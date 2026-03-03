@@ -1,248 +1,145 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F7DF4D2EE7
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 16:17:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772554672; cv=pass; b=iQ37H7o7bgALtWYbxYTv+IhEgcp+zADTFGOjVQ/GkS2utcsAo9wF6ozi9xtXIlDVrm1y3oPAN0jaVLZR51Rt91tH0XHpXc2DE/pS6eUi8KuvmmLmjEiZ5mQ9k1oJndZSWdxRxpZSF1rw+3kegW5PlDWS3Lc07z6F6dnnfu9VT6s=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772554672; c=relaxed/simple;
-	bh=D31bfjZSP/L0HElgbPJEOIXXw9PZR2MgXoaqrLT9Rqo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hv4BdbRlEIrdQhxnBM20ng61vphLPqVcuLR2vDWB8y1V9YgY1ZRl9zCQcYJzAFxThuX8MJHPrvOqxac7lbiV4+T8T6cmMz9/GEzo/olqXCb6i06JzjK3GEKZhvYEiXnlElHte6T4L/R4xYbsnHL/iu1dWErEGCMeqYNSDkFz5Nc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=AwjiNWln; arc=pass smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D59E34DA552
+	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 16:29:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772555378; cv=none; b=T//GbgH8CetIVVxit6v3+t2Y/4g9s5/5U+v8q3X1yHsJLLlTQHRf0+zidxsQlz2KuLe8l2WAbhEk25IoVV4dzxe2PcGxnVFMAKzuvRghi87SFhMfeAMhyJpbsO7HC7f06LQE0EOB1aEBmClqDeqlwUICnvOms4gnPlBK1ldZPhA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772555378; c=relaxed/simple;
+	bh=BY5G1NRxuyMsQZJBOz/VqqG5cvCVR93ARsdhy73TK3o=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
+	 References:In-Reply-To; b=h1teFD7+PrrSBK4do5RY2bXaXK73VemB3u2sdVLH+ojFTY8DQwlFRbqnHh6sijT1Gun/4OGzf2WGb282dV3luLZubPt8o86n5or7Lx2+z46spMwW/bGLJ5hZJIlxVjmjfeYId8fbTWhe4Qbi9qNVwD3S3J9RiiUpMhaHjXZvYf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=V9g/OBGJ; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="AwjiNWln"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-35983877dc5so1305953a91.2
-        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 08:17:48 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772554668; cv=none;
-        d=google.com; s=arc-20240605;
-        b=McJsD//RmWVEGoD4NzMzbNCEXMlkLiBz6rbgWW2TsAvMYPMFi52mn24mbdQfS6kYd4
-         mct78tFLwCrDLlcKmOuD6krlpgtwkZXWjk2xV+nKHPwVMO+vQu5fjH6BoQqvPqSXa2G7
-         LJvq/BSf2rT3EIxu94sEpxRFlINXQyVzmejBJg3q86yMt+/nG20lcZftrkRCnjNQaezv
-         ErRrIQUE8qmKN13TBxVzE0HkP5PKPTEHjRmJOB2tjQR0XVDBgOPkYwedtf4v474/w+yB
-         8nxsMMH2VZr2vPpySZrI5q5F0vCngeQTnsdBBbrRKgnblL/VTdQWGf3i2DCUbFmUv6m2
-         GG6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=vlM0HTuT+/Lu8GovscjfA3KZuqms5GnXWRMciKBvDhQ=;
-        fh=8g9tdTonIxr7sXZ+mx9KzjAUPCueqC5+IF/PCG0DGn4=;
-        b=kbb1DLfsvNPkJLc3rXIzab6c8pP093AmrnDZJH05aAEoSJwaej7MXUpSLTOe7HqRYZ
-         q5BJsd2Ng+GjbeapnQntCp4KAOo+nEWylN6ER4m55Dtr3FvznQR+KToj8CafUwSMI3OK
-         uH11ABT148jRpBtcvHmp7Mr0+nd1/MEhDYDpFkqcY+ET9ea8IKa/lNcIaIxv7rYolZ1m
-         61Pddp5oQwSOCGxXsLu8JHBUyjugRGRudvmKv7Oy/gis3C1QkePEN0XC/LRTHk2Rmteq
-         mzDnFTNggoRS1Q2wFq66AaF3RvIvhP+ViUivO7MWWhn9wL2X5ZrhS0gumXmBTtjoExS1
-         TVDg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1772554668; x=1773159468; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vlM0HTuT+/Lu8GovscjfA3KZuqms5GnXWRMciKBvDhQ=;
-        b=AwjiNWln5JR6BxSrUTDTHA+0IzNH6y/wDyQd8wA8GmdtuWg0T7RL0eJsZE/3cD7JTN
-         J+fLhSw6cPUycqgFu+Q+/ajM7Sji9fBJ6gnOrRT/Q+DNeGveICu3p2iA2h+bvcTk+GxF
-         /XoXg8WhQpUAUJIVoH0tjyBT4Mi8qy90ohn7q6lOW9FLjyXLXB0q6aBZ6q0wprJV1GPR
-         l4JDkYfvmZkRb++O8RFLWEKuhno69fazyKkVXzVUU6RSzmGNni/ji6h3OTvSd+Jw9IhG
-         AjnormoIAmc8F7TR4h6EwKoARQfPCyOSvgMgqLHIlMLTs/a79zkB4RSFwd61MxtDZzz9
-         yJXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772554668; x=1773159468;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=vlM0HTuT+/Lu8GovscjfA3KZuqms5GnXWRMciKBvDhQ=;
-        b=wseA0rWW6kFskWpvlynARXKTbAuGrSWMw4M6QdUxrok+mvdVG18DvWss2Y8ZqePDTW
-         r49c0zIqoq42QsnbUpKV7Xs/LJYzgY1x/sxmkXIS743oyWmVTUlaVZfAiY82MUaFmRKg
-         /c/J7pLdpfreG5fggYqBGbh8qvqSZY9KCeIsWNOKI8WUi6DuO1KCQnjzNHgBGr99CQik
-         v4IlBGZnjrlKtCoTyu01SWzwis87MDy/zEoHE8yieYDu/4I1bow2l5fZJoQD1yxFAREe
-         4N1ZerWxGEunIR0lusP7p+46xFQb+3Vgt1YeajUDTHfOsGDaLJAINv5+BsiPUkHme6Eq
-         boDg==
-X-Forwarded-Encrypted: i=1; AJvYcCVxassK+97NDKCj2/27koDClodz8gGaFccr0LvqZ7wgbhmC1bxRAhwsOBcWKcEhq0qEyCY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTjr4miZB6SrqpngecyBVfWWZH7NRsJwK0r1UvLOuJ6pM65wPj
-	cu6nqdP0mg0d7YKGlN+xxclSNm8mJ5nMvISkkaTtTggSK5zm3OgNqSL8uJdnokDElomzGCOZD5M
-	E09y4PS5VPTGojvVxKFD5+5ox5kcV2QcZbrYZd8e/
-X-Gm-Gg: ATEYQzx6c58senTj+TnteGBDqpjlXeQ6izSDVjCSNK6aHZKXrU7aEoW6aYWWBTfUPa2
-	O13vVkV5zAQw9Z6MEu2hW5VV19BjjfIvk44RSFIqOvHGTnt0Fcw0pzBdl+aiBeUpzs9PT3JtVaz
-	CU1dtfnl30jBxGbDw+Q2CMG3aRsH6CgXLyDlS3hMNeg80ip4p+DofZsn8Zu7O2rVM3p/MRo3ou5
-	I06x9alHMdUvvTg33YRV5G7zrYjK+llIMaDb+LFXgu+30X06O1swr5mxpRwP7NLw0yQClIPKZPy
-	B5WzvA0=
-X-Received: by 2002:a17:90b:4c12:b0:359:8d70:c4e6 with SMTP id
- 98e67ed59e1d1-3598d70c5admr5344309a91.1.1772554667658; Tue, 03 Mar 2026
- 08:17:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="V9g/OBGJ"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id C5CBFC40FA0;
+	Tue,  3 Mar 2026 16:29:50 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id E066A5FF29;
+	Tue,  3 Mar 2026 16:29:32 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 28AAD1036875A;
+	Tue,  3 Mar 2026 17:29:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1772555372; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=vxEKFs0jFuv6u4VJhIGhmJsnyai2CUMCJeV8dWAXHLQ=;
+	b=V9g/OBGJCkYKEquzv3iFqY58vCKodgkgdEE4Ye5HIsVuNVKWXt1iFth0miD4iIVc0YHGtO
+	brqiAKR1unqtUd2Q91a1TY6oPHhcABPV8oYKEecCUCMuscYngy6FuCADq8cERfoICZ85SM
+	dKH+MXepzfk3oHg8lT1Oa2Kbi8+x5kzTb1YPrazrOW4pDLmLupuCHPthNb2Y8VL0KrbyoG
+	utiwSpqnjv9m+EQZN7AB1RdauZtz/aWqsrOROc8aI8pdu+reKnTdYGZvab1vWW3O5dfA+o
+	g2V6dgiwyplXYdrynyXAKSWQEPWAd3XmPl1PZ5WKdkQtg/LhmMJxFudAR3jHgA==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260302-iino-u64-v2-0-e5388800dae0@kernel.org>
- <20260302-iino-u64-v2-3-e5388800dae0@kernel.org> <CAHC9VhRnmBuXEKkUPQhJ_LDzcksjoAJL-ne6mFoJdR1hnDdzsg@mail.gmail.com>
- <7a0165fe39e82a1effd8cce5c2c4e82d6a42cb3a.camel@kernel.org>
- <CAHC9VhTyhnG7-ojnTnVdh_m1x=rKxw9YEH9g7Xp9m4F78aA5cA@mail.gmail.com> <add39953250a4a1b2fe2b09deb3373c2a7482b88.camel@kernel.org>
-In-Reply-To: <add39953250a4a1b2fe2b09deb3373c2a7482b88.camel@kernel.org>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 3 Mar 2026 11:17:34 -0500
-X-Gm-Features: AaiRm503AvilRZsmzje3hsLVwZQN2UeIDoaYrT0wwtgoCj-_LcRzyWRvZdGrFAo
-Message-ID: <CAHC9VhSb3nAsJBxhqitDVQw=J8hX1CJDe1xqL-JMjOA5J4tUkw@mail.gmail.com>
-Subject: Re: [PATCH v2 003/110] audit: widen ino fields to u64
-To: Jeff Layton <jlayton@kernel.org>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Dan Williams <dan.j.williams@intel.com>, 
-	Matthew Wilcox <willy@infradead.org>, Eric Biggers <ebiggers@kernel.org>, 
-	"Theodore Y. Ts'o" <tytso@mit.edu>, Muchun Song <muchun.song@linux.dev>, 
-	Oscar Salvador <osalvador@suse.de>, David Hildenbrand <david@kernel.org>, 
-	David Howells <dhowells@redhat.com>, Paulo Alcantara <pc@manguebit.org>, 
-	Andreas Dilger <adilger.kernel@dilger.ca>, Jan Kara <jack@suse.com>, 
-	Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>, 
-	Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
-	Chuck Lever <chuck.lever@oracle.com>, NeilBrown <neil@brown.name>, 
-	Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, 
-	Steve French <sfrench@samba.org>, Ronnie Sahlberg <ronniesahlberg@gmail.com>, 
-	Shyam Prasad N <sprasad@microsoft.com>, Bharath SM <bharathsm@microsoft.com>, 
-	Alexander Aring <alex.aring@gmail.com>, Ryusuke Konishi <konishi.ryusuke@gmail.com>, 
-	Viacheslav Dubeyko <slava@dubeyko.com>, Eric Van Hensbergen <ericvh@kernel.org>, 
-	Latchesar Ionkov <lucho@ionkov.net>, Dominique Martinet <asmadeus@codewreck.org>, 
-	Christian Schoenebeck <linux_oss@crudebyte.com>, David Sterba <dsterba@suse.com>, 
-	Marc Dionne <marc.dionne@auristor.com>, Ian Kent <raven@themaw.net>, 
-	Luis de Bethencourt <luisbg@kernel.org>, Salah Triki <salah.triki@gmail.com>, 
-	"Tigran A. Aivazian" <aivazian.tigran@gmail.com>, Ilya Dryomov <idryomov@gmail.com>, 
-	Alex Markuze <amarkuze@redhat.com>, Jan Harkes <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu, 
-	Nicolas Pitre <nico@fluxnic.net>, Tyler Hicks <code@tyhicks.com>, Amir Goldstein <amir73il@gmail.com>, 
-	Christoph Hellwig <hch@infradead.org>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Yangtao Li <frank.li@vivo.com>, 
-	Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>, David Woodhouse <dwmw2@infradead.org>, 
-	Richard Weinberger <richard@nod.at>, Dave Kleikamp <shaggy@kernel.org>, 
-	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>, Mark Fasheh <mark@fasheh.com>, 
-	Joel Becker <jlbec@evilplan.org>, Joseph Qi <joseph.qi@linux.alibaba.com>, 
-	Mike Marshall <hubcap@omnibond.com>, Martin Brandenburg <martin@omnibond.com>, 
-	Miklos Szeredi <miklos@szeredi.hu>, Anders Larsen <al@alarsen.net>, 
-	Zhihao Cheng <chengzhihao1@huawei.com>, Damien Le Moal <dlemoal@kernel.org>, 
-	Naohiro Aota <naohiro.aota@wdc.com>, Johannes Thumshirn <jth@kernel.org>, 
-	John Johansen <john.johansen@canonical.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Eric Snowberg <eric.snowberg@oracle.com>, Fan Wu <wufan@kernel.org>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Casey Schaufler <casey@schaufler-ca.com>, Alex Deucher <alexander.deucher@amd.com>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, Eric Dumazet <edumazet@google.com>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Willem de Bruijn <willemb@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	James Clark <james.clark@linaro.org>, "Darrick J. Wong" <djwong@kernel.org>, 
-	Martin Schiller <ms@dev.tdt.de>, Eric Paris <eparis@redhat.com>, Joerg Reuter <jreuter@yaina.de>, 
-	Marcel Holtmann <marcel@holtmann.org>, Johan Hedberg <johan.hedberg@gmail.com>, 
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Oliver Hartkopp <socketcan@hartkopp.net>, 
-	Marc Kleine-Budde <mkl@pengutronix.de>, David Ahern <dsahern@kernel.org>, 
-	Neal Cardwell <ncardwell@google.com>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, Remi Denis-Courmont <courmisch@gmail.com>, 
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, 
-	Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, nvdimm@lists.linux.dev, 
-	fsverity@lists.linux.dev, linux-mm@kvack.org, netfs@lists.linux.dev, 
-	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net, 
-	linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, 
-	samba-technical@lists.samba.org, linux-nilfs@vger.kernel.org, 
-	v9fs@lists.linux.dev, linux-afs@lists.infradead.org, autofs@vger.kernel.org, 
-	ceph-devel@vger.kernel.org, codalist@coda.cs.cmu.edu, 
-	ecryptfs@vger.kernel.org, linux-mtd@lists.infradead.org, 
-	jfs-discussion@lists.sourceforge.net, ntfs3@lists.linux.dev, 
-	ocfs2-devel@lists.linux.dev, devel@lists.orangefs.org, 
-	linux-unionfs@vger.kernel.org, apparmor@lists.ubuntu.com, 
-	linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	selinux@vger.kernel.org, amd-gfx@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, 
-	linaro-mm-sig@lists.linaro.org, netdev@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-fscrypt@vger.kernel.org, 
-	linux-xfs@vger.kernel.org, linux-hams@vger.kernel.org, 
-	linux-x25@vger.kernel.org, audit@vger.kernel.org, 
-	linux-bluetooth@vger.kernel.org, linux-can@vger.kernel.org, 
-	linux-sctp@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 03 Mar 2026 17:29:27 +0100
+Message-Id: <DGTAFQ1WX43H.2R6R1RS5F09Q7@bootlin.com>
+Subject: Re: [PATCH bpf-next v5 0/5] emit ENDBR/BTI instructions for
+ indirect jump targets
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Puranjay Mohan"
+ <puranjay@kernel.org>, "Anton Protopopov" <a.s.protopopov@gmail.com>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Xu Kuohai" <xukuohai@huaweicloud.com>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260302102726.1126019-1-xukuohai@huaweicloud.com>
+In-Reply-To: <20260302102726.1126019-1-xukuohai@huaweicloud.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Tue, Mar 3, 2026 at 11:12=E2=80=AFAM Jeff Layton <jlayton@kernel.org> wr=
-ote:
-> On Tue, 2026-03-03 at 11:03 -0500, Paul Moore wrote:
-> > On Tue, Mar 3, 2026 at 6:05=E2=80=AFAM Jeff Layton <jlayton@kernel.org>=
- wrote:
-> > > On Mon, 2026-03-02 at 18:44 -0500, Paul Moore wrote:
-> > > > On Mon, Mar 2, 2026 at 3:25=E2=80=AFPM Jeff Layton <jlayton@kernel.=
-org> wrote:
-> > > > >
-> > > > > inode->i_ino is being widened from unsigned long to u64. The audi=
-t
-> > > > > subsystem uses unsigned long ino in struct fields, function param=
-eters,
-> > > > > and local variables that store inode numbers from arbitrary files=
-ystems.
-> > > > > On 32-bit platforms this truncates inode numbers that exceed 32 b=
-its,
-> > > > > which will cause incorrect audit log entries and broken watch/mar=
-k
-> > > > > comparisons.
-> > > > >
-> > > > > Widen all audit ino fields, parameters, and locals to u64, and up=
-date
-> > > > > the inode format string from %lu to %llu to match.
-> > > > >
-> > > > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > > > > ---
-> > > > >  include/linux/audit.h   | 2 +-
-> > > > >  kernel/audit.h          | 9 ++++-----
-> > > > >  kernel/audit_fsnotify.c | 4 ++--
-> > > > >  kernel/audit_watch.c    | 8 ++++----
-> > > > >  kernel/auditsc.c        | 2 +-
-> > > > >  5 files changed, 12 insertions(+), 13 deletions(-)
-> > > >
-> > > > We should also update audit_hash_ino() in kernel/audit.h.  It is a
-> > > > *very* basic hash function, so I think leaving the function as-is a=
-nd
-> > > > just changing the inode parameter from u32 to u64 should be fine.
-> >
-> > ...
-> >
-> > > It doesn't look like changing the argument type will make any materia=
-l
-> > > difference. Given that it should still work without that change, can =
-we
-> > > leave this cleanup for you to do in a follow-on patchset?
-> >
-> > I would prefer if you made the change as part of the patch, mainly to
-> > keep a patch record of this being related.
+Hi Xu,
+
+On Mon Mar 2, 2026 at 11:27 AM CET, Xu Kuohai wrote:
+> On x86 CPUs with CET/IBT and arm64 CPUs with BTI, missing landing pad ins=
+tructions
+> at indirect jump targets triggers kernel panic. So emit ENDBR instruction=
+s for
+> indirect jump targets on x86 and BTI on arm64. Indirect jump targets are =
+identified
+> based on the insn_aux_data created by the verifier.
 >
-> Ok, I'll see about factoring that in.
+> v5:
+> - Switch to pass env to JIT directly to get rid of coping private insn_au=
+x_data for
+>   each prog
 
-Thanks.
+Nice, thanks for this. As discussed in [1], I'm planning to reuse this
+in my KASAN work to pass info to JIT comp about ldx/stx instructions
+(especially, whether those insn are accessing prog stack or elsewhere).
+So far I've been using a small POC aiming to do the same kind of thing,
+but your series made me aware of a few points I missed, like the offset
+induced by constant blinding. I'll keep my work rebased on top of your
+series, and track it until it is merged.
 
-> > Ideally I'd really like to see kino_t used in the audit code instead
-> > of u64, but perhaps that is done in a later patch that I didn't see.
+Thanks
+
+Alexis
+
+[1] https://lore.kernel.org/bpf/CAADnVQLX7RSnOqQuU32Cgq-e0MVqyeNrtCQSBbk0W2=
+xGkE-ZNw@mail.gmail.com/
+
+> v4: https://lore.kernel.org/all/20260114093914.2403982-1-xukuohai@huaweic=
+loud.com/
+> - Switch to the approach proposed by Eduard, using insn_aux_data to inden=
+tify indirect
+>   jump targets, and emit ENDBR on x86
 >
-> I think I didn't make this clear enough in the cover letter, but kino_t
-> is removed at the end of the series. It's just there to support the
-> change during the interim.
+> v3: https://lore.kernel.org/bpf/20251227081033.240336-1-xukuohai@huaweicl=
+oud.com/
+> - Get rid of unnecessary enum definition (Yonghong Song, Anton Protopopov=
+)
+>
+> v2: https://lore.kernel.org/bpf/20251223085447.139301-1-xukuohai@huaweicl=
+oud.com/
+> - Exclude instruction arrays not used for indirect jumps (Anton Protopopo=
+v)
+>
+> v1: https://lore.kernel.org/bpf/20251127140318.3944249-1-xukuohai@huaweic=
+loud.com/
+>
+> Xu Kuohai (5):
+>   bpf: Move JIT for single-subprog programs to verifier
+>   bpf: Pass bpf_verifier_env to jit
+>   bpf: Add helper to detect indirect jump targets
+>   bpf, x86: Emit ENDBR for indirect jump targets
+>   bpf, arm64: Emit BTI for indirect jump target
+>
+>  arch/arc/net/bpf_jit_core.c      | 19 +++----
+>  arch/arm/net/bpf_jit_32.c        |  4 +-
+>  arch/arm64/net/bpf_jit_comp.c    | 21 ++++----
+>  arch/loongarch/net/bpf_jit.c     |  4 +-
+>  arch/mips/net/bpf_jit_comp.c     |  4 +-
+>  arch/parisc/net/bpf_jit_core.c   |  4 +-
+>  arch/powerpc/net/bpf_jit_comp.c  |  4 +-
+>  arch/riscv/net/bpf_jit_core.c    |  4 +-
+>  arch/s390/net/bpf_jit_comp.c     |  4 +-
+>  arch/sparc/net/bpf_jit_comp_64.c |  4 +-
+>  arch/x86/net/bpf_jit_comp.c      | 25 +++++----
+>  arch/x86/net/bpf_jit_comp32.c    |  4 +-
+>  include/linux/bpf.h              |  2 +
+>  include/linux/bpf_verifier.h     | 10 ++--
+>  include/linux/filter.h           |  6 ++-
+>  kernel/bpf/core.c                | 93 ++++++++++++++++++++++++--------
+>  kernel/bpf/syscall.c             |  2 +-
+>  kernel/bpf/verifier.c            | 22 ++++++--
+>  18 files changed, 157 insertions(+), 79 deletions(-)
 
-Ah, gotcha, thanks for the education :)
 
-> If HCH gets his way to do the changes as one big patch, it'll go away
-> entirely.
+
 
 --=20
-paul-moore.com
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
