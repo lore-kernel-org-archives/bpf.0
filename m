@@ -1,112 +1,90 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8188F37CD20
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 16:44:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB74D3947B2
+	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 16:50:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772556274; cv=none; b=dy3CX6GMoHpQUNL7C6X62j1NDHtfRB12TUBvXQ0noufHO+dk/ZxYV1fnkMfr3RPfPfnwBwSWK1ryFczqbEVLDF39MysL6EjsYR/Bz1GzJZaleBPbH1eo+gzJhxDeYpRyo299R1f/lVIQEEuLNYSaAWXClX3DH+POrFcxM6wqqAw=
+	t=1772556620; cv=none; b=HpEyUWufnCJYZ+7UM5Y+BztrqhVLRVeVHC1jR0Tej18CbA4gRcLNFU6TMjxCNyJP+uHQgeA4nEgiIXLX0DH1jwtckZX4t8FmdQzRPks+DhQAca0JhjzXpkFlm+y8QV9Kdaei5rqfMYe6xcbx0t0Zhtu3qqxF8MQ6qCWxM+UzyM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772556274; c=relaxed/simple;
-	bh=GD8R4MrS3YxxeJH+XqUwYY0ZgQukNMSTXS7hk3+dkhw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=idLpgWkW8oT3Ump+jHnjoPMi1P9/lgrMKHjiCxF5XcnSjJPZNmSR79AkPtwEZQE4o7YReGEEzym+bEEfm+P0jdZpFk9LtLg+Hl2obtM1dBimkjN3JtLRaYFRjWEuoD9IzCMXFQ0673YpQG7Iv3cw15xRAFehjNiNuSQCexQlS8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UCs4Bq9x; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772556620; c=relaxed/simple;
+	bh=W6yXrkehX4Vd0xq+xsmaOoCCwLEDkcwlfwPv/gAtKkA=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=T4f8KpvtiZg+97Jdnsa5y/L/tNJ+wzyviRDkaltwzQ/nnAxJ2KCq+90s6XHL4sxpnn7XtzFOYS1DlXW+OP1eLAtwyMqnliBB5Dl3aCz+eIgYA+qFt9tRAYEdW+tewhpbH50bfsz83YFoM7BajbXDxwm1/Ym6C5y2j/WQHYWFRw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z658sLmd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UCs4Bq9x"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CB2FC19422
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 16:44:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z658sLmd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 798BBC2BCB2;
+	Tue,  3 Mar 2026 16:50:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772556274;
-	bh=GD8R4MrS3YxxeJH+XqUwYY0ZgQukNMSTXS7hk3+dkhw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=UCs4Bq9x70nl85+v+7lx+5fxXDSiy1/L1s882ijSWgoOXGAHqqFbB3LIzwWfhGPHa
-	 sLvBiNGJgqfLmqFH2hTJuTzuKBVa10PynN/CRC5q/T2GBVh8sbMIMVEEPAJE5VtZZT
-	 DATB6dKCk1GvngeQc75cLoGOrnZ0aQqEwhkmDRfHJ9Dm2lW3Egrxb+CgK2doq/0nle
-	 VlqSiAP6TFR2UWMQwBe3X08EF58ofHmH6IK6tSr6g20D0/j7zgfBGc6xAT0jZhUSgf
-	 Gu+kDkTynguPLCzel88ifRGSRee1UTnjeK50yAnBvMJnvMRdjBXTtlheGQj0k+byCC
-	 rzCd36trU+vEw==
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-89a14be4733so3147686d6.2
-        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 08:44:34 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVTv1krB0mMl95D6GyXn1mlHF2I17NypHvv6jfrZ2TzXJDN11dMcHw556VDcL9QdMYXvNc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4MFawuHW/iQPikszCsBW2idVEjXwEK33RSAmnglf4kWBaUKYz
-	qUp7aXhfuw41qvVD1Eg/bT7MIVEqA+sR3h1CgfzmbwnWQX41nlFLhkTM6e7praidxd1XMj846nS
-	D7d3KTWXM71nO3XKUzedSFNHAhn5DWOY=
-X-Received: by 2002:a05:6214:d4b:b0:89a:14c5:f53 with SMTP id
- 6a1803df08f44-89a14c511a9mr11079146d6.53.1772556273364; Tue, 03 Mar 2026
- 08:44:33 -0800 (PST)
+	s=k20201202; t=1772556620;
+	bh=W6yXrkehX4Vd0xq+xsmaOoCCwLEDkcwlfwPv/gAtKkA=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Z658sLmdqYP3kjL5nzmj3HsHUxrCyEyQ/5TrVI5fDWlcBWgpDLhf/t4BJDNJC98WH
+	 uLltF4yLp9kDQvGuRPWsxWadPYxtNa+fYrx6F07BGocVKzEWn8xMhfjfkAC99qiQu1
+	 BtOl1Kq/duNHsfKn2QZjOyNbQgkqWVdhDUzKaxoVZ41w6j1hdhPMLabkEiJuURqUsN
+	 HzEl/qE+yI1LW1d7t+AXXHdAkEZcw4sSYSi610XVr2r2BIK2DC9MnBkImq6rpg7qAY
+	 8iN5gPoOwTn0WlE61NYvlFoj1PwXiSKZyU8H5aQtGQfaGfA1GM/iay5QBU5kpjxSqw
+	 aJZ30XTjCXVJw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02E383808200;
+	Tue,  3 Mar 2026 16:50:23 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260220-work-bpf-namespace-v1-0-866207db7b83@kernel.org>
- <20260220-work-bpf-namespace-v1-1-866207db7b83@kernel.org>
- <CAPhsuW63sEvK50ELaxo4LxjCS-2RdfxDzuMYhW59PDUHfF0-iQ@mail.gmail.com>
- <20260227-nullnummer-eisdiele-08db4c8fe99e@brauner> <CAPhsuW5GCK02OXvFeNQVW-QoX9eJ7CyiT=oEDsCYyht-Hve3sQ@mail.gmail.com>
- <20260302-begehbar-kanister-9801d1198abf@brauner>
-In-Reply-To: <20260302-begehbar-kanister-9801d1198abf@brauner>
-From: Song Liu <song@kernel.org>
-Date: Tue, 3 Mar 2026 08:44:22 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW4gRcU-5RhiR=BcDS3J=Px+5n_4nbex+KjAkw0fzXFTZg@mail.gmail.com>
-X-Gm-Features: AaiRm52-DKXlpufIhvmyCV4nEob2wQGCqkaDCXdRM0qSJ1z5Eq_QFD3SWEY4o-Q
-Message-ID: <CAPhsuW4gRcU-5RhiR=BcDS3J=Px+5n_4nbex+KjAkw0fzXFTZg@mail.gmail.com>
-Subject: Re: [PATCH 1/4] ns: add bpf hooks
-To: Christian Brauner <brauner@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Tejun Heo <tj@kernel.org>, 
-	KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	cgroups@vger.kernel.org, Lennart Poettering <lennart@poettering.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v6 0/5] bpf: Allow void return type for global
+ subprogs
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177255662179.1383432.17952808984148177343.git-patchwork-notify@kernel.org>
+Date: Tue, 03 Mar 2026 16:50:21 +0000
+References: <20260228184759.108145-1-emil@etsalapatis.com>
+In-Reply-To: <20260228184759.108145-1-emil@etsalapatis.com>
+To: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, eddyz87@gmail.com, martin.lau@kernel.org,
+ memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev
 
-On Mon, Mar 2, 2026 at 1:46=E2=80=AFAM Christian Brauner <brauner@kernel.or=
-g> wrote:
->
-> On Fri, Feb 27, 2026 at 08:38:48AM -0800, Song Liu wrote:
-> > On Fri, Feb 27, 2026 at 2:28=E2=80=AFAM Christian Brauner <brauner@kern=
-el.org> wrote:
-> > [...]
-> > > >
-> > > > If we change the hook as
-> > > >
-> > > >    bpf_lsm_namespace_alloc(ns, inum);
-> > > >
-> > > > We can move it to the beginning of __ns_common_init().
-> > > > This change allows blocking __ns_common_init() before
-> > > > it makes any changes to the ns. Is this a better approach?
-> > >
-> > > I don't think it matters tbh. We have no control when exactly
-> > > __ns_common_init() is called. That's up to the containing namespace. =
-We
-> > > can't rely on the namespace to have been correctly set up at this tim=
-e.
-> > > My main goal was to have struct ns_common to be fully initialized
-> > > already so that direct access to it's field already makes sense.
-> >
-> > Good point on having ns_common initialized. Besides inum, we
-> > should also pass ns_type and ops into the hook.
->
-> But why? The struct ns_common is already fully initialized when it is
-> passed to bpf_lsm_namespace_alloc() including ops, inum, ns_type etc.
+Hello:
 
-I meant if we pull bpf_lsm_namespace_alloc() to the beginning of
-__ns_common_init(), we need ns_type etc. because ns_common
-is not fully initialized. IOW, I agree with your early comment.
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-> >
-> > OTOH, shall we have the hook before proc_alloc_inum()? With
-> > this change, the hook can block the operation before it causes
-> > any contention on proc_inum_ida. IOW, how about we have:
->
-> I think that contention is meaningless and I'd rather have struct
-> ns_common fully set up so that all fields can be accessed.
+On Sat, 28 Feb 2026 13:47:54 -0500 you wrote:
+> Global subprogs are currently not allowed to return void. Adjust
+> verifier logic to allow global functions with a void return type.
+> Exception callbacks are excluded from this change, and still require
+> a scalar return type.
+> 
+> Adding additional logic for void globals significantly complicates
+> check_return_code(), mainly because of how the new feature interacts
+> with bpf_throw(). To avoid complicating the code, refactor the return
+> value range validation logic into two separate functions, one for
+> program exits through BPF_EXIT and one for program exits through
+> bpf_throw(). The changes are non-functional.
+> 
+> [...]
 
-If contention is not a concern, which I believe you know better
-than I do, I think this patch works fine. So
+Here is the summary with links:
+  - [bpf-next,v6,1/5] bpf: Factor out program return value calculation
+    https://git.kernel.org/bpf/bpf-next/c/83419c8fdbbc
+  - [bpf-next,v6,2/5] bpf: Extract program_returns_void() for clarity
+    https://git.kernel.org/bpf/bpf-next/c/63ec29623943
+  - [bpf-next,v6,3/5] bpf: extract check_global_subprog_return_code() for clarity
+    https://git.kernel.org/bpf/bpf-next/c/69ca55e63101
+  - [bpf-next,v6,4/5] bpf: Allow void global functions in the verifier
+    https://git.kernel.org/bpf/bpf-next/c/8446ded1e1a0
+  - [bpf-next,v6,5/5] selftests: bpf: Add tests for void global subprogs
+    https://git.kernel.org/bpf/bpf-next/c/422f1efabd13
 
-Acked-by: Song Liu <song@kernel.org>
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Thanks,
-Song
+
