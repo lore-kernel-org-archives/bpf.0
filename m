@@ -1,162 +1,255 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53A171A6811
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 11:02:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.129.124
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772535743; cv=pass; b=it/8icrjczJ9YdP79qPhFvQMO7s6YA4YCOc5+xAm0DGoc8wCryRMY9eaxkPV5mhoiaJbd0WLDZw9NngbxReOBt7P7QzZTJaAsy4fiKo7LjSrlPtLJPr5cBg2wd/a8eUe6f31hdYpt4gUJilQRXNdH1ToLgtcDSfTA+OVde4ymqQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772535743; c=relaxed/simple;
-	bh=q2JJExAxC2TtzJzsIROiri0j+cMXu1NLqvz5H532HlY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iaQ/8ZXVMf5ZSAkjAALMIaHFNzeW4AiHoUQk9DhwrHwArKXbJWnn2QCAoOA4Qmons5s5b7svZLnuPlGZJruu46qPn+J/pqO1B9nLTyCbxNUMqhteqkii0SCz90zF3sBW3yKf2fSyPwOpxVvssgdWBNVE5mEs0VxgC94kirls3b0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fghd0QEP; arc=pass smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EA6A39A078;
+	Tue,  3 Mar 2026 11:05:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772535908; cv=none; b=rH5i815MC0BfK30tzmFziNywiDlY59Qne8ePxhDekI5KIJ9dlf2WoRHRjF8PMX2QTwM7LM4iyLWJk0OkGE8uWE1oB0NsNSgx5yBL/nNeRT+Sx7n3NGB5TmALy28Nrg8Yy6YblsMSohiLq3Ypa2pNmuGXFE++3OypFAATlvO5vh0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772535908; c=relaxed/simple;
+	bh=QbX73wCXwRkr1HV7bEMnhXfnmc2ghikMMn+yFzCU/s4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=dSqcmx7cv/9s+SumqNjDQRYK1nVZwebS7i7TvNqHuAcYEKjeIiWA/SJmZZgkToMyVPULHt7kmOlTHO5M+7TbYSdh6Cf93AdslPW1K4NqLOc2oTtYCB7V+XOTOFNsJrvGlED0VKSd3nGR+DmvzbTB9td4UPYIS8l88+YUlnQMlAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QdLDbc3L; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fghd0QEP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772535739;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tDNXTdEhsZuDSlsnR9FJK78Yt48gWyWFipvm9YpyX4I=;
-	b=fghd0QEPt4czlRp7rUaT6B6aPenMvZPnnSqzHdWvKUC7GfPsWJr/6Yw2N7Zb1RkhU8sIDk
-	vDr8h8tQegTnC+QtqcheaxdVCWCe0N7uLw2QLwtkpUIWOjAuuiVFJphnZwSKGRbInKeGBo
-	SShCHzmErAOe1Y/KkthC3qX6GN2eFEs=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-355--HRYa9qWMEOMqx2NQBz00g-1; Tue, 03 Mar 2026 06:02:16 -0500
-X-MC-Unique: -HRYa9qWMEOMqx2NQBz00g-1
-X-Mimecast-MFC-AGG-ID: -HRYa9qWMEOMqx2NQBz00g_1772535735
-Received: by mail-lj1-f200.google.com with SMTP id 38308e7fff4ca-386fc5cdd1fso46221421fa.2
-        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 03:02:15 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772535734; cv=none;
-        d=google.com; s=arc-20240605;
-        b=i3ObmuaoKY2qhk7ArIUgnNPQLzIDSK5eFI5oXdKNJQG+4pwtM+I68/qS4aOpo454n8
-         P97TqDqG69v07XFxewsngSNS6OH9SmtDMsTe7wgCz2I0VDEG27lSZDLER0Bg5GUFM8Eb
-         YktyJtbakyUoPAGlYbZjd8dU88X8NG0pNnOurgpLPF6NvFkkAOx5lG7aOcNOxRJfdTYm
-         +UaAGsy9Oqz90LbOC3UdFq2ptVvYSv5sOZNcdxs0bV13z22RzIN/gMcr/dPbRpIgGWxU
-         pobu6+ZVzL1G5K6JZlQmmiV7Pqu5zscHgq2kfED7fMlh99vWStLA/kDDmdevFNhbUikQ
-         fxgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version;
-        bh=tDNXTdEhsZuDSlsnR9FJK78Yt48gWyWFipvm9YpyX4I=;
-        fh=NwG+yX7eG6t7UJH0Ktz47AXvtn6YGcm56tPHJSpqd2c=;
-        b=AvhFsScRgdAoc52DUDPO5h8mkvZhb0QBi9p3cqK7C+LITzD9i8aZOT5LcUQFoKH9Gu
-         S1JfRbMEGhEQVSt1eu57Kz85kU+IA9o4VpbXH2xHF8JKDEk/9dC95BBQgFuLXy8fsrLJ
-         FiQViSIixXM/hP8a3iyzV50pTzdF7UXj+SnO72QNM9iO6wQYnNgeuuoy8GGtM/Jb90eR
-         WRO7Xk4Gd/hMXg06hXS+8D3sXeyBLouKk9xDjbK6BERZ2JC2mI/16+6IggqW5lan+4De
-         ehF8NfArq5BjBu1+fA1penUbx/ccT8UDnj1In9HlgNFJ+8weFQtxFTSdR8Dh16smygud
-         BwNw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772535734; x=1773140534;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=tDNXTdEhsZuDSlsnR9FJK78Yt48gWyWFipvm9YpyX4I=;
-        b=Y2GXhEyatoy1uAxtw0M89VjtAeVDd0IKOMIADarUYymSUwwPEyltJBUqGBSppPqdaE
-         7J6xkD1Kvs7IeVy0DC4RYYMMRz9U4/z3kC0KGu5Y9thPh0MLlW5axkeIvgzwXJJUX5Bg
-         cwG5ss5tqe5RYDYzECuX3mUK3dxIT5+Ep4mkuX8E5Em3e9skD0VpfVXtv/wOLPevyztE
-         CMovaCldJIF5rO++isYFExCu3O3zR2xiFykYsudMe320iiE+I/AQuJbeHWK5Xx5iIgC3
-         WjLrnO+COjbllKA2nJn3i4omQps5jlexwsWzYB6THfC9ztgVNETbRolg+hPo5su2SytM
-         wM7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU9a2/Aiq3XwTOjJmj0f8eiP6w7GTq+MqflAC4qwLsrb5Ve16Tg1EaXnT1HJ28S7GaoA+M=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyrq1GCWlSVu2RpN4w7kxJ9xWFDdwODd01sdnblnNUKCda36Y0u
-	g4P+r/LKZE5+FguT3ZHLwRxY6TXHxXPzpVOt5MKTEAwj/EJTVOSKoeA6Jo8FTgcrSV94bbwlAMT
-	Ku+nWfWXh9pYPOHvGgIzQqZgmmBN7gxDRwFmRjGpbTjToIbSeOFqUJg5vbRJXiOtFRIB5B0tvKG
-	2TuwMzddIY7ZV7DgviD2vMgNGdc765
-X-Gm-Gg: ATEYQzw7yOt7fyxtqgooge0rlEWip3sTY87jWU1rCIX6Pa2069Ibzy0YKaUHQt9G2Ac
-	od5kLiVK6yot+EOJ+OCoIKP0lilfTqrTOU+ijq9Rm75kr90Wvx/NbUWeMdIncogwNdUxt4jVNJD
-	CzSc+TV256t0Zwsx+XRPx0bkl0OQUTt4zJQncO8NQyeE/S3DiIHizOZMqQaWfC0O72utXyeV3H7
-	stlEo1lTJSCG0E5JAEAY5tkUkXyJwc0IL/WtxQPQC69JG+eMSJ0fzFpJ4KWUbaTD4c=
-X-Received: by 2002:a05:651c:304c:b0:389:ee95:e238 with SMTP id 38308e7fff4ca-389ff111fe7mr92003131fa.1.1772535734365;
-        Tue, 03 Mar 2026 03:02:14 -0800 (PST)
-X-Received: by 2002:a05:651c:304c:b0:389:ee95:e238 with SMTP id
- 38308e7fff4ca-389ff111fe7mr92002891fa.1.1772535733857; Tue, 03 Mar 2026
- 03:02:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QdLDbc3L"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E18EC2BCC6;
+	Tue,  3 Mar 2026 11:04:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772535908;
+	bh=QbX73wCXwRkr1HV7bEMnhXfnmc2ghikMMn+yFzCU/s4=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=QdLDbc3LspoMdzF3yOKiS+2/bUeNd88SSHjCuT7BH1PZu1IwQEogRoQSu8GuYzJ+I
+	 hpWGLoUh+GTROb0CySxfl/puC0FvszABaio+jS6fONHEdgq/FmTqONvmSud82z6v/W
+	 Qtzf/6fNZkahrT0m8/+6Gau5nXY0CUEepz3EyoxuCjfqJMbL2WmwAoDJm1HdQWFqNy
+	 QsSMVRYs+yeBOEHTxADK1VTZCs95KN4idlKoNWMnHAbPNwRAhNXAPO5DZAo2X1V0bd
+	 QL/EUNzsawwZDF+680pke+4oUr+Dq4LAL4NtV4KYqvQE7YdWUch7FadAjHY5IFmcVi
+	 L2huhQ2zHojSQ==
+Message-ID: <7a0165fe39e82a1effd8cce5c2c4e82d6a42cb3a.camel@kernel.org>
+Subject: Re: [PATCH v2 003/110] audit: widen ino fields to u64
+From: Jeff Layton <jlayton@kernel.org>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner	
+ <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Steven Rostedt	
+ <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, Mathieu
+ Desnoyers <mathieu.desnoyers@efficios.com>, Dan Williams
+ <dan.j.williams@intel.com>, Matthew Wilcox	 <willy@infradead.org>, Eric
+ Biggers <ebiggers@kernel.org>, "Theodore Y. Ts'o"	 <tytso@mit.edu>, Muchun
+ Song <muchun.song@linux.dev>, Oscar Salvador	 <osalvador@suse.de>, David
+ Hildenbrand <david@kernel.org>, David Howells	 <dhowells@redhat.com>, Paulo
+ Alcantara <pc@manguebit.org>, Andreas Dilger	 <adilger.kernel@dilger.ca>,
+ Jan Kara <jack@suse.com>, Jaegeuk Kim	 <jaegeuk@kernel.org>, Chao Yu
+ <chao@kernel.org>, Trond Myklebust	 <trondmy@kernel.org>, Anna Schumaker
+ <anna@kernel.org>, Chuck Lever	 <chuck.lever@oracle.com>, NeilBrown
+ <neil@brown.name>, Olga Kornievskaia	 <okorniev@redhat.com>, Dai Ngo
+ <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,  Steve French
+ <sfrench@samba.org>, Ronnie Sahlberg <ronniesahlberg@gmail.com>, Shyam
+ Prasad N	 <sprasad@microsoft.com>, Bharath SM <bharathsm@microsoft.com>,
+ Alexander Aring	 <alex.aring@gmail.com>, Ryusuke Konishi
+ <konishi.ryusuke@gmail.com>,  Viacheslav Dubeyko	 <slava@dubeyko.com>, Eric
+ Van Hensbergen <ericvh@kernel.org>, Latchesar Ionkov	 <lucho@ionkov.net>,
+ Dominique Martinet <asmadeus@codewreck.org>, Christian Schoenebeck
+ <linux_oss@crudebyte.com>, David Sterba <dsterba@suse.com>, Marc Dionne	
+ <marc.dionne@auristor.com>, Ian Kent <raven@themaw.net>, Luis de
+ Bethencourt	 <luisbg@kernel.org>, Salah Triki <salah.triki@gmail.com>,
+ "Tigran A. Aivazian"	 <aivazian.tigran@gmail.com>, Ilya Dryomov
+ <idryomov@gmail.com>, Alex Markuze	 <amarkuze@redhat.com>, Jan Harkes
+ <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu,  Nicolas Pitre <nico@fluxnic.net>,
+ Tyler Hicks <code@tyhicks.com>, Amir Goldstein <amir73il@gmail.com>, 
+ Christoph Hellwig	 <hch@infradead.org>, John Paul Adrian Glaubitz
+ <glaubitz@physik.fu-berlin.de>,  Yangtao Li <frank.li@vivo.com>, Mikulas
+ Patocka <mikulas@artax.karlin.mff.cuni.cz>, David Woodhouse	
+ <dwmw2@infradead.org>, Richard Weinberger <richard@nod.at>, Dave Kleikamp	
+ <shaggy@kernel.org>, Konstantin Komarov	
+ <almaz.alexandrovich@paragon-software.com>, Mark Fasheh <mark@fasheh.com>, 
+ Joel Becker <jlbec@evilplan.org>, Joseph Qi <joseph.qi@linux.alibaba.com>,
+ Mike Marshall	 <hubcap@omnibond.com>, Martin Brandenburg
+ <martin@omnibond.com>, Miklos Szeredi	 <miklos@szeredi.hu>, Anders Larsen
+ <al@alarsen.net>, Zhihao Cheng	 <chengzhihao1@huawei.com>, Damien Le Moal
+ <dlemoal@kernel.org>, Naohiro Aota	 <naohiro.aota@wdc.com>, Johannes
+ Thumshirn <jth@kernel.org>, John Johansen	 <john.johansen@canonical.com>,
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
+ Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu	
+ <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+ Eric Snowberg <eric.snowberg@oracle.com>, Fan Wu <wufan@kernel.org>,
+ Stephen Smalley	 <stephen.smalley.work@gmail.com>, Ondrej Mosnacek
+ <omosnace@redhat.com>,  Casey Schaufler <casey@schaufler-ca.com>, Alex
+ Deucher <alexander.deucher@amd.com>, Christian =?ISO-8859-1?Q?K=F6nig?=	
+ <christian.koenig@amd.com>, David Airlie <airlied@gmail.com>, Simona Vetter
+	 <simona@ffwll.ch>, Sumit Semwal <sumit.semwal@linaro.org>, Eric Dumazet	
+ <edumazet@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni	
+ <pabeni@redhat.com>, Willem de Bruijn <willemb@google.com>, "David S.
+ Miller"	 <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Simon
+ Horman	 <horms@kernel.org>, Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra
+	 <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho
+ de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Mark Rutland
+	 <mark.rutland@arm.com>, Alexander Shishkin
+ <alexander.shishkin@linux.intel.com>,  Jiri Olsa <jolsa@kernel.org>, Ian
+ Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+ James Clark <james.clark@linaro.org>, "Darrick J. Wong"
+ <djwong@kernel.org>, Martin Schiller <ms@dev.tdt.de>,  Eric Paris
+ <eparis@redhat.com>, Joerg Reuter <jreuter@yaina.de>, Marcel Holtmann
+ <marcel@holtmann.org>,  Johan Hedberg <johan.hedberg@gmail.com>, Luiz
+ Augusto von Dentz <luiz.dentz@gmail.com>, Oliver Hartkopp	
+ <socketcan@hartkopp.net>, Marc Kleine-Budde <mkl@pengutronix.de>, David
+ Ahern	 <dsahern@kernel.org>, Neal Cardwell <ncardwell@google.com>, Steffen
+ Klassert	 <steffen.klassert@secunet.com>, Herbert Xu
+ <herbert@gondor.apana.org.au>,  Remi Denis-Courmont	 <courmisch@gmail.com>,
+ Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,  Xin Long
+ <lucien.xin@gmail.com>, Magnus Karlsson <magnus.karlsson@intel.com>, Maciej
+ Fijalkowski	 <maciej.fijalkowski@intel.com>, Stanislav Fomichev
+ <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Jesper Dangaard Brouer	 <hawk@kernel.org>, John
+ Fastabend <john.fastabend@gmail.com>, 	linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, 	linux-trace-kernel@vger.kernel.org,
+ nvdimm@lists.linux.dev, 	fsverity@lists.linux.dev, linux-mm@kvack.org,
+ netfs@lists.linux.dev, 	linux-ext4@vger.kernel.org,
+ linux-f2fs-devel@lists.sourceforge.net, 	linux-nfs@vger.kernel.org,
+ linux-cifs@vger.kernel.org, 	samba-technical@lists.samba.org,
+ linux-nilfs@vger.kernel.org, 	v9fs@lists.linux.dev,
+ linux-afs@lists.infradead.org, autofs@vger.kernel.org, 
+	ceph-devel@vger.kernel.org, codalist@coda.cs.cmu.edu,
+ ecryptfs@vger.kernel.org, 	linux-mtd@lists.infradead.org,
+ jfs-discussion@lists.sourceforge.net, 	ntfs3@lists.linux.dev,
+ ocfs2-devel@lists.linux.dev, devel@lists.orangefs.org, 
+	linux-unionfs@vger.kernel.org, apparmor@lists.ubuntu.com, 
+	linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	selinux@vger.kernel.org, amd-gfx@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, 
+	linaro-mm-sig@lists.linaro.org, netdev@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, linux-fscrypt@vger.kernel.org, 
+	linux-xfs@vger.kernel.org, linux-hams@vger.kernel.org,
+ linux-x25@vger.kernel.org, 	audit@vger.kernel.org,
+ linux-bluetooth@vger.kernel.org, 	linux-can@vger.kernel.org,
+ linux-sctp@vger.kernel.org, bpf@vger.kernel.org
+Date: Tue, 03 Mar 2026 06:04:51 -0500
+In-Reply-To: <CAHC9VhRnmBuXEKkUPQhJ_LDzcksjoAJL-ne6mFoJdR1hnDdzsg@mail.gmail.com>
+References: <20260302-iino-u64-v2-0-e5388800dae0@kernel.org>
+	 <20260302-iino-u64-v2-3-e5388800dae0@kernel.org>
+	 <CAHC9VhRnmBuXEKkUPQhJ_LDzcksjoAJL-ne6mFoJdR1hnDdzsg@mail.gmail.com>
+Autocrypt: addr=jlayton@kernel.org; prefer-encrypt=mutual;
+ keydata=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
+ QZIQXVeAA+smfTT0tDrisj1U5x6ZB9b3nBg65kc=
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260115163650.118910-1-wander@redhat.com> <20260115163650.118910-8-wander@redhat.com>
- <CAP4=nvR1YMQerrJUfKG6a1WaR_ajhOda=Ee5Jit-U=mB6Y9uWA@mail.gmail.com>
-In-Reply-To: <CAP4=nvR1YMQerrJUfKG6a1WaR_ajhOda=Ee5Jit-U=mB6Y9uWA@mail.gmail.com>
-From: Wander Lairson Costa <wander@redhat.com>
-Date: Tue, 3 Mar 2026 08:02:02 -0300
-X-Gm-Features: AaiRm52aB5mNrgSUriPTM8H-k-A8l6JJMEcw91RR_l_OtUtdxH2_hQHzgn0B_OI
-Message-ID: <CAAq0SU=EqDsHNxPZAbn3PVFm24UdKsF3BOP7f_8fBUAnooS-ZA@mail.gmail.com>
-Subject: Re: [PATCH v3 07/18] rtla: Add strscpy() and replace strncpy() calls
-To: Tomas Glozar <tglozar@redhat.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Crystal Wood <crwood@redhat.com>, 
-	Ivan Pravdin <ipravdin.official@gmail.com>, Costa Shulyupin <costa.shul@redhat.com>, 
-	John Kacur <jkacur@redhat.com>, Tiezhu Yang <yangtiezhu@loongson.cn>, 
-	Haiyong Sun <sunhaiyong@loongson.cn>, Daniel Wagner <dwagner@suse.de>, 
-	Daniel Bristot de Oliveira <bristot@kernel.org>, 
-	"open list:Real-time Linux Analysis (RTLA) tools" <linux-trace-kernel@vger.kernel.org>, 
-	"open list:Real-time Linux Analysis (RTLA) tools" <linux-kernel@vger.kernel.org>, 
-	"open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 2, 2026 at 11:33=E2=80=AFAM Tomas Glozar <tglozar@redhat.com> w=
+On Mon, 2026-03-02 at 18:44 -0500, Paul Moore wrote:
+> On Mon, Mar 2, 2026 at 3:25=E2=80=AFPM Jeff Layton <jlayton@kernel.org> w=
 rote:
->
-> =C4=8Dt 15. 1. 2026 v 18:26 odes=C3=ADlatel Wander Lairson Costa
-> <wander@redhat.com> napsal:
-> >
-> > Introduce a userspace strscpy() implementation that matches the Linux
-> > kernel's strscpy() semantics. The function is built on top of glibc's
-> > strlcpy() and provides guaranteed NUL-termination along with proper
-> > truncation detection through its return value.
-> >
-> > The previous strncpy() calls had potential issues: strncpy() does not
-> > guarantee NUL-termination when the source string length equals or
-> > exceeds the destination buffer size. This required defensive patterns
-> > like pre-zeroing buffers or manually setting the last byte to NUL.
-> > The new strscpy() function always NUL-terminates the destination buffer
-> > unless the size is zero, and returns -E2BIG on truncation, making error
-> > handling cleaner and more consistent with kernel code.
-> >
-> > Note that unlike the kernel's strscpy(), this implementation uses
-> > strlcpy() internally, which reads the entire source string to determine
-> > its length. The kernel avoids this to prevent potential DoS attacks fro=
-m
-> > extremely long untrusted strings. This is harmless for a userspace CLI
-> > tool like rtla where input sources are bounded and trusted.
-> >
->
-> strlcpy() was only added in glibc 2.38 [1]. It is thus not available
-> on systems with older glibc, like RHEL 9. Using it for strscpy()
-> implementation causes RTLA to fail to build on those systems.
->
-
-Thanks for pointing this. I will fix that in v4.
-
-> [1] https://www.gnu.org/software/gnulib/manual/html_node/strlcpy.html
->
-> > Replace all strncpy() calls in rtla with strscpy(), using sizeof() for
-> > buffer sizes instead of magic constants to ensure the sizes stay in
-> > sync with the actual buffer declarations. Also remove a now-redundant
-> > memset() call that was previously needed to work around strncpy()
-> > behavior.
-> >
-> > Signed-off-by: Wander Lairson Costa <wander@redhat.com>
+> >=20
+> > inode->i_ino is being widened from unsigned long to u64. The audit
+> > subsystem uses unsigned long ino in struct fields, function parameters,
+> > and local variables that store inode numbers from arbitrary filesystems=
+.
+> > On 32-bit platforms this truncates inode numbers that exceed 32 bits,
+> > which will cause incorrect audit log entries and broken watch/mark
+> > comparisons.
+> >=20
+> > Widen all audit ino fields, parameters, and locals to u64, and update
+> > the inode format string from %lu to %llu to match.
+> >=20
+> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
 > > ---
-> >  tools/tracing/rtla/src/timerlat_aa.c |  6 ++---
-> >  tools/tracing/rtla/src/utils.c       | 34 ++++++++++++++++++++++++++--
-> >  tools/tracing/rtla/src/utils.h       |  1 +
-> >  3 files changed, 36 insertions(+), 5 deletions(-)
-> >
->
-> Tomas
->
+> >  include/linux/audit.h   | 2 +-
+> >  kernel/audit.h          | 9 ++++-----
+> >  kernel/audit_fsnotify.c | 4 ++--
+> >  kernel/audit_watch.c    | 8 ++++----
+> >  kernel/auditsc.c        | 2 +-
+> >  5 files changed, 12 insertions(+), 13 deletions(-)
+>=20
+> We should also update audit_hash_ino() in kernel/audit.h.  It is a
+> *very* basic hash function, so I think leaving the function as-is and
+> just changing the inode parameter from u32 to u64 should be fine.
 
+It is indeed very simple. Here it is today:
+
+	static inline int audit_hash_ino(u32 ino)                           =20
+	{                                                                   =20
+	        return (ino & (AUDIT_INODE_BUCKETS-1));                     =20
+	}      =20
+
+It doesn't look like changing the argument type will make any material
+difference. Given that it should still work without that change, can we
+leave this cleanup for you to do in a follow-on patchset?
+
+--=20
+Jeff Layton <jlayton@kernel.org>
