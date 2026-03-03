@@ -1,102 +1,129 @@
-Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0B0147DF90
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 15:06:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F66447DF90;
+	Tue,  3 Mar 2026 15:07:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772550421; cv=none; b=naKa3h1GEZeBqN+w/9ruuYgPWFsq16vQDiFrem3IKQwfW3rwpaBGJPNeTsNOamGD3C8uoQb3eSsFCWBYSjwHdnkKN518Aje0ZIBW7deygqo6pq+xk/vKUMQrWGiAqA/vgm/ZOBte+sSeGoMjYwItByXzwl4OGUEnvBCqGfBSoAQ=
+	t=1772550449; cv=none; b=eJDzqMAChUUQUYU29MTmmV8BoCpzcZ3iTGaMfThav+yxa0tUKHjsYvWm+HVV0gP0diP9WJcLFn+FKwU4h6H3FKP4KgU3R1wXlZFjZPcUPqDUOKkEfhKbfjdf4Ks5BgIXmqsd6GRT5w2MQ8aHGhYFQ4rYFYehiZi9cagNa7T7hOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772550421; c=relaxed/simple;
-	bh=zZAQwnXwTS4ZJrc9nWuiqrG5mkirIuNcJQLGStcnLpc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Zl8aFWWTYMZxRKOiYZ6BWOOLYkWn9TMAIMjvX2vmiHDyWazZOh+PF/d2vyQJP/FghXSB4IYGZ8dSG93BgESlVjyriGKBDVmA0KcSHROJQ8afaxXdqVVosmOitfRswdL94CecLXwQUuqw9q1p20+wmB92lwDRREJCXJTDABWS8sw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BRqmf0+F; arc=none smtp.client-ip=95.215.58.180
+	s=arc-20240116; t=1772550449; c=relaxed/simple;
+	bh=og5BGeFrQ30Aqrda3hTixvdjugHX91yV1mpgepgzpaA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=T7wMh5/5ZVQ6TNIPKL6ADd9pMFtw8jbrnE6bqZ0FffRkMi/7Xu0734/L4cnTZjgYipS/8yvhwzyy9V73unVIyiNpnLrH3S5j2XfbMKQGsixcptBI2DjU/EiaBBbKweFDvN263+9HpdX/hqr/vWXyv6njvPS5EohCAYoFcqDVCsI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vV1d/3cB; arc=none smtp.client-ip=95.215.58.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BRqmf0+F"
-Message-ID: <aa2fada2-3f61-4f3d-9f55-36538f566333@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vV1d/3cB"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772550417;
+	t=1772550445;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=kPkRskiwsoZ3DEHGZEpEaLK9DAp/hC6vkb4Wg9Zbopc=;
-	b=BRqmf0+FCA2qWGQPLN/z+Dzjre/NCMVUX60l1PnIaikAfiLAeuLeUTTw9/B2aQiwwUxh50
-	T0+Rsg6S/Ll8FPb2bwujPhEsdtvYcu32Y/Ubmn6TSvFrF8EjvR5eau0AKNmjcwintUcd9q
-	fqDae1or4kMwGywAbFiSHBZxsS3ye20=
-Date: Tue, 3 Mar 2026 07:06:46 -0800
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=5h/Luh3nfXV7UEzDnO3fH1YL4eWophs4aupwotkiXUk=;
+	b=vV1d/3cBhWQeLop0t2aqFtKHQDZvJMgnpK6nyWiidpr8ShtOIvHjUPKO2gByc0l9t4e3Vq
+	8O/UmIQV5QBRdEmUI65WlpIvVO2ix3kCbtErQyeDcQMCd1ns9cgHI/9sU9HgwYruSjeNRg
+	D26XK7PbN+1mgo0LgUTvszXQ1XMRkUQ=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Feng Yang <yangfeng@kylinos.cn>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Pu Lehui <pulehui@huawei.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v3 0/6] bpf: Enhance __bpf_prog_map_compatible()
+Date: Tue,  3 Mar 2026 23:06:33 +0800
+Message-ID: <20260303150639.85007-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [LSF/MM/BPF TOPIC] BPF local storage for every packet
-To: Jakub Sitnicki <jakub@cloudflare.com>, lsf-pc@lists.linux-foundation.org
-Cc: bpf@vger.kernel.org, kernel-team@cloudflare.com
-References: <87ecmffopy.fsf@cloudflare.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Zhu Yanjun <yanjun.zhu@linux.dev>
-In-Reply-To: <87ecmffopy.fsf@cloudflare.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-在 2026/2/20 6:56, Jakub Sitnicki 写道:
-> In the upcoming days we are going to post an RFC which proposes to
-> extend the concept of BPF local storage to socket buffers (sk_buff, skb)
-> as means to attach arbitrary metadata to packets from BPF programs [1]
-> (slides 41-55).
-> 
-> Design wise, BPF local storage is a great fit for a packet metadata
-> container, as it that avoids some of the shortcoming of the the XDP
-> metadata interface:
-> 
-> 1. Users interact with storage through BPF maps and can take advantage
->     of existing built-in BPF map types, while still being able to
->     implement a custom data format,
-> 
-> 2. Maps within local storage can have different properties controlled by
->     map flags. For example, maps with BPF_F_CLONE set can survive packet
->     cloning. Other flags could allow map contents to survive sk_buff
->     scrubbing during encapsulation/decapsulation or pass across network
->     namespace boundaries.
-> 
-> 3. Local storage supports multiple users out of the box - each user
->     creates their own map, eliminating the need to coordinate data
->     layout,
-> 
-> 4. Local storage has its own backing memory, so persisting it across
->     network stack layers requires no changes to the network stack.
-> 
-> However, this flexibility comes at a cost. While XDP metadata requires
-> no allocations [2], an initial write to BPF local storage requires two:
-> one for bpf_local_storage_elem, and one for bpf_local_storage itself.
-> 
-> We would like to align this work with the needs of other BPF local
-> storage users (socks, cgroups, tasks, inodes), where allocation overhead
-> has been a concern as well [2].
-> 
-> Optimization ideas we would like to put up for discussion:
-> - slimming down bpf_local_storage so it can be embedded as an skb
->    extension chunk,
+Following discussion in the "bpf: tail calls in sleepable programs" [1],
+this series extends __bpf_prog_map_compatible() with additional per-program
+compatibility checks.
 
-Interested in this topic. I hope to join this meeting.
+The series validates these attributes:
 
-Zhu Yanjun
+* kprobe_write_ctx: for uprobe programs that can update pt_regs.
+* call_get_func_ip: for tracing programs using bpf_get_func_ip().
+* call_session_cookie: for fsession programs using bpf_session_cookie().
 
-> - making the bpf_local_storage cache size configurable,
-> - allowing bpf_local_storage to be pre-allocated,
-> - co-allocating bpf_local_storage and bpf_local_storage_elem for the
->    single-map case.
-> 
-> Thanks,
-> -jkbs
-> 
-> [1] https://fosdem.org/2026/schedule/event/DSC9L3-rich-packet-metadata/
-> [2] Assuming sufficient free headroom in the skb linear buffer.
-> [3] http://msgid.link/ad835a9b-e544-48d3-b6e2-ffe172fcfa6d@linux.dev
+kprobe_write_ctx progs can be abused to modify pt_regs of kprobe progs via
+tail calls. As in the test in patch #6, a kprobe prog can "regs->di = 0;"
+when it runs as a tail callee. Thus, bpf_prog_test_run_opts() gets -EFAULT
+instead of success.
+
+call_get_func_ip progs could get a bogus func IP when they run as tail
+callees, because the tail caller does not prepare the func IP on the
+trampoline stack. As in the test in patch #6, it gets the RBX value on
+stack instead of the true func IP.
+
+call_session_cookie progs can modify the first arg value on the trampoline
+stack. As in the test in patch #6, bpf_prog_test_run_opts() also gets -EFAULT
+because the first arg is modified by "*cookie = 0;".
+
+Links:
+[1] https://lore.kernel.org/bpf/20260130081208.1130204-1-jolsa@kernel.org/
+
+Changes:
+v2 -> v3:
+* Address comment from bot+bpf-ci:
+  * Guard call_get_func_ip and call_session_cookie with "has_trampoline" for
+    BPF_MAP_OWNER_MATCH_FOR_INIT.
+* v2: https://lore.kernel.org/bpf/20260302150342.55709-1-leon.hwang@linux.dev/
+
+v1 -> v2:
+* Factor out bpf_map_owner_init() and bpf_map_owner_matches() helpers.
+* Drop the "call_session_is_return" case, because the "is_return" value is
+  always prepared for fsession progs.
+* Address comments from Alexei:
+  * Use bitfields like 'u32 jited:1;'.
+  * Reimplement selftests.
+* v1: https://lore.kernel.org/bpf/20260224154024.12504-1-leon.hwang@linux.dev/
+
+Leon Hwang (6):
+  bpf: Add fsession to verbose log in check_get_func_ip()
+  bpf: Factor out bpf_map_owner_[init,matches]() helpers
+  bpf: Disallow !kprobe_write_ctx progs tail-calling kprobe_write_ctx
+    progs
+  bpf: Disallow !call_get_func_ip progs tail-calling call_get_func_ip
+    progs
+  bpf: Disallow !call_session_cookie progs tail-calling
+    call_session_cookie progs
+  selftests/bpf: Add tests to verify prog_array map compatibility
+
+ include/linux/bpf.h                           |   9 +-
+ kernel/bpf/core.c                             | 141 +++++---
+ kernel/bpf/verifier.c                         |   2 +-
+ .../selftests/bpf/prog_tests/tailcalls.c      | 319 ++++++++++++++++++
+ .../bpf/progs/tailcall_map_compatible.c       | 103 ++++++
+ 5 files changed, 524 insertions(+), 50 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/tailcall_map_compatible.c
+
+-- 
+2.52.0
 
