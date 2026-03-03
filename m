@@ -1,199 +1,137 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5374D1F5821
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 02:30:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.171
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772505025; cv=pass; b=WpJ1KQN0VjoMgFRMP+6HW064jgkoWxZ7OeyI6FPkvObR2k1/WMG2V3GZZKXX3sG46YGDnYrx3Osk+StXqrU9rUUnF9n9U64nJnH3m7T2NJoLlc3zrf6HtKwXShCpAtLdwvYyb2jcEMGtW3iEcWI0GWkaKgp51XKNaqAFajjxpLM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772505025; c=relaxed/simple;
-	bh=dpQSmzkUM5eywQT8MkIz9dqIAPHwbz822026FlJmJ4U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BAekG9Z0L7XwqYCJojJAPRYvBiLuxuNg28uGKRWyllVY4suZpWAJlvJEa4x3ToBGuceJizERGJb8d70EGNXG/PLbjGWyhij4yykbUxGVFu98i4xJ1EJYAkrki9Kkgq7VQb6pclDpS4VKcTjBsHN9CGxyVBF/t0DyTzG3kPdc45Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=EnwY0ve8; arc=pass smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FA98346ADE
+	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 02:39:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772505583; cv=none; b=LkXsSA2KX1E+Lfh/EJuQE1SB3gKNNMhhtrFmg0AXqWJRqr/ODX8VDpXyil0LNqmWTR9p40xp4sdo3CuCfBQnhGsWnyVGXuuMHAvbqIIN6UcATklHtDrAV3xxd/QuNKhwBRMkpntb9E7CI06uaPYCCZggeLEDsOu0bWDUJarnLAk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772505583; c=relaxed/simple;
+	bh=T0cqjCwPvGE8zwx/T0Uo+KK3ac7/xsG3+KRqmE8nIrg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=W1hrAB5XdZ9gYOTbQvoK4ucNfPTw1KVX8sh68n1p1xHBbiOZWhMFpPoF3useYPoQ7ZOspWKmq6JUu7aMsNNHDj2fGG3Hiu5efEyw0mzW/5YwyU0mCXQs1BvxuAYyAhbYJQZTMkyFd7TwDWzb8QIXcdBD+OihKPekv/iAqLEvzp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=h4zQtD5J; arc=none smtp.client-ip=95.215.58.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="EnwY0ve8"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2ae5636ab04so14895085ad.3
-        for <bpf@vger.kernel.org>; Mon, 02 Mar 2026 18:30:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772505023; cv=none;
-        d=google.com; s=arc-20240605;
-        b=jb7H2YSPfqeqtRJ/dM5o/4gGdXj4JWTFACiS/7qThZae5ZQVNcIyZnMCvVxOwRbjeF
-         9BTotOkXWQRdQ9cY2w5Iq0d83jiTQNQSu4TiAD/ARfAFxvsCluyELvI/LYJdXKTctmOR
-         adidGxxdF4/ktfxQK5zYar806IiJnZ/QndF5oS71+CrCpvaB7tVqQ6vJk189NI6RMQqW
-         nE87rioLGiFNZIH+noHC9BKThB4sUJBQzv1RceNlFgBGSxKUuNmouxS023esuUea8W8+
-         LmAviPze2HUSULE53TBb7QdhTF6JjwvNHtKtDq9b7aO82kvIvtQPH3HULG79RnLry3zL
-         c4ew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=VKlMqpEd7YBdXym1IpYpN4BFku3eaQLOirqfkrIT+SY=;
-        fh=WFMPj72yNJADnVmglhkQborCxbuJ9mwS0PQ5WKoH/vg=;
-        b=ionBV++/BWH1TkEwsJmRFTBz83yDb9wOA9Km3WDdKWVkWzxnurTVjqpRLgMh2E9Caa
-         YWo9F5y8LHv5y5PzMeqD1qponAfB/u5L9ifODJzp1IM+NbTl5Snwhri85VYaYTocSXYP
-         rIqwKWw+KQjESZK9BmTrlOac+b/kZPzP6bCs1yyKK6S6qBvknnuLmbo3KWo9A8HFFN+E
-         KeQYwj4buczp7JVjv7Kp86zUPxuocuVPqCYxqb3iYRzPz8soSDKj3xohLxpeNlgC6bFQ
-         WHMLFV7doZBd1Duk0AADqc4+wr+f+kcXGik/wuGc7dSwnSviw7SRFhZYTsnz0MVnl168
-         haHQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1772505023; x=1773109823; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VKlMqpEd7YBdXym1IpYpN4BFku3eaQLOirqfkrIT+SY=;
-        b=EnwY0ve8TI0VtmQxkarnaeufyPNiRRg1y9muTbZKzuEXhBY4g9HJ1IYcz84MXVe3/Q
-         bODMW83ywTK57L5SZkYzNMj6/uZyPLCyYjeLT31Vg/OLbeVJFoS0Ak6MPkzrK/2sH3zD
-         WARVYmWukoUuqK9Eskgff7q/iwCXhd6YT+AALq3/Y+g4H4ZCdvFCVw77BsVUwkXzuals
-         skmlOGjHq5zAfFgxynVodMOJqA6nnZ/N0jDSwpqbnP2Ofgxo8y6KMPdI7Tg2IAdEnNup
-         9TwqryRojXr0OZdLeCzJ03Dhgxy7oO3iQ828WbSd+OzDs+GG0CL5AjDXr3sW8EiW32eM
-         YLgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772505023; x=1773109823;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=VKlMqpEd7YBdXym1IpYpN4BFku3eaQLOirqfkrIT+SY=;
-        b=Fk6WUbzOzW2XKC/uFk4JqJ94pE/7Bl0bXl1O8f4tEBIiJx+JIbYM7wATiW1TPAZKbI
-         pYgrMhqH4WdP88gJZc2p4xDRDfFYZvU1/rC4cAkv/hZvBjUERlB1OY7374FdCJwOHXco
-         plK+IpfQGx+9yDysJJeQ9uT2Ms5P5thZ7AMKGSQyG8tRihCUbz0MO5Qn00Rt6S6qL0ud
-         T1ma9o083MskN3SJBstFIhPR6JbyaOXbCgoha1H+JNoxEOBPFWjJTPnzaTx8iVpZ5GD2
-         P+To/f1SCQav0Uj7ylwbZ6hJETDovFDBu0lUUY/ddYuXQ+Sx89Aej/k8i25xjO/3/bpb
-         PvIw==
-X-Forwarded-Encrypted: i=1; AJvYcCWv89VhKw5uXMLRIFreAify+Ache0spZpNo7/6QIrF4B8XD/YqqdsyDxTqv3AfFzmQrQLs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YznG5nxXkRsh9quRso695KSgJOXb/wOdMYd3DjcKCqQpum0zRTf
-	YfqnivAnC0NL0mZA/YleBLMnYWIUft9C2Dh9e+mT2/luIQubQCscKzdjjC1T0tR84dqumRP9oE5
-	3TbX5JFLE7xKx6MYaxO8/HAmSrD5j0Kv+XELowhZR
-X-Gm-Gg: ATEYQzw/OKs6iWC+ntf0vPhKj0GZBjk2n2BZB3OXPfvXhdGhehKX5tWD78TxE7B5Qhl
-	ejdMtNNGdm30HVXEl2/5gpCAHpkC8YShYvbFn5su+o9nXQigUhxl5tsp1hR8/QriTaQ5luMjsXJ
-	p8ebn598Dpl/FDl95OiZAykvYjd//aTxXwphNvdLjrhdR8Lc8/oh1HqYFEtqMewnW+Ik+EuioqR
-	aTiJU+NB4zRFHTFY6Uf6vOgv4vx1VzKgqKkEDI6wzcTXWU2/EjvlC3CAq6X3XMUIfhmJ8crgRrQ
-	k43+78/APSa2RCooBQ==
-X-Received: by 2002:a17:903:244a:b0:2ae:56f8:747b with SMTP id
- d9443c01a7336-2ae56f8786cmr37920855ad.57.1772505023451; Mon, 02 Mar 2026
- 18:30:23 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="h4zQtD5J"
+Message-ID: <ad50571a-ce13-47c9-ba5d-570adb4fc689@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772505580;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rcQBl4+DxnX9Uk553kw+FydgskPAvd1e5qW9QMDg1UA=;
+	b=h4zQtD5J206GALJqu1wb/dXYfS5GUVmCpXl1UqIOD5MdWa+eD+g+T4do3XtJzMu4wE1DS/
+	X140H9qyAXu8V2wmLH6Pr5zQrnkM0L1qBotj20zFiWvR2SBDA3dulwoSwrhQiWXdaAgSi3
+	h459+M6/hwAC6qLU5ewbYsQgBjgbZww=
+Date: Mon, 2 Mar 2026 18:39:30 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260302-iino-u64-v2-0-e5388800dae0@kernel.org> <20260302-iino-u64-v2-105-e5388800dae0@kernel.org>
-In-Reply-To: <20260302-iino-u64-v2-105-e5388800dae0@kernel.org>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 2 Mar 2026 21:30:10 -0500
-X-Gm-Features: AaiRm53tOqTCLn9NgvLgqwCOFo4xSyksjolr8ucn59RQ44Ck0r7mzGeRmSI5U0c
-Message-ID: <CAHC9VhSHj7qc-tKxEN45bkfr+Dha59ihzOGiCO2WDYTYoB-LeA@mail.gmail.com>
-Subject: Re: [PATCH v2 105/110] security: replace PRIino with %llu/%llx format strings
-To: Jeff Layton <jlayton@kernel.org>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Dan Williams <dan.j.williams@intel.com>, 
-	Matthew Wilcox <willy@infradead.org>, Eric Biggers <ebiggers@kernel.org>, 
-	"Theodore Y. Ts'o" <tytso@mit.edu>, Muchun Song <muchun.song@linux.dev>, 
-	Oscar Salvador <osalvador@suse.de>, David Hildenbrand <david@kernel.org>, 
-	David Howells <dhowells@redhat.com>, Paulo Alcantara <pc@manguebit.org>, 
-	Andreas Dilger <adilger.kernel@dilger.ca>, Jan Kara <jack@suse.com>, 
-	Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>, 
-	Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
-	Chuck Lever <chuck.lever@oracle.com>, NeilBrown <neil@brown.name>, 
-	Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, 
-	Steve French <sfrench@samba.org>, Ronnie Sahlberg <ronniesahlberg@gmail.com>, 
-	Shyam Prasad N <sprasad@microsoft.com>, Bharath SM <bharathsm@microsoft.com>, 
-	Alexander Aring <alex.aring@gmail.com>, Ryusuke Konishi <konishi.ryusuke@gmail.com>, 
-	Viacheslav Dubeyko <slava@dubeyko.com>, Eric Van Hensbergen <ericvh@kernel.org>, 
-	Latchesar Ionkov <lucho@ionkov.net>, Dominique Martinet <asmadeus@codewreck.org>, 
-	Christian Schoenebeck <linux_oss@crudebyte.com>, David Sterba <dsterba@suse.com>, 
-	Marc Dionne <marc.dionne@auristor.com>, Ian Kent <raven@themaw.net>, 
-	Luis de Bethencourt <luisbg@kernel.org>, Salah Triki <salah.triki@gmail.com>, 
-	"Tigran A. Aivazian" <aivazian.tigran@gmail.com>, Ilya Dryomov <idryomov@gmail.com>, 
-	Alex Markuze <amarkuze@redhat.com>, Jan Harkes <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu, 
-	Nicolas Pitre <nico@fluxnic.net>, Tyler Hicks <code@tyhicks.com>, Amir Goldstein <amir73il@gmail.com>, 
-	Christoph Hellwig <hch@infradead.org>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Yangtao Li <frank.li@vivo.com>, 
-	Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>, David Woodhouse <dwmw2@infradead.org>, 
-	Richard Weinberger <richard@nod.at>, Dave Kleikamp <shaggy@kernel.org>, 
-	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>, Mark Fasheh <mark@fasheh.com>, 
-	Joel Becker <jlbec@evilplan.org>, Joseph Qi <joseph.qi@linux.alibaba.com>, 
-	Mike Marshall <hubcap@omnibond.com>, Martin Brandenburg <martin@omnibond.com>, 
-	Miklos Szeredi <miklos@szeredi.hu>, Anders Larsen <al@alarsen.net>, 
-	Zhihao Cheng <chengzhihao1@huawei.com>, Damien Le Moal <dlemoal@kernel.org>, 
-	Naohiro Aota <naohiro.aota@wdc.com>, Johannes Thumshirn <jth@kernel.org>, 
-	John Johansen <john.johansen@canonical.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Eric Snowberg <eric.snowberg@oracle.com>, Fan Wu <wufan@kernel.org>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Casey Schaufler <casey@schaufler-ca.com>, Alex Deucher <alexander.deucher@amd.com>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, Eric Dumazet <edumazet@google.com>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Willem de Bruijn <willemb@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	James Clark <james.clark@linaro.org>, "Darrick J. Wong" <djwong@kernel.org>, 
-	Martin Schiller <ms@dev.tdt.de>, Eric Paris <eparis@redhat.com>, Joerg Reuter <jreuter@yaina.de>, 
-	Marcel Holtmann <marcel@holtmann.org>, Johan Hedberg <johan.hedberg@gmail.com>, 
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Oliver Hartkopp <socketcan@hartkopp.net>, 
-	Marc Kleine-Budde <mkl@pengutronix.de>, David Ahern <dsahern@kernel.org>, 
-	Neal Cardwell <ncardwell@google.com>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, Remi Denis-Courmont <courmisch@gmail.com>, 
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, 
-	Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, nvdimm@lists.linux.dev, 
-	fsverity@lists.linux.dev, linux-mm@kvack.org, netfs@lists.linux.dev, 
-	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net, 
-	linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, 
-	samba-technical@lists.samba.org, linux-nilfs@vger.kernel.org, 
-	v9fs@lists.linux.dev, linux-afs@lists.infradead.org, autofs@vger.kernel.org, 
-	ceph-devel@vger.kernel.org, codalist@coda.cs.cmu.edu, 
-	ecryptfs@vger.kernel.org, linux-mtd@lists.infradead.org, 
-	jfs-discussion@lists.sourceforge.net, ntfs3@lists.linux.dev, 
-	ocfs2-devel@lists.linux.dev, devel@lists.orangefs.org, 
-	linux-unionfs@vger.kernel.org, apparmor@lists.ubuntu.com, 
-	linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	selinux@vger.kernel.org, amd-gfx@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, 
-	linaro-mm-sig@lists.linaro.org, netdev@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-fscrypt@vger.kernel.org, 
-	linux-xfs@vger.kernel.org, linux-hams@vger.kernel.org, 
-	linux-x25@vger.kernel.org, audit@vger.kernel.org, 
-	linux-bluetooth@vger.kernel.org, linux-can@vger.kernel.org, 
-	linux-sctp@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf v3] bpf: fix: Race condition in
+ bpf_trampoline_unlink_cgroup_shim
+To: xulang@uniontech.com
+Cc: bot+bpf-ci@kernel.org, andrii@kernel.org, ast@kernel.org,
+ bpf@vger.kernel.org, clm@meta.com, daniel@iogearbox.net, dddddd@hust.edu.cn,
+ dzm91@hust.edu.cn, eddyz87@gmail.com,
+ hust-os-kernel-patches@googlegroups.com, ihor.solodrai@linux.dev,
+ kaiyanm@hust.edu.cn, martin.lau@kernel.org, sdf@fomichev.me,
+ yonghong.song@linux.dev
+References: <FFFA8066FE63B894+20260228022403.99235-1-xulang@uniontech.com>
+ <5a89fd3edd5e90ed47ff1189efdfa626f9b4610daa02da46a3a8fe4d5762796c@mail.kernel.org>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <5a89fd3edd5e90ed47ff1189efdfa626f9b4610daa02da46a3a8fe4d5762796c@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Mar 2, 2026 at 3:50=E2=80=AFPM Jeff Layton <jlayton@kernel.org> wro=
-te:
->
-> Now that i_ino is u64 and the PRIino format macro has been removed,
-> replace all uses in security with the concrete format strings.
->
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+
+
+On 2/27/26 7:04 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+>> --- a/kernel/bpf/trampoline.c
+>> +++ b/kernel/bpf/trampoline.c
+> 
+> [ ... ]
+> 
+>> @@ -1003,12 +1004,13 @@ struct bpf_attach_target_info tgt_info = {};
+>>
+>>   	shim_link = cgroup_shim_find(tr, bpf_func);
+>>   	if (shim_link) {
+>> -		/* Reusing existing shim attached by the other program. */
+>> -		bpf_link_inc(&shim_link->link.link);
+>> -
+>> -		mutex_unlock(&tr->mutex);
+>> -		bpf_trampoline_put(tr); /* bpf_trampoline_get above */
+>> -		return 0;
+>> +		link = &shim_link->link.link;
+>> +		if (link == bpf_link_inc_not_zero(link)) {
+> 
+> The other callers of bpf_link_inc_not_zero() check the return value
+> using IS_ERR(), for example bpf_link_by_id():
+> 
+>      link = bpf_link_inc_not_zero(link);
+> 
+> and bpf_link_get_curr_or_next():
+> 
+>      link = bpf_link_inc_not_zero(link);
+>      if (IS_ERR(link)) {
+> 
+> Should this use the same IS_ERR() pattern for consistency? Something
+> like:
+> 
+>      if (!IS_ERR(bpf_link_inc_not_zero(link))) {
+
+The same feedback by ai-review. I don't have a strong opinion. However, 
+the newly added "struct bpf_link *link" variable is not needed also. I 
+would carry the ai's suggestion further and remove the new local 
+variable also. Just test:
+
+	if (!IS_ERR(bpf_link_inc_not_zero(&shim_link->link.link))) {
+
+> 
+>> +			/* Reusing existing shim attached by the other program. */
+>> +			mutex_unlock(&tr->mutex);
+>> +			bpf_trampoline_put(tr); /* bpf_trampoline_get above */
+>> +			return 0;
+>> +		}
+>>   	}
+> 
+> This commit fixes a use-after-free introduced by commit 69fd337a975c
+> ("bpf: per-cgroup lsm flavor"), which added the bpf_link_inc() call
+> that could resurrect a zero-refcount link. It appears to be missing
+> a Fixes: tag. Martin KaFai Lau's review of v2 also expected this tag
+> to be present.
+
+Indeed, please ensure to address the earlier reviewer's feedback.
+
+pw-bot: cr
+
+> 
+> Suggested:
+> 
+>      Fixes: 69fd337a975c ("bpf: per-cgroup lsm flavor")
+> 
+> https://lore.kernel.org/bpf/cd99eba7-ac03-4b53-a79c-a6206abbddb6@linux.dev/
+> 
+> 
 > ---
->  security/apparmor/apparmorfs.c       |  4 ++--
->  security/integrity/integrity_audit.c |  2 +-
->  security/ipe/audit.c                 |  2 +-
->  security/lsm_audit.c                 | 10 +++++-----
->  security/selinux/hooks.c             | 10 +++++-----
->  security/smack/smack_lsm.c           | 12 ++++++------
->  6 files changed, 20 insertions(+), 20 deletions(-)
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22511586078
+> 
+> AI-authorship-score: low
+> AI-authorship-explanation: Human authorship patterns: references maintainer suggestion, informal testing description, iterative v1/v2/v3 development with reviewer feedback, addresses a bug reported by a different researcher.
+> issues-found: 2
+> issue-severity-score: low
+> issue-severity-explanation: Missing Fixes: tag (requested by BPF maintainer) and non-standard bpf_link_inc_not_zero() return value comparison pattern; neither causes runtime problems.
 
-For the LSM framework and SELinux changes ...
-
-Acked-by: Paul Moore <paul@paul-moore.com> (LSM/SELinux)
-
---=20
-paul-moore.com
