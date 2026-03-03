@@ -1,54 +1,54 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2159A38911E
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 19:55:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDDC6396596
+	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 19:56:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772567763; cv=none; b=JpSJoHiI8rHu844ig2exfcitXgZv3I6Td9bipJEklLiwybgwQKPpEX2xhqiBOcD8jtPEps6kl8b+ZF6+WXrNRVRlpCPdrRP85oua6pkI/lF7/C/u78o86w1dA0p8+dCiYkux7V/VQtu9Gwa5YixEAUJWMMR8KrxTpIKU7U8xNN0=
+	t=1772567764; cv=none; b=CkONiA63SldqPCx34QjCr/J0eE0LtAFf7MpL9ZMXKvOkG/cOUFadO4+5iKO+t1OMYo2f2gC/7t/gbUNeTEhW2Wgl8x528LeuTVcZQ/aMcXJ5pO/Ft7g5taEg1JZlsYNqkmkjPAaS93+VJRv+mJTGskeX6jelh8TXTi+RiKdQG3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772567763; c=relaxed/simple;
-	bh=Fz+xOWFU7AOGBur392VvmH8RfVHXuXIbgMX+VtQzmUo=;
+	s=arc-20240116; t=1772567764; c=relaxed/simple;
+	bh=bcPmWJbA+HwFh5Sp4FvAT6eGPD1jFzH7Tlh7wmLVZFg=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=I+HFmr7cu9ODAwnx/GwPh8TWn66ULQKGTSqjrKop3+xp87Rum1yCP/tvf9hKT9wXywVR950q9anJFYSFtPpo1P/iH0xUXew9YKPlAW6D1p26OVLi1bPDhHoGozfg+1apYbjEMp30YxVXfOpHix8bgIe+8jOop1POK57Okjr55GU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--joshwash.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SBAl/Bz7; arc=none smtp.client-ip=209.85.210.202
+	 To:Cc:Content-Type; b=dUeOFe65oncHyz/Gk3NDSrPe4WwOqK3o143BEPQXBhJBuoFaV9V3a5d3alY0pzg/N5qkROiYFYeR347CQLvisVYNKuRd0/zyvkc/hXmqV41PVR4dKgPSlgF/ZIhdH2s6h/hWtLKSHGoAxiCcWci2KKoiCdYes1qjm56DlTX4tbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--joshwash.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4bqAqaSW; arc=none smtp.client-ip=209.85.215.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--joshwash.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SBAl/Bz7"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-824ae2cac9dso2237137b3a.1
-        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 11:55:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4bqAqaSW"
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b6ce1b57b9cso4810935a12.1
+        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 11:56:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772567759; x=1773172559; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1772567761; x=1773172561; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dq/OV3i9BQc2Nxo8MqQVMxCoaBT7eVK8KXpu8kyi000=;
-        b=SBAl/Bz7g8wUyIfoOWqBebb9/XtKX/DOKzT4m1N42I8caEKbRF4LXcTYEXO/nykKJb
-         LOBi3UT2nBpp9aJl3PcbderSvVThUbl6Hru39LudvvZdfdx/mg0gs0Nf1q+xUuvkIUhk
-         k1oGYK2N/hpTaoAtqgm1BtVMGEfkIq1W6vEwlxd+WvB68ZDRbRuDIy+Hy0ey1uuFYmPc
-         JvX9VNTXxgRES+my+BVrUZeCM0yFVrak+MMQjmiQj6yh2f3GHYQqQp79EIkj/NZIpQ03
-         Rfr5TOoZkLDTwwOWxK5WYaddrUzlnzdLPB1QFClEGujmNCE7aQGaCVNKAL0BudEYI23a
-         zMsA==
+        bh=q7O+VqmWleakm25HNUCSndfnjpDlMGeEkeH0AG/54zw=;
+        b=4bqAqaSWfGMG3ODjwionQIf98JgMtykwKCws9aOBc/R/0TMDWyhvKVMSl8t7m/OrEH
+         hAnAJiFoXPGE6b+vCvEqZ8ArTzXM02uUgAS/9rLwQvfsxAav0QifZSzLM+gnraqQC7e7
+         MAwO5HfSmh+3Jb8++u7fzA66Qo1R6nUJS+IUyg1yoqskycYCYmJ8oiGrz5QEApKHAlVV
+         0tTt0sp/IBKIDwhs8Pr4dvTDj6kr3ZF8LiqN0KRKWEPk0dnSk+kX6WcD1Cv6M5MD5H+y
+         SMY50DiqkA53sHj5v+MdaViqDzDWum0vIIjU8otQPEOadTsDEC/E10g/4VsYtD8BBx/Y
+         Z1VA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772567759; x=1773172559;
+        d=1e100.net; s=20230601; t=1772567761; x=1773172561;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dq/OV3i9BQc2Nxo8MqQVMxCoaBT7eVK8KXpu8kyi000=;
-        b=NS3nm8XsUNkhsuBZP9BlEcckslaAZZp6eOg9yyVl5Bh3mUZtnxT9hscnPKqb/XaN5p
-         cmuc7RrLxVvMv/zBEUuPP3PVnq+uQO1ivCHyoh+Gi0OgLWTbTAehAWJDOAfM0QqQO0Oi
-         cqW5VAYcZbps3oZOpTRGxYiZomNkDO+k78RpG0xjkCAiicLSTvZ0cq/HhoWymVL/DIY6
-         HJq0BywpwYFA8EqR6Yjce76ysIx3FwTua0eHb4u0Kl6jmGm16qSKYEB9nmYfGDxl2yDp
-         o47mUev79Ayp1rdrCFfzHL6ytcUGpSSmcqhmO5Pi13GUj9r0bA9HtOyBGVQ2W1BVcN9G
-         /5iw==
-X-Forwarded-Encrypted: i=1; AJvYcCX0jtriKn0I31ScqGHyUkgmW8C+ub+4lTaoTTSGyWKujlmwIkG9yC8a51NGTl2GB5uFxXo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyu781W690PWCLquEGJubKIoVrt9N794VGUMpEGrR5NEeFFY2DL
-	Ah695J7KsbetUz9GpKVj4HmNqZFwV9D9xHLDBfC2dL/tygkI1KJC4R9FXtvWTjVzpovXdZhAYTL
-	8rkQNFxjIGkHX/g==
-X-Received: from pfjt7.prod.google.com ([2002:a05:6a00:21c7:b0:824:a3b4:6d0])
+        bh=q7O+VqmWleakm25HNUCSndfnjpDlMGeEkeH0AG/54zw=;
+        b=NfBPCHyNbi2FbLecNZfk6U+DYKhgYlJBDGy+aqcHnqxGRrYMGUpMY2DEpszFVW7es1
+         BMbfarunJsl/TB8TCFrMCm3aANQEZabwlQ5/ZaTcnlJDi8t9JLjolojId2hLcc9wTDI5
+         BXseRlu2OFdRwwdaoLw47oIO8J0NtnxxrLQXAZ1iTMXKLm7WrXwVhoGL2222roDZBoI+
+         q9mSwmoCR2VN5pRG3QVh3vv7u2ARUaaBqW+oMuqgwtmmD8Dg0gBlB9Q6vCEhKjw3ARqA
+         6n0W1GcPKnMHzAArzeoD63ELgP3XXyIIeNHsMQ++NkiujcwL7+0JSil6JSpOf238srje
+         Aopg==
+X-Forwarded-Encrypted: i=1; AJvYcCXZj+imPL74rdvaKVyKaZRbZeIwNqsgb+SsT7RaODEkb8W84TfUB1zSs28tlT78DI0Qtno=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOyF8InLWao5RazLAsJwajgztiAujdxkYZOU+fE0+1+sWqS6gw
+	ElLdZvpvdr9B76HCMeP96ZdQki8H+sy5vsgEPdPRQeNUrHo98uMf3THKp5QGBClvgsEpk3LrFIm
+	btPr3mgFMHkeRng==
+X-Received: from pgag24.prod.google.com ([2002:a05:6a02:2f18:b0:c70:e479:52d3])
  (user=joshwash job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a00:2d95:b0:822:1dbc:e75d with SMTP id d2e1a72fcca58-8274d933c52mr13543880b3a.1.1772567758991;
- Tue, 03 Mar 2026 11:55:58 -0800 (PST)
-Date: Tue,  3 Mar 2026 11:55:48 -0800
+ 2002:a05:6a21:610e:b0:38d:eeb9:8f49 with SMTP id adf61e73a8af0-395c39de44amr13785530637.2.1772567760815;
+ Tue, 03 Mar 2026 11:56:00 -0800 (PST)
+Date: Tue,  3 Mar 2026 11:55:49 -0800
 In-Reply-To: <20260303195549.2679070-1-joshwash@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -58,8 +58,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260303195549.2679070-1-joshwash@google.com>
 X-Mailer: git-send-email 2.53.0.473.g4a7958ca14-goog
-Message-ID: <20260303195549.2679070-4-joshwash@google.com>
-Subject: [PATCH net-next 3/4] gve: pull network headers into skb linear part
+Message-ID: <20260303195549.2679070-5-joshwash@google.com>
+Subject: [PATCH net-next 4/4] gve: Enable hw-gro by default if device supported
 From: Joshua Washington <joshwash@google.com>
 To: netdev@vger.kernel.org
 Cc: Joshua Washington <joshwash@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
@@ -76,74 +76,38 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ankit Garg <nktgrg@google.com>
 
-Currently, in DQO mode with hw-gro enabled, entire received packet is
-placed into skb fragments when header-split is disabled. This leaves
-the skb linear part empty, forcing the networking stack to do multiple
-small memory copies to access eth, IP and TCP headers.
+Change the driver's default behavior to enable hw-gro whenever supported
+for device.
 
-This patch adds a single memcpy to put all headers into linear portion
-before packet reaches the SW GRO stack; thus eliminating multiple
-smaller memcpy calls.
-
-Additionally, the criteria for calling napi_gro_frags() was updated.
-Since skb->head is now populated, we instead check if the SKB is the
-cached NAPI scratchpad to ensure we continue using the zero-allocation
-path.
+Performance observations:
+- We observed ~10% improvement in RX single stream throughput across
+  various MTU sizes.
+- No change in TCP_RR/TCP_CRR latencies
 
 Signed-off-by: Ankit Garg <nktgrg@google.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+Reviewed-by: Willem de Bruijn <willemb@google.com>
 Reviewed-by: Harshitha Ramamurthy <hramamurthy@google.com>
 Signed-off-by: Joshua Washington <joshwash@google.com>
 ---
- drivers/net/ethernet/google/gve/gve_rx_dqo.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/google/gve/gve_adminq.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/google/gve/gve_rx_dqo.c b/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-index 5ba893e5..ac44f50d 100644
---- a/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-+++ b/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-@@ -946,6 +946,8 @@ static int gve_rx_complete_rsc(struct sk_buff *skb,
- {
- 	struct skb_shared_info *shinfo = skb_shinfo(skb);
- 	int rsc_segments, rsc_seg_len, hdr_len;
-+	skb_frag_t *frag;
-+	void *va;
+diff --git a/drivers/net/ethernet/google/gve/gve_adminq.c b/drivers/net/ethernet/google/gve/gve_adminq.c
+index 873672f6..6ce8345e 100644
+--- a/drivers/net/ethernet/google/gve/gve_adminq.c
++++ b/drivers/net/ethernet/google/gve/gve_adminq.c
+@@ -1128,8 +1128,10 @@ int gve_adminq_describe_device(struct gve_priv *priv)
+ 	gve_set_default_rss_sizes(priv);
  
- 	/* HW-GRO only coalesces TCP. */
- 	if (ptype.l4_type != GVE_L4_TYPE_TCP)
-@@ -973,10 +975,20 @@ static int gve_rx_complete_rsc(struct sk_buff *skb,
- 		/* HW-GRO packets are guaranteed to have complete TCP/IP
- 		 * headers in frag[0] when header-split is not enabled.
- 		 */
--		hdr_len = eth_get_headlen(skb->dev,
--					  skb_frag_address(&shinfo->frags[0]),
--					  skb_frag_size(&shinfo->frags[0]));
-+		frag = &skb_shinfo(skb)->frags[0];
-+		va = skb_frag_address(frag);
-+		hdr_len =
-+			eth_get_headlen(skb->dev, va, skb_frag_size(frag));
- 		rsc_segments = DIV_ROUND_UP(skb->len - hdr_len, rsc_seg_len);
-+		skb_copy_to_linear_data(skb, va, hdr_len);
-+		skb_frag_size_sub(frag, hdr_len);
-+		/* Verify we didn't empty the fragment completely as that could
-+		 * otherwise lead to page leaks.
-+		 */
-+		DEBUG_NET_WARN_ON_ONCE(!skb_frag_size(frag));
-+		skb_frag_off_add(frag, hdr_len);
-+		skb->data_len -= hdr_len;
-+		skb->tail += hdr_len;
- 	}
- 	shinfo->gso_size = rsc_seg_len;
- 	shinfo->gso_segs = rsc_segments;
-@@ -1013,7 +1025,7 @@ static int gve_rx_complete_skb(struct gve_rx_ring *rx, struct napi_struct *napi,
- 			return err;
- 	}
+ 	/* DQO supports HW-GRO. */
+-	if (!gve_is_gqi(priv))
++	if (gve_is_dqo(priv)) {
+ 		priv->dev->hw_features |= NETIF_F_GRO_HW;
++		priv->dev->features |= NETIF_F_GRO_HW;
++	}
  
--	if (skb_headlen(rx->ctx.skb_head) == 0)
-+	if (rx->ctx.skb_head == napi->skb)
- 		napi_gro_frags(napi);
- 	else
- 		napi_gro_receive(napi, rx->ctx.skb_head);
+ 	priv->max_registered_pages =
+ 				be64_to_cpu(descriptor->max_registered_pages);
 -- 
 2.53.0.473.g4a7958ca14-goog
 
