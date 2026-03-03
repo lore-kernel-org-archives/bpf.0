@@ -1,117 +1,129 @@
-Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D834A370D65
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 20:08:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C3D5390C84
+	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 20:17:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772568529; cv=none; b=gjjyVPkp6IF9q99r6gKAM+iNjrwURz5tSeiAjnCPWWa1MyQmmMOwhOmPZJ2f/DDdmcCu7UaSuHbCXAGUfMXc5dT44tMk93toISl/ljHxtH8x+KdURT1K0g7qTVvYO7DGDrjX0PxIK5bDHdU1yZqzyu/7n4v88rFsQ0bENiB4owY=
+	t=1772569075; cv=none; b=t0HQCKcsY3KfHlxzTO4EuhSP/5Q2lrgEg2TUgEO/v1CWVf7VF27XYpxS0V77HHVNad0GBzuibP6HknJ7moTmj6AoXcVAKRbLBT3QhA69VTSHPGOMeIxiUVE2buJWihpBh2aGjMqiSBI2/WYq+6XAenyT9kTRKI4PaOXr47sU7FY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772568529; c=relaxed/simple;
-	bh=ISEtte2YRGcmWkrcUHpDS6PMfMZOWkZs5vlInnwzUbA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=csHtuJ/ORPvT5KgwQ/8n2Vw0F92X05PQTwT9IvndGvjDgmLIQdRWeXtnNtmnd69oBNZhv+WBnkyQYS1qBIb/Pk1cYBaSZYykLOFmc777aK6MCy1M+oUrkbKSQ2gCMFmBlGAPqkkQU9wMUE4VwZLKnhgkSnPqzHsAr7DeWZV9LOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HJkcv25a; arc=none smtp.client-ip=74.125.82.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772569075; c=relaxed/simple;
+	bh=NQbsMGmf5+ykUmsC0KXPVoOlpRSjg8unR+tV/T0jsOo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NYGGMfJvm/MzQd1HCQKd/cTl4Ldv7v3SHmMqkPiV3/dB0q7DDz/v7K2f1H3W4LjuCAwRFoCj6mBdhVjealrThNDP7j0dLKSPCK/jCXczQWbviIYZ0OIPIJ4lX17YQMGqoMgEjImIdYAsfX0xByCjLnejZOvcea7nSzXKJX5CW0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VnDTEp46; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HJkcv25a"
-Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-1274204434bso4670378c88.1
-        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 12:08:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772568528; x=1773173328; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=9yF/aUyo6FiFRr8w9SYSbT1Zd6hZOeTGHVjT13l1hoE=;
-        b=HJkcv25afmCkUv3iLfkgKqnRrPxiIGQbc8eY35jXJy2JamiAwn6n+/2NrnoDWeeH+F
-         Ip89KJrdxqwG/DdWvI8V+oGBpiPYQgGPHrcvJ4PZy7kVhgCUs83bPytcLGrLM9OWpT16
-         BAutvlZgJ/+dH1cy6mMst6RE0mYgTyIZe/tSWqMgHN6xJ177tc0c2fD39iYPWN4kAPEm
-         H0ZEpGSZI39jS1xfKxgKF7PTe6cKc1h0egdst2bOgB7VLoQ6MjFbNKX9x/hg7KuhPOVl
-         qeOqm6/OtPMb0BO24N/AkfeJAClt91AgJjl5Rhi5zQDBsqApA++M+hql2kY9r9JvOPDE
-         aNSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772568528; x=1773173328;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9yF/aUyo6FiFRr8w9SYSbT1Zd6hZOeTGHVjT13l1hoE=;
-        b=Xu4apYx+foOCNxRYMy68LF3IzbovLFy2B2ek9QUEejOaJZboSOwPhAiDvwf47OJHf6
-         efGsZtWBCFbK7TN+0X+c4HNMvqD7PURwUWpS7lsYkBtCUa+J85xIRC1ApfrvkmDF62dS
-         0op5w8Xj7y4LFpSFRD+7lDBOUhHxxqPEgWz92qvChc3VfmbSbR0Cap3OcmIgYAHDEyUx
-         OEYaoywuUOEcrzlfozgHusylfvUjy01yAiAr+AOmUh145KnHF9u986AfxwYLw7FsYjhE
-         3LLaoyIDt4gj367gV9jdAAaD2YVUGqBMoMNIWUgJ0h8uwOCWLclz84BM83dMs2ehShBE
-         CQrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXpszKKHaD8nc70mbcAohok4cbDFxUvBqMs0Osb6BL/y17IDAPjWFu9155QFXU/CJ5ye5U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfgSl82Nf5lLMdxY4JSVm+2gYrz6Elg8gX5dV5bLfAXeEHc6Io
-	JJEpBtIuOoNX9FMBLgTw5ro4mO23lAwjeBxzTOR/a+a8CvetVtPoeuao
-X-Gm-Gg: ATEYQzyUK7S55d7c50f1lm2GTGqu1NZOI7+SUiXLctfNmT7srP6kzZdLo4c+ilbhuB9
-	8CcEPWOw4G+GjEuctzhBBDr2oVjT87H4eYrHdAnJDrcFMiEnJMiP/fF6V55GFFF5bexUjgADDzb
-	ZQKZVSzLs81IB7bP0ln/rq2R6aRGY2FGb7A+93+i/heL0clos0Y7bXvlCbQTjPS1FmTQm0juNJn
-	iZqPMCdIAra1gF0/6k4zSBefDMommhkpaj0fv7k2WslKvahdDfW5RvvwxDA5bKahBX9uaphAv/i
-	usSokvjPXPjjADlLP7jbiE7+PA07eeDCscI2dTlPRMLFV+0/fi0+c1aUv+mXqCoOfIH2SQC8drY
-	WM6JjM+cCg8AuMQZFj0VLzMJpsYIjxPhznVxUG21xQmSoEVx8Jea3z9rGm+onoqLlrmIbju0aa0
-	sN03o0dIGnFOwxfGe9/zSAk2BMNuL2vtsvtXcM2QvfUsSqEHCcS94TUKQ7OaGctVvr9Zrdr9nW+
-	MQrkCER
-X-Received: by 2002:a05:7022:7a3:b0:127:9432:485f with SMTP id a92af1059eb24-128b0ce47b5mr1159115c88.5.1772568527731;
-        Tue, 03 Mar 2026 12:08:47 -0800 (PST)
-Received: from ?IPv6:2a03:83e0:115c:1:bf8e:1331:ef2b:145d? ([2620:10d:c090:500::3:4473])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12789a32633sm20160083c88.9.2026.03.03.12.08.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2026 12:08:47 -0800 (PST)
-Message-ID: <24dceff5bf15b6c3e204c69617ac249de497b034.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v4 2/2] selftests/bpf: Add trampolines single
- and multi-level pointer params test coverage
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Slava Imameev <slava.imameev@crowdstrike.com>, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org
-Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, 	jolsa@kernel.org, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, 	pabeni@redhat.com, horms@kernel.org,
- shuah@kernel.org, 	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- netdev@vger.kernel.org, 	linux-kselftest@vger.kernel.org,
- linux-open-source@crowdstrike.com
-Date: Tue, 03 Mar 2026 12:08:44 -0800
-In-Reply-To: <20260303095427.38981-3-slava.imameev@crowdstrike.com>
-References: <20260303095427.38981-1-slava.imameev@crowdstrike.com>
-	 <20260303095427.38981-3-slava.imameev@crowdstrike.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VnDTEp46"
+Message-ID: <609c1db8-e674-4d65-8082-43e9fa4fbc9a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772569071;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UlP8bZ45vbIWhoTp733e81PmNEq8zFu8uoAFbKeun4w=;
+	b=VnDTEp46bC8nA2iCfPvlW+p/2IuCd9diM7L3ZQvh0EK7v4tBdil48svdWDBEkFkb2olBcS
+	a5jzyCdK8BPaz/spZrlth41bo0FkUodPFQZ9wup2HZZ9Y7ExNlboaBi6uIMCAJy4eunouP
+	6F7nBuUsXIcdUYq3jVS69H+8z10syXI=
+Date: Tue, 3 Mar 2026 12:17:43 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf v2] resolve_btfids: Fix linker flags detection
+To: Vitaly Chikunov <vt@altlinux.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
+ kernel-team@meta.com
+References: <20260303193954.1879948-1-ihor.solodrai@linux.dev>
+ <aac-hefhJ8znydSb@altlinux.org>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <aac-hefhJ8znydSb@altlinux.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, 2026-03-03 at 20:54 +1100, Slava Imameev wrote:
-> Single and multi-level pointer params and return value test coverage
-> for BPF trampolines:
-> - fentry/fexit programs covering struct and void double/triple
->   pointer parameters and return values
-> - verifier context tests covering pointers as parameters, these
->   tests cover single and double pointers to int, enum 32 and 64,
->   void, function, and double pointers to struct, triple pointers
->   for void
-> - verifier context tests covering single and double pointers to
->   float, to check proper error is returned as pointers to float
->   are not supported
-> - verifier context tests covering pointers as return values
-> - verifier context tests for lsm to check trusted parameters
->   handling
-> - verifier context tests covering out-of-bound access after cast
-> - verifier BPF helper tests to validate no change in verifier
->   behavior
->=20
-> Signed-off-by: Slava Imameev <slava.imameev@crowdstrike.com>
-> ---
+On 3/3/26 12:06 PM, Vitaly Chikunov wrote:
+> Ihor,
+> 
+> [...]
+>>  
+>>  LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
+>> +
+>> +ifneq ($(filter -static,$(EXTRA_LDFLAGS)),)
+>> +LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs --static 2>/dev/null || echo -lelf -lzstd)
+>> +else
+>>  LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
+>> +endif
+>>  
+>>  ZLIB_LIBS  := $(shell $(HOSTPKG_CONFIG) zlib --libs 2>/dev/null || echo -lz)
+> 
+> Perhaps, this line is not needed either, as `pkg-config libelf --libs
+> --static` will add -lz.
 
-Again, I probably miss a point, but with current implementation it
-seems sufficient in verifier_ctx_ptr_param() to add one or two
-tests accessing void** or similar and checking verification log
-to validate that parameter has expected type scalar().
-Why so many tests are necessary?
+The -lz has been there forever too [1], and a duplicate lib flag is
+harmless here.  We also want to have reasonable defaults if pkg-config
+is not available.
 
-[...]
+That said, the same can be achieved with the diff pasted below.
+
+I don't mind either way, let's see if maintainers have an opinion.
+
+diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+index 7672208f65e4..a7dac1587344 100644
+--- a/tools/bpf/resolve_btfids/Makefile
++++ b/tools/bpf/resolve_btfids/Makefile
+@@ -66,13 +66,11 @@ $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OU
+ LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
+ 
+ ifneq ($(filter -static,$(EXTRA_LDFLAGS)),)
+-LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs --static 2>/dev/null || echo -lelf -lzstd)
++LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs --static 2>/dev/null || echo -lelf -lzstd -lz)
+ else
+-LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
++LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf -lz)
+ endif
+ 
+-ZLIB_LIBS  := $(shell $(HOSTPKG_CONFIG) zlib --libs 2>/dev/null || echo -lz)
+-
+ HOSTCFLAGS_resolve_btfids += -g \
+           -I$(srctree)/tools/include \
+           -I$(srctree)/tools/include/uapi \
+@@ -81,7 +79,7 @@ HOSTCFLAGS_resolve_btfids += -g \
+           $(LIBELF_FLAGS) \
+           -Wall -Werror
+ 
+-LIBS = $(LIBELF_LIBS) $(ZLIB_LIBS)
++LIBS = $(LIBELF_LIBS)
+ 
+ export srctree OUTPUT HOSTCFLAGS_resolve_btfids Q HOSTCC HOSTLD HOSTAR
+ include $(srctree)/tools/build/Makefile.include
+
+
+[1] https://lore.kernel.org/bpf/20200711215329.41165-2-jolsa@kernel.org/
+
+> 
+> Thanks,
+> 
+>> -ZSTD_LIBS  := $(shell $(HOSTPKG_CONFIG) libzstd --libs 2>/dev/null || echo -lzstd)
+>>  
+>>  HOSTCFLAGS_resolve_btfids += -g \
+>>            -I$(srctree)/tools/include \
+>> @@ -76,7 +81,7 @@ HOSTCFLAGS_resolve_btfids += -g \
+>>            $(LIBELF_FLAGS) \
+>>            -Wall -Werror
+>>  
+>> -LIBS = $(LIBELF_LIBS) $(ZLIB_LIBS) $(ZSTD_LIBS)
+>> +LIBS = $(LIBELF_LIBS) $(ZLIB_LIBS)
+>>  
+>>  export srctree OUTPUT HOSTCFLAGS_resolve_btfids Q HOSTCC HOSTLD HOSTAR
+>>  include $(srctree)/tools/build/Makefile.include
+>> -- 
+>> 2.53.0
+
