@@ -1,118 +1,312 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B983F2E2852;
-	Tue,  3 Mar 2026 19:15:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CC2E36EAAB
+	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 19:27:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772565327; cv=none; b=Xw4Bvcai1GYF5Gb7SJsDhifaNpohseOYFg0QpqOKUpHFc8cxUuXfcwat17MU08MKau48acEJT6uZO6qOkCWQ09iYVl1Z4qaWA7YtfkmeY8HEfTRbh0MIJTlps1fRihhhk2Ii62WeiqyUV1/hk5jLorVz8QUpDl7TjcY7d6DS0As=
+	t=1772566049; cv=none; b=fiDA2/H14g7vnQ1KQJNGWxCoApKmhixIKFRz5MNmfFkKDMw7/th/HCAtRUOrqqSSj1HmuYc8t35Slg9GDlc5Dn00gFy4ezSNYmgDL1LftmjW299HFmf54mKkRhB35NQT6oeJWgYAQqVlx3keYc1BsVljSVozWLydR7RA3XynF8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772565327; c=relaxed/simple;
-	bh=8+T3xdiQptMYEcaeS4p4OKnvS5XK55of7k2wnkVPxEk=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=QyH0lMuZVqZmj/jBkZFbxJ8zoRUkdSpW5Ui2jR4k02dHFgsSrFZztFjfsiMbPJ11+vMCpqFdYwS9WH0N/6E5u/v2RlGl+woZ19g7RLIE6Rx9fFTaD/O8oWS/bld3fEpKX+FoKcd+08VME51i7VxrwNodCJH9Qu80utX/qQL5LY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=axx8AMjf; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772566049; c=relaxed/simple;
+	bh=3KQTnb7khAeZO66gkrvN0Vybgn9ssamBPBLbak/e7g8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=jSHVpfEnaxhByyLm488/KyCFelBwHe8/Et+uFb86by2l0k8/UPxhkFJIFjIVkmS4b4ijzzI7kylEuZYXd3dVa/6O5IIErOc3vEVoNe9f/7kS9OO2I3i1WmdwS/qZgKkEgG+G/S3nx/j6lQwcAUJJ6ck4sZBIgTbB5iYhbEEa4i0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dH/AsFKk; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="axx8AMjf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7E37C116C6;
-	Tue,  3 Mar 2026 19:15:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772565327;
-	bh=8+T3xdiQptMYEcaeS4p4OKnvS5XK55of7k2wnkVPxEk=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=axx8AMjfW+96ZwmIa4a9BoJHG5mM8lnem2bUGoYM4w7PRIv0GtGuxe3ApD/95PFRM
-	 PopmqoYSwb/kXPDlNSYaGS2oWENQ/sb0RBjjtHfX/r8VNCe36j45GDkeJvd9vPhqdm
-	 lhbrkndssj2U/sc9DMK2i8JOKExrMd1YfxQL4MUsKz4V2ewGgQTF5i2+pBibKFPLcH
-	 bjlgZGIN4j4AD8ZeYIfJG/keVI07nmpHe52Kbsq+VLyQpGiy6bj9MewqFn2oJD3FIE
-	 ZNUo6wBNratNaMxvf4ggVLJhWeNwniMHSZviNGNb13Z6VEjF8d6P0Wj+ExUa+knZJK
-	 vLxW7Z/F+Z1wQ==
-Content-Type: multipart/mixed; boundary="===============9213348926159975098=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dH/AsFKk"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4807068eacbso50207005e9.2
+        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 11:27:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772566044; x=1773170844; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=v+RXAX9PEVTKAQLrJdNQtqPtGtgnDbJVl3qqHrqDcCE=;
+        b=dH/AsFKkmmU56fDkbbQxORhNSsI24XAxc9Tmbaw9dSMOT06oTjnYL4pgqIRcxXY4WB
+         0UxXed4bfKLQpLmfgxwMs9v/FTlB/00ad/vJUYnItNPLc5mGDvnnFVXoFFa7BaQWv0jr
+         d8ClwM6Kosbo6MmElDCLTv1Xd59RQTO+dky32Htcri5dZJj+tKP1HW9f2+KACqSTX2CH
+         1GlFv21qTqLGcSq118MEK/wcXAFy0nEXV9z/izMl6d31KxJgXxvs/k9drfU0x+d5ooTa
+         p9an/C8n9IC4DyvITz72nUvEJBKOxzXdIlSA3ZfXitSfHnPuHMOSHAB4/8+O2UEOk7Y/
+         jx8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772566044; x=1773170844;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v+RXAX9PEVTKAQLrJdNQtqPtGtgnDbJVl3qqHrqDcCE=;
+        b=TPA0Kz1/mhDPcGYzE/Ct09UL6MMEFKFizl9ytb0TUfGy9K00/wxnL1FYf0l3TKSKZp
+         X9BRG7Adraqv3f0UTOJEn75UdglY2RQ2Dp/8v48gWZ9xQ/3s7bPdnzZYeCA1X83rmjt6
+         DeyrsmSrZXYPYJrsFmI8S7v5j43Kny9v+5nnL/atxxPgyEJRvIv8UPYBUkEMIbfh2eZr
+         6xw87DWXpu1/fmYQYnDEAhWMt/NMbJsZIcs5jjnY6AA6nlXuilufMuFW5cqKMZKHr1aG
+         cNoVW9RKbArJD0GLCRrukqUDt6lCUxwifyCfKJeI2J0xO+VZBKCnG86MpHpOpy6UlNaM
+         W4bQ==
+X-Gm-Message-State: AOJu0YxHGXaqk9W3xSWHP2qP/cGlHdfMohOBhSGdHRVxrpEhM40U2Krs
+	0UyWSwLr0g8nzGkaf18i6oANIYB0o8R7AeM5S7h9M+ojngBD/SD0g5/YHd6nwUDT
+X-Gm-Gg: ATEYQzwYIuEjV8xMndJqfIbdvZnbBn4j7b8fv8WlDUwcYKm8Uk5Ymw94ZdY1oyK4v6x
+	DycvJr7GKqZJluHZZdAMyqO/PTjdgvDRws7LnJBSON1iMB5Q7k1lT3M3+kYEJc74WuT48l1QbFB
+	xBP8aRF8HhwL5oMa7L3YAHJ4hoZcQKPk8/vlpINjaxm5ZjhOq91zeElsMHsg5DZbwTj39JTjLxn
+	Bh3cbjIPcr/bjkfitmRXN1CyE7f2IkmujeMPXvZfBwWLWzmLkX46+UC/2temJZu5uRrp79OadRG
+	E08nEa25usUlDQAW14gptIQOMreIkaY/X3tXx/SJpdjIaLGc1W8WjU9qT2Bl+9iGtl/YTF93stW
+	W+c/bUUXiVFCaSedsObf3HIiqv+1CCJCJ/Zpfq5atfXxNz7ndPUF+hsi3MNe0srNejdaWkvpifv
+	AR60cVYEAYrDGUqE4p4v8dX1+/6BEjGecDsvJHOh9ZmOWLWrcMMBi9wSWmPra6Q7deOuIpuXX4y
+	5RwO6DgTVz/vry59ZoAHOViihhEUrQh9+sr2yXNQafAPOps3CnpSjI+Ua7xTJ4WaK9FoDitMrOv
+	XfWFBVhDPBdrL6MzDJb+dQ==
+X-Received: by 2002:a05:600c:4ece:b0:46f:d682:3c3d with SMTP id 5b1f17b1804b1-483c9bad811mr345958665e9.13.1772566043855;
+        Tue, 03 Mar 2026 11:27:23 -0800 (PST)
+Received: from mail.gmail.com (2a01cb0889497e008a159e65a12d50f9.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:8a15:9e65:a12d:50f9])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4851335648esm56433955e9.5.2026.03.03.11.27.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Mar 2026 11:27:22 -0800 (PST)
+Date: Tue, 3 Mar 2026 20:27:20 +0100
+From: Paul Chaignon <paul.chaignon@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+Subject: [PATCH bpf-next 1/1] bpf: Avoid one round of bounds deduction
+Message-ID: <aac2GMpnpoAKD4jX@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <a1a841b4bd59afe171bf85b06e723705403e1092c5c17a0466feb7114d189296@mail.kernel.org>
-In-Reply-To: <20260303182003.117483-7-alan.maguire@oracle.com>
-References: <20260303182003.117483-7-alan.maguire@oracle.com>
-Subject: Re: [PATCH v12 bpf-next 6/8] btf: support kernel parsing of BTF with layout info
-From: bot+bpf-ci@kernel.org
-To: alan.maguire@oracle.com,andrii@kernel.org,ast@kernel.org
-Cc: daniel@iogearbox.net,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,qmo@kernel.org,ihor.solodrai@linux.dev,mykyta.yatsenko5@gmail.com,dwarves@vger.kernel.org,bpf@vger.kernel.org,alan.maguire@oracle.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue,  3 Mar 2026 19:15:26 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
---===============9213348926159975098==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+In commit 5dbb19b16ac49 ("bpf: Add third round of bounds deduction"), I
+added a new round of bounds deduction because two rounds were not enough
+to converge to a fixed point. This commit slightly refactor the bounds
+deduction logic such that two rounds are enough.
 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
+In [1], Eduard noticed that after we improved the refinement logic, a
+third call to the bounds deduction (__reg_deduce_bounds) was needed to
+converge to a fixed point. More specifically, we needed this third call
+to improve the s64 range using the s32 range. We added the third call
+and postponed a more detailed analysis of the refinement logic.
 
-[ ... ]
+I've been looking into this more recently. To help, I wrote a high level
+sequence of all the refinements carried out in reg_bounds_sync. u64 ->
+s32 means we used the u64 ranges to improve the s32 ranges.
 
-> +static int btf_parse_layout_sec(struct btf_verifier_env *env)
-> +{
-> +	const struct btf_header *hdr = &env->btf->hdr;
-> +	struct btf *btf = env->btf;
-> +	void *start, *end;
-> +
-> +	if (hdr->hdr_len < sizeof(struct btf_header) ||
-> +	    hdr->layout_len == 0)
-> +		return 0;
-> +
-> +	/* Layout section must align to 4 bytes */
-> +	if (hdr->layout_off & (sizeof(u32) - 1)) {
-> +		btf_verifier_log(env, "Unaligned layout_off");
-> +		return -EINVAL;
-> +	}
+    /* __update_reg_bounds: */
+    tnum -> {s32, u32, s64, u64}
+    /* __reg_deduce_bounds: */
+    for (3 times) {
+        /* __reg32_deduce_bounds: */
+        u64 -> {u32, s32}
+        s64 -> {u32, s32}
+        u64 -> s32
+        s64 -> s32
+        u32 -> s32
+        s32 -> u32
+        /* __reg64_deduce_bounds: */
+        u64 -> s64
+        s64 -> u64
+        {u64, s64} -> {u64, s64}
+        /* __reg_deduce_mixed_bounds: */
+        u32 -> u64
+        u32 -> s64
+        {s32, s64} -> {s64, u64, tnum}
+    }
+    /* __reg_bound_offset: */
+    {u64, u32} -> tnum
+    /* __update_reg_bounds: */
+    tnum -> {s32, u32, s64, u64}
 
-When one of these validation errors fires, btf_verifier_log_hdr()
-has already printed the header dump.  That function currently logs
-type_off, type_len, str_off, and str_len, but not layout_off or
-layout_len:
+From this, we can observe that we first improve the 32bit ranges from
+the 64bit ranges in __reg32_deduce_bounds, then improve the 64bit
+ranges on their own in __reg64_deduce_bounds. Intuitively, if we were to
+improve the 64bit ranges on their own *before* we use them to improve
+the 32bit ranges, we may reach a fixed point earlier. Said otherwise, we
+would need to move the *64 -> *32 refinements to the beginning of
+__reg_deduce_mixed_bounds. (The logic would then also better match the
+function names, but that's secondary.)
 
-kernel/bpf/btf.c:btf_verifier_log_hdr() {
-    ...
-    __btf_verifier_log(log, "type_off: %u\n", hdr->type_off);
-    __btf_verifier_log(log, "type_len: %u\n", hdr->type_len);
-    __btf_verifier_log(log, "str_off: %u\n", hdr->str_off);
-    __btf_verifier_log(log, "str_len: %u\n", hdr->str_len);
-    __btf_verifier_log(log, "btf_total_size: %u\n", btf_data_size);
-}
+After testing, this small refactoring does allow us to lose one call to
+__reg_deduce_bounds. Without this refactoring, the test
+"verifier_bounds/bounds deduction cross sign boundary, negative
+overlap" fails when removing one call to __reg_deduce_bounds. This
+patch therefore implements that bit of refactoring and reverts commit
+5dbb19b16ac49 ("bpf: Add third round of bounds deduction").
 
-Should layout_off and layout_len be added to the header log, at
-least when hdr_len >= sizeof(struct btf_header)?  Without them a
-user who hits "Unaligned layout_off" or "Layout section is too
-small" cannot see the actual values in the verifier output.
+As expected, this change didn't have any impact on the number of
+instructions processed when running it through the Cilium complexity
+test suite [2].
 
-> +	start = btf->nohdr_data + hdr->layout_off;
-> +	end = start + hdr->layout_len;
-> +
-> +	if (hdr->layout_len < sizeof(struct btf_layout)) {
-> +		btf_verifier_log(env, "Layout section is too small");
-> +		return -EINVAL;
-> +	}
-> +	if (hdr->layout_len % sizeof(struct btf_layout) != 0) {
-> +		btf_verifier_log(env, "layout_len is not multiple of %zu",
-> +				 sizeof(struct btf_layout));
-> +		return -EINVAL;
-> +	}
-> +	if (end > btf->data + btf->data_size) {
-> +		btf_verifier_log(env, "Layout section is too big");
-> +		return -EINVAL;
-> +	}
-> +	btf->layout = start;
-> +
-> +	return 0;
-> +}
-
-
+Link: https://lore.kernel.org/bpf/aIKtSK9LjQXB8FLY@mail.gmail.com/ [1]
+Link: https://pchaigno.github.io/test-verifier-complexity.html [2]
+Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ kernel/bpf/verifier.c | 138 +++++++++++++++++++++---------------------
+ 1 file changed, 69 insertions(+), 69 deletions(-)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22637324186
---===============9213348926159975098==--
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index fc4ccd1de569..55575f66aad5 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2427,74 +2427,6 @@ static void __update_reg_bounds(struct bpf_reg_state *reg)
+ /* Uses signed min/max values to inform unsigned, and vice-versa */
+ static void __reg32_deduce_bounds(struct bpf_reg_state *reg)
+ {
+-	/* If upper 32 bits of u64/s64 range don't change, we can use lower 32
+-	 * bits to improve our u32/s32 boundaries.
+-	 *
+-	 * E.g., the case where we have upper 32 bits as zero ([10, 20] in
+-	 * u64) is pretty trivial, it's obvious that in u32 we'll also have
+-	 * [10, 20] range. But this property holds for any 64-bit range as
+-	 * long as upper 32 bits in that entire range of values stay the same.
+-	 *
+-	 * E.g., u64 range [0x10000000A, 0x10000000F] ([4294967306, 4294967311]
+-	 * in decimal) has the same upper 32 bits throughout all the values in
+-	 * that range. As such, lower 32 bits form a valid [0xA, 0xF] ([10, 15])
+-	 * range.
+-	 *
+-	 * Note also, that [0xA, 0xF] is a valid range both in u32 and in s32,
+-	 * following the rules outlined below about u64/s64 correspondence
+-	 * (which equally applies to u32 vs s32 correspondence). In general it
+-	 * depends on actual hexadecimal values of 32-bit range. They can form
+-	 * only valid u32, or only valid s32 ranges in some cases.
+-	 *
+-	 * So we use all these insights to derive bounds for subregisters here.
+-	 */
+-	if ((reg->umin_value >> 32) == (reg->umax_value >> 32)) {
+-		/* u64 to u32 casting preserves validity of low 32 bits as
+-		 * a range, if upper 32 bits are the same
+-		 */
+-		reg->u32_min_value = max_t(u32, reg->u32_min_value, (u32)reg->umin_value);
+-		reg->u32_max_value = min_t(u32, reg->u32_max_value, (u32)reg->umax_value);
+-
+-		if ((s32)reg->umin_value <= (s32)reg->umax_value) {
+-			reg->s32_min_value = max_t(s32, reg->s32_min_value, (s32)reg->umin_value);
+-			reg->s32_max_value = min_t(s32, reg->s32_max_value, (s32)reg->umax_value);
+-		}
+-	}
+-	if ((reg->smin_value >> 32) == (reg->smax_value >> 32)) {
+-		/* low 32 bits should form a proper u32 range */
+-		if ((u32)reg->smin_value <= (u32)reg->smax_value) {
+-			reg->u32_min_value = max_t(u32, reg->u32_min_value, (u32)reg->smin_value);
+-			reg->u32_max_value = min_t(u32, reg->u32_max_value, (u32)reg->smax_value);
+-		}
+-		/* low 32 bits should form a proper s32 range */
+-		if ((s32)reg->smin_value <= (s32)reg->smax_value) {
+-			reg->s32_min_value = max_t(s32, reg->s32_min_value, (s32)reg->smin_value);
+-			reg->s32_max_value = min_t(s32, reg->s32_max_value, (s32)reg->smax_value);
+-		}
+-	}
+-	/* Special case where upper bits form a small sequence of two
+-	 * sequential numbers (in 32-bit unsigned space, so 0xffffffff to
+-	 * 0x00000000 is also valid), while lower bits form a proper s32 range
+-	 * going from negative numbers to positive numbers. E.g., let's say we
+-	 * have s64 range [-1, 1] ([0xffffffffffffffff, 0x0000000000000001]).
+-	 * Possible s64 values are {-1, 0, 1} ({0xffffffffffffffff,
+-	 * 0x0000000000000000, 0x00000000000001}). Ignoring upper 32 bits,
+-	 * we still get a valid s32 range [-1, 1] ([0xffffffff, 0x00000001]).
+-	 * Note that it doesn't have to be 0xffffffff going to 0x00000000 in
+-	 * upper 32 bits. As a random example, s64 range
+-	 * [0xfffffff0fffffff0; 0xfffffff100000010], forms a valid s32 range
+-	 * [-16, 16] ([0xfffffff0; 0x00000010]) in its 32 bit subregister.
+-	 */
+-	if ((u32)(reg->umin_value >> 32) + 1 == (u32)(reg->umax_value >> 32) &&
+-	    (s32)reg->umin_value < 0 && (s32)reg->umax_value >= 0) {
+-		reg->s32_min_value = max_t(s32, reg->s32_min_value, (s32)reg->umin_value);
+-		reg->s32_max_value = min_t(s32, reg->s32_max_value, (s32)reg->umax_value);
+-	}
+-	if ((u32)(reg->smin_value >> 32) + 1 == (u32)(reg->smax_value >> 32) &&
+-	    (s32)reg->smin_value < 0 && (s32)reg->smax_value >= 0) {
+-		reg->s32_min_value = max_t(s32, reg->s32_min_value, (s32)reg->smin_value);
+-		reg->s32_max_value = min_t(s32, reg->s32_max_value, (s32)reg->smax_value);
+-	}
+ 	/* if u32 range forms a valid s32 range (due to matching sign bit),
+ 	 * try to learn from that
+ 	 */
+@@ -2649,6 +2581,75 @@ static void __reg64_deduce_bounds(struct bpf_reg_state *reg)
+ 
+ static void __reg_deduce_mixed_bounds(struct bpf_reg_state *reg)
+ {
++	/* If upper 32 bits of u64/s64 range don't change, we can use lower 32
++	 * bits to improve our u32/s32 boundaries.
++	 *
++	 * E.g., the case where we have upper 32 bits as zero ([10, 20] in
++	 * u64) is pretty trivial, it's obvious that in u32 we'll also have
++	 * [10, 20] range. But this property holds for any 64-bit range as
++	 * long as upper 32 bits in that entire range of values stay the same.
++	 *
++	 * E.g., u64 range [0x10000000A, 0x10000000F] ([4294967306, 4294967311]
++	 * in decimal) has the same upper 32 bits throughout all the values in
++	 * that range. As such, lower 32 bits form a valid [0xA, 0xF] ([10, 15])
++	 * range.
++	 *
++	 * Note also, that [0xA, 0xF] is a valid range both in u32 and in s32,
++	 * following the rules outlined below about u64/s64 correspondence
++	 * (which equally applies to u32 vs s32 correspondence). In general it
++	 * depends on actual hexadecimal values of 32-bit range. They can form
++	 * only valid u32, or only valid s32 ranges in some cases.
++	 *
++	 * So we use all these insights to derive bounds for subregisters here.
++	 */
++	if ((reg->umin_value >> 32) == (reg->umax_value >> 32)) {
++		/* u64 to u32 casting preserves validity of low 32 bits as
++		 * a range, if upper 32 bits are the same
++		 */
++		reg->u32_min_value = max_t(u32, reg->u32_min_value, (u32)reg->umin_value);
++		reg->u32_max_value = min_t(u32, reg->u32_max_value, (u32)reg->umax_value);
++
++		if ((s32)reg->umin_value <= (s32)reg->umax_value) {
++			reg->s32_min_value = max_t(s32, reg->s32_min_value, (s32)reg->umin_value);
++			reg->s32_max_value = min_t(s32, reg->s32_max_value, (s32)reg->umax_value);
++		}
++	}
++	if ((reg->smin_value >> 32) == (reg->smax_value >> 32)) {
++		/* low 32 bits should form a proper u32 range */
++		if ((u32)reg->smin_value <= (u32)reg->smax_value) {
++			reg->u32_min_value = max_t(u32, reg->u32_min_value, (u32)reg->smin_value);
++			reg->u32_max_value = min_t(u32, reg->u32_max_value, (u32)reg->smax_value);
++		}
++		/* low 32 bits should form a proper s32 range */
++		if ((s32)reg->smin_value <= (s32)reg->smax_value) {
++			reg->s32_min_value = max_t(s32, reg->s32_min_value, (s32)reg->smin_value);
++			reg->s32_max_value = min_t(s32, reg->s32_max_value, (s32)reg->smax_value);
++		}
++	}
++	/* Special case where upper bits form a small sequence of two
++	 * sequential numbers (in 32-bit unsigned space, so 0xffffffff to
++	 * 0x00000000 is also valid), while lower bits form a proper s32 range
++	 * going from negative numbers to positive numbers. E.g., let's say we
++	 * have s64 range [-1, 1] ([0xffffffffffffffff, 0x0000000000000001]).
++	 * Possible s64 values are {-1, 0, 1} ({0xffffffffffffffff,
++	 * 0x0000000000000000, 0x00000000000001}). Ignoring upper 32 bits,
++	 * we still get a valid s32 range [-1, 1] ([0xffffffff, 0x00000001]).
++	 * Note that it doesn't have to be 0xffffffff going to 0x00000000 in
++	 * upper 32 bits. As a random example, s64 range
++	 * [0xfffffff0fffffff0; 0xfffffff100000010], forms a valid s32 range
++	 * [-16, 16] ([0xfffffff0; 0x00000010]) in its 32 bit subregister.
++	 */
++	if ((u32)(reg->umin_value >> 32) + 1 == (u32)(reg->umax_value >> 32) &&
++	    (s32)reg->umin_value < 0 && (s32)reg->umax_value >= 0) {
++		reg->s32_min_value = max_t(s32, reg->s32_min_value, (s32)reg->umin_value);
++		reg->s32_max_value = min_t(s32, reg->s32_max_value, (s32)reg->umax_value);
++	}
++	if ((u32)(reg->smin_value >> 32) + 1 == (u32)(reg->smax_value >> 32) &&
++	    (s32)reg->smin_value < 0 && (s32)reg->smax_value >= 0) {
++		reg->s32_min_value = max_t(s32, reg->s32_min_value, (s32)reg->smin_value);
++		reg->s32_max_value = min_t(s32, reg->s32_max_value, (s32)reg->smax_value);
++	}
++
+ 	/* Try to tighten 64-bit bounds from 32-bit knowledge, using 32-bit
+ 	 * values on both sides of 64-bit range in hope to have tighter range.
+ 	 * E.g., if r1 is [0x1'00000000, 0x3'80000000], and we learn from
+@@ -2741,7 +2742,6 @@ static void reg_bounds_sync(struct bpf_reg_state *reg)
+ 	/* We might have learned something about the sign bit. */
+ 	__reg_deduce_bounds(reg);
+ 	__reg_deduce_bounds(reg);
+-	__reg_deduce_bounds(reg);
+ 	/* We might have learned some bits from the bounds. */
+ 	__reg_bound_offset(reg);
+ 	/* Intersecting with the old var_off might have improved our bounds
+-- 
+2.43.0
+
