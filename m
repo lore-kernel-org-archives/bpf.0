@@ -1,113 +1,152 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDDC6396596
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 19:56:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8AC83890E1;
+	Tue,  3 Mar 2026 20:04:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772567764; cv=none; b=CkONiA63SldqPCx34QjCr/J0eE0LtAFf7MpL9ZMXKvOkG/cOUFadO4+5iKO+t1OMYo2f2gC/7t/gbUNeTEhW2Wgl8x528LeuTVcZQ/aMcXJ5pO/Ft7g5taEg1JZlsYNqkmkjPAaS93+VJRv+mJTGskeX6jelh8TXTi+RiKdQG3w=
+	t=1772568295; cv=none; b=FiJXcTKfjxno/bgXNpOI75h1IsLDS0uby2UNZ5nyH0C8id7Z1cQgWGaEZ1Yp5RinmYcc+FTlqtI2/Qz0p58h1H4rUDk0nE7KdYNtXq1HoYygJn3TYQ2ZQ6jmbxULbC/NTYcMuc5cD68p12rqX43XGdDtYi3xwyO5IXZj0ZwNltc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772567764; c=relaxed/simple;
-	bh=bcPmWJbA+HwFh5Sp4FvAT6eGPD1jFzH7Tlh7wmLVZFg=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=dUeOFe65oncHyz/Gk3NDSrPe4WwOqK3o143BEPQXBhJBuoFaV9V3a5d3alY0pzg/N5qkROiYFYeR347CQLvisVYNKuRd0/zyvkc/hXmqV41PVR4dKgPSlgF/ZIhdH2s6h/hWtLKSHGoAxiCcWci2KKoiCdYes1qjm56DlTX4tbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--joshwash.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4bqAqaSW; arc=none smtp.client-ip=209.85.215.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--joshwash.bounces.google.com
+	s=arc-20240116; t=1772568295; c=relaxed/simple;
+	bh=Qj8+TYobz9svKb+bbVJ56ph3mB+FicVT/jE7eZHw7D4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=rXa8DaAKEyJco5JD0kAEWMyiWMMt/+JrG7F+nbTDjfJLA4gqUUdWWRKQVnV79kCgnkTiij0ycDoc2Yt6DSyuqCq/KZ8C7ShpLZXVUndlWxP0T+R3o+oOFoXzvZ5lrd5wNaHQx4bxK3tFwFhkX+2hT22zdlVwPZlltFLdjzHG8gI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YsOYV8l/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4bqAqaSW"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b6ce1b57b9cso4810935a12.1
-        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 11:56:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772567761; x=1773172561; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=q7O+VqmWleakm25HNUCSndfnjpDlMGeEkeH0AG/54zw=;
-        b=4bqAqaSWfGMG3ODjwionQIf98JgMtykwKCws9aOBc/R/0TMDWyhvKVMSl8t7m/OrEH
-         hAnAJiFoXPGE6b+vCvEqZ8ArTzXM02uUgAS/9rLwQvfsxAav0QifZSzLM+gnraqQC7e7
-         MAwO5HfSmh+3Jb8++u7fzA66Qo1R6nUJS+IUyg1yoqskycYCYmJ8oiGrz5QEApKHAlVV
-         0tTt0sp/IBKIDwhs8Pr4dvTDj6kr3ZF8LiqN0KRKWEPk0dnSk+kX6WcD1Cv6M5MD5H+y
-         SMY50DiqkA53sHj5v+MdaViqDzDWum0vIIjU8otQPEOadTsDEC/E10g/4VsYtD8BBx/Y
-         Z1VA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772567761; x=1773172561;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q7O+VqmWleakm25HNUCSndfnjpDlMGeEkeH0AG/54zw=;
-        b=NfBPCHyNbi2FbLecNZfk6U+DYKhgYlJBDGy+aqcHnqxGRrYMGUpMY2DEpszFVW7es1
-         BMbfarunJsl/TB8TCFrMCm3aANQEZabwlQ5/ZaTcnlJDi8t9JLjolojId2hLcc9wTDI5
-         BXseRlu2OFdRwwdaoLw47oIO8J0NtnxxrLQXAZ1iTMXKLm7WrXwVhoGL2222roDZBoI+
-         q9mSwmoCR2VN5pRG3QVh3vv7u2ARUaaBqW+oMuqgwtmmD8Dg0gBlB9Q6vCEhKjw3ARqA
-         6n0W1GcPKnMHzAArzeoD63ELgP3XXyIIeNHsMQ++NkiujcwL7+0JSil6JSpOf238srje
-         Aopg==
-X-Forwarded-Encrypted: i=1; AJvYcCXZj+imPL74rdvaKVyKaZRbZeIwNqsgb+SsT7RaODEkb8W84TfUB1zSs28tlT78DI0Qtno=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOyF8InLWao5RazLAsJwajgztiAujdxkYZOU+fE0+1+sWqS6gw
-	ElLdZvpvdr9B76HCMeP96ZdQki8H+sy5vsgEPdPRQeNUrHo98uMf3THKp5QGBClvgsEpk3LrFIm
-	btPr3mgFMHkeRng==
-X-Received: from pgag24.prod.google.com ([2002:a05:6a02:2f18:b0:c70:e479:52d3])
- (user=joshwash job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a21:610e:b0:38d:eeb9:8f49 with SMTP id adf61e73a8af0-395c39de44amr13785530637.2.1772567760815;
- Tue, 03 Mar 2026 11:56:00 -0800 (PST)
-Date: Tue,  3 Mar 2026 11:55:49 -0800
-In-Reply-To: <20260303195549.2679070-1-joshwash@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YsOYV8l/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DB21C116C6;
+	Tue,  3 Mar 2026 20:04:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772568295;
+	bh=Qj8+TYobz9svKb+bbVJ56ph3mB+FicVT/jE7eZHw7D4=;
+	h=Date:From:To:Cc:Subject:From;
+	b=YsOYV8l/ULA0bztoVlum4Bs5mIihyKus1QiZv5aesrnEud8RTLrIdC0Jqu+eUvVsg
+	 65VtWbl0hFSYN+4TKxN5WmSycdTMWA4jFRp6hIDqdGipxnsD3BJBYyYS920lWaTsBE
+	 E2A3b2HxS4+UFMGfbbo3+Omhi4w//iKpStymRR0GCeiY0f4dEVbk5zRW90OSa9s3kx
+	 DrO6p5OxSMPXSPKfvTMeFKxhdLLi6W170MEU7vWAuY6jbtlVYPRIOYNjFJAo6LoXmU
+	 o5+zfHm23ZwUS23cGk/H/pU9VjMMKetWkRgVYlMU/JW6vhRoKpe7w94B69avdLG0K4
+	 WHl5KtIfEebkg==
+Date: Tue, 3 Mar 2026 14:04:24 +0900
+From: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	linux-hardening@vger.kernel.org, Kees Cook <kees@kernel.org>
+Subject: [PATCH][next] bpf: Avoid thousands of
+ -Wflex-array-members-not-at-end warnings
+Message-ID: <aaZr2A1UPJq33127@kspp>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260303195549.2679070-1-joshwash@google.com>
-X-Mailer: git-send-email 2.53.0.473.g4a7958ca14-goog
-Message-ID: <20260303195549.2679070-5-joshwash@google.com>
-Subject: [PATCH net-next 4/4] gve: Enable hw-gro by default if device supported
-From: Joshua Washington <joshwash@google.com>
-To: netdev@vger.kernel.org
-Cc: Joshua Washington <joshwash@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Willem de Bruijn <willemb@google.com>, 
-	Jordan Rhee <jordanrhee@google.com>, Ankit Garg <nktgrg@google.com>, 
-	John Fraker <jfraker@google.com>, Ziwei Xiao <ziweixiao@google.com>, 
-	Matt Olson <maolson@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
-	Tim Hostetler <thostet@google.com>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Ankit Garg <nktgrg@google.com>
+-Wflex-array-member-not-at-end was introduced in GCC-14, and we are
+getting ready to enable it, globally.
 
-Change the driver's default behavior to enable hw-gro whenever supported
-for device.
+struct bpf_prog_array is a flexible structure, this is a structure that
+contains a flexible-array member (struct bpf_prog_array_item items[];).
 
-Performance observations:
-- We observed ~10% improvement in RX single stream throughput across
-  various MTU sizes.
-- No change in TCP_RR/TCP_CRR latencies
+We create the new struct bpf_prog_array_hdr type, and use it to replace
+the object type causing trouble in struct bpf_empty_prog_array, namely
+struct bpf_prog_array hdr; 
 
-Signed-off-by: Ankit Garg <nktgrg@google.com>
-Reviewed-by: Willem de Bruijn <willemb@google.com>
-Reviewed-by: Harshitha Ramamurthy <hramamurthy@google.com>
-Signed-off-by: Joshua Washington <joshwash@google.com>
+Also, once -fms-extensions is enabled, we can use transparent struct
+members in struct bpf_prog_array.
+
+Notice that the newly created type does not contain the flex-array
+member `items`, which is the object causing the -Wfamnae warnings
+in struct bpf_empty_prog_array.
+
+With these changes, fix the following warnings:
+    
+7659 ./include/linux/bpf.h:2369:31: warning: structure containing a flexible array member is not at the end of another structure [-Wflex-array-member-not-at-end]
+
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 ---
- drivers/net/ethernet/google/gve/gve_adminq.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ include/linux/bpf-cgroup.h | 2 +-
+ include/linux/bpf.h        | 8 ++++++--
+ kernel/bpf/core.c          | 6 +++---
+ 3 files changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/google/gve/gve_adminq.c b/drivers/net/ethernet/google/gve/gve_adminq.c
-index 873672f6..6ce8345e 100644
---- a/drivers/net/ethernet/google/gve/gve_adminq.c
-+++ b/drivers/net/ethernet/google/gve/gve_adminq.c
-@@ -1128,8 +1128,10 @@ int gve_adminq_describe_device(struct gve_priv *priv)
- 	gve_set_default_rss_sizes(priv);
+diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+index 2f535331f926..e7d266600ac7 100644
+--- a/include/linux/bpf-cgroup.h
++++ b/include/linux/bpf-cgroup.h
+@@ -184,7 +184,7 @@ static inline bool cgroup_bpf_sock_enabled(struct sock *sk,
+ 	struct bpf_prog_array *array;
  
- 	/* DQO supports HW-GRO. */
--	if (!gve_is_gqi(priv))
-+	if (gve_is_dqo(priv)) {
- 		priv->dev->hw_features |= NETIF_F_GRO_HW;
-+		priv->dev->features |= NETIF_F_GRO_HW;
-+	}
+ 	array = rcu_access_pointer(cgrp->bpf.effective[type]);
+-	return array != &bpf_empty_prog_array.hdr;
++	return (void *)array != (void *)&bpf_empty_prog_array.hdr;
+ }
  
- 	priv->max_registered_pages =
- 				be64_to_cpu(descriptor->max_registered_pages);
+ /* Wrappers for __cgroup_bpf_run_filter_skb() guarded by cgroup_bpf_enabled. */
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 05b34a6355b0..488de065466e 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2360,13 +2360,17 @@ struct bpf_prog_array_item {
+ 	};
+ };
+ 
+-struct bpf_prog_array {
++struct bpf_prog_array_hdr {
+ 	struct rcu_head rcu;
++};
++
++struct bpf_prog_array {
++	struct bpf_prog_array_hdr;
+ 	struct bpf_prog_array_item items[];
+ };
+ 
+ struct bpf_empty_prog_array {
+-	struct bpf_prog_array hdr;
++	struct bpf_prog_array_hdr hdr;
+ 	struct bpf_prog *null_prog;
+ };
+ 
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 229c74f3d6ae..ac15ab8b7d3c 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2598,14 +2598,14 @@ struct bpf_prog_array *bpf_prog_array_alloc(u32 prog_cnt, gfp_t flags)
+ 	if (prog_cnt)
+ 		p = kzalloc_flex(*p, items, prog_cnt + 1, flags);
+ 	else
+-		p = &bpf_empty_prog_array.hdr;
++		p = (void *)&bpf_empty_prog_array.hdr;
+ 
+ 	return p;
+ }
+ 
+ void bpf_prog_array_free(struct bpf_prog_array *progs)
+ {
+-	if (!progs || progs == &bpf_empty_prog_array.hdr)
++	if (!progs || (void *)progs == (void *)&bpf_empty_prog_array.hdr)
+ 		return;
+ 	kfree_rcu(progs, rcu);
+ }
+@@ -2626,7 +2626,7 @@ static void __bpf_prog_array_free_sleepable_cb(struct rcu_head *rcu)
+ 
+ void bpf_prog_array_free_sleepable(struct bpf_prog_array *progs)
+ {
+-	if (!progs || progs == &bpf_empty_prog_array.hdr)
++	if (!progs || (void *)progs == (void *)&bpf_empty_prog_array.hdr)
+ 		return;
+ 	call_rcu_tasks_trace(&progs->rcu, __bpf_prog_array_free_sleepable_cb);
+ }
 -- 
-2.53.0.473.g4a7958ca14-goog
+2.43.0
 
