@@ -1,137 +1,134 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FA98346ADE
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 02:39:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E51F158535
+	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 02:45:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772505583; cv=none; b=LkXsSA2KX1E+Lfh/EJuQE1SB3gKNNMhhtrFmg0AXqWJRqr/ODX8VDpXyil0LNqmWTR9p40xp4sdo3CuCfBQnhGsWnyVGXuuMHAvbqIIN6UcATklHtDrAV3xxd/QuNKhwBRMkpntb9E7CI06uaPYCCZggeLEDsOu0bWDUJarnLAk=
+	t=1772505945; cv=none; b=Onr9XTmy6o7k6ZmF+6tX8nA3KZkOy2qD0PYvaJzi3cDve/srKe0aWCqt+PMQKftgF99drf9z8CP2DpoEO+pLtfQkH/B7Z8tuK5RtOZatFNoZttk0Zz9+A7g+FRH6hn0oLDBVLxs5+3Q7Gy/rDAtiMSe5gMjl56jLkONwqqT3r6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772505583; c=relaxed/simple;
-	bh=T0cqjCwPvGE8zwx/T0Uo+KK3ac7/xsG3+KRqmE8nIrg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W1hrAB5XdZ9gYOTbQvoK4ucNfPTw1KVX8sh68n1p1xHBbiOZWhMFpPoF3useYPoQ7ZOspWKmq6JUu7aMsNNHDj2fGG3Hiu5efEyw0mzW/5YwyU0mCXQs1BvxuAYyAhbYJQZTMkyFd7TwDWzb8QIXcdBD+OihKPekv/iAqLEvzp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=h4zQtD5J; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1772505945; c=relaxed/simple;
+	bh=b+0Ff/pUDhFe+rGVzYVSp1+4DBYWUSZiCFvSNbPgMUE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=KncHVstCkMWWJ3myi99/EwtsLVuu8HFOh+RBYcs7ZukyswuXmgKGdkSQqQkLyeKXo1qi3Bw9vPAURYDT0TB45xVQiJw2j+U3ODdjFSCGa1vmJ5D1/BPqTEgUqcbUsktGSKR4tnUxqemxVEQ6Im/JenqM0bB3lwYTvjvVI3RD01U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=ffauuUDS; arc=none smtp.client-ip=209.85.161.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="h4zQtD5J"
-Message-ID: <ad50571a-ce13-47c9-ba5d-570adb4fc689@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772505580;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rcQBl4+DxnX9Uk553kw+FydgskPAvd1e5qW9QMDg1UA=;
-	b=h4zQtD5J206GALJqu1wb/dXYfS5GUVmCpXl1UqIOD5MdWa+eD+g+T4do3XtJzMu4wE1DS/
-	X140H9qyAXu8V2wmLH6Pr5zQrnkM0L1qBotj20zFiWvR2SBDA3dulwoSwrhQiWXdaAgSi3
-	h459+M6/hwAC6qLU5ewbYsQgBjgbZww=
-Date: Mon, 2 Mar 2026 18:39:30 -0800
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="ffauuUDS"
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-6786b13984fso4051444eaf.2
+        for <bpf@vger.kernel.org>; Mon, 02 Mar 2026 18:45:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1772505943; x=1773110743; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zopse3Rf+kKizvyvuRBVQ7DWejIScda9vW//LITHTBk=;
+        b=ffauuUDSI18B5wnMPdSGdU34iEGOz3MV9NTaBrYmFZQytzq9TwRiYF3qyJy01YcGEO
+         hj8xnqHi0yn44h9z0SIR38OkwrjqSWc+lzkdNVJevrxhiFCrRRqq7xKMpMc9JM6x+tiN
+         J1sXlXbbBWcSejDNxFwpNVcUeTO3TpP4/pAXGgC9+33p/w5mayIYgE6QRlavGE95TcK/
+         thzEIZAoiB5tASvqVyq3tz6tjGd8k4FBzcLkOK4MU8/ryhdTuuGHH2EPGMTH0UKY5HWL
+         qc+R5Fily8rvV4GpMyZwOZViUViuIgmYxITCY8xZVBq56QWYx9mM0CpLgO2IgGdlB9wc
+         AHfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772505943; x=1773110743;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=zopse3Rf+kKizvyvuRBVQ7DWejIScda9vW//LITHTBk=;
+        b=PwK9aO+YEzitMC6gxDbrUcczfMey9gxEJUGPBNnO6y4Mm2OjRp3Se23ByGSKIPNQ7/
+         IKT/QgPvJBCND1/Qphg2VS+hdFnO17g39MMvFgr2UCF6AedIuUAuftgUF/nG/ZuLcPH6
+         uWvm+YuCKtnTTxmyt8rHej7SdNkuLHdFxpTbh84lxqvuZIKIB6DRsmZrSbL6FfeTg+me
+         hm4M7rG+1uVX+4t79GmN99jIDlS9laCICy8Al4YpWUmMsUMCBbEQxRTi0FjAWeCSIlBB
+         YPNTQs0Powfu7KE/6FTJca6VXrDKZlv4MPxqkCRKtiTMe0trg1+SOqORHGTIWhVIgukf
+         lAGw==
+X-Forwarded-Encrypted: i=1; AJvYcCWqBfnJMh7VDigMJoLd6Q4IWHH7wNHb4TBaf/UfMjGVHOubl1E1dUd48oD89Tn9HQwY5uc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHe586H7FN/0zWC+p46xbHsiCWZaExNT/R1SF+snu14w2RAL+d
+	mdjAlNsm/gHTCA6fJHEsV1b0bzRTjMDjvZ3lVQfygpbQJFItcg/qYYWzObNCXFJ8uLc=
+X-Gm-Gg: ATEYQzy5FgEKAmGP78ZgHesh/I/TQBCU+Z4/OkDneKEZSIAUg9EH34sLK0JpK8jOIju
+	h3bW1seODCUEim89/yeTOJNdUeHg8F74ym5RoowxSWeyRLbOyb65QNo7fHan/AzG6wQsakuTewH
+	I50JfJ8qvn4/GIOoU2zPgJPufG0D25fthAsZbykH5dlcSK5AX2C9wH0kVnlaOXGY6Ce3wtpgVmn
+	G+a43Rmb8y0u7m8RLhKox8R0XStlA6r8PjYOHFH+2LeXUHhS5oSczSDu0c+t4B56zkiD9P6JSJH
+	2VEzoG8dS+RwuFPa0tsCLFayPpURtwecsPr5e4seu6P+C421VSM1nFcAz3Hp2OP4igHBd0TUq3A
+	fkRdgsp7c1sHY6ofWvwfT0mxq8/PdkazBiWmTDLxD8o7Za7Rs7HMQ6tiYf9cgkYMwBpXk7DGqQ3
+	qNbkKSzl0=
+X-Received: by 2002:a05:6820:1747:b0:677:e78d:223b with SMTP id 006d021491bc7-679faefa6dfmr9051694eaf.36.1772505943148;
+        Mon, 02 Mar 2026 18:45:43 -0800 (PST)
+Received: from 20HS2G4.. ([2a09:bac1:76c0:540::a2:70])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-679f2d84dacsm10205642eaf.9.2026.03.02.18.45.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Mar 2026 18:45:42 -0800 (PST)
+From: Chris J Arges <carges@cloudflare.com>
+To: michael.chan@broadcom.com,
+	pavan.chebbi@broadcom.com,
+	joe@dama.to,
+	kuba@kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>
+Cc: kernel-team@cloudflare.com,
+	Chris J Arges <carges@cloudflare.com>,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH net-next v2 0/4] bnxt_en: add XDP RSS hash metadata support
+Date: Mon,  2 Mar 2026 20:43:48 -0600
+Message-ID: <20260303024510.644962-1-carges@cloudflare.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260213192449.1294830-1-carges@cloudflare.com>
+References: <20260213192449.1294830-1-carges@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v3] bpf: fix: Race condition in
- bpf_trampoline_unlink_cgroup_shim
-To: xulang@uniontech.com
-Cc: bot+bpf-ci@kernel.org, andrii@kernel.org, ast@kernel.org,
- bpf@vger.kernel.org, clm@meta.com, daniel@iogearbox.net, dddddd@hust.edu.cn,
- dzm91@hust.edu.cn, eddyz87@gmail.com,
- hust-os-kernel-patches@googlegroups.com, ihor.solodrai@linux.dev,
- kaiyanm@hust.edu.cn, martin.lau@kernel.org, sdf@fomichev.me,
- yonghong.song@linux.dev
-References: <FFFA8066FE63B894+20260228022403.99235-1-xulang@uniontech.com>
- <5a89fd3edd5e90ed47ff1189efdfa626f9b4610daa02da46a3a8fe4d5762796c@mail.kernel.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <5a89fd3edd5e90ed47ff1189efdfa626f9b4610daa02da46a3a8fe4d5762796c@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
+This series adds XDP RSS hash metadata extraction support for the bnxt_en
+driver and includes selftests to validate the functionality. I was able
+to test this on a BCM57414 NIC.
 
+The driver changes introduce a bnxt_xdp_buff wrapper that carries
+hardware RX completion descriptors alongside the xdp_buff, then use it
+to implement bpf_xdp_metadata_rx_hash().
 
-On 2/27/26 7:04 PM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
->> --- a/kernel/bpf/trampoline.c
->> +++ b/kernel/bpf/trampoline.c
-> 
-> [ ... ]
-> 
->> @@ -1003,12 +1004,13 @@ struct bpf_attach_target_info tgt_info = {};
->>
->>   	shim_link = cgroup_shim_find(tr, bpf_func);
->>   	if (shim_link) {
->> -		/* Reusing existing shim attached by the other program. */
->> -		bpf_link_inc(&shim_link->link.link);
->> -
->> -		mutex_unlock(&tr->mutex);
->> -		bpf_trampoline_put(tr); /* bpf_trampoline_get above */
->> -		return 0;
->> +		link = &shim_link->link.link;
->> +		if (link == bpf_link_inc_not_zero(link)) {
-> 
-> The other callers of bpf_link_inc_not_zero() check the return value
-> using IS_ERR(), for example bpf_link_by_id():
-> 
->      link = bpf_link_inc_not_zero(link);
-> 
-> and bpf_link_get_curr_or_next():
-> 
->      link = bpf_link_inc_not_zero(link);
->      if (IS_ERR(link)) {
-> 
-> Should this use the same IS_ERR() pattern for consistency? Something
-> like:
-> 
->      if (!IS_ERR(bpf_link_inc_not_zero(link))) {
+The selftest changes refactor common XDP/BPF helpers into a shared
+library and add a new xdp_metadata test that verifies RSS hash
+extraction for TCP and UDP traffic via device-bound XDP programs.
 
-The same feedback by ai-review. I don't have a strong opinion. However, 
-the newly added "struct bpf_link *link" variable is not needed also. I 
-would carry the ai's suggestion further and remove the new local 
-variable also. Just test:
+Changes from v1:
+- selftests: moved tests into net/hw
+- selftests: fix pylinter errors
+- selftests: add check for no error count
+- bnxt_xdp: followed RCT for variable declaration
+- rebased on net-next 
 
-	if (!IS_ERR(bpf_link_inc_not_zero(&shim_link->link.link))) {
+Chris J Arges (4):
+  bnxt_en: use bnxt_xdp_buff for xdp context
+  bnxt_en: Implement XDP RSS hash metadata extraction
+  selftests: net: move common xdp.py functions into lib
+  selftests: drv-net: xdp: Add rss_hash metadata tests
 
-> 
->> +			/* Reusing existing shim attached by the other program. */
->> +			mutex_unlock(&tr->mutex);
->> +			bpf_trampoline_put(tr); /* bpf_trampoline_get above */
->> +			return 0;
->> +		}
->>   	}
-> 
-> This commit fixes a use-after-free introduced by commit 69fd337a975c
-> ("bpf: per-cgroup lsm flavor"), which added the bpf_link_inc() call
-> that could resurrect a zero-refcount link. It appears to be missing
-> a Fixes: tag. Martin KaFai Lau's review of v2 also expected this tag
-> to be present.
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c     |  30 ++--
+ drivers/net/ethernet/broadcom/bnxt/bnxt.h     |   2 +
+ drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c |  47 +++++
+ drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h |  10 ++
+ .../testing/selftests/drivers/net/hw/Makefile |   1 +
+ .../drivers/net/hw/lib/py/__init__.py         |   2 +
+ .../selftests/drivers/net/hw/xdp_metadata.py  | 146 ++++++++++++++++
+ .../selftests/drivers/net/lib/py/__init__.py  |   2 +
+ tools/testing/selftests/drivers/net/xdp.py    |  95 +++-------
+ .../testing/selftests/net/lib/py/__init__.py  |   2 +
+ tools/testing/selftests/net/lib/py/bpf.py     |  68 ++++++++
+ .../selftests/net/lib/xdp_metadata.bpf.c      | 163 ++++++++++++++++++
+ 12 files changed, 486 insertions(+), 82 deletions(-)
+ create mode 100644 tools/testing/selftests/drivers/net/hw/xdp_metadata.py
+ create mode 100644 tools/testing/selftests/net/lib/py/bpf.py
+ create mode 100644 tools/testing/selftests/net/lib/xdp_metadata.bpf.c
 
-Indeed, please ensure to address the earlier reviewer's feedback.
-
-pw-bot: cr
-
-> 
-> Suggested:
-> 
->      Fixes: 69fd337a975c ("bpf: per-cgroup lsm flavor")
-> 
-> https://lore.kernel.org/bpf/cd99eba7-ac03-4b53-a79c-a6206abbddb6@linux.dev/
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22511586078
-> 
-> AI-authorship-score: low
-> AI-authorship-explanation: Human authorship patterns: references maintainer suggestion, informal testing description, iterative v1/v2/v3 development with reviewer feedback, addresses a bug reported by a different researcher.
-> issues-found: 2
-> issue-severity-score: low
-> issue-severity-explanation: Missing Fixes: tag (requested by BPF maintainer) and non-standard bpf_link_inc_not_zero() return value comparison pattern; neither causes runtime problems.
+-- 
+2.43.0
 
