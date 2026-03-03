@@ -1,35 +1,79 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE81A3909AA;
-	Tue,  3 Mar 2026 10:00:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31442342CB1
+	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 10:04:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772532010; cv=none; b=GVZkvv84lSUbHUlBn5y8O1B1hG20xArkJHo81WNRkorpc+SnSRF2JD8hltEANWd8gitYE5RX46SfyyZ2y6Ukv4OMNs426BqOyf/rtauogYniAy+UcQ/lmXOdi5g98h2vpd8S6R6p4zrdla1cJJp14fZmAoI34G8hkFS16EGCPd4=
+	t=1772532289; cv=none; b=tj47vAopjLuHPKG516X30xJ36I/FH5xjG9fnaZiRV27n2oWeK1UAHH0bwXQ3Tnphyspb4yBMM9dh/SVKXIjBTUKuhANP7Wu4Mk3lFal2gK7hzfvB2Cb5d42zmKBSly3+paHfpmfZ6hisc/QJjQHIcPJpxH98tCxsoHOq1ANPPLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772532010; c=relaxed/simple;
-	bh=2XJmhHdjfoxa8F7+fhCdXOQGrgSRsK9e7VLWwQnm3c4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=SysZ1r54breypFdXc3sNxl7miWIPdsNILvZldyGUzpdbcJWjVhjF8/l9tf1gPdjpVTkvFc4r8S23X2OdOxaKsTapPAkVVd1HYaPb9fNmKQrVddZn+IqUirTpHYEt9tONvFIOusBq0IR3oD84XLgBw7UGbHfM4XX8JKxX+JzUd7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bnGaK1LL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772532289; c=relaxed/simple;
+	bh=j8x8rSyHICY5qcHKtJbgh2Wkn2gcq92t1omfvouCwNY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=rq3JOwxuecZg/PR2FoTuDTS8BF1JfEjYaj3nHvQKeMTWhINW+mDgg1BC7QGNPkSgRIvrC1n1XUfwNYs1jyOh3g06VLqwj8wleVh/lKMKPhyuGm6/NgcgO5wRLjFF6ORBe0eRjDtWzMR4BFzL3UoV1hlfcgfpQKq9ItJa6QhWTl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zp3LHtWE; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bnGaK1LL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52A76C19425;
-	Tue,  3 Mar 2026 10:00:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772532010;
-	bh=2XJmhHdjfoxa8F7+fhCdXOQGrgSRsK9e7VLWwQnm3c4=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=bnGaK1LL7eOE7q7B7wgiek/S9+W5NRvZ9MqmFXWRNFRGolXx5bmQczYH9b/iyV4LA
-	 LkViQ2Qa214PHGpeEGaGhRh0fya7PGaHRNUGF15Y+LYJRN5LtZ+A0QbrQE5NucWo7J
-	 +3QaJlV7kMzo0iM+CKPCF6kWLA9Wuv3abaNqIsmpr9bcWO0IxZK4QWazUAeQfI05g7
-	 xRYTxNbh9K0SEQ01vDfx8fH9i/JxD260l4LbcMrx3m/mbGIQaJ7CYL0C5AbRCVOgMy
-	 mfz7ENktqZEKQJXS5ZfJsF9GdZZT3wtY3cmHZhAfuFmdRoUIyTPgFHY45k7lRX1SIU
-	 SzQlcmrQtuCww==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02D72380A961;
-	Tue,  3 Mar 2026 10:00:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zp3LHtWE"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2ae50a33ff8so16140615ad.3
+        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 02:04:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772532287; x=1773137087; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UfAHCrUtdxDkRhQeZ2MUII7KbpuuMok/pw78xOx4c/E=;
+        b=Zp3LHtWEy5JRZlPE3D/tWYPg0dJztNAv2cZuWiNM+sC5ZXdDR3thyjofDAwC8uogeH
+         ltlzDBS9Rk9XX2gxJqbUlciYSjDfYsZpfyvIvX3jyQEQszcV6t6vQldfaJi9a04mRGpQ
+         g+IqbZtoedBfHGsj6CXHuEphXP0qEQENY8FDQOKIUr6NPbTqi9SlT2utpV9kdFpiIXH7
+         Serl/WejCaRVQECECjn1fqAwXV/OWqc93B3j4tNpeMH6qbJx3FIz3Ek1nmuGtaj1hwyX
+         2/rKfUqntNQdNHYplhxzLoNQ2H4JrAGMcLjFolrawycNCy58IFT242BZU0VJLRZG5pZO
+         NOwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772532287; x=1773137087;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UfAHCrUtdxDkRhQeZ2MUII7KbpuuMok/pw78xOx4c/E=;
+        b=POU6KL5Dn+I/oY2zMS81zz23Jw1AU0xV5UaHdCilsq4Pnkzr06ibvE+Wyz1H8zdri/
+         XHqgM1L1a5tTmFiu3t0kZVkE8hIJK2sIAw51IFFpEaVQcmcG2tr/CsUJii/bpVQdji8S
+         lFRUXT4kIvVTdreRhPNm6o4rx0o1ok/EAwjXwuygjL5ywYFIPOsGicWn+PpeZonhdpU5
+         uiAUxSvDYXgEb0cG7WqvTPKDxPA7/fqvBRiYcul088ETYxowDntBLlzllUEIqEqYMYie
+         I3f903eK0+/rriKqXp7+QEpBTmqYPU/Q8//5aWir99M0H1veC7GVY54UUp/O4bR4Nj2K
+         /eJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWqyF1cfZlCBdUGaJfumR+J04YY/HlqJ4h5NwWXASXBoqObw0h/lZQU5Z1/3UZ/ZQYT66Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZXg0BGHtMQL8ImMSpCqzhsTbg5p3q6qieUoHVqWf0gx5Vs+Vy
+	JabTcuyWSQYk0wJPsn83xnJrC7nqI4uwCcrcO3mWofYUxI+HFzCmc6eG
+X-Gm-Gg: ATEYQzyyBZx9AJu99cQvEoUrTISpEEVYUGjNDwhJGKPb2Q6unO3gnFP/PLKO+8ZEdNm
+	xh/g6cO2gixDpRPMxh+PXovLlQeJ43nr6b7virIHQoCcFa/glbqPzmopgBvS4TdZBJG+IjyKPvu
+	ANL5olLyC2/jXr8GJDYQakH5xLguHXIwdmpsTvnIg9xJ8WZrLrgikvIFllN2HJJn+xp5V6vNxhB
+	l1DoHhL+qVMgbc+GCToX6UzrX5frg+jAmpaGp8WqK2HpH3t4A5d/AwwAKoKpV7RgqwtIItYdvR1
+	RdNjddMUpXMT4ngyYk7GEr+i3o0k3ksuUwFLoaTR6y8RfFeASixU+UEkKPvZMRqQfu6RgaKf19n
+	8ZGKtgrxYaN5RVJBmHMkGZiKula8CFWL0HNNKakxHz3R2lqFSvoPqD0rb67eK/f2K9bvV0s09rr
+	oxDSVC17nhkdZCCrzieX1aCXngkO3Vn0pxGxMlWWlm/8eYYFK2TZ+Hdj9KUL5JD37VKr5KAK1VU
+	gAVoyPhk1y+
+X-Received: by 2002:a17:902:c951:b0:2a0:fb1c:144c with SMTP id d9443c01a7336-2ae2e3e3e93mr154800025ad.5.1772532287501;
+        Tue, 03 Mar 2026 02:04:47 -0800 (PST)
+Received: from dpc2500057.. (fsb6a9315e.tkyc502.ap.nuro.jp. [182.169.49.94])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2adfb6b5813sm166283095ad.63.2026.03.03.02.04.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Mar 2026 02:04:47 -0800 (PST)
+From: Keita Morisaki <kmta1236@gmail.com>
+To: Eric Dumazet <edumazet@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Kuniyuki Iwashima <kuniyu@google.com>,
+	Simon Horman <horms@kernel.org>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Keita Morisaki <kmta1236@gmail.com>
+Subject: [PATCH net-next v2] tcp: shrink per-packet memset in __tcp_transmit_skb()
+Date: Tue,  3 Mar 2026 19:04:39 +0900
+Message-Id: <20260303100439.3172296-1-kmta1236@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,51 +81,80 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v1 0/2] bonding: fix missing XDP compat check on
- xmit_hash_policy change
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177253201154.775036.12280212702681060217.git-patchwork-notify@kernel.org>
-Date: Tue, 03 Mar 2026 10:00:11 +0000
-References: <20260226080306.98766-1-jiayuan.chen@linux.dev>
-In-Reply-To: <20260226080306.98766-1-jiayuan.chen@linux.dev>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: netdev@vger.kernel.org, jiayuan.chen@shopee.com, jv@jvosburgh.net,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, andrii@kernel.org, eddyz87@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, kpsingh@kernel.org,
- haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- jon.toppins+linux@gmail.com, joamaki@gmail.com, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
 
-Hello:
+Use struct_group() to group the three fields in tcp_out_options that are
+read unconditionally by tcp_options_write() and bpf_skops_write_hdr_opt()
+(mss, bpf_opt_len, num_sack_blocks), then replace the full-struct memset
+with a targeted memset of only that group.
 
-This series was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+struct tcp_out_options is 40 bytes without MPTCP and 96 bytes with
+CONFIG_MPTCP=y (typical distro config). Every remaining field is either
+assigned before first use by tcp_established_options()/tcp_syn_options(),
+or gated behind its OPTION_* flag in tcp_options_write(). This memset
+runs on every transmitted TCP packet, so shrinking it from 96 (or 40)
+bytes to 4 bytes reduces per-packet overhead on the hot path.
 
-On Thu, 26 Feb 2026 16:03:00 +0800 you wrote:
-> syzkaller reported a bug https://syzkaller.appspot.com/bug?extid=5a287bcdc08104bc3132
-> 
-> When a bond device is in 802.3ad or balance-xor mode, XDP is supported
-> only when xmit_hash_policy != vlan+srcmac.  This constraint is enforced
-> in bond_option_mode_set() via bond_xdp_check(), which prevents switching
-> to an XDP-incompatible mode while a program is loaded.  However, the
-> symmetric path -- changing xmit_hash_policy while XDP is loaded -- had
-> no such guard in bond_option_xmit_hash_policy_set().
-> 
-> [...]
+Assembly comparison (x86-64, GCC 13, CONFIG_MPTCP=y):
 
-Here is the summary with links:
-  - [net,v1,1/2] bpf/bonding: reject vlan+srcmac xmit_hash_policy change when XDP is loaded
-    https://git.kernel.org/netdev/net/c/479d589b40b8
-  - [net,v1,2/2] selftests/bpf: add test for xdp_bonding xmit_hash_policy compat
-    https://git.kernel.org/netdev/net/c/181cafbd8a01
+  Before: rep stos zeroing 96 bytes (5 instructions, 12 8-byte stores)
+  After:  movl $0x0 zeroing 4 bytes (1 instruction, 1 store)
 
-You are awesome, thank you!
+Also add opts->options = 0 at the top of tcp_syn_options(), which
+already used |= without a prior clear. tcp_established_options() already
+clears opts->options at its top.
+
+Signed-off-by: Keita Morisaki <kmta1236@gmail.com>
+---
+ net/ipv4/tcp_output.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 326b58ff1118d..63ee037f46e50 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -429,14 +429,19 @@ static void smc_options_write(__be32 *ptr, u16 *options)
+ }
+ 
+ struct tcp_out_options {
++	/* Following group is cleared in __tcp_transmit_skb() */
++	struct_group(cleared,
++		u16 mss;		/* 0 to disable */
++		u8 bpf_opt_len;		/* length of BPF hdr option */
++		u8 num_sack_blocks;	/* number of SACK blocks to include */
++	);
++
++	/* Caution: following fields are not cleared in __tcp_transmit_skb() */
+ 	u16 options;		/* bit field of OPTION_* */
+-	u16 mss;		/* 0 to disable */
+ 	u8 ws;			/* window scale, 0 to disable */
+-	u8 num_sack_blocks;	/* number of SACK blocks to include */
+ 	u8 num_accecn_fields:7,	/* number of AccECN fields needed */
+ 	   use_synack_ecn_bytes:1; /* Use synack_ecn_bytes or not */
+ 	u8 hash_size;		/* bytes in hash_location */
+-	u8 bpf_opt_len;		/* length of BPF hdr option */
+ 	__u8 *hash_location;	/* temporary pointer, overloaded */
+ 	__u32 tsval, tsecr;	/* need to include OPTION_TS */
+ 	struct tcp_fastopen_cookie *fastopen_cookie;	/* Fast open cookie */
+@@ -965,6 +970,8 @@ static unsigned int tcp_syn_options(struct sock *sk, struct sk_buff *skb,
+ 	struct tcp_fastopen_request *fastopen = tp->fastopen_req;
+ 	bool timestamps;
+ 
++	opts->options = 0;
++
+ 	/* Better than switch (key.type) as it has static branches */
+ 	if (tcp_key_is_md5(key)) {
+ 		timestamps = false;
+@@ -1549,7 +1556,7 @@ static int __tcp_transmit_skb(struct sock *sk, struct sk_buff *skb,
+ 
+ 	inet = inet_sk(sk);
+ 	tcb = TCP_SKB_CB(skb);
+-	memset(&opts, 0, sizeof(opts));
++	memset(&opts.cleared, 0, sizeof(opts.cleared));
+ 
+ 	tcp_get_current_key(sk, &key);
+ 	if (unlikely(tcb->tcp_flags & TCPHDR_SYN)) {
+
+base-commit: af4e9ef3d78420feb8fe58cd9a1ab80c501b3c08
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.34.1
 
