@@ -1,152 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8AC83890E1;
-	Tue,  3 Mar 2026 20:04:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA94738911B
+	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 20:05:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772568295; cv=none; b=FiJXcTKfjxno/bgXNpOI75h1IsLDS0uby2UNZ5nyH0C8id7Z1cQgWGaEZ1Yp5RinmYcc+FTlqtI2/Qz0p58h1H4rUDk0nE7KdYNtXq1HoYygJn3TYQ2ZQ6jmbxULbC/NTYcMuc5cD68p12rqX43XGdDtYi3xwyO5IXZj0ZwNltc=
+	t=1772568309; cv=none; b=n0OUJNZ9WqRUV2A7jNwhn9y626W4B4YEzDwmjvRuEPxEeI3lPku9tUx7wqRGKy3qm6mXUWRiwLEOzftDaVIB0jIrvkMWV+CfebkRztOJu0KgK2K0SsfNZ7swXFStGcJjgd6GW2F/UpwDysdgNNse7VOgKyftB7Klkg7ZHF32cCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772568295; c=relaxed/simple;
-	bh=Qj8+TYobz9svKb+bbVJ56ph3mB+FicVT/jE7eZHw7D4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=rXa8DaAKEyJco5JD0kAEWMyiWMMt/+JrG7F+nbTDjfJLA4gqUUdWWRKQVnV79kCgnkTiij0ycDoc2Yt6DSyuqCq/KZ8C7ShpLZXVUndlWxP0T+R3o+oOFoXzvZ5lrd5wNaHQx4bxK3tFwFhkX+2hT22zdlVwPZlltFLdjzHG8gI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YsOYV8l/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772568309; c=relaxed/simple;
+	bh=bzPb6xmAmChlVP1q/WZM2tU9RBqtVAwunFB11U2PeFk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=FDDixKtRYvppYeTX75WPW88Pt/d/a3hXGInThvCQ9Ya91ApfehxX35nn0IqexH21j3tjnS4vQF6ZZVE1rUMxCzVuP0bfm7ic/jenMkjEdniii10h26HRucIBnLD9Z/qxgKA4fTVV3tXfGfAgyTqLh/4m+/d1idzqc4aSULI9Fqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bSIsRVe6; arc=none smtp.client-ip=74.125.82.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YsOYV8l/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DB21C116C6;
-	Tue,  3 Mar 2026 20:04:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772568295;
-	bh=Qj8+TYobz9svKb+bbVJ56ph3mB+FicVT/jE7eZHw7D4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=YsOYV8l/ULA0bztoVlum4Bs5mIihyKus1QiZv5aesrnEud8RTLrIdC0Jqu+eUvVsg
-	 65VtWbl0hFSYN+4TKxN5WmSycdTMWA4jFRp6hIDqdGipxnsD3BJBYyYS920lWaTsBE
-	 E2A3b2HxS4+UFMGfbbo3+Omhi4w//iKpStymRR0GCeiY0f4dEVbk5zRW90OSa9s3kx
-	 DrO6p5OxSMPXSPKfvTMeFKxhdLLi6W170MEU7vWAuY6jbtlVYPRIOYNjFJAo6LoXmU
-	 o5+zfHm23ZwUS23cGk/H/pU9VjMMKetWkRgVYlMU/JW6vhRoKpe7w94B69avdLG0K4
-	 WHl5KtIfEebkg==
-Date: Tue, 3 Mar 2026 14:04:24 +0900
-From: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-hardening@vger.kernel.org, Kees Cook <kees@kernel.org>
-Subject: [PATCH][next] bpf: Avoid thousands of
- -Wflex-array-members-not-at-end warnings
-Message-ID: <aaZr2A1UPJq33127@kspp>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bSIsRVe6"
+Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-126ea4b77adso7888532c88.1
+        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 12:05:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772568308; x=1773173108; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=HuHhGttXcFsF+4KHE6jrs5iwTBoeSrOICFq+9jlRCq0=;
+        b=bSIsRVe6UZvWI4nIJSQTLM2z/mRTQTIzATYGx2TntqAnXap3tmmLkSLfW37VEEQPbG
+         Coj+sog5Kav5y8SSyaTUJTA6XBN5UxnLLyn8rPIwHnAX0jgGUq74/fMNpRVCdS8eacJi
+         BR7c2IwyAFQVkIC0I1fqKOSCe5D5d86/div2hvsGsHuUZq6FoTif1NdHDvxsmYISW2aT
+         pQmQVZ9f6cjEf27FTX9rWYOIO7rfblQ7pV+3KMyzE0LCttzjxkcVe4Y4CddADgxf1pXX
+         Nwjt5pgKaS94yu80oruGpIyJWOtuZjo93uFFToglgA+vlaerNDeZONsds4aDcA5iFjkn
+         LLyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772568308; x=1773173108;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HuHhGttXcFsF+4KHE6jrs5iwTBoeSrOICFq+9jlRCq0=;
+        b=FuorrTmW7LyXxgCaw8aHS4l+/ydc7ANOANwDQzGxP8u6dhASJGcCb6Tu9fO5GjWs8D
+         xoM+Oqgi2YwTKjdfET1utjECfkWNUFb772lgZKvNRgoZp69F+P8czf4xtrEpV5uXjCmT
+         8e98bucxCJBlBiQPR4u1GnQDfvL28432U7608s/2io2I1MkZnz9OjtK2LJEcbUxxX9Zk
+         UYGO/DMY9ra8SkUe3bjAbJvj+7K8676ygk8yBdXkusVAqgDP1wJYxYgBgAGUfe3WbycQ
+         oe0VR5pbEJK40B4G+gukp6N8jolyJ4Si/hCEbmn9hiyEmQkCZzPDjg/u4CbrrSCaypMY
+         ZcoA==
+X-Forwarded-Encrypted: i=1; AJvYcCX8ofZ13DwRlAmpfKLZDzlTNaWLr/OvTuatKzDiVv/OoDErq5XJ+rOSoPKhdf5Bf/1MyiQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxno7FT+QrcqC44Ubx1XChLJHLINLl8K0DQr4u5peK+R3agVcUy
+	hz65AY40udaQj66Z4Zsx60uhu6g8XT5wjyr7CQw8Pm527fR4MX0MTkB3
+X-Gm-Gg: ATEYQzzf3xffAbJzCZbygEBy29sQxXZPEACLDJXLc+VZ3wh6VyYWtljFgG0+79iuIkd
+	t2kW4lNDig9NVJbE4Hx4Z4cOuyalR4VZrGpGxRY+eE0U8DCYZtb598HhncLqa4siQqjzJNGjfcE
+	0FXzR0UU47K9Lxi1qA/CH//klxUB0/FzuTkHly9VQe7ppcY9RSk/R+aRx22B8LEWP18hvivk3AC
+	UYr+0/Vbx4rw06hoCzHITB6ILOs/+mT5LTl3klr96MgDuAmX92PDl0hs6AqUPEZT/04DYHc3Rkj
+	2yj/6f/Oqhybu9SZKyXfcMds1TG0bR94xX01SJy+a18bMuUUWy0weqbat7mYsHlPeO0OEvxnUv7
+	xVU6QCNrc+B3G4xkIIZ71Siz7FNuQgJ9a5/6tnJEdspIHUzDZHhxlJc/F2HfKvXEM6/oQJ0q9HN
+	BYjjlY+GWxNsud9NhkBC0LvTWwwIcTDT9Y+akKfWoTpXuoPpwIno9qHiaazVbRjSjgIvT2a9YAV
+	89/lAiy
+X-Received: by 2002:a05:7022:b97:b0:11b:9b98:aa4b with SMTP id a92af1059eb24-1278fb6859cmr8038142c88.6.1772568307717;
+        Tue, 03 Mar 2026 12:05:07 -0800 (PST)
+Received: from ?IPv6:2a03:83e0:115c:1:bf8e:1331:ef2b:145d? ([2620:10d:c090:500::3:4473])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-127899df391sm20207397c88.5.2026.03.03.12.05.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Mar 2026 12:05:07 -0800 (PST)
+Message-ID: <c40dd219ea60f810d52576f998e68cc0d731f761.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v4 1/2] bpf: Support new pointer param types
+ via SCALAR_VALUE for trampolines
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Slava Imameev <slava.imameev@crowdstrike.com>, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, 	jolsa@kernel.org, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, 	pabeni@redhat.com, horms@kernel.org,
+ shuah@kernel.org, 	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, 	linux-kselftest@vger.kernel.org,
+ linux-open-source@crowdstrike.com
+Date: Tue, 03 Mar 2026 12:05:04 -0800
+In-Reply-To: <20260303095427.38981-2-slava.imameev@crowdstrike.com>
+References: <20260303095427.38981-1-slava.imameev@crowdstrike.com>
+	 <20260303095427.38981-2-slava.imameev@crowdstrike.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
--Wflex-array-member-not-at-end was introduced in GCC-14, and we are
-getting ready to enable it, globally.
+On Tue, 2026-03-03 at 20:54 +1100, Slava Imameev wrote:
 
-struct bpf_prog_array is a flexible structure, this is a structure that
-contains a flexible-array member (struct bpf_prog_array_item items[];).
+[...]
 
-We create the new struct bpf_prog_array_hdr type, and use it to replace
-the object type causing trouble in struct bpf_empty_prog_array, namely
-struct bpf_prog_array hdr; 
+> @@ -6902,11 +6921,7 @@ bool btf_ctx_access(int off, int size, enum bpf_ac=
+cess_type type,
+>  		}
+>  	}
+> =20
+> -	/*
+> -	 * If it's a pointer to void, it's the same as scalar from the verifier
+> -	 * safety POV. Either way, no futher pointer walking is allowed.
+> -	 */
+> -	if (is_void_or_int_ptr(btf, t))
+> +	if (is_ptr_treated_as_scalar(btf, t))
+>  		return true;
 
-Also, once -fms-extensions is enabled, we can use transparent struct
-members in struct bpf_prog_array.
+I'm probably missing a point here, but what's wrong with Alexei's
+suggestion to do this instead:
 
-Notice that the newly created type does not contain the flex-array
-member `items`, which is the object causing the -Wfamnae warnings
-in struct bpf_empty_prog_array.
+	if (is_ptr_treated_as_scalar(btf, t))
+		 return true;
+?
 
-With these changes, fix the following warnings:
-    
-7659 ./include/linux/bpf.h:2369:31: warning: structure containing a flexible array member is not at the end of another structure [-Wflex-array-member-not-at-end]
+Only two new tests fail:
+- #554/62  verifier_ctx_ptr_param/fentry/pointer to float - invalid ctx acc=
+ess:FAIL
+- #554/63  verifier_ctx_ptr_param/fentry/double pointer to float - invalid =
+ctx access:FAIL
 
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- include/linux/bpf-cgroup.h | 2 +-
- include/linux/bpf.h        | 8 ++++++--
- kernel/bpf/core.c          | 6 +++---
- 3 files changed, 10 insertions(+), 6 deletions(-)
+But I'd say this shouldn't matter.
+This will also make selftests much simpler.
 
-diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-index 2f535331f926..e7d266600ac7 100644
---- a/include/linux/bpf-cgroup.h
-+++ b/include/linux/bpf-cgroup.h
-@@ -184,7 +184,7 @@ static inline bool cgroup_bpf_sock_enabled(struct sock *sk,
- 	struct bpf_prog_array *array;
- 
- 	array = rcu_access_pointer(cgrp->bpf.effective[type]);
--	return array != &bpf_empty_prog_array.hdr;
-+	return (void *)array != (void *)&bpf_empty_prog_array.hdr;
- }
- 
- /* Wrappers for __cgroup_bpf_run_filter_skb() guarded by cgroup_bpf_enabled. */
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 05b34a6355b0..488de065466e 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2360,13 +2360,17 @@ struct bpf_prog_array_item {
- 	};
- };
- 
--struct bpf_prog_array {
-+struct bpf_prog_array_hdr {
- 	struct rcu_head rcu;
-+};
-+
-+struct bpf_prog_array {
-+	struct bpf_prog_array_hdr;
- 	struct bpf_prog_array_item items[];
- };
- 
- struct bpf_empty_prog_array {
--	struct bpf_prog_array hdr;
-+	struct bpf_prog_array_hdr hdr;
- 	struct bpf_prog *null_prog;
- };
- 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 229c74f3d6ae..ac15ab8b7d3c 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2598,14 +2598,14 @@ struct bpf_prog_array *bpf_prog_array_alloc(u32 prog_cnt, gfp_t flags)
- 	if (prog_cnt)
- 		p = kzalloc_flex(*p, items, prog_cnt + 1, flags);
- 	else
--		p = &bpf_empty_prog_array.hdr;
-+		p = (void *)&bpf_empty_prog_array.hdr;
- 
- 	return p;
- }
- 
- void bpf_prog_array_free(struct bpf_prog_array *progs)
- {
--	if (!progs || progs == &bpf_empty_prog_array.hdr)
-+	if (!progs || (void *)progs == (void *)&bpf_empty_prog_array.hdr)
- 		return;
- 	kfree_rcu(progs, rcu);
- }
-@@ -2626,7 +2626,7 @@ static void __bpf_prog_array_free_sleepable_cb(struct rcu_head *rcu)
- 
- void bpf_prog_array_free_sleepable(struct bpf_prog_array *progs)
- {
--	if (!progs || progs == &bpf_empty_prog_array.hdr)
-+	if (!progs || (void *)progs == (void *)&bpf_empty_prog_array.hdr)
- 		return;
- 	call_rcu_tasks_trace(&progs->rcu, __bpf_prog_array_free_sleepable_cb);
- }
--- 
-2.43.0
-
+> =20
+>  	/* this is a pointer to another type */
