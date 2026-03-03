@@ -1,82 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07BC43368B0
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 23:30:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78D3436C9D1
+	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 23:42:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772580611; cv=none; b=kYvSSvXeSMjPmOvwQjnvlO6IT65q3vTCgskl4D9laZoIRbzhApAjScc8riH4jtLMQJ4bRHHYkTosWFkDLCXBrhRALm5aHwT2KqHO7jfqGJ4Cl91Fa7koDXyzuQOi4JgLHgvl07egqlJc3TCgyY0cNH5A+A8+h21wS5qqzJPFRAk=
+	t=1772581356; cv=none; b=WBUlaOtBp1GAhB6xdnly/QC1lRIjOLyIJjZpMLEDh+alfNUqFxxuAyrtMyxgjWzbtSp3TWcrjQ1DYjEYdZ1Rz6/jbiswlZK10F0E4meRQxCLL7wSjWmbDtfdsv7ozouUoWrfJeUOtjsGx9ikc+F9Z+ectNu/4HwR0m8IKmu/n6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772580611; c=relaxed/simple;
-	bh=z7WxkVcUFswQHG4gl6UA91fQt16A0FuPKoZf4sB/zoI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=gmoQnxM2bC7q6mRBxX0ZathAxTxed5YisghFUmEBbsbSkBcQglkGQrCWLIeRn5zrJYGuBgHtQRqrRd46A5Avq0gUm8M5seT+6XOJp6olOaPHD+mZ5yRkk199JuFtO6rmshayxweGimwlv9eDMYWGNghxLU/22KhKra1yn5W0EG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dAnMGKBk; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772581356; c=relaxed/simple;
+	bh=kWhijkX4NW9+j8hjQNKVNHbTc1OwH2G//Ljxi1C9zNk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=beldPsIutoPN8BRKvWIcUEildc93RAsfnbSOChxCoa+tIq3IjEQH4MFKO5P9q5g8YT0PSjWAoFiINaak/RIoWUFgeSAtli/CUivRLGZBlhql19XNzLAdL43BBGlUXFLqmCApVuR41Hz0UMwesUTVPFWcJT2/Cju/6VMBplLcLTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WiuJU9xS; arc=none smtp.client-ip=95.215.58.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dAnMGKBk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6B18C116C6;
-	Tue,  3 Mar 2026 23:30:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772580610;
-	bh=z7WxkVcUFswQHG4gl6UA91fQt16A0FuPKoZf4sB/zoI=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=dAnMGKBkgHuMexlSKA5Mj6KIb/wgwJGtpKYzKVgVmo3LFHXvME1skDW1n8S5EGMqS
-	 5QBDcFdf0cuHImahyPSrxKXh8N/p6OQj8Bj5xcnjJvnGMVtaYRl7UqWeZlFAIZKRVF
-	 Z+bvIHcRLDP7sO+rmBf+Bzb3z02ueqlgcxOeqaFeXEy2iOi44wYFdUW2eFyUOgj1CF
-	 31Fu45KKGP2erbDZzYG8lbXscPRrDDFd00G9XpvH2SK0/sHtNqdmm2yWvfRq3cfY9k
-	 /KXhi2v+m60NTBU18M7fopWJ/fmZZFaOUfv2iN0OGYo556gfpP7iOvpW2AGBAptb4L
-	 hSkNhNqkGMo/w==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02C9C3808200;
-	Tue,  3 Mar 2026 23:30:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WiuJU9xS"
+Message-ID: <da42af3a-7595-4e51-8c85-5b419266a8a3@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772581341;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GZ/CIewNUhK4DMFEo8Ql83aiKEIEGzE6lChFBdbn6Qw=;
+	b=WiuJU9xSpPqUUi0fFmsaSFfdclDs2RnncKi0uexKiZV2/5T4+rQp/AV0D0U+vMuHTPOnJM
+	SQNP2pe4y/+PsPJyUZh/iG8WrSk9ez3KpnRawQZA4Mp7+lrQvzE25mPhAWdLfESidtEZmP
+	QJrH2E7Ss/GwiBZHXDJ5i6lPo3pa2YI=
+Date: Tue, 3 Mar 2026 15:42:12 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v5] bpf: fix: Race condition in
- bpf_trampoline_link_cgroup_shim
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177258061155.1514859.17135134965646626818.git-patchwork-notify@kernel.org>
-Date: Tue, 03 Mar 2026 23:30:11 +0000
-References: <279EEE1BA1DDB49D+20260303095217.34436-1-xulang@uniontech.com>
-In-Reply-To: <279EEE1BA1DDB49D+20260303095217.34436-1-xulang@uniontech.com>
-To: xulang <xulang@uniontech.com>
-Cc: bot+bpf-ci@kernel.org, andrii@kernel.org, ast@kernel.org,
- bpf@vger.kernel.org, clm@meta.com, daniel@iogearbox.net, dddddd@hust.edu.cn,
- dzm91@hust.edu.cn, eddyz87@gmail.com,
- hust-os-kernel-patches@googlegroups.com, ihor.solodrai@linux.dev,
- kaiyanm@hust.edu.cn, martin.lau@kernel.org, martin.lau@linux.dev,
- sdf@fomichev.me, yonghong.song@linux.dev
+Subject: Re: [PATCH v1 bpf-next] net: core: allow
+ netdev_upper_get_next_dev_rcu from bh context
+To: Jakub Kicinski <kuba@kernel.org>, Kohei Enju <kohei@enjuk.jp>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>,
+ =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+ kohei.enju@gmail.com
+References: <20260220110922.94781-1-kohei@enjuk.jp>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20260220110922.94781-1-kohei@enjuk.jp>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
 
-This patch was applied to bpf/bpf.git (master)
-by Martin KaFai Lau <martin.lau@kernel.org>:
 
-On Tue,  3 Mar 2026 17:52:17 +0800 you wrote:
-> From: Lang Xu <xulang@uniontech.com>
+On 2/20/26 3:09 AM, Kohei Enju wrote:
+> Since XDP programs are called from a NAPI poll context, the RCU
+> reference liveness is ensured by local_bh_disable().
 > 
-> The root cause of this bug is that when `bpf_link_put` reduces the
-> refcount of `shim_link->link.link` to zero, the resource is considered
-> released but may still be referenced via `tr->progs_hlist` in
-> `cgroup_shim_find`. The actual cleanup of `tr->progs_hlist` in
-> `bpf_shim_tramp_link_release` is deferred. During this window, another
-> process can cause a use-after-free via `bpf_trampoline_link_cgroup_shim`.
+> Commit aeea1b86f936 ("bpf, devmap: Exclude XDP broadcast to master
+> device") started to call netdev_upper_get_next_dev_rcu() from this
+> context, but missed adding rcu_read_lock_bh_held() as a condition to the
+> RCU checks.
+> While both bh_disabled and rcu_read_lock() provide RCU protection,
+> lockdep complains since the check condition is insufficient [1].
 > 
-> [...]
+> Add rcu_read_lock_bh_held() as condition to help lockdep to understand
+> the dereference is safe, in the same way as commit 694cea395fde ("bpf:
+> Allow RCU-protected lookups to happen from bh context").
+> 
+> [1]
+>   WARNING: net/core/dev.c:8099 at netdev_upper_get_next_dev_rcu+0x96/0xd0, CPU#0: swapper/0/0
+>   ...
+>   RIP: 0010:netdev_upper_get_next_dev_rcu+0x96/0xd0
+>   ...
+>    <IRQ>
+>    dev_map_enqueue_multi+0x411/0x970
+>    xdp_do_redirect+0xdf2/0x1030
+>    __igc_xdp_run_prog+0x6a0/0xc80
+>    igc_poll+0x34b0/0x70b0
+>    __napi_poll.constprop.0+0x98/0x490
+>    net_rx_action+0x8f2/0xfa0
+>    handle_softirqs+0x1c7/0x710
+>    __irq_exit_rcu+0xb1/0xf0
+>    irq_exit_rcu+0x9/0x20
+>    common_interrupt+0x7f/0x90
+>    </IRQ>
+> 
+> Signed-off-by: Kohei Enju <kohei@enjuk.jp>
+> ---
+>   net/core/dev.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 096b3ff13f6b..b99d46b682c6 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -8103,7 +8103,8 @@ struct net_device *netdev_upper_get_next_dev_rcu(struct net_device *dev,
+>   {
+>   	struct netdev_adjacent *upper;
+>   
+> -	WARN_ON_ONCE(!rcu_read_lock_held() && !lockdep_rtnl_is_held());
+> +	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_bh_held() &&
 
-Here is the summary with links:
-  - [bpf,v5] bpf: fix: Race condition in bpf_trampoline_link_cgroup_shim
-    https://git.kernel.org/bpf/bpf/c/56145d237385
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+lgtm after re-reading some of the threads related to commit 694cea395fde.
 
+Jakub, if it looks good to you also, can you take it to the net-next 
+tree? Thanks.
+
+Acked-by: Martin KaFai Lau <martin.lau@kernel.org>
+
+> +		     !lockdep_rtnl_is_held());
+>   
+>   	upper = list_entry_rcu((*iter)->next, struct netdev_adjacent, list);
+>   
 
