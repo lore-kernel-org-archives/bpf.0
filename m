@@ -1,256 +1,237 @@
-Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 865FF18DB01;
-	Tue,  3 Mar 2026 04:01:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772510465; cv=none; b=AksStB3GhzqiIyitwFqB/sGUSksO42SBdD17wjQTMBTlk5hrNg+UQmfBYQV6XVnlpSSzYBIF0MnoU6/1DQid4RBFdE4Sq2gG6XdrF3ZRFbhZUf+1LJZMb0f5E5+eYh4PtbxKqKlR7/zDXIs/cMI31IYX184AAiIP68ezMW2UPkI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772510465; c=relaxed/simple;
-	bh=4MM7daaFntoYpBAIYvw4i9yp3O8TJHzAbNFBDoI5UfI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LtR9AWVGa0XlU2D/tXM6CC22C+HJI688B3kx0AGKxwRuzmRUUcfAzOIcm/DHom5FbzTCjNtP4RxMn9iMBze58iwQEk5cWbbmBmmpA2zEY1e1U8/C/8Nz6g+vNaeURIYrKozejQFCc62yajnDSEgf5uybOa0ojpAsrOdlRKlYDE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-	by vmicros1.altlinux.org (Postfix) with ESMTP id 1A94D72C8F5;
-	Tue,  3 Mar 2026 07:01:01 +0300 (MSK)
-Received: from altlinux.org (unknown [193.43.10.9])
-	by imap.altlinux.org (Postfix) with ESMTPSA id F3AC736D00D3;
-	Tue,  3 Mar 2026 07:01:00 +0300 (MSK)
-Date: Tue, 3 Mar 2026 07:01:00 +0300
-From: Vitaly Chikunov <vt@altlinux.org>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: bot+bpf-ci@kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, olsajiri@gmail.com, yatsenko@meta.com, 
-	alexis.lothore@bootlin.com, ameryhung@gmail.com, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, kernel-team@meta.com, martin.lau@kernel.org, 
-	yonghong.song@linux.dev, clm@meta.com
-Subject: Re: [PATCH bpf v3 01/15] selftests/bpf: Pass through build flags to
- bpftool and resolve_btfids
-Message-ID: <aaZOdWs7OS8Pn1Pl@altlinux.org>
-References: <20260220222604.1155148-2-ihor.solodrai@linux.dev>
- <edac02ca77865be9cc18b013f5209a8fb0d8a4c443ce16dce8ad368a9ecefe05@mail.kernel.org>
- <789af3df-291c-410d-89d8-ee7b12479798@linux.dev>
- <aaWqMcK-2AQw5dx8@altlinux.org>
- <d6fda426-b59f-48d6-bbe7-b2069a7e352e@linux.dev>
- <aaXwaMCIm9UZUx9O@altlinux.org>
- <de42bb10-dafd-45da-97fe-b59be487f30b@linux.dev>
+Received: from MEUPR01CU001.outbound.protection.outlook.com (mail-australiasoutheastazolkn19010014.outbound.protection.outlook.com [52.103.73.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56919375F6C
+	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 04:02:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.73.14
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772510523; cv=fail; b=FpV1YdbHhUkHoyi9UQVEZ9oaA3/5+0oTBrKKjbfpTvyzp73cOR6bE69bQDr91t13f15RLV1v9T1WsgF+VpSaCfz5erJg6Ez4xTFcSE4cqwrk2YOzJUFfZ4SLEfl4+mYMqUct8gPCcJFcZZGaJUzWFobIsL5diRQULfHSOLshMZU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772510523; c=relaxed/simple;
+	bh=f3Ba9P93V3ob21EnHsULIoLSBioUPQNuuvZu3nRhsz4=;
+	h=Message-ID:Date:From:Subject:To:Cc:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=UzvlFRDrzGkl8QmjXt8UUYlvYClqCKxiKYb0OgRp6YAqTLQvkJhywB/24Zna4b8iylBI9Way6jX5phloRgy38xzhhwcf8rCwr70kROSIQ3UMsRuBA/V9TN/mRY2jaSKR204I3NGfGUmbfRAIuoFr2ytThq+t3mxD95fsaj2K5BA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=PEVvYq3U; arc=fail smtp.client-ip=52.103.73.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="PEVvYq3U"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=TCw9OrtE8IRNP0QyCw0wIxtXliU3XqnwS7rhyx95QrPQHVs1savT+JPhL+rCP4VnPzXWQL+tWV4Hvz5tvSSaRxt0CTpjd3YkluSLgXhwKLKgiBGH3u0b5AiF9MwmlVCL8Wx4Q+XoG1kWlWTsjKVLOkHuhVL28cWTr35Sj6jFB2/GMe8X7xyzym6ZgMvk3VwjQAzovGqq3IFQZEYOXZz7SpyHMvPIGi9lh7dzAovRFxZxA59j5K+H3ClO49dZyINQa0xxTpO17Wnt0RYDSDHnydyP4NJoX3ktKQAx7cc+l1+H00TPoDuo4WTDiICvMNOolmQ30LS7eKFSj4fhRV2x1g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zAfw3QgWXaRTjZWo4LUdhUawKSEqQxA/qmV9T5JPDN8=;
+ b=BtWmq3b0xq1stsJuKmJnSyf7Z7ypSZcXIthHamTbRtrZ3gJkTx83L1uITi4zz9cNoyx7i6yDYQK432/Egh/5r4FQU23WXoSp5ZKXSn0IsUQEGPPQb4mUvvTn34g/0hOSoFiyypjDSY2gj3wajZkS95j7umE/LoW5hlLj8KgRMEoVqChvvyEQB77qFeMRhZCYXud1G77PYrNqqf3IVXpGh+yjY6o9Lhb6J4TY/GBSbd4/gGHQbMsoyX2VCGGdlOaXv/T4gWSYAwhW4ZlSBuvkJFFddy5BQxDIc36o9uMjg6YmF0uYcPyVOXyYwIJFEgGv1NP2iaZz+3JeuPB4RxfETA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zAfw3QgWXaRTjZWo4LUdhUawKSEqQxA/qmV9T5JPDN8=;
+ b=PEVvYq3U+Ia7cLoBQIGyKc5xLaSdfK3GtMPLueVqUeKbbNk+cmfFedPAa7fQ65uzfKOj12h1zIghaCG2kDyFGbY5+Mwg5dvGjy0kVrkw+gRxDdAwnEsX3vkA1P4y+HqzzSnIqBUxuv8dEJgbmsftdK/vm3cZKEUcZSdDAz/+sT3qsG2POvqFP8cjgYUOKWOV1GgR3OKO40pdj5IZ53ivnDKA8KWOs7CTzJnkaLNBpNDqrhJyjW1EwyuqrO7qOXoc7H0L5TlNpSZTEA3WrpZJWk8zz9xzbJwEJm66XOX+QqPwHWi2LlVMse1kxVpl3xk+pf//4d5tim84+0igEQvoXw==
+Received: from SY7PR01MB10924.ausprd01.prod.outlook.com (2603:10c6:10:337::22)
+ by SY4PR01MB6282.ausprd01.prod.outlook.com (2603:10c6:10:ee::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.21; Tue, 3 Mar
+ 2026 04:01:55 +0000
+Received: from SY7PR01MB10924.ausprd01.prod.outlook.com
+ ([fe80::ea4e:596c:c03c:ab48]) by SY7PR01MB10924.ausprd01.prod.outlook.com
+ ([fe80::ea4e:596c:c03c:ab48%6]) with mapi id 15.20.9654.020; Tue, 3 Mar 2026
+ 04:01:55 +0000
+Message-ID:
+ <SY7PR01MB10924FF95363746C25CDE4A29EC7FA@SY7PR01MB10924.ausprd01.prod.outlook.com>
+Date: Tue, 3 Mar 2026 12:01:49 +0800
+User-Agent: Mozilla Thunderbird
+From: Yazhou Tang <tangyazhou518@outlook.com>
+Subject: Re: PROBLEM: verifier.c - invalid scalar IDs after byte swaps
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Guillaume Laporte <glapt.pro@outlook.com>
+Cc: "ast@kernel.org" <ast@kernel.org>,
+ "daniel@iogearbox.net" <daniel@iogearbox.net>,
+ "bpf@vger.kernel.org" <bpf@vger.kernel.org>, Tianci Cao <ziye@zju.edu.cn>,
+ Shenghao Yuan <shenghaoyuan0928@163.com>
+References: <AMBPR06MB108683CFEB1CB8D9E02FC95ECF17EA@AMBPR06MB10868.eurprd06.prod.outlook.com>
+ <CAADnVQJQhOkyPxFSrr_qoyDZUYdaT88g2xZa5+0UCvV4Ufb79w@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CAADnVQJQhOkyPxFSrr_qoyDZUYdaT88g2xZa5+0UCvV4Ufb79w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SI1PR02CA0034.apcprd02.prod.outlook.com
+ (2603:1096:4:1f6::10) To SY7PR01MB10924.ausprd01.prod.outlook.com
+ (2603:10c6:10:337::22)
+X-Microsoft-Original-Message-ID:
+ <403641ee-6840-4347-b8c3-e0dc3e3295c3@outlook.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-In-Reply-To: <de42bb10-dafd-45da-97fe-b59be487f30b@linux.dev>
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SY7PR01MB10924:EE_|SY4PR01MB6282:EE_
+X-MS-Office365-Filtering-Correlation-Id: 13bf428d-ae69-455d-d920-08de78d99bc1
+X-MS-Exchange-SLBlob-MailProps:
+	cn60g5V53KPDHK5IscaBpQ6i7hZ/p/QyeFr06PQpYQjAmv4aVvAwk9CU8IrsJBqaYAsagmmCTETtsC7q1Xzl7eqQYkMx/ZSTbvIh9E6qds2BZiHuy/srfgS3/tm/LZnO6JzxuUq361kq4A/4kWfBUKoScHGkP3G9nohga5gcqeHr3TwVx4irwWtCllB4lAbT2hvBfM9T12Yn0lVyqAlHsqSVWTVGNJBtYO/qvtqivYHEs/OOGyLNTqMV+AsLgz4e0bSbowcee1GZKnB3cO276+v3/nVfis4Z9Ngk6BSQRjCvQK9v+iyzFRt+WADmaYHqaDY1PoWNhSr/KfZ4PHbeNmHhHMw2d1AConf4D9mAlygVMe83R0zO9fUbEpSkRwKDvbTcscgSvK3ELEO7GAj3IGdFP8mwDAVmyMava8ZjQ0mgLEShy8ENloTmFwBy//uYMW05vLGpL7fWraRChl+OepvGKkoz14qfaOmfzTJ1UMvXLS1sp5Q2gAyplx4Ql2VxgOszLmv2L2BdDwl9AVQcfI0upZU8jZD2jQcJl0dabFZl5EzMqkJJua2kwQGVKjjArWSVI/U+aEk+LTZ/0XhG8D7TxbmwOd8mBnQzFI1fWT/ulztA+iBswLE4TzyT2/A6pjJsy1CFc00L8DfoFtzo6vhAsKWF1aLPyaz9F91hw9qSvhidBHsTkeCvc3U/vovf/jx/IffdhWdUHPO0DMYFzDdBQcwMEYon3WrYN5UEdF86aIkU1Rg3ASi1ZZ6bHIu765h+wEfiDad5L9C0TBid+tTiO865Ud1UlXrpmj1BEVVDGQ/Ng0lwmN1Nh/gxuJ2ajML3jxzCRGWKyUXzetwaixGdYBS+OVH0KUv8TyGhAcvJBAA+ksHfpA==
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|23021999003|41001999006|8060799015|15080799012|19110799012|5072599009|461199028|6090799003|10035399007|4302099013|440099028|3412199025|26104999006|1602099012|40105399003|53005399003;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Vjd4VDRRd1UzbTlVRXpicURsbWhDeGJPWVRNZlNkYkRLRTNnbDdRRTd4ZGNG?=
+ =?utf-8?B?emhPZEdDU0N1dTREb0l2TzdBMWZQc3RwL3B2SHh6UHlCeUVDeHhBTWxlZlU3?=
+ =?utf-8?B?RlVzckpSeU81TTRSR21RT0dZekdqK2QzMWYwYzdKakhRUDFwSkgwdkFiSVFG?=
+ =?utf-8?B?eVdLWUh5YmhOM2VnS01RV1AvUkdiOHBRVU8zSDN6ZFA2VHlmeVZPUmRCbDRw?=
+ =?utf-8?B?UlI5aXI5WHphMFFCc2lYUXA4SllsSDliVkYya1hSbXdpbW9BdFRsVnRIRXBq?=
+ =?utf-8?B?ZysvNTJFVGNjT3VyWnpveVgvaTROL0tXU3Q1UWRtajd6VU1lZU51NVh2ZGlF?=
+ =?utf-8?B?N3RvZW5IdVJidnl3SkR5YXBZd3lKN1pyWmtqcnlORDFQaS85bkxkMyszS2pO?=
+ =?utf-8?B?aHNmUXFPQk5FNDhIRy9jemhVeHJoVmhIL1ZLZFk4TmtnbmZKb244N3R5ZGJS?=
+ =?utf-8?B?SmsrVklab1U1TjRUcHhoL0pUUk91S1B5OXNUTE0vckVnZHBOdlhxUkhKdDA5?=
+ =?utf-8?B?S3lueTVkTm9pNThKVnFOdTcrbXNhYVJYYUhPSnNIVHQvNHhGQlEyL1JMeG8z?=
+ =?utf-8?B?S0dmakpwMVV4OUw0TFluRHJZblM5ZDMxMEE2S2NmTnFUNkZDWWhUbDF4Mmoy?=
+ =?utf-8?B?bjRPeHpRUEdQUEZINkh0T1Y3K3pWSUEyaytTc0pUY3NuZm95cVFOT0xyLy9Q?=
+ =?utf-8?B?WGMvRXhVYUFwTll4Q1g5WUhSZTh5Vm1zb3Jiais4VE5abnJiUUNodVRGVGM1?=
+ =?utf-8?B?WmwzWlpJOGVHY2xoOVU3NnhLRXlCMWVsTE0vUU1qRm11ZHM0U2J0R2RKR0FZ?=
+ =?utf-8?B?M0pHT1AvcnZEaFUvcVZIeXJLWjhFYm9qNmRwRFdXMGc2UjgzOHVPa3g4dEsy?=
+ =?utf-8?B?MXlpcnowalhwY3E1bUlqbnFKTWdVR1FSejR3RG1SSm5KRjhPclVJRk9XRGRj?=
+ =?utf-8?B?UTZ0Q3RoVHBPNlBPT1p4K25CTFcvc0x6MXU4WlNvRnJWTldIcnd4TDhVaFEy?=
+ =?utf-8?B?V1Fpajc1NklXYzduZmQ0SzVZRUZSU2plc2lkUFR1cUUrTDQwZ1prZW4xZXVq?=
+ =?utf-8?B?eUZJSlJ6ZW5DcDh1SnR5amFYTExmN0RRWGN1c3V0NkhLa1daTkQvb0dFb2Y4?=
+ =?utf-8?B?dkVlTEk1d1IrMGMyRkNRSXJJWUwzN0FScStqbDBlZmtISzJVc09XRkRIMTdM?=
+ =?utf-8?B?My9QSWRYWklTL3pwQXQyVCt6cy9HaytqMGdXamFpV3c3cCtFR0Q2K2FRc2Ir?=
+ =?utf-8?B?cENzbDRIc09nc1kxSlJib1NkL2J2cGdGdldkUmxyS25RMUpVR29FQTRZbmt3?=
+ =?utf-8?B?T3hxeVhQR2xhc0pKREFqVTRnL0UrWHF3WTJrSDF1UlJGa2U1Wmp4SGoyK2kx?=
+ =?utf-8?B?RHdsWGNFak51MnlCZmdRVlJhVFdxaExvZTQxWkFsT1ZyMzVjMWg0U3NodmpB?=
+ =?utf-8?B?ZGIvaVpXbkhjejFaclNqTFpLNm56NGdsUGhIMUVBPT0=?=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?aXNSSHJyUXdVSCtxeEU1aFBWS2s3WnRyazNPM0psNnJxQ3hvWi90bk5PTmRo?=
+ =?utf-8?B?dTRCZi9aTmJyUjhwQWI3SEpxR0hPeDFiNW5EZDVsbEdZWGZ4Qyt4SlAzL25X?=
+ =?utf-8?B?a2pYQzFRU0Q0M1U3ZVRidHBScGlPQ25ZMDBjNDEzQUVLRGxrWitFRyt6Um5U?=
+ =?utf-8?B?MTFZUXRHRXBjemdEWC9HRzNXaWlrbWVjSW9aUXkwaHhuMEVzdmYzWmd1U1ht?=
+ =?utf-8?B?Skl4SVUyamF5OTdacExpUUZkL2ViVFZZbTFvb2MxeGRFTEtXeitVSitDRmkv?=
+ =?utf-8?B?NHcwbldGSE9uOVZoOEZTb1U2NW4wanNBYzJTV2dkOXhUNlZQbFA2Vm1qaW1v?=
+ =?utf-8?B?K2dLY3M0dnl4TkJOOHZVN1dLMzVRQ3dObFg3d3pGRzFnQXVOdmFFSUpOWG95?=
+ =?utf-8?B?Wk0rTUJvVEdsZjBWNHNLMURPRVhoWWNDck1TbEorRmk4QUtzbU41RWt0bXRL?=
+ =?utf-8?B?dmd5akFHL3kvblUyOGZXNXRwSTVRUUdXcUZPSFovdnM4akJ3dUxUOW1XOWdm?=
+ =?utf-8?B?Q1UrcEZKRm92b1hoTG5XRkcrb2w4VHIwanY3azlGUXozVG1IdTZMQ3V2bGJy?=
+ =?utf-8?B?RlNXanl2aTV6U0h3NlduMDdpS0lzcHdRUG9uUElBeFNYeGhFSnFuVzRPTFNE?=
+ =?utf-8?B?b0d4cU1WdDVoVTNjUHR4NzF5ZlM3S2F5VFgwMFVHeUVpMUFkenpUeUpIZi9r?=
+ =?utf-8?B?SlFWSzlBZDZRNHoveGpPRk93Vm11TklPcStIdEtZaDFjMmZpdC9Id1JMdzY5?=
+ =?utf-8?B?OHNsRkgvZ1dtaksxUkluMUgxWm9hVWFTenRDYUVVTE9ZVjJua1N1ZVBrUCtF?=
+ =?utf-8?B?azFON250bmZ1Ui9VYVdkbjdXaTdEVGJWOVZtMHQ5TjNQRnFXeGpKY3J3QlZq?=
+ =?utf-8?B?SkJPTnpXYWpxZDRIaWpDWWVPaGR1MWlRcXdvZWQwV20zWWFEM0FhNWFIU0NO?=
+ =?utf-8?B?blBJaUN6NzcwMUpmTHFVaFprUFVBREwxamRlVmJCQXU5MDlsK2tDNkpIU2M1?=
+ =?utf-8?B?cEMxRTdTdjNHRnliVHd4a3pRbmFGcU1lMDVCMHFmc3IvQ2c0VW8vTy82djRj?=
+ =?utf-8?B?aDRsemJUWGx3VEl5bkwweldsY0hpR2dweCtUNnNJci9qcFpoY0hFbVFBVFd4?=
+ =?utf-8?B?OUFiQ00vUUVYSGdxeFhKMVpUNEpxZHJnN3ZTbmFoeEZJVms2TGRXUFdsWGJK?=
+ =?utf-8?B?cno2R3REOWNaMkNRMDZRRUwxVC9HcWtCTmpyNXFnZHN6MStxbkpOcExLSjk5?=
+ =?utf-8?B?dm04QnlGNkpJMXlQcFlDUFo5U0NqSmg2ZVpWUlM5OTBWRDc1YkQ0VVBmcTJy?=
+ =?utf-8?B?Q2lRbThqZHhaUW5qOHgvcGlEQWV1U1RzV2ZOa0w3bi9QejhIVXJIbXJLV2xj?=
+ =?utf-8?B?MHdaR25mOE1RMHBKa1Q4NStyZkFKQmlTaEtLbGRPNG12TzVJQS9VYVVib0I0?=
+ =?utf-8?B?NEZCZzdhTExnN2JyZlpyNFVtVitzblkzVkoybXg2REZDUk14QUNXajNWem5k?=
+ =?utf-8?B?UnJJdFBMNWxXcmVhQUY1eDhITUFVMXptdnpRTmZuNWovelpwUEg4Y1l2WE9w?=
+ =?utf-8?B?aGFGMUxTNGFQY1ZGY1lOSW5NTG1tVG5Ld09QWXB0ZEIzUDFTYjA0MzZnZyt3?=
+ =?utf-8?B?bm9oSldCejU2YVFCVUlJbDkrcUtEYmsxYVJxeFBnY3R4UEh4UGlBRHNmTTJ3?=
+ =?utf-8?B?UmFzbVRqVkFyVzBuSkh3RzBiem9ZNnErUElCZjA5aVBYSXdiY21NUTgwSzBj?=
+ =?utf-8?B?OWVQK2Zrdmk2ci9pSVFwbXBkUzcvd2Q1bXNTR3llM2RxRTE5Wk5OdUwydCtR?=
+ =?utf-8?B?U0dqR01kNzhGL205RjVLWnpCbkJ4Rldrc0lhMURsei9RSjNlYVNsT09vcmoz?=
+ =?utf-8?Q?w0sNbSgOAiqK6?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 13bf428d-ae69-455d-d920-08de78d99bc1
+X-MS-Exchange-CrossTenant-AuthSource: SY7PR01MB10924.ausprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2026 04:01:55.2497
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY4PR01MB6282
 
-Ihor,
+Hi Alexei and Guillaume,
 
-On Mon, Mar 02, 2026 at 02:42:11PM -0800, Ihor Solodrai wrote:
-> On 3/2/26 12:27 PM, Vitaly Chikunov wrote:
-> > On Mon, Mar 02, 2026 at 10:01:59AM -0800, Ihor Solodrai wrote:
-> >> On 3/2/26 7:22 AM, Vitaly Chikunov wrote:
-> >>> On Fri, Feb 20, 2026 at 08:23:51PM -0800, Ihor Solodrai wrote:
-> >>>> On 2/20/26 2:57 PM, bot+bpf-ci@kernel.org wrote:
-> >>>>>> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-> >>>>>> index 1733a6e93a07..ef083602b73a 100644
-> >>>>>> --- a/tools/bpf/resolve_btfids/Makefile
-> >>>>>> +++ b/tools/bpf/resolve_btfids/Makefile
-> >>>>>> @@ -65,6 +65,9 @@ $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OU
-> >>>>>>  LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
-> >>>>>>  LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
-> >>>>>>
-> >>>>>> +ZLIB_LIBS  := $(shell $(HOSTPKG_CONFIG) zlib --libs 2>/dev/null || echo -lz)
-> >>>>>> +ZSTD_LIBS  := $(shell $(HOSTPKG_CONFIG) libzstd --libs 2>/dev/null || echo -lzstd)
-> >>>>>
-> >>>>> The "|| echo -lzstd" fallback makes zstd an unconditional link
-> >>>>> dependency. On systems where libzstd-dev is not installed, pkg-config
-> >>>>> fails and the fallback provides -lzstd, but the linker cannot find the
-> >>>>> library and the build fails.
-> >>>>>
-> >>>>> bpftool handles the same transitive dependency conditionally via a
-> >>>>> feature test:
-> >>>>>
-> >>>>> tools/bpf/bpftool/Makefile:
-> >>>>>     ifeq ($(feature-libelf-zstd),1)
-> >>>>>     LIBS += -lzstd
-> >>>>>     LIBS_BOOTSTRAP += -lzstd
-> >>>>>     endif
-> >>>>>
-> >>>>> Would it be safer to drop the fallback here so ZSTD_LIBS is empty
-> >>>>> when zstd is not available?
-> >>>>>
-> >>>>>     ZSTD_LIBS := $(shell $(HOSTPKG_CONFIG) libzstd --libs 2>/dev/null)
-> >>>>>
-> >>>>> This would still link zstd when present (needed for the static linking
-> >>>>> case where libelf.a pulls in ZSTD symbols from elf_compress.o), but
-> >>>>> avoid breaking dynamic builds on systems without libzstd-dev.
-> >>>>
-> >>>> [...]
-> >>>>
-> >>>>
-> >>>> So, while AI may be technically correct that the build will fail if
-> >>>> libelf is installed and libzstd is not, it seems a far-fetched
-> >>>> situation, given that libelf depends on libzstd.
-> >>>
-> >>> This is not far-fetched, and we have build failure for v7.0-rc2 due to
-> >>> this.
-> >>>
-> >>>   ld: cannot find -lzstd: No such file or directory
-> >>>
-> >>> Even though libelf is linked with libzstd, this does not imply
-> >>> libzstd-devel (with headers and so library) is there when building.
-> >>
-> >> Does AI's suggestion make sense in your case then?
-> >> That is, make ZSTD_LIBS empty in case pkg-config didn't find libzstd?
-> >>
-> >> I'm happy to fix this, the build shouldn't fail unless it must.
-> >>
-> >> But I am curious how and why an environment building Linux with BTF
-> >> (requiring build and run of resolve_btfids), which needs libelf-dev
-> >> and presumably its dependencies, would exclude/avoid installing
-> >> libzstd-dev?
-> > 
-> > Are you providing -lzstd just to link with libelf? I don't think you need to
+Thanks for the bug report. We have already located the root cause.
+
+The reason is that BPF_END and BPF_NEG are the *only* operations that
+perform value tracking while bypassing the standard `dst_reg->id = 0`
+reset logic [1]. While BPF_NEG handles this bypass by manually clearing
+the register ID via `__mark_reg_known` [2], we unfortunately missed
+this manual reset step for BPF_END in our previous patch [3].
+
+We will send out a patch shortly to fix this by adopting the same manual
+reset approach used for BPF_NEG. We might also consider refactoring
+this code path later to make it less error-prone.
+
+[1] https://elixir.bootlin.com/linux/v6.19.3/source/kernel/bpf/verifier.c#L15743
+[2] https://elixir.bootlin.com/linux/v6.19.3/source/kernel/bpf/verifier.c#L15557
+[3] https://lore.kernel.org/bpf/20260204111503.77871-2-ziye@zju.edu.cn/
+
+Best,
+
+Yazhou
+
+On 3/3/26 9:08 AM, Alexei Starovoitov wrote:
+> Tianci,
 > 
-> An explicit -lzstd flag was added to enable a static build [1].
+> please take a look.
 > 
-> > care about zstd in that case. libelf is already linked with libzstd. If you
-> > don't use libzstd functions yourself you don't need to link with -lzstd.
-> > 
-> > Example build without -lzstd:
-> > 
-> >   builder@x86_64:~/RPM/BUILD/kernel-image-7.0-rc2$ grep zstd tools/bpf/resolve_btfids/Makefile
-> >   ZSTD_LIBS  := $(shell $(HOSTPKG_CONFIG) libzstd --libs 2>/dev/null)
-> > 
-> >   builder@x86_64:~/RPM/BUILD/kernel-image-7.0-rc2$ ldd ./tools/bpf/resolve_btfids/resolve_btfids
-> > 	  linux-vdso.so.1 (0x00007ff8b2329000)
-> > 	  libelf.so.1 => /lib64/libelf.so.1 (0x00007ff8b2287000)
-> > 	  libz.so.1 => /lib64/libz.so.1 (0x00007ff8b2269000)
-> > 	  libc.so.6 => /lib64/libc.so.6 (0x00007ff8b206e000)
-> > 	  libzstd.so.1 => /lib64/libzstd.so.1 (0x00007ff8b1fc8000)
-> > 	  /lib64/ld-linux-x86-64.so.2 (0x00007ff8b232b000)
-> >   builder@x86_64:~/RPM/BUILD/kernel-image-7.0-rc2$ rpm -q libzstd
-> >   libzstd-1.5.5-alt2.x86_64
-> >   builder@x86_64:~/RPM/BUILD/kernel-image-7.0-rc2$ rpm -q libzstd-devel
-> >   package libzstd-devel is not installed
-> > 
-> > lib*-devel/-dev packages only required if your source is directly using the
-> > target lib, in other causes this is already handled.
-> 
-> The issue that AI has raised is whether to leave -lzstd link flag by
-> default or not. I decided to leave it on the assumption that the
-> environments building Linux with BTF (hence building and running
-> resovle_btfids) would have libelf-dev installed (because -lelf has
-> been a requirement forever [2]), and libzstd-dev is its dependency.
-> 
-> I checked a few recent distros, all of them have libzstd-dev as a
-> direct dependency of libelf-dev, which supports my assumption:
-> 
->   # Fedora
->   $ dnf repoquery --providers-of=depends elfutils-libelf-devel
->   Updating and loading repositories:
->   Repositories loaded.
->   elfutils-libelf-0:0.194-1.fc43.i686
->   elfutils-libelf-0:0.194-1.fc43.x86_64
->   libzstd-devel-0:1.5.7-2.fc43.i686
->   libzstd-devel-0:1.5.7-2.fc43.x86_64
+> On Mon, Mar 2, 2026 at 10:11 AM Guillaume Laporte <glapt.pro@outlook.com> wrote:
+>>
+>> Hi BPF maintainers,
+>>
+>> I believe there is a verifier bug that manifests when a program performs a
+>> byte-swap (BPF_ALU | BPF_END | BPF_TO_BE) on a value that was previously copied
+>> elsewhere. In such a scenario, the verifier can incorrectly assume the two
+>> values are the same (share the same ID), and can then narrow the value of the
+>> untouched copy in a way that does not make sense after the byte-swap.
+>>
+>> I can reliably reproduce the issue starting with commit 9d21199 "bpf: Add
+>> bitwise tracking for BPF_END", so only the 7.0 release candidates seem to be
+>> affected; not kernel 6.19.
+>>
+>> Below is a minimal reproducer program that demonstrates the issue:
+>>
+>> struct bpf_insn prog[] = {
+>>      /* call bpf_ktime_get_ns */
+>>      { .code = BPF_JMP | BPF_CALL,
+>>        .imm = BPF_FUNC_ktime_get_ns },
+>>
+>>      /* r1 = r0 */
+>>      { .code = BPF_ALU64 | BPF_MOV | BPF_X,
+>>        .dst_reg = BPF_REG_1, .src_reg = BPF_REG_0 },
+>>
+>>      /* r0 = be16 r0 <- the bug is triggered here */
+>>      { .code = BPF_ALU | BPF_END | BPF_TO_BE,
+>>        .dst_reg = BPF_REG_0, .imm = 16 },
+>>
+>>      /* if r0 != 0x1 goto pc+0 */
+>>      { .code = BPF_JMP | BPF_JNE | BPF_K,
+>>        .dst_reg = BPF_REG_0, .imm = 1, .off = 0 },
+>>
+>>      /* exit */
+>>      { .code = BPF_JMP | BPF_EXIT,
+>>        .imm = 0 },
+>> };
+>>
+>> When I load this program (as a BPF_PROG_TYPE_SOCKET_FILTER), the verifier
+>> appears to keep the original scalar ID for the destination register, which can
+>> lead to incorrect verification (R1 is assumed to be 0x1 when its actual value is
+>> 0x100). Here is the relevant part of the associated verifier log:
+>>
+>> 0: R1=ctx() R10=fp0
+>> 0: (85) call bpf_ktime_get_ns#5       ; R0=scalar()
+>> 1: (bf) r1 = r0                       ; R0=scalar(id=1) R1=scalar(id=1)
+>> 2: (dc) r0 = be16 r0                  ; R0=scalar(id=1,smin=smin32=0,smax=umax=smax32=umax32=0xffff,var_off=(0x0; 0xffff))
+>> 3: (55) if r0 != 0x1 goto pc+0        ; R0=1 R1=1
+>> 4: (95) exit
+>>
+>> from 3 to 4: R0=scalar(id=1,smin=smin32=0,smax=umax=smax32=umax32=0xffff,var_off=(0x0; 0xffff)) R1=scalar(id=1,smin=smin32=0,smax=umax=smax32=umax32=0xffff,var_off=(0x0; 0xffff)) R10=fp0
+>> 4: R0=scalar(id=1,smin=smin32=0,smax=umax=smax32=umax32=0xffff,var_off=(0x0; 0xffff)) R1=scalar(id=1,smin=smin32=0,smax=umax=smax32=umax32=0xffff,var_off=(0x0; 0xffff)) R10=fp0
+>> 4: (95) exit
+>>
+>> Thank you for your time and for your work on the BPF subsystem.
+>>
+>> Best regards,
+>>
+>> Guillaume Laporte
 
-Interesting, but looks like this is not needed package dependency.
-
-  [fodora:rawhide@docker /]# grep zstd /usr/lib64/pkgconfig/libelf.pc
-  Requires.private: zlib libzstd
-
-It's only a private dependency not exposed to the application.
-pkg-config will not add -lzstd to link with libelf.so. (Unless it's
--static linking.) See pkg-config(1):
-
-  Requires.private:
-    A list of packages required by this package. The difference from Requires is
-    that the packages listed under Requires.private are not taken into account when
-    a flag list is computed for dynamically linked executable (i.e., when --static
-    was not specified).  In the situation where each .pc file corresponds to a
-    library, Requires.private shall be used exclusively to specify the dependencies
-    between the libraries.
-
-Perhaps, for your static linking case, you just need to extract -static from
-EXTRA_LDFLAGS and add it to `pkg-config libelf --libs` to get the list of
-static libraries to link with libelf, without defining ZSTD_LIBS at all.
-This may provide other important flags besides these, see for example:
-
-  alt:sisyphus# pkg-config libelf --libs --static
-  -lelf -lz -lzstd -pthread
-
-I think it's better to rely on pkg-config instead of guessing all the required
-linking flags.
-
-
->   pkgconf-pkg-config-0:2.3.0-3.fc43.i686
->   pkgconf-pkg-config-0:2.3.0-3.fc43.x86_64
->   zlib-ng-compat-devel-0:2.3.3-1.fc43.i686
->   zlib-ng-compat-devel-0:2.3.3-1.fc43.x86_64
-> 
->   # Ubuntu
->   $ apt info libelf-dev
->   Package: libelf-dev
->   Version: 0.190-1.1ubuntu0.1
->   Priority: optional
->   Section: libdevel
->   Source: elfutils
->   Origin: Ubuntu
->   Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
->   Original-Maintainer: Debian Elfutils Maintainers <debian-gcc@lists.debian.org>
->   Bugs: https://bugs.launchpad.net/ubuntu/+filebug
->   Installed-Size: 385 kB
->   Depends: libelf1t64 (= 0.190-1.1ubuntu0.1), zlib1g-dev, libzstd-dev
->   Conflicts: libelfg0-dev
->   [...]
-> 
->   # Debian
->   $ apt info libelf-dev
->   Package: libelf-dev
->   Version: 0.192-4
->   Priority: optional
->   Section: libdevel
->   Source: elfutils
->   Maintainer: Debian Elfutils Maintainers <debian-gcc@lists.debian.org>
->   Installed-Size: 420 kB
->   Depends: libelf1t64 (= 0.192-4), zlib1g-dev, libzstd-dev
->   Conflicts: libelfg0-dev
->   [...]
-
-I don't know why these distros do this sort of dependency. In ALT Linux we
-don't require libzstd-devel for linelf-devel, also, I just checked OpenMandriva
-and it does not require this too. But, openSUSE requires libzstd-devel.
-
-> Of course it's plausible to have a system where libelf-dev is present
-> while libzstd-dev is not, as demonstrated by you running one.
-> 
-> Anyways this is easy to fix, I'll send a patch shortly.
-
-Thanks,
-
-> 
-> [1] https://lore.kernel.org/bpf/4ff82800-2daa-4b9f-95a9-6f512859ee70@linux.dev/
-> [2] https://lore.kernel.org/bpf/20200711215329.41165-2-jolsa@kernel.org/
-> 
-> 
-> > 
-> > Thanks,
-> > 
-> >>
-> >> Thanks.
-> >>
-> >>>
-> >>> Thanks,
-> >>>
-> >>>>
-> >>>> I think we can leave the default -lzstd to have an explicit
-> >>>> dependency in the Makefile.
-> >>>>
-> >>>>
-> >>>>>
-> >>>>> [ ... ]
-> >>
