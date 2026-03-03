@@ -1,168 +1,114 @@
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E1AF33FE06;
-	Tue,  3 Mar 2026 12:14:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.189.157.229
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F06DD33E34E
+	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 12:28:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772540097; cv=none; b=pbGopzdmEdcMLJlHZZvt7h0kzV00ZUROfvIsqb1ehrxwGUnNztT4mNADf0GTemAC/H1Apsg0UkyCwPrDU4rIGD8xe5CYbHynKeqjqdQgjiQjYfD3fSabLbaZ8K5mlnFaH5g4kX/QBz3UpjXa1V6gqTlEfwYrsI7QYBK9ku70A7c=
+	t=1772540904; cv=none; b=JgtmS03dcd00HjDzliozZwq4YyfMutcw4qp/LncVstaIzu1Syvl0aX32QM5+lOL7R/9px8CgmeRet11viqjRwVqqTwE1evDuzqTOM9BIfPd3slUxdRDWI56tYOZBuXIAOCyb54xISBbNzxewuGBWgVyKGI/khmgDUG04+xobNAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772540097; c=relaxed/simple;
-	bh=Py8Zp69P5/J1BlQCksfycmAarkSiVopSUaC0+sAz+Yc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fc2KqkoCld3v9f+4/QuviZs+j7pLDwkOgGYxrBw3iv7pGnhecygJgIJ0ugBZ0D62BRrCblDEfUsrO+tgSCc0yI6JivG5v749wZgQUWDSMiU7TOIee8iJmCk1mNZIpQATSV30yTWm7YYAVnaIYeZm3KgDQzx41MUCrGZOSljYGPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=crudebyte.com; spf=pass smtp.mailfrom=crudebyte.com; dkim=pass (4096-bit key) header.d=crudebyte.com header.i=@crudebyte.com header.b=b45/xuqs; arc=none smtp.client-ip=5.189.157.229
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=crudebyte.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crudebyte.com
+	s=arc-20240116; t=1772540904; c=relaxed/simple;
+	bh=kBBdX6mJ7Qn/upAsEMLjY/CJQO8dS9V1ueDqkwwlumI=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=szWn0MXQ5YQSrQH8cTrgP3a3g7A8oAEXL4pMMToW9sQgcNaUYgX4NKL2GyzWjFC5yjfH6qg47yGvif2eUj04DUZFxmQoC3lXncukmvYPumKFJwhW3VjsfF/D3tZ9fau+9jK2lyqhVkV19e2KnKNTAn8LhLGIVV3i3GwFZ0qtQqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=JswCGXIA; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=crudebyte.com header.i=@crudebyte.com header.b="b45/xuqs"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-	Content-ID:Content-Description;
-	bh=sEoIOy08sNDPM7R5rm77ylqbd67+xSmbEywB7fDE1l0=; b=b45/xuqsDe3UOPQGaSOC3QVfXK
-	OUdoPRzyNDl+yB4fHKVaFWk8VF87HMtM4PYj4R2Fj4RpvcBDUY2ZRib9drn+oqZiRxQCtGar4RuAz
-	RYpsEbooDPugVAlnLrqpLhL+RChtlDNEybUZnd2yTo6Y9uqRr+1WKo0xl+84dQj8eWwrm7umz7n0w
-	S0EXkqOXa2C/JE8ObWOt92H0I3bqxVdgJ9TfYidSDZtw7bmGYFyYek8qwJZQAKn3MZmmf/FUVClZB
-	QWCtVuugHhF8BNOyUJFLJSfWPIXAHjH3TLcWIb8OST54dg+7vIizA1SPKkby0pw/QTg0kPbnj4Wj9
-	VeB+nqiUcTgosudQMsEBFy4QC+CVa0DVQMYM3UhAhXRVcGAw2OrwsIYL9SNJioU6URY8vyDA6TwfM
-	CFYsOZ3h1lK3cnDA5o2cflFeZC32omihqCAVM51Ge0wTTskASCR9w0ENeA5eVA/akwkz+TZ5d3AsE
-	7f82uN5RuzZACblKcmQqEKYQjiNJSERv0YAwUBb/EiPVB4IwaXQdg3R2xm5FyvBpIz+8+5sqHHPrp
-	714s96tE/7YqJbu0kX52r+TMH8FczKREFdRsqPG+YK+I8GIlGaziiB8fLP6RTgOHSdf3lUuYeXzdb
-	ttbE75RJ/SInwkaKpg3BOdQZ8WJQK3Z8q+sKFDgvs=;
-From: Christian Schoenebeck <linux_oss@crudebyte.com>
-To: Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Dan Williams <dan.j.williams@intel.com>,
- Matthew Wilcox <willy@infradead.org>, Eric Biggers <ebiggers@kernel.org>,
- "Theodore Y. Ts'o" <tytso@mit.edu>, Muchun Song <muchun.song@linux.dev>,
- Oscar Salvador <osalvador@suse.de>, David Hildenbrand <david@kernel.org>,
- David Howells <dhowells@redhat.com>, Paulo Alcantara <pc@manguebit.org>,
- Andreas Dilger <adilger.kernel@dilger.ca>, Jan Kara <jack@suse.com>,
- Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
- Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>,
- Chuck Lever <chuck.lever@oracle.com>, NeilBrown <neil@brown.name>,
- Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>,
- Tom Talpey <tom@talpey.com>, Steve French <sfrench@samba.org>,
- Ronnie Sahlberg <ronniesahlberg@gmail.com>,
- Shyam Prasad N <sprasad@microsoft.com>, Bharath SM <bharathsm@microsoft.com>,
- Alexander Aring <alex.aring@gmail.com>,
- Ryusuke Konishi <konishi.ryusuke@gmail.com>,
- Viacheslav Dubeyko <slava@dubeyko.com>,
- Eric Van Hensbergen <ericvh@kernel.org>, Latchesar Ionkov <lucho@ionkov.net>,
- Dominique Martinet <asmadeus@codewreck.org>, David Sterba <dsterba@suse.com>,
- Marc Dionne <marc.dionne@auristor.com>, Ian Kent <raven@themaw.net>,
- Luis de Bethencourt <luisbg@kernel.org>, Salah Triki <salah.triki@gmail.com>,
- "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
- Ilya Dryomov <idryomov@gmail.com>, Alex Markuze <amarkuze@redhat.com>,
- Jan Harkes <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu,
- Nicolas Pitre <nico@fluxnic.net>, Tyler Hicks <code@tyhicks.com>,
- Amir Goldstein <amir73il@gmail.com>, Christoph Hellwig <hch@infradead.org>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- Yangtao Li <frank.li@vivo.com>,
- Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>,
- David Woodhouse <dwmw2@infradead.org>, Richard Weinberger <richard@nod.at>,
- Dave Kleikamp <shaggy@kernel.org>,
- Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
- Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>,
- Joseph Qi <joseph.qi@linux.alibaba.com>, Mike Marshall <hubcap@omnibond.com>,
- Martin Brandenburg <martin@omnibond.com>, Miklos Szeredi <miklos@szeredi.hu>,
- Anders Larsen <al@alarsen.net>, Zhihao Cheng <chengzhihao1@huawei.com>,
- Damien Le Moal <dlemoal@kernel.org>, Naohiro Aota <naohiro.aota@wdc.com>,
- Johannes Thumshirn <jth@kernel.org>,
- John Johansen <john.johansen@canonical.com>,
- Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
- "Serge E. Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>,
- Roberto Sassu <roberto.sassu@huawei.com>,
- Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
- Eric Snowberg <eric.snowberg@oracle.com>, Fan Wu <wufan@kernel.org>,
- Stephen Smalley <stephen.smalley.work@gmail.com>,
- Ondrej Mosnacek <omosnace@redhat.com>,
- Casey Schaufler <casey@schaufler-ca.com>,
- Alex Deucher <alexander.deucher@amd.com>,
- Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Sumit Semwal <sumit.semwal@linaro.org>, Eric Dumazet <edumazet@google.com>,
- Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Willem de Bruijn <willemb@google.com>,
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Simon Horman <horms@kernel.org>, Oleg Nesterov <oleg@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>,
- James Clark <james.clark@linaro.org>, "Darrick J. Wong" <djwong@kernel.org>,
- Martin Schiller <ms@dev.tdt.de>, Eric Paris <eparis@redhat.com>,
- Joerg Reuter <jreuter@yaina.de>, Marcel Holtmann <marcel@holtmann.org>,
- Johan Hedberg <johan.hedberg@gmail.com>,
- Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
- Oliver Hartkopp <socketcan@hartkopp.net>,
- Marc Kleine-Budde <mkl@pengutronix.de>, David Ahern <dsahern@kernel.org>,
- Neal Cardwell <ncardwell@google.com>,
- Steffen Klassert <steffen.klassert@secunet.com>,
- Herbert Xu <herbert@gondor.apana.org.au>,
- Remi Denis-Courmont <courmisch@gmail.com>,
- Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
- Xin Long <lucien.xin@gmail.com>, Magnus Karlsson <magnus.karlsson@intel.com>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>, Jeff Layton <jlayton@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
- fsverity@lists.linux.dev, linux-mm@kvack.org, netfs@lists.linux.dev,
- linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
- linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org,
- samba-technical@lists.samba.org, linux-nilfs@vger.kernel.org,
- v9fs@lists.linux.dev, linux-afs@lists.infradead.org, autofs@vger.kernel.org,
- ceph-devel@vger.kernel.org, codalist@coda.cs.cmu.edu,
- ecryptfs@vger.kernel.org, linux-mtd@lists.infradead.org,
- jfs-discussion@lists.sourceforge.net, ntfs3@lists.linux.dev,
- ocfs2-devel@lists.linux.dev, devel@lists.orangefs.org,
- linux-unionfs@vger.kernel.org, apparmor@lists.ubuntu.com,
- linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org,
- selinux@vger.kernel.org, amd-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
- linaro-mm-sig@lists.linaro.org, netdev@vger.kernel.org,
- linux-perf-users@vger.kernel.org, linux-fscrypt@vger.kernel.org,
- linux-xfs@vger.kernel.org, linux-hams@vger.kernel.org,
- linux-x25@vger.kernel.org, audit@vger.kernel.org,
- linux-bluetooth@vger.kernel.org, linux-can@vger.kernel.org,
- linux-sctp@vger.kernel.org, bpf@vger.kernel.org,
- Jeff Layton <jlayton@kernel.org>
-Subject: Re: [PATCH v2 016/110] 9p: use PRIino format for i_ino
-Date: Tue, 03 Mar 2026 12:52:39 +0100
-Message-ID: <12847641.O9o76ZdvQC@weasel>
-In-Reply-To: <20260302-iino-u64-v2-16-e5388800dae0@kernel.org>
-References:
- <20260302-iino-u64-v2-0-e5388800dae0@kernel.org>
- <20260302-iino-u64-v2-16-e5388800dae0@kernel.org>
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="JswCGXIA"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b8fa449e618so803322266b.0
+        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 04:28:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1772540901; x=1773145701; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VDlk2CxhN/+s7UbyKiiidNIbM6SpyinQ7RPlUl1FFQU=;
+        b=JswCGXIAdEx8ydgswZpjnkbbrP39x9YwbGqkfhk7H5m9+ffH9ovHtv2B42X5W1Vmfw
+         cB76pbcwNdJOJMrUEFu+UcjqHQx/H+p21theUF4qmZ/RzF9JI2XD5f/yjsrHc4zRiAI1
+         U1ErB9ic5G44/O/xmFN4Psy8hCWAvyYT36hQJWW7Dl49lGA1W9SglvQJwDf9ec6KxbMw
+         Yx1fSQUHDsv4DF3fWt0uDNJ7eFQZKt8+r3YdTyLlMAVLPRNbv3MeI9tUOEVE5drdfhM5
+         ZLDCJZ1mYjG/sls2ZNgPdiXgGaW50PCwakCpUJ4ad+QS2OyvXlprqz3rsBvyHHtdTIN/
+         GiGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772540901; x=1773145701;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VDlk2CxhN/+s7UbyKiiidNIbM6SpyinQ7RPlUl1FFQU=;
+        b=iZ25651AJalxmheuhTwfNrE8o6dLOCtBdNdH0wBB1+3kGWRQsu1azgbVmPX5ZKulCY
+         7/w7aQAnID6BXCNV6kPr6p12Ru1KTfnWulyGsaIaiPo+mSNwbXcOmpPSlzjOlsRE9fCx
+         RS693zq3KcmrFFuopBffiLA7oSjUUteH0kQaiMsGdlNj6vXmfCBCOGlgROuR8CZOVcTK
+         xOp32bUuJ1YN0Cj464NzalYB6RxR50K31T9+4yhZr2Ya1nA44nHZ3mYI/PqfuloKuc0d
+         acfyCU5KnfcnjuJ5iy9bsRWQtoF6sJ6N1a6tJtOCngWGbiIuOni9Yej4NpqrJYS/LR+8
+         aD/w==
+X-Forwarded-Encrypted: i=1; AJvYcCUUqLgRARtB0ahREGHMxolKv6ZdPQSX5lorA4x6idOnOSSXu3+r3+wHpcGArJ7SaraZdqQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtXLtA1DKzrUeKKuiDqheEDKPX5ar4B8i4XKi81JHA1ZaSbk6C
+	ErOkhbAQC2uAw0Ta4bU5kSefQHQxOM4ys01KUjJ6a+ZAJUSMyiRpvrLnz0VaQbfVMrY=
+X-Gm-Gg: ATEYQzyFaef244vK3Sto37qqOANseJHKTl9jBKobihPTtO0aJtO+NUkn0vEva+yVvRr
+	gw2Tufb07qth0ioiKjRm7OPFVxJQWwKeMT7WQvnFe6Bh7NyjzvYSE2l5B8ct3YizF3SdX62HqGG
+	UYyJw8ucbXvsE6cEtj6ZQvTl4/M3wmnK0/Aza+7Fs2l3wfo5Bt5eViKc/y5sMAbDFYq9Jl/sGou
+	rhCJh7P1OhEqQtiJ82dan1WT30izl7Dyvg2G7Ob+omsvcA7+PbKzOIA0uMzczMSYvb7DJulqJF9
+	penaYQQFxtzpG/r/UKYoKS+enkAlogUEFhbHe7rhIwi0fSCEf2+pX7Iy92ESDy5f5L1lJFfCHWg
+	VliMsiFh/byDZczGQh+RSI/zrlXQXhieJu2GvcAPJDw4nR1twndDMEUHy8QDCmKLcn3WVWJVsce
+	gyYx9mYhjgQTR5BoX/xkMPYNxCzmM=
+X-Received: by 2002:a17:907:9450:b0:b93:6bb6:cb3d with SMTP id a640c23a62f3a-b9376573d38mr1103711666b.58.1772540901273;
+        Tue, 03 Mar 2026 04:28:21 -0800 (PST)
+Received: from cloudflare.com ([104.28.225.185])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b935aec39fdsm581834166b.54.2026.03.03.04.28.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Mar 2026 04:28:20 -0800 (PST)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Keita Morisaki <kmta1236@gmail.com>
+Cc: Eric Dumazet <edumazet@google.com>,  Neal Cardwell
+ <ncardwell@google.com>,  "David S . Miller" <davem@davemloft.net>,  David
+ Ahern <dsahern@kernel.org>,  Jakub Kicinski <kuba@kernel.org>,  Paolo
+ Abeni <pabeni@redhat.com>,  Kuniyuki Iwashima <kuniyu@google.com>,  Simon
+ Horman <horms@kernel.org>,  netdev@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v2] tcp: shrink per-packet memset in
+ __tcp_transmit_skb()
+In-Reply-To: <20260303100439.3172296-1-kmta1236@gmail.com> (Keita Morisaki's
+	message of "Tue, 3 Mar 2026 19:04:39 +0900")
+References: <20260303100439.3172296-1-kmta1236@gmail.com>
+Date: Tue, 03 Mar 2026 13:28:19 +0100
+Message-ID: <87bjh5drmk.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain
 
-On Monday, 2 March 2026 21:24:00 CET Jeff Layton wrote:
-> Convert 9p i_ino format strings to use the PRIino format
-> macro in preparation for the widening of i_ino via kino_t.
-> 
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+On Tue, Mar 03, 2026 at 07:04 PM +09, Keita Morisaki wrote:
+> Use struct_group() to group the three fields in tcp_out_options that are
+> read unconditionally by tcp_options_write() and bpf_skops_write_hdr_opt()
+> (mss, bpf_opt_len, num_sack_blocks), then replace the full-struct memset
+> with a targeted memset of only that group.
+>
+> struct tcp_out_options is 40 bytes without MPTCP and 96 bytes with
+> CONFIG_MPTCP=y (typical distro config). Every remaining field is either
+> assigned before first use by tcp_established_options()/tcp_syn_options(),
+> or gated behind its OPTION_* flag in tcp_options_write(). This memset
+> runs on every transmitted TCP packet, so shrinking it from 96 (or 40)
+> bytes to 4 bytes reduces per-packet overhead on the hot path.
+>
+> Assembly comparison (x86-64, GCC 13, CONFIG_MPTCP=y):
+>
+>   Before: rep stos zeroing 96 bytes (5 instructions, 12 8-byte stores)
+>   After:  movl $0x0 zeroing 4 bytes (1 instruction, 1 store)
+>
+> Also add opts->options = 0 at the top of tcp_syn_options(), which
+> already used |= without a prior clear. tcp_established_options() already
+> clears opts->options at its top.
+>
+> Signed-off-by: Keita Morisaki <kmta1236@gmail.com>
 > ---
->  fs/9p/vfs_addr.c       | 4 ++--
->  fs/9p/vfs_inode.c      | 6 +++---
->  fs/9p/vfs_inode_dotl.c | 6 +++---
->  3 files changed, 8 insertions(+), 8 deletions(-)
 
-Reviewed-by: Christian Schoenebeck <linux_oss@crudebyte.com>
+Loosely related, noticed while reviewing - tcp_out_options.hash_size
+looks unused:
 
+ * MD5 - always 16
+ * AO - uses tcp_ao_maclen()
 
-
+Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
