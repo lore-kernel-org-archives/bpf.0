@@ -1,255 +1,236 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83BE618DB01
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 17:19:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772558374; cv=pass; b=TPDzkndUAsVvXdEQTF6LgCBkFONRWL6oYTP0XlsaCaAG+i+o3BAXicATYkwW3aP68bAD2jllxy9Dauk/bTIlZzw9Xba/lPHqbHVrPEp99A8pEdklcZ473g0hWKox1uLyiXbXdXikMIMzqcPSXp9jG9sjZRijwSXZrwFk8zZMWXw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772558374; c=relaxed/simple;
-	bh=JX0D7ao9LL28h16X6vB2z6PAyJyRhBjZGE0WWOIA93w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ADbdBZjXNRhx7fF7zEU1kFApxlsC0G0COrSTiME3XC49xfe7awBAzKUORNHvNagTvlMgpt5QN1IZrrrivJuBMedhfOuufqgew2VencjRSEfES/4Ov3BX9WftYECyvODN1YcSbbSTSs+XOafokgtUuhFa5bQrY9kz4x8UWj0c/EE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CY+wILiX; arc=pass smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0296F183CC3;
+	Tue,  3 Mar 2026 17:19:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772558399; cv=none; b=ekt/cX3B2w7to1gVz8JshD1eK1rXumHZMeOqt03TBoNVtJ/iBLHSLfOc6m/AMnyfV/dIkGCVRAg5NJqSkn6h0dw7gYXqD2AD3S/l+lfvoqLqI1fVX2ZK6UjRhqbEBVzxxRI/5E/p6srCysp9z81lQ8tCsolpuyBm0qz1KcuNeYQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772558399; c=relaxed/simple;
+	bh=zqFmimCwr8ga6Oi8betk9+WgAjdJVqsFjZR3BnaMo9k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FJU8ArEJePyNj+In/zTSMkguXn8P07VS/hU7wdxw6MlQMyc9QfsgtJuqIW20UmcaoIGDRaAuR50r5mSTAK4KFGZIVSUriaI6iZLNafZ7c+NIgxX2ltwSRhDBUxGjSa1ADJ6qzmojwjvVHtaDsPXeh6bfBEa96ACTFGlg5sg5JyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Dwtx7drr; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CY+wILiX"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-439aa2f8ebaso1992727f8f.2
-        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 09:19:32 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772558371; cv=none;
-        d=google.com; s=arc-20240605;
-        b=G0xDJJguBG5s1a2+2bfQrNsM2uCVlucflwLMc7OmB7CDFwFakwP7tcBJOhSutZ/FTu
-         ZSsbtIyCQV4mvhhWK0L0nkSNSs8RAxBiZ9P8VkkqIhE59hx7RcBjtsEHBGm6w9bbuE5w
-         kOiHG8rBPtIAnUtUH0v9YLseZfzAkwCzst5gOYMXDCSbNr1m6CKxycF42vIBg/zHqabe
-         4izK3OiG8KX1cV7j9C4avhI10zUY1dk+OYdbIj9YqjBar3GNqr+cRTDyEYx3J0N66QEf
-         qJkQuAEuxbNzS2JdqGM3ljKq6ekze41soHeM0U2ZbB/nS9/86Z56/Xo+uNHJjC7lp0ij
-         YHqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=4lG3IZPwbMVPm9SM64fXZ+1KlCJGNP1Tyih1mnoT5bc=;
-        fh=iMzrOB6qCEvQuf+WB4cfNypUTdfIZ6ZaJy8QTZEOyIQ=;
-        b=A7X7xYA1GicFBM+gfImlG/yTL6TxJ3mv3HLgFOUG5qdLcCkgCICPVKtiRZxIUw5k/V
-         yN6Mq5ODyIytaUkGGeEDEyMztgp/oIYBHisaQ2mwOpNghEiXg5/bPgdYyOEXjU8ZVz38
-         wk9xFk5cVbCBdfgBQVNXST0bAOdyNj8M5SR8hS69aeAdmgucVlexItjaJWGLohaK/ITP
-         NSEZpmahWvlyoDCwuj/INdYjeDQqwA94B2i3ARNP6cbnfzXY4fQHzPPVjXhhuJpz2Jg8
-         W5t+dC2lu3LqTN1EOpY5Szh2anBExdk0oukdnLdfJXB2GYmNVSbRpwlA5LGU2iB8Bxzp
-         CeAg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772558371; x=1773163171; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4lG3IZPwbMVPm9SM64fXZ+1KlCJGNP1Tyih1mnoT5bc=;
-        b=CY+wILiXDznFZwN1WTaV6IXXPjE7acK1A9smsSiQCmKm5g/AM4k8eVhQiFmippW9hO
-         ks+/zNUcrIblvZSJ+zSSHkbAEoXH/72pQKhCN1lKRaLFcUBkG6sEDKNCTKji6KdBhaRO
-         Fuhgd+RuxsiVw0M0PuVFfzPcrQgzNn3J//2G+NbO7o+mYG/EP/h6yKcoSQHK336HZVPN
-         ZYZ0ZLNkQSx9pdX7/ywwsnYHaNfvxXJ9M5HF0IDUn8+6yD8vPnlcNS+Wl0IzJl1NX7Gs
-         sbzS8r/pILGUJNdPZtJe+Fpw57aiJ1V2R4IgD+nuO/gtuZ1Yb+VZsY2Mr87LPJnOPdxE
-         jdMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772558371; x=1773163171;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=4lG3IZPwbMVPm9SM64fXZ+1KlCJGNP1Tyih1mnoT5bc=;
-        b=SWvN5nOqTS2F6u15IRNwsQJdNw0KKmepLkBI3QdjYCfTCD9ECcSIS3jFIyvDTWsAf/
-         EJDY8tNTn1ShcOqjI/6cy/dRSdL6Ya3obUP0T2B2xiadjdUtJSGTjaDC5H/svfQK4V1l
-         +SaytPV+pKy2f7YO5zK3jAB/BtUWR1fkc5GOga9YUiLuFMjvMKdZsz1K49CuIhjGAf1W
-         qbS67xdP9X0iSvZqK50qhdp1DRUab9svvhCKV6Yl2fq6t10g2cJyLV/n2rve0dA0D44Y
-         c0CQArvUFKCiw5FdRB+1mUki3Ss/kIS2LCtQ0zpxzkVy0Y58So541gJrvay/dAGAxGbU
-         AdbA==
-X-Gm-Message-State: AOJu0Yy6+2+tkQ32OYB+1r8d0uoqUNdU912wflpJu59E3x8CW9l0T/FZ
-	fHWAfXBsNk5/3KrpnSuhMg6vnYOd1goU1OoGVFSbA590eiWnuHTsoTKl0ecfojRGESFom4YwMSx
-	+8JUfkA6l4jeaS/Z5Ad62l9VutWZbGgA=
-X-Gm-Gg: ATEYQzxtBAc8naWdBxDeMJQE4T5RPidTaoxaqKAih0oDO3h1CzqEqALxEdCnyIAza0B
-	oyZY38lFdGFM8GmWO8yc5w6N+6iOKHEgltC/EIQBC+LwD/1GqpDjKaQH/r0paCbcKrfWux+9DWk
-	ZC1K/gLPVVFWF2D/A0vb9AhRyoovpKhlg6Kh4QyIrgiPJUlrmAwJE1rX6WqcAZtYo2p041ArKSV
-	j/6r7dswkaJfQYXz3EEH/+dwhUqsjansOfSzf/6CTfL2PMBRgCgUUVvt735FyebAklVUaXBs0l7
-	9o7ads/H3O0biVjKgOJeLEQgbWQ6bHmwbZaNXlVIXS/x2wk1Phh9sKQC2iJN2gAkDuJbWi1atzj
-	8Seq+Ji3AAHssbF0EEuuMnSh4JQ==
-X-Received: by 2002:a05:6000:2510:b0:439:8a13:2c65 with SMTP id
- ffacd0b85a97d-4399de27c06mr27623605f8f.37.1772558370676; Tue, 03 Mar 2026
- 09:19:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Dwtx7drr"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=Tao3d1V6YUWjQGbciieZF7tZIWM4RPJQYZqAieQGxVw=; b=Dwtx7drrLMoXnL7AZ4mDDb+Dr1
+	pHpHIG972dhLGyxzFcAQx+NudbFIcurMxKVq97sQTr1lhz5PGW3hew2GVT9QoeCbheZzl/O82STLK
+	vg8zfOueGsejINU32tZqwfKdGcdQbjZuH93Vwz2pTaPZIsUFcvRc5p4xprv+YZmZa41AUiirVclTo
+	qxIIHl6PoQ8QMH4z3vU3H3gUflIy+NEXbLJEmvYHKdxOjT+/NqRvilsvA6ZnM/G8lcC5UPT2gBhSW
+	z8jZyRc6CCB7fazc1OBmrw5oOtDAXe2WSm0mby/ncmsCi8bS24bckEVTfiMaEfIq2JCGnv34ZS2p+
+	wh5wZg3A==;
+Received: from willy by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vxTOA-0000000BrGK-29fG;
+	Tue, 03 Mar 2026 17:18:30 +0000
+Date: Tue, 3 Mar 2026 17:18:30 +0000
+From: Matthew Wilcox <willy@infradead.org>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: Christoph Hellwig <hch@infradead.org>,
+	"Darrick J. Wong" <djwong@kernel.org>, Theodore Tso <tytso@mit.edu>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Muchun Song <muchun.song@linux.dev>,
+	Oscar Salvador <osalvador@suse.de>,
+	David Hildenbrand <david@kernel.org>,
+	David Howells <dhowells@redhat.com>,
+	Paulo Alcantara <pc@manguebit.org>,
+	Andreas Dilger <adilger.kernel@dilger.ca>, Jan Kara <jack@suse.com>,
+	Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+	Trond Myklebust <trondmy@kernel.org>,
+	Anna Schumaker <anna@kernel.org>,
+	Chuck Lever <chuck.lever@oracle.com>, NeilBrown <neil@brown.name>,
+	Olga Kornievskaia <okorniev@redhat.com>,
+	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
+	Steve French <sfrench@samba.org>,
+	Ronnie Sahlberg <ronniesahlberg@gmail.com>,
+	Shyam Prasad N <sprasad@microsoft.com>,
+	Bharath SM <bharathsm@microsoft.com>,
+	Alexander Aring <alex.aring@gmail.com>,
+	Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+	Viacheslav Dubeyko <slava@dubeyko.com>,
+	Eric Van Hensbergen <ericvh@kernel.org>,
+	Latchesar Ionkov <lucho@ionkov.net>,
+	Dominique Martinet <asmadeus@codewreck.org>,
+	Christian Schoenebeck <linux_oss@crudebyte.com>,
+	David Sterba <dsterba@suse.com>,
+	Marc Dionne <marc.dionne@auristor.com>, Ian Kent <raven@themaw.net>,
+	Luis de Bethencourt <luisbg@kernel.org>,
+	Salah Triki <salah.triki@gmail.com>,
+	"Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
+	Ilya Dryomov <idryomov@gmail.com>,
+	Alex Markuze <amarkuze@redhat.com>,
+	Jan Harkes <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu,
+	Nicolas Pitre <nico@fluxnic.net>, Tyler Hicks <code@tyhicks.com>,
+	Amir Goldstein <amir73il@gmail.com>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Yangtao Li <frank.li@vivo.com>,
+	Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Dave Kleikamp <shaggy@kernel.org>,
+	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+	Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>,
+	Joseph Qi <joseph.qi@linux.alibaba.com>,
+	Mike Marshall <hubcap@omnibond.com>,
+	Martin Brandenburg <martin@omnibond.com>,
+	Miklos Szeredi <miklos@szeredi.hu>, Anders Larsen <al@alarsen.net>,
+	Zhihao Cheng <chengzhihao1@huawei.com>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Naohiro Aota <naohiro.aota@wdc.com>,
+	Johannes Thumshirn <jth@kernel.org>,
+	John Johansen <john.johansen@canonical.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eric Snowberg <eric.snowberg@oracle.com>, Fan Wu <wufan@kernel.org>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	Ondrej Mosnacek <omosnace@redhat.com>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Willem de Bruijn <willemb@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Martin Schiller <ms@dev.tdt.de>, Eric Paris <eparis@redhat.com>,
+	Joerg Reuter <jreuter@yaina.de>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Johan Hedberg <johan.hedberg@gmail.com>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	Oliver Hartkopp <socketcan@hartkopp.net>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	David Ahern <dsahern@kernel.org>,
+	Neal Cardwell <ncardwell@google.com>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Remi Denis-Courmont <courmisch@gmail.com>,
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+	Xin Long <lucien.xin@gmail.com>,
+	Magnus Karlsson <magnus.karlsson@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
+	fsverity@lists.linux.dev, linux-mm@kvack.org, netfs@lists.linux.dev,
+	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+	linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+	samba-technical@lists.samba.org, linux-nilfs@vger.kernel.org,
+	v9fs@lists.linux.dev, linux-afs@lists.infradead.org,
+	autofs@vger.kernel.org, ceph-devel@vger.kernel.org,
+	codalist@telemann.coda.cs.cmu.edu, ecryptfs@vger.kernel.org,
+	linux-mtd@lists.infradead.org, jfs-discussion@lists.sourceforge.net,
+	ntfs3@lists.linux.dev, ocfs2-devel@lists.linux.dev,
+	devel@lists.orangefs.org, linux-unionfs@vger.kernel.org,
+	apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+	linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+	netdev@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	linux-fscrypt@vger.kernel.org, linux-xfs@vger.kernel.org,
+	linux-hams@vger.kernel.org, linux-x25@vger.kernel.org,
+	audit@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+	linux-can@vger.kernel.org, linux-sctp@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH v2 001/110] vfs: introduce kino_t typedef and PRIino
+ format macro
+Message-ID: <aacX5metux-C_xBw@casper.infradead.org>
+References: <20260302-iino-u64-v2-0-e5388800dae0@kernel.org>
+ <20260302-iino-u64-v2-1-e5388800dae0@kernel.org>
+ <20260303012556.GA6520@macsyma-wired.lan>
+ <20260303042546.GF13868@frogsfrogsfrogs>
+ <33228005140684201de2ca0c157441d3b6a06413.camel@kernel.org>
+ <aabkBadGzo7IZpSU@infradead.org>
+ <19e4e79a59dcfc4c61c8cf263af345d0d7026fc8.camel@kernel.org>
+ <aabpPQxCTweoTp8Z@infradead.org>
+ <1310fc5c09cce52ec00344b936275fe584c88dea.camel@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260302102726.1126019-1-xukuohai@huaweicloud.com> <20260302102726.1126019-4-xukuohai@huaweicloud.com>
-In-Reply-To: <20260302102726.1126019-4-xukuohai@huaweicloud.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 3 Mar 2026 09:19:19 -0800
-X-Gm-Features: AaiRm539mPHub3uCS2S3noHSaRKoMrdKE-keShol4azTs2yNuhNZuM_iwYbvnNE
-Message-ID: <CAADnVQLoWzz8ioVg3MFjn08fBLfNq6HdvqLtqXV0zUb=SR_HGA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 3/5] bpf: Add helper to detect indirect jump targets
-To: Xu Kuohai <xukuohai@huaweicloud.com>
-Cc: bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, Puranjay Mohan <puranjay@kernel.org>, 
-	Anton Protopopov <a.s.protopopov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1310fc5c09cce52ec00344b936275fe584c88dea.camel@kernel.org>
 
-On Mon, Mar 2, 2026 at 2:02=E2=80=AFAM Xu Kuohai <xukuohai@huaweicloud.com>=
- wrote:
->
-> From: Xu Kuohai <xukuohai@huawei.com>
->
-> Introduce helper bpf_insn_is_indirect_target to determine whether a BPF
-> instruction is an indirect jump target. This helper will be used by
-> follow-up patches to decide where to emit indirect landing pad instructio=
-ns.
->
-> Add a new flag to struct bpf_insn_aux_data to mark instructions that are
-> indirect jump targets. The BPF verifier sets this flag, and the helper
-> checks it to determine whether an instruction is an indirect jump target.
->
-> Also add a new field to struct bpf_insn_aux_data to track the instruction
-> final index in the bpf prog, as the instructions may be rewritten by
-> constant blinding in the JIT stage. This field is used as a binary search
-> key to find the corresponding insn_aux_data for a given instruction.
->
-> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-> ---
->  include/linux/bpf.h          |  2 ++
->  include/linux/bpf_verifier.h | 10 ++++++----
->  kernel/bpf/core.c            | 38 +++++++++++++++++++++++++++++++++---
->  kernel/bpf/verifier.c        | 13 +++++++++++-
->  4 files changed, 55 insertions(+), 8 deletions(-)
->
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 05b34a6355b0..90760e250865 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1541,6 +1541,8 @@ bool bpf_has_frame_pointer(unsigned long ip);
->  int bpf_jit_charge_modmem(u32 size);
->  void bpf_jit_uncharge_modmem(u32 size);
->  bool bpf_prog_has_trampoline(const struct bpf_prog *prog);
-> +bool bpf_insn_is_indirect_target(const struct bpf_verifier_env *env, con=
-st struct bpf_prog *prog,
-> +                                int insn_idx);
->  #else
->  static inline int bpf_trampoline_link_prog(struct bpf_tramp_link *link,
->                                            struct bpf_trampoline *tr,
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index c1e30096ea7b..f8f70e5414f0 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -577,16 +577,18 @@ struct bpf_insn_aux_data {
->
->         /* below fields are initialized once */
->         unsigned int orig_idx; /* original instruction index */
-> -       bool jmp_point;
-> -       bool prune_point;
-> +       unsigned int final_idx; /* final instruction index */
-> +       u32 jmp_point:1;
-> +       u32 prune_point:1;
->         /* ensure we check state equivalence and save state checkpoint an=
-d
->          * this instruction, regardless of any heuristics
->          */
-> -       bool force_checkpoint;
-> +       u32 force_checkpoint:1;
->         /* true if instruction is a call to a helper function that
->          * accepts callback function as a parameter.
->          */
-> -       bool calls_callback;
-> +       u32 calls_callback:1;
-> +       u32 indirect_target:1; /* if it is an indirect jump target */
->         /*
->          * CFG strongly connected component this instruction belongs to,
->          * zero if it is a singleton SCC.
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 7702c232c62e..9a760cf43d68 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -1486,13 +1486,41 @@ static void adjust_insn_arrays(struct bpf_prog *p=
-rog, u32 off, u32 len)
->  #endif
->  }
->
-> +static int bpf_insn_aux_cmp_by_insn_idx(const void *a, const void *b)
-> +{
-> +       int insn_idx =3D *(int *)a;
-> +       int final_idx =3D ((const struct bpf_insn_aux_data *)b)->final_id=
-x;
-> +
-> +       return insn_idx - final_idx;
-> +}
-> +
-> +bool bpf_insn_is_indirect_target(const struct bpf_verifier_env *env, con=
-st struct bpf_prog *prog,
-> +                                int insn_idx)
-> +{
-> +       struct bpf_insn_aux_data *insn_aux;
-> +       int func_idx, subprog_start, subprog_end;
-> +
-> +       if (!env)
-> +               return false;
-> +
-> +       func_idx =3D prog->aux->func_idx;
-> +       subprog_start =3D env->subprog_info[func_idx].start;
-> +       subprog_end =3D env->subprog_info[func_idx + 1].start;
-> +
-> +       insn_aux =3D bsearch(&insn_idx, &env->insn_aux_data[subprog_start=
-],
-> +                          subprog_end - subprog_start,
-> +                          sizeof(struct bpf_insn_aux_data), bpf_insn_aux=
-_cmp_by_insn_idx);
-> +
-> +       return insn_aux && insn_aux->indirect_target;
-> +}
-> +
->  struct bpf_prog *bpf_jit_blind_constants(struct bpf_verifier_env *env, s=
-truct bpf_prog *prog)
->  {
->         struct bpf_insn insn_buff[16], aux[2];
->         struct bpf_prog *clone, *tmp;
-> -       int insn_delta, insn_cnt;
-> +       int insn_delta, insn_cnt, subprog_start;
->         struct bpf_insn *insn;
-> -       int i, rewritten;
-> +       int i, j, rewritten;
->
->         if (!prog->blinding_requested || prog->blinded)
->                 return prog;
-> @@ -1503,8 +1531,10 @@ struct bpf_prog *bpf_jit_blind_constants(struct bp=
-f_verifier_env *env, struct bp
->
->         insn_cnt =3D clone->len;
->         insn =3D clone->insnsi;
-> +       subprog_start =3D env->subprog_info[prog->aux->func_idx].start;
->
-> -       for (i =3D 0; i < insn_cnt; i++, insn++) {
-> +       for (i =3D 0, j =3D 0; i < insn_cnt; i++, j++, insn++) {
-> +               env->insn_aux_data[subprog_start + j].final_idx =3D i;
->                 if (bpf_pseudo_func(insn)) {
->                         /* ld_imm64 with an address of bpf subprog is not
->                          * a user controlled constant. Don't randomize it=
-,
-> @@ -1512,6 +1542,8 @@ struct bpf_prog *bpf_jit_blind_constants(struct bpf=
-_verifier_env *env, struct bp
->                          */
->                         insn++;
->                         i++;
-> +                       j++;
-> +                       env->insn_aux_data[subprog_start + j].final_idx =
-=3D i;
+On Tue, Mar 03, 2026 at 09:19:42AM -0500, Jeff Layton wrote:
+> There are really only three options here:
+> 
+> 1/ Do (almost) all of the changes in one giant patch
+> 
+> 2/ Accept that the build may break during the interim stages
+> 
+> 3/ This series: using a typedef and macro to work around the breakage
+> until the type can be changed, at the expense of some extra churn in
+> the codebase
 
-You're adding final_idx because bpf_jit_blind_constants()
-doesn't call adjust_insn_aux_data() ?
+4/ Don't do anything, drop the patch series (I'm not in favour of this,
+but it is an option)
 
-imo that's an ugly workaround. Just call adjust_insn_aux_data().
+5/ Do the conversion(s) _once_ per filesystem.  Here's one way to do
+it:
 
-And in the future please mention such design decisions in the commit log,
-so that reviewers don't need to reverse engineer your thought process.
+-	unsigned long           i_ino;
++	union {
++		u64 i_ino64;
++		struct {
++#if defined(CONFIG_64BIT)
++			unsigned long i_ino;
++#elif defined(CONFIG_CPU_BIG_ENDIAN)
++			unsigned long i_ino;
++			unsigned long i_ino_pad;
++#else
++			unsigned long i_ino_pad;
++			unsigned long i_ino;
++#endif
++		};
++	};
 
-pw-bot: cr
+[...]
+#define i_ino(inode)	(inode)->i_ino64
+
+So that's patch one.  All plain references to i_ino access the lower
+bits of i_ino64, so everything will continue to work as it does today.
+
+Once you've got the VFS core in shape, you can convert filesystems one
+at a time to use i_ino(inode).  Once you're done you can delete the
+scaffolding from the core and go back to calling i_ino64 just i_ino.
+You could delete the i_ino() uses from filesystems at that point, but
+why bother?
+
+I'm sure there are other ways to do it, this is just the one I came up
+with.  But for the love of god stop spamming hundreds of people on the
+cc of this patchset.  In fact, take me off for next time -- I get each
+one of these fucking patches four times.
