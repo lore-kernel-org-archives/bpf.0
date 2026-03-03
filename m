@@ -1,294 +1,255 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 978254EA387
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 17:01:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772557274; cv=none; b=js59SFuwCIC2pRiz5x6MjorSLDRmyWqzTSQGFjCobL9RM94FkI9P4ucvyL+9r3srEQczG6EtRd3v31kZehyNgpeMM75Dr6p7BYv+jbOMjBurDgIN01wuknJtQKwOFc8ri2n0OHJCpi6eSfYsUn2McL7jr3j2RWBSUm52tiidno0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772557274; c=relaxed/simple;
-	bh=JigWNMGvmaqLz9gNJo9scOfVQ5332TtH1CV3c8Fx5Zk=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Lhoh+5gGwfApLCS+sd/n0R/RiC6EebeLVUwQY7Wxqvb1AXHBijLW3Gg4KoRPtRNzytRlQepXibKivKupnDwdps2My42Hzj7mAXaxqwiXjk+SEk6OP99W9cYyWkXCnD2RMi/NZ1asummTvWNAOrenZfRqfwePDRiXV3GleOkD7vk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=C7mw7AbO; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83BE618DB01
+	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 17:19:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772558374; cv=pass; b=TPDzkndUAsVvXdEQTF6LgCBkFONRWL6oYTP0XlsaCaAG+i+o3BAXicATYkwW3aP68bAD2jllxy9Dauk/bTIlZzw9Xba/lPHqbHVrPEp99A8pEdklcZ473g0hWKox1uLyiXbXdXikMIMzqcPSXp9jG9sjZRijwSXZrwFk8zZMWXw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772558374; c=relaxed/simple;
+	bh=JX0D7ao9LL28h16X6vB2z6PAyJyRhBjZGE0WWOIA93w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ADbdBZjXNRhx7fF7zEU1kFApxlsC0G0COrSTiME3XC49xfe7awBAzKUORNHvNagTvlMgpt5QN1IZrrrivJuBMedhfOuufqgew2VencjRSEfES/4Ov3BX9WftYECyvODN1YcSbbSTSs+XOafokgtUuhFa5bQrY9kz4x8UWj0c/EE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CY+wILiX; arc=pass smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="C7mw7AbO"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2ae405e95f5so32966105ad.2
-        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 09:01:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CY+wILiX"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-439aa2f8ebaso1992727f8f.2
+        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 09:19:32 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772558371; cv=none;
+        d=google.com; s=arc-20240605;
+        b=G0xDJJguBG5s1a2+2bfQrNsM2uCVlucflwLMc7OmB7CDFwFakwP7tcBJOhSutZ/FTu
+         ZSsbtIyCQV4mvhhWK0L0nkSNSs8RAxBiZ9P8VkkqIhE59hx7RcBjtsEHBGm6w9bbuE5w
+         kOiHG8rBPtIAnUtUH0v9YLseZfzAkwCzst5gOYMXDCSbNr1m6CKxycF42vIBg/zHqabe
+         4izK3OiG8KX1cV7j9C4avhI10zUY1dk+OYdbIj9YqjBar3GNqr+cRTDyEYx3J0N66QEf
+         qJkQuAEuxbNzS2JdqGM3ljKq6ekze41soHeM0U2ZbB/nS9/86Z56/Xo+uNHJjC7lp0ij
+         YHqw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=4lG3IZPwbMVPm9SM64fXZ+1KlCJGNP1Tyih1mnoT5bc=;
+        fh=iMzrOB6qCEvQuf+WB4cfNypUTdfIZ6ZaJy8QTZEOyIQ=;
+        b=A7X7xYA1GicFBM+gfImlG/yTL6TxJ3mv3HLgFOUG5qdLcCkgCICPVKtiRZxIUw5k/V
+         yN6Mq5ODyIytaUkGGeEDEyMztgp/oIYBHisaQ2mwOpNghEiXg5/bPgdYyOEXjU8ZVz38
+         wk9xFk5cVbCBdfgBQVNXST0bAOdyNj8M5SR8hS69aeAdmgucVlexItjaJWGLohaK/ITP
+         NSEZpmahWvlyoDCwuj/INdYjeDQqwA94B2i3ARNP6cbnfzXY4fQHzPPVjXhhuJpz2Jg8
+         W5t+dC2lu3LqTN1EOpY5Szh2anBExdk0oukdnLdfJXB2GYmNVSbRpwlA5LGU2iB8Bxzp
+         CeAg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772557273; x=1773162073; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rvr9XkY/ko1+sFzIvoHqF1W2S3aBl/jHK/RTg7obYs0=;
-        b=C7mw7AbOdSIQLQMj7loEa7NVhR4pjbI1nSkpq/8Oqu/OoQ9jB98NISmQamRrH15ad2
-         sMPQxRyY9sccPLqjnUb/hhf4Xe+x4Iu7RjfAnA0C4SnvmsYPeqldHRRoHdjYVBA4z+5Q
-         /X0Ytgm8zuDwxrSVOZgaqJAs9FfU2fBQVxEVrrZ0qpjNmcTVy1FhgVj2iuDRj34rKe0Q
-         jMzjhtjH8livjpIB1Ji1COItDjcNJT8lWHhs+/e2/OOyJwsGY4VESA4PQZqQv6RJoN9r
-         KoziAo/J+6kuOCO4fc3RiZZ0qmsAfInAAcdTj3YuWe3w9g8FoNrgxERRWBxZD5D+KCdw
-         BwgA==
+        d=gmail.com; s=20230601; t=1772558371; x=1773163171; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4lG3IZPwbMVPm9SM64fXZ+1KlCJGNP1Tyih1mnoT5bc=;
+        b=CY+wILiXDznFZwN1WTaV6IXXPjE7acK1A9smsSiQCmKm5g/AM4k8eVhQiFmippW9hO
+         ks+/zNUcrIblvZSJ+zSSHkbAEoXH/72pQKhCN1lKRaLFcUBkG6sEDKNCTKji6KdBhaRO
+         Fuhgd+RuxsiVw0M0PuVFfzPcrQgzNn3J//2G+NbO7o+mYG/EP/h6yKcoSQHK336HZVPN
+         ZYZ0ZLNkQSx9pdX7/ywwsnYHaNfvxXJ9M5HF0IDUn8+6yD8vPnlcNS+Wl0IzJl1NX7Gs
+         sbzS8r/pILGUJNdPZtJe+Fpw57aiJ1V2R4IgD+nuO/gtuZ1Yb+VZsY2Mr87LPJnOPdxE
+         jdMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772557273; x=1773162073;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rvr9XkY/ko1+sFzIvoHqF1W2S3aBl/jHK/RTg7obYs0=;
-        b=nLpdCIPskLdneBmz5nK9Hf0DA6xDAIV3IIrMbyGYtr2xrnuAw/ngfeYs9mrhouXldH
-         7Gmzx6L2K+3WEKrs46oOQJwjTUKQ9kkC2RRTfXa7OShh/PZhil/8SAsz2Aq292/1D2Fm
-         RTNxe0+3YJ4/sNWypzWwRi3lP9p4hbbOqg+GTa2gbmyZPDL2aze/92aD8SR4X4fZF12r
-         eqewYyGtf7WocVOpb7b/DIzNSxdaJJO1sJNEblLNcVOMhMv1NrOEnIe81GS+yw6QjBg8
-         MuUwgYMMtDSoWQ/LJPpaAaVhjGRGP+Ynk4W+w9mS4AUsKdtKomkENmvUHFWShmvtC/sz
-         LFgA==
-X-Forwarded-Encrypted: i=1; AJvYcCU7+r6rKOgnE+lFZnfx85SWhXnyyPO+Ly8unAHa/FVR2waTWD7DBelBlpzasWPjU1MrybI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwU1p0Nb7pyY1jdu8a4x1NidVUP+fsmp9JlIrvX7aamfHW0t8sj
-	eYGLs9YKYbiBla81nrU2C//DjOtQYqZYrGY+kRAUoFpS1GFFXSFxN5TSIm0dZrgXFGjCoVQTdug
-	wrA==
-X-Received: from plblf4.prod.google.com ([2002:a17:902:fb44:b0:2ae:41d1:2788])
- (user=jrife job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:da8d:b0:2ae:5848:baf0
- with SMTP id d9443c01a7336-2ae5848bcc4mr60259455ad.2.1772557272638; Tue, 03
- Mar 2026 09:01:12 -0800 (PST)
-Date: Tue,  3 Mar 2026 17:01:03 +0000
-In-Reply-To: <20260303170106.129698-1-jrife@google.com>
+        d=1e100.net; s=20230601; t=1772558371; x=1773163171;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=4lG3IZPwbMVPm9SM64fXZ+1KlCJGNP1Tyih1mnoT5bc=;
+        b=SWvN5nOqTS2F6u15IRNwsQJdNw0KKmepLkBI3QdjYCfTCD9ECcSIS3jFIyvDTWsAf/
+         EJDY8tNTn1ShcOqjI/6cy/dRSdL6Ya3obUP0T2B2xiadjdUtJSGTjaDC5H/svfQK4V1l
+         +SaytPV+pKy2f7YO5zK3jAB/BtUWR1fkc5GOga9YUiLuFMjvMKdZsz1K49CuIhjGAf1W
+         qbS67xdP9X0iSvZqK50qhdp1DRUab9svvhCKV6Yl2fq6t10g2cJyLV/n2rve0dA0D44Y
+         c0CQArvUFKCiw5FdRB+1mUki3Ss/kIS2LCtQ0zpxzkVy0Y58So541gJrvay/dAGAxGbU
+         AdbA==
+X-Gm-Message-State: AOJu0Yy6+2+tkQ32OYB+1r8d0uoqUNdU912wflpJu59E3x8CW9l0T/FZ
+	fHWAfXBsNk5/3KrpnSuhMg6vnYOd1goU1OoGVFSbA590eiWnuHTsoTKl0ecfojRGESFom4YwMSx
+	+8JUfkA6l4jeaS/Z5Ad62l9VutWZbGgA=
+X-Gm-Gg: ATEYQzxtBAc8naWdBxDeMJQE4T5RPidTaoxaqKAih0oDO3h1CzqEqALxEdCnyIAza0B
+	oyZY38lFdGFM8GmWO8yc5w6N+6iOKHEgltC/EIQBC+LwD/1GqpDjKaQH/r0paCbcKrfWux+9DWk
+	ZC1K/gLPVVFWF2D/A0vb9AhRyoovpKhlg6Kh4QyIrgiPJUlrmAwJE1rX6WqcAZtYo2p041ArKSV
+	j/6r7dswkaJfQYXz3EEH/+dwhUqsjansOfSzf/6CTfL2PMBRgCgUUVvt735FyebAklVUaXBs0l7
+	9o7ads/H3O0biVjKgOJeLEQgbWQ6bHmwbZaNXlVIXS/x2wk1Phh9sKQC2iJN2gAkDuJbWi1atzj
+	8Seq+Ji3AAHssbF0EEuuMnSh4JQ==
+X-Received: by 2002:a05:6000:2510:b0:439:8a13:2c65 with SMTP id
+ ffacd0b85a97d-4399de27c06mr27623605f8f.37.1772558370676; Tue, 03 Mar 2026
+ 09:19:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260303170106.129698-1-jrife@google.com>
-X-Mailer: git-send-email 2.53.0.473.g4a7958ca14-goog
-Message-ID: <20260303170106.129698-3-jrife@google.com>
-Subject: [PATCH net-next v2 2/2] selftests/bpf: Ensure dst addr/port are
- preserved after socket abort
-From: Jordan Rife <jrife@google.com>
-To: netdev@vger.kernel.org
-Cc: Jordan Rife <jrife@google.com>, bpf@vger.kernel.org, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Eric Dumazet <edumazet@google.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>, 
-	Yusuke Suzuki <yusuke.suzuki@isovalent.com>, Jakub Kicinski <kuba@kernel.org>
+MIME-Version: 1.0
+References: <20260302102726.1126019-1-xukuohai@huaweicloud.com> <20260302102726.1126019-4-xukuohai@huaweicloud.com>
+In-Reply-To: <20260302102726.1126019-4-xukuohai@huaweicloud.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 3 Mar 2026 09:19:19 -0800
+X-Gm-Features: AaiRm539mPHub3uCS2S3noHSaRKoMrdKE-keShol4azTs2yNuhNZuM_iwYbvnNE
+Message-ID: <CAADnVQLoWzz8ioVg3MFjn08fBLfNq6HdvqLtqXV0zUb=SR_HGA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 3/5] bpf: Add helper to detect indirect jump targets
+To: Xu Kuohai <xukuohai@huaweicloud.com>
+Cc: bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, Puranjay Mohan <puranjay@kernel.org>, 
+	Anton Protopopov <a.s.protopopov@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Ensure that sock_release hooks see the original dst_ip4, dst_ip6, and
-dst_port values for connected UDP and TCP sockets following a socket
-abort.
+On Mon, Mar 2, 2026 at 2:02=E2=80=AFAM Xu Kuohai <xukuohai@huaweicloud.com>=
+ wrote:
+>
+> From: Xu Kuohai <xukuohai@huawei.com>
+>
+> Introduce helper bpf_insn_is_indirect_target to determine whether a BPF
+> instruction is an indirect jump target. This helper will be used by
+> follow-up patches to decide where to emit indirect landing pad instructio=
+ns.
+>
+> Add a new flag to struct bpf_insn_aux_data to mark instructions that are
+> indirect jump targets. The BPF verifier sets this flag, and the helper
+> checks it to determine whether an instruction is an indirect jump target.
+>
+> Also add a new field to struct bpf_insn_aux_data to track the instruction
+> final index in the bpf prog, as the instructions may be rewritten by
+> constant blinding in the JIT stage. This field is used as a binary search
+> key to find the corresponding insn_aux_data for a given instruction.
+>
+> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> ---
+>  include/linux/bpf.h          |  2 ++
+>  include/linux/bpf_verifier.h | 10 ++++++----
+>  kernel/bpf/core.c            | 38 +++++++++++++++++++++++++++++++++---
+>  kernel/bpf/verifier.c        | 13 +++++++++++-
+>  4 files changed, 55 insertions(+), 8 deletions(-)
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 05b34a6355b0..90760e250865 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1541,6 +1541,8 @@ bool bpf_has_frame_pointer(unsigned long ip);
+>  int bpf_jit_charge_modmem(u32 size);
+>  void bpf_jit_uncharge_modmem(u32 size);
+>  bool bpf_prog_has_trampoline(const struct bpf_prog *prog);
+> +bool bpf_insn_is_indirect_target(const struct bpf_verifier_env *env, con=
+st struct bpf_prog *prog,
+> +                                int insn_idx);
+>  #else
+>  static inline int bpf_trampoline_link_prog(struct bpf_tramp_link *link,
+>                                            struct bpf_trampoline *tr,
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index c1e30096ea7b..f8f70e5414f0 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -577,16 +577,18 @@ struct bpf_insn_aux_data {
+>
+>         /* below fields are initialized once */
+>         unsigned int orig_idx; /* original instruction index */
+> -       bool jmp_point;
+> -       bool prune_point;
+> +       unsigned int final_idx; /* final instruction index */
+> +       u32 jmp_point:1;
+> +       u32 prune_point:1;
+>         /* ensure we check state equivalence and save state checkpoint an=
+d
+>          * this instruction, regardless of any heuristics
+>          */
+> -       bool force_checkpoint;
+> +       u32 force_checkpoint:1;
+>         /* true if instruction is a call to a helper function that
+>          * accepts callback function as a parameter.
+>          */
+> -       bool calls_callback;
+> +       u32 calls_callback:1;
+> +       u32 indirect_target:1; /* if it is an indirect jump target */
+>         /*
+>          * CFG strongly connected component this instruction belongs to,
+>          * zero if it is a singleton SCC.
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 7702c232c62e..9a760cf43d68 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -1486,13 +1486,41 @@ static void adjust_insn_arrays(struct bpf_prog *p=
+rog, u32 off, u32 len)
+>  #endif
+>  }
+>
+> +static int bpf_insn_aux_cmp_by_insn_idx(const void *a, const void *b)
+> +{
+> +       int insn_idx =3D *(int *)a;
+> +       int final_idx =3D ((const struct bpf_insn_aux_data *)b)->final_id=
+x;
+> +
+> +       return insn_idx - final_idx;
+> +}
+> +
+> +bool bpf_insn_is_indirect_target(const struct bpf_verifier_env *env, con=
+st struct bpf_prog *prog,
+> +                                int insn_idx)
+> +{
+> +       struct bpf_insn_aux_data *insn_aux;
+> +       int func_idx, subprog_start, subprog_end;
+> +
+> +       if (!env)
+> +               return false;
+> +
+> +       func_idx =3D prog->aux->func_idx;
+> +       subprog_start =3D env->subprog_info[func_idx].start;
+> +       subprog_end =3D env->subprog_info[func_idx + 1].start;
+> +
+> +       insn_aux =3D bsearch(&insn_idx, &env->insn_aux_data[subprog_start=
+],
+> +                          subprog_end - subprog_start,
+> +                          sizeof(struct bpf_insn_aux_data), bpf_insn_aux=
+_cmp_by_insn_idx);
+> +
+> +       return insn_aux && insn_aux->indirect_target;
+> +}
+> +
+>  struct bpf_prog *bpf_jit_blind_constants(struct bpf_verifier_env *env, s=
+truct bpf_prog *prog)
+>  {
+>         struct bpf_insn insn_buff[16], aux[2];
+>         struct bpf_prog *clone, *tmp;
+> -       int insn_delta, insn_cnt;
+> +       int insn_delta, insn_cnt, subprog_start;
+>         struct bpf_insn *insn;
+> -       int i, rewritten;
+> +       int i, j, rewritten;
+>
+>         if (!prog->blinding_requested || prog->blinded)
+>                 return prog;
+> @@ -1503,8 +1531,10 @@ struct bpf_prog *bpf_jit_blind_constants(struct bp=
+f_verifier_env *env, struct bp
+>
+>         insn_cnt =3D clone->len;
+>         insn =3D clone->insnsi;
+> +       subprog_start =3D env->subprog_info[prog->aux->func_idx].start;
+>
+> -       for (i =3D 0; i < insn_cnt; i++, insn++) {
+> +       for (i =3D 0, j =3D 0; i < insn_cnt; i++, j++, insn++) {
+> +               env->insn_aux_data[subprog_start + j].final_idx =3D i;
+>                 if (bpf_pseudo_func(insn)) {
+>                         /* ld_imm64 with an address of bpf subprog is not
+>                          * a user controlled constant. Don't randomize it=
+,
+> @@ -1512,6 +1542,8 @@ struct bpf_prog *bpf_jit_blind_constants(struct bpf=
+_verifier_env *env, struct bp
+>                          */
+>                         insn++;
+>                         i++;
+> +                       j++;
+> +                       env->insn_aux_data[subprog_start + j].final_idx =
+=3D i;
 
-Signed-off-by: Jordan Rife <jrife@google.com>
----
- .../bpf/prog_tests/sock_destroy_release.c     | 136 ++++++++++++++++++
- .../bpf/progs/sock_destroy_release.c          |  59 ++++++++
- 2 files changed, 195 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/sock_destroy_release.c
- create mode 100644 tools/testing/selftests/bpf/progs/sock_destroy_release.c
+You're adding final_idx because bpf_jit_blind_constants()
+doesn't call adjust_insn_aux_data() ?
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sock_destroy_release.c b/tools/testing/selftests/bpf/prog_tests/sock_destroy_release.c
-new file mode 100644
-index 000000000000..a2db4f31f6fa
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/sock_destroy_release.c
-@@ -0,0 +1,136 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+#include "network_helpers.h"
-+#include "sock_destroy_release.skel.h"
-+
-+#define TEST_NS "sock_destroy_release_netns"
-+
-+static __u64 socket_cookie(int fd)
-+{
-+	__u64 cookie;
-+	socklen_t cookie_len = sizeof(cookie);
-+
-+	if (!ASSERT_OK(getsockopt(fd, SOL_SOCKET, SO_COOKIE, &cookie,
-+				  &cookie_len), "getsockopt(SO_COOKIE)"))
-+		return 0;
-+	return cookie;
-+}
-+
-+static void destroy(struct sock_destroy_release *skel, int fd, int sock_type)
-+{
-+	__u64 cookie = socket_cookie(fd);
-+	struct bpf_link *link = NULL;
-+	int iter_fd = -1;
-+	int nread;
-+	__u64 out;
-+
-+	skel->bss->abort_cookie = cookie;
-+
-+	link = bpf_program__attach_iter(sock_type == SOCK_STREAM ?
-+					skel->progs.abort_tcp :
-+					skel->progs.abort_udp, NULL);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_iter"))
-+		goto done;
-+
-+	iter_fd = bpf_iter_create(bpf_link__fd(link));
-+	if (!ASSERT_OK_FD(iter_fd, "bpf_iter_create"))
-+		goto done;
-+
-+	/* Delete matching socket. */
-+	nread = read(iter_fd, &out, sizeof(out));
-+	ASSERT_GE(nread, 0, "nread");
-+	if (nread)
-+		ASSERT_EQ(out, cookie, "cookie matches");
-+done:
-+	if (iter_fd >= 0)
-+		close(iter_fd);
-+	bpf_link__destroy(link);
-+	close(fd);
-+}
-+
-+static void do_test(struct sock_destroy_release *skel, int sock_type,
-+		    int family)
-+{
-+	const char *addr = family == AF_INET ? "127.0.0.1" : "::1";
-+	int listen_fd = -1, connect_fd = -1;
-+	static const int port = 10001;
-+
-+	listen_fd = start_server(family, sock_type, addr, port, 0);
-+	if (!ASSERT_OK_FD(listen_fd, "start_server"))
-+		goto cleanup;
-+
-+	connect_fd = connect_to_fd(listen_fd, 0);
-+	if (!ASSERT_OK_FD(connect_fd, "connect_to_fd"))
-+		goto cleanup;
-+
-+	memset(&skel->bss->sk, 0, sizeof(skel->bss->sk));
-+	destroy(skel, connect_fd, sock_type);
-+	connect_fd = -1;
-+	if (!ASSERT_EQ(ntohs(skel->bss->sk.dst_port), port, "dst_port"))
-+		goto cleanup;
-+	if (family == AF_INET) {
-+		if (!ASSERT_EQ(ntohl(skel->bss->sk.dst_ip4), 0x7f000001,
-+			       "dst_ip4"))
-+			goto cleanup;
-+	} else {
-+		if (!ASSERT_EQ(skel->bss->sk.dst_ip6[0], 0, "dst_ip6[0]"))
-+			goto cleanup;
-+		if (!ASSERT_EQ(skel->bss->sk.dst_ip6[1], 0, "dst_ip6[1]"))
-+			goto cleanup;
-+		if (!ASSERT_EQ(skel->bss->sk.dst_ip6[2], 0, "dst_ip6[2]"))
-+			goto cleanup;
-+		if (!ASSERT_EQ(ntohl(skel->bss->sk.dst_ip6[3]), 0x1,
-+			       "dst_ip6[3]"))
-+			goto cleanup;
-+	}
-+cleanup:
-+	if (connect_fd >= 0)
-+		close(connect_fd);
-+	if (listen_fd >= 0)
-+		close(listen_fd);
-+}
-+
-+void test_sock_destroy_release(void)
-+{
-+	struct sock_destroy_release *skel = NULL;
-+	struct nstoken *nstoken = NULL;
-+	int cgroup_fd = -1;
-+
-+	skel = sock_destroy_release__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		goto done;
-+
-+	cgroup_fd = test__join_cgroup("/sock_destroy_release");
-+	if (!ASSERT_OK_FD(cgroup_fd, "join_cgroup"))
-+		goto done;
-+
-+	skel->links.sock_release = bpf_program__attach_cgroup(
-+		skel->progs.sock_release, cgroup_fd);
-+	if (!ASSERT_OK_PTR(skel->links.sock_release, "attach_cgroup"))
-+		goto done;
-+
-+	SYS_NOFAIL("ip netns del " TEST_NS);
-+	SYS(done, "ip netns add %s", TEST_NS);
-+	SYS(done, "ip -net %s link set dev lo up", TEST_NS);
-+
-+	nstoken = open_netns(TEST_NS);
-+	if (!ASSERT_OK_PTR(nstoken, "open_netns"))
-+		goto done;
-+
-+	if (test__start_subtest("tcp")) {
-+		do_test(skel, SOCK_STREAM, AF_INET);
-+		do_test(skel, SOCK_STREAM, AF_INET6);
-+	}
-+	if (test__start_subtest("udp")) {
-+		do_test(skel, SOCK_DGRAM, AF_INET);
-+		do_test(skel, SOCK_DGRAM, AF_INET6);
-+	}
-+done:
-+	if (nstoken)
-+		close_netns(nstoken);
-+	if (cgroup_fd >= 0)
-+		close(cgroup_fd);
-+	SYS_NOFAIL("ip netns del " TEST_NS);
-+	sock_destroy_release__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/sock_destroy_release.c b/tools/testing/selftests/bpf/progs/sock_destroy_release.c
-new file mode 100644
-index 000000000000..add322ab1303
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/sock_destroy_release.c
-@@ -0,0 +1,59 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_core_read.h>
-+#include <bpf/bpf_endian.h>
-+#include "bpf_kfuncs.h"
-+
-+volatile __u64 abort_cookie;
-+
-+void maybe_abort(struct sock_common *sk, struct seq_file *seq)
-+{
-+	__u64 sock_cookie;
-+
-+	if (!sk)
-+		return;
-+
-+	sock_cookie = bpf_get_socket_cookie(sk);
-+	if (sock_cookie != abort_cookie)
-+		return;
-+
-+	bpf_sock_destroy(sk);
-+	bpf_seq_write(seq, &sock_cookie, sizeof(sock_cookie));
-+}
-+
-+SEC("iter/udp")
-+int abort_udp(struct bpf_iter__udp *ctx)
-+{
-+	maybe_abort((struct sock_common *)ctx->udp_sk,
-+		    ctx->meta->seq);
-+
-+	return 0;
-+}
-+
-+SEC("iter/tcp")
-+int abort_tcp(struct bpf_iter__tcp *ctx)
-+{
-+	maybe_abort((struct sock_common *)ctx->sk_common,
-+		    ctx->meta->seq);
-+
-+	return 0;
-+}
-+
-+struct bpf_sock sk = {};
-+
-+SEC("cgroup/sock_release")
-+int sock_release(struct bpf_sock *ctx)
-+{
-+	sk.dst_ip4 = ctx->dst_ip4;
-+	sk.dst_ip6[0] = ctx->dst_ip6[0];
-+	sk.dst_ip6[1] = ctx->dst_ip6[1];
-+	sk.dst_ip6[2] = ctx->dst_ip6[2];
-+	sk.dst_ip6[3] = ctx->dst_ip6[3];
-+	sk.dst_port = ctx->dst_port;
-+
-+	return 1;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.53.0.473.g4a7958ca14-goog
+imo that's an ugly workaround. Just call adjust_insn_aux_data().
 
+And in the future please mention such design decisions in the commit log,
+so that reviewers don't need to reverse engineer your thought process.
+
+pw-bot: cr
