@@ -1,138 +1,116 @@
-Received: from mail-ed1-f65.google.com (mail-ed1-f65.google.com [209.85.208.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30D953976AE
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 21:07:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 242DE39D6D7
+	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 21:14:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772572059; cv=none; b=mUw1mpcSnLwKc+2/adSILqzU1sRj4I/97omuVRcBuWuoZD2NExyJ5aIoTZb1uTD5L4sckxrNJKvtwXiXhchMadHwkS3HRXmYTa+FHsxoFJL9g2Z0NJcEBJqxQcUOo5RHvD6xjfBR3Qdy9sGWriDNQtj9DEyzwILK2vmcKlp4DFA=
+	t=1772572461; cv=none; b=Glwzfdzf5b8nXbKDfEFSRvxbcuqs7N0tmpwtiuRThAG0YTnVp3Xw+X+LXHHBg741p4HYb/e1PjXfMMUg5pTP2XrNnrBRZbVE9nit9SqKZltgF1ahnCi+qAXYxiHJ1vuDZhOnWRcdXnyvfQBaVpEUL/qEiRU4IwGTis2lgkC2Jwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772572059; c=relaxed/simple;
-	bh=dWV0urC7GXJe3oKflvdKpjYd1q4KvJjQhjYofU/Og+c=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=rkzpa/EAo06S/pJZ4hBrHf09N/v5Bs5GMUbiH1ubHa8OsWFMQIFzvI1vsfC91y6k8JC/L6bxr7PnN/vues1dP8pp2s3S3/OgnlyMosRY2KT/1qcr6X5v+whatm2NaOlxCBF/lKOzTc2nVFOHVYBB2ZA/WR2nowxIGAYJ9/2DRgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=efHj9x3V; arc=none smtp.client-ip=209.85.208.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1772572461; c=relaxed/simple;
+	bh=aU8I06Byo+0ZrO9kKuYwRLdqMdSB/u++Mp9DqrpLlHA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HPn/ZeFsMpSEdQYykqCKQHFMLZnBlPFUCJ/ZC5c+e9nUJeLiyatIpeXmSUKp0gFjkugcGIbSRpf2OgzWfSfvjTHgWj5eLjUCd9c1nmGGSdyl9jqnES3dRTG36hDP7jP4ggy1cFawHTmNxnq7Dfaljrn9xYKzMsJbHqSytVWj+WM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sPd6IZY5; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="efHj9x3V"
-Received: by mail-ed1-f65.google.com with SMTP id 4fb4d7f45d1cf-65c01595082so9427957a12.3
-        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 13:07:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1772572056; x=1773176856; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iXHvHlZGtSW7HsiwQ41th4kpFrzXRsO7hly8Z9fZP2A=;
-        b=efHj9x3VcZOJKWOVVQFa5J0qQbvpoHRdCL1nUgCfk1JlShgH9eHYg42t56uEBJgmCQ
-         aee3gWX52clC64eN1dZ9KYt5yqayz61tcIdXeTbXkAVXQd3nZdJV7+xHzB2It+XNRPyx
-         HQ/GKOudGh6UWS96I8UKnplciAMVZA/0TExR5/crIPvILPupGAFg3FPkSlNcijd0jHu5
-         Jmq4OtDP4uRfswfvYvGEzpiD5ue2lVbc7iqa7CrGPE/MsKEXj8se/FuDvwAdmr6nJhU8
-         1lbGrTa8ncBsNzQHughqbMKbW5y1Et+nIOV14NS8JcTWupbs4H8NyyklQmtINjBABWcp
-         237g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772572056; x=1773176856;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=iXHvHlZGtSW7HsiwQ41th4kpFrzXRsO7hly8Z9fZP2A=;
-        b=itGxDD++1+EKzZCi/higpZ8Gqd7N1VY54T8Txso9IbG/pMohcZRgvvekCjplMW68lG
-         jIU4STG+f1D9Yk3/Nkq/5vYuG70anQd0xoB+l/8m2rf0Y0RehLj6KhYQRTNDWAp90NRJ
-         r9FtSRwaqFxsoV9m7z2X8cSGRlf9kWkcwpTMaJ/inDV9zxLzZOb6y9qLc+LjST4g4ykk
-         BFka4tosN5EALOxpLVjla75C21+FTjBZLE3oeHGCnOVkkqL0Ztin9GMIWhemOS9/rIlj
-         cwY7a0Q7igvpKkc9RLy+MD2ql6oAFSTXINXdytZdauGQHt6o3NRs8a5f46vy1uAXoFls
-         m3dQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV6oAMNenB9v4GdrUVmFAVxul4VPk0YgE66KENNTFhiZB1tcGpbfQNCgFmFpoWxgmLvRvw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0qR+jRMYkGnqYADCVeQU2othRraMuw+hM1Kr+LP0mevxpjEcL
-	VOFkIIyyNZhNnzwD8YbZ910fKI4XDo/6WTwd4vtdyE1wom/pnnboHa5fm0y6Ja9WaWyGFlKcS7O
-	If/I25kSUjavT
-X-Gm-Gg: ATEYQzyEfxPewuyh5yZuCJ5QBOGvOyqSVZTJIP5SMllL8HgEWn6Lh0Egzdz+rxtWhBR
-	wW0hU379Nlg/LPetYiNccRkoBnA6k2YqlHtkujNhCIxGlCQw4hOo7ETtnD7iD1yXLWLS7gWBhtb
-	AWdqz/bAr+WOSwu07k7S0G3VGEmwGJYWmo+RUjobBeldbj6266yjXwWDIj5n2SA8EJeSt2kH70y
-	GRt2zxZQpSnpm69dTRS7UU0iHwyV8BqW2CBR14iqLH1bZWbGiIysA+Dv4ZIEdNm2HtfTV42yAM3
-	WCGwjr0BnvvZMGOj0OCE1Pf1tDh4k5YL0LU1Opre99nCN4ZxG9IUlJs6dKZdYdalJ9M+fbZsLxs
-	/Anz50+11OZ2+LFYuJpTgTPIcVcXpjiV22ChNPCdnuMktIsAGEyH+5RW/NbvTRnXauCyFycsg/x
-	CvcUwP+kmqAuO6n32smGFkjZGKuBw=
-X-Received: by 2002:a05:6402:13d2:b0:65c:2836:1cc4 with SMTP id 4fb4d7f45d1cf-65fddee9f43mr10808349a12.30.1772572056523;
-        Tue, 03 Mar 2026 13:07:36 -0800 (PST)
-Received: from cloudflare.com ([104.28.193.185])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-65fabf6d068sm4769862a12.21.2026.03.03.13.07.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2026 13:07:36 -0800 (PST)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Zhu Yanjun <yanjun.zhu@linux.dev>
-Cc: lsf-pc@lists.linux-foundation.org,  bpf@vger.kernel.org,
-  kernel-team@cloudflare.com
-Subject: Re: [LSF/MM/BPF TOPIC] BPF local storage for every packet
-In-Reply-To: <aa2fada2-3f61-4f3d-9f55-36538f566333@linux.dev> (Zhu Yanjun's
-	message of "Tue, 3 Mar 2026 07:06:46 -0800")
-References: <87ecmffopy.fsf@cloudflare.com>
-	<aa2fada2-3f61-4f3d-9f55-36538f566333@linux.dev>
-Date: Tue, 03 Mar 2026 22:07:35 +0100
-Message-ID: <87ikbcoc4o.fsf@cloudflare.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sPd6IZY5"
+Message-ID: <6302ae47-88b0-40cf-9b02-ff35f7292ec1@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772572455;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HcApNV65xllvWnEY+rPw944sQYzISRxzIQ3ebOilVOg=;
+	b=sPd6IZY5BwhSavOZfUXvUe8VRuPQz+7hK1dLTG0NrL0SWePSqnA1hrIbpDT8U07bKu804S
+	LhCTcL/+8T0kpBl2lOss+Y2k7DZwF9fChFNX/exWsmjjMofIQhmich8CsVoBXAjlFl+yf5
+	WyeZbswUwzHOEax6ZNhTDaJk2dvqnOQ=
+Date: Tue, 3 Mar 2026 13:13:59 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v9 bpf-next 2/2] selftests/bpf: Add selftests for the
+ invocation of bpf_lwt_xmit_push_encap
+To: Feng Yang <yangfeng59949@163.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, posk@google.com, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260303074423.172680-1-yangfeng59949@163.com>
+ <20260303074423.172680-3-yangfeng59949@163.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20260303074423.172680-3-yangfeng59949@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, Mar 03, 2026 at 07:06 AM -08, Zhu Yanjun wrote:
-> =E5=9C=A8 2026/2/20 6:56, Jakub Sitnicki =E5=86=99=E9=81=93:
->> In the upcoming days we are going to post an RFC which proposes to
->> extend the concept of BPF local storage to socket buffers (sk_buff, skb)
->> as means to attach arbitrary metadata to packets from BPF programs [1]
->> (slides 41-55).
->> Design wise, BPF local storage is a great fit for a packet metadata
->> container, as it that avoids some of the shortcoming of the the XDP
->> metadata interface:
->> 1. Users interact with storage through BPF maps and can take advantage
->>     of existing built-in BPF map types, while still being able to
->>     implement a custom data format,
->> 2. Maps within local storage can have different properties controlled by
->>     map flags. For example, maps with BPF_F_CLONE set can survive packet
->>     cloning. Other flags could allow map contents to survive sk_buff
->>     scrubbing during encapsulation/decapsulation or pass across network
->>     namespace boundaries.
->> 3. Local storage supports multiple users out of the box - each user
->>     creates their own map, eliminating the need to coordinate data
->>     layout,
->> 4. Local storage has its own backing memory, so persisting it across
->>     network stack layers requires no changes to the network stack.
->> However, this flexibility comes at a cost. While XDP metadata requires
->> no allocations [2], an initial write to BPF local storage requires two:
->> one for bpf_local_storage_elem, and one for bpf_local_storage itself.
->> We would like to align this work with the needs of other BPF local
->> storage users (socks, cgroups, tasks, inodes), where allocation overhead
->> has been a concern as well [2].
->> Optimization ideas we would like to put up for discussion:
->> - slimming down bpf_local_storage so it can be embedded as an skb
->>    extension chunk,
->
-> Interested in this topic. I hope to join this meeting.
 
-Thanks for the interest. I've since posted the RFC for that [1] and the
-topic is, at least partially, no longer relevant. We won't be adding new
-users of BPF local storage [2].
 
-I've proposed to the PC that we can change it to:
+On 3/2/26 11:44 PM, Feng Yang wrote:
+> From: Feng Yang <yangfeng@kylinos.cn>
+> 
+> Calling bpf_lwt_xmit_push_encap will not cause a crash when dst is missing.
+> 
+> Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
+> ---
+>   .../selftests/bpf/progs/verifier_lwt.c        | 20 +++++++++++++++++++
+>   1 file changed, 20 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_lwt.c b/tools/testing/selftests/bpf/progs/verifier_lwt.c
+> index 5ab746307309..9cef07e6eceb 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_lwt.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_lwt.c
+> @@ -231,4 +231,24 @@ __naked void not_permitted_for_lwt_prog(void)
+>   	: __clobber_all);
+>   }
+>   
+> +SEC("lwt_xmit")
+> +__description("missing dst when calling bpf_lwt_xmit_push_encap")
+> +__success __retval(0)
+> +__naked void missing_dst_call_bpf_lwt_xmit_push_encap(void)
+> +{
+> +	asm volatile ("					\
+> +	r9 = 69;					\
 
-1) How to make regular BPF maps work as a stash-away storage for skb
-metadata. I've highlighted my initial concerns [3] and will give it a
-try to get hands-on experience with this approach.
+hmm... I just noticed this.
 
-2) Or if we decide to go with a secondary skb metadata embedded in the
-skb_ext - which is another direction I wanted to explore, then we could
-discuss how to optimize skb_ext (this overlaps with the original
-proposal).
+69 is the ip version and ihl?
 
-Thanks,
--jkbs
+> +	r3 = r10;					\
+> +	r3 += -32;					\
+> +	*(u64 *)(r3 + 0) = r9;				\
 
-[1] https://lore.kernel.org/all/20260226-skb-local-storage-v1-0-4ca44f0dd9d=
-1@cloudflare.com/
-[2] https://lore.kernel.org/all/CAADnVQKVfyh3_OZshvYf7GJUF-ph2eMfmaQsxNgwBJ=
-d1AJgXTQ@mail.gmail.com/
-[3] https://lore.kernel.org/all/87wlzydk12.fsf@cloudflare.com/
+This will not work in big endian. Although x86 arch is enough to cover 
+this test, these little things (e.g., the value 69, unnecessary asm 
+...etc) make this test hard to read.
+
+Let's bite the bullet and move this bpf test prog out of verifier_lwt.c. 
+It is not testing the verifier to begin with. No need to write in asm 
+either. Create its own progs/lwt_misc.c test file for misc lwt tests. 
+Create a corresponding prog_tests/lwt_misc.c also. Write the bpf prog in 
+C instead of asm. Use "char iph[20];" for the iph and init "iph[0] = 
+0x45". Search for RUN_TESTS() usage in prog_tests/. It is pretty 
+straightforward.
+
+pw-bot: cr
+
+> +	r2 = 2;						\
+> +	r4 = 20;					\
+> +	call %[bpf_lwt_push_encap];			\
+> +	r0 = 0;						\
+> +	exit;						\
+> +"	:
+> +	: __imm(bpf_lwt_push_encap)
+> +	: __clobber_all);
+> +}
+> +
+>   char _license[] SEC("license") = "GPL";
+
