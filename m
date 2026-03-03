@@ -1,47 +1,61 @@
-Received: from sgoci-sdnproxy-4.icoremail.net (sgoci-sdnproxy-4.icoremail.net [129.150.39.64])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7FB838CFE2
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 09:40:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.150.39.64
+Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9962938C2C2
+	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 09:53:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.92.39.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772530852; cv=none; b=XDNRwY45LZFWwfIDnIWqssuQDmCzCppuPr/pEt/PmV6i4GiTjhsBzvY51Q1s5evga7iHxpccN8Nzbi6WHDIuJNryo2MtJ0WeuUCY49NCgkAfsLLyDt/+IbZhafHoAf+bYk5rgxTbY0Kg0mGR1qxL6PH1Hd8GclnEp8elcdYaSUw=
+	t=1772531585; cv=none; b=B5XxFKu1r2NGaVRHwsRkA8Au+r3kB9mTBSS/7ziBywV9w3Mf1NnVnFANpkvR8NXbIegxvYPJNaVUg19Ls2CpH4XmjNgR+6kbSkgPhyeGfgegGFJCs5qxCwzhIpLXbJpDHy4Mtl3xUrKosNep8J75id4DcZpFATNrYD5iIay3RXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772530852; c=relaxed/simple;
-	bh=55EE6THTcaftJRKKIAtIFsnWxe+nVnMo7evMy81DX8I=;
+	s=arc-20240116; t=1772531585; c=relaxed/simple;
+	bh=zop48+CHzjssPpSGVwIPSIDDOAJmsgpDV1LUYuAyqN4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mP/sytqqiOON9U/7Fw/xf6mkd3YFNzZqNC70fT4m4UalOALBvCRXGcuby/yVcy3cFAP0R3BSE2xikXwTuWxGJrdBKwdW9TjV/fMBXlnUffkqy0k8o3u8f7tkCRuVRXHgHOTECU6l1lpMiUpMAM6FWT+6m30pf/vM4AQcMI8sLF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=129.150.39.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [10.162.163.215])
-	by mtasvr (Coremail) with SMTP id _____wDXKESCrKZprjr+AA--.956S3;
-	Tue, 03 Mar 2026 17:40:18 +0800 (CST)
-Received: from lutetium.tail477849.ts.net (unknown [10.162.163.215])
-	by mail-app1 (Coremail) with SMTP id yy_KCgAnfNeArKZpdD9zBg--.47419S2;
-	Tue, 03 Mar 2026 17:40:16 +0800 (CST)
-From: Yazhou Tang <tangyazhou@zju.edu.cn>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
+	 MIME-Version; b=cvo4INIicCjh65GyuRdz5bMt3TKvj5um3wH+6IYZ6o9+MDSKkt3W0CAo3AfZ5/7L1arQqS5eYQh93jrLvGRAu/wtqwPOf7aQVJTzFbzXKSaPElcknZSjuVK2MpiCBOoRfBCjK8bMx9uOno566H60U/awBi1RuUOyiHleGaU9Nl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=SNDgTe0B; arc=none smtp.client-ip=54.92.39.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="SNDgTe0B"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1772531546;
+	bh=ATGljxreJxuAb1q1oikhv4OCA7tc0nM8ns76mKHdqgY=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=SNDgTe0BKI77tBKxfqVPgD965tfWxdUGR+5ykhm5h7T7/ia59uUCY+S8CGZkFFpy+
+	 wqPJdgJ5b/gxYGqfDp3Ow98q1a+l5bnM0yymRmREPODz8k7JnTyAoWmJ3UB3/8ilcm
+	 mVZPWZaiywm4ZAI7ntJzSxGHvugVHgRJEidvnG6w=
+X-QQ-mid: zesmtpip2t1772531541t62c48cde
+X-QQ-Originating-IP: SS1liby2+gwXPBjoKfMJY0+aZRXrPxbs3FwxJwJsD6U=
+Received: from xulang-PC ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 03 Mar 2026 17:52:19 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 16806137112662569003
+EX-QQ-RecipientCnt: 17
+From: xulang <xulang@uniontech.com>
+To: bot+bpf-ci@kernel.org
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	clm@meta.com,
 	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
+	dddddd@hust.edu.cn,
+	dzm91@hust.edu.cn,
 	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
+	hust-os-kernel-patches@googlegroups.com,
+	ihor.solodrai@linux.dev,
+	kaiyanm@hust.edu.cn,
+	martin.lau@kernel.org,
+	martin.lau@linux.dev,
 	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	tangyazhou518@outlook.com,
-	shenghaoyuan0928@163.com,
-	ziye@zju.edu.cn,
-	glapt.pro@outlook.com
-Subject: [PATCH bpf 1/2] bpf: Reset register ID for BPF_END value tracking
-Date: Tue,  3 Mar 2026 17:39:55 +0800
-Message-ID: <20260303093956.395076-2-tangyazhou@zju.edu.cn>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260303093956.395076-1-tangyazhou@zju.edu.cn>
-References: <20260303093956.395076-1-tangyazhou@zju.edu.cn>
+	xulang@uniontech.com,
+	yonghong.song@linux.dev
+Subject: [PATCH bpf v5] bpf: fix: Race condition in bpf_trampoline_link_cgroup_shim
+Date: Tue,  3 Mar 2026 17:52:17 +0800
+Message-ID: <279EEE1BA1DDB49D+20260303095217.34436-1-xulang@uniontech.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <73e7c1b535284b3b65b44534db868fd5d8cee5530821278c07b8c64a46ce79dc@mail.kernel.org>
+References: <73e7c1b535284b3b65b44534db868fd5d8cee5530821278c07b8c64a46ce79dc@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,72 +63,86 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:yy_KCgAnfNeArKZpdD9zBg--.47419S2
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiAgMTCmml6Akh0QAAsF
-X-CM-DELIVERINFO: =?B?5kkU3wXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9LdbtO46Mr1SK3wce07WIS0wTOb25lByQQtB5iheJW9ZDvCykB0nABnAwXqJMiwiEwGG
-	Sh0O33mDS+Ktbb5ZsSEljUQtJamXixNlbRSHgb4/V/1pB3UsDrbgEVzanqOPpQ==
-X-Coremail-Antispam: 1Uk129KBj93XoW7Zr4rCF4kAry5Kr13WrWDWrX_yoW8ZFWDpr
-	4DGF98KFyvgw1j9a17uF4IkFyUW3ZxXw4xWrs8A34SyF1UJFyFv3y0gF1aqFWayrZ2g3yF
-	vr12v39Iva1UZFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUU9Eb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
-	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAF
-	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0Y48IcxkI7V
-	AKI48G6xCjnVAKz4kxM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC2
-	0s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI
-	0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE
-	14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20x
-	vaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8
-	JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1Hq2tUUUUU==
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3b-0
+X-QQ-XMAILINFO: Oe8iwmjPdG65pKat3kf54Pt+EXwT4y4u3cPScrDU25ma1AOMm3+fcdtr
+	2E5KDDdz/VB6YoUtl4kTKoiEOZmihoNoDTL1f5fBNB1YjWVrVv6NiW/vYvpI1g7ITHKy8Lf
+	OQpFG1Lwq2WyBq7Wz8KuVQptS8kT6ITP7H4Fg8RRen/+hsS/fyy4sKPURjaeDGaFwG+cF6R
+	Mnf70Qoi2IugleMBr4HsCb444BYNKVLPAe7lhVnmsJAIFiEV6eoKtJKX5NUg7s79/89ABHV
+	etwSD7nEChPJMA7kNE+AIQaDRLC6AJeUs3cBjEv+4Z2uG7CsTWcb9gZ0LKFO1WTu+0rjffJ
+	2Iw4Tps5GtNmGgpQ8/lVa6R62+ArII5Dep5XgYrFWpW1aTFkMgIgbL9xkRkN6zy5cpWhSr+
+	vcU5DTBQF8vwdmmlDrzYZE92qtqA795az9cpRPrEfg1fD8BE3k2kHGaY2FriZIP+M8G7hUC
+	BH6W9Eiq0ibMipUbNsf2b7qcFTvnkadjvqZjfY9hqLL42n7kKVqfjQVD2KYyRInmxBhQ1nb
+	VrzbuCkaDaB5VGXTfh7t5SzTiBy8dNzPmIXCFn+hdv3NGoO0CweOMOKDvTfTB9B74d1hvte
+	hoWhz5HHix9mMoj7cssJ/saiGY4eaAgmBHtW3aAqKuHGtPUjyXPW5MEv/Cgfhzco4KO0xUS
+	X9rIPkemWKNuOTKetjuiN7pt+YzNgypR60CZqFUZoQXJ/z/+rHOAttM8cEmaEHFSh/Io0D6
+	TDXOSeF7izKhBxDkadAKfJ0/ztsR8Lftz1GWC1z0imcx47JUVz53+HhNimTMnf3wTUzfgjy
+	HFBUORaXHFgZEVOPa8NDBCatuzqlO0Q9tAv5OAn2uxo08YXA1CXL70zT96KszAjjPHqK8x5
+	MaIcJQY/sMey9AfTwiWmqyhQ1jS+Cl7Lwy4EG3S2UcvtFeKSVM7Glq1sGd6lcO+t258djRr
+	84KMjgjjnP/n0uTKJQ6IF3jpybYtPXxpafLuVZX4eJUXba9wBcUjmdrvdKFbZEh6HNS2xRD
+	KlWqis5eqA+wZkRrKVDWcDkEafrU26pNHzMGn/0l/xy1VhnZMfSrhnnE7IEzIBMeg3Lv3pi
+	Q==
+X-QQ-XMRINFO: OD9hHCdaPRBwH5bRRRw8tsiH4UAatJqXfg==
+X-QQ-RECHKSPAM: 0
 
-From: Yazhou Tang <tangyazhou518@outlook.com>
+From: Lang Xu <xulang@uniontech.com>
 
-When a register undergoes a BPF_END (byte swap) operation, its scalar
-value is mutated in-place. If this register previously shared a scalar ID
-with another register (e.g., after an `r1 = r0` assignment), this tie must
-be broken.
+The root cause of this bug is that when `bpf_link_put` reduces the
+refcount of `shim_link->link.link` to zero, the resource is considered
+released but may still be referenced via `tr->progs_hlist` in
+`cgroup_shim_find`. The actual cleanup of `tr->progs_hlist` in
+`bpf_shim_tramp_link_release` is deferred. During this window, another
+process can cause a use-after-free via `bpf_trampoline_link_cgroup_shim`.
 
-Currently, the verifier misses resetting `dst_reg->id` to 0 for BPF_END.
-Consequently, if a conditional jump checks the swapped register, the
-verifier incorrectly propagates the learned bounds to the linked register,
-leading to false confidence in the linked register's value and potentially
-allowing out-of-bounds memory accesses.
+Based on Martin KaFai Lau's suggestions, I have created a simple patch.
 
-Fix this by explicitly resetting `dst_reg->id` to 0 in the BPF_END case
-to break the scalar tie, similar to how BPF_NEG handles it via
-`__mark_reg_known`.
+To fix this:
+   Add an atomic non-zero check in `bpf_trampoline_link_cgroup_shim`.
+   Only increment the refcount if it is not already zero.
 
-Fixes: 9d2119984224 ("bpf: Add bitwise tracking for BPF_END")
-Closes: https://lore.kernel.org/bpf/AMBPR06MB108683CFEB1CB8D9E02FC95ECF17EA@AMBPR06MB10868.eurprd06.prod.outlook.com/
-Link: https://lore.kernel.org/bpf/4be25f7442a52244d0dd1abb47bc6750e57984c9.camel@gmail.com/
-Reported-by: Guillaume Laporte <glapt.pro@outlook.com>
-Co-developed-by: Tianci Cao <ziye@zju.edu.cn>
-Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
-Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
-Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
-Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
+Optimized testing:
+   I used a non-rigorous method to verify the fix by adding a delay in
+   `bpf_shim_tramp_link_release` to make the bug easier to trigger:
+
+static void bpf_shim_tramp_link_release(struct bpf_link *link)
+{
+    ...
+    if (!shim_link->trampoline)
+        return;
+
++   msleep(100);
+    WARN_ON_ONCE(bpf_trampoline_unlink_prog(&shim_link->link,
+        shim_link->trampoline, NULL));
+    bpf_trampoline_put(shim_link->trampoline);
+}
+
+Before the patch, running a PoC easily reproduced the crash(almost 100%)
+with a call trace similar to KaiyanM's report.
+After the patch, the bug no longer occurs even after millions of
+iterations.
+
+Fixes: 69fd337a975c ("bpf: per-cgroup lsm flavor")
+Signed-off-by: Lang Xu <xulang@uniontech.com>
 ---
- kernel/bpf/verifier.c | 2 ++
- 1 file changed, 2 insertions(+)
+ kernel/bpf/trampoline.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 401d6c4960ec..366ba4757135 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -16121,6 +16121,8 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
- 			scalar_min_max_arsh(dst_reg, &src_reg);
- 		break;
- 	case BPF_END:
-+		/* manually reset register's id here to avoid mistaken register links */
-+		dst_reg->id = 0;
- 		scalar_byte_swap(dst_reg, insn);
- 		break;
- 	default:
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index dbe7754b4f4e..894cd6f205f5 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -749,10 +749,8 @@ int bpf_trampoline_link_cgroup_shim(struct bpf_prog *prog,
+ 	mutex_lock(&tr->mutex);
+ 
+ 	shim_link = cgroup_shim_find(tr, bpf_func);
+-	if (shim_link) {
++	if (shim_link && !IS_ERR(bpf_link_inc_not_zero(&shim_link->link.link))) {
+ 		/* Reusing existing shim attached by the other program. */
+-		bpf_link_inc(&shim_link->link.link);
+-
+ 		mutex_unlock(&tr->mutex);
+ 		bpf_trampoline_put(tr); /* bpf_trampoline_get above */
+ 		return 0;
 -- 
-2.53.0
+2.51.0
 
