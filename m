@@ -1,30 +1,30 @@
-Received: from m16.mail.126.com (m16.mail.126.com [220.197.31.9])
+Received: from m16.mail.126.com (m16.mail.126.com [220.197.31.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80A923845BB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D11D38654A;
 	Tue,  3 Mar 2026 07:24:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.9
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772522674; cv=none; b=hdOYvAawUJkBAq2OfmBeL6MqWR+Fxrdvv2l7s5vkV5JxxEFUuaQJ9uDNQgMM8qcoh7SsB82pw2rOQfFnGoMAuN/H2w0ioeJQoAa35IMnCWdIb7CIgfbsQNCAIcC1s/VuqTKATxhm6j/UAuJDfvuZAAAJaN2xl8wPn69bHmqkR9A=
+	t=1772522681; cv=none; b=ilDabjIrqImueaKPNmIzp55EW/yP/KfHIkHwf2yFX1ZiG6+OLxX5/26005q1/j8iyxrmsgdVFE1WdRT6CuSPY7l2KMpFvYb5IAEM4qF7GcT7/CzMiKfLZINnF2LXDSVsUSplqVh0YOjTISg8hyTrgviR8RBHlk3aLs/N9JVV9cw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772522674; c=relaxed/simple;
-	bh=VGYfChW+hftxyiHbvyTWUAIFNt4cxQtpYaguIbM90pg=;
+	s=arc-20240116; t=1772522681; c=relaxed/simple;
+	bh=O0FV2f9VOHGakL3BdhgKr0O8u27OTBHmjRbv1WyyV10=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=U0e4lCqxGyIDZwoIFZbMe9gwrefX4/aZSRiy4RKbQsmDDTFSu/uX7dHa4jIwjQnYZ6pM3JGpCKsjp62UhS4a5t811hO6eSH7v9pfSZqroSxkwVDsYKUKF34u33DkQiQ/OVD5UwVdVzs4Ew5cZuQ6/r9N0tZyIEE++d3IJphqxhE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=fQxj334s; arc=none smtp.client-ip=220.197.31.9
+	 MIME-Version; b=FXmBHtcUVSpV7rnGzvMpliXoJJGLqHifQFftrtwCSCn7q2Ox1LL25U2D6axG8uChwPoBiLdH9Xu1jeVdtk98kZWzxnWcEuXn+UNIGzhjS5U18E5w16GgxHm+Errnnfk0OvDi8C1FX89cGxMnwFXPJgzWSwfQFbMdqJ1FEhEIUZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=hh4xzTVt; arc=none smtp.client-ip=220.197.31.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="fQxj334s"
+	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="hh4xzTVt"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=jN
-	sX6y3/noWI4atTR0sE6jHvaCyPAhxU+KSQMt55M44=; b=fQxj334sUBe23Xt4Iy
-	mSpCe8IOhpDdpfEc3gN0r2sr42IudD+J1E1fSej/a5DYmJY0S7q5kbjR+jP9x6+n
-	ycYh1U6jF2RBp+bPyar7jl+Xdz/hnif88Q8XqPyfkqRMmZcsWEIq09tjTZxrGEpY
-	6Kber2liaTLwhDzq5BqK6lbfc=
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Tv
+	d5JbamKTm8eCSpeOkJ/IJ6Kk9pcl+E2+ZvdRrW8Hs=; b=hh4xzTVtGQy3DtAnGS
+	rX5TzapAZkthb9vqe32BwpoB64jhwifvvttOmRphwWjYO4R004czdL+haMg1S107
+	NDQ5ta9bwjkW2NWhtd2AR/CYIHSldeQEIHPDrHDFT3Ua5jwE13V7FiaoZ+S5IUM7
+	VemTwn4bWo/oej0d0b4zOsfpo=
 Received: from localhost.localdomain (unknown [])
-	by gzsmtp5 (Coremail) with SMTP id QCkvCgDnT3h6jKZpVDeAAw--.53445S3;
-	Tue, 03 Mar 2026 15:23:39 +0800 (CST)
+	by gzsmtp5 (Coremail) with SMTP id QCkvCgDnT3h6jKZpVDeAAw--.53445S5;
+	Tue, 03 Mar 2026 15:23:41 +0800 (CST)
 From: Zhao Mengmeng <zhaomzhao@126.com>
 To: tj@kernel.org,
 	void@manifault.com,
@@ -41,9 +41,9 @@ Cc: sched-ext@lists.linux.dev,
 	bpf@vger.kernel.org,
 	llvm@lists.linux.dev,
 	zhaomengmeng@kylinos.cn
-Subject: [PATCH 1/3] tools/sched_ext: Add -fms-extensions to bpf build flags
-Date: Tue,  3 Mar 2026 15:23:15 +0800
-Message-ID: <20260303072317.76035-2-zhaomzhao@126.com>
+Subject: [PATCH 3/3] selftests/sched_ext: Fix peek_dsq.bpf.c compile error for clang 17
+Date: Tue,  3 Mar 2026 15:23:17 +0800
+Message-ID: <20260303072317.76035-4-zhaomzhao@126.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260303072317.76035-1-zhaomzhao@126.com>
 References: <20260303072317.76035-1-zhaomzhao@126.com>
@@ -54,61 +54,55 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:QCkvCgDnT3h6jKZpVDeAAw--.53445S3
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Cr18Kr1DGw1fuw4DKrykKrg_yoW8Xr17pa
-	9I9rW8GF47tFy8Gws7JFW3trWY9ws2gw40qryqqwn0yF97t3ZFq3s7tF43Ar17tw4kCry7
-	ua4xKasxWw12v3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UE4E_UUUUU=
-X-CM-SenderInfo: 52kd0zp2kd0qqrswhudrp/xtbBqxtFvGmmjHtQHwAA3+
+X-CM-TRANSID:QCkvCgDnT3h6jKZpVDeAAw--.53445S5
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Ww4fGFyxuFW7XFW3tw45GFg_yoW8Xw13pa
+	18ZF1rAr4ftF43G3W8JrWkJrWUXrsavF4Iga13ZrZFqFWrJw48Jr1xKFW3tryDWr97uFs3
+	Aa4Skw1YkFWDJFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j5wIDUUUUU=
+X-CM-SenderInfo: 52kd0zp2kd0qqrswhudrp/xtbBlx1GvWmmjH2t0wAA3x
 
 From: Zhao Mengmeng <zhaomengmeng@kylinos.cn>
 
-Similar to commit 835a50753579 ("selftests/bpf: Add -fms-extensions to
-bpf build flags") and commit 639f58a0f480 ("bpftool: Fix build warnings
-due to MS extensions")
+When compiling sched_ext selftests using clang 17.0.6, it raised
+compiler crash and build error:
 
-The kernel is now built with -fms-extensions, therefore
-generated vmlinux.h contains types like:
-struct aes_key {
-        struct aes_enckey;
-        union aes_invkey_arch inv_k;
-};
+Error at line 68: Unsupport signed division for DAG: 0x55b2f9a60240:
+i64 = sdiv 0x55b2f9a609b0, Constant:i64<100>, peek_dsq.bpf.c:68:25 @[
+peek_dsq.bpf.c:95:4 @[ peek_dsq.bpf.c:169:8 @[ peek
+_dsq.bpf.c:140:6 ] ] ]Please convert to unsigned div/mod
 
-struct ns_common {
-	...
-        union {
-                struct ns_tree;
-                struct callback_head ns_rcu;
-        };
-};
+After digging, it's not a compiler error, clang supported Signed division
+only when using -mcpu=v4, while we use -mcpu=v3 currently, the better way
+is to use unsigned div, see [1] for details.
 
-Which raise warning like below when building scx scheduler:
-
-tools/sched_ext/build/include/vmlinux.h:50533:3: warning:
-declaration does not declare anything [-Wmissing-declarations]
- 50533 |                 struct ns_tree;
-       |                 ^
-Fix it by using -fms-extensions and -Wno-microsoft-anon-tag flags
-to build bpf programs that #include "vmlinux.h"
+[1] https://github.com/llvm/llvm-project/issues/70433
 
 Signed-off-by: Zhao Mengmeng <zhaomengmeng@kylinos.cn>
 ---
- tools/sched_ext/Makefile | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/sched_ext/peek_dsq.bpf.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/sched_ext/Makefile b/tools/sched_ext/Makefile
-index 47ad7444677e..21554f089692 100644
---- a/tools/sched_ext/Makefile
-+++ b/tools/sched_ext/Makefile
-@@ -122,6 +122,8 @@ BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH)					\
- 	     -I../../include							\
- 	     $(call get_sys_includes,$(CLANG))					\
- 	     -Wall -Wno-compare-distinct-pointer-types				\
-+	     -Wno-microsoft-anon-tag						\
-+	     -fms-extensions							\
- 	     -O2 -mcpu=v3
+diff --git a/tools/testing/selftests/sched_ext/peek_dsq.bpf.c b/tools/testing/selftests/sched_ext/peek_dsq.bpf.c
+index a3faf5bb49d6..784f2f6c1af9 100644
+--- a/tools/testing/selftests/sched_ext/peek_dsq.bpf.c
++++ b/tools/testing/selftests/sched_ext/peek_dsq.bpf.c
+@@ -58,14 +58,14 @@ static void record_peek_result(long pid)
+ {
+ 	u32 slot_key;
+ 	long *slot_pid_ptr;
+-	int ix;
++	u32 ix;
  
- # sort removes libbpf duplicates when not cross-building
+ 	if (pid <= 0)
+ 		return;
+ 
+ 	/* Find an empty slot or one with the same PID */
+ 	bpf_for(ix, 0, 10) {
+-		slot_key = (pid + ix) % MAX_SAMPLES;
++		slot_key = ((u64)pid + ix) % MAX_SAMPLES;
+ 		slot_pid_ptr = bpf_map_lookup_elem(&peek_results, &slot_key);
+ 		if (!slot_pid_ptr)
+ 			continue;
 -- 
 2.43.0
 
