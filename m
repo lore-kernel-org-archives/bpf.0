@@ -1,151 +1,184 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27DAF38756B
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 14:51:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.133.124
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772549512; cv=pass; b=r454I+rsBSZmTLqq8DHQ+y6Mfv5KmRENgulWtvGUwfTDbggUbZaYEjwgrgBESt/cNNhSLOq6BDGv2anCWjBoaku3pHplzh9YHYqDocRILKX7EGfYpQCH1B8Q1hkmnvWsCJBUuWT3OjT20CYa9js1CZd/BvqmQF2cORAYHfeJ+NY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772549512; c=relaxed/simple;
-	bh=VcTAEuXIgazbam30v7h0INbBTK6ykVLaAc+NDs8de+k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pLC6ands9PU+Ztd9/cqnXvfZ2mJ+MHUZ6oJM4M0ptwPAIkYhGjdKqxMYmy5qqGkYbbdwbnasPIx58LaMy8PzQyiq4UbDlboFcedlVU8W45Tt4p1FJcQwotMaDG5DEp3JQ7J3NK2jEZNG3o3QiOjaClUxoNMSFM7Ee6ETU/qtvqY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BksYknTA; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=ibZmvTrq; arc=pass smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A9C35E948;
+	Tue,  3 Mar 2026 14:59:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772549982; cv=none; b=lw/4HJbDomOgrE1TFYxaECuEHrVtoumkzt1nHqywduhb9qSRe8XO5zmhTTqrn0JryGV6eEkWuWMVp+/nWIxKDWHWp3DNHMJXC5Kk7E6XAfFQWycNybhDmy6d65WoKZaESE6EV5Ucc7ZIbTwrLmgjeANVWDse1+CO3oR8fotaMrg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772549982; c=relaxed/simple;
+	bh=rhh1YA9sgaouHH6eIPRuYmu2YhRyWymcydmYPUBfsoA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mjxJxnzBglvDYT4v8SvO6lHb0xuMLMEzA577weVcMgya4wKeWoXK8frxbiHGkcobj1JHlBGCrJJJf2lBHkPjVS/UNP+3C4TyK57mM550LjZQ+6nmoBILTDtM5EfeB9u2izGUNaF//JaplD+1lW5YmE+vRY23utK/oCSM9DomBG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=GVyV580I; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BksYknTA";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="ibZmvTrq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772549510;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VcTAEuXIgazbam30v7h0INbBTK6ykVLaAc+NDs8de+k=;
-	b=BksYknTA8iRoj8ISFtprmrM+KebEluCn04vOOZ3Q4FwhP4QRiQmc6qiDoYvJQAqRQ6Hsih
-	D9dPhpcJF907kDREO5ayCdhBQM0kz1ebUgB3EDnXbnF87UbWoa2ThvbRj8AFumeqcoW+2u
-	J+YPBdvhE8wziIGxO1xp2X5TpkLibfc=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-660-YTIpUc_rOzOkhiuu-iiH3g-1; Tue, 03 Mar 2026 09:51:49 -0500
-X-MC-Unique: YTIpUc_rOzOkhiuu-iiH3g-1
-X-Mimecast-MFC-AGG-ID: YTIpUc_rOzOkhiuu-iiH3g_1772549508
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-b937607a902so554391866b.2
-        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 06:51:48 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772549508; cv=none;
-        d=google.com; s=arc-20240605;
-        b=O+TXA22h6UnMvSauD1LtrdGxjBTy/VJFGzyuSZxZurAdqi5oqoRtEO65d22ECHIg23
-         reyiMpofVXq8iG+jhI5IDWMko+enVv52kv+E5CBuedJA4i+GbyddFegMStOKMfW6kH1s
-         ix53Qu7zD+ArmKT0VJhR5NHlEBOsgnl60QBcpry0jIz0xz6W7YukpFZASiqmVj8spPvb
-         WPxeGVspI0GTD9lRBjXeLXWFG4ses2Rl76D/Nv5GNeSir9/mj8FtuyvxxvqLQJBrC3Py
-         8o/Xo8vvbGdPMoILs09KmACVJ4Ld5NVviVRg1GByrUGzKqRD+Toy8Y6Ng8zZCndEU3GG
-         Uwsw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=VcTAEuXIgazbam30v7h0INbBTK6ykVLaAc+NDs8de+k=;
-        fh=cv73xazEMEEcRqn26A0BLaZi6iWSlSI+3WmV50zTYug=;
-        b=XGkZmYOl1dNXy96pMHuuaflcEzJn2bZ2Uajyd8FqbqedaNnXplStCDYX3bLEP1CLAO
-         WHP6irLBGO2TbR5PbkPreBkMsgvviQmm+xinB9U+aM/sTpNavqV0+BYwILslzCwJA9Sj
-         vq7bCphE95PyTZ5oP7g6RPoUE6ovtxUCiVdzVsvLA+P7izkEk7c62M84uSDqnf1moSYk
-         tKuMoiDf+u971gOvVHCBt18V8ZjRk+7q+liGSoBmzkz/yPETYc4vEecZWdjrmH0YX1aL
-         YQQwN+CegWcWVEdmCMJ9dxkF1F6eQJqbIkGaXcTJkniA7Qxk35RltEVG/W2hCDHjzo+g
-         Ri2w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1772549508; x=1773154308; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VcTAEuXIgazbam30v7h0INbBTK6ykVLaAc+NDs8de+k=;
-        b=ibZmvTrqd/RfNJHreuqfM72CbnJ0KJBHtjUfZjieiSs8+vGQ2M1dJnyqQEHC1YA3MM
-         lGveSYFeczaCI+vuyHu4ZdoOUnTpy3mJdqZ6igm0fpos0muU4wzbcd69xK2cOrDV0YVE
-         Ds9KguaHi7AvkqwxGBmAOSsvYtvb3LmrqFZXmd2+8wGfMWKQ23h80zq3EH8yh0MJdhEm
-         E6gu0yqMevIf9G0NM6mgwpLat4Yn01Ck3QypI+N3thUUHA8f9XRrwloq5O9iXdr1vz+Z
-         uaqve7LwaFP3jcFiqZPXX2Nk/wYUXNGc1MwP5c0LcfMOylkmh7aRxIq4q36YjY3zqDKD
-         NRYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772549508; x=1773154308;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=VcTAEuXIgazbam30v7h0INbBTK6ykVLaAc+NDs8de+k=;
-        b=s5mEK+ARzJWT/zUsCFrTgo58kBSUUq5+tMKnGCGHpzH8m8Mupk+xpNjCvpRaBV4IUE
-         KFW2VLBYecPoOFcBOS23QGrSP3dxBJNN5J8Oly5FhJL60RJItTqgNUXOSeZ97r3eSGKc
-         gKyu1uJnaZesG+GR1aLbM6H82AlroWPqQ1fRRpy4231lZttx72fXBm8ACLBsDKnhZmsJ
-         oVuQxwIyRdAJFck6FlbHrcT7u6kSfzh6kBxi0gzWH9DAGjCxP4AmX+guf/Kuj0hiNLfQ
-         WBL4LxTt63hkw4tJf21TCZCqHbJg2GEIbh8flVf+Y6eC6I3mgYsJlyul93+y+pRmH3r/
-         4ixQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWnVXO/54O/+ifTa1JlcHPCi6D1lQ3pwT95WbT9MyEOTsdCdfF8lEw8sv6lY7XQ9OlNgD4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtEYPuDY0jn55C6laXJdgxj/S2Jz55tgz4ipdJd1nRcn9hGYkP
-	Hk9B+gdYlhrTZZTVqvobrRTY5L3RQMmPLPZPzEbGOtqN+Od8QmYVwXLQLdyU6onOX/NoI5DQHFq
-	Em1aa6PVN9oForUOuHSiB0oirwGc0+3INNokhrOkYKHeP1k3eDQ3lZRUJ3G/6z4DnPQayQiQzNj
-	1El/BZvnpKeKryYjjpftlrVstDhyFg
-X-Gm-Gg: ATEYQzzYvgpw1acVPsrBx2HkhtrM5Ro1KSSWTIqy9aKkTfP9gKYU98VwM1+/iVMHECK
-	1iKlvjgWAPQzDiYtu/3yqP2lhJkrYuRbSwJXn0JUtxnuqQcoKBF0J3XsrHXCK3ElIIhgrgeaY01
-	AiIYlbQKSLtqdmgMc21NXHWDbyRJ7EYdVeCu/Q1nUxMbkgioS8hGgfxpdOZpj7dfA2KDlG27LnK
-	fBFOg==
-X-Received: by 2002:a17:906:f5a6:b0:b93:5fa8:d7f9 with SMTP id a640c23a62f3a-b937659f053mr1099835666b.56.1772549507761;
-        Tue, 03 Mar 2026 06:51:47 -0800 (PST)
-X-Received: by 2002:a17:906:f5a6:b0:b93:5fa8:d7f9 with SMTP id
- a640c23a62f3a-b937659f053mr1099833466b.56.1772549507290; Tue, 03 Mar 2026
- 06:51:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="GVyV580I"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62318Jtl1528090;
+	Tue, 3 Mar 2026 14:58:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=L3ODhxKhXKAZO7Qt/XBU+6JDWqfCEU
+	C3cU3LlDcofqQ=; b=GVyV580IL1plO6OVvHgFBibi2SYBUYbLHRKt/PW6RAKIX8
+	ZNxSHFUAPTjcGor8439GSbAcRWABCzrCl4KWVYgeidJiqhTKKRLYmrlxZ/lC112r
+	BhE7GClvSJqH1EwCTMxKxAjiDt0HT//j7di0r2UsuUYk9yYkWYKNyyY+NVKq3iGs
+	WnkSNQ5k0FGQw5D7PKikzwzZneAwwbpxQgshIz15CJKYT3yyOQIcE9hVGcPVqABv
+	TqZQfevDM4KizvZ1IuJ93bbdUYIdWo7VJtyQV0wFNB9akdl1wFLorEfFm6mp6qMk
+	SJd1PI85FGQmFATC/AgjpzE0b5y33gtB25fVeGdg==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ckssmk87x-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 03 Mar 2026 14:58:35 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 623DdaQK003266;
+	Tue, 3 Mar 2026 14:58:35 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cmb2y2wmu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 03 Mar 2026 14:58:35 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 623EwUwZ10420604
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 3 Mar 2026 14:58:31 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E206720043;
+	Tue,  3 Mar 2026 14:58:30 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E8EED20040;
+	Tue,  3 Mar 2026 14:58:27 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.39.17.34])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Tue,  3 Mar 2026 14:58:27 +0000 (GMT)
+Date: Tue, 3 Mar 2026 20:28:25 +0530
+From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+To: Viktor Malik <vmalik@redhat.com>
+Cc: linuxppc-dev@lists.ozlabs.org, Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+        Joe Perches <joe@perches.com>, Paul Mackerras <paulus@ozlabs.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        atrajeev@linux.ibm.com, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH] powerpc, perf: Check that current->mm is alive before
+ getting user callchain
+Message-ID: <aab3EW1LfDcjSzzy@linux.ibm.com>
+References: <20260227082502.1882395-1-vmalik@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260115163650.118910-1-wander@redhat.com> <20260115163650.118910-16-wander@redhat.com>
-In-Reply-To: <20260115163650.118910-16-wander@redhat.com>
-From: Tomas Glozar <tglozar@redhat.com>
-Date: Tue, 3 Mar 2026 15:51:34 +0100
-X-Gm-Features: AaiRm511X9QNsDzw92mihpQidwgDFGXSj9GKUHHxoZ4yY1UDj2VYOgC1182-m6U
-Message-ID: <CAP4=nvTy6AE2i6ziW+jtWqrDR3CMVPDMhNE5bp-cVMs9_D=k+w@mail.gmail.com>
-Subject: Re: [PATCH v3 15/18] rtla/trace: Fix write loop in trace_event_save_hist()
-To: Wander Lairson Costa <wander@redhat.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Crystal Wood <crwood@redhat.com>, 
-	Ivan Pravdin <ipravdin.official@gmail.com>, Costa Shulyupin <costa.shul@redhat.com>, 
-	John Kacur <jkacur@redhat.com>, Haiyong Sun <sunhaiyong@loongson.cn>, 
-	Tiezhu Yang <yangtiezhu@loongson.cn>, Daniel Wagner <dwagner@suse.de>, 
-	Daniel Bristot de Oliveira <bristot@kernel.org>, 
-	"open list:Real-time Linux Analysis (RTLA) tools" <linux-trace-kernel@vger.kernel.org>, 
-	"open list:Real-time Linux Analysis (RTLA) tools" <linux-kernel@vger.kernel.org>, 
-	"open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260227082502.1882395-1-vmalik@redhat.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAzMDExNiBTYWx0ZWRfX7Dd5Z/y41l1k
+ /SANOxAC4+lXSdqZ/hRQjt/rCdE0vlzSV9k5GEwsQytQqj9Xb3FfO1ozUNbIevCPZIYOCzZx9r9
+ SXg5H1so7/1H/rVedql1FhxwaWehZlodp2DZDdLSYLzJnpR12H3+k7sHSB4va77oCbzQcWyjjrz
+ yGmu+19DwOhl8hvpyehjq5rqvi46pn9S2OiMQsIRCxrQF2boFqTyiuS0crXgniwwEFsHBjzCMtl
+ dcBmaV+nQrgBslGy8lWfs+21Gu6ZIpeTLL2lACDe1cK75+7oG3W/5bIlFUuCXmf5yyfc3sgg4C/
+ b3WG/OGZ7IUVtUtkWw1f59K6maaROmy6t2pcCUi62O2UfNVy73v+8KTHykxcHoIp2qeL2kx6M+m
+ INmC7RiOl73qOqZc5mf16/VK3SAwyJ4RWc+bj4BezxVf8+8FE5jOLLJyTlPkwUHRgux+FMpr6TX
+ uSC+upSrXyOdQ63nSDg==
+X-Proofpoint-ORIG-GUID: UxO3AEXIgiJCB3nAkpq02ep1r8COpOQz
+X-Proofpoint-GUID: fEH3ii7yaMN7S0fzhhWOkdXCFhxb0nm0
+X-Authority-Analysis: v=2.4 cv=AobjHe9P c=1 sm=1 tr=0 ts=69a6f71c cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=kj9zAlcOel0A:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=VwQbUJbxAAAA:8
+ a=20KFwNOVAAAA:8 a=e-EAHXkKvpEb-08ajsIA:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-02_05,2026-03-03_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 lowpriorityscore=0 bulkscore=0 impostorscore=0 malwarescore=0
+ spamscore=0 clxscore=1011 suspectscore=0 adultscore=0 priorityscore=1501
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603030116
 
-=C4=8Dt 15. 1. 2026 v 18:29 odes=C3=ADlatel Wander Lairson Costa
-<wander@redhat.com> napsal:
->
-> The write loop in trace_event_save_hist() does not correctly handle
-> errors from the write() system call. If write() returns -1, this value
-> is added to the loop index, leading to an incorrect memory access on
-> the next iteration and potentially an infinite loop. The loop also
-> fails to handle EINTR.
->
-> Fix the write loop by introducing proper error handling. The return
-> value of write() is now stored in a ssize_t variable and checked for
-> errors. The loop retries the call if interrupted by a signal and breaks
-> on any other error after logging it with strerror().
->
-> Additionally, change the index variable type from int to size_t to
-> match the type used for buffer sizes and by strlen(), improving type
-> safety.
->
-> Signed-off-by: Wander Lairson Costa <wander@redhat.com>
+On Fri, Feb 27, 2026 at 09:25:02AM +0100, Viktor Malik wrote:
+> It may happen that mm is already released, which leads to kernel panic.
+> This adds the NULL check for current->mm, similarly to 20afc60f892d
+> ("x86, perf: Check that current->mm is alive before getting user
+> callchain").
+> 
+> I was getting this panic when running a profiling BPF program
+> (profile.py from bcc-tools):
+> 
+>     [26215.051935] Kernel attempted to read user page (588) - exploit attempt? (uid: 0)
+>     [26215.051950] BUG: Kernel NULL pointer dereference on read at 0x00000588
+>     [26215.051952] Faulting instruction address: 0xc00000000020fac0
+>     [26215.051957] Oops: Kernel access of bad area, sig: 11 [#1]
+>     [...]
+>     [26215.052049] Call Trace:
+>     [26215.052050] [c000000061da6d30] [c00000000020fc10] perf_callchain_user_64+0x2d0/0x490 (unreliable)
+>     [26215.052054] [c000000061da6dc0] [c00000000020f92c] perf_callchain_user+0x1c/0x30
+>     [26215.052057] [c000000061da6de0] [c0000000005ab2a0] get_perf_callchain+0x100/0x360
+>     [26215.052063] [c000000061da6e70] [c000000000573bc8] bpf_get_stackid+0x88/0xf0
+>     [26215.052067] [c000000061da6ea0] [c008000000042258] bpf_prog_16d4ab9ab662f669_do_perf_event+0xf8/0x274
+>     [...]
+> 
+> Fixes: 20002ded4d93 ("perf_counter: powerpc: Add callchain support")
+> Signed-off-by: Viktor Malik <vmalik@redhat.com>
+> ---
+>  arch/powerpc/perf/callchain_32.c | 3 +++
+>  arch/powerpc/perf/callchain_64.c | 3 +++
+>  2 files changed, 6 insertions(+)
+> 
+> diff --git a/arch/powerpc/perf/callchain_32.c b/arch/powerpc/perf/callchain_32.c
+> index ddcc2d8aa64a..b46e21679566 100644
+> --- a/arch/powerpc/perf/callchain_32.c
+> +++ b/arch/powerpc/perf/callchain_32.c
+> @@ -144,6 +144,9 @@ void perf_callchain_user_32(struct perf_callchain_entry_ctx *entry,
+>  	sp = regs->gpr[1];
+>  	perf_callchain_store(entry, next_ip);
+>  
+> +	if (!current->mm)
+> +		return;
+> +
+>  	while (entry->nr < entry->max_stack) {
+>  		fp = (unsigned int __user *) (unsigned long) sp;
+>  		if (invalid_user_sp(sp) || read_user_stack_32(fp, &next_sp))
+> diff --git a/arch/powerpc/perf/callchain_64.c b/arch/powerpc/perf/callchain_64.c
+> index 115d1c105e8a..eaaadd6fa81b 100644
+> --- a/arch/powerpc/perf/callchain_64.c
+> +++ b/arch/powerpc/perf/callchain_64.c
+> @@ -79,6 +79,9 @@ void perf_callchain_user_64(struct perf_callchain_entry_ctx *entry,
+>  	sp = regs->gpr[1];
+>  	perf_callchain_store(entry, next_ip);
+>  
+> +	if (!current->mm)
+> +		return;
+> +
+>  	while (entry->nr < entry->max_stack) {
+>  		fp = (unsigned long __user *) sp;
+>  		if (invalid_user_sp(sp) || read_user_stack_64(fp, &next_sp))
+> -- 
+> 2.53.0
+> 
+Sorry, I missed adding cc list for the last conversation so adding this for reference:
 
-Looks good. Only thing is that it should have a Fixes tag so that it
-can be detected by automation (e.g. stable backports - as this is
-relatively old code), like this:
+> Wouldn't be good if we check this in perf_callchain_user() as it will
+> cover both cases.
 
-Fixes: 761916fd02c2 ("rtla/trace: Save event histogram output to a file")
+to which Viktor replied:
+I considered it but in that case, we'd also miss the top-level stack
+frame (the perf_callchain_store call above). Other arches include it so
+I followed the behavior for powerpc.
 
-(on one line, Gmail may truncate that)
+Viktor, agreed with your first point. I have another concern:
 
-Tomas
+I was hitting this issue with stacktrace_build_id_nmi in bpf and
+applied this patch https://lore.kernel.org/bpf/20260126074331.815684-1-chen.dylane@linux.dev/T/#mf901967ebe77506f1bd6e3d876c2a85824d9519d
 
+Wondering if the above generic fix is working do we need to add this
+check in powerpc specific code?
+
+Thanks,
+Saket
