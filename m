@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 523BF3988E9;
-	Tue,  3 Mar 2026 23:12:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A72A39A055;
+	Tue,  3 Mar 2026 23:12:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772579526; cv=none; b=HpKGzYNAAUJw+nrrI5QxKoDiM+gZfSKT6VeJzbmFJU8fQtDjMlDqd1zNLrp6J98nXzCfas2iI7RCUsu4TL42potnCXTEBzEADQ7nwvIvP8a4HI1Qz0B6djwBZb0F5BU3O2ZI1tsgBZ0669+noeHpZ4HkwN+qM5/jOPFzqPu0xWw=
+	t=1772579529; cv=none; b=qj9hdDyH8568gi5Eg2p7j13JfuxvBODAR1Px7irBMLKb3LMc6DxwHXkXIHBrWpu4DBpoaQnh7j6ryrcLMcBk85OY4oAWQD9KtKoJuvMkWIpV6qXidn3nz67czIs8ZGcMDXnh+aGz0nNqq0S1tDkgZuKSU+MoFJpdYzgmhfEEyfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772579526; c=relaxed/simple;
-	bh=4lj6Mv86DOUniLAjUedxKmqRrWgLF398XXuyJ71yUPw=;
+	s=arc-20240116; t=1772579529; c=relaxed/simple;
+	bh=it3J/LZ+wo2pUMheg6nqBzMIFIy4vXVvGzIzuw8Kokg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=M1wEW3Df96SPdN2MH2HXk8i+Uypl9Y+pINaVf9kBrFwxFBqFsPZWQBqCxrQbuSZcMa/TRySkNdr/6B6QVKdKbO2nIdBI21obnTeQfy9BdT/SONFfu83erlSbHOv9TIhiARF3sDEUnTH8WTQxLYU6fXCSDR0BQ3NygMAzNX279g8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZjS6XIng; arc=none smtp.client-ip=198.175.65.15
+	 MIME-Version; b=WDs7nurCXsPE6DKYAIJTbtI21RMLQgmW59expmzGyUuyFFY2d0P8w7+iJ97dXnS6Znt3m/exxiCl2FmlYuU8Q7yzyTcC7+zZMcdH0+Tyv/5n+sik+L75edhns+oHHyTYzg+g45paW9Pk5jaxNd1/uic840XoYpAWbwBDokbDBSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NnKqQRXt; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZjS6XIng"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NnKqQRXt"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772579523; x=1804115523;
+  t=1772579526; x=1804115526;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=4lj6Mv86DOUniLAjUedxKmqRrWgLF398XXuyJ71yUPw=;
-  b=ZjS6XIng0TyNgL1DTYNQ7qoMsNKAEnA/TP1THVHOKQSoUl0SUoM2MpgC
-   3Ri87MFmdgk371Q0wEzQ++nzmDyBLHrqvF9adl2hP8rb1GCvyPtXH9LFj
-   zjZmJYgfWBScd2FB8/gSUM1vQWwD+tBceHhj+U51cbq75gVSAXrTgIJc3
-   iklfYMUjL4gjyfNKyi5hs2irYo37K4s46TAXgW1gkFHEwocdFIKt+OrAu
-   XFgj6mBZqBR1dgunkHXrfDA41dgg3IbdEUG+zkXFygmsPAwhEOjQwwojZ
-   lUh2y6Mb5+4XzfO5N+Xjux3kkqSajdeJJJWjE5G8Z7mUFOntYprh2UDhh
-   Q==;
-X-CSE-ConnectionGUID: 6QuBnbghSW22Wm/MlA0tqQ==
-X-CSE-MsgGUID: DXL6ly/TQwW8Xqi0wdetgw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11718"; a="77238809"
+  bh=it3J/LZ+wo2pUMheg6nqBzMIFIy4vXVvGzIzuw8Kokg=;
+  b=NnKqQRXtzFFoOnrxtymNLZQhzyf2XXJiD6bHASAH77n8ejb0+tSjLzrj
+   8EiPJ6+yfYm4eduhg0HDdQQXo5GKRsucNFzgeFCL+/jkV804Hh/H3bXSu
+   7SYL515jttMelXDNdfI3hC/clDpNCFZwNWMQRXvd1/CHGvuccq6O9D08Z
+   Q6QZo16cjy/8iWtpBSEKTp1tyfgtOpfWEcTNqu+ZndKwfl7r/nOYJ75Es
+   Jx8yyXQzvBpM7zTY/D5ECQ2nRamqmn2Il30BlxU1kNRP8zl8OLw6aq4Ww
+   3lusTbV9ujkeGox19tbf/HR36n3jqEkZQC7NXZHg0SHwpGezj71HdqsMx
+   w==;
+X-CSE-ConnectionGUID: e+gDLSB0TgCaR5qfyIEh4g==
+X-CSE-MsgGUID: 7jnLlxgnQ0e77+kpNCLx8w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11718"; a="77238834"
 X-IronPort-AV: E=Sophos;i="6.21,322,1763452800"; 
-   d="scan'208";a="77238809"
+   d="scan'208";a="77238834"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
   by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2026 15:11:59 -0800
-X-CSE-ConnectionGUID: 0sKhPT93SlSm3z4dAMeNRA==
-X-CSE-MsgGUID: tVP1ahfcT9mb0uoxTF1oaA==
+X-CSE-ConnectionGUID: tdNHAytXSZGrM/X4bXSC7w==
+X-CSE-MsgGUID: 768EK7aBRFmIlcHH+ULJZw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,322,1763452800"; 
-   d="scan'208";a="248633807"
+   d="scan'208";a="248633818"
 Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
-  by orviesa002.jf.intel.com with ESMTP; 03 Mar 2026 15:11:59 -0800
+  by orviesa002.jf.intel.com with ESMTP; 03 Mar 2026 15:12:00 -0800
 From: Tony Nguyen <anthony.l.nguyen@intel.com>
 To: davem@davemloft.net,
 	kuba@kernel.org,
@@ -50,8 +50,9 @@ To: davem@davemloft.net,
 	edumazet@google.com,
 	andrew+netdev@lunn.ch,
 	netdev@vger.kernel.org
-Cc: Zilin Guan <zilin@seu.edu.cn>,
+Cc: Vivek Behera <vivek.behera@siemens.com>,
 	anthony.l.nguyen@intel.com,
+	jacob.e.keller@intel.com,
 	maciej.fijalkowski@intel.com,
 	magnus.karlsson@intel.com,
 	ast@kernel.org,
@@ -60,12 +61,13 @@ Cc: Zilin Guan <zilin@seu.edu.cn>,
 	john.fastabend@gmail.com,
 	sdf@fomichev.me,
 	bpf@vger.kernel.org,
-	Paul Menzel <pmenzel@molgen.mpg.de>,
+	kurt@linutronix.de,
+	sriram.yagnaraman@ericsson.com,
 	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
-	Rinitha S <sx.rinitha@intel.com>
-Subject: [PATCH net 4/8] ice: Fix memory leak in ice_set_ringparam()
-Date: Tue,  3 Mar 2026 15:11:50 -0800
-Message-ID: <20260303231155.2895065-5-anthony.l.nguyen@intel.com>
+	Saritha Sanigani <sarithax.sanigani@intel.com>
+Subject: [PATCH net 7/8] igb: Fix trigger of incorrect irq in igb_xsk_wakeup
+Date: Tue,  3 Mar 2026 15:11:53 -0800
+Message-ID: <20260303231155.2895065-8-anthony.l.nguyen@intel.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20260303231155.2895065-1-anthony.l.nguyen@intel.com>
 References: <20260303231155.2895065-1-anthony.l.nguyen@intel.com>
@@ -77,68 +79,103 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Zilin Guan <zilin@seu.edu.cn>
+From: Vivek Behera <vivek.behera@siemens.com>
 
-In ice_set_ringparam, tx_rings and xdp_rings are allocated before
-rx_rings. If the allocation of rx_rings fails, the code jumps to
-the done label leaking both tx_rings and xdp_rings. Furthermore, if
-the setup of an individual Rx ring fails during the loop, the code jumps
-to the free_tx label which releases tx_rings but leaks xdp_rings.
+The current implementation in the igb_xsk_wakeup expects
+the Rx and Tx queues to share the same irq. This would lead
+to triggering of incorrect irq in split irq configuration.
+This patch addresses this issue which could impact environments
+with 2 active cpu cores
+or when the number of queues is reduced to 2 or less
 
-Fix this by introducing a free_xdp label and updating the error paths to
-ensure both xdp_rings and tx_rings are properly freed if rx_rings
-allocation or setup fails.
+cat /proc/interrupts | grep eno2
+ 167:          0          0          0          0 IR-PCI-MSIX-0000:08:00.0
+ 0-edge      eno2
+ 168:          0          0          0          0 IR-PCI-MSIX-0000:08:00.0
+ 1-edge      eno2-rx-0
+ 169:          0          0          0          0 IR-PCI-MSIX-0000:08:00.0
+ 2-edge      eno2-rx-1
+ 170:          0          0          0          0 IR-PCI-MSIX-0000:08:00.0
+ 3-edge      eno2-tx-0
+ 171:          0          0          0          0 IR-PCI-MSIX-0000:08:00.0
+ 4-edge      eno2-tx-1
 
-Compile tested only. Issue found using a prototype static analysis tool
-and code review.
+Furthermore it uses the flags input argument to trigger either rx, tx or
+both rx and tx irqs as specified in the ndo_xsk_wakeup api documentation
 
-Fixes: fcea6f3da546 ("ice: Add stats and ethtool support")
-Fixes: efc2214b6047 ("ice: Add support for XDP")
-Signed-off-by: Zilin Guan <zilin@seu.edu.cn>
-Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Fixes: 80f6ccf9f116 ("igb: Introduce XSK data structures and helpers")
+Signed-off-by: Vivek Behera <vivek.behera@siemens.com>
 Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-Tested-by: Rinitha S <sx.rinitha@intel.com> (A Contingent worker at Intel)
+Suggested-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Tested-by: Saritha Sanigani <sarithax.sanigani@intel.com> (A Contingent Worker at Intel)
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 ---
- drivers/net/ethernet/intel/ice/ice_ethtool.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/intel/igb/igb_xsk.c | 38 +++++++++++++++++++-----
+ 1 file changed, 30 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_ethtool.c b/drivers/net/ethernet/intel/ice/ice_ethtool.c
-index 29e341251754..b9be10b58856 100644
---- a/drivers/net/ethernet/intel/ice/ice_ethtool.c
-+++ b/drivers/net/ethernet/intel/ice/ice_ethtool.c
-@@ -3332,7 +3332,7 @@ ice_set_ringparam(struct net_device *netdev, struct ethtool_ringparam *ring,
- 	rx_rings = kzalloc_objs(*rx_rings, vsi->num_rxq);
- 	if (!rx_rings) {
- 		err = -ENOMEM;
--		goto done;
-+		goto free_xdp;
- 	}
+diff --git a/drivers/net/ethernet/intel/igb/igb_xsk.c b/drivers/net/ethernet/intel/igb/igb_xsk.c
+index 30ce5fbb5b77..ce4a7b58cad2 100644
+--- a/drivers/net/ethernet/intel/igb/igb_xsk.c
++++ b/drivers/net/ethernet/intel/igb/igb_xsk.c
+@@ -524,6 +524,16 @@ bool igb_xmit_zc(struct igb_ring *tx_ring, struct xsk_buff_pool *xsk_pool)
+ 	return nb_pkts < budget;
+ }
  
- 	ice_for_each_rxq(vsi, i) {
-@@ -3359,7 +3359,7 @@ ice_set_ringparam(struct net_device *netdev, struct ethtool_ringparam *ring,
- 			}
- 			kfree(rx_rings);
- 			err = -ENOMEM;
--			goto free_tx;
-+			goto free_xdp;
- 		}
- 	}
++static u32 igb_sw_irq_prep(struct igb_q_vector *q_vector)
++{
++	u32 eics = 0;
++
++	if (!napi_if_scheduled_mark_missed(&q_vector->napi))
++		eics = q_vector->eims_value;
++
++	return eics;
++}
++
+ int igb_xsk_wakeup(struct net_device *dev, u32 qid, u32 flags)
+ {
+ 	struct igb_adapter *adapter = netdev_priv(dev);
+@@ -542,20 +552,32 @@ int igb_xsk_wakeup(struct net_device *dev, u32 qid, u32 flags)
  
-@@ -3411,6 +3411,13 @@ ice_set_ringparam(struct net_device *netdev, struct ethtool_ringparam *ring,
- 	}
- 	goto done;
+ 	ring = adapter->tx_ring[qid];
  
-+free_xdp:
-+	if (xdp_rings) {
-+		ice_for_each_xdp_txq(vsi, i)
-+			ice_free_tx_ring(&xdp_rings[i]);
-+		kfree(xdp_rings);
+-	if (test_bit(IGB_RING_FLAG_TX_DISABLED, &ring->flags))
+-		return -ENETDOWN;
+-
+ 	if (!READ_ONCE(ring->xsk_pool))
+ 		return -EINVAL;
+ 
+-	if (!napi_if_scheduled_mark_missed(&ring->q_vector->napi)) {
++	if (flags & XDP_WAKEUP_TX) {
++		if (test_bit(IGB_RING_FLAG_TX_DISABLED, &ring->flags))
++			return -ENETDOWN;
++
++		eics |= igb_sw_irq_prep(ring->q_vector);
 +	}
 +
- free_tx:
- 	/* error cleanup if the Rx allocations failed after getting Tx */
- 	if (tx_rings) {
++	if (flags & XDP_WAKEUP_RX) {
++		/* If IGB_FLAG_QUEUE_PAIRS is active, the q_vector
++		 * and NAPI is shared between RX and TX.
++		 * If NAPI is already running it would be marked as missed
++		 * from the TX path, making this RX call a NOP
++		 */
++		ring = adapter->rx_ring[qid];
++		eics |= igb_sw_irq_prep(ring->q_vector);
++	}
++
++	if (eics) {
+ 		/* Cause software interrupt */
+-		if (adapter->flags & IGB_FLAG_HAS_MSIX) {
+-			eics |= ring->q_vector->eims_value;
++		if (adapter->flags & IGB_FLAG_HAS_MSIX)
+ 			wr32(E1000_EICS, eics);
+-		} else {
++		else
+ 			wr32(E1000_ICS, E1000_ICS_RXDMT0);
+-		}
+ 	}
+ 
+ 	return 0;
 -- 
 2.47.1
 
