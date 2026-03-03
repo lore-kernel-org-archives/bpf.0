@@ -1,272 +1,123 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34D7B3264C8;
-	Tue,  3 Mar 2026 18:11:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 748633B8931
+	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 18:12:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772561471; cv=none; b=RYM6lN6wrnOEM5mIdajx6rBUP22HkN/Wpeen4L7hi6iCFUDOhI3hianXj4Pi+RUgibJzcXY4BKrW3z9Ef+2+gJcAVJQn9X28PKp+ZUR1lEdnp16XmNZtgzi1LUq1sd8Z4gml72AbSJciw4oLUnpPd+dcby6HBGd8N7HANmLGMgc=
+	t=1772561580; cv=none; b=GRzWnrh8HOItWqE5lBks6/tsQuY5dHqEKJydOAbZJS/ffHnUX/rPv2AfdrDsBRv1WSd7kI/Fn70WgSF/t/EmmLxsVLToyiaBC+yUxjVNHLQ6gfM0GkDM34c3Gpuunp5s62jf+FIJsS/ddkgaTEIbkDld8J59g45E/y4XygjAsjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772561471; c=relaxed/simple;
-	bh=cLFpKVMNiz8kbm4YFP7VjWVb2/WR6GxtEe2LThCTYaw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pqfeUanQqiee6EQCOksBA+J/Kqs9kd+wGZ9doQR9HYgzkNuGo3amL+R14fBj18fYdPAdqj1NBXMQxWkWbnpl3lkyACkCJ/zaNJc6eqmJKiUm8oBaDGctqSJ2NnksKnqyBdzcec0RJUM0EG6+Tx62Ps+e/xs/C7JAD3CdXVKia/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tgfTUa+R; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1772561580; c=relaxed/simple;
+	bh=xNht/T+WscIS5Q8ag7MUrZ8GHvj7xpgUTyaWnBTqcHw=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=XjXU6lo5chwS7pXrVJsj63hY8rQGNY6z6ztSjM036UqMrIL9vNsrkATGVKNPSL/65oXaLWMVzO0pfevRVyMgBZw4s9zCA0p02o5l7KgqKaMzSOIHjpGJKC4v7jT35elyrGyHKQlfErhB+3xrZSz/9lowkqBpBo3xTWpuMOhUEEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CEkF63du; arc=none smtp.client-ip=74.125.82.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tgfTUa+R"
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 623H5Ffu2060996;
-	Tue, 3 Mar 2026 18:10:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=KoqA0eQ6AV3ndyHYi
-	ApU6L60lsiOT32TWmcerkEGRxs=; b=tgfTUa+R0wbx0sKyoF8o2DCU0ojDUdkT2
-	vJzVzOLQ7Z5YPQl7LDERx3YOtdzsDU6hJGoTcMtpL8yw5efLaR1BcvEfMqdl0tLx
-	U2gT7yPUxai58S0DUIt6Wv/m3R73lHuDg3amjcstIDQyIC/fT2g5itImH1fn3N9b
-	nGbQJoRMLK0zd3/0EIWRBkPL9En6huATKG4Acwq3VwME2eZNWS5h5uXiud/Y6cc3
-	ehJEIYrVPcNpHRKz5MbAi7xy2xmOTU3yeRBoZinWyIL9CRSAdnNifbx7qFELA5eF
-	GANdiE3FlEBAIIBMAoxHST43nXkPvceWtB2IH4fsewhsJV6KOrfeQ==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cksrj49qa-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 03 Mar 2026 18:10:54 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 623Et6Z8010299;
-	Tue, 3 Mar 2026 18:10:53 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cmc6k3dft-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 03 Mar 2026 18:10:53 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 623IAnYx16449872
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 3 Mar 2026 18:10:49 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8325D20040;
-	Tue,  3 Mar 2026 18:10:49 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6BC8420043;
-	Tue,  3 Mar 2026 18:10:47 +0000 (GMT)
-Received: from li-bd3f974c-2712-11b2-a85c-df1cec4d728e.ibm.com.com (unknown [9.43.53.81])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  3 Mar 2026 18:10:47 +0000 (GMT)
-From: Hari Bathini <hbathini@linux.ibm.com>
-To: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Cc: bpf@vger.kernel.org, Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Saket Kumar Bhaskar <skb99@linux.ibm.com>,
-        Abhishek Dubey <adubey@linux.ibm.com>,
-        Venkat Rao Bagalkote <venkat88@linux.ibm.com>, stable@vger.kernel.org
-Subject: [PATCH v4 6/6] powerpc64/bpf: fix kfunc call support
-Date: Tue,  3 Mar 2026 23:40:30 +0530
-Message-ID: <20260303181031.390073-7-hbathini@linux.ibm.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260303181031.390073-1-hbathini@linux.ibm.com>
-References: <20260303181031.390073-1-hbathini@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CEkF63du"
+Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-12732e6a123so2613609c88.1
+        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 10:12:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772561575; x=1773166375; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=bs6G5u3J0O0JY2hFZLUxi9LFHLPH8cYrQrqnv/UplR0=;
+        b=CEkF63dupfmI2tS25+vmLYnl5WZ4XvOXPut0wsM9q55RruqJlgSfLT1JFKUAAEuJED
+         kbyeovKpnC0ox9HGsFRDyYGpjBBdEYXRIsA+Ib+tFM3KHQwH7ozF9F+bLERdIj9/b1M5
+         eLH3jb4npx1T1+DNftQijSmxPhN+JpU4pDVYZPbPMlnsEjnrk8rn7VB5tXlcLVwGjC0u
+         YKZj9tEui7re3p1E5vkOXbixWvlaYeJP/o3Jaawn/TNd+tyFP9T+szaZWAr5R2jlRGRa
+         8t2PHf93n7OrdLj5b5ruSQnfwyygFGeUULITNqiitueSJmd6EzOdhkPpR44Gsylp2bal
+         +Zsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772561575; x=1773166375;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bs6G5u3J0O0JY2hFZLUxi9LFHLPH8cYrQrqnv/UplR0=;
+        b=sMWFusQ5TxRBrA64lhoBvzB4QagPdi2wB2Nz0dowTOC06ObSg+74pJYUKwA5EM2DKN
+         JIMG6hw3qrztHVqZfAELb/eIfCxwv5jqCgBdaH5yjamXF+mGPiIM0u6QUCTX+7jbXPp4
+         1K4frFysiE1HXDkyXdOcfpEezH62MeLQcrO/Pg7ZX5OJkLqoTlwehqBiXC66bFflfuuj
+         Q06ADJgZtDdKzOt9SXlrquXwtjksR8G87lWBm6oe8ozi+EGy5MbXa0Lu4Y0kcOeapjcj
+         d/pRmmCGWPjL9PB81L369u9tv8xO0EufPKG+Wv9lW1V120bzwRVgI3KT4IB2ryMn6JiT
+         DAIw==
+X-Forwarded-Encrypted: i=1; AJvYcCUt4J2gUqgWAVAj83JP5VHcDSrGBHIRjJJ9QSKnOtcYX1Tsh5NRxNpbbSF2WX64bS597Jk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7otTdByPKHTlbsERelIjbyWRZluAEm9OycvBmIWB06aNn5v+C
+	7vwt7stBkZ7Mu9JfqrsYi4CC9jnU/BHpMkGqfHYryyKqwmbdy1889S1J
+X-Gm-Gg: ATEYQzxgPJbgTqyCsPAzIA1XmhIpoAORRhQ5IKXu/s3bVkcO9S/0QU6BYYSH+mP+0p+
+	iMga7YF8zlDwfkbkhsmNIpV10gdzOBGexG2Z6XVcafgcVFQMd5WMGBSjbs7Av8DDizyPHue8SZ/
+	Syot5hCqeIwsk9xWCYZxaEygtaYb/3DnpnUWOOGNrfzz6QLwxbKLnNXnsrWxeJwPdC7uM/4uRkM
+	bio69NLfUM6NQD9NMRA/M/GHdCU7UtsvNTGGKgK7WlstXj2zneNofaSalYEGkbr2BEyE42jhMEb
+	mEhzfYNXL71+4Oq5Uvnfs/f5jbWBd2RKaXgzh1R+lDWWy5k8iaNehol032U9eGaZ2Zozm3HYb8p
+	J+Cjqu1HVMmqA2VSH3cUM6R2FI5er+SY2yaJSkFAX3N+idFV+eM1O3qnyx2tD+3XGbQWlDG3vWK
+	UAJFjxvHjiZ6iaF+68uRyivsyXDWG2NuLD98QTDU/W01h/UThKgbDFFHhdEJnEEt1rZ7Y+qFZFV
+	C3JIQb+ozMGmtugXD0=
+X-Received: by 2002:a05:7022:128f:b0:123:3bc6:1ffe with SMTP id a92af1059eb24-1278fccbe64mr6646779c88.15.1772561574941;
+        Tue, 03 Mar 2026 10:12:54 -0800 (PST)
+Received: from ?IPv6:2a03:83e0:115c:1:bf8e:1331:ef2b:145d? ([2620:10d:c090:500::3:4473])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-127899d49ccsm20035712c88.3.2026.03.03.10.12.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Mar 2026 10:12:54 -0800 (PST)
+Message-ID: <f68ad995294f3223d6bf3eef0176193b52ae54f9.camel@gmail.com>
+Subject: Re: [PATCH 2/2] selftests/bpf: tests to non_null ptr detection
+ using register operand in JEQ/JNE
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Cupertino Miranda <cupertino.miranda@oracle.com>, bpf@vger.kernel.org
+Cc: David Faust <david.faust@oracle.com>, Jose Marchesi
+	 <jose.marchesi@oracle.com>, Elena Zannoni <elena.zannoni@oracle.com>
+Date: Tue, 03 Mar 2026 10:12:53 -0800
+In-Reply-To: <20260302161736.156685-3-cupertino.miranda@oracle.com>
+References: <20260302161736.156685-1-cupertino.miranda@oracle.com>
+	 <20260302161736.156685-3-cupertino.miranda@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=Rp/I7SmK c=1 sm=1 tr=0 ts=69a7242e cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=iQ6ETzBq9ecOQQE5vZCe:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
- a=cgMUl_j-H115-_3Hw7UA:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAzMDE0NiBTYWx0ZWRfX5xrwatiaCXnT
- 3huUZcjM8NcL7Ju/kluSm6C/XcsEotx+uLYffcGgH6hAR5QdYPygo25D4V3T73GbmLvL6CnTPa4
- nFXCI+Gn30TGHIksPOWaX7zlsvYY867CYuaTV0FSEfVRqHCfhUw4ImC8SsNhE/DVsJU+kkM9wtt
- Q7SNe8m1Kplc1nSwi899znI9mEU2c//F2yaF+VoS0ZhqQ0TTbEf5WiEBsNnedh2/wuJhksv5EUd
- xvQaQJLedFHy4N4yEk0EeRSWSdeQz3io81oDRib8G2ztw5/FcvYBFcnACp8oOJUIXxwP9J3wPuJ
- W/BLewlCjyH+HdACNnFu/cGqsocRCvC/wp6GxSgkMB1BfoXvRy8YJ2R1nk0voMgi57trVnoYm1l
- 3+erjx/mn4L9kkCOaYu5CM+Ux547kPXVld1V1adQ4MtgHidmv5eId+N29kfskPk32tFKbN7hEvl
- cgOFs9V9B9WLRVmm8+w==
-X-Proofpoint-GUID: 7o_4C3H4WFgCekNUSbaUyE3zeEx9T8Lq
-X-Proofpoint-ORIG-GUID: 7o_4C3H4WFgCekNUSbaUyE3zeEx9T8Lq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-03_02,2026-03-03_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 priorityscore=1501 spamscore=0 phishscore=0 adultscore=0
- bulkscore=0 clxscore=1015 impostorscore=0 malwarescore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603030146
 
-Commit 61688a82e047 ("powerpc/bpf: enable kfunc call") inadvertently
-enabled kfunc call support for 32-bit powerpc but that support will
-not be possible until ABI mismatch between 32-bit powerpc and eBPF is
-handled in 32-bit powerpc JIT code. Till then, advertise support only
-for 64-bit powerpc. Also, in powerpc ABI, caller needs to extend the
-arguments properly based on signedness. The JIT code is responsible
-for handling this explicitly for kfunc calls as verifier can't handle
-this for each architecture-specific ABI needs. But this was not taken
-care of while kfunc call support was enabled for powerpc. Fix it by
-handling this with bpf_jit_find_kfunc_model() and using zero_extend()
-& sign_extend() helper functions.
+On Mon, 2026-03-02 at 16:17 +0000, Cupertino Miranda wrote:
+> The 5 added tests are copies of the already existing tests in the same
+> file, but changed to use R3 instead of an immediate 0.
+>
+> Signed-off-by: Cupertino Miranda <cupertino.miranda@oracle.com>
+> Cc: David Faust  <david.faust@oracle.com>
+> Cc: Jose Marchesi  <jose.marchesi@oracle.com>
+> Cc: Elena Zannoni  <elena.zannoni@oracle.com>
+> ---
 
-Fixes: 61688a82e047 ("powerpc/bpf: enable kfunc call")
-Cc: stable@vger.kernel.org
-Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
----
+I think this is an overkill, these tests check nullness propagation
+over id chains etc. For the purpose of this change something like
+below should suffice:
 
-Changes in v4:
-- Fixed src_reg usage in zero_extend() helper - reported by
-  bot+bpf-ci@kernel.org.
-
-Changes in v3:
-- New patch to fix kfunc call ABI issue on powerpc while passing arguments.
-
-
- arch/powerpc/net/bpf_jit_comp.c   |   2 +-
- arch/powerpc/net/bpf_jit_comp64.c | 101 +++++++++++++++++++++++++++---
- 2 files changed, 94 insertions(+), 9 deletions(-)
-
-diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
-index 85457bcb2040..a62a9a92b7b5 100644
---- a/arch/powerpc/net/bpf_jit_comp.c
-+++ b/arch/powerpc/net/bpf_jit_comp.c
-@@ -450,7 +450,7 @@ bool bpf_jit_supports_subprog_tailcalls(void)
- 
- bool bpf_jit_supports_kfunc_call(void)
- {
--	return true;
-+	return IS_ENABLED(CONFIG_PPC64);
- }
- 
- bool bpf_jit_supports_arena(void)
-diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-index 04e76440d1ad..c5e26d231cd5 100644
---- a/arch/powerpc/net/bpf_jit_comp64.c
-+++ b/arch/powerpc/net/bpf_jit_comp64.c
-@@ -499,6 +499,83 @@ int bpf_jit_emit_func_call_rel(u32 *image, u32 *fimage, struct codegen_context *
- 	return 0;
- }
- 
-+static int zero_extend(u32 *image, struct codegen_context *ctx, u32 src_reg, u32 dst_reg, u32 size)
++SEC("xdp")
++__success __log_level(2)
++/* to make sure the branch is not falsely predicted*/
++__msg("r0 =3D *(u32 *)(r0 +0)")
++__msg("from 7 to 9")
++__naked void jeq_reg_reg_null_check(void)
 +{
-+	switch (size) {
-+	case 1:
-+		 /* zero-extend 8 bits into 64 bits */
-+		EMIT(PPC_RAW_RLDICL(dst_reg, src_reg, 0, 56));
-+		return 0;
-+	case 2:
-+		 /* zero-extend 16 bits into 64 bits */
-+		EMIT(PPC_RAW_RLDICL(dst_reg, src_reg, 0, 48));
-+		return 0;
-+	case 4:
-+		 /* zero-extend 32 bits into 64 bits */
-+		EMIT(PPC_RAW_RLDICL(dst_reg, src_reg, 0, 32));
-+		fallthrough;
-+	case 8:
-+		/* Nothing to do */
-+		return 0;
-+	default:
-+		return -1;
-+	}
++        asm volatile ("                                 \
++        *(u32*)(r10 - 8) =3D 0;                           \
++        r1 =3D %[map_xskmap] ll;                          \
++        r2 =3D r10;                                       \
++        r2 +=3D -8;                                       \
++        call %[bpf_map_lookup_elem];                    \
++        r1 =3D 0;                                         \
++        if r0 =3D=3D r1 goto 1f;                            \
++        r0 =3D *(u32*)(r0 +0);                            \
++1:      r0 =3D 0;                                         \
++        exit;                                           \
++"       :
++        : __imm(bpf_map_lookup_elem),
++          __imm_addr(map_xskmap)
++        : __clobber_all);
 +}
-+
-+static int sign_extend(u32 *image, struct codegen_context *ctx, u32 src_reg, u32 dst_reg, u32 size)
-+{
-+	switch (size) {
-+	case 1:
-+		 /* sign-extend 8 bits into 64 bits */
-+		EMIT(PPC_RAW_EXTSB(dst_reg, src_reg));
-+		return 0;
-+	case 2:
-+		 /* sign-extend 16 bits into 64 bits */
-+		EMIT(PPC_RAW_EXTSH(dst_reg, src_reg));
-+		return 0;
-+	case 4:
-+		 /* sign-extend 32 bits into 64 bits */
-+		EMIT(PPC_RAW_EXTSW(dst_reg, src_reg));
-+		fallthrough;
-+	case 8:
-+		/* Nothing to do */
-+		return 0;
-+	default:
-+		return -1;
-+	}
-+}
-+
-+/*
-+ * Handle powerpc ABI expectations from caller:
-+ *   - Unsigned arguments are zero-extended.
-+ *   - Signed arguments are sign-extended.
-+ */
-+static int prepare_for_kfunc_call(const struct bpf_prog *fp, u32 *image,
-+				  struct codegen_context *ctx,
-+				  const struct bpf_insn *insn)
-+{
-+	const struct btf_func_model *m = bpf_jit_find_kfunc_model(fp, insn);
-+	int i;
-+
-+	if (!m)
-+		return -1;
-+
-+	for (i = 0; i < m->nr_args; i++) {
-+		/* Note that BPF ABI only allows up to 5 args for kfuncs */
-+		u32 reg = bpf_to_ppc(BPF_REG_1 + i), size = m->arg_size[i];
-+
-+		if (!(m->arg_flags[i] & BTF_FMODEL_SIGNED_ARG)) {
-+			if (zero_extend(image, ctx, reg, reg, size))
-+				return -1;
-+		} else {
-+			if (sign_extend(image, ctx, reg, reg, size))
-+				return -1;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static int bpf_jit_emit_tail_call(u32 *image, struct codegen_context *ctx, u32 out)
- {
- 	/*
-@@ -1143,14 +1220,16 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
- 				/* special mov32 for zext */
- 				EMIT(PPC_RAW_RLWINM(dst_reg, dst_reg, 0, 0, 31));
- 				break;
--			} else if (off == 8) {
--				EMIT(PPC_RAW_EXTSB(dst_reg, src_reg));
--			} else if (off == 16) {
--				EMIT(PPC_RAW_EXTSH(dst_reg, src_reg));
--			} else if (off == 32) {
--				EMIT(PPC_RAW_EXTSW(dst_reg, src_reg));
--			} else if (dst_reg != src_reg)
--				EMIT(PPC_RAW_MR(dst_reg, src_reg));
-+			}
-+			if (off == 0) {
-+				/* MOV */
-+				if (dst_reg != src_reg)
-+					EMIT(PPC_RAW_MR(dst_reg, src_reg));
-+			} else {
-+				/* MOVSX: dst = (s8,s16,s32)src (off = 8,16,32) */
-+				if (sign_extend(image, ctx, src_reg, dst_reg, off / 8))
-+					return -1;
-+			}
- 			goto bpf_alu32_trunc;
- 		case BPF_ALU | BPF_MOV | BPF_K: /* (u32) dst = imm */
- 		case BPF_ALU64 | BPF_MOV | BPF_K: /* dst = (s64) imm */
-@@ -1618,6 +1697,12 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
- 			if (ret < 0)
- 				return ret;
- 
-+			/* Take care of powerpc ABI requirements before kfunc call */
-+			if (insn[i].src_reg == BPF_PSEUDO_KFUNC_CALL) {
-+				if (prepare_for_kfunc_call(fp, image, ctx, &insn[i]))
-+					return -1;
-+			}
-+
- 			ret = bpf_jit_emit_func_call_rel(image, fimage, ctx, func_addr);
- 			if (ret)
- 				return ret;
--- 
-2.53.0
 
+And maybe a variant of this with `if r1 !=3D r0` or maybe not.
+
+[...]
