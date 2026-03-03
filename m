@@ -1,203 +1,142 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 344C2375F60
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 02:28:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772504914; cv=pass; b=tmLlUW6vzAi8fyUh2TxpcQ/ERpdUcmkUVPSMUI7OMm/rVrwOT6V7uoXxGGeOCOgZ0HfGHzFrHXj34MMDncG88FlO0S+mQeLW8u/eJ1kOKMNlyN9PD7VLtdwMHFwUdCnW76OxfiLpNsXEJ7TTAlb1g3Njj+95T5eHirn9h2zlt68=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772504914; c=relaxed/simple;
-	bh=CmpPLTDLjoziZGQueGxnmQI7O2xObKPRhPekUhrY70I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fquL1l8iydZxS0WlT95ypjdY6j57w1rqEvTBAetJfS681YPuKZ1folTj3/MoCkiZg2YA6/rp4oaBOxVpBCpyRZEcactZ9mkBL0rLmT5mfFF3DFi2fHkxgVopg4xXADnfvD3B+tkm671O6K5Yp2nW8wHMiLQYzV51B/8jAZNN2SI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=EsJG3vBa; arc=pass smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="EsJG3vBa"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-354a18c48b5so4571000a91.1
-        for <bpf@vger.kernel.org>; Mon, 02 Mar 2026 18:28:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772504909; cv=none;
-        d=google.com; s=arc-20240605;
-        b=MvFkib/5osob97giy0DUoK3+j+tm07lVQMm6jBKqb8a3aqmtRaG/swIrtgT3b+TcT4
-         n6dKO7LapWwrwyfFVhlnEXfbMrQI4PTNiQPYWz2C7ZzUITIdGCtVCK/f+cgpfXdGiTUE
-         /5yMW/NlPsG0Qemwtln/DfVKXUnOYKj/rBpeMNg6NPbhD+Ld9S4PpQ0mHO3Kf9tJNjGl
-         k+DB/vTydMwPmjyEmXXsRzd8o1LcwYWSePV1K1Kv0HSBHzpN4Ix52xU8O1bDgkz090z+
-         lpJ7j2hq2g8yUo9DsY0Fief4gyuDHr+Xm4KPYYLYR+11P3lIGNRpv3V1GwUk+ULEBE/G
-         npbA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=C1bg6xiI4y6+7k2tjKhPvGRGK3TFDQKnfwBJ+EjIYKA=;
-        fh=rv08GqTYWGaP8nxKYv4qPwrShXj1/5mxlko3ZBzCB9Q=;
-        b=Rf3Zre75u7q+fu6eKaYobZ/kHuOGsO2zjJC+LoBYKwgAwiR2cWGGtePfWEOhsbLOTk
-         IgM/QCyJu2O30CbmGJt1ovRUslv/bIW6rVYa5uTW71NMUqvdL4kI6oLVexAaXsQGedDp
-         sBT1ZQ430NNP8NSNNdQzUsE4zLyGumEh9U1An9Gjq5V4ggic5ldzW6j3oC7eqwU6B/17
-         +iM2DyVBPXE+rthVInxWoWaxhRy3PYk4eo2y+Q/XVMZoI+gQ+YpOiF1y2Af/dZPZlpan
-         Pf2tgPwgLXCGVhFH6njBqKfIOM+QYjZBV1kniEGSHbBNtYschIGYQIrUNhEyz5/Y2hUy
-         bbEA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1772504909; x=1773109709; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C1bg6xiI4y6+7k2tjKhPvGRGK3TFDQKnfwBJ+EjIYKA=;
-        b=EsJG3vBaS1KZW5Izsw4OaIpH7hRkswp/BBxxAkmDxitc8w8FFOEbGPrwFIDKDTkfvb
-         el6P57HEQuZcFjAaRfBrYvppssqd1ruzRuX4K9GMbWsv/a+0UdV/wy91N0ItQt8JMY7a
-         +fTlI8uCMeBUtsXgkY9VG3mNkYMrQZASXK6Fb2eeSI0EWs+Ecp3RZWF2axg/KRySCujq
-         H9Rf6OiWSGLlOnujavHZFxxri5nzMcAFcuYI1rUxw9EWfymRbiJfLVMfJoPIduuGJW6o
-         TvrrzCiZ3L0CbmubL55JgO7BYzgGIbyf7FMN2fyQN+DOU1GKA/JOwazVjT7OHeGtXVR4
-         LdXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772504909; x=1773109709;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=C1bg6xiI4y6+7k2tjKhPvGRGK3TFDQKnfwBJ+EjIYKA=;
-        b=iTwEHKCy/IY/s7tX5U93c3TBbMwQZQzvXLTutj7ZM8C5tUN18quPux5suwpZGhvw7p
-         tlnLewMOWAWdp3CsArMi1Wvc3By6zUPcq75ZHPwE3xP1SY6jEEHyX8r4XNotM5hnHnRo
-         renqDRlLjJc9unnbdh41AQdBD8lbA+DQzlYX+UTI8cLLr//RNrqBOuMsi415eE9tYe75
-         iA65r4HlLP2kZypC5rbGz3pcO/8pKQFrNNbW7J0I8n7UtHZWzWgMhmWn/ziSTX3r1Elb
-         UvCPLrvSfFaHbt/5JbIrmuh5rggcHbT2RaYZAM8bjh0xq2JdX1XXQU/w7dbvcuAP1iYN
-         Rq7g==
-X-Forwarded-Encrypted: i=1; AJvYcCXxEL1rLZsuLdD6eRywz7+TbBDOENZiXr40g6thIgkdgp50ooZPT3MjvZfDNkyww6Kcreo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwxxvZ3b8AqvhL0TSgEklWN3fB3HrR7+zAFkjVOxPBxa7NnmeAb
-	zOrMCzKNkuhHf0GotLRsJzRCzuPWv4QOWqRG8Y49zjUDSd7U/I3OND+klBZWEhVHXN14eGgSTUy
-	4I3VSoSKcNEB6sFU/hyP3d/c0K8h0QAYSNRZiQr/U
-X-Gm-Gg: ATEYQzzIMEDZcTs4Jtx4T1IwOa8cJCME6TzyFZ7vurUEGwFLCUtSYaknPvapP9goaVk
-	Yu27vdB2JhLidro4i0SPciGnR8y1E8yYy+ZNepBdzgnIQoJ6KyBfK4epi7SYOflQTb2QQMlGUCP
-	ikPqEfVHIavAu/I/AnjWvd8xy6kNFyRzGAbfjsK7XFCbcFfq3M+w7dhHhKfu4H75IXb/yNfJs50
-	3QhggwUcKa26/qBRMxDl5Ol98YxrxkSO31sfQShtpFmzIy/LWR36KwXbyhXTm970RA9SC696mmi
-	W1hOCFI=
-X-Received: by 2002:a17:90a:7f93:b0:356:1db4:8fe5 with SMTP id
- 98e67ed59e1d1-35965cc714fmr9453563a91.29.1772504909127; Mon, 02 Mar 2026
- 18:28:29 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E677C3750DA;
+	Tue,  3 Mar 2026 02:28:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772504918; cv=none; b=qr38/nbOJDsxCvkrPDYQU4a7Buemk8jEnw/i/A1lvxD6HESJXzoYa42YrDcn41kH/NoGTly8eqRZ8mDswNI0HE6OyR2mSE1mVrtjeAZjngIuw/UmeiK3qlLLbZNzBphevhAokxbxPp6arS2kDW8cXAPWThiUqP3bvqyFG/8XC/I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772504918; c=relaxed/simple;
+	bh=HMoF9fJL5K58JJ1olw4rfmD8Lhzxr47kFv5DmeFlLRg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FWIhTrmYixnIWJ+tR0DHVE6Lsbx+LSOwKbGAEgNWR+zVWDtdDosqPHaAe3LXD70NLRHxscAz/EE6Z0RCqBK0vpUhoOpUPID1O2PW1VItCpCopTToLcjBN5XCRc53NakPj2H+TIEpWCTuzMxMTryjlghHvTVFUAoyMfn6/sYoK6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fQ08s5pJjzKHMYP;
+	Tue,  3 Mar 2026 10:28:29 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 842F34058F;
+	Tue,  3 Mar 2026 10:28:33 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP4 (Coremail) with SMTP id gCh0CgAniPhQR6ZpdniDJQ--.4204S2;
+	Tue, 03 Mar 2026 10:28:33 +0800 (CST)
+Message-ID: <770fef28-efd7-4bcb-aa11-33ab22cc9841@huaweicloud.com>
+Date: Tue, 3 Mar 2026 10:28:32 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260302-iino-u64-v2-0-e5388800dae0@kernel.org> <20260302-iino-u64-v2-49-e5388800dae0@kernel.org>
-In-Reply-To: <20260302-iino-u64-v2-49-e5388800dae0@kernel.org>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 2 Mar 2026 21:28:17 -0500
-X-Gm-Features: AaiRm53ToDAKLnqMzF7h_Rr5obeE3dnKPI4TQkaY52RSs5vb8oGyabc3Zmeif9I
-Message-ID: <CAHC9VhRLAhMYL1ax3+LCeLLhnK0XGnvs0kGPGgHaptTaDynroA@mail.gmail.com>
-Subject: Re: [PATCH v2 049/110] security: use PRIino format for i_ino
-To: Jeff Layton <jlayton@kernel.org>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Dan Williams <dan.j.williams@intel.com>, 
-	Matthew Wilcox <willy@infradead.org>, Eric Biggers <ebiggers@kernel.org>, 
-	"Theodore Y. Ts'o" <tytso@mit.edu>, Muchun Song <muchun.song@linux.dev>, 
-	Oscar Salvador <osalvador@suse.de>, David Hildenbrand <david@kernel.org>, 
-	David Howells <dhowells@redhat.com>, Paulo Alcantara <pc@manguebit.org>, 
-	Andreas Dilger <adilger.kernel@dilger.ca>, Jan Kara <jack@suse.com>, 
-	Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>, 
-	Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
-	Chuck Lever <chuck.lever@oracle.com>, NeilBrown <neil@brown.name>, 
-	Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, 
-	Steve French <sfrench@samba.org>, Ronnie Sahlberg <ronniesahlberg@gmail.com>, 
-	Shyam Prasad N <sprasad@microsoft.com>, Bharath SM <bharathsm@microsoft.com>, 
-	Alexander Aring <alex.aring@gmail.com>, Ryusuke Konishi <konishi.ryusuke@gmail.com>, 
-	Viacheslav Dubeyko <slava@dubeyko.com>, Eric Van Hensbergen <ericvh@kernel.org>, 
-	Latchesar Ionkov <lucho@ionkov.net>, Dominique Martinet <asmadeus@codewreck.org>, 
-	Christian Schoenebeck <linux_oss@crudebyte.com>, David Sterba <dsterba@suse.com>, 
-	Marc Dionne <marc.dionne@auristor.com>, Ian Kent <raven@themaw.net>, 
-	Luis de Bethencourt <luisbg@kernel.org>, Salah Triki <salah.triki@gmail.com>, 
-	"Tigran A. Aivazian" <aivazian.tigran@gmail.com>, Ilya Dryomov <idryomov@gmail.com>, 
-	Alex Markuze <amarkuze@redhat.com>, Jan Harkes <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu, 
-	Nicolas Pitre <nico@fluxnic.net>, Tyler Hicks <code@tyhicks.com>, Amir Goldstein <amir73il@gmail.com>, 
-	Christoph Hellwig <hch@infradead.org>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Yangtao Li <frank.li@vivo.com>, 
-	Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>, David Woodhouse <dwmw2@infradead.org>, 
-	Richard Weinberger <richard@nod.at>, Dave Kleikamp <shaggy@kernel.org>, 
-	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>, Mark Fasheh <mark@fasheh.com>, 
-	Joel Becker <jlbec@evilplan.org>, Joseph Qi <joseph.qi@linux.alibaba.com>, 
-	Mike Marshall <hubcap@omnibond.com>, Martin Brandenburg <martin@omnibond.com>, 
-	Miklos Szeredi <miklos@szeredi.hu>, Anders Larsen <al@alarsen.net>, 
-	Zhihao Cheng <chengzhihao1@huawei.com>, Damien Le Moal <dlemoal@kernel.org>, 
-	Naohiro Aota <naohiro.aota@wdc.com>, Johannes Thumshirn <jth@kernel.org>, 
-	John Johansen <john.johansen@canonical.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Eric Snowberg <eric.snowberg@oracle.com>, Fan Wu <wufan@kernel.org>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Casey Schaufler <casey@schaufler-ca.com>, Alex Deucher <alexander.deucher@amd.com>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, Eric Dumazet <edumazet@google.com>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Willem de Bruijn <willemb@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	James Clark <james.clark@linaro.org>, "Darrick J. Wong" <djwong@kernel.org>, 
-	Martin Schiller <ms@dev.tdt.de>, Eric Paris <eparis@redhat.com>, Joerg Reuter <jreuter@yaina.de>, 
-	Marcel Holtmann <marcel@holtmann.org>, Johan Hedberg <johan.hedberg@gmail.com>, 
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Oliver Hartkopp <socketcan@hartkopp.net>, 
-	Marc Kleine-Budde <mkl@pengutronix.de>, David Ahern <dsahern@kernel.org>, 
-	Neal Cardwell <ncardwell@google.com>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, Remi Denis-Courmont <courmisch@gmail.com>, 
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, 
-	Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, nvdimm@lists.linux.dev, 
-	fsverity@lists.linux.dev, linux-mm@kvack.org, netfs@lists.linux.dev, 
-	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net, 
-	linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, 
-	samba-technical@lists.samba.org, linux-nilfs@vger.kernel.org, 
-	v9fs@lists.linux.dev, linux-afs@lists.infradead.org, autofs@vger.kernel.org, 
-	ceph-devel@vger.kernel.org, codalist@coda.cs.cmu.edu, 
-	ecryptfs@vger.kernel.org, linux-mtd@lists.infradead.org, 
-	jfs-discussion@lists.sourceforge.net, ntfs3@lists.linux.dev, 
-	ocfs2-devel@lists.linux.dev, devel@lists.orangefs.org, 
-	linux-unionfs@vger.kernel.org, apparmor@lists.ubuntu.com, 
-	linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	selinux@vger.kernel.org, amd-gfx@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, 
-	linaro-mm-sig@lists.linaro.org, netdev@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-fscrypt@vger.kernel.org, 
-	linux-xfs@vger.kernel.org, linux-hams@vger.kernel.org, 
-	linux-x25@vger.kernel.org, audit@vger.kernel.org, 
-	linux-bluetooth@vger.kernel.org, linux-can@vger.kernel.org, 
-	linux-sctp@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v5 1/5] bpf: Move JIT for single-subprog programs
+ to verifier
+Content-Language: en-US
+To: bot+bpf-ci@kernel.org, xukuohai@huaweicloud.com, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, yonghong.song@linux.dev,
+ puranjay@kernel.org, a.s.protopopov@gmail.com, martin.lau@kernel.org,
+ clm@meta.com, ihor.solodrai@linux.dev
+References: <20260302102726.1126019-2-xukuohai@huaweicloud.com>
+ <cae8a7cfe54f2f1f66bde10df2026eb2c1076998bef9e483b513abd3bb5722c3@mail.kernel.org>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <cae8a7cfe54f2f1f66bde10df2026eb2c1076998bef9e483b513abd3bb5722c3@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:gCh0CgAniPhQR6ZpdniDJQ--.4204S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCFyrCry3Jr15ZFyDtrWrXwb_yoW5AFykpa
+	s7KFWDCr4UGr1DtwnFyFWDZaySqa1rG3y7G3Z8JFWI9rnYgrnYgFW0ga1jgF90yr1Ykwsa
+	va1jvrWqqr15ZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+	0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
+	v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
+	1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
+	AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI
+	42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
+	evJa73UjIFyTuYvjfUonmRUUUUU
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On Mon, Mar 2, 2026 at 3:36=E2=80=AFPM Jeff Layton <jlayton@kernel.org> wro=
-te:
->
-> Convert security i_ino format strings to use the PRIino format
-> macro in preparation for the widening of i_ino via kino_t.
->
-> Also correct signed format specifiers to unsigned, since inode
-> numbers are unsigned values.
->
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+On 3/2/2026 6:46 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index fc4ccd1de569..ab2bc0850770 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -26086,6 +26086,11 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr, __u3
+>>   		convert_pseudo_ld_imm64(env);
+>>   	}
+>>
+>> +	/* constants blinding in the JIT may increase prog->len */
+>> +	len = env->prog->len;
+>> +	if (env->subprog_cnt == 1)
+>> +		env->prog = bpf_prog_select_jit(env->prog, &ret);
+>> +
+>>   	adjust_btf_func(env);
+>>
+>>   err_release_maps:
+> 
+> [ ... ]
+> 
+>> @@ -26111,7 +26116,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr, __u3
+>>   err_unlock:
+>>   	if (!is_priv)
+>>   		mutex_unlock(&bpf_verifier_lock);
+>> -	clear_insn_aux_data(env, 0, env->prog->len);
+>> +	clear_insn_aux_data(env, 0, len);
+>>   	vfree(env->insn_aux_data);
+> 
+> Can the len variable be stale when reaching clear_insn_aux_data()
+> through an error path?
+> 
+> At the top of bpf_check(), len is first assigned as:
+> 
+>      len = (*prog)->len;
+> 
+> This original value is used to allocate insn_aux_data. Later,
+> instruction rewriting passes like convert_ctx_accesses() and
+> do_misc_fixups() can change env->prog->len and resize
+> insn_aux_data to match via bpf_patch_insn_data().
+> 
+> The second assignment added by this patch:
+> 
+>      len = env->prog->len;
+> 
+> is only reached on the success path, after all instruction
+> rewriting and after the maps/btfs allocation. If an error occurs
+> between the rewriting passes and this reassignment, for example
+> bpf_vlog_finalize() returning an error, copy_to_bpfptr_offset()
+> failing, or kmalloc for used_maps/used_btfs failing, the code
+> jumps to err_release_maps and eventually reaches
+> clear_insn_aux_data(env, 0, len) with the original program length
+> rather than the current post-rewriting length.
+> 
+> If rewriting increased env->prog->len (the common case for
+> programs with context accesses), the iteration stops short of
+> the actual insn_aux_data size, potentially leaking jt fields in
+> the unvisited entries.
+> 
+
+Right, len is stale in the error path. I'll fix it in the next version.
+
+> 
 > ---
->  security/apparmor/apparmorfs.c       |  4 ++--
->  security/integrity/integrity_audit.c |  2 +-
->  security/ipe/audit.c                 |  2 +-
->  security/lsm_audit.c                 | 10 +++++-----
->  security/selinux/hooks.c             | 10 +++++-----
->  security/smack/smack_lsm.c           | 12 ++++++------
->  6 files changed, 20 insertions(+), 20 deletions(-)
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22571297111
+> 
+> AI-authorship-score: low
+> AI-authorship-explanation: Standard kernel refactoring by a known BPF contributor with non-native English patterns in the commit message.
+> issues-found: 1
+> issue-severity-score: low
+> issue-severity-explanation: Stale len variable in bpf_check error paths can cause insn_aux_data jt field memory leaks when instruction rewriting changed prog->len before an error between rewriting and the len reassignment.
 
-No comment on the PRIino specifier, but the LSM framework and SELinux
-changes seem complete.
-
-Acked-by: Paul Moore <paul@paul-moore.com> (LSM/SELinux)
-
---=20
-paul-moore.com
