@@ -1,235 +1,187 @@
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E92C426699;
-	Tue,  3 Mar 2026 13:15:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA297214A64
+	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 13:21:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772543714; cv=none; b=Ej3OKMwLsuDjFo6ziHS29ayLYuXc8FQCD2rax/S/U07pUscTvnpxG62ZNqlxoNoQlRqj2WGJd/2sSRx0i3WHJ3tRxI3hVLz9ZgDLca8JpF0yc7SUz6xD+Fj9e8jWGztL3C9whMMgQwS46A9v1z4fKjjtoAbYe43BIt7pnDEbXiw=
+	t=1772544107; cv=none; b=fGxbZL2funNOHucr27uVdc7130mjIPM/cQbQg7Fzc43vY9jC3j8rdYZ1guuSC/56HcszKCIiaylzHkK0pw9IOxfN+pAz0UcrSovNVgHBVZ+S/rCEAeidfQsheo3fTiXBpeXCOiGZS9pp7yJLo2nkHTHatQ5FOTVBu8gg0D7XW5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772543714; c=relaxed/simple;
-	bh=/MyWbW03chpBJaPzR/BFPiU3CF6WAhtdLIPgT2cm51U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sWW+NikZ4VZvw46DzXn+fJCTfo/mt8Jkr1YbzN1T1Ter3J1RgzB5Gbkiq8MI95kZHp7tOZOyn/0A++IGp8L6VqHoUld/S0yLO74eL7r8tpjSGkrVfRXm/46Rng698YSDpzjt3FLr6na24xGhRpOxLNIgYz0FW4BPfRG3+hCNc3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=p9osVp3v; arc=none smtp.client-ip=148.163.158.5
+	s=arc-20240116; t=1772544107; c=relaxed/simple;
+	bh=jQVxxzBzMW5ezrxE1H9WLpupUZdI6t6ikRyARMjxoZ4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ch1p/Dovrs5GzVL0TDagE6dc5ddasvDQyBaYjuRxuivKcnH3d3cHp5PCrvRvvYrbiQ9QghHk89wk34VOqwM8MIhNQmCKhEw266XQvNDejjtZgU56ZvKebeuh31gdtWJT5JoKzQVPQJt2kezcw8/sKQ8ivywF9jiX7GeIS01+6xc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=O1gvjVoJ; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="p9osVp3v"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6237I5Fc2246261;
-	Tue, 3 Mar 2026 13:14:58 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="O1gvjVoJ"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 623115Xg1621757;
+	Tue, 3 Mar 2026 13:21:18 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=dnPUKhp1sBymgzQCRaFIsgoe2Dawzv5JW1P6j/OpY
-	CY=; b=p9osVp3vdmoZK/EQWZemxOST/WC+Ix1eLV/2GxlrRm4CtYk3D0QjKF2/j
-	MQKa55wdcKQvq6Aggla+zeSK1c7yR9MUUYXXngxg90fqQAAmxkDl4FT1BIFs9z2M
-	xVxBDHM6CztkSuMvaV2pJRqS/GwmeguicTfuswR2OitqZAL6AwiAqzh/K7CRowHN
-	ZmJLjKujx/ziWdDH10CClpk2vdUkgTOG4Ww6YXeVaxJxATj3t4LztGLWVAI6UZSj
-	5dryug06E5eMWiBlrAQg1rCnwkCLxwLKv2r+QBMbcXlWLiDTvL8IGlHTp6dKdbYh
-	U+XryzWHNl7JpmBNT5RHHK59ts97g==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cksk3truh-1
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=QId7nP
+	HDYS6tYYZeXC9mclSJa9ObH9GqTpYbu06gOEQ=; b=O1gvjVoJsBegsacEcXoEnO
+	4tMk55F0Nt9W88fadLC/qSq0jWlnpkRNIf2BTjFDbtEmScZFtg8DxWyFqv8WSJFV
+	ZvownYyIKy9UoWdXzvc0a5E4lQHdcestaM/m5r+vLMr3yY1CodDSFhC/iKjvz/g0
+	PQiO7ZcYzQlf+DduvpG6pwUjXMXHXRNORRLnS9o5Ol+ps5omkkKbXUqG3dwK1aUi
+	ydHy5ZrJ4zj4jVa2kB5jsaHSBO1JDSpZLq9QpqN9pTf6Mfx+7/zwUyVnxngNl9Wv
+	DJ+Uso2RnQxDceyP6YDNFhusTbWpmVHSakImuksmAMGJTzsP4sbqB5GoAnXcvbrw
+	==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ckssmjtcg-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 03 Mar 2026 13:14:58 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 623BjWxn027662;
-	Tue, 3 Mar 2026 13:14:57 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cmcwja1jp-1
+	Tue, 03 Mar 2026 13:21:18 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 6239aBsx003275;
+	Tue, 3 Mar 2026 13:21:17 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cmb2y2f25-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 03 Mar 2026 13:14:57 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 623DEujj40436020
+	Tue, 03 Mar 2026 13:21:17 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 623DLDln9044312
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 3 Mar 2026 13:14:56 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E777C2004B;
-	Tue,  3 Mar 2026 13:14:55 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 97F0F20043;
-	Tue,  3 Mar 2026 13:14:54 +0000 (GMT)
-Received: from li-bd3f974c-2712-11b2-a85c-df1cec4d728e.in.ibm.com (unknown [9.78.106.17])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  3 Mar 2026 13:14:54 +0000 (GMT)
-From: Hari Bathini <hbathini@linux.ibm.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests/bpf: improve test coverage for kfunc call
-Date: Tue,  3 Mar 2026 18:44:53 +0530
-Message-ID: <20260303131453.328674-1-hbathini@linux.ibm.com>
-X-Mailer: git-send-email 2.53.0
+	Tue, 3 Mar 2026 13:21:13 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8E97A20063;
+	Tue,  3 Mar 2026 13:21:13 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 195F420040;
+	Tue,  3 Mar 2026 13:21:12 +0000 (GMT)
+Received: from [9.78.106.17] (unknown [9.78.106.17])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue,  3 Mar 2026 13:21:11 +0000 (GMT)
+Message-ID: <29f1d295-a38a-42fc-98c6-20281278dc64@linux.ibm.com>
+Date: Tue, 3 Mar 2026 18:51:11 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] bpf: zero extend function arguments while calling
+ kernel function
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Saket Kumar Bhaskar <skb99@linux.ibm.com>,
+        Abhishek Dubey <adubey@linux.ibm.com>
+References: <20260220062959.195101-1-hbathini@linux.ibm.com>
+ <20260220062959.195101-2-hbathini@linux.ibm.com>
+ <CAADnVQKwCX6mUbQeLTCtG7dKe+P_UUBig5KMTkF+t-6SW7wAkA@mail.gmail.com>
+Content-Language: en-US
+From: Hari Bathini <hbathini@linux.ibm.com>
+In-Reply-To: <CAADnVQKwCX6mUbQeLTCtG7dKe+P_UUBig5KMTkF+t-6SW7wAkA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 8b54qjDb-R5ivBcUuCWV5kQCZ84D1uIU
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAzMDEwMyBTYWx0ZWRfX7koSo+OIHtDl
- 2IxAg4In0E6t0JkW+wXTtG7vp55D0bC6gPoE/c68QyAy2BVOXK/aVazTEbMaeMZ9X616sIhdRTG
- BFzAZhhcf4Ra0e5heiuVr9DsNEJspwwX8Y9WxCi5N0ZWsC9fDHPRpWWnX0j6pMEq7U3RxKczX41
- SpsmIBKO5MDZYKiKFb1ZZHtbdf/oevcuqHzI/3w4avYv6C++Nf5e/p9/9AdKqhkTIdwt3bG7/3Q
- voGsNGPAQbU4jcrnhfiHVW+8dCbyLn97IHmjk5rTamyOIRdONWdpXfXoucbz9h7+/xsh1U9k4wA
- 4IXHkhBWsJ1aUPqvRylPo0K3NgPeo9MQqW303CH1AS1MlnzMWqpUmBuwao5HV3zilPDiA44Sfa7
- k66vby3ELhY3ufp2871023md5345hRQe5tm0lQ3yPGbQYmT7I2a9VPWPPc6XoeBlczccJBBXuBY
- vyVvG7ir9m9pE1xbZLw==
-X-Authority-Analysis: v=2.4 cv=csCWUl4i c=1 sm=1 tr=0 ts=69a6ded2 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
- a=AYg3Pj_DittMGbcp-hAA:9
-X-Proofpoint-GUID: 8b54qjDb-R5ivBcUuCWV5kQCZ84D1uIU
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAzMDEwMyBTYWx0ZWRfX14Us5Vxa6tVl
+ LnkztTPnuSqgjdb/yjFsFib939duywrWS+bzUxoVZfLsAmMlIkTF6rHh3EoEEtQFc13gRLi8zVM
+ JuQXAPsxEY2vTe2p7zlIxgnPPXsgbdW7/mWnMGg9Pf07b50eeUg8kfMjLBaWdnwGQvR6XxGq4xR
+ 6vKrOpG0FJvhIPpaLd7MEhCfdytKRr4coTRDUOdxfnPdAoY32fE0/V3tza67hnSZLlEpETAjvDk
+ 74UALy2qM4vdyla2bBR0W0o/JbdTAGua/HTbXOeToS6QSF9MBODvsoQIIZmio5VDoShp+XfHbFZ
+ AwQhLrs6SjNsRF6fW+j73WBty5/A62MJdtW0niGz7dKLhe3FyfOvV7K4LyZ7DRaRE073KF1EwFG
+ mwKKfjZiFmoPbMYZO0s3BHArOpgAsQcwQYh/7yEsOMrDFRwc8SmF8mTzINksdeYvNT6PYd24CsD
+ L4eBFhLIIVU/Wi0b4Pg==
+X-Proofpoint-ORIG-GUID: x4yxWgm3hF98cFXOAluNDT5RTq0x0ajI
+X-Proofpoint-GUID: q6AXym9kmdTuA2kpnZUa_4wRqtwwzu0Z
+X-Authority-Analysis: v=2.4 cv=AobjHe9P c=1 sm=1 tr=0 ts=69a6e04e cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=UFEoRwOCi9S2vwcJ2cMA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-03-02_05,2026-03-03_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 priorityscore=1501 suspectscore=0 malwarescore=0 adultscore=0
- clxscore=1015 bulkscore=0 phishscore=0 spamscore=0 lowpriorityscore=0
+ phishscore=0 lowpriorityscore=0 bulkscore=0 impostorscore=0 malwarescore=0
+ spamscore=0 clxscore=1015 suspectscore=0 adultscore=0 priorityscore=1501
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603030103
 
-On powerpc, immediate load instructions are sign extended. In case
-of unsigned types, arguments should be explicitly zero-extended by
-the caller. For kfunc call, this needs to be handled in the JIT code.
-While kfunc_call_test4 test case already checks for sign-extension of
-signed argument types in kfunc calls, zero-extension for unsigned
-argument types is being checked with this test case.
-
-Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
----
-
-- powerpc BPF JIT was not handling ABI sign-extension & zero-extension
-  appropriately for kfunc calls. Fixed with:
-
-    https://lore.kernel.org/all/20260303130208.325249-7-hbathini@linux.ibm.com/
 
 
- .../selftests/bpf/prog_tests/kfunc_call.c     |  1 +
- .../selftests/bpf/progs/kfunc_call_test.c     | 34 +++++++++++++++++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    | 28 +++++++++++++++
- .../bpf/test_kmods/bpf_testmod_kfunc.h        |  1 +
- 4 files changed, 64 insertions(+)
+On 25/02/26 12:03 am, Alexei Starovoitov wrote:
+> On Thu, Feb 19, 2026 at 10:30 PM Hari Bathini <hbathini@linux.ibm.com> wrote:
+>>
+>> For kernel functions, even if a function parameter is not of u64 size,
+>> it may still be cast to a data type of u64 size. In fact, page_cnt, a
+>> u32 argument in bpf_arena_reserve_pages() kfunc is implicitly getting
+>> typecasted to long. Without zero extension for that argument, the
+>> verifier_arena/reserve_invalid_region selftest fails on ppc64le. So,
+>> be more conservative and do zero extension for all arguments. JIT
+>> compile code can eliminate unnecessary zero extension code-gen.
+>>
+>> Fixes: e6ac2450d6de ("bpf: Support bpf program calling kernel function")
+>> Reported-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+>> Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
+>> ---
+>>   kernel/bpf/verifier.c | 7 +++++--
+>>   1 file changed, 5 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index f0ca69f888fa..3f6e0e1c71e4 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -12018,8 +12018,11 @@ static void __mark_btf_func_reg_size(struct bpf_verifier_env *env, struct bpf_re
+>>                  /* Function return value */
+>>                  reg->subreg_def = reg_size == sizeof(u64) ?
+>>                          DEF_NOT_SUBREG : env->insn_idx + 1;
+>> -       } else if (reg_size == sizeof(u64)) {
+>> -               /* Function argument */
+>> +       } else {
+>> +               /*
+>> +                * Be more conservative and do zero extension for all arguments,
+>> +                * as how these arguments get used in kernel is anybody's guess.
+>> +                */
+>>                  mark_insn_zext(env, reg);
+> 
+> This needs a selftest and better explanation of what's going on.
+> So far the patch doesn't make sense to me at all.
+> zext marking is only to simplify JIT's life for extensions
+> from 32-bit to 64-bit. All <= 32 extensions are done by LLVM
+> when it generates bpf code on the caller side.
+> If native callee messed it up, it's a bug in JIT that
+> doesn't do correct job for kfunc calling and translation
+> from bpf ABI to native.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-index f79c8e53cb3e..fb06f2485197 100644
---- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-@@ -74,6 +74,7 @@ static struct kfunc_test_params kfunc_tests[] = {
- 	TC_TEST(kfunc_call_test1, 12),
- 	TC_TEST(kfunc_call_test2, 3),
- 	TC_TEST(kfunc_call_test4, -1234),
-+	TC_TEST(kfunc_call_test5, 0),
- 	TC_TEST(kfunc_call_test_ref_btf_id, 0),
- 	TC_TEST(kfunc_call_test_get_mem, 42),
- 	SYSCALL_TEST(kfunc_syscall_test, 0),
-diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test.c b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-index 8b86113a0126..a32c3a60fa4f 100644
---- a/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-+++ b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-@@ -4,6 +4,40 @@
- #include <bpf/bpf_helpers.h>
- #include "../test_kmods/bpf_testmod_kfunc.h"
- 
-+SEC("tc")
-+int kfunc_call_test5(struct __sk_buff *skb)
-+{
-+	struct bpf_sock *sk = skb->sk;
-+	int ret;
-+	u32 val32;
-+	u16 val16;
-+	u8 val8;
-+
-+	if (!sk)
-+		return -1;
-+
-+	sk = bpf_sk_fullsock(sk);
-+	if (!sk)
-+		return -1;
-+
-+	ret = bpf_kfunc_call_test5(0xFF, 0xFFFF, 0xFFFFFFFF);
-+	if (ret)
-+		return ret;
-+
-+	val32 = bpf_get_prandom_u32();
-+	val16 = val32 & 0xFFFF;
-+	val8 = val32 & 0xFF;
-+	ret = bpf_kfunc_call_test5(val8, val16, val32);
-+	if (ret)
-+		return ret;
-+
-+	ret = bpf_kfunc_call_test5(val8 * 0xFF, val16 * 0xFFFF, val32 * 0xFFFFFFFF);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
- SEC("tc")
- int kfunc_call_test4(struct __sk_buff *skb)
- {
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index e62c6b78657f..de4897ddcff1 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -766,6 +766,33 @@ __bpf_kfunc long noinline bpf_kfunc_call_test4(signed char a, short b, int c, lo
- 	return (long)a + (long)b + (long)c + d;
- }
- 
-+__bpf_kfunc int bpf_kfunc_call_test5(u8 a, u16 b, u32 c)
-+{
-+	/* Make val as volatile to avoid compiler optimizations on the below checks */
-+	volatile long val = a;
-+
-+	/* Check zero-extension */
-+	if (val != (unsigned long)a)
-+		return 1;
-+	/* Check no sign-extension */
-+	if (val < 0)
-+		return 2;
-+
-+	val = b;
-+	if (val != (unsigned long)b)
-+		return 3;
-+	if (val < 0)
-+		return 4;
-+
-+	val = c;
-+	if (val != (unsigned long)c)
-+		return 5;
-+	if (val < 0)
-+		return 6;
-+
-+	return 0;
-+}
-+
- static struct prog_test_ref_kfunc prog_test_struct = {
- 	.a = 42,
- 	.b = 108,
-@@ -1228,6 +1255,7 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test1)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test2)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test3)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test4)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test5)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_pass1)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_fail1)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_fail2)
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-index b393bf771131..aa0b8d41e71b 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-@@ -110,6 +110,7 @@ __u64 bpf_kfunc_call_test1(struct sock *sk, __u32 a, __u64 b,
- int bpf_kfunc_call_test2(struct sock *sk, __u32 a, __u32 b) __ksym;
- struct sock *bpf_kfunc_call_test3(struct sock *sk) __ksym;
- long bpf_kfunc_call_test4(signed char a, short b, int c, long d) __ksym;
-+int bpf_kfunc_call_test5(__u8 a, __u16 b, __u32 c) __ksym;
- 
- void bpf_kfunc_call_test_pass_ctx(struct __sk_buff *skb) __ksym;
- void bpf_kfunc_call_test_pass1(struct prog_test_pass1 *p) __ksym;
--- 
-2.53.0
+Hi Alexei,
 
+Thanks for taking a look.
+
+What we’re seeing on ppc64le is that the powerpc JIT implementation was
+implicitly relying on the verifier’s zext marking for kfunc arguments.
+In other words, the JIT wasn’t fully taking care of the required ABI-
+level zero extension when translating from the BPF calling convention to
+the native one. So as the verifier only marked sizeof(u64) arguments,
+the powerpc JIT ended up passing non–zero-extended values in cases where
+the native ABI expects them to be properly extended.
+
+ From the verifier’s perspective, that assumption is indeed backwards —
+the verifier shouldn’t need to compensate for arch-specific ABI handling
+in JITs. The responsibility to satisfy the native calling convention for
+kfunc calls lies with the arch JIT.
+
+I’ve prepared a fix for the powerpc JIT to explicitly zero-extend
+arguments as required by the ABI during kfunc call translation, instead
+of depending on verifier zext state. I have posted the powerpc JIT fix
+here:
+
+  
+https://lore.kernel.org/all/20260303130208.325249-7-hbathini@linux.ibm.com/
+
+
+and proposed a test case in the selftests for the same here:
+
+  
+https://lore.kernel.org/bpf/20260303131453.328674-1-hbathini@linux.ibm.com/
+
+Thanks again for the review and for calling this out.
+
+- Hari
