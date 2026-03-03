@@ -1,123 +1,187 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 448353B8BCE;
-	Tue,  3 Mar 2026 18:22:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAC163537F6
+	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 18:22:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772562122; cv=none; b=mIkRF9bzWxIbe/Yk+WvCOTsUCQJefsrDAxdeyL4nT59+MbIiCckBVS4HOj5sQgzkgovD/AkzHKKsmuGnQN1j/7r/U64b+2nxzbnT4dlW7GKc4vCfMZicoNsAt2QLbRenNCstmr0nwgvfQK2LuaXh7J7TRg15BQAMVqFrZS+W0Eo=
+	t=1772562154; cv=none; b=OC977xeOmDoAUh8Oa2wX74h+di6okPEd50wC4uy+u6UdsPzN1NqX+kJoGUZTqMxcwZ5Eyx2Wo3Xq44sV7ShO9U/GWh9oJcw61urqPI3omtM35s6q/6TUcUmN92ZLpoWjYx65BL0RGrQGaflpf32qzfp9XJ1alMow8NFdeBzkUp8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772562122; c=relaxed/simple;
-	bh=LX9otucclhj4r5PMXsK54vORtsnyHeJbLaBj22vTMDo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MGZO2tqeTPECNodr10/aVFiwKXOVzxhFVLxF/j+QxgcPqSc0aaCOeYXntheGsxv9R0DgPCb8DJdNsS7+247YASoLASoL2C/cToSqGTb64yjnZhWWly+AFZPjmYCciwUbBsKocPLsu+Ldphi+6/mYxa4zjKAa0TaNGTVty5qUAOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=BClYeAbK; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1772562154; c=relaxed/simple;
+	bh=tpQuM+5W84CjfyPtIB/HGmRUoecN9Co8woJs1AoFHRw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DO2RV0RtJdEZz+rlbB3iPmtFpAwPaN2rTgHow638JdEHDmsS8S7HLfVM11hkgXLf6vnL/7k0SY1X5wyaNXQJLhHWk8p4FXQoE5oK9CAjqyygS/SnjiUfA/xhpQMLwdTORKVj95tV5Jp63cgAETxTp7FhnoQOTG3/HhmobpWkiIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b=RzNN+vLP; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="BClYeAbK"
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 623IHCqr868138;
-	Tue, 3 Mar 2026 18:20:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=CE9Sd
-	S/nbEF9YJNIEgxKbklEKP8amjl4saQWyJDXHbk=; b=BClYeAbKFUVcDeIr17yEG
-	TZhMDq69jBKfur6GG+ReCrjlTHfpwhjQj6ESDymj6yodjO+WviV0u4+ZwTxwYSEj
-	umtS1lIDfqvTT2xSbDLxMI4dkNDsE7T4IhgIjzzc3TV2hUMXw+5tWguMQ2/xB02U
-	mKf3P6PCoJ6HPjK9byhCOxKPV9WvzcaZINvT58K0yhL/ypb0Ak8QqLdvkeobgYVz
-	LXFcTJ74J89JEtiWeLTC9sEelqcETaghxf9lXAQEVWeU6tnIEps0aYrJ1VtOVT4K
-	if6/5QpTqLfZJxinJSYJSbbgeN1M0sY9zEXAoB2jlCZKAoUkS8bK3IxXkfTSLa0A
-	g==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4cp4sr006a-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 03 Mar 2026 18:20:22 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 623HYBGX037701;
-	Tue, 3 Mar 2026 18:20:21 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4ckpteyyg1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 03 Mar 2026 18:20:21 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 623IK7oD029269;
-	Tue, 3 Mar 2026 18:20:21 GMT
-Received: from bpf.uk.oracle.com (dhcp-10-154-62-133.vpn.oracle.com [10.154.62.133])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4ckpteyxu6-6;
-	Tue, 03 Mar 2026 18:20:20 +0000
-From: Alan Maguire <alan.maguire@oracle.com>
-To: andrii@kernel.org, ast@kernel.org
-Cc: daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
-        song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
-        jolsa@kernel.org, qmo@kernel.org, ihor.solodrai@linux.dev,
-        mykyta.yatsenko5@gmail.com, dwarves@vger.kernel.org,
-        bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v12 bpf-next 5/8] libbpf: BTF validation can use layout for unknown kinds
-Date: Tue,  3 Mar 2026 18:20:00 +0000
-Message-ID: <20260303182003.117483-6-alan.maguire@oracle.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20260303182003.117483-1-alan.maguire@oracle.com>
-References: <20260303182003.117483-1-alan.maguire@oracle.com>
+	dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b="RzNN+vLP"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2ae4988e039so18433665ad.1
+        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 10:22:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dama-to.20230601.gappssmtp.com; s=20230601; t=1772562147; x=1773166947; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=buu7Uz55KYttMA+alRRNNRRlc+ACOAEsL4P+TKZKLiU=;
+        b=RzNN+vLPpMzzPeOKrosA+GPJJhvCOtZ3HRH0potipfCgc1oCjsQ+mA5k5t2BvxCvT0
+         p3+hdgmujTSosjR0R9JgV0SkHr3A4IAHHH/YKqUXtubdIWQPQbuZIf2pgZNA5c/F8hqR
+         lyhsTDtO8+sYJdCoGwqmvL8scJsHt6dqRfahDHVh64Myz24c+2xMZAeLdqCglhQ6yaCl
+         cB28YGvAu+nFNERycNm3Fgpt5P0QQDY+FRy1QPAtQ1+mOeBN1Bvye4raRAcEEbJU9L6k
+         jknKpLGgZQOYQz9A0uuzHr4sUDRGXVGdOSDGCwISLccvcADircwgmJ0+g5F8XA9pt19C
+         hPSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772562147; x=1773166947;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=buu7Uz55KYttMA+alRRNNRRlc+ACOAEsL4P+TKZKLiU=;
+        b=fszxOb+NSMVrFFwzU9VBmb8PAGCWHSIy/na6XSWLsPXAuLDJPryIV1W+IsMIZ/+iBW
+         364y5QINmjRfmbTOLP8nA6wSFoDxECQFN7BHbQzg4NEMPo0HkxRTWJ8WUDBIeDqD0cPS
+         7r2JAqU+WclJfpHx88g277Yn2Yz+K466YZX9NQyW0ns25fhz31mdvtgzcVVl/9tAoqKH
+         fkDtwO2B2y0YuDRU27yPx0GH51hX93xSpNswrFEn3pGh7TMbsSlQgOkbU3Y7rWMWyC0t
+         gvKH6UCyCZQGsZVO/dJJpVYYSlXpx4D2USXZ/rkKRpzpT8VEdLEZ4oYeo06YuT6LTIrr
+         fQ6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCW0JLUuq4nQwfuX2wvCMiGwgKr1yGPUJQ+tQTCR+qkFhsm++Yb1TXwcrrCWD6RFSYifyRM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyV9cYhrlhxdFoAeZ93wHiK63Uo+x/wofOazi4cwXIjJr1mr7/U
+	VOm+bNeFDXCLDZbyMDNJ39sBLg3ICgXnFpX6kPVzxyxgzRXKnlkY79KTa2RC+jskGwNMXxSfo/Q
+	FLxdAJJ4=
+X-Gm-Gg: ATEYQzwZcrRZhDxiPInwGEfn0Hl5yY9R5Mrzeu1jM9Dsd+IBmSzEz2Uvc8kmoZV8LnQ
+	z9nGEjjNfANyLEDt9BKTiBGIG0YjLO9CtIulYGm/+cFO/spLcLSWxzqC9XXFkY9dq4TyWnGsQsK
+	Uh62wwU45RgU+PuTp3PVTpfN6PcN8xZ5mL93F4uWHXbGx1lMPYbfWMTpGKvYIoPI8I7O76EKCB5
+	gC2LA49aTcXaUs9l1JMiwpEJS0qffcfWbXFBgd+WJmoHwExevh+gCrAS5NUlCg1PRCpNriq/sTF
+	xMbPmXc6r7fIXZSC44DvHIZRy+cWbdQHzkPJLzxeLxKHgm8zDFrkL+9olYexq0cBBLuA748wMHs
+	R1fn5gWoLvYhLqmVoCHangqFagVuNnAUwOo8/faH7tZodM62PUT9+QqTgYaRhwqU/FaQXeEYXa5
+	LmoW+OhZE6pAJFMQ==
+X-Received: by 2002:a17:903:1905:b0:2ae:47d7:e101 with SMTP id d9443c01a7336-2ae60c53f62mr27683895ad.1.1772562147351;
+        Tue, 03 Mar 2026 10:22:27 -0800 (PST)
+Received: from localhost ([2a03:2880:2ff:3::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2adfb69f283sm174125805ad.49.2026.03.03.10.22.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Mar 2026 10:22:26 -0800 (PST)
+Date: Tue, 3 Mar 2026 10:22:26 -0800
+From: Joe Damato <joe@dama.to>
+To: Chris J Arges <carges@cloudflare.com>
+Cc: michael.chan@broadcom.com, pavan.chebbi@broadcom.com, kuba@kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, kernel-team@cloudflare.com,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v2 2/4] bnxt_en: Implement XDP RSS hash metadata
+ extraction
+Message-ID: <aacm4vPHq8V42lw1@devvm20253.cco0.facebook.com>
+Mail-Followup-To: Joe Damato <joe@dama.to>,
+	Chris J Arges <carges@cloudflare.com>, michael.chan@broadcom.com,
+	pavan.chebbi@broadcom.com, kuba@kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, kernel-team@cloudflare.com,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+References: <20260213192449.1294830-1-carges@cloudflare.com>
+ <20260303024510.644962-1-carges@cloudflare.com>
+ <20260303024510.644962-3-carges@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-03_02,2026-03-03_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0 phishscore=0
- spamscore=0 mlxscore=0 mlxlogscore=999 suspectscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2602130000
- definitions=main-2603030148
-X-Proofpoint-GUID: E10JSP6Xm7P-TlkYICfJOM0Zv08sm6jq
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAzMDE0NyBTYWx0ZWRfX3d3CI7IhXHgw
- 9GS15bljpl91hR2qPssuoOYvReOkpxHM2pVRPR6lYqKkSuOFweRf/q80tbwYfwvcgQV0lxTna+F
- 1H3BkiI6XjB1I7Ef+RU14aw6TJpt4e26aoeSUWLCqLl8/TlgQuoNR1mIYo3mUqEOUP7UXSwGZgc
- JohoXv/3t1BL00CpLDpYc0IZjbD0eZ+93odrnxurPiPDU38oh00Ynf4muvNSat+T+nBMBEE/+SJ
- N0r0MrgOw6EkffqUYhSjsIZlb2O0NmW9FTqjV99XGSa0i9x9UCESLooj2emO829tQ0c1zSFmvXS
- hxOf5pwMVwlbu/X1bXKc2UeEdg3OSqEo0+9kIdI32HKDli/bXx+8LEWi1tcA47kPhzg+nWRW+Hm
- cnT/4p4HWPFAT2yT3V0pLou022I/58zvPTeWuzOFe70E99t+KsMG4xhAzQHopK/ybkZ++OWJiG9
- VTaDT1WpVUYEDjK0KE+SIp+l29RChkB+CvzIjyCU=
-X-Authority-Analysis: v=2.4 cv=bp9BxUai c=1 sm=1 tr=0 ts=69a72666 b=1 cx=c_pps
- a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
- a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=x4eqshVgHu-cdnggieHk:22 a=yPCof4ZbAAAA:8 a=aoasKMbPG5nyLhygJAEA:9
- a=zgiPjhLxNE0A:10 a=zZCYzV9kfG8A:10 cc=ntf awl=host:13812
-X-Proofpoint-ORIG-GUID: E10JSP6Xm7P-TlkYICfJOM0Zv08sm6jq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260303024510.644962-3-carges@cloudflare.com>
 
-BTF parsing can use layout to navigate unknown kinds, so
-btf_validate_type() should take layout information into
-account to avoid failure when an unrecognized kind is met.
+On Mon, Mar 02, 2026 at 08:43:50PM -0600, Chris J Arges wrote:
+> Add support for extracting RSS hash values and hash types from hardware
+> completion descriptors in XDP programs for bnxt_en.
+> 
+> Add IP_TYPE definition for determining if completion is ipv4 or ipv6. In
+> addition add ITYPE_ICMP flag for identifying ICMP completions.
+> 
+> Signed-off-by: Chris J Arges <carges@cloudflare.com>
+> ---
+>  drivers/net/ethernet/broadcom/bnxt/bnxt.c     |  5 ++
+>  drivers/net/ethernet/broadcom/bnxt/bnxt.h     |  2 +
+>  drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c | 47 +++++++++++++++++++
+>  drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h |  3 ++
+>  4 files changed, 57 insertions(+)
+> 
+> diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> index ab73aad40593..c06033cf9f82 100644
+> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> @@ -15906,6 +15906,10 @@ static const struct net_device_ops bnxt_netdev_ops = {
+>  	.ndo_hwtstamp_set	= bnxt_hwtstamp_set,
+>  };
+>  
+> +static const struct xdp_metadata_ops bnxt_xdp_metadata_ops = {
+> +	.xmo_rx_hash		= bnxt_xdp_rx_hash,
+> +};
+> +
+>  static void bnxt_get_queue_stats_rx(struct net_device *dev, int i,
+>  				    struct netdev_queue_stats_rx *stats)
+>  {
+> @@ -16790,6 +16794,7 @@ static int bnxt_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+>  		goto init_err_free;
+>  
+>  	dev->netdev_ops = &bnxt_netdev_ops;
+> +	dev->xdp_metadata_ops = &bnxt_xdp_metadata_ops;
+>  	dev->stat_ops = &bnxt_stat_ops;
+>  	dev->watchdog_timeo = BNXT_TX_TIMEOUT;
+>  	dev->ethtool_ops = &bnxt_ethtool_ops;
+> diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.h b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
+> index 90fa3e93c8d6..34bb98709f2b 100644
+> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt.h
+> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
+> @@ -232,6 +232,7 @@ struct rx_cmp {
+>  	 #define RX_CMP_FLAGS_ITYPE_UDP				 (3 << 12)
+>  	 #define RX_CMP_FLAGS_ITYPE_FCOE			 (4 << 12)
+>  	 #define RX_CMP_FLAGS_ITYPE_ROCE			 (5 << 12)
+> +	 #define RX_CMP_FLAGS_ITYPE_ICMP			 (7 << 12)
+>  	 #define RX_CMP_FLAGS_ITYPE_PTP_WO_TS			 (8 << 12)
+>  	 #define RX_CMP_FLAGS_ITYPE_PTP_W_TS			 (9 << 12)
+>  	#define RX_CMP_LEN					(0xffff << 16)
+> @@ -311,6 +312,7 @@ struct rx_cmp_ext {
+>  	#define RX_CMP_FLAGS2_T_IP_CS_CALC			(0x1 << 2)
+>  	#define RX_CMP_FLAGS2_T_L4_CS_CALC			(0x1 << 3)
+>  	#define RX_CMP_FLAGS2_META_FORMAT_VLAN			(0x1 << 4)
+> +	#define RX_CMP_FLAGS2_IP_TYPE				(0x1 << 8)
+>  	__le32 rx_cmp_meta_data;
+>  	#define RX_CMP_FLAGS2_METADATA_TCI_MASK			0xffff
+>  	#define RX_CMP_FLAGS2_METADATA_VID_MASK			0xfff
+> diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
+> index 85cbeb35681c..1ab3d9f9b3ac 100644
+> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
+> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
+> @@ -472,3 +472,50 @@ bnxt_xdp_build_skb(struct bnxt *bp, struct sk_buff *skb, u8 num_frags,
+>  				  xdp_buff_get_skb_flags(xdp));
+>  	return skb;
+>  }
+> +
+> +int bnxt_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
+> +		     enum xdp_rss_hash_type *rss_type)
+> +{
+> +	const struct bnxt_xdp_buff *xdp = (void *)ctx;
+> +	const struct rx_cmp *rxcmp = xdp->rxcmp;
+> +	const struct rx_cmp_ext *rxcmp1 = xdp->rxcmp1;
+> +	enum xdp_rss_hash_type hash_type = 0;
+> +	u32 itypes;
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- tools/lib/bpf/btf.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Sorry don't mean to nitpick (also: I'm just a random subscriber to the list so
+maybe the maintainers don't mind), but I think rx_cmp_ext needs to be moved up
+to preserve RCT ?
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index eba0cae65bb4..0f7532f3862b 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -706,8 +706,12 @@ static int btf_validate_type(const struct btf *btf, const struct btf_type *t, __
- 		break;
- 	}
- 	default:
--		pr_warn("btf: type [%u]: unrecognized kind %u\n", id, kind);
--		return -EINVAL;
-+		/* Kind may be represented in kind layout information. */
-+		if (btf_type_size_unknown(btf, t) < 0) {
-+			pr_warn("btf: type [%u]: unrecognized kind %u\n", id, kind);
-+			return -EINVAL;
-+		}
-+		break;
- 	}
- 	return 0;
- }
--- 
-2.39.3
+You can retain my Reviewed-by (if you respin) because the rest seems OK to me:
 
+Reviewed-by: Joe Damato <joe@dama.to>
