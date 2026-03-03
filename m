@@ -1,82 +1,56 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9359038BF76
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 09:54:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DFF738C42E;
+	Tue,  3 Mar 2026 09:55:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772531654; cv=none; b=m3vF3LuLpprYtIoWvhS2TlXPc3LI9DuB/0i9N79rsUcYnhXIMJAQ0aAbzqLMpb+jn1O0Ev9TBMk4VLV1rWNuXQ7mXv58JyeurPSMXclxqOsaumjuaLtkisWuYc6bq2TMR3I7SgnshlcICI/RZjGiKt1FlxEaMGKq8GANXRBbK7U=
+	t=1772531727; cv=none; b=qQgg/cWCFzGjNuCeBCwuySFgg1+KW7FZB065AQqh7MmbKZ3Q3zTWsdClnFx/oMW19zneDTEeQraCtrDFxp44i9+Mk9wF6KDaNRXUlPXbk5IZnwyCS4rL+MWWp9jKreap/fiE8AMVMG3efFiFWUWNMAM4s6haLh1JVCF2YONjoOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772531654; c=relaxed/simple;
-	bh=6zEHfs6NVagrKkHTQrtRq0DKa/7gfElvLcDsqQCnjmM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=XJgQOJODqAL0Yz+5cM7fd9VeKorlIB5eWqWjWY0wp8VxH24yqD70PAeo83Ietmlm+Q+MLKcN3X5o+NmEt43DXE4z354TiVmZ+hJBrbfRz3aXl0iYWHgHr7kBwSUBahKczFvXe9lgig2Lgoyhf5zc6vxqlXJwR+h0trNFOwN0xk4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J5kyLqHk; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772531727; c=relaxed/simple;
+	bh=S9/Qs/sGuV7SVQT+vu0p0WWQgUDurNzDlIBBmNi9YxE=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=uczdBW/AYHZB/NDhhoaIVgEMtkhiqtRDRClQKxafGPf83PwfxorPZxGxLGZn27m7HulUQm/qNmYMSDDqFSbrCDsO7qESfOUAyKI2J+tcda0hVC7jgV8C4CU9ZME1zveFzBSlwq4ibnEuSBcIXx/UPa/Ka61uaZFqqx+vDuca6PY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=ACqEVtHd; arc=none smtp.client-ip=148.163.148.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J5kyLqHk"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2adbfab4501so24440025ad.2
-        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 01:54:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772531653; x=1773136453; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+6+Ol++dwc5uQY0FUuFGmKhf/l4t1CM8X/CyOEISVX4=;
-        b=J5kyLqHkS+06mMDoIC7ijss8AXm3EXmgj9/Tdv8CnL/fAaqEqpoJ5RmF8AAGwta2Gr
-         9ZTkF8NtEIuNmsu05VbVxiHFyZshxu5q5Wmqn5cF42UZxpJ2/xOVnkA8WwbRMGfJJss1
-         cLagcRqIHWWjHNoEPPGebOFVMVE8Kkjev05Yql7cLCLKKVrmKxXiYtYMsP+QnFZWdZdE
-         emeTxt3PhsMAHqpJbQ9obFwQK/iVGXRfN+PPaB+i3crxl4pXkZXNtX8W/jQL4YdyDg4D
-         uRLWbzHQSC7Wk9ludbDFFOofWth0trOvi9l2vuNJKeuMs/LfSQ8DJWKZiqdIWDs+U3kK
-         FN2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772531653; x=1773136453;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=+6+Ol++dwc5uQY0FUuFGmKhf/l4t1CM8X/CyOEISVX4=;
-        b=YWy/WBGk9Gr2Zatjv1Jt2e8zyoI0KWueeD5j3eKrvGo7CIV3iNs1gMrD0eWkJs3Frb
-         O71RV57K9I5i1w0dSGYDawvMLyVmuKjU810mubFuGQg/jSPjE7GGnz87HJIYmJ6HXsA4
-         STuYa/nhpc7vXK4E/LhSpynqR+7pnDlsuNk7Ly/0ozgv3tMIYdwucidxud7HczVJTGNs
-         iW3wlWDT5cVpjZfpwRtuZJ6kbUdpcoUKB0P7vENexpKXvGIeLKMhuxM6UEeJmlG4EyZ5
-         VOPP1A0a0a2j42JkZD5CA1/8cuddW+Rvpkj9Em4//nwNUsmWaF3LNPKFI1YBQ3rg9TYd
-         sUFA==
-X-Gm-Message-State: AOJu0Yw+hCLd7UBBEAzXQskck7RFnLqkjba5V+fAhv4DIkhU7LWKBQd1
-	IWy9ALWSYFwzfO+S90j9XNToe5K9vJQ+T4R8oQOyYjZg60VdhT4eO+wzD/D5Kpc5Xjg9OA==
-X-Gm-Gg: ATEYQzzYXU+acu7QYCybJqYRvc9R0mBWK6I0Qj3f7EL6kofUMra4IsOYhEJ56EFgZih
-	gEEhWmBUGxXW1HUfrTTZN7gtszkehpss5bCSaKFKqOgkULcwupEjfDUT42s1nXrogdQMfcWMZ5M
-	3OKg9ITxktjoELwD4Y0f9AXZtq3JylKA8DAMx4ge6TIu5+H+oqrHT939TdTzEnjx33Ul8gxnb/D
-	FGd1U1drgPhU/eVAFrnN5aeoPwv2PBGC6ikshKqyt+ggUlrCntZbbDSOqISWaEw9fFmnoGEEo8e
-	d2uTI2ny9PjDAoCzKGbZ20u4kG57mW6Q74PdIj5mM6LSfnYyXilIc75zP3xNc+9PJNrWYFJTZ9c
-	gds1QCTBACjdMRRlaJp+IfYb7992Q55l/qUbse2BrAoKqoY0vSf7cSyOI8iqqqmcQDpCWfnGC2B
-	8yoHNIMmt65Vhe3tMs6JJolgiqQ7TlNnXiDUaUM/wmK54Q56E3v5eym3fj1e81aNEQ6wi5fWRUM
-	HXiCj4enD5N
-X-Received: by 2002:a17:902:ec8d:b0:2ae:63a4:3baf with SMTP id d9443c01a7336-2ae63a4420dmr6105535ad.46.1772531652863;
-        Tue, 03 Mar 2026 01:54:12 -0800 (PST)
-Received: from dpc2500057.. (fsb6a9315e.tkyc502.ap.nuro.jp. [182.169.49.94])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae4e571b90sm60596445ad.62.2026.03.03.01.54.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2026 01:54:12 -0800 (PST)
-From: Keita Morisaki <kmta1236@gmail.com>
-To: edumazet@google.com
-Cc: bpf@vger.kernel.org,
-	davem@davemloft.net,
-	dsahern@kernel.org,
-	horms@kernel.org,
-	kmta1236@gmail.com,
-	kuba@kernel.org,
-	kuniyu@google.com,
-	linux-kernel@vger.kernel.org,
-	ncardwell@google.com,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com
-Subject: Re: [PATCH net-next] tcp: replace per-packet memset in __tcp_transmit_skb()
-Date: Tue,  3 Mar 2026 18:54:03 +0900
-Message-Id: <20260303095403.3141135-1-kmta1236@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <CANn89i+10Jz0BpOPdajdLccfBz5UNq9ay7qcXS0LwDaU-07ozQ@mail.gmail.com>
-References: <CANn89i+10Jz0BpOPdajdLccfBz5UNq9ay7qcXS0LwDaU-07ozQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="ACqEVtHd"
+Received: from pps.filterd (m0354651.ppops.net [127.0.0.1])
+	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6236Fln6763086;
+	Tue, 3 Mar 2026 09:54:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:message-id:mime-version:subject:to; s=default; bh=pEQplKdtBIj4L
+	2qCzOsTZaemiKLyoExlh7izHFHAaPA=; b=ACqEVtHdoD5lOcBFDY1Jof73RQBi3
+	lAEmOvP+pcr/09Vo65qxrfzdDtrA+kjeOL1cuz4JjAzU+CqdnIJFVnVUKINmUTFO
+	KAlqD/ODuCCkyMfxN7SEMwf9noeLH+YSraZ2S8QRwJAq2ieSK+OnMcWFOBn9V0GU
+	RlhPpkp20oN7ml35az2i6xPVqnLPWn+VNxpbEXg+brcnMt1BZH7dR8GImRRvXinX
+	ILBKBIiGXm3CTNNwy/DuqqD2/CjZ/fJef+k+DY2fZTPMishqtGl8S8Lo1Drs+Tag
+	9gFoptef8m91XaqBl+HoPSfZ5huBueXMRGh+Mq+DYIM9nJFvZvf2Ed10w==
+Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
+	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4cmbkwghre-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 03 Mar 2026 09:54:52 +0000 (GMT)
+Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Tue, 3 Mar 2026 09:54:46 +0000
+From: Slava Imameev <slava.imameev@crowdstrike.com>
+To: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>
+CC: <martin.lau@linux.dev>, <eddyz87@gmail.com>, <song@kernel.org>,
+        <yonghong.song@linux.dev>, <john.fastabend@gmail.com>,
+        <kpsingh@kernel.org>, <sdf@fomichev.me>, <haoluo@google.com>,
+        <jolsa@kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
+        <kuba@kernel.org>, <pabeni@redhat.com>, <horms@kernel.org>,
+        <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-open-source@crowdstrike.com>,
+        Slava Imameev
+	<slava.imameev@crowdstrike.com>
+Subject: [PATCH bpf-next v4 0/2] bpf: Add multi-level pointer parameter support for trampolines
+Date: Tue, 3 Mar 2026 20:54:24 +1100
+Message-ID: <20260303095427.38981-1-slava.imameev@crowdstrike.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -84,52 +58,205 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: 04WPEXCH010.crowdstrike.sys (10.100.11.80) To
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70)
+X-Disclaimer: USA
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAzMDA3NCBTYWx0ZWRfXxY268R9C+SJq
+ 1OAXTXlvoAuXVTOFTi8wItSUQ4ZOwpRuiR93ziYyX7csprx3/RgJlB9GGPZl7ZZEIKrmpVYfV9l
+ u31Toksi2hsOuSku1i+3Kfbs7QCfLds2p/cGCcmq9wwUqArzKHHl99IOQ04DVnw6pf7a4q7GaQG
+ mwPH/wQlBJpJ6HpnHiu2NL55x976ojpx3oe11qGbFT5Yj0PWEroXtKhPYcX7wZuuHOOu2jgTGUv
+ YETstq3pWzEVbPdOFojEXvOtpRRV/2YWdrzR0Tb2Q7F/0sq6SAlJF6b2quPOHQkGQ7hMxSk7ukU
+ 3rrw9ITRQVnCwcGEaO4XZ8672wKpBbS+kOOH6gjjQvtDX/mcq3szSWQcE+BoMpr3A+kcvSor0L8
+ ZIQA6Q60hp6X6yDi1A+fnFF8sek3nDJSCJR83KTQhvgkF5B+t68fQP90SsIwUe2gFUwSavjky7Y
+ QBYgWlGiMnkP2yhp1zg==
+X-Authority-Analysis: v=2.4 cv=M4RA6iws c=1 sm=1 tr=0 ts=69a6afec cx=c_pps
+ a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
+ a=EjBHVkixTFsA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=T2KQ53IYiC3MXPrxx8bB:22 a=b3B37AjAgz0HnGB3MuNd:22 a=VwQbUJbxAAAA:8
+ a=QyXUC8HyAAAA:8 a=WyMQw0lqGAoaf0B3nNEA:9
+X-Proofpoint-GUID: kpgBTCyi04zBQ_oWrgCk_pfDUy0shKcz
+X-Proofpoint-ORIG-GUID: kpgBTCyi04zBQ_oWrgCk_pfDUy0shKcz
+X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11717
+ signatures=596818
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 adultscore=0 bulkscore=0 clxscore=1015 priorityscore=1501
+ suspectscore=0 spamscore=0 lowpriorityscore=0 phishscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603030074
 
-> Interesting idea, but the implementation is a bit fragile.
->
-> I would instead add a group in struct tcp_out_options to clearly mark
-> which group is zeroed in  __tcp_transmit_skb().
+This is v4 of a series adding support for new pointer types for
+trampoline parameters.
 
-That's a great idea.
+Originally, only support for multi-level pointers was proposed.
+As suggested during review, it was extended to some single level
+pointers. During discussion, it was proposed to add support for any
+pointer type that is not a pointer to structure, with a condition
+like if (!btf_type_is_struct(t)), but I found this might not be
+compatible with some cases, e.g., some tests failed. Though this
+depended on the exact place the check is done - if the check is
+moved before the exit from btf_ctx_access, tests are passed. Anyway,
+this looked like an extension which might conflict with future
+changes for some types falling in the !btf_type_is_struct(t) case.
+Instead, I used explicit type checks to add support only for single
+and multi-level pointer types that are not supported but can be
+supported with scalar. This is a cautious approach which can be
+verified with explicit tests for each type.
 
->
-> Partial patch to give the idea :
->
-> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-> index 46bd48cf776a6a37e6ab2664245cd1e35a88d4f8..b96168f50170b7359d26de2389128bc80d4d549e
-> 100644
-> --- a/net/ipv4/tcp_output.c
-> +++ b/net/ipv4/tcp_output.c
-> @@ -429,14 +429,19 @@ static void smc_options_write(__be32 *ptr, u16 *options)
->  }
->
->  struct tcp_out_options {
-> +       /* Following group is cleared in __tcp_transmit_skb() */
-> +       struct_group(cleared,
-> +               u16 mss;                /* 0 to disable */
-> +               u8 bpf_opt_len;         /* length of BPF hdr option */
-> +               u8 num_sack_blocks;     /* number of SACK blocks to include */
-> +       );
-> +
-> +       /* Caution : Following fields are not cleared in
-> __tcp_transmit_skb(). */
->         u16 options;            /* bit field of OPTION_* */
-> -       u16 mss;                /* 0 to disable */
->         u8 ws;                  /* window scale, 0 to disable */
-> -       u8 num_sack_blocks;     /* number of SACK blocks to include */
->         u8 num_accecn_fields:7, /* number of AccECN fields needed */
->            use_synack_ecn_bytes:1; /* Use synack_ecn_bytes or not */
->         u8 hash_size;           /* bytes in hash_location */
-> -       u8 bpf_opt_len;         /* length of BPF hdr option */
->         __u8 *hash_location;    /* temporary pointer, overloaded */
->         __u32 tsval, tsecr;     /* need to include OPTION_TS */
->         struct tcp_fastopen_cookie *fastopen_cookie;    /* Fast open cookie */
-> @@ -1565,7 +1570,7 @@ static int __tcp_transmit_skb(struct sock *sk,
-> struct sk_buff *skb,
->
->         inet = inet_sk(sk);
->         tcb = TCP_SKB_CB(skb);
-> -       memset(&opts, 0, sizeof(opts));
-> +       memset(&opts.cleared, 0, sizeof(opts.cleared));
+These changes appear to be a safe extension since any future support
+for arrays and output values would require annotation (similar to
+Microsoft SAL), which differentiates between current unannotated
+scalar cases and new annotated cases.
 
-Will send V2 with this change. Thank you for the review!
+This series adds BPF verifier support for single- and multi-level
+pointer parameters and return values in BPF trampolines. The
+implementation treats these parameters as SCALAR_VALUE.
+
+The following new single level pointer support is added:
+- pointers to enum, 32 and 64
+- pointers to functions
+
+The following multi-level pointer support is added:
+- multi-level pointers to int
+- multi-level pointers to void
+- multi-level pointers to enum, 32 and 64
+- multi-level pointers to function
+- multi-level pointers to structure
+
+This is consistent with the existing pointers to int and void
+already treated as SCALAR.
+
+This provides consistent logic for single and multi-level pointers
+- if the type is treated as SCALAR for a single level pointer, the
+same is applicable for multi-level pointers, except the pointer to
+struct which is currently PTR_TO_BTF_ID, but in case of multi-level
+pointer it is treated as scalar as the verifier lacks the context
+to infer the size of their target memory regions.
+
+Background:
+
+Prior to these changes, accessing multi-level pointer parameters or
+return values through BPF trampoline context arrays resulted in
+verification failures in btf_ctx_access, producing errors such as:
+
+func '%s' arg%d type %s is not a struct
+
+For example, consider a BPF program that logs an input parameter of
+type struct posix_acl **:
+
+SEC("fentry/__posix_acl_chmod")
+int BPF_PROG(trace_posix_acl_chmod, struct posix_acl **ppacl, gfp_t gfp,
+             umode_t mode)
+{
+    bpf_printk("__posix_acl_chmod ppacl = %px\n", ppacl);
+    return 0;
+}
+
+This program failed BPF verification with the following error:
+
+libbpf: prog 'trace_posix_acl_chmod': -- BEGIN PROG LOAD LOG --
+0: R1=ctx() R10=fp0
+; int BPF_PROG(trace_posix_acl_chmod, struct posix_acl **ppacl,
+gfp_t gfp, umode_t mode) @ posix_acl_monitor.bpf.c:23
+0: (79) r6 = *(u64 *)(r1 +16)         ; R1=ctx() R6_w=scalar()
+1: (79) r1 = *(u64 *)(r1 +0)
+func '__posix_acl_chmod' arg0 type PTR is not a struct
+invalid bpf_context access off=0 size=8
+processed 2 insns (limit 1000000) max_states_per_insn 0 total_states 0
+peak_states 0 mark_read 0
+-- END PROG LOAD LOG --
+
+The common workaround involved using helper functions to fetch
+parameter values by passing the address of the context array entry:
+
+SEC("fentry/__posix_acl_chmod")
+int BPF_PROG(trace_posix_acl_chmod, struct posix_acl **ppacl, gfp_t gfp,
+             umode_t mode)
+{
+    struct posix_acl **pp;
+    bpf_probe_read_kernel(&pp, sizeof(ppacl), &ctx[0]);
+    bpf_printk("__posix_acl_chmod %px\n", pp);
+    return 0;
+}
+
+This approach introduced helper call overhead and created
+inconsistency with parameter access patterns.
+
+Improvements:
+
+With this patch, trampoline programs can directly access multi-level
+pointer parameters, eliminating helper call overhead and explicit ctx
+access while ensuring consistent parameter handling. For example, the
+following ctx access with a helper call:
+
+SEC("fentry/__posix_acl_chmod")
+int BPF_PROG(trace_posix_acl_chmod, struct posix_acl **ppacl, gfp_t gfp,
+             umode_t mode)
+{
+    struct posix_acl **pp;
+    bpf_probe_read_kernel(&pp, sizeof(pp), &ctx[0]);
+    bpf_printk("__posix_acl_chmod %px\n", pp);
+    ...
+}
+
+is replaced by a load instruction:
+
+SEC("fentry/__posix_acl_chmod")
+int BPF_PROG(trace_posix_acl_chmod, struct posix_acl **ppacl, gfp_t gfp,
+             umode_t mode)
+{
+    bpf_printk("__posix_acl_chmod %px\n", ppacl);
+    ...
+}
+
+The bpf_core_cast macro can be used for deeper level dereferences,
+as illustrated in the tests added by this patch.
+
+v1 -> v2:
+* corrected maintainer's email
+v2 -> v3:
+* Addressed reviewers' feedback:
+	* Changed the register type from PTR_TO_MEM to SCALAR_VALUE.
+	* Modified tests to accommodate SCALAR_VALUE handling.
+* Fixed a compilation error for loongarch
+	* https://lore.kernel.org/oe-kbuild-all/202602181710.tEK6nOl6-lkp@intel.com/
+* Addressed AI bot review
+	* Added a commentary to address a NULL pointer case
+	* Removed WARN_ON
+	* Fixed a commentary
+v3 -> v4:
+* Added more consistent support for single and multi-level pointers
+as suggested by reviewers.
+	* added single level pointers to enum 32 and 64
+	* added single level pointers to functions
+	* harmonized support for single and multi-level pointer types
+	* added new tests to support the above changes
+* Removed create_bad_kaddr that allocated and invalidated kernel VA
+for tests, and replaced it with hardcoded values similar to
+bpf_testmod_return_ptr as suggested by reviewers.
+
+Slava Imameev (2):
+  bpf: Support new pointer param types via SCALAR_VALUE for trampolines
+  selftests/bpf: Add trampolines single and multi-level pointer params
+    test coverage
+
+ kernel/bpf/btf.c                              |  31 +-
+ net/bpf/test_run.c                            | 130 +++++
+ .../prog_tests/fentry_fexit_multi_level_ptr.c | 206 +++++++
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../progs/fentry_fexit_pptr_nullable_test.c   |  60 ++
+ .../bpf/progs/fentry_fexit_pptr_test.c        |  67 +++
+ .../bpf/progs/fentry_fexit_void_ppptr_test.c  |  38 ++
+ .../bpf/progs/fentry_fexit_void_pptr_test.c   |  71 +++
+ .../bpf/progs/verifier_ctx_ptr_param.c        | 523 ++++++++++++++++++
+ 9 files changed, 1120 insertions(+), 8 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/fentry_fexit_multi_level_ptr.c
+ create mode 100644 tools/testing/selftests/bpf/progs/fentry_fexit_pptr_nullable_test.c
+ create mode 100644 tools/testing/selftests/bpf/progs/fentry_fexit_pptr_test.c
+ create mode 100644 tools/testing/selftests/bpf/progs/fentry_fexit_void_ppptr_test.c
+ create mode 100644 tools/testing/selftests/bpf/progs/fentry_fexit_void_pptr_test.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_ctx_ptr_param.c
+
+-- 
+2.34.1
+
