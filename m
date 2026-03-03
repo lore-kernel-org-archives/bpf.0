@@ -1,59 +1,52 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from m16.mail.126.com (m16.mail.126.com [117.135.210.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA782EE611
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 05:54:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DA552848BB;
+	Tue,  3 Mar 2026 07:24:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772517271; cv=none; b=cKo/MQP7P/TYhAQnwKGqWP2t7nE0z6b7Qd4NfMXOeHwpuPQpbfQRZhMuBxL7BdgZce1aOJym/rGDZcEMzgfAazqwrCH/QZ4SwQsh785ZpIUD0TfVHNzpiQpF9bmed9nEDIvhrWvOR5GzRzk5waQ2DKSQ4BIDcK5SvKz8roGwGvA=
+	t=1772522668; cv=none; b=pugC6aQgGQAVqrHsqJBunWlCI/19N6TQHZWimkW9T023ZWcTLzMM2GHGz+D/TKPcacotBEL8hlj4JpE1QLZxOrmJwCOhz2fiLCDCCqYcJdhnWGNq3HQksknt51gTrNQ+0Sq8N/Wpq+wnCx8Hs8BOM8YJcO6nSrJFk+30HH6654Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772517271; c=relaxed/simple;
-	bh=6qzHlh10MApeXv7yMNlEmX5cSN6GyQGLqmitHm1kE4g=;
+	s=arc-20240116; t=1772522668; c=relaxed/simple;
+	bh=Es196YeG+70qw0n2ceX/lhCeIW20rSH3pl2LHQseJDQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kJ33RwYx+j634kGCN/CsmoKLoBZmBzbsrrWg+v7wCOKu+3GwV5FEGpz5aT0Erkb2N7AeaNMNZ0sg9FM93/mzHIAbBCFFs5n+QmOsWuDeofKh8HfYmuNigIOasubE5a+AldcPkvMF+z1B4dHCa5geGtpgEzdkO3+NRLyHKmX5IOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iqW7blNx; arc=none smtp.client-ip=91.218.175.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 MIME-Version; b=kVfdEI8bEhpjUqq8xhO8yJSaDVId4vVBCIHkxgJ6YHYAatAFyQe8gc/15Sbk5mcauu8TMhdqKqLCE54tkJsDR185b6FrUPtD275YR8vmEjLkX13su1CNMZxIhCMoAhYoWK4uN+M4+LVgqGmR9kSOLT8ecEB8tdI3amAVEe9cl7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=o5BTgwgA; arc=none smtp.client-ip=117.135.210.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iqW7blNx"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772517268;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=l6eJEYFrb9LvZqYh0Q45H8GvoxLpNshzFBYH4l9HNuk=;
-	b=iqW7blNxfgMMwNnwuepiufW6U7e5cTFabi7kyBfFiPesIN6hDT91skoAwlY4cZ8ekKRc+o
-	K5QrgLyiwFzkvMBCd2RQLWQNjheKc5eUVoyG68nIoMG+jCQemLoGPj/kEn1XDjaYkI6Eud
-	aRJ/G5foVMSVgcFnUTneZ68dOf+qxmo=
-From: Hui Zhu <hui.zhu@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	JP Kobryn <inwardvessel@gmail.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	bpf@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="o5BTgwgA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=x3
+	rn7gZpH9mRjTDX/QjdbmjaJA3AHIVg1ikqiO27ZMk=; b=o5BTgwgAkV50N3oL6W
+	fiUCzwCAApDl1N2NbV99Zn2OMqbozbgCb8h6UyQj0+UOVwOPLdgdM3772/giC9ou
+	Y1pCtrnlwA/38Co2cE5rjRKMkrnU81bojjTE6yQT8CMdbnY1Pgb34U6ro+qY/Fyn
+	BKJDfOqAZvU3Q3fjdxBW8l4/s=
+Received: from localhost.localdomain (unknown [])
+	by gzsmtp5 (Coremail) with SMTP id QCkvCgDnT3h6jKZpVDeAAw--.53445S4;
+	Tue, 03 Mar 2026 15:23:40 +0800 (CST)
+From: Zhao Mengmeng <zhaomzhao@126.com>
+To: tj@kernel.org,
+	void@manifault.com,
+	arighi@nvidia.com,
+	changwoo@igalia.com,
+	shuah@kernel.org,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	morbo@google.com,
+	justinstitt@google.com
+Cc: sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Hui Zhu <zhuhui@kylinos.cn>,
-	JP Kobryn <jp.kobryn@linux.dev>
-Subject: [PATCH bpf-next v5 2/2] bpf: Use bpf_core_enum_value for stats in cgroup_iter_memcg
-Date: Tue,  3 Mar 2026 13:53:09 +0800
-Message-ID: <ca6eb1a1a4fd7a17ffe995acf52c9a4ceb7bac13.1772505399.git.zhuhui@kylinos.cn>
-In-Reply-To: <cover.1772505399.git.zhuhui@kylinos.cn>
-References: <cover.1772505399.git.zhuhui@kylinos.cn>
+	bpf@vger.kernel.org,
+	llvm@lists.linux.dev,
+	zhaomengmeng@kylinos.cn
+Subject: [PATCH 2/3] selftests/sched_ext: Add -fms-extensions to bpf build flags
+Date: Tue,  3 Mar 2026 15:23:16 +0800
+Message-ID: <20260303072317.76035-3-zhaomzhao@126.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260303072317.76035-1-zhaomzhao@126.com>
+References: <20260303072317.76035-1-zhaomzhao@126.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -61,57 +54,41 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-CM-TRANSID:QCkvCgDnT3h6jKZpVDeAAw--.53445S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrurW3Cw4ktFWkGF4DXr1UWrg_yoWkAwbEyw
+	4fWrs7AFWDCFy8tr47ur15Grnakan0grs5ArnIqwnxZw4DZ3Z8Ga1DuF1jvF1FgrWjgr9I
+	vF4vyFyrtFn2gjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU8VT5PUUUUU==
+X-CM-SenderInfo: 52kd0zp2kd0qqrswhudrp/xtbBqhxGvWmmjHwHfAAA3J
 
-From: Hui Zhu <zhuhui@kylinos.cn>
+From: Zhao Mengmeng <zhaomengmeng@kylinos.cn>
 
-Replace hardcoded enum values with bpf_core_enum_value() calls in
-cgroup_iter_memcg test to improve portability across different
-kernel versions.
+Similar to commit 835a50753579 ("selftests/bpf: Add -fms-extensions to
+bpf build flags") and commit 639f58a0f480 ("bpftool: Fix build warnings
+due to MS extensions")
 
-The change adds runtime enum value resolution for:
-- node_stat_item: NR_ANON_MAPPED, NR_SHMEM, NR_FILE_PAGES,
-  NR_FILE_MAPPED
-- vm_event_item: PGFAULT
+Fix "declaration does not declare anything" warning by using
+-fms-extensions and -Wno-microsoft-anon-tag flags to build bpf programs
+that #include "vmlinux.h"
 
-This ensures the BPF program can adapt to enum value changes
-between kernel versions.
-
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-Reviewed-by: JP Kobryn <jp.kobryn@linux.dev>
-Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+Signed-off-by: Zhao Mengmeng <zhaomengmeng@kylinos.cn>
 ---
- .../selftests/bpf/progs/cgroup_iter_memcg.c     | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+ tools/testing/selftests/sched_ext/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c b/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c
-index 12f79a44133e..06a385c9d85b 100644
---- a/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c
-+++ b/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c
-@@ -26,11 +26,18 @@ int cgroup_memcg_query(struct bpf_iter__cgroup *ctx)
+diff --git a/tools/testing/selftests/sched_ext/Makefile b/tools/testing/selftests/sched_ext/Makefile
+index 2815a875bde2..a3bbe2c7911b 100644
+--- a/tools/testing/selftests/sched_ext/Makefile
++++ b/tools/testing/selftests/sched_ext/Makefile
+@@ -93,6 +93,8 @@ BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH)					\
+ 	     $(CLANG_SYS_INCLUDES) 						\
+ 	     -Wall -Wno-compare-distinct-pointer-types				\
+ 	     -Wno-incompatible-function-pointer-types				\
++	     -Wno-microsoft-anon-tag						\
++	     -fms-extensions							\
+ 	     -O2 -mcpu=v3
  
- 	bpf_mem_cgroup_flush_stats(memcg);
- 
--	memcg_query.nr_anon_mapped = bpf_mem_cgroup_page_state(memcg, NR_ANON_MAPPED);
--	memcg_query.nr_shmem = bpf_mem_cgroup_page_state(memcg, NR_SHMEM);
--	memcg_query.nr_file_pages = bpf_mem_cgroup_page_state(memcg, NR_FILE_PAGES);
--	memcg_query.nr_file_mapped = bpf_mem_cgroup_page_state(memcg, NR_FILE_MAPPED);
--	memcg_query.pgfault = bpf_mem_cgroup_vm_events(memcg, PGFAULT);
-+	memcg_query.nr_anon_mapped = bpf_mem_cgroup_page_state(
-+		memcg,
-+		bpf_core_enum_value(enum node_stat_item, NR_ANON_MAPPED));
-+	memcg_query.nr_shmem = bpf_mem_cgroup_page_state(
-+		memcg, bpf_core_enum_value(enum node_stat_item, NR_SHMEM));
-+	memcg_query.nr_file_pages = bpf_mem_cgroup_page_state(
-+		memcg, bpf_core_enum_value(enum node_stat_item, NR_FILE_PAGES));
-+	memcg_query.nr_file_mapped = bpf_mem_cgroup_page_state(
-+		memcg,
-+		bpf_core_enum_value(enum node_stat_item, NR_FILE_MAPPED));
-+	memcg_query.pgfault = bpf_mem_cgroup_vm_events(
-+		memcg, bpf_core_enum_value(enum vm_event_item, PGFAULT));
- 
- 	bpf_put_mem_cgroup(memcg);
- 
+ # sort removes libbpf duplicates when not cross-building
 -- 
 2.43.0
 
