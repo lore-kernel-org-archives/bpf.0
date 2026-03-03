@@ -1,57 +1,57 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BE53381AE6
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 18:11:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34D7B3264C8;
+	Tue,  3 Mar 2026 18:11:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772561469; cv=none; b=MSLhOllibt2/Sw7+Gm6e02nCWM3ofdIXqubgiWOdtUyLYl/n6hUr/0D2f31J3e9eyBLu7HNbZ6S2Gi+iwxGPg9yEaRXLdTiqMCQYCx1kC+xG7ZUxxeEtVR5zUV5onnTDqyf7DdkjAoxjFraV2v7OGrBT6yw1hf/X8jTo13W+uT8=
+	t=1772561471; cv=none; b=RYM6lN6wrnOEM5mIdajx6rBUP22HkN/Wpeen4L7hi6iCFUDOhI3hianXj4Pi+RUgibJzcXY4BKrW3z9Ef+2+gJcAVJQn9X28PKp+ZUR1lEdnp16XmNZtgzi1LUq1sd8Z4gml72AbSJciw4oLUnpPd+dcby6HBGd8N7HANmLGMgc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772561469; c=relaxed/simple;
-	bh=v+4dGsdaXI6UhU0a1GIj6he0+yTM5V/EZRoBNyXUpns=;
+	s=arc-20240116; t=1772561471; c=relaxed/simple;
+	bh=cLFpKVMNiz8kbm4YFP7VjWVb2/WR6GxtEe2LThCTYaw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gcnI8xTtLQWyEmPf7VWLyfU99zVcxt3YcnWQA0od2onq3cAZcp0cGqJQLodmdS4UR3t6g/TF3MAwIk/0B6frmLubQxsAIzauOAAcKbPG/x/b8d2vKJ9R8bVtipmsMZNppcbg1EEDYkS/lLk6TfMGA5e/UTsdvEeKz/phbr3zDV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tcMd6efb; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=pqfeUanQqiee6EQCOksBA+J/Kqs9kd+wGZ9doQR9HYgzkNuGo3amL+R14fBj18fYdPAdqj1NBXMQxWkWbnpl3lkyACkCJ/zaNJc6eqmJKiUm8oBaDGctqSJ2NnksKnqyBdzcec0RJUM0EG6+Tx62Ps+e/xs/C7JAD3CdXVKia/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tgfTUa+R; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tcMd6efb"
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6234a7se2072521;
-	Tue, 3 Mar 2026 18:10:52 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tgfTUa+R"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 623H5Ffu2060996;
+	Tue, 3 Mar 2026 18:10:55 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=pMTGScymwo5E4qyRC
-	uDqWQ1RRGHPMygEEiWcwIPFZ/s=; b=tcMd6efbcT4Rj5jsaPRKbou1cY+AUQqVR
-	enjZyljD9u0yUR54T9L+WBgMN/AnrXF1RsVGDAG5wFbRyN6qJFt3gjnaBU1gOYUn
-	g02DsgDmPd9/m/Z4UqgHYL0aR9tUzfRcIHdIvmnBSiqovcbx4DNOCcEKiwNZ6Die
-	bRpPVihQY0cVAI0bsUcZ9HLCLVdf6M1HEpa39IEvQuzJUeWc1pYkGsVkTkus8q79
-	lIr2Y0uHHEOXqNIqPIp1x+BNMZNtMNaeLmhE90k5X3eBGlxiAmGJdO/+JIPKOqwX
-	JEAQCuJ4B67x+IDSo7gxjY7Jhy+x5XQuJovLfE+/ngqmlMXjqD58g==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ckskbuy11-1
+	:mime-version:references:subject:to; s=pp1; bh=KoqA0eQ6AV3ndyHYi
+	ApU6L60lsiOT32TWmcerkEGRxs=; b=tgfTUa+R0wbx0sKyoF8o2DCU0ojDUdkT2
+	vJzVzOLQ7Z5YPQl7LDERx3YOtdzsDU6hJGoTcMtpL8yw5efLaR1BcvEfMqdl0tLx
+	U2gT7yPUxai58S0DUIt6Wv/m3R73lHuDg3amjcstIDQyIC/fT2g5itImH1fn3N9b
+	nGbQJoRMLK0zd3/0EIWRBkPL9En6huATKG4Acwq3VwME2eZNWS5h5uXiud/Y6cc3
+	ehJEIYrVPcNpHRKz5MbAi7xy2xmOTU3yeRBoZinWyIL9CRSAdnNifbx7qFELA5eF
+	GANdiE3FlEBAIIBMAoxHST43nXkPvceWtB2IH4fsewhsJV6KOrfeQ==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cksrj49qa-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 03 Mar 2026 18:10:51 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 623I7IJt016408;
-	Tue, 3 Mar 2026 18:10:51 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cmbpn3fr5-1
+	Tue, 03 Mar 2026 18:10:54 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 623Et6Z8010299;
+	Tue, 3 Mar 2026 18:10:53 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cmc6k3dft-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 03 Mar 2026 18:10:51 +0000
+	Tue, 03 Mar 2026 18:10:53 +0000
 Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 623IAlkw53019060
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 623IAnYx16449872
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 3 Mar 2026 18:10:47 GMT
+	Tue, 3 Mar 2026 18:10:49 GMT
 Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1C2F72004B;
+	by IMSVA (Postfix) with ESMTP id 8325D20040;
+	Tue,  3 Mar 2026 18:10:49 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6BC8420043;
 	Tue,  3 Mar 2026 18:10:47 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DBE6F20040;
-	Tue,  3 Mar 2026 18:10:44 +0000 (GMT)
 Received: from li-bd3f974c-2712-11b2-a85c-df1cec4d728e.ibm.com.com (unknown [9.43.53.81])
 	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  3 Mar 2026 18:10:44 +0000 (GMT)
+	Tue,  3 Mar 2026 18:10:47 +0000 (GMT)
 From: Hari Bathini <hbathini@linux.ibm.com>
 To: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
 Cc: bpf@vger.kernel.org, Madhavan Srinivasan <maddy@linux.ibm.com>,
@@ -60,10 +60,10 @@ Cc: bpf@vger.kernel.org, Madhavan Srinivasan <maddy@linux.ibm.com>,
         Andrii Nakryiko <andrii@kernel.org>,
         Saket Kumar Bhaskar <skb99@linux.ibm.com>,
         Abhishek Dubey <adubey@linux.ibm.com>,
-        Venkat Rao Bagalkote <venkat88@linux.ibm.com>, bot+bpf-ci@kernel.org
-Subject: [PATCH v4 5/6] powerpc64/bpf: fix handling of BPF stack in exception callback
-Date: Tue,  3 Mar 2026 23:40:29 +0530
-Message-ID: <20260303181031.390073-6-hbathini@linux.ibm.com>
+        Venkat Rao Bagalkote <venkat88@linux.ibm.com>, stable@vger.kernel.org
+Subject: [PATCH v4 6/6] powerpc64/bpf: fix kfunc call support
+Date: Tue,  3 Mar 2026 23:40:30 +0530
+Message-ID: <20260303181031.390073-7-hbathini@linux.ibm.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260303181031.390073-1-hbathini@linux.ibm.com>
 References: <20260303181031.390073-1-hbathini@linux.ibm.com>
@@ -75,134 +75,198 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: xFVJ4h6QI8UgS5b6auo135vWjiYBPkT0
-X-Authority-Analysis: v=2.4 cv=b66/I9Gx c=1 sm=1 tr=0 ts=69a7242b cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+X-Authority-Analysis: v=2.4 cv=Rp/I7SmK c=1 sm=1 tr=0 ts=69a7242e cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
  a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=V8glGbnc2Ofi9Qvn3v5h:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
- a=m4XNrN4Pf6lr1zoJ5mEA:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAzMDE0NiBTYWx0ZWRfXz81N35fQ3OSy
- 1UlUKfDFReonztF9Xmwyi+i66qHzIdzUSCS7FtXcCcagcz63EEEKki4s9iJ9UsA7jUVo2Y+1k7Q
- m/AUh4AFQW8txNO/tJFW76HmyjG69i7EmVQ5vyqI00E8jQAdREgDLBVZvauz4ri+rXtOLfEYghP
- Y9EvFf4qdOU5W+sl6fc43QAfqte1/TiI8Z4ojCyY4SdpSA4LPZna+arF+G/tapEaguxs0CAaxes
- DtaC5hPBeCQF+vFk+J62WHFAorJdRU6MP+fX9q0BV0QwFGd/J24+5+oJ/r+TFYRnnsZcM3NkBLl
- xRrJZegHVVuqginktCky158c28taJs4DwxBLHo4PqOSoM/h23eIM20IgW1QLg6S7Udr4r+0uucF
- 7X83KRZ66p4WOGANh5OSVd4mEmzVT5AwpVtfYa49mfaS1zUnJ5rxzLMIc0mGM9WjtQ7ZuvaeQVE
- uSUkEp1OiS3ghQMS7SQ==
-X-Proofpoint-GUID: xFVJ4h6QI8UgS5b6auo135vWjiYBPkT0
+ a=iQ6ETzBq9ecOQQE5vZCe:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
+ a=cgMUl_j-H115-_3Hw7UA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAzMDE0NiBTYWx0ZWRfX5xrwatiaCXnT
+ 3huUZcjM8NcL7Ju/kluSm6C/XcsEotx+uLYffcGgH6hAR5QdYPygo25D4V3T73GbmLvL6CnTPa4
+ nFXCI+Gn30TGHIksPOWaX7zlsvYY867CYuaTV0FSEfVRqHCfhUw4ImC8SsNhE/DVsJU+kkM9wtt
+ Q7SNe8m1Kplc1nSwi899znI9mEU2c//F2yaF+VoS0ZhqQ0TTbEf5WiEBsNnedh2/wuJhksv5EUd
+ xvQaQJLedFHy4N4yEk0EeRSWSdeQz3io81oDRib8G2ztw5/FcvYBFcnACp8oOJUIXxwP9J3wPuJ
+ W/BLewlCjyH+HdACNnFu/cGqsocRCvC/wp6GxSgkMB1BfoXvRy8YJ2R1nk0voMgi57trVnoYm1l
+ 3+erjx/mn4L9kkCOaYu5CM+Ux547kPXVld1V1adQ4MtgHidmv5eId+N29kfskPk32tFKbN7hEvl
+ cgOFs9V9B9WLRVmm8+w==
+X-Proofpoint-GUID: 7o_4C3H4WFgCekNUSbaUyE3zeEx9T8Lq
+X-Proofpoint-ORIG-GUID: 7o_4C3H4WFgCekNUSbaUyE3zeEx9T8Lq
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-03-03_02,2026-03-03_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 lowpriorityscore=0 phishscore=0 clxscore=1015 adultscore=0
- bulkscore=0 impostorscore=0 malwarescore=0 spamscore=0 priorityscore=1501
+ suspectscore=0 priorityscore=1501 spamscore=0 phishscore=0 adultscore=0
+ bulkscore=0 clxscore=1015 impostorscore=0 malwarescore=0 lowpriorityscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603030146
 
-Exception callback reuses the stack frame of exception boundary. When
-exception boundary and exception callback programs have different BPF
-stack depth, the current stack unwind in exception callback will fail.
-Adjust the stack frame size of exception callback, in its prologue,
-if its BPF stack depth is different from that of exception boundary.
+Commit 61688a82e047 ("powerpc/bpf: enable kfunc call") inadvertently
+enabled kfunc call support for 32-bit powerpc but that support will
+not be possible until ABI mismatch between 32-bit powerpc and eBPF is
+handled in 32-bit powerpc JIT code. Till then, advertise support only
+for 64-bit powerpc. Also, in powerpc ABI, caller needs to extend the
+arguments properly based on signedness. The JIT code is responsible
+for handling this explicitly for kfunc calls as verifier can't handle
+this for each architecture-specific ABI needs. But this was not taken
+care of while kfunc call support was enabled for powerpc. Fix it by
+handling this with bpf_jit_find_kfunc_model() and using zero_extend()
+& sign_extend() helper functions.
 
-Reported-by: bot+bpf-ci@kernel.org
-Closes: https://lore.kernel.org/bpf/2a310e86a59eb4c44c3ac9e5647814469d9c955580c9c0f1b3d9ca4a44717a34@mail.kernel.org/
-Fixes: 11d45eee9f42 ("powerpc64/bpf: Additional NVR handling for bpf_throw")
+Fixes: 61688a82e047 ("powerpc/bpf: enable kfunc call")
+Cc: stable@vger.kernel.org
 Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
 ---
 
-* No changes in v4.
+Changes in v4:
+- Fixed src_reg usage in zero_extend() helper - reported by
+  bot+bpf-ci@kernel.org.
 
 Changes in v3:
-- Fixed a few comments.
+- New patch to fix kfunc call ABI issue on powerpc while passing arguments.
 
 
- arch/powerpc/net/bpf_jit_comp64.c | 36 +++++++++++++++++++++----------
- 1 file changed, 25 insertions(+), 11 deletions(-)
+ arch/powerpc/net/bpf_jit_comp.c   |   2 +-
+ arch/powerpc/net/bpf_jit_comp64.c | 101 +++++++++++++++++++++++++++---
+ 2 files changed, 94 insertions(+), 9 deletions(-)
 
+diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+index 85457bcb2040..a62a9a92b7b5 100644
+--- a/arch/powerpc/net/bpf_jit_comp.c
++++ b/arch/powerpc/net/bpf_jit_comp.c
+@@ -450,7 +450,7 @@ bool bpf_jit_supports_subprog_tailcalls(void)
+ 
+ bool bpf_jit_supports_kfunc_call(void)
+ {
+-	return true;
++	return IS_ENABLED(CONFIG_PPC64);
+ }
+ 
+ bool bpf_jit_supports_arena(void)
 diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-index 7655be76f537..04e76440d1ad 100644
+index 04e76440d1ad..c5e26d231cd5 100644
 --- a/arch/powerpc/net/bpf_jit_comp64.c
 +++ b/arch/powerpc/net/bpf_jit_comp64.c
-@@ -32,14 +32,15 @@
-  *
-  *		[	prev sp		] <-------------
-  *		[    tail_call_info	] 8		|
-- *		[   nv gpr save area	] 6*8 + (12*8)	|
-+ *		[   nv gpr save area	] (6 * 8)	|
-+ *		[ addl. nv gpr save area] (12 * 8)	| <--- exception boundary/callback program
-  *		[    local_tmp_var	] 24		|
-  * fp (r31) -->	[   ebpf stack space	] upto 512	|
-  *		[     frame header	] 32/112	|
-  * sp (r1) --->	[    stack pointer	] --------------
-  *
-- * Additional (12*8) in 'nv gpr save area' only in case of
-- * exception boundary.
-+ * Additional (12 * 8) in 'nv gpr save area' only in case of
-+ * exception boundary/callback.
-  */
+@@ -499,6 +499,83 @@ int bpf_jit_emit_func_call_rel(u32 *image, u32 *fimage, struct codegen_context *
+ 	return 0;
+ }
  
- /* BPF non-volatile registers save area size */
-@@ -51,7 +52,7 @@
-  * for additional non volatile registers(r14-r25) to be saved
-  * at exception boundary
-  */
--#define BPF_PPC_EXC_STACK_SAVE (12*8)
-+#define BPF_PPC_EXC_STACK_SAVE (12 * 8)
- 
- /* stack frame excluding BPF stack, ensure this is quadword aligned */
- #define BPF_PPC_STACKFRAME	(STACK_FRAME_MIN_SIZE + \
-@@ -128,12 +129,13 @@ static inline bool bpf_has_stack_frame(struct codegen_context *ctx)
-  *		[	  ...       	] 		|
-  * sp (r1) --->	[    stack pointer	] --------------
-  *		[    tail_call_info	] 8
-- *		[   nv gpr save area	] 6*8 + (12*8)
-+ *		[   nv gpr save area	] (6 * 8)
-+ *		[ addl. nv gpr save area] (12 * 8) <--- exception boundary/callback program
-  *		[    local_tmp_var	] 24
-  *		[   unused red zone	] 224
-  *
-- * Additional (12*8) in 'nv gpr save area' only in case of
-- * exception boundary.
-+ * Additional (12 * 8) in 'nv gpr save area' only in case of
-+ * exception boundary/callback.
-  */
- static int bpf_jit_stack_local(struct codegen_context *ctx)
++static int zero_extend(u32 *image, struct codegen_context *ctx, u32 src_reg, u32 dst_reg, u32 size)
++{
++	switch (size) {
++	case 1:
++		 /* zero-extend 8 bits into 64 bits */
++		EMIT(PPC_RAW_RLDICL(dst_reg, src_reg, 0, 56));
++		return 0;
++	case 2:
++		 /* zero-extend 16 bits into 64 bits */
++		EMIT(PPC_RAW_RLDICL(dst_reg, src_reg, 0, 48));
++		return 0;
++	case 4:
++		 /* zero-extend 32 bits into 64 bits */
++		EMIT(PPC_RAW_RLDICL(dst_reg, src_reg, 0, 32));
++		fallthrough;
++	case 8:
++		/* Nothing to do */
++		return 0;
++	default:
++		return -1;
++	}
++}
++
++static int sign_extend(u32 *image, struct codegen_context *ctx, u32 src_reg, u32 dst_reg, u32 size)
++{
++	switch (size) {
++	case 1:
++		 /* sign-extend 8 bits into 64 bits */
++		EMIT(PPC_RAW_EXTSB(dst_reg, src_reg));
++		return 0;
++	case 2:
++		 /* sign-extend 16 bits into 64 bits */
++		EMIT(PPC_RAW_EXTSH(dst_reg, src_reg));
++		return 0;
++	case 4:
++		 /* sign-extend 32 bits into 64 bits */
++		EMIT(PPC_RAW_EXTSW(dst_reg, src_reg));
++		fallthrough;
++	case 8:
++		/* Nothing to do */
++		return 0;
++	default:
++		return -1;
++	}
++}
++
++/*
++ * Handle powerpc ABI expectations from caller:
++ *   - Unsigned arguments are zero-extended.
++ *   - Signed arguments are sign-extended.
++ */
++static int prepare_for_kfunc_call(const struct bpf_prog *fp, u32 *image,
++				  struct codegen_context *ctx,
++				  const struct bpf_insn *insn)
++{
++	const struct btf_func_model *m = bpf_jit_find_kfunc_model(fp, insn);
++	int i;
++
++	if (!m)
++		return -1;
++
++	for (i = 0; i < m->nr_args; i++) {
++		/* Note that BPF ABI only allows up to 5 args for kfuncs */
++		u32 reg = bpf_to_ppc(BPF_REG_1 + i), size = m->arg_size[i];
++
++		if (!(m->arg_flags[i] & BTF_FMODEL_SIGNED_ARG)) {
++			if (zero_extend(image, ctx, reg, reg, size))
++				return -1;
++		} else {
++			if (sign_extend(image, ctx, reg, reg, size))
++				return -1;
++		}
++	}
++
++	return 0;
++}
++
+ static int bpf_jit_emit_tail_call(u32 *image, struct codegen_context *ctx, u32 out)
  {
-@@ -240,10 +242,6 @@ void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
- 
- 	if (bpf_has_stack_frame(ctx) && !ctx->exception_cb) {
- 		/*
--		 * exception_cb uses boundary frame after stack walk.
--		 * It can simply use redzone, this optimization reduces
--		 * stack walk loop by one level.
--		 *
- 		 * We need a stack frame, but we don't necessarily need to
- 		 * save/restore LR unless we call other functions
- 		 */
-@@ -287,6 +285,22 @@ void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
- 		 * program(main prog) as third arg
- 		 */
- 		EMIT(PPC_RAW_MR(_R1, _R5));
-+		/*
-+		 * Exception callback reuses the stack frame of exception boundary.
-+		 * But BPF stack depth of exception callback and exception boundary
-+		 * don't have to be same. If BPF stack depth is different, adjust the
-+		 * stack frame size considering BPF stack depth of exception callback.
-+		 * The non-volatile register save area remains unchanged. These non-
-+		 * volatile registers are restored in exception callback's epilogue.
-+		 */
-+		EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_1), _R5, 0));
-+		EMIT(PPC_RAW_SUB(bpf_to_ppc(TMP_REG_2), bpf_to_ppc(TMP_REG_1), _R1));
-+		EMIT(PPC_RAW_ADDI(bpf_to_ppc(TMP_REG_2), bpf_to_ppc(TMP_REG_2),
-+			-BPF_PPC_EXC_STACKFRAME));
-+		EMIT(PPC_RAW_CMPLDI(bpf_to_ppc(TMP_REG_2), ctx->stack_size));
-+		PPC_BCC_CONST_SHORT(COND_EQ, 12);
-+		EMIT(PPC_RAW_MR(_R1, bpf_to_ppc(TMP_REG_1)));
-+		EMIT(PPC_RAW_STDU(_R1, _R1, -(BPF_PPC_EXC_STACKFRAME + ctx->stack_size)));
- 	}
- 
  	/*
+@@ -1143,14 +1220,16 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
+ 				/* special mov32 for zext */
+ 				EMIT(PPC_RAW_RLWINM(dst_reg, dst_reg, 0, 0, 31));
+ 				break;
+-			} else if (off == 8) {
+-				EMIT(PPC_RAW_EXTSB(dst_reg, src_reg));
+-			} else if (off == 16) {
+-				EMIT(PPC_RAW_EXTSH(dst_reg, src_reg));
+-			} else if (off == 32) {
+-				EMIT(PPC_RAW_EXTSW(dst_reg, src_reg));
+-			} else if (dst_reg != src_reg)
+-				EMIT(PPC_RAW_MR(dst_reg, src_reg));
++			}
++			if (off == 0) {
++				/* MOV */
++				if (dst_reg != src_reg)
++					EMIT(PPC_RAW_MR(dst_reg, src_reg));
++			} else {
++				/* MOVSX: dst = (s8,s16,s32)src (off = 8,16,32) */
++				if (sign_extend(image, ctx, src_reg, dst_reg, off / 8))
++					return -1;
++			}
+ 			goto bpf_alu32_trunc;
+ 		case BPF_ALU | BPF_MOV | BPF_K: /* (u32) dst = imm */
+ 		case BPF_ALU64 | BPF_MOV | BPF_K: /* dst = (s64) imm */
+@@ -1618,6 +1697,12 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
+ 			if (ret < 0)
+ 				return ret;
+ 
++			/* Take care of powerpc ABI requirements before kfunc call */
++			if (insn[i].src_reg == BPF_PSEUDO_KFUNC_CALL) {
++				if (prepare_for_kfunc_call(fp, image, ctx, &insn[i]))
++					return -1;
++			}
++
+ 			ret = bpf_jit_emit_func_call_rel(image, fimage, ctx, func_addr);
+ 			if (ret)
+ 				return ret;
 -- 
 2.53.0
 
