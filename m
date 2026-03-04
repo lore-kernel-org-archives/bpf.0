@@ -1,140 +1,89 @@
-Received: from mail-pg1-f193.google.com (mail-pg1-f193.google.com [209.85.215.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D5FE226863
-	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 07:09:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6293C2AE8D;
+	Wed,  4 Mar 2026 07:14:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772608183; cv=none; b=jFEw+dbwZtIucB8f2i2lOBaYDFHwo3Q/hoYjy4t1EPSVeeET4L78fpOIQ/4ZbBwl3CckPmbQw5XzxmKtyE9lpGMAY26dup4yTtx/suPw2uTJN6P1uP/eYlrqXNInCwX83glEMjlx6dKuTsds+wuvjlOncnWBJJHFHHHNZWohbL8=
+	t=1772608460; cv=none; b=GFk+Ol3IeIExfnBu1PEqAm/rIMQP8RLcALvRVhyFwkA842Tm/XbxbFeg+niqGEtajg5nsBJRzG5oFia4XzO9n22gV1XxT4YYX8be+t+I6sDTpknSrybSDfYKgYdJrz9L4RLP7TX1a5PfXEIn3m3zVt+z+yF4mQ4dKutBe2z+CKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772608183; c=relaxed/simple;
-	bh=4d/pDtjsCeJbpYXYsN17tpsk+pR/bruOy5b6xlGmRdQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bcw5b+1EH4OsmUr9ZD8Q2OqduNad09ke29ZktVMiwTEJ9ggKCsVjg8rDxK1DjAPkm/zx+xYFXuXo7N5ZdUWicyYTtkvBUOfsDOs0xQ9fdnhNjIwTmH3g7ZRuqEt3Y/yUIrt7Ko2gv5tBIz1v9bN8U5YTYpjlGLavnJNAcCE3REI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gOonlHRw; arc=none smtp.client-ip=209.85.215.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772608460; c=relaxed/simple;
+	bh=cPZJfPbuDa1fkt02QXSIQH0+wvGAsNbNKl/OpOppkw4=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=F91a3e0PQGEPxriQqJlz1y/IdKxuKO8apN9H7utE27phK1u7/8M6l5L5p8bVkEAOjn7MWaAr4amqDasla730V7ZlTf4ngjqlUeCR9EIYFsfVH19f47+6NewL9/Ck59f5ty1BdTTLFI8DFU/mqOs6PL26mkyTVxUfBl/Jd4XJXd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B2Nv6Dth; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gOonlHRw"
-Received: by mail-pg1-f193.google.com with SMTP id 41be03b00d2f7-c648bc907ebso4107981a12.3
-        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 23:09:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772608181; x=1773212981; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nQWG5MjkMMO6X/T7/5cytYtSTJXPfn5rr0LrLEyQ9mg=;
-        b=gOonlHRwrIn5gvqocpEdfWpHl/04k8qEAuqw/klMPYhlaYghN1uqrhcWyWOKCavxPm
-         2FW4E4krr+gXnoka01bL/vGSOcrRK/t/PoQx4tats9Gt5GSLKg0GnuVe92ynsQy/GijF
-         docCnkNxKBWRH5NyJqxx1MOeIJxjkUoHsOCvsehG4n04rfCirmqeMJEXAb2faqlRJ1u9
-         wK3Pxjy+bD9yCZGj7Z722ABQ6RECJ0Pvkkjml+MmFB0Thobr9L+9Smaf7QSqj7sSHO9C
-         s09qP1unAzBxgxnBDYKVeCl8eJ4uL1ufX0eAdDt+v2C7zfr4xfCnLDYlwMWSo5u0livY
-         V6YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772608181; x=1773212981;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nQWG5MjkMMO6X/T7/5cytYtSTJXPfn5rr0LrLEyQ9mg=;
-        b=ulzK29wgdZ+/XXTwBFWNGwgPUkFNE4DLqSQMwmDuduo9AI+Xz57Bw4LZryDIuQcnL5
-         bfqDtXw3O/AIuTvDIChEt+CDrc1ObVTftUwo/S9Nr1OHptdedZ5ZRzKks3pAVcN/5iHM
-         fJ7zkpqtWWYuJIkY/JH7Gn53TRoPROmvP2gK8+UJbgXBBoMsc+bgu94hSnQoXXLjULWl
-         LYuI/5HfqEuEVGjsZrXbW6Lioy/dEI6klxjGZlOxhddr42qWCRnWZb4kcxdLwiovlof7
-         zgA7CCX4vUgNtItQneAnWpgbypswSRBsNJYHgFXMIzbcwFNhMO/yjKo0a+pqRSJhrhcj
-         rhKw==
-X-Gm-Message-State: AOJu0Yyvnpmx1s9ncFqNv0f4wOvm+fE/cgfD+EqPY45/0cAY+xwCTGVY
-	dWwYVuYwT4Zfa2qXBOgB2TOvdYtyW/Mmn+UHkzqNSTduZPzdi+W6xXG7
-X-Gm-Gg: ATEYQzwkbymw6ZNi5b92Ul7zQRvSi2q0BspVwWbU87LkwHW+mFBa46xAfst1+qR9L6z
-	evOtxVa7QVKaX8LHya/VD9fIUcb0TuIIfHrTilX/ESnSRB2EE9dJAjaDlu9b7ksqm3QQNNT73jU
-	en8rwkVBsXgsWnBGnwZ6gQ7VvWZSlEkrv4F9UU73NRJIqUnjtYFcrsxjlIEqZbVBHN0zhC5+5oA
-	E+xEcXeGZNxFM3+ww4xppu/gspL6FU5Ev95ddsjQSuaGy7t9C5JGKt8her2EFMiNwHyEEKHecF7
-	vXzQQLWv3E8lU4VksA85gm56zRVJNao+EJ1t8xJq1Rfl6qqr3+Gb3kvUV0VtUoLJmj0EhA87+TM
-	/axl+oZq2XERsaB4mcgYKIdWBpmKwLdvjMAfy/sZ83vdOCZOa2fc324O2xD+49Aj5VwGAYJv4K5
-	zTuIt2nBfGXRVtvbD/hsGVBTUdRN1ZJ06q17RWs/1yIs4qsmOvmA==
-X-Received: by 2002:a17:902:d60f:b0:2ae:4bd5:a7f5 with SMTP id d9443c01a7336-2ae6ab6a1b3mr12636425ad.56.1772608180842;
-        Tue, 03 Mar 2026 23:09:40 -0800 (PST)
-Received: from lima-ubuntu.hz.ali.com ([47.246.98.208])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2adfb6b416bsm190980875ad.61.2026.03.03.23.09.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2026 23:09:40 -0800 (PST)
-From: Qing Wang <wangqing7171@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Qing Wang <wangqing7171@gmail.com>,
-	syzbot+b4c5ad098c821bf8d8bc@syzkaller.appspotmail.com
-Subject: [PATCH] bpf: Fix use-after-free in __bpf_trace_run()
-Date: Wed,  4 Mar 2026 15:09:27 +0800
-Message-Id: <20260304070927.178464-1-wangqing7171@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B2Nv6Dth"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5786DC19423;
+	Wed,  4 Mar 2026 07:14:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772608459;
+	bh=cPZJfPbuDa1fkt02QXSIQH0+wvGAsNbNKl/OpOppkw4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=B2Nv6DthxweQOzN4B5mA5GUF94adCUfwqJgJZ0DJyTf5mqabGwVAsWGWLhNy8P6+I
+	 g31FjrQWFyZmS3CE8jVMu6ey2jyvfKhlux1CDPpecNyCy3r0a9G6lPO/0giVJM4Mmd
+	 v6q2w6opQF5ZuUkP6wK2nleEQJBf/fijKg7vjBWABnvYEPPTExbjSRvYoJd4vEOyNX
+	 oimsY1dxixhYpwpb6i80C8IwuDzT0mZcM7FUR/RwLC6TUnRH6+Eyt1mq9enjdwGEr8
+	 x2NcNY3sQOxGL9bOapLXLo17/MGKIcp/hdXLj8dLQb7uO6TXuozWMQZKbgBVSUBjjg
+	 F8CxB1kl59W8w==
+Content-Type: multipart/mixed; boundary="===============8248387453652486925=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <772806bbb78e8d4cfc9525b6122c44496a1c345616a31f0bbb7f8dd12c621844@mail.kernel.org>
+In-Reply-To: <20260304063643.14581-4-jiayuan.chen@linux.dev>
+References: <20260304063643.14581-4-jiayuan.chen@linux.dev>
+Subject: Re: [PATCH bpf-next v1 3/7] tcp_bpf: refactor recvmsg with read actor abstraction
+From: bot+bpf-ci@kernel.org
+To: jiayuan.chen@linux.dev,bpf@vger.kernel.org,john.fastabend@gmail.com,jakub@cloudflare.com
+Cc: jiayuan.chen@linux.dev,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,kuniyu@google.com,willemb@google.com,dsahern@kernel.org,ncardwell@google.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,jiapeng.chong@linux.alibaba.com,ihor.solodrai@linux.dev,mhal@rbox.co,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed,  4 Mar 2026 07:14:19 +0000 (UTC)
 
-A use-after-free issue reported from syzbot exists in __bpf_trace_run(O).
+--===============8248387453652486925==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-BUG: KASAN: slab-use-after-free in __bpf_trace_run kernel/trace/bpf_trace.c:2075 [inline]
-    -> struct bpf_prog *prog = link->link.prog;
+> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+> index 2e26174c9919..6a906bfe3aa4 100644
+> --- a/net/core/skmsg.c
+> +++ b/net/core/skmsg.c
 
-The link(struct bpf_raw_tp_link) was freed when link->link.prog.
+[ ... ]
 
-The root cause is that: both bpf_raw_tp_link and tp_probes are RCU-managed,
-but there is no synchronization between their lifecycles. The link can be
-freed via call_rcu() before tp_probes is freed via
-call_srcu()/call_rcu_tasks_trace(), causing the link's lifetime to be
-shorter than tp_probes. This allows __bpf_trace_run() to access the freed
-link when a tracepoint fires.
+> @@ -440,7 +442,8 @@ int __sk_msg_recvmsg(struct sock *sk, ...
+>  			if (copy)
+> -				copy = copy_page_to_iter(page, sge->offset, copy, iter);
+> +				copy = actor(actor_arg, page,
+> +					     sge->offset, copy);
 
-Fix by calling tracepoint_synchronize_unregister() to ensure tp_probes
-is freed before allowing the link to be freed.
+The direct copy_page_to_iter() call is now replaced by the actor
+callback here, but deeper in the same function the peek-path comment
+still references copy_page_to_iter() by name:
 
-The issue was introduced by commit d4dfc5700e86 ("bpf:
-pass whole link instead of prog when triggering raw tracepoint"),
-which changed tracepoint callbacks to receive bpf_raw_tp_link pointers
-instead of bpf_prog pointers.
+net/core/skmsg.c:sk_msg_read_core() {
+    ...
+		} else {
+			/* Lets not optimize peek case if copy_page_to_iter
+			 * didn't copy the entire length lets just break.
+			 */
+			if (copy != sge->length)
+				goto out;
+    ...
+}
 
-Prior to this commit, this issue did not occur because the bpf_prog was
-directly used and protected by reference counting.
+Should this comment say "the actor" instead of "copy_page_to_iter"
+now that the copy operation is abstracted behind the callback? Once
+the splice actor is added later in this series, the reference to
+copy_page_to_iter will be inaccurate for that path.
 
-Fixes: d4dfc5700e86 ("bpf: pass whole link instead of prog when triggering raw tracepoint")
-Reported-by: syzbot+b4c5ad098c821bf8d8bc@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=b4c5ad098c821bf8d8bc
-Tested-by: syzbot+b4c5ad098c821bf8d8bc@syzkaller.appspotmail.com
-Signed-off-by: Qing Wang <wangqing7171@gmail.com>
+
 ---
- kernel/bpf/syscall.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 0378e83b4099..fc93dd544162 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -3783,6 +3783,12 @@ static void bpf_raw_tp_link_release(struct bpf_link *link)
- 
- 	bpf_probe_unregister(raw_tp->btp, raw_tp);
- 	bpf_put_raw_tracepoint(raw_tp->btp);
-+
-+	/*
-+	 * Ensure tp_probes is freed before the link. This prevents
-+	 * use-after-free in __bpf_trace_run() when a tracepoint fires.
-+	 */
-+	tracepoint_synchronize_unregister();
- }
- 
- static void bpf_raw_tp_link_dealloc(struct bpf_link *link)
--- 
-2.34.1
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22658462977
+--===============8248387453652486925==--
