@@ -1,61 +1,63 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7490438423F
-	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 07:47:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CCBA38657C
+	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 07:47:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772610446; cv=none; b=bY+XvIlBCR/AXh5s/omu2qaUs3bKVUbfD9jh9bVO6wivnUM/5+3ovhziwG5YqXhjy5DlV+L1R0GqxMsjI3BH+o18EFs6QzUIXHWscHL+p7dRieNAb0qjlwJ8oOLG8M/TAhdeQSxhcFLTJZQggcdlmQnESxSGBG3xYL4T/b8Vs0I=
+	t=1772610452; cv=none; b=VKOseChJMlYvVlqNgrRkRQSGbgeobjhD3EnmbV9UA3uObGrmjx+Je3g2irXCBJoZoXtNmblIyZHAlxNTFJz55XuAlnslfTkKpeCVnS+sGvH+EG/j4Wv3inMF2v/QT8KBokW68FaZZ80DpRlkpNNShcERGaW1QmUtaRDPaDYUzvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772610446; c=relaxed/simple;
-	bh=yRckoB6ziQPF5Ej6okVCmWtfBamAAg/Ab3cCVaNmIik=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KTjpnEHoJILj+Z/1r1Au3QxBEfTmtC9YqobtOnh2yBPBYerrgfs20JyFjp4IE7+7fHC7sIIereSsFxjz6jO48t8S3JmMcD6VOfYlCLYdjmK2GUmR5SzSbVMpXBx4oKW1MOURbzToylsHMb4NIz9QsIQzgWxr4CqkbOIqkruD4O0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=krmqqgLa; arc=none smtp.client-ip=209.85.216.45
+	s=arc-20240116; t=1772610452; c=relaxed/simple;
+	bh=6RIg3+xlc56a9TiATGgbmkLKt/1FmZfcHuoKSyt/chw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=CW58I7+tmiXmAmPyNAcjAPe+JO3KcFx6Noiu8FdXZqkI6vuLeuu1dcdLLyqlBTpZFUZtikOIsnrQ4m1ZgYwTttowqNFfzuZW1JUxsTffwBUZPgB25/OY+zuR3P7NUEEV/IYOyFFJJ/WYW6MPcn3EUQj8EPywLICNGZHQuHV6ZbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nNP3pDQl; arc=none smtp.client-ip=209.85.216.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="krmqqgLa"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3598c1ad542so1894589a91.0
-        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 23:47:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nNP3pDQl"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3567e2b4159so3496400a91.0
+        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 23:47:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772610443; x=1773215243; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IGWcCR+A6EXMnTgGJ2S1pAkRxkB7eLQpaJpcDvBiZQI=;
-        b=krmqqgLaCZhCaQJ0k4ERQr6GLZ4KxeBTBkLWQMzVlct/O25x3zM1mckQR2ArVfMgLj
-         AIkqg3Xx3fYV8T6VyO+XIPgx5Egs6FeIpw/QoAtpMiwCUs+SLWNyEIXzSN/5r0QpMHSL
-         FmOdk2QhWc8R3EjJQJbdD94aBX95IRtMRpFlHbVWajJNhIP9LqvLyxhwewR1B4G4aJ0G
-         96F4sJeAoCoWT0Fig9PWI6D7BH96wyMAYiwjcpubUXJAWM8AQcVKqeh3SHImYrS4kwzl
-         kIBK7Z2dsS8i03BuL5RXOsYBC4PYnuYz5koK6CzqZArT4Pc+1f8C9yuyMiz/MWi87TiN
-         w6dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772610443; x=1773215243;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1772610446; x=1773215246; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IGWcCR+A6EXMnTgGJ2S1pAkRxkB7eLQpaJpcDvBiZQI=;
-        b=Oi3odW6oYgrk1jOns5bsSMUwXYIsAV9OOaFokWDpfY3VW9filFFJ4Jzb7NVES2/VrC
-         oxQooN56BDsVwn13I4EsfVgtwfCvOCx6vgPWxhnIa4KWKf3/qmKkHBJA6INmOjtPSNEB
-         xWHUaYf/0J1A6qQ+ZJfwPq/HxQQ/ix666d/vmcfoEMgEDWt4KOk1AOsxaXZBrUxJbSgS
-         SdCKkg6FlEDSwSsLKWnBYVVjJ03dvei5c6L7FUi9N66yT96AEzw9MrwOoFOxMTk4d+UC
-         eIaNmwlSzeYuP/lOjbs8sZ0o5UI7a7Fi66pva1wNyuUVG5L8Une7qvGBaU5SyGd31K98
-         CINQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVqMJCimQOOOg2Zski+X0ohnKGL3E5BQS8SqCLkTEbCrIwJNHidWhDk5/w5oLJP60o/I6o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyEdNDfQbgYYiR9GhGKvBHAlq0oouRXzyvcL0KqFSuo5VDWATUH
-	rwaLCREKTX4nPXtH5/MycAUvgU3+HHmcsDgauISPyEvNRVKrjLQjgaOL
-X-Gm-Gg: ATEYQzxHBEmES+WhDKEFA4H+hyuLjathjUMA/hRaPZB2L3/frXNIAhmI5jJIdOFfRQ7
-	F2areRYJuvycNu7fClvzDd85lcvXI1QJowqlTfu2ozVJ0QzRabrp87IbkKJazP0fOblmtktvxk4
-	WP5dCofNjrhvI1D6YepOG9Yql+qozewMaq8Q4MIFdPQnBfNrWEMVRI9YimrEF2n6DCVr29ZQjcW
-	X5ZU0alEYodViEWuMKVXvhX7S3RNCP7aF3gDLIupXWwce0XRq67vQqqy45beiOA6+UX2o//E/qz
-	BxHS645Y6ee8zeqchAJsWNFsgRaZ/TWWEVAcWg4qYPSsr7l8oKnsE+/e8Nq1PhPYI2mBbxJHZyf
-	GCk8iGO0Q616gnzxgdNgYsRCnLqYqk6HnfQ8tvO8sTbmu0KPmywHib1NsCDwLL9yjgoL6f4iios
-	5K0dm4F3BJ+P7rLa/bGSuJ40tMYK4jUDhrLaqxNv8e9OnlQuPzP/puRSE0HXXxWQ==
-X-Received: by 2002:a17:90b:390e:b0:336:9dcf:ed14 with SMTP id 98e67ed59e1d1-359a6a531e6mr1125726a91.23.1772610442466;
-        Tue, 03 Mar 2026 23:47:22 -0800 (PST)
+        bh=7ugG+Q6CRrXfDVHr7sdXkPMCc63GqTD3eiVmBzfzheY=;
+        b=nNP3pDQlHa0AD2Z3QzLIf7NljbzABm10nlytc7vp9yxz53wgzeWTCV7GMyc0rfko9T
+         xk7Yk6wmIIP9qgDh7FRZASMGD+j979z8KxMtZS5JnOEIjwQDssr+ws5flZV+jkzUSWSf
+         t+Yiyf5FYZEwG7XtPxP9/YgBsEMxa9kypdMhM1N650hGKlQ/pFK1FUqjAINQIA1fa7rq
+         yN3evzG9uW0tdL5a18zNQx/VVKTwLHQlMlF6jv2vaKwo4CoQ/GA1ByXtNUUB8vJKYYhB
+         PZvdjkV6WMV/s7cD98bnkPKTpj+UP97jE9wY4vdmMlsVKYT9F0O00yE3fWzrKQ6pWXPC
+         8s5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772610446; x=1773215246;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=7ugG+Q6CRrXfDVHr7sdXkPMCc63GqTD3eiVmBzfzheY=;
+        b=giW0T3eWMEPNF2HUzKhJZ6OpcNBSPEtlG9YA1rJBSUaAQc3BCavGRRpthz58JMwPlJ
+         MS6Gbg0sW4GxSZqUtNZ2y4YEPpdt0en1Dynr4xbH3biqqDZvIDPrCEP8UVs7agSC/6k4
+         y4iqt5pjpvP16FosULFBgpBuYkCjjElGnF6UkB07NXCpK5f8QCvKFgsIZCOBm2AWR/5u
+         A6hG/ml721rMkmjQdasHsoWqALQ9nkb20iGeYDLxfMbNISGiGfxueV7+bLeGm+V75A8W
+         Nc1KJKQtVwrz3CgP3OwvRmYLZ5dcgpwsXiXToCp3eFLNAQCuAbjM1wahiVSJiIkjgm0b
+         OiJw==
+X-Forwarded-Encrypted: i=1; AJvYcCXGQY1aKLcVkASVoXWjZ2XuvxLWe4q2KhenaMmmgtav7U5JcKJTJvCNQMn+l+lu+Y8qssY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzl9l4dVeuZRophEsGbrvSwtrlUZU2XibtjqHCoR/1J/94cd79x
+	Q5PFLQz8T2d/M0EdtWzKZHHNNk5ysP0bkoMjQRRQJYCissZckGvQJMTZ
+X-Gm-Gg: ATEYQzyFpCaxaglEJFuWBAGvtYHd0Xqf2DgBdYF6u4MaMkRpNT1/dahfJIe4VtKYDke
+	KolLxGZ85CSfsn6d6dRH9VRzsT0m6PMz02RM80lLDguth4oOe0rE+NcGh8Wnb3BpeUYP5wx9UF8
+	WqaWF4U5qYtxSjBeDqwwABl6GTuWpQGXe+Z4IWXlywyW4eonCFMIefEk49wTZVdoPG1bQdAHYiZ
+	TB78PcqvRR2TX7aJ0S+4cSkZFCAxNAORa36ecKfDlysSTl2Io94FXhbRiGuyhqaHXDiujGbKvev
+	/xWP/4vBI/p0KSqRA+stahOcIkcuDb/Lo6BU8o+4vrGWK1oeGWpj8zrPrzFJ9ZG0OkqesOV5+JX
+	6uzdNY2qQNOg0cj1U3slG8J538OpWDP7Jtg86G6cB/5Mt4QZ0OAL6J0f+HhSxWLDWkqqL+75lIP
+	5251DTqoCXCcy0fNnWngbqr0ANwUgFmneXwAfKFiORnraFkf4FJxoJyXAnx4kzhA==
+X-Received: by 2002:a17:90b:1a92:b0:356:7b41:d348 with SMTP id 98e67ed59e1d1-359a6a3d157mr1010057a91.20.1772610446311;
+        Tue, 03 Mar 2026 23:47:26 -0800 (PST)
 Received: from localhost.localdomain ([2409:891f:1ba6:a29e:d73:6202:f71f:51b0])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3599c39def7sm4352078a91.12.2026.03.03.23.47.18
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3599c39def7sm4352078a91.12.2026.03.03.23.47.22
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 03 Mar 2026 23:47:21 -0800 (PST)
+        Tue, 03 Mar 2026 23:47:25 -0800 (PST)
 From: Yafang Shao <laoar.shao@gmail.com>
 To: peterz@infradead.org,
 	mingo@redhat.com,
@@ -70,10 +72,12 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
 	Yafang Shao <laoar.shao@gmail.com>
-Subject: [RFC PATCH 0/2] disable optimistic spinning for ftrace_lock
-Date: Wed,  4 Mar 2026 15:46:48 +0800
-Message-ID: <20260304074650.58165-1-laoar.shao@gmail.com>
+Subject: [RFC PATCH 1/2] locking: add mutex_lock_nospin()
+Date: Wed,  4 Mar 2026 15:46:49 +0800
+Message-ID: <20260304074650.58165-2-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20260304074650.58165-1-laoar.shao@gmail.com>
+References: <20260304074650.58165-1-laoar.shao@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -82,136 +86,145 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Background
-==========
+Introduce mutex_lock_nospin(), a helper that disables optimistic spinning
+on the owner for specific heavy locks. This prevents long spinning times
+that can lead to latency spikes for other tasks on the same runqueue.
 
-One of our latency-sensitive services reported random CPU %sys spikes.
-After a thorough investigation, we finally identified the root cause of the
-CPU %sys spikes. The key kernel stacks are as follows:
-
-- Task A
-
-2026-02-14-16:53:40.938243: [CPU198] 2156302(bpftrace) cgrp:4019437 pod:4019253
-
-        find_kallsyms_symbol+142
-        module_address_lookup+104
-        kallsyms_lookup_buildid+203
-        kallsyms_lookup+20
-        print_rec+64
-        t_show+67
-        seq_read_iter+709
-        seq_read+165
-        vfs_read+165
-        ksys_read+103
-        __x64_sys_read+25
-        do_syscall_64+56
-        entry_SYSCALL_64_after_hwframe+100
-
-This task (2156302, bpftrace) is reading the
-/sys/kernel/debug/tracing/available_filter_functions to check if a function
-is traceable:
-
-  https://github.com/bpftrace/bpftrace/blob/master/src/tracefs/tracefs.h#L21
-
-Reading the available_filter_functions file is time-consuming, as it
-contains tens of thousands of functions:
-
-  $ cat /sys/kernel/debug/tracing/available_filter_functions | wc -l
-  61081
-
-  $ time cat /sys/kernel/debug/tracing/available_filter_functions > /dev/null
-
-  real    0m0.452s
-  user    0m0.000s
-  sys     0m0.452s
-
-Consequently, the ftrace_lock is held by this task for an extended period.
-
-- Other Tasks
-
-2026-02-14-16:53:41.437094: [CPU79] 2156308(bpftrace) cgrp:4019437 pod:4019253
-
-        mutex_spin_on_owner+108
-        __mutex_lock.constprop.0+1132
-        __mutex_lock_slowpath+19
-        mutex_lock+56
-        t_start+51
-        seq_read_iter+250
-        seq_read+165
-        vfs_read+165
-        ksys_read+103
-        __x64_sys_read+25
-        do_syscall_64+56
-        entry_SYSCALL_64_after_hwframe+100
-
-Since ftrace_lock is held by Task-A and Task-A is actively running on a
-CPU, all other tasks waiting for the same lock will spin on their
-respective CPUs. This leads to increased CPU pressure.
-
-Reproduction
-============
-
-This issue can be reproduced simply by running
-`cat available_filter_functions`.
-
-- Single process reading available_filter_functions:
-
-  $ time cat /sys/kernel/tracing/available_filter_functions > /dev/null
-
-  real    0m0.452s
-  user    0m0.001s
-  sys     0m0.451s
-
-- Six processes reading available_filter_functions simultaneously:
-
-  for i in `seq 0 5`; do
-    time cat /sys/kernel/tracing/available_filter_functions > /dev/null &
-  done
-
-  The results are as follows:
-
-  real    0m1.801s
-  user    0m0.000s
-  sys     0m1.779s
-
-  real    0m1.804s
-  user    0m0.001s
-  sys     0m1.791s
-
-  real    0m1.805s
-  user    0m0.000s
-  sys     0m1.792s
-
-  real    0m1.806s
-  user    0m0.001s
-  sys     0m1.796s
-
-  As more processes are added, the system time increases correspondingly.
-
-Solution
-========
-
-One approach is to optimize the reading of available_filter_functions to
-make it as fast as possible. However, the risk lies in the contention
-caused by optimistic spin locking.
-
-Therefore, we need to consider an alternative solution that avoids
-optimistic spinning for heavy mutexes that may be held for long durations.
-Note that we do not want to disable CONFIG_MUTEX_SPIN_ON_OWNER entirely, as
-that could lead to unexpected performance regressions.
-
-In this patch, a new wrapper mutex_lock_nospin() is used for ftrace_lock to
-selectively disable optimistic spinning.
-
-Yafang Shao (2):
-  locking: add mutex_lock_nospin()
-  ftrace: disable optimistic spinning for ftrace_lock
-
+Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+---
  include/linux/mutex.h  |  3 +++
- kernel/locking/mutex.c | 39 +++++++++++++++++++++++++------
- kernel/trace/ftrace.c  | 52 +++++++++++++++++++++---------------------
- 3 files changed, 61 insertions(+), 33 deletions(-)
+ kernel/locking/mutex.c | 39 ++++++++++++++++++++++++++++++++-------
+ 2 files changed, 35 insertions(+), 7 deletions(-)
 
+diff --git a/include/linux/mutex.h b/include/linux/mutex.h
+index ecaa0440f6ec..1e488bb24b57 100644
+--- a/include/linux/mutex.h
++++ b/include/linux/mutex.h
+@@ -189,11 +189,13 @@ extern int __must_check mutex_lock_interruptible_nested(struct mutex *lock,
+ extern int __must_check _mutex_lock_killable(struct mutex *lock,
+ 		unsigned int subclass, struct lockdep_map *nest_lock) __cond_acquires(0, lock);
+ extern void mutex_lock_io_nested(struct mutex *lock, unsigned int subclass) __acquires(lock);
++extern void mutex_lock_nospin_nested(struct mutex *lock, unsigned int subclass);
+ 
+ #define mutex_lock(lock) mutex_lock_nested(lock, 0)
+ #define mutex_lock_interruptible(lock) mutex_lock_interruptible_nested(lock, 0)
+ #define mutex_lock_killable(lock) _mutex_lock_killable(lock, 0, NULL)
+ #define mutex_lock_io(lock) mutex_lock_io_nested(lock, 0)
++#define mutex_lock_nospin(lock) mutex_lock_nospin_nested(lock, 0)
+ 
+ #define mutex_lock_nest_lock(lock, nest_lock)				\
+ do {									\
+@@ -215,6 +217,7 @@ extern void mutex_lock(struct mutex *lock) __acquires(lock);
+ extern int __must_check mutex_lock_interruptible(struct mutex *lock) __cond_acquires(0, lock);
+ extern int __must_check mutex_lock_killable(struct mutex *lock) __cond_acquires(0, lock);
+ extern void mutex_lock_io(struct mutex *lock) __acquires(lock);
++extern void mutex_lock_nospin(struct mutex *lock) __acquires(lock);
+ 
+ # define mutex_lock_nested(lock, subclass) mutex_lock(lock)
+ # define mutex_lock_interruptible_nested(lock, subclass) mutex_lock_interruptible(lock)
+diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
+index 2a1d165b3167..03d3b0749882 100644
+--- a/kernel/locking/mutex.c
++++ b/kernel/locking/mutex.c
+@@ -290,6 +290,14 @@ void __sched mutex_lock(struct mutex *lock)
+ 		__mutex_lock_slowpath(lock);
+ }
+ EXPORT_SYMBOL(mutex_lock);
++
++void __sched mutex_lock_nospin(struct mutex *lock)
++{
++	might_sleep();
++
++	if (!__mutex_trylock_fast(lock))
++		__mutex_lock_nospin(lock);
++}
+ #endif
+ 
+ #include "ww_mutex.h"
+@@ -443,8 +451,11 @@ static inline int mutex_can_spin_on_owner(struct mutex *lock)
+  */
+ static __always_inline bool
+ mutex_optimistic_spin(struct mutex *lock, struct ww_acquire_ctx *ww_ctx,
+-		      struct mutex_waiter *waiter)
++		      struct mutex_waiter *waiter, const bool nospin)
+ {
++	if (nospin)
++		return false;
++
+ 	if (!waiter) {
+ 		/*
+ 		 * The purpose of the mutex_can_spin_on_owner() function is
+@@ -577,7 +588,8 @@ EXPORT_SYMBOL(ww_mutex_unlock);
+ static __always_inline int __sched
+ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclass,
+ 		    struct lockdep_map *nest_lock, unsigned long ip,
+-		    struct ww_acquire_ctx *ww_ctx, const bool use_ww_ctx)
++		    struct ww_acquire_ctx *ww_ctx, const bool use_ww_ctx,
++		    const bool nospin)
+ {
+ 	DEFINE_WAKE_Q(wake_q);
+ 	struct mutex_waiter waiter;
+@@ -615,7 +627,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
+ 
+ 	trace_contention_begin(lock, LCB_F_MUTEX | LCB_F_SPIN);
+ 	if (__mutex_trylock(lock) ||
+-	    mutex_optimistic_spin(lock, ww_ctx, NULL)) {
++	    mutex_optimistic_spin(lock, ww_ctx, NULL, nospin)) {
+ 		/* got the lock, yay! */
+ 		lock_acquired(&lock->dep_map, ip);
+ 		if (ww_ctx)
+@@ -716,7 +728,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
+ 			 * to run.
+ 			 */
+ 			clear_task_blocked_on(current, lock);
+-			if (mutex_optimistic_spin(lock, ww_ctx, &waiter))
++			if (mutex_optimistic_spin(lock, ww_ctx, &waiter, nospin))
+ 				break;
+ 			set_task_blocked_on(current, lock);
+ 			trace_contention_begin(lock, LCB_F_MUTEX);
+@@ -773,14 +785,21 @@ static int __sched
+ __mutex_lock(struct mutex *lock, unsigned int state, unsigned int subclass,
+ 	     struct lockdep_map *nest_lock, unsigned long ip)
+ {
+-	return __mutex_lock_common(lock, state, subclass, nest_lock, ip, NULL, false);
++	return __mutex_lock_common(lock, state, subclass, nest_lock, ip, NULL, false, false);
++}
++
++static int __sched
++__mutex_lock_nospin(struct mutex *lock, unsigned int state, unsigned int subclass,
++		    struct lockdep_map *nest_lock, unsigned long ip)
++{
++	return __mutex_lock_common(lock, state, subclass, nest_lock, ip, NULL, false, true);
+ }
+ 
+ static int __sched
+ __ww_mutex_lock(struct mutex *lock, unsigned int state, unsigned int subclass,
+ 		unsigned long ip, struct ww_acquire_ctx *ww_ctx)
+ {
+-	return __mutex_lock_common(lock, state, subclass, NULL, ip, ww_ctx, true);
++	return __mutex_lock_common(lock, state, subclass, NULL, ip, ww_ctx, true, false);
+ }
+ 
+ /**
+@@ -861,11 +880,17 @@ mutex_lock_io_nested(struct mutex *lock, unsigned int subclass)
+ 
+ 	token = io_schedule_prepare();
+ 	__mutex_lock_common(lock, TASK_UNINTERRUPTIBLE,
+-			    subclass, NULL, _RET_IP_, NULL, 0);
++			    subclass, NULL, _RET_IP_, NULL, 0, false);
+ 	io_schedule_finish(token);
+ }
+ EXPORT_SYMBOL_GPL(mutex_lock_io_nested);
+ 
++void __sched
++mutex_lock_nospin_nested(struct mutex *lock, unsigned int subclass)
++{
++	__mutex_lock_nospin(lock, TASK_UNINTERRUPTIBLE, subclass, NULL, _RET_IP_);
++}
++
+ static inline int
+ ww_mutex_deadlock_injection(struct ww_mutex *lock, struct ww_acquire_ctx *ctx)
+ {
 -- 
 2.47.3
 
