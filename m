@@ -1,145 +1,245 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-b1-smtp.messagingengine.com (flow-b1-smtp.messagingengine.com [202.12.124.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A1083914E9
-	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 17:23:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B0F73BA22A;
+	Wed,  4 Mar 2026 17:27:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772645016; cv=none; b=ku/NvBOtc449LBp2ZbY/cCOr+rWeszmBZqNDfPBVlchexUVvEVUu6eUB5iWy/HUHBBiEj75wLdHSOfvHlZhQnO2aL5Ma69WLJNjpUpi8PThWrrUpYeKdM1qq28n2tyBGbiGCtA6+iAoBQpgZ1WmOMytWI14QHifpEzrpQSA0Ovg=
+	t=1772645261; cv=none; b=Uh1k72MYujx5gvo9IRNA0l9cOjwXP8FAZsMaE5RF27TRXOsD61yI4nJ9AE1nrfake0OYIRkT+QKhSp4NBV5ef2poNctnox+Y2TgY38Niv4IPxjQvHQFGqDm8U1x2ft86vq1i3KZrvH4FiRC6aYeXYXtLluUba/uiEzuQGdiG3dg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772645016; c=relaxed/simple;
-	bh=JkbNzU+BC5mBDwM7Qlval4j4vLyLERVSyUQctGylHzI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BbIg6Ay31yxGIMvhYxh3HAUu/nrN2/0EviTkCkmD8iKxRlAIK0o69eL4D1aC+/STCC4t4sCUHMzXLOmqtswXtthRaAsNkOvwx1Z4L8h2YXVFTccLWotuJlBVwJVbz/avAmYflv/29MEhRqtkFi/5vTyeM1i1jEMtl5hw8/7h+bs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YQYoUW1V; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772645261; c=relaxed/simple;
+	bh=ChRoXIr9yvc9qsnA8M/lFeW4TR0ctexLkYbNu6N5U84=;
+	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+	 Content-Type:Date:Message-ID; b=fC1MkkZ5bkQwHVpMOW0NbK3sM6paNKxB5ySeg2E0CQPnO9rEnGS2e2dWIWtd2OKyNt5ZF5pZetoFpjW8NEX68jrtrE/2G7/+P7sQ7a9amKknt7b6I+sdTl5HCf1LtNrJjWrLZzCf+/cek5LSU1yGAq53wciFjrJgDML3ImG83kU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net; spf=pass smtp.mailfrom=jvosburgh.net; dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b=QnC36x3Q; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Ts0Q+CyL; arc=none smtp.client-ip=202.12.124.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jvosburgh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YQYoUW1V"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-439b9b190easo2348709f8f.2
-        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 09:23:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772645009; x=1773249809; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/95HNY6KDLzXlUBiGuKlerjfWpKOKTeKORSHgp3u1Uc=;
-        b=YQYoUW1VBvAnVLYSLizzhSBr80QtbIaRXDS51kDzlvNZ3fjq1NWMBKvGRxtMIN6/wX
-         uSZz0KapBUWz1540FeT+UpDJ4StgtQpP7eSkg7PBBzwsgEhxaLeT2onfhvG44Y2ahf8m
-         pDxxikF3L3n3W2AIRX8UrMI3HJeV8oByeaB2ld8OVheJBqOnnWfRLtmBbOX3IX3peK1H
-         IjpbcMfa7bnxXli3sjWHi6Y3eKz2ZDy1Sx+0/6bDJ0tIJZVJSvwevEKoCNQO/hBtvNJm
-         1YpcT1ocxyu4Css8soaPt9L32BtJv9VGOIdK80FnBBQbE0ylSSK+Fg2iGueb2h4eNKt+
-         r8Pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772645009; x=1773249809;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/95HNY6KDLzXlUBiGuKlerjfWpKOKTeKORSHgp3u1Uc=;
-        b=mcZZA/17w4NDtTq1av+I7pQaZj22esl7FSq2DVckNpKgML4/tbFR27kqLdPj8yoXdT
-         Gw+0ssBYtyoq6zpMnEyJaSjF1X856zNXzrw58/g5IkL06qyGEqRViHo1FWZiTNrjpSiC
-         HWiYB6Q47TqdiV08C5VFuSTtNy6k5CfPxnipXM7x+Cc2aePE/sgTmGUBZTIJ6m5wTjLK
-         mG4iXn+ojfpLGvW/2B1fAb8f+nVd119S8ZiMbuEiahAo8L/6t5OdJNeaJfYQ+yj500r8
-         0MPP9BknuKaeZ3/YAdAtnGkgE/9PMTX+gvJWrCXhBu1uHDYrolHQ+q16xSTdOjUMjMY6
-         6xBA==
-X-Forwarded-Encrypted: i=1; AJvYcCWh5/y8xAN72dK/kCFUpX6vZaFxLUWyOeFgnk7i54xZGVU21P+9hzKxt8bqQdoy2qbMGgI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyH3GMmsyH1cut6idKAgamQ15Qua6vas8CYLLpVyY+UMfkdJEaW
-	5Dr91sFmYY3E2Qq4ReI3EisXXVC/pyMpNtoDHtjDGhhwmJ/+Rl4+bw3M
-X-Gm-Gg: ATEYQzwoidNQA3Qo3JdNtChBHKLTos7DeLBsCeYEziTpWQwTJVxS/6FCiKXkvaFr683
-	PzHPT6PHY/onoqexcHqGOHxjUSSjcNiBgn6AlQC+aoiuKU5KLmXW57IkV+xdp46V/4UsfTZShN2
-	OOPnQDqyGCekN7J0tmzINbmKJU0tckHyMHshPu3WCT5kyS8lTrE0n6flnSpPcz+W8sBk+jhjXEn
-	ugmKjyY3BpxrPmIm4ni0aiYxp632QMndtG56edD+MiYWLEndkI0kpEHSz4wy+fhfOWw35tLt01v
-	xESTyZ/pXsl76QmpzkH2ZaDX1j9yZ7DIFQxNcW8srXidVf3Jq/bIdhBEDyx7XKfKThkDRE0cS35
-	NpLamTWGssxVhMstu+fYyj9vM4jq6IiHgWdK5bmZkHmZfCZrjOVer9H15kpZq7e8ePixY/Zi9Zu
-	RYSqk2r4RfpnsF8MopBJwiX4e+HAvbh+EEOtyVI7d8IzgGaraAKsL21kpPU/WbLSJLKs4C9tS4c
-	eNipmJ08wZlc7uWWZWGMjqgCojS5MjoVtkwBXMydOSJnV2zvXyHRuoOT/7qpvb3nh/ZrqpF3b7l
-	u0od3bOrEA==
-X-Received: by 2002:a05:6000:1862:b0:439:c1e2:921f with SMTP id ffacd0b85a97d-439c800d2a1mr5668603f8f.59.1772645009089;
-        Wed, 04 Mar 2026 09:23:29 -0800 (PST)
-Received: from mail.gmail.com (2a01cb0889497e00a157f2ce043226e6.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:a157:f2ce:432:26e6])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439b1116698sm31716855f8f.16.2026.03.04.09.23.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2026 09:23:28 -0800 (PST)
-Date: Wed, 4 Mar 2026 18:23:26 +0100
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Vitaly Chikunov <vt@altlinux.org>, bpf@vger.kernel.org,
-	kernel-team@meta.com
-Subject: Re: [PATCH bpf v1] resolve_btfids: Drop -lzstd fallback if libzstd
- not found
-Message-ID: <aahqjs9v3PRmR6rV@mail.gmail.com>
-References: <20260302231058.916946-1-ihor.solodrai@linux.dev>
+	dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b="QnC36x3Q";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Ts0Q+CyL"
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailflow.stl.internal (Postfix) with ESMTP id CF9111300F11;
+	Wed,  4 Mar 2026 12:27:30 -0500 (EST)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-01.internal (MEProxy); Wed, 04 Mar 2026 12:27:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jvosburgh.net;
+	 h=cc:cc:content-id:content-transfer-encoding:content-type
+	:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to; s=fm2; t=1772645250; x=1772652450; bh=3hZ85nMdNhByeQ6ZYVQXq
+	B9xKZH1h7PxqhN6Br3f/2c=; b=QnC36x3Q0L6xqckhgTvg0RhzwLtbHJl1LbZae
+	lQOEj5vSYUTnSoVlsVUeyWZ7BFVXvRbadXEoFjlwbuFmtCNoNr5g6QgGwQhny6EB
+	9+TJ1YY5NzwaPEddpx8Dz91sG6J7yavVO6pwgw7K00XnTGDS3NLW2t2kWbKXI/bD
+	ktlVMvv3lLGzjkrFKztKz/lOnCzXc+uBHh8LxWeqUrV0j7rKVCgZlB2ojJtQt8z2
+	d7rwxR8364Xlmf3EIgKF8a79qS4pel2lSzv450kjZmMyfz6Kcgo0Cj+C0la1LVuH
+	RAJl6zvwMmHvuMMDz0X1SnfPo/FXLXgNoyXC5a03JJIhH9prw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-id
+	:content-transfer-encoding:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1772645250; x=1772652450; bh=3hZ85nMdNhByeQ6ZYVQXqB9xKZH1h7PxqhN
+	6Br3f/2c=; b=Ts0Q+CyLeHtsjZa2qIsBBXYiazEhphTAUGF1UbKa8iFCnzq+F9Z
+	tpFVd3j1u8YHNdSWNkE7XrsA0j2gJqzVSc26ea5hkpBzUPp7HikTyqU8MgT8d5Sn
+	K0S/PEf75ZeANH4LYctWTja3+fzREQSau8D4BOrSKlCjqv4jAtKAsgd+2liZrw/f
+	yhpkISLwza5cFE2y/otsnbshQlvQPvvhAHgC8Dayj8qkRqyYJdVOppxQqZ7baCCe
+	Pxahyc9I55JrrKXD3ZrmWi+grgHLziieNuHHwJ8NTIf08TcgkC3sqeG12qJdllH4
+	f8R65rPiQnwJBvcMCC8Z9E2rZ0jDMdrZtnA==
+X-ME-Sender: <xms:gWuoaXqk14uE5s0m_TuMf6ts7a1i3iGW40jvSu4pR9Zi_ZfP5HqcrA>
+    <xme:gWuoaU0B4tFrUIaiHcZUah8p0Kqq7oYK-qlT7K3Nw0nygkSEH7vmRwyVXFm5slPvH
+    sPby8Kgy7liPCAcsrsEpztcXNBGkn-rFcEqJbZ-r4oFfA__sHHhYWDA>
+X-ME-Received: <xmr:gWuoabDRjtyrY32qaPOz5eDHSWtQ4mJweZH9YQJ7da5hObUf-gDGexKT6ARICdu4PKP5Iw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvieeguddtucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhephffvvefujghfofggtgfgfffksehtqhertdertddvnecuhfhrohhmpeflrgihucgg
+    ohhssghurhhghhcuoehjvhesjhhvohhssghurhhghhdrnhgvtheqnecuggftrfgrthhtvg
+    hrnhepueffvedvvdefudejfeeuudfgtdfgudettdevfeeileffhffghfdtjeekhfeitdek
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpehjvhesjhhvohhssghurhhghhdrnhgvthdpnhgs
+    pghrtghpthhtohepfedvpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehrrgiioh
+    hrsegslhgrtghkfigrlhhlrdhorhhgpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhl
+    ohhfthdrnhgvthdprhgtphhtthhopehsughfsehfohhmihgthhgvvhdrmhgvpdhrtghpth
+    htohepvgguugihiiekjeesghhmrghilhdrtghomhdprhgtphhtthhopehjohgrmhgrkhhi
+    sehgmhgrihhlrdgtohhmpdhrtghpthhtohepjhhohhhnrdhfrghsthgrsggvnhgusehgmh
+    grihhlrdgtohhmpdhrtghpthhtoheprhhoshhtvgguthesghhoohgumhhishdrohhrghdp
+    rhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpdhrtghpthhtohephh
+    grohhluhhosehgohhoghhlvgdrtghomh
+X-ME-Proxy: <xmx:gWuoaf-EBMU6swfd3wz5-LiaJoCG7pZXDIGa3MJHvemjMva_eYZK7g>
+    <xmx:gWuoaZNqTd9KN2XDAKETzPj03As7PqG8KycivG-2S4CbXR-oS_YByA>
+    <xmx:gWuoaZGIr2ULQaYIa6nntoUlP4dambGdZS1-5PMwloSv7uFI8a5YCQ>
+    <xmx:gWuoaYtTjEINoFXqZu29syBRqZDb08iZ_8KL2A4Cw1Mle9DtJKzvVQ>
+    <xmx:gmuoaQPXxPfDAFDGHFskgUiH2pt0TXhr7IpjI4TKmlobe_WeiAlZ6uUc>
+Feedback-ID: i53714940:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 4 Mar 2026 12:27:29 -0500 (EST)
+Received: by famine.localdomain (Postfix, from userid 1000)
+	id 0A4769FCB4; Wed,  4 Mar 2026 09:27:28 -0800 (PST)
+Received: from famine (localhost [127.0.0.1])
+	by famine.localdomain (Postfix) with ESMTP id 08F399FC67;
+	Wed,  4 Mar 2026 09:27:28 -0800 (PST)
+From: Jay Vosburgh <jv@jvosburgh.net>
+To: Nikolay Aleksandrov <razor@blackwall.org>
+cc: Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org,
+    jiayuan.chen@shopee.com,
+    syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
+    Andrew Lunn <andrew+netdev@lunn.ch>,
+    "David S. Miller" <davem@davemloft.net>,
+    Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+    Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+    Daniel Borkmann <daniel@iogearbox.net>,
+    Jesper Dangaard Brouer <hawk@kernel.org>,
+    John Fastabend <john.fastabend@gmail.com>,
+    Stanislav Fomichev <sdf@fomichev.me>,
+    Andrii Nakryiko <andrii@kernel.org>,
+    Martin KaFai Lau <martin.lau@linux.dev>,
+    Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+    Yonghong Song <yonghong.song@linux.dev>,
+    KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+    Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+    Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+    Clark Williams <clrkwllms@kernel.org>,
+    Steven Rostedt <rostedt@goodmis.org>, Jussi Maki <joamaki@gmail.com>,
+    linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+    linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH net v4 1/2] bonding: fix null-ptr-deref in
+ bond_rr_gen_slave_id()
+In-reply-to: <aahWymAi_CtRG0gJ@penguin>
+References: <20260304074301.35482-1-jiayuan.chen@linux.dev>
+ <20260304074301.35482-2-jiayuan.chen@linux.dev> <aahWymAi_CtRG0gJ@penguin>
+Comments: In-reply-to Nikolay Aleksandrov <razor@blackwall.org>
+   message dated "Wed, 04 Mar 2026 17:59:06 +0200."
+X-Mailer: MH-E 8.6+git; nmh 1.8+dev; Emacs 29.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260302231058.916946-1-ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1293119.1772645247.1@famine>
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 04 Mar 2026 09:27:28 -0800
+Message-ID: <1293120.1772645248@famine>
 
-On Mon, Mar 02, 2026 at 03:10:58PM -0800, Ihor Solodrai wrote:
-> The "|| echo -lzstd" default makes zstd an unconditional link
-> dependency of resolve_btfids. On systems where libzstd-dev is not
-> installed and pkg-config fails, the linker fails:
-> 
->   ld: cannot find -lzstd: No such file or directory
-> 
-> libzstd is a transitive dependency of libelf, so the -lzstd flag is
-> strictly necessary only for static builds [1].
-> 
-> Drop the -lzstd fallback to enable builds on systems without
-> libzstd-dev installed.
-> 
-> Reported-by: BPF CI Bot (Claude Opus 4.6) <bot+bpf-ci@kernel.org>
-> Reported-by: Vitaly Chikunov <vt@altlinux.org>
-> Closes: https://lore.kernel.org/bpf/aaWqMcK-2AQw5dx8@altlinux.org/
-> Fixes: 4021848a903e ("selftests/bpf: Pass through build flags to bpftool and resolve_btfids")
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> ---
->  tools/bpf/resolve_btfids/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-> index ef083602b73a..5df897c881d3 100644
-> --- a/tools/bpf/resolve_btfids/Makefile
-> +++ b/tools/bpf/resolve_btfids/Makefile
-> @@ -66,7 +66,7 @@ LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
->  LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
->  
->  ZLIB_LIBS  := $(shell $(HOSTPKG_CONFIG) zlib --libs 2>/dev/null || echo -lz)
-> -ZSTD_LIBS  := $(shell $(HOSTPKG_CONFIG) libzstd --libs 2>/dev/null || echo -lzstd)
-> +ZSTD_LIBS  := $(shell $(HOSTPKG_CONFIG) libzstd --libs 2>/dev/null)
+Nikolay Aleksandrov <razor@blackwall.org> wrote:
 
-This change is currently failing in CI with "undefined reference to
-`ZSTD_xxx'" when trying to build resolve_btfids. I think this is
-happening because the selftests use static linking with
-PKG_CONFIG='pkg-config --static' but then the same isn't done for
-resolve_btfids, so "pkg-config libelf --libs" doesn't return -lzstd.
+>On Wed, Mar 04, 2026 at 03:42:57PM +0800, Jiayuan Chen wrote:
+>> From: Jiayuan Chen <jiayuan.chen@shopee.com>
+>> =
 
-So maybe the solution is to define HOSTPKG_CONFIG when building
-resolve_btfids, as in the following diff:
+>> bond_rr_gen_slave_id() dereferences bond->rr_tx_counter without a NULL
+>> check. rr_tx_counter is a per-CPU counter only allocated in bond_open()
+>> when the bond mode is round-robin. If the bond device was never brought
+>> up, rr_tx_counter remains NULL, causing a null-ptr-deref.
+>> =
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 72a9ba41f95e..d5acbeba0383 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -409,6 +409,7 @@ $(RESOLVE_BTFIDS): $(HOST_BPFOBJ) | $(HOST_BUILD_DIR)/resolve_btfids        \
-                CC="$(HOSTCC)" LD="$(HOSTLD)" AR="$(HOSTAR)" \
-                LIBBPF_INCLUDE=$(HOST_INCLUDE_DIR) \
-                EXTRA_LDFLAGS='$(SAN_LDFLAGS) $(EXTRA_LDFLAGS)' \
-+               HOSTPKG_CONFIG=$(PKG_CONFIG) \
-                OUTPUT=$(HOST_BUILD_DIR)/resolve_btfids/ BPFOBJ=$(HOST_BPFOBJ)
+>> The XDP redirect path can reach this code even when the bond is not up:
+>> bpf_master_redirect_enabled_key is a global static key, so when any bon=
+d
+>> device has native XDP attached, the XDP_TX -> xdp_master_redirect()
+>> interception is enabled for all bond slaves system-wide. This allows th=
+e
+>> path xdp_master_redirect() -> bond_xdp_get_xmit_slave() ->
+>> bond_xdp_xmit_roundrobin_slave_get() -> bond_rr_gen_slave_id() to be
+>> reached on a bond that was never opened.
+>> =
 
- # Get Clang's default includes on this system, as opposed to those seen by
+>> Fix this by allocating rr_tx_counter unconditionally in bond_init()
+>> (ndo_init), which is called by register_netdevice() and covers both
+>> device creation paths (bond_create() and bond_newlink()). This also
+>> handles the case where bond mode is changed to round-robin after device
+>> creation. The conditional allocation in bond_open() is removed. Since
+>> bond_destructor() already unconditionally calls
+>> free_percpu(bond->rr_tx_counter), the lifecycle is clean: allocate at
+>> ndo_init, free at destructor.
+>> =
 
->  
->  HOSTCFLAGS_resolve_btfids += -g \
->            -I$(srctree)/tools/include \
-> -- 
-> 2.53.0
-> 
-> 
+>> Note: rr_tx_counter is only used by round-robin mode, so this
+>> deliberately allocates a per-cpu u32 that goes unused for other modes.
+>> Conditional allocation (e.g., in bond_option_mode_set) was considered
+>> but rejected: the XDP path can race with mode changes on a downed bond,
+>> and adding memory barriers to the XDP hot path is not justified for
+>> saving 4 bytes per CPU.
+>> =
+
+>> Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to sla=
+ve device")
+>> Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com
+>> Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.00cc.GAE@g=
+oogle.com/T/
+>> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
+>> ---
+>>  drivers/net/bonding/bond_main.c | 19 +++++++++++++------
+>>  1 file changed, 13 insertions(+), 6 deletions(-)
+>> =
+
+>
+>IMO it's not worth it to waste memory in all modes, for an unpopular mode=
+.
+>I think it'd be better to add a null check in bond_rr_gen_slave_id(),
+>READ/WRITE_ONCE() should be enough since it is allocated only once, and
+>freed when the xmit code cannot be reachable anymore (otherwise we'd have
+>more bugs now). The branch will be successfully predicted practically alw=
+ays,
+>and you can also mark the ptr being null as unlikely. That way only RR ta=
+kes
+>a very minimal hit, if any.
+
+	Is what you're suggesting different from Jiayuan's proposal[0],
+in the sense of needing barriers in the XDP hot path to insure ordering?
+
+	If I understand correctly, your suggestion is something like
+(totally untested):
+
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_ma=
+in.c
+index eb27cacc26d7..ac2a4fc0aad0 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -4273,13 +4273,17 @@ void bond_work_cancel_all(struct bonding *bond)
+ static int bond_open(struct net_device *bond_dev)
+ {
+ 	struct bonding *bond =3D netdev_priv(bond_dev);
++	u32 __percpu *rr_tx_tmp;
+ 	struct list_head *iter;
+ 	struct slave *slave;
+ =
+
+-	if (BOND_MODE(bond) =3D=3D BOND_MODE_ROUNDROBIN && !bond->rr_tx_counter)=
+ {
+-		bond->rr_tx_counter =3D alloc_percpu(u32);
+-		if (!bond->rr_tx_counter)
++	if (BOND_MODE(bond) =3D=3D BOND_MODE_ROUNDROBIN &&
++	    !READ_ONCE(bond->rr_tx_counter)) {
++		rr_tx_tmp =3D alloc_percpu(u32);
++		if (!rr_tx_tmp)
+ 			return -ENOMEM;
++		WRITE_ONCE(bond->rr_tx_counter, rr_tx_tmp);
++
+ 	}
+ =
+
+ 	/* reset slave->backup and slave->inactive */
+@@ -4866,6 +4870,9 @@ static u32 bond_rr_gen_slave_id(struct bonding *bond=
+)
+ 	struct reciprocal_value reciprocal_packets_per_slave;
+ 	int packets_per_slave =3D bond->params.packets_per_slave;
+ =
+
++	if (!READ_ONCE(bond->rr_tx_counter))
++		packets_per_slave =3D 0;
++
+ 	switch (packets_per_slave) {
+ 	case 0:
+ 		slave_id =3D get_random_u32();
+
+	-J
+
+
+[0] https://lore.kernel.org/netdev/e4a2a652784ec206728eb3a929a9892238c61f0=
+6@linux.dev/
+
+---
+	-Jay Vosburgh, jv@jvosburgh.net
