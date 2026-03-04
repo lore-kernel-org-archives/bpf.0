@@ -1,30 +1,32 @@
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6068B18A92F
-	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 06:37:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5AD529408;
+	Wed,  4 Mar 2026 06:37:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772606236; cv=none; b=Gt8Fzj1D10qN5PBDczfdaI1zMFFAVHhyboorhfBkNyeELfzPLoA0RovH744Whb63BVQzr4VHuy+YhJmqhCTtEkessrlq+dTXI2DjbyPdszz+zK4FygI3Ul+6qu+oUFDaLPVE7bKjKApDsMNyyA7tOpuqaXpPjCj1F6Wrne/wRdA=
+	t=1772606259; cv=none; b=Pvtt1oLYzh2/CS0w57cB5IoPM/zu/VvVFCMnEBtcwR6MKb+c79MU8SyeGgaEdzITki3rB6G114e82Kapn4Q7TuiFm2/KUSFSGlC+PpnG+Xb88MHD790O9DFxZptTtqW9W87Wsr33+lJvJ1V8kAslK6FQgsL21y36CoXYS0Nlpdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772606236; c=relaxed/simple;
-	bh=C+GWh0X/x+E8K8Heufepk3oNTNdSdcGqi5B/uREcWyM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=B94y+TURcgga30wI0BeSVmdgA1iSBmvQFfk551x1uEOvnWzgA5qJ18wD+Y9Kj9jcl09HerxtvjXBDa5wQXB6srH+GcAT+XUu5UbMzQtWMpJ2ReudiRC251X4MOOsS2PPmAHKWjjQ1Fppm+aI+qVEVNNYwoJiF5imvFHMtOw6aLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dSdIUZn/; arc=none smtp.client-ip=91.218.175.184
+	s=arc-20240116; t=1772606259; c=relaxed/simple;
+	bh=lsIWMaQL/3whKexmrcJ91u/Whymn/Pb8xcsaW7Jb11M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=MkgsYLLqVnlryxW8Uy7ydSjRSZ/ejnuGEC5ALMuFRnTshxMiIKQvuOnSxXGClLNCfUOJ16ZqrIAeNMz9htFv3ZphgrolMlYc+o/gDSpRVoA61//YeumMhCfxVcgzi60gqfT6/5dQ7+WojLSXlsGpKiGNgKtU95sUI4YcFSCVCjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GhSM2U/8; arc=none smtp.client-ip=91.218.175.185
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dSdIUZn/"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GhSM2U/8"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772606232;
+	t=1772606256;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=BezM0d3Efmj5Mb5nol+0YNAjnV5cCAH9C7KVaf9ncPM=;
-	b=dSdIUZn/Je1e4TEMSMz6sz+HWz+Z67hLlAtKW/MRyVywEMHOVKjHo/LTFV+CR0iPzbus5U
-	7SEeOmQamZI4V90SkQbQamxfBYQsMQCgKvpvG5qUExT1RlLbxEE4uCNGgwmpx0z7Mgvb9v
-	mW3Cf0vE+qmUXg97JEPoKMATXtCr9IU=
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9VefZAyfd4lTF4RnV2A7nIRCdqG5nxtx9S7DWo98eaU=;
+	b=GhSM2U/8YC96Es7pkV8cwof4OEYp+LUxYDTKPDho37h4hYPlF+IzxY2YlRhUCvJGQnuk6w
+	heiudbs8dFsIptmC3EimiGBQ40Vd2s76Ts7IIN1FM7kZbfUZX5z7mjlSYfhWOj7lSYq4Py
+	nOQWcshZ7LGy/9it3z5bsDgn4eK8Jmk=
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org,
 	john.fastabend@gmail.com,
@@ -57,87 +59,68 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v1 0/7] bpf/sockmap: add splice support for tcp_bpf
-Date: Wed,  4 Mar 2026 14:33:51 +0800
-Message-ID: <20260304063643.14581-1-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf-next v1 1/7] net: add splice_read to struct proto and set it in tcp_prot/tcpv6_prot
+Date: Wed,  4 Mar 2026 14:33:52 +0800
+Message-ID: <20260304063643.14581-2-jiayuan.chen@linux.dev>
+In-Reply-To: <20260304063643.14581-1-jiayuan.chen@linux.dev>
+References: <20260304063643.14581-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Starting from Go 1.22.0, TCPConn implements the WriteTo interface [1],
-which internally uses the splice(2) syscall to transfer data between
-file descriptors [2].
+Add a splice_read function pointer to struct proto between recvmsg and
+splice_eof. Set it to tcp_splice_read in both tcp_prot and tcpv6_prot.
 
-However, for sockets with sockmap enabled, sk_prot is replaced with
-tcp_bpf_prots which does not provide a splice_read callback. When data
-is redirected to a socket's psock ingress queue via bpf_msg_redirect,
-splice(2) cannot read from it because the splice path has no knowledge
-of the psock queue. This causes TCPConn.WriteTo to return 0 bytes,
-effectively breaking Go applications that rely on io.Copy between TCP
-connections when sockmap/BPF is in use [3].
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+---
+ include/net/sock.h  | 3 +++
+ net/ipv4/tcp_ipv4.c | 1 +
+ net/ipv6/tcp_ipv6.c | 1 +
+ 3 files changed, 5 insertions(+)
 
-The simplest fix would be registering a splice callback that just calls
-copy_splice_read(), but this results in redundant copies (socket -> kernel
-buffer -> pipe -> destination), which defeats the purpose of splice.
-
-Patch 1 adds splice_read to struct proto and sets it in TCP.
-Patch 2 adds inet_splice_read and uses it in inet_stream_ops.
-Patch 3 refactors tcp_bpf recvmsg with a read actor abstraction.
-Patch 4 adds basic splice_read support for sockmap, but this still
-involves 2 data copies.
-Patch 5 optimizes the splice implementation by transferring page
-ownership directly into the pipe, achieving true zero-copy. Benchmarks
-show performance on par with the read(2) path.
-Patch 6 adds splice selftests. Since splice can seamlessly replace read
-operations, we redefine read to splice in the existing selftests so
-that all existing test cases also cover the splice path.
-Patch 7 adds splice to the sockmap benchmark, which also serves to
-verify the effectiveness of our zero-copy implementation.
-
-Benchmark results with rx-verdict-ingress mode (loopback, 8 CPUs):
-
-  read(2):                  ~4292 MB/s
-  splice(2) + zero-copy:    ~4270 MB/s
-  splice(2) + always-copy:  ~2770 MB/s
-
-Zero-copy splice achieves near-parity with read(2), while the
-always-copy fallback is ~35% slower.
-
-[1] https://github.com/golang/go/blob/master/src/net/tcpsock.go#L173
-[2] https://github.com/golang/go/blob/fdf3bee/src/net/tcpsock_posix.go#L57
-[3] https://github.com/jschwinger233/bpf_msg_redirect_bug_reproducer
-
-Jiayuan Chen (7):
-  net: add splice_read to struct proto and set it in tcp_prot/tcpv6_prot
-  inet: add inet_splice_read() and use it in
-    inet_stream_ops/inet6_stream_ops
-  tcp_bpf: refactor recvmsg with read actor abstraction
-  tcp_bpf: add splice_read support for sockmap
-  tcp_bpf: optimize splice_read with zero-copy for non-slab pages
-  selftests/bpf: add splice_read tests for sockmap
-  selftests/bpf: add splice option to sockmap benchmark
-
- include/linux/skmsg.h                         |  12 +-
- include/net/inet_common.h                     |   3 +
- include/net/sock.h                            |   3 +
- net/core/skmsg.c                              |  34 ++-
- net/ipv4/af_inet.c                            |  15 +-
- net/ipv4/tcp_bpf.c                            | 227 +++++++++++++++---
- net/ipv4/tcp_ipv4.c                           |   1 +
- net/ipv6/af_inet6.c                           |   2 +-
- net/ipv6/tcp_ipv6.c                           |   1 +
- .../selftests/bpf/benchs/bench_sockmap.c      |  57 ++++-
- .../selftests/bpf/prog_tests/sockmap_basic.c  |  28 ++-
- .../bpf/prog_tests/sockmap_helpers.h          |  62 +++++
- .../selftests/bpf/prog_tests/sockmap_strp.c   |  28 ++-
- 13 files changed, 421 insertions(+), 52 deletions(-)
-
+diff --git a/include/net/sock.h b/include/net/sock.h
+index 6c9a83016e95..de28af168ec4 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -1317,6 +1317,9 @@ struct proto {
+ 					   size_t len);
+ 	int			(*recvmsg)(struct sock *sk, struct msghdr *msg,
+ 					   size_t len, int flags, int *addr_len);
++	ssize_t			(*splice_read)(struct socket *sock, loff_t *ppos,
++					       struct pipe_inode_info *pipe, size_t len,
++					       unsigned int flags);
+ 	void			(*splice_eof)(struct socket *sock);
+ 	int			(*bind)(struct sock *sk,
+ 					struct sockaddr_unsized *addr, int addr_len);
+diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+index d53d39be291a..fa445f20b427 100644
+--- a/net/ipv4/tcp_ipv4.c
++++ b/net/ipv4/tcp_ipv4.c
+@@ -3433,6 +3433,7 @@ struct proto tcp_prot = {
+ 	.keepalive		= tcp_set_keepalive,
+ 	.recvmsg		= tcp_recvmsg,
+ 	.sendmsg		= tcp_sendmsg,
++	.splice_read		= tcp_splice_read,
+ 	.splice_eof		= tcp_splice_eof,
+ 	.backlog_rcv		= tcp_v4_do_rcv,
+ 	.release_cb		= tcp_release_cb,
+diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
+index e46a0efae012..277b954c524d 100644
+--- a/net/ipv6/tcp_ipv6.c
++++ b/net/ipv6/tcp_ipv6.c
+@@ -2295,6 +2295,7 @@ struct proto tcpv6_prot = {
+ 	.keepalive		= tcp_set_keepalive,
+ 	.recvmsg		= tcp_recvmsg,
+ 	.sendmsg		= tcp_sendmsg,
++	.splice_read		= tcp_splice_read,
+ 	.splice_eof		= tcp_splice_eof,
+ 	.backlog_rcv		= tcp_v6_do_rcv,
+ 	.release_cb		= tcp_release_cb,
 -- 
 2.43.0
 
