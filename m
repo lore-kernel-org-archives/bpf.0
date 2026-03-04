@@ -1,32 +1,32 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C1C3101A0;
-	Wed,  4 Mar 2026 06:38:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08C65381AE5;
+	Wed,  4 Mar 2026 06:38:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772606284; cv=none; b=VedTlIVx/FrtgGoseA+FePkz4pFAzjrjbJf5OeYAgNrF5AFxL4RcbXyqm6BxsSx1TW7tyz4IY/8eW/k9nd5stBKlDRBOYVdDT9CehSRG/p10CMgNOI+q39CFLsj41sTVHE88hBBBob1aHoW5xIlFxXkSj+PdrmnHh/6Efkxrivo=
+	t=1772606308; cv=none; b=RCH5HpIDyqqiZq/sqSGy0SjhSsDb2i7016iZM/J+f6s1ZJ3IFriSg1ArhQg93GQA9kUcAARrVjZwQ6JnEASBcWNCNvYhmLTAUAoUIrHnCHFXPUmh8qJi9Nu+Jjkx58Gd+Iyf8sE4egBiEd3GhCJxFjwd8blzJFu2v1LxbBgaHns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772606284; c=relaxed/simple;
-	bh=VBHqTt/FhWZsMO+m6rPxjyAbdZ7icfdYuGxRqnevfCM=;
+	s=arc-20240116; t=1772606308; c=relaxed/simple;
+	bh=rnvgDuIM8vQ4Ur2khkq6Tdvxz0lxrQhZ/hIDvNzyy0U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TtcrtYUhrScpFhLlfwW95n0yLYLWjOoKX1VbaigS6bNgh/3qhLjqYlYYfYIp4lGGn73uadVKf026B4TWBdNvQMSIcATvgoUyVv7l/KhDcOY9gFssTHRcZ4aDIGOTPbERxuVly1YGjQ7vwyHfd7sg+VsIL4PLcEvK2+n8gKEOA5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vsdHcr/h; arc=none smtp.client-ip=91.218.175.174
+	 MIME-Version; b=sw1Ui66lVLtC1IMoTxszi+5sveclD4uR6AnGfrKWr9TpHNbKRe5M2b8LwjruWQcGcK6jrEKoTVa6mwK2959HhJKpMCzSkBlceR7zqF/bTvaJnBs6U8DlxdJhFqJwbyj88V8ztWrdwxOHe7ahbDRAmV0FzTU5anojQpVUqx1e0tc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xfDP4xHP; arc=none smtp.client-ip=91.218.175.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vsdHcr/h"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xfDP4xHP"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772606280;
+	t=1772606305;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=rGZj5xXe+WPvDUb4thRq5WQY+Pyy46ij4fOCKK+Ii00=;
-	b=vsdHcr/hO21XNvsSTo6Q0FVpU3e0DLphACPRp6pdWkVH3xMla7vZkvOWbDqxRogzwWYDnU
-	ONtC7XuICoEQLTAlxAd4sBjhPOB6+TG9+Grv7E9KKW114rNrn8EWMfGii88UnVXcvrmKxz
-	9Yaov08wwGzxYNZBAwBFei8o2uhL+M8=
+	bh=mOpTXC80TFbvx4uT0sZN6YnfWzBhPWN4KMs+EKSr7jQ=;
+	b=xfDP4xHPEXKJwwyYAnMNy7mgd5Pd43uM7Ho6f2jDCU6ljHy6Gj141uHst5V5g4l6/XC/7S
+	J1Jf33ygGa0eJtR7tct3MO1tBTXJ032HyyW+jflHGZL5MidbafqtCEJRPM3ew3bNXPezn+
+	OY6J7HrtubuC74j7W3yDI4MIh2/2ma0=
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org,
 	john.fastabend@gmail.com,
@@ -59,9 +59,9 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v1 2/7] inet: add inet_splice_read() and use it in inet_stream_ops/inet6_stream_ops
-Date: Wed,  4 Mar 2026 14:33:53 +0800
-Message-ID: <20260304063643.14581-3-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf-next v1 3/7] tcp_bpf: refactor recvmsg with read actor abstraction
+Date: Wed,  4 Mar 2026 14:33:54 +0800
+Message-ID: <20260304063643.14581-4-jiayuan.chen@linux.dev>
 In-Reply-To: <20260304063643.14581-1-jiayuan.chen@linux.dev>
 References: <20260304063643.14581-1-jiayuan.chen@linux.dev>
 Precedence: bulk
@@ -73,77 +73,292 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Add inet_splice_read() which dispatches to sk->sk_prot->splice_read
-via INDIRECT_CALL_1. Replace the direct tcp_splice_read reference in
-inet_stream_ops and inet6_stream_ops with inet_splice_read.
+Refactor the read operation with no functional changes.
+
+tcp_bpf has two read paths: strparser and non-strparser. Currently
+the differences are implemented directly in their respective recvmsg
+functions, which works fine. However, upcoming splice support would
+require duplicating the same logic for both paths. To avoid this,
+extract the strparser-specific differences into an independent
+abstraction that can be reused by splice.
+
+For ingress_msg data processing, introduce a function pointer
+callback approach. The current implementation passes
+sk_msg_recvmsg_actor(), which performs copy_page_to_iter() - the
+same copy logic previously embedded in sk_msg_recvmsg(). This
+provides the extension point for future splice support, where a
+different actor can be plugged in.
 
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- include/net/inet_common.h |  3 +++
- net/ipv4/af_inet.c        | 15 ++++++++++++++-
- net/ipv6/af_inet6.c       |  2 +-
- 3 files changed, 18 insertions(+), 2 deletions(-)
+ include/linux/skmsg.h |  12 ++++-
+ net/core/skmsg.c      |  24 +++++++--
+ net/ipv4/tcp_bpf.c    | 123 ++++++++++++++++++++++++++++--------------
+ 3 files changed, 112 insertions(+), 47 deletions(-)
 
-diff --git a/include/net/inet_common.h b/include/net/inet_common.h
-index 5dd2bf24449e..84f2744d57f8 100644
---- a/include/net/inet_common.h
-+++ b/include/net/inet_common.h
-@@ -34,6 +34,9 @@ void __inet_accept(struct socket *sock, struct socket *newsock,
- 		   struct sock *newsk);
- int inet_send_prepare(struct sock *sk);
- int inet_sendmsg(struct socket *sock, struct msghdr *msg, size_t size);
-+ssize_t inet_splice_read(struct socket *sock, loff_t *ppos,
-+			 struct pipe_inode_info *pipe, size_t len,
-+			 unsigned int flags);
- void inet_splice_eof(struct socket *sock);
- int inet_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
- 		 int flags);
-diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-index 8036e76aa1e4..2c7b35d9c62d 100644
---- a/net/ipv4/af_inet.c
-+++ b/net/ipv4/af_inet.c
-@@ -876,6 +876,19 @@ void inet_splice_eof(struct socket *sock)
- }
- EXPORT_SYMBOL_GPL(inet_splice_eof);
+diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
+index 19f4f253b4f9..d53756914b2f 100644
+--- a/include/linux/skmsg.h
++++ b/include/linux/skmsg.h
+@@ -143,8 +143,16 @@ int sk_msg_memcopy_from_iter(struct sock *sk, struct iov_iter *from,
+ 			     struct sk_msg *msg, u32 bytes);
+ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
+ 		   int len, int flags);
+-int __sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
+-		     int len, int flags, int *copied_from_self);
++typedef int (*sk_msg_read_actor_t)(void *arg, struct page *page,
++				   unsigned int offset, size_t len);
++/* Core function for reading ingress_msg, dispatches to the given actor */
++int sk_msg_read_core(struct sock *sk, struct sk_psock *psock,
++		     size_t len, int flags,
++		     sk_msg_read_actor_t actor, void *actor_arg,
++		     int *copied_from_self);
++int sk_msg_recvmsg_actor(void *arg, struct page *page,
++			 unsigned int offset, size_t len);
++
+ bool sk_msg_is_readable(struct sock *sk);
  
-+ssize_t inet_splice_read(struct socket *sock, loff_t *ppos,
-+			 struct pipe_inode_info *pipe, size_t len,
-+			 unsigned int flags)
+ static inline void sk_msg_check_to_free(struct sk_msg *msg, u32 i, u32 bytes)
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index 2e26174c9919..6a906bfe3aa4 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -409,10 +409,12 @@ int sk_msg_memcopy_from_iter(struct sock *sk, struct iov_iter *from,
+ }
+ EXPORT_SYMBOL_GPL(sk_msg_memcopy_from_iter);
+ 
+-int __sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
+-		     int len, int flags, int *copied_from_self)
++/* Core function for reading ingress_msg, dispatches to the given actor */
++int sk_msg_read_core(struct sock *sk, struct sk_psock *psock,
++		     size_t len, int flags,
++		     sk_msg_read_actor_t actor, void *actor_arg,
++		     int *copied_from_self)
+ {
+-	struct iov_iter *iter = &msg->msg_iter;
+ 	int peek = flags & MSG_PEEK;
+ 	struct sk_msg *msg_rx;
+ 	int i, copied = 0;
+@@ -440,7 +442,8 @@ int __sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg
+ 			if (copied + copy > len)
+ 				copy = len - copied;
+ 			if (copy)
+-				copy = copy_page_to_iter(page, sge->offset, copy, iter);
++				copy = actor(actor_arg, page,
++					     sge->offset, copy);
+ 			if (!copy) {
+ 				copied = copied ? copied : -EFAULT;
+ 				goto out;
+@@ -495,12 +498,23 @@ int __sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg
+ out:
+ 	return copied;
+ }
++EXPORT_SYMBOL_GPL(sk_msg_read_core);
++
++int sk_msg_recvmsg_actor(void *arg, struct page *page,
++			 unsigned int offset, size_t len)
 +{
-+	struct sock *sk = sock->sk;
-+	const struct proto *prot;
++	struct msghdr *msg = arg;
 +
-+	prot = READ_ONCE(sk->sk_prot);
-+	return INDIRECT_CALL_1(prot->splice_read, tcp_splice_read, sock,
-+			       ppos, pipe, len, flags);
++	return copy_page_to_iter(page, offset, len, &msg->msg_iter);
 +}
-+EXPORT_SYMBOL_GPL(inet_splice_read);
++EXPORT_SYMBOL_GPL(sk_msg_recvmsg_actor);
+ 
+ /* Receive sk_msg from psock->ingress_msg to @msg. */
+ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
+ 		   int len, int flags)
+ {
+-	return __sk_msg_recvmsg(sk, psock, msg, len, flags, NULL);
++	return sk_msg_read_core(sk, psock, len, flags,
++				sk_msg_recvmsg_actor, msg, NULL);
+ }
+ EXPORT_SYMBOL_GPL(sk_msg_recvmsg);
+ 
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index c449a044895e..606c2b079f86 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -218,31 +218,26 @@ static bool is_next_msg_fin(struct sk_psock *psock)
+ 	return false;
+ }
+ 
+-static int tcp_bpf_recvmsg_parser(struct sock *sk,
+-				  struct msghdr *msg,
+-				  size_t len,
+-				  int flags,
+-				  int *addr_len)
++/*
++ * __tcp_bpf_recvmsg_parser - inner recvmsg for strparser path
++ *
++ * Handles TCP seq tracking, pre-accept receive_queue draining, FIN detection,
++ * and receive window updates. The actual data read is delegated to @actor.
++ *
++ * Caller must hold a psock ref. Socket lock is acquired/released internally.
++ * Returns bytes read, or negative error.
++ */
++static int __tcp_bpf_recvmsg_parser(struct sock *sk, struct sk_psock *psock,
++				    sk_msg_read_actor_t actor, void *actor_arg,
++				    size_t len, int flags)
+ {
+ 	int peek = flags & MSG_PEEK;
+-	struct sk_psock *psock;
+-	struct tcp_sock *tcp;
++	struct tcp_sock *tcp = tcp_sk(sk);
+ 	int copied_from_self = 0;
+ 	int copied = 0;
+ 	u32 seq;
+ 
+-	if (unlikely(flags & MSG_ERRQUEUE))
+-		return inet_recv_error(sk, msg, len, addr_len);
+-
+-	if (!len)
+-		return 0;
+-
+-	psock = sk_psock_get(sk);
+-	if (unlikely(!psock))
+-		return tcp_recvmsg(sk, msg, len, flags, addr_len);
+-
+ 	lock_sock(sk);
+-	tcp = tcp_sk(sk);
+ 	seq = tcp->copied_seq;
+ 	/* We may have received data on the sk_receive_queue pre-accept and
+ 	 * then we can not use read_skb in this context because we haven't
+@@ -264,7 +259,8 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+ 	}
+ 
+ msg_bytes_ready:
+-	copied = __sk_msg_recvmsg(sk, psock, msg, len, flags, &copied_from_self);
++	copied = sk_msg_read_core(sk, psock, len, flags,
++				  actor, actor_arg, &copied_from_self);
+ 	/* The typical case for EFAULT is the socket was gracefully
+ 	 * shutdown with a FIN pkt. So check here the other case is
+ 	 * some error on copy_page_to_iter which would be unexpected.
+@@ -329,10 +325,34 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+ 
+ unlock:
+ 	release_sock(sk);
+-	sk_psock_put(sk, psock);
+ 	return copied;
+ }
+ 
++static int tcp_bpf_recvmsg_parser(struct sock *sk,
++				  struct msghdr *msg,
++				  size_t len,
++				  int flags,
++				  int *addr_len)
++{
++	struct sk_psock *psock;
++	int ret;
 +
- INDIRECT_CALLABLE_DECLARE(int udp_recvmsg(struct sock *, struct msghdr *,
- 					  size_t, int, int *));
- int inet_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
-@@ -1079,7 +1092,7 @@ const struct proto_ops inet_stream_ops = {
- 	.mmap		   = tcp_mmap,
- #endif
- 	.splice_eof	   = inet_splice_eof,
--	.splice_read	   = tcp_splice_read,
-+	.splice_read	   = inet_splice_read,
- 	.set_peek_off      = sk_set_peek_off,
- 	.read_sock	   = tcp_read_sock,
- 	.read_skb	   = tcp_read_skb,
-diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
-index 23cc9b4cb2f1..12256b0234ff 100644
---- a/net/ipv6/af_inet6.c
-+++ b/net/ipv6/af_inet6.c
-@@ -705,7 +705,7 @@ const struct proto_ops inet6_stream_ops = {
- #endif
- 	.splice_eof	   = inet_splice_eof,
- 	.sendmsg_locked    = tcp_sendmsg_locked,
--	.splice_read	   = tcp_splice_read,
-+	.splice_read	   = inet_splice_read,
- 	.set_peek_off      = sk_set_peek_off,
- 	.read_sock	   = tcp_read_sock,
- 	.read_skb	   = tcp_read_skb,
++	if (unlikely(flags & MSG_ERRQUEUE))
++		return inet_recv_error(sk, msg, len, addr_len);
++
++	if (!len)
++		return 0;
++
++	psock = sk_psock_get(sk);
++	if (unlikely(!psock))
++		return tcp_recvmsg(sk, msg, len, flags, addr_len);
++
++	ret = __tcp_bpf_recvmsg_parser(sk, psock,
++				       sk_msg_recvmsg_actor, msg, len, flags);
++	sk_psock_put(sk, psock);
++	return ret;
++}
++
+ static int tcp_bpf_ioctl(struct sock *sk, int cmd, int *karg)
+ {
+ 	bool slow;
+@@ -351,29 +371,25 @@ static int tcp_bpf_ioctl(struct sock *sk, int cmd, int *karg)
+ 	return 0;
+ }
+ 
+-static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+-			   int flags, int *addr_len)
++/*
++ * __tcp_bpf_recvmsg - inner recvmsg for non-parser (verdict only) path
++ *
++ * No TCP seq tracking needed (tcp_eat_skb handles it at verdict time).
++ * Returns bytes read, 0 if caller should fall back to the normal TCP
++ * read path (data on receive_queue but not in psock), or negative error.
++ *
++ * Caller must hold a psock ref. Socket lock is acquired/released internally.
++ */
++static int __tcp_bpf_recvmsg(struct sock *sk, struct sk_psock *psock,
++			     sk_msg_read_actor_t actor, void *actor_arg,
++			     size_t len, int flags)
+ {
+-	struct sk_psock *psock;
+ 	int copied, ret;
+ 
+-	if (unlikely(flags & MSG_ERRQUEUE))
+-		return inet_recv_error(sk, msg, len, addr_len);
+-
+-	if (!len)
+-		return 0;
+-
+-	psock = sk_psock_get(sk);
+-	if (unlikely(!psock))
+-		return tcp_recvmsg(sk, msg, len, flags, addr_len);
+-	if (!skb_queue_empty(&sk->sk_receive_queue) &&
+-	    sk_psock_queue_empty(psock)) {
+-		sk_psock_put(sk, psock);
+-		return tcp_recvmsg(sk, msg, len, flags, addr_len);
+-	}
+ 	lock_sock(sk);
+ msg_bytes_ready:
+-	copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
++	copied = sk_msg_read_core(sk, psock, len, flags,
++				  actor, actor_arg, NULL);
+ 	if (!copied) {
+ 		long timeo;
+ 		int data;
+@@ -388,8 +404,7 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+ 			if (!sk_psock_queue_empty(psock))
+ 				goto msg_bytes_ready;
+ 			release_sock(sk);
+-			sk_psock_put(sk, psock);
+-			return tcp_recvmsg(sk, msg, len, flags, addr_len);
++			return 0;
+ 		}
+ 		copied = -EAGAIN;
+ 	}
+@@ -397,7 +412,35 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+ 
+ unlock:
+ 	release_sock(sk);
++	return ret;
++}
++
++static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
++			   int flags, int *addr_len)
++{
++	struct sk_psock *psock;
++	int ret;
++
++	if (unlikely(flags & MSG_ERRQUEUE))
++		return inet_recv_error(sk, msg, len, addr_len);
++
++	if (!len)
++		return 0;
++
++	psock = sk_psock_get(sk);
++	if (unlikely(!psock))
++		return tcp_recvmsg(sk, msg, len, flags, addr_len);
++	if (!skb_queue_empty(&sk->sk_receive_queue) &&
++	    sk_psock_queue_empty(psock)) {
++		sk_psock_put(sk, psock);
++		return tcp_recvmsg(sk, msg, len, flags, addr_len);
++	}
++
++	ret = __tcp_bpf_recvmsg(sk, psock, sk_msg_recvmsg_actor, msg,
++				len, flags);
+ 	sk_psock_put(sk, psock);
++	if (!ret)
++		return tcp_recvmsg(sk, msg, len, flags, addr_len);
+ 	return ret;
+ }
+ 
 -- 
 2.43.0
 
