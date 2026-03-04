@@ -1,126 +1,215 @@
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0D60314D37
-	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 10:51:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B5C314D37
+	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 10:51:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.178
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772621509; cv=pass; b=cGFJkmD7vcLZPZ5SnnnzPv+lQVwkxgRg6Esxuy//AguH78zmsZH5WIzHmXivwC/fF3NmtkyDLMjSK6hiVt2yCOf20aiGIqnare7H8laqqrDEb3qZUjy1SSSF3X3xbYeoW8kZRmjdZk70GPlwFB1YlP7hRikANg4d/WuDc5FUNB8=
+	t=1772621513; cv=pass; b=GSmus2YMKGxz1htzDuFrqM7woU86P2fH89E1W3LX2AofYl8XDb428tPls5c3kK+sWa/7F2l7O5gSGfbXjgiCHUa2bjhjghRhGmIdhlJeyqNLbmYaH/o2R8wIV3pcXVe1dRnvyBhazwZ/6vc8xfi1HTYyD2yjLx8xOBGQFt/CWek=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772621509; c=relaxed/simple;
-	bh=57u5vhCVP5EEa+FsK/c7AMFO2KyXey8UN5xlwACjIv0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rdxBneg0BU2E5thYuCZ6vb45GoZuPn7qR4g4Eu6vPXKE0p8l609CQFI4w++AQN9g5zzesoGPrxMIJmY8kDuyLqRQE7X2dWpu+Q9S1tLgHbWgusL50EKxeWsA4XS7tbKngw9ebWseX4RIu2K5EsVqswkeVbJuMQDvi9JOWSmniGM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=l8KnR0lr; arc=pass smtp.client-ip=209.85.128.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1772621513; c=relaxed/simple;
+	bh=L0KvSDN5YMgJEa1mOF3k46aRAnm/3tmb/hvbzs6p/e8=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=prOuSa7hfZLuUWODjlGhsWG1Ppk5vM2wG6bdE7uyV6AHPvcMSGZjxJTT22HhK/i7bVdG8C2g3MsAW+i0SEXr3FFXRtoHc8G4LpzEKiS5Zg+DSPzt9o4Xdhg/9aI/EKIAVtAT+2gIa9VxiYfm7PJNROyHh0u4cDPRH0CxEmPncdE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bU2BthHw; arc=pass smtp.client-ip=209.85.208.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="l8KnR0lr"
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-7984d31b895so64491837b3.1
-        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 02:51:48 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772621508; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bU2BthHw"
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-3870cbd6c40so107598021fa.0
+        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 02:51:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772621511; cv=none;
         d=google.com; s=arc-20240605;
-        b=i6B5JBkajTkLORG4WFPjqc0ryC6a7vzqdU5AGNnTGMD852rpDgnOLxx6+SFl34+4Zu
-         jW/G4JF6OjQDaHvWTEKj8u1FMPjKqKVb2amJ0bQkVJWiKoWeQhTa11LFFS+GnZsoH5Zx
-         /A1DPpAsijbD1FDyx+nJ3E/MdEhbMpg6nHBu1FslI8IYD40BB2NZegz0M2LQXW2Y/GU0
-         BI3qmprUSzPitIAOW43zfgBrQYAGwAj1IavODlQtF8k4e7L0x0TDTSELv2hnbkOa1LGx
-         FowdxHtR7U/ONJ+Pq3KYihc6XT42O3vfUfuG0s3s6p88O6vl7b1CPvAi1xBfiqCmkZrh
-         jorQ==
+        b=LaGecMa7Gg3b6bJaQySqz9RFOcUyvQGWe433B1+3lvbiuJM/RFcUDJSH+qC9nklRks
+         l3E8uqhK83I+ziWz2Sh1Ga29GYZTQphp1M+AF1jXROsLhoiFHbiJkaaKU/XDY0N63WG0
+         kLsAKHjGBtGV2wYw8aSDpm6s0k07QTCO2+jIyOvcKLhIOEdyid1+l+AbZrJKipltmNQx
+         3Z/nsmWGfXzKABypkaJo9w7/u/28xVO8trbvhR60QARFr7coEeAY6lDAMUeliOGfAgL9
+         s4eJXOmNRVePgqs90hs0KvYkWdqoDO3+Zju5mJIsNRp4il+ewVSQ+yDBpmQVeJ7Vwy5H
+         gPXA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=4PcEkYoFEI5voGPr8pCPoGCSxgYeETv4ZT/GQQL/KoU=;
-        fh=WAvsj9Z0CIAy/F9BGNb9QfffVODX8QEISUjE2jjb0E0=;
-        b=c/vCtO9E9hebaqTgCmLSbiS5oJ/Ld40PfMTYLiAJ6xwukgGNp0Vjphtkvzt9RxW0mZ
-         OZusqb1k2k0xB5/71LdiYFnNxCHHrKgqER7O3YUDBPJ+8d69IS0N7pF5Qs8xaDyfFPAG
-         va/zy3e3fFnlCDkH5Bu/Y2EF7bFL5VmffQtkGm+pM589CTQ9ErAI54Po+89YDem1kJcB
-         vSVHlWu6TSsLXcjaRCSqxft7O5V8ViiOxU7Ey7e+Wf1YpzKFoaL5Cx7KDkV7hzHuyCkL
-         KAdyk68up97MWl1A7jK8ZF/yd9y+tivfM3Esr5oqBXF2wk/HnXVEenkV3oUOgFtetg0e
-         3pyA==;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=AZvKF3gSYTbPT4SlKBZ7fQjgKlABzp9L6yM4JYTNPBk=;
+        fh=YSs3wVOwLpYXHDVTQOQhpuQf9sYEKrNgSkySr3HbMXY=;
+        b=YPYRNyxuPt/wW8VKZIHlxCZlihM8hi7DNvBt02yD0+C6tjXAu8vwO67C9xlCJwDteW
+         6hbv3FovEsBPYYqT0TcUcJMJfsUgxhRsH86I4jgTXzAFgOfeeH0s3mPTZhGKOMzIk6XB
+         x4NfI7tnCICqnj3PdF/iP/9WLZPgugavwILF8qXxwxHzUhdMVaZJ/32wH88tG1eQQCCs
+         WbFzMkmyAl9E93rAsraSa9UQvigBu2dfiCkrJ0NmHoHbdqnBcxdUUaqTVmJE/e36OgX/
+         CCjuNuTauP2svpecjoeCpVIF9L/cvGIaXQuWDNHF4Qh490m/flvIG4Lvb35QFMOhP3in
+         k85w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772621508; x=1773226308; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4PcEkYoFEI5voGPr8pCPoGCSxgYeETv4ZT/GQQL/KoU=;
-        b=l8KnR0lrH2nddb2FOAdsXr+wCeHVI0lPlBJ9Iz7OZnfDnV27cA/N58Ro6ZRIBwl8UP
-         KqJm0hqFaGPqFPrzZ8XSp/Fp2XW3ugYfAODs1qMH340C3BVVe/VvMrIxyIpjvM8hamR0
-         C09NAj62pWHpZ8qhoAlN45Vvq9E/eT7g/ogMjHXefrwpZ4MdueRUq4lHxIdatbJvgH3M
-         vTQ71NDBGY7wm2vDRsVJK1DO1SlxL5QIHzBZXhddvNhzHE8dXLQ9GwFUSCi396lPQwfg
-         +eONPCqzD4ATW+ogi6LPD24ZimO0f29h6Ur1BNRfI48+vIRK1hJSTn1Ym+hPmqUf6O3S
-         2Nlg==
+        d=gmail.com; s=20230601; t=1772621511; x=1773226311; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=AZvKF3gSYTbPT4SlKBZ7fQjgKlABzp9L6yM4JYTNPBk=;
+        b=bU2BthHwCRbeyJEEHcK7Iwsbk+FdqTF2qk1zUIQRNeI6x7a9wOarITbuOYbORHE5oQ
+         BN1LjCv4Qpl0J6gbeNHWpP9eCNBkeMJ+NP9z9NgwofwT4hm6azbgoBjWB+jB9V0Txtoi
+         SCrXt7ExqurcW5m0ADmIjYTXVRzcj7SfK3vNIUdfF/+Tyvig6uXMhvno6ixRNjDGfW1F
+         tf6XxwpEIppj9+ccEIuU8IzZraGEmRf9nwA5N6FIHSkiHQa8QJHEPjyKEeWPrTZWd8yD
+         7OLyhONTcb7yKcKwTMQHPb3lGDgHWL4yHln4sp/2mtkGoyajgdNtKyhE9HQBf+SRsZD7
+         MTQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772621508; x=1773226308;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=4PcEkYoFEI5voGPr8pCPoGCSxgYeETv4ZT/GQQL/KoU=;
-        b=CeeyTphTwOFHf7DK86pFHHh828TfBJI35/3khG0AwQLzRYoIa+axAOvgVNY2CVDEeE
-         GTuDv8NE0IbWXqXyAFBFf5Lz98CjRrQMIrZm+Ekqnu3Qu4vFrfUe89bt04pu2ubiiq0k
-         0ffA/JCtBdoP+Gq3JN5vITmVV6k4dktt885dU1QNhl5iuu/Jw0/8ItfgYHr2ykTKEq2f
-         WTKO/xbCeHuAA0Yjv9ODl9GLCBGPNeWbxg30SrVm2Ipaz2xBLccAvcgeJgVVYiOgyVA1
-         q6yxK8KDTsGVpxpKO2J4kTodyyjLdFRxMYw4xNKpCrzWMbppDTiFxIR7ySDfm5HlLvUB
-         FYow==
-X-Forwarded-Encrypted: i=1; AJvYcCVJqHaiNbTYbUptgwVZPhO6Dzj2SAol7Xp0L27vdKPVNsCvPkFwrg+R4KsVyyZcod6/y2I=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzx2D2rX4Qk96eeEZKxoQKPxJnHL1Gzc9LmWaYouMmomzzDt1AY
-	GEGRtbwlrJYAjzwt93K/PaRAhLgONwc+aXkYeQMkcGZy2V0Teql++BNtL3oR2QkSKqldsJaoDk7
-	YpQyv1BWNzZuywuFvJZzTr9qpqzM5khRgIz7+hPq34epCrriwS7Nl2w29
-X-Gm-Gg: ATEYQzyP9ho5ncROYr2ACkXyy0dqEzEboVQotW2gRRo7Yi6sH85tCA58Vjjx8wzCKeY
-	f9nN01iy9Fk3Gx5/Qy6J58YicJJLRrxDp8Y111GImPMCFSpcIWdR2X5fxhK6bS4TwOirFJ+5Ev1
-	8P/tzdtPaf54a6fd0PyAH2LV4PHpKY+e+eHiQbmdXk8MFY43sL4GEyAngBtu8ZXllWToyyrnzKL
-	APbfTGZOJL0W7hF5RZDj41cGUFoUwolCPs52VXyY1sa4RM3RlTHOvC1BlTukyAauSZvBwRFImqW
-	imfWh34I
-X-Received: by 2002:a05:690c:289:b0:798:caa5:cd31 with SMTP id
- 00721157ae682-798caa5e3abmr4129457b3.66.1772621507369; Wed, 04 Mar 2026
- 02:51:47 -0800 (PST)
+        d=1e100.net; s=20230601; t=1772621511; x=1773226311;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AZvKF3gSYTbPT4SlKBZ7fQjgKlABzp9L6yM4JYTNPBk=;
+        b=Y1bhu/sTr/1ItZitXUX425Jgr4ukQ8HbIsilLUu0OY8KxqPtwdo8bokv9cQ48p0FmS
+         bz2Fa4gpPC2AzB8sbG8heO9uif+TWiY5jbB2u/WqurqHlJgv1WvizlKRpfoZbUNo0Ym/
+         HlTAAxr9cmhUFrtAr18EB7qLYPSy8QS+WhS/pzrYaUS7FPz+N5D9MVK8W0PtR43nHj0p
+         hln011d33oQHPeAMItX6dnEHcFUr5eXf6H3Yr+KTZURs9E8i9OLujQZCB27EY8Qe5vzs
+         KxsvKNuWp5EBxj0RyeMbm2EeuC6GfJQWSC271wOJV63v0pxklt747C5DNriRqlbe100a
+         g2dw==
+X-Forwarded-Encrypted: i=1; AJvYcCWecLDKmnZRHEUcHxg14oIy1Kfx+mrWBdO770LEip2QsictGzGVkceFCtEwxlLaxHdFrts=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZzyqPe3Wor8AOS78caYoCFKLymZEvhDL6nTFUIkDDG45VRvfT
+	XItxsnIJg50SFftBODJLf+6wB4rfuCxiJLR80HdeAYzT3Q4tWnzDsBrflhkCjJUbhEcvp3Idw2y
+	k/JQ1INvH0f08ir8MbxA2j5mZlLdSTRo=
+X-Gm-Gg: ATEYQzxONsngOOWxbO/2T96WqnFb+N/eP9IAeADFgwL0r7OGZwOlUvA5kobWr7ALtzb
+	t5zdkQkbGVh4X4P8UsHLYrS82fQeE9TaD43cWkQUHq1/kNEthy0HW8Ab+H9Fz624YuX+b3rMGVy
+	/pgxxvBC3EOd8wGFvyq8y7v2ZDwoczWzhww69Gpj91KVNK+T4GTowWC81rMUKAR0jNM9dTYkuUH
+	ieu3KD+P0Wuu44ifL93vFJGENrTW6USg/z7A15oALHy7DDyZhiiqOA9LGcZFvwBIPtMJXdT1oJO
+	+m+blTX+P2fx7FJ3lw==
+X-Received: by 2002:a05:651c:1550:b0:385:f8c8:b3f with SMTP id
+ 38308e7fff4ca-38a2c5b9491mr13522801fa.25.1772621510334; Wed, 04 Mar 2026
+ 02:51:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260303100439.3172296-1-kmta1236@gmail.com>
-In-Reply-To: <20260303100439.3172296-1-kmta1236@gmail.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Wed, 4 Mar 2026 11:51:35 +0100
-X-Gm-Features: AaiRm52fwpgkHQRhYeOQXh5WIYeoMabF6E2KRsY4-7GtkGjYqVvq3HycuLPYk-s
-Message-ID: <CANn89iLt6xx3hEjTLEAv06G+4bK3TTti=H4qDgS4LxWSwyy7TA@mail.gmail.com>
-Subject: Re: [PATCH net-next v2] tcp: shrink per-packet memset in __tcp_transmit_skb()
-To: Keita Morisaki <kmta1236@gmail.com>
-Cc: Neal Cardwell <ncardwell@google.com>, "David S . Miller" <davem@davemloft.net>, 
-	David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+From: Max Ver <dudududumaxver@gmail.com>
+Date: Wed, 4 Mar 2026 18:51:38 +0800
+X-Gm-Features: AaiRm50GaV7PmYiAQtjK3ldkIooz443XUg3Z9bCG6AZjmeJAobyVzQ7j4vsiMak
+Message-ID: <CABjJbFJO+p3jA1r0gjUZrCepQb1Fab3kqxYhc_PSfoqo21ypeQ@mail.gmail.com>
+Subject: Process killed by seccomp looks live by tracer
+To: linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Cc: Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, 
+	Oleg Nesterov <oleg@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 3, 2026 at 11:04=E2=80=AFAM Keita Morisaki <kmta1236@gmail.com>=
- wrote:
->
-> Use struct_group() to group the three fields in tcp_out_options that are
-> read unconditionally by tcp_options_write() and bpf_skops_write_hdr_opt()
-> (mss, bpf_opt_len, num_sack_blocks), then replace the full-struct memset
-> with a targeted memset of only that group.
->
-> struct tcp_out_options is 40 bytes without MPTCP and 96 bytes with
-> CONFIG_MPTCP=3Dy (typical distro config). Every remaining field is either
-> assigned before first use by tcp_established_options()/tcp_syn_options(),
-> or gated behind its OPTION_* flag in tcp_options_write(). This memset
-> runs on every transmitted TCP packet, so shrinking it from 96 (or 40)
-> bytes to 4 bytes reduces per-packet overhead on the hot path.
->
-> Assembly comparison (x86-64, GCC 13, CONFIG_MPTCP=3Dy):
->
->   Before: rep stos zeroing 96 bytes (5 instructions, 12 8-byte stores)
->   After:  movl $0x0 zeroing 4 bytes (1 instruction, 1 store)
->
-> Also add opts->options =3D 0 at the top of tcp_syn_options(), which
-> already used |=3D without a prior clear. tcp_established_options() alread=
-y
-> clears opts->options at its top.
->
-> Signed-off-by: Keita Morisaki <kmta1236@gmail.com>
+I was using ptrace to trace a tracee status, using
+`PTRACE_GET_SYSCALL_INFO` and `PTRACE_SYSCALL`
+to get its syscall arguments and results. When a tracee killed by its
+seccomp, the tracer can't know immediately,
+instead, the `PTRACE_GET_SYSCALL_INFO` tell tracer that tracee exit
+with no error. The syscall wasn't actually
+executed, it was captured by seccomp, even the tracee was killed by seccomp.
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+Here is a poc explaining what I said.
+I was expecting to aware the death of tracee at the fourth
+`PTRACE_GET_SYSCALL_INFO`,
+at least `PTRACE_GET_SYSCALL_INFO` should tell that the syscall
+failed, or get some different message from waitpid.
+But the result are below. Tracer can only get the death of tracee at
+the fifth loop.
+
+---
+Start tracing child
+entry
+exit ok
+entry
+exit ok
+get_syscall_info: No such process
+---
+// poc file
+#include <linux/audit.h>
+#include <linux/filter.h>
+#include <linux/seccomp.h>
+#include <string.h>
+#include <sys/ptrace.h>
+#include <linux/ptrace.h>
+#include <signal.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/prctl.h>
+#include <sys/syscall.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <threads.h>
+#include <unistd.h>
+
+void
+child ()
+{
+  if (prctl (PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0))
+    {
+      perror ("prctl");
+      exit (1);
+    }
+  ptrace (PTRACE_TRACEME, 0, 0, 0);
+  raise (SIGSTOP);
+
+  struct sock_filter filter[] = {
+    BPF_STMT (BPF_RET | BPF_K, SECCOMP_RET_KILL_PROCESS),
+  };
+
+  struct sock_fprog prog = {
+    .len = 1,
+    .filter = filter,
+  };
+
+  if (syscall (SYS_seccomp, SECCOMP_SET_MODE_FILTER, 0, &prog))
+    {
+      perror ("seccomp");
+      exit (1);
+    }
+  write (1, "a", 1);
+}
+
+void
+get_child_info (pid_t pid)
+{
+  int status;
+
+  struct ptrace_syscall_info info;
+  memset (&info, 0, sizeof (info));
+  ptrace (PTRACE_SYSCALL, pid, 0, 0);
+  if ((waitpid (pid, &status, 0) == -1) || WIFEXITED (status))
+    {
+      puts ("child exit");
+      exit (1);
+    }
+  if (ptrace (PTRACE_GET_SYSCALL_INFO, pid,
+              sizeof (struct ptrace_syscall_info), &info)
+      == -1)
+    {
+      perror ("get_syscall_info");
+      exit (1);
+    }
+
+  if (info.op == PTRACE_SYSCALL_INFO_ENTRY)
+    puts ("entry");
+  else if (info.op == PTRACE_SYSCALL_INFO_EXIT)
+    puts (info.exit.is_error ? "exit with err" : "exit ok");
+  else if (info.op == PTRACE_SYSCALL_INFO_NONE)
+    puts ("none");
+  else if (info.op == PTRACE_SYSCALL_INFO_SECCOMP)
+    puts ("seccomp");
+  else
+    printf ("%d\n", info.op);
+}
+
+void
+parent (pid_t pid)
+{
+  int status;
+  waitpid (pid, &status, 0);
+  puts ("Start tracing child");
+
+  if (ptrace (PTRACE_SETOPTIONS, pid, 0, PTRACE_O_TRACESYSGOOD) == -1)
+    exit (1);
+  while (1)
+    get_child_info (pid);
+}
+
+int
+main ()
+{
+  pid_t pid = fork ();
+  if (pid == 0)
+    child ();
+  else
+    parent (pid);
+}
