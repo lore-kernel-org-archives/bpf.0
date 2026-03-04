@@ -1,78 +1,106 @@
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 296053914EB
-	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 07:53:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D5C2381B07;
+	Wed,  4 Mar 2026 07:54:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772610788; cv=none; b=jlc4fnQLvgrM7jjANSSca50JuWq98R2zqBkKoyhJUxxW6Y1NdafHQQdcqrk7LICx2rWN9qG7+wDskhTHDMrQOepaFzxSBgA1L0KTMOThIIRqP6CTNTANMExP7tSE2wEB9YYA9cmZwRYdI+lmjY8HpsrETgjLVd1/f6G1qXD3B70=
+	t=1772610882; cv=none; b=aG8ZymkR+dYYjh4NrAlXaMkFJLvQHTHa6MAbmtkc1Sh/2NbH9mEFuelmN5h/S427M7yO/OptAd3Gt6hpufaJ0IUqvfiKe7AFBloKXcE8E2Mg2Lr0BktCk+xKSZJ8tVtMfW7Yvo6Z8+iStLVQA97P4xfUL67m6/g45lHjOENFQT0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772610788; c=relaxed/simple;
-	bh=zgt8NOJmo621b4ulFEWxV/ruySqdMkBgDOFDs9sEB0M=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=iahnjiDiemJY69wmUlovAgV2wqpX+puxbdHJeKrF+lyuyfbQd2OzPdnk7byK1Vl7n7u7M0huGlNMGpflL7Rq+YdxrMXSnQRGJZxq45IoStc3IPDFb4nVnqQ+hIidEYxwh2PJcfb58bwgr91QUj8KIkuUe0UdjxizXr1q1G9QBPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.167.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-463a018f61bso32372283b6e.3
-        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 23:53:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772610784; x=1773215584;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eARhPwa95rMvtjrvMSpgRRZfWbAgWTWKjI5GGPrNVeI=;
-        b=PnkEdZkKIsew7yXza0peNPE9iG10BgbRF+E/mXwu8OzLe+Nyn4Bp68HhdgGh7tGlIw
-         t65ylQ4Me2EwbaDmgwUNwnR4SaZm/hEMaFFArsQOtKE9jwh0jWyykQzHmoJp7Et2vVbb
-         qoYEB8N7Vnvq3hLW6mvOxiqoz3YLc4UfUa7io8J6NHSf8jBJCQJF29PoTjLu2PEP0Xu5
-         4OVQop21sa8bNKgxRK++mRMsBKjex3Ks3FAjZSK3FECWRmxFyv4qcRd59sM082Qj26Ri
-         JWYXwj8CCCC7Guk6tuphgvHTYwmlCjl8eAnVy8G5T6Tf0eK57a1hRgOULZowl7N+4Uac
-         ci7A==
-X-Forwarded-Encrypted: i=1; AJvYcCX4/E7WMhN9vVeXLqYvBs+gTNq8na0Jo7oOXb8B11rredcvQtmsrpo+6v+PNimlNIGIvmE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsbQmc27he4nj/wtWviJ52xw4SHf8HjxERU9Iiyb7LVClI7iVK
-	J42kvjH60qSAqG5rI3uwoaXWU0eml+I+GdTmAe5Blrtrztq2C2KgMbP17heVNglbqiC4P0d0UG1
-	xMLUkLXHwFqVITGf7rocH3nB/WZOGFMaeNPh7XjxGuOBmmbtVJ1sRHaOlyY4=
+	s=arc-20240116; t=1772610882; c=relaxed/simple;
+	bh=QitYUOa5hzFGpdv5n4wqmr5lh5JEpHpUcevnVR00OEI=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=KtPq6Pi5EemhmO7OebZ9O2Q1kG+CyU1c74KjAWNLAquBoY82w/kobm2O1r1vHAjcvjls8YYWaR88Bxk26DCNrPJG+IxblJXiYUMYi4HQfFCYYtzCr6z9UurnVNET4H2F8F8Nwu0qQTj7Mb3kC5SgJGkCIa+CWbedK5w3C2M5OhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gXUPZJpz; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gXUPZJpz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5F01C19423;
+	Wed,  4 Mar 2026 07:54:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772610881;
+	bh=QitYUOa5hzFGpdv5n4wqmr5lh5JEpHpUcevnVR00OEI=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=gXUPZJpzSJNftDFZ8qi6wKfmoDHUcaTy/Bu0laVkqliIFYn9OChJEXi2koMT5Kgws
+	 Z1qHseQeEWrRSVAgbdFpIjsqanT9uxq0nt283eN9Zie5WABAl+um/K0bxMp9yuheMb
+	 eZJpn5DOx9eG9HlLcGPq1KakiwFVglLJKSfi6Cd2e/R5vRZS7XoyVo/hEgLAQ+ES7d
+	 RUUoW5frUdwjmbY+PKb/HWTyD6FEPjGQ3VHMbTMDdruOQpRlCTcotdBAYGxSIDUmAB
+	 l6Y0TolK9m1B5hq41OhY8plYfAf4rYAA5+G811Xx7oWLgWhuoWZkck1YrCUL+bXWhp
+	 2uQOO1wX3aQcg==
+Content-Type: multipart/mixed; boundary="===============7477303576377298078=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:1612:b0:676:84e2:1551 with SMTP id
- 006d021491bc7-67b1e92ed60mr617652eaf.76.1772610783903; Tue, 03 Mar 2026
- 23:53:03 -0800 (PST)
-Date: Tue, 03 Mar 2026 23:53:03 -0800
-In-Reply-To: <20260304072616.185060-1-wangqing7171@gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <69a7e4df.050a0220.21ae90.0014.GAE@google.com>
-Subject: Re: [syzbot] [bpf?] [trace?] KASAN: slab-use-after-free Read in
- bpf_trace_run3 (2)
-From: syzbot <syzbot+9ea7c90be2b24e189592@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com, 
-	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	martin.lau@linux.dev, mathieu.desnoyers@efficios.com, 
-	mattbobrowski@google.com, mhiramat@kernel.org, rostedt@goodmis.org, 
-	sdf@fomichev.me, song@kernel.org, syzkaller-bugs@googlegroups.com, 
-	wangqing7171@gmail.com, yonghong.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <1c92317f67a41ca1ea84e2cd52cd276f8e3c63be7b128b42564bbef4b427e4a6@mail.kernel.org>
+In-Reply-To: <20260304070927.178464-1-wangqing7171@gmail.com>
+References: <20260304070927.178464-1-wangqing7171@gmail.com>
+Subject: Re: [PATCH] bpf: Fix use-after-free in __bpf_trace_run()
+From: bot+bpf-ci@kernel.org
+To: wangqing7171@gmail.com,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org
+Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,wangqing7171@gmail.com,syzbot+b4c5ad098c821bf8d8bc@syzkaller.appspotmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed,  4 Mar 2026 07:54:41 +0000 (UTC)
 
-Hello,
+--===============7477303576377298078==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+> Fix by calling tracepoint_synchronize_unregister() to ensure tp_probes
+> is freed before allowing the link to be freed.
 
-Reported-by: syzbot+9ea7c90be2b24e189592@syzkaller.appspotmail.com
-Tested-by: syzbot+9ea7c90be2b24e189592@syzkaller.appspotmail.com
+tracepoint_synchronize_unregister() calls synchronize_rcu_tasks_trace()
+and synchronize_srcu(&tracepoint_srcu), which wait for in-flight
+readers to complete. They do not ensure that call_srcu() or
+call_rcu_tasks_trace() callbacks (the ones that actually kfree
+tp_probes in rcu_free_old_probes()) have been invoked -- that
+would require srcu_barrier()/rcu_barrier().
 
-Tested on:
+The fix is correct because after tracepoint_synchronize_unregister()
+returns, no tracepoint callback can still be executing with a reference
+to the link through the old tp_probes array. Would it be more precise
+to say the synchronization ensures all in-flight tracepoint callbacks
+have completed, rather than that tp_probes is freed?
 
-commit:         0031c068 Merge tag 'cgroup-for-7.0-rc2-fixes' of git:/..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=12afb006580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c5c49ee0942d1cdb
-dashboard link: https://syzkaller.appspot.com/bug?extid=9ea7c90be2b24e189592
-compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1566e552580000
+> The link(struct bpf_raw_tp_link) was freed when link->link.prog.
 
-Note: testing is done by a robot and is best-effort only.
+This sentence is difficult to parse. Perhaps something like "The
+link (struct bpf_raw_tp_link) was freed before accessing
+link->link.prog"?
+
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 274039e36465..b179e96ebf2b 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -3783,6 +3783,12 @@ static void bpf_raw_tp_link_release(struct bpf_link *link)
+>
+>  	bpf_probe_unregister(raw_tp->btp, raw_tp);
+>  	bpf_put_raw_tracepoint(raw_tp->btp);
+> +
+> +	/*
+> +	 * Ensure tp_probes is freed before the link. This prevents
+> +	 * use-after-free in __bpf_trace_run() when a tracepoint fires.
+> +	 */
+
+Same observation as above about the commit message. The comment says
+"Ensure tp_probes is freed before the link" but
+tracepoint_synchronize_unregister() ensures all in-flight tracepoint
+callbacks have completed, not that the tp_probes freeing callback
+has run. The UAF prevention comes from readers finishing, not from
+a freeing order.
+
+Something like "Wait for all in-flight tracepoint callbacks to
+complete so the link is no longer reachable through tp_probes" would
+more accurately describe the guarantee.
+
+> +	tracepoint_synchronize_unregister();
+>  }
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22659523367
+--===============7477303576377298078==--
