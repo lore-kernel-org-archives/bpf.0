@@ -1,151 +1,238 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8206F312837
-	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 15:59:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2198B35B64B
+	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 15:59:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772639953; cv=none; b=DVz1uk1Ik3xOKg7mLAMu7nGOTzIYBQL8lLtFRQMiHWlEl7aKNKFWSD49GqSERCa68r8uzPb9988z3tE7Y6mruJQjXD2gXxDimtIoepV76Mpkj4snA8GZnKL/cHjYf8U6D1v4j21t0vx5PYfWg6y9J4Ujp0SupBRMglTiZLYgBXg=
+	t=1772639998; cv=none; b=QEiCfpUj/IFxME0yW99wKwrq0AGO0ejcNS1uMx2oU+mu07azqlE7Z94HkREQ/qeiIP6hJBnYIkyTXJwcb+xl1OCChVjcMscg2IYeuJi77sMWVgzCUA+u2QAcGTjybG6h0AzQJeksNa8iV6+TiQcitTbvUT2f3f4nNjfxuHvK1dI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772639953; c=relaxed/simple;
-	bh=sRkO7eLIQ3gUqOEx4ySJKyymRH2K2LfoKGh++9p0oBc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JHQZr1MCeuKwdWS6EZQqCNd5KjaSTRCSpZMXkdDrH4XynJ1cnXCjgUgXzuwu/yCIhxm9kSGvoxfZ68fofzhyQsO/U1p47TeV5KqRoTcgnqvAD0dvyhiPw660GH8/JEri1rnlGF8YxKoaYqqjWmnHWIw7Ne6/XMZgICnnEhv6gEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b=bCl7mpAT; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
+	s=arc-20240116; t=1772639998; c=relaxed/simple;
+	bh=DR72l5rfmF9woJgiiQ+SUs1tFCC5L4Em4zqGl0Tn244=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Y3mzCv/7Fe8D7olYt05CeNlJt6iaHj+90VcwIWM32kQBuyW3EnvKTPNa6vC9Zdf2V/Bm/Y37yI8cMlvHCjQvL7TqvRFtuo2XTOb1iPHhLgr9VIvtuBlLN8MIUX+bvYTvbbAl8Syx1AkVRdgFEVKndrF4QE7rhLqG+7WdG0wUTOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y9JBwHVl; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b="bCl7mpAT"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4806ce0f97bso60715855e9.0
-        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 07:59:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y9JBwHVl"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-829756f3ee9so621802b3a.2
+        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 07:59:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall.org; s=google; t=1772639949; x=1773244749; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HOSnZzfeSc3oCHq3PRnVd2F+xX7z1Nwp9tzlqrjRhhw=;
-        b=bCl7mpATphtDitT/eSLxiEA6FtOIYGrpkTySJuJVnZiyRj41rVH10N6ylXXNJcoasi
-         JuIc2+hmQ++Ja5/gsKlcal7/XTp+xh8nfblN5go2qu2QJLQeNVnJ4NXThFznSTlyl0We
-         jTJ4oYxSdgPhhjrWcmBvZvZ/csYOhhTtSgkpX+qlwj0k1NCWQwO+2E7QrH56xXdsq3lx
-         np5cNxcuPyXHDADxhrNVpJeKRU2VR5OK2WK51Q8JeGpZsQ4q6w6DstTeKZPVYN6G7lv8
-         cJdfsXJRot7b8jyykENAjFS3lFAIvPoMCDLB7H1wq3p+bynF/CRsfz682RXxQEsIIGv5
-         pA2g==
+        d=gmail.com; s=20230601; t=1772639996; x=1773244796; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lkeTvPf0E8KU750qZQOM/g+J3nMAURhvhN+ETGDpHsM=;
+        b=Y9JBwHVlonc4R/ur4Tv8GErnNM95ue3EbkXwkbjDEtRfO39TlGxRB7xeJMGoBjCYuK
+         PsHqhht6FMzOEuxsY6ilPBCbWySDWQmhGcy8nloopD0r/50J74MaEYJkjFfcNBBELgK8
+         216FYfUcAxM+Lg5SMSroArDf0+W1Qn84sZkkCYvGJu5z9/UO/bOL16/jYGWhKxdrGueP
+         dYHthiJPgFuxr6xe7GZ28wo5bJVHvuIOS+n0ITPxlT2ePHIUx8qe1QSO7HCVzEYDnp+U
+         i5h+5cMvn9XHPobayo9K32gny9m2YOX1jLbSGY0gOa6mrPzNl3c8J3Kz5qemvKVwLBn2
+         492w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772639949; x=1773244749;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HOSnZzfeSc3oCHq3PRnVd2F+xX7z1Nwp9tzlqrjRhhw=;
-        b=FxYoXT8Oot7yrNclO79chOHKTl5hzGlkvMfr9pFn+5h+KD7gkdjJQ/lqeHuwut/oNm
-         usIsoj5BF8nnmUYNTzZ7WObYHQ+7rnGk72LRkRYylr4zP12hhXEQ2kHD1m/cstndpmbK
-         KlNmCWGybO+2hHLINpaZgwLWf3hQz3H6vzKw3vQBZhcp6asDvN1oXp1jjdKffxxzHOf4
-         mT46Frw1QdE3MJY9g+1T8OD350+tAMiA2fPs8lbUYlTGy/vu9SzjlMzOVU7TG576at8x
-         /Hepo9MighG+2/mDY61ofQrOoX/bNqIaNCYrI5StKHof13VvA4G4W/ttv+JfJjLdBZmF
-         RueQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXmHYIP5YgvYyBkNEgjmAWmXQzVte+V0/bG8Ln+WEmRDnuBUVaJnyhs/9+aNVLfq6k60Ag=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyeN+d47GaZCStXmFgVdiob6HEMPGwDOL+gCds4LmQx90FGeXAb
-	HCaTIYGYIIfpYsqpAumfVZpiV4VXFqjdE4+L2o6ecBRUHX0sP6Np/vwbjq3JDo/ICT8=
-X-Gm-Gg: ATEYQzxixv/QgJ6qAKUrkJQ/1CZ2UEdGJ7ry0deNhqdG/WExaxlNEl4Zebjl8xS0vra
-	9Jf5J0ebs2B9qIidj1bn2IzZPT/qp4zVm/0sM78labAThKgEJNI4dOuOyA8IcqH/4A4TEzbFTiZ
-	YwUCOkluckpYiwLN4jFPkvVlmXtFrGxA/YrM9F8bfHV8Rd+9QNI0znEP8lyE66HLnfyy/tSyNwB
-	po0a3irFEINgNc2vz794dHG7D248AY08agftvf+R/rmxos/D79PuHj75DvD1vTXb3qBg1utj3u5
-	FZCJlOLcbZ0qRMh0kfDC/wHwQoTMUBTZpWvz6Fs7RhRyeCShD6hDlMn89w5MsBcwY9ZfpFk2liK
-	77EA9mb0Pkrk0V3hV8fYmVJ6m91r1YHyc4r5wJq757GdAuk7DQH3QHZM5cRKzZRaSScxI2f00HV
-	wrxUHoMvg5OPi8JTq+UmqFiwl5MA6I3rxzafb2NlWDwoJBSVn918XOzji7eA==
-X-Received: by 2002:a05:600c:3b29:b0:483:7980:4687 with SMTP id 5b1f17b1804b1-48519899381mr45743415e9.17.1772639948325;
-        Wed, 04 Mar 2026 07:59:08 -0800 (PST)
-Received: from localhost (176.111.182.151.kyiv.nat.volia.net. [176.111.182.151])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4851acfa177sm21037355e9.4.2026.03.04.07.59.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2026 07:59:07 -0800 (PST)
-Date: Wed, 4 Mar 2026 17:59:06 +0200
-From: Nikolay Aleksandrov <razor@blackwall.org>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: jv@jvosburgh.net, netdev@vger.kernel.org, jiayuan.chen@shopee.com,
-	syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Jussi Maki <joamaki@gmail.com>, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH net v4 1/2] bonding: fix null-ptr-deref in
- bond_rr_gen_slave_id()
-Message-ID: <aahWymAi_CtRG0gJ@penguin>
-References: <20260304074301.35482-1-jiayuan.chen@linux.dev>
- <20260304074301.35482-2-jiayuan.chen@linux.dev>
+        d=1e100.net; s=20230601; t=1772639996; x=1773244796;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lkeTvPf0E8KU750qZQOM/g+J3nMAURhvhN+ETGDpHsM=;
+        b=nblqKoH0vYvyCF3JFVZJtIF/CZHb89bSpjfCeS3+9DETTMGbR6+7XR1B/brUAQLOSx
+         dFDMArovJq+S36ScYWyI4kq+KUxwUeSTJQtUEWTFbETHozPhFviMasqoRhGxinxbz/ti
+         X2RPmuFZWkEaknFM6K7UxjxhxQiTNrLETYwNtcRi6G6b9bvsqZ/EY0HUc2hLlbLGealm
+         Sj28viphi9xTwR3IU51PJ4o2rXYpnIIJJSRDWs2oPQT5pa7VWqdHn/YJjkQi2a84iILF
+         Tki3VhFpGlXvESLMaiDJj5omfFLIXDZ2wzdcE6LGWQLfNmObWVq/H42tqZzLUo+K+r31
+         p7zw==
+X-Gm-Message-State: AOJu0Yy9npBjgTeEgE07+rscmZWVXIfdBCAj3AL1RzsPtm/Xy8HLOHvU
+	xmY+OdMrN0NrxABxHUO7F4Ns8HJ+EJjVdamDjYS32f8CRe8v1xnVR8b8
+X-Gm-Gg: ATEYQzyB6PjIwlXYSXsrBqhg1il/W1D+u/1NMLVr/rdWeSvdLDea1x/afMX6ivDUvkT
+	bCyQ6c15ZdVCBm2z83nraNBaYfeI1HvwVsb5N8HEp+QsFvWQisEVuEgevhcGX0Lx2+ueNUMclw1
+	XVKIcSdLcFeImI6ck0RlaSisMgf4rmDVVoYiQQ/eum9nmdjTXyK6e/LrjDeRUByMtMDhRSvdhce
+	ES7x19TAZTZoE4qS35WvXiKlYkfgZqXQ+dh61HEQSIlcFo38uOpsyVLKbStNM5jtvtjqOAvpYY1
+	luVDSQuDnWFUmm5Fe/vgMI4x0XxRo9CYKOx6jl1ITDvkcx4GeQW+oGHWeQ+1CtMI9CP8MheSVjg
+	5mXmjPMigncDQafbEGQnyU86e8TwLUV8WaCiDY6GwWMVVgpHi9JCy6G/oBW07cZ8K4AEE9ReWL7
+	cX8m6Nkjtsjo2T/NEhk55RmyaY0O/ApyqaFdaZ
+X-Received: by 2002:a05:6a21:7a96:b0:38b:e3c1:db44 with SMTP id adf61e73a8af0-3982e23b3e7mr2314723637.58.1772639996403;
+        Wed, 04 Mar 2026 07:59:56 -0800 (PST)
+Received: from [172.20.10.5] ([117.20.154.117])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c73818d9502sm1352139a12.21.2026.03.04.07.59.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Mar 2026 07:59:55 -0800 (PST)
+Message-ID: <927c59b1-acae-4013-b552-2d03cc77562b@gmail.com>
+Date: Wed, 4 Mar 2026 23:59:48 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260304074301.35482-2-jiayuan.chen@linux.dev>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 5/5] bpf/verifier: refactor kfunc checks to
+ table-driven approach
+To: Chengkaitao <pilgrimtao@gmail.com>, martin.lau@linux.dev, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ chengkaitao@kylinos.cn, linux-kselftest@vger.kernel.org
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260304143459.78059-1-pilgrimtao@gmail.com>
+ <20260304143459.78059-6-pilgrimtao@gmail.com>
+Content-Language: en-US
+From: Leon Hwang <hffilwlqm@gmail.com>
+In-Reply-To: <20260304143459.78059-6-pilgrimtao@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Mar 04, 2026 at 03:42:57PM +0800, Jiayuan Chen wrote:
-> From: Jiayuan Chen <jiayuan.chen@shopee.com>
+NIT on the subject prefix: instead of bpf/verifier, it should be one of
+bpf, libbpf, selftests/bpf, bpftool, and "bpf, x86/arm64".
+
+So, the subject can be "bpf: refactor kfunc checks using table-driven
+approach in verifier".
+
+Thanks,
+Leon
+
+On 2026/3/4 22:34, Chengkaitao wrote:
+> From: Kaitao Cheng <chengkaitao@kylinos.cn>
 > 
-> bond_rr_gen_slave_id() dereferences bond->rr_tx_counter without a NULL
-> check. rr_tx_counter is a per-CPU counter only allocated in bond_open()
-> when the bond mode is round-robin. If the bond device was never brought
-> up, rr_tx_counter remains NULL, causing a null-ptr-deref.
+> Replace per-kfunc btf_id chains in list/rbtree/res_lock and graph node
+> checks with btf_id_in_kfunc_table() and static kfunc tables for easier
+> maintenance.
 > 
-> The XDP redirect path can reach this code even when the bond is not up:
-> bpf_master_redirect_enabled_key is a global static key, so when any bond
-> device has native XDP attached, the XDP_TX -> xdp_master_redirect()
-> interception is enabled for all bond slaves system-wide. This allows the
-> path xdp_master_redirect() -> bond_xdp_get_xmit_slave() ->
-> bond_xdp_xmit_roundrobin_slave_get() -> bond_rr_gen_slave_id() to be
-> reached on a bond that was never opened.
-> 
-> Fix this by allocating rr_tx_counter unconditionally in bond_init()
-> (ndo_init), which is called by register_netdevice() and covers both
-> device creation paths (bond_create() and bond_newlink()). This also
-> handles the case where bond mode is changed to round-robin after device
-> creation. The conditional allocation in bond_open() is removed. Since
-> bond_destructor() already unconditionally calls
-> free_percpu(bond->rr_tx_counter), the lifecycle is clean: allocate at
-> ndo_init, free at destructor.
-> 
-> Note: rr_tx_counter is only used by round-robin mode, so this
-> deliberately allocates a per-cpu u32 that goes unused for other modes.
-> Conditional allocation (e.g., in bond_option_mode_set) was considered
-> but rejected: the XDP path can race with mode changes on a downed bond,
-> and adding memory barriers to the XDP hot path is not justified for
-> saving 4 bytes per CPU.
-> 
-> Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to slave device")
-> Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com
-> Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.00cc.GAE@google.com/T/
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
+> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
 > ---
->  drivers/net/bonding/bond_main.c | 19 +++++++++++++------
->  1 file changed, 13 insertions(+), 6 deletions(-)
+>  kernel/bpf/verifier.c | 93 +++++++++++++++++++++++++++++--------------
+>  1 file changed, 64 insertions(+), 29 deletions(-)
 > 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index d133d18aa0cc..25961cf83a67 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -12600,6 +12600,60 @@ BTF_ID(func, bpf_session_is_return)
+>  BTF_ID(func, bpf_stream_vprintk)
+>  BTF_ID(func, bpf_stream_print_stack)
+>  
+> +static const enum special_kfunc_type bpf_list_api_kfuncs[] = {
+> +	KF_bpf_list_push_front_impl,
+> +	KF_bpf_list_push_back_impl,
+> +	KF_bpf_list_pop_front,
+> +	KF_bpf_list_pop_back,
+> +	KF_bpf_list_del,
+> +	KF_bpf_list_front,
+> +	KF_bpf_list_back,
+> +	KF_bpf_list_add_impl,
+> +	KF_bpf_list_node_is_edge,
+> +	KF_bpf_list_empty,
+> +};
+> +
+> +/* Kfuncs that take a list node argument (bpf_list_node *). */
+> +static const enum special_kfunc_type bpf_list_node_api_kfuncs[] = {
+> +	KF_bpf_list_push_front_impl,
+> +	KF_bpf_list_push_back_impl,
+> +	KF_bpf_list_del,
+> +	KF_bpf_list_add_impl,
+> +	KF_bpf_list_node_is_edge,
+> +};
+> +
+> +/* Kfuncs that take an rbtree node argument (bpf_rb_node *). */
+> +static const enum special_kfunc_type bpf_rbtree_node_api_kfuncs[] = {
+> +	KF_bpf_rbtree_remove,
+> +	KF_bpf_rbtree_add_impl,
+> +	KF_bpf_rbtree_left,
+> +	KF_bpf_rbtree_right,
+> +};
+> +
+> +static const enum special_kfunc_type bpf_rbtree_api_kfuncs[] = {
+> +	KF_bpf_rbtree_add_impl,
+> +	KF_bpf_rbtree_remove,
+> +	KF_bpf_rbtree_first,
+> +	KF_bpf_rbtree_root,
+> +	KF_bpf_rbtree_left,
+> +	KF_bpf_rbtree_right,
+> +};
+> +
+> +static const enum special_kfunc_type bpf_res_spin_lock_kfuncs[] = {
+> +	KF_bpf_res_spin_lock,
+> +	KF_bpf_res_spin_unlock,
+> +	KF_bpf_res_spin_lock_irqsave,
+> +	KF_bpf_res_spin_unlock_irqrestore,
+> +};
+> +
+> +static bool btf_id_in_kfunc_table(u32 btf_id, const enum special_kfunc_type *kfuncs, int n)
+> +{
+> +	for (int i = 0; i < n; i++)
+> +		if (btf_id == special_kfunc_list[kfuncs[i]])
+> +			return true;
+> +	return false;
+> +}
+> +
+>  static bool is_task_work_add_kfunc(u32 func_id)
+>  {
+>  	return func_id == special_kfunc_list[KF_bpf_task_work_schedule_signal] ||
+> @@ -13000,26 +13054,14 @@ static int check_reg_allocation_locked(struct bpf_verifier_env *env, struct bpf_
+>  
+>  static bool is_bpf_list_api_kfunc(u32 btf_id)
+>  {
+> -	return btf_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
+> -	       btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
+> -	       btf_id == special_kfunc_list[KF_bpf_list_pop_front] ||
+> -	       btf_id == special_kfunc_list[KF_bpf_list_pop_back] ||
+> -	       btf_id == special_kfunc_list[KF_bpf_list_del] ||
+> -	       btf_id == special_kfunc_list[KF_bpf_list_front] ||
+> -	       btf_id == special_kfunc_list[KF_bpf_list_back] ||
+> -	       btf_id == special_kfunc_list[KF_bpf_list_add_impl] ||
+> -	       btf_id == special_kfunc_list[KF_bpf_list_node_is_edge] ||
+> -	       btf_id == special_kfunc_list[KF_bpf_list_empty];
+> +	return btf_id_in_kfunc_table(btf_id, bpf_list_api_kfuncs,
+> +				     ARRAY_SIZE(bpf_list_api_kfuncs));
+>  }
+>  
+>  static bool is_bpf_rbtree_api_kfunc(u32 btf_id)
+>  {
+> -	return btf_id == special_kfunc_list[KF_bpf_rbtree_add_impl] ||
+> -	       btf_id == special_kfunc_list[KF_bpf_rbtree_remove] ||
+> -	       btf_id == special_kfunc_list[KF_bpf_rbtree_first] ||
+> -	       btf_id == special_kfunc_list[KF_bpf_rbtree_root] ||
+> -	       btf_id == special_kfunc_list[KF_bpf_rbtree_left] ||
+> -	       btf_id == special_kfunc_list[KF_bpf_rbtree_right];
+> +	return btf_id_in_kfunc_table(btf_id, bpf_rbtree_api_kfuncs,
+> +				     ARRAY_SIZE(bpf_rbtree_api_kfuncs));
+>  }
+>  
+>  static bool is_bpf_iter_num_api_kfunc(u32 btf_id)
+> @@ -13037,10 +13079,8 @@ static bool is_bpf_graph_api_kfunc(u32 btf_id)
+>  
+>  static bool is_bpf_res_spin_lock_kfunc(u32 btf_id)
+>  {
+> -	return btf_id == special_kfunc_list[KF_bpf_res_spin_lock] ||
+> -	       btf_id == special_kfunc_list[KF_bpf_res_spin_unlock] ||
+> -	       btf_id == special_kfunc_list[KF_bpf_res_spin_lock_irqsave] ||
+> -	       btf_id == special_kfunc_list[KF_bpf_res_spin_unlock_irqrestore];
+> +	return btf_id_in_kfunc_table(btf_id, bpf_res_spin_lock_kfuncs,
+> +				    ARRAY_SIZE(bpf_res_spin_lock_kfuncs));
+>  }
+>  
+>  static bool is_bpf_arena_kfunc(u32 btf_id)
+> @@ -13129,17 +13169,12 @@ static bool check_kfunc_is_graph_node_api(struct bpf_verifier_env *env,
+>  
+>  	switch (node_field_type) {
+>  	case BPF_LIST_NODE:
+> -		ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
+> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
+> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_del] ||
+> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_add_impl] ||
+> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_node_is_edge]);
+> +		ret = btf_id_in_kfunc_table(kfunc_btf_id, bpf_list_node_api_kfuncs,
+> +					    ARRAY_SIZE(bpf_list_node_api_kfuncs));
+>  		break;
+>  	case BPF_RB_NODE:
+> -		ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_remove] ||
+> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_add_impl] ||
+> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_left] ||
+> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_right]);
+> +		ret = btf_id_in_kfunc_table(kfunc_btf_id, bpf_rbtree_node_api_kfuncs,
+> +					    ARRAY_SIZE(bpf_rbtree_node_api_kfuncs));
+>  		break;
+>  	default:
+>  		verbose(env, "verifier internal error: unexpected graph node argument type %s\n",
 
-IMO it's not worth it to waste memory in all modes, for an unpopular mode.
-I think it'd be better to add a null check in bond_rr_gen_slave_id(),
-READ/WRITE_ONCE() should be enough since it is allocated only once, and
-freed when the xmit code cannot be reachable anymore (otherwise we'd have
-more bugs now). The branch will be successfully predicted practically always,
-and you can also mark the ptr being null as unlikely. That way only RR takes
-a very minimal hit, if any.
-
-Cheers,
- Nik
