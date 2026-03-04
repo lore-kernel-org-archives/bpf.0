@@ -1,69 +1,79 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1861F38236A;
-	Wed,  4 Mar 2026 07:43:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7490438423F
+	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 07:47:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772610227; cv=none; b=lGrjzay0tTrF7PLciDDiOzOQ6zhpdx0bizbPDE8JAu0P12ujlVTGl6CTs3tchT9ffyAh4Fded89MxkPbQtiPmWaksZsrKfrH1GSJqnbk7kiCpClAgpkv/AZa5pbI5lv/QuMjdB2ZuccC6BNMQFjK/8n6bl+2+uD5todI33HJymg=
+	t=1772610446; cv=none; b=bY+XvIlBCR/AXh5s/omu2qaUs3bKVUbfD9jh9bVO6wivnUM/5+3ovhziwG5YqXhjy5DlV+L1R0GqxMsjI3BH+o18EFs6QzUIXHWscHL+p7dRieNAb0qjlwJ8oOLG8M/TAhdeQSxhcFLTJZQggcdlmQnESxSGBG3xYL4T/b8Vs0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772610227; c=relaxed/simple;
-	bh=/nWFWGm1LWFw2+LWBT5eLedzo5nO+2W6C3bxSAB4nQw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XMpYoA7XCsMSByzxKd7vCfCOg0NFNb9Cj5LhbnOegTrAlGCGL359nWLOLI5+qu+0nOhJEVSEFWQQf1CtAprF0y/IGM1E/sO9CRxRDEZz4/1oEgTZz/2Vwpwtn2BJvLC3d/wWPfWD+v4wZzIpyjU1II3+VwHCK7wrY56wtZsDq9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UcoZDpUg; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1772610446; c=relaxed/simple;
+	bh=yRckoB6ziQPF5Ej6okVCmWtfBamAAg/Ab3cCVaNmIik=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KTjpnEHoJILj+Z/1r1Au3QxBEfTmtC9YqobtOnh2yBPBYerrgfs20JyFjp4IE7+7fHC7sIIereSsFxjz6jO48t8S3JmMcD6VOfYlCLYdjmK2GUmR5SzSbVMpXBx4oKW1MOURbzToylsHMb4NIz9QsIQzgWxr4CqkbOIqkruD4O0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=krmqqgLa; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UcoZDpUg"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772610223;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=OozEdu1pfaLvelgpBknkr6XecjF2fZSlQnkaPUUUzxY=;
-	b=UcoZDpUg7fPzwB8PKIahbAswNCu/jblwcid44mW/Y20eRXHwOMxMowaGMvIlJBAGfJ8x09
-	CtDbSlLqoypeFN2BlZtFE2FdO0ux0jmnzU4nQEoUswuBDsiRKreENFTU2lE8karDwWKbA2
-	BaV+SDaSBgAk2R4uYeE7+KiWDhYhOL4=
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: jv@jvosburgh.net,
-	netdev@vger.kernel.org
-Cc: jiayuan.chen@linux.dev,
-	jiayuan.chen@shopee.com,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Jussi Maki <joamaki@gmail.com>,
-	linux-kernel@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="krmqqgLa"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3598c1ad542so1894589a91.0
+        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 23:47:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772610443; x=1773215243; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IGWcCR+A6EXMnTgGJ2S1pAkRxkB7eLQpaJpcDvBiZQI=;
+        b=krmqqgLaCZhCaQJ0k4ERQr6GLZ4KxeBTBkLWQMzVlct/O25x3zM1mckQR2ArVfMgLj
+         AIkqg3Xx3fYV8T6VyO+XIPgx5Egs6FeIpw/QoAtpMiwCUs+SLWNyEIXzSN/5r0QpMHSL
+         FmOdk2QhWc8R3EjJQJbdD94aBX95IRtMRpFlHbVWajJNhIP9LqvLyxhwewR1B4G4aJ0G
+         96F4sJeAoCoWT0Fig9PWI6D7BH96wyMAYiwjcpubUXJAWM8AQcVKqeh3SHImYrS4kwzl
+         kIBK7Z2dsS8i03BuL5RXOsYBC4PYnuYz5koK6CzqZArT4Pc+1f8C9yuyMiz/MWi87TiN
+         w6dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772610443; x=1773215243;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IGWcCR+A6EXMnTgGJ2S1pAkRxkB7eLQpaJpcDvBiZQI=;
+        b=Oi3odW6oYgrk1jOns5bsSMUwXYIsAV9OOaFokWDpfY3VW9filFFJ4Jzb7NVES2/VrC
+         oxQooN56BDsVwn13I4EsfVgtwfCvOCx6vgPWxhnIa4KWKf3/qmKkHBJA6INmOjtPSNEB
+         xWHUaYf/0J1A6qQ+ZJfwPq/HxQQ/ix666d/vmcfoEMgEDWt4KOk1AOsxaXZBrUxJbSgS
+         SdCKkg6FlEDSwSsLKWnBYVVjJ03dvei5c6L7FUi9N66yT96AEzw9MrwOoFOxMTk4d+UC
+         eIaNmwlSzeYuP/lOjbs8sZ0o5UI7a7Fi66pva1wNyuUVG5L8Une7qvGBaU5SyGd31K98
+         CINQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVqMJCimQOOOg2Zski+X0ohnKGL3E5BQS8SqCLkTEbCrIwJNHidWhDk5/w5oLJP60o/I6o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEdNDfQbgYYiR9GhGKvBHAlq0oouRXzyvcL0KqFSuo5VDWATUH
+	rwaLCREKTX4nPXtH5/MycAUvgU3+HHmcsDgauISPyEvNRVKrjLQjgaOL
+X-Gm-Gg: ATEYQzxHBEmES+WhDKEFA4H+hyuLjathjUMA/hRaPZB2L3/frXNIAhmI5jJIdOFfRQ7
+	F2areRYJuvycNu7fClvzDd85lcvXI1QJowqlTfu2ozVJ0QzRabrp87IbkKJazP0fOblmtktvxk4
+	WP5dCofNjrhvI1D6YepOG9Yql+qozewMaq8Q4MIFdPQnBfNrWEMVRI9YimrEF2n6DCVr29ZQjcW
+	X5ZU0alEYodViEWuMKVXvhX7S3RNCP7aF3gDLIupXWwce0XRq67vQqqy45beiOA6+UX2o//E/qz
+	BxHS645Y6ee8zeqchAJsWNFsgRaZ/TWWEVAcWg4qYPSsr7l8oKnsE+/e8Nq1PhPYI2mBbxJHZyf
+	GCk8iGO0Q616gnzxgdNgYsRCnLqYqk6HnfQ8tvO8sTbmu0KPmywHib1NsCDwLL9yjgoL6f4iios
+	5K0dm4F3BJ+P7rLa/bGSuJ40tMYK4jUDhrLaqxNv8e9OnlQuPzP/puRSE0HXXxWQ==
+X-Received: by 2002:a17:90b:390e:b0:336:9dcf:ed14 with SMTP id 98e67ed59e1d1-359a6a531e6mr1125726a91.23.1772610442466;
+        Tue, 03 Mar 2026 23:47:22 -0800 (PST)
+Received: from localhost.localdomain ([2409:891f:1ba6:a29e:d73:6202:f71f:51b0])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3599c39def7sm4352078a91.12.2026.03.03.23.47.18
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 03 Mar 2026 23:47:21 -0800 (PST)
+From: Yafang Shao <laoar.shao@gmail.com>
+To: peterz@infradead.org,
+	mingo@redhat.com,
+	will@kernel.org,
+	boqun@kernel.org,
+	longman@redhat.com,
+	rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	mark.rutland@arm.com,
+	mathieu.desnoyers@efficios.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: [PATCH net v4 2/2] selftests/bpf: add test for xdp_master_redirect with bond not up
-Date: Wed,  4 Mar 2026 15:42:58 +0800
-Message-ID: <20260304074301.35482-3-jiayuan.chen@linux.dev>
-In-Reply-To: <20260304074301.35482-1-jiayuan.chen@linux.dev>
-References: <20260304074301.35482-1-jiayuan.chen@linux.dev>
+	Yafang Shao <laoar.shao@gmail.com>
+Subject: [RFC PATCH 0/2] disable optimistic spinning for ftrace_lock
+Date: Wed,  4 Mar 2026 15:46:48 +0800
+Message-ID: <20260304074650.58165-1-laoar.shao@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -71,158 +81,137 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-From: Jiayuan Chen <jiayuan.chen@shopee.com>
+Background
+==========
 
-Add a selftest that reproduces the null-ptr-deref in
-bond_rr_gen_slave_id() when XDP redirect targets a bond device in
-round-robin mode that was never brought up. The test verifies the fix
-by ensuring no crash occurs.
+One of our latency-sensitive services reported random CPU %sys spikes.
+After a thorough investigation, we finally identified the root cause of the
+CPU %sys spikes. The key kernel stacks are as follows:
 
-Test setup:
-- bond0: active-backup mode, UP, with native XDP (enables
-  bpf_master_redirect_enabled_key globally)
-- bond1: round-robin mode, never UP
-- veth1: slave of bond1, with generic XDP (XDP_TX)
-- BPF_PROG_TEST_RUN with live frames triggers the redirect path
+- Task A
 
-Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
----
- .../selftests/bpf/prog_tests/xdp_bonding.c    | 101 +++++++++++++++++-
- 1 file changed, 99 insertions(+), 2 deletions(-)
+2026-02-14-16:53:40.938243: [CPU198] 2156302(bpftrace) cgrp:4019437 pod:4019253
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-index fb952703653e..a5b15e464018 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-@@ -191,13 +191,18 @@ static int bonding_setup(struct skeletons *skeletons, int mode, int xmit_policy,
- 	return -1;
- }
- 
--static void bonding_cleanup(struct skeletons *skeletons)
-+static void link_cleanup(struct skeletons *skeletons)
- {
--	restore_root_netns();
- 	while (skeletons->nlinks) {
- 		skeletons->nlinks--;
- 		bpf_link__destroy(skeletons->links[skeletons->nlinks]);
- 	}
-+}
-+
-+static void bonding_cleanup(struct skeletons *skeletons)
-+{
-+	restore_root_netns();
-+	link_cleanup(skeletons);
- 	ASSERT_OK(system("ip link delete bond1"), "delete bond1");
- 	ASSERT_OK(system("ip link delete veth1_1"), "delete veth1_1");
- 	ASSERT_OK(system("ip link delete veth1_2"), "delete veth1_2");
-@@ -493,6 +498,95 @@ static void test_xdp_bonding_nested(struct skeletons *skeletons)
- 	system("ip link del bond_nest2");
- }
- 
-+/*
-+ * Test that XDP redirect via xdp_master_redirect() does not crash when
-+ * the bond master device is not up. When bond is in round-robin mode but
-+ * never opened, rr_tx_counter is NULL.
-+ */
-+static void test_xdp_bonding_redirect_no_up(struct skeletons *skeletons)
-+{
-+	struct nstoken *nstoken = NULL;
-+	int xdp_pass_fd, xdp_tx_fd;
-+	int veth1_ifindex;
-+	int err;
-+	char pkt[ETH_HLEN + 1];
-+	struct xdp_md ctx_in = {};
-+
-+	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
-+			    .data_in = &pkt,
-+			    .data_size_in = sizeof(pkt),
-+			    .ctx_in = &ctx_in,
-+			    .ctx_size_in = sizeof(ctx_in),
-+			    .flags = BPF_F_TEST_XDP_LIVE_FRAMES,
-+			    .repeat = 1,
-+			    .batch_size = 1,
-+		);
-+
-+	/* We can't use bonding_setup() because bond will be active */
-+	SYS(out, "ip netns add ns_rr_no_up");
-+	nstoken = open_netns("ns_rr_no_up");
-+	if (!ASSERT_OK_PTR(nstoken, "open ns_rr_no_up"))
-+		goto out;
-+
-+	/* bond0: active-backup, UP with slave veth0.
-+	 * Attaching native XDP to bond0 enables bpf_master_redirect_enabled_key
-+	 * globally.
-+	 */
-+	SYS(out, "ip link add bond0 type bond mode active-backup");
-+	SYS(out, "ip link add veth0 type veth peer name veth0p");
-+	SYS(out, "ip link set veth0 master bond0");
-+	SYS(out, "ip link set bond0 up");
-+	SYS(out, "ip link set veth0p up");
-+
-+	/* bond1: round-robin, never UP -> rr_tx_counter stays NULL */
-+	SYS(out, "ip link add bond1 type bond mode balance-rr");
-+	SYS(out, "ip link add veth1 type veth peer name veth1p");
-+	SYS(out, "ip link set veth1 master bond1");
-+
-+	veth1_ifindex = if_nametoindex("veth1");
-+	if (!ASSERT_GT(veth1_ifindex, 0, "veth1_ifindex"))
-+		goto out;
-+
-+	/* Attach native XDP to bond0 -> enables global redirect key */
-+	if (xdp_attach(skeletons, skeletons->xdp_tx->progs.xdp_tx, "bond0"))
-+		goto out;
-+
-+	/* Attach generic XDP (XDP_TX) to veth1.
-+	 * When packets arrive at veth1 via netif_receive_skb, do_xdp_generic()
-+	 * runs this program. XDP_TX + bond slave triggers xdp_master_redirect().
-+	 */
-+	xdp_tx_fd = bpf_program__fd(skeletons->xdp_tx->progs.xdp_tx);
-+	if (!ASSERT_GE(xdp_tx_fd, 0, "xdp_tx prog_fd"))
-+		goto out;
-+
-+	err = bpf_xdp_attach(veth1_ifindex, xdp_tx_fd,
-+			     XDP_FLAGS_SKB_MODE, NULL);
-+	if (!ASSERT_OK(err, "attach generic XDP to veth1"))
-+		goto out;
-+
-+	/* Run BPF_PROG_TEST_RUN with XDP_PASS live frames on veth1.
-+	 * XDP_PASS frames become SKBs with skb->dev = veth1, entering
-+	 * netif_receive_skb -> do_xdp_generic -> xdp_master_redirect.
-+	 * Without the fix, bond_rr_gen_slave_id() dereferences NULL
-+	 * rr_tx_counter and crashes.
-+	 */
-+	xdp_pass_fd = bpf_program__fd(skeletons->xdp_dummy->progs.xdp_dummy_prog);
-+	if (!ASSERT_GE(xdp_pass_fd, 0, "xdp_pass prog_fd"))
-+		goto out;
-+
-+	memset(pkt, 0, sizeof(pkt));
-+	ctx_in.data_end = sizeof(pkt);
-+	ctx_in.ingress_ifindex = veth1_ifindex;
-+
-+	err = bpf_prog_test_run_opts(xdp_pass_fd, &opts);
-+	ASSERT_OK(err, "xdp_pass test_run should not crash");
-+
-+out:
-+	link_cleanup(skeletons);
-+	close_netns(nstoken);
-+	SYS_NOFAIL("ip netns del ns_rr_no_up");
-+}
-+
- static void test_xdp_bonding_features(struct skeletons *skeletons)
- {
- 	LIBBPF_OPTS(bpf_xdp_query_opts, query_opts);
-@@ -680,6 +774,9 @@ void serial_test_xdp_bonding(void)
- 	if (test__start_subtest("xdp_bonding_redirect_multi"))
- 		test_xdp_bonding_redirect_multi(&skeletons);
- 
-+	if (test__start_subtest("xdp_bonding_redirect_no_up"))
-+		test_xdp_bonding_redirect_no_up(&skeletons);
-+
- out:
- 	xdp_dummy__destroy(skeletons.xdp_dummy);
- 	xdp_tx__destroy(skeletons.xdp_tx);
+        find_kallsyms_symbol+142
+        module_address_lookup+104
+        kallsyms_lookup_buildid+203
+        kallsyms_lookup+20
+        print_rec+64
+        t_show+67
+        seq_read_iter+709
+        seq_read+165
+        vfs_read+165
+        ksys_read+103
+        __x64_sys_read+25
+        do_syscall_64+56
+        entry_SYSCALL_64_after_hwframe+100
+
+This task (2156302, bpftrace) is reading the
+/sys/kernel/debug/tracing/available_filter_functions to check if a function
+is traceable:
+
+  https://github.com/bpftrace/bpftrace/blob/master/src/tracefs/tracefs.h#L21
+
+Reading the available_filter_functions file is time-consuming, as it
+contains tens of thousands of functions:
+
+  $ cat /sys/kernel/debug/tracing/available_filter_functions | wc -l
+  61081
+
+  $ time cat /sys/kernel/debug/tracing/available_filter_functions > /dev/null
+
+  real    0m0.452s
+  user    0m0.000s
+  sys     0m0.452s
+
+Consequently, the ftrace_lock is held by this task for an extended period.
+
+- Other Tasks
+
+2026-02-14-16:53:41.437094: [CPU79] 2156308(bpftrace) cgrp:4019437 pod:4019253
+
+        mutex_spin_on_owner+108
+        __mutex_lock.constprop.0+1132
+        __mutex_lock_slowpath+19
+        mutex_lock+56
+        t_start+51
+        seq_read_iter+250
+        seq_read+165
+        vfs_read+165
+        ksys_read+103
+        __x64_sys_read+25
+        do_syscall_64+56
+        entry_SYSCALL_64_after_hwframe+100
+
+Since ftrace_lock is held by Task-A and Task-A is actively running on a
+CPU, all other tasks waiting for the same lock will spin on their
+respective CPUs. This leads to increased CPU pressure.
+
+Reproduction
+============
+
+This issue can be reproduced simply by running
+`cat available_filter_functions`.
+
+- Single process reading available_filter_functions:
+
+  $ time cat /sys/kernel/tracing/available_filter_functions > /dev/null
+
+  real    0m0.452s
+  user    0m0.001s
+  sys     0m0.451s
+
+- Six processes reading available_filter_functions simultaneously:
+
+  for i in `seq 0 5`; do
+    time cat /sys/kernel/tracing/available_filter_functions > /dev/null &
+  done
+
+  The results are as follows:
+
+  real    0m1.801s
+  user    0m0.000s
+  sys     0m1.779s
+
+  real    0m1.804s
+  user    0m0.001s
+  sys     0m1.791s
+
+  real    0m1.805s
+  user    0m0.000s
+  sys     0m1.792s
+
+  real    0m1.806s
+  user    0m0.001s
+  sys     0m1.796s
+
+  As more processes are added, the system time increases correspondingly.
+
+Solution
+========
+
+One approach is to optimize the reading of available_filter_functions to
+make it as fast as possible. However, the risk lies in the contention
+caused by optimistic spin locking.
+
+Therefore, we need to consider an alternative solution that avoids
+optimistic spinning for heavy mutexes that may be held for long durations.
+Note that we do not want to disable CONFIG_MUTEX_SPIN_ON_OWNER entirely, as
+that could lead to unexpected performance regressions.
+
+In this patch, a new wrapper mutex_lock_nospin() is used for ftrace_lock to
+selectively disable optimistic spinning.
+
+Yafang Shao (2):
+  locking: add mutex_lock_nospin()
+  ftrace: disable optimistic spinning for ftrace_lock
+
+ include/linux/mutex.h  |  3 +++
+ kernel/locking/mutex.c | 39 +++++++++++++++++++++++++------
+ kernel/trace/ftrace.c  | 52 +++++++++++++++++++++---------------------
+ 3 files changed, 61 insertions(+), 33 deletions(-)
+
 -- 
-2.43.0
+2.47.3
 
