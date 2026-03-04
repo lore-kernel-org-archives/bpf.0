@@ -1,42 +1,42 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECA343D75A4
-	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 18:23:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92CAD3DA5BD;
+	Wed,  4 Mar 2026 18:24:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772648641; cv=none; b=L4eRpaxFVOYszAVZVNFUT5HzuzvnNUfRh6nsc7xtUEAOSYVOdPyyHEdFY0fFoTIp6GbGtq4MoDjTWCjbywhaKvr3RgQwjRAkLDn2kIo7qVtBHJEiroWunx1/+93uwAeGrmZr4zfBnNBpeDQ7qvrYgTP62xlMtAMvjUeeFDSJLow=
+	t=1772648643; cv=none; b=lS/8Cvd7IdTZlOEF7UIcG+cLwvxBNCLKbb3dve50ug+M53EoP9oy9rOcUTNBSXMQ1r4dDIMLYbysFbRUuYHKy6A/+vMYBooKAekXh3fJGn059zeYGO0g9+CfEqb0C1dVbf3fnNg3e592GuZeg3hNYYB7NZacgXc5I8/kvvD2RC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772648641; c=relaxed/simple;
-	bh=gExp/m0uv0I2CpCXmMKevKdtVBq/K6XyZ9iXZ8ojeYw=;
+	s=arc-20240116; t=1772648643; c=relaxed/simple;
+	bh=G9KhzfbRPiUfwEZc2MDjN1mlwQlI2CXVD3V8Is7hDwI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=kX5V1FjBMlq//Q+Pr+/xJH5+kajfbYNWC4IkKrHFlKCpYXG5H7t1Ggzv7eTAmbmmMFuMCjFVMPhh2X6/ceZ1yw8CpXRWplDBCfpcrLmENom34381m2sFWQANRY2MGLHKfEean+LGtkUqMOono2K59hSrITXXgP6AQ1d1X910jdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=xYj+FOig; arc=none smtp.client-ip=185.246.84.56
+	 In-Reply-To:To:Cc; b=o/p8DARDYSaaIwn8VbEBVwpRdG/oT5tH6w9uU73sDVXOlztTc0btEvhIJKXUa+AB2EINu3t2p5Bk+nT9GErEzzjmobH2yj5C7Qn7AKa7PfDx5BBSft5oZMHIm/AOScx7g8rABd6c1zSU6oYX8ndalmU7jWDusc8TaEprZ8XUKWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=YJQ1dArG; arc=none smtp.client-ip=185.246.85.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="xYj+FOig"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="YJQ1dArG"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id A51D51A2CB7;
-	Wed,  4 Mar 2026 18:23:58 +0000 (UTC)
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 469DE4E42545;
+	Wed,  4 Mar 2026 18:24:01 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 788015FF5C;
-	Wed,  4 Mar 2026 18:23:58 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id CB476103694F8;
-	Wed,  4 Mar 2026 19:23:55 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 1CA2E5FF5C;
+	Wed,  4 Mar 2026 18:24:01 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id BBF60103686F7;
+	Wed,  4 Mar 2026 19:23:57 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1772648637; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1772648639; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=dzl/qreKh68sppWaNDnY8qNK5Kh//0XfSDDQisblgGk=;
-	b=xYj+FOigGbPONNXz/Vyy9F0IOlMRie/Vb9p8u3BKuobRRDcyImEvUHtrnBoXEkBiJTou8g
-	fKIai177jJ9uOXnxbkdd5FQVgQI/2zCoGy6zcR47FLilNGTCtV0OmXCeJ7E/qpz+gvEyN1
-	sP3juI9IUHT+TbU0vjj+6qyIuK3Kydwha+QvXXmAwEw0M6VtmqhzALeu1PGS9g+utnt4jV
-	bHC0DmV0gDnA6U2E9lijBCaETWvg00fuOUiwLXXApuHi+BAVrra3bg5nMvjydtm3LLpn/p
-	gbxl5PiQJe++4Jgd7htOqpn/nNh3BqggfLit+ik2ofvvWHGRU9myYw9orD01XQ==
+	bh=VDNyDdnQCdnj1Wd9DXlEzXJRQVE56WRRVJ8JxqxAUF4=;
+	b=YJQ1dArGAXDkbHnXGeHdKIL3S1SvbylyVlTi18BV/xgQCVyznb/yFtz2NAJWpHpECG/v8y
+	GF9iwT7U0vXmYwchljltSjG4NZ3Qr5FKrkElFwgaMFgdZLqvN9EKKxUdboglgLLK8tt6gs
+	2Mb1AkUDbzj35WCBN7aiMtZb4ogYP8iX8v8+4chG/FRtUuw7HwEXlOEPga2gQKetwVwpkf
+	MYK12NAksYMxQ4NmmSxu7Qcjodhr1/Az39s6DqpVSrC+tVHj6Eofj7ANwx01gjG3frDkrb
+	e9sNOsbkXS0cw023N+qgKE1rR8L25frAjLSWqaXzlYe9R15tE+VxmWXyUd3tWA==
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Wed, 04 Mar 2026 19:23:46 +0100
-Subject: [PATCH net-next 3/8] net: macb: account for stats in Tx XDP
- codepaths
+Date: Wed, 04 Mar 2026 19:23:47 +0100
+Subject: [PATCH net-next 4/8] net: macb: drop handling of recycled buffers
+ in gem_rx_refill()
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260304-macb-xsk-v1-3-3d036076abf5@bootlin.com>
+Message-Id: <20260304-macb-xsk-v1-4-3d036076abf5@bootlin.com>
 References: <20260304-macb-xsk-v1-0-3d036076abf5@bootlin.com>
 In-Reply-To: <20260304-macb-xsk-v1-0-3d036076abf5@bootlin.com>
 To: Nicolas Ferre <nicolas.ferre@microchip.com>, 
@@ -69,146 +69,116 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
 X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
 
-macb_tx_complete() processing loop assumes a packet is composed of
-multiple frames and composes around this idea. However, this is only
-true in the SKB case ie `tx_buff->type == MACB_TYPE_SKB`.
+The refill operation supports detecting if a buffer is present in a
+slot; if it is, then it updates its DMA descriptor reusing the same
+buffer.
 
-Rework macb_tx_complete() to bring the tx_buff->type switch statement
-outside and the frame iteration loop now lives only inside the SKB
-case.
+This behavior can be dropped; all codepaths of gem_rx() letting a buffer
+lay around to be reused by refill have disappeared. Said another way:
+every time queue->tx_tail is incremented, queue->rx_buff[entry] is set
+to NULL.
 
-Fix Tx XDP stats that were not accounted for, in the XDP_TX|NDO cases.
-Only increment statistics once per macb_tx_complete() call rather than
-once per frame.
-
-The `bytes` and `packets` stack variables now gets incremented for
-completed XDP XMIT/TX packets. This implies the DQL subsystem through
-netdev_tx_completed_queue() now gets notified of those packets
-completing. We must therefore also report those bytes as sent, using
-netdev_tx_sent_queue(), in macb_xdp_submit_frame() called by:
- - Rx XDP programs returning action XDP_TX and,
- - the .ndo_xdp_xmit() callback.
-
-Incrementing `packets` also implies XDP packets are accounted for in our
-NAPI budget calculation.
+On the same occasion, move `gfp_alloc` assignment out of the loop and
+into variable declarations. Its value is constant across the function's
+lifetime. Also fix tiny alignment issue with the while statement.
 
 Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
- drivers/net/ethernet/cadence/macb_main.c | 71 +++++++++++++++-----------------
- 1 file changed, 33 insertions(+), 38 deletions(-)
+ drivers/net/ethernet/cadence/macb_main.c | 64 ++++++++++++++------------------
+ 1 file changed, 28 insertions(+), 36 deletions(-)
 
 diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-index 1aa90499343a..c1677f1d8f23 100644
+index c1677f1d8f23..ed94f9f0894b 100644
 --- a/drivers/net/ethernet/cadence/macb_main.c
 +++ b/drivers/net/ethernet/cadence/macb_main.c
-@@ -1212,7 +1212,7 @@ static int macb_tx_complete(struct macb_queue *queue, int budget)
+@@ -1351,18 +1351,18 @@ static unsigned int gem_total_rx_buffer_size(struct macb *bp)
+ 
+ static int gem_rx_refill(struct macb_queue *queue, bool napi)
  {
++	gfp_t gfp_alloc = napi ? GFP_ATOMIC : GFP_KERNEL;
  	struct macb *bp = queue->bp;
- 	unsigned long flags;
--	int skb_packets = 0;
-+	int xsk_frames = 0;
- 	unsigned int tail;
- 	unsigned int head;
- 	u16 queue_index;
-@@ -1227,7 +1227,6 @@ static int macb_tx_complete(struct macb_queue *queue, int budget)
- 		struct macb_tx_buff *tx_buff;
- 		struct macb_dma_desc *desc;
- 		struct sk_buff *skb;
--		void *data = NULL;
- 		u32 ctrl;
+ 	struct macb_dma_desc *desc;
+ 	unsigned int entry;
+ 	struct page *page;
+ 	dma_addr_t paddr;
+-	gfp_t gfp_alloc;
+ 	int err = 0;
+ 	void *data;
+ 	int offset;
  
- 		desc = macb_tx_desc(queue, tail);
-@@ -1243,52 +1242,46 @@ static int macb_tx_complete(struct macb_queue *queue, int budget)
- 		if (!(ctrl & MACB_BIT(TX_USED)))
- 			break;
+ 	while (CIRC_SPACE(queue->rx_prepared_head, queue->rx_tail,
+-			bp->rx_ring_size) > 0) {
++			  bp->rx_ring_size) > 0) {
+ 		entry = macb_rx_ring_wrap(bp, queue->rx_prepared_head);
  
--		/* Process all buffers of the current transmitted frame */
--		for (;; tail++) {
--			tx_buff = macb_tx_buff(queue, tail);
-+		tx_buff = macb_tx_buff(queue, tail);
+ 		/* Make hw descriptor updates visible to CPU */
+@@ -1370,41 +1370,33 @@ static int gem_rx_refill(struct macb_queue *queue, bool napi)
  
--			if (tx_buff->type != MACB_TYPE_SKB) {
--				data = tx_buff->ptr;
--				packets++;
--				goto unmap;
-+		switch (tx_buff->type) {
-+		case MACB_TYPE_SKB:
-+			/* Process all buffers of the current transmitted frame */
-+			while (!tx_buff->ptr) {
-+				macb_tx_unmap(bp, tx_buff, budget);
-+				tail++;
-+				tx_buff = macb_tx_buff(queue, tail);
- 			}
+ 		desc = macb_rx_desc(queue, entry);
  
--			/* First, update TX stats if needed */
--			if (tx_buff->ptr) {
--				data = tx_buff->ptr;
--				skb = tx_buff->ptr;
-+			skb = tx_buff->ptr;
- 
--				if (unlikely(skb_shinfo(skb)->tx_flags & SKBTX_HW_TSTAMP) &&
--				    !ptp_one_step_sync(skb))
--					gem_ptp_do_txstamp(bp, skb, desc);
-+			if (unlikely(skb_shinfo(skb)->tx_flags & SKBTX_HW_TSTAMP) &&
-+			    !ptp_one_step_sync(skb))
-+				gem_ptp_do_txstamp(bp, skb, desc);
- 
--				netdev_vdbg(bp->dev, "skb %u (data %p) TX complete\n",
--					    macb_tx_ring_wrap(bp, tail),
--					    skb->data);
--				bp->dev->stats.tx_packets++;
--				queue->stats.tx_packets++;
--				bp->dev->stats.tx_bytes += skb->len;
--				queue->stats.tx_bytes += skb->len;
--				skb_packets++;
--				packets++;
--				bytes += skb->len;
--			}
-+			netdev_vdbg(bp->dev, "skb %u (data %p) TX complete\n",
-+				    macb_tx_ring_wrap(bp, tail),
-+				    skb->data);
-+			bytes += skb->len;
-+			break;
- 
--unmap:
--			/* Now we can safely release resources */
--			macb_tx_unmap(bp, tx_buff, budget);
--
--			/* data is set only for the last buffer of the frame.
--			 * WARNING: at this point the buffer has been freed by
--			 * macb_tx_unmap().
--			 */
--			if (data)
+-		if (!queue->rx_buff[entry]) {
+-			gfp_alloc = napi ? GFP_ATOMIC : GFP_KERNEL;
+-			page = page_pool_alloc_frag(queue->page_pool, &offset,
+-						    gem_total_rx_buffer_size(bp),
+-						    gfp_alloc | __GFP_NOWARN);
+-			if (!page) {
+-				dev_err_ratelimited(&bp->pdev->dev,
+-						    "Unable to allocate rx buffer\n");
+-				err = -ENOMEM;
 -				break;
-+		case MACB_TYPE_XDP_TX:
-+		case MACB_TYPE_XDP_NDO:
-+			bytes += tx_buff->size;
+-			}
+-
+-			paddr = page_pool_get_dma_addr(page) +
+-				gem_rx_pad(bp) + offset;
+-
+-			dma_sync_single_for_device(&bp->pdev->dev,
+-						   paddr, bp->rx_buffer_size,
+-						   page_pool_get_dma_dir(queue->page_pool));
+-
+-			data = page_address(page) + offset;
+-			queue->rx_buff[entry] = data;
+-
+-			if (entry == bp->rx_ring_size - 1)
+-				paddr |= MACB_BIT(RX_WRAP);
+-			desc->ctrl = 0;
+-			/* Setting addr clears RX_USED and allows reception,
+-			 * make sure ctrl is cleared first to avoid a race.
+-			 */
+-			dma_wmb();
+-			macb_set_addr(bp, desc, paddr);
+-		} else {
+-			desc->ctrl = 0;
+-			dma_wmb();
+-			desc->addr &= ~MACB_BIT(RX_USED);
++		page = page_pool_alloc_frag(queue->page_pool, &offset,
++					    gem_total_rx_buffer_size(bp),
++					    gfp_alloc | __GFP_NOWARN);
++		if (!page) {
++			dev_err_ratelimited(&bp->pdev->dev,
++					    "Unable to allocate rx buffer\n");
++			err = -ENOMEM;
 +			break;
  		}
 +
-+		packets++;
-+		macb_tx_unmap(bp, tx_buff, budget);
++		paddr = page_pool_get_dma_addr(page) + gem_rx_pad(bp) + offset;
++
++		dma_sync_single_for_device(&bp->pdev->dev,
++					   paddr, bp->rx_buffer_size,
++					   page_pool_get_dma_dir(queue->page_pool));
++
++		data = page_address(page) + offset;
++		queue->rx_buff[entry] = data;
++
++		if (entry == bp->rx_ring_size - 1)
++			paddr |= MACB_BIT(RX_WRAP);
++		desc->ctrl = 0;
++		/* Setting addr clears RX_USED and allows reception,
++		 * make sure ctrl is cleared first to avoid a race.
++		 */
++		dma_wmb();
++		macb_set_addr(bp, desc, paddr);
+ 		queue->rx_prepared_head++;
  	}
- 
-+	bp->dev->stats.tx_packets += packets;
-+	queue->stats.tx_packets += packets;
-+	bp->dev->stats.tx_bytes += bytes;
-+	queue->stats.tx_bytes += bytes;
-+
- 	netdev_tx_completed_queue(netdev_get_tx_queue(bp->dev, queue_index),
--				  skb_packets, bytes);
-+				  packets, bytes);
- 
- 	queue->tx_tail = tail;
- 	if (__netif_subqueue_stopped(bp->dev, queue_index) &&
-@@ -1529,6 +1522,8 @@ static int macb_xdp_submit_frame(struct macb *bp, struct xdp_frame *xdpf,
- 	macb_writel(bp, NCR, macb_readl(bp, NCR) | MACB_BIT(TSTART));
- 	spin_unlock(&bp->lock);
- 
-+	netdev_tx_sent_queue(netdev_get_tx_queue(bp->dev, queue_index), xdpf->len);
-+
- 	if (CIRC_SPACE(queue->tx_head, queue->tx_tail, bp->tx_ring_size) < 1)
- 		netif_stop_subqueue(dev, queue_index);
  
 
 -- 
