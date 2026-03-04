@@ -1,94 +1,84 @@
-Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96BEE34B437
-	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 23:38:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C776A3382E7
+	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 23:52:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772667526; cv=none; b=YzcTZj3F2wOiYdX08D0QWBNvd9btrV8Myu2VkLlzNTXnucDg68PzPzmXRKY7SXxhOyZndII7dMZWkQ2F7ffSYvKil/BSKks0iSglp6lImPAw1azoC+eckS0QCvq8c2c3TmDCersCYQufJD48yzjZa3FO8a9GRmIAwYQaIj0CwRY=
+	t=1772668349; cv=none; b=leVqNKmWCfuGCF2EY57DX6Qc9y8FVtQRSrFUhNznsEJ2gDond75EFVNeBKA8lKoUxqIgmNaxemVLt12Tovn0bg0oTzpYT7lNSMcQgY1NVABnwvwngQB6GFYLYE9q5742xxd/fWdzN0rwUFPqAnJa7BJMJPOuhAJTIGOj285P4eg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772667526; c=relaxed/simple;
-	bh=cFGv1sL9pqbx153vxBCwRyGdMfivYi5rRpVeeKWxw90=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=lAhC/zLxrBsl81vD8dkBJ1/8Pz71XCzAf1QTsszr85+c+EPTfBrLFbVdAaBbo/dxmPVK0iVNfueW+eCO7KDEBfTdogA+qOOUDTowQDlWf8ypEpa0F2iKi67z7wVIHBB5nvlbvi3Yn/EhGKu/5ApSVOHWyMR/8TikKtt8f6fISaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JF6oBn6p; arc=none smtp.client-ip=74.125.224.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772668349; c=relaxed/simple;
+	bh=oMO2lmI6jl8bfWRtrbTzUfsP4kK3JhJ9nHuZIHroJso=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mMscvjBmHWoVfHzqf0wim+rgTuO6c+YoS0bHaH/nNxl1BriHJC6MF2Y+Fwr7RfBhWpo1X8UbmXF/qmjiKIJ9myPJmgAXMafFSdAAJ4M7WaknwhkEDno4SVkGlwxiy5IpDZXAeAaALYBC7ljpm56TMHMfwVarMJrm8TrZE8aUlPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oK3evLd9; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JF6oBn6p"
-Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-64ca423ad53so6632161d50.0
-        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 15:38:43 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oK3evLd9"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2ae523d54d2so14165ad.1
+        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 15:52:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772667523; x=1773272323; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lwEg//kb8UGbW1G0PCmmnpwtxLnHg+DSaYUVRtKA4rU=;
-        b=JF6oBn6pDxkd/WmNriovCLV9t9gYk9qFKYX3NAL5bL9rpHqTtgZj9jA7k7EaGbOjdV
-         zGA/ziOLqro2qlFhasPRaIkcNnddpba6wtAqGIfzVeV/Q3DjE/jSxKkpW6SIr4mcOLcD
-         20yb3ZZMUZTOXvFw2Aka+vD91aRPl3dfLEbgm6wJTc9kc4tN12q8DlXCvW55Jrp80jTM
-         lTOFVvpGJb6Vzz+DGrMolWfxgYuDlfva4fzbsfSIUztk6C1n0kZ5Tv8Z1XSdPcodRHUc
-         MOkiHoM5pAVZ0J0k06Fk//P9V48sHaCGRdfzuWP3xIBI985SaPI6j5LODZ+tLO5Vnr+q
-         cHfA==
+        d=google.com; s=20230601; t=1772668347; x=1773273147; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cJXWQ/ytiNmgn7oJt5ZgR0qUZMF+nTZXMyr1U431JSU=;
+        b=oK3evLd9/s19oYVpWqqUGHjQ8ssniPbGyQi0Zl+AX6le9o9dHF7wNslguOvO1ZF/rS
+         9kvUXr3RrZZjqSA5O3DSykB3F15zD3zxTAeFdVqZ/Bd32UbBVwjUAzGrElTfS29xhQJl
+         XkceJQcY/7aqK7zScI/QwmwxxhMLUl+3iy2Wp9bjagl9yaCltwg1s3flTXliJ7FksLJJ
+         oZkODv0KpmNoWn5+t2qMlr6SSnuAePfV2sFey4ueUjCoPdP/yJ9pmN5bMs3K+O+7lZ4C
+         MRqanKV8TDjxwzcYOuj7nO0mj02IAx654ZPxljymcPmdlQABjZm1MxCyKUc0DMa8NQPj
+         Fccg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772667523; x=1773272323;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lwEg//kb8UGbW1G0PCmmnpwtxLnHg+DSaYUVRtKA4rU=;
-        b=ZgcS0LV0tFU4XBfwC6ImllCCq55WDYPcZvpuTapGjWDZiklAKsDf4gOIWMycTjTQfI
-         jl5D0h5ooAXlyTLnGfCK6k9oUp1gi5W6HRPvCo/cvvamCpfoT8HLLKGHxbRwL7dbm3er
-         cqc3MAijBQYwQ9w5NQtQ++fPcga+VZQldbJHqmW0vgQ5S430eZ55CRr7SMC5WyGNK17O
-         6D0ofpGOfJCim3HpVM12CF3O7mFNdrV9oLCnkSHYfo3+h0qTJh+BrNCEXYn3PmnsRgcP
-         YgPDz0WX1nXU7G+1HjQ5oT2+OV/uuBe4Xr2jPRCl+BlxG0COW6TyuBNJGN3aLYx9zZeJ
-         t7lw==
-X-Forwarded-Encrypted: i=1; AJvYcCWo2zegYuMJ4LIqe1UI1VScIJuDpRj9NEZnuN8rAcu2ZCsryYwWpPPhGAw1Uxi8TWRWGTQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7UkCBcbD/I3BOfZQe5JNegOM5h5YEAuYN7gVGej9dmrBolYYX
-	MTYJWe1ZeZ0lu7DJyCIDvOslj7NDi5fwZUEs9EkySXW9f9LYVQKT3ho1
-X-Gm-Gg: ATEYQzyYRoxG1BsJvDN7qtifXhYkArbS30tZHzUAooQMwZpyBaQAdcRQ/HpJfSxEVkx
-	1q2a0zpJFlE5FLMYpm243pCg/hv4+ehOCOMPzdXvcz4M6Z8Yv4D/Vn/RD3L1dQJXzz5QbEg8Yqh
-	Jr3u8ivVK1xMDdYNs7M22oSx1+81gWmsgv0eq3adhZ5oOV1SY8twr5uBYVhGgJvON3d1tgC+MvF
-	k0+PpNI0SKHAM05WJuxspXgRnGaJb37fz/zIL4tGLQ1VFOTRnw1Izz41KyaVEhBGiIPKAltvuVR
-	MbuIJ/50VCZkFfelXTDEote8wldOd+8AVOHgq6cpf0FuEbl0Om5AU0Hqa51kandnD0I1QO6Y3zk
-	uyKii+ene6gQrmWcpF9WcpB6nRmjhEfr8y8EjVUWnNUjpP1c6/DWLduQrRLSvnQ16QUhZGhaPA+
-	uACiqXDsTjq5KaTSyQv4O3Uf48Brkj/0RSyORY9+XwFIdTPcM12RtJIeVVyaswGMA/cF4RCLQ=
-X-Received: by 2002:a05:690e:1248:b0:64a:f1a6:6b0d with SMTP id 956f58d0204a3-64cf9b3425cmr3179552d50.14.1772667522539;
-        Wed, 04 Mar 2026 15:38:42 -0800 (PST)
-Received: from gmail.com (15.60.86.34.bc.googleusercontent.com. [34.86.60.15])
-        by smtp.gmail.com with UTF8SMTPSA id 956f58d0204a3-64cb75ba104sm8430163d50.10.2026.03.04.15.38.41
+        d=1e100.net; s=20230601; t=1772668347; x=1773273147;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cJXWQ/ytiNmgn7oJt5ZgR0qUZMF+nTZXMyr1U431JSU=;
+        b=gh6wikBDO06V3YdG3QfY8xkziMNeZOLyZ9Kx3Gj5hvOeBjHj3Ge650B3psN5LTXbTp
+         z5Nhrzt490QKpkqKyGJc5hSpCDmdk+N2fazWFYBAV+BkYp6V+GAeU41VC8Vk+hBAKH59
+         yoIXUyWDd7Audxa8B9wNCfLWjxfUK84tdm14bwb/eBj+94yuerzqgtC91PiE1veJ5cNZ
+         8nkURINsyrDh1OytvrXTHAdcaXkmiXxDvC5MmExoS3CSISogs+QC/5+DyO4CnNLtd3uF
+         Bb9GqdLXAaXn+SGDE6l/31/DlO1iRm/S83VQG3y4RPKGZ3dn8HmaozYoVjwV7V/WPUf2
+         4mhw==
+X-Forwarded-Encrypted: i=1; AJvYcCVi8F+j8l3XutI0/qFSeVeZd3OHmSXnokaIAMXAaDOUIVjQbeCqLgQJq9oyKWtKZ/R1NxA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxpAveQ/AePT8r7+dnRRQkQwxJ7Ecvq5d93GAapT1dRERO42Tkz
+	hXVq25e1/KhEm3ctW+2lAv6ewkC69HelvJr1BDIHSi/iy6hkQZkvzpI8aqFzcvnPwQ==
+X-Gm-Gg: ATEYQzw2yrfznAJbNGAxo8RSOBEkCxdJa6bXZkadu+UILBpMA6zMdY7AzFybmEqYNkx
+	LUW0ZllJK+WMyUTHCpfXOc5CHCYPyIMbqqXhRE7ys/GWZdiMboXUBWj9nO1y/qLId99IqfPcxwS
+	TorUeR8ZS4QMUHrbVhHN+Ws+CTXexAkIw9io5Dyk5iMqzqzl4eH3+ithvbr3kf2wigqiKioT6+9
+	8a5ArcdrzrHcvLkMF8KteawUXZ3BDd8p1wUlXjvPf/WWVSEyIY8DVc/WIJjAT+mCLvNt7iN5SQv
+	03OKA42sHsU8X1vESr0aNb7kUAHmsLs3vedm6BMCp6FUHera/WWsfaltJ2qehtxxWeInc9m9src
+	Xetvo0UmZM0Ze3e84c+uh4riaawewYhj5mkBSagOw/s2zJhCCn7MforiCb9JDaMD4kHWwHLfDMV
+	JW+ZP4/xtN8jUvOwBWrUK9U1eIrkVsCJ9899tP5u8gbf1hy8tb2bjpGmmPCA==
+X-Received: by 2002:a17:902:e5ce:b0:2ae:5a44:ea91 with SMTP id d9443c01a7336-2ae750e2726mr647625ad.22.1772668346686;
+        Wed, 04 Mar 2026 15:52:26 -0800 (PST)
+Received: from google.com (127.200.82.34.bc.googleusercontent.com. [34.82.200.127])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c70fa8059bcsm17879218a12.18.2026.03.04.15.52.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2026 15:38:41 -0800 (PST)
-Date: Wed, 04 Mar 2026 18:38:41 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Kuniyuki Iwashima <kuniyu@google.com>, 
- jrife@google.com
-Cc: andrii@kernel.org, 
- bpf@vger.kernel.org, 
- daniel@iogearbox.net, 
- edumazet@google.com, 
- kuba@kernel.org, 
- martin.lau@linux.dev, 
- netdev@vger.kernel.org, 
- sdf@fomichev.me, 
- willemdebruijn.kernel@gmail.com, 
- yusuke.suzuki@isovalent.com
-Message-ID: <willemdebruijn.kernel.1f16f5ebde0ed@gmail.com>
-In-Reply-To: <20260304212128.1943568-1-kuniyu@google.com>
-References: <20260303170106.129698-2-jrife@google.com>
- <20260304212128.1943568-1-kuniyu@google.com>
+        Wed, 04 Mar 2026 15:52:26 -0800 (PST)
+Date: Wed, 4 Mar 2026 23:52:22 +0000
+From: Jordan Rife <jrife@google.com>
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: andrii@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net, 
+	edumazet@google.com, kuba@kernel.org, martin.lau@linux.dev, netdev@vger.kernel.org, 
+	sdf@fomichev.me, willemdebruijn.kernel@gmail.com, yusuke.suzuki@isovalent.com
 Subject: Re: [PATCH net-next v2 1/2] udp: Preserve UDP socket addresses on
  abort
+Message-ID: <skxd6uimyxzi4x5nfmz24ez3d45qiubdnwkqawtbomjfzy5qrs@yb724ykvvkec>
+References: <20260303170106.129698-2-jrife@google.com>
+ <20260304212128.1943568-1-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260304212128.1943568-1-kuniyu@google.com>
 
-Kuniyuki Iwashima wrote:
+On Wed, Mar 04, 2026 at 09:21:03PM +0000, Kuniyuki Iwashima wrote:
 > From: Jordan Rife <jrife@google.com>
 > Date: Tue,  3 Mar 2026 17:01:02 +0000
 > > Currently, udp_abort() invokes __udp_disconnect() which clears out
@@ -106,8 +96,12 @@ Kuniyuki Iwashima wrote:
 > after aborting it ?
 > 
 > At least Cilium should know the key at that moment.
-> 
-> 
+
+Originally, socket aborts in Cilium were handled with sock_diag (and
+still are on older kernels), so you'd need to do some map maintenance in
+userspace directly before or after aborting the socket. I suppose it was
+just cleaner to put common cleanup code in a sock_release hook.
+
 > > 
 > > Make the behavior consistent between TCP and UDP sockets by not clearing
 > 
@@ -117,8 +111,12 @@ Kuniyuki Iwashima wrote:
 > aborted, a bound socket still reserves a port, but it does not now.
 > 
 > This might be surprising for non-reuseaddr/port sockets.
-> 
-> 
+
+Yeah, true. I'm curious if this behavior is something that is useful at
+all or simply an accident of the current implementation? If I'm
+aborting/destroying a socket, why should it hold onto bound ports until
+the socket is closed? I wasn't quite sure about this.
+
 > > out these fields in udp_abort(). Instead, just unhash the socket, mark
 > > its state as TCP_CLOSE, and preserve the state of the other fields.
 > > 
@@ -144,11 +142,49 @@ Kuniyuki Iwashima wrote:
 > like ____udp_disconnect() (I'm not good at naming), or must make
 > sure the flag is never used in uAPI.
 
-If the only goal is to not clear inet_daddr and inet_dport in
-__udp_disconnect, then another variant of that that takes an extra
-bool might indeed be the more obviously correct approach.
+To make sure we're on the same page about what you're describing, I'm
+imagining:
 
+static int ___udp_disconnect(struct sock *sk, int flags, bool reinit)
+{                                                 
+	same as before, but if reinit == false then avoid reinitializing
+	fields like daddr/dport while holding onto reserved ports
+}
+
+int __udp_disconnect(struct sock *sk, int flags)
+{
+	___udp_disconnect(sk, flags, true);
+}
+
+...
+
+int udp_abort(struct sock *sk, int err)
+{
+	...
+	___udp_disconnect(sk, flags, false); <--- set reinit arg to false
+	...
+}
+
+This would have the same behavior with regards to reserved ports
+following udp_abort() while preserving fields like daddr. I was
+considering something like this initially, but it wasn't clear to me why
+you'd want to hold onto reserved ports if the socket was destroyed as I
+mentioned above. If it's important to maintain that aspect of the
+behavior, then I'm OK with this approach.
+
+> 
+> 
 > 
 > > +	sk->sk_state = TCP_CLOSE;
 > > +	sk->sk_prot->unhash(sk);
 > > +	sk_dst_reset(sk);
+> >  
+> >  out:
+> >  	if (!has_current_bpf_ctx())
+> > -- 
+> > 2.53.0.473.g4a7958ca14-goog
+> > 
+
+Thanks!
+
+Jordan
