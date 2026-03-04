@@ -1,152 +1,109 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88A3639D6D3;
-	Wed,  4 Mar 2026 09:46:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1648D39EF35
+	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 09:54:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772617587; cv=none; b=a7gJy5Prd8eIEyenrSxqyLTKVJ0P+mFhraeXfbiLDMuE7o3qIu60inMFmVrsuGagk85DZr84J6FMEZnAkJQhLT33X2RpHMoHM7y+SBQD004tVT3EXItfm8VwUmrgnWmVGpPcBame3NrkYw2+2ib0XR2GO4jPHb0kV9yY2HFZ+vU=
+	t=1772618060; cv=none; b=j1J0aChrgOIki5h02aovAesYxWP50qDWOzvOKl2ZYQ5I7BnsR3/REIUS7n6xLt+qrKELb0/GCe6iVLMK5xlKUF7j3YhX8d5hTiaTq0q2sBMVNvBU1BgtXMCP4L1Xhrsaflc3tLGsr40FZei4NZBWefgsIuSC6MAd5OE67OnC9C8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772617587; c=relaxed/simple;
-	bh=IHvvot2ZKfXtsZnCW0snZYODzuu20UCO0AhRTSPRbSo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=p5XMnWwV+hfYQcX3mERYyW5+pMnF6w4+NW+pLxZEYUyEOknI4L4C9mUZK8+Mbo6ORu9VIrbd/r1ffNJDi8u6Xtx7rZiIt1NeWP35E5yM2ra9iAzmIJ7/R3mqkldGfcmgy10zqiGOn6T/nxeyM3tQsbFDFrXgc5VJjolpdIdND6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=fTJjNTI1; arc=none smtp.client-ip=117.135.210.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1772618060; c=relaxed/simple;
+	bh=eTa78WHUoVEvfYrnL1ZrbRTeOyVh9VMa4jG2UuaS4SI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gWNd/Rz+vPpDC2xmewm109PMRytTZjk5QiFnHoF0CCq9A4hc0tLZ8F81igP/cnZwwQNrbIRZIQIKuBzG2EFcTj2X2FSk9K/s6Y4gbsiQrus9vXf462RqW48Blm69orZnJa5JHw2sFhQjwh9AQsavSlUEW8VY0Je1jhPIfT8Jk0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZF5A+nkN; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="fTJjNTI1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Iv
-	H/4xvRl/PMZEl+uJ5vYYSKnvzvkhOjS5cyB+WO+9Q=; b=fTJjNTI1qyRn2MP3ei
-	g5aGAM/3hNRs9DCgLMO5kh43gdhqkexPsfAKhPK2KHhJbxOQLmM+FzFfjDCkp2ui
-	PcB0DZ1bCtjURRwlbc9+ZD1e5Nb1PzkAJ/BSSvkQAe6Ibkdjn9ZK3NkqN4XFVOTO
-	KXofznjJHhp73ssjUsocu3fBg=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp5 (Coremail) with SMTP id QCgvCgC3f179_qdpB89zRQ--.55S3;
-	Wed, 04 Mar 2026 17:44:34 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	posk@google.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com
-Cc: bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	yangfeng59949@163.com
-Subject: [PATCH v10 bpf-next 1/2] bpf: test_run: Fix the null pointer dereference issue in bpf_lwt_xmit_push_encap
-Date: Wed,  4 Mar 2026 17:44:28 +0800
-Message-Id: <20260304094429.168521-2-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260304094429.168521-1-yangfeng59949@163.com>
-References: <20260304094429.168521-1-yangfeng59949@163.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZF5A+nkN"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-439c9eb5d36so310502f8f.2
+        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 01:54:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772618057; x=1773222857; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=04TQwyjav+Mkle+Jlhsg1YPsdYQI6BcfeeGyJ/oU2Wk=;
+        b=ZF5A+nkN4Wcm2GQfTfzasFYPtzOGaM/vnwrBrdwOHvMRjyvx5cL5oO9Sp61/l9DUwV
+         G6bB8r8ffMHAPCtV9nj/Hto696l6ZtoYRDeqQ4Ds6wW/8pCPYtHRWCGpBCYg9Vc2zink
+         IDgfXFWIz66OyXC7A8OPb0g16zqtBIQ+htDd37Z0zODKNswgoSIHHPvRB9SZvF7YET/U
+         k6Adb5pFTLVi5tBPvQd32cRvnPg5sMJB8GydQfx2rU9QqKDMOS/fiCw3eUsEqy/9ewAa
+         bbw+QteujQd3wVApvB4P/kF5A8MCaqZuQqk2h+HgvOYcP+0dYnf5NwEg9Erk+zZJhF2f
+         540w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772618057; x=1773222857;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=04TQwyjav+Mkle+Jlhsg1YPsdYQI6BcfeeGyJ/oU2Wk=;
+        b=YA2FIrT3avUwDLXQ9u3yEpXlCQboPoczf9Hoc2zippssAuX0g5y9hTuTN3z+Fo8rgH
+         0EtiAevJYTDTHbHgZOFatwWlwT1YS5JwRkgnSBBlA1QZyR+y+fn2C7Ou+wPHu1m1XGov
+         aCTTtgF0ivSQ7rQLeCWC/oXkQ0vqJY6U9Il+eulycPXWsQc6vaTonD6KWTS/pfovf/U3
+         eA8IwQ01C6cJliTEPtDQjN1p0ZmWlZVE/dsL2hCITqpeXu3ya8IRl4JlCebZqeKi/zsZ
+         c+eHLj7LjeMY5dAzUYf/1eQv7L/Ignnp4sPeKjELyoGBQPhtQ5K8udIc2oajxcV6XmTs
+         hkjA==
+X-Forwarded-Encrypted: i=1; AJvYcCWoN2hQ3ZuI420ln4FXmXhViDtCSHC1ZfCgy9CS96GYnqDC/Q1jrFs5wvDAXzu9EWNB9Mg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1W2sVf0lqIt7YtGK2f2A8U46iQmgYv78tiZ8H6KUz6r0rA4KS
+	/Dlt+3P+QojR88ZWbwHlyp2gZtYN1G8MpYzxWfzX40mW47AIsm/j+xi6
+X-Gm-Gg: ATEYQzwE97TfAcGNbnEommS00M0U4cb7bd5vPuiAYLCAgG1C0+zF5yq+H7xTsWduOuU
+	+3ObH+9wZFuxFJxxgMtNRQZrKHizVlSTTjZ3D2SB5hVXNWgUZzwz55Ys3R/rX/1kKA8Vt6tZ3KJ
+	68jMQpnRvEKoomnWHNtJxIjr5ggCWvrGimfDDshZzE5z99dtyINEHdLFiRN3VbsHE1hQHBB64eV
+	bC3DC8a5xMsXhmV0IOATYS5igDrUAKN92hBxl4+7NLuIPKeICZdE2Nd5/XVE8x/fck7Pkp4DUQu
+	C2MxlywVCcHnTLvf979t4PpMTP215iaUKibvtkHlDSmM7if8xRlPTiti+kD5ml6gzNY+dIppVsf
+	fkWouXOK+9pPypAQHNpsEO7KEJ7S9AXeu+rVuhwZvxTs9SpIfw+OcVY/GcoV3AjMu1TEZ/Qjxyo
+	aFovoAZSf2XyjtwAVYtYcdpDVkXI012K6S8MB6mGlCPkz+lCAUstgyIJICpXrE4YjfJ3j3XsFDF
+	hI=
+X-Received: by 2002:a05:600c:6389:b0:483:75f1:54f with SMTP id 5b1f17b1804b1-485198a10e7mr21116425e9.31.1772618057285;
+        Wed, 04 Mar 2026 01:54:17 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-485188923c2sm40345475e9.14.2026.03.04.01.54.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Mar 2026 01:54:17 -0800 (PST)
+Date: Wed, 4 Mar 2026 09:54:15 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Yafang Shao <laoar.shao@gmail.com>, mingo@redhat.com, will@kernel.org,
+ boqun@kernel.org, longman@redhat.com, rostedt@goodmis.org,
+ mhiramat@kernel.org, mark.rutland@arm.com, mathieu.desnoyers@efficios.com,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 1/2] locking: add mutex_lock_nospin()
+Message-ID: <20260304095415.4d5f2528@pumpkin>
+In-Reply-To: <20260304090249.GN606826@noisy.programming.kicks-ass.net>
+References: <20260304074650.58165-1-laoar.shao@gmail.com>
+	<20260304074650.58165-2-laoar.shao@gmail.com>
+	<20260304090249.GN606826@noisy.programming.kicks-ass.net>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:QCgvCgC3f179_qdpB89zRQ--.55S3
-X-Coremail-Antispam: 1Uf129KBjvJXoWxAF4UWFy5ZF1Utr1UWryfZwb_yoWrWrWDpF
-	4UtrWFgrsYy340qF48Jr4UJw1YqFWqyFW5Xr1avw1jqF1jqr1xXr1ftF4jqrZ8Ar45ur4x
-	J34Ut3Z7tr1UJaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piyrWrUUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbCzwNEvGmn-wNc2gAA3A
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-From: Feng Yang <yangfeng@kylinos.cn>
+On Wed, 4 Mar 2026 10:02:49 +0100
+Peter Zijlstra <peterz@infradead.org> wrote:
 
-The bpf_lwt_xmit_push_encap helper needs to access skb_dst(skb)->dev to
-calculate the needed headroom:
+> On Wed, Mar 04, 2026 at 03:46:49PM +0800, Yafang Shao wrote:
+> > Introduce mutex_lock_nospin(), a helper that disables optimistic spinning
+> > on the owner for specific heavy locks. This prevents long spinning times
+> > that can lead to latency spikes for other tasks on the same runqueue.  
+> 
+> This makes no sense; spinning stops on need_resched().
+> 
 
-	err = skb_cow_head(skb,
-			   len + LL_RESERVED_SPACE(skb_dst(skb)->dev));
+That might still be an issue if a high priority process is spinning.
+But a %sys spike doesn't imply a latency spike.
 
-But skb->_skb_refdst may not be initialized when the skb is set up by
-bpf_prog_test_run_skb function. Executing bpf_lwt_push_ip_encap function
-in this scenario will trigger null pointer dereference, causing a kernel
-crash as Yinhao reported:
+Is this using the osq_lock.c code?
+That will have problems on overprovisioned VMs, it tries to find out
+whether the hypervisor has switched out - but ISTR that is flawed.
 
-[  105.186365] BUG: kernel NULL pointer dereference, address: 0000000000000000
-[  105.186382] #PF: supervisor read access in kernel mode
-[  105.186388] #PF: error_code(0x0000) - not-present page
-[  105.186393] PGD 121d3d067 P4D 121d3d067 PUD 106c83067 PMD 0
-[  105.186404] Oops: 0000 [#1] PREEMPT SMP NOPTI
-[  105.186412] CPU: 3 PID: 3250 Comm: poc Kdump: loaded Not tainted 6.19.0-rc5 #1
-[  105.186423] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
-[  105.186427] RIP: 0010:bpf_lwt_push_ip_encap+0x1eb/0x520
-[  105.186443] Code: 0f 84 de 01 00 00 0f b7 4a 04 66 85 c9 0f 85 47 01 00 00 31 c0 5b 5d 41 5c 41 5d 41 5e c3 cc cc cc cc 48 8b 73 58 48 83 e6 fe <48> 8b 36 0f b7 be ec 00 00 00 0f b7 b6 e6 00 00 00 01 fe 83 e6 f0
-[  105.186449] RSP: 0018:ffffbb0e0387bc50 EFLAGS: 00010246
-[  105.186455] RAX: 000000000000004e RBX: ffff94c74e036500 RCX: ffff94c74874da00
-[  105.186460] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff94c74e036500
-[  105.186463] RBP: 0000000000000001 R08: 0000000000000002 R09: 0000000000000000
-[  105.186467] R10: ffffbb0e0387bd50 R11: 0000000000000000 R12: ffffbb0e0387bc98
-[  105.186471] R13: 0000000000000014 R14: 0000000000000000 R15: 0000000000000002
-[  105.186484] FS:  00007f166aa4d680(0000) GS:ffff94c8b7780000(0000) knlGS:0000000000000000
-[  105.186490] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  105.186494] CR2: 0000000000000000 CR3: 000000015eade001 CR4: 0000000000770ee0
-[  105.186499] PKRU: 55555554
-[  105.186502] Call Trace:
-[  105.186507]  <TASK>
-[  105.186513]  bpf_lwt_xmit_push_encap+0x2b/0x40
-[  105.186522]  bpf_prog_a75eaad51e517912+0x41/0x49
-[  105.186536]  ? kvm_clock_get_cycles+0x18/0x30
-[  105.186547]  ? ktime_get+0x3c/0xa0
-[  105.186554]  bpf_test_run+0x195/0x320
-[  105.186563]  ? bpf_test_run+0x10f/0x320
-[  105.186579]  bpf_prog_test_run_skb+0x2f5/0x4f0
-[  105.186590]  __sys_bpf+0x69c/0xa40
-[  105.186603]  __x64_sys_bpf+0x1e/0x30
-[  105.186611]  do_syscall_64+0x59/0x110
-[  105.186620]  entry_SYSCALL_64_after_hwframe+0x76/0xe0
-[  105.186649] RIP: 0033:0x7f166a97455d
+In reality a spin lock shouldn't be held for long enough to cause
+any kind latency issue.
+So something in the code that reads the list of filter functions
+needs to be done differently so that the lock isn't held for as long.
 
-Temporarily add the setting of skb->_skb_refdst before bpf_test_run to resolve the issue.
-
-Fixes: 52f278774e79 ("bpf: implement BPF_LWT_ENCAP_IP mode in bpf_lwt_push_encap")
-Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
-Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
-Closes: https://groups.google.com/g/hust-os-kernel-patches/c/8-a0kPpBW2s
-Signed-off-by: Yun Lu <luyun@kylinos.cn>
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
-Tested-by: syzbot@syzkaller.appspotmail.com
----
- net/bpf/test_run.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
-
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 178c4738e63b..565fe8cbcdc9 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -1156,6 +1156,20 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 		skb->ip_summed = CHECKSUM_COMPLETE;
- 	}
- 
-+	if (prog->type == BPF_PROG_TYPE_LWT_XMIT) {
-+		if (ipv6_bpf_stub) {
-+#if IS_ENABLED(CONFIG_IPV6)
-+			dst_hold(&net->ipv6.ip6_null_entry->dst);
-+			skb_dst_set(skb, &net->ipv6.ip6_null_entry->dst);
-+#endif
-+		} else {
-+			/* For CONFIG_IPV6=n, ipv6_bpf_stub is NULL */
-+			pr_warn_once("Please test this program with the IPv6 module enabled\n");
-+			ret = -EOPNOTSUPP;
-+			goto out;
-+		}
-+	}
-+
- 	ret = bpf_test_run(prog, skb, repeat, &retval, &duration, false);
- 	if (ret)
- 		goto out;
--- 
-2.43.0
-
+	David
