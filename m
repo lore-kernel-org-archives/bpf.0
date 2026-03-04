@@ -1,83 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C325E33F5B1
-	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 16:16:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B6A733F597;
+	Wed,  4 Mar 2026 16:35:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772640979; cv=none; b=HYhCmJW/lql/FjXYMoW/Z48eDRlSrow3wzOS6Spg+0TstZaAYwI20qfc1fMKWeohJ84nSfMFeSaYC2OXTHmPXGWoqyTwZO+8UNVaLpgDT9YXvVAOC48ETvAiUxq+pM7bKedckX4Bmsy/D4pE9CuOicmp5Z/ukjGj+uxXbJufLzo=
+	t=1772642154; cv=none; b=PJK98Ono/KyUflx73/GLob0ILhIr9CQzBdcREmKWnGKjozb0i+OYVck42xyyFCYnrHbFcuCe39Mnch5OAqkWDlnaKfca4P75hc0d5maRsLavKA9CCRGBotXYPVC8n8XgMteGKGdlz7zFirzK5cPg4UHrjQ4MdmTumf13elCHdpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772640979; c=relaxed/simple;
-	bh=T7f4tXnoY/hEozTaziiKAKOGF0srqtLlgr+HlO0N/OA=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=aL1yh+PTgbo01UQQDAMX4Smbt7dPBoB3A8Q++Gj2Q5xyGy+dTClluHl2OIE0dkfykwuUDkSBRQSVUuck3UsFEQngj3m/g5mqA4Hx2fb42ZWyF6Jasy6bvWVbOjIDny7GG5A7H7t+rIcqFxgdz8pyx4HybUkjiKB6BFXgIE3CYBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CJVRsMu5; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772642154; c=relaxed/simple;
+	bh=Tz/EW6VqSDuNT9o95iMXFSH++Mx/kFvK7wixh1Rq9Lo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LQhlGt3nK7s369ck7HLtMyqhQKreVGkjdxNVaG+xUJZ5x/2dMcqJUfkIy1UbMYaG66sgWm6xZoJOejIYiq1adi3E59tABfUp9O3Hw+1s8o8IzVDlt0mOk5Bs3e6TjsVzqEztHiRvUb3lMYoeMT6bJYsuw8PmHtIcKBf9uGArfOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ducmDr+A; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CJVRsMu5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FF4BC4CEF7;
-	Wed,  4 Mar 2026 16:16:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772640979;
-	bh=T7f4tXnoY/hEozTaziiKAKOGF0srqtLlgr+HlO0N/OA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=CJVRsMu5rhDuFWR3fw7kqBVymwu14o4LSUoXHgeZgiUIoIW/eeLMPxUtCM6YMycoc
-	 gN9Ue6pgC/sooPSzqGzJ7iSXT1kVPrjCSALonkLpPur87Xr59CzB84xuNlRbXzxZBk
-	 KvDbeCGfpXCYRqq/I9eiBKPkTLEujc8HdGL7Z4EEzCEVHf2Jh2y7/7kHOHVcpvg3g3
-	 pgBA6oUJfspZFMX8pKJWvmnlGNevYKS/ch3or/xeU4w2wx9JnL0g7ysnmCYpYl11Bv
-	 FqyjIkG1lD7FZHxf6Qqarcupl1mLlCSCTHW9ka0s5ES8en6RqA1GVPjQdvFiSumW9a
-	 lWu/is52md3Uw==
-Content-Type: multipart/mixed; boundary="===============8677841370066391576=="
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ducmDr+A"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772642153; x=1804178153;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Tz/EW6VqSDuNT9o95iMXFSH++Mx/kFvK7wixh1Rq9Lo=;
+  b=ducmDr+A7OX3cB0RtCmAuM45K0hxldfJWKTiqmVo0bung52YKGWce33W
+   JEcnPYDpV/KkpmTPL0k2CbrKexYR4kla8rKJ7mzpEv1NWhRQcuTBMK1l5
+   7xQ/pG0K/qW9TPa+JW4M312n/u/Hteiqgi/t6/mpKRWpi3qA1hQIRQKRg
+   c3vOrZPynx0Ovii//epchBtefPfjRZnLYInKh6hzAEBKTxhC3RWSkgXr6
+   a/gaDDd+inaQ6s2HLmjLj5eJoXH0TId+qd8X8ZR+u7DlNeQLb9hPT4sTK
+   nQ0UEhWccn8S1NlYHf//Kq4hBs14wlGHR56QoUt63bSW6hlaMq/TNn4P1
+   Q==;
+X-CSE-ConnectionGUID: 3dOa2prUTv6N9Pdh+I4UDg==
+X-CSE-MsgGUID: VXbUUm6DQfegZYFBMyFcfA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11719"; a="77580005"
+X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
+   d="scan'208";a="77580005"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2026 08:35:52 -0800
+X-CSE-ConnectionGUID: 28qXX9IKTM+4NtRU4IyMMw==
+X-CSE-MsgGUID: pjZ06Zf0QEGnm8h6YaITQw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
+   d="scan'208";a="222895522"
+Received: from irvmail002.ir.intel.com ([10.43.11.120])
+  by orviesa004.jf.intel.com with ESMTP; 04 Mar 2026 08:35:47 -0800
+Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id 0F4B5312C7;
+	Wed,  4 Mar 2026 16:35:45 +0000 (GMT)
+From: Larysa Zaremba <larysa.zaremba@intel.com>
+To: Tony Nguyen <anthony.l.nguyen@intel.com>,
+	intel-wired-lan@lists.osuosl.org
+Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
+	Natalia Wochtman <natalia.wochtman@intel.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH iwl-next v3 00/10] libeth and full XDP for ixgbevf
+Date: Wed,  4 Mar 2026 17:03:32 +0100
+Message-ID: <20260304160345.1340940-1-larysa.zaremba@intel.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <fef042048a6ecfc6de8186922df313d8b3e61cc6dffd714e046882ec3c3dc68b@mail.kernel.org>
-In-Reply-To: <20260304151932.177995-2-cupertino.miranda@oracle.com>
-References: <20260304151932.177995-2-cupertino.miranda@oracle.com>
-Subject: Re: [PATCH v2 1/2] bpf: detect non null pointer with register operand in JEQ/JNE.
-From: bot+bpf-ci@kernel.org
-To: cupertino.miranda@oracle.com,bpf@vger.kernel.org
-Cc: cupertino.miranda@oracle.com,david.faust@oracle.com,jose.marchesi@oracle.com,elena.zannoni@oracle.com,eddyz87@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed,  4 Mar 2026 16:16:19 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============8677841370066391576==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Update ixgbevf with standard XDP features by utilizing libeth library.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -17647,12 +17647,15 @@ struct linked_regs linked_regs = {};
+First, in patches 1-4 refactor existing general and XDP Rx code
+to use libeth fill queues. Then in patches 5-7, add support for
+XDP multi-buffer and XDP_REDIRECT (target and source). Patch 8 addresses
+particularities of one HW type by using a software header split.
+Patches 9-10 address page pool not being reconfigured on MTU change.
 
-[ ... ]
+v2->v3:
+* remove IXGBEVF_MAX_FRAME_BUILD_SKB one patch earlier
+* remove __IXGBEVF_RX_3K_BUFFER (not used anymore)
+* correct stats for mbuf packets when XDP verdict is other than XDP_PASS
+* improve commit message in the cleanup patch
+* improve error handling when page pool creation fails
+* free data buffer when the corresponding header buffer allocation fails
+* when some Rx buffers cannot be allocated, break instead of returning,
+  so allocated buffers are not lost
 
-> 	/* detect if R == 0 where R is returned from bpf_map_lookup_elem().
-> +	 * Also does the same detection for a register which the value is
-> +	 * known to be 0.
+v1->v2:
+* fix wrong return value when allocating descriptor memory fails
+* tag xdp_prog in ring structure as RCU
 
-Minor grammar nit: "a register which the value is known to be 0" reads
-awkwardly.  Should this be "a register whose value is known to be 0"
-to match the corrected commit message wording?
+Larysa Zaremba (9):
+  ixgbevf: remove legacy Rx
+  ixgbevf: do not share pages between packets
+  ixgbevf: use libeth in Rx processing
+  ixgbevf: branch prediction and cleanup
+  ixgbevf: support XDP multi-buffer on Rx path
+  ixgbevf: XDP_TX in multi-buffer through libeth
+  ixgbevf: support XDP_REDIRECT and .ndo_xdp_xmit
+  ixgbevf: reconfigure page pool when reallocating buffers
+  ixgbevf: allow changing MTU when XDP program is attached
 
-> 	 * NOTE: these optimizations below are related with pointer comparison
-> 	 *       which will never be JMP32.
-> 	 */
-> +	if (!is_jmp32 && (opcode == BPF_JEQ || opcode == BPF_JNE) &&
-> +	    type_may_be_null(dst_reg->type) &&
-> +	    ((BPF_SRC(insn->code) == BPF_K && insn->imm == 0) ||
-> +	     (BPF_SRC(insn->code) == BPF_X && register_is_null (src_reg)))) {
-                                               ^^^^^^^^^^^^^^^^^
+Natalia Wochtman (1):
+  ixgbevf: add pseudo header split
 
-There is a space between the function name and the opening parenthesis.
-Every other call to register_is_null() in verifier.c omits this space.
+ drivers/net/ethernet/intel/Kconfig            |    1 +
+ drivers/net/ethernet/intel/ixgbevf/defines.h  |    2 +-
+ drivers/net/ethernet/intel/ixgbevf/ethtool.c  |   48 -
+ drivers/net/ethernet/intel/ixgbevf/ixgbevf.h  |   99 +-
+ .../net/ethernet/intel/ixgbevf/ixgbevf_main.c | 1117 +++++++----------
+ include/net/libeth/xdp.h                      |    2 +-
+ 6 files changed, 499 insertions(+), 770 deletions(-)
 
+-- 
+2.52.0
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22676623004
---===============8677841370066391576==--
