@@ -1,186 +1,174 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B7DBBA21;
-	Wed,  4 Mar 2026 01:12:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C5E5F513;
+	Wed,  4 Mar 2026 01:14:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772586771; cv=none; b=FJ5oxib+iMUZMn/h0EDI9NwfHXLTVP98P6ekCJ2e2R4xLh95kZoZXdOVEBv2xUlsoiMcF6eVeiaNeEDL09eiQHlDGKtjKTiVpXW2mxvh202a2juJ3IrwJ0D0GAK97O69Zcld6YtyfegExB7f2Cyy1QuNRuT71boqhOmIsqNNgCs=
+	t=1772586867; cv=none; b=lBYlB1kt7gMuHgsXm+jn/j0rwLOdcmN+nQ4yWmGvGjscXO+PBnnrotJO9VnPwKp/kFnZT89pTdJj6xBheLmdo4104tVPVrAifjHWfB7Yb8eS46YdrBU7xdISkYIdex1zVtN06u+WhdcWgz+wMUF8lpM80/Mx7XWErb2doJIoYss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772586771; c=relaxed/simple;
-	bh=GFMrZQJwS7/We+LO7SGzzxn2lFIugPuzG0DMG56Js2Y=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=FOveOG2TCR43Cu4l15Xs8uudLCORKU0jvm/lNs67JB2g1Fdnguzid5cc01D5H0mSBvka/MVmFAv8+QrpbcUddkzceXJC4YSoZu7zw/H13wA7FQ034GDwrjUEgYm0Iw+/wS3gKkpRk6a4JfJTJW0NEDSdC5RKTeYVNU6ziQ6/zYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WgCKlAsk; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772586867; c=relaxed/simple;
+	bh=1YW3g4qTt9TeJGFFN0APvLtJpVOVvhJxLVnIpsJbZLU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dxUCM24mMHNT8TDvOrIErHwOj1nb1uOgwqVZw6diuV5ANdcvIbZZHgoqfNOAbZUi/wBAxDDRjFnPHZTxNc9DJJg4ZOXIjveonBNg7hsYtG8jLApoKquhVtEZKFIuosISSB8I1U5AKA0mI3IX/udH0bRZMB7npT72TIyA3FEUvl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YmdZjYnG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WgCKlAsk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC630C116C6;
-	Wed,  4 Mar 2026 01:12:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YmdZjYnG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ECC4C116C6;
+	Wed,  4 Mar 2026 01:14:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772586770;
-	bh=GFMrZQJwS7/We+LO7SGzzxn2lFIugPuzG0DMG56Js2Y=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=WgCKlAsk3bXb+r/1s8b+OdlG4mX+icJAS45Uq+KKMNYvC49iKTzsvQ1tAfDcKjOHO
-	 pKVaQRChw5HLqCsmNleVgIcsLZe/mxOdeaALYcjfevERMGUkXjesPWWweCyhou7fQl
-	 VQ4Mb37EKNYYDJ4P3igTTUB/rwlUKWDzyHL6MaEPUYg4GKRNARAdOpQi37TER+bijy
-	 ujXwk/T7EtjhMi3TyZMPQ0jsSUIHCkGDCCDxAdqRqWs1EQh9//lrZ/RlcnBRfnGFFQ
-	 Jo6qgWMK/+GUePLR79A6WJNPJzwq2R2bZgMbaePiL9CPpPo5lJ+0GFE54ESH67v3gD
-	 aYrfgbEpOhAMQ==
-Date: Wed, 4 Mar 2026 10:12:29 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Jeff Layton <jlayton@kernel.org>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner
- <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Steven Rostedt
- <rostedt@goodmis.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Dan Williams <dan.j.williams@intel.com>, Matthew Wilcox
- <willy@infradead.org>, Eric Biggers <ebiggers@kernel.org>,
- "Theodore Y. Ts'o" <tytso@mit.edu>, Muchun Song <muchun.song@linux.dev>,
- Oscar Salvador <osalvador@suse.de>, David Hildenbrand <david@kernel.org>,
- David Howells <dhowells@redhat.com>, Paulo Alcantara <pc@manguebit.org>,
- Andreas Dilger <adilger.kernel@dilger.ca>, Jan Kara <jack@suse.com>,
- Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>, Trond
- Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, Chuck
- Lever <chuck.lever@oracle.com>, NeilBrown <neil@brown.name>, Olga
- Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom
- Talpey <tom@talpey.com>, Steve French <sfrench@samba.org>, Ronnie Sahlberg
- <ronniesahlberg@gmail.com>, Shyam Prasad N <sprasad@microsoft.com>, Bharath
- SM <bharathsm@microsoft.com>, Alexander Aring <alex.aring@gmail.com>,
- Ryusuke Konishi <konishi.ryusuke@gmail.com>, Viacheslav Dubeyko
- <slava@dubeyko.com>, Eric Van Hensbergen <ericvh@kernel.org>, Latchesar
- Ionkov <lucho@ionkov.net>, Dominique Martinet <asmadeus@codewreck.org>,
- Christian Schoenebeck <linux_oss@crudebyte.com>, David Sterba
- <dsterba@suse.com>, Marc Dionne <marc.dionne@auristor.com>, Ian Kent
- <raven@themaw.net>, Luis de Bethencourt <luisbg@kernel.org>, Salah Triki
- <salah.triki@gmail.com>, "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
- Ilya Dryomov <idryomov@gmail.com>, Alex Markuze <amarkuze@redhat.com>, Jan
- Harkes <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu, Nicolas Pitre
- <nico@fluxnic.net>, Tyler Hicks <code@tyhicks.com>, Amir Goldstein
- <amir73il@gmail.com>, Christoph Hellwig <hch@infradead.org>, John Paul
- Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Yangtao Li
- <frank.li@vivo.com>, Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>,
- David Woodhouse <dwmw2@infradead.org>, Richard Weinberger <richard@nod.at>,
- Dave Kleikamp <shaggy@kernel.org>, Konstantin Komarov
- <almaz.alexandrovich@paragon-software.com>, Mark Fasheh <mark@fasheh.com>,
- Joel Becker <jlbec@evilplan.org>, Joseph Qi <joseph.qi@linux.alibaba.com>,
- Mike Marshall <hubcap@omnibond.com>, Martin Brandenburg
- <martin@omnibond.com>, Miklos Szeredi <miklos@szeredi.hu>, Anders Larsen
- <al@alarsen.net>, Zhihao Cheng <chengzhihao1@huawei.com>, Damien Le Moal
- <dlemoal@kernel.org>, Naohiro Aota <naohiro.aota@wdc.com>, Johannes
- Thumshirn <jth@kernel.org>, John Johansen <john.johansen@canonical.com>,
- Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
- "Serge E. Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>,
- Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin
- <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, Fan
- Wu <wufan@kernel.org>, Stephen Smalley <stephen.smalley.work@gmail.com>,
- Ondrej Mosnacek <omosnace@redhat.com>, Casey Schaufler
- <casey@schaufler-ca.com>, Alex Deucher <alexander.deucher@amd.com>,
- Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>, David Airlie
- <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Sumit Semwal
- <sumit.semwal@linaro.org>, Eric Dumazet <edumazet@google.com>, Kuniyuki
- Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, Willem de
- Bruijn <willemb@google.com>, "David S. Miller" <davem@davemloft.net>, Jakub
- Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>, Oleg Nesterov
- <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar
- <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung
- Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Alexander
- Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa
- <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, Adrian Hunter
- <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>,
- "Darrick J. Wong" <djwong@kernel.org>, Martin Schiller <ms@dev.tdt.de>,
- Eric Paris <eparis@redhat.com>, Joerg Reuter <jreuter@yaina.de>, Marcel
- Holtmann <marcel@holtmann.org>, Johan Hedberg <johan.hedberg@gmail.com>,
- Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Oliver Hartkopp
- <socketcan@hartkopp.net>, Marc Kleine-Budde <mkl@pengutronix.de>, David
- Ahern <dsahern@kernel.org>, Neal Cardwell <ncardwell@google.com>, Steffen
- Klassert <steffen.klassert@secunet.com>, Herbert Xu
- <herbert@gondor.apana.org.au>, Remi Denis-Courmont <courmisch@gmail.com>,
- Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Xin Long
- <lucien.xin@gmail.com>, Magnus Karlsson <magnus.karlsson@intel.com>, Maciej
- Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev
- <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, John
- Fastabend <john.fastabend@gmail.com>, linux-fsdevel@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- nvdimm@lists.linux.dev, fsverity@lists.linux.dev, linux-mm@kvack.org,
- netfs@lists.linux.dev, linux-ext4@vger.kernel.org,
- linux-f2fs-devel@lists.sourceforge.net, linux-nfs@vger.kernel.org,
- linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
- linux-nilfs@vger.kernel.org, v9fs@lists.linux.dev,
- linux-afs@lists.infradead.org, autofs@vger.kernel.org,
- ceph-devel@vger.kernel.org, codalist@coda.cs.cmu.edu,
- ecryptfs@vger.kernel.org, linux-mtd@lists.infradead.org,
- jfs-discussion@lists.sourceforge.net, ntfs3@lists.linux.dev,
- ocfs2-devel@lists.linux.dev, devel@lists.orangefs.org,
- linux-unionfs@vger.kernel.org, apparmor@lists.ubuntu.com,
- linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org,
- selinux@vger.kernel.org, amd-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
- linaro-mm-sig@lists.linaro.org, netdev@vger.kernel.org,
- linux-perf-users@vger.kernel.org, linux-fscrypt@vger.kernel.org,
- linux-xfs@vger.kernel.org, linux-hams@vger.kernel.org,
- linux-x25@vger.kernel.org, audit@vger.kernel.org,
- linux-bluetooth@vger.kernel.org, linux-can@vger.kernel.org,
- linux-sctp@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v2 053/110] uprobes: use PRIino format for i_ino
-Message-Id: <20260304101229.bc9fba5fcb816b7325fdf57d@kernel.org>
-In-Reply-To: <20260302-iino-u64-v2-53-e5388800dae0@kernel.org>
-References: <20260302-iino-u64-v2-0-e5388800dae0@kernel.org>
-	<20260302-iino-u64-v2-53-e5388800dae0@kernel.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=k20201202; t=1772586866;
+	bh=1YW3g4qTt9TeJGFFN0APvLtJpVOVvhJxLVnIpsJbZLU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YmdZjYnG8tRoM4HIQ4pqIJD90bjIM2u2s8Torrn48PqqATOdWMh/cErfj8WlfkkBO
+	 /CPkOOp3yLwQpaWzlP1P+aclZ4LYnPxnTNSPKAV4erFuQfNZPRC6RxWlXXdZ69gGDP
+	 X4EXa0mlbR2p+8fWNNH1g6iHB5O928zU7We5U2aIozGFEHmTih7E/AVsb75yLFFbO0
+	 vueWQ8vdYmDNlowtlEa5Ouihv6c5zrZYC8YmIBF06pSyrskbn/Y5jbD1h3bW15yJnc
+	 GkZnjPKVHO2AfGWDByofuBeSxIMpQoXOw/TULVRLjm1qLE7D9e/OKylXv1SYoXkX+J
+	 KKxqPPyB1IWCA==
+Date: Tue, 3 Mar 2026 17:14:24 -0800
+From: Namhyung Kim <namhyung@kernel.org>
+To: Quentin Monnet <qmo@kernel.org>
+Cc: Leo Yan <leo.yan@arm.com>, Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, bpf@vger.kernel.org
+Subject: Re: [PATCH RESEND v2] tools build: Use -fzero-init-padding-bits=all
+Message-ID: <aaeHcL7vEhZ0LWth@google.com>
+References: <20260224-tools_build_fix_zero_init-v2-1-b1acc817a01e@arm.com>
+ <aaCTC86U9KjnmZmu@google.com>
+ <99e7fe4e-72de-4b55-9a9a-ae51718a0e73@kernel.org>
+ <20260227103611.GA1098637@e132581.arm.com>
+ <c886c8c9-d336-4ec3-94c0-c4869dee7e7f@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <c886c8c9-d336-4ec3-94c0-c4869dee7e7f@kernel.org>
 
-On Mon, 02 Mar 2026 15:24:37 -0500
-Jeff Layton <jlayton@kernel.org> wrote:
+Hello,
 
-> Convert uprobes i_ino format strings to use the PRIino format
-> macro in preparation for the widening of i_ino via kino_t.
+On Fri, Feb 27, 2026 at 11:52:38AM +0000, Quentin Monnet wrote:
+> 2026-02-27 10:36 UTC+0000 ~ Leo Yan <leo.yan@arm.com>
+> > On Thu, Feb 26, 2026 at 10:52:01PM +0000, Quentin Monnet wrote:
+> >> 2026-02-26 10:38 UTC-0800 ~ Namhyung Kim <namhyung@kernel.org>
+> >>> Adding bpftool maintainer.
+> >>>
+> >>> On Tue, Feb 24, 2026 at 12:16:40PM +0000, Leo Yan wrote:
+> >>>> GCC-15 release claims [1]:
+> >>>>
+> >>>>   {0} initializer in C or C++ for unions no longer guarantees clearing
+> >>>>   of the whole union (except for static storage duration initialization),
+> >>>>   it just initializes the first union member to zero. If initialization
+> >>>>   of the whole union including padding bits is desirable, use {} (valid
+> >>>>   in C23 or C++) or use -fzero-init-padding-bits=unions option to
+> >>>>   restore old GCC behavior.
+> >>>>
+> >>>> As a result, this new behaviour might cause unexpected data when we
+> >>>> initialize a union with using the '{ 0 }' initializer.
+> >>>>
+> >>>> Since commit dce4aab8441d ("kbuild: Use -fzero-init-padding-bits=all"),
+> >>>> the kernel has enabled -fzero-init-padding-bits=all to zero padding bits
+> >>>> in unions and structures.  This commit applies the same option for tools
+> >>>> building.
+> >>>>
+> >>>> The option is not supported neither by any version older than GCC 15 and
+> >>>> is also not supported by LLVM, this patch adds the cc-option function to
+> >>>> dynamically detect the compiler option.
+> >>>>
+> >>>> [1] https://gcc.gnu.org/gcc-15/changes.html
+> >>>>
+> >>>> Signed-off-by: Leo Yan <leo.yan@arm.com>
+> >>
+> >>
+> >> Thank you Namhyung for the Cc.
+> >>
+> >> I built bpftool with the patch, with gcc 13 (which didn't get the flag,
+> >> as expected) and gcc 15, and it's fine with both. As far as I can tell,
+> >> bpftool does not initialise any union with "{0}" anyway.
+> > 
+> > Thanks a lot for testing!
+> > 
+> >> One potential concern (I didn't try) could be for cross-compilation:
+> >> bpftool's Makefile sets HOST_CFLAGS based on $(CFLAGS), but $(HOSTCC)
+> >> and $(CC) could be different versions of gcc, for example.
+> > 
+> > To avoid confusion, we can use EXTRA_CFLAGS and HOST_EXTRACFLAGS instead
+> > in Makefile.include:
+> > 
+> > -----
+> > 
+> > # cc-option
+> > # Usage: CFLAGS += $(call cc-option,-march=winchip-c6,-march=i586)
+> > cc-option = $(call try-run, \
+> >        $(CC) -Werror $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
+> > 
+> > host-cc-option = $(call try-run, \
+> >        $(HOSTCC) -Werror $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
+> > 
+> > # Explicitly clear padding bits with the initializer '{ 0 }'
+> > EXTRA_CFLAGS += $(call cc-option,-fzero-init-padding-bits=all)
+> > HOST_EXTRACFLAGS += $(call host-cc-option,-fzero-init-padding-bits=all)
+> > 
+> > -----
+> > 
+> > Then, in a project, its Makefile can append EXTRA_CFLAGS and
+> > HOST_EXTRACFLAGS to CFLAGS and HOSTCFLAGS respectively.
 > 
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> 
+> This sounds like it should work for bpftool as long as we += and don't
+> overwrite the EXTRA_CFLAGS passed from command line. In bpftool's
+> Makefile we'd have to move HOST_CFLAGS's CFLAGS-based defintion higher
+> up, before we add the EXTRA_CFLAGS to CFLAGS; and if anything needs to
+> be passed to the host binary, users will have to specify
+> HOST_EXTRACFLAGS (or HOST_EXTRA_CFLAGS?) independently, which is acceptable.
 
-Looks good to me.
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Quentin, do you want v2 with this or just ok for v1?
 
 Thanks,
+Namhyung
 
-> ---
->  kernel/events/uprobes.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
-> index 923b24b321cc0fbdecaf016645cdac0457a74463..d5bf51565851223730c63b50436c493c0c05eafd 100644
-> --- a/kernel/events/uprobes.c
-> +++ b/kernel/events/uprobes.c
-> @@ -344,7 +344,7 @@ __update_ref_ctr(struct mm_struct *mm, unsigned long vaddr, short d)
->  static void update_ref_ctr_warn(struct uprobe *uprobe,
->  				struct mm_struct *mm, short d)
->  {
-> -	pr_warn("ref_ctr %s failed for inode: 0x%lx offset: "
-> +	pr_warn("ref_ctr %s failed for inode: 0x%" PRIino "x offset: "
->  		"0x%llx ref_ctr_offset: 0x%llx of mm: 0x%p\n",
->  		d > 0 ? "increment" : "decrement", uprobe->inode->i_ino,
->  		(unsigned long long) uprobe->offset,
-> @@ -982,7 +982,7 @@ static struct uprobe *insert_uprobe(struct uprobe *uprobe)
->  static void
->  ref_ctr_mismatch_warn(struct uprobe *cur_uprobe, struct uprobe *uprobe)
->  {
-> -	pr_warn("ref_ctr_offset mismatch. inode: 0x%lx offset: 0x%llx "
-> +	pr_warn("ref_ctr_offset mismatch. inode: 0x%" PRIino "x offset: 0x%llx "
->  		"ref_ctr_offset(old): 0x%llx ref_ctr_offset(new): 0x%llx\n",
->  		uprobe->inode->i_ino, (unsigned long long) uprobe->offset,
->  		(unsigned long long) cur_uprobe->ref_ctr_offset,
+> Out of curiosity I looked at other tools, and of course everyone does it
+> differently:
 > 
-> -- 
-> 2.53.0
+> - Some of them, like bpftool, reuse the CFLAGS inherited from
+> tools/scripts/Makefile.include, adding EXTRA_CFLAGS to it, so setting
+> aside cross-compiling, both approaches (using CFLAGS or EXTRA_CFLAGS)
+> are fine.
 > 
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> - Some of them, such as tools/lib/bpf/Makefile for example, reset CFLAGS
+> before/by adding EXTRA_CFLAGS, so your v2 relying on CFLAGS would
+> probably have no effect for them.
+> 
+> - Some of them, such as tools/tracing/latency/Makefile or
+> tools/mm/Makefile, do not use EXTRA_CFLAGS - maybe it's worth adding it
+> if your objective is to pass the flag to all/most tools.
+> 
+> - (Also many smaller Makefiles such as most of the ones in selftests do
+> not pull tools/scripts/Makefile.include at all, but I suppose this is
+> out of scope.)
+> 
+> 
+> > If this is fine for us, I will repin patches
+> > 
+> >> The same concern could apply to perf with HOSTCFLAGS, by the way?
+> > 
+> > I don't see perf's HOSTCFLAGS to reuse CFLAGS.
+> 
+> 
+> Woops I can't see the HOSTCFLAGS using the CFLAGS either for perf, sorry
+> about that.
+> 
+> Thanks,
+> Quentin
