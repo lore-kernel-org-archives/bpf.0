@@ -1,168 +1,126 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1FEC37F00A
-	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 19:23:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 247713DA5C6
+	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 19:25:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772652200; cv=none; b=AsWQKdi2S+uQFqOoQZVIb0QfZug3uJN/vxu1mPL13StbppTSaRJvMGbZ9tuT0oWthS1l59FtnZ3s7SImU0D7KSmu1ZGw6eLvWBPX1ldEddRE3wOXLgffcGtJcKJlYGUoS1P2qCbi57dJWU8AfjsfZzFj1WyFWYZvHhI2IUVNIxQ=
+	t=1772652305; cv=none; b=s16sTl54hf5sPT/xmMF/7TrPy9GrhOkWlNjmCeXFU2cIpjjkpbnNSyxXMHModcipn+tnLdm/9bbEOr+72DNqHaMPI3a4IX3GcR+ZE+a7DMrQNQaiMbHc6j7VCDcCTsdh7vEsR13ygAJ9gDgrU4Vr+SmE3gBB6ZdmbYy4Ehk4Xeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772652200; c=relaxed/simple;
-	bh=ZPUAlez0m+RFWzXkftiiUGJe6zY2BMTtynPWR344TgA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RJDeW9ERiLQo/y4TPg1jbQt3mYjI7k2rkxMBW38Lfdk7DyGzqj89cd9uzdwfexMBSu3g3kHygKnRoSHZX6S4MR66rPyEqOpay563/YJRb0DIAX0OM+1mtyGD+HcvYz0rV/3axqq+VHNCFga5TdJGBdzgykzXqsxKz7LnegaXVYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mC4PD/J4; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772652305; c=relaxed/simple;
+	bh=klHlRSPUrcW19/cikqwSdg/fo8XZOOGT+82TaWVh2C4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TnRlfqUZBio/Dn0XAlGYmmdbOOnB3JJdQ65cUiThOP+i0xUSVRPjQYfxFwvG65KcCgRJWsRA4JKPfYC3QjNJLYAtq/kA4qzu+bUUFw3aSQxV7mLhM4MPFH+qmNl87K7ewe5c7xN5L+f82j6UmMGqaeEv1Gfy13Xn4kPybkxRBmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YhFfgKmF; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mC4PD/J4"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-8272a56b91cso6057541b3a.1
-        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 11:23:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772652197; x=1773256997; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=fU1U7bfciin8qRi/ihFmDDAULa/0oFMs1kOeD6wpMrA=;
-        b=mC4PD/J4wvyB6JC8oovwtQjYKoJI7H3cOCGSZOU3VRVfeoZzRRkKXRLhRcoG0Y0wBi
-         Z5XS42JzFUqSk0wZQOwCBLNMZpS7vj2DjukJnMpqeEZCG4jbQUotHXhcpL9Va8bdEeZ4
-         SWqJpcI6D16e92UTcpT47Ie25HpY2r7BMcQTdAk3VpteQMqQZ79v6KmxJnMEek5wIv0y
-         DnJZHdSCPnCV8vzmgiYKOlMdIQEuChvNaYlZqiJdSGJIY1zNSonxnucs3YdHC3xOrxG8
-         WkpbEOJ/UcHSwQDtqsDR8HuriDVIVI5VoZO969HblVex1tNuQyQ1pSOt25yex1Q2FOC9
-         GjRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772652197; x=1773256997;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fU1U7bfciin8qRi/ihFmDDAULa/0oFMs1kOeD6wpMrA=;
-        b=Flf7XhdQTidvp9kkf1bPkPgY0Lzw9TpdJdLK/sT49pO6iX8qE5jzXXGss6Bz20R0Qv
-         xqhI2u8usVpXNptWpXF6amSBLMbhvnSKOX9OZHMcyw9kTOLYBUY185PSz0r6NpLmwkPb
-         JFbYFdT2OZfq81n8ID6fZ6NOJGCMWhz4VNnfKQgoIAY9LgZVAnc4A7QpbUJ3hxswpOoa
-         sRPyCnBKFh3j5npW/30k416PeD/zsAtFJY/wPJXlX0gFvQCqPmRpIlklmjZF/5sjJyIU
-         J2zlzXREX/3LWzR6QXWXPg6PNIKLjiQkxTOOOhz2x4pSY+EyPl1ys9Pg2WHarEULXD19
-         t//Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUkac+/9fJv6u2s1tXZk41Q713293ifC+fyXQ0MeGCXYMdlZWi5gASZx4+L0Lqznisjcf0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3WvXDdezaNCUvvYJp4iM5WaUP2ATL/8kWOzpSp9CoYVViJNCf
-	9f3PpG+UTa/mRdsP1vU//tjaN/twqSvIi9UG2audltNPDsbCG5LtG7pd
-X-Gm-Gg: ATEYQzzTEreNUbEo5d9+V1i77F6JL2xmPolwsDfv6ZdzIS/mRdvAyvwN4xHorAQbD75
-	T+nYd5xjeXv2wILsFUcDQeiRtGDdZ96VOt9X262zSR1B3EN8v08Vm/OLKf+lajl3w52zQCwQj/W
-	VpJzsthBktcrAB0pf65wPpP5x3ZjMk4dwWVKO8lwF857m9ACWZxnZYk4ZEoBduz8YKvdXqcLvkM
-	f/p5cSpIFKjME3MSXVlDVpwgEZX/R7avaZPG+e6h3CckY7DJ9z6V9pww+s9Q7vPoS9+zbG3b4lJ
-	XPkcu5zA6kcEnytKpZLoN5HILiVtPjpdK3lg5nw5lZNQC84sXoeO3bYzXL2IO6H2NKxavhlljt0
-	WDZmROyxZLOJqAapILrIq/EcKS4HVrV+a1XX2cnXFz8DT6h9zLI+/cwm/wjxBgvxf5bSrKR7mwP
-	ntCfH6dkoJSHAu9jLP/XAADRO2z8oOoGYqSw2aQAsaK/5Sl1IZ2U72AdeW5jJq440=
-X-Received: by 2002:a05:6a00:4f85:b0:823:943:391b with SMTP id d2e1a72fcca58-82972ce0e64mr2874609b3a.60.1772652196994;
-        Wed, 04 Mar 2026 11:23:16 -0800 (PST)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8273a01054dsm24557417b3a.43.2026.03.04.11.23.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2026 11:23:16 -0800 (PST)
-Message-ID: <e8cc28373cd122f041a71f5818e41b7e3e4cffa2.camel@gmail.com>
-Subject: Re: [PATCH] bpf: Prevent invalid u32 bounds in
- __reg32_deduce_bounds()
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Andrea Righi <arighi@nvidia.com>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
-Cc: John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau	
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song	
- <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev	 <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>,  Emil Tsalapatis <emil@etsalapatis.com>,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Wed, 04 Mar 2026 11:23:13 -0800
-In-Reply-To: <20260220190736.230329-1-arighi@nvidia.com>
-References: <20260220190736.230329-1-arighi@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YhFfgKmF"
+Message-ID: <073804ab-6180-4cd5-a0cc-7ab7680cdf5e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772652300;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4E5nouG1FBOVXMudvOlFlS5ESes2e5w+Ttq5buwkCvA=;
+	b=YhFfgKmFv3IbsPbxr+aigcDTqVbCSPTy0Wqt+pfJCdo/bv7v4oO9Iuj2oYQuK3r2yy3xhq
+	ZgKBdMd09i0eXDP71CQUJ4CX15hDZQNzRRxdHjGylVfPD/5mEW+aqIIku6NxCiQpPKTIlI
+	ePIVeLUAqARBY4dBTc5Amc+eaHHekvE=
+Date: Wed, 4 Mar 2026 11:24:54 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf v1] resolve_btfids: Drop -lzstd fallback if libzstd
+ not found
+To: Paul Chaignon <paul.chaignon@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Vitaly Chikunov <vt@altlinux.org>,
+ bpf@vger.kernel.org, kernel-team@meta.com
+References: <20260302231058.916946-1-ihor.solodrai@linux.dev>
+ <aahqjs9v3PRmR6rV@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <aahqjs9v3PRmR6rV@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, 2026-02-20 at 20:07 +0100, Andrea Righi wrote:
-> When refining register bounds, __reg32_deduce_bounds can derive u32
-> min/max from 64-bit or s32 bounds and assign them with max_t/min_t.
->=20
-> If the existing u32 range and the derived range do not overlap (e.g.,
-> u64 says [0, 1] while u32 was [2, 2] from an earlier path), the
-> intersection is empty and the new u32_min_value can end up greater than
-> u32_max_value, triggering the following warning:
->=20
->   verifier bug: REG INVARIANTS VIOLATION (false_reg1): range bounds viola=
-tion
->     u64=3D[0x0, 0x1] s64=3D[0x0, 0x1] u32=3D[0x3, 0x1] s32=3D[0x0, 0x1] v=
-ar_off=3D(0x0, 0x1)
->   WARNING: kernel/bpf/verifier.c:2742 at reg_bounds_sanity_check
->   Call Trace:
->     reg_bounds_sanity_check+0xbc/0x1e0
->     reg_set_min_max+0x1a2/0x1f0
->     check_cond_jmp_op+0x5d2/0x1980
->     do_check_common+0x2b0f/0x3410
->     do_check_subprogs+0xcd/0x180
->     bpf_check+0x33fe/0x3850
->     bpf_prog_load+0x7d7/0xee0
->     __sys_bpf+0xea2/0x2e30
->=20
-> This was triggered by the scx CI while loading the scx_layered sched_ext
-> scheduler [1].
->=20
-> Fix by only applying the derived u32 bounds when the resulting range is
-> valid (u32_min <=3D u32_max).
->=20
-> [1] https://github.com/sched-ext/scx/pull/3349
->=20
-> Fixes: c1efab6468fd5 ("bpf: derive subreg bounds from full bounds when up=
-per 32 bits are constant")
-> Signed-off-by: Andrea Righi <arighi@nvidia.com>
-> ---
+On 3/4/26 9:23 AM, Paul Chaignon wrote:
+> On Mon, Mar 02, 2026 at 03:10:58PM -0800, Ihor Solodrai wrote:
+>> The "|| echo -lzstd" default makes zstd an unconditional link
+>> dependency of resolve_btfids. On systems where libzstd-dev is not
+>> installed and pkg-config fails, the linker fails:
+>>
+>>   ld: cannot find -lzstd: No such file or directory
+>>
+>> libzstd is a transitive dependency of libelf, so the -lzstd flag is
+>> strictly necessary only for static builds [1].
+>>
+>> Drop the -lzstd fallback to enable builds on systems without
+>> libzstd-dev installed.
+>>
+>> Reported-by: BPF CI Bot (Claude Opus 4.6) <bot+bpf-ci@kernel.org>
+>> Reported-by: Vitaly Chikunov <vt@altlinux.org>
+>> Closes: https://lore.kernel.org/bpf/aaWqMcK-2AQw5dx8@altlinux.org/
+>> Fixes: 4021848a903e ("selftests/bpf: Pass through build flags to bpftool and resolve_btfids")
+>> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+>> ---
+>>  tools/bpf/resolve_btfids/Makefile | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+>> index ef083602b73a..5df897c881d3 100644
+>> --- a/tools/bpf/resolve_btfids/Makefile
+>> +++ b/tools/bpf/resolve_btfids/Makefile
+>> @@ -66,7 +66,7 @@ LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
+>>  LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
+>>  
+>>  ZLIB_LIBS  := $(shell $(HOSTPKG_CONFIG) zlib --libs 2>/dev/null || echo -lz)
+>> -ZSTD_LIBS  := $(shell $(HOSTPKG_CONFIG) libzstd --libs 2>/dev/null || echo -lzstd)
+>> +ZSTD_LIBS  := $(shell $(HOSTPKG_CONFIG) libzstd --libs 2>/dev/null)
+> 
+> This change is currently failing in CI with "undefined reference to
+> `ZSTD_xxx'" when trying to build resolve_btfids. I think this is
 
-Hi Andrea,
+Hi Paul, thanks for taking a look.
 
-Sorry for delayed response.
+I'm aware, I sent a v2 yesterday (with changed subject):
+https://lore.kernel.org/bpf/20260303193954.1879948-1-ihor.solodrai@linux.dev/
 
-Currently the assumption is that all ranges/tnum tracked as a part of
-a register state are valid, and I don't think we'd like to sidestep
-this assumption. Eventually is_scalar_branch_taken() and
-adjust_scalar_min_max_vals() should be unified to avoid possibility
-for mismatch between is_scalar_branch_taken() predictions (when it
-assumes that some branch can be taken by failing to predict jump)
-and adjust_scalar_min_max_vals() adjustments (when it infers that in
-fact register state is empty for the branch).
+Your diagnosis is correct, the HOSTPKG_CONFIG wasn't set.
+I fixed that by adding a default in resolve_btfids/Makefile,
+but your diff makes sense too, I think we should apply both.
 
-As it turns out, the problem you report is a bit easier to fix.
-After minimizing the failing file with Emil's help I derived the
-following test case that captures the problem:
+> happening because the selftests use static linking with
+> PKG_CONFIG='pkg-config --static' but then the same isn't done for
+> resolve_btfids, so "pkg-config libelf --libs" doesn't return -lzstd.
+> 
+> So maybe the solution is to define HOSTPKG_CONFIG when building
+> resolve_btfids, as in the following diff:
+> 
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 72a9ba41f95e..d5acbeba0383 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -409,6 +409,7 @@ $(RESOLVE_BTFIDS): $(HOST_BPFOBJ) | $(HOST_BUILD_DIR)/resolve_btfids        \
+>                 CC="$(HOSTCC)" LD="$(HOSTLD)" AR="$(HOSTAR)" \
+>                 LIBBPF_INCLUDE=$(HOST_INCLUDE_DIR) \
+>                 EXTRA_LDFLAGS='$(SAN_LDFLAGS) $(EXTRA_LDFLAGS)' \
+> +               HOSTPKG_CONFIG=$(PKG_CONFIG) \
+>                 OUTPUT=$(HOST_BUILD_DIR)/resolve_btfids/ BPFOBJ=$(HOST_BPFOBJ)
+> 
+>  # Get Clang's default includes on this system, as opposed to those seen by
+> 
+>>  
+>>  HOSTCFLAGS_resolve_btfids += -g \
+>>            -I$(srctree)/tools/include \
+>> -- 
+>> 2.53.0
+>>
+>>
 
-SEC("socket")
-__success
-__flag(BPF_F_TEST_REG_INVARIANTS)
-__naked void signed_unsined_intersection32(void *ctx)
-{
-	asm volatile("			\
-	call %[bpf_get_prandom_u32];	\
-	w0 &=3D 0xffffffff;		\
-	if w0 < 0x3 goto 1f;		\ /* on fall-through u32 range [3..U32_MAX] */
-	if w0 s> 0x1 goto 1f;		\ /* on fall-through s32 range [S32_MIN..1] *
-	if w0 s< 0x0 goto 1f;		\ /* the above ranges can be narrowed to [S32_MIN..=
--1] */
-	r10 =3D 0;			\ /* meaning that condition can be predicted, */
-1:	exit;				\ /* but verifier is not smart enough at the moment. */
-"	:
-	: __imm(bpf_get_prandom_u32)
-	: __clobber_all);
-}
-
-This branch has verifier modifications making it smart enough to
-process this case: https://github.com/eddyz87/bpf/tree/cnum-sync-bounds .
-With some additional verification: https://github.com/eddyz87/cnum-verif .
-I'm working towards submitting the fix, need to decide on what to do
-with reg_bounds.c, as this test is now not smart enough.
-
-Thanks,
-Eduard
-
-[...]
