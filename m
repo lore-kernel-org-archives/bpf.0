@@ -1,95 +1,125 @@
-Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 369CE37FF79
-	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 08:07:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.21.223
+Received: from mail-wm1-f68.google.com (mail-wm1-f68.google.com [209.85.128.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F790389114
+	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 08:07:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772611634; cv=none; b=YkByyhukjgQ2ZRyYu9vir2C36ZkS1TSE4NGVJ/W3NcCglkfRm0jBbjrCx+Kq0m41JR1dxbyXVXEJD4PL2KuVd4eFPxgJOKnWOnhgQD6PGjBj9LInT4fA38GtSe2g0Fb7JCpuLsVGc6DKNX2/evMMdYnP3Dk5bYXKe0Bjl2H3dcI=
+	t=1772611680; cv=none; b=Pr99fqRmjOBZksbrUxLpyatFNqAkT3RwX+FUv083qscaSzyQJpio0QcEGcQFY1fanqmlz9vZ7ts0dQGuDnsmmWtxVOlwdzGxPpWC+faeVpFaq4ZLYILju64u1b1DlzCFpP8kSnVDpn/hf65vKZwT4DMuGFH0j9hUDMs4u5Smohs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772611634; c=relaxed/simple;
-	bh=Zf1yhcieIXEXMulBajrZMfUiePBDXxg6KJNRK9lGeHI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W2Gq4zMskoLoR5ayua5q/kmIb92kLqGBlx5Nb+9b7qwT9MZ2bGf+m3OUKBayEDMRJOc9D4FIp4bDb5Q8+lW55mBZ77HUbca5+vGxK44JPfirvarVniyYFUhEe5x10GzIHBGwdKXP/fV6VJY9ows39mJVG/gDg7Ku2ywlq9QFcE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=206.189.21.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [122.224.66.117])
-	by mtasvr (Coremail) with SMTP id _____wDnOOAI6KdpWZMEAQ--.15328S3;
-	Wed, 04 Mar 2026 16:06:33 +0800 (CST)
-Received: from [0.0.0.0] (unknown [122.224.66.117])
-	by mail-app1 (Coremail) with SMTP id yy_KCgBXrNcF6KdpfLV2Bg--.202S3;
-	Wed, 04 Mar 2026 16:06:29 +0800 (CST)
-Message-ID: <44c58906-e537-400f-b360-01a915e05275@zju.edu.cn>
-Date: Wed, 4 Mar 2026 16:06:28 +0800
+	s=arc-20240116; t=1772611680; c=relaxed/simple;
+	bh=hOeg8/gd726Tdq9mrgEBZ1rywC1S35GTZQRzN2uBWyU=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=pXCgQL2iKLWxMaueKmi0BPdEufPEazMaKdVRJvJ0Sepl9T7w2Bw3VahTjvA3OrJB1P+ncjFuoN1UqVNgbCkQb+e7QOSjIZfl3O11p6vWE/vdwskVa8E/YjsU4fHd2B62nZOYFFvLgpPM7qPfN+mOGAeHrH3x7etGoDNt2Pekjmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lL4LO+O3; arc=none smtp.client-ip=209.85.128.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lL4LO+O3"
+Received: by mail-wm1-f68.google.com with SMTP id 5b1f17b1804b1-4834826e5a0so74494705e9.2
+        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 00:07:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772611677; x=1773216477; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=av4UH9SO0/Ch5JZF+nWNZV5yubzeG2c9IUi69Z0bBu0=;
+        b=lL4LO+O3BgKMvK84ER6Dau4ujbdXtRyFovQumkZcfOUUtSmEqxcQ2TxbUKVf2N+YIz
+         Zh8DAB1fRCRHpUbypxNE/ul4VNkCAJt7rfaXfaarb2RShYfOVCL+6EdXAcBpv8vrr0pq
+         mWXOqGrkUVTG7cIaaCMhaBPu7gn+jgd4bPXluqOJO524ZyB3JbVEGWN95As/S/mAwZ09
+         cnksew7Hqr5YpwDozi3P59FfhHp2K1CHGXHkNS+4Pm0FY45PqdjOShjBcUO4d/liilP9
+         ckIRAYM0IGA2TfyiB4rpe8x/pMjKEPsxbfYNN2bghfeJOoM8DazpYi+fbU0HrzY6FWPF
+         yBsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772611677; x=1773216477;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=av4UH9SO0/Ch5JZF+nWNZV5yubzeG2c9IUi69Z0bBu0=;
+        b=q4EMlJapyc1+DqMGGVWP/yfU47q/eVfI8Q7slVvjSlTU8mtNHtFNIl5+H3xBNiIyKp
+         Y4gvmMLivkDBJ+GTUPk8q08OwLQzjBgtiHsLegVT1BL5Gz2jUs+sKU5vnjGeg01fFLVS
+         qIIJIdVxD/3+kdMmoPBImUPp1E+USQMLZcj/EdUrKX7cpopLBfOrNl0VWPUDzuflIXJu
+         YH2ioMkA5nege4DH7UZdPrAWdiCu0c26kU84vh8HgihduysnCRubTnfLbQfG0aYKzObE
+         d2TKX47vBQt5PINEl/mhqy7A3Xtdjrnoqb6mtyIMahKxx73jI5HK3P5zCXeFwxUZ3gdQ
+         OHMw==
+X-Forwarded-Encrypted: i=1; AJvYcCXHRrZLaIzZ25aXKQNGd3EfCeWuStUxTEr3qI3UZO0JPOP/mu7M+XsDMa8f+cCFINFHYC8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxo2UoY4iUHHqIA1Lgqgn/VADFia80ccJIHJaeOYkdRe/Y/HA/0
+	t7W6ItyQ3Ts+rUkpgbFX8kOaVy+H1KU+MbKDXEjpIlarwx1q4qG3Kg1t
+X-Gm-Gg: ATEYQzysM3NKhHvBMCQpsS4pQ9cPvdW2/0JMUY1JlUzVLTqJ25APN7ZIAede9byL6bv
+	GjUFXyYaPk5WZsrGinhgidgwkRwbPFpgPSihvJvtTh8MmksMXJZ134ZQKLOA3Li5B5WgqJL1RUN
+	DE9fcjsO/jPApTkX6qsOGzaNTVkN2dvRjYx71qNp63/Vji1uyJ1GXWh/iwsArcDFjXNXAPi5Qas
+	2bkql2ndlOPOs7NQ/uFL35ftMpK7oh+kwPOVISMlvUlyn9bUk46nzXIdwsTyaHH4Z/StP401EYx
+	giRVlqosIs4Z/0ZFqJBQHx3g1w6vqeeWwp+ZkT3Y7vDp9FuJ/u47pWoLowROq2skbhg1YleM7Cq
+	fjClHdUjT9il8X2nlatP+Dc/LImKoerUoLtI6N3xs3euCr//KcZAayDLnfPTo1LMs5xqJp/keFS
+	mlAk3PbXoQ2d2MMNW7OncBOE6oLMMoAqI1+lsIt3QWzmJQBg5A1A==
+X-Received: by 2002:a05:600c:1d0e:b0:482:eec4:76d with SMTP id 5b1f17b1804b1-48519888ab3mr17588355e9.17.1772611677114;
+        Wed, 04 Mar 2026 00:07:57 -0800 (PST)
+Received: from lima-ubuntu.hz.ali.com ([47.246.98.208])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4851a82c876sm5400915e9.0.2026.03.04.00.07.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Mar 2026 00:07:56 -0800 (PST)
+From: Qing Wang <wangqing7171@gmail.com>
+To: syzbot+9ea7c90be2b24e189592@syzkaller.appspotmail.com
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	haoluo@google.com,
+	john.fastabend@gmail.com,
+	jolsa@kernel.org,
+	kpsingh@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	martin.lau@linux.dev,
+	mathieu.desnoyers@efficios.com,
+	mattbobrowski@google.com,
+	mhiramat@kernel.org,
+	rostedt@goodmis.org,
+	sdf@fomichev.me,
+	song@kernel.org,
+	syzkaller-bugs@googlegroups.com,
+	wangqing7171@gmail.com,
+	yonghong.song@linux.dev
+Subject: Re: [syzbot] [bpf?] [trace?] KASAN: slab-use-after-free Read in bpf_trace_run3 (2)
+Date: Wed,  4 Mar 2026 16:07:39 +0800
+Message-Id: <20260304080739.198251-1-wangqing7171@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <69a7e4df.050a0220.21ae90.0014.GAE@google.com>
+References: <69a7e4df.050a0220.21ae90.0014.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf 1/2] bpf: Reset register ID for BPF_END value tracking
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- tangyazhou518@outlook.com, shenghaoyuan0928@163.com, ziye@zju.edu.cn,
- glapt.pro@outlook.com
-References: <20260303093956.395076-1-tangyazhou@zju.edu.cn>
- <20260303093956.395076-2-tangyazhou@zju.edu.cn>
- <a4c1da47af29c3930a025217f25d169da48ed2a1.camel@gmail.com>
-Content-Language: en-US
-From: Yazhou Tang <tangyazhou@zju.edu.cn>
-In-Reply-To: <a4c1da47af29c3930a025217f25d169da48ed2a1.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:yy_KCgBXrNcF6KdpfLV2Bg--.202S3
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBgQACmmnOYkbZwAAsK
-X-CM-DELIVERINFO: =?B?hGTpWQXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9H+6e/0XdEnku/cOG5HghNi58xKsYpGoUd9Rvrf54waB6dKt08ePEsCBjYGcbzhyWgqU
-	gO3h4fP+W/NQJnRsZaUtHJ2CBxes0Cj2YkVXpbcsRZ9UoT8PGGNHLwwloQjsJw==
-X-Coremail-Antispam: 1Uk129KBj9xXoW7Gw45Zr4DWr48GryrKw47ZFc_yoW3KrX_Gr
-	4rZ348Gw1qvF1avF13AF47ZryUKw4kKF4rAw47XFWDZFWUX398C34Fya4Fvas8G3y2krZF
-	yrn09r9IyFn5uosvyTuYvTs0mTUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUbxAYFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	WxJr0_GcWl84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4
-	xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v2
-	6r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2
-	kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
-	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIx
-	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
-	wI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
-	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PU
-	UUUU=
+Content-Transfer-Encoding: 8bit
 
-Hi Eduard,
-
-Thanks for the review and the Ack!
-
-On 3/4/26 02:25, Eduard Zingerman wrote:
-> On Tue, 2026-03-03 at 17:39 +0800, Yazhou Tang wrote:
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 401d6c4960ec..366ba4757135 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -16121,6 +16121,8 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
->>   			scalar_min_max_arsh(dst_reg, &src_reg);
->>   		break;
->>   	case BPF_END:
->> +		/* manually reset register's id here to avoid mistaken register links */
->> +		dst_reg->id = 0;
->>   		scalar_byte_swap(dst_reg, insn);
+On Wed, 04 Mar 2026 at 15:53, syzbot <syzbot+9ea7c90be2b24e189592@syzkaller.appspotmail.com> wrote:
+> Hello,
 > 
-> Nit: I'd push this inside scalar_byte_swap() and maybe do it conditionally.
+> syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+> 
+> Reported-by: syzbot+9ea7c90be2b24e189592@syzkaller.appspotmail.com
+> Tested-by: syzbot+9ea7c90be2b24e189592@syzkaller.appspotmail.com
+> 
+> Tested on:
+> 
+> commit:         0031c068 Merge tag 'cgroup-for-7.0-rc2-fixes' of git:/..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=12afb006580000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=c5c49ee0942d1cdb
+> dashboard link: https://syzkaller.appspot.com/bug?extid=9ea7c90be2b24e189592
+> compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+> patch:          https://syzkaller.appspot.com/x/patch.diff?x=1566e552580000
+> 
+> Note: testing is done by a robot and is best-effort only.
 
-Makes sense. I will move it inside scalar_byte_swap() and handle it 
-conditionally in v2.
+It's same as [0].
+ [0] https://syzkaller.appspot.com/bug?extid=b4c5ad098c821bf8d8bc
 
-Best,
+I sent the fixed patch [1] to [0].
+ [1] https://lore.kernel.org/all/20260304070927.178464-1-wangqing7171@gmail.com/T/
 
-Yazhou
-
+--
+Qing
