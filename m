@@ -1,122 +1,157 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC96030ACF0
-	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 01:27:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772587623; cv=pass; b=o837vFP8dck6ZwK0qNnHz8i+n8oThialnxINRbjhsjlvUaRDh4VO+DNfdxt6pqM8SFPRuXi66gX0K7nt0S00HgVT2XctY+jC8+BFBmPEQFjVK4KupRvuFQ3enWsrRvGT12bp4Eq0Ai8QiqtOTIJU8NOSV87GW/u9SOkdgAJgAbw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772587623; c=relaxed/simple;
-	bh=FHYjBXW8HV0h+QKFk4VqiWMpMzLMEpCxoDWHLBPHxHk=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=hpE9AzFp81gm0FDZUfdXjU4Htztt99JKyvoy7BxDftNnMWdrHSlQFxaUueC0u4cszAqjFDcxI1a3UxKMNjL3HBjnRHrq4nT/n4xSxzdSmdiRpU7snP6pm8zHRRQmRV8qms5mirfIR1tS8kIpZ0oePPrIbwlGohPTTB2MW3HvZaw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BXxNyIWW; arc=pass smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E7930EF86;
+	Wed,  4 Mar 2026 01:28:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772587691; cv=none; b=drf5aovjjP74he3uQmUvGYEoXpIrQtwwKkCtlk4Dkxew0W/kJQ5Y8d+gCQp8g+iZeThAMaDBxXJEztEcbfpnwytrw/RSUo9sg3UgSFWIanYXJwsCb0tpf1yXorYL1ncWT+l5wVZSuo5/1P33xvmGuEHijlf3KzHpFzqi4rja4FE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772587691; c=relaxed/simple;
+	bh=tlL/8WdJD0d9jG2rBAaeDXxofN7B8fJpA+xw0D0xTeU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GA0JrODmqKt5SnXSpKsRGMM1rF969/Kj7BNjughXQorTU/NnOe54106tlhBUnrmu4Vt2ycKHTeiVeOZ9rH8GLSDaiF797j5TMlTGDz7WPA720h6Kfbi9cRbHzNL7ET28VUTopkfMp3B85AoY/1/3sn1/02kj4yL2dar2Y7jMF4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GlqDVp8B; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BXxNyIWW"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-48372efa020so55166445e9.2
-        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 17:27:01 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772587620; cv=none;
-        d=google.com; s=arc-20240605;
-        b=gnDZeXuU9TCGkboz1n9DgmIZTXxP95UGBWxAGJYrHzUHU3GekwjK8PRBe/Hu6m6r1e
-         /RbnViTTyVxGTA+h+q3rR67QmCAOw+mB48+ZCOD9/Nl4qPcUwzUalAFim+qm2657tn53
-         sx23vNsvU20mF+5aoUOuSUB3EaZHXlp6CgCnP9HFGBUeJeeXdkEKT3G6V1yboVlrs1q/
-         pr3aeVfpATlSD1CNLJ9oAsTXNBENWVSwfeNw9BIvyUMhjSgkORiaE4YqJFOrPh6mFHBQ
-         9JTBfGTMExnzkIrdTVhFQ0ZP9gvdQ6MXkYd6c3gwPLICVX8YFQ66zikaDVzg+YvIZRdU
-         R74Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=FHYjBXW8HV0h+QKFk4VqiWMpMzLMEpCxoDWHLBPHxHk=;
-        fh=R+oH7rToOi4uBtfAhwdLwBuw7/zOR4LOd7duA2DxMds=;
-        b=g4qKmjWGEjXStmYlKAvhHKBLzQna+eomApLoiTa4CKDSZHDH0KAlvkChsfhmV2Yv4L
-         MPw6q6ZH3MvfxN/N7CTzS3Lj2YIr0wE4OPmJCuIZRz6QNHAOAOaAzRBTaD6TicI9Rqv0
-         jbb2BDBFHUebzhF2phO6ovNmVhmjckrgVuFgPqqLyNVEWFfAzqWJeqndHa2plGwrYQgZ
-         J4yJQwUob4gJQ92d2aUFAX9ypqB8EYeUabINjtwaZj2PjBvW35J2Ac/ybRc5uDB/7Xps
-         lOSw35hH1oWMvEsWICycht9pcdxQDdKz6iEiQgI2OezlFcZzrw+8w/32Sgh9XNNOtXiA
-         lbMQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772587620; x=1773192420; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=FHYjBXW8HV0h+QKFk4VqiWMpMzLMEpCxoDWHLBPHxHk=;
-        b=BXxNyIWWOu7MWoE3ssJqNi32cGoOc9MNVM3pDAyybVwHUfpdsxrf39VUsZ7GpczyT5
-         dkWqhEblOSm6dwXWx2XzPV1LLtlGF8Ne6k4wVHDDY6g3EKGX48mC2oUJrOk08AkIsll3
-         VtGX8Sw4mcBymazUbFpXic4PlXUJC8XkFEtTuH87QzynZzlGMCK8JfxdFjveqhX8gzVr
-         XjqJLRxDZtT2hvuOOtcSY6atvA45YgzG5ABXfue0l2iAGiGW83wx+uyaN8gCcLqEv0v1
-         cdZYga9nmhfC0CSJ5G1gw+fCXHWbDc5s6l+P9hAwJiQijJlO+MCQ/iHNiN4GVPLgFpLT
-         BRHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772587620; x=1773192420;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FHYjBXW8HV0h+QKFk4VqiWMpMzLMEpCxoDWHLBPHxHk=;
-        b=pBZytiwJ9nA3VlgFk5etyRo19EWPnxdDXcH0IdHPqDpI5FlxN6oRNLQkj2upV/LMF8
-         4SwGVrxTynZ2s6emY/1jGYGsCMc28OBynVOnWiq0d/sVKfMYj04ea8AaSD1lR2hMXJdd
-         qpIxj5oPCUiorCyP3AMPCktUpklIogrX6ScjUQ/HGcwNCHxnjG50T51aJG+a7xO3mtce
-         wo3T/oU2kIiiD/hLbYtutKmwIRtpPFFQuvEYyUZzapbs+zBTIy2AKWSonp1Mng2WlP2E
-         1VElaiXERbANcl0qh4n2vbPzWKOrIWJMATXzngSnc7cIDhm4xn51JLSx0RwuaEN5wa1o
-         NBdg==
-X-Gm-Message-State: AOJu0Yy8wUtfmY9qtS3s4Jxwxn4i3smI/BlXHdFSBv+i+J1RJFNbk1Ls
-	i8tB+B62M2R5I2pyrxCyRHOojihDB3WEqm9MVDDL6pM/7yYAXc/iIldFnBToEdG7aZp/eWZFHl4
-	+KqWSl7dI7NcWtkVRaFJpUSFdlEgSN5x+k+oV
-X-Gm-Gg: ATEYQzxK0CMoiN+iVmRlGw0X+xvD68qdFlXs/YiHm3K7LjXTqkTUYvIoGt5NgvrcJid
-	GHMV8x2O91NCy27PCkFyDbK/hwBcn63pFpblfyi53X3/Mo1Xb5zpHwgVg3MkiA9rRCQWv+MDRrg
-	zkWh38ZLJLSCmmHWNgjOHMbVJh9zkj+vGCimmokOjj/DIcosShfQWFb+nd163/f4Oe1Mt3znszY
-	0hsalwQBS3mnKEOh+lAo8L/f2siu+W0+52abhAyjG7zER0CoGo4ELbQOiybG9yu3lv0eqn6PYbf
-	9KpGgsxPnLVs9Ixkx5UpO/wvCUtNeJmg5YoaU+lANipmoEAatJw0I3uuYm3T8osFCbHEX8ppGjR
-	EmOmW8AqSEp+HGyJg2gwWBSnLBA==
-X-Received: by 2002:a05:600c:34d1:b0:477:a978:3a7b with SMTP id
- 5b1f17b1804b1-48519888c4amr3891405e9.22.1772587619950; Tue, 03 Mar 2026
- 17:26:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GlqDVp8B"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB70EC2BC9E;
+	Wed,  4 Mar 2026 01:28:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772587691;
+	bh=tlL/8WdJD0d9jG2rBAaeDXxofN7B8fJpA+xw0D0xTeU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=GlqDVp8BB7stucd97wuW1mNl2D/oP5MR74esP9luZpfEr7cCLvEL8xo4rGPfhWJgJ
+	 5pyi4cbwQO6TfEVjg3z1HxkTkcD0gsmdgP0DU9g+z5/kXmgm/6GJebBEEjZs2mNO2f
+	 jKO1mWagp4X0LBy07vkmsZ6HGMt3C7sqzj2C9tAnfIqh6hZQkmayH3txCJirP0QOZo
+	 rqfAUYt7SQ9zx0eCOvQsS6ELbnW2h7jmZd/vNI382pX8C3piW7eLLJdlFNeuuh/6H9
+	 uQtQQv9blsTN0j03QBG19sbBJSwGmrf/9ulKnWE8m5oZS/NKzTwc9WlQx/n36Knh6o
+	 TWzNj2GUzklAQ==
+Message-ID: <2ff9897c-3822-4e31-acfb-884690448af0@kernel.org>
+Date: Wed, 4 Mar 2026 02:28:05 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 3 Mar 2026 17:26:48 -0800
-X-Gm-Features: AaiRm52eilpTo4fMDeSQV13zlFfC5zc5JC4tBK11mYny_DwuguTFg-zz2_v2X8o
-Message-ID: <CAADnVQ+TKKptnNB25V3=bcdybh5G6c2DyW2sYtXvyRaVnPN8MA@mail.gmail.com>
-Subject: Introducing Code Review Credit System
-To: bpf <bpf@vger.kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Amery Hung <ameryhung@gmail.com>, 
-	Anton Protopopov <a.s.protopopov@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Hou Tao <houtao1@huawei.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Jakub Kicinski <kuba@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	KaFai Wan <kafai.wan@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Leon Hwang <leon.hwang@linux.dev>, 
-	Luis Gerhorst <luis.gerhorst@fau.de>, Menglong Dong <menglong8.dong@gmail.com>, 
-	Mykyta Yatsenko <yatsenko@meta.com>, Paul Chaignon <paul.chaignon@gmail.com>, 
-	Peilin Ye <yepeilin@google.com>, Puranjay Mohan <puranjay@kernel.org>, 
-	Tao Chen <chen.dylane@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, 
-	Geliang Tang <geliang@kernel.org>, Ilya Leoshkevich <iii@linux.ibm.com>, 
-	Jiayuan Chen <jiayuan.chen@linux.dev>, Jordan Rife <jrife@google.com>, 
-	Matt Bobrowski <mattbobrowski@google.com>, Pu Lehui <pulehui@huawei.com>, 
-	Saket Kumar Bhaskar <skb99@linux.ibm.com>, Song Liu <song@kernel.org>, 
-	Tony Ambardar <tony.ambardar@gmail.com>, Tushar Vyavahare <tushar.vyavahare@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND v2] tools build: Use -fzero-init-padding-bits=all
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: Leo Yan <leo.yan@arm.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nicolas Schier <nsc@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Ian Rogers <irogers@google.com>,
+ James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, bpf@vger.kernel.org
+References: <20260224-tools_build_fix_zero_init-v2-1-b1acc817a01e@arm.com>
+ <aaCTC86U9KjnmZmu@google.com>
+ <99e7fe4e-72de-4b55-9a9a-ae51718a0e73@kernel.org>
+ <20260227103611.GA1098637@e132581.arm.com>
+ <c886c8c9-d336-4ec3-94c0-c4869dee7e7f@kernel.org>
+ <aaeHcL7vEhZ0LWth@google.com>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <aaeHcL7vEhZ0LWth@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-All,
+2026-03-03 17:14 UTC-0800 ~ Namhyung Kim <namhyung@kernel.org>
+> Hello,
+> 
+> On Fri, Feb 27, 2026 at 11:52:38AM +0000, Quentin Monnet wrote:
+>> 2026-02-27 10:36 UTC+0000 ~ Leo Yan <leo.yan@arm.com>
+>>> On Thu, Feb 26, 2026 at 10:52:01PM +0000, Quentin Monnet wrote:
+>>>> 2026-02-26 10:38 UTC-0800 ~ Namhyung Kim <namhyung@kernel.org>
+>>>>> Adding bpftool maintainer.
+>>>>>
+>>>>> On Tue, Feb 24, 2026 at 12:16:40PM +0000, Leo Yan wrote:
+>>>>>> GCC-15 release claims [1]:
+>>>>>>
+>>>>>>   {0} initializer in C or C++ for unions no longer guarantees clearing
+>>>>>>   of the whole union (except for static storage duration initialization),
+>>>>>>   it just initializes the first union member to zero. If initialization
+>>>>>>   of the whole union including padding bits is desirable, use {} (valid
+>>>>>>   in C23 or C++) or use -fzero-init-padding-bits=unions option to
+>>>>>>   restore old GCC behavior.
+>>>>>>
+>>>>>> As a result, this new behaviour might cause unexpected data when we
+>>>>>> initialize a union with using the '{ 0 }' initializer.
+>>>>>>
+>>>>>> Since commit dce4aab8441d ("kbuild: Use -fzero-init-padding-bits=all"),
+>>>>>> the kernel has enabled -fzero-init-padding-bits=all to zero padding bits
+>>>>>> in unions and structures.  This commit applies the same option for tools
+>>>>>> building.
+>>>>>>
+>>>>>> The option is not supported neither by any version older than GCC 15 and
+>>>>>> is also not supported by LLVM, this patch adds the cc-option function to
+>>>>>> dynamically detect the compiler option.
+>>>>>>
+>>>>>> [1] https://gcc.gnu.org/gcc-15/changes.html
+>>>>>>
+>>>>>> Signed-off-by: Leo Yan <leo.yan@arm.com>
+>>>>
+>>>>
+>>>> Thank you Namhyung for the Cc.
+>>>>
+>>>> I built bpftool with the patch, with gcc 13 (which didn't get the flag,
+>>>> as expected) and gcc 15, and it's fine with both. As far as I can tell,
+>>>> bpftool does not initialise any union with "{0}" anyway.
+>>>
+>>> Thanks a lot for testing!
+>>>
+>>>> One potential concern (I didn't try) could be for cross-compilation:
+>>>> bpftool's Makefile sets HOST_CFLAGS based on $(CFLAGS), but $(HOSTCC)
+>>>> and $(CC) could be different versions of gcc, for example.
+>>>
+>>> To avoid confusion, we can use EXTRA_CFLAGS and HOST_EXTRACFLAGS instead
+>>> in Makefile.include:
+>>>
+>>> -----
+>>>
+>>> # cc-option
+>>> # Usage: CFLAGS += $(call cc-option,-march=winchip-c6,-march=i586)
+>>> cc-option = $(call try-run, \
+>>>        $(CC) -Werror $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
+>>>
+>>> host-cc-option = $(call try-run, \
+>>>        $(HOSTCC) -Werror $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
+>>>
+>>> # Explicitly clear padding bits with the initializer '{ 0 }'
+>>> EXTRA_CFLAGS += $(call cc-option,-fzero-init-padding-bits=all)
+>>> HOST_EXTRACFLAGS += $(call host-cc-option,-fzero-init-padding-bits=all)
+>>>
+>>> -----
+>>>
+>>> Then, in a project, its Makefile can append EXTRA_CFLAGS and
+>>> HOST_EXTRACFLAGS to CFLAGS and HOSTCFLAGS respectively.
+>>
+>>
+>> This sounds like it should work for bpftool as long as we += and don't
+>> overwrite the EXTRA_CFLAGS passed from command line. In bpftool's
+>> Makefile we'd have to move HOST_CFLAGS's CFLAGS-based defintion higher
+>> up, before we add the EXTRA_CFLAGS to CFLAGS; and if anything needs to
+>> be passed to the host binary, users will have to specify
+>> HOST_EXTRACFLAGS (or HOST_EXTRA_CFLAGS?) independently, which is acceptable.
+> 
+> Quentin, do you want v2 with this or just ok for v1?
+> 
+> Thanks,
+> Namhyung
 
-While coding agents are significantly reducing the cost
-of code creation, human expertise remains crucial for
-maintaining code quality through thorough reviews.
-Although our BPF CI AI bot provides an effective
-initial filter for many bugs, the sheer volume of
-submissions continues to challenge BPF maintainers.
 
-To ensure timely and high-quality integration of patches,
-we are implementing a system that encourages broad
-developer participation in the code review process.
+Hi Namhyung
 
-As a prerequisite for merging a patch, the submitting
-developer is expected to complete a comprehensive review
-of another developer's patch of comparable scope and complexity.
+(I'm not entirely sure what v1/v2 refer to, this one was tagged v2 and I
+suspect v1 was the first post before the resend - I suppose you mean
+this one is v1 and a v2 would be with an additional host variable.)
 
-Code review participation is an expectation for regular developers.
-This requirement does not apply to occasional, or "drive-by," contributors.
+I don't want bpftool's HOST_CFLAGS to inherit
+-fzero-init-padding-bits=all if the compiler doesn't support it, which
+may happen with the current version of the patch. I'd prefer a version
+with separate EXTRA_CFLAGS and HOST_EXTRA_CFLAGS, as proposed by Leo and
+discussed above, to address the cross-compilation issue.
+
+Thanks,
+Quentin
