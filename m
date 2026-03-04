@@ -1,106 +1,112 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95EE137756D;
-	Wed,  4 Mar 2026 09:40:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BE56386425;
+	Wed,  4 Mar 2026 09:45:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772617228; cv=none; b=f7T4KyS5JFw3MykVN+ziyLCU7/C7wCeq8jozrMjiJ7prpTBx6tL5Ye6FcZ6YEynvqmbJGXl6K2TtlLs+tLAHe61yfFNIRJh/J5ahDrLIqJhJCE2YwESasDyxnv93SlUV6KidAAnKJsVK64rpsSWzFFdocV8JkjBtpE63Iy0u2GA=
+	t=1772617550; cv=none; b=RDlj3aEX+iW9TrR3pS6Ytxwrcn9elEvHY1Y9sm5RBq9GwFJyeJYc60OE+NjteQXgVTSRuicnEeeorkJPSmNT0d/KG3OcSnGBCzXBNk33VKlwFCVJjE70n0NltPi7QjE0qJntl+SmS27w+uXcfoL9+J7WmhXoSjb35se78lc9wSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772617228; c=relaxed/simple;
-	bh=AO4HBzUh5EP6nb40VVibWTz1NPRn67r816VYbLssLbc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SwStHmg3rvrIVFuyEsXO10p6Q5+9KeTd5RgaGNGYUK+07r/qYYs9Z2Hxg6LDo4GSbQ9D3W5rdLlmkeZF8zVce219+h7BC7pE6V+y0/dHm+u9s9Ier+oPcyQ1nJbHKxhxqPuteOIoHryj3yW0BbhkFcfPLAj5s5bPnoh4GDa5q+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=OAp3voBI; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=K3E4IYZb; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1772617550; c=relaxed/simple;
+	bh=DHcRKnTdSBMPwyItzgqFFwuKKqQc6Iary+f3kqe3ZFQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Hm0zkCUjuMKO4AHAQY240Xj793Y246m98t5o3+YtsrloT4GotDUWmBKfLtOEc7G6DHxxPqF88QZRjICjELdv5k9b/D0TJeU6LB57+cQJtRflzcd4k+SKwyinRh+Vl3bX1yntrSP0rnmPF5luGzM8rX3jVQ9DNRk2++BujMHlhjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=qOD/mkbd; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="OAp3voBI";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="K3E4IYZb"
-Date: Wed, 4 Mar 2026 10:40:20 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1772617222;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Q657n44NPR8EAAxyaBxEl5qa/lvFmu4t7TcVp8HrJ7Y=;
-	b=OAp3voBIC0L4UmhpZ2/EAVtSPuaBfY6rUqIWrxu75Cw+lLn65bvdFd1WzX/AKsNg2gKBiw
-	Z6I9txSZCxn1OKQcxSMdmh03zI8UjppHhFwotw05wqcYEIiumIBoMboVyfq349GiDbXlYQ
-	ufIqW3hTcq/BKDWlpfn1KMe1HKcftN4QrZqKYxZC8ghFt56WFj4Yjc5fpo0eeHCEVYRyzd
-	fp1K19HKj5QkG8YHNN2vzJcArZpDYEemMrqIv7WpG8oLfiwASx4pap/kpsUTx8o4zOTrR5
-	guCmjaNKgPjuAvmbzsFavSth2zFbsgSZHzAvPD5UF7Be9/jDOp7n9W1nr6yLZA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1772617222;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Q657n44NPR8EAAxyaBxEl5qa/lvFmu4t7TcVp8HrJ7Y=;
-	b=K3E4IYZbNFpbtPuBz2Nep+jxFPN0D/7DPJh4DozcQd42LeMWFbaL8m7nL21IIouc5ID0z3
-	4mMqBIs4V19rOeAQ==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>, jv@jvosburgh.net,
-	netdev@vger.kernel.org, jiayuan.chen@shopee.com,
-	syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Jussi Maki <joamaki@gmail.com>, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH net v4 1/2] bonding: fix null-ptr-deref in
- bond_rr_gen_slave_id()
-Message-ID: <20260304094020.mrSO02-z@linutronix.de>
-References: <20260304074301.35482-1-jiayuan.chen@linux.dev>
- <20260304074301.35482-2-jiayuan.chen@linux.dev>
- <4d15be93-b497-4499-996d-9f3a67a2abc6@iogearbox.net>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="qOD/mkbd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=jD
+	+Sp4wtwMkRsgqj6ZVTSMoYWYf5p6y+YL87jla0SGA=; b=qOD/mkbdLmVaDfMjvh
+	kh6dgkW4xF3Fx7h3tOHuxqVTSvmYP7jLUuJmuIjujM/xVFSEHD/5SLXMjqC4KC0G
+	U8jiN9z89ee3EaxLaik5Y22XOmrCN56BOSBl+bSBOG3wLbNWExtOzl+fvZ1t83f/
+	RJoic4nfls5VX7kJ1Y8kZmZ+k=
+Received: from localhost.localdomain (unknown [])
+	by gzsmtp5 (Coremail) with SMTP id QCgvCgC3f179_qdpB89zRQ--.55S2;
+	Wed, 04 Mar 2026 17:44:33 +0800 (CST)
+From: Feng Yang <yangfeng59949@163.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	posk@google.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com
+Cc: bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	yangfeng59949@163.com
+Subject: [PATCH v10 bpf-next 0/2] Fix the null pointer dereference issue in bpf_lwt_xmit_push_encap
+Date: Wed,  4 Mar 2026 17:44:27 +0800
+Message-Id: <20260304094429.168521-1-yangfeng59949@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4d15be93-b497-4499-996d-9f3a67a2abc6@iogearbox.net>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:QCgvCgC3f179_qdpB89zRQ--.55S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ury3tFWrZr4Dtr45Zr1UWrg_yoW8tr4DpF
+	W0qrZ5Gw1rtw1SqFs3Ca13XFyFgan5Gr1Ygw1xA345AF4DZryUJryIkw4agFnIgrZrur4r
+	A3ZaqF13Ka4jva7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRFoGQUUUUU=
+X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8gJEvGmn-wIxVQAA3f
 
-On 2026-03-04 09:20:27 [+0100], Daniel Borkmann wrote:
-> Arguably it's a corner case, but could we not just do sth like this to
-> actually check if the device is up and if not drop?
-> 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index ba019ded773d..c447fd989a27 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -4387,6 +4387,9 @@ u32 xdp_master_redirect(struct xdp_buff *xdp)
->         struct net_device *master, *slave;
->         master = netdev_master_upper_dev_get_rcu(xdp->rxq->dev);
-> +       if (unlikely(!(master->flags & IFF_UP)))
-> +               return XDP_ABORTED;
+From: Feng Yang <yangfeng@kylinos.cn>
 
-preemption (vcpu scheduled), while paused the other CPU could put the
-device down, or is it too much of a corner case?
-Also, there is also ndo_get_xmit_slave which at this time is only used
-by Infiniband and supports only active-backup mode [0].
+Fix the null pointer dereference issue in bpf_lwt_xmit_push_encap
 
-[0] https://lore.kernel.org/netdev/999129.1772247707@famine/
+Changes in v10:
+- Optimization patch. Thanks, Martin KaFai Lau.
+- Link to v9: https://lore.kernel.org/all/20260303074423.172680-1-yangfeng59949@163.com/
+Changes in v9:
+- Use dst_hold() and skb_dst_set().
+  !skb_dst skip.
+  Move all changes into the IS_ENABLED(CONFIG_IPV6).
+  Use #if IS_ENABLED(CONFIG_IPV6); otherwise, a compilation error will occur when ipv6 is not enabled.
+  Thanks, Martin KaFai Lau.
+- Link to v8: https://lore.kernel.org/all/20260227082133.96951-1-yangfeng59949@163.com/
+Changes in v8:
+- set ret to an error code before goto out.
+- Link to v7: https://lore.kernel.org/all/20260226095156.117996-1-yangfeng59949@163.com/
+Changes in v7:
+- Use ip6_null_entry to avoid. Thanks, Martin KaFai Lau.
+Changes in v6:
+- Modify the bpf_lwt_xmit_push_encap function and add selftests for it.
+  Thanks, Martin KaFai Lau.
+- Link to v5: https://lore.kernel.org/all/20260210090657.86977-1-yangfeng59949@163.com/
+Changes in v5:
+- Refer to the bpf_lwt_xmit_reroute function to configure the dst parameter.
+- Link to v4: https://lore.kernel.org/all/20260209015111.28144-1-yangfeng59949@163.com/
+Changes in v4:
+- add rcu lock
+- Link to v3: https://lore.kernel.org/all/20260206055113.63476-1-yangfeng59949@163.com/
+Changes in v3:
+- use dst_init
+- Link to v2: https://lore.kernel.org/all/20260205092227.126665-1-yangfeng59949@163.com/
+Changes in v2:
+- Link to v1: https://lore.kernel.org/all/20260127084520.13890-1-luyun_611@163.com/
 
-> +
->         slave = master->netdev_ops->ndo_xdp_get_xmit_slave(master, xdp);
->         if (slave && slave != xdp->rxq->dev) {
->                 /* The target device is different from the receiving device, so
+Feng Yang (2):
+  bpf: test_run: Fix the null pointer dereference issue in
+    bpf_lwt_xmit_push_encap
+  selftests/bpf: Add selftests for the invocation of
+    bpf_lwt_xmit_push_encap
 
-Sebastian
+ net/bpf/test_run.c                            | 14 ++++++++++++
+ .../selftests/bpf/prog_tests/lwt_misc.c       |  9 ++++++++
+ tools/testing/selftests/bpf/progs/lwt_misc.c  | 22 +++++++++++++++++++
+ 3 files changed, 45 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/lwt_misc.c
+ create mode 100644 tools/testing/selftests/bpf/progs/lwt_misc.c
+
+-- 
+2.43.0
+
