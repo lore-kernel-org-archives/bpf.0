@@ -1,185 +1,322 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D647374745;
-	Wed,  4 Mar 2026 16:36:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60DE53750DC
+	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 16:51:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772642184; cv=none; b=rX9MoWhVD4cpgGrf0E973SYRNzBocEczVHXN0hxLJWuvKnNSMHEi5JpXVetuoPcTwrUr3YRPf3Ue0AqilBIIhuV9kARMl/rHMb7MlBOPgmPVID9w0eyvflE1Jlaxa8uoF182V/GoyE0nlkekV3nr2V7sTaSQdkj3lM+nh+mP2ys=
+	t=1772643116; cv=none; b=IDr6HhG7g8ArgSB6AD3675bjlGvt5Z7Wfq+XxNdUDWErlNerKM0cWHQtHgWymSCKMTlJgUVlbQC6cOWuSCLEHyciVZQsZmY9RM6v3mLwgapVN1MIBgQVZnV+t7Sg6HioLb2K7G/56nb+0tN2Gb3Ot1OdYVPt6GLSioKfR80PoVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772642184; c=relaxed/simple;
-	bh=xSoRegfDOP/5IirhtXxj8ro8oytZUXfZQIPbEnLhFj0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fKLX5/v2yVkpSvyRNb3gnXtagZyMWNJ0rq2Z7HUTSGIwARmHuAdc+Z5DPcXh64ci1u3AW923gQ6nt1hGkzA9Apdhf06z90ajIXEehlH7KKpLb3SK4ibu61RoxcbqSkm43gN4qbFh1ktT3RKcVkAXqj5SFQw3ZidHjEUZ2VjGk4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W1fvYWFH; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1772643116; c=relaxed/simple;
+	bh=bi+6sUnHKlEUMGA6r0TjLG/9imupYiG4TY4uYgFcBVQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=ZnRIEzIRSfuuhnl/DbQ2kVQP855ZmMwrCKRlpPDPuIpMtwzew7FLjd/5o3ukc/Yy1zh+GhCi5yEdbtkUAPeQ8UT4yA4WqcnwnVqLiCBggPyEZdMEuu86HltQfOLMtqM5V8+alfV3nPYIuZ2q4gf2zzy0QGl8VE0xQVDPQpdryvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cZ/GQpyU; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W1fvYWFH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772642176; x=1804178176;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=xSoRegfDOP/5IirhtXxj8ro8oytZUXfZQIPbEnLhFj0=;
-  b=W1fvYWFHPWDTUvwr+a6TUurNqZ/eK7OHMrVTvsKdUEegMXpoVQChGinI
-   1GjOKr9JJyANH+TkqeLaIy7z8KeEknOgV7czEtfVZblp22HWnCKF4We/g
-   VEkABcEN9q4fTOvQNPj3c3XGMF/C1osDQszLCwJRSO+rtHvAFNtFI8PbM
-   MJO/Y8rILcbXS55L2/tdTyhMl9N4aPT2SMxwqgffyb9vsX9Sy73HmV9Aa
-   doxQ4cs5T7pVkB3H4nqrcQnoJJR7G5A+Pf4WiyaEsgDvw3M6tmABDP/zm
-   wuVfRasade6sYtJu49yel6SvrB0c1CpihF/4Y0oDibNst+nr3f+5ke/gz
-   g==;
-X-CSE-ConnectionGUID: lPlGa30tR7a5mWu+tY9sEA==
-X-CSE-MsgGUID: XIKd8roiTBCe43olBpK+NA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11719"; a="72906460"
-X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
-   d="scan'208";a="72906460"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2026 08:36:15 -0800
-X-CSE-ConnectionGUID: 7wkR9efNR9uyL5ijqtiN3Q==
-X-CSE-MsgGUID: 1fYrwHwiR7qWLIM1XMTJOw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
-   d="scan'208";a="241405043"
-Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by fmviesa002.fm.intel.com with ESMTP; 04 Mar 2026 08:36:11 -0800
-Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id 109DB312CB;
-	Wed,  4 Mar 2026 16:36:10 +0000 (GMT)
-From: Larysa Zaremba <larysa.zaremba@intel.com>
-To: Tony Nguyen <anthony.l.nguyen@intel.com>,
-	intel-wired-lan@lists.osuosl.org
-Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
-	Natalia Wochtman <natalia.wochtman@intel.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH iwl-next v3 10/10] ixgbevf: allow changing MTU when XDP program is attached
-Date: Wed,  4 Mar 2026 17:03:42 +0100
-Message-ID: <20260304160345.1340940-11-larysa.zaremba@intel.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260304160345.1340940-1-larysa.zaremba@intel.com>
-References: <20260304160345.1340940-1-larysa.zaremba@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cZ/GQpyU"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-439c5cce2c6so1150129f8f.3
+        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 08:51:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772643113; x=1773247913; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WpoDneLkO6OZwYLW2uXWBWuwRjmbz8T2ttllNFOLrjE=;
+        b=cZ/GQpyUHcqIvazso5ZJ3zbORHYJ92/AoyVOV3owQcs1B4qiZTV73IwSiBNHGfABog
+         wKPXQWMjHJzJKlOFmxGFzkidI4me5xe7ySZsW4inB7da6b5wBu2hhYzp0GJ0x6mkB09i
+         TesbUWhuqLI+qoY04F2/yQzoCsMC3umfMdA1iO/HXA5tXFLrQqIPkRXzM8wLVr8UYAVN
+         Kwwour85gtMm1PY1r/Wzhi6jtPeOXKKIdSQkXUkp2ant0aVPpxnVz8egAVm8swmrFzhH
+         dZQGSf6aaPKNMDmgL/oS1njzDJv5o2zJaM8SGJo5TXrU3+HY1PTMTNKOlGtLakQQdt0f
+         Bwiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772643113; x=1773247913;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WpoDneLkO6OZwYLW2uXWBWuwRjmbz8T2ttllNFOLrjE=;
+        b=rhalH6rc3xXQjV80F3FjvxeuP0ybGMtr7mD8UOr362Ognwo21ke7jIZxVTqpl3cJne
+         Oo15qvYi0d68wLR09LsdkQ7b9p3zVYJZeRmdcRwopHuN+vdRf8INyHPaIvpnjDyQ4GM4
+         MgmqIzcV0iyHf6+3cuyeD9ZXalSJF7ERvXxi5Ku5+PbJb+L1dvdv8Op0C2DU3jIWVz2q
+         aPh9X89y37J3wyLR8qAx6gA1qgT8rvfJpybXSFkQD0acK8JUxowYkkHnygonvjxBKXzP
+         SJFw1SgQTjJk1m8+7JbBKNMZSU/LALLX0DBzG4o5o8cMDexx2C34me87NV9GJGen89jb
+         a1dw==
+X-Forwarded-Encrypted: i=1; AJvYcCWm2YJaTIx2y4C7ggzRfMaFl2f+lky2PYlKEtm7QVDXK+47gLnyR2EoqQ2qRRWJWl4pla8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGDe/BQNuhUOb84DmvS4MlAfnbo84wvnviL9QYkW7MKowyT699
+	FZLuaupqNN6bDwoJJa3dPLk+ousOVlKb8etYbXBgJOVzS6QW2YfFr/ggzJtLwQ==
+X-Gm-Gg: ATEYQzxQpkjsqu02rm4J7oAZYnTOCGQDbOIAx6/t5rpAjjNwckgYGaVwVG7NbHVDusW
+	pe71jdg+pBNwnqROxtm3JmkKYEqPncK5NsHNigOfw+ywLRvrDTi9mV2xlrj3k0yjgrKgz6G1wIM
+	UQD3L2hZCe9h635LSiX7akbf+hUbfahWawA5Ufh1RQxj20n/VNXxaBG0/SOgl024yWWLG+CaU8y
+	yxogjkeyK+78FtjDzrnSjCoWQDWJirjtuLCKAcpNXQxz7zg1syqFI3dOubnXhDUJZupnZK0re7Y
+	7VYcYVdQ09ez3u8gv8pVG0EzN6doOPsvAz5YFytFXkQeHUTGAyE/fbckdfBG2jEark3R335tGZ0
+	o4el4e54ZKNQbHXfcjVw2ww+qCCJYFwNcXaxLut8dd5Tkr+8u/vd1U5zIhifRe+zHgxFAZRoJ70
+	aXFPgS0OAU/AUmbSCX/V9Nd1Eer/SfUJbYB/1EDg==
+X-Received: by 2002:a05:6000:40e0:b0:439:af81:1b23 with SMTP id ffacd0b85a97d-439c7f791a0mr5175785f8f.21.1772643112424;
+        Wed, 04 Mar 2026 08:51:52 -0800 (PST)
+Received: from localhost ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439b4175fd2sm28630097f8f.14.2026.03.04.08.51.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Mar 2026 08:51:51 -0800 (PST)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
+Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, martin.lau@kernel.org, memxor@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, Emil Tsalapatis
+ <emil@etsalapatis.com>
+Subject: Re: [PATCH bpf-next v3 1/2] bpf: Only enforce 8 frame call stack
+ limit for all-static stacks
+In-Reply-To: <20260303043106.406099-2-emil@etsalapatis.com>
+References: <20260303043106.406099-1-emil@etsalapatis.com>
+ <20260303043106.406099-2-emil@etsalapatis.com>
+Date: Wed, 04 Mar 2026 16:51:51 +0000
+Message-ID: <87tsuvy1ug.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-xskxceiver attempts to change MTU after attaching XDP program,
-ixgbevf rejects the request leading to test being failed.
+Emil Tsalapatis <emil@etsalapatis.com> writes:
 
-Support MTU change operation even when XDP program is already attached,
-perform the same frame size check as when attaching a program.
-
-Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
----
- .../net/ethernet/intel/ixgbevf/ixgbevf_main.c | 37 ++++++++++++++-----
- 1 file changed, 27 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c b/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
-index 196e51eb516a..08ea2ae45cea 100644
---- a/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
-+++ b/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
-@@ -569,8 +569,8 @@ static void ixgbevf_alloc_rx_buffers(struct ixgbevf_ring *rx_ring,
- 	};
- 	u16 ntu = rx_ring->next_to_use;
- 
--	/* nothing to do or no valid netdev defined */
--	if (unlikely(!cleaned_count || !rx_ring->netdev))
-+	/* nothing to do or page pool is not present */
-+	if (unlikely(!cleaned_count || !fq.pp))
- 		return;
- 
- 	rx_desc = IXGBEVF_RX_DESC(rx_ring, ntu);
-@@ -1764,6 +1764,7 @@ static void ixgbevf_configure_rx_ring(struct ixgbevf_adapter *adapter,
- 	bool rlpml_valid = false;
- 	u64 rdba = ring->dma;
- 	u32 rxdctl;
-+	int err;
- 
- 	/* disable queue to avoid issues while updating state */
- 	rxdctl = IXGBE_READ_REG(hw, IXGBE_VFRXDCTL(reg_idx));
-@@ -1797,7 +1798,13 @@ static void ixgbevf_configure_rx_ring(struct ixgbevf_adapter *adapter,
- 	ring->next_to_clean = 0;
- 	ring->next_to_use = 0;
- 
--	ixgbevf_rx_create_pp(ring);
-+	err = ixgbevf_rx_create_pp(ring);
-+	if (err) {
-+		netdev_err(ring->netdev,
-+			   "Failed to create Page Pool for buffer allocation: (%pe), RxQ %d is disabled, driver reload may be needed\n",
-+			   ERR_PTR(err), ring->queue_index);
-+		return;
-+	}
- 
- 	/* RXDCTL.RLPML does not work on 82599 */
- 	if (adapter->hw.mac.type != ixgbe_mac_82599_vf) {
-@@ -4082,6 +4089,18 @@ static int ixgbevf_set_mac(struct net_device *netdev, void *p)
- 	return 0;
- }
- 
-+static bool ixgbevf_xdp_mtu_ok(const struct ixgbevf_adapter *adapter,
-+			       const struct bpf_prog *prog, unsigned int mtu)
-+{
-+	u32 frame_size = mtu + LIBETH_RX_LL_LEN;
-+	bool requires_mbuf;
-+
-+	requires_mbuf = frame_size > IXGBEVF_RX_PAGE_LEN(LIBETH_XDP_HEADROOM) ||
-+			adapter->flags & IXGBEVF_FLAG_HSPLIT;
-+
-+	return prog->aux->xdp_has_frags || !requires_mbuf;
-+}
-+
- /**
-  * ixgbevf_change_mtu - Change the Maximum Transfer Unit
-  * @netdev: network interface device structure
-@@ -4097,8 +4116,10 @@ static int ixgbevf_change_mtu(struct net_device *netdev, int new_mtu)
- 	int ret;
- 
- 	/* prevent MTU being changed to a size unsupported by XDP */
--	if (adapter->xdp_prog) {
--		dev_warn(&adapter->pdev->dev, "MTU cannot be changed while XDP program is loaded\n");
-+	if (adapter->xdp_prog &&
-+	    !ixgbevf_xdp_mtu_ok(adapter, adapter->xdp_prog, new_mtu)) {
-+		netdev_warn(netdev,
-+			    "MTU value provided cannot be set while current XDP program is attached\n");
- 		return -EPERM;
- 	}
- 
-@@ -4261,14 +4282,10 @@ ixgbevf_features_check(struct sk_buff *skb, struct net_device *dev,
- static int ixgbevf_xdp_setup(struct net_device *dev, struct bpf_prog *prog,
- 			     struct netlink_ext_ack *extack)
- {
--	u32 frame_size = READ_ONCE(dev->mtu) + LIBETH_RX_LL_LEN;
- 	struct ixgbevf_adapter *adapter = netdev_priv(dev);
- 	struct bpf_prog *old_prog;
--	bool requires_mbuf;
- 
--	requires_mbuf = frame_size > IXGBEVF_RX_PAGE_LEN(LIBETH_XDP_HEADROOM) ||
--			adapter->flags & IXGBEVF_FLAG_HSPLIT;
--	if (prog && !prog->aux->xdp_has_frags && requires_mbuf) {
-+	if (prog && !ixgbevf_xdp_mtu_ok(adapter, prog, READ_ONCE(dev->mtu))) {
- 		NL_SET_ERR_MSG_MOD(extack,
- 				   "Configured MTU or HW limitations require non-linear frames and XDP prog does not support frags");
- 		return -EOPNOTSUPP;
--- 
-2.52.0
-
+> The BPF verifier currently enforces a call stack depth of 8 frames,
+> regardless of the actual stack space consumption of those frames. The
+> limit is necessary for static call stacks, because the bookkeeping data
+> structures used by the verifier when stepping into static functions
+> during verification only support 8 stack frames. However, this
+> limitation only matters for static stack frames: Global subprogs are
+> verified by themselves and do not require limiting the call depth.
+>
+> Relax this limitation to only apply to static stack frames. Verification
+> now only fails when there is a sequence of 8 calls to non-global
+> subprogs. Calling into a global subprog resets the counter. This allows
+> deeper call stacks, provided all frames still fit in the stack.
+>
+> The change does not increase the maximum size of the call stack, only
+> the maximum number of frames we can place in it.
+>
+> Also change the progs/test_global_func3.c selftest to use static
+> functions, since with the new patch it would otherwise unexpectedly
+> pass verification.
+>
+> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+> ---
+>  include/linux/bpf_verifier.h                  |  6 +++
+>  kernel/bpf/verifier.c                         | 43 ++++++++++++-------
+>  .../selftests/bpf/progs/test_global_func3.c   | 18 ++++----
+>  3 files changed, 42 insertions(+), 25 deletions(-)
+>
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index c1e30096ea7b..39a54e631bcd 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -650,6 +650,8 @@ enum priv_stack_mode {
+>  	PRIV_STACK_ADAPTIVE,
+>  };
+>  
+> +struct bpf_subprog_info;
+> +
+>  struct bpf_subprog_info {
+>  	/* 'start' has to be the first field otherwise find_subprog() won't work */
+>  	u32 start; /* insn idx of function entry point */
+> @@ -677,6 +679,10 @@ struct bpf_subprog_info {
+>  
+>  	enum priv_stack_mode priv_stack_mode;
+>  	struct bpf_subprog_arg_info args[MAX_BPF_FUNC_REG_ARGS];
+> +
+> +	int ret_insn;
+> +	int frame;
+> +	int cidx;
+nit: can you add comment that cidx means caller index, i saw it below
+and it clarifies this code a lot.
+>  };
+>  
+>  struct bpf_verifier_env;
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 1153a828ce8d..d362ddd47d71 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -6652,9 +6652,11 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+>  	struct bpf_insn *insn = env->prog->insnsi;
+>  	int depth = 0, frame = 0, i, subprog_end, subprog_depth;
+>  	bool tail_call_reachable = false;
+> -	int ret_insn[MAX_CALL_FRAMES];
+> -	int ret_prog[MAX_CALL_FRAMES];
+> -	int j;
+> +	int total;
+> +	int tmp;
+> +
+> +	/* no caller idx */
+> +	subprog[idx].cidx = -1;
+>  
+>  	i = subprog[idx].start;
+>  	if (!priv_stack_supported)
+> @@ -6706,8 +6708,11 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+>  	} else {
+>  		depth += subprog_depth;
+>  		if (depth > MAX_BPF_STACK) {
+> +			for (total = 1; subprog[idx].cidx >= 0 ; total++)
+nit: I think the way this loop is implemented below is more readable:
+for (tmp = idx; tmp >= 0; tmp = subprog[tmp].cidx)
+    total++;
+it is confusing now, because for loop initializes and increments total,
+but tracks cidx for exit check. 
+> +				idx = subprog[idx].cidx;
+> +
+>  			verbose(env, "combined stack size of %d calls is %d. Too large\n",
+> -				frame + 1, depth);
+> +				total, depth);
+>  			return -EACCES;
+>  		}
+>  	}
+> @@ -6723,8 +6728,8 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+>  				continue;
+>  			if (subprog[idx].is_cb)
+>  				err = true;
+> -			for (int c = 0; c < frame && !err; c++) {
+> -				if (subprog[ret_prog[c]].is_cb) {
+> +			for (tmp = idx; tmp >= 0 && !err; tmp = subprog[tmp].cidx) {
+> +				if (subprog[tmp].is_cb) {
+>  					err = true;
+>  					break;
+>  				}
+> @@ -6740,8 +6745,9 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+>  		if (!bpf_pseudo_call(insn + i) && !bpf_pseudo_func(insn + i))
+>  			continue;
+>  		/* remember insn and function to return to */
+> -		ret_insn[frame] = i + 1;
+> -		ret_prog[frame] = idx;
+> +
+> +		subprog[idx].frame = frame;
+> +		subprog[idx].ret_insn = i + 1;
+>  
+>  		/* find the callee */
+>  		next_insn = i + insn[i].imm + 1;
+> @@ -6762,6 +6768,9 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+>  			}
+>  		}
+>  		i = next_insn;
+> +
+> +		/* caller idx */
+> +		subprog[sidx].cidx = idx;
+>  		idx = sidx;
+>  		if (!priv_stack_supported)
+>  			subprog[idx].priv_stack_mode = NO_PRIV_STACK;
+> @@ -6769,7 +6778,7 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+>  		if (subprog[idx].has_tail_call)
+>  			tail_call_reachable = true;
+>  
+> -		frame++;
+> +		frame = subprog_is_global(env, idx) ? 0 : frame + 1;
+>  		if (frame >= MAX_CALL_FRAMES) {
+>  			verbose(env, "the call stack of %d frames is too deep !\n",
+>  				frame);
+> @@ -6783,12 +6792,12 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+>  	 * tail call counter throughout bpf2bpf calls combined with tailcalls
+>  	 */
+>  	if (tail_call_reachable)
+> -		for (j = 0; j < frame; j++) {
+> -			if (subprog[ret_prog[j]].is_exception_cb) {
+> +		for (tmp = idx; tmp >= 0; tmp = subprog[tmp].cidx) {
+> +			if (subprog[tmp].is_exception_cb) {
+>  				verbose(env, "cannot tail call within exception cb\n");
+>  				return -EINVAL;
+>  			}
+> -			subprog[ret_prog[j]].tail_call_reachable = true;
+> +			subprog[tmp].tail_call_reachable = true;
+>  		}
+>  	if (subprog[0].tail_call_reachable)
+>  		env->prog->aux->tail_call_reachable = true;
+> @@ -6796,13 +6805,15 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+>  	/* end of for() loop means the last insn of the 'subprog'
+>  	 * was reached. Doesn't matter whether it was JA or EXIT
+>  	 */
+> -	if (frame == 0)
+> +	if (frame == 0 && subprog[idx].cidx < 0)
+>  		return 0;
+>  	if (subprog[idx].priv_stack_mode != PRIV_STACK_ADAPTIVE)
+>  		depth -= round_up_stack_depth(env, subprog[idx].stack_depth);
+> -	frame--;
+> -	i = ret_insn[frame];
+> -	idx = ret_prog[frame];
+> +
+> +	idx = subprog[idx].cidx;
+> +	frame = subprog[idx].frame;
+> +	i = subprog[idx].ret_insn;
+> +
+>  	goto continue_func;
+>  }
+>  
+> diff --git a/tools/testing/selftests/bpf/progs/test_global_func3.c b/tools/testing/selftests/bpf/progs/test_global_func3.c
+> index 142b682d3c2f..974fd8c19561 100644
+> --- a/tools/testing/selftests/bpf/progs/test_global_func3.c
+> +++ b/tools/testing/selftests/bpf/progs/test_global_func3.c
+> @@ -5,56 +5,56 @@
+>  #include <bpf/bpf_helpers.h>
+>  #include "bpf_misc.h"
+>  
+> -__attribute__ ((noinline))
+> +static __attribute__ ((noinline))
+>  int f1(struct __sk_buff *skb)
+>  {
+>  	return skb->len;
+>  }
+>  
+> -__attribute__ ((noinline))
+> +static __attribute__ ((noinline))
+>  int f2(int val, struct __sk_buff *skb)
+>  {
+>  	return f1(skb) + val;
+>  }
+>  
+> -__attribute__ ((noinline))
+> +static __attribute__ ((noinline))
+>  int f3(int val, struct __sk_buff *skb, int var)
+>  {
+>  	return f2(var, skb) + val;
+>  }
+>  
+> -__attribute__ ((noinline))
+> +static __attribute__ ((noinline))
+>  int f4(struct __sk_buff *skb)
+>  {
+>  	return f3(1, skb, 2);
+>  }
+>  
+> -__attribute__ ((noinline))
+> +static __attribute__ ((noinline))
+>  int f5(struct __sk_buff *skb)
+>  {
+>  	return f4(skb);
+>  }
+>  
+> -__attribute__ ((noinline))
+> +static __attribute__ ((noinline))
+>  int f6(struct __sk_buff *skb)
+>  {
+>  	return f5(skb);
+>  }
+>  
+> -__attribute__ ((noinline))
+> +static __attribute__ ((noinline))
+>  int f7(struct __sk_buff *skb)
+>  {
+>  	return f6(skb);
+>  }
+>  
+> -__attribute__ ((noinline))
+> +static __attribute__ ((noinline))
+>  int f8(struct __sk_buff *skb)
+>  {
+>  	return f7(skb);
+>  }
+>  
+>  SEC("tc")
+> -__failure __msg("the call stack of 8 frames")
+> +__failure __msg("the call stack of 9 frames")
+>  int global_func3(struct __sk_buff *skb)
+>  {
+>  	return f8(skb);
+> -- 
+> 2.49.0
