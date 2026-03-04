@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B55DB377EA6;
-	Wed,  4 Mar 2026 22:23:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 390EF372661;
+	Wed,  4 Mar 2026 22:23:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772662995; cv=none; b=WuPumEZZSxL9xsnoDjgMfkSo+IHeyrx4CZSY1MAE3BXxGfvLgLwDQWTivQKJMgwe+osdidzVWHVxDfPyPmZF4UB2Nu8hvO7XjRlydTO1PN+3sVACHXdRdM8enOmzYIts5XW8LuEpThos18aPwSi1qOCXFXyOurXbTqSKK+3OaHo=
+	t=1772663006; cv=none; b=FAF6FhTxaL3tVynEMGycl5EouwE4c4ALT1SsgtFO4wRQPpuGAP1IjIuVOnRqv6WxygbCSWjfdTo8hu5jGZ+N0EZci5LmkZFkdGRAiaT5Ieytwc5CkpR8ZBLHRwRVLsMsKN6Dt0msZnl4cP/7SWFe2xW4VcAESjOO7HogWaXjNow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772662995; c=relaxed/simple;
-	bh=brhgQm72s/WYPH4hSEFm4S25RNyIH2enZ7W9yhBsRKQ=;
+	s=arc-20240116; t=1772663006; c=relaxed/simple;
+	bh=jSNutvuy3gJCiN3hxksnhaXJGd2BRC4KOPVdTTDdc5U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mQclC6FvsGPOlXbjqxoKNaQXDCf6w94Rfp10LATJo/3m3/ZVXre1e5PYZbAFZQHhvciWGFciCLPATZmp0wUMlH0ebxplYOOT5XWlDwAHPMkgMsgV9c4jy+hDL1S+gHEaDV7KJvSeTuZ2VcwW13HiUdycX2sbr/7ucd26T4S9QZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xs8oKbgR; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=BxS25Wx9lgplRYv/NhA8UJA/tkfO7qbW9zYcLDn52nK6ttqkX9nR5XxMtgbVWRNqq7vnEpfXb8o15/cGLsizGqdFZBawDs92M/X/iW3MeFb1GxFWTfqNqgOvrmhlrZIIFbEmYoEP7QGjBn06OQslENyZwHpxpYMZiDYKq0ase9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HmBGvGQs; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xs8oKbgR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59304C4CEF7;
-	Wed,  4 Mar 2026 22:23:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HmBGvGQs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4FDEC4CEF7;
+	Wed,  4 Mar 2026 22:23:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772662995;
-	bh=brhgQm72s/WYPH4hSEFm4S25RNyIH2enZ7W9yhBsRKQ=;
+	s=k20201202; t=1772663005;
+	bh=jSNutvuy3gJCiN3hxksnhaXJGd2BRC4KOPVdTTDdc5U=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Xs8oKbgRAWu7fGspG3lUzAXQ0m//qhakNc6fRK+7MfbkB1xZJxTHAOzVfMtqr8LwQ
-	 cv/3ml0p7AhsecO9RgbAmTsDixsgpPFWyzroPhIE0sPP+QM9l+G3oXzUwekBjK5We+
-	 3djnK+QeHLwh3TAtW1aHSFMA9fcJH60YIf4gpShRcBmMQhuwpWjtN+/aGXgTntKbMt
-	 ehTfSDYJZUR/CRWAyzOfX8ahPDhANjQlLgdOgdDx92XDRoqS4PAX1jE6LjTEGd2eyr
-	 Ud0k90OoubjdAHLePK+vStO2w6t7ah7g0xj62pWoS4T5blQraqJB1wkYiZyOexW9XB
-	 yJUZ43ANNigrQ==
+	b=HmBGvGQsYL1G892CVc3O/4f9uH9jacqINBSfInMv/bFaZShSiUEEUpYeNWcZCSQ53
+	 fuCWWtp3BZQm8v9Gs0TkdWH1XoAMAz4WEXrIV3Ym1hGOiG0BAsBGRNWSyHHLU+9dGT
+	 NGwBDoBD66VGPnTjECwphV25eDvnWqwdoqZYz/DA0lmT8i34VzcqSMa7MkamDH6cY5
+	 W/R5YfndIm0ouzW4pBYX2EeR62g88lhCwNiakjixsA5N64cyVeQnr+7TQB9GVPJ9AC
+	 oHba9U6s5zF+BFp7C49kW8SvRd3QW1+EN8i+CnXXyizZvr4aBxZQraa/Eu2EclJoNx
+	 BmAg7mQl28IZw==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -38,9 +38,9 @@ Cc: bpf@vger.kernel.org,
 	Yonghong Song <yhs@fb.com>,
 	Menglong Dong <menglong8.dong@gmail.com>,
 	Steven Rostedt <rostedt@kernel.org>
-Subject: [PATCHv2 bpf-next 08/23] bpf: Add bpf_trampoline_multi_attach/detach functions
-Date: Wed,  4 Mar 2026 23:21:26 +0100
-Message-ID: <20260304222141.497203-9-jolsa@kernel.org>
+Subject: [PATCHv2 bpf-next 09/23] bpf: Add support for tracing multi link
+Date: Wed,  4 Mar 2026 23:21:27 +0100
+Message-ID: <20260304222141.497203-10-jolsa@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260304222141.497203-1-jolsa@kernel.org>
 References: <20260304222141.497203-1-jolsa@kernel.org>
@@ -52,36 +52,24 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Adding bpf_trampoline_multi_attach/detach functions that allows to
-attach/detach tracing program to multiple functions/trampolines.
+Adding new link to allow to attach program to multiple function
+BTF IDs. The link is represented by struct bpf_tracing_multi_link.
 
-The attachment is defined with bpf_program and array of BTF ids of
-functions to attach the bpf program to.
+To configure the link, new fields are added to bpf_attr::link_create
+to pass array of BTF IDs;
 
-Adding bpf_tracing_multi_link object that holds all the attached
-trampolines and is initialized in attach and used in detach.
+  struct {
+    __aligned_u64 ids;
+    __u32         cnt;
+  } tracing_multi;
 
-The attachment allocates or uses currently existing trampoline
-for each function to attach and links it with the bpf program.
+Each BTF ID represents function (BTF_KIND_FUNC) that the link will
+attach bpf program to.
 
-The attach works as follows:
-- we get all the needed trampolines
-- lock them and add the bpf program to each (__bpf_trampoline_link_prog)
-- the trampoline_multi_ops passed in __bpf_trampoline_link_prog gathers
-  ftrace_hash (ip -> trampoline) objects
-- we call update_ftrace_direct_add/mod to update needed locations
-- we unlock all the trampolines
+We use previously added bpf_trampoline_multi_attach/detach functions
+to attach/detach the link.
 
-The detach works as follows:
-- we lock all the needed trampolines
-- remove the program from each (__bpf_trampoline_unlink_prog)
-- the trampoline_multi_ops passed in __bpf_trampoline_link_prog gathers
-  ftrace_hash (ip -> trampoline) objects
-- we call update_ftrace_direct_del/mod to update needed locations
-- we unlock and put all the trampolines
-
-Adding trampoline_(un)lock_all functions to (un)lock all trampolines
-to gate the tracing_multi attachment.
+The linkinfo/fdinfo callbacks will be implemented in following changes.
 
 Note this is supported only for archs (x86_64) with ftrace direct and
 have single ops support.
@@ -91,306 +79,230 @@ have single ops support.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- include/linux/bpf.h     |  17 +++
- kernel/bpf/trampoline.c | 243 ++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 260 insertions(+)
+ include/linux/bpf_types.h      |  1 +
+ include/linux/trace_events.h   |  6 +++
+ include/uapi/linux/bpf.h       |  5 ++
+ kernel/bpf/syscall.c           |  2 +
+ kernel/trace/bpf_trace.c       | 88 ++++++++++++++++++++++++++++++++++
+ tools/include/uapi/linux/bpf.h |  6 +++
+ tools/lib/bpf/libbpf.c         |  1 +
+ 7 files changed, 109 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index c401b308a325..f22b9400a915 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1464,6 +1464,12 @@ struct bpf_trampoline *bpf_trampoline_get(u64 key,
- void bpf_trampoline_put(struct bpf_trampoline *tr);
- int arch_prepare_bpf_dispatcher(void *image, void *buf, s64 *funcs, int num_funcs);
+diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
+index b13de31e163f..96575b5b563e 100644
+--- a/include/linux/bpf_types.h
++++ b/include/linux/bpf_types.h
+@@ -155,3 +155,4 @@ BPF_LINK_TYPE(BPF_LINK_TYPE_PERF_EVENT, perf)
+ BPF_LINK_TYPE(BPF_LINK_TYPE_KPROBE_MULTI, kprobe_multi)
+ BPF_LINK_TYPE(BPF_LINK_TYPE_STRUCT_OPS, struct_ops)
+ BPF_LINK_TYPE(BPF_LINK_TYPE_UPROBE_MULTI, uprobe_multi)
++BPF_LINK_TYPE(BPF_LINK_TYPE_TRACING_MULTI, tracing_multi)
+diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
+index 37eb2f0f3dd8..b6d4c745bdac 100644
+--- a/include/linux/trace_events.h
++++ b/include/linux/trace_events.h
+@@ -783,6 +783,7 @@ int bpf_get_perf_event_info(const struct perf_event *event, u32 *prog_id,
+ 			    unsigned long *missed);
+ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog);
+ int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog);
++int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr);
+ #else
+ static inline unsigned int trace_call_bpf(struct trace_event_call *call, void *ctx)
+ {
+@@ -835,6 +836,11 @@ bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+ {
+ 	return -EOPNOTSUPP;
+ }
++static inline int
++bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr)
++{
++	return -EOPNOTSUPP;
++}
+ #endif
  
-+struct bpf_tracing_multi_link;
-+int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
-+				struct bpf_tracing_multi_link *link);
-+int bpf_trampoline_multi_detach(struct bpf_prog *prog,
-+				struct bpf_tracing_multi_link *link);
-+
- /*
-  * When the architecture supports STATIC_CALL replace the bpf_dispatcher_fn
-  * indirection with a direct call to the bpf program. If the architecture does
-@@ -1888,6 +1894,17 @@ struct bpf_tracing_link {
- 	struct bpf_prog *tgt_prog;
+ enum {
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 68600972a778..7f5c51f27a36 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1180,6 +1180,7 @@ enum bpf_link_type {
+ 	BPF_LINK_TYPE_UPROBE_MULTI = 12,
+ 	BPF_LINK_TYPE_NETKIT = 13,
+ 	BPF_LINK_TYPE_SOCKMAP = 14,
++	BPF_LINK_TYPE_TRACING_MULTI = 15,
+ 	__MAX_BPF_LINK_TYPE,
  };
  
-+struct bpf_tracing_multi_node {
-+	struct bpf_tramp_node node;
-+	struct bpf_trampoline *trampoline;
-+};
-+
-+struct bpf_tracing_multi_link {
-+	struct bpf_link link;
-+	int nodes_cnt;
-+	struct bpf_tracing_multi_node nodes[] __counted_by(nodes_cnt);
-+};
-+
- struct bpf_raw_tp_link {
- 	struct bpf_link link;
- 	struct bpf_raw_event_map *btp;
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index e2f4a15886b0..c42bf16b6807 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -88,6 +88,22 @@ static struct bpf_trampoline *direct_ops_ip_lookup(struct ftrace_ops *ops, unsig
- 	mutex_unlock(&trampoline_mutex);
- 	return tr;
- }
-+
-+static void trampoline_lock_all(void)
-+{
-+	int i;
-+
-+	for (i = 0; i < TRAMPOLINE_LOCKS_TABLE_SIZE; i++)
-+		mutex_lock(&trampoline_locks[i].mutex);
-+}
-+
-+static void trampoline_unlock_all(void)
-+{
-+	int i;
-+
-+	for (i = 0; i < TRAMPOLINE_LOCKS_TABLE_SIZE; i++)
-+		mutex_unlock(&trampoline_locks[i].mutex);
-+}
- #else
- static struct bpf_trampoline *direct_ops_ip_lookup(struct ftrace_ops *ops, unsigned long ip)
- {
-@@ -1426,6 +1442,233 @@ int __weak arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
- 	return -ENOTSUPP;
+@@ -1863,6 +1864,10 @@ union bpf_attr {
+ 				};
+ 				__u64		expected_revision;
+ 			} cgroup;
++			struct {
++				__aligned_u64	ids;
++				__u32		cnt;
++			} tracing_multi;
+ 		};
+ 	} link_create;
+ 
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 2680740e9c09..94c6a9c81ef0 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -5749,6 +5749,8 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr)
+ 			ret = bpf_iter_link_attach(attr, uattr, prog);
+ 		else if (prog->expected_attach_type == BPF_LSM_CGROUP)
+ 			ret = cgroup_bpf_link_attach(attr, prog);
++		else if (is_tracing_multi(prog->expected_attach_type))
++			ret = bpf_tracing_multi_attach(prog, attr);
+ 		else
+ 			ret = bpf_tracing_prog_attach(prog,
+ 						      attr->link_create.target_fd,
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 0b040a417442..a18aef19c3b5 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -42,6 +42,7 @@
+ 
+ #define MAX_UPROBE_MULTI_CNT (1U << 20)
+ #define MAX_KPROBE_MULTI_CNT (1U << 20)
++#define MAX_TRACING_MULTI_CNT (1U << 20)
+ 
+ #ifdef CONFIG_MODULES
+ struct bpf_trace_module {
+@@ -3594,3 +3595,90 @@ __bpf_kfunc int bpf_copy_from_user_task_str_dynptr(struct bpf_dynptr *dptr, u64
  }
  
+ __bpf_kfunc_end_defs();
++
 +#if defined(CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS) && \
 +    defined(CONFIG_HAVE_SINGLE_FTRACE_DIRECT_OPS)
 +
-+struct fentry_multi_data {
-+	struct ftrace_hash *unreg;
-+	struct ftrace_hash *modify;
-+	struct ftrace_hash *reg;
++static void bpf_tracing_multi_link_release(struct bpf_link *link)
++{
++	struct bpf_tracing_multi_link *tr_link =
++		container_of(link, struct bpf_tracing_multi_link, link);
++
++	WARN_ON_ONCE(bpf_trampoline_multi_detach(link->prog, tr_link));
++}
++
++static void bpf_tracing_multi_link_dealloc(struct bpf_link *link)
++{
++	struct bpf_tracing_multi_link *tr_link =
++		container_of(link, struct bpf_tracing_multi_link, link);
++
++	kvfree(tr_link);
++}
++
++static const struct bpf_link_ops bpf_tracing_multi_link_lops = {
++	.release = bpf_tracing_multi_link_release,
++	.dealloc_deferred = bpf_tracing_multi_link_dealloc,
 +};
 +
-+static void free_fentry_multi_data(struct fentry_multi_data *data)
++int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr)
 +{
-+	free_ftrace_hash(data->reg);
-+	free_ftrace_hash(data->unreg);
-+	free_ftrace_hash(data->modify);
-+}
-+
-+static int register_fentry_multi(struct bpf_trampoline *tr, void *new_addr, void *ptr)
-+{
-+	unsigned long addr = (unsigned long) new_addr;
-+	unsigned long ip = ftrace_location(tr->ip);
-+	struct fentry_multi_data *data = ptr;
-+
-+	if (bpf_trampoline_use_jmp(tr->flags))
-+		addr = ftrace_jmp_set(addr);
-+	return add_ftrace_hash_entry_direct(data->reg, ip, addr) ? 0 : -ENOMEM;
-+}
-+
-+static int unregister_fentry_multi(struct bpf_trampoline *tr, u32 orig_flags, void *old_addr,
-+				   void *ptr)
-+{
-+	unsigned long addr = (unsigned long) old_addr;
-+	unsigned long ip = ftrace_location(tr->ip);
-+	struct fentry_multi_data *data = ptr;
-+
-+	if (bpf_trampoline_use_jmp(tr->flags))
-+		addr = ftrace_jmp_set(addr);
-+	return add_ftrace_hash_entry_direct(data->unreg, ip, addr) ? 0 : -ENOMEM;
-+}
-+
-+static int modify_fentry_multi(struct bpf_trampoline *tr, u32 orig_flags, void *old_addr,
-+			       void *new_addr, bool lock_direct_mutex, void *ptr)
-+{
-+	unsigned long addr = (unsigned long) new_addr;
-+	unsigned long ip = ftrace_location(tr->ip);
-+	struct fentry_multi_data *data = ptr;
-+
-+	if (bpf_trampoline_use_jmp(tr->flags))
-+		addr = ftrace_jmp_set(addr);
-+	return add_ftrace_hash_entry_direct(data->modify, ip, addr) ? 0 : -ENOMEM;
-+}
-+
-+static struct bpf_trampoline_ops trampoline_multi_ops = {
-+	.register_fentry   = register_fentry_multi,
-+	.unregister_fentry = unregister_fentry_multi,
-+	.modify_fentry     = modify_fentry_multi,
-+};
-+
-+static int bpf_get_btf_id_target(struct btf *btf, struct bpf_prog *prog, u32 btf_id,
-+				 struct bpf_attach_target_info *tgt_info)
-+{
-+	const struct btf_type *t;
-+	unsigned long addr;
-+	const char *tname;
++	struct bpf_tracing_multi_link *link = NULL;
++	struct bpf_link_primer link_primer;
++	u32 cnt, *ids = NULL;
++	u32 __user *uids;
 +	int err;
 +
-+	if (!btf_id || !btf)
-+		return -EINVAL;
-+	t = btf_type_by_id(btf, btf_id);
-+	if (!t)
-+		return -EINVAL;
-+	tname = btf_name_by_offset(btf, t->name_off);
-+	if (!tname)
-+		return -EINVAL;
-+	if (!btf_type_is_func(t))
-+		return -EINVAL;
-+	t = btf_type_by_id(btf, t->type);
-+	if (!btf_type_is_func_proto(t))
-+		return -EINVAL;
-+	err = btf_distill_func_proto(NULL, btf, t, tname, &tgt_info->fmodel);
-+	if (err < 0)
-+		return err;
-+	if (btf_is_module(btf)) {
-+		/* The bpf program already holds refference to module. */
-+		if (WARN_ON_ONCE(!prog->aux->mod))
-+			return -EINVAL;
-+		addr = find_kallsyms_symbol_value(prog->aux->mod, tname);
-+	} else {
-+		addr = kallsyms_lookup_name(tname);
-+	}
-+	if (!addr || !ftrace_location(addr))
-+		return -ENOENT;
-+	tgt_info->tgt_addr = addr;
-+	return 0;
-+}
++	uids = u64_to_user_ptr(attr->link_create.tracing_multi.ids);
++	cnt = attr->link_create.tracing_multi.cnt;
 +
-+int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
-+				struct bpf_tracing_multi_link *link)
-+{
-+	struct bpf_attach_target_info tgt_info = {};
-+	struct btf *btf = prog->aux->attach_btf;
-+	struct bpf_tracing_multi_node *mnode;
-+	int j, i, err, cnt = link->nodes_cnt;
-+	struct fentry_multi_data data;
-+	struct bpf_trampoline *tr;
-+	u32 btf_id;
-+	u64 key;
++	if (!cnt || !uids)
++		return -EINVAL;
++	if (cnt > MAX_TRACING_MULTI_CNT)
++		return -E2BIG;
 +
-+	data.reg    = alloc_ftrace_hash(FTRACE_HASH_DEFAULT_BITS);
-+	data.unreg  = alloc_ftrace_hash(FTRACE_HASH_DEFAULT_BITS);
-+	data.modify = alloc_ftrace_hash(FTRACE_HASH_DEFAULT_BITS);
-+
-+	if (!data.reg || !data.unreg || !data.modify) {
-+		free_fentry_multi_data(&data);
++	ids = kvmalloc_array(cnt, sizeof(*ids), GFP_KERNEL);
++	if (!ids)
 +		return -ENOMEM;
++
++	if (copy_from_user(ids, uids, cnt * sizeof(*ids))) {
++		err = -EFAULT;
++		goto error;
 +	}
 +
-+	for (i = 0; i < cnt; i++) {
-+		btf_id = ids[i];
-+
-+		err = bpf_get_btf_id_target(btf, prog, btf_id, &tgt_info);
-+		if (err)
-+			goto rollback_put;
-+
-+		if (prog->sleepable) {
-+			err = btf_id_allow_sleepable(btf_id, tgt_info.tgt_addr, prog, btf);
-+			if (err)
-+				goto rollback_put;
-+		}
-+
-+		key = bpf_trampoline_compute_key(NULL, prog->aux->attach_btf, btf_id);
-+
-+		tr = bpf_trampoline_get(key, &tgt_info);
-+		if (!tr) {
-+			err = -ENOMEM;
-+			goto rollback_put;
-+		}
-+
-+		mnode = &link->nodes[i];
-+		mnode->trampoline = tr;
-+		mnode->node.link = &link->link;
++	link = kvzalloc(struct_size(link, nodes, cnt), GFP_KERNEL);
++	if (!link) {
++		err = -ENOMEM;
++		goto error;
 +	}
 +
-+	trampoline_lock_all();
++	bpf_link_init(&link->link, BPF_LINK_TYPE_TRACING_MULTI,
++		      &bpf_tracing_multi_link_lops, prog, prog->expected_attach_type);
 +
-+	for (i = 0; i < cnt; i++) {
-+		mnode = &link->nodes[i];
-+		err = __bpf_trampoline_link_prog(&mnode->node, mnode->trampoline, NULL,
-+						 &trampoline_multi_ops, &data);
-+		if (err)
-+			goto rollback_unlink;
++	err = bpf_link_prime(&link->link, &link_primer);
++	if (err)
++		goto error;
++
++	link->nodes_cnt = cnt;
++
++	err = bpf_trampoline_multi_attach(prog, ids, link);
++	kvfree(ids);
++	if (err) {
++		bpf_link_cleanup(&link_primer);
++		return err;
 +	}
++	return bpf_link_settle(&link_primer);
 +
-+	if (ftrace_hash_count(data.reg)) {
-+		err = update_ftrace_direct_add(&direct_ops, data.reg);
-+		if (err)
-+			goto rollback_unlink;
-+	}
-+
-+	if (ftrace_hash_count(data.modify)) {
-+		err = update_ftrace_direct_mod(&direct_ops, data.modify, true);
-+		if (err) {
-+			WARN_ON_ONCE(update_ftrace_direct_del(&direct_ops, data.reg));
-+			goto rollback_unlink;
-+		}
-+	}
-+
-+	trampoline_unlock_all();
-+
-+	free_fentry_multi_data(&data);
-+	return 0;
-+
-+rollback_unlink:
-+	for (j = 0; j < i; j++) {
-+		mnode = &link->nodes[j];
-+		WARN_ON_ONCE(__bpf_trampoline_unlink_prog(&mnode->node, mnode->trampoline,
-+					NULL, &trampoline_multi_ops, &data));
-+	}
-+	trampoline_unlock_all();
-+
-+	i = cnt;
-+
-+rollback_put:
-+	for (j = 0; j < i; j++)
-+		bpf_trampoline_put(link->nodes[j].trampoline);
-+
-+	free_fentry_multi_data(&data);
++error:
++	kvfree(ids);
++	kvfree(link);
 +	return err;
 +}
 +
-+int bpf_trampoline_multi_detach(struct bpf_prog *prog, struct bpf_tracing_multi_link *link)
++#else
++
++int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr)
 +{
-+	struct bpf_tracing_multi_node *mnode;
-+	struct fentry_multi_data data = {};
-+	int i, cnt = link->nodes_cnt;
-+
-+	data.unreg  = alloc_ftrace_hash(FTRACE_HASH_DEFAULT_BITS);
-+	data.modify = alloc_ftrace_hash(FTRACE_HASH_DEFAULT_BITS);
-+
-+	if (!data.unreg || !data.modify) {
-+		free_ftrace_hash(data.unreg);
-+		return -ENOMEM;
-+	}
-+
-+	trampoline_lock_all();
-+
-+	for (i = 0; i < cnt; i++) {
-+		mnode = &link->nodes[i];
-+		WARN_ON_ONCE(__bpf_trampoline_unlink_prog(&mnode->node, mnode->trampoline,
-+					NULL, &trampoline_multi_ops, &data));
-+	}
-+
-+	if (ftrace_hash_count(data.unreg))
-+		WARN_ON_ONCE(update_ftrace_direct_del(&direct_ops, data.unreg));
-+	if (ftrace_hash_count(data.modify))
-+		WARN_ON_ONCE(update_ftrace_direct_mod(&direct_ops, data.modify, true));
-+
-+	trampoline_unlock_all();
-+
-+	for (i = 0; i < cnt; i++)
-+		bpf_trampoline_put(link->nodes[i].trampoline);
-+
-+	free_fentry_multi_data(&data);
-+	return 0;
++	return -EOPNOTSUPP;
 +}
 +
 +#endif /* CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS) && CONFIG_HAVE_SINGLE_FTRACE_DIRECT_OPS */
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 61f0fe5bc0aa..7f5c51f27a36 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -1180,6 +1180,7 @@ enum bpf_link_type {
+ 	BPF_LINK_TYPE_UPROBE_MULTI = 12,
+ 	BPF_LINK_TYPE_NETKIT = 13,
+ 	BPF_LINK_TYPE_SOCKMAP = 14,
++	BPF_LINK_TYPE_TRACING_MULTI = 15,
+ 	__MAX_BPF_LINK_TYPE,
+ };
+ 
+@@ -1863,6 +1864,10 @@ union bpf_attr {
+ 				};
+ 				__u64		expected_revision;
+ 			} cgroup;
++			struct {
++				__aligned_u64	ids;
++				__u32		cnt;
++			} tracing_multi;
+ 		};
+ 	} link_create;
+ 
+@@ -7236,6 +7241,7 @@ enum {
+ 	TCP_BPF_SOCK_OPS_CB_FLAGS = 1008, /* Get or Set TCP sock ops flags */
+ 	SK_BPF_CB_FLAGS		= 1009, /* Get or set sock ops flags in socket */
+ 	SK_BPF_BYPASS_PROT_MEM	= 1010, /* Get or Set sk->sk_bypass_prot_mem */
 +
- static int __init init_trampolines(void)
- {
- 	int i;
+ };
+ 
+ enum {
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 1e19c7b861ec..74e579d7f310 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -156,6 +156,7 @@ static const char * const link_type_name[] = {
+ 	[BPF_LINK_TYPE_UPROBE_MULTI]		= "uprobe_multi",
+ 	[BPF_LINK_TYPE_NETKIT]			= "netkit",
+ 	[BPF_LINK_TYPE_SOCKMAP]			= "sockmap",
++	[BPF_LINK_TYPE_TRACING_MULTI]		= "tracing_multi",
+ };
+ 
+ static const char * const map_type_name[] = {
 -- 
 2.53.0
 
