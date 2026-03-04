@@ -1,69 +1,69 @@
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CF5838550F
-	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 20:57:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFBFD3845C3
+	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 20:57:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772657827; cv=none; b=Rykgt6/tWEILMa32puycJdxFgvGdaUsFV9TX7ueGLDO+ACfn3/PBEgSQdMGVBZb/vP1m16U2cfwRc15MKuQDJyQqBR/PZHt9wD08Cx9xKOEV70DVuTWLoba7GDRqk9LZjCu0uhf+1DFqZ4mANGOYWqKA08AvU8/YJf06EFsDvEY=
+	t=1772657829; cv=none; b=ackC6Qx225PHOsz55JXOvtie/MozJPn2LqEKolq10b8sKSwD04DShU0I2lP9fKFc09npJwSUUHb1Iw+5QaYNn2mWsNCrL5g8pboiJ1xkpVBtGFTn1Mpro45HLujU2Gt5HVfZFebvHHYOcV/XZ7x26Ow31cCYwQCQVMOUcpYMxe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772657827; c=relaxed/simple;
-	bh=RxL6z+zw2hb3Ua992HMj+evwFuDxGd2pG925AkelRHk=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IXS0CjmdlMjZrq854oIoaVQ22om60c9hGKCDN/DESry+dRtFfosR5cuw6IGmJOomQ4LY0Dw4uoKoyX7ddBauxs/kQGtG2k4JH7WUzfZMCPIU7j0EruLQpuuZSasyVE5Zv42jIjkbyuW6RL9cKRVMFhiqdCly4CORfx4RxIvcDVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=nlxsExgV; arc=none smtp.client-ip=209.85.160.176
+	s=arc-20240116; t=1772657829; c=relaxed/simple;
+	bh=WyeYQb3YQCz+f5H/eR5ZDASafjif2FCnbOm6FuWiFnk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=NRVSBMH3vbyvvGCXMMxYAwNfUBdfF8BmGPoHMV3WQ0vHOqTnVlwsuT+tJbDRIrC2FBtNrm60HzSkWwS4YGjS5IEuOZXfTtpJjpU/+H6EBQXM7fSnp7fpfnMvR8NEb7CIY484rou2Tcme4kfU8Twe85zq2nP+iNCbtloOovwH9kQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=qB3k6+zR; arc=none smtp.client-ip=209.85.219.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="nlxsExgV"
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-50697d6a69cso37280551cf.2
-        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 12:57:03 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="qB3k6+zR"
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-899eabc5292so42896226d6.0
+        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 12:57:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda.com; s=google; t=1772657822; x=1773262622; darn=vger.kernel.org;
+        d=toxicpanda.com; s=google; t=1772657823; x=1773262623; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iNKFyABXShuPhoG46GCIz5GpmBHUYu/gn8UQCtzbQzk=;
-        b=nlxsExgVl9btCZmln9Wm53dA7Y7RqbGeM9XH9C6GaFp6p4Gm0G8FxZnbx+RCHCALja
-         r8FIltHBUJ/jrigcPMRInBdPx17QrWUf/kKU8BMMhhiMoMyb4LMF1DX4/pkgBX3lL2XQ
-         TpEC9R7Agfn9bTQBnp58uUsNB2lPy2OSRFk5JIhzDtJLs47HsLUFhmxwz0PH6a1EygUv
-         HZN7vOjUomSwXcsOYAUGLxJqJd5Zu0T6em5B/4fuQ6RGTBsuV913fU4p0yUY0r2eTCr0
-         HKAmuDgudex/HbR4wheWZrET4/+1jFCGphJQkYaVROl9Sa09fEDTlWvACYFHdEkgLxRA
-         W0pA==
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ncCoeXyjR9RDKeVTND0rxI6Rhxaft+8azHfZqWQiIOU=;
+        b=qB3k6+zRux6W1rAP1Jbw3Iy143vQIU4j2jHgMZEzdLZTJLTnuYNONfTMMyuZ3tCtET
+         ESAvnY6gVR8Lpgr452lUD+kTJ7GLI4AZXwF0E+cu29vy04DFUb2YG3NqrT1HmrI4M1E7
+         WvH5XMo6VK9lgGYy/GS6tZPxpmFYe/cOYKeVl8WnT6b8gjaYeJQ7gbjKxbDl5grJduw8
+         SBF8xHSsVtod2ppmpkA/+c4zYfRFN0eFARDZ9bKwzD9WGxk+pyusTTVQWB9BT46jPRWM
+         +aakF1WDRMaDwmwr1c/ziH/3bHKZShmIsD+2ZXH6eGKpdIszxEYhVeMPui/1ssG0OICy
+         lsLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772657822; x=1773262622;
+        d=1e100.net; s=20230601; t=1772657823; x=1773262623;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=iNKFyABXShuPhoG46GCIz5GpmBHUYu/gn8UQCtzbQzk=;
-        b=qXaMuUSCI0hJ20med17cyAc8VjAyLTjzqvlfVFSjbnpQgB5JBf4oWWtFXkeBTY6M05
-         IhyDrNoozMhYImfPTgd1niUaIJfQriM58oxbSUaLMc00TbFlhuiNK05Y/12G0/yDQv2j
-         KH+xOlRfz5Q3H3fpq3oJ9HNkc+M4hXe9K44+XXsDvYk/tkhDmkjzpm0qaopHzUMFNdGH
-         hsHqHLB5VuXj6/ore1AHqid3sIStZyCQL3sI7EGAWV7NCSDzZ0u3HXOwOLJQHRyH35bb
-         qBzVQw/f56mLvbuP1a2cZLh6h9pukPJz9ESalP1pmnlDVwTgC4fJhFscbAHXYzOKNgCv
-         RvXw==
-X-Gm-Message-State: AOJu0Yx5fKCw1QghBmOuP0/FwO+l12iHNxdBQBFUiStl7HWUgMPwhb1K
-	XnL59DwMxpbJ/dod47DTj5AB3il7OrFWvvz8D28Gd8jPbohkwvRGjvTs/Roh5zhBB87GEQxANP3
-	kQgPJBFn6Kg==
-X-Gm-Gg: ATEYQzxCS4BZa6oo8oFm3iKE8mMiijnjTghbRbCRTzOMu932Rqvej8RoC+qx4uSB03Q
-	niAwD3XC7fWVX13UwIqXmIwOSmgA2XFQIPyB/nBB1jJaZdEEIhBwy+XmLG7E7tUmG7I8Sok9kbX
-	gcC6PE7Awheu/vfEn5nQOQbQeKdxR14TOka6LRdPylyMlS2NtQNTiDMsGfqg+VVDpy8XtjRiUOZ
-	J+bhFhSscvgvRfAdTu4X0dPlw1PvShf+8kwGdKGdWPInLx55UBKSMApQEHPu/kejEWor7Di+wY8
-	QUYRQVNblQjIxQE5YqO/QLbNSzJTEPpdTouuJZoYi1XeR72i+iQPnQvXSOF/8GivmUWVJLTYr84
-	6OsgSwxKb0BhoqfhckN8w5YnVrfpCZWfz65J1GUs/BOUq0vHLKswxhUkTffeYKC6mRna9YerctB
-	tBpW7ngurhRFVJF3+oTvK9JjnHsg==
-X-Received: by 2002:a05:622a:202:b0:4ee:4512:4a24 with SMTP id d75a77b69052e-508db3eb4c5mr47075691cf.72.1772657821581;
-        Wed, 04 Mar 2026 12:57:01 -0800 (PST)
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ncCoeXyjR9RDKeVTND0rxI6Rhxaft+8azHfZqWQiIOU=;
+        b=vwW4irMrXcifsBTY6PK7IZdm/qZk3LF1TbtBeDl5v/l9nSjM/wPeQrLi/BBfx3y3jZ
+         /Jy+iWfl5v7UhLZdE4yOs8QUdtuq2NmZmCGf2ppcHH4LIZgSzdVt61K/NbzDO/pcXGyd
+         Rvl4D/ftweliIdpoxbCxd90WbPvL9K98X0HlujKvgnnfXrOeCNi3xlGgC18wbC1eOsaw
+         Rs98dwCDQJp+4PiM0NU0gamYUAR32BQLghgdEZlGXJe/nMMid01TrbfBLlXz2MSpwF01
+         61WrDqP3AQdezOklBXPUfYwVt8e8Zbf+2IwsLTJlnGXK6Ed6VMvdgE1Lgk+ibs7BlQWk
+         ptjw==
+X-Gm-Message-State: AOJu0YwrFtg5gQ2lR+8ND2DzhIeDQYeAVWoC/13CaLgvSne+0OGR+CU/
+	wF9aI37lQW47OIBAYKV0TDPHLj8xMndOo8kFrxZJYegbdnj5C+jV5JOLvbrLxeDB1NmQH4uyUN1
+	hjG9yPfbC0g==
+X-Gm-Gg: ATEYQzwttFEcqSE+02shFZ8K/2a/TgcrkMzrDrQrRkzf/YCPsxxp5pb2osx/4TLV9Fv
+	Vl35gmIvdE+pjNQ1llXND6DpjrlPtu9qnTb4+ylCCtP2H4Uo1lApUS3c6UYauZlB4hc7tTyMku9
+	mSf9GS2kF1Oiv0y9SYBszKQ66dGucVkxLEQRNDDLduyiDrrSDAzOAMnjma/JBQezfiTgXk6IXYh
+	NwqYvlOfh1pSjZCvnZZ/C6qrxGS8B30iIeTG7qT9qurOC6XJaLuo9q25S11OaCjqySwWkqEf8e2
+	I2vE9jaWw1bJaL817wHJzYOKQ7lOd0kvHT8xuNmu1cGje67mkaY/CcULU6nbQ+eHsQrlc8W+bR9
+	pEgdi6ZpPuMo1GFBb4eBmY4CdKxN4KrLBdnGl7eGk+pnfFsN7+V39qh1Fv137ItpUK6J24H9oS/
+	FccSRCfI+qflSm9yOHnZBs4cXpWA==
+X-Received: by 2002:ad4:5ba8:0:b0:899:f78e:d72a with SMTP id 6a1803df08f44-89a19d392c4mr47279256d6.64.1772657822984;
+        Wed, 04 Mar 2026 12:57:02 -0800 (PST)
 Received: from localhost ([2603:6080:7702:ce00:96ef:dc7e:bb84:bc5a])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50744aef9e0sm155296601cf.30.2026.03.04.12.57.00
-        for <bpf@vger.kernel.org>
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-899ee519773sm97849416d6.47.2026.03.04.12.57.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2026 12:57:01 -0800 (PST)
+        Wed, 04 Mar 2026 12:57:02 -0800 (PST)
 From: Josef Bacik <josef@toxicpanda.com>
 To: bpf@vger.kernel.org
-Subject: [PATCH v6 2/3] bpftool: support merging multiple module BTFs in btf dump
-Date: Wed,  4 Mar 2026 15:56:51 -0500
-Message-ID: <b19c2760ffe48cec546dd3810d237f8cad20d606.1772657690.git.josef@toxicpanda.com>
+Cc: Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v6 3/3] selftests/bpf: add test for btf__add_btf() with split BTF sources
+Date: Wed,  4 Mar 2026 15:56:52 -0500
+Message-ID: <64a8c947bff1ae89efa9ba8c099466477762490f.1772657690.git.josef@toxicpanda.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1772657690.git.josef@toxicpanda.com>
 References: <cover.1772657690.git.josef@toxicpanda.com>
@@ -75,250 +75,145 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add support for specifying multiple file sources in 'bpftool btf dump'
-to generate a single C header containing types from vmlinux plus
-multiple kernel modules:
-
-  bpftool btf dump file /sys/kernel/btf/mod1 file /sys/kernel/btf/mod2 format c
-
-This is useful for BPF programs that need to access types defined in
-kernel modules. Previously this required a separate bpftool invocation
-for each module, producing separate headers that could not be combined
-due to overlapping vmlinux type definitions.
-
-The implementation collects all file paths, then for the multi-file
-case creates an empty split BTF on the vmlinux base and iteratively
-merges each module's types into it via btf__add_btf(). The single-file
-code path is preserved exactly to avoid any regression risk.
-
-Auto-detection of vmlinux as the base BTF from sysfs paths works as
-before. If vmlinux itself appears in the file list it is skipped with
-a warning since its types are already provided by the base.
+Add a test that verifies btf__add_btf() correctly handles merging
+multiple split BTF objects that share the same base BTF. The test
+creates two sibling split BTFs on a common base, merges them into
+a combined split BTF, and validates that base type references are
+preserved while split type references are properly remapped.
 
 Assisted-by: Claude:claude-opus-4-6
 Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- .../bpf/bpftool/Documentation/bpftool-btf.rst |  11 +-
- tools/bpf/bpftool/bash-completion/bpftool     |   6 +-
- tools/bpf/bpftool/btf.c                       | 132 ++++++++++++++++--
- 3 files changed, 132 insertions(+), 17 deletions(-)
+ .../selftests/bpf/prog_tests/btf_write.c      | 111 ++++++++++++++++++
+ 1 file changed, 111 insertions(+)
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-btf.rst b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
-index d47dddc2b4ee..cf75a7fa2d6b 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-btf.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
-@@ -27,7 +27,7 @@ BTF COMMANDS
- | **bpftool** **btf dump** *BTF_SRC* [**format** *FORMAT*] [**root_id** *ROOT_ID*]
- | **bpftool** **btf help**
- |
--| *BTF_SRC* := { **id** *BTF_ID* | **prog** *PROG* | **map** *MAP* [{**key** | **value** | **kv** | **all**}] | **file** *FILE* }
-+| *BTF_SRC* := { **id** *BTF_ID* | **prog** *PROG* | **map** *MAP* [{**key** | **value** | **kv** | **all**}] | **file** *FILE* [**file** *FILE*]... }
- | *FORMAT* := { **raw** | **c** [**unsorted**] }
- | *MAP* := { **id** *MAP_ID* | **pinned** *FILE* }
- | *PROG* := { **id** *PROG_ID* | **pinned** *FILE* | **tag** *PROG_TAG* | **name** *PROG_NAME* }
-@@ -58,9 +58,12 @@ bpftool btf dump *BTF_SRC* [format *FORMAT*] [root_id *ROOT_ID*]
-     When **prog** is provided, it's expected that program has associated BTF
-     object with BTF types.
- 
--    When specifying *FILE*, an ELF file is expected, containing .BTF section
--    with well-defined BTF binary format data, typically produced by clang or
--    pahole.
-+    When specifying *FILE*, an ELF file or a raw BTF file (e.g. from
-+    ``/sys/kernel/btf/``) is expected.  Multiple **file** arguments may be
-+    given to merge BTF from several kernel modules into a single output.
-+    When sysfs paths are used, vmlinux BTF is loaded automatically as the
-+    base; if vmlinux itself appears in the file list it is skipped.
-+    A base BTF can also be specified explicitly with **-B**.
- 
-     **format** option can be used to override default (raw) output format. Raw
-     (**raw**) or C-syntax (**c**) output formats are supported. With C-style
-diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-index a28f0cc522e4..babb0d4e9753 100644
---- a/tools/bpf/bpftool/bash-completion/bpftool
-+++ b/tools/bpf/bpftool/bash-completion/bpftool
-@@ -961,10 +961,14 @@ _bpftool()
-                         *)
-                             # emit extra options
-                             case ${words[3]} in
--                                id|file)
-+                                id)
-                                     COMPREPLY=( $( compgen -W "root_id" -- "$cur" ) )
-                                     _bpftool_once_attr 'format'
-                                     ;;
-+                                file)
-+                                    COMPREPLY=( $( compgen -W "root_id file" -- "$cur" ) )
-+                                    _bpftool_once_attr 'format'
-+                                    ;;
-                                 map|prog)
-                                     if [[ ${words[3]} == "map" ]] && [[ $cword == 6 ]]; then
-                                         COMPREPLY+=( $( compgen -W "key value kv all" -- "$cur" ) )
-diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-index 946612029dee..c44e86a64760 100644
---- a/tools/bpf/bpftool/btf.c
-+++ b/tools/bpf/bpftool/btf.c
-@@ -28,6 +28,7 @@
- #define FASTCALL_DECL_TAG	"bpf_fastcall"
- 
- #define MAX_ROOT_IDS		16
-+#define MAX_BTF_FILES		64
- 
- static const char * const btf_kind_str[NR_BTF_KINDS] = {
- 	[BTF_KIND_UNKN]		= "UNKNOWN",
-@@ -878,6 +879,49 @@ static bool btf_is_kernel_module(__u32 btf_id)
- 	return btf_info.kernel_btf && strncmp(btf_name, "vmlinux", sizeof(btf_name)) != 0;
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_write.c b/tools/testing/selftests/bpf/prog_tests/btf_write.c
+index 6e36de1302fc..5c84723cf254 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_write.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_write.c
+@@ -497,10 +497,121 @@ static void test_btf_add_btf()
+ 	btf__free(btf2);
  }
  
-+static struct btf *merge_btf_files(const char **files, int nr_files,
-+				   struct btf *vmlinux_base)
++static void test_btf_add_btf_split()
 +{
-+	struct btf *combined, *mod;
-+	int ret;
++	struct btf *base = NULL, *split1 = NULL, *split2 = NULL;
++	struct btf *combined = NULL;
++	int id, err;
 +
-+	combined = btf__new_empty_split(vmlinux_base);
-+	if (!combined) {
-+		p_err("failed to create combined BTF: %s",
-+		      strerror(errno));
-+		return NULL;
-+	}
++	/* Create a base BTF with an INT and a PTR to it */
++	base = btf__new_empty();
++	if (!ASSERT_OK_PTR(base, "base"))
++		return;
 +
-+	for (int j = 0; j < nr_files; j++) {
-+		mod = btf__parse_split(files[j], vmlinux_base);
-+		if (!mod) {
-+			p_err("failed to load BTF from %s: %s",
-+			      files[j], strerror(errno));
-+			btf__free(combined);
-+			return NULL;
-+		}
++	id = btf__add_int(base, "int", 4, BTF_INT_SIGNED);
++	ASSERT_EQ(id, 1, "base_int_id");
++	id = btf__add_ptr(base, 1);
++	ASSERT_EQ(id, 2, "base_ptr_id");
 +
-+		ret = btf__add_btf(combined, mod);
-+		btf__free(mod);
-+		if (ret < 0) {
-+			p_err("failed to merge BTF from %s: %s",
-+			      files[j], strerror(-ret));
-+			btf__free(combined);
-+			return NULL;
-+		}
-+	}
++	/* base has 2 types, type IDs 1..2 */
++	ASSERT_EQ(btf__type_cnt(base), 3, "base_type_cnt");
 +
-+	ret = btf__dedup(combined, NULL);
-+	if (ret) {
-+		p_err("failed to dedup combined BTF: %s",
-+		      strerror(-ret));
-+		btf__free(combined);
-+		return NULL;
-+	}
++	/* Create split1 on base: a STRUCT referencing base's int (ID 1) */
++	split1 = btf__new_empty_split(base);
++	if (!ASSERT_OK_PTR(split1, "split1"))
++		goto cleanup;
 +
-+	return combined;
++	id = btf__add_struct(split1, "s1", 4);
++	/* split types start at base_type_cnt = 3 */
++	ASSERT_EQ(id, 3, "split1_struct_id");
++	btf__add_field(split1, "x", 1, 0, 0); /* refers to base int */
++
++	id = btf__add_ptr(split1, 3);
++	ASSERT_EQ(id, 4, "split1_ptr_id"); /* ptr to the struct (split self-ref) */
++
++	/* Add a typedef "int_alias" -> base int in split1, which will be
++	 * duplicated in split2 to test that btf__dedup() merges them.
++	 */
++	id = btf__add_typedef(split1, "int_alias", 1);
++	ASSERT_EQ(id, 5, "split1_typedef_id");
++
++	/* Create split2 on base: a TYPEDEF referencing base's ptr (ID 2) */
++	split2 = btf__new_empty_split(base);
++	if (!ASSERT_OK_PTR(split2, "split2"))
++		goto cleanup;
++
++	id = btf__add_typedef(split2, "int_ptr", 2); /* refers to base ptr */
++	ASSERT_EQ(id, 3, "split2_typedef_id");
++
++	id = btf__add_struct(split2, "s2", 8);
++	ASSERT_EQ(id, 4, "split2_struct_id");
++	btf__add_field(split2, "p", 3, 0, 0); /* refers to split2's own typedef */
++
++	/* Same "int_alias" typedef as split1 - should be deduped away */
++	id = btf__add_typedef(split2, "int_alias", 1);
++	ASSERT_EQ(id, 5, "split2_dup_typedef_id");
++
++	/* Create combined split BTF on same base and merge both */
++	combined = btf__new_empty_split(base);
++	if (!ASSERT_OK_PTR(combined, "combined"))
++		goto cleanup;
++
++	/* Merge split1: its types (3,4,5) should land at IDs 3,4,5 */
++	id = btf__add_btf(combined, split1);
++	if (!ASSERT_GE(id, 0, "add_split1"))
++		goto cleanup;
++	ASSERT_EQ(id, 3, "split1_first_id");
++
++	/* Merge split2: its types (3,4,5) should be remapped to 6,7,8 */
++	id = btf__add_btf(combined, split2);
++	if (!ASSERT_GE(id, 0, "add_split2"))
++		goto cleanup;
++	ASSERT_EQ(id, 6, "split2_first_id");
++
++	/* Before dedup: base (2) + split1 (3) + split2 (3) = 8 types + void */
++	ASSERT_EQ(btf__type_cnt(combined), 9, "pre_dedup_type_cnt");
++
++	VALIDATE_RAW_BTF(
++		combined,
++		/* base types (IDs 1-2) */
++		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
++		"[2] PTR '(anon)' type_id=1",
++
++		/* split1 types (IDs 3-5): base refs unchanged */
++		"[3] STRUCT 's1' size=4 vlen=1\n"
++		"\t'x' type_id=1 bits_offset=0",      /* refers to base int=1 */
++		"[4] PTR '(anon)' type_id=3",          /* refers to split1's struct=3 */
++		"[5] TYPEDEF 'int_alias' type_id=1",   /* refers to base int=1 */
++
++		/* split2 types (IDs 6-8): remapped from 3,4,5 to 6,7,8 */
++		"[6] TYPEDEF 'int_ptr' type_id=2",     /* base ptr=2, unchanged */
++		"[7] STRUCT 's2' size=8 vlen=1\n"
++		"\t'p' type_id=6 bits_offset=0",       /* split2 typedef: 3->6 */
++		"[8] TYPEDEF 'int_alias' type_id=1");   /* dup of [5] */
++
++	/* Dedup to mirror the bpftool merge flow; should remove the
++	 * duplicate "int_alias" typedef.
++	 */
++	err = btf__dedup(combined, NULL);
++	if (!ASSERT_OK(err, "dedup"))
++		goto cleanup;
++
++	/* After dedup: one int_alias removed, so 7 types + void */
++	ASSERT_EQ(btf__type_cnt(combined), 8, "dedup_type_cnt");
++
++cleanup:
++	btf__free(combined);
++	btf__free(split2);
++	btf__free(split1);
++	btf__free(base);
 +}
 +
- static int do_dump(int argc, char **argv)
+ void test_btf_write()
  {
- 	bool dump_c = false, sort_dump_c = true;
-@@ -958,20 +1002,83 @@ static int do_dump(int argc, char **argv)
- 		NEXT_ARG();
- 	} else if (is_prefix(src, "file")) {
- 		const char sysfs_prefix[] = "/sys/kernel/btf/";
-+		struct btf *vmlinux_base = base_btf;
-+		const char *files[MAX_BTF_FILES];
-+		int nr_files = 0;
- 
--		if (!base_btf &&
--		    strncmp(*argv, sysfs_prefix, sizeof(sysfs_prefix) - 1) == 0 &&
--		    strcmp(*argv, sysfs_vmlinux) != 0)
--			base = get_vmlinux_btf_from_sysfs();
--
--		btf = btf__parse_split(*argv, base ?: base_btf);
--		if (!btf) {
--			err = -errno;
--			p_err("failed to load BTF from %s: %s",
--			      *argv, strerror(errno));
--			goto done;
-+		/* First grab our argument, filtering out the sysfs_vmlinux. */
-+		if (strcmp(*argv, sysfs_vmlinux) != 0) {
-+			files[nr_files++] = *argv;
-+		} else {
-+			p_info("skipping %s (will be loaded as base)",
-+			       *argv);
- 		}
- 		NEXT_ARG();
-+
-+		while (argc && is_prefix(*argv, "file")) {
-+			NEXT_ARG();
-+			if (!REQ_ARGS(1)) {
-+				err = -EINVAL;
-+				goto done;
-+			}
-+			/* Filter out any sysfs vmlinux entries. */
-+			if (strcmp(*argv, sysfs_vmlinux) == 0) {
-+				p_info("skipping %s (will be loaded as base)",
-+				       *argv);
-+				NEXT_ARG();
-+				continue;
-+			}
-+			if (nr_files >= MAX_BTF_FILES) {
-+				p_err("too many BTF files (max %d)",
-+				      MAX_BTF_FILES);
-+				err = -E2BIG;
-+				goto done;
-+			}
-+			files[nr_files++] = *argv;
-+			NEXT_ARG();
-+		}
-+
-+		/* Auto-detect vmlinux base if any file is from sysfs */
-+		if (!vmlinux_base) {
-+			for (int j = 0; j < nr_files; j++) {
-+				if (strncmp(files[j], sysfs_prefix,
-+					    sizeof(sysfs_prefix) - 1) == 0) {
-+					base = get_vmlinux_btf_from_sysfs();
-+					vmlinux_base = base;
-+					break;
-+				}
-+			}
-+		}
-+
-+		/* All files were the sysfs_vmlinux, handle it like we used to */
-+		if (nr_files == 0) {
-+			nr_files = 1;
-+			files[0] = sysfs_vmlinux;
-+		}
-+
-+		if (nr_files == 1) {
-+			btf = btf__parse_split(files[0],
-+					       base ?: base_btf);
-+			if (!btf) {
-+				err = -errno;
-+				p_err("failed to load BTF from %s: %s",
-+				      files[0], strerror(errno));
-+				goto done;
-+			}
-+		} else {
-+			if (!vmlinux_base) {
-+				p_err("base BTF is required when merging multiple BTF files; use -B/--base-btf or use sysfs paths");
-+				err = -EINVAL;
-+				goto done;
-+			}
-+
-+			btf = merge_btf_files(files, nr_files,
-+					      vmlinux_base);
-+			if (!btf) {
-+				err = -errno;
-+				goto done;
-+			}
-+		}
- 	} else {
- 		err = -1;
- 		p_err("unrecognized BTF source specifier: '%s'", src);
-@@ -1445,7 +1552,8 @@ static int do_help(int argc, char **argv)
- 		"       %1$s %2$s dump BTF_SRC [format FORMAT] [root_id ROOT_ID]\n"
- 		"       %1$s %2$s help\n"
- 		"\n"
--		"       BTF_SRC := { id BTF_ID | prog PROG | map MAP [{key | value | kv | all}] | file FILE }\n"
-+		"       BTF_SRC := { id BTF_ID | prog PROG | map MAP [{key | value | kv | all}] |\n"
-+		"                    file FILE [file FILE]... }\n"
- 		"       FORMAT  := { raw | c [unsorted] }\n"
- 		"       " HELP_SPEC_MAP "\n"
- 		"       " HELP_SPEC_PROGRAM "\n"
+ 	if (test__start_subtest("btf_add"))
+ 		test_btf_add();
+ 	if (test__start_subtest("btf_add_btf"))
+ 		test_btf_add_btf();
++	if (test__start_subtest("btf_add_btf_split"))
++		test_btf_add_btf_split();
+ }
 -- 
 2.53.0
 
