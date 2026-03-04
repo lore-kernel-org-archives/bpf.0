@@ -1,81 +1,76 @@
-Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
+Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 170CA23BD1B
-	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 00:39:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C3F17A31C
+	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 01:01:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772584743; cv=none; b=T5BKPLQAljXcsMXjJA0GjgPxe+ApA6iSvDyS/K2wAPpvOkW+6Wbl5yMmhLrxJUDwiJE8ont5KiiQByZtT9fhcOX6g376LLk7BvHrlN1EDFLvg5xvmR/zHITwXAh9LwL8aK3HJt4fL2Yxtiox9JxgMa70XlLX5JvzLO++b+EkKBo=
+	t=1772586108; cv=none; b=AcRsXA7baABITRQ4l34X3VXfv9biHms17Yg1jPAtUVkYD2KDRYD+bAgRqsANjDL84GDmA9JrhFVmXACwb7o5d9+tsJB3IPANIX4AmBB8SGtCor1hO4SRR8n/JA40Ewdwr71ORsOm664MwSQTIx0ThY179p3y/KrA1p839ovVS1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772584743; c=relaxed/simple;
-	bh=J9/w+GV109IEcn1Q+0SdEFxbwYJRkVeVL/l+ILzuzio=;
+	s=arc-20240116; t=1772586108; c=relaxed/simple;
+	bh=qVffnjJVz7mI6NMKnlTlRq3bSydGxCqbAw76/81cbuo=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=mveEX/6vt2sQln2y+Rv/TjO6NrIQ4sIveMCjfF2u2/mPMn3kdbKdNWQx2ad5mxkt/xWe5yG1UlnxPo6ntBmdIBaHBeCdatJDrDy+XeioIVYxl38nSe97W4wwJS9dy/KVHK5KMdaVQGeK2XWjtOGDMfKvjnwKQCfcjS80SM0F/gI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bDr12r/5; arc=none smtp.client-ip=74.125.82.182
+	 Content-Type:MIME-Version; b=cfF1CJkaWljn5LQf851pbvozmLHYStCT5DDc17WWcKtf6nUXOtvBEgVKO/QHDi7YMtQ4mV//yWRluHsSMw8FmHR8oSI6JV5u/b9M/Pj7mcYyvDzcATlVdQk2aKRqyv5AXCpwPUWQ1pkUNSYXkUHe+tPEh8K9WVnsb6DEmYagNf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CLsH5hXJ; arc=none smtp.client-ip=74.125.82.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bDr12r/5"
-Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-2be1d9c356cso3457277eec.0
-        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 16:39:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CLsH5hXJ"
+Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-2bdd40d3c61so5155858eec.1
+        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 17:01:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772584741; x=1773189541; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772586106; x=1773190906; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=stECg2pbCtjFcE+bnNiaYSS9evhqc17B1DW1uTxR+o8=;
-        b=bDr12r/5mUbgnorNLOflO+Eglp059pPtKNvr5h2Gd4ivamKxPFmiQUqxKoEYGEu0/x
-         5nNdrPsW4WSyytKuP/r+9NHobz45IRuoCeH9t4LWzuqhXU3QZRy9MNqOdyzViNexxTo3
-         lmiJRu6lboPBgLmyRLBWeWKdwNLAUitUp72i7/LY3iz5viZ3SzGbom86RMBmG41plqER
-         dmBhb8b909peqfqPby0cwd9JVdvNnoJvsyrY2wRsrv/E+teDzyjBzvZgJ2xoxIef8wD5
-         vgMv0VCNwP6w5n3zzTxkELll0POge4G1F5JAV3fEhbwEwQeUbYbdZGe7Zf7GPsGywz1a
-         FKcw==
+        bh=IQVgPxdwuZFyyTKIP6gO5rHHyx6tPfpxBJVDbsYROaI=;
+        b=CLsH5hXJmaEFlS/QVIfCkvpEMtej64UjdNqO7t5cDhKoMIKBB0N6oly2zItnUr6Zj8
+         SF4UnSJ5Q+fSYG7PNuqurn9de5FWjYImnr/bE1DjcUgJUzXMZTR6jZyTzeksRy4VOJk/
+         tS3YCNQqsuvNawLq6CnXUulq2lMypTjLdl6i1aLOuEjGdA2RUwlQlPTyf8ziXH2ZJFFB
+         u5RfuyDyE/v0/xP5pkIiNYvIKw1Sx4CwJSSUrsE0ppvZNPHh9VDzQHc9i83y93WBcKeL
+         sz+ReIkHituBWbFe1SW+zbj/D/7nIIbXK3vd9mkxIQsdiFWyRTjPtVwJr/+qX8/YsuCp
+         2EEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772584741; x=1773189541;
+        d=1e100.net; s=20230601; t=1772586106; x=1773190906;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=stECg2pbCtjFcE+bnNiaYSS9evhqc17B1DW1uTxR+o8=;
-        b=RQMFVMCZBrOzNr9qK78l5o8tuN3j1uSdxU5p7YqMyWa8IA2UCdyTL9irWsK9ptXmTT
-         9IJGf7aurwsBdzRa4ikeAC0nrZyKnEchSvIXEZwtKaQsDgSi+pts645ov0i8WIUo967m
-         xFfhT+jrj3ZJm5kMTqBjG+1F0EjP3UlLAcxy9sQJsSyYQj+LVFj0/rKiMgODmh4rOdIG
-         2pr/6YCvXHxCf13/y7Vo9daxfXSsrTKgUDdzHyj3eAp0+2R1ySB7o8Qi6ai/UBjJhY1v
-         Ly+AwzCsAsuRDDx44fqSTUuENGpVFHlm80Y9nUj2fkfPyPlqKCrw1MPKyi4Tl4Dk+8Xw
-         ALgg==
-X-Forwarded-Encrypted: i=1; AJvYcCXJk/C+PHP8sYVSy8RcePgsoSKma6L/Dc59w4sJYWOHn4NV9fj7k0GmWhShgfKgBvrZVgA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YySPs0Ukzmxuberokzz8wD62wgwT70wfyr76Trq1kl1Yzh9QK1p
-	HS7oV05sBkFEcOtsLu4mOdIZqJI101Ld9BS/rVyw+QEwR4scDG3EJjsD5gdtaw21
-X-Gm-Gg: ATEYQzwVPcoWD6vBQ6CZVvC0YuHS3Qw5pjqqq421HJUI9g2cWWLLAvS55NTWDXTxkCZ
-	jDZTYqvDuToHlbD3iETOPhcyu0Yv4EldxLvKN0M1labQd4qzp5uGT0PXwt12dUSKnhNtIpOLBVp
-	3CTGczFHbA2oM7EEn1tFNZIQs4DNvVsVlBEtTsthB3oQOKaiPzYYGyG4OlGEUBRdHgo8g8lLgLo
-	nDxWeezf+IOtYPBS+wxD0dR4oK+bX0FBUyOt4voIvgrojZUFj22PjHbpPyVvUrlu/W+QIBbcEDo
-	inzH0N4eqXNCRiFSnq9TuV4CRvVY2gRzeZpegQw0+uiK0RE8hdPDd8NfKojAW5K9hbvzASemHoO
-	ZQFb3X5vsvxLhEoIz2Gb3DsBazSqYEccg9TJk37G0Gojx/u70nYlEsAp9eNw+lV/1LPzCBrzz90
-	+IoYGmWehw6gOGDC0G8RNLovzelkMQ6z7WgzDco//KD5ndx5rQ5flQbc+dsfBPB7tcq0leTsIL7
-	/p8enzKL6A8kOoGS2s=
-X-Received: by 2002:a05:7300:fb96:b0:2bd:d157:6786 with SMTP id 5a478bee46e88-2be3108dacbmr114547eec.25.1772584740993;
-        Tue, 03 Mar 2026 16:39:00 -0800 (PST)
+        bh=IQVgPxdwuZFyyTKIP6gO5rHHyx6tPfpxBJVDbsYROaI=;
+        b=AOQvCDsNh9tTKKKow0tk0aarnQ5o8g9SdCT8X5GGNRXf3oKj1b7LAb4R92pQcVPmIA
+         0qbnhWgxlerU+ZYm4NzN3X15QWrMXY88Ohcgm8THXTt7hM+UY8k8OHJU1qiwAn8Mhp3Q
+         uiG0bqEkSp2Mu3VLQNK5V6ZKGQUejlSzSxowqhIJir/c6w6Xey5jP5mrnGwK1fXNiisn
+         aNeETMxoR1SSllu3FNAQor7dlH2MYL3mvS1uh1F4t/W1xALO5pRX1IT0HCgzLQKs0eiO
+         6hrwjJ/6/4xmFCYHjh+/62scU+Zb8JC8pIf1BvokCB76UFYzXvUe+Ai/RlEXS3dS7RAr
+         TVnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXl5GZGPgk6+q6uGllSDCpVkNH7CLMtCTy63liAQHOd223CHVQrKfUnVBbpRE4ufk4rMZ4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx14JPqNB9p/9r3zLf3E4m7BN8HX2Mg4P8n6SJfZ22+lSPc/jEH
+	/tDv2ZHA45yhN6gsYNKxKJFmVjHJE+C+T9mYqgzMTCi/Ha6ZVT+W9Pl7
+X-Gm-Gg: ATEYQzxjqMYHInnU8hpQzgoWk8jxh/mhl/m5/4/AFaSpWQ9yNX2P4Nnwizj3S9qpBH3
+	etYy/HRZoX1dbY8yofbEV6w7P43C3duu0eSwwnATNBKf3GRM5QZi0TdbGGiFXAgjC1Xvusiy2R/
+	VEGM56fEf4jT8E7+4aXLCKREeif2ZhMgUg3HaDpgnBdCiVjwSCdsMs01s7E1QXP7dozSlNAfOGq
+	M7PPI6Dt8enBgkLVnR7+I+HEieHhd9ODaaPgMxSyaubcUMKE/+71o/nqBzw4RsDK7bS+LW0l1Ey
+	raQbI86kXoGnx2ss0L7GhYAu7BRQYzGNmxqEJaRdhRPnuSXdtO4HNo15Vgq1CZFaEhTvIId5qWi
+	JSOYTIOIFusByRMY68hOlUfDFSG216x47bwnvij0XOBE+9GyFZ1uZQn5TGaA0c8YH/irAuv+7rI
+	oK1tAiwCWhWGYuQE2IgzHfD1onhSVMfAnilt2yFSDYoucPq/WwiMIni110Mnzf8wlcIO9rPxIgN
+	dGobkZsKTFKd/6GXzo=
+X-Received: by 2002:a05:7300:ef97:b0:2ba:6c38:c79e with SMTP id 5a478bee46e88-2be311bce57mr95509eec.28.1772586105914;
+        Tue, 03 Mar 2026 17:01:45 -0800 (PST)
 Received: from ?IPv6:2a03:83e0:115c:1:bf8e:1331:ef2b:145d? ([2620:10d:c090:500::3:4473])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2be0d7e0d40sm6942494eec.12.2026.03.03.16.38.58
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2bdfba0df2fsm10286542eec.7.2026.03.03.17.01.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2026 16:39:00 -0800 (PST)
-Message-ID: <c4f4e99f83a98179c3413dd7afe5e7e73a98e4d3.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v4 1/2] bpf: Support new pointer param types
- via SCALAR_VALUE for trampolines
+        Tue, 03 Mar 2026 17:01:45 -0800 (PST)
+Message-ID: <592a6eacf7c278137e49acb62f527e07a6c0b473.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/2] bpf: Only enforce 8 frame call stack
+ limit for all-static stacks
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: Slava Imameev <slava.imameev@crowdstrike.com>
-Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
- daniel@iogearbox.net, 	davem@davemloft.net, edumazet@google.com,
- haoluo@google.com, horms@kernel.org, 	john.fastabend@gmail.com,
- jolsa@kernel.org, kpsingh@kernel.org, kuba@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-open-source@crowdstrike.com, martin.lau@linux.dev,
- netdev@vger.kernel.org, 	pabeni@redhat.com, sdf@fomichev.me,
- shuah@kernel.org, song@kernel.org, 	yonghong.song@linux.dev
-Date: Tue, 03 Mar 2026 16:38:57 -0800
-In-Reply-To: <20260304002205.15728-1-slava.imameev@crowdstrike.com>
-References: <84c687e56ed8f04f3f318f090272fb5ef7520e96.camel@gmail.com>
-	 <20260304002205.15728-1-slava.imameev@crowdstrike.com>
+To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
+Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	martin.lau@kernel.org, memxor@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev
+Date: Tue, 03 Mar 2026 17:01:43 -0800
+In-Reply-To: <20260303043106.406099-2-emil@etsalapatis.com>
+References: <20260303043106.406099-1-emil@etsalapatis.com>
+	 <20260303043106.406099-2-emil@etsalapatis.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
@@ -86,151 +81,209 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Wed, 2026-03-04 at 11:22 +1100, Slava Imameev wrote:
-> On Tue, 03 Mar 2026 14:43:01, Eduard Zingerman wrote:
-> > On Wed, 2026-03-04 at 08:49 +1100, Slava Imameev wrote:
-> > > On 2026-03-03 20:05 UTC, Eduard Zingerman wrote:
-> > >=20
-> > > > > @@ -6902,11 +6921,7 @@ bool btf_ctx_access(int off, int size, enu=
-m bpf_access_type type,
-> > > > >               }
-> > > > >       }
-> > > > >=20
-> > > > > -     /*
-> > > > > -      * If it's a pointer to void, it's the same as scalar from =
-the verifier
-> > > > > -      * safety POV. Either way, no futher pointer walking is all=
-owed.
-> > > > > -      */
-> > > > > -     if (is_void_or_int_ptr(btf, t))
-> > > > > +     if (is_ptr_treated_as_scalar(btf, t))
-> > > > >               return true;
-> > > >=20
-> > > > I'm probably missing a point here, but what's wrong with Alexei's
-> > > > suggestion to do this instead:
-> > > >=20
-> > > >         if (is_ptr_treated_as_scalar(btf, t))
-> > > >                  return true;
-> > > > ?
-> >=20
-> > Uh-oh, I copy-pasted the wrong snippet, sorry.
-> > The correct snippet is:
-> >=20
-> >          if (btf_type_is_struct_ptr(btf, t))
-> >                   return true;
-> >=20
-> > With it the selftests pass (except for `float` tests noted earlier).
-> > And regardless of selftests, the code below this point will
-> > error out if `t` is not a pointer to struct.
+On Mon, 2026-03-02 at 23:31 -0500, Emil Tsalapatis wrote:
+> The BPF verifier currently enforces a call stack depth of 8 frames,
+> regardless of the actual stack space consumption of those frames. The
+> limit is necessary for static call stacks, because the bookkeeping data
+> structures used by the verifier when stepping into static functions
+> during verification only support 8 stack frames. However, this
+> limitation only matters for static stack frames: Global subprogs are
+> verified by themselves and do not require limiting the call depth.
 >=20
-> I think you tested with
+> Relax this limitation to only apply to static stack frames. Verification
+> now only fails when there is a sequence of 8 calls to non-global
+> subprogs. Calling into a global subprog resets the counter. This allows
+> deeper call stacks, provided all frames still fit in the stack.
 >=20
-> 	if (!btf_type_is_struct_ptr(btf, t))
-> 		return true;
+> The change does not increase the maximum size of the call stack, only
+> the maximum number of frames we can place in it.
 >=20
-> I decided on a narrower condition, as
+> Also change the progs/test_global_func3.c selftest to use static
+> functions, since with the new patch it would otherwise unexpectedly
+> pass verification.
 >=20
-> - if (!btf_type_is_struct_ptr(btf, t)) -
+> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+> ---
+>  include/linux/bpf_verifier.h                  |  6 +++
+>  kernel/bpf/verifier.c                         | 43 ++++++++++++-------
+>  .../selftests/bpf/progs/test_global_func3.c   | 18 ++++----
+>  3 files changed, 42 insertions(+), 25 deletions(-)
+>=20
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index c1e30096ea7b..39a54e631bcd 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -650,6 +650,8 @@ enum priv_stack_mode {
+>  	PRIV_STACK_ADAPTIVE,
+>  };
+> =20
+> +struct bpf_subprog_info;
+> +
+>  struct bpf_subprog_info {
+>  	/* 'start' has to be the first field otherwise find_subprog() won't wor=
+k */
+>  	u32 start; /* insn idx of function entry point */
+> @@ -677,6 +679,10 @@ struct bpf_subprog_info {
+> =20
+>  	enum priv_stack_mode priv_stack_mode;
+>  	struct bpf_subprog_arg_info args[MAX_BPF_FUNC_REG_ARGS];
+> +
 
-Yes, sorry again.
+Nit: please add a comment here saying the below are temporary values
+     used in check_max_stack_depth_subprog() (tbh, I'd move those to a
+     separate array in env but maybe that's an overkill).
 
-> changes the existing selection condition from "treat only these types
-> as scalar" to "treat as scalar any type that is not a pointer to
-> structure". Technically both approaches cover the problem I'm trying
-> to solve - multilevel pointer support for structures, but the latter is
-> open-ended and changes the current approach, which checks for pointers
-> to int and void. So I'm extending this to int, void, enum 32/64,
-> function, and corresponding multilevel pointers to these types and
-> multilevel pointers to structures.
+> +	int ret_insn;
+> +	int frame;
+> +	int cidx;
 
-BTF is defined for the following non-modifier types:
-- void        [allowed already]
-- int         [allowed already]
-- ptr         [multi-level pointers allowed by your patch]
-- array       [disallowed?]
-- struct      [single level pointers allowed already,
-- union		   multi-level allowed by your patch]
-- enum/enum64 [allowed by your patch]
-- func_proto  [allowed by your patch]
-- float       [disallowed]
+Nit: please rename to `caller` and add a comment.
 
-And a few not reachable from function fields (I think BTF validation
-checks that these can't be met, but would be good to double-check.
-If it doesn't, it should):
-- func
-- var
-- datasec
+>  };
+> =20
+>  struct bpf_verifier_env;
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 1153a828ce8d..d362ddd47d71 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -6652,9 +6652,11 @@ static int check_max_stack_depth_subprog(struct bp=
+f_verifier_env *env, int idx,
+>  	struct bpf_insn *insn =3D env->prog->insnsi;
+>  	int depth =3D 0, frame =3D 0, i, subprog_end, subprog_depth;
+>  	bool tail_call_reachable =3D false;
+> -	int ret_insn[MAX_CALL_FRAMES];
+> -	int ret_prog[MAX_CALL_FRAMES];
+> -	int j;
+> +	int total;
+> +	int tmp;
+> +
+> +	/* no caller idx */
+> +	subprog[idx].cidx =3D -1;
+> =20
+>  	i =3D subprog[idx].start;
+>  	if (!priv_stack_supported)
+> @@ -6706,8 +6708,11 @@ static int check_max_stack_depth_subprog(struct bp=
+f_verifier_env *env, int idx,
+>  	} else {
+>  		depth +=3D subprog_depth;
+>  		if (depth > MAX_BPF_STACK) {
+> +			for (total =3D 1; subprog[idx].cidx >=3D 0 ; total++)
+> +				idx =3D subprog[idx].cidx;
+> +
+>  			verbose(env, "combined stack size of %d calls is %d. Too large\n",
+> -				frame + 1, depth);
+> +				total, depth);
+>  			return -EACCES;
+>  		}
+>  	}
+> @@ -6723,8 +6728,8 @@ static int check_max_stack_depth_subprog(struct bpf=
+_verifier_env *env, int idx,
+>  				continue;
+>  			if (subprog[idx].is_cb)
+>  				err =3D true;
 
-So, effectively you disallow reading from tracing context fields of
-type: struct (non-pointer), array, float and a few types that can't be
-specified for struct fields.
+Below the old version of the loop does not include current frame, but
+the new version *does* include current frame. Looks like the above
+check can be removed.
 
-Does not seem necessary, tbh.
+> -			for (int c =3D 0; c < frame && !err; c++) {
+> -				if (subprog[ret_prog[c]].is_cb) {
+> +			for (tmp =3D idx; tmp >=3D 0 && !err; tmp =3D subprog[tmp].cidx) {
+> +				if (subprog[tmp].is_cb) {
+>  					err =3D true;
+>  					break;
+>  				}
 
-> It seems - if (!btf_type_is_struct_ptr(btf, t)) - works, but it's
-> challenging to strictly prove it's sufficiently future-proof.
->=20
-> > > This reflects my belief in a cautious approach: adding support
-> > > only for selected types with tests added for each new type. That said=
-,
-> > > I can add the suggested broader condition and make it pass the tests,
-> > but I cannot be sure it will be future-proof against conflicts.
-> > >=20
-> > > I think the broader check like
-> > >=20
-> > >       /* skip modifiers */
-> > >       tt =3D t;
-> > >       while (btf_type_is_modifier(tt))
-> > >               tt =3D btf_type_by_id(btf, tt->type);
-> > >       if (!btf_type_is_struct(tt))
-> > >               return true;
-> >=20
-> > btf_type_is_struct_ptr() is almost identical to the snippet above.
-> >=20
-> > > might have some incompatibility with future changes, compared to
-> > > explicit type checks for selected types. This condition is
-> > > open-ended, including anything instead of selecting specific types.
-> >=20
-> > What potential incompatibility do you expect?
-> > Two things change:
-> > - types other then `struct foo *` or `int` can be read:
-> >   - do you expect we would want to deny reading some ctx
-> >     fields in the future?
-> > - the value read is marked as scalar:
-> >   - not much can be done with a scalar, except for leaking it to
-> >     e.g. some map or ring buffer. Do you expect this to problematic?
-> >=20
-> > Note that the above are selected based on type, not on the
-> > function/parameter combination, which is already not a very effective
-> > filter if some parameters need to be hidden.
->=20
-> I do not think any of these represent a real problem. As I said,
-> my approach is based mostly on narrowing the supported types to
-> reduce potential conflicts.
->=20
-> I do not have a good example of such conflicts.
-> The added tests for pointer to float, which failed with -
-> if (!btf_type_is_struct_ptr(btf, t)) - might be an example when adding
-> a new type might silently pass this check because of missing tests.
+This code checks that bpf_throw() cannot be called from callbacks.
+The `is_cb` is set in push_callback_call() both for sync and async
+callbacks, it is also set for exception callback separately.
+Meaning that check_return_code() can be simplified further.
 
-Yes, but that does not really matter if verifier treats floats as
-unbound scalars.
+> @@ -6740,8 +6745,9 @@ static int check_max_stack_depth_subprog(struct bpf=
+_verifier_env *env, int idx,
+>  		if (!bpf_pseudo_call(insn + i) && !bpf_pseudo_func(insn + i))
+>  			continue;
+>  		/* remember insn and function to return to */
+> -		ret_insn[frame] =3D i + 1;
+> -		ret_prog[frame] =3D idx;
+> +
+> +		subprog[idx].frame =3D frame;
+> +		subprog[idx].ret_insn =3D i + 1;
 
-> I  was not able to convince myself a conflict will not  happen.
->=20
-> That said, changing
->=20
-> 	if (is_ptr_treated_as_scalar(btf, t))
-> 		return true;
->=20
-> 	to
->=20
-> 	if (!btf_type_is_struct_ptr(btf, t))
-> 		return true;
->=20
-> just makes the scope of these changes wider. This was
-> my initial approach to this problem, but I was worried
-> by its wide scope.
+Nit: move this down to `subprog[sidx].cidx =3D idx;`, so that the whole
+     "frame" setup is done in one place?
 
-Let's see what Alexei would say, but I'd say there is no need to
-complicate things w/o clear necessity.
+> =20
+>  		/* find the callee */
+>  		next_insn =3D i + insn[i].imm + 1;
+> @@ -6762,6 +6768,9 @@ static int check_max_stack_depth_subprog(struct bpf=
+_verifier_env *env, int idx,
+>  			}
+>  		}
+>  		i =3D next_insn;
+> +
+> +		/* caller idx */
+> +		subprog[sidx].cidx =3D idx;
+>  		idx =3D sidx;
+>  		if (!priv_stack_supported)
+>  			subprog[idx].priv_stack_mode =3D NO_PRIV_STACK;
+> @@ -6769,7 +6778,7 @@ static int check_max_stack_depth_subprog(struct bpf=
+_verifier_env *env, int idx,
+>  		if (subprog[idx].has_tail_call)
+>  			tail_call_reachable =3D true;
+> =20
+> -		frame++;
+> +		frame =3D subprog_is_global(env, idx) ? 0 : frame + 1;
+>  		if (frame >=3D MAX_CALL_FRAMES) {
+>  			verbose(env, "the call stack of %d frames is too deep !\n",
+>  				frame);
+> @@ -6783,12 +6792,12 @@ static int check_max_stack_depth_subprog(struct b=
+pf_verifier_env *env, int idx,
+>  	 * tail call counter throughout bpf2bpf calls combined with tailcalls
+>  	 */
+>  	if (tail_call_reachable)
+
+Unrelated to current patch, but looks like an issue.
+`tail_call_reachable` is not reset anywhere in
+check_max_stack_depth_subprog(). Once it flips to true all calls
+visited afterwards trigger spine to be marked.
+
+> -		for (j =3D 0; j < frame; j++) {
+> -			if (subprog[ret_prog[j]].is_exception_cb) {
+> +		for (tmp =3D idx; tmp >=3D 0; tmp =3D subprog[tmp].cidx) {
+> +			if (subprog[tmp].is_exception_cb) {
+
+As with previous such loop, the new code seem to include current frame.
+Does this change anything?
+
+>  				verbose(env, "cannot tail call within exception cb\n");
+>  				return -EINVAL;
+>  			}
+> -			subprog[ret_prog[j]].tail_call_reachable =3D true;
+> +			subprog[tmp].tail_call_reachable =3D true;
+>  		}
+>  	if (subprog[0].tail_call_reachable)
+>  		env->prog->aux->tail_call_reachable =3D true;
+> @@ -6796,13 +6805,15 @@ static int check_max_stack_depth_subprog(struct b=
+pf_verifier_env *env, int idx,
+>  	/* end of for() loop means the last insn of the 'subprog'
+>  	 * was reached. Doesn't matter whether it was JA or EXIT
+>  	 */
+> -	if (frame =3D=3D 0)
+> +	if (frame =3D=3D 0 && subprog[idx].cidx < 0)
+>  		return 0;
+>  	if (subprog[idx].priv_stack_mode !=3D PRIV_STACK_ADAPTIVE)
+>  		depth -=3D round_up_stack_depth(env, subprog[idx].stack_depth);
+> -	frame--;
+> -	i =3D ret_insn[frame];
+> -	idx =3D ret_prog[frame];
+> +
+> +	idx =3D subprog[idx].cidx;
+> +	frame =3D subprog[idx].frame;
+> +	i =3D subprog[idx].ret_insn;
+> +
+>  	goto continue_func;
+>  }
+> =20
+
+[...]
