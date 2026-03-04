@@ -1,302 +1,126 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7C2034EEEE
-	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 15:40:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772638828; cv=none; b=lrLXmfy7AIYW6e//aZZE75HSumxyrMRaRls/G6rYt4mmCW/M5Ps9yzz3gSSwq5U3gyKD4zoC3YNykHWeIVfG13qYjaA5hHvz7Eg0LA3cJrete2JZFnV1DCfMClMMUJRChrD/9oSIEsJwSes2bUb8pU+2jB+9JuIE6K51PkvwzCk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772638828; c=relaxed/simple;
-	bh=k2nBFpS9fppSZ+E+YPtXIaO9vEZ0zeTUV9rFMO63JgQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=X053i6y2FWFbH6SvwZvL8JaiQKuOQWRRj1QImC0/wu0UBdzJMI1Suqj1K4cufjYKWhbN1ZgeO2jbe2L6oa2/u5thydwsBkErCCBXGpT8OgJ8QyvTz8QT+Hmbb8wrrA831xDpAcVOypzicdcJnRG5wVtYNUlID5Z/rTd6tpLtflY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JvgpTGho; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF76335B64A
+	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 15:41:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.133.124
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772638867; cv=pass; b=X3Xd2GR9F3K9KmJUtryxQ8tu35ad0xjoR6Fmt5AaJE0hTFLSTOMqp3cpPc1U93Ec90aBkGGLcedx8VoC9XoZiwtneKyoUtYYR0aGhPXNavxgUglruS3ROYwAinGPB2MJ2usHNOJTEb0pI2np9NdM0fPHqHjBUKilOugEjZUHttY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772638867; c=relaxed/simple;
+	bh=eXXO3JvNT25eAlvx+ZS1k4YSqotW72Hu288sNSHskyA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AEWt19jC3twP+nhUzd9AOngG2Xs7nbsOdkN6riw8TWISB+179O/nff4YFzrKgL5WzB8RBXK5YSItL6UGLZ3MPHVNxV+qevZJWgeja+Y6XC2dEkP0jBCnqZMdRUyMIeAuJFG/7tNqD1qU3dGM+8619szWrMlmPkMzFN9BU8Qa/L4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AGeX0ZUw; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=VX4E+8/I; arc=pass smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JvgpTGho"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-48372efa020so62175615e9.2
-        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 07:40:26 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AGeX0ZUw";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="VX4E+8/I"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1772638865;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=eXXO3JvNT25eAlvx+ZS1k4YSqotW72Hu288sNSHskyA=;
+	b=AGeX0ZUwKczB7D8YHnlQFT28jg5hHAnZO4nyDEjvlY9rnjD8cKfpgSCRJ+W5uDc7mxX7OK
+	jQ3NPVUZGGkAH8yofN1ureX110b9pRAuY4vmV2Py6VgaGIlt/dx5cmQyTNEGO9NtuIsDDy
+	mYIiiPfEWOH+EWHyzp2GiU8YhniaxN8=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-618-mZAJ7hJRMLiP3Mv7SIdA8Q-1; Wed, 04 Mar 2026 10:41:03 -0500
+X-MC-Unique: mZAJ7hJRMLiP3Mv7SIdA8Q-1
+X-Mimecast-MFC-AGG-ID: mZAJ7hJRMLiP3Mv7SIdA8Q_1772638860
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-b9399d68111so475397066b.0
+        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 07:41:01 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772638860; cv=none;
+        d=google.com; s=arc-20240605;
+        b=BDQSBGW30IUU8CNAduolI69Kv2FTUrBuzYKkKOMNEz4KqlxtdzXxGDa1yoLw8QgKUA
+         nFrcKZAJAlB2K6so51hz/9Fp4bNTqj6ARW2s536CipTeakbFRBM8LuwuijHOqH2nZJ0M
+         AndEHfW6RzGR2KpmrVCOXGBvzIViDSLvtxZODgWj1qzos/IPRn+rfIfHJDljE/q2kULQ
+         V/KtlKc0YR5OZBjuRNFWRVBDiJH17QND2YrSAv0wbYh3qUa53P6gEQHXscOQl/gwiQHf
+         ITtjVNN4TKa4M7vmvxLMOtaDkOkMNAL/fC7z9jT36CWWnU0FgrS0523W/umAKKecH1go
+         1K1g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=eXXO3JvNT25eAlvx+ZS1k4YSqotW72Hu288sNSHskyA=;
+        fh=FUzzwAqgzwuEx4UEdkC484LEpBcWrbczJgcyRdhT9hw=;
+        b=TwGTaCDdagXzyVpxoQS+5/AWai5W+dD7fVYtcFBwxbg+8WdHv5Ou7vyorJ9/QC4hX7
+         U52Aa3Pb80zqkfKPOqzymJ26qEWAwaImo6PhqR7I9H22yhXMEV5HR62DWfabXLG0Na4U
+         0Ic9wzTguUab4+Ylk49Z6JhxQCb5G6ehXrcGGnuLy4C7wBPStF6H7M6m7mhaTWhaMJKX
+         uyFlLZsJAku/a1Ou94VkZlutzRzZS9oWZkLT7EkPDnAiQNu/JYDwl+sXnDpsY8ShooHK
+         ziIJkW8s0rCugkEaeWS1J2vqwzBVCO6gLs/l56u2+xpaqJfUjHK9+IvwkQaKoV4Yl/vD
+         fXEg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772638825; x=1773243625; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0nqRZvA6ar4NE2XUljdnWCP0iRfuf99S4MTbfk/iA4c=;
-        b=JvgpTGho1/83VyRMC0VDO4xrnlsDRm9ZtPv8Q2qczyOb7RuFEDxe+AQ6cgnE+YEB5N
-         0yAJmJjCFYh8O6Z28FG5IaFe0VQBXs6KmqxVFxqhYF/6C9KvSdfkXKRG2yDUmtAJd5uE
-         TD8f1S05i3iU6HT28Jad6sNiH4tYoZI57UCbIJlaFC9JT2na1WVWa2ADcUJ5BdsMpjmh
-         KQ4DiYKYZ7HsryA+GKz+ZuHpvdOF2QFoCpNABCWHLgO/yfZgNGtT3hh+r2rmYrU1Q/Sq
-         4KfIqPa9gt1dMr2WMVSAk1uW1BSoRmKkEwR+nJQSdHsjP9JdA44FaONb296uIM2ks+NI
-         GQKQ==
+        d=redhat.com; s=google; t=1772638860; x=1773243660; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=eXXO3JvNT25eAlvx+ZS1k4YSqotW72Hu288sNSHskyA=;
+        b=VX4E+8/IOXORodM9ynKQgOH78y+h6ZMld8ho5GvNLmp/ZZgi34ql8u6fnlgQc0Bi9m
+         ck17UHSJaQbcq7h104BFcVphbzOcx34C5LqFynbeyoo8uT/mhE97GdV/kYf4/iqwU0Jy
+         6dGmbjUrROjWV3vrCFzCJAPjmDHAtmZxwP6BM/yHFtHs5wH7uUxF7YzqRtyreSWAIJQE
+         4vnDmY5R0RPdarCtnlc+8a2Jn7isYZxgr+FeX9MALUYBf4zLAr4B91JZ/1R8gTS3InSL
+         ZjnLS07WtsCUXCir2sIs/wwgYtVvO0TFM0zA2z2LRHQxAAjpy4OR9NGJiDASPCOUqcrO
+         N6Bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772638825; x=1773243625;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0nqRZvA6ar4NE2XUljdnWCP0iRfuf99S4MTbfk/iA4c=;
-        b=tG5axtB2Qigrrg9ED2ecznyMdVRXOTN2OeqNsX3ErOuoC/SUsjDyfYNgKTlXKTV1YA
-         SYTK5fy/HTW9aRpBy/7INkQWwGGL/ZAG0StC1eQ3fDF4/ISGQ1BJDkbKkhnd4o9BL9i8
-         cMxOqCpdGSYeLrBoYH+UhL3XPzmlL3L6gKdcDk2F7eBHKFJkPzsDgorSj0bhtEu3qETZ
-         bZg13BA501TguPGs3XwdnD+DQXS4hEjEX2M2BUR8OfUhRbZ7CMn8AW2p0baJGO2gy+uL
-         /Q71MlijrVU2j8zwAuHV33RFxkH3cK5Ibsy9xLY1c//9bnvJnp8eGsLT+nlauqxqlT4b
-         UQYg==
-X-Gm-Message-State: AOJu0YzMW/tWcPT88tx8pn34MDcXK04BnKB0mEGuirhlCHTbCY8jrDDJ
-	fHvsbxsSJQ9cd3MXZ5pkN2djhWhuQCw2RqqPRZwZRFmYfGMpdGoxR8DD
-X-Gm-Gg: ATEYQzy649ApPRXHXeyfggFW0Q7DGqlivkvVQEUpaZkHq6JtoOUxNbqgcZRcO4CW1cG
-	EUKFZJMCiC71LcAkWUlOe8imwdP2zJ1pis84yIpXoyDs0HCx8M+zXFM4VBHxsog7OVky3pEV9it
-	39peeAW1o7o8w4/Ste3Mwoz6zPMlyAyTSd+G9h7+U4/tNWq807/FPvxr5MYVBkmBai7baOPihMI
-	EH2RXFo48KOTp8okw72nLveGzzICwD82ZH8ucs1g4jaeAcBwVHclD8xPpUzuCNZ+xwg6oICmoVl
-	MFkuzuJL4AInhJ2F76UDnq5fw/aKkj+qYGlnVeNoYRL6Qw5kivMZ5qKKwu8zOBq6EW1OMZ1JVel
-	D3MKo2q1hf0LA2yKxfB8zG3D8COaQ3OyjpTX8Pl4xsR6WbR/WhLbw8/dZQlESOiYuxrY8LIFJaP
-	q7F4clf1Mvxdoepc+k8rHz3+vgbLeuz7FYxr25gQ==
-X-Received: by 2002:a05:600c:4e51:b0:483:7783:5373 with SMTP id 5b1f17b1804b1-4851988ce8fmr42377075e9.23.1772638824824;
-        Wed, 04 Mar 2026 07:40:24 -0800 (PST)
-Received: from localhost ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-485187b7851sm102849015e9.3.2026.03.04.07.40.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2026 07:40:24 -0800 (PST)
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-To: Chengkaitao <pilgrimtao@gmail.com>, martin.lau@linux.dev,
- ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- chengkaitao@kylinos.cn, linux-kselftest@vger.kernel.org
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 4/6] selftests/bpf: Add test case for bpf_list_add_impl
-In-Reply-To: <20260304031606.43884-5-pilgrimtao@gmail.com>
-References: <20260304031606.43884-1-pilgrimtao@gmail.com>
- <20260304031606.43884-5-pilgrimtao@gmail.com>
-Date: Wed, 04 Mar 2026 15:40:23 +0000
-Message-ID: <87342fzjq0.fsf@gmail.com>
+        d=1e100.net; s=20230601; t=1772638860; x=1773243660;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eXXO3JvNT25eAlvx+ZS1k4YSqotW72Hu288sNSHskyA=;
+        b=CBg3PRtH38vCNhkVqK7uT8cud9K3lbTSoZ4Hu8FvXwUOrNAIC6G3fRI031cODPJL0R
+         ml5kNPOIj8CLaG8r1pXPo87b40C5vnpw/oHMWAM9Gq0sxfuxnquUuUr+iQbR0IE1x7+5
+         mMXii3Wv7W8oiLBmrrzKJMBKRqY6stlH98k6NFM4FKnoteP2WtlYdWkfltWh4e63AD+6
+         EwmXAyES47DlhIyaqdyq5IUVDq4GB5WNCp/kZ+Mx2cO6IY6vAboRZv7Ois2zhlpbNynt
+         i7uyzF/AlH0IzTBZAA5aYjCCC5XBMNd9vb7aVZ3q2IL4Q8pSKgV0qdY11X36/Z0/Ez7T
+         Jv9A==
+X-Forwarded-Encrypted: i=1; AJvYcCUfTfhcx5kGq7Og0vWp3pwZx9Q/TWm8ZJRr7ere9/I8h/es8UairwymRbmWvSjZaC/egIk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRYcR7Q0NrGkYL/8WojHMjJ9F6zZN+/9LMaW4IdKbbAlnTDuHc
+	tcnX1PkjXo/10GkNhcAAVDelJMHaceJqQ2uVuMEYoKepm7esHvmjPjlNYyKURpZnevEMZEm2ZeP
+	LAGQ4cPGSkPsYDxb7VR97pqeWcSfaGte+Td0tDkH8XpJeIQcpY7k6dVMwHYX39lvbDx10wXWJ9/
+	UJ+dSD4PynkNzQoxXl25mjZfA+yX+E
+X-Gm-Gg: ATEYQzy+PLOgOixdbrEue5GFLjXC5XzBuJCTUAECBqxstdMjaRHagL6Yt5kHwLCmicb
+	ZiHsyQufOijbZ85kD2sd8CtJ+vbMSrss7YF/EqdVSgrkUhh65JWdKt5AVbLv9z2dfCeUvm0N812
+	N6Y8UDIwDc42K8Fyu7KMsAGy4oCg2XppxVTdKhkOCMjECibTelp8eBdG429S5h3Cc7CF+UBDUZB
+	iwcc3WbpWRXjlsfJNWs/5WaY1Z6QUav3Y0zaf8=
+X-Received: by 2002:a17:907:2d87:b0:b88:5158:d106 with SMTP id a640c23a62f3a-b93f154b56dmr149630066b.52.1772638860353;
+        Wed, 04 Mar 2026 07:41:00 -0800 (PST)
+X-Received: by 2002:a17:907:2d87:b0:b88:5158:d106 with SMTP id
+ a640c23a62f3a-b93f154b56dmr149627166b.52.1772638859819; Wed, 04 Mar 2026
+ 07:40:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20260213115234.430232-1-costa.shul@redhat.com>
+ <20260213115234.430232-2-costa.shul@redhat.com> <CAP4=nvQ8xFr2mD4z01e656hfE9btiFRu8xrqHiR0zGkDYsiVSQ@mail.gmail.com>
+In-Reply-To: <CAP4=nvQ8xFr2mD4z01e656hfE9btiFRu8xrqHiR0zGkDYsiVSQ@mail.gmail.com>
+From: Costa Shulyupin <costa.shul@redhat.com>
+Date: Wed, 4 Mar 2026 17:40:24 +0200
+X-Gm-Features: AaiRm50Tx4kP75HvOGffhYU5EKa7DmQTxYEcq3WXv3ktKFx9Pt5RNfV9InaLVl4
+Message-ID: <CADDUTFwD6i=JJCSSndFK=XHG5YrL3gnW95EMQEQmOM9HCs4tDA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/5] tools/rtla: Consolidate nr_cpus usage across all tools
+To: Tomas Glozar <tglozar@redhat.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Crystal Wood <crwood@redhat.com>, 
+	Wander Lairson Costa <wander@redhat.com>, Ivan Pravdin <ipravdin.official@gmail.com>, 
+	John Kacur <jkacur@redhat.com>, Tiezhu Yang <yangtiezhu@loongson.cn>, 
+	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Chengkaitao <pilgrimtao@gmail.com> writes:
+On Wed, 4 Mar 2026 at 16:59, Tomas Glozar <tglozar@redhat.com> wrote:
+> This should be updated on top of the unit tests patchset [1] to also
+> include and initialize this global variable in tests, right? Without
+> that, unit tests fail to compile with undefined reference.
+>
+> [1] https://lore.kernel.org/linux-trace-kernel/20260119105857.797498-1-costa.shul@redhat.com/
 
-> From: Kaitao Cheng <chengkaitao@kylinos.cn>
->
-> Extend refcounted_kptr test to exercise bpf_list_add:
-> add a second node after the first, then bpf_list_del both nodes.
->
-> To verify the validity of bpf_list_add, also expect the verifier
-> to reject calls to bpf_list_add made without holding the spin_lock.
->
-> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
-> ---
->  .../testing/selftests/bpf/bpf_experimental.h  |  16 +++
->  .../selftests/bpf/progs/refcounted_kptr.c     | 122 ++++++++++++++++--
->  2 files changed, 124 insertions(+), 14 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-> index 54ec9d307fdc..fdcc7a054095 100644
-> --- a/tools/testing/selftests/bpf/bpf_experimental.h
-> +++ b/tools/testing/selftests/bpf/bpf_experimental.h
-> @@ -110,6 +110,22 @@ extern struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *head) __ksy
->  extern struct bpf_list_node *bpf_list_del(struct bpf_list_head *head,
->  					  struct bpf_list_node *node) __ksym;
-should this be available from vmlinux.h?
->  
-> +/* Description
-> + *	Insert 'new' after 'prev' in the BPF linked list with head 'head'.
-> + *	The bpf_spin_lock protecting the list must be held. 'prev' must already
-> + *	be in that list; 'new' must not be in any list. The 'meta' and 'off'
-> + *	parameters are rewritten by the verifier, no need for BPF programs to
-> + *	set them.
-> + * Returns
-> + *	0 on success, -EINVAL if head is NULL, prev is not in the list with head,
-> + *	or new is already in a list.
-> + */
-> +extern int bpf_list_add_impl(struct bpf_list_head *head, struct bpf_list_node *new,
-> +			     struct bpf_list_node *prev, void *meta, __u64 off) __ksym;
-> +
-> +/* Convenience macro to wrap over bpf_list_add_impl */
-> +#define bpf_list_add(head, new, prev) bpf_list_add_impl(head, new, prev, NULL, 0)
-> +
->  /* Description
->   *	Remove 'node' from rbtree with root 'root'
->   * Returns
-> diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr.c b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-> index ac7672cfefb8..5a83274e1d26 100644
-> --- a/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-> +++ b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-> @@ -367,18 +367,19 @@ long insert_rbtree_and_stash__del_tree_##rem_tree(void *ctx)		\
->  INSERT_STASH_READ(true, "insert_stash_read: remove from tree");
->  INSERT_STASH_READ(false, "insert_stash_read: don't remove from tree");
->  
-> -/* Insert node_data into both rbtree and list, remove from tree, then remove
-> - * from list via bpf_list_del using the node obtained from the tree.
-> +/* Insert one node in tree and list, remove it from tree, add a second
-Use kernel comment style: first line is just "/*" then text starts from
-the next one.
-> + * node after it in list with bpf_list_add, then remove both nodes from
-> + * list via bpf_list_del.
->   */
-It sounds like the new test is quite different from the previous, why
-not add a separate test running new codepaths instead of retrofitting
-into the existing test?
->  SEC("tc")
-> -__description("test_bpf_list_del: remove an arbitrary node from the list")
-> +__description("test_list_add_del: test bpf_list_add/del")
->  __success __retval(0)
-> -long test_bpf_list_del(void *ctx)
-> +long test_list_add_del(void *ctx)
->  {
-> -	long err;
-> +	long err = 0;
->  	struct bpf_rb_node *rb;
-> -	struct bpf_list_node *l;
-> -	struct node_data *n;
-> +	struct bpf_list_node *l, *l_1;
-> +	struct node_data *n, *n_1, *m_1;
-nit: The naming scheme is a little bit confusing.
->  
->  	err = __insert_in_tree_and_list(&head, &root, &lock);
->  	if (err)
-> @@ -392,20 +393,48 @@ long test_bpf_list_del(void *ctx)
->  	}
->  
->  	rb = bpf_rbtree_remove(&root, rb);
-> -	if (!rb) {
-> -		bpf_spin_unlock(&lock);
-> +	bpf_spin_unlock(&lock);
-> +	if (!rb)
->  		return -5;
-> -	}
->  
->  	n = container_of(rb, struct node_data, r);
-> +	n_1 = bpf_obj_new(typeof(*n_1));
-> +	if (!n_1) {
-> +		bpf_obj_drop(n);
-> +		return -1;
-> +	}
-> +	m_1 = bpf_refcount_acquire(n_1);
-> +	if (!m_1) {
-> +		bpf_obj_drop(n);
-> +		bpf_obj_drop(n_1);
-> +		return -1;
-> +	}
-> +
-> +	bpf_spin_lock(&lock);
-> +	if (bpf_list_add(&head, &n_1->l, &n->l)) {
-> +		bpf_spin_unlock(&lock);
-> +		bpf_obj_drop(n);
-> +		bpf_obj_drop(m_1);
-> +		return -8;
-> +	}
-> +
->  	l = bpf_list_del(&head, &n->l);
-> +	l_1 = bpf_list_del(&head, &m_1->l);
->  	bpf_spin_unlock(&lock);
->  	bpf_obj_drop(n);
-> -	if (!l)
-> -		return -6;
-> +	bpf_obj_drop(m_1);
->  
-> -	bpf_obj_drop(container_of(l, struct node_data, l));
-> -	return 0;
-> +	if (l)
-Can we do early returns, like
-if (!l)
-   return -6;
-bpf_obj_drop(l);
-if (!l_1)
-   return -7;
-bpf_obj_drop(l_1);
+The unit test has not yet been approved. Which patch would you like to
+approve the first?
 
-The point of returning different errors per each error path is to make
-it easy to understand where your test errored out by just looking at err.
-> +		bpf_obj_drop(container_of(l, struct node_data, l));
-> +	else
-> +		err = -6;
-> +
-> +	if (l_1)
-> +		bpf_obj_drop(container_of(l_1, struct node_data, l));
-> +	else
-> +		err = -6;
-> +
-> +	return err;
->  }
->  
->  SEC("?tc")
-> @@ -438,6 +467,71 @@ long list_del_without_lock_fail(void *ctx)
->  	return 0;
->  }
->  
-> +SEC("?tc")
-> +__failure __msg("bpf_spin_lock at off=32 must be held for bpf_list_head")
-> +long list_add_without_lock_fail(void *ctx)
-> +{
-> +	long err = 0;
-> +	struct bpf_rb_node *rb;
-> +	struct bpf_list_node *l, *l_1;
-> +	struct node_data *n, *n_1, *m_1;
-> +
-> +	err = __insert_in_tree_and_list(&head, &root, &lock);
-> +	if (err)
-> +		return err;
-> +
-> +	bpf_spin_lock(&lock);
-> +	rb = bpf_rbtree_first(&root);
-> +	if (!rb) {
-> +		bpf_spin_unlock(&lock);
-> +		return -4;
-> +	}
-> +
-> +	rb = bpf_rbtree_remove(&root, rb);
-> +	bpf_spin_unlock(&lock);
-> +	if (!rb)
-> +		return -5;
-> +
-> +	n = container_of(rb, struct node_data, r);
-> +	n_1 = bpf_obj_new(typeof(*n_1));
-> +	if (!n_1) {
-> +		bpf_obj_drop(n);
-> +		return -1;
-> +	}
-> +	m_1 = bpf_refcount_acquire(n_1);
-> +	if (!m_1) {
-> +		bpf_obj_drop(n);
-> +		bpf_obj_drop(n_1);
-> +		return -1;
-> +	}
-> +
-> +	/* Intentionally no lock: verifier should reject bpf_list_add without lock */
-> +	if (bpf_list_add(&head, &n_1->l, &n->l)) {
-> +		bpf_obj_drop(n);
-> +		bpf_obj_drop(m_1);
-> +		return -8;
-> +	}
-> +
-> +	bpf_spin_lock(&lock);
-> +	l = bpf_list_del(&head, &n->l);
-> +	l_1 = bpf_list_del(&head, &m_1->l);
-> +	bpf_spin_unlock(&lock);
-> +	bpf_obj_drop(n);
-> +	bpf_obj_drop(m_1);
-> +
-> +	if (l)
-> +		bpf_obj_drop(container_of(l, struct node_data, l));
-> +	else
-> +		err = -6;
-> +
-> +	if (l_1)
-> +		bpf_obj_drop(container_of(l_1, struct node_data, l));
-> +	else
-> +		err = -6;
-> +
-> +	return err;
-> +}
-Do we need this big test just to trigger that verifier error?
-> +
->  SEC("tc")
->  __success
->  long rbtree_refcounted_node_ref_escapes(void *ctx)
-> -- 
-> 2.50.1 (Apple Git-155)
