@@ -1,65 +1,80 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2198B35B64B
-	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 15:59:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 110293537C0
+	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 16:14:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772639998; cv=none; b=QEiCfpUj/IFxME0yW99wKwrq0AGO0ejcNS1uMx2oU+mu07azqlE7Z94HkREQ/qeiIP6hJBnYIkyTXJwcb+xl1OCChVjcMscg2IYeuJi77sMWVgzCUA+u2QAcGTjybG6h0AzQJeksNa8iV6+TiQcitTbvUT2f3f4nNjfxuHvK1dI=
+	t=1772640865; cv=none; b=dP1GLR5xIAjuBTyD3bhFStxRYmMLv8KGMPvKpIC12voM1xm9cIBvaCkD0U7twAYrBfb8hH6Rggh5HugLrDYK4z/BVnLQLmahJoktidFlG3l0m25OkHF4dGJKf5OFkoASQgKyWyIXChNIb4+tF2Lys0tr0ntF4fuSWLXM4zLPiC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772639998; c=relaxed/simple;
-	bh=DR72l5rfmF9woJgiiQ+SUs1tFCC5L4Em4zqGl0Tn244=;
+	s=arc-20240116; t=1772640865; c=relaxed/simple;
+	bh=BJhSI8YyDnYwG/YSLyeauMxJaBwN/UIwFp9AQDNBSvM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y3mzCv/7Fe8D7olYt05CeNlJt6iaHj+90VcwIWM32kQBuyW3EnvKTPNa6vC9Zdf2V/Bm/Y37yI8cMlvHCjQvL7TqvRFtuo2XTOb1iPHhLgr9VIvtuBlLN8MIUX+bvYTvbbAl8Syx1AkVRdgFEVKndrF4QE7rhLqG+7WdG0wUTOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y9JBwHVl; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=ZiCe6u+29N5W95j1L+TcdqhOj+Sd2hxtjXvBxz8Ce6xye/JD3I4ecftI1eJjHwUdx9Bs6N24Zn1S4cxOAYrbwtNdaWhegDPuQNAO0fvD6J6rpD9vMXepLxt/G3ngYmvRxkbXHAEdbnf2FOVlpj0UbewcU3U9f0GHm4D+MLkEqwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=s1QZQ+nk; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=p71z4Fsc; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=s1QZQ+nk; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=p71z4Fsc; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y9JBwHVl"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-829756f3ee9so621802b3a.2
-        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 07:59:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772639996; x=1773244796; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lkeTvPf0E8KU750qZQOM/g+J3nMAURhvhN+ETGDpHsM=;
-        b=Y9JBwHVlonc4R/ur4Tv8GErnNM95ue3EbkXwkbjDEtRfO39TlGxRB7xeJMGoBjCYuK
-         PsHqhht6FMzOEuxsY6ilPBCbWySDWQmhGcy8nloopD0r/50J74MaEYJkjFfcNBBELgK8
-         216FYfUcAxM+Lg5SMSroArDf0+W1Qn84sZkkCYvGJu5z9/UO/bOL16/jYGWhKxdrGueP
-         dYHthiJPgFuxr6xe7GZ28wo5bJVHvuIOS+n0ITPxlT2ePHIUx8qe1QSO7HCVzEYDnp+U
-         i5h+5cMvn9XHPobayo9K32gny9m2YOX1jLbSGY0gOa6mrPzNl3c8J3Kz5qemvKVwLBn2
-         492w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772639996; x=1773244796;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lkeTvPf0E8KU750qZQOM/g+J3nMAURhvhN+ETGDpHsM=;
-        b=nblqKoH0vYvyCF3JFVZJtIF/CZHb89bSpjfCeS3+9DETTMGbR6+7XR1B/brUAQLOSx
-         dFDMArovJq+S36ScYWyI4kq+KUxwUeSTJQtUEWTFbETHozPhFviMasqoRhGxinxbz/ti
-         X2RPmuFZWkEaknFM6K7UxjxhxQiTNrLETYwNtcRi6G6b9bvsqZ/EY0HUc2hLlbLGealm
-         Sj28viphi9xTwR3IU51PJ4o2rXYpnIIJJSRDWs2oPQT5pa7VWqdHn/YJjkQi2a84iILF
-         Tki3VhFpGlXvESLMaiDJj5omfFLIXDZ2wzdcE6LGWQLfNmObWVq/H42tqZzLUo+K+r31
-         p7zw==
-X-Gm-Message-State: AOJu0Yy9npBjgTeEgE07+rscmZWVXIfdBCAj3AL1RzsPtm/Xy8HLOHvU
-	xmY+OdMrN0NrxABxHUO7F4Ns8HJ+EJjVdamDjYS32f8CRe8v1xnVR8b8
-X-Gm-Gg: ATEYQzyB6PjIwlXYSXsrBqhg1il/W1D+u/1NMLVr/rdWeSvdLDea1x/afMX6ivDUvkT
-	bCyQ6c15ZdVCBm2z83nraNBaYfeI1HvwVsb5N8HEp+QsFvWQisEVuEgevhcGX0Lx2+ueNUMclw1
-	XVKIcSdLcFeImI6ck0RlaSisMgf4rmDVVoYiQQ/eum9nmdjTXyK6e/LrjDeRUByMtMDhRSvdhce
-	ES7x19TAZTZoE4qS35WvXiKlYkfgZqXQ+dh61HEQSIlcFo38uOpsyVLKbStNM5jtvtjqOAvpYY1
-	luVDSQuDnWFUmm5Fe/vgMI4x0XxRo9CYKOx6jl1ITDvkcx4GeQW+oGHWeQ+1CtMI9CP8MheSVjg
-	5mXmjPMigncDQafbEGQnyU86e8TwLUV8WaCiDY6GwWMVVgpHi9JCy6G/oBW07cZ8K4AEE9ReWL7
-	cX8m6Nkjtsjo2T/NEhk55RmyaY0O/ApyqaFdaZ
-X-Received: by 2002:a05:6a21:7a96:b0:38b:e3c1:db44 with SMTP id adf61e73a8af0-3982e23b3e7mr2314723637.58.1772639996403;
-        Wed, 04 Mar 2026 07:59:56 -0800 (PST)
-Received: from [172.20.10.5] ([117.20.154.117])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c73818d9502sm1352139a12.21.2026.03.04.07.59.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Mar 2026 07:59:55 -0800 (PST)
-Message-ID: <927c59b1-acae-4013-b552-2d03cc77562b@gmail.com>
-Date: Wed, 4 Mar 2026 23:59:48 +0800
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="s1QZQ+nk";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="p71z4Fsc";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="s1QZQ+nk";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="p71z4Fsc"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 6E23F3F7D0;
+	Wed,  4 Mar 2026 16:14:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1772640861; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ajoRZChLFPs1F0mUpZ7Ecdp8r2zvsyEaG9QiHQzGOr0=;
+	b=s1QZQ+nk9hFzpc+Lca+K8Qd1w6YLC8vbOxhNVMIjZD3R87/3Kz/Qm/U/Ud1bPZ5DxJzf5Z
+	yU/+1RmTBPYZ8SOnI6pzXIGHQFU9MOuWo4B5gc0hwEJrjGULtKPsftf2bSpX20tnG4HyDI
+	8BBwLt0r6cg/lPYyFjC3581P9jFAPj0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1772640861;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ajoRZChLFPs1F0mUpZ7Ecdp8r2zvsyEaG9QiHQzGOr0=;
+	b=p71z4Fscn/K0+ATuwvNB4jyZPi+cUNzE3GwJjR2Izh728CuNUs/j6YzXuJG0A9OB+IhDyt
+	z9nrYqji6fH84vAQ==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1772640861; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ajoRZChLFPs1F0mUpZ7Ecdp8r2zvsyEaG9QiHQzGOr0=;
+	b=s1QZQ+nk9hFzpc+Lca+K8Qd1w6YLC8vbOxhNVMIjZD3R87/3Kz/Qm/U/Ud1bPZ5DxJzf5Z
+	yU/+1RmTBPYZ8SOnI6pzXIGHQFU9MOuWo4B5gc0hwEJrjGULtKPsftf2bSpX20tnG4HyDI
+	8BBwLt0r6cg/lPYyFjC3581P9jFAPj0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1772640861;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ajoRZChLFPs1F0mUpZ7Ecdp8r2zvsyEaG9QiHQzGOr0=;
+	b=p71z4Fscn/K0+ATuwvNB4jyZPi+cUNzE3GwJjR2Izh728CuNUs/j6YzXuJG0A9OB+IhDyt
+	z9nrYqji6fH84vAQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id BD7D13EA69;
+	Wed,  4 Mar 2026 16:14:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id /veKKltaqGkoBQAAD6G6ig
+	(envelope-from <fmancera@suse.de>); Wed, 04 Mar 2026 16:14:19 +0000
+Message-ID: <ba35fa2c-0085-43c9-afe0-3b2e0351ca3c@suse.de>
+Date: Wed, 4 Mar 2026 17:13:42 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,172 +82,76 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 5/5] bpf/verifier: refactor kfunc checks to
- table-driven approach
-To: Chengkaitao <pilgrimtao@gmail.com>, martin.lau@linux.dev, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- chengkaitao@kylinos.cn, linux-kselftest@vger.kernel.org
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260304143459.78059-1-pilgrimtao@gmail.com>
- <20260304143459.78059-6-pilgrimtao@gmail.com>
+Subject: Re: [PATCH net 1/3] bpf: bpf_out_neigh_v4: Fix nd_tbl NULL
+ dereference when IPv6 is disabled
+To: David Ahern <dsahern@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jakub Kicinski <kuba@kernel.org>
+Cc: =?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?=
+ <toke@redhat.com>, Jay Vosburgh <jv@jvosburgh.net>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, Hangbin Liu <liuhangbin@gmail.com>,
+ bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260228-net-nd_tbl_fixes-v1-0-2b2a274df9bb@suse.com>
+ <20260228-net-nd_tbl_fixes-v1-1-2b2a274df9bb@suse.com>
+ <0b52257d-d557-4f26-9931-34c81ab621bc@iogearbox.net>
+ <20260302171131.28373ccb@kernel.org>
+ <0d7bb5c5-4122-4dc9-b52b-c305591207d1@suse.de>
+ <bbee1ce1-0615-4be2-b7b1-a14eaf2afe26@iogearbox.net>
+ <ba665193-bb6f-4293-b8ca-bbb267e92eb3@kernel.org>
 Content-Language: en-US
-From: Leon Hwang <hffilwlqm@gmail.com>
-In-Reply-To: <20260304143459.78059-6-pilgrimtao@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+From: Fernando Fernandez Mancera <fmancera@suse.de>
+In-Reply-To: <ba665193-bb6f-4293-b8ca-bbb267e92eb3@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[26];
+	TAGGED_RCPT(0.00)[netdev];
+	MID_RHS_MATCH_FROM(0.00)[];
+	R_RATELIMIT(0.00)[to_ip_from(RLrr9ek4ud4f4qwi71m7motjzt)];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[suse.com,linux.dev,gmail.com,fomichev.me,kernel.org,google.com,davemloft.net,redhat.com,jvosburgh.net,lunn.ch,vger.kernel.org];
+	RCVD_TLS_ALL(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid]
+X-Spam-Flag: NO
+X-Spam-Score: -2.80
+X-Spam-Level: 
 
-NIT on the subject prefix: instead of bpf/verifier, it should be one of
-bpf, libbpf, selftests/bpf, bpftool, and "bpf, x86/arm64".
+On 3/4/26 4:49 PM, David Ahern wrote:
+> On 3/3/26 9:49 PM, Daniel Borkmann wrote:
+>> Maybe the "fix" could be to just switch IPV6 from tristate to bool in
+>> the Kconfig, and then once net merges into net-next we could deconstruct
+>> all the helper cruft which makes the late on-demand module loading of
+>> IPv6 work.
+> 
+> +1
 
-So, the subject can be "bpf: refactor kfunc checks using table-driven
-approach in verifier".
+Maybe I am missing something here, but I believe this won't solve the 
+problem. Even if ipv6 is built-in, it should be possible to pass 
+ipv6.disable=1 during boot and therefore nd_tbl would still be 
+uninitialized, not NULL tho.
 
 Thanks,
-Leon
-
-On 2026/3/4 22:34, Chengkaitao wrote:
-> From: Kaitao Cheng <chengkaitao@kylinos.cn>
-> 
-> Replace per-kfunc btf_id chains in list/rbtree/res_lock and graph node
-> checks with btf_id_in_kfunc_table() and static kfunc tables for easier
-> maintenance.
-> 
-> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
-> ---
->  kernel/bpf/verifier.c | 93 +++++++++++++++++++++++++++++--------------
->  1 file changed, 64 insertions(+), 29 deletions(-)
-> 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index d133d18aa0cc..25961cf83a67 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -12600,6 +12600,60 @@ BTF_ID(func, bpf_session_is_return)
->  BTF_ID(func, bpf_stream_vprintk)
->  BTF_ID(func, bpf_stream_print_stack)
->  
-> +static const enum special_kfunc_type bpf_list_api_kfuncs[] = {
-> +	KF_bpf_list_push_front_impl,
-> +	KF_bpf_list_push_back_impl,
-> +	KF_bpf_list_pop_front,
-> +	KF_bpf_list_pop_back,
-> +	KF_bpf_list_del,
-> +	KF_bpf_list_front,
-> +	KF_bpf_list_back,
-> +	KF_bpf_list_add_impl,
-> +	KF_bpf_list_node_is_edge,
-> +	KF_bpf_list_empty,
-> +};
-> +
-> +/* Kfuncs that take a list node argument (bpf_list_node *). */
-> +static const enum special_kfunc_type bpf_list_node_api_kfuncs[] = {
-> +	KF_bpf_list_push_front_impl,
-> +	KF_bpf_list_push_back_impl,
-> +	KF_bpf_list_del,
-> +	KF_bpf_list_add_impl,
-> +	KF_bpf_list_node_is_edge,
-> +};
-> +
-> +/* Kfuncs that take an rbtree node argument (bpf_rb_node *). */
-> +static const enum special_kfunc_type bpf_rbtree_node_api_kfuncs[] = {
-> +	KF_bpf_rbtree_remove,
-> +	KF_bpf_rbtree_add_impl,
-> +	KF_bpf_rbtree_left,
-> +	KF_bpf_rbtree_right,
-> +};
-> +
-> +static const enum special_kfunc_type bpf_rbtree_api_kfuncs[] = {
-> +	KF_bpf_rbtree_add_impl,
-> +	KF_bpf_rbtree_remove,
-> +	KF_bpf_rbtree_first,
-> +	KF_bpf_rbtree_root,
-> +	KF_bpf_rbtree_left,
-> +	KF_bpf_rbtree_right,
-> +};
-> +
-> +static const enum special_kfunc_type bpf_res_spin_lock_kfuncs[] = {
-> +	KF_bpf_res_spin_lock,
-> +	KF_bpf_res_spin_unlock,
-> +	KF_bpf_res_spin_lock_irqsave,
-> +	KF_bpf_res_spin_unlock_irqrestore,
-> +};
-> +
-> +static bool btf_id_in_kfunc_table(u32 btf_id, const enum special_kfunc_type *kfuncs, int n)
-> +{
-> +	for (int i = 0; i < n; i++)
-> +		if (btf_id == special_kfunc_list[kfuncs[i]])
-> +			return true;
-> +	return false;
-> +}
-> +
->  static bool is_task_work_add_kfunc(u32 func_id)
->  {
->  	return func_id == special_kfunc_list[KF_bpf_task_work_schedule_signal] ||
-> @@ -13000,26 +13054,14 @@ static int check_reg_allocation_locked(struct bpf_verifier_env *env, struct bpf_
->  
->  static bool is_bpf_list_api_kfunc(u32 btf_id)
->  {
-> -	return btf_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_list_pop_front] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_list_pop_back] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_list_del] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_list_front] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_list_back] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_list_add_impl] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_list_node_is_edge] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_list_empty];
-> +	return btf_id_in_kfunc_table(btf_id, bpf_list_api_kfuncs,
-> +				     ARRAY_SIZE(bpf_list_api_kfuncs));
->  }
->  
->  static bool is_bpf_rbtree_api_kfunc(u32 btf_id)
->  {
-> -	return btf_id == special_kfunc_list[KF_bpf_rbtree_add_impl] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_rbtree_remove] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_rbtree_first] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_rbtree_root] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_rbtree_left] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_rbtree_right];
-> +	return btf_id_in_kfunc_table(btf_id, bpf_rbtree_api_kfuncs,
-> +				     ARRAY_SIZE(bpf_rbtree_api_kfuncs));
->  }
->  
->  static bool is_bpf_iter_num_api_kfunc(u32 btf_id)
-> @@ -13037,10 +13079,8 @@ static bool is_bpf_graph_api_kfunc(u32 btf_id)
->  
->  static bool is_bpf_res_spin_lock_kfunc(u32 btf_id)
->  {
-> -	return btf_id == special_kfunc_list[KF_bpf_res_spin_lock] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_res_spin_unlock] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_res_spin_lock_irqsave] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_res_spin_unlock_irqrestore];
-> +	return btf_id_in_kfunc_table(btf_id, bpf_res_spin_lock_kfuncs,
-> +				    ARRAY_SIZE(bpf_res_spin_lock_kfuncs));
->  }
->  
->  static bool is_bpf_arena_kfunc(u32 btf_id)
-> @@ -13129,17 +13169,12 @@ static bool check_kfunc_is_graph_node_api(struct bpf_verifier_env *env,
->  
->  	switch (node_field_type) {
->  	case BPF_LIST_NODE:
-> -		ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
-> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
-> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_del] ||
-> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_add_impl] ||
-> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_node_is_edge]);
-> +		ret = btf_id_in_kfunc_table(kfunc_btf_id, bpf_list_node_api_kfuncs,
-> +					    ARRAY_SIZE(bpf_list_node_api_kfuncs));
->  		break;
->  	case BPF_RB_NODE:
-> -		ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_remove] ||
-> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_add_impl] ||
-> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_left] ||
-> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_right]);
-> +		ret = btf_id_in_kfunc_table(kfunc_btf_id, bpf_rbtree_node_api_kfuncs,
-> +					    ARRAY_SIZE(bpf_rbtree_node_api_kfuncs));
->  		break;
->  	default:
->  		verbose(env, "verifier internal error: unexpected graph node argument type %s\n",
-
+Fernando.
