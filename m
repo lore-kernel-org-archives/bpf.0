@@ -1,62 +1,62 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18D08C2FF
-	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 03:16:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BD43C2FF
+	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 03:16:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772594190; cv=none; b=D/8OmRcrbYNegHLE+GbfNLkQgxJTnA8pGSbQbXzusjEklqAituZ3phxZWYXc8RV8iPX79WMOEW5nYh7Vyq6V2Ett4KyLTn4JknSvmHv/GQ/ptJsftw19UCrUnD1arY1YeOKiNJ5sEEGmlnQM+YnkbrGItRVzAXH/8prhLIaUFU0=
+	t=1772594197; cv=none; b=IJvNURVyn69uRDbQ9U1ZVAJkQna0y+RvuIe2D28ilpq/SDULQGBDRrD3bE9tl01287rxqDepH4UUDTeKj940M71lCPbvkRqVFBty6QtJTTJsP13k1ybLM1cLm22GWsgfe3U/6bZ1f52j59mdoLtl3DbXxKa1OsIPCBb1qBTZk1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772594190; c=relaxed/simple;
-	bh=bXOZyfrjjEJNg2zXkkRsWg+H9U/k/NIMjxFzOVXWV+0=;
+	s=arc-20240116; t=1772594197; c=relaxed/simple;
+	bh=5k3B4Ygo1wjsDMA1EPhJXyhhcMiqhAMzgiy+JUuepVA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PbkyHGF/7eplw/TJn+JiFweAJVfEoLheX6RJJQLPEH0tfedljqPUpNgAu605RHqQK4pzGh5bLAiKKot1ctwuXDCouhN7HA8MVWrSuSZY1rfUv45JMzlwz7MXmr2aTjhzvfy0/xhl8Fitvpjfl1G2DqHxuJEQhh+/ilLzAWigqRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f//U9OPo; arc=none smtp.client-ip=209.85.210.175
+	 MIME-Version; b=HRF0cNDtvpnpesHxMZOyYZ4zN51BAW+8/obhElna6+NZ0Qq1kn6H/xuWgyBPH+PyfyFJ644Nd8Zh2Wd3a0nWVrZ8lO6j12jd8MrAX7rVKBvZnj9rOoDYsWEZmEp5jxPvwbTCY3McHc+BXlo5wZfOrOICK8w/9z99kPYwOnfHPX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cXiXYnWq; arc=none smtp.client-ip=209.85.216.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f//U9OPo"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-8296d553142so170272b3a.3
-        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 19:16:29 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cXiXYnWq"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-35990245493so1755068a91.2
+        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 19:16:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772594188; x=1773198988; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772594196; x=1773198996; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=U5WORjt7SxVQlhYT/6rzYEp8dt5s0cz4VVG01wwIAJ8=;
-        b=f//U9OPo3nKm/ZZxd12kIfzmM7/PN4YhYB+2QXC/DE2SGIvidZxDPIKeHdVsFYpkoL
-         9D+smbVC9gdSSzUdE6yo/tMaxi8YpP56DPMcvIpdVHXeb1aDvPetchRFjXt6F9KlY4J1
-         BSozryKs7P2zyl9KTv49mrjs7nv07heZjBR6CSFHEOBXrGYr4UwN/6MM40Aah1IFj0Vm
-         n7QvcacCj/d9wReVTiWnIwToefMvmm7b4Pp8N9qT7G/QeQM+vCKFzsvK1eTwM8Y4eT6S
-         Eq0eTZLQU4m7aWo246wbIS1pB/N8oAwyEBtHgFiiENGVJ2h1zAHxgKPGW6GlphyuzEXi
-         ZnAQ==
+        bh=9yrYqqdL3L32jfs4+IGyGROm0lZBENJH7/3+fmtOXxw=;
+        b=cXiXYnWqyt0MpL47jDycvNwUCu6830PNR2bgK+QA59NNxdSFC+vyKzDouKjF6HuiBV
+         nVCXnDNu50UzfiAFiTOSHkq9P7A8xYDR4L9QJg5zbHauE410nlObPXBocoAyspx/lT/W
+         8DJc0RkFOwwffgq92CwiCncrGoyOquh+wB+1BzXt82OHt5TtckOlTo1xjyUEvD8Y1sob
+         6v3Ub4JoXfWapPDBYH12dqa5V1GFl5ZVdkryw5H4Oy3xcfzm45K0CBEr2+umCk5NCd5Z
+         xuJpnUar+QK3CpE/Ixyv3r0E04yf9iKaYnqLwZADMfFHrscnIrRRnn+7u2SgPogEjIsF
+         Jf3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772594188; x=1773198988;
+        d=1e100.net; s=20230601; t=1772594196; x=1773198996;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=U5WORjt7SxVQlhYT/6rzYEp8dt5s0cz4VVG01wwIAJ8=;
-        b=h2phJKpu9jcNcOV5GhCXJerSjNEm4WRTGEjadOugLCc15wqFDeF9kGGYG+7Cb8irVE
-         5xddzmZi+SQhjyF5aO3voCdSOFaD13tS7z3Fl4xauXrJK8eK2qzGELhW2YpgHaogfeaS
-         cKdwie0MRrHkHVR/iqY/Fok9l7k2ebvRTQQ95eqJZ1JVT18YxkBjgRXtGUMf9YV2hw4L
-         ofcwlIILP6YQyDPwrHVD/MQgEH9Z0BMJCn5MELqcY1MIlxLTdNH4K4dM5xiaGGmh11cC
-         SjRTCDN1LfMh9W9vE/pufgOsxXovv+8zSAdJ4SbwRDGxll6NvmxTfMjHVurQDRn+i3j0
-         k1jw==
-X-Gm-Message-State: AOJu0YwR3Ts7XkuV7qYGJpu8UF1tN60yg9tEyvfUpRei5OLH04iGYzrG
-	r81LJPW1Pd3IVg4SJkAR/vX/FrJ7CeMSrVYRrX/P/GhtksN8qXmNO9bP
-X-Gm-Gg: ATEYQzy6R7ezkD49w08cttiWZJObq4520Zv/fER7m4JfztY8fv694eXRwmTluJ/X94b
-	RF1UigNj2h0nyizVXcGxFVime4wY0Y5SOBgs0QAmQVGuZAnMTinmYv8kADbw5X4UWo5dmnvvf9r
-	D61oBzWw2B5JlCPcX2CBDIWcOUBdE2YTbGV2mwYDxTX5HlcPtQrkABj5jQkaxVYtkjhyf7g3uxO
-	LNjDMWc15ER1fbMLfnyRdQsnHvUsqZhFC1zvxTm33UciFbqTPx52jBZFe684XtsH2ODpOJwh2gL
-	Lhk2O1queIQ+Rm4nuN2tWoKY/yaxHMy+prYzwFeCt62k68bmPVNptUgQ8P1VJWBivzwkNttDi/d
-	DOcngTMTkr6Ep7s2wP6tjzZFJZAPKmkTy+v2eJLR+rl29XP1sEHG3qm7SfpmbfuhgRGiUhjIFz1
-	GXx6LlyFCVyfaCCgkOXxB9KfNc+UWm7w9iBbidrZPrqwgsW+znIg==
-X-Received: by 2002:a17:90b:390a:b0:359:8ef8:7a77 with SMTP id 98e67ed59e1d1-359a69ba1a1mr646963a91.9.1772594188387;
-        Tue, 03 Mar 2026 19:16:28 -0800 (PST)
+        bh=9yrYqqdL3L32jfs4+IGyGROm0lZBENJH7/3+fmtOXxw=;
+        b=VzK5QEpXrwtzFHZxryqCWlCPpwRS+xs/5jcAGRZOo1NgOqxCiFj1J8mxyr/l8vbLHy
+         CsIJsUebNbfqedriah2761kIEOijgyTccRcbEA40ZPUJ4nPvQ3Glw/6SOoPP8o5skweG
+         g5EHJU4j1h2Zq2ayJ1OPg3iNX/XMPgRiGLCb3FQam+XJ94SXnihd8ua4IvIpJmN7qx1A
+         cNgaaUf82Xp5a/NhuTCLQ4156xiHynKIUrcukwCP9j+yrGMJ/GFj9xPShA0zqdTDl3w6
+         ngnGk1Vyxv9+VTIEJfd4sqMPOFz9LqYv503zmd2Hq2sOPZ7JfAjAUsN6tM4tcZiaRIN4
+         h9HQ==
+X-Gm-Message-State: AOJu0YwtlSGaTDHxbsI4UGyI74P76aSkxlWdge2Y28XyYb5Elxtb7+92
+	OWfUgYmhq0uuPsXvuUZn7SJ+JZ5RbhFGnl56UqDc1B1peI2XUE8AgOkf
+X-Gm-Gg: ATEYQzxGFWn+kDfUg24iHWRAyT5uOsG0HXZAe9ANpxBxFuiaXmNlJziI1I3sDkX1y6T
+	Y4c4lXHTBsyNUWNfiqmZmtgc1hNe6wsYhEC/LMNzB/90eelSPCqx733z5xmauRtMwJmY9fl5yZ1
+	gBRsLP9qHD2EvllXAjSBp9kIJEJP7bkr16tJeS+IY+SJbH3vt8xvUkPeEIS+1AYtvYYp1YaGmwS
+	PPR+R+FV5JdKDPdIZoGukDOAowuxrQcHHWAqf61+gShkGW+RLPQSaWM4mITukKJaBjOSLhDtR+2
+	v1Vi6qn1P8Ku4/iCtaeyP/VcnfHiZwaZOpXczrbcK+evaDdfASawHYL8nvFTKEg7+DLOpdzmqFR
+	LG6b7IS7mqlYVMvboSEVoU7YoX2U8aLlD2LPE/1NRbBNGsFEG5/21HcVPdwd5ux1hP9xPcQQ6SA
+	4Oj6eX8o8nZO1e0GTD7sqEfT6p2R2QeQ5kLZQkFwF0NZYFtkCCfA==
+X-Received: by 2002:a17:90b:1643:b0:356:24f0:af0c with SMTP id 98e67ed59e1d1-359a6a4d3famr830934a91.17.1772594195723;
+        Tue, 03 Mar 2026 19:16:35 -0800 (PST)
 Received: from localhost.localdomain ([116.128.244.171])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3599c3ab946sm3610648a91.13.2026.03.03.19.16.22
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3599c3ab946sm3610648a91.13.2026.03.03.19.16.28
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 03 Mar 2026 19:16:27 -0800 (PST)
+        Tue, 03 Mar 2026 19:16:35 -0800 (PST)
 From: Chengkaitao <pilgrimtao@gmail.com>
 To: martin.lau@linux.dev,
 	ast@kernel.org,
@@ -75,9 +75,9 @@ To: martin.lau@linux.dev,
 	linux-kselftest@vger.kernel.org
 Cc: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 1/6] bpf: Introduce the bpf_list_del kfunc.
-Date: Wed,  4 Mar 2026 11:16:01 +0800
-Message-ID: <20260304031606.43884-2-pilgrimtao@gmail.com>
+Subject: [PATCH v5 2/6] selftests/bpf: Add test cases for bpf_list_del
+Date: Wed,  4 Mar 2026 11:16:02 +0800
+Message-ID: <20260304031606.43884-3-pilgrimtao@gmail.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260304031606.43884-1-pilgrimtao@gmail.com>
 References: <20260304031606.43884-1-pilgrimtao@gmail.com>
@@ -91,95 +91,123 @@ Content-Transfer-Encoding: 8bit
 
 From: Kaitao Cheng <chengkaitao@kylinos.cn>
 
-If a user holds ownership of a node in the middle of a list, they
-can directly remove it from the list without strictly adhering to
-deletion rules from the head or tail.
+Add a node to both an rbtree and a list, retrieve the node from
+the rbtree, use the obtained node pointer to remove it from the
+list, and finally free the node.
 
-This is typically paired with bpf_refcount. After calling
-bpf_list_del, it is generally necessary to drop the reference to
-the list node twice to prevent reference count leaks.
+To verify the validity of bpf_list_del, also expect the verifier
+to reject calls to bpf_list_del made without holding the spin_lock.
 
 Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
 ---
- kernel/bpf/helpers.c  | 19 +++++++++++++++++++
- kernel/bpf/verifier.c |  6 +++++-
- 2 files changed, 24 insertions(+), 1 deletion(-)
+ .../testing/selftests/bpf/bpf_experimental.h  | 11 +++
+ .../selftests/bpf/progs/refcounted_kptr.c     | 71 +++++++++++++++++++
+ 2 files changed, 82 insertions(+)
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 6eb6c82ed2ee..19d88da8e694 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2459,6 +2459,24 @@ __bpf_kfunc struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *head)
- 	return __bpf_list_del(head, true);
- }
+diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
+index 4b7210c318dd..54ec9d307fdc 100644
+--- a/tools/testing/selftests/bpf/bpf_experimental.h
++++ b/tools/testing/selftests/bpf/bpf_experimental.h
+@@ -99,6 +99,17 @@ extern struct bpf_list_node *bpf_list_pop_front(struct bpf_list_head *head) __ks
+  */
+ extern struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *head) __ksym;
  
-+__bpf_kfunc struct bpf_list_node *bpf_list_del(struct bpf_list_head *head,
-+					       struct bpf_list_node *node)
++/* Description
++ *	Remove 'node' from the BPF linked list with head 'head'.
++ *	The node must be in the list. Caller receives ownership of the
++ *	removed node and must release it with bpf_obj_drop.
++ * Returns
++ *	Pointer to the removed bpf_list_node, or NULL if 'node' is NULL
++ *	or not in the list.
++ */
++extern struct bpf_list_node *bpf_list_del(struct bpf_list_head *head,
++					  struct bpf_list_node *node) __ksym;
++
+ /* Description
+  *	Remove 'node' from rbtree with root 'root'
+  * Returns
+diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr.c b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
+index 1aca85d86aeb..ac7672cfefb8 100644
+--- a/tools/testing/selftests/bpf/progs/refcounted_kptr.c
++++ b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
+@@ -367,6 +367,77 @@ long insert_rbtree_and_stash__del_tree_##rem_tree(void *ctx)		\
+ INSERT_STASH_READ(true, "insert_stash_read: remove from tree");
+ INSERT_STASH_READ(false, "insert_stash_read: don't remove from tree");
+ 
++/* Insert node_data into both rbtree and list, remove from tree, then remove
++ * from list via bpf_list_del using the node obtained from the tree.
++ */
++SEC("tc")
++__description("test_bpf_list_del: remove an arbitrary node from the list")
++__success __retval(0)
++long test_bpf_list_del(void *ctx)
 +{
-+	struct bpf_list_node_kern *knode = (struct bpf_list_node_kern *)node;
-+	struct list_head *h = (void *)head;
++	long err;
++	struct bpf_rb_node *rb;
++	struct bpf_list_node *l;
++	struct node_data *n;
 +
-+	if (unlikely(!knode))
-+		return NULL;
++	err = __insert_in_tree_and_list(&head, &root, &lock);
++	if (err)
++		return err;
 +
-+	if (WARN_ON_ONCE(READ_ONCE(knode->owner) != h))
-+		return NULL;
++	bpf_spin_lock(&lock);
++	rb = bpf_rbtree_first(&root);
++	if (!rb) {
++		bpf_spin_unlock(&lock);
++		return -4;
++	}
 +
-+	list_del_init(&knode->list_head);
-+	WRITE_ONCE(knode->owner, NULL);
++	rb = bpf_rbtree_remove(&root, rb);
++	if (!rb) {
++		bpf_spin_unlock(&lock);
++		return -5;
++	}
 +
-+	return node;
++	n = container_of(rb, struct node_data, r);
++	l = bpf_list_del(&head, &n->l);
++	bpf_spin_unlock(&lock);
++	bpf_obj_drop(n);
++	if (!l)
++		return -6;
++
++	bpf_obj_drop(container_of(l, struct node_data, l));
++	return 0;
 +}
 +
- __bpf_kfunc struct bpf_list_node *bpf_list_front(struct bpf_list_head *head)
- {
- 	struct list_head *h = (struct list_head *)head;
-@@ -4545,6 +4563,7 @@ BTF_ID_FLAGS(func, bpf_list_push_front_impl)
- BTF_ID_FLAGS(func, bpf_list_push_back_impl)
- BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_list_pop_back, KF_ACQUIRE | KF_RET_NULL)
-+BTF_ID_FLAGS(func, bpf_list_del, KF_ACQUIRE | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_list_front, KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_list_back, KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 67c09b43a497..c9557d3fb8dd 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -12461,6 +12461,7 @@ enum special_kfunc_type {
- 	KF_bpf_list_push_back_impl,
- 	KF_bpf_list_pop_front,
- 	KF_bpf_list_pop_back,
-+	KF_bpf_list_del,
- 	KF_bpf_list_front,
- 	KF_bpf_list_back,
- 	KF_bpf_cast_to_kern_ctx,
-@@ -12521,6 +12522,7 @@ BTF_ID(func, bpf_list_push_front_impl)
- BTF_ID(func, bpf_list_push_back_impl)
- BTF_ID(func, bpf_list_pop_front)
- BTF_ID(func, bpf_list_pop_back)
-+BTF_ID(func, bpf_list_del)
- BTF_ID(func, bpf_list_front)
- BTF_ID(func, bpf_list_back)
- BTF_ID(func, bpf_cast_to_kern_ctx)
-@@ -12996,6 +12998,7 @@ static bool is_bpf_list_api_kfunc(u32 btf_id)
- 	       btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
- 	       btf_id == special_kfunc_list[KF_bpf_list_pop_front] ||
- 	       btf_id == special_kfunc_list[KF_bpf_list_pop_back] ||
-+	       btf_id == special_kfunc_list[KF_bpf_list_del] ||
- 	       btf_id == special_kfunc_list[KF_bpf_list_front] ||
- 	       btf_id == special_kfunc_list[KF_bpf_list_back];
- }
-@@ -13118,7 +13121,8 @@ static bool check_kfunc_is_graph_node_api(struct bpf_verifier_env *env,
- 	switch (node_field_type) {
- 	case BPF_LIST_NODE:
- 		ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
--		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_back_impl]);
-+		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
-+		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_del]);
- 		break;
- 	case BPF_RB_NODE:
- 		ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_remove] ||
++SEC("?tc")
++__failure __msg("bpf_spin_lock at off=32 must be held for bpf_list_head")
++long list_del_without_lock_fail(void *ctx)
++{
++	struct bpf_rb_node *rb;
++	struct bpf_list_node *l;
++	struct node_data *n;
++
++	bpf_spin_lock(&lock);
++	rb = bpf_rbtree_first(&root);
++	if (!rb) {
++		bpf_spin_unlock(&lock);
++		return -4;
++	}
++
++	rb = bpf_rbtree_remove(&root, rb);
++	bpf_spin_unlock(&lock);
++	if (!rb)
++		return -5;
++
++	n = container_of(rb, struct node_data, r);
++	l = bpf_list_del(&head, &n->l);
++	bpf_obj_drop(n);
++	if (!l)
++		return -6;
++
++	bpf_obj_drop(container_of(l, struct node_data, l));
++	return 0;
++}
++
+ SEC("tc")
+ __success
+ long rbtree_refcounted_node_ref_escapes(void *ctx)
 -- 
 2.50.1 (Apple Git-155)
 
