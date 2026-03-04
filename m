@@ -1,40 +1,42 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F7D33D5645
-	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 18:24:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C470C3DA5AE
+	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 18:24:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772648684; cv=none; b=N3ytj7icx0D4MpiRW8eJMiGk6amWnWOLw2vgQvhL+3HiHMt7jwNwJm608zI8IStfxOVZKQabzj04TYf8pFdAn+pHIF4PwQPbkzBkt56FZR4p314kmFP/75q/hLhmi5fqwLw29Smn1rPDdIpWCyb4Wto4Y5RKW3FLAHSeYA8WMA8=
+	t=1772648687; cv=none; b=jM2TcRqBavXcjDK1VDhPTjKJydBayJuPiV1Zx1+F9c4WX0IkTWNe8FcXiu71jby1SXpOzaTUPpro1Rz2DUcenUKzLGUavbBM9DH/8z2rjWk6ohbkYFfhpjbdgJUrtXbF5TLhKWZmR4u+x3QeFPeK2cbOoerylEh27r+FV/jwHBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772648684; c=relaxed/simple;
-	bh=jc1QvlY1lbLpIbI076nir2ZaedngSe7jeRQsBJr4Czg=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=VFJ4nnTUfg+wnwhlg+uqg2l7MN+tToOBWJwvRrCFncr2POSmW3S7VJWn8Tg6i7d39wGBH7bBXW081WUKGtDPiC/pNTdxhq52E5KJi1OqLQCIUf366f5O2qVAfUvBSriSzzFHsrHm9tr7qSrz1b1/L1C15XG0bZO3c0rfYDxhGhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=AlHL4YxV; arc=none smtp.client-ip=185.246.85.4
+	s=arc-20240116; t=1772648687; c=relaxed/simple;
+	bh=1kn1psIhiJQGixudWstdQUGbMnl65a2Ws9qkxb0h6vA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=NaGzgutBMo0XZiZ+MY5vqnEjSqmyq1ZQPSGRAJpYkv+dKyVNoJ3XAwVpCLVlonq0sXdozCcwyLXS8s2JFhT+XVE298AmSQ/cyRVmGHlSmMEZRKaDNjsPT8lBkcx4VfPQAReDACa+goZrfHteYfib0UeWXCUQoU5HePcoI3AhxOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=KSOTSxrp; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="AlHL4YxV"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="KSOTSxrp"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 150844E4253B;
-	Wed,  4 Mar 2026 18:24:42 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 8F7AB1A2C8D;
+	Wed,  4 Mar 2026 18:24:44 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id DDF065FF5C;
-	Wed,  4 Mar 2026 18:24:41 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 127D910368740;
-	Wed,  4 Mar 2026 19:24:39 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 63F6C5FF5C;
+	Wed,  4 Mar 2026 18:24:44 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 10862103695FE;
+	Wed,  4 Mar 2026 19:24:41 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1772648680; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=JMu61Yoxk/4le6cWj2PnfG+Kc9s7gnyiyKLhI5011RY=;
-	b=AlHL4YxVNakrYsdjkGzowhTyXnSRebwbKMqi7O9euCdaGbMnxED+o9U3HP2420gF15xoCQ
-	qTMUAMSradvGa8a+fgQEjyf10prmSyjwnfpE/lD72xE9K/cNKieTiXiWeMRC2mTCesWmXY
-	qdgRANnUSCpzJtjw01s/X9gi79sAPjwFRyicI/3rt4Al9D0ACsFq4UtccVQDWQXzrLkKxa
-	gljVogKnF24K7/SvHO73ZdMsHwwLL4CoL2jfohjnZAmjJJvyGCLB7yUB3rS7I5K4wsNWPp
-	QNpJy78aIEa052nS7HmvJ5gM1nT0+yU0hpg6CP/j6jXeGN5sPbjzrjlXyjuERA==
+	t=1772648683; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=afu30LFlXgCnEzNfi1TzEAIspkrLSXKZZ9DD7cZcOIc=;
+	b=KSOTSxrpWkZQgzLiyoGhPRhMXy7ijJemYXH/1A9i1v912AqXLRj21WYaD9tFiOGBrCKjaC
+	DPrNlF+fuYRgVpUeRfJGTKdDULcpjE5WWGS8rLuv8M1FtLNK10d3HfQyh3VAjAQO7GNHEX
+	tsHKcUrF0nnXG62J3WnXVQETPMSYvVSnE4HXJG3jc+rahGYNtv6RMb6YdfKcnLLbt89bkR
+	kfIhmWd+QrNxUb7kuK2YwM5aWlE/boa4/Q3eoV0/LCJULuX0fdaTQrq6JnVCPMhxsRbAio
+	uKEWZGI7o6Y5u2FYBkocnEWkGixsWmIPk7W6Ke4J7TKrCONEj3kc53DKSvjrdw==
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: [PATCH net-next 0/8] net: macb: add XSK support
-Date: Wed, 04 Mar 2026 19:24:23 +0100
-Message-Id: <20260304-macb-xsk-v1-0-ba2ebe2bdaa3@bootlin.com>
+Date: Wed, 04 Mar 2026 19:24:24 +0100
+Subject: [PATCH net-next 1/8] net: macb: make rx error messages
+ rate-limited
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -43,10 +45,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MQQqAIBBA0avErBuwKSW6SrQom2qILFRCiO6et
- Hzw+Q8E9sIBuuIBz7cEOV1GVRZgt9GtjDJnAykyikjjMdoJU9ix0WSVbRU1tYGcX54XSf+qB8c
- RHacIw/t+bYm9UWQAAAA=
-X-Change-ID: 20260225-macb-xsk-452c0c802436
+Message-Id: <20260304-macb-xsk-v1-1-ba2ebe2bdaa3@bootlin.com>
+References: <20260304-macb-xsk-v1-0-ba2ebe2bdaa3@bootlin.com>
+In-Reply-To: <20260304-macb-xsk-v1-0-ba2ebe2bdaa3@bootlin.com>
 To: Nicolas Ferre <nicolas.ferre@microchip.com>, 
  Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
  Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -68,70 +69,69 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
 X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
 
-Add XSK support to the MACB/GEM driver.
-Tested on Mobileye EyeQ5 (MIPS) evaluation board.
-Applies on top of net-next (4ad96a7c9e2c) and Paolo's XDP work [0].
+If Rx codepath error messages trigger, they do not interrupt reception.
+Kernel log gets spammed, we lose useful history and everything crawls
+to a halt. Instead, make them rate-limited to keep old useful
+information in the log and keep the system responsive.
 
-I don't have good Rx benchmark numbers yet, sorry, mostly because of
-userspace tooling issues around eBPF/XDP and MIPS. In copy mode it only
-means slowdowns, but in zero-copy, as we work with a fixed amount of
-buffers, it causes allocation errors.
-
---
-
-The bulk of the work is dealing with a second allocator. Throughout, we
-now use queue->page_pool or queue->xsk_pool. The former gives us raw
-buffers which we need to wrap inside xdp_buff and the latter allocates
-xdp_buff, meaning less work.
-
-To simplify the implementation, attaching an XSK pool implies closing
-and reopening the interface. It could be improved over time as
-currently attaching AF_XDP socket in zero-copy mode means we
-close/reopen twice: once for the XDP program, once for the XSK pool.
-
-First three patches are cleanup.
-
-   [PATCH net-next 1/8] net: macb: make rx error messages rate-limited
-   [PATCH net-next 2/8] net: macb: account for stats in Rx XDP codepaths
-   [PATCH net-next 3/8] net: macb: account for stats in Tx XDP codepaths
-
-Then comes preparation work.
-
-   [PATCH net-next 4/8] net: macb: drop handling of recycled buffers in gem_rx_refill()
-   [PATCH net-next 5/8] net: macb: move macb_xdp_submit_frame() body to helper function
-
-And finally the XSK codepaths.
-
-   [PATCH net-next 6/8] net: macb: add infrastructure for XSK buffer pool
-   [PATCH net-next 7/8] net: macb: add Rx zero-copy AF_XDP support
-   [PATCH net-next 8/8] net: macb: add Tx zero-copy AF_XDP support
-
-Thanks,
-Have a nice day,
-Théo
-
-[0]: https://lore.kernel.org/netdev/20260302115232.1430640-1-pvalerio@redhat.com/
+No netdev_*_ratelimited() variants exist so we switch to dev_*().
 
 Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
-Théo Lebrun (8):
-      net: macb: make rx error messages rate-limited
-      net: macb: account for stats in Rx XDP codepaths
-      net: macb: account for stats in Tx XDP codepaths
-      net: macb: drop handling of recycled buffers in gem_rx_refill()
-      net: macb: move macb_xdp_submit_frame() body to helper function
-      net: macb: add infrastructure for XSK buffer pool
-      net: macb: add Rx zero-copy AF_XDP support
-      net: macb: add Tx zero-copy AF_XDP support
+ drivers/net/ethernet/cadence/macb_main.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
- drivers/net/ethernet/cadence/macb.h      |   2 +
- drivers/net/ethernet/cadence/macb_main.c | 668 +++++++++++++++++++++----------
- 2 files changed, 468 insertions(+), 202 deletions(-)
----
-base-commit: 06d25a140f34f5879d0731117d4d62a7dd3824a9
-change-id: 20260225-macb-xsk-452c0c802436
+diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
+index a79daad275ba..ab73d1a522c2 100644
+--- a/drivers/net/ethernet/cadence/macb_main.c
++++ b/drivers/net/ethernet/cadence/macb_main.c
+@@ -1303,11 +1303,12 @@ static int macb_tx_complete(struct macb_queue *queue, int budget)
+ static inline int gem_rx_data_len(struct macb *bp, struct macb_queue *queue,
+ 				  u32 desc_ctrl, bool rx_sof, bool rx_eof)
+ {
++	struct device *dev = &bp->pdev->dev;
+ 	int len;
+ 
+ 	if (unlikely(!rx_sof && !queue->skb)) {
+-		netdev_err(bp->dev,
+-			   "Received non-starting frame while expecting a starting one\n");
++		dev_err_ratelimited(dev,
++				    "Received non-starting frame while expecting a starting one\n");
+ 		return -1;
+ 	}
+ 
+@@ -1322,7 +1323,7 @@ static inline int gem_rx_data_len(struct macb *bp, struct macb_queue *queue,
+ 
+ 	if (rx_eof && !rx_sof) {
+ 		if (unlikely(queue->skb->len > len)) {
+-			netdev_err(bp->dev, "Unexpected frame len: %d\n", len);
++			dev_err_ratelimited(dev, "Unexpected frame len: %d\n", len);
+ 			return -1;
+ 		}
+ 
+@@ -1382,8 +1383,8 @@ static int gem_rx_refill(struct macb_queue *queue, bool napi)
+ 						    gem_total_rx_buffer_size(bp),
+ 						    gfp_alloc | __GFP_NOWARN);
+ 			if (!page) {
+-				netdev_err(bp->dev,
+-					   "Unable to allocate rx buffer\n");
++				dev_err_ratelimited(&bp->pdev->dev,
++						    "Unable to allocate rx buffer\n");
+ 				err = -ENOMEM;
+ 				break;
+ 			}
+@@ -1666,8 +1667,8 @@ static int gem_rx(struct macb_queue *queue, struct napi_struct *napi,
+ 
+ 		buff_head = queue->rx_buff[entry];
+ 		if (unlikely(!buff_head)) {
+-			netdev_err(bp->dev,
+-				   "inconsistent Rx descriptor chain\n");
++			dev_err_ratelimited(&bp->pdev->dev,
++					    "inconsistent Rx descriptor chain\n");
+ 			bp->dev->stats.rx_dropped++;
+ 			queue->stats.rx_dropped++;
+ 			break;
 
-Best regards,
 -- 
-Théo Lebrun <theo.lebrun@bootlin.com>
+2.53.0
 
