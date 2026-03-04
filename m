@@ -1,165 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF19A1A6825;
-	Wed,  4 Mar 2026 01:35:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8438730FF37
+	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 01:43:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772588106; cv=none; b=h+D9suxua1hu96aoaXXDcPoDjTUQExw3xuWN8dwHsES+7B0StEn2nvr3dXE8YCEHtssGzII85vcYfnHDlUBPoaNFJFKQ7YFcW7U2GHXkrouk+92M58DBu3YxuTd3T50nweG61a505G4Y66r7wpnP34cmrbjPtO5fauTc4Re1D/o=
+	t=1772588628; cv=none; b=BKPSgWDhUQNjlJAG+sV43sju1CaHCRLSeB9S9VSrLBFVmrlrXwuLcRT+jKVqOOnAQr2Ws9aoLyEsR241K8nxtilXo/3jxWdwicz/liCuAyfKf+RLNroKDCwR1siEIl2FSEKmblLe9s+2gmrJ2n3IM2TzxRY0v/rJTgcsiG11SMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772588106; c=relaxed/simple;
-	bh=PWqQw6QkHOEToxV7Zpy3OPRtRc1QebdYN5ooe3pSOeo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hw1xqtOpHxGuY4zjj85lzDSncUm+pqZcpm9EYc2FgIMxvms4k6kiKi5gBGxIw9ve40aUhIGq6nEh1JEqQ34rqcnGXw9gwZqDuKjtAryHBUhO5Wl3Ay/e3WsDrq8XluPjSBO5MmNmGHYF1yLrz3GT1JmfkE0R9KKYNDIMdXQtca0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nKItcNT2; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772588628; c=relaxed/simple;
+	bh=pweUVnV31JEUF1FTpI7AIMRyaMvVExRTL4LgxaNelNA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YK47hAFzbr1dKy8h6nGng+/6LVbvpTHWQoKqMuRqJ3nOVtqPaOJY84H+z5i6ZpDkcGaj1wEtslHCkgWCXPYwziBV5tJAvQe6Mq0r5tbjROAVcErxUI9KmyaryMceP5Nu9erIK1opGExmEO4c+5DwIyOA0GtbqigqbbyFKXF3buo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dwxnXhtu; arc=none smtp.client-ip=95.215.58.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nKItcNT2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0B32C116C6;
-	Wed,  4 Mar 2026 01:35:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772588106;
-	bh=PWqQw6QkHOEToxV7Zpy3OPRtRc1QebdYN5ooe3pSOeo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nKItcNT2isfPirMIuyaBmc/eLBbLP3r2Qce8i86fifUGaozLyDIRkAPEF4PTYtN8W
-	 vAxNvQyu036666sZl7b6prIDZySssrmhXjfjym71KAjET10kYsWUqcG1dtdFKeZDhy
-	 ReF8t7Gw8YYiStL2xpNfv920MIo/SlmhiWm8SFBIkvIjNrNFPFEyVpFMIWgQkvLhDw
-	 JtAYUurPDkgfxgrH+EXJeUHYknvy953OMnI3STtfNNLGTKomRXe8Qs7xIoFKaIb6hk
-	 e0fceYL7BkQOaTRdH5jvkhA0s/M6J0ihxOAg1FyKlAG7etUHxp2LeLWPFvWUjj30nN
-	 PKz9UTTHl5EXQ==
-Date: Tue, 3 Mar 2026 17:35:04 -0800
-From: Namhyung Kim <namhyung@kernel.org>
-To: Quentin Monnet <qmo@kernel.org>
-Cc: Leo Yan <leo.yan@arm.com>, Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, bpf@vger.kernel.org
-Subject: Re: [PATCH RESEND v2] tools build: Use -fzero-init-padding-bits=all
-Message-ID: <aaeMSBW_K827ARYJ@google.com>
-References: <20260224-tools_build_fix_zero_init-v2-1-b1acc817a01e@arm.com>
- <aaCTC86U9KjnmZmu@google.com>
- <99e7fe4e-72de-4b55-9a9a-ae51718a0e73@kernel.org>
- <20260227103611.GA1098637@e132581.arm.com>
- <c886c8c9-d336-4ec3-94c0-c4869dee7e7f@kernel.org>
- <aaeHcL7vEhZ0LWth@google.com>
- <2ff9897c-3822-4e31-acfb-884690448af0@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dwxnXhtu"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772588624;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LoH1JvM5eEae/EYrTmhHLOmzHKnwbLDxV3lBHEOw8I4=;
+	b=dwxnXhtuW9xxBJiPrcL/yVbKD+aFJmHutNPXcdkUlkOedu9W4G6v3yXVZIUtmwDG8zWWQ1
+	iZi1Jpq4VOISMIKQ4XPlCW0jV/7gOSH4hEhundUQ53euRMEq8/HXt04RLlxaekf/sXdCe9
+	rZTAn7osiXMl1FHPZPKRLinJjLD3ovA=
+From: Menglong Dong <menglong.dong@linux.dev>
+To: Hengqi Chen <hengqi.chen@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, chenhuacai@kernel.org, yangtiezhu@loongson.cn,
+ vincent.mc.li@gmail.com, menglong8.dong@gmail.com, loongarch@lists.linux.dev,
+ bpf@vger.kernel.org, Hengqi Chen <hengqi.chen@gmail.com>
+Subject:
+ Re: [PATCH bpf-next 3/3] bpf/selftests: Enable fsession tests for LoongArch
+Date: Wed, 04 Mar 2026 09:43:28 +0800
+Message-ID: <5970598.DvuYhMxLoT@7940hx>
+In-Reply-To: <20260226065952.4082859-4-hengqi.chen@gmail.com>
+References:
+ <20260226065952.4082859-1-hengqi.chen@gmail.com>
+ <20260226065952.4082859-4-hengqi.chen@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2ff9897c-3822-4e31-acfb-884690448af0@kernel.org>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Mar 04, 2026 at 02:28:05AM +0100, Quentin Monnet wrote:
-> 2026-03-03 17:14 UTC-0800 ~ Namhyung Kim <namhyung@kernel.org>
-> > Hello,
-> > 
-> > On Fri, Feb 27, 2026 at 11:52:38AM +0000, Quentin Monnet wrote:
-> >> 2026-02-27 10:36 UTC+0000 ~ Leo Yan <leo.yan@arm.com>
-> >>> On Thu, Feb 26, 2026 at 10:52:01PM +0000, Quentin Monnet wrote:
-> >>>> 2026-02-26 10:38 UTC-0800 ~ Namhyung Kim <namhyung@kernel.org>
-> >>>>> Adding bpftool maintainer.
-> >>>>>
-> >>>>> On Tue, Feb 24, 2026 at 12:16:40PM +0000, Leo Yan wrote:
-> >>>>>> GCC-15 release claims [1]:
-> >>>>>>
-> >>>>>>   {0} initializer in C or C++ for unions no longer guarantees clearing
-> >>>>>>   of the whole union (except for static storage duration initialization),
-> >>>>>>   it just initializes the first union member to zero. If initialization
-> >>>>>>   of the whole union including padding bits is desirable, use {} (valid
-> >>>>>>   in C23 or C++) or use -fzero-init-padding-bits=unions option to
-> >>>>>>   restore old GCC behavior.
-> >>>>>>
-> >>>>>> As a result, this new behaviour might cause unexpected data when we
-> >>>>>> initialize a union with using the '{ 0 }' initializer.
-> >>>>>>
-> >>>>>> Since commit dce4aab8441d ("kbuild: Use -fzero-init-padding-bits=all"),
-> >>>>>> the kernel has enabled -fzero-init-padding-bits=all to zero padding bits
-> >>>>>> in unions and structures.  This commit applies the same option for tools
-> >>>>>> building.
-> >>>>>>
-> >>>>>> The option is not supported neither by any version older than GCC 15 and
-> >>>>>> is also not supported by LLVM, this patch adds the cc-option function to
-> >>>>>> dynamically detect the compiler option.
-> >>>>>>
-> >>>>>> [1] https://gcc.gnu.org/gcc-15/changes.html
-> >>>>>>
-> >>>>>> Signed-off-by: Leo Yan <leo.yan@arm.com>
-> >>>>
-> >>>>
-> >>>> Thank you Namhyung for the Cc.
-> >>>>
-> >>>> I built bpftool with the patch, with gcc 13 (which didn't get the flag,
-> >>>> as expected) and gcc 15, and it's fine with both. As far as I can tell,
-> >>>> bpftool does not initialise any union with "{0}" anyway.
-> >>>
-> >>> Thanks a lot for testing!
-> >>>
-> >>>> One potential concern (I didn't try) could be for cross-compilation:
-> >>>> bpftool's Makefile sets HOST_CFLAGS based on $(CFLAGS), but $(HOSTCC)
-> >>>> and $(CC) could be different versions of gcc, for example.
-> >>>
-> >>> To avoid confusion, we can use EXTRA_CFLAGS and HOST_EXTRACFLAGS instead
-> >>> in Makefile.include:
-> >>>
-> >>> -----
-> >>>
-> >>> # cc-option
-> >>> # Usage: CFLAGS += $(call cc-option,-march=winchip-c6,-march=i586)
-> >>> cc-option = $(call try-run, \
-> >>>        $(CC) -Werror $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
-> >>>
-> >>> host-cc-option = $(call try-run, \
-> >>>        $(HOSTCC) -Werror $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
-> >>>
-> >>> # Explicitly clear padding bits with the initializer '{ 0 }'
-> >>> EXTRA_CFLAGS += $(call cc-option,-fzero-init-padding-bits=all)
-> >>> HOST_EXTRACFLAGS += $(call host-cc-option,-fzero-init-padding-bits=all)
-> >>>
-> >>> -----
-> >>>
-> >>> Then, in a project, its Makefile can append EXTRA_CFLAGS and
-> >>> HOST_EXTRACFLAGS to CFLAGS and HOSTCFLAGS respectively.
-> >>
-> >>
-> >> This sounds like it should work for bpftool as long as we += and don't
-> >> overwrite the EXTRA_CFLAGS passed from command line. In bpftool's
-> >> Makefile we'd have to move HOST_CFLAGS's CFLAGS-based defintion higher
-> >> up, before we add the EXTRA_CFLAGS to CFLAGS; and if anything needs to
-> >> be passed to the host binary, users will have to specify
-> >> HOST_EXTRACFLAGS (or HOST_EXTRA_CFLAGS?) independently, which is acceptable.
-> > 
-> > Quentin, do you want v2 with this or just ok for v1?
-> > 
-> > Thanks,
-> > Namhyung
+On 2026/2/26 14:59 Hengqi Chen <hengqi.chen@gmail.com> write:
+> Now that the LoongArch JIT supports BPF_TRACE_FSESSION, allow
+> the fsession-related tests to run on LoongArch.
 > 
-> 
-> Hi Namhyung
-> 
-> (I'm not entirely sure what v1/v2 refer to, this one was tagged v2 and I
-> suspect v1 was the first post before the resend - I suppose you mean
-> this one is v1 and a v2 would be with an additional host variable.)
+>     $ ./test_progs -a fsession_test,get_func_args_test,get_func_ip_test
+>     #136/1   fsession_test/fsession_test:OK
+>     #136/2   fsession_test/fsession_reattach:OK
+>     #136/3   fsession_test/fsession_cookie:OK
+>     #136     fsession_test:OK
+>     #138     get_func_args_test:OK
+>     #139     get_func_ip_test:OK
+>     Summary: 3/3 PASSED, 0 SKIPPED, 0 FAILED
 
-Oops, right.  They should be v2 and v3.
+Hi Hengqi,
+
+The testcases is updated in c1eee8d1e84f "selftests/bpf: factor out
+get_func_* tests for fsession", so we don't need the 3rd patch anymore.
+
+Thanks!
+Menglong Dong
 
 > 
-> I don't want bpftool's HOST_CFLAGS to inherit
-> -fzero-init-padding-bits=all if the compiler doesn't support it, which
-> may happen with the current version of the patch. I'd prefer a version
-> with separate EXTRA_CFLAGS and HOST_EXTRA_CFLAGS, as proposed by Leo and
-> discussed above, to address the cross-compilation issue.
+> Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
+> ---
+>  tools/testing/selftests/bpf/progs/get_func_args_test.c | 3 ++-
+>  tools/testing/selftests/bpf/progs/get_func_ip_test.c   | 3 ++-
+>  2 files changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/progs/get_func_args_test.c b/tools/testing/selftests/bpf/progs/get_func_args_test.c
+> index 075a1180ec26..afb185fdf60c 100644
+> --- a/tools/testing/selftests/bpf/progs/get_func_args_test.c
+> +++ b/tools/testing/selftests/bpf/progs/get_func_args_test.c
+> @@ -167,7 +167,8 @@ int BPF_PROG(tp_test2)
+>  }
+>  
+>  __u64 test7_result = 0;
+> -#if defined(bpf_target_x86) || defined(bpf_target_arm64) || defined(bpf_target_riscv)
+> +#if defined(bpf_target_x86) || defined(bpf_target_arm64) || \
+> +    defined(bpf_target_riscv) || defined(bpf_target_loongarch)
+>  SEC("fsession/bpf_fentry_test1")
+>  int BPF_PROG(test7)
+>  {
+> diff --git a/tools/testing/selftests/bpf/progs/get_func_ip_test.c b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
+> index 45eaa54d1ac7..3816a3616fbe 100644
+> --- a/tools/testing/selftests/bpf/progs/get_func_ip_test.c
+> +++ b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
+> @@ -106,7 +106,8 @@ int BPF_URETPROBE(test8, int ret)
+>  
+>  __u64 test9_entry_result = 0;
+>  __u64 test9_exit_result = 0;
+> -#if defined(bpf_target_x86) || defined(bpf_target_arm64) || defined(bpf_target_riscv)
+> +#if defined(bpf_target_x86) || defined(bpf_target_arm64) || \
+> +    defined(bpf_target_riscv) || defined(bpf_target_loongarch)
+>  SEC("fsession/bpf_fentry_test1")
+>  int BPF_PROG(test9, int a)
+>  {
+> -- 
+> 2.43.5
+> 
+> 
+> 
 
-Got it.  Leo, can you please update the patch?
 
-Thanks,
-Namhyung
+
 
