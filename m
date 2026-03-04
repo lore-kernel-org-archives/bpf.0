@@ -1,99 +1,129 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 496D53101A0
-	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 01:52:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 980E570808
+	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 02:04:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772589147; cv=none; b=LG8mvr4r8baK3J7210Ayx9/LMvBITF1kuPA0OEEUceUn2LJGPkMel7STu3EmhcjySuha0EYwOhWb83t4vkptUTf4Myhu2FY2wGtfbQ4PMYn0QqoxJgWu2+zJt5uLiFGHbZUS8dFUnvj95WHAuwDKUSajEfcZ5q+moMY0ffG1ypE=
+	t=1772589864; cv=none; b=HOOHYyvu6+Nv1YQn8QBMs0+5rfkj6OIJ0B0uUemGRzkuu5IZl0SrDOkZCpnT0l2+zzOObCjm8OSUg3/1R4GdQHHDq1kg6pV4cJNNqoQdwtIfmDLsPZWNzUOS3pQDtTWi8O3pJOJQM6dwKrQwO3CWerjDaY4bUkRZLWpZKacey9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772589147; c=relaxed/simple;
-	bh=rPTY48Iubdpu3NXqy8HT4V9ZO1OkhsoHpesXWdjQcyo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=GCV82pEqruWaJDrLkQieL9hd4XUC3e8X1suv03U77hEDNL3gIVqiNV+2SFlJBl6KyC7GkLmttUypkOZ/urCAzJ99mOVFRpO9nXiwFzd1KT+hUvLDEXrXpiwHaxi/hT1L2DAok7/m4iH99Gv/0Sp5td0CWs5Ob8YCodrD6e27HXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PtsiLxOK; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772589864; c=relaxed/simple;
+	bh=QhTV/iWXDi65yO7UJFlwrHJ77vXGxJPcWuiou5imFPw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=e9ROXjZGO05JGt/I8XMqDfsjIfP3z0RmP4+lQtMTe06owNAEyo1Ptw6XmE0fJC94uTlqteQ7LtvU8VkI35E6HCwRKDbgX+8Uo0k4A7phJPQy01nVaeIAeJEiGvtQC5AG+0kyHRVEGiSk0VOBqjCWZfc6qRl+4DgxxIGNMTrM4ac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vIO0GibL; arc=none smtp.client-ip=95.215.58.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PtsiLxOK"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2ae50a33ff8so22902575ad.3
-        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 17:52:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772589146; x=1773193946; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aIvIgLHoIA/uDprnWtl8reZar/8ysIY1y6EtxkybfUM=;
-        b=PtsiLxOKAnZ9tEhClG8ESRh2vTYOUoFW39PAyzPvM5/CjswgMRNrsvDrdLVJj6wx6L
-         29HeK2xhCarltxdHnHT9pOVsJxTjtybYhAIWQsLRWeHtDbJj9LrUmp++fcaB5vkoc1B4
-         jv39AlhFk/I/pPh4HQjXDSaXzPbwat5sffDD9SreITKtI3O9jigvtCv8/ELdRyqCm7VO
-         Tx9w1KVp1oWgaVt5nwQjww9GMlDgvttVYE6csaeT91UQzVLDDz15J9uK7X77AqNOVPTq
-         u0BTqnSCi4A2220uY1wQXnnDbaFd6Qk35g8utMutbyc7OnQfSk2WJF3117rKGfsKY/w8
-         wo5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772589146; x=1773193946;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=aIvIgLHoIA/uDprnWtl8reZar/8ysIY1y6EtxkybfUM=;
-        b=GsrLukN0Gx6w9pnTRuv+b+rz6BBjHuKx2vUVOPcrUp/xnU3aeFoFt1s3rbP1Xq1nDD
-         8Il0YA3++ur6sFRQLVXvvhs6X0uV0NiovfKvK8AEtG1aKie0c4Ut1Q9q9SCZR+90oukp
-         1sz72YFd9R6gRnzcmS5oc3G+Y4wVklVDHLM0km/kdbP69tPaWswQ3oznJJKhPt+adVNh
-         2N1/jhq/mc8+k+trpMh0+FDAsZsjH5Bv4CU4LE7TUWvXtECUZJ05FGZw5k9lHTKfOeG+
-         mAbi5PySLz8EFg+jhIdnmJcZMa4t2STs1h1ZwDPVQuHiMJszdCqt0jcUpHOCE8AwjmL5
-         tUmg==
-X-Gm-Message-State: AOJu0YxKMtnY6S0A1WrdaxPbyrXIHVVRB0xKxVr20Q8IM9e0QuzA0Xak
-	JnAQY+gZZhc0nPkRmsfzcw9o+x8wojZ3GFtxzDa5Kj8qP/HuRQFcNXvH
-X-Gm-Gg: ATEYQzxghRGwkFQehPiNkU2cM93on3rKUxMs7omO2ZKHqg5oOh1txLb0wlQKmRoZrBp
-	wr9sUv30PJTyE5/4017LX57oQ6hc3d/o5wFtaMLZEfPSp7tffSiwnGtqvf7/aZlmSedvaI+kEAx
-	khymEpAkQagajPJsUH4XNZdajq0ivFEd2MLcXt9kr8G0ZVH33dqqxgLX5sv/KipZQ5SdkxV3R4T
-	fpcCcNyXeH9egiMpwZjGpheO9hKzZN/0Tl51PzNeO/FW6w+NYWZgH1sgwnYWlyCvGfTDxe/alvS
-	mrwvKTdvbTv5WKQ/8um3S4o7r8a2VLzQ4vKz6nb1514PBHjBfDZyyaiMCdZPBQP7qUuUrIh7LyM
-	tYAgrZ4qynm27nVv8yu+HZmslNf9hipM6mGuDT9ROqJEtuyXOQrAfzNd2ez4IRCAxTQUfanZbe1
-	hCwlsIHDjRVtKJUiS9CnbO+6+EirgH86Y1H58NF/7Nwp5ojenxzB15WXQASrt73UM6xRAxpxl/4
-	TXI7BTLV1B3
-X-Received: by 2002:a17:902:fc8d:b0:2ae:5426:da46 with SMTP id d9443c01a7336-2ae6aa8e99fmr5074385ad.29.1772589145620;
-        Tue, 03 Mar 2026 17:52:25 -0800 (PST)
-Received: from dpc2500057.. (fsb6a9315e.tkyc502.ap.nuro.jp. [182.169.49.94])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2adfb5c20d3sm251074665ad.25.2026.03.03.17.52.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2026 17:52:25 -0800 (PST)
-From: Keita Morisaki <kmta1236@gmail.com>
-To: jakub@cloudflare.com
-Cc: bpf@vger.kernel.org,
-	davem@davemloft.net,
-	dsahern@kernel.org,
-	edumazet@google.com,
-	horms@kernel.org,
-	kmta1236@gmail.com,
-	kuba@kernel.org,
-	kuniyu@google.com,
-	linux-kernel@vger.kernel.org,
-	ncardwell@google.com,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com
-Subject: Re: [PATCH net-next v2] tcp: shrink per-packet memset in __tcp_transmit_skb()
-Date: Wed,  4 Mar 2026 10:52:15 +0900
-Message-Id: <20260304015215.755299-1-kmta1236@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <87bjh5drmk.fsf@cloudflare.com>
-References: <87bjh5drmk.fsf@cloudflare.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vIO0GibL"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772589859;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dZNYN9APb6O7lTvOGYOzyJCu+M47K/ysceq9bq5ATMI=;
+	b=vIO0GibLLoapKGgBaqp46JHz55azCvqWBBp8FpUyfN/vRMERAZzLwJes4ikCrD5thUwenZ
+	dZ7wmpFKLmWvRQmu12TsNj+HQqaGyn3fPp6ymTwZWbZ3VVB7bTtU5b8UPt9X3HR9Mo3awY
+	gF7QApKWx472HstbZuX6de7LLSrJ0/Q=
+From: Menglong Dong <menglong.dong@linux.dev>
+To: yangtiezhu@loongson.cn, Hengqi Chen <hengqi.chen@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, chenhuacai@kernel.org, vincent.mc.li@gmail.com,
+ menglong8.dong@gmail.com, loongarch@lists.linux.dev, bpf@vger.kernel.org,
+ Hengqi Chen <hengqi.chen@gmail.com>
+Subject:
+ Re: [PATCH 1/3] LoongArch: BPF: Introduce emit_store_stack_imm64() helper
+Date: Wed, 04 Mar 2026 10:04:02 +0800
+Message-ID: <4716621.LvFx2qVVIh@7940hx>
+In-Reply-To: <20260226065952.4082859-2-hengqi.chen@gmail.com>
+References:
+ <20260226065952.4082859-1-hengqi.chen@gmail.com>
+ <20260226065952.4082859-2-hengqi.chen@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
+X-Migadu-Flow: FLOW_OUT
 
-> Loosely related, noticed while reviewing - tcp_out_options.hash_size
-> looks unused:
->
->  * MD5 - always 16
->  * AO - uses tcp_ao_maclen()
+On 2026/2/26 14:59 Hengqi Chen <hengqi.chen@gmail.com> write:
+> Introduce a helper to store 64-bit immediate on the trampoline stack.
+> The helper will be used in the next patch. Also refactor the existing
+> code to use this helper.
+> 
+> Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
+> ---
+>  arch/loongarch/net/bpf_jit.c | 24 +++++++++++++-----------
+>  1 file changed, 13 insertions(+), 11 deletions(-)
+> 
+> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+> index 3bd89f55960d..e3deb0da6a50 100644
+> --- a/arch/loongarch/net/bpf_jit.c
+> +++ b/arch/loongarch/net/bpf_jit.c
+> @@ -1480,6 +1480,12 @@ static void restore_args(struct jit_ctx *ctx, int nargs, int args_off)
+>  	}
+>  }
 
-Great catch. I will follow up.
+LGTM.
 
-> Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
+Reviewed-by: Menglong Dong <menglong8.dong@gmail.com>
 
-Thank you for the review, Jakub.
+>  
+> +static void emit_store_stack_imm64(struct jit_ctx *ctx, int reg, int stack_off, u64 imm64)
+> +{
+> +	move_imm(ctx, reg, imm64, false);
+> +	emit_insn(ctx, std, reg, LOONGARCH_GPR_FP, stack_off);
+> +}
+> +
+>  static int invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
+>  			   int args_off, int retval_off, int run_ctx_off, bool save_ret)
+>  {
+> @@ -1488,12 +1494,11 @@ static int invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
+>  	struct bpf_prog *p = l->link.prog;
+>  	int cookie_off = offsetof(struct bpf_tramp_run_ctx, bpf_cookie);
+>  
+> -	if (l->cookie) {
+> -		move_imm(ctx, LOONGARCH_GPR_T1, l->cookie, false);
+> -		emit_insn(ctx, std, LOONGARCH_GPR_T1, LOONGARCH_GPR_FP, -run_ctx_off + cookie_off);
+> -	} else {
+> +	if (l->cookie)
+> +		emit_store_stack_imm64(ctx, LOONGARCH_GPR_T1,
+> +				      -run_ctx_off + cookie_off, l->cookie);
+> +	else
+>  		emit_insn(ctx, std, LOONGARCH_GPR_ZERO, LOONGARCH_GPR_FP, -run_ctx_off + cookie_off);
+> -	}
+>  
+>  	/* arg1: prog */
+>  	move_imm(ctx, LOONGARCH_GPR_A0, (const s64)p, false);
+> @@ -1726,14 +1731,11 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
+>  	emit_insn(ctx, std, LOONGARCH_GPR_S1, LOONGARCH_GPR_FP, -sreg_off);
+>  
+>  	/* store ip address of the traced function */
+> -	if (flags & BPF_TRAMP_F_IP_ARG) {
+> -		move_imm(ctx, LOONGARCH_GPR_T1, (const s64)func_addr, false);
+> -		emit_insn(ctx, std, LOONGARCH_GPR_T1, LOONGARCH_GPR_FP, -ip_off);
+> -	}
+> +	if (flags & BPF_TRAMP_F_IP_ARG)
+> +		emit_store_stack_imm64(ctx, LOONGARCH_GPR_T1, -ip_off, (u64)func_addr);
+>  
+>  	/* store nargs number */
+> -	move_imm(ctx, LOONGARCH_GPR_T1, nargs, false);
+> -	emit_insn(ctx, std, LOONGARCH_GPR_T1, LOONGARCH_GPR_FP, -nargs_off);
+> +	emit_store_stack_imm64(ctx, LOONGARCH_GPR_T1, -nargs_off, nargs);
+>  
+>  	store_args(ctx, nargs, args_off);
+>  
+> -- 
+> 2.43.5
+> 
+> 
+> 
+
+
+
+
