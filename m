@@ -1,106 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D5C2381B07;
-	Wed,  4 Mar 2026 07:54:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9DD36BCEA
+	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 08:00:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772610882; cv=none; b=aG8ZymkR+dYYjh4NrAlXaMkFJLvQHTHa6MAbmtkc1Sh/2NbH9mEFuelmN5h/S427M7yO/OptAd3Gt6hpufaJ0IUqvfiKe7AFBloKXcE8E2Mg2Lr0BktCk+xKSZJ8tVtMfW7Yvo6Z8+iStLVQA97P4xfUL67m6/g45lHjOENFQT0=
+	t=1772611229; cv=none; b=Ym46K9hGYIqeu8j/LSmolmt8HW0J2/xmm4UPncFJinFmuu7PGlqFzxP+hqjOxRYiraC8ubRrOWlL14Bloyl7sZis51rA79YvcJ/pnC6Ay69NAL1ND2zsQ71MjcS+8QSZzozu2zY/VaJF12HGYYR0UYvnb3Pwa4IJr5BtE05E0Ig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772610882; c=relaxed/simple;
-	bh=QitYUOa5hzFGpdv5n4wqmr5lh5JEpHpUcevnVR00OEI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=KtPq6Pi5EemhmO7OebZ9O2Q1kG+CyU1c74KjAWNLAquBoY82w/kobm2O1r1vHAjcvjls8YYWaR88Bxk26DCNrPJG+IxblJXiYUMYi4HQfFCYYtzCr6z9UurnVNET4H2F8F8Nwu0qQTj7Mb3kC5SgJGkCIa+CWbedK5w3C2M5OhE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gXUPZJpz; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772611229; c=relaxed/simple;
+	bh=kMUUQDzznqRvF1LLeIcupGnl7rhKPcy9b0LRaImOvMA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QnygynWi9ssOsDA5RIFVZG+rJjo7tO3ky7tLSASRs73UEuwFIDb1KkPXSN4VJLrXuriZzxkiVJqPJ5trS45ZaCTKWUQP9dGv/BVOtk+eNZ8mcvW9y9qLnXV/q63NxCi9FsbJsIvQAjZ+ODEaz0AxXsM/TblkiPik8xxNKarlon4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fBimobs1; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=IIqw3yVr; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gXUPZJpz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5F01C19423;
-	Wed,  4 Mar 2026 07:54:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772610881;
-	bh=QitYUOa5hzFGpdv5n4wqmr5lh5JEpHpUcevnVR00OEI=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=gXUPZJpzSJNftDFZ8qi6wKfmoDHUcaTy/Bu0laVkqliIFYn9OChJEXi2koMT5Kgws
-	 Z1qHseQeEWrRSVAgbdFpIjsqanT9uxq0nt283eN9Zie5WABAl+um/K0bxMp9yuheMb
-	 eZJpn5DOx9eG9HlLcGPq1KakiwFVglLJKSfi6Cd2e/R5vRZS7XoyVo/hEgLAQ+ES7d
-	 RUUoW5frUdwjmbY+PKb/HWTyD6FEPjGQ3VHMbTMDdruOQpRlCTcotdBAYGxSIDUmAB
-	 l6Y0TolK9m1B5hq41OhY8plYfAf4rYAA5+G811Xx7oWLgWhuoWZkck1YrCUL+bXWhp
-	 2uQOO1wX3aQcg==
-Content-Type: multipart/mixed; boundary="===============7477303576377298078=="
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fBimobs1";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="IIqw3yVr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1772611227;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ze7UOcsS/0AQxjqOP6QoDrpCM4RWmrrojsTRiFn/AcA=;
+	b=fBimobs1UE0Fw5Bd1dlHHAFUK0PKIgo4XGRn4I9eNRBbzfKnH+SLnmquQYm1ApdSPb6/l2
+	jAC1mi7v16K7XFooc9clVHq0RubOzsTjbeY5s6A3lEDEO50lKVN3pu4X0ZuBbhJLXVgLqr
+	UQcKCk4+z17JKggPNVKuB0IX/ypkDoI=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-659-xS2Cab4MNLuFkKkukgMKrQ-1; Wed, 04 Mar 2026 03:00:25 -0500
+X-MC-Unique: xS2Cab4MNLuFkKkukgMKrQ-1
+X-Mimecast-MFC-AGG-ID: xS2Cab4MNLuFkKkukgMKrQ_1772611225
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-48379489438so62165825e9.2
+        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 00:00:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1772611224; x=1773216024; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ze7UOcsS/0AQxjqOP6QoDrpCM4RWmrrojsTRiFn/AcA=;
+        b=IIqw3yVrFWp94iv+h62GZUGTrq8V2TONxJFPx0+H3o4jcjB2OhJNMYZtwzRSvoveRW
+         R1v8tV1OfhPs/G7MBtGyfqQoG98PAuGKWRW3mRe83pm9YeFV+Qn8lOVzr5hFMTYW+0rQ
+         xwLr8UGSFa5HekldT875Sh1SbRnbbt93YtGYco2mdh5I44fW/BNNJlGWGJaHBGJOOAUp
+         sC9dV0Mr1emGraOlgo5uhEI4L6K0am92B3fOL3g1cJV3boYkNwegNbtVsAOJtvcTtbco
+         f45RwK/x5a4BjrN8ZDm8dh6SX4EAkBf08kOWLwQSJAp/uzm9ObRv1UMfU0tlUAIUG3uQ
+         uNmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772611224; x=1773216024;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ze7UOcsS/0AQxjqOP6QoDrpCM4RWmrrojsTRiFn/AcA=;
+        b=cermuWYxWzSInCQP0B18eFZmu5+4adpXT8D7aWgDlMcP168+kMMcKp8cPCsNy5fLEl
+         yTVnkZg8n3KCV1ft+Gd/Er5DCWbW4xBDr44dwwg/PyVbWc1PyYpp8iqogCruNQNUs3Nu
+         jzFNLI6mgvQPPE5ww304kzGwsYQ+6aE8wKyWoK1Ppgw8DjpKgod5nlNH9V2uLkIt3JXA
+         S/ViARxoXV3rMu6ZuNrg0OKJUsF2NcI6hNOgBEM7+tNhpOqxUP0iojzXNeOM7SxmlMB+
+         dARnrOMDjl07ApVzUThP9jK/b2ny83SVn2k9HvQh5BfMybZHn83mQUSh85tVWcXk4SQq
+         JbaA==
+X-Gm-Message-State: AOJu0YxqUkMjdK6hzQwquWTl7T1Uid5KGcJoBn1U+tXYxjdR8NP9GmEu
+	S1p6ORMubfmlLgnf6wsuWygTwQwozA/UiRBpw+0mK1NamOdBbvea03zXL+xPF5wp4jVZrhCg16f
+	fINn4qryeFfrGdyJyUFFL/vcIh617muSN4HwjeTHnIij1skHM+mDf
+X-Gm-Gg: ATEYQzzHkmh4tLf3/2q8nB+hZwJfSckYsHcTAc6vPYRrMKMa+o6z8cldjDWG/1/tQgA
+	8Go+FSwY2BEom0k26Sathyy2vZK1DoH1kezOfz9yB7rtXftwER6Pp7/98gGt4dMirhUZToWd7fu
+	wmx1ARBJ5BmF1kC4fQndhoUIg8p4RzpB5viQ5830MN4zmLQJrdRMIDM3aY8UXNmYXY4DJdoAZxB
+	9JGJrczzbxvvWWjNIOLGPRExTluF9+XGaE7HHGhV1gFifvxUBIZUni2pGf2QtQUuOd3t5IrreuC
+	C5H7vlFSnEeEbeGXfTch0quBHJPc3+uR5T468TAjf7ixfU1yCtd50jIb01UEJnk2HKDlrbGAmDl
+	JKUPLJBubtyZ5GZHV54zKyuH7srFspNmKjgiAbywOhRsGNNoUQWE4LSufrg==
+X-Received: by 2002:a05:600c:530e:b0:483:887:59b0 with SMTP id 5b1f17b1804b1-485198be61fmr16301735e9.35.1772611224049;
+        Wed, 04 Mar 2026 00:00:24 -0800 (PST)
+X-Received: by 2002:a05:600c:530e:b0:483:887:59b0 with SMTP id 5b1f17b1804b1-485198be61fmr16301005e9.35.1772611223270;
+        Wed, 04 Mar 2026 00:00:23 -0800 (PST)
+Received: from ?IPV6:2001:67c:1220:8b4:be:aaf2:74d9:219f? ([2001:67c:1220:8b4:be:aaf2:74d9:219f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4851a8aa589sm6024015e9.5.2026.03.04.00.00.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Mar 2026 00:00:22 -0800 (PST)
+Message-ID: <c37a5cca-67d4-4eff-82cd-665913d61888@redhat.com>
+Date: Wed, 4 Mar 2026 09:00:20 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <1c92317f67a41ca1ea84e2cd52cd276f8e3c63be7b128b42564bbef4b427e4a6@mail.kernel.org>
-In-Reply-To: <20260304070927.178464-1-wangqing7171@gmail.com>
-References: <20260304070927.178464-1-wangqing7171@gmail.com>
-Subject: Re: [PATCH] bpf: Fix use-after-free in __bpf_trace_run()
-From: bot+bpf-ci@kernel.org
-To: wangqing7171@gmail.com,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org
-Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,wangqing7171@gmail.com,syzbot+b4c5ad098c821bf8d8bc@syzkaller.appspotmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed,  4 Mar 2026 07:54:41 +0000 (UTC)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next] selftests/bpf: Split module_attach into subtests
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Shubham Sharma <slopixelz@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Steven Rostedt <rostedt@goodmis.org>
+References: <20260225120904.1529112-1-vmalik@redhat.com>
+ <CAADnVQKSVu-dTqqENSdznsoo6cva006P8qAJkx4RTp8JyEXVig@mail.gmail.com>
+From: Viktor Malik <vmalik@redhat.com>
+Content-Language: en-US
+In-Reply-To: <CAADnVQKSVu-dTqqENSdznsoo6cva006P8qAJkx4RTp8JyEXVig@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
---===============7477303576377298078==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On 3/3/26 18:26, Alexei Starovoitov wrote:
+> On Wed, Feb 25, 2026 at 4:09 AM Viktor Malik <vmalik@redhat.com> wrote:
+>>
+>> The test verifies attachment to various hooks in a kernel module,
+>> however, everything is flattened into a single test. This makes it
+>> impossible to run or skip test cases selectively.
+>>
+>> Isolate each BPF program into a separate subtest. This is done by
+>> disabling auto-loading of programs and loading and testing each program
+>> separately.
+>>
+>> At the same time, modernize the test to use ASSERT* instead of CHECK and
+>> replace `return` by `goto cleanup` where necessary.
+>>
+>> Signed-off-by: Viktor Malik <vmalik@redhat.com>
+>> ---
+>>  .../selftests/bpf/prog_tests/module_attach.c  | 171 +++++++++++++-----
+>>  .../selftests/bpf/progs/test_module_attach.c  |  63 +++----
+>>  2 files changed, 148 insertions(+), 86 deletions(-)
+> 
+> Applied.
+> Could you also take a look at why the test takes so much time?
+> time ./test_progs -t module_attach
+> #220/1   module_attach/handle_raw_tp:OK
+> ...
+> #220     module_attach:OK
+> Summary: 1/14 PASSED, 0 SKIPPED, 0 FAILED
+> 
+> real 0m5.072s
+> user 0m0.275s
+> sys 0m0.199s
+> 
+> It's not caused by your changes, but would be good to understand and fix.
 
-> Fix by calling tracepoint_synchronize_unregister() to ensure tp_probes
-> is freed before allowing the link to be freed.
+Yeah, I noticed, too. I'll have a look.
 
-tracepoint_synchronize_unregister() calls synchronize_rcu_tasks_trace()
-and synchronize_srcu(&tracepoint_srcu), which wait for in-flight
-readers to complete. They do not ensure that call_srcu() or
-call_rcu_tasks_trace() callbacks (the ones that actually kfree
-tp_probes in rcu_free_old_probes()) have been invoked -- that
-would require srcu_barrier()/rcu_barrier().
-
-The fix is correct because after tracepoint_synchronize_unregister()
-returns, no tracepoint callback can still be executing with a reference
-to the link through the old tp_probes array. Would it be more precise
-to say the synchronization ensures all in-flight tracepoint callbacks
-have completed, rather than that tp_probes is freed?
-
-> The link(struct bpf_raw_tp_link) was freed when link->link.prog.
-
-This sentence is difficult to parse. Perhaps something like "The
-link (struct bpf_raw_tp_link) was freed before accessing
-link->link.prog"?
-
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 274039e36465..b179e96ebf2b 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -3783,6 +3783,12 @@ static void bpf_raw_tp_link_release(struct bpf_link *link)
->
->  	bpf_probe_unregister(raw_tp->btp, raw_tp);
->  	bpf_put_raw_tracepoint(raw_tp->btp);
-> +
-> +	/*
-> +	 * Ensure tp_probes is freed before the link. This prevents
-> +	 * use-after-free in __bpf_trace_run() when a tracepoint fires.
-> +	 */
-
-Same observation as above about the commit message. The comment says
-"Ensure tp_probes is freed before the link" but
-tracepoint_synchronize_unregister() ensures all in-flight tracepoint
-callbacks have completed, not that the tp_probes freeing callback
-has run. The UAF prevention comes from readers finishing, not from
-a freeing order.
-
-Something like "Wait for all in-flight tracepoint callbacks to
-complete so the link is no longer reachable through tp_probes" would
-more accurately describe the guarantee.
-
-> +	tracepoint_synchronize_unregister();
->  }
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22659523367
---===============7477303576377298078==--
