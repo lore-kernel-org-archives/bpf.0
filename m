@@ -1,128 +1,102 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B35042DB7B4
-	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 06:17:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5E0B37FF42
+	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 06:23:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772605079; cv=none; b=q2ZAjUbl9OW9kclAuc2t92lM50Jgc4JvxndZ9T3n5Ww1VKizbQ+YSPyx5gU2DmZJ5qKDPEW7oAWK69BKy6iMUmmPxlUHMRUheQ4xroXnp9cVSdRzvmZEV61oqELY4bcQ26OA3EWYYmLaUw5BXzFVS2OUOxXz5rPKIik6Hxd/nHg=
+	t=1772605393; cv=none; b=B+H97yJCCcOtguFm3WIc4zpqwtI7nMBwfRqwN3bpYNw3QleXN/rp25POg4vDnSNsXAB99NOnoLuuDe0jW+HszuhCs45z48kANooFajcFjSvUhCGprXDgyjhhvx85u+AEihTyh5Lpe/k3LpvZSgBKJsDHgnI6lPaPB3jipfZ6rqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772605079; c=relaxed/simple;
-	bh=A4Xtcv5kM6K6vci3wtfbZ4vMYs3E/kbIxMZAcCaxwlg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nwUj+UBcsczHWQadRFqbci50nkDUFf+02hfP8W2NI59Od4TLboNMa9HdwIc7JtsLBViMC5Oa+zvKaxWta56mEyuc3cDh02NvwOXtSwKISg8xhOgpO3JTKHjaDm327Rq7bZngPLGeoKgSFbPGPFxFae0Y6C2wH9FnM/vFkoNQvIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=G1ztogz3; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1772605393; c=relaxed/simple;
+	bh=Hp2QrPOWKqCv7nAk4ci0TLOs1jBx/SSiuHZVLojI+Co=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=MxzmvI+Ys5PmuZ8gz29d+8l9QvM5k8fugrRS2mIRR2dcirpstUU5ze75yEWrNUdeLgEPlYTuqmsEQjDG1HQVc8Kw7szrAiyLBwpHu0FRmrV6NdVN+fTlE4fRHur2S7wPMhHmAMkDIOM2XbfpA1WyL+7KNuatJYLKIvWelah5TO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iA7roWzM; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="G1ztogz3"
-Message-ID: <91bad178-9cbe-42db-a91c-01bacfdf9653@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772605065;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NmtNQLaw6mVn27gnuT4O9OA3tJ6/3X+wThoJDlyqgko=;
-	b=G1ztogz35lYYrJLq86l9llfZAbHF6iIW2G4izdPZJuehYTp5KTQgG4mTbpq4DP3wpm5CRQ
-	FKD6kLAjS8MpqLVjIrB+jlcQW2lAGlUllBiqhIYcQiqVJuhFYqhet5zzbNh4Q5P04UtFgK
-	Y90PUMwiprF1rhvLdvu8IfC0HVgdeLo=
-Date: Wed, 4 Mar 2026 14:17:31 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iA7roWzM"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-35995cb33a8so1491826a91.0
+        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 22:23:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772605392; x=1773210192; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=f9B/eoXPHzf4Ne438osq3GavHWtC0eEvRnIZrrT/wzs=;
+        b=iA7roWzMkYyAkMGrHXcjq65NhpNDbVWNh7D+u0c9H68N5fG0C08OPApcIjBXJ6+Wwx
+         hjQ+x3xmepHpgFPTm4mqk0UB+SbujcJjvDwjYXIYhrYZw5FbRjFufPHUvePGg+T8JKHj
+         9oNrV5Gfe+pccKeF2fULUKTWEb7Rw5YWJPzQy6uWPzBx5rp8+HzqH84pR8Y4kRYp78Uf
+         RQ24hxhxK9QW990ZG4oalCakUQmBLTJtTWXjTT2IhtBvMulYZ2Pmw+NM97S1pGiVTYb+
+         iRC7NI24sYTIHrW4hSeQW27dhNnx5gsftp4r/WaO4c18Q1d96KrT24DebTBMT4IaV0Bq
+         bJDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772605392; x=1773210192;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f9B/eoXPHzf4Ne438osq3GavHWtC0eEvRnIZrrT/wzs=;
+        b=B5ZMjekSRZaaRUw53K4AaE3dnkYBgy4j2mUe77xk36xM22deENzulriC8XUuk1fbVD
+         clyLuZ4VyvAWTJNcYM8S5AmN7pijlNugOinZZiRoT3iVwjLM6EIwYyDQv4CM05no3lyd
+         iwBMDreqokx30DnRUC2nBxgKgw2AGThvsGb0Xchv4xiYoocQlGCTyiewrWzcM7pYR6Hi
+         5Du/xaPeDjuYHmOxpf7ErSkgXjA7TjS6PiHUYjwfdduP9R0TYUVQgartIBA5ElYLWt/0
+         za9VQuAxErsKOtpEVSVnUrrGcQCkuAb8LA4v+ok3TjyO3ZJhguNGxGxy/NlZJaiSL2gO
+         19+w==
+X-Forwarded-Encrypted: i=1; AJvYcCVWt6Jzfmhj8Loc8YDF24BOAXxAmHehmWPWBAYFFtrlMyETtYOWlqjJpa1C9vydWIjXS30=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxXJPA5+9Uj/j+1IzfUT66kmV/aJNN0I2ua+5H6GbzHOLvSLsi
+	e2+3HRwVsjEjFPGoO5PUr0qQfj5hJBO3VZxlk53nupMOPMatRpu2ntXB
+X-Gm-Gg: ATEYQzxvMSEA3cbZiP3BqJU9lMKdCkycQW4ECMw84L7gvr0VKpBwq0VSh7H4eZP5300
+	6LpuNJP1I/BD23e24l1vRZlqDO5r+NeBWZH63ZwGxIxtV5fl/7EXB90vF0cs2OZKpFhByB2cn+1
+	DrswPqXBMbuYAjs8lhXDNMBOIyMSEBLbmiCVGI5rjZRG6rX2rvMyPfIWZPON3vPMuTSEx6DS2wB
+	85m509R0Uxm4bj22suJVjQz7xNf6ZCZsx9Oiq/+8x/GndOa3BAERU6Z+gjAlWRC2gstfdDjU1Ot
+	2c/3iiz2JqYPcZY1LMZO+sgL4haq5Fo+Zzg4YpbJK7jF2ro7hVaw64A2U/3VyXS7gf4Xk91FfB6
+	TlHEBwtl2/E+tu/svIU/iDmOgV9KuZNDKpX94qgvE2k8SUoPgW0yyMC4sXBGFVja2SgnJdBoxFG
+	7JLn9iRk8k1nlUmx4hx60YOWPrDmT3KekazCgFa2pyO4NUGPPuHKEf
+X-Received: by 2002:a17:90b:2f87:b0:352:d933:5574 with SMTP id 98e67ed59e1d1-3599ceb537dmr4072869a91.9.1772605392279;
+        Tue, 03 Mar 2026 22:23:12 -0800 (PST)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae54e394aasm96198375ad.77.2026.03.03.22.23.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Mar 2026 22:23:11 -0800 (PST)
+Message-ID: <e50cb1e9f805d55a04cf0396aeb9fa3823a2f37b.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v5 4/5] bpf, x86: Emit ENDBR for indirect jump
+ targets
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Xu Kuohai <xukuohai@huaweicloud.com>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
+ Lau <martin.lau@linux.dev>, Yonghong Song	 <yonghong.song@linux.dev>,
+ Puranjay Mohan <puranjay@kernel.org>, Anton Protopopov
+ <a.s.protopopov@gmail.com>
+Date: Tue, 03 Mar 2026 22:23:09 -0800
+In-Reply-To: <20260302102726.1126019-5-xukuohai@huaweicloud.com>
+References: <20260302102726.1126019-1-xukuohai@huaweicloud.com>
+	 <20260302102726.1126019-5-xukuohai@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v10 3/8] bpf: Refactor reporting log_true_size
- for prog_load
-Content-Language: en-US
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
- Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>,
- Andrey Albershteyn <aalbersh@redhat.com>,
- Willem de Bruijn <willemb@google.com>, Jason Xing
- <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>,
- Mykyta Yatsenko <yatsenko@meta.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
- <ameryhung@gmail.com>, Rong Tao <rongtao@cestc.cn>,
- LKML <linux-kernel@vger.kernel.org>, Linux API <linux-api@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- kernel-patches-bot@fb.com
-References: <20260211151115.78013-1-leon.hwang@linux.dev>
- <20260211151115.78013-4-leon.hwang@linux.dev>
- <CAADnVQKc5H=k-++CHxs+Y1ggptRSLRcACLgVaMgOmt=QBT=dkA@mail.gmail.com>
- <c9cd645f-810b-4dd4-a1ed-27569dca5055@linux.dev>
- <CAADnVQJ4E5L8rL-K=yJJZpCeRBvEJZcSKOEQP0kg2ztowhGmvA@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAADnVQJ4E5L8rL-K=yJJZpCeRBvEJZcSKOEQP0kg2ztowhGmvA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
+On Mon, 2026-03-02 at 18:27 +0800, Xu Kuohai wrote:
 
+[...]
 
-On 4/3/26 13:58, Alexei Starovoitov wrote:
-> On Tue, Mar 3, 2026 at 9:47 PM Leon Hwang <leon.hwang@linux.dev> wrote:
->>
->> On 4/3/26 00:32, Alexei Starovoitov wrote:
->>> On Wed, Feb 11, 2026 at 7:13 AM Leon Hwang <leon.hwang@linux.dev> wrote:
->>>>
->>
->> [...]
->>
->>>> @@ -6241,7 +6244,11 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size,
->>>>                 err = map_freeze(&attr);
->>>>                 break;
->>>>         case BPF_PROG_LOAD:
->>>> -               err = bpf_prog_load(&attr, uattr, size);
->>>> +               if (from_user && size >= offsetofend(union bpf_attr, log_true_size))
->>>> +                       log_true_size = uattr.user + offsetof(union bpf_attr, log_true_size);
->>>
->>> So you added 'from_user' gating because
->>> you replaced copy_to_bpfptr_offset() with copy_to_user()?
->>> This is a drastic change in behavior and you don't even talk about
->>> it in the commit log.
->>> You said "refactor". This is not a refactoring!
->>>
->>> This is v10. The common_attr feature is useful, but
->>> you really need to think harder about what your patches
->>> are doing.
->>>
->>
->> Refactoring should not introduce any functional changes. If a functional
->> change is involved, it should be factored out of the refactoring commit
->> into a separate commit with an explanation in the commit log.
->>
->> I'll add this to my self-review checklist.
->>
->> The intention of 'from_user' was to replace copy_to_bpfptr_offset() with
->> copy_to_user(), since the log is always copied to the user-space buffer
->> when the log level is not BPF_LOG_KERNEL in
->> kernel/bpf/log.c::bpf_verifier_vlog().
->>
->> The 'from_user' gating will be dropped in v12 to keep this patch as pure
->> refactoring.
-> 
-> You were told multiple times to avoid copy pasting AI into your emails.
-> Sorry, but this crosses the line for me.
-> Your patches will be ignored for 2 weeks.
+> @@ -2449,7 +2452,7 @@ st:			if (is_imm8(insn->off))
+> =20
+>  			/* call */
+>  		case BPF_JMP | BPF_CALL: {
+> -			u8 *ip =3D image + addrs[i - 1];
+> +			u8 *ip =3D image + addrs[i - 1] + (prog - temp);
+                                                        ^^^^^^^^^^^^^
+			Could you please comment a bit why this addend is needed?
+> =20
+>  			func =3D (u8 *) __bpf_call_base + imm32;
+>  			if (src_reg =3D=3D BPF_PSEUDO_CALL && tail_call_reachable) {
 
-Oops. The above reply was written by my hand. Possibly, the reply
-carried LLM smell because I learnt LLM tongue recently.
-
-As you said, I won't send patches for 2 weeks. :-(
-
-Thanks,
-Leon
-
+[...]
