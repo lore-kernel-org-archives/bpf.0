@@ -1,173 +1,95 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D92DE3033E9;
-	Wed,  4 Mar 2026 08:20:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+Received: from sgoci-sdnproxy-4.icoremail.net (sgoci-sdnproxy-4.icoremail.net [129.150.39.64])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3557364EAD
+	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 08:33:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.150.39.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772612453; cv=none; b=c0EmTv5qNznjlUGg6nURLDdXG4jSae7LkVV43fkvixg/g8IECJW/Ej+ObACy6jl+BUzYWo8Hjh4yUI98ERThpTZNWfbsbxknKOYLXLnS8t6jX+9QaROVGVFR7UuivjgbWq08aU13zwaDjrD88JuXDWyMebwc8WTCZzQ+UNddjMo=
+	t=1772613198; cv=none; b=rLq/dCjxJrcUBcK1OWsy4xEj08Y7KLCzR7EEm6LU7q2KNHBVcvz1R7MPxqGdmi8X4pAKUTbqAjk6UEUGnIaNeqbM+kl60BSgliQpXCsLf5flVnRkR2xtHJEwK1/P5wKVNg/9OeQ45ZzyGlW4pD/XN+z+a4vj9g0Fg6yTrd4aLkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772612453; c=relaxed/simple;
-	bh=Yzvz2OcX/hibfB+ZWQ8QvVfOQna2FRgXWAoVtODTmZk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Lt78PkFs+SN45f6Pv5UCM1oVG2dbFPafWqjNd62qx2AK80fHdwe9cQBGFPV9rJAv+ukEaLiAWLo+J852m/EZUkFq4gvsUN/jgdkbNnPeX2D7Qmp9DYH2aDZd2hyoDDX/tFXyIpLk8y+yavgKQAR+uOBrbr2xQsDvLZiTwIIQPG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=ZPsG5A2W; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="ZPsG5A2W"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=e2vLRe8Ez7+7nnLlb+6zDAS5O4Vu0VVVu6ABOx3M68A=; b=ZPsG5A2Wm9WD2hSniEVzfQpt1o
-	FRttmdURymDPemiWMH538njtm2DKCAETKlQ/FwfoERY7jMY3Boj9p5DbnKwjI0X/wpZqudGeJJkXw
-	e1/fRQ1lpbRAT9iI71A5QIvZSHJmEl9Ailon9/IoUKofV9rp7VtQsxxyARdKUpaM6XjwusBbH8J82
-	Pi9JMxfhm3PofRjyN1ZCByYESUNG37aMuS2QcAIxIgNz/VusQhK+Hp1Hmydk7DsZWjdBvdkMI5qR3
-	KaGtiAi3s9WN/0DDs7xbaMjpPcouo1y237Xp/lbrmAU7HEKwvXNYykBqr9blItLT2GQzK+Zibfb9R
-	G8XrNiZw==;
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1vxhTG-000NSi-2n;
-	Wed, 04 Mar 2026 09:20:42 +0100
-Received: from localhost ([127.0.0.1])
-	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1vxhTE-000NtK-2f;
-	Wed, 04 Mar 2026 09:20:41 +0100
-Message-ID: <4d15be93-b497-4499-996d-9f3a67a2abc6@iogearbox.net>
-Date: Wed, 4 Mar 2026 09:20:27 +0100
+	s=arc-20240116; t=1772613198; c=relaxed/simple;
+	bh=ew3iDrY6fawcRRAubjEnQa/QK3iFTGyZ74Y0XN+Ca/I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lNrqzGMhWF7zNHGZRrfTVA13Obqtirv3D3ebZJXX62UW0SO/hafrw9KSq4b/Se+lGqj7e3bx2RfJfT3lvOYkuo5qPQB5r1+/p+LuA06tWW+JmHiEIsgBRVoJzWYUFNhr/SWY44GnqNuF1juYLWO1ARQ5BcfgOyB7/sqq4BaZ9EE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=129.150.39.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
+Received: from zju.edu.cn (unknown [122.224.66.117])
+	by mtasvr (Coremail) with SMTP id _____wBHP2Ym7qdpvssEAQ--.16642S3;
+	Wed, 04 Mar 2026 16:32:39 +0800 (CST)
+Received: from wolframium.tail477849.ts.net (unknown [122.224.66.117])
+	by mail-app1 (Coremail) with SMTP id yy_KCgAHhs4l7qdpAM12Bg--.161S2;
+	Wed, 04 Mar 2026 16:32:37 +0800 (CST)
+From: Yazhou Tang <tangyazhou@zju.edu.cn>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	tangyazhou518@outlook.com,
+	shenghaoyuan0928@163.com,
+	ziye@zju.edu.cn,
+	glapt.pro@outlook.com
+Subject: [PATCH bpf v2 0/2] bpf: Reset register ID for BPF_END value tracking
+Date: Wed,  4 Mar 2026 16:32:26 +0800
+Message-ID: <20260304083228.142016-1-tangyazhou@zju.edu.cn>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v4 1/2] bonding: fix null-ptr-deref in
- bond_rr_gen_slave_id()
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, jv@jvosburgh.net,
- netdev@vger.kernel.org
-Cc: jiayuan.chen@shopee.com,
- syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Alexei Starovoitov <ast@kernel.org>, Jesper Dangaard Brouer
- <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- Jussi Maki <joamaki@gmail.com>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-rt-devel@lists.linux.dev
-References: <20260304074301.35482-1-jiayuan.chen@linux.dev>
- <20260304074301.35482-2-jiayuan.chen@linux.dev>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- xsFNBGNAkI0BEADiPFmKwpD3+vG5nsOznvJgrxUPJhFE46hARXWYbCxLxpbf2nehmtgnYpAN
- 2HY+OJmdspBntWzGX8lnXF6eFUYLOoQpugoJHbehn9c0Dcictj8tc28MGMzxh4aK02H99KA8
- VaRBIDhmR7NJxLWAg9PgneTFzl2lRnycv8vSzj35L+W6XT7wDKoV4KtMr3Szu3g68OBbp1TV
- HbJH8qe2rl2QKOkysTFRXgpu/haWGs1BPpzKH/ua59+lVQt3ZupePpmzBEkevJK3iwR95TYF
- 06Ltpw9ArW/g3KF0kFUQkGXYXe/icyzHrH1Yxqar/hsJhYImqoGRSKs1VLA5WkRI6KebfpJ+
- RK7Jxrt02AxZkivjAdIifFvarPPu0ydxxDAmgCq5mYJ5I/+BY0DdCAaZezKQvKw+RUEvXmbL
- 94IfAwTFA1RAAuZw3Rz5SNVz7p4FzD54G4pWr3mUv7l6dV7W5DnnuohG1x6qCp+/3O619R26
- 1a7Zh2HlrcNZfUmUUcpaRPP7sPkBBLhJfqjUzc2oHRNpK/1mQ/+mD9CjVFNz9OAGD0xFzNUo
- yOFu/N8EQfYD9lwntxM0dl+QPjYsH81H6zw6ofq+jVKcEMI/JAgFMU0EnxrtQKH7WXxhO4hx
- 3DFM7Ui90hbExlFrXELyl/ahlll8gfrXY2cevtQsoJDvQLbv7QARAQABzSZEYW5pZWwgQm9y
- a21hbm4gPGRhbmllbEBpb2dlYXJib3gubmV0PsLBkQQTAQoAOxYhBCrUdtCTcZyapV2h+93z
- cY/jfzlXBQJjQJCNAhsDBQkHhM4ACAsJCAcNDAsKBRUKCQgLAh4BAheAAAoJEN3zcY/jfzlX
- dkUQAIFayRgjML1jnwKs7kvfbRxf11VI57EAG8a0IvxDlNKDcz74mH66HMyhMhPqCPBqphB5
- ZUjN4N5I7iMYB/oWUeohbuudH4+v6ebzzmgx/EO+jWksP3gBPmBeeaPv7xOvN/pPDSe/0Ywp
- dHpl3Np2dS6uVOMnyIsvmUGyclqWpJgPoVaXrVGgyuer5RpE/a3HJWlCBvFUnk19pwDMMZ8t
- 0fk9O47HmGh9Ts3O8pGibfdREcPYeGGqRKRbaXvcRO1g5n5x8cmTm0sQYr2xhB01RJqWrgcj
- ve1TxcBG/eVMmBJefgCCkSs1suriihfjjLmJDCp9XI/FpXGiVoDS54TTQiKQinqtzP0jv+TH
- 1Ku+6x7EjLoLH24ISGyHRmtXJrR/1Ou22t0qhCbtcT1gKmDbTj5TcqbnNMGWhRRTxgOCYvG0
- 0P2U6+wNj3HFZ7DePRNQ08bM38t8MUpQw4Z2SkM+jdqrPC4f/5S8JzodCu4x80YHfcYSt+Jj
- ipu1Ve5/ftGlrSECvy80ZTKinwxj6lC3tei1bkI8RgWZClRnr06pirlvimJ4R0IghnvifGQb
- M1HwVbht8oyUEkOtUR0i0DMjk3M2NoZ0A3tTWAlAH8Y3y2H8yzRrKOsIuiyKye9pWZQbCDu4
- ZDKELR2+8LUh+ja1RVLMvtFxfh07w9Ha46LmRhpCzsFNBGNAkI0BEADJh65bNBGNPLM7cFVS
- nYG8tqT+hIxtR4Z8HQEGseAbqNDjCpKA8wsxQIp0dpaLyvrx4TAb/vWIlLCxNu8Wv4W1JOST
- wI+PIUCbO/UFxRy3hTNlb3zzmeKpd0detH49bP/Ag6F7iHTwQQRwEOECKKaOH52tiJeNvvyJ
- pPKSKRhmUuFKMhyRVK57ryUDgowlG/SPgxK9/Jto1SHS1VfQYKhzMn4pWFu0ILEQ5x8a0RoX
- k9p9XkwmXRYcENhC1P3nW4q1xHHlCkiqvrjmWSbSVFYRHHkbeUbh6GYuCuhqLe6SEJtqJW2l
- EVhf5AOp7eguba23h82M8PC4cYFl5moLAaNcPHsdBaQZznZ6NndTtmUENPiQc2EHjHrrZI5l
- kRx9hvDcV3Xnk7ie0eAZDmDEbMLvI13AvjqoabONZxra5YcPqxV2Biv0OYp+OiqavBwmk48Z
- P63kTxLddd7qSWbAArBoOd0wxZGZ6mV8Ci/ob8tV4rLSR/UOUi+9QnkxnJor14OfYkJKxot5
- hWdJ3MYXjmcHjImBWplOyRiB81JbVf567MQlanforHd1r0ITzMHYONmRghrQvzlaMQrs0V0H
- 5/sIufaiDh7rLeZSimeVyoFvwvQPx5sXhjViaHa+zHZExP9jhS/WWfFE881fNK9qqV8pi+li
- 2uov8g5yD6hh+EPH6wARAQABwsF8BBgBCgAmFiEEKtR20JNxnJqlXaH73fNxj+N/OVcFAmNA
- kI0CGwwFCQeEzgAACgkQ3fNxj+N/OVfFMhAA2zXBUzMLWgTm6iHKAPfz3xEmjtwCF2Qv/TT3
- KqNUfU3/0VN2HjMABNZR+q3apm+jq76y0iWroTun8Lxo7g89/VDPLSCT0Nb7+VSuVR/nXfk8
- R+OoXQgXFRimYMqtP+LmyYM5V0VsuSsJTSnLbJTyCJVu8lvk3T9B0BywVmSFddumv3/pLZGn
- 17EoKEWg4lraXjPXnV/zaaLdV5c3Olmnj8vh+14HnU5Cnw/dLS8/e8DHozkhcEftOf+puCIl
- Awo8txxtLq3H7KtA0c9kbSDpS+z/oT2S+WtRfucI+WN9XhvKmHkDV6+zNSH1FrZbP9FbLtoE
- T8qBdyk//d0GrGnOrPA3Yyka8epd/bXA0js9EuNknyNsHwaFrW4jpGAaIl62iYgb0jCtmoK/
- rCsv2dqS6Hi8w0s23IGjz51cdhdHzkFwuc8/WxI1ewacNNtfGnorXMh6N0g7E/r21pPeMDFs
- rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
- DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
- owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
-In-Reply-To: <20260304074301.35482-2-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/27929/Tue Mar  3 08:24:19 2026)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:yy_KCgAHhs4l7qdpAM12Bg--.161S2
+X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBgQACmmnOYkbZwABsL
+X-CM-DELIVERINFO: =?B?qXH/DgXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
+	9q9H+6e/0XdEnku/cOG5HghNjUxtIMSarHAoNzYkFDbMNFRAePzpitA5jAjzL+HsjuXZ5n
+	f2fZKYTMvLvJAFQkaSO8sMZvCfkO7ZOcGAPAnND4cX2ztE4GC796a+vZhPIwXg==
+X-Coremail-Antispam: 1Uk129KBj9xXoWrKr48Kry8uF47WF4xtryDXFc_yoWxZFbEyw
+	1IqFykWa9rG3ZruFyYvF1xZr9rCrW0gr13tFWUtFyDtry7Xrs0grZ5AryrZ34UXF4ftFZx
+	Jw1Y9asYyF43uosvyTuYvTs0mTUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUbTAYFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
+	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AK
+	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7xvr2IYc2Ij64
+	vIr40E4x8a64kEw24lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I
+	3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxV
+	WUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAF
+	wI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcI
+	k0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j
+	6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU7ku4UUUUU
 
-On 3/4/26 8:42 AM, Jiayuan Chen wrote:
-> From: Jiayuan Chen <jiayuan.chen@shopee.com>
-> 
-> bond_rr_gen_slave_id() dereferences bond->rr_tx_counter without a NULL
-> check. rr_tx_counter is a per-CPU counter only allocated in bond_open()
-> when the bond mode is round-robin. If the bond device was never brought
-> up, rr_tx_counter remains NULL, causing a null-ptr-deref.
-> 
-> The XDP redirect path can reach this code even when the bond is not up:
-> bpf_master_redirect_enabled_key is a global static key, so when any bond
-> device has native XDP attached, the XDP_TX -> xdp_master_redirect()
-> interception is enabled for all bond slaves system-wide. This allows the
-> path xdp_master_redirect() -> bond_xdp_get_xmit_slave() ->
-> bond_xdp_xmit_roundrobin_slave_get() -> bond_rr_gen_slave_id() to be
-> reached on a bond that was never opened.
-> 
-> Fix this by allocating rr_tx_counter unconditionally in bond_init()
-> (ndo_init), which is called by register_netdevice() and covers both
-> device creation paths (bond_create() and bond_newlink()). This also
-> handles the case where bond mode is changed to round-robin after device
-> creation. The conditional allocation in bond_open() is removed. Since
-> bond_destructor() already unconditionally calls
-> free_percpu(bond->rr_tx_counter), the lifecycle is clean: allocate at
-> ndo_init, free at destructor.
-> 
-> Note: rr_tx_counter is only used by round-robin mode, so this
-> deliberately allocates a per-cpu u32 that goes unused for other modes.
-> Conditional allocation (e.g., in bond_option_mode_set) was considered
-> but rejected: the XDP path can race with mode changes on a downed bond,
-> and adding memory barriers to the XDP hot path is not justified for
-> saving 4 bytes per CPU.
-Arguably it's a corner case, but could we not just do sth like this to
-actually check if the device is up and if not drop?
+From: Yazhou Tang <tangyazhou518@outlook.com>
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index ba019ded773d..c447fd989a27 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -4387,6 +4387,9 @@ u32 xdp_master_redirect(struct xdp_buff *xdp)
-         struct net_device *master, *slave;
-  
-         master = netdev_master_upper_dev_get_rcu(xdp->rxq->dev);
-+       if (unlikely(!(master->flags & IFF_UP)))
-+               return XDP_ABORTED;
-+
-         slave = master->netdev_ops->ndo_xdp_get_xmit_slave(master, xdp);
-         if (slave && slave != xdp->rxq->dev) {
-                 /* The target device is different from the receiving device, so
+This patchset fixes a register's scalar ID issue for BPF_END operations
+reported by Guillaume Laporte. Please see commit log of 1/2 for more details.
+
+---
+
+Changes v1 => v2:
+
+1. Reset register ID inside scalar_byte_swap() conditionally. (Eduard)
+
+v1: https://lore.kernel.org/bpf/20260303093956.395076-1-tangyazhou@zju.edu.cn/
+
+Yazhou Tang (2):
+  bpf: Reset register ID for BPF_END value tracking
+  selftests/bpf: Add test for BPF_END register ID reset
+
+ kernel/bpf/verifier.c                         |  7 ++++++
+ .../selftests/bpf/progs/verifier_bswap.c      | 22 +++++++++++++++++++
+ 2 files changed, 29 insertions(+)
+
+-- 
+2.53.0
 
