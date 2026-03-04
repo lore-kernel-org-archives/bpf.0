@@ -1,236 +1,144 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDC2E3B5315
-	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 14:36:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772634968; cv=none; b=g7SCxdXmsbG3uhc8Fk9S7vI30jrd7pAS0TW6OkLO2C66BR8R9WdTPNcVQwlTV2g/USgOnE/9/b07yafA7fZGKuWNGrUJ+e4Jb/TujDpHX+zG8A6YXDw2aCgTYQvmeJwrPfiGUJHftj71JHAujj90v84YZc9fK1S2a1hMm4NRalA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772634968; c=relaxed/simple;
-	bh=BqZXOAJGIKKd92V/RAYQDxNC6AlkoRpcSBFvvTkyrIw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Lo/mi2AtT8StmdpdwjDOMp1n+IyXtFh3B5N+KByU1lzSMS/vStbxNTc9XjHdqnbuS49jlVO72VjDMhTg/2N3Cv0Ta+WpEInEHL+IoYyos4FWj0rS94L3xchtNBKRSyDI/r5zguOwNFuL31ddFru5yIG/dK6mGuhokVaVHrLEs8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YFT0B1eC; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2D4E3B5846
+	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 14:57:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.129.124
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772636234; cv=pass; b=NSyCbbFXMzpqgvpiyTby/gJjoLSO/Uu/po7v0dHWuEjMDWK/pIO5QWHxMk9+u75vQGg/SshjOWOtGnw8h2aDxThL3HkuUVKTieDwNEPPIZMU3ada7xjdoqeuTCndYAQ0izD+R4oB+cy3YfNc+E0p2wIsZ8RaY5ED6RQG+nxpaFg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772636234; c=relaxed/simple;
+	bh=oHGf015O3HEFczpp/doR7GCeyn5AXcOYhDM9+nhRjvg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=owMtiLfXX4xbz+9Liiq/TrmpCwyVPWFe9jvzazjEvQaCdQWj+fIgQBrZtxDGArJrawIz9ROyfwsgwLAdbW5R/5WtYhLSibuDaYheWd/d+9fV7xzI9P3ahGDyziZ8G6HNegd3lBa6wM0HpSEXx73/FoF1O43OqZ4amiYa1sifepc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Rjlq/pwA; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=QC4pu86N; arc=pass smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YFT0B1eC"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-824a829f9bbso3257507b3a.0
-        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 06:36:06 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Rjlq/pwA";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="QC4pu86N"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1772636232;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NxcuwNQEbPJtChtRmmX8bmzTS5j+ytdkrBn203bf/CM=;
+	b=Rjlq/pwAQb8KdSp311PkTqi60i/RDVbtDqJxOBaGW56ev6XWVm3wvalGrhuRyCfjlrmzq9
+	qR4ZJE4OTtLETejRpxIw6XnccxJB5atCA6dix0M9Eb6MWZPWv7QJEoFx62ipnOjhNrXJuT
+	gVYF/W7LHJG62k1wFGcsiNmwyVqtRdQ=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-391-yh_pjF_uNuCo0y1ixQPyRg-1; Wed, 04 Mar 2026 09:57:10 -0500
+X-MC-Unique: yh_pjF_uNuCo0y1ixQPyRg-1
+X-Mimecast-MFC-AGG-ID: yh_pjF_uNuCo0y1ixQPyRg_1772636229
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-b844098869cso698445966b.2
+        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 06:57:10 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772636229; cv=none;
+        d=google.com; s=arc-20240605;
+        b=PKLW1fdLGMI0zBisnKsiX/AK0d0DhaHZQ2Ph+uI2KOYV96VEQD2AWGBBmeXwvKOyf1
+         EAnZmL7E9zcs2EoMJ8VIZ8hrYvCJ+CGsozBsk+aHA/yoD+Qr8iCNgzieFcQEvDYZT9up
+         kzoADes3X1gCtGlWQtTnqLR1VgjLhHJoy9U/giLIsCmUZPyaRD6Yhw9mjdZyAzKxJ1Ko
+         Q8SHByhbKUUKEm46KFEv8zAI4WdMqzdzGYN3KnQuq1QgDQVxWRTDOrVXqYc9pGJhGJ6H
+         d4Yee4p2ViQrOhJcQZ8uMGfaCcrGrnsvE/1xVtZ2VoGx9Xg8leLu+cdEpn2Ahm1oYSWA
+         HI5Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=NxcuwNQEbPJtChtRmmX8bmzTS5j+ytdkrBn203bf/CM=;
+        fh=dTIhBjNrlnuewY7bigIR1Ze8jwuj9ViDDtr3yg+lmxs=;
+        b=hvCn2JLpAxy8vKmpm4TXRLFLOc6epxoz9+U8chLuoSLJHQd6zEBsUdRhFexEuRgfQE
+         MbXeGbjEQ2au9hG+lihL5Jj/gz+dHBVDLEFVX+/FR+7YMUOu+erknKkqZ1vNfVWUNzg/
+         Sh/eVD6gZvcQwGQ5qIjIClYF3gy1YuwDIsdLKY/AB9dj+otVzwz92S36A67HsSMM0ftU
+         RVQorl0RjgphL9VmhLpl+lALyu72kJVQ7OJW/ktYDBNQEzhexzXfHItyPwOnOK7/fGSj
+         WvY0610f3S/3yQoIynturFTQ+mNNvDlyyBevmU9zHoRQx2SbxSzoLQnpWH2DWXURVypB
+         5eWQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772634966; x=1773239766; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=redhat.com; s=google; t=1772636229; x=1773241029; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dc9SHoQTccjHJ9ny8JNU6itOYKrSyJ60RaW6+NKZF+0=;
-        b=YFT0B1eCFTamUd2fHrTmd82K0Hg2jWgof/dUlkj1aGV9skjBGMqkGCuXJHSTngo7z6
-         a+wrR78YQdIeLBJuK03VNpd3nXYZZwf2pnwyMOLCb/TspsdtphpCh6C6sJhyDlizWuHX
-         XM95FTocNPIQ5J3KPsoKzjTAMLpVbhdNKa4KzvLKi7d77B8nLlxc8O9yrbtQLnyCUgKj
-         8cGmP4WRTxYYbRNfnkSLCAGyCbsTye827oSsLu4VV4R+1VRn2BdKWefoFfJYVYkYVnJG
-         72DyQlebzp/Ye9Ds9q7CA2Iizmk1jQNBDCA+eoL41gNzADsaEcpAeDZkiEyZTozG/SUO
-         ooaQ==
+        bh=NxcuwNQEbPJtChtRmmX8bmzTS5j+ytdkrBn203bf/CM=;
+        b=QC4pu86N/vuyjfS7kiaifo1n5ppTmVnzlq6DvIMRK8LxQtQXZoS1TJmpLc3BQ5ac7E
+         90XbEwFb/PvCUrbLJ1zinZMW5AHQ/uOnm+QJYELdlQuQueh431LHq4f+VnS2YJU9uiq9
+         ZefXy8wh9Fc0OHdhuEgC1l/jEUb8ZZXXQ/8wnRosQr17RD0NRjAyMxUz99TkyeERaU0u
+         ny7oXcVXiWN0LACQ9Tqwxt5jMr7nFMf79DAd6T+48Q2xXTDOZ0zHMx+i7ylMHEIWR01V
+         zbDXJuX3AiR0FY8f/22QSMHKhK1HPHbR9PwLdnLUG8qZIy2SvFS1BjUqcUEXHW6Gga4B
+         6yrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772634966; x=1773239766;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20230601; t=1772636229; x=1773241029;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=dc9SHoQTccjHJ9ny8JNU6itOYKrSyJ60RaW6+NKZF+0=;
-        b=Vgl0vaF8T0CL/UMrMkcZ5zTagtjM+er+SDWLZCyz3HCcC5SsOjP7I8Bh6asUKZ6peM
-         7AaTeCW1hm3wDIgd6612H+ME2hWrok7M8mTUWIiPRn3ct9M6J81/quMOcorbOhVLzJXX
-         8wSSu7Pt92Pm4eDdSvXxaBUmvfR5qPVEpkwB+9DuYJF4Fsf1juwt9QBGA9HrcW7ZVqNI
-         e0a+iK7pK7wZLtG/NdqjUBthWduEV/owuEDhh1Y3zw7djvPokOofZ7eyqTguQY14iG58
-         eeq7dNQiTqzZO9qXeVJ6XMiTIaFhXgVjt4BDTiIZ1J8t5n1l9R+vjrPCm9TsuKAxda7S
-         0JQw==
-X-Gm-Message-State: AOJu0YwPlc9uZoGwRwlGv6J2tOcLJmoHN0H8/klvLknZpClwMyXg/Amf
-	K/G4qmtFy7u/W8XrSL8VUUh6rGPgXUgNoNT7EPzDY4ndD45W64/k7/6q
-X-Gm-Gg: ATEYQzx0y73OMoCRnmv8bXn4eRL60xrJ4N54MXajX8WC7Gn7bnOKeZlShkTcN+U1cSU
-	z4az5yfhvptwfih2J1QV/R6qcCV3D97TNPkhKh25ASQUcs/b4Ru1erIIbkgijpQG2WnATB5tohl
-	z4Hiqiq8j+45dCEuc2GG5aWXTc5nwOV4kc4TkikZt+EfqGl3k5lxqfxzS4hQyjbwuxBAmXIdwCj
-	uNqRFps/Qy1hh8NbTUMCdfB/fyhEqsZODThLBuVltxnV/YT5MwGg9Ioyr7o1+6VyS2VW0wIjJ71
-	bsjUpCj26twqeRtbTnl3aR3LlR/soyFjCeOvCVej8lMpaIlHpGPlfaoH9rvmUw5LaWmfXlPj8G/
-	w2dpXYrBCMg1wyqtFL5hQ1CxiU1adzaCAMr0ershjlPnfliTYUXNSXD3KVtrQihmijnAVXh01vH
-	hltuy1k9QEVuPonpshs4NYi5S1rU25n+3SksH1lfwSI0HzUI8wgZd1jA==
-X-Received: by 2002:a05:6a00:218b:b0:824:9451:c1e9 with SMTP id d2e1a72fcca58-82972df1b4amr2144267b3a.62.1772634966159;
-        Wed, 04 Mar 2026 06:36:06 -0800 (PST)
-Received: from localhost.localdomain ([113.218.252.150])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82739d87e4csm18470184b3a.15.2026.03.04.06.35.58
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 04 Mar 2026 06:36:05 -0800 (PST)
-From: Chengkaitao <pilgrimtao@gmail.com>
-To: martin.lau@linux.dev,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	chengkaitao@kylinos.cn,
-	linux-kselftest@vger.kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v6 5/5] bpf/verifier: refactor kfunc checks to table-driven approach
-Date: Wed,  4 Mar 2026 22:34:59 +0800
-Message-ID: <20260304143459.78059-6-pilgrimtao@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260304143459.78059-1-pilgrimtao@gmail.com>
-References: <20260304143459.78059-1-pilgrimtao@gmail.com>
+        bh=NxcuwNQEbPJtChtRmmX8bmzTS5j+ytdkrBn203bf/CM=;
+        b=DIA3qCgAFdxiG0h7QEYq7ZCQnVCsTKsW7Bzx7yC29rScLmzR2gSPHKgnQC2h0CY9q0
+         gg3oXnHq3qLo6IoSIuhIRTZeobdo+Sm/YBfk5cy+DnnqFqyyeoCLADpUGDJFevCQEufH
+         JhO1q4i/4EhtFRoLH4oKif+PMlDO3lewDxsEjimhDg3Lr7fApqlq87X+5hN4chS2KUcS
+         iUp6aCWQ3bLj1ymxuOvb4Cazi5AKWPi75immCTCqNTJ3yw0ycVgZF+nw5ktGeAtAYbBR
+         uYwLUnC9h87M2/FzHvpLkzKY1eDTCtoS46GSL9NUupwavYMvz6fZPXrh+pW0oRZDgL3N
+         qusg==
+X-Forwarded-Encrypted: i=1; AJvYcCXU+OoB50K6+WLyJuih0CtuLjgEaFyp75blkOoMEa7ideVrWFezcx3GKTYhMCEJARwgdQk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2lCIDSbECJL5cTSQ6ZTSpqXPzzBtuEBHIYoYeK+5kggkhVryX
+	89CMTSSoiGijpGv7cJUHkT1iCTapzN5AGFYwA1oZsR3j+RmNtlZ3VJ9ENmjDddJAPCwIdgtgI1b
+	cWQvSAvrOuyuJKPNYqMq5qk4+rtkiQ0fJ0gmjyHdWX/hZgAdkhw/76Hpu2CYQFDh9ju9Jvyxofc
+	UccwT3RDi2upvP+Ye2AATZuyKBBMct
+X-Gm-Gg: ATEYQzxOcIEBA44T+uOSwhnfuiAGHL0m5qG3ZTg8QjS7EP9aTrqntNfOPcktNNItZXE
+	5kADn3afzB0OUppvywREnpONIitSZ2fhxPS24YeDRUU2ZiGByYT2ju53SFa/DNoMQ4jGmw9eur3
+	GBiE0+Wx2LOaWLTc7eCrK0gWKzYEm826Ncv9cJwInJ2habrqY2+6LfbhvNIgY5qFncAfQmm+SYY
+	W0m8w==
+X-Received: by 2002:a17:907:d18:b0:b93:a3db:a6b9 with SMTP id a640c23a62f3a-b93f1584a51mr122660866b.53.1772636229391;
+        Wed, 04 Mar 2026 06:57:09 -0800 (PST)
+X-Received: by 2002:a17:907:d18:b0:b93:a3db:a6b9 with SMTP id
+ a640c23a62f3a-b93f1584a51mr122659466b.53.1772636228844; Wed, 04 Mar 2026
+ 06:57:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260213115234.430232-1-costa.shul@redhat.com> <20260213115234.430232-6-costa.shul@redhat.com>
+In-Reply-To: <20260213115234.430232-6-costa.shul@redhat.com>
+From: Tomas Glozar <tglozar@redhat.com>
+Date: Wed, 4 Mar 2026 15:56:57 +0100
+X-Gm-Features: AaiRm53z50JmqmT1o6Ph_54puJ9QJQq9UavtQvA3Nx1tVw-urpPxa1yu1HVK3Tg
+Message-ID: <CAP4=nvQZT9GB85cHkkFBL+BRzsiU+15RG7a1aQ3jp4BPA+1Axg@mail.gmail.com>
+Subject: Re: [PATCH v3 5/5] tools/rtla: Remove unneeded cpus parameter from
+ timerlat BPF functions
+To: Costa Shulyupin <costa.shul@redhat.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Crystal Wood <crwood@redhat.com>, 
+	Wander Lairson Costa <wander@redhat.com>, Ivan Pravdin <ipravdin.official@gmail.com>, 
+	John Kacur <jkacur@redhat.com>, Tiezhu Yang <yangtiezhu@loongson.cn>, 
+	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Kaitao Cheng <chengkaitao@kylinos.cn>
+p=C3=A1 13. 2. 2026 v 12:53 odes=C3=ADlatel Costa Shulyupin
+<costa.shul@redhat.com> napsal:
+>
+> nr_cpus is a global variable available throughout the codebase, so
+> passing it as a function parameter is unnecessary.
+>
+> Remove the cpus parameter from timerlat_bpf_get_hist_value() and
+> get_value(), using the global nr_cpus directly.
+>
+> Signed-off-by: Costa Shulyupin <costa.shul@redhat.com>
+> ---
+>  tools/tracing/rtla/src/timerlat_bpf.c  | 16 +++++++---------
+>  tools/tracing/rtla/src/timerlat_bpf.h  |  6 ++----
+>  tools/tracing/rtla/src/timerlat_hist.c |  2 +-
+>  3 files changed, 10 insertions(+), 14 deletions(-)
+>
 
-Replace per-kfunc btf_id chains in list/rbtree/res_lock and graph node
-checks with btf_id_in_kfunc_table() and static kfunc tables for easier
-maintenance.
+Is there a reason to have a separate commit for this? The change fits
+into the "tools/rtla: Remove unneeded nr_cpus arguments", which also
+touches some of the functions in timerlat_bpf.c. It feels strange to
+have some timerlat BPF functions cleaned up in that commit and some in
+this one.
 
-Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
----
- kernel/bpf/verifier.c | 93 +++++++++++++++++++++++++++++--------------
- 1 file changed, 64 insertions(+), 29 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d133d18aa0cc..25961cf83a67 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -12600,6 +12600,60 @@ BTF_ID(func, bpf_session_is_return)
- BTF_ID(func, bpf_stream_vprintk)
- BTF_ID(func, bpf_stream_print_stack)
- 
-+static const enum special_kfunc_type bpf_list_api_kfuncs[] = {
-+	KF_bpf_list_push_front_impl,
-+	KF_bpf_list_push_back_impl,
-+	KF_bpf_list_pop_front,
-+	KF_bpf_list_pop_back,
-+	KF_bpf_list_del,
-+	KF_bpf_list_front,
-+	KF_bpf_list_back,
-+	KF_bpf_list_add_impl,
-+	KF_bpf_list_node_is_edge,
-+	KF_bpf_list_empty,
-+};
-+
-+/* Kfuncs that take a list node argument (bpf_list_node *). */
-+static const enum special_kfunc_type bpf_list_node_api_kfuncs[] = {
-+	KF_bpf_list_push_front_impl,
-+	KF_bpf_list_push_back_impl,
-+	KF_bpf_list_del,
-+	KF_bpf_list_add_impl,
-+	KF_bpf_list_node_is_edge,
-+};
-+
-+/* Kfuncs that take an rbtree node argument (bpf_rb_node *). */
-+static const enum special_kfunc_type bpf_rbtree_node_api_kfuncs[] = {
-+	KF_bpf_rbtree_remove,
-+	KF_bpf_rbtree_add_impl,
-+	KF_bpf_rbtree_left,
-+	KF_bpf_rbtree_right,
-+};
-+
-+static const enum special_kfunc_type bpf_rbtree_api_kfuncs[] = {
-+	KF_bpf_rbtree_add_impl,
-+	KF_bpf_rbtree_remove,
-+	KF_bpf_rbtree_first,
-+	KF_bpf_rbtree_root,
-+	KF_bpf_rbtree_left,
-+	KF_bpf_rbtree_right,
-+};
-+
-+static const enum special_kfunc_type bpf_res_spin_lock_kfuncs[] = {
-+	KF_bpf_res_spin_lock,
-+	KF_bpf_res_spin_unlock,
-+	KF_bpf_res_spin_lock_irqsave,
-+	KF_bpf_res_spin_unlock_irqrestore,
-+};
-+
-+static bool btf_id_in_kfunc_table(u32 btf_id, const enum special_kfunc_type *kfuncs, int n)
-+{
-+	for (int i = 0; i < n; i++)
-+		if (btf_id == special_kfunc_list[kfuncs[i]])
-+			return true;
-+	return false;
-+}
-+
- static bool is_task_work_add_kfunc(u32 func_id)
- {
- 	return func_id == special_kfunc_list[KF_bpf_task_work_schedule_signal] ||
-@@ -13000,26 +13054,14 @@ static int check_reg_allocation_locked(struct bpf_verifier_env *env, struct bpf_
- 
- static bool is_bpf_list_api_kfunc(u32 btf_id)
- {
--	return btf_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
--	       btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
--	       btf_id == special_kfunc_list[KF_bpf_list_pop_front] ||
--	       btf_id == special_kfunc_list[KF_bpf_list_pop_back] ||
--	       btf_id == special_kfunc_list[KF_bpf_list_del] ||
--	       btf_id == special_kfunc_list[KF_bpf_list_front] ||
--	       btf_id == special_kfunc_list[KF_bpf_list_back] ||
--	       btf_id == special_kfunc_list[KF_bpf_list_add_impl] ||
--	       btf_id == special_kfunc_list[KF_bpf_list_node_is_edge] ||
--	       btf_id == special_kfunc_list[KF_bpf_list_empty];
-+	return btf_id_in_kfunc_table(btf_id, bpf_list_api_kfuncs,
-+				     ARRAY_SIZE(bpf_list_api_kfuncs));
- }
- 
- static bool is_bpf_rbtree_api_kfunc(u32 btf_id)
- {
--	return btf_id == special_kfunc_list[KF_bpf_rbtree_add_impl] ||
--	       btf_id == special_kfunc_list[KF_bpf_rbtree_remove] ||
--	       btf_id == special_kfunc_list[KF_bpf_rbtree_first] ||
--	       btf_id == special_kfunc_list[KF_bpf_rbtree_root] ||
--	       btf_id == special_kfunc_list[KF_bpf_rbtree_left] ||
--	       btf_id == special_kfunc_list[KF_bpf_rbtree_right];
-+	return btf_id_in_kfunc_table(btf_id, bpf_rbtree_api_kfuncs,
-+				     ARRAY_SIZE(bpf_rbtree_api_kfuncs));
- }
- 
- static bool is_bpf_iter_num_api_kfunc(u32 btf_id)
-@@ -13037,10 +13079,8 @@ static bool is_bpf_graph_api_kfunc(u32 btf_id)
- 
- static bool is_bpf_res_spin_lock_kfunc(u32 btf_id)
- {
--	return btf_id == special_kfunc_list[KF_bpf_res_spin_lock] ||
--	       btf_id == special_kfunc_list[KF_bpf_res_spin_unlock] ||
--	       btf_id == special_kfunc_list[KF_bpf_res_spin_lock_irqsave] ||
--	       btf_id == special_kfunc_list[KF_bpf_res_spin_unlock_irqrestore];
-+	return btf_id_in_kfunc_table(btf_id, bpf_res_spin_lock_kfuncs,
-+				    ARRAY_SIZE(bpf_res_spin_lock_kfuncs));
- }
- 
- static bool is_bpf_arena_kfunc(u32 btf_id)
-@@ -13129,17 +13169,12 @@ static bool check_kfunc_is_graph_node_api(struct bpf_verifier_env *env,
- 
- 	switch (node_field_type) {
- 	case BPF_LIST_NODE:
--		ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
--		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
--		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_del] ||
--		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_add_impl] ||
--		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_node_is_edge]);
-+		ret = btf_id_in_kfunc_table(kfunc_btf_id, bpf_list_node_api_kfuncs,
-+					    ARRAY_SIZE(bpf_list_node_api_kfuncs));
- 		break;
- 	case BPF_RB_NODE:
--		ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_remove] ||
--		       kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_add_impl] ||
--		       kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_left] ||
--		       kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_right]);
-+		ret = btf_id_in_kfunc_table(kfunc_btf_id, bpf_rbtree_node_api_kfuncs,
-+					    ARRAY_SIZE(bpf_rbtree_node_api_kfuncs));
- 		break;
- 	default:
- 		verbose(env, "verifier internal error: unexpected graph node argument type %s\n",
--- 
-2.50.1 (Apple Git-155)
+Tomas
 
