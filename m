@@ -1,32 +1,32 @@
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DF7537F8AB;
-	Wed,  4 Mar 2026 06:39:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6697737F743;
+	Wed,  4 Mar 2026 06:39:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772606358; cv=none; b=EvX991l1JfKA+GLXpc1NAJxzKwiRypNs2+ajQUZBfMKN5v0Vx0nwB5P105MysPHZwyVKxI7uHuEWbqRVSKh9kw5irm69V98xfCkyoDV3RZgupi/i0KOZ6+pZY+sfk/CwsGEHDwipCkhrUMCePsLo8tv6CV7mAqTAd/rbZlGo7Gw=
+	t=1772606386; cv=none; b=lOSAL70PXXIXk7e35pNyJ7l4Z45XEX6dMmyNvSOChfZqPYL/V0djja3dxWTrMfuLr8yCSiRnpSGl/wkpxjC472jlq12K73LjAP1RBp7Jf/Y9RKfOcyVRIa7dGYwpmSLswVR/kTmFN2d4l+N6DLK85Ql/UgTcGaP52/nb9AeyVmk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772606358; c=relaxed/simple;
-	bh=T3LZkyXNgXp7yXEoUgK0q7pKCngpRITB3P7KxJw8R3k=;
+	s=arc-20240116; t=1772606386; c=relaxed/simple;
+	bh=6EK4kevhLvn8MwpRl+sYXsC6m0CP/64/dLc/zPKgHGY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ns/QgTwfRdbY1udqXBH4UT9iO1kXJWd8zzCwhCFngHPkaL45sgPwScE0vXmuHx6cm7Pbti86A+WYl+jM1T+KPX0yTxeWbiS7F3LBfLuRUhhc9SSy6MLl7N0e8Pnon0jiqqO6I63azcFKMl2Ds/fEuSViFx6kAYDiKa8MXhwPidg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XjbhhzTd; arc=none smtp.client-ip=91.218.175.184
+	 MIME-Version; b=umoFvw4zqlPMpoVssduSleUUMptORryspeByu1A/kgz7424iF/IzrzLlRD68Zx4fT6Cqieh7yJ9PveZCesoofo2IDFjALko36+tyYszi0ql+cdeEzpksSgRQtifI8kQ0NcVGQwLJJPfX30Mt3MfQCivg/s2srJmQ698F8gmzJJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=W555oO6o; arc=none smtp.client-ip=91.218.175.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XjbhhzTd"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="W555oO6o"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772606355;
+	t=1772606382;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=d5duGPLmRq29qJW6Ubc2JTj9Y024B43GziisGHsbdVM=;
-	b=XjbhhzTdcorKHPYWcfmiX2oGlCoSL1wUr+CUtd8WlT2R3/xdlrugtM+MNIP1lrNiaqM+m5
-	jovxTnqsXHiZG+vYbETJvCkxEJ/3hEVv9aiNy4MsJ/xkQiw13drwVxcf3yTduSIFpQUpkw
-	y74jmFQHAPmGee+k8P2fG3WOjoVJC5A=
+	bh=t+aNyjWwHYPmClz3BrgloLW8wipTLTFpy6aXnO+owLw=;
+	b=W555oO6oGOGBLdPzbE4pSIegHFAu7S8ANwX9rU83zXyQQxmJ0ZPq80VTgxJzbbBoNnW2ar
+	uF38wV//9YODNivW03OXFThuyYoiSmEwRdMB5SlZNoQBADbPWoKgpHRG51cCdd5C9KxJus
+	FR4MfYGdWl5p2JPddgMamDnU31ojWew=
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org,
 	john.fastabend@gmail.com,
@@ -59,9 +59,9 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v1 5/7] tcp_bpf: optimize splice_read with zero-copy for non-slab pages
-Date: Wed,  4 Mar 2026 14:33:56 +0800
-Message-ID: <20260304063643.14581-6-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf-next v1 6/7] selftests/bpf: add splice_read tests for sockmap
+Date: Wed,  4 Mar 2026 14:33:57 +0800
+Message-ID: <20260304063643.14581-7-jiayuan.chen@linux.dev>
 In-Reply-To: <20260304063643.14581-1-jiayuan.chen@linux.dev>
 References: <20260304063643.14581-1-jiayuan.chen@linux.dev>
 Precedence: bulk
@@ -73,112 +73,202 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-The previous splice_read implementation copies all data through
-intermediate pages (alloc_page + memcpy). This is wasteful for
-skb fragment pages which are allocated from the page allocator
-and can be safely referenced via get_page().
+Add splice_read coverage to sockmap_basic and sockmap_strp selftests.
+Each test suite now runs twice: once with normal recv_timeout() and
+once with splice-based reads, verifying that data read via splice(2)
+through a pipe produces identical results.
 
-Optimize by checking PageSlab() to distinguish between linear
-skb data (slab-backed) and fragment pages (page allocator-backed):
+A recv_timeout_with_splice() helper is added to sockmap_helpers.h
+that creates a temporary pipe, splices data from the socket into
+the pipe, then reads from the pipe into the user buffer. MSG_PEEK
+calls fall back to native recv since splice does not support peek.
+Non-TCP sockets also fall back to native recv.
 
-- For slab pages (skb linear data): copy to a page fragment via
-  sk_page_frag, matching what linear_to_page() does in the
-  standard TCP splice path (skb_splice_bits). get_page() is
-  invalid on slab pages so a copy is unavoidable here.
-- For non-slab pages (skb frags): use get_page() directly for
-  true zero-copy, same as skb_splice_bits does for fragments.
+The splice subtests are distinguished by appending " splice" to
+each subtest name via a test__start_subtest macro override.
 
-Both paths use nosteal_pipe_buf_ops. The sk_page_frag approach
-is more memory-efficient than alloc_page for small linear copies,
-as multiple copies can share a single page fragment.
-
-Benchmark results with rx-verdict-ingress mode (loopback, 8 CPUs):
-
-  splice(2) + always-copy:  ~2770 MB/s (before this patch)
-  splice(2) + zero-copy:    ~4270 MB/s (after this patch, +54%)
-  read(2):                  ~4292 MB/s (baseline for reference)
+./test_progs -a sockmap_*
+...
+Summary: 5/830 PASSED, 0 SKIPPED, 0 FAILED
 
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- net/ipv4/tcp_bpf.c | 41 +++++++++++++++++++++++++++++++----------
- 1 file changed, 31 insertions(+), 10 deletions(-)
+ .../selftests/bpf/prog_tests/sockmap_basic.c  | 28 ++++++++-
+ .../bpf/prog_tests/sockmap_helpers.h          | 62 +++++++++++++++++++
+ .../selftests/bpf/prog_tests/sockmap_strp.c   | 28 ++++++++-
+ 3 files changed, 116 insertions(+), 2 deletions(-)
 
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index e85a27e32ea7..13506ba7672f 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -447,6 +447,7 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+index dd3c757859f6..ea0b49ec9a93 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+@@ -18,6 +18,23 @@
  
- struct tcp_bpf_splice_ctx {
- 	struct pipe_inode_info *pipe;
-+	struct sock *sk;
- };
+ #include "sockmap_helpers.h"
  
- static int sk_msg_splice_actor(void *arg, struct page *page,
-@@ -458,13 +459,33 @@ static int sk_msg_splice_actor(void *arg, struct page *page,
- 	};
- 	ssize_t ret;
- 
--	buf.page = alloc_page(GFP_KERNEL);
--	if (!buf.page)
--		return 0;
-+	if (PageSlab(page)) {
-+		/*
-+		 * skb linear data is backed by slab memory where
-+		 * get_page() is invalid. Copy to a page fragment from
-+		 * the socket's page allocator, matching what
-+		 * linear_to_page() does in the standard TCP splice
-+		 * path (skb_splice_bits).
-+		 */
-+		struct page_frag *pfrag = sk_page_frag(ctx->sk);
++static bool use_splice;
 +
-+		if (!sk_page_frag_refill(ctx->sk, pfrag))
-+			return 0;
++static bool __start_subtest(const char *name)
++{
++	if (!use_splice)
++		return (test__start_subtest)(name);
++
++	char buf[MAX_TEST_NAME];
++
++	snprintf(buf, sizeof(buf), "%s splice", name);
++	return (test__start_subtest)(buf);
++}
++
++#define test__start_subtest(name) __start_subtest(name)
++#define recv_timeout(fd, buf, len, flags, timeout) \
++	recv_timeout_with_splice(fd, buf, len, flags, timeout, use_splice)
++
+ #define TCP_REPAIR		19	/* TCP sock is under repair right now */
  
--	memcpy(page_address(buf.page), page_address(page) + offset, len);
--	buf.offset = 0;
--	buf.len = len;
-+		len = min_t(size_t, len, pfrag->size - pfrag->offset);
-+		memcpy(page_address(pfrag->page) + pfrag->offset,
-+		       page_address(page) + offset, len);
-+		buf.page = pfrag->page;
-+		buf.offset = pfrag->offset;
-+		buf.len = len;
-+		pfrag->offset += len;
-+	} else {
-+		buf.page = page;
-+		buf.offset = offset;
-+		buf.len = len;
+ #define TCP_REPAIR_ON		1
+@@ -1314,7 +1331,7 @@ static void test_sockmap_multi_channels(int sotype)
+ 	test_sockmap_pass_prog__destroy(skel);
+ }
+ 
+-void test_sockmap_basic(void)
++static void __test_sockmap_basic(void)
+ {
+ 	if (test__start_subtest("sockmap create_update_free"))
+ 		test_sockmap_create_update_free(BPF_MAP_TYPE_SOCKMAP);
+@@ -1391,3 +1408,12 @@ void test_sockmap_basic(void)
+ 	if (test__start_subtest("sockmap udp multi channels"))
+ 		test_sockmap_multi_channels(SOCK_DGRAM);
+ }
++
++void test_sockmap_basic(void)
++{
++	use_splice = false;
++	__test_sockmap_basic();
++
++	use_splice = true;
++	__test_sockmap_basic();
++}
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h b/tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h
+index d815efac52fd..1f0da657243f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h
+@@ -80,4 +80,66 @@ static inline int add_to_sockmap(int mapfd, int fd1, int fd2)
+ 	return xbpf_map_update_elem(mapfd, &u32(1), &u64(fd2), BPF_NOEXIST);
+ }
+ 
++static inline ssize_t recv_timeout_with_splice(int fd, void *buf, size_t len,
++					       int flags,
++					       unsigned int timeout_sec,
++					       bool do_splice)
++{
++	ssize_t total = 0;
++	int pipefd[2];
++	int fl;
++
++	int sotype, protocol;
++	socklen_t optlen = sizeof(sotype);
++
++	if (!do_splice || (flags & MSG_PEEK) ||
++	    getsockopt(fd, SOL_SOCKET, SO_TYPE, &sotype, &optlen) ||
++	    sotype != SOCK_STREAM ||
++	    getsockopt(fd, SOL_SOCKET, SO_PROTOCOL, &protocol, &optlen) ||
++	    protocol != IPPROTO_TCP)
++		return recv_timeout(fd, buf, len, flags, timeout_sec);
++
++	if (poll_read(fd, timeout_sec))
++		return -1;
++
++	if (pipe(pipefd) < 0)
++		return -1;
++
++	/*
++	 * tcp_splice_read() only checks sock->file->f_flags for
++	 * O_NONBLOCK, ignoring SPLICE_F_NONBLOCK for the socket
++	 * side timeout. Set O_NONBLOCK on the fd so the loop won't
++	 * block forever when no more data is available.
++	 */
++	fl = fcntl(fd, F_GETFL);
++	fcntl(fd, F_SETFL, fl | O_NONBLOCK);
++
++	/*
++	 * Pipe has limited buffer slots (default 16), so a single
++	 * splice may not transfer all requested bytes. Loop until
++	 * we've read enough or no more data is available.
++	 */
++	while (total < (ssize_t)len) {
++		ssize_t spliced, n;
++
++		spliced = splice(fd, NULL, pipefd[1], NULL, len - total,
++				 SPLICE_F_NONBLOCK);
++		if (spliced <= 0)
++			break;
++
++		n = read(pipefd[0], buf + total, spliced);
++		if (n <= 0)
++			break;
++
++		total += n;
 +	}
 +
-+	get_page(buf.page);
++	fcntl(fd, F_SETFL, fl);
++
++	close(pipefd[0]);
++	close(pipefd[1]);
++
++	return total > 0 ? total : -1;
++}
++
+ #endif // __SOCKMAP_HELPERS__
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c b/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
+index 621b3b71888e..2226399eee0d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
+@@ -6,6 +6,23 @@
+ #include "test_skmsg_load_helpers.skel.h"
+ #include "test_sockmap_strp.skel.h"
  
- 	/*
- 	 * add_to_pipe() calls pipe_buf_release() on failure, which
-@@ -481,9 +502,9 @@ static ssize_t tcp_bpf_splice_read(struct socket *sock, loff_t *ppos,
- 				   struct pipe_inode_info *pipe, size_t len,
- 				   unsigned int flags)
++static bool use_splice;
++
++static bool __start_subtest(const char *name)
++{
++	if (!use_splice)
++		return (test__start_subtest)(name);
++
++	char buf[MAX_TEST_NAME];
++
++	snprintf(buf, sizeof(buf), "%s splice", name);
++	return (test__start_subtest)(buf);
++}
++
++#define test__start_subtest(name) __start_subtest(name)
++#define recv_timeout(fd, buf, len, flags, timeout) \
++	recv_timeout_with_splice(fd, buf, len, flags, timeout, use_splice)
++
+ #define STRP_PKT_HEAD_LEN 4
+ #define STRP_PKT_BODY_LEN 6
+ #define STRP_PKT_FULL_LEN (STRP_PKT_HEAD_LEN + STRP_PKT_BODY_LEN)
+@@ -431,7 +448,7 @@ static void test_sockmap_strp_verdict(int family, int sotype)
+ 	test_sockmap_strp__destroy(strp);
+ }
+ 
+-void test_sockmap_strp(void)
++static void __test_sockmap_strp(void)
  {
--	struct tcp_bpf_splice_ctx ctx = { .pipe = pipe };
--	int bpf_flags = flags & SPLICE_F_NONBLOCK ? MSG_DONTWAIT : 0;
- 	struct sock *sk = sock->sk;
-+	struct tcp_bpf_splice_ctx ctx = { .pipe = pipe, .sk = sk };
-+	int bpf_flags = flags & SPLICE_F_NONBLOCK ? MSG_DONTWAIT : 0;
- 	struct sk_psock *psock;
- 	int ret;
- 
-@@ -508,9 +529,9 @@ static ssize_t tcp_bpf_splice_read_parser(struct socket *sock, loff_t *ppos,
- 					  struct pipe_inode_info *pipe,
- 					  size_t len, unsigned int flags)
- {
--	struct tcp_bpf_splice_ctx ctx = { .pipe = pipe };
--	int bpf_flags = flags & SPLICE_F_NONBLOCK ? MSG_DONTWAIT : 0;
- 	struct sock *sk = sock->sk;
-+	struct tcp_bpf_splice_ctx ctx = { .pipe = pipe, .sk = sk };
-+	int bpf_flags = flags & SPLICE_F_NONBLOCK ? MSG_DONTWAIT : 0;
- 	struct sk_psock *psock;
- 	int ret;
- 
+ 	if (test__start_subtest("sockmap strp tcp pass"))
+ 		test_sockmap_strp_pass(AF_INET, SOCK_STREAM, false);
+@@ -452,3 +469,12 @@ void test_sockmap_strp(void)
+ 	if (test__start_subtest("sockmap strp tcp dispatch"))
+ 		test_sockmap_strp_dispatch_pkt(AF_INET, SOCK_STREAM);
+ }
++
++void test_sockmap_strp(void)
++{
++	use_splice = false;
++	__test_sockmap_strp();
++
++	use_splice = true;
++	__test_sockmap_strp();
++}
 -- 
 2.43.0
 
