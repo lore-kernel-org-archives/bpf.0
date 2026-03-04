@@ -1,84 +1,25 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9DD36BCEA
-	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 08:00:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 369CE37FF79
+	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 08:07:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.21.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772611229; cv=none; b=Ym46K9hGYIqeu8j/LSmolmt8HW0J2/xmm4UPncFJinFmuu7PGlqFzxP+hqjOxRYiraC8ubRrOWlL14Bloyl7sZis51rA79YvcJ/pnC6Ay69NAL1ND2zsQ71MjcS+8QSZzozu2zY/VaJF12HGYYR0UYvnb3Pwa4IJr5BtE05E0Ig=
+	t=1772611634; cv=none; b=YkByyhukjgQ2ZRyYu9vir2C36ZkS1TSE4NGVJ/W3NcCglkfRm0jBbjrCx+Kq0m41JR1dxbyXVXEJD4PL2KuVd4eFPxgJOKnWOnhgQD6PGjBj9LInT4fA38GtSe2g0Fb7JCpuLsVGc6DKNX2/evMMdYnP3Dk5bYXKe0Bjl2H3dcI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772611229; c=relaxed/simple;
-	bh=kMUUQDzznqRvF1LLeIcupGnl7rhKPcy9b0LRaImOvMA=;
+	s=arc-20240116; t=1772611634; c=relaxed/simple;
+	bh=Zf1yhcieIXEXMulBajrZMfUiePBDXxg6KJNRK9lGeHI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QnygynWi9ssOsDA5RIFVZG+rJjo7tO3ky7tLSASRs73UEuwFIDb1KkPXSN4VJLrXuriZzxkiVJqPJ5trS45ZaCTKWUQP9dGv/BVOtk+eNZ8mcvW9y9qLnXV/q63NxCi9FsbJsIvQAjZ+ODEaz0AxXsM/TblkiPik8xxNKarlon4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fBimobs1; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=IIqw3yVr; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fBimobs1";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="IIqw3yVr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772611227;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ze7UOcsS/0AQxjqOP6QoDrpCM4RWmrrojsTRiFn/AcA=;
-	b=fBimobs1UE0Fw5Bd1dlHHAFUK0PKIgo4XGRn4I9eNRBbzfKnH+SLnmquQYm1ApdSPb6/l2
-	jAC1mi7v16K7XFooc9clVHq0RubOzsTjbeY5s6A3lEDEO50lKVN3pu4X0ZuBbhJLXVgLqr
-	UQcKCk4+z17JKggPNVKuB0IX/ypkDoI=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-659-xS2Cab4MNLuFkKkukgMKrQ-1; Wed, 04 Mar 2026 03:00:25 -0500
-X-MC-Unique: xS2Cab4MNLuFkKkukgMKrQ-1
-X-Mimecast-MFC-AGG-ID: xS2Cab4MNLuFkKkukgMKrQ_1772611225
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-48379489438so62165825e9.2
-        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 00:00:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1772611224; x=1773216024; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ze7UOcsS/0AQxjqOP6QoDrpCM4RWmrrojsTRiFn/AcA=;
-        b=IIqw3yVrFWp94iv+h62GZUGTrq8V2TONxJFPx0+H3o4jcjB2OhJNMYZtwzRSvoveRW
-         R1v8tV1OfhPs/G7MBtGyfqQoG98PAuGKWRW3mRe83pm9YeFV+Qn8lOVzr5hFMTYW+0rQ
-         xwLr8UGSFa5HekldT875Sh1SbRnbbt93YtGYco2mdh5I44fW/BNNJlGWGJaHBGJOOAUp
-         sC9dV0Mr1emGraOlgo5uhEI4L6K0am92B3fOL3g1cJV3boYkNwegNbtVsAOJtvcTtbco
-         f45RwK/x5a4BjrN8ZDm8dh6SX4EAkBf08kOWLwQSJAp/uzm9ObRv1UMfU0tlUAIUG3uQ
-         uNmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772611224; x=1773216024;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ze7UOcsS/0AQxjqOP6QoDrpCM4RWmrrojsTRiFn/AcA=;
-        b=cermuWYxWzSInCQP0B18eFZmu5+4adpXT8D7aWgDlMcP168+kMMcKp8cPCsNy5fLEl
-         yTVnkZg8n3KCV1ft+Gd/Er5DCWbW4xBDr44dwwg/PyVbWc1PyYpp8iqogCruNQNUs3Nu
-         jzFNLI6mgvQPPE5ww304kzGwsYQ+6aE8wKyWoK1Ppgw8DjpKgod5nlNH9V2uLkIt3JXA
-         S/ViARxoXV3rMu6ZuNrg0OKJUsF2NcI6hNOgBEM7+tNhpOqxUP0iojzXNeOM7SxmlMB+
-         dARnrOMDjl07ApVzUThP9jK/b2ny83SVn2k9HvQh5BfMybZHn83mQUSh85tVWcXk4SQq
-         JbaA==
-X-Gm-Message-State: AOJu0YxqUkMjdK6hzQwquWTl7T1Uid5KGcJoBn1U+tXYxjdR8NP9GmEu
-	S1p6ORMubfmlLgnf6wsuWygTwQwozA/UiRBpw+0mK1NamOdBbvea03zXL+xPF5wp4jVZrhCg16f
-	fINn4qryeFfrGdyJyUFFL/vcIh617muSN4HwjeTHnIij1skHM+mDf
-X-Gm-Gg: ATEYQzzHkmh4tLf3/2q8nB+hZwJfSckYsHcTAc6vPYRrMKMa+o6z8cldjDWG/1/tQgA
-	8Go+FSwY2BEom0k26Sathyy2vZK1DoH1kezOfz9yB7rtXftwER6Pp7/98gGt4dMirhUZToWd7fu
-	wmx1ARBJ5BmF1kC4fQndhoUIg8p4RzpB5viQ5830MN4zmLQJrdRMIDM3aY8UXNmYXY4DJdoAZxB
-	9JGJrczzbxvvWWjNIOLGPRExTluF9+XGaE7HHGhV1gFifvxUBIZUni2pGf2QtQUuOd3t5IrreuC
-	C5H7vlFSnEeEbeGXfTch0quBHJPc3+uR5T468TAjf7ixfU1yCtd50jIb01UEJnk2HKDlrbGAmDl
-	JKUPLJBubtyZ5GZHV54zKyuH7srFspNmKjgiAbywOhRsGNNoUQWE4LSufrg==
-X-Received: by 2002:a05:600c:530e:b0:483:887:59b0 with SMTP id 5b1f17b1804b1-485198be61fmr16301735e9.35.1772611224049;
-        Wed, 04 Mar 2026 00:00:24 -0800 (PST)
-X-Received: by 2002:a05:600c:530e:b0:483:887:59b0 with SMTP id 5b1f17b1804b1-485198be61fmr16301005e9.35.1772611223270;
-        Wed, 04 Mar 2026 00:00:23 -0800 (PST)
-Received: from ?IPV6:2001:67c:1220:8b4:be:aaf2:74d9:219f? ([2001:67c:1220:8b4:be:aaf2:74d9:219f])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4851a8aa589sm6024015e9.5.2026.03.04.00.00.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Mar 2026 00:00:22 -0800 (PST)
-Message-ID: <c37a5cca-67d4-4eff-82cd-665913d61888@redhat.com>
-Date: Wed, 4 Mar 2026 09:00:20 +0100
+	 In-Reply-To:Content-Type; b=W2Gq4zMskoLoR5ayua5q/kmIb92kLqGBlx5Nb+9b7qwT9MZ2bGf+m3OUKBayEDMRJOc9D4FIp4bDb5Q8+lW55mBZ77HUbca5+vGxK44JPfirvarVniyYFUhEe5x10GzIHBGwdKXP/fV6VJY9ows39mJVG/gDg7Ku2ywlq9QFcE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=206.189.21.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
+Received: from zju.edu.cn (unknown [122.224.66.117])
+	by mtasvr (Coremail) with SMTP id _____wDnOOAI6KdpWZMEAQ--.15328S3;
+	Wed, 04 Mar 2026 16:06:33 +0800 (CST)
+Received: from [0.0.0.0] (unknown [122.224.66.117])
+	by mail-app1 (Coremail) with SMTP id yy_KCgBXrNcF6KdpfLV2Bg--.202S3;
+	Wed, 04 Mar 2026 16:06:29 +0800 (CST)
+Message-ID: <44c58906-e537-400f-b360-01a915e05275@zju.edu.cn>
+Date: Wed, 4 Mar 2026 16:06:28 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -86,60 +27,69 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next] selftests/bpf: Split module_attach into subtests
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Shubham Sharma <slopixelz@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Steven Rostedt <rostedt@goodmis.org>
-References: <20260225120904.1529112-1-vmalik@redhat.com>
- <CAADnVQKSVu-dTqqENSdznsoo6cva006P8qAJkx4RTp8JyEXVig@mail.gmail.com>
-From: Viktor Malik <vmalik@redhat.com>
+Subject: Re: [PATCH bpf 1/2] bpf: Reset register ID for BPF_END value tracking
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+ tangyazhou518@outlook.com, shenghaoyuan0928@163.com, ziye@zju.edu.cn,
+ glapt.pro@outlook.com
+References: <20260303093956.395076-1-tangyazhou@zju.edu.cn>
+ <20260303093956.395076-2-tangyazhou@zju.edu.cn>
+ <a4c1da47af29c3930a025217f25d169da48ed2a1.camel@gmail.com>
 Content-Language: en-US
-In-Reply-To: <CAADnVQKSVu-dTqqENSdznsoo6cva006P8qAJkx4RTp8JyEXVig@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From: Yazhou Tang <tangyazhou@zju.edu.cn>
+In-Reply-To: <a4c1da47af29c3930a025217f25d169da48ed2a1.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:yy_KCgBXrNcF6KdpfLV2Bg--.202S3
+X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBgQACmmnOYkbZwAAsK
+X-CM-DELIVERINFO: =?B?hGTpWQXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
+	9q9H+6e/0XdEnku/cOG5HghNi58xKsYpGoUd9Rvrf54waB6dKt08ePEsCBjYGcbzhyWgqU
+	gO3h4fP+W/NQJnRsZaUtHJ2CBxes0Cj2YkVXpbcsRZ9UoT8PGGNHLwwloQjsJw==
+X-Coremail-Antispam: 1Uk129KBj9xXoW7Gw45Zr4DWr48GryrKw47ZFc_yoW3KrX_Gr
+	4rZ348Gw1qvF1avF13AF47ZryUKw4kKF4rAw47XFWDZFWUX398C34Fya4Fvas8G3y2krZF
+	yrn09r9IyFn5uosvyTuYvTs0mTUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUbxAYFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	WxJr0_GcWl84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4
+	xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v2
+	6r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2
+	kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
+	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIx
+	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
+	wI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
+	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PU
+	UUUU=
 
-On 3/3/26 18:26, Alexei Starovoitov wrote:
-> On Wed, Feb 25, 2026 at 4:09 AM Viktor Malik <vmalik@redhat.com> wrote:
->>
->> The test verifies attachment to various hooks in a kernel module,
->> however, everything is flattened into a single test. This makes it
->> impossible to run or skip test cases selectively.
->>
->> Isolate each BPF program into a separate subtest. This is done by
->> disabling auto-loading of programs and loading and testing each program
->> separately.
->>
->> At the same time, modernize the test to use ASSERT* instead of CHECK and
->> replace `return` by `goto cleanup` where necessary.
->>
->> Signed-off-by: Viktor Malik <vmalik@redhat.com>
->> ---
->>  .../selftests/bpf/prog_tests/module_attach.c  | 171 +++++++++++++-----
->>  .../selftests/bpf/progs/test_module_attach.c  |  63 +++----
->>  2 files changed, 148 insertions(+), 86 deletions(-)
-> 
-> Applied.
-> Could you also take a look at why the test takes so much time?
-> time ./test_progs -t module_attach
-> #220/1   module_attach/handle_raw_tp:OK
-> ...
-> #220     module_attach:OK
-> Summary: 1/14 PASSED, 0 SKIPPED, 0 FAILED
-> 
-> real 0m5.072s
-> user 0m0.275s
-> sys 0m0.199s
-> 
-> It's not caused by your changes, but would be good to understand and fix.
+Hi Eduard,
 
-Yeah, I noticed, too. I'll have a look.
+Thanks for the review and the Ack!
+
+On 3/4/26 02:25, Eduard Zingerman wrote:
+> On Tue, 2026-03-03 at 17:39 +0800, Yazhou Tang wrote:
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 401d6c4960ec..366ba4757135 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -16121,6 +16121,8 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
+>>   			scalar_min_max_arsh(dst_reg, &src_reg);
+>>   		break;
+>>   	case BPF_END:
+>> +		/* manually reset register's id here to avoid mistaken register links */
+>> +		dst_reg->id = 0;
+>>   		scalar_byte_swap(dst_reg, insn);
+> 
+> Nit: I'd push this inside scalar_byte_swap() and maybe do it conditionally.
+
+Makes sense. I will move it inside scalar_byte_swap() and handle it 
+conditionally in v2.
+
+Best,
+
+Yazhou
 
