@@ -1,109 +1,113 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1648D39EF35
-	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 09:54:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A13C37FF79;
+	Wed,  4 Mar 2026 10:11:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772618060; cv=none; b=j1J0aChrgOIki5h02aovAesYxWP50qDWOzvOKl2ZYQ5I7BnsR3/REIUS7n6xLt+qrKELb0/GCe6iVLMK5xlKUF7j3YhX8d5hTiaTq0q2sBMVNvBU1BgtXMCP4L1Xhrsaflc3tLGsr40FZei4NZBWefgsIuSC6MAd5OE67OnC9C8=
+	t=1772619082; cv=none; b=uGkjd7jzvNkPhl2gSvwo03/hPkORJAfqIlYa+SWHIk+YSIwQPJ8oPqmkIwAVLj5mhwGDokIDIY74ckRoHLLzOBQFsbg5AbwLFtn4y0/zcP72gDo2XMpftTxj7YVfovgO2ovF6DE+Pe/Y109wA7R5QZQGYW5f6WrlOUznXZj5ENw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772618060; c=relaxed/simple;
-	bh=eTa78WHUoVEvfYrnL1ZrbRTeOyVh9VMa4jG2UuaS4SI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gWNd/Rz+vPpDC2xmewm109PMRytTZjk5QiFnHoF0CCq9A4hc0tLZ8F81igP/cnZwwQNrbIRZIQIKuBzG2EFcTj2X2FSk9K/s6Y4gbsiQrus9vXf462RqW48Blm69orZnJa5JHw2sFhQjwh9AQsavSlUEW8VY0Je1jhPIfT8Jk0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZF5A+nkN; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772619082; c=relaxed/simple;
+	bh=JQb85VHaICruah/Qdpes4o76dLFKahkK2tO0kdC0Zes=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WWpgR5LFvxfvfmnMAWhjBFI/vDz5sp4sc5M6yilGiKEMbn3hhlrdmZBeL4xICgzROarQK4KKC/DGS1VjC+ZcAzSikfsFVDUymS71tgESFbfCkazp81GyRFg6f0yDw7bFRw6L/i+AkOtWiaRuSOzpMaqYshPCceR2u9jgFNELIjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=rUeaCfku; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZF5A+nkN"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-439c9eb5d36so310502f8f.2
-        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 01:54:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772618057; x=1773222857; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=04TQwyjav+Mkle+Jlhsg1YPsdYQI6BcfeeGyJ/oU2Wk=;
-        b=ZF5A+nkN4Wcm2GQfTfzasFYPtzOGaM/vnwrBrdwOHvMRjyvx5cL5oO9Sp61/l9DUwV
-         G6bB8r8ffMHAPCtV9nj/Hto696l6ZtoYRDeqQ4Ds6wW/8pCPYtHRWCGpBCYg9Vc2zink
-         IDgfXFWIz66OyXC7A8OPb0g16zqtBIQ+htDd37Z0zODKNswgoSIHHPvRB9SZvF7YET/U
-         k6Adb5pFTLVi5tBPvQd32cRvnPg5sMJB8GydQfx2rU9QqKDMOS/fiCw3eUsEqy/9ewAa
-         bbw+QteujQd3wVApvB4P/kF5A8MCaqZuQqk2h+HgvOYcP+0dYnf5NwEg9Erk+zZJhF2f
-         540w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772618057; x=1773222857;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=04TQwyjav+Mkle+Jlhsg1YPsdYQI6BcfeeGyJ/oU2Wk=;
-        b=YA2FIrT3avUwDLXQ9u3yEpXlCQboPoczf9Hoc2zippssAuX0g5y9hTuTN3z+Fo8rgH
-         0EtiAevJYTDTHbHgZOFatwWlwT1YS5JwRkgnSBBlA1QZyR+y+fn2C7Ou+wPHu1m1XGov
-         aCTTtgF0ivSQ7rQLeCWC/oXkQ0vqJY6U9Il+eulycPXWsQc6vaTonD6KWTS/pfovf/U3
-         eA8IwQ01C6cJliTEPtDQjN1p0ZmWlZVE/dsL2hCITqpeXu3ya8IRl4JlCebZqeKi/zsZ
-         c+eHLj7LjeMY5dAzUYf/1eQv7L/Ignnp4sPeKjELyoGBQPhtQ5K8udIc2oajxcV6XmTs
-         hkjA==
-X-Forwarded-Encrypted: i=1; AJvYcCWoN2hQ3ZuI420ln4FXmXhViDtCSHC1ZfCgy9CS96GYnqDC/Q1jrFs5wvDAXzu9EWNB9Mg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw1W2sVf0lqIt7YtGK2f2A8U46iQmgYv78tiZ8H6KUz6r0rA4KS
-	/Dlt+3P+QojR88ZWbwHlyp2gZtYN1G8MpYzxWfzX40mW47AIsm/j+xi6
-X-Gm-Gg: ATEYQzwE97TfAcGNbnEommS00M0U4cb7bd5vPuiAYLCAgG1C0+zF5yq+H7xTsWduOuU
-	+3ObH+9wZFuxFJxxgMtNRQZrKHizVlSTTjZ3D2SB5hVXNWgUZzwz55Ys3R/rX/1kKA8Vt6tZ3KJ
-	68jMQpnRvEKoomnWHNtJxIjr5ggCWvrGimfDDshZzE5z99dtyINEHdLFiRN3VbsHE1hQHBB64eV
-	bC3DC8a5xMsXhmV0IOATYS5igDrUAKN92hBxl4+7NLuIPKeICZdE2Nd5/XVE8x/fck7Pkp4DUQu
-	C2MxlywVCcHnTLvf979t4PpMTP215iaUKibvtkHlDSmM7if8xRlPTiti+kD5ml6gzNY+dIppVsf
-	fkWouXOK+9pPypAQHNpsEO7KEJ7S9AXeu+rVuhwZvxTs9SpIfw+OcVY/GcoV3AjMu1TEZ/Qjxyo
-	aFovoAZSf2XyjtwAVYtYcdpDVkXI012K6S8MB6mGlCPkz+lCAUstgyIJICpXrE4YjfJ3j3XsFDF
-	hI=
-X-Received: by 2002:a05:600c:6389:b0:483:75f1:54f with SMTP id 5b1f17b1804b1-485198a10e7mr21116425e9.31.1772618057285;
-        Wed, 04 Mar 2026 01:54:17 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-485188923c2sm40345475e9.14.2026.03.04.01.54.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2026 01:54:17 -0800 (PST)
-Date: Wed, 4 Mar 2026 09:54:15 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Yafang Shao <laoar.shao@gmail.com>, mingo@redhat.com, will@kernel.org,
- boqun@kernel.org, longman@redhat.com, rostedt@goodmis.org,
- mhiramat@kernel.org, mark.rutland@arm.com, mathieu.desnoyers@efficios.com,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- bpf@vger.kernel.org
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="rUeaCfku"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=mJ2CiEyAFUElfaXb6N8aGN32kS3DPoLsnA9tyI9dOKo=; b=rUeaCfkud2aiYXkPwCcJPWE/Vk
+	5rCfxeOOOsPCyP3EiNQET/HAIoe2iR1s1jU/f3+3rmcBxFgQeCuM+8mqqL4lpJYZBtM3NNuAPSKB/
+	vNRHhOUBrOdImQklwGpT9k3IDJT+Hn8vTlUPHRGPbEJkEZhl6Adf8w7s3+ngy7jQVHyvLmCyVypPY
+	P5LMlC2b6bcihJ9xUsyrXcCCo1c+CaPfnMSHwSGTAo60oXhG3GBuFpiEzniCC+RNBDCYXZhBk0oOD
+	mXF9tVdAynM1BfrAUul741D8VdCKV0CTcq6+ghfHHR7tzLn8wXG3evoV7EsDr9LF4Ix/NYZ8lSXjm
+	tGKdG0LA==;
+Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vxjCC-0000000D65V-0Ugp;
+	Wed, 04 Mar 2026 10:11:12 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 5FFE1300B40; Wed, 04 Mar 2026 11:11:11 +0100 (CET)
+Date: Wed, 4 Mar 2026 11:11:11 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: mingo@redhat.com, will@kernel.org, boqun@kernel.org, longman@redhat.com,
+	rostedt@goodmis.org, mhiramat@kernel.org, mark.rutland@arm.com,
+	mathieu.desnoyers@efficios.com, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
 Subject: Re: [RFC PATCH 1/2] locking: add mutex_lock_nospin()
-Message-ID: <20260304095415.4d5f2528@pumpkin>
-In-Reply-To: <20260304090249.GN606826@noisy.programming.kicks-ass.net>
+Message-ID: <20260304101111.GQ606826@noisy.programming.kicks-ass.net>
 References: <20260304074650.58165-1-laoar.shao@gmail.com>
-	<20260304074650.58165-2-laoar.shao@gmail.com>
-	<20260304090249.GN606826@noisy.programming.kicks-ass.net>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+ <20260304074650.58165-2-laoar.shao@gmail.com>
+ <20260304090249.GN606826@noisy.programming.kicks-ass.net>
+ <CALOAHbC1AHc2eZrzafz7ynrW7NFPrVmervCY_jjWsRTo0gBwQQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALOAHbC1AHc2eZrzafz7ynrW7NFPrVmervCY_jjWsRTo0gBwQQ@mail.gmail.com>
 
-On Wed, 4 Mar 2026 10:02:49 +0100
-Peter Zijlstra <peterz@infradead.org> wrote:
-
-> On Wed, Mar 04, 2026 at 03:46:49PM +0800, Yafang Shao wrote:
-> > Introduce mutex_lock_nospin(), a helper that disables optimistic spinning
-> > on the owner for specific heavy locks. This prevents long spinning times
-> > that can lead to latency spikes for other tasks on the same runqueue.  
+On Wed, Mar 04, 2026 at 05:37:31PM +0800, Yafang Shao wrote:
+> On Wed, Mar 4, 2026 at 5:03 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Wed, Mar 04, 2026 at 03:46:49PM +0800, Yafang Shao wrote:
+> > > Introduce mutex_lock_nospin(), a helper that disables optimistic spinning
+> > > on the owner for specific heavy locks. This prevents long spinning times
+> > > that can lead to latency spikes for other tasks on the same runqueue.
+> >
+> > This makes no sense; spinning stops on need_resched().
 > 
-> This makes no sense; spinning stops on need_resched().
+> Hello Peter,
+> 
+> The condition to stop spinning on need_resched() relies on the mutex
+> owner remaining unchanged. However, when multiple tasks contend for
+> the same lock, the owner can change frequently. This creates a
+> potential TOCTOU (Time of Check to Time of Use) issue.
+> 
+>   mutex_optimistic_spin
+>       owner = __mutex_trylock_or_owner(lock);
+>       mutex_spin_on_owner
+>           // the __mutex_owner(lock) might get a new owner.
+>           while (__mutex_owner(lock) == owner)
 > 
 
-That might still be an issue if a high priority process is spinning.
-But a %sys spike doesn't imply a latency spike.
+How do these new owners become the owner? Are they succeeding the
+__mutex_trylock() that sits before mutex_optimistic_spin() and
+effectively starving the spinner?
 
-Is this using the osq_lock.c code?
-That will have problems on overprovisioned VMs, it tries to find out
-whether the hypervisor has switched out - but ISTR that is flawed.
+Something like the below would make a difference if that were so.
 
-In reality a spin lock shouldn't be held for long enough to cause
-any kind latency issue.
-So something in the code that reads the list of filter functions
-needs to be done differently so that the lock isn't held for as long.
+---
+diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
+index c867f6c15530..0796e77a8c3b 100644
+--- a/kernel/locking/mutex.c
++++ b/kernel/locking/mutex.c
+@@ -521,7 +521,7 @@ static __always_inline bool
+ mutex_optimistic_spin(struct mutex *lock, struct ww_acquire_ctx *ww_ctx,
+ 		      struct mutex_waiter *waiter)
+ {
+-	return false;
++	return __mutex_trylock(lock);
+ }
+ #endif
+ 
+@@ -614,8 +614,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
+ 	mutex_acquire_nest(&lock->dep_map, subclass, 0, nest_lock, ip);
+ 
+ 	trace_contention_begin(lock, LCB_F_MUTEX | LCB_F_SPIN);
+-	if (__mutex_trylock(lock) ||
+-	    mutex_optimistic_spin(lock, ww_ctx, NULL)) {
++	if (mutex_optimistic_spin(lock, ww_ctx, NULL)) {
+ 		/* got the lock, yay! */
+ 		lock_acquired(&lock->dep_map, ip);
+ 		if (ww_ctx)
 
-	David
