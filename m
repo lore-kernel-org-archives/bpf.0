@@ -1,245 +1,209 @@
-Received: from flow-b1-smtp.messagingengine.com (flow-b1-smtp.messagingengine.com [202.12.124.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B0F73BA22A;
-	Wed,  4 Mar 2026 17:27:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAAD13C3BE4
+	for <bpf@vger.kernel.org>; Wed,  4 Mar 2026 17:32:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772645261; cv=none; b=Uh1k72MYujx5gvo9IRNA0l9cOjwXP8FAZsMaE5RF27TRXOsD61yI4nJ9AE1nrfake0OYIRkT+QKhSp4NBV5ef2poNctnox+Y2TgY38Niv4IPxjQvHQFGqDm8U1x2ft86vq1i3KZrvH4FiRC6aYeXYXtLluUba/uiEzuQGdiG3dg=
+	t=1772645566; cv=none; b=FVr+A8+i31ZTcax3rTiah2qg2wBRnKHMPEcYDcDrL1h6Y1Q+eXEdVqSAhbSnR/BKr9EtFvG9pq3dhRhnXVyYMKnLj0GkAlLs1DxSculDQjPX251KTY9ycE2CjnVzt33R9DuSxYd46OF2bxeN7Vwnk0v+nhorJVCwihrX5t4h95E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772645261; c=relaxed/simple;
-	bh=ChRoXIr9yvc9qsnA8M/lFeW4TR0ctexLkYbNu6N5U84=;
-	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
-	 Content-Type:Date:Message-ID; b=fC1MkkZ5bkQwHVpMOW0NbK3sM6paNKxB5ySeg2E0CQPnO9rEnGS2e2dWIWtd2OKyNt5ZF5pZetoFpjW8NEX68jrtrE/2G7/+P7sQ7a9amKknt7b6I+sdTl5HCf1LtNrJjWrLZzCf+/cek5LSU1yGAq53wciFjrJgDML3ImG83kU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net; spf=pass smtp.mailfrom=jvosburgh.net; dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b=QnC36x3Q; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Ts0Q+CyL; arc=none smtp.client-ip=202.12.124.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jvosburgh.net
+	s=arc-20240116; t=1772645566; c=relaxed/simple;
+	bh=N47v7eONnQY3buJuOKooWDUtMXrII78TS3KNla41Zlg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jHnPGNqfdisjxWPzNWjIm1hKq6rMHAyG1n1UrPONq7jyZW9nh69ZcMRhIIZijjNzbubB9276RBvzYhnEmvZA0x76Ev02XYHUzITsuwshF4IzZpMsqKv8KdVOQOS1/OoiFGDObYJSkzgrbcNevhqc0Palvuh3rSq7NLSsPSdf7Hs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b=l5TuBfJD; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b="QnC36x3Q";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Ts0Q+CyL"
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailflow.stl.internal (Postfix) with ESMTP id CF9111300F11;
-	Wed,  4 Mar 2026 12:27:30 -0500 (EST)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-01.internal (MEProxy); Wed, 04 Mar 2026 12:27:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jvosburgh.net;
-	 h=cc:cc:content-id:content-transfer-encoding:content-type
-	:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to; s=fm2; t=1772645250; x=1772652450; bh=3hZ85nMdNhByeQ6ZYVQXq
-	B9xKZH1h7PxqhN6Br3f/2c=; b=QnC36x3Q0L6xqckhgTvg0RhzwLtbHJl1LbZae
-	lQOEj5vSYUTnSoVlsVUeyWZ7BFVXvRbadXEoFjlwbuFmtCNoNr5g6QgGwQhny6EB
-	9+TJ1YY5NzwaPEddpx8Dz91sG6J7yavVO6pwgw7K00XnTGDS3NLW2t2kWbKXI/bD
-	ktlVMvv3lLGzjkrFKztKz/lOnCzXc+uBHh8LxWeqUrV0j7rKVCgZlB2ojJtQt8z2
-	d7rwxR8364Xlmf3EIgKF8a79qS4pel2lSzv450kjZmMyfz6Kcgo0Cj+C0la1LVuH
-	RAJl6zvwMmHvuMMDz0X1SnfPo/FXLXgNoyXC5a03JJIhH9prw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-id
-	:content-transfer-encoding:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1772645250; x=1772652450; bh=3hZ85nMdNhByeQ6ZYVQXqB9xKZH1h7PxqhN
-	6Br3f/2c=; b=Ts0Q+CyLeHtsjZa2qIsBBXYiazEhphTAUGF1UbKa8iFCnzq+F9Z
-	tpFVd3j1u8YHNdSWNkE7XrsA0j2gJqzVSc26ea5hkpBzUPp7HikTyqU8MgT8d5Sn
-	K0S/PEf75ZeANH4LYctWTja3+fzREQSau8D4BOrSKlCjqv4jAtKAsgd+2liZrw/f
-	yhpkISLwza5cFE2y/otsnbshQlvQPvvhAHgC8Dayj8qkRqyYJdVOppxQqZ7baCCe
-	Pxahyc9I55JrrKXD3ZrmWi+grgHLziieNuHHwJ8NTIf08TcgkC3sqeG12qJdllH4
-	f8R65rPiQnwJBvcMCC8Z9E2rZ0jDMdrZtnA==
-X-ME-Sender: <xms:gWuoaXqk14uE5s0m_TuMf6ts7a1i3iGW40jvSu4pR9Zi_ZfP5HqcrA>
-    <xme:gWuoaU0B4tFrUIaiHcZUah8p0Kqq7oYK-qlT7K3Nw0nygkSEH7vmRwyVXFm5slPvH
-    sPby8Kgy7liPCAcsrsEpztcXNBGkn-rFcEqJbZ-r4oFfA__sHHhYWDA>
-X-ME-Received: <xmr:gWuoabDRjtyrY32qaPOz5eDHSWtQ4mJweZH9YQJ7da5hObUf-gDGexKT6ARICdu4PKP5Iw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvieeguddtucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhephffvvefujghfofggtgfgfffksehtqhertdertddvnecuhfhrohhmpeflrgihucgg
-    ohhssghurhhghhcuoehjvhesjhhvohhssghurhhghhdrnhgvtheqnecuggftrfgrthhtvg
-    hrnhepueffvedvvdefudejfeeuudfgtdfgudettdevfeeileffhffghfdtjeekhfeitdek
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpehjvhesjhhvohhssghurhhghhdrnhgvthdpnhgs
-    pghrtghpthhtohepfedvpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehrrgiioh
-    hrsegslhgrtghkfigrlhhlrdhorhhgpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhl
-    ohhfthdrnhgvthdprhgtphhtthhopehsughfsehfohhmihgthhgvvhdrmhgvpdhrtghpth
-    htohepvgguugihiiekjeesghhmrghilhdrtghomhdprhgtphhtthhopehjohgrmhgrkhhi
-    sehgmhgrihhlrdgtohhmpdhrtghpthhtohepjhhohhhnrdhfrghsthgrsggvnhgusehgmh
-    grihhlrdgtohhmpdhrtghpthhtoheprhhoshhtvgguthesghhoohgumhhishdrohhrghdp
-    rhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpdhrtghpthhtohephh
-    grohhluhhosehgohhoghhlvgdrtghomh
-X-ME-Proxy: <xmx:gWuoaf-EBMU6swfd3wz5-LiaJoCG7pZXDIGa3MJHvemjMva_eYZK7g>
-    <xmx:gWuoaZNqTd9KN2XDAKETzPj03As7PqG8KycivG-2S4CbXR-oS_YByA>
-    <xmx:gWuoaZGIr2ULQaYIa6nntoUlP4dambGdZS1-5PMwloSv7uFI8a5YCQ>
-    <xmx:gWuoaYtTjEINoFXqZu29syBRqZDb08iZ_8KL2A4Cw1Mle9DtJKzvVQ>
-    <xmx:gmuoaQPXxPfDAFDGHFskgUiH2pt0TXhr7IpjI4TKmlobe_WeiAlZ6uUc>
-Feedback-ID: i53714940:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 4 Mar 2026 12:27:29 -0500 (EST)
-Received: by famine.localdomain (Postfix, from userid 1000)
-	id 0A4769FCB4; Wed,  4 Mar 2026 09:27:28 -0800 (PST)
-Received: from famine (localhost [127.0.0.1])
-	by famine.localdomain (Postfix) with ESMTP id 08F399FC67;
-	Wed,  4 Mar 2026 09:27:28 -0800 (PST)
-From: Jay Vosburgh <jv@jvosburgh.net>
-To: Nikolay Aleksandrov <razor@blackwall.org>
-cc: Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org,
-    jiayuan.chen@shopee.com,
-    syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
-    Andrew Lunn <andrew+netdev@lunn.ch>,
-    "David S. Miller" <davem@davemloft.net>,
-    Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-    Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
-    Daniel Borkmann <daniel@iogearbox.net>,
-    Jesper Dangaard Brouer <hawk@kernel.org>,
-    John Fastabend <john.fastabend@gmail.com>,
-    Stanislav Fomichev <sdf@fomichev.me>,
-    Andrii Nakryiko <andrii@kernel.org>,
-    Martin KaFai Lau <martin.lau@linux.dev>,
-    Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-    Yonghong Song <yonghong.song@linux.dev>,
-    KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-    Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-    Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-    Clark Williams <clrkwllms@kernel.org>,
-    Steven Rostedt <rostedt@goodmis.org>, Jussi Maki <joamaki@gmail.com>,
-    linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-    linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b="l5TuBfJD"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4806f3fc50bso76570485e9.0
+        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 09:32:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall.org; s=google; t=1772645563; x=1773250363; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CvZHzwfBez6SktFHis/UP+MVLhoMj8/M/nCRuUvbuQA=;
+        b=l5TuBfJD0yd2e4QSZwFscYrag7RycsKhSf56F281OerWnHQqhIgrHn7ForIkVMUDXA
+         bQHB/DJYaz2Q4cCBiMuhnzdcwEipcFHIqSifLRP30foC4RlbU8UwuYpFKjFUTtiVN4We
+         XfdWNgJOrlxfsQAL0o8LLUZE3HaKe/w+LKZK8Q3dvqo6sgNJJ5s0+VDZEJJq6he7/NBP
+         SkkbBGPUX2qsrJ6tjouPbR4/z1LtB0OhRKLsxcw6p9FnOdxwhz9oudT+n0v8wZgpKBy5
+         iJ3frWlYD4L5Ljxn+XfFKUhBzZzHnLZGZuF987Gv44POrCz+/u57joN8VXm0n2hbdVRt
+         dkKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772645563; x=1773250363;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CvZHzwfBez6SktFHis/UP+MVLhoMj8/M/nCRuUvbuQA=;
+        b=JlHr+xOPKB/G8F2suyDwBVJi4ZtQUUQFVi0EjCnKNZRFx30hFVWM0rDID84Sh96CCB
+         sIpzEh/cxcU5GC1Hz3k+aI2FMfezd3Gqs8aRimKupQu7mCacRAlL0iTiwW0zk8gUKp/o
+         k10JYQZ/jHkt/Y+QLTCDn6YMpqxiUBBHw2FyyF7ZEKEX5r7zVZ1+BaVd/6AQRz4hQd25
+         KboeocWRG2pBLwSSpbHY+saAZm+2JBsMrHl2urO820dYbn+48rbCiPKNv3NVyDzBQLU/
+         UjVzZC7XVAFiyHdRH60A7ZQtMYNxGvL6AsxywC5pXvq2tYUxl//UUPWXpND1uIrP+C60
+         5kNA==
+X-Forwarded-Encrypted: i=1; AJvYcCVlTsj/r4lDfDXcl2/iH2kcha50Wk9amrRMnBOD2Jo059x5v5l37RDKERYMOzFDlEWRrRk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqkO5x7igjF22pwvhEdbWfgmoD9cVUHcRgZewrRXeNMI5qoy0M
+	ZQweHPTFQ4bt49/11E1UTHslrdQYOO3WnXZhHg0Rj1mE37bXLJeuVVHaX3Ftkzv+gjM=
+X-Gm-Gg: ATEYQzzLizwXABt6wtQQydeU5PwZtal8J8Wp3e0j6QBRpK8Zjy5E+0Og3IAW/8l6ZVM
+	CwhH11q5EF1kmHZGRcxGefLruc6XRevayl7GgOkUPW+w+nP7ROAsesVivKTiBlxAMlXSmelVtvx
+	BEcRk6exbd2HaP9lnKpHu2exW7bRugQvmojTNYBl+wa9LqCmz+deMhL5W4BdahBqV2z95GFIRQI
+	11wLaVARRNrEVFJfK2FMcpOhy8tZ0Z6aKbZJ34BKmb/4eyATnixdk8I3Ntnfb8NVHsXpZWGN1zK
+	Mdda3B8UR/qztXKRgfaKKwPqUJ4kIZJEr/9QY4VjCBUWaBZvtFkKuryXXyOwmJLTF4mD9uh87ZX
+	6I3mM6bsR6ZpH0RugXm06SIJfVTsyIWXUcVvNYov6mKqvODdFmehrkqj1ON9igtbdVaYfWRxna8
+	k73GmAqHKJXIK07KoZpNkJnQY6mLomvKwhV1wOuRzdGKfPmVTF5wR9qtEvVI1zbe5V6pdv
+X-Received: by 2002:a05:600c:34d6:b0:477:58af:a91d with SMTP id 5b1f17b1804b1-4851983936cmr53536205e9.5.1772645562765;
+        Wed, 04 Mar 2026 09:32:42 -0800 (PST)
+Received: from localhost (176.111.182.151.kyiv.nat.volia.net. [176.111.182.151])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48518839ae7sm56386405e9.1.2026.03.04.09.32.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Mar 2026 09:32:42 -0800 (PST)
+Date: Wed, 4 Mar 2026 19:32:40 +0200
+From: Nikolay Aleksandrov <razor@blackwall.org>
+To: Jay Vosburgh <jv@jvosburgh.net>
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org,
+	jiayuan.chen@shopee.com,
+	syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Jussi Maki <joamaki@gmail.com>, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
 Subject: Re: [PATCH net v4 1/2] bonding: fix null-ptr-deref in
  bond_rr_gen_slave_id()
-In-reply-to: <aahWymAi_CtRG0gJ@penguin>
+Message-ID: <aahsuPt7cY8LxETN@penguin>
 References: <20260304074301.35482-1-jiayuan.chen@linux.dev>
- <20260304074301.35482-2-jiayuan.chen@linux.dev> <aahWymAi_CtRG0gJ@penguin>
-Comments: In-reply-to Nikolay Aleksandrov <razor@blackwall.org>
-   message dated "Wed, 04 Mar 2026 17:59:06 +0200."
-X-Mailer: MH-E 8.6+git; nmh 1.8+dev; Emacs 29.3
+ <20260304074301.35482-2-jiayuan.chen@linux.dev>
+ <aahWymAi_CtRG0gJ@penguin>
+ <1293120.1772645248@famine>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1293119.1772645247.1@famine>
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 04 Mar 2026 09:27:28 -0800
-Message-ID: <1293120.1772645248@famine>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1293120.1772645248@famine>
 
-Nikolay Aleksandrov <razor@blackwall.org> wrote:
+On Wed, Mar 04, 2026 at 09:27:28AM -0800, Jay Vosburgh wrote:
+> Nikolay Aleksandrov <razor@blackwall.org> wrote:
+> 
+> >On Wed, Mar 04, 2026 at 03:42:57PM +0800, Jiayuan Chen wrote:
+> >> From: Jiayuan Chen <jiayuan.chen@shopee.com>
+> >> 
+> >> bond_rr_gen_slave_id() dereferences bond->rr_tx_counter without a NULL
+> >> check. rr_tx_counter is a per-CPU counter only allocated in bond_open()
+> >> when the bond mode is round-robin. If the bond device was never brought
+> >> up, rr_tx_counter remains NULL, causing a null-ptr-deref.
+> >> 
+> >> The XDP redirect path can reach this code even when the bond is not up:
+> >> bpf_master_redirect_enabled_key is a global static key, so when any bond
+> >> device has native XDP attached, the XDP_TX -> xdp_master_redirect()
+> >> interception is enabled for all bond slaves system-wide. This allows the
+> >> path xdp_master_redirect() -> bond_xdp_get_xmit_slave() ->
+> >> bond_xdp_xmit_roundrobin_slave_get() -> bond_rr_gen_slave_id() to be
+> >> reached on a bond that was never opened.
+> >> 
+> >> Fix this by allocating rr_tx_counter unconditionally in bond_init()
+> >> (ndo_init), which is called by register_netdevice() and covers both
+> >> device creation paths (bond_create() and bond_newlink()). This also
+> >> handles the case where bond mode is changed to round-robin after device
+> >> creation. The conditional allocation in bond_open() is removed. Since
+> >> bond_destructor() already unconditionally calls
+> >> free_percpu(bond->rr_tx_counter), the lifecycle is clean: allocate at
+> >> ndo_init, free at destructor.
+> >> 
+> >> Note: rr_tx_counter is only used by round-robin mode, so this
+> >> deliberately allocates a per-cpu u32 that goes unused for other modes.
+> >> Conditional allocation (e.g., in bond_option_mode_set) was considered
+> >> but rejected: the XDP path can race with mode changes on a downed bond,
+> >> and adding memory barriers to the XDP hot path is not justified for
+> >> saving 4 bytes per CPU.
+> >> 
+> >> Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to slave device")
+> >> Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com
+> >> Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.00cc.GAE@google.com/T/
+> >> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
+> >> ---
+> >>  drivers/net/bonding/bond_main.c | 19 +++++++++++++------
+> >>  1 file changed, 13 insertions(+), 6 deletions(-)
+> >> 
+> >
+> >IMO it's not worth it to waste memory in all modes, for an unpopular mode.
+> >I think it'd be better to add a null check in bond_rr_gen_slave_id(),
+> >READ/WRITE_ONCE() should be enough since it is allocated only once, and
+> >freed when the xmit code cannot be reachable anymore (otherwise we'd have
+> >more bugs now). The branch will be successfully predicted practically always,
+> >and you can also mark the ptr being null as unlikely. That way only RR takes
+> >a very minimal hit, if any.
+> 
+> 	Is what you're suggesting different from Jiayuan's proposal[0],
+> in the sense of needing barriers in the XDP hot path to insure ordering?
+> 
+> 	If I understand correctly, your suggestion is something like
+> (totally untested):
+> 
 
->On Wed, Mar 04, 2026 at 03:42:57PM +0800, Jiayuan Chen wrote:
->> From: Jiayuan Chen <jiayuan.chen@shopee.com>
->> =
+Basically yes, that is what I'm proposing + an unlikely() around that
+null check since it is really unlikely and will be always predicted
+correctly, this way it's only for RR mode.
 
->> bond_rr_gen_slave_id() dereferences bond->rr_tx_counter without a NULL
->> check. rr_tx_counter is a per-CPU counter only allocated in bond_open()
->> when the bond mode is round-robin. If the bond device was never brought
->> up, rr_tx_counter remains NULL, causing a null-ptr-deref.
->> =
-
->> The XDP redirect path can reach this code even when the bond is not up:
->> bpf_master_redirect_enabled_key is a global static key, so when any bon=
-d
->> device has native XDP attached, the XDP_TX -> xdp_master_redirect()
->> interception is enabled for all bond slaves system-wide. This allows th=
-e
->> path xdp_master_redirect() -> bond_xdp_get_xmit_slave() ->
->> bond_xdp_xmit_roundrobin_slave_get() -> bond_rr_gen_slave_id() to be
->> reached on a bond that was never opened.
->> =
-
->> Fix this by allocating rr_tx_counter unconditionally in bond_init()
->> (ndo_init), which is called by register_netdevice() and covers both
->> device creation paths (bond_create() and bond_newlink()). This also
->> handles the case where bond mode is changed to round-robin after device
->> creation. The conditional allocation in bond_open() is removed. Since
->> bond_destructor() already unconditionally calls
->> free_percpu(bond->rr_tx_counter), the lifecycle is clean: allocate at
->> ndo_init, free at destructor.
->> =
-
->> Note: rr_tx_counter is only used by round-robin mode, so this
->> deliberately allocates a per-cpu u32 that goes unused for other modes.
->> Conditional allocation (e.g., in bond_option_mode_set) was considered
->> but rejected: the XDP path can race with mode changes on a downed bond,
->> and adding memory barriers to the XDP hot path is not justified for
->> saving 4 bytes per CPU.
->> =
-
->> Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to sla=
-ve device")
->> Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com
->> Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.00cc.GAE@g=
-oogle.com/T/
->> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
->> ---
->>  drivers/net/bonding/bond_main.c | 19 +++++++++++++------
->>  1 file changed, 13 insertions(+), 6 deletions(-)
->> =
-
->
->IMO it's not worth it to waste memory in all modes, for an unpopular mode=
-.
->I think it'd be better to add a null check in bond_rr_gen_slave_id(),
->READ/WRITE_ONCE() should be enough since it is allocated only once, and
->freed when the xmit code cannot be reachable anymore (otherwise we'd have
->more bugs now). The branch will be successfully predicted practically alw=
-ays,
->and you can also mark the ptr being null as unlikely. That way only RR ta=
-kes
->a very minimal hit, if any.
-
-	Is what you're suggesting different from Jiayuan's proposal[0],
-in the sense of needing barriers in the XDP hot path to insure ordering?
-
-	If I understand correctly, your suggestion is something like
-(totally untested):
-
-diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_ma=
-in.c
-index eb27cacc26d7..ac2a4fc0aad0 100644
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -4273,13 +4273,17 @@ void bond_work_cancel_all(struct bonding *bond)
- static int bond_open(struct net_device *bond_dev)
- {
- 	struct bonding *bond =3D netdev_priv(bond_dev);
-+	u32 __percpu *rr_tx_tmp;
- 	struct list_head *iter;
- 	struct slave *slave;
- =
-
--	if (BOND_MODE(bond) =3D=3D BOND_MODE_ROUNDROBIN && !bond->rr_tx_counter)=
- {
--		bond->rr_tx_counter =3D alloc_percpu(u32);
--		if (!bond->rr_tx_counter)
-+	if (BOND_MODE(bond) =3D=3D BOND_MODE_ROUNDROBIN &&
-+	    !READ_ONCE(bond->rr_tx_counter)) {
-+		rr_tx_tmp =3D alloc_percpu(u32);
-+		if (!rr_tx_tmp)
- 			return -ENOMEM;
-+		WRITE_ONCE(bond->rr_tx_counter, rr_tx_tmp);
-+
- 	}
- =
-
- 	/* reset slave->backup and slave->inactive */
-@@ -4866,6 +4870,9 @@ static u32 bond_rr_gen_slave_id(struct bonding *bond=
-)
- 	struct reciprocal_value reciprocal_packets_per_slave;
- 	int packets_per_slave =3D bond->params.packets_per_slave;
- =
-
-+	if (!READ_ONCE(bond->rr_tx_counter))
-+		packets_per_slave =3D 0;
-+
- 	switch (packets_per_slave) {
- 	case 0:
- 		slave_id =3D get_random_u32();
-
-	-J
-
-
-[0] https://lore.kernel.org/netdev/e4a2a652784ec206728eb3a929a9892238c61f0=
-6@linux.dev/
-
----
-	-Jay Vosburgh, jv@jvosburgh.net
+> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+> index eb27cacc26d7..ac2a4fc0aad0 100644
+> --- a/drivers/net/bonding/bond_main.c
+> +++ b/drivers/net/bonding/bond_main.c
+> @@ -4273,13 +4273,17 @@ void bond_work_cancel_all(struct bonding *bond)
+>  static int bond_open(struct net_device *bond_dev)
+>  {
+>  	struct bonding *bond = netdev_priv(bond_dev);
+> +	u32 __percpu *rr_tx_tmp;
+>  	struct list_head *iter;
+>  	struct slave *slave;
+>  
+> -	if (BOND_MODE(bond) == BOND_MODE_ROUNDROBIN && !bond->rr_tx_counter) {
+> -		bond->rr_tx_counter = alloc_percpu(u32);
+> -		if (!bond->rr_tx_counter)
+> +	if (BOND_MODE(bond) == BOND_MODE_ROUNDROBIN &&
+> +	    !READ_ONCE(bond->rr_tx_counter)) {
+> +		rr_tx_tmp = alloc_percpu(u32);
+> +		if (!rr_tx_tmp)
+>  			return -ENOMEM;
+> +		WRITE_ONCE(bond->rr_tx_counter, rr_tx_tmp);
+> +
+>  	}
+>  
+>  	/* reset slave->backup and slave->inactive */
+> @@ -4866,6 +4870,9 @@ static u32 bond_rr_gen_slave_id(struct bonding *bond)
+>  	struct reciprocal_value reciprocal_packets_per_slave;
+>  	int packets_per_slave = bond->params.packets_per_slave;
+>  
+> +	if (!READ_ONCE(bond->rr_tx_counter))
+> +		packets_per_slave = 0;
+> +
+>  	switch (packets_per_slave) {
+>  	case 0:
+>  		slave_id = get_random_u32();
+> 
+> 	-J
+> 
+> 
+> [0] https://lore.kernel.org/netdev/e4a2a652784ec206728eb3a929a9892238c61f06@linux.dev/
+> 
+> ---
+> 	-Jay Vosburgh, jv@jvosburgh.net
