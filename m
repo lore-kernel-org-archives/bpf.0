@@ -1,163 +1,173 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C41B932B989;
-	Thu,  5 Mar 2026 07:11:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8931D30C62D
+	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 07:16:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772694721; cv=none; b=OCzMp4ij6wXFt51gd+3HDr0AkvpcAB6PN30xYhS4bo+KzAFiqPbgDVJXFSdU86kdxZ/OVZC7XldS0SPwl73jHZhiCHSDcH3nwst3ycKXY6FcCJ4eAhR6aRrAXGQ83Dvc+W3I7kkX1JZnMMBRk0H1T/iO+9CMw/fdoTBCJX5WI98=
+	t=1772695011; cv=none; b=Q9F1E7i+LrD1s9hK1DmbYdOcTxMKjuWm7BvxwxqZXA75AR+3WM/CJfVmiojkPtpVn7Fa6VRPGPR6JsaOLvwLE8yPV/OfBDnbHhQ9jWBNWEYx6SDjCP+gSM7KZhsug3lFxk5D5dR0Jywvln3LA8xpbOez1YMrAXc8132VXamVP+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772694721; c=relaxed/simple;
-	bh=MilPBKT5qdBGv3KAqViaqGXVrPTSiq77sK756EO+4xk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RE6ynkjk30u2qFijYKbXzy+yiGPXpCiypoEulBeYp9EYr5BLz7oVH5vtveByQyuzi0Ca/K6cdcBjITYlcvMmgd+3pfOjzj/2is/hbx9UfncYQme+mz7n0pSIjWXI1Eyr76/xFfTkdd/9Y4RLoLfoD/pd31yQrUMzBzsLY98AGxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=DS1AH48t; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=j4+Kz4fq; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1772695011; c=relaxed/simple;
+	bh=3l6xAzbLtTmepWBb4mTwXWx2jqG1Qzvd3VQpoDc/+3k=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UZcI3apS50Tq0iGUVnfev7ZFssEbICCaB+kZCQ2O4bFhdviNGb3n7DO5ATy9JQGqrSWiNOD3Vs/F0pCXZ8mCnmzcwc4QwKgG6c3c/MyROKXIvIZzhznT35YiGncv+Z1ARrgvvsV24tpEEORMJMuF3oEH55fHtYfowUmUmQLTRos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZqOro29C; arc=none smtp.client-ip=209.85.128.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="DS1AH48t";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="j4+Kz4fq"
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1772694718;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+RqUxSzmka9uuI1Wx1AJs8zJfLvQqhjOS+vbWhu9tD0=;
-	b=DS1AH48tfugFJcWdxt+ntxub/fGyGX9FkpjLo0CJZeh/DwiZiPwPzFkUQjX9eixu4qa4Z1
-	4+n/HmA6OQAT5bE72jpECNB6CvImHVYjhnrrPsSe5wKW4j0GZ5zw/sTjRBUbznTHu7X7O7
-	4KB7lZChdL7BYF5Ac4nX3n97YxL44/rh7bJAh8rdyVVub+M8pcpuyFITzQECESW0XyMI+z
-	LH9XDOcEFSmM0bnvL7hJ3O0RzD12zwrheNTCTsEBprVqHNrZpK8cyKKNJoGih5ciMWGL0f
-	jpoJOGJAlQDUYWwdB4dyCBB4TDAbMophYuff2+Zhw1ExctzO+x5Zh8MRbVY3+Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1772694718;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+RqUxSzmka9uuI1Wx1AJs8zJfLvQqhjOS+vbWhu9tD0=;
-	b=j4+Kz4fq6lQ/WAEovs2DrNNpIYCrkmQ1vXjADMdGWbWe//WpJ9tet50SZDwe5Ow0y308oI
-	WKclOAnQM4JltQBQ==
-Date: Thu, 05 Mar 2026 08:11:58 +0100
-Subject: [PATCH v2 8/8] selftests/bpf: verify_pkcs7_sig: Use 'struct
- module_signature' from the UAPI headers
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZqOro29C"
+Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-48378136adcso45716575e9.1
+        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 23:16:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772695009; x=1773299809; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w5DTydL42chhunqhrPV2dhB9V973kmBV2P3Jq0tj1g4=;
+        b=ZqOro29CXB6a7cYwpT7YNh77et9IyvuTRsMU87cJSWcBDrveKP7kaGbB1LMFnfDh6v
+         TKDtVB9V+vPbueMye6izeFU0Junwxtp+mLb+KQc6p+qFfTAeih0XRcLRslnMHSXlBirJ
+         61WaO/PyU5lazXmeowXWWroSsUBJnXaIS3Oa1AZDbycDUmxatwI8HcrK3a0RUXFDK1QH
+         aM1/aCllKWNA4zHmN80lHnvb8IN/BDLrzyv5bbp3qchyrya8ClSdsDm922s7iFju65wU
+         ckKYAoVodvaNDG8hSDWyV2o2TwKAK/icUnNzECqlSbrEo1YspTercuvMdw16TiiV4HKk
+         gElw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772695009; x=1773299809;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=w5DTydL42chhunqhrPV2dhB9V973kmBV2P3Jq0tj1g4=;
+        b=Tz0LIDLSVsFNmN+9VKiVByupmdKzhq446V+ugwXit9+9losRYygaNsFRQWJE+6m1q8
+         KXntm/zqS7uTkjex/gzl5pGK6FMb2oswILFU88Rb2gjCGY+t8gi0sTZKpbxcaFBqLBpN
+         DtsLZL2oVSLdSzFgHqIRhycEyrEGn9FXhKJmGRd/GHTVLQpQnG1Lko0tgefNxa/4qgzD
+         Lz2L1LchCAd5TMsNDG6GO3TC3XzjshCVRVUqBCQE9ZkzdJgb2ev6B/LrCYAUFvoPB4Dw
+         hL+ud/0+cpSRgf3wMCidIzGZvnPRjaoCphaaFvdU9HkjMjdzbybDNeed8C+w+l6DYxl8
+         NO0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUkPkaRMRdMkGLS7DbQXHBbHgPeZ299mPMBkyAzRbWT4JPr1VskeiNXeJJK/1PDWKHLVvI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzdLPrbYqXCfVeAgYiCV4JGeGdkCK/Hb39shxV419fZlBvajSFM
+	tbzE19hKBcQ2ryqt3+E7dfAg6ahd19TE1SAnl0klAq8qpjl880tdhvzJ
+X-Gm-Gg: ATEYQzzwDk9SHEXmTt32fRbdELa575wuvf+yXz/S9UE1sCwJUzfPe/Hz3kWQQV9hz7y
+	PNPIvMtWoB/vejSIW9kCpzSKW/HyxLp1JDZrKzhQ6FSlMGNm8aIJLA77HnOMxIkf3LufeMYM7Iz
+	9IGdSjfjxeEUBGMHfug0EB0DSDp5XD8wh8HC72N+xmQlGMXujHZZd0++FIvtReobZtWkz7LgS5g
+	QgdGhenyAUuRCz5tmEXJyVds086aBxhdceYUqLPI3Xgq4K9As4NVWMv0M+Rjt/T3ADDKEyUy+Cf
+	OTuKveaFD5llT+jgRZimxkdfAHDxVSYV9q0UO2kTkOvoyQVSx5Z3Zxbp85fx76juJ7NSMNj+feq
+	xUrSZfjkiIAAvnr6bT7A85Zb1ph45j5o0E5OcQP1sMuZAleQf8xbmY/3EijMdJ6ObH1zpInANqm
+	/wLQOTUn9NPPvwUKR7fyni4Q3m9gPBpRX6XGvo8sFUjLYGfGrJ2w==
+X-Received: by 2002:a05:600c:a08c:b0:483:885:f0b0 with SMTP id 5b1f17b1804b1-485198bac26mr85292725e9.35.1772695008566;
+        Wed, 04 Mar 2026 23:16:48 -0800 (PST)
+Received: from lima-ubuntu.hz.ali.com ([47.246.98.208])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4851fae475csm20714535e9.8.2026.03.04.23.16.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Mar 2026 23:16:48 -0800 (PST)
+From: Qing Wang <wangqing7171@gmail.com>
+To: jrife@google.com
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	haoluo@google.com,
+	john.fastabend@gmail.com,
+	jolsa@kernel.org,
+	kpsingh@kernel.org,
+	linux-kernel@vger.kernel.org,
+	martin.lau@linux.dev,
+	sdf@fomichev.me,
+	song@kernel.org,
+	syzbot+b4c5ad098c821bf8d8bc@syzkaller.appspotmail.com,
+	wangqing7171@gmail.com,
+	yonghong.song@linux.dev
+Subject: Re: [PATCH v2] bpf: Fix use-after-free in __bpf_trace_run()
+Date: Thu,  5 Mar 2026 15:16:36 +0800
+Message-Id: <20260305071636.1174156-1-wangqing7171@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <xt2wdltgcksndmsizbzhyedshr4qaadmn6pgto76x4kiv7kczh@cobpljlcjttp>
+References: <xt2wdltgcksndmsizbzhyedshr4qaadmn6pgto76x4kiv7kczh@cobpljlcjttp>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260305-module-signature-uapi-v2-8-dc4d81129dee@linutronix.de>
-References: <20260305-module-signature-uapi-v2-0-dc4d81129dee@linutronix.de>
-In-Reply-To: <20260305-module-signature-uapi-v2-0-dc4d81129dee@linutronix.de>
-To: David Howells <dhowells@redhat.com>, 
- David Woodhouse <dwmw2@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>, 
- Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
- Alexander Gordeev <agordeev@linux.ibm.com>, 
- Christian Borntraeger <borntraeger@linux.ibm.com>, 
- Sven Schnelle <svens@linux.ibm.com>, Mimi Zohar <zohar@linux.ibm.com>, 
- Roberto Sassu <roberto.sassu@huawei.com>, 
- Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
- Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, 
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: keyrings@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-modules@vger.kernel.org, linux-s390@vger.kernel.org, 
- linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
- linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1772694712; l=2348;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=MilPBKT5qdBGv3KAqViaqGXVrPTSiq77sK756EO+4xk=;
- b=Y630crB86kIbqRltJn2BQgjYutCB5syuG9sQtPZvqCzlVINSBbItuoyZZJcFPjmhBOAlWwlAN
- rrzsRYozFmcBYiHIDYSmoW64Qvi3e5/0RWDujK3QgSIGuXAXEeF8c8d
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Now that the UAPI headers provide the required definitions, use those.
-Some symbols have been renamed, adapt to those.
+On Thu, 05 Mar 2026 at 09:38, Jordan Rife <jrife@google.com> wrote:
+> > A use-after-free issue reported from syzbot exists in __bpf_trace_run().
+> > 
+> > BUG: KASAN: slab-use-after-free in __bpf_trace_run kernel/trace/bpf_trace.c:2075 [inline]
+> >     -> struct bpf_prog *prog = link->link.prog;
+> > 
+> > The link(struct bpf_raw_tp_link) was freed before accessing
+> > link->link.prog.
+> > 
+> > The root cause is that: When bpf_probe_unregister() is called, tasks may
+> > have already entered the old tp_probes array (RCU read-side section)
+> > before rcu_assign_pointer() updates tp->funcs. These tasks can access the
+> > link through the old array. Without synchronization, the link can be freed
+> > via call_rcu() after bpf_probe_unregister() in bpf_link_free(), leading to
+> > use-after-free in __bpf_trace_run().
+> > 
+> > CPU 0 (free link)                    CPU 1 (enter old tp probe)
+> > ─────────────────                    ────────────────────────
+> > 
+> >                                      rcu_read_lock()
+> >                                      old_funcs = tp->funcs
+> > bpf_raw_tp_link_release()
+> > bpf_probe_unregister()
+> > rcu_assign_pointer(tp->funcs, new)
+> > call_srcu/call_rcu_tasks_trace(old_tp)
+> > ...
+> > call_rcu/call_rcu_tasks_trace(&link->rcu, ...)
+> 
+> If CPU 1 is in an RCU read-side section, then call_rcu would wait for
+> the RCU GP anyway before freeing the link in question.
 
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
----
- .../selftests/bpf/prog_tests/verify_pkcs7_sig.c    | 28 +++-------------------
- 1 file changed, 3 insertions(+), 25 deletions(-)
+Sry, It's my mistake that it should be 'srcu_read_lock(&tracepoint_srcu)'[0]
+but not rcu_read_lock(), so that misleaded you. It only wait for the srcu
+grace period (tracepoint).
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c b/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
-index 4d69d9d55e17..f327feb8e38c 100644
---- a/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
-@@ -18,6 +18,7 @@
- #include <linux/keyctl.h>
- #include <sys/xattr.h>
- #include <linux/fsverity.h>
-+#include <linux/module_signature.h>
- #include <test_progs.h>
- 
- #include "test_verify_pkcs7_sig.skel.h"
-@@ -33,29 +34,6 @@
- #define SHA256_DIGEST_SIZE      32
- #endif
- 
--/* In stripped ARM and x86-64 modules, ~ is surprisingly rare. */
--#define MODULE_SIG_STRING "~Module signature appended~\n"
--
--/*
-- * Module signature information block.
-- *
-- * The constituents of the signature section are, in order:
-- *
-- *	- Signer's name
-- *	- Key identifier
-- *	- Signature data
-- *	- Information block
-- */
--struct module_signature {
--	__u8	algo;		/* Public-key crypto algorithm [0] */
--	__u8	hash;		/* Digest algorithm [0] */
--	__u8	id_type;	/* Key identifier type [PKEY_ID_PKCS7] */
--	__u8	signer_len;	/* Length of signer's name [0] */
--	__u8	key_id_len;	/* Length of key identifier [0] */
--	__u8	__pad[3];
--	__be32	sig_len;	/* Length of signature data */
--};
--
- struct data {
- 	__u8 data[MAX_DATA_SIZE];
- 	__u32 data_len;
-@@ -215,7 +193,7 @@ static int populate_data_item_mod(struct data *data_item)
- 		return 0;
- 
- 	modlen = st.st_size;
--	marker_len = sizeof(MODULE_SIG_STRING) - 1;
-+	marker_len = sizeof(MODULE_SIGNATURE_MARKER) - 1;
- 
- 	fd = open(mod_path, O_RDONLY);
- 	if (fd == -1)
-@@ -228,7 +206,7 @@ static int populate_data_item_mod(struct data *data_item)
- 	if (mod == MAP_FAILED)
- 		return -errno;
- 
--	if (strncmp(mod + modlen - marker_len, MODULE_SIG_STRING, marker_len)) {
-+	if (strncmp(mod + modlen - marker_len, MODULE_SIGNATURE_MARKER, marker_len)) {
- 		ret = -EINVAL;
- 		goto out;
- 	}
+    [0]
+    include/linux/tracepoint.h:279
+    #define __DECLARE_TRACE(name, proto, args, cond, data_proto)			\
+    	__DECLARE_TRACE_COMMON(name, PARAMS(proto), PARAMS(args), PARAMS(data_proto)) \
+    	static inline void __do_trace_##name(proto)			\
+    	{								\
+    		TRACEPOINT_CHECK(name)					\
+    		if (cond) {						\
+    			guard(srcu_fast_notrace)(&tracepoint_srcu);	\   <----
+    			__DO_TRACE_CALL(name, TP_ARGS(args));		\
+    		}							\
+        }
 
--- 
-2.53.0
 
+> > (RCU grace period)
+> > kfree(link)
+> >                                      __bpf_trace_run(link, ...)
+> >                                      access link->link.prog
+> >                                      UAF!
+> > 
+> > Fix by calling tracepoint_synchronize_unregister() to ensure all
+> > in-flight tracepoint callbacks have completed, so the link is no
+> > longer reachable before it is freed.
+> 
+> It looks like tracepoint_synchronize_unregister() just calls
+> synchronize_rcu_tasks_trace() and synchronize_rcu(), but it should also
+> be sufficient to use call_rcu() or call_rcu_tasks_trace() to ensure that
+> the appopriate grace period elapses for that tracepoint. Is the extra
+> delay just masking the problem instead of fixing the root cause?
+
+I think using synchronize_srcu(&tracepoint_srcu) is enough to ensure those
+used old tp_probes can exit srcu_read_lock() before kfree(link). It needs
+further discussion whether to use tracepoint_synchronize_unregister().
+
+> > The issue was introduced by commit d4dfc5700e86 ("bpf:
+> > pass whole link instead of prog when triggering raw tracepoint"),
+> > which changed tracepoint callbacks to receive bpf_raw_tp_link pointers
+> > instead of bpf_prog pointers.
+> 
+> Did you run a bisect?
+
+I'm trying to run it, but I haven't reproduced it yet.
+
+--
+Qing
