@@ -1,114 +1,105 @@
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE051221D96;
-	Thu,  5 Mar 2026 13:20:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.11
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772716853; cv=none; b=XZdSVMGbh+mEeaMhGX8pUbtOCzYMlbEj94LHUwJpFoKt2c92SH+lnxTH72RHsTU/F4JUWFqvT4pidpDPVoTR0b2J4PboZ+zinqwjw0brl2Yt9ATU5dEA+BVrjqLpucjApxBDCRJ2sOgIel23OwZQHdzfN8bKwexeZ8Hvcw5Wiuk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772716853; c=relaxed/simple;
-	bh=CwGtpqWlsou0kFKNtq+6I3wxRsvfeyxuVZBpgGDbidk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=M54hWdovmKsepvnZo7D6vibRb7nrugmrudMPHqS394zQ2GP/kdK446ccZybKqlsnyaidpa024TAeOQATGmnf0RolyW9QZeVEHCENdZBr80hAOexoxRKjwUh72RR35es4J6UzLp3oerfOOgsjqoNvCSj2QRKVFa8MxsYt4WCtrh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf02.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay04.hostedemail.com (Postfix) with ESMTP id 08C221A015D;
-	Thu,  5 Mar 2026 13:20:50 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf02.hostedemail.com (Postfix) with ESMTPA id 5B4F88000E;
-	Thu,  5 Mar 2026 13:20:47 +0000 (UTC)
-Date: Thu, 5 Mar 2026 08:21:25 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: Waiman Long <longman@redhat.com>, David Laight
- <david.laight.linux@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
- mingo@redhat.com, will@kernel.org, boqun@kernel.org, mhiramat@kernel.org,
- mark.rutland@arm.com, mathieu.desnoyers@efficios.com,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 1/2] locking: add mutex_lock_nospin()
-Message-ID: <20260305082125.35d8539c@gandalf.local.home>
-In-Reply-To: <CALOAHbAsiVNC7COL7rCJBdaC-8oZQvg+pjudR4QexQQaYLBmgA@mail.gmail.com>
-References: <20260304074650.58165-1-laoar.shao@gmail.com>
-	<20260304074650.58165-2-laoar.shao@gmail.com>
-	<20260304090249.GN606826@noisy.programming.kicks-ass.net>
-	<20260304095415.4d5f2528@pumpkin>
-	<20260304155742.7b4de2d1@gandalf.local.home>
-	<20260304214447.3e5817ea@pumpkin>
-	<CALOAHbCOynnRdc8JkNJHb-nyoerrz0K5GUhnD8OR2hv4x==5LA@mail.gmail.com>
-	<20260304212802.458b878e@fedora>
-	<CALOAHbBA643_QOsnTmrfjKE71hSa+v1cToiELvGk+vjtcgJsxg@mail.gmail.com>
-	<20260304220019.3efa12ab@robin>
-	<CALOAHbA4Dtc3cXs2JiQ=kxES3kT+Acb=amUxkOvQ22fns-Mqgw@mail.gmail.com>
-	<748e8e0d-5164-4c8a-9bb9-110874c5daa0@redhat.com>
-	<CALOAHbAsiVNC7COL7rCJBdaC-8oZQvg+pjudR4QexQQaYLBmgA@mail.gmail.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C9B3A6402
+	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 13:54:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.173
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772718870; cv=pass; b=NGA1gHXvKTrbvcIdoHE7PrngxBuXV+gN0BLBBWLRbt1YmUhRdGIBDu/p0ENudw1Mg5cdVSW/hNND5VreQ/9fuNjoGy6aLEkbY4LCtxDqHo670g3m9xTvMr1PBKIebL3VLVxKI8YwF3N1DH/GP2MSXRj3J4T6/kMeDzIKnrFfcHU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772718870; c=relaxed/simple;
+	bh=7bIubE/tWXR/VKCSVoYtj0rwX7vNIEiCqb0WR0Q+uZw=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=QebwxlV7dMmSpJxUCSRtGBu1ym5H84KQSovx+IYvEfDpOY8rKND3N3n4/K8Xt2pCPXBzUKSXXH16VOtMSJ91eR/k4pyH1pIenyBn6OrctigtM31KgLb/RrAV4pwdbfM51OVN2LlgptePgZx2g2116RtnxjsyblnjqxlcPbdEBUI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F2SUC2i/; arc=pass smtp.client-ip=209.85.160.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F2SUC2i/"
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-506a1627a09so47097461cf.1
+        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 05:54:29 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772718868; cv=none;
+        d=google.com; s=arc-20240605;
+        b=OBBiWEO2m5t+6Hr0DSsqrZEMDZ6uQjOO6hxtAdCh9tkLknNAVtP/tJ9P1lbRpmYwIH
+         vUlvjROQnV7q+e2qWiYvZI8zpLwTqHAdumMJB5Wa29+TgeKCGyLYthYNodezvfSgzh6v
+         ilMt3zBAdMrEvP78n9WQCITPdiFFEfiyOJl6J7QoSPd/mtss7Nk3GYg2F2+1f1u03bUV
+         b4S9VfYzZSWrhfubdX/b4KNA3KDhtD15DtLO8619FhzkzKJypkUNdAwJcZIMpGm7odcr
+         NTvzqjGIPCUNM3THAnrppe1n7rL+HXJ8FLgEeQenThmnTtliUh1jD3ouIxM6F/Gll8xI
+         U1Ig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=hWtEQgLWe2dUk4REriFzk67sFGYEf2GENq1G5qE0B/M=;
+        fh=NPVFJnkplS0XBaxDJfGZcLOa8RPQHO8kfhXKRMGAFb4=;
+        b=UEKk7t+kXg5J+Bcq4Sc4A7KrMfUqW9VQAnew5qh/wx+hyWAkpSW4HRC12sv2TkQuwN
+         M4MvbVkzz8bWbdUY2hqFBf9QK3Ll6kvLNlancZsSsYIj16QPVjd0jV63uofqUaGvIm2u
+         yQWzdsgAIV/13WdZKIcaF1OjH1GatePkle/lrnmn2pKj1I8ZH0EnZYqLzu8/h8Hseevt
+         OvQfMJEwnT5Zv7/5oTSn5H20A4uSUlM6S11FFUbEoXOLDkotNsAiZ+YO/xN8q6hIyR5B
+         z2LaDfjxFYG8i0fYRYJotTkQenfvQaoPZmVdMQdmJxZXxjXfBgDMeBFF7R55jNsGvr6J
+         8LJA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772718868; x=1773323668; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=hWtEQgLWe2dUk4REriFzk67sFGYEf2GENq1G5qE0B/M=;
+        b=F2SUC2i/V16Vnp0MQMsxG2ZaKVVj4fG1NPo2qMXt5qZ4/6pSn+oJI0Q3J+Cn7zuoLw
+         qBVoaICHwVrYEV6cn5l4o3JdqFqCyVFuNnQM1IOczXGFRiwsTX4BGnrmv1KZSBPARmM4
+         zmTeoEU1vXcSjqEJ4dIBb8roZ/Y44Xi6vLEWBYY7WNd40hRiBH2cxtzi4KX2VzAOP6qg
+         E0WELiWAfBtsORYNYsCLfSlrF501H1Bm0ZZAvoxJ9ioH80zW9IzwPiKIlnAa8oWQJnXY
+         yv6rOD43hDhhYnVy/BdJu5vrag7tIGPa1TBOSC323B7MkzMaAGjfL1xjsoaYHl+NieN/
+         yWBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772718868; x=1773323668;
+        h=to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hWtEQgLWe2dUk4REriFzk67sFGYEf2GENq1G5qE0B/M=;
+        b=isCspbjKFHvbM1NEBffx42V2CVCKZvPj6cFVBm/DPQ32s24WZT5OdBiGpU+0MIk/YA
+         H3JkpBMd3RGGVbZNAStGyvzNPcglqEmX94fowOH3/p1xkPF7tp9G7MEUj/tuBbVSb9l7
+         alBL5kjjM9crrzhYk9QerqRP15T1qKNlbWqeX6oPIDzMUxwD+0UEtRyaFH96aFaWvz6A
+         5JKJvsBA/zgoxPvJhbBtVRmb58fOfzI24UXOM9cDdjbtw5qZZlvSnBeruihqTHoAtOHF
+         K5T+rzGaDUEvyfXjrePLJrWDe5ylafdP0ZrTSlMNyXm7OAc9kRB2D6kIVqmxXBvC825w
+         gelg==
+X-Gm-Message-State: AOJu0Yxl7AdVx8f3/ytZpRniBxJ/j9nAbPLqYSI8x0kKz/A8EGhTjyhq
+	HxcQyNrJpczo+POI69bqlZNqTi5YsrtQ53C7qsszj1plXC5LWDvLNCxE75QyAVrsvNjA1rhQttX
+	mN4v9Qqijn78lJzFCievx/MekqsBQL8YmUM+S
+X-Gm-Gg: ATEYQzxDsf9szs5AOoVxCG98TiKkTj6eSzOTOkvnYZCwTBITDotDSWpcuTfKAy1ukxa
+	1/RUC8GPjcxaWtVeM866q0f6M6E3vUCNdX/jBqPs21/WAP6vPLsH23Do2BUVPmwmFfjawS3xoye
+	NBlIHgRTKaonAMSwg30JttYdDxePsBM8pjQQV1sMBUYqiBZCcvzJOxfNhC8qWko8s/cUa+6K+Is
+	aGFdhnh44HyhzmQS9/4s9u35MwipXbLsJ5jw4JNAhoQCSRJIGrPeh8MX2WGBkMajT5Q51c28q22
+	mjF5obmR
+X-Received: by 2002:ac8:7f83:0:b0:4ee:42e6:a5 with SMTP id d75a77b69052e-508db392109mr70969881cf.57.1772718868570;
+ Thu, 05 Mar 2026 05:54:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: 5B4F88000E
-X-Stat-Signature: dbt6fsqpbjakohchp87mf59hxz83abbk
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX19nGggTJBCCXPbN6dgsUGRGeCssd4zkOd4=
-X-HE-Tag: 1772716847-196258
-X-HE-Meta: U2FsdGVkX19/nA7nkiJ+lEu/bhXZ7iVnaGIQF1IGFnFPwc+FBle9wIBmCB012lsGYBm/ecU20fIb9h2Up+hs15uH8elqdHCi0G3TKEXS4dCoBkuW2NRWvaeukGOlePrAdQU/a70KaOhUwsW/6T3ifdbDbWVADRweNv6PzeNFZ1MXlFELAQn6yQ2HRgvFwIGJQFIVoN+wTm/6fORb8dm5MTGNAG+KdDNVQKc62AMItK1vRGaJHXayne1B1oqLjvIgcLZEkkXlt0Z0kw42eGDegYpC2iKed6u6cNE8ce0Ino9bt/uYjEp722x3tUsNf3ZbBce/8hYHfJKk44l1CmslOzhLQsjlxBwf
+From: Farbod Shahinfar <fshahinfar1@gmail.com>
+Date: Thu, 5 Mar 2026 14:54:17 +0100
+X-Gm-Features: AaiRm529Uye6H4IP_gKYPjWFs-i2uzpDk-zwfzgw61Xj8kF8ZRvLmqg-395MJ_g
+Message-ID: <CA+WLDByd8qeUpVBijKooyZkBRB1iwGT8fjUEUKXgQEFAZ_pzHA@mail.gmail.com>
+Subject: bpftool generated jited has unpreventable jump addresses
+To: bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 5 Mar 2026 13:40:27 +0800
-Yafang Shao <laoar.shao@gmail.com> wrote:
+Hi,
 
-> Exactly. ftrace is intended for debugging and should not significantly
-> impact real workloads. Therefore, it's reasonable to make it sleep if
-> it cannot acquire the lock immediately, rather than spinning and
-> consuming CPU cycles.
+I want to prepare a CFG for a jited eBPF program. The output of
+`bpftool prog dump jited id xx` reports jumps with kernel memory
+address (e.g., `ja      0xffffffffc013ad2a`) and it seems impossible
+to infer where the destination of the jump is. I thought maybe by
+knowing the base address of the program, I can manually convert jump
+destinations to relative addresses, but the base address is not known
+by bpftool (As far as I understood looking at the code).
 
-Actually, ftrace is more than just debugging. It is the infrastructure for
-live kernel patching as well.
+My questions are:
+1. Is this a real problem or am I missing something (I might be
+because the bpftool already reports CFG for xlated version)
+2. If it is a limitation, how do you suggest to address the problem
+(if it is of interest to others of course). My initial guess is to
+return the load address of the program in the `bpf_prog_info` when
+doing `bpf_prog_get_info_by_fd`
 
-> 
-> >
-> > BTW, you should expand the commit log of patch 1 to include the
-> > rationale of why we should add this feature to mutex as the information
-> > in the cover letter won't get included in the git log if this patch
-> > series is merged. You should also elaborate in comment on under what
-> > conditions should this this new mutex API be used.  
-> 
-> Sure.  I will update it.
-> 
-> BTW, these issues are notably hard to find. I suspect there are other
-> locks out there with the same problem.
-
-As I mentioned, I'm not against the change. I just want to make sure the
-rationale is strong enough to make the change.
-
-One thing that should be modified with your patch is the name. "nospin"
-references the implementation of the mutex. Instead it should be called
-something like: "noncritical" or "slowpath" stating that the grabbing of
-this mutex is not of a critical section.
-
-Maybe an entirely new interface should be defined:
-
-
-struct slow_mutex;
-
-slow_mutex_lock()
-slow_mutex_unlock()
-
-etc,
-
-that makes it obvious that this mutex may be held for long periods of time.
-In fact, this would be useful for RT workloads, as these mutexes could be
-flagged to warn RT critical tasks if those tasks were to take one of them.
-
-There has been some talk to mark paths in the kernel that RT tasks would
-get a SIGKILL if they were to hit a path that is known to be non
-deterministic.
-
--- Steve
+Sincerely
+Farbod
