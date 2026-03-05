@@ -1,99 +1,89 @@
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E3BA361DCE
-	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 19:54:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18B05329C7F;
+	Thu,  5 Mar 2026 20:18:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772740483; cv=none; b=ng19kXImNoMdeTZxYzoUZnGkL5r1ONk7jl6wz9VajuffqFDw0vxa0ZEeClnTGWbApTf+HJjaNRN8/NBY7TSoip2z2NGDI2snJKVyIP8GTzkovDWcHnYS4Cq1JqXX/onvNDQ0+10SsqRsRJAcb9MPgvUZlmFwTiMcQNqPR6y5l9Y=
+	t=1772741918; cv=none; b=U9LJ2Zavm1DlTPUFtVn2pRa0veykTUBJ1EgLS3rHSgsoCVZGn8u4xUAZ5WVa+clKeGMLvgHh1WhYUN51d3EO5x0nAp/Hsjq3/ymqjqR/avJfhyhj5eCcL/kseYEGadgN6cuxouxOcrhGvUFOlzyFZpXhq/DVG2mCQmVNbrNesec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772740483; c=relaxed/simple;
-	bh=KXjaeO8TBCJWOsx77BtNaImSzKSFsBBLoI/vCV6xqPg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=hNxQErs5/DHz993umvzE9rHn+PIMRNfM+IGWMnDaSR7oa1rlpEyevGvpCK6NOUM5p1GL41m6uwG2l/eFv4hhKuqTSZC2m8+cRiVs4VJOG1yuRAMW9w6Q0nJvm5/wCOMjr6PzSJRe+/SATjVYZuFjoS0rPZi0Wv0RNiblzG5SERI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OmchPgGz; arc=none smtp.client-ip=209.85.222.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772741918; c=relaxed/simple;
+	bh=pRMj0I4HTIXwyDqWCrTrse1IQfhg7ecelu35rca7kIs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UvdoFmDqJfhUOX4Nq17XFGwzLwp6bOyvyDAFO+6XxzopXL3LQR9JebA5ty+NTaRP0qzzp+lJAclfvhnAtSY8UIOid21E0UMyaJ4qzEoglbpBKydRljAqfzurjzFu1P3nOEXtKeRsadjG2doK+8ns+1GIEuMOweulV2PXssTnKFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vKLw0hNA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OmchPgGz"
-Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-8cb39647a70so812808685a.0
-        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 11:54:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772740481; x=1773345281; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Tef0lFKtuCFCTOe1otFjNe5uRz/BF/bwXpY3OD/8jqc=;
-        b=OmchPgGz9e1y1X4/xZ26ItsCDu9rd2nzYw7p6tVTUgmjOZmojVWRxTrImiQmckW/38
-         ehU9RG9fMdrrVpS96zAnmtI29kyN0RHbrLv/gmtB6wr/OqyG6SWXBerz0YfQKEiFV1NF
-         1Mi4M7pxqMEZ8/IWI1x+hZXXyx1i8DcsRMEzqYOEdnzZJZToFQxyFk88cMYX2NZNwx1W
-         H7Uun01cj9ND2AYg+28HJhV6AVjM4d34c36rDlh9MMsZg1S7kbnqGA+N9Yx7KiZVNO9n
-         3jANWbPM6zmBWGDZNqn9WH8187RiAYkCmqt3nBLTtCVe9jgrJfMdU8h9PvWATTdWcG/B
-         tthQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772740481; x=1773345281;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tef0lFKtuCFCTOe1otFjNe5uRz/BF/bwXpY3OD/8jqc=;
-        b=S9ZictsskdW59PqGh+4JZD3hWf+kFkXAyqFUxcOmnni0ZkKDUShIkk4Au7UrpzJ4E0
-         Rl7csVBOX5UBbLIxtjaJ5MkyzhPN6N9LUgE8hFaQatnQQRJ89mWh0kDfxQ6Xr1N0ewkr
-         DXluT6a77EwzAWsfqouQs5pPX6PW7yAXZmp96ujsVfMHqUxXg8XsGMBOKXNS5/zNnsEb
-         8BAQRjrK2cV9SDd/QkI+FnHq9pchvdiHOtjLfj0eQW2GhpF5lGETGmY9irCFc6lGswT5
-         USwS0kndy7O5Inq+uj1A7CGjfmhRr/QgmmuN79b2Ll5yJMR0uh2I5QZWY/WUQf7Y/pwd
-         V90w==
-X-Gm-Message-State: AOJu0YzsGVPNLaM7Y3I0YLMT6B9/Z32KwLSpD+zUI4WgNhfWhrkSbMlQ
-	UxHGtdt2fXNIlBealazNx+n2Ic2WnhHv7LaPAw4cGTtA8wezRQ+L6PPImbU3Hg==
-X-Gm-Gg: ATEYQzxy/K7H/T7/61DupauYJRmDo9rCqzXfbT4cQkfZD7Ny9LQrSo98HFBEk+j1msx
-	iKPvIqfhEAHbndqhSHcew4DMaxyd+55jcBV/jPvsR/M1ese2n81rDcCVBy++w+y9mRaLdoXItX8
-	1NQuyMJdUBidVVMu0pj2gNylRrfJF1JIqVjsM7IXgj2i6kRcd1r2PfDw5wTsLnn9TLgjgTnVNuN
-	bpkDEskQUKAp21iyqZJ/ECuFDJCCDDFJGsyMca3ajQtugR9ziEHeN2eaiC0RiytUKoc1rlfbCZV
-	qU1gMiwsAs7UY1sKbcZpOKnq++aAT6ojAv5IpE/PEVWdzmck6dBvxfeVAoiQCmIZLWYe4ag0rmY
-	lHyPlX5xEphBFfNqfDBh/ZwU6zCBeRjKxtyRUOITwlfzgvoZLRA3FT0SrlJd4t+DQcw2vrN1LHV
-	3AJBqHaBqznt/gexevALGkP/Q6jLXpDpEYcbEK9ggYeQsad7O2ZZz2ieS0SOCIn80=
-X-Received: by 2002:ac8:5d0d:0:b0:4f1:ab66:7c43 with SMTP id d75a77b69052e-508db46d6d0mr106304361cf.74.1772740480686;
-        Thu, 05 Mar 2026 11:54:40 -0800 (PST)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cbbf6541f1sm1935979685a.3.2026.03.05.11.54.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Mar 2026 11:54:40 -0800 (PST)
-Message-ID: <110810cc8533bf8569d0226ab5f5735851d1fad9.camel@gmail.com>
-Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: test refining u32/s32 bounds
- when ranges cross min/max boundary
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org
-Cc: daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com, 
-	yonghong.song@linux.dev, emil@etsalapatis.com, arighi@nvidia.com, 
-	shung-hsi.yu@suse.com
-Date: Thu, 05 Mar 2026 11:54:35 -0800
-In-Reply-To: <20260305-bpf-32-bit-range-overflow-v2-2-7169206a3041@gmail.com>
-References: <20260305-bpf-32-bit-range-overflow-v2-0-7169206a3041@gmail.com>
-	 <20260305-bpf-32-bit-range-overflow-v2-2-7169206a3041@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vKLw0hNA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35EDEC116C6;
+	Thu,  5 Mar 2026 20:18:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772741918;
+	bh=pRMj0I4HTIXwyDqWCrTrse1IQfhg7ecelu35rca7kIs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=vKLw0hNAjuLQhzQvJvvbQW1Q3hpGvnzi2VqbhQm5VxpwHnRbNNyEovCyiH6lGIYns
+	 9lA2zlTh1STudb1tZk+p+3ww1iyWqnEu7inxi08wv9ZCkZH9WVTxO3a2GdWJ9/5Lf8
+	 tdRimsnbiqMhHQfYS5dotyWv53YHic27f+/57R5gNG0Eygg/LtjXMX/qeym2ksbPPe
+	 xeAQZqCN0DDoMi79Mjypd22CojoPU58GbcdwdInB+p0F/Nap70VoFV/kOn512PXpkb
+	 6Rutt00qOZLF8CEnCdcyYiAeMKnE4Sgo+heHMHlqFGU5c5rryt139jz4cu4ryHuR1b
+	 BQAxripXHeWHw==
+Date: Thu, 5 Mar 2026 15:18:32 -0500
+From: Steven Rostedt <rostedt@kernel.org>
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: Jens Remus <jremus@linux.ibm.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, x86@kernel.org,
+ linux-mm@kvack.org, Josh Poimboeuf <jpoimboe@kernel.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>, Jiri
+ Olsa <jolsa@kernel.org>, Arnaldo Carvalho de Melo <acme@kernel.org>, Thomas
+ Gleixner <tglx@linutronix.de>, Andrii Nakryiko <andrii@kernel.org>, Indu
+ Bhagat <indu.bhagat@oracle.com>, "Jose E. Marchesi" <jemarch@gnu.org>, Beau
+ Belgrave <beaub@linux.microsoft.com>, Linus Torvalds
+ <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>,
+ Florian Weimer <fweimer@redhat.com>, Kees Cook <kees@kernel.org>, Carlos
+ O'Donell <codonell@redhat.com>, Sam James <sam@gentoo.org>, Dylan Hatch
+ <dylanbhatch@google.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, David Hildenbrand <david@redhat.com>, "H.
+ Peter Anvin" <hpa@zytor.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Michal Hocko
+ <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan
+ <surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>, Heiko Carstens
+ <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>
+Subject: Re: [PATCH v13 00/18] unwind_deferred: Implement sframe handling
+Message-ID: <20260305151832.5f4d2761@gandalf.local.home>
+In-Reply-To: <aYvKqse1aXxGqFwR@google.com>
+References: <20260127150554.2760964-1-jremus@linux.ibm.com>
+	<aYTgwoyRl8kxQShT@google.com>
+	<20260205135411.5fb22df2@gandalf.local.home>
+	<113e4e4d-8b7a-437d-a3a2-de74acc9ecaa@linux.ibm.com>
+	<aYvKqse1aXxGqFwR@google.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, 2026-03-05 at 11:48 -0800, Eduard Zingerman wrote:
-> Two test cases for signed/unsigned 32-bit bounds refinement
-> when s32 range crosses the sign boundary:
-> - s32 range [S32_MIN..1] overlapping with u32 range [3..U32_MAX],
->   s32 range tail before sign boundary overlaps with u32 range.
-> - s32 range [-3..5] overlapping with u32 range [0..S32_MIN+3],
->   s32 range head after the sign boundary overlaps with u32 range.
->=20
-> This covers both branches added in the __reg32_deduce_bounds().
->=20
-> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
-> ---
+On Tue, 10 Feb 2026 16:17:46 -0800
+Namhyung Kim <namhyung@kernel.org> wrote:
 
-I did not copy the reviewed-by tag from Emil from v1:
+> > 
+> > Maybe it would make sense not to "overload" the perf record option
+> > "--call-graph fp,defer" and use it for all deferred unwinding methods.
+> > 
+> > What about "--call-graph defer", "--call-graph any,defer", or
+> > "--call-graph *,defer"?  
+> 
+> Sounds better.  But I think it cannot enforce "--call-graph fp,defer" to
+> use frame pointers when SFrame is available.. Hmm.
 
-"Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>"
+Yeah, let's just call it --defer. The "fp" part isn't really something perf
+has control over. It's an implementation detail. Perf should really just
+care about getting a stack trace and not how the kernel goes about it.
 
-Sorry...
+The only difference is that it needs to know if it is deferred or not, as
+perf needs to do things differently when it is.
+
+-- Steve
