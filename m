@@ -1,176 +1,149 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 812C037AA97;
-	Thu,  5 Mar 2026 09:31:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 461F1379999
+	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 09:32:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772703107; cv=none; b=gTYbp0mQ2QTiSnmpGEhCICal6BwmJtoMoF84zgW7oUFZuAa84dPIYWaH3RYOiUYFtGsFaw1HzQoejBb36+xfdxrKL59HnZ2+1WNRe4ElpHmlJhVyQsWhtINhEtncFh0rWQf3qQe7UlpR15kc0ABslHBQLQ+Kip3GraB+3yuV/0k=
+	t=1772703179; cv=none; b=ocvhb0iZ1PfLYaoxNlTxM+5dyt8Q5c/TCnlS9/qExA7z3XNuVnthVKXInjZxPxPcJbyPSo4cMFm+BgpmbyxkFV8/rHnSybHiScub0ZRloHGTdOhBcfGDyJ9wsQLUi7PpoNkLGF9+qkgN+WkQxA2qT/u1uK4iB0q4yycs/NuvGz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772703107; c=relaxed/simple;
-	bh=zLOR26cLBLYh5Klh+Pn0d+Hj/jKctPEuA5Lkndxr7M8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ffDQNn6nZ3A+DL6FxaTKRKCsfHA8yY6RTjy+7P+1N+kqe04JzZMQ5arYLD+yTgjh+kDwpxxNt1P+TAs8LmN+QJjlZ/fYStVDp23oCTm8wdN7DJyVSbpk/kkIfADIkzhh6qVqf3RN72aYY5m2MXnnmf7NpHiRrkzMx9U8nnT8jYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=u4Ey9NAy; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=bEppHdnl; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1772703179; c=relaxed/simple;
+	bh=9PYOb+VpS5iduMsjRQAstf3pfoEPKqF4vCLzhZxYmzk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=N4vzJM/Pyg7YInVX9AaO/LLi3n5USbNWnIk/68ilySzvfltllLi/xyk9tHAu+8bDqBI02gjuaAcGdikLXsNn8bzvggTcUw6ySLMQQLRz3jPo+Dy+m/QE00FeBk6kE6xTGMMN5CIEWT1iB4t5oopgjHYSdIS/SBrWH6uMuthq6m8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mcjOgqKa; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="u4Ey9NAy";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="bEppHdnl"
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1772703102;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=co01dxvIFWtkmzMGUBe0JJ0whr193iX3Ll+T6RjyBMU=;
-	b=u4Ey9NAyGUWhFzkNvW79whLpHoE678j2ZVNI7l110NkoHqN/cvmf1WNc3en60CY14hUlcd
-	kGiibB4af3kjSPeilIZYEZVe6jXa4M/ZzqJ7K24k+SsbED4eMaTIf7dq3jyeqyptm+uzzo
-	pajMZj8GX8f16XWZsq6rPOlGiLslBquq0Rwar2AumaULhH058WMlwnGrQkKGgFr4qf8Ujd
-	JeyEcLkiWaC/LgpXfmVyPchP4j+ox31IW901B3NWKwjirWkOfrbx00ujQHARucnXbzr39h
-	6qmNSlRU7Ksg/rNroUDh+eKhwj8+sBpNk4i5P/TkWF3Pp4pJLaGRco2c2F7wpA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1772703102;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=co01dxvIFWtkmzMGUBe0JJ0whr193iX3Ll+T6RjyBMU=;
-	b=bEppHdnlxpvy3m7oFR2YBsCtCjTREF5/5uSe5duOhyg3S0XxgXU4LtbYlykc9tTHgO6Ibx
-	csrqBtCXrUrD4UAA==
-Date: Thu, 05 Mar 2026 10:31:43 +0100
-Subject: [PATCH v3 7/8] sign-file: use 'struct module_signature' from the
- UAPI headers
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mcjOgqKa"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-483770e0b25so66224815e9.0
+        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 01:32:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772703177; x=1773307977; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k9Wh14Cu8HPwYp2aF4AzVWASloPNWhH5O37QCidUK+E=;
+        b=mcjOgqKak919W21aNiOfDWp3RExh27bIzdoIxIC4k58wQM4+b6YOrFljmyeqK/3Snd
+         UyoDhIFVRObN6Fp1wc8I05j/16qrFKwbiU7oK33CfvMkOVYlLBP6vRSb7yybQLun09rz
+         Nw6J8yJosxvThsVFKfxDV7uWnObxA+CKDCC0iU70qjfRFs7M7U0rhbSsn6+6Swxohih1
+         8bKSxJI++wSK73E++jRfvZ63EH/8TyVexW3a5qqyhbO2oMlPcZ7+odbc/0E2pDbFHhlF
+         fxdz+abfRQ548SA2fp4i4i6VkDAt2etu7DMYwVozDBZRJLsj79/5R0WQDEdplHcT8Hfo
+         zZvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772703177; x=1773307977;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=k9Wh14Cu8HPwYp2aF4AzVWASloPNWhH5O37QCidUK+E=;
+        b=XnALSqitvPN/ZE0CYHRV6+p0Cef/A+mf1tLW9sOI6jo7zAW83ezwifXMgjO1CvzM40
+         Qe12/nt0kjQTJI8Gd7YOFS5nu1+8I9irdp4AzITaH2laScP7G99ZRd5joZWnByecXvJZ
+         61GwttJgofzP9hdqjyBH/VhN4GbWpOqqiEfXceCuNF2MQSeA2qTgJk/3AT7xpR8WGmyr
+         ZSDtoXNuMtQSRuyCyIYKGd1fv+/l7FK1wWnO1eEYOOjg73p0u6Gk2Wu8J/u2U9cRUzmv
+         hxxuzyCKXUd2abOv+N01/ug0HetMAv1hp4FzeXGOcKNIHvp+5eJgDwwTwCLX0/t9SuQX
+         zJ+w==
+X-Forwarded-Encrypted: i=1; AJvYcCXc0hkZp3NXLRywxl48UEHI3mQSqyFKa87zpBO9QXhkKX2EGGJG7nAtdpEh7+fIBZFEdJc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkLbDGCDCqYU5PqzTDauoYKjAccUkdUG0676hwr6TQLoyXADHo
+	JObCGG/R0HnearITMVPvGuCp5yIlx5tjDIsfjtu04e7E77y8gDbyyGTs
+X-Gm-Gg: ATEYQzzS/ib8qsGxNQZqIC7eZMOD5R8W2ScQZc5s+iRr2N+bXmXVi+sKy+Fmb/BMq9L
+	llw7fAvr8CeX7sBm3posGAzedW/DhYNsIjY1ig045BrGV7v0VYOV4Odb6hTmH+Wy/cq0rkz/c8y
+	M1i6MFrY8mjYnjFAdg9XAS+S/HB5+LWmBEOMMbcZe6zu/EhBYYR9ujstMFIXKJjihXc0WR0CXvY
+	ehsYU0o8h/wAfARxyGHy0zrkSwOcvxUgAAe+p0IsXjQ8su82of5oamnqgi2+IAoIxeZCGWXes3M
+	bVHyUsVPRO3PKvxwl0ueHxkyBk8jSXEcRbCJZbEz6xh99KnxsAIUcqLR2ya/013p8WiA1+4/zSH
+	4KybkWzYuk7cUBwUNwHSubg07H6yeLLoJQIxl4OlJ6vx0J7YHMierw5MMqE3IqnB0lZtLvv5zrl
+	Uf2e+fyFhQ5LMwlMIxsSNPPdXIqWQHfCth3wY2eFXnowtshfpDUu/XtJaeFIMfhyYrJEbneL6nI
+	iw=
+X-Received: by 2002:a05:600c:64ce:b0:475:da1a:53f9 with SMTP id 5b1f17b1804b1-4851985aa88mr86271115e9.14.1772703176565;
+        Thu, 05 Mar 2026 01:32:56 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4851fb27a20sm63043525e9.9.2026.03.05.01.32.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Mar 2026 01:32:56 -0800 (PST)
+Date: Thu, 5 Mar 2026 09:32:54 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Waiman Long <longman@redhat.com>
+Cc: Yafang Shao <laoar.shao@gmail.com>, Steven Rostedt
+ <rostedt@goodmis.org>, Peter Zijlstra <peterz@infradead.org>,
+ mingo@redhat.com, will@kernel.org, boqun@kernel.org, mhiramat@kernel.org,
+ mark.rutland@arm.com, mathieu.desnoyers@efficios.com,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 1/2] locking: add mutex_lock_nospin()
+Message-ID: <20260305093254.61facfb6@pumpkin>
+In-Reply-To: <748e8e0d-5164-4c8a-9bb9-110874c5daa0@redhat.com>
+References: <20260304074650.58165-1-laoar.shao@gmail.com>
+	<20260304074650.58165-2-laoar.shao@gmail.com>
+	<20260304090249.GN606826@noisy.programming.kicks-ass.net>
+	<20260304095415.4d5f2528@pumpkin>
+	<20260304155742.7b4de2d1@gandalf.local.home>
+	<20260304214447.3e5817ea@pumpkin>
+	<CALOAHbCOynnRdc8JkNJHb-nyoerrz0K5GUhnD8OR2hv4x==5LA@mail.gmail.com>
+	<20260304212802.458b878e@fedora>
+	<CALOAHbBA643_QOsnTmrfjKE71hSa+v1cToiELvGk+vjtcgJsxg@mail.gmail.com>
+	<20260304220019.3efa12ab@robin>
+	<CALOAHbA4Dtc3cXs2JiQ=kxES3kT+Acb=amUxkOvQ22fns-Mqgw@mail.gmail.com>
+	<748e8e0d-5164-4c8a-9bb9-110874c5daa0@redhat.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260305-module-signature-uapi-v3-7-92f45ea6028c@linutronix.de>
-References: <20260305-module-signature-uapi-v3-0-92f45ea6028c@linutronix.de>
-In-Reply-To: <20260305-module-signature-uapi-v3-0-92f45ea6028c@linutronix.de>
-To: David Howells <dhowells@redhat.com>, 
- David Woodhouse <dwmw2@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>, 
- Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
- Alexander Gordeev <agordeev@linux.ibm.com>, 
- Christian Borntraeger <borntraeger@linux.ibm.com>, 
- Sven Schnelle <svens@linux.ibm.com>, Mimi Zohar <zohar@linux.ibm.com>, 
- Roberto Sassu <roberto.sassu@huawei.com>, 
- Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
- Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, 
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: keyrings@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-modules@vger.kernel.org, linux-s390@vger.kernel.org, 
- linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
- linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1772703098; l=3380;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=zLOR26cLBLYh5Klh+Pn0d+Hj/jKctPEuA5Lkndxr7M8=;
- b=cbKMWPxLR0aa06YPMJMNH+3sP2FeyyExCNDYs8ZhrAmgMGdFUszFLlFGXUBMFrAX7ZUpY1tuP
- TT9qQLgbqBID7uuHWdtKTfOJ/DTI7Hziz33pfmvgOnHWrkQKgvv0/7w
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Now that the UAPI headers provide the required definitions, use those.
-Some symbols have been renamed, adapt to those.
+On Wed, 4 Mar 2026 23:30:40 -0500
+Waiman Long <longman@redhat.com> wrote:
 
-Also adapt the include path for the custom sign-file rule in the
-bpf selftests.
+> On 3/4/26 10:08 PM, Yafang Shao wrote:
+> > On Thu, Mar 5, 2026 at 11:00=E2=80=AFAM Steven Rostedt <rostedt@goodmis=
+.org> wrote: =20
+> >> On Thu, 5 Mar 2026 10:33:00 +0800
+> >> Yafang Shao <laoar.shao@gmail.com> wrote:
+> >> =20
+> >>> Other tools may also read available_filter_functions, requiring each
+> >>> one to be patched individually to avoid this flaw=E2=80=94a clearly
+> >>> impractical solution. =20
+> >> What exactly is the issue? =20
+> > It makes no sense to spin unnecessarily when it can be avoided. We
+> > continuously improve the kernel to do the right thing=E2=80=94and unnec=
+essary
+> > spinning is certainly not the right thing.
+> > =20
+> >> If a task does a while 1 in user space, it
+> >> wouldn't be much different. =20
+> > The while loop in user space performs actual work, whereas useless
+> > spinning does nothing but burn CPU cycles. My point is simple: if this
+> > unnecessary spinning isn't already considered an issue, it should
+> > be=E2=80=94it's something that clearly needs improvement. =20
+>=20
+> The whole point of optimistic spinning is to reduce the lock acquisition=
+=20
+> latency. If the waiter sleeps, the unlock operation will have to wake up=
+=20
+> the waiter which can have a variable latency depending on how busy the=20
+> system is at the time. Yes, it is burning CPU cycles while spinning,=20
+> Most workloads will gain performance with this optimistic spinning=20
+> feature. You do have a point that for system monitoring tools that=20
+> observe the system behavior, they shouldn't burn that much CPU times=20
+> that affect performance of real workload that the tools are monitoring.
+>=20
+> BTW, you should expand the commit log of patch 1 to include the=20
+> rationale of why we should add this feature to mutex as the information=20
+> in the cover letter won't get included in the git log if this patch=20
+> series is merged. You should also elaborate in comment on under what=20
+> conditions should this this new mutex API be used.
 
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
----
- scripts/Makefile                     |  1 +
- scripts/sign-file.c                  | 19 ++++---------------
- tools/testing/selftests/bpf/Makefile |  1 +
- 3 files changed, 6 insertions(+), 15 deletions(-)
+Isn't changing mutex_lock() the wrong place anyway?
+What you need is for the code holding the lock to indicate that
+it isn't worth waiters spinning because the lock will be held
+for a long time.
 
-diff --git a/scripts/Makefile b/scripts/Makefile
-index 0941e5ce7b57..3434a82a119f 100644
---- a/scripts/Makefile
-+++ b/scripts/Makefile
-@@ -35,6 +35,7 @@ HOSTCFLAGS_sorttable.o = -I$(srctree)/tools/include
- HOSTLDLIBS_sorttable = -lpthread
- HOSTCFLAGS_asn1_compiler.o = -I$(srctree)/include
- HOSTCFLAGS_sign-file.o = $(shell $(HOSTPKG_CONFIG) --cflags libcrypto 2> /dev/null)
-+HOSTCFLAGS_sign-file.o += -I$(srctree)/tools/include/uapi/
- HOSTLDLIBS_sign-file = $(shell $(HOSTPKG_CONFIG) --libs libcrypto 2> /dev/null || echo -lcrypto)
- 
- ifdef CONFIG_UNWINDER_ORC
-diff --git a/scripts/sign-file.c b/scripts/sign-file.c
-index 73fbefd2e540..86b010ac1514 100644
---- a/scripts/sign-file.c
-+++ b/scripts/sign-file.c
-@@ -40,19 +40,7 @@
- #endif
- #include "ssl-common.h"
- 
--struct module_signature {
--	uint8_t		algo;		/* Public-key crypto algorithm [0] */
--	uint8_t		hash;		/* Digest algorithm [0] */
--	uint8_t		id_type;	/* Key identifier type [PKEY_ID_PKCS7] */
--	uint8_t		signer_len;	/* Length of signer's name [0] */
--	uint8_t		key_id_len;	/* Length of key identifier [0] */
--	uint8_t		__pad[3];
--	uint32_t	sig_len;	/* Length of signature data */
--};
--
--#define PKEY_ID_PKCS7 2
--
--static char magic_number[] = "~Module signature appended~\n";
-+#include <linux/module_signature.h>
- 
- static __attribute__((noreturn))
- void format(void)
-@@ -197,7 +185,7 @@ static X509 *read_x509(const char *x509_name)
- 
- int main(int argc, char **argv)
- {
--	struct module_signature sig_info = { .id_type = PKEY_ID_PKCS7 };
-+	struct module_signature sig_info = { .id_type = MODULE_SIGNATURE_TYPE_PKCS7 };
- 	char *hash_algo = NULL;
- 	char *private_key_name = NULL, *raw_sig_name = NULL;
- 	char *x509_name, *module_name, *dest_name;
-@@ -357,7 +345,8 @@ int main(int argc, char **argv)
- 	sig_size = BIO_number_written(bd) - module_size;
- 	sig_info.sig_len = htonl(sig_size);
- 	ERR(BIO_write(bd, &sig_info, sizeof(sig_info)) < 0, "%s", dest_name);
--	ERR(BIO_write(bd, magic_number, sizeof(magic_number) - 1) < 0, "%s", dest_name);
-+	ERR(BIO_write(bd, MODULE_SIGNATURE_MARKER, sizeof(MODULE_SIGNATURE_MARKER) - 1) < 0,
-+	    "%s", dest_name);
- 
- 	ERR(BIO_free(bd) != 1, "%s", dest_name);
- 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 6776158f1f3e..2b1080892208 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -270,6 +270,7 @@ $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_r
- $(OUTPUT)/sign-file: ../../../../scripts/sign-file.c
- 	$(call msg,SIGN-FILE,,$@)
- 	$(Q)$(CC) $(shell $(PKG_CONFIG) --cflags libcrypto 2> /dev/null) \
-+		  -I$(srctree)/tools/include/uapi/ \
- 		  $< -o $@ \
- 		  $(shell $(PKG_CONFIG) --libs libcrypto 2> /dev/null || echo -lcrypto)
- 
+	David
 
--- 
-2.53.0
+>=20
+> Cheers,
+> Longman
+>=20
 
