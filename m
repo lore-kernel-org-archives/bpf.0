@@ -1,154 +1,133 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF8D219D07E;
-	Thu,  5 Mar 2026 01:59:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772675989; cv=none; b=vApimxxVWQpMI+nSxh6gG7NjWQhhqi+PekV/YXRG1XohR9j5sNYLkhy04f9tOW17/ws04mjSXB/nGhqK4e/GrdGYvUBPtOttwSt8iMs+R4nNZqRxFRCVt5G4pE1J4xdi4U6zXN6FH2js33KnZ5L+pAtN1Up+9PGD54d6UcAECcM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772675989; c=relaxed/simple;
-	bh=JyG7zJ1z6nNh2vnH37eDpwEPw8ydsKFdwpEniiyy9HE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IxD28R55DVfgcYf417eQCpNuvl4fK9YXxvqQ0hdqV/gsgqvEEEHIRwVtAEwKQ3Qj6FJf5dMFqKmhod0+ySGLqRebReVquhYnw2JHQ/R5/SNJSntk7lcSrNUn6STb1oGjelZGeKZYv7IHB1tPgaa+EW4Wpn80YSAJI1LLA7QXcb0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=PT/cDRCW; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28C32157487
+	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 02:00:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772676032; cv=pass; b=B4L81TtdPlDPWO/7tOIfe2KreRK+4HwOnhoqSADU6WGiO7i7TNfUgOK0l1ZTRrW2lDiw/6Zl098OwSxcna2mF3Q7A+DByDt4+eouNgAii+Cvk9vad8pZkzIfhR9GpIZEKsw/IzOLtleZVp/fSeqj4sTMX8Q2BGk54kMlhi+Wvl4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772676032; c=relaxed/simple;
+	bh=5K2OqdFd2CdOe5790BPFhI9mbz5gkNhXbnkaiIAeHac=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Mch9xwln+5jI2faJkMfjs/RjoMcZJ6wUEV/ccl907teJp8L/6NkiI37wyUzVN7txDvg8BJ2eloWvrg3IJ6ObP6L6La6brD+Ozct7PPjEtwBRSqm2ARPbltF90ELJOMZ6MrO8m8TuMGLYeKXEHlghCJY4HhLBYlCzuoBCpMHg38s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EqPXMfXc; arc=pass smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="PT/cDRCW"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=iOdPYh0tb08jNptxkA6JF4JsDVhs2YHL1DVAqLGeqQo=; b=PT/cDRCWtLAHK3KUzCNpJ8n2gz
-	R4R4cmKM2ghLLDRK8n1ZNuwe8o4+puh6q7HLc4vAtWUhcFMlsN8VhoQlq+XOLBvj/VDanFGdDkU81
-	aUuJr+7X2F6U/MbR9bFYfx/zoIZFtktREXpZHDArd2AIpcLebVJWmzkc6as8vagfGuT7U+PIbAfYw
-	nejR87WLKEOjUd8nPrwnDtDwUQyZymc3igz2UaA3OGYG7kPt9jreo4/zOJKUMM1LDtZJqvWRXWKlE
-	5JqXW3ylR2rKsw5HQqSSICRoj/NJlqWxPoDhXDICh7RnlsU98EmzQ/MtwcWD/adlvc/mC9ODZ6uOq
-	c9JgimLQ==;
-Received: from sslproxy04.your-server.de ([78.46.152.42])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1vxy04-0006R5-0u;
-	Thu, 05 Mar 2026 02:59:40 +0100
-Received: from localhost ([127.0.0.1])
-	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1vxy02-000Goy-1D;
-	Thu, 05 Mar 2026 02:59:38 +0100
-Message-ID: <ec1fdead-8a2b-475b-a786-846b81234b74@iogearbox.net>
-Date: Thu, 5 Mar 2026 02:59:27 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EqPXMfXc"
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5a10d130b37so1054053e87.0
+        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 18:00:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772676029; cv=none;
+        d=google.com; s=arc-20240605;
+        b=PfyLvywbCt0I/jbbQuD5kvf4ZBf2zqDKMutXXh/am4YA2/MK0LmixLS62vB9uBiVTx
+         JszFHTs5Q4coSTt/cb0QZuvJbKU0WTJw0zV1HiT1M80Q3oySoVxNrpED2jiv2+RwLh+h
+         vxZO8GKDLX0Alp/6z7opf1M/zkiilGUFdLDrQX0K5E2CBSqkUfO96D/J7OKF1hCXdqKt
+         5YVpdXZCgSvcFTeFpCqI4ltPwl8xqlcLj2BQ84U9P0FuLxi0nwsnOyLSxDKF6zDCltFs
+         gHlzfCEIT8Qc3DjUCvTT2bA7a6gVmhAZkXMnlYGG3H/h/AdKVEJVyNB+WolLb+I0SCVZ
+         a1Iw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=5K2OqdFd2CdOe5790BPFhI9mbz5gkNhXbnkaiIAeHac=;
+        fh=J+G8LbaBUJAcpLVu4OMUDFi37gXStVkzKZ31UcBrPxo=;
+        b=PJPRnwkG8WbPilM6a2UWZnOWqG1dFo7cQHeJmNaH/mLT8altOAZuVHflVc20BL3TdY
+         6KI4fC2z0Am5xcTnQmu3pZbA1UcDtttFpp2xp3uLixsGMn2fFT6c0NJovZxSMzqE7d/E
+         vPcR/GWOttmzMlD9j3cC0110AZBTptAy+PUmFlv8fOmG1dUGOSpPnnUXEnESzhB+vxFD
+         3YHf6YRtuQnM3o1/kzYThLYWsXATgiaXY88mfXwUKtuWFc+MFViJY1blhQ6lvRoHyqjT
+         cIRtuGRhOyvqZm6uoyueenIyo7nAGda8GLtjDGSE0JaeNJPr1v/8Iv4ErsMkanlTysyY
+         D6LA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772676029; x=1773280829; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5K2OqdFd2CdOe5790BPFhI9mbz5gkNhXbnkaiIAeHac=;
+        b=EqPXMfXcmhf3iqRPJvWRnIFKP5WxB20xlZWRdbLFWQoVEEZvnBi4SwuruQoJKBvcmB
+         ln8++fwiqjAviVyGF0+DOIeWm7W4aAI/GawTdh2GVcjiJz4PDM43Xj4qTJrOH3iMKjdL
+         d6gF63EEr1VAEBn99kPKKTtCMgAp5MICeRgWBQvRmljc4m6IOCIgVjdkWxzFmLklagbU
+         3zvQi/rYBZFzAJ4at0k7q4g9aQYdEHri1RwmgTl22jlFTl8ogRITEVGoA/Zn9ozhp+wv
+         UM3NHgz9r/CJwegFaPmp5wUF88lgZdpt6BpgaJzNMR2gvUa1r8KjKro7bgoNBhJnzJRx
+         Xj7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772676029; x=1773280829;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=5K2OqdFd2CdOe5790BPFhI9mbz5gkNhXbnkaiIAeHac=;
+        b=f15i7iVe/sgDEhq2UVyejOgoWmYIZNhujEmeMtodiRJmSpJQWjxhHqmIghYatbvUP4
+         fiAaIUvSixRnD/JGKmQWihx5v6ZNsLxIb9Ud4I44C8cCoDkexYn5B6m71XIWiPJkVnD2
+         H3UJ60rymgEG43m8fP+05nRaRii1GlO0YY3jyzN1ajxmFsjChAadmy9J49V1asUyJc0O
+         ZlKAn4+TY0jJKBKSI8O1l2grSpbMhSufOkT4RY1SK6fLvERdm9OmIeMGvVIh/srDDu/e
+         VxNzMZXLQZ9fqwdIjAlQvT0baQ600MtItLSSKkQJ3dxk3raf2bncxMljk2OkaMylEcOR
+         kzWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVCpJBRwVde31Cd0wN6CQWbMJnGMMopxNFlJMkFLHhKT3gk5eOFhEXESoPwzP9joAPw97k=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0QEQst2JbsZC2OXmVXxCdV67Up77liTLMoZjqKf3FXmwCKthF
+	bpNnfoNw1vBRbHV7zRQ164s/lW9XF33ug3QPvSmU1FBwIxxWoYbPWnnNGgSp17169FvKYP+/dpA
+	3WlTAYevuSCUVmGN6j3bjE8uJANEbPGA=
+X-Gm-Gg: ATEYQzxgXXoLiKFtWnIzPrN4I9qZeyS2SxLEmRc/xV3+NVL6kJazlfrqIs3U5h+wcBI
+	/dFA1v8DXInwzjR+4+/GRIL8ufa9we66pjS5G121kF4XyOlvNbLJxk22CgpO/Ki4+jKdV1J4Jis
+	rTcsIy3pbh5CTRANg4GOaPJM3ovDqOBw6VyU9C+SwOUOpDuU88CJx4pzF0Qcw9KKpUKGeHQQOxm
+	GI0fElrtGPtI/m15IwyrZ+iQsg2tGIfPpwTg80TktaAS5h/3u7PFrqv3VLLItLSkMJ8a4wLUmYg
+	vfMoRME=
+X-Received: by 2002:a05:6512:224c:b0:5a1:1cd2:571e with SMTP id
+ 2adb3069b0e04-5a131f31742mr169683e87.19.1772676029143; Wed, 04 Mar 2026
+ 18:00:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 1/3] bpf: bpf_out_neigh_v4: Fix nd_tbl NULL
- dereference when IPv6 is disabled
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Fernando Fernandez Mancera <fmancera@suse.de>,
- David Ahern <dsahern@kernel.org>, =?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?=
- <rbm@suse.com>, Martin KaFai Lau <martin.lau@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?=
- <toke@redhat.com>, Jay Vosburgh <jv@jvosburgh.net>,
- Andrew Lunn <andrew+netdev@lunn.ch>, Hangbin Liu <liuhangbin@gmail.com>,
- bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260228-net-nd_tbl_fixes-v1-0-2b2a274df9bb@suse.com>
- <20260228-net-nd_tbl_fixes-v1-1-2b2a274df9bb@suse.com>
- <0b52257d-d557-4f26-9931-34c81ab621bc@iogearbox.net>
- <20260302171131.28373ccb@kernel.org>
- <0d7bb5c5-4122-4dc9-b52b-c305591207d1@suse.de>
- <bbee1ce1-0615-4be2-b7b1-a14eaf2afe26@iogearbox.net>
- <ba665193-bb6f-4293-b8ca-bbb267e92eb3@kernel.org>
- <ba35fa2c-0085-43c9-afe0-3b2e0351ca3c@suse.de>
- <525dab04-4e64-49cf-94d9-12084e146b80@iogearbox.net>
- <20260304174327.0a48ff45@kernel.org>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260304174327.0a48ff45@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/27930/Wed Mar  4 08:24:08 2026)
+References: <CABjJbFJO+p3jA1r0gjUZrCepQb1Fab3kqxYhc_PSfoqo21ypeQ@mail.gmail.com>
+ <DEEAE764-41EA-4760-9606-341317E9FDC2@kernel.org>
+In-Reply-To: <DEEAE764-41EA-4760-9606-341317E9FDC2@kernel.org>
+From: Max Ver <dudududumaxver@gmail.com>
+Date: Thu, 5 Mar 2026 10:00:17 +0800
+X-Gm-Features: AaiRm520Wv1nm2lAU8QWLV6Crma97R3cpDBPxFyChT3g5fsWJ8tnyFZNENkHwbk
+Message-ID: <CABjJbFJSYjQ+spicPrTnxkpcLWqSZ3aF-+b5DMKMXqcVU3mKwQ@mail.gmail.com>
+Subject: Re: Process killed by seccomp looks live by tracer
+To: Kees Cook <kees@kernel.org>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Andy Lutomirski <luto@amacapital.net>, Oleg Nesterov <oleg@redhat.com>, Will Drewry <wad@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/5/26 2:43 AM, Jakub Kicinski wrote:
-> On Thu, 5 Mar 2026 02:34:00 +0100 Daniel Borkmann wrote:
->>> Maybe I am missing something here, but I believe this won't solve
->>> the problem. Even if ipv6 is built-in, it should be possible to
->>> pass ipv6.disable=1 during boot and therefore nd_tbl would still be
->>> uninitialized, not NULL tho.
->>
->> I presume you mean disable_ipv6_mod which then bails out during the module
->> load process without error, right? It could be deprecated with a warning so
->> that it turns into a no-op:
-> 
-> I believe disabling ipv6 may be legit. Some admins on ipv4 networks may
-> be paranoid and not want to allow any ipv6 traffic if their "firewalls"
-> can only understand IPv6? This is just a guess on my side, but I'm less
-> confident of deprecating the disable knob than =m. I'd be happy if I'm
-> wrong.
-> 
-> To answer the earlier question -- I would prefer to take the fixes now
-> and make IPv6 bool in net-next, feels like too big of a change for rc3
-> :(
+>This is expected; PTRACE_GET_SYSCALL_INFO is at syscall entry before secco=
+mp filtering has run.
 
-Makes sense, I think starting this process via net-next is fine and can be
-better justified. Fernando, maybe in that case resend with the unlikely()
-added.
+It also happens at the syscall exit. Take a look at the result, it
+shows 'exit ok' twice.
+If we can agree on this is a bug, I suggest the kernel give a hint
+about tracee exit in waitpid return value, what do you think?
 
-Thanks,
-Daniel
+Kees Cook <kees@kernel.org> =E4=BA=8E2026=E5=B9=B43=E6=9C=885=E6=97=A5=E5=
+=91=A8=E5=9B=9B 02:05=E5=86=99=E9=81=93=EF=BC=9A
+>
+>
+>
+> On March 4, 2026 2:51:38 AM PST, Max Ver <dudududumaxver@gmail.com> wrote=
+:
+> >I was using ptrace to trace a tracee status, using
+> >`PTRACE_GET_SYSCALL_INFO` and `PTRACE_SYSCALL`
+> >to get its syscall arguments and results. When a tracee killed by its
+> >seccomp, the tracer can't know immediately,
+> >instead, the `PTRACE_GET_SYSCALL_INFO` tell tracer that tracee exit
+> >with no error. The syscall wasn't actually
+> >executed, it was captured by seccomp, even the tracee was killed by secc=
+omp.
+> >
+> >Here is a poc explaining what I said.
+> >I was expecting to aware the death of tracee at the fourth
+> >`PTRACE_GET_SYSCALL_INFO`,
+> >at least `PTRACE_GET_SYSCALL_INFO` should tell that the syscall
+> >failed, or get some different message from waitpid.
+> >But the result are below. Tracer can only get the death of tracee at
+> >the fifth loop.
+>
+> This is expected; PTRACE_GET_SYSCALL_INFO is at syscall entry before secc=
+omp filtering has run.
+>
+> --
+> Kees Cook
