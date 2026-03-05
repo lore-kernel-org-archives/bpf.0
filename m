@@ -1,77 +1,121 @@
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f66.google.com (mail-ej1-f66.google.com [209.85.218.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54CD0374198
-	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 11:36:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E0B621ABC9
+	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 11:39:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772710611; cv=none; b=uk8MM6DdBgxNLtKfjSz2tYp1ldJfiKFjNdOn7gXBajTT81jaFte7YJWrRG/XCAx3dHtrQm04qb05GMu/1JeuIP8+xjYMSxEpzOLnF9i6oDlN6IlzxES3Ke4xtOXvql6AYmFrjOs6Jx4i1kuWLCw2P+MDr1Uszmf6bkJI7ZwV0rM=
+	t=1772710764; cv=none; b=hSuXCgvbwDAEdUI9WdQHkv+76C3yxHIDEI/mSX3IFbnIju2c6YBOfZ+W1TIGHadq2mZw1VQj9DVu5pr5TOZfpbNPs80tsVOYk6Lm1tm2Tny4UQjDa/DMdwrPN8ZA+tb2aA4DnyJuMAijFwuwiu7I9gIu34jCgyAXs4MRrErRf9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772710611; c=relaxed/simple;
-	bh=XZzbk4q5ZldJrLSIgMJMGGLKseGacG0Z2XIZk0UpUZg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ngamO+CafEOYCIknWs+Ys3ZQUMRxBErqXUosffVGwbD1Yeq1hWPJWOTtHBstK8biFFLtWS2ZAQ50uzUE8pGMoFAo09RscyGhL1Q2SooDcLUY6cHz11QQJDLBaX9+b31CRZlrI7IVLfyfKenMNsPCtPb57FSbZN61KQARndQKn80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dLvrTAxe; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1772710764; c=relaxed/simple;
+	bh=bRM+Z8TRqy+7khM6Y/tE2QgluvkMOuKZQbK7SF0Kjr4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=S+nVibvuHgZv0v7DbY24/zD8w3DTk64O4pF2FdmjqrFWORwukmz4IYUTvMqchGM2o394he2aYMKh+voLOVD9gZ4wH1/N1QfBR/r/x8nHbzLu8IhV0EMFmpXyad0NKTmWmQyA3RoMqku2N3PvMpNoChwp9jrW2EeakJQq06qztOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=Qq868KBM; arc=none smtp.client-ip=209.85.218.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dLvrTAxe"
-Date: Thu, 5 Mar 2026 19:36:26 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772710607;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rXd/VJuYpQQsRydpizuMm27rujDu9G1vVap3iRte4Gw=;
-	b=dLvrTAxeI5d+DEhrgKtrPwuABrZ92+apLZl8tPZ5zxlxldwhMBQvwzwN7cFORC61nR90GF
-	kbcEZBZCjeaSYVKKtuBBWISflfxazG/wLE0TcW3mcn9jIhk8D4wnz6iVfjlQ0BZMdMJM6q
-	x1leuXvKd4JsasnokBqT9SVpgoYT5UQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Qq868KBM"
+Received: by mail-ej1-f66.google.com with SMTP id a640c23a62f3a-b935a74b7c2so1078325866b.3
+        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 03:39:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1772710762; x=1773315562; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dAOkhEnhzPo5xZRNqtX6dTKBEVvp+75/lvQ1sFK3ki4=;
+        b=Qq868KBMP2TERpLw12dWHqEKRLWzTRwcOk1Qs5IngnDB/svTRb2/9bWt8H8qDpCREv
+         CO8UNa+4OJheZHQm3uRZLp4utHYua2399cTs3pSdohi1dFYqiG7xsApNkqJ568wSdPot
+         CCwCsR2JqeFFJHLde7lIFPn0fGkGdV+aOJo0uA3Lv/sK3TL63tZ35xc5iatDrSkZhQGC
+         33AAirHxhlt/mUNB3L7ekA6HQU6CysrrCbJpr6+BihxQ8z4woKH9pEDIWKaxwa3iQ+C+
+         c8OakZ78Nc8iMz6Sqx+JTC/wUf65WaCahDqYqyzNiEPdbDkSlt1HMzMoG8Jdi7ltFRi9
+         9l3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772710762; x=1773315562;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dAOkhEnhzPo5xZRNqtX6dTKBEVvp+75/lvQ1sFK3ki4=;
+        b=Ps1jwPiWMKI1b3USu4L9ZpIHLOtihKmJ3XR11SL09z6MnZUhOthPB8fZs86ZlS0CO/
+         IilAMWpKGW5CeDUBxEtKZ1SOLk0PlJ73Tc7XI4S/RVOFK5UxYQm8/zf+rT7X7oiCYCyM
+         clqGHIrnWkR8EF2N6IQEc8v/XGjBfsHCEcrEut6i6o5r9qDb2J+dPF5q2QOO2yrWnkiT
+         KnqcvxAFj4+78PTRqAxaDSqkJ6hZfGxvvaBlm4AKT5bM40rOPx4wXgp9DvtT9PqZpEQx
+         qwn/JzUnfHhMP6OETfpsAn/g3xMWBhJ+cEU4bpayiu2ljB5j4HghfS/RhJ/zO3dEl/vA
+         Gk5w==
+X-Forwarded-Encrypted: i=1; AJvYcCV+kHMooki9ar1jCVkIvCYxfg5nFQJcYKF/pCjTnV/ARx6Vj3CN33mgV8re4OcRkryUOjw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqD/1Isw0nK9OX4JeOHr5wYC+Fm6p2DmFfsLruFSCfOA8RyNwX
+	nGdsM45kgTSqNBV9gE8YFf4Yw226A44tyi9Lwy8NW3BIvLulKRHKqf5gzi21WfvoF7k8PJNIbWa
+	YS0yFZGF7e12N
+X-Gm-Gg: ATEYQzwPT/4Hft1eh+xAj4gC6o7C8/FziC6jur6DljuyS4mpEiguPeNiMakalLBNv4e
+	Dp1AfXlrOVJ0PmqqwYJG1LxogbKOfQSZ4vg2Lk02ZtczHikng+eUcL2O7qioNq+r65bYMbQz6/G
+	eTxR7+YmF6twWCO8wldCeBzxXNUYQyPzdH5JzgkWyVU51xS0lvHwO/Bf1VhhKcV9HX5bmlm2KUb
+	W9tOT4S+qVHuGLdnQFpA2mX4s37WcTy00OO2h9qQJpSlIgUHzqKPrCKAQijaCQoYSASDmmNGDvn
+	BH2Dd5rUFRNJXG4+jkb1/hSj/7cpZRoCBhrh4CZQf+TU/q2FHx3qZdLcBc0oN5Voy9JOY4uW7lw
+	AuELNl8Zb6eVs4azCjrZIzyas2zy+++Zi3UmnZmjgYk2iZyNnQgA0/GPBzEHKRbBwrMk+F4nKcg
+	w677kkcQ849zMjUpr40IEbdJs6YR8ZozV6VO+BGM0Ro1abmYje0IDIo/E3cak1PFGMBujz8A==
+X-Received: by 2002:a17:906:c148:b0:b93:609a:1519 with SMTP id a640c23a62f3a-b93f15a7d55mr401408566b.48.1772710761619;
+        Thu, 05 Mar 2026 03:39:21 -0800 (PST)
+Received: from cloudflare.com (79.184.124.63.ipv4.supernova.orange.pl. [79.184.124.63])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b935ac513bcsm891702966b.19.2026.03.05.03.39.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Mar 2026 03:39:21 -0800 (PST)
+From: Jakub Sitnicki <jakub@cloudflare.com>
 To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: John Fastabend <john.fastabend@gmail.com>, 
-	Jakub Sitnicki <jakub@cloudflare.com>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
-	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	syzbot+9307c991a6d07ce6e6d8@syzkaller.appspotmail.com
+Cc: John Fastabend <john.fastabend@gmail.com>,  Willem de Bruijn
+ <willemdebruijn.kernel@gmail.com>,  Kuniyuki Iwashima
+ <kuni1840@gmail.com>,  bpf@vger.kernel.org,  netdev@vger.kernel.org,
+  syzbot+9307c991a6d07ce6e6d8@syzkaller.appspotmail.com
 Subject: Re: [PATCH v4 bpf/net 3/6] sockmap: Fix use-after-free in
  udp_bpf_recvmsg().
-Message-ID: <duzhaj5r5o3igwhfi72ps37c53usev6ijnqtch4h4up22f2chc@jik3ncn2k4ym>
+In-Reply-To: <20260221233234.3814768-4-kuniyu@google.com> (Kuniyuki Iwashima's
+	message of "Sat, 21 Feb 2026 23:30:50 +0000")
 References: <20260221233234.3814768-1-kuniyu@google.com>
- <20260221233234.3814768-4-kuniyu@google.com>
+	<20260221233234.3814768-4-kuniyu@google.com>
+Date: Thu, 05 Mar 2026 12:39:20 +0100
+Message-ID: <875x7ao68n.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260221233234.3814768-4-kuniyu@google.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain
 
-On Sat, Feb 21, 2026 at 11:30:50PM +0800, Kuniyuki Iwashima wrote:
+On Sat, Feb 21, 2026 at 11:30 PM GMT, Kuniyuki Iwashima wrote:
 > syzbot reported use-after-free of struct sk_msg in sk_msg_recvmsg(). [0]
-> 
+>
 > sk_msg_recvmsg() peeks sk_msg from psock->ingress_msg under a lock,
 > but its processing is lockless.
-> 
+>
 > Thus, sk_msg_recvmsg() must be serialised by callers, otherwise
 > multiple threads could touch the same sk_msg.
-> 
+>
 > For example, TCP uses lock_sock(), and AF_UNIX uses unix_sk(sk)->iolock.
-> 
+>
 > Initially, udp_bpf_recvmsg() had used lock_sock(), but the cited
 > commit accidentally removed it.
-> 
+
+FWIW, it doesn't sound like commit 9f2470fbc4cb ("skmsg: Improve
+udp_bpf_recvmsg() accuracy") removed it by accident. The commit message
+calls it out explicitly:
+
+    Also, UDP does not lock the sock during BH Rx path, it makes
+    no sense for its ->recvmsg() to lock the sock. It is always
+    possible for ->recvmsg() to be called before packets actually
+    arrive in the receive queue, we just use best effort to make
+    it accurate here.
+
+Looks like we just didn't understand the consequences at that time.
+
+>
 > Let's serialise sk_msg_recvmsg() with lock_sock() in udp_bpf_recvmsg().
-> 
+>
 > Note that holding spin_lock_bh(&sk->sk_receive_queue.lock) is not
 > an option due to copy_page_to_iter() in sk_msg_recvmsg().
-> 
+>
 > [0]:
 > BUG: KASAN: slab-use-after-free in sk_msg_recvmsg+0xb54/0xc30 net/core/skmsg.c:428
 > Read of size 4 at addr ffff88814cdcf000 by task syz.0.24/6020
-> 
+>
 > CPU: 1 UID: 0 PID: 6020 Comm: syz.0.24 Not tainted syzkaller #0 PREEMPT(full)
 > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/13/2026
 > Call Trace:
@@ -104,7 +148,7 @@ On Sat, Feb 21, 2026 at 11:30:50PM +0800, Kuniyuki Iwashima wrote:
 > R10: 0000000040000021 R11: 0000000000000246 R12: 0000000000000000
 > R13: 00007fb31a216128 R14: 00007fb31a216090 R15: 00007ffe21dd0a98
 >  </TASK>
-> 
+>
 > Allocated by task 6019:
 >  kasan_save_stack mm/kasan/common.c:57 [inline]
 >  kasan_save_track+0x3e/0x80 mm/kasan/common.c:78
@@ -150,7 +194,7 @@ On Sat, Feb 21, 2026 at 11:30:50PM +0800, Kuniyuki Iwashima wrote:
 >  do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
 >  do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
 >  entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> 
+>
 > Freed by task 6021:
 >  kasan_save_stack mm/kasan/common.c:57 [inline]
 >  kasan_save_track+0x3e/0x80 mm/kasan/common.c:78
@@ -177,21 +221,11 @@ On Sat, Feb 21, 2026 at 11:30:50PM +0800, Kuniyuki Iwashima wrote:
 >  do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
 >  do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
 >  entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> 
+>
 > Fixes: 9f2470fbc4cb ("skmsg: Improve udp_bpf_recvmsg() accuracy")
 > Reported-by: syzbot+9307c991a6d07ce6e6d8@syzkaller.appspotmail.com
 > Closes: https://lore.kernel.org/netdev/69922ac9.a70a0220.2c38d7.00e0.GAE@google.com/
 > Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
-
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-
 > ---
->  net/ipv4/udp_bpf.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/net/ipv4/udp_bpf.c b/net/ipv4/udp_bpf.c
-> index 779a3a03762f..b07774034a91 100644
-> --- a/net/ipv4/udp_bpf.c
-> +++ b/net/ipv4/udp_bpf.c
-> @@ -52,7 +52,9 @@ static int udp_msg_wait_data(struct sock *sk, struct sk_psock *psock,
-[...]
+
+Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
