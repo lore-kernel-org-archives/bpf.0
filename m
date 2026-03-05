@@ -1,67 +1,67 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AD3E344DAE
-	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 20:37:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4DF9345CA5
+	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 20:37:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772743076; cv=none; b=WIF9WyTypO/hCwxsmo7p6o3hgVocXBRfwtguyGXHoX7KYDyWuARvI11ueZRygUII7hS61QWyQw2waI012PDT8OP8RjvyPPl7/JLbZv9YMhfWX7qdNe3PF3B3mYN4rBf91EMWW1L4SLiQ+BW6iminMgAUjuFz1wiY1tLcZN6fHYs=
+	t=1772743080; cv=none; b=aU/6urf0U1sp2tJT+TdXS85SmuCmLI+CTAlq8ZVAPwGLp7pTGx6RMvFYF3VV/b6jy1FTSCq47cwVxVvAkdMvAPQDDzrqaDh5ZsrvTR2Ew0pI0Uitme4S3zkmz3fZRI7HUEbVnwF78cjcP+8nDv6VlLs9gNxoHR83NyXzpHZun+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772743076; c=relaxed/simple;
-	bh=BJNtUYfcCSIEf+KeHSlKgwI0CK0CjGEsuB477WGKkxc=;
+	s=arc-20240116; t=1772743080; c=relaxed/simple;
+	bh=cnxiDzaTG3dDRmVmA/NbvEgeXNe7TfmfMEbBpvNLqsY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jwxKcjk14kmowFigt5giOQjsubw+p/NRRLSeQxos0oiEf9JxUUfx2O1cm5W4bSxV27hXwzrqvWU1QutEjoyME3VsMy9oNJIa5Cg2Z1yxzKbBKlDLuvOpzVdtNPvUoPh3HCi0ci/qTv0TsWFlANHX4lqP8fp0TtUYw652n5KSSzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=d40pxSfv; arc=none smtp.client-ip=209.85.128.54
+	 In-Reply-To:To:Cc; b=TgRQhXqMJdtyxtRD3ABKHer9wAabWEoYde7PxdtSp+f8C8OS0BhwNQ+2l0lE1ZIJKkHl85S1H46g7n6Xby6nun2xFAe+pA2jpU0bwacvCigz7NuQ/4lPmC9kRCHmlLvSGUjRoU/Yo6W0nd6eAzDPnm8M8HVEsoQCi5zdIVsMkjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Gni7X/C3; arc=none smtp.client-ip=209.85.128.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="d40pxSfv"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-48375f10628so56695695e9.1
-        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 12:37:54 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Gni7X/C3"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-48372efa020so75337165e9.2
+        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 12:37:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1772743073; x=1773347873; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1772743077; x=1773347877; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5iQa15gRV5WHmyp76havDhzqIhlaRupWnpaZaZ9e388=;
-        b=d40pxSfvQg+T40WC4baDClvjkGivNBvgPsiskFs140c40hWoSXfX8PN7PeDorTS31G
-         U0SZzVGlsToJ3T58uTfVTPrAX8HJQGNSrGfTzwyhZg/AfmIzTpF1wd0yTM2FjJAf+pI5
-         l6EqbX6NaGSNrRtO66EENu6yu/ShkLrw2N4nJ4ZPUbreOAdKlQpqxUNm4OLhBIrmim5y
-         9NoMIqG8Us39fHAi0ZGTzSdLTVz/w0oRrdGLpW+EmwuQ+FilrwkAQ3qEJy4Mmm2z5OM0
-         Fwm8mQYV9EfQxuhHw+GaOpOY9s6tLtnyyR+ASCeNFBxf+Djhos4oExD6BzHKd1YUuncP
-         zgiw==
+        bh=yBymiq7nID2vF4wesRN60I/529SDzorxfefrpkxAGsE=;
+        b=Gni7X/C38IFjzoKGxSw36Mv7ExYpAofpud9tmH6C78LpgTXLWvZaDDcuRNH7Lkvdx3
+         naAstLwTOkgUPwq91rNedD8X0Sx1E98x07zjT6NGlRP2v3TyCrZgYWctMyFjuphGquK/
+         gUj7NPR4NW3RxhAdC+t73Rxn6ijza0Yv7jbQLUwSgROARE1LkM4TY1O7evWhBdCTPHwJ
+         KpcYGYUcMvVSF4j6c2kDE5giU1LPq91VIc/Yno/Y2amBPN2zoWUA+JwERA1QHD10YOuU
+         vn0GcPV7W6a2b5R2ykzXdrIGlt3IWPlhU971KSDHTVSJRrJUFvkHGla0jyyeCPF02pEz
+         TWAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772743073; x=1773347873;
+        d=1e100.net; s=20230601; t=1772743077; x=1773347877;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=5iQa15gRV5WHmyp76havDhzqIhlaRupWnpaZaZ9e388=;
-        b=S6GVJQpiOi7dIug+IhbhF0RoFxL05Spsu2ycMJtTwow2NZ4aF2M2VOqouBdOLfd9wS
-         rhshAZFg7fWkS1c7UnJiD2xjvfEFG6NxeAGClRGtlCkKkPLJMULQT94yNvuGJgfMKNOR
-         F/g61+hXH/TpdTagxV8VmyrkZyv78grj6nQ+85oFuJ2Qp8/WZsXOoCW/R1SGdUmsIb8L
-         08lL1LwEOOBzb/+poaPF8DmZyUjy+Yo6ejHKh8lODtLrJEOnbRaRKcFraobnzZ2qnw2+
-         9Eacm2OVLmde/gocjbtJ7Dgigk9kWoxMdHOrlYCYWC6RyiOlqOVwm4f6tvPCKUDISmw5
-         XAUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXqDLLoYvdXowWkJNCbWsW2aDScZbYNZsPt/CBTmeno9FnCeC61uoOgSgLKm63v2r57sT8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+UuHNxMZi9wszTTnsw/4DugiB1zWw59RtqeDUHqhcmNpSg9yU
-	D398dNYkcfmsWzk7JkL77mqMZBwX47c5aZ6U8bp5DOlmUDcHAY6ZdAuOqeoATasdRww=
-X-Gm-Gg: ATEYQzwhhVb1bqcsVTYuLdwbfK7demf/MyF+fHqnnICav+Oiqgg/w7f48ym/1dfr0UT
-	A+GLarodEsaN++C3oLl7t/fl/Zt56CWawEkZ8aHu2esx9NESvkyLQIDtxddoZ9svUMYd26k2+3G
-	SndipZbjDSgH5A5hzFMdorM9dHVSu1sZdB5SZYESoq09S5qbRYTTQ0AjzOHDTJCSjPX2ycK7qIe
-	9wJQBmiAImNRS+IRarV4hvXAhte6QU0gknr5bhfBwGxJ0pNV4U9M8iHxoS7yC8SGnXyTh0lMkf/
-	4glU+NcgY8cL/Dvz9YZj+gUbz9ugGzsjJjQ6VK1Sk3XaZDYJ2uLr2CBTZV7biTVYoRWhhKyYGcJ
-	mKvU7jczYiWWnSZuP1XUrbhMCd9RCMb2+SWrMD5ynGqCpSLWq18ZXeOiTsf0otHKzkEvBdYXtMW
-	fayJecQg8NAHVTAglm4W+3
-X-Received: by 2002:a05:600c:4e8a:b0:47e:e9c9:23bc with SMTP id 5b1f17b1804b1-4851989fb4cmr108131025e9.30.1772743073493;
-        Thu, 05 Mar 2026 12:37:53 -0800 (PST)
+        bh=yBymiq7nID2vF4wesRN60I/529SDzorxfefrpkxAGsE=;
+        b=RakGS/qdn6AfBr2vQqFUR6/P9nwjnJgNeKmKgZd16u5xjL4bVCiKCmQp71rioRkhPS
+         zo6Jttzyw5qOyoYLWBnm5i9FyiVG8hopil8RxaX+qOJghuBihfWuJTxvUVu6neNqvGTl
+         lEXkf3MGZGNi/A/qPlCt3hS4amz9jbGqmJS6CMwIYP2tSWPB9xC7QDW2bKqRRE6nBJtg
+         L6/eE6rBe2X/Ua2Hoxh0tOFZyjwskAXJGQ/mQhVR/mIiNj+jExwDRGBajxB1111+3XZd
+         NA8WiRQo1QrAfdVrSqL3zag5QL3lmCKZtyFMqt/I9p9z1is9UVRxhtjcWYEPlDYpPUcb
+         FM5g==
+X-Forwarded-Encrypted: i=1; AJvYcCU6uUYJ6LfdHX9J6JwteJ0BEGV8loaD9pMPmk52+7rfmwJb3Qi+pXdjTvaaFB/0f28TlVc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxnmDx1cSdnDHZ2xDresRv0OccLimC6knwsHvb8vOTrFHZVeQvG
+	ebszZigiON8irEHtTiSk0nxtIOFvmqa2SN97dyxt46rxMUewxj7G3X6BR53XrFw+7bk=
+X-Gm-Gg: ATEYQzyOkXb1Ztlc/N4KJ4LiNgtTJkh5JNSohD79cpuVVH22l/rz9L6OeQe9mjD0hb6
+	NUsB91ZzLPWgwljyiO8VykT3FkKNZSVRiHTVc+a0gn85urFG/j7FTb+er/MOvrZJlipob/WX1iy
+	GEMnNf7n8aK2+7N8prRD2Uy/i6HwMP6TiEgb+DjjXuIXRhcE4MB4JBACb+jrbTGEd/OpQf2AdKS
+	x1uHsBLOIpiG7mu42T+w7Whr32JrUFZNeiO8/YTUwftNrW6sSfUXce0qyCudkmGGFvTpU+5+4iw
+	cHBBT04YE9REuyTHxQi6OGCGmNnaAkJ4ASxgTfX3m+dcs0KOWuaQRrlBFMRz2/+GOiI1lbYW94+
+	pbATi9zzFHjnnk3RGIdmpAuncclTZE/gK9WThHActx1paZh0bVCVbLGZBIsrUijHuggu5apEGIq
+	zmkCp8nv22+g==
+X-Received: by 2002:a05:600c:a08c:b0:483:885:f0b0 with SMTP id 5b1f17b1804b1-485198bac26mr132115915e9.35.1772743077012;
+        Thu, 05 Mar 2026 12:37:57 -0800 (PST)
 Received: from localhost ([189.99.238.164])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-94df65a2a0esm21503219241.12.2026.03.05.12.37.50
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-56b007a3364sm1714489e0c.16.2026.03.05.12.37.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Mar 2026 12:37:51 -0800 (PST)
+        Thu, 05 Mar 2026 12:37:56 -0800 (PST)
 From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Date: Thu, 05 Mar 2026 17:37:40 -0300
-Subject: [PATCH net v2 2/3] bpf: bpf_out_neigh_v6: Fix nd_tbl NULL
- dereference when IPv6 is disabled
+Date: Thu, 05 Mar 2026 17:37:41 -0300
+Subject: [PATCH net v2 3/3] net: bonding: Fix nd_tbl NULL dereference when
+ IPv6 is disabled
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260305-net-nd_tbl_fixes-v2-2-b7177db1a9f3@suse.com>
+Message-Id: <20260305-net-nd_tbl_fixes-v2-3-b7177db1a9f3@suse.com>
 References: <20260305-net-nd_tbl_fixes-v2-0-b7177db1a9f3@suse.com>
 In-Reply-To: <20260305-net-nd_tbl_fixes-v2-0-b7177db1a9f3@suse.com>
 To: Martin KaFai Lau <martin.lau@linux.dev>, 
@@ -90,39 +90,57 @@ Cc: Fernando Fernandez Mancera <fmancera@suse.de>, bpf@vger.kernel.org,
  netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openssh-sha256; t=1772743062; l=2000;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1772743062; l=2650;
  i=rbm@suse.com; h=from:subject:message-id;
- bh=BJNtUYfcCSIEf+KeHSlKgwI0CK0CjGEsuB477WGKkxc=;
+ bh=cnxiDzaTG3dDRmVmA/NbvEgeXNe7TfmfMEbBpvNLqsY=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
  x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QKpwaygzkyRw1nX1Db8ixqMTwa+zBHSzqsGzeC0nU7VvrPsKL8ySrGdrLXidS6fBHmhzLURON79
- y3rFPuYcGygw=
+ QFEHFEzi4olsRwKIGTYjj0OJcMJUp7J/8RoYSXtHC6YxcKesAOSiPUA9lLV1yaiiKX9118RM+Zw
+ h7qF3LiueJwA=
 X-Developer-Key: i=rbm@suse.com; a=openssh;
  fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
 When booting with the 'ipv6.disable=1' parameter, the nd_tbl is never
-initialized because inet6_init() exits before ndisc_init() is called which
-initializes it. If bpf_redirect_neigh() is called with explicit AF_INET6
-nexthop parameters, __bpf_redirect_neigh_v6() can skip the IPv6 FIB lookup
-and call bpf_out_neigh_v6() directly. bpf_out_neigh_v6() then calls
-ip_neigh_gw6(), which uses ipv6_stub->nd_tbl.
+initialized because inet6_init() exits before ndisc_init() is called
+which initializes it. If bonding ARP/NS validation is enabled, an IPv6
+NS/NA packet received on a slave can reach bond_validate_na(), which
+calls bond_has_this_ip6(). That path calls ipv6_chk_addr() and can
+crash in __ipv6_chk_addr_and_flags().
 
- BUG: kernel NULL pointer dereference, address: 0000000000000248
+ BUG: kernel NULL pointer dereference, address: 00000000000005d8
  Oops: Oops: 0000 [#1] SMP NOPTI
- RIP: 0010:skb_do_redirect+0x44f/0xf40
+ RIP: 0010:__ipv6_chk_addr_and_flags+0x69/0x170
  Call Trace:
+  <IRQ>
+  ipv6_chk_addr+0x1f/0x30
+  bond_validate_na+0x12e/0x1d0 [bonding]
+  ? __pfx_bond_handle_frame+0x10/0x10 [bonding]
+  bond_rcv_validate+0x1a0/0x450 [bonding]
+  bond_handle_frame+0x5e/0x290 [bonding]
+  ? srso_alias_return_thunk+0x5/0xfbef5
+  __netif_receive_skb_core.constprop.0+0x3e8/0xe50
+  ? srso_alias_return_thunk+0x5/0xfbef5
+  ? update_cfs_rq_load_avg+0x1a/0x240
+  ? srso_alias_return_thunk+0x5/0xfbef5
+  ? __enqueue_entity+0x5e/0x240
+  __netif_receive_skb_one_core+0x39/0xa0
+  process_backlog+0x9c/0x150
+  __napi_poll+0x30/0x200
+  ? srso_alias_return_thunk+0x5/0xfbef5
+  net_rx_action+0x338/0x3b0
+  handle_softirqs+0xc9/0x2a0
+  do_softirq+0x42/0x60
+  </IRQ>
   <TASK>
+  __local_bh_enable_ip+0x62/0x70
+  __dev_queue_xmit+0x2d3/0x1000
   ? srso_alias_return_thunk+0x5/0xfbef5
-  ? __tcf_classify.constprop.0+0x83/0x160
   ? srso_alias_return_thunk+0x5/0xfbef5
-  ? tcf_classify+0x2b/0x50
-  ? srso_alias_return_thunk+0x5/0xfbef5
-  ? tc_run+0xb8/0x120
-  ? srso_alias_return_thunk+0x5/0xfbef5
-  __dev_queue_xmit+0x6fa/0x1000
-  ? srso_alias_return_thunk+0x5/0xfbef5
+  ? packet_parse_headers+0x10a/0x1a0
   packet_sendmsg+0x10da/0x1700
+  ? kick_pool+0x5f/0x140
   ? srso_alias_return_thunk+0x5/0xfbef5
+  ? __queue_work+0x12d/0x4f0
   __sys_sendto+0x1f3/0x220
   __x64_sys_sendto+0x24/0x30
   do_syscall_64+0x101/0xf80
@@ -131,30 +149,30 @@ ip_neigh_gw6(), which uses ipv6_stub->nd_tbl.
   entry_SYSCALL_64_after_hwframe+0x77/0x7f
   </TASK>
 
-Fix this by adding an early check in bpf_out_neigh_v6(). If
-ipv6_stub->nd_tbl is NULL, drop the packet before neighbor lookup.
+Fix this by adding an early check in bond_confirm_addr6(). If
+ipv6_stub->nd_tbl is NULL, return before calling ipv6_chk_addr().
 
 Suggested-by: Fernando Fernandez Mancera <fmancera@suse.de>
-Fixes: ba452c9e996d ("bpf: Fix bpf_redirect_neigh helper api to support supplying nexthop")
+Fixes: 4e24be018eb9 ("bonding: add new parameter ns_targets")
 Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
 ---
- net/core/filter.c | 3 +++
+ drivers/net/bonding/bond_main.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index ff02dbe4c94f..3344fa0789f0 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2228,6 +2228,9 @@ static int bpf_out_neigh_v6(struct net *net, struct sk_buff *skb,
- 			return -ENOMEM;
- 	}
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index 14ed91391fcc..7d32cd231633 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -3256,6 +3256,9 @@ static int bond_confirm_addr6(struct net_device *dev,
+ {
+ 	struct in6_addr *addr = (struct in6_addr *)priv->data;
  
 +	if (unlikely(!ipv6_mod_enabled()))
-+		goto out_drop;
++		return 0;
 +
- 	rcu_read_lock();
- 	if (!nh) {
- 		dst = skb_dst(skb);
+ 	return ipv6_chk_addr(dev_net(dev), addr, dev, 0);
+ }
+ 
 
 -- 
 2.53.0
