@@ -1,81 +1,172 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA17F1A6826;
-	Thu,  5 Mar 2026 02:55:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7369F5477E;
+	Thu,  5 Mar 2026 02:57:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772679334; cv=none; b=GgB7jpWm6Asi+Q+xY+1igNn92a61P/Up5WAPUCOz1h6vEY8QKUIHsiDMz8DR0PgrOSHIyokmg4mu7g289+07oeyi3C3vz2iYvSvPiJoEIcwMID+BEXyE6BXEvbzGPvPpyStW//PRy8ZRhv36OxijLIo/4s/rVTJESKMSFW9auZA=
+	t=1772679426; cv=none; b=gPsYxkDUBYeAsAjtt3Y/sikbTbgifsnDtHLzA6rolD6x3sitaS/i8VVZwDzipb8RBGZaco8P8e0cVEtfxyVNXw04M8Jaij+R24sQo0rsb/FyEbeHWzg3852r24I7g7jgMBGjxPpKcwwbtYdJ9Yag3x8M3frMNee7XxdhfjczXXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772679334; c=relaxed/simple;
-	bh=4d7y/xjgWSGuhuezCdtH2976xfIP6uASlpXYDBGcWGw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GpwMzWHp0/5XZv2wVCLbXbDo4x2E9HgsP/bdxKi7uxS2TCCvYYaOBGMGgHDlpK24WK20PdJTwiwOCUyGOO6Do63HjakRR/EMDPtVdWz1RyL2WbkJUbM0uGHsrxiYWd/dnjKvjx2IP1B5VzwfPusdOISxprwbA5JzPI3vdVGpAaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pYK7YM4m; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772679426; c=relaxed/simple;
+	bh=f2O35ftXwIOl4C8//sQWNz2JrsSHsbTVOvnsi6RFJjY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=aoLWvWBJt1KrAUTkgp+bP4/NG3GWH/DwVE+a2t5PpKdOfHq3fMqeB3XVwE8BoNGwOD92KfK6sTMQkVluo+IXFJ6FZBschEJEp/CXjlCe67dpGwa/Q2cVd2JzXWgmC04RXmORGLeCp74f+dYfaePWTEwEYd/l3PhK3lRLWs3tqj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=orbhr3Nw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pYK7YM4m"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2664C4CEF7;
-	Thu,  5 Mar 2026 02:55:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="orbhr3Nw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42254C4CEF7;
+	Thu,  5 Mar 2026 02:57:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772679334;
-	bh=4d7y/xjgWSGuhuezCdtH2976xfIP6uASlpXYDBGcWGw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=pYK7YM4m0fnSsQAyhefMcDaOBvn8Y9c20FaOvCpYggIpa60A8z3EWxFyPSfPRL9FU
-	 REN3e4tRWW1m7oG26k1oqS+4aO937R4czODpAvvERAsyQWEQMzozLXDSJml7d3155z
-	 jcXg03aXYVxS0lHpCo0e59gkB2hrJHpLLVbwZU5kMt/dzDbqrUe3XWteUg9Db2G9AZ
-	 7CMUJ2C/mOnC6YdoiPoF+jNUvhw4vyDicAInnAmtwaJ8ckXg8wYOq8SMe7YFrs82cG
-	 +bU8uWFw2JBclJCUuwTUOm5ex6kn+DfB7sKrnPaJvlby8tgUkH8ayRDaMdRV+ro3nH
-	 mC/rbafRFsa9A==
-Date: Wed, 4 Mar 2026 18:55:31 -0800
+	s=k20201202; t=1772679426;
+	bh=f2O35ftXwIOl4C8//sQWNz2JrsSHsbTVOvnsi6RFJjY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=orbhr3Nw/lq4rGh0nCgUCtzH8tBCuNcHIX0Nz8JNu2Nq+BZmfIVlEAjGIah6CRzf2
+	 qw7QR9PZbbMxpPOhaVhjME+u20xc4xIvoLC3EB7F8q1+dagbU6RGTwMKo0uzdVv5+P
+	 x+OQGoid1GgNry9A7f/DYPRlUax7WClh0ikOSesaOK4zAbPxwIHZB8oJC7R+dPeD+2
+	 V+RXhgoHdcHHH3njFXDm9h/u84zCqAxX1s4NREsfC///QOAiE5BrYV8BDy2PzB8kJj
+	 eR8ijSSpqKw8Bxa7DJiROQ0gAopUnCDOKDcuR7JwJn8Rv+FT/Yu+XVMgdRNjoLxgI4
+	 PoPi2tOmwi/Ow==
 From: Jakub Kicinski <kuba@kernel.org>
-To: Larysa Zaremba <larysa.zaremba@intel.com>
-Cc: bpf@vger.kernel.org, Claudiu Manoil <claudiu.manoil@nxp.com>, Vladimir
- Oltean <vladimir.oltean@nxp.com>, Wei Fang <wei.fang@nxp.com>, Clark Wang
- <xiaoning.wang@nxp.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, Tony Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard
- Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Simon Horman
- <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Alexander Lobakin
- <aleksander.lobakin@intel.com>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, "Bastien Curutchet (eBPF Foundation)"
- <bastien.curutchet@bootlin.com>, Tushar Vyavahare
- <tushar.vyavahare@intel.com>, Jason Xing <kernelxing@tencent.com>, "Ricardo
- B. =?UTF-8?B?TWFybGnDqHJl?=" <rbm@suse.com>, Eelco Chaudron
- <echaudro@redhat.com>, Lorenzo Bianconi <lorenzo@kernel.org>, Toke
- Hoiland-Jorgensen <toke@redhat.com>, imx@lists.linux.dev,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org,
- Aleksandr Loktionov <aleksandr.loktionov@intel.com>, Dragos Tatulea
- <dtatulea@nvidia.com>
-Subject: Re: [PATCH bpf v4 0/9] Address XDP frags having negative tailroom
-Message-ID: <20260304185531.4f49fda4@kernel.org>
-In-Reply-To: <20260302161723.858616-1-larysa.zaremba@intel.com>
-References: <20260302161723.858616-1-larysa.zaremba@intel.com>
+To: carges@cloudflare.com
+Cc: Jakub Kicinski <kuba@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	pavan.chebbi@broadcom.com,
+	pabeni@redhat.com,
+	joe@dama.to,
+	linux-kernel@vger.kernel.org,
+	hawk@kernel.org,
+	horms@kernel.org,
+	netdev@vger.kernel.org,
+	sdf@fomichev.me,
+	davem@davemloft.net,
+	andrew+netdev@lunn.ch,
+	edumazet@google.com,
+	daniel@iogearbox.net,
+	bpf@vger.kernel.org,
+	shuah@kernel.org,
+	michael.chan@broadcom.com,
+	john.fastabend@gmail.com,
+	ast@kernel.org,
+	kernel-team@cloudflare.com
+Subject: Re: [net-next,v2,2/4] bnxt_en: Implement XDP RSS hash metadata extraction
+Date: Wed,  4 Mar 2026 18:57:03 -0800
+Message-ID: <20260305025704.3619593-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260303024510.644962-3-carges@cloudflare.com>
+References: <20260303024510.644962-3-carges@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Mon,  2 Mar 2026 17:17:13 +0100 Larysa Zaremba wrote:
-> Aside from the issue described below, tailroom calculation does not account
-> for pages being split between frags, e.g. in i40e, enetc and
-> AF_XDP ZC with smaller chunks. These series address the problem by
-> calculating modulo (skb_frag_off() % rxq->frag_size) in order to get
-> data offset within a smaller block of memory. Please note, xskxceiver
-> tail grow test passes without modulo e.g. in xdpdrv mode on i40e,
-> because there is not enough descriptors to get to flipped buffers.
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
 
-This was re-assigned to netdev in pw, I presume by BPF maintainers.
-But it doesn't apply to net. There's a conflict in ice.
-Could you rebase on net and repost?
+For local reproduction steps see https://netdev-ai.bots.linux.dev/ai-local.html
+---
+bnxt_en: Implement XDP RSS hash metadata extraction
+
+This commit adds support for extracting RSS hash values and hash types from
+hardware completion descriptors in XDP programs for the bnxt_en driver.
+
+> diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
+> index 85cbeb35681c..1ab3d9f9b3ac 100644
+> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
+> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
+
+[ ... ]
+
+> @@ -472,3 +472,50 @@ bnxt_xdp_build_skb(struct bnxt *bp, struct sk_buff *skb, u8 num_frags,
+>  				  xdp_buff_get_skb_flags(xdp));
+>  	return skb;
+>  }
+> +
+> +int bnxt_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
+> +		     enum xdp_rss_hash_type *rss_type)
+> +{
+> +	const struct bnxt_xdp_buff *xdp = (void *)ctx;
+> +	const struct rx_cmp *rxcmp = xdp->rxcmp;
+> +	const struct rx_cmp_ext *rxcmp1 = xdp->rxcmp1;
+> +	enum xdp_rss_hash_type hash_type = 0;
+> +	u32 itypes;
+> +
+> +	if (!rxcmp || !RX_CMP_HASH_VALID(rxcmp))
+> +		return -ENODATA;
+> +
+> +	*hash = le32_to_cpu(rxcmp->rx_cmp_rss_hash);
+> +
+> +	if (!rxcmp1) {
+> +		*rss_type = XDP_RSS_TYPE_L2;
+> +		return 0;
+> +	}
+> +
+> +	if (xdp->cmp_type == CMP_TYPE_RX_L2_CMP) {
+> +		itypes = RX_CMP_ITYPES(rxcmp);
+> +		if (rxcmp1->rx_cmp_flags2 &
+> +		    cpu_to_le32(RX_CMP_FLAGS2_IP_TYPE)) {
+> +			hash_type |= XDP_RSS_TYPE_L3_IPV6;
+> +		} else {
+> +			hash_type |= XDP_RSS_TYPE_L3_IPV4;
+> +		}
+> +
+> +		switch (itypes) {
+> +		case RX_CMP_FLAGS_ITYPE_TCP:
+> +			hash_type |= XDP_RSS_L4 | XDP_RSS_L4_TCP;
+> +			break;
+> +		case RX_CMP_FLAGS_ITYPE_UDP:
+> +			hash_type |= XDP_RSS_L4 | XDP_RSS_L4_UDP;
+> +			break;
+> +		case RX_CMP_FLAGS_ITYPE_ICMP:
+> +			hash_type |= XDP_RSS_L4 | XDP_RSS_L4_ICMP;
+> +			break;
+> +		default:
+> +			break;
+> +		}
+> +	}
+
+What happens when xdp->cmp_type is CMP_TYPE_RX_L2_V3_CMP instead of
+CMP_TYPE_RX_L2_CMP? Looking at bnxt_rx_pkt() in bnxt.c, when XDP is attached,
+the cmp_type field can be set to CMP_TYPE_RX_L2_V3_CMP on P5+ hardware:
+
+drivers/net/ethernet/broadcom/bnxt/bnxt.c:bnxt_rx_pkt() {
+    ...
+    cmp_type = RX_CMP_TYPE(rxcmp);
+    ...
+    if (bp->xdp_prog) {
+        ...
+        bnxt_xdp.cmp_type = cmp_type;
+        ...
+    }
+}
+
+In the V3 case, this function returns success with *hash set correctly but
+leaves *rss_type as 0 (XDP_RSS_TYPE_L2/XDP_RSS_TYPE_NONE) because the type
+classification logic is skipped.
+
+The existing SKB path handles V3 completions differently:
+
+drivers/net/ethernet/broadcom/bnxt/bnxt.c:bnxt_rx_pkt() {
+    ...
+    if (cmp_type == CMP_TYPE_RX_L2_V3_CMP) {
+        bnxt_rss_ext_op(bp, rxcmp1, skb);
+    } else {
+        skb_set_hash(skb, ...);
+    }
+}
+
+Where bnxt_rss_ext_op() uses RX_CMP_V3_HASH_TYPE() for proper L3/L4
+classification.
+
+Should bnxt_xdp_rx_hash() handle CMP_TYPE_RX_L2_V3_CMP completions with
+equivalent V3 hash type decoding, or return -ENODATA for V3 completions to
+avoid returning success with misleading type information?
+
+> +
+> +	*rss_type = hash_type;
+> +	return 0;
+> +}
+-- 
+pw-bot: cr
