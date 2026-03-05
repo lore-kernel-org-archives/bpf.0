@@ -1,172 +1,77 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7369F5477E;
-	Thu,  5 Mar 2026 02:57:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E5637262B;
+	Thu,  5 Mar 2026 03:00:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772679426; cv=none; b=gPsYxkDUBYeAsAjtt3Y/sikbTbgifsnDtHLzA6rolD6x3sitaS/i8VVZwDzipb8RBGZaco8P8e0cVEtfxyVNXw04M8Jaij+R24sQo0rsb/FyEbeHWzg3852r24I7g7jgMBGjxPpKcwwbtYdJ9Yag3x8M3frMNee7XxdhfjczXXg=
+	t=1772679627; cv=none; b=kJtB4cShq2MRvcDESL2J4RibuFKE//SZ7n9wP1z93h4r/OyAIgPndepGxqgqNtAzqUqbkS3vL17qWUyRF1fbOQ4osULorbeAwgoV+nKohi3NejFjErYt1HEJ2aIwbnncz2wLTg4zUfa2f2ICyvGH5rcMonoOHhKWdNVC2NtcJeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772679426; c=relaxed/simple;
-	bh=f2O35ftXwIOl4C8//sQWNz2JrsSHsbTVOvnsi6RFJjY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aoLWvWBJt1KrAUTkgp+bP4/NG3GWH/DwVE+a2t5PpKdOfHq3fMqeB3XVwE8BoNGwOD92KfK6sTMQkVluo+IXFJ6FZBschEJEp/CXjlCe67dpGwa/Q2cVd2JzXWgmC04RXmORGLeCp74f+dYfaePWTEwEYd/l3PhK3lRLWs3tqj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=orbhr3Nw; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="orbhr3Nw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42254C4CEF7;
-	Thu,  5 Mar 2026 02:57:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772679426;
-	bh=f2O35ftXwIOl4C8//sQWNz2JrsSHsbTVOvnsi6RFJjY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=orbhr3Nw/lq4rGh0nCgUCtzH8tBCuNcHIX0Nz8JNu2Nq+BZmfIVlEAjGIah6CRzf2
-	 qw7QR9PZbbMxpPOhaVhjME+u20xc4xIvoLC3EB7F8q1+dagbU6RGTwMKo0uzdVv5+P
-	 x+OQGoid1GgNry9A7f/DYPRlUax7WClh0ikOSesaOK4zAbPxwIHZB8oJC7R+dPeD+2
-	 V+RXhgoHdcHHH3njFXDm9h/u84zCqAxX1s4NREsfC///QOAiE5BrYV8BDy2PzB8kJj
-	 eR8ijSSpqKw8Bxa7DJiROQ0gAopUnCDOKDcuR7JwJn8Rv+FT/Yu+XVMgdRNjoLxgI4
-	 PoPi2tOmwi/Ow==
-From: Jakub Kicinski <kuba@kernel.org>
-To: carges@cloudflare.com
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	pavan.chebbi@broadcom.com,
-	pabeni@redhat.com,
-	joe@dama.to,
-	linux-kernel@vger.kernel.org,
-	hawk@kernel.org,
-	horms@kernel.org,
-	netdev@vger.kernel.org,
-	sdf@fomichev.me,
-	davem@davemloft.net,
-	andrew+netdev@lunn.ch,
-	edumazet@google.com,
-	daniel@iogearbox.net,
-	bpf@vger.kernel.org,
-	shuah@kernel.org,
-	michael.chan@broadcom.com,
-	john.fastabend@gmail.com,
-	ast@kernel.org,
-	kernel-team@cloudflare.com
-Subject: Re: [net-next,v2,2/4] bnxt_en: Implement XDP RSS hash metadata extraction
-Date: Wed,  4 Mar 2026 18:57:03 -0800
-Message-ID: <20260305025704.3619593-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260303024510.644962-3-carges@cloudflare.com>
-References: <20260303024510.644962-3-carges@cloudflare.com>
+	s=arc-20240116; t=1772679627; c=relaxed/simple;
+	bh=cHwGQKmPsWfWcixUcZF+n3NEdYoTNBQLxPJ5tpvRZ0E=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sg5sUlqn8Y9kxYQp0NF/zAgFJI5cY1uT7d23GImYzL+RzESCtc4Nho45R5bgzyVADi2MCzY+EMKZIO2eW5mTFSuLx1hcbzXAkjnhxv7TBF9Bihqmp4VXiryy8OxIoSwz9xR2nHsJmMQ9wFjEiWBynIpcmhRh8+GiPYlLSVVxgvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay10.hostedemail.com (Postfix) with ESMTP id F167DC1BE2;
+	Thu,  5 Mar 2026 03:00:23 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf09.hostedemail.com (Postfix) with ESMTPA id 35C1E20024;
+	Thu,  5 Mar 2026 03:00:21 +0000 (UTC)
+Date: Wed, 4 Mar 2026 22:00:19 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: David Laight <david.laight.linux@gmail.com>, Peter Zijlstra
+ <peterz@infradead.org>, mingo@redhat.com, will@kernel.org,
+ boqun@kernel.org, longman@redhat.com, mhiramat@kernel.org,
+ mark.rutland@arm.com, mathieu.desnoyers@efficios.com,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 1/2] locking: add mutex_lock_nospin()
+Message-ID: <20260304220019.3efa12ab@robin>
+In-Reply-To: <CALOAHbBA643_QOsnTmrfjKE71hSa+v1cToiELvGk+vjtcgJsxg@mail.gmail.com>
+References: <20260304074650.58165-1-laoar.shao@gmail.com>
+	<20260304074650.58165-2-laoar.shao@gmail.com>
+	<20260304090249.GN606826@noisy.programming.kicks-ass.net>
+	<20260304095415.4d5f2528@pumpkin>
+	<20260304155742.7b4de2d1@gandalf.local.home>
+	<20260304214447.3e5817ea@pumpkin>
+	<CALOAHbCOynnRdc8JkNJHb-nyoerrz0K5GUhnD8OR2hv4x==5LA@mail.gmail.com>
+	<20260304212802.458b878e@fedora>
+	<CALOAHbBA643_QOsnTmrfjKE71hSa+v1cToiELvGk+vjtcgJsxg@mail.gmail.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Stat-Signature: emwhu543p3pwoujw7dyynb9qwr851643
+X-Rspamd-Server: rspamout04
+X-Rspamd-Queue-Id: 35C1E20024
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1/MmNAFKuSCqyQHbBzziQMMEAQdPmfUGeE=
+X-HE-Tag: 1772679621-783041
+X-HE-Meta: U2FsdGVkX199bnlpv7btDLAB2Hr/Dnq9eg3ysLcOievMW5PQMLatt3R6dXMKY043RDknsKNNLyvge8f056/MlanNbS/SlAiw2pjHziJZoPbVRyOxAJJF2yV6IevmjQtQXcTMy4udaJrgmixx5YM2nJT7Tj+14OLA6n3WcYD62D3PRg4YZuTsB7zZxf6sXFLEB4+YGzX1ZF4uoUN6F1qtOIlt2Ez902dYq87obCP2NrcrlgoViKA8CQq1sDgRuOwzG8jDy7wTYsDQdEbBfNYlsHGMO4rEQeRKrWgOMsWLLo9FOOk/MkeIZyheKvrkGQmwpzTVeh5xckgIGgYolej9dAvatj5u6xJpmjZ1ipTuOZ9KmAqyc61FGA==
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
+On Thu, 5 Mar 2026 10:33:00 +0800
+Yafang Shao <laoar.shao@gmail.com> wrote:
 
-For local reproduction steps see https://netdev-ai.bots.linux.dev/ai-local.html
----
-bnxt_en: Implement XDP RSS hash metadata extraction
+> Other tools may also read available_filter_functions, requiring each
+> one to be patched individually to avoid this flaw=E2=80=94a clearly
+> impractical solution.
 
-This commit adds support for extracting RSS hash values and hash types from
-hardware completion descriptors in XDP programs for the bnxt_en driver.
+What exactly is the issue? If a task does a while 1 in user space, it
+wouldn't be much different. With PREEMPT_LAZY the most a task will spin
+in the kernel is one extra tick over a user space task spinning in user
+space.
 
-> diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-> index 85cbeb35681c..1ab3d9f9b3ac 100644
-> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
+available_filter_functions is definitely not a hot path, so I
+personally don't care if it were to use "nospin". My worry is about
+adding this "special" mutex for a single corner case, and I want to know
+that its a real bug before we add something special into the kernel.
 
-[ ... ]
-
-> @@ -472,3 +472,50 @@ bnxt_xdp_build_skb(struct bnxt *bp, struct sk_buff *skb, u8 num_frags,
->  				  xdp_buff_get_skb_flags(xdp));
->  	return skb;
->  }
-> +
-> +int bnxt_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
-> +		     enum xdp_rss_hash_type *rss_type)
-> +{
-> +	const struct bnxt_xdp_buff *xdp = (void *)ctx;
-> +	const struct rx_cmp *rxcmp = xdp->rxcmp;
-> +	const struct rx_cmp_ext *rxcmp1 = xdp->rxcmp1;
-> +	enum xdp_rss_hash_type hash_type = 0;
-> +	u32 itypes;
-> +
-> +	if (!rxcmp || !RX_CMP_HASH_VALID(rxcmp))
-> +		return -ENODATA;
-> +
-> +	*hash = le32_to_cpu(rxcmp->rx_cmp_rss_hash);
-> +
-> +	if (!rxcmp1) {
-> +		*rss_type = XDP_RSS_TYPE_L2;
-> +		return 0;
-> +	}
-> +
-> +	if (xdp->cmp_type == CMP_TYPE_RX_L2_CMP) {
-> +		itypes = RX_CMP_ITYPES(rxcmp);
-> +		if (rxcmp1->rx_cmp_flags2 &
-> +		    cpu_to_le32(RX_CMP_FLAGS2_IP_TYPE)) {
-> +			hash_type |= XDP_RSS_TYPE_L3_IPV6;
-> +		} else {
-> +			hash_type |= XDP_RSS_TYPE_L3_IPV4;
-> +		}
-> +
-> +		switch (itypes) {
-> +		case RX_CMP_FLAGS_ITYPE_TCP:
-> +			hash_type |= XDP_RSS_L4 | XDP_RSS_L4_TCP;
-> +			break;
-> +		case RX_CMP_FLAGS_ITYPE_UDP:
-> +			hash_type |= XDP_RSS_L4 | XDP_RSS_L4_UDP;
-> +			break;
-> +		case RX_CMP_FLAGS_ITYPE_ICMP:
-> +			hash_type |= XDP_RSS_L4 | XDP_RSS_L4_ICMP;
-> +			break;
-> +		default:
-> +			break;
-> +		}
-> +	}
-
-What happens when xdp->cmp_type is CMP_TYPE_RX_L2_V3_CMP instead of
-CMP_TYPE_RX_L2_CMP? Looking at bnxt_rx_pkt() in bnxt.c, when XDP is attached,
-the cmp_type field can be set to CMP_TYPE_RX_L2_V3_CMP on P5+ hardware:
-
-drivers/net/ethernet/broadcom/bnxt/bnxt.c:bnxt_rx_pkt() {
-    ...
-    cmp_type = RX_CMP_TYPE(rxcmp);
-    ...
-    if (bp->xdp_prog) {
-        ...
-        bnxt_xdp.cmp_type = cmp_type;
-        ...
-    }
-}
-
-In the V3 case, this function returns success with *hash set correctly but
-leaves *rss_type as 0 (XDP_RSS_TYPE_L2/XDP_RSS_TYPE_NONE) because the type
-classification logic is skipped.
-
-The existing SKB path handles V3 completions differently:
-
-drivers/net/ethernet/broadcom/bnxt/bnxt.c:bnxt_rx_pkt() {
-    ...
-    if (cmp_type == CMP_TYPE_RX_L2_V3_CMP) {
-        bnxt_rss_ext_op(bp, rxcmp1, skb);
-    } else {
-        skb_set_hash(skb, ...);
-    }
-}
-
-Where bnxt_rss_ext_op() uses RX_CMP_V3_HASH_TYPE() for proper L3/L4
-classification.
-
-Should bnxt_xdp_rx_hash() handle CMP_TYPE_RX_L2_V3_CMP completions with
-equivalent V3 hash type decoding, or return -ENODATA for V3 completions to
-avoid returning success with misleading type information?
-
-> +
-> +	*rss_type = hash_type;
-> +	return 0;
-> +}
--- 
-pw-bot: cr
+-- Steve
