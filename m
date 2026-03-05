@@ -1,225 +1,416 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F8EC364E8C
-	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 23:10:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.176
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772752227; cv=pass; b=CKIykdqf3oFw4xzN3D0gzUhDqtczCfVir8Ym/s8Ikm7q+7rr4+KzXp8VMcoq502AGuqtc9dh+T5J0QjWAp3xd+pLlJt8gHzkTBdhncjlfGNVrPbjZhuiqMHLG/St1Vw6oE2xRNX8a4zA8a9ZQpz/naiGYgWLdWUROQX9qWN+Oq0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772752227; c=relaxed/simple;
-	bh=IvQTQSXkN/lzrsH+20vLWipAyAWK++OMIxCINlKGieE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Mjdy+DN1YgGtP5EcTg+IoPw8EmKa9MDf7WO2lv9Ksy5cGKMkAdVSi+w52XHMckPuNUaATum/yLIyzcT/KqgABe4zz+kKDP65vCUoccNTV1c///qjks75u4dr26E1hGYZDEQVxxK4sQpYdBLo2JBr9+CJ2FSguLAsIIl3PZMgv2M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JD1x4dJS; arc=pass smtp.client-ip=209.85.215.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15780189B84
+	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 23:18:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772752701; cv=none; b=pLoZw+umO/lYJxxWjKsKuoByHQwxgurLgvSrQ4G1agg0MeGk/VwZfMm82wotRI2J35lmqvgUwuYZvTEfBRq3gd/8wTXUJlphYuyzWSRoukgGOXNcsqrbpUC0PTZe7iTEaiLYmN0MA4+AzVOS5wDOXqhmkUC9kJPVwxDYEh7A9Hc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772752701; c=relaxed/simple;
+	bh=Fqf2vnzhjskGiqh/nmMd1dXkW60vrL4+QtjH4ybHDY4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MEzKWZKV7uZyf8EMSJe5XDhLKVXdaqJ59BN8v96kX3HDXtwWBojM1XxHWCd6J2ArM6lF/eP59skvl8MfKJ6iqKUmHVHs3LlJSzh997sOGGpiwqHXX26mXoddZh+vjte1cKXunT8aRLzC1um2jPVFuWb9nA+djKLAvdXSQa3AXfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=l33iWp/M; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JD1x4dJS"
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-b6ce6d1d3dcso3022830a12.3
-        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 15:10:25 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772752225; cv=none;
-        d=google.com; s=arc-20240605;
-        b=C+iRJVgNsisJic9qgZvxjOgs7g4nD3J/UVpJ+WePYp35AWwSt0hazTZyyTijZGCuVH
-         NtEVF4vJO/P7Ae2JbrF5HKSQ3wHvR0i37RfyFJXg8tXFawMm05BHC85yhv//lt9BO60H
-         nQMCzDG3cw6P2E7pyRTLbIu7fpBtO7VJzQih+Smlc+auZTu/jEU9bfNMjKU/HTDvGOZ9
-         rCtWKJ5VG5T6xJ2+5Q0RvQNpK3mxFiVMUrCi6IjJxy3AmWV6xCpdy1N/6UVvgDvgL+FZ
-         0BGMxetqyV7z0soA09H5huBtvJsC8/VmCkNPs2O1T8nl/VIum6w2vwz92/ROOtehj9e3
-         b3Lw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=oHYogqidDxqmpzWYl8t1n7jPajQf/LegJQLqZ82v8Fk=;
-        fh=11ul8rzbGb8pjDTdrOlBtAMkerZtoZn7p29NQ5Qo0us=;
-        b=S/oBFNhA5XzXwZu2J38+WUnB+WdMfAKXxnbeFrkemHvRfq8LlMfbXKWolFlp/J6nox
-         +g8+Id9a6v4tkV/c1d2pJNvg639ilD9vUR7M+fsjazPXc4ulKBgZY24qRlnA1QxnvLth
-         Xun25jT80jBW6NOE9HMtIqnJsQwgrpwcCPPIOP37/j09NPaq7TkgHCWjwL/AgmZAL/Xv
-         DVnZ5Glbrh0iqfXo/bKSGrwERmMMYZYNfjdRE81RnUkYeWwvgT+A1cLw7wvbwpbmY+OP
-         6I3r0FrH1c4mts8Qi5pERjma+FswpNjC479fegGBDa1Pf51LM4YJQmGA9ldyGai/Szhj
-         IpEw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="l33iWp/M"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2ae4b40999bso14225ad.1
+        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 15:18:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772752225; x=1773357025; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oHYogqidDxqmpzWYl8t1n7jPajQf/LegJQLqZ82v8Fk=;
-        b=JD1x4dJS4Qbmcnswx2cyDf7QNIak7gxnG2Ne1qV1qq3uJ6yeXeaFGuT/blFD7pb5O/
-         dVKmmnC/sYK9FAcIIrNTMk7CODK7Mi7lldH1zO0YfOE6JmOHAzUT3NzFbufOUKvGYSfH
-         qvX3uaXddurNBATsH/XnVkkGcvQUIgp9JI1Lwv2tfu50XE3sf6rIX8PzxLZWpTKAokgT
-         qhn+4DkK6ZojgPCkrLK7iMydUdwXtlH3OduD9PSlqfFxWIQk2EuaZaaNHzXq8yNCCMhy
-         /kd7oajPe8wtEOotB/Da5+7jzwdH4bEdJ1w23GDbvkKKYF+o8LD4zRh4fhpK8545sBfn
-         RXrw==
+        d=google.com; s=20230601; t=1772752699; x=1773357499; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OT+M4OLV2jPlgPxLe+Zv0BlzVS5I6l8bWz+4E140bhA=;
+        b=l33iWp/MmEIiQ8eNhzGvOGVYLPlrNQwulyxQGUTk5v47QhYESx338kwB0jyXtfm6LB
+         +tTpFwzVhEHk1MLv4sWQhsd6nnWCUsBsILA5qMhH8Duo14vOW2EZlyo90uOeHzCUTlxO
+         1xwNBFTwZrU3iJTCGnBHZTm8RQKD+wg6XP7hEtfQ9b/HLsB9+jqr2i2GuvSP0n3lW7y3
+         t3j9paXzWSVa+E2B63ppOWxaHAsnrkBbd8FpKH2B/XRxo4x/DawS35OJhysY5Ha1+SL+
+         tCJCfe7BdV8Ka6VFSTXaee6S/YdP0n8n2lR5wHIn5KSN/9Qbqw1wdbWHtUNdvduxc4xj
+         RNuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772752225; x=1773357025;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=oHYogqidDxqmpzWYl8t1n7jPajQf/LegJQLqZ82v8Fk=;
-        b=vX8+2i5DgUEIfaqIZvyyknFD1TBCPmX0ilysiQbC5q4w+5qVq8S6LxzaWTP9aVLYIS
-         uRFi0kNwtwCORJiq3Bryda/eLsmeTxhODanK19OKBegl8nbe93//4vRq9WGYmp4WZ1+I
-         hvICD/m82KzMVPXqMDwuWkNLsZr4nwbGliUnkPgdgPj51gPhEzDIPIeNP4qELu9tE3sL
-         y+aOFMmTHWfr1uYGQ+1Lt8IVsGK8aszXGjF/ExTzR5IZ2uUgGStEYDGYN1TjzRNaG7SR
-         jEi8GbnYaoVPMU4LlXOlvtnYIXibXWL6xxTTbQmZrsTG7ZcFC5sA/o/k/5wffQRIUQ1b
-         du5g==
-X-Forwarded-Encrypted: i=1; AJvYcCUi1APDUQrn4if06TSsOpYdZujWBPtIoo8F9NXPQxmX0fkXIhEiqBwuQZBB+lcUmWBTN10=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzlbF8cDDDuXe7z7B9n599xLwk+SKw1T5a6bWwk9Rxd7WmdTfMf
-	E+0/wqpmPIfdNXaiurZrEzdqHSHNKtArntM59Ysj+MA6PloMNDd1Zj33iC1XVrj4LHuh8y43rit
-	KiwWJNPrpat+ilMZZNuJh/Yed9rN/hr4=
-X-Gm-Gg: ATEYQzz+tsTGFnLQxQvV8uV9ZvWEayZwc7si7w9WZNgA6AnXUvGWJc0U3Qw3oAmdF9i
-	gVEwOVzJ4i00CjrL++Wa52pmRWMjDRceNOnpIrX5u93GYZuFPyM/mWfUMGBhDwKBqVdI+0taV/h
-	dbm7tgqhSR7+JZOGotECrSrwQuHnPDY4jC20u1HPHTFEn3NtPYkszFay8QZwcxeG6oizwI4LBFn
-	glsEPsxc9ONHYJ6p9d+zuEJAeTExSPN7VPTBbVQUQ6xLH2kgMcBpK32HW057FoE81625D6UUWTX
-	+1d3PRiS2SXBz3qqgmwNURBwq1mGSMpjiw==
-X-Received: by 2002:a17:902:d54f:b0:2a9:e8b:5326 with SMTP id
- d9443c01a7336-2ae823a4d58mr1997775ad.23.1772752225422; Thu, 05 Mar 2026
- 15:10:25 -0800 (PST)
+        d=1e100.net; s=20230601; t=1772752699; x=1773357499;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OT+M4OLV2jPlgPxLe+Zv0BlzVS5I6l8bWz+4E140bhA=;
+        b=pBwpDxTnrMvq8rhQQY+/GwbIXa99Vq4kEtPl8pYAk5PwdubxR5SZNjaPvDquGs6MgQ
+         iA6XHioBS3Py40YuhOwzlG2ZV0mnfS8h84w8hLnt2MUL1Ru1W+KPWtDBi/MDa9BryRrJ
+         ClJiZQlD8W2bfcg2k8EyFi2R7Qe0ztnx/6rFSitP7TLVScAlrHcxDF3Os/fNETIsV19c
+         w4C1Tfe8gCJZG0/4nzjr7Y2gXQ1wyR8sT5WL9nIfW/Ljxa3Ex1giR/d6o0Bvyh52LNII
+         eMYEXFffJFmzgQj+xVLnCW6cqGUCH0kOojlvkVkJeQWmbMXVUMSNwAwJehYB4LptKzBd
+         ab/g==
+X-Forwarded-Encrypted: i=1; AJvYcCWzCapIpL9yVchUBzeMrphsKS8x08CnuBVrC1+qxGQlpeSrC8cW3x/FkkVA8qozvD/NAic=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPYVmqF1m7jPFjNRQOINnpnuP0/zEEeRtmen/+4mjErhl89hYT
+	i5uIV/HCRw8KWPUe9UzGyypRhXC2I0+AJ+MXMIY6GXL6AnpR7L6LwpECgO9xQlH8Tw==
+X-Gm-Gg: ATEYQzzRR30IRkpq4XLsIj9sotVTIFCA29P34dd19d4EugPqCFAtMHJE1KA5TnwTu06
+	4u3oA4DoskGlwPYg279D7hxXVA8r6e5Y3Nr+upMkfq1nZOLqi0d+LoAS6e4SeHJQy+BJs8axL4Q
+	LO6XBjzaVmQGDl3+Pyed19W/kSz0fTaUhtymAqDDOKZdT2AvYOJ25bA4sKGnHrovtfiCgcEa5DO
+	VmFnQORqV0UfXIOdDcJ57I1O0OkG0ZvDQvtssuCYe/CRGNDtSUEkj1HD1vqKafS0gSoPlQXTvhg
+	H7hMkkR+o37ymeoOg336WZh27vPBz6VsBPxBZnf5w9zUc4XTF0zvAPTTvSFBOcZ+R5F7sX/Jm8H
+	ubVQbC9gIZ6qNJhY/7nONQxE1/+g7eyPpqaQMTVt0nh1NxbjFIb/f4tGfvty0vuNL9nk+yH5TsW
+	N0nm8uknMNf4UljPgep5c4Df+wf6/foMtciip2+HQPhGmddbVLWH02N2afmg==
+X-Received: by 2002:a17:902:f710:b0:2a0:89b0:71d7 with SMTP id d9443c01a7336-2ae81e54cf1mr501075ad.13.1772752698768;
+        Thu, 05 Mar 2026 15:18:18 -0800 (PST)
+Received: from google.com (127.200.82.34.bc.googleusercontent.com. [34.82.200.127])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae4f945985sm185696495ad.71.2026.03.05.15.18.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Mar 2026 15:18:18 -0800 (PST)
+Date: Thu, 5 Mar 2026 23:18:14 +0000
+From: Jordan Rife <jrife@google.com>
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: andrii@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net, 
+	edumazet@google.com, kuba@kernel.org, martin.lau@linux.dev, netdev@vger.kernel.org, 
+	sdf@fomichev.me, willemdebruijn.kernel@gmail.com, yusuke.suzuki@isovalent.com
+Subject: Re: [PATCH net-next v2 1/2] udp: Preserve UDP socket addresses on
+ abort
+Message-ID: <sypbfotquozxxj2oe2xspfepfjrxdp2xkijhsccdzzxoza2mcr@vk6wnpajjn4e>
+References: <md5mulclwk56nxxdqn4zwgiouwfdi7ydfn3g5hka434ov3ygax@qrw2b3h7ho4f>
+ <20260305193157.2889096-1-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260226093132.437206-1-sun.jian.kdev@gmail.com> <20260226093132.437206-2-sun.jian.kdev@gmail.com>
-In-Reply-To: <20260226093132.437206-2-sun.jian.kdev@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 5 Mar 2026 15:10:12 -0800
-X-Gm-Features: AaiRm50Poi9eBlaCh0RKyEPdsL-FSf0gcFHcAZ2CKsbcpppBDOcAC4mBr8B4WFE
-Message-ID: <CAEf4BzZ1B54Dsu_X4dyu6OH-4heM=NvWy6S6E6ayz2eWpwO3qQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] selftests/bpf: probe_user: filter by pid to avoid
- cross-test interference
-To: Sun Jian <sun.jian.kdev@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260305193157.2889096-1-kuniyu@google.com>
 
-On Thu, Feb 26, 2026 at 1:31=E2=80=AFAM Sun Jian <sun.jian.kdev@gmail.com> =
-wrote:
->
-> The test installs a kprobe on __sys_connect and checks that
-> bpf_probe_write_user() can modify the syscall argument. However, any
-> concurrent thread in any other test that calls connect() will also
-> trigger the kprobe and have its sockaddr silently overwritten, causing
-> flaky failures in unrelated tests.
->
-> Constrain the hook to the current test process by filtering on a PID
-> stored as a global variable in .bss. Initialize the .bss value from
-> user space before bpf_object__load() using bpf_map__set_initial_value(),
-> and validate the bss map value size to catch layout mismatches.
->
-> No new map is introduced and the test keeps the existing non-skeleton
-> flow.
->
-> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
-> ---
->  .../selftests/bpf/prog_tests/probe_user.c     | 27 ++++++++++++++++++-
->  .../selftests/bpf/progs/test_probe_user.c     | 13 +++++++--
->  2 files changed, 37 insertions(+), 3 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/probe_user.c b/tools/=
-testing/selftests/bpf/prog_tests/probe_user.c
-> index 8721671321de..280dcdb5ddef 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/probe_user.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/probe_user.c
-> @@ -20,6 +20,11 @@ void serial_test_probe_user(void)
->         struct bpf_program *kprobe_progs[prog_count];
->         struct bpf_object *obj;
->         static const int zero =3D 0;
-> +       struct test_pro_bss {
-> +               struct sockaddr_in old;
-> +               __u32 test_pid;
-> +       };
-> +       struct test_pro_bss results =3D {};
->         size_t i;
->
->         obj =3D bpf_object__open_file(obj_file, &opts);
-> @@ -34,6 +39,24 @@ void serial_test_probe_user(void)
->                         goto cleanup;
->         }
->
-> +       {
-> +               struct bpf_map *bss_map;
-> +               struct test_pro_bss bss_init =3D {};
-> +
-> +               bss_init.test_pid =3D getpid();
-> +               bss_map =3D bpf_object__find_map_by_name(obj, "test_pro.b=
-ss");
-> +               if (CHECK(!bss_map, "find_bss_map", "no bss map\n"))
-> +                       goto cleanup;
-> +               if (CHECK(bpf_map__value_size(bss_map) !=3D sizeof(bss_in=
-it),
-> +                         "bss_size", "bss value_size %u !=3D %zu\n",
-> +                         bpf_map__value_size(bss_map), sizeof(bss_init))=
-)
-> +                       goto cleanup;
-> +               err =3D bpf_map__set_initial_value(bss_map, &bss_init,
-> +                                                sizeof(bss_init));
-> +               if (CHECK(err, "set_bss_init", "err %d\n", err))
-> +                       goto cleanup;
+On Thu, Mar 05, 2026 at 07:31:45PM +0000, Kuniyuki Iwashima wrote:
+> From: Jordan Rife <jrife@google.com>
+> Date: Thu, 5 Mar 2026 18:03:09 +0000
+> > On Thu, Mar 05, 2026 at 03:25:21AM +0000, Kuniyuki Iwashima wrote:
+> > > From: Jordan Rife <jrife@google.com>
+> > > Date: Wed, 4 Mar 2026 23:52:22 +0000
+> > > > On Wed, Mar 04, 2026 at 09:21:03PM +0000, Kuniyuki Iwashima wrote:
+> > > > > From: Jordan Rife <jrife@google.com>
+> > > > > Date: Tue,  3 Mar 2026 17:01:02 +0000
+> > > > > > Currently, udp_abort() invokes __udp_disconnect() which clears out
+> > > > > > socket fields like inet_daddr and inet_dport. This makes fields like
+> > > > > > dst_ip4, dst_ip6, and dst_port useless inside cgroup/sock_release BPF
+> > > > > > hooks following an abort on a connected UDP socket, since they'll always
+> > > > > > equal zero. This differs from the behavior for TCP sockets where a
+> > > > > > cgroup/sock_release hook will see the address and port that the socket
+> > > > > > was connected to at the time it was aborted. This causes issues in
+> > > > > > Cilium where a sock_release hook is used to perform map maintenance when
+> > > > > > sockets are released, since Cilium actively destroys connected UDP
+> > > > > > sockets in some cases.
+> > > > > 
+> > > > > Just curious why Cilium does not unregister the socket just
+> > > > > after aborting it ?
+> > > > > 
+> > > > > At least Cilium should know the key at that moment.
+> > > > 
+> > > > Originally, socket aborts in Cilium were handled with sock_diag (and
+> > > > still are on older kernels), so you'd need to do some map maintenance in
+> > > > userspace directly before or after aborting the socket. I suppose it was
+> > > > just cleaner to put common cleanup code in a sock_release hook.
+> > > > 
+> > > > > > 
+> > > > > > Make the behavior consistent between TCP and UDP sockets by not clearing
+> > > > > 
+> > > > > This patch makes another inconsistency with TCP.
+> > > > > 
+> > > > > As you mentioned in the cover letter, before the patch, even if
+> > > > > aborted, a bound socket still reserves a port, but it does not now.
+> > > > > 
+> > > > > This might be surprising for non-reuseaddr/port sockets.
+> > > > 
+> > > > Yeah, true. I'm curious if this behavior is something that is useful at
+> > > > all or simply an accident of the current implementation? If I'm
+> > > > aborting/destroying a socket, why should it hold onto bound ports until
+> > > > the socket is closed? I wasn't quite sure about this.
+> > > 
+> > > Digging into the first (long) thread of SOCK_DESTROY (TCP),
+> > > the motivation was to kill sockets bound to an IP address
+> > > that Android/laptop removes when it switches networks.
+> > > https://lore.kernel.org/netdev/1447811024-8553-1-git-send-email-lorenzo@google.com/
+> > > 
+> > > In that sense, holding a port seems unnecessary.
+> > > 
+> > > But there are a few concerns like
+> > > 
+> > >   * someone could use the feature for server and reuse port
+> > >     too quickly.
+> > >     https://lore.kernel.org/netdev/1447879416.562854.443622857.62708268@webmail.messagingengine.com/
+> > > 
+> > >   * it's a bit worrisome if this feature is viewed as a way for
+> > >     resouce management.
+> > >     https://lore.kernel.org/netdev/CALx6S35Q_pc-vBNpA0hipn5K-vSmPDsV-V=D13sODESNO7Htdw@mail.gmail.com/
+> > > 
+> > > Considering these, it seems fair to only notify an error
+> > > via epoll or blocked syscall and let the application to
+> > > close() sockets.
+> > > 
+> > > In a thread, the author mentioned this :
+> > > 
+> > > ---8<---
+> > > Its purpose is to interrupt
+> > > blocked userspace socket calls, not to release resources.
+> > > ---8<---
+> > > https://lore.kernel.org/netdev/CAKD1Yr0Gpr6Ex2i1TXEWyETn48P4g5vBvFZ9=_g+Lz_7-PqBDQ@mail.gmail.com/
+> > > 
+> > > Also, there was an assumption that a sane application will
+> > > close() sockets after receiving errors.
+> > > https://lore.kernel.org/netdev/1447972381.22599.278.camel@edumazet-glaptop2.roam.corp.google.com/
+> > > 
+> > > And yes, this does not apply to UDP, and sadly UDP patch's
+> > > thread has no such context nor discussion.
+> > > https://lore.kernel.org/netdev/?q=udp_abort&o=-1
+> > > 
+> > 
+> > Interesting, thanks for taking the time to dig into this.
+> > 
+> > > But anyway, now I think we can solve your problem more
+> > > easily, see below.
+> > > 
+> > > 
+> > > > 
+> > > > > > out these fields in udp_abort(). Instead, just unhash the socket, mark
+> > > > > > its state as TCP_CLOSE, and preserve the state of the other fields.
+> > > > > > 
+> > > > > > Fixes: f5836749c9c0 ("bpf: Add BPF_CGROUP_INET_SOCK_RELEASE hook")
+> > > > > > Reported-by: Yusuke Suzuki <yusuke.suzuki@isovalent.com>
+> > > > > > Signed-off-by: Jordan Rife <jrife@google.com>
+> > > > > > ---
+> > > > > >  net/ipv4/udp.c | 4 +++-
+> > > > > >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > > > > > 
+> > > > > > diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+> > > > > > index b96e47f1c8a2..01a0a0fbcd56 100644
+> > > > > > --- a/net/ipv4/udp.c
+> > > > > > +++ b/net/ipv4/udp.c
+> > > > > > @@ -3247,7 +3247,9 @@ int udp_abort(struct sock *sk, int err)
+> > > > > >  
+> > > > > >  	sk->sk_err = err;
+> > > > > >  	sk_error_report(sk);
+> > > > > > -	__udp_disconnect(sk, 0);
+> > > > > 
+> > > > > How about passing another flag and avoid unwanted init only for
+> > > > > bpf iterator ?  This will need another layer of __udp_disconnect()
+> > > > > like ____udp_disconnect() (I'm not good at naming), or must make
+> > > > > sure the flag is never used in uAPI.
+> > > > 
+> > > > To make sure we're on the same page about what you're describing, I'm
+> > > > imagining:
+> > > > 
+> > > > static int ___udp_disconnect(struct sock *sk, int flags, bool reinit)
+> > > > {                                                 
+> > > > 	same as before, but if reinit == false then avoid reinitializing
+> > > > 	fields like daddr/dport while holding onto reserved ports
+> > > > }
+> > > > 
+> > > > int __udp_disconnect(struct sock *sk, int flags)
+> > > > {
+> > > > 	___udp_disconnect(sk, flags, true);
+> > > > }
+> > > > 
+> > > > ...
+> > > > 
+> > > > int udp_abort(struct sock *sk, int err)
+> > > > {
+> > > > 	...
+> > > > 	___udp_disconnect(sk, flags, false); <--- set reinit arg to false
+> > > > 	...
+> > > > }
+> > > > 
+> > > > This would have the same behavior with regards to reserved ports
+> > > > following udp_abort() while preserving fields like daddr. I was
+> > > > considering something like this initially, but it wasn't clear to me why
+> > > > you'd want to hold onto reserved ports if the socket was destroyed as I
+> > > > mentioned above. If it's important to maintain that aspect of the
+> > > > behavior, then I'm OK with this approach.
+> > > 
+> > > This was what's in my mind, but probably we could just avoid
+> > > the initialisation:
+> > > 
+> > > ---8<---
+> > > diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+> > > index ce49ed2bd36f..d44be0020446 100644
+> > > --- a/net/ipv4/udp.c
+> > > +++ b/net/ipv4/udp.c
+> > > @@ -2213,21 +2213,21 @@ int __udp_disconnect(struct sock *sk, int flags)
+> > >  	 */
+> > >  
+> > >  	sk->sk_state = TCP_CLOSE;
+> > > -	inet->inet_daddr = 0;
+> > > -	inet->inet_dport = 0;
+> > >  	sock_rps_reset_rxhash(sk);
+> > >  	sk->sk_bound_dev_if = 0;
+> > > -	if (!(sk->sk_userlocks & SOCK_BINDADDR_LOCK)) {
+> > > -		inet_reset_saddr(sk);
+> > > -		if (sk->sk_prot->rehash &&
+> > > -		    (sk->sk_userlocks & SOCK_BINDPORT_LOCK))
+> > > -			sk->sk_prot->rehash(sk);
+> > > -	}
+> > >  
+> > >  	if (!(sk->sk_userlocks & SOCK_BINDPORT_LOCK)) {
+> > >  		sk->sk_prot->unhash(sk);
+> > > -		inet->inet_sport = 0;
+> > > +	} else if (!(sk->sk_userlocks & SOCK_BINDADDR_LOCK)) {
+> > > +		if (sk->sk_prot->rehash &&
+> > > +		    (sk->sk_userlocks & SOCK_BINDPORT_LOCK)) {
+> > > +			inet_reset_saddr(sk);
+> > > +			inet->inet_daddr = 0;
+> > > +			inet->inet_dport = 0;
+> > > +			sk->sk_prot->rehash(sk);
+> > > +		}
+> > >  	}
+> > > +
+> > >  	sk_dst_reset(sk);
+> > >  	return 0;
+> > >  }
+> > > ---8<---
+> > > 
+> > > When we need to rehash(), of course we have to clear
+> > > saddr/daddr/dport, but otherwise, we don't, even sport.
+> > 
+> > What about the case where you bind to a port and use connect?
+> > 
+> > 1. socket bind() to 0.0.0.0:10000
+> > 2. socket connect() to 1.2.3.4:20000
+> > 3. diag_destroy -> udp_abort()
+> > 4. socket close()
+> > 5. sock_release hook runs and daddr/dport have been cleared
+> > 
+> > compared to just connect:
+> > 
+> > 1. socket connect() to 1.2.3.4:20000
+> > 2. diag_destroy -> udp_abort()
+> > 3. socket close()
+> > 4. sock_release hook runs and daddr/dport remain intact
+> > 
+> > It seems confusing that these two sequences would behave differently.
+> 
+> I assumed from "a connected UDP socket" that your use case
+> is a client without explicit bind(), but if it's not, yes,
+> this will not work.
+> 
+> 
+> >  
+> > > When ->unhash()ed, only thing we need to do is to clear
+> > > inet_sk(sk)->inet_num.
+> > > 
+> > > Then, even if bind() and connect() are called later, it
+> > > works because each syscall does not care about the old
+> > > saddr/sport/daddr/dport and just assign a new value if
+> > > inet->inet_num == 0.
+> > > 
+> > > This seems a bit fragile, but TCP already relies on it and
+> > > it's unlikely that we change the behaviour in __inet_bind(),
+> > > inet_autobind(), and inet_dgram_connect().
+> > > 
+> > > And all the other users of __udp_disconnect() are also
+> > > AF_INET or AF_INET6, l2tp, ping, raw.
+> > 
+> > Taking another look at tcp_abort() to compare how it behaves, I saw the
+> > following:
+> > 
+> > tcp_abort(sk, err)
+> >   maybe send active rst
+> >   tcp_done_with_error(sk, err)
+> >     tcp_done(sk)
+> >       tcp_set_state(sk, TCP_CLOSE)
+> >         sk->sk_prot->unhash(sk) if state == TCP_CLOSE
+> > 	  inet_unhash(sk)
+> > 	    removes sk from lhash/ehash
+> > 
+> > I don't see a scenario where diag_destroy (tcp_abort) doesn't lead to
+> > the socket getting immediately unhashed, even if bound to a specific
+> > port (SOCK_BINDPORT_LOCK).
+> 
+> TCP has 3 hash tables, lhash for TCP_LISTEN, ehash for other
+> states except for TCP_CLOSE, and bhash is for all sockets bound
+> to a port regardless of explicit/implicit bind().
+> 
+> If the socket is explicitly bind()ed and has SOCK_BINDPORT_LOCK,
+> inet_put_port() is not called, which does not unhash it from bhash,
+> meaning the socket still reserves a port.
 
-don't use CHECK() macro, use sproper ASSERT_xxx()
+Ah, I see now. Thanks for the explanation and sorry for the
+misunderstanding.
 
+> 
+> 
+> > This seems consistent with my observations
+> > in [1] where I used diag_destroy to immediately remove TCP sockets from
+> > the ehash while testing socket iterators.
+> 
+> BPF iter only iterates over ehash and lhash that have sockets
+> with real work.  This behaviour derives from /proc/net/tcp, which
+> cannot catch TCP_CLOSE sockets.
+> 
+> Recently INET_DIAG dump (not destroy) started to support
+> bhash though, see 91051f0039484.
+> 
+> 
+> > In contrast, I remember in [2]
+> > encountering this rehash behavior with UDP sockets leading to seeing the
+> > same socket twice during iteration if you bpf_sock_destroy()ed the
+> > socket. This wasn't inherently a problem at the time, but it was a bit
+> > surprising.
+> 
+> Right, this happens because UDP combines bhash/ehash/lhash
+> into a single hash table (technically it has 1-tuple/2-tuple/4-tuple
+> hash tables but they are not separated in terms of resource
+> management).
+> 
+> 
+> > 
+> > > This patch makes another inconsistency with TCP.
+> > 
+> > All this is to say, I'm still not sure why preserving how rehash works
+> > in the case of udp_abort() is necessary, and doing so can result in some
+> > unexpected behavior both in the case of socket iteration and
+> > sock_release as in the example above. To keep things consistent with
+> > TCP, doesn't it make more sense to just unhash instead of sometimes
+> > keeping the socket in the UDP hash under certain conditions? Am I just
+> > not seeing the place where a TCP socket would hold onto a port after you
+> > destroy it?
+> 
+> As mentioned, that's bhash, and you can see TCP does
+> not do "just unhash" behaviour even with tcp_abort().
 
-and for email subject, stick to "selftest/bpf:" without extra
-"something: " after this
+Yeah, I see now what you meant by "this patch makes another
+inconsistency with TCP". With that in mind, your previous suggestion
+indeed seems like the best option. It would at least avoid clearing
+daddr/dport with connect()ed UDP, and I don't see a way around it where
+SOCK_BINDPORT_LOCK is concerned.
+ 
+> ---8<---
+> # python3
+> >>> from socket import *
+> >>> 
+> >>> s1 = socket()
+> >>> s1.bind(('', 80))
+> >>> s1.listen()
+> >>> 
+> >>> import subprocess
+> >>> subprocess.run("ss -K -t state listening sport :80".split(' '))
+> Recv-Q                Send-Q                                Local Address:Port                                 Peer Address:Port
+> 0                     128                                         0.0.0.0:http                                      0.0.0.0:*
+> CompletedProcess(args=['ss', '-K', '-t', 'state', 'listening', 'sport', ':80'], returncode=0)
+> >>> subprocess.run("ss -tB".split(' '))
+> Recv-Q                Send-Q                                Local Address:Port                                 Peer Address:Port
+> 0                     0                                           0.0.0.0:http                                      0.0.0.0:*
+> CompletedProcess(args=['ss', '-tB'], returncode=0)
+> >>> 
+> >>> s2 = socket()
+> >>> s2.bind(s1.getsockname())
+> Traceback (most recent call last):
+>   File "<python-input-12>", line 1, in <module>
+>     s2.bind(s1.getsockname())
+>     ~~~~~~~^^^^^^^^^^^^^^^^^^
+> OSError: [Errno 98] Address already in use
+> ---8<---
+> 
+> 
+> 
+> > 
+> > [1]: https://lore.kernel.org/netdev/20250714180919.127192-13-jordan@jrife.io/
+> > [2]: https://lore.kernel.org/bpf/CADKFtnQyiz_r_vfyYfTvzi3MvNpRt62mDrNyEvp9tm82UcSFjQ@mail.gmail.com/
+> > 
 
-pw-bot: cr
-
-
-> +       }
-> +
->         err =3D bpf_object__load(obj);
->         if (CHECK(err, "obj_load", "err %d\n", err))
->                 goto cleanup;
-> @@ -62,11 +85,13 @@ void serial_test_probe_user(void)
->         connect(sock_fd, &curr, sizeof(curr));
->         close(sock_fd);
->
-> -       err =3D bpf_map_lookup_elem(results_map_fd, &zero, &tmp);
-> +       err =3D bpf_map_lookup_elem(results_map_fd, &zero, &results);
->         if (CHECK(err, "get_kprobe_res",
->                   "failed to get kprobe res: %d\n", err))
->                 goto cleanup;
->
-> +       memcpy(&tmp, &results.old, sizeof(tmp));
-> +
->         in =3D (struct sockaddr_in *)&tmp;
->         if (CHECK(memcmp(&tmp, &orig, sizeof(orig)), "check_kprobe_res",
->                   "wrong kprobe res from probe read: %s:%u\n",
-> diff --git a/tools/testing/selftests/bpf/progs/test_probe_user.c b/tools/=
-testing/selftests/bpf/progs/test_probe_user.c
-> index a8e501af9604..4bc86c7654b1 100644
-> --- a/tools/testing/selftests/bpf/progs/test_probe_user.c
-> +++ b/tools/testing/selftests/bpf/progs/test_probe_user.c
-> @@ -5,13 +5,22 @@
->  #include <bpf/bpf_core_read.h>
->  #include "bpf_misc.h"
->
-> -static struct sockaddr_in old;
-> +struct test_pro_bss {
-> +       struct sockaddr_in old;
-> +       __u32 test_pid;
-> +};
-> +
-> +struct test_pro_bss bss;
->
->  static int handle_sys_connect_common(struct sockaddr_in *uservaddr)
->  {
->         struct sockaddr_in new;
-> +       __u32 cur =3D bpf_get_current_pid_tgid() >> 32;
-> +
-> +       if (bss.test_pid && cur !=3D bss.test_pid)
-> +               return 0;
->
-> -       bpf_probe_read_user(&old, sizeof(old), uservaddr);
-> +       bpf_probe_read_user(&bss.old, sizeof(bss.old), uservaddr);
->         __builtin_memset(&new, 0xab, sizeof(new));
->         bpf_probe_write_user(uservaddr, &new, sizeof(new));
->
-> --
-> 2.43.0
->
+Jordan
