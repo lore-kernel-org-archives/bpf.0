@@ -1,154 +1,123 @@
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE4004A32
-	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 08:43:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CBA830FC26
+	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 08:55:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772700200; cv=none; b=r6YNS6oXd8Yg3FvnCXj++9PeTAtsXPy4JiGpg5mQz7bPvM6DipHqFBp//O8Lsty7ySmxIsLc/wHy3pdYfiKMq8ODLz2syjTUTuVcfnm1shB1BQRQb2naUcP+kHTHBoukCS0R+pXWPsyA9TnzctF3BocYYFCPft/Teanj9tKRN04=
+	t=1772700947; cv=none; b=oiAB3WSJj/q8p+Dw5Uwd4dObGqX7femvH+N4NkS5nNPBe5O15KJhgruPwxA3eI8mp65jsM2ocqzSOu64A++iJaxHiKAltpD5t8ifAELu3ag4b76fO9Dl+RvEZBFzDDSf8LKAy5mCqwFTrYYJvwc/7Lwy5qcC/EXrN/NPc8Xe2HY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772700200; c=relaxed/simple;
-	bh=u0MGYNAw3R2Om4vWGOjTSr99GmxyJZFiyTRBLrX6YfU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jvSvh3CpZXXw8m5ytQtZ0/26W7SAjHhTirzpnDyNpKzarBrhStQj30uq7K2xSprW88PUZnY5XaTLoyg5X3E3BIUIPuFJISvYU6E+zm6BtRHZ8eTQ1yjeHS4O1nU7eE5moUEbQXf57auJC6umqHYoThIscFHrSw9xcXoKxsWmaJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=glOJNtNF; arc=none smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772700947; c=relaxed/simple;
+	bh=KvQC244mb8gIOMZVdMYn6Tn//fuIPSbkRxl6PK+JLEE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e1amVeIjWi9wfaHGKzYr5exTWfWaUzMkJUEfC03oDrAKMEeZ1s5N+49iuhNcuZcKurayDimXJEdxm9TBH+RkkdRkbASvATKiO4ATWbuUNkBAMdXg7VeqwDmtOmsaabN6KobuYQs5KrS8wbK2MFYpcvkq1cKT8YWyXTM64n2ZcVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DhdUfREu; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="glOJNtNF"
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-7986d231b3cso103151857b3.1
-        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 00:43:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772700197; x=1773304997; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1CrbCrCECbu++kikZq0nQDYehopFHuwXsfSUPduIJHA=;
-        b=glOJNtNFq/DN10ClthHrmayv/shT5b1DNeUEs7ckGrSE4wVvooePRPuKez8dsPyYVJ
-         435T19Ciy8qXqSC5tZ9P0/aX6Nd9rf+9q0FJqbIK6LNOXFj9j6kBXoNmuHoxmODwTlol
-         kxzTwI1A8YH3CBwltwEh7xMvlTnVm+wCHmBkOK5CQ4r4ccESvpWtvOj9JTcopye9fm58
-         sHD7VL+1FB+CxWvq3v8hJQFFhJOYGYIE6pQF6KL+JtsGHsbTWMcJ31TerH48bVssj3+k
-         1R+ndGtBzXM3QC7X9yhe3lWxn4eFMTAprYUgUpiMBjsNLrIJZik+x5Rc5Mzm7g+y2V8A
-         Es6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772700197; x=1773304997;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1CrbCrCECbu++kikZq0nQDYehopFHuwXsfSUPduIJHA=;
-        b=Uwo/TjXAv96hOaLakeQC0exn9uMmVVznahOZlEKGdBZrsPS9exIFfyI8iSzTSQk6+V
-         GMtHPOcabEngVtZq4CM2ORb5Ih6SMVVrEr64M7XWXfgxYnP5eO8VXMTFo4tP5uZeuvlU
-         MgaIS/2BLT5/avRql++pukaIsYrDRhmrac8IYoRoxIfUk7ZtsfJd9a8hxqdiurw2aJw4
-         qMaP6IifbqliKHyF2Omm8BVv2fBzZWRfKq9iDJ0HGXyNmuO2VyuFRyyoqsb+RENqQkiw
-         5S37Ik+aDJKviYcc3m/slERrcZLnWSfj5w96Yal7TVS8DS1/moekWeO6ErDiZ1RSwS+n
-         bKvQ==
-X-Gm-Message-State: AOJu0YydR6dnBmacWi3e3ZMo5d6vZjxasNYOg3HCFUcY8fPbdgg4N94L
-	Z+ZTUoSSRvBAlmG3Ow3OgS37EROzcZyZAyZZafUmazqmiHfldohW4QB405logYmidHeZnjrF
-X-Gm-Gg: ATEYQzwY/dH2gGPmqy9sDMRkNZJgscEJ0MTsMrsAmLNwr/COdZPOxbn0GkGceaIE5QE
-	9hr3C2eh1ADoWIGoyZbHfQ3Mn6iNyB4SGEhqyHS1F0YH4QDDq5OAjlA3QYo+7lqBakTRBad4LhW
-	Z+p/wj42oZP4I2nXZ30U6QSO/wnld10ngdKhiaBaFjTDl07Tcsm0IkkZ9kUY0Mb7nHEClPHzl6X
-	tGDDI2JmAdi0OM4vCrWgNGfr3QExOyNt5KAWxMrxPMbEFw580hOv4guCwzzRUPNR0nLPEB1NDOF
-	iPY2GBKhNizLlE073hFSlSxoWLFYE+vYJBwuIIulvE3DVijCfeud4M2kFhl5FLPJ8ZIeT34/hlr
-	ac1scHgQKxnHQxbAiPvIVn/8YtXnj9HKWYGK0Esh2zXbkWmNGoHIz+y/n/b8XE6Y8sscXqorMML
-	8g4EWBMJYAMegq+vgFq/ASa//lafw25ZUzG5GBXJ1HgzJeNeXo+8HvMPq4bUJIb12V2cAdg5a6s
-	CCpBTN4D9t4aDnCUF+IlcoqyvX1oltOfA==
-X-Received: by 2002:a05:690e:1914:b0:644:59ed:dba3 with SMTP id 956f58d0204a3-64d0715a05bmr1217220d50.30.1772700197654;
-        Thu, 05 Mar 2026 00:43:17 -0800 (PST)
-Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-64cb7626e56sm8943553d50.15.2026.03.05.00.43.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Mar 2026 00:43:17 -0800 (PST)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DhdUfREu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772700946; x=1804236946;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KvQC244mb8gIOMZVdMYn6Tn//fuIPSbkRxl6PK+JLEE=;
+  b=DhdUfREu/aO6O28Pa6pncTt6z3FTums6AdoEMk42w/rxQlACohcfL2Sq
+   +fUP29WqcvcBdNEtZqH7u8g2/A5N7JLh2CzTpm7tWa0OqPZT6DOCFXSCF
+   zKgriYJ1pL2IyyCHDHouPclo9bQJcbufYAwhrOWwTLVpv7Q5ms5fj+fDx
+   tN85xhDtyuUZPydDYL8QyfGvmxqxlLNOFfkQhDONZJ1e80wDUhvgrBIEZ
+   y9U0FYZ2RBHt3MRfLUh7ywfloEc6eHA5kQPRtM5jB9T1ezOCxQvns+hRz
+   Bu64eKOaKj7fZsFQMJCsi0qjhpYwskmybmj4v9OPis3up/FzXNpPSm322
+   A==;
+X-CSE-ConnectionGUID: nES5l+SpQgKj1vmPzBvSbA==
+X-CSE-MsgGUID: rIHLjc4ZTqaDPRIsjfLSwg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11719"; a="91352582"
+X-IronPort-AV: E=Sophos;i="6.23,325,1770624000"; 
+   d="scan'208";a="91352582"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2026 00:55:45 -0800
+X-CSE-ConnectionGUID: 1EdtUNBrT4WZ/Fc4ol0MVQ==
+X-CSE-MsgGUID: FTFjEgtDRxmV4ldGZ2gw4Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,325,1770624000"; 
+   d="scan'208";a="217850906"
+Received: from lkp-server01.sh.intel.com (HELO cadc4577a874) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 05 Mar 2026 00:55:42 -0800
+Received: from kbuild by cadc4577a874 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vy4Ud-000000000N8-0WGA;
+	Thu, 05 Mar 2026 08:55:39 +0000
+Date: Thu, 5 Mar 2026 16:55:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Puranjay Mohan <puranjay@kernel.org>,
 	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH bpf-next] selftests/bpf: perf_link: avoid failures in concurrent mode
-Date: Thu,  5 Mar 2026 16:43:05 +0800
-Message-ID: <20260305084306.283983-1-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, kernel-team@meta.com
+Subject: Re: [PATCH bpf 1/3] bpf: fix mm lifecycle in open-coded task_vma
+ iterator
+Message-ID: <202603051628.H3HNsDUG-lkp@intel.com>
+References: <20260304142026.1443666-2-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260304142026.1443666-2-puranjay@kernel.org>
 
-perf_link creates a system-wide perf event pinned to CPU 0 (pid=-1, cpu=0)
-and also pins the test thread to CPU 0. Under concurrent selftests this
-can lead to cross-test interference and CPU 0 contention, making the test
-flaky.
+Hi Puranjay,
 
-Create a per-task perf event instead (pid=0, cpu=-1) and drop CPU pinning
-from burn_cpu(). Use barrier() to prevent the burn loop from being
-optimized away. Drop the serial_ prefix so the test can run in parallel.
-Also remove the stale TODO comment.
+kernel test robot noticed the following build errors:
 
-Tested:
-  ./test_progs -t perf_link -vv
-  ./test_progs -j$(nproc) -t perf_link -vv
-  for i in $(seq 1 50); do ./test_progs -j$(nproc) -t perf_link; done
+[auto build test ERROR on 3ebc98c1ae7efda949a015990280a097f4a5453a]
 
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
----
- .../selftests/bpf/prog_tests/perf_link.c      | 20 +++++--------------
- 1 file changed, 5 insertions(+), 15 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Puranjay-Mohan/bpf-fix-mm-lifecycle-in-open-coded-task_vma-iterator/20260304-224301
+base:   3ebc98c1ae7efda949a015990280a097f4a5453a
+patch link:    https://lore.kernel.org/r/20260304142026.1443666-2-puranjay%40kernel.org
+patch subject: [PATCH bpf 1/3] bpf: fix mm lifecycle in open-coded task_vma iterator
+config: arm-randconfig-003-20260305 (https://download.01.org/0day-ci/archive/20260305/202603051628.H3HNsDUG-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 9a109fbb6e184ec9bcce10615949f598f4c974a9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260305/202603051628.H3HNsDUG-lkp@intel.com/reproduce)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/perf_link.c b/tools/testing/selftests/bpf/prog_tests/perf_link.c
-index d940ff87fa08..9e3a0d217af8 100644
---- a/tools/testing/selftests/bpf/prog_tests/perf_link.c
-+++ b/tools/testing/selftests/bpf/prog_tests/perf_link.c
-@@ -1,8 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright (c) 2021 Facebook */
- #define _GNU_SOURCE
--#include <pthread.h>
--#include <sched.h>
-+#include <linux/compiler.h>
- #include <test_progs.h>
- #include "testing_helpers.h"
- #include "test_perf_link.skel.h"
-@@ -12,23 +11,14 @@
- 
- static void burn_cpu(void)
- {
--	volatile int j = 0;
--	cpu_set_t cpu_set;
--	int i, err;
--
--	/* generate some branches on cpu 0 */
--	CPU_ZERO(&cpu_set);
--	CPU_SET(0, &cpu_set);
--	err = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set), &cpu_set);
--	ASSERT_OK(err, "set_thread_affinity");
-+	int i;
- 
- 	/* spin the loop for a while (random high number) */
- 	for (i = 0; i < 1000000; ++i)
--		++j;
-+		barrier();
- }
- 
--/* TODO: often fails in concurrent mode */
--void serial_test_perf_link(void)
-+void test_perf_link(void)
- {
- 	struct test_perf_link *skel = NULL;
- 	struct perf_event_attr attr;
-@@ -45,7 +35,7 @@ void serial_test_perf_link(void)
- 	attr.config = PERF_COUNT_SW_CPU_CLOCK;
- 	attr.freq = 1;
- 	attr.sample_freq = 1000;
--	pfd = syscall(__NR_perf_event_open, &attr, -1, 0, -1, PERF_FLAG_FD_CLOEXEC);
-+	pfd = syscall(__NR_perf_event_open, &attr, 0, -1, -1, PERF_FLAG_FD_CLOEXEC);
- 	if (!ASSERT_GE(pfd, 0, "perf_fd"))
- 		goto cleanup;
- 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603051628.H3HNsDUG-lkp@intel.com/
 
-base-commit: 0b3bb205808195159be633a8cefb602670e856fb
+All errors (new ones prefixed by >>):
+
+>> kernel/bpf/task_iter.c:840:3: error: call to undeclared function 'mmput_async'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     840 |                 mmput_async(work->mm);
+         |                 ^
+   kernel/bpf/task_iter.c:848:3: error: call to undeclared function 'mmput_async'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     848 |                 mmput_async(mm);
+         |                 ^
+   2 errors generated.
+
+
+vim +/mmput_async +840 kernel/bpf/task_iter.c
+
+   833	
+   834	static void do_bpf_iter_mmput(struct irq_work *entry)
+   835	{
+   836		struct bpf_iter_mmput_irq_work *work;
+   837	
+   838		work = container_of(entry, struct bpf_iter_mmput_irq_work, irq_work);
+   839		if (work->mm) {
+ > 840			mmput_async(work->mm);
+   841			work->mm = NULL;
+   842		}
+   843	}
+   844	
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
