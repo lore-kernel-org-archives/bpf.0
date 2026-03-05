@@ -1,136 +1,200 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F054737649C
-	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 12:42:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F6943314A1
+	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 12:45:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772714560; cv=none; b=W558bp0kesDnlYe0fZPGM010pJ4yv6bqaIl2xJTD686eiHYsRZIvoWdGRUPh7PIx3mws2c7WrUso2VJyO3ZUK6H/nTgRVGWLfhVll/pAqXjFme4ma9OYM9MmllDARYbT1PBOsR1nFNJW78c9Tpr46mGNsYwoCdpozTuShDmyXQk=
+	t=1772714752; cv=none; b=Il6lU1P0e6CI1VGtw+DdUrDos6husJZRIi5HsTm7k6GsRfBYmW9n3mMPJVGgHjB4Ui+uydZdlRZS95xftyxdj1PNJm+owacsVQtc7UzGCAwFvcWj026VdmNh6K6IZqWex6VQQ3EOiFgfRpvfEvyZQbN2rE5bY4eJkATDLkNuNjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772714560; c=relaxed/simple;
-	bh=F8woh9js9XcHNLC38nopuCN1xsLDX1k03bkw/YemlEE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=UOmYP0NYJwyAAkbACVnus8pUgAta8jALoHFGCwphd7xhhHbojc9TDwEJTHDHECJpSVeBfgdJB5AAm3ZvhyVQ1vErBtMkxkKvY2QGiIXed3YmgRNhDpI/aI04CBC6tyTtzQuhK2CWJdfvPnTODdNrNpLz7NIGRjssBMmX8Xo961o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=JremhocD; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1772714752; c=relaxed/simple;
+	bh=edIqlo7BDG6ryHe7lI82URkSb6Ls8kMYck1YU1J8E1g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pqdG3MhqtTtxfTsY9VottxS/v7K6CnPLNbxk3Te2m82kPzbopWAY8hdlOHR567Lfpe3dIjfZCbUOjeG3+RN0BgxbY0zleGU8Grj6V2fIMGIJg+OJfWN/qXaU0vHbP+KTHuUQQeZPhUwaFDEl25UUDorrqqqDIlKGGiY5u0b+4FY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SOWBUKRc; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=qlpK8CE+; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="JremhocD"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-480706554beso86591925e9.1
-        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 04:42:38 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SOWBUKRc";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="qlpK8CE+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1772714749;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8lkxI+3lOCvkC886PGfDKxPOQ08Kegpy+JUcXJYkgXA=;
+	b=SOWBUKRce6kIWv1MyUgZleDb4nVRyNebl8d3hG5ea+s4k2w4j36aUaAgLYRQJgrFfFUf+4
+	JFjeglKehjjD+8ZyOyqMZv3s/tEqsJ4Xs/y7PYgRXFytWXXJ0kZZdknK7BervQD/6k0Es0
+	1qPbCHkl0dasRNoWyWITkzRohQUd6Nc=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-325-UxmoXDnFOQe80yZJs-eVtw-1; Thu, 05 Mar 2026 07:45:47 -0500
+X-MC-Unique: UxmoXDnFOQe80yZJs-eVtw-1
+X-Mimecast-MFC-AGG-ID: UxmoXDnFOQe80yZJs-eVtw_1772714747
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-483bcfdaf7dso78382945e9.0
+        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 04:45:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1772714557; x=1773319357; darn=vger.kernel.org;
-        h=in-reply-to:references:to:cc:subject:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F8woh9js9XcHNLC38nopuCN1xsLDX1k03bkw/YemlEE=;
-        b=JremhocDidVGA9xi2y+kd6lN4USCRKAt0hsXie3N2VYF2p1DLBtH7vn7irPYWhPMog
-         7QjQ2vXbfAd9z+OtIB/domBtDenOuqYmQe1aGy308qoGHQB8I9Bdey/PEVBt75OimgVm
-         ZNMPd1mGcYQMqRtHqK0ayTcs0Cuxy875aP/iLp1xPfg1n2vQz+lUVUMXxxe1NFPSYAkP
-         oJ+uTJl82NqRfS3q0x0dXxcnHrCTvwhLtj//S+P+66Tp03+VQu6cYwlWQLnZLgsPAlSX
-         KvizdPU2C89TD9h0Tgk2zWLfUlg5zB7LPHN9+hmZRRUzk6HoH8zPP5U7gTqFLNrs57oC
-         lytA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772714557; x=1773319357;
-        h=in-reply-to:references:to:cc:subject:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+        d=redhat.com; s=google; t=1772714747; x=1773319547; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=F8woh9js9XcHNLC38nopuCN1xsLDX1k03bkw/YemlEE=;
-        b=g0XXxQ26/XawcwrUhR1kQBFO+lEP57lXYVQss1uxfb9HJbxY8hGCdu3YlisTQz8G8r
-         9YSff/iSur8qTOyJ4ccjmV6tdIC78aaYHJ0PF+e31K3wVtmRm0IgsY0eeknRmu6ZHe49
-         n+gVrNISRxXx5ac+m6d56EsTJ9vq9CKyW8XQODlkiQBb7tXncYbnmG/4OBoRukdoch0u
-         J4gvCKkU7YFb184l20itzX5sn3wTg9N+IDYRPS62lvnUsqvR+eaJXc7HPi7sicmLi0pE
-         oxaNpIPNNjVFVEYoO/Lx2Pp84qH/n+7PiNkQJZfjBG0ttcvCkyHg7sZIRpimpgav7709
-         zQ0w==
-X-Forwarded-Encrypted: i=1; AJvYcCWnvY3n921cSw6InheyaLa6JNqffk/5S1/hYXsjg4hibRzpy3EiO2HYf7ZDt9RyR3JN03w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YymVGIBrFnqdCT5QWccjORnekI99enL99rkjIz/Fsx/R7g0pZeK
-	aNdueyIyAVu1TAq55KxqG+XPW0ztCC35yb8cTd3DoKG9GIjwUSk32ocVp1tJPN6dyk4=
-X-Gm-Gg: ATEYQzw/ElhPbEemEpXJQsLknFjgUmAuFCUh+iBO3I9ozdRzz4a7W8Sc3IZfQq4oKOU
-	+6Lp3mgBHroztw9yF9rqDQWIO6E+oZ3SbNk0dRoOAKF5cTG/4cFw2EsiY0Tpmye63bRA9sI8QbE
-	kJhphCIo6yLUBh952V/5K6YSGrZ6A+pTKaUNMsq5O7sKUBfMZ/ILV8q/AY0wmquS2/ghmMUfu/d
-	bHlLxg6cDWIA0g35miDplu9pLA9wPgrJc014vTM6eEFx2g41kkI97H7HteiocccPGaMhcFDeedA
-	zs510najFStjTHM4hPnwphFv462HS7QOwZR5EW15aSrQkFb9S6/7RMTlMIlyLwSxmBrfQZa9eKT
-	PVHwuPtjhCKzIIQjaUQ5RQPYjVZnxPfhuBRD9Jw1XU/9YO49ruorbDQUhvJGLh0YKEFJ6avD26e
-	vYLMyGCLpvsw==
-X-Received: by 2002:a05:600c:470d:b0:47e:e87f:4bba with SMTP id 5b1f17b1804b1-485198a2b1emr99378065e9.29.1772714557221;
-        Thu, 05 Mar 2026 04:42:37 -0800 (PST)
-Received: from localhost ([189.99.238.164])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-5ffaa208aeesm5252381137.12.2026.03.05.04.42.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Mar 2026 04:42:36 -0800 (PST)
+        bh=8lkxI+3lOCvkC886PGfDKxPOQ08Kegpy+JUcXJYkgXA=;
+        b=qlpK8CE+z6SiPusVJ42z3qIS5SRAuM5Wb8j/bU+mVXE+llq+wKv9b/ZFD4tNQxUCSR
+         TotHwnHRW+UsY5K7yJplslDOQcDOhdBBSuA5g/Li9ify6I/QBrDQ3IzVFrVBoU/gf+zT
+         lt6HJsmTUPnvz93r96lD2mTeG1IhLmpkMrnOlNcl0LtTSnjgJlNSp6+qjixHplc4JQ0z
+         ZvIrRLrRmHZSuEOCivuegOqIApYUbLvvuJBdulY8qbj11J09gB3KV+zFuphHFXpcoIWl
+         hYoWAOupr2TLt3QZpOq9ZI67nnJ8LM/bE31yuVa5ejTbexkPHNulWA6EmPwNG2yVI+xq
+         Bwkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772714747; x=1773319547;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8lkxI+3lOCvkC886PGfDKxPOQ08Kegpy+JUcXJYkgXA=;
+        b=ejvPd3Hv67kIZgml6c+m5iBTg0mMgFQ4fJZ78enRiXvDAxmU+MNS87xDZfSgA1V58l
+         y9b7BJMq3w0ZZ4HvFIUu4Olnnq55EkL2ODUmdFEKubP9dPJnH5j2gnDajSFoCFVx2K2W
+         Q7Wa/e5u05hB5kG1CoVP1SHwVXpqMNcPtbLVP3mDwhiiDJGav/joRK8KROSA24Gq5z9j
+         xXk4hGMxW+cwUMyhe1xLM3mf+HXJAQfoocpB95+7fbNh2jdYw88wq8+G3ZypjvjL792n
+         yC7kIsuqRRGMzrhchUW/8+6Cma4ECTFWFlPd3/HEaagTuoObJFbDd9AAqJ1sCiiGFRd2
+         YEDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVkRU2ozc3w4VbJ1CnVA9N7Gcuon7igTWHJoLCuA6A9E7RBK/6DM6lQ066NkDi1qp4OMPo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzippvyFspIhsnCBWj4OgKa4DJTfgwZYRyRN7VauKO+12nk3buw
+	UCeEeR0ZM1BBtKwx+6uqFcmqrzy/xAsLpa7mcjeN59E31lRE7PazC0Kba9A7jc4EVGjNum+Q4qd
+	BIKXhl2/BcY2ttp+9FnkU6L7/CopV6JQhSRmIh1JabyIY4ntEHHcQ
+X-Gm-Gg: ATEYQzzj00SF0+yPeGKgfVt73zZOlWE5gAfOLSO6B1gNMgYLEjW83EYr/WJ+ZjyEKtt
+	M3ICxgP/QVmfBAaSchJtUIwfCp6GXybV8RsIisdDp0Aqb+EYAEF+CkGrers59PNCTiodYtuFaIQ
+	eBvaoexWx0cvXrOWqSN18Why/Er8iiu6lXc5wg+gimC3o4rpQVxrpKQgcEm8M8Hxr5ySH/tAwPZ
+	JhlaxvZMAZKIIeFcsPyUUzRkVn3IeAUjSaA7/3PFf/DJFMA2FfXikNSSftELe7k5CnGNQdoYYW7
+	Vi6f/N5/8gJHhu1LPYh0rNtg6jgkJWnq1nFFVyB2AJiPqCZlqyIhzXvkp+JlT4eurf3AZCBiDYT
+	4wqbj+dzcgmnlppCSf07qTHOLwwgN88/t+lBxtE0/aTG0+KMpNRB8XAsK
+X-Received: by 2002:a05:600c:458d:b0:482:eec4:74c with SMTP id 5b1f17b1804b1-4851988a630mr86649775e9.22.1772714746624;
+        Thu, 05 Mar 2026 04:45:46 -0800 (PST)
+X-Received: by 2002:a05:600c:458d:b0:482:eec4:74c with SMTP id 5b1f17b1804b1-4851988a630mr86649485e9.22.1772714746130;
+        Thu, 05 Mar 2026 04:45:46 -0800 (PST)
+Received: from [192.168.0.135] (185-219-167-205-static.vivo.cz. [185.219.167.205])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4851fb33815sm80533045e9.12.2026.03.05.04.45.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Mar 2026 04:45:45 -0800 (PST)
+Message-ID: <80766050-c745-411b-8ee6-8141d2cfe4ff@redhat.com>
+Date: Thu, 5 Mar 2026 13:45:44 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] powerpc, perf: Check that current->mm is alive before
+ getting user callchain
+To: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+Cc: linuxppc-dev@lists.ozlabs.org, Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+ Joe Perches <joe@perches.com>, Paul Mackerras <paulus@ozlabs.org>,
+ Benjamin Herrenschmidt <benh@kernel.crashing.org>, atrajeev@linux.ibm.com,
+ linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+References: <20260227082502.1882395-1-vmalik@redhat.com>
+ <aab3EW1LfDcjSzzy@linux.ibm.com>
+From: Viktor Malik <vmalik@redhat.com>
+Content-Language: en-US
+In-Reply-To: <aab3EW1LfDcjSzzy@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 05 Mar 2026 09:42:33 -0300
-Message-Id: <DGUUV390XWEL.3BNFHCZL5RJJ@suse.com>
-From: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
-Subject: Re: [PATCH net 1/3] bpf: bpf_out_neigh_v4: Fix nd_tbl NULL
- dereference when IPv6 is disabled
-Cc: "Fernando Fernandez Mancera" <fmancera@suse.de>, "David Ahern"
- <dsahern@kernel.org>, =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?=
- <rbm@suse.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "John Fastabend"
- <john.fastabend@gmail.com>, "Stanislav Fomichev" <sdf@fomichev.me>, "Alexei
- Starovoitov" <ast@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "KP Singh" <kpsingh@kernel.org>,
- "Hao Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "David S.
- Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Paolo
- Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>,
- =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>, "Jay
- Vosburgh" <jv@jvosburgh.net>, "Andrew Lunn" <andrew+netdev@lunn.ch>,
- "Hangbin Liu" <liuhangbin@gmail.com>, <bpf@vger.kernel.org>,
- <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-To: "Jakub Kicinski" <kuba@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>
-X-Mailer: aerc 0.21.0-120-g50bad16c3d41-dirty
-References: <20260228-net-nd_tbl_fixes-v1-0-2b2a274df9bb@suse.com>
- <20260228-net-nd_tbl_fixes-v1-1-2b2a274df9bb@suse.com>
- <0b52257d-d557-4f26-9931-34c81ab621bc@iogearbox.net>
- <20260302171131.28373ccb@kernel.org>
- <0d7bb5c5-4122-4dc9-b52b-c305591207d1@suse.de>
- <bbee1ce1-0615-4be2-b7b1-a14eaf2afe26@iogearbox.net>
- <ba665193-bb6f-4293-b8ca-bbb267e92eb3@kernel.org>
- <ba35fa2c-0085-43c9-afe0-3b2e0351ca3c@suse.de>
- <525dab04-4e64-49cf-94d9-12084e146b80@iogearbox.net>
- <20260304174327.0a48ff45@kernel.org>
- <ec1fdead-8a2b-475b-a786-846b81234b74@iogearbox.net>
- <20260304185056.4ef945d4@kernel.org>
-In-Reply-To: <20260304185056.4ef945d4@kernel.org>
+Content-Transfer-Encoding: 7bit
 
-On Wed Mar 4, 2026 at 11:50 PM -03, Jakub Kicinski wrote:
-> On Thu, 5 Mar 2026 02:59:27 +0100 Daniel Borkmann wrote:
->> >> I presume you mean disable_ipv6_mod which then bails out during the m=
-odule
->> >> load process without error, right? It could be deprecated with a warn=
-ing so
->> >> that it turns into a no-op: =20
->> >=20
->> > I believe disabling ipv6 may be legit. Some admins on ipv4 networks ma=
-y
->> > be paranoid and not want to allow any ipv6 traffic if their "firewalls=
-"
->> > can only understand IPv6? This is just a guess on my side, but I'm les=
-s
->> > confident of deprecating the disable knob than =3Dm. I'd be happy if I=
-'m
->> > wrong.
->> >=20
->> > To answer the earlier question -- I would prefer to take the fixes now
->> > and make IPv6 bool in net-next, feels like too big of a change for rc3
->> > :( =20
->>=20
->> Makes sense, I think starting this process via net-next is fine and can =
-be
->> better justified. Fernando, maybe in that case resend with the unlikely(=
-)
->> added.
->
-> I think Fernando was chiming in because he sent similar patches.
-> Ricardo, please respin checking ipv6_mod_disabled() ?
+On 3/3/26 15:58, Saket Kumar Bhaskar wrote:
+> On Fri, Feb 27, 2026 at 09:25:02AM +0100, Viktor Malik wrote:
+>> It may happen that mm is already released, which leads to kernel panic.
+>> This adds the NULL check for current->mm, similarly to 20afc60f892d
+>> ("x86, perf: Check that current->mm is alive before getting user
+>> callchain").
+>>
+>> I was getting this panic when running a profiling BPF program
+>> (profile.py from bcc-tools):
+>>
+>>     [26215.051935] Kernel attempted to read user page (588) - exploit attempt? (uid: 0)
+>>     [26215.051950] BUG: Kernel NULL pointer dereference on read at 0x00000588
+>>     [26215.051952] Faulting instruction address: 0xc00000000020fac0
+>>     [26215.051957] Oops: Kernel access of bad area, sig: 11 [#1]
+>>     [...]
+>>     [26215.052049] Call Trace:
+>>     [26215.052050] [c000000061da6d30] [c00000000020fc10] perf_callchain_user_64+0x2d0/0x490 (unreliable)
+>>     [26215.052054] [c000000061da6dc0] [c00000000020f92c] perf_callchain_user+0x1c/0x30
+>>     [26215.052057] [c000000061da6de0] [c0000000005ab2a0] get_perf_callchain+0x100/0x360
+>>     [26215.052063] [c000000061da6e70] [c000000000573bc8] bpf_get_stackid+0x88/0xf0
+>>     [26215.052067] [c000000061da6ea0] [c008000000042258] bpf_prog_16d4ab9ab662f669_do_perf_event+0xf8/0x274
+>>     [...]
+>>
+>> Fixes: 20002ded4d93 ("perf_counter: powerpc: Add callchain support")
+>> Signed-off-by: Viktor Malik <vmalik@redhat.com>
+>> ---
+>>  arch/powerpc/perf/callchain_32.c | 3 +++
+>>  arch/powerpc/perf/callchain_64.c | 3 +++
+>>  2 files changed, 6 insertions(+)
+>>
+>> diff --git a/arch/powerpc/perf/callchain_32.c b/arch/powerpc/perf/callchain_32.c
+>> index ddcc2d8aa64a..b46e21679566 100644
+>> --- a/arch/powerpc/perf/callchain_32.c
+>> +++ b/arch/powerpc/perf/callchain_32.c
+>> @@ -144,6 +144,9 @@ void perf_callchain_user_32(struct perf_callchain_entry_ctx *entry,
+>>  	sp = regs->gpr[1];
+>>  	perf_callchain_store(entry, next_ip);
+>>  
+>> +	if (!current->mm)
+>> +		return;
+>> +
+>>  	while (entry->nr < entry->max_stack) {
+>>  		fp = (unsigned int __user *) (unsigned long) sp;
+>>  		if (invalid_user_sp(sp) || read_user_stack_32(fp, &next_sp))
+>> diff --git a/arch/powerpc/perf/callchain_64.c b/arch/powerpc/perf/callchain_64.c
+>> index 115d1c105e8a..eaaadd6fa81b 100644
+>> --- a/arch/powerpc/perf/callchain_64.c
+>> +++ b/arch/powerpc/perf/callchain_64.c
+>> @@ -79,6 +79,9 @@ void perf_callchain_user_64(struct perf_callchain_entry_ctx *entry,
+>>  	sp = regs->gpr[1];
+>>  	perf_callchain_store(entry, next_ip);
+>>  
+>> +	if (!current->mm)
+>> +		return;
+>> +
+>>  	while (entry->nr < entry->max_stack) {
+>>  		fp = (unsigned long __user *) sp;
+>>  		if (invalid_user_sp(sp) || read_user_stack_64(fp, &next_sp))
+>> -- 
+>> 2.53.0
+>>
+> Sorry, I missed adding cc list for the last conversation so adding this for reference:
+> 
+>> Wouldn't be good if we check this in perf_callchain_user() as it will
+>> cover both cases.
+> 
+> to which Viktor replied:
+> I considered it but in that case, we'd also miss the top-level stack
+> frame (the perf_callchain_store call above). Other arches include it so
+> I followed the behavior for powerpc.
+> 
+> Viktor, agreed with your first point. I have another concern:
+> 
+> I was hitting this issue with stacktrace_build_id_nmi in bpf and
+> applied this patch https://lore.kernel.org/bpf/20260126074331.815684-1-chen.dylane@linux.dev/T/#mf901967ebe77506f1bd6e3d876c2a85824d9519d
+> 
+> Wondering if the above generic fix is working do we need to add this
+> check in powerpc specific code?
 
-Will do, thank you all for reviewing.
+I tried to apply that patch series but, unfortunately, keep getting the
+panic when running the BCC profile tool.
+
+Also, looking at the patch, it seems that it would only solve the issue
+when perf_callchain_user is called from a BPF context, however, I assume
+that it may be called from other contexts, too.
+
+Since perf_callchain_user_{32,64} are dereferencing current->mm while
+walking the stack, I think that an explicit protection against
+current->mm being NULL makes sense here, even in the presence of the
+above patch. Especially since other arches have it, too.
+
+Viktor
+
