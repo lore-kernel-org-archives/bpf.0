@@ -1,89 +1,71 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18B05329C7F;
-	Thu,  5 Mar 2026 20:18:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0344339861
+	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 20:28:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772741918; cv=none; b=U9LJ2Zavm1DlTPUFtVn2pRa0veykTUBJ1EgLS3rHSgsoCVZGn8u4xUAZ5WVa+clKeGMLvgHh1WhYUN51d3EO5x0nAp/Hsjq3/ymqjqR/avJfhyhj5eCcL/kseYEGadgN6cuxouxOcrhGvUFOlzyFZpXhq/DVG2mCQmVNbrNesec=
+	t=1772742499; cv=none; b=aKab4ebc8PTTdX3AGuQ54ixa2pD7U1QHJeGBp//eAyBNDY2ZUobJyHxr99Q+exiuLam5GsgLCsusP9CYh7QbBQW/IcXreyolIILYSzbW1AO1L17kqQhyWaymCYnzZGClEwA6dwbUrW6lTAKbt1gwT2AyLMBfoNsj3Kg22v0EEsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772741918; c=relaxed/simple;
-	bh=pRMj0I4HTIXwyDqWCrTrse1IQfhg7ecelu35rca7kIs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UvdoFmDqJfhUOX4Nq17XFGwzLwp6bOyvyDAFO+6XxzopXL3LQR9JebA5ty+NTaRP0qzzp+lJAclfvhnAtSY8UIOid21E0UMyaJ4qzEoglbpBKydRljAqfzurjzFu1P3nOEXtKeRsadjG2doK+8ns+1GIEuMOweulV2PXssTnKFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vKLw0hNA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772742499; c=relaxed/simple;
+	bh=Tiy45h93hbyevmXK3PZxLVT0oEL3CPk6qbrVHwUDBkE=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=dhz5fowE+vEvT4x80NHmpbIgiYYTq4qEync9QBdtEj8VjOqD/7E2szdw0HsGWHMFTUYxxHO3lDOn5lNF1v+zr1EugPvRKJRlF2ayxIYMZxgZ1ShEn6snTg9Zwc7xWjKb7nPLdsKMvhnbS6C4phDDe0Z+HIFRtHCq7aM1A6ixzO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JgL7vSfe; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vKLw0hNA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35EDEC116C6;
-	Thu,  5 Mar 2026 20:18:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JgL7vSfe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F925C116C6;
+	Thu,  5 Mar 2026 20:28:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772741918;
-	bh=pRMj0I4HTIXwyDqWCrTrse1IQfhg7ecelu35rca7kIs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=vKLw0hNAjuLQhzQvJvvbQW1Q3hpGvnzi2VqbhQm5VxpwHnRbNNyEovCyiH6lGIYns
-	 9lA2zlTh1STudb1tZk+p+3ww1iyWqnEu7inxi08wv9ZCkZH9WVTxO3a2GdWJ9/5Lf8
-	 tdRimsnbiqMhHQfYS5dotyWv53YHic27f+/57R5gNG0Eygg/LtjXMX/qeym2ksbPPe
-	 xeAQZqCN0DDoMi79Mjypd22CojoPU58GbcdwdInB+p0F/Nap70VoFV/kOn512PXpkb
-	 6Rutt00qOZLF8CEnCdcyYiAeMKnE4Sgo+heHMHlqFGU5c5rryt139jz4cu4ryHuR1b
-	 BQAxripXHeWHw==
-Date: Thu, 5 Mar 2026 15:18:32 -0500
-From: Steven Rostedt <rostedt@kernel.org>
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: Jens Remus <jremus@linux.ibm.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, x86@kernel.org,
- linux-mm@kvack.org, Josh Poimboeuf <jpoimboe@kernel.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>, Jiri
- Olsa <jolsa@kernel.org>, Arnaldo Carvalho de Melo <acme@kernel.org>, Thomas
- Gleixner <tglx@linutronix.de>, Andrii Nakryiko <andrii@kernel.org>, Indu
- Bhagat <indu.bhagat@oracle.com>, "Jose E. Marchesi" <jemarch@gnu.org>, Beau
- Belgrave <beaub@linux.microsoft.com>, Linus Torvalds
- <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>,
- Florian Weimer <fweimer@redhat.com>, Kees Cook <kees@kernel.org>, Carlos
- O'Donell <codonell@redhat.com>, Sam James <sam@gentoo.org>, Dylan Hatch
- <dylanbhatch@google.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
- <dave.hansen@linux.intel.com>, David Hildenbrand <david@redhat.com>, "H.
- Peter Anvin" <hpa@zytor.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Michal Hocko
- <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan
- <surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>, Heiko Carstens
- <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>
-Subject: Re: [PATCH v13 00/18] unwind_deferred: Implement sframe handling
-Message-ID: <20260305151832.5f4d2761@gandalf.local.home>
-In-Reply-To: <aYvKqse1aXxGqFwR@google.com>
-References: <20260127150554.2760964-1-jremus@linux.ibm.com>
-	<aYTgwoyRl8kxQShT@google.com>
-	<20260205135411.5fb22df2@gandalf.local.home>
-	<113e4e4d-8b7a-437d-a3a2-de74acc9ecaa@linux.ibm.com>
-	<aYvKqse1aXxGqFwR@google.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=k20201202; t=1772742499;
+	bh=Tiy45h93hbyevmXK3PZxLVT0oEL3CPk6qbrVHwUDBkE=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=JgL7vSfeanGx0dPRck3OiraTl5vkSsQAhtzCV0zgenbC1LY3BR0p8rjXjcRw0q6hd
+	 Etcbhj952Jj80gJGRJMAmpgbDXaTlmYTtLtGc9nq/a7jm6q+VQYnt3cqErGF3OO4kc
+	 rSAZYjN/Tq2Q5p8ZDI4Xm4dg04/WNLT6C5ZOt3aQaPefmV/pnAWaA4zWsVgmp97Cfr
+	 /LYteISCQ8Vluil8NiAGUtOB1MCw1oB8NdQUFBPnj/J/fEYqwiy66HFW3kul7b6/hO
+	 qp+7vNpXUPqfGYNznMO23FcuZOURxXavUEmtQz6rakWmtqa+LtIQpoH5oSe5azNfbo
+	 kQEkXX8dHYtnQ==
+Content-Type: multipart/mixed; boundary="===============3367509451540937078=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Message-Id: <0c49825f6d0ae413ca101a5004a2e33ff1d979f2121180e9654957fe6121f9cc@mail.kernel.org>
+In-Reply-To: <20260305-bpf-32-bit-range-overflow-v2-1-7169206a3041@gmail.com>
+References: <20260305-bpf-32-bit-range-overflow-v2-1-7169206a3041@gmail.com>
+Subject: Re: [PATCH bpf v2 1/2] bpf: refine u32/s32 bounds when ranges cross min/max boundary
+From: bot+bpf-ci@kernel.org
+To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org
+Cc: daniel@iogearbox.net,martin.lau@linux.dev,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,emil@etsalapatis.com,arighi@nvidia.com,shung-hsi.yu@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu,  5 Mar 2026 20:28:19 +0000 (UTC)
+
+--===============3367509451540937078==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-On Tue, 10 Feb 2026 16:17:46 -0800
-Namhyung Kim <namhyung@kernel.org> wrote:
+> Reported-by: Andrea Righi <arighi@nvidia.com>
+> Reported-by: Emil Tsalapatis <emil@etsalapatis.com>
+> Closes: https://lore.kernel.org/bpf/aakqucg4vcujVwif@gpd4/T/
+> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 
-> > 
-> > Maybe it would make sense not to "overload" the perf record option
-> > "--call-graph fp,defer" and use it for all deferred unwinding methods.
-> > 
-> > What about "--call-graph defer", "--call-graph any,defer", or
-> > "--call-graph *,defer"?  
-> 
-> Sounds better.  But I think it cannot enforce "--call-graph fp,defer" to
-> use frame pointers when SFrame is available.. Hmm.
+This commit fixes a missing refinement that was noted as a known gap
+when the 64-bit version was added.  Paul Chaignon's commit message for
+00bf8d0c6c9b stated: "The same logic can probably apply to the s32/u32
+ranges, but this patch doesn't implement that change."
 
-Yeah, let's just call it --defer. The "fp" part isn't really something perf
-has control over. It's an implementation detail. Perf should really just
-care about getting a stack trace and not how the kernel goes about it.
+Should a Fixes: tag be included to reference that commit?  The
+suggested tag would be:
 
-The only difference is that it needs to know if it is deferred or not, as
-perf needs to do things differently when it is.
+Fixes: 00bf8d0c6c9b ("bpf: Improve bounds when s64 crosses sign boundary")
 
--- Steve
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22734151945
+--===============3367509451540937078==--
