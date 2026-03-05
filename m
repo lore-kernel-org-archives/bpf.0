@@ -1,46 +1,46 @@
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6430B36920C;
-	Thu,  5 Mar 2026 23:32:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82C4736A02C;
+	Thu,  5 Mar 2026 23:32:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772753526; cv=none; b=qPBDvPz8plkhG/pA8PYgmeQH96Fjd2AgFa7ctGts52RQm+ek8GpzkoxNSsrQmEYLbUXBZ0cGva06aqKnfLec7ZI5V3QLhXObWAgWtFIvcZmC0xhUMY51EJ3SsbB+JsBf5Qc46Y8VY/RDbzpMrEiprnxAPjMoW2/+WSCIw6sZepk=
+	t=1772753537; cv=none; b=Zoek7slmDU/Tkl8qKwRfp5NsrXQl4fmP5KFaUG0y9ubiTn2v4QcAoDbqhmEn+jzPkAQkqTwA4htBndjlEQJ09/6uzxB2JYoamHC3TvgO/GgZYqnCW71hAyW9akpwtnZ4W9on1TfRj335v+5fpc6vmXwIT3d1aQKEI6TCGofskdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772753526; c=relaxed/simple;
-	bh=ZQr+WTwSnte7ugmiliHwL9asahOJBYvUnHt5xYlz2Is=;
+	s=arc-20240116; t=1772753537; c=relaxed/simple;
+	bh=dPxiuBeFVLFXcQWhDoQAORF1N20Mja2gEH0QbJScTxc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=UTQuPKMCzYzDKovXlgfsBCYZ7vTiLjPfu3Qwn4UX8v1a9hGmbidIDQnZJ/P3G6YYz5PDvaKxjaiO6AxbVjoQl8RcBRGCwFDc+/qY28hiXzdQsjaJJCFipN5kiqRb5ucY79ay2VN11I3klhpII03HLMmUSstioBgY3U1MZ5Q3FhE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=vRFIZhJJ; arc=none smtp.client-ip=185.226.149.37
+	 In-Reply-To:To:Cc; b=gDpxJcGTL3mwlvkmVD0giweanqUDyPfxX+ae4pQzO+qp3CpxHe2f5e4MF5O0NwSFDtXGLuxeU/q5sc35i/DXHGWwibcFyTo2agxx2I/cZ6e5eH3jf6yVbjWqdckRf4lwUPIxhY0Xao480NSX0xsbxvnDYPBCk+wXFQL2yWGepR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=bPcPcFgt; arc=none smtp.client-ip=185.226.149.38
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="vRFIZhJJ"
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="bPcPcFgt"
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1vyIAh-0012v4-04; Fri, 06 Mar 2026 00:31:59 +0100
+	id 1vyIAt-00EUi3-Ex; Fri, 06 Mar 2026 00:32:11 +0100
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
 	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
 	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=sSLGc2cwazj/BaeN56d1lulum1UQWYpoeFSBe7HE8yA=; b=vRFIZhJJcAGnOJWZcaWpLMUK3U
-	s7g9UQCDGwOLLGkT1dnmH0FT7D7mFULlJ3yOf6Aa7NgkQWetTYzR+r3abBqx3lAJILtcQaaXg1u3z
-	kYj0X9ooz8MLrgo29U9M3MsKVISHyjRYm9tJV5+YuAQVuGEHx9M/SCKuUq3jiVuLGfjKFI93ogi+6
-	7zjjjSavw8dZvTVvJduKT5NS8uqQ1cjZr6aENxdEDFP/zT56ZOEXmzaYfg/GFFLEXT1244EGOXoRU
-	3GfvUCLQSr9bR2vbvOGYoXb1mREQxvsXpfp3qRI3V8fVeZgpB1Cm19wl/ndCsOSU2TCbjaiAb14bp
-	AyDWWEyw==;
+	bh=RdHEkIIRAhdGMHaZV+5C0ZEGBw8Y9TkMkH8ReCDpSdI=; b=bPcPcFgtE5d6dwCZUfVkoOkYYc
+	zGIRT6ZToCxJNhtZ/jcJWqJRkOcDY+nSq5llGhexsFNpe4ASGTPeV/QQsD48MadenHAmiXeP60zXR
+	91XcQRyhPRovHaPtTqmTZlVFFhBH/RjSCDwSwUKlKPNA/XunV6Io5aKa7YaZQivf32ByAwt0hOcIB
+	vK4KpkMnVxjTv+Mo/IB1pAfF3l8qFpJkEaAZ2xepF+rjXF9RoBdWenWMgLIM2Qmy00VF6io/TGizl
+	tyi2nY/FZ3fTyngeOCEblKmdmk8jooTipfd+4BA+aW8MeDwoewlt2q1hZ4tjo2WinN8bC2S5rhnM0
+	+Ukl2sXw==;
 Received: from [10.9.9.73] (helo=submission02.runbox)
-	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1vyIAg-00024o-AK; Fri, 06 Mar 2026 00:31:58 +0100
+	id 1vyIAj-0004Bv-14; Fri, 06 Mar 2026 00:32:01 +0100
 Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.93)
-	id 1vyIAJ-00141B-1j; Fri, 06 Mar 2026 00:31:35 +0100
+	id 1vyIAL-00141B-Si; Fri, 06 Mar 2026 00:31:37 +0100
 From: Michal Luczaj <mhal@rbox.co>
-Date: Fri, 06 Mar 2026 00:30:56 +0100
-Subject: [PATCH bpf v3 2/5] bpf, sockmap: Use
- sock_map_sk_{acquire,release}() where open-coded
+Date: Fri, 06 Mar 2026 00:30:58 +0100
+Subject: [PATCH bpf v3 4/5] selftests/bpf: Extend bpf_iter_unix to attempt
+ deadlocking
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,7 +49,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260306-unix-proto-update-null-ptr-deref-v3-2-2f0c7410c523@rbox.co>
+Message-Id: <20260306-unix-proto-update-null-ptr-deref-v3-4-2f0c7410c523@rbox.co>
 References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
 In-Reply-To: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
 To: John Fastabend <john.fastabend@gmail.com>, 
@@ -71,76 +71,41 @@ Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
  Michal Luczaj <mhal@rbox.co>
 X-Mailer: b4 0.14.3
 
-Instead of repeating the same (un)locking pattern, reuse
-sock_map_sk_{acquire,release}(). This centralizes the code and makes it
-easier to adapt sockmap to af_unix-specific locking.
+Updating a sockmap from a unix iterator prog may lead to a deadlock.
+Piggyback on the original selftest.
 
 Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
- net/core/sock_map.c | 21 +++++++--------------
- 1 file changed, 7 insertions(+), 14 deletions(-)
+ tools/testing/selftests/bpf/progs/bpf_iter_unix.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 02a68be3002a..7ba6a7f24ccd 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -353,11 +353,9 @@ static void sock_map_free(struct bpf_map *map)
- 		sk = xchg(psk, NULL);
- 		if (sk) {
- 			sock_hold(sk);
--			lock_sock(sk);
--			rcu_read_lock();
-+			sock_map_sk_acquire(sk);
- 			sock_map_unref(sk, psk);
--			rcu_read_unlock();
--			release_sock(sk);
-+			sock_map_sk_release(sk);
- 			sock_put(sk);
- 		}
- 	}
-@@ -1176,11 +1174,9 @@ static void sock_hash_free(struct bpf_map *map)
- 		 */
- 		hlist_for_each_entry_safe(elem, node, &unlink_list, node) {
- 			hlist_del(&elem->node);
--			lock_sock(elem->sk);
--			rcu_read_lock();
-+			sock_map_sk_acquire(elem->sk);
- 			sock_map_unref(elem->sk, elem);
--			rcu_read_unlock();
--			release_sock(elem->sk);
-+			sock_map_sk_release(elem->sk);
- 			sock_put(elem->sk);
- 			sock_hash_free_elem(htab, elem);
- 		}
-@@ -1676,8 +1672,7 @@ void sock_map_close(struct sock *sk, long timeout)
- 	void (*saved_close)(struct sock *sk, long timeout);
- 	struct sk_psock *psock;
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_unix.c b/tools/testing/selftests/bpf/progs/bpf_iter_unix.c
+index fea275df9e22..a2652c8c3616 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_unix.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_unix.c
+@@ -7,6 +7,13 @@
  
--	lock_sock(sk);
--	rcu_read_lock();
-+	sock_map_sk_acquire(sk);
- 	psock = sk_psock(sk);
- 	if (likely(psock)) {
- 		saved_close = psock->saved_close;
-@@ -1685,16 +1680,14 @@ void sock_map_close(struct sock *sk, long timeout)
- 		psock = sk_psock_get(sk);
- 		if (unlikely(!psock))
- 			goto no_psock;
--		rcu_read_unlock();
- 		sk_psock_stop(psock);
--		release_sock(sk);
-+		sock_map_sk_release(sk);
- 		cancel_delayed_work_sync(&psock->work);
- 		sk_psock_put(sk, psock);
- 	} else {
- 		saved_close = READ_ONCE(sk->sk_prot)->close;
- no_psock:
--		rcu_read_unlock();
--		release_sock(sk);
-+		sock_map_sk_release(sk);
- 	}
+ char _license[] SEC("license") = "GPL";
  
- 	/* Make sure we do not recurse. This is a bug.
++SEC(".maps") struct {
++	__uint(type, BPF_MAP_TYPE_SOCKMAP);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u64);
++} sockmap;
++
+ static long sock_i_ino(const struct sock *sk)
+ {
+ 	const struct socket *sk_socket = sk->sk_socket;
+@@ -76,5 +83,8 @@ int dump_unix(struct bpf_iter__unix *ctx)
+ 
+ 	BPF_SEQ_PRINTF(seq, "\n");
+ 
++	/* Test for deadlock. */
++	bpf_map_update_elem(&sockmap, &(int){0}, sk, 0);
++
+ 	return 0;
+ }
 
 -- 
 2.52.0
