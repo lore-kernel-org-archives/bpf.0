@@ -1,164 +1,183 @@
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 942F11B4257
-	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 11:10:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0BAE37AA68
+	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 11:27:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772709006; cv=none; b=F8Jicf9qtl/uO/JBThT/MIZGfOS4r9BXESZ5kXxL3Rcbg28g5u93GTF9sRo2Hj9DWKv10t8taKygvu/Pxvktzh5nLrHH9CGOMWcRBNWki9U+AkK6AJ7IhXx5KmlW2OSUH7hZq4H6JWr7jor3fTJ1Q7QHeaH/vpWHjh1cZPl7yeQ=
+	t=1772710069; cv=none; b=WcrCwGmhG2paa67IJJGBr/BHutPnbF0I3DYxqSw3bpXm1iuHIoAQ2cUOC23SFjY3dA2z+FyqyN/7tFWOnXpldhoLQI4IDC3ww0YMNHoyCvYLsS3WlzTwAwuOkqeyK2VL85/8Fmjs1e751PNiv58Y/n8Lld5a4s6EhcHHPZw5E1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772709006; c=relaxed/simple;
-	bh=sZdDLt+hENxDMx+UCNQb12a/QsepiR6kbFY3U20trWY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=GM/kcFLSd0d9T8mU6+wCLM9Gr+k+5A7dfezdc80/Gun3iz0SYj0+RD7pXTHsD28XZEcCu79W2CBUtOiO1LSAUqyRxJYlnfO5sv0I1U6+q7CWbEAZsQ1+svJ9Totx9hW6pJmLWprN+JL+SK4LGIpVMRA49u6H4snUfaOSEF0FGgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ATZ/JunL; arc=none smtp.client-ip=209.85.222.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772710069; c=relaxed/simple;
+	bh=iKymPhGye+cdouPYHEN4Jj1ZVauyxKfTUpLBhyIibSs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oIWfK3LnNCto6R2+R+VNVjEUZ166S1zku/yNJkn/XAbT1ZjElQ8mqGpIOPLhfOB7c05xzzGgrWAk/gdF/BdMwdn9Mb2tOiP6+2EUxX6X9Jk54jFMbA+sLAk+4JQZEfmiwgXYp84gz1dF7zcqcYJo11tnxIfW8DWsvm5fv+qo08g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KSTdVSdW; arc=none smtp.client-ip=91.218.175.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ATZ/JunL"
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-8cb3e22435fso712559285a.1
-        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 03:10:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772709004; x=1773313804; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=sZdDLt+hENxDMx+UCNQb12a/QsepiR6kbFY3U20trWY=;
-        b=ATZ/JunLsR/1BU1zctvu2QDrXYnWdSupPGvyM0tusYVfhL3+QQRRK4903Go7zIBiJ6
-         Y884Tl+brRIZxTbutAmovO6chr2pNLQJp1hG5UH9BuvKkSOik+Gv8mAimW7ok6+PyGsk
-         KwH1CGveqAfffRYeWwqG5WJaJwfw9cU61Vuj81p4OPo/z1tEJPujG/GYIDTakXy7CcMd
-         MdODCkio0wB5FAtnVuqzNHLlJeXc3w9Cjk9EqwWojlt16bL9xS8GH4HWbSB2Arzo7dq6
-         4sxE0wsJPeO7+kXznOBLdgncHntlzZxtVl/T73jUAyOLQacREtxi5XA1B5wlODwOFu4y
-         a8PQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772709004; x=1773313804;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sZdDLt+hENxDMx+UCNQb12a/QsepiR6kbFY3U20trWY=;
-        b=Tn/ZGEf3AD2E3p38uodhkxzjBoAZykkLXWyYEsmVzcVQw+BoJ6iZKQYLr1fyAL+fF/
-         KlQ4kKZ3dTl49+Ef8OiD7n45V6Nsqo87Z84wb4s54a0D5cph0WHKcu74RqlsYFUjGziF
-         cZS2UCZD0ykFowKAs9m5kjgvXscyxgkzUBrLfWrtenR29d+100mo5p4yks+3FqDhvunm
-         PkNXDSm5miudq5Vjg8EF0+EXBPmJ10jOKF6VpZEpLOQWAHku17I/eIvxE+cCTGyRmHku
-         IziDIG7LOkB56L00sNJQYEKSU3QxuP3nH9GHUaFePAsJ41hR4/Fbkz5n4O35thIKVONA
-         aBIA==
-X-Forwarded-Encrypted: i=1; AJvYcCVMAICXZ/m/Bmfjv4UbZxI3kYj+a7mo0AWAHmDNY2Y3YeNYnd7iZS5XGzNb/T9NtXCe+Mk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzyPNBSyFy26s2D5vsxZYe8AmuehTo6WgktS33iAyZ9ixfdadPT
-	Y/AGVCkGZ1OUUPzP3NL4dEkbWLbhgRzIWXDA5wDk9UjKVaAACLRAgAWr
-X-Gm-Gg: ATEYQzza/+7DrzvTNHm5lUpbduJYE3xr0ZWkgiOgFwUCBCi4hnQ95nVGRqbVQOWXy3X
-	vSKItYDTxTtZ3uW6LtOq3DHtuD3sDFxaBUChECY1oHm0DQbtWfx5FKChwGWbS52WIOdeX1iEh06
-	XSENIQVa305DUawIG4ZJhV537jQgysfOIPq04lHhVkzz47V32nFChOn0glbi2HeAMgdxvDjQnKa
-	7vcrGUpmoj13aa6w95bzQAdXFBQxT4zZXuReFJVKM7ejlUPyCOlLVN8uXbmHlc6IXtI+Lmfu5Cy
-	dSn+Q776VkqwUX4Yq32nipk8VH3Ad9OMOS4oSnlgpL+HCIFnw+3qIpK2tRXEnkrqCkI9bL5TFFd
-	CF20p7IneEPMDxjrzdPUkA7SfRYNSUPSBYvd5VXGKq4Svvzs+aRqAW6zT81zICkLGx+EzN//SOt
-	Hx8IRmnhKVPpadqcDERrRy7PRihXPlH2NwfTfWMIGq8YpM/0NhTvc=
-X-Received: by 2002:a05:620a:171e:b0:8c7:3ff0:d472 with SMTP id af79cd13be357-8cd6343c010mr193688885a.15.1772709004361;
-        Thu, 05 Mar 2026 03:10:04 -0800 (PST)
-Received: from [192.168.0.56] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cbbf65921bsm1828070285a.1.2026.03.05.03.10.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Mar 2026 03:10:03 -0800 (PST)
-Message-ID: <ff92fa059a5f5427fec24be6758afa033ee43af2.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 1/1] bpf: Avoid one round of bounds deduction
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Shung-Hsi Yu <shung-hsi.yu@suse.com>, Ihor Solodrai
-	 <ihor.solodrai@linux.dev>
-Cc: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>,  Harishankar Vishwanathan
- <harishankar.vishwanathan@gmail.com>, Kernel Team <kernel-team@meta.com>
-Date: Thu, 05 Mar 2026 03:10:00 -0800
-In-Reply-To: <umlxk5jo72ii4efzcethwcwtr7e4scq5iicb57huuhb3qtvcuc@xhl3c6acyzga>
-References: <aac2GMpnpoAKD4jX@mail.gmail.com>
-	 <d9c98aac-6c4c-483e-9e9a-0659dc03f9e7@linux.dev>
-	 <umlxk5jo72ii4efzcethwcwtr7e4scq5iicb57huuhb3qtvcuc@xhl3c6acyzga>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KSTdVSdW"
+Date: Thu, 5 Mar 2026 19:27:37 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772710065;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zoHjZWEDNZiaOFtzpXckHo29DrJiIVSf/NVQLIvzdp8=;
+	b=KSTdVSdWRmB7yZA+a+76H3J3y3dQADu0L8rlCDriCP5RZsblmF5JEK2QCkX6+z/3W8AKNT
+	FmFlvI1sdTqm4EZlZXVqcd3uuWfycODchR7jXX5tu7UErTuGIbdm7sZNqjs5WYhL5ZiEQV
+	BkW7ebD7LinBngwLy07gXI7UDptmaXI=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: John Fastabend <john.fastabend@gmail.com>, 
+	Jakub Sitnicki <jakub@cloudflare.com>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	syzbot+113cea56c13a8a1e95ab@syzkaller.appspotmail.com
+Subject: Re: [PATCH v4 bpf/net 1/6] sockmap: Annotate sk->sk_data_ready() for
+ UDP.
+Message-ID: <3vjijl45ah2i666j5fkaekvu2uxgw3q2jtg6rs7y24gffbsesz@fkvdvr37ju7v>
+References: <20260221233234.3814768-1-kuniyu@google.com>
+ <20260221233234.3814768-2-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260221233234.3814768-2-kuniyu@google.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, 2026-03-05 at 14:54 +0800, Shung-Hsi Yu wrote:
-> On Wed, Mar 04, 2026 at 04:48:43PM -0800, Ihor Solodrai wrote:
-> > On 3/3/26 11:27 AM, Paul Chaignon wrote:
-> > > In commit 5dbb19b16ac49 ("bpf: Add third round of bounds deduction"),=
- I
-> > > added a new round of bounds deduction because two rounds were not eno=
-ugh
-> > > to converge to a fixed point. This commit slightly refactor the bound=
-s
-> > > deduction logic such that two rounds are enough.
-> > >=20
-> > > In [1], Eduard noticed that after we improved the refinement logic, a
-> > > third call to the bounds deduction (__reg_deduce_bounds) was needed t=
-o
-> > > converge to a fixed point. More specifically, we needed this third ca=
-ll
-> > > to improve the s64 range using the s32 range. We added the third call
-> > > and postponed a more detailed analysis of the refinement logic.
-> > >=20
-> > > I've been looking into this more recently. To help, I wrote a high le=
-vel
-> > > sequence of all the refinements carried out in reg_bounds_sync. u64 -=
->
-> > > s32 means we used the u64 ranges to improve the s32 ranges.
-> > >=20
-> > > =C2=A0=C2=A0=C2=A0 /* __update_reg_bounds: */
-> > > =C2=A0=C2=A0=C2=A0 tnum -> {s32, u32, s64, u64}
-> > > =C2=A0=C2=A0=C2=A0 /* __reg_deduce_bounds: */
-> > > =C2=A0=C2=A0=C2=A0 for (3 times) {
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* __reg32_deduce_bounds: =
-*/
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u64 -> {u32, s32}
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 s64 -> {u32, s32}
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u64 -> s32
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 s64 -> s32
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 -> s32
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 s32 -> u32
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* __reg64_deduce_bounds: =
-*/
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u64 -> s64
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 s64 -> u64
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 {u64, s64} -> {u64, s64}
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* __reg_deduce_mixed_boun=
-ds: */
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 -> u64
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 -> s64
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 {s32, s64} -> {s64, u64, t=
-num}
-> > > =C2=A0=C2=A0=C2=A0 }
-> > > =C2=A0=C2=A0=C2=A0 /* __reg_bound_offset: */
-> > > =C2=A0=C2=A0=C2=A0 {u64, u32} -> tnum
-> > > =C2=A0=C2=A0=C2=A0 /* __update_reg_bounds: */
-> > > =C2=A0=C2=A0=C2=A0 tnum -> {s32, u32, s64, u64}
-> [...]
-> > Hi Paul,
-> >=20
-> > (trying to do my part with the code reviews and learn in the process)
->=20
-> +1, still
->=20
-> > Side note: you might be interested to know that Eduard is working on
-> > consolidating signed and unsigned domains [1].
->=20
-> \o/
->=20
-> When I last look into this[1] there's was the "Interval Analysis and
-> Machine Arithmetic: Why Signedness Ignorance Is Bliss" paper[2] that
-> looks rather promising. And lately there was also "Program Analysis
-> Combining Generalized Bit-Level and Word-Level Abstractions"[3] (haven't
-> read) that seems more specific to BPF verifier.
+On Sat, Feb 21, 2026 at 11:30:48PM +0800, Kuniyuki Iwashima wrote:
+> syzbot reported data race of sk->sk_data_ready(). [0]
+> 
+> UDP fast path does not hold bh_lock_sock(), instead
+> spin_lock_bh(&sk->sk_receive_queue.lock) is used.
+> 
+> Let's use WRITE_ONCE() and READ_ONCE() for sk->sk_data_ready().
+> 
+> Another option is to hold sk->sk_receive_queue.lock in
+> sock_map_sk_acquire() if sk_is_udp() is true, but this is
+> overkill and also does not work for sk->sk_write_space().
+> 
+> [0]:
+> BUG: KCSAN: data-race in __udp_enqueue_schedule_skb / sk_psock_drop
+> 
+> write to 0xffff88811d063048 of 8 bytes by task 23114 on cpu 0:
+>  sk_psock_stop_verdict net/core/skmsg.c:1287 [inline]
+>  sk_psock_drop+0x12f/0x270 net/core/skmsg.c:873
+>  sk_psock_put include/linux/skmsg.h:473 [inline]
+>  sock_map_unref+0x2a5/0x300 net/core/sock_map.c:185
+>  __sock_map_delete net/core/sock_map.c:426 [inline]
+>  sock_map_delete_from_link net/core/sock_map.c:439 [inline]
+>  sock_map_unlink net/core/sock_map.c:1608 [inline]
+>  sock_map_remove_links+0x228/0x340 net/core/sock_map.c:1623
+>  sock_map_close+0xa1/0x340 net/core/sock_map.c:1684
+>  inet_release+0xcd/0xf0 net/ipv4/af_inet.c:437
+>  __sock_release net/socket.c:662 [inline]
+>  sock_close+0x6b/0x150 net/socket.c:1455
+>  __fput+0x29b/0x650 fs/file_table.c:468
+>  ____fput+0x1c/0x30 fs/file_table.c:496
+>  task_work_run+0x130/0x1a0 kernel/task_work.c:233
+>  resume_user_mode_work include/linux/resume_user_mode.h:50 [inline]
+>  __exit_to_user_mode_loop kernel/entry/common.c:44 [inline]
+>  exit_to_user_mode_loop+0x1f7/0x6f0 kernel/entry/common.c:75
+>  __exit_to_user_mode_prepare include/linux/irq-entry-common.h:226 [inline]
+>  syscall_exit_to_user_mode_prepare include/linux/irq-entry-common.h:256 [inline]
+>  syscall_exit_to_user_mode_work include/linux/entry-common.h:159 [inline]
+>  syscall_exit_to_user_mode include/linux/entry-common.h:194 [inline]
+>  do_syscall_64+0x1d3/0x2a0 arch/x86/entry/syscall_64.c:100
+>  entry_SYSCALL_64_after_hwframe+0x77/0x7f
+> 
+> read to 0xffff88811d063048 of 8 bytes by task 23117 on cpu 1:
+>  __udp_enqueue_schedule_skb+0x6c1/0x840 net/ipv4/udp.c:1789
+>  __udp_queue_rcv_skb net/ipv4/udp.c:2346 [inline]
+>  udp_queue_rcv_one_skb+0x709/0xc20 net/ipv4/udp.c:2475
+>  udp_queue_rcv_skb+0x20e/0x2b0 net/ipv4/udp.c:2493
+>  __udp4_lib_mcast_deliver+0x6e8/0x790 net/ipv4/udp.c:2585
+>  __udp4_lib_rcv+0x96f/0x1260 net/ipv4/udp.c:2724
+>  udp_rcv+0x4f/0x60 net/ipv4/udp.c:2911
+>  ip_protocol_deliver_rcu+0x3f9/0x780 net/ipv4/ip_input.c:207
+>  ip_local_deliver_finish+0x1fc/0x2f0 net/ipv4/ip_input.c:241
+>  NF_HOOK include/linux/netfilter.h:318 [inline]
+>  ip_local_deliver+0xe8/0x1e0 net/ipv4/ip_input.c:262
+>  dst_input include/net/dst.h:474 [inline]
+>  ip_sublist_rcv_finish net/ipv4/ip_input.c:584 [inline]
+>  ip_list_rcv_finish net/ipv4/ip_input.c:628 [inline]
+>  ip_sublist_rcv+0x42b/0x6d0 net/ipv4/ip_input.c:644
+>  ip_list_rcv+0x261/0x290 net/ipv4/ip_input.c:678
+>  __netif_receive_skb_list_ptype net/core/dev.c:6195 [inline]
+>  __netif_receive_skb_list_core+0x4dc/0x500 net/core/dev.c:6242
+>  __netif_receive_skb_list net/core/dev.c:6294 [inline]
+>  netif_receive_skb_list_internal+0x47d/0x5f0 net/core/dev.c:6385
+>  netif_receive_skb_list+0x31/0x1f0 net/core/dev.c:6437
+>  xdp_recv_frames net/bpf/test_run.c:269 [inline]
+>  xdp_test_run_batch net/bpf/test_run.c:350 [inline]
+>  bpf_test_run_xdp_live+0x104c/0x1360 net/bpf/test_run.c:379
+>  bpf_prog_test_run_xdp+0x57b/0xa10 net/bpf/test_run.c:1396
+>  bpf_prog_test_run+0x204/0x340 kernel/bpf/syscall.c:4703
+>  __sys_bpf+0x4c0/0x7b0 kernel/bpf/syscall.c:6182
+>  __do_sys_bpf kernel/bpf/syscall.c:6274 [inline]
+>  __se_sys_bpf kernel/bpf/syscall.c:6272 [inline]
+>  __x64_sys_bpf+0x41/0x50 kernel/bpf/syscall.c:6272
+>  x64_sys_call+0x28e1/0x3000 arch/x86/include/generated/asm/syscalls_64.h:322
+>  do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+>  do_syscall_64+0xc0/0x2a0 arch/x86/entry/syscall_64.c:94
+>  entry_SYSCALL_64_after_hwframe+0x77/0x7f
+> 
+> value changed: 0xffffffff847b24d0 -> 0xffffffff84673410
+> 
+> Reported by Kernel Concurrency Sanitizer on:
+> CPU: 1 UID: 0 PID: 23117 Comm: syz.8.5085 Tainted: G        W           syzkaller #0 PREEMPT(voluntary)
+> Tainted: [W]=WARN
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/25/2025
+> 
+> Fixes: 7b98cd42b049 ("bpf: sockmap: Add UDP support")
+> Reported-by: syzbot+113cea56c13a8a1e95ab@syzkaller.appspotmail.com
+> Closes: https://lore.kernel.org/netdev/69922ac9.a70a0220.2c38d7.00e1.GAE@google.com/
+> Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
+> ---
+>  net/core/skmsg.c | 4 ++--
+>  net/ipv4/udp.c   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+> index ddde93dd8bc6..75fa94217e1e 100644
+> --- a/net/core/skmsg.c
+> +++ b/net/core/skmsg.c
+> @@ -1296,7 +1296,7 @@ void sk_psock_start_verdict(struct sock *sk, struct sk_psock *psock)
+>  		return;
+>  
+>  	psock->saved_data_ready = sk->sk_data_ready;
+> -	sk->sk_data_ready = sk_psock_verdict_data_ready;
+> +	WRITE_ONCE(sk->sk_data_ready, sk_psock_verdict_data_ready);
+>  	sk->sk_write_space = sk_psock_write_space;
+>  }
+>  
+> @@ -1308,6 +1308,6 @@ void sk_psock_stop_verdict(struct sock *sk, struct sk_psock *psock)
+>  	if (!psock->saved_data_ready)
+>  		return;
+>  
+> -	sk->sk_data_ready = psock->saved_data_ready;
+> +	WRITE_ONCE(sk->sk_data_ready, psock->saved_data_ready);
+>  	psock->saved_data_ready = NULL;
+>  }
+> diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+> index b96e47f1c8a2..422c96fea249 100644
+> --- a/net/ipv4/udp.c
+> +++ b/net/ipv4/udp.c
+> @@ -1787,7 +1787,7 @@ int __udp_enqueue_schedule_skb(struct sock *sk, struct sk_buff *skb)
+>  		 * using prepare_to_wait_exclusive().
+>  		 */
+>  		while (nb) {
+> -			INDIRECT_CALL_1(sk->sk_data_ready,
+> +			INDIRECT_CALL_1(READ_ONCE(sk->sk_data_ready),
+>  					sock_def_readable, sk);
+>  			nb--;
+>  		}
+> -- 
+> 2.53.0.371.g1d285c8824-goog
+> 
 
-Thank you for the links, I've only seen [1].
-I was about to send [a], feeling really smug about cbmc tests.
-But then a much simpler solution [b] occurred when figuring out why
-64-bit test can't be written.
-
-I'll probably continue playing with cnums at leisure pace.
-
-[a] https://github.com/eddyz87/bpf/tree/cnum-sync-bounds
-[b] https://github.com/eddyz87/bpf/tree/32-bit-range-overflow
+Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
