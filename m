@@ -1,45 +1,45 @@
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E3E3366DA1;
-	Thu,  5 Mar 2026 23:32:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5EA536B067;
+	Thu,  5 Mar 2026 23:32:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772753548; cv=none; b=qycNqE9yx6o1yVvX93ef2CndYFTSqTiY2doRJVfvPYc56Zsad5D6g7M6D6dGNunkA+Mb63Q3zqcOaqNAVTgeY3l0owJWyVP4c+RG9Ik3WxJTZPk6i3DILuLzplU2p6SuXkfM1hfAp1I3NqQ3Mg0U3fdta0GgcvAdK7RrRi6Cpvw=
+	t=1772753551; cv=none; b=OdHfk+rimrZoqvgPM9MukJEjki1zP6WPcH5KXViYoqq80ZP1AhCnggKlHcsPgQ5gpht07qXgziyyiTJa4m5zRFYk8qR1mS8eOv6E4AJVsNHl+lXT2HOC73wf1h5rT9GVLoH2RVej5wwCf2+mCZYwvkjX4VCfXTFrGDPZL+VIISI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772753548; c=relaxed/simple;
-	bh=oNnL6PgF9i8BYLmz2dLn/HEJ+dwNCEs6Wzi0I8A2pHc=;
+	s=arc-20240116; t=1772753551; c=relaxed/simple;
+	bh=bDzbc3ZHCvPBc/hlIDrPvFqAxratovDgZTWCGUKaMcs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=J26TRuM/UljIu9UbQe2DwztkTLiMLyx9bYl0PkTd80L3liZHLw5Qx8Z1MhMRgQxOnaN7KqO5wakbeQ1SX8Ak38oBGrKxJZesW2X5fSq4KEDQrw5mGCYIncqmaMDzEFz8a2HY/GYRJAzvQYRlFCeZIDTqzPUVUPYGG0qscWKwOAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=S++1oYfX; arc=none smtp.client-ip=185.226.149.37
+	 In-Reply-To:To:Cc; b=omfOlkoFiINIBz6iX7D3c+bBd7e0BT4iE07ZWwGld9UQvDg2EYVMOSeaL8OQjLuBlrHV4SDH7o5XXzTNiBw7/qvHZ2Bqz32w3C2JO+5O1Pl1ncA5BzqLhgbYPV7g81LPZjNu7Qvu1yBHPOU/SnErYvmSDWS/bL+FzIO65b3v3Pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=tH/LCiLS; arc=none smtp.client-ip=185.226.149.38
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="S++1oYfX"
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="tH/LCiLS"
 Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1vyIB4-00130B-Uy; Fri, 06 Mar 2026 00:32:22 +0100
+	id 1vyIB6-00EUkk-AT; Fri, 06 Mar 2026 00:32:24 +0100
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
 	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
 	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=KABCYR0VsFTXAqyXXhibjrexgB3N0ErIAHc1B1FNe3A=; b=S++1oYfXbyWS8Se+zDTggLJ7B1
-	0PtFtJ5xZIKHqqjwxPBxKrxTf/uW6/DI9JOb2IpkrEosZVGngQLoHkV3opIuPyYVi0/l13hHx/smh
-	tZod1zSOj9kR9R+TZlo77KvkoW+StF9dMiWbsYG2Ph/2PixYtDTONl8zSjIS/Gn7VY+1pxQ3fUfkQ
-	hjr3xPBbjq4V2Am7mNhKMQnizmnVRVpL3hkZSsKswxPvsnH9fY2rB7btl6PZitlCbxwLuIo7gB5cL
-	yoCVDP6N9IPI3EX8T6uE/rNucfs/jN1aYYR+ULgxbbHvT2an9lglEfyHv06MvWwCDZ5SmCo/QFCq8
-	UFM835ew==;
+	bh=h3U/vn8cMJy7gTz7S1npXP10+eZWzW20H3DtLHiAKc0=; b=tH/LCiLSZnMna8l28wQy45gYGx
+	heYq9n4eqSxv+Hp0y2W2r/r43siFTAT8ZxVnEl9LmxYWl99pDZPqnJXNhBik6PVvszMzJsSbHVYA6
+	0Tx4Yv5g1CgrRq7bdOlzIoi30H+jw41KfRkgwq5i7t0umrZmKtKa1Lma5YO00A5XBnWoR+olv5lY4
+	4qIDC5KcApNPNdqzGL4Bxime8Ds6d7a/Ya58akhH+moH7gxI5+SW8K8CwltCz0Bjt6N35nA6p6BWN
+	ts4+jTmeHzgRV7axQ1S9pH6clP9PnEdOdYwdRnurOjMAHfisiGtMrpp6SBHbXeN8s5tboMfnm3TcR
+	ac/Nf6hw==;
 Received: from [10.9.9.73] (helo=submission02.runbox)
 	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1vyIAu-0004DA-EG; Fri, 06 Mar 2026 00:32:12 +0100
+	id 1vyIB5-0004DY-VA; Fri, 06 Mar 2026 00:32:24 +0100
 Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.93)
-	id 1vyIAK-00141B-Fy; Fri, 06 Mar 2026 00:31:36 +0100
+	id 1vyIAN-00141B-96; Fri, 06 Mar 2026 00:31:39 +0100
 From: Michal Luczaj <mhal@rbox.co>
-Date: Fri, 06 Mar 2026 00:30:57 +0100
-Subject: [PATCH bpf v3 3/5] bpf, sockmap: Fix af_unix iter deadlock
+Date: Fri, 06 Mar 2026 00:30:59 +0100
+Subject: [PATCH bpf v3 5/5] bpf, sockmap: Adapt for af_unix-specific lock
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,7 +48,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260306-unix-proto-update-null-ptr-deref-v3-3-2f0c7410c523@rbox.co>
+Message-Id: <20260306-unix-proto-update-null-ptr-deref-v3-5-2f0c7410c523@rbox.co>
 References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
 In-Reply-To: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
 To: John Fastabend <john.fastabend@gmail.com>, 
@@ -70,87 +70,132 @@ Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
  Michal Luczaj <mhal@rbox.co>
 X-Mailer: b4 0.14.3
 
-bpf_iter_unix_seq_show() may deadlock when lock_sock_fast() takes the fast
-path and the iter prog attempts to update a sockmap. Which ends up spinning
-at sock_map_update_elem()'s bh_lock_sock():
+unix_stream_connect() sets sk_state (`WRITE_ONCE(sk->sk_state,
+TCP_ESTABLISHED)`) _before_ it assigns a peer (`unix_peer(sk) = newsk`).
+sk_state == TCP_ESTABLISHED makes sock_map_sk_state_allowed() believe that
+socket is properly set up, which would include having a defined peer. IOW,
+there's a window when unix_stream_bpf_update_proto() can be called on
+socket which still has unix_peer(sk) == NULL.
 
-WARNING: possible recursive locking detected
-test_progs/1393 is trying to acquire lock:
-ffff88811ec25f58 (slock-AF_UNIX){+...}-{3:3}, at: sock_map_update_elem+0xdb/0x1f0
+          T0 bpf                            T1 connect
+          ------                            ----------
 
-but task is already holding lock:
-ffff88811ec25f58 (slock-AF_UNIX){+...}-{3:3}, at: __lock_sock_fast+0x37/0xe0
+                                WRITE_ONCE(sk->sk_state, TCP_ESTABLISHED)
+sock_map_sk_state_allowed(sk)
+...
+sk_pair = unix_peer(sk)
+sock_hold(sk_pair)
+                                sock_hold(newsk)
+                                smp_mb__after_atomic()
+                                unix_peer(sk) = newsk
 
-other info that might help us debug this:
- Possible unsafe locking scenario:
-
-       CPU0
-       ----
-  lock(slock-AF_UNIX);
-  lock(slock-AF_UNIX);
-
- *** DEADLOCK ***
-
- May be due to missing lock nesting notation
-
-4 locks held by test_progs/1393:
- #0: ffff88814b59c790 (&p->lock){+.+.}-{4:4}, at: bpf_seq_read+0x59/0x10d0
- #1: ffff88811ec25fd8 (sk_lock-AF_UNIX){+.+.}-{0:0}, at: bpf_seq_read+0x42c/0x10d0
- #2: ffff88811ec25f58 (slock-AF_UNIX){+...}-{3:3}, at: __lock_sock_fast+0x37/0xe0
- #3: ffffffff85a6a7c0 (rcu_read_lock){....}-{1:3}, at: bpf_iter_run_prog+0x51d/0xb00
-
+BUG: kernel NULL pointer dereference, address: 0000000000000080
+RIP: 0010:unix_stream_bpf_update_proto+0xa0/0x1b0
 Call Trace:
- dump_stack_lvl+0x5d/0x80
- print_deadlock_bug.cold+0xc0/0xce
- __lock_acquire+0x130f/0x2590
- lock_acquire+0x14e/0x2b0
- _raw_spin_lock+0x30/0x40
- sock_map_update_elem+0xdb/0x1f0
- bpf_prog_2d0075e5d9b721cd_dump_unix+0x55/0x4f4
- bpf_iter_run_prog+0x5b9/0xb00
- bpf_iter_unix_seq_show+0x1f7/0x2e0
- bpf_seq_read+0x42c/0x10d0
- vfs_read+0x171/0xb20
- ksys_read+0xff/0x200
- do_syscall_64+0x6b/0x3a0
- entry_SYSCALL_64_after_hwframe+0x76/0x7e
+  sock_map_link+0x564/0x8b0
+  sock_map_update_common+0x6e/0x340
+  sock_map_update_elem_sys+0x17d/0x240
+  __sys_bpf+0x26db/0x3250
+  __x64_sys_bpf+0x21/0x30
+  do_syscall_64+0x6b/0x3a0
+  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+
+Initial idea was to move peer assignment _before_ the sk_state update[1],
+but that involved an additional memory barrier, and changing the hot path
+was rejected. Then a check during proto update was considered[2], but a
+follow-up discussion[3] concluded the root cause is sockmap taking a wrong
+lock. Or, more specifically, an insufficient lock[4].
+
+Thus, teach sockmap about the af_unix-specific locking: af_unix protects
+critical sections under unix_state_lock() operating on unix_sock::lock.
+
+[1]: https://lore.kernel.org/netdev/ba5c50aa-1df4-40c2-ab33-a72022c5a32e@rbox.co/
+[2]: https://lore.kernel.org/netdev/20240610174906.32921-1-kuniyu@amazon.com/
+[3]: https://lore.kernel.org/netdev/7603c0e6-cd5b-452b-b710-73b64bd9de26@linux.dev/
+[4]: https://lore.kernel.org/netdev/CAAVpQUA+8GL_j63CaKb8hbxoL21izD58yr1NvhOhU=j+35+3og@mail.gmail.com/
 
 Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
 Suggested-by: Martin KaFai Lau <martin.lau@linux.dev>
-Fixes: 2c860a43dd77 ("bpf: af_unix: Implement BPF iterator for UNIX domain socket.")
+Fixes: c63829182c37 ("af_unix: Implement ->psock_update_sk_prot()")
 Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
- net/unix/af_unix.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ net/core/sock_map.c | 35 +++++++++++++++++++++++++++++------
+ 1 file changed, 29 insertions(+), 6 deletions(-)
 
-diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-index 3756a93dc63a..3d2cfb4ecbcd 100644
---- a/net/unix/af_unix.c
-+++ b/net/unix/af_unix.c
-@@ -3729,15 +3729,14 @@ static int bpf_iter_unix_seq_show(struct seq_file *seq, void *v)
- 	struct bpf_prog *prog;
- 	struct sock *sk = v;
- 	uid_t uid;
--	bool slow;
- 	int ret;
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index 7ba6a7f24ccd..6109fbe6f99c 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -12,6 +12,7 @@
+ #include <linux/list.h>
+ #include <linux/jhash.h>
+ #include <linux/sock_diag.h>
++#include <net/af_unix.h>
+ #include <net/udp.h>
  
- 	if (v == SEQ_START_TOKEN)
- 		return 0;
+ struct bpf_stab {
+@@ -115,19 +116,43 @@ int sock_map_prog_detach(const union bpf_attr *attr, enum bpf_prog_type ptype)
+ }
  
--	slow = lock_sock_fast(sk);
-+	lock_sock(sk);
+ static void sock_map_sk_acquire(struct sock *sk)
+-	__acquires(&sk->sk_lock.slock)
+ {
+ 	lock_sock(sk);
++
++	if (sk_is_unix(sk))
++		unix_state_lock(sk);
++
+ 	rcu_read_lock();
+ }
  
--	if (unlikely(sk_unhashed(sk))) {
-+	if (unlikely(sock_flag(sk, SOCK_DEAD))) {
- 		ret = SEQ_SKIP;
- 		goto unlock;
- 	}
-@@ -3747,7 +3746,7 @@ static int bpf_iter_unix_seq_show(struct seq_file *seq, void *v)
- 	prog = bpf_iter_get_info(&meta, false);
- 	ret = unix_prog_seq_show(prog, &meta, v, uid);
- unlock:
--	unlock_sock_fast(sk, slow);
-+	release_sock(sk);
+ static void sock_map_sk_release(struct sock *sk)
+-	__releases(&sk->sk_lock.slock)
+ {
+ 	rcu_read_unlock();
++
++	if (sk_is_unix(sk))
++		unix_state_unlock(sk);
++
+ 	release_sock(sk);
+ }
+ 
++static inline void sock_map_sk_acquire_fast(struct sock *sk)
++{
++	local_bh_disable();
++	bh_lock_sock(sk);
++
++	if (sk_is_unix(sk))
++		unix_state_lock(sk);
++}
++
++static inline void sock_map_sk_release_fast(struct sock *sk)
++{
++	if (sk_is_unix(sk))
++		unix_state_unlock(sk);
++
++	bh_unlock_sock(sk);
++	local_bh_enable();
++}
++
+ static void sock_map_add_link(struct sk_psock *psock,
+ 			      struct sk_psock_link *link,
+ 			      struct bpf_map *map, void *link_raw)
+@@ -604,16 +629,14 @@ static long sock_map_update_elem(struct bpf_map *map, void *key,
+ 	if (!sock_map_sk_is_suitable(sk))
+ 		return -EOPNOTSUPP;
+ 
+-	local_bh_disable();
+-	bh_lock_sock(sk);
++	sock_map_sk_acquire_fast(sk);
+ 	if (!sock_map_sk_state_allowed(sk))
+ 		ret = -EOPNOTSUPP;
+ 	else if (map->map_type == BPF_MAP_TYPE_SOCKMAP)
+ 		ret = sock_map_update_common(map, *(u32 *)key, sk, flags);
+ 	else
+ 		ret = sock_hash_update_common(map, key, sk, flags);
+-	bh_unlock_sock(sk);
+-	local_bh_enable();
++	sock_map_sk_release_fast(sk);
  	return ret;
  }
  
