@@ -1,150 +1,131 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8002D46B5
-	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 02:30:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772677840; cv=none; b=b5hAq/FMFzPdXR3dnaFXOs3YaByLexpqf6R2lBW9IY8y6RNfK6MSJQ3SUChqDZ1zNASIamAolTxDaqEZyaP4MC5BPWXlOrJ8zKTHiymcnDu0c3de1/lhM7vce02/qlF8WhtutCgDaj7Iq0PsyC0StbyT8TRNTOl0c5OKD/eJ+Ic=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772677840; c=relaxed/simple;
-	bh=KJrGWC9qcRPY59iBcTX6nUVjltKd5Md5FdfXV0UJjF0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W7P2LlviKFvAW3Jzv3AnNJSze23+TrfCV2NbmQ84q+ZohYoWpwiyJV1l6D/4QHb/thKE8REcewSaj85fzqiCr8nt/JHrG8PZevgXz/20iNkEe2qt3Q6NB+U4pUzXaqOJlILYATF/30/47K7z4DaAh8SDouNSgGCQQmqhGc1bQAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vIak2M76; arc=none smtp.client-ip=91.218.175.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0121B1A9F90
+	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 02:33:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772678018; cv=pass; b=rJ01JuaKu78trNey759uoAxOVSPjGJjSnJoUct33jSGb2ponMdyzExwmMItMezfO5OBOjJbViFC/VGRNi4697zfkL/ULfLKSxBlOBD0RspXa9Nfps+hXpQl2d+YT5a26wyTHbsTGb/v5FtytOb8c2hZ/Ll7VDi55OCl6F/Wp1RE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772678018; c=relaxed/simple;
+	bh=K9ENe+ZS+qJSovUOmnU+BwHRKPZ9IJnRalUA3D1rjVw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=H4qE3ZbFU4oSvf2Up2506UYsdU8q0n2Im7lVcZx20HH/WE+JdOk7kZKHzUeYlRJenNSqvDqR5r3vcFBGEPL8XVHOpCIMMYOckBzH7kPRQHmEuNeKVtdCNoDdnV8gNmvSqYmh+gxlM2qnfkRTPC+9paAievtC+GiD3AU4uWmS5ig=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LlXe3a3Y; arc=pass smtp.client-ip=209.85.128.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vIak2M76"
-Date: Thu, 5 Mar 2026 10:30:26 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772677836;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8IAhsCTPaaj49fw0EkRaGxHy6m09MppnBlqhQd5DSh4=;
-	b=vIak2M76ZjO6Y/YCDIrXDHHXLMRoIWi/ffz1M/m/6MkMOTCad+3cwY0umDCtM39A+SSoup
-	I3zERGx0GrX9XoodkyX6mf/iDwEYs7qX56EXh4uEs5cPOFWTS5zTO0vjMqsgpIqmIAxl1j
-	sfgRgE7IN6r6tFi8NCyqWHvGSAssssA=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: John Fastabend <john.fastabend@gmail.com>, 
-	Jakub Sitnicki <jakub@cloudflare.com>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
-	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	syzbot+9307c991a6d07ce6e6d8@syzkaller.appspotmail.com
-Subject: Re: [PATCH v4 bpf/net 3/6] sockmap: Fix use-after-free in
- udp_bpf_recvmsg().
-Message-ID: <g7ap5glmwfoyskarflvmuiurlm7atfbospmqp4hifumv2f4thc@bgb6vsmszzpf>
-References: <20260221233234.3814768-1-kuniyu@google.com>
- <20260221233234.3814768-4-kuniyu@google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LlXe3a3Y"
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-7982c3b7dfcso75664017b3.0
+        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 18:33:36 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772678016; cv=none;
+        d=google.com; s=arc-20240605;
+        b=KR4fVWDFY1lpiJajm5QbXHIst0/tfZ1p+0D1bvZy+IVfx0cUY98HIjgQQp4qzo5bHj
+         wY26bFHzOB+xamHojTlcNA+Euvdk9JauTnB7yKuzo0eThdn2mWk48eVMo29qciVXWIPf
+         6YbuC3uC7halWsu5EOJx8XQjlJbGTH1IrP1rW5ONJ/VEIzed/UpxfvUc9wRZacZ8G26E
+         jhEzBwkaLjllfcfcKLqG8dsKZWL8prOgefe7bUmtFdbaHa0vfwOnfCDDh22r5NRcbC1S
+         a81l3GJN4Op0/t52jJWrOY8HH1WyVaa0q3Zx03eos6WT2TPVufzUGt69BL0AFcBBNucB
+         wFZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=XLIDchVytB4hdh+ZFB2ySmS25tHVhntL5EeIcD91OOA=;
+        fh=tZrfMP0dAiywRcrVVhpojDxP6chP2xlo4w5pF485UqM=;
+        b=ID6HZrkN65r/sokan7qi39pckqeNd8qq5Mc8JbXXcecEQVmS6+FC6ouApd4iYKxqS0
+         jR61Ahw3Ij5NAVdlj7jM5/JMpr0XZmwqbjBXDRiajuL6Os18wVyKEfDBvd37fx5SQaIx
+         zLyKx3VCwoD50aNV4y1bw8bb1Fjn9qV5uf9GLrrC4Ql1jU2mmONkvFukLtP/WP4/1ca+
+         Xmh9SkQrJVWvPOHtpaQjohL71YWsVSvu6MUglwndK1Q5xMiFB1D7Qhmm4lAp0wLeLcWQ
+         pjrIaWbxaiy4+QqQrXEtrFZAUcBVEEyEIEw3mPfZvCjGd8oaPunGpmiKphWgJwBBWgvR
+         ZdqQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772678016; x=1773282816; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XLIDchVytB4hdh+ZFB2ySmS25tHVhntL5EeIcD91OOA=;
+        b=LlXe3a3Y3cYn97S9gY9jMqB9RTWfP1s+QE5JFrc8hcqM0ZhpoGCDR8PxDD/GOz3uel
+         sNMX2f540VckuO7nw+9QBeZevobeKqvTClcBm+UYtXXI/VmB38Ar8W5a0PXwUetHkt8C
+         Ahn0oZZbbC5jrDYAQxKBleznRHDLeYaOVQQU/VHGErhZ1COdr0BVCzBJ1ZfCZmWHJJRq
+         Z/IhV0mpinH31LQonF0C7uLmM+rkUWJru+r9Khjy7X6f2azA8fWSnIIDTq3qgZbum/yC
+         ufWwEvd+JAK/Ci6OAjrAFO1RqBMVW2CCylmP7CsZ5Z88FroJrlXdoawI8LerCGDEa23N
+         TpLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772678016; x=1773282816;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=XLIDchVytB4hdh+ZFB2ySmS25tHVhntL5EeIcD91OOA=;
+        b=TrjSKrQaaiKooT99SVw81a01M0M0yrMWad/OR9ZzDLKK6FYZtI7SclwfU0JaV+wFuA
+         BAZ/iNAdPnaq2Y6gCDAfGthJgEpWtquExhbiKdHgfzguSNAQvy0qyXClfQmZv6C9+QQZ
+         sgLo6DMD3NP/wmm8mqnzpwp1HUvh+U6O5HB5Zqeb3BU4Vn0eLmGeDis6ur7ZkjLK/mmV
+         QaBlKOVlj274Z1EJFvR+Ar3UTtdGNzGvCClMF8uyPNWf+g8poFkmo+xQjjWYRHw9z16T
+         J1FCKdspnsqirryr79uz8TceO3SKxJMQxiFr1GPumUxvfdSAXPm2JY/HQTh9yhW3myUW
+         TESA==
+X-Forwarded-Encrypted: i=1; AJvYcCVpQ4Jvg58k6wS+86CZM8vcupFP+/VbbkYXpYe60/UHy7t+uNB4etg+8knMW1/Aw2BhwKg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyrEppLmRfGl54KhuLPR725K/edh4pkKwxGMro6Zed0VSkpPjWR
+	3bK46CFcR7Lg/E0+08UL8ThHjD82QXsp2vfzxZ//2yt1BWCz9uWDfR2/jJUymXBODft3m07NVnQ
+	/Zl/8cOUEbDw/ECKHCs7qObGLBCt4qjdeD5/kB3g=
+X-Gm-Gg: ATEYQzyA5eZtbdJAp4P3liP5/n0Q9kKBDuRiUfJZu3XSqFw9+NODUWXR57SRVrAoDbo
+	O53u84juU3KjNzxg6f4CARJKs2IKyBrqCpbfIHLUOJocOac4Iai1zl3XmYeID+DicDAG5VCkBRG
+	paYe3q+Rb/0CELa+Y3s9zv5YgYlhSKH0OKENOIL+0EJys2K6GjV8uBNSQKSJl7c7Q6vFEojdmL1
+	OBFt2vRBNvhCxYmHwfYiNfT7LqihaXL/dzimbtpiTScTKYaSubT6dSouxHbUNXjs6O0LS0b6ATc
+	SzVrpK2Z
+X-Received: by 2002:a05:690c:d96:b0:796:3d5f:a2c8 with SMTP id
+ 00721157ae682-798c6c274a9mr31734047b3.21.1772678016033; Wed, 04 Mar 2026
+ 18:33:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260221233234.3814768-4-kuniyu@google.com>
-X-Migadu-Flow: FLOW_OUT
+References: <20260304074650.58165-1-laoar.shao@gmail.com> <20260304074650.58165-2-laoar.shao@gmail.com>
+ <20260304090249.GN606826@noisy.programming.kicks-ass.net> <20260304095415.4d5f2528@pumpkin>
+ <20260304155742.7b4de2d1@gandalf.local.home> <20260304214447.3e5817ea@pumpkin>
+ <CALOAHbCOynnRdc8JkNJHb-nyoerrz0K5GUhnD8OR2hv4x==5LA@mail.gmail.com> <20260304212802.458b878e@fedora>
+In-Reply-To: <20260304212802.458b878e@fedora>
+From: Yafang Shao <laoar.shao@gmail.com>
+Date: Thu, 5 Mar 2026 10:33:00 +0800
+X-Gm-Features: AaiRm53aCsDXjaWwJhIMrzV2l8_S6HGgo3u5_su8w8JGRp5Idp54WIy0bpLVxTQ
+Message-ID: <CALOAHbBA643_QOsnTmrfjKE71hSa+v1cToiELvGk+vjtcgJsxg@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/2] locking: add mutex_lock_nospin()
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: David Laight <david.laight.linux@gmail.com>, Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com, 
+	will@kernel.org, boqun@kernel.org, longman@redhat.com, mhiramat@kernel.org, 
+	mark.rutland@arm.com, mathieu.desnoyers@efficios.com, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Feb 21, 2026 at 11:30:50PM +0800, Kuniyuki Iwashima wrote:
-> syzbot reported use-after-free of struct sk_msg in sk_msg_recvmsg(). [0]
-> 
-> sk_msg_recvmsg() peeks sk_msg from psock->ingress_msg under a lock,
-> but its processing is lockless.
-> 
-> Thus, sk_msg_recvmsg() must be serialised by callers, otherwise
-> multiple threads could touch the same sk_msg.
-> 
-> For example, TCP uses lock_sock(), and AF_UNIX uses unix_sk(sk)->iolock.
-> 
-> Initially, udp_bpf_recvmsg() had used lock_sock(), but the cited
-> commit accidentally removed it.
-> 
-> Let's serialise sk_msg_recvmsg() with lock_sock() in udp_bpf_recvmsg().
-> 
-> Note that holding spin_lock_bh(&sk->sk_receive_queue.lock) is not
-> an option due to copy_page_to_iter() in sk_msg_recvmsg().
-> 
-> [0]:
-> BUG: KASAN: slab-use-after-free in sk_msg_recvmsg+0xb54/0xc30 net/core/skmsg.c:428
-> Read of size 4 at addr ffff88814cdcf000 by task syz.0.24/6020
-> 
-> CPU: 1 UID: 0 PID: 6020 Comm: syz.0.24 Not tainted syzkaller #0 PREEMPT(full)
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/13/2026
-> Call Trace:
->  <TASK>
->  dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
->  print_address_description mm/kasan/report.c:378 [inline]
->  do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
->  entry_SYSCALL_64_after_hwframe+0x77/0x7f
+On Thu, Mar 5, 2026 at 10:28=E2=80=AFAM Steven Rostedt <rostedt@goodmis.org=
+> wrote:
 >
+> On Thu, 5 Mar 2026 10:17:09 +0800
+> Yafang Shao <laoar.shao@gmail.com> wrote:
+>
+> > bpftrace is a widely used tool for online debugging and dynamic
+> > tracing. However, sysadmins may unknowingly run multiple bpftrace
+> > instances concurrently without realizing the potential impact on
+> > system performance.
+> >
+> > If this is your answer, I believe we should clearly document the
+> > following warning:
+> >
+> >   Warning: Do not read available_filter_functions concurrently, as
+> > doing so can significantly degrade system performance and potentially
+> > impact production workloads.
+>
+> Or update bpftrace to cache that file. It's only updated on module load
+> and unload, which isn't done much. There's no reason it needs to
+> constantly read that file if bpftrace is being used constantly.
 
-[...] 
-> Fixes: 9f2470fbc4cb ("skmsg: Improve udp_bpf_recvmsg() accuracy")
-> Reported-by: syzbot+9307c991a6d07ce6e6d8@syzkaller.appspotmail.com
-> Closes: https://lore.kernel.org/netdev/69922ac9.a70a0220.2c38d7.00e0.GAE@google.com/
-> Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
-> ---
->  net/ipv4/udp_bpf.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/net/ipv4/udp_bpf.c b/net/ipv4/udp_bpf.c
-> index 779a3a03762f..b07774034a91 100644
-> --- a/net/ipv4/udp_bpf.c
-> +++ b/net/ipv4/udp_bpf.c
-> @@ -52,7 +52,9 @@ static int udp_msg_wait_data(struct sock *sk, struct sk_psock *psock,
->  	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
->  	ret = udp_msg_has_data(sk, psock);
->  	if (!ret) {
-> +		release_sock(sk);
->  		wait_woken(&wait, TASK_INTERRUPTIBLE, timeo);
-> +		lock_sock(sk);
->  		ret = udp_msg_has_data(sk, psock);
->  	}
->  	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
-> @@ -81,6 +83,7 @@ static int udp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
->  		goto out;
->  	}
->  
-> +	lock_sock(sk);
->  msg_bytes_ready:
->  	copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
->  	if (!copied) {
-> @@ -92,11 +95,17 @@ static int udp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
->  		if (data) {
->  			if (psock_has_data(psock))
->  				goto msg_bytes_ready;
-> +
-> +			release_sock(sk);
-> +
->  			ret = sk_udp_recvmsg(sk, msg, len, flags, addr_len);
->  			goto out;
->  		}
->  		copied = -EAGAIN;
->  	}
-> +
-> +	release_sock(sk);
-> +
->  	ret = copied;
->  out:
->  	sk_psock_put(sk, psock);
-> -- 
-> 2.53.0.371.g1d285c8824-goog
-> 
+Other tools may also read available_filter_functions, requiring each
+one to be patched individually to avoid this flaw=E2=80=94a clearly
+impractical solution.
 
-LGTM.
-
-One minor observation for a possible follow-up:
-psock_has_data() is checked before lock_sock(), which leaves a TOCTOU window.
-
-If the BPF verdict path consumes the skb from the UDP receive queue and redirects it to
-psock->ingress_msg between the check and sk_udp_recvmsg(), the thread may block in
-__skb_recv_udp() while data is already available in the psock.
-
-Moving lock_sock() before the psock_has_data() check (as the original code
-did before 9f2470fbc4cb) would narrow this window, similar to how
-__tcp_bpf_recvmsg() acquires lock_sock() upfront. But that can be a
-separate patch.
+--=20
+Regards
+Yafang
