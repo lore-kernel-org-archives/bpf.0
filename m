@@ -1,135 +1,131 @@
 Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A38C8632B
-	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 01:47:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E95A8632B
+	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 01:48:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772675271; cv=none; b=nxB1QcgNIBy8nBXXSFAwCtl+AIsBu5mf+hEq7eiEuLKZG6Q2xaSqLjmWSPGzMIgER5ydYulssjMafhHGrUFlgeRWUcUkNM3mevNfG2611uoG4j4Lw5MRJMj4/+B36FP0fNEmKdFkyQ2gQ9PvmDcsfwB1zFoISJLpurdaN5Tq8ro=
+	t=1772675311; cv=none; b=Ws2xRUmyeQfWnuR0UlHXU8TyljKgvSUg4JZCzMSmM0oQ+4IyzCCMtkcx0NIPWEOXPpS7QseSHETDKYUxQgc4rQ06zjvhOf6wBN94tHijYob/fTPBvnk6BVb8RE2VbDFBdYUsdFSkPU0Rs0z5pMVmxwiCVAcXlkTL19vqUoLrxqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772675271; c=relaxed/simple;
-	bh=oXzvPnYTqJ/VdaGlUO4Ss9kFiI5jeYEGS4Ci00IFfCc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tn6EsoEp7OLFLKs7en2p6Ok96CpevHLcBUNDsuBJ83oT5siz8G1MEna5kNorpsLnG84mDYCTp+eW2KmNK6TcdPz7x6wCem7/asp9MtTyIyjR+/yaWLWbhLGwT4NvGGuCaWRixbdC+0c2fpakgxryBm+T/6ZKBcsBZNZY0x5d/5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pWYWFiyk; arc=none smtp.client-ip=95.215.58.170
+	s=arc-20240116; t=1772675311; c=relaxed/simple;
+	bh=IEvQkKrDCFSs0g+lWRw582cZkJZ4fe+BWJn7/H5Dq/Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JIuV8ojMJn2IX3ZaGawTzoIxS57B5fZugl99iMw2fW4X9p9+xWW911UyhOp8TIi5ym3/snmk2ONEjx9Z1X1kDUxkOWtuSEj3WwFTAt5GROlKyUTYnmVOJvUqmm6BTR0JJRRNX1d19IJUuzf10mAVPDL/4Wr/w2Wju0BJQlkvHNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GJWNBLC3; arc=none smtp.client-ip=95.215.58.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pWYWFiyk"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GJWNBLC3"
+Date: Thu, 5 Mar 2026 09:48:16 +0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772675267;
+	t=1772675308;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=l2pXca8ytjqqZIXpp8jxmyNDWO6b9AWoUWW2hg/Yqjc=;
-	b=pWYWFiykZiT/N4Gn1VPScpHzpf9wmjxL5diRO+0GfzfmpZOxoADQo0Ni5vX/jYoNFLTqvW
-	Gt7XDZVdQCno8vO4jeXcmo1hi4LFwguf4R57YiyNu1JWWg6EMsN2RkwHRE3BAlc+x/96a9
-	xiNKbUD73LkDjlns42Ku0F/lnUoQCm0=
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>
-Cc: Paul Chaignon <paul.chaignon@gmail.com>,
-	Vitaly Chikunov <vt@altlinux.org>,
-	bpf@vger.kernel.org,
-	kernel-team@meta.com
-Subject: [PATCH bpf v3] resolve_btfids: Fix linker flags detection
-Date: Wed,  4 Mar 2026 17:47:30 -0800
-Message-ID: <20260305014730.3123382-1-ihor.solodrai@linux.dev>
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=D009twMs8s5iYn56OQIX52TjVOfgGF664WoLEilRwtI=;
+	b=GJWNBLC3+iRrGzLpmLsET3irh5eDR+dAxwkoSRrLyhlE/VA6ykcLFdla+DBKs+rXPu/N5i
+	RHZ99f73PmKqxLPvRSpwKRsBUxqNOHd+9Mx8sxaoSVeFPOMicBFzxGx7hStH2GFC6Zvmdj
+	B73bJS3jzBvL5wGpFb1OUqxCvMhWCY4=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: John Fastabend <john.fastabend@gmail.com>, 
+	Jakub Sitnicki <jakub@cloudflare.com>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v4 bpf/net 2/6] sockmap: Annotate sk->sk_write_space()
+ for UDP.
+Message-ID: <fjt7fesjnzwuzeuiouv6rpvoxebounjqv3jlc34tvmzh252zep@hizdvwr2qwe4>
+References: <20260221233234.3814768-1-kuniyu@google.com>
+ <20260221233234.3814768-3-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260221233234.3814768-3-kuniyu@google.com>
 X-Migadu-Flow: FLOW_OUT
 
-The "|| echo -lzstd" default makes zstd an unconditional link
-dependency of resolve_btfids. On systems where libzstd-dev is not
-installed and pkg-config fails, the linker fails:
+On Sat, Feb 21, 2026 at 11:30:49PM +0800, Kuniyuki Iwashima wrote:
+> UDP TX skb->destructor() is sock_wfree(), and UDP only
+> holds lock_sock() for UDP_CORK / MSG_MORE sendmsg().
+> 
+> Otherwise, sk->sk_write_space() is read locklessly.
+> 
+> Let's use WRITE_ONCE() and READ_ONCE() for sk->sk_write_space().
+> 
+> Fixes: 7b98cd42b049 ("bpf: sockmap: Add UDP support")
+> Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
+> ---
+> v3: Use WRITE_ONCE() in udp_bpf_update_proto()
+> v2: Cache sk->sk_write_space in sock_wfree()
+> ---
+>  net/core/skmsg.c   | 2 +-
+>  net/core/sock.c    | 8 ++++++--
+>  net/ipv4/udp_bpf.c | 2 +-
+>  3 files changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+> index 75fa94217e1e..3d7eb2f4ac98 100644
+> --- a/net/core/skmsg.c
+> +++ b/net/core/skmsg.c
+> @@ -1297,7 +1297,7 @@ void sk_psock_start_verdict(struct sock *sk, struct sk_psock *psock)
+>  
+>  	psock->saved_data_ready = sk->sk_data_ready;
+>  	WRITE_ONCE(sk->sk_data_ready, sk_psock_verdict_data_ready);
+> -	sk->sk_write_space = sk_psock_write_space;
+> +	WRITE_ONCE(sk->sk_write_space, sk_psock_write_space);
+>  }
 
-  ld: cannot find -lzstd: No such file or directory
+I noticed that Patch 1 and 2 were submitted earlier and are on bpf tree.
+Given that Eric's commit (which you reviewed) is now in net.git, these two patches
+should probably be dropped in the next version, right? Just confirming.
 
-libzstd is a transitive dependency of libelf, so the -lzstd flag is
-strictly necessary only for static builds [1].
-
-Remove ZSTD_LIBS variable, and instead set LIBELF_LIBS depending on
-whether the build is static or not. Use $(HOSTPKG_CONFIG) as primary
-source of the flags list.
-
-Also add a default value for HOSTPKG_CONFIG in case it's not built via
-the toplevel Makefile. Pass it from selftests/bpf too.
-
-[1] https://lore.kernel.org/bpf/4ff82800-2daa-4b9f-95a9-6f512859ee70@linux.dev/
-
-Reported-by: BPF CI Bot (Claude Opus 4.6) <bot+bpf-ci@kernel.org>
-Reported-by: Vitaly Chikunov <vt@altlinux.org>
-Closes: https://lore.kernel.org/bpf/aaWqMcK-2AQw5dx8@altlinux.org/
-Fixes: 4021848a903e ("selftests/bpf: Pass through build flags to bpftool and resolve_btfids")
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
----
-
-v2->v3: Pass HOSTPKG_CONFIG from selftests/bpf/Makefile (Paul)
-v2: https://lore.kernel.org/bpf/20260303193954.1879948-1-ihor.solodrai@linux.dev/
-
-v1->v2: Use different LDFLAGS depending on -static (Vitaly)
-v1: https://lore.kernel.org/bpf/20260302231058.916946-1-ihor.solodrai@linux.dev/
-
----
- tools/bpf/resolve_btfids/Makefile    | 9 +++++++--
- tools/testing/selftests/bpf/Makefile | 1 +
- 2 files changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-index ef083602b73a..7672208f65e4 100644
---- a/tools/bpf/resolve_btfids/Makefile
-+++ b/tools/bpf/resolve_btfids/Makefile
-@@ -23,6 +23,7 @@ RM      ?= rm
- HOSTCC  ?= gcc
- HOSTLD  ?= ld
- HOSTAR  ?= ar
-+HOSTPKG_CONFIG ?= pkg-config
- CROSS_COMPILE =
- 
- OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
-@@ -63,10 +64,14 @@ $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OU
- 		    $(abspath $@) install_headers
- 
- LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
-+
-+ifneq ($(filter -static,$(EXTRA_LDFLAGS)),)
-+LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs --static 2>/dev/null || echo -lelf -lzstd)
-+else
- LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
-+endif
- 
- ZLIB_LIBS  := $(shell $(HOSTPKG_CONFIG) zlib --libs 2>/dev/null || echo -lz)
--ZSTD_LIBS  := $(shell $(HOSTPKG_CONFIG) libzstd --libs 2>/dev/null || echo -lzstd)
- 
- HOSTCFLAGS_resolve_btfids += -g \
-           -I$(srctree)/tools/include \
-@@ -76,7 +81,7 @@ HOSTCFLAGS_resolve_btfids += -g \
-           $(LIBELF_FLAGS) \
-           -Wall -Werror
- 
--LIBS = $(LIBELF_LIBS) $(ZLIB_LIBS) $(ZSTD_LIBS)
-+LIBS = $(LIBELF_LIBS) $(ZLIB_LIBS)
- 
- export srctree OUTPUT HOSTCFLAGS_resolve_btfids Q HOSTCC HOSTLD HOSTAR
- include $(srctree)/tools/build/Makefile.include
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 72a9ba41f95e..d5acbeba0383 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -409,6 +409,7 @@ $(RESOLVE_BTFIDS): $(HOST_BPFOBJ) | $(HOST_BUILD_DIR)/resolve_btfids	\
- 		CC="$(HOSTCC)" LD="$(HOSTLD)" AR="$(HOSTAR)" \
- 		LIBBPF_INCLUDE=$(HOST_INCLUDE_DIR) \
- 		EXTRA_LDFLAGS='$(SAN_LDFLAGS) $(EXTRA_LDFLAGS)' \
-+		HOSTPKG_CONFIG=$(PKG_CONFIG) \
- 		OUTPUT=$(HOST_BUILD_DIR)/resolve_btfids/ BPFOBJ=$(HOST_BPFOBJ)
- 
- # Get Clang's default includes on this system, as opposed to those seen by
--- 
-2.53.0
-
+https://web.git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=2ef2b20cf4e04ac8a6ba68493f8780776ff84300
+  
+>  void sk_psock_stop_verdict(struct sock *sk, struct sk_psock *psock)
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index 693e6d80f501..710f57ff3768 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+> @@ -2673,8 +2673,12 @@ void sock_wfree(struct sk_buff *skb)
+>  	int old;
+>  
+>  	if (!sock_flag(sk, SOCK_USE_WRITE_QUEUE)) {
+> +		void (*sk_write_space)(struct sock *sk);
+> +
+> +		sk_write_space = READ_ONCE(sk->sk_write_space);
+> +
+>  		if (sock_flag(sk, SOCK_RCU_FREE) &&
+> -		    sk->sk_write_space == sock_def_write_space) {
+> +		    sk_write_space == sock_def_write_space) {
+>  			rcu_read_lock();
+>  			free = __refcount_sub_and_test(len, &sk->sk_wmem_alloc,
+>  						       &old);
+> @@ -2690,7 +2694,7 @@ void sock_wfree(struct sk_buff *skb)
+>  		 * after sk_write_space() call
+>  		 */
+>  		WARN_ON(refcount_sub_and_test(len - 1, &sk->sk_wmem_alloc));
+> -		sk->sk_write_space(sk);
+> +		sk_write_space(sk);
+>  		len = 1;
+>  	}
+>  	/*
+> diff --git a/net/ipv4/udp_bpf.c b/net/ipv4/udp_bpf.c
+> index 91233e37cd97..779a3a03762f 100644
+> --- a/net/ipv4/udp_bpf.c
+> +++ b/net/ipv4/udp_bpf.c
+> @@ -158,7 +158,7 @@ int udp_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore)
+>  	int family = sk->sk_family == AF_INET ? UDP_BPF_IPV4 : UDP_BPF_IPV6;
+>  
+>  	if (restore) {
+> -		sk->sk_write_space = psock->saved_write_space;
+> +		WRITE_ONCE(sk->sk_write_space, psock->saved_write_space);
+>  		sock_replace_proto(sk, psock->sk_proto);
+>  		return 0;
+>  	}
+> -- 
+> 2.53.0.371.g1d285c8824-goog
+> 
