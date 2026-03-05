@@ -1,78 +1,254 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC89820A5F3;
-	Thu,  5 Mar 2026 00:36:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 079EB190462
+	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 00:48:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772671008; cv=none; b=TgNZtyqupiwvWsOc3fEjeHMTTl6XoyKK6QYWttPu4VeNvTpOTZQYR1Ds/5Nq+YCyZRD1DwHpSbyknc4kd0UBgICsNs6zq4iN/S5+ovAF1plwbnKgGy7EsYp46dAMtIcmOYoOSzb1W9bEWf6ck65feJjkXTVEtfPiMZM7ehRgimE=
+	t=1772671734; cv=none; b=mTkAq9k1S+HrBFs/KC9ZaLXkdN07hZdrL3VhyigIpz2aYcr/xELaTPccs6ZIj0BM5v2ITWzOw/HdjA0ohLPa90hDKWd9Qh891sOdg1Bc7sCgjWvCTOxLdTs3o8G7I1z9FgL9qNKFAYai0j7jNhEiZd9sJeL+ZosCl2Ec6akdYWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772671008; c=relaxed/simple;
-	bh=YKalpB8/rUvFs9g/hYXsIJ5wpix29Oe5LQMz8wFRhjs=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=hsLQ/YMZR3C5BO4UHkp+qc6ZrYouie6qCf/AGxg17EOtPEnmnwl3R/S3Hx/lakTT9RnqWYgmeIi9akmMWXwKo/+v2k1NWnNplafMxxgAAcEOBwWdyp+Pqtd3ioNBrvp3kKjyT630C5pQGd5Z2PmClJVQjwwxaPcAbgNntGf7NzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dcLjbQFE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772671734; c=relaxed/simple;
+	bh=nK431fd7b3+zMItLeANdhfvFIPZw970bPhV16CyOiGA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bafYrmOFJyJ+BJUc7a9E/pPU0yeBctjYYm8zSAbrXWckcPCBFj0Gl5xkG5l4rzKD/YX8WKwyTTAM1hABbFhdVkf7ssVSd4I7lp1W4KxZL+uX74JOtrhpsQLmNgkm0XMIbKDgLeVIuPisKma1n/4T7/sdZCk2kvHTbcTQxZxxbzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JpJ+JzX4; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dcLjbQFE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67704C2BC86;
-	Thu,  5 Mar 2026 00:36:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772671008;
-	bh=YKalpB8/rUvFs9g/hYXsIJ5wpix29Oe5LQMz8wFRhjs=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=dcLjbQFEywZdqEcvLQK213BmmFnLr9VtKG+q2SYTZbiA4hQjRnHnprt0Y3Tx3If92
-	 45dSUXZJOCgs4pn+TpR88k8E7x38KZ0Zh8gjDPQo5Cp0UXBaooCTVvwh3x9UiA9POh
-	 xLnqlQXAhWo0M8IVQHD4Y0jKu9kcVdBD+2pp+MNxkgDXLYxi9+CcE+mt1krh9xArZR
-	 w1sx2mutIFaw27i4woHJ3+ixxWNRCNKqiCP5oDu8hXhfkXPtbx5tDMGuxPnjoGfF6U
-	 BzARV7IilnyN3x/pK5Ibt44OOILey2jF319L4aGYo4KnmmGomWvt8FwE+txiy1SpF7
-	 x5xlCakDvJyNg==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org
-In-Reply-To: <20260226-kbuild-resolve_btfids-v1-1-2bf38b93dfe7@linutronix.de>
-References: <20260226-kbuild-resolve_btfids-v1-1-2bf38b93dfe7@linutronix.de>
-Subject: Re: [PATCH] kbuild: install-extmod-build: Package resolve_btfids
- if necessary
-Message-Id: <177267100716.1730256.8133428757987285416.b4-ty@kernel.org>
-Date: Wed, 04 Mar 2026 17:36:47 -0700
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JpJ+JzX4"
+Message-ID: <d9c98aac-6c4c-483e-9e9a-0659dc03f9e7@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772671729;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=llDAxjq2rbQmr/Q2MAZkSmBnkUtdyt81+GrI0Pnmgy0=;
+	b=JpJ+JzX4wtWICq/vuRxVS1WFSoRBZ16/kCxhl1I6Eu97BgL3cUKWRUoYX8pHoemx23T59m
+	AQPF0227sh9Foi6LBA09MhSuB6ii9IC986YLT3pUodFe3VdgGsTB4zJYQusch4tEbH7TA1
+	owzjQxQyGnbJ1SClQ4v9cElCb+T79EI=
+Date: Wed, 4 Mar 2026 16:48:43 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.15-dev
+Subject: Re: [PATCH bpf-next 1/1] bpf: Avoid one round of bounds deduction
+To: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>,
+ Kernel Team <kernel-team@meta.com>
+References: <aac2GMpnpoAKD4jX@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <aac2GMpnpoAKD4jX@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, 26 Feb 2026 08:41:48 +0100, Thomas Weißschuh wrote:
-> When CONFIG_DEBUG_INFO_BTF_MODULES is enabled and vmlinux is available,
-> Makefilefile.modfinal and gen-btf.sh will try to use resolve_btfids
-> on the module .ko. install-extmod-build currently does not package
-> resolve_btfids, so that step fails.
+On 3/3/26 11:27 AM, Paul Chaignon wrote:
+> In commit 5dbb19b16ac49 ("bpf: Add third round of bounds deduction"), I
+> added a new round of bounds deduction because two rounds were not enough
+> to converge to a fixed point. This commit slightly refactor the bounds
+> deduction logic such that two rounds are enough.
 > 
-> Also package resolve_btfids if it may get used.
+> In [1], Eduard noticed that after we improved the refinement logic, a
+> third call to the bounds deduction (__reg_deduce_bounds) was needed to
+> converge to a fixed point. More specifically, we needed this third call
+> to improve the s64 range using the s32 range. We added the third call
+> and postponed a more detailed analysis of the refinement logic.
+> 
+> I've been looking into this more recently. To help, I wrote a high level
+> sequence of all the refinements carried out in reg_bounds_sync. u64 ->
+> s32 means we used the u64 ranges to improve the s32 ranges.
+> 
+>     /* __update_reg_bounds: */
+>     tnum -> {s32, u32, s64, u64}
+>     /* __reg_deduce_bounds: */
+>     for (3 times) {
+>         /* __reg32_deduce_bounds: */
+>         u64 -> {u32, s32}
+>         s64 -> {u32, s32}
+>         u64 -> s32
+>         s64 -> s32
+>         u32 -> s32
+>         s32 -> u32
+>         /* __reg64_deduce_bounds: */
+>         u64 -> s64
+>         s64 -> u64
+>         {u64, s64} -> {u64, s64}
+>         /* __reg_deduce_mixed_bounds: */
+>         u32 -> u64
+>         u32 -> s64
+>         {s32, s64} -> {s64, u64, tnum}
+>     }
+>     /* __reg_bound_offset: */
+>     {u64, u32} -> tnum
+>     /* __update_reg_bounds: */
+>     tnum -> {s32, u32, s64, u64}
+> 
+> From this, we can observe that we first improve the 32bit ranges from
+> the 64bit ranges in __reg32_deduce_bounds, then improve the 64bit
+> ranges on their own in __reg64_deduce_bounds. Intuitively, if we were to
+> improve the 64bit ranges on their own *before* we use them to improve
+> the 32bit ranges, we may reach a fixed point earlier. Said otherwise, we
+> would need to move the *64 -> *32 refinements to the beginning of
+> __reg_deduce_mixed_bounds. (The logic would then also better match the
+> function names, but that's secondary.)
+> 
+> After testing, this small refactoring does allow us to lose one call to
+> __reg_deduce_bounds. Without this refactoring, the test
+> "verifier_bounds/bounds deduction cross sign boundary, negative
+> overlap" fails when removing one call to __reg_deduce_bounds. This
+> patch therefore implements that bit of refactoring and reverts commit
+> 5dbb19b16ac49 ("bpf: Add third round of bounds deduction").
+> 
+> As expected, this change didn't have any impact on the number of
+> instructions processed when running it through the Cilium complexity
+> test suite [2].
+> 
+> Link: https://lore.kernel.org/bpf/aIKtSK9LjQXB8FLY@mail.gmail.com/ [1]
+> Link: https://pchaigno.github.io/test-verifier-complexity.html [2]
+> Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
+
+
+Hi Paul,
+
+(trying to do my part with the code reviews and learn in the process)
+
+Side note: you might be interested to know that Eduard is working on
+consolidating signed and unsigned domains [1].
+
+If I understand correctly from the pseudocode there is a dependency
+loop between *64 -> *32 -> *64 -> *32 -> ... and so on.
+
+This got me curious, why don't we actually try to compute a fixed
+point here with a loop? If we were, we wouldn't have to guess how many
+iterations need to be there, and the order of the narrowing steps.
+
+So I implemented a dumb loop in reg_bounds_sync() with a limit, and
+added global counters to collect stats. Pasting a (mostly vibe-coded,
+sorry) patch at the bottom.
+
+Then I ran veristat on a suite of Meta BPF programs against a kernel
+with this loop (without your patch), here are the results:
+
+  $ grep bounds_sync tools/testing/selftests/bpf/veristat.log | tail -n 10
+  bounds_sync calls 12400636 total_iters 1349388 max_iters 2 avg_iters 0.10
+  bounds_sync calls 12451162 total_iters 1355717 max_iters 2 avg_iters 0.10
+  bounds_sync calls 12501688 total_iters 1362046 max_iters 2 avg_iters 0.10
+  bounds_sync calls 12618333 total_iters 1377655 max_iters 2 avg_iters 0.10
+  bounds_sync calls 12734978 total_iters 1393264 max_iters 2 avg_iters 0.10
+  bounds_sync calls 12790555 total_iters 1398860 max_iters 2 avg_iters 0.10
+  bounds_sync calls 12846132 total_iters 1404456 max_iters 2 avg_iters 0.10
+  bounds_sync calls 12846174 total_iters 1404459 max_iters 2 avg_iters 0.10
+  bounds_sync calls 12846320 total_iters 1404465 max_iters 2 avg_iters 0.10
+  bounds_sync calls 12846321 total_iters 1404465 max_iters 2 avg_iters 0.10
+
+  $ grep bounds_sync tools/testing/selftests/bpf/veristat.log | grep -o 'max_iters.*' | sort -u
+  max_iters 2 avg_iters 0.09
+  max_iters 2 avg_iters 0.10
+  max_iters 2 avg_iters 0.11
+
+This is across 400+ progs of various sizes. The vast majority of
+reg_bounds_sync() calls don't change anything (0 iterations), and
+those that do converge in max 2 iterations.
+
+My interpretation of this (assuming I haven't messed up anything while
+experimenting) is that the situation you hit in [2] is rare. And I think
+it is safe to implement a loop in reg_bounds_sync() with a reasonable
+iteration limit (10 maybe?).
+
+Am I missing anything that makes it a bad idea?
+
+[1] https://github.com/eddyz87/bpf/tree/cnum
+[2] https://lore.kernel.org/bpf/aIKtSK9LjQXB8FLY@mail.gmail.com/
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index d92cf2821657..dc1082590f04 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -369,6 +369,11 @@ static const char *btf_type_name(const struct btf *btf, u32 id)
+ static DEFINE_MUTEX(bpf_verifier_lock);
+ static DEFINE_MUTEX(bpf_percpu_ma_lock);
+ 
++/* Global counters for reg_bounds_sync fixed-point convergence stats */
++static atomic64_t bounds_sync_total_iters = ATOMIC64_INIT(0);
++static atomic64_t bounds_sync_call_count = ATOMIC64_INIT(0);
++static atomic_t bounds_sync_max_iters = ATOMIC_INIT(0);
++
+ __printf(2, 3) static void verbose(void *private_data, const char *fmt, ...)
+ {
+ 	struct bpf_verifier_env *env = private_data;
+@@ -2757,14 +2762,34 @@ static void __reg_bound_offset(struct bpf_reg_state *reg)
+ 	reg->var_off = tnum_or(tnum_clear_subreg(var64_off), var32_off);
+ }
+ 
++#define REG_BOUNDS_MAX_ITERS 1000
++
+ static void reg_bounds_sync(struct bpf_reg_state *reg)
+ {
++	struct bpf_reg_state prev;
++	int iters = 0;
++	int cur_max;
++
+ 	/* We might have learned new bounds from the var_off. */
+ 	__update_reg_bounds(reg);
+-	/* We might have learned something about the sign bit. */
+-	__reg_deduce_bounds(reg);
+-	__reg_deduce_bounds(reg);
+-	__reg_deduce_bounds(reg);
++	/* We might have learned something about the sign bit.
++	 * Loop until bounds reach a fixed point.
++	 */
++	do {
++		prev = *reg;
++		__reg_deduce_bounds(reg);
++	} while (memcmp(&prev, reg, sizeof(prev)) && ++iters < REG_BOUNDS_MAX_ITERS);
++
++	WARN_ON_ONCE(iters >= REG_BOUNDS_MAX_ITERS);
++
++	atomic64_add(iters, &bounds_sync_total_iters);
++	atomic64_inc(&bounds_sync_call_count);
++	cur_max = atomic_read(&bounds_sync_max_iters);
++	while (iters > cur_max) {
++		if (atomic_try_cmpxchg(&bounds_sync_max_iters, &cur_max, iters))
++			break;
++	}
++
+ 	/* We might have learned some bits from the bounds. */
+ 	__reg_bound_offset(reg);
+ 	/* Intersecting with the old var_off might have improved our bounds
+@@ -24799,6 +24824,20 @@ static void print_verification_stats(struct bpf_verifier_env *env)
+ 		env->insn_processed, BPF_COMPLEXITY_LIMIT_INSNS,
+ 		env->max_states_per_insn, env->total_states,
+ 		env->peak_states, env->longest_mark_read_walk);
++
++	{
++		u64 total = atomic64_read(&bounds_sync_total_iters);
++		u64 calls = atomic64_read(&bounds_sync_call_count);
++		u32 max = atomic_read(&bounds_sync_max_iters);
++
++		verbose(env, "bounds_sync calls %llu total_iters %llu max_iters %u",
++			calls, total, max);
++		if (calls)
++			verbose(env, " avg_iters %llu.%02llu",
++				div_u64(total, calls),
++				div_u64(total * 100, calls) % 100);
++		verbose(env, "\n");
++	}
+ }
+ 
+ int bpf_prog_ctx_arg_info_init(struct bpf_prog *prog,
+
+
+
+> ---
+>  kernel/bpf/verifier.c | 138 +++++++++++++++++++++---------------------
+>  1 file changed, 69 insertions(+), 69 deletions(-)
 > 
 > [...]
-
-Applied to
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git kbuild-fixes
-
-Thanks!
-
-[1/1] kbuild: install-extmod-build: Package resolve_btfids if necessary
-      https://git.kernel.org/kbuild/c/459cb3c054c23
-
-Please look out for regression or issue reports or other follow up
-comments, as they may result in the patch/series getting dropped or
-reverted. Patches applied to an "unstable" branch are accepted pending
-wider testing in -next and any post-commit review; they will generally
-be moved to the main branch in a week if no issues are found.
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
