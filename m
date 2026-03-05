@@ -1,310 +1,148 @@
-Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C35CC378D84
-	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 09:27:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772702848; cv=pass; b=Q+ilcFWoZ4NBNDIu0WpyimIK3Mk67F2n4XUSBkkMu+YYOTUfuwVYKMw9Ejur1ZVxd5lIlP5eYIDHESdMwTuTJ5/lcQoHt0SS9lsSdfq5myrYXDt4HbZ0Cb1Iyp0pdrhpTtNtLGxo4CQvLLqtbUBi5KdJCUVUcjSasb0cUXW5Oyg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772702848; c=relaxed/simple;
-	bh=lMjYfl+Pmb7NDXCB4+hmAwoURdeJLXQAEFQ0PlMbzDw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ptrx72ZXUwNX7oKTVulOmghH5lid0hOHpPcirOlVK4NXU9FwVV1qIoI5UilkdnjVlM4ySohn5XsbfaeBv08qtJLPL1h50NjGg8RXLsf3CV9fPVMHO0tiFl3nJVmMYQJyqpCBdj+HbYRRAlen0LOeWfH3MLyqqA5ZXc1mmxIC0fE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Jrn/sVVQ; arc=pass smtp.client-ip=74.125.82.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C63A4377ED7;
+	Thu,  5 Mar 2026 09:31:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772703102; cv=none; b=pPcRC9IsUCQhBWL5Ej46NpS813rJ8+sZ2nRUPRxNsIADfeNAfCRafDT51FUNyaYJF1rwf8sRe+Due0BYGC4MqJV6FJ5eqKakBdzdWg5Lgc/0IJQfrn1HdfcJ3ZmNsZHiawGZaAkc9pMS3DPPanNQvJ90QqV8Ang+rwV/ewTlKio=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772703102; c=relaxed/simple;
+	bh=fgdmdf77b8hQOI441pKYdKFicdhvYLEChYvN03raTtg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=nBZXxOK+dauwzbTz75j9GcX3em936nUhneuuWzphq0Ecv8wsUEMhRqRp/afxRhNsIBfLu+TBHOwLEwYiHV7ODyvoWa3HngY6OWNgQGt7j4tBbWbQHHFY5lg1IeBQfM0fKdmQpFbYHb8IUao/eGZw7+Z+MHz3Nn5O2Np5T+qu30g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=xytaAf2r; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=r3h3+lgD; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Jrn/sVVQ"
-Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-127380532eeso291930c88.1
-        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 01:27:26 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772702846; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ZWLXIV9DHduyzXpFH5Kj3vE9yvVKzlsA5Ql0NoqCaXkOApVOl8VQlA9E8hKOPpSoR7
-         0F2Njla96Bqyv55AkDBJD992voxmk3jzskfLUymoXVz4amRqw6S80LbyWiDy40SHsyMQ
-         A4eMnQHo/ZsGqsn1MYHK+pMa8uTRaZPwYP3xTBPC7YdMyQ3uMFTa/SvIa/86h9x4GpO+
-         xTs1GKRy2tNQJ28qVxtZG5ViaoIfXoMrPCy//EdSgzK82x+NRQX5VPNVgEBB+ebxd0rc
-         w/Qk+zmq2Zqqig8mPjTpAi1LznprpWqa7cNOZdIZMEMGUggvYf06AvirKO7fH+w/lNdF
-         R4mA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=YGl7YGr5hs1Mp3RVhxOnhpc/LsWUXqci1b3NWeyBdTs=;
-        fh=R1FkMQUf04WuFe6ak358N5QeDOQE20VkQXcOBsSuILY=;
-        b=UZBvEz5JM1P6V79mbWQQe1SSls2mEL7nKU8H8s2naSLGrRerM+VeGEEh5VHSaZnOhE
-         AvyxlFtGyxFNTvNJ0cVC+PJ3P072Lv+j1tkeVbus/3sSubiepAZMfNrQXkWzZxdd3Ou7
-         QPvKjHj1TVZmWPUCKu7SBPKui7guiuuCnDMhKGtUHkfS5y+avsa/fhx7hkLJ7Rzz9sRM
-         piAMR1MpocLDPU/ayrtgYwC272bkKr/4Oxt3AEJyUfY8bH/PncZ4YbLT/cIZpsD4oWvI
-         rkGpHSKVuKWdaJ4QqhJqcbahDm18oWhcXo1hqbQoMMYyHbq2n7bQw/Loh2jgWajuP3bc
-         pXNA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772702846; x=1773307646; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YGl7YGr5hs1Mp3RVhxOnhpc/LsWUXqci1b3NWeyBdTs=;
-        b=Jrn/sVVQs4MieGopJwRtadojipO3mkCjMRwDvBdMDScqI08y/cITVgvrqS8rKeKyPG
-         pEIBpJcvPr8HdCQ4NlX/m+W3mf06CQE5gCDQNmBItSbJbN63xuljNt7aF4dEcD4/8vD7
-         8mAxVSHzqBC33HEJB5wYfYoiPerooxy0qlino5Gg2XZ7gx7+J1HJ0NiIqUQboOazaCey
-         z2U6UKpJD3XFR+U0VDhgiIgqvsES04fLapbUUxPrRADMscrZzYwzGbCeJqgUv9Giriu8
-         XqA0nn9/8mbDKamVjuOLH3Km6ErEZ/usAQCJljY+SeSr2JajgEdDSIi5RiyOq4BhD3Ub
-         Gqfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772702846; x=1773307646;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=YGl7YGr5hs1Mp3RVhxOnhpc/LsWUXqci1b3NWeyBdTs=;
-        b=IUbXpqr+TaNQ9VfGTEb0fcWF6fr1H70RSb4V6w5y/FPmL+C0XlWVhygyFOmZpPeVEh
-         ezeR/7aFNDvrm8Ly4Bse8k2rStS7pIPe+H61JYFExZf2Kurko9ZmmVa5akRx/8CiRO1F
-         8aZntgWWVZlP8WSFmNt6tPM4YlEKIybUuGxAhgcji8hl2SBcPhiglU+P7Ao9DxRFkS/6
-         /M00jMBzE51FUEcentuX2GdBh9nwYxEdD9KVRHuoj4JTSphGxC9LSIsSSM1ixvHylEpL
-         nMTjOw/BjOVNjHwpcHUxO5KmWKjydpFKj8GpqTxJEYOHSRi40SpQYZOpXxCJs4VGqme7
-         Ohqg==
-X-Forwarded-Encrypted: i=1; AJvYcCXTf5TgxIpjNrwpAKl0BRXBuB4Js8XD2/zGJPtOY1lX6VdvIWU4bBU3emCk64Jb3vDd7oI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxchZPL+DG0r3YKZeoAbdBvEunXBSumP5IMhoB6DuMGsWxNDJKv
-	ckJeYXbkuxTqs5FDTfn0/BuWKIOIWznVKjekrDOFILMypMlHaXxbZQSmVeRYfZkOHZvVQvr1Yk4
-	S3Py39LANjPnsTqjhKtSKo4mXc0zzcq8c5U4dmDmI
-X-Gm-Gg: ATEYQzx2h2Gs/FoqJXX6v0dsUX/dxECC4ARtAbVErttzRr7Qb5k8p8VgMdEKvHjebgO
-	jW97Fnb2r2C2rNoP028bMIoe56GfmO8pCOKdmImBwy/bQTXFOzzA+2tdYPkauRGnJ/7trcrWA3p
-	G70CauVMgbM1mVQ+1iNmnXizIrrWQwHZIRV4pvB9JXu00KmLsZ8Pw0PTiPhKfes1UvdycQeBNIF
-	2o3AMqZYLQcD/6fuBiz/ym4T+VMd4db7agsdeguamSsNQLhNBS/Li6hZM61Ioak53FlaSDRRt1Z
-	ZM2F4Kae2trO/GmK3B8mvZSzKIbfYHwVsIQNeiWkOeNL7PpiKAHa9R2nSJnUVRKsQtoRk2mp
-X-Received: by 2002:a05:7022:6899:b0:11b:9386:7ecd with SMTP id
- a92af1059eb24-128b70ef851mr2410546c88.42.1772702845137; Thu, 05 Mar 2026
- 01:27:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="xytaAf2r";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="r3h3+lgD"
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1772703099;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=bu8WiQKkNBMwU28xfl3txV1TIzZCzYlrhLm08RAUoXs=;
+	b=xytaAf2rQjEZLTmTvairdv61lxtC7b0QvsvU7QQqMHIAPJd+fAWNG+mAyxuseqCTH983ep
+	G4BMiuylTlFAz6M+kVa+yosMj+cV0mGtJ0/57/5PKoTHbUYaqIjkskjIvskcmZ9PoZwpnW
+	lv2fzACqYjLtFgum+YtXdSCOkQEXvdeR/SW22AuHS6g2KwPYZdRicHw9InDvPchFfTCral
+	wslaTJQrjzQwwfeidMP24ffvF8VnN8IxQrRwgRBekI7lkPOz6RNdHvMivJPe0UAoEl+/37
+	qxDqqfnwLdLh9sMDZVS/k5nIPcz1V8RWFS5bhTds39OJvsT+xDY2g60gigJyOQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1772703099;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=bu8WiQKkNBMwU28xfl3txV1TIzZCzYlrhLm08RAUoXs=;
+	b=r3h3+lgD/zejL3EcYa0zS2NepF6/Bzhk91kBp7FP2T1DWK8OkCe17rhH5Ov7JMzUPM4ui2
+	qh/2XF05iCDzFMDg==
+Subject: [PATCH v3 0/8] module: Move 'struct module_signature' to UAPI
+Date: Thu, 05 Mar 2026 10:31:36 +0100
+Message-Id: <20260305-module-signature-uapi-v3-0-92f45ea6028c@linutronix.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260221233234.3814768-1-kuniyu@google.com> <20260221233234.3814768-7-kuniyu@google.com>
- <r7csevb4yonphmfhfpkj7jpc4yvjkdwrp566zxhueaf6vgjfak@stnfyjkqid6o>
- <CAAVpQUAGSzypVhT8V-qjhUfZeEQhXQtS1z+iQC7vrzZCHEr9=A@mail.gmail.com> <389162b2e117d8a5675b02286c7bafcc342086b6@linux.dev>
-In-Reply-To: <389162b2e117d8a5675b02286c7bafcc342086b6@linux.dev>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Thu, 5 Mar 2026 01:27:13 -0800
-X-Gm-Features: AaiRm51CIrbURfGzu54QGWbHrTP5af5b7cqQqQoVQE0Fnyut1UlLLTuWdt-6J08
-Message-ID: <CAAVpQUBrVzwDN2xc68owHJZP7VoAZQWhwo_xdo5noGZ27qmjpA@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf/net 6/6] sockmap: Fix broken memory accounting for UDP.
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: John Fastabend <john.fastabend@gmail.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, 
-	bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	syzbot+5b3b7e51dda1be027b7a@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4XNQQ6CMBCF4auYrq1pB0Fw5T2Mi0IHmARb0tIGQ
+ 7i7hZUxMS7/l8w3C/PoCD27HhbmMJIna1JkxwNremU65KRTMxBQiEwAf1odBuSeOqOm4JAHNRI
+ vZKtKUUuEumbpdnTY0ry790fqnvxk3Wt/E+W2/hOj5IKDuOgqz1HooroNZMLkrKH5pJFtaoRPK
+ f8lQZJ0c9allFBpxG9pXdc3b+fMCQgBAAA=
+X-Change-ID: 20260302-module-signature-uapi-61fa80b1e2bb
+To: David Howells <dhowells@redhat.com>, 
+ David Woodhouse <dwmw2@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+ Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+ Alexander Gordeev <agordeev@linux.ibm.com>, 
+ Christian Borntraeger <borntraeger@linux.ibm.com>, 
+ Sven Schnelle <svens@linux.ibm.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+ Roberto Sassu <roberto.sassu@huawei.com>, 
+ Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+ Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, 
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: keyrings@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-modules@vger.kernel.org, linux-s390@vger.kernel.org, 
+ linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
+ linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1772703098; l=2709;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=fgdmdf77b8hQOI441pKYdKFicdhvYLEChYvN03raTtg=;
+ b=s9GwrswTxqAeCrdGrvQfEgfC7LmIbNL8z1iS8wn8NtXjBtkaOvbCkix1V+4OPt3aX7UBqtjHF
+ jyv4woFRhFyD9t2uIYxxJHpnY2YVFC+wfrTccfY88rNB/abo5o3vGLA
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-On Thu, Mar 5, 2026 at 12:30=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.de=
-v> wrote:
->
-> March 5, 2026 at 15:48, "Kuniyuki Iwashima" <kuniyu@google.com mailto:kun=
-iyu@google.com?to=3D%22Kuniyuki%20Iwashima%22%20%3Ckuniyu%40google.com%3E >=
- wrote:
->
->
-> >
-> > On Wed, Mar 4, 2026 at 10:37 PM Jiayuan Chen <jiayuan.chen@linux.dev> w=
-rote:
-> >
-> > >
-> > > On Sat, Feb 21, 2026 at 11:30:53PM +0800, Kuniyuki Iwashima wrote:
-> > >  [...]
-> > >  </TASK>
-> > >
-> > >  Fixes: d7f571188ecf ("udp: Implement ->read_sock() for sockmap")
-> > >  Reported-by: syzbot+5b3b7e51dda1be027b7a@syzkaller.appspotmail.com
-> > >  Closes: https://lore.kernel.org/netdev/698f84c6.a70a0220.2c38d7.00cb=
-.GAE@google.com/
-> > >  Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
-> > >  ---
-> > >  v4: Fix deadlock when requeued
-> > >  v2: Fix build failure when CONFIG_INET=3Dn
-> > >  ---
-> > >  include/net/udp.h | 9 +++++++++
-> > >  net/core/skmsg.c | 29 +++++++++++++++++++++++++----
-> > >  net/ipv4/udp.c | 9 +++++++++
-> > >  3 files changed, 43 insertions(+), 4 deletions(-)
-> > >
-> > >  diff --git a/include/net/udp.h b/include/net/udp.h
-> > >  index 700dbedcb15f..ae38a4da9388 100644
-> > >  --- a/include/net/udp.h
-> > >  +++ b/include/net/udp.h
-> > >  @@ -455,6 +455,15 @@ struct sock *__udp6_lib_lookup(const struct net=
- *net,
-> > >  struct sk_buff *skb);
-> > >  struct sock *udp6_lib_lookup_skb(const struct sk_buff *skb,
-> > >  __be16 sport, __be16 dport);
-> > >  +
-> > >  +#ifdef CONFIG_INET
-> > >  +void udp_sock_rfree(struct sk_buff *skb);
-> > >  +#else
-> > >  +static inline void udp_sock_rfree(struct sk_buff *skb)
-> > >  +{
-> > >  +}
-> > >  +#endif
-> > >  +
-> > >  int udp_read_skb(struct sock *sk, skb_read_actor_t recv_actor);
-> > >
-> > >  /* UDP uses skb->dev_scratch to cache as much information as possibl=
-e and avoid
-> > >  diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> > >  index 96f43e0dbb17..dd9134a45663 100644
-> > >  --- a/net/core/skmsg.c
-> > >  +++ b/net/core/skmsg.c
-> > >  @@ -7,6 +7,7 @@
-> > >
-> > >  #include <net/sock.h>
-> > >  #include <net/tcp.h>
-> > >  +#include <net/udp.h>
-> > >  #include <net/tls.h>
-> > >  #include <trace/events/sock.h>
-> > >
-> > >  @@ -576,6 +577,7 @@ static int sk_psock_skb_ingress(struct sk_psock =
-*psock, struct sk_buff *skb,
-> > >  u32 off, u32 len, bool take_ref)
-> > >  {
-> > >  struct sock *sk =3D psock->sk;
-> > >  + bool is_udp =3D sk_is_udp(sk);
-> > >  struct sk_msg *msg;
-> > >  int err =3D -EAGAIN;
-> > >
-> > >  @@ -583,13 +585,20 @@ static int sk_psock_skb_ingress(struct sk_psoc=
-k *psock, struct sk_buff *skb,
-> > >  if (!msg)
-> > >  goto out;
-> > >
-> > >  - if (skb->sk !=3D sk && take_ref) {
-> > >  + if (is_udp) {
-> > >  + if (unlikely(skb->destructor =3D=3D udp_sock_rfree))
-> > >  + goto enqueue;
-> > >  +
-> > >  + spin_lock_bh(&sk->sk_receive_queue.lock);
-> > >  + }
-> > >  +
-> > >  + if (is_udp || (skb->sk !=3D sk && take_ref)) {
-> > >  if (atomic_read(&sk->sk_rmem_alloc) > sk->sk_rcvbuf)
-> > >  - goto free;
-> > >  + goto unlock;
-> > >
-> > >  if (!sk_rmem_schedule(sk, skb, skb->truesize))
-> > >  - goto free;
-> > >  - } else {
-> > >  + goto unlock;
-> > >  + } else if (skb->sk =3D=3D sk || !take_ref) {
-> > >  /* This is used in tcp_bpf_recvmsg_parser() to determine whether the
-> > >  * data originates from the socket's own protocol stack. No need to
-> > >  * refcount sk because msg's lifetime is bound to sk via the ingress_=
-msg.
-> > >  @@ -604,11 +613,23 @@ static int sk_psock_skb_ingress(struct sk_psoc=
-k *psock, struct sk_buff *skb,
-> > >  * into user buffers.
-> > >  */
-> > >  skb_set_owner_r(skb, sk);
-> > >  +
-> > >  + if (is_udp) {
-> > >  + spin_unlock_bh(&sk->sk_receive_queue.lock);
-> > >  +
-> > >  + skb->destructor =3D udp_sock_rfree;
-> > >  + }
-> > >  +
-> > >  +enqueue:
-> > >  err =3D sk_psock_skb_ingress_enqueue(skb, off, len, psock, sk, msg, =
-take_ref);
-> > >  if (err < 0)
-> > >  goto free;
-> > >  out:
-> > >  return err;
-> > >  +
-> > >  +unlock:
-> > >  + if (is_udp)
-> > >  + spin_unlock_bh(&sk->sk_receive_queue.lock);
-> > >  free:
-> > >  kfree(msg);
-> > >  goto out;
-> > >  diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-> > >  index 422c96fea249..831d26748a90 100644
-> > >  --- a/net/ipv4/udp.c
-> > >  +++ b/net/ipv4/udp.c
-> > >  @@ -2039,6 +2039,15 @@ struct sk_buff *__skb_recv_udp(struct sock *s=
-k, unsigned int flags,
-> > >  }
-> > >  EXPORT_SYMBOL(__skb_recv_udp);
-> > >
-> > >  +void udp_sock_rfree(struct sk_buff *skb)
-> > >  +{
-> > >  + struct sock *sk =3D skb->sk;
-> > >  +
-> > >  + spin_lock_bh(&sk->sk_receive_queue.lock);
-> > >  + sock_rfree(skb);
-> > >  + spin_unlock_bh(&sk->sk_receive_queue.lock);
-> > >  +}
-> > >  +
-> > >  int udp_read_skb(struct sock *sk, skb_read_actor_t recv_actor)
-> > >  {
-> > >  struct sk_buff *skb;
-> > >  --
-> > >  2.53.0.371.g1d285c8824-goog
-> > >
-> > >  There are too many protocol-specific checks in the generic skmsg cod=
-e
-> > >  here. This should be abstracted out.
-> > >
-> > >  Also TCP also has a similar issue with sk_forward_alloc concurrency
-> > >  between the backlog charge and recvmsg uncharge paths so the abstrac=
-tion
-> > >  is necessary.
-> > >
-> > >  I've put together a simple diff based on your patch for reference.
-> > >  I haven't tested it thoroughly, but it at least handles TCP and UDP
-> > >  separately through a callback, keeping the generic code clean.
-> > >
-> > I can follow up on TCP, but TCP needs another fix, which
-> > cannot be factored out.
-> >
-> > Some wrong assumptions in your patch:
-> >
-> > 1) tcp_psock_ingress_charge() uses psock->ingress_lock,
-> >  but it does not protect any tcp_sock fields, especially
-> >  sk->sk_forwad_alloc.
-> >
-> > 2) TCP memory accounting happens under bh_lock_sock()
-> >  _or_ lock_sock(). sendmsg()/recvmsg() works under
-> >  lock_sock() and TCP fast path puts skb to backlog if
-> >  lock_sock() is held by userspace. This means even
-> >  a simple bh_lock_sock() in tcp_psock_ingress_charge()
-> >  race with memory accounting happening under lock_sock().
-> >
-> > Since sk_psock_skb_ingress() is called from both GFP_KERNEL
-> > and GFP_ATOMIC context, the simplest fix would be to put
-> > lock_sock() in sk_psock_backlog() for TCP, which is ugly though.
-> >
->
-> OK, thanks.
->
-> Now my only concern is keeping UDP-specific logic
-> out of skmsg.c.
+This structure definition is used outside the kernel proper.
+For example in kmod and the kernel build environment.
 
-We already have TCP-only msg->sk logic there that
-you added.  It just does not look like TCP code.
+To allow reuse, move it to a new UAPI header.
 
-If really needed, we can do such cleanup in bpf-next
-for TCP and UDP altogether (probably after another
-TCP fix ?).
+While it is not a true UAPI, it is a common practice to have
+non-UAPI interface definitions in the kernel's UAPI headers.
 
+This came up as part of my CONFIG_MODULE_HASHES series [0].
+But it is useful on its own and so we get it out of the way.
 
-> We could use a function pointer so that UDP
-> implements its own ingress charge in udp_bpf.c, while other
-> protocols just use a default no-op or even NULL.
+[0] https://lore.kernel.org/lkml/aZ3OfJJSJgfOb0rJ@levanger/
 
-If TCP requires locking outside of the scope, there's
-no point adding one more extra layer/complexity just
-for UDP.
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+Changes in v3:
+- Also adapt the include path for the custom sign-file rule in the bpf selftests.
+  (My manual run of BPF CI still fails, due to an BUG() on s390,
+  I don't see how this is due to this patch)
+- Link to v2: https://lore.kernel.org/r/20260305-module-signature-uapi-v2-0-dc4d81129dee@linutronix.de
 
-Even if we go that way, most likely we cannot get rid
-of protocol-specific code (UDP/TCP-only hook) and
-end up with the indirect call helpers, which will be
-expensive than simple if logic.
+Changes in v2:
+- Drop spurious definition of MODULE_SIGNATURE_TYPE_MERKLE.
+- s/modules/module/ in two patch subjects.
+- Pick up review tags.
+- Link to v1: https://lore.kernel.org/r/20260302-module-signature-uapi-v1-0-207d955e0d69@linutronix.de
+
+---
+Thomas Weißschuh (8):
+      extract-cert: drop unused definition of PKEY_ID_PKCS7
+      module: Drop unused signature types
+      module: Give 'enum pkey_id_type' a more specific name
+      module: Give MODULE_SIG_STRING a more descriptive name
+      module: Move 'struct module_signature' to UAPI
+      tools uapi headers: add linux/module_signature.h
+      sign-file: use 'struct module_signature' from the UAPI headers
+      selftests/bpf: verify_pkcs7_sig: Use 'struct module_signature' from the UAPI headers
+
+ arch/s390/kernel/machine_kexec_file.c              |  6 ++--
+ certs/extract-cert.c                               |  2 --
+ include/linux/module_signature.h                   | 30 +---------------
+ include/uapi/linux/module_signature.h              | 41 ++++++++++++++++++++++
+ kernel/module/signing.c                            |  4 +--
+ kernel/module_signature.c                          |  2 +-
+ scripts/Makefile                                   |  1 +
+ scripts/sign-file.c                                | 19 +++-------
+ security/integrity/ima/ima_modsig.c                |  6 ++--
+ tools/include/uapi/linux/module_signature.h        | 41 ++++++++++++++++++++++
+ tools/testing/selftests/bpf/Makefile               |  1 +
+ .../selftests/bpf/prog_tests/verify_pkcs7_sig.c    | 28 ++-------------
+ 12 files changed, 101 insertions(+), 80 deletions(-)
+---
+base-commit: 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
+change-id: 20260302-module-signature-uapi-61fa80b1e2bb
+
+Best regards,
+-- 
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+
