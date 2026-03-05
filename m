@@ -1,179 +1,185 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4DF9345CA5
-	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 20:37:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A7CF1A683B
+	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 20:46:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772743080; cv=none; b=aU/6urf0U1sp2tJT+TdXS85SmuCmLI+CTAlq8ZVAPwGLp7pTGx6RMvFYF3VV/b6jy1FTSCq47cwVxVvAkdMvAPQDDzrqaDh5ZsrvTR2Ew0pI0Uitme4S3zkmz3fZRI7HUEbVnwF78cjcP+8nDv6VlLs9gNxoHR83NyXzpHZun+o=
+	t=1772743578; cv=none; b=S0O3Xhc5XiJKMsDyT5rfOWYyXo9KdNhmuxaNccBDVmGj3GQcto0jYUQia5UbHyCdaeqU0i/2UBkbHE2q6o/gnSYFcu60zv1u1C5kdPx2PhbdzIri84JMXOWlnl/862etDBNc82PvDDMK2KopEDkwZIoQWh4Y1Ozwt5xADYCvQLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772743080; c=relaxed/simple;
-	bh=cnxiDzaTG3dDRmVmA/NbvEgeXNe7TfmfMEbBpvNLqsY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=TgRQhXqMJdtyxtRD3ABKHer9wAabWEoYde7PxdtSp+f8C8OS0BhwNQ+2l0lE1ZIJKkHl85S1H46g7n6Xby6nun2xFAe+pA2jpU0bwacvCigz7NuQ/4lPmC9kRCHmlLvSGUjRoU/Yo6W0nd6eAzDPnm8M8HVEsoQCi5zdIVsMkjQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Gni7X/C3; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1772743578; c=relaxed/simple;
+	bh=q8ufLpNslSSynxuiXFuLszBqCCaJfxfHaFiz4uBXhHg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=BduxPMOD26H12+neIyic3Wom2iFuwpSDweV3E1jiGI9k9zVNgf1WdYiK7kjX1aWFNaLa0mZcaIij5GLhRfD3f23WQZS75HZlbl7JGp5YFSEiAdXpKgty0kSSTctwTTosjbBTqxyboeWX5Ivx6tI/oOQaMztPLZVsuDK59b0sgZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GwSjYCxQ; arc=none smtp.client-ip=209.85.222.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Gni7X/C3"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-48372efa020so75337165e9.2
-        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 12:37:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GwSjYCxQ"
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-8cbae8f69cbso863661385a.0
+        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 12:46:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1772743077; x=1773347877; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yBymiq7nID2vF4wesRN60I/529SDzorxfefrpkxAGsE=;
-        b=Gni7X/C38IFjzoKGxSw36Mv7ExYpAofpud9tmH6C78LpgTXLWvZaDDcuRNH7Lkvdx3
-         naAstLwTOkgUPwq91rNedD8X0Sx1E98x07zjT6NGlRP2v3TyCrZgYWctMyFjuphGquK/
-         gUj7NPR4NW3RxhAdC+t73Rxn6ijza0Yv7jbQLUwSgROARE1LkM4TY1O7evWhBdCTPHwJ
-         KpcYGYUcMvVSF4j6c2kDE5giU1LPq91VIc/Yno/Y2amBPN2zoWUA+JwERA1QHD10YOuU
-         vn0GcPV7W6a2b5R2ykzXdrIGlt3IWPlhU971KSDHTVSJRrJUFvkHGla0jyyeCPF02pEz
-         TWAA==
+        d=gmail.com; s=20230601; t=1772743576; x=1773348376; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=hpjhThsp+16LsJkraaDBfD6WR8AcYeiPqIr1Bw2XbvI=;
+        b=GwSjYCxQHak6UYlFdWkvfoXsnMNy1DFHS1igP9KzxF5KkIBU8rrd2kem6SVsr+dpZI
+         6IMlyDMsWuTY4KL3wlj96LbYW/qBrBi2FNVeo+cj2hnauqEC6XuMw6cbWcjJ+iNC7q56
+         ABfVVq9mQVYXKrGlFiKJZrBz9k4M6OU+WFyotV1TqxH9bVFLoCqG9A8CCFJOeLWdNSCL
+         qYAaHQDkoSfr4r/QX9Ns00ER0HOWay7qG4Pt+wIdPtCpzudnPxl2VwF1TZNvwkpO3tiV
+         ACJZBEV8kYzKxsIwkCuV1y4hh7WizC9JGw39yPJNMpClzltGTMtscsqlcysJiya8Jx13
+         F5iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772743077; x=1773347877;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=yBymiq7nID2vF4wesRN60I/529SDzorxfefrpkxAGsE=;
-        b=RakGS/qdn6AfBr2vQqFUR6/P9nwjnJgNeKmKgZd16u5xjL4bVCiKCmQp71rioRkhPS
-         zo6Jttzyw5qOyoYLWBnm5i9FyiVG8hopil8RxaX+qOJghuBihfWuJTxvUVu6neNqvGTl
-         lEXkf3MGZGNi/A/qPlCt3hS4amz9jbGqmJS6CMwIYP2tSWPB9xC7QDW2bKqRRE6nBJtg
-         L6/eE6rBe2X/Ua2Hoxh0tOFZyjwskAXJGQ/mQhVR/mIiNj+jExwDRGBajxB1111+3XZd
-         NA8WiRQo1QrAfdVrSqL3zag5QL3lmCKZtyFMqt/I9p9z1is9UVRxhtjcWYEPlDYpPUcb
-         FM5g==
-X-Forwarded-Encrypted: i=1; AJvYcCU6uUYJ6LfdHX9J6JwteJ0BEGV8loaD9pMPmk52+7rfmwJb3Qi+pXdjTvaaFB/0f28TlVc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnmDx1cSdnDHZ2xDresRv0OccLimC6knwsHvb8vOTrFHZVeQvG
-	ebszZigiON8irEHtTiSk0nxtIOFvmqa2SN97dyxt46rxMUewxj7G3X6BR53XrFw+7bk=
-X-Gm-Gg: ATEYQzyOkXb1Ztlc/N4KJ4LiNgtTJkh5JNSohD79cpuVVH22l/rz9L6OeQe9mjD0hb6
-	NUsB91ZzLPWgwljyiO8VykT3FkKNZSVRiHTVc+a0gn85urFG/j7FTb+er/MOvrZJlipob/WX1iy
-	GEMnNf7n8aK2+7N8prRD2Uy/i6HwMP6TiEgb+DjjXuIXRhcE4MB4JBACb+jrbTGEd/OpQf2AdKS
-	x1uHsBLOIpiG7mu42T+w7Whr32JrUFZNeiO8/YTUwftNrW6sSfUXce0qyCudkmGGFvTpU+5+4iw
-	cHBBT04YE9REuyTHxQi6OGCGmNnaAkJ4ASxgTfX3m+dcs0KOWuaQRrlBFMRz2/+GOiI1lbYW94+
-	pbATi9zzFHjnnk3RGIdmpAuncclTZE/gK9WThHActx1paZh0bVCVbLGZBIsrUijHuggu5apEGIq
-	zmkCp8nv22+g==
-X-Received: by 2002:a05:600c:a08c:b0:483:885:f0b0 with SMTP id 5b1f17b1804b1-485198bac26mr132115915e9.35.1772743077012;
-        Thu, 05 Mar 2026 12:37:57 -0800 (PST)
-Received: from localhost ([189.99.238.164])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-56b007a3364sm1714489e0c.16.2026.03.05.12.37.55
+        d=1e100.net; s=20230601; t=1772743576; x=1773348376;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hpjhThsp+16LsJkraaDBfD6WR8AcYeiPqIr1Bw2XbvI=;
+        b=XlGzXvuvRYmuLGrQw58CwU0mLGFB1FPZcKKv5+HpRLBAz9ISnS5NH7I+1lZag8EhHf
+         fRALIPgE2/+BQMHtZygpYyFiX3j/hkfxlTFNDYkxPAVIQ0kni+qToyMR+xyhDGYCD5nZ
+         w5hRldTJQyNCOZXSCCTHVFYB3ehChl8glc//YAws6tJTDUJUWCaXRkyQNZPPPL1wEHhj
+         3v14P1vVUZszz4DjsXBBUyD0RbqOsRcFD5iJ4DG1LzYNzDG6ktNx8cZZJ1RO42HYl8VF
+         Gnu6ukIjQLkIuqkNfJmhko+9cYrvrnI8SLPZigl/2EPCKmlPCvo0yFEdUaHK+0/Yt37p
+         oTFg==
+X-Forwarded-Encrypted: i=1; AJvYcCUb3e+Em8jmEPsU1YgKg1U2Tme+TZWEUpWKsgtzSp+M/tze5sSTyRn5ZeAD1Y2r0N24kEs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxI80EzZ0MQTeZ9GdGttV8H5XkcMSpNVrUZgzcZruGcOVtkYnXH
+	b3fbfyP3pbfR5pw+vu5U41K7cq4Obx1GC510JMxCuEr27mYWNxbEYdNX
+X-Gm-Gg: ATEYQzwwpXz68kVdfI+bFljBImElOYxTxi8CREZ4J0uW8faCqyF3wRGFqxQXkkUYu/B
+	ROjPjHJL7AZqhgfhYVqCvjd3dZSyKSF5yEApLlBAru9239jm2y8a6OaVr1VRRdh/xiBVQC4sXhE
+	4YDGF4IfRR3W4zn9MF7csi4Glq63EBbvdom2p6vY6+hbNjETv9rIDTavxbhkrNJNBbWgdVKGGGQ
+	x+7kRjN8A9kk1LyLJgSH8o+hj0LDfVX6ucOMqamyE4EYCCTyLknQt3bINo6ocYPJR8IN0geHWU9
+	cbkWbIK+CZYsLExw9Pc9Z2qL8vQ0wCjFY/aMelM+ISD7xviBPnZzvOKp9lUYC8P7dTxt3iGgnnq
+	HsH4jif23yoxxDG12bU/ozOSYnKPTP+0H8WpeDt8LaxEpEawpQEB7qfueUeFlYJEvNm3tConsT4
+	GQveXUuGFbQMIl6NOAorahsoeEXbIsbdX2SZGhw9c8PxAvKrH0knYV
+X-Received: by 2002:a05:620a:4014:b0:8cb:3919:f538 with SMTP id af79cd13be357-8cd634f1ccfmr407076785a.39.1772743576065;
+        Thu, 05 Mar 2026 12:46:16 -0800 (PST)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cbbf658f70sm1936984085a.7.2026.03.05.12.46.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Mar 2026 12:37:56 -0800 (PST)
-From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Date: Thu, 05 Mar 2026 17:37:41 -0300
-Subject: [PATCH net v2 3/3] net: bonding: Fix nd_tbl NULL dereference when
- IPv6 is disabled
+        Thu, 05 Mar 2026 12:46:15 -0800 (PST)
+Message-ID: <3fd3c01483348c678490810e379ceb76ceab7781.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/2] bpf: Only enforce 8 frame call stack
+ limit for all-static stacks
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
+Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	martin.lau@kernel.org, memxor@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev
+Date: Thu, 05 Mar 2026 12:46:11 -0800
+In-Reply-To: <DGV3PH3KCD9F.T400P92JF2T5@etsalapatis.com>
+References: <20260303043106.406099-1-emil@etsalapatis.com>
+	 <20260303043106.406099-2-emil@etsalapatis.com>
+	 <592a6eacf7c278137e49acb62f527e07a6c0b473.camel@gmail.com>
+	 <DGV3PH3KCD9F.T400P92JF2T5@etsalapatis.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260305-net-nd_tbl_fixes-v2-3-b7177db1a9f3@suse.com>
-References: <20260305-net-nd_tbl_fixes-v2-0-b7177db1a9f3@suse.com>
-In-Reply-To: <20260305-net-nd_tbl_fixes-v2-0-b7177db1a9f3@suse.com>
-To: Martin KaFai Lau <martin.lau@linux.dev>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
- KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>, 
- David Ahern <dsahern@kernel.org>, Jay Vosburgh <jv@jvosburgh.net>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, Hangbin Liu <liuhangbin@gmail.com>
-Cc: Fernando Fernandez Mancera <fmancera@suse.de>, bpf@vger.kernel.org, 
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openssh-sha256; t=1772743062; l=2650;
- i=rbm@suse.com; h=from:subject:message-id;
- bh=cnxiDzaTG3dDRmVmA/NbvEgeXNe7TfmfMEbBpvNLqsY=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
- x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QFEHFEzi4olsRwKIGTYjj0OJcMJUp7J/8RoYSXtHC6YxcKesAOSiPUA9lLV1yaiiKX9118RM+Zw
- h7qF3LiueJwA=
-X-Developer-Key: i=rbm@suse.com; a=openssh;
- fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
-When booting with the 'ipv6.disable=1' parameter, the nd_tbl is never
-initialized because inet6_init() exits before ndisc_init() is called
-which initializes it. If bonding ARP/NS validation is enabled, an IPv6
-NS/NA packet received on a slave can reach bond_validate_na(), which
-calls bond_has_this_ip6(). That path calls ipv6_chk_addr() and can
-crash in __ipv6_chk_addr_and_flags().
+On Thu, 2026-03-05 at 14:38 -0500, Emil Tsalapatis wrote:
 
- BUG: kernel NULL pointer dereference, address: 00000000000005d8
- Oops: Oops: 0000 [#1] SMP NOPTI
- RIP: 0010:__ipv6_chk_addr_and_flags+0x69/0x170
- Call Trace:
-  <IRQ>
-  ipv6_chk_addr+0x1f/0x30
-  bond_validate_na+0x12e/0x1d0 [bonding]
-  ? __pfx_bond_handle_frame+0x10/0x10 [bonding]
-  bond_rcv_validate+0x1a0/0x450 [bonding]
-  bond_handle_frame+0x5e/0x290 [bonding]
-  ? srso_alias_return_thunk+0x5/0xfbef5
-  __netif_receive_skb_core.constprop.0+0x3e8/0xe50
-  ? srso_alias_return_thunk+0x5/0xfbef5
-  ? update_cfs_rq_load_avg+0x1a/0x240
-  ? srso_alias_return_thunk+0x5/0xfbef5
-  ? __enqueue_entity+0x5e/0x240
-  __netif_receive_skb_one_core+0x39/0xa0
-  process_backlog+0x9c/0x150
-  __napi_poll+0x30/0x200
-  ? srso_alias_return_thunk+0x5/0xfbef5
-  net_rx_action+0x338/0x3b0
-  handle_softirqs+0xc9/0x2a0
-  do_softirq+0x42/0x60
-  </IRQ>
-  <TASK>
-  __local_bh_enable_ip+0x62/0x70
-  __dev_queue_xmit+0x2d3/0x1000
-  ? srso_alias_return_thunk+0x5/0xfbef5
-  ? srso_alias_return_thunk+0x5/0xfbef5
-  ? packet_parse_headers+0x10a/0x1a0
-  packet_sendmsg+0x10da/0x1700
-  ? kick_pool+0x5f/0x140
-  ? srso_alias_return_thunk+0x5/0xfbef5
-  ? __queue_work+0x12d/0x4f0
-  __sys_sendto+0x1f3/0x220
-  __x64_sys_sendto+0x24/0x30
-  do_syscall_64+0x101/0xf80
-  ? exc_page_fault+0x6e/0x170
-  ? srso_alias_return_thunk+0x5/0xfbef5
-  entry_SYSCALL_64_after_hwframe+0x77/0x7f
-  </TASK>
+[...]
 
-Fix this by adding an early check in bond_confirm_addr6(). If
-ipv6_stub->nd_tbl is NULL, return before calling ipv6_chk_addr().
+> > > @@ -6723,8 +6728,8 @@ static int check_max_stack_depth_subprog(struct=
+ bpf_verifier_env *env, int idx,
+> > >  				continue;
+> > >  			if (subprog[idx].is_cb)
+> > >  				err =3D true;
+> >=20
+> > Below the old version of the loop does not include current frame, but
+> > the new version *does* include current frame. Looks like the above
+> > check can be removed.
+> >=20
+>=20
+> Makes sense.
+>=20
+> > > -			for (int c =3D 0; c < frame && !err; c++) {
+> > > -				if (subprog[ret_prog[c]].is_cb) {
+> > > +			for (tmp =3D idx; tmp >=3D 0 && !err; tmp =3D subprog[tmp].cidx) =
+{
+> > > +				if (subprog[tmp].is_cb) {
+> > >  					err =3D true;
+> > >  					break;
+> > >  				}
+> >=20
+> > This code checks that bpf_throw() cannot be called from callbacks.
+> > The `is_cb` is set in push_callback_call() both for sync and async
+> > callbacks, it is also set for exception callback separately.
+> > Meaning that check_return_code() can be simplified further.
+> >=20
+>=20
+> Do you mean we can simplify the check for choosing between
+> check_return_code and check_global_subprog_return_code to just check
+> is_cb instead of checking both is_async_cb and is_exception_cb?
 
-Suggested-by: Fernando Fernandez Mancera <fmancera@suse.de>
-Fixes: 4e24be018eb9 ("bonding: add new parameter ns_targets")
-Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
----
- drivers/net/bonding/bond_main.c | 3 +++
- 1 file changed, 3 insertions(+)
+Actually, I was thinking about `frame->in_async_callback_fn` checks in
+check_return_code(). But on a second thought these are unrelated.
+Please skip my comment above.
 
-diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-index 14ed91391fcc..7d32cd231633 100644
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -3256,6 +3256,9 @@ static int bond_confirm_addr6(struct net_device *dev,
- {
- 	struct in6_addr *addr = (struct in6_addr *)priv->data;
- 
-+	if (unlikely(!ipv6_mod_enabled()))
-+		return 0;
-+
- 	return ipv6_chk_addr(dev_net(dev), addr, dev, 0);
- }
- 
+[...]
 
--- 
-2.53.0
+> > > @@ -6783,12 +6792,12 @@ static int check_max_stack_depth_subprog(stru=
+ct bpf_verifier_env *env, int idx,
+> > >  	 * tail call counter throughout bpf2bpf calls combined with tailcal=
+ls
+> > >  	 */
+> > >  	if (tail_call_reachable)
+> >=20
+> > Unrelated to current patch, but looks like an issue.
+> > `tail_call_reachable` is not reset anywhere in
+> > check_max_stack_depth_subprog(). Once it flips to true all calls
+> > visited afterwards trigger spine to be marked.
+> >=20
+>=20
+> You're right, this is never unset. I can send a followup patchset for
+> this along with the followups for the check_return_code patch. I believe
+> we can change this to eagerly set the subprog's tail_call_reachable flag
+> directly instead of using a stack variable.=20
+>=20
+> > > -		for (j =3D 0; j < frame; j++) {
+> > > -			if (subprog[ret_prog[j]].is_exception_cb) {
+> > > +		for (tmp =3D idx; tmp >=3D 0; tmp =3D subprog[tmp].cidx) {
+> > > +			if (subprog[tmp].is_exception_cb) {
+> >=20
+> > As with previous such loop, the new code seem to include current frame.
+> > Does this change anything?
+> >=20
+>=20
+> I think it is ok, though since as you pointed out tail_call_reachable doe=
+sn't=20
+> currently seem to work correctly I can only assume: We set tail_call_reac=
+hable=20
+> if any of the subprogs called by the current one make a tail call. If
+> that's the case, the current frame should also count as tail_call_reachab=
+le.
+>=20
+> It all depends on where tail_call_reachable is supposed to be set and uns=
+et. I=20
+> think it's supposed to flow from callee to caller, and if that's the
+> case we should hoist up the whole loop to where we initially set the
+> stack variable.
 
+So, the tail_call_reachable flag is transferred to subprog[*].tail_call_rea=
+chable
+property. In check_subprogs() there is direct `subprog[cur_subprog].tail_ca=
+ll_reachable =3D true`
+if tail call exists in the subprogram. Looks like behavior does not really =
+change
+with this patch.
+
+> > >  				verbose(env, "cannot tail call within exception cb\n");
+> > >  				return -EINVAL;
+> > >  			}
+> > > -			subprog[ret_prog[j]].tail_call_reachable =3D true;
+> > > +			subprog[tmp].tail_call_reachable =3D true;
+> > >  		}
+> > >  	if (subprog[0].tail_call_reachable)
+> > >  		env->prog->aux->tail_call_reachable =3D true;
+
+[...]
