@@ -1,75 +1,79 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CFD934C9AF
-	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 14:02:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FBC834C9AF
+	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 14:03:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772719369; cv=none; b=ULcneF7tZkIkB0Gv86QXevrmHpqPAjiQ2Bes4ILARF/BLlcuHlql6hLNZk3fyncRhzhVWJ6mapE0bTQD2tFlEafv5oBNrjrvSiZF6UyZyLDOj2mKO9FcI1nU5wGT4zsqfpTISsWYxnjQojfi1RLHS4HPis5M/LelvZkmfEJQVNg=
+	t=1772719381; cv=none; b=p2Wbmrnt1F/dL3X2l3L6xXT+EmzgGewPhm+C1NQK95W3dPH43QKKmT8DG5DrD6x+FUbkpV6J7LRcfy25gzoUHmz6AsVCccgUhviCsnwvNCfCCzJ31gho55f68xICss6vtNMmz7/VTIfUpRVl1Hbr8+01R/YHpKUR7YEFjthYzmQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772719369; c=relaxed/simple;
-	bh=Z34mdtr1b/ICs/c64EQSK4zTp2yDbOBYmoxjVqtaA8I=;
+	s=arc-20240116; t=1772719381; c=relaxed/simple;
+	bh=5kkbubYy4FnU0F2wQ5CgXGyB2dALRdLIq2BTPUeGbMU=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TtuCRkPI5FHNg5DWpAeqgfJrdPa4Q+GGjMQkXBFOjFD3CXRRmwIg8/vJh1jRd9KqlqlF2Q7vYUtycjz9ZCIHFws6IAVuAqKN7i8tKmpPZuBFikZTmunymHEZx2YdiFBNB/HVBx1WU7FEiuJeeNdHqpnh8RDTrYFo9FuD53WRk4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gutkv2/o; arc=none smtp.client-ip=209.85.221.53
+	 Content-Type:Content-Disposition:In-Reply-To; b=kBIGnEaLd9RFdjYm7dVBdZk1J3WUXFeSw2hbSQkVxEY5kVwAPWNuI7nBZdEUQAFYEaaaBbjPBpGXB2/AwjGLr5aUvSHughiiSLabEq5ETnfBewtAVPDOrnaTc5soMGseacvG1YlJicRMwt99qQo1CdGiF1jyoSB3tHaN6662uxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S6qfAn0c; arc=none smtp.client-ip=209.85.128.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gutkv2/o"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-439aeed8a5bso5185149f8f.3
-        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 06:02:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S6qfAn0c"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4838c15e3cbso73550275e9.3
+        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 06:03:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772719365; x=1773324165; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772719379; x=1773324179; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GKxSvraDpoad+84dRp1TpOG4toWpwmDod5+UGYBJ7P8=;
-        b=gutkv2/oaetcQvQMiO7Hgy8gZJQ43kXaIcRljvMYfkZcRn7DHOT0nYcaciVjcV/bh/
-         vFj6MzU5Jj0TCZ4/bVRCLbEV4lIe51nc5nRN2JCaAZwVWJwNH56R6cAiNiClAyMMbCf3
-         NLrsHbTaGYiiIFKiepAg1kzCtKURAm01QeA25O5pEMigd5WtdKQsIScvG9pIRyzA7r/n
-         aRZqVPyUsuVcma52fWYx01IwzSoAipoEzuv2/WS6tkw0lHQA5fcIwtqEc1Q0uW/RDhop
-         fW54rqAlXrfjfuCr4eg3nODTO4juKE/N4pDF0S/momvmsha2FJr/4vxjuMWF3ZtA5rSC
-         GwWQ==
+        bh=0gc32faIZSqifYGedhNQqSI6XI0cDDSqa8ioUwK5io4=;
+        b=S6qfAn0ch6vt0YJyKh542nbikJl4u+37ga62FIg8Pq8E8AWo18DBATIppf77FgnS6N
+         qM50rvrmlM+uxTR66K3YDfEfK1JZPmyydx/mIHlXZvGNrO3mYO9KrNnJoYRRNiofCOa4
+         1s5ppHUOPotsfnJGATbKJw6cIuelVoHFArD5erwtqrOt81qJ1X0szY6GzVzpePOFZqgE
+         jxD3J6fD0bM/lyoQMsLhFgWCB7TlZy/sRRUYNeaUKCR/Ri1oN+IOHKhNyyBBfxYYbW8K
+         WuDTMAX8gVRTzIwKBVtJv1RBMQTWwHDXIb/Rrxe1fmsbTfPz9uODAeVRioHwk64g5aaS
+         0UIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772719365; x=1773324165;
+        d=1e100.net; s=20230601; t=1772719379; x=1773324179;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GKxSvraDpoad+84dRp1TpOG4toWpwmDod5+UGYBJ7P8=;
-        b=WfgFgZslzKalAi2W/phv4k3+cRRBJ7bluTSNSt3mEFisv5VX/R9/Re/dmGRny+4l7f
-         dGr8bLMFrV8Mg5vbbOv3aEZzkK0sVoRxfA5CXb/OAMo6afPB0SJdt9QQZSv0Lqsoscxr
-         5oy102hMKcsHGEvT8QfLgDP19zdsKLVDPDSVNZJ52ycdgC8sbptHb5B7dhruRY66Q5BG
-         2XlDChXz1i0iOnvFOQQijIdxi2BLvGuSfTHfn3uxiuhJ6XzfhQX6XYBHXe7bCjaqrYBC
-         LB1FKFxoFEOAj3hfCKR+TaCvo482nDuwzGEagoqcCwQCTqBN8JnW192TfW5T4SaWywdv
-         friQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWpBcx5NAz4sJpmyi4UI/4YS6mQ6cnfKmm76qOWud3pBDbHUHGYKJY84TDvKRdweftnxN0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxxpr1VAeQKFtuafUX7WwMr2PgFrmzrigkT8MZ3odYklK0/ur2B
-	I/DCfioDeE680jLcv46GLLGMYJ1AzYZeKnaw63ATtbqZIjOxt6o1T2aK
-X-Gm-Gg: ATEYQzwviI2/dziyuVtKz9o+yYLqgfe6ITLQfZg2Gy8tnYLxjxO0I38L1/q0ipfP5P8
-	nzkfJKnGgBJj7OKijBelsRTNSDXMr2poVBk3gMRpOxZzu66PREHBuJGOEMjFPb48BB9g+ScIF36
-	b3oKhjq/Xesy9VBZKaUvWT0j84NQoGhjawXcpdjOIYJYFGuFsU6UeVvrfdSFhk0v/nwI41t1TIR
-	mjOtUhEAM2RRSJpEN1YVcTVcNRwx+QgjZxwBhH2MiCrpzhLgAmXhIP6GgtnpCIKEjl5llOStKMa
-	gv4HDi0XS5syYQ881fGfpcoKoCqyVUk5IXLBqZRyyTmxtyq8oSo7WpTz32LHWhmJnkgkszpu9vy
-	wqiwTnGZ1oAYE61/iALhcJRCBvRMASbKS3CUbVQN2M0VUmh0NHOWfPwPL4PkpQo9anO2IauiM
-X-Received: by 2002:a05:6000:1788:b0:439:af81:1b2f with SMTP id ffacd0b85a97d-439c80154b9mr10514645f8f.46.1772719365461;
-        Thu, 05 Mar 2026 06:02:45 -0800 (PST)
+        bh=0gc32faIZSqifYGedhNQqSI6XI0cDDSqa8ioUwK5io4=;
+        b=obVLK7/H6yx957XLh4qfCYU1La+TyMFTRHD6EEle9HZZiEs9XiPVYnfpSxI9N1xMiR
+         7XSHM3dVqYAmipctaog7s5+N47a/mZ8OFKKEoTZGFGdwZ0aI0LdLaoN1AnBbieIZgRsJ
+         d6HYlVIXA0EZzseTqm77PnSMsR5R0aXjvgOtC0RD3W4FDN1vxqqGHfB2Hbi8IfExUCHs
+         4pC5i3csa3WddfOuFT97cacNdkaDul4DC1QfX063MIvc8ASaXAC2duNTCGkE4d+ctc/b
+         LkHxjzKO8cRNx/+3yW5iUD1SXxoox7NFtZvOgd4Ftnt4UPufLu85A9+g9M3ZJy20Ldif
+         O3nQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVwCljTJ2qhTywfVQIjPazqcKLTSy6Eae83duKH47B1oHrz7oObSGDOzuHA/TJeNsYKc50=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZ0frXgRIMoJrAp2ptv90W5FCNUXUbn5RDXSX79otky/3UIrs+
+	lvTQtOI5WnL4LqJAVJceHxtzuJLC8HKVao/4PlhO/Q4WSQECmIWt4xgE
+X-Gm-Gg: ATEYQzxuL5RRIRoMZKzKt2NLvNq49eOFBdbotkU9qr1vowBZUydAgVlr2j4R6PKFoGb
+	8rAKmn2i+fyx8vwTWFvFd/0C0PMYvdxf+X0XPfGzS0NuMc4PqHGTYv6kfG+SUukHCxbUKSzDdsx
+	t0d4PLh9j9FLMcVeuMXHfL0luuJHVVKGYZUAUeG3qCQ1Gbn2/XgKy2YUhCQ+Xc0wXHs0qutMdex
+	GNfJQpGFfLXqAFO51c6GB1BdYDyym/bEmamn+qo62VaFZ85ZUtMp8Q7a+mGBuAwN77nq+Y4QJO+
+	9stKNboQdunbeG0SJgIp4ob+kGZRkJpms6P28aZh6Py61v52/YGx3NpjM429f4ur6s4KhZDI2yj
+	ljv5fu7o2YZ3pa4KBBxgKq4T7yI1hZ7pVRsKOoxhcUJGo53VQEzVhHBwY++HHe3SVmYM5K5un
+X-Received: by 2002:a05:600c:6992:b0:485:17a7:b9c7 with SMTP id 5b1f17b1804b1-4851984fd72mr103483905e9.10.1772719378184;
+        Thu, 05 Mar 2026 06:02:58 -0800 (PST)
 Received: from krava ([2a02:8308:a00c:e200::d99c])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439b34b6252sm34213852f8f.10.2026.03.05.06.02.44
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4851fade9fdsm79672885e9.4.2026.03.05.06.02.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Mar 2026 06:02:45 -0800 (PST)
+        Thu, 05 Mar 2026 06:02:57 -0800 (PST)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 5 Mar 2026 15:02:43 +0100
-To: bot+bpf-ci@kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	kafai@fb.com, eddyz87@gmail.com, songliubraving@fb.com, yhs@fb.com,
-	menglong8.dong@gmail.com, rostedt@kernel.org, martin.lau@kernel.org,
-	yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
+Date: Thu, 5 Mar 2026 15:02:56 +0100
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Steven Rostedt <rostedt@kernel.org>
 Subject: Re: [PATCHv2 bpf-next 15/23] libbpf: Add support to create tracing
  multi link
-Message-ID: <aamNA4bW5on1jD2c@krava>
-References: <20260304222141.497203-16-jolsa@kernel.org>
- <625b9bd61d08db7a0cdff51817fe64752c1901d360d73455b609516a0b611d3d@mail.kernel.org>
+Message-ID: <aamNEBkUuqKr2XQR@krava>
+References: <20260304222141.497203-1-jolsa@kernel.org>
+ <20260304222141.497203-16-jolsa@kernel.org>
+ <0f3ec422-4b98-4311-96de-ccfc86bb22ad@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -78,59 +82,91 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <625b9bd61d08db7a0cdff51817fe64752c1901d360d73455b609516a0b611d3d@mail.kernel.org>
+In-Reply-To: <0f3ec422-4b98-4311-96de-ccfc86bb22ad@linux.dev>
 
-On Wed, Mar 04, 2026 at 11:02:25PM +0000, bot+bpf-ci@kernel.org wrote:
-> > The provided <pattern> is used as 'pattern' argument in
-> > bpf_program__attach_kprobe_multi_opts function.
-> 
-> The function referenced here should be
-> bpf_program__attach_tracing_multi, not
-> bpf_program__attach_kprobe_multi_opts. This was noted in v1
-> review.
+On Thu, Mar 05, 2026 at 02:59:48PM +0800, Leon Hwang wrote:
 
-I'm refering to bpf_program__attach_kprobe_multi_opts intentionaly
+SNIP
 
-> 
-> > - bpf_program__attach_kprobe_multi_opts must either have
-> >   pattern with module spec or BTF ids from the module
-> 
-> Same here, should be bpf_program__attach_tracing_multi.
-
-yep, that's typo, thnx
-
-> 
-> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> > --- a/tools/lib/bpf/libbpf.c
-> > +++ b/tools/lib/bpf/libbpf.c
-> 
-> [ ... ]
-> 
-> > +struct bpf_link *
-> > +bpf_program__attach_tracing_multi(const struct bpf_program *prog, const char *pattern,
-> > +				  const struct bpf_tracing_multi_opts *opts)
+> > +static int tracing_multi_mod_fd(struct bpf_program *prog, int *btf_obj_fd)
 > > +{
-> > +	LIBBPF_OPTS(bpf_link_create_opts, lopts);
-> > +	__u32 *ids, *free_ids = NULL;
-> > +	__u64 *cookies;
-> > +	int prog_fd, link_fd, err, cnt;
-> > +	struct bpf_link *link;
+> > +	const char *attach_name, *sep, *mod_name = NULL;
+> > +	int i, err, mod_len = 0;
 > > +
-> > +	cnt = OPTS_GET(opts, cnt, 0);
-> > +	ids = OPTS_GET(opts, ids, NULL);
-> > +	cookies = OPTS_GET(opts, cookies, NULL);
+> > +	*btf_obj_fd = 0;
+> > +	attach_name = strchr(prog->sec_name, '/');
+> > +
+> > +	/* Program with no details in spec, using kernel btf. */
+> > +	if (!attach_name)
+> > +		return 0;
+> > +
+> > +	attach_name++;
+> > +	sep = strchr(attach_name, ':');
+> > +	if (sep) {
+> > +		mod_name = attach_name;
+> > +		mod_len = sep - mod_name;
+> > +	}
+> > +
+> > +	/* Program with no module section, using kernel btf. */
+> > +	if (!mod_name)
+> > +		return 0;
+> > +
+> > +	err = load_module_btfs(prog->obj);
+> > +	if (err)
+> > +		return err;
+> > +
+> > +	for (i = 0; i < prog->obj->btf_module_cnt; i++) {
+> > +		const struct module_btf *mod = &prog->obj->btf_modules[i];
+> > +
+> > +		if (mod_name && strncmp(mod->name, mod_name, mod_len) == 0) {
 > 
-> Should this function validate opts with OPTS_VALID() before
-> calling OPTS_GET()? The comparable
-> bpf_program__attach_kprobe_multi_opts() does:
+> strncmp() is not enough to exactly compare two module names, as
+> strncmp() only compares the first 'mod_len' bytes.
 > 
->     if (!OPTS_VALID(opts, bpf_kprobe_multi_opts))
->         return libbpf_err_ptr(-EINVAL);
+> So, mod_name "foo" could match mod "foobar", since 'obj->btf_modules'
+> are not sorted by name after loading from kernel.
 > 
-> Without OPTS_VALID(), a caller passing opts with sz=0 would have
-> ids, cookies and cnt silently ignored rather than getting -EINVAL
-> back.
+> To find the exact module via module name, "strncmp() == 0 &&
+> mod->name[mod_len] == '\0'" would be better.
 
-yep, should be there, will fix, thnx
+yes, good catch, will fix
 
+SNIP
+
+> > +static int collect_func_ids_by_glob(struct bpf_object *obj, const char *pattern, __u32 **ids)
+> > +{
+> > +	const char *mod_name = NULL, *sep;
+> > +	int i, err, mod_len = 0;
+> > +	struct btf *btf = NULL;
+> > +
+> > +	err = bpf_object__load_vmlinux_btf(obj, true);
+> > +	if (err)
+> > +		return err;
+> > +
+> > +	/* In case we have module specified, we will find its btf and use that. */
+> > +	sep = strchr(pattern, ':');
+> > +	if (sep) {
+> > +		mod_name = pattern;
+> > +		mod_len = sep - pattern;
+> > +		pattern = sep + 1;
+> > +
+> > +		err = load_module_btfs(obj);
+> > +		if (err)
+> > +			goto cleanup;
+> > +
+> > +		for (i = 0; i < obj->btf_module_cnt; i++) {
+> > +			const struct module_btf *mod = &obj->btf_modules[i];
+> > +
+> > +			if (!strncmp(mod->name, mod_name, mod_len)) {
+> 
+> Same concern here.
+> 
+> Would it be better to factor out a helper to find module via name?
+
+we have similar issue in find_kernel_btf_id, but we get away with
+that with just continuing to loop modules if the lookup fails
+
+I agree some helper would be good hear, will try to add it
+
+thanks,
 jirka
