@@ -1,43 +1,68 @@
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1FD9306B1B
-	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 06:37:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25FBD298CBE;
+	Thu,  5 Mar 2026 06:39:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772692669; cv=none; b=CfAdI2p83H9WGPkGAJ2KVAt+Y7mcLDYopNJPEEH8EL4kRgNn1ptPh3Pdk8KmC+C3lTgyVb7hd9EIt5Ps0G6xQBnDinX8yX60KLofDHablrCTm8W9hHFBX7l+J7Zj4KwkRwi2840LDFQL8wL70FKH74iWWN931dsKxDC7kWQHucM=
+	t=1772692752; cv=none; b=fQDUqx5S4Z62VfT0J4OOPx4kBZzKxsUp6wi7BU4vb77pod1qW6RxFfrSVczmuXOm1m1i39zNtcuZu8YZMtuOK/AJNjUCKpsOF5lRRHkrD0gfebevDagemHf+HUunlBinjoca4jcgGDASItBAu/TF8EVzLb6iEHereU7LKCoFQm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772692669; c=relaxed/simple;
-	bh=2/dDEO6Okg4r6z3kT6lcNlrPgBgleKltpkjwonngJhc=;
+	s=arc-20240116; t=1772692752; c=relaxed/simple;
+	bh=08P+xjE+qk6UsI8mJrxebsA7ZIQQhBiJz1S2trq85zI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m4pDCtMxNW0jpMa8SvAKE79mpk8YU61BtUgCoqN/5LJUzXePkXUPuTtAUFK7Rb1sbfxAbwMWmLJ3UtOnkuKZGn9n/C1xQ95SxF+MTf2CgoukOI1FeHvM8BHMAqDQKcd6vwihnVTkcWJcANGPGMwA6FyVzDRCF1L1lQdkkuVPaTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=nHbNSVCO; arc=none smtp.client-ip=91.218.175.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 Content-Type:Content-Disposition:In-Reply-To; b=K89722FWFeeBdGCc2MZoda7WKt/kftj9jIYpQAAfupFTIiopMYULtFgvWpki8CvOpSimpD+AJrX7ERztnCNt9LrA1my6OOv7kksOXNWPMLMgc79CPzs5Tbdxq/5g4SIuvkRQJLDaaut0WWmw+vI8Qq+5Zk8LLPsKx6y/LEx0oOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iRGDL2Ej; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="nHbNSVCO"
-Date: Thu, 5 Mar 2026 14:37:35 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772692664;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2S16QnK4rxQ0pZBOKtZvv7yodAZC9lYu1exEt4dOxzE=;
-	b=nHbNSVCOaFCTs1ON86LqF5XUcEV/dNYlH82IX4io1DZL1IHqv7wsEuTnAoOgibkEc0TmSk
-	T7HliUDKTJLT1aNwKPHeRxyJW8srzpW5d3umqVv9eGh+tIxH0oJI4nYMJgchW5M9rn2yii
-	Goy4d91QR2VA/YVA0iK8ChQSpaD81y4=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: John Fastabend <john.fastabend@gmail.com>, 
-	Jakub Sitnicki <jakub@cloudflare.com>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
-	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	syzbot+5b3b7e51dda1be027b7a@syzkaller.appspotmail.com
-Subject: Re: [PATCH v4 bpf/net 6/6] sockmap: Fix broken memory accounting for
- UDP.
-Message-ID: <r7csevb4yonphmfhfpkj7jpc4yvjkdwrp566zxhueaf6vgjfak@stnfyjkqid6o>
-References: <20260221233234.3814768-1-kuniyu@google.com>
- <20260221233234.3814768-7-kuniyu@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iRGDL2Ej"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772692751; x=1804228751;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=08P+xjE+qk6UsI8mJrxebsA7ZIQQhBiJz1S2trq85zI=;
+  b=iRGDL2EjwHfDYXZBx0nnPzq8KWQJl2ZNQTNjewkhQz7L+o4uGEkaUbTw
+   W4l8KsL7Z0M+jAe72ztPBCZN45EPyLITeXbyFRQgf5UV/IHeFqS5Z6AuW
+   t0bRwHVy/Hd9wjg1dsoCqhFvToOGXZm6Y2DSLEHR/gDTjKJhBHffDH9e0
+   KvE3gvt08Z8TGCLXlKzpWYoc61m+jizSu420rUMkNIFhSKIiIDeR3A0Re
+   WSOp8z79O+T3Gr70rX1pB07whj3TkLh7BmRIhsK/zraE4V8dGjPMn3epg
+   SUr6q10ceK4OgLChgIs3sVZkTDSXVQ+cjLCl2j1qvQfWR/2D7vQdyzn7Z
+   Q==;
+X-CSE-ConnectionGUID: nojLGCdvRy6MgIDpZrDnbw==
+X-CSE-MsgGUID: 7376VqK1TDSv7hWYGlrnFQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11719"; a="73676972"
+X-IronPort-AV: E=Sophos;i="6.21,325,1763452800"; 
+   d="scan'208";a="73676972"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2026 22:39:10 -0800
+X-CSE-ConnectionGUID: bC+F6IgTQTuCY9Sz1CyJRw==
+X-CSE-MsgGUID: /WZQqOdbSIOFcsYMa2AF0A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,325,1763452800"; 
+   d="scan'208";a="217821731"
+Received: from lkp-server01.sh.intel.com (HELO cadc4577a874) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 04 Mar 2026 22:39:07 -0800
+Received: from kbuild by cadc4577a874 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vy2MQ-0000000005m-4B7I;
+	Thu, 05 Mar 2026 06:39:02 +0000
+Date: Thu, 5 Mar 2026 14:38:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Xu Kuohai <xukuohai@huaweicloud.com>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc: oe-kbuild-all@lists.linux.dev, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Anton Protopopov <a.s.protopopov@gmail.com>
+Subject: Re: [PATCH bpf-next v5 4/5] bpf, x86: Emit ENDBR for indirect jump
+ targets
+Message-ID: <202603051414.AAMjmOHv-lkp@intel.com>
+References: <20260302102726.1126019-5-xukuohai@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,481 +71,524 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260221233234.3814768-7-kuniyu@google.com>
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <20260302102726.1126019-5-xukuohai@huaweicloud.com>
 
-On Sat, Feb 21, 2026 at 11:30:53PM +0800, Kuniyuki Iwashima wrote:
-[...]
->  </TASK>
-> 
-> Fixes: d7f571188ecf ("udp: Implement ->read_sock() for sockmap")
-> Reported-by: syzbot+5b3b7e51dda1be027b7a@syzkaller.appspotmail.com
-> Closes: https://lore.kernel.org/netdev/698f84c6.a70a0220.2c38d7.00cb.GAE@google.com/
-> Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
-> ---
-> v4: Fix deadlock when requeued
-> v2: Fix build failure when CONFIG_INET=n
-> ---
->  include/net/udp.h |  9 +++++++++
->  net/core/skmsg.c  | 29 +++++++++++++++++++++++++----
->  net/ipv4/udp.c    |  9 +++++++++
->  3 files changed, 43 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/net/udp.h b/include/net/udp.h
-> index 700dbedcb15f..ae38a4da9388 100644
-> --- a/include/net/udp.h
-> +++ b/include/net/udp.h
-> @@ -455,6 +455,15 @@ struct sock *__udp6_lib_lookup(const struct net *net,
->  			       struct sk_buff *skb);
->  struct sock *udp6_lib_lookup_skb(const struct sk_buff *skb,
->  				 __be16 sport, __be16 dport);
-> +
-> +#ifdef CONFIG_INET
-> +void udp_sock_rfree(struct sk_buff *skb);
-> +#else
-> +static inline void udp_sock_rfree(struct sk_buff *skb)
-> +{
-> +}
-> +#endif
-> +
->  int udp_read_skb(struct sock *sk, skb_read_actor_t recv_actor);
->  
->  /* UDP uses skb->dev_scratch to cache as much information as possible and avoid
-> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> index 96f43e0dbb17..dd9134a45663 100644
-> --- a/net/core/skmsg.c
-> +++ b/net/core/skmsg.c
-> @@ -7,6 +7,7 @@
->  
->  #include <net/sock.h>
->  #include <net/tcp.h>
-> +#include <net/udp.h>
->  #include <net/tls.h>
->  #include <trace/events/sock.h>
->  
-> @@ -576,6 +577,7 @@ static int sk_psock_skb_ingress(struct sk_psock *psock, struct sk_buff *skb,
->  				u32 off, u32 len, bool take_ref)
->  {
->  	struct sock *sk = psock->sk;
-> +	bool is_udp = sk_is_udp(sk);
->  	struct sk_msg *msg;
->  	int err = -EAGAIN;
->  
-> @@ -583,13 +585,20 @@ static int sk_psock_skb_ingress(struct sk_psock *psock, struct sk_buff *skb,
->  	if (!msg)
->  		goto out;
->  
-> -	if (skb->sk != sk && take_ref) {
-> +	if (is_udp) {
-> +		if (unlikely(skb->destructor == udp_sock_rfree))
-> +			goto enqueue;
-> +
-> +		spin_lock_bh(&sk->sk_receive_queue.lock);
-> +	}
-> +
-> +	if (is_udp || (skb->sk != sk && take_ref)) {
->  		if (atomic_read(&sk->sk_rmem_alloc) > sk->sk_rcvbuf)
-> -			goto free;
-> +			goto unlock;
->  
->  		if (!sk_rmem_schedule(sk, skb, skb->truesize))
-> -			goto free;
-> -	} else {
-> +			goto unlock;
-> +	} else if (skb->sk == sk || !take_ref) {
->  		/* This is used in tcp_bpf_recvmsg_parser() to determine whether the
->  		 * data originates from the socket's own protocol stack. No need to
->  		 * refcount sk because msg's lifetime is bound to sk via the ingress_msg.
-> @@ -604,11 +613,23 @@ static int sk_psock_skb_ingress(struct sk_psock *psock, struct sk_buff *skb,
->  	 * into user buffers.
->  	 */
->  	skb_set_owner_r(skb, sk);
-> +
-> +	if (is_udp) {
-> +		spin_unlock_bh(&sk->sk_receive_queue.lock);
-> +
-> +		skb->destructor = udp_sock_rfree;
-> +	}
-> +
-> +enqueue:
->  	err = sk_psock_skb_ingress_enqueue(skb, off, len, psock, sk, msg, take_ref);
->  	if (err < 0)
->  		goto free;
->  out:
->  	return err;
-> +
-> +unlock:
-> +	if (is_udp)
-> +		spin_unlock_bh(&sk->sk_receive_queue.lock);
->  free:
->  	kfree(msg);
->  	goto out;
-> diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-> index 422c96fea249..831d26748a90 100644
-> --- a/net/ipv4/udp.c
-> +++ b/net/ipv4/udp.c
-> @@ -2039,6 +2039,15 @@ struct sk_buff *__skb_recv_udp(struct sock *sk, unsigned int flags,
->  }
->  EXPORT_SYMBOL(__skb_recv_udp);
->  
-> +void udp_sock_rfree(struct sk_buff *skb)
-> +{
-> +	struct sock *sk = skb->sk;
-> +
-> +	spin_lock_bh(&sk->sk_receive_queue.lock);
-> +	sock_rfree(skb);
-> +	spin_unlock_bh(&sk->sk_receive_queue.lock);
-> +}
-> +
->  int udp_read_skb(struct sock *sk, skb_read_actor_t recv_actor)
->  {
->  	struct sk_buff *skb;
-> -- 
-> 2.53.0.371.g1d285c8824-goog
->
+Hi Xu,
 
-There are too many protocol-specific checks in the generic skmsg code
-here. This should be abstracted out.
+kernel test robot noticed the following build warnings:
 
-Also TCP also has a similar issue with sk_forward_alloc concurrency
-between the backlog charge and recvmsg uncharge paths so the abstraction
-is necessary.
+[auto build test WARNING on bpf-next/master]
 
-I've put together a simple diff based on your patch for reference. 
-I haven't tested it thoroughly, but it at least handles TCP and UDP
-separately through a callback, keeping the generic code clean.
+url:    https://github.com/intel-lab-lkp/linux/commits/Xu-Kuohai/bpf-Move-JIT-for-single-subprog-programs-to-verifier/20260302-181031
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20260302102726.1126019-5-xukuohai%40huaweicloud.com
+patch subject: [PATCH bpf-next v5 4/5] bpf, x86: Emit ENDBR for indirect jump targets
+config: x86_64-buildonly-randconfig-001-20260305 (https://download.01.org/0day-ci/archive/20260305/202603051414.AAMjmOHv-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260305/202603051414.AAMjmOHv-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603051414.AAMjmOHv-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   arch/x86/net/bpf_jit_comp.c: In function 'do_jit':
+>> arch/x86/net/bpf_jit_comp.c:1747:37: warning: suggest braces around empty body in an 'if' statement [-Wempty-body]
+    1747 |                         EMIT_ENDBR();
+         |                                     ^
 
 
-diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
-index 829b281d6c9c..d9a607e11cd1 100644
---- a/include/linux/skmsg.h
-+++ b/include/linux/skmsg.h
-@@ -80,6 +80,20 @@ struct sk_psock_work_state {
-        u32                             off;
- };
+vim +/if +1747 arch/x86/net/bpf_jit_comp.c
 
-+struct sk_psock;
-+
-+/*
-+ * Callback for protocol-specific memory accounting on the ingress path.
-+ * Each protocol uses different locks to protect sk->sk_forward_alloc:
-+ *   TCP: psock->ingress_lock
-+ *   UDP: sk->sk_receive_queue.lock
-+ * This callback encapsulates the protocol-specific locking and charging.
-+ *
-+ * Returns 0 on success, negative errno on failure.
-+ */
-+typedef int (*psock_ingress_charge_t)(struct sk_psock *psock, struct sock *sk,
-+                                    struct sk_buff *skb, struct sk_msg *msg);
-+
- struct sk_psock {
-        struct sock                     *sk;
-        struct sock                     *sk_redir;
-@@ -97,6 +111,7 @@ struct sk_psock {
-        struct sk_buff_head             ingress_skb;
-        struct list_head                ingress_msg;
-        spinlock_t                      ingress_lock;
-+       psock_ingress_charge_t          ingress_charge;
-        /** @msg_tot_len: Total bytes queued in ingress_msg list. */
-        u32                             msg_tot_len;
-        unsigned long                   state;
-@@ -411,10 +426,13 @@ static inline bool sk_psock_queue_empty(const struct sk_psock *psock)
-        return psock ? list_empty(&psock->ingress_msg) : true;
- }
+  1660	
+  1661	static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+  1662			  u8 *rw_image, int oldproglen, struct jit_context *ctx, bool jmp_padding)
+  1663	{
+  1664		bool tail_call_reachable = bpf_prog->aux->tail_call_reachable;
+  1665		struct bpf_insn *insn = bpf_prog->insnsi;
+  1666		bool callee_regs_used[4] = {};
+  1667		int insn_cnt = bpf_prog->len;
+  1668		bool seen_exit = false;
+  1669		u8 temp[BPF_MAX_INSN_SIZE + BPF_INSN_SAFETY];
+  1670		void __percpu *priv_frame_ptr = NULL;
+  1671		u64 arena_vm_start, user_vm_start;
+  1672		void __percpu *priv_stack_ptr;
+  1673		int i, excnt = 0;
+  1674		int ilen, proglen = 0;
+  1675		u8 *prog = temp;
+  1676		u32 stack_depth;
+  1677		int err;
+  1678	
+  1679		stack_depth = bpf_prog->aux->stack_depth;
+  1680		priv_stack_ptr = bpf_prog->aux->priv_stack_ptr;
+  1681		if (priv_stack_ptr) {
+  1682			priv_frame_ptr = priv_stack_ptr + PRIV_STACK_GUARD_SZ + round_up(stack_depth, 8);
+  1683			stack_depth = 0;
+  1684		}
+  1685	
+  1686		arena_vm_start = bpf_arena_get_kern_vm_start(bpf_prog->aux->arena);
+  1687		user_vm_start = bpf_arena_get_user_vm_start(bpf_prog->aux->arena);
+  1688	
+  1689		detect_reg_usage(insn, insn_cnt, callee_regs_used);
+  1690	
+  1691		emit_prologue(&prog, image, stack_depth,
+  1692			      bpf_prog_was_classic(bpf_prog), tail_call_reachable,
+  1693			      bpf_is_subprog(bpf_prog), bpf_prog->aux->exception_cb);
+  1694	
+  1695		bpf_prog->aux->ksym.fp_start = prog - temp;
+  1696	
+  1697		/* Exception callback will clobber callee regs for its own use, and
+  1698		 * restore the original callee regs from main prog's stack frame.
+  1699		 */
+  1700		if (bpf_prog->aux->exception_boundary) {
+  1701			/* We also need to save r12, which is not mapped to any BPF
+  1702			 * register, as we throw after entry into the kernel, which may
+  1703			 * overwrite r12.
+  1704			 */
+  1705			push_r12(&prog);
+  1706			push_callee_regs(&prog, all_callee_regs_used);
+  1707		} else {
+  1708			if (arena_vm_start)
+  1709				push_r12(&prog);
+  1710			push_callee_regs(&prog, callee_regs_used);
+  1711		}
+  1712		if (arena_vm_start)
+  1713			emit_mov_imm64(&prog, X86_REG_R12,
+  1714				       arena_vm_start >> 32, (u32) arena_vm_start);
+  1715	
+  1716		if (priv_frame_ptr)
+  1717			emit_priv_frame_ptr(&prog, priv_frame_ptr);
+  1718	
+  1719		ilen = prog - temp;
+  1720		if (rw_image)
+  1721			memcpy(rw_image + proglen, temp, ilen);
+  1722		proglen += ilen;
+  1723		addrs[0] = proglen;
+  1724		prog = temp;
+  1725	
+  1726		for (i = 1; i <= insn_cnt; i++, insn++) {
+  1727			const s32 imm32 = insn->imm;
+  1728			u32 dst_reg = insn->dst_reg;
+  1729			u32 src_reg = insn->src_reg;
+  1730			u8 b2 = 0, b3 = 0;
+  1731			u8 *start_of_ldx;
+  1732			s64 jmp_offset;
+  1733			s16 insn_off;
+  1734			u8 jmp_cond;
+  1735			u8 *func;
+  1736			int nops;
+  1737	
+  1738			if (priv_frame_ptr) {
+  1739				if (src_reg == BPF_REG_FP)
+  1740					src_reg = X86_REG_R9;
+  1741	
+  1742				if (dst_reg == BPF_REG_FP)
+  1743					dst_reg = X86_REG_R9;
+  1744			}
+  1745	
+  1746			if (bpf_insn_is_indirect_target(env, bpf_prog, i - 1))
+> 1747				EMIT_ENDBR();
+  1748	
+  1749			switch (insn->code) {
+  1750				/* ALU */
+  1751			case BPF_ALU | BPF_ADD | BPF_X:
+  1752			case BPF_ALU | BPF_SUB | BPF_X:
+  1753			case BPF_ALU | BPF_AND | BPF_X:
+  1754			case BPF_ALU | BPF_OR | BPF_X:
+  1755			case BPF_ALU | BPF_XOR | BPF_X:
+  1756			case BPF_ALU64 | BPF_ADD | BPF_X:
+  1757			case BPF_ALU64 | BPF_SUB | BPF_X:
+  1758			case BPF_ALU64 | BPF_AND | BPF_X:
+  1759			case BPF_ALU64 | BPF_OR | BPF_X:
+  1760			case BPF_ALU64 | BPF_XOR | BPF_X:
+  1761				maybe_emit_mod(&prog, dst_reg, src_reg,
+  1762					       BPF_CLASS(insn->code) == BPF_ALU64);
+  1763				b2 = simple_alu_opcodes[BPF_OP(insn->code)];
+  1764				EMIT2(b2, add_2reg(0xC0, dst_reg, src_reg));
+  1765				break;
+  1766	
+  1767			case BPF_ALU64 | BPF_MOV | BPF_X:
+  1768				if (insn_is_cast_user(insn)) {
+  1769					if (dst_reg != src_reg)
+  1770						/* 32-bit mov */
+  1771						emit_mov_reg(&prog, false, dst_reg, src_reg);
+  1772					/* shl dst_reg, 32 */
+  1773					maybe_emit_1mod(&prog, dst_reg, true);
+  1774					EMIT3(0xC1, add_1reg(0xE0, dst_reg), 32);
+  1775	
+  1776					/* or dst_reg, user_vm_start */
+  1777					maybe_emit_1mod(&prog, dst_reg, true);
+  1778					if (is_axreg(dst_reg))
+  1779						EMIT1_off32(0x0D,  user_vm_start >> 32);
+  1780					else
+  1781						EMIT2_off32(0x81, add_1reg(0xC8, dst_reg),  user_vm_start >> 32);
+  1782	
+  1783					/* rol dst_reg, 32 */
+  1784					maybe_emit_1mod(&prog, dst_reg, true);
+  1785					EMIT3(0xC1, add_1reg(0xC0, dst_reg), 32);
+  1786	
+  1787					/* xor r11, r11 */
+  1788					EMIT3(0x4D, 0x31, 0xDB);
+  1789	
+  1790					/* test dst_reg32, dst_reg32; check if lower 32-bit are zero */
+  1791					maybe_emit_mod(&prog, dst_reg, dst_reg, false);
+  1792					EMIT2(0x85, add_2reg(0xC0, dst_reg, dst_reg));
+  1793	
+  1794					/* cmove r11, dst_reg; if so, set dst_reg to zero */
+  1795					/* WARNING: Intel swapped src/dst register encoding in CMOVcc !!! */
+  1796					maybe_emit_mod(&prog, AUX_REG, dst_reg, true);
+  1797					EMIT3(0x0F, 0x44, add_2reg(0xC0, AUX_REG, dst_reg));
+  1798					break;
+  1799				} else if (insn_is_mov_percpu_addr(insn)) {
+  1800					/* mov <dst>, <src> (if necessary) */
+  1801					EMIT_mov(dst_reg, src_reg);
+  1802	#ifdef CONFIG_SMP
+  1803					/* add <dst>, gs:[<off>] */
+  1804					EMIT2(0x65, add_1mod(0x48, dst_reg));
+  1805					EMIT3(0x03, add_2reg(0x04, 0, dst_reg), 0x25);
+  1806					EMIT((u32)(unsigned long)&this_cpu_off, 4);
+  1807	#endif
+  1808					break;
+  1809				}
+  1810				fallthrough;
+  1811			case BPF_ALU | BPF_MOV | BPF_X:
+  1812				if (insn->off == 0)
+  1813					emit_mov_reg(&prog,
+  1814						     BPF_CLASS(insn->code) == BPF_ALU64,
+  1815						     dst_reg, src_reg);
+  1816				else
+  1817					emit_movsx_reg(&prog, insn->off,
+  1818						       BPF_CLASS(insn->code) == BPF_ALU64,
+  1819						       dst_reg, src_reg);
+  1820				break;
+  1821	
+  1822				/* neg dst */
+  1823			case BPF_ALU | BPF_NEG:
+  1824			case BPF_ALU64 | BPF_NEG:
+  1825				maybe_emit_1mod(&prog, dst_reg,
+  1826						BPF_CLASS(insn->code) == BPF_ALU64);
+  1827				EMIT2(0xF7, add_1reg(0xD8, dst_reg));
+  1828				break;
+  1829	
+  1830			case BPF_ALU | BPF_ADD | BPF_K:
+  1831			case BPF_ALU | BPF_SUB | BPF_K:
+  1832			case BPF_ALU | BPF_AND | BPF_K:
+  1833			case BPF_ALU | BPF_OR | BPF_K:
+  1834			case BPF_ALU | BPF_XOR | BPF_K:
+  1835			case BPF_ALU64 | BPF_ADD | BPF_K:
+  1836			case BPF_ALU64 | BPF_SUB | BPF_K:
+  1837			case BPF_ALU64 | BPF_AND | BPF_K:
+  1838			case BPF_ALU64 | BPF_OR | BPF_K:
+  1839			case BPF_ALU64 | BPF_XOR | BPF_K:
+  1840				maybe_emit_1mod(&prog, dst_reg,
+  1841						BPF_CLASS(insn->code) == BPF_ALU64);
+  1842	
+  1843				/*
+  1844				 * b3 holds 'normal' opcode, b2 short form only valid
+  1845				 * in case dst is eax/rax.
+  1846				 */
+  1847				switch (BPF_OP(insn->code)) {
+  1848				case BPF_ADD:
+  1849					b3 = 0xC0;
+  1850					b2 = 0x05;
+  1851					break;
+  1852				case BPF_SUB:
+  1853					b3 = 0xE8;
+  1854					b2 = 0x2D;
+  1855					break;
+  1856				case BPF_AND:
+  1857					b3 = 0xE0;
+  1858					b2 = 0x25;
+  1859					break;
+  1860				case BPF_OR:
+  1861					b3 = 0xC8;
+  1862					b2 = 0x0D;
+  1863					break;
+  1864				case BPF_XOR:
+  1865					b3 = 0xF0;
+  1866					b2 = 0x35;
+  1867					break;
+  1868				}
+  1869	
+  1870				if (is_imm8(imm32))
+  1871					EMIT3(0x83, add_1reg(b3, dst_reg), imm32);
+  1872				else if (is_axreg(dst_reg))
+  1873					EMIT1_off32(b2, imm32);
+  1874				else
+  1875					EMIT2_off32(0x81, add_1reg(b3, dst_reg), imm32);
+  1876				break;
+  1877	
+  1878			case BPF_ALU64 | BPF_MOV | BPF_K:
+  1879			case BPF_ALU | BPF_MOV | BPF_K:
+  1880				emit_mov_imm32(&prog, BPF_CLASS(insn->code) == BPF_ALU64,
+  1881					       dst_reg, imm32);
+  1882				break;
+  1883	
+  1884			case BPF_LD | BPF_IMM | BPF_DW:
+  1885				emit_mov_imm64(&prog, dst_reg, insn[1].imm, insn[0].imm);
+  1886				insn++;
+  1887				i++;
+  1888				break;
+  1889	
+  1890				/* dst %= src, dst /= src, dst %= imm32, dst /= imm32 */
+  1891			case BPF_ALU | BPF_MOD | BPF_X:
+  1892			case BPF_ALU | BPF_DIV | BPF_X:
+  1893			case BPF_ALU | BPF_MOD | BPF_K:
+  1894			case BPF_ALU | BPF_DIV | BPF_K:
+  1895			case BPF_ALU64 | BPF_MOD | BPF_X:
+  1896			case BPF_ALU64 | BPF_DIV | BPF_X:
+  1897			case BPF_ALU64 | BPF_MOD | BPF_K:
+  1898			case BPF_ALU64 | BPF_DIV | BPF_K: {
+  1899				bool is64 = BPF_CLASS(insn->code) == BPF_ALU64;
+  1900	
+  1901				if (dst_reg != BPF_REG_0)
+  1902					EMIT1(0x50); /* push rax */
+  1903				if (dst_reg != BPF_REG_3)
+  1904					EMIT1(0x52); /* push rdx */
+  1905	
+  1906				if (BPF_SRC(insn->code) == BPF_X) {
+  1907					if (src_reg == BPF_REG_0 ||
+  1908					    src_reg == BPF_REG_3) {
+  1909						/* mov r11, src_reg */
+  1910						EMIT_mov(AUX_REG, src_reg);
+  1911						src_reg = AUX_REG;
+  1912					}
+  1913				} else {
+  1914					/* mov r11, imm32 */
+  1915					EMIT3_off32(0x49, 0xC7, 0xC3, imm32);
+  1916					src_reg = AUX_REG;
+  1917				}
+  1918	
+  1919				if (dst_reg != BPF_REG_0)
+  1920					/* mov rax, dst_reg */
+  1921					emit_mov_reg(&prog, is64, BPF_REG_0, dst_reg);
+  1922	
+  1923				if (insn->off == 0) {
+  1924					/*
+  1925					 * xor edx, edx
+  1926					 * equivalent to 'xor rdx, rdx', but one byte less
+  1927					 */
+  1928					EMIT2(0x31, 0xd2);
+  1929	
+  1930					/* div src_reg */
+  1931					maybe_emit_1mod(&prog, src_reg, is64);
+  1932					EMIT2(0xF7, add_1reg(0xF0, src_reg));
+  1933				} else {
+  1934					if (BPF_CLASS(insn->code) == BPF_ALU)
+  1935						EMIT1(0x99); /* cdq */
+  1936					else
+  1937						EMIT2(0x48, 0x99); /* cqo */
+  1938	
+  1939					/* idiv src_reg */
+  1940					maybe_emit_1mod(&prog, src_reg, is64);
+  1941					EMIT2(0xF7, add_1reg(0xF8, src_reg));
+  1942				}
+  1943	
+  1944				if (BPF_OP(insn->code) == BPF_MOD &&
+  1945				    dst_reg != BPF_REG_3)
+  1946					/* mov dst_reg, rdx */
+  1947					emit_mov_reg(&prog, is64, dst_reg, BPF_REG_3);
+  1948				else if (BPF_OP(insn->code) == BPF_DIV &&
+  1949					 dst_reg != BPF_REG_0)
+  1950					/* mov dst_reg, rax */
+  1951					emit_mov_reg(&prog, is64, dst_reg, BPF_REG_0);
+  1952	
+  1953				if (dst_reg != BPF_REG_3)
+  1954					EMIT1(0x5A); /* pop rdx */
+  1955				if (dst_reg != BPF_REG_0)
+  1956					EMIT1(0x58); /* pop rax */
+  1957				break;
+  1958			}
+  1959	
+  1960			case BPF_ALU | BPF_MUL | BPF_K:
+  1961			case BPF_ALU64 | BPF_MUL | BPF_K:
+  1962				maybe_emit_mod(&prog, dst_reg, dst_reg,
+  1963					       BPF_CLASS(insn->code) == BPF_ALU64);
+  1964	
+  1965				if (is_imm8(imm32))
+  1966					/* imul dst_reg, dst_reg, imm8 */
+  1967					EMIT3(0x6B, add_2reg(0xC0, dst_reg, dst_reg),
+  1968					      imm32);
+  1969				else
+  1970					/* imul dst_reg, dst_reg, imm32 */
+  1971					EMIT2_off32(0x69,
+  1972						    add_2reg(0xC0, dst_reg, dst_reg),
+  1973						    imm32);
+  1974				break;
+  1975	
+  1976			case BPF_ALU | BPF_MUL | BPF_X:
+  1977			case BPF_ALU64 | BPF_MUL | BPF_X:
+  1978				maybe_emit_mod(&prog, src_reg, dst_reg,
+  1979					       BPF_CLASS(insn->code) == BPF_ALU64);
+  1980	
+  1981				/* imul dst_reg, src_reg */
+  1982				EMIT3(0x0F, 0xAF, add_2reg(0xC0, src_reg, dst_reg));
+  1983				break;
+  1984	
+  1985				/* Shifts */
+  1986			case BPF_ALU | BPF_LSH | BPF_K:
+  1987			case BPF_ALU | BPF_RSH | BPF_K:
+  1988			case BPF_ALU | BPF_ARSH | BPF_K:
+  1989			case BPF_ALU64 | BPF_LSH | BPF_K:
+  1990			case BPF_ALU64 | BPF_RSH | BPF_K:
+  1991			case BPF_ALU64 | BPF_ARSH | BPF_K:
+  1992				maybe_emit_1mod(&prog, dst_reg,
+  1993						BPF_CLASS(insn->code) == BPF_ALU64);
+  1994	
+  1995				b3 = simple_alu_opcodes[BPF_OP(insn->code)];
+  1996				if (imm32 == 1)
+  1997					EMIT2(0xD1, add_1reg(b3, dst_reg));
+  1998				else
+  1999					EMIT3(0xC1, add_1reg(b3, dst_reg), imm32);
+  2000				break;
+  2001	
+  2002			case BPF_ALU | BPF_LSH | BPF_X:
+  2003			case BPF_ALU | BPF_RSH | BPF_X:
+  2004			case BPF_ALU | BPF_ARSH | BPF_X:
+  2005			case BPF_ALU64 | BPF_LSH | BPF_X:
+  2006			case BPF_ALU64 | BPF_RSH | BPF_X:
+  2007			case BPF_ALU64 | BPF_ARSH | BPF_X:
+  2008				/* BMI2 shifts aren't better when shift count is already in rcx */
+  2009				if (boot_cpu_has(X86_FEATURE_BMI2) && src_reg != BPF_REG_4) {
+  2010					/* shrx/sarx/shlx dst_reg, dst_reg, src_reg */
+  2011					bool w = (BPF_CLASS(insn->code) == BPF_ALU64);
+  2012					u8 op;
+  2013	
+  2014					switch (BPF_OP(insn->code)) {
+  2015					case BPF_LSH:
+  2016						op = 1; /* prefix 0x66 */
+  2017						break;
+  2018					case BPF_RSH:
+  2019						op = 3; /* prefix 0xf2 */
+  2020						break;
+  2021					case BPF_ARSH:
+  2022						op = 2; /* prefix 0xf3 */
+  2023						break;
+  2024					}
+  2025	
+  2026					emit_shiftx(&prog, dst_reg, src_reg, w, op);
+  2027	
+  2028					break;
+  2029				}
+  2030	
+  2031				if (src_reg != BPF_REG_4) { /* common case */
+  2032					/* Check for bad case when dst_reg == rcx */
+  2033					if (dst_reg == BPF_REG_4) {
+  2034						/* mov r11, dst_reg */
+  2035						EMIT_mov(AUX_REG, dst_reg);
+  2036						dst_reg = AUX_REG;
+  2037					} else {
+  2038						EMIT1(0x51); /* push rcx */
+  2039					}
+  2040					/* mov rcx, src_reg */
+  2041					EMIT_mov(BPF_REG_4, src_reg);
+  2042				}
+  2043	
+  2044				/* shl %rax, %cl | shr %rax, %cl | sar %rax, %cl */
+  2045				maybe_emit_1mod(&prog, dst_reg,
+  2046						BPF_CLASS(insn->code) == BPF_ALU64);
+  2047	
+  2048				b3 = simple_alu_opcodes[BPF_OP(insn->code)];
+  2049				EMIT2(0xD3, add_1reg(b3, dst_reg));
+  2050	
+  2051				if (src_reg != BPF_REG_4) {
+  2052					if (insn->dst_reg == BPF_REG_4)
+  2053						/* mov dst_reg, r11 */
+  2054						EMIT_mov(insn->dst_reg, AUX_REG);
+  2055					else
+  2056						EMIT1(0x59); /* pop rcx */
+  2057				}
+  2058	
+  2059				break;
+  2060	
+  2061			case BPF_ALU | BPF_END | BPF_FROM_BE:
+  2062			case BPF_ALU64 | BPF_END | BPF_FROM_LE:
+  2063				switch (imm32) {
+  2064				case 16:
+  2065					/* Emit 'ror %ax, 8' to swap lower 2 bytes */
+  2066					EMIT1(0x66);
+  2067					if (is_ereg(dst_reg))
+  2068						EMIT1(0x41);
+  2069					EMIT3(0xC1, add_1reg(0xC8, dst_reg), 8);
+  2070	
+  2071					/* Emit 'movzwl eax, ax' */
+  2072					if (is_ereg(dst_reg))
+  2073						EMIT3(0x45, 0x0F, 0xB7);
+  2074					else
+  2075						EMIT2(0x0F, 0xB7);
+  2076					EMIT1(add_2reg(0xC0, dst_reg, dst_reg));
+  2077					break;
+  2078				case 32:
+  2079					/* Emit 'bswap eax' to swap lower 4 bytes */
+  2080					if (is_ereg(dst_reg))
+  2081						EMIT2(0x41, 0x0F);
+  2082					else
+  2083						EMIT1(0x0F);
+  2084					EMIT1(add_1reg(0xC8, dst_reg));
+  2085					break;
+  2086				case 64:
+  2087					/* Emit 'bswap rax' to swap 8 bytes */
+  2088					EMIT3(add_1mod(0x48, dst_reg), 0x0F,
+  2089					      add_1reg(0xC8, dst_reg));
+  2090					break;
+  2091				}
+  2092				break;
+  2093	
+  2094			case BPF_ALU | BPF_END | BPF_FROM_LE:
+  2095				switch (imm32) {
+  2096				case 16:
+  2097					/*
+  2098					 * Emit 'movzwl eax, ax' to zero extend 16-bit
+  2099					 * into 64 bit
+  2100					 */
+  2101					if (is_ereg(dst_reg))
+  2102						EMIT3(0x45, 0x0F, 0xB7);
+  2103					else
+  2104						EMIT2(0x0F, 0xB7);
+  2105					EMIT1(add_2reg(0xC0, dst_reg, dst_reg));
+  2106					break;
+  2107				case 32:
+  2108					/* Emit 'mov eax, eax' to clear upper 32-bits */
+  2109					if (is_ereg(dst_reg))
+  2110						EMIT1(0x45);
+  2111					EMIT2(0x89, add_2reg(0xC0, dst_reg, dst_reg));
+  2112					break;
+  2113				case 64:
+  2114					/* nop */
+  2115					break;
+  2116				}
+  2117				break;
+  2118	
+  2119				/* speculation barrier */
+  2120			case BPF_ST | BPF_NOSPEC:
+  2121				EMIT_LFENCE();
+  2122				break;
+  2123	
+  2124				/* ST: *(u8*)(dst_reg + off) = imm */
+  2125			case BPF_ST | BPF_MEM | BPF_B:
+  2126				if (is_ereg(dst_reg))
+  2127					EMIT2(0x41, 0xC6);
+  2128				else
+  2129					EMIT1(0xC6);
+  2130				goto st;
+  2131			case BPF_ST | BPF_MEM | BPF_H:
+  2132				if (is_ereg(dst_reg))
+  2133					EMIT3(0x66, 0x41, 0xC7);
+  2134				else
+  2135					EMIT2(0x66, 0xC7);
+  2136				goto st;
+  2137			case BPF_ST | BPF_MEM | BPF_W:
+  2138				if (is_ereg(dst_reg))
+  2139					EMIT2(0x41, 0xC7);
+  2140				else
+  2141					EMIT1(0xC7);
+  2142				goto st;
+  2143			case BPF_ST | BPF_MEM | BPF_DW:
+  2144				EMIT2(add_1mod(0x48, dst_reg), 0xC7);
+  2145	
 
--static inline void kfree_sk_msg(struct sk_msg *msg)
-+static inline void kfree_sk_msg(struct sk_psock *psock, struct sk_msg *msg)
- {
--       if (msg->skb)
-+       if (msg->skb) {
-+               spin_lock_bh(&psock->ingress_lock);
-                consume_skb(msg->skb);
-+               spin_unlock_bh(&psock->ingress_lock);
-+       }
-        kfree(msg);
- }
-
-diff --git a/include/net/udp.h b/include/net/udp.h
-index 700dbedcb15f..78229bc7424e 100644
---- a/include/net/udp.h
-+++ b/include/net/udp.h
-@@ -401,6 +401,7 @@ void udp_destruct_common(struct sock *sk);
- void skb_consume_udp(struct sock *sk, struct sk_buff *skb, int len);
- int __udp_enqueue_schedule_skb(struct sock *sk, struct sk_buff *skb);
- void udp_skb_destructor(struct sock *sk, struct sk_buff *skb);
-+void udp_sock_rfree(struct sk_buff *skb);
- struct sk_buff *__skb_recv_udp(struct sock *sk, unsigned int flags, int *off,
-                               int *err);
- static inline struct sk_buff *skb_recv_udp(struct sock *sk, unsigned int flags,
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index ddde93dd8bc6..df0f846c63bb 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -488,7 +488,7 @@ int __sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg
-                msg_rx->sg.start = i;
-                if (!sge->length && (i == msg_rx->sg.end || sg_is_last(sge))) {
-                        msg_rx = sk_psock_dequeue_msg(psock);
--                       kfree_sk_msg(msg_rx);
-+                       kfree_sk_msg(psock, msg_rx);
-                }
-                msg_rx = sk_psock_peek_msg(psock);
-        }
-@@ -529,18 +529,6 @@ static struct sk_msg *alloc_sk_msg(gfp_t gfp)
-        return msg;
- }
-
--static struct sk_msg *sk_psock_create_ingress_msg(struct sock *sk,
--                                                 struct sk_buff *skb)
--{
--       if (atomic_read(&sk->sk_rmem_alloc) > sk->sk_rcvbuf)
--               return NULL;
--
--       if (!sk_rmem_schedule(sk, skb, skb->truesize))
--               return NULL;
--
--       return alloc_sk_msg(GFP_KERNEL);
--}
--
- static int sk_psock_skb_ingress_enqueue(struct sk_buff *skb,
-                                        u32 off, u32 len,
-                                        struct sk_psock *psock,
-@@ -584,60 +572,51 @@ static int sk_psock_skb_ingress_enqueue(struct sk_buff *skb,
-        return copied;
- }
-
--static int sk_psock_skb_ingress_self(struct sk_psock *psock, struct sk_buff *skb,
--                                    u32 off, u32 len, bool take_ref);
--
--static int sk_psock_skb_ingress(struct sk_psock *psock, struct sk_buff *skb,
--                               u32 off, u32 len)
-+/* Default ingress charge for protocols that don't set a custom callback.
-+ * Behaves like the original TCP logic: skip accounting for self-redirect.
-+ */
-+static int sk_psock_ingress_charge_default(struct sk_psock *psock,
-+                                          struct sock *sk,
-+                                          struct sk_buff *skb,
-+                                          struct sk_msg *msg)
- {
--       struct sock *sk = psock->sk;
--       struct sk_msg *msg;
--       int err;
-+       if (skb->sk == sk) {
-+               skb_set_owner_r(skb, sk);
-+               msg->sk = sk;
-+               return 0;
-+       }
-
--       /* If we are receiving on the same sock skb->sk is already assigned,
--        * skip memory accounting and owner transition seeing it already set
--        * correctly.
--        */
--       if (unlikely(skb->sk == sk))
--               return sk_psock_skb_ingress_self(psock, skb, off, len, true);
--       msg = sk_psock_create_ingress_msg(sk, skb);
--       if (!msg)
-+       if (atomic_read(&sk->sk_rmem_alloc) > sk->sk_rcvbuf)
-+               return -EAGAIN;
-+
-+       if (!sk_rmem_schedule(sk, skb, skb->truesize))
-                return -EAGAIN;
-
--       /* This will transition ownership of the data from the socket where
--        * the BPF program was run initiating the redirect to the socket
--        * we will eventually receive this data on. The data will be released
--        * from skb_consume found in __tcp_bpf_recvmsg() after its been copied
--        * into user buffers.
--        */
-        skb_set_owner_r(skb, sk);
--       err = sk_psock_skb_ingress_enqueue(skb, off, len, psock, sk, msg, true);
--       if (err < 0)
--               kfree(msg);
--       return err;
-+       return 0;
- }
-
--/* Puts an skb on the ingress queue of the socket already assigned to the
-- * skb. In this case we do not need to check memory limits or skb_set_owner_r
-- * because the skb is already accounted for here.
-- */
--static int sk_psock_skb_ingress_self(struct sk_psock *psock, struct sk_buff *skb,
--                                    u32 off, u32 len, bool take_ref)
-+static int sk_psock_skb_ingress(struct sk_psock *psock, struct sk_buff *skb,
-+                               u32 off, u32 len, bool take_ref)
- {
--       struct sk_msg *msg = alloc_sk_msg(GFP_ATOMIC);
-        struct sock *sk = psock->sk;
-+       psock_ingress_charge_t charge_fn;
-+       struct sk_msg *msg;
-        int err;
-
--       if (unlikely(!msg))
-+       msg = alloc_sk_msg(take_ref ? GFP_KERNEL : GFP_ATOMIC);
-+       if (!msg)
-                return -EAGAIN;
--       skb_set_owner_r(skb, sk);
-
--       /* This is used in tcp_bpf_recvmsg_parser() to determine whether the
--        * data originates from the socket's own protocol stack. No need to
--        * refcount sk because msg's lifetime is bound to sk via the ingress_msg.
--        */
--       msg->sk = sk;
--       err = sk_psock_skb_ingress_enqueue(skb, off, len, psock, sk, msg, take_ref);
-+       charge_fn = psock->ingress_charge ?: sk_psock_ingress_charge_default;
-+       err = charge_fn(psock, sk, skb, msg);
-+       if (err < 0) {
-+               kfree(msg);
-+               return err;
-+       }
-+
-+       err = sk_psock_skb_ingress_enqueue(skb, off, len, psock, sk, msg,
-+                                          take_ref);
-        if (err < 0)
-                kfree(msg);
-        return err;
-@@ -652,7 +631,7 @@ static int sk_psock_handle_skb(struct sk_psock *psock, struct sk_buff *skb,
-                return skb_send_sock(psock->sk, skb, off, len);
-        }
-
--       return sk_psock_skb_ingress(psock, skb, off, len);
-+       return sk_psock_skb_ingress(psock, skb, off, len, true);
- }
-
- static void sk_psock_skb_state(struct sk_psock *psock,
-@@ -1059,7 +1038,7 @@ static int sk_psock_verdict_apply(struct sk_psock *psock, struct sk_buff *skb,
-                                off = stm->offset;
-                                len = stm->full_len;
-                        }
--                       err = sk_psock_skb_ingress_self(psock, skb, off, len, false);
-+                       err = sk_psock_skb_ingress(psock, skb, off, len, false);
-                }
-                if (err < 0) {
-                        spin_lock_bh(&psock->ingress_lock);
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index ca8a5cb8e569..d88b9516a470 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -706,6 +706,37 @@ int tcp_bpf_strp_read_sock(struct strparser *strp, read_descriptor_t *desc,
- }
- #endif /* CONFIG_BPF_STREAM_PARSER */
-
-+static int tcp_psock_ingress_charge(struct sk_psock *psock, struct sock *sk,
-+                                   struct sk_buff *skb, struct sk_msg *msg)
-+{
-+       /* TCP self-redirect: skb is already accounted by TCP stack, and
-+        * lock_sock serializes the verdict path with recvmsg. Skip memory
-+        * accounting but mark msg->sk for tcp_bpf_recvmsg_parser() to
-+        * identify self-originated data.
-+        */
-+       if (skb->sk == sk) {
-+               skb_set_owner_r(skb, sk);
-+               msg->sk = sk;
-+               return 0;
-+       }
-+
-+       spin_lock_bh(&psock->ingress_lock);
-+
-+       if (atomic_read(&sk->sk_rmem_alloc) > sk->sk_rcvbuf)
-+               goto err;
-+
-+       if (!sk_rmem_schedule(sk, skb, skb->truesize))
-+               goto err;
-+
-+       skb_set_owner_r(skb, sk);
-+       spin_unlock_bh(&psock->ingress_lock);
-+       return 0;
-+
-+err:
-+       spin_unlock_bh(&psock->ingress_lock);
-+       return -EAGAIN;
-+}
-+
- int tcp_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore)
- {
-        int family = sk->sk_family == AF_INET6 ? TCP_BPF_IPV6 : TCP_BPF_IPV4;
-@@ -739,6 +770,7 @@ int tcp_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore)
-                tcp_bpf_check_v6_needs_rebuild(psock->sk_proto);
-        }
-
-+       psock->ingress_charge = tcp_psock_ingress_charge;
-        /* Pairs with lockless read in sk_clone_lock() */
-        sock_replace_proto(sk, &tcp_bpf_prots[family][config]);
-        return 0;
-diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index b96e47f1c8a2..8cefc3ed76c5 100644
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@ -2039,6 +2039,19 @@ struct sk_buff *__skb_recv_udp(struct sock *sk, unsigned int flags,
- }
- EXPORT_SYMBOL(__skb_recv_udp);
-
-+/* skb destructor for sockmap-owned UDP skbs.
-+ * sock_rfree modifies sk->sk_forward_alloc which must be protected
-+ * by sk->sk_receive_queue.lock for UDP.
-+ */
-+void udp_sock_rfree(struct sk_buff *skb)
-+{
-+       struct sock *sk = skb->sk;
-+
-+       spin_lock_bh(&sk->sk_receive_queue.lock);
-+       sock_rfree(skb);
-+       spin_unlock_bh(&sk->sk_receive_queue.lock);
-+}
-+
- int udp_read_skb(struct sock *sk, skb_read_actor_t recv_actor)
- {
-        struct sk_buff *skb;
-diff --git a/net/ipv4/udp_bpf.c b/net/ipv4/udp_bpf.c
-index 91233e37cd97..6b117711193e 100644
---- a/net/ipv4/udp_bpf.c
-+++ b/net/ipv4/udp_bpf.c
-@@ -153,6 +153,42 @@ static int __init udp_bpf_v4_build_proto(void)
- }
- late_initcall(udp_bpf_v4_build_proto);
-
-+static int udp_psock_ingress_charge(struct sk_psock *psock, struct sock *sk,
-+                                   struct sk_buff *skb, struct sk_msg *msg)
-+{
-+       /* When backlog retries a previously charged skb, the destructor
-+        * is already set to udp_sock_rfree. Skip re-charging.
-+        */
-+       if (unlikely(skb->destructor == udp_sock_rfree))
-+               return 0;
-+
-+       /* UDP must always do full memory accounting, even for self-redirect.
-+        * Unlike TCP, udp_rmem_release() partially reclaims sk_forward_alloc
-+        * during skb_recv_udp(), so the skb is no longer properly accounted
-+        * when it reaches the sockmap ingress path.
-+        *
-+        * sk->sk_receive_queue.lock is required because that's the lock UDP
-+        * uses internally to protect sk_forward_alloc.
-+        */
-+       spin_lock_bh(&sk->sk_receive_queue.lock);
-+
-+       if (atomic_read(&sk->sk_rmem_alloc) > sk->sk_rcvbuf)
-+               goto err;
-+
-+       if (!sk_rmem_schedule(sk, skb, skb->truesize))
-+               goto err;
-+
-+       skb_set_owner_r(skb, sk);
-+       spin_unlock_bh(&sk->sk_receive_queue.lock);
-+
-+       skb->destructor = udp_sock_rfree;
-+       return 0;
-+
-+err:
-+       spin_unlock_bh(&sk->sk_receive_queue.lock);
-+       return -EAGAIN;
-+}
-+
- int udp_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore)
- {
-        int family = sk->sk_family == AF_INET ? UDP_BPF_IPV4 : UDP_BPF_IPV6;
-@@ -166,6 +202,7 @@ int udp_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore)
-        if (sk->sk_family == AF_INET6)
-                udp_bpf_check_v6_needs_rebuild(psock->sk_proto);
-
-+       psock->ingress_charge = udp_psock_ingress_charge;
-        sock_replace_proto(sk, &udp_bpf_prots[family]);
-        return 0;
- } 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
