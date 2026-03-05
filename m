@@ -1,192 +1,273 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD0929B233;
-	Thu,  5 Mar 2026 07:30:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772695813; cv=none; b=EP+uP7nfzdhyEVapxK1DPxJ1pHlwOTCjxz714U8y6pQnfEe111NWjihoYEl46ohvKVzZdFXHXMG1i0RhMa34obxSzK7/ydeDo5bNDc9AYyAKWLMjpTQF7S6ECeuS1AKmE9PQo64mQguin/MHfIz+9yheHod3thKsUdPhoeF/Piw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772695813; c=relaxed/simple;
-	bh=lTzC3DOe3FWjuf5axLH/2f9FZMU8FQpjojeYB+xavQA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X5KU7hCxfGcdqX1oxkb1tkkc39zDqBltYqFu6Q8j2oWVNjucBmhubzkrwJ1qYA324mW1kt26Y8kIzNBbMKoYcIvdrcRN8Dj9Iv+Ywh0abHGZGg1Cqn5BA2GBsETpVfs9LYl8AjHZN/bvLF8x/jdgx/+VnyEWwRhG5GVDW9+qNvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pHM8ePeM; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A094229A1
+	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 07:48:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772696906; cv=pass; b=RvOfN2DDUo622gzHDzTVHg8bJfsbw+JubI9UcjcOsHmwHsGf+3GtlZr1ILSiM0iyuoM2N2BMC/rjNjDOLQAMnQhfatnf/GRKFEwPNiqBr4oK6KLLkLG0SxOi/p6BMJSx8ybOdydlHCv/i+NrbUbuR7DVoOdDr+lljiYhlZH4cm0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772696906; c=relaxed/simple;
+	bh=k9aARijhl+UpUNTAbtTN6GlGGncJpw4/8U+YwxU7GGg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Jzg1FKdkud1nHYkZsFEMZKMCouiY41vPRxfRsdsQOfK/lAJkd8dkIE+q+UhGZ1TqwK6yDY7SXtqQutQ7VuPBn1ryV0aevoeZGkVrasJegO92+FRBZ8tIEg5ttIuadO/+2kcERh1KV+KG8RiBqlPByNkben9TQNViw+L5x40lu4I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uGeIP84N; arc=pass smtp.client-ip=74.125.82.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pHM8ePeM"
-Message-ID: <30ebc83a-8f17-44fc-89a6-037e826f6c70@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772695809;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Zkrpq1MReRvWW8x3HssiZAsOMiRgFEXzVCzorhAJJaI=;
-	b=pHM8ePeMJgcZM1DJ2exaS0Qv+n3ixnbXF/93qDO5dpmKJYldHGKWCfFP9BV6+Dubqx0a5x
-	/4CNALdZmDXPAhrxbW/hOHU6v8mwSM7v8YjYIkAIS1/Pdw4TKy+O5Qw+puu2nlvr+yK8nG
-	ZBEXTzS18s3P0ioRo6u7y77YCACMR7o=
-Date: Thu, 5 Mar 2026 15:30:01 +0800
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uGeIP84N"
+Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-1275750cf9cso6378642c88.0
+        for <bpf@vger.kernel.org>; Wed, 04 Mar 2026 23:48:24 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772696904; cv=none;
+        d=google.com; s=arc-20240605;
+        b=gmqdGOjBb8+XHmGoXfYhC6O3aPeKzevXIIqHKLN5KPCDJWCkgpismxPossw6wbIIYL
+         cc0vlJhFRZZ3v6VoCE3Yole2sapJU4ABU2/LSTRoDllVCR2UC9IU2ypks6V4Us/90RiC
+         2BLGfUD+CDTOiYesiSdBNzjbMRnUA2sxRlkyy9ROYGqSrXSNSGYW4jl5IejWpyhdhy5L
+         QsH10QjJdugJyY0o83fzypfZ71gsOdQsoPoDfac066HIiI37201pSpoagqbqQ+FD+aPK
+         uogo64Bx+g2tWsZ3t+SJSsp3fda4DlDleH8If0bxT89agT6vvehCor5vJkGwWhFcVcK+
+         SBLA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=9JJY1lPR4ZIJ0bJOtAMSPyTe1J2YXJb3Q8jfZODA7WM=;
+        fh=oNo+1hifg6CX4IqOWWo6v8gaC12tZNl9IsQVelyVrHk=;
+        b=WTIk3D/E5N1MwM8kYJZu2B6I8T0BKAsobAIssAaVoc8vdtyT85VjFkPtZdTCqnHpk5
+         TNw2P0e+o6/Jh7JxiGeAN8+bJ2NxmBw5oQLL1q9+JrOy7OiTP1CAvlRCr/b1iAAHfFvT
+         NZe0sgWRpEKJHYDJgIHUDnCdgSaoWmrvYn1xf2TqKcfdZC2c+sgtvrpomxJ0c48r8u0D
+         cOAFqeeIo76DH/LJw7LcjIwG3feDPd7USl47kiZZToDL/Bq3ZOOIZfcd5ZxXvkEWrEGW
+         zIhNFMzRT/crnfQdIxCy+kaT4rqfcROYk6G54Im2CSciX6EvXHvO09awSeHEQetk+HYJ
+         m13g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1772696904; x=1773301704; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9JJY1lPR4ZIJ0bJOtAMSPyTe1J2YXJb3Q8jfZODA7WM=;
+        b=uGeIP84Ncjd5aF66u6nlTjNdRmqRJ2t+KKHR4dYJETc6C5AzitOoCuAx1wgVtgwPJU
+         XxXJ7ePFD3eO2t7d1pazTLFNklyF1B+Y+aakuX9+1RIqiNVSs/wFjHefKxdh86aQQRaW
+         Ggx8MuBEsBKrBerKwYlNzZ7IPxnBqfeWRpJLcF4PqDbp/FZ7VugWmAqDGf30IqtCYtKC
+         St/aBImwFXZ/nAbBFEY6iNGCE0a3TAKSJ3d/1vR+jNZv8C4ISrUwij6vv479aOK0SIR1
+         7QW/C0rgy3nUflbZFc2hpGkySvJLGIlaSKFjNAstqgck7+p26y0HPQpHP4yag79EKOI7
+         HXwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772696904; x=1773301704;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=9JJY1lPR4ZIJ0bJOtAMSPyTe1J2YXJb3Q8jfZODA7WM=;
+        b=jvCGJL/fwBPPOcrdz1S16TeWdUWtjjvi9HtDjs0ldinPLvCIy+npQOvcGnRnkjEZGG
+         /cTSmL5ANFD8OH7yPA37boEuGKvYBw7J3whxUWSUv9NlN9x5TAbY/d0BJ1UXGAWw0dKH
+         5BUU3JLYXYfs+bO7bdrw8C6WtroqHqLm+mo8fFHuZzB4lCnMrCvPTwpNP8xMkoSNF+DW
+         xulvmWUh9sJCRKoiJ8CHprglNmqRdyJBTLSUgCya9QD4iByXU386vjmDEZ/CuwmzyHyJ
+         +IVGbCwKb0sthGEDI70CxydvRnZFlBz8FH+pIRZT/002xWe6haLtuvO2lTjj9QxRBPYZ
+         qghA==
+X-Forwarded-Encrypted: i=1; AJvYcCV+tdhV80YAVoFphn1CGrUlNBWCZk3xBeF9RpQfglvb49+oDyTE4vJgsHIU+llwyvXGEsg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxPALOocMgDupAZhWTewM3yTeTkjp2/536XW1Y6Hb3g+0CGTgyX
+	ag5sQg04s+YC3eyvxcH0VIVEZf71TPF9a7vvq5nNFGu6bxXsKiziHnJSPZ9Ab0ycl23XV9Oj+ck
+	Iv2iXVcG3q5O39ZuknpdaOkpILfBiDsbcbaCwEc0k
+X-Gm-Gg: ATEYQzz7d0cbadQnF2SArrs/+M8PGyiHx/1ZC1+vmfKx+IGxFYUZf6uHLWdzsT+KlCq
+	1YrA2wsrZdKAX+BqGBnfgojDaKTdPPS29XhUL1qwRp139kFDuskQ5zX9m75muYgMimoiZjYX/fA
+	Jfj8pHcHsJAxsYMXrjXFUB75jKO3peB2RRi/xWqK1Br8oZ0SFEwtXhzkViaidrg/2a4Nwoj/EF2
+	RKbJOXLE0YTRbTQ3sEnu1DEgJrNar1LubUdS52X32dJAVzvP2zYzHjEm0duCyLQyEqn6JuhQwwY
+	2YVnW/+SumrMJkl6Z3M5NcRX/ojKzSFZxAKjBp+cRfX+TaLzTGvOjWdBF2pBi6KS0lmgUTEe
+X-Received: by 2002:a05:7022:926:b0:122:2f4:b251 with SMTP id
+ a92af1059eb24-128b70c82bemr2437835c88.21.1772696903061; Wed, 04 Mar 2026
+ 23:48:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCHv2 bpf-next 22/23] selftests/bpf: Add tracing multi attach
- benchmark test
-Content-Language: en-US
-To: Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- Martin KaFai Lau <kafai@fb.com>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
- Menglong Dong <menglong8.dong@gmail.com>, Steven Rostedt <rostedt@kernel.org>
-References: <20260304222141.497203-1-jolsa@kernel.org>
- <20260304222141.497203-23-jolsa@kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <20260304222141.497203-23-jolsa@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260221233234.3814768-1-kuniyu@google.com> <20260221233234.3814768-7-kuniyu@google.com>
+ <r7csevb4yonphmfhfpkj7jpc4yvjkdwrp566zxhueaf6vgjfak@stnfyjkqid6o>
+In-Reply-To: <r7csevb4yonphmfhfpkj7jpc4yvjkdwrp566zxhueaf6vgjfak@stnfyjkqid6o>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Wed, 4 Mar 2026 23:48:12 -0800
+X-Gm-Features: AaiRm51o2epiQ653A5R7b9_VBmqBq3bYa7mnj-Cue-rtJnp1UxPzumDbD-GWMNg
+Message-ID: <CAAVpQUAGSzypVhT8V-qjhUfZeEQhXQtS1z+iQC7vrzZCHEr9=A@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf/net 6/6] sockmap: Fix broken memory accounting for UDP.
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: John Fastabend <john.fastabend@gmail.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, 
+	bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	syzbot+5b3b7e51dda1be027b7a@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 5/3/26 06:21, Jiri Olsa wrote:
-> Adding benchmark test that attaches to (almost) all allowed tracing
-> functions and display attach/detach times.
-> 
->   # ./test_progs -t tracing_multi_bench_attach -v
->   bpf_testmod.ko is already unloaded.
->   Loading bpf_testmod.ko...
->   Successfully loaded bpf_testmod.ko.
->   serial_test_tracing_multi_bench_attach:PASS:btf__load_vmlinux_btf 0 nsec
->   serial_test_tracing_multi_bench_attach:PASS:tracing_multi_bench__open_and_load 0 nsec
->   serial_test_tracing_multi_bench_attach:PASS:get_syms 0 nsec
->   serial_test_tracing_multi_bench_attach:PASS:bpf_program__attach_tracing_multi 0 nsec
->   serial_test_tracing_multi_bench_attach: found 51186 functions
->   serial_test_tracing_multi_bench_attach: attached in   1.295s
->   serial_test_tracing_multi_bench_attach: detached in   0.243s
->   #507     tracing_multi_bench_attach:OK
->   Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
->   Successfully unloaded bpf_testmod.ko.
-> 
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  .../selftests/bpf/prog_tests/tracing_multi.c  | 178 ++++++++++++++++++
->  .../selftests/bpf/progs/tracing_multi_bench.c |  13 ++
->  2 files changed, 191 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_bench.c
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-> index d64d90f4e086..585d6b646d20 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-> @@ -9,6 +9,7 @@
->  #include "tracing_multi_intersect.skel.h"
->  #include "tracing_multi_session.skel.h"
->  #include "tracing_multi_fail.skel.h"
-> +#include "tracing_multi_bench.skel.h"
->  #include "trace_helpers.h"
->  
->  static __u64 bpf_fentry_test_cookies[] = {
-> @@ -543,6 +544,183 @@ static void test_attach_api_fails(void)
->  	tracing_multi_fail__destroy(skel);
->  }
->  
-> +/*
-> + * Skip several kernel symbols that might not be safe or could cause delays.
-> + */
-> +static bool skip_symbol(char *name)
-> +{
-> +	if (!strcmp(name, "arch_cpu_idle"))
-> +		return true;
-> +	if (!strcmp(name, "default_idle"))
-> +		return true;
-> +	if (!strncmp(name, "rcu_", 4))
-> +		return true;
-> +	if (!strcmp(name, "bpf_dispatcher_xdp_func"))
-> +		return true;
-> +	if (strstr(name, "rcu"))
-> +		return true;
-> +	if (strstr(name, "trace"))
-> +		return true;
-> +	if (strstr(name, "irq"))
-> +		return true;
-> +	if (strstr(name, "bpf_lsm_"))
-> +		return true;
-> +	if (!strcmp(name, "migrate_enable"))
-> +		return true;
-> +	if (!strcmp(name, "migrate_disable"))
-> +		return true;
-> +	if (!strcmp(name, "preempt_count_sub"))
-> +		return true;
-> +	if (!strcmp(name, "preempt_count_add"))
-> +		return true;
-> +	return false;
-> +}
+On Wed, Mar 4, 2026 at 10:37=E2=80=AFPM Jiayuan Chen <jiayuan.chen@linux.de=
+v> wrote:
+>
+> On Sat, Feb 21, 2026 at 11:30:53PM +0800, Kuniyuki Iwashima wrote:
+> [...]
+> >  </TASK>
+> >
+> > Fixes: d7f571188ecf ("udp: Implement ->read_sock() for sockmap")
+> > Reported-by: syzbot+5b3b7e51dda1be027b7a@syzkaller.appspotmail.com
+> > Closes: https://lore.kernel.org/netdev/698f84c6.a70a0220.2c38d7.00cb.GA=
+E@google.com/
+> > Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
+> > ---
+> > v4: Fix deadlock when requeued
+> > v2: Fix build failure when CONFIG_INET=3Dn
+> > ---
+> >  include/net/udp.h |  9 +++++++++
+> >  net/core/skmsg.c  | 29 +++++++++++++++++++++++++----
+> >  net/ipv4/udp.c    |  9 +++++++++
+> >  3 files changed, 43 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/include/net/udp.h b/include/net/udp.h
+> > index 700dbedcb15f..ae38a4da9388 100644
+> > --- a/include/net/udp.h
+> > +++ b/include/net/udp.h
+> > @@ -455,6 +455,15 @@ struct sock *__udp6_lib_lookup(const struct net *n=
+et,
+> >                              struct sk_buff *skb);
+> >  struct sock *udp6_lib_lookup_skb(const struct sk_buff *skb,
+> >                                __be16 sport, __be16 dport);
+> > +
+> > +#ifdef CONFIG_INET
+> > +void udp_sock_rfree(struct sk_buff *skb);
+> > +#else
+> > +static inline void udp_sock_rfree(struct sk_buff *skb)
+> > +{
+> > +}
+> > +#endif
+> > +
+> >  int udp_read_skb(struct sock *sk, skb_read_actor_t recv_actor);
+> >
+> >  /* UDP uses skb->dev_scratch to cache as much information as possible =
+and avoid
+> > diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+> > index 96f43e0dbb17..dd9134a45663 100644
+> > --- a/net/core/skmsg.c
+> > +++ b/net/core/skmsg.c
+> > @@ -7,6 +7,7 @@
+> >
+> >  #include <net/sock.h>
+> >  #include <net/tcp.h>
+> > +#include <net/udp.h>
+> >  #include <net/tls.h>
+> >  #include <trace/events/sock.h>
+> >
+> > @@ -576,6 +577,7 @@ static int sk_psock_skb_ingress(struct sk_psock *ps=
+ock, struct sk_buff *skb,
+> >                               u32 off, u32 len, bool take_ref)
+> >  {
+> >       struct sock *sk =3D psock->sk;
+> > +     bool is_udp =3D sk_is_udp(sk);
+> >       struct sk_msg *msg;
+> >       int err =3D -EAGAIN;
+> >
+> > @@ -583,13 +585,20 @@ static int sk_psock_skb_ingress(struct sk_psock *=
+psock, struct sk_buff *skb,
+> >       if (!msg)
+> >               goto out;
+> >
+> > -     if (skb->sk !=3D sk && take_ref) {
+> > +     if (is_udp) {
+> > +             if (unlikely(skb->destructor =3D=3D udp_sock_rfree))
+> > +                     goto enqueue;
+> > +
+> > +             spin_lock_bh(&sk->sk_receive_queue.lock);
+> > +     }
+> > +
+> > +     if (is_udp || (skb->sk !=3D sk && take_ref)) {
+> >               if (atomic_read(&sk->sk_rmem_alloc) > sk->sk_rcvbuf)
+> > -                     goto free;
+> > +                     goto unlock;
+> >
+> >               if (!sk_rmem_schedule(sk, skb, skb->truesize))
+> > -                     goto free;
+> > -     } else {
+> > +                     goto unlock;
+> > +     } else if (skb->sk =3D=3D sk || !take_ref) {
+> >               /* This is used in tcp_bpf_recvmsg_parser() to determine =
+whether the
+> >                * data originates from the socket's own protocol stack. =
+No need to
+> >                * refcount sk because msg's lifetime is bound to sk via =
+the ingress_msg.
+> > @@ -604,11 +613,23 @@ static int sk_psock_skb_ingress(struct sk_psock *=
+psock, struct sk_buff *skb,
+> >        * into user buffers.
+> >        */
+> >       skb_set_owner_r(skb, sk);
+> > +
+> > +     if (is_udp) {
+> > +             spin_unlock_bh(&sk->sk_receive_queue.lock);
+> > +
+> > +             skb->destructor =3D udp_sock_rfree;
+> > +     }
+> > +
+> > +enqueue:
+> >       err =3D sk_psock_skb_ingress_enqueue(skb, off, len, psock, sk, ms=
+g, take_ref);
+> >       if (err < 0)
+> >               goto free;
+> >  out:
+> >       return err;
+> > +
+> > +unlock:
+> > +     if (is_udp)
+> > +             spin_unlock_bh(&sk->sk_receive_queue.lock);
+> >  free:
+> >       kfree(msg);
+> >       goto out;
+> > diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+> > index 422c96fea249..831d26748a90 100644
+> > --- a/net/ipv4/udp.c
+> > +++ b/net/ipv4/udp.c
+> > @@ -2039,6 +2039,15 @@ struct sk_buff *__skb_recv_udp(struct sock *sk, =
+unsigned int flags,
+> >  }
+> >  EXPORT_SYMBOL(__skb_recv_udp);
+> >
+> > +void udp_sock_rfree(struct sk_buff *skb)
+> > +{
+> > +     struct sock *sk =3D skb->sk;
+> > +
+> > +     spin_lock_bh(&sk->sk_receive_queue.lock);
+> > +     sock_rfree(skb);
+> > +     spin_unlock_bh(&sk->sk_receive_queue.lock);
+> > +}
+> > +
+> >  int udp_read_skb(struct sock *sk, skb_read_actor_t recv_actor)
+> >  {
+> >       struct sk_buff *skb;
+> > --
+> > 2.53.0.371.g1d285c8824-goog
+> >
+>
+> There are too many protocol-specific checks in the generic skmsg code
+> here. This should be abstracted out.
+>
+> Also TCP also has a similar issue with sk_forward_alloc concurrency
+> between the backlog charge and recvmsg uncharge paths so the abstraction
+> is necessary.
+>
+> I've put together a simple diff based on your patch for reference.
+> I haven't tested it thoroughly, but it at least handles TCP and UDP
+> separately through a callback, keeping the generic code clean.
 
-These names intersect with the list in trace_helpers.c::skip_entry().
+I can follow up on TCP, but TCP needs another fix, which
+cannot be factored out.
 
-It would be better to move this list to trace_helpers.c.
+Some wrong assumptions in your patch:
 
-> +
-> +#define MAX_BPF_FUNC_ARGS 12
-> +
-> +static bool btf_type_is_modifier(const struct btf_type *t)
-> +{
-> +	switch (BTF_INFO_KIND(t->info)) {
-> +	case BTF_KIND_TYPEDEF:
-> +	case BTF_KIND_VOLATILE:
-> +	case BTF_KIND_CONST:
-> +	case BTF_KIND_RESTRICT:
-> +	case BTF_KIND_TYPE_TAG:
-> +		return true;
-> +	}
-> +	return false;
-> +}
-> +
-> +static bool is_allowed_func(const struct btf *btf, const struct btf_type *t)
-> +{
-> +	const struct btf_type *proto;
-> +	const struct btf_param *args;
-> +	__u32 i, nargs;
-> +	__s64 ret;
-> +
-> +	proto = btf_type_by_id(btf, t->type);
-> +	if (BTF_INFO_KIND(proto->info) != BTF_KIND_FUNC_PROTO)
-> +		return false;
-> +
-> +	args = (const struct btf_param *)(proto + 1);
-> +	nargs = btf_vlen(proto);
-> +	if (nargs > MAX_BPF_FUNC_ARGS)
-> +		return false;
-> +
-> +	t = btf__type_by_id(btf, proto->type);
-> +	while (t && btf_type_is_modifier(t))
-> +		t = btf__type_by_id(btf, t->type);
-> +
-> +	if (btf_is_struct(t) || btf_is_union(t))
-> +		return false;
-> +
-> +	for (i = 0; i < nargs; i++) {
-> +		/* No support for variable args */
-> +		if (i == nargs - 1 && args[i].type == 0)
-> +			return false;
-> +
-> +		/* No support of struct argument size greater than 16 bytes */
-> +		ret = btf__resolve_size(btf, args[i].type);
-> +		if (ret < 0 || ret > 16)
-> +			return false;
-> +	}
-> +
-> +	return true;
-> +}
+1) tcp_psock_ingress_charge() uses psock->ingress_lock,
+    but it does not protect any tcp_sock fields, especially
+    sk->sk_forwad_alloc.
 
-NIT: can we avoid copy/pasting the code snippet from libbpf.c?
+2) TCP memory accounting happens under bh_lock_sock()
+    _or_ lock_sock().  sendmsg()/recvmsg() works under
+    lock_sock() and TCP fast path puts skb to backlog if
+    lock_sock() is held by userspace.  This means even
+    a simple bh_lock_sock() in tcp_psock_ingress_charge()
+    race with memory accounting happening under lock_sock().
 
-Thanks,
-Leon
-
-[...]
-
+Since sk_psock_skb_ingress() is called from both GFP_KERNEL
+and GFP_ATOMIC context, the simplest fix would be to put
+lock_sock() in sk_psock_backlog() for TCP, which is ugly though.
