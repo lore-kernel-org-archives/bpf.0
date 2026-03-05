@@ -1,63 +1,63 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2348D264A65;
-	Thu,  5 Mar 2026 02:50:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA17F1A6826;
+	Thu,  5 Mar 2026 02:55:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772679060; cv=none; b=Vr4mC5SgNYg4fb/Qm93OONSEKnSGtZIjajiJncnD/Mi/oW0dP5eX8wO2VvTUuf3e8qaEzUR7Tk89lMoWx1L0x+F05tVGzlCxp8ksezlVvGZZTLp4xOVbW8Or5jLalNpH9vQKd02RZptYCK1jePy6GoPhC69GeT81SlXuZ8WMqm4=
+	t=1772679334; cv=none; b=GgB7jpWm6Asi+Q+xY+1igNn92a61P/Up5WAPUCOz1h6vEY8QKUIHsiDMz8DR0PgrOSHIyokmg4mu7g289+07oeyi3C3vz2iYvSvPiJoEIcwMID+BEXyE6BXEvbzGPvPpyStW//PRy8ZRhv36OxijLIo/4s/rVTJESKMSFW9auZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772679060; c=relaxed/simple;
-	bh=pUydlp0JDyvoilaKO0EdUKvO26qTKH0x97z1hOtea+k=;
+	s=arc-20240116; t=1772679334; c=relaxed/simple;
+	bh=4d7y/xjgWSGuhuezCdtH2976xfIP6uASlpXYDBGcWGw=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TR2cXyYtTBs0DC0h9yqIN/8bPh81rNBJ69rMcZEaveI5WgnlwUaIFRHxOz54lD5TJSh4YEOqjipP3pj5JdxqIxTwd6+ByVUUOkZ/Gss0iVXGU2pIs6q1tHLp8ecKQS9EXI6mtR3kagHTzAdJhpWhlM1HOGWr/YipLntEP3eyc3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GfQU6x/A; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=GpwMzWHp0/5XZv2wVCLbXbDo4x2E9HgsP/bdxKi7uxS2TCCvYYaOBGMGgHDlpK24WK20PdJTwiwOCUyGOO6Do63HjakRR/EMDPtVdWz1RyL2WbkJUbM0uGHsrxiYWd/dnjKvjx2IP1B5VzwfPusdOISxprwbA5JzPI3vdVGpAaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pYK7YM4m; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GfQU6x/A"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D8FDC4CEF7;
-	Thu,  5 Mar 2026 02:50:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pYK7YM4m"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2664C4CEF7;
+	Thu,  5 Mar 2026 02:55:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772679059;
-	bh=pUydlp0JDyvoilaKO0EdUKvO26qTKH0x97z1hOtea+k=;
+	s=k20201202; t=1772679334;
+	bh=4d7y/xjgWSGuhuezCdtH2976xfIP6uASlpXYDBGcWGw=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=GfQU6x/ApJyFbfHjCkGwdK/UVyTJgS5zf4KaU8s/8c6TZ3AIGRcwxxYSajcJ32mfT
-	 /+OcOgSPZ5qH0eaJCPYSq+FsKdU/e9bwwEe8/49PEtRlvG/6vwUJY4ClSQdYv0wTO8
-	 ntw7jt600tM0bbDlqWsLVhgxFCwjWHgp0unJSjOCvQ2ljwI0APutDEJ90XzojyHpWi
-	 3QKKK1O2ypZXOcCa0QKSZQQEgG/0G+TwiPVeTwVAP0dYFIDeajJ2qUsR/UsCvOJu3M
-	 wkIKvrc62sjLCecZB4uudV+76FGov7+W2YpB10cCZx2Ukev2DuR437WAMIrsx2pcMQ
-	 Iorhkxsol+eqQ==
-Date: Wed, 4 Mar 2026 18:50:56 -0800
+	b=pYK7YM4m0fnSsQAyhefMcDaOBvn8Y9c20FaOvCpYggIpa60A8z3EWxFyPSfPRL9FU
+	 REN3e4tRWW1m7oG26k1oqS+4aO937R4czODpAvvERAsyQWEQMzozLXDSJml7d3155z
+	 jcXg03aXYVxS0lHpCo0e59gkB2hrJHpLLVbwZU5kMt/dzDbqrUe3XWteUg9Db2G9AZ
+	 7CMUJ2C/mOnC6YdoiPoF+jNUvhw4vyDicAInnAmtwaJ8ckXg8wYOq8SMe7YFrs82cG
+	 +bU8uWFw2JBclJCUuwTUOm5ex6kn+DfB7sKrnPaJvlby8tgUkH8ayRDaMdRV+ro3nH
+	 mC/rbafRFsa9A==
+Date: Wed, 4 Mar 2026 18:55:31 -0800
 From: Jakub Kicinski <kuba@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Fernando Fernandez Mancera <fmancera@suse.de>, David Ahern
- <dsahern@kernel.org>, "Ricardo B. =?UTF-8?B?TWFybGnDqHJl?=" <rbm@suse.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, John Fastabend
- <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Alexei
- Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Eduard
- Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
+To: Larysa Zaremba <larysa.zaremba@intel.com>
+Cc: bpf@vger.kernel.org, Claudiu Manoil <claudiu.manoil@nxp.com>, Vladimir
+ Oltean <vladimir.oltean@nxp.com>, Wei Fang <wei.fang@nxp.com>, Clark Wang
+ <xiaoning.wang@nxp.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
+ Abeni <pabeni@redhat.com>, Tony Nguyen <anthony.l.nguyen@intel.com>,
+ Przemek Kitszel <przemyslaw.kitszel@intel.com>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
  <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Toke =?UTF-8?B?SMO4?=
- =?UTF-8?B?aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>, Jay Vosburgh
- <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>, Hangbin Liu
- <liuhangbin@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 1/3] bpf: bpf_out_neigh_v4: Fix nd_tbl NULL
- dereference when IPv6 is disabled
-Message-ID: <20260304185056.4ef945d4@kernel.org>
-In-Reply-To: <ec1fdead-8a2b-475b-a786-846b81234b74@iogearbox.net>
-References: <20260228-net-nd_tbl_fixes-v1-0-2b2a274df9bb@suse.com>
-	<20260228-net-nd_tbl_fixes-v1-1-2b2a274df9bb@suse.com>
-	<0b52257d-d557-4f26-9931-34c81ab621bc@iogearbox.net>
-	<20260302171131.28373ccb@kernel.org>
-	<0d7bb5c5-4122-4dc9-b52b-c305591207d1@suse.de>
-	<bbee1ce1-0615-4be2-b7b1-a14eaf2afe26@iogearbox.net>
-	<ba665193-bb6f-4293-b8ca-bbb267e92eb3@kernel.org>
-	<ba35fa2c-0085-43c9-afe0-3b2e0351ca3c@suse.de>
-	<525dab04-4e64-49cf-94d9-12084e146b80@iogearbox.net>
-	<20260304174327.0a48ff45@kernel.org>
-	<ec1fdead-8a2b-475b-a786-846b81234b74@iogearbox.net>
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Simon Horman
+ <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Alexander Lobakin
+ <aleksander.lobakin@intel.com>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, "Bastien Curutchet (eBPF Foundation)"
+ <bastien.curutchet@bootlin.com>, Tushar Vyavahare
+ <tushar.vyavahare@intel.com>, Jason Xing <kernelxing@tencent.com>, "Ricardo
+ B. =?UTF-8?B?TWFybGnDqHJl?=" <rbm@suse.com>, Eelco Chaudron
+ <echaudro@redhat.com>, Lorenzo Bianconi <lorenzo@kernel.org>, Toke
+ Hoiland-Jorgensen <toke@redhat.com>, imx@lists.linux.dev,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org,
+ Aleksandr Loktionov <aleksandr.loktionov@intel.com>, Dragos Tatulea
+ <dtatulea@nvidia.com>
+Subject: Re: [PATCH bpf v4 0/9] Address XDP frags having negative tailroom
+Message-ID: <20260304185531.4f49fda4@kernel.org>
+In-Reply-To: <20260302161723.858616-1-larysa.zaremba@intel.com>
+References: <20260302161723.858616-1-larysa.zaremba@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,24 +67,15 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu, 5 Mar 2026 02:59:27 +0100 Daniel Borkmann wrote:
-> >> I presume you mean disable_ipv6_mod which then bails out during the module
-> >> load process without error, right? It could be deprecated with a warning so
-> >> that it turns into a no-op:  
-> > 
-> > I believe disabling ipv6 may be legit. Some admins on ipv4 networks may
-> > be paranoid and not want to allow any ipv6 traffic if their "firewalls"
-> > can only understand IPv6? This is just a guess on my side, but I'm less
-> > confident of deprecating the disable knob than =m. I'd be happy if I'm
-> > wrong.
-> > 
-> > To answer the earlier question -- I would prefer to take the fixes now
-> > and make IPv6 bool in net-next, feels like too big of a change for rc3
-> > :(  
-> 
-> Makes sense, I think starting this process via net-next is fine and can be
-> better justified. Fernando, maybe in that case resend with the unlikely()
-> added.
+On Mon,  2 Mar 2026 17:17:13 +0100 Larysa Zaremba wrote:
+> Aside from the issue described below, tailroom calculation does not account
+> for pages being split between frags, e.g. in i40e, enetc and
+> AF_XDP ZC with smaller chunks. These series address the problem by
+> calculating modulo (skb_frag_off() % rxq->frag_size) in order to get
+> data offset within a smaller block of memory. Please note, xskxceiver
+> tail grow test passes without modulo e.g. in xdpdrv mode on i40e,
+> because there is not enough descriptors to get to flipped buffers.
 
-I think Fernando was chiming in because he sent similar patches.
-Ricardo, please respin checking ipv6_mod_disabled() ?
+This was re-assigned to netdev in pw, I presume by BPF maintainers.
+But it doesn't apply to net. There's a conflict in ice.
+Could you rebase on net and repost?
