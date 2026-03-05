@@ -1,339 +1,213 @@
-Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012071.outbound.protection.outlook.com [40.93.195.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 277A430FC1E
-	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 07:00:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772694009; cv=none; b=EbpSS8HQ/JvP0REEJ/HoLyowuKyB1kEhgxgQNysI1A3JAkQCbqsMG6TafRS/s9Uqo1DURkWW1FlgzmWSOYY0Xrzi+VVyHioMZawDpyKejyP29Zx7MpOTLZlJXeVkclKwvGcEjhE7u3S5gx04erzpS/DmdL/3TtZ4RxSAyq+idRA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772694009; c=relaxed/simple;
-	bh=I7U/rIja0hkqLwde0y+xCfy9HDS+KsjUXWaIjEhHC4k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lEn+/QnhpxXjKHQGbb3jUVHeaTLIm3T0Vyp/MuACrntIno0INEkHa7SvDPCRrEQ5bBnOfJ+NWrRWG2AfZa7OBCXzO8DNxLBGwrMqHUNFesQboui4MITCRoGZdn/CyAxHFFJhJb6TcN/pXLUlP/iRgTtHHu0o6CFoQAbjEPBIRbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=d+lAoFVb; arc=none smtp.client-ip=95.215.58.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7413A1C68F;
+	Thu,  5 Mar 2026 07:03:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.71
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772694209; cv=fail; b=Z9spgY2xPtMvE5fx+kXQzX7u9EPbX7ImfhC/WJ990uywoOZP04Xp3+rfxZxbGN467EXXbRTuKMGL9F46Ksje+wNLiyUoz1HWy8EoMaXzsY3Vkq1OLDR6+ogJUG0nl9x83oAdGXIc0WUzNUAfaZQXKLVnzy5XTVFVjO4/l2Y3GoI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772694209; c=relaxed/simple;
+	bh=LCjCspAIJZ3+Oymrd11A8AEvbblEGKXyvHGi/1naQDo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=Qg4TzTSH23oIbhvU6f42C1hfHwhgfW0McDZxSjx/LF3J2HA25pRRwGzsXOUG8UVjpCtiX1y+QZ1Qeps3wAcS/KaYjKHpGirPw4YugKkXzuJTNyEHJoISgOpOf1T3cPjdaYbZzTw8plLmNwSPCEpa5fyfVKAjL+HGOylfqnlnM/Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=MRRSPUjP; arc=fail smtp.client-ip=40.93.195.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="d+lAoFVb"
-Message-ID: <0f3ec422-4b98-4311-96de-ccfc86bb22ad@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772693996;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PKZjmBMs6uqPznaGXDzSJjOUHnipnd2ok2ANadgI9vQ=;
-	b=d+lAoFVbsuaB+CybiKDAzO2i5esmKLgwufdF+C5F76sc0uWwZg3kZY5/EGedhxIoQw8cYz
-	ZRa0oFWamJLBwkTW+Sn0LbEy/eztxvvHpJbHUIqM7usdiXMN2fAuP9QwHfJffg725RVPQB
-	OfaNwTcTKPH/OtyzEhFnJgnwzTJXEng=
-Date: Thu, 5 Mar 2026 14:59:48 +0800
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="MRRSPUjP"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=KdE/mXNW3IGbd2r9vFC1WfKQJ8CoD88ntuclfwQRpQbjJgLaMqt9sUWyraSDPq1fL4tlYE9hFDz5pBqqwnV09cv4inLsKO1WwwXqW+JlP53eVUBVZHQIKO+FVMQ8JdcI8jWW+YvcxiIojwm4pw1bHENgH/7DSAyh8ddftLWwh7+Ewiv9OOuGxsfxcsStwMsj+oxAFxJ9btYpfsw5B66KvfKpSC7kPlI1otrGuqY8QL3C5maE+STcvVgPSpCvQrtJHT/GQZ0WElFMrkw9m7NTALNKcG5KZ5cqZ5/Nwyw5T3KPgXyBoTbfplSKTMeLkn6uFYP3jy1ODestxnQ4fBrIzQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=P7x/Iz93DbplPNuD9tUgrIBZ0N3jey6qdlnoJjKkCTY=;
+ b=vx9yS4IIQQUuc40GpnzKp79yuijVd1LA57Rr1Hie5AofVZlQ7r7jW3pg+HzvMS1dUEHVHWVOJHLxMbfMS6B4BGB1Es2aZ4T2beFvJeHeOv/MQRrSyzN7LnT9Dv2X+CBLTCKP0P5fWeEfNi0ZOGA3QYFPkeB39+vAcvLqYtaIcoD5mVuAtlilj992TMd4hJCJzFkp8v092qpl7mBmT3/Ic3xi0NKr02EULU7VFwCa9EUL8b939gIxajmhZIVxbxByCBHC8dxEahxmLs743X/A2W1Rj16idjlYsPOoEpuD0KhUF3k4o8ZW6JzYDD6mJwZN2qghR/QJBVxI5FGqHb+oXg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=P7x/Iz93DbplPNuD9tUgrIBZ0N3jey6qdlnoJjKkCTY=;
+ b=MRRSPUjP/vV9N50bDSPOzYfbl+IWKcrRAcJw0pcBBmI6thj5tJyl1UNPIGYjxkRpHBqCcSmiZtppZzhQ6y4geldVH/1kKGOT90cY+VeNsLYARpP1hu9qU1eXRZ7fMAlznfkCveH7YPcu9Z4HXdlB64+HouPBlRfMss3+ykBIEM52LlBKRjvBQvL42ldY43GrjtKYJVyupO13FZrkhV67/9Y6HZ2mwEZoebjzsxkAw7Vq6lmMtGOn2apacrYjwl2TqUp9T3Fp/SjTDTad37I/VfWFuckoCymCZ6E5PlnV6K8aWsjk8+4YN6UTJRwis8z25NCFZiCyLmQ4kZ4NDc6KwA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
+ by PH8PR12MB6939.namprd12.prod.outlook.com (2603:10b6:510:1be::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.17; Thu, 5 Mar
+ 2026 07:03:25 +0000
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528]) by LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528%5]) with mapi id 15.20.9654.022; Thu, 5 Mar 2026
+ 07:03:24 +0000
+Date: Thu, 5 Mar 2026 08:03:21 +0100
+From: Andrea Righi <arighi@nvidia.com>
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] bpf: Prevent invalid u32 bounds in
+ __reg32_deduce_bounds()
+Message-ID: <aakqucg4vcujVwif@gpd4>
+References: <20260220190736.230329-1-arighi@nvidia.com>
+ <e8cc28373cd122f041a71f5818e41b7e3e4cffa2.camel@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e8cc28373cd122f041a71f5818e41b7e3e4cffa2.camel@gmail.com>
+X-ClientProxiedBy: MI2P293CA0003.ITAP293.PROD.OUTLOOK.COM
+ (2603:10a6:290:45::16) To LV8PR12MB9620.namprd12.prod.outlook.com
+ (2603:10b6:408:2a1::19)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCHv2 bpf-next 15/23] libbpf: Add support to create tracing
- multi link
-Content-Language: en-US
-To: Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- Martin KaFai Lau <kafai@fb.com>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
- Menglong Dong <menglong8.dong@gmail.com>, Steven Rostedt <rostedt@kernel.org>
-References: <20260304222141.497203-1-jolsa@kernel.org>
- <20260304222141.497203-16-jolsa@kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <20260304222141.497203-16-jolsa@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|PH8PR12MB6939:EE_
+X-MS-Office365-Filtering-Correlation-Id: 630e3009-2b02-431e-4670-08de7a854b3a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	1IZkHejJ7693DGS32nDB64oaZZKnCOWcDOL9kTS07zoZAZ2eFtuwccJB8SWm4BrOawrPz5aH+ilXb/ufKpx0+neViEoRj0Eetlwz96WGBNfLADE1xzXqHbZpKKQFR8Nloweou+uH/Yok0QM2JrED0TpXs4gPSlc640WetHPCOxQhoWa2kaL2BGqF7Hig0NhtDCMgOlXA56BPGpqBFunUvcTCoS1YN0JV9aLwW9zTwEjdXl2nTf/VetAovesMTYaUh9Gf6jpc/g5RgHkpLp8twEnsEX/GY+7Q34sL4ttQ7Ak4TikhNMzImwZFkSe0yMbGNm07NVVUUjRPMA9WOx13Hskd3hMk/u+SRRr8NuapeU4adeRQRSJ4YLeGymAh1zRB3sHgAk8QX7Xt9XPxACDRkCmVjrjBLFzOaEaYP8QnfWY5yU6h0Bhlww+LP7P10FHtKl92Ca1WPumWJczTD+56F3z0NmZ0T4PACR0JhKGYxm1AtKTZMbJX8/NAI+TlLy0TWHBZEZiJXVmB0AGR875z3+6/7/0BZ0O2lICILYkpC/MHddVRhc8NLn7ZXNNzkP/oqbiiAidgvEARQ/ziCOOONM3LMU8Rs+q4CSswNvMywP4Qke7A2Eo7cIgdM+yJUJfU3eyPQa8+IRul0xNnQnRQgUi+dPKFtL29DbPB+hggBH+1Ds22GOPGqY2RVAEebJjrNB8tlCC31I0qOvFKqnf1QYPItUf8Tn4cgVJpxgL9WfwbgrIdEls/BhLi3HNk5q8n
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?XFweCqqa1TUgfBGFoqLvM3WDzN0tZzm2tk09Aqi7Olo/Opn7AzZOCBJiFy+D?=
+ =?us-ascii?Q?htG8l62PE8iBwobsDKBbZ7yWyIpt/JQdSz9n7C2PExO6ejAdX4TbgUqnKVqG?=
+ =?us-ascii?Q?obFHxfrwN3xLnxbJVIwkUcX+UG3ZkWbxKoIQF9SFy9noOOno/wjRhKE+vcSl?=
+ =?us-ascii?Q?tT0jPIwBgONlMFF4rxjmAI0bArK5lUpwrXBlbSDIt2nzr9viBAGY5dIKKtjL?=
+ =?us-ascii?Q?6hOyiKEy6p0oFKHX56tEF5cfiqbq/KLTf92E0wbRkfJJTnWFsOyVJgELJlti?=
+ =?us-ascii?Q?MPJTFVnCrQO0ntVGuGrSoEw0WOlupnwtag9bc6EphpLHocDGsrbEeRQYUTfb?=
+ =?us-ascii?Q?tfVhQN/XLtxy5RQ4zYWG1/S4qaZ8l5MaElQZFW7aGyCvezlxWB8JWVyjGAzJ?=
+ =?us-ascii?Q?3D32n5a+DF29Yy35IPIXn1jd0LPlsitoxGjNmIeXXZHatXFQDPLHsho3E8mH?=
+ =?us-ascii?Q?NXIQIaw2CZtTZFBsDO8Sm8OkKvoImcicxSDBE7oWn7+SgUCs5/HZ8PuHo0Kq?=
+ =?us-ascii?Q?XykCYdMSy4d15uHgizDgYs0aNHESiDjXobH4SCCUjZYTnyaJoL/vD76l9ST2?=
+ =?us-ascii?Q?C/jlhnR0UBZd7pjHOR7zNnZwr7COkkUdQb+1NXleKTBoHn1G58Q7bcoOdLHH?=
+ =?us-ascii?Q?moyrhkI9ytGlUp0HFZ/wjOixDja5lxsn+wL0Iff1SUdHiTAa4x0e2GIM5e5O?=
+ =?us-ascii?Q?BTszqqEgIvtDV3Ueig2Zgw9DdguFFYRGYBVLioQp1WKRefj06DEmYmv7e+fj?=
+ =?us-ascii?Q?sNDmhEdKyK8eVe0oDKYNjGaxefP2ybVI6dNUGwGyWFgVIb9dlXn2PQqrnsNQ?=
+ =?us-ascii?Q?1MQJSCh9P9k/4AV28Bk24gH2eueKQkYXSG5/53FA1Aq1NAC4tq6vgTwOUUVp?=
+ =?us-ascii?Q?2ZVTlEzNPvPwXOSCRejzy3DEViEhoG0nR9CeZNTqrCpAjvBD/m88DS7gSnKF?=
+ =?us-ascii?Q?N68ZdPfobe71ZqMUZdUmU4rSJPUBffHjMOlsK/0DRGUiBWHaxaxxjZf2EuRq?=
+ =?us-ascii?Q?sZp9CrQdcVfWBwKrHP19A4d+LdpiZt/ScO/LvsH4Asek+2Fn9WJb+nOrXYpf?=
+ =?us-ascii?Q?oI9svLUtVD2Y73W7lM1Ru4A+54IXWGmBcp4XYO9p2rEc4vUA9ICTlgZWN/ru?=
+ =?us-ascii?Q?/Hh2cZEW4Q2q7sz1SrO/mfYdox1SOb9ZZjeps/+9J1zYLD7pkhO7w+ef1N0D?=
+ =?us-ascii?Q?RLcYZY55OH/6I6F2rgtATaIsDmKJLtu6cX684FzRA04tzZur14lY0oyVLGFC?=
+ =?us-ascii?Q?/HUkUbZnLfGgex88+etuxztn8wQuFQaaBhE5L1RQDklGnbLut+lV9+JFEBI1?=
+ =?us-ascii?Q?1tbHc2UBCPwWQ0DlpqKMHLBsQePPjd3tcXRyQSLV0At4XFQp2n+Y3Efz6Kxt?=
+ =?us-ascii?Q?En+XKcWt9mHaqGcRFg0+4UrnZkXszHh2FekgeJa9ax0U9DIxQ2v5vyIGXpET?=
+ =?us-ascii?Q?+6X90BW+vuWIRuw//fpQG5/OPdmsSpI8aCnhH1l46rgGyujDMsuhHwB3YPyX?=
+ =?us-ascii?Q?XobzTQODwa9R0a6zlBG//cKY3+2nTS9A05No1O9TyAi5IwwUlPQD6GoCyxSY?=
+ =?us-ascii?Q?ZX5iH1v9n7TNjYbc9ZYHiMYlNknECcDfymLIENQHUk5RQU3AvdPlqqjoIiBc?=
+ =?us-ascii?Q?3CTEeW9QwZx1Pb6DXVB0/AOg/MC4JXXFgn77MN8gJPA3UqfUxWsdNjquKqxX?=
+ =?us-ascii?Q?sZS/z9BW8JveJLB1YEW85ts7kKh9LAiKLcvFuRo0bGQpzt2QV/rYjEPZPx9m?=
+ =?us-ascii?Q?VLGvByAwGA=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 630e3009-2b02-431e-4670-08de7a854b3a
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Mar 2026 07:03:24.7044
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kl/5j5A+86YM+/++IaKVWfCizxvTYJRsLTi2pG0J+IZK1XBZZupbhYqml2+oEgZFaDaOIA2tQUnsCNYRqaQIhQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6939
 
-On 5/3/26 06:21, Jiri Olsa wrote:
-> Adding bpf_program__attach_tracing_multi function for attaching
-> tracing program to multiple functions.
-> 
->   struct bpf_link *
->   bpf_program__attach_tracing_multi(const struct bpf_program *prog,
->                                     const char *pattern,
->                                     const struct bpf_tracing_multi_opts *opts);
-> 
-> User can specify functions to attach with 'pattern' argument that
-> allows wildcards (*?' supported) or provide BTF ids of functions
-> in array directly via opts argument. These options are mutually
-> exclusive.
-> 
-> When using BTF ids, user can also provide cookie value for each
-> provided id/function, that can be retrieved later in bpf program
-> with bpf_get_attach_cookie helper. Each cookie value is paired with
-> provided BTF id with the same array index.
-> 
-> Adding support to auto attach programs with following sections:
-> 
->   fsession.multi/<pattern>
->   fsession.multi.s/<pattern>
->   fentry.multi/<pattern>
->   fexit.multi/<pattern>
->   fentry.multi.s/<pattern>
->   fexit.multi.s/<pattern>
-> 
-> The provided <pattern> is used as 'pattern' argument in
-> bpf_program__attach_kprobe_multi_opts function.
-> 
-> The <pattern> allows to specify optional kernel module name with
-> following syntax:
-> 
->   <module>:<function_pattern>
-> 
-> In order to attach tracing_multi link to a module functions:
-> - program must be loaded with 'module' btf fd
->   (in attr::attach_btf_obj_fd)
-> - bpf_program__attach_kprobe_multi_opts must either have
->   pattern with module spec or BTF ids from the module
-> 
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  tools/lib/bpf/libbpf.c   | 309 +++++++++++++++++++++++++++++++++++++++
->  tools/lib/bpf/libbpf.h   |  15 ++
->  tools/lib/bpf/libbpf.map |   1 +
->  3 files changed, 325 insertions(+)
-> 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 34987ce7cdc8..8842adcf8c8a 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -7716,6 +7716,52 @@ static int bpf_object__sanitize_prog(struct bpf_object *obj, struct bpf_program
->  static int libbpf_find_attach_btf_id(struct bpf_program *prog, const char *attach_name,
->  				     int *btf_obj_fd, int *btf_type_id);
->  
-> +static inline bool is_tracing_multi(enum bpf_attach_type type)
-> +{
-> +	return type == BPF_TRACE_FENTRY_MULTI || type == BPF_TRACE_FEXIT_MULTI ||
-> +	       type == BPF_TRACE_FSESSION_MULTI;
-> +}
-> +
-> +static int tracing_multi_mod_fd(struct bpf_program *prog, int *btf_obj_fd)
-> +{
-> +	const char *attach_name, *sep, *mod_name = NULL;
-> +	int i, err, mod_len = 0;
-> +
-> +	*btf_obj_fd = 0;
-> +	attach_name = strchr(prog->sec_name, '/');
-> +
-> +	/* Program with no details in spec, using kernel btf. */
-> +	if (!attach_name)
-> +		return 0;
-> +
-> +	attach_name++;
-> +	sep = strchr(attach_name, ':');
-> +	if (sep) {
-> +		mod_name = attach_name;
-> +		mod_len = sep - mod_name;
-> +	}
-> +
-> +	/* Program with no module section, using kernel btf. */
-> +	if (!mod_name)
-> +		return 0;
-> +
-> +	err = load_module_btfs(prog->obj);
-> +	if (err)
-> +		return err;
-> +
-> +	for (i = 0; i < prog->obj->btf_module_cnt; i++) {
-> +		const struct module_btf *mod = &prog->obj->btf_modules[i];
-> +
-> +		if (mod_name && strncmp(mod->name, mod_name, mod_len) == 0) {
+Hi Eduard,
 
-strncmp() is not enough to exactly compare two module names, as
-strncmp() only compares the first 'mod_len' bytes.
+On Wed, Mar 04, 2026 at 11:23:13AM -0800, Eduard Zingerman wrote:
+> On Fri, 2026-02-20 at 20:07 +0100, Andrea Righi wrote:
+> > When refining register bounds, __reg32_deduce_bounds can derive u32
+> > min/max from 64-bit or s32 bounds and assign them with max_t/min_t.
+> > 
+> > If the existing u32 range and the derived range do not overlap (e.g.,
+> > u64 says [0, 1] while u32 was [2, 2] from an earlier path), the
+> > intersection is empty and the new u32_min_value can end up greater than
+> > u32_max_value, triggering the following warning:
+> > 
+> >   verifier bug: REG INVARIANTS VIOLATION (false_reg1): range bounds violation
+> >     u64=[0x0, 0x1] s64=[0x0, 0x1] u32=[0x3, 0x1] s32=[0x0, 0x1] var_off=(0x0, 0x1)
+> >   WARNING: kernel/bpf/verifier.c:2742 at reg_bounds_sanity_check
+> >   Call Trace:
+> >     reg_bounds_sanity_check+0xbc/0x1e0
+> >     reg_set_min_max+0x1a2/0x1f0
+> >     check_cond_jmp_op+0x5d2/0x1980
+> >     do_check_common+0x2b0f/0x3410
+> >     do_check_subprogs+0xcd/0x180
+> >     bpf_check+0x33fe/0x3850
+> >     bpf_prog_load+0x7d7/0xee0
+> >     __sys_bpf+0xea2/0x2e30
+> > 
+> > This was triggered by the scx CI while loading the scx_layered sched_ext
+> > scheduler [1].
+> > 
+> > Fix by only applying the derived u32 bounds when the resulting range is
+> > valid (u32_min <= u32_max).
+> > 
+> > [1] https://github.com/sched-ext/scx/pull/3349
+> > 
+> > Fixes: c1efab6468fd5 ("bpf: derive subreg bounds from full bounds when upper 32 bits are constant")
+> > Signed-off-by: Andrea Righi <arighi@nvidia.com>
+> > ---
+> 
+> Hi Andrea,
+> 
+> Sorry for delayed response.
+> 
+> Currently the assumption is that all ranges/tnum tracked as a part of
+> a register state are valid, and I don't think we'd like to sidestep
+> this assumption. Eventually is_scalar_branch_taken() and
+> adjust_scalar_min_max_vals() should be unified to avoid possibility
+> for mismatch between is_scalar_branch_taken() predictions (when it
+> assumes that some branch can be taken by failing to predict jump)
+> and adjust_scalar_min_max_vals() adjustments (when it infers that in
+> fact register state is empty for the branch).
+> 
+> As it turns out, the problem you report is a bit easier to fix.
+> After minimizing the failing file with Emil's help I derived the
+> following test case that captures the problem:
+> 
+> SEC("socket")
+> __success
+> __flag(BPF_F_TEST_REG_INVARIANTS)
+> __naked void signed_unsined_intersection32(void *ctx)
+> {
+> 	asm volatile("			\
+> 	call %[bpf_get_prandom_u32];	\
+> 	w0 &= 0xffffffff;		\
+> 	if w0 < 0x3 goto 1f;		\ /* on fall-through u32 range [3..U32_MAX] */
+> 	if w0 s> 0x1 goto 1f;		\ /* on fall-through s32 range [S32_MIN..1] *
+> 	if w0 s< 0x0 goto 1f;		\ /* the above ranges can be narrowed to [S32_MIN..-1] */
+> 	r10 = 0;			\ /* meaning that condition can be predicted, */
+> 1:	exit;				\ /* but verifier is not smart enough at the moment. */
+> "	:
+> 	: __imm(bpf_get_prandom_u32)
+> 	: __clobber_all);
+> }
+> 
+> This branch has verifier modifications making it smart enough to
+> process this case: https://github.com/eddyz87/bpf/tree/cnum-sync-bounds .
+> With some additional verification: https://github.com/eddyz87/cnum-verif .
+> I'm working towards submitting the fix, need to decide on what to do
+> with reg_bounds.c, as this test is now not smart enough.
 
-So, mod_name "foo" could match mod "foobar", since 'obj->btf_modules'
-are not sorted by name after loading from kernel.
-
-To find the exact module via module name, "strncmp() == 0 &&
-mod->name[mod_len] == '\0'" would be better.
-
-> +			*btf_obj_fd = mod->fd;
-> +			return 0;
-> +		}
-> +	}
-> +
-> +	/* Specified module was not found, let's bail out. */
-> +	return -EINVAL;
-> +}
-> +
->  /* this is called as prog->sec_def->prog_prepare_load_fn for libbpf-supported sec_defs */
->  static int libbpf_prepare_prog_load(struct bpf_program *prog,
->  				    struct bpf_prog_load_opts *opts, long cookie)
-> @@ -7779,6 +7825,18 @@ static int libbpf_prepare_prog_load(struct bpf_program *prog,
->  		opts->attach_btf_obj_fd = btf_obj_fd;
->  		opts->attach_btf_id = btf_type_id;
->  	}
-> +
-> +	if (is_tracing_multi(prog->expected_attach_type)) {
-> +		int err, btf_obj_fd = 0;
-> +
-> +		err = tracing_multi_mod_fd(prog, &btf_obj_fd);
-> +		if (err < 0)
-> +			return err;
-> +
-> +		prog->attach_btf_obj_fd = btf_obj_fd;
-> +		opts->attach_btf_obj_fd = btf_obj_fd;
-> +	}
-> +
->  	return 0;
->  }
->  
-> @@ -9835,6 +9893,7 @@ static int attach_kprobe_session(const struct bpf_program *prog, long cookie, st
->  static int attach_uprobe_multi(const struct bpf_program *prog, long cookie, struct bpf_link **link);
->  static int attach_lsm(const struct bpf_program *prog, long cookie, struct bpf_link **link);
->  static int attach_iter(const struct bpf_program *prog, long cookie, struct bpf_link **link);
-> +static int attach_tracing_multi(const struct bpf_program *prog, long cookie, struct bpf_link **link);
->  
->  static const struct bpf_sec_def section_defs[] = {
->  	SEC_DEF("socket",		SOCKET_FILTER, 0, SEC_NONE),
-> @@ -9883,6 +9942,12 @@ static const struct bpf_sec_def section_defs[] = {
->  	SEC_DEF("fexit.s+",		TRACING, BPF_TRACE_FEXIT, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_trace),
->  	SEC_DEF("fsession+",		TRACING, BPF_TRACE_FSESSION, SEC_ATTACH_BTF, attach_trace),
->  	SEC_DEF("fsession.s+",		TRACING, BPF_TRACE_FSESSION, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_trace),
-> +	SEC_DEF("fsession.multi+",	TRACING, BPF_TRACE_FSESSION_MULTI, 0, attach_tracing_multi),
-> +	SEC_DEF("fsession.multi.s+",	TRACING, BPF_TRACE_FSESSION_MULTI, SEC_SLEEPABLE, attach_tracing_multi),
-> +	SEC_DEF("fentry.multi+",	TRACING, BPF_TRACE_FENTRY_MULTI, 0, attach_tracing_multi),
-> +	SEC_DEF("fexit.multi+",		TRACING, BPF_TRACE_FEXIT_MULTI, 0, attach_tracing_multi),
-> +	SEC_DEF("fentry.multi.s+",	TRACING, BPF_TRACE_FENTRY_MULTI, SEC_SLEEPABLE, attach_tracing_multi),
-> +	SEC_DEF("fexit.multi.s+",	TRACING, BPF_TRACE_FEXIT_MULTI, SEC_SLEEPABLE, attach_tracing_multi),
->  	SEC_DEF("freplace+",		EXT, 0, SEC_ATTACH_BTF, attach_trace),
->  	SEC_DEF("lsm+",			LSM, BPF_LSM_MAC, SEC_ATTACH_BTF, attach_lsm),
->  	SEC_DEF("lsm.s+",		LSM, BPF_LSM_MAC, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_lsm),
-> @@ -12258,6 +12323,250 @@ static int attach_uprobe_multi(const struct bpf_program *prog, long cookie, stru
->  	return ret;
->  }
->  
-> +#define MAX_BPF_FUNC_ARGS 12
-> +
-> +static bool btf_type_is_modifier(const struct btf_type *t)
-> +{
-> +	switch (BTF_INFO_KIND(t->info)) {
-> +	case BTF_KIND_TYPEDEF:
-> +	case BTF_KIND_VOLATILE:
-> +	case BTF_KIND_CONST:
-> +	case BTF_KIND_RESTRICT:
-> +	case BTF_KIND_TYPE_TAG:
-> +		return true;
-> +	default:
-> +		return false;
-> +	}
-> +}
-> +
-> +static bool is_allowed_func(const struct btf *btf, const struct btf_type *t)
-> +{
-> +	const struct btf_type *proto;
-> +	const struct btf_param *args;
-> +	__u32 i, nargs;
-> +	__s64 ret;
-> +
-> +	proto = btf_type_by_id(btf, t->type);
-> +	if (BTF_INFO_KIND(proto->info) != BTF_KIND_FUNC_PROTO)
-> +		return false;
-> +
-> +	args = (const struct btf_param *)(proto + 1);
-> +	nargs = btf_vlen(proto);
-> +	if (nargs > MAX_BPF_FUNC_ARGS)
-> +		return false;
-> +
-> +	/* No support for struct/union return argument type. */
-> +	t = btf__type_by_id(btf, proto->type);
-> +	while (t && btf_type_is_modifier(t))
-> +		t = btf__type_by_id(btf, t->type);
-> +
-> +	if (btf_is_struct(t) || btf_is_union(t))
-> +		return false;
-> +
-> +	for (i = 0; i < nargs; i++) {
-> +		/* No support for variable args. */
-> +		if (i == nargs - 1 && args[i].type == 0)
-> +			return false;
-> +
-> +		/* No support of struct argument size greater than 16 bytes. */
-> +		ret = btf__resolve_size(btf, args[i].type);
-> +		if (ret < 0 || ret > 16)
-> +			return false;
-> +	}
-> +
-> +	return true;
-> +}
-> +
-> +static int
-> +collect_btf_func_ids_by_glob(const struct btf *btf, const char *pattern, __u32 **ids)
-> +{
-> +	__u32 type_id, nr_types = btf__type_cnt(btf);
-> +	size_t cap = 0, cnt = 0;
-> +
-> +	if (!pattern)
-> +		return -EINVAL;
-> +
-> +	for (type_id = 1; type_id < nr_types; type_id++) {
-> +		const struct btf_type *t = btf__type_by_id(btf, type_id);
-> +		const char *name;
-> +		int err;
-> +
-> +		if (btf_kind(t) != BTF_KIND_FUNC)
-> +			continue;
-> +		name = btf__name_by_offset(btf, t->name_off);
-> +		if (!name)
-> +			continue;
-> +
-> +		if (!glob_match(name, pattern))
-> +			continue;
-> +		if (!is_allowed_func(btf, t))
-> +			continue;
-> +
-> +		err = libbpf_ensure_mem((void **) ids, &cap, sizeof(**ids), cnt + 1);
-> +		if (err) {
-> +			free(*ids);
-> +			return -ENOMEM;
-> +		}
-> +		(*ids)[cnt++] = type_id;
-> +	}
-> +
-> +	return cnt;
-> +}
-> +
-> +static int collect_func_ids_by_glob(struct bpf_object *obj, const char *pattern, __u32 **ids)
-> +{
-> +	const char *mod_name = NULL, *sep;
-> +	int i, err, mod_len = 0;
-> +	struct btf *btf = NULL;
-> +
-> +	err = bpf_object__load_vmlinux_btf(obj, true);
-> +	if (err)
-> +		return err;
-> +
-> +	/* In case we have module specified, we will find its btf and use that. */
-> +	sep = strchr(pattern, ':');
-> +	if (sep) {
-> +		mod_name = pattern;
-> +		mod_len = sep - pattern;
-> +		pattern = sep + 1;
-> +
-> +		err = load_module_btfs(obj);
-> +		if (err)
-> +			goto cleanup;
-> +
-> +		for (i = 0; i < obj->btf_module_cnt; i++) {
-> +			const struct module_btf *mod = &obj->btf_modules[i];
-> +
-> +			if (!strncmp(mod->name, mod_name, mod_len)) {
-
-Same concern here.
-
-Would it be better to factor out a helper to find module via name?
+I see, yeah, my approach is more of a defensive fix, the right
+architectural fix is to make the verifier smart enough to never produce
+this inconsistent state, which is what your branch is doing IIUC. So feel
+free to ignore this patch once you land the proper fix.
 
 Thanks,
-Leon
-
-[...]
-
+-Andrea
