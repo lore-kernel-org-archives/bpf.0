@@ -1,175 +1,258 @@
-Received: from mail-ed1-f68.google.com (mail-ed1-f68.google.com [209.85.208.68])
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27893238166
-	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 11:05:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A7D2366548
+	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 11:09:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772708728; cv=none; b=V4LMEwaKe/kS40xQ+9Q99G4k4gBgZYQ9Z6xkorUbgt/gnmHMZXuJVGpBj0t47IcjiaP0Ld/iT7NfICGm45QWDmgJHT1ABgI412c6ICExZLmmSLR6AluHM+xj5+AN2HyXgr1BjCmcSsQTFlU9MvgnYBLo1lBYqaujXKcpXrMjQJQ=
+	t=1772708989; cv=none; b=YjLVgXdSF5fAJ3ZlxCxDqWcPIdqXhcxT3pQg66nkwuZr2KlZKHcj3H66TmiNlg8lpQbX6h4/bc9VPz9ZC7EPY6h/r62JFRRsSI81JHckxDJ+t/qGKEAjwFauiYtC8UpRwNbvCaOCHYrQ9vdOt1kq9zvd3nIAeDgDQN5EnG134V4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772708728; c=relaxed/simple;
-	bh=L/DaKvYTz36FNjIuY5J5bDAK4KPHUjUfguKWDTyOtq0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=X2iIqdRMa/pMfTA3CsqVRSPOaaYCkQ/VDA+mDdWn9Yg6Z0hJxf92i9XDrlPFyNfoIZ+L6GjTLJvkqdtTP2rRfnBY20E94F2ek2sLiGk2pbJTUeqeyugpmjOuvx9gQ9ehDe7ThG8A1SvekD2MiU/PzTDRSeVSCWSjbI5lzFxo624=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=HI8gstVM; arc=none smtp.client-ip=209.85.208.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1772708989; c=relaxed/simple;
+	bh=Q/FdNtpGImn7O5rmgvSmcQtfH2jqv91yRBowb34fYLE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tfhmNbG5MiZ0FN7pUia2yJoPdv+/ArbqVBpMxS78jAexAxH5o8FoX01lx2LyaJjeqAVUOgStxSdTyYVU0BX/73QndF14vLdFfoaoRCmTRWqPtZaWXXEXvP9X7zLj6/IccdlrXkvLCMmyRvy9f07wt1nMjS1/Xy5n6aQ/7F9Me+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iLOUsO60; arc=none smtp.client-ip=209.85.160.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="HI8gstVM"
-Received: by mail-ed1-f68.google.com with SMTP id 4fb4d7f45d1cf-660b497adaaso4163549a12.3
-        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 03:05:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iLOUsO60"
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-50335b926c2so73169611cf.2
+        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 03:09:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1772708724; x=1773313524; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=b/7UCwgjtbrg6WQn51Mqdwa0wdTg8UHHjDw0AsFNOQY=;
-        b=HI8gstVM5fEfbXT/Lk0lpwOpNe2TJOzuDWwZebLGuluIS6MLZoVUpOLJQCk/jhDMdM
-         lahcnjrsvkeOKXHv4EThsfJ2gy0YCtJeCGLvoAjhTqYlYI3NdJ5P8smFg6rYLvGgJpdH
-         u+ZjK0Ia8S9BAgBnVS9096Md/LP1Y1GfzYk4CT2aiZVXH2PvsIbdaLLWQVTIaN3M3api
-         Wotkz1KW4XaMATU5TnpIY50pdvXG3Wzk49ZkBtR/JLwutvUrd3yUWiXiRaVj5cVyQhuq
-         xfM4TUGmrBD7w9sAralUqllKFUedODCJ8JLzP5i4c2R1iNUvuh4ixvuR7h7/SvRDy0Lq
-         +kaA==
+        d=gmail.com; s=20230601; t=1772708987; x=1773313787; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vGyp5DlEDSNyf1D+fHR1Xar9HkT1CTBb6h7JuOAsMfk=;
+        b=iLOUsO60SdlLTnd/T+GCUM+a4Nf5Qpk9ONhIbuc1/3apIrN8TLOBkDgcLJ8jwVi1Pd
+         zSSHS9c1W7lkmxKe0SrARGnVY52HT9C675V3odG/1rD0sSCDRuomsp4G6DLflx9lI1Uj
+         nbA837JV95HZlZTpy2cDrXFTWMS1B/AR8gAARDXoVHGGG8iYf3hUUb3PXUZM0vq51KZl
+         dm2wxuojAXcYH6dX+4Gnzu95rr50VdcQ+Ke3jHILh0nerdN8arU0uyxKsmv0NslxzO1I
+         hxMGyi8yVEWSNXegJWxp5yppjwjy3n5SSp/NEPW5JyS27n3xADZPUknZT33fQHnp4rYV
+         Xv0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772708724; x=1773313524;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b/7UCwgjtbrg6WQn51Mqdwa0wdTg8UHHjDw0AsFNOQY=;
-        b=do5MqEZ/Tjtr/h02gOYQc6Bt5hglu6VWxsuQxDSatBgINx9bmkj9GeTCMzxf6evPD4
-         8CPuTK7qpUvKS7xbp08QZyky9VJtURw5T5na+UITy774QfWP9gjjDaPLm0DRspSD9d0o
-         kdz7q1gWl8GAtsaAO9FGfhOeqTIn5oFQDdoorbka2dQB8Svl+OOWG1m3D2MW5SjzmVbD
-         5aCXcAec8Bm81c6y1rbKNaimiWXfr0Ae91Swvmr1Myfk3p20WHoQMdnLXV0IF1N19jEi
-         xTXPVadc9nxJnbN+vdmBlrQOSBtA3gbUKGMWiPjp1nnrT9pqesqnu7KNlAH1uQ+7Uvg2
-         HHiw==
-X-Forwarded-Encrypted: i=1; AJvYcCUQ+p4CnF1EjqkNRZHESktTt0AdtwUyZG7FXsiKtuTMcclzj0T1oxT2+o2im2mEZFumwFE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxzdMwepZUi9+KojuX616NA5o2Pv+Nt6MjCnrr1MOg2x7mq1Wc
-	BOS1pF1vH/RTIKNzhmNhJZlMAxgD4U9TFMFKNUACS5aqw3oXekc2bxaVbns9GnMMjzM=
-X-Gm-Gg: ATEYQzzWO5kF2CsNYydxUJHORyrO2NZDXQl/3eUU82PnJxRePEtKgZty2TAlaXxh2JH
-	sW5WOkYggu5/Oi1M3iq9T23+96goU1lcTS/Gh9uRfha+q7hPdVRJaPbeNKASuoP/7sdES21m2UK
-	f9N1/BHU6S0yE1OV+JIs5Afgzo+HwkwEoighC4OF2FxvnOZxOqTNJFW14YUGgE5Fiyfc9u5Fmvn
-	2Bv73bW4ZJZrRRK24MBbBRXQzRcUDQMOlGhutgZCmNTsC2uG91/LhjSh9ycDqUzSxIUAz1KgCay
-	fZutLynGzgdYT6YfGA8J6U7zScYi5jbCH9GOFuVfXY7z8/mlKPBtbX9HWvIYl8CyTgRgsw+IAU4
-	ABNhgF33/vktVFS4qB9p7qnnFT9Zja9jiTsiyAH5LUTX/hJx5tnsLU54Erj64Koc/6m64sdIA9g
-	a5Gu7X+KdbqN4AuPihOC5Wt/KKH+Gc50p0GWJa7eVoPPJG5ZWrlDVHxLCj9q35EYUksm8HkPAjN
-	KX1YJ+S
-X-Received: by 2002:a05:6402:1448:b0:65f:7f90:fb89 with SMTP id 4fb4d7f45d1cf-660efeb46f4mr3684525a12.17.1772708724386;
-        Thu, 05 Mar 2026 03:05:24 -0800 (PST)
-Received: from cloudflare.com (79.184.124.63.ipv4.supernova.orange.pl. [79.184.124.63])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-660af3bf657sm2678794a12.5.2026.03.05.03.05.23
+        d=1e100.net; s=20230601; t=1772708987; x=1773313787;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vGyp5DlEDSNyf1D+fHR1Xar9HkT1CTBb6h7JuOAsMfk=;
+        b=FQE4YI9DWBnkM5zSsImiNO0UTeO43GICCjL/g5bBVu0iK7YebqPPNzY+X9dM4lWpsE
+         aCIWWYiWwQ6BG1OM9iWngfEe8FRPN+bJZWEctauYZc192/WBzjLZ8Z4JZx5nCg/VBv5t
+         agwdJ4j5Z73H5m0nCvvGG5aMEn9Z11pA1+IX2VPklIXFKiD0tfae8fqJZxCySJc1VwWQ
+         M+UFdxlK9bW51GSX1dgi2sZw8Qj8vKugCYQ8YgDEeVqY1ZqjIZ1p6y16oni6fE9hoKDZ
+         TDMrgBbO8c16i0b/4LmRLibf0t0Z2CbNtpewprDzKlIrrSC735p1jW9Da+7kBv4C7ssT
+         sKeg==
+X-Gm-Message-State: AOJu0YxMR18J3GHZGjsJdmae+kaJ02no0xu+0gQPPSVV6C+32Cz3+oRs
+	Xq0U4m1dl7Ud/dCWfB2GmGlI++jkpuupA4xCGeJtwqdCpSExrvaw16aDJxEJHA==
+X-Gm-Gg: ATEYQzwvJJJpOhS1bmjuiJc57ZLpRrM9IobOP5MO1/tQN6/T48BYAM5P4IAv8Q6pt1O
+	wMPYPpbLZl2VN0pwsRsI23v9hj+w8eedP+uHvLJ9Vu7CnMapdp410iYmo2fkH1x5jNBNoIxVLZf
+	khDUeEILinyghJA/B+i38pea22mXuu7DdiKQ1HykirAdIXIBq1dnDfyO1PZvyio8VDBXvvd0xVr
+	A4wt1h/nLNOM3DQlcaBXnlMkaElDt2t+lD9BXw9RAUNujXxsk/TRTcfhaIQc2mVshbmof9+H7rf
+	mUUcaoDdGyW2XpdnAGx9kpYBnuJ/aVjAbtaMMPQz3YGJq/wXgqLC4puU/Nl/8lsP/us6H/YPzoD
+	G+SM8qREy1Zkeh2E1TfHwqZuOGeDOXD8ZKwPh8tJOZIKhfVUWDq3kly2FGUED2FGdKBlBY3+bUZ
+	9/JazETO39T2tM8sArEMZWioil1jzenVMLTQF81KSUWCrvTbIR
+X-Received: by 2002:ac8:1115:0:b0:4ee:24fc:bea3 with SMTP id d75a77b69052e-508e0d0c138mr44444811cf.35.1772708986836;
+        Thu, 05 Mar 2026 03:09:46 -0800 (PST)
+Received: from honey-badger ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50744acfcdesm176006751cf.26.2026.03.05.03.09.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Mar 2026 03:05:23 -0800 (PST)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: John Fastabend <john.fastabend@gmail.com>,  Willem de Bruijn
- <willemdebruijn.kernel@gmail.com>,  Kuniyuki Iwashima
- <kuni1840@gmail.com>,  bpf@vger.kernel.org,  netdev@vger.kernel.org,
-  syzbot+113cea56c13a8a1e95ab@syzkaller.appspotmail.com
-Subject: Re: [PATCH v4 bpf/net 1/6] sockmap: Annotate sk->sk_data_ready()
- for UDP.
-In-Reply-To: <20260221233234.3814768-2-kuniyu@google.com> (Kuniyuki Iwashima's
-	message of "Sat, 21 Feb 2026 23:30:48 +0000")
-References: <20260221233234.3814768-1-kuniyu@google.com>
-	<20260221233234.3814768-2-kuniyu@google.com>
-Date: Thu, 05 Mar 2026 12:05:23 +0100
-Message-ID: <87a4wmo7t8.fsf@cloudflare.com>
+        Thu, 05 Mar 2026 03:09:46 -0800 (PST)
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: bpf@vger.kernel.org,
+	ast@kernel.org
+Cc: andrii@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	kernel-team@fb.com,
+	yonghong.song@linux.dev,
+	emil@etsalapatis.com,
+	arighi@nvidia.com,
+	shung-hsi.yu@suse.com,
+	Eduard Zingerman <eddyz87@gmail.com>
+Subject: [PATCH bpf-next v1 1/2] bpf: refine u32/s32 bounds when ranges cross min/max boundary
+Date: Thu,  5 Mar 2026 03:09:28 -0800
+Message-ID: <20260305110929.738140-1-eddyz87@gmail.com>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sat, Feb 21, 2026 at 11:30 PM GMT, Kuniyuki Iwashima wrote:
-> syzbot reported data race of sk->sk_data_ready(). [0]
->
-> UDP fast path does not hold bh_lock_sock(), instead
-> spin_lock_bh(&sk->sk_receive_queue.lock) is used.
->
-> Let's use WRITE_ONCE() and READ_ONCE() for sk->sk_data_ready().
->
-> Another option is to hold sk->sk_receive_queue.lock in
-> sock_map_sk_acquire() if sk_is_udp() is true, but this is
-> overkill and also does not work for sk->sk_write_space().
->
-> [0]:
-> BUG: KCSAN: data-race in __udp_enqueue_schedule_skb / sk_psock_drop
->
-> write to 0xffff88811d063048 of 8 bytes by task 23114 on cpu 0:
->  sk_psock_stop_verdict net/core/skmsg.c:1287 [inline]
->  sk_psock_drop+0x12f/0x270 net/core/skmsg.c:873
->  sk_psock_put include/linux/skmsg.h:473 [inline]
->  sock_map_unref+0x2a5/0x300 net/core/sock_map.c:185
->  __sock_map_delete net/core/sock_map.c:426 [inline]
->  sock_map_delete_from_link net/core/sock_map.c:439 [inline]
->  sock_map_unlink net/core/sock_map.c:1608 [inline]
->  sock_map_remove_links+0x228/0x340 net/core/sock_map.c:1623
->  sock_map_close+0xa1/0x340 net/core/sock_map.c:1684
->  inet_release+0xcd/0xf0 net/ipv4/af_inet.c:437
->  __sock_release net/socket.c:662 [inline]
->  sock_close+0x6b/0x150 net/socket.c:1455
->  __fput+0x29b/0x650 fs/file_table.c:468
->  ____fput+0x1c/0x30 fs/file_table.c:496
->  task_work_run+0x130/0x1a0 kernel/task_work.c:233
->  resume_user_mode_work include/linux/resume_user_mode.h:50 [inline]
->  __exit_to_user_mode_loop kernel/entry/common.c:44 [inline]
->  exit_to_user_mode_loop+0x1f7/0x6f0 kernel/entry/common.c:75
->  __exit_to_user_mode_prepare include/linux/irq-entry-common.h:226 [inline]
->  syscall_exit_to_user_mode_prepare include/linux/irq-entry-common.h:256 [inline]
->  syscall_exit_to_user_mode_work include/linux/entry-common.h:159 [inline]
->  syscall_exit_to_user_mode include/linux/entry-common.h:194 [inline]
->  do_syscall_64+0x1d3/0x2a0 arch/x86/entry/syscall_64.c:100
->  entry_SYSCALL_64_after_hwframe+0x77/0x7f
->
-> read to 0xffff88811d063048 of 8 bytes by task 23117 on cpu 1:
->  __udp_enqueue_schedule_skb+0x6c1/0x840 net/ipv4/udp.c:1789
->  __udp_queue_rcv_skb net/ipv4/udp.c:2346 [inline]
->  udp_queue_rcv_one_skb+0x709/0xc20 net/ipv4/udp.c:2475
->  udp_queue_rcv_skb+0x20e/0x2b0 net/ipv4/udp.c:2493
->  __udp4_lib_mcast_deliver+0x6e8/0x790 net/ipv4/udp.c:2585
->  __udp4_lib_rcv+0x96f/0x1260 net/ipv4/udp.c:2724
->  udp_rcv+0x4f/0x60 net/ipv4/udp.c:2911
->  ip_protocol_deliver_rcu+0x3f9/0x780 net/ipv4/ip_input.c:207
->  ip_local_deliver_finish+0x1fc/0x2f0 net/ipv4/ip_input.c:241
->  NF_HOOK include/linux/netfilter.h:318 [inline]
->  ip_local_deliver+0xe8/0x1e0 net/ipv4/ip_input.c:262
->  dst_input include/net/dst.h:474 [inline]
->  ip_sublist_rcv_finish net/ipv4/ip_input.c:584 [inline]
->  ip_list_rcv_finish net/ipv4/ip_input.c:628 [inline]
->  ip_sublist_rcv+0x42b/0x6d0 net/ipv4/ip_input.c:644
->  ip_list_rcv+0x261/0x290 net/ipv4/ip_input.c:678
->  __netif_receive_skb_list_ptype net/core/dev.c:6195 [inline]
->  __netif_receive_skb_list_core+0x4dc/0x500 net/core/dev.c:6242
->  __netif_receive_skb_list net/core/dev.c:6294 [inline]
->  netif_receive_skb_list_internal+0x47d/0x5f0 net/core/dev.c:6385
->  netif_receive_skb_list+0x31/0x1f0 net/core/dev.c:6437
->  xdp_recv_frames net/bpf/test_run.c:269 [inline]
->  xdp_test_run_batch net/bpf/test_run.c:350 [inline]
->  bpf_test_run_xdp_live+0x104c/0x1360 net/bpf/test_run.c:379
->  bpf_prog_test_run_xdp+0x57b/0xa10 net/bpf/test_run.c:1396
->  bpf_prog_test_run+0x204/0x340 kernel/bpf/syscall.c:4703
->  __sys_bpf+0x4c0/0x7b0 kernel/bpf/syscall.c:6182
->  __do_sys_bpf kernel/bpf/syscall.c:6274 [inline]
->  __se_sys_bpf kernel/bpf/syscall.c:6272 [inline]
->  __x64_sys_bpf+0x41/0x50 kernel/bpf/syscall.c:6272
->  x64_sys_call+0x28e1/0x3000 arch/x86/include/generated/asm/syscalls_64.h:322
->  do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
->  do_syscall_64+0xc0/0x2a0 arch/x86/entry/syscall_64.c:94
->  entry_SYSCALL_64_after_hwframe+0x77/0x7f
->
-> value changed: 0xffffffff847b24d0 -> 0xffffffff84673410
->
-> Reported by Kernel Concurrency Sanitizer on:
-> CPU: 1 UID: 0 PID: 23117 Comm: syz.8.5085 Tainted: G        W           syzkaller #0 PREEMPT(voluntary)
-> Tainted: [W]=WARN
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/25/2025
->
-> Fixes: 7b98cd42b049 ("bpf: sockmap: Add UDP support")
-> Reported-by: syzbot+113cea56c13a8a1e95ab@syzkaller.appspotmail.com
-> Closes: https://lore.kernel.org/netdev/69922ac9.a70a0220.2c38d7.00e1.GAE@google.com/
-> Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
-> ---
+Same as in __reg64_deduce_bounds(), refine s32/u32 ranges
+in __reg32_deduce_bounds() in the following situations:
 
-Sorry for the delay. Got caught up in skb metadata stuff...
+0                                                   U32_MAX
+|  [xxxxxxxxxxxxxx u32 range xxxxxxxxxxxxxx]              |
+|----------------------------|----------------------------|
+|xxxxx s32 range xxxxxxxxx]                       [xxxxxxx|
+0                     S32_MAX S32_MIN                    -1
 
-Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
+0                                                   U32_MAX
+|              [xxxxxxxxxxxxxx u32 range xxxxxxxxxxxxxx]  |
+|----------------------------|----------------------------|
+|xxxxxxxxx]                       [xxxxxxxxxxxx s32 range |
+0                     S32_MAX S32_MIN                    -1
+
+This helps for e.g. consider the following program:
+
+   call %[bpf_get_prandom_u32];
+   w0 &= 0xffffffff;
+   if w0 < 0x3 goto 1f;    // on fall-through u32 range [3..U32_MAX]
+   if w0 s> 0x1 goto 1f;   // on fall-through s32 range [S32_MIN..1]
+   if w0 s< 0x0 goto 1f;   // range can be narrowed to  [S32_MIN..-1]
+   r10 = 0;
+1: ...;
+
+The reg_bounds.c selftest is updated to incorporate identical logic,
+refinement based on non-overflowing range halves:
+
+  ((x ∩ [0, smax]) ∩ (y ∩ [0, smax])) ∪
+  ((x ∩ [smin,-1]) ∩ (y ∩ [smin,-1]))
+
+Reported-by: Andrea Righi <arighi@nvidia.com>
+Reported-by: Emil Tsalapatis <emil@etsalapatis.com>
+Closes: https://lore.kernel.org/bpf/aakqucg4vcujVwif@gpd4/T/
+Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+---
+ kernel/bpf/verifier.c                         | 24 ++++++++
+ .../selftests/bpf/prog_tests/reg_bounds.c     | 58 +++++++++++++++++--
+ 2 files changed, 78 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index d92cf2821657..2b79a2a4d1b5 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2532,6 +2532,30 @@ static void __reg32_deduce_bounds(struct bpf_reg_state *reg)
+ 	if ((u32)reg->s32_min_value <= (u32)reg->s32_max_value) {
+ 		reg->u32_min_value = max_t(u32, reg->s32_min_value, reg->u32_min_value);
+ 		reg->u32_max_value = min_t(u32, reg->s32_max_value, reg->u32_max_value);
++	} else {
++		if (reg->u32_max_value < (u32)reg->s32_min_value) {
++			/* See __reg64_deduce_bounds() for detailed explanation.
++			 * Refine ranges in the following situation:
++			 *
++			 * 0                                                   U32_MAX
++			 * |  [xxxxxxxxxxxxxx u32 range xxxxxxxxxxxxxx]              |
++			 * |----------------------------|----------------------------|
++			 * |xxxxx s32 range xxxxxxxxx]                       [xxxxxxx|
++			 * 0                     S32_MAX S32_MIN                    -1
++			 */
++			reg->s32_min_value = (s32)reg->u32_min_value;
++			reg->u32_max_value = min_t(u32, reg->u32_max_value, reg->s32_max_value);
++		} else if ((u32)reg->s32_max_value < reg->u32_min_value) {
++			/*
++			 * 0                                                   U32_MAX
++			 * |              [xxxxxxxxxxxxxx u32 range xxxxxxxxxxxxxx]  |
++			 * |----------------------------|----------------------------|
++			 * |xxxxxxxxx]                       [xxxxxxxxxxxx s32 range |
++			 * 0                     S32_MAX S32_MIN                    -1
++			 */
++			reg->s32_max_value = (s32)reg->u32_max_value;
++			reg->u32_min_value = max_t(u32, reg->u32_min_value, reg->s32_min_value);
++		}
+ 	}
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
+index 0322f817d07b..446e5ef62f44 100644
+--- a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
++++ b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
+@@ -422,15 +422,65 @@ static bool is_valid_range(enum num_t t, struct range x)
+ 	}
+ }
+ 
+-static struct range range_improve(enum num_t t, struct range old, struct range new)
++static struct range range_intersection(enum num_t t, struct range old, struct range new)
+ {
+ 	return range(t, max_t(t, old.a, new.a), min_t(t, old.b, new.b));
+ }
+ 
++static struct range range_union(enum num_t t, struct range x, struct range y)
++{
++	if (!is_valid_range(t, x))
++		return y;
++	if (!is_valid_range(t, y))
++		return x;
++	return range(t, min_t(t, x.a, y.a), max_t(t, x.b, y.b));
++}
++
++/*
++ * This function attempts to improve x range intersecting it with y.
++ * range_cast(... to_t ...) looses precision for ranges that pass to_t
++ * min/max boundaries. To avoid such precision loses this function
++ * splits both x and y into halves corresponding to non-overflowing
++ * sub-ranges: [0, smin] and [smax, -1].
++ * Final result is computed as follows:
++ *
++ *   ((x ∩ [0, smax]) ∩ (y ∩ [0, smax])) ∪
++ *   ((x ∩ [smin,-1]) ∩ (y ∩ [smin,-1]))
++ *
++ * Precision might still be lost if final union is not a continuous range.
++ */
++static struct range range_refine_in_halves(enum num_t x_t, struct range x,
++					   enum num_t y_t, struct range y)
++{
++	struct range x_pos, x_neg, y_pos, y_neg, r_pos, r_neg;
++	u64 smax, smin, neg_one;
++
++	if (t_is_32(x_t)) {
++		smax = (u64)(u32)S32_MAX;
++		smin = (u64)(u32)S32_MIN;
++		neg_one = (u64)(u32)(s32)(-1);
++	} else {
++		smax = (u64)S64_MAX;
++		smin = (u64)S64_MIN;
++		neg_one = U64_MAX;
++	}
++	x_pos = range_intersection(x_t, x, range(x_t, 0, smax));
++	x_neg = range_intersection(x_t, x, range(x_t, smin, neg_one));
++	y_pos = range_intersection(y_t, y, range(x_t, 0, smax));
++	y_neg = range_intersection(y_t, y, range(y_t, smin, neg_one));
++	r_pos = range_intersection(x_t, x_pos, range_cast(y_t, x_t, y_pos));
++	r_neg = range_intersection(x_t, x_neg, range_cast(y_t, x_t, y_neg));
++	return range_union(x_t, r_pos, r_neg);
++
++}
++
+ static struct range range_refine(enum num_t x_t, struct range x, enum num_t y_t, struct range y)
+ {
+ 	struct range y_cast;
+ 
++	if (t_is_32(x_t) == t_is_32(y_t))
++		x = range_refine_in_halves(x_t, x, y_t, y);
++
+ 	y_cast = range_cast(y_t, x_t, y);
+ 
+ 	/* If we know that
+@@ -444,7 +494,7 @@ static struct range range_refine(enum num_t x_t, struct range x, enum num_t y_t,
+ 	 */
+ 	if (x_t == S64 && y_t == S32 && y_cast.a <= S32_MAX  && y_cast.b <= S32_MAX &&
+ 	    (s64)x.a >= S32_MIN && (s64)x.b <= S32_MAX)
+-		return range_improve(x_t, x, y_cast);
++		return range_intersection(x_t, x, y_cast);
+ 
+ 	/* the case when new range knowledge, *y*, is a 32-bit subregister
+ 	 * range, while previous range knowledge, *x*, is a full register
+@@ -462,7 +512,7 @@ static struct range range_refine(enum num_t x_t, struct range x, enum num_t y_t,
+ 		x_swap = range(x_t, swap_low32(x.a, y_cast.a), swap_low32(x.b, y_cast.b));
+ 		if (!is_valid_range(x_t, x_swap))
+ 			return x;
+-		return range_improve(x_t, x, x_swap);
++		return range_intersection(x_t, x, x_swap);
+ 	}
+ 
+ 	if (!t_is_32(x_t) && !t_is_32(y_t) && x_t != y_t) {
+@@ -480,7 +530,7 @@ static struct range range_refine(enum num_t x_t, struct range x, enum num_t y_t,
+ 	}
+ 
+ 	/* otherwise, plain range cast and intersection works */
+-	return range_improve(x_t, x, y_cast);
++	return range_intersection(x_t, x, y_cast);
+ }
+ 
+ /* =======================
+-- 
+2.51.1
+
