@@ -1,148 +1,164 @@
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEE3737AA61
-	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 11:09:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 942F11B4257
+	for <bpf@vger.kernel.org>; Thu,  5 Mar 2026 11:10:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772708991; cv=none; b=F/DytMDI8pbnAFxu5cUVxZvNzNXDnrN3gduQfy41G5Z+jafkYFyQoUbWX8etozucy7PDR3A/1/T9sOCGw+QK8YVppNbQxStnpS1M7JrZ8rgbeah3WdBx8JU5ScIit+IYoyO9rqwfXDvSrOOHRJcCqsuZR9JdI7I7VzoEqvVb5vo=
+	t=1772709006; cv=none; b=F8Jicf9qtl/uO/JBThT/MIZGfOS4r9BXESZ5kXxL3Rcbg28g5u93GTF9sRo2Hj9DWKv10t8taKygvu/Pxvktzh5nLrHH9CGOMWcRBNWki9U+AkK6AJ7IhXx5KmlW2OSUH7hZq4H6JWr7jor3fTJ1Q7QHeaH/vpWHjh1cZPl7yeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772708991; c=relaxed/simple;
-	bh=mHNzE1T51qkhUVI4g48iA1QTp6yVEC3HtoM/5DpUnnc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=beagiFH8c70DbSAcfXbAnKwQHuF/ZQymiV3VFfrbTliLwD+vg9I7s6geZQWo3Xy+f06zYiLdAbyF2xJ8JmuqlPnnf8hRMETprEx5RlZQglvPEUclSQ7Af05vKjSgsB9p2YUnctnJWWGnZAIpys7ELBfVEX2ykRQDTVv9/2T1eRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D6IDqbr8; arc=none smtp.client-ip=209.85.222.177
+	s=arc-20240116; t=1772709006; c=relaxed/simple;
+	bh=sZdDLt+hENxDMx+UCNQb12a/QsepiR6kbFY3U20trWY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=GM/kcFLSd0d9T8mU6+wCLM9Gr+k+5A7dfezdc80/Gun3iz0SYj0+RD7pXTHsD28XZEcCu79W2CBUtOiO1LSAUqyRxJYlnfO5sv0I1U6+q7CWbEAZsQ1+svJ9Totx9hW6pJmLWprN+JL+SK4LGIpVMRA49u6H4snUfaOSEF0FGgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ATZ/JunL; arc=none smtp.client-ip=209.85.222.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D6IDqbr8"
-Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-8cbb6d5f780so798223085a.1
-        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 03:09:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ATZ/JunL"
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-8cb3e22435fso712559285a.1
+        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 03:10:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772708988; x=1773313788; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/KzLR1vZy5awtbVTbYAmh5k4tcwmsGYBCR79f1i9Vys=;
-        b=D6IDqbr8nBQBI5ydYK2HQP9vdT9IPza7DoGeMiI7K7eM9kgpq5EHyIZWlSSos3A54E
-         Krj7JRPHHiG51c8nyauBfW3gpBFI4r4PYa8dR8SCIfrBUpytRnamqkAzStINd6fR/buv
-         JtVqMi1uVbqdl667cIyCV5ubQsWVCAkS3cLQz8k0BifJWY89Sam5ufTzYJ2DxcP0N5iV
-         2VsWSFWvwBI6XCcukQGz1UD/BiVNmor3ujwY+0tESvL5rITxMYR5TNGGX5L7g8Pb2xFR
-         9NX0NNq6HxyCoKGINi02X3G7snogPDdbQ4tMEobc+qcVOI0FVjZOiogU7PChKTj8WLYF
-         O8jA==
+        d=gmail.com; s=20230601; t=1772709004; x=1773313804; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=sZdDLt+hENxDMx+UCNQb12a/QsepiR6kbFY3U20trWY=;
+        b=ATZ/JunLsR/1BU1zctvu2QDrXYnWdSupPGvyM0tusYVfhL3+QQRRK4903Go7zIBiJ6
+         Y884Tl+brRIZxTbutAmovO6chr2pNLQJp1hG5UH9BuvKkSOik+Gv8mAimW7ok6+PyGsk
+         KwH1CGveqAfffRYeWwqG5WJaJwfw9cU61Vuj81p4OPo/z1tEJPujG/GYIDTakXy7CcMd
+         MdODCkio0wB5FAtnVuqzNHLlJeXc3w9Cjk9EqwWojlt16bL9xS8GH4HWbSB2Arzo7dq6
+         4sxE0wsJPeO7+kXznOBLdgncHntlzZxtVl/T73jUAyOLQacREtxi5XA1B5wlODwOFu4y
+         a8PQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772708988; x=1773313788;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=/KzLR1vZy5awtbVTbYAmh5k4tcwmsGYBCR79f1i9Vys=;
-        b=GxMNAG3X41zNP7mmY9eLbkLb4YBbkDBiiD/tKyIyhT1PSGgoKNMbNmsni3A/G8uChh
-         ccCJrUpXMQxBOBDBcNA9+Wjyd0G3Oj9JVIRC38vK78CbgBkCXjDBRtCmbFvByJ1yfvlg
-         qg1p0qz0cs5kMpekIUMOzTe4gHK+YOGTaS/w0V3bqiafPmlW2IyOTsHUE3vDwH8V3TJ1
-         OrYZy1Y+hW65Nq6AqlOaRNxguFpRYZ5gq0U8gr+Lcu4T6S6D+7DWzQMfIBay0sIxahFO
-         5tKFaR6ZR6YR3IiKc1VvJLDQuzYq/Nj6oqeQMFM5NoreN92czOMzsJOZl+uuK40j99DS
-         0Msw==
-X-Gm-Message-State: AOJu0Yxam1gyIVE/gY+IK44r059GUQuVLYnv85Nnl1RwqqA16DB7cbp2
-	f+c/1YySCgtJLV6i0qBtEYGg0fMuxVafQy6lxO2iRumD8M+P2/jOF2lh7S0FBQ==
-X-Gm-Gg: ATEYQzzf8mURrHzimqroAGpw2ox5U8cEHyV8a/1h6g4zeyLJ69TCBasK6VYvVPrwI96
-	VQkLy5/dsaIEv92J4FwSscCF7fK+3QNjI2UfhAnNBNGZiQxXasFf3AquwmOKDTxQm91M4vK/kjd
-	ceJ3PjNwkTicwjYj+c77pxE0GFyMU666SaJ2DIO4lWAfbbuCgI6iuBXb/AZqMAJMsA1GTnoCrpq
-	U2lW1WVvbnMq/VpNHpir+EkrTaE2KhQFKcAbJSnI7D3RGgh4SiyaHWKzVtX0Ny1jp4jcz63Mt7N
-	p9jJzJjja7Xbej23K9zJtKMONfwpSw/LZFAeSfDqpCNs5UBos2mctp0g/z6NJ0kwGeOIOUOjYFI
-	beAQyc25XXI4GSXdFEgpfbgUbE1lzS+1ArzW0mznMea3QthlokrZiNSy/cVCXbiKLJ8qisEltMz
-	Npd35KGfT3L/5fK7N7+VPT/b9qGe7EY9heBE67D8nXW/VU+WaUiScLejM/bwA=
-X-Received: by 2002:a05:622a:181f:b0:502:9e67:2099 with SMTP id d75a77b69052e-508db38dc41mr65416311cf.44.1772708988529;
-        Thu, 05 Mar 2026 03:09:48 -0800 (PST)
-Received: from honey-badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50744acfcdesm176006751cf.26.2026.03.05.03.09.47
+        d=1e100.net; s=20230601; t=1772709004; x=1773313804;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sZdDLt+hENxDMx+UCNQb12a/QsepiR6kbFY3U20trWY=;
+        b=Tn/ZGEf3AD2E3p38uodhkxzjBoAZykkLXWyYEsmVzcVQw+BoJ6iZKQYLr1fyAL+fF/
+         KlQ4kKZ3dTl49+Ef8OiD7n45V6Nsqo87Z84wb4s54a0D5cph0WHKcu74RqlsYFUjGziF
+         cZS2UCZD0ykFowKAs9m5kjgvXscyxgkzUBrLfWrtenR29d+100mo5p4yks+3FqDhvunm
+         PkNXDSm5miudq5Vjg8EF0+EXBPmJ10jOKF6VpZEpLOQWAHku17I/eIvxE+cCTGyRmHku
+         IziDIG7LOkB56L00sNJQYEKSU3QxuP3nH9GHUaFePAsJ41hR4/Fbkz5n4O35thIKVONA
+         aBIA==
+X-Forwarded-Encrypted: i=1; AJvYcCVMAICXZ/m/Bmfjv4UbZxI3kYj+a7mo0AWAHmDNY2Y3YeNYnd7iZS5XGzNb/T9NtXCe+Mk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzyPNBSyFy26s2D5vsxZYe8AmuehTo6WgktS33iAyZ9ixfdadPT
+	Y/AGVCkGZ1OUUPzP3NL4dEkbWLbhgRzIWXDA5wDk9UjKVaAACLRAgAWr
+X-Gm-Gg: ATEYQzza/+7DrzvTNHm5lUpbduJYE3xr0ZWkgiOgFwUCBCi4hnQ95nVGRqbVQOWXy3X
+	vSKItYDTxTtZ3uW6LtOq3DHtuD3sDFxaBUChECY1oHm0DQbtWfx5FKChwGWbS52WIOdeX1iEh06
+	XSENIQVa305DUawIG4ZJhV537jQgysfOIPq04lHhVkzz47V32nFChOn0glbi2HeAMgdxvDjQnKa
+	7vcrGUpmoj13aa6w95bzQAdXFBQxT4zZXuReFJVKM7ejlUPyCOlLVN8uXbmHlc6IXtI+Lmfu5Cy
+	dSn+Q776VkqwUX4Yq32nipk8VH3Ad9OMOS4oSnlgpL+HCIFnw+3qIpK2tRXEnkrqCkI9bL5TFFd
+	CF20p7IneEPMDxjrzdPUkA7SfRYNSUPSBYvd5VXGKq4Svvzs+aRqAW6zT81zICkLGx+EzN//SOt
+	Hx8IRmnhKVPpadqcDERrRy7PRihXPlH2NwfTfWMIGq8YpM/0NhTvc=
+X-Received: by 2002:a05:620a:171e:b0:8c7:3ff0:d472 with SMTP id af79cd13be357-8cd6343c010mr193688885a.15.1772709004361;
+        Thu, 05 Mar 2026 03:10:04 -0800 (PST)
+Received: from [192.168.0.56] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cbbf65921bsm1828070285a.1.2026.03.05.03.10.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Mar 2026 03:09:48 -0800 (PST)
+        Thu, 05 Mar 2026 03:10:03 -0800 (PST)
+Message-ID: <ff92fa059a5f5427fec24be6758afa033ee43af2.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/1] bpf: Avoid one round of bounds deduction
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org
-Cc: andrii@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@linux.dev,
-	kernel-team@fb.com,
-	yonghong.song@linux.dev,
-	emil@etsalapatis.com,
-	arighi@nvidia.com,
-	shung-hsi.yu@suse.com,
-	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v1 2/2] selftests/bpf: test refining u32/s32 bounds when ranges cross min/max boundary
-Date: Thu,  5 Mar 2026 03:09:29 -0800
-Message-ID: <20260305110929.738140-2-eddyz87@gmail.com>
-X-Mailer: git-send-email 2.51.1
-In-Reply-To: <20260305110929.738140-1-eddyz87@gmail.com>
-References: <20260305110929.738140-1-eddyz87@gmail.com>
+To: Shung-Hsi Yu <shung-hsi.yu@suse.com>, Ihor Solodrai
+	 <ihor.solodrai@linux.dev>
+Cc: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>,  Harishankar Vishwanathan
+ <harishankar.vishwanathan@gmail.com>, Kernel Team <kernel-team@meta.com>
+Date: Thu, 05 Mar 2026 03:10:00 -0800
+In-Reply-To: <umlxk5jo72ii4efzcethwcwtr7e4scq5iicb57huuhb3qtvcuc@xhl3c6acyzga>
+References: <aac2GMpnpoAKD4jX@mail.gmail.com>
+	 <d9c98aac-6c4c-483e-9e9a-0659dc03f9e7@linux.dev>
+	 <umlxk5jo72ii4efzcethwcwtr7e4scq5iicb57huuhb3qtvcuc@xhl3c6acyzga>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Two test cases for signed/unsigned 32-bit bounds refinement
-when s32 range crosses the sign boundary:
-- s32 range [S32_MIN..1] overlapping with u32 range [3..U32_MAX],
-  s32 range tail before sign boundary overlaps with u32 range.
-- s32 range [-3..5] overlapping with u32 range [0..S32_MIN+3],
-  s32 range head after the sign boundary overlaps with u32 range.
+On Thu, 2026-03-05 at 14:54 +0800, Shung-Hsi Yu wrote:
+> On Wed, Mar 04, 2026 at 04:48:43PM -0800, Ihor Solodrai wrote:
+> > On 3/3/26 11:27 AM, Paul Chaignon wrote:
+> > > In commit 5dbb19b16ac49 ("bpf: Add third round of bounds deduction"),=
+ I
+> > > added a new round of bounds deduction because two rounds were not eno=
+ugh
+> > > to converge to a fixed point. This commit slightly refactor the bound=
+s
+> > > deduction logic such that two rounds are enough.
+> > >=20
+> > > In [1], Eduard noticed that after we improved the refinement logic, a
+> > > third call to the bounds deduction (__reg_deduce_bounds) was needed t=
+o
+> > > converge to a fixed point. More specifically, we needed this third ca=
+ll
+> > > to improve the s64 range using the s32 range. We added the third call
+> > > and postponed a more detailed analysis of the refinement logic.
+> > >=20
+> > > I've been looking into this more recently. To help, I wrote a high le=
+vel
+> > > sequence of all the refinements carried out in reg_bounds_sync. u64 -=
+>
+> > > s32 means we used the u64 ranges to improve the s32 ranges.
+> > >=20
+> > > =C2=A0=C2=A0=C2=A0 /* __update_reg_bounds: */
+> > > =C2=A0=C2=A0=C2=A0 tnum -> {s32, u32, s64, u64}
+> > > =C2=A0=C2=A0=C2=A0 /* __reg_deduce_bounds: */
+> > > =C2=A0=C2=A0=C2=A0 for (3 times) {
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* __reg32_deduce_bounds: =
+*/
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u64 -> {u32, s32}
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 s64 -> {u32, s32}
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u64 -> s32
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 s64 -> s32
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 -> s32
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 s32 -> u32
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* __reg64_deduce_bounds: =
+*/
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u64 -> s64
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 s64 -> u64
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 {u64, s64} -> {u64, s64}
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* __reg_deduce_mixed_boun=
+ds: */
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 -> u64
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 -> s64
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 {s32, s64} -> {s64, u64, t=
+num}
+> > > =C2=A0=C2=A0=C2=A0 }
+> > > =C2=A0=C2=A0=C2=A0 /* __reg_bound_offset: */
+> > > =C2=A0=C2=A0=C2=A0 {u64, u32} -> tnum
+> > > =C2=A0=C2=A0=C2=A0 /* __update_reg_bounds: */
+> > > =C2=A0=C2=A0=C2=A0 tnum -> {s32, u32, s64, u64}
+> [...]
+> > Hi Paul,
+> >=20
+> > (trying to do my part with the code reviews and learn in the process)
+>=20
+> +1, still
+>=20
+> > Side note: you might be interested to know that Eduard is working on
+> > consolidating signed and unsigned domains [1].
+>=20
+> \o/
+>=20
+> When I last look into this[1] there's was the "Interval Analysis and
+> Machine Arithmetic: Why Signedness Ignorance Is Bliss" paper[2] that
+> looks rather promising. And lately there was also "Program Analysis
+> Combining Generalized Bit-Level and Word-Level Abstractions"[3] (haven't
+> read) that seems more specific to BPF verifier.
 
-This covers both branches added in the __reg32_deduce_bounds().
+Thank you for the links, I've only seen [1].
+I was about to send [a], feeling really smug about cbmc tests.
+But then a much simpler solution [b] occurred when figuring out why
+64-bit test can't be written.
 
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
----
- .../selftests/bpf/progs/verifier_bounds.c     | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
+I'll probably continue playing with cnums at leisure pace.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-index 4588e5b55b41..0c2a62b16ec4 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-@@ -2000,4 +2000,41 @@ __naked void bounds_refinement_multiple_overlaps(void *ctx)
- 	: __clobber_all);
- }
- 
-+SEC("socket")
-+__success
-+__flag(BPF_F_TEST_REG_INVARIANTS)
-+__naked void signed_unsigned_intersection32_case1(void *ctx)
-+{
-+	asm volatile("									\
-+	call %[bpf_get_prandom_u32];							\
-+	w0 &= 0xffffffff;								\
-+	if w0 < 0x3 goto 1f;		/* on fall-through u32 range [3..U32_MAX]  */	\
-+	if w0 s> 0x1 goto 1f;		/* on fall-through s32 range [S32_MIN..1]  */	\
-+	if w0 s< 0x0 goto 1f;		/* range can be narrowed to  [S32_MIN..-1] */	\
-+	r10 = 0;			/* thus predicting the jump. */			\
-+1:	exit;										\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__success
-+__flag(BPF_F_TEST_REG_INVARIANTS)
-+__naked void signed_unsigned_intersection32_case2(void *ctx)
-+{
-+	asm volatile("									\
-+	call %[bpf_get_prandom_u32];							\
-+	w0 &= 0xffffffff;								\
-+	if w0 > 0x80000003 goto 1f;	/* on fall-through u32 range [0..S32_MIN+3] */	\
-+	if w0 s< -3 goto 1f;		/* on fall-through s32 range [-3..S32_MAX] */	\
-+	if w0 s> 5 goto 1f;		/* on fall-through s32 range [-3..5] */		\
-+	if w0 <= 5 goto 1f;		/* range can be narrowed to  [0..5] */		\
-+	r10 = 0;			/* thus predicting the jump */			\
-+1:	exit;										\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.51.1
-
+[a] https://github.com/eddyz87/bpf/tree/cnum-sync-bounds
+[b] https://github.com/eddyz87/bpf/tree/32-bit-range-overflow
