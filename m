@@ -1,60 +1,62 @@
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6111F2641FC
-	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 19:08:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 347B4347BAF
+	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 19:08:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772824139; cv=none; b=YNOzDXFmqTmPcdtq6G1lQfEWXv5m2FjGO1/ciWGLK0C3/MFQ6Naj8UfWLYMgwB/1XghOwzaWFHLRL63j0sH730DE7dryW7G7cACH/RifcxS7y+fbbibZt2t3OCjFXYnpzQiYG+98q7ciXJjeFrWkUu5VlZToMAcr4gmauXGkAd4=
+	t=1772824140; cv=none; b=IsiDyt7bezAeo3+jBdEJD3BmpEAkI0SBSL1y8lWpkklzkSRetA0/Bsb4Y2RI43QR0TnpSOPT2jA0VaSGDas1X9xrvcIs0S0pjIOfjE7L9G7XB9BjyaPCp8zynU8wR2D9m1cU/FSr6WtjbK+ltYOJ9+nnQ031b/i4Eg5cnkeDfhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772824139; c=relaxed/simple;
-	bh=edvQgNeOv46ZMOh4l6Nts64+x+jMDlczX+qkclgVkwU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=V3yRswDPRw7ofOYHqRKcaPvf32V8QgCsFM0uaOVlA5zgB0bRDH6M+q7KhAh+2A9fQj8eUhFYnfvyQTdRbNnn1WWQw0Qh+iQNh0LvZEvifcuBV/dqudDQz6oPyCP2ORiPZwZ0gU7sBxueyFC/0wJZr2mSrgaWDgbqJSN4E3x24GA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hPNSjFg+; arc=none smtp.client-ip=209.85.219.53
+	s=arc-20240116; t=1772824140; c=relaxed/simple;
+	bh=qlACSX6hwy1mOHW6k9hLKXSX6Ovk+Qhqa4ZgwjT/JpE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=i7bXJ0PXvKWQSfUNpDLVePMWkT9SR39kZx4zaz8kMAhwBUU8i8lKHX7L0tZe70z/uITQd0oL54fqN3oV4T73upWHn/IDVDMuMVFwxyjFwDqPQXksBV2aimXzxFJcoswt11vuYbyndQRhG9ECuHHSc2/KQ4JOUBmklxXxDkHGqkw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jRSTLjnl; arc=none smtp.client-ip=209.85.222.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hPNSjFg+"
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-899eabc5292so64868426d6.0
-        for <bpf@vger.kernel.org>; Fri, 06 Mar 2026 11:08:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jRSTLjnl"
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-8cbc593a67aso905689685a.2
+        for <bpf@vger.kernel.org>; Fri, 06 Mar 2026 11:08:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772824137; x=1773428937; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6Cv1u0c8GS3pzmzjgJjS/6YL+uN7UDrixGOE8PPuhuc=;
-        b=hPNSjFg+AIi/crcNbZy4WoeEwJfrz9kcUTjdrSSk7Ge3i6YUP2OtR/GgiVix9UlSrI
-         NN2yFzl2HkFUVIQpYbY/eEeyGwcI5wX9MrCj/BUGqalUfFFEqK/ZaO5cNmaqvvcun4cU
-         NvoDFFHE9FjBimTZ0AYPHVHjg4POtpN/h346Xzh5d9q77xzZKg+rQ6P6mbXGgJ2AU06+
-         M3NHhwoOELjW/J4f5eXY3MKkdzuqoBe4G+6IAKZfJAyJGVMV7nY/gPLFPPxmitwixc//
-         wNint5BHAkCeG7M0NTGcvVLYviaRQxMKD67o6OWfltDG4l/v36sSQaageBTGOGc99WS1
-         qdOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772824137; x=1773428937;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1772824138; x=1773428938; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6Cv1u0c8GS3pzmzjgJjS/6YL+uN7UDrixGOE8PPuhuc=;
-        b=GCtkzovS1hnIekBkOhqt1wlU0uYrGlrwrOG3Nv2fOgaUzC9p0VVesTAfc+SNT1fl+A
-         EYBmeRmmRvDR5UH4O/tYFppinbOWVW++0dy+a3/VPv8cqBZuKYlTlM721opJuiJsyVAT
-         d4fpykXuCg+rsV9hxeC6ijfjejplqcBkkdbor3i6cm9Uu9cqVY71RIByc3K2/hwVMfxS
-         VwiRShhaScRu+SY/hPYa5Y9kqKZMBr8Hd+HGuHCQTH71vvL6IOh94BVAbW58PyLnjGX0
-         +26HJwCMUesXbUW4D+5xrfpeS71GUXCWm1IRxLaOCll6tPA6wq2Pm13lWZv4iOSehoqB
-         3TeA==
-X-Gm-Message-State: AOJu0YxyjJk47kIq066xGR5+LoSRoHit4XqAOqWYkJQhbTXGkJbH+UzW
-	fWUsxzi8e5cpLlXEeEToXRNOvPSjCZJNC6wxYJvyw/zTHHLW4Sag1ddu2UpHd68w
-X-Gm-Gg: ATEYQzxCTaGkSZZP14hCfeVil/doLT5LXgqLx5Hcr8Uv0LOJVeI7YSq/4Y+26BUD9Ic
-	XEDWC0lvjveheIU2HF3XS8lpgEPWk8cHbheEhJT8eO/GU8X/hvbG4NOEy8rWMrg1/lXX1yosbfK
-	lbfJ0x343GpEs6lOpEJnO8mzhGdVI1SKrYZmWlGk51ul/PnGsoP6YuUNjcqyIWKSxbCyUso40Y6
-	XZUSZ23Nq0YO5THdtpyFIkrM3/ww12001fWfTbtX4dZtG4rNKfdM2BkKymOGaFWRvGtj1uI52iQ
-	oHIvZ8qii++jRMXHxg6VyFEeimEQ0MKEjOSL7T4qg5kOpGROr5uVj1y0Z3CIacCqoBrbBmRqKFE
-	ihcAF2ACu4c8TcI01U8OQ/tyJnvoZZaHSQWnbBHNAgu+mz4ZMf6dhjRiAGKLdEyvXeQkcH7URWJ
-	15JNDCAVI+akP4HP5KOKhdcVuB4jpbZ4jZ//37WojjEwZN
-X-Received: by 2002:a05:6214:2685:b0:899:fb3a:9f62 with SMTP id 6a1803df08f44-89a30a5c8bemr49048746d6.17.1772824137006;
-        Fri, 06 Mar 2026 11:08:57 -0800 (PST)
+        bh=tiL2MvXoPmEq5QF32m0XXHv0UJ31bcM+RTyi0t3M5Qk=;
+        b=jRSTLjnlWA0/++GBWlbuOjodw/mTInAgFJz2+C8LZjloX+Zt5qh09X/CRa9bSTDjjx
+         I3NA5gPrISzu0Rk4SOnzteH/VZOTE7lzZ36t9xeP1F9JJpwkjGnwm91YTnlcmenlK41b
+         zdiL+AW+8XyR3gykaxzopJWjWlm9sGcNCd8lgjKpR1HLWMAVCyDZjtDRcTdx0zzWwQrQ
+         cqlwufv8WE84Gu0OEgBRj/SBcRkD9603lGTgHok2/vCfqXnT7U6kYPmyCZNRgd2vHKY1
+         gNkPjz8KKZVtfs/ztgF2YFNlep7OvKiSsmG6WP+I1K0EiGwSZTKA5cQAeDqh3jSZm0sd
+         M1Ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772824138; x=1773428938;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=tiL2MvXoPmEq5QF32m0XXHv0UJ31bcM+RTyi0t3M5Qk=;
+        b=cF8L4Su7Y0n/eyzPsSU7XQ2YwW0eiJ8ZBhkBz8n4KPJ682Eap+UFEzHWnc1br2PHnG
+         lUfaMMxb6YrXo7E1riUll6vMur9RjjRXQxUK32HSGkebuTyvl2ZUTuPBs+0lrHEHC7lu
+         nCeUviiO+Sq5rq4WX4t+oEE0EUxQ7xQI6Caq+PHrdvaGlzJNDmezhFGXG6WPvH42r+pb
+         O5Fs9sU7UzPDyZ6PuJAjQrvMcoq3ZHYTRM6qXFNbg3G1lD2Pn75WOkqMqgIwRE1V9iMb
+         Sz8HbGQ1xMtEaRYBYjpVGsoh+6VP6dCPjEFzeoJNkog7bxokuuUOkQBuWYLHDGx7iEkH
+         WaoA==
+X-Gm-Message-State: AOJu0YxQbRGXdKYxgq5/gdE18SPiAiOy6lf8CInm0bYsuvIpRq2TMrO5
+	wtC56LPDcgUfOFzjJKkhnpuf78bybYTxJ2J0HELJkUpkUiwGMPAiQUs6zHqcwj25
+X-Gm-Gg: ATEYQzyFQ3mrqga/QwBBt9NO7h9RDTbaIjxyL8fny0ZLKdD+jzIObNuaacWZU3unv0H
+	fsR2uSEaDnVSG8RTVg+X3AdfuBfr/LU6k8Y15pXDzI4qxBzfxUb2/1cQy4Y5tCgVJu0nSBppJvX
+	omrdfm90idjEocSaf0gxwOsdnpcqRm8n9SnYCnO2+3J0G8aYOUV/GIGn7CEu3xSOSsMnymi9jyg
+	H0Bvd92EAbeGszHuQ2Ei+4urTQHVwQ3rvt8ldu9HLXcMLslnDqZGylxi+8JfdzY1zdWiCyPHLg8
+	ZV9ZyzhaZh3RBYwaTpiT61LJijJujWJx+3MQec166oa1uDKNUp9YJGFgidQmS92mz2zqBF/urHR
+	Z3IKe1OIwLoYLlwBZuN9QY9Edt4qbaMra2nnM4FAoJFGBLBoWRFTGxMQdEYXyYBfhsrJpkWRIdd
+	GZ313WQ9e4Bi6z1Y8E3sQcXODCtIdVgVxAtIOZKIhvA6ey
+X-Received: by 2002:a05:620a:31a0:b0:8cb:66dc:9fcd with SMTP id af79cd13be357-8cd6d454b7cmr411990185a.56.1772824138000;
+        Fri, 06 Mar 2026 11:08:58 -0800 (PST)
 Received: from 192-222-50-213.tail19a0b.ts.net ([192.222.50.213])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89a317187c0sm20322976d6.50.2026.03.06.11.08.56
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89a317187c0sm20322976d6.50.2026.03.06.11.08.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2026 11:08:56 -0800 (PST)
+        Fri, 06 Mar 2026 11:08:57 -0800 (PST)
 From: Jenny Guanni Qu <qguanni@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -62,10 +64,12 @@ Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	lkp@intel.com,
 	Jenny Guanni Qu <qguanni@gmail.com>
-Subject: [PATCH v2 0/2] bpf: Fix abs(INT_MIN) undefined behavior in interpreter sdiv/smod
-Date: Fri,  6 Mar 2026 19:08:53 +0000
-Message-Id: <20260306190855.937198-1-qguanni@gmail.com>
+Subject: [PATCH v2 1/2] bpf: Fix undefined behavior in interpreter sdiv/smod for INT_MIN
+Date: Fri,  6 Mar 2026 19:08:54 +0000
+Message-Id: <20260306190855.937198-2-qguanni@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260306190855.937198-1-qguanni@gmail.com>
+References: <20260306190855.937198-1-qguanni@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -75,33 +79,97 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 The BPF interpreter's signed 32-bit division and modulo handlers use
-abs() on s32 operands, which is undefined for S32_MIN. This causes
-the interpreter to compute wrong results, creating a mismatch with
-the verifier's range tracking.
+the kernel abs() macro on s32 operands. The abs() macro documentation
+(include/linux/math.h) explicitly states the result is undefined when
+the input is the type minimum. When DST contains S32_MIN (0x80000000),
+abs((s32)DST) triggers undefined behavior and returns S32_MIN unchanged
+on arm64/x86. This value is then sign-extended to u64 as
+0xFFFFFFFF80000000, causing do_div() to compute the wrong result.
 
-For example, INT_MIN / 2 returns 0x40000000 instead of the correct
-0xC0000000. The verifier tracks the correct range, so a crafted BPF
-program can exploit the mismatch for out-of-bounds map value access
-(confirmed by KASAN).
+The verifier's abstract interpretation (scalar32_min_max_sdiv) computes
+the mathematically correct result for range tracking, creating a
+verifier/interpreter mismatch that can be exploited for out-of-bounds
+map value access.
 
-Patch 1 introduces __safe_abs32() which handles S32_MIN correctly
-and replaces all 8 abs((s32)...) call sites.
+Introduce __safe_abs32() which handles S32_MIN correctly and replace
+all 8 abs((s32)...) call sites in the interpreter's sdiv32/smod32
+handlers.
 
-Patch 2 adds selftests covering sdiv32 and smod32 with INT_MIN
-dividend to prevent regression.
+Fixes: ec0e2da95f72 ("bpf: Support new signed div/mod instructions.")
+Signed-off-by: Jenny Guanni Qu <qguanni@gmail.com>
+---
+ kernel/bpf/core.c | 23 ++++++++++++++---------
+ 1 file changed, 14 insertions(+), 9 deletions(-)
 
-Changes since v1:
-  - Moved __safe_abs32() helper above the kerneldoc comment block
-    for ___bpf_prog_run() to fix build warnings reported by
-    kernel test robot (W=1 doc warnings)
-
-Jenny Guanni Qu (2):
-  bpf: Fix undefined behavior in interpreter sdiv/smod for INT_MIN
-  selftests/bpf: Add tests for sdiv32/smod32 with INT_MIN dividend
-
- kernel/bpf/core.c                             | 23 ++++---
- .../selftests/bpf/progs/verifier_sdiv.c       | 58 +++++++++++++++++++
- 2 files changed, 72 insertions(+), 9 deletions(-)
-
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 3ece2da55625..663b9af6d19b 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -16,7 +16,6 @@
+  * Andi Kleen - Fix a few bad bugs and races.
+  * Kris Katterjohn - Added many additional checks in bpf_check_classic()
+  */
+-
+ #include <uapi/linux/btf.h>
+ #include <crypto/sha1.h>
+ #include <linux/filter.h>
+@@ -1736,6 +1735,12 @@ bool bpf_opcode_in_insntable(u8 code)
+ }
+ 
+ #ifndef CONFIG_BPF_JIT_ALWAYS_ON
++/* Safe absolute value for s32 - abs() is undefined for S32_MIN */
++static inline u32 __safe_abs32(s32 x)
++{
++	return x >= 0 ? (u32)x : x == S32_MIN ? (u32)S32_MIN : (u32)-x;
++}
++
+ /**
+  *	___bpf_prog_run - run eBPF program on a given context
+  *	@regs: is the array of MAX_BPF_EXT_REG eBPF pseudo-registers
+@@ -1900,8 +1905,8 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
+ 			DST = do_div(AX, (u32) SRC);
+ 			break;
+ 		case 1:
+-			AX = abs((s32)DST);
+-			AX = do_div(AX, abs((s32)SRC));
++			AX = __safe_abs32((s32)DST);
++			AX = do_div(AX, __safe_abs32((s32)SRC));
+ 			if ((s32)DST < 0)
+ 				DST = (u32)-AX;
+ 			else
+@@ -1928,8 +1933,8 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
+ 			DST = do_div(AX, (u32) IMM);
+ 			break;
+ 		case 1:
+-			AX = abs((s32)DST);
+-			AX = do_div(AX, abs((s32)IMM));
++			AX = __safe_abs32((s32)DST);
++			AX = do_div(AX, __safe_abs32((s32)IMM));
+ 			if ((s32)DST < 0)
+ 				DST = (u32)-AX;
+ 			else
+@@ -1955,8 +1960,8 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
+ 			DST = (u32) AX;
+ 			break;
+ 		case 1:
+-			AX = abs((s32)DST);
+-			do_div(AX, abs((s32)SRC));
++			AX = __safe_abs32((s32)DST);
++			do_div(AX, __safe_abs32((s32)SRC));
+ 			if (((s32)DST < 0) == ((s32)SRC < 0))
+ 				DST = (u32)AX;
+ 			else
+@@ -1982,8 +1987,8 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
+ 			DST = (u32) AX;
+ 			break;
+ 		case 1:
+-			AX = abs((s32)DST);
+-			do_div(AX, abs((s32)IMM));
++			AX = __safe_abs32((s32)DST);
++			do_div(AX, __safe_abs32((s32)IMM));
+ 			if (((s32)DST < 0) == ((s32)IMM < 0))
+ 				DST = (u32)AX;
+ 			else
 -- 
 2.34.1
+
