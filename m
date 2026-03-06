@@ -1,72 +1,73 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B827738E13A
-	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 12:11:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F7935F160;
+	Fri,  6 Mar 2026 12:12:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772799089; cv=none; b=QBtPfUMug49+NstIIxRV7WZ1b1JGYjHoxEpjN+eWrlp3GYHE2CDq+VwK60fE2E+inqA0s/yzdE1lz58qUgVG8YmH6EHwvZogaMRFdtmjOEMZyO+5KO7oBClf628ApHjilAxcJISwioJEWsm5N9khQ63evr3bGgydcbb4Q8sdKLA=
+	t=1772799165; cv=none; b=XF6Tgok6Lt+JKKGC204l6fvJCy+pqNzVL13DbEOpfPQi/iE8zritAPWROhtTMmz5eKxvdTzGATI2vHikNuhIksM3lE3PuCrpzJqVNZ4Uz3D9LhmZ3o+aq7CIr1W2RGgUCauBQV3BjjKtF6qv1DHuBZyT6YaeMu7/0oKJLfRFKjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772799089; c=relaxed/simple;
-	bh=7H2AvTqAd7H8QnR4PrOuXAEIsyLIGRg9AQOZdQt4mOY=;
+	s=arc-20240116; t=1772799165; c=relaxed/simple;
+	bh=0pXAFOIFGu2oV25L8o52sQR97OfC/9uMSwkci4VWiEI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QnqeZocRURHRlbR9ubGN6VytfGkxgxs8a3PbuHyMQibpRxWEd7sOuZ/Knc9GuHcEIGjHvJam9+oFG1bFZAyDS7gM0Czo8eIfLPYsYcOMuY8IYV2RI6eFP/b43HdPbFqDnyGtPLt10DZ6PCCSAfYeobZbcrSXRjrLol8fKeHPkxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XRicpND1; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=hh1u47Povq6Mb4+FIKXYvDNcftGM3z+0sa8C+AlWOm95DlCnTN4Yykx/lJMzVeHJhMAw6WJmFQLlq8A+AvCB2IjWYBxKZwcGi8+M5x8hXpnYg8RbDMIAWbas81KhKT/ediUTYqOU5v2cf9bln99hjjkKipEaERIRMozVQLCja60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=edn61naH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XRicpND1"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c73967cf77aso569396a12.3
-        for <bpf@vger.kernel.org>; Fri, 06 Mar 2026 04:11:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772799087; x=1773403887; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=p1+VYCqFSNiByaSaiXPiM6cBehayAyLVjnULInN33Ug=;
-        b=XRicpND1kEvLeLzvCQh/AfDxQ7JA0Vy5qGGO8bXde5e0rpU/1Dcn9f3xbvWH8D/gP0
-         usbXqEga+/Yzd7rDzZZ31W9BZI29glWH8Stx2QAP2H714Zzni9P2SR2UX5/FNcXUJDOW
-         44BYbNTJ+D8vWYLNRiDu5v9/p638VSTPAI730raShx7EO9N4DMNX1IWCf+Tk6Q9C8qbM
-         nmpzXhw/Wr3rR1p6ad//oDwCkmASxnAxLxTn8zjjiBOn2Ue7fqCAGQ6k77ekSKDE/edA
-         H64e4DeBLhm3u7DEnmU5ZfzbNaySKDx4RzJqIgt2xg4avX7UkWW2LCHutgj5WfMHMZuG
-         zSsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772799087; x=1773403887;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p1+VYCqFSNiByaSaiXPiM6cBehayAyLVjnULInN33Ug=;
-        b=BGG9flLNqJe0tblQVl/Xek2fgVIUJ4D2gAu8Xl4nk9jBY4FWlPtX3l2Y7rmYiIE4rs
-         MwPQwJDQHGqmLRivT3b2pRLAjVndZOZEiur2FL5ghijsxar5qasr3D5AqjJQ5tqzb70C
-         aQfdufItfx//nJWCgwizQXEyB0ljEYFdOFM5gdPJWq6CJSYp2igG4WqQrY4Bb/dS9oPf
-         xOr0LNDnlwkacGDPmbWYlpXam+9Vat7PQWAKNmbkOOjWJtspMn2UB1zZZ551niMnY7x7
-         2y52ASfwe26jCqF2IEtH7V9TS+fw3YcHvGVio75G7B0bpjRA4TI7zJHMqBD/0BKWw8AN
-         LVWA==
-X-Forwarded-Encrypted: i=1; AJvYcCVdwFF2twQFuJZLgrjkjud05F4RBa/noinXCbleVV5Gas6MuoUlk+tRDPl9uYTpi+rBMEw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdInysmD6y61qg3Iw5oeWk17UtHl1lMxSYpeFs3xb0DBFGtuPq
-	N2ByMnAE41VercQ//eLeCye/qL2oT6ZaY6QxaXAPqvtkI+WjjHP7IekX
-X-Gm-Gg: ATEYQzxoocfQ5Uo+yOiZpINRALk2TVYv0fodNx7r7gQzBwmf0AbWuEv6JDndNc2aoAj
-	eKCM76ajkStq04Kwp8e6zl/X5qVerXKDGT2e+7mHAR0S8CcdieARRB4HeKhrRx4yRWHqJyM0QDU
-	N3e5uof9lh+Jzbjv+op4ZC7VsUGAapqJly3j2uzbuR0vy4r/uNHkFlOaVoBejGZxilQM5ly9ozK
-	eBH3f8lstprsMuOuijNIeT64qkkqfA4/CGKT98wsWPVoNozSEzIblKopFaECsJapa8GEZHDx+vP
-	YMda+2nUhHP/qP2S1GJDCF1vOC0nKW9njePMSA0932L1SFP34fTdvvjPGefRPWV8BZjthNiV2z0
-	N8ec0SaoA637cEm6QmiH9LPZsM7Jowd47LfWSxFsUKEQkbdgqnAeA6W4uBaw7u+D0XKwx6mK7ew
-	M6dRFnELfM6t9emjuDFU4xD1b1KP53tcKFMi6Al+whfRanMIGMw4tz3dP8AHPw9qiIGzuX
-X-Received: by 2002:a17:902:f789:b0:2ae:4996:430b with SMTP id d9443c01a7336-2ae824e9d94mr20798785ad.26.1772799086911;
-        Fri, 06 Mar 2026 04:11:26 -0800 (PST)
-Received: from computer ([2405:201:d015:d26b:3cf6:c501:92b2:25a5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae83e7c58asm19807735ad.25.2026.03.06.04.11.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2026 04:11:26 -0800 (PST)
-Date: Fri, 6 Mar 2026 17:41:12 +0530
-From: Varun R Mallya <varunrmallya@gmail.com>
-To: andrii@kernel.org, eddyz87@gmail.com, toke@redhat.com
-Cc: ast@kernel.org, daniel@iogearbox.net, song@kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix const qualifier warning in
- fexit_bpf2bpf.c
-Message-ID: <aarEYMXNzVhvNNMs@computer>
-References: <20260305222132.470700-1-varunrmallya@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="edn61naH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C62C0C2BCAF;
+	Fri,  6 Mar 2026 12:12:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772799165;
+	bh=0pXAFOIFGu2oV25L8o52sQR97OfC/9uMSwkci4VWiEI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=edn61naHlNfCj6ZsP5AwEUGw9CwfdJ2+qp4E3P9NrRqaex7Mzs8I9+4N3Nb8iPzP+
+	 MDPjuNK9A6Qetf2KX0tPdvyQxuXEHgWgnJamhiPEMXHArV5hNb6HubqUE67/ScusgV
+	 91Op1mHTejDA5unrODiPadH1XnhaGXoJamDx/1ZP/XFup2VlHpsi86fd3iVR7t4ble
+	 +R8KS6ktipoGCS0QCYK2SAjgpa//+C9kqsjUElB2UcpnwNnT+t6UY96TQdEfREXxm8
+	 O4hbjLTlhFJ/5gK3fCzWdjUFddgW6o4Vk83yvQglRcCnELrZY+0WRVW3GmusGUbG5S
+	 PqwmeKjYrR3zQ==
+Date: Fri, 6 Mar 2026 12:12:42 +0000
+From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: linux-kernel@vger.kernel.org, 
+	"linux-mm @ kvack . org" <linux-mm@kvack.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, 
+	Pedro Falcato <pfalcato@suse.de>, David Rientjes <rientjes@google.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Janosch Frank <frankja@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Gerald Schaefer <gerald.schaefer@linux.ibm.com>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Jarkko Sakkinen <jarkko@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>, 
+	Todd Kjos <tkjos@android.com>, Christian Brauner <brauner@kernel.org>, 
+	Carlos Llamas <cmllamas@google.com>, Ian Abbott <abbotti@mev.co.uk>, 
+	H Hartley Sweeten <hsweeten@visionengravers.com>, Jani Nikula <jani.nikula@linux.intel.com>, 
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Leon Romanovsky <leon@kernel.org>, Dimitri Sivanich <dimitri.sivanich@hpe.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Andy Lutomirski <luto@kernel.org>, 
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Eric Dumazet <edumazet@google.com>, 
+	Neal Cardwell <ncardwell@google.com>, "David S. Miller" <davem@davemloft.net>, 
+	David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Miguel Ojeda <ojeda@kernel.org>, linuxppc-dev@lists.ozlabs.org, 
+	kvm@vger.kernel.org, linux-s390@vger.kernel.org, linux-sgx@vger.kernel.org, 
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	netdev@vger.kernel.org, rust-for-linux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v1 04/16] mm/memory: simplify calculation in
+ unmap_mapping_range_tree()
+Message-ID: <6c6bf2d6-bc0f-4721-a57d-6b9c5f2a5c66@lucifer.local>
+References: <20260227200848.114019-1-david@kernel.org>
+ <20260227200848.114019-5-david@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -75,38 +76,89 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260305222132.470700-1-varunrmallya@gmail.com>
+In-Reply-To: <20260227200848.114019-5-david@kernel.org>
 
-Looks like the CI failed on this:
-> CI has tested the following submission:
-> Status:     FAILURE
-> Name:       [bpf-next] selftests/bpf: Fix const qualifier warning in fexit_bpf2bpf.c
-> Patchwork:  https://patchwork.kernel.org/project/netdevbpf/list/?series=1062212&state=*
-> Matrix:     https://github.com/kernel-patches/bpf/actions/runs/22741682920
-> 
-> Failed jobs:
-> test_progs_parallel-x86_64-gcc-15: https://github.com/kernel-patches/bpf/actions/runs/22741682920/job/65957069283
-> 
+On Fri, Feb 27, 2026 at 09:08:35PM +0100, David Hildenbrand (Arm) wrote:
+> Let's simplify the calculation a bit further to make it easier to get,
+> reusing vma_last_pgoff() which we move from interval_tree.c to mm.h.
 >
+> Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
 
-The CI Failure seems to be unrelated, though:
+Thanks, some crusty old code here much improved. LGTM, so:
 
-```
-With the provided path, there will be 109 files uploaded
+Reviewed-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
 
-Artifact name is valid!
-Root directory input is valid!
-Error: The path for one of the files in artifact is not valid:
-/packets-135-10-net_timestamping__INET4:_bpf_timestamping-net_timestamping_ns.log.
-Contains the following character:  Colon :
+> ---
+>  include/linux/mm.h |  5 +++++
+>  mm/interval_tree.c |  5 -----
+>  mm/memory.c        | 12 +++++-------
+>  3 files changed, 10 insertions(+), 12 deletions(-)
+>
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index a8138ff7d1fa..d3ef586ee1c0 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -4000,6 +4000,11 @@ static inline unsigned long vma_pages(const struct vm_area_struct *vma)
+>  	return (vma->vm_end - vma->vm_start) >> PAGE_SHIFT;
+>  }
+>
+> +static inline unsigned long vma_last_pgoff(struct vm_area_struct *vma)
+> +{
+> +	return vma->vm_pgoff + vma_pages(vma) - 1;
+> +}
+> +
+>  static inline unsigned long vma_desc_size(const struct vm_area_desc *desc)
+>  {
+>  	return desc->end - desc->start;
+> diff --git a/mm/interval_tree.c b/mm/interval_tree.c
+> index 32e390c42c53..32bcfbfcf15f 100644
+> --- a/mm/interval_tree.c
+> +++ b/mm/interval_tree.c
+> @@ -15,11 +15,6 @@ static inline unsigned long vma_start_pgoff(struct vm_area_struct *v)
+>  	return v->vm_pgoff;
+>  }
+>
+> -static inline unsigned long vma_last_pgoff(struct vm_area_struct *v)
+> -{
+> -	return v->vm_pgoff + vma_pages(v) - 1;
+> -}
+> -
+>  INTERVAL_TREE_DEFINE(struct vm_area_struct, shared.rb,
+>  		     unsigned long, shared.rb_subtree_last,
+>  		     vma_start_pgoff, vma_last_pgoff, /* empty */, vma_interval_tree)
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 5c47309331f5..e4154f03feac 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -4227,17 +4227,15 @@ static inline void unmap_mapping_range_tree(struct rb_root_cached *root,
+>  					    struct zap_details *details)
+>  {
+>  	struct vm_area_struct *vma;
+> -	pgoff_t vba, vea, zba, zea;
+>  	unsigned long start, size;
+>  	struct mmu_gather tlb;
+>
+>  	vma_interval_tree_foreach(vma, root, first_index, last_index) {
+> -		vba = vma->vm_pgoff;
+> -		vea = vba + vma_pages(vma) - 1;
+> -		zba = max(first_index, vba);
+> -		zea = min(last_index, vea);
 
-Invalid characters include:  Double quote ", Colon :, Less than <, Greater than >,
-Vertical bar |, Asterisk *, Question mark ?, Carriage return \r, Line feed \n
+These variable names... Lord.
 
-The following characters are not allowed in files that are uploaded due to
-limitations with certain file systems such as NTFS. To maintain file system
-agnostic behavior, these characters are intentionally not allowed to prevent
-potential problems with downloads on different file systems.
-```
-The selftests did pass.
+> -		start = ((zba - vba) << PAGE_SHIFT) + vma->vm_start;
+> -		size = (zea - zba + 1) << PAGE_SHIFT;
+> +		const pgoff_t start_idx = max(first_index, vma->vm_pgoff);
+> +		const pgoff_t end_idx = min(last_index, vma_last_pgoff(vma)) + 1;
 
+I guess since 'end' is by-convention the +1 of last this is fine
+
+> +
+> +		start = vma->vm_start + ((start_idx - vma->vm_pgoff) << PAGE_SHIFT);
+> +		size = (end_idx - start_idx) << PAGE_SHIFT;
+>
+>  		tlb_gather_mmu(&tlb, vma->vm_mm);
+>  		zap_page_range_single_batched(&tlb, vma, start, size, details);
+> --
+> 2.43.0
+>
