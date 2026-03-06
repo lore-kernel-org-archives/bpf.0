@@ -1,75 +1,95 @@
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA13739890F
-	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 19:08:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D075642EEBB
+	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 19:51:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772824141; cv=none; b=ETWQB4ukHBtjCwCFSFZFRU+cmbbFu8FcpGnO8lIPGpAsvyIHw6RZFygG1TaxTClpdkTeCwBTLQ00h858L8TDR9qMmv+ucFFJpJwfsyRTke5SqaSVP6SX+zSK104gXmNtljpmeSU2A29SvkEolMa11FKgK4qMftHMVrlYRLTEaN4=
+	t=1772826674; cv=none; b=H9d8CkUTT9XqXppcKulycPvWW6cinlAxPBKqy0GS9jZ6i+2e2bCgdStPxCnRqRXlqEBR5MvUr0VEcL9a4U0fXjOm86zW6By0Zqegg6kFsC/noHiZdmK3JhBg2zBFJT+bSYo2VVDyUv5wMDx1s2FKHwBLuGYp9W/BpyOtvZV34ZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772824141; c=relaxed/simple;
-	bh=0r9AhianaHhBaRi6Goikk6bbXXR/eOi6ITCxSqIKQTc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=pLFuz8QhzUY+LrqUprVVX/PYbVauk9zM2XopTlv6fQaSXuzGyyDIcnguzGNZhAf1EbR5/KthYJbaO+VdHb2x2xbC/3pkFIFI0M+kD+JsALH6Bgx2srDar9xw5Tr2eOTquipU9nt93CC1RMO7ajUd7bKym3oNr+olV0Qy7QSx89Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nrPX9Dvj; arc=none smtp.client-ip=209.85.219.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772826674; c=relaxed/simple;
+	bh=26QaMlsBHZXBBsoWb+RFPRcsWBtokGFkKVFb+dwgdz0=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=YfZBVMqcvd5wv7ApAWCSAveTvZ8LQFjxwy0cT+9xYaisga8iTdfovc6zmdsiCy9ZiT9qf5ccDeD88fphX25VHTVUR6aq23mZWnstphFiYmQzb8vCgDJhNd8o8LkA+91VcyN6kU1TttA84rMaKZoOiOLrvPKcDgf9UluMdNFqc1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fC0pLv/3; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=NNdHoM09; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nrPX9Dvj"
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-89a1347051aso72200346d6.2
-        for <bpf@vger.kernel.org>; Fri, 06 Mar 2026 11:08:59 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fC0pLv/3";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="NNdHoM09"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1772826671;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=lIsA0vBDr/Zf85MeCX2VIrGY0ZH9k8QbBxgGKGtnSCg=;
+	b=fC0pLv/3MKiqW/cOCj0Bneba1kDdydcGoSYpGEVdF3eAjIXOlV8RM2CqTnXZz7G+FifMV1
+	mAwD8SJvFVnv/VELEG2crkHdEYjLFKOiOqvnBcEGdoDXiHpV8iDI6nYypcLOvz4u9bmYe1
+	WVNuHl1G+gWax5an2cOEfpp9ijYlPMc=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-151-sq6XfE5xMDqVOMX02yiX9Q-1; Fri, 06 Mar 2026 14:51:09 -0500
+X-MC-Unique: sq6XfE5xMDqVOMX02yiX9Q-1
+X-Mimecast-MFC-AGG-ID: sq6XfE5xMDqVOMX02yiX9Q_1772826668
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-48529c087f6so5774575e9.3
+        for <bpf@vger.kernel.org>; Fri, 06 Mar 2026 11:51:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772824139; x=1773428939; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kraYytm7IB1Y9w4YBbwtt0Dp0Y2H+qeL6VwnbTaeLN4=;
-        b=nrPX9DvjVS4ZUEXA4Jqfiv8NDJofOu6tzSIIwaX8Ybo0MhqJuPQ/1SxCX4fnYYJuOB
-         ViLLWSkyz3fiihpWg1994Pk8zWI7qRjnyU1brWPgIdZjSICNW3zujG/kc4ZeO5qClp4O
-         VKPed6LlnTXzWvKgXcYY5bDc7iMAFz6Ke/8WCnHrQMRxY4as4DES9DhlCtAdIegm5VqG
-         0AyzzPevMEUtKnQNQoNGYgoO5vjaL8AAUd2UnhPbog3glxr23TEF1uY0iT82SWlTtx1v
-         5sbsb/nspAT5JBbosb8FRk0f45Aq8hIhFDVOOe23Vrbv4ijdIHPCSoHESCx6bSK0j8YI
-         5ouQ==
+        d=redhat.com; s=google; t=1772826668; x=1773431468; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lIsA0vBDr/Zf85MeCX2VIrGY0ZH9k8QbBxgGKGtnSCg=;
+        b=NNdHoM094dTl03N5MB2JxgRli671micuqf7XVaF109ag/IogQDr6K6T9Lxm+L0j4Ys
+         lMc5kfp/V8RxyuBdQr9XXKbnbPHoim51MZFeymf2jDgbEANpYYZFlhaQhx2ZS1pMzO9T
+         8bYABPEqWShaN0WF6AbaT3KX4i7lnhCNLNm6GSzKVXeqEdsH/TS81k6evvEbDydIiAtP
+         V9zPm7++zi7TsYyVInQEJYOJF8OkRQkk8HNxNwlY2rZ6nzsSpmmcNki0Pzm4ngDLYgm7
+         hGkuHAkMa8a1PACs9nQa9RhUha908kDM9dP7wwmoe33HbZs2BkY4F9gzncXnt6fd6FOP
+         4JtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772824139; x=1773428939;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=kraYytm7IB1Y9w4YBbwtt0Dp0Y2H+qeL6VwnbTaeLN4=;
-        b=inCYFM/IMBCmrcLoTJFqwG9NYUc2IF+5eq4qwLoIBKzg8XlpC4RvpPFpKJuHYTn+KV
-         /4Ds16c2E6WKJpbSjJaD/+dMTJ3rw2xNr0LDrCd3TIEWRPMURhLR8dUpm8suCTkPqhPe
-         SJP9iti9jfhf7cshNJu4mP3/CX7nIN1nCoXtIj6aLsQEqi/xAjS2XJs4dsAuL5KI6Su1
-         FYvBnvGjIql4fMmynFh8T/8Pf/QjbHTyc56uU+VVOF7TPPXX+fT7TScB3yO76sDR2D06
-         SzFLkh/H2yjboyI/RkfId+qrYn3Cc0pBDXXiMOdJkZdlWvM6qcTpA7MXmlhA7c48pxWx
-         3hYQ==
-X-Gm-Message-State: AOJu0Yx9gfbzy07fKCc/v1CIQ57ISDkkcHvyO8QvjfeDdDjddJQZjs8x
-	i5qv5wMNN+0b0JfOkFX2mu02d+BL6ivIVg2tAkuJplD3rZHEjQxubZhFfDbn0WO8
-X-Gm-Gg: ATEYQzwZ9rr0UWJ2/BXKIYBsqsi/XD65XBV4Z57w8RxY50rD54JkMBcd5Il4UUMq7CB
-	sq2x3PgUg+cwrUGAENGrRBOqP5wnfkeSXrK7cKBckiNKUR2NovAUQQejvrRXt7ad4Y+HzpJPi5U
-	Re4z3HRGkZWNzXOppRBKxSdAs3Nz159BYxUvfoNof5hHBjTAPPekndXxAA2kH+z8Z9BVHZ/rEKF
-	U2paBjHzn1eoTjLyaUYSswczUMlODc5xRNiUJvfLXN+3PMlywSIhZJDQaSwv9OpRasToA4i+kQE
-	fnASqUGbxHEsq4g8DCa5Zq4LdI/iQ7En2IB6aKULY72lsvav9ZSio0lMUCJVe+UKehXZyAJieP9
-	5fAKJ8mlDD2rN2ZPWQj85arG21d0HNFLCUmyfZoBNOPjC5oCBnREr8lOa55CkX8SMU2YRYHJcEf
-	bnyfLDDgG52WYKfzME2r3Jr061ZNqiUv63oINxvAfjk2+Z
-X-Received: by 2002:a05:6214:1d2b:b0:899:f0b1:732a with SMTP id 6a1803df08f44-89a30ad6ab4mr48120136d6.31.1772824138928;
-        Fri, 06 Mar 2026 11:08:58 -0800 (PST)
-Received: from 192-222-50-213.tail19a0b.ts.net ([192.222.50.213])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89a317187c0sm20322976d6.50.2026.03.06.11.08.58
+        d=1e100.net; s=20230601; t=1772826668; x=1773431468;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lIsA0vBDr/Zf85MeCX2VIrGY0ZH9k8QbBxgGKGtnSCg=;
+        b=YYkyGVHD5VmgekPKToVDcWArGu2FfEfcSPKVUm3Xbi8/jwDsNajoB7wHbjS1iUTMMY
+         bdBje9UlC0b41GtwU2gTUtGpo/ApUuWozkjSdTwxCt9JswZlDWtimSe53ejDQFJSDYm5
+         RAKO+CiUTapzOzZsNTUPrZujLGwbE58xF14MHfdPJQ6fhwXpMkkNkuVUR7bx6FF/mY0c
+         Pt8gJgIHG6lC9Lbkz/9dATnMdauxqPE9ZbfEnHc3rDUmqKLCUXnJQ+OiEn9W5Zy2iXqE
+         ZmTa/QsbxfW7VgcVYeVsSm7z0aNH1GJCYxWUEHi/Um4kcohEUGQEdEjiL1XzQ4Q1qnmc
+         AGfg==
+X-Forwarded-Encrypted: i=1; AJvYcCXVK6lrnsEah3cPWtRhHRaBZ4kU1QmDjepDxJL6o2qh6W+PyCPPzvm3MW40c1+tHC5yI7s=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0EWZL+d2iFc10gxCZJFgbcVWDZfbo8ALix12GwjwFFKROQ83I
+	31dRilMsHYGG7j4vxLPg9DWml3QhmEiX7LKvaVo/jSqpLj9hDXSGDtb6Dj3eq0ykf1caFFxUzgF
+	xpUbke9LeTeB4VkaRAZGa6ymc5jr9nH8kFyJp+CiyRhE5ohSyG1ifGQ==
+X-Gm-Gg: ATEYQzzmDkw0CbrUdAXlMNMoFSVhMLnAzz8aVpWZl9w/KgSJvlJASquq507gD31e7lW
+	ks6D312/5lz46dya2J/uy82+W7PFCqJCICXIlEWfz9jtYrlhKNUUq9NX2bDGbfJPbwiwFd3fXrQ
+	L6wccNLPmwFwN8zAlkO3Y8qIQUkG6D5HUdYiBfmZWC8HXxXcwQr8dKCAoLa+udFdnh0NRvAkeG5
+	eLJEoCbbvORwFKRVpn2uYS9yxOrEYibs1NXTcs4XP9Ap+j/p9MlSBHLpaXlo/RIBZxRp4UG/lWy
+	Iud7f48L6UITZUqPhq+i+rlPNXX2U9ns0QkNXnQMkr6xjuS7JjkpWaZ85f0N4r2ObaVGO2lgla7
+	60OHbhD0D1U0MhaSpQx1X2rFclHAibsulqNURCw==
+X-Received: by 2002:a05:600c:c0c3:20b0:485:2a85:e5ec with SMTP id 5b1f17b1804b1-4852a85e711mr21979795e9.2.1772826668402;
+        Fri, 06 Mar 2026 11:51:08 -0800 (PST)
+X-Received: by 2002:a05:600c:c0c3:20b0:485:2a85:e5ec with SMTP id 5b1f17b1804b1-4852a85e711mr21979485e9.2.1772826667946;
+        Fri, 06 Mar 2026 11:51:07 -0800 (PST)
+Received: from costa-tp.redhat.com ([2a00:a041:e223:1b00:fe51:8bb:7986:c897])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-485276b75eesm48596485e9.14.2026.03.06.11.51.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2026 11:08:58 -0800 (PST)
-From: Jenny Guanni Qu <qguanni@gmail.com>
-To: bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	ast@kernel.org,
-	andrii@kernel.org,
-	lkp@intel.com,
-	Jenny Guanni Qu <qguanni@gmail.com>
-Subject: [PATCH v2 2/2] selftests/bpf: Add tests for sdiv32/smod32 with INT_MIN dividend
-Date: Fri,  6 Mar 2026 19:08:55 +0000
-Message-Id: <20260306190855.937198-3-qguanni@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260306190855.937198-1-qguanni@gmail.com>
-References: <20260306190855.937198-1-qguanni@gmail.com>
+        Fri, 06 Mar 2026 11:51:07 -0800 (PST)
+From: Costa Shulyupin <costa.shul@redhat.com>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Tomas Glozar <tglozar@redhat.com>,
+	Costa Shulyupin <costa.shul@redhat.com>,
+	Crystal Wood <crwood@redhat.com>,
+	Wander Lairson Costa <wander@redhat.com>,
+	John Kacur <jkacur@redhat.com>,
+	Ivan Pravdin <ipravdin.official@gmail.com>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH v4 0/4] tools/rtla: Consolidate nr_cpus usage
+Date: Fri,  6 Mar 2026 21:49:48 +0200
+Message-ID: <20260306194953.2511960-1-costa.shul@redhat.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -78,90 +98,45 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add tests to verify that signed 32-bit division and modulo operations
-produce correct results when the dividend is INT_MIN (0x80000000).
+sysconf(_SC_NPROCESSORS_CONF) (via get_nprocs_conf) reflects
+cpu_possible_mask, which is fixed at boot time, so querying it
+repeatedly is unnecessary.
 
-These test the fix in the previous commit which replaced abs() with a
-safe helper to avoid undefined behavior for S32_MIN.
+Replace multiple calls to sysconf(_SC_NPROCESSORS_CONF) with a single
+global nr_cpus variable initialized once at startup.
 
-Test cases:
-  - SDIV32 INT_MIN / 2 = -1073741824 (imm and reg divisor)
-  - SMOD32 INT_MIN % 2 = 0 (positive and negative divisor)
+v4:
+- Reorder change of BPF functions
+- Update unit test
+v3:
+- Remove unneeded cpus parameter from timerlat BPF functions as
+  requested by Wander Costa.
+v2:
+- Add `#pragma once` in timerlat_u.h to avoid redefinition errors with
+  pre-C23 compilers.
 
-Signed-off-by: Jenny Guanni Qu <qguanni@gmail.com>
----
- .../selftests/bpf/progs/verifier_sdiv.c       | 58 +++++++++++++++++++
- 1 file changed, 58 insertions(+)
+Costa Shulyupin (4):
+  tools/rtla: Consolidate nr_cpus usage across all tools
+  tools/rtla: Remove unneeded nr_cpus arguments
+  tools/rtla: Remove unneeded nr_cpus members
+  tools/rtla: Remove unneeded nr_cpus from for_each_monitored_cpu
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_sdiv.c b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-index 148d2299e5b4..fd59d57e8e37 100644
---- a/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-@@ -1209,6 +1209,64 @@ __naked void smod32_ri_divisor_neg_1(void)
- 	: __clobber_all);
- }
- 
-+SEC("socket")
-+__description("SDIV32, INT_MIN divided by 2, imm")
-+__success __success_unpriv __retval(-1073741824)
-+__naked void sdiv32_int_min_div_2_imm(void)
-+{
-+	asm volatile ("					\
-+	w0 = %[int_min];				\
-+	w0 s/= 2;					\
-+	exit;						\
-+"	:
-+	: __imm_const(int_min, INT_MIN)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("SDIV32, INT_MIN divided by 2, reg")
-+__success __success_unpriv __retval(-1073741824)
-+__naked void sdiv32_int_min_div_2_reg(void)
-+{
-+	asm volatile ("					\
-+	w0 = %[int_min];				\
-+	w1 = 2;						\
-+	w0 s/= w1;					\
-+	exit;						\
-+"	:
-+	: __imm_const(int_min, INT_MIN)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("SMOD32, INT_MIN modulo 2, imm")
-+__success __success_unpriv __retval(0)
-+__naked void smod32_int_min_mod_2_imm(void)
-+{
-+	asm volatile ("					\
-+	w0 = %[int_min];				\
-+	w0 s%%= 2;					\
-+	exit;						\
-+"	:
-+	: __imm_const(int_min, INT_MIN)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("SMOD32, INT_MIN modulo -2, imm")
-+__success __success_unpriv __retval(0)
-+__naked void smod32_int_min_mod_neg2_imm(void)
-+{
-+	asm volatile ("					\
-+	w0 = %[int_min];				\
-+	w0 s%%= -2;					\
-+	exit;						\
-+"	:
-+	: __imm_const(int_min, INT_MIN)
-+	: __clobber_all);
-+}
-+
-+
- #else
- 
- SEC("socket")
+ tools/tracing/rtla/src/common.c            |  7 ++-
+ tools/tracing/rtla/src/common.h            |  4 +-
+ tools/tracing/rtla/src/osnoise_hist.c      | 26 ++++-----
+ tools/tracing/rtla/src/osnoise_top.c       | 16 ++----
+ tools/tracing/rtla/src/timerlat.c          |  9 ++--
+ tools/tracing/rtla/src/timerlat_aa.c       | 11 ++--
+ tools/tracing/rtla/src/timerlat_bpf.c      | 19 +++----
+ tools/tracing/rtla/src/timerlat_bpf.h      | 12 ++---
+ tools/tracing/rtla/src/timerlat_hist.c     | 62 +++++++++-------------
+ tools/tracing/rtla/src/timerlat_top.c      | 47 ++++++----------
+ tools/tracing/rtla/src/timerlat_u.c        |  9 ++--
+ tools/tracing/rtla/src/timerlat_u.h        |  1 +
+ tools/tracing/rtla/src/utils.c             | 10 +---
+ tools/tracing/rtla/tests/unit/unit_tests.c | 44 +++++++--------
+ 14 files changed, 108 insertions(+), 169 deletions(-)
+
 -- 
-2.34.1
+2.53.0
 
