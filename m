@@ -1,40 +1,54 @@
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from fra-out-009.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-009.esa.eu-central-1.outbound.mail-perimeter.amazon.com [3.64.237.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E260738F223
-	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 12:48:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C79A038F244;
+	Fri,  6 Mar 2026 12:48:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=3.64.237.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772801317; cv=none; b=Id5qzq+dm60as4x7Jk7JTWeUQcSKF1iUzc7a5bDLxJAX/45NR+AA6uqMjprK+G6wYihrdyu32ca0+hv4RfzjaDyM63elgVQ4y/emyGRYH7EKxK9RuyjKoYHS3+joWccAPEG/LFgEb+gQUnkJ8Ft13sIJ+x1V0vG+TT32sLkG6OA=
+	t=1772801329; cv=none; b=eLWs/Yys7miASR9VEw+yWKT925EoLZdAExanmiOSrZOZKOMqMXL9BFFpYE7tfqU+oaJlRGiLclwkD4hftMMTH08L7jTRPMtg9KVgzyQIJohAAkSV1yyiIpv5h2WD2PjjERFPodlWL62d2Ys77tyv1YC/Niz+ydh7CfpzFayCN1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772801317; c=relaxed/simple;
-	bh=qPicryEkwijXPwqofzoau04znhdrfvIHnu6/Pyv8VUc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jRH4PRGT28FhzEuto1Ps75S9ZZXE5P+edZ/UMbUY8/46ey74JGLjXpIS+2wtijvildolhJ4IVbtcztDwwgu1tMyC464pKSrLoQ7K0CzC+C/K33HVUsvMRgpHdlO0bzl2/3ruIG5ph37Pz0+pmbX9ZLb87ur+RTthdwzhdBoEslM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=KSLV+Asz; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1772801329; c=relaxed/simple;
+	bh=A4w55fhkSP5SYqH4itJWFNtaO6TtNfPXoavYXd9Qto0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Yi76rrrboO7WgW+mkJGTWkZNVm4h33Iokc2cd6VqXVFDDsjMll4LgnJVaWs0enkXuQyEbW6ZA3LeNwhs8OF0lHexOE6UICt5I6VXiu0nwxEzikmjDBJJjp2PNJ9gykIPwsOrwLY4w4NCSe8tD8NeWX+mj2mm9CVAG8iFc5nuWhM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=qJl9tLI6; arc=none smtp.client-ip=3.64.237.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="KSLV+Asz"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id E285AC40432;
-	Fri,  6 Mar 2026 12:48:50 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id BEF445FF92;
-	Fri,  6 Mar 2026 12:48:31 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 1C126103699D2;
-	Fri,  6 Mar 2026 13:48:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1772801310; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=FkZSFQh+KvpketIOrBtEelxV6rwNiCRVKYCWCZUIhEw=;
-	b=KSLV+Asz8WIYjHDBTLUnCDHxCh86N/EhI3LyQKwjdzdWns3qJQA4RavwYkb70hzWBNNCT4
-	xKlaqWKEg0WCzgTZJU+/nb7YjDneVLt82ijLzRYw6FhNH02v1herHWe9vtJF4Ej4LkdCV6
-	KnCWz6qxbFPOU/2NL661KQaOLbXrq8kDswrMXSgIaogUEhuOON/2mp4ITWIB5Ova+DcKq4
-	YjJuJr4qZOPXlYPHq7eBRvw1PqCyT9RrmYvjFA0OSa346a9S6+dlf4VoePMBoMgRRIKQhx
-	VtT66m1EHlvByauqhG/yS/af69G41C+sBtGmgh9/L4+AREexPyIfsVy+ljcRHw==
-Message-ID: <74089907-d7d3-4242-92a5-909812779932@bootlin.com>
-Date: Fri, 6 Mar 2026 13:48:23 +0100
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="qJl9tLI6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1772801327; x=1804337327;
+  h=message-id:date:mime-version:reply-to:subject:to:cc:
+   references:from:in-reply-to:content-transfer-encoding;
+  bh=bMQYOYMXLfYYqfrzv9J2aTP1fDeqWn0su8Gslng5WAw=;
+  b=qJl9tLI6Hmyo/cvynocC/dXRUh6jTzwgUewXZHe5Qx3AqbGjsC/cvgHe
+   GYoZXOO1tUCAOOHHOfR+Q9AO0pYhzUQCBYe4g8OUwMtZPU8+mNmklmL1X
+   6ifSEp2IHSGmA2Hzq1YxFJfLl2A+gzoDp+LWtP932fRUaBKSdIqSocb7K
+   84GfU5suoK6/w2pac4s/CoUj/ce6Ack1D+uodCJsgwqOeAIYjB1rhzA9+
+   qzT/ArGvxWtrLw4J9sxk/meMNDwTYlRwRB4OPeH2VvkKNXhOJR9KrmMA6
+   eSITT6cdyNGNGTSbyS0SKMWH7iodhFgbkfXgOsA0VYTtMtQ+ZlqoTB+Nl
+   w==;
+X-CSE-ConnectionGUID: Yx/EHmQHRFy5mQfbcc7SOQ==
+X-CSE-MsgGUID: vFI11kARTzO+6Dwqg0rWgg==
+X-IronPort-AV: E=Sophos;i="6.23,104,1770595200"; 
+   d="scan'208";a="10334043"
+Received: from ip-10-6-3-216.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.3.216])
+  by internal-fra-out-009.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2026 12:48:42 +0000
+Received: from EX19MTAEUB002.ant.amazon.com [54.240.197.224:9741]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.16.189:2525] with esmtp (Farcaster)
+ id 782955b1-d49c-41df-ab22-e29b6a3853bb; Fri, 6 Mar 2026 12:48:42 +0000 (UTC)
+X-Farcaster-Flow-ID: 782955b1-d49c-41df-ab22-e29b6a3853bb
+Received: from EX19D005EUB003.ant.amazon.com (10.252.51.31) by
+ EX19MTAEUB002.ant.amazon.com (10.252.51.59) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
+ Fri, 6 Mar 2026 12:48:41 +0000
+Received: from [192.168.2.180] (10.106.83.26) by EX19D005EUB003.ant.amazon.com
+ (10.252.51.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37; Fri, 6 Mar 2026
+ 12:48:36 +0000
+Message-ID: <92fcec4f-43f9-4207-8472-eb94874f2efd@amazon.com>
+Date: Fri, 6 Mar 2026 12:48:35 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -42,106 +56,189 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 8/8] net: macb: add Tx zero-copy AF_XDP support
-To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
- Claudiu Beznea <claudiu.beznea@tuxon.dev>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>,
- Richard Cochran <richardcochran@gmail.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
- Gregory CLEMENT <gregory.clement@bootlin.com>,
- =?UTF-8?Q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>,
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20260304-macb-xsk-v1-0-ba2ebe2bdaa3@bootlin.com>
- <20260304-macb-xsk-v1-8-ba2ebe2bdaa3@bootlin.com>
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Reply-To: <kalyazin@amazon.com>
+Subject: Re: [PATCH v10 01/15] set_memory: set_direct_map_* to take address
+To: "David Hildenbrand (Arm)" <david@kernel.org>, "Kalyazin, Nikita"
+	<kalyazin@amazon.co.uk>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
+	<kvmarm@lists.linux.dev>, "linux-fsdevel@vger.kernel.org"
+	<linux-fsdevel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"kernel@xen0n.name" <kernel@xen0n.name>, "linux-riscv@lists.infradead.org"
+	<linux-riscv@lists.infradead.org>, "linux-s390@vger.kernel.org"
+	<linux-s390@vger.kernel.org>, "loongarch@lists.linux.dev"
+	<loongarch@lists.linux.dev>
+CC: "pbonzini@redhat.com" <pbonzini@redhat.com>, "corbet@lwn.net"
+	<corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>, "oupton@kernel.org"
+	<oupton@kernel.org>, "joey.gouly@arm.com" <joey.gouly@arm.com>,
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "yuzenghui@huawei.com"
+	<yuzenghui@huawei.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"will@kernel.org" <will@kernel.org>, "seanjc@google.com" <seanjc@google.com>,
+	"tglx@kernel.org" <tglx@kernel.org>, "mingo@redhat.com" <mingo@redhat.com>,
+	"bp@alien8.de" <bp@alien8.de>, "dave.hansen@linux.intel.com"
+	<dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>,
+	"hpa@zytor.com" <hpa@zytor.com>, "luto@kernel.org" <luto@kernel.org>,
+	"peterz@infradead.org" <peterz@infradead.org>, "willy@infradead.org"
+	<willy@infradead.org>, "akpm@linux-foundation.org"
+	<akpm@linux-foundation.org>, "lorenzo.stoakes@oracle.com"
+	<lorenzo.stoakes@oracle.com>, "vbabka@suse.cz" <vbabka@suse.cz>,
+	"rppt@kernel.org" <rppt@kernel.org>, "surenb@google.com" <surenb@google.com>,
+	"mhocko@suse.com" <mhocko@suse.com>, "ast@kernel.org" <ast@kernel.org>,
+	"daniel@iogearbox.net" <daniel@iogearbox.net>, "andrii@kernel.org"
+	<andrii@kernel.org>, "martin.lau@linux.dev" <martin.lau@linux.dev>,
+	"eddyz87@gmail.com" <eddyz87@gmail.com>, "song@kernel.org" <song@kernel.org>,
+	"yonghong.song@linux.dev" <yonghong.song@linux.dev>,
+	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "kpsingh@kernel.org"
+	<kpsingh@kernel.org>, "sdf@fomichev.me" <sdf@fomichev.me>,
+	"haoluo@google.com" <haoluo@google.com>, "jolsa@kernel.org"
+	<jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>, "jhubbard@nvidia.com"
+	<jhubbard@nvidia.com>, "peterx@redhat.com" <peterx@redhat.com>,
+	"jannh@google.com" <jannh@google.com>, "pfalcato@suse.de" <pfalcato@suse.de>,
+	"shuah@kernel.org" <shuah@kernel.org>, "riel@surriel.com" <riel@surriel.com>,
+	"ryan.roberts@arm.com" <ryan.roberts@arm.com>, "jgross@suse.com"
+	<jgross@suse.com>, "yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>,
+	"kas@kernel.org" <kas@kernel.org>, "coxu@redhat.com" <coxu@redhat.com>,
+	"kevin.brodsky@arm.com" <kevin.brodsky@arm.com>, "ackerleytng@google.com"
+	<ackerleytng@google.com>, "maobibo@loongson.cn" <maobibo@loongson.cn>,
+	"prsampat@amd.com" <prsampat@amd.com>, "mlevitsk@redhat.com"
+	<mlevitsk@redhat.com>, "jmattson@google.com" <jmattson@google.com>,
+	"jthoughton@google.com" <jthoughton@google.com>, "agordeev@linux.ibm.com"
+	<agordeev@linux.ibm.com>, "alex@ghiti.fr" <alex@ghiti.fr>,
+	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>, "borntraeger@linux.ibm.com"
+	<borntraeger@linux.ibm.com>, "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+	"dev.jain@arm.com" <dev.jain@arm.com>, "gor@linux.ibm.com"
+	<gor@linux.ibm.com>, "hca@linux.ibm.com" <hca@linux.ibm.com>,
+	"palmer@dabbelt.com" <palmer@dabbelt.com>, "pjw@kernel.org" <pjw@kernel.org>,
+	"shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>,
+	"svens@linux.ibm.com" <svens@linux.ibm.com>, "thuth@redhat.com"
+	<thuth@redhat.com>, "wyihan@google.com" <wyihan@google.com>,
+	"yang@os.amperecomputing.com" <yang@os.amperecomputing.com>,
+	"Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
+	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "urezki@gmail.com"
+	<urezki@gmail.com>, "zhengqi.arch@bytedance.com"
+	<zhengqi.arch@bytedance.com>, "gerald.schaefer@linux.ibm.com"
+	<gerald.schaefer@linux.ibm.com>, "jiayuan.chen@shopee.com"
+	<jiayuan.chen@shopee.com>, "lenb@kernel.org" <lenb@kernel.org>,
+	"osalvador@suse.de" <osalvador@suse.de>, "pavel@kernel.org"
+	<pavel@kernel.org>, "rafael@kernel.org" <rafael@kernel.org>,
+	"vannapurve@google.com" <vannapurve@google.com>, "jackmanb@google.com"
+	<jackmanb@google.com>, "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>,
+	"patrick.roy@linux.dev" <patrick.roy@linux.dev>, "Thomson, Jack"
+	<jackabt@amazon.co.uk>, "Itazuri, Takahiro" <itazur@amazon.co.uk>,
+	"Manwaring, Derek" <derekmn@amazon.com>, "Cali, Marco"
+	<xmarcalx@amazon.co.uk>
+References: <20260126164445.11867-1-kalyazin@amazon.com>
+ <20260126164445.11867-2-kalyazin@amazon.com>
+ <90058ff2-9dea-4090-b2e6-da4c3cdba81b@kernel.org>
 Content-Language: en-US
-In-Reply-To: <20260304-macb-xsk-v1-8-ba2ebe2bdaa3@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+From: Nikita Kalyazin <kalyazin@amazon.com>
+In-Reply-To: <90058ff2-9dea-4090-b2e6-da4c3cdba81b@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: EX19D002EUA002.ant.amazon.com (10.252.50.7) To
+ EX19D005EUB003.ant.amazon.com (10.252.51.31)
 
-Hi Théo,
 
-On 04/03/2026 19:24, Théo Lebrun wrote:
-> Add a new buffer type (to `enum macb_tx_buff_type`). Near the end of
-> macb_tx_complete(), we go and read the XSK buffers using
-> xsk_tx_peek_release_desc_batch() and append those buffers to our Tx
-> ring.
+
+On 05/03/2026 17:23, David Hildenbrand (Arm) wrote:
+> On 1/26/26 17:46, Kalyazin, Nikita wrote:
+>> From: Nikita Kalyazin <kalyazin@amazon.com>
+>>
+>> This is to avoid excessive conversions folio->page->address when adding
+>> helpers on top of set_direct_map_valid_noflush() in the next patch.
+>>
+>> Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
+>> ---
+>>   arch/arm64/include/asm/set_memory.h     |  7 ++++---
+>>   arch/arm64/mm/pageattr.c                | 19 +++++++++----------
+>>   arch/loongarch/include/asm/set_memory.h |  7 ++++---
+>>   arch/loongarch/mm/pageattr.c            | 25 ++++++++++++-------------
+>>   arch/riscv/include/asm/set_memory.h     |  7 ++++---
+>>   arch/riscv/mm/pageattr.c                | 17 +++++++++--------
+>>   arch/s390/include/asm/set_memory.h      |  7 ++++---
+>>   arch/s390/mm/pageattr.c                 | 13 +++++++------
+>>   arch/x86/include/asm/set_memory.h       |  7 ++++---
+>>   arch/x86/mm/pat/set_memory.c            | 23 ++++++++++++-----------
+>>   include/linux/set_memory.h              |  9 +++++----
+>>   kernel/power/snapshot.c                 |  4 ++--
+>>   mm/execmem.c                            |  6 ++++--
+>>   mm/secretmem.c                          |  6 +++---
+>>   mm/vmalloc.c                            | 11 +++++++----
+>>   15 files changed, 90 insertions(+), 78 deletions(-)
 > 
-> Additionally, in macb_tx_complete(), we signal to the XSK subsystem
-> number of bytes completed and conditionally mark the need_wakeup
-> flag.
+> [...]
 > 
-> Lastly, we update XSK wakeup by writing the TCOMP bit in the per-queue
-> IMR register, to ensure NAPI scheduling will take place.
+>> --- a/arch/loongarch/mm/pageattr.c
+>> +++ b/arch/loongarch/mm/pageattr.c
+>> @@ -198,32 +198,31 @@ bool kernel_page_present(struct page *page)
+>>        return pte_present(ptep_get(pte));
+>>   }
+>>
+>> -int set_direct_map_default_noflush(struct page *page)
+>> +int set_direct_map_default_noflush(const void *addr)
+>>   {
+>> -     unsigned long addr = (unsigned long)page_address(page);
+>> -
+>> -     if (addr < vm_map_base)
+>> +     if ((unsigned long)addr < vm_map_base)
+>>                return 0;
+>>
+>> -     return __set_memory(addr, 1, PAGE_KERNEL, __pgprot(0));
+>> +     return __set_memory((unsigned long)addr, 1, PAGE_KERNEL, __pgprot(0));
+>>   }
+>>
+>> -int set_direct_map_invalid_noflush(struct page *page)
+>> +int set_direct_map_invalid_noflush(const void *addr)
+>>   {
+>> -     unsigned long addr = (unsigned long)page_address(page);
+>> +     unsigned long addr = (unsigned long)addr;
 > 
-> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
-> ---
+> Are you sure you want a local variable with the exact same name
+> 
 
-[...]
+You're right.  Thanks for spotting that.
 
-> +static void macb_xdp_xmit_zc(struct macb *bp, unsigned int queue_index, int budget)
-> +{
-> +	struct macb_queue *queue = &bp->queues[queue_index];
-> +	struct xsk_buff_pool *xsk = queue->xsk_pool;
-> +	dma_addr_t mapping;
-> +	u32 slot_available;
-> +	size_t bytes = 0;
-> +	u32 batch;
-> +
-> +	guard(spinlock_irqsave)(&queue->tx_ptr_lock);
-> +
-> +	/* This is a hard error, log it. */
-> +	slot_available = CIRC_SPACE(queue->tx_head, queue->tx_tail, bp->tx_ring_size);
-> +	if (slot_available < 1) {
-> +		netif_stop_subqueue(bp->dev, queue_index);
-> +		netdev_dbg(bp->dev, "tx_head = %u, tx_tail = %u\n",
-> +			   queue->tx_head, queue->tx_tail);
-> +		return;
-> +	}
-> +
-> +	batch = min_t(u32, slot_available, budget);
-> +	batch = xsk_tx_peek_release_desc_batch(xsk, batch);
-> +	if (!batch)
-> +		return;
-> +
-> +	for (u32 i = 0; i < batch; i++) {
-> +		struct xdp_desc *desc = &xsk->tx_descs[i];
-> +
-> +		mapping = xsk_buff_raw_get_dma(xsk, desc->addr);
-> +		xsk_buff_raw_dma_sync_for_device(xsk, mapping, desc->len);
-> +
-> +		macb_xdp_submit_buff(bp, queue_index, (struct macb_tx_buff){
-> +			.ptr = NULL,
-> +			.mapping = mapping,
-> +			.size = desc->len,
-> +			.mapped_as_page = false,
-> +			.type = MACB_TYPE_XSK,
-> +		});
-> +
-> +		bytes += desc->len;
-> +	}
-> +
-> +	/* Make newly initialized descriptor visible to hardware */
-> +	wmb();
-> +	spin_lock(&bp->lock);
-> +	macb_writel(bp, NCR, macb_readl(bp, NCR) | MACB_BIT(TSTART));
-> +	spin_unlock(&bp->lock);
+> ...
+> 
+>>
+>> -     if (addr < vm_map_base)
+>> +     if ((unsigned long)addr < vm_map_base)
+>>                return 0;
+>>
+>> -     return __set_memory(addr, 1, __pgprot(0), __pgprot(_PAGE_PRESENT | _PAGE_VALID));
+>> +     return __set_memory((unsigned long)addr, 1, __pgprot(0),
+>> +                         __pgprot(_PAGE_PRESENT | _PAGE_VALID));
+> 
+> And cast it to (unsigned long) even though not required two times? :)
+> 
+> I assume you wanted to get rid of the local varable.
 
-this lock is also taken in interrupt context, this should probably use a
-irqsave/restore variant. Now, there are a few other parts of this driver
-that use a plain spin_lock() call and except for the paths that actually
-run in interrupt context, they don't seem correct to me :(
+Yes, that's what I meant.
 
-Maxime
+> 
+>>   }
+>>
+>> -int set_direct_map_valid_noflush(struct page *page, unsigned nr, bool valid)
+>> +int set_direct_map_valid_noflush(const void *addr, unsigned long numpages,
+>> +                              bool valid)
+> 
+> 
+> 
+> Nothing else jumped at me.
+> 
+> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
+Thanks!
+
+> 
+> It would be good to get some ACK from some arch people that are CCed :)
+> 
+> --
+> Cheers,
+> 
+> David
 
