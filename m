@@ -1,241 +1,90 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95E9D1B6D08;
-	Fri,  6 Mar 2026 05:03:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFED236D4FA
+	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 05:18:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772773421; cv=none; b=Hc0469/Or+X2INsIRtR0810hlr1fMg4kC+wLooPxiRkFKXFAu2oDK3TRoXlN6ua8548K0Pp3DqZvjntGnplxAgRY5n9ZVGb3f1HEknNAdTrvt/ojSOoAJyqRAof2ZR9nkr4U7NKlLsXGJYav9r3Njrl0aAPouMkB4P5EAdbXP8s=
+	t=1772774284; cv=none; b=MTxBw89ZqN/rXNyY3FCJ6j/6rEInlv3niMSi0Cvh5BlP8oI5QgOZR5OUvChAl5LIhYuG/UQAPFITTO4hTDO66i+jJBhQkPx/AffkdXQmVr0pRj9KM43iwtLuIDck5lLYtIWUhP05T8qOAHJdq0wgoWr+Ufbn9p47P1TYaiGzIJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772773421; c=relaxed/simple;
-	bh=qUJeOEsw+vRKzQDz95vJjk1nAfCEPoWenvORmi/vglc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qrW03ATZ2OLyzaIL3B6UPQd43n/ZhztmxX0FGu8QlUGmVch/5XfiGZX51NcHqPU4v7unYfqa2v+wYWqvs1xmtoaNcDusur+bqNGiALQR7I4L1RZl+Np3VMFA2b3v12vSAmoDvCS04CGpwRmPtI585P38RcUuZJGeaUKkEvhkmF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=XmJzkqhS; arc=none smtp.client-ip=117.135.210.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1772774284; c=relaxed/simple;
+	bh=on1Qkb4/RzoXx3b8AOjJIK8cGF7ipXEdpeHhB3e7bjo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tizwpcUrqyNiCOUZAvV/fLvafphZX+bTWDUrb4MCNw+Cew1P5MIXZGDQpLwrkg6nJAqsEqGWLDlUGqjZY9ZI9A78P22BljvkGTrB009nbORmy5hbUoJZwEhX82kD44+9N8ODfYCg/u81kNNjRdKrWS+IcCImhquYjXburiLzu4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=GskxK25P; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="XmJzkqhS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
-	Content-Type; bh=MZkqtGswibcF4EQ0oKUujrPCkLwNqRBJ1gUrWyQ6mq4=;
-	b=XmJzkqhSif/KJmEzFj0D7/aItuzCRbLQe11TwIDquQKRBt5eJlTLFX0AMPYoiI
-	/ONTvoaTFBvSamj3ZO6d7grlcYBxhk7kV4qmHOs+iaCt/Caxg7uxAuAojZ7xFpdH
-	Tra1ZkKq1LRFu0JIJ+LKcygDWdhlSvsf/kGXR3iEygXF4=
-Received: from [10.54.24.32] (unknown [])
-	by gzga-smtp-mtada-g1-1 (Coremail) with SMTP id _____wC37PmmX6ppmnCsOA--.52670S2;
-	Fri, 06 Mar 2026 13:01:28 +0800 (CST)
-Message-ID: <2192e9ef-894f-4826-b296-4f90e973a31b@163.com>
-Date: Fri, 6 Mar 2026 13:01:26 +0800
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="GskxK25P"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-439bc14dcf4so3259429f8f.1
+        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 21:18:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1772774280; x=1773379080; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sa/utmtpkkddihbWQ7xCVwU5KKj90Lo/Fkfn7w7Y8qI=;
+        b=GskxK25P9au3JYcH4Ryrh1Yt8HOzhek/JrbtHGSsS3mPMdee/RtZh5PmRAvX2mJLPL
+         Xp3SWk+62A+IJIzMxJJgk7wQPVoADSAUVStT6vIFGftgXkVJP0Z+f4CsCxB37qYQJhZi
+         nYrTjj4Lob+cBXK5NRfuzM48LGHdYoCPCME7p81zjWgxrIHKJTucnJ06SixkB0hO5gYj
+         dGyhqNNiO3zSw93+OfolrIqmYQdeyCknMyDtHdmvCvKLLbKpviG+g2aXzIFmj10PkFQi
+         S0TGXxQvtmZzHlhrKSZyeYPSBrJxjAhT+Hov4l1AXpJdiVkJMgQSFyn1UhGqt1mpPVcR
+         j5VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772774280; x=1773379080;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Sa/utmtpkkddihbWQ7xCVwU5KKj90Lo/Fkfn7w7Y8qI=;
+        b=W7DyDqWmI3pVF3shndYFRyA96W7fWDKr9scCGQOj06ipz5xRoHA5LkHZRsvdki/PWh
+         BPhEDaYiS3gkWraqQ5u8010jNaxHrRPIIbdyMB+TSu/UqOUe9XJSfj4eUGhvRtlupETi
+         IePq9lbZhjrv/TyA/t+eSQblVI33Gt1Y5fa3VXUEWZszJ2dWwzjMx3WjsBmbbYzbYlIg
+         dEoCSaedH7XoZRUBYeqTpOjA5bMFZaTTbQ1rZw5wernF/XvQbDf4W5MHbDNc4aSC6MGB
+         UzNbKGaI/nmq8APWUMczKC+FsRe6NcSd5bA4Knl0M1n8eRyWKw7iv7Hc/zBxalJ/1SHg
+         j/yg==
+X-Gm-Message-State: AOJu0YyY4qWWhbok7kzF4Gu1XjqWwsla4twhEkQFteluiXQFk7ziQclM
+	OVnmCh7FRlDDv0CIEvOXAP5Ui4kMQgNj/Du0CospEImFV0vMgehfhPCMEfFCIVoyNcg=
+X-Gm-Gg: ATEYQzzMys8DPjBb1Yy2bJft9mjiIs32JD3BAxe3z/vJf6e6j26icCoO8udhMcQbYpt
+	+c7M/kOChtzxdDB6mHsHirsSitsF550iHzv41gTO9LJXeSNP5WA7m8Z9uJHQtWinYqdo/O3Ahbs
+	JCFCcfSZp8v7T+a7eX00sSAhYhZ55/AmP2JaTwVhnyd+E5GIClIqJOEMP5jqJRgaDyNc4F53niE
+	f6vHvpTsCUhkNhkv8sKbkAU25ZZfjEBroViH2ZV4D7fnyhAFfOfPYH0ksVu5HLlQs8iQ9vHd/Xi
+	lcuuR6P80yB2wzF/lYlVeGk8aps2KRWCWZqUy1B3YOPnjmRl6UwZEi54mcx/uHPi3X882E3q7wt
+	49sdq/Prew2GQ7bYEESSqcKWvKnxsKgQnuM8S0UiNKdF5Bq9/6hF40sjufIfd3uGSzWhiBEG/N5
+	m2NvaNKGxfaiObr7OSads=
+X-Received: by 2002:a05:600c:8586:b0:47e:e0b3:2437 with SMTP id 5b1f17b1804b1-4851ee73b5dmr78728615e9.5.1772774279864;
+        Thu, 05 Mar 2026 21:17:59 -0800 (PST)
+Received: from u94a ([2401:e180:8d04:ef14:c2ab:34a8:92f4:47b8])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae83e57740sm4838825ad.15.2026.03.05.21.17.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Mar 2026 21:17:58 -0800 (PST)
+Date: Fri, 6 Mar 2026 13:17:50 +0800
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com, 
+	yonghong.song@linux.dev, emil@etsalapatis.com, arighi@nvidia.com
+Subject: Re: [PATCH bpf v2 0/2] bpf: refine u32/s32 bounds when ranges cross
+ min/max boundary
+Message-ID: <zr5324tfnwrgnui7m4aub3kvpna5hcwsu6uorzx7awzdjhil53@hyf2fkn63532>
+References: <20260305-bpf-32-bit-range-overflow-v2-0-7169206a3041@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v3 5/5] bpf, sockmap: Adapt for af_unix-specific lock
-To: Michal Luczaj <mhal@rbox.co>, John Fastabend <john.fastabend@gmail.com>,
- Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>,
- Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Willem de Bruijn <willemb@google.com>, "David S. Miller"
- <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>,
- Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Cong Wang <cong.wang@bytedance.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
- <20260306-unix-proto-update-null-ptr-deref-v3-5-2f0c7410c523@rbox.co>
-From: Jiayuan Chen <mrpre@163.com>
-In-Reply-To: <20260306-unix-proto-update-null-ptr-deref-v3-5-2f0c7410c523@rbox.co>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wC37PmmX6ppmnCsOA--.52670S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW3Ar4xur18Jr18trWftr1UKFg_yoWxJr1rpF
-	Z0kF4xGrWDJryxXr4fA3s2vrWkuanYg3W5Kas7XayrAFZFgr1fuw4DGFZ2vr90yrZFkF1U
-	Jw17Kr4kA3yUJ37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UyVbgUUUUU=
-X-CM-SenderInfo: xpus2vi6rwjhhfrp/xtbCwwkHrmmqX6ks5gAA3c
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260305-bpf-32-bit-range-overflow-v2-0-7169206a3041@gmail.com>
 
+On Thu, Mar 05, 2026 at 11:48:21AM -0800, Eduard Zingerman wrote:
+> Cover the following cases in range refinement logic for 32-bit ranges:
+> - s32 range crosses U32_MAX/0 boundary, positive part of the s32 range
+>   overlaps with u32 range.
+> - s32 range crosses U32_MAX/0 boundary, negative part of the s32 range
+>   overlaps with u32 range.
+> 
+> These cases are already handled for 64-bit range refinement.
 
-On 3/6/26 7:30 AM, Michal Luczaj wrote:
-> unix_stream_connect() sets sk_state (`WRITE_ONCE(sk->sk_state,
-> TCP_ESTABLISHED)`) _before_ it assigns a peer (`unix_peer(sk) = newsk`).
-> sk_state == TCP_ESTABLISHED makes sock_map_sk_state_allowed() believe that
-> socket is properly set up, which would include having a defined peer. IOW,
-> there's a window when unix_stream_bpf_update_proto() can be called on
-> socket which still has unix_peer(sk) == NULL.
->
->            T0 bpf                            T1 connect
->            ------                            ----------
->
->                                  WRITE_ONCE(sk->sk_state, TCP_ESTABLISHED)
-> sock_map_sk_state_allowed(sk)
-> ...
-> sk_pair = unix_peer(sk)
-> sock_hold(sk_pair)
->                                  sock_hold(newsk)
->                                  smp_mb__after_atomic()
->                                  unix_peer(sk) = newsk
->
-> BUG: kernel NULL pointer dereference, address: 0000000000000080
-> RIP: 0010:unix_stream_bpf_update_proto+0xa0/0x1b0
-> Call Trace:
->    sock_map_link+0x564/0x8b0
->    sock_map_update_common+0x6e/0x340
->    sock_map_update_elem_sys+0x17d/0x240
->    __sys_bpf+0x26db/0x3250
->    __x64_sys_bpf+0x21/0x30
->    do_syscall_64+0x6b/0x3a0
->    entry_SYSCALL_64_after_hwframe+0x76/0x7e
->
-> Initial idea was to move peer assignment _before_ the sk_state update[1],
-> but that involved an additional memory barrier, and changing the hot path
-> was rejected. Then a check during proto update was considered[2], but a
-> follow-up discussion[3] concluded the root cause is sockmap taking a wrong
-> lock. Or, more specifically, an insufficient lock[4].
->
-> Thus, teach sockmap about the af_unix-specific locking: af_unix protects
-> critical sections under unix_state_lock() operating on unix_sock::lock.
->
-> [1]: https://lore.kernel.org/netdev/ba5c50aa-1df4-40c2-ab33-a72022c5a32e@rbox.co/
-> [2]: https://lore.kernel.org/netdev/20240610174906.32921-1-kuniyu@amazon.com/
-> [3]: https://lore.kernel.org/netdev/7603c0e6-cd5b-452b-b710-73b64bd9de26@linux.dev/
-> [4]: https://lore.kernel.org/netdev/CAAVpQUA+8GL_j63CaKb8hbxoL21izD58yr1NvhOhU=j+35+3og@mail.gmail.com/
->
-> Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
-> Suggested-by: Martin KaFai Lau <martin.lau@linux.dev>
-> Fixes: c63829182c37 ("af_unix: Implement ->psock_update_sk_prot()")
-> Signed-off-by: Michal Luczaj <mhal@rbox.co>
-> ---
->   net/core/sock_map.c | 35 +++++++++++++++++++++++++++++------
->   1 file changed, 29 insertions(+), 6 deletions(-)
->
-> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-> index 7ba6a7f24ccd..6109fbe6f99c 100644
-> --- a/net/core/sock_map.c
-> +++ b/net/core/sock_map.c
-> @@ -12,6 +12,7 @@
->   #include <linux/list.h>
->   #include <linux/jhash.h>
->   #include <linux/sock_diag.h>
-> +#include <net/af_unix.h>
->   #include <net/udp.h>
->   
->   struct bpf_stab {
-> @@ -115,19 +116,43 @@ int sock_map_prog_detach(const union bpf_attr *attr, enum bpf_prog_type ptype)
->   }
->   
->   static void sock_map_sk_acquire(struct sock *sk)
-> -	__acquires(&sk->sk_lock.slock)
->   {
->   	lock_sock(sk);
-> +
-> +	if (sk_is_unix(sk))
-> +		unix_state_lock(sk);
-> +
->   	rcu_read_lock();
->   }
->   
+LGTM.
 
-This introduces a new ordering constraint: lock_sock() before
-unix_state_lock(). Kuniyuki flagged in the v2 review that taking
-lock_sock() inside unix_state_lock() in the future would create an
-ABBA deadlock, which is exactly why the order was settled this way. However,
-the thread did not reach a conclusion on whether that constraint should be
-documented in the code.
-
-Since there is nothing enforcing this ordering mechanically, a brief comment
-at sock_map_sk_acquire() would help future readers avoid introducing the
-inverse ordering.
-
-
->   static void sock_map_sk_release(struct sock *sk)
-> -	__releases(&sk->sk_lock.slock)
->   {
->   	rcu_read_unlock();
-> +
-> +	if (sk_is_unix(sk))
-> +		unix_state_unlock(sk);
-> +
->   	release_sock(sk);
->   }
->   
-> +static inline void sock_map_sk_acquire_fast(struct sock *sk)
-> +{
-> +	local_bh_disable();
-> +	bh_lock_sock(sk);
-> +
-> +	if (sk_is_unix(sk))
-> +		unix_state_lock(sk);
-> +}
-> +
-
-
-v2 and v3 differ here in a way that deserves a closer look. In v2, AF_UNIX
-sockets took only unix_state_lock() in the fast path, skipping
-bh_lock_sock() entirely:
-
-/* v2 */
-if (sk_is_unix(sk))
-   unix_state_lock(sk);
-else
-   bh_lock_sock(sk);
-
-v3 takes both for AF_UNIX sockets.
-
-bh_lock_sock() protects sock::sk_lock.slock, whereas the state that
-actually needs protection here — sk_state and unix_peer() — lives under
-unix_sock::lock. Since unix_state_lock() is already sufficient to close
-the race against unix_stream_connect(), is bh_lock_sock() still doing
-anything useful for AF_UNIX sockets in this path?
-
-The v3 changelog attributes "Keep lock_sock() along with unix_state_lock()"
-to Kuniyuki, but that comment appears to concern sock_map_sk_acquire()
-(the slow path); the fast path behaviour change was not explicitly discussed
-in the v2 thread.
-
-If bh_lock_sock() is redundant for AF_UNIX here, reverting to the v2
-approach would reduce unnecessary lock contention. If it is still needed,
-a comment explaining what it protects for AF_UNIX sockets would help.
-
-> +static inline void sock_map_sk_release_fast(struct sock *sk)
-> +{
-> +	if (sk_is_unix(sk))
-> +		unix_state_unlock(sk);
-> +
-> +	bh_unlock_sock(sk);
-> +	local_bh_enable();
-> +}
-> +
->   static void sock_map_add_link(struct sk_psock *psock,
->   			      struct sk_psock_link *link,
->   			      struct bpf_map *map, void *link_raw)
-> @@ -604,16 +629,14 @@ static long sock_map_update_elem(struct bpf_map *map, void *key,
->   	if (!sock_map_sk_is_suitable(sk))
->   		return -EOPNOTSUPP;
->   
-> -	local_bh_disable();
-> -	bh_lock_sock(sk);
-> +	sock_map_sk_acquire_fast(sk);
->   	if (!sock_map_sk_state_allowed(sk))
->   		ret = -EOPNOTSUPP;
->   	else if (map->map_type == BPF_MAP_TYPE_SOCKMAP)
->   		ret = sock_map_update_common(map, *(u32 *)key, sk, flags);
->   	else
->   		ret = sock_hash_update_common(map, key, sk, flags);
-> -	bh_unlock_sock(sk);
-> -	local_bh_enable();
-> +	sock_map_sk_release_fast(sk);
->   	return ret;
->   }
->   
->
-
+Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
