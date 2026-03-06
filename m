@@ -1,208 +1,237 @@
-Received: from mail.kxxt.dev (mail.kxxt.dev [74.48.220.112])
+Received: from fra-out-011.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-011.esa.eu-central-1.outbound.mail-perimeter.amazon.com [52.28.197.132])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8701D2AE78
-	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 15:40:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.48.220.112
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 523B42AE78;
+	Fri,  6 Mar 2026 15:41:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.28.197.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772811637; cv=none; b=U491t/ArYO1Ca+MFBwX/7Y6iDw8zkuluAqmVx3HfRqL6Mq6MZAK/x5dl3aApf+BtagvS1w2UUZsZBVc1yeMRdMyDUFeEGAnqh7SxYhjX5yGYFc+in1Z5cKQAEH5INDw5Oe6xmaKWqFfXx9JMAEPu3cTBb5FQTBPZgJPxQczGh7I=
+	t=1772811718; cv=none; b=ZwFiFr9ZB31V8bmePgMPP42kulWoFzUGQtEUpxnuYNoeJ19QnTL2Y4urHwgj47+eqPLz35c8GEhvJduxc9jORuwwc+TGhAqpyE6GD0sPzTNuRlWxnt8UPqJTS58FdpQaiLdculSE3phIyM/FVmGP5X6UnMOFHEiKPTKjpTU4KxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772811637; c=relaxed/simple;
-	bh=RWfdfhpQLspD6jFW3F/z0gM0UgOVvdsd+ZC1M9yqRcM=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=UP91x1Nkj164lLixY6G1j3WuLKQJedEaCM0l7gMD5mbXkUBBnjr4fM18e1xm81FbcDLZAxgxywk1HP+GznoxSwQdAw6oj6OUoGJIDRPjX5g+GXsNBtSGDAga6+PqHxifPdsgQLPo2T/fywBolgpaFs4RV6NqACLZIF8urckwvqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kxxt.dev; spf=pass smtp.mailfrom=kxxt.dev; dkim=pass (1024-bit key) header.d=kxxt.dev header.i=@kxxt.dev header.b=Z90UmeTD; arc=none smtp.client-ip=74.48.220.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kxxt.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kxxt.dev
+	s=arc-20240116; t=1772811718; c=relaxed/simple;
+	bh=C+TIi3OVTHeU4/YpXmPN6ChBPTVFEYpeWN7RdHrTOB0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=SAvzZ8OcWsGF8JYYqBkSw8QPFBPIvaXPQaXxJ9ez8frlcC49sADJzDw4kjDUsnjAa3cX/IbfEYWliC0RUnlnuLXUtEMeZ5FDi0jFsgnjW0NuU+G3PPdRmuibScAuoD48GvwSlWZt1nrrYQJYlLsuRBSGJD7NzYa6Jj2Qagb8n3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=Q70p8Ep7; arc=none smtp.client-ip=52.28.197.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=kxxt.dev header.i=@kxxt.dev header.b="Z90UmeTD"
-Message-ID: <6d4f5665-6b46-40b4-bf87-5c800dda1279@kxxt.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kxxt.dev; s=mail;
-	t=1772811634;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=B3ONmoVRrRRgbUnP+44hQXbI6hSzlK51jFNlydfEAdA=;
-	b=Z90UmeTD9uauuxVBpXPv2+1R33+68LI+6EDxduHs4CrSNqlu+kNcmt231Ps816Vn3QtEPR
-	AwGIBW3VSLteDY+KxHaEIet+dfWqEe48fvjkoAuNLUn4T0G1AmxufHSxAhvOZuzlyg6DGS
-	n8shZer35kGmG5YMlQ4pFuT1N9AsSlo=
-Date: Fri, 6 Mar 2026 23:40:30 +0800
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="Q70p8Ep7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1772811717; x=1804347717;
+  h=message-id:date:mime-version:reply-to:subject:to:cc:
+   references:from:in-reply-to:content-transfer-encoding;
+  bh=YnCR77bPkSJ3r6eLW+FO2o4FnCnPBwwukZtKN2qmask=;
+  b=Q70p8Ep7xTsO1OjUkZDaSu/LtGmJkPOnsximK4zz8H5Hwc1tTSiDw7oH
+   9HPDs6IfqZ3oSYsICpF6Bsjv8TeXlTQ3wxuhrcLAq0iqYDJfvUZtGvq4/
+   3Z/zcWbd+RFfstDg3YgQi/yEaPOoNe6/ANtf/FvfjZRYMhAaAj5kyCLwt
+   7B/7qhOI1F/o1FWGeUd3HyiPcX/YXNEuHM3wYWMgo+RvFnAUnTm13NLPA
+   z5yjLKmmh850P1bus51dooK/hU6qY25VurrCLt4FCnjy3T/eflPoKk/iG
+   pizqSDUVqydIAi0GV8PfBmg0/iqZVvCiQdzuu4UKgV/i+QHG4EgeF9D+U
+   w==;
+X-CSE-ConnectionGUID: GwEkaMEOTMKbobqyy3yX9A==
+X-CSE-MsgGUID: di4IC+oOQpGwVPpG+YbSbA==
+X-IronPort-AV: E=Sophos;i="6.23,105,1770595200"; 
+   d="scan'208";a="10322839"
+Received: from ip-10-6-11-83.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.11.83])
+  by internal-fra-out-011.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2026 15:41:52 +0000
+Received: from EX19MTAEUA002.ant.amazon.com [54.240.197.232:9370]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.46.96:2525] with esmtp (Farcaster)
+ id 5185657e-5145-4540-97b1-c86cd60d47dd; Fri, 6 Mar 2026 15:41:52 +0000 (UTC)
+X-Farcaster-Flow-ID: 5185657e-5145-4540-97b1-c86cd60d47dd
+Received: from EX19D005EUB003.ant.amazon.com (10.252.51.31) by
+ EX19MTAEUA002.ant.amazon.com (10.252.50.124) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
+ Fri, 6 Mar 2026 15:41:52 +0000
+Received: from [192.168.2.180] (10.106.83.26) by EX19D005EUB003.ant.amazon.com
+ (10.252.51.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37; Fri, 6 Mar 2026
+ 15:41:47 +0000
+Message-ID: <5c322be7-ea81-4e6a-9689-978c35e93af6@amazon.com>
+Date: Fri, 6 Mar 2026 15:41:45 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 0/2] bpf: calls to bpf_loop() should have an SCC and
- accumulate backedges
-From: Levi Zim <i@kxxt.dev>
-To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
- ast@kernel.org, andrii@kernel.org
-Cc: daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com,
- yonghong.song@linux.dev
-References: <20251229-scc-for-callbacks-v1-0-ceadfe679900@gmail.com>
- <ed857a23-bd73-4915-b080-558b5934bc8f@kxxt.dev>
- <79ac0188db82c675e62c36c8ab036b45cef3f3f7.camel@gmail.com>
- <632021d4-9401-4c3a-af4c-bdb450add34f@kxxt.dev>
+User-Agent: Mozilla Thunderbird
+Reply-To: <kalyazin@amazon.com>
+Subject: Re: [PATCH v10 02/15] set_memory: add folio_{zap, restore}_direct_map
+ helpers
+To: "David Hildenbrand (Arm)" <david@kernel.org>, "Kalyazin, Nikita"
+	<kalyazin@amazon.co.uk>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
+	<kvmarm@lists.linux.dev>, "linux-fsdevel@vger.kernel.org"
+	<linux-fsdevel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"kernel@xen0n.name" <kernel@xen0n.name>, "linux-riscv@lists.infradead.org"
+	<linux-riscv@lists.infradead.org>, "linux-s390@vger.kernel.org"
+	<linux-s390@vger.kernel.org>, "loongarch@lists.linux.dev"
+	<loongarch@lists.linux.dev>
+CC: "pbonzini@redhat.com" <pbonzini@redhat.com>, "corbet@lwn.net"
+	<corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>, "oupton@kernel.org"
+	<oupton@kernel.org>, "joey.gouly@arm.com" <joey.gouly@arm.com>,
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "yuzenghui@huawei.com"
+	<yuzenghui@huawei.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"will@kernel.org" <will@kernel.org>, "seanjc@google.com" <seanjc@google.com>,
+	"tglx@kernel.org" <tglx@kernel.org>, "mingo@redhat.com" <mingo@redhat.com>,
+	"bp@alien8.de" <bp@alien8.de>, "dave.hansen@linux.intel.com"
+	<dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>,
+	"hpa@zytor.com" <hpa@zytor.com>, "luto@kernel.org" <luto@kernel.org>,
+	"peterz@infradead.org" <peterz@infradead.org>, "willy@infradead.org"
+	<willy@infradead.org>, "akpm@linux-foundation.org"
+	<akpm@linux-foundation.org>, "lorenzo.stoakes@oracle.com"
+	<lorenzo.stoakes@oracle.com>, "vbabka@suse.cz" <vbabka@suse.cz>,
+	"rppt@kernel.org" <rppt@kernel.org>, "surenb@google.com" <surenb@google.com>,
+	"mhocko@suse.com" <mhocko@suse.com>, "ast@kernel.org" <ast@kernel.org>,
+	"daniel@iogearbox.net" <daniel@iogearbox.net>, "andrii@kernel.org"
+	<andrii@kernel.org>, "martin.lau@linux.dev" <martin.lau@linux.dev>,
+	"eddyz87@gmail.com" <eddyz87@gmail.com>, "song@kernel.org" <song@kernel.org>,
+	"yonghong.song@linux.dev" <yonghong.song@linux.dev>,
+	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "kpsingh@kernel.org"
+	<kpsingh@kernel.org>, "sdf@fomichev.me" <sdf@fomichev.me>,
+	"haoluo@google.com" <haoluo@google.com>, "jolsa@kernel.org"
+	<jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>, "jhubbard@nvidia.com"
+	<jhubbard@nvidia.com>, "peterx@redhat.com" <peterx@redhat.com>,
+	"jannh@google.com" <jannh@google.com>, "pfalcato@suse.de" <pfalcato@suse.de>,
+	"shuah@kernel.org" <shuah@kernel.org>, "riel@surriel.com" <riel@surriel.com>,
+	"ryan.roberts@arm.com" <ryan.roberts@arm.com>, "jgross@suse.com"
+	<jgross@suse.com>, "yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>,
+	"kas@kernel.org" <kas@kernel.org>, "coxu@redhat.com" <coxu@redhat.com>,
+	"kevin.brodsky@arm.com" <kevin.brodsky@arm.com>, "ackerleytng@google.com"
+	<ackerleytng@google.com>, "maobibo@loongson.cn" <maobibo@loongson.cn>,
+	"prsampat@amd.com" <prsampat@amd.com>, "mlevitsk@redhat.com"
+	<mlevitsk@redhat.com>, "jmattson@google.com" <jmattson@google.com>,
+	"jthoughton@google.com" <jthoughton@google.com>, "agordeev@linux.ibm.com"
+	<agordeev@linux.ibm.com>, "alex@ghiti.fr" <alex@ghiti.fr>,
+	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>, "borntraeger@linux.ibm.com"
+	<borntraeger@linux.ibm.com>, "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+	"dev.jain@arm.com" <dev.jain@arm.com>, "gor@linux.ibm.com"
+	<gor@linux.ibm.com>, "hca@linux.ibm.com" <hca@linux.ibm.com>,
+	"palmer@dabbelt.com" <palmer@dabbelt.com>, "pjw@kernel.org" <pjw@kernel.org>,
+	"shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>,
+	"svens@linux.ibm.com" <svens@linux.ibm.com>, "thuth@redhat.com"
+	<thuth@redhat.com>, "wyihan@google.com" <wyihan@google.com>,
+	"yang@os.amperecomputing.com" <yang@os.amperecomputing.com>,
+	"Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
+	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "urezki@gmail.com"
+	<urezki@gmail.com>, "zhengqi.arch@bytedance.com"
+	<zhengqi.arch@bytedance.com>, "gerald.schaefer@linux.ibm.com"
+	<gerald.schaefer@linux.ibm.com>, "jiayuan.chen@shopee.com"
+	<jiayuan.chen@shopee.com>, "lenb@kernel.org" <lenb@kernel.org>,
+	"osalvador@suse.de" <osalvador@suse.de>, "pavel@kernel.org"
+	<pavel@kernel.org>, "rafael@kernel.org" <rafael@kernel.org>,
+	"vannapurve@google.com" <vannapurve@google.com>, "jackmanb@google.com"
+	<jackmanb@google.com>, "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>,
+	"patrick.roy@linux.dev" <patrick.roy@linux.dev>, "Thomson, Jack"
+	<jackabt@amazon.co.uk>, "Itazuri, Takahiro" <itazur@amazon.co.uk>,
+	"Manwaring, Derek" <derekmn@amazon.com>, "Cali, Marco"
+	<xmarcalx@amazon.co.uk>
+References: <20260126164445.11867-1-kalyazin@amazon.com>
+ <20260126164445.11867-3-kalyazin@amazon.com>
+ <af2d4dcd-60a8-4a5a-b508-d9600b1f2275@kernel.org>
+ <e2834fd9-e4ec-473c-90cd-6c3a5049747f@amazon.com>
+ <40bd6f9b-d5c0-4844-81bc-d221cd9b058f@kernel.org>
+ <38deb26a-918c-4743-b35f-92a1330dbf40@amazon.com>
+ <efc1c39c-7eb5-488f-819c-0ca2149898c3@kernel.org>
 Content-Language: en-US
-In-Reply-To: <632021d4-9401-4c3a-af4c-bdb450add34f@kxxt.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From: Nikita Kalyazin <kalyazin@amazon.com>
+In-Reply-To: <efc1c39c-7eb5-488f-819c-0ca2149898c3@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: EX19D007EUB003.ant.amazon.com (10.252.51.43) To
+ EX19D005EUB003.ant.amazon.com (10.252.51.31)
 
 
-On 3/6/26 5:41 PM, Levi Zim wrote:
-> On 2026-03-06 16:27, Eduard Zingerman wrote:
->> On Fri, 2026-03-06 at 16:20 +0800, Levi Zim wrote:
->>> Hi Eduard,
->>>
->>> On 2025-12-30 15:13, Eduard Zingerman wrote:
->>>> This is a correctness fix for the verification of BPF programs that
->>>> work with callback-calling functions. The problem is the same as the
->>>> issue fixed by series [1] for iterator-based loops: some of the states
->>>> created while processing the callback function body might have
->>>> incomplete read or precision marks.
->>>>
->>>> An example of an unsafe program that is accepted without this fix can
->>>> be found in patch #2.
->>>>
->>>> There is some impact on verification performance:
->>>>
->>>> File                             Program               Insns (A)  Insns (B)  Insns      (DIFF)
->>>> -------------------------------  --------------------  ---------  ---------  -----------------
->>>> pyperf600_bpf_loop.bpf.o         on_event                   4247       9985   +5738 (+135.11%)
->>>> setget_sockopt.bpf.o             skops_sockopt              5719       7446    +1727 (+30.20%)
->>>> setget_sockopt.bpf.o             socket_post_create         1253       1603     +350 (+27.93%)
->>>> strobemeta_bpf_loop.bpf.o        on_event                   3424       7224   +3800 (+110.98%)
->>>> test_tcp_custom_syncookie.bpf.o  tcp_custom_syncookie      11929      38307  +26378 (+221.12%)
->>>> xdp_synproxy_kern.bpf.o          syncookie_tc              13986      23035    +9049 (+64.70%)
->>>> xdp_synproxy_kern.bpf.o          syncookie_xdp             13881      21022    +7141 (+51.44%)
->>> I see that the first patch in the series causes some impact on
->>> verification performance.
->>> The patch contains "Fixes:" tag for two commits that landed in 6.17 kernel:
->>>
->>> c9e31900b54c ("bpf: propagate read/precision marks over state graph backedges")
->>> 96c6aa4c63af ("bpf: compute SCCs in program control flow graph")
->>>
->>> I have a BPF program [1] that is badly affected by the patch that it no
->>> longer loads on 6.19.5 due to
->>> E2BIG error.
->>>
->>> The program consists of multiple nested bpf_loop calls as follows so I
->>> think the impact on it is expected.
->>>
->>> (entry point) func trace_exec_common
->>> -> (bpf_loop) callback read_strings for reading ARGV
->>> -> (bpf_loop) callback read_strings for reading ENVP
->>> -> (call) read_fds
->>>      -> (bpf_loop) callback read_fds_impl for iterating over the fdset
->>>         -> (bpf_loop) callback read_fdset_word for reading a single word in the fdset
->>>             -> (call) _read_fd for getting information from a single fd
->>>                 -> (call) read_send_path which reads the absolute path and mount info
->>>
->>>
->>> After the patch, I find that I need to comment out the
->>> bpf_loop(BITS_PER_LONG, read_fdset_word, &subctx, 0)
->>> statement in read_fds_impl function to make the eBPF program load.
->>>
->>> Does it mean that after the patch, the verification performance degraded
->>> significantly compared to older
->>> versions of kernel, e.g. 6.6 LTS? Or is it that older kernels are also
->>> impacted with the same sort of bug and
->>> currently waiting to be fixed?
->>>
->>> I am also exploring ways to fix my bpf program so that it could work on
->>> 6.19.4 and later kernels.
->>> It would be greatly appreciated if you could share some insights for
->>> fixing bpf programs that are badly
->>> affected by this patch.
 
-I do find a workaround in the end. For my special case, I am iterating over
-an fd bitmap with hand-written bpf code.
-
-After switching [1] to using bpf_iter_bits (introduced in v6.11), the bpf program
-could load again.
-
-So it appears that after this patch, the verifier is no longer happy about my hand-written
-iteration over a bitmap using bpf_loop, find_next_bit and generic___ffs.
-
-[1]: https://github.com/kxxt/tracexec/compare/b2764f1346325546c2afc54035c9210a7cbea809...3ce0af209399add4566a4bdb316a103890d4a6b4
-
->> Hi Levi,
-> 
-> Hi Eduard,
-> 
-> Thanks for your quick reply!
+On 06/03/2026 15:17, David Hildenbrand (Arm) wrote:
+> On 3/6/26 15:48, Nikita Kalyazin wrote:
 >>
->> I'll take a detailed look tomorrow, but am curious if patch-set [1]
->> helps with your program? As far as I understand it is not a part of
->> 6.19, as it was not marked as "fixes".
-> 
-> The patch-set is in v7.0-rc2 so I tested my program on v7.0-rc2 but it still doesn't load.
-> However, the logs are slightly different.
-> 
-> The log from v7.0-rc2 is shorter than the one I got from v6.19.4 and the metrics are slightly different:
-> 
-> From 6.19.4:
-> 
-> BPF program is too large. Processed 1000001 insn
-> processed 1000001 insns (limit 1000000) max_states_per_insn 46 total_states 48940 peak_states 103941 mark_read 0
-> 
-> From 7.0-rc2:
-> 
-> BPF program is too large. Processed 1000001 insn
-> processed 1000001 insns (limit 1000000) max_states_per_insn 55 total_states 46639 peak_states 99877 mark_read 0
-> 
-> So I think the patch-set helped but still couldn't make the program load again.
-> 
-> If you want me to test the patch-set by applying it on top of 6.19.4, feel free to tell me.
-> 
-> Thanks,
-> Levi
-> 
 >>
->> [1] https://lore.kernel.org/bpf/20251230-loop-stack-misc-pruning-v1-0-585cfd6cec51@gmail.com/
->>
->> Thanks,
->> Eduard
->>
->>> [1]:
->>> https://github.com/kxxt/tracexec/blob/main/crates/tracexec-backend-ebpf/src/bpf/tracexec_system.bpf.c
+>> On 06/03/2026 14:17, David Hildenbrand (Arm) wrote:
+>>> On 3/6/26 13:48, Nikita Kalyazin wrote:
+>>>>
+>>>>
+>>>>
+>>>> Will update, thanks.
+>>>>
+>>>>
+>>>> Absolutely!
+>>>>
+>>>>
+>>>> Yes, on x86 we need an explicit flush.  Other architectures deal with it
+>>>> internally.
 >>>
->>> Thanks,
->>> Levi
+>>> So, we call a _noflush function and it performs a ... flush. What.
+>>
+>> Yeah, that's unfortunately the status quo as pointed by Aneesh [1]
+>>
+>> [1] https://lore.kernel.org/kvm/yq5ajz07czvz.fsf@kernel.org/
+>>
 >>>
->>>> Total progs: 4172
->>>> Old success: 2520
->>>> New success: 2520
->>>> total_insns diff min:    0.00%
->>>> total_insns diff max:  221.12%
->>>> 0 -> value: 0
->>>> value -> 0: 0
->>>> total_insns abs max old: 837,487
->>>> total_insns abs max new: 837,487
->>>>      0 .. 5    %: 4163
->>>>      5 .. 15   %: 2
->>>>     25 .. 35   %: 2
->>>>     50 .. 60   %: 1
->>>>     60 .. 70   %: 1
->>>>    110 .. 120  %: 1
->>>>    135 .. 145  %: 1
->>>>    220 .. 225  %: 1
->>>>
->>>> [1] https://lore.kernel.org/bpf/174968344350.3524559.14906547029551737094.git-patchwork-notify@kernel.org/
->>>>
->>>> ---
->>>> Eduard Zingerman (2):
->>>>         bpf: bpf_scc_visit instance and backedges accumulation for bpf_loop()
->>>>         selftests/bpf: test cases for bpf_loop SCC and state graph backedges
->>>>
->>>>    kernel/bpf/verifier.c                     | 13 ++++--
->>>>    tools/testing/selftests/bpf/progs/iters.c | 75 +++++++++++++++++++++++++++++++
->>>>    2 files changed, 84 insertions(+), 4 deletions(-)
->>>> ---
->>>> base-commit: f14cdb1367b947d373215e36cfe9c69768dbafc9
->>>> change-id: 20251219-scc-for-callbacks-d6d94faa2e43
->>>>
+>>> Take a look at secretmem_fault(), where we do an unconditional
+>>> flush_tlb_kernel_range().
+>>>
+>>> Do we end up double-flushing in that case?
+>>
+>> Yes, looks like that.  I'll remove the explicit flush and rely on
+>> folio_zap_direct_map().
+>>
+>>>
+>>>> Do you propose a bespoke implementation for x86 and a
+>>>> "generic" one for others?
+>>>
+>>> We have to find a way to have a single set of functions for all archs
+>>> that support directmap removal.
+>>
+>> I believe Dave meant to address that with folio_{zap,restore}
+>> _direct_map() [2].
+>>
+>> [2] https://lore.kernel.org/kvm/9409531b-589b-4a54-
+>> b122-06a3cf0846f3@intel.com/
+>>
+>>>
+>>> One option might be to have some indication from the architecture that
+>>> no flush_tlb_kernel_range() is required.
+>>>
+>>> Could be a config option or some simple helper function.
+>>
+>> I'd be inclined to know what arch maintainers think because I don't have
+>> a strong opinion on that.
 > 
+> You could also just perform a double flush, and let people that
+> implemented a _noflush() to perform a flush optimize that later.
+
+Do you propose to just universalise the one from x86?
+
+int folio_zap_direct_map(struct folio *folio)
+{
+	const void *addr = folio_address(folio);
+	int ret;
+
+	ret = set_direct_map_valid_noflush(addr, folio_nr_pages(folio), false);
+	flush_tlb_kernel_range((unsigned long)addr,
+			       (unsigned long)addr + folio_size(folio));
+
+	return ret;
+}
+
+I'm fine with that too.
+
+> 
+> I mean, that's what secretmem did :)
+
+With the solution above, secretmem stays where it was: no optimisation 
+so far :)
+
+> 
+> --
+> Cheers,
+> 
+> David
 
