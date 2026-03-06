@@ -1,133 +1,218 @@
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D6C6313E2C;
-	Fri,  6 Mar 2026 14:06:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F098292B44;
+	Fri,  6 Mar 2026 14:08:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772806020; cv=none; b=aBlDg+ABqfCMSD+Cwg15+9aRSJjwuALY9eZYlvgrz6PmVzvTUknGBNNCUBTOPumQ2O+gHvtSudX8RAIJhMXMt5AddyO7v0LSr2uBWwMFZTowpwGK+4ZBtR5k7Xr3cvtLh03CWvF1ZOfg9tEiWAV4hIvy73WSHId0VyWvMfxb/JA=
+	t=1772806113; cv=none; b=gEafP0H8Mldsb1Np0YUWbzfcEzbvyvJne8yvZO/oiAFIWxaIa4AH9nHSOomg9WIqtTuWgfiWwDHDKCPCJeL/ao5pcNTSJhYkB1La/JlINdteHCPLmZvSNcmbwp87BEYRYw/xsXSgX4SQitv+76tYtjrgeurq0VscGYETmV3vSPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772806020; c=relaxed/simple;
-	bh=zOMrDzt6Kt+O7lNavb64k4pt1LqFU3bftY7nK/1uQZA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KqWLnenCnwvaeuw/qjgPxQaUCsszY3h9lxVRdaJPJ+wXDLV5XL7LyTAWnAjai8ZpnaT6v8BCo90PFITzspY/fyt5vuLuRKK6Z8nZS9EqQQABO7HokeaAKD+kaLfOYzcDfWgfo6VWdQToVDMx3X+R8shUGPaSRhxZSR2CrWYQpwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=tZ88noAj; arc=none smtp.client-ip=185.226.149.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1772806113; c=relaxed/simple;
+	bh=4MdGIbdndDFCXfwOf0TVp8VdxUpp+s5KJh5cTZCa4y4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:
+	 In-Reply-To:References:To:Cc; b=uPFn0wY3tYxlnHlkoMR8rFoydLYmJe6HMlNGoS0dU2EgPYGJzpMORFuYMdra92wLyBtcnunevc6oOQkWpwsctb21la73LJ8Lf3Bj2ho09CcCbnHNx4WNAQhJ1TTFwkLP+XTvZLVDCzO9Xf2XcXh/my4ya7IodPKBxsLdZWFEXHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Il8W8Q5C; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="tZ88noAj"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1vyVpA-002b4g-Us; Fri, 06 Mar 2026 15:06:40 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
-	bh=tC4hDySprxrT/Gr+j4+xPNKNNmZSdgwoLCHwVwT6ztI=; b=tZ88noAjFpW5Nv/sqE9VS4pza5
-	hPbP4uJ4fe57vF2JmAJ/yKvFEzygbyKWj3mC5t/ylL+43p/IFKIzQFzZyS3gjCR5V9WMm1IKZpBB3
-	liXKtSTtDgsyRZqZxlm79Ncm0HpPJOAXL1O81qTCMRBZKT1flLqgBD66rm8bkVA+XEthNDMYstXE8
-	ipngfsGAbLtFtLQ69Dhze++67yIKq+eqE5UE0gUa+MZKStoDUec4Y7XjHz5kJ/FLuw84ZSbd6tGgr
-	3U6P4zbehVpOOi+kfCEndJeH8JYHTsoksN9R/BTXvYp3mzsgfBRbcdsT1jsSEz+OGyxDq91UQbDMl
-	3JvQNP/A==;
-Received: from [10.9.9.74] (helo=submission03.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1vyVpA-0001kw-Ba; Fri, 06 Mar 2026 15:06:40 +0100
-Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1vyVor-0008GC-Mo; Fri, 06 Mar 2026 15:06:21 +0100
-Message-ID: <6b02c177-69a2-4e08-a936-65bfa8e85b7e@rbox.co>
-Date: Fri, 6 Mar 2026 15:06:18 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Il8W8Q5C"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D38C8C2BC86;
+	Fri,  6 Mar 2026 14:08:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772806113;
+	bh=4MdGIbdndDFCXfwOf0TVp8VdxUpp+s5KJh5cTZCa4y4=;
+	h=From:Date:Subject:In-Reply-To:References:To:Cc:From;
+	b=Il8W8Q5CS7L7P0bqo7Us0iIYS+WhXJUOEb6CER6p4507+nweqA6pmTUkrTmWKCZYn
+	 OcMUvncMKjCPahYcsW24aDEqyWlWu3DzoJtoi5MRomgR/HzTR6VX3O/tBeVLMrwKrY
+	 j9b+uiS/Kwojk05jNdKZtMdJbv6/1KhgO+h4IQunQvYBLez6uqQUX5IEL07z+iNiir
+	 1jgUYbWkiYKuJHWUfPbP0AWg0LSS5lQyVXjyZbtEbdk5J9JFKqVQWbXsG5WKIEMiFq
+	 SzBVSkbHuDK9UsrqBOaU3Le1NLR/mdH5shVNxcd6RGbDQ4Lpby7lVEjcBR7F7+AIzM
+	 d7momE3le035w==
+From: Christian Brauner <brauner@kernel.org>
+Date: Fri, 06 Mar 2026 15:07:31 +0100
+Subject: [PATCH] kthread: remove kthread_exit()
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v3 3/5] bpf, sockmap: Fix af_unix iter deadlock
-To: Jiayuan Chen <jiayuan.chen@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>,
- Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>,
- Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Willem de Bruijn <willemb@google.com>, "David S. Miller"
- <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>,
- Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Cong Wang <cong.wang@bytedance.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
- <20260306-unix-proto-update-null-ptr-deref-v3-3-2f0c7410c523@rbox.co>
- <b2218c30-a704-4395-a67e-95c62b75586f@linux.dev>
-Content-Language: pl-PL, en-GB
-From: Michal Luczaj <mhal@rbox.co>
-In-Reply-To: <b2218c30-a704-4395-a67e-95c62b75586f@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260306-work-kernel-exit-v1-1-8f871f6281cb@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAKLfqmkC/yWMQQ7CIBBFr2JYi4FpC+hVjAsYphar1AxVmzS9u
+ 60u389/bxaFOFERp90smN6ppCGvoPc7gZ3PV5IprixAgVGVMvIzcC974kx3SVMaJZBr45EAwWu
+ xak+mNk2/5Pny5/IKN8Jx62yP4AvJwD5jt00PX0biA2plrWvQkovBh6hRu0ppr7Ey0NR1aKwz4
+ EAsyxdp09x5tgAAAA==
+X-Change-ID: 20260306-work-kernel-exit-2e8fd9e2c2a1
+In-Reply-To: <1ff1bce2-8bb4-463c-a631-16e14f4ea7e2@arm.com>
+References: <1ff1bce2-8bb4-463c-a631-16e14f4ea7e2@arm.com>
+To: linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
+ linux-nfs@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+ Aaron Tomlin <atomlin@atomlin.com>, Chuck Lever <chuck.lever@oracle.com>, 
+ Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
+ Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, 
+ Tom Talpey <tom@talpey.com>, Trond Myklebust <trondmy@kernel.org>, 
+ Anna Schumaker <anna@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>, 
+ Christian Loehle <christian.loehle@arm.com>, 
+ Linus Torvalds <torvalds@linux-foundation.org>, 
+ Christian Brauner <brauner@kernel.org>
+X-Mailer: b4 0.15-dev-1404c
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4745; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=4MdGIbdndDFCXfwOf0TVp8VdxUpp+s5KJh5cTZCa4y4=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWSuun9zi3BDvPhGva7N9jzc0WLt//ImTHJ6mbiAa1Jii
+ onw4sTFHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABM5xczIsFX3ReLthQdXXuNI
+ CpVK9/mw6GnZgm27IpN0cq2Sudb43Gb475566W5uru1bmY1O95xfbrj57apDYsOxuz2sZkqRSr3
+ C3AA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-On 3/6/26 07:04, Jiayuan Chen wrote:
-> On 3/6/26 7:30 AM, Michal Luczaj wrote:
->> @@ -3729,15 +3729,14 @@ static int bpf_iter_unix_seq_show(struct seq_file *seq, void *v)
->>   	struct bpf_prog *prog;
->>   	struct sock *sk = v;
->>   	uid_t uid;
->> -	bool slow;
->>   	int ret;
->>   
->>   	if (v == SEQ_START_TOKEN)
->>   		return 0;
->>   
->> -	slow = lock_sock_fast(sk);
->> +	lock_sock(sk);
->>   
->> -	if (unlikely(sk_unhashed(sk))) {
->> +	if (unlikely(sock_flag(sk, SOCK_DEAD))) {
->>   		ret = SEQ_SKIP;
->>   		goto unlock;
->>   	}
-> 
-> 
-> Switching to lock_sock() fixes the deadlock, but it does not provide mutual
-> exclusion with unix_release_sock(), which uses unix_state_lock() exclusively
-> and does not touch lock_sock() at all. So a dying socket can still reach the
-> BPF prog concurrently with unix_release_sock() running on another CPU.
+In 28aaa9c39945 ("kthread: consolidate kthread exit paths to prevent use-after-free")
+we folded kthread_exit() into do_exit() when we fixed a nasty UAF bug.
+We left kthread_exit() around as an alias to do_exit(). Remove it
+completely.
 
-That's right. Note that although the socket is dying, iter holds a
-reference to it, so the socket is far from being freed (as in: memory
-released).
+Reported-by: Christian Loehle <christian.loehle@arm.com>
+Link: https://lore.kernel.org/1ff1bce2-8bb4-463c-a631-16e14f4ea7e2@arm.com
+Signed-off-by: Christian Brauner <brauner@kernel.org>
+---
+ include/linux/kthread.h    | 1 -
+ include/linux/module.h     | 2 +-
+ include/linux/sunrpc/svc.h | 2 +-
+ kernel/bpf/verifier.c      | 1 -
+ kernel/kthread.c           | 8 ++++----
+ kernel/module/main.c       | 2 +-
+ lib/kunit/try-catch.c      | 2 +-
+ 7 files changed, 8 insertions(+), 10 deletions(-)
 
-> Both SOCK_DEAD and the clearing of unix_peer(sk) happen under
-> unix_state_lock() in unix_release_sock(). Without taking unix_state_lock()
-> before the SOCK_DEAD check, there is a window:
->
-> iter                              unix_release_sock()
-> ---  lock_sock(sk)
-> SOCK_DEAD == 0  (check passes)
->                                   unix_state_lock(sk)
->                                   unix_peer(sk) = NULL
->                                   sock_set_flag(sk, SOCK_DEAD)
->                                   unix_state_unlock(sk)
-> BPF prog runs
-> → accesses unix_peer(sk) == NULL → crash
->
-> This was not raised in the v2 discussion.
+diff --git a/include/linux/kthread.h b/include/linux/kthread.h
+index a01a474719a7..37982eca94f1 100644
+--- a/include/linux/kthread.h
++++ b/include/linux/kthread.h
+@@ -116,7 +116,6 @@ void *kthread_probe_data(struct task_struct *k);
+ int kthread_park(struct task_struct *k);
+ void kthread_unpark(struct task_struct *k);
+ void kthread_parkme(void);
+-#define kthread_exit(result) do_exit(result)
+ void kthread_complete_and_exit(struct completion *, long) __noreturn;
+ int kthreads_update_housekeeping(void);
+ void kthread_do_exit(struct kthread *, long);
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 14f391b186c6..79ac4a700b39 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -855,7 +855,7 @@ static inline int unregister_module_notifier(struct notifier_block *nb)
+ 	return 0;
+ }
+ 
+-#define module_put_and_kthread_exit(code) kthread_exit(code)
++#define module_put_and_kthread_exit(code) do_exit(code)
+ 
+ static inline void print_modules(void)
+ {
+diff --git a/include/linux/sunrpc/svc.h b/include/linux/sunrpc/svc.h
+index 4dc14c7a711b..c86fc8a87eae 100644
+--- a/include/linux/sunrpc/svc.h
++++ b/include/linux/sunrpc/svc.h
+@@ -338,7 +338,7 @@ static inline void svc_thread_init_status(struct svc_rqst *rqstp, int err)
+ {
+ 	store_release_wake_up(&rqstp->rq_err, err);
+ 	if (err)
+-		kthread_exit(1);
++		do_exit(1);
+ }
+ 
+ struct svc_deferred_req {
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 401d6c4960ec..8db79e593156 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -25261,7 +25261,6 @@ BTF_ID(func, __x64_sys_exit_group)
+ BTF_ID(func, do_exit)
+ BTF_ID(func, do_group_exit)
+ BTF_ID(func, kthread_complete_and_exit)
+-BTF_ID(func, kthread_exit)
+ BTF_ID(func, make_task_dead)
+ BTF_SET_END(noreturn_deny)
+ 
+diff --git a/kernel/kthread.c b/kernel/kthread.c
+index 791210daf8b4..1447c14c8540 100644
+--- a/kernel/kthread.c
++++ b/kernel/kthread.c
+@@ -323,7 +323,7 @@ void __noreturn kthread_complete_and_exit(struct completion *comp, long code)
+ 	if (comp)
+ 		complete(comp);
+ 
+-	kthread_exit(code);
++	do_exit(code);
+ }
+ EXPORT_SYMBOL(kthread_complete_and_exit);
+ 
+@@ -395,7 +395,7 @@ static int kthread(void *_create)
+ 	if (!done) {
+ 		kfree(create->full_name);
+ 		kfree(create);
+-		kthread_exit(-EINTR);
++		do_exit(-EINTR);
+ 	}
+ 
+ 	self->full_name = create->full_name;
+@@ -435,7 +435,7 @@ static int kthread(void *_create)
+ 		__kthread_parkme(self);
+ 		ret = threadfn(data);
+ 	}
+-	kthread_exit(ret);
++	do_exit(ret);
+ }
+ 
+ /* called from kernel_clone() to get node information for about to be created task */
+@@ -738,7 +738,7 @@ EXPORT_SYMBOL_GPL(kthread_park);
+  * instead of calling wake_up_process(): the thread will exit without
+  * calling threadfn().
+  *
+- * If threadfn() may call kthread_exit() itself, the caller must ensure
++ * If threadfn() may call do_exit() itself, the caller must ensure
+  * task_struct can't go away.
+  *
+  * Returns the result of threadfn(), or %-EINTR if wake_up_process()
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index c3ce106c70af..340b4dc5c692 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -228,7 +228,7 @@ static int mod_strncmp(const char *str_a, const char *str_b, size_t n)
+ void __noreturn __module_put_and_kthread_exit(struct module *mod, long code)
+ {
+ 	module_put(mod);
+-	kthread_exit(code);
++	do_exit(code);
+ }
+ EXPORT_SYMBOL(__module_put_and_kthread_exit);
+ 
+diff --git a/lib/kunit/try-catch.c b/lib/kunit/try-catch.c
+index d84a879f0a78..99d9603a2cfd 100644
+--- a/lib/kunit/try-catch.c
++++ b/lib/kunit/try-catch.c
+@@ -18,7 +18,7 @@
+ void __noreturn kunit_try_catch_throw(struct kunit_try_catch *try_catch)
+ {
+ 	try_catch->try_result = -EFAULT;
+-	kthread_exit(0);
++	do_exit(0);
+ }
+ EXPORT_SYMBOL_GPL(kunit_try_catch_throw);
+ 
 
-It was raised in v1[1]. Conclusion was that bpf prog bytecode directly
-accessing unix_peer(sk) is not an issue; bpf machinery will handle any
-faults. That said, should a "bad" value of unix_peer(sk) end up as a
-parameter of a bpf helper, yes, that is a well known[2] problem (that have
-a solution unrelated to this series).
-
-[1]:
-https://lore.kernel.org/bpf/6de6f1bf-c8ee-4dfb-9b8c-f89185946630@linux.dev/
-[2]:
-https://lore.kernel.org/bpf/CAADnVQK_93g_KkNFYXSr8ZvA1fYh4hoFRJCJFPS-zs4ox0HhAA@mail.gmail.com/
+---
+base-commit: c107785c7e8dbabd1c18301a1c362544b5786282
+change-id: 20260306-work-kernel-exit-2e8fd9e2c2a1
 
