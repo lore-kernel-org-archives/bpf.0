@@ -1,150 +1,120 @@
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f65.google.com (mail-wr1-f65.google.com [209.85.221.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB00634252D;
-	Thu,  5 Mar 2026 23:35:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772753727; cv=none; b=pUddVVDkYUWYk4SR6c9VsuOEM1jPMzK5SVuhVGOIKH8qPx7+5F22Nnn4bEx860GAjSHZ7NGzaFV8DU45XoJvYMKuHvnf98Jywh2KXBTZ2TuU5wKlWXDcTOOE01C/j570QXCqzO4njBYEcBS42TN7HU4iYkYmM84U9SjgDRAwNWI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772753727; c=relaxed/simple;
-	bh=XGCp/gbBgvkSyAtCgxgVwVbQsCEaGunpuJSjPaIh8lc=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=EL3SiZwPtdu3G3KkbJ7dnrncFFSd5h1nv6jg/TltRXtrO9kFKTKg+y9aBXQxjWmn0gozs4UBX3DiDJWrN7viHFrAyt+btjoEy6HArmhtS3UMI/7MRbi6509Ulvu/YdUayOCYNhRiuN6HkjFM6Yd1thbgL8ctt2htpNcGnB9Vm0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=YJQvhVm9; arc=none smtp.client-ip=185.226.149.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33D19EAC7
+	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 00:00:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.65
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772755258; cv=pass; b=o/dRIuWZ4/WbzdUFPP9kyJpWgePoT66sx+5XpJBPsJdFJFQAm2g00C1TpBS+XlspPDV33b4rft390eXtnibXe9Cag1xDGjVu5S5Pap3+5dKg+RB3XRRXNv0d9W93niJQgggYA4I9qn0jjIyHgYMGdNSfBcaFIwKETsbUi7bcFSI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772755258; c=relaxed/simple;
+	bh=jRsauYAb/O8R1mJxxt+mtRx4RCCMNAsS80SQg73kaeM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eOspE96LlXLzoD3uZW81DHl5YPJGD+5vEwVFDEFX+f9f0Hx4HPro+rfTXt2s05Z5ShbIZuX+e17qKkfN++OlgviLENovMtsM2n4EcSSI68kRdWWgY/CG3ymvHL3izF9/tZVZtWyHFHn0C739HFHGZ65VupO6gzZY4GZ2ZblxHfo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UUZRq7BO; arc=pass smtp.client-ip=209.85.221.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="YJQvhVm9"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1vyIDu-0013L3-Mp; Fri, 06 Mar 2026 00:35:18 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
-	Cc:To:Subject:From:MIME-Version:Date:Message-ID;
-	bh=dCbpzFqSx3F9rEHb6ZJLGJQOxr68Qnt0aViVYMiwJhM=; b=YJQvhVm9GfSyt5rWCW5xnzIQ22
-	ceQVRRSm229Dbqy0h+1MLiulH/WFrpn+ePtiBgvjRmgLy1961A4jfo4gUM45WGIavaLejRfwBsZWj
-	o4GRIFgYryGUo1//BCXFS2O21g6yzXb1R5VC03bbn6sZEZewr2emWzSyrUdf1LHYUXJ+n5jhU3PkZ
-	1ViaHbbGWM5OTr3PajefPJrJRi0zV2CovX9x8Vnxuc2hHTOL5tAUaPcCXv8VVb5J0sV7iogr92Q6G
-	SvC5ygse3ZdQoD7U2nZkd+Jjnd3FTl1A4upT4nwVVzW8yOFfI22WmJJ5QXonVO+iHvZBt+TRfEuZF
-	hYIkaW4g==;
-Received: from [10.9.9.73] (helo=submission02.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1vyIDp-0004Ol-8s; Fri, 06 Mar 2026 00:35:13 +0100
-Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1vyIDi-0014Px-3p; Fri, 06 Mar 2026 00:35:06 +0100
-Message-ID: <835cea23-d141-4c7a-944d-9861be59fecd@rbox.co>
-Date: Fri, 6 Mar 2026 00:35:02 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UUZRq7BO"
+Received: by mail-wr1-f65.google.com with SMTP id ffacd0b85a97d-439c6fc2910so1814922f8f.0
+        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 16:00:56 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772755255; cv=none;
+        d=google.com; s=arc-20240605;
+        b=d1XkeeHInuhCNjsYPuGfzs0yMk2aF6BxuR786uUL833liVi3atw/iXUnYSiq6sj4EI
+         RbpGnx5DacvU5DF7mP8AuJg4gmS6MiypVOPgQH2fEBG5qmhGiYt/KgQS7c08GBL//9Sk
+         EBt/2m614mO0ZwAvRiiad5pH1sAjCH7bijPTjuEZmTZygy+ZefmyGYVkW6lMDZvVdGjl
+         T/3dhA1bgGmcJYgIdqGZRR9SFf1TfjPt1vl1zXBncoYc1BUtDC81MPXLz6ToTMYrZUIx
+         zGLsUwKFI4zshnV/YTJfcI/qkI3Dse5QCk3gj77818sP6tjVDAKUjvj39oBDq7Bck6bC
+         TF3w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=jRsauYAb/O8R1mJxxt+mtRx4RCCMNAsS80SQg73kaeM=;
+        fh=Ce0ibqXoVcrtpgJDCrQH13f4WUWtWrkMkYTRvRqlv+U=;
+        b=K0HKFW1YsF9sBAKmv/atd7LXNSV4BKs0i7F58jp/Smc2YbH4JL3AgV6grgre6enbXf
+         zoYU2T39EjWSuf2SId/URKBsBq+A7MzpHB7I9CSrubHiYxtF2CCZv7Lh9VkKnU2v9HZ+
+         NHKu2TMcZ+XcWookMIxfIiapW4WIIazqptIoom3QH760P59W58KVFJN7lDGa8cDBmNer
+         rjNpXlD4SMFH2xuLrntO1yuL8kj1+JGdQtuhMXoUaA639ZvGkbhH1LAX8f/CXn1sotCh
+         SonZssyAP4Mwuuq9wIqsJ6Mb3eAJVP0JHydqVCqE0inGld4GnvYqafrD2AOTkKp0b3F6
+         /fKg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772755255; x=1773360055; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jRsauYAb/O8R1mJxxt+mtRx4RCCMNAsS80SQg73kaeM=;
+        b=UUZRq7BOubLQZOXobh3MkiGkZOhSt8DRWM9mJq7Uk+DXfnh4UKW+sG96ykcuvuoJ+b
+         +Jjq7H1kW5JThwi61BwO/h1sMbAyOmoClqfyF8SDbe88o5Xg4Z28KCN2P610dXJ/lXPY
+         bawo6lgFNPGa1v3mYbs9Isj10mVBjLeozj0BCU6kL4yyxxaQqWOR9yZTqN7Ub54W7O3J
+         sRPc74lXZrnAin3+K3Ee2XfDBEr3JvplbAHTxmdWpxXgzih10KfkW7sX2PsG+97snNYJ
+         3WcuYhLSMiJBbQDSDPS8CwjGdRpO1s3oFxomAkEu0BD3I7iEfZHrsRzFBBbRMeogyX9S
+         wtxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772755255; x=1773360055;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jRsauYAb/O8R1mJxxt+mtRx4RCCMNAsS80SQg73kaeM=;
+        b=EHUJILHaFfoeBXDzXWUIPIs+u4TtOPhFZ0ncsmpNvzVITdxDy6thvnyFirzus/FKfF
+         VHgqOQ3e509jU0ueOL4EMR0KIoiMB6luuIfsdaLCldQMeq+4Sp2bz/qzk3yb/5spu1O2
+         ihLwdoOlVp4SdfmaPNtPE1SWkMmYxdx5VPve2o59eYw9LFhHFEiLRmF6grxr795Vgxey
+         SIwCMqsG0afrHngnG6euvW9hihypS0IIpmtPY/aLEAHudt0NqX4RcaG1N4MS62Bytp+s
+         XRODCpUxBX1QAPWOA7CQCYxmSKF6cjY+ttY+Q818E3ywUbDVTcVPYBUfmPvvtPf6EQH1
+         L8Dw==
+X-Forwarded-Encrypted: i=1; AJvYcCVVZxmZio3JyoIJ4B/QqL0Q/yFl5zo7tCPzzc0Lt99AivdwrOfGZBznooKG1QVfHczjtHo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4x9Z79onqCBBoyrHxpWFeguaOl9nnwWXqLtqIZI1U1RDn6r7l
+	8fGgLNxWFDGLAj9AqqrHUhanE8ydG3G3aO/5e4ZnEeL6SuOt7SuwwU1vWh0p+TYDb0Yx1ocNc8j
+	QGtyWnl+AUvpbn54a+bJB+GjoNgkyV8c=
+X-Gm-Gg: ATEYQzyPoBarURWJcUaeB+858/L24hMSye7nzwya6JQ70ZYTQOosokeknyoxZh4CAH6
+	hRV3o2ay7//Fx2Owvl3hNVDyGzAIxiAd2npQXfHs95W/V/BN3+8fk4KSfhXipmVe/5z26oKn9N4
+	0x15EM/SkgR8OTjzeEtUBhgzBYUJHwmfEM9/b8HI0opF0bgiYxKPUpdW9t8q1l66yN2ZgTPIGGh
+	mvretG9Xos7iWec/TMYMvglHg0oIhr3lH5bOv1GQiU4rfvzC+Ta2Pt7x2UK9eG2OjtLrNYwtwhO
+	aYDvQxUKz7/agT4ayW4gj5cdRmw8wOCPQ/KpXwr/3cLs7S8SBCWvNWT39Fs=
+X-Received: by 2002:a5d:5c89:0:b0:439:c42f:10d3 with SMTP id
+ ffacd0b85a97d-439da67c522mr251928f8f.46.1772755254397; Thu, 05 Mar 2026
+ 16:00:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Michal Luczaj <mhal@rbox.co>
-Subject: Re: [PATCH bpf v2 3/4] bpf, sockmap: Adapt for the af_unix-specific
- lock
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Kuniyuki Iwashima <kuniyu@google.com>,
- John Fastabend <john.fastabend@gmail.com>,
- Jakub Sitnicki <jakub@cloudflare.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Willem de Bruijn <willemb@google.com>, Cong Wang <cong.wang@bytedance.com>,
- Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@fb.com>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260207-unix-proto-update-null-ptr-deref-v2-0-9f091330e7cd@rbox.co>
- <20260207-unix-proto-update-null-ptr-deref-v2-3-9f091330e7cd@rbox.co>
- <CAAVpQUA+8GL_j63CaKb8hbxoL21izD58yr1NvhOhU=j+35+3og@mail.gmail.com>
- <c4eaead1-ad69-42f0-9699-5f2d555a7693@rbox.co>
- <a2f2c260-38e8-4ba3-8655-cffbee046259@linux.dev>
- <b75bbc3f-85fd-4209-9ce1-3bf685ba62ff@rbox.co>
- <d122ed8b-ebfb-4d59-96ce-10c361e76676@linux.dev>
- <1022fcaf-ca38-43d2-84cb-f66a504335e1@rbox.co>
- <f38608e1-4e85-4bc4-8872-c9ecf38e5d7e@linux.dev>
-Content-Language: pl-PL, en-GB
-In-Reply-To: <f38608e1-4e85-4bc4-8872-c9ecf38e5d7e@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20260304143459.78059-1-pilgrimtao@gmail.com> <20260304143459.78059-2-pilgrimtao@gmail.com>
+In-Reply-To: <20260304143459.78059-2-pilgrimtao@gmail.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Fri, 6 Mar 2026 01:00:17 +0100
+X-Gm-Features: AaiRm503-nblu_Zv4HuBZcLkUaQYpUNSpcsO_swTkvFKxfix8qqgo7AO5qFDAns
+Message-ID: <CAP01T77RgXhG_Pc6qhxdksMSpm07YhEvtcooEzz4boYv3+6GqQ@mail.gmail.com>
+Subject: Re: [PATCH v6 1/5] bpf: Introduce the bpf_list_del kfunc.
+To: Chengkaitao <pilgrimtao@gmail.com>
+Cc: martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, eddyz87@gmail.com, song@kernel.org, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, 
+	chengkaitao@kylinos.cn, linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 3/3/26 02:51, Martin KaFai Lau wrote:
-> On 2/24/26 7:28 AM, Michal Luczaj wrote:
->> On 2/23/26 22:43, Martin KaFai Lau wrote:
->>>
->>> On 2/11/26 2:02 AM, Michal Luczaj wrote:
->>>>> It should also be helpful to be consistent with tcp/udp iter and use
->>>>> lock_sock() instead of lock_sock_fast() in bpf_iter_unix_seq_show().
->>>> OK, I'll tweak that in v3.
->>>
->>> Hi, Michal. Are you planning to send v3 soon? I don't think the
->>> sock_owned_by_user for the non-tracing prog needs to be addressed in the
->>> same set.
->>
->> Yes, I'm working on it. Sorry for the delay, I'm taking my sweet time to
->> come up with a selftest.
->>
->> I think I can neatly fit the sock_owned_by_user()-related stuff in this
->> series, but let me know if you'd rather have it separately. Whichever way,
->> I don't mind.
-> 
-> I think sock_owned_by_user() is not related to the AF_UNIX's sockmap 
-> fix. If it is not, it's better to separate it. I think one thing at a 
-> time is easier to review.
+On Wed, 4 Mar 2026 at 15:50, Chengkaitao <pilgrimtao@gmail.com> wrote:
+>
+> From: Kaitao Cheng <chengkaitao@kylinos.cn>
+>
+> If a user holds ownership of a node in the middle of a list, they
+> can directly remove it from the list without strictly adhering to
+> deletion rules from the head or tail.
+>
+> We have added an additional parameter bpf_list_head *head to
+> bpf_list_del, as the verifier requires the head parameter to
+> check whether the lock is being held.
+>
+> This is typically paired with bpf_refcount. After calling
+> bpf_list_del, it is generally necessary to drop the reference to
+> the list node twice to prevent reference count leaks.
+>
+> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+> ---
 
-All right, sending out v3 to reduce the scope:
-https://lore.kernel.org/bpf/20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co/
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-> If they are related somewhat or it's easier to review them together, see 
-> if it makes sense to structure them in a way such that the AF_UNIX's 
-> sockmap-related fixes and tests are at the beginning of the patch set so 
-> that they can be applied first if others need more discussion.
-
-I'd say those changes are related, but things are getting unclear for me, I
-won't insist on keeping them together.
-
-So. Simply dropping BH locks and introducing sock_owned_by_user() in
-sock_map_update_elem() is not enough. For example, sock_map_seq_show() and
-sock_hash_seq_show() must be adapted before taking the sock lock (as they
-currently run under RCU).
-
-But there's a deeper problem: bpf iters let the bpf code call sockmap
-update when sk's file descriptor is halfway through sock_map_close(). This
-breaks the sockmap contract as the update can happen after
-sock_map_remove_links(), but before saved_close(). sockmap ends up with a
-closed sk that normally would be removed.
-
-For sockmap/sockhash iters this condition can be handled: before running
-the bpf tracer prog, check if sk is still linked to map. Since those are
-sockmap/sockhash iters, if there's no link, it means sk should be skipped.
-
-But I'm not sure about other iters. Plus the case you've mentioned of bpf
-tc progs that can call sockmap update with sk unowned. Hence I stop here
-worried this may be a doomed approach :)
-
-Long story short: feels like taking the spinlocks (without unconditionally
-checking sock_owned_by_user()) in sock_map_update_elem() is the best
-approach. Just as it is currently implemented (+the af_unix special
-casing). Some sks will come owned, some won't. What needs to be added after
-taking the spinlock(s) is a sort of is-sk-being-closed check. Or am I
-missing something?
-
-> Regarding the "Keeping sparse annotations in 
-> sock_map_sk_{acquire,release}() required some
-> hackery...". Maybe just remove the annotations?
-> [ btw, from commit 5b63d0ae94cc, the sparse support is removed and it
->    depends solely on clang now (?). If it is the case, what does clang do
->    on the "sock_or_unix_lock"? ]
-
-Oh, I haven't seen that one, thanks. Will take a look. For now, I've just
-dropped the annotations.
+> [...]
