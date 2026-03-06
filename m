@@ -1,62 +1,62 @@
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 347B4347BAF
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA13739890F
 	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 19:08:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772824140; cv=none; b=IsiDyt7bezAeo3+jBdEJD3BmpEAkI0SBSL1y8lWpkklzkSRetA0/Bsb4Y2RI43QR0TnpSOPT2jA0VaSGDas1X9xrvcIs0S0pjIOfjE7L9G7XB9BjyaPCp8zynU8wR2D9m1cU/FSr6WtjbK+ltYOJ9+nnQ031b/i4Eg5cnkeDfhA=
+	t=1772824141; cv=none; b=ETWQB4ukHBtjCwCFSFZFRU+cmbbFu8FcpGnO8lIPGpAsvyIHw6RZFygG1TaxTClpdkTeCwBTLQ00h858L8TDR9qMmv+ucFFJpJwfsyRTke5SqaSVP6SX+zSK104gXmNtljpmeSU2A29SvkEolMa11FKgK4qMftHMVrlYRLTEaN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772824140; c=relaxed/simple;
-	bh=qlACSX6hwy1mOHW6k9hLKXSX6Ovk+Qhqa4ZgwjT/JpE=;
+	s=arc-20240116; t=1772824141; c=relaxed/simple;
+	bh=0r9AhianaHhBaRi6Goikk6bbXXR/eOi6ITCxSqIKQTc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=i7bXJ0PXvKWQSfUNpDLVePMWkT9SR39kZx4zaz8kMAhwBUU8i8lKHX7L0tZe70z/uITQd0oL54fqN3oV4T73upWHn/IDVDMuMVFwxyjFwDqPQXksBV2aimXzxFJcoswt11vuYbyndQRhG9ECuHHSc2/KQ4JOUBmklxXxDkHGqkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jRSTLjnl; arc=none smtp.client-ip=209.85.222.178
+	 MIME-Version; b=pLFuz8QhzUY+LrqUprVVX/PYbVauk9zM2XopTlv6fQaSXuzGyyDIcnguzGNZhAf1EbR5/KthYJbaO+VdHb2x2xbC/3pkFIFI0M+kD+JsALH6Bgx2srDar9xw5Tr2eOTquipU9nt93CC1RMO7ajUd7bKym3oNr+olV0Qy7QSx89Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nrPX9Dvj; arc=none smtp.client-ip=209.85.219.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jRSTLjnl"
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-8cbc593a67aso905689685a.2
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nrPX9Dvj"
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-89a1347051aso72200346d6.2
         for <bpf@vger.kernel.org>; Fri, 06 Mar 2026 11:08:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772824138; x=1773428938; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772824139; x=1773428939; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tiL2MvXoPmEq5QF32m0XXHv0UJ31bcM+RTyi0t3M5Qk=;
-        b=jRSTLjnlWA0/++GBWlbuOjodw/mTInAgFJz2+C8LZjloX+Zt5qh09X/CRa9bSTDjjx
-         I3NA5gPrISzu0Rk4SOnzteH/VZOTE7lzZ36t9xeP1F9JJpwkjGnwm91YTnlcmenlK41b
-         zdiL+AW+8XyR3gykaxzopJWjWlm9sGcNCd8lgjKpR1HLWMAVCyDZjtDRcTdx0zzWwQrQ
-         cqlwufv8WE84Gu0OEgBRj/SBcRkD9603lGTgHok2/vCfqXnT7U6kYPmyCZNRgd2vHKY1
-         gNkPjz8KKZVtfs/ztgF2YFNlep7OvKiSsmG6WP+I1K0EiGwSZTKA5cQAeDqh3jSZm0sd
-         M1Ww==
+        bh=kraYytm7IB1Y9w4YBbwtt0Dp0Y2H+qeL6VwnbTaeLN4=;
+        b=nrPX9DvjVS4ZUEXA4Jqfiv8NDJofOu6tzSIIwaX8Ybo0MhqJuPQ/1SxCX4fnYYJuOB
+         ViLLWSkyz3fiihpWg1994Pk8zWI7qRjnyU1brWPgIdZjSICNW3zujG/kc4ZeO5qClp4O
+         VKPed6LlnTXzWvKgXcYY5bDc7iMAFz6Ke/8WCnHrQMRxY4as4DES9DhlCtAdIegm5VqG
+         0AyzzPevMEUtKnQNQoNGYgoO5vjaL8AAUd2UnhPbog3glxr23TEF1uY0iT82SWlTtx1v
+         5sbsb/nspAT5JBbosb8FRk0f45Aq8hIhFDVOOe23Vrbv4ijdIHPCSoHESCx6bSK0j8YI
+         5ouQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772824138; x=1773428938;
+        d=1e100.net; s=20230601; t=1772824139; x=1773428939;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=tiL2MvXoPmEq5QF32m0XXHv0UJ31bcM+RTyi0t3M5Qk=;
-        b=cF8L4Su7Y0n/eyzPsSU7XQ2YwW0eiJ8ZBhkBz8n4KPJ682Eap+UFEzHWnc1br2PHnG
-         lUfaMMxb6YrXo7E1riUll6vMur9RjjRXQxUK32HSGkebuTyvl2ZUTuPBs+0lrHEHC7lu
-         nCeUviiO+Sq5rq4WX4t+oEE0EUxQ7xQI6Caq+PHrdvaGlzJNDmezhFGXG6WPvH42r+pb
-         O5Fs9sU7UzPDyZ6PuJAjQrvMcoq3ZHYTRM6qXFNbg3G1lD2Pn75WOkqMqgIwRE1V9iMb
-         Sz8HbGQ1xMtEaRYBYjpVGsoh+6VP6dCPjEFzeoJNkog7bxokuuUOkQBuWYLHDGx7iEkH
-         WaoA==
-X-Gm-Message-State: AOJu0YxQbRGXdKYxgq5/gdE18SPiAiOy6lf8CInm0bYsuvIpRq2TMrO5
-	wtC56LPDcgUfOFzjJKkhnpuf78bybYTxJ2J0HELJkUpkUiwGMPAiQUs6zHqcwj25
-X-Gm-Gg: ATEYQzyFQ3mrqga/QwBBt9NO7h9RDTbaIjxyL8fny0ZLKdD+jzIObNuaacWZU3unv0H
-	fsR2uSEaDnVSG8RTVg+X3AdfuBfr/LU6k8Y15pXDzI4qxBzfxUb2/1cQy4Y5tCgVJu0nSBppJvX
-	omrdfm90idjEocSaf0gxwOsdnpcqRm8n9SnYCnO2+3J0G8aYOUV/GIGn7CEu3xSOSsMnymi9jyg
-	H0Bvd92EAbeGszHuQ2Ei+4urTQHVwQ3rvt8ldu9HLXcMLslnDqZGylxi+8JfdzY1zdWiCyPHLg8
-	ZV9ZyzhaZh3RBYwaTpiT61LJijJujWJx+3MQec166oa1uDKNUp9YJGFgidQmS92mz2zqBF/urHR
-	Z3IKe1OIwLoYLlwBZuN9QY9Edt4qbaMra2nnM4FAoJFGBLBoWRFTGxMQdEYXyYBfhsrJpkWRIdd
-	GZ313WQ9e4Bi6z1Y8E3sQcXODCtIdVgVxAtIOZKIhvA6ey
-X-Received: by 2002:a05:620a:31a0:b0:8cb:66dc:9fcd with SMTP id af79cd13be357-8cd6d454b7cmr411990185a.56.1772824138000;
+        bh=kraYytm7IB1Y9w4YBbwtt0Dp0Y2H+qeL6VwnbTaeLN4=;
+        b=inCYFM/IMBCmrcLoTJFqwG9NYUc2IF+5eq4qwLoIBKzg8XlpC4RvpPFpKJuHYTn+KV
+         /4Ds16c2E6WKJpbSjJaD/+dMTJ3rw2xNr0LDrCd3TIEWRPMURhLR8dUpm8suCTkPqhPe
+         SJP9iti9jfhf7cshNJu4mP3/CX7nIN1nCoXtIj6aLsQEqi/xAjS2XJs4dsAuL5KI6Su1
+         FYvBnvGjIql4fMmynFh8T/8Pf/QjbHTyc56uU+VVOF7TPPXX+fT7TScB3yO76sDR2D06
+         SzFLkh/H2yjboyI/RkfId+qrYn3Cc0pBDXXiMOdJkZdlWvM6qcTpA7MXmlhA7c48pxWx
+         3hYQ==
+X-Gm-Message-State: AOJu0Yx9gfbzy07fKCc/v1CIQ57ISDkkcHvyO8QvjfeDdDjddJQZjs8x
+	i5qv5wMNN+0b0JfOkFX2mu02d+BL6ivIVg2tAkuJplD3rZHEjQxubZhFfDbn0WO8
+X-Gm-Gg: ATEYQzwZ9rr0UWJ2/BXKIYBsqsi/XD65XBV4Z57w8RxY50rD54JkMBcd5Il4UUMq7CB
+	sq2x3PgUg+cwrUGAENGrRBOqP5wnfkeSXrK7cKBckiNKUR2NovAUQQejvrRXt7ad4Y+HzpJPi5U
+	Re4z3HRGkZWNzXOppRBKxSdAs3Nz159BYxUvfoNof5hHBjTAPPekndXxAA2kH+z8Z9BVHZ/rEKF
+	U2paBjHzn1eoTjLyaUYSswczUMlODc5xRNiUJvfLXN+3PMlywSIhZJDQaSwv9OpRasToA4i+kQE
+	fnASqUGbxHEsq4g8DCa5Zq4LdI/iQ7En2IB6aKULY72lsvav9ZSio0lMUCJVe+UKehXZyAJieP9
+	5fAKJ8mlDD2rN2ZPWQj85arG21d0HNFLCUmyfZoBNOPjC5oCBnREr8lOa55CkX8SMU2YRYHJcEf
+	bnyfLDDgG52WYKfzME2r3Jr061ZNqiUv63oINxvAfjk2+Z
+X-Received: by 2002:a05:6214:1d2b:b0:899:f0b1:732a with SMTP id 6a1803df08f44-89a30ad6ab4mr48120136d6.31.1772824138928;
         Fri, 06 Mar 2026 11:08:58 -0800 (PST)
 Received: from 192-222-50-213.tail19a0b.ts.net ([192.222.50.213])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89a317187c0sm20322976d6.50.2026.03.06.11.08.57
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89a317187c0sm20322976d6.50.2026.03.06.11.08.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2026 11:08:57 -0800 (PST)
+        Fri, 06 Mar 2026 11:08:58 -0800 (PST)
 From: Jenny Guanni Qu <qguanni@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -64,9 +64,9 @@ Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	lkp@intel.com,
 	Jenny Guanni Qu <qguanni@gmail.com>
-Subject: [PATCH v2 1/2] bpf: Fix undefined behavior in interpreter sdiv/smod for INT_MIN
-Date: Fri,  6 Mar 2026 19:08:54 +0000
-Message-Id: <20260306190855.937198-2-qguanni@gmail.com>
+Subject: [PATCH v2 2/2] selftests/bpf: Add tests for sdiv32/smod32 with INT_MIN dividend
+Date: Fri,  6 Mar 2026 19:08:55 +0000
+Message-Id: <20260306190855.937198-3-qguanni@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260306190855.937198-1-qguanni@gmail.com>
 References: <20260306190855.937198-1-qguanni@gmail.com>
@@ -78,98 +78,90 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The BPF interpreter's signed 32-bit division and modulo handlers use
-the kernel abs() macro on s32 operands. The abs() macro documentation
-(include/linux/math.h) explicitly states the result is undefined when
-the input is the type minimum. When DST contains S32_MIN (0x80000000),
-abs((s32)DST) triggers undefined behavior and returns S32_MIN unchanged
-on arm64/x86. This value is then sign-extended to u64 as
-0xFFFFFFFF80000000, causing do_div() to compute the wrong result.
+Add tests to verify that signed 32-bit division and modulo operations
+produce correct results when the dividend is INT_MIN (0x80000000).
 
-The verifier's abstract interpretation (scalar32_min_max_sdiv) computes
-the mathematically correct result for range tracking, creating a
-verifier/interpreter mismatch that can be exploited for out-of-bounds
-map value access.
+These test the fix in the previous commit which replaced abs() with a
+safe helper to avoid undefined behavior for S32_MIN.
 
-Introduce __safe_abs32() which handles S32_MIN correctly and replace
-all 8 abs((s32)...) call sites in the interpreter's sdiv32/smod32
-handlers.
+Test cases:
+  - SDIV32 INT_MIN / 2 = -1073741824 (imm and reg divisor)
+  - SMOD32 INT_MIN % 2 = 0 (positive and negative divisor)
 
-Fixes: ec0e2da95f72 ("bpf: Support new signed div/mod instructions.")
 Signed-off-by: Jenny Guanni Qu <qguanni@gmail.com>
 ---
- kernel/bpf/core.c | 23 ++++++++++++++---------
- 1 file changed, 14 insertions(+), 9 deletions(-)
+ .../selftests/bpf/progs/verifier_sdiv.c       | 58 +++++++++++++++++++
+ 1 file changed, 58 insertions(+)
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 3ece2da55625..663b9af6d19b 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -16,7 +16,6 @@
-  * Andi Kleen - Fix a few bad bugs and races.
-  * Kris Katterjohn - Added many additional checks in bpf_check_classic()
-  */
--
- #include <uapi/linux/btf.h>
- #include <crypto/sha1.h>
- #include <linux/filter.h>
-@@ -1736,6 +1735,12 @@ bool bpf_opcode_in_insntable(u8 code)
+diff --git a/tools/testing/selftests/bpf/progs/verifier_sdiv.c b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
+index 148d2299e5b4..fd59d57e8e37 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_sdiv.c
++++ b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
+@@ -1209,6 +1209,64 @@ __naked void smod32_ri_divisor_neg_1(void)
+ 	: __clobber_all);
  }
  
- #ifndef CONFIG_BPF_JIT_ALWAYS_ON
-+/* Safe absolute value for s32 - abs() is undefined for S32_MIN */
-+static inline u32 __safe_abs32(s32 x)
++SEC("socket")
++__description("SDIV32, INT_MIN divided by 2, imm")
++__success __success_unpriv __retval(-1073741824)
++__naked void sdiv32_int_min_div_2_imm(void)
 +{
-+	return x >= 0 ? (u32)x : x == S32_MIN ? (u32)S32_MIN : (u32)-x;
++	asm volatile ("					\
++	w0 = %[int_min];				\
++	w0 s/= 2;					\
++	exit;						\
++"	:
++	: __imm_const(int_min, INT_MIN)
++	: __clobber_all);
 +}
 +
- /**
-  *	___bpf_prog_run - run eBPF program on a given context
-  *	@regs: is the array of MAX_BPF_EXT_REG eBPF pseudo-registers
-@@ -1900,8 +1905,8 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
- 			DST = do_div(AX, (u32) SRC);
- 			break;
- 		case 1:
--			AX = abs((s32)DST);
--			AX = do_div(AX, abs((s32)SRC));
-+			AX = __safe_abs32((s32)DST);
-+			AX = do_div(AX, __safe_abs32((s32)SRC));
- 			if ((s32)DST < 0)
- 				DST = (u32)-AX;
- 			else
-@@ -1928,8 +1933,8 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
- 			DST = do_div(AX, (u32) IMM);
- 			break;
- 		case 1:
--			AX = abs((s32)DST);
--			AX = do_div(AX, abs((s32)IMM));
-+			AX = __safe_abs32((s32)DST);
-+			AX = do_div(AX, __safe_abs32((s32)IMM));
- 			if ((s32)DST < 0)
- 				DST = (u32)-AX;
- 			else
-@@ -1955,8 +1960,8 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
- 			DST = (u32) AX;
- 			break;
- 		case 1:
--			AX = abs((s32)DST);
--			do_div(AX, abs((s32)SRC));
-+			AX = __safe_abs32((s32)DST);
-+			do_div(AX, __safe_abs32((s32)SRC));
- 			if (((s32)DST < 0) == ((s32)SRC < 0))
- 				DST = (u32)AX;
- 			else
-@@ -1982,8 +1987,8 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
- 			DST = (u32) AX;
- 			break;
- 		case 1:
--			AX = abs((s32)DST);
--			do_div(AX, abs((s32)IMM));
-+			AX = __safe_abs32((s32)DST);
-+			do_div(AX, __safe_abs32((s32)IMM));
- 			if (((s32)DST < 0) == ((s32)IMM < 0))
- 				DST = (u32)AX;
- 			else
++SEC("socket")
++__description("SDIV32, INT_MIN divided by 2, reg")
++__success __success_unpriv __retval(-1073741824)
++__naked void sdiv32_int_min_div_2_reg(void)
++{
++	asm volatile ("					\
++	w0 = %[int_min];				\
++	w1 = 2;						\
++	w0 s/= w1;					\
++	exit;						\
++"	:
++	: __imm_const(int_min, INT_MIN)
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD32, INT_MIN modulo 2, imm")
++__success __success_unpriv __retval(0)
++__naked void smod32_int_min_mod_2_imm(void)
++{
++	asm volatile ("					\
++	w0 = %[int_min];				\
++	w0 s%%= 2;					\
++	exit;						\
++"	:
++	: __imm_const(int_min, INT_MIN)
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD32, INT_MIN modulo -2, imm")
++__success __success_unpriv __retval(0)
++__naked void smod32_int_min_mod_neg2_imm(void)
++{
++	asm volatile ("					\
++	w0 = %[int_min];				\
++	w0 s%%= -2;					\
++	exit;						\
++"	:
++	: __imm_const(int_min, INT_MIN)
++	: __clobber_all);
++}
++
++
+ #else
+ 
+ SEC("socket")
 -- 
 2.34.1
 
