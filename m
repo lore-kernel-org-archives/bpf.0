@@ -1,274 +1,195 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.kxxt.dev (mail.kxxt.dev [74.48.220.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDD9A33B6CB;
-	Fri,  6 Mar 2026 09:15:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2E4A346A0A
+	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 09:41:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.48.220.112
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772788508; cv=none; b=e+8vKnSn84cLNLd4ZqnhbpZQ8kIURZi7XqPNUAdVTGF1vkwY96Wprk7pcQZqALiso2xj+M5ginnmVgyAJ/eu6l2y/nFH+GVemtYGsUX4wnV8uZpVUki+WoGqVbpm++w6Mtq9LozfiSAAp/feMTT1fvNbOojpBxMNczzpuS6lCwI=
+	t=1772790103; cv=none; b=AUq3AnTGDYSp4SqQofBd90nD+azB8d8jWFFA/ODHhLLASwWOC4xcxbHxYOOhkE67VXfG+ayvqkU0V4RX6SuflyTBXgsJ26hcGoqCVASpQLKAXWde8sWrl5Zs0Ehkp6Xlhmgte4w5YPa7dSHIBI2itUq8fAozRHwxuThJb2Ptp0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772788508; c=relaxed/simple;
-	bh=7RvOdnrFs/iEe9G84pPe+q4PLv+gFd3Sa58Nl0eTC8M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MhkrUNew/kVjjDX00OOp2HBs5hVrUxZeQ+VO91IGOaVaGPyrv/7spRARgvL4zQSEQEm5Soq62lHODY+P8EFU2BSfjsBxus5wxEs6wP6knTO423TDZzAZK0kJ8WCPPK06gaQ5BB7kgguVlb6DEYYVM5ZKe5J9x4Q4fnwuwp8KipI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TyR366hp; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772790103; c=relaxed/simple;
+	bh=vuW86NXR7ir3mTZfbVIFs+xF8J5TZ+Zl1hU33mjSDSM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tvJxTYxdR8ATci2I1dcmZJN33N+SpX69eOP8MaGGr2wylDaa1LS36zi4u5xuvNd0UBVK5PE8eoqkHlc0x3T5nrS+KBXHKRXXgNstCOLUd/K50FyN4wNgCr3OST6pcpE8QlpXTlREOk9xN8CMqd/mHZFTXw9AkibDcZp/hWiSBD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kxxt.dev; spf=pass smtp.mailfrom=kxxt.dev; dkim=pass (1024-bit key) header.d=kxxt.dev header.i=@kxxt.dev header.b=ohFRI8l+; arc=none smtp.client-ip=74.48.220.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kxxt.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kxxt.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TyR366hp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C425BC4CEF7;
-	Fri,  6 Mar 2026 09:14:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772788507;
-	bh=7RvOdnrFs/iEe9G84pPe+q4PLv+gFd3Sa58Nl0eTC8M=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TyR366hpH5SBgvb3stJOO+3+JgB4eyp8Ub6SIcEY5Wv5+DIXq3qwQ1akUuyGzm4GI
-	 oVWqv0SYGKFQk/aIJcLbDc3SkZdh03GwnjPJPfc8DHBxnnTk3pTwokbH2aquirHejB
-	 nz1gJxpKMhkWSd0cvlbIm12Yo0dUUSzlaMGnA70lo5LCfYmGHYkoB3BEoaWxEw9skO
-	 0XSBCv8+kTn/Gf5HrA+24udlPqxoLhC1731SEC00PUdG+t6hKArOjAPEtT/hHxR1LY
-	 s+VuE2scXcViJMBvNGcnMzw7bfK0RAeQxP1RLAMHfxMD+S62KQ5DOUo/0QF6h57vkJ
-	 rf8R3FiiVNktg==
-From: Christian Brauner <brauner@kernel.org>
-To: Jeff Layton <jlayton@kernel.org>
-Cc: Christian Brauner <brauner@kernel.org>,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	nvdimm@lists.linux.dev,
-	fsverity@lists.linux.dev,
-	linux-mm@kvack.org,
-	netfs@lists.linux.dev,
-	linux-ext4@vger.kernel.org,
-	linux-f2fs-devel@lists.sourceforge.net,
-	linux-nfs@vger.kernel.org,
-	linux-cifs@vger.kernel.org,
-	samba-technical@lists.samba.org,
-	linux-nilfs@vger.kernel.org,
-	v9fs@lists.linux.dev,
-	linux-afs@lists.infradead.org,
-	autofs@vger.kernel.org,
-	ceph-devel@vger.kernel.org,
-	codalist@coda.cs.cmu.edu,
-	ecryptfs@vger.kernel.org,
-	linux-mtd@lists.infradead.org,
-	jfs-discussion@lists.sourceforge.net,
-	ntfs3@lists.linux.dev,
-	ocfs2-devel@lists.linux.dev,
-	devel@lists.orangefs.org,
-	linux-unionfs@vger.kernel.org,
-	apparmor@lists.ubuntu.com,
-	linux-security-module@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	selinux@vger.kernel.org,
-	amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	linux-media@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org,
-	netdev@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	linux-fscrypt@vger.kernel.org,
-	linux-xfs@vger.kernel.org,
-	linux-hams@vger.kernel.org,
-	linux-x25@vger.kernel.org,
-	audit@vger.kernel.org,
-	linux-bluetooth@vger.kernel.org,
-	linux-can@vger.kernel.org,
-	linux-sctp@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Jan Kara <jack@suse.cz>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	"Theodore Y. Ts'o" <tytso@mit.edu>,
-	Muchun Song <muchun.song@linux.dev>,
-	Oscar Salvador <osalvador@suse.de>,
-	David Hildenbrand <david@kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Paulo Alcantara <pc@manguebit.org>,
-	Andreas Dilger <adilger.kernel@dilger.ca>,
-	Jan Kara <jack@suse.com>,
-	Jaegeuk Kim <jaegeuk@kernel.org>,
-	Chao Yu <chao@kernel.org>,
-	Trond Myklebust <trondmy@kernel.org>,
-	Anna Schumaker <anna@kernel.org>,
-	Chuck Lever <chuck.lever@oracle.com>,
-	NeilBrown <neil@brown.name>,
-	Olga Kornievskaia <okorniev@redhat.com>,
-	Dai Ngo <Dai.Ngo@oracle.com>,
-	Tom Talpey <tom@talpey.com>,
-	Steve French <sfrench@samba.org>,
-	Ronnie Sahlberg <ronniesahlberg@gmail.com>,
-	Shyam Prasad N <sprasad@microsoft.com>,
-	Bharath SM <bharathsm@microsoft.com>,
-	Alexander Aring <alex.aring@gmail.com>,
-	Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-	Viacheslav Dubeyko <slava@dubeyko.com>,
-	Eric Van Hensbergen <ericvh@kernel.org>,
-	Latchesar Ionkov <lucho@ionkov.net>,
-	Dominique Martinet <asmadeus@codewreck.org>,
-	Christian Schoenebeck <linux_oss@crudebyte.com>,
-	David Sterba <dsterba@suse.com>,
-	Marc Dionne <marc.dionne@auristor.com>,
-	Ian Kent <raven@themaw.net>,
-	Luis de Bethencourt <luisbg@kernel.org>,
-	Salah Triki <salah.triki@gmail.com>,
-	"Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
-	Ilya Dryomov <idryomov@gmail.com>,
-	Alex Markuze <amarkuze@redhat.com>,
-	Jan Harkes <jaharkes@cs.cmu.edu>,
-	coda@cs.cmu.edu,
-	Nicolas Pitre <nico@fluxnic.net>,
-	Tyler Hicks <code@tyhicks.com>,
-	Amir Goldstein <amir73il@gmail.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Yangtao Li <frank.li@vivo.com>,
-	Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Dave Kleikamp <shaggy@kernel.org>,
-	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-	Mark Fasheh <mark@fasheh.com>,
-	Joel Becker <jlbec@evilplan.org>,
-	Joseph Qi <joseph.qi@linux.alibaba.com>,
-	Mike Marshall <hubcap@omnibond.com>,
-	Martin Brandenburg <martin@omnibond.com>,
-	Miklos Szeredi <miklos@szeredi.hu>,
-	Anders Larsen <al@alarsen.net>,
-	Zhihao Cheng <chengzhihao1@huawei.com>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Naohiro Aota <naohiro.aota@wdc.com>,
-	Johannes Thumshirn <jth@kernel.org>,
-	John Johansen <john.johansen@canonical.com>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
-	Fan Wu <wufan@kernel.org>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
-	Ondrej Mosnacek <omosnace@redhat.com>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-	David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Willem de Bruijn <willemb@google.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	James Clark <james.clark@linaro.org>,
-	"Darrick J. Wong" <djwong@kernel.org>,
-	Martin Schiller <ms@dev.tdt.de>,
-	Eric Paris <eparis@redhat.com>,
-	Joerg Reuter <jreuter@yaina.de>,
-	Marcel Holtmann <marcel@holtmann.org>,
-	Johan Hedberg <johan.hedberg@gmail.com>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	Oliver Hartkopp <socketcan@hartkopp.net>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	David Ahern <dsahern@kernel.org>,
-	Neal Cardwell <ncardwell@google.com>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Remi Denis-Courmont <courmisch@gmail.com>,
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-	Xin Long <lucien.xin@gmail.com>,
-	Magnus Karlsson <magnus.karlsson@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>
-Subject: Re: [PATCH v3 00/12] vfs: change inode->i_ino from unsigned long to u64
-Date: Fri,  6 Mar 2026 10:09:33 +0100
-Message-ID: <20260306-kennen-zubrot-2605fcfd6950@brauner>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260304-iino-u64-v3-0-2257ad83d372@kernel.org>
-References: <20260304-iino-u64-v3-0-2257ad83d372@kernel.org>
+	dkim=pass (1024-bit key) header.d=kxxt.dev header.i=@kxxt.dev header.b="ohFRI8l+"
+Message-ID: <632021d4-9401-4c3a-af4c-bdb450add34f@kxxt.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kxxt.dev; s=mail;
+	t=1772790100;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=A+9p9FH9jLgKu80Bz9z/T90k4OTA6bi4AWy4WKJ+t1w=;
+	b=ohFRI8l+L7eLgIIsWGWpv0wK9yoVwbZuDl8oiXD7ctJn2AH74el/kHlAI9OOoWJXv99maY
+	fzwTCp8xGuw224R7I6JSs0BZrGjVgmrKj6ZjRJLNocxDAkVPOMNfmY+HFQI8UVN9Ee5pS8
+	sVsE2NXZ58CIp458tSwyEx6BI+cMCL8=
+Date: Fri, 6 Mar 2026 17:41:35 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2708; i=brauner@kernel.org; h=from:subject:message-id; bh=7RvOdnrFs/iEe9G84pPe+q4PLv+gFd3Sa58Nl0eTC8M=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWSumvWu2uNxbBFXikaZQKrMtl0PLj1c+kZGWOrvZiHz/ W/CTGOed5SyMIhxMciKKbI4tJuEyy3nqdhslKkBM4eVCWQIAxenAEzk4A5GhimT869vPnNH4Vqj t6Tr0fqPLXs3v0g/qbXpwf6o52L5D7YyMnxU+idovG+O5JQe0WVOK45/sI9bw9AjJfah78/izrQ aXg4A
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 0/2] bpf: calls to bpf_loop() should have an SCC and
+ accumulate backedges
+To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
+ ast@kernel.org, andrii@kernel.org
+Cc: daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com,
+ yonghong.song@linux.dev
+References: <20251229-scc-for-callbacks-v1-0-ceadfe679900@gmail.com>
+ <ed857a23-bd73-4915-b080-558b5934bc8f@kxxt.dev>
+ <79ac0188db82c675e62c36c8ab036b45cef3f3f7.camel@gmail.com>
+Content-Language: en-US
+From: Levi Zim <i@kxxt.dev>
+In-Reply-To: <79ac0188db82c675e62c36c8ab036b45cef3f3f7.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, 04 Mar 2026 10:32:30 -0500, Jeff Layton wrote:
-> Christian said [1] to "just do it" when I proposed this, so here we are!
-> 
-> For historical reasons, the inode->i_ino field is an unsigned long,
-> which means that it's 32 bits on 32 bit architectures. This has caused a
-> number of filesystems to implement hacks to hash a 64-bit identifier
-> into a 32-bit field, and deprives us of a universal identifier field for
-> an inode.
-> 
-> [...]
+On 2026-03-06 16:27, Eduard Zingerman wrote:
+> On Fri, 2026-03-06 at 16:20 +0800, Levi Zim wrote:
+>> Hi Eduard,
+>>
+>> On 2025-12-30 15:13, Eduard Zingerman wrote:
+>>> This is a correctness fix for the verification of BPF programs that
+>>> work with callback-calling functions. The problem is the same as the
+>>> issue fixed by series [1] for iterator-based loops: some of the states
+>>> created while processing the callback function body might have
+>>> incomplete read or precision marks.
+>>>
+>>> An example of an unsafe program that is accepted without this fix can
+>>> be found in patch #2.
+>>>
+>>> There is some impact on verification performance:
+>>>
+>>> File                             Program               Insns (A)  Insns (B)  Insns      (DIFF)
+>>> -------------------------------  --------------------  ---------  ---------  -----------------
+>>> pyperf600_bpf_loop.bpf.o         on_event                   4247       9985   +5738 (+135.11%)
+>>> setget_sockopt.bpf.o             skops_sockopt              5719       7446    +1727 (+30.20%)
+>>> setget_sockopt.bpf.o             socket_post_create         1253       1603     +350 (+27.93%)
+>>> strobemeta_bpf_loop.bpf.o        on_event                   3424       7224   +3800 (+110.98%)
+>>> test_tcp_custom_syncookie.bpf.o  tcp_custom_syncookie      11929      38307  +26378 (+221.12%)
+>>> xdp_synproxy_kern.bpf.o          syncookie_tc              13986      23035    +9049 (+64.70%)
+>>> xdp_synproxy_kern.bpf.o          syncookie_xdp             13881      21022    +7141 (+51.44%)
+>> I see that the first patch in the series causes some impact on
+>> verification performance.
+>> The patch contains "Fixes:" tag for two commits that landed in 6.17 kernel:
+>>
+>> c9e31900b54c ("bpf: propagate read/precision marks over state graph backedges")
+>> 96c6aa4c63af ("bpf: compute SCCs in program control flow graph")
+>>
+>> I have a BPF program [1] that is badly affected by the patch that it no
+>> longer loads on 6.19.5 due to
+>> E2BIG error.
+>>
+>> The program consists of multiple nested bpf_loop calls as follows so I
+>> think the impact on it is expected.
+>>
+>> (entry point) func trace_exec_common
+>> -> (bpf_loop) callback read_strings for reading ARGV
+>> -> (bpf_loop) callback read_strings for reading ENVP
+>> -> (call) read_fds
+>>      -> (bpf_loop) callback read_fds_impl for iterating over the fdset
+>>         -> (bpf_loop) callback read_fdset_word for reading a single word in the fdset
+>>             -> (call) _read_fd for getting information from a single fd
+>>                 -> (call) read_send_path which reads the absolute path and mount info
+>>
+>>
+>> After the patch, I find that I need to comment out the
+>> bpf_loop(BITS_PER_LONG, read_fdset_word, &subctx, 0)
+>> statement in read_fds_impl function to make the eBPF program load.
+>>
+>> Does it mean that after the patch, the verification performance degraded
+>> significantly compared to older
+>> versions of kernel, e.g. 6.6 LTS? Or is it that older kernels are also
+>> impacted with the same sort of bug and
+>> currently waiting to be fixed?
+>>
+>> I am also exploring ways to fix my bpf program so that it could work on
+>> 6.19.4 and later kernels.
+>> It would be greatly appreciated if you could share some insights for
+>> fixing bpf programs that are badly
+>> affected by this patch.
+> Hi Levi,
 
-This series makes me happy. We've been talking about this conversion for
-a while and I'm thankful that you did this work. Without the automation
-available this probably wouldn't have happened as quickly as it did now.
-Let's see what bits and pieces it missed.
+Hi Eduard,
 
----
+Thanks for your quick reply!
+>
+> I'll take a detailed look tomorrow, but am curious if patch-set [1]
+> helps with your program? As far as I understand it is not a part of
+> 6.19, as it was not marked as "fixes".
 
-Applied to the vfs-7.1.kino branch of the vfs/vfs.git tree.
-Patches in the vfs-7.1.kino branch should appear in linux-next soon.
+The patch-set is in v7.0-rc2 so I tested my program on v7.0-rc2 but it 
+still doesn't load.
+However, the logs are slightly different.
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
+The log from v7.0-rc2 is shorter than the one I got from v6.19.4 and the 
+metrics are slightly different:
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
+ From 6.19.4:
 
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
+BPF program is too large. Processed 1000001 insn
+processed 1000001 insns (limit 1000000) max_states_per_insn 46 total_states 48940 peak_states 103941 mark_read 0
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs-7.1.kino
+ From 7.0-rc2:
 
-[01/12] vfs: widen inode hash/lookup functions to u64
-        https://git.kernel.org/vfs/vfs/c/2412a9fa518a
-[02/12] audit: widen ino fields to u64
-        https://git.kernel.org/vfs/vfs/c/a5e863be4d02
-[03/12] net: change sock.sk_ino and sock_i_ino() to u64
-        https://git.kernel.org/vfs/vfs/c/c21144a0a33f
-[04/12] vfs: widen trace event i_ino fields to u64
-        https://git.kernel.org/vfs/vfs/c/5e5c380870b2
-[05/12] cachefiles: widen trace event i_ino fields to u64
-        https://git.kernel.org/vfs/vfs/c/25291f67aad7
-[06/12] ext2: widen trace event i_ino fields to u64
-        https://git.kernel.org/vfs/vfs/c/797d04a355e3
-[07/12] hugetlbfs: widen trace event i_ino fields to u64
-        https://git.kernel.org/vfs/vfs/c/3c976fb36a9a
-[08/12] zonefs: widen trace event i_ino fields to u64
-        https://git.kernel.org/vfs/vfs/c/988f68c01b3a
-[09/12] ext4: widen trace event i_ino fields to u64
-        https://git.kernel.org/vfs/vfs/c/1c1427c79bc2
-[10/12] f2fs: widen trace event i_ino fields to u64
-        https://git.kernel.org/vfs/vfs/c/6e62bf74bd8a
-[11/12] nilfs2: widen trace event i_ino fields to u64
-        https://git.kernel.org/vfs/vfs/c/6ce73711525a
-[12/12] treewide: change inode->i_ino from unsigned long to u64
-        https://git.kernel.org/vfs/vfs/c/af82d143e869
+BPF program is too large. Processed 1000001 insn
+processed 1000001 insns (limit 1000000) max_states_per_insn 55 total_states 46639 peak_states 99877 mark_read 0
+
+So I think the patch-set helped but still couldn't make the program load 
+again.
+
+If you want me to test the patch-set by applying it on top of 6.19.4, 
+feel free to tell me.
+
+Thanks,
+Levi
+
+>
+> [1] https://lore.kernel.org/bpf/20251230-loop-stack-misc-pruning-v1-0-585cfd6cec51@gmail.com/
+>
+> Thanks,
+> Eduard
+>
+>> [1]:
+>> https://github.com/kxxt/tracexec/blob/main/crates/tracexec-backend-ebpf/src/bpf/tracexec_system.bpf.c
+>>
+>> Thanks,
+>> Levi
+>>
+>>> Total progs: 4172
+>>> Old success: 2520
+>>> New success: 2520
+>>> total_insns diff min:    0.00%
+>>> total_insns diff max:  221.12%
+>>> 0 -> value: 0
+>>> value -> 0: 0
+>>> total_insns abs max old: 837,487
+>>> total_insns abs max new: 837,487
+>>>      0 .. 5    %: 4163
+>>>      5 .. 15   %: 2
+>>>     25 .. 35   %: 2
+>>>     50 .. 60   %: 1
+>>>     60 .. 70   %: 1
+>>>    110 .. 120  %: 1
+>>>    135 .. 145  %: 1
+>>>    220 .. 225  %: 1
+>>>
+>>> [1] https://lore.kernel.org/bpf/174968344350.3524559.14906547029551737094.git-patchwork-notify@kernel.org/
+>>>
+>>> ---
+>>> Eduard Zingerman (2):
+>>>         bpf: bpf_scc_visit instance and backedges accumulation for bpf_loop()
+>>>         selftests/bpf: test cases for bpf_loop SCC and state graph backedges
+>>>
+>>>    kernel/bpf/verifier.c                     | 13 ++++--
+>>>    tools/testing/selftests/bpf/progs/iters.c | 75 +++++++++++++++++++++++++++++++
+>>>    2 files changed, 84 insertions(+), 4 deletions(-)
+>>> ---
+>>> base-commit: f14cdb1367b947d373215e36cfe9c69768dbafc9
+>>> change-id: 20251219-scc-for-callbacks-d6d94faa2e43
+>>>
