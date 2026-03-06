@@ -1,47 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D43661A2389
-	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 13:41:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4031021D3F3
+	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 13:41:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772804494; cv=none; b=ECa3Ht3z7dZOuU81NFt1PmUxtstTPmUW0sVgvxYVlRieYlVDfwfGMsgqtYhi0ysvyJpbhFgmCQrnjjfyHPAP7P5JSdybPJAGLzplYtXfDjpVymksRKT8pwgGx6C6dOwcfkTVwGymLL+lDOnetIPN/WydbwtYGELm9tpyq0cEa7A=
+	t=1772804501; cv=none; b=ZrDq+QpcKHf9qWMNFC5RA5TGZcOx3E5yqLZI0dItjFncciHjJoTlUHFJJZz5x8by5vkBvnfKojspb32aoaFlB3Kv7JNHHzA/TtRiykl6+uCvxIlvWVIHTIsInAORo5PJx48CyW1MJjjMMDzANM8Byaz7EHJCxd7JiQV0jthlOGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772804494; c=relaxed/simple;
-	bh=W5Yk6UZEOdjdy90OrbeCWPRiPsGbHUGuDLP2Fj4Ib6s=;
+	s=arc-20240116; t=1772804501; c=relaxed/simple;
+	bh=G6VY5RDVjhZMohKXuUVetgaAVnAeU49myyQ1Nlk+vvk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=abIlaaq5QK3X094ITxqhTg302ywan7thglIvHTTK4WmVq1WQ+RVjorUKF/O+fxSDZtJx/KTX6cbETGGF5i+9dypaSI6b10wHt+ErWbKt8lG8sLcQvADWvOIq6XTRiRAx0rxpgKLSjZ6dbnecFb3f4NlG701x8dVczysLJ0sK4Oo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BWubt8Uu; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=BIiQobqz4IPfpGA657OTRb7ZqFQ8YEzHOoogb4cTkd11CbsfIF2hPN2SQF/mrpElaQgg//OhwpkIUKAAYM/qWHl2vUuYx+ev51Ia0/2Al6QUqaSQkbOhn12KCzEppKPDPNKcXDTvW7OVCNG0RiDvOqBf9BnavU6fsR4Xw56kMvw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=V8UQyFRk; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BWubt8Uu"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="V8UQyFRk"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772804492;
+	s=mimecast20190719; t=1772804499;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=SEwNwOdpPOyF/kQTFgzPcU3A57fwNCMpCI8CYnVSmr0=;
-	b=BWubt8Uu1AVlzFNXJt2sgY2azS2jT9PPqsSK1mzrv0SlxZlReKJMUNcujSG+yDeVSbuoi0
-	zcPuL73pX8lVXeontG0KFEATVWu9NKxGm6DpwfQMOUlLHo5bD2HKTLFZpXhvVlXXVjBUc6
-	yvk4ihPtSwEok/m/2ysIrdo3r2AOfRM=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+	bh=48AgRvPpMmicOhvi4SBNaTEWDoQoTwK8k7XE/ZL8mJk=;
+	b=V8UQyFRk5CwM2TdhwFj9nAlGqASpIzQmOtIukfDM1ApOhQOW5R99iDFJvPyQkpjSlrVP+G
+	KxsDpsWiPcFY+pEThpDeGWfhtw4ylhu9USbbuMdrJuGstaisAX2xbIH/6kKqIjEnmqSjUV
+	UM9tTtJCEwVumzdITnveM1he9euj6eE=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-359-6Sl9ql2JPt6R5g-7qXHrxw-1; Fri,
- 06 Mar 2026 08:41:28 -0500
-X-MC-Unique: 6Sl9ql2JPt6R5g-7qXHrxw-1
-X-Mimecast-MFC-AGG-ID: 6Sl9ql2JPt6R5g-7qXHrxw_1772804486
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-571-1ywtGvzlNpSIpfFcLkJSiQ-1; Fri,
+ 06 Mar 2026 08:41:35 -0500
+X-MC-Unique: 1ywtGvzlNpSIpfFcLkJSiQ-1
+X-Mimecast-MFC-AGG-ID: 1ywtGvzlNpSIpfFcLkJSiQ_1772804492
 Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5DE291956059;
-	Fri,  6 Mar 2026 13:41:25 +0000 (UTC)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3F31D195608D;
+	Fri,  6 Mar 2026 13:41:32 +0000 (UTC)
 Received: from vmalik-fedora.redhat.com (unknown [10.45.225.35])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 61103180035F;
-	Fri,  6 Mar 2026 13:41:18 +0000 (UTC)
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D50001800361;
+	Fri,  6 Mar 2026 13:41:25 +0000 (UTC)
 From: Viktor Malik <vmalik@redhat.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -63,9 +63,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
 	Leon Hwang <leon.hwang@linux.dev>,
 	Viktor Malik <vmalik@redhat.com>
-Subject: [PATCH bpf-next v2 2/3] bpf: Always allow fmod_ret programs on syscalls
-Date: Fri,  6 Mar 2026 14:40:58 +0100
-Message-ID: <710368d4559b13d2d82a47ef1fa7d70a9a038add.1772804200.git.vmalik@redhat.com>
+Subject: [PATCH bpf-next v2 3/3] selftests/bpf: Move sleepable refcounted_kptr tests to syscalls
+Date: Fri,  6 Mar 2026 14:40:59 +0100
+Message-ID: <8ce28b8f962759f5177b4b426f4ab372775aeef2.1772804200.git.vmalik@redhat.com>
 In-Reply-To: <cover.1772804199.git.vmalik@redhat.com>
 References: <cover.1772804199.git.vmalik@redhat.com>
 Precedence: bulk
@@ -77,82 +77,56 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-fmod_ret BPF programs can only be attached to selected functions. For
-convenience, the error injection list was originally used (along with
-functions prefixed with "security_"), which contains syscalls and
-several other functions.
+Now that sleepable programs are always enabled on syscalls, let
+refcounted_kptr tests use syscalls rather than bpf_testmod_test_read,
+which is not sleepable with error injection disabled.
 
-When error injection is disabled (CONFIG_FUNCTION_ERROR_INJECTION=n),
-that list is empty and fmod_ret programs are effectively unavailable for
-most of the functions. In such a case, at least enable fmod_ret programs
-on syscalls.
+The tests just check that the verifier can handle usage of RCU locks in
+sleepable programs and never actually attach. So, the attachment target
+doesn't matter (as long as it is sleepable) and with syscalls, the tests
+pass on kernels with disabled error injection.
 
 Signed-off-by: Viktor Malik <vmalik@redhat.com>
 ---
- kernel/bpf/verifier.c | 29 +++++++++++++++++++----------
- 1 file changed, 19 insertions(+), 10 deletions(-)
+ tools/testing/selftests/bpf/progs/refcounted_kptr.c      | 4 ++--
+ tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 458fc528ccc6..f05dea10c1b7 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -24921,15 +24921,6 @@ static int check_struct_ops_btf_id(struct bpf_verifier_env *env)
- }
- #define SECURITY_PREFIX "security_"
- 
--static int check_attach_modify_return(unsigned long addr, const char *func_name)
--{
--	if (within_error_injection_list(addr) ||
--	    !strncmp(SECURITY_PREFIX, func_name, sizeof(SECURITY_PREFIX) - 1))
--		return 0;
--
--	return -EINVAL;
--}
--
- #ifdef CONFIG_FUNCTION_ERROR_INJECTION
- 
- /* list of non-sleepable functions that are otherwise on
-@@ -24965,6 +24956,15 @@ static int check_attach_sleepable(u32 btf_id, unsigned long addr, const char *fu
- 	return -EINVAL;
+diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr.c b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
+index 1aca85d86aeb..c847398837cc 100644
+--- a/tools/testing/selftests/bpf/progs/refcounted_kptr.c
++++ b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
+@@ -500,7 +500,7 @@ long rbtree_wrong_owner_remove_fail_a2(void *ctx)
+ 	return 0;
  }
  
-+static int check_attach_modify_return(unsigned long addr, const char *func_name)
-+{
-+	if (within_error_injection_list(addr) ||
-+	    !strncmp(SECURITY_PREFIX, func_name, sizeof(SECURITY_PREFIX) - 1))
-+		return 0;
-+
-+	return -EINVAL;
-+}
-+
- #else
- 
- /* Unfortunately, the arch-specific prefixes are hard-coded in arch syscall code
-@@ -24990,7 +24990,7 @@ static bool has_arch_syscall_prefix(const char *func_name)
- #endif
+-SEC("?fentry.s/bpf_testmod_test_read")
++SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
+ __success
+ int BPF_PROG(rbtree_sleepable_rcu,
+ 	     struct file *file, struct kobject *kobj,
+@@ -534,7 +534,7 @@ int BPF_PROG(rbtree_sleepable_rcu,
+ 	return 0;
  }
  
--/* Without error injection, allow sleepable progs on syscalls. */
-+/* Without error injection, allow sleepable and fmod_ret progs on syscalls. */
- 
- static int check_attach_sleepable(u32 btf_id, unsigned long addr, const char *func_name)
- {
-@@ -25000,6 +25000,15 @@ static int check_attach_sleepable(u32 btf_id, unsigned long addr, const char *fu
- 	return -EINVAL;
+-SEC("?fentry.s/bpf_testmod_test_read")
++SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
+ __success
+ int BPF_PROG(rbtree_sleepable_rcu_no_explicit_rcu_lock,
+ 	     struct file *file, struct kobject *kobj,
+diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+index 836c8ab7b908..b2808bfcec29 100644
+--- a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
++++ b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+@@ -93,7 +93,7 @@ long rbtree_refcounted_node_ref_escapes_owning_input(void *ctx)
+ 	return 0;
  }
  
-+static int check_attach_modify_return(unsigned long addr, const char *func_name)
-+{
-+	if (has_arch_syscall_prefix(func_name) ||
-+	    !strncmp(SECURITY_PREFIX, func_name, sizeof(SECURITY_PREFIX) - 1))
-+		return 0;
-+
-+	return -EINVAL;
-+}
-+
- #endif /* CONFIG_FUNCTION_ERROR_INJECTION */
- 
- int bpf_check_attach_target(struct bpf_verifier_log *log,
+-SEC("?fentry.s/bpf_testmod_test_read")
++SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
+ __failure __msg("function calls are not allowed while holding a lock")
+ int BPF_PROG(rbtree_fail_sleepable_lock_across_rcu,
+ 	     struct file *file, struct kobject *kobj,
 -- 
 2.53.0
 
