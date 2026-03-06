@@ -1,120 +1,239 @@
-Received: from mail-wr1-f65.google.com (mail-wr1-f65.google.com [209.85.221.65])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33D19EAC7
-	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 00:00:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.65
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772755258; cv=pass; b=o/dRIuWZ4/WbzdUFPP9kyJpWgePoT66sx+5XpJBPsJdFJFQAm2g00C1TpBS+XlspPDV33b4rft390eXtnibXe9Cag1xDGjVu5S5Pap3+5dKg+RB3XRRXNv0d9W93niJQgggYA4I9qn0jjIyHgYMGdNSfBcaFIwKETsbUi7bcFSI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772755258; c=relaxed/simple;
-	bh=jRsauYAb/O8R1mJxxt+mtRx4RCCMNAsS80SQg73kaeM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eOspE96LlXLzoD3uZW81DHl5YPJGD+5vEwVFDEFX+f9f0Hx4HPro+rfTXt2s05Z5ShbIZuX+e17qKkfN++OlgviLENovMtsM2n4EcSSI68kRdWWgY/CG3ymvHL3izF9/tZVZtWyHFHn0C739HFHGZ65VupO6gzZY4GZ2ZblxHfo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UUZRq7BO; arc=pass smtp.client-ip=209.85.221.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A51731D130E
+	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 00:13:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772756014; cv=none; b=GRPIavg67NdmjWiQIAY9ZQ//CZG8ssCvomAaG78fhxkPsDBaaPuuSU5WSjmUHSqRsKR6PCybkNWak2Vk614C4C9Zeh9d/JkqLXOfWFl9pMUPYEyWuHsl2yhKsN3X64srEsuSka7CJxFaLraFrZmUn0MbYQPmijeLYHQI3hRBf+M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772756014; c=relaxed/simple;
+	bh=Li4Kix+J1mGeqeHe3Fhv+8xWcy6XSHBFelrYjVb9IeQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qQMkAuUbmFtL3VfEUgCb6Fq9VOgAOsip0FhuNsYewW6pbRttiy7M2QjPFOPhknHLjSpIZKyPNhIdWrUZAyovOVlDngGkND6Y4603/59tLuCzfld70trK0zRRliC5OgAgFjdI6Dyd5iuZGxcJ8B4snNKIPLbRheQaep6YsNWjtAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wh93PVFS; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UUZRq7BO"
-Received: by mail-wr1-f65.google.com with SMTP id ffacd0b85a97d-439c6fc2910so1814922f8f.0
-        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 16:00:56 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772755255; cv=none;
-        d=google.com; s=arc-20240605;
-        b=d1XkeeHInuhCNjsYPuGfzs0yMk2aF6BxuR786uUL833liVi3atw/iXUnYSiq6sj4EI
-         RbpGnx5DacvU5DF7mP8AuJg4gmS6MiypVOPgQH2fEBG5qmhGiYt/KgQS7c08GBL//9Sk
-         EBt/2m614mO0ZwAvRiiad5pH1sAjCH7bijPTjuEZmTZygy+ZefmyGYVkW6lMDZvVdGjl
-         T/3dhA1bgGmcJYgIdqGZRR9SFf1TfjPt1vl1zXBncoYc1BUtDC81MPXLz6ToTMYrZUIx
-         zGLsUwKFI4zshnV/YTJfcI/qkI3Dse5QCk3gj77818sP6tjVDAKUjvj39oBDq7Bck6bC
-         TF3w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=jRsauYAb/O8R1mJxxt+mtRx4RCCMNAsS80SQg73kaeM=;
-        fh=Ce0ibqXoVcrtpgJDCrQH13f4WUWtWrkMkYTRvRqlv+U=;
-        b=K0HKFW1YsF9sBAKmv/atd7LXNSV4BKs0i7F58jp/Smc2YbH4JL3AgV6grgre6enbXf
-         zoYU2T39EjWSuf2SId/URKBsBq+A7MzpHB7I9CSrubHiYxtF2CCZv7Lh9VkKnU2v9HZ+
-         NHKu2TMcZ+XcWookMIxfIiapW4WIIazqptIoom3QH760P59W58KVFJN7lDGa8cDBmNer
-         rjNpXlD4SMFH2xuLrntO1yuL8kj1+JGdQtuhMXoUaA639ZvGkbhH1LAX8f/CXn1sotCh
-         SonZssyAP4Mwuuq9wIqsJ6Mb3eAJVP0JHydqVCqE0inGld4GnvYqafrD2AOTkKp0b3F6
-         /fKg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wh93PVFS"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-483770e0b25so73460585e9.0
+        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 16:13:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772755255; x=1773360055; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jRsauYAb/O8R1mJxxt+mtRx4RCCMNAsS80SQg73kaeM=;
-        b=UUZRq7BOubLQZOXobh3MkiGkZOhSt8DRWM9mJq7Uk+DXfnh4UKW+sG96ykcuvuoJ+b
-         +Jjq7H1kW5JThwi61BwO/h1sMbAyOmoClqfyF8SDbe88o5Xg4Z28KCN2P610dXJ/lXPY
-         bawo6lgFNPGa1v3mYbs9Isj10mVBjLeozj0BCU6kL4yyxxaQqWOR9yZTqN7Ub54W7O3J
-         sRPc74lXZrnAin3+K3Ee2XfDBEr3JvplbAHTxmdWpxXgzih10KfkW7sX2PsG+97snNYJ
-         3WcuYhLSMiJBbQDSDPS8CwjGdRpO1s3oFxomAkEu0BD3I7iEfZHrsRzFBBbRMeogyX9S
-         wtxg==
+        d=gmail.com; s=20230601; t=1772756011; x=1773360811; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=g8pmZpePRELpT0ZOdmN60HAwXvR2uRkWlak+kFMuYJ0=;
+        b=Wh93PVFSNruYuXpWG+3ShiqMIzdql6Rpt+A0hif2y9CvZEc2hRkEMzue9++W+wzcn0
+         BGb6fY60OkQ5UAqGJuRYqhEbXo4otlptz0FAsJkCg8eORV/vNKojE3jglH0h6L4EESzA
+         YQTU6TQZFWEESmz3KSFvQlloyAvs/P3y7ihearxJn4V41PpLwWT327mt3lConjRUoYH6
+         rCcRxj3KsU0E/4phKkfSdDNkc5G/czfBU/9HGykVgecGH1LMAghOjTNi1X2QeG5RaGRC
+         Y2r8V8St6nwcUNFxaRj3nMrpW23tKnfnAKS+qoDkEqWVIal/6E6zYWEou+SlSTAHmpaQ
+         JAZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772755255; x=1773360055;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jRsauYAb/O8R1mJxxt+mtRx4RCCMNAsS80SQg73kaeM=;
-        b=EHUJILHaFfoeBXDzXWUIPIs+u4TtOPhFZ0ncsmpNvzVITdxDy6thvnyFirzus/FKfF
-         VHgqOQ3e509jU0ueOL4EMR0KIoiMB6luuIfsdaLCldQMeq+4Sp2bz/qzk3yb/5spu1O2
-         ihLwdoOlVp4SdfmaPNtPE1SWkMmYxdx5VPve2o59eYw9LFhHFEiLRmF6grxr795Vgxey
-         SIwCMqsG0afrHngnG6euvW9hihypS0IIpmtPY/aLEAHudt0NqX4RcaG1N4MS62Bytp+s
-         XRODCpUxBX1QAPWOA7CQCYxmSKF6cjY+ttY+Q818E3ywUbDVTcVPYBUfmPvvtPf6EQH1
-         L8Dw==
-X-Forwarded-Encrypted: i=1; AJvYcCVVZxmZio3JyoIJ4B/QqL0Q/yFl5zo7tCPzzc0Lt99AivdwrOfGZBznooKG1QVfHczjtHo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4x9Z79onqCBBoyrHxpWFeguaOl9nnwWXqLtqIZI1U1RDn6r7l
-	8fGgLNxWFDGLAj9AqqrHUhanE8ydG3G3aO/5e4ZnEeL6SuOt7SuwwU1vWh0p+TYDb0Yx1ocNc8j
-	QGtyWnl+AUvpbn54a+bJB+GjoNgkyV8c=
-X-Gm-Gg: ATEYQzyPoBarURWJcUaeB+858/L24hMSye7nzwya6JQ70ZYTQOosokeknyoxZh4CAH6
-	hRV3o2ay7//Fx2Owvl3hNVDyGzAIxiAd2npQXfHs95W/V/BN3+8fk4KSfhXipmVe/5z26oKn9N4
-	0x15EM/SkgR8OTjzeEtUBhgzBYUJHwmfEM9/b8HI0opF0bgiYxKPUpdW9t8q1l66yN2ZgTPIGGh
-	mvretG9Xos7iWec/TMYMvglHg0oIhr3lH5bOv1GQiU4rfvzC+Ta2Pt7x2UK9eG2OjtLrNYwtwhO
-	aYDvQxUKz7/agT4ayW4gj5cdRmw8wOCPQ/KpXwr/3cLs7S8SBCWvNWT39Fs=
-X-Received: by 2002:a5d:5c89:0:b0:439:c42f:10d3 with SMTP id
- ffacd0b85a97d-439da67c522mr251928f8f.46.1772755254397; Thu, 05 Mar 2026
- 16:00:54 -0800 (PST)
+        d=1e100.net; s=20230601; t=1772756011; x=1773360811;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g8pmZpePRELpT0ZOdmN60HAwXvR2uRkWlak+kFMuYJ0=;
+        b=Fv9K+XrEUG2025ODsnli9LGgUn/WbId3miiyDJDffjRUFl/zjwk924d4zwGuzcQCdd
+         HSYDO7V2LYul75nu/yHHiaZVWGqjwUkVtUh2HKqt5ytdMz8Gg33yGY2IzSnJmcctZPg9
+         rDlwyqf5lOIGVVzFgl1+p6uqTNqqBFZ/ySkCD5GBdSQQaCvxNni+ffkB/OWP9RXJM2gd
+         YV74tivzfwztwykYi802aaA1ahEa+9PpcSRZ/ypSv9V3jcl+qzCGv5SU++0/dXPTT2dq
+         iqurQVrbAuA72+KIRYO3i9KdU8zf35c44eMzwI0bHUXYbXdiJezPdimucz5kPXMgeZMU
+         ejXg==
+X-Gm-Message-State: AOJu0YwDKLrwv3LAtOPnCxttYycP7NI0UqS/k0QQOU/OSgATfqZikH5d
+	V+nUJO69LbWn9p7SxWLrhhSa2XG2TWEoor/9wiBcPcSKa4eIm6IO+V4s
+X-Gm-Gg: ATEYQzwza7UVXDpsMc1/RHECeHQmhCWmY/ch9PmlcHItDhjlX6U3Citsz3GD5g2BRss
+	tjL1HzPONkA3LmNuISrVWI+PY35ZMikhlXPx+9GvsORiIdZ5a55g/zunHs5hYqPGc1bVS1yHjni
+	9fRZgulgfw5ATO5tHPxe1gVib8YpQUvHYcZiNKF5ovuvNx/Md+eOcEWP8XOErdXiXRayG2e/roI
+	elMktTCvTvulqIBfLAj5yRFciQ4lh41sQoGikrZqYJDNKIqfDooPgIJwRGoUWQj7CEJ87caT2B1
+	z+WCqrSUckwX6q+pmuiFm68YRBwbKiRDzF+uaJU6CjIJZh8pO1esLIWQUHddxbGC0YB7beNtuZC
+	hPsw/OvjwG3dswm1hNtY1lY1o5nFKr5cqPeMXVCx7FHMBthrw/jBBiTe7ILKI1Xj9g9QKgAjt4Z
+	/fjnP61fq7Yxe+PyyvN32X2CT8mX6seuEyNowvyNaNt4eakH0UYIvAFr6PngONpAxZP5Db1pDd+
+	l7BNUTjd4bb1umWnqAbYkbK//+hC8ycNMLxJl46NKqzWzr5e0B6xdbQxW54hdFpNge+5zJAm6c=
+X-Received: by 2002:a05:600c:4752:b0:480:4a8f:2d5c with SMTP id 5b1f17b1804b1-4852697721cmr1643005e9.29.1772756010754;
+        Thu, 05 Mar 2026 16:13:30 -0800 (PST)
+Received: from Tunnel (2a01cb089436c0001b77cc3ec8ba0ad1.ipv6.abo.wanadoo.fr. [2a01:cb08:9436:c000:1b77:cc3e:c8ba:ad1])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4851fae5dbdsm71595685e9.8.2026.03.05.16.13.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Mar 2026 16:13:29 -0800 (PST)
+Date: Fri, 6 Mar 2026 01:13:27 +0100
+From: Paul Chaignon <paul.chaignon@gmail.com>
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+	daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com,
+	yonghong.song@linux.dev, emil@etsalapatis.com, arighi@nvidia.com,
+	shung-hsi.yu@suse.com
+Subject: Re: [PATCH bpf v2 1/2] bpf: refine u32/s32 bounds when ranges cross
+ min/max boundary
+Message-ID: <aaocJ3gJr7019urU@Tunnel>
+References: <20260305-bpf-32-bit-range-overflow-v2-0-7169206a3041@gmail.com>
+ <20260305-bpf-32-bit-range-overflow-v2-1-7169206a3041@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260304143459.78059-1-pilgrimtao@gmail.com> <20260304143459.78059-2-pilgrimtao@gmail.com>
-In-Reply-To: <20260304143459.78059-2-pilgrimtao@gmail.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Fri, 6 Mar 2026 01:00:17 +0100
-X-Gm-Features: AaiRm503-nblu_Zv4HuBZcLkUaQYpUNSpcsO_swTkvFKxfix8qqgo7AO5qFDAns
-Message-ID: <CAP01T77RgXhG_Pc6qhxdksMSpm07YhEvtcooEzz4boYv3+6GqQ@mail.gmail.com>
-Subject: Re: [PATCH v6 1/5] bpf: Introduce the bpf_list_del kfunc.
-To: Chengkaitao <pilgrimtao@gmail.com>
-Cc: martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, eddyz87@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, 
-	chengkaitao@kylinos.cn, linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260305-bpf-32-bit-range-overflow-v2-1-7169206a3041@gmail.com>
 
-On Wed, 4 Mar 2026 at 15:50, Chengkaitao <pilgrimtao@gmail.com> wrote:
->
-> From: Kaitao Cheng <chengkaitao@kylinos.cn>
->
-> If a user holds ownership of a node in the middle of a list, they
-> can directly remove it from the list without strictly adhering to
-> deletion rules from the head or tail.
->
-> We have added an additional parameter bpf_list_head *head to
-> bpf_list_del, as the verifier requires the head parameter to
-> check whether the lock is being held.
->
-> This is typically paired with bpf_refcount. After calling
-> bpf_list_del, it is generally necessary to drop the reference to
-> the list node twice to prevent reference count leaks.
->
-> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
-> ---
+On Thu, Mar 05, 2026 at 11:48:22AM -0800, Eduard Zingerman wrote:
 
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+[...]
 
-> [...]
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 401d6c4960eccfa90893660b7d8aece859787f7f..f960b382fdb3d4a4f5f2a66a525c2f594de529ff 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -2511,6 +2511,30 @@ static void __reg32_deduce_bounds(struct bpf_reg_state *reg)
+>  	if ((u32)reg->s32_min_value <= (u32)reg->s32_max_value) {
+>  		reg->u32_min_value = max_t(u32, reg->s32_min_value, reg->u32_min_value);
+>  		reg->u32_max_value = min_t(u32, reg->s32_max_value, reg->u32_max_value);
+> +	} else {
+> +		if (reg->u32_max_value < (u32)reg->s32_min_value) {
+> +			/* See __reg64_deduce_bounds() for detailed explanation.
+> +			 * Refine ranges in the following situation:
+> +			 *
+> +			 * 0                                                   U32_MAX
+> +			 * |  [xxxxxxxxxxxxxx u32 range xxxxxxxxxxxxxx]              |
+> +			 * |----------------------------|----------------------------|
+> +			 * |xxxxx s32 range xxxxxxxxx]                       [xxxxxxx|
+> +			 * 0                     S32_MAX S32_MIN                    -1
+> +			 */
+> +			reg->s32_min_value = (s32)reg->u32_min_value;
+> +			reg->u32_max_value = min_t(u32, reg->u32_max_value, reg->s32_max_value);
+> +		} else if ((u32)reg->s32_max_value < reg->u32_min_value) {
+> +			/*
+> +			 * 0                                                   U32_MAX
+> +			 * |              [xxxxxxxxxxxxxx u32 range xxxxxxxxxxxxxx]  |
+> +			 * |----------------------------|----------------------------|
+> +			 * |xxxxxxxxx]                       [xxxxxxxxxxxx s32 range |
+> +			 * 0                     S32_MAX S32_MIN                    -1
+> +			 */
+> +			reg->s32_max_value = (s32)reg->u32_max_value;
+> +			reg->u32_min_value = max_t(u32, reg->u32_min_value, reg->s32_min_value);
+> +		}
+
+Looks good to me. I also ran it through Agni and __reg_deduce_bounds
+(aka special instruction BPF_SYNC2) is still found to be sound.
+
+>  	}
+>  }
+>  
+> diff --git a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
+> index 0322f817d07be5d003c17dd7cedfa3aa4197678e..04938d0d431b38e086b50fe28b99e4ad2682742e 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
+> @@ -422,15 +422,69 @@ static bool is_valid_range(enum num_t t, struct range x)
+>  	}
+>  }
+>  
+> -static struct range range_improve(enum num_t t, struct range old, struct range new)
+> +static struct range range_intersection(enum num_t t, struct range old, struct range new)
+>  {
+>  	return range(t, max_t(t, old.a, new.a), min_t(t, old.b, new.b));
+>  }
+>  
+> +/*
+> + * Result is precise when 'x' and 'y' overlap or form a continuous range,
+> + * result is an over-approximation if 'x' and 'y' do not overlap.
+> + */
+> +static struct range range_union(enum num_t t, struct range x, struct range y)
+> +{
+> +	if (!is_valid_range(t, x))
+> +		return y;
+> +	if (!is_valid_range(t, y))
+> +		return x;
+> +	return range(t, min_t(t, x.a, y.a), max_t(t, x.b, y.b));
+> +}
+> +
+> +/*
+> + * This function attempts to improve x range intersecting it with y.
+> + * range_cast(... to_t ...) looses precision for ranges that pass to_t
+> + * min/max boundaries. To avoid such precision loses this function
+> + * splits both x and y into halves corresponding to non-overflowing
+> + * sub-ranges: [0, smin] and [smax, -1].
+> + * Final result is computed as follows:
+> + *
+> + *   ((x ∩ [0, smax]) ∩ (y ∩ [0, smax])) ∪
+> + *   ((x ∩ [smin,-1]) ∩ (y ∩ [smin,-1]))
+> + *
+> + * Precision might still be lost if final union is not a continuous range.
+> + */
+> +static struct range range_refine_in_halves(enum num_t x_t, struct range x,
+> +					   enum num_t y_t, struct range y)
+> +{
+> +	struct range x_pos, x_neg, y_pos, y_neg, r_pos, r_neg;
+> +	u64 smax, smin, neg_one;
+> +
+> +	if (t_is_32(x_t)) {
+> +		smax = (u64)(u32)S32_MAX;
+> +		smin = (u64)(u32)S32_MIN;
+> +		neg_one = (u64)(u32)(s32)(-1);
+> +	} else {
+> +		smax = (u64)S64_MAX;
+> +		smin = (u64)S64_MIN;
+> +		neg_one = U64_MAX;
+> +	}
+> +	x_pos = range_intersection(x_t, x, range(x_t, 0, smax));
+> +	x_neg = range_intersection(x_t, x, range(x_t, smin, neg_one));
+> +	y_pos = range_intersection(y_t, y, range(x_t, 0, smax));
+> +	y_neg = range_intersection(y_t, y, range(y_t, smin, neg_one));
+> +	r_pos = range_intersection(x_t, x_pos, range_cast(y_t, x_t, y_pos));
+> +	r_neg = range_intersection(x_t, x_neg, range_cast(y_t, x_t, y_neg));
+> +	return range_union(x_t, r_pos, r_neg);
+> +
+> +}
+> +
+>  static struct range range_refine(enum num_t x_t, struct range x, enum num_t y_t, struct range y)
+>  {
+>  	struct range y_cast;
+>  
+> +	if (t_is_32(x_t) == t_is_32(y_t))
+> +		x = range_refine_in_halves(x_t, x, y_t, y);
+
+Don't we usually put changes to this file in a separate commit, as for
+test changes in general?
+
+Also I believe with these changes, we can now revert commit da653de268d3
+("selftests/bpf: Update reg_bound range refinement logic").
+
+> +
+>  	y_cast = range_cast(y_t, x_t, y);
+>  
+>  	/* If we know that
+> @@ -444,7 +498,7 @@ static struct range range_refine(enum num_t x_t, struct range x, enum num_t y_t,
+>  	 */
+>  	if (x_t == S64 && y_t == S32 && y_cast.a <= S32_MAX  && y_cast.b <= S32_MAX &&
+>  	    (s64)x.a >= S32_MIN && (s64)x.b <= S32_MAX)
+> -		return range_improve(x_t, x, y_cast);
+> +		return range_intersection(x_t, x, y_cast);
+>  
+>  	/* the case when new range knowledge, *y*, is a 32-bit subregister
+>  	 * range, while previous range knowledge, *x*, is a full register
+> @@ -462,7 +516,7 @@ static struct range range_refine(enum num_t x_t, struct range x, enum num_t y_t,
+>  		x_swap = range(x_t, swap_low32(x.a, y_cast.a), swap_low32(x.b, y_cast.b));
+>  		if (!is_valid_range(x_t, x_swap))
+>  			return x;
+> -		return range_improve(x_t, x, x_swap);
+> +		return range_intersection(x_t, x, x_swap);
+>  	}
+>  
+>  	if (!t_is_32(x_t) && !t_is_32(y_t) && x_t != y_t) {
+> @@ -480,7 +534,7 @@ static struct range range_refine(enum num_t x_t, struct range x, enum num_t y_t,
+>  	}
+>  
+>  	/* otherwise, plain range cast and intersection works */
+> -	return range_improve(x_t, x, y_cast);
+> +	return range_intersection(x_t, x, y_cast);
+>  }
+>  
+>  /* =======================
+> 
+> -- 
+> 2.53.0
+> 
