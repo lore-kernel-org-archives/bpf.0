@@ -1,40 +1,41 @@
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BEE934F48B
-	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 14:33:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8543F1DB34C
+	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 14:34:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772807614; cv=none; b=hL1YPs5f0klFab6s05RnjEcwV2R8uwakDUvq672oQIh2Ay5hZ7I3bFRhxTuziwXIIPnBZHmeL3UR5uu28uqkQt88wD5m9MoBK5nlN16xWrlbEW6SIUE1OsoLBkg7FZZ1yLg9KIk7GfPjILwM0WN5cxxPbuqDMrc3AUGlZWhQVMg=
+	t=1772807685; cv=none; b=VB6g6hXzxC3hvn+BZ0Tkk5Bd0z9bMstwd0Iq4igVSt/AmgyH2/rL4D0vdwETikwBQgThVoPLr9wCcUTCQHzGQJDiSWRkv/GgttQbmswbJqyN0B/wEWXyy6caO7yzaNtOAfW4ajCGA6pyMaT67EsRcAhpl0hHIKf8sYpSZyWvmuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772807614; c=relaxed/simple;
-	bh=Ysl9chhusUB817jAQXGethrg3waZcOgyV/zi+p/14jc=;
+	s=arc-20240116; t=1772807685; c=relaxed/simple;
+	bh=vaEoDpy1fUGpWdko4iZwCqWJ0MXp1Q1rdotkgeUPpiY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fE8lnJxx60VoE6VlSqZohN4alnCHgvHR7ik7Odm5u5+x5PFIG8ERivhuvRzaLNN5R5vGOXtDv1e5YitfSo3fE3SGNeBYQDNj1bt7BiERyp7QXiaQfRPkPgIBpbLoIl1WUuF6I7M0D7RsK8haudsH3lMA3w7Vlts2ZHr+KqBgi7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XG2clrQU; arc=none smtp.client-ip=91.218.175.177
+	 In-Reply-To:Content-Type; b=OOkA0Yq5Ym+gAz2MNvoKMVj8Y0UhTjCncjMU2YL1EHrw/65+bT85NdKKiNIVS1SOtiRFQTCSvMVSU0c4YxQTKIZzUGicIO1+rVqQsFiF/oKLEMuenYKYmDYZMBG4ZtZJ/LHcP1gEProVZEFb1Wpr8y+uQeCgQsI2Pd7CK5YgqIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hhpqnd2i; arc=none smtp.client-ip=91.218.175.186
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XG2clrQU"
-Message-ID: <80758367-e3fb-4f60-835e-57706c5a9589@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hhpqnd2i"
+Message-ID: <92677272-5719-4c91-b4d4-d3e71e50d2c6@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772807610;
+	t=1772807681;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=URQHRYrZjIk3HFN36oTQy+hQ9dJ6v0hRv9nEIwzwOGU=;
-	b=XG2clrQURzOHuuY20vaReoo2t3ZqglWQ3o9C3gKyS6r+8XJnSbjyDlPiTdfszjuo+RHSQb
-	oJft+2fEBu1St16orCMYLfVrESm9o4ckti0QX2IHmrXlE3DzNwvZCUtB4ALTfvDMImrAzJ
-	xMVV2RWpxr2Lb7LO2jBZrYl0RAcz7bM=
-Date: Fri, 6 Mar 2026 22:33:13 +0800
+	bh=vaEoDpy1fUGpWdko4iZwCqWJ0MXp1Q1rdotkgeUPpiY=;
+	b=hhpqnd2i75OSY9dCdX31aGhtVXUA0kJTD97ClADMtN1oNGF+ULiwRnO8F8I2RiQJdEKkZe
+	k+bzJnx360NzWysp2c/u5FgbpbQsEzjf2/biERO4kpUWoR66BmXcibSYQ1i/legEZFQase
+	nRgZuJWO3LZYTJmKL2jWCLkJFzvCrLQ=
+Date: Fri, 6 Mar 2026 22:34:30 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v3 3/5] bpf, sockmap: Fix af_unix iter deadlock
+Subject: Re: [PATCH bpf v3 4/5] selftests/bpf: Extend bpf_iter_unix to attempt
+ deadlocking
 To: Michal Luczaj <mhal@rbox.co>, John Fastabend <john.fastabend@gmail.com>,
  Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>,
  Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>,
@@ -52,66 +53,20 @@ To: Michal Luczaj <mhal@rbox.co>, John Fastabend <john.fastabend@gmail.com>,
 Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
- <20260306-unix-proto-update-null-ptr-deref-v3-3-2f0c7410c523@rbox.co>
+ <20260306-unix-proto-update-null-ptr-deref-v3-4-2f0c7410c523@rbox.co>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20260306-unix-proto-update-null-ptr-deref-v3-3-2f0c7410c523@rbox.co>
+In-Reply-To: <20260306-unix-proto-update-null-ptr-deref-v3-4-2f0c7410c523@rbox.co>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
 
 On 3/6/26 7:30 AM, Michal Luczaj wrote:
-> bpf_iter_unix_seq_show() may deadlock when lock_sock_fast() takes the fast
-> path and the iter prog attempts to update a sockmap. Which ends up spinning
-> at sock_map_update_elem()'s bh_lock_sock():
+> Updating a sockmap from a unix iterator prog may lead to a deadlock.
+> Piggyback on the original selftest.
 >
-> WARNING: possible recursive locking detected
-> test_progs/1393 is trying to acquire lock:
-> ffff88811ec25f58 (slock-AF_UNIX){+...}-{3:3}, at: sock_map_update_elem+0xdb/0x1f0
->
-> but task is already holding lock:
-> ffff88811ec25f58 (slock-AF_UNIX){+...}-{3:3}, at: __lock_sock_fast+0x37/0xe0
->
-> other info that might help us debug this:
->   Possible unsafe locking scenario:
->
->         CPU0
->         ----
->    lock(slock-AF_UNIX);
->    lock(slock-AF_UNIX);
->
->   *** DEADLOCK ***
->
->   May be due to missing lock nesting notation
->
-> 4 locks held by test_progs/1393:
->   #0: ffff88814b59c790 (&p->lock){+.+.}-{4:4}, at: bpf_seq_read+0x59/0x10d0
->   #1: ffff88811ec25fd8 (sk_lock-AF_UNIX){+.+.}-{0:0}, at: bpf_seq_read+0x42c/0x10d0
->   #2: ffff88811ec25f58 (slock-AF_UNIX){+...}-{3:3}, at: __lock_sock_fast+0x37/0xe0
->   #3: ffffffff85a6a7c0 (rcu_read_lock){....}-{1:3}, at: bpf_iter_run_prog+0x51d/0xb00
->
-> Call Trace:
->   dump_stack_lvl+0x5d/0x80
->   print_deadlock_bug.cold+0xc0/0xce
->   __lock_acquire+0x130f/0x2590
->   lock_acquire+0x14e/0x2b0
->   _raw_spin_lock+0x30/0x40
->   sock_map_update_elem+0xdb/0x1f0
->   bpf_prog_2d0075e5d9b721cd_dump_unix+0x55/0x4f4
->   bpf_iter_run_prog+0x5b9/0xb00
->   bpf_iter_unix_seq_show+0x1f7/0x2e0
->   bpf_seq_read+0x42c/0x10d0
->   vfs_read+0x171/0xb20
->   ksys_read+0xff/0x200
->   do_syscall_64+0x6b/0x3a0
->   entry_SYSCALL_64_after_hwframe+0x76/0x7e
->
-> Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
-> Suggested-by: Martin KaFai Lau <martin.lau@linux.dev>
-> Fixes: 2c860a43dd77 ("bpf: af_unix: Implement BPF iterator for UNIX domain socket.")
 > Signed-off-by: Michal Luczaj <mhal@rbox.co>
-
 
 Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
