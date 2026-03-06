@@ -1,170 +1,135 @@
-Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ACFD280035
-	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 05:47:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772776079; cv=pass; b=YUW69cQtRq+Zvk5G7ElRtDF7zfPkVQsRkOdGP7bRO1bqDIO4oR5wVEAtOaUJuHWMQnSp1U/blAvJjVyQvHqtH4+HbgLQI7/N+iJeFd5YZrAs0s1mbM8+MMjxdCO2DKaQpjCHWy5EDc7/vQ4B9Ne69qib1b3vj2hukAU/jLypmpw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772776079; c=relaxed/simple;
-	bh=FWoKnzFkU1fho+/6SGBYDFjVkFjVU4+0P4fHA5HMTy8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DIaYjgJbKvc+C31li8xSDx91EoBnXCVnXumcM7h6+pWhJgGfm66C2Jtx/yCVs2XIjy9VaviBSw1fhse2cfQ/83Lvl7TGbPB1EjKJVOcGylM7nFmNDE0SK05PP4/KXqBDeJnZdbNLbWymNdF2ANZjCVHxhFwSH4Hilf+rWRhbnxU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2v0e1a9J; arc=pass smtp.client-ip=74.125.82.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D59619E98D;
+	Fri,  6 Mar 2026 05:50:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772776224; cv=none; b=rJQ/e6x5UKnH2MBYsI0Yk/5XVaWKNRMdCqzhqYCcQGlpZFGJg2cxqlo5zv3BDdqlbfbpv2gWGCKMX/Gudx79hTle1m+41nLYOvo4t56n5N+1duYZjVIIuqyGanL+KppL3VuHteD9fH1IYHlMJ+N2dFQFQkVj/2MQ1tGjEPM9sng=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772776224; c=relaxed/simple;
+	bh=rwJ15iDivE6V3WpEvcgvjP7uL6nLZHAyQoOBnVqUZHE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=czCeriG8emL/r3iENpQdEmSXY/EXprRcwK4Nlzr4X20SICrfu7cZRrBViAEIayJ7gTYF9SoQLGcebaRzyZRsBsiuT2vEpC3oezrbkcPBL2MBBVfdzgFBOklXwuS9DxzYjmbK82heux4KR2/GnnNwP52Tug53vZmQXejwM7YN6t4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=MGXS2+JD; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2v0e1a9J"
-Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-1279eced0b9so7600195c88.0
-        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 21:47:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772776077; cv=none;
-        d=google.com; s=arc-20240605;
-        b=jxb4Z6hhhQW+XerXB98c4ly51J/QsBVrU3xqB+j+4Nj58kCp20mip/KMfapVneZaS3
-         R3ce0jmKhKBRnEckAs0NINjzdurbifbJ/Lx6kAkMWDGNbD/wPw2X4cmy1CCO5XSV1GeP
-         42PHrcQtkhJVRWecooGkSKfxL8c8mU36KDp0+Sw3OHTH/Fvx9hEvhe6URjdOx6AgXGY1
-         P5DE6jgyWwknWyt4UvIgPtg8BnCyqEFNI1HoLdGU9M3VPKjPm8nVBO4D8qP7KVsA85Bo
-         3UPQdQQFzh2ZBdfBBERzZGo+KtA+mv6X8hrpioqE3Aj+RQawEYaTpq9fu7m9GXkaI+sY
-         k5YQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=gpXO7mHlaGT+SvMmByXwqY9ET8QOSb7XZwHnLOlPXCw=;
-        fh=BA8oXlKWReBiJHOJSSx6EmmOg91HB+HOrIKvM4XjItE=;
-        b=g9w9qFLRKh8jWinHgxGHyO78T5DbaJ/dDRt36PxljFCey2NN982ZPUoVIb+zDX+HT2
-         ziLiYVefAh/EMFCi8mRiZ2XxyBtNIFEqaAmKNv+UwuaNdiUOBQbg9rbbHJGvnYI7wpsW
-         4L/WUZhVzh6zvuIbocOxdGlvA5ateT8KG349aXb8IDdmidO6vhyUm0NZosgLRqRDunbW
-         zTUcJiRIWK121nPsSheIuDiGwq2aGvA7K8vpV9vu5VQVaSgqiqGwZ012dKRu5yByaLJ7
-         IImnHcCyIX80Je5P+7o0HxqXO/gFqSCylPm59HprHvszomyKHyfHUUtl721StMPopEmq
-         nyWw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772776077; x=1773380877; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gpXO7mHlaGT+SvMmByXwqY9ET8QOSb7XZwHnLOlPXCw=;
-        b=2v0e1a9JEOR8zNQUmfjtW3wi0m/G4WxMvKR7bat+cH/6HNE8pdFJdKITXphSCUbn91
-         5Tgmf5g+6xeOw4ORMP9qvbw/rbc03dmet6xTn3HPz5356yS/uaVgIDGgiKyFD5Sy9rTs
-         tY/U4AXi78fY2aeA8if9lSQsVjD+Mx0WOaPtrS/lrTj0nIMqrUJUEag+suicHin2fOKZ
-         kmjC7RokPiEliw1CBdp8xyXj7lHoG/OpcNsPeKZC5e73qxDKPkTN6sddRxRzLlTmfFXc
-         ZeQIJ5WMVJlYj/w/h4ObZRdRJNwjMEt26dfJOhPQ/Z2G5AYFT6blJgYtxiNyLKLZA8il
-         fvBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772776077; x=1773380877;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=gpXO7mHlaGT+SvMmByXwqY9ET8QOSb7XZwHnLOlPXCw=;
-        b=KdO4h+TeDqIqUbj0c3abIQffoAAsisJDHeVJMn2vZWFqWoJwnXFzkuAT+hUylzEogr
-         l8TdTCCS0aQjwam55WkNzKZg/9rjPud6QqQhynvGTIlwTfyboBmjtCXd6y2uUdDaKeI8
-         HtLwVKQpRABV5QDeMobi9oqSVAwkF3fVd0GkZzJwNLxYtROO3lBnoIvLGT1GJQaILBkY
-         EmXqyTHG2DmWwSLNlWE4aDS8S8gIq4X2PjdZIolpAt3WS2YFv++GeUixPAbfFNRk1F/l
-         h9vSV1uhv6SeoeEYf/9hX3zfwnZylmUV2nq97bwPjIqbol9sMzYSr/yjaS183TQ8ja7R
-         mVNA==
-X-Forwarded-Encrypted: i=1; AJvYcCVD38gQLrzZxmF6g0BRtSw01fx/6QXx9z//ntZb83khoKiyjYrAiwl9J4z1Qr2dtVkDFCM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQ0SMWWlp+b4uvtd6ue12/y3dLn0rlN0VXF3m/rTMyyWNSL/Jy
-	3XONCoYs6dd61/Txjo7Z1zPtDOBxtaPFG0Z7TIhi9oYun8PpV+C+yPT01xcSYEQxLEQFhqblv3i
-	O3IIdMqswLHeV8Ks5XEQ77RT7wXWWihvYhvtVQ/x2
-X-Gm-Gg: ATEYQzw7BjdXFu/EdJCkQay2UQ9qbrmL9wOaKBUETpBq/aQgvyhZB87AI7i3BR0pXg0
-	wHZdUE7SyVgXN73vnY99WLML3pwlI/m5XXnHLPP95/qbAA25BzqwoyN5lEOUbDAwSeLBBRexbLD
-	peJ36ekP308L0kMV4hL4S1fm10KjwmuIMcsi1crDvXeEn/79V8x86vvuenWQcpeTjUTEn9HI8BE
-	oC8mYO8RO3yXD4GJ0MOD6Lu5M9Lc+aolgd8Pc83HTDHbyDbwshlaAKVjsFEyWNW8SOZ3/2ZrtRc
-	gYY1j1akEiWXzjfdcQi3gh9oQNS1iEcTL2fOk4VK7jWkmTxsutKNUdqvrKeA7TWPMGrNzgFBAGh
-	Nqt4hSik=
-X-Received: by 2002:a05:7022:117:b0:119:e56b:91ec with SMTP id
- a92af1059eb24-128c2e8b925mr401820c88.29.1772776076587; Thu, 05 Mar 2026
- 21:47:56 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="MGXS2+JD"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=5kbz/qIutsegQX66TjAquqol90At9RQdLWUV3QaLUAA=; b=MGXS2+JDZuBTEBXu7WF1z/3eFI
+	7SD7kf2YZDlmYCAaXzdYhgykifSID+FeZrOHfLaZPWikcQ7lOff+iRDH2CmuLRb3Z5HYmL3pBaYUO
+	oetXok04+26rcihTi/Xi7rNLpRJGmxEacfGMHZewnFca5p7PxWFJu0vDXPt4SPMEAETt7u4s6BLMg
+	1LL3axsb4Ozx0cUi6rGpIAbTSUbdNPHJrp78ftj2nvLU2oLnLD+0NZWX/WFe5vVHBD9khzMTxPzs8
+	oNBHSVWxm7scyd8mqb4m5evp02aj3DrojWtHFlL3wgA7lieoEnGvUFQxqYCiDHHwB7ZH/JWVCSbb+
+	8wIL9O/A==;
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1vyO4Q-000IM2-0b;
+	Fri, 06 Mar 2026 06:49:54 +0100
+Received: from localhost ([127.0.0.1])
+	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1vyO4O-000Hgk-2U;
+	Fri, 06 Mar 2026 06:49:53 +0100
+Message-ID: <99158091-834d-43ad-83c6-8e62145449ba@iogearbox.net>
+Date: Fri, 6 Mar 2026 06:49:44 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
- <20260306-unix-proto-update-null-ptr-deref-v3-3-2f0c7410c523@rbox.co>
-In-Reply-To: <20260306-unix-proto-update-null-ptr-deref-v3-3-2f0c7410c523@rbox.co>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Thu, 5 Mar 2026 21:47:43 -0800
-X-Gm-Features: AaiRm51rtVtTlMmtHwM6HAI4yCYAH4c9qJkSJtwY41_Op2u8ii9foodM1xMuJa8
-Message-ID: <CAAVpQUAdOCM1h-G-vU+tdEdOqc5+YoHypKwV_w5m4bAA4Ai8Yw@mail.gmail.com>
-Subject: Re: [PATCH bpf v3 3/5] bpf, sockmap: Fix af_unix iter deadlock
-To: Michal Luczaj <mhal@rbox.co>
-Cc: John Fastabend <john.fastabend@gmail.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Willem de Bruijn <willemb@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v8 02/16] net: Implement
+ netdev_nl_queue_create_doit
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
+ razor@blackwall.org, pabeni@redhat.com, willemb@google.com, sdf@fomichev.me,
+ john.fastabend@gmail.com, martin.lau@kernel.org, jordan@jrife.io,
+ maciej.fijalkowski@intel.com, magnus.karlsson@intel.com, dw@davidwei.uk,
+ toke@redhat.com, yangzhenze@bytedance.com, wangdongdong.6@bytedance.com
+References: <20260129222830.439687-1-daniel@iogearbox.net>
+ <20260129222830.439687-3-daniel@iogearbox.net>
+ <20260131154523.5e495380@kernel.org>
+ <5065f783-9378-4965-8266-e494cdee46d2@iogearbox.net>
+ <20260305181041.7ed26e4e@kernel.org>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20260305181041.7ed26e4e@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/27931/Thu Mar  5 08:24:23 2026)
 
-On Thu, Mar 5, 2026 at 3:32=E2=80=AFPM Michal Luczaj <mhal@rbox.co> wrote:
->
-> bpf_iter_unix_seq_show() may deadlock when lock_sock_fast() takes the fas=
-t
-> path and the iter prog attempts to update a sockmap. Which ends up spinni=
-ng
-> at sock_map_update_elem()'s bh_lock_sock():
->
-> WARNING: possible recursive locking detected
-> test_progs/1393 is trying to acquire lock:
-> ffff88811ec25f58 (slock-AF_UNIX){+...}-{3:3}, at: sock_map_update_elem+0x=
-db/0x1f0
->
-> but task is already holding lock:
-> ffff88811ec25f58 (slock-AF_UNIX){+...}-{3:3}, at: __lock_sock_fast+0x37/0=
-xe0
->
-> other info that might help us debug this:
->  Possible unsafe locking scenario:
->
->        CPU0
->        ----
->   lock(slock-AF_UNIX);
->   lock(slock-AF_UNIX);
->
->  *** DEADLOCK ***
->
->  May be due to missing lock nesting notation
->
-> 4 locks held by test_progs/1393:
->  #0: ffff88814b59c790 (&p->lock){+.+.}-{4:4}, at: bpf_seq_read+0x59/0x10d=
-0
->  #1: ffff88811ec25fd8 (sk_lock-AF_UNIX){+.+.}-{0:0}, at: bpf_seq_read+0x4=
-2c/0x10d0
->  #2: ffff88811ec25f58 (slock-AF_UNIX){+...}-{3:3}, at: __lock_sock_fast+0=
-x37/0xe0
->  #3: ffffffff85a6a7c0 (rcu_read_lock){....}-{1:3}, at: bpf_iter_run_prog+=
-0x51d/0xb00
->
-> Call Trace:
->  dump_stack_lvl+0x5d/0x80
->  print_deadlock_bug.cold+0xc0/0xce
->  __lock_acquire+0x130f/0x2590
->  lock_acquire+0x14e/0x2b0
->  _raw_spin_lock+0x30/0x40
->  sock_map_update_elem+0xdb/0x1f0
->  bpf_prog_2d0075e5d9b721cd_dump_unix+0x55/0x4f4
->  bpf_iter_run_prog+0x5b9/0xb00
->  bpf_iter_unix_seq_show+0x1f7/0x2e0
->  bpf_seq_read+0x42c/0x10d0
->  vfs_read+0x171/0xb20
->  ksys_read+0xff/0x200
->  do_syscall_64+0x6b/0x3a0
->  entry_SYSCALL_64_after_hwframe+0x76/0x7e
->
-> Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
-> Suggested-by: Martin KaFai Lau <martin.lau@linux.dev>
-> Fixes: 2c860a43dd77 ("bpf: af_unix: Implement BPF iterator for UNIX domai=
-n socket.")
-> Signed-off-by: Michal Luczaj <mhal@rbox.co>
-
-Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+On 3/6/26 3:10 AM, Jakub Kicinski wrote:
+> On Thu, 5 Mar 2026 05:38:06 +0100 Daniel Borkmann wrote:
+>>>> +	rxq_lease = __netif_get_rx_queue(dev_lease, queue_id_lease);
+>>>> +	rxq = __netif_get_rx_queue(dev, dev->real_num_rx_queues - 1);
+>>>> +
+>>>> +	if (rxq->lease && rxq->lease->dev != dev_lease) {
+>>>
+>>> IIUC the simplification of having all leases from one devices is still
+>>> a netkit thing? I mean - there's nothing in the core that depends on
+>>> this, just the cleanup / notifier handling in netkit? If that's the
+>>> case let's move this check into netkit.
+>>>
+>>> Sorry if you moved this here because I asked to move as much as
+>>> possible into the core.
+>> Imho it was a good suggestion to move it here and I would prefer to leave
+>> this in the core, and only really move it into a per-driver constraint
+>> once we see a driver wanting to support such setting. Otherwise we would
+>> propagate AF_XDP support on the device where some queues have support but
+>> others don't.
+> 
+> Alright, let's add a comment explaining the status and plan then?
+Yep, will add.
