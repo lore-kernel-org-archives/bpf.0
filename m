@@ -1,236 +1,558 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1C84302146;
-	Fri,  6 Mar 2026 20:06:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772827613; cv=none; b=j5A8P88PnHnG+ppXGIxiujzJMeRMcdzvrtA/XZJuJT2G9NXtgJ08/RACiGUtHGJGqv3KJMuk2zoI9XpQYn7zC12FcgOIqxcWflPC5P463bOce5KhGkdv+5qF1obmc5K4WMjaBYOs3PHw7F/HZJjDh9bJUhvcOZf3WL1/8sdnRDI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772827613; c=relaxed/simple;
-	bh=lcDXN6R21X2uCOK7uiaLL18UXsiIHBRj1spT/gMxVfk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=M+8DmWTIQU1V5nYqQO2WxIacWC/gUrwnwews9XbmHfMe+BuvtMCMfIhT5MSw+/I9L+XUSDlrJTtoR9zhw+L6/YnT191hCYDZPr6B6hxyXeQdHqWVlU8Z0a7bqqYsjh84qoFzit0wNChzgLQgYi8uou1wehBiYVsZ1VyWZLgtYnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R2mk+9E4; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBBF92ED870
+	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 21:08:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=148.163.148.77
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772831299; cv=pass; b=Ail0v8WsGyCJyHICWmjYXn7heXMXMQMd2lgQAcKq2pclhSuqCdfqK89KBcCebT+NJNNXm1mQr+WxgL/9ny0pzEog5n7YOYrE/LFUcM7SVxyvKGScT5s4+BHEnbAc1GyAXFTekM8gJzjVck+9hh8fGl/2ag2HFBzP0UtRcplIssU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772831299; c=relaxed/simple;
+	bh=tz7xlU8D9UHerw3PrGPoteaAG8FBDzDbfriHdNwcHI8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UIghVq2mHsfddXZnb6Kmk7T1yyaWQ63pKJMiCtlyhsu2wYIzn+MfUfsZBi+wu0cH7LVeTb+ZIw8AJHCT6Kj/AG5BJ/n3UF0/ldlx9+IqyrzZGJmYEeCuWtgmjo3kW/gDs4iyiXF30b9S5/D27oiAigBgHQw7z7xr1YAQpYgUCp8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=uAYXgUth; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=nnX3jekE; arc=pass smtp.client-ip=148.163.148.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R2mk+9E4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC53FC4CEF7;
-	Fri,  6 Mar 2026 20:06:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772827612;
-	bh=lcDXN6R21X2uCOK7uiaLL18UXsiIHBRj1spT/gMxVfk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=R2mk+9E44A2EFvK0xK2jJT1OvwtacnYo93YeFCRVWzRYkDIxnSpy7OOavzsLLEA6w
-	 Me1zMjmLO1OdfmZVcDCyAWo6f4IdCrOaG495OZ1gMNZBidhbVudI8sQS/6fxDcBV1X
-	 1rdPbBicT3edr4r+AqB7wAFlka+l6GpipVY4vpZO2tZBVpmXlufaXt6DyLimsh7vxM
-	 LynZIGBSgJSqHS6/H1/kT3yqPiZomKF2oDGemN+plrNaz9+HWm0TsEfpDSzw4DOo8o
-	 QUNjs0SdR5wjM63xK41HWotBwOJ4UBuh5+4T6NTXr21s664CzFEO1RJRWOcZrbs7I5
-	 BsQ0LBzjRGiYw==
-Message-ID: <659c7113-988b-4493-8866-82b55b49a626@kernel.org>
-Date: Fri, 6 Mar 2026 21:06:26 +0100
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="uAYXgUth";
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="nnX3jekE"
+Received: from pps.filterd (m0354651.ppops.net [127.0.0.1])
+	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 626IxeZ63056211
+	for <bpf@vger.kernel.org>; Fri, 6 Mar 2026 21:08:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	default; bh=U7hLZePx34037ZHb6KOjiAEDsLods061WLt0odaeuiY=; b=uAYX
+	gUthj3OYtSAVJ8i35+lDL9zrqFgcrE5QYHwq7URuTrNFfIHJoI3prmj2I6za7x2k
+	O3ponee9vPh/iFhzTDxvZ9AtgyT37pAZ3354PgLuYAAV9Kb2Fuu/WXLXf3CEwRAg
+	Cpa8B7qr9M9lPL4z4s2kSPnK6BSA689yBV3UzmWfogCf2W18nu9oEiv03SuP91TH
+	WvjKxlCS7a3OJCtut1AfQP8n8Y/+ocJBY8oL/qUMPE0mPk4ro+8zvvEPkWORk/2H
+	h8TTSPzO7LCElgUrtwZakChu3UVCf2sVlSK9AcRdMCCeHKD9san4OJCvIdbFw68i
+	v+3aWHWxg9iA6BQodA==
+Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
+	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4cr3hdgsy0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+	for <bpf@vger.kernel.org>; Fri, 06 Mar 2026 21:08:16 +0000 (GMT)
+Received: from 04WPEXCH005.crowdstrike.sys (10.100.11.69) by
+ 04WPEXCH013.crowdstrike.sys (10.100.11.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Fri, 6 Mar 2026 21:08:15 +0000
+Received: from mail-yx1-f70.google.com (10.100.11.78) by
+ 04WPEXCH005.crowdstrike.sys (10.100.11.69) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35 via Frontend Transport; Fri, 6 Mar 2026 21:08:15 +0000
+Received: by mail-yx1-f70.google.com with SMTP id 956f58d0204a3-649deeeb00fso13334917d50.0
+        for <bpf@vger.kernel.org>; Fri, 06 Mar 2026 13:08:15 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772831295; cv=none;
+        d=google.com; s=arc-20240605;
+        b=liX7mKpnEzEbtXeEZZFHys8hBEQw0qvS8x+YKuQnndobe9vv4DvvcGF/zK3S3FBIZ0
+         xudadGFk+/1f9uwKTRiaKzVC1ppSFjPmW2khp2AOBkxtLNcCbucf/IdyBKEitPhzqfAN
+         3/a83g0iJmHj91WU2vNKSJn2bTbh/ATxjfVfZRh3zQTNyDEFLCglOn9YHvv8U4+4PdBi
+         bnhU+CQH3aYQBhpdsaRXkQ/eP820FMqhEkeF2JOzMcLerszwpgmlu6eP9HrBO/QHJbD2
+         5lI9pBtbSNVXY9nqJRdSrfcQExXfI7TUOE0bzZxyOo26hHNaLPAJRs09R9KYJHeFjI+n
+         1VeQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=U7hLZePx34037ZHb6KOjiAEDsLods061WLt0odaeuiY=;
+        fh=Eu4umwily2rRSS9LrU3YEXKRRKdb5TGhuAGlbptaSF4=;
+        b=MquQVABxDAP1NVVCG2kUSbIzk/OVqf2h4S/wi5DdqIfqA1UhZnStGNsUyRsAoP+b3p
+         w8xgZLvczdw/MHv/O3OvgkS2UAPszzS1rgre7sclWOW0ryyme5QRGykNeJ1NV+0cNchi
+         DdH8EsOAb9jE15kKCOv/b4Uixsx1gTL40RiwI1U73ev7Nkyyk7vtw1LecXXKkb50TaOT
+         tEl/xOm/5AgzxIiNf/BYjIsY24VzO6tb1Dx9unPQ/DgcLqZxB5Hji4dwzjBANUAmuf1T
+         d+ac9088V0FRsqSfeaGaWfajogLBhL9EWnm7DAAIlmNduN54gcteqF8RXfY5DxAox1oY
+         dIIQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=crowdstrike.com; s=google; t=1772831295; x=1773436095; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U7hLZePx34037ZHb6KOjiAEDsLods061WLt0odaeuiY=;
+        b=nnX3jekEPBvhj0K0pL6fwW+bgzHPxUcwJ6XIk8E/Pw0ugCqZYzsm5H/OJk6PU6XshB
+         s3qJqj64CLXCw04HQCU2D+2kDx9qpm1oOpDlDxyP8E7IUnUzIEdtMKU26fPAH0NkwnJF
+         7HBM3c83bSb3ldTigSLdTnRB5OwuBfP/ih/7wCeOK7UKG+XFkBo1Cs4hfmjlOjyvQWSl
+         t9xOy12YV16x8k3nn1qNKa9I5YTKo+nPx8QLUzFF6X2RB6FiR8cNnZ4Zw9lx53LoHRm4
+         rDyEIMC/rNJqi/ADrAvmfCAclEvcdOiNqnp+Q8Djab0Nq163iS/6jXC36s0c3j46tQfx
+         LHGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772831295; x=1773436095;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=U7hLZePx34037ZHb6KOjiAEDsLods061WLt0odaeuiY=;
+        b=eBrJtzFtd9I6gP+RPyP0pGt2o8TEkfdhwrAv9gTcR/l6acIb/EuDJM0YjuPUrQdTLt
+         T8j4BqYEttcX8f78qTLIAS9xxOpOSKOgXTAyfxC61q7BS5ILJCuGXaiGeLJn+SqzCExO
+         VeCopZodNmRw5YlmJDCFOdB/gmvTmOeHo5lX3XjQ1oK1w80JwT9uOKzbNPK871CjBZdT
+         YBynQssvv3Z/VCHe7UIXm7D635h6Gyzwa2Eh7wuZrnEb8RAfZPjpH0cNc1YJeMK0JBDg
+         UnOOU8xIcjPrWLFPMlzjap/dxoip8EmuQ+bNcvPc9YCuBY4waBGauMYWEkeRsrvKkvKt
+         W9Yw==
+X-Gm-Message-State: AOJu0YwLLFi44plFPQh6Xf03JnxxRiNBxi3emM4q9YmIJfmdvvOfQ+Bz
+	lUEJ3aDsMGfjeRq8bKfqXfc7mFmXZKZfMVgaFHny3qMhEbeloo7QnVm/I59JMZ7e5UTj74NaWXK
+	5xvgBF9rVSMeFMqgDHebnEtZePxk/SNKpGkePyAHL/Pzb1S8fBuTCUJ0cnjYtioKEvw2C6Jaern
+	rzvXmDWhyMyMnqgq/AVVptyVXtciSKcurc/T7dqdKwoaw=
+X-Gm-Gg: ATEYQzw+8C7KiFBG7txe6IfzLBQVFEpc05hRD9np0Pb242BphjP9IOraf1NTE7D10Zj
+	Vj1CPj2ATyFjq7mnNTwDf8vZiWfQ8QO4Otgsd69u5kvBFk1d4RwUe70MbQBozmtL1o2Xs5IExmc
+	XstaUV5iIZDleXRS/jG+J+sev7Bh7XKjNE/k3xnFRjc/XlPCgezz4H4sUryJsWzLBVYQqxTIzcI
+	plS
+X-Received: by 2002:a05:690e:120e:b0:64a:db50:faa6 with SMTP id 956f58d0204a3-64d14390485mr3312503d50.87.1772831294917;
+        Fri, 06 Mar 2026 13:08:14 -0800 (PST)
+X-Received: by 2002:a05:690e:120e:b0:64a:db50:faa6 with SMTP id
+ 956f58d0204a3-64d14390485mr3312470d50.87.1772831294354; Fri, 06 Mar 2026
+ 13:08:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 02/15] set_memory: add folio_{zap, restore}_direct_map
- helpers
-To: kalyazin@amazon.com, "Kalyazin, Nikita" <kalyazin@amazon.co.uk>,
- "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
- "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
- "linux-mm@kvack.org" <linux-mm@kvack.org>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- "kernel@xen0n.name" <kernel@xen0n.name>,
- "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
- "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
- "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>
-Cc: "pbonzini@redhat.com" <pbonzini@redhat.com>,
- "corbet@lwn.net" <corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>,
- "oupton@kernel.org" <oupton@kernel.org>,
- "joey.gouly@arm.com" <joey.gouly@arm.com>,
- "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
- "yuzenghui@huawei.com" <yuzenghui@huawei.com>,
- "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
- "will@kernel.org" <will@kernel.org>, "seanjc@google.com"
- <seanjc@google.com>, "tglx@kernel.org" <tglx@kernel.org>,
- "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
- "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
- "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
- "luto@kernel.org" <luto@kernel.org>,
- "peterz@infradead.org" <peterz@infradead.org>,
- "willy@infradead.org" <willy@infradead.org>,
- "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
- "lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
- "vbabka@suse.cz" <vbabka@suse.cz>, "rppt@kernel.org" <rppt@kernel.org>,
- "surenb@google.com" <surenb@google.com>, "mhocko@suse.com"
- <mhocko@suse.com>, "ast@kernel.org" <ast@kernel.org>,
- "daniel@iogearbox.net" <daniel@iogearbox.net>,
- "andrii@kernel.org" <andrii@kernel.org>,
- "martin.lau@linux.dev" <martin.lau@linux.dev>,
- "eddyz87@gmail.com" <eddyz87@gmail.com>, "song@kernel.org"
- <song@kernel.org>, "yonghong.song@linux.dev" <yonghong.song@linux.dev>,
- "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
- "kpsingh@kernel.org" <kpsingh@kernel.org>, "sdf@fomichev.me"
- <sdf@fomichev.me>, "haoluo@google.com" <haoluo@google.com>,
- "jolsa@kernel.org" <jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>,
- "jhubbard@nvidia.com" <jhubbard@nvidia.com>,
- "peterx@redhat.com" <peterx@redhat.com>, "jannh@google.com"
- <jannh@google.com>, "pfalcato@suse.de" <pfalcato@suse.de>,
- "shuah@kernel.org" <shuah@kernel.org>, "riel@surriel.com"
- <riel@surriel.com>, "ryan.roberts@arm.com" <ryan.roberts@arm.com>,
- "jgross@suse.com" <jgross@suse.com>,
- "yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>,
- "kas@kernel.org" <kas@kernel.org>, "coxu@redhat.com" <coxu@redhat.com>,
- "kevin.brodsky@arm.com" <kevin.brodsky@arm.com>,
- "ackerleytng@google.com" <ackerleytng@google.com>,
- "maobibo@loongson.cn" <maobibo@loongson.cn>,
- "prsampat@amd.com" <prsampat@amd.com>,
- "mlevitsk@redhat.com" <mlevitsk@redhat.com>,
- "jmattson@google.com" <jmattson@google.com>,
- "jthoughton@google.com" <jthoughton@google.com>,
- "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
- "alex@ghiti.fr" <alex@ghiti.fr>,
- "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
- "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
- "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
- "dev.jain@arm.com" <dev.jain@arm.com>, "gor@linux.ibm.com"
- <gor@linux.ibm.com>, "hca@linux.ibm.com" <hca@linux.ibm.com>,
- "palmer@dabbelt.com" <palmer@dabbelt.com>, "pjw@kernel.org"
- <pjw@kernel.org>,
- "shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>,
- "svens@linux.ibm.com" <svens@linux.ibm.com>,
- "thuth@redhat.com" <thuth@redhat.com>, "wyihan@google.com"
- <wyihan@google.com>,
- "yang@os.amperecomputing.com" <yang@os.amperecomputing.com>,
- "Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
- "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
- "urezki@gmail.com" <urezki@gmail.com>,
- "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
- "gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>,
- "jiayuan.chen@shopee.com" <jiayuan.chen@shopee.com>,
- "lenb@kernel.org" <lenb@kernel.org>, "osalvador@suse.de"
- <osalvador@suse.de>, "pavel@kernel.org" <pavel@kernel.org>,
- "rafael@kernel.org" <rafael@kernel.org>,
- "vannapurve@google.com" <vannapurve@google.com>,
- "jackmanb@google.com" <jackmanb@google.com>,
- "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>,
- "patrick.roy@linux.dev" <patrick.roy@linux.dev>,
- "Thomson, Jack" <jackabt@amazon.co.uk>,
- "Itazuri, Takahiro" <itazur@amazon.co.uk>,
- "Manwaring, Derek" <derekmn@amazon.com>, "Cali, Marco"
- <xmarcalx@amazon.co.uk>
-References: <20260126164445.11867-1-kalyazin@amazon.com>
- <20260126164445.11867-3-kalyazin@amazon.com>
- <af2d4dcd-60a8-4a5a-b508-d9600b1f2275@kernel.org>
- <e2834fd9-e4ec-473c-90cd-6c3a5049747f@amazon.com>
- <40bd6f9b-d5c0-4844-81bc-d221cd9b058f@kernel.org>
- <38deb26a-918c-4743-b35f-92a1330dbf40@amazon.com>
- <efc1c39c-7eb5-488f-819c-0ca2149898c3@kernel.org>
- <5c322be7-ea81-4e6a-9689-978c35e93af6@amazon.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <5c322be7-ea81-4e6a-9689-978c35e93af6@amazon.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260302210532.381083-1-andrey.grodzovsky@crowdstrike.com>
+ <20260302210532.381083-2-andrey.grodzovsky@crowdstrike.com> <CAEf4BzYiwAczqqdb40YKq8yRd7JWgOV_cgyehpCRzoEZ6qeP7g@mail.gmail.com>
+In-Reply-To: <CAEf4BzYiwAczqqdb40YKq8yRd7JWgOV_cgyehpCRzoEZ6qeP7g@mail.gmail.com>
+From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+Date: Fri, 6 Mar 2026 16:08:03 -0500
+X-Gm-Features: AaiRm50VZUwd9KHddRLsb4GS4kWbf9gi4zyqVka3UQPTjKPD3OrzHc-8pq-WQAY
+Message-ID: <CAOu3gNgUp0sqgTUfCM_UFsEi6jwsTDjMrAZL_Pv=FZ4Fx_Khug@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH bpf-next v4 1/2] libbpf: Handle duplicate
+ kprobe symbols in attach_kprobe_opts
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, jolsa@kernel.org, emil@etsalapatis.com,
+        linux-open-source@crowdstrike.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Disclaimer: USA
+X-Authority-Analysis: v=2.4 cv=N+Mk1m9B c=1 sm=1 tr=0 ts=69ab4240 cx=c_pps
+ a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
+ a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=KZhmPCYDdY0A:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=T2KQ53IYiC3MXPrxx8bB:22 a=b3B37AjAgz0HnGB3MuNd:22
+ a=pGLkceISAAAA:8 a=pl6vuDidAAAA:8 a=yDVHsGV7-Ncyle89FEcA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzA2MDE5OSBTYWx0ZWRfXyAAAVbLZLspQ
+ W2jLnBy/x7H+AKyy7Yq7OEzJU9LpeHEcrPku4Ftta4ZbdiuFGGmmS1cvcsWnM+37OtPjXiTy6Hr
+ yHFq6OogpId5NNpxrXzvnVWuAqUcutzNb8G0qqqBOB0e6L4VPW5xMppKBrynLa/L9t0AjxRIOi8
+ ZKn80pLzJqmz2ljsL8t8Xc/UD55GEmI7xMYfRW7lUW6lyCNHQS9d+mhBlhM0NPecek9AnfXxkWw
+ 6z/gEnU6DSG+dTwbRqpq9sidQEESI6MbuTmjqkNQ1+jjfnJXGwKlCtH6YL/d2T8plu6cdIiUP/A
+ bRw3/3wNxabSwIiHsAJR/3Q13RoWxy98HkdED74vIHqzLUj7s25n/SwRHIQ4il+bkNNpdGN4ZyR
+ 3/wSBLhPfPDoa6Gj0u+NHbiEJA0PQU2sJFErZW6hQ3IhBxuXfJl8lCUPeMgUIXKckI8UYs8T1ma
+ YA8rbJln+5Uu5aGvsag==
+X-Proofpoint-ORIG-GUID: eR4rWD0Bn09-W_80givF5X_71jCIUyHI
+X-Proofpoint-GUID: eR4rWD0Bn09-W_80givF5X_71jCIUyHI
+X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11721
+ signatures=596818
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 impostorscore=0 priorityscore=1501 suspectscore=0 phishscore=0
+ adultscore=0 malwarescore=0 clxscore=1015 lowpriorityscore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603060199
 
-On 3/6/26 16:41, Nikita Kalyazin wrote:
-> 
-> 
-> On 06/03/2026 15:17, David Hildenbrand (Arm) wrote:
->> On 3/6/26 15:48, Nikita Kalyazin wrote:
->>>
->>>
->>>
->>> Yeah, that's unfortunately the status quo as pointed by Aneesh [1]
->>>
->>> [1] https://lore.kernel.org/kvm/yq5ajz07czvz.fsf@kernel.org/
->>>
->>>
->>> Yes, looks like that.  I'll remove the explicit flush and rely on
->>> folio_zap_direct_map().
->>>
->>>
->>> I believe Dave meant to address that with folio_{zap,restore}
->>> _direct_map() [2].
->>>
->>> [2] https://lore.kernel.org/kvm/9409531b-589b-4a54-
->>> b122-06a3cf0846f3@intel.com/
->>>
->>>
->>> I'd be inclined to know what arch maintainers think because I don't have
->>> a strong opinion on that.
->>
->> You could also just perform a double flush, and let people that
->> implemented a _noflush() to perform a flush optimize that later.
-> 
-> Do you propose to just universalise the one from x86?
-> 
-> int folio_zap_direct_map(struct folio *folio)
-> {
->     const void *addr = folio_address(folio);
->     int ret;
-> 
->     ret = set_direct_map_valid_noflush(addr, folio_nr_pages(folio), false);
->     flush_tlb_kernel_range((unsigned long)addr,
->                    (unsigned long)addr + folio_size(folio));
-> 
->     return ret;
-> }
+On Thu, Mar 5, 2026 at 5:47=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Mon, Mar 2, 2026 at 1:05=E2=80=AFPM Andrey Grodzovsky
+> <andrey.grodzovsky@crowdstrike.com> wrote:
+> >
+> > When a kernel module exports a symbol with the same name as an existing
+> > vmlinux symbol, kprobe attachment via bpf_program__attach_kprobe_opts()
+> > fails with EADDRNOTAVAIL (perf_event_open path) or EINVAL (legacy
+> > tracefs path).
+>
+> If the same symbol name resolves to multiple addresses, that's an
+> ambiguity that libbpf has no business resolving. It should be on user
+> to resolve and use attachment by address, which libbpf supports
+> through bpf_kprobe_opts or multi-kprobe opts.
+>
+> pw-bot: cr
+>
 
-Yes, exactly something along those lines!
--- 
-Cheers,
+I understand the concern about libbpf making policy decisions on
+ambiguous symbol resolution. But I think the skeleton-based auto-attach
+workflow makes this impractical for the user to handle.
 
-David
+The recommended upstream pattern is:
+
+  skel =3D my_prog__open_and_load();
+  my_prog__attach(skel);
+
+So it's something along the lines of
+
+our_skeleteon_bpf__attach(skel)
+    =E2=86=92 bpf_object__attach_skeleton(skel->skeleton)
+      =E2=86=92 prog->sec_def->prog_attach_fn()  [=3D attach_kprobe()]
+        =E2=86=92 bpf_program__attach_kprobe_opts(prog, func, &opts)
+          =E2=86=92 perf_event_open_probe(name=3Dfunc, offset=3D0)
+            =E2=86=92 perf_event_open() =E2=86=92 EADDRNOTAVAIL
+
+So bpf_object__attach_skeleton(), which iterates over all
+programs and calls attach_kprobe() internally. That function extracts
+the symbol name from the ELF section name (SEC("kprobe/func_name"))
+and passes it to bpf_program__attach_kprobe_opts(). The user has no
+control point in this chain - no callback, no option struct, no way
+to intercept a failed attach and supply an address instead.
+
+If a kernel module happens to export a symbol with the same name as
+a vmlinux function the user is probing, the attach fails with
+EADDRNOTAVAIL and the user has no recovery path within the skeleton
+API. The only options would be:
+
+1. Abandon skeleton auto-attach entirely for any kprobe program
+ that might hit a duplicate, and manually call
+ bpf_program__attach_kprobe_opts() with a resolved address for
+ each one. This defeats the purpose of skeletons.
+
+2. Proactively scan /proc/kallsyms before every attach to detect
+ potential duplicates, set prog->autoattach =3D false for affected
+ programs, and manually attach those. But autoattach is not
+ exposed in the public skeleton API either.
+
+Since a kernel module can be loaded at any time, any kprobe could
+potentially become ambiguous. Pushing resolution to the user
+effectively means the skeleton auto-attach pattern cannot be
+reliably used for kprobes.
+
+The fallback in this patch is intentionally conservative - it only
+triggers on the specific error codes that indicate duplicate symbols
+(EADDRNOTAVAIL for perf_event_open, EINVAL for legacy), and it
+resolves strictly to the vmlinux text symbol, skipping module symbols.
+This seems like the only reasonable behavior for auto-attach, where
+the user has expressed intent to probe a specific function by name.
+
+Would it make sense to limit this fallback to the auto-attach path
+(attach_kprobe) rather than the explicit attach_kprobe_opts API?
+That way users who call attach_kprobe_opts directly still get the
+raw error and can handle it themselves, while the skeleton workflow
+has a reasonable default.
+
+Happy to hear alternative suggestions on how to make this work
+within the existing API.
+
+Andrey
+
+
+>
+> >
+> > Implement a fallback mechanism that, on such failures, resolves the
+> > vmlinux address through /proc/kallsyms - filtering out module symbols -
+> > and retries probe attachment using the absolute address, bypassing
+> > kernel symbol name validation.
+> >
+> > Changes:
+> > - Restructure libbpf_kallsyms_parse() to accept a bool skip_if_module
+> >   parameter that filters module symbols before invoking the callback.
+> > - Add find_kaddr_cb() callback and find_kaddr_ctx struct to resolve
+> >   vmlinux text symbol addresses from /proc/kallsyms.
+> > - Detect duplicate symbol errors (-EADDRNOTAVAIL for perf_event_open,
+> >   -EINVAL for legacy tracefs) and retry with resolved KADDR.
+> > - Fix NULL pointer in gen_probe_legacy_event_name() when using absolute
+> >   address by passing func_name instead of optional_func_name.
+> > - Fix NULL pointer in pr_warn() calls within
+> >   perf_event_kprobe_open_legacy() by using ternary fallback.
+> > - Fix memory leak of legacy_probe buffer on retry path.
+> >
+> > Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+> > ---
+> >  tools/lib/bpf/libbpf.c | 155 ++++++++++++++++++++++++++++++++++++-----
+> >  1 file changed, 137 insertions(+), 18 deletions(-)
+> >
+> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > index 0be7017800fe..e725e3c98ee2 100644
+> > --- a/tools/lib/bpf/libbpf.c
+> > +++ b/tools/lib/bpf/libbpf.c
+> > @@ -8460,9 +8460,11 @@ static int bpf_object__sanitize_maps(struct bpf_=
+object *obj)
+> >  typedef int (*kallsyms_cb_t)(unsigned long long sym_addr, char sym_typ=
+e,
+> >                              const char *sym_name, void *ctx);
+> >
+> > -static int libbpf_kallsyms_parse(kallsyms_cb_t cb, void *ctx)
+> > +static int libbpf_kallsyms_parse(kallsyms_cb_t cb, void *ctx,
+> > +                               bool skip_if_module)
+> >  {
+> >         char sym_type, sym_name[500];
+> > +       char module_name[128];
+> >         unsigned long long sym_addr;
+> >         int ret, err =3D 0;
+> >         FILE *f;
+> > @@ -8475,21 +8477,39 @@ static int libbpf_kallsyms_parse(kallsyms_cb_t =
+cb, void *ctx)
+> >         }
+> >
+> >         while (true) {
+> > -               ret =3D fscanf(f, "%llx %c %499s%*[^\n]\n",
+> > -                            &sym_addr, &sym_type, sym_name);
+> > -               if (ret =3D=3D EOF && feof(f))
+> > +               int n =3D 0;
+> > +
+> > +               /*
+> > +                * Format tries to match both vmlinux and module kallsy=
+ms
+> > +                * entries in one call. Module entries have the form:
+> > +                *   addr type name [module]
+> > +                * %n fires only if the closing ']' literal is matched.
+> > +                */
+> > +               ret =3D fscanf(f, "%llx %c %499s [%127[^] \t\n\r\v\f]] =
+%n",
+> > +                            &sym_addr, &sym_type, sym_name, module_nam=
+e, &n);
+> > +
+> > +               /* EOF or malformed line - handle after the loop */
+> > +               if (ret !=3D 3 && ret !=3D 4)
+> >                         break;
+> > -               if (ret !=3D 3) {
+> > -                       pr_warn("failed to read kallsyms entry: %d\n", =
+ret);
+> > -                       err =3D -EINVAL;
+> > +
+> > +               /* ret =3D=3D 4 && n =3D=3D 0: scanset matched but ']' =
+didn't */
+> > +               if (ret =3D=3D 4 && n =3D=3D 0)
+> >                         break;
+> > -               }
+> > +
+> > +               if (ret =3D=3D 4 && skip_if_module)
+> > +                       continue;
+> >
+> >                 err =3D cb(sym_addr, sym_type, sym_name, ctx);
+> >                 if (err)
+> >                         break;
+> >         }
+> >
+> > +       /* !err: don't overwrite callback errors with -EINVAL */
+> > +       if (!feof(f) && !err) {
+> > +               pr_warn("failed to read kallsyms entry: ret=3D%d\n", re=
+t);
+> > +               err =3D -EINVAL;
+> > +       }
+> > +
+> >         fclose(f);
+> >         return err;
+> >  }
+> > @@ -8529,7 +8549,7 @@ static int kallsyms_cb(unsigned long long sym_add=
+r, char sym_type,
+> >
+> >  static int bpf_object__read_kallsyms_file(struct bpf_object *obj)
+> >  {
+> > -       return libbpf_kallsyms_parse(kallsyms_cb, obj);
+> > +       return libbpf_kallsyms_parse(kallsyms_cb, obj, false);
+> >  }
+> >
+> >  static int find_ksym_btf_id(struct bpf_object *obj, const char *ksym_n=
+ame,
+> > @@ -11527,10 +11547,20 @@ static void gen_probe_legacy_event_name(char =
+*buf, size_t buf_sz,
+> >  static int add_kprobe_event_legacy(const char *probe_name, bool retpro=
+be,
+> >                                    const char *kfunc_name, size_t offse=
+t)
+> >  {
+> > -       return append_to_file(tracefs_kprobe_events(), "%c:%s/%s %s+0x%=
+zx",
+> > -                             retprobe ? 'r' : 'p',
+> > -                             retprobe ? "kretprobes" : "kprobes",
+> > -                             probe_name, kfunc_name, offset);
+> > +       /* When kfunc_name is NULL, use absolute address format (0xADDR=
+),
+> > +        * otherwise use symbol+offset format (SYMBOL+0xOFF)
+> > +        */
+> > +       if (kfunc_name) {
+> > +               return append_to_file(tracefs_kprobe_events(), "%c:%s/%=
+s %s+0x%zx",
+> > +                                     retprobe ? 'r' : 'p',
+> > +                                     retprobe ? "kretprobes" : "kprobe=
+s",
+> > +                                     probe_name, kfunc_name, offset);
+> > +       } else {
+> > +               return append_to_file(tracefs_kprobe_events(), "%c:%s/%=
+s 0x%zx",
+> > +                                     retprobe ? 'r' : 'p',
+> > +                                     retprobe ? "kretprobes" : "kprobe=
+s",
+> > +                                     probe_name, offset);
+> > +       }
+> >  }
+> >
+> >  static int remove_kprobe_event_legacy(const char *probe_name, bool ret=
+probe)
+> > @@ -11559,7 +11589,7 @@ static int perf_event_kprobe_open_legacy(const =
+char *probe_name, bool retprobe,
+> >         err =3D add_kprobe_event_legacy(probe_name, retprobe, kfunc_nam=
+e, offset);
+> >         if (err < 0) {
+> >                 pr_warn("failed to add legacy kprobe event for '%s+0x%z=
+x': %s\n",
+> > -                       kfunc_name, offset,
+> > +                       kfunc_name ? kfunc_name : "(abs_addr)", offset,
+> >                         errstr(err));
+> >                 return err;
+> >         }
+> > @@ -11567,7 +11597,7 @@ static int perf_event_kprobe_open_legacy(const =
+char *probe_name, bool retprobe,
+> >         if (type < 0) {
+> >                 err =3D type;
+> >                 pr_warn("failed to determine legacy kprobe event id for=
+ '%s+0x%zx': %s\n",
+> > -                       kfunc_name, offset,
+> > +                       kfunc_name ? kfunc_name : "(abs_addr)", offset,
+> >                         errstr(err));
+> >                 goto err_clean_legacy;
+> >         }
+> > @@ -11651,6 +11681,44 @@ int probe_kern_syscall_wrapper(int token_fd)
+> >         }
+> >  }
+> >
+> > +/* Context structure for finding vmlinux kernel symbol address */
+> > +struct find_kaddr_ctx {
+> > +       const char *func_name;
+> > +       unsigned long long kaddr;
+> > +};
+> > +
+> > +/* Callback to find vmlinux kernel text symbol address */
+> > +static int find_kaddr_cb(unsigned long long sym_addr, char sym_type,
+> > +                        const char *sym_name, void *ctx)
+> > +{
+> > +       struct find_kaddr_ctx *data =3D ctx;
+> > +
+> > +       /* Only match text section symbols ('T' or 't') */
+> > +       if (toupper(sym_type) !=3D 'T')
+> > +               return 0;
+> > +
+> > +       /* Check if this is the symbol we're looking for */
+> > +       if (strcmp(sym_name, data->func_name) =3D=3D 0) {
+> > +
+> > +               /*
+> > +                * If we already have an address, we've encountered a
+> > +                * duplicate symbol name. Reject such symbols to avoid
+> > +                * ambiguous resolution.
+> > +                */
+> > +               if (data->kaddr && data->kaddr !=3D sym_addr) {
+> > +                       pr_warn("kernel symbol '%s': resolution is ambi=
+guous: 0x%llx or 0x%llx\n",
+> > +                       sym_name, data->kaddr, sym_addr);
+> > +                       return -EINVAL;
+> > +               }
+> > +
+> > +               data->kaddr =3D sym_addr;
+> > +               pr_debug("found kernel symbol %s at address 0x%llx\n",
+> > +                        sym_name, data->kaddr);
+> > +       }
+> > +
+> > +       return 0;
+> > +}
+> > +
+> >  struct bpf_link *
+> >  bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
+> >                                 const char *func_name,
+> > @@ -11663,6 +11731,8 @@ bpf_program__attach_kprobe_opts(const struct bp=
+f_program *prog,
+> >         size_t offset;
+> >         bool retprobe, legacy;
+> >         int pfd, err;
+> > +       const char *optional_func_name =3D func_name;
+> > +       struct find_kaddr_ctx kaddr_ctx =3D { .kaddr =3D 0 };
+> >
+> >         if (!OPTS_VALID(opts, bpf_kprobe_opts))
+> >                 return libbpf_err_ptr(-EINVAL);
+> > @@ -11693,9 +11763,10 @@ bpf_program__attach_kprobe_opts(const struct b=
+pf_program *prog,
+> >                 return libbpf_err_ptr(-EINVAL);
+> >         }
+> >
+> > +retry_create:
+> >         if (!legacy) {
+> >                 pfd =3D perf_event_open_probe(false /* uprobe */, retpr=
+obe,
+> > -                                           func_name, offset,
+> > +                                           optional_func_name, offset,
+> >                                             -1 /* pid */, 0 /* ref_ctr_=
+off */);
+> >         } else {
+> >                 char probe_name[MAX_EVENT_NAME_LEN];
+> > @@ -11707,7 +11778,7 @@ bpf_program__attach_kprobe_opts(const struct bp=
+f_program *prog,
+> >                 if (!legacy_probe)
+> >                         return libbpf_err_ptr(-ENOMEM);
+> >
+> > -               pfd =3D perf_event_kprobe_open_legacy(legacy_probe, ret=
+probe, func_name,
+> > +               pfd =3D perf_event_kprobe_open_legacy(legacy_probe, ret=
+probe, optional_func_name,
+> >                                                     offset, -1 /* pid *=
+/);
+> >         }
+> >         if (pfd < 0) {
+> > @@ -11716,6 +11787,54 @@ bpf_program__attach_kprobe_opts(const struct b=
+pf_program *prog,
+> >                         prog->name, retprobe ? "kretprobe" : "kprobe",
+> >                         func_name, offset,
+> >                         errstr(err));
+> > +
+> > +               /*
+> > +                * If attachment fails with EADDRNOTAVAIL (or EINVAL in
+> > +                * legacy mode) and we used non-NULL func_name, try to
+> > +                * find function address in /proc/kallsyms and retry
+> > +                * using KADDR instead of ambiguous symbol. Legacy
+> > +                * tracefs API converts EADDRNOTAVAIL to EINVAL, so
+> > +                * we need to check for both.
+> > +                */
+> > +               if ((err =3D=3D -EADDRNOTAVAIL || (legacy && err =3D=3D=
+ -EINVAL)) && optional_func_name) {
+> > +                       pr_debug("kallsyms lookup for %s\n",
+> > +                                func_name);
+> > +
+> > +                       kaddr_ctx.func_name =3D func_name;
+> > +                       kaddr_ctx.kaddr =3D 0;
+> > +
+> > +                       /*
+> > +                        * Drop the function symbol and add the resolve=
+d
+> > +                        * KADDR to the offset.
+> > +                        * This avoids kallsyms validation for duplicat=
+e
+> > +                        * symbols in the kernel. See attr.config2 in
+> > +                        * perf_event_open_probe and kernel code in
+> > +                        * perf_kprobe_init/create_local_trace_kprobe.
+> > +                        */
+> > +                       optional_func_name =3D NULL;
+> > +
+> > +                       err =3D libbpf_kallsyms_parse(find_kaddr_cb, &k=
+addr_ctx, true);
+> > +                       if (err) {
+> > +                               pr_warn("failed to get addr for %s\n",
+> > +                                       func_name);
+> > +                               goto err_out;
+> > +                       }
+> > +
+> > +                       if (kaddr_ctx.kaddr) {
+> > +                               pr_debug("retrying %s using kaddr 0x%ll=
+x\n",
+> > +                                        func_name, kaddr_ctx.kaddr);
+> > +
+> > +                               offset +=3D kaddr_ctx.kaddr;
+> > +                               free(legacy_probe);
+> > +                               legacy_probe =3D NULL;
+> > +                               goto retry_create;
+> > +                       }
+> > +
+> > +                       pr_warn("symbol '%s' not found in vmlinux\n",
+> > +                               func_name);
+> > +                       err =3D -ENOENT;
+> > +               }
+> > +
+> >                 goto err_out;
+> >         }
+> >         link =3D bpf_program__attach_perf_event_opts(prog, pfd, &pe_opt=
+s);
+> > @@ -11931,7 +12050,7 @@ static int libbpf_available_kallsyms_parse(stru=
+ct kprobe_multi_resolve *res)
+> >         data.syms =3D syms;
+> >         data.res =3D res;
+> >         data.cnt =3D cnt;
+> > -       libbpf_kallsyms_parse(avail_kallsyms_cb, &data);
+> > +       libbpf_kallsyms_parse(avail_kallsyms_cb, &data, false);
+> >
+> >         if (res->cnt =3D=3D 0)
+> >                 err =3D -ENOENT;
+> > --
+> > 2.34.1
+> >
