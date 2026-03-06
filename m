@@ -1,153 +1,175 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0002C33BBC0
-	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 02:26:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 021782EC0B5
+	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 02:28:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772764001; cv=pass; b=r+sG//BoFwDqWhswYfDUH42DubbhVDFlOzcf6MhB1YvwOAKoqm+1IruM1fgJPmJhgYQxpfcv5XvRaXCPJpAxho49KMOoqQX11vqNxbn7QjEb9i0x8S27wWX5W5StsH/X/MgsVtyGdqRXa5Jz/yI08gIMtyakXrpTOc9MyKS68mU=
+	t=1772764088; cv=pass; b=tWdLgeoTnUMVsKKJ6TGMc2jATkwl3evKxBm++0Jymwo2eG9ZcYToOWnEbgdk/oS8T3v/Li+7QONe8CAaS+Z3gMZath34XB0ZNw36O0I24kG+pk5drblgkJxl4HE3luGE3hT2eOvQmf/lbM5kUwbg5FAod+eAlh3Ch/OKUncqNNA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772764001; c=relaxed/simple;
-	bh=UDS74/xcl5OJssDWqd0By56d3wyNHRnEU5ge7nZTzOc=;
+	s=arc-20240116; t=1772764088; c=relaxed/simple;
+	bh=B2KdgKc3ZvG/UaXzCHXzFbOt9fsK1ZB/lv5DSzHqXIk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NkFCjQ9WKNxfuhOR0kL3ooXembCHAYQTryD30bSISQyCePZp5svw0gaRqzAu5R6BnyX3l5WoSad9/7Ugas+4yVagLuM/Eb3eFgBxP7vX1hVIA/au7cLLdiSgJKTYdpGADTEwdqpa1/DZmZ7LJwvrUSHwcJcppn7HtaueanXd3Rk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bCoeVHLl; arc=pass smtp.client-ip=209.85.128.54
+	 To:Cc:Content-Type; b=Z/tVlPEzS0kOCi1r3XMpgyyXYvvwkGgnZyjWBcF7iDGhpVLPvfdPYSU2QKBUnIUE2NqXMKD75pxf/QL+JbJUZW/NxHbqSIIOZcMv4gpGuyQCzjYlTLzQOPgmGElBZqrvvwdKQdhIOjexPjpzRxvgd/rwTLMLnqFKyw8DT5FtyPU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ddoU+qD8; arc=pass smtp.client-ip=74.125.224.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bCoeVHLl"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-483703e4b08so84788215e9.1
-        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 18:26:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772763998; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ddoU+qD8"
+Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-64c9fcc24b3so6659682d50.1
+        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 18:28:06 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772764086; cv=none;
         d=google.com; s=arc-20240605;
-        b=TWh0+ZyF++YobVzm7Z49RttSY1+Xgz4Ssp9vMJXaxq804ocErfd2tVeFZJVwST9Eiu
-         hW0prn3uicfcDoqXR4njV+xhWykNwlKecyXi92/ir9vPVSMfluuN2zrggVLX6NPfC7pF
-         xPj15y53wd0jt2dSwZQJWEPRbD2jOdk70hFfJ/Eukrb/cXtgWaY31lckcu8RUXZhMdqg
-         aEel68IGDp5UufEFArH9uOlBI6h03QwcoUfQFBfP7a0LjGTZi+fbaHuhU7LY9P0cNsME
-         lJZym5g2/Zh4geLj5R/EuPameMoJj73bFlRNXg5z9+Zu1f51Cw5zv6MwWWD7BxIxKqAO
-         TdBQ==
+        b=igZaSmoMNcVAeDqnRNudT54yi3R+8GxjtXixARGi4j83s4uacywqQ33yTxPhb4QiXO
+         7kheOZqpWbZ9kjGKdyEDdZ2W0lJl7KWC5lR70GtH/PJLpIGF7x6LXKgg9yW4koUw5Gwe
+         zaqeJQQ7BzIUSBeUAk7at0xv9z0FU4oCuKryixdjLJwLNO5SZA/dHfIk+tjgAxV9syAX
+         Vsc01sLM98qAN3y3AtURYqwCPtBiYlAgQc3MkwKHxiM4aYsUoq92iANu+lRURj9kyiHa
+         /YRPKtTXBncaReojXTM2/CVtd0uEe6jLJG11w/y+uMEYQlvWZBETu1niQKXCTzF+TBql
+         fI5Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=n2TFpv0VKsV5EvrPnFDMEkG92wU7XaQFnZYIaCfU3hY=;
-        fh=PhiV5KRFSUnxIlJyBJ9E9t5pHKhhXFjfdw1CpeHfBQg=;
-        b=AyJj5yQpq2RliPfYY99drsySGFHzvgj+gad+ebW/kbpaogCSUTR7731oKwECaCC3LZ
-         ZatrKh+5OcZQmIvZRwf0dGrHeW8QfPR6rC+eQ+Uvxccz/qPbcy5xa5g+1XpM+rfxL0Vo
-         f3U8JwEJHzQQV0QnuD84+YjqxcHmO3TjEqKrD7rytKUagXLi757u1Q/vuvOSmM7WQXvR
-         YeS1PUTofz+8TXCLZVpPUVO6GzKhNjN6FtaCB/gYsLB/T9RgXnVVDG2AC7uRe53sfsmm
-         aSS7s6VDalr1LNtnbKEi60PJ2LUaUR0INfvGiiqq53gNIbV1dbXipD0OtAw81e8bs7hf
-         KAQg==;
+        bh=B2KdgKc3ZvG/UaXzCHXzFbOt9fsK1ZB/lv5DSzHqXIk=;
+        fh=pdLved/9qLiviS9RwtyxyhY//5qEBeffBdt3wAxWc7E=;
+        b=CCEV5Hge5yBy9dkLO2tQ/jeldZmO66pdzJSTCANko9NJiAZT9VFdsYy02s7QAQ5s6O
+         ozsALE2QXDOcHq72X3mSQW778O5QxRzhOeHxvfwvS4cbX9XMp7FFf4Q5w0L2aJseW3wj
+         yn6A9nRbq6K6kTQ4eCKwcSp26WB2dG0J1DiYr1I9ssikKJ/Vp45wwHwM3IlJD+RjL5SO
+         YLBOP9y+znrpyQYzGgXHC8mVrrUAQYr1E261lzWT4Z4cntDyb4TDvzuJrtiUk7Z6jjLp
+         f9yDQkxE4ATC3PZ61rN7/F28ktcBPaomcM0AZQFIEerC2R4uCdzqD2lxnDzEx5NgIXfJ
+         g1aw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772763998; x=1773368798; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772764086; x=1773368886; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=n2TFpv0VKsV5EvrPnFDMEkG92wU7XaQFnZYIaCfU3hY=;
-        b=bCoeVHLlKGpjeMl4Ft0xkufhr005Zq2eDvsNwKNtz+RmBjvASppqEZyXJsFX6qM3PL
-         BmW9pASn8Til+msYU1Un8PADXEyoR/+XCQfnP/1c6RrdyX4f8mQUquQ8+X8PvRpvOIlo
-         Kk7YkOEChpftNWoKt2D57DJbUlrI+ikTTvwcukUrwvfwbE9eFG2GyDPprXhi8v3MITyp
-         3TrTRscYMx6qP5V3MnosmYH88Gea0upvTK6drLCMBsOd+BTRRad6Kvy3j+YTA4U/2mIu
-         2Wkjrk05KbBLAERRSgLEQPvZ4yippLwTDKXpmQjoxO16emp7IJJC+N3H1AKTieG0DE3O
-         1W0w==
+        bh=B2KdgKc3ZvG/UaXzCHXzFbOt9fsK1ZB/lv5DSzHqXIk=;
+        b=ddoU+qD81IUqSzi2WZnYxPpsNcMYlWz4Ioigi1uccJImq+NjPcxigw4Nsx8qdqylyu
+         +cTEZYc2EiExLmNQQP9omAEgFjXpYDgl+2i1cFbi8XK2lVs43nkc335qH2CCiS5NrwKq
+         u9h6ln73mQV0gU7jPOQcv73wpyMqS+fJtlEz65aHsohzjFQqfEnT+0ojWglQYsHlfD+C
+         Xlb3LBrkTVqKtxaRn7SRaQOWywe0TiDdnScsh2xU4+jeuiQyQUvyBLqygQRwgSfL3D8N
+         OF1GGmzSU5Li14djic0Zg38k/RIaUzZYNECU11yuZAQ2gcM/2X3dDD+0Yxv87kiSmlkZ
+         Z2/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772763998; x=1773368798;
+        d=1e100.net; s=20230601; t=1772764086; x=1773368886;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=n2TFpv0VKsV5EvrPnFDMEkG92wU7XaQFnZYIaCfU3hY=;
-        b=flxSqacL1A0bAw2rYK+Yl/6XKuWq7L5EXKIe9Wc1STvuMn06oqHQplb6l+rv9V8OvP
-         xK4VrQ/2luAowDlljMogSeJA1LjA9XZFeNqKBGK+ofeGUa5UtziHkIfj4hFqn2d6+qRW
-         aqr6RZ23LCZvNWxEEhUdiNfKqIjTFdZ4qmd37oyqhSDp4Kmr+6m7x9w8nC2GnuZXYrlt
-         c0LjAwiMsbNCnxbwc/945jFSzE9M+QGKN5ejS54gKoDACov+ypW9nBcOggAr1pwRuE46
-         +1ebSJInYeed1DdLnvM0bPmIh143wxsklSQWLfzFZLf6Asl8Vpn7HvNq4nUW7LfifT09
-         8nqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUj7dGK2uI8BLRnP9BN11FKmR/HK9zifAZUccwV67HaOZIsTbL1NVxzKXhmzd9Zf5Kn8eI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOWhv6WjSwd3prCIT0G7SZS5YPKYyAcy0fEQ5FIe9s/dqZu9dk
-	Vff4Uym3DoD3nuWt8xCdDeHd0YuF+RNqiW/wJkBBvfbEW2TfmNgygZG14KIJoSB6KydgL/WnQ/U
-	qJUcgSrfVMflfznZ38PShU8jirix155Y=
-X-Gm-Gg: ATEYQzxeJlyXzXG//pEOhik07aa7/B3xrr7lFmUB0/+JtsG/xOzQ3xHVgHuXbfpS5Uk
-	N7BcTHAm2bj1aOTJOXvQWlRi5XSA/5R78Xo4k4QerF4KdBB4Tg/fj3V+yHyWujXXrWJEnA9jVZC
-	Z4/hj2F2iR/C/IdSxw8cIfnOCXsnjzDrAfH+iYQZUQ89iczF2EIJeopERv+bXRbY3EaMxeG8vCM
-	shydWyDr/e3KbqKCqu1A3whP1TG9lrfTxQ1SQFrcJ3GDq94s6LwaJWvKydGhIVEJBbRRExt7l7L
-	cIOJ9SB+i7rWCVFJaaIW+F3a/E5BuNbPlEG5Wgf2Y2azBpSFCxssv60HRPuuITFTSgEk4oiqEtK
-	PdcDvE9eBIUB7KQkaWxI/ndp3vg==
-X-Received: by 2002:a05:600c:154b:b0:47d:6c36:a125 with SMTP id
- 5b1f17b1804b1-4852675edf7mr6731585e9.17.1772763998304; Thu, 05 Mar 2026
- 18:26:38 -0800 (PST)
+        bh=B2KdgKc3ZvG/UaXzCHXzFbOt9fsK1ZB/lv5DSzHqXIk=;
+        b=GoF2y69jV2d7cHybd3UeEwsmtHC06yn11DSJYiRZ0c8BxssFR/PaJgkIyHg0xMm+k9
+         sOzppX3AiOxHIVA9YM+BCuR1zuI7pc90BN652hOTFHfu4e8DmmSSHSeL86PoS1pWuVu2
+         URKlKA57Tzy5vzhX4AZ9E+GQGWiNcTvV3siZN/1ywQgnNfJBoTjScKRWSlKEZQlWJ4XH
+         S2hgn/4E1LiMymWGQurQmiyuQs/h5mTLm+AvDmB+iCxNt1o5kS6U0YDaWFVB/jQxKAl7
+         hd2+WIOYianeXKhdQhCVFhe1pA7zIoHo77YczAcXOPgHCDYmVm86gRBjEbm6AaQqmEcn
+         Fcdw==
+X-Forwarded-Encrypted: i=1; AJvYcCXpZOFqkESeEEydT12ed4gfrvzYsSFIZ8L8iy5Hja0FlvbOl89+0pNAUUq/yxd8DsDUGhA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKPeTbveikAaIIdIY+zO7aNpqADKPBmmG6PnvwBWWA3DUcnPYa
+	/Xwy1tZP4MPY8/HLDQkyJsrQbeGyZx+saCkYNwck/GtZ912HPvHdx9HmqDxvzjXXhgEGUW/KT05
+	Cu6gl21iQMQIYSpaUDhyxv8SNDiAvE3Y=
+X-Gm-Gg: ATEYQzzryNJQWpgiFKBiDG8u6ISLQ+PyYrqDkJa4U5jy5ZRo0GFZLWGRxUY2h02fWD0
+	D/RRIVRhtM4O9PeAbr8U2gS/l+GgrbqZRbmYgMx01eFoNqIOZLYFZyDLajT0+NSEE2D7RBmqTyQ
+	bMdKH8EUYpvVnLydt4r403GcfN5Ilqomya1BEwAcpADhhBizO8g7QoL6ka1wuIn0ivd3727G5eS
+	an1xugLsy7Z6um+XcrHoALOctMgdanTdAvqMTH+B55N2z36NrHTGNhbBweKi5UEyoPMQEs/SCMJ
+	K1WTuoGj
+X-Received: by 2002:a05:690e:c48:b0:64c:b7c9:dffd with SMTP id
+ 956f58d0204a3-64d14279b0amr631804d50.58.1772764086027; Thu, 05 Mar 2026
+ 18:28:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260305222132.470700-1-varunrmallya@gmail.com>
- <12848362.O9o76ZdvQC@7940hx> <CAADnVQL7BpNh_WuR3bPKuVPeKLOgnkY+MUwDG2WgN1ZPtD734w@mail.gmail.com>
-In-Reply-To: <CAADnVQL7BpNh_WuR3bPKuVPeKLOgnkY+MUwDG2WgN1ZPtD734w@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 5 Mar 2026 18:26:27 -0800
-X-Gm-Features: AaiRm53ltGWbt7YWlC9e3Ad6zWeS5FUC7pw7OoSNqS6AexwChHHTRiJSQkapvsg
-Message-ID: <CAADnVQ+gA+4UHjz8BvN7fSRehZ9c0vdYGVJ4e01ecat3beCwAQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix const qualifier warning in fexit_bpf2bpf.c
-To: Menglong Dong <menglong.dong@linux.dev>
-Cc: Varun R Mallya <varunrmallya@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard <eddyz87@gmail.com>, =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Song Liu <song@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+References: <20260304074650.58165-1-laoar.shao@gmail.com> <20260304074650.58165-2-laoar.shao@gmail.com>
+ <20260304090249.GN606826@noisy.programming.kicks-ass.net> <20260304095415.4d5f2528@pumpkin>
+ <20260304155742.7b4de2d1@gandalf.local.home> <20260304214447.3e5817ea@pumpkin>
+ <CALOAHbCOynnRdc8JkNJHb-nyoerrz0K5GUhnD8OR2hv4x==5LA@mail.gmail.com>
+ <20260304212802.458b878e@fedora> <CALOAHbBA643_QOsnTmrfjKE71hSa+v1cToiELvGk+vjtcgJsxg@mail.gmail.com>
+ <20260304220019.3efa12ab@robin> <CALOAHbA4Dtc3cXs2JiQ=kxES3kT+Acb=amUxkOvQ22fns-Mqgw@mail.gmail.com>
+ <748e8e0d-5164-4c8a-9bb9-110874c5daa0@redhat.com> <CALOAHbAsiVNC7COL7rCJBdaC-8oZQvg+pjudR4QexQQaYLBmgA@mail.gmail.com>
+ <c58807dc-74ea-469e-9c21-0300b80f2a82@redhat.com> <9e4e356e-25b0-4ac5-8d25-ad093b241b94@redhat.com>
+In-Reply-To: <9e4e356e-25b0-4ac5-8d25-ad093b241b94@redhat.com>
+From: Yafang Shao <laoar.shao@gmail.com>
+Date: Fri, 6 Mar 2026 10:27:29 +0800
+X-Gm-Features: AaiRm51pzOPVYlr4bRz9IM4Ws3QgVJ-mXjKQiEBEVWnxK9TajtP8CzsG3fc6_I4
+Message-ID: <CALOAHbBM_4dNRFb28M9-cQG689broOc2QtfYYEM59CjxG3wVkQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/2] locking: add mutex_lock_nospin()
+To: Waiman Long <longman@redhat.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>, David Laight <david.laight.linux@gmail.com>, 
+	Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com, will@kernel.org, boqun@kernel.org, 
+	mhiramat@kernel.org, mark.rutland@arm.com, mathieu.desnoyers@efficios.com, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 5, 2026 at 5:40=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Fri, Mar 6, 2026 at 2:45=E2=80=AFAM Waiman Long <longman@redhat.com> wro=
+te:
 >
-> On Thu, Mar 5, 2026 at 5:16=E2=80=AFPM Menglong Dong <menglong.dong@linux=
-.dev> wrote:
+> On 3/5/26 1:34 PM, Waiman Long wrote:
+> > On 3/5/26 12:40 AM, Yafang Shao wrote:
+> >> On Thu, Mar 5, 2026 at 12:30=E2=80=AFPM Waiman Long <longman@redhat.co=
+m> wrote:
+> >>> On 3/4/26 10:08 PM, Yafang Shao wrote:
+> >>>> On Thu, Mar 5, 2026 at 11:00=E2=80=AFAM Steven Rostedt
+> >>>> <rostedt@goodmis.org> wrote:
+> >>>>> On Thu, 5 Mar 2026 10:33:00 +0800
+> >>>>> Yafang Shao <laoar.shao@gmail.com> wrote:
+> >>>>>
+> >>>>>> Other tools may also read available_filter_functions, requiring ea=
+ch
+> >>>>>> one to be patched individually to avoid this flaw=E2=80=94a clearl=
+y
+> >>>>>> impractical solution.
+> >>>>> What exactly is the issue?
+> >>>> It makes no sense to spin unnecessarily when it can be avoided. We
+> >>>> continuously improve the kernel to do the right thing=E2=80=94and un=
+necessary
+> >>>> spinning is certainly not the right thing.
+> >>>>
+> >>>>> If a task does a while 1 in user space, it
+> >>>>> wouldn't be much different.
+> >>>> The while loop in user space performs actual work, whereas useless
+> >>>> spinning does nothing but burn CPU cycles. My point is simple: if th=
+is
+> >>>> unnecessary spinning isn't already considered an issue, it should
+> >>>> be=E2=80=94it's something that clearly needs improvement.
+> >>> The whole point of optimistic spinning is to reduce the lock
+> >>> acquisition
+> >>> latency. If the waiter sleeps, the unlock operation will have to
+> >>> wake up
+> >>> the waiter which can have a variable latency depending on how busy th=
+e
+> >>> system is at the time. Yes, it is burning CPU cycles while spinning,
+> >>> Most workloads will gain performance with this optimistic spinning
+> >>> feature. You do have a point that for system monitoring tools that
+> >>> observe the system behavior, they shouldn't burn that much CPU times
+> >>> that affect performance of real workload that the tools are monitorin=
+g.
+> >> Exactly. ftrace is intended for debugging and should not significantly
+> >> impact real workloads. Therefore, it's reasonable to make it sleep if
+> >> it cannot acquire the lock immediately, rather than spinning and
+> >> consuming CPU cycles.
 > >
-> > On 2026/3/6 06:21 Varun R Mallya <varunrmallya@gmail.com> write:
-> > > Building selftests with
-> > > clang 23.0.0 (6fae863eba8a72cdd82f37e7111a46a70be525e0) triggers
-> > > the following error:
-> > >
-> > >   tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c:117:12:
-> > >   error: assigning to 'char *' from 'const char *' discards qualifier=
-s
-> > >   [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-> > >
-> > > The variable `tgt_name` is declared as `char *`, but it stores the
-> > > result of strstr(prog_name[i], "/"). Since `prog_name[i]` is a
-> > > `const char *`, the returned pointer should also be treated as
-> > > const-qualified.
-> > >
-> > > Update `tgt_name` to `const char *` to match the type of the underlyi=
-ng
-> > > string and silence the compiler warning.
-> > >
-> > > Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
-> > > ---
-> > >  tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b=
-/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-> > > index 23d933f1aec6..92c20803ea76 100644
-> > > --- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-> > > +++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-> > > @@ -111,7 +111,7 @@ static void test_fexit_bpf2bpf_common(const char =
-*obj_file,
-> > >               struct bpf_link_info link_info;
-> > >               struct bpf_program *pos;
-> > >               const char *pos_sec_name;
-> > > -             char *tgt_name;
-> > > +             const char *tgt_name;
-> >
-> > I have been suffering from this build error too. So,
-> >
-> > Acked-by: Menglong Dong <menglong.dong@linux.dev>
->
-> Looks like this patch was lost. Pls resend.
+> > Your patch series use wordings that give a negative connotation about
+> > optimistic spinning making it look like a bad thing.
 
-Ohh. I see it now. Your reply got delivered before the patch itself
-and the patch went to spam.
-No need to resend.
+Perhaps I didn't phrase that well. I do understand that optimistic
+spinning is valuable in use cases where we wouldn't want to disable
+CONFIG_MUTEX_SPIN_ON_OWNER.
+
+> In fact, it is
+> > just a request for a new mutex API for use cases where they can suffer
+> > higher latency in order to minimize the system overhead they incur. So
+> > don't bad-mouth optimistic spinning and emphasize the use cases you
+> > want to support with the new API in your next version.
+>
+> BTW, for any new mutex API introduced, you should also provide an
+> equivalent version in kernel/locking/rtmutex_api.c for PREEMPT_RT kernel.
+
+Thanks for the suggestion.
+
+--=20
+Regards
+Yafang
