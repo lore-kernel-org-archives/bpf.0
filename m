@@ -1,133 +1,173 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C2AC366063
-	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 06:16:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BDDC366811
+	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 06:23:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772777765; cv=none; b=LOPlH1aTD3SwbkoD2beh1kDEU5rgb/0J8UPk7XM+SidlYg5qrc/7+4kFTBsht9nOVVB9jzuOtbaTJtFaTYGxaDMDtEh4isfHdU4S37MDZqbu4I9UOkMQwu+JeXLPF9hwQusKe0fD5KDOPgW9DxbgTzcNJf6sSuD79sbQDE6yPXY=
+	t=1772778237; cv=none; b=F3towbVip6Gg3fwJlZuNLi8ISVuhafaxcfc724nguRcJJa2qesa5WteUKhPKPnTMoLzBFroH9+rZNkHUu+7dl+gQKb2rcfAl+bhpQXBGiWlfSEAX5PNQG9zCmW6NScvj9U1oZpZ/QknCAjHMHHfbWZYJRQ9jQ4uWreCYHeLDBaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772777765; c=relaxed/simple;
-	bh=hGtRcnWTy/PpFFzdK7d1MHZ61VyPgPTh0NNGxvvrpIw=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=Ma/0ANk5ipIiwfgzhPnsHZ52dUMDErpev18JsNa1K3LZYIgy8LgH8bw3dqJQRI6SrnfcCUniY1gKKlCX7AIHt2QGvl9dvms40CZq6VBe781y8qobSDHeWrTXVUtRwN+k5vuOnvx/sMbNxvZNvo+k8MuggZqLescFg8ABx5EE8+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fAl+knHo; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1772778237; c=relaxed/simple;
+	bh=EKsN+yX+yi+ftieFrU3o3RX1+H9rpw8vqp1ZoriJSvM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Y41CAdrvv2hH56gXhPCdFi6qs0ts0UrYMhENX7g41tCVC9w9VPBt7FpYIZ7y9hjZuZx/+v8Xg+k+v8uv7GOt5oAj8Y1fa03oui3zLi2YAZ+fnAliqh8vnalvYdz9pNTCqhPYQo4rguhI8pnIKUWvvFTzivuxiEbk9I/NB3e+zkE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LHszZhmO; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=L5CgHuyE; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fAl+knHo"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LHszZhmO";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="L5CgHuyE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1772778234;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JDRt8/EK4ZknH0taR3rYFQKjDxoY12NnJkd2SmGA52Y=;
+	b=LHszZhmO7wazAck/dp2IrFtgDOurHZ5YOZ56Lr6VW8VnkCoZkG/OyQgFtIEuODqcUnGYj0
+	LwXMa7LKhcadokZ0BauRGbenZhLaI+aL/XNf0ALf/Ssnpgd2DNE6m+T5imDtDAXEHPe/xK
+	Yaf+LTOKNHelU4TkFhx7m5McAQHfo1A=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-669-sKUIeBJzOVKR05ApbKkFPQ-1; Fri, 06 Mar 2026 01:23:52 -0500
+X-MC-Unique: sKUIeBJzOVKR05ApbKkFPQ-1
+X-Mimecast-MFC-AGG-ID: sKUIeBJzOVKR05ApbKkFPQ_1772778232
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-439ab866bc1so6994146f8f.2
+        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 22:23:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1772778231; x=1773383031; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JDRt8/EK4ZknH0taR3rYFQKjDxoY12NnJkd2SmGA52Y=;
+        b=L5CgHuyEvY6g7+GAqpUXGR18j7fMllpq9DgwaSeOZmd/bgX5/Kb3GkuJUBT1/sDpOf
+         K83mLX/6WcQxtvYjkfxConc7rDYxif5bNeKydSNNkZI6G2VYxEY1T96DMRP/OOBwQqSH
+         olkvTSXUocpjULWRtV6GjEE8m2TbmZV6yVtaA90kLessKr1/pTlwvNrhQJtK+BHeoVc0
+         +GibbMtOZuZJ8XvHg4O7VWqaePCEltsBmWxdALfpfA3e1I7d6aVqP8O2ppof108kzIZ6
+         ODiMzCcuFzmsqSLL0ozmDj2VK4V19KwvFHM2bQeEKENDffQIW2RSfTyUIuyaYYPvebQB
+         nRxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772778231; x=1773383031;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JDRt8/EK4ZknH0taR3rYFQKjDxoY12NnJkd2SmGA52Y=;
+        b=cE+K2PccD/cvCOavJdi3zsQ+R6MR+l3uOG01YN1sbpchRcZxumTjjtfhPLDFwZd5Yw
+         xqgleGW7HLO5KAYL9gn3OhO2oz96TnpXwzi/yMLqDAi1yaHPi1RvbzquQ4NZOZIHyP2E
+         gSb0lCXJ1YVl8WH88SUpQtnAPG1DZujbjB4tUDy3fMPr2HdvF3pAtrGMuX/cFi4K4MwL
+         vHt9qkfALo9FYtzPrfC87pmIJ7q9Br5hoGf+lmEV7l0Syb0Mt8y8JdGeVMq6umcr4d2+
+         JPWuPa3P4jRPuxa9ymuzcPlSZeblywJfnUdZ4UdTOFrEZW6g015cjAmhS0WeG4eiHSyx
+         R7pQ==
+X-Gm-Message-State: AOJu0YzVT4YJYehZQdYny4DVsgTxEgT7KJz71KaouW31+UhFr/oT+FSL
+	WI4XDNyi50eDk5fJ2RsHMe7BJLJUt3b+ztLl1kf3rjCk5oj0C+CIrBoX/ofgHzuG4X7UqER6ULX
+	k0o8kDG7sKP2ggKlOImtzQZNdty+MyQ1mo6VTFGV6rtAkqyDJZh0dcTXfu5OfnUA=
+X-Gm-Gg: ATEYQzw3AQv8tmLv1jELUU4K1ZBRYosx32LKz3AESGIHzaI3qZl7Om1XLG4LSyTBVZI
+	vCDVpEa12a8nHZAeuiBnQ9zOC98KZQw1irT8sk0L5JkwFrSiW/V8I9R8CopKuTcG2x4rPe3fBiS
+	8RgZ/Tf59YmXqC1WBrpODfw5FhkMvnbxiIWrYBVfSInERIc5OEEBFl1mHjJhTaSWDZYdGpjlFeF
+	Zmmuc4VsWpBB5rz0o4Rux3EOlupM60F8fUcovQNm3R5LBg7SREAR3DCjAWy1YxGQ6r1ycD0D87t
+	cfm1v5ayaogy0F+RuqmpJjwGDvnc6xFsKsMRO33SXJJTfypnWMlwEcExzQqpxCYamSPrVVl2Yxc
+	st6kv7gb9Jdp9Y2kkGwmdPqk+/4OywsJbCc+Y2guxpysJbxTuD1t3c7tV
+X-Received: by 2002:a05:6000:4205:b0:439:c9d0:5fd4 with SMTP id ffacd0b85a97d-439da656affmr1473078f8f.16.1772778231412;
+        Thu, 05 Mar 2026 22:23:51 -0800 (PST)
+X-Received: by 2002:a05:6000:4205:b0:439:c9d0:5fd4 with SMTP id ffacd0b85a97d-439da656affmr1473043f8f.16.1772778230881;
+        Thu, 05 Mar 2026 22:23:50 -0800 (PST)
+Received: from [192.168.0.135] (185-219-167-205-static.vivo.cz. [185.219.167.205])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439dae2b9d8sm1467585f8f.21.2026.03.05.22.23.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Mar 2026 22:23:50 -0800 (PST)
+Message-ID: <064f9d6b-827f-4de2-827c-60841db0e2b5@redhat.com>
+Date: Fri, 6 Mar 2026 07:23:47 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772777752;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vqXgGoazXTsI2u6OsAzXa6/DneMpo4x6tpW9FL9NTEU=;
-	b=fAl+knHob6eDuMaiQ7kRog26/CIu2cadYe/IsQHXVwIXoDzk9ezDPQrCTZHKwnbPfuJO37
-	6QBhpUTUrc0qMzUEf0UtMRuIGZZ/0hxZuFPIo3yhHfZKuvd934sUgz4tQyR6I7vljMn9jh
-	ODFAe6dFYYTHQn1gjJxWbG2TQfambIE=
-Date: Fri, 06 Mar 2026 06:15:45 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Message-ID: <c028f0251aeadfad8a76b0c9aa1f46a7e2f81b1a@linux.dev>
-TLS-Required: No
-Subject: Re: [PATCH bpf v3 3/5] bpf, sockmap: Fix af_unix iter deadlock
-To: "Michal Luczaj" <mhal@rbox.co>, "John Fastabend"
- <john.fastabend@gmail.com>, "Jakub Sitnicki" <jakub@cloudflare.com>,
- "Eric Dumazet" <edumazet@google.com>, "Kuniyuki Iwashima"
- <kuniyu@google.com>, "Paolo Abeni" <pabeni@redhat.com>, "Willem de
- Bruijn" <willemb@google.com>, "David S. Miller" <davem@davemloft.net>,
- "Jakub Kicinski" <kuba@kernel.org>, "Simon Horman" <horms@kernel.org>,
- "Yonghong Song" <yhs@fb.com>, "Andrii Nakryiko" <andrii@kernel.org>,
- "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "KP Singh"
- <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "Hao Luo"
- <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Shuah Khan"
- <shuah@kernel.org>, "Cong Wang" <cong.wang@bytedance.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-In-Reply-To: <b2218c30-a704-4395-a67e-95c62b75586f@linux.dev>
-References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
- <20260306-unix-proto-update-null-ptr-deref-v3-3-2f0c7410c523@rbox.co>
- <b2218c30-a704-4395-a67e-95c62b75586f@linux.dev>
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/3] bpf: Always allow sleepable programs on
+ syscalls
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bot+bpf-ci@kernel.org
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+ pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+ shuah@kernel.org, leon.hwang@linux.dev, martin.lau@kernel.org, clm@meta.com,
+ ihor.solodrai@linux.dev
+References: <0715e86d7461c20d318594c770b6fa4c71f299c5.1772721009.git.vmalik@redhat.com>
+ <e21c875dcc2ec41524707acee1fd07bcd9dd3868cd6cdd63a9d7625c764271f3@mail.kernel.org>
+ <CAP01T77_E7rJPEykxbZ2dx0aFBk+N+pFae3r37wrzoFcUBa_OQ@mail.gmail.com>
+From: Viktor Malik <vmalik@redhat.com>
+Content-Language: en-US
+In-Reply-To: <CAP01T77_E7rJPEykxbZ2dx0aFBk+N+pFae3r37wrzoFcUBa_OQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-March 6, 2026 at 14:04, "Jiayuan Chen" <jiayuan.chen@linux.dev mailto:jia=
-yuan.chen@linux.dev?to=3D%22Jiayuan%20Chen%22%20%3Cjiayuan.chen%40linux.d=
-ev%3E > wrote:
+On 3/6/26 03:02, Kumar Kartikeya Dwivedi wrote:
+> On Thu, 5 Mar 2026 at 17:08, <bot+bpf-ci@kernel.org> wrote:
+>>
+>>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>>> index d92cf2821657..cb80a3ddb7a4 100644
+>>> --- a/kernel/bpf/verifier.c
+>>> +++ b/kernel/bpf/verifier.c
+>>
+>> [ ... ]
+>>
+>>> +#else
+>>> +
+>>> +static bool has_arch_syscall_prefix(const char *func_name)
+>>> +{
+>>> +#if defined(__x86_64__)
+>>> +     return !strncmp(func_name, "__x64_", 6);
+>>> +#elif defined(__i386__)
+>>> +     return !strncmp(func_name, "__ia32_", 7);
+>>> +#elif defined(__s390x__)
+>>> +     return !strncmp(func_name, "__s390x_", 8);
+>>> +#elif defined(__aarch64__)
+>>> +     return !strncmp(func_name, "__arm64_", 8);
+>>> +#elif defined(__riscv)
+>>> +     return !strncmp(func_name, "__riscv_", 8);
+>>> +#elif defined(__powerpc__) || defined(__powerpc64__)
+>>> +     return !strncmp(func_name, "sys", 3);
+>>                                     ^^^^^
+>>
+>> The other architectures use prefixes that uniquely identify syscall
+>> wrappers (__x64_sys_*, __arm64_sys_*, etc.), but "sys" with length 3
+>> would also match sysfs_*, sysctl_*, sysrq_*, and other non-syscall
+>> kernel functions.
+>>
+>> Looking at arch/powerpc/include/asm/syscall_wrapper.h, __SYSCALL_DEFINEx
+>> generates names like sys_read and SYSCALL_DEFINE0 generates sys_fork, so
+>> the actual common prefix for powerpc syscalls is "sys_" (4 characters
+>> with the underscore).
+>>
+>> Should this be "sys_" with length 4 instead?
+> 
+> I think the bot is right, we should match sys_, that is less likely to
+> include other non-syscall kernel functions.
+> It only affects powerpc with error injection disabled.
 
+Yeah, agreed, will update to sys_ in v2.
 
->=20
->=20On 3/6/26 7:30 AM, Michal Luczaj wrote:
->=20
+> 
+> Other than that, the set looks good to me. I tested it by disabling
+> error injection and things fail before your fix is applied.
+> 
+>>
+>>> +#else
+>>> +     return false;
+>>> +#endif
+>>> +}
+>>
+>> [ ... ]
+>>
+>>
+>> ---
+>> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+>> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>>
+>> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22725431483
+> 
 
-[...]
->=20>  diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-> >  index 3756a93dc63a..3d2cfb4ecbcd 100644
-> >  --- a/net/unix/af_unix.c
-> >  +++ b/net/unix/af_unix.c
-> >  @@ -3729,15 +3729,14 @@ static int bpf_iter_unix_seq_show(struct seq=
-_file *seq, void *v)
-> >  struct bpf_prog *prog;
-> >  struct sock *sk =3D v;
-> >  uid_t uid;
-> >  - bool slow;
-> >  int ret;
-> >  > if (v =3D=3D SEQ_START_TOKEN)
-> >  return 0;
-> >  > - slow =3D lock_sock_fast(sk);
-> >  + lock_sock(sk);
-> >  > - if (unlikely(sk_unhashed(sk))) {
-> >  + if (unlikely(sock_flag(sk, SOCK_DEAD))) {
-> >  ret =3D SEQ_SKIP;
-> >  goto unlock;
-> >  }
-> >=20
->=20Switching to lock_sock() fixes the deadlock, but it does not provide =
-mutual
-> exclusion with unix_release_sock(), which uses unix_state_lock() exclus=
-ively
-> and does not touch lock_sock() at all. So a dying socket can still reac=
-h the
-> BPF prog concurrently with unix_release_sock() running on another CPU.
->=20
->=20Both SOCK_DEAD and the clearing of unix_peer(sk) happen under
-> unix_state_lock() in unix_release_sock(). Without taking unix_state_loc=
-k()
-> before the SOCK_DEAD check, there is a window:
->=20
->=20iter unix_release_sock()
-> ---=C2=A0 lock_sock(sk)
-> SOCK_DEAD =3D=3D 0(check passes)
->  =C2=A0=C2=A0unix_state_lock(sk)
->  =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=C2=A0=C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=C2=A0unix_peer(sk) =3D NULL
->  =C2=A0=C2=A0sock_set_flag(sk, SOCK_DEAD)
->  =C2=A0=C2=A0unix_state_unlock(sk)
-> BPF prog runs
-> =E2=86=92 accesses unix_peer(sk) =3D=3D NULL =E2=86=92 crash
-
-
-Sorry for malformed message.
-Here is correct:
-
-iter                              unix_release_sock()
----  lock_sock(sk)
-SOCK_DEAD =3D=3D 0  (check passes)
-                                  unix_state_lock(sk)
-                                  unix_peer(sk) =3D NULL
-                                  sock_set_flag(sk, SOCK_DEAD)
-                                  unix_state_unlock(sk)
-BPF prog runs
-=E2=86=92 accesses unix_peer(sk) =3D=3D NULL =E2=86=92 crash
