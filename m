@@ -1,166 +1,185 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 758D634F47C
-	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 09:58:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA71358393
+	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 10:00:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772791135; cv=none; b=qMXJqsRR52mIYUvgC3ag//ESRge/m+lH0Z4uQmj9ifbodLwaGCVlTRANXzN1u5NQlKrJpAMqXq+2vijhW09tGfvdlNfoSYHvJoZb6gtVmdNyRtKT8KILsL/vhXmaRcnuxAD3E7YbZx9l/DKqLPVz0gOtz8P77OfbsOFbHXQNemY=
+	t=1772791253; cv=none; b=i+Wb3VpaQQSzwvIbU5tTtw9iiDWLHNogSMF208ilybp73cz97WkZbkG2qyZDBmAXMc+VdaaVhxEWozAxZw4xGHlPzcot9PqU+mTejb+IzjN+Od89Bcaj2fHU/nLRFYgC2OrBkM0V9Y00Oo/jAv68/ziq9plr0f5/v852zjCvjhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772791135; c=relaxed/simple;
-	bh=P0IkSeqQ7fCQIGnFk3lw3TNS81NHlXKUzK61UgqZNFc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UnEmL0Qh+/BBqA6P0Qv5FCHwcMzS+KIMAJZrRe+LUce0Ffdwd+IL+ujtlX+W9tg3zIwfPuPNu0lns4cie59Ryr10eHG9cwuvj6k6MilIDkYxwlzyX0KMPCDcIGVkwvV5VY4FNXZY2xP4fdJM1FGZTWYEya1cCpwWENiFKIIVj9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Xk6vWkNZ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=CxdhXeYY; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Xk6vWkNZ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=CxdhXeYY; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1772791253; c=relaxed/simple;
+	bh=Otf5TtKLt3P6lmlkJiFtklNIKvRQIvt73Bnw8pB5Lrg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=szko8n0ajwZ/DUjmM4I8Wr2O0hm+shnf7d9SHH5sce0Y3dYK250yjuvGNqS+8Gk1QXPvJUDt4/+kyv98dZ9bcMq/MDTgUE0vui7gqRKzPoh4lORXiN93aPGBcYUy8spv7iEKc6QQXE35Nx2bJ5TalLyRG6aIn0Kh0VxRe60s1NU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O0+LLFH4; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Xk6vWkNZ";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="CxdhXeYY";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Xk6vWkNZ";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="CxdhXeYY"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 3935A5BD8E;
-	Fri,  6 Mar 2026 09:58:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1772791127; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rhMcktw3Gz3DMzPYzGWkb8un5tONzEZ2V5rvxzmHAIc=;
-	b=Xk6vWkNZ422rV3iMi4Ve6Qn1ufBJgdErdesucNVMM9yzQarWLRCGa/+9kS1MdgB3BQb2WE
-	lYOBoeALVrkQrLUkdTqBATvEXSKCm70vl/XjrBfd6CbTor/Me4UCkeW8lX01rCFAFg9Nbl
-	0D/5ojq3CZV8z/4LSnrGsu0WZR6/dwI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1772791127;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rhMcktw3Gz3DMzPYzGWkb8un5tONzEZ2V5rvxzmHAIc=;
-	b=CxdhXeYYUMVzJ7txBMqnAinrsNWft+/4ku0Y3SBGnzauNTJYoQJhzlHda+fFQ6bli6PJK9
-	GXiA5/e3XmN5NRBg==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=Xk6vWkNZ;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=CxdhXeYY
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1772791127; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rhMcktw3Gz3DMzPYzGWkb8un5tONzEZ2V5rvxzmHAIc=;
-	b=Xk6vWkNZ422rV3iMi4Ve6Qn1ufBJgdErdesucNVMM9yzQarWLRCGa/+9kS1MdgB3BQb2WE
-	lYOBoeALVrkQrLUkdTqBATvEXSKCm70vl/XjrBfd6CbTor/Me4UCkeW8lX01rCFAFg9Nbl
-	0D/5ojq3CZV8z/4LSnrGsu0WZR6/dwI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1772791127;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rhMcktw3Gz3DMzPYzGWkb8un5tONzEZ2V5rvxzmHAIc=;
-	b=CxdhXeYYUMVzJ7txBMqnAinrsNWft+/4ku0Y3SBGnzauNTJYoQJhzlHda+fFQ6bli6PJK9
-	GXiA5/e3XmN5NRBg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id BD6FB3EA75;
-	Fri,  6 Mar 2026 09:58:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id raUgK1WlqmlMEwAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Fri, 06 Mar 2026 09:58:45 +0000
-Message-ID: <b3477010-6fdd-4bec-8951-152b12bf56e6@suse.de>
-Date: Fri, 6 Mar 2026 10:58:44 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O0+LLFH4"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-439b97a8a8cso5209224f8f.1
+        for <bpf@vger.kernel.org>; Fri, 06 Mar 2026 02:00:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772791250; x=1773396050; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Si6gJZflbpg2/p8TcnKsUQK0gcIs9I1IuQBcaW/7KB4=;
+        b=O0+LLFH4CjESCtwLlLJeh9nqEj/q3N7wgtxn8/OZ0tEsbL8PkRD0V+ScJcLtea6TR7
+         fPYcwKKjK8he93seRQ+9b46fKlGGZnxe8DW075+l9AjWrSEmvMsk0Eddq81yvfk83CJ8
+         TcbGSDZP0Yf2FWlMtFHEYwb7GtKIIj2omC/gUR3rxF0m9VO/ruTgHy/o/obN9Z/vfDSc
+         Wv5ZSZgl60vQGChKb8CLNlVQ7zpG7HoYR8YpiKWqOlx8WnZCrNinL/S06S+J5LlCDgM0
+         c5Al6B2QoKPhXuwpsJqAP+9KtHejyVw641k7dd3zixpSENUCNJ+wNshac1k7FOqnAsHV
+         qBmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772791250; x=1773396050;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Si6gJZflbpg2/p8TcnKsUQK0gcIs9I1IuQBcaW/7KB4=;
+        b=pr9KZfIsbpozArDtEYib1rr9A0udx2eUnbao9sKjRipj3kVmvpI7tQ9jJwy6s08a9K
+         R1byLFrt3P9ek8JjHC2cCzl68zeBaaYF3ZJv4ChG/BJLxD4Fwr5Lz3IERNwjoFtz8mkE
+         bI7GRa4ufsceHvPHfRFdEb2OHnHqI7h3DHa1xTtVfKWnHXaLibLHgZMc2k47/UfSyx+c
+         5ddhlSf1KgDpDdkff3pBmzUxJfJsmVhkSgN7TGCLyS9PhZVGpQi46RC4t45pPohAaWa1
+         qDB8iv0+SYX45/vg7zCS9eTVRZdfMbEXlyqCoqB1z5NqRGw049ixTROzy3Yp1Vr3Ry2X
+         ti9w==
+X-Forwarded-Encrypted: i=1; AJvYcCWltw9nC49Y1ILxw6jpWKQwh1/qcedHa9vr3Bnd74UBIKvWydunAM8KhC+Aj8HP5IlD0Ps=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxf3rzbu97Ea8YLBt/H+jVVgRZ8VRlEEyErvu4sDLbWEKSnr3ZC
+	ZgrHk+qkErGf8dtrJ223ojzV4NSJeYg8E9AxylQwd/AeoOSJGH4qwkSs
+X-Gm-Gg: ATEYQzzuKjfGDT3v7lkETYJsDaxl67LGmOfSJl+oPYOkdQtRfqhZIJtmonESQ2waxAU
+	5wgw2V5ROqas0TtIWMY+IhPZYNpWrvbqcrmXEmrB6pRlIhlkO+olS6OtuzJLfYfyK4GTvXCuXIS
+	kcA7bthFYEvC6IkjI2atbKIMuevDJfD5wfra1vIKCKviT3S2y/FckP7YJXZClZ3Qakb+i9rODH1
+	cDO8mvnSiXZJWJrpPEC0Ch8nxcvorXNNhhL7VU1kvMtHWj0fBLReKBpoLczuNKFR4sL6T1lYUPz
+	uXWx3ymIDU7OqiRepMZhNLbCR3xXHp7SQD1/9OP4/lEMRWTOaFKNH+3aWd/UlqaWJje5gMYx3r/
+	doO8h2DA+KLk04LZ7eSW0wczG5AQfWMwoFtw6FShvWBZ/aofLBuGZF9O+3QFqQFU14iV/hJU2JD
+	wnlqHB6Res1WKhq34APnTayYr7pp8OdExuJ5wYyUD5D6q0Ucz+p00g5qRdbQuj6JY6
+X-Received: by 2002:a05:600c:3b0c:b0:483:ad56:8d16 with SMTP id 5b1f17b1804b1-48526918944mr23274095e9.6.1772791249789;
+        Fri, 06 Mar 2026 02:00:49 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-485245e0f53sm13970035e9.13.2026.03.06.02.00.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Mar 2026 02:00:49 -0800 (PST)
+Date: Fri, 6 Mar 2026 10:00:47 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Waiman Long <longman@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com, will@kernel.org,
+ boqun@kernel.org, mhiramat@kernel.org, mark.rutland@arm.com,
+ mathieu.desnoyers@efficios.com, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 1/2] locking: add mutex_lock_nospin()
+Message-ID: <20260306100047.7c4725de@pumpkin>
+In-Reply-To: <CALOAHbA9u2sHSYRF_kDKpf2d_UADQFu-1BMWFhBTo3mvgf6kFQ@mail.gmail.com>
+References: <20260304074650.58165-1-laoar.shao@gmail.com>
+	<20260304074650.58165-2-laoar.shao@gmail.com>
+	<20260304090249.GN606826@noisy.programming.kicks-ass.net>
+	<20260304095415.4d5f2528@pumpkin>
+	<20260304155742.7b4de2d1@gandalf.local.home>
+	<20260304214447.3e5817ea@pumpkin>
+	<CALOAHbCOynnRdc8JkNJHb-nyoerrz0K5GUhnD8OR2hv4x==5LA@mail.gmail.com>
+	<20260304212802.458b878e@fedora>
+	<CALOAHbBA643_QOsnTmrfjKE71hSa+v1cToiELvGk+vjtcgJsxg@mail.gmail.com>
+	<20260304220019.3efa12ab@robin>
+	<CALOAHbA4Dtc3cXs2JiQ=kxES3kT+Acb=amUxkOvQ22fns-Mqgw@mail.gmail.com>
+	<748e8e0d-5164-4c8a-9bb9-110874c5daa0@redhat.com>
+	<CALOAHbAsiVNC7COL7rCJBdaC-8oZQvg+pjudR4QexQQaYLBmgA@mail.gmail.com>
+	<20260305082125.35d8539c@gandalf.local.home>
+	<CALOAHbA9u2sHSYRF_kDKpf2d_UADQFu-1BMWFhBTo3mvgf6kFQ@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v3 2/3] bpf: bpf_out_neigh_v6: Fix nd_tbl NULL
- dereference when IPv6 is disabled
-To: Jakub Kicinski <kuba@kernel.org>, =?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?=
- <rbm@suse.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?=
- <toke@redhat.com>, David Ahern <dsahern@kernel.org>,
- Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
- Hangbin Liu <liuhangbin@gmail.com>, bpf@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260305-net-nd_tbl_fixes-v3-0-fde28b30a744@suse.com>
- <20260305-net-nd_tbl_fixes-v3-2-fde28b30a744@suse.com>
- <20260305182521.0ca7313c@kernel.org>
-Content-Language: en-US
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-In-Reply-To: <20260305182521.0ca7313c@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-0.998];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	RCPT_COUNT_TWELVE(0.00)[26];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	RCVD_TLS_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[linux.dev,iogearbox.net,gmail.com,fomichev.me,kernel.org,google.com,davemloft.net,redhat.com,jvosburgh.net,lunn.ch,vger.kernel.org];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[netdev];
-	DKIM_TRACE(0.00)[suse.de:+];
-	R_RATELIMIT(0.00)[to_ip_from(RLjnappfs4fazzqxz8xagywz8p)];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:mid]
-X-Rspamd-Queue-Id: 3935A5BD8E
-X-Spam-Flag: NO
-X-Spam-Score: -3.01
-X-Spam-Level: 
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On 3/6/26 3:25 AM, Jakub Kicinski wrote:
-> On Thu, 05 Mar 2026 18:29:56 -0300 Ricardo B. Marlière wrote:
->> +++ b/net/core/filter.c
->> @@ -2228,6 +2228,9 @@ static int bpf_out_neigh_v6(struct net *net, struct sk_buff *skb,
->>   			return -ENOMEM;
->>   	}
->>   
->> +	if (unlikely(!ipv6_stub->nd_tbl))
->> +		goto out_drop;
-> 
-> So neither Fernando nor you checked whether this code can be built
-> as a module? ipv6_mod_enabled() should work just fine
-> 
+On Fri, 6 Mar 2026 10:22:11 +0800
+Yafang Shao <laoar.shao@gmail.com> wrote:
 
-I checked it. If IPV6=m this is not fine.
+> On Thu, Mar 5, 2026 at 9:20=E2=80=AFPM Steven Rostedt <rostedt@goodmis.or=
+g> wrote:
+> >
+> > On Thu, 5 Mar 2026 13:40:27 +0800
+> > Yafang Shao <laoar.shao@gmail.com> wrote:
+> > =20
+> > > Exactly. ftrace is intended for debugging and should not significantly
+> > > impact real workloads. Therefore, it's reasonable to make it sleep if
+> > > it cannot acquire the lock immediately, rather than spinning and
+> > > consuming CPU cycles. =20
+> >
+> > Actually, ftrace is more than just debugging. It is the infrastructure =
+for
+> > live kernel patching as well. =20
+>=20
+> good to know.
+>=20
+> > =20
+> > > =20
+> > > >
+> > > > BTW, you should expand the commit log of patch 1 to include the
+> > > > rationale of why we should add this feature to mutex as the informa=
+tion
+> > > > in the cover letter won't get included in the git log if this patch
+> > > > series is merged. You should also elaborate in comment on under what
+> > > > conditions should this this new mutex API be used. =20
+> > >
+> > > Sure.  I will update it.
+> > >
+> > > BTW, these issues are notably hard to find. I suspect there are other
+> > > locks out there with the same problem. =20
+> >
+> > As I mentioned, I'm not against the change. I just want to make sure the
+> > rationale is strong enough to make the change.
+> >
+> > One thing that should be modified with your patch is the name. "nospin"
+> > references the implementation of the mutex. Instead it should be called
+> > something like: "noncritical" or "slowpath" stating that the grabbing of
+> > this mutex is not of a critical section.
+> >
+> > Maybe an entirely new interface should be defined:
+> >
+> >
+> > struct slow_mutex; =20
+>=20
+> Is it necessary to define a new structure for this slow mutex? We
+> could simply reuse the existing struct mutex instead. Alternatively,
+> should we add some new flags to this slow_mutex for debugging
+> purposes?
+>=20
+> >
+> > slow_mutex_lock()
+> > slow_mutex_unlock() =20
+>=20
+> These two APIs appear sufficient to handle this use case.
 
-ld: vmlinux.o: in function `bpf_out_neigh_v6':
-filter.c:(.text+0x3231d60): undefined reference to `ipv6_mod_enabled'
+Don't semaphores still exist?
+IIRC they always sleep.
 
-> SMH
+Although I wonder if the mutex need to be held for as long at it is.
+ISTR one of the tracebacks was one the 'address to name' lookup,
+that code will be slow.
+Since the mutex can't be held across the multiple reads that are done
+to read the full list of tracepoints it must surely be possible to
+release it across the name lookup?
+
+	David
+
+>=20
+> >
+> > etc,
+> >
+> > that makes it obvious that this mutex may be held for long periods of t=
+ime.
+> > In fact, this would be useful for RT workloads, as these mutexes could =
+be
+> > flagged to warn RT critical tasks if those tasks were to take one of th=
+em.
+> >
+> > There has been some talk to mark paths in the kernel that RT tasks would
+> > get a SIGKILL if they were to hit a path that is known to be non
+> > deterministic. =20
+>=20
+> Thanks for your information.
+>=20
 
