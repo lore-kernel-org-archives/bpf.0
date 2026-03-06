@@ -1,184 +1,179 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A172934D391
-	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 02:31:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772764303; cv=none; b=enRHRXcuI7pT06MOF30VrGgeHug2u794WZMTy61YytD01H8vI40q8eBIOPROIPhb3E4HfCtI2zX7Hg0SxbgG57+qYcfkFAMIu2VcpiuAc/m9wZKrDvHL2hp8RZP0DQNlFWTbASAJeDXt5HKFoxoj7PRU5h1iNLxZqKuu7p58mdI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772764303; c=relaxed/simple;
-	bh=fW8gBQOtfNePRqpqKBV9lUkeaR7UovNSaxmofrlbQgY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n7eV0yXdGtrOgb4JDRkIufJ1e6eeWQp1TQa6nj4bGFXYcqpC4LpgHc2LG4qkB2txRLpeDweFou57d78X10xM3hyl4NkGRFZHpnMHOS7tg9fzdahz8qCIDQ3NwEVTx8HvLKBPJM3URcb1m3AR1oIjpmtMTWBD3H/xbf7Ni6Nk9UA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hrnUNuw7; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AC3B2D7393
+	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 02:34:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772764449; cv=pass; b=YFbUz9Dw2EVzg2D4XTc5akQj9//JyFONaWznQ27mM+wM1pg0OYpqUW7T5e/orPC/4Qk7cEeKhraUTj1jWgsAKYj2+5pQOKKlaPcaT9+yBrTZIa3GdqcNraNkEvdLPYLlOm5VF9POol/j4mRv5ByviJOvp2MCRfkjxCnUE5GktEU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772764449; c=relaxed/simple;
+	bh=XsprmjPwSUOmN0k9ofErnefj5ohgqOyDo5r3X01z8N0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kxKWCrXgx0rVEJsxx3MCiDVXcy9uHxqewig/XXuHAP4iMkGzDCsA/bYiFUBYdIpV8UOUYFmV+yBKILMPVsPlqIcnp9xJ+pSlDSswrqZ0jgT5N9M6f8ZjrZ0YJqwkqwt7cvUNhOpis72CnqCz0GzXUgFnt20j753+zg34DxeEzWg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l5uvKtJM; arc=pass smtp.client-ip=74.125.224.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hrnUNuw7"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-82984c077b2so819471b3a.1
-        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 18:31:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l5uvKtJM"
+Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-64ad019bbd4so8001503d50.0
+        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 18:34:07 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772764447; cv=none;
+        d=google.com; s=arc-20240605;
+        b=AO3tXisxt7s/kxdEGN2BLniZy9S4wE/rFXm6fNV2VQG2dtX8lWx2ooWhZZVOdF+vtF
+         TeHI3GHsBfk06SMVMmbZEFgDFnuNIYfjpmxEmu03fJR3DdZYFpFFpL2GqmUdondWySb2
+         hyKDKGz0eqDqYs7m4irE21wpIhC2qK2SYd7i7J4MNdttABWkah+9uvdB/A3yxZCMh58U
+         zLkXWZRhuD0v4uGyQQ3GILUmB6yMR9Jzcj7qBSkx3YUchEAoIOMsdyWSKDCouusE3ueO
+         fO8qdlec42y2tevB+44+gSDVSCmJpJDPs9DWkYOfmkIraQNnE6wJpdarvXchFAsTcfKa
+         TC0A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=XsprmjPwSUOmN0k9ofErnefj5ohgqOyDo5r3X01z8N0=;
+        fh=GZ/d3WFYj4ujq7ZltdenjvDudx7GnOJOycQoV+UJivo=;
+        b=MZ2E5AtwJXi8YQ/n4pectFamgUMU8Hhj0sTvz/PUvOzfnD1YXq4EWSRLm1GT6r5BbD
+         HbSieva4BBTcqw/8hMiOGbMcMt/6LRB1idR7rXiY5O/bbC8GLghggg0ewaHcw7AuwqD8
+         2iwUI5aBjGPgl8rB5/P6BFpYSVAZ6pnePi7ZbR1kXCRracC2g5R6Mtk0F3YpW0nlalYm
+         O2MVx1RtYs6258vN0VEBsHd0qR4i/R8n7tgQQTLJkkg5JnwWUIWdAlrT1nUxNDzJd5bG
+         Bx4IhzNwMz1CUqH4pIZ8Wr7eWGsomkHOvrBfiuzu4m72bzeWFFsvPTILTapBH/bKQ5aU
+         s+yA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772764301; x=1773369101; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=rrMFSfOaZamk6DLKrZZgW30i49gOAC5qJ6C+E3QqCSQ=;
-        b=hrnUNuw7YMi/37kiHJoeQ3u2A8CKpWbZjeUD1CFNoS8QL/hfK0l+6z48+1umm5sUuq
-         Lzn6EuJ5udHmNEnrDAanCRuN4AbIH/lvtC1GgLPvlJS5F9Xt2bMcO32Tt0+wQ+cGPFSH
-         AtCwImgLiY9Sad2QbefPPtwlw+CtqyWRIyjDxz+a0AIDXoUayT2/d6zijKxdBjBVsOgs
-         l7+xUcKi/NmqTlmdz/ZIZUlWTELQ+gFR1/bmkXR8FM45A37ssig3DPMMNQ8ksU8ZK2GN
-         rf59hQJ81Jec5zPWFXwvgmA/eGDZENEokH8ZaAhb182CijODTD7ZOcC1UyQeeEPcIsBu
-         y1Xg==
+        d=gmail.com; s=20230601; t=1772764447; x=1773369247; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XsprmjPwSUOmN0k9ofErnefj5ohgqOyDo5r3X01z8N0=;
+        b=l5uvKtJMFy6Klzy6UETiPdK7lJtMghAKmtB10NWxKDZUOHfkZ+rZc3tl9EjECFy1NC
+         VUiAskk32+Ga5cpem+iOE9QcXQbrxRhYM/bG+xN5pYbLdAs50rb+Rasng/CtbulS9Z4o
+         jMRx5/rKK7hQFEkovcOcxX24F/3TCAFK7FpFIZqjvl/td+mI0phJYlah1BWT3W87gJ/J
+         iNN11XEh8+ABN1AKUP3M/O6V8JZAy5ywFX/C2LI8Di5reX+4EIVI8Mzk7xCd218eyzLu
+         BxyIJ3/4mWrmofradpYKKiejywXB2ZiSwD+pgA2243tkgXcWHa4kT4d56yc4uv+Nw+52
+         TVPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772764301; x=1773369101;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rrMFSfOaZamk6DLKrZZgW30i49gOAC5qJ6C+E3QqCSQ=;
-        b=uafW0c8Utdq3EykwwEDOQVhIpBKibjQzGFrrh7Fo9BVE6EgUV2zexajX6naUVhr/kp
-         aLRi1K5grvE9DObcLRMgvHhKPiNbcfse818zavZhiyevcPaPXvc5btR+KLUVHswmgVjd
-         HLz5cRfnH4fQbqlDW062uOiwWfnQRCIxsEPpg8fJWWkxFewEclMDPc5VlS1iE2ObR81x
-         +YGQmz3uX/hTbQz9JiOi0p2N3GZmG2oPYwfdf7bGhM7rpTy6Ap/nqloCaX+mi5VgbUXw
-         SvdGi2hCJUl0c0aKzCnr1+Bf8sLL5l5fSXFzkkuaPxbKw3Ei12aiFwd5EB1thpzT85VW
-         MVgA==
-X-Forwarded-Encrypted: i=1; AJvYcCWi8BzyWPDZ2Z9JJWlkiLyNxsaydjZlInmh7h/ADaxAq5sZhQSQ9aIENRVrV8p2yL9G8rU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywpf0HQKiY5734kAAb4IXBnbSqtgYkDQ5ZEwNqcHdxpyofKG/go
-	BtXL40i/8EpMHj7mm1QWlqYvXUnYfFF5DntkDAzetFvlRLcA+G39NpsS
-X-Gm-Gg: ATEYQzxxbs6FSzaFtuPuKiF5IeVucNMzzZK2wgZDZbCBRf8TDzvJaJrVN1KgrWz1AWm
-	H8oTZ4h8f4f6QzVyr5YGt/dH8GfzijsNOEHWPSiQLfqqjjWh5HC0y56XR01FBl0tZE76RNIiyO9
-	pWMXReCqSm+8VPJ0NW6g04x9qyv8KeA3iaFQm310GTwesEiV3E3yeJutlpSzqLOWc8oMFamKGZE
-	4FVdfsQY8AF6bJ3rJe6hf6dPVK8IG8LJDxt1rIkSdHPje4mwjRA6JWgWpK46bBVJ3kgasQMVVl1
-	6UFsi4DPRgKNJzMWbBz4p5F179aeeQELdr2FJxaYUHJyk/aJrZTRpe1Z4QVdvUJxGPktgSR4imh
-	ogVfgE12Ppe8f1EElXv0wvDaVdHkNiHLlAqbPY9O7G4GxyKeqMTT4d/WdfQ7Hr/x5tHWLHBI/Yi
-	8ZaZhYoB09iJw/+B8Ce+lctsJQAog=
-X-Received: by 2002:a05:6a00:1882:b0:827:455b:86b1 with SMTP id d2e1a72fcca58-829a2e786c5mr457884b3a.28.1772764300896;
-        Thu, 05 Mar 2026 18:31:40 -0800 (PST)
-Received: from fedora ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-829a4867e6asm66368b3a.32.2026.03.05.18.31.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Mar 2026 18:31:40 -0800 (PST)
-Date: Fri, 6 Mar 2026 02:31:28 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Ricardo =?iso-8859-1?Q?B=2E_Marli=E8re?= <rbm@suse.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-	David Ahern <dsahern@kernel.org>, Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Fernando Fernandez Mancera <fmancera@suse.de>, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v2 3/3] net: bonding: Fix nd_tbl NULL dereference
- when IPv6 is disabled
-Message-ID: <aao8gM6br-_RJ5HO@fedora>
-References: <20260305-net-nd_tbl_fixes-v2-0-b7177db1a9f3@suse.com>
- <20260305-net-nd_tbl_fixes-v2-3-b7177db1a9f3@suse.com>
+        d=1e100.net; s=20230601; t=1772764447; x=1773369247;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=XsprmjPwSUOmN0k9ofErnefj5ohgqOyDo5r3X01z8N0=;
+        b=pnLtRttV6HbLDGZDv+6iQWOhDrcQJEocVEiv0BE1WSG1H/frh6Jo/vanEX4ue9gcfF
+         Gf59EraXih729EeGzL/Zfy8pn49wg+1PUf/mtX14zyAT5jetAMnZlz5c06NicgwH1lSd
+         9/wzcroPezgc6vAhZXUpAVtSUAu/RBY+aZoUZwGpkdAnAgGPXVZpklmsdb7i81Kw6xQU
+         DlAPkBORFEYRUl96s4/NQnlCpb36jYxELMomLmMP5gzc9+an2U2Ca5sCtMeRClaz9T/U
+         CKLyuYz08AxFzeRjl4fx35CjHGRxqircM761BhBu4CTbioYKFUEbnbIP+Jep+mqjvNIQ
+         jSSw==
+X-Forwarded-Encrypted: i=1; AJvYcCUNpSgQtYd+57V189jbxtH/tCOVmvwxhDRSJIA6NHYInDHcyLK1Ob5CQjIOc7CPxWkVbjQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+eU4m+4mPmbz0odgfdSvuMErBr2j5OSHvFte280r8ELxpbTD1
+	mMRmZtHSPjSvf8Is85puwHnyLLgmisJzM16yYQ1a+/ZURm+7wQiKZKxP/aN7sZjgS4Q2K15f/cl
+	xO1a3ZdCkyEztFFW56ON/+AAM/MSY9Z7lt45z
+X-Gm-Gg: ATEYQzyg3kP/M3c9rz9gPVD91RA3GfDhZa17g3YJjJxCY96z8WCd9RW32g4x4lXKmfI
+	2UwWqHesTkNJAbl/ewr2+WiIuVv1OR6OGvMJyRX/lSbl3tGLNOvYu4tj8Y0qo87im3TGdKpG/sL
+	Z6VyVGqZrKnp3atzaAvZyR3zwOrf5Ofd8j+7yO8dRJW8oZ9bUDNOQ+O1FKIBNK3cpFROr8xVWiP
+	1wJE1KeVhoqhCBRycIrqFfzJ84zS8v5T5tgpQEF8WUWyAqmh23JIpDy3EVgw7EPhIum4diu1ccS
+	XFk/7Pwc
+X-Received: by 2002:a53:b465:0:b0:649:cf3f:b318 with SMTP id
+ 956f58d0204a3-64d14280ef0mr534531d50.54.1772764447184; Thu, 05 Mar 2026
+ 18:34:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260305-net-nd_tbl_fixes-v2-3-b7177db1a9f3@suse.com>
+References: <20260304074650.58165-1-laoar.shao@gmail.com> <20260304074650.58165-2-laoar.shao@gmail.com>
+ <20260304090249.GN606826@noisy.programming.kicks-ass.net> <20260304095415.4d5f2528@pumpkin>
+ <20260304155742.7b4de2d1@gandalf.local.home> <20260304214447.3e5817ea@pumpkin>
+ <CALOAHbCOynnRdc8JkNJHb-nyoerrz0K5GUhnD8OR2hv4x==5LA@mail.gmail.com>
+ <20260304212802.458b878e@fedora> <CALOAHbBA643_QOsnTmrfjKE71hSa+v1cToiELvGk+vjtcgJsxg@mail.gmail.com>
+ <20260304220019.3efa12ab@robin> <CALOAHbA4Dtc3cXs2JiQ=kxES3kT+Acb=amUxkOvQ22fns-Mqgw@mail.gmail.com>
+ <748e8e0d-5164-4c8a-9bb9-110874c5daa0@redhat.com> <20260305093254.61facfb6@pumpkin>
+ <d161ea96-8023-4a5e-a4eb-3e17780c8308@redhat.com>
+In-Reply-To: <d161ea96-8023-4a5e-a4eb-3e17780c8308@redhat.com>
+From: Yafang Shao <laoar.shao@gmail.com>
+Date: Fri, 6 Mar 2026 10:33:31 +0800
+X-Gm-Features: AaiRm51g6v9S1i2W6an56fo2JJwlLhr-3uILfFxDkrGsMtVSRH2Heri_rvDMBdM
+Message-ID: <CALOAHbBnmFjauN0V3L4xCiyJFBDnGOo3_qF302iXWcWp_fqw5w@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/2] locking: add mutex_lock_nospin()
+To: Waiman Long <longman@redhat.com>
+Cc: David Laight <david.laight.linux@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com, will@kernel.org, boqun@kernel.org, 
+	mhiramat@kernel.org, mark.rutland@arm.com, mathieu.desnoyers@efficios.com, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 05, 2026 at 05:37:41PM -0300, Ricardo B. Marlière wrote:
-> When booting with the 'ipv6.disable=1' parameter, the nd_tbl is never
-> initialized because inet6_init() exits before ndisc_init() is called
-> which initializes it. If bonding ARP/NS validation is enabled, an IPv6
-> NS/NA packet received on a slave can reach bond_validate_na(), which
-> calls bond_has_this_ip6(). That path calls ipv6_chk_addr() and can
-> crash in __ipv6_chk_addr_and_flags().
-> 
->  BUG: kernel NULL pointer dereference, address: 00000000000005d8
->  Oops: Oops: 0000 [#1] SMP NOPTI
->  RIP: 0010:__ipv6_chk_addr_and_flags+0x69/0x170
->  Call Trace:
->   <IRQ>
->   ipv6_chk_addr+0x1f/0x30
->   bond_validate_na+0x12e/0x1d0 [bonding]
->   ? __pfx_bond_handle_frame+0x10/0x10 [bonding]
->   bond_rcv_validate+0x1a0/0x450 [bonding]
->   bond_handle_frame+0x5e/0x290 [bonding]
->   ? srso_alias_return_thunk+0x5/0xfbef5
->   __netif_receive_skb_core.constprop.0+0x3e8/0xe50
->   ? srso_alias_return_thunk+0x5/0xfbef5
->   ? update_cfs_rq_load_avg+0x1a/0x240
->   ? srso_alias_return_thunk+0x5/0xfbef5
->   ? __enqueue_entity+0x5e/0x240
->   __netif_receive_skb_one_core+0x39/0xa0
->   process_backlog+0x9c/0x150
->   __napi_poll+0x30/0x200
->   ? srso_alias_return_thunk+0x5/0xfbef5
->   net_rx_action+0x338/0x3b0
->   handle_softirqs+0xc9/0x2a0
->   do_softirq+0x42/0x60
->   </IRQ>
->   <TASK>
->   __local_bh_enable_ip+0x62/0x70
->   __dev_queue_xmit+0x2d3/0x1000
->   ? srso_alias_return_thunk+0x5/0xfbef5
->   ? srso_alias_return_thunk+0x5/0xfbef5
->   ? packet_parse_headers+0x10a/0x1a0
->   packet_sendmsg+0x10da/0x1700
->   ? kick_pool+0x5f/0x140
->   ? srso_alias_return_thunk+0x5/0xfbef5
->   ? __queue_work+0x12d/0x4f0
->   __sys_sendto+0x1f3/0x220
->   __x64_sys_sendto+0x24/0x30
->   do_syscall_64+0x101/0xf80
->   ? exc_page_fault+0x6e/0x170
->   ? srso_alias_return_thunk+0x5/0xfbef5
->   entry_SYSCALL_64_after_hwframe+0x77/0x7f
->   </TASK>
-> 
-> Fix this by adding an early check in bond_confirm_addr6(). If
-> ipv6_stub->nd_tbl is NULL, return before calling ipv6_chk_addr().
-> 
-> Suggested-by: Fernando Fernandez Mancera <fmancera@suse.de>
-> Fixes: 4e24be018eb9 ("bonding: add new parameter ns_targets")
-> Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
-> ---
->  drivers/net/bonding/bond_main.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-> index 14ed91391fcc..7d32cd231633 100644
-> --- a/drivers/net/bonding/bond_main.c
-> +++ b/drivers/net/bonding/bond_main.c
-> @@ -3256,6 +3256,9 @@ static int bond_confirm_addr6(struct net_device *dev,
->  {
->  	struct in6_addr *addr = (struct in6_addr *)priv->data;
->  
-> +	if (unlikely(!ipv6_mod_enabled()))
-> +		return 0;
-> +
->  	return ipv6_chk_addr(dev_net(dev), addr, dev, 0);
->  }
+On Fri, Mar 6, 2026 at 3:00=E2=80=AFAM Waiman Long <longman@redhat.com> wro=
+te:
+>
+> On 3/5/26 4:32 AM, David Laight wrote:
+> > On Wed, 4 Mar 2026 23:30:40 -0500
+> > Waiman Long <longman@redhat.com> wrote:
+> >
+> >> On 3/4/26 10:08 PM, Yafang Shao wrote:
+> >>> On Thu, Mar 5, 2026 at 11:00=E2=80=AFAM Steven Rostedt <rostedt@goodm=
+is.org> wrote:
+> >>>> On Thu, 5 Mar 2026 10:33:00 +0800
+> >>>> Yafang Shao <laoar.shao@gmail.com> wrote:
+> >>>>
+> >>>>> Other tools may also read available_filter_functions, requiring eac=
+h
+> >>>>> one to be patched individually to avoid this flaw=E2=80=94a clearly
+> >>>>> impractical solution.
+> >>>> What exactly is the issue?
+> >>> It makes no sense to spin unnecessarily when it can be avoided. We
+> >>> continuously improve the kernel to do the right thing=E2=80=94and unn=
+ecessary
+> >>> spinning is certainly not the right thing.
+> >>>
+> >>>> If a task does a while 1 in user space, it
+> >>>> wouldn't be much different.
+> >>> The while loop in user space performs actual work, whereas useless
+> >>> spinning does nothing but burn CPU cycles. My point is simple: if thi=
+s
+> >>> unnecessary spinning isn't already considered an issue, it should
+> >>> be=E2=80=94it's something that clearly needs improvement.
+> >> The whole point of optimistic spinning is to reduce the lock acquisiti=
+on
+> >> latency. If the waiter sleeps, the unlock operation will have to wake =
+up
+> >> the waiter which can have a variable latency depending on how busy the
+> >> system is at the time. Yes, it is burning CPU cycles while spinning,
+> >> Most workloads will gain performance with this optimistic spinning
+> >> feature. You do have a point that for system monitoring tools that
+> >> observe the system behavior, they shouldn't burn that much CPU times
+> >> that affect performance of real workload that the tools are monitoring=
+.
+> >>
+> >> BTW, you should expand the commit log of patch 1 to include the
+> >> rationale of why we should add this feature to mutex as the informatio=
+n
+> >> in the cover letter won't get included in the git log if this patch
+> >> series is merged. You should also elaborate in comment on under what
+> >> conditions should this this new mutex API be used.
+> > Isn't changing mutex_lock() the wrong place anyway?
+> > What you need is for the code holding the lock to indicate that
+> > it isn't worth waiters spinning because the lock will be held
+> > for a long time.
+>
+> I have actually thought about having a flag somewhere in the mutex
+> itself to indicate that optimistic spinning isn't needed. However the
+> owner field is running out of usable flag bits.
 
-Hi Ricardo,
+True. Introducing a new MUTEX_FLAGS would likely require a substantial
+refactor of the mutex code, which may not be worth it.
 
-Since the ipv6 has been disabled on the host, I'm a little wonder why
-don't we check it more early, e.g. in this if check
+> The other option is to
+> add it to osq as it doesn't really need to use the full 32 bits for the
+> tail. In this case, we can just initialize the mutex to say that we
+> don't need optimistic spinning and no new mutex_lock() API will be needed=
+.
 
-#if IS_ENABLED(CONFIG_IPV6)
-        } else if (is_ipv6) {
-                return bond_na_rcv(skb, bond, slave);
-#endif
+I believe a new mutex_lock() variant would be clearer and easier to
+understand. It also has the advantage of requiring minimal changes to
+the existing mutex code.
 
-Thanks
-Hangbin
+--=20
+Regards
+Yafang
