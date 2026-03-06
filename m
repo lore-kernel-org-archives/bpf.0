@@ -1,114 +1,216 @@
-Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1596F376486
-	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 08:34:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F4892836AF
+	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 08:38:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772786074; cv=none; b=dnJe0cFbGF8SJUL4tUuZ0DkMAQ8XVVTF9IjWZDCkhkd1Ydh511H6f0gAPLXK1/7aA2hrvuZ8cuZcniRnb/ocPQmUriatOmM5wZn0XyNpx2uH3aGTObSAI8AW1Jh4SXwRHoIb0aYwpzkEqWVH3xTNGsYHjj9fNU4+LhA5fzKWnPk=
+	t=1772786295; cv=none; b=ki2MNehtt6mtYn0P/GRwLUN0c5hdl5jkqc2BeJ5Kzg7ttKpoEWn58mUpDzs5UE4QBdVyqQZC3r+Z1ozUvqEj4ZNPXRc9ohJwX98Gurql+anT6nMVZVKyCZp6tjk2uaF0+/CoT7M45+QmPukDrAuvE6bVc292xJadyoHuxxciZH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772786074; c=relaxed/simple;
-	bh=clVf7GqR7W7fSCjiWJJXJAaVwuefWYjZHusO5/YfFSg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RkcafHWZsNASU9Gh2LycFY7YpS+jYQfW/Z7DiRE3GLU9ZuwSUj+aC4a8v35jpkQGFhT1LmucHJwcBlSJ23mrbph4kgoC0Pq5PMHv40DqCovoBqTfRi34AfnRxVhxpJDePrrYL6JABRxh/jK4z488e2S95EEwCdzPzO2UM7GAEP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QVYyuL4e; arc=none smtp.client-ip=74.125.82.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772786295; c=relaxed/simple;
+	bh=jFrmwmzXzxNPU+hHqB6RRamYbKEmhbE8XbE8pAnvVxI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JX2na6dayaVD/Mgm42SP4CFebVzRqhsp7RtBnRekfl98f+5ZHWK9TDqNJ8m8LtGSkWlSiTs8mUMM/GAFXPlD1Ub0+T5kIaLmv17ygzhZkJ5HNXK6DW/oFquQY6YoIgcGBB4UE8+xMwcIG3TMjZ3eROPkiNvWrG3xUS2tMXTxvio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=G/ADDq/k; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=tPxDUx7A; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QVYyuL4e"
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-2be1ab1fa7dso6691333eec.0
-        for <bpf@vger.kernel.org>; Fri, 06 Mar 2026 00:34:31 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="G/ADDq/k";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="tPxDUx7A"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1772786293;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=P86pZu/1CyRXliceQ+LY5dZ1MCBLm/RN74G5dcWmpEo=;
+	b=G/ADDq/kvcryx6eeZrurxx+o6agiWPCIDFZJpr3NUJHTJrgl6Pc3UfrhfiasjoFixrZiB2
+	iBSzIMnV/oB/i7pqkUWeTPqQEPMaguXwi/C9KMnBGU8bVC0J2rzRtfC/tRxhbJLQUC423/
+	e1H4XzC1TK8i/H/dwgqWVxaDnIqS1LU=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-687-OWD-F0fJO4Oun8U5hKc24g-1; Fri, 06 Mar 2026 03:38:11 -0500
+X-MC-Unique: OWD-F0fJO4Oun8U5hKc24g-1
+X-Mimecast-MFC-AGG-ID: OWD-F0fJO4Oun8U5hKc24g_1772786291
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4837cee2e9bso71430225e9.3
+        for <bpf@vger.kernel.org>; Fri, 06 Mar 2026 00:38:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772786071; x=1773390871; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CNnmYE0R4N2smug7XMNMUgUzL8tG2gVRbeEqqmNaiP4=;
-        b=QVYyuL4exvfUQB39je7q/FSlDDCOQid5XeIh8+3H69v5Kc5ETHxmuDCVfH+NA6+yND
-         M6TQXwJLbcobWT/Lst6wnOqpKjlohEhs3ElwgpkF0gFwk2HCtruRwwErDjP55P9Czlv/
-         RVvWe3QXhAaBjyNP0HHnZc4WE6raNOMwPqMJgB9kI7NMLvtGiNbBXvPjH0mnXdFP5eep
-         KUZGnUgUI6AALQ8AusrP35mnhOmJhkhO7Sq3P5YbxTYiyYIZQrKKCa0tOW8P3wpOy2dy
-         WRnAOnodcmio/At0zxULXri7T5pIhFiDGpt2p9Xgp9g4Tkbd+9DsS4/CdGKTpF66ocyF
-         Zt+g==
+        d=redhat.com; s=google; t=1772786291; x=1773391091; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=P86pZu/1CyRXliceQ+LY5dZ1MCBLm/RN74G5dcWmpEo=;
+        b=tPxDUx7Ax9v4XRRMuqaN4m+Wwo9QhAEUHyYS96o/QAsyd9Wb8a/WBA3fupoY87t/7P
+         LZ+GeCaVqaPJhY6U1yPklnqWrQn1BO60dPv1sbGm5przwb8Y8eTQFWxnzxTFo1TvotjP
+         z/B1qr2y/PGQkciq+z7emGjEOcQ0QjFIzFFttOyHh/+ll67fWolSflCm24zBCxneqhw9
+         bq5Cld1kb5mdG0l2toy3pOsyqnjHBGJz50bk1xy12f/7IgO+QeJBP5NH5e67IgR1XQTq
+         4rlIrxPSKVI4+MZaamsed6JbnK26acRaqgy6o6CrCH4VdaYxedRH0vUGPXHs6fbx+Y4X
+         71sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772786071; x=1773390871;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=CNnmYE0R4N2smug7XMNMUgUzL8tG2gVRbeEqqmNaiP4=;
-        b=b/EoVLT+9Q0+GDm5polv8fkJkClLgSsWWd82V6QXM/LLgKxbYEvrK5zGDtThoRCT3D
-         GAeBJJ59vKpehvEWlPx6rMW2jSgrCDDMJl0rKGHmG8YLZMCNMJJVCYy9olvTF97RLLK2
-         VgtOkX/Cha83+0kfTMLtwkHhx5UjX/jtoVOJ+JyqNc9NY09KhBRZeT25GW/BPVh58YRk
-         Qiuhoq9Y4tL2WvDsBTXGEez19n3+W4fjDwdnKOHJAVontkUgpsA7KQxLnX9etidTZC+7
-         FGNok9gazMfjos3MQ7IFUi5pFhTTAWpq/UkgcSjjz4qmDTtMdG2G8pArtp9r3t2S0bWl
-         oVDQ==
-X-Gm-Message-State: AOJu0YwGDCNZ7tZBi7leS2WRBd7/eO0DcXyW90QeIvoo973oUFMTk2Cz
-	wycekDOgDDUkMhDZsoTKthkxypfc2zRN5VZ/XB2A8zmvePoi3G5BWeL/
-X-Gm-Gg: ATEYQzwAp5WATNFkQMeNxdqVq6cf87rwjevtYba/eR3wp5UwIl82b4aUJdgB+Zk6Zsl
-	fenvkIomtCKBnEVKj+lDt/oOe5Cfw5wCuFzNRSxxNCQ9WoJj1NdsRAHbutkd+qcEvbxzhvhX+RW
-	kc4zo+4qd8slNk8KeLF1zphn5DO5nLYv56VmfRJLw+/X9OR1bBstnP0DCdEYMl7gC828K+KSNoB
-	uLIlnH8Ow0ec8YkfAxuVUdTatjmFUfD7vFrmt66gXYJeqn7FFVcQ2S0mz+1EVu0vPZRTZkDy5v4
-	bocHyR9VwoQ/YRtYRtKo4NFMoaQR2+5YIh570yU/Ez2nFj/SGzT5OgrJmZEC41RSEUXZ4wcK41Z
-	Jzkc7YiQ/WakMgmWnFbBAkuIw8hjGb38okoseB2w4SefIdvlsIMkKwoLlu39jliDFugBK3rTE6+
-	sDWT28DYbEbX/PkRx5X97JXmadu/CUg1mFnEde61qbAk6IxG+DStrkkiJG2StS5OBj5HaUpluLb
-	iXzxKQ98PxDuawY9Q3TWRPePltSOVELWA==
-X-Received: by 2002:a05:7301:2f95:b0:2be:e4b:60d2 with SMTP id 5a478bee46e88-2be4de766demr563325eec.4.1772786070906;
-        Fri, 06 Mar 2026 00:34:30 -0800 (PST)
-Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2be4f807a30sm680324eec.6.2026.03.06.00.34.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2026 00:34:30 -0800 (PST)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH v3 2/2] selftests/bpf: drop serial restriction
-Date: Fri,  6 Mar 2026 16:33:30 +0800
-Message-ID: <20260306083330.518627-2-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260306083330.518627-1-sun.jian.kdev@gmail.com>
-References: <20260306083330.518627-1-sun.jian.kdev@gmail.com>
+        d=1e100.net; s=20230601; t=1772786291; x=1773391091;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P86pZu/1CyRXliceQ+LY5dZ1MCBLm/RN74G5dcWmpEo=;
+        b=TvwzqN+kJBW7NyyXL9v/9u38e5rX5f1FehdARsGw4g+moMKSTln9qjshiPHehbPy96
+         Cw5bt7nOPgpFGWUgyGaGfXf/ZjnMlk/XTos8lFIyJQv3chtWjadWhFJxmkjyVn9qu3EH
+         r8LMIO8Qig0Pk7smA51FR+nybfpI6b2uEdyupc65INb+J0J4jSk4ZYwPI1D7Bj/VyDO6
+         Z8tZvBmOnCMlQQSPSI66z8Hz6Cgl73vOQUasrlOh2F64HdyhQ8d3htpnciSnwLMEDao8
+         U6lHj+/5QqBztKP+tZQLX4SoTk2yFHANKOwVkgySBsVvd9p1lVMrFYw9+ClnspJd/RD6
+         EVwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWBpECYTf9/kQBH5KaF1GlI3Hmc9iZwvYSyWEz1eepXdZ6vJl3KBWv//5mOu6A3M2Uc6LE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTzeelPUu1E8u4UnO7vNzz8IKOisEAgyHA9dnTFEVT6qXZFXKz
+	7egWqOizmJNfBUxEAk/Xh19cJaG8AOa+/oLtHr2FbzfWLUNtXW2iDWk3dcJRpL2U5kR883dSlRl
+	w8rWlANa8ihsNGDfgiDfvs+9PesuyjK5rf76ICXgKgC0g+/xV+oVE
+X-Gm-Gg: ATEYQzz0voPm2rXwSOhOwl2cLVYd2Hei8LHaUSMZlJzZSK+tdOWSHebITmXrkuI67VE
+	t85D1gONE6EYGygyp+s3CWVEOF6H5jaaz6kE8xkKT4oUhz1G5q4eqixJNjIGjwtct4TAqseAR/7
+	SB1Rx+OykYZkHGUXS3XyEze7J3D5g+0BNXyrIEsuTI8X9LffY9U1cLV4eTHaElbVm2Id7Z5xPTn
+	d9HdcMCcFa+ZmzfEL7Qr8V1O/GHoFPVu9S1QyB+F6MC0QCWAz+P0lPlr0AkHq6aKSBzPSNS+0ns
+	UIM0ZFHZJ0FJG5HPFZ93xtWYWhkpYdMMXsfEeHC09lzOQyX7keldr6yBThL5TMY5EeT4optkjvN
+	Ho2BB6l6Wbqfcd1+95bPBV4JI5NV2/lM+fzjZ5k4qvtTmxeDhRZuntqhi
+X-Received: by 2002:a05:600c:34d2:b0:47a:814c:ee95 with SMTP id 5b1f17b1804b1-485269305b2mr18032685e9.12.1772786290600;
+        Fri, 06 Mar 2026 00:38:10 -0800 (PST)
+X-Received: by 2002:a05:600c:34d2:b0:47a:814c:ee95 with SMTP id 5b1f17b1804b1-485269305b2mr18032255e9.12.1772786290140;
+        Fri, 06 Mar 2026 00:38:10 -0800 (PST)
+Received: from [192.168.0.135] (185-219-167-205-static.vivo.cz. [185.219.167.205])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48527648a19sm19608235e9.0.2026.03.06.00.38.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Mar 2026 00:38:09 -0800 (PST)
+Message-ID: <042df233-2d0c-46e2-9928-aaa249e52bac@redhat.com>
+Date: Fri, 6 Mar 2026 09:38:08 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/3] bpf: Always allow sleepable programs on
+ syscalls
+To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+ Shuah Khan <shuah@kernel.org>
+References: <cover.1772721009.git.vmalik@redhat.com>
+ <0715e86d7461c20d318594c770b6fa4c71f299c5.1772721009.git.vmalik@redhat.com>
+ <69b41a54-fb91-4924-999a-06ba94edf72a@linux.dev>
+ <862423cd-ee96-478a-a13f-cd4ab5f4ba7a@redhat.com>
+ <b5a0099c-6f28-4a54-ba0a-5d3f878cc495@linux.dev>
+From: Viktor Malik <vmalik@redhat.com>
+Content-Language: en-US
+In-Reply-To: <b5a0099c-6f28-4a54-ba0a-5d3f878cc495@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Patch 1/2 added PID filtering to the probe_user BPF program to avoid
-cross-test interference from the global connect() hooks.
+On 3/6/26 08:41, Leon Hwang wrote:
+> On 6/3/26 15:09, Viktor Malik wrote:
+>> On 3/6/26 03:05, Leon Hwang wrote:
+>>> On 5/3/26 23:25, Viktor Malik wrote:
+>>>> Sleepable BPF programs can only be attached to selected functions. For
+>>>> convenience, the error injection list was originally used, which
+>>>> contains syscalls and several other functions.
+>>>>
+>>>> When error injection is disabled (CONFIG_FUNCTION_ERROR_INJECTION=n),
+>>>> that list is empty and sleepable tracing programs are effectively
+>>>> unavailable. In such a case, at least enable sleepable programs on
+>>>> syscalls.
+>>>>
+>>>> Signed-off-by: Viktor Malik <vmalik@redhat.com>
+>>>> ---
+>>>>  kernel/bpf/verifier.c | 54 ++++++++++++++++++++++++++++++++++++++-----
+>>>>  1 file changed, 48 insertions(+), 6 deletions(-)
+>>>>
+>>>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>>>> index d92cf2821657..cb80a3ddb7a4 100644
+>>>> --- a/kernel/bpf/verifier.c
+>>>> +++ b/kernel/bpf/verifier.c
+>>>> @@ -24930,6 +24930,8 @@ static int check_attach_modify_return(unsigned long addr, const char *func_name)
+>>>>  	return -EINVAL;
+>>>>  }
+>>>>  
+>>>> +#ifdef CONFIG_FUNCTION_ERROR_INJECTION
+>>>> +
+>>>>  /* list of non-sleepable functions that are otherwise on
+>>>>   * ALLOW_ERROR_INJECTION list
+>>>>   */
+>>>> @@ -24951,6 +24953,51 @@ static int check_non_sleepable_error_inject(u32 btf_id)
+>>>>  	return btf_id_set_contains(&btf_non_sleepable_error_inject, btf_id);
+>>>>  }
+>>>>  
+>>>> +static int check_attach_sleepable(u32 btf_id, unsigned long addr, const char *func_name)
+>>>> +{
+>>>> +	/* fentry/fexit/fmod_ret progs can be sleepable if they are
+>>>> +	 * attached to ALLOW_ERROR_INJECTION and are not in denylist.
+>>>> +	 */
+>>>> +	if (!check_non_sleepable_error_inject(btf_id) &&
+>>>> +	    within_error_injection_list(addr))
+>>>> +		return 0;
+>>>> +
+>>>> +	return -EINVAL;
+>>>> +}
+>>>> +
+>>>> +#else
+>>>> +
+>>>> +static bool has_arch_syscall_prefix(const char *func_name)
+>>>> +{
+>>>> +#if defined(__x86_64__)
+>>>> +	return !strncmp(func_name, "__x64_", 6);
+>>>> +#elif defined(__i386__)
+>>>> +	return !strncmp(func_name, "__ia32_", 7);
+>>>> +#elif defined(__s390x__)
+>>>> +	return !strncmp(func_name, "__s390x_", 8);
+>>>> +#elif defined(__aarch64__)
+>>>> +	return !strncmp(func_name, "__arm64_", 8);
+>>>> +#elif defined(__riscv)
+>>>> +	return !strncmp(func_name, "__riscv_", 8);
+>>>> +#elif defined(__powerpc__) || defined(__powerpc64__)
+>>>> +	return !strncmp(func_name, "sys", 3);
+>>>> +#else
+>>>> +	return false;
+>>>> +#endif
+>>>> +}
+>>>
+>>> At first glance, it is not a good taste to hard code these prefixes here.
+>>>
+>>> Furthermore, the arch_syscall_match_sym_name() of ftrace does the same
+>>> thing. Consider it instead.
+>>
+>> I did consider it but arch_syscall_match_sym_name() matches two strings
+>> (the arch-specific syscall function and the generic "sys_<name>") while
+>> we need to just check the prefix (we don't have the other string).
+>>
+>> Another generic option is to implement has_arch_syscall_prefix() in arch
+>> code, next to arch_syscall_match_sym_name(). But that seems like too big
+>> of a change in ftrace for a small use-case such as this one.
+>>
+>> That's why I ended up with the current form. In addition, arches
+>> hard-code the prefixes in their syscall code so we'll have to hard-code
+>> them anyways, no matter the solution we end up with.
+>>
+> Hmm, I don't have a strong preference.
+> 
+> However, it is worth adding some explanation in the commit log and code
+> comment.
 
-With the interference removed, drop the serial_ prefix and remove the
-stale TODO comment so the test can run in parallel.
+Ok, I'll add an explanation.
 
-Tested:
-  ./test_progs -t probe_user -v
-  ./test_progs -j$(nproc) -t probe_user
+Thanks,
+Viktor
 
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
----
- tools/testing/selftests/bpf/prog_tests/probe_user.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/probe_user.c b/tools/testing/selftests/bpf/prog_tests/probe_user.c
-index b3e17a329cb4..7a9d13aa2c87 100644
---- a/tools/testing/selftests/bpf/prog_tests/probe_user.c
-+++ b/tools/testing/selftests/bpf/prog_tests/probe_user.c
-@@ -1,8 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
- 
--/* TODO: corrupts other tests uses connect() */
--void serial_test_probe_user(void)
-+void test_probe_user(void)
- {
- 	static const char *const prog_names[] = {
- 		"handle_sys_connect",
--- 
-2.43.0
+> 
+> Thanks,
+> Leon
+> 
+> [...]
+> 
 
