@@ -1,135 +1,180 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D59619E98D;
-	Fri,  6 Mar 2026 05:50:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBBEB36DA17
+	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 06:04:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772776224; cv=none; b=rJQ/e6x5UKnH2MBYsI0Yk/5XVaWKNRMdCqzhqYCcQGlpZFGJg2cxqlo5zv3BDdqlbfbpv2gWGCKMX/Gudx79hTle1m+41nLYOvo4t56n5N+1duYZjVIIuqyGanL+KppL3VuHteD9fH1IYHlMJ+N2dFQFQkVj/2MQ1tGjEPM9sng=
+	t=1772777092; cv=none; b=dhHnXgPPsfnJQ6Lim+F/B1aaTevwlaM4kxqaWPO9HtRTKKtwSwNVb9vxwBskyrl5gg0uQ9oqqYbRr3F63/JjbKhN3bWFt0GAaLcldxLRaBJM7eSgdNaAER6c8QAzBXxByuKCw9v+Y6maojdqbyLGTZHQvfOhRr7VB131f4Jp9ss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772776224; c=relaxed/simple;
-	bh=rwJ15iDivE6V3WpEvcgvjP7uL6nLZHAyQoOBnVqUZHE=;
+	s=arc-20240116; t=1772777092; c=relaxed/simple;
+	bh=vWeu+rrJuKn1HkWhdpVCh461e+ugjTi9tY18/n63aBU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=czCeriG8emL/r3iENpQdEmSXY/EXprRcwK4Nlzr4X20SICrfu7cZRrBViAEIayJ7gTYF9SoQLGcebaRzyZRsBsiuT2vEpC3oezrbkcPBL2MBBVfdzgFBOklXwuS9DxzYjmbK82heux4KR2/GnnNwP52Tug53vZmQXejwM7YN6t4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=MGXS2+JD; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	 In-Reply-To:Content-Type; b=HfmHriGTPcOHbffrmOWv8AmXtRasJ1twsQG3TXe2qEC3gIX6P+elKuc3/v57V8InTFbuLn6nfe/HFlu0vSa5sVOOJDCYecB403sLVS+entV4YwZUlAUnnBTEm13qcQiywC1eZQSkqWPczFcs/Cd+/zFQs9/xQxLqtJ2H/DouzAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Jg6FGjoK; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="MGXS2+JD"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=5kbz/qIutsegQX66TjAquqol90At9RQdLWUV3QaLUAA=; b=MGXS2+JDZuBTEBXu7WF1z/3eFI
-	7SD7kf2YZDlmYCAaXzdYhgykifSID+FeZrOHfLaZPWikcQ7lOff+iRDH2CmuLRb3Z5HYmL3pBaYUO
-	oetXok04+26rcihTi/Xi7rNLpRJGmxEacfGMHZewnFca5p7PxWFJu0vDXPt4SPMEAETt7u4s6BLMg
-	1LL3axsb4Ozx0cUi6rGpIAbTSUbdNPHJrp78ftj2nvLU2oLnLD+0NZWX/WFe5vVHBD9khzMTxPzs8
-	oNBHSVWxm7scyd8mqb4m5evp02aj3DrojWtHFlL3wgA7lieoEnGvUFQxqYCiDHHwB7ZH/JWVCSbb+
-	8wIL9O/A==;
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1vyO4Q-000IM2-0b;
-	Fri, 06 Mar 2026 06:49:54 +0100
-Received: from localhost ([127.0.0.1])
-	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1vyO4O-000Hgk-2U;
-	Fri, 06 Mar 2026 06:49:53 +0100
-Message-ID: <99158091-834d-43ad-83c6-8e62145449ba@iogearbox.net>
-Date: Fri, 6 Mar 2026 06:49:44 +0100
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Jg6FGjoK"
+Message-ID: <b2218c30-a704-4395-a67e-95c62b75586f@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772777076;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lha1WxEP+imAaOmc44xUnzff4mjB8gJAeNTzMUJkIRU=;
+	b=Jg6FGjoK1PpSXKlligTbMsTDBRMhL/de2yK3tlsDKu2sxpMYtli5ImRDeZIg6MwAsnjUmF
+	a0QOh6/N3x4yIg2UuELd1FVRhP/cE7IHjZT+I5QqUdXIsQgwZBxHusHK71Rt9lrQFUEsyj
+	NF7WpdbM6vil13A0pzoVwjUupJo3jCs=
+Date: Fri, 6 Mar 2026 14:04:09 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v8 02/16] net: Implement
- netdev_nl_queue_create_doit
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
- razor@blackwall.org, pabeni@redhat.com, willemb@google.com, sdf@fomichev.me,
- john.fastabend@gmail.com, martin.lau@kernel.org, jordan@jrife.io,
- maciej.fijalkowski@intel.com, magnus.karlsson@intel.com, dw@davidwei.uk,
- toke@redhat.com, yangzhenze@bytedance.com, wangdongdong.6@bytedance.com
-References: <20260129222830.439687-1-daniel@iogearbox.net>
- <20260129222830.439687-3-daniel@iogearbox.net>
- <20260131154523.5e495380@kernel.org>
- <5065f783-9378-4965-8266-e494cdee46d2@iogearbox.net>
- <20260305181041.7ed26e4e@kernel.org>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260305181041.7ed26e4e@kernel.org>
+Subject: Re: [PATCH bpf v3 3/5] bpf, sockmap: Fix af_unix iter deadlock
+To: Michal Luczaj <mhal@rbox.co>, John Fastabend <john.fastabend@gmail.com>,
+ Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>,
+ Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Willem de Bruijn <willemb@google.com>, "David S. Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Cong Wang <cong.wang@bytedance.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
+ <20260306-unix-proto-update-null-ptr-deref-v3-3-2f0c7410c523@rbox.co>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260306-unix-proto-update-null-ptr-deref-v3-3-2f0c7410c523@rbox.co>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/27931/Thu Mar  5 08:24:23 2026)
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On 3/6/26 3:10 AM, Jakub Kicinski wrote:
-> On Thu, 5 Mar 2026 05:38:06 +0100 Daniel Borkmann wrote:
->>>> +	rxq_lease = __netif_get_rx_queue(dev_lease, queue_id_lease);
->>>> +	rxq = __netif_get_rx_queue(dev, dev->real_num_rx_queues - 1);
->>>> +
->>>> +	if (rxq->lease && rxq->lease->dev != dev_lease) {
->>>
->>> IIUC the simplification of having all leases from one devices is still
->>> a netkit thing? I mean - there's nothing in the core that depends on
->>> this, just the cleanup / notifier handling in netkit? If that's the
->>> case let's move this check into netkit.
->>>
->>> Sorry if you moved this here because I asked to move as much as
->>> possible into the core.
->> Imho it was a good suggestion to move it here and I would prefer to leave
->> this in the core, and only really move it into a per-driver constraint
->> once we see a driver wanting to support such setting. Otherwise we would
->> propagate AF_XDP support on the device where some queues have support but
->> others don't.
-> 
-> Alright, let's add a comment explaining the status and plan then?
-Yep, will add.
+
+On 3/6/26 7:30 AM, Michal Luczaj wrote:
+> bpf_iter_unix_seq_show() may deadlock when lock_sock_fast() takes the fast
+> path and the iter prog attempts to update a sockmap. Which ends up spinning
+> at sock_map_update_elem()'s bh_lock_sock():
+>
+> WARNING: possible recursive locking detected
+> test_progs/1393 is trying to acquire lock:
+> ffff88811ec25f58 (slock-AF_UNIX){+...}-{3:3}, at: sock_map_update_elem+0xdb/0x1f0
+>
+> but task is already holding lock:
+> ffff88811ec25f58 (slock-AF_UNIX){+...}-{3:3}, at: __lock_sock_fast+0x37/0xe0
+>
+> other info that might help us debug this:
+>   Possible unsafe locking scenario:
+>
+>         CPU0
+>         ----
+>    lock(slock-AF_UNIX);
+>    lock(slock-AF_UNIX);
+>
+>   *** DEADLOCK ***
+>
+>   May be due to missing lock nesting notation
+>
+> 4 locks held by test_progs/1393:
+>   #0: ffff88814b59c790 (&p->lock){+.+.}-{4:4}, at: bpf_seq_read+0x59/0x10d0
+>   #1: ffff88811ec25fd8 (sk_lock-AF_UNIX){+.+.}-{0:0}, at: bpf_seq_read+0x42c/0x10d0
+>   #2: ffff88811ec25f58 (slock-AF_UNIX){+...}-{3:3}, at: __lock_sock_fast+0x37/0xe0
+>   #3: ffffffff85a6a7c0 (rcu_read_lock){....}-{1:3}, at: bpf_iter_run_prog+0x51d/0xb00
+>
+> Call Trace:
+>   dump_stack_lvl+0x5d/0x80
+>   print_deadlock_bug.cold+0xc0/0xce
+>   __lock_acquire+0x130f/0x2590
+>   lock_acquire+0x14e/0x2b0
+>   _raw_spin_lock+0x30/0x40
+>   sock_map_update_elem+0xdb/0x1f0
+>   bpf_prog_2d0075e5d9b721cd_dump_unix+0x55/0x4f4
+>   bpf_iter_run_prog+0x5b9/0xb00
+>   bpf_iter_unix_seq_show+0x1f7/0x2e0
+>   bpf_seq_read+0x42c/0x10d0
+>   vfs_read+0x171/0xb20
+>   ksys_read+0xff/0x200
+>   do_syscall_64+0x6b/0x3a0
+>   entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>
+> Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
+> Suggested-by: Martin KaFai Lau <martin.lau@linux.dev>
+> Fixes: 2c860a43dd77 ("bpf: af_unix: Implement BPF iterator for UNIX domain socket.")
+> Signed-off-by: Michal Luczaj <mhal@rbox.co>
+> ---
+>   net/unix/af_unix.c | 7 +++----
+>   1 file changed, 3 insertions(+), 4 deletions(-)
+>
+> diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
+> index 3756a93dc63a..3d2cfb4ecbcd 100644
+> --- a/net/unix/af_unix.c
+> +++ b/net/unix/af_unix.c
+> @@ -3729,15 +3729,14 @@ static int bpf_iter_unix_seq_show(struct seq_file *seq, void *v)
+>   	struct bpf_prog *prog;
+>   	struct sock *sk = v;
+>   	uid_t uid;
+> -	bool slow;
+>   	int ret;
+>   
+>   	if (v == SEQ_START_TOKEN)
+>   		return 0;
+>   
+> -	slow = lock_sock_fast(sk);
+> +	lock_sock(sk);
+>   
+> -	if (unlikely(sk_unhashed(sk))) {
+> +	if (unlikely(sock_flag(sk, SOCK_DEAD))) {
+>   		ret = SEQ_SKIP;
+>   		goto unlock;
+>   	}
+
+
+Switching to lock_sock() fixes the deadlock, but it does not provide mutual
+exclusion with unix_release_sock(), which uses unix_state_lock() exclusively
+and does not touch lock_sock() at all. So a dying socket can still reach the
+BPF prog concurrently with unix_release_sock() running on another CPU.
+
+Both SOCK_DEAD and the clearing of unix_peer(sk) happen under
+unix_state_lock() in unix_release_sock(). Without taking unix_state_lock()
+before the SOCK_DEAD check, there is a window:
+
+iter unix_release_sock()
+---  lock_sock(sk)
+SOCK_DEAD == 0(check passes)
+   unix_state_lock(sk)
+                                                   unix_peer(sk) = NULL
+   sock_set_flag(sk, SOCK_DEAD)
+   unix_state_unlock(sk)
+BPF prog runs
+→ accesses unix_peer(sk) == NULL → crash
+
+This was not raised in the v2 discussion.
+
+The natural fix is to check SOCK_DEAD under unix_state_lock(). However,
+holding unix_state_lock() throughout BPF prog execution would conflict with
+patch 5: sock_map_sk_acquire_fast() also takes unix_state_lock() for AF_UNIX
+sockets, resulting in a recursive spinlock deadlock.
+
+
+Kuniyuki, Martin — what is the right approach here?
+
+> @@ -3747,7 +3746,7 @@ static int bpf_iter_unix_seq_show(struct seq_file *seq, void *v)
+>   	prog = bpf_iter_get_info(&meta, false);
+>   	ret = unix_prog_seq_show(prog, &meta, v, uid);
+>   unlock:
+> -	unlock_sock_fast(sk, slow);
+> +	release_sock(sk);
+>   	return ret;
+>   }
+>   
+>
