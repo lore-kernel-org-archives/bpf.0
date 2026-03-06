@@ -1,23 +1,23 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA4BA4963DD;
-	Fri,  6 Mar 2026 22:13:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AC23495507;
+	Fri,  6 Mar 2026 22:13:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772835223; cv=none; b=jadABTn7U8Jl8R1rAdyt9nTgEbAM51WPTyLJGfydzgAzylOssnuryc7jCunIa7E6vazUkrl4XWu0k88ouMhrjuqCFOoaYykTaNISUF4uo3ZaGwESTfCyRjWWkrX6UNcprbiLI/fiWNWwLah3fLD8kTYbzlhGT0BWIyrK499EHmA=
+	t=1772835226; cv=none; b=HAsVgfrz0Qnd9CwmGnthnMzP6Y7/mxxAvnGVrOje4HvBBK0yYlm90ktN/HQb/D8YXTLag78uleM56Pa3jX3DUEaJPnw+bolP8LDB/cwZtnWmlt/mGxA+XwZIx9H7xiyV5ghVrBsI0Z1fWxgm7Tf7KZ7LPQ3vXA4IklI8lkryfko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772835223; c=relaxed/simple;
-	bh=a4Phz0SnU5odEDbCGwqCKMxUapx1yl401h3iW7hVZLo=;
+	s=arc-20240116; t=1772835226; c=relaxed/simple;
+	bh=CAxEUFGkDw2vOY2BOgBahxA+NyU6Q1AB5+DtigJteQk=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=NEIasbXImnuZs6257hdAnZBHd5o2rUdgQfwKTh83fqahxqxOy6cPBxo7gaEHpKEkcXhwM86QH/b0e3D104SOF0wn9zUdNFcpnwkwZKjd723jF83xRDUeIwY1wZYhV/BTbL1p3EmPktmEHH+GEl3cR+ryCb3b3i+zWVQaZgL9bpQ=
+	 MIME-Version; b=jocp1ZsZWdUY2DFLcdBnEOGrsqoxh2tIaH2h5ZmaJPGXE2pluN+EK+gIpv5cjEF0rrtyHhuagTGiAl1O1wfkWgKx6WLkfY7vEe9yt/AoEEJ196a/B6TrelflSgZDNpd+GrVkKmDPQJEqrooH+OMvdIHTBqXewFqBQ88nR9ifeM8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E333D175A;
-	Fri,  6 Mar 2026 14:13:34 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A6127175D;
+	Fri,  6 Mar 2026 14:13:37 -0800 (PST)
 Received: from e129823.cambridge.arm.com (e129823.arm.com [10.1.197.6])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A779C3F7BD;
-	Fri,  6 Mar 2026 14:13:38 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 69CCA3F7BD;
+	Fri,  6 Mar 2026 14:13:41 -0800 (PST)
 From: Yeoreum Yun <yeoreum.yun@arm.com>
 To: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -41,9 +41,9 @@ Cc: ast@kernel.org,
 	richardcochran@gmail.com,
 	a.s.protopopov@gmail.com,
 	Yeoreum Yun <yeoreum.yun@arm.com>
-Subject: [PATCH 2/3] bpf: introduce bpf_jit_insn_aux_data
-Date: Fri,  6 Mar 2026 22:13:29 +0000
-Message-Id: <20260306221330.630971-3-yeoreum.yun@arm.com>
+Subject: [PATCH 3/3] bpf: arm64: fix BTI exception when execute gotox instruction
+Date: Fri,  6 Mar 2026 22:13:30 +0000
+Message-Id: <20260306221330.630971-4-yeoreum.yun@arm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260306221330.630971-1-yeoreum.yun@arm.com>
 References: <20260306221330.630971-1-yeoreum.yun@arm.com>
@@ -55,246 +55,119 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch prepares for fixing the BTI exception related to gotox.
+On systems where FEAT_BTI is enabled, running the verifier_gotox testcase
+triggers a BTI exception:
 
-bpf_jit_insn_aux_data contains per-instruction auxiliary data for the JIT,
-extracted from env->insn_aux_data.
+  [  257.920598] Internal error: Oops - BTI: 0000000036000003 [#1]  SMP
+  [  257.920740] Modules linked in:
+  [  257.920860] CPU: 4 UID: 0 PID: 239 Comm: test_progs Not tainted 7.0.0-rc2+ #602 PREEMPT(full)
+  [  257.921061] Hardware name:  , BIOS
+  [  257.921160] pstate: 161402c09 (nZCv daif +PAN -UAO -TCO +DIT -SSBS BTYPE=j-)
+  [  257.921337] pc : bpf_prog_0a2b4e44c75a3cb4_jump_table_ok+0x40/0x60
+  [  257.921491] lr : bpf_test_run+0x1e8/0x460
+  [  257.921639] sp : ffff80008435b7f0
+  [  257.921736] x29: ffff80008435b800 x28: ffff80008435b858 x27: ffff80008435b870
+  [  257.921991] x26: ffff80008435b7f0 x25: f8ff000803478000 x24: 0000000000000001
+  [  257.922243] x23: f0ff8000839bd000 x22: f4ff000801f7f200 x21: ffff80008435b9a4
+  [  257.922498] x20: ffff80008435b9a0 x19: 0000000000000000 x18: 0000000000000000
+  [  257.922743] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+  [  257.922992] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
+  [  257.923232] x11: 000000000000dd86 x10: 0000000000000000 x9 : ffff8000814f06f0
+  [  257.923480] x8 : ffff800083d9d888 x7 : ffff800083d9d8c8 x6 : 0000000000000000
+  [  257.923731] x5 : 0000000000000000 x4 : ffff80008435b9a0 x3 : 0000000000000000
+  [  257.923976] x2 : 0000000000000000 x1 : f0ff8000839bd060 x0 : f4ff000801f7f200
+  [  257.924226] Call trace:
+  [  257.924307]  bpf_prog_0a2b4e44c75a3cb4_jump_table_ok+0x40/0x60 (P)
+  [  257.924481]  bpf_test_run+0x1e8/0x460
+  [  257.924644]  bpf_prog_test_run_skb+0x424/0x708
+  [  257.924820]  bpf_prog_test_run+0xf4/0x218
+  [  257.924978]  __sys_bpf+0x3c4/0x498
+  [  257.925124]  __arm64_sys_bpf+0x30/0x58
+  [  257.925312]  invoke_syscall+0x68/0xe8
+  [  257.925490]  el0_svc_common+0x94/0xf8
+  [  257.925668]  do_el0_svc+0x28/0x48
+  [  257.925840]  el0_svc+0x40/0x100
+  [  257.925998]  el0t_64_sync_handler+0x84/0x140
+  [  257.926172]  el0t_64_sync+0x1bc/0x1c0
+  [  257.926359] Code: f28bea07 910020e7 f94000e7 d61f00e0 (d2800027)
+  [  257.926489] ---[ end trace 0000000000000000 ]---
+  [  257.926612] Kernel panic - not syncing: Oops - BTI: Fatal exception in interrupt
+  [  257.926755] SMP: stopping secondary CPUs
+  [  257.927208] Kernel Offset: disabled
+  [  257.927300] CPU features: 0x0000000,00040f05,dffb65e1,976ff727
+  [  257.927437] Memory Limit: none
+  [  257.927540] ---[ end Kernel panic - not syncing: Oops - BTI: Fatal exception in interrupt ]---
 
-For example, it is used to determine whether an instruction is
-a destination of a gotox, allowing the JIT to emit
-the appropriate BTI instruction at that location in arm64.
+This occurs because the target of the gotox instruction
+(BPF_JMP | BPF_JA | BPF_X) does not begin with a BTI instruction.
 
+To fix this, emit a BTI J instruction at the beginning of
+the gotox destination block.
+
+after this patch verifier_gotox passes without exception:
+
+  # ./test_progs -a verifier_gotox
+  ...
+  #540/1   verifier_gotox/jump_table_ok:OK
+  #540/2   verifier_gotox/jump_table_reserved_field_src_reg:OK
+  #540/3   verifier_gotox/jump_table_reserved_field_non_zero_off:OK
+  #540/4   verifier_gotox/jump_table_reserved_field_non_zero_imm:OK
+  #540/5   verifier_gotox/jump_table_no_jump_table:OK
+  #540/6   verifier_gotox/jump_table_incorrect_dst_reg_type:OK
+  #540/7   verifier_gotox/jump_table_invalid_read_size_u32:OK
+  #540/8   verifier_gotox/jump_table_invalid_read_size_u16:OK
+  #540/9   verifier_gotox/jump_table_invalid_read_size_u8:OK
+  #540/10  verifier_gotox/jump_table_misaligned_access:OK
+  #540/11  verifier_gotox/jump_table_invalid_mem_acceess_pos:OK
+  #540/12  verifier_gotox/jump_table_invalid_mem_acceess_neg:OK
+  #540/13  verifier_gotox/jump_table_add_sub_ok:OK
+  #540/14  verifier_gotox/jump_table_no_writes:OK
+  #540/15  verifier_gotox/jump_table_use_reg_r0:OK
+  #540/16  verifier_gotox/jump_table_use_reg_r1:OK
+  #540/17  verifier_gotox/jump_table_use_reg_r2:OK
+  #540/18  verifier_gotox/jump_table_use_reg_r3:OK
+  #540/19  verifier_gotox/jump_table_use_reg_r4:OK
+  #540/20  verifier_gotox/jump_table_use_reg_r5:OK
+  #540/21  verifier_gotox/jump_table_use_reg_r6:OK
+  #540/22  verifier_gotox/jump_table_use_reg_r7:OK
+  #540/23  verifier_gotox/jump_table_use_reg_r8:OK
+  #540/24  verifier_gotox/jump_table_use_reg_r9:OK
+  #540/25  verifier_gotox/jump_table_outside_subprog:OK
+  #540/26  verifier_gotox/jump_table_contains_non_unique_values:OK
+  #540     verifier_gotox:OK
+
+Fixes: f4a66cf1cb14 ("bpf: arm64: Add support for indirect jumps")
 Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 ---
- include/linux/bpf.h    |  6 +++++
- include/linux/filter.h |  4 +++
- kernel/bpf/core.c      | 59 +++++++++++++++++++++++++++++++++++++++++-
- kernel/bpf/verifier.c  | 30 ++++++++++++++++++++-
- 4 files changed, 97 insertions(+), 2 deletions(-)
+ arch/arm64/net/bpf_jit_comp.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 05b34a6355b0..12fed098ec85 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1606,6 +1606,11 @@ struct bpf_jit_poke_descriptor {
- 	u32 insn_idx;
- };
- 
-+/* Per-instruction auxiliary data for JIT. */
-+struct bpf_jit_insn_aux_data {
-+	bool gotox_point;
-+};
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index adf84962d579..e54e45b35015 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -1223,6 +1223,21 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 	int off_adj;
+ 	int ret;
+ 	bool sign_extend;
++	struct bpf_prog_aux *aux = ctx->prog->aux;
 +
- /* reg_type info for ctx arguments */
- struct bpf_ctx_arg_aux {
- 	u32 offset;
-@@ -1768,6 +1773,7 @@ struct bpf_prog_aux {
- 	struct bpf_stream stream[2];
- 	struct mutex st_ops_assoc_mutex;
- 	struct bpf_map __rcu *st_ops_assoc;
-+	struct bpf_jit_insn_aux_data *insn_aux_data;
- };
- 
- #define BPF_NR_CONTEXTS        4       /* normal, softirq, hardirq, NMI */
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 44d7ae95ddbc..79b18a061cc0 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -38,6 +38,7 @@ struct xdp_buff;
- struct sock_reuseport;
- struct ctl_table;
- struct ctl_table_header;
-+struct bpf_insn_aux_data;
- 
- /* ArgX, context and stack frame pointer register positions. Note,
-  * Arg1, Arg2, Arg3, etc are used as argument mappings of function
-@@ -1116,6 +1117,9 @@ bool bpf_opcode_in_insntable(u8 code);
- void bpf_prog_fill_jited_linfo(struct bpf_prog *prog,
- 			       const u32 *insn_to_jit_off);
- int bpf_prog_alloc_jited_linfo(struct bpf_prog *prog);
-+int bpf_prog_alloc_jit_insn_aux_data(struct bpf_prog *prog);
-+void bpf_prog_fill_jit_insn_aux_data(struct bpf_prog *prog,
-+				    struct bpf_insn_aux_data *insn_aux_data);
- void bpf_prog_jit_attempt_done(struct bpf_prog *prog);
- 
- struct bpf_prog *bpf_prog_alloc(unsigned int size, gfp_t gfp_extra_flags);
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 3ece2da55625..32656ef7750e 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -189,8 +189,27 @@ int bpf_prog_alloc_jited_linfo(struct bpf_prog *prog)
- 	return 0;
- }
- 
-+int bpf_prog_alloc_jit_insn_aux_data(struct bpf_prog *prog)
-+{
-+	if (!prog->len || !prog->jit_requested)
-+		return -EINVAL;
-+
-+	prog->aux->insn_aux_data = kvzalloc_objs(*prog->aux->insn_aux_data,
-+						 prog->len,
-+						 bpf_memcg_flags(GFP_KERNEL | __GFP_NOWARN));
-+	if (!prog->aux->insn_aux_data)
-+		return -ENOMEM;
-+
-+	return 0;
-+}
-+
- void bpf_prog_jit_attempt_done(struct bpf_prog *prog)
- {
-+	if (prog->aux->insn_aux_data) {
-+		kvfree(prog->aux->insn_aux_data);
-+		prog->aux->insn_aux_data = NULL;
-+	}
-+
- 	if (prog->aux->jited_linfo &&
- 	    (!prog->jited || !prog->aux->jited_linfo[0])) {
- 		kvfree(prog->aux->jited_linfo);
-@@ -254,6 +273,20 @@ void bpf_prog_fill_jited_linfo(struct bpf_prog *prog,
- 			insn_to_jit_off[linfo[i].insn_off - insn_start - 1];
- }
- 
-+void bpf_prog_fill_jit_insn_aux_data(struct bpf_prog *prog,
-+				    struct bpf_insn_aux_data *insn_aux_data)
-+{
-+	int i;
-+
-+	if (!prog->aux->insn_aux_data || !insn_aux_data)
-+		return;
-+
-+	for (i = 0; i < prog->len; i++) {
-+		prog->aux->insn_aux_data[i].gotox_point =
-+			insn_aux_data[i].gotox_point;
-+	}
-+}
-+
- struct bpf_prog *bpf_prog_realloc(struct bpf_prog *fp_old, unsigned int size,
- 				  gfp_t gfp_extra_flags)
- {
-@@ -458,6 +491,7 @@ struct bpf_prog *bpf_patch_insn_single(struct bpf_prog *prog, u32 off,
- 	u32 insn_adj_cnt, insn_rest, insn_delta = len - 1;
- 	const u32 cnt_max = S16_MAX;
- 	struct bpf_prog *prog_adj;
-+	struct bpf_jit_insn_aux_data *insn_aux_data = NULL;
- 	int err;
- 
- 	/* Since our patchlet doesn't expand the image, we're done. */
-@@ -477,14 +511,28 @@ struct bpf_prog *bpf_patch_insn_single(struct bpf_prog *prog, u32 off,
- 	    (err = bpf_adj_branches(prog, off, off + 1, off + len, true)))
- 		return ERR_PTR(err);
- 
-+	if (prog->aux->insn_aux_data) {
-+		insn_aux_data = kvzalloc_objs(*prog->aux->insn_aux_data,
-+					       insn_adj_cnt,
-+					       bpf_memcg_flags(GFP_KERNEL | __GFP_NOWARN));
-+		if (!insn_aux_data)
-+			return ERR_PTR(-ENOMEM);
-+
-+		memcpy(insn_aux_data, prog->aux->insn_aux_data,
-+		       prog->len * sizeof(*prog->aux->insn_aux_data));
-+	}
-+
- 	/* Several new instructions need to be inserted. Make room
- 	 * for them. Likely, there's no need for a new allocation as
- 	 * last page could have large enough tailroom.
- 	 */
- 	prog_adj = bpf_prog_realloc(prog, bpf_prog_size(insn_adj_cnt),
- 				    GFP_USER);
--	if (!prog_adj)
-+	if (!prog_adj) {
-+		if (insn_aux_data)
-+			kvfree(insn_aux_data);
- 		return ERR_PTR(-ENOMEM);
++	/*
++	 * In some cases, insn_aux_data is not passed,
++	 * and it does not need to be. For example, the embedded
++	 * program in ptp_classifier_init().
++	 * Therefore, we need to check whether insn_aux_data is present.
++	 */
++	if (aux->insn_aux_data) {
++		/*
++		 * emit BTI J for (BPF_JMP | BPF_X)'s destination.
++		 */
++		if (aux->insn_aux_data[i].gotox_point)
++			emit_bti(A64_BTI_J, ctx);
 +	}
  
- 	prog_adj->len = insn_adj_cnt;
- 
-@@ -502,6 +550,15 @@ struct bpf_prog *bpf_patch_insn_single(struct bpf_prog *prog, u32 off,
- 		sizeof(*patch) * insn_rest);
- 	memcpy(prog_adj->insnsi + off, patch, sizeof(*patch) * len);
- 
-+	if (insn_aux_data) {
-+		memmove(insn_aux_data + off + len, insn_aux_data + off + 1,
-+			sizeof(*insn_aux_data) * insn_rest);
-+		memset(insn_aux_data + off + 1, 0x00,
-+		       sizeof(*insn_aux_data) * insn_delta);
-+		kvfree(prog_adj->aux->insn_aux_data);
-+		prog_adj->aux->insn_aux_data = insn_aux_data;
-+	}
-+
- 	/* We are guaranteed to not fail at this point, otherwise
- 	 * the ship has sailed to reverse to the original state. An
- 	 * overflow cannot happen at this point.
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index bf0281fb5db9..cfc87106aae2 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -22865,6 +22865,12 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- 		func[i]->aux->arena = prog->aux->arena;
- 		func[i]->aux->used_maps = env->used_maps;
- 		func[i]->aux->used_map_cnt = env->used_map_cnt;
-+
-+		err = bpf_prog_alloc_jit_insn_aux_data(func[i]);
-+		if (err)
-+			goto out_free;
-+		bpf_prog_fill_jit_insn_aux_data(func[i], &env->insn_aux_data[subprog_start]);
-+
- 		num_exentries = 0;
- 		insn = func[i]->insnsi;
- 		for (j = 0; j < func[i]->len; j++, insn++) {
-@@ -22957,6 +22963,9 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- 	for (i = 0; i < env->subprog_cnt; i++) {
- 		func[i]->aux->used_maps = NULL;
- 		func[i]->aux->used_map_cnt = 0;
-+		func[i]->aux->insn_aux_data = NULL;
-+		kvfree(func[i]->aux->insn_aux_data);
-+		func[i]->aux->insn_aux_data = NULL;
- 	}
- 
- 	/* finally lock prog and jit images for all functions and
-@@ -23019,6 +23028,10 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- 		if (!func[i])
- 			continue;
- 		func[i]->aux->poke_tab = NULL;
-+		if (func[i]->aux->insn_aux_data) {
-+			kvfree(func[i]->aux->insn_aux_data);
-+			func[i]->aux->insn_aux_data = NULL;;
-+		}
- 		bpf_jit_free(func[i]);
- 	}
- 	kfree(func);
-@@ -26086,6 +26099,15 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr, __u3
- 	print_verification_stats(env);
- 	env->prog->aux->verified_insns = env->insn_processed;
- 
-+	if (ret == 0 && !env->prog->jited && env->prog->jit_requested &&
-+	    !bpf_prog_is_offloaded(env->prog->aux)) {
-+		/* jit_insn_aux_data will be freed at bpf_prog_select_runtime() */
-+		ret = bpf_prog_alloc_jit_insn_aux_data(env->prog);
-+		if (ret)
-+			goto err_release_maps;
-+		bpf_prog_fill_jit_insn_aux_data(env->prog, env->insn_aux_data);
-+	}
-+
- 	/* preserve original error even if log finalization is successful */
- 	err = bpf_vlog_finalize(&env->log, &log_true_size);
- 	if (err)
-@@ -26140,8 +26162,14 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr, __u3
- 	adjust_btf_func(env);
- 
- err_release_maps:
--	if (ret)
-+	if (ret) {
-+		if (env->prog->aux->insn_aux_data) {
-+			kvfree(env->prog->aux->insn_aux_data);
-+			env->prog->aux->insn_aux_data = NULL;
-+		}
-+
- 		release_insn_arrays(env);
-+	}
- 	if (!env->prog->aux->used_maps)
- 		/* if we didn't copy map pointers into bpf_prog_info, release
- 		 * them now. Otherwise free_used_maps() will release them.
+ 	switch (code) {
+ 	/* dst = src */
 -- 
 LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
 
