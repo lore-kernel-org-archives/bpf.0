@@ -1,179 +1,239 @@
-Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AC3B2D7393
-	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 02:34:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772764449; cv=pass; b=YFbUz9Dw2EVzg2D4XTc5akQj9//JyFONaWznQ27mM+wM1pg0OYpqUW7T5e/orPC/4Qk7cEeKhraUTj1jWgsAKYj2+5pQOKKlaPcaT9+yBrTZIa3GdqcNraNkEvdLPYLlOm5VF9POol/j4mRv5ByviJOvp2MCRfkjxCnUE5GktEU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772764449; c=relaxed/simple;
-	bh=XsprmjPwSUOmN0k9ofErnefj5ohgqOyDo5r3X01z8N0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kxKWCrXgx0rVEJsxx3MCiDVXcy9uHxqewig/XXuHAP4iMkGzDCsA/bYiFUBYdIpV8UOUYFmV+yBKILMPVsPlqIcnp9xJ+pSlDSswrqZ0jgT5N9M6f8ZjrZ0YJqwkqwt7cvUNhOpis72CnqCz0GzXUgFnt20j753+zg34DxeEzWg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l5uvKtJM; arc=pass smtp.client-ip=74.125.224.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 755F7353ED4
+	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 02:42:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772764933; cv=none; b=MtUIVVrwb2P/43s9HTkcsjsfF9hVSk/HXePhzb1oWMCW5p5xWd90fTSbagk620rSgYN+NlwCEovkoSjVwOfr8MEhcokJHeoxygy2U6xXRf6fZ8n5XqzEJBco9s93ejki6YGNgAMxN0ousHViuo425p27ndVWpJWSv15AoBWXLDo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772764933; c=relaxed/simple;
+	bh=v4cflm4NiRNKit0+IyjvwCr+f6yIyaerrT9iAHpzkIU=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=otvC5F73tBha3rlpZtTs6UQLCX6pb3N8awnzmFpZRPQ+ZBEH3CJPQoOykusVJ+SjlPj1Jms94SEvKH11kmGvFtPPV4+zBJRwURqJcrVb1j/ugIhE6ZRbCx3fNEgU+3ED6jIqhYetaDcG5BwGve+DWMUh0soXmZDrj9g8ITDcsfY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fnjQCxqX; arc=none smtp.client-ip=95.215.58.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l5uvKtJM"
-Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-64ad019bbd4so8001503d50.0
-        for <bpf@vger.kernel.org>; Thu, 05 Mar 2026 18:34:07 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772764447; cv=none;
-        d=google.com; s=arc-20240605;
-        b=AO3tXisxt7s/kxdEGN2BLniZy9S4wE/rFXm6fNV2VQG2dtX8lWx2ooWhZZVOdF+vtF
-         TeHI3GHsBfk06SMVMmbZEFgDFnuNIYfjpmxEmu03fJR3DdZYFpFFpL2GqmUdondWySb2
-         hyKDKGz0eqDqYs7m4irE21wpIhC2qK2SYd7i7J4MNdttABWkah+9uvdB/A3yxZCMh58U
-         zLkXWZRhuD0v4uGyQQ3GILUmB6yMR9Jzcj7qBSkx3YUchEAoIOMsdyWSKDCouusE3ueO
-         fO8qdlec42y2tevB+44+gSDVSCmJpJDPs9DWkYOfmkIraQNnE6wJpdarvXchFAsTcfKa
-         TC0A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=XsprmjPwSUOmN0k9ofErnefj5ohgqOyDo5r3X01z8N0=;
-        fh=GZ/d3WFYj4ujq7ZltdenjvDudx7GnOJOycQoV+UJivo=;
-        b=MZ2E5AtwJXi8YQ/n4pectFamgUMU8Hhj0sTvz/PUvOzfnD1YXq4EWSRLm1GT6r5BbD
-         HbSieva4BBTcqw/8hMiOGbMcMt/6LRB1idR7rXiY5O/bbC8GLghggg0ewaHcw7AuwqD8
-         2iwUI5aBjGPgl8rB5/P6BFpYSVAZ6pnePi7ZbR1kXCRracC2g5R6Mtk0F3YpW0nlalYm
-         O2MVx1RtYs6258vN0VEBsHd0qR4i/R8n7tgQQTLJkkg5JnwWUIWdAlrT1nUxNDzJd5bG
-         Bx4IhzNwMz1CUqH4pIZ8Wr7eWGsomkHOvrBfiuzu4m72bzeWFFsvPTILTapBH/bKQ5aU
-         s+yA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772764447; x=1773369247; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XsprmjPwSUOmN0k9ofErnefj5ohgqOyDo5r3X01z8N0=;
-        b=l5uvKtJMFy6Klzy6UETiPdK7lJtMghAKmtB10NWxKDZUOHfkZ+rZc3tl9EjECFy1NC
-         VUiAskk32+Ga5cpem+iOE9QcXQbrxRhYM/bG+xN5pYbLdAs50rb+Rasng/CtbulS9Z4o
-         jMRx5/rKK7hQFEkovcOcxX24F/3TCAFK7FpFIZqjvl/td+mI0phJYlah1BWT3W87gJ/J
-         iNN11XEh8+ABN1AKUP3M/O6V8JZAy5ywFX/C2LI8Di5reX+4EIVI8Mzk7xCd218eyzLu
-         BxyIJ3/4mWrmofradpYKKiejywXB2ZiSwD+pgA2243tkgXcWHa4kT4d56yc4uv+Nw+52
-         TVPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772764447; x=1773369247;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=XsprmjPwSUOmN0k9ofErnefj5ohgqOyDo5r3X01z8N0=;
-        b=pnLtRttV6HbLDGZDv+6iQWOhDrcQJEocVEiv0BE1WSG1H/frh6Jo/vanEX4ue9gcfF
-         Gf59EraXih729EeGzL/Zfy8pn49wg+1PUf/mtX14zyAT5jetAMnZlz5c06NicgwH1lSd
-         9/wzcroPezgc6vAhZXUpAVtSUAu/RBY+aZoUZwGpkdAnAgGPXVZpklmsdb7i81Kw6xQU
-         DlAPkBORFEYRUl96s4/NQnlCpb36jYxELMomLmMP5gzc9+an2U2Ca5sCtMeRClaz9T/U
-         CKLyuYz08AxFzeRjl4fx35CjHGRxqircM761BhBu4CTbioYKFUEbnbIP+Jep+mqjvNIQ
-         jSSw==
-X-Forwarded-Encrypted: i=1; AJvYcCUNpSgQtYd+57V189jbxtH/tCOVmvwxhDRSJIA6NHYInDHcyLK1Ob5CQjIOc7CPxWkVbjQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+eU4m+4mPmbz0odgfdSvuMErBr2j5OSHvFte280r8ELxpbTD1
-	mMRmZtHSPjSvf8Is85puwHnyLLgmisJzM16yYQ1a+/ZURm+7wQiKZKxP/aN7sZjgS4Q2K15f/cl
-	xO1a3ZdCkyEztFFW56ON/+AAM/MSY9Z7lt45z
-X-Gm-Gg: ATEYQzyg3kP/M3c9rz9gPVD91RA3GfDhZa17g3YJjJxCY96z8WCd9RW32g4x4lXKmfI
-	2UwWqHesTkNJAbl/ewr2+WiIuVv1OR6OGvMJyRX/lSbl3tGLNOvYu4tj8Y0qo87im3TGdKpG/sL
-	Z6VyVGqZrKnp3atzaAvZyR3zwOrf5Ofd8j+7yO8dRJW8oZ9bUDNOQ+O1FKIBNK3cpFROr8xVWiP
-	1wJE1KeVhoqhCBRycIrqFfzJ84zS8v5T5tgpQEF8WUWyAqmh23JIpDy3EVgw7EPhIum4diu1ccS
-	XFk/7Pwc
-X-Received: by 2002:a53:b465:0:b0:649:cf3f:b318 with SMTP id
- 956f58d0204a3-64d14280ef0mr534531d50.54.1772764447184; Thu, 05 Mar 2026
- 18:34:07 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fnjQCxqX"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260304074650.58165-1-laoar.shao@gmail.com> <20260304074650.58165-2-laoar.shao@gmail.com>
- <20260304090249.GN606826@noisy.programming.kicks-ass.net> <20260304095415.4d5f2528@pumpkin>
- <20260304155742.7b4de2d1@gandalf.local.home> <20260304214447.3e5817ea@pumpkin>
- <CALOAHbCOynnRdc8JkNJHb-nyoerrz0K5GUhnD8OR2hv4x==5LA@mail.gmail.com>
- <20260304212802.458b878e@fedora> <CALOAHbBA643_QOsnTmrfjKE71hSa+v1cToiELvGk+vjtcgJsxg@mail.gmail.com>
- <20260304220019.3efa12ab@robin> <CALOAHbA4Dtc3cXs2JiQ=kxES3kT+Acb=amUxkOvQ22fns-Mqgw@mail.gmail.com>
- <748e8e0d-5164-4c8a-9bb9-110874c5daa0@redhat.com> <20260305093254.61facfb6@pumpkin>
- <d161ea96-8023-4a5e-a4eb-3e17780c8308@redhat.com>
-In-Reply-To: <d161ea96-8023-4a5e-a4eb-3e17780c8308@redhat.com>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Fri, 6 Mar 2026 10:33:31 +0800
-X-Gm-Features: AaiRm51g6v9S1i2W6an56fo2JJwlLhr-3uILfFxDkrGsMtVSRH2Heri_rvDMBdM
-Message-ID: <CALOAHbBnmFjauN0V3L4xCiyJFBDnGOo3_qF302iXWcWp_fqw5w@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] locking: add mutex_lock_nospin()
-To: Waiman Long <longman@redhat.com>
-Cc: David Laight <david.laight.linux@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com, will@kernel.org, boqun@kernel.org, 
-	mhiramat@kernel.org, mark.rutland@arm.com, mathieu.desnoyers@efficios.com, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772764929;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=B/7M8Q3sVB0HPgbs9UCg3aqgHeu4f7DPzAlrQa5392Y=;
+	b=fnjQCxqXAMRp37ZcPFn9LlnceurWpFBB9B2+YtuSlaxPqcpkS+UHJi0+LkQoG8VLp90//y
+	g4wAh6ZSpng0H91NYyOONQGjyId1JhnzdUEh/00XwLhdZMZgwvZ5Vjb0lFdFX1oeGVMjEM
+	89ppIQryir/ENCv097hDuCwxq9ZZbDc=
+Date: Fri, 06 Mar 2026 02:42:05 +0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+Message-ID: <e08dcb78a13fc69be07d28d032cebe3734797a3a@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH net v4 1/2] bonding: fix null-ptr-deref in
+ bond_rr_gen_slave_id()
+To: "Jay Vosburgh" <jv@jvosburgh.net>, "Nikolay Aleksandrov"
+ <razor@blackwall.org>
+Cc: netdev@vger.kernel.org, jiayuan.chen@shopee.com,
+ syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com, "Andrew Lunn"
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>, "Jesper Dangaard Brouer"
+ <hawk@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Stanislav Fomichev" <sdf@fomichev.me>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong
+ Song" <yonghong.song@linux.dev>, "KP Singh" <kpsingh@kernel.org>, "Hao
+ Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Shuah Khan"
+ <shuah@kernel.org>, "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
+ "Clark Williams" <clrkwllms@kernel.org>, "Steven Rostedt"
+ <rostedt@goodmis.org>, "Jussi Maki" <joamaki@gmail.com>,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev
+In-Reply-To: <1356528.1772744631@famine>
+References: <20260304074301.35482-1-jiayuan.chen@linux.dev>
+ <20260304074301.35482-2-jiayuan.chen@linux.dev>
+ <aahWymAi_CtRG0gJ@penguin> <1293120.1772645248@famine>
+ <aahsuPt7cY8LxETN@penguin> <1356528.1772744631@famine>
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Mar 6, 2026 at 3:00=E2=80=AFAM Waiman Long <longman@redhat.com> wro=
-te:
+2026/3/6 05:03, "Jay Vosburgh" <jv@jvosburgh.net mailto:jv@jvosburgh.net?=
+to=3D%22Jay%20Vosburgh%22%20%3Cjv%40jvosburgh.net%3E > wrote:
+
+
+>=20
+>=20Nikolay Aleksandrov <razor@blackwall.org> wrote:
+>=20
+>=20>=20
+>=20> On Wed, Mar 04, 2026 at 09:27:28AM -0800, Jay Vosburgh wrote:
+> >=20
+>=20> >=20
+>=20> > Nikolay Aleksandrov <razor@blackwall.org> wrote:
+> > >=20=20
+>=20> >  >On Wed, Mar 04, 2026 at 03:42:57PM +0800, Jiayuan Chen wrote:
+> > >  >> From: Jiayuan Chen <jiayuan.chen@shopee.com>
+> > >  >>=20
+>=20> >  >> bond_rr_gen_slave_id() dereferences bond->rr_tx_counter witho=
+ut a NULL
+> > >  >> check. rr_tx_counter is a per-CPU counter only allocated in bon=
+d_open()
+> > >  >> when the bond mode is round-robin. If the bond device was never=
+ brought
+> > >  >> up, rr_tx_counter remains NULL, causing a null-ptr-deref.
+> > >  >>=20
+>=20> >  >> The XDP redirect path can reach this code even when the bond =
+is not up:
+> > >  >> bpf_master_redirect_enabled_key is a global static key, so when=
+ any bond
+> > >  >> device has native XDP attached, the XDP_TX -> xdp_master_redire=
+ct()
+> > >  >> interception is enabled for all bond slaves system-wide. This a=
+llows the
+> > >  >> path xdp_master_redirect() -> bond_xdp_get_xmit_slave() ->
+> > >  >> bond_xdp_xmit_roundrobin_slave_get() -> bond_rr_gen_slave_id() =
+to be
+> > >  >> reached on a bond that was never opened.
+> > >  >>=20
+>=20> >  >> Fix this by allocating rr_tx_counter unconditionally in bond_=
+init()
+> > >  >> (ndo_init), which is called by register_netdevice() and covers =
+both
+> > >  >> device creation paths (bond_create() and bond_newlink()). This =
+also
+> > >  >> handles the case where bond mode is changed to round-robin afte=
+r device
+> > >  >> creation. The conditional allocation in bond_open() is removed.=
+ Since
+> > >  >> bond_destructor() already unconditionally calls
+> > >  >> free_percpu(bond->rr_tx_counter), the lifecycle is clean: alloc=
+ate at
+> > >  >> ndo_init, free at destructor.
+> > >  >>=20
+>=20> >  >> Note: rr_tx_counter is only used by round-robin mode, so this
+> > >  >> deliberately allocates a per-cpu u32 that goes unused for other=
+ modes.
+> > >  >> Conditional allocation (e.g., in bond_option_mode_set) was cons=
+idered
+> > >  >> but rejected: the XDP path can race with mode changes on a down=
+ed bond,
+> > >  >> and adding memory barriers to the XDP hot path is not justified=
+ for
+> > >  >> saving 4 bytes per CPU.
+> > >  >>=20
+>=20> >  >> Fixes: 879af96ffd72 ("net, core: Add support for XDP redirect=
+ion to slave device")
+> > >  >> Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.=
+com
+> > >  >> Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.00=
+cc.GAE@google.com/T/
+> > >  >> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
+> > >  >> ---
+> > >  >> drivers/net/bonding/bond_main.c | 19 +++++++++++++------
+> > >  >> 1 file changed, 13 insertions(+), 6 deletions(-)
+> > >  >>=20
+>=20> >  >
+> > >  >IMO it's not worth it to waste memory in all modes, for an unpopu=
+lar mode.
+> > >  >I think it'd be better to add a null check in bond_rr_gen_slave_i=
+d(),
+> > >  >READ/WRITE_ONCE() should be enough since it is allocated only onc=
+e, and
+> > >  >freed when the xmit code cannot be reachable anymore (otherwise w=
+e'd have
+> > >  >more bugs now). The branch will be successfully predicted practic=
+ally always,
+> > >  >and you can also mark the ptr being null as unlikely. That way on=
+ly RR takes
+> > >  >a very minimal hit, if any.
+> > >=20=20
+>=20> >  Is what you're suggesting different from Jiayuan's proposal[0],
+> > >  in the sense of needing barriers in the XDP hot path to insure ord=
+ering?
+> > >=20=20
+>=20> >  If I understand correctly, your suggestion is something like
+> > >  (totally untested):
+> > >=20
+>=20> Basically yes, that is what I'm proposing + an unlikely() around th=
+at
+> > null check since it is really unlikely and will be always predicted
+> > correctly, this way it's only for RR mode.
+> >=20
+>=20 Jiayuan,
+>=20
+>=20 Do you agree that the patch below (including Nikolay's
+> suggestion to add "unlikely") resolves the original issue without memor=
+y
+> waste, and without introducing performance issues (barriers) into the
+> XDP path?
+
+
+Sure, it's basically similar to what my v1 did, but the patch below can b=
+e more generic.
+
+https://lore.kernel.org/netdev/20260224112545.37888-1-jiayuan.chen@linux.=
+dev/T/#m08e3e53a8aa8d837ddc9242f4b14f2651a2b00aa
+
+>  -J
+>=20
+>=20>=20
+>=20> >=20
+>=20> > diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bondin=
+g/bond_main.c
+> > >  index eb27cacc26d7..ac2a4fc0aad0 100644
+> > >  --- a/drivers/net/bonding/bond_main.c
+> > >  +++ b/drivers/net/bonding/bond_main.c
+> > >  @@ -4273,13 +4273,17 @@ void bond_work_cancel_all(struct bonding *=
+bond)
+> > >  static int bond_open(struct net_device *bond_dev)
+> > >  {
+> > >  struct bonding *bond =3D netdev_priv(bond_dev);
+> > >  + u32 __percpu *rr_tx_tmp;
+> > >  struct list_head *iter;
+> > >  struct slave *slave;
+> > >=20=20
+>=20> >  - if (BOND_MODE(bond) =3D=3D BOND_MODE_ROUNDROBIN && !bond->rr_t=
+x_counter) {
+> > >  - bond->rr_tx_counter =3D alloc_percpu(u32);
+> > >  - if (!bond->rr_tx_counter)
+> > >  + if (BOND_MODE(bond) =3D=3D BOND_MODE_ROUNDROBIN &&
+> > >  + !READ_ONCE(bond->rr_tx_counter)) {
+> > >  + rr_tx_tmp =3D alloc_percpu(u32);
+> > >  + if (!rr_tx_tmp)
+> > >  return -ENOMEM;
+> > >  + WRITE_ONCE(bond->rr_tx_counter, rr_tx_tmp);
+> > >  +
+> > >  }
+> > >=20=20
+>=20> >  /* reset slave->backup and slave->inactive */
+> > >  @@ -4866,6 +4870,9 @@ static u32 bond_rr_gen_slave_id(struct bondi=
+ng *bond)
+> > >  struct reciprocal_value reciprocal_packets_per_slave;
+> > >  int packets_per_slave =3D bond->params.packets_per_slave;
+> > >=20=20
+>=20> >  + if (!READ_ONCE(bond->rr_tx_counter))
+> > >  + packets_per_slave =3D 0;
+> > >  +
+> > >  switch (packets_per_slave) {
+> > >  case 0:
+> > >  slave_id =3D get_random_u32();
+> > >=20=20
+>=20> >  -J
+> > >=20=20
+>=20> >=20=20
+>=20> >  [0] https://lore.kernel.org/netdev/e4a2a652784ec206728eb3a929a98=
+92238c61f06@linux.dev/
+> > >
+> >=20
+>=20---
+>  -Jay Vosburgh, jv@jvosburgh.net
 >
-> On 3/5/26 4:32 AM, David Laight wrote:
-> > On Wed, 4 Mar 2026 23:30:40 -0500
-> > Waiman Long <longman@redhat.com> wrote:
-> >
-> >> On 3/4/26 10:08 PM, Yafang Shao wrote:
-> >>> On Thu, Mar 5, 2026 at 11:00=E2=80=AFAM Steven Rostedt <rostedt@goodm=
-is.org> wrote:
-> >>>> On Thu, 5 Mar 2026 10:33:00 +0800
-> >>>> Yafang Shao <laoar.shao@gmail.com> wrote:
-> >>>>
-> >>>>> Other tools may also read available_filter_functions, requiring eac=
-h
-> >>>>> one to be patched individually to avoid this flaw=E2=80=94a clearly
-> >>>>> impractical solution.
-> >>>> What exactly is the issue?
-> >>> It makes no sense to spin unnecessarily when it can be avoided. We
-> >>> continuously improve the kernel to do the right thing=E2=80=94and unn=
-ecessary
-> >>> spinning is certainly not the right thing.
-> >>>
-> >>>> If a task does a while 1 in user space, it
-> >>>> wouldn't be much different.
-> >>> The while loop in user space performs actual work, whereas useless
-> >>> spinning does nothing but burn CPU cycles. My point is simple: if thi=
-s
-> >>> unnecessary spinning isn't already considered an issue, it should
-> >>> be=E2=80=94it's something that clearly needs improvement.
-> >> The whole point of optimistic spinning is to reduce the lock acquisiti=
-on
-> >> latency. If the waiter sleeps, the unlock operation will have to wake =
-up
-> >> the waiter which can have a variable latency depending on how busy the
-> >> system is at the time. Yes, it is burning CPU cycles while spinning,
-> >> Most workloads will gain performance with this optimistic spinning
-> >> feature. You do have a point that for system monitoring tools that
-> >> observe the system behavior, they shouldn't burn that much CPU times
-> >> that affect performance of real workload that the tools are monitoring=
-.
-> >>
-> >> BTW, you should expand the commit log of patch 1 to include the
-> >> rationale of why we should add this feature to mutex as the informatio=
-n
-> >> in the cover letter won't get included in the git log if this patch
-> >> series is merged. You should also elaborate in comment on under what
-> >> conditions should this this new mutex API be used.
-> > Isn't changing mutex_lock() the wrong place anyway?
-> > What you need is for the code holding the lock to indicate that
-> > it isn't worth waiters spinning because the lock will be held
-> > for a long time.
->
-> I have actually thought about having a flag somewhere in the mutex
-> itself to indicate that optimistic spinning isn't needed. However the
-> owner field is running out of usable flag bits.
-
-True. Introducing a new MUTEX_FLAGS would likely require a substantial
-refactor of the mutex code, which may not be worth it.
-
-> The other option is to
-> add it to osq as it doesn't really need to use the full 32 bits for the
-> tail. In this case, we can just initialize the mutex to say that we
-> don't need optimistic spinning and no new mutex_lock() API will be needed=
-.
-
-I believe a new mutex_lock() variant would be clearer and easier to
-understand. It also has the advantage of requiring minimal changes to
-the existing mutex code.
-
---=20
-Regards
-Yafang
