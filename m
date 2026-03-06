@@ -1,85 +1,88 @@
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+Received: from mail-oi1-f194.google.com (mail-oi1-f194.google.com [209.85.167.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10347365A05
-	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 23:06:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB733624D2
+	for <bpf@vger.kernel.org>; Fri,  6 Mar 2026 23:06:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772838398; cv=none; b=sn4wXMdIIgbk7M8w/LtcJa/fPEPxFxNP4xZdZ7H7B9W07VECSKDtbbYF+VmVFhEhKAN2GDx0/H+VsrCwVi0M/ZfopsIavDIruc0zdVsRQ/KvBqOaLikDYlrZ0zPLFnwaupSOVUB81VZNzVFnfjGqmBRrmq4Jy97OzU7UeOd9uFM=
+	t=1772838401; cv=none; b=AM8XyaO8S/w0PF9DhQkcjXrzOUWvz1Irtc12mnensI+NO9Ek209aqGRrOq+sYGLBrySwkb1W3T4Q1SK40cWS/MlmVG+TlXvuY+26xryAXaJ5JJyO+H4q1tnKKTOR+Qz6XzN5cg5Hja1UNWAYGoi4701SvPwhlXlidwKMX1h/gow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772838398; c=relaxed/simple;
-	bh=G1m2bChyGfFCLRh6E4i97fS7WkOhKhPKA/ZRk/gLdPg=;
+	s=arc-20240116; t=1772838401; c=relaxed/simple;
+	bh=8czuKxIXstw0JG+VhrpdbQpiwcgQIXQoU+tZtK84puo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EDbNy9hFaYiwE1CmVaJGuGuyR2N1MU4ZIO5H4ly7LOR/23lkJ9kxcNOWohOXCul5WPakQAcV8SWikRrzR1RV4R4pwy+cUvWeDibA+Z1Ou8E10nz9VpNhe2bJm6rTGBEvEvS+Y/2OjvACDt5AvNIyrA2Mf7r4q7FqUUZRy5oq+LQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=aBpaE88+; arc=none smtp.client-ip=209.85.167.182
+	 MIME-Version; b=TMspuAu/o0d2Y//A2Wkrw/mTcDN7mn3NGdlQVqGKM6hNQMQU45xp3AAKewGLmZRDvFH+/QBV8sWfm1CTha510oa1lSp/i3dlL2RuuOnrozAxal1BFdQPtPVxbeEbWxS8OB7RwYDjmR2Ch/DBQjB7J8StjNV3kw2770dkI5l+OUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=Sbm+mlZz; arc=none smtp.client-ip=209.85.167.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="aBpaE88+"
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-464bc03efd8so5759225b6e.2
-        for <bpf@vger.kernel.org>; Fri, 06 Mar 2026 15:06:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Sbm+mlZz"
+Received: by mail-oi1-f194.google.com with SMTP id 5614622812f47-45f194e9a98so3599945b6e.3
+        for <bpf@vger.kernel.org>; Fri, 06 Mar 2026 15:06:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1772838395; x=1773443195; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1772838399; x=1773443199; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=csumzbWHZvx8PA3oyWoX+6soqsMyY5CickRdRinv65Y=;
-        b=aBpaE88+ILfrcp/pXPRpS46zO4rEi0NIYGOfEAgPdVHZovFOiOvUgk+qTFWYhqsQHp
-         cjmU34OUFXNHZDC9ktFhq5lXM9Ziy+gUf8HxO/G1WJ2ghkOnhhMvO1Ov2H69scUQHflY
-         0osQfEMxBgumDqB/1oGgXmqmjC5ZItyX13O72i0ZfjgB2uQsZHcnm9fAynp6iYcfkLwz
-         sz9qinXOKoDy+jp4n23EMLrx0B6uJW9NEIHwQVesp7o3jPo0afHLjRuMWuA6/ayg38NM
-         PcOxfjKPIOqiCXCe85ghO/NkK2knqjizadNmM9ot5VTLFwWlvsKsQElWnwD/wDlg9+th
-         Bzug==
+        bh=l4PoAMNeLEmpnpNk8ugY9fn6SRetloOwm3+eWZzi2Xs=;
+        b=Sbm+mlZzhXffSlGETBKm5TnRa5b4rHoSPbxODn5y3eUgzMjxzpuEPRIAhhcRR2Q15W
+         EnWjJpMR9IF3tYNrWQxPs9tOjULaNqs/q7lHy7x0GqHO834Im3P4YbFDqd7OpZEUw9fQ
+         X6tTkr7puYK5LwSCwJuzez6alJHGgFs2wrd8rPMHV6stV2af8WAdId2rqg8bBGIolWpH
+         qlAM6BrBakYWn2vvDlRsRCtFKzjZYo+qcjRFvxG/tacT/B3v8cpRunyG2Blc1hvnJ34t
+         wtd5xdFWyLNly7sGl3lx6oztZOqiGdA938f/AXhbcxVayZY9wbjpkV+EbXqpVbMcRnvR
+         y5Nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772838395; x=1773443195;
+        d=1e100.net; s=20230601; t=1772838399; x=1773443199;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=csumzbWHZvx8PA3oyWoX+6soqsMyY5CickRdRinv65Y=;
-        b=cHB2zGobQSmN3RaHhFGw0UVEZr1ZDCzc/Bk1Dh7xM/nb+ahADhcUEUuP/OUNiC9Zwz
-         d1AenEmrlcb62ssFpB72eax51xt6L9LvdyyMmvDmZLwima73Bu2pYNUOcIK/x3y9sy0b
-         uoGcXlHf2TgTHFzrulHT7waXvkAWCe0JLMqsEm6Lf2CXFKqfxFGkHhxxZzNUl8dD6aRh
-         t+nBDCvZcsUlrMJ6McqNTfbZm17GzadL2WRau1zzIaASsGGiQLh6CN874fkPjZV4uXHP
-         iiFC8UqHyeMcB8oXsPxD2vdjE1NBxT28azB7hcClCGAzz8LZ3Nfx3gjWP3yAEvwa9y89
-         mlgw==
-X-Forwarded-Encrypted: i=1; AJvYcCUSIEnnW8e6pM3dZ7FpbRv+NMwMD1rMRSwjopbQ+EfRVkOoS3mlm7i+nmAFFtW5gTcFaGw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7VVJ6QgDJU4PgEfCRiOMqTS+olYseOk2WSvO883eA/hTqg0B4
-	6Hsu2pN8r+dV2SqvwU/+CJujGbdvlOpc1rDaCowdz1WenkaRPqVpH8zj3MUdqzm4Pvk=
-X-Gm-Gg: ATEYQzz6686ZOZ6rOnxw8ScNMvkTRMIXsmbe8sUl8s0VZ2HtMa2uhwURzrA0GNHXRra
-	3JKB1H7CNl56o46y8LE9GqkCxZoLzAZZOCYdCJS2fxF4GtQDd7GXMWT+alQk0+gkPj8Z7UPXlgb
-	vChrFzKidgH/xT73qlxi634F4PludsvBY/Aaewx32Cj1nfTsT273tMXrazikUoKQ5RMPRPxfKSY
-	FgJ2bQn/yOKQCPRQbA4KI3kdAevhp0h1GVtgxmvk2dE3K+WidV6z+EBQDFVtLGuPLdZPWMI4ro9
-	vhcyAPUpXZ3OSWK2p9BErZ+76Eg53psy4JaeCyvsDxt4UCUMERTpq161NIybRBt0lW8yXsYQRKM
-	iUmmJeAY2OyGc9geHPyepuM5uFGy4TzIHfmyxxXU99mAOMTHU/PeRPHnXaWdx+gN2cjbWlRua8a
-	FYh2QZNFRB05QUEDNF9bE=
-X-Received: by 2002:a05:6808:3098:b0:45c:7c9e:854f with SMTP id 5614622812f47-466dcb9c0d7mr2209128b6e.58.1772838394942;
-        Fri, 06 Mar 2026 15:06:34 -0800 (PST)
+        bh=l4PoAMNeLEmpnpNk8ugY9fn6SRetloOwm3+eWZzi2Xs=;
+        b=cZTSf8OeA2UaeYrnfi+LgQR1djPW0pvA8njQBmIZi6e/hmWNl6caAerLqG2TTptLCV
+         nO0qva7CXPdNkDqM+KuYFg1hyn3QwY2eesjkQ8vjYnVY5UfUaKbVAF4OipewpiVOPe/b
+         Li8MhX4+6SLeGQYz3AWwZCBlEU48AFypnXPER5WBVmyn/oJ7dEXY0WbcOUbDTgfHANhV
+         vkkAIRsoQxILwB359zX5xRnZl4+F7Q1KBNFS/VFqcOQGuMsQS0Ju59QHWLx177BylQYN
+         oOCkZZVze8j5XzOJtuGvTDHHyCpKD/SOYYiRvgrAoF8AZ4272osBxnFQtQlr2Ux6ZWdj
+         ULbg==
+X-Forwarded-Encrypted: i=1; AJvYcCV1uSn6NA5LyZLDu2ntfB/8jW3oJrIrEO8kwmrdm0UCArp0b2klRfsWpwNsCqLUouIQCWY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqOxsqEwtLl0yM2JLZ2wNrXhS2SxL5GofAmJRxoA7nakuOHw3X
+	Aj9oSl00grGC6WdXr7/7YIynRjIFMhutKkziiXJtxaP2N1qo7TANQCTMAgjMPRCS9vA=
+X-Gm-Gg: ATEYQzyMhYHzNmHTXoRi46gsOJj/cTEIf18+/5aFk1+AP1c/tcgJg9FAC/udm805mmh
+	7DwXzSjWAedOYQNPJTiOIORTVIC4qIoFydaA3YFO36PvFaFR88o5hvXcphKyWGw2Yz1wAUiT/f7
+	gdRsqls5CZiql/73UEcVKCbLcQ3aCzO2srVdyAoTddrQYRT+FXkKxseIFLGW7DMvGaaEow1hshs
+	5c5kPujA6ufEG6cjCk2VT/cFMwqEHMouaf9AkQ/z+4Tzh62ZeRM+GaK9xkQu6wj0+Pj+f4tMMUy
+	1FuY1kvFCT2DJmijZraCKH+js7yercf0bPJyfi4ksjHYz+4yyc1nauZ9wJ/cJbpg9Ex5ttuh233
+	LYPE0VZBTgAxj3w6U9q9ox9CIE3lt+rN6kdot8GfWJjCaY75GHCNJsXcbP08yV5t8e64tek5k1+
+	KiKKLm7XPo
+X-Received: by 2002:a05:6808:c1e7:b0:464:2570:8805 with SMTP id 5614622812f47-466dc9d6965mr2403674b6e.3.1772838398845;
+        Fri, 06 Mar 2026 15:06:38 -0800 (PST)
 Received: from 20HS2G4.. ([2a09:bac1:76c0:540::3ce:23])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-466dfac17b3sm1532769b6e.14.2026.03.06.15.06.33
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-466dfac17b3sm1532769b6e.14.2026.03.06.15.06.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2026 15:06:34 -0800 (PST)
+        Fri, 06 Mar 2026 15:06:37 -0800 (PST)
 From: Chris J Arges <carges@cloudflare.com>
 To: michael.chan@broadcom.com,
 	pavan.chebbi@broadcom.com,
 	joe@dama.to,
 	kuba@kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Simon Horman <horms@kernel.org>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S. Miller" <davem@davemloft.net>,
 	Jesper Dangaard Brouer <hawk@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>
+	Stanislav Fomichev <sdf@fomichev.me>
 Cc: kernel-team@cloudflare.com,
 	Chris J Arges <carges@cloudflare.com>,
+	linux-kernel@vger.kernel.org,
 	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v3 3/5] bnxt_en: Implement XDP RSS hash metadata extraction for V3_CMP
-Date: Fri,  6 Mar 2026 17:00:18 -0600
-Message-ID: <20260306230600.1628196-4-carges@cloudflare.com>
+	linux-kselftest@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH net-next v3 4/5] selftests: net: move common xdp.py functions into lib
+Date: Fri,  6 Mar 2026 17:00:19 -0600
+Message-ID: <20260306230600.1628196-5-carges@cloudflare.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260306230600.1628196-1-carges@cloudflare.com>
 References: <20260306230600.1628196-1-carges@cloudflare.com>
@@ -91,47 +94,315 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This adds another conditional for if cmp_type is CMP_TYPE_RX_L2_V3_CMP for
-drivers that support this completion format.
-
-It uses a similar approach as found in other parts of the driver.
+This moves a few functions which can be useful to other python programs
+that manipulate XDP programs. This also refactors xdp.py to use the
+refactored functions.
 
 Signed-off-by: Chris J Arges <carges@cloudflare.com>
 ---
- drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c | 20 +++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ .../selftests/drivers/net/lib/py/__init__.py  |  2 +
+ tools/testing/selftests/drivers/net/xdp.py    | 95 +++++--------------
+ .../testing/selftests/net/lib/py/__init__.py  |  2 +
+ tools/testing/selftests/net/lib/py/bpf.py     | 68 +++++++++++++
+ 4 files changed, 95 insertions(+), 72 deletions(-)
+ create mode 100644 tools/testing/selftests/net/lib/py/bpf.py
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-index 1f920464b426..25ecef1eb96e 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-@@ -514,6 +514,26 @@ int bnxt_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
- 		default:
- 			break;
- 		}
-+	} else if (xdp->cmp_type == CMP_TYPE_RX_L2_V3_CMP) {
-+		struct bnxt *bp = netdev_priv(xdp->xdp.rxq->dev);
-+		u8 ext_op;
-+
-+		if (rxcmp1->rx_cmp_flags2 & cpu_to_le32(RX_CMP_FLAGS2_IP_TYPE))
-+			hash_type |= XDP_RSS_TYPE_L3_IPV6;
-+		else
-+			hash_type |= XDP_RSS_TYPE_L3_IPV4;
-+
-+		ext_op = RX_CMP_V3_HASH_TYPE(bp, rxcmp);
-+		switch (ext_op) {
-+		case EXT_OP_INNER_4:
-+		case EXT_OP_OUTER_4:
-+		case EXT_OP_INNFL_3:
-+		case EXT_OP_OUTFL_3:
-+			hash_type |= XDP_RSS_L4;
-+			break;
-+		default:
-+			break;
-+		}
- 	}
+diff --git a/tools/testing/selftests/drivers/net/lib/py/__init__.py b/tools/testing/selftests/drivers/net/lib/py/__init__.py
+index 5872d114f142..f64e84b90574 100644
+--- a/tools/testing/selftests/drivers/net/lib/py/__init__.py
++++ b/tools/testing/selftests/drivers/net/lib/py/__init__.py
+@@ -23,6 +23,7 @@ try:
+     from net.lib.py import CmdExitFailure
+     from net.lib.py import bkg, cmd, bpftool, bpftrace, defer, ethtool, \
+         fd_read_timeout, ip, rand_port, rand_ports, wait_port_listen, wait_file
++    from net.lib.py import bpf_map_set, bpf_map_dump, bpf_prog_map_ids
+     from net.lib.py import KsftSkipEx, KsftFailEx, KsftXfailEx
+     from net.lib.py import ksft_disruptive, ksft_exit, ksft_pr, ksft_run, \
+         ksft_setup, ksft_variants, KsftNamedVariant
+@@ -36,6 +37,7 @@ try:
+                "bkg", "cmd", "bpftool", "bpftrace", "defer", "ethtool",
+                "fd_read_timeout", "ip", "rand_port", "rand_ports",
+                "wait_port_listen", "wait_file",
++               "bpf_map_set", "bpf_map_dump", "bpf_prog_map_ids",
+                "KsftSkipEx", "KsftFailEx", "KsftXfailEx",
+                "ksft_disruptive", "ksft_exit", "ksft_pr", "ksft_run",
+                "ksft_setup", "ksft_variants", "KsftNamedVariant",
+diff --git a/tools/testing/selftests/drivers/net/xdp.py b/tools/testing/selftests/drivers/net/xdp.py
+index e54df158dfe9..10d821156db1 100755
+--- a/tools/testing/selftests/drivers/net/xdp.py
++++ b/tools/testing/selftests/drivers/net/xdp.py
+@@ -16,7 +16,8 @@ from lib.py import KsftNamedVariant, ksft_variants
+ from lib.py import KsftFailEx, NetDrvEpEnv
+ from lib.py import EthtoolFamily, NetdevFamily, NlError
+ from lib.py import bkg, cmd, rand_port, wait_port_listen
+-from lib.py import ip, bpftool, defer
++from lib.py import ip, defer
++from lib.py import bpf_map_set, bpf_map_dump, bpf_prog_map_ids
  
- 	*rss_type = hash_type;
+ 
+ class TestConfig(Enum):
+@@ -122,47 +123,11 @@ def _load_xdp_prog(cfg, bpf_info):
+     xdp_info = ip(f"-d link show dev {cfg.ifname}", json=True)[0]
+     prog_info["id"] = xdp_info["xdp"]["prog"]["id"]
+     prog_info["name"] = xdp_info["xdp"]["prog"]["name"]
+-    prog_id = prog_info["id"]
+-
+-    map_ids = bpftool(f"prog show id {prog_id}", json=True)["map_ids"]
+-    prog_info["maps"] = {}
+-    for map_id in map_ids:
+-        name = bpftool(f"map show id {map_id}", json=True)["name"]
+-        prog_info["maps"][name] = map_id
++    prog_info["maps"] = bpf_prog_map_ids(prog_info["id"])
+ 
+     return prog_info
+ 
+ 
+-def format_hex_bytes(value):
+-    """
+-    Helper function that converts an integer into a formatted hexadecimal byte string.
+-
+-    Args:
+-        value: An integer representing the number to be converted.
+-
+-    Returns:
+-        A string representing hexadecimal equivalent of value, with bytes separated by spaces.
+-    """
+-    hex_str = value.to_bytes(4, byteorder='little', signed=True)
+-    return ' '.join(f'{byte:02x}' for byte in hex_str)
+-
+-
+-def _set_xdp_map(map_name, key, value):
+-    """
+-    Updates an XDP map with a given key-value pair using bpftool.
+-
+-    Args:
+-        map_name: The name of the XDP map to update.
+-        key: The key to update in the map, formatted as a hexadecimal string.
+-        value: The value to associate with the key, formatted as a hexadecimal string.
+-    """
+-    key_formatted = format_hex_bytes(key)
+-    value_formatted = format_hex_bytes(value)
+-    bpftool(
+-        f"map update name {map_name} key hex {key_formatted} value hex {value_formatted}"
+-    )
+-
+-
+ def _get_stats(xdp_map_id):
+     """
+     Retrieves and formats statistics from an XDP map.
+@@ -177,25 +142,11 @@ def _get_stats(xdp_map_id):
+     Raises:
+         KsftFailEx: If the stats retrieval fails.
+     """
+-    stats_dump = bpftool(f"map dump id {xdp_map_id}", json=True)
+-    if not stats_dump:
++    stats = bpf_map_dump(xdp_map_id)
++    if not stats:
+         raise KsftFailEx(f"Failed to get stats for map {xdp_map_id}")
+ 
+-    stats_formatted = {}
+-    for key in range(0, 5):
+-        val = stats_dump[key]["formatted"]["value"]
+-        if stats_dump[key]["formatted"]["key"] == XDPStats.RX.value:
+-            stats_formatted[XDPStats.RX.value] = val
+-        elif stats_dump[key]["formatted"]["key"] == XDPStats.PASS.value:
+-            stats_formatted[XDPStats.PASS.value] = val
+-        elif stats_dump[key]["formatted"]["key"] == XDPStats.DROP.value:
+-            stats_formatted[XDPStats.DROP.value] = val
+-        elif stats_dump[key]["formatted"]["key"] == XDPStats.TX.value:
+-            stats_formatted[XDPStats.TX.value] = val
+-        elif stats_dump[key]["formatted"]["key"] == XDPStats.ABORT.value:
+-            stats_formatted[XDPStats.ABORT.value] = val
+-
+-    return stats_formatted
++    return stats
+ 
+ 
+ def _test_pass(cfg, bpf_info, msg_sz):
+@@ -211,8 +162,8 @@ def _test_pass(cfg, bpf_info, msg_sz):
+     prog_info = _load_xdp_prog(cfg, bpf_info)
+     port = rand_port()
+ 
+-    _set_xdp_map("map_xdp_setup", TestConfig.MODE.value, XDPAction.PASS.value)
+-    _set_xdp_map("map_xdp_setup", TestConfig.PORT.value, port)
++    bpf_map_set("map_xdp_setup", TestConfig.MODE.value, XDPAction.PASS.value)
++    bpf_map_set("map_xdp_setup", TestConfig.PORT.value, port)
+ 
+     ksft_eq(_test_udp(cfg, port, msg_sz), True, "UDP packet exchange failed")
+     stats = _get_stats(prog_info["maps"]["map_xdp_stats"])
+@@ -258,8 +209,8 @@ def _test_drop(cfg, bpf_info, msg_sz):
+     prog_info = _load_xdp_prog(cfg, bpf_info)
+     port = rand_port()
+ 
+-    _set_xdp_map("map_xdp_setup", TestConfig.MODE.value, XDPAction.DROP.value)
+-    _set_xdp_map("map_xdp_setup", TestConfig.PORT.value, port)
++    bpf_map_set("map_xdp_setup", TestConfig.MODE.value, XDPAction.DROP.value)
++    bpf_map_set("map_xdp_setup", TestConfig.PORT.value, port)
+ 
+     ksft_eq(_test_udp(cfg, port, msg_sz), False, "UDP packet exchange should fail")
+     stats = _get_stats(prog_info["maps"]["map_xdp_stats"])
+@@ -305,8 +256,8 @@ def _test_xdp_native_tx(cfg, bpf_info, payload_lens):
+     prog_info = _load_xdp_prog(cfg, bpf_info)
+     port = rand_port()
+ 
+-    _set_xdp_map("map_xdp_setup", TestConfig.MODE.value, XDPAction.TX.value)
+-    _set_xdp_map("map_xdp_setup", TestConfig.PORT.value, port)
++    bpf_map_set("map_xdp_setup", TestConfig.MODE.value, XDPAction.TX.value)
++    bpf_map_set("map_xdp_setup", TestConfig.PORT.value, port)
+ 
+     expected_pkts = 0
+     for payload_len in payload_lens:
+@@ -454,15 +405,15 @@ def _test_xdp_native_tail_adjst(cfg, pkt_sz_lst, offset_lst):
+     prog_info = _load_xdp_prog(cfg, bpf_info)
+ 
+     # Configure the XDP map for tail adjustment
+-    _set_xdp_map("map_xdp_setup", TestConfig.MODE.value, XDPAction.TAIL_ADJST.value)
+-    _set_xdp_map("map_xdp_setup", TestConfig.PORT.value, port)
++    bpf_map_set("map_xdp_setup", TestConfig.MODE.value, XDPAction.TAIL_ADJST.value)
++    bpf_map_set("map_xdp_setup", TestConfig.PORT.value, port)
+ 
+     for offset in offset_lst:
+         tag = format(random.randint(65, 90), "02x")
+ 
+-        _set_xdp_map("map_xdp_setup", TestConfig.ADJST_OFFSET.value, offset)
++        bpf_map_set("map_xdp_setup", TestConfig.ADJST_OFFSET.value, offset)
+         if offset > 0:
+-            _set_xdp_map("map_xdp_setup", TestConfig.ADJST_TAG.value, int(tag, 16))
++            bpf_map_set("map_xdp_setup", TestConfig.ADJST_TAG.value, int(tag, 16))
+ 
+         for pkt_sz in pkt_sz_lst:
+             test_str = "".join(random.choice(string.ascii_lowercase) for _ in range(pkt_sz))
+@@ -574,8 +525,8 @@ def _test_xdp_native_head_adjst(cfg, prog, pkt_sz_lst, offset_lst):
+     prog_info = _load_xdp_prog(cfg, BPFProgInfo(prog, "xdp_native.bpf.o", "xdp.frags", 9000))
+     port = rand_port()
+ 
+-    _set_xdp_map("map_xdp_setup", TestConfig.MODE.value, XDPAction.HEAD_ADJST.value)
+-    _set_xdp_map("map_xdp_setup", TestConfig.PORT.value, port)
++    bpf_map_set("map_xdp_setup", TestConfig.MODE.value, XDPAction.HEAD_ADJST.value)
++    bpf_map_set("map_xdp_setup", TestConfig.PORT.value, port)
+ 
+     hds_thresh = get_hds_thresh(cfg)
+     for offset in offset_lst:
+@@ -595,11 +546,11 @@ def _test_xdp_native_head_adjst(cfg, prog, pkt_sz_lst, offset_lst):
+             test_str = ''.join(random.choice(string.ascii_lowercase) for _ in range(pkt_sz))
+             tag = format(random.randint(65, 90), '02x')
+ 
+-            _set_xdp_map("map_xdp_setup",
++            bpf_map_set("map_xdp_setup",
+                      TestConfig.ADJST_OFFSET.value,
+                      offset)
+-            _set_xdp_map("map_xdp_setup", TestConfig.ADJST_TAG.value, int(tag, 16))
+-            _set_xdp_map("map_xdp_setup", TestConfig.ADJST_OFFSET.value, offset)
++            bpf_map_set("map_xdp_setup", TestConfig.ADJST_TAG.value, int(tag, 16))
++            bpf_map_set("map_xdp_setup", TestConfig.ADJST_OFFSET.value, offset)
+ 
+             recvd_str = _exchg_udp(cfg, port, test_str)
+ 
+@@ -691,8 +642,8 @@ def test_xdp_native_qstats(cfg, act):
+     prog_info = _load_xdp_prog(cfg, bpf_info)
+     port = rand_port()
+ 
+-    _set_xdp_map("map_xdp_setup", TestConfig.MODE.value, act.value)
+-    _set_xdp_map("map_xdp_setup", TestConfig.PORT.value, port)
++    bpf_map_set("map_xdp_setup", TestConfig.MODE.value, act.value)
++    bpf_map_set("map_xdp_setup", TestConfig.PORT.value, port)
+ 
+     # Discard the input, but we need a listener to avoid ICMP errors
+     rx_udp = f"socat -{cfg.addr_ipver} -T 2 -u UDP-RECV:{port},reuseport " + \
+diff --git a/tools/testing/selftests/net/lib/py/__init__.py b/tools/testing/selftests/net/lib/py/__init__.py
+index a584e7f806a4..ff9b83890773 100644
+--- a/tools/testing/selftests/net/lib/py/__init__.py
++++ b/tools/testing/selftests/net/lib/py/__init__.py
+@@ -15,6 +15,7 @@ from .nsim import NetdevSim, NetdevSimDev
+ from .utils import CmdExitFailure, fd_read_timeout, cmd, bkg, defer, \
+     bpftool, ip, ethtool, bpftrace, rand_port, rand_ports, wait_port_listen, \
+     wait_file, tool
++from .bpf import bpf_map_set, bpf_map_dump, bpf_prog_map_ids
+ from .ynl import NlError, YnlFamily, EthtoolFamily, NetdevFamily, RtnlFamily, RtnlAddrFamily
+ from .ynl import NetshaperFamily, DevlinkFamily, PSPFamily
+ 
+@@ -28,6 +29,7 @@ __all__ = ["KSRC",
+            "CmdExitFailure", "fd_read_timeout", "cmd", "bkg", "defer",
+            "bpftool", "ip", "ethtool", "bpftrace", "rand_port", "rand_ports",
+            "wait_port_listen", "wait_file", "tool",
++           "bpf_map_set", "bpf_map_dump", "bpf_prog_map_ids",
+            "NetdevSim", "NetdevSimDev",
+            "NetshaperFamily", "DevlinkFamily", "PSPFamily", "NlError",
+            "YnlFamily", "EthtoolFamily", "NetdevFamily", "RtnlFamily",
+diff --git a/tools/testing/selftests/net/lib/py/bpf.py b/tools/testing/selftests/net/lib/py/bpf.py
+new file mode 100644
+index 000000000000..96b29d41c34b
+--- /dev/null
++++ b/tools/testing/selftests/net/lib/py/bpf.py
+@@ -0,0 +1,68 @@
++# SPDX-License-Identifier: GPL-2.0
++
++"""
++BPF helper utilities for kernel selftests.
++
++Provides common operations for interacting with BPF maps and programs
++via bpftool, used by XDP and other BPF-based test files.
++"""
++
++from .utils import bpftool
++
++def format_hex_bytes(value):
++    """
++    Helper function that converts an integer into a formatted hexadecimal byte string.
++
++    Args:
++        value: An integer representing the number to be converted.
++
++    Returns:
++        A string representing hexadecimal equivalent of value, with bytes separated by spaces.
++    """
++    hex_str = value.to_bytes(4, byteorder='little', signed=True)
++    return ' '.join(f'{byte:02x}' for byte in hex_str)
++
++
++def bpf_map_set(map_name, key, value):
++    """
++    Updates an XDP map with a given key-value pair using bpftool.
++
++    Args:
++        map_name: The name of the XDP map to update.
++        key: The key to update in the map, formatted as a hexadecimal string.
++        value: The value to associate with the key, formatted as a hexadecimal string.
++    """
++    key_formatted = format_hex_bytes(key)
++    value_formatted = format_hex_bytes(value)
++    bpftool(
++        f"map update name {map_name} key hex {key_formatted} value hex {value_formatted}"
++    )
++
++def bpf_map_dump(map_id):
++    """Dump all entries of a BPF array map.
++
++    Args:
++        map_id: Numeric map ID (as returned by bpftool prog show).
++
++    Returns:
++        A dict mapping formatted key (int) to formatted value (int).
++    """
++    raw = bpftool(f"map dump id {map_id}", json=True)
++    return {e["formatted"]["key"]: e["formatted"]["value"] for e in raw}
++
++
++def bpf_prog_map_ids(prog_id):
++    """Get the map name-to-ID mapping for a loaded BPF program.
++
++    Args:
++        prog_id: Numeric program ID.
++
++    Returns:
++        A dict mapping map name (str) to map ID (int).
++    """
++    map_ids = bpftool(f"prog show id {prog_id}", json=True)["map_ids"]
++    maps = {}
++    for mid in map_ids:
++        name = bpftool(f"map show id {mid}", json=True)["name"]
++        maps[name] = mid
++    return maps
 -- 
 2.43.0
 
