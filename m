@@ -1,55 +1,71 @@
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EEE435E951
-	for <bpf@vger.kernel.org>; Sat,  7 Mar 2026 18:24:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF88436606C
+	for <bpf@vger.kernel.org>; Sat,  7 Mar 2026 18:48:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772907886; cv=none; b=HDHa10fJz6L9DC5FRTISH4aEomVXJ2cH9RTEO/MOWcPTLqcZrVu7Rc02V7bvo5AbT84Ektmn4i+3donvO7PDQlEuTO6Dc/AYjSrPFjcHppDXI8XTWvYnxl+1u7DeLOmUgTQebLO2qMCi5SHU5WXFnykDbFDBKwAilgtLm1Xzd/g=
+	t=1772909332; cv=none; b=iqfknqdMkaAE91XmmPv/xH0eJUzD1PUsM9GsKJHrSpMBLRp5yLpY+Z98dm9MfAQfm5conzpFeQxlsgbLOFWvI4dSyxhPRZEzjRRpU4fdT+c3j/pGWkqxIjAIJENJBau6CYGmmxoZqrikEoIJuZodrUuXDKIJfFWDJ6IR/1c5MJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772907886; c=relaxed/simple;
-	bh=8sjvbr2kIRhpYOnuj7cZHDnKrydwIns1Qn6GNN6m5uc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=V/IHfxIHts/Z9xYY5CC2r2s3ZwzEi42GbgIZ2QyfgOhD5FZxSAyt71lfUXCi5ixI4lGs9tf17gec+c4Fm79NMj/1H7qqDXpVWtPj/YJW7CUvlZkqTsaoAR8hoPNBau8KoxrCInxQl2mheYnl/v6rsJeh/d3UD+cCUx8y6Y3X1C8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Yr93vZIU; arc=none smtp.client-ip=91.218.175.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1772909332; c=relaxed/simple;
+	bh=eHVDJXcq4X+CS/xdUeZXnnsD92vTKDdOsghs0xKnffw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=unP46ngIEdIMKvjUfDXkSRoxaCCrAp3K8/v4CQWVYivHTxms5foj1yfzs3R3GKqgfM0WhTgOa0Gimq+pRCoxyO8CugM6JOj/wb5VTL/ncik2m3RK4zO+HN0QTYFzsdbqUvP9fmL8f3ipTLjogJYwj4K4j+UAKlS05uy2pFx/lVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BlKePTKg; arc=none smtp.client-ip=209.85.160.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Yr93vZIU"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772907872;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=3t0Kg5Rp4+B0pW4g3HfgV1XxcRBiIIV6pjcS9WKTZpo=;
-	b=Yr93vZIU/9FTq2N3W+CLFQpHOnWJOoOlHH0hv+nked4gC1lopvAg3gisKJWSx/GXwTm623
-	kZHWTqT0Zvdld/dL4DfMdRb3yCqk0/aKzDLEgXl13ADcsVB1ZU3bhEIB7STp0H3bip+rHz
-	d2djOnWQdt2ey4gh2IEdRiJqzYYJvTg=
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: lsf-pc@lists.linux-foundation.org
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Tejun Heo <tj@kernel.org>,
-	Michal Hocko <mhocko@suse.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Hui Zhu <hui.zhu@linux.dev>,
-	JP Kobryn <inwardvessel@gmail.com>,
-	Muchun Song <muchun.song@linux.dev>,
-	Geliang Tang <geliang@kernel.org>,
-	Sweet Tea Dorminy <sweettea-kernel@dorminy.me>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	David Rientjes <rientjes@google.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Meta kernel team <kernel-team@meta.com>,
-	linux-mm@kvack.org,
-	cgroups@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [LSF/MM/BPF TOPIC] Reimagining Memory Cgroup (memcg_ext)
-Date: Sat,  7 Mar 2026 10:24:24 -0800
-Message-ID: <20260307182424.2889780-1-shakeel.butt@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BlKePTKg"
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-506aa68065eso90962421cf.1
+        for <bpf@vger.kernel.org>; Sat, 07 Mar 2026 10:48:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772909330; x=1773514130; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=i+9ahsnsWSySdyvH6ljLR9Nw5pN6696R14hb58xCC1g=;
+        b=BlKePTKgdjvfYj6OjTlRRoVBbOQoQAc+TfCym3ANH6bI/GMqy7o23GpH/6wIYjUaX8
+         A6KgJBGPDvj9llZDZ7We/5NBY22KNqUAooVeKM4x17C/TaQWJlPAouajRXl8AfBJWqiY
+         gyB3kGnSKQERuLJFLFwSzgRZxLNNaNnHFuJv+tPZMDuUwfPhXQgJ5laqNwBVGO7zKSBt
+         t0PzmXF7ouTPEgFlVFrC6aF6UyMPEjWpSNtNRh8zRelrh1tJ94KO0kizMANQfszemHyd
+         TM2dByWpBGgR2jjCYnge7kx2gKusRN9Jbv9nGndn/VOUvg9GQbAuhaWijG3+kbwUAi4L
+         D/Nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772909330; x=1773514130;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i+9ahsnsWSySdyvH6ljLR9Nw5pN6696R14hb58xCC1g=;
+        b=Uqt4e5kFUO72CeQRpTQI338g/zdJg3hq6M9Ubi2ma1WfEirif0VFnrADqLOVlBVwEW
+         FWka5CnsBGZk098xIZ15+5s6Uw5iDFVPXziIHk0zyEABl3WSesDqKCe23mIvTGawU3qC
+         PskcrUyM7g3mZsJU2vcihKN4i2aVS6bJ3jAejlnb+pUZFDxkjikGS5oNXQ3A/hF7ixZP
+         E5/mSvctFhNxDS9tdSfxfRLqg2BQFC2Dnh/ia8iov0n159FvC3h2Fm9C0Sah2h7qv2s4
+         3jHi7XugnHSaVeDSDW7GVPtlqaqHhdM4xtlECi5UI4T9b+vZzwUQ2fk6ZpJJx3UK7T3/
+         SPIQ==
+X-Gm-Message-State: AOJu0YxtE2WhstpTIZT3H7DMIDNyooTD8vbu2Ceo6XAZ2pc6a0jV+cQ0
+	bzdQaFIQkwl5KkU6aHi0jRTWVeW/p1+FveoR/4nd8ql77V34V0zzVKs3
+X-Gm-Gg: ATEYQzy6ut2kooAonaycR9ZpZHpIA4F0eILt6xlCODGei0PTSJRy3Bix157QcuaUlAE
+	wrrX5SrwddIBVg++SXB5cOTCuarN5ieAKd5AHHKAdHgWQ0lSjLWS1gLnTsB84jazUxjUqbKK7pH
+	Bw8Qdm8gYSAujjXRcPMUNQeQ9RFkM2rguMxckSvMJKMaG8KM6lbCvGzl16i2wRQBzlH1yIh+tjy
+	Cr9r/B8wLDdGdT1vXI2PooyL1+duggDeuRuligCpQ8uCjDkeMYUvw3P1cXCV8Jp3ubkFi+xuzjx
+	UyWN3QK9oUcjziXTBJUzLgWe1ufFIxUbZYHNDhXY7yYsnxNsEYI0R+KfLFNecxEKa5dEwhHLfte
+	vdpKPq4Lw0LK4zc1hNZwozSV+kfN2T6+KlsAk0VLpV+XydA7Fkl925vwCJuXk0mdFYarJ55bvyO
+	oHNrDxEveG0g5PDuSTRHFN74rvdNUTYcdqSOc9ZmaZcgJ0yioIwiGVU7ctaovXk8fDrpsclY7mW
+	agZABuS5iDElx2IvUI6q5y/Q6WK1NNgJy2OUDjDTnKFdn6g9at/8AOciQc1OA==
+X-Received: by 2002:ac8:588b:0:b0:4ed:b0f9:767f with SMTP id d75a77b69052e-508f49753d4mr82093431cf.70.1772909329738;
+        Sat, 07 Mar 2026 10:48:49 -0800 (PST)
+Received: from localhost.localdomain ([2601:600:837f:c6b0:18cf:ab6c:cac0:3007])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-509101c6a55sm2010471cf.23.2026.03.07.10.48.41
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sat, 07 Mar 2026 10:48:43 -0800 (PST)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: torvalds@linux-foundation.org
+Cc: bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@kernel.org
+Subject: [GIT PULL] BPF fixes for 7.0-rc3
+Date: Sat,  7 Mar 2026 10:48:39 -0800
+Message-ID: <20260307184839.33830-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -57,136 +73,63 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-Over the last couple of weeks, I have been brainstorming on how I would go
-about redesigning memcg, taking inspiration from sched_ext and bpfoom, with a
-focus on existing challenges and issues. This proposal outlines the high-level
-direction. Followup emails and patch series will cover and brainstorm the
-mechanisms (of course BPF) to achieve these goals.
+Hi Linus,
 
-Memory cgroups provide memory accounting and the ability to control memory usage
-of workloads through two categories of limits. Throttling limits (memory.max and
-memory.high) cap memory consumption. Protection limits (memory.min and
-memory.low) shield a workload's memory from reclaim under external memory
-pressure.
+The following changes since commit af4e9ef3d78420feb8fe58cd9a1ab80c501b3c08:
 
-Challenges
-----------
+  uaccess: Fix scoped_user_read_access() for 'pointer to const' (2026-03-02 09:24:32 -0800)
 
-- Workload owners rarely know their actual memory requirements, leading to
-  overprovisioned limits, lower utilization, and higher infrastructure costs.
+are available in the Git repository at:
 
-- Throttling limit enforcement is synchronous in the allocating task's context,
-  which can stall latency-sensitive threads.
+  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/bpf-fixes
 
-- The stalled thread may hold shared locks, causing priority inversion -- all
-  waiters are blocked regardless of their priority.
+for you to fetch changes up to b0dcdcb9ae757c8a8ba2fb24d34f8d147bae707b:
 
-- Enforcement is indiscriminate -- there is no way to distinguish a
-  performance-critical or latency-critical allocator from a latency-tolerant
-  one.
+  resolve_btfids: Fix linker flags detection (2026-03-07 08:51:51 -0800)
 
-- Protection limits assume static working sets size, forcing owners to either
-  overprovision or build complex userspace infrastructure to dynamically adjust
-  them.
+----------------------------------------------------------------
+- Fix u32/s32 bounds when ranges cross min/max boundary (Eduard Zingerman)
 
-Feature Wishlist
-----------------
+- Fix precision backtracking with linked registers (Eduard Zingerman)
 
-Here is the list of features and capabilities I want to enable in the
-redesigned memcg limit enforcement world.
+- Fix linker flags detection for resolve_btfids (Ihor Solodrai)
 
-Per-Memcg Background Reclaim
+- Fix race in update_ftrace_direct_add/del (Jiri Olsa)
 
-In the new memcg world, with the goal of (mostly) eliminating direct synchronous
-reclaim for limit enforcement, provide per-memcg background reclaimers which can
-scale across CPUs with the allocation rate.
+- Fix UAF in bpf_trampoline_link_cgroup_shim (Lang Xu)
 
-Lock-Aware Throttling
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+----------------------------------------------------------------
+Alexei Starovoitov (2):
+      Merge branch 'bpf-fix-u32-s32-bounds-when-ranges-cross-min-max-boundary'
+      Merge branch 'bpf-fix-precision-backtracking-bug-with-linked-registers'
 
-The ability to avoid throttling an allocating task that is holding locks, to
-prevent priority inversion. In Meta's fleet, we have observed lock holders stuck
-in memcg reclaim, blocking all waiters regardless of their priority or
-criticality.
+Eduard Zingerman (5):
+      bpf: Fix u32/s32 bounds when ranges cross min/max boundary
+      selftests/bpf: test refining u32/s32 bounds when ranges cross min/max boundary
+      Revert "selftests/bpf: Update reg_bound range refinement logic"
+      bpf: collect only live registers in linked regs
+      selftests/bpf: add reproducer for spurious precision propagation through calls
 
-Thread-Level Throttling Control
+Ihor Solodrai (1):
+      resolve_btfids: Fix linker flags detection
 
-Workloads should be able to indicate at the thread level which threads can be
-synchronously throttled and which cannot. For example, while experimenting with
-sched_ext, we drastically improved the performance of AI training workloads by
-prioritizing threads interacting with the GPU. Similarly, applications can
-identify the threads or thread pools on their performance-critical paths and
-the memcg enforcement mechanism should not throttle them.
+Jiri Olsa (1):
+      ftrace: Add missing ftrace_lock to update_ftrace_direct_add/del
 
-Combined Memory and Swap Limits
+Lang Xu (1):
+      bpf: Fix a UAF issue in bpf_trampoline_link_cgroup_shim
 
-Some users (Google actually) need the ability to enforce limits based on
-combined memory and swap usage, similar to cgroup v1's memsw limit, providing a
-ceiling on total memory commitment rather than treating memory and swap
-independently.
-
-Dynamic Protection Limits
-
-Rather than static protection limits, the kernel should support defining
-protection based on the actual working set of the workload, leveraging signals
-such as working set estimation, PSI, refault rates, or a combination thereof to
-automatically adapt to the workload's current memory needs.
-
-Shared Memory Semantics
-
-With more flexibility in limit enforcement, the kernel should be able to
-account for memory shared between workloads (cgroups) during enforcement.
-Today, enforcement only looks at each workload's memory usage independently.
-Sensible shared memory semantics would allow the enforcer to consider
-cross-cgroup sharing when making reclaim and throttling decisions.
-
-Memory Tiering
-
-With a flexible limit enforcement mechanism, the kernel can balance memory
-usage of different workloads across memory tiers based on their performance
-requirements. Tier accounting and hotness tracking are orthogonal, but the
-decisions of when and how to balance memory between tiers should be handled by
-the enforcer.
-
-Collaborative Load Shedding
-
-Many workloads communicate with an external entity for load balancing and rely
-on their own usage metrics like RSS or memory pressure to signal whether they
-can accept more or less work. This is guesswork. Instead of the
-workload guessing, the limit enforcer -- which is actually managing the
-workload's memory usage -- should be able to communicate available headroom or
-request the workload to shed load or reduce memory usage. This collaborative
-load shedding mechanism would allow workloads to make informed decisions rather
-than reacting to coarse signals.
-
-Cross-Subsystem Collaboration
-
-Finally, the limit enforcement mechanism should collaborate with the CPU
-scheduler and other subsystems that can release memory. For example, dirty
-memory is not reclaimable and the memory subsystem wakes up flushers to trigger
-writeback. However, flushers need CPU to run -- asking the CPU scheduler to
-prioritize them ensures the kernel does not lack reclaimable memory under
-stressful conditions. Similarly, some subsystems free memory through workqueues
-or RCU callbacks. While this may seem orthogonal to limit enforcement, we can
-definitely take advantage by having visibility into these situations.
-
-Putting It All Together
------------------------
-
-To illustrate the end goal, here is an example of the scenario I want to
-enable. Suppose there is an AI agent controlling the resources of a host. I
-should be able to provide the following policy and everything should work out
-of the box:
-
-Policy: "keep system-level memory utilization below 95 percent;
-avoid priority inversions by not throttling allocators holding locks; trim each
-workload's usage to its working set without regressing its relevant performance
-metrics; collaborate with workloads on load shedding and memory trimming
-decisions; and under extreme memory pressure, collaborate with the OOM killer
-and the central job scheduler to kill and clean up a workload."
-
-Initially I added this example for fun, but from [1] it seems like there is a
-real need to enable such capabilities.
-
-[1] https://arxiv.org/abs/2602.09345
+ kernel/bpf/trampoline.c                            |  4 +-
+ kernel/bpf/verifier.c                              | 37 ++++++++++-
+ kernel/trace/ftrace.c                              |  2 +
+ tools/bpf/resolve_btfids/Makefile                  |  9 ++-
+ tools/testing/selftests/bpf/Makefile               |  1 +
+ .../testing/selftests/bpf/prog_tests/reg_bounds.c  | 76 +++++++++++++++++-----
+ .../selftests/bpf/progs/exceptions_assert.c        | 34 +++++-----
+ .../testing/selftests/bpf/progs/verifier_bounds.c  | 39 ++++++++++-
+ .../selftests/bpf/progs/verifier_linked_scalars.c  | 64 ++++++++++++++++++
+ .../selftests/bpf/progs/verifier_scalar_ids.c      | 56 ++++++++++++----
+ tools/testing/selftests/bpf/verifier/precise.c     |  8 +--
+ 11 files changed, 268 insertions(+), 62 deletions(-)
