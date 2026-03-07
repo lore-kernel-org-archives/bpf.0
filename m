@@ -1,172 +1,107 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06102224FA
-	for <bpf@vger.kernel.org>; Sat,  7 Mar 2026 00:03:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C09AF224FA
+	for <bpf@vger.kernel.org>; Sat,  7 Mar 2026 00:03:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772841828; cv=none; b=sK3mCiAcA9YfMEwWUkvtWDesTY4k3bOmdFI7bRgJ1+MrQjj3duyLeWjnpJZwSRvIIObEkcDu9Iva3is67WfCXP50B2xltkNIHfxjIW6ww4I3KIqLCS+yb0NlBLgu9AybiiC1+1tnMOQF2sJVcBL+PqhG9ACMOUT4VDRjsxE8ljQ=
+	t=1772841836; cv=none; b=ST3R1RMTooGEsu/3Hl922CQfDH+CzY8Bl5ZPtLZH1ytCkGSDisRwlgF5jcdJ62TQBTF+6JN92LGXEl0Tyvgnwb8UYpxLTIxJblV6O9RZfNusKcB44xSGY9kEHTtj7C/Da5wGo093nsDNewUyyqhS0z8UDAw9F2iLgZBVnbnQ+vc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772841828; c=relaxed/simple;
-	bh=KtrJoBUgPNyiStfFdIGXUaVOLLSm3ELi3RF86SVkilo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rgGP64qE4vC24Od0N0fqXLaNttTZRT6u9yH7ylBUasxEcX7OnUSYHmzZe8iPV1JUOlnEPj9P/QyjLu9PeMKZmTBwmH02atIa6KDrR/M541tY4mfr6C1/RiXm798cg/Y3HEKM2IaAb3RmYBs1eizdvv4TDt7mh4y9uMrpDCpJIgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N/9TEsSl; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772841836; c=relaxed/simple;
+	bh=Oq6i+H3v/yPVvO2FJiTNolpyjO3CpjZSQcMebne3h8g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NeE3RT2szPPYN5mMe8XW1E9SyacIdc0D4AKe+Ghbmf5kz9BsRQqFCCEO1/hlemS4umoDuyJbrmxfJmC/yiIFPCPlJmNi9CipBolG30YYvMztZXuBYvnYY086n3e33LHOHEE82K2RaO10G46Fnb0XI3c5y7smxE5iDt15h6kL+Vo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ihXinTtH; arc=none smtp.client-ip=91.218.175.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N/9TEsSl"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4806f3fc50bso106603915e9.0
-        for <bpf@vger.kernel.org>; Fri, 06 Mar 2026 16:03:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772841825; x=1773446625; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=C/9vPG3hNBCc8KEQdYyYCc76P/tB4TEQT2/8UdfLXHI=;
-        b=N/9TEsSlcueVaJAhb8AcD7cRXopQ44Angw2YdVfSYLuOBnlFnZx8L+AUHYeNT0BGaZ
-         EA43YUJj4/rjseohITDC4KrlsJnE3vBV0c53Idhg0MlWd4Z8CXJwdvaguPthIj4g55Zr
-         qlJH+uUFKKfdjp6wynlkTFxeQ5rXn52DFmFff6RyUwJ/Suof1ibAtIjxXLtPK4OS7FOc
-         farbrfvnowskQEhVA12KySuTA0GHlQSkfcOm0IBFK6cXD1rW0GiSfetHdoim8oNolrb2
-         pLfVyq4Lw3DVnQ1CVf2psCfPU9tBGujqcleaPG+B6Oa1T71B9dJ7JrCrqeGBqpgvAlUj
-         ssXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772841825; x=1773446625;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=C/9vPG3hNBCc8KEQdYyYCc76P/tB4TEQT2/8UdfLXHI=;
-        b=URmWonsZJBJE9NPgj8F+LfxndlA8CK0CPz0Onp2uasHsbamM6hcwuLhziAydSg1Hhx
-         SZh4e1AeGP6f8gE2gJudFwck7iiOW6lmbFvtUAQ+BSiw9NdZsuSLICYnps9aua5ImSqG
-         Lmson7AkU/BchkK/CwV04hdYWyMOl1wtWRqX0+PXWfAxEuoEXCFmxnScGv4DXdOS6NGu
-         ke2f2yCacMlWYovwvbio+KesD3ESTA8O/mAygl9TcUq5Kafhc58PtD4qBVEvpYDsDZnx
-         QUP+rUHVgdrY46Ente4V/YY+Ua/TF2jDNKFm2Z4Xd3bBUMcORy6zdOORw9zJ/iYyxBWL
-         gJqw==
-X-Gm-Message-State: AOJu0YzvLiRLDR6U//o5uz2wxHRiTlu5eOpwbFzxE5cLkV2/4nDgO9Jg
-	ckSIM9pv951XDZVgmpqjB+zsVNOrvzPpEg4UdaBcWHYZ56gSbuaz0fLo42xSVRej
-X-Gm-Gg: ATEYQzyxrPJkUIV0XI8kmlKTdcyI2SqbxczZx5hmZwsgg4KAwwocwdE9defvjJocQil
-	BbXY+nnKuJoU4nOv0O4TKKUhzUzLaNERZYNNdm/3Z9KXP5wVY2KKNHHH84Smh0Rg4+/A3j4ZDIx
-	HS2/nNcxYgKWykZJ9739lZd2QatXvNlbbVdLFcN/g5EQQzY9LojV018MfSWez9nTSjlgXhaIN3s
-	vGs5bQxTs8dHsVC/X+n8CBGC2BKBfEYzehg7Ze3CuDQ+vU52zhnOhxm3KY3kHW9qFbwtTcNQ0Oc
-	19Nc+P///2iNSoOMNdLta2oFwEn9tmdtdXT0/aXOrx1iHSOdvPFy8XRdGEq0BFZu+BkWd0pRn2t
-	RGI154XWKPEN7HFN3mtogfuGkYurtnmXqrxmQRGD465Kvhk6Pgtb+5xQ6pU2ym2K5oN/xvT/zwW
-	bmlTNw6FI0daDt+UAro5swZlaK0HH1+o83oYRs3aA5gvtHrsWZTgGVgDmmKEKF2URDroGubDzqd
-	7PYvx56DWHHDaN4KrEP+SKx+RupKiU3/rSFaTCDYcRe+9kWWSJ02fSMnQkuJ7pHZHwnaWqUeDdh
-X-Received: by 2002:a05:600c:8b01:b0:477:5ad9:6df1 with SMTP id 5b1f17b1804b1-4852691989bmr63278885e9.3.1772841824951;
-        Fri, 06 Mar 2026 16:03:44 -0800 (PST)
-Received: from Tunnel (2a01cb089436c000a341eb7e94b4f969.ipv6.abo.wanadoo.fr. [2a01:cb08:9436:c000:a341:eb7e:94b4:f969])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4852767dd5fsm66994035e9.1.2026.03.06.16.03.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2026 16:03:44 -0800 (PST)
-Date: Sat, 7 Mar 2026 01:03:42 +0100
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>,
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Subject: [PATCH v2 bpf-next 2/2] selftests/bpf: Test case for refinement
- improvement using 64b bounds
-Message-ID: <263797e1f32f3ce986a1ff7c4f38aee2440d6338.1772840030.git.paul.chaignon@gmail.com>
-References: <5b8fed05cc97cd3730bbdfbb452699b7edd16963.1772840030.git.paul.chaignon@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ihXinTtH"
+Message-ID: <dc3a8b4c-32f3-4905-8cca-078f220abfef@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772841832;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EHbeFglmCtgzA3qJvWmuinGohwBorJjMNIER9qJwK6c=;
+	b=ihXinTtHdoZ+Cnx64OuUP3org3GvdBYo6bMdbg2NFzvT015bfNYpMDlSBttTh6O5xrZYah
+	dBvBaQSLbexAejGr78NFhy/iOR25WW+JQpOWjoz6ZkMvTY7wQNba3sRGxXittla8D2WtJX
+	fjHSISQihkFk7qGZ9K7qgfKarYL5qSs=
+Date: Fri, 6 Mar 2026 16:03:47 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5b8fed05cc97cd3730bbdfbb452699b7edd16963.1772840030.git.paul.chaignon@gmail.com>
+Subject: Re: [PATCH v4 bpf/net 2/6] sockmap: Annotate sk->sk_write_space() for
+ UDP.
+To: Kuniyuki Iwashima <kuniyu@google.com>,
+ Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: John Fastabend <john.fastabend@gmail.com>,
+ Jakub Sitnicki <jakub@cloudflare.com>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org,
+ netdev@vger.kernel.org
+References: <20260221233234.3814768-1-kuniyu@google.com>
+ <20260221233234.3814768-3-kuniyu@google.com>
+ <fjt7fesjnzwuzeuiouv6rpvoxebounjqv3jlc34tvmzh252zep@hizdvwr2qwe4>
+ <CAAVpQUAJgFtcJGtuMufS9mhaShs7OQDxx7jTGOSbG9wCdeCN7Q@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <CAAVpQUAJgFtcJGtuMufS9mhaShs7OQDxx7jTGOSbG9wCdeCN7Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-This new selftest demonstrates the improvement of bounds refinement from
-the previous patch. It is inspired from a set of reg_bounds_sync inputs
-generated using CBMC [1] by Shung-Hsi:
 
-  reg.smin_value=0x8000000000000002
-  reg.smax_value=2
-  reg.umin_value=2
-  reg.umax_value=19
-  reg.s32_min_value=2
-  reg.s32_max_value=3
-  reg.u32_min_value=2
-  reg.u32_max_value=3
 
-reg_bounds_sync returns R=[2; 3] without the previous patch, and R=2
-with it. __reg64_deduce_bounds is able to derive that u64=2, but before
-the previous patch, those bounds are overwritten in
-__reg_deduce_mixed_bounds using the 32bits bounds.
+On 3/4/26 7:43 PM, Kuniyuki Iwashima wrote:
+> On Wed, Mar 4, 2026 at 5:48 PM Jiayuan Chen <jiayuan.chen@linux.dev> wrote:
+>>
+>> On Sat, Feb 21, 2026 at 11:30:49PM +0800, Kuniyuki Iwashima wrote:
+>>> UDP TX skb->destructor() is sock_wfree(), and UDP only
+>>> holds lock_sock() for UDP_CORK / MSG_MORE sendmsg().
+>>>
+>>> Otherwise, sk->sk_write_space() is read locklessly.
+>>>
+>>> Let's use WRITE_ONCE() and READ_ONCE() for sk->sk_write_space().
+>>>
+>>> Fixes: 7b98cd42b049 ("bpf: sockmap: Add UDP support")
+>>> Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
+>>> ---
+>>> v3: Use WRITE_ONCE() in udp_bpf_update_proto()
+>>> v2: Cache sk->sk_write_space in sock_wfree()
+>>> ---
+>>>   net/core/skmsg.c   | 2 +-
+>>>   net/core/sock.c    | 8 ++++++--
+>>>   net/ipv4/udp_bpf.c | 2 +-
+>>>   3 files changed, 8 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+>>> index 75fa94217e1e..3d7eb2f4ac98 100644
+>>> --- a/net/core/skmsg.c
+>>> +++ b/net/core/skmsg.c
+>>> @@ -1297,7 +1297,7 @@ void sk_psock_start_verdict(struct sock *sk, struct sk_psock *psock)
+>>>
+>>>        psock->saved_data_ready = sk->sk_data_ready;
+>>>        WRITE_ONCE(sk->sk_data_ready, sk_psock_verdict_data_ready);
+>>> -     sk->sk_write_space = sk_psock_write_space;
+>>> +     WRITE_ONCE(sk->sk_write_space, sk_psock_write_space);
+>>>   }
+>>
+>> I noticed that Patch 1 and 2 were submitted earlier and are on bpf tree.
+>> Given that Eric's commit (which you reviewed) is now in net.git, these two patches
+>> should probably be dropped in the next version, right? Just confirming.
+> 
+> I was thinking git can just handle them well, and even the
+> patch 2 has a delta in sock_wfree().
 
-To arrive to these reg_bounds_sync inputs, we bound the 32bits value
-first to [2; 3]. We can then upper-bound s64 without impacting u64. At
-that point, the refinement to u64=2 doesn't happen because the ranges
-still overlap in two points:
+At least for patch 1, I am not sure git can handle it well without human 
+intervention because the sk_write_space is backward from Eric.
 
-  0  umin=2                             umax=0xff..ff00..03   U64_MAX
-  |  [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]      |
-  |----------------------------|------------------------------|
-  |xx]                           [xxxxxxxxxxxxxxxxxxxxxxxxxxxx|
-  0  smax=2                      smin=0x800..02               -1
-
-With an upper-bound check at value 19, we can reach the above inputs for
-reg_bounds_sync. At that point, the refinement to u64=2 happens and
-because it isn't overwritten by __reg_deduce_mixed_bounds anymore,
-reg_bounds_sync returns with reg=2.
-
-The test validates this result by including an illegal instruction in
-the (dead) branch reg != 2.
-
-Link: https://github.com/shunghsiyu/reg_bounds_sync-review/ [1]
-Co-developed-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Signed-off-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
----
- .../selftests/bpf/progs/verifier_bounds.c     | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-index 4588e5b55b41..fd377d3a27d4 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-@@ -2000,4 +2000,37 @@ __naked void bounds_refinement_multiple_overlaps(void *ctx)
- 	: __clobber_all);
- }
- 
-+/* After instruction 3, the u64 and s64 ranges look as follows:
-+ * 0  umin=2                             umax=0xff..ff00..03   U64_MAX
-+ * |  [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]      |
-+ * |----------------------------|------------------------------|
-+ * |xx]                           [xxxxxxxxxxxxxxxxxxxxxxxxxxxx|
-+ * 0  smax=2                      smin=0x800..02               -1
-+ *
-+ * The two ranges can't be refined because they overlap in two places. Once we
-+ * add an upper-bound to u64 at instruction 4, the refinement can happen. This
-+ * test validates that this refinement does happen and is not overwritten by
-+ * the less-precise 32bits ranges.
-+ */
-+SEC("socket")
-+__description("bounds refinement: 64bits ranges not overwritten by 32bits ranges")
-+__msg("3: (65) if r0 s> 0x2 {{.*}} R0=scalar(smin=0x8000000000000002,smax=2,umin=smin32=umin32=2,umax=0xffffffff00000003,smax32=umax32=3")
-+__msg("4: (25) if r0 > 0x13 {{.*}} R0=2")
-+__success __log_level(2)
-+__naked void tmp(void *ctx)
-+{
-+	asm volatile("			\
-+	call %[bpf_get_prandom_u32];	\
-+	if w0 < 2 goto +5;		\
-+	if w0 > 3 goto +4;		\
-+	if r0 s> 2 goto +3;		\
-+	if r0 > 19 goto +2;		\
-+	if r0 == 2 goto +1;		\
-+	r10 = 0;			\
-+	exit;				\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.43.0
+For the missing change in sock_wfree (?), it probably makes sense to 
+create a separate patch on top of Eric's change and target net. My 
+understanding is patch 3-6 can be on its own without patch 1+2.
 
