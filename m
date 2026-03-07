@@ -1,180 +1,107 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BFBC33438F;
-	Sat,  7 Mar 2026 17:09:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F28329C54;
+	Sat,  7 Mar 2026 17:14:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772903359; cv=none; b=rupIinPxBWdt78dUamitWKm8bWvRtz2IvqrnoX+9+92ysr64/LmJzTsjS6oGPCrTOgznj8XD2iPYDc1dx/cTpLSeVVtLyHv+vqZuWBNrHeWX3sUyyHPqVbIxm+DFeIPebtyq9pZJNuWqCDFEMolRLDwvDST6Efo6XbTEyqlyUrc=
+	t=1772903664; cv=none; b=DPfua/pRV9nyeIxZci3F/DNG609+kACbsYWUonpZKqA+2a/MJHuqAwLikLf0hskRH39Ua7XENPVPXkVX6++gO65/Q6NitVdLkwMyS8++RwaVljn5+zFiWzj+DkVUmI+XnxxlvZxLzSnYJ3coGmUMBey45Y39Hs+onDSFTvsgaP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772903359; c=relaxed/simple;
-	bh=KHFeNtfK3xhUslDy7/86IoviHngY4/bdrX3PnhqPzK4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nRnxAswgeBU5i1HP7X69aQy2A/09NWspKLPBFXdT58mD+pWhqVxIE1yo3DRiRyMsk4xyLTS/dM+pOeo1COvyOXLO4bFwqAYQaPf6JNWwqp643R1+vdY4VekIUn5rewyJY+buAWcxTr/0BCGPGdUtevJa0TE1If5WdZ+FjmOStDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HeLwiEco; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1772903664; c=relaxed/simple;
+	bh=wvZwCWzoV2syxel4bj9Num7rqlKF203cjboJ2bIy5os=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=QwhH6HRakSoHCRayf8/w7LPf2oQNflu8VBP0Rqw0W/f7+AFc5RBQNeQ1bW2QvRqmQIZ8mmrPCukYzX61jvcO20TbvRKAkIufcLLCXVNMPdzixuQFnrAjITqs0SpG7pbn2OOvd1fDfLdezVk6Lls7YjB58xtstLoumSeQ2CvTIyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IS8+3rL6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HeLwiEco"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772903358; x=1804439358;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KHFeNtfK3xhUslDy7/86IoviHngY4/bdrX3PnhqPzK4=;
-  b=HeLwiEcog0Cvpg1w2J5IIH5lEstfJ+5Wm3mhUF6ISakxx3vhTiCXRZH2
-   09ngW/zvdYEvg9ehHD6ZFOmW96af4mZ/zF0bmgbGdy7biB1TELNM0Ghgd
-   9H2qjMHrIn/rGh6gmQYkGh/f/7WvCJ2574JJu/MikQc3ca8uDRx3RDw/O
-   SRGVoYT904STPmbYiccKpXI4ySVBRAgBhvC7eHZN1EcWLtAKbJIH6z9Mg
-   4hr6QYNPONfZPLeTRphmkGSxcwmY1ZqcYe7Uie4HLPhp+kvP2N2wc0wHV
-   aRTIqSt2ErE+CooqBlP1Lcidc5cMwo1V7Phk5H2KK8FRbYRPbosc3ybD3
-   Q==;
-X-CSE-ConnectionGUID: pmJDpWF/Qj+crLQxov2QNQ==
-X-CSE-MsgGUID: BkTub3/iTaCxPxb6EPXvWw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11722"; a="85461423"
-X-IronPort-AV: E=Sophos;i="6.23,107,1770624000"; 
-   d="scan'208";a="85461423"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2026 09:09:17 -0800
-X-CSE-ConnectionGUID: LcqLTwAYSC63ZKLMJFHkaA==
-X-CSE-MsgGUID: hZFPj6DbQtOdHbBDtB5gYQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,107,1770624000"; 
-   d="scan'208";a="222070247"
-Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
-  by fmviesa004.fm.intel.com with ESMTP; 07 Mar 2026 09:09:11 -0800
-Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vyv9J-000000002Wf-1GSP;
-	Sat, 07 Mar 2026 17:09:09 +0000
-Date: Sat, 7 Mar 2026 18:08:13 +0100
-From: kernel test robot <lkp@intel.com>
-To: Xu Kuohai <xukuohai@huaweicloud.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Anton Protopopov <a.s.protopopov@gmail.com>,
-	Shahab Vahedi <list+bpf@vahedi.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	Hengqi Chen <hengqi.chen@gmail.com>,
-	Johan Almbladh <johan.almbladh@anyfinetworks.com>,
-	Paul Burton <paulburton@kernel.org>,
-	Hari Bathini <hbathini@linux.ibm.com>,
-	Christophe Leroy <chleroy@kernel.org>,
-	Naveen N Rao <naveen@kernel.org>,
-	Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	Pu Lehui <pulehui@huawei.com>, Ilya Leoshkevich <iii@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Wang YanQing <udknight@gmail.com>
-Subject: Re: [bpf-next v7 1/5] bpf: Move constants blinding from JIT to
- verifier
-Message-ID: <202603071836.igZbCyrE-lkp@intel.com>
-References: <20260307103949.2340104-2-xukuohai@huaweicloud.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IS8+3rL6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE4CCC19422;
+	Sat,  7 Mar 2026 17:14:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772903664;
+	bh=wvZwCWzoV2syxel4bj9Num7rqlKF203cjboJ2bIy5os=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=IS8+3rL6RB502TfkKEXzwAn5AFGRVyuTCJw5q7ZBwEizqrRWLHH8PMtZ1VowKnACT
+	 kjcdRxbvbDnN7bYPUCWaCoHtJ6/WLK+CGRKbYE4SQdgB1ZgE7PIFso4BEH5ouAtJxV
+	 Kh091a69PK1EM+dj+qSwgo4TvGKuuu1NpteP+knzwQWYOuD0HENSxIqu478wPyQjUd
+	 N9wGUhAKgspQwMknQ/ZMorLOMYbh2WiXDUjkH2hMyWP6RiMNCMf8reomc+Mde9I4Vm
+	 POXZG0p95e6lwN2hXNru55BlF7mn4qv8Jnx/1riDM7yeIDHPCFZjvclfdN9hrYDoAW
+	 7oRiHM6Pw5VfQ==
+Content-Type: multipart/mixed; boundary="===============0778104764128759318=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260307103949.2340104-2-xukuohai@huaweicloud.com>
+Message-Id: <ca484ba53c9ce4dac51c7ae3e8888cfe561b31c3826880c6fc89d5581c6de2fa@mail.kernel.org>
+In-Reply-To: <20260307103949.2340104-4-xukuohai@huaweicloud.com>
+References: <20260307103949.2340104-4-xukuohai@huaweicloud.com>
+Subject: Re: [bpf-next v7 3/5] bpf: Add helper to detect indirect jump targets
+From: bot+bpf-ci@kernel.org
+To: xukuohai@huaweicloud.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-arm-kernel@lists.infradead.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,yonghong.song@linux.dev,puranjay@kernel.org,a.s.protopopov@gmail.com,list+bpf@vahedi.org,linux@armlinux.org.uk,yangtiezhu@loongson.cn,hengqi.chen@gmail.com,johan.almbladh@anyfinetworks.com,paulburton@kernel.org,hbathini@linux.ibm.com,chleroy@kernel.org,naveen@kernel.org,luke.r.nels@gmail.com,xi.wang@gmail.com,bjorn@kernel.org,pulehui@huawei.com,iii@linux.ibm.com,hca@linux.ibm.com,gor@linux.ibm.com,davem@davemloft.net,udknight@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sat,  7 Mar 2026 17:14:23 +0000 (UTC)
 
-Hi Xu,
+--===============0778104764128759318==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-kernel test robot noticed the following build errors:
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -1475,11 +1475,30 @@ int bpf_jit_blind_constants(struct bpf_verifier_env *env)
+>  		insn = prog->insnsi + i + insn_delta;
+>  		insn_cnt += insn_delta;
+>  		i        += insn_delta;
+> +
+> +		/* bpf_patch_insn_data() calls adjust_insn_aux_data() to adjust insn_aux_data. The
+> +		 * indirect_target flag for the original instruction is moved to the last of the new
+> +		 * instructions, but the indirect jump target is actually the first one, so move
+> +		 * it back.
+> +		 */
+> +		if (env->insn_aux_data[i].indirect_target) {
+> +			env->insn_aux_data[i].indirect_target = 0;
+> +			env->insn_aux_data[i - insn_delta].indirect_target = 1;
+> +		}
 
-[auto build test ERROR on bpf-next/master]
+This fixup handles the displacement caused by
+bpf_jit_blind_constants() itself, but adjust_insn_aux_data() has
+the same displacement behavior in every caller of
+bpf_patch_insn_data(). Several patching passes run before
+bpf_jit_blind_constants() in bpf_check():
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Xu-Kuohai/bpf-Move-constants-blinding-from-JIT-to-verifier/20260307-181538
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20260307103949.2340104-2-xukuohai%40huaweicloud.com
-patch subject: [bpf-next v7 1/5] bpf: Move constants blinding from JIT to verifier
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260307/202603071836.igZbCyrE-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260307/202603071836.igZbCyrE-lkp@intel.com/reproduce)
+  convert_ctx_accesses()      ->  bpf_patch_insn_data()
+  do_misc_fixups()            ->  bpf_patch_insn_data()
+  opt_subreg_zext_lo32_rnd_hi32() -> bpf_patch_insn_data()
+  fixup_call_args()           ->  bpf_jit_blind_constants()  <-- only fixup here
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603071836.igZbCyrE-lkp@intel.com/
+All of these call adjust_insn_aux_data() which does:
 
-All errors (new ones prefixed by >>):
+  memmove(data + off + cnt - 1, data + off, ...)
+  memset(data + off, 0, ...)
 
->> kernel/bpf/verifier.c:23100:9: error: call to undeclared function 'bpf_jit_blind_constants'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    23100 |                 err = bpf_jit_blind_constants(env);
-          |                       ^
-   1 error generated.
+This moves indirect_target from data[off] to data[off + cnt - 1].
+Meanwhile, bpf_insn_array_adjust() preserves xlated_off == off:
+
+  if (insn_array->values[i].xlated_off <= off)
+      continue;
+
+So after an earlier pass patches an indirect target instruction,
+the insn_array still says the target is at off, but
+insn_aux_data has indirect_target set at off + cnt - 1.
+
+If an indirect jump target is also, say, a helper call that
+do_misc_fixups() replaces with multiple instructions, would
+bpf_insn_is_indirect_target() return the wrong result for that
+instruction? It seems like the fixup might need to be in
+adjust_insn_aux_data() itself rather than only in
+bpf_jit_blind_constants().
 
 
-vim +/bpf_jit_blind_constants +23100 kernel/bpf/verifier.c
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
- 23087	
- 23088	static int fixup_call_args(struct bpf_verifier_env *env)
- 23089	{
- 23090	#ifndef CONFIG_BPF_JIT_ALWAYS_ON
- 23091		struct bpf_prog *prog = env->prog;
- 23092		struct bpf_insn *insn = prog->insnsi;
- 23093		bool has_kfunc_call = bpf_prog_has_kfunc_call(prog);
- 23094		int i, depth;
- 23095	#endif
- 23096		int err = 0;
- 23097	
- 23098		if (env->prog->jit_requested &&
- 23099		    !bpf_prog_is_offloaded(env->prog->aux)) {
- 23100			err = bpf_jit_blind_constants(env);
- 23101			if (err)
- 23102				return err;
- 23103			err = jit_subprogs(env);
- 23104			if (err == 0)
- 23105				return 0;
- 23106			if (err == -EFAULT)
- 23107				return err;
- 23108		}
- 23109	#ifndef CONFIG_BPF_JIT_ALWAYS_ON
- 23110		if (has_kfunc_call) {
- 23111			verbose(env, "calling kernel functions are not allowed in non-JITed programs\n");
- 23112			return -EINVAL;
- 23113		}
- 23114		if (env->subprog_cnt > 1 && env->prog->aux->tail_call_reachable) {
- 23115			/* When JIT fails the progs with bpf2bpf calls and tail_calls
- 23116			 * have to be rejected, since interpreter doesn't support them yet.
- 23117			 */
- 23118			verbose(env, "tail_calls are not allowed in non-JITed programs with bpf-to-bpf calls\n");
- 23119			return -EINVAL;
- 23120		}
- 23121		for (i = 0; i < prog->len; i++, insn++) {
- 23122			if (bpf_pseudo_func(insn)) {
- 23123				/* When JIT fails the progs with callback calls
- 23124				 * have to be rejected, since interpreter doesn't support them yet.
- 23125				 */
- 23126				verbose(env, "callbacks are not allowed in non-JITed programs\n");
- 23127				return -EINVAL;
- 23128			}
- 23129	
- 23130			if (!bpf_pseudo_call(insn))
- 23131				continue;
- 23132			depth = get_callee_stack_depth(env, insn, i);
- 23133			if (depth < 0)
- 23134				return depth;
- 23135			bpf_patch_call_args(insn, depth);
- 23136		}
- 23137		err = 0;
- 23138	#endif
- 23139		return err;
- 23140	}
- 23141	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22803043949
+--===============0778104764128759318==--
