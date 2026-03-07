@@ -1,62 +1,62 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5720237E2F7
-	for <bpf@vger.kernel.org>; Sat,  7 Mar 2026 06:44:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA550386C02
+	for <bpf@vger.kernel.org>; Sat,  7 Mar 2026 06:44:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772865890; cv=none; b=PfG5T55h4bpUIvPgzrBdem+0woZI4inPbXXToRFPpxhvi4c8jWQa55MlXarrIRvUdSsxE9TXdMfzdJNjSWJTRa1ejXeZfZO0SA5ecdyH+HByp09GbzAK5T59CJYy25oKet+CXkIWSKiB2/z+VKTh+f5GhDQtdO69BjpotpIwFc0=
+	t=1772865891; cv=none; b=tk2K8iKuWdnjVsiLd5iCPy5K2/kjTAZaw3SlgRA1KafdRC0VkCoYT2yABES6IObr+rqqbyEX2jRe6+LAW5gTg7/LTMQBwhHPpKkeCXxY9qyPp4Uzad/Q20+7RamR2KUuELj8abu5OT4YyvKOqmywkZ6krK8QSNG9t16mfigaDAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772865890; c=relaxed/simple;
-	bh=220J2NF5yCyk7tRF95PoeS+Bz3Vq8x488ZxOVCO6gxU=;
+	s=arc-20240116; t=1772865891; c=relaxed/simple;
+	bh=+lr2vlS6ETl2QkmquAVBxAjL9FC2dwcWWpltl/omZjY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bph7NFaVPTchEDvpyRdrUKsvUonZZyiCR4WOxnSIacZf3WycGlc19gdWOipEVY92u/pyVHXFBEQuibQT8KuwpPrZlUTGdMJCeB0j6c13gklpkVAhaRMyyEflnAZZaHHv8ZTIxLM7lww3ylWDOw8cTQxUgDXNm2bz5Rl/g6Gg9VI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K1Qv9R1f; arc=none smtp.client-ip=209.85.210.171
+	 MIME-Version; b=cCM0skcvshrg8pywlZ8+1uPFgGClSgPk27cjjXiHjcOJnCLSe5hH8bnsghwOl/a6vJ7MBbkL2aofhPuhvEl6rHt3mybwAI0N0l/clF+ZQXoyFWfDE3N3dmIrEcKAIif3o1b195ZS4zJsIBDZqpRDdbn+mZSUizShFicqBByvB9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X4c8jrBP; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K1Qv9R1f"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-829865a8471so2697399b3a.3
-        for <bpf@vger.kernel.org>; Fri, 06 Mar 2026 22:44:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X4c8jrBP"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2ae8979dbb2so4725475ad.3
+        for <bpf@vger.kernel.org>; Fri, 06 Mar 2026 22:44:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772865888; x=1773470688; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772865890; x=1773470690; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=etdBLDx36dMtVbyrSAhU63rVIi5uq5aFdbc/ugTsJBw=;
-        b=K1Qv9R1fN1e+kaWl38fkUKUgv9e9uS7dCpWSR1Ur4bpDneOKZzgqhLmJtCcIoXg9wL
-         Q2leoUWiAeHWoNTnuuq6ebnKMGYcjpE7kTIaXr8DEnmhB9CvvUmRYsK7D7Lgf6uTP/LO
-         2zv0JXIsYukWYnhwl/pz9rCIBmtHLn0kvAfDTCbhb33efEJ1oMAnWz4kl89ViZxP7v2v
-         EqOfNICGGdPP0ehFIXQMYGGvz5ZgsiygaUtYTfCCs5DMtM4KiU6ikXApcZrGO/G2rjXy
-         M21q3n01ca3SjC+OGES61RrnOh6Q28MFlXqeuwqMb0ooxdJNCrwP9jincr7Lnvt0odOK
-         MRVg==
+        bh=MAvuWZcmmyV939xPdlaiE2LYkNV1C8x4Vf2BYdbK888=;
+        b=X4c8jrBPZxBiVmD8cScK4r9cd0pR4FlAGStGR+iMiPWrzn25+4hgaeelW27MJ7XauC
+         lAB6FVO/OqLrgcMIznET9V2shl+Xm5czY4Is7brBsHt0LWxd+KrZjJ4Lv9Mr/SyPVT0Z
+         UM6QvAIPN1evO8UKqR83AvjzNbTiyLFC74s9uK1azthlk5xzs1VgC3Uf31itfXw3CL90
+         o7FFqzlfQjIg+css98DGEr/sgtL8Pi7K7P2E2K6+Xx27/uGIumYnoOZPhw9oQ1PvZASt
+         xFqMYyEW1VZS3jWBcWOhpaRql4LWBUh/cuou0F5Ax1VLb/GaVhVf3DnF9g0T6yHwbLov
+         MkaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772865888; x=1773470688;
+        d=1e100.net; s=20230601; t=1772865890; x=1773470690;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=etdBLDx36dMtVbyrSAhU63rVIi5uq5aFdbc/ugTsJBw=;
-        b=peYjP9GjIrX96JcfgnMC/AqLbN8AJNthHlZ6w0SqwRMmwc/F+2rHx9NtJQn8Epmx3o
-         UEAd3Q8et0Lm0lmuA1OCj5QOeNnojB1tHSjmKNJwyDq/x1eadx49c1i5NE1ct/etmuqv
-         Q9Aeq7r1/yaYBEzTiFXRRlIb+xlL28F+jvnU4AkDNm1rbhCe5GTTM6Ie057vHF+RgMR5
-         Mw2J6jX3kM6tEZaTb9stgIsDA7CCJUOwh3ZKXdYFqIqn0tPps78bGK4/+DQrbPz2Zt9M
-         nFi7KgHYLK9PJTFNsz6jT7ZBEcAcld249oHD+83wYyVzAAeKpFalqfY4XjV5U2H4Np5I
-         OecQ==
-X-Gm-Message-State: AOJu0Yx6bwQvk5MCGAK2m2qfuerwVyPeAuPEQTduYlMJI4o59SAVXxn2
-	ybnC/JMTBYbT+SmK7y+mBGPEbUgN7YOJ4LR8CEW6rpxgY/j1nFr8DNJz/HgBaw==
-X-Gm-Gg: ATEYQzzsYdYGoLhA/3xyI5rxBo+NAiSozatuy1xMGOWvySNuTohe95irzDunvDpO4Qy
-	QV8vIpglf3B/m4pyifzxqtM4Xo09h98qChpUREk2Z6+stbOLPoYxLvxRxDXSDKg4WtIvlOUVZ0s
-	fmAj+rpWd66rLlEFQxvPRJryWLv7zD5xlzZKdfTg04nBaS1vk2AHzYTWSqr/GCImyk88fIf9MKK
-	YV52TU4Hr7fl1bWzZ92XIWO/YxSt50RLWhUPjcUt/8DxwhofyjP5lbj5fOzoTgYSTjcaXnJdAig
-	DKWLBF1oTGuKyzQZBPFoNVyJra1nLtp0GM65gm4EFl7sEzGG1IIgQEeP/bqsK4b9jJRQThN9AEo
-	oukW3+A3lpfOtdTEghSxAtFqvaAGv7vrHGWk2ivPN63WFFpTpZRiNweIls6F3ZCqqklceSWlRLw
-	j8VBNzkVET+iYD
-X-Received: by 2002:a05:6a00:1c87:b0:81e:d7c3:2f3a with SMTP id d2e1a72fcca58-829a2f5a754mr4012267b3a.46.1772865888530;
-        Fri, 06 Mar 2026 22:44:48 -0800 (PST)
-Received: from localhost ([2a03:2880:ff:3::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-829a4676187sm4391941b3a.27.2026.03.06.22.44.48
+        bh=MAvuWZcmmyV939xPdlaiE2LYkNV1C8x4Vf2BYdbK888=;
+        b=c6dSgoRHkmZy7IbTQ4jxzQIQCfeBJHJP65+f55v7xW3CkMRtxKYEmr8FJEmfd9AJaZ
+         k5UDaJ8Nyv/qXR66DGfU2GUGCF+/h2tH1wcnO1ntqkGv7IcTNn0lCtuPT6lZ/jxYOskV
+         U7IF04n0vUNf+C2QSV6M6fRyk2Pool38vsVfQ99OG+D1vrMrvh0XFUbsbbJMtuWMrrdO
+         17zer7/GV9euTo3p8K+5nLqrXpWNG8bVTBOn7UogoDMar91gs2U9rmJeAkerFcFumkC8
+         sC30VPjUegMqc4FkcJTAQX4vX+y0g3CvcOla0tvSWargrkn6kgCax7P/tH2xJSly7la5
+         FKxA==
+X-Gm-Message-State: AOJu0Yy8vGykuWAMYPMBOpDYRuUUbGjKK5a2XaEsbNFLOJiDxoEVw9sb
+	qVFPbif34gMFl0kjI8Eu+Oxtkh0rJAGW5hp7RbJHn+YO1LRf0A0wTJqGHmhMlg==
+X-Gm-Gg: ATEYQzx6gPGzJby6yrxMkXnSpp+iOGE4XGHUV090Su+r+ju0oU0rB7w7ZfrvPIkoS6o
+	xtQTbViOlrXxqEaG6ftjGs4HwFISsJdttCGXQG8ogHrj9RqcaquRfyi/ARyioyHDDmEfzlFyUyi
+	dMTcKqmLcSaCQEIYX+VhElsMzXiIV9fsbcqPkg0VHupMPq2EXmqhVWTuAJR9S8mE9j5Tgrk/bB4
+	XiSKJHhW8TPHX5MSRH+MC2CPl6oG7QVAL+Yd27EGicYEmXYduh5fL4Mytw5gkslERzTOExL+eZL
+	AEcTpu7t+BNU6OM7F0Hy8OQ4lqEkyA1TDo2xogNRYMBR0nvdEDOYin3EzI731maZOYz1OiITAtB
+	PzEgYO+g3yHaQTvvqetLwvWL6zAGQRCJF73gOZjnctcVeAV8M8ShSZsz0iu19Vo07JDdDPxLh8E
+	Y4vovzvqzap2A+EQ==
+X-Received: by 2002:a17:902:ef08:b0:2ae:5b64:12da with SMTP id d9443c01a7336-2ae82506badmr52343715ad.45.1772865889893;
+        Fri, 06 Mar 2026 22:44:49 -0800 (PST)
+Received: from localhost ([2a03:2880:ff:54::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae83f8a67esm53870265ad.61.2026.03.06.22.44.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2026 22:44:48 -0800 (PST)
+        Fri, 06 Mar 2026 22:44:49 -0800 (PST)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: netdev@vger.kernel.org,
@@ -67,9 +67,9 @@ Cc: netdev@vger.kernel.org,
 	martin.lau@kernel.org,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [RFC PATCH bpf-next v2 07/11] bpf: Remove redundant dynptr arg check for helper
-Date: Fri,  6 Mar 2026 22:44:35 -0800
-Message-ID: <20260307064439.3247440-8-ameryhung@gmail.com>
+Subject: [RFC PATCH bpf-next v2 08/11] selftests/bpf: Test creating dynptr from dynptr data and slice
+Date: Fri,  6 Mar 2026 22:44:36 -0800
+Message-ID: <20260307064439.3247440-9-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260307064439.3247440-1-ameryhung@gmail.com>
 References: <20260307064439.3247440-1-ameryhung@gmail.com>
@@ -81,105 +81,67 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-unmark_stack_slots_dynptr() already makes sure that CONST_PTR_TO_DYNPTR
-cannot be released. process_dynptr_func() also prevents passing
-uninitialized dynptr to helpers expecting initialized dynptr. Now that
-unmark_stack_slots_dynptr() also error returned from
-release_reference(), there should be no reason to keep these redundant
-checks.
+The verifier currently does not allow creating dynptr from dynptr data
+or slice. Add a selftest to test this explicitly.
 
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- kernel/bpf/verifier.c                         | 21 +------------------
- .../testing/selftests/bpf/progs/dynptr_fail.c |  6 +++---
- .../selftests/bpf/progs/user_ringbuf_fail.c   |  4 ++--
- 3 files changed, 6 insertions(+), 25 deletions(-)
+ .../testing/selftests/bpf/progs/dynptr_fail.c | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 0436fc4d9107..80b9ef6f329f 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -9737,26 +9737,7 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 
- skip_type_check:
- 	if (arg_type_is_release(arg_type)) {
--		if (arg_type_is_dynptr(arg_type)) {
--			struct bpf_func_state *state = func(env, reg);
--			int spi;
--
--			/* Only dynptr created on stack can be released, thus
--			 * the get_spi and stack state checks for spilled_ptr
--			 * should only be done before process_dynptr_func for
--			 * PTR_TO_STACK.
--			 */
--			if (reg->type == PTR_TO_STACK) {
--				spi = dynptr_get_spi(env, reg);
--				if (spi < 0 || !state->stack[spi].spilled_ptr.id) {
--					verbose(env, "arg %d is an unacquired reference\n", regno);
--					return -EINVAL;
--				}
--			} else {
--				verbose(env, "cannot release unowned const bpf_dynptr\n");
--				return -EINVAL;
--			}
--		} else if (!reg->ref_obj_id && !register_is_null(reg)) {
-+		if (!arg_type_is_dynptr(arg_type) && !reg->ref_obj_id && !register_is_null(reg)) {
- 			verbose(env, "R%d must be referenced when passed to release function\n",
- 				regno);
- 			return -EINVAL;
 diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-index 5e1b1cf4ea8e..631e37500ec6 100644
+index 631e37500ec6..6b162512b0c9 100644
 --- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
 +++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-@@ -135,7 +135,7 @@ int ringbuf_missing_release_callback(void *ctx)
+@@ -704,6 +704,48 @@ int dynptr_from_mem_invalid_api(void *ctx)
+ 	return 0;
+ }
  
- /* Can't call bpf_ringbuf_submit/discard_dynptr on a non-initialized dynptr */
- SEC("?raw_tp")
--__failure __msg("arg 1 is an unacquired reference")
-+__failure __msg("Expected an initialized dynptr as arg #0")
- int ringbuf_release_uninit_dynptr(void *ctx)
- {
- 	struct bpf_dynptr ptr;
-@@ -649,7 +649,7 @@ int invalid_offset(void *ctx)
- 
- /* Can't release a dynptr twice */
- SEC("?raw_tp")
--__failure __msg("arg 1 is an unacquired reference")
-+__failure __msg("Expected an initialized dynptr as arg #0")
- int release_twice(void *ctx)
- {
- 	struct bpf_dynptr ptr;
-@@ -676,7 +676,7 @@ static int release_twice_callback_fn(__u32 index, void *data)
-  * within a callback function, fails
-  */
- SEC("?raw_tp")
--__failure __msg("arg 1 is an unacquired reference")
-+__failure __msg("Expected an initialized dynptr as arg #0")
- int release_twice_callback(void *ctx)
- {
- 	struct bpf_dynptr ptr;
-diff --git a/tools/testing/selftests/bpf/progs/user_ringbuf_fail.c b/tools/testing/selftests/bpf/progs/user_ringbuf_fail.c
-index 54de0389f878..e8f4ae86470f 100644
---- a/tools/testing/selftests/bpf/progs/user_ringbuf_fail.c
-+++ b/tools/testing/selftests/bpf/progs/user_ringbuf_fail.c
-@@ -146,7 +146,7 @@ try_discard_dynptr(struct bpf_dynptr *dynptr, void *context)
-  * not be able to read past the end of the pointer.
-  */
- SEC("?raw_tp")
--__failure __msg("cannot release unowned const bpf_dynptr")
-+__failure __msg("cannot pass pointer to const bpf_dynptr, the helper mutates it")
- int user_ringbuf_callback_discard_dynptr(void *ctx)
- {
- 	bpf_user_ringbuf_drain(&user_ringbuf, try_discard_dynptr, NULL, 0);
-@@ -166,7 +166,7 @@ try_submit_dynptr(struct bpf_dynptr *dynptr, void *context)
-  * not be able to read past the end of the pointer.
-  */
- SEC("?raw_tp")
--__failure __msg("cannot release unowned const bpf_dynptr")
-+__failure __msg("cannot pass pointer to const bpf_dynptr, the helper mutates it")
- int user_ringbuf_callback_submit_dynptr(void *ctx)
- {
- 	bpf_user_ringbuf_drain(&user_ringbuf, try_submit_dynptr, NULL, 0);
++/* Cannot create dynptr from dynptr data */
++SEC("?raw_tp")
++__failure __msg("Unsupported reg type mem for bpf_dynptr_from_mem data")
++int dynptr_from_dynptr_data(void *ctx)
++{
++	struct bpf_dynptr ptr, ptr2;
++	__u8 *data;
++
++	if (get_map_val_dynptr(&ptr))
++		return 0;
++
++	data = bpf_dynptr_data(&ptr, 0, sizeof(__u32));
++	if (!data)
++		return 0;
++
++	/* this should fail */
++	bpf_dynptr_from_mem(data, sizeof(__u32), 0, &ptr2);
++
++	return 0;
++}
++
++/* Cannot create dynptr from dynptr slice */
++SEC("?tc")
++__failure __msg("Unsupported reg type mem for bpf_dynptr_from_mem data")
++int dynptr_from_dynptr_slice(struct __sk_buff *skb)
++{
++	struct bpf_dynptr ptr, ptr2;
++	struct ethhdr *hdr;
++	char buffer[sizeof(*hdr)] = {};
++
++	bpf_dynptr_from_skb(skb, 0, &ptr);
++
++	hdr = bpf_dynptr_slice_rdwr(&ptr, 0, buffer, sizeof(buffer));
++	if (!hdr)
++		return SK_DROP;
++
++	/* this should fail */
++	bpf_dynptr_from_mem(hdr, sizeof(*hdr), 0, &ptr2);
++
++	return SK_PASS;
++}
++
+ SEC("?tc")
+ __failure __msg("cannot overwrite referenced dynptr") __log_level(2)
+ int dynptr_pruning_overwrite(struct __sk_buff *ctx)
 -- 
 2.47.3
 
