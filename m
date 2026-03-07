@@ -1,62 +1,62 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 398AD3783C9
-	for <bpf@vger.kernel.org>; Sat,  7 Mar 2026 06:44:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C4BD37998A
+	for <bpf@vger.kernel.org>; Sat,  7 Mar 2026 06:44:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772865885; cv=none; b=oIpDuQNBmRHIn2fFHQObd5uba7vXBUWZaSb0OY2wFbQywY6UuyIpmjJO+ZasYN6mdkPL3TgHy8mH8Jvuhbp2SftvcLxuPKEeBO83nDPD3IzxmBGzyTTyvwotrUifH6O40vRcBnhis9EsPXOEx3WheLDFhErTrR5giPisPo0J1ZI=
+	t=1772865886; cv=none; b=cEkPSKYJc9YHcRdzCGaiwXnQSR1esskbPe0LUFa4dgMaYD7huX+UHqOHJCeUIJAm2D8rWkNUVfPht9WaDYyFoRhtg3zvnwPotAk123ny3ujCI4fJtmg+QxeuA/4Akdac/nWAkgDLyxhEvkMf9DMr3/Smr7dbfNBO/qq679GbOt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772865885; c=relaxed/simple;
-	bh=tVYgDTwlhQGaqP5jUbtmbK0POx4ylr+E1xKOUDLHxoE=;
+	s=arc-20240116; t=1772865886; c=relaxed/simple;
+	bh=24Rp4W/jPdWtc1camvuiV4VBUwdYMUtcAtN4Dkl0gNA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MpcWNzwOxyxucNDJJ4ohb5Jol9Ja0qR+TZToWvrgJcN/TOmzi4kmjWm+UetYgKlLvhcHepdtq8t75HL8uEBzqoyHWspUW9NnnCyDyiSpb9BwSQpR8f03HGTRQ2bPZfW/zi5l8xgC4Zxtihgdg/YRFvcSakuLJcFGVwNnAWKws54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jDOKoCWY; arc=none smtp.client-ip=209.85.216.44
+	 MIME-Version; b=gwpDj1ZoZC+9goAfYCSgUq5ljoSmY+QVvVmOObMig9f41bJDc8NJz4P3VEsZc8BCYruEp40qw+xVqxNqA8T1bt5AekpBvGnjDhp5L9B2PAwozdDAajt6v7tpQiA7je/XiqOFQAIY7yWmGVgDtyBluX9fS4pSeICJpHg0y0vM3Og=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=abd1hSoq; arc=none smtp.client-ip=209.85.216.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jDOKoCWY"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3597b474cbdso3936719a91.1
-        for <bpf@vger.kernel.org>; Fri, 06 Mar 2026 22:44:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="abd1hSoq"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3598a09fcb3so2796399a91.0
+        for <bpf@vger.kernel.org>; Fri, 06 Mar 2026 22:44:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772865883; x=1773470683; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772865884; x=1773470684; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=24B35N+9xKOQKPzMnszSj5WzoicfoSOub9MhHTgHYkk=;
-        b=jDOKoCWYOrsnEDQKxnmrNqisDKdKekvL16xQqTDjcLiv1KmNb24Pv1dh7768HPeY6R
-         d5W9Wy4jOWorr/dGqRtRH6hYBuYM2JyJl9ad6hXaHp2/KMpLTqBkwIapn6iJb79c9oAb
-         VkZUT1nL+UxSj/WP4UsUZ8h3uVzF6/KSBc5hlX5DVZ7MmQ4DUxgI7sjsqi+EQ0SgclHt
-         gz5h5Ru8t6xWmKWxuTzTiJLT0mzXt9sUC77S6h/9gvOSxeVbtV2Q44/Y5fBSfwmDjDZd
-         B+GW1F31DXSqYxS+2ohT3kFyICWJfvCNeFIeFlTfkkntjN1MqpLbnyUtGEcYJpip1lMc
-         ZOrQ==
+        bh=cFAMMEwYySoxyVlmBbqN4trFShpF/9uolHKdyzjp7ro=;
+        b=abd1hSoqG6aEw2aMajyQc8wcQUF3PP3h+m/VCkF4ZQRZPKKHsrMjvTm1wOpqNb9tQT
+         t9EIeeMVKJ8+pgDMUrkIzb2xxosbg5ukgV5+He4ydrWeCw2Zm9XJLnD7OIQiaEQmpsIu
+         9Y4PGcGDFaQMCcJCiV2q8oVw5jHqREhFHJ5YkK6lnjiEgtIKg0LUZlZR/CdObuXJ+iP3
+         795tWlTngqo9KBnOeJx+3QsqltmBvM8UCgzhOqaA7lz6/uE9eM9WcTMbG0QkBFLKiQ0G
+         TDdJXL/CJrrvqlAXUkhrEMAFf1yb67Ei1SoiuXW02vQ6CL6Ub9J8pq8lxr7AJTOujdIq
+         qw9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772865883; x=1773470683;
+        d=1e100.net; s=20230601; t=1772865884; x=1773470684;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=24B35N+9xKOQKPzMnszSj5WzoicfoSOub9MhHTgHYkk=;
-        b=KX6QLAJXY2ifWSPf7bbjCfOYoulVNE/EEx9eAig4vZ0Zu8JV7wG52AsHC9ewr7kLuQ
-         DzroXc711uF+g3sAabDfBZ4b47uI34qdUJwi+pBN1T0t4BS2maV5Y2KiY5OKWZRC7YGS
-         MCPYKPtwxGvjbG467ltb4Bg8Ad/IUfJZOIZeNgKciAFQlhuupyiQw7z+0cv1G2ZIjYgX
-         ZB5SeHO67TaVsPJqGmsU0TUTrmIO2CGP4/EfAcUZvloirfhDivUYcoY6gkx9pZ2dxt3g
-         0T0EoEJCUgTwCOIA3FdxvKAif7DGN2d44m4/WIw+byExHDdc2QM3iNRId5BIvRtqg/AJ
-         PcuQ==
-X-Gm-Message-State: AOJu0Yw81jWd6DaPdq1GUQqi95b668InO1U/gP9XnrYg3C5FrRm2ygdi
-	Xw9Zdzl950IHmZ6ZzFqCsKB+MJ+iiyOja/pYuXJItnh/CEyies5Kks9XkboLXQ==
-X-Gm-Gg: ATEYQzw/vNoEPWAiLWQ5hmxoJ02TcWxYtlYbTuCs8fO/nPZCia3uKSB0a95C+UhfiGS
-	u1ovi7NalO4B13DSPfN3e3KUr0yLdW2P18CTIetERA5h0nruF8WpSzMpfbuXN1XdWiZpX5aM6s0
-	fzWlKfwHA44WJUbFkExEevIH4FZl+zB37RmvQd9IqzUZDvVeiJG9r3yNTeqoL4v285xd3t3WMMP
-	qVWCpp20/rxGTiA0PLDHY3NmY2Rxpj5zY+l1T8p9XF4dBCO4FfxJJy5UMtpIwYVDuxB4NbJMNfe
-	Ou4ihyO/CleRnH/Ug5WNaD8mc5Nw5UcWBkxZU67bixEXvJdDJtYZMupOs5b+bTLWPZ8ulWWR22+
-	9AXSWsEy5Tnft7lZSVywBSSs0xFPhZRrHFRpHE5HJbHoE9UJRooo1BnHh/GuYurhLOM/K/UwWmT
-	jtk4bc8qKWgVIw
-X-Received: by 2002:a17:90b:4acb:b0:34c:6124:3616 with SMTP id 98e67ed59e1d1-359be38b06fmr4380798a91.27.1772865883496;
-        Fri, 06 Mar 2026 22:44:43 -0800 (PST)
-Received: from localhost ([2a03:2880:ff:a::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-359b2de7c33sm7207425a91.11.2026.03.06.22.44.42
+        bh=cFAMMEwYySoxyVlmBbqN4trFShpF/9uolHKdyzjp7ro=;
+        b=EZ8vNAO0UOEESqc7JJrZMxvXdh83T+NrZM7ZfN56UwByqE/o1/G0BHJR0nMtwkqLqs
+         JDNTW10rEMuWgVe1S3+mb0Utvp2y7b7G4m868apK0nxfhUVINdkaHQPlNd/dU//bmx5d
+         CyL6hPE1rTgzj3hTCp8+1ZVoVYdv2Oc6khMFoZmmy9OHKRUX/CEiv+86SNA3eR8k775Q
+         vOleTcSgSgtKzCxfKrwbGdV1fRDU/3/rMTIdN02PgvssHOGkC5YZxqpkUpb+a6iRV2Rn
+         DW0V0TPw8FjlV7cPXoKLiFOvKLvUCIM7XudTwOrnfFk58PaDZcxyHmxKrXXTaqbI8YDt
+         rScg==
+X-Gm-Message-State: AOJu0YyYc/0J2U7TmUcOrCNF+EiH6S72J9W0nT0Gsxwh6jZWUMeamjsf
+	UBv/oysLVFafMZE/FI8pue/NQ3P4fMYV+X4ao1v8WjwdRTWZ5EPMB813aSgcuQ==
+X-Gm-Gg: ATEYQzyntFSXN7SRtswr8bEdJzEVmG/pH3iuH0R4k+ZMQu+BzugXLxno+iWsfEdrNaq
+	pDVA0Pr+I/544kHfyycGYQOJDD8e56xcFxlkTvwTwRLLxaeq8Otd0AZWmTOWY2PrxbxscEKf3P2
+	JrfiRiQPKfjPS5dyPKP7ypkl8dnHHHqhPhwy7EPSMTyaVr/Ll2qOtj1XZXeTNDUdwuRHYhyO99y
+	nmANhRT4O6SWT9mGLUvHZ6WhFLRf8B/CbN5zIBfUhQnysAp/AysLn+MxzQTFTbiDBeHlDAXed2C
+	F4H5Wp9QAzb3l08U3QldhmsZHQ1q+PQh7HuTm+WgjC5xDsJLACmV4Oy0QTGI6NpZM0WpbmGHzbk
+	oRRaLWBocVeWJF55XtDkSrkBhtfPxGrsiWuaWJ5rSC3zUVS4KoYgQF8bmGjw22j/3iT+rKhzmAi
+	gbrLblxyvLPrtE
+X-Received: by 2002:a17:90b:4d88:b0:359:c7ef:97c0 with SMTP id 98e67ed59e1d1-359c7ef9a15mr1891332a91.19.1772865884425;
+        Fri, 06 Mar 2026 22:44:44 -0800 (PST)
+Received: from localhost ([2a03:2880:ff:2::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-359b2dffbf2sm7279899a91.13.2026.03.06.22.44.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2026 22:44:43 -0800 (PST)
+        Fri, 06 Mar 2026 22:44:44 -0800 (PST)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: netdev@vger.kernel.org,
@@ -67,9 +67,9 @@ Cc: netdev@vger.kernel.org,
 	martin.lau@kernel.org,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [RFC PATCH bpf-next v2 02/11] selftests/bpf: Test passing CONST_PTR_TO_DYNPTR to kfunc that may mutate dynptr
-Date: Fri,  6 Mar 2026 22:44:30 -0800
-Message-ID: <20260307064439.3247440-3-ameryhung@gmail.com>
+Subject: [RFC PATCH bpf-next v2 03/11] bpf: Unify dynptr handling in the verifier
+Date: Fri,  6 Mar 2026 22:44:31 -0800
+Message-ID: <20260307064439.3247440-4-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260307064439.3247440-1-ameryhung@gmail.com>
 References: <20260307064439.3247440-1-ameryhung@gmail.com>
@@ -81,127 +81,308 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Make sure for kfunc that takes mutable dynptr argument, verifier rejects
-passing CONST_PTR_TO_DYNPTR to it.
-
-Rename struct sample to test_sample to avoid a conflict with the
-definition in vmlinux.h
-
-In test_kfunc_dynptr_param.c, initialize dynptr to 0 to avoid
--Wuninitialized-const-pointer warning.
+Simplify dynptr checking for helper and kfunc by unifying it. Remember
+initialized dynptr in process_dynptr_func() so that we can easily
+retrieve the information for verification later.
 
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- .../testing/selftests/bpf/progs/dynptr_fail.c | 37 +++++++++++++++----
- .../bpf/progs/test_kfunc_dynptr_param.c       |  2 +-
- 2 files changed, 30 insertions(+), 9 deletions(-)
+ kernel/bpf/verifier.c | 179 +++++++++---------------------------------
+ 1 file changed, 36 insertions(+), 143 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-index 8f2ae9640886..5e1b1cf4ea8e 100644
---- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
-+++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-@@ -1,15 +1,14 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright (c) 2022 Facebook */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 0f77c4c5b510..d52780962adb 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -277,8 +277,15 @@ struct bpf_map_desc {
+ 	int uid;
+ };
  
-+#include <vmlinux.h>
- #include <errno.h>
- #include <string.h>
--#include <stdbool.h>
--#include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
--#include <linux/if_ether.h>
- #include "bpf_misc.h"
- #include "bpf_kfuncs.h"
-+#include "../test_kmods/bpf_testmod_kfunc.h"
++struct bpf_dynptr_desc {
++	enum bpf_dynptr_type type;
++	u32 id;
++	u32 ref_obj_id;
++};
++
+ struct bpf_call_arg_meta {
+ 	struct bpf_map_desc map;
++	struct bpf_dynptr_desc initialized_dynptr;
+ 	bool raw_mode;
+ 	bool pkt_access;
+ 	u8 release_regno;
+@@ -287,7 +294,6 @@ struct bpf_call_arg_meta {
+ 	int mem_size;
+ 	u64 msize_max_value;
+ 	int ref_obj_id;
+-	int dynptr_id;
+ 	int func_id;
+ 	struct btf *btf;
+ 	u32 btf_id;
+@@ -346,16 +352,12 @@ struct bpf_kfunc_call_arg_meta {
+ 	struct {
+ 		struct btf_field *field;
+ 	} arg_rbtree_root;
+-	struct {
+-		enum bpf_dynptr_type type;
+-		u32 id;
+-		u32 ref_obj_id;
+-	} initialized_dynptr;
+ 	struct {
+ 		u8 spi;
+ 		u8 frameno;
+ 	} iter;
+ 	struct bpf_map_desc map;
++	struct bpf_dynptr_desc initialized_dynptr;
+ 	u64 mem_size;
+ };
  
- char _license[] SEC("license") = "GPL";
- 
-@@ -46,7 +45,7 @@ struct {
- 	__type(value, __u64);
- } array_map4 SEC(".maps");
- 
--struct sample {
-+struct test_sample {
- 	int pid;
- 	long value;
- 	char comm[16];
-@@ -95,7 +94,7 @@ __failure __msg("Unreleased reference id=4")
- int ringbuf_missing_release2(void *ctx)
- {
- 	struct bpf_dynptr ptr1, ptr2;
--	struct sample *sample;
-+	struct test_sample *sample;
- 
- 	bpf_ringbuf_reserve_dynptr(&ringbuf, sizeof(*sample), 0, &ptr1);
- 	bpf_ringbuf_reserve_dynptr(&ringbuf, sizeof(*sample), 0, &ptr2);
-@@ -173,7 +172,7 @@ __failure __msg("type=mem expected=ringbuf_mem")
- int ringbuf_invalid_api(void *ctx)
- {
- 	struct bpf_dynptr ptr;
--	struct sample *sample;
-+	struct test_sample *sample;
- 
- 	bpf_ringbuf_reserve_dynptr(&ringbuf, sizeof(*sample), 0, &ptr);
- 	sample = bpf_dynptr_data(&ptr, 0, sizeof(*sample));
-@@ -315,7 +314,7 @@ __failure __msg("invalid mem access 'scalar'")
- int data_slice_use_after_release1(void *ctx)
- {
- 	struct bpf_dynptr ptr;
--	struct sample *sample;
-+	struct test_sample *sample;
- 
- 	bpf_ringbuf_reserve_dynptr(&ringbuf, sizeof(*sample), 0, &ptr);
- 	sample = bpf_dynptr_data(&ptr, 0, sizeof(*sample));
-@@ -347,7 +346,7 @@ __failure __msg("invalid mem access 'scalar'")
- int data_slice_use_after_release2(void *ctx)
- {
- 	struct bpf_dynptr ptr1, ptr2;
--	struct sample *sample;
-+	struct test_sample *sample;
- 
- 	bpf_ringbuf_reserve_dynptr(&ringbuf, 64, 0, &ptr1);
- 	bpf_ringbuf_reserve_dynptr(&ringbuf, sizeof(*sample), 0, &ptr2);
-@@ -1993,3 +1992,25 @@ int test_dynptr_reg_type(void *ctx)
- 	global_call_bpf_dynptr((const struct bpf_dynptr *)current);
- 	return 0;
+@@ -511,11 +513,6 @@ static bool is_ptr_cast_function(enum bpf_func_id func_id)
+ 		func_id == BPF_FUNC_skc_to_tcp_request_sock;
  }
-+
-+/* Cannot pass CONST_PTR_TO_DYNPTR to bpf_kfunc_dynptr_test() that may mutate the dynptr */
-+__noinline int global_subprog_dynptr_mutable(const struct bpf_dynptr *dynptr)
-+{
-+	long ret = 0;
-+
-+	/* this should fail */
-+	bpf_kfunc_dynptr_test((struct bpf_dynptr *)dynptr, NULL);
-+	__sink(ret);
-+	return ret;
-+}
-+
-+SEC("tc")
-+__failure __msg("cannot pass pointer to const bpf_dynptr, the helper mutates it")
-+int kfunc_dynptr_const_to_mutable(struct __sk_buff *skb)
-+{
-+	struct bpf_dynptr data;
-+
-+	bpf_dynptr_from_skb(skb, 0, &data);
-+	global_subprog_dynptr_mutable(&data);
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c b/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
-index c3631fd41977..1c6cfd0888ba 100644
---- a/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
-+++ b/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
-@@ -33,7 +33,7 @@ SEC("?lsm.s/bpf")
- __failure __msg("cannot pass in dynptr at an offset=-8")
- int BPF_PROG(not_valid_dynptr, int cmd, union bpf_attr *attr, unsigned int size, bool kernel)
- {
--	unsigned long val;
-+	unsigned long val = 0;
  
- 	return bpf_verify_pkcs7_signature((struct bpf_dynptr *)&val,
- 					  (struct bpf_dynptr *)&val, NULL);
+-static bool is_dynptr_ref_function(enum bpf_func_id func_id)
+-{
+-	return func_id == BPF_FUNC_dynptr_data;
+-}
+-
+ static bool is_sync_callback_calling_kfunc(u32 btf_id);
+ static bool is_async_callback_calling_kfunc(u32 btf_id);
+ static bool is_callback_calling_kfunc(u32 btf_id);
+@@ -597,8 +594,6 @@ static bool helper_multiple_ref_obj_use(enum bpf_func_id func_id,
+ 		ref_obj_uses++;
+ 	if (is_acquire_function(func_id, map))
+ 		ref_obj_uses++;
+-	if (is_dynptr_ref_function(func_id))
+-		ref_obj_uses++;
+ 
+ 	return ref_obj_uses > 1;
+ }
+@@ -8750,7 +8745,8 @@ static int process_kptr_func(struct bpf_verifier_env *env, int regno,
+  * type, and declare it as 'const struct bpf_dynptr *' in their prototype.
+  */
+ static int process_dynptr_func(struct bpf_verifier_env *env, int regno, int insn_idx,
+-			       enum bpf_arg_type arg_type, int clone_ref_obj_id)
++			       enum bpf_arg_type arg_type, int clone_ref_obj_id,
++			       struct bpf_dynptr_desc *initialized_dynptr)
+ {
+ 	struct bpf_reg_state *reg = reg_state(env, regno);
+ 	int err;
+@@ -8825,6 +8821,20 @@ static int process_dynptr_func(struct bpf_verifier_env *env, int regno, int insn
+ 		}
+ 
+ 		err = mark_dynptr_read(env, reg);
++
++		if (initialized_dynptr) {
++			struct bpf_func_state *state = func(env, reg);
++			int spi;
++
++			if (reg->type != CONST_PTR_TO_DYNPTR) {
++				spi = dynptr_get_spi(env, reg);
++				reg = &state->stack[spi].spilled_ptr;
++			}
++
++			initialized_dynptr->id = reg->id;
++			initialized_dynptr->type = reg->dynptr.type;
++			initialized_dynptr->ref_obj_id = reg->ref_obj_id;
++		}
+ 	}
+ 	return err;
+ }
+@@ -9587,72 +9597,6 @@ static int check_func_arg_reg_off(struct bpf_verifier_env *env,
+ 	}
+ }
+ 
+-static struct bpf_reg_state *get_dynptr_arg_reg(struct bpf_verifier_env *env,
+-						const struct bpf_func_proto *fn,
+-						struct bpf_reg_state *regs)
+-{
+-	struct bpf_reg_state *state = NULL;
+-	int i;
+-
+-	for (i = 0; i < MAX_BPF_FUNC_REG_ARGS; i++)
+-		if (arg_type_is_dynptr(fn->arg_type[i])) {
+-			if (state) {
+-				verbose(env, "verifier internal error: multiple dynptr args\n");
+-				return NULL;
+-			}
+-			state = &regs[BPF_REG_1 + i];
+-		}
+-
+-	if (!state)
+-		verbose(env, "verifier internal error: no dynptr arg found\n");
+-
+-	return state;
+-}
+-
+-static int dynptr_id(struct bpf_verifier_env *env, struct bpf_reg_state *reg)
+-{
+-	struct bpf_func_state *state = func(env, reg);
+-	int spi;
+-
+-	if (reg->type == CONST_PTR_TO_DYNPTR)
+-		return reg->id;
+-	spi = dynptr_get_spi(env, reg);
+-	if (spi < 0)
+-		return spi;
+-	return state->stack[spi].spilled_ptr.id;
+-}
+-
+-static int dynptr_ref_obj_id(struct bpf_verifier_env *env, struct bpf_reg_state *reg)
+-{
+-	struct bpf_func_state *state = func(env, reg);
+-	int spi;
+-
+-	if (reg->type == CONST_PTR_TO_DYNPTR)
+-		return reg->ref_obj_id;
+-	spi = dynptr_get_spi(env, reg);
+-	if (spi < 0)
+-		return spi;
+-	return state->stack[spi].spilled_ptr.ref_obj_id;
+-}
+-
+-static enum bpf_dynptr_type dynptr_get_type(struct bpf_verifier_env *env,
+-					    struct bpf_reg_state *reg)
+-{
+-	struct bpf_func_state *state = func(env, reg);
+-	int spi;
+-
+-	if (reg->type == CONST_PTR_TO_DYNPTR)
+-		return reg->dynptr.type;
+-
+-	spi = __get_spi(reg->var_off.value);
+-	if (spi < 0) {
+-		verbose(env, "verifier internal error: invalid spi when querying dynptr type\n");
+-		return BPF_DYNPTR_TYPE_INVALID;
+-	}
+-
+-	return state->stack[spi].spilled_ptr.dynptr.type;
+-}
+-
+ static int check_reg_const_str(struct bpf_verifier_env *env,
+ 			       struct bpf_reg_state *reg, u32 regno)
+ {
+@@ -10007,7 +9951,8 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 					 true, meta);
+ 		break;
+ 	case ARG_PTR_TO_DYNPTR:
+-		err = process_dynptr_func(env, regno, insn_idx, arg_type, 0);
++		err = process_dynptr_func(env, regno, insn_idx, arg_type, 0,
++					  &meta->initialized_dynptr);
+ 		if (err)
+ 			return err;
+ 		break;
+@@ -10666,7 +10611,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
+ 			if (ret)
+ 				return ret;
+ 
+-			ret = process_dynptr_func(env, regno, -1, arg->arg_type, 0);
++			ret = process_dynptr_func(env, regno, -1, arg->arg_type, 0, NULL);
+ 			if (ret)
+ 				return ret;
+ 		} else if (base_type(arg->arg_type) == ARG_PTR_TO_BTF_ID) {
+@@ -11771,52 +11716,10 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 			}
+ 		}
+ 		break;
+-	case BPF_FUNC_dynptr_data:
+-	{
+-		struct bpf_reg_state *reg;
+-		int id, ref_obj_id;
+-
+-		reg = get_dynptr_arg_reg(env, fn, regs);
+-		if (!reg)
+-			return -EFAULT;
+-
+-
+-		if (meta.dynptr_id) {
+-			verifier_bug(env, "meta.dynptr_id already set");
+-			return -EFAULT;
+-		}
+-		if (meta.ref_obj_id) {
+-			verifier_bug(env, "meta.ref_obj_id already set");
+-			return -EFAULT;
+-		}
+-
+-		id = dynptr_id(env, reg);
+-		if (id < 0) {
+-			verifier_bug(env, "failed to obtain dynptr id");
+-			return id;
+-		}
+-
+-		ref_obj_id = dynptr_ref_obj_id(env, reg);
+-		if (ref_obj_id < 0) {
+-			verifier_bug(env, "failed to obtain dynptr ref_obj_id");
+-			return ref_obj_id;
+-		}
+-
+-		meta.dynptr_id = id;
+-		meta.ref_obj_id = ref_obj_id;
+-
+-		break;
+-	}
+ 	case BPF_FUNC_dynptr_write:
+ 	{
+-		enum bpf_dynptr_type dynptr_type;
+-		struct bpf_reg_state *reg;
+-
+-		reg = get_dynptr_arg_reg(env, fn, regs);
+-		if (!reg)
+-			return -EFAULT;
++		enum bpf_dynptr_type dynptr_type = meta.initialized_dynptr.type;
+ 
+-		dynptr_type = dynptr_get_type(env, reg);
+ 		if (dynptr_type == BPF_DYNPTR_TYPE_INVALID)
+ 			return -EFAULT;
+ 
+@@ -12007,10 +11910,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 		return -EFAULT;
+ 	}
+ 
+-	if (is_dynptr_ref_function(func_id))
+-		regs[BPF_REG_0].dynptr_id = meta.dynptr_id;
+-
+-	if (is_ptr_cast_function(func_id) || is_dynptr_ref_function(func_id)) {
++	if (is_ptr_cast_function(func_id)) {
+ 		/* For release_reference() */
+ 		regs[BPF_REG_0].ref_obj_id = meta.ref_obj_id;
+ 	} else if (is_acquire_function(func_id, meta.map.ptr)) {
+@@ -12024,6 +11924,11 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 		regs[BPF_REG_0].ref_obj_id = id;
+ 	}
+ 
++	if (func_id == BPF_FUNC_dynptr_data) {
++		regs[BPF_REG_0].dynptr_id = meta.initialized_dynptr.id;
++		regs[BPF_REG_0].ref_obj_id = meta.initialized_dynptr.ref_obj_id;
++	}
++
+ 	err = do_refine_retval_range(env, regs, fn->ret_type, func_id, &meta);
+ 	if (err)
+ 		return err;
+@@ -13559,22 +13464,10 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+ 				}
+ 			}
+ 
+-			ret = process_dynptr_func(env, regno, insn_idx, dynptr_arg_type, clone_ref_obj_id);
++			ret = process_dynptr_func(env, regno, insn_idx, dynptr_arg_type, clone_ref_obj_id,
++						  &meta->initialized_dynptr);
+ 			if (ret < 0)
+ 				return ret;
+-
+-			if (!(dynptr_arg_type & MEM_UNINIT)) {
+-				int id = dynptr_id(env, reg);
+-
+-				if (id < 0) {
+-					verifier_bug(env, "failed to obtain dynptr id");
+-					return id;
+-				}
+-				meta->initialized_dynptr.id = id;
+-				meta->initialized_dynptr.type = dynptr_get_type(env, reg);
+-				meta->initialized_dynptr.ref_obj_id = dynptr_ref_obj_id(env, reg);
+-			}
+-
+ 			break;
+ 		}
+ 		case KF_ARG_PTR_TO_ITER:
 -- 
 2.47.3
 
