@@ -1,161 +1,958 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3EA32D3EEE
-	for <bpf@vger.kernel.org>; Sat,  7 Mar 2026 20:51:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCD9526D4F7
+	for <bpf@vger.kernel.org>; Sat,  7 Mar 2026 21:21:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772916682; cv=none; b=tn+VyUemDB6vzZ8Kvu/SNUAqfTNkxxQhObCd+pQEQtpO2Gx4k7r+E3IlTcIw4eBmuEfQ2HIR5rWNa4MNHKAItNvtHz82IZVlm7Xj2lJV90Lu2Aj9tLJCtCV/SwdJwXX9duFWWluBg389gbnVvJsBKzoi91152ENnuq8COTHX7ws=
+	t=1772918478; cv=none; b=iqX2tWh0diuo/y4hugbebni/Cy30OL1qlUiCHjGV0rBa5fQhQsH5xlAe2ws9R19789YDEBISS0oyNxCVVXFa5pp75E5sr4jccm5HKe3TRLO3vRdrOTclKwYvU16LneWTKp2e/T+emMKveBOtXDUB0NelQXpKCkuhd2dzecMOe5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772916682; c=relaxed/simple;
-	bh=LfIxcEnbfF8UcBAlQpsEC60tpSn836JRskSf+FgYy7k=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Wj1ma9e1D2LF4srKIx1JrrnPTIqYaROMRcSqPCVcEK+Uf8efRjEv7fWkaYnHpkhBJEUqQ53kufgOVjJ0y5I/JoYyMUDMeijN+UJvu6BxmyimphkNY6HFZg81q2YxoWku/TkIDpvLc4TDrOZnE02QUf52rNLVK3ZdExeJlMjitlc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=NyJaqgXI; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1772918478; c=relaxed/simple;
+	bh=GcPtsHdivMxjb0zIr1pknXC3G3P/Thz+GN4x9xvstZo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=uItcDvITWZsd4SCRLWxbiyHyyooesLyUWtizEaSgUq+GpU+fHHC2miEEZ8wJC6aSDAPXSA1j2zA26IhuxLii86Ss5i4WhQIfgWVxeChGB0s3HhGjpLRiMiSTYlbp52WX12ANAqnZ1BcMBQ2PirEGnn4oOBH8oPHugaNt3Jqv11A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b=FYeO6f3Z; arc=none smtp.client-ip=209.85.222.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="NyJaqgXI"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4806cc07ce7so119875415e9.1
-        for <bpf@vger.kernel.org>; Sat, 07 Mar 2026 12:51:17 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="FYeO6f3Z"
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-8cb5c9ba82bso1661586485a.2
+        for <bpf@vger.kernel.org>; Sat, 07 Mar 2026 13:21:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1772916676; x=1773521476; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+8YSb3tz18QqaSJGIXy5ZYeSWZygMaMUDj6N+n+MakU=;
-        b=NyJaqgXIlqFmQfADBmL2KrY9It4WrL7J0rOKiK+s03mgGOTAK2bCRLgTuAe96ZtQFa
-         2b7xtY5kWcLPmVpZGDJBCtofd8xSMpNot3ne6FWrPRxKkvjiPqf6d3xUmduUlxbQ2pn/
-         1W5R4SZs0+BjBOO+yLasxVfYLROMWaKgD3eF+Ct8iK2d2dh7uRjtgswMpgrwzWldsdhx
-         78Z6vsnGg0tlp9ztQOLzRsnYnWvw5q78gbXUXM64IKpXnWZNakuzGxlWNi0zSHsJ7Qz8
-         wXJJOKZKPq3NXKzFDCBqdgJah1Q1dJHwYuqnRUSS9MtWVtugq04oCmFvhL2x6p3LWlu3
-         c5QA==
+        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1772918474; x=1773523274; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kyB+pkSm8sExMr4KliyVJaS5lBIwdySIBs7wmJw7xbI=;
+        b=FYeO6f3ZD3EeU5+xALu2SiTwy7ME/ijmSO/Ih7p/uNgKxzgTk0rrJlc8IpOhbX7B2d
+         TQNLbI3EGe1VpaNLM82+iRzvCaNKGbWJ6Qxst6jh5bnL6F0vzJ7YnlaDrK8iMrQsKkeJ
+         mgwa1ZTq+yV8RlYwY9YoyYo76jLpExrIBAKkJ8peqDMDNXUAzRRnmP/GpbQvVr4JAAyr
+         VDVTMj6HE5CqAZT5k7CvVoTFfQ6/4FCx20x2gBa8bk6P9kVt/Dv5lnxFR/Lxz/fttdBU
+         JeWjVg7FJUoIezp81NZsH6vt4Jt5znafhN//0CfCcKqBqr3vmdpTlP7z9QMAjKHV4ee9
+         RDeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772916676; x=1773521476;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+8YSb3tz18QqaSJGIXy5ZYeSWZygMaMUDj6N+n+MakU=;
-        b=fjD8Z+ZFal4cu3GFue1mUBZZ8BQyUGXr/wGf3cGIRJDib/NLnV2wH+ILiuY+FQ9imc
-         z4hBNGRynQNXehjxphCKXhJhlyw5bTg7bL1bJNKNesPZ2M7kffxjzbr5JJEZbh5Juboh
-         SzJxVeM9hrZa6V6zcJ2rd24wIjCnaUl3xPadbAt9fgtiVXKBQc1zVshq34KI6zpYeEnN
-         GXZQA+qkrkB7aiHfkiTbaNWSoh+3513EBvRaxBRdbJGV9zgXWgcgsspRnVKB2LguH7xE
-         wYLMkXl8xt82dXE0TDYm3z1ysoarIe8ESTBY/mZJIoC/DctXsJaxo6seyVWGRZh5By0L
-         WDhw==
-X-Forwarded-Encrypted: i=1; AJvYcCXgumfJrFScGGWG8gVofDQSdKLZt/32/bG6PvhbqAHDQJogkbSeHCzxkkYDIcp/Y5Q+sLA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YylMMfyPB/f11vnYLfXmE8PIOGQG883lTT8m0LsxI3s+aae75pb
-	RKUR7jttA/8LrGhW8NE25vBdqufdl2J4SkUwC3+N9/IexFJJvukVMRWyEZSGA13x67g=
-X-Gm-Gg: ATEYQzx8G/d66U3RMkvM7iuR7HvpJUFG/vlRWQnpt5+WUBfGxVSUFIsxDIoRLCtaS/l
-	8w4ae8iJpdfpwJXkQWsUW5NLkcnQwV86z8HawWTJz3KjloWa+YHzT4WZ7DISW2t73UJ2B0Qa6KG
-	0UDH49PE1LWdSz5+vx+TiYKIUfAzTs4GwfLTxFBlZECiLTYvmEIh7qXgWtY9yaqye3z1heGx5lD
-	5EJf5WT8oUVKsjigofgjmiFBxOU94ytaB09fMERgfGNeZnfXfm5haNHjqO8C9CUUDRdLph51Ihr
-	7h6DHIL+f50Nmm0r54HiaLckg1j7wY6zlPLwF+eziG5E5gTKYankTywX4rk2LrEMyw27cw15J17
-	y/pzHzNZFC2iM3PG0xum+j7jAw61b0XXzjJ59sfAVtKDnxCcWHG+ouYUhp0BV6H8ACgj8dFoeDr
-	HCiSjbvpLvwA==
-X-Received: by 2002:a05:600c:3e15:b0:485:2f8b:55e9 with SMTP id 5b1f17b1804b1-4852f8b5ca8mr40634795e9.26.1772916676004;
-        Sat, 07 Mar 2026 12:51:16 -0800 (PST)
-Received: from localhost ([189.99.238.164])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-56b09b20d3bsm5854727e0c.16.2026.03.07.12.51.14
+        d=1e100.net; s=20230601; t=1772918474; x=1773523274;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kyB+pkSm8sExMr4KliyVJaS5lBIwdySIBs7wmJw7xbI=;
+        b=ADZpHBzpxXpUgDsOqptbkRjl4Z0QGoFbR9IAeBlpxccoHhSxuSqucnmvuNS93I3Y0c
+         aqvh3XBW5pvORwFq0EtKD4sskaj3x4eO2P2EvZMJ2bJqHhQ8Dy+gz/iJ2xdkTTHwaxwi
+         mhXAFT5SJvEP4aWHQpRiLwr5EU9hi6m1M6rm3e81yauXU3RBNZEBrpZtTJZas43L/ipx
+         zpAQASLH3lf4rFwuyKjDVH2FKkOxGc3apWzyfv+vBv7nQ4Pvn6HfnXhjMxdofmEkd5/+
+         FWpwuN0iOpE0Ek4qeXhT9ddUh/VD9SeUcVX7iVY0eWC0S0psE1NYD3OHjryUkBmZC7jH
+         rw2g==
+X-Forwarded-Encrypted: i=1; AJvYcCW6Ng4HK4sPCK0yojTU7pVE+lL+Y0F/2qlpj7HjPmXYDmNITZw7kgjN4DgjW4Tu4Dchdts=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIZhtr6QRGeGonuSZgrTDhCvbJdGyfwuCjUGFaZqbItow9IWpg
+	ATTZVlhezL0S0OSBJXclOcAJVtcpij1uX3obcLrLuTM7R6EOCEs/Nwrnvu1ZjsQ+rg==
+X-Gm-Gg: ATEYQzx/2Mp6KXLcxbrl4OQUUe3DGZhaw6g42eh+ESJ2MEIXOYVlOIyTIYjutfKjz2/
+	eg5Rbw+BUowf+GjDlspp15mveGdIO0R2fa48qPo4k6NPSbS8zeyg0CyGeK+dsEEa7kEEM9cITiW
+	VKHA2TgProMthR6AvSY+ju+O1YccAd+oR57HWIWHyb36lpcYjtV0bsRuaeJBq3d3zLAY9dHMBoR
+	njRMTO9a4wN8J/QiESSS40apXYXEsvPv3evmD5kdqEcGa4SZfMy8rWUbQEPfZDAQYff8y86CvjG
+	ql/cafHmVdZVAvWfOfOmPoJTLaofTiOfptZEPtyKFlMiZXtoC+v4UYs+7TmS5IfUsRMv5PVOOB9
+	jEYB+WQvKRC6wr1RegZdePhALZ2fJiwIoy64PmS3U+/Fh97RZ9qiTIpJODMF9WeM6ecmsUOTMGa
+	e6P2+Gzf2m2XuD0lWFHObdPfdckuoufTP0hQ==
+X-Received: by 2002:a05:620a:4095:b0:8cd:825c:c940 with SMTP id af79cd13be357-8cd825cd08cmr20523585a.71.1772918474411;
+        Sat, 07 Mar 2026 13:21:14 -0800 (PST)
+Received: from majuu.waya ([70.50.89.69])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cd772f9f9bsm209568585a.24.2026.03.07.13.21.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Mar 2026 12:51:15 -0800 (PST)
-From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Date: Sat, 07 Mar 2026 17:50:56 -0300
-Subject: [PATCH net v4 4/4] bpf: bpf_out_neigh_v6: Fix nd_tbl NULL
- dereference when IPv6 is disabled
+        Sat, 07 Mar 2026 13:21:13 -0800 (PST)
+From: Jamal Hadi Salim <jhs@mojatatu.com>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	jiri@resnulli.us,
+	toke@toke.dk,
+	vinicius.gomes@intel.com,
+	stephen@networkplumber.org,
+	vladbu@nvidia.com,
+	cake@lists.bufferbloat.net,
+	bpf@vger.kernel.org,
+	ghandatmanas@gmail.com,
+	km.kim1503@gmail.com,
+	security@kernel.org,
+	Jamal Hadi Salim <jhs@mojatatu.com>,
+	Victor Nogueira <victor@mojatatu.com>
+Subject: [PATCH net] net/sched: Mark qdisc for deletion if graft cannot delete
+Date: Sat,  7 Mar 2026 16:20:58 -0500
+Message-Id: <20260307212058.169511-1-jhs@mojatatu.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260307-net-nd_tbl_fixes-v4-4-e2677e85628c@suse.com>
-References: <20260307-net-nd_tbl_fixes-v4-0-e2677e85628c@suse.com>
-In-Reply-To: <20260307-net-nd_tbl_fixes-v4-0-e2677e85628c@suse.com>
-To: Martin KaFai Lau <martin.lau@linux.dev>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
- KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>, 
- David Ahern <dsahern@kernel.org>, Jay Vosburgh <jv@jvosburgh.net>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, Hangbin Liu <liuhangbin@gmail.com>
-Cc: Fernando Fernandez Mancera <fmancera@suse.de>, bpf@vger.kernel.org, 
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openssh-sha256; t=1772916658; l=1991;
- i=rbm@suse.com; h=from:subject:message-id;
- bh=LfIxcEnbfF8UcBAlQpsEC60tpSn836JRskSf+FgYy7k=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
- x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QA78kdashxAZg6QDOFTFJ5DdZ4/gEYZMYataFMliZwhtsqkFf/nfobnSy0f0fdVlTgoSW3hutmQ
- V6JaQ4aFi8AE=
-X-Developer-Key: i=rbm@suse.com; a=openssh;
- fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
-When booting with the 'ipv6.disable=1' parameter, the nd_tbl is never
-initialized because inet6_init() exits before ndisc_init() is called which
-initializes it. If bpf_redirect_neigh() is called with explicit AF_INET6
-nexthop parameters, __bpf_redirect_neigh_v6() can skip the IPv6 FIB lookup
-and call bpf_out_neigh_v6() directly. bpf_out_neigh_v6() then calls
-ip_neigh_gw6(), which uses ipv6_stub->nd_tbl.
+In tc_new_tfilter, __tcf_qdisc_find is always called without the
+rtnl_lock. This causes a bug in the following scenario.
 
- BUG: kernel NULL pointer dereference, address: 0000000000000248
- Oops: Oops: 0000 [#1] SMP NOPTI
- RIP: 0010:skb_do_redirect+0x44f/0xf40
- Call Trace:
-  <TASK>
-  ? srso_alias_return_thunk+0x5/0xfbef5
-  ? __tcf_classify.constprop.0+0x83/0x160
-  ? srso_alias_return_thunk+0x5/0xfbef5
-  ? tcf_classify+0x2b/0x50
-  ? srso_alias_return_thunk+0x5/0xfbef5
-  ? tc_run+0xb8/0x120
-  ? srso_alias_return_thunk+0x5/0xfbef5
-  __dev_queue_xmit+0x6fa/0x1000
-  ? srso_alias_return_thunk+0x5/0xfbef5
-  packet_sendmsg+0x10da/0x1700
-  ? srso_alias_return_thunk+0x5/0xfbef5
-  __sys_sendto+0x1f3/0x220
-  __x64_sys_sendto+0x24/0x30
-  do_syscall_64+0x101/0xf80
-  ? exc_page_fault+0x6e/0x170
-  ? srso_alias_return_thunk+0x5/0xfbef5
-  entry_SYSCALL_64_after_hwframe+0x77/0x7f
-  </TASK>
+- The user attaches a multiqueue qdisc to root with handle ffff0000
+- The user attaches a child multiqueue qdisc to ffff0002 with handle
+  0x10000
 
-Fix this by adding an early check in bpf_out_neigh_v6(). If IPv6 is
-disabled, drop the packet before neighbor lookup.
+After that parallel threads execute the following:
 
-Suggested-by: Fernando Fernandez Mancera <fmancera@suse.de>
-Fixes: ba452c9e996d ("bpf: Fix bpf_redirect_neigh helper api to support supplying nexthop")
-Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
+time x: On cpux: "qdisc del" enters for root qdisc, holding rtnl
+(example refcnt = 1), see tc_get_qdisc()
+time x+1: On cpuy: "filter add" enters increments refcnt to 2 after
+finding the root qdisc (see __tcf_qdisc_find)
+time x+2: On cpux: "qdisc del" calls qdisc_put, decrements refcnt to 1
+and doesnt delete qdisc because refcnt is not 0;  "qdisc del" exits
+time x+3: On cpuz: "qdisc add" enters for htb, using handle ffff0000 (the
+deleted root qdisc's handle), and adds as parent 0x10001 (which is the
+major of the delete root qdiscs's child) whilst "filter add" is still
+executing.
+time x+4: On cpuz: "qdisc_add" calls qdisc_tree_reduce_backlog.
+Before calling  qdisc_tree_reduce_backlog, the newly created qdisc is added
+to the qdisc hashtable. Since its parent is 0x10001,
+qdisc_tree_reduce_backlog will find the previous child qdisc (which had as
+parent 0xffff0002). So when qdisc_tree_reduce_backlog looks up 0x10000's
+parent, it will find the newly created qdisc (from step x + 3). This will
+result in calling the notify callback for the newly created qdisc.
+Since the class it passes as a parameter (0xffff0002) to the notify
+callback isn't a child of the newly created qdisc, this will cause a
+segfault (in time x+4):
+
+[   89.555574][  T337] Oops: general protection fault, probably for non-canonical address 0xdffffc0000000035: 0000 [#1] SMP KASAN NOPTI
+[   89.556410][  T337] KASAN: null-ptr-deref in range [0x00000000000001a8-0x00000000000001af]
+[   89.556737][  T337] CPU: 5 UID: 0 PID: 337 Comm: poc_manas_null_ Not tainted 7.0.0-rc1-00147-g9439a661c2e8 #604 PREEMPT(full)
+...
+[   89.557404][  T337] RIP: 0010:htb_qlen_notify (net/sched/sch_htb.c:613 net/sched/sch_htb.c:1490)
+[   89.557614][  T337] Code: 90 90 f3 0f 1e fa 0f 1f 44 00 00 48 8d 96 a8 01 00 00 48 89 f9 48 83 ec 18 48 b8 00 00 00 00 00 fc ff df 48 89 d7 48 c1 ef 03 <0f> b6 04 07 84 c0 74 04 3c 03 7e 61 8b 86 a8 01 00 00 85 c0 75 09
+[   89.558291][  T337] RSP: 0018:ffff8880200df308 EFLAGS: 00010216
+[   89.558530][  T337] RAX: dffffc0000000000 RBX: ffff888004484000 RCX: ffff888004484000
+[   89.558818][  T337] RDX: 00000000000001a8 RSI: 0000000000000000 RDI: 0000000000000035
+[   89.559096][  T337] RBP: dffffc0000000000 R08: 1ffff11000890850 R09: 00000000a1c8e417
+[   89.559374][  T337] R10: 0000000000000001 R11: 00000000d51664f0 R12: 0000000000000000
+[   89.559657][  T337] R13: 0000000000000000 R14: 00000000ffff0002 R15: ffffffff9e5c6cc0
+[   89.559942][  T337] FS:  00007ff004df66c0(0000) GS:ffff88809543b000(0000) knlGS:0000000000000000
+[   89.560273][  T337] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   89.560507][  T337] CR2: 000055ce40d39158 CR3: 0000000016275000 CR4: 0000000000750ef0
+[   89.560797][  T337] PKRU: 55555554
+[   80.405129] Call Trace:
+[   80.405430]  <TASK>
+[   89.561184][  T337]  ? srso_alias_return_thunk (arch/x86/lib/retpoline.S:221)
+[   89.561382][  T337]  ? __pfx_htb_qlen_notify (net/sched/sch_htb.c:1487)
+[   89.561570][  T337]  qdisc_tree_reduce_backlog (net/sched/sch_api.c:806)
+[   89.561770][  T337]  multiq_graft (./include/net/sch_generic.h:1007 ./include/net/sch_generic.h:1283 net/sched/sch_multiq.c:289)
+[   89.561959][  T337]  ? srso_alias_return_thunk (arch/x86/lib/retpoline.S:221)
+[   89.562140][  T337]  ? __pfx_multiq_graft (net/sched/sch_multiq.c:282)
+[   89.562294][  T337]  ? qdisc_alloc (./include/linux/refcount.h:134 net/sched/sch_generic.c:984)
+[   89.562461][  T337]  ? qdisc_create (net/sched/sch_api.c:1263)
+[   89.562613][  T337]  ? __pfx_htb_init (net/sched/sch_htb.c:1052)
+[   89.562786][  T337]  ? netlink_unicast (net/netlink/af_netlink.c:1319 net/netlink/af_netlink.c:1344)
+[   89.562941][  T337]  qdisc_graft (net/sched/sch_api.c:1197)
+[   89.563098][  T337]  ? __pfx_qdisc_graft (net/sched/sch_api.c:1091)
+[   89.563293][  T337]  ? srso_alias_return_thunk (arch/x86/lib/retpoline.S:221)
+[   89.563459][  T337]  ? qdisc_hash_add (net/sched/sch_api.c:285 (discriminator 2) net/sched/sch_api.c:282 (discriminator 2))
+[   89.563618][  T337]  ? srso_alias_return_thunk (arch/x86/lib/retpoline.S:221)
+[   89.563780][  T337]  ? qdisc_create (./include/trace/events/qdisc.h:127 (discriminator 33) net/sched/sch_api.c:1344 (discriminator 33))
+[   89.563950][  T337]  tc_modify_qdisc (net/sched/sch_api.c:1762 net/sched/sch_api.c:1817)
+
+Fix this by putting the qdisc in a intermediate state whenever qdisc_graft
+cannot delete it because it's being accessed in parallel by a classifier.
+We accomplish this by creating a new qdisc op (mark_for_del), which will
+set the TCQ_F_MARK_FOR_DEL flag for the qdisc and all of its descendents in
+the tree. This op is mandatory for all qdiscs that perform grafting.
+When the qdisc is in this intermediate state, whenever it is looked up,
+ERR_PTR(-EBUSY) will be returned.
+
+A similar issue was fixed for ingress side in
+https://lore.kernel.org/netdev/c1f67078dc8a3fd7b3c8ed65896c726d1e9b261e.1686355297.git.peilin.ye@bytedance.com/
+
+Note: We tried a couple of different approaches that had smaller code
+footprint but were a bit fugly. The first approach was to use recursion
+on the qdisc hash table to iterate the descendants of the qdisc; however,
+the challenge here is if the graph depth is "high" - we may overflow the
+stack. The second approach was to use a breadth first search to achieve
+the same goal; the challenge here was it was a quadratic algorithm.
+
+Fixes: 470502de5bdb ("net: sched: unlock rules update API")
+Reported-by: Manas Ghandat <ghandatmanas@gmail.com>
+Reported-by: GangMin Kim <km.kim1503@gmail.com>
+Closes: https://lore.kernel.org/netdev/CAGfirffHzSjmjNGx1ZU+JNLmrUYWEukrPAP5nTbJdemn6MZGyQ@mail.gmail.com/
+Closes: https://lore.kernel.org/netdev/CAGfirfcsAFODycGarmqY8v6HSiHVaBgyKSUucV0DvPDjVX0U8Q@mail.gmail.com/
+Co-developed-by: Victor Nogueira <victor@mojatatu.com>
+Signed-off-by: Victor Nogueira <victor@mojatatu.com>
+Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
 ---
- net/core/filter.c | 3 +++
- 1 file changed, 3 insertions(+)
+ include/net/sch_generic.h | 14 ++++++-
+ include/net/sch_priv.h    |  1 +
+ net/sched/bpf_qdisc.c     |  5 +++
+ net/sched/cls_api.c       | 11 ++++--
+ net/sched/sch_api.c       | 79 +++++++++++++++++++++++++++++++++++----
+ net/sched/sch_cake.c      |  1 +
+ net/sched/sch_cbs.c       |  8 ++++
+ net/sched/sch_drr.c       | 15 ++++++++
+ net/sched/sch_ets.c       | 10 +++++
+ net/sched/sch_hfsc.c      | 14 +++++++
+ net/sched/sch_htb.c       | 22 +++++++++++
+ net/sched/sch_mq.c        | 14 +++++++
+ net/sched/sch_mqprio.c    | 15 ++++++++
+ net/sched/sch_multiq.c    | 11 ++++++
+ net/sched/sch_netem.c     |  8 ++++
+ net/sched/sch_prio.c      | 11 ++++++
+ net/sched/sch_qfq.c       | 14 +++++++
+ net/sched/sch_red.c       |  8 ++++
+ net/sched/sch_sfb.c       |  8 ++++
+ net/sched/sch_taprio.c    | 12 ++++++
+ net/sched/sch_tbf.c       |  8 ++++
+ 21 files changed, 277 insertions(+), 12 deletions(-)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index ff02dbe4c94f..3344fa0789f0 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2228,6 +2228,9 @@ static int bpf_out_neigh_v6(struct net *net, struct sk_buff *skb,
- 			return -ENOMEM;
+diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
+index d5d55cb21686..5f0ec8e02d2b 100644
+--- a/include/net/sch_generic.h
++++ b/include/net/sch_generic.h
+@@ -89,6 +89,7 @@ struct Qdisc {
+ #define TCQ_F_NOLOCK		0x100 /* qdisc does not require locking */
+ #define TCQ_F_OFFLOADED		0x200 /* qdisc is offloaded to HW */
+ #define TCQ_F_DEQUEUE_DROPS	0x400 /* ->dequeue() can drop packets in q->to_free */
++#define TCQ_F_MARK_FOR_DEL	0x800 /* Is marked for deletion */
+ 
+ 	u32			limit;
+ 	const struct Qdisc_ops	*ops;
+@@ -328,7 +329,7 @@ struct Qdisc_ops {
+ 
+ 	int			(*dump)(struct Qdisc *, struct sk_buff *);
+ 	int			(*dump_stats)(struct Qdisc *, struct gnet_dump *);
+-
++	void			(*mark_for_del)(struct Qdisc *sch);
+ 	void			(*ingress_block_set)(struct Qdisc *sch,
+ 						     u32 block_index);
+ 	void			(*egress_block_set)(struct Qdisc *sch,
+@@ -740,6 +741,17 @@ qdisc_offload_graft_helper(struct net_device *dev, struct Qdisc *sch,
+ {
+ }
+ #endif
++
++static inline void qdisc_mark_for_del(struct Qdisc *sch)
++{
++	if (!sch)
++		return;
++
++	sch->flags |= TCQ_F_MARK_FOR_DEL;
++	if (sch->ops->mark_for_del)
++		sch->ops->mark_for_del(sch);
++}
++
+ void qdisc_offload_query_caps(struct net_device *dev,
+ 			      enum tc_setup_type type,
+ 			      void *caps, size_t caps_len);
+diff --git a/include/net/sch_priv.h b/include/net/sch_priv.h
+index 4789f668ae87..4c874d1d5e7c 100644
+--- a/include/net/sch_priv.h
++++ b/include/net/sch_priv.h
+@@ -12,6 +12,7 @@ int mq_init_common(struct Qdisc *sch, struct nlattr *opt,
+ 		   struct netlink_ext_ack *extack,
+ 		   const struct Qdisc_ops *qdisc_ops);
+ void mq_destroy_common(struct Qdisc *sch);
++void mq_mark_for_del_common(struct Qdisc *sch);
+ void mq_attach(struct Qdisc *sch);
+ void mq_dump_common(struct Qdisc *sch, struct sk_buff *skb);
+ struct netdev_queue *mq_select_queue(struct Qdisc *sch,
+diff --git a/net/sched/bpf_qdisc.c b/net/sched/bpf_qdisc.c
+index 098ca02aed89..e40d84ddf4a8 100644
+--- a/net/sched/bpf_qdisc.c
++++ b/net/sched/bpf_qdisc.c
+@@ -246,6 +246,11 @@ __bpf_kfunc int bpf_qdisc_init_prologue(struct Qdisc *sch,
+ 		 * has not been added to qdisc_hash yet.
+ 		 */
+ 		p = qdisc_lookup(dev, TC_H_MAJ(sch->parent));
++		if (IS_ERR(p)) {
++			NL_SET_ERR_MSG(extack,
++				       "BPF Qdisc is being deleted in parallel");
++			return PTR_ERR(p);
++		}
+ 		if (p && !(p->flags & TCQ_F_MQROOT)) {
+ 			NL_SET_ERR_MSG(extack, "BPF qdisc only supported on root or mq");
+ 			return -EINVAL;
+diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
+index 4829c27446e3..fc0c0d94d7ac 100644
+--- a/net/sched/cls_api.c
++++ b/net/sched/cls_api.c
+@@ -1203,6 +1203,12 @@ static int __tcf_qdisc_find(struct net *net, struct Qdisc **q,
+ 		*parent = (*q)->handle;
+ 	} else {
+ 		*q = qdisc_lookup_rcu(dev, TC_H_MAJ(*parent));
++		if (IS_ERR(*q)) {
++			NL_SET_ERR_MSG(extack,
++				       "Parent Qdisc is being deleted in parallel");
++			err = PTR_ERR(*q);
++			goto errout_rcu;
++		}
+ 		if (!*q) {
+ 			NL_SET_ERR_MSG(extack, "Parent Qdisc doesn't exists");
+ 			err = -EINVAL;
+@@ -2895,7 +2901,7 @@ static int tc_dump_tfilter(struct sk_buff *skb, struct netlink_callback *cb)
+ 			q = rtnl_dereference(dev->qdisc);
+ 		else
+ 			q = qdisc_lookup(dev, TC_H_MAJ(tcm->tcm_parent));
+-		if (!q)
++		if (IS_ERR_OR_NULL(q))
+ 			goto out;
+ 		cops = q->ops->cl_ops;
+ 		if (!cops)
+@@ -3278,8 +3284,7 @@ static int tc_dump_chain(struct sk_buff *skb, struct netlink_callback *cb)
+ 			q = rtnl_dereference(dev->qdisc);
+ 		else
+ 			q = qdisc_lookup(dev, TC_H_MAJ(tcm->tcm_parent));
+-
+-		if (!q)
++		if (IS_ERR_OR_NULL(q))
+ 			goto out;
+ 		cops = q->ops->cl_ops;
+ 		if (!cops)
+diff --git a/net/sched/sch_api.c b/net/sched/sch_api.c
+index cc43e3f7574f..fa126309c06b 100644
+--- a/net/sched/sch_api.c
++++ b/net/sched/sch_api.c
+@@ -159,6 +159,12 @@ int register_qdisc(struct Qdisc_ops *qops)
+ 
+ 		if (cops->tcf_block && !(cops->bind_tcf && cops->unbind_tcf))
+ 			goto out_einval;
++
++		/* If a qdisc can have children, it might need to mark them
++		 * in case there are parallel classifier ops
++		 */
++		if (cops->graft && !(qops->mark_for_del))
++			goto out_einval;
  	}
  
-+	if (unlikely(!ipv6_mod_enabled()))
-+		goto out_drop;
+ 	qops->next = NULL;
+@@ -264,17 +270,30 @@ static struct Qdisc *qdisc_match_from_root(struct Qdisc *root, u32 handle)
+ {
+ 	struct Qdisc *q;
+ 
+-	if (!qdisc_dev(root))
+-		return (root->handle == handle ? root : NULL);
++	if (!qdisc_dev(root)) {
++		if (root->handle == handle) {
++			if (root->flags & TCQ_F_MARK_FOR_DEL)
++				return ERR_PTR(-EBUSY);
++			return root;
++		}
++		return NULL;
++	}
+ 
+ 	if (!(root->flags & TCQ_F_BUILTIN) &&
+-	    root->handle == handle)
++	    root->handle == handle) {
++		if (root->flags & TCQ_F_MARK_FOR_DEL)
++			return ERR_PTR(-EBUSY);
 +
- 	rcu_read_lock();
- 	if (!nh) {
- 		dst = skb_dst(skb);
-
+ 		return root;
++	}
+ 
+ 	hash_for_each_possible_rcu(qdisc_dev(root)->qdisc_hash, q, hash, handle,
+ 				   lockdep_rtnl_is_held()) {
+-		if (q->handle == handle)
++		if (q->handle == handle) {
++			if (q->flags & TCQ_F_MARK_FOR_DEL)
++				return ERR_PTR(-EBUSY);
+ 			return q;
++		}
+ 	}
+ 	return NULL;
+ }
+@@ -793,8 +812,8 @@ void qdisc_tree_reduce_backlog(struct Qdisc *sch, int n, int len)
+ 		notify = !sch->q.qlen;
+ 		/* TODO: perform the search on a per txq basis */
+ 		sch = qdisc_lookup_rcu(qdisc_dev(sch), TC_H_MAJ(parentid));
+-		if (sch == NULL) {
+-			WARN_ON_ONCE(parentid != TC_H_ROOT);
++		if (sch == NULL || IS_ERR(sch)) {
++			WARN_ON_ONCE(parentid != TC_H_ROOT && sch == NULL);
+ 			break;
+ 		}
+ 		cops = sch->ops->cl_ops;
+@@ -985,6 +1004,8 @@ static bool tc_qdisc_dump_ignore(struct Qdisc *q, bool dump_invisible)
+ 		return true;
+ 	if ((q->flags & TCQ_F_INVISIBLE) && !dump_invisible)
+ 		return true;
++	if ((q->flags & TCQ_F_MARK_FOR_DEL))
++		return true;
+ 
+ 	return false;
+ }
+@@ -1050,6 +1071,17 @@ static int qdisc_notify(struct net *net, struct sk_buff *oskb,
+ 	return -EINVAL;
+ }
+ 
++static void qdisc_put_mark_for_del(struct Qdisc *sch)
++{
++	if (sch->flags & TCQ_F_BUILTIN)
++		return;
++
++	if (refcount_dec_and_test(&sch->refcnt))
++		qdisc_destroy(sch);
++	else
++		qdisc_mark_for_del(sch);
++}
++
+ static void notify_and_destroy(struct net *net, struct sk_buff *skb,
+ 			       struct nlmsghdr *n, u32 clid,
+ 			       struct Qdisc *old, struct Qdisc *new,
+@@ -1059,7 +1091,7 @@ static void notify_and_destroy(struct net *net, struct sk_buff *skb,
+ 		qdisc_notify(net, skb, n, clid, old, new, extack);
+ 
+ 	if (old)
+-		qdisc_put(old);
++		qdisc_put_mark_for_del(old);
+ }
+ 
+ static void qdisc_clear_nolock(struct Qdisc *sch)
+@@ -1157,7 +1189,6 @@ static int qdisc_graft(struct net_device *dev, struct Qdisc *parent,
+ 			rcu_assign_pointer(dev->qdisc, new ? : &noop_qdisc);
+ 
+ 			notify_and_destroy(net, skb, n, classid, old, new, extack);
+-
+ 			if (new && new->ops->attach)
+ 				new->ops->attach(new);
+ 		}
+@@ -1481,6 +1512,11 @@ static int __tc_get_qdisc(struct sk_buff *skb, struct nlmsghdr *n,
+ 		if (clid != TC_H_ROOT) {
+ 			if (TC_H_MAJ(clid) != TC_H_MAJ(TC_H_INGRESS)) {
+ 				p = qdisc_lookup(dev, TC_H_MAJ(clid));
++				if (IS_ERR(p)) {
++					NL_SET_ERR_MSG(extack,
++						       "Qdisc is being deleted in parallel");
++					return PTR_ERR(p);
++				}
+ 				if (!p) {
+ 					NL_SET_ERR_MSG(extack, "Failed to find qdisc with specified classid");
+ 					return -ENOENT;
+@@ -1505,6 +1541,11 @@ static int __tc_get_qdisc(struct sk_buff *skb, struct nlmsghdr *n,
+ 		}
+ 	} else {
+ 		q = qdisc_lookup(dev, tcm->tcm_handle);
++		if (IS_ERR(q)) {
++			NL_SET_ERR_MSG(extack,
++				       "Qdisc is being deleted in parallel");
++			return PTR_ERR(q);
++		}
+ 		if (!q) {
+ 			NL_SET_ERR_MSG(extack, "Failed to find qdisc with specified handle");
+ 			return -ENOENT;
+@@ -1595,6 +1636,11 @@ static int __tc_modify_qdisc(struct sk_buff *skb, struct nlmsghdr *n,
+ 		if (clid != TC_H_ROOT) {
+ 			if (clid != TC_H_INGRESS) {
+ 				p = qdisc_lookup(dev, TC_H_MAJ(clid));
++				if (IS_ERR(p)) {
++					NL_SET_ERR_MSG(extack,
++						       "Qdisc is being deleted in parallel");
++					return PTR_ERR(p);
++				}
+ 				if (!p) {
+ 					NL_SET_ERR_MSG(extack, "Failed to find specified qdisc");
+ 					return -ENOENT;
+@@ -1629,6 +1675,11 @@ static int __tc_modify_qdisc(struct sk_buff *skb, struct nlmsghdr *n,
+ 					return -EINVAL;
+ 				}
+ 				q = qdisc_lookup(dev, tcm->tcm_handle);
++				if (IS_ERR(q)) {
++					NL_SET_ERR_MSG(extack,
++						       "Qdisc is being deleted in parallel");
++					return PTR_ERR(q);
++				}
+ 				if (!q)
+ 					goto create_n_graft;
+ 				if (q->parent != tcm->tcm_parent) {
+@@ -1705,6 +1756,11 @@ static int __tc_modify_qdisc(struct sk_buff *skb, struct nlmsghdr *n,
+ 			return -EINVAL;
+ 		}
+ 		q = qdisc_lookup(dev, tcm->tcm_handle);
++		if (IS_ERR(q)) {
++			NL_SET_ERR_MSG(extack,
++				       "Qdisc is being deleted in parallel");
++			return PTR_ERR(q);
++		}
+ 	}
+ 
+ 	/* Change qdisc parameters */
+@@ -2218,6 +2274,11 @@ static int __tc_ctl_tclass(struct sk_buff *skb, struct nlmsghdr *n,
+ 
+ 	/* OK. Locate qdisc */
+ 	q = qdisc_lookup(dev, qid);
++	if (IS_ERR(q)) {
++		NL_SET_ERR_MSG(extack,
++			       "Qdisc is being deleted in parallel");
++		return PTR_ERR(q);
++	}
+ 	if (!q)
+ 		return -ENOENT;
+ 
+@@ -2375,6 +2436,8 @@ static int tc_dump_tclass_root(struct Qdisc *root, struct sk_buff *skb,
+ 
+ 	if (tcm->tcm_parent) {
+ 		q = qdisc_match_from_root(root, TC_H_MAJ(tcm->tcm_parent));
++		if (IS_ERR(q))
++			return 0;
+ 		if (q && q != root &&
+ 		    tc_dump_tclass_qdisc(q, skb, tcm, cb, t_p, s_t) < 0)
+ 			return -1;
+diff --git a/net/sched/sch_cake.c b/net/sched/sch_cake.c
+index 9efe23f8371b..a92ce78c733f 100644
+--- a/net/sched/sch_cake.c
++++ b/net/sched/sch_cake.c
+@@ -3341,6 +3341,7 @@ static struct Qdisc_ops cake_mq_qdisc_ops __read_mostly = {
+ 	.change		=	cake_mq_change,
+ 	.change_real_num_tx = mq_change_real_num_tx,
+ 	.dump		=	cake_mq_dump,
++	.mark_for_del	=	mq_mark_for_del_common,
+ 	.owner		=	THIS_MODULE,
+ };
+ MODULE_ALIAS_NET_SCH("cake_mq");
+diff --git a/net/sched/sch_cbs.c b/net/sched/sch_cbs.c
+index 8c9a0400c862..23edb020a0de 100644
+--- a/net/sched/sch_cbs.c
++++ b/net/sched/sch_cbs.c
+@@ -449,6 +449,13 @@ static void cbs_destroy(struct Qdisc *sch)
+ 	qdisc_put(q->qdisc);
+ }
+ 
++static void cbs_mark_for_del(struct Qdisc *sch)
++{
++	struct cbs_sched_data *q = qdisc_priv(sch);
++
++	qdisc_mark_for_del(q->qdisc);
++}
++
+ static int cbs_dump(struct Qdisc *sch, struct sk_buff *skb)
+ {
+ 	struct cbs_sched_data *q = qdisc_priv(sch);
+@@ -544,6 +551,7 @@ static struct Qdisc_ops cbs_qdisc_ops __read_mostly = {
+ 	.destroy	=	cbs_destroy,
+ 	.change		=	cbs_change,
+ 	.dump		=	cbs_dump,
++	.mark_for_del	=	cbs_mark_for_del,
+ 	.owner		=	THIS_MODULE,
+ };
+ MODULE_ALIAS_NET_SCH("cbs");
+diff --git a/net/sched/sch_drr.c b/net/sched/sch_drr.c
+index 01335a49e091..8d261d2c6548 100644
+--- a/net/sched/sch_drr.c
++++ b/net/sched/sch_drr.c
+@@ -458,6 +458,20 @@ static void drr_destroy_qdisc(struct Qdisc *sch)
+ 	qdisc_class_hash_destroy(&q->clhash);
+ }
+ 
++static void drr_mark_qdisc_for_del(struct Qdisc *sch)
++{
++	struct drr_sched *q = qdisc_priv(sch);
++	struct hlist_node *next;
++	struct drr_class *cl;
++	int i;
++
++	for (i = 0; i < q->clhash.hashsize; i++) {
++		hlist_for_each_entry_safe(cl, next, &q->clhash.hash[i],
++					  common.hnode)
++			qdisc_mark_for_del(cl->qdisc);
++	}
++}
++
+ static const struct Qdisc_class_ops drr_class_ops = {
+ 	.change		= drr_change_class,
+ 	.delete		= drr_delete_class,
+@@ -483,6 +497,7 @@ static struct Qdisc_ops drr_qdisc_ops __read_mostly = {
+ 	.init		= drr_init_qdisc,
+ 	.reset		= drr_reset_qdisc,
+ 	.destroy	= drr_destroy_qdisc,
++	.mark_for_del	= drr_mark_qdisc_for_del,
+ 	.owner		= THIS_MODULE,
+ };
+ MODULE_ALIAS_NET_SCH("drr");
+diff --git a/net/sched/sch_ets.c b/net/sched/sch_ets.c
+index a4b07b661b77..93a88e181ffb 100644
+--- a/net/sched/sch_ets.c
++++ b/net/sched/sch_ets.c
+@@ -742,6 +742,15 @@ static void ets_qdisc_destroy(struct Qdisc *sch)
+ 		qdisc_put(q->classes[band].qdisc);
+ }
+ 
++static void ets_qdisc_mark_for_del(struct Qdisc *sch)
++{
++	struct ets_sched *q = qdisc_priv(sch);
++	int band;
++
++	for (band = 0; band < q->nbands; band++)
++		qdisc_mark_for_del(q->classes[band].qdisc);
++}
++
+ static int ets_qdisc_dump(struct Qdisc *sch, struct sk_buff *skb)
+ {
+ 	struct ets_sched *q = qdisc_priv(sch);
+@@ -827,6 +836,7 @@ static struct Qdisc_ops ets_qdisc_ops __read_mostly = {
+ 	.reset		= ets_qdisc_reset,
+ 	.destroy	= ets_qdisc_destroy,
+ 	.dump		= ets_qdisc_dump,
++	.mark_for_del	= ets_qdisc_mark_for_del,
+ 	.owner		= THIS_MODULE,
+ };
+ MODULE_ALIAS_NET_SCH("ets");
+diff --git a/net/sched/sch_hfsc.c b/net/sched/sch_hfsc.c
+index b5657ffbbf84..a008c8db532c 100644
+--- a/net/sched/sch_hfsc.c
++++ b/net/sched/sch_hfsc.c
+@@ -1517,6 +1517,19 @@ hfsc_destroy_qdisc(struct Qdisc *sch)
+ 	qdisc_watchdog_cancel(&q->watchdog);
+ }
+ 
++static void
++hfsc_mark_qdisc_for_del(struct Qdisc *sch)
++{
++	struct hfsc_sched *q = qdisc_priv(sch);
++	struct hfsc_class *cl;
++	unsigned int i;
++
++	for (i = 0; i < q->clhash.hashsize; i++) {
++		hlist_for_each_entry(cl, &q->clhash.hash[i], cl_common.hnode)
++			qdisc_mark_for_del(cl->qdisc);
++	}
++}
++
+ static int
+ hfsc_dump_qdisc(struct Qdisc *sch, struct sk_buff *skb)
+ {
+@@ -1681,6 +1694,7 @@ static struct Qdisc_ops hfsc_qdisc_ops __read_mostly = {
+ 	.dequeue	= hfsc_dequeue,
+ 	.peek		= qdisc_peek_dequeued,
+ 	.cl_ops		= &hfsc_class_ops,
++	.mark_for_del	= hfsc_mark_qdisc_for_del,
+ 	.priv_size	= sizeof(struct hfsc_sched),
+ 	.owner		= THIS_MODULE
+ };
+diff --git a/net/sched/sch_htb.c b/net/sched/sch_htb.c
+index cf6cd4ccfa20..6f740c82721e 100644
+--- a/net/sched/sch_htb.c
++++ b/net/sched/sch_htb.c
+@@ -1689,6 +1689,27 @@ static void htb_destroy(struct Qdisc *sch)
+ 	kfree(q->direct_qdiscs);
+ }
+ 
++static void htb_mark_for_del(struct Qdisc *sch)
++{
++	struct htb_sched *q = qdisc_priv(sch);
++	struct hlist_node *next;
++	struct htb_class *cl;
++	unsigned int i;
++
++	for (i = 0; i < q->clhash.hashsize; i++) {
++		hlist_for_each_entry_safe(cl, next, &q->clhash.hash[i],
++					  common.hnode)
++			if (!cl->level)
++				qdisc_mark_for_del(cl->leaf.q);
++	}
++
++	if (q->direct_qdiscs) {
++		for (i = 0; i < q->num_direct_qdiscs && q->direct_qdiscs[i];
++		     i++)
++			qdisc_mark_for_del(q->direct_qdiscs[i]);
++	}
++}
++
+ static int htb_delete(struct Qdisc *sch, unsigned long arg,
+ 		      struct netlink_ext_ack *extack)
+ {
+@@ -2148,6 +2169,7 @@ static struct Qdisc_ops htb_qdisc_ops __read_mostly = {
+ 	.reset		=	htb_reset,
+ 	.destroy	=	htb_destroy,
+ 	.dump		=	htb_dump,
++	.mark_for_del	=	htb_mark_for_del,
+ 	.owner		=	THIS_MODULE,
+ };
+ MODULE_ALIAS_NET_SCH("htb");
+diff --git a/net/sched/sch_mq.c b/net/sched/sch_mq.c
+index 0ed199fa18f0..1f9369ebc1dc 100644
+--- a/net/sched/sch_mq.c
++++ b/net/sched/sch_mq.c
+@@ -59,6 +59,19 @@ void mq_destroy_common(struct Qdisc *sch)
+ }
+ EXPORT_SYMBOL_NS_GPL(mq_destroy_common, "NET_SCHED_INTERNAL");
+ 
++void mq_mark_for_del_common(struct Qdisc *sch)
++{
++	struct mq_sched *priv = qdisc_priv(sch);
++	struct net_device *dev = qdisc_dev(sch);
++	unsigned int ntx;
++
++	if (!priv->qdiscs)
++		return;
++	for (ntx = 0; ntx < dev->num_tx_queues && priv->qdiscs[ntx]; ntx++)
++		qdisc_mark_for_del(priv->qdiscs[ntx]);
++}
++EXPORT_SYMBOL_NS_GPL(mq_mark_for_del_common, "NET_SCHED_INTERNAL");
++
+ static void mq_destroy(struct Qdisc *sch)
+ {
+ 	mq_offload(sch, TC_MQ_DESTROY);
+@@ -297,5 +310,6 @@ struct Qdisc_ops mq_qdisc_ops __read_mostly = {
+ 	.attach		= mq_attach,
+ 	.change_real_num_tx = mq_change_real_num_tx,
+ 	.dump		= mq_dump,
++	.mark_for_del	= mq_mark_for_del_common,
+ 	.owner		= THIS_MODULE,
+ };
+diff --git a/net/sched/sch_mqprio.c b/net/sched/sch_mqprio.c
+index b83276409416..0566e854e156 100644
+--- a/net/sched/sch_mqprio.c
++++ b/net/sched/sch_mqprio.c
+@@ -112,6 +112,20 @@ static void mqprio_destroy(struct Qdisc *sch)
+ 		netdev_set_num_tc(dev, 0);
+ }
+ 
++static void mqprio_mark_for_del(struct Qdisc *sch)
++{
++	struct net_device *dev = qdisc_dev(sch);
++	struct mqprio_sched *priv = qdisc_priv(sch);
++	unsigned int ntx;
++
++	if (priv->qdiscs) {
++		for (ntx = 0;
++		     ntx < dev->num_tx_queues && priv->qdiscs[ntx];
++		     ntx++)
++			qdisc_mark_for_del(priv->qdiscs[ntx]);
++	}
++}
++
+ static int mqprio_parse_opt(struct net_device *dev, struct tc_mqprio_qopt *qopt,
+ 			    const struct tc_mqprio_caps *caps,
+ 			    struct netlink_ext_ack *extack)
+@@ -769,6 +783,7 @@ static struct Qdisc_ops mqprio_qdisc_ops __read_mostly = {
+ 	.attach		= mqprio_attach,
+ 	.change_real_num_tx = mq_change_real_num_tx,
+ 	.dump		= mqprio_dump,
++	.mark_for_del	= mqprio_mark_for_del,
+ 	.owner		= THIS_MODULE,
+ };
+ MODULE_ALIAS_NET_SCH("mqprio");
+diff --git a/net/sched/sch_multiq.c b/net/sched/sch_multiq.c
+index 9f822fee113d..edc60ddc0b12 100644
+--- a/net/sched/sch_multiq.c
++++ b/net/sched/sch_multiq.c
+@@ -168,6 +168,16 @@ multiq_destroy(struct Qdisc *sch)
+ 	kfree(q->queues);
+ }
+ 
++static void
++multiq_mark_for_del(struct Qdisc *sch)
++{
++	struct multiq_sched_data *q = qdisc_priv(sch);
++	int band;
++
++	for (band = 0; band < q->bands; band++)
++		qdisc_mark_for_del(q->queues[band]);
++}
++
+ static int multiq_tune(struct Qdisc *sch, struct nlattr *opt,
+ 		       struct netlink_ext_ack *extack)
+ {
+@@ -393,6 +403,7 @@ static struct Qdisc_ops multiq_qdisc_ops __read_mostly = {
+ 	.destroy	=	multiq_destroy,
+ 	.change		=	multiq_tune,
+ 	.dump		=	multiq_dump,
++	.mark_for_del	=	multiq_mark_for_del,
+ 	.owner		=	THIS_MODULE,
+ };
+ MODULE_ALIAS_NET_SCH("multiq");
+diff --git a/net/sched/sch_netem.c b/net/sched/sch_netem.c
+index 5de1c932944a..134716ec507f 100644
+--- a/net/sched/sch_netem.c
++++ b/net/sched/sch_netem.c
+@@ -1155,6 +1155,13 @@ static void netem_destroy(struct Qdisc *sch)
+ 	dist_free(q->slot_dist);
+ }
+ 
++static void netem_mark_for_del(struct Qdisc *sch)
++{
++	struct netem_sched_data *q = qdisc_priv(sch);
++
++	qdisc_mark_for_del(q->qdisc);
++}
++
+ static int dump_loss_model(const struct netem_sched_data *q,
+ 			   struct sk_buff *skb)
+ {
+@@ -1353,6 +1360,7 @@ static struct Qdisc_ops netem_qdisc_ops __read_mostly = {
+ 	.destroy	=	netem_destroy,
+ 	.change		=	netem_change,
+ 	.dump		=	netem_dump,
++	.mark_for_del	=	netem_mark_for_del,
+ 	.owner		=	THIS_MODULE,
+ };
+ MODULE_ALIAS_NET_SCH("netem");
+diff --git a/net/sched/sch_prio.c b/net/sched/sch_prio.c
+index 9e2b9a490db2..3a8cc47cd6a4 100644
+--- a/net/sched/sch_prio.c
++++ b/net/sched/sch_prio.c
+@@ -173,6 +173,16 @@ prio_destroy(struct Qdisc *sch)
+ 		qdisc_put(q->queues[prio]);
+ }
+ 
++static void
++prio_mark_for_del(struct Qdisc *sch)
++{
++	struct prio_sched_data *q = qdisc_priv(sch);
++	int prio;
++
++	for (prio = 0; prio < q->bands; prio++)
++		qdisc_mark_for_del(q->queues[prio]);
++}
++
+ static int prio_tune(struct Qdisc *sch, struct nlattr *opt,
+ 		     struct netlink_ext_ack *extack)
+ {
+@@ -416,6 +426,7 @@ static struct Qdisc_ops prio_qdisc_ops __read_mostly = {
+ 	.destroy	=	prio_destroy,
+ 	.change		=	prio_tune,
+ 	.dump		=	prio_dump,
++	.mark_for_del	=	prio_mark_for_del,
+ 	.owner		=	THIS_MODULE,
+ };
+ MODULE_ALIAS_NET_SCH("prio");
+diff --git a/net/sched/sch_qfq.c b/net/sched/sch_qfq.c
+index 699e45873f86..6b72a626dc74 100644
+--- a/net/sched/sch_qfq.c
++++ b/net/sched/sch_qfq.c
+@@ -1510,6 +1510,19 @@ static void qfq_destroy_qdisc(struct Qdisc *sch)
+ 	qdisc_class_hash_destroy(&q->clhash);
+ }
+ 
++static void qfq_mark_qdisc_for_del(struct Qdisc *sch)
++{
++	struct qfq_sched *q = qdisc_priv(sch);
++	struct qfq_class *cl;
++	unsigned int i;
++
++	for (i = 0; i < q->clhash.hashsize; i++) {
++		hlist_for_each_entry(cl, &q->clhash.hash[i],
++				     common.hnode)
++			qdisc_mark_for_del(cl->qdisc);
++	}
++}
++
+ static const struct Qdisc_class_ops qfq_class_ops = {
+ 	.change		= qfq_change_class,
+ 	.delete		= qfq_delete_class,
+@@ -1535,6 +1548,7 @@ static struct Qdisc_ops qfq_qdisc_ops __read_mostly = {
+ 	.init		= qfq_init_qdisc,
+ 	.reset		= qfq_reset_qdisc,
+ 	.destroy	= qfq_destroy_qdisc,
++	.mark_for_del	= qfq_mark_qdisc_for_del,
+ 	.owner		= THIS_MODULE,
+ };
+ MODULE_ALIAS_NET_SCH("qfq");
+diff --git a/net/sched/sch_red.c b/net/sched/sch_red.c
+index 479c42d11083..e5df29ca5f7c 100644
+--- a/net/sched/sch_red.c
++++ b/net/sched/sch_red.c
+@@ -223,6 +223,13 @@ static void red_destroy(struct Qdisc *sch)
+ 	qdisc_put(q->qdisc);
+ }
+ 
++static void red_mark_for_del(struct Qdisc *sch)
++{
++	struct red_sched_data *q = qdisc_priv(sch);
++
++	qdisc_mark_for_del(q->qdisc);
++}
++
+ static const struct nla_policy red_policy[TCA_RED_MAX + 1] = {
+ 	[TCA_RED_UNSPEC] = { .strict_start_type = TCA_RED_FLAGS },
+ 	[TCA_RED_PARMS]	= { .len = sizeof(struct tc_red_qopt) },
+@@ -548,6 +555,7 @@ static struct Qdisc_ops red_qdisc_ops __read_mostly = {
+ 	.change		=	red_change,
+ 	.dump		=	red_dump,
+ 	.dump_stats	=	red_dump_stats,
++	.mark_for_del	=	red_mark_for_del,
+ 	.owner		=	THIS_MODULE,
+ };
+ MODULE_ALIAS_NET_SCH("red");
+diff --git a/net/sched/sch_sfb.c b/net/sched/sch_sfb.c
+index d2835f1168e1..e4151e39a92f 100644
+--- a/net/sched/sch_sfb.c
++++ b/net/sched/sch_sfb.c
+@@ -473,6 +473,13 @@ static void sfb_destroy(struct Qdisc *sch)
+ 	qdisc_put(q->qdisc);
+ }
+ 
++static void sfb_mark_for_del(struct Qdisc *sch)
++{
++	struct sfb_sched_data *q = qdisc_priv(sch);
++
++	qdisc_mark_for_del(q->qdisc);
++}
++
+ static const struct nla_policy sfb_policy[TCA_SFB_MAX + 1] = {
+ 	[TCA_SFB_PARMS]	= { .len = sizeof(struct tc_sfb_qopt) },
+ };
+@@ -709,6 +716,7 @@ static struct Qdisc_ops sfb_qdisc_ops __read_mostly = {
+ 	.change		=	sfb_change,
+ 	.dump		=	sfb_dump,
+ 	.dump_stats	=	sfb_dump_stats,
++	.mark_for_del	=	sfb_mark_for_del,
+ 	.owner		=	THIS_MODULE,
+ };
+ MODULE_ALIAS_NET_SCH("sfb");
+diff --git a/net/sched/sch_taprio.c b/net/sched/sch_taprio.c
+index f721c03514f6..54bb5814f1e9 100644
+--- a/net/sched/sch_taprio.c
++++ b/net/sched/sch_taprio.c
+@@ -2059,6 +2059,17 @@ static void taprio_destroy(struct Qdisc *sch)
+ 	taprio_cleanup_broken_mqprio(q);
+ }
+ 
++static void taprio_mark_for_del(struct Qdisc *sch)
++{
++	struct taprio_sched *q = qdisc_priv(sch);
++	struct net_device *dev = qdisc_dev(sch);
++	unsigned int i;
++
++	if (q->qdiscs)
++		for (i = 0; i < dev->num_tx_queues; i++)
++			qdisc_mark_for_del(q->qdiscs[i]);
++}
++
+ static int taprio_init(struct Qdisc *sch, struct nlattr *opt,
+ 		       struct netlink_ext_ack *extack)
+ {
+@@ -2542,6 +2553,7 @@ static struct Qdisc_ops taprio_qdisc_ops __read_mostly = {
+ 	.enqueue	= taprio_enqueue,
+ 	.dump		= taprio_dump,
+ 	.dump_stats	= taprio_dump_stats,
++	.mark_for_del	= taprio_mark_for_del,
+ 	.owner		= THIS_MODULE,
+ };
+ MODULE_ALIAS_NET_SCH("taprio");
+diff --git a/net/sched/sch_tbf.c b/net/sched/sch_tbf.c
+index f2340164f579..ef378d5dc636 100644
+--- a/net/sched/sch_tbf.c
++++ b/net/sched/sch_tbf.c
+@@ -507,6 +507,13 @@ static void tbf_destroy(struct Qdisc *sch)
+ 	qdisc_put(q->qdisc);
+ }
+ 
++static void tbf_mark_for_del(struct Qdisc *sch)
++{
++	struct tbf_sched_data *q = qdisc_priv(sch);
++
++	qdisc_mark_for_del(q->qdisc);
++}
++
+ static int tbf_dump(struct Qdisc *sch, struct sk_buff *skb)
+ {
+ 	struct tbf_sched_data *q = qdisc_priv(sch);
+@@ -613,6 +620,7 @@ static struct Qdisc_ops tbf_qdisc_ops __read_mostly = {
+ 	.destroy	=	tbf_destroy,
+ 	.change		=	tbf_change,
+ 	.dump		=	tbf_dump,
++	.mark_for_del	=	tbf_mark_for_del,
+ 	.owner		=	THIS_MODULE,
+ };
+ MODULE_ALIAS_NET_SCH("tbf");
 -- 
-2.53.0
+2.34.1
 
