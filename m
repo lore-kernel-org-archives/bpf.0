@@ -1,125 +1,66 @@
-Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB26728B7EA
-	for <bpf@vger.kernel.org>; Sat,  7 Mar 2026 00:54:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3894E2C08C4
+	for <bpf@vger.kernel.org>; Sat,  7 Mar 2026 00:55:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772844890; cv=none; b=TtCKrZwumE1eXXplUqt+5Sd9KfNe48HlgoY8y2Ms4F5ETt+iB2un+7mpMqusDWpdrGFVYjSAjdgsRijjUOZEnPzkqRKO4exaDDfHZ2J9pYEH+8JZdjb05B5jYdUmgsdeeDOpiZTwZ7nmyvvj34S+b8HRa0oT5gGzobtxchweLIA=
+	t=1772844956; cv=none; b=XOKW01SHS2CHXJ3PoJbuVcQnpib7wvGj5aWUQVVxfye2tNt+6wZMOKo6y8Cdr/xKmkpy31zVtb8RyP6u9slZ/gCtrKiHVbxQH7M1+ZFzUYgLF9l1NTNrlvDqFz/6v9qbEiQvHBNm1B0mGhc1XfaaeF5XkggMQZp+6d6dbDWF1Cc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772844890; c=relaxed/simple;
-	bh=+JHDuzbi9ldVSnPat9JoCVKuhDe7bJHfcAxEvo5qEdc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uVb/5YET35I2E+s5aQJ2dctnKBc2bKsWJ/JHihUq/mwZpNaMp6ZcC9IgvNmIoziijuNiLRDQ8hb5fhDVyOYVU3mM7eBrfJeoFYyGq7yDJ/2g261w2FeWmHkYCwDdHcyqRElVV9l2AKVkA/WPlRT0QJw4PAeSJM+b0f8oziCamyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ErGB402t; arc=none smtp.client-ip=74.125.82.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772844956; c=relaxed/simple;
+	bh=6Pq7toGRBGn+Ec8UEuPgc0SD+mUE0wGY6th44T13dBc=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=epvXpcfS6Gz9ydJPCsxC04CZTvocxG37tYz+bhqNYOML7yty2qvLojFCA00EkSm0hcQQhxX1rwsOTj/fbZ5uz/X2Le59ogVJ7isefLwCPiHHvK/5X1WiUv5QIFYQTyDo4THOZ4yyOyBx9VgZ1ZQxKKeUI2xACguQgEC3c57+wko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rzH2nr8o; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ErGB402t"
-Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-2be1ab1fa7dso1156054eec.0
-        for <bpf@vger.kernel.org>; Fri, 06 Mar 2026 16:54:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772844888; x=1773449688; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UtN8rJyxgujSOLUNp3Mg4U7/rRF526fUzTXP77KmtEI=;
-        b=ErGB402tB374/J3A5IL5pF0oeQN318lddTPY9gZYTuyihP2C38fHOaNNC2I9xMFneM
-         5J2Y0FiUvkPUDeGEaKduGASwQdKlfK1q9vOcTvS4hF6nErF8zf68XmbHK6eEiV7gUCYM
-         yu7rPhW9n9/ah0Lp1MEeS2yuLQUN8WeGeJfToH64zFK9pqYIKFE4OSAW8+9fK3mjrTRh
-         /GpTJoGGHyGeQHOKD5jY4qs2f4aqKMe8RQi/oDHo+yUyroaWEucj6awVJOU36WorzbJR
-         6KEgHJqO6olIKFathyzW1H6sEB/fYJPQpST0ZvfIPwhU+j3/y6s0XcNkWkodfitzWfsn
-         lckQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772844888; x=1773449688;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=UtN8rJyxgujSOLUNp3Mg4U7/rRF526fUzTXP77KmtEI=;
-        b=sG9RSImfA2d1zxS3xHJQS1XmNG6cyL85WKVEvFxD0Yh3HcJUz+t4VqV5Yh7A7obGRs
-         1bG9h1F7uFr0jbb5RRcCYu3lq6qmntW20CBXTAtUU9r0YdQLmdOQsMkkaDEA3VPJZz1c
-         gTI91SUSxCDJb+gW7gr/kczcaP0wsv5dm6qMVjYyrcYLCudK5c2+0FKd5dGbwHc2pvG1
-         oiORm32vZDxFDCbQhVNVHbZ1JBU97rfuZjxVexLrelGgdlPQq69P/dJJifw+i6HW2sIO
-         jvSC32XCVdi6x0ZBF1ktAUnZJtWv1hP8id5fJ0kDtzWaoZ/aE/eBHmNA0Ok00o2Z1vqv
-         aGMw==
-X-Gm-Message-State: AOJu0YzrOxi7mG4Tf5tbzYTVPUSBHgW5qwz7HsJSZwFPYCJ4i/kWGoXn
-	miHPxMmPqFfDLC/U4f98EJoQGUtbH9UE72CAfJy1mBU2HQqWOSrw+cWhGWn0zale
-X-Gm-Gg: ATEYQzzMaXmd8VKDYPNBh24mEHwZYKNgpS1xZiLX5rEaQ8I7ZNPVs5KL68tcdDhBanD
-	RK/lRZw0TzrjpW0/DIfXrx2YeSoGV1JAIOG/eB8oJTERCWxVJBpNIgDa5AvKpbzEUw4qjizT7e9
-	kDp3whp/RRgkffalRpG2srZ73nVdrLlZMCRb+jQ9V6oplWaaeFYZ1M/P33BBF2jU4U9GyQxhjdv
-	GTgJb11WsIGEGlPCOUWAUBMfGTP1uxzsZ/akqrbGKge2CDiDlmpzVJJ7DKoIrDuYRcdPKY4/Z00
-	75Y3+jSRwgnJZJsA+T+n32q/rhMj+OuWpNp8Zd6fycrAk3bKXLNAcd7YhdHAJZL4sip8GrC6pJ/
-	v7lYMNDp53UpRBRP9iK/XaJAT85/Pt+WhA1nSyOJI7mpcKGDedASV+hLmOTHpSx9Rm5dfO+Pm89
-	VfN6WSYGWFQW8D1YMXxVlz19ARHTUZSF8CovNJu9bAmvfq6IziLvYxwotnLZ7k/XVn011VfgoEr
-	L/b3RE=
-X-Received: by 2002:a05:7301:fa0a:b0:2b8:30b8:58cf with SMTP id 5a478bee46e88-2be4de76edcmr1730695eec.8.1772844887810;
-        Fri, 06 Mar 2026 16:54:47 -0800 (PST)
-Received: from ezingerman-fedora-PF4V722J.thefacebook.com ([2620:10d:c090:500::2:f62d])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2be4f948390sm2235110eec.22.2026.03.06.16.54.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2026 16:54:47 -0800 (PST)
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	andrii@kernel.org
-Cc: daniel@iogearbox.net,
-	martin.lau@linux.dev,
-	kernel-team@fb.com,
-	yonghong.song@linux.dev,
-	eddyz87@gmail.com,
-	shung-hsi.yu@suse.com,
-	paul.chaignon@gmail.com,
-	emil@etsalapatis.com
-Subject: [PATCH bpf v3 3/3] Revert "selftests/bpf: Update reg_bound range refinement logic"
-Date: Fri,  6 Mar 2026 16:54:26 -0800
-Message-ID: <20260306-bpf-32-bit-range-overflow-v3-3-f7f67e060a6b@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260306-bpf-32-bit-range-overflow-v3-0-f7f67e060a6b@gmail.com>
-References: <20260306-bpf-32-bit-range-overflow-v3-0-f7f67e060a6b@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rzH2nr8o"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B093C4CEF7;
+	Sat,  7 Mar 2026 00:55:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772844955;
+	bh=6Pq7toGRBGn+Ec8UEuPgc0SD+mUE0wGY6th44T13dBc=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=rzH2nr8o6KX4gbu1xx5JyD5HK4SHXLxxvaXH14zlcfrPpdsFx1STnqyG9uyim0V6G
+	 JRt9y7ZbYdfZiUJtF6CXJEEFGGzp+2uwwggWeSHVuFGQaDwFMa41x9ufDM3iGtmO32
+	 IskfgGhQSprA3LpbOZIysn97RkZbG9o3zM918C/OBeDzITDVSt/cqqyNR9Fc68QDOX
+	 v4Cgknr95iDlNTVrNsx06463skdTJQHfplbPZIZN3XoSppO4xhc8Tv1sU4y1TOl4PV
+	 iP1xXqi3sZMNgmh9YpkWS4hKMDvVGSrPzPrZBUXOUUTIOSNZuaKQm2Krqd2AQzLNy+
+	 ZzoVMKAXePD9w==
+Content-Type: multipart/mixed; boundary="===============7527132546623287183=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Message-Id: <28ff0a701e78a62c807b7564e4332bb1412ee44fe28c133c173c668fb07dbd52@mail.kernel.org>
+In-Reply-To: <20260306-linked-regs-and-propagate-precision-v1-1-18e859be570d@gmail.com>
+References: <20260306-linked-regs-and-propagate-precision-v1-1-18e859be570d@gmail.com>
+Subject: Re: [PATCH bpf 1/2] bpf: collect only live registers in linked regs
+From: bot+bpf-ci@kernel.org
+To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org
+Cc: daniel@iogearbox.net,martin.lau@linux.dev,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,emil@etsalapatis.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sat,  7 Mar 2026 00:55:55 +0000 (UTC)
 
-This reverts commit da653de268d32a80e135c9eb960a8147c186f1bc.
-Removed logic is now covered by range_refine_in_halves()
-which handles both 32-bit and 64-bit refinements.
+--===============7527132546623287183==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Suggested-by: Paul Chaignon <paul.chaignon@gmail.com>
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+> Reported-by: Emil Tsalapatis <emil@etsalapatis.com>
+> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+
+This commit fixes a bug introduced by commit 0fb3cf6110a5 ("bpf: use
+register liveness information for func_states_equal"), which made
+func_states_equal() filter register comparisons by live_regs_before
+but did not update collect_linked_regs() to match. Should a Fixes:
+tag be added?
+
+Fixes: 0fb3cf6110a5 ("bpf: use register liveness information for func_states_equal")
+
 ---
- tools/testing/selftests/bpf/prog_tests/reg_bounds.c | 14 --------------
- 1 file changed, 14 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-index 04938d0d431b38e086b50fe28b99e4ad2682742e..cb8dd2f63296b826491c8a010f4ece4aa20c0560 100644
---- a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-+++ b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-@@ -519,20 +519,6 @@ static struct range range_refine(enum num_t x_t, struct range x, enum num_t y_t,
- 		return range_intersection(x_t, x, x_swap);
- 	}
- 
--	if (!t_is_32(x_t) && !t_is_32(y_t) && x_t != y_t) {
--		if (x_t == S64 && x.a > x.b) {
--			if (x.b < y.a && x.a <= y.b)
--				return range(x_t, x.a, y.b);
--			if (x.a > y.b && x.b >= y.a)
--				return range(x_t, y.a, x.b);
--		} else if (x_t == U64 && y.a > y.b) {
--			if (y.b < x.a && y.a <= x.b)
--				return range(x_t, y.a, x.b);
--			if (y.a > x.b && y.b >= x.a)
--				return range(x_t, x.a, y.b);
--		}
--	}
--
- 	/* otherwise, plain range cast and intersection works */
- 	return range_intersection(x_t, x, y_cast);
- }
-
--- 
-2.53.0
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22787654290
+--===============7527132546623287183==--
