@@ -1,247 +1,116 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F37AC14F112
-	for <bpf@vger.kernel.org>; Sat,  7 Mar 2026 00:53:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.172
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772844792; cv=pass; b=n3LildTafTNY1NqqoBL395AOzDlFcvbQLb/wvecY2CfxZit7NtMcomg4V8KER+bN+kLxCT3JT4FSYM6LlxhdR02qDVhSl+6wA1thAzpaoeKsnCF3Z7gipYE31a1b0B1w8t/U6BLUUGod2X5vmEnRl8GrrSK8ll2GM5RjZMbqRaU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772844792; c=relaxed/simple;
-	bh=KgC75WWku0vFWN0FPoaUFQGBduqYB4wIG4FIDN51S2g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LNzxz/NqGXdGYPczXDpFXSt7JaxDmHEx2q9H3sxgxn4/juYaYEJ2xDQx9kKM9ls+2cZ+VBW/RAaM84utl4NSt9QkLf40Azi9ZUNO8TljDxqInCHDGdzX6avnUyfEKfPybJlqR255tEMepshDrkEfRjhYCXHOZI1ceVM8Bn10Ng0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W93MMCqj; arc=pass smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92C81285CAA
+	for <bpf@vger.kernel.org>; Sat,  7 Mar 2026 00:54:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772844885; cv=none; b=D7QJS7azGmm6vxpOqejfzZ1lCzUmx/d3q56nRW88usHi2Gwbw5bZhuomPiU2HqNDxr/bVJoUK+ZvFLdxFS0Il48NWUcXKgDSpx13/2QqPeiWZ2rzlWiT7gfxoZtz8+XZCGg9R9O2XT/FE0hTIgTqKppgaUo6SopWL4b/Fr8GCz4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772844885; c=relaxed/simple;
+	bh=Kxmt4WfEyYNC9B4OggoW30VD5UzDtIxDJwASqTNRxDA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LJ0f6vvuyON84XiV0Q779x7BWHD/jT9SU7H/Yq4sK2cWO3+bwv+hcJz+Ha3LggLczRkGWsZcRTVBs/yNkwHaX4LJUvuZlEqQRiqKPERuOvE5ROK0eIIsSECgNZfbbG1GkM0HAbzgnJxWMDpe3m+ES2YlgcnEQP1GFVneD/ptWvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eY0RdJLi; arc=none smtp.client-ip=74.125.82.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W93MMCqj"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8299f1ca86fso651339b3a.0
-        for <bpf@vger.kernel.org>; Fri, 06 Mar 2026 16:53:10 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772844790; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ixbGRb2aMCNlY2jqJI1aKaQQCeG0U7ejpb01lQxk9CslWgWRfZGBDDwDfdwwY5uVvk
-         3HU5OT0194xxvI4EOddeVFVyQLb0Gw7PgYUMVeP2xnY/LaBX3DjkQxx2Eck0Zm0ahh86
-         Shj2lw2zT78yfzjroH+uXJbeLO9yuzum/HdyO5hOE/JuE5VLvP8TOqF2qlD2X18Ip5Fe
-         w8vCHW4Zzi/3dyDXtFsJ7U6Y5ZBqGO+JAP5dRgD9ftJCraQktYVyndlVy5/XLhKRftdW
-         7TX69brF2b65H/C4RAac6T7+w2365k6qM1UvJkWo+OYmWPRZuMz/NVun1nqTlTabl738
-         v7YA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=dUBvhRli2+tpD4rC9ts0IOVrF/QooZN64iTMRsQJNbg=;
-        fh=nQy42juJAtOd+ZZJVn9EZi5KSLdCBMcThKSvGZVlprQ=;
-        b=VZzT/SMiKvxVlMFFBb0tSEdvM9s1SGLyRxTBCbFlGtXji5c9Eh7CitPOAuHoxk7nxc
-         V7mrBibdpfGwEpufbKyi6gUKovTe1PWovXNppeXOqxxY+O7CeBQMb/729HVo7GgerP9q
-         PPMnP7UrdmH7or4oslcUUtXj5VsQvuxtJ/Bo6+iKD63fMdWKilKMXYrh17kAjF7n6olM
-         epafl/Jrr/oolmfseFGZCFTS/l3olJTBzlY2Ko3GJUb0Cwy64k3kMu0qGjrhX4SntbX4
-         E/XoftH6MYpAv1/1vU5vT5U1unmPX0gVwYDh4rzC5UJ4+bUkudi5LzU87Y+Q0lWSBvM8
-         Lp/Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eY0RdJLi"
+Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-2be3bdfda8eso3001583eec.1
+        for <bpf@vger.kernel.org>; Fri, 06 Mar 2026 16:54:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772844790; x=1773449590; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dUBvhRli2+tpD4rC9ts0IOVrF/QooZN64iTMRsQJNbg=;
-        b=W93MMCqjS/1xoTmn3Iz85M4nnRTtFOKvJeobHncr9Rf+h1JuwubI5HCH9bQeZcXPWy
-         g0lArdzX9qztXiF0aZmk9jhOBble5oZWX9D22n0VPrrwZ/LEzkBaFtwEt5vHBguLRwQn
-         SU7mzlJsI3PXxEsU1DlwoltOdyl+pw4z8QHLQAGTvD/XeXmA0Jy1Lvudh1CUPLlyTR8W
-         2sMKWkGYi+QW7QG/cZsu9ixkQFBytUH6mViwcVQGhItTUNhZOWlzwdk0Ts3Cnm6ChHK/
-         /ZPn0I46lvcW2sxYE8GruHHfr+mFe68HtEDTDmhYllHM94o65DO2NXN3QrGS50thJCrj
-         ou7Q==
+        d=gmail.com; s=20230601; t=1772844883; x=1773449683; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Le9mkTgn2CBuj1c4DzQEBUqZ8ua+0MeeZqh/9YSh2EY=;
+        b=eY0RdJLieiQankcpp+R3DGkGeErs6ejUhU51AJp+VtkG9WlSSRBUFzpvIn7FVy7EMn
+         Jjk9HPu5s81ESjWZYmmte05yFa1iAplDxRJ8zK/HMmVpHXQEjswwun/ID75skU2Tb/7P
+         p6quIUqP7HnX9wQImA9cjWSA9zkN1rV4wYOmm2Xjf100WrzAQ7hS9F5apx1zuyIlbxlO
+         K54yud77a1ka/ucj7bUpLGGiZ5BN50npSoA70S+6MnhR7bgWPRCI7lPcOJ2KBbNJcRms
+         ZL7chWnMlpyvWbakppJ2Q5jWbx61Iug79Rtln0CVe2cFnwpoHa1ban0mxZJXNw6PJP+t
+         ekFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772844790; x=1773449590;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=dUBvhRli2+tpD4rC9ts0IOVrF/QooZN64iTMRsQJNbg=;
-        b=STHQ/2UV8rufqmDWgF/HZqkuqzLCs0N2pjHntQEPEMdbRhwNWO0uaO0RaT4pRxF3O+
-         i8/2LCfPFjj+hnO01a1NCnbeviyHpSguL6lQtBemgnSlZOkSRv330pSIDxKGBVEJh/b+
-         i+H0VvTg+f9HEBxAdRkeipashWrFEc9tHHQKKHmNndfHRVPIae8HVyx6YIhyCEGk8GfT
-         J0iwfynNyxcXGk1Jllexo0uTHIlfE+MaDkYoCDCIUh6zyJycyugiMwe4vxFvaJHXU3B+
-         U97zz0BhPX7jDUVi7YqYrrcgJxiuGEV4g8L6mPsnYCt/PR2GggXs0lrIKpk65wMDkR1q
-         wmsw==
-X-Gm-Message-State: AOJu0YxRPB1COQ+WgNq6X3ccyxR7AASqWlOFL+EBSNxRuyNp1ho1/R8B
-	QcCFNIb7U8ZfTn7n8E2GKEm70flheE5KD0H/L0ooCtcPohdgNXOAN/ThwC2BsI5c8yjC330k59q
-	eEM5wfNsnEi+TxQuSTvOfS/mqKrnW1vU=
-X-Gm-Gg: ATEYQzzixUWJSqV4d+0vOarJkmfpXnM5O62gezogDTpBY7U9FJQjO1kILXCKGurhsdi
-	IjZae/Usz+iEdoXzgeuZjGj2YBcX8aeST4XXTLdhvatu1Pr3N62d33MMPIzrXGySACPW4Usw6WV
-	ZlqOpstuxVcp7zkmfqQAYcElJ2sRW3djjD8j4AH8bnaG+psIyU20mhYBaGgU7obeiD19xgdoHk6
-	Nya3VPliquM4oScabuYmZnybQ2CubOTMAgGV8IOUtXlZVr1mPBtU1BGPhzHExDNmHCJ5FeV41nY
-	orICUlw=
-X-Received: by 2002:a05:6a00:21d0:b0:829:7087:7e79 with SMTP id
- d2e1a72fcca58-829a2f49b43mr3751961b3a.30.1772844790225; Fri, 06 Mar 2026
- 16:53:10 -0800 (PST)
+        d=1e100.net; s=20230601; t=1772844883; x=1773449683;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Le9mkTgn2CBuj1c4DzQEBUqZ8ua+0MeeZqh/9YSh2EY=;
+        b=eF0BUTXCeKWMyr25i+bqRUlFxs6B9gWNSwLD0BFP7GaGwNV/5GDGeTGH+AOkYMnw9h
+         jVZSuAvs1wFU6S6fOILU4VMzKfZpxFzsVvUC5wkI8mte6Mh6pT68oqHg2BD9mI/0n7av
+         tOLm6LC8xr1pAlkYRiEqCwDJlHFhfcXPb3miLq9xb1RjNcsiLLQTk3YjByhQedpIUSfq
+         o8LwyKi9ZlWj7+wmYwqo6V//7KhhjXijaQzbEc8cnQCOFOyft5nG6UYYXHbvvBUiySKL
+         +ozAK9S0oz7WPOyKynUgidC530uoK452p8uGuB0wIAI+Xn8mG5Vyd8atFfYxSxp/WW8o
+         nfWA==
+X-Gm-Message-State: AOJu0Yw0TKQMExmFghIZBJg3kwHHKaKkQWerWIwew3dYdycD9CQHUGHw
+	CcyKe8rlprnjF4zv2XN9TSeaMi0rJxcYTqQS4v6SbWAk7r/jiKDOQG6BknT+pZZt
+X-Gm-Gg: ATEYQzzmW0g/0j0H5HY6KSEwEUkHgYqeASze8lZ+RFp4hVxiEpcQk5r4dMTwVXAyS1e
+	xLQ+jvA3lXS9nZ9LXtDcrj5U8w9Q0TFGD5UqWarIHcQQhz3oL6toPvSvGqq/y6XNK2CY6W94qEl
+	BxC2g93NSgj/lwKsFhesnjD+Oh8aWaLMZamT2MzO6xGU2VhigCABjnuUz8PWm0UWORI95VMNEef
+	PbcT5Bc/4Gr0X2oumKR+hP2n46PpfWszyDUqSJ84y3vGZ/AyRD1bY4ZNEF/HL5fAJ3AgUgzv+8W
+	rt1b+t29Im9T3CecpKOUrRSVw+SVSIsijloCQiECycHFSPC8V+K0Zj+5EuhSinWDX709gaUC2Zh
+	uybm/TcHRPnlUZmXwmz0DuptBRtb5rd39J+of3irMsIIec5TRxDpjWpJaBDxhMfiP73LzHZmjcy
+	2NDGsLQK6owD4mi7rK3A6pOLsg5NEQWO99qzLh6K4xiZG8DWVl/5tc9qdSHxExIQxdn35B2A2Wg
+	2wQGXw=
+X-Received: by 2002:a05:7300:ec17:b0:2ae:5e93:b6d with SMTP id 5a478bee46e88-2be4e06434amr1440661eec.38.1772844883342;
+        Fri, 06 Mar 2026 16:54:43 -0800 (PST)
+Received: from ezingerman-fedora-PF4V722J.thefacebook.com ([2620:10d:c090:500::2:f62d])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2be4f948390sm2235110eec.22.2026.03.06.16.54.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Mar 2026 16:54:43 -0800 (PST)
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	andrii@kernel.org
+Cc: daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	kernel-team@fb.com,
+	yonghong.song@linux.dev,
+	eddyz87@gmail.com,
+	shung-hsi.yu@suse.com,
+	paul.chaignon@gmail.com,
+	emil@etsalapatis.com
+Subject: [PATCH bpf v3 0/3] bpf: refine u32/s32 bounds when ranges cross min/max boundary
+Date: Fri,  6 Mar 2026 16:54:23 -0800
+Message-ID: <20260306-bpf-32-bit-range-overflow-v3-0-f7f67e060a6b@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260302210532.381083-1-andrey.grodzovsky@crowdstrike.com>
- <20260302210532.381083-2-andrey.grodzovsky@crowdstrike.com>
- <CAEf4BzYiwAczqqdb40YKq8yRd7JWgOV_cgyehpCRzoEZ6qeP7g@mail.gmail.com> <CAOu3gNgUp0sqgTUfCM_UFsEi6jwsTDjMrAZL_Pv=FZ4Fx_Khug@mail.gmail.com>
-In-Reply-To: <CAOu3gNgUp0sqgTUfCM_UFsEi6jwsTDjMrAZL_Pv=FZ4Fx_Khug@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 6 Mar 2026 16:52:58 -0800
-X-Gm-Features: AaiRm50VW-3g5J2XQ6FWw_8dclIhmc5syPXmzgMvkGYM-L6Xg-GI_roMWjjnOSU
-Message-ID: <CAEf4BzZ8ky0menK0ujPMkKre3+P2SwPQ2oJ=cgtQ9JMp0c86Kg@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH bpf-next v4 1/2] libbpf: Handle duplicate
- kprobe symbols in attach_kprobe_opts
-To: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, jolsa@kernel.org, emil@etsalapatis.com, 
-	linux-open-source@crowdstrike.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Change-ID: 20260305-bpf-32-bit-range-overflow-00351dfb8083
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 6, 2026 at 1:08=E2=80=AFPM Andrey Grodzovsky
-<andrey.grodzovsky@crowdstrike.com> wrote:
->
-> On Thu, Mar 5, 2026 at 5:47=E2=80=AFPM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Mon, Mar 2, 2026 at 1:05=E2=80=AFPM Andrey Grodzovsky
-> > <andrey.grodzovsky@crowdstrike.com> wrote:
-> > >
-> > > When a kernel module exports a symbol with the same name as an existi=
-ng
-> > > vmlinux symbol, kprobe attachment via bpf_program__attach_kprobe_opts=
-()
-> > > fails with EADDRNOTAVAIL (perf_event_open path) or EINVAL (legacy
-> > > tracefs path).
-> >
-> > If the same symbol name resolves to multiple addresses, that's an
-> > ambiguity that libbpf has no business resolving. It should be on user
-> > to resolve and use attachment by address, which libbpf supports
-> > through bpf_kprobe_opts or multi-kprobe opts.
-> >
-> > pw-bot: cr
-> >
->
-> I understand the concern about libbpf making policy decisions on
-> ambiguous symbol resolution. But I think the skeleton-based auto-attach
-> workflow makes this impractical for the user to handle.
->
-> The recommended upstream pattern is:
->
->   skel =3D my_prog__open_and_load();
->   my_prog__attach(skel);
->
-> So it's something along the lines of
->
-> our_skeleteon_bpf__attach(skel)
->     =E2=86=92 bpf_object__attach_skeleton(skel->skeleton)
->       =E2=86=92 prog->sec_def->prog_attach_fn()  [=3D attach_kprobe()]
->         =E2=86=92 bpf_program__attach_kprobe_opts(prog, func, &opts)
->           =E2=86=92 perf_event_open_probe(name=3Dfunc, offset=3D0)
->             =E2=86=92 perf_event_open() =E2=86=92 EADDRNOTAVAIL
->
-> So bpf_object__attach_skeleton(), which iterates over all
-> programs and calls attach_kprobe() internally. That function extracts
-> the symbol name from the ELF section name (SEC("kprobe/func_name"))
-> and passes it to bpf_program__attach_kprobe_opts(). The user has no
-> control point in this chain - no callback, no option struct, no way
-> to intercept a failed attach and supply an address instead.
->
-> If a kernel module happens to export a symbol with the same name as
-> a vmlinux function the user is probing, the attach fails with
-> EADDRNOTAVAIL and the user has no recovery path within the skeleton
-> API. The only options would be:
->
-> 1. Abandon skeleton auto-attach entirely for any kprobe program
->  that might hit a duplicate, and manually call
->  bpf_program__attach_kprobe_opts() with a resolved address for
->  each one. This defeats the purpose of skeletons.
+Cover the following cases in range refinement logic for 32-bit ranges:
+- s32 range crosses U32_MAX/0 boundary, positive part of the s32 range
+  overlaps with u32 range.
+- s32 range crosses U32_MAX/0 boundary, negative part of the s32 range
+  overlaps with u32 range.
 
-No it doesn't. And there are many purposes to skeletons, convenient
-auto-attach of everything is but one of them (when everything can be
-declaratively defined and attached).
+These cases are already handled for 64-bit range refinement.
 
-But even for the auto-attach functionality.
-bpf_program__set_autoattach(prog, false), attach explicitly however
-your application logic demands and set resulting link into skeleton's
-slot (skel->links.<prog>). You'll get the same auto-detach clean up as
-if your program was auto-attached. It's pretty flexible. Sure it's
-nice when everything just works out of the box, but ambiguous target
-symbol is not a typical out-of-the-box-working situation,
-unfortunately.
+Changelog:
+- v2 -> v3:
+  - Reverted da653de268d3 (Paul)
+  - Removed !BPF_F_TEST_REG_INVARIANTS flag from
+    crossing_32_bit_signed_boundary_2() (Paul)
+- v1 -> v2:
+  - Extended commit message and comments (Emil)
+  - Targeting 'bpf' tree instead of bpf-next (Alexei)
 
->
-> 2. Proactively scan /proc/kallsyms before every attach to detect
->  potential duplicates, set prog->autoattach =3D false for affected
->  programs, and manually attach those. But autoattach is not
->  exposed in the public skeleton API either.
+v1: https://lore.kernel.org/bpf/9a23fbacdc6d33ec8fcb3f6988395b5129f75369.camel@gmail.com/T
+v2: https://lore.kernel.org/bpf/20260305-bpf-32-bit-range-overflow-v2-0-7169206a3041@gmail.com/
+---
+Eduard Zingerman (3):
+      bpf: refine u32/s32 bounds when ranges cross min/max boundary
+      selftests/bpf: test refining u32/s32 bounds when ranges cross min/max boundary
+      Revert "selftests/bpf: Update reg_bound range refinement logic"
 
-see above, bpf_program__set_autoattach() is a public API. Skeleton is
-just a convenience wrapper around bpf_object, you still have full
-access to bpf_map, bpf_program, bpf_object, etc. Skeleton's first and
-foremost unique added feature is convenient memory-mapped access to
-global variables (and embedding BPF object file for nicer production
-deployment), other than that it's doing its best to help but not get
-in the way.
-
->
-> Since a kernel module can be loaded at any time, any kprobe could
-> potentially become ambiguous. Pushing resolution to the user
-> effectively means the skeleton auto-attach pattern cannot be
-> reliably used for kprobes.
-
-you are overexaggerating how common this problem is
-
->
-> The fallback in this patch is intentionally conservative - it only
-> triggers on the specific error codes that indicate duplicate symbols
-> (EADDRNOTAVAIL for perf_event_open, EINVAL for legacy), and it
-> resolves strictly to the vmlinux text symbol, skipping module symbols.
-> This seems like the only reasonable behavior for auto-attach, where
-> the user has expressed intent to probe a specific function by name.
->
-> Would it make sense to limit this fallback to the auto-attach path
-> (attach_kprobe) rather than the explicit attach_kprobe_opts API?
-> That way users who call attach_kprobe_opts directly still get the
-> raw error and can handle it themselves, while the skeleton workflow
-> has a reasonable default.
->
-> Happy to hear alternative suggestions on how to make this work
-> within the existing API.
-
-Realistically, just use multi-kprobe. It will attach to all matching
-kernel functions (unless unique match is requested).
-
->
-> Andrey
->
->
-> >
-> > >
-> > > Implement a fallback mechanism that, on such failures, resolves the
-> > > vmlinux address through /proc/kallsyms - filtering out module symbols=
- -
-> > > and retries probe attachment using the absolute address, bypassing
-> > > kernel symbol name validation.
-> > >
-> > > Changes:
-> > > - Restructure libbpf_kallsyms_parse() to accept a bool skip_if_module
-> > >   parameter that filters module symbols before invoking the callback.
-> > > - Add find_kaddr_cb() callback and find_kaddr_ctx struct to resolve
-> > >   vmlinux text symbol addresses from /proc/kallsyms.
-> > > - Detect duplicate symbol errors (-EADDRNOTAVAIL for perf_event_open,
-> > >   -EINVAL for legacy tracefs) and retry with resolved KADDR.
-> > > - Fix NULL pointer in gen_probe_legacy_event_name() when using absolu=
-te
-> > >   address by passing func_name instead of optional_func_name.
-> > > - Fix NULL pointer in pr_warn() calls within
-> > >   perf_event_kprobe_open_legacy() by using ternary fallback.
-> > > - Fix memory leak of legacy_probe buffer on retry path.
-> > >
-> > > Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-> > > ---
-> > >  tools/lib/bpf/libbpf.c | 155 ++++++++++++++++++++++++++++++++++++---=
---
-> > >  1 file changed, 137 insertions(+), 18 deletions(-)
-> > >
-
-[...]
+ kernel/bpf/verifier.c                              | 24 +++++++
+ .../testing/selftests/bpf/prog_tests/reg_bounds.c  | 76 +++++++++++++++++-----
+ .../testing/selftests/bpf/progs/verifier_bounds.c  | 39 ++++++++++-
+ 3 files changed, 120 insertions(+), 19 deletions(-)
+---
+base-commit: 56145d237385ca0e7ca9ff7b226aaf2eb8ef368b
+change-id: 20260305-bpf-32-bit-range-overflow-00351dfb8083
