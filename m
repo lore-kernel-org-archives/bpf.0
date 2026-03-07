@@ -1,60 +1,60 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2907637AA8B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0975837B03C
 	for <bpf@vger.kernel.org>; Sat,  7 Mar 2026 06:44:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772865887; cv=none; b=LkBVjF6rMni1SZixBPVzMw17uH7ONWprZ+hbW8kLPisaApSSc6t4X8hZZgRENSQa8oK3rM4AZua6hADPtb9Kqxf5ZtDuXmzBUYMBCtlp6lyEFaVLtEL/17e696tagBaafDXDpWlRhpJnwY6Fa4MCP0nbxf52xIFeq3iepwjDKzA=
+	t=1772865888; cv=none; b=ksdqAsFAzrFHxfGlc7QNT6Nj82DbZi/t2MO+qKahXD/zggjUUNud3LK5WyCF7Wzh/w5apMsZWRsVtnams1L4u4TfpjbCoVmdcPGXpc1V9RnVLMvPzJ+RFrA7m+8Y3a+r7vCaIHMF1H3vC8bZkqMHDzUqg0JMZsdRKaN9P6PLmM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772865887; c=relaxed/simple;
-	bh=78mFUcjNUhU+/beghqjp/7We/0Zd0ZYpScLfFzhKku8=;
+	s=arc-20240116; t=1772865888; c=relaxed/simple;
+	bh=zg54N2RacaNRzv4xPjUQtK1TvbPGS4ttunAlGHbREgI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=G1/ItFiLhJ/t0kM+ce3XnE056DRViJbD0EEdaGhoDM9NONgEj7fgzHUsGcI1lTBeOjptcqmP87Z+Xq7gJL92//Gh5+bJbPQHTYNxM0jCH8SUsGfOxbn2R1Cmkoe8Ydz0yVvojaN9MP0BlvbdcONJUYfvW34+z42G2cIURDGGqOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gLCorju/; arc=none smtp.client-ip=209.85.210.169
+	 MIME-Version; b=nUNrQ507mEp5U2YGA7ze/yrK81aac6YFyhFafEdGxi9p96uST0vj1dhVDoI82NmGlTViyLNPwhjlZDQy2tzjT7wc8eR1s9SVt1EGUwLjEFHThtm1qtciuo8Ew+/t53LecC4+isdDN9tF3xl/5Xvr9EIPEsnKxGmHleb18zX+nlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Opp7fMVR; arc=none smtp.client-ip=209.85.215.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gLCorju/"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-829a9c03780so1136278b3a.1
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Opp7fMVR"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-bde0f62464cso3721155a12.2
         for <bpf@vger.kernel.org>; Fri, 06 Mar 2026 22:44:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772865885; x=1773470685; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772865886; x=1773470686; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MvUn/zlTI4nC36Csjw0hz3VgIHs5jPtoGtL/EDdDIEQ=;
-        b=gLCorju/JcfDx48KQbpliV0/ksiZq9JQsu6FVX+ysJgx2bp1u7eoxBSY2IJ0ZN8vvy
-         YFMvaWbBW5tAXVVsf8tlZDt1v5umB0bUSGy9UPK8fzHbQ0DJrwk5AGzwvaV26MlNUfVX
-         n7GXuoVQ1JiXEwdeJfm7f2U7tflnGiSX/GPmZtQvOa9MPG10iUFCQAyaFDxC5IC64zK4
-         mW1fH5o/ao1Le1nZFsBPJsVczxmDrHz1jUZkCVDd0c9MGWfkfQVdvWk5WAc7sioau7cG
-         RJseB/1SYfwvmL01/vVZMVgnFokk8X0I6mvIUl3AgfVmwA1NOnAAkzqOWJEEBRGojb0d
-         i5Wg==
+        bh=IveTH5JWf6wbbtWrNvYx1p+e/Ua/aGYSxO2nKBZt0ag=;
+        b=Opp7fMVRMSgzvQOBIW5uplifqY7+bsg12ZFcyAU06KSExynb6/DoBDyxUI2QYq1H/9
+         KMuF+zRAOT33l0dqsiENjAkIt/C9ZR0iMAAVaa4gDhMnm51eIJRN42BgsoHAGe+Qf1RK
+         OoLeXjPfBmsY2ejBIk5R0knza4/3uiFZrSfLAxnK4UNwUWSp0An1ETAOUigIvoCs5DEG
+         TxW8HDcyAd3yL8PZ1M0wBNez8C/LmNBX1e4hZlWr6KXYhJod279WK6w9p3svngHxgSLp
+         PqPiWpg0XI5CZTAwX04BhFVxUKC0zV6+gj07qaAlaEQ4D0RELRQ3lX3etwVTH4wIWBEn
+         EkEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772865885; x=1773470685;
+        d=1e100.net; s=20230601; t=1772865886; x=1773470686;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=MvUn/zlTI4nC36Csjw0hz3VgIHs5jPtoGtL/EDdDIEQ=;
-        b=EOMZ2XSr2AqtFEyQMEgHhy2DIqURrsntnvYWM636BsOpubtgHhD3fVxsglkA+2zXpL
-         Q6CitVu2POYqYE6ooMe/Zvjl9mEQgPm4cgZe/4bm3AgJKxUWWn5Yp+KGff4myRCMkXws
-         Z8I78S+79rnqxwUbVEIjxzRNyQnGx9EOpAfoB0mCMDpiZsKolow9lkEl5kdxm+jpkA2b
-         w494hnkUilz1YMEyjOoDBNFfaMEAioN7czE/LqwxmnZiduv6UM2tZKlU3dlNrdov6tsV
-         Xi19E+1M7qSvj0LrqMZaVluWU8IxVknvSCXYRwkSGdbMCZ9RL9qtEFsC5trDFGJkfVOo
-         6onw==
-X-Gm-Message-State: AOJu0YxQgIWHusGgEp0ANzX+Q2mMtbc/iSSri7xwTtgP314RrX4Wui51
-	KpBmfyKTRGYrKxI9cTYSU6z3WsJkQ5Q35n2XTbj/+5QrU1cFckX/Zg4lTP59OQ==
-X-Gm-Gg: ATEYQzx+rkQdz4qFhRXJZDbrDiVIlqvRRkBfF6IR0I8M2Nfez6zsV/mH4OnKrOgLQBF
-	loGfkhHhP6ZnFkeZpJ872Zg4jt82rzJy7gFQtGjzPPDHd2CU37cZ1hb69Cb+Ob6e9wZa3lTYA4a
-	KZrv28FLVC79k6PTDiwGGVZNrubIjA+2rlCLufFynU7ZWptT9mRTUhaN3bEwhSoAV2Cl0uP2UAz
-	pkXMG5l9QClK3a0HN/Mk5UIu1MLgYj2bsPY7Gr/F42um4rrxkbjWvuHJCs7Dfq34Y6kzNsaVnDH
-	XCo6C0USn1jVijZdolxi/PaZFHXWLsBVC3SaHdWEf/3XSYSCuFEEOhNjbHiOQZa6zFgYkQh1xTQ
-	w0aXmZoOdo6dczRINoxwZOk8Ak6zrnzhQUCZUubIEUzGJVFYV+4CobTWy/NHFv6SxnytBWReZZJ
-	VCtV4QAjhYWXXX
-X-Received: by 2002:a05:6a00:4006:b0:81f:3cac:38a1 with SMTP id d2e1a72fcca58-829a2d6e529mr4224203b3a.6.1772865885305;
-        Fri, 06 Mar 2026 22:44:45 -0800 (PST)
-Received: from localhost ([2a03:2880:ff:d::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-829a4656f36sm3463022b3a.14.2026.03.06.22.44.44
+        bh=IveTH5JWf6wbbtWrNvYx1p+e/Ua/aGYSxO2nKBZt0ag=;
+        b=cCOrBo+PL/sEPoqN05HgwG10eli0ZNMkrGjqPyQEwHe43JiJGjezuLz7UuN9DRoyv7
+         aiuXth/i8WJP59UMO8dHONYJYlQUeMuPkIjpXUv36EUmejvVZf2jsbMf2ISSg1QbsB/A
+         /wNgzd/8UoNZ9YyDsxMk/X0czONkxXHG8bIrqkBnmP3IZzTkMDMT+Eu0jq5xIJ3nfeAB
+         /WvAWJY9oZma7k0tJEMijddsohvHAWEQ/ouAL644WQbO0Wr1G7SCLnis3tYpepUxYnga
+         XQ9O6BMGgh5cCYSa+PBQ7IgKEVpGTm+LV3fSwfTPfDdo6xFjgEujedhdeqM9hsPOv50D
+         JJrg==
+X-Gm-Message-State: AOJu0YxEIxmLVEwNa0KEBRusWVSI6colJMh8OcYj6IxEyMjEXwD2d580
+	D+1J2JhFzdIQMdVXbYmxPhpkQoq2ds+JDPmE0JaT7yqKYoMGbbGVdDIIUdNWfg==
+X-Gm-Gg: ATEYQzyTPOk2n6WlyMVcOLK057b1rUoN6PAoIlhMb0IRzD+0X+o5q95svUYbs7ElM0l
+	c6Zkc/KKSHIrM0MBChiU3rXZRi7vwVfyfml5rlyVCfsQEQdZwyk9tu7hu5wLMm2xUT4tLgBvgwR
+	R6uNEX6jnQ0x9lZgXO+IxEz4oM0liP6KYUS2zUsnCiMo/ROd+7zqMfLtsAf5MuPsz94rWxUP/Ij
+	7gJkpD7ZxFHgDSgdr64y4xG2UpKP0NSuZ65FgbApJjGniUb5CDQZccudfn04AQeJhaY5C5ljvaa
+	Azf6HU8E1iTTCkxiVbiQH3BduiGx4Ov2dawhusg4iT5zDwj56A+CPNEVc+I0ie89TZ+dY+71okp
+	mSOZAiOreZq1NQ3Uu5QZYicSa2y/Q2f6I1q5iTqZf4lArj7PQuZB6/a70/QpHBtLuuJbjfqei7L
+	lmOUnrHUs+NB2Fsg==
+X-Received: by 2002:a17:903:ac5:b0:2ae:4a6b:68ea with SMTP id d9443c01a7336-2ae82466961mr45232935ad.43.1772865886243;
+        Fri, 06 Mar 2026 22:44:46 -0800 (PST)
+Received: from localhost ([2a03:2880:ff:71::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae840ad894sm55101425ad.80.2026.03.06.22.44.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 06 Mar 2026 22:44:45 -0800 (PST)
 From: Amery Hung <ameryhung@gmail.com>
@@ -67,9 +67,9 @@ Cc: netdev@vger.kernel.org,
 	martin.lau@kernel.org,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [RFC PATCH bpf-next v2 04/11] bpf: Assign reg->id when getting referenced kptr from ctx
-Date: Fri,  6 Mar 2026 22:44:32 -0800
-Message-ID: <20260307064439.3247440-5-ameryhung@gmail.com>
+Subject: [RFC PATCH bpf-next v2 05/11] bpf: Preserve reg->id of pointer objects after null-check
+Date: Fri,  6 Mar 2026 22:44:33 -0800
+Message-ID: <20260307064439.3247440-6-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260307064439.3247440-1-ameryhung@gmail.com>
 References: <20260307064439.3247440-1-ameryhung@gmail.com>
@@ -81,41 +81,123 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Assign reg->id when getting referenced kptr from read program context
-to be consistent with R0 of KF_ACQUIRE kfunc. skb dynptr will track the
-referenced skb in qdisc programs using a new field reg->parent_id in
-a later patch.
+Preserve reg->id of pointer objects after null-checking the register so
+that children objects derived from it can still refer to it in the new
+object relationship tracking mechanism introduced in a later patch. This
+change incurs a slight increase in the number of states in one selftest
+bpf object, rbtree_search.bpf.o. For Meta bpf objects, the increase of
+states is also negligible.
+
+Selftest BPF objects with insns_diff > 0
+
+Insns (A)  Insns (B)  Insns  (DIFF)  States (A)  States (B)  States (DIFF)
+---------  ---------  -------------  ----------  ----------  -------------
+     7309       7814  +505 (+6.91%)         394         413   +19 (+4.82%)
+
+Meta BPF objects with insns_diff > 0
+
+Insns (A)  Insns (B)  Insns   (DIFF)  States (A)  States (B)  States (DIFF)
+---------  ---------  --------------  ----------  ----------  -------------
+       52         57     +5 (+9.62%)           5           6   +1 (+20.00%)
+       52         57     +5 (+9.62%)           5           6   +1 (+20.00%)
+      676        679     +3 (+0.44%)          54          54    +0 (+0.00%)
+      289        292     +3 (+1.04%)          20          20    +0 (+0.00%)
+       78         82     +4 (+5.13%)           8           8    +0 (+0.00%)
+      252        320   +68 (+26.98%)          21          27   +6 (+28.57%)
+      252        320   +68 (+26.98%)          21          27   +6 (+28.57%)
+      119        126     +7 (+5.88%)           6           7   +1 (+16.67%)
+     1119       1128     +9 (+0.80%)          95          96    +1 (+1.05%)
+     1128       1137     +9 (+0.80%)          95          96    +1 (+1.05%)
+     4380       4465    +85 (+1.94%)         114         118    +4 (+3.51%)
+     3093       3170    +77 (+2.49%)          83          88    +5 (+6.02%)
+    30181      31224  +1043 (+3.46%)         832         863   +31 (+3.73%)
+   237608     237619    +11 (+0.00%)       11670       11671    +1 (+0.01%)
+    94832      94836     +4 (+0.00%)        4787        4788    +1 (+0.02%)
+   237387     237407    +20 (+0.01%)       11651       11652    +1 (+0.01%)
+    94832      94836     +4 (+0.00%)        4787        4788    +1 (+0.02%)
+     8103       8108     +5 (+0.06%)         459         459    +0 (+0.00%)
+     8076       8079     +3 (+0.04%)         457         457    +0 (+0.00%)
+     8177       8197    +20 (+0.24%)         459         460    +1 (+0.22%)
+     8083       8086     +3 (+0.04%)         458         458    +0 (+0.00%)
+   237608     237619    +11 (+0.00%)       11670       11671    +1 (+0.01%)
+    94832      94836     +4 (+0.00%)        4787        4788    +1 (+0.02%)
+   237387     237407    +20 (+0.01%)       11651       11652    +1 (+0.01%)
+    94832      94836     +4 (+0.00%)        4787        4788    +1 (+0.02%)
+     8103       8108     +5 (+0.06%)         459         459    +0 (+0.00%)
+     8076       8079     +3 (+0.04%)         457         457    +0 (+0.00%)
+     8177       8197    +20 (+0.24%)         459         460    +1 (+0.22%)
+     8083       8086     +3 (+0.04%)         458         458    +0 (+0.00%)
+
+Looking into rbtree_search, the reason for such increase is that the
+verifier has to explore the main loop shown below for one more iteration
+until state pruning decides the current state is safe.
+
+long rbtree_search(void *ctx)
+{
+	...
+	bpf_spin_lock(&glock0);
+	rb_n = bpf_rbtree_root(&groot0);
+	while (can_loop) {
+		if (!rb_n) {
+			bpf_spin_unlock(&glock0);
+			return __LINE__;
+		}
+
+		n = rb_entry(rb_n, struct node_data, r0);
+		if (lookup_key == n->key0)
+			break;
+		if (nr_gc < NR_NODES)
+			gc_ns[nr_gc++] = rb_n;
+		if (lookup_key < n->key0)
+			rb_n = bpf_rbtree_left(&groot0, rb_n);
+		else
+			rb_n = bpf_rbtree_right(&groot0, rb_n);
+	}
+	...
+}
+
+Below is what the verifier sees at the start of each iteration
+(65: may_goto) after preserving id of rb_n. Without id of rb_n, the
+verifier stops exploring the loop at iter 16.
+
+           rb_n  gc_ns[15]
+iter 15    257   257
+
+iter 16    290   257    rb_n: idmap add 257->290
+                        gc_ns[15]: check 257 != 290 --> state not equal
+
+iter 17    325   257    rb_n: idmap add 290->325
+                        gc_ns[15]: idmap add 257->257 --> state safe
 
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- kernel/bpf/verifier.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ kernel/bpf/verifier.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d52780962adb..ea10dd611df2 100644
+index ea10dd611df2..8f9e28901bc4 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -7754,8 +7754,6 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
- 			} else {
- 				mark_reg_known_zero(env, regs,
- 						    value_regno);
--				if (type_may_be_null(info.reg_type))
--					regs[value_regno].id = ++env->id_gen;
- 				/* A load of ctx field could have different
- 				 * actual load size with the one encoded in the
- 				 * insn. When the dst is PTR, it is for sure not
-@@ -7765,8 +7763,11 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
- 				if (base_type(info.reg_type) == PTR_TO_BTF_ID) {
- 					regs[value_regno].btf = info.btf;
- 					regs[value_regno].btf_id = info.btf_id;
-+					regs[value_regno].id = info.ref_obj_id;
- 					regs[value_regno].ref_obj_id = info.ref_obj_id;
- 				}
-+				if (type_may_be_null(info.reg_type) && !regs[value_regno].id)
-+					regs[value_regno].id = ++env->id_gen;
- 			}
- 			regs[value_regno].type = info.reg_type;
- 		}
+@@ -17014,15 +17014,10 @@ static void mark_ptr_or_null_reg(struct bpf_func_state *state,
+ 
+ 		mark_ptr_not_null_reg(reg);
+ 
+-		if (!reg_may_point_to_spin_lock(reg)) {
+-			/* For not-NULL ptr, reg->ref_obj_id will be reset
+-			 * in release_reference().
+-			 *
+-			 * reg->id is still used by spin_lock ptr. Other
+-			 * than spin_lock ptr type, reg->id can be reset.
+-			 */
+-			reg->id = 0;
+-		}
++		/*
++		 * reg->id is preserved for object relationship tracking
++		 * and spin_lock lock state tracking
++		 */
+ 	}
+ }
+ 
 -- 
 2.47.3
 
