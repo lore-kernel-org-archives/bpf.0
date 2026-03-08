@@ -1,148 +1,166 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FCBC36DA09
-	for <bpf@vger.kernel.org>; Sun,  8 Mar 2026 13:08:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C6202110E
+	for <bpf@vger.kernel.org>; Sun,  8 Mar 2026 13:46:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772975338; cv=none; b=MlRlbTFNpRwov6XdRFNdxUF2XnWbvWa7IqKP3U44S5wBy2QpDpqosxY8KI1mTAAtToXMlLrCd/Fmn9f+SmRqGVeqtmnQdQ9nqEJOfhiojPlkEnnXipnW3W9ezyQfWPI9OkNOWVW2iOGDpVV7FuiZV5kJIvoanSRYtIV4D18L1VA=
+	t=1772977596; cv=none; b=tsfrs3SLFUOoshhbDPMQyectUY1x5YRoNb26uDoUZnqyYxoLPDK3MJKwVWGGeaITz/zc7uBK4P6cXqIPWehmlqZBuU//QT42Vho1gblzv/APEqC7bEuEIB5FjmB2mDqAU05XJZGMpbIw/KpvBNMZN85ROfobHMsYcCFdJMAp9aw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772975338; c=relaxed/simple;
-	bh=BgXzf9/DakieqP1vbKFJbeiTrM0BNzQVzd7gSPOSD0A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AlsnJ/+OuMACOj1xQ4FzIfU86KMMShHBAOk3sk9S9Uy3GCys3y7Rd5B3CBQxhgYUiA/+Kzbq18PDX5G41ze7iaDdcgdfQ3MsXhMsxRIVJ8DqJOU9tR0iWcqB1BVUsn34QItU+Jb/N4CotdRTqMMscYymeX4FML+5F2wOkR6htao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KjAGBT9v; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1772977596; c=relaxed/simple;
+	bh=Ms1medIm3lUakbcGGlgIz09mCoV0O+2kC59uF9/DNwk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mt4Ep4tU+TPb9QU8plWcr7a/TnjQ9LAyknP8KU5AVsYTGp+89auZPpZF36tIk6U/x5PmDkHlFM+MSPVZree/5QGOBL6eZ/os/jW4kMMlCI3J9j+SaRd1YzmHhuVnlYVe5HmBsTiC3H9E3qUm1C/WGMPydjHROHk3k3m6WgV4Bjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PX5mBAl5; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KjAGBT9v"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772975336;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=i/Bsvt9jT0E4ZN9oplHUq+cX+ewJsum36FF0EKEPoDs=;
-	b=KjAGBT9voDP5fWdPvkKX9o2Sak9pxANc4wUpGiTKrWAVhGJ9bdf0zBvCCK1D4g3gvMmNFf
-	8BzkcOpc7BYc7t20j+zEQNH7flhL11odLovsgGe5QpyROVnmvINtnYxhR4PLzU2B07Y5xf
-	EeYSTIDA50xvzIc9WPAZyb8DJjpglD4=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-373-b78EP0AsPEm_FEBqcDVdBA-1; Sun,
- 08 Mar 2026 09:08:50 -0400
-X-MC-Unique: b78EP0AsPEm_FEBqcDVdBA-1
-X-Mimecast-MFC-AGG-ID: b78EP0AsPEm_FEBqcDVdBA_1772975329
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 62872195608E;
-	Sun,  8 Mar 2026 13:08:49 +0000 (UTC)
-Received: from fedora (unknown [10.45.224.43])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 95AE330001BE;
-	Sun,  8 Mar 2026 13:08:46 +0000 (UTC)
-Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Sun,  8 Mar 2026 14:08:48 +0100 (CET)
-Date: Sun, 8 Mar 2026 14:08:45 +0100
-From: Oleg Nesterov <oleg@redhat.com>
-To: Max Ver <dudududumaxver@gmail.com>,
-	Andy Lutomirski <luto@amacapital.net>, Kees Cook <kees@kernel.org>,
-	Dmitry Levin <ldv@strace.io>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Will Drewry <wad@chromium.org>
-Subject: Re: Process killed by seccomp looks live by tracer
-Message-ID: <aa103dEXEqU4QlgZ@redhat.com>
-References: <CABjJbFJO+p3jA1r0gjUZrCepQb1Fab3kqxYhc_PSfoqo21ypeQ@mail.gmail.com>
- <DEEAE764-41EA-4760-9606-341317E9FDC2@kernel.org>
- <CABjJbFJSYjQ+spicPrTnxkpcLWqSZ3aF-+b5DMKMXqcVU3mKwQ@mail.gmail.com>
- <aamX8uw8UN23rkc_@redhat.com>
- <aanBUeT2kQKpDWxZ@redhat.com>
- <CABjJbF+vEwEr4fQo7zZwFtgPSJGM1veFnaaLrupOzaVDoi3hJg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PX5mBAl5"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-829a568f3ccso1004939b3a.0
+        for <bpf@vger.kernel.org>; Sun, 08 Mar 2026 06:46:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772977594; x=1773582394; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=724CiEVW7rjLnZsSrHgbVvU2fcWwebcILCwsZMr5Rok=;
+        b=PX5mBAl5uZQiF0nryvc+cvTm6sromP2WjSBTVp5zthi1DTBFxDr3bqGQ5+vrMihVAv
+         ShZFV3JmKAzKvr3Dny857Hl5MlYpftB497/OR9/CxfX1+RKlIZfTDpJ51SBqEYRBjpV5
+         isRfELkEQ4r/baSSA/0Z5XAFHlHBspwgCTf9mitc65sCGrVzX14tU6q4S6gCeKVnW+Oj
+         3BI5JXUV+XeTQzie2UP79wxlKA0kICdYixEOE3G5kIXlSoKDdvx3cMMfTu7Op1faewEN
+         xUUvZNECfqMvzbBEboib118whoTfhZPrKtbcjGnt9/WzelijFtm2Yi/PFDQ97fiyrJph
+         QiMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772977594; x=1773582394;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=724CiEVW7rjLnZsSrHgbVvU2fcWwebcILCwsZMr5Rok=;
+        b=X8wUSLtb8sC/xH3r0fXXgTEiu7fVKioMVqie+AmkyRbaJkSwcPejbrUWMdDZ8qaxul
+         bK5TmyJcvrbJQ/I1zOE0QyhU3asKObW+DCo+FhkTiSjhEeB9NDdMdQMGWmeo/OjCvxop
+         cf6CvFiqhEs3ST9zEulY7Kgg0ZdkYy+YWbqidFlZwZojgaz1SkQb4ebv9uhOFKmVwd2U
+         Q5m5bvv6k6dyWSamJEQ0mhCWAr2MsM51C+BC3Rb1j5R22BpycH5Ao3kev/v/9kROW/5d
+         8g5J6F5InpDcAYfWPfMqRHDt7KQvu9m8Msy+37O/1E/hIPvy2Yw3vcl+MZnHxNQDAwn6
+         tiaw==
+X-Gm-Message-State: AOJu0YyoRkPyeWs/fpwVwk6LCZtuuuOLxH+VIcT6xrGeEgwGjMcC+zi/
+	2Yf0N+5jwndFz6xHpENYUJTY5bBIegpubxTlmp15gM4j1Hp2j66StU0U
+X-Gm-Gg: ATEYQzzfrnucQ7hO7Yhd3H4uacLdZSS1Gnk5MNalZ8Rxqg+nkNnPdcLDQQ6mLVXK3yP
+	57Dhvst0f8B7MRwk3vBjtZfz0/E7aglWgFvCxrhjf7gf12hJ+C+wzXjBZ6cwcKnkN9K3k3Xwq3D
+	stKtP+60BBnFjBe6beb0dhzCe/2T6DrS6GDjdYKzq0Vdi3RoKducJBx1FPFUnSsMVRKMl/nWidL
+	IdZvUq4gcHc3hmcmmfcVEyOORC7AuZ4j9+AuslX0kaBFKCKqrKVxPFWO0VB9qgjX+mf5bHyOA6U
+	8+uxbFdnqLXUKRvBNVhjt8lBxtlHDizspAG3ryNvKSgyz/cqoVHEnZmIrCxeVqKv4hyJx0YX1D0
+	DTqVx0ilRAr/oMSuCx3N68eWYGxfclXddU75opzhuPglJOlnDhTjSEYT9CL/TsCMXQfGB0qZ3fv
+	pt74rMpC6qZaW6UoOe2RonUtZj58CTP9WTSPVMP94P2mrob8Uq
+X-Received: by 2002:a05:6a00:1397:b0:827:4bca:f1a2 with SMTP id d2e1a72fcca58-829a2d81a8dmr6902060b3a.10.1772977593860;
+        Sun, 08 Mar 2026 06:46:33 -0700 (PDT)
+Received: from localhost.localdomain ([113.218.252.35])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-829a4636968sm7095056b3a.9.2026.03.08.06.46.21
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 08 Mar 2026 06:46:33 -0700 (PDT)
+From: Chengkaitao <pilgrimtao@gmail.com>
+To: martin.lau@linux.dev,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	chengkaitao@kylinos.cn,
+	linux-kselftest@vger.kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v7 0/5] bpf: Extend the bpf_list family of APIs
+Date: Sun,  8 Mar 2026 21:46:09 +0800
+Message-ID: <20260308134614.29711-1-pilgrimtao@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABjJbF+vEwEr4fQo7zZwFtgPSJGM1veFnaaLrupOzaVDoi3hJg@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On 03/06, Max Ver wrote:
->
-> I suppose it's more reasonable for kernel to give a hint just after
-> the syscall killed by seccomp at the fourth loop. So that we can know
-> the syscall is rollbacked, or else we can only assume the syscall may
-> succeed.
+From: Kaitao Cheng <chengkaitao@kylinos.cn>
 
-Perhaps you are right, but this is a question for seccomp experts...
+In BPF, a list can only be used to implement a stack structure.
+Due to an incomplete API set, only FIFO or LIFO operations are
+supported. The patches enhance the BPF list API, making it more
+list-like.
 
-Kees, Andy, what do you think?
+Five new kfuncs have been added:
+bpf_list_del: remove a node from the list
+bpf_list_add_impl: insert a node after a given list node
+bpf_list_is_first: check if a node is the first in the list
+bpf_list_is_last: check if a node is the last in the list
+bpf_list_empty: check if the list is empty
 
-Say, we can do something like
+refactor kfunc checks to table-driven approach, and add test cases for
+the aforementioned kfuncs.
 
-	--- a/kernel/ptrace.c
-	+++ b/kernel/ptrace.c
-	@@ -951,11 +951,20 @@ ptrace_get_syscall_info_seccomp(struct task_struct *child, struct pt_regs *regs,
-		return offsetofend(struct ptrace_syscall_info, seccomp.ret_data);
-	 }
-	 
-	+// currently not exposed
-	+#define SECCOMP_MODE_DEAD	(SECCOMP_MODE_FILTER + 1)
-	+
-	+static long xxx_get_error(struct task_struct *task, struct pt_regs *regs)
-	+{
-	+	return task->seccomp.mode == SECCOMP_MODE_DEAD
-	+		? -EINTR : syscall_get_error(task, regs);
-	+}
-	+
-	 static unsigned long
-	 ptrace_get_syscall_info_exit(struct task_struct *child, struct pt_regs *regs,
-				     struct ptrace_syscall_info *info)
-	 {
-	-	info->exit.rval = syscall_get_error(child, regs);
-	+	info->exit.rval = xxx_get_error(child, regs);
-		info->exit.is_error = !!info->exit.rval;
-		if (!info->exit.is_error)
-			info->exit.rval = syscall_get_return_value(child, regs);
+Changes in v7:
+- Replace bpf_list_node_is_edge with bpf_list_is_first/is_last
+- Reimplement __bpf_list_del and __bpf_list_add
+- Simplify test cases
 
-but probably this is not a good solution.
+Changes in v6:
+- Merge [patch v5 (2,4,6)/6] into [patch v6 4/5]
+- If list_head was 0-initialized, init it
+- refactor kfunc checks to table-driven approach
 
-Perhaps we can add a new "killed_by_seccomp" member into ptrace_syscall_info.exit ?
+Changes in v5:
+- Fix bpf_obj leak on bpf_list_add_impl error
 
-Or even add a new ptrace_syscall_info.op = PTRACE_SYSCALL_INFO_KILLED_BY_SECCOMP ?
+Changes in v4:
+- [patch v3 1/6] Revert to version v1
+- Change the parameters of bpf_list_add_impl to (head, new, prev, ...)
 
-Or change ptrace_report_syscall(PTRACE_EVENTMSG_SYSCALL_EXIT) to not report the event
-if the tracee was killed by force_sig_seccomp(force_coredump => true) ?
+Changes in v3:
+- Add a new lock_rec member to struct bpf_reference_state for lock
+  holding detection.
+- Add test cases to verify that the verifier correctly restricts calls
+  to bpf_list_del when the spin_lock is not held.
 
-Oleg.
+Changes in v2:
+- Remove the head parameter from bpf_list_del
+- Add bpf_list_add/is_first/is_last/empty to API and test cases
 
->
-> Oleg Nesterov <oleg@redhat.com> 于2026年3月6日周五 01:46写道：
-> >
-> > That said...
-> >
-> > __seccomp_filter() does
-> >
-> >         case SECCOMP_RET_KILL_PROCESS:
-> >         ...
-> >                 /* Show the original registers in the dump. */
-> >                 syscall_rollback(current, current_pt_regs());
-> >
-> >                 /* Trigger a coredump with SIGSYS */
-> >                 force_sig_seccomp(this_syscall, data, true);
-> >
-> > This means that after syscall_rollback() regs->ax == orig_ax, so
-> > ptrace_get_syscall_info_exit() will always report .is_error == 0.
-> >
-> > And since force_sig_seccomp() uses force_coredump == true, SIGSYS
-> > won't be reported (see the SA_IMMUTABLE check in get_signal()).
-> >
-> > Again, it is not that I think this wrong. But perhaps Kees and Andy
-> > can take a look and confirm that this is what we actually want.
-> >
-> > Oleg.
+Link to v6:
+https://lore.kernel.org/all/20260304143459.78059-1-pilgrimtao@gmail.com/
+
+Link to v5:
+https://lore.kernel.org/all/20260304031606.43884-1-pilgrimtao@gmail.com/
+
+Link to v4:
+https://lore.kernel.org/all/20260303135219.33726-1-pilgrimtao@gmail.com/
+
+Link to v3:
+https://lore.kernel.org/all/20260302124028.82420-1-pilgrimtao@gmail.com/
+
+Link to v2:
+https://lore.kernel.org/all/20260225092651.94689-1-pilgrimtao@gmail.com/
+
+Link to v1:
+https://lore.kernel.org/all/20260209025250.55750-1-pilgrimtao@gmail.com/
+
+Kaitao Cheng (5):
+  bpf: Introduce the bpf_list_del kfunc.
+  bpf: Add bpf_list_add_impl to insert node after a given list node
+  bpf: add bpf_list_is_first/last/empty kfuncs
+  selftests/bpf: Add test cases for
+    bpf_list_del/add/is_first/is_last/empty
+  bpf: refactor kfunc checks using table-driven approach in verifier
+
+ kernel/bpf/helpers.c                          | 124 +++++++++++++---
+ kernel/bpf/verifier.c                         | 107 ++++++++++---
+ .../testing/selftests/bpf/bpf_experimental.h  |  16 ++
+ .../selftests/bpf/progs/refcounted_kptr.c     | 140 ++++++++++++++++++
+ 4 files changed, 339 insertions(+), 48 deletions(-)
+
+-- 
+2.50.1 (Apple Git-155)
 
