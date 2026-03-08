@@ -1,162 +1,276 @@
-Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D267A309EF9
-	for <bpf@vger.kernel.org>; Sun,  8 Mar 2026 05:56:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772949362; cv=pass; b=HxAXyhiUJA9Wb2hrN72QpxafOpJc8w9OAnsA0thzOqq/RNdL0nwTEMQvxMOo7n8aqKeZF2zvL1RBlGwksSAKu02n2CFBUwtDws6B7Tf9I+QQg8X9oqPyv+KqbbOnT2hv6wL6wBqfZ56NRLqord9jKBNtHCBbRq19eYFsEQAP8IQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772949362; c=relaxed/simple;
-	bh=qzZLCcnHG+Osbm7pa12qQeoDFe0+3vPeHUnXlwX+JZ0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hj5bEfyzo6wiC8MphPkVmGeQ/M9gNSd83rnJEPmPUcaYmE8hRIBvkpDkWJmsKPhAhUKeLcgLgxZrVqwzizHnr6OnzhPaisQMFvRV+z6IWGqbHDskoh0IxQdQ6kUFtPCwuqk0ZPcPbumAG2wijm2Khxta/d3WXxb4wTgs/ztHVIg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JD4Lzhmj; arc=pass smtp.client-ip=74.125.224.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76FA2853F7
+	for <bpf@vger.kernel.org>; Sun,  8 Mar 2026 07:03:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772953440; cv=none; b=AIG8JZFXxjGcWZgUSJGJ3/+jmkOgboPDCZiPAvsJJn8ODrYVrgCcr96h76jBmjcLvPK1mw8B3WRcglWMhh/oXuW1vaw79pZ8qRv+XS5Yffe1P+hubl4ZF+JNK6t+A+8bfRJ7BEBDgIv3XIqr9ZATvKE7/myI5yFLdKHG3ZGrJdo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772953440; c=relaxed/simple;
+	bh=Zh1bm2G6WffKCPIN2jFLIG+MdQXeuGQ6TRbfmAtGFbg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Wx6c5/Qj3PmTwkwrX5CIen3HmXvez9HfgzmuCxrzl0Jf2rDPG+zFZiArprTqQdpQPdDSL9TVQT9hyXkbP2Qa/fHTXgSzmEeVXAw+UGqqfFOjddHbTPzIe7DChCUFrHi4bXoOuHqja3hE3DmswTVnJOdIZxTNXPDeC7bXslC/BTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LVVQ14S1; arc=none smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JD4Lzhmj"
-Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-64ae222d978so10175255d50.1
-        for <bpf@vger.kernel.org>; Sat, 07 Mar 2026 21:56:00 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772949360; cv=none;
-        d=google.com; s=arc-20240605;
-        b=OvPXrHvrVzUZsw8gO08cyGdMRFW1xSHwBr+2XjJQ4qEDWCtlH1N6n76B30ZojZagwT
-         Ebj6JKEDWockAcuMMxIWgeSmGFDZo02CDqFIdMtjL30AKltC8e66SYZpR0O7Ec8XLT04
-         6Or9QCTAiYC43QfW6TCYQEFIFMDW5viQkYknpW3xzUzb85cmOtkWvEXqTc9I+LrwZVyv
-         y5k2mM6Riz4z3I8UecwoMBO/cNE1qNFv2ULNGHAaPFfhy84RUMG5L07NRfxtoGJ/LGcf
-         prp+YR7W2ebxklAsStuor99eaiuM2+nG2lXUuACk8KtQTRcq265pGsowxtG57WIqjbfd
-         FzQg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=qzZLCcnHG+Osbm7pa12qQeoDFe0+3vPeHUnXlwX+JZ0=;
-        fh=c50BiYsxCqUtwm9MeZBvBZ5ITHkBLm52E9zb2rk5/zQ=;
-        b=N3cZf9eLWqLFpka5bdHjsss86qULM3dKyohkyUHNl1wOSe825P487ROwUHYp4TGizm
-         2DG/xmQQXtVE5R1j/0RVTno7qvPNDPSvv3e/ED0vREicD1o86OmVXPQoC4+iVlnCqhW9
-         R/4FzHfYbif7RXNw6/giSjyK1a+C2Mvwi+8BH5RuZa292OBeiQgDlC84s55UekYhdSIo
-         lTU9p0xyXkkpEWFrVsz5gAxa8Z+loowXIV+u0JNnezoyKuTjxPwMgzRAYGaUEG5ojG50
-         3kI2+svEJydqlz7akj7Ca9h89ntRoMU2/3u95qp/66mMFqfxMIP0KVRFYeDuQG2UHGBM
-         nl/A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LVVQ14S1"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-439c56e822eso4956497f8f.2
+        for <bpf@vger.kernel.org>; Sat, 07 Mar 2026 23:03:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772949360; x=1773554160; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qzZLCcnHG+Osbm7pa12qQeoDFe0+3vPeHUnXlwX+JZ0=;
-        b=JD4Lzhmj8BLhi0ktY77ZOwbthqiDm6jQaPAiuRihzUNoObi/aTRhGBMiGVwlAzQ/kD
-         07h55C2f18u/dtYhN4ydhjIxrzj61EulUqEuuR8KwOOu4llo/GRq5WzhG4YBKPAi82W8
-         DMFxapv2q+iU8BkhbQcE67EixUo2ha0AWyGBvJEsF6xEA484jAIDMB+Rw7RaO7dMkm/Z
-         0mEubXwkJe7Q9kvcg4qjpWSRmgl/eE8nyZTwdpIy3g6HKLFfoQXfStgGqZYdzzryOrSo
-         WH+etbX4oJFa8q5Q+AVarzkLuDLTzs6owz2HIOVyOhfKi0YahDiL8/Ed++FbKPgFGE/+
-         c9vQ==
+        d=gmail.com; s=20230601; t=1772953437; x=1773558237; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uex+bKRQKHrL7xt0CITOz3u6A+gWG+tnnaXJC6V2/0g=;
+        b=LVVQ14S1EoOU4ymyVEyBlNQx56G8RYINnMKt2AA4LKebuH0NKefUVy1O52y1FYzbUz
+         C2Ln200Cq/DGaW7JUxZ+5ERpD0NQMSvwmADAjBW0vIina49PhzEsRSp4hqU8Uags9GFO
+         r42hFPmzy/RBG6slzMQIsR57LhxIxc9us/rK2Fc60TDp7JNA/H0fAMIZaviJ7Q2/Z5Ls
+         zJprEJ6OkM5I1H2rwU01ovMFTv/wywdqPGstlv20P/8/TqALX/iqkS9QHvDVxlDQTmHO
+         4iYo3sz3PZWopZ0bdCsowLQlpG2+v+FX7fNjIHBqounU83jVPYmlr4HfwrdqyETtkdCR
+         k63Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772949360; x=1773554160;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=qzZLCcnHG+Osbm7pa12qQeoDFe0+3vPeHUnXlwX+JZ0=;
-        b=iryndQEjKThlsS4Y9FdHgb4+oRKskdX8gRvxs1PLzvON6mtA6u1Ew5XHPVpBUuF6bJ
-         Z2luhHa1UWUEKYknFcafc7+X470IMe3WgxrQMsQYup30MMBJ7OeUCqHy7zcC9iDL2MhD
-         UYEOyFEUX4hbXMWD6tqiGq4D573zz5NT8pb7IjTUEaIzAzVrbq9Odog5zhA6jFUy4RVr
-         ci3w2vrMBxj+5Lvqen0bkcWGwEnBgu2XE1Fg1D1oN+SduC64ILxfWgCAZykNojP/4Vh7
-         lojax57beC7dy3nuKs4+e+DBNVHKCzrHV9/HEOuvVJlJeXdxLYH9TuOLgHfzfnCv9svz
-         atMA==
-X-Forwarded-Encrypted: i=1; AJvYcCXlBNuUzxTKINPoEc+s4djj7VmWpx5B2dsgvKNiOznOoDeSBCh4o7vdAGaCOt6V4RuDz3U=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxsg3qjR/sAaUmOgG63SYnVj7S7wyOUTB+5yz259sooMlrRUZfM
-	lt1lS+MOQfBLVqLKHED275SZBEkfjFBhDSg2BecucCux4SHJ5miXQENIRUyViUARn4R6YiI/O3g
-	8uILWg1ZnUN3MgEchonSm90GLzRHkPZE=
-X-Gm-Gg: ATEYQzwrRmIK1ZCMCnEAQd6TqEWF556QbVROj1rnsi7QAFUCPeU592eFNXJKeYvQRUa
-	hntfbCh4QIJF6T6b4vTavBRB9L/70whsuhOdFeWIufgRsYmigGaXKTF8jZg2m0c81ytN+BayN9c
-	BeXPKRzQV/KdCDVH4mH2GuSI/5KnuJSgblpqcOHOOhOFRMDdBqvRlOI9+raWfTkURQuYEGqPOJP
-	HvPNaPXA5Tw1I+C73/+E30+bnFC8CXNI0ttzS+7tjOXDL1OhqysOXkxvUiVJui/+QeFAk9n1WfT
-	XO51kwEAP69R
-X-Received: by 2002:a05:690c:690d:b0:798:6a6b:5b0f with SMTP id
- 00721157ae682-798dd742160mr68841947b3.32.1772949359778; Sat, 07 Mar 2026
- 21:55:59 -0800 (PST)
+        d=1e100.net; s=20230601; t=1772953437; x=1773558237;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uex+bKRQKHrL7xt0CITOz3u6A+gWG+tnnaXJC6V2/0g=;
+        b=kR5jbK0240lY7nwTAqJwHDj4dX7ncEQ9CPI7zmF0k8sruKoMXRVCQeQWmNyPgd5Ebn
+         F2EoymTfdgFZCzoU+BSto2VGHkBd/kB6/fl1KjDPu1gGQnUYkkiLOa9Iu64qEt2bG4Cm
+         gsqyBU/ATRe6frkhlvhWTtlyKCBmwnPjNIfrCpWf0COMfBHS+aPgkFygHAzOjj3Nd3Rl
+         6m2MEYTyP6Q2NwAdUy2nkMNUKV8bIquxnUkLDLtspPDfg0ROSP1GXJhMJTosDvj3eg62
+         Mj9bj1rACe/JbKuqt30x+DcT1bFpDqv6Ly8lw2GQa9y6REaf4oAL5HzdSLIlUWoXrsxE
+         gjIg==
+X-Forwarded-Encrypted: i=1; AJvYcCVw3tRtaScoBHb+kp3+WD1x3z34iV1rfl4UhkDPN5pVpVE/Z+7/61L+83+oricrmMosBkU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwcMJVOxhquIC+NbLFzWAv6yhVp5FbQEN5NgFdduonjQtvmFFYb
+	zqpkKiCpZKnnkLvjzTMmNkeFeQJRI2AjtPvfjvOaUgDXmpybi0DZwcOn
+X-Gm-Gg: ATEYQzyTi25XKKf6UpY1Lai1C0O8tikw52PRI/lisc2H/PZFGDdSUyxQ6/xbqgPRLtf
+	3fLm33FxIh/DuSJpCpX/S7mp5scqcN60/2vfxAmXcwF+MdHZJNOiNOaEIyp/i/VhuCUZywktOGV
+	u9kTgUfVXYTlKXcgjjuxfCP2h0r+4ND6G6CvRJoA9x4dVYWFclgq4/9JwojJei5M7T11yv70nAG
+	gtjZXOvKAZDX7GvSnqrEPC8t87i6Hxu12YLB18cGKL+JtRMqcKNUcmS718OlPfctJUC9ZKDqgO4
+	ypAbn1fULx7JYDMe283sbeO2KlmKIy0OiscJ/AR1Ns4Tz0j62uTlJ/Q/JI8bLMd4E+24rnyymJW
+	6E2oryQwlV9HxR1cO/kKLcP9voAgNP5t1mL8Zt09jfOzGtBYjDimfGrEwJGDsPF/7VE77X/OtkV
+	3+3xvThFmLS+ss2r8X3XFPqFp7fqybwpbBJFjXaruAt5JaEyhtbwFa/TQx4Q==
+X-Received: by 2002:a5d:5f93:0:b0:439:b791:f920 with SMTP id ffacd0b85a97d-439da656af4mr13244466f8f.17.1772953436851;
+        Sat, 07 Mar 2026 23:03:56 -0800 (PST)
+Received: from [10.221.200.186] ([165.85.126.96])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439dae36785sm15614890f8f.27.2026.03.07.23.03.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 07 Mar 2026 23:03:56 -0800 (PST)
+Message-ID: <6f3c34dc-af62-4f54-b56f-4aa6e8f1c690@gmail.com>
+Date: Sun, 8 Mar 2026 09:03:58 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260306120024.1032301-1-sun.jian.kdev@gmail.com>
- <aar9gzh7QVhezeII@Tunnel> <CAADnVQJtG9s1CV-qeF8NSgi_UFPgahOXtB3PWiivBooAYC69GA@mail.gmail.com>
-In-Reply-To: <CAADnVQJtG9s1CV-qeF8NSgi_UFPgahOXtB3PWiivBooAYC69GA@mail.gmail.com>
-From: sun jian <sun.jian.kdev@gmail.com>
-Date: Sun, 8 Mar 2026 13:55:48 +0800
-X-Gm-Features: AaiRm51lortd9tUoJm6gybm3nts0d_O0elldh2h1076SJcxJM1Dgweg8zuDg1_w
-Message-ID: <CABFUUZGV7ZAVY=Y6Py3ytZUzZV0i9otPWADgP9HtVrDzf612ew@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests/bpf: avoid jump seq limit in verif_scale_pyperf600
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Paul Chaignon <paul.chaignon@gmail.com>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v2] net/mlx5e: Precompute xdpsq assignments for
+ mlx5e_xdp_xmit()
+To: Finn Dayton <Finnius.Dayton@spacex.com>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Cc: "ast@kernel.org" <ast@kernel.org>,
+ "daniel@iogearbox.net" <daniel@iogearbox.net>,
+ "davem@davemloft.net" <davem@davemloft.net>,
+ "kuba@kernel.org" <kuba@kernel.org>, "hawk@kernel.org" <hawk@kernel.org>,
+ "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+ "sdf@fomichev.me" <sdf@fomichev.me>, "saeedm@nvidia.com"
+ <saeedm@nvidia.com>, "leon@kernel.org" <leon@kernel.org>,
+ "tariqt@nvidia.com" <tariqt@nvidia.com>,
+ "mbloch@nvidia.com" <mbloch@nvidia.com>,
+ "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+ "edumazet@google.com" <edumazet@google.com>,
+ "pabeni@redhat.com" <pabeni@redhat.com>,
+ "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+ "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <60E0EC79-4E2B-4874-9CEB-6558706A910A@spacex.com>
+Content-Language: en-US
+From: Tariq Toukan <ttoukan.linux@gmail.com>
+In-Reply-To: <60E0EC79-4E2B-4874-9CEB-6558706A910A@spacex.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sat, Mar 7, 2026 at 12:23=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Fri, Mar 6, 2026 at 8:15=E2=80=AFAM Paul Chaignon <paul.chaignon@gmail=
-.com> wrote:
-> Sun Jian,
-> I asked to do a _minimal_ tweak to pyperf600.
-> What you did is a drastic change. Pls don't hack tests
-> just to make them pass. The tests have to be meaningful
-> and test coverage shouldn't degrade.
->
 
-Hi Alexei, Paul,
 
-I spent some more time looking into this.
+On 02/03/2026 7:52, Finn Dayton wrote:
+> mlx5e_xdp_xmit() currently selects the xdpsq (send queue) using
+> smp_processor_id() (i.e. cpu id). When doing XDP_REDIRECT from a cpu
+> with id >= priv->channels.num, however, mlx5e_xdp_xmit() returns -ENXIO
+> and the redirect fails.
+> 
+> Previous discussion proposed using modulo or while loop subtraction
+> in mlx5e_xdp_xmit() to map cpu id to send queue, but these approaches
+> introduce hot path overhead on modern systems where the number of
+> logical cores >> the number of XDP send queues (xdpsq).
+> 
+> The below approach precomputes per-cpu priv->xdpsq assignments when
+> channels are (re)configured and does a constant-time lookup in
+> mlx5e_xdp_xmit().
+> 
+> Because multiple CPUs may now map to the same xdpsq (whenever cpu count
+> exceeds channel count), we serialize writes in xdp_xmit with a tx_lock.
+> 
+> Link: https://lore.kernel.org/all/610D8F9E-0038-46D9-AD8A-1D596236B1EF@spacex.com/
+> Link: https://lore.kernel.org/all/474c1f71-3a5c-4fe5-a01e-80f2ba95fd7e@bytedance.com/
+> Signed-off-by: Finn Dayton <finnius.dayton@spacex.com>
+> ---
+> v2:
+> - Removed unnecessary guards
+> - Improved variable naming and placement
+> - Change mapping from cpu -> index to cpu -> xdpsq
+> - Call smp_wmb() after updates to mapping
+> 
 
-Comparing unmodified pyperf600 bytecode between clang-18 and clang-20, I
-see fewer instructions with clang-20 and nearly the same number of
-branches:
+Thanks for your patch. Sorry for the delayed feedback.
 
-clang-18: 90134 lines of disassembly, 6090 gotos
-clang-20: 78369 lines of disassembly, 6085 gotos
+Were you able to do some basic packet-rate testing for it?
+Any noticeable impact?
 
-So this does not look like a simple program-size increase. What seems to
-change is the branch layout in the unrolled loop body, which seems to
-make the verifier DFS go deeper before pruning.
+A few nits below.
 
-One useful data point is that a single __on_event() copy does load
-successfully (that was my v2), while with 2 or more copies it
-consistently fails at exactly 8193 jumps. In other words, the verifier
-hits the jump-sequence limit before reaching the second copy.
+>   drivers/net/ethernet/mellanox/mlx5/core/en.h  |  4 +++
+>   .../net/ethernet/mellanox/mlx5/core/en/xdp.c  | 17 ++++++-------
+>   .../net/ethernet/mellanox/mlx5/core/en_main.c | 25 +++++++++++++++++++
+>   3 files changed, 36 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/drivers/net/ethernet/mellanox/mlx5/core/en.h
+> index ea2cd1f5d1d0..713dc7f9bae3 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
+> @@ -493,6 +493,8 @@ struct mlx5e_xdpsq {
+>   	u16                        pc;
+>   	struct mlx5_wqe_ctrl_seg   *doorbell_cseg;
+>   	struct mlx5e_tx_mpwqe      mpwqe;
+> +	/* serialize writes by multiple CPUs to this send queue */
+> +	spinlock_t                 tx_lock;
+>   
+>   	struct mlx5e_cq            cq;
+>   
+> @@ -898,6 +900,8 @@ struct mlx5e_priv {
+>   	struct mlx5e_selq selq;
+>   	struct mlx5e_txqsq **txq2sq;
+>   	struct mlx5e_sq_stats **txq2sq_stats;
+> +	/* selects the xdpsq during mlx5e_xdp_xmit() */
+> +	struct mlx5e_xdpsq * __percpu *send_queue_ptr;
+>   
+>   #ifdef CONFIG_MLX5_CORE_EN_DCB
+>   	struct mlx5e_dcbx_dp       dcbx_dp;
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+> index 80f9fc10877a..1db83a69055c 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+> @@ -845,7 +845,6 @@ int mlx5e_xdp_xmit(struct net_device *dev, int n, struct xdp_frame **frames,
+>   	struct mlx5e_priv *priv = netdev_priv(dev);
+>   	struct mlx5e_xdpsq *sq;
+>   	int nxmit = 0;
+> -	int sq_num;
+>   	int i;
+>   
+>   	/* this flag is sufficient, no need to test internal sq state */
+> @@ -854,14 +853,12 @@ int mlx5e_xdp_xmit(struct net_device *dev, int n, struct xdp_frame **frames,
+>   
+>   	if (unlikely(flags & ~XDP_XMIT_FLAGS_MASK))
+>   		return -EINVAL;
+> -
+> -	sq_num = smp_processor_id();
+> -
+> -	if (unlikely(sq_num >= priv->channels.num))
+> -		return -ENXIO;
+> -
+> -	sq = priv->channels.c[sq_num]->xdpsq;
+> -
+> +	/* Per-CPU xdpsq mapping, rebuilt on channel (re)configuration while XDP TX is disabled */
 
-I also tried a range of source-level mitigations, but so far I couldn't
-find one that preserves the test intent and keeps pyperf600 comparable
-to the other variants:
+Line too long?
 
-- UNROLL_COUNT tuning: 99 does not compile; 100-120 compile but still
-fail at 8193; 121-145 fail to compile; 146-150 compile but still fail
-at 8193
-- early break/goto on !frame_ptr: insufficient for pyperf600, and also
-hurts pyperf600_nounroll by adding branch points to the 600-iteration loop
-- wrapping 5x __on_event() in a non-unrolled loop: verifier still unrolls i=
-t
-- making get_frame_data() __noinline: still fails
-- moving the unwind loop into a __noinline subprog: still fails
-- SUBPROGS / __on_event as __noinline: still fails; codegen changes,
-but the verifier still hits 8193
+> +	sq = *this_cpu_ptr(priv->send_queue_ptr);
+> +	/* The number of queues configured on a netdev may be smaller than the
+> +	 * CPU pool, so two CPUs might map to this queue. We must serialize writes.
+> +	 */
+> +	spin_lock(&sq->tx_lock);
+>   	for (i = 0; i < n; i++) {
+>   		struct mlx5e_xmit_data_frags xdptxdf = {};
+>   		struct xdp_frame *xdpf = frames[i];
+> @@ -941,7 +938,7 @@ int mlx5e_xdp_xmit(struct net_device *dev, int n, struct xdp_frame **frames,
+>   
+>   	if (flags & XDP_XMIT_FLUSH)
+>   		mlx5e_xmit_xdp_doorbell(sq);
+> -
+> +	spin_unlock(&sq->tx_lock);
+>   	return nxmit;
+>   }
+>   
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> index b6c12460b54a..434db74f096b 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> @@ -1505,6 +1505,7 @@ static int mlx5e_alloc_xdpsq(struct mlx5e_channel *c,
+>   	sq->stop_room = param->is_mpw ? mlx5e_stop_room_for_mpwqe(mdev) :
+>   					mlx5e_stop_room_for_max_wqe(mdev);
+>   	sq->max_sq_mpw_wqebbs = mlx5e_get_max_sq_aligned_wqebbs(mdev);
+> +	spin_lock_init(&sq->tx_lock);
+>   
+>   	param->wq.db_numa_node = cpu_to_node(c->cpu);
+>   	err = mlx5_wq_cyc_create(mdev, &param->wq, sqc_wq, wq, &sq->wq_ctrl);
+> @@ -3283,10 +3284,27 @@ static void mlx5e_build_txq_maps(struct mlx5e_priv *priv)
+>   	smp_wmb();
+>   }
+>   
+> +static void mlx5e_build_xdpsq_maps(struct mlx5e_priv *priv)
+> +{
+> +	/* Build mapping from CPU id to XDP send queue, used by
+> +	 * mlx5e_xdp_xmit() to determine which send queue to transmit packet on.
+> +	 */
+> +	int cpu;
+> +
+> +	for_each_possible_cpu(cpu) {
+> +		int send_queue_idx = cpu % priv->channels.num;
+> +		struct mlx5e_xdpsq *sq = priv->channels.c[send_queue_idx]->xdpsq;
 
-Paul also mentioned trying STACK_MAX_LEN/UNROLL_COUNT and only getting it
-to work with STACK_MAX_LEN reduced to 180, which would make it too close
-to pyperf180.
+maintain RCT.
 
-The only source change I found that passes is reducing __on_event() to a
-single copy, but that clearly weakens the test as pointed out.
+> +		*per_cpu_ptr(priv->send_queue_ptr, cpu) = sq;
+> +	}
+> +	/* Publish the new CPU->xdpsq map before re-enabling XDP TX */
+> +	smp_wmb();
+> +}
+> +
+>   void mlx5e_activate_priv_channels(struct mlx5e_priv *priv)
+>   {
+>   	mlx5e_build_txq_maps(priv);
+>   	mlx5e_activate_channels(priv, &priv->channels);
+> +	mlx5e_build_xdpsq_maps(priv);
+>   	mlx5e_xdp_tx_enable(priv);
+>   
+>   	/* dev_watchdog() wants all TX queues to be started when the carrier is
+> @@ -6262,8 +6280,14 @@ int mlx5e_priv_init(struct mlx5e_priv *priv,
+>   	if (!priv->fec_ranges)
+>   		goto err_free_channel_stats;
+>   
+> +	priv->send_queue_ptr = alloc_percpu(struct mlx5e_xdpsq *);
+> +	if (!priv->send_queue_ptr)
+> +		goto err_free_fec_ranges;
+> +
+>   	return 0;
+>   
+> +err_free_fec_ranges:
+> +	kfree(priv->fec_ranges);
+>   err_free_channel_stats:
+>   	kfree(priv->channel_stats);
+>   err_free_tx_rates:
+> @@ -6290,6 +6314,7 @@ void mlx5e_priv_cleanup(struct mlx5e_priv *priv)
+>   	if (!priv->mdev)
+>   		return;
+>   
+> +	free_percpu(priv->send_queue_ptr);
 
-At this point, I don't have a source-level fix that preserves the test
-intent.
+keep symmetric to the order in mlx5e_priv_init.
 
-Regards,
-Sun Jian
+>   	kfree(priv->fec_ranges);
+>   	for (i = 0; i < priv->stats_nch; i++)
+>   		kvfree(priv->channel_stats[i]);
+
