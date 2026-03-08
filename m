@@ -1,378 +1,162 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5444933A9D3
-	for <bpf@vger.kernel.org>; Sat,  7 Mar 2026 21:37:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D267A309EF9
+	for <bpf@vger.kernel.org>; Sun,  8 Mar 2026 05:56:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772919454; cv=pass; b=V3f0XuoD+2BZ9/YBQngawYZ2z4a+KFaU/XY14KqZUINh8vZ6ttIKYKSFXVbMMpouoepX30VXk3TfsLU9LyxWTDne5DeTRwc3eetv7w+eXC6KGpfQ2MZb7HgsXJmqzWZmNc7AyTu4gSHhmMQPbYXj+130pof6q1AsSKxPBCt41AY=
+	t=1772949362; cv=pass; b=HxAXyhiUJA9Wb2hrN72QpxafOpJc8w9OAnsA0thzOqq/RNdL0nwTEMQvxMOo7n8aqKeZF2zvL1RBlGwksSAKu02n2CFBUwtDws6B7Tf9I+QQg8X9oqPyv+KqbbOnT2hv6wL6wBqfZ56NRLqord9jKBNtHCBbRq19eYFsEQAP8IQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772919454; c=relaxed/simple;
-	bh=WDwWZdc9BnDjVU87cF0t+e1oCeBeoUzRFGAxWbMfhgE=;
+	s=arc-20240116; t=1772949362; c=relaxed/simple;
+	bh=qzZLCcnHG+Osbm7pa12qQeoDFe0+3vPeHUnXlwX+JZ0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WL41jSvK7rb6CD1SQqP9krrDNVTY8TdU0K4Y4qnxVSPnC8heb6TLZvF0/TIItPryWLOzxWs1EsV3T2L1Lqjbz13pNV0bI2dowg96bAEHEewz/hbF7pk/ODAiKWXcJJTKn8tNoN2+oPSdz3NHnxs3Iy+cpHGwjPPBaAwYF5j78UI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b=cTJlYEzM; arc=pass smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	 To:Cc:Content-Type; b=hj5bEfyzo6wiC8MphPkVmGeQ/M9gNSd83rnJEPmPUcaYmE8hRIBvkpDkWJmsKPhAhUKeLcgLgxZrVqwzizHnr6OnzhPaisQMFvRV+z6IWGqbHDskoh0IxQdQ6kUFtPCwuqk0ZPcPbumAG2wijm2Khxta/d3WXxb4wTgs/ztHVIg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JD4Lzhmj; arc=pass smtp.client-ip=74.125.224.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="cTJlYEzM"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-82980945556so1362308b3a.0
-        for <bpf@vger.kernel.org>; Sat, 07 Mar 2026 13:37:33 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772919453; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JD4Lzhmj"
+Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-64ae222d978so10175255d50.1
+        for <bpf@vger.kernel.org>; Sat, 07 Mar 2026 21:56:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772949360; cv=none;
         d=google.com; s=arc-20240605;
-        b=CubQlD0Tx9p3Qwx+2HXDPBbT51lTryJL+ngGtdQG4asOshxAK7gtOLplAA7Z74F0vw
-         AUWZkvDf6a9eCAn0Ljrp/D0kTJ/OOD5PCOFwNHGCWH7kCtqLlj4u9gsdiZuxvPxOiENL
-         EmskXVKDZS9BOPeuvKnOv9u2NOPAuGlqlFOVf61OZ7oMhWqeS/q8BdNVq4jR0SsNS8T3
-         trkWxNsHwZBy/9LT342GB6TKhmERw/0prDrkNas0Wei+FbI8/TRZdnpZiC9Ip7+AZBT2
-         Ii8nYju6EPiOWVauXcOw9TlnyqqCcD+cYNFSdNEb0DcBehvUy1vJHAM6x80CUzMcueqm
-         wnfw==
+        b=OvPXrHvrVzUZsw8gO08cyGdMRFW1xSHwBr+2XjJQ4qEDWCtlH1N6n76B30ZojZagwT
+         Ebj6JKEDWockAcuMMxIWgeSmGFDZo02CDqFIdMtjL30AKltC8e66SYZpR0O7Ec8XLT04
+         6Or9QCTAiYC43QfW6TCYQEFIFMDW5viQkYknpW3xzUzb85cmOtkWvEXqTc9I+LrwZVyv
+         y5k2mM6Riz4z3I8UecwoMBO/cNE1qNFv2ULNGHAaPFfhy84RUMG5L07NRfxtoGJ/LGcf
+         prp+YR7W2ebxklAsStuor99eaiuM2+nG2lXUuACk8KtQTRcq265pGsowxtG57WIqjbfd
+         FzQg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=BLekuXTpZCk/2xRsyir8NHL/C+qFDUmVruKtYYzpMrM=;
-        fh=D6s9hrywqThFpE8MdRKqJrd6bQleMPE91gMa5GBlvkU=;
-        b=QwI+836wMCbNjZDtHPxqDrWjjXUFW2jUPivHcQjno128+ClN5UVMFnR1zP1QXX0i8O
-         8QbMpVaRbae02HPjokb6LUsmxb80unbLihdKNGpbJT37mi9319uOuadQ8yNrxUq3OMT+
-         9Uc2/Sy7nR2iCQehZ6sDRqus1HfqaIa7i4I9W7Y5qkmMyw2b4UAMx0cu4CJwDnZ3vmbn
-         YC3YZSCYR/f5ztchE8qxZwzte6oAgkFMhOWZKDVTcD4OA1DErJbOT3GsVGNlEjXVDvjq
-         gTbj39bbaBeY1/taOzGxKTimh1wX47eEeu00/Rlot0Hdu5qiDM4AY2V/NKYgvTyzdZtO
-         XpWg==;
+        bh=qzZLCcnHG+Osbm7pa12qQeoDFe0+3vPeHUnXlwX+JZ0=;
+        fh=c50BiYsxCqUtwm9MeZBvBZ5ITHkBLm52E9zb2rk5/zQ=;
+        b=N3cZf9eLWqLFpka5bdHjsss86qULM3dKyohkyUHNl1wOSe825P487ROwUHYp4TGizm
+         2DG/xmQQXtVE5R1j/0RVTno7qvPNDPSvv3e/ED0vREicD1o86OmVXPQoC4+iVlnCqhW9
+         R/4FzHfYbif7RXNw6/giSjyK1a+C2Mvwi+8BH5RuZa292OBeiQgDlC84s55UekYhdSIo
+         lTU9p0xyXkkpEWFrVsz5gAxa8Z+loowXIV+u0JNnezoyKuTjxPwMgzRAYGaUEG5ojG50
+         3kI2+svEJydqlz7akj7Ca9h89ntRoMU2/3u95qp/66mMFqfxMIP0KVRFYeDuQG2UHGBM
+         nl/A==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1772919453; x=1773524253; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772949360; x=1773554160; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BLekuXTpZCk/2xRsyir8NHL/C+qFDUmVruKtYYzpMrM=;
-        b=cTJlYEzMNqMeEKOqWBEEWI1B9nsRKuCGf7ckaNtc/AfFDK5oMqfcAJyYvVd6gfFTm+
-         MHv3xcuHGqStLtqTEyqz9ss0/9Kmyd41w3Tvl3/DfViHsKAgfdSHBXoDZCoBodPRRTo9
-         eWsrsQ2jKSjM1BVZ0HNFIfLc1BRMEDD99DzV9KkgqQ2Ydb9VgDnVOMcmO99dxtGvbvoS
-         X/44a9ajJhp96nNthU8viQP1rNkTStB226iEZp2v7HAgIRc/BpMtHKuxT7Ylxz29MPLg
-         b1vScf2/S4dtDhMNEqZZNlyqehRtMCsQRyLgCQr++zdnX+VVrPVJ7wmonW8Dd6YYo+tI
-         CHsQ==
+        bh=qzZLCcnHG+Osbm7pa12qQeoDFe0+3vPeHUnXlwX+JZ0=;
+        b=JD4Lzhmj8BLhi0ktY77ZOwbthqiDm6jQaPAiuRihzUNoObi/aTRhGBMiGVwlAzQ/kD
+         07h55C2f18u/dtYhN4ydhjIxrzj61EulUqEuuR8KwOOu4llo/GRq5WzhG4YBKPAi82W8
+         DMFxapv2q+iU8BkhbQcE67EixUo2ha0AWyGBvJEsF6xEA484jAIDMB+Rw7RaO7dMkm/Z
+         0mEubXwkJe7Q9kvcg4qjpWSRmgl/eE8nyZTwdpIy3g6HKLFfoQXfStgGqZYdzzryOrSo
+         WH+etbX4oJFa8q5Q+AVarzkLuDLTzs6owz2HIOVyOhfKi0YahDiL8/Ed++FbKPgFGE/+
+         c9vQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772919453; x=1773524253;
+        d=1e100.net; s=20230601; t=1772949360; x=1773554160;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=BLekuXTpZCk/2xRsyir8NHL/C+qFDUmVruKtYYzpMrM=;
-        b=uw5ldzFq9fMN9w2gL/gSNaWBf7EHyAFELado8ocbVHKohU/P8D7VJoVD84b4RhTZGf
-         0l4QGjJ14Vup6jdM3fj3a5XT+MHnztnRvNvEbUNPnGQ/s143aZoHG2AgzufsyzGR7Mwm
-         3ywl/uBJ+VSvYSgJfQCxreqvWnbxCa3FuLvOJgr+B6VNOMKD565Je5YBAnUWmqqLKwUL
-         XXqd4KbjsK0lq/npm7GPWC+KDC/QL29kmCD6xg0eGNTl7X8QbSUS7Gor7F6G0erVv+b0
-         1EhnYtXHvOlOOVcRNWNTqtmukGZbkSgcr4AxXkJ8xGmXVnzfdf7TfJ3+gVqwvcYvD8Wo
-         i/5A==
-X-Forwarded-Encrypted: i=1; AJvYcCVGsXd+uZEAyOYB2S3ZCIS5p3I7c3JP5zxAdGC9nLbwfkS/vg0Pf+g4wok7P/oKblfigSM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+BzMSuTWUsrCYx1NACPWn28Q+YIJxD94pqAnUW/a3ha6Ey36b
-	g1i5RCKqL9Shxg0a2WOJPuF9fLl9/47VZyvVsvgBHtsYpp1S94GZKBbrwehDm0zrsYCiX+paQtT
-	SCpYTCLT637cY7DP4QC9mXDsLnd+LiWYJ+ntRJWw1
-X-Gm-Gg: ATEYQzwX+hfCTnhuQmYER50/7Qbu+up2tPNJK3rMAQDeHNGSiFgRLr5bW1FL3yJFzox
-	Ugrpb0mKeIWIKW8VIoKZVGcnZKVdx1wXYsp1W3GWGZTvvIShSb9sOy9Mo7LiUk18cYSSOesa0LM
-	qlWt1yeqcrlc9wlwsiKoN3paTJTn2nAEZ04i3mfg0+0nVlt81JmcWvFBHki4+SQubzOQ1A+KFKb
-	WekpGDiRQoVW9LJibuKCMeuYBIBm71mO8uu+AinAdDCwRdvJcYcSGDuWPKa5Vi6m8z+9vazlH/e
-	mOqd1CjbgROdjow=
-X-Received: by 2002:a05:6a00:ae07:b0:81f:50ea:5d96 with SMTP id
- d2e1a72fcca58-829a2e14ae7mr4663911b3a.18.1772919452679; Sat, 07 Mar 2026
- 13:37:32 -0800 (PST)
+        bh=qzZLCcnHG+Osbm7pa12qQeoDFe0+3vPeHUnXlwX+JZ0=;
+        b=iryndQEjKThlsS4Y9FdHgb4+oRKskdX8gRvxs1PLzvON6mtA6u1Ew5XHPVpBUuF6bJ
+         Z2luhHa1UWUEKYknFcafc7+X470IMe3WgxrQMsQYup30MMBJ7OeUCqHy7zcC9iDL2MhD
+         UYEOyFEUX4hbXMWD6tqiGq4D573zz5NT8pb7IjTUEaIzAzVrbq9Odog5zhA6jFUy4RVr
+         ci3w2vrMBxj+5Lvqen0bkcWGwEnBgu2XE1Fg1D1oN+SduC64ILxfWgCAZykNojP/4Vh7
+         lojax57beC7dy3nuKs4+e+DBNVHKCzrHV9/HEOuvVJlJeXdxLYH9TuOLgHfzfnCv9svz
+         atMA==
+X-Forwarded-Encrypted: i=1; AJvYcCXlBNuUzxTKINPoEc+s4djj7VmWpx5B2dsgvKNiOznOoDeSBCh4o7vdAGaCOt6V4RuDz3U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxsg3qjR/sAaUmOgG63SYnVj7S7wyOUTB+5yz259sooMlrRUZfM
+	lt1lS+MOQfBLVqLKHED275SZBEkfjFBhDSg2BecucCux4SHJ5miXQENIRUyViUARn4R6YiI/O3g
+	8uILWg1ZnUN3MgEchonSm90GLzRHkPZE=
+X-Gm-Gg: ATEYQzwrRmIK1ZCMCnEAQd6TqEWF556QbVROj1rnsi7QAFUCPeU592eFNXJKeYvQRUa
+	hntfbCh4QIJF6T6b4vTavBRB9L/70whsuhOdFeWIufgRsYmigGaXKTF8jZg2m0c81ytN+BayN9c
+	BeXPKRzQV/KdCDVH4mH2GuSI/5KnuJSgblpqcOHOOhOFRMDdBqvRlOI9+raWfTkURQuYEGqPOJP
+	HvPNaPXA5Tw1I+C73/+E30+bnFC8CXNI0ttzS+7tjOXDL1OhqysOXkxvUiVJui/+QeFAk9n1WfT
+	XO51kwEAP69R
+X-Received: by 2002:a05:690c:690d:b0:798:6a6b:5b0f with SMTP id
+ 00721157ae682-798dd742160mr68841947b3.32.1772949359778; Sat, 07 Mar 2026
+ 21:55:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260307163430.470644-1-edumazet@google.com>
-In-Reply-To: <20260307163430.470644-1-edumazet@google.com>
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-Date: Sat, 7 Mar 2026 16:37:21 -0500
-X-Gm-Features: AaiRm53IwD_HGBvn9iNu272U-Gw6uJDTj-k6DWnDVMwt6tHmJ6OrKak1uzeQbWc
-Message-ID: <CAM0EoMkFfW2q=LN9s0hegFVd+cnc0hx2xp=CpoJHFVHx0D38xQ@mail.gmail.com>
-Subject: Re: [PATCH v2 net-next] net/sched: do not reset queues in graft operations
-To: Eric Dumazet <edumazet@google.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, "David S . Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, Simon Horman <horms@kernel.org>, 
-	Victor Nogueira <victor@mojatatu.com>, Cong Wang <xiyou.wangcong@gmail.com>, 
-	Jiri Pirko <jiri@resnulli.us>, =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
-	eric.dumazet@gmail.com, Yunsheng Lin <linyunsheng@huawei.com>
+References: <20260306120024.1032301-1-sun.jian.kdev@gmail.com>
+ <aar9gzh7QVhezeII@Tunnel> <CAADnVQJtG9s1CV-qeF8NSgi_UFPgahOXtB3PWiivBooAYC69GA@mail.gmail.com>
+In-Reply-To: <CAADnVQJtG9s1CV-qeF8NSgi_UFPgahOXtB3PWiivBooAYC69GA@mail.gmail.com>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Sun, 8 Mar 2026 13:55:48 +0800
+X-Gm-Features: AaiRm51lortd9tUoJm6gybm3nts0d_O0elldh2h1076SJcxJM1Dgweg8zuDg1_w
+Message-ID: <CABFUUZGV7ZAVY=Y6Py3ytZUzZV0i9otPWADgP9HtVrDzf612ew@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests/bpf: avoid jump seq limit in verif_scale_pyperf600
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Paul Chaignon <paul.chaignon@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Mar 7, 2026 at 11:34=E2=80=AFAM Eric Dumazet <edumazet@google.com> =
-wrote:
+On Sat, Mar 7, 2026 at 12:23=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> Following typical script is extremely disruptive,
-> because each graft operation calls dev_deactivate()
-> which resets all the queues of the device.
+> On Fri, Mar 6, 2026 at 8:15=E2=80=AFAM Paul Chaignon <paul.chaignon@gmail=
+.com> wrote:
+> Sun Jian,
+> I asked to do a _minimal_ tweak to pyperf600.
+> What you did is a drastic change. Pls don't hack tests
+> just to make them pass. The tests have to be meaningful
+> and test coverage shouldn't degrade.
 >
-> QPARAM=3D"limit 100000 flow_limit 1000 buckets 4096"
-> TXQS=3D64
-> for ETH in eth1
-> do
->  tc qd del dev $ETH root 2>/dev/null
->  tc qd add dev $ETH root handle 1: mq
->  for i in `seq 1 $TXQS`
->  do
->    slot=3D$( printf %x $(( i )) )
->    tc qd add dev $ETH parent 1:$slot fq $QPARAM
->  done
-> done
->
-> One can add "ip link set dev $ETH down/up" to reduce the disruption time:
->
-> QPARAM=3D"limit 100000 flow_limit 1000 buckets 4096"
-> TXQS=3D64
-> for ETH in eth1
-> do
->  ip link set dev $ETH down
->  tc qd del dev $ETH root 2>/dev/null
->  tc qd add dev $ETH root handle 1: mq
->  for i in `seq 1 $TXQS`
->  do
->    slot=3D$( printf %x $(( i )) )
->    tc qd add dev $ETH parent 1:$slot fq $QPARAM
->  done
->  ip link set dev $ETH up
-> done
->
-> Or we can add a @reset_needed flag to dev_deactivate() and
-> dev_deactivate_many().
->
-> This flag is set to true at device dismantle or linkwatch_do_dev(),
-> and to false for graft operations.
->
-> In the future, we might only stop one queue instead of the whole
-> device, ie call dev_deactivate_queue() instead of dev_deactivate().
->
-> I think the problem (quadratic behavior) was added in commit
-> 2fb541c862c9 ("net: sch_generic: aviod concurrent reset and enqueue op
-> for lockless qdisc") but this does not look serious enough to deserve
-> risky backports.
->
-> Signed-off-by: Eric Dumazet <edumazet@google.com>
 
-Reviewed-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Hi Alexei, Paul,
 
-cheers,
-jamal
+I spent some more time looking into this.
 
-> Cc: Yunsheng Lin <linyunsheng@huawei.com>
-> ---
-> v2: clarified the changelog
->     added kdoc missing part (kernel build bots)
->
->  include/net/sch_generic.h |  4 ++--
->  net/core/dev.c            |  2 +-
->  net/core/link_watch.c     |  2 +-
->  net/sched/sch_api.c       |  2 +-
->  net/sched/sch_generic.c   | 20 ++++++++++++--------
->  net/sched/sch_htb.c       |  4 ++--
->  net/sched/sch_mq.c        |  2 +-
->  net/sched/sch_mqprio.c    |  2 +-
->  net/sched/sch_taprio.c    |  2 +-
->  9 files changed, 22 insertions(+), 18 deletions(-)
->
-> diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
-> index c355300893a3921740cf6b919cc58de953cd610c..16beba40914ee5a9454f9eec2=
-ad6e600543c89f2 100644
-> --- a/include/net/sch_generic.h
-> +++ b/include/net/sch_generic.h
-> @@ -710,8 +710,8 @@ void dev_qdisc_change_real_num_tx(struct net_device *=
-dev,
->  void dev_init_scheduler(struct net_device *dev);
->  void dev_shutdown(struct net_device *dev);
->  void dev_activate(struct net_device *dev);
-> -void dev_deactivate(struct net_device *dev);
-> -void dev_deactivate_many(struct list_head *head);
-> +void dev_deactivate(struct net_device *dev, bool reset_needed);
-> +void dev_deactivate_many(struct list_head *head, bool reset_needed);
->  struct Qdisc *dev_graft_qdisc(struct netdev_queue *dev_queue,
->                               struct Qdisc *qdisc);
->  void qdisc_reset(struct Qdisc *qdisc);
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 203dc36aaed55e706f5d978ec02c6bf48201e3d4..6fc9350f0be8756ae849d5b0c=
-a9b222055d96ced 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -1756,7 +1756,7 @@ static void __dev_close_many(struct list_head *head=
-)
->                 smp_mb__after_atomic(); /* Commit netif_running(). */
->         }
->
-> -       dev_deactivate_many(head);
-> +       dev_deactivate_many(head, true);
->
->         list_for_each_entry(dev, head, close_list) {
->                 const struct net_device_ops *ops =3D dev->netdev_ops;
-> diff --git a/net/core/link_watch.c b/net/core/link_watch.c
-> index 25c455c10a01cf535d6a7d2952d51434fe462690..ff2c1d4538efbc89cd49d8d84=
-77542a6e7bacbad 100644
-> --- a/net/core/link_watch.c
-> +++ b/net/core/link_watch.c
-> @@ -181,7 +181,7 @@ static void linkwatch_do_dev(struct net_device *dev)
->                 if (netif_carrier_ok(dev))
->                         dev_activate(dev);
->                 else
-> -                       dev_deactivate(dev);
-> +                       dev_deactivate(dev, true);
->
->                 netif_state_change(dev);
->         }
-> diff --git a/net/sched/sch_api.c b/net/sched/sch_api.c
-> index cc43e3f7574fae203989f5c28b4934f0720e64c2..c0bab092ea809955b3a5aaa08=
-c169bca55cfaf7f 100644
-> --- a/net/sched/sch_api.c
-> +++ b/net/sched/sch_api.c
-> @@ -1120,7 +1120,7 @@ static int qdisc_graft(struct net_device *dev, stru=
-ct Qdisc *parent,
->                 }
->
->                 if (dev->flags & IFF_UP)
-> -                       dev_deactivate(dev);
-> +                       dev_deactivate(dev, false);
->
->                 qdisc_offload_graft_root(dev, new, old, extack);
->
-> diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
-> index 556e0d8003161d3dfe68e484f6349714cf989c0c..d4fe907c4ad5895b1dda5249c=
-55e4c1e0168023e 100644
-> --- a/net/sched/sch_generic.c
-> +++ b/net/sched/sch_generic.c
-> @@ -1370,11 +1370,12 @@ static bool some_qdisc_is_busy(struct net_device =
-*dev)
->  /**
->   *     dev_deactivate_many - deactivate transmissions on several devices
->   *     @head: list of devices to deactivate
-> + *     @reset_needed: qdisc should be reset if true.
->   *
->   *     This function returns only when all outstanding transmissions
->   *     have completed, unless all devices are in dismantle phase.
->   */
-> -void dev_deactivate_many(struct list_head *head)
-> +void dev_deactivate_many(struct list_head *head, bool reset_needed)
->  {
->         bool sync_needed =3D false;
->         struct net_device *dev;
-> @@ -1393,11 +1394,14 @@ void dev_deactivate_many(struct list_head *head)
->         if (sync_needed)
->                 synchronize_net();
->
-> -       list_for_each_entry(dev, head, close_list) {
-> -               netdev_for_each_tx_queue(dev, dev_reset_queue, NULL);
-> +       if (reset_needed) {
-> +               list_for_each_entry(dev, head, close_list) {
-> +                       netdev_for_each_tx_queue(dev, dev_reset_queue, NU=
-LL);
->
-> -               if (dev_ingress_queue(dev))
-> -                       dev_reset_queue(dev, dev_ingress_queue(dev), NULL=
-);
-> +                       if (dev_ingress_queue(dev))
-> +                               dev_reset_queue(dev, dev_ingress_queue(de=
-v),
-> +                                               NULL);
-> +               }
->         }
->
->         /* Wait for outstanding qdisc_run calls. */
-> @@ -1412,12 +1416,12 @@ void dev_deactivate_many(struct list_head *head)
->         }
->  }
->
-> -void dev_deactivate(struct net_device *dev)
-> +void dev_deactivate(struct net_device *dev, bool reset_needed)
->  {
->         LIST_HEAD(single);
->
->         list_add(&dev->close_list, &single);
-> -       dev_deactivate_many(&single);
-> +       dev_deactivate_many(&single, reset_needed);
->         list_del(&single);
->  }
->  EXPORT_SYMBOL(dev_deactivate);
-> @@ -1473,7 +1477,7 @@ int dev_qdisc_change_tx_queue_len(struct net_device=
- *dev)
->         int ret =3D 0;
->
->         if (up)
-> -               dev_deactivate(dev);
-> +               dev_deactivate(dev, false);
->
->         for (i =3D 0; i < dev->num_tx_queues; i++) {
->                 ret =3D qdisc_change_tx_queue_len(dev, &dev->_tx[i]);
-> diff --git a/net/sched/sch_htb.c b/net/sched/sch_htb.c
-> index cf6cd4ccfa2029d9a45e35d6780520290690732d..eb12381795ce1bb0f3b8c5f50=
-2e16ad64c4408c8 100644
-> --- a/net/sched/sch_htb.c
-> +++ b/net/sched/sch_htb.c
-> @@ -1387,7 +1387,7 @@ htb_graft_helper(struct netdev_queue *dev_queue, st=
-ruct Qdisc *new_q)
->         struct Qdisc *old_q;
->
->         if (dev->flags & IFF_UP)
-> -               dev_deactivate(dev);
-> +               dev_deactivate(dev, false);
->         old_q =3D dev_graft_qdisc(dev_queue, new_q);
->         if (new_q)
->                 new_q->flags |=3D TCQ_F_ONETXQUEUE | TCQ_F_NOPARENT;
-> @@ -1421,7 +1421,7 @@ static void htb_offload_move_qdisc(struct Qdisc *sc=
-h, struct htb_class *cl_old,
->                 struct Qdisc *qdisc;
->
->                 if (dev->flags & IFF_UP)
-> -                       dev_deactivate(dev);
-> +                       dev_deactivate(dev, false);
->                 qdisc =3D dev_graft_qdisc(queue_old, NULL);
->                 WARN_ON(qdisc !=3D cl_old->leaf.q);
->         }
-> diff --git a/net/sched/sch_mq.c b/net/sched/sch_mq.c
-> index 0ed199fa18f04a06197116b6ab64ff3647dbace9..a0133a7b9d3b09a0d2a606423=
-4c8fdef60dbf955 100644
-> --- a/net/sched/sch_mq.c
-> +++ b/net/sched/sch_mq.c
-> @@ -201,7 +201,7 @@ static int mq_graft(struct Qdisc *sch, unsigned long =
-cl, struct Qdisc *new,
->         struct net_device *dev =3D qdisc_dev(sch);
->
->         if (dev->flags & IFF_UP)
-> -               dev_deactivate(dev);
-> +               dev_deactivate(dev, false);
->
->         *old =3D dev_graft_qdisc(dev_queue, new);
->         if (new)
-> diff --git a/net/sched/sch_mqprio.c b/net/sched/sch_mqprio.c
-> index b83276409416fabeccc441e5127211632ddcfedb..002add5ce9e0ab04a6260495d=
-1bec02983c2a204 100644
-> --- a/net/sched/sch_mqprio.c
-> +++ b/net/sched/sch_mqprio.c
-> @@ -469,7 +469,7 @@ static int mqprio_graft(struct Qdisc *sch, unsigned l=
-ong cl, struct Qdisc *new,
->                 return -EINVAL;
->
->         if (dev->flags & IFF_UP)
-> -               dev_deactivate(dev);
-> +               dev_deactivate(dev, false);
->
->         *old =3D dev_graft_qdisc(dev_queue, new);
->
-> diff --git a/net/sched/sch_taprio.c b/net/sched/sch_taprio.c
-> index f721c03514f6008ecc59fe4c4ca4a082099dc125..8e375281195061da848fb2bfa=
-f79cf125afccac0 100644
-> --- a/net/sched/sch_taprio.c
-> +++ b/net/sched/sch_taprio.c
-> @@ -2184,7 +2184,7 @@ static int taprio_graft(struct Qdisc *sch, unsigned=
- long cl,
->                 return -EINVAL;
->
->         if (dev->flags & IFF_UP)
-> -               dev_deactivate(dev);
-> +               dev_deactivate(dev, false);
->
->         /* In offload mode, the child Qdisc is directly attached to the n=
-etdev
->          * TX queue, and thus, we need to keep its refcount elevated in o=
-rder
-> --
-> 2.53.0.473.g4a7958ca14-goog
->
+Comparing unmodified pyperf600 bytecode between clang-18 and clang-20, I
+see fewer instructions with clang-20 and nearly the same number of
+branches:
+
+clang-18: 90134 lines of disassembly, 6090 gotos
+clang-20: 78369 lines of disassembly, 6085 gotos
+
+So this does not look like a simple program-size increase. What seems to
+change is the branch layout in the unrolled loop body, which seems to
+make the verifier DFS go deeper before pruning.
+
+One useful data point is that a single __on_event() copy does load
+successfully (that was my v2), while with 2 or more copies it
+consistently fails at exactly 8193 jumps. In other words, the verifier
+hits the jump-sequence limit before reaching the second copy.
+
+I also tried a range of source-level mitigations, but so far I couldn't
+find one that preserves the test intent and keeps pyperf600 comparable
+to the other variants:
+
+- UNROLL_COUNT tuning: 99 does not compile; 100-120 compile but still
+fail at 8193; 121-145 fail to compile; 146-150 compile but still fail
+at 8193
+- early break/goto on !frame_ptr: insufficient for pyperf600, and also
+hurts pyperf600_nounroll by adding branch points to the 600-iteration loop
+- wrapping 5x __on_event() in a non-unrolled loop: verifier still unrolls i=
+t
+- making get_frame_data() __noinline: still fails
+- moving the unwind loop into a __noinline subprog: still fails
+- SUBPROGS / __on_event as __noinline: still fails; codegen changes,
+but the verifier still hits 8193
+
+Paul also mentioned trying STACK_MAX_LEN/UNROLL_COUNT and only getting it
+to work with STACK_MAX_LEN reduced to 180, which would make it too close
+to pyperf180.
+
+The only source change I found that passes is reducing __on_event() to a
+single copy, but that clearly weakens the test as pointed out.
+
+At this point, I don't have a source-level fix that preserves the test
+intent.
+
+Regards,
+Sun Jian
