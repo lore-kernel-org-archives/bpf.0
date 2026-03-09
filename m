@@ -1,200 +1,169 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95BFF23A98E
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 16:45:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44D1A2494ED
+	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 16:45:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773074722; cv=none; b=f+EU1uW5UbHVEg4n4bhNa6CwfQfF65UUecFDXhgTTE20Sak7r16EusFyytyIuoEVzmEDkND2OGeVXrGrCjPgzBwS5KVSKqNQ53zlcPRdg6zwfqPLz8/pCAWtvBQb+KUHsihGDDphgRgAGaXx5Mj86I6N+y6yydti6cLf80Cr1rM=
+	t=1773074734; cv=none; b=JzY0PlNSMZKT+1RBEaEJwCx6PGLZIOY0hWP0Sk6c/JdYOwpA7awBtyEqD3u/osMZWiOKTwX6oIyde9U5qjbk+Yu3iaT+oUmnRaaDGGfS3JfCla85PZKGOyHWMabvf0DPZUk9j7EkDJCYxbFe11Yxh28ALsf6YZU+ii/qQkEL4Wg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773074722; c=relaxed/simple;
-	bh=icjWP1L+DoRJUOSBMBCHZ0UgNuHL2LRNvLvlEm6xUEk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hdrM2onPsWwLTbmR1T+a/HHlRVJwTD+rVBsYJOawQPWJ7UtjclTEDPethClQJoJ1E6Z8kUy8pfwi01A3bFF9paNd8BNCF4ST3I6hDO4LKd4mlFEqfkIkLH2NGGeU1cKWCwbWHiwTgEXtruv0WV/GxGfekGoh8jWm0LtZ9Zd/fik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=enOEeJHq; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1773074734; c=relaxed/simple;
+	bh=zAR72wDXdxq5C9PjPsyeD4QQxyEK/1hXtEl2Xpss9d0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WmZCcU9bFaP27HjCdyFzN8WHwB+Z6DozVEW7jX1H8kGHf47SK14bXxKaT/kL2gxIijMrbjHRbP8u4ZyYl6vkQ/yj3cnbedjgC69fB1T9ZZq0wVM+Jl0hL6svyy2secxCb3+FU7Q7eC82vncgdXU1XoT6dC/7vfucvf47gISpvtY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=D5jINIZ0; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="enOEeJHq"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4852afd42ceso27043905e9.2
-        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 09:45:20 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="D5jINIZ0"
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-660ea6ceb5aso7979903a12.0
+        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 09:45:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1773074719; x=1773679519; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=C4TrHsDF1RGNreebKCbrcf0d+wkWEPrj32T2lm3DYKI=;
-        b=enOEeJHqOmpmU3RKhKiCoChpyREgkwdH269FQxg/xsYwnZyNj4YIbsCYnFUWU2YMsL
-         OIq4x2bm9ZI7BFN2pyb2FiGyh9XSEDjqKfaIeSqolc9l5HEXEqwWQpIMDLmedAyQmUPp
-         pm1iPR/YJKM3Xt+PjfYhnTyrl7SzIOrJ4uGZ6DLrykBZaOaisCqGXlJga9ue8NsHUPHE
-         bNALsT9XvKTAIbxE/nlASx2EkZe24u9mnyVmx4rCDYwSrtO4fAg7tPr5d/x23NuPeZLb
-         LpEX/N2AktNJ2KNu8ARri0ePI6+n7yh4SjGILTZQHlgBT05SyJeU0ZGwJZcR6mY0EcNh
-         bagQ==
+        d=linux-foundation.org; s=google; t=1773074731; x=1773679531; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5aGclf2D5Ad+FZRYNo1Igm1i3XSKWX/TJgjzbw+i9o4=;
+        b=D5jINIZ0SJ1eMjToj0ZyLoC9gUATikIGHw+K7PJ4ARcB2lO6P6aIWG++AydC/803J3
+         rQaV/nbkGTwjwauzC69iZVXrCSKMjf+yWD354zJ3DhVUgZ3QV1FHTbwDXRcAF7PC2uRk
+         BKDB82EcvJ9j40pt/XPVMt6OQ4o+YXW2Yapfw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773074719; x=1773679519;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=C4TrHsDF1RGNreebKCbrcf0d+wkWEPrj32T2lm3DYKI=;
-        b=qzYEOViIq8HlPTpYlbgAWuNtZgZ9rHv24/jitWvMI9AG1nGO+NlusaTzTUorS92qo7
-         cJaGYSRGvY5kFxmo9YDfZxDkN+loxmCXia8bFyg0P240J197Nq052B+pcnFcxJIvjh9q
-         /k/Fm1LC/9fBgKvWO3JFPXhlGQaiZnOLAChW054hyencx+IFdNBDzvw4xsdHI6TFedh5
-         XsXyPM7ncZjRQZ3xB/zqydbAcOPfS+DVvYTsEb/daGuwCv4HwCD93a1VXo2IEWARcnAC
-         Ik6RqmDHNk3TRhFYCsEBEoCLqSKY6B9f9eo3ddZ2ne2+lkqO1aS65rOSctx6AnO+lErz
-         m7Vw==
-X-Forwarded-Encrypted: i=1; AJvYcCXenBNXzXp/GDhzmMjZCIuPWh9vXIarJDk661sTgiHX4CKMA/FB9/yGOLtcBcPUMMjVmxQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbrVcLHlyK6CUZ/k9RJ/75PYClPj5wtBhpK/sRMMFARCfYB6YM
-	2Li9XJu7rj9G+XyK8/h8xcnnvNPQWg/YJcybLveF0h+biKaQdzMBeM4U21z55Hk3SpvSbwZtNuy
-	7Pt4j
-X-Gm-Gg: ATEYQzy3uq7IE7sSkEmTj+3Z8ewz/244irpUGGk/o+70qy+NNKVtze++HFB/W+rJXFE
-	qomKcCfu4A1NpyFzuOxDNmZwVx6v35eGgNBdb1WN2XcCnduvzaODrZOqoE7Iyoc6XZWAfLax0o0
-	gYjGopczTuaQPfxgRZ78bLo8w70ivLdJ4ghVQr6r6fZxHO10fiN5VR1mCzilDhHdSCP1cQbxifJ
-	HM7/FI6Hpi/loVa6LvUp0B454iknd1qyeZm7YMSqwv9zpKADHlcE74NK6m5knzje1N/tW1Qw9qV
-	SKJg0yRyuXEhraogOvHD8K9JH7FyCyHsQ5XiM6B7QxtVmsnLOlkkAjU9UCbJOymcvZVGQzLAuMT
-	2fpnFNWH1fvirMIZTjcPdAoWxPwkIMx5VbfSs/0SvJcIK+sPw2K9UFawQvPbvQBN7ufYPGujFkM
-	JvtijBQnOXzd1mviyYKgtmsS0dlirndF9E1uAnhEgvpsY=
-X-Received: by 2002:a05:600c:3b17:b0:483:7903:c3b1 with SMTP id 5b1f17b1804b1-4852695aeb9mr189560675e9.20.1773074718746;
-        Mon, 09 Mar 2026 09:45:18 -0700 (PDT)
-Received: from blackdock.suse.cz (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48541a8d4desm3471025e9.8.2026.03.09.09.45.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Mar 2026 09:45:18 -0700 (PDT)
-Date: Mon, 9 Mar 2026 17:45:16 +0100
-From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Tejun Heo <tj@kernel.org>, KP Singh <kpsingh@kernel.org>, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	Lennart Poettering <lennart@poettering.net>
-Subject: Re: [PATCH 2/4] cgroup: add bpf hook for attach
-Message-ID: <ptsniiapf4wkho5qsjdbzog7zrago6bifqlsbauabosq4xnbna@vxvsno4cp4id>
-References: <20260220-work-bpf-namespace-v1-0-866207db7b83@kernel.org>
- <20260220-work-bpf-namespace-v1-2-866207db7b83@kernel.org>
- <tmihfspwvvxv6sle27br4dgsbvepacnqj74zfscndkz722ssby@244dku2izea7>
- <20260227-ballverlust-abziehen-51ec7de2d16a@brauner>
+        d=1e100.net; s=20230601; t=1773074731; x=1773679531;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5aGclf2D5Ad+FZRYNo1Igm1i3XSKWX/TJgjzbw+i9o4=;
+        b=wUpfNSumP2wzzTYUaIoYGB76aK6aMdRDC8UETvDoel8CW3Y3Uvvb/IlEi/aVENZdoo
+         umwwlvbuGbKaCK1s6sTcrr/BLvu2D80kvWjHYybWEtRMsNbgWLhyGxvEkT73lRf/AY2r
+         Y+xDTS/F1cwxMWnsz6f/NvTQPutrfmVpS1N54eezBMNIk8o3CS2mitbvstZSUUhBtZDZ
+         +FNhxS8ohzkeEzmPrnZzD6zK7II5RIYdUGBvLWYqIgpga6FmHV1tn8vilOsef9IFwdgO
+         ChI8HC6rOJ4VwiMaa62XlU/usvXzU+M+D2pRSec2vtyc5Y0oaOU6O76LZG6lM8Qyv1+3
+         NHQg==
+X-Forwarded-Encrypted: i=1; AJvYcCXuncI6xWj7URuZJD+rbpv7NOOKvS0FPulZv8PexdgjeTm7g/VkwWM9v0DdF7buv9OPMyM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+WLgNGPPEJ9SRZfehZm44aY1t4myxSSisv18iDYMeAvJjOj/s
+	08WqvcBKZ+gTq6ERc31NSfO+eMf4sRfw9k0RRa7FNkk1eK7GihDiTIR80Yrq4kIjiAVH42vtg6t
+	k4mFgekA=
+X-Gm-Gg: ATEYQzyJ6mm0EALeKSQw9QnH5xMLA2RKJ0dFdOzKyd5gJ4pNjkwOQxf0+WQHY0kz6wp
+	WR3QnNxNKA97/1ZrgSHWsojNB+CySPrlU68I0h0HBEP4GJpNlm9AJ6UES+5Rc5k4rBe8EsO062k
+	/aPsuhgnj+pzRAJwyzojBsSeMI5rxKmwHhai1Sfrd7l3gaqKaP7HHc/hyViKh85KuVZq/GPfv/D
+	r778PUGtijxWW0pgbjUE3GB1uCI/wFi8CYOL6hfpc3HWlzimWb+NpYvghHdetGQycMD66woGEil
+	7AKCBwR8CJeqSI3X9sTFSSpRda01X+sY5/zDCDCD4tZP7d2aEiZSDFFAqPasrsNv/OnqUmRZKkQ
+	Z238CmTs7UPzlnca/c2b2kQyTHKk6yn+IAd0w+pBMwZxjND5X+Fzy4VhUwRB/yGwooW0KNBlRrl
+	56yQQJHzHMWdp2hOl/bklm/XXRFTUxmBOXIK1JzLVWlzt+5X7si6W/yW3VzruQ6VY9spJbAk8q
+X-Received: by 2002:a17:907:6ea2:b0:b8f:dec3:6606 with SMTP id a640c23a62f3a-b97119cc65dmr14662066b.23.1773074731213;
+        Mon, 09 Mar 2026 09:45:31 -0700 (PDT)
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com. [209.85.218.52])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b942ef47ae5sm378504766b.5.2026.03.09.09.45.30
+        for <bpf@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Mar 2026 09:45:31 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b9423d62cbbso456330366b.1
+        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 09:45:30 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWhQGki2kd030THw6LOM401BlsA2Nk4NRutiQtZNej1ArhWBQoUdP+supXVffz33S8400s=@vger.kernel.org
+X-Received: by 2002:a17:907:3e10:b0:b96:e1de:db04 with SMTP id
+ a640c23a62f3a-b9711a1fe33mr14904266b.18.1773074262570; Mon, 09 Mar 2026
+ 09:37:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260227-ballverlust-abziehen-51ec7de2d16a@brauner>
+References: <1ff1bce2-8bb4-463c-a631-16e14f4ea7e2@arm.com> <20260306-work-kernel-exit-v1-1-8f871f6281cb@kernel.org>
+ <aaroReSCj1qXUeQb@infradead.org> <CAHk-=whCiPr-cR3hVv=46Qo0Nw_vN422YUxqU0GmNai+KRtg2w@mail.gmail.com>
+ <aa7qson15uJpL-BL@infradead.org>
+In-Reply-To: <aa7qson15uJpL-BL@infradead.org>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Mon, 9 Mar 2026 09:37:26 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi_kwtWt4Swi=k2zJTnStoBaw3vneHz8ccVNDyVD1nvWg@mail.gmail.com>
+X-Gm-Features: AaiRm52k8FmvIAxaWFSwelL44z7-IyhgZowK3grBWDh2zbSjeLnGfYwalrLVlLs
+Message-ID: <CAHk-=wi_kwtWt4Swi=k2zJTnStoBaw3vneHz8ccVNDyVD1nvWg@mail.gmail.com>
+Subject: Re: [PATCH] kthread: remove kthread_exit()
+To: Christoph Hellwig <hch@infradead.org>
+Cc: Christian Brauner <brauner@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-modules@vger.kernel.org, linux-nfs@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Aaron Tomlin <atomlin@atomlin.com>, Chuck Lever <chuck.lever@oracle.com>, 
+	Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
+	Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, 
+	Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Rae Moar <raemoar63@gmail.com>, Christian Loehle <christian.loehle@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hello.
+On Mon, 9 Mar 2026 at 08:43, Christoph Hellwig <hch@infradead.org> wrote:
+>
+> Because it can't f&*^ up the state of random tasks.
 
-On Fri, Feb 27, 2026 at 02:44:27PM +0100, Christian Brauner <brauner@kernel.org> wrote:
-> So calling this misconfiguration is like taking a shortcut
-> by simply pointing to a different destination. But fine, let's say you
-> insist on this not being valid.
+Christoph, you make no sense.
 
-I understand this in analogy with filesystem organization -- there's the
-package manager that ensures files are put in right places,
-non-conflicting and trackable.  Subtrees may be delegated (e.g.
-/usr/local).  If root (or whoever has perms for it), decides to
-manipulate the files, its up to them what they end up with.
+"do_exit()" cannot mess up random tasks. It can only exit the
+*current* task. The task that is running right now in that module.
 
-> The implementation atop of a single superblock like cgroupfs is
-> questionable.
+And exiting a task is about the least effed up you can do to a task
+when you are in kernel mode.
 
-(This is an interesting topic which I'd like to discuss some other
-time not to diverge here.)
+Compared to everything else you can do by mistake - like just
+corrupting task state randomly - it's a very benign operation, *and*
+it is obvious both in source code and in behavior. It's not like it is
+some subtle operation.
 
-> But in general the point is that there's no mechanism to enforce cgroup
-> tree policy currently in a sufficiently flexible manner.
-> 
-> > root detaching/disabling these hook progs anyway?)
-> 
-> I cannot help but read this as you asking me "What if you're too dumb to
-> write a security policy that isn't self-defeating?" :)
+I'd be *much* more worried about actual subtle bugs, not somebody
+explicitly calling exit.
 
-I was just trying to express that there's only one level of root (user).
-(Cautionary example are "containers" that executed as (host) root.
-Lockdown neglected.)
+So what is the actual problem? No more random rants. Explain yourself
+without making wild handwaving gestures.
 
-> bpf has security hooks for itself including security_bpf(). First thing
-> that comes to mind is to have security.bpf.* or trusted.* xattrs on
-> selected processes like PID 1 that mark it as eligible for modifying BPF
-> state or BPF LSM programs supervising link/prog detach, update etc and
-> then designating only PID 1 as handing out those magical xattrs. Can be
-> as fine-grained as needed and that tells everyone else to go away and do
-> something else.
+Now, there are real exports in this area that are actually strange and
+should be removed: for some historical reason we export 'free_task()'
+which makes no sense to me at all (but probably did at some point).
 
-(These are too many new concepts for me, I must skip it now. I may catch
-up after more study.)
+Now *that* is a strange export that can mess up another task in major ways.
 
-> systemd will gain the ability to implement policy to control cgroup tree
-> modifications in as much details as it needs without having the kernel
-> in need to be aware of it. This can take various forms by marking only
-> select processes as being eligible for managing cgroup migrations or
-> even just locking down specific cgroups.
+[ Ok, I was intrigued and I went and dug into history: we used to do
+it in the oprofile driver many many moons ago. ]
 
-This is how I understand the goal could be expressed in current terms:
+And since I looked at the history of this all due to that odd export,
+that also made it clear that historically we used to export
+complete_and_exit(), which was this beauty:
 
-  a) allowlisting processes that can do migrations
-     # common ancestor of all + access to each dst
-     chown -R :grA $root_cgroup/cgroup.procs
-     chmod -R g+w $root_cgroup/cgroup.procs
+    NORET_TYPE void complete_and_exit(struct completion *comp, long code)
+    {
+        if (comp)
+                complete(comp);
 
-     # static:
-       usermod -G grA user_of_pid
-       (re)start pid
-     # or in spawner:
-       fork
-       setgroups([grA])
-       exec
+        do_exit(code);
+    }
 
-  b) rules that are specific to cgroup (subtree)
-    # applying same like above but to a $lower_group
+so you could always do "do_exit()" by just doing
+"complete_and_exit(NULL, code)".
 
-    $ setfacl -R -m g:grB:w $lower_group/cgroup.procs
-    setfacl: cgroup.procs: Operation not supported
-    # here I notice why current impl isn't sufficient
+And yes, that function was exported since at least 2003 (it was
+exported even before that, under the name 'up_and_exit()', and that's
+the point where I couldn't be bothered any more because it predates
+even the old BK history).
 
-Also, if I understand this correctly you semm to move from the semantics
-where users (UIDs) are subjects to a different one where it's bound to
-processes (PIDs).
+Yes, it was indeed renamed to kthread_complete_and_exit() back in
+2021, but that wasn't due to any fundamental "it has to work only on
+kthreads". It was simply because nothing but kthreads used it - and
+because that was also the time when kthread_exit() started doing
+*extra* things over and beyond just the regular do_exit().
 
+So it was a practical thing brought on by kthread changes, not some
+kind of "exit is evil" thing.
 
-> The policy needs to be flexible so it can be live-updated, switched into
-> auditing mode, and losened, tightened on-demand as needed.
+And that "ktrhead_exit() does extra things" was the actual bug that
+needed fixing and caused nasty memory corruption due to subtle lack of
+cleanup when it was bypassed.
 
-OK.
-(I'd add that policy should be also easily debuggable/troubleshootable.)
+End result: we've never historically felt that exit() was somehow bad,
+and when we limited it to kthreads and made it special, it caused
+actual bugs.
 
-> Ok, let's start with cgroup_can_fork(). The sched ext hook isn't a
-> generic permission check. It's called way after
-> cgroup_attach_permissions() and is a per cgroup controller check that is
-> only called for some cgroup controllers. So effectively useless to pull
-> up (Notice also, how some controllers like cpuset call additional
-> security hooks already.).
-
-There could be one BPF predicate (on the cgroup level) and potentially
-pass per-controller data, so that function could employ (or not) those.
-It's true that semantics would be a bit different because of implicit
-migrations happening with controller en-/disablement.
-
-What I don't like about the multiple hooks is that there'd be several
-places to check when one is trying to figure out why a migration failed.
-
-
-> On top of that this looks like a category mistake imho. The callbacks
-> are a dac-like permission mechanism whereas the hooks is actual mac
-> permission checking. I'm not sure lumping this together with
-> per-cgroup-controller migration preparations will be very clean. I think
-> it will end up looking rather confusing. But that's best left to you
-> cgroup maintainers, I think.
-
-This paragraph hinted me at (yet) another mechanism in the kernel (and
-you also mentioned it with cpuset) -- the LSM hooks. Namely, if this was
-security_cgroup_attach() hook, the logic could be expressed with other
-existing modules, IIUC, one of them is BPF. Would that fulfil the
-behaviors you're missing?
-
-(I'm proposing this as potentially less confusing/known "evil" approach
-to the scenarios considered above.)
-
-
-Thanks,
-Michal
+            Linus
