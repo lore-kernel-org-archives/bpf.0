@@ -1,127 +1,233 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7F933CB2E1
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 17:18:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D1463ECBEE
+	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 17:22:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773076688; cv=none; b=uJEr6rM3tn6hyJkkBoMKevDUnMi5kJasDEQE7FaDSWKwTpw66noBR3wnMqAsNxYde3lETYS4aAAgN8Tr7RkAOu/4d26RUgOFcgek28JUWeMlKDxSLDp0AWiPuihy2hVAS5HF0VRlm6CdfkwsiQ/gccpA2x97COsb3YyM1MkgBc8=
+	t=1773076936; cv=none; b=NR1jrDvtgxPEloWDkjwSIg9G9+iSjF0uwOXlEPMdI7g2iCDW9j2E7CmOmq/Tv5plq7yan6SjVsNARnGsPxCXBUaH8/Yke+Yt1cuL1pep8D8cm5lXpN90FOmue3NJ9YnBP17App34y/2q+Fkub5JwYY3F8e6ZS2bduZ09tGBeu8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773076688; c=relaxed/simple;
-	bh=9CCY4PzYOrzWqpPuXimhKXwck19MaZ0LfiRjaCIJIzM=;
+	s=arc-20240116; t=1773076936; c=relaxed/simple;
+	bh=gMhr3ZdeBB/k2u9IpfotCM/7puJUP5X4j5k+2W7E5L0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m5SjryvhvY9Qu4UZY/iOq/NLQVvLU7HWzgVcDypQrYiDwW3pJy9Hxw/E7lo1JV+o4E83oegBRkY+uSX9lUmLUC1vmMh0wWZ2T7VDA95nemsQeJuTyeAwJ15EN0zYYkC9+ahDKoxadn+87GyH/H6EQYLvFoIbOfEFz09GfyL05V8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gCNpJaRB; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fs0V1BTXxana4/UkhG1no4feZ6YS8kjL9sSDG4MGKtabdQAWxc/HxziFVetp/cEdvj7lol9epZ8tlfT5vi8ijBQNyzcpsrHq0NkjpQhFSVY3RnEIz7+DCFeiQMgcuqWwMUfIKrSswoSgRdbjd7J2Dbh8HJn/H+t4crBqLH5flbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cfBLKUfl; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gCNpJaRB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773076685;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=i2rJs6eN4RulDPNhq1NMUOOVSeUcobhvUEjspYXJuM4=;
-	b=gCNpJaRBpKcn/9DK6qB3168EIhHvQZSbLbpZFqayMauN3Gqi8TpQ8kCWCBmuhYj3E64fr/
-	HHpALPNe1FU64B28miVIaI/g4vchmqwFN+u09FRHJGWhKAZQgzWuV5OTPLth8upcTWCuAL
-	0H+pyb+3EdUQpcgXCdnVCZ/OO0cqYB4=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-155-_kpt2FzsOxSO-92QLnQ2BA-1; Mon,
- 09 Mar 2026 13:18:02 -0400
-X-MC-Unique: _kpt2FzsOxSO-92QLnQ2BA-1
-X-Mimecast-MFC-AGG-ID: _kpt2FzsOxSO-92QLnQ2BA_1773076680
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 936EF1956054;
-	Mon,  9 Mar 2026 17:18:00 +0000 (UTC)
-Received: from fedora (unknown [10.22.81.10])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2E4F2195411D;
-	Mon,  9 Mar 2026 17:17:54 +0000 (UTC)
-Date: Mon, 9 Mar 2026 14:17:53 -0300
-From: Wander Lairson Costa <wander@redhat.com>
-To: Tomas Glozar <tglozar@redhat.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Crystal Wood <crwood@redhat.com>, 
-	Ivan Pravdin <ipravdin.official@gmail.com>, Costa Shulyupin <costa.shul@redhat.com>, 
-	John Kacur <jkacur@redhat.com>, Tiezhu Yang <yangtiezhu@loongson.cn>, 
-	Daniel Wagner <dwagner@suse.de>, Daniel Bristot de Oliveira <bristot@kernel.org>, 
-	"open list:Real-time Linux Analysis (RTLA) tools" <linux-trace-kernel@vger.kernel.org>, 
-	"open list:Real-time Linux Analysis (RTLA) tools" <linux-kernel@vger.kernel.org>, 
-	"open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>
-Subject: Re: [PATCH v3 12/18] rtla: Enforce exact match for time unit suffixes
-Message-ID: <aa8AXqNzcGKffUWZ@fedora>
-References: <20260115163650.118910-1-wander@redhat.com>
- <20260115163650.118910-13-wander@redhat.com>
- <CAP4=nvQ6EeecMggeVciOaW_-=sa2QJ2r9DX0Xifzgsv5JBhAAg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cfBLKUfl"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-439ce3605ecso3323358f8f.0
+        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 10:22:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773076933; x=1773681733; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=popiN9giVNSxFEXNtoVkUQBWgWnWRyzWI0B1NJHLewA=;
+        b=cfBLKUflY1XYxeYboF0/rctJC5VcwgSi6Ic7FNwcdRyqEWHlp+yzgP8CUXUOxkihs0
+         LvIlj309PDT/pCsMlSwvnrcCND5+LEhrW7CELIi3soJHNoFtZoV8tEwBviebP5GcknMH
+         qJEA60GbDKUh/K4oUZhFTKNR56dxV5Vo8ec9L07eNXEuDinUMcpKpSr4XcO0GfYuB8wm
+         JamN7j0VzgdFOrrjA8Gb+UlWPPNPOg9fr7oxamSryMrlaW8lMItX8InlbWvWB2QeeIWp
+         ClOIis6uitdtiWTwO6q/w3YySRcv4nCk68LItMwp1/lT1jdziSPBpbNu5wugxf6OL7ah
+         GWhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773076933; x=1773681733;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=popiN9giVNSxFEXNtoVkUQBWgWnWRyzWI0B1NJHLewA=;
+        b=IAmU9qQaZwjbmShj95mtNAU4uniY6txKsSQQVUy21etj6Tff84I66vsMmrYBrpn2yJ
+         hVIxjq6VQkZoKXXSGV6LyJ07seKwPtSZoza5wcaIn58w6hRSaLg6qavpEwgRcGYgLjqL
+         +EuRh5CAIKSc8ZaVNK21yPN31OSBJKpHYxNzyFXtgk5+QhRWHAFqNNVLxpRzRNNnWglD
+         kaesBoQfOcdhzRWw9xXV2bwXJEaWKtSoXcn++Dg3b4LNAI9A6E7d9SBGxLQpyHKMBCwy
+         FqtWJzHQUbvILlvONFy59NidORtiBY5o4iDA6lizdnE4hH0Z6rULCqFrk6nbNVoFPylz
+         eiBg==
+X-Gm-Message-State: AOJu0YwkAg6jfkTrWRZ/2n7ANRzm0kXJXagQF//2xnahemkbFdKQbIrj
+	7sp8HSvAAoHumSBbE5AJrYLVooALezbokbEZDyXf/k+uQo2rHvwUKso9
+X-Gm-Gg: ATEYQzzoasreYvCpBiMamxHQr6LTOSdy6JWl+jaXtSYpuCozJEjR1B0fR6Tf5Ejy3sJ
+	tNvalX0SLPsGTo6u2h5wDMuLOPDdGdZe5zEwqoWaTsdNKlyY3ooAXZRtP+wTv/O7igRNdiW0gE7
+	tXIJWHgbxOKKtUYTyRxLDyqQ02Vc5CI9NVUl43ZCDQ9VEGHFJ+IZxck+BsTxucEhSo9M5eL+3Np
+	n86MlUVcm9qBEZf9kYi4i1fTwllwNPtvaQM5nvo8a9L9pEpHmRWsJisI7pPUWSgsYQLIIUg7YU2
+	NlvlkLariTXFMBJX9SVcS1GM900X+Utk7SQCQ2Fu8ZumzWo8TmP9w82SUHqp1uR6N+qlRSXt309
+	KkymvvcZMG/Y4orrErsGyxil9GeSKvAIyFH+LosP/C+cnfy1XpGPIUqjm5+gMdhkIMwT2VW8L+P
+	kJqa67ifr8FdP5mbIZwOSXVFO6R+WKSJUf
+X-Received: by 2002:a05:6000:26d1:b0:439:b486:ba6b with SMTP id ffacd0b85a97d-439da89401fmr21299511f8f.39.1773076933239;
+        Mon, 09 Mar 2026 10:22:13 -0700 (PDT)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439dae49177sm27108030f8f.35.2026.03.09.10.22.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Mar 2026 10:22:12 -0700 (PDT)
+Date: Mon, 9 Mar 2026 17:30:45 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Xu Kuohai <xukuohai@huaweicloud.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Shahab Vahedi <list+bpf@vahedi.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>,
+	Hengqi Chen <hengqi.chen@gmail.com>,
+	Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+	Paul Burton <paulburton@kernel.org>,
+	Hari Bathini <hbathini@linux.ibm.com>,
+	Christophe Leroy <chleroy@kernel.org>,
+	Naveen N Rao <naveen@kernel.org>,
+	Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	Pu Lehui <pulehui@huawei.com>, Ilya Leoshkevich <iii@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Wang YanQing <udknight@gmail.com>
+Subject: Re: [bpf-next v8 3/5] bpf: Add helper to detect indirect jump targets
+Message-ID: <aa8DxUESQAI/zAEs@mail.gmail.com>
+References: <20260309140044.2652538-1-xukuohai@huaweicloud.com>
+ <20260309140044.2652538-4-xukuohai@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP4=nvQ6EeecMggeVciOaW_-=sa2QJ2r9DX0Xifzgsv5JBhAAg@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+In-Reply-To: <20260309140044.2652538-4-xukuohai@huaweicloud.com>
 
-On Tue, Mar 03, 2026 at 03:27:35PM +0100, Tomas Glozar wrote:
-> čt 15. 1. 2026 v 18:28 odesílatel Wander Lairson Costa
-> <wander@redhat.com> napsal:
-> >
-> > The parse_ns_duration() function currently uses prefix matching for
-> > detecting time units. This approach is problematic as it silently
-> > accepts malformed strings such as "100nsx" or "100us_invalid" by
-> > ignoring the trailing characters, leading to potential configuration
-> > errors.
-> >
-> > Switch to using strcmp() for suffix comparison to enforce exact matches.
-> > This ensures that the parser strictly validates the time unit and
-> > rejects any input containing invalid trailing characters, thereby
-> > improving the robustness of the configuration parsing.
-> >
+On 26/03/09 10:00PM, Xu Kuohai wrote:
+> From: Xu Kuohai <xukuohai@huawei.com>
 > 
-> Why not use your strncmp_static() helper to protect from overrun?
+> Introduce helper bpf_insn_is_indirect_target to check whether a BPF
+> instruction is an indirect jump target.
+> 
+> Since the verifier knows which instructions are indirect jump targets,
+> add a new flag indirect_target to struct bpf_insn_aux_data to mark
+> them. The verifier sets this flag when verifing an indirect jump target
+> instruction, and the helper checks it to determine whether an
+> instruction is an indirect jump target.
+> 
+> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> ---
+>  include/linux/bpf.h          |  2 ++
+>  include/linux/bpf_verifier.h |  9 +++++----
+>  kernel/bpf/core.c            |  9 +++++++++
+>  kernel/bpf/verifier.c        | 18 ++++++++++++++++++
+>  4 files changed, 34 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 05b34a6355b0..90760e250865 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1541,6 +1541,8 @@ bool bpf_has_frame_pointer(unsigned long ip);
+>  int bpf_jit_charge_modmem(u32 size);
+>  void bpf_jit_uncharge_modmem(u32 size);
+>  bool bpf_prog_has_trampoline(const struct bpf_prog *prog);
+> +bool bpf_insn_is_indirect_target(const struct bpf_verifier_env *env, const struct bpf_prog *prog,
+> +				 int insn_idx);
+>  #else
+>  static inline int bpf_trampoline_link_prog(struct bpf_tramp_link *link,
+>  					   struct bpf_trampoline *tr,
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 090aa26d1c98..6431b94746cf 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -578,16 +578,17 @@ struct bpf_insn_aux_data {
+>  
+>  	/* below fields are initialized once */
+>  	unsigned int orig_idx; /* original instruction index */
+> -	bool jmp_point;
+> -	bool prune_point;
+> +	u32 jmp_point:1;
+> +	u32 prune_point:1;
+>  	/* ensure we check state equivalence and save state checkpoint and
+>  	 * this instruction, regardless of any heuristics
+>  	 */
+> -	bool force_checkpoint;
+> +	u32 force_checkpoint:1;
+>  	/* true if instruction is a call to a helper function that
+>  	 * accepts callback function as a parameter.
+>  	 */
+> -	bool calls_callback;
+> +	u32 calls_callback:1;
+> +	u32 indirect_target:1; /* if it is an indirect jump target */
+>  	/*
+>  	 * CFG strongly connected component this instruction belongs to,
+>  	 * zero if it is a singleton SCC.
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 88a1834030a0..ccc618a50103 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -1480,6 +1480,15 @@ int bpf_jit_blind_constants(struct bpf_verifier_env *env)
+>  	prog->blinded = 1;
+>  	return 0;
+>  }
+> +
+> +bool bpf_insn_is_indirect_target(const struct bpf_verifier_env *env, const struct bpf_prog *prog,
+> +				 int insn_idx)
+> +{
+> +	if (!env)
+> +		return false;
+> +	insn_idx += prog->aux->subprog_start;
+> +	return env->insn_aux_data[insn_idx].indirect_target;
+> +}
+>  #endif /* CONFIG_BPF_JIT */
+>  
+>  /* Base function for offset calculation. Needs to go into .text section,
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index fc3ba380b74a..8d8e349f98cd 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -4022,6 +4022,11 @@ static bool is_jmp_point(struct bpf_verifier_env *env, int insn_idx)
+>  	return env->insn_aux_data[insn_idx].jmp_point;
+>  }
+>  
+> +static void mark_indirect_target(struct bpf_verifier_env *env, int idx)
+> +{
+> +	env->insn_aux_data[idx].indirect_target = true;
+> +}
+> +
+>  #define LR_FRAMENO_BITS	3
+>  #define LR_SPI_BITS	6
+>  #define LR_ENTRY_BITS	(LR_SPI_BITS + LR_FRAMENO_BITS + 1)
+> @@ -21082,12 +21087,14 @@ static int check_indirect_jump(struct bpf_verifier_env *env, struct bpf_insn *in
+>  	}
+>  
+>  	for (i = 0; i < n - 1; i++) {
+> +		mark_indirect_target(env, env->gotox_tmp_buf->items[i]);
+>  		other_branch = push_stack(env, env->gotox_tmp_buf->items[i],
+>  					  env->insn_idx, env->cur_state->speculative);
+>  		if (IS_ERR(other_branch))
+>  			return PTR_ERR(other_branch);
+>  	}
+>  	env->insn_idx = env->gotox_tmp_buf->items[n-1];
+> +	mark_indirect_target(env, env->insn_idx);
+>  	return 0;
+>  }
+>  
+> @@ -22013,6 +22020,17 @@ static void adjust_insn_aux_data(struct bpf_verifier_env *env,
+>  		data[i].seen = old_seen;
+>  		data[i].zext_dst = insn_has_def32(insn + i);
+>  	}
+> +
+> +	/* The indirect_target flag of the original instruction was moved to the last of the
+> +	 * new instructions by the above memmove and memset, but the indirect jump target is
+> +	 * actually the first instruction, so move it back. This also matches with the behavior
+> +	 * of bpf_insn_array_adjust(), which preserves xlated_off to point to the first new
+> +	 * instruction.
+> +	 */
+> +	if (data[off + cnt - 1].indirect_target) {
+> +		data[off].indirect_target = 1;
+> +		data[off + cnt - 1].indirect_target = 0;
+> +	}
+>  }
+>  
+>  static void adjust_subprog_starts(struct bpf_verifier_env *env, u32 off, u32 len)
+> -- 
+> 2.47.3
+> 
 
-As I said before, sometime I fail to follow my own rules *facepalm*.
-> 
-> > Signed-off-by: Wander Lairson Costa <wander@redhat.com>
-> > ---
-> >  tools/tracing/rtla/src/utils.c | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/tools/tracing/rtla/src/utils.c b/tools/tracing/rtla/src/utils.c
-> > index 486d96e8290fb..b029fe5970c31 100644
-> > --- a/tools/tracing/rtla/src/utils.c
-> > +++ b/tools/tracing/rtla/src/utils.c
-> > @@ -211,15 +211,15 @@ long parse_ns_duration(char *val)
-> >         t = strtol(val, &end, 10);
-> >
-> >         if (end) {
-> > -               if (!strncmp(end, "ns", 2)) {
-> > +               if (strcmp(end, "ns") == 0) {
-> >                         return t;
-> > -               } else if (!strncmp(end, "us", 2)) {
-> > +               } else if (strcmp(end, "us") == 0) {
-> >                         t *= 1000;
-> >                         return t;
-> > -               } else if (!strncmp(end, "ms", 2)) {
-> > +               } else if (strcmp(end, "ms") == 0) {
-> >                         t *= 1000 * 1000;
-> >                         return t;
-> > -               } else if (!strncmp(end, "s", 1)) {
-> > +               } else if (strcmp(end, "s") == 0) {
-> >                         t *= 1000 * 1000 * 1000;
-> >                         return t;
-> >                 }
-> > --
-> > 2.52.0
-> >
-> 
-> Tomas
-> 
-
+Reviewed-by: Anton Protopopov <a.s.protopopov@gmail.com>
