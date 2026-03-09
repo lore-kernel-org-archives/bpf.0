@@ -1,314 +1,233 @@
-Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D80233B3C1C
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 16:28:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=148.163.148.77
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773073694; cv=pass; b=jiFH2pmUrfWzr0fvEEi6hFsrwDHiRQ3/d/L/R1v4EoKe8BM4TzvSdvigsNBwaUKzp3B+dy0UgSVaMUF84vSOV4oCS3pbyiBWOdT5x1CNnIgamTyQbnkJ3Dnh/d/SgU2wrxejH27OTXmTHC9Bcd8du+C7jMdQobs8pfK7yBcKy3M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773073694; c=relaxed/simple;
-	bh=6FcdC7XGQ4jkQLD+Wscs7I1j0Wqn5J/bSiY/KJxoln0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LzHtre27qHeoFGVPgfqBKtUF7b6GuDYzLo6gwMvZJQ/ijINNZvM7qZVvRQQVsZd96Mkrbvq2EsEfkaRoTjGF6XT0uhhMcYOexmbAi1akLgusU89L+IXJF1bqQVRsjd2K+edw2NQwV70DC4tmR+g5oGw/ikyYSysuCqWEJCDpqxE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=YWN6V1Cr; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=Im+Zw8b3; arc=pass smtp.client-ip=148.163.148.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DC173E8C6B
+	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 16:29:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773073771; cv=none; b=B5UdppDXzERLaShB4sERGQOyevgdzMDWKbaR+xBgq6xQPPUM0aC7ofJVw19RLBMQrmPxyv2+NSVHpOatYYXOVUgLLTZcKPyieo9K95lTlPmOCr7sPlvsdyLB0dOnMCH9olTCDiDn1LBk2ZNtNmzdRFDSoYEa76b7ab9TyoWsR8c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773073771; c=relaxed/simple;
+	bh=sy/csZ9qYJvyx0Yth+q0jvxJ72s/YhvX4d14B5XLrYE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a/L6cZ2lATmG2hk5YJUiP9K1Deepm9H+wYcM/X48G9HU540eQRUmvsyB+7ibxrkYF6Al6ggBpmBU1RdBCRCWCPyDWIwDTbHvGRz6KZE/PdCPzeqd4jgGv+jeiPiD++nPAa9oTYc3GfxrBJihDs/bArzPMOUCtejgjnGxriuAeQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bohEd6BN; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="YWN6V1Cr";
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="Im+Zw8b3"
-Received: from pps.filterd (m0354652.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 629FpVkh2575578
-	for <bpf@vger.kernel.org>; Mon, 9 Mar 2026 16:28:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=XMVepEXCHAiG6crC1IEBcOFkczgNZ9CneWdZtRfQKVk=; b=YWN6
-	V1CrdOGKHQ8ksl3f2wY8j9f12Bd2ik6/fnmurXbYi6r83ChYUPNlwCp6eJY9jSoS
-	MXCj9ceplBiOfAV3SjVqF4++YxYnCkCAZS6SdCZoMQAqBZ06ysjDTifh+bEzJ3Od
-	bQ8dALXcJd18NWx/6EnOqkMeGOkDf+svPSX7Y8ewiMJX8OodDaJvcJ3G4N+8IzN8
-	A6RG/toqXY0qHbd8g0gosNAmdjNYnib7lCkSECeIJRgFAmvF8lplZh8rUhsLyqm2
-	vZwzIGCdaCcjNDtpyynu6f4rrcsRok8DvKhuNwyvEU5WjT3D5eT7EzOTLaZEgtjW
-	cLOxJGr2ECGak/EhOg==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4cs1u05527-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-	for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 16:28:03 +0000 (GMT)
-Received: from 04WPEXCH009.crowdstrike.sys (10.100.11.79) by
- 04WPEXCH008.crowdstrike.sys (10.100.11.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Mon, 9 Mar 2026 16:28:02 +0000
-Received: from mail-yx1-f69.google.com (10.100.11.78) by
- 04WPEXCH009.crowdstrike.sys (10.100.11.79) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35 via Frontend Transport; Mon, 9 Mar 2026 16:28:02 +0000
-Received: by mail-yx1-f69.google.com with SMTP id 956f58d0204a3-64ca3de57f1so13663274d50.0
-        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 09:28:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773073682; cv=none;
-        d=google.com; s=arc-20240605;
-        b=jznwhhNLm5grTgCiLcwXA2QYtb11dpV2Dev1qeua/K9rmQIIIX8mh2Ap4Bpv+8z486
-         AL9StLrx9jCGs1NhBzexSvM6WRTF2Lw9i/mLN/QxyqYLnnAA7ZGkvwk6ra/sulbEy9hY
-         wd0B7gAqO0sa8qSuBliz7ngtiOKnRREaGg+eFzoSvMuitMRwGZoPJBoNwN20sR4Upe1+
-         FIrWMkshCJa3ewgJEwriLlJq0YWmtB1c8TVBYkTcNcpP+peE64MxM57kZKclPHVzDYpf
-         HnFIgyW/iS6qYGfp+3de/CyX3nnKG0wQcVQU1xWVfukfSe9ET8D2QVsh9+RphK1RmkcF
-         lAMw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=XMVepEXCHAiG6crC1IEBcOFkczgNZ9CneWdZtRfQKVk=;
-        fh=Eu4umwily2rRSS9LrU3YEXKRRKdb5TGhuAGlbptaSF4=;
-        b=R7j6hGEcLLIuozPgXujJskuJU6RPuR9izFja1ThvT6CUJhSA0/9s/poGZB/P3GFNVF
-         Mx23Lo5obzSjVWXUsMWQ5hc29CukoNWnrIoujVeZeA/AWs8Sf3BZrImjZN7iLcCqQouh
-         3b6pYbsMIEDaVNoKGUkLKlVYd6t8EDt8jKu4ooBNCgdBKvUI4wRx3bPUX/93PZDqycqf
-         AolEIl0zbR6MZA+w/EYway3a8OkohjARo76jlraktI0bw8x8kwatWqJoXRKXsasr8EF2
-         bYfiLOpqqBeIhJjOWakz7N+rq9F3KgO6FB1kR1I1p4Zg8Q6fUHUTp/7YfivE07rkHV/k
-         md5A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bohEd6BN"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-48529c325f0so21422915e9.0
+        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 09:29:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=crowdstrike.com; s=google; t=1773073682; x=1773678482; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XMVepEXCHAiG6crC1IEBcOFkczgNZ9CneWdZtRfQKVk=;
-        b=Im+Zw8b3Q2FNadAmIv34muC92HFoBEWYcmD1Vx1bRpoc8MQ9iRiQWlaSLJEyUWVLRX
-         2qBubqEpFGJLz/nVGJ+BXuPi0LWYj0Ed8NVcMJ9HKhLT6NeLzdL2nnywjkdMDf+mAHAg
-         zDwJKgiKovikmu240Psae41X+0QNiyGOoXO5IMmeARIbeMPfeFKPDaw86mSrmZgZ+9ac
-         7TwQPKNw2cWGnG8zgk4xcHoOX0HO1i9USX5xigh99piEwx7Wa/iNqRF+sb0rs0ixSRQ8
-         UOJtECOEdrnaVaAfTels8iLnWaiblyULNg+uaP+IWBvX0bpm3xQ3PMSgx2WMPg0EfpF5
-         a9yg==
+        d=gmail.com; s=20230601; t=1773073768; x=1773678568; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fqJYl3zPZN2KFVigj33M+KDn8csTHg3syExrZwynl6M=;
+        b=bohEd6BNxnBG9Y/cr/ap/F4X/QSyeJ/XFTVkDlEKqJ7bJHnXrepXjK+z0y/Pcn0WeJ
+         ZA9ZLm7F41A4FiHoCcfbgz7hBGvjKBpaNwI5QMUwK+skmseDC6VzZmumk3f5dkCQMdcc
+         mu5wIuAMjYdPoURkVUkc01Z+o8REbOz0XXMH4c4sL+2xHHVCtD+7SYcw5ZfG7OwFg0Z2
+         f0DTQx9wrIrTlXxshbqdJH+GL2F6b4HaSNOgc3XYntIuS/GGYRJdTg4NgDD8chnu7ChM
+         hb8BhsCh+CgFcEFNZlyhHFDHVQ51n9V6U/KCenVDcKJ/VLOm1E1Q89O7kBXgJBqqSDV0
+         kE2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773073682; x=1773678482;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=XMVepEXCHAiG6crC1IEBcOFkczgNZ9CneWdZtRfQKVk=;
-        b=NZsSsBH+Mob0do+d1jKJbVtAfKXYjQRwl38AWsuw9RFpzd+qlJOyQGamGKGjCeXQj4
-         N/u7NwMG+bKnc2CuitoOqnaGQFrwzDW0Fmt/9xtDiJQaB494fXM5mqeLyixo2B4rIG3c
-         xHDg9ZA4hzxqcH97DF2dk7d2KpvRJfZeWNpo5EmlKFskm8z/Q//0GCjznPfzQVDYOCTu
-         c7CtA0UER1bjifVyO5P/z2Ilck7YPJd2qp5rk27/NWuxG600TLdgRw2/6pnR51Qs4nLz
-         NjuWlpQUfuril8P8lDhxhxO/3lo/bEd47cobEd1lJP0A7hBwzb/T9R9k+Kn/ATkzs2M+
-         H3Aw==
-X-Gm-Message-State: AOJu0Yxpz0LWn3DOgp8aT57i6PZ3xpxwCkqwgB6+g3Jfmwcir0AWhQIK
-	jff/raKTuviJibIWMVmCd+VRWGWDkVb/n791iR1FEtmEqO/ypmmPQHG9L13QkpqikJT/TDZs+ga
-	nDI0aAZCRrOb2tC6esDOdG8e2lvoE3IwuTQJv/ELsDWQUoEbVA5ycl95MJbXf/0V6/LFwWGeTtP
-	Vr2QXJgY4ICNkggwXjLhbiir8AdyFTigIOojCKo7gG8+U=
-X-Gm-Gg: ATEYQzyPgMgg7GO1p4uNnEDSN/JmvtpbSW6/VdUyUDo6yh4P1O6tfOQljCupmokngXi
-	UPnF/C9B4pes/qp7f+JOOtPnM+WOTXJICYB99lBsGF+5DqGwLe+EYrSmykSn18dLdvHzWEL6lbP
-	GPy1hXbYXvqrYamIqEEjQ27w0hCiBibDBnzSol3cev7ZlTzCboqXvZxjXeSFyMpSuRy1KoOLgVR
-	jXA
-X-Received: by 2002:a05:690e:e85:b0:64c:a5f9:9b2d with SMTP id 956f58d0204a3-64d14101bfemr10276422d50.21.1773073681780;
-        Mon, 09 Mar 2026 09:28:01 -0700 (PDT)
-X-Received: by 2002:a05:690e:e85:b0:64c:a5f9:9b2d with SMTP id
- 956f58d0204a3-64d14101bfemr10276399d50.21.1773073681178; Mon, 09 Mar 2026
- 09:28:01 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1773073768; x=1773678568;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fqJYl3zPZN2KFVigj33M+KDn8csTHg3syExrZwynl6M=;
+        b=giCptvlHBl+d8WY/+wyMUh+ch0X0fKSBa0GMJXc19V0lwjXTo1zBaznXKtizAhcIhm
+         Tjs28fUsnuivzBIuVd4sSMdjSKdm/nGYvC3YGCf2W0+LsDWt1Q4yLjQ3NyqtjkkfEu4Z
+         FOYUDkqeDqoJHuugllXgDErTGcbK4mfwpsxwuJ/FDz+vfK40n1Wcfg+XhXLLmsLvfpt1
+         JI8XuxD91QGsb/GRex3cbUm6sBoSBGQ0LTt0QKaPQ6xq/rSQpCr31Leg4kKiKHQpDwGl
+         wH0qUT1cETj2/4mJmOOo11jF9yWt/6jVZGfqfnHzjr54yeXZp/kuVNsFtaMGhbX/Dyn6
+         K63A==
+X-Gm-Message-State: AOJu0YyXQuRFJFeRyeODcvIdQhKsPFCna2ZC3F4FcF8re6b1eJaGWF2T
+	ELp9LTTWanxgum40h26RNV0+02k8ie7MyfucBjo3Ic46MCendJrk35MD
+X-Gm-Gg: ATEYQzz3BP6n1e4Ihz/zGjohweZz2Q0cnixUy/DfFpZMUcPa6AhZuFNCrRT2+hYwb07
+	FvrcxErX0c7RGhiw6ziAaBOFH1m2a6o01Wllj8GU92SeYocGUt8iWdNmslTPm1IJ82FpDmq2A7H
+	lYl5H1OqXT5ijgk1pxf/X6dDIrdUIo/CnHwPPh4u7Yq9co7NGxDpyaj4Eg3jOQVaEflFZrUdFXP
+	dT188+Q3jQEjJ/QzoZF3gOatjKD6rBS9zVAomaZ4DlihpX9RFRQH5BdXslvLqAb6ptXekXa6bK8
+	EhDCZWxUY6yzLiiHFkSfLNjmUV+Fg29U6whtHYE2QoAgqBl9C3Scg4JdOToN8TeFs4O4efVWEO0
+	/s36HanMFNjzBaJ1RXOxAEGy1BkQX25EJyWhtc+UKpkbsocv/N2DKvhvp/xf+lMR7BQ==
+X-Received: by 2002:a05:600c:6217:b0:485:3f58:d9f with SMTP id 5b1f17b1804b1-4853f580f32mr34856035e9.30.1773073766062;
+        Mon, 09 Mar 2026 09:29:26 -0700 (PDT)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48541ac17f2sm2008225e9.6.2026.03.09.09.29.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Mar 2026 09:29:25 -0700 (PDT)
+Date: Mon, 9 Mar 2026 16:37:58 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Xu Kuohai <xukuohai@huaweicloud.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Shahab Vahedi <list+bpf@vahedi.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>,
+	Hengqi Chen <hengqi.chen@gmail.com>,
+	Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+	Paul Burton <paulburton@kernel.org>,
+	Hari Bathini <hbathini@linux.ibm.com>,
+	Christophe Leroy <chleroy@kernel.org>,
+	Naveen N Rao <naveen@kernel.org>,
+	Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	Pu Lehui <pulehui@huawei.com>, Ilya Leoshkevich <iii@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Wang YanQing <udknight@gmail.com>
+Subject: Re: [bpf-next v8 4/5] bpf, x86: Emit ENDBR for indirect jump targets
+Message-ID: <aa73Zu0TC7jUEDju@mail.gmail.com>
+References: <20260309140044.2652538-1-xukuohai@huaweicloud.com>
+ <20260309140044.2652538-5-xukuohai@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260302210532.381083-1-andrey.grodzovsky@crowdstrike.com>
- <20260302210532.381083-2-andrey.grodzovsky@crowdstrike.com>
- <CAEf4BzYiwAczqqdb40YKq8yRd7JWgOV_cgyehpCRzoEZ6qeP7g@mail.gmail.com>
- <CAOu3gNgUp0sqgTUfCM_UFsEi6jwsTDjMrAZL_Pv=FZ4Fx_Khug@mail.gmail.com> <CAEf4BzZ8ky0menK0ujPMkKre3+P2SwPQ2oJ=cgtQ9JMp0c86Kg@mail.gmail.com>
-In-Reply-To: <CAEf4BzZ8ky0menK0ujPMkKre3+P2SwPQ2oJ=cgtQ9JMp0c86Kg@mail.gmail.com>
-From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Date: Mon, 9 Mar 2026 12:27:50 -0400
-X-Gm-Features: AaiRm50LMmLAmQfIIo5zVvJXHG8V5ut9oBjRoyBEAr_isdtHETwBxT-qFhIk68s
-Message-ID: <CAOu3gNjcdzFJDBAdBHDFJp_MMKoy2dMG7M3=LHx_gR8ENMK=UA@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH bpf-next v4 1/2] libbpf: Handle duplicate
- kprobe symbols in attach_kprobe_opts
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, jolsa@kernel.org, emil@etsalapatis.com,
-        linux-open-source@crowdstrike.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Disclaimer: USA
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzA5MDE0OCBTYWx0ZWRfX3ri7aVJK+Zfr
- caUY2gD/8dPpppg5AQULlUlsH1/Lxk0lAQtytH+7EiX9XPychfptPFkKFSyybpI5RWJQflkivQU
- biDaItp2NE5ltPptF+h+PEOyl8Y8LlBQ9iPZNp5Np99dXEyBAQzvSY6xT3EopPyuBIdWlcyBz0h
- uhahtLphijZaGV640gFqV7S4Cl0a8fdkF5XTsyHnkwh718rAKH3yhI728YQ5S5aCgd2zHuVRyvg
- w5sZSSlPQCgqMjj3ysXb5PFOKTAyvhulxOQdcQBsTxbNJ1bcwT6WIK9m75cPtvHaKNGLsplmtyx
- xV8YyvVt8h9y0aM7xlNcepxznPKM19gdJeVll1p3IksN9VPWT99D++UJ8QpOf5Nrs6S1Mek1aZs
- Z6zQRoUHzsl+H0HrzYsL90+kYxfaP3ktYA8bpsASLVvQvzn/EtRoSC6w9MRGpB7HI700bmdKLMC
- VR28FtQ1YtnwQX59rWQ==
-X-Proofpoint-ORIG-GUID: aB2ECoeC4Fgw82MBckRWnGM1WxbKpkJS
-X-Proofpoint-GUID: aB2ECoeC4Fgw82MBckRWnGM1WxbKpkJS
-X-Authority-Analysis: v=2.4 cv=Z5Hh3XRA c=1 sm=1 tr=0 ts=69aef513 cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=KZhmPCYDdY0A:10
- a=VkNPw1HP01LnGYTKEx00:22 a=T2KQ53IYiC3MXPrxx8bB:22 a=2KvRFfd_T_-xjmS8C1aD:22
- a=pGLkceISAAAA:8 a=pl6vuDidAAAA:8 a=89cUL-tqPNMvuB5KzNEA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11723
- signatures=596818
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 malwarescore=0 clxscore=1015 priorityscore=1501 spamscore=0
- bulkscore=0 impostorscore=0 lowpriorityscore=0 adultscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603090148
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260309140044.2652538-5-xukuohai@huaweicloud.com>
 
-On Fri, Mar 6, 2026 at 7:53=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Fri, Mar 6, 2026 at 1:08=E2=80=AFPM Andrey Grodzovsky
-> <andrey.grodzovsky@crowdstrike.com> wrote:
-> >
-> > On Thu, Mar 5, 2026 at 5:47=E2=80=AFPM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Mon, Mar 2, 2026 at 1:05=E2=80=AFPM Andrey Grodzovsky
-> > > <andrey.grodzovsky@crowdstrike.com> wrote:
-> > > >
-> > > > When a kernel module exports a symbol with the same name as an exis=
-ting
-> > > > vmlinux symbol, kprobe attachment via bpf_program__attach_kprobe_op=
-ts()
-> > > > fails with EADDRNOTAVAIL (perf_event_open path) or EINVAL (legacy
-> > > > tracefs path).
-> > >
-> > > If the same symbol name resolves to multiple addresses, that's an
-> > > ambiguity that libbpf has no business resolving. It should be on user
-> > > to resolve and use attachment by address, which libbpf supports
-> > > through bpf_kprobe_opts or multi-kprobe opts.
-> > >
-> > > pw-bot: cr
-> > >
-> >
-> > I understand the concern about libbpf making policy decisions on
-> > ambiguous symbol resolution. But I think the skeleton-based auto-attach
-> > workflow makes this impractical for the user to handle.
-> >
-> > The recommended upstream pattern is:
-> >
-> >   skel =3D my_prog__open_and_load();
-> >   my_prog__attach(skel);
-> >
-> > So it's something along the lines of
-> >
-> > our_skeleteon_bpf__attach(skel)
-> >     =E2=86=92 bpf_object__attach_skeleton(skel->skeleton)
-> >       =E2=86=92 prog->sec_def->prog_attach_fn()  [=3D attach_kprobe()]
-> >         =E2=86=92 bpf_program__attach_kprobe_opts(prog, func, &opts)
-> >           =E2=86=92 perf_event_open_probe(name=3Dfunc, offset=3D0)
-> >             =E2=86=92 perf_event_open() =E2=86=92 EADDRNOTAVAIL
-> >
-> > So bpf_object__attach_skeleton(), which iterates over all
-> > programs and calls attach_kprobe() internally. That function extracts
-> > the symbol name from the ELF section name (SEC("kprobe/func_name"))
-> > and passes it to bpf_program__attach_kprobe_opts(). The user has no
-> > control point in this chain - no callback, no option struct, no way
-> > to intercept a failed attach and supply an address instead.
-> >
-> > If a kernel module happens to export a symbol with the same name as
-> > a vmlinux function the user is probing, the attach fails with
-> > EADDRNOTAVAIL and the user has no recovery path within the skeleton
-> > API. The only options would be:
-> >
-> > 1. Abandon skeleton auto-attach entirely for any kprobe program
-> >  that might hit a duplicate, and manually call
-> >  bpf_program__attach_kprobe_opts() with a resolved address for
-> >  each one. This defeats the purpose of skeletons.
->
-> No it doesn't. And there are many purposes to skeletons, convenient
-> auto-attach of everything is but one of them (when everything can be
-> declaratively defined and attached).
->
-> But even for the auto-attach functionality.
-> bpf_program__set_autoattach(prog, false), attach explicitly however
-> your application logic demands and set resulting link into skeleton's
-> slot (skel->links.<prog>). You'll get the same auto-detach clean up as
-> if your program was auto-attached. It's pretty flexible. Sure it's
-> nice when everything just works out of the box, but ambiguous target
-> symbol is not a typical out-of-the-box-working situation,
-> unfortunately.
->
-> >
-> > 2. Proactively scan /proc/kallsyms before every attach to detect
-> >  potential duplicates, set prog->autoattach =3D false for affected
-> >  programs, and manually attach those. But autoattach is not
-> >  exposed in the public skeleton API either.
->
-> see above, bpf_program__set_autoattach() is a public API. Skeleton is
-> just a convenience wrapper around bpf_object, you still have full
-> access to bpf_map, bpf_program, bpf_object, etc. Skeleton's first and
-> foremost unique added feature is convenient memory-mapped access to
-> global variables (and embedding BPF object file for nicer production
-> deployment), other than that it's doing its best to help but not get
-> in the way.
->
-> >
-> > Since a kernel module can be loaded at any time, any kprobe could
-> > potentially become ambiguous. Pushing resolution to the user
-> > effectively means the skeleton auto-attach pattern cannot be
-> > reliably used for kprobes.
->
-> you are overexaggerating how common this problem is
->
-> >
-> > The fallback in this patch is intentionally conservative - it only
-> > triggers on the specific error codes that indicate duplicate symbols
-> > (EADDRNOTAVAIL for perf_event_open, EINVAL for legacy), and it
-> > resolves strictly to the vmlinux text symbol, skipping module symbols.
-> > This seems like the only reasonable behavior for auto-attach, where
-> > the user has expressed intent to probe a specific function by name.
-> >
-> > Would it make sense to limit this fallback to the auto-attach path
-> > (attach_kprobe) rather than the explicit attach_kprobe_opts API?
-> > That way users who call attach_kprobe_opts directly still get the
-> > raw error and can handle it themselves, while the skeleton workflow
-> > has a reasonable default.
-> >
-> > Happy to hear alternative suggestions on how to make this work
-> > within the existing API.
->
-> Realistically, just use multi-kprobe. It will attach to all matching
-> kernel functions (unless unique match is requested).
+On 26/03/09 10:00PM, Xu Kuohai wrote:
+> From: Xu Kuohai <xukuohai@huawei.com>
+> 
+> On CPUs that support CET/IBT, the indirect jump selftest triggers
+> a kernel panic because the indirect jump targets lack ENDBR
+> instructions.
+> 
+> To fix it, emit an ENDBR instruction to each indirect jump target. Since
+> the ENDBR instruction shifts the position of original jited instructions,
+> fix the instruction address calculation wherever the addresses are used.
+> 
+> For reference, below is a sample panic log.
+> 
+>  Missing ENDBR: bpf_prog_2e5f1c71c13ac3e0_big_jump_table+0x97/0xe1
+>  ------------[ cut here ]------------
+>  kernel BUG at arch/x86/kernel/cet.c:133!
+>  Oops: invalid opcode: 0000 [#1] SMP NOPTI
+> 
+>  ...
+> 
+>   ? 0xffffffffc00fb258
+>   ? bpf_prog_2e5f1c71c13ac3e0_big_jump_table+0x97/0xe1
+>   bpf_prog_test_run_syscall+0x110/0x2f0
+>   ? fdget+0xba/0xe0
+>   __sys_bpf+0xe4b/0x2590
+>   ? __kmalloc_node_track_caller_noprof+0x1c7/0x680
+>   ? bpf_prog_test_run_syscall+0x215/0x2f0
+>   __x64_sys_bpf+0x21/0x30
+>   do_syscall_64+0x85/0x620
+>   ? bpf_prog_test_run_syscall+0x1e2/0x2f0
+> 
+> Fixes: 493d9e0d6083 ("bpf, x86: add support for indirect jumps")
+> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> ---
+>  arch/x86/net/bpf_jit_comp.c | 26 +++++++++++++++-----------
+>  1 file changed, 15 insertions(+), 11 deletions(-)
+> 
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index b95f23ad1093..251dff1cd8e4 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+> @@ -1649,8 +1649,8 @@ static int emit_spectre_bhb_barrier(u8 **pprog, u8 *ip,
+>  	return 0;
+>  }
+>  
+> -static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image, u8 *rw_image,
+> -		  int oldproglen, struct jit_context *ctx, bool jmp_padding)
+> +static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+> +		  u8 *rw_image, int oldproglen, struct jit_context *ctx, bool jmp_padding)
+>  {
+>  	bool tail_call_reachable = bpf_prog->aux->tail_call_reachable;
+>  	struct bpf_insn *insn = bpf_prog->insnsi;
+> @@ -1663,7 +1663,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image, u8 *rw_image
+>  	void __percpu *priv_stack_ptr;
+>  	int i, excnt = 0;
+>  	int ilen, proglen = 0;
+> -	u8 *prog = temp;
+> +	u8 *ip, *prog = temp;
+>  	u32 stack_depth;
+>  	int err;
+>  
+> @@ -1734,6 +1734,13 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image, u8 *rw_image
+>  				dst_reg = X86_REG_R9;
+>  		}
+>  
+> +#ifdef CONFIG_X86_KERNEL_IBT
+> +		if (bpf_insn_is_indirect_target(env, bpf_prog, i - 1))
+> +			EMIT_ENDBR();
+> +#endif
+> +
+> +		ip = image + addrs[i - 1] + (prog - temp);
+> +
+>  		switch (insn->code) {
+>  			/* ALU */
+>  		case BPF_ALU | BPF_ADD | BPF_X:
+> @@ -2440,8 +2447,6 @@ st:			if (is_imm8(insn->off))
+>  
+>  			/* call */
+>  		case BPF_JMP | BPF_CALL: {
+> -			u8 *ip = image + addrs[i - 1];
+> -
+>  			func = (u8 *) __bpf_call_base + imm32;
+>  			if (src_reg == BPF_PSEUDO_CALL && tail_call_reachable) {
+>  				LOAD_TAIL_CALL_CNT_PTR(stack_depth);
+> @@ -2465,7 +2470,8 @@ st:			if (is_imm8(insn->off))
+>  			if (imm32)
+>  				emit_bpf_tail_call_direct(bpf_prog,
+>  							  &bpf_prog->aux->poke_tab[imm32 - 1],
+> -							  &prog, image + addrs[i - 1],
+> +							  &prog,
+> +							  ip,
+>  							  callee_regs_used,
+>  							  stack_depth,
+>  							  ctx);
+> @@ -2474,7 +2480,7 @@ st:			if (is_imm8(insn->off))
+>  							    &prog,
+>  							    callee_regs_used,
+>  							    stack_depth,
+> -							    image + addrs[i - 1],
+> +							    ip,
+>  							    ctx);
+>  			break;
+>  
+> @@ -2639,7 +2645,7 @@ st:			if (is_imm8(insn->off))
+>  			break;
+>  
+>  		case BPF_JMP | BPF_JA | BPF_X:
+> -			emit_indirect_jump(&prog, insn->dst_reg, image + addrs[i - 1]);
+> +			emit_indirect_jump(&prog, insn->dst_reg, ip);
+>  			break;
+>  		case BPF_JMP | BPF_JA:
+>  		case BPF_JMP32 | BPF_JA:
+> @@ -2729,8 +2735,6 @@ st:			if (is_imm8(insn->off))
+>  			ctx->cleanup_addr = proglen;
+>  			if (bpf_prog_was_classic(bpf_prog) &&
+>  			    !ns_capable_noaudit(&init_user_ns, CAP_SYS_ADMIN)) {
+> -				u8 *ip = image + addrs[i - 1];
+> -
+>  				if (emit_spectre_bhb_barrier(&prog, ip, bpf_prog))
+>  					return -EINVAL;
+>  			}
+> @@ -3791,7 +3795,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+>  	for (pass = 0; pass < MAX_PASSES || image; pass++) {
+>  		if (!padding && pass >= PADDING_PASSES)
+>  			padding = true;
+> -		proglen = do_jit(prog, addrs, image, rw_image, oldproglen, &ctx, padding);
+> +		proglen = do_jit(env, prog, addrs, image, rw_image, oldproglen, &ctx, padding);
+>  		if (proglen <= 0) {
+>  out_image:
+>  			image = NULL;
+> -- 
+> 2.47.3
 
-Thanks Andrii, I already replied to Ihor so I will not repeat same replies
-here to not spam the mailing list. In genral I understand the issues you
-guys are having with this approach. Ihor suggested a kernel level solution
-which seems like a great idea and I will look into it.
-
-Andrey
-
->
-> >
-> > Andrey
-> >
-> >
-> > >
-> > > >
-> > > > Implement a fallback mechanism that, on such failures, resolves the
-> > > > vmlinux address through /proc/kallsyms - filtering out module symbo=
-ls -
-> > > > and retries probe attachment using the absolute address, bypassing
-> > > > kernel symbol name validation.
-> > > >
-> > > > Changes:
-> > > > - Restructure libbpf_kallsyms_parse() to accept a bool skip_if_modu=
-le
-> > > >   parameter that filters module symbols before invoking the callbac=
-k.
-> > > > - Add find_kaddr_cb() callback and find_kaddr_ctx struct to resolve
-> > > >   vmlinux text symbol addresses from /proc/kallsyms.
-> > > > - Detect duplicate symbol errors (-EADDRNOTAVAIL for perf_event_ope=
-n,
-> > > >   -EINVAL for legacy tracefs) and retry with resolved KADDR.
-> > > > - Fix NULL pointer in gen_probe_legacy_event_name() when using abso=
-lute
-> > > >   address by passing func_name instead of optional_func_name.
-> > > > - Fix NULL pointer in pr_warn() calls within
-> > > >   perf_event_kprobe_open_legacy() by using ternary fallback.
-> > > > - Fix memory leak of legacy_probe buffer on retry path.
-> > > >
-> > > > Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com=
->
-> > > > ---
-> > > >  tools/lib/bpf/libbpf.c | 155 ++++++++++++++++++++++++++++++++++++-=
-----
-> > > >  1 file changed, 137 insertions(+), 18 deletions(-)
-> > > >
->
-> [...]
+Reviewed-by: Anton Protopopov <a.s.protopopov@gmail.com>
