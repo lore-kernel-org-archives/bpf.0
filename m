@@ -1,174 +1,103 @@
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D893136D50D
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 21:59:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 407D238E5D2;
+	Mon,  9 Mar 2026 22:20:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773093554; cv=none; b=mdbxalTPbIAFqvIPNU8A/uSrA0FDbkjBISuDP+Dydop8Izsf2JNjp5AxuTq6JXkRKpKLpONcH+WdadRr5HSIfjJ5h7DVzZf+LIlobTzmwiZPrBDfZ6zetaXWdAvBtxZLTzK8OGlBx5gGkfGxGOX/UziL5mj/vO8AW/19DbJ1bu0=
+	t=1773094861; cv=none; b=jy45Q6/f3aasdN2qrVo3GKb8Nt2eitgkbSBqxtUgYHfvMKFHU78GmUWqQuHgr9oYzkYx08T1N4Yfyhr2Lab61A/ACJguYd29zA/gUqHmDgcTGxjM37ma4G/3xk8bRwKTREpDnDfA0OgGV+v/61BcXFTIky3lKoGFQdTxpcO/tdk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773093554; c=relaxed/simple;
-	bh=904tRJigNTY9z7Ja1ow8Ptra0Ey4/uPHVE88X+oc0+g=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=X3sG9eM39e9z+mm0RZY5fiAxhXmRnq8fPb9Q5mbr/wXef9IG7D9kPziZCRyyS8YW4r1+oK9R8j0HJKS+X21BtXULloV/LpiBgpVDM5PbRfG6koXI3MEiptxZUHksVfZCUiknR/5DP6HxfltB8XMMyWUDKSqwgWyI/BiNJQSSL+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=chkLFrti; arc=none smtp.client-ip=209.85.222.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773094861; c=relaxed/simple;
+	bh=cPpaWJQ80q+Lffa6Wa0Eh87ldCBLbEMQduRkLHgrlQY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FWkc1b8JrfMkgddzPyJleBl1dAXFP0y8jfSR7UsxWHJF50NKY6RzeQoGp3q6J6UYd2QKEwpDICnf+O0SwOla2OomeLe5moiOqECTD7s0ubX/IfpfHYr4BZi/sX/jM0XJ4a9qxJA2dVxrenpeC+Jfrh+za2DUPQM/uGLYqotytw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=l4FtqkE2; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="chkLFrti"
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-8cd80f56b27so201773785a.1
-        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 14:59:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773093552; x=1773698352; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nyMOmW6MOcG0GDsei76waXPmZLjMAteNNQhRjIZNAHA=;
-        b=chkLFrtinfDbQLw/Zfm2Q54VDGLcsRAqTLOPZrN+BYffewXLaUrYMOf/Q0b0sGQONP
-         O6EvScrEmJmKnRy4BQdSGQ0lhZVTeBCuY207f46zAULOzD9Gvkht8y2ayrQM9s3Y2lXY
-         vBcRPpyCwAvgVT3aBbUOMvtkmOJqvctSkEAOncXKbMrAydNdmL0oniJcXmMacmlO+bJZ
-         TUTxWNOpbW0YOCRyEIGDO2xA4BIjIIGh2iGruXOWEI8iRcwvpetzf4WZNZPlinA/kk9y
-         DHrW+JL4/RTv75kyQGiEd4CvDLM1SLFRN4UX8iHF8Xl8dzzkop/lK3nHxxLqgpA0gXC8
-         kgYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773093552; x=1773698352;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=nyMOmW6MOcG0GDsei76waXPmZLjMAteNNQhRjIZNAHA=;
-        b=OG9HdHXlxUdbbhwvTsgnStSPLM+p2NYjbqg6GHBbS2bZ1XKxnN1Sy5q21tPcaqeRzQ
-         y3dC8+sQ6Dha6c7G6zgkMPCMIVYKlj2Xh7ijIFfJFAitYz2xNaPQWPGX6HBY4w08xwd6
-         lI15HmRj/IJfmx8F9ktaDzPJkIUrJtyNIJ5IdL0gOmSeNI7ZjOqcCjQ/OolFuv/H8koh
-         7jEGPcZdU8RUINkkx22arJ4+JMtxJEHQq/LfqUar9EVqxze4GUhAmVXpYf7w9lq4Vuuu
-         3OibXCfqXZeDLy5UK24ftstlxt6iPeRce/dzsW3C9gh116ifZ0l3TarwAA6DXRYsy7fD
-         hZnA==
-X-Gm-Message-State: AOJu0Yx2ECay5pUWorE1ljmV307HIzzOdrX8v1BsVCDx/kncAWXKHH1m
-	PH+6ewgeQvTCeE/KRiDHJM6+p5e/9px+p4Co84C4lQxp+Iiyejgl8PUPg0raggVH
-X-Gm-Gg: ATEYQzyjX6ltphxXXGMPlGZr+lN/3v5ChEeca5Jj//tAKpnN2sLHdSTB05gS7Mccn2S
-	+6CakoI+lyp+/8B2SeTqV1DA5nj7rMc1LkY5CXMyMqykOTEOQrB1Gbofr74WBnCaHTG+gubvaH/
-	VPm4Dv53JyXoLKI5rryypxR5SOJoKyL4HUoXT7mmSWKDK7U1ogAQjv32eiLw4rIDI4nchV3YFL4
-	7MZ8ad4jxeLJxr7D2JKg/5w3wSyCDZwPrhYnMunRdTo7moKxBE+2BhpdK0n2hKoguZRbIl5Rynd
-	Ci2GcfSj09pQawXV8RQmZ7xDM7oFmP0Id4rbKXR6d/KemBP79im62DnJmrgkaiCfWVbnbqTLDeU
-	E9M363S/LGiZE2by3wnaUi+KoOpTpwx6X84twRHNoOCy3+h5LfOpbMW88laZ/iU707mfOABuCCL
-	kjk0Yo6RZ+bNPCBIwmSq8j5AUVz31blG0CaNDk+/6dIOpx
-X-Received: by 2002:a05:6214:401d:b0:89a:59c:34c0 with SMTP id 6a1803df08f44-89a30a2b9eemr202711866d6.10.1773093551865;
-        Mon, 09 Mar 2026 14:59:11 -0700 (PDT)
-Received: from 192-222-50-213.ll.local ([192.222.50.213])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89a57c34a59sm6134856d6.45.2026.03.09.14.59.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Mar 2026 14:59:11 -0700 (PDT)
-From: Jenny Guanni Qu <qguanni@gmail.com>
-To: bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	ast@kernel.org,
-	andrii@kernel.org,
-	mykyta.yatsenko5@gmail.com,
-	yonghong.song@linux.dev,
-	lkp@intel.com,
-	Jenny Guanni Qu <qguanni@gmail.com>
-Subject: [PATCH v4 2/2] selftests/bpf: Add tests for sdiv32/smod32 with INT_MIN dividend
-Date: Mon,  9 Mar 2026 21:59:10 +0000
-Message-Id: <20260309215910.4131143-3-qguanni@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260309215910.4131143-1-qguanni@gmail.com>
-References: <20260309215910.4131143-1-qguanni@gmail.com>
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="l4FtqkE2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1773094851;
+	bh=cPpaWJQ80q+Lffa6Wa0Eh87ldCBLbEMQduRkLHgrlQY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=l4FtqkE2r3xNDU+YNU5fDpID5U4KhRcECi077BNVvuAQ7eHjVs7AGtsG5ppDmyH2R
+	 DsU/qkDlIZ7U0BC9t2/AyTsfKeE2mUMLWGDZ8kcUnHC8pjcPnPoo0goxIom0ZuZtIG
+	 McB7anzqo30tlykekx0wC1giSfEHW6i5oc5PPb7s=
+Date: Mon, 9 Mar 2026 23:20:51 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Leo Yan <leo.yan@arm.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>, 
+	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, Quentin Monnet <qmo@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@kernel.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, 
+	Qinxin Xia <xiaqinxin@huawei.com>, Bartosz Golaszewski <brgl@kernel.org>, 
+	Kent Gibson <warthog618@gmail.com>, "K. Y. Srinivasan" <kys@microsoft.com>, 
+	Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>, 
+	Long Li <longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>, 
+	David Lechner <dlechner@baylibre.com>, Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>, 
+	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Willy Tarreau <w@1wt.eu>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, 
+	Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>, 
+	Mark Brown <broonie@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+	Benjamin Tissoires <bentiss@kernel.org>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v3 18/30] tools: nolibc: Append extra cflags
+Message-ID: <a23c078e-e057-4e2e-8c85-945cb61a4f88@t-8ch.de>
+References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
+ <20260308-tools_build_fix_zero_init-v3-18-6477808123b7@arm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260308-tools_build_fix_zero_init-v3-18-6477808123b7@arm.com>
 
-Add tests to verify that signed 32-bit division and modulo operations
-produce correct results when the dividend is INT_MIN (0x80000000).
+Hi Leo,
 
-The bug fixed in the previous commit only affects the BPF interpreter
-path. When JIT is enabled (the default on most architectures), the
-native CPU division instruction produces the correct result and these
-tests pass regardless. With bpf_jit_enable=0, the interpreter is used
-and without the previous fix, INT_MIN / 2 incorrectly returns
-0x40000000 instead of 0xC0000000 due to abs(S32_MIN) undefined
-behavior, causing these tests to fail.
+On 2026-03-08 16:46:23+0000, Leo Yan wrote:
+> Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
+> the compiler.
+> 
+> Signed-off-by: Leo Yan <leo.yan@arm.com>
+> ---
+>  tools/include/nolibc/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
+> index 1958dda988954d8a604b28f5feb75ebb67ee2e14..b7f0385ccba14fdaa08aab6192acf0296b47cdbc 100644
+> --- a/tools/include/nolibc/Makefile
+> +++ b/tools/include/nolibc/Makefile
+> @@ -105,7 +105,7 @@ headers_standalone: headers
+>  	$(Q)$(MAKE) -C $(srctree) headers_install INSTALL_HDR_PATH=$(OUTPUT)sysroot
+>  
+>  CFLAGS_s390 := -m64
+> -CFLAGS := $(CFLAGS_$(ARCH))
+> +CFLAGS := $(CFLAGS_$(ARCH)) $(EXTRA_CFLAGS)
 
-Test cases:
-  - SDIV32 INT_MIN / 2 = -1073741824 (imm and reg divisor)
-  - SMOD32 INT_MIN % 2 = 0 (positive and negative divisor)
+I don't think we need additional cflags in tools/include/nolibc.
+The only thing this Makefile does is to test-compile some headers.
 
-Signed-off-by: Jenny Guanni Qu <qguanni@gmail.com>
----
- .../selftests/bpf/progs/verifier_sdiv.c       | 58 +++++++++++++++++++
- 1 file changed, 58 insertions(+)
+>  headers_check: headers_standalone
+>  	$(Q)for header in $(filter-out crt.h std.h,$(all_files)); do \
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_sdiv.c b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-index 148d2299e5b4..fd59d57e8e37 100644
---- a/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-@@ -1209,6 +1209,64 @@ __naked void smod32_ri_divisor_neg_1(void)
- 	: __clobber_all);
- }
- 
-+SEC("socket")
-+__description("SDIV32, INT_MIN divided by 2, imm")
-+__success __success_unpriv __retval(-1073741824)
-+__naked void sdiv32_int_min_div_2_imm(void)
-+{
-+	asm volatile ("					\
-+	w0 = %[int_min];				\
-+	w0 s/= 2;					\
-+	exit;						\
-+"	:
-+	: __imm_const(int_min, INT_MIN)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("SDIV32, INT_MIN divided by 2, reg")
-+__success __success_unpriv __retval(-1073741824)
-+__naked void sdiv32_int_min_div_2_reg(void)
-+{
-+	asm volatile ("					\
-+	w0 = %[int_min];				\
-+	w1 = 2;						\
-+	w0 s/= w1;					\
-+	exit;						\
-+"	:
-+	: __imm_const(int_min, INT_MIN)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("SMOD32, INT_MIN modulo 2, imm")
-+__success __success_unpriv __retval(0)
-+__naked void smod32_int_min_mod_2_imm(void)
-+{
-+	asm volatile ("					\
-+	w0 = %[int_min];				\
-+	w0 s%%= 2;					\
-+	exit;						\
-+"	:
-+	: __imm_const(int_min, INT_MIN)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("SMOD32, INT_MIN modulo -2, imm")
-+__success __success_unpriv __retval(0)
-+__naked void smod32_int_min_mod_neg2_imm(void)
-+{
-+	asm volatile ("					\
-+	w0 = %[int_min];				\
-+	w0 s%%= -2;					\
-+	exit;						\
-+"	:
-+	: __imm_const(int_min, INT_MIN)
-+	: __clobber_all);
-+}
-+
-+
- #else
- 
- SEC("socket")
--- 
-2.34.1
 
+Thomas
