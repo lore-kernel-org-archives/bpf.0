@@ -1,93 +1,71 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DF253D1CCF
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 16:30:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 867D130F7F2;
+	Mon,  9 Mar 2026 16:30:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773073806; cv=none; b=cNDXB8EpCoV7LoDMIS2tozRCOyDfN6pVc35M9GGvB6K1URnbmvD49UNiUr9E0MA5nJJoReAi1VDEBataXDWNclXmKlcpX/cWu2fUZpkURlDIoCxb6+NrF3EUpC5oFxZu+npNryO1F5dPBs5K6basvDGptasCExrDM6mj3VJCbhY=
+	t=1773073853; cv=none; b=aA1Zz9S3X1B911pdknO0Sa3246KCgytoC6dvA6mCGeAhb6BWnQxczpIH/V5yyKKtlXsm23cUwnZhaN5RIMNYWtwNtNNIM9V/yxvprO55auLVwo3JlQ65BKeFgrbdVe5QX4nTlYbkFpMgVtLiNZlHkiVcwePWnoi9s/vg47tgVAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773073806; c=relaxed/simple;
-	bh=0r2VyRfKuQvi8Br6PMZE5Ur4xoDTU+UBzGGvjNgxtn4=;
+	s=arc-20240116; t=1773073853; c=relaxed/simple;
+	bh=/g/YyAmYCQXluFTU0N+NMwUrGYpeFYyauq6d0pk9dMg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S7ZuVwFm/aNRaoVq+6jqddosOedqe6OEVA4P3zUIT+1FYlxqF0ZcNe9/vsyCJi5xmkiSPfk6ynWKFYsJFNR55QqX8m9Z2jlz2HsnKp0Cij4L2QbrRiFBfxsIn3Kuxy8XFhySwo/Al3jYMP0UinYRVOPTFGukTDxyR8Eo+MIPkdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nd1H+CmL; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=B0rS0tjZmcp3nQElbS0S0Yo9NlFgvXtMIc7QM/KG/QP7Ax3LusjQzhU166KTTlVxkQgPkeKeweePnCqpltZsi+YrgITNLqXUbV3AKqDsX6F0EKWDQx1cREP6WcJtg3obT2jcfkK5zobEYtsspjFjywfU4STxgwmBKD5MgLG4uUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=MuKabqMb; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nd1H+CmL"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-439ac15f35fso8446407f8f.0
-        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 09:30:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773073803; x=1773678603; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EdpDN3cbR4Vo18mFgfjtOYOZ0BTO5Hn4GNbDEChr/aA=;
-        b=nd1H+CmLsmRLLyFirY5o7l/GZrBV5oyyss9G/u31GI1lO1zZk7sKrbfCEQpkT1HtNU
-         foWw8txSCzpcho4siqL58NNZZ+oJbPWzlDOtXMp89H9PG63zqM8gpea4PyknQpijnz5g
-         N97lrr2QPu9qdUfDTdfPA4zlBpmepzzVipqD7ASf01yaFLnsQBie4Y4UjFk9q2/iDzci
-         BRLKHbZdZHPgMA4mcVbbskzavwUyQl5+LMHsmi7rnrYpAHC2P5z3HavVtrAv174Rk7yf
-         kIjhq4JgKuyjaKs3PxUEPCZlLLJVLqXnRG9S9jVd5Z69ZAYkotKbg1/HUW1jsbjREDjP
-         Ib5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773073803; x=1773678603;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EdpDN3cbR4Vo18mFgfjtOYOZ0BTO5Hn4GNbDEChr/aA=;
-        b=PW77CZKJ5xdFEofGjhZQOp9XBDW3P6mubc2ebjl9/ekbmI5npSzL0mXp0cREUoqvI5
-         YvbBFVUrQ60PSiQOVaUrUF/CrAv1+eO/1IbJMfkCdr4d/+0xqEIkZNosP5/aEOdvo1Q7
-         beANcaYxNxK5ri9SBNfvMI+VQfnzg+VIqj9y5VrZXizSrsdpl3ZOsHJEnUqnyewRTs+H
-         XqlOsP5/EJg/rmkYnYddlW7Bw3zTxx7jZ7WuDyTnKfX8dxvkyTpisXZ4+9lh4UPO9BK0
-         qZESs3wM2jceQfvNgzw2JvpZzEooV5WHUd3CimkV1IAFAYtkGUDxp20MGXADpTdmhY+b
-         kpSg==
-X-Gm-Message-State: AOJu0YzAyQqwMvGbDOJDxQghLDZY0xUJHJEhYbQpfBFv7odwM3BbX+z3
-	5C5+GCg0qeBR9olMFOlwfM0zobGXXK+KcLtgKYLIbGTImlvpwyc830Fo
-X-Gm-Gg: ATEYQzyy5o4f/6EU/sXC6Ng9f5+6K4Bh8w0W5iGqX9EkHMIGagNWrbNhGdUA+lUDEUP
-	2FoiA16mYHcJO/gxSuypbAa7AfwNZxdV+x4VF4ee3y2N8KOAK2fh7Lcf6pztclbxSnT+WtplpLc
-	rkKifxNT3x0ITm34bgz2YYUuKaNn+xsY3hdMvICwDq9j1y5IoAZAk3eVnll7ejfexBDRZ6k4UIV
-	YKAEN+2/upf0eqZ9lBzwb2iCJSyHJ4kSFuJ0w4Kdw1QDK+DaqHiF4k1ewlIqLeaORmMxYQaAsUw
-	VcXwN3AEqIJfBtENk3h/cEq7QpMLb0aDyiuN6e5rMXRb8vQqncsj9Q/tCvIiSzakZWZjOKOh5YC
-	mOvwrnB5lsmtR63Wc8GmK4jTR/fSaKMmss7YCefiXjjWG7sHjSxunxxnFZYuPTGgrrQj0iVvIqs
-	LMngn0z1GTd4Y0xPR6Hh1OLXwbM+Uo7bBf
-X-Received: by 2002:a05:6000:1a8b:b0:430:f790:99d7 with SMTP id ffacd0b85a97d-439da35f669mr21060331f8f.27.1773073803043;
-        Mon, 09 Mar 2026 09:30:03 -0700 (PDT)
-Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439dad8d95dsm30173171f8f.7.2026.03.09.09.30.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Mar 2026 09:30:02 -0700 (PDT)
-Date: Mon, 9 Mar 2026 16:38:21 +0000
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: Xu Kuohai <xukuohai@huaweicloud.com>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Shahab Vahedi <list+bpf@vahedi.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	Hengqi Chen <hengqi.chen@gmail.com>,
-	Johan Almbladh <johan.almbladh@anyfinetworks.com>,
-	Paul Burton <paulburton@kernel.org>,
-	Hari Bathini <hbathini@linux.ibm.com>,
-	Christophe Leroy <chleroy@kernel.org>,
-	Naveen N Rao <naveen@kernel.org>,
-	Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	Pu Lehui <pulehui@huawei.com>, Ilya Leoshkevich <iii@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Wang YanQing <udknight@gmail.com>
-Subject: Re: [bpf-next v8 5/5] bpf, arm64: Emit BTI for indirect jump target
-Message-ID: <aa73feA0wPDNmZLC@mail.gmail.com>
-References: <20260309140044.2652538-1-xukuohai@huaweicloud.com>
- <20260309140044.2652538-6-xukuohai@huaweicloud.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="MuKabqMb"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 629F7tiO1275175;
+	Mon, 9 Mar 2026 16:29:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=u9Jv1xiXDQhoRB+qsZiT314gW/jnX6
+	o87tkiSY3Qjbw=; b=MuKabqMb+xg6/RZCHxRCXFEhM9L9ve9Xxh4PMw3nBl3eG0
+	F9ctw5HrR8mjlBWQYjxv6HhHolpryanLaJteXF35v/6fSu0bCIGpvNyFJOmaVrxx
+	ZmOCRYP4sZemqEYFRE0rulWPTV/DbxcY4EA2JGJdp3rmljszBf3GW4gAN4Zt/Q5z
+	K+z3U32Inmwo4q0ZMUXhIaP1BBEgWUUFpzaO7gLt2T/JCfIAn94mFwy9Iyo1Tad0
+	Cg3FQPMrqzBmvC2YgqjRylLfjYZdptzWavm/uuss9NEdgBRqixSNWLjYmLbiOcWP
+	VPfxlMBoJcwv2Sg/DPeDUA1+qF9eEvtJpxrYqKCQ==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4crcvr78cm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 09 Mar 2026 16:29:56 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 629DNmZo021181;
+	Mon, 9 Mar 2026 16:29:55 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4crxbsnukt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 09 Mar 2026 16:29:55 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 629GTsri56885708
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 9 Mar 2026 16:29:54 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 03D7520043;
+	Mon,  9 Mar 2026 16:29:54 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 44A8E20040;
+	Mon,  9 Mar 2026 16:29:51 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.124.216.7])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Mon,  9 Mar 2026 16:29:51 +0000 (GMT)
+Date: Mon, 9 Mar 2026 21:59:48 +0530
+From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+To: Viktor Malik <vmalik@redhat.com>
+Cc: linuxppc-dev@lists.ozlabs.org, Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@ozlabs.org>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v2] powerpc, perf: Check that current->mm is alive before
+ getting user callchain
+Message-ID: <aa71fOBjQwvCFFNq@linux.ibm.com>
+References: <20260309144045.169427-1-vmalik@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -96,104 +74,114 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260309140044.2652538-6-xukuohai@huaweicloud.com>
+In-Reply-To: <20260309144045.169427-1-vmalik@redhat.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzA5MDE0NSBTYWx0ZWRfX+rjeGaeASbO2
+ DRRCfL+CMorHO5ng1qGUas6J8JvgX5kk/akDTzG+WtfiXrtQPT337K5va/I6ATguS1jUcTGEzH+
+ 1qUEdOzZBCz8pZoFVqPQE09RWTe9C2CD2iBQySe1f/IjXU2FOEs+WMIyxZ5I/CNi7OUokx7MGRr
+ ftoeP5tRJ1019lbSHRewSQ4jQXpPBJ9y2fZTZMqX2q8ZAZGqYrg4vWJjO9nMmDe884OBye9//WK
+ o7c46o3MbT2VP1NjQ6u82nEMXLKlug+vWoX2qsrw4QH5vXXLzL++Z4Yh0Gor5EnSb0cyyuR3kEK
+ iID65YQcNw8QuqYtIheYBhSBj9GOXivDtq5XhN/2nJ+L2GmR/zX0j49Hz9JiTrOVXdcQpH9L+sn
+ ylSAOQIfC+dyoUZxr2omBDe1CasazDS71d3fBzHIg1hgGZk03AG6po7boYLsp+IK1VRK5fu5VsS
+ u/bMuNFLnc+gZ6v7+Lg==
+X-Proofpoint-GUID: AykpcraF3vgF-W4mHKIkLrlGlLQPY39P
+X-Proofpoint-ORIG-GUID: 7ljpo1MiTfY3ZH2wBCg09610OOHkGqxF
+X-Authority-Analysis: v=2.4 cv=QoFTHFyd c=1 sm=1 tr=0 ts=69aef585 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=kj9zAlcOel0A:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=20KFwNOVAAAA:8
+ a=VnNF1IyMAAAA:8 a=e-EAHXkKvpEb-08ajsIA:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-09_04,2026-03-09_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 spamscore=0 priorityscore=1501 phishscore=0
+ lowpriorityscore=0 adultscore=0 clxscore=1015 malwarescore=0 suspectscore=0
+ bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2602130000
+ definitions=main-2603090145
 
-On 26/03/09 10:00PM, Xu Kuohai wrote:
-> From: Xu Kuohai <xukuohai@huawei.com>
+On Mon, Mar 09, 2026 at 03:40:45PM +0100, Viktor Malik wrote:
+> It may happen that mm is already released, which leads to kernel panic.
+> This adds the NULL check for current->mm, similarly to 20afc60f892d
+> ("x86, perf: Check that current->mm is alive before getting user
+> callchain").
 > 
-> On CPUs that support BTI, the indirect jump selftest triggers a kernel
-> panic because there is no BTI instructions at the indirect jump targets.
+> I was getting this panic when running a profiling BPF program
+> (profile.py from bcc-tools):
 > 
-> Fix it by emitting a BTI instruction for each indirect jump target.
+>     [26215.051935] Kernel attempted to read user page (588) - exploit attempt? (uid: 0)
+>     [26215.051950] BUG: Kernel NULL pointer dereference on read at 0x00000588
+>     [26215.051952] Faulting instruction address: 0xc00000000020fac0
+>     [26215.051957] Oops: Kernel access of bad area, sig: 11 [#1]
+>     [...]
+>     [26215.052049] Call Trace:
+>     [26215.052050] [c000000061da6d30] [c00000000020fc10] perf_callchain_user_64+0x2d0/0x490 (unreliable)
+>     [26215.052054] [c000000061da6dc0] [c00000000020f92c] perf_callchain_user+0x1c/0x30
+>     [26215.052057] [c000000061da6de0] [c0000000005ab2a0] get_perf_callchain+0x100/0x360
+>     [26215.052063] [c000000061da6e70] [c000000000573bc8] bpf_get_stackid+0x88/0xf0
+>     [26215.052067] [c000000061da6ea0] [c008000000042258] bpf_prog_16d4ab9ab662f669_do_perf_event+0xf8/0x274
+>     [...]
 > 
-> For reference, below is a sample panic log.
+> In addition, move storing the top-level stack entry to generic
+> perf_callchain_user to make sure the top-evel entry is always captured,
+> even if current->mm is NULL.
 > 
-> Internal error: Oops - BTI: 0000000036000003 [#1]  SMP
-> ...
-> Call trace:
->  bpf_prog_2e5f1c71c13ac3e0_big_jump_table+0x54/0xf8 (P)
->  bpf_prog_run_pin_on_cpu+0x140/0x468
->  bpf_prog_test_run_syscall+0x280/0x3b8
->  bpf_prog_test_run+0x22c/0x2c0
-> 
-> Fixes: f4a66cf1cb14 ("bpf: arm64: Add support for indirect jumps")
-> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> Fixes: 20002ded4d93 ("perf_counter: powerpc: Add callchain support")
+> Signed-off-by: Viktor Malik <vmalik@redhat.com>
 > ---
->  arch/arm64/net/bpf_jit_comp.c | 17 ++++++++++-------
->  1 file changed, 10 insertions(+), 7 deletions(-)
+> Changes in v2:
+> - Move call to perf_callchain_store() for the top-level stack entry to
+>   common perf_callchain_user (Saket)
 > 
-> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-> index 5c785eab4b5a..036ad607720a 100644
-> --- a/arch/arm64/net/bpf_jit_comp.c
-> +++ b/arch/arm64/net/bpf_jit_comp.c
-> @@ -1198,8 +1198,8 @@ static int add_exception_handler(const struct bpf_insn *insn,
->   * >0 - successfully JITed a 16-byte eBPF instruction.
->   * <0 - failed to JIT.
->   */
-> -static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
-> -		      bool extra_pass)
-> +static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn *insn,
-> +		      struct jit_ctx *ctx, bool extra_pass)
+>  arch/powerpc/perf/callchain.c    | 5 +++++
+>  arch/powerpc/perf/callchain_32.c | 1 -
+>  arch/powerpc/perf/callchain_64.c | 1 -
+>  3 files changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/powerpc/perf/callchain.c b/arch/powerpc/perf/callchain.c
+> index 26aa26482c9a..992cc5c98214 100644
+> --- a/arch/powerpc/perf/callchain.c
+> +++ b/arch/powerpc/perf/callchain.c
+> @@ -103,6 +103,11 @@ perf_callchain_kernel(struct perf_callchain_entry_ctx *entry, struct pt_regs *re
+>  void
+>  perf_callchain_user(struct perf_callchain_entry_ctx *entry, struct pt_regs *regs)
 >  {
->  	const u8 code = insn->code;
->  	u8 dst = bpf2a64[insn->dst_reg];
-> @@ -1224,6 +1224,9 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
->  	int ret;
->  	bool sign_extend;
->  
-> +	if (bpf_insn_is_indirect_target(env, ctx->prog, i))
-> +		emit_bti(A64_BTI_J, ctx);
+> +	perf_callchain_store(entry, perf_arch_instruction_pointer(regs));
 > +
->  	switch (code) {
->  	/* dst = src */
->  	case BPF_ALU | BPF_MOV | BPF_X:
-> @@ -1899,7 +1902,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
->  	return 0;
->  }
+> +	if (!current->mm)
+> +		return;
+> +
+>  	if (!is_32bit_task())
+>  		perf_callchain_user_64(entry, regs);
+>  	else
+> diff --git a/arch/powerpc/perf/callchain_32.c b/arch/powerpc/perf/callchain_32.c
+> index ddcc2d8aa64a..0de21c5d272c 100644
+> --- a/arch/powerpc/perf/callchain_32.c
+> +++ b/arch/powerpc/perf/callchain_32.c
+> @@ -142,7 +142,6 @@ void perf_callchain_user_32(struct perf_callchain_entry_ctx *entry,
+>  	next_ip = perf_arch_instruction_pointer(regs);
+>  	lr = regs->link;
+>  	sp = regs->gpr[1];
+> -	perf_callchain_store(entry, next_ip);
 >  
-> -static int build_body(struct jit_ctx *ctx, bool extra_pass)
-> +static int build_body(struct bpf_verifier_env *env, struct jit_ctx *ctx, bool extra_pass)
->  {
->  	const struct bpf_prog *prog = ctx->prog;
->  	int i;
-> @@ -1918,7 +1921,7 @@ static int build_body(struct jit_ctx *ctx, bool extra_pass)
->  		int ret;
+>  	while (entry->nr < entry->max_stack) {
+>  		fp = (unsigned int __user *) (unsigned long) sp;
+> diff --git a/arch/powerpc/perf/callchain_64.c b/arch/powerpc/perf/callchain_64.c
+> index 115d1c105e8a..30fb61c5f0cb 100644
+> --- a/arch/powerpc/perf/callchain_64.c
+> +++ b/arch/powerpc/perf/callchain_64.c
+> @@ -77,7 +77,6 @@ void perf_callchain_user_64(struct perf_callchain_entry_ctx *entry,
+>  	next_ip = perf_arch_instruction_pointer(regs);
+>  	lr = regs->link;
+>  	sp = regs->gpr[1];
+> -	perf_callchain_store(entry, next_ip);
 >  
->  		ctx->offset[i] = ctx->idx;
-> -		ret = build_insn(insn, ctx, extra_pass);
-> +		ret = build_insn(env, insn, ctx, extra_pass);
->  		if (ret > 0) {
->  			i++;
->  			ctx->offset[i] = ctx->idx;
-> @@ -2086,7 +2089,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
->  	if (build_prologue(&ctx, was_classic))
->  		goto out_off;
->  
-> -	if (build_body(&ctx, extra_pass))
-> +	if (build_body(env, &ctx, extra_pass))
->  		goto out_off;
->  
->  	ctx.epilogue_offset = ctx.idx;
-> @@ -2134,7 +2137,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
->  	/* Dont write body instructions to memory for now */
->  	ctx.write = false;
->  
-> -	if (build_body(&ctx, extra_pass))
-> +	if (build_body(env, &ctx, extra_pass))
->  		goto out_free_hdr;
->  
->  	ctx.epilogue_offset = ctx.idx;
-> @@ -2143,7 +2146,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
->  	ctx.write = true;
->  
->  	/* Pass 3: Adjust jump offset and write final image */
-> -	if (build_body(&ctx, extra_pass) ||
-> +	if (build_body(env, &ctx, extra_pass) ||
->  		WARN_ON_ONCE(ctx.idx != ctx.epilogue_offset))
->  		goto out_free_hdr;
->  
+>  	while (entry->nr < entry->max_stack) {
+>  		fp = (unsigned long __user *) sp;
 > -- 
-> 2.47.3
+> 2.53.0
+LGTM, feel free to add below tag:
+Reviewed-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
 > 
-
-Reviewed-by: Anton Protopopov <a.s.protopopov@gmail.com>
