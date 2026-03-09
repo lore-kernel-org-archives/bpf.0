@@ -1,178 +1,318 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF9C31D5ABA
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 00:51:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EF1422F177
+	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 02:21:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773017474; cv=none; b=umugWBmixALRqcwzbd1+CT04u+o0MN0qnbnk82p0d57dfcQQenQZ0L+Dp3ShEAF4RJvFiNsrqS19nQiJeiHcRYz1eUK8pzuoSWTiWZ3SLT09KchyHqb7kgfp/XRtqpbOi7DgRQM1XrIwtk2rfVE1PI4j267VEX+/btCM7mD3AbU=
+	t=1773022878; cv=none; b=Sy2D5QrFQchugnh9yFtPuHADMeX5TuyIM25hoeBiyrIkv1o5AYVQZd+VogJQJIu/vc6aeyUn6lXkoxMbAOhzwHPoYOuB0o54xeaOXxxoam3A6j9+J5RlBKsC5E4gOSs2OyXdnhVe16cCKTLNoNQsOdCL6V81K2jqi+chhDX1bt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773017474; c=relaxed/simple;
-	bh=RP++oaAENCDfdPEBn0eleqFM3JOYSMJrMeHuCLOSiaw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dtfV+c5vObp97tdvc5GXyR2Viwji7t6o8OxwB/+4+m2c4umIpcxYkNZPGPswCMPlAf7AWmvM+JmucrBzaNBugsACjFFwX4LnyicxLktaIq8LnSW4V7MJqcJRwfXirahjaqqGomcA4csQUbUnZeQoRq+aSk7472T5WEZ55nRLp8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bXaqBm/y; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773022878; c=relaxed/simple;
+	bh=fjIkHMBX/IponQHGFR9TlaW+i0c+pmaMFOQSCSrNePU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Skni7ww4zBNFedjHDds/mcuOkP9PAuivtZWDzqIhd2jXBXmmLFIPtOl0Dm8foLtMrgdm727SLulROr6yTt2jhPwyi7N5u/aQCEd6gKg8BQCKYRrIeRM1QlaWTc8HripmzdPTwzFdp95jsJxi3mUK8ziTtbBPhnRw5Gaeq7GH1S0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=cMQ6tUDe; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=To29WtR6; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=VaGOCi7+; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=xZgwHgfP; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bXaqBm/y"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-82985f42664so2093465b3a.0
-        for <bpf@vger.kernel.org>; Sun, 08 Mar 2026 17:51:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773017472; x=1773622272; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=NyUeO1XqBZxXrzuRGXceTat8xeWAmoV2Pi1+QZtQ4ME=;
-        b=bXaqBm/yotArpy56WlkAN21Igl1IxGuBySrTkY2YM5f51n4TOnclOEuITgihMEt1GK
-         Z9fn9U/VW5Cixo+HVYjBm+vzJvyYx7QDjlgQQrwDKJK8Ok9/SK5JPgDSje8lvhNjjDhd
-         3HWGwoeb9tJ9k3XS34trmDvCss7cXVVWdK/FvxKeZDH2qn3NJEssv7j7vE37dBtB0T9x
-         1DvKTZ8ydttoKMNNB+uEn/RFJobRNAkqGRRFzuqVG2f5ylDHPzDSO4TV+yEwf/UrG9y1
-         +la8cigHY3/L4eHhuiTl1v4Hvpk2EBvhcdBo5CcQfes1K9EHe1v1sSP/atGuACaZfadH
-         xIrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773017472; x=1773622272;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NyUeO1XqBZxXrzuRGXceTat8xeWAmoV2Pi1+QZtQ4ME=;
-        b=e51G98vbuE0CVV55ksr4ZA2fLZheVgIoxj8f8EP3oQ3pI76qpqTPOBciuden9AXBxK
-         S3oNfeSntvW+DoDBnosBm9jLn4blisx53xnoJ7WNWFCwGjKIbpCyQhLRjlLkPC8lQgDu
-         lUrOfgKzCZmXzlkAGIPzURDR8bocP2ahhSsedGt8l5m9Vky5UB+Pvzj1Yj9BbQ1KRtf6
-         dtWog9MMT6U/14nB9MkwqMPf4ahTHkVzIG9ExTuKd7sBRo3BSpXNbXmrejBhELj9XnXc
-         1KbTgqxipwX40nx3K7FbDzTxmI1rYnmryzqNRAEdLU6koN593ts4AMplsXhJoQ/ScwEe
-         FTCA==
-X-Forwarded-Encrypted: i=1; AJvYcCUMacn+laqpX6WeK4XRmo4YvumOyUmBHG4A15+yfXls0vr5TScx5/f2x3xxbpc8iNT2lHs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxq06CyhV7uzqfwZW6rRsrS8A1nh0y2fX5dZX9jqqL1ydEzLVs+
-	JwlqDRa9wNgNTI2HrVnYkODQQjw1yzHssWQ+ZIon3FQPAcpDeczSdVhO
-X-Gm-Gg: ATEYQzwTdQhBc3uHN3226YcNHxCvP/ObZ8O5gL/R7svCcd8+Hsmd6TE/SqiEi8N1nHk
-	Dy+3XB4H04F/3hhnYI4rKcY0K8sJ+BoPNmxGPlHSAGXGAHqpnFw4IHpw+ow0Jn/O0eDTjVmIKs7
-	osYStpqLWTdZpufxaC6k47+5qk/IfNjNg2hXSkCVMjOuaHsZJzNbwH8FDg5mZZkG2aJzWQIF5Sl
-	REWvN1qlCfOlTQaYS0oJaAQh6OGWCiDivNityROcY+hzIF47c3JPYtEABLWXduI+7v9n042L/d4
-	8Z58d1Owt09XQYlGGveH5yAj95dYzpCJA8aiWArKDwzGCVx95lKI+RQZYR8gkj1qtDktnquwCx4
-	ByNktgulJb558I94jtl3g67abwCE1veh7vdNdfUl3BE0JTyc7BodrotR9eqpGZmYupIb64avRg4
-	3S76HbD1EFk+bx5l9qbs7qanVXeaY=
-X-Received: by 2002:a05:6a00:3cd6:b0:81f:4566:ccde with SMTP id d2e1a72fcca58-829a2dc33c8mr8984256b3a.20.1773017472211;
-        Sun, 08 Mar 2026 17:51:12 -0700 (PDT)
-Received: from fedora ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-829a4636a92sm8405090b3a.1.2026.03.08.17.51.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Mar 2026 17:51:11 -0700 (PDT)
-Date: Mon, 9 Mar 2026 00:50:59 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Ricardo =?iso-8859-1?Q?B=2E_Marli=E8re?= <rbm@suse.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="cMQ6tUDe";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="To29WtR6";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="VaGOCi7+";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="xZgwHgfP"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id F00C65BD22;
+	Mon,  9 Mar 2026 02:21:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1773022875; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LeCovzApJDAHD+9aWO9A6V+G2ZCSxX2KgRDA/JYU19s=;
+	b=cMQ6tUDe00lmSjqBPRQa3rmLKC/HLG/mJNE40B6YkMxsBzHysxJtvEkxfgMb2e/nOoWriX
+	e5YBUUZJ6yvdBPC7qjnXOFm2zwemGbB6F0amsH074+bvIMXsrusNhQGEKmGiKWcFishc+m
+	9rw1Ld7rCcsXUIvj/Rk7V/8Jy4uq7uU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1773022875;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LeCovzApJDAHD+9aWO9A6V+G2ZCSxX2KgRDA/JYU19s=;
+	b=To29WtR68MBfb7E9C+cFQ4n6kPf/klqu2cFgsaxxrNX8ewcZXLSa2NU7sRe7CAQsr7Kz8H
+	umwnZuNN1MjbttAQ==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1773022874; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LeCovzApJDAHD+9aWO9A6V+G2ZCSxX2KgRDA/JYU19s=;
+	b=VaGOCi7+b1JwiGUkqRU04k8ZJph28CFlersb76Q7XsWMfKtEPkhkhK34J0fJQIEqDAwHDQ
+	36HfmG+Zt7YVwqmPBGBnmOeqO+7+28qoCp+cIBXhvL7Ef9b4Avkvmq0rgNHU7GxNtr+6LJ
+	bFnTo39qn19rjP+2MtVjtnh12r1oOkE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1773022874;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LeCovzApJDAHD+9aWO9A6V+G2ZCSxX2KgRDA/JYU19s=;
+	b=xZgwHgfPSmGFZfj0jg1lnhSEb8l9F9G77ADmcSvbt1bNpeuGtTAEwKZhiMy/TEm2LdB55V
+	DcBNLaz5xW7YSlDw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8A03B3EC6D;
+	Mon,  9 Mar 2026 02:21:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 0CwrHpkurmk0MgAAD6G6ig
+	(envelope-from <fmancera@suse.de>); Mon, 09 Mar 2026 02:21:13 +0000
+From: Fernando Fernandez Mancera <fmancera@suse.de>
+To: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Fernando Fernandez Mancera <fmancera@suse.de>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
 	Simon Horman <horms@kernel.org>,
-	Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-	David Ahern <dsahern@kernel.org>, Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Fernando Fernandez Mancera <fmancera@suse.de>, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v4 2/4] net: bonding: Fix nd_tbl NULL dereference
- when IPv6 is disabled
-Message-ID: <aa4Zc3fbvDXor1jn@fedora>
-References: <20260307-net-nd_tbl_fixes-v4-0-e2677e85628c@suse.com>
- <20260307-net-nd_tbl_fixes-v4-2-e2677e85628c@suse.com>
+	David Ahern <dsahern@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools))
+Subject: [PATCH 02/10 net-next] ipv6: replace IS_BUILTIN(CONFIG_IPV6) with IS_ENABLED(CONFIG_IPV6)
+Date: Mon,  9 Mar 2026 03:19:35 +0100
+Message-ID: <20260309022013.5199-3-fmancera@suse.de>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260309022013.5199-1-fmancera@suse.de>
+References: <20260309022013.5199-1-fmancera@suse.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260307-net-nd_tbl_fixes-v4-2-e2677e85628c@suse.com>
+X-Spamd-Result: default: False [-1.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:email,imap1.dmz-prg2.suse.org:helo];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[22];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_RCPT(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,suse.de,davemloft.net,google.com,kernel.org,redhat.com,iogearbox.net,linux.dev,gmail.com,fomichev.me];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com]
+X-Spam-Flag: NO
+X-Spam-Score: -1.30
+X-Spam-Level: 
 
-On Sat, Mar 07, 2026 at 05:50:54PM -0300, Ricardo B. Marlière wrote:
-> When booting with the 'ipv6.disable=1' parameter, the nd_tbl is never
-> initialized because inet6_init() exits before ndisc_init() is called
-> which initializes it. If bonding ARP/NS validation is enabled, an IPv6
-> NS/NA packet received on a slave can reach bond_validate_na(), which
-> calls bond_has_this_ip6(). That path calls ipv6_chk_addr() and can
-> crash in __ipv6_chk_addr_and_flags().
-> 
->  BUG: kernel NULL pointer dereference, address: 00000000000005d8
->  Oops: Oops: 0000 [#1] SMP NOPTI
->  RIP: 0010:__ipv6_chk_addr_and_flags+0x69/0x170
->  Call Trace:
->   <IRQ>
->   ipv6_chk_addr+0x1f/0x30
->   bond_validate_na+0x12e/0x1d0 [bonding]
->   ? __pfx_bond_handle_frame+0x10/0x10 [bonding]
->   bond_rcv_validate+0x1a0/0x450 [bonding]
->   bond_handle_frame+0x5e/0x290 [bonding]
->   ? srso_alias_return_thunk+0x5/0xfbef5
->   __netif_receive_skb_core.constprop.0+0x3e8/0xe50
->   ? srso_alias_return_thunk+0x5/0xfbef5
->   ? update_cfs_rq_load_avg+0x1a/0x240
->   ? srso_alias_return_thunk+0x5/0xfbef5
->   ? __enqueue_entity+0x5e/0x240
->   __netif_receive_skb_one_core+0x39/0xa0
->   process_backlog+0x9c/0x150
->   __napi_poll+0x30/0x200
->   ? srso_alias_return_thunk+0x5/0xfbef5
->   net_rx_action+0x338/0x3b0
->   handle_softirqs+0xc9/0x2a0
->   do_softirq+0x42/0x60
->   </IRQ>
->   <TASK>
->   __local_bh_enable_ip+0x62/0x70
->   __dev_queue_xmit+0x2d3/0x1000
->   ? srso_alias_return_thunk+0x5/0xfbef5
->   ? srso_alias_return_thunk+0x5/0xfbef5
->   ? packet_parse_headers+0x10a/0x1a0
->   packet_sendmsg+0x10da/0x1700
->   ? kick_pool+0x5f/0x140
->   ? srso_alias_return_thunk+0x5/0xfbef5
->   ? __queue_work+0x12d/0x4f0
->   __sys_sendto+0x1f3/0x220
->   __x64_sys_sendto+0x24/0x30
->   do_syscall_64+0x101/0xf80
->   ? exc_page_fault+0x6e/0x170
->   ? srso_alias_return_thunk+0x5/0xfbef5
->   entry_SYSCALL_64_after_hwframe+0x77/0x7f
->   </TASK>
-> 
-> Fix this by checking ipv6_mod_enabled() before dispatching IPv6 packets to
-> bond_na_rcv(). If IPv6 is disabled, return early from bond_rcv_validate()
-> and avoid the path to ipv6_chk_addr().
-> 
-> Suggested-by: Fernando Fernandez Mancera <fmancera@suse.de>
-> Fixes: 4e24be018eb9 ("bonding: add new parameter ns_targets")
-> Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
-> ---
->  drivers/net/bonding/bond_main.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-> index 14ed91391fcc..33fb5f168cef 100644
-> --- a/drivers/net/bonding/bond_main.c
-> +++ b/drivers/net/bonding/bond_main.c
-> @@ -3377,7 +3377,7 @@ int bond_rcv_validate(const struct sk_buff *skb, struct bonding *bond,
->  	} else if (is_arp) {
->  		return bond_arp_rcv(skb, bond, slave);
->  #if IS_ENABLED(CONFIG_IPV6)
-> -	} else if (is_ipv6) {
-> +	} else if (is_ipv6 && likely(ipv6_mod_enabled())) {
->  		return bond_na_rcv(skb, bond, slave);
->  #endif
->  	} else {
-> 
-> -- 
-> 2.53.0
-> 
+As IPv6 is built-in only, it does not make sense to continue using
+IS_BUILTIN(CONFIG_IPV6). Therefore, replace it with IS_ENABLED() when
+necessary and drop it if it isn't valid anymore.
 
-Reviewed-by: Hangbin Liu <liuhangbin@gmail.com>
+Notice that there is still one instance related to ICMPv6, as it
+requires more changes it will be handle separately.
+
+Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
+---
+ include/linux/indirect_call_wrapper.h |  2 +-
+ include/net/ip6_fib.h                 |  2 +-
+ net/core/filter.c                     | 14 +++++++-------
+ net/ipv6/ip6_fib.c                    |  2 +-
+ net/ipv6/ip6_offload.c                |  4 ++--
+ net/ipv6/route.c                      |  6 +++---
+ 6 files changed, 15 insertions(+), 15 deletions(-)
+
+diff --git a/include/linux/indirect_call_wrapper.h b/include/linux/indirect_call_wrapper.h
+index dc272b514a01..0e4340ecd857 100644
+--- a/include/linux/indirect_call_wrapper.h
++++ b/include/linux/indirect_call_wrapper.h
+@@ -57,7 +57,7 @@
+  * builtin, this macro simplify dealing with indirect calls with only ipv4/ipv6
+  * alternatives
+  */
+-#if IS_BUILTIN(CONFIG_IPV6)
++#if IS_ENABLED(CONFIG_IPV6)
+ #define INDIRECT_CALL_INET(f, f2, f1, ...) \
+ 	INDIRECT_CALL_2(f, f2, f1, __VA_ARGS__)
+ #elif IS_ENABLED(CONFIG_INET)
+diff --git a/include/net/ip6_fib.h b/include/net/ip6_fib.h
+index 88b0dd4d8e09..39c98c3d8ac5 100644
+--- a/include/net/ip6_fib.h
++++ b/include/net/ip6_fib.h
+@@ -580,7 +580,7 @@ static inline bool fib6_metric_locked(struct fib6_info *f6i, int metric)
+ void fib6_info_hw_flags_set(struct net *net, struct fib6_info *f6i,
+ 			    bool offload, bool trap, bool offload_failed);
+ 
+-#if IS_BUILTIN(CONFIG_IPV6) && defined(CONFIG_BPF_SYSCALL)
++#if IS_ENABLED(CONFIG_IPV6) && defined(CONFIG_BPF_SYSCALL)
+ struct bpf_iter__ipv6_route {
+ 	__bpf_md_ptr(struct bpf_iter_meta *, meta);
+ 	__bpf_md_ptr(struct fib6_info *, rt);
+diff --git a/net/core/filter.c b/net/core/filter.c
+index a77d23fe2359..62cae2bcc562 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -7584,7 +7584,7 @@ BPF_CALL_5(bpf_tcp_check_syncookie, struct sock *, sk, void *, iph, u32, iph_len
+ 		ret = __cookie_v4_check((struct iphdr *)iph, th);
+ 		break;
+ 
+-#if IS_BUILTIN(CONFIG_IPV6)
++#if IS_ENABLED(CONFIG_IPV6)
+ 	case 6:
+ 		if (unlikely(iph_len < sizeof(struct ipv6hdr)))
+ 			return -EINVAL;
+@@ -7654,7 +7654,7 @@ BPF_CALL_5(bpf_tcp_gen_syncookie, struct sock *, sk, void *, iph, u32, iph_len,
+ 		mss = tcp_v4_get_syncookie(sk, iph, th, &cookie);
+ 		break;
+ 
+-#if IS_BUILTIN(CONFIG_IPV6)
++#if IS_ENABLED(CONFIG_IPV6)
+ 	case 6:
+ 		if (unlikely(iph_len < sizeof(struct ipv6hdr)))
+ 			return -EINVAL;
+@@ -8020,7 +8020,7 @@ static const struct bpf_func_proto bpf_tcp_raw_gen_syncookie_ipv4_proto = {
+ BPF_CALL_3(bpf_tcp_raw_gen_syncookie_ipv6, struct ipv6hdr *, iph,
+ 	   struct tcphdr *, th, u32, th_len)
+ {
+-#if IS_BUILTIN(CONFIG_IPV6)
++#if IS_ENABLED(CONFIG_IPV6)
+ 	const u16 mss_clamp = IPV6_MIN_MTU - sizeof(struct tcphdr) -
+ 		sizeof(struct ipv6hdr);
+ 	u32 cookie;
+@@ -8072,7 +8072,7 @@ static const struct bpf_func_proto bpf_tcp_raw_check_syncookie_ipv4_proto = {
+ BPF_CALL_2(bpf_tcp_raw_check_syncookie_ipv6, struct ipv6hdr *, iph,
+ 	   struct tcphdr *, th)
+ {
+-#if IS_BUILTIN(CONFIG_IPV6)
++#if IS_ENABLED(CONFIG_IPV6)
+ 	if (__cookie_v6_check(iph, th) > 0)
+ 		return 0;
+ 
+@@ -11958,7 +11958,7 @@ BPF_CALL_1(bpf_skc_to_tcp_timewait_sock, struct sock *, sk)
+ 		return (unsigned long)sk;
+ #endif
+ 
+-#if IS_BUILTIN(CONFIG_IPV6)
++#if IS_ENABLED(CONFIG_IPV6)
+ 	if (sk && sk->sk_prot == &tcpv6_prot && sk->sk_state == TCP_TIME_WAIT)
+ 		return (unsigned long)sk;
+ #endif
+@@ -11981,7 +11981,7 @@ BPF_CALL_1(bpf_skc_to_tcp_request_sock, struct sock *, sk)
+ 		return (unsigned long)sk;
+ #endif
+ 
+-#if IS_BUILTIN(CONFIG_IPV6)
++#if IS_ENABLED(CONFIG_IPV6)
+ 	if (sk && sk->sk_prot == &tcpv6_prot && sk->sk_state == TCP_NEW_SYN_RECV)
+ 		return (unsigned long)sk;
+ #endif
+@@ -12244,7 +12244,7 @@ __bpf_kfunc int bpf_sk_assign_tcp_reqsk(struct __sk_buff *s, struct sock *sk,
+ 		ops = &tcp_request_sock_ops;
+ 		min_mss = 536;
+ 		break;
+-#if IS_BUILTIN(CONFIG_IPV6)
++#if IS_ENABLED(CONFIG_IPV6)
+ 	case htons(ETH_P_IPV6):
+ 		ops = &tcp6_request_sock_ops;
+ 		min_mss = IPV6_MIN_MTU - 60;
+diff --git a/net/ipv6/ip6_fib.c b/net/ipv6/ip6_fib.c
+index a6e58a435735..0fc6ef4a48b1 100644
+--- a/net/ipv6/ip6_fib.c
++++ b/net/ipv6/ip6_fib.c
+@@ -2763,7 +2763,7 @@ static void ipv6_route_native_seq_stop(struct seq_file *seq, void *v)
+ 	rcu_read_unlock();
+ }
+ 
+-#if IS_BUILTIN(CONFIG_IPV6) && defined(CONFIG_BPF_SYSCALL)
++#if IS_ENABLED(CONFIG_IPV6) && defined(CONFIG_BPF_SYSCALL)
+ static int ipv6_route_prog_seq_show(struct bpf_prog *prog,
+ 				    struct bpf_iter_meta *meta,
+ 				    void *v)
+diff --git a/net/ipv6/ip6_offload.c b/net/ipv6/ip6_offload.c
+index bd7f780e37a5..d8072ad6b8c4 100644
+--- a/net/ipv6/ip6_offload.c
++++ b/net/ipv6/ip6_offload.c
+@@ -286,7 +286,7 @@ INDIRECT_CALLABLE_SCOPE struct sk_buff *ipv6_gro_receive(struct list_head *head,
+ 
+ 	if (likely(proto == IPPROTO_TCP))
+ 		pp = tcp6_gro_receive(head, skb);
+-#if IS_BUILTIN(CONFIG_IPV6)
++#if IS_ENABLED(CONFIG_IPV6)
+ 	else if (likely(proto == IPPROTO_UDP))
+ 		pp = udp6_gro_receive(head, skb);
+ #endif
+@@ -346,7 +346,7 @@ INDIRECT_CALLABLE_SCOPE int ipv6_gro_complete(struct sk_buff *skb, int nhoff)
+ 
+ 	if (likely(ops == &net_hotdata.tcpv6_offload))
+ 		return tcp6_gro_complete(skb, nhoff);
+-#if IS_BUILTIN(CONFIG_IPV6)
++#if IS_ENABLED(CONFIG_IPV6)
+ 	if (ops == &net_hotdata.udpv6_offload)
+ 		return udp6_gro_complete(skb, nhoff);
+ #endif
+diff --git a/net/ipv6/route.c b/net/ipv6/route.c
+index 08cd86f49bf9..e206777785d4 100644
+--- a/net/ipv6/route.c
++++ b/net/ipv6/route.c
+@@ -6826,7 +6826,7 @@ void __init ip6_route_init_special_entries(void)
+   #endif
+ }
+ 
+-#if IS_BUILTIN(CONFIG_IPV6)
++#if IS_ENABLED(CONFIG_IPV6)
+ #if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PROC_FS)
+ DEFINE_BPF_ITER_FUNC(ipv6_route, struct bpf_iter_meta *meta, struct fib6_info *rt)
+ 
+@@ -6921,7 +6921,7 @@ int __init ip6_route_init(void)
+ 	if (ret)
+ 		goto out_register_late_subsys;
+ 
+-#if IS_BUILTIN(CONFIG_IPV6)
++#if IS_ENABLED(CONFIG_IPV6)
+ #if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PROC_FS)
+ 	ret = bpf_iter_register();
+ 	if (ret)
+@@ -6961,7 +6961,7 @@ int __init ip6_route_init(void)
+ 
+ void ip6_route_cleanup(void)
+ {
+-#if IS_BUILTIN(CONFIG_IPV6)
++#if IS_ENABLED(CONFIG_IPV6)
+ #if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PROC_FS)
+ 	bpf_iter_unregister();
+ #endif
+-- 
+2.53.0
+
