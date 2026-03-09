@@ -1,204 +1,193 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A33243D7D97
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 15:10:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.177
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773069029; cv=pass; b=DxfX2SmwRSQ+80L1qEJyi0iDlH747j4tYgid1tbS8r8wWlFT69N28W3eOxo1ZzKxyzVFHY785/CFp43H/tytrricUk3QZg5Prrl6seu8pnNzr5Dsx5I6zwTeYh6tfC0S2eIOq2w22om2ba08GdzdP7aDWl6ktIjwX3E5/cointw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773069029; c=relaxed/simple;
-	bh=5i8qPmQzszVgv/IzZW6/JLkFuKhxnzZQEpxh8nw5jy0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WHir7+51Icor7V1p6ftTYIYX+q7uFbLpQTUuD3MFHoKJCmDlJSUai2Apaz02QvkKNYCELngf4MEELhiQeQUqYJMPPfV0M8Xy4fXVMJwH+Hr2d987DI57OFbGvY2J+93PNJrSfpk30pQO2EzmarAf2aMqb0mnXhEIXWrECHCsFnw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=v4xaBXqp; arc=pass smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="v4xaBXqp"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2ae3f822163so149235ad.0
-        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 08:10:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773069025; cv=none;
-        d=google.com; s=arc-20240605;
-        b=G6cHwsvAv3KZi/K9KgeU5f9V9XpFOqKAnYFOuS93uY/3v0Grr4+CdOS58DOuxWhvkE
-         pyylWEo+lioboMBB28VaXQdw5+Jdzb8iOEJePMVEhYdvIMCYQflJIVGu9lKNK13Buytv
-         ujHMrsqJgB0uLUao4RXQiw7c4l3AWYbHnlM6zIWv79lZfV3Fp3QIw8uqvuFFGLH0tAXt
-         abC0MuMktY1eaqyWh2GSGJrqwpLWWetiv2KPQk1FcbUbYEP5iQGzq7WJ3BDxHj0sDqwQ
-         9rrHkJOqYyz+1IgHFhmWDvpdRCcUnTFhklxjgCxzy8g63C4W1koKzMXpkgQMHOhHXUzi
-         JNbQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=6FbR4+wo96W1dWPj028FNCvwM/SPgWjQY/Nh61K7Dcw=;
-        fh=XC+kl10271RZQlyUT6x+luMOByzPrzwLc8L+b7G0T4Q=;
-        b=dfBFGmfjnifD2GlN7SvmmL3rqTM/58Wcpb21HJ9Ry9Ip39oGlL7iyiI0a2cPyIQIa9
-         PGuVY5Yn5rJS2PkVOVw8/y55ak8r81Sw6Ish/HGgnPhXnxujspcv4dXX9VyX+GMxUvQk
-         HuWY0J5v7ml+W9nNceRnhMHh4D51sn3IoNqZb+0LCqeVd/H370QJLh4Ne1xaOZwcZEGp
-         oeW0FwE8ptdoV+eieG1AMzu8q3c6MwMR6h2XzxjMjQet1XldhZJnoSSwG2bcpp4YY/RY
-         u/CwHLNjitvHM79ffrVXhXbdhW0cL6/r4nwAyNJVMPzz61k9jSwfL2f+ExZ9Ag0nQ7Xx
-         sUpg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773069025; x=1773673825; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6FbR4+wo96W1dWPj028FNCvwM/SPgWjQY/Nh61K7Dcw=;
-        b=v4xaBXqpIuT0bcg9isx0DX3xggBhIWuO0XIcHogy6/uqvk8alDDzE93ExeqxdD3Sfw
-         LCsZzFCDhtusjba0bkIhwHbSNGnhQUO6vu3DNZh87taQZRfn9+D+Elpv+Ynf2hYyADuz
-         VDxp+QEGAuKbb1r5F172LIHP5d2NAt2N3iblcYpHCIlv1eElakEj/77cV9F2s1FaMMzG
-         Xz6mCsiAU8By3/xu9Aslk2tRWeI2Su3wnNde9NrXGaY5wBmyNF+gq6vH5G2+UBxbbxAh
-         kuhAtfvIecAhpClqOUsl6E+B7CyePTnCR/uGfYsdWerlfkA7OygbIp5yFuPn9eLdjs+j
-         wRTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773069025; x=1773673825;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=6FbR4+wo96W1dWPj028FNCvwM/SPgWjQY/Nh61K7Dcw=;
-        b=H2XMYhQti9AD/zKa4M5WwB94Na6zSNTftyZ0mpdqwqZpRpVm7AwDaqurpol/5IpvHW
-         Z7ervEpqR4IZmO6gcjQsxCbwlfqQwVfhS4MeX+JY3JlW+3HW1qxa3IGPAw0Oiv17+TnA
-         H8N/ZJkugsVo3uOp6dnRj7gJdWDTeq8Oxq72lm/tqz6fwVcQhzW8oJuud1jM+3IBWscQ
-         5X0hcVxkxxjb5+MFWQSUUsvKmSlIrEBt9FV24jQFAL7btDw81vlVlfrS89G7ojk28OnB
-         ZAKCCcQozaGx8kpmL3s8A9aSCyJmRTk0MqGai3duYrK4CwvhumoDRHRNmh3BWy6V23j7
-         wzwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX92UuZLGxbx/xB8Rh5TUUP9GI2fwX+0IZ+etFEFWLPT6dwBRuLNN7u6uxMXK3Wp3ebAu8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzU85H9Hkr1HvlcCL1g7gJzyE8/JkDIKLgzkhBzR0I1NcCqoY4w
-	leyU4JgBEHXfeWT+23dZ3dGM3IMBEpMcJcn5X5KY65jfE9JIU883HO9JUbtkf4ibcEDzFHoUSfk
-	RZY+EKzEtxJPwcA4l/fRNhC+elVhB5DKQmQxkyEFZ
-X-Gm-Gg: ATEYQzz6BUrnJ8K9t593ZUph5MeIMsP4Mg8Pe2zv8qiGtxl/UEiCdZRnf8g3BFkuHGq
-	MGpwOutl/C9CIxpOtz4Qx3TcehZlJKkDrWisJDIvtvWYSbOX93fvB4mUFU1XFDbN0+1kvpc7H+T
-	uZe4IwDwgIW7tMhG8lyMi1nIguCkLTD5DCitGAPJGyFY7aHpHFku2ADJlZT1WUkZqIOm73dduao
-	atF/xRe8/YdeLlYbm4C+eOmLl/VpEinnFUc1ZIdpAPpkt2M7YzFT3TbRJLSyGnniCpCLHMHaAlV
-	FRwc3U8JV8mChKTR9bo3Y1Ia7Wc+B4VVJmHwxg==
-X-Received: by 2002:a17:903:1a23:b0:2a7:6c4e:5914 with SMTP id
- d9443c01a7336-2ae8ad1c62emr4122395ad.6.1773069024342; Mon, 09 Mar 2026
- 08:10:24 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625993D646A
+	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 15:32:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773070351; cv=none; b=Mc0yYJ7jjdoQgqlhv6yF4bNXF2i+wi94YCiQi+VFNOHRlkFai6HJGcKdp2mCmHxHTAr0PEQSnO4moupNMWi2smDrsAgZ3KV3R+SSb+WlPtTQUQiz6XMGwlsZqu7PHJ9q0tijf8Rc32kmbfCsfSMUjFyu9OSDM1s2Fa74CPe8Eos=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773070351; c=relaxed/simple;
+	bh=7ZW3By0w3QyuzeVjBktUxP1vGE6Th7mzXbzHtvjDPRQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Fwkjyg32MdbGpUs8D72ggSQVgEX3gj5jcADFJMkkWEHGTSQTbmwlLl3Y/LEflk6bT1y7skeYyXrqHEyDvnUypXvBtrPsDCHVIW/YYYL5BFjUmMhLVH00UMnxu43C0lCh55F1pF4z3z84nLbYe1dnZlMyIJHo7dpK9dPV6jRbSsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id 9859D24944292; Mon,  9 Mar 2026 08:32:15 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: Alan Maguire <alan.maguire@oracle.com>,
+	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+	dwarves@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	bpf@vger.kernel.org,
+	kernel-team@fb.com
+Subject: [PATCH dwarves v2 0/9] pahole: Encode true signatures in kernel BTF
+Date: Mon,  9 Mar 2026 08:32:15 -0700
+Message-ID: <20260309153215.1917033-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com> <20260308-tools_build_fix_zero_init-v3-3-6477808123b7@arm.com>
-In-Reply-To: <20260308-tools_build_fix_zero_init-v3-3-6477808123b7@arm.com>
-From: Ian Rogers <irogers@google.com>
-Date: Mon, 9 Mar 2026 08:10:13 -0700
-X-Gm-Features: AaiRm53Q6tq8LuPIrmfsSi3or0ZsIgIF5Wzq_daN-fddH5XU6fwZ-9Q1_o7c91A
-Message-ID: <CAP-5=fUjJ1QONNLNyJL7Ugc3=44sJ2i10wpQNoGtM7Fnd5wJ0g@mail.gmail.com>
-Subject: Re: [PATCH v3 03/30] tools: lib: thermal: Initialize CFLAGS before
- including Makefile.include
-To: Leo Yan <leo.yan@arm.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, 
-	Quentin Monnet <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>, 
-	Bartosz Golaszewski <brgl@kernel.org>, Kent Gibson <warthog618@gmail.com>, 
-	"K. Y. Srinivasan" <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
-	Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>, 
-	Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, 
-	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
-	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>, 
-	Len Brown <lenb@kernel.org>, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, 
-	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, bpf@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Mar 8, 2026 at 9:46=E2=80=AFAM Leo Yan <leo.yan@arm.com> wrote:
->
-> Initialize CFLAGS to the default value before including
-> tools/scripts/Makefile.include.
->
-> Defer appending EXTRA_CFLAGS to CFLAGS until after including
-> Makefile.include, as it may extend EXTRA_CFLAGS in the future.
->
-> Signed-off-by: Leo Yan <leo.yan@arm.com>
-> ---
->  tools/lib/thermal/Makefile | 16 +++++++++-------
->  1 file changed, 9 insertions(+), 7 deletions(-)
->
-> diff --git a/tools/lib/thermal/Makefile b/tools/lib/thermal/Makefile
-> index 41aa7a324ff4d76351b89d7d7cf382df3fc14052..50efa97163fc089455161d6b8=
-1db13aa0ae41af6 100644
-> --- a/tools/lib/thermal/Makefile
-> +++ b/tools/lib/thermal/Makefile
-> @@ -23,6 +23,14 @@ INSTALL =3D install
->  DESTDIR ?=3D
->  DESTDIR_SQ =3D '$(subst ','\'',$(DESTDIR))'
->
-> +# Defer assigning EXTRA_CFLAGS to CFLAGS until after including
-> +# tools/scripts/Makefile.include, as it may add flags to EXTRA_CFLAGS.
-> +ifdef EXTRA_CFLAGS
-> +  CFLAGS :=3D
-> +else
-> +  CFLAGS :=3D -g -Wall
-> +endif
-> +
->  include $(srctree)/tools/scripts/Makefile.include
->  include $(srctree)/tools/scripts/Makefile.arch
->
-> @@ -39,13 +47,6 @@ libdir =3D $(prefix)/$(libdir_relative)
->  libdir_SQ =3D $(subst ','\'',$(libdir))
->  libdir_relative_SQ =3D $(subst ','\'',$(libdir_relative))
->
-> -# Set compile option CFLAGS
-> -ifdef EXTRA_CFLAGS
-> -  CFLAGS :=3D $(EXTRA_CFLAGS)
-> -else
-> -  CFLAGS :=3D -g -Wall
-> -endif
-> -
->  NL3_CFLAGS =3D $(shell pkg-config --cflags libnl-3.0 2>/dev/null)
->  ifeq ($(NL3_CFLAGS),)
->  NL3_CFLAGS =3D -I/usr/include/libnl3
-> @@ -60,6 +61,7 @@ INCLUDES =3D \
->  -I$(srctree)/tools/include/uapi
->
->  # Append required CFLAGS
-> +override CFLAGS +=3D $(EXTRA_CFLAGS)
->  override CFLAGS +=3D $(EXTRA_WARNINGS)
->  override CFLAGS +=3D -Werror -Wall
->  override CFLAGS +=3D -fPIC
+Current vmlinux BTF encoding is based on the source level signatures.
+But the compiler may do some optimization and changed the signature.
+If the user tried with source level signature, their initial implementati=
+on
+may have wrong results and then the user need to check what is the
+problem and work around it, e.g. through kprobe since kprobe does not
+need vmlinux BTF.
 
-The change lgtm. Running this patch through an AI review showed that
-what looks like a typo, CFLAGS becoming CFGLAS, is located below:
-https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/tools/lib/thermal/Makefile#n62
-```
-# Append required CFLAGS
-override CFLAGS +=3D $(EXTRA_WARNINGS)
-override CFLAGS +=3D -Werror -Wall
-override CFLAGS +=3D -fPIC
-override CFLAGS +=3D $(NL3_CFLAGS)
-override CFLAGS +=3D $(INCLUDES)
-override CFLAGS +=3D -fvisibility=3Dhidden
-override CFGLAS +=3D -Wl,-L.
-override CFGLAS +=3D -Wl,-lthermal
-```
+Majority of changed signatures are due to dead argument elimination.
+The following is a more complex one. The original source signature:
+  typedef struct {
+        union {
+                void            *kernel;
+                void __user     *user;
+        };
+        bool            is_kernel : 1;
+  } sockptr_t;
+  typedef sockptr_t bpfptr_t;
+  static int map_create(union bpf_attr *attr, bpfptr_t uattr) { ... }
+After compiler optimization, the signature becomes:
+  static int map_create(union bpf_attr *attr, bool uattr__is_kernel) { ..=
+. }
+In the above, uattr__is_kernel corresponds to 'is_kernel' field in sockpt=
+r_t.
+This makes it easier for developers to understand what changed.
 
-Thanks,
-Ian
+The new signature needs to properly follow ABI specification based on
+locations. Otherwise, that signature should be discarded. For example,
 
-> --
-> 2.34.1
->
+    0x0242f1f7:   DW_TAG_subprogram
+                    DW_AT_name      ("memblock_find_in_range")
+                    DW_AT_calling_convention        (DW_CC_nocall)
+                    DW_AT_type      (0x0242decc "phys_addr_t")
+                    ...
+    0x0242f22e:     DW_TAG_formal_parameter
+                      DW_AT_location        (indexed (0x14a) loclist =3D =
+0x005595bc:
+                         [0xffffffff87a000f9, 0xffffffff87a00178): DW_OP_=
+reg5 RDI
+                         [0xffffffff87a00178, 0xffffffff87a001be): DW_OP_=
+reg14 R14
+                         [0xffffffff87a001be, 0xffffffff87a001c7): DW_OP_=
+entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
+                         [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_=
+reg14 R14)
+                      DW_AT_name    ("start")
+                      DW_AT_type    (0x0242decc "phys_addr_t")
+                      ...
+    0x0242f239:     DW_TAG_formal_parameter
+                      DW_AT_location        (indexed (0x14b) loclist =3D =
+0x005595e6:
+                         [0xffffffff87a000f9, 0xffffffff87a00175): DW_OP_=
+reg4 RSI
+                         [0xffffffff87a00175, 0xffffffff87a001b8): DW_OP_=
+reg3 RBX
+                         [0xffffffff87a001b8, 0xffffffff87a001c7): DW_OP_=
+entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
+                         [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_=
+reg3 RBX)
+                      DW_AT_name    ("end")
+                      DW_AT_type    (0x0242decc "phys_addr_t")
+                      ...
+    0x0242f245:     DW_TAG_formal_parameter
+                      DW_AT_location        (indexed (0x14c) loclist =3D =
+0x00559610:
+                         [0xffffffff87a001e3, 0xffffffff87a001ef): DW_OP_=
+breg4 RSI+0)
+                      DW_AT_name    ("size")
+                      DW_AT_type    (0x0242decc "phys_addr_t")
+                      ...
+    0x0242f250:     DW_TAG_formal_parameter
+                      DW_AT_const_value     (4096)
+                      DW_AT_name    ("align")
+                      DW_AT_type    (0x0242decc "phys_addr_t")
+                      ...
+
+The third argument should correspond to RDX for x86_64. But the location =
+suggests that
+the parameter value is stored in the address with 'RSI + 0'. It is not cl=
+ear whether
+the parameter value is stored in RDX or not. So we have to discard this f=
+unciton in
+vmlinux BTF to avoid incorrect true signatures.
+
+For llvm, any function having
+  DW_AT_calling_convention        (DW_CC_nocall)
+in dwarf DW_TAG_subprogram will indicate that this function has signature=
+ changed.
+I did experiment with latest bpf-next. For x86_64, there are 69103 kernel=
+ functions
+and 875 kernel functions having signature changed. A series of patches ar=
+e intended
+to ensure true signatures are properly represented. Eventually, only 17 f=
+unctions
+cannot have true signatures due to locations.
+
+For arm64, there are 863 kernel functions having signature changed, and
+79 functions cannot have true signatures due to locations. I checked thos=
+e
+functions and look like llvm arm64 backend more relaxed to compute parame=
+ter
+values.
+
+For the patch set, Patch 1 introduced usage of DW_AT_calling_convention, =
+which
+can precisely identify which function has signature changed. This can fil=
+ter
+majority of functions where their signature won't change.
+Patches 2 to 7 tried to find functions with true signature.
+Patch 8 enables to btf encoder to properly generate BTF.
+Patch 9 includes a few tests.
+
+Changelog:
+  v1 -> v2:
+    - v1: https://lore.kernel.org/bpf/20260305225455.1151066-1-yonghong.s=
+ong@linux.dev/
+    - Added producer_clang guarding in btf_encoder. Otherwise, gcc kernel=
+ build
+      will crash pahole.
+    - Fix an early return in parameter__reg() which didn't do pthread_mut=
+ex_unlock()
+      which caused the deadlock for arm64.
+    - Add a few more places to guard with producer_clang and conf->true_s=
+ignature
+      to maintain the previous behavior if not clang or conf->true_signat=
+ure is false.
+
+Yonghong Song (9):
+  dwarf_loader: Reduce parameter checking with clang
+    DW_AT_calling_convention attr
+  dwarf_loader: Handle signatures with dead arguments
+  dwarf_loader: Refactor initial ret -1 to be macro PARM_DEFAULT_FAIL
+  dwarf_laoder: Handle locations with DW_OP_fbreg
+  dwarf_loader: Change exprlen checking condition in parameter__reg()
+  dwarf_loader: Detect optimized parameters with locations having
+    constant values
+  dwarf_loader: Handle expression lists
+  btf_encoder: Handle optimized parameter properly
+  tests: Add a few clang true signature tests
+
+ btf_encoder.c                                 |  13 +-
+ dwarf_loader.c                                | 397 +++++++++++++++++-
+ dwarves.h                                     |   3 +
+ tests/true_signatures/clang_parm_aggregate.sh |  83 ++++
+ tests/true_signatures/clang_parm_optimized.sh |  95 +++++
+ .../clang_parm_optimized_stack.sh             |  95 +++++
+ .../gcc_true_signatures.sh                    |   0
+ 7 files changed, 662 insertions(+), 24 deletions(-)
+ create mode 100755 tests/true_signatures/clang_parm_aggregate.sh
+ create mode 100755 tests/true_signatures/clang_parm_optimized.sh
+ create mode 100755 tests/true_signatures/clang_parm_optimized_stack.sh
+ rename tests/{ =3D> true_signatures}/gcc_true_signatures.sh (100%)
+
+--=20
+2.47.3
+
