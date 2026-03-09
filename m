@@ -1,160 +1,134 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47DB92D0602
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 18:07:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C2FC2C0303
+	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 18:12:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.44
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773079654; cv=pass; b=jgDaF8Xb/hmmae3CbMGdgz6HJJOr3IgXjy9s+2LUPdeHex8T+gRDQaOvcrJx949E1uodfnwNj53MpWujhPh2FvK/vVvqtsK+pOqqpWh0eZsvpFBaJLoVKTa3FnmYF0N9sYr/V8pxf7p2aRNOOFSwPJo+//eLYR/Qr1fKp9biDJ4=
+	t=1773079935; cv=pass; b=FLaB3sUsm2WYcjck0VrSO1+WYF5wMTzHfvJ5Wp7zX4HuAWlRAqDUIZ5z0PbUgbj+9WjT5fGQxnxTNy0QNMUMhX6UhnoaIG9LbIyPDDMkKBnWZ/y7K3HmaursPEE2AmZvM3acGU5Y0kSnwLoJ6d7fn4Rt4IRA6keUelKpi0nMDp8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773079654; c=relaxed/simple;
-	bh=QIMNB5EyqX39o2tFyg9pOLQaPD6ckffxKJvkpme5m9o=;
+	s=arc-20240116; t=1773079935; c=relaxed/simple;
+	bh=VbnN0d+ZsN8iu+Q27vm50zGAamkjg92EXxi65PIOHyM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RZBBlD+SoV4ENE/mYOMLSbE3+ozywIPnxLgHqLnypafsNfA9f9Cizo7Q6fQY5ZBoJOIRPLMNUvUZmkoPQ2AYlZxfpXTfwiI8bsr2x9rpwn9Z+Rv6OmQC7WVh5xxfBBD3iLudGO+5SPpjlOc9Wxk8+hILz/p7EN+ptHltmQi6PW8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dITMcj+I; arc=pass smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=FXziaL9tS/KMHugAteqiifXn2c9sr7TSZpZGyrP6v47JvaA87owvRdrZFDMVjTAUxNIQq1b0+fBLjbJfqXenORu/iwtNCRux6KdVWbxzG+e6fgmyINcjs/gVqk0LXgUAzsubBjBJtY73WXBHlasaDXWUnU8M40dnAK9EBw2jX+Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iz8CDAu5; arc=pass smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dITMcj+I"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2ae49120e97so18815ad.0
-        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 11:07:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773079653; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iz8CDAu5"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4852e9ca034so22327595e9.2
+        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 11:12:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773079932; cv=none;
         d=google.com; s=arc-20240605;
-        b=DOdCog2GRWlcgoa+Py2mmvoagTAogsChaQTYWhVysVypjE58mnXucgMet512ML7vXK
-         I164GYPcQVTaD8paCWIbwUF14T0djV8mSUPHmFWMziyUS6NHQiWMUF6MFjz0vwoTgN27
-         9mwyi/3bA+XMf6oLp7mYItfJHpKXcdvJNgToflUcxnO/WBzREWMO9r1fYUABAWhvQgt1
-         UEP3hAf4L+lrRLKZ3tUIOme4Wwnkcd+OvseO55N8GEMUQgQUtQPue1+TBPrK4l0fIv2S
-         n5ckf6i0mm/NzK7eOLBPlAGMVaLfm9EfsqDJauhFyy9YTItvIBry9hY8BOUG7vQWFr3c
-         dzDg==
+        b=Ydz9mCUkN92Pj5dtY7A3v7N1SwsN38BGyceC1ddgVpvlZgpVq3VzdsLIqUUbFplcKv
+         HCIPTwUqJwRjzvTr2gL2mamGo5lQLJ35cLLubrvmkRgHwEvnSRzBkQOyo61nN620efgZ
+         tZ6Z1uRzlLaZ4aZ5TO4p4qsJJGg5sSTWE5IoKXB3OpxhIoRoVPHkh+KufG3EsL+YRmhv
+         fK4IyIVnoiDaRr7LjfRAlkjQmtyq7dZoa6sdW+L3pGX606Idv/Xk2fU8pECQwHC6lsZt
+         Jp3gPtltbgV/WS7Zigu87Y4/B9OcqNPS8F05cJefersyFcevz945Am9U3pU/Js8Yywd2
+         aWYA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=8TSrNRaJmO51nmlmw1NUXrIFdMrsiQHCiZF8RZbGZ8o=;
-        fh=4OpjJqXOocGPiJz1jD8/DxfENDerbSmIV37XB6w4HmQ=;
-        b=lZpA3gvEyDgDYjIlPSb3jttnoSWNedPUFEVa/WApu4QdSiJTGEnEzqNjtUoIAOeytI
-         H45b74Y6tBwSckMxWjzHhcl9DfhmFnCTZ8IkGsE+1V+IfUb7bqBbCLa76jozvQwk8sUH
-         KHE090IkQYyUuU4+jBRcT+3p2Ow8L15zELToe8fGw382gVVd+KSBNZ0Rs0c++D2U2W6w
-         YxcucpjC9E7RjIGG/czvmwFBVGZEerwbrFZ7tI2xaGeA7ziNEcsCArqGZ0IfNw8FoRRn
-         GSaQfeB7+rtMARp8lfrCb9KZjQ4/FOpv3ccju5hLlJ5HUA4SzIZxRFv/74r6ldOVZp5D
-         K2hA==;
+        bh=VbnN0d+ZsN8iu+Q27vm50zGAamkjg92EXxi65PIOHyM=;
+        fh=V+pBgdWCGc3eEx30o3EZqXHeWkGtRTtxD2uIo15vuaQ=;
+        b=DPAsuxhfgF9VU0bgNkLL5PABH+TVz9SmKyypmLnnbxTx4NXCDiJTiqjtGvgCy5PKUo
+         8D84jsR4L2Rh6Vx2fwn0bThcXrGPOCCcSz1gwLRr6VLH0koDM6yn99OY8ybOaEgQGH1w
+         kCg5j4cBSdy4/ZRQgnVg5rh386sM0GFVKCl9RKG/DXuLDithGL2FO7u2oM6YnyZZAvby
+         TC2zNvh0NeoM/DpR8L17CFpN3y+MNj8mcrKhpKTZ5N6FKAmdjYyJBLvWXq3oP75LFNOM
+         Jye35W2b21aa2f91csyjhNfMT45PlENNaCb5DprSVmnfVKTHZgRJjqUCnZZjoh67RpJe
+         z46w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773079653; x=1773684453; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773079932; x=1773684732; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8TSrNRaJmO51nmlmw1NUXrIFdMrsiQHCiZF8RZbGZ8o=;
-        b=dITMcj+IP+X1pNDLQlzbO/2Br9TEhFRT6fvRvGnSdpfo8105ue3D5YuFUzfORKIUR2
-         8exPwII8caUYFpgVnBptMqd/gNbrLduG8jLq8oKnWCkanuKHfPsCmRK7CA2w8wuZSS+w
-         sGqOYYxPQtJElPE6D9nNWXQ7Uz8nfTicxQlRAT++ftptEd9ozJOjZ/xxSwjkQt9/nPcC
-         QxNZ4bj65X+XCvTm8tv9s6UJivX4A9uroRHHgaLVlUfI1w6YuArFopcF2d/T5QU4gJ3d
-         GIUGYVOUkl/wLfgA5BUCiavv9Wy/BP6W5KABBryaUDzIRRgPFYa3gCzFGP4ilbvzTAAo
-         o0aA==
+        bh=VbnN0d+ZsN8iu+Q27vm50zGAamkjg92EXxi65PIOHyM=;
+        b=iz8CDAu5HcH7RwN6wRGEUljkG0oeIkf5AEpR76ehVeWis6UKuzmuLcKbtSdLuuYsEN
+         GbzLI5ofhzFmf9ag8UHHAaOtkXv8+crtex4sqI287rJdFCJh1qegeOwXoyaxczR1q1ii
+         pNnpKGjdv2BEKiwBgjy6lO9dvl2IXw8iQZej5ypio7+zQhxlp3IG2pyry/oNNZilDksU
+         WP8jr/8rHibPbXZyNZXRWrKM2sTfGPYiKItEqYoEFEgGf4uMxDOjbzCBpFFf+Ywqm3OQ
+         a/WG/4sU/5H/QlkfmUf6kkoCB+gwskQ0SK+vIszynIMETrZr2Ry9FRWJBg6Su/D8Gtak
+         V2Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773079653; x=1773684453;
+        d=1e100.net; s=20230601; t=1773079932; x=1773684732;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=8TSrNRaJmO51nmlmw1NUXrIFdMrsiQHCiZF8RZbGZ8o=;
-        b=mixo845RO6uaKB0rgRo4dAiQgAxWkgvfV+n0NV0eey9Gg4rTbMUquie0uT4gVOk2pK
-         o3rrvuQ1S7OQ3l8ze4tb0FaT1g/LWtQ6aJAHznWx93bnq2V3BE2gOYLNRxxZg6qHXObS
-         8okTTVbOGCUZLpONz4gn5asIxrH1VMhmyRqF12etNNfhrGtQZWsVDRlL/EWgwMfJTnc2
-         KBKh1Sw4og7zyOyLhGJVThlev3GUSEgwOQpvwCzuYdGGTcbAHu2mrJc49ONrzSo5ziGa
-         8Z0nUYluCh0vNk8UQcHSZk3a6vVGG2NUAQ9DxtL91R1w49fCwsCzCjp5ClZjnLr/BMxy
-         fPQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV0BCQblNY68NTsOnqlm5jBD/cuhlh7wZ85P3YXu7a8Hd4lO/Q46fOOJY9/6l1Ioi9hf88=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwpsIjWlO1U4NH3cOxFEsHCOAxiLjfh12R7r8sJdDASajoDSnmA
-	yq7ysrzbeVpMsDTQqlZs8kw5mqWC8SIjLJiS+1D9ZoOLthEjPGtpqSy88BLZswV9zXICZKzp6wy
-	VWK1wY9q+Oia1uahSxxR+S14DXxQWwxPnS54Mz/6t
-X-Gm-Gg: ATEYQzwgQJQvCQ/aHT9yfZCJyA1YRV2zxH7PCDSkYUTC27NzhLfr64NTfHb6LrvwvYp
-	90NQajPHj/BsTBvGdIyek51yNZj0unDzpxPLCyJ+BCYh3pThiXsWBlQ3PrTJQEZQnDrE0KmnlCe
-	dJc3q+NLaWRPXreMbGF0B7Hl5tAkk63+KprhAthPLNXUkYFt+UE3WsUWcJc4n/Kn66K/6MC2KYE
-	kzL2ykOJqK1lCZM7hKax9HsSKmJqT8Onfg6pTExfHdw4/DHPgtYslQKeIHdNl1jbKA07YdPqZUF
-	G/VGmFLO+NlzZhI7KC7s116h8xoSLybu32M=
-X-Received: by 2002:a17:902:da91:b0:2ad:ab68:f2c3 with SMTP id
- d9443c01a7336-2aea32679e7mr214325ad.13.1773079652084; Mon, 09 Mar 2026
- 11:07:32 -0700 (PDT)
+        bh=VbnN0d+ZsN8iu+Q27vm50zGAamkjg92EXxi65PIOHyM=;
+        b=hjtuM72nol4NFcbhbobp9FnzmrVt/Se2FEoMJQY6PgswbQbl7Tqan4N8CU4F32vD3n
+         vcuC4m7wjyevSjHwCqPYt592FGs8b68c/sjKX5riuIFBXU4olQwuGlj9gE+P0Fd5Dj4t
+         z7CBsim2tLlx/nCTVPu7ayezPxf4dGFGdFLHCk/oBl5uPF3kkihVu1duboUddT/xYhxn
+         HFvMNb6yCJCBsXaOBRYYLOtTV/iOD7m1/zay5PDDWMWXzbgzAAYbN2iwH/COnzAdMEQX
+         dyj5FsubBlYHObEx51r7BuJxfBwSwzQ/1uKXev0MvCyeP1Rz8HRMBE/90IODEXlCdCKV
+         WQnQ==
+X-Gm-Message-State: AOJu0YzKHGQN4S0AKYeNeHiz/mtPPAwfos+Ejk5eQTO6we4PkArdt83T
+	Ou9yuzoP2kr4/VACgJhzRAsTzmBk/ginI47vT/2io8biEEWmDxpSDfgID7W8u8B1B7XUFE6yEl8
+	3PWtr1W06kVCO5eFTF//+Tcm0P1xlZCE=
+X-Gm-Gg: ATEYQzzhFjyJPkZzd7ZgpqfL9e2EdTqFKRysMNMEXNc/LqnqGUwh1O2nbShyYvB5lP6
+	EteFQJvS6ckDwvEf8fcNIFLq4pfa1B/5RHh4MXnGDO8TgR9VOJklDWiCTc1E/GQIsGKuxV/QJvL
+	24hUXUKzNCp3QqTP0i+PoQvkH0QnmoooNsOVJv/tVlp7DzyV6zMFqApblnUHQexYliNZtkqq3pm
+	xwadEq650+OHx3H5aedcwVe612CP6Mim2cu5ReCTcZi/nCL6qetyZLSXWKa/wdYGuHl+ZTUcKs8
+	oN7+QjC4APRlecARmF0e87GhPfO/2P6mURu7R6qwhLOSDk3/dCpLO0R4Bxyd1tV21I09cReBfHU
+	UBdKgrEGX0thfvxRU4/hPs7Zw+SSd4kUJchxA
+X-Received: by 2002:a05:6000:18a8:b0:439:cee7:7160 with SMTP id
+ ffacd0b85a97d-439da8a31admr19533393f8f.52.1773079932246; Mon, 09 Mar 2026
+ 11:12:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com> <20260308-tools_build_fix_zero_init-v3-22-6477808123b7@arm.com>
-In-Reply-To: <20260308-tools_build_fix_zero_init-v3-22-6477808123b7@arm.com>
-From: Ian Rogers <irogers@google.com>
-Date: Mon, 9 Mar 2026 11:07:20 -0700
-X-Gm-Features: AaiRm51tQNQ2inpIlTxQfShRsJQdMzHGmNgW_x5TCtZwRMueLBJEPIayhaU2J5E
-Message-ID: <CAP-5=fVp5LEezSpRaTZTH17KjkFBvnDLqonMDa5Lm7O7wHD_Bg@mail.gmail.com>
-Subject: Re: [PATCH v3 22/30] tools: sched_ext: Append extra cflags
-To: Leo Yan <leo.yan@arm.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, 
-	Quentin Monnet <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>, 
-	Bartosz Golaszewski <brgl@kernel.org>, Kent Gibson <warthog618@gmail.com>, 
-	"K. Y. Srinivasan" <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
-	Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>, 
-	Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, 
-	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
-	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>, 
-	Len Brown <lenb@kernel.org>, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, 
-	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, bpf@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org
+References: <20260309155506.23490-1-puranjay@kernel.org> <20260309155506.23490-3-puranjay@kernel.org>
+ <CAADnVQ+2FoGYUapuXQUcCEerjfxqFSSUc8vwg4q8TN0GVwaS=g@mail.gmail.com> <CANk7y0iD2hsfcYZ4eBHib0au_sZx_ziqXPR9cf7iAmqC73NgyQ@mail.gmail.com>
+In-Reply-To: <CANk7y0iD2hsfcYZ4eBHib0au_sZx_ziqXPR9cf7iAmqC73NgyQ@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 9 Mar 2026 11:12:01 -0700
+X-Gm-Features: AaiRm52K0lH8Rz39-0C2bvpy3rrG6D4Fb6yV8V53xhLf1KOFP0RidWtAU3QlWl0
+Message-ID: <CAADnVQK+qKy+39SWmOBE+si9NNJc7K9jzz1JcBJkv6Z45ufHxA@mail.gmail.com>
+Subject: Re: [PATCH bpf v2 2/4] bpf: fix mm lifecycle in open-coded task_vma iterator
+To: Puranjay Mohan <puranjay12@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, 
+	Kernel Team <kernel-team@meta.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Mar 8, 2026 at 9:49=E2=80=AFAM Leo Yan <leo.yan@arm.com> wrote:
+On Mon, Mar 9, 2026 at 11:02=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.co=
+m> wrote:
 >
-> Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
-> the compiler.
+> On Mon, Mar 9, 2026 at 4:48=E2=80=AFPM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Mon, Mar 9, 2026 at 8:55=E2=80=AFAM Puranjay Mohan <puranjay@kernel.=
+org> wrote:
+> > >
+> > > The open-coded task_vma iterator reads task->mm and acquires
+> > > mmap_read_trylock() but never calls mmget(). The mm can reach
+> > > mm_users =3D=3D 0 if the task exits while the iterator holds the lock=
+.
+> > >
+> > > Add mmget_not_zero() before mmap_read_trylock(). Drop the mm referenc=
+e
+> > > on error paths via mmput_async(), which is safe from process context.
+> > > From hardirq/NMI context mmput_async() can re-enter __queue_work() an=
+d
+> >
+> > hardirq can reenter __queue_work() ?
 >
-> Signed-off-by: Leo Yan <leo.yan@arm.com>
-> ---
->  tools/sched_ext/Makefile | 1 +
->  1 file changed, 1 insertion(+)
+> No.
 >
-> diff --git a/tools/sched_ext/Makefile b/tools/sched_ext/Makefile
-> index 21554f0896923fa9c2e5b98c85d65d964152e592..7b97af037ae55981bc84d4a91=
-40766fdf4c62a6c 100644
-> --- a/tools/sched_ext/Makefile
-> +++ b/tools/sched_ext/Makefile
-> @@ -89,6 +89,7 @@ ifneq ($(wildcard $(GENHDR)),)
->    GENFLAGS :=3D -DHAVE_GENHDR
->  endif
->
-> +CFLAGS +=3D $(EXTRA_CFLAGS)
->  CFLAGS +=3D -g -O2 -rdynamic -pthread -Wall -Werror $(GENFLAGS)         =
-         \
->           -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)                       =
-       \
->           -I$(TOOLSINCDIR) -I$(APIDIR) -I$(CURDIR)/include
+> I blindly copied from defer_timer_wq_op(), sorry for that, I should
+> have thought more and looked at the lockdep_assert_irqs_disabled() in
+> __queue_work() which means hardirq can't re enter.
+> We only need to check !irqs_disabled() here as reentry can happen only
+> from bpf programs attached to tracepoints in the call chain of
+> __queue_work().
 
-The append should probably happen last to allow the default values to
-be overridden.
-
-Thanks,
-Ian
-
-> --
-> 2.34.1
->
+Exactly.
+Please add a comment.
+It will make agent's analysis easier too.
