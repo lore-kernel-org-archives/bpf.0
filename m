@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E00103612ED
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 15:55:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A3AE3D648A
+	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 15:55:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773071720; cv=none; b=ijyt/rtKAg4j6BIAJBSNMkvHHIn5D1KPp5mwRx9Fi2aMMT55b+RbeSYZUaNtrNoif1WSSGdq9jt5BHdqVEBT/VxyN97PGY5gVm9pUWq0MdbwVUSJymlfQtlYUYTYeTBNNUA6hbUFmf8VuK9PbK8klcxahoJ3sEaJK/w5hr0Org4=
+	t=1773071725; cv=none; b=tAyZRDUsXN4VKpurGUBiaxKBqn+n5C/timRhwTJUyj3S5iUZjagY9XnYujwIqiaEh9cRady1VjR1GVfjsLUqF5NMDvUwDfGEw/jHcD8nXM1Fzqg+BWnjj5in3uTVwhFvwa2S2gn9kaQwrSuwvqFD4QUnY38Rae4mDnlwrPz11RE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773071720; c=relaxed/simple;
-	bh=/mc2BoMcDypwvF7gm6lx7PnGvxRKbNpQa5g5wLxMtKM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lwpQxwulgdZX5I2q/YjUY1oC9+TQcwV7xgWMw1fE2p8YNa9WZFssh52LSv37pX7C8nnlLuNghoT92Fgmx5myiWfP4hyZsWlX65UPRHNOj6IoBYkG19J4fsLVTT9q980tdkgOMH58xn/fZlRi+sm4x7qpBxDPKdQFn1Zft0UcQZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h7zGZiTj; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773071725; c=relaxed/simple;
+	bh=5zgy6VVKvQE+FX74kIsWabqkjp5D/gOOpk1wuNUamzU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=t/RA1BCXxiCNCmOJwZh2W6VFhhsWGbgPjK2QvuAxLlJp8BXKTnhVqLInRdXhpVPXr38Vz4U9x2N1WIh/Z5wHwjjb14Zr4LS0WXWnxiyntMeT+STJw0FwDM5e5hP+gV/CW2KJDcyD3L1/qAN9CmH+5WDI0N4xc8374mCQyd8YWvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B49LuVeJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h7zGZiTj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 687EBC4CEF7;
-	Mon,  9 Mar 2026 15:55:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B49LuVeJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEB54C4CEF7;
+	Mon,  9 Mar 2026 15:55:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773071720;
-	bh=/mc2BoMcDypwvF7gm6lx7PnGvxRKbNpQa5g5wLxMtKM=;
-	h=From:To:Cc:Subject:Date:From;
-	b=h7zGZiTj+yugcAqDea/ZBdQPqHjkpHrvWUs8mM73909j5DexT05fPhy3EKgoUE8VD
-	 Z7htm7bExvg+Njt3Is4bxY0qCSK4CLvJVEhsbs2/WOKAv58bwlaUJA5UN9OsxsNEEe
-	 F6mzDi/ZCRnYEKDuTJMAsg3d/7bJi29/P+v1MfTcxkqKkVExQN9mZ36Y/N4JcU1Cp4
-	 2X3ZjkgppuFO1absclbtnCraSruD+K85nZTMGcNdVTXwxEJtQPjZ79+kcoMW7F1yLh
-	 feWYbtJ3nHkC6yWymUiNsTot+b565MrGjUafyYuF4Fq8jlmgPOrmA2g9V0c9g9MLOA
-	 pjNdE9RXgiYkg==
+	s=k20201202; t=1773071724;
+	bh=5zgy6VVKvQE+FX74kIsWabqkjp5D/gOOpk1wuNUamzU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=B49LuVeJhVCtsDRqGykQF0QCfN/uS0jsakQgRxkZEesw3HNrBxSTDvVH5C1M4yF0b
+	 RMOfni8hX4hU17RWaFlURlkVxFkoPRM1gT97YWUzHMRZmoshrR45djB3TatN8DQRXE
+	 mRQ5liohjZ674om7r7nW+6rbBkUSHCj4mc/WhcKQNsK5yEtpgSGGtUVWLmIOuIgf7d
+	 jzQMLJcnKjaTYcXUdQQlk1MEg7vHbwzONegngT39t6OzBkBD7qHvrc9yEegQ/kwBYM
+	 4HyOXDCJhV4uXkTaf5POkFwpBiMZ9TPQod0cbzkhqTR/pkjp+JgRgAhID46fDYcahV
+	 Ws1FU/cWKGsAg==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -37,10 +38,12 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
 	kernel-team@meta.com
-Subject: [PATCH bpf v2 0/4] bpf: fix and improve open-coded task_vma iterator
-Date: Mon,  9 Mar 2026 08:54:54 -0700
-Message-ID: <20260309155506.23490-1-puranjay@kernel.org>
+Subject: [PATCH bpf v2 1/4] bpf: rename mmap_unlock_irq_work to bpf_iter_mm_irq_work
+Date: Mon,  9 Mar 2026 08:54:55 -0700
+Message-ID: <20260309155506.23490-2-puranjay@kernel.org>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260309155506.23490-1-puranjay@kernel.org>
+References: <20260309155506.23490-1-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,57 +52,123 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Changelog:
-v1: https://lore.kernel.org/all/20260304142026.1443666-1-puranjay@kernel.org/
-Changes in v2:
-- Add a preparatory patch to rename mmap_unlock_irq_work to
-  bpf_iter_mm_irq_work (Mykyta)
-- Fix bpf_iter_mmput() to also defer for IRQ disabled regions (Alexei)
-- Fix a build issue where mmpu_async() is not available without
-  CONFIG_MMU (kernel test robot)
-- Reuse mmap_unlock_irq_work (after rename) for mmput (Mykyta)
-- Move vma lookup (retry block) to a separate function (Mykyta)
+The next commit will be reusing mmap_unlock_irq_work to do mmput_async()
+in irq_work. Rather than creating a new structure, rename
+mmap_unlock_irq_work to bpf_iter_mm_irq_work and reuse it.
 
-This series fixes the mm lifecycle handling in the open-coded task_vma
-BPF iterator and switches it from mmap_lock to per-VMA locking to reduce
-contention. It then fixes a deadlock that is caused by holding locks
-accross the body of the iterator where faulting is allowed.
+This is only a rename with no functional changes.
 
-Patch 1 renames mmap_unlock_irq_work to bpf_iter_mm_irq_work so it is
-generic enough to be used by Patch 2 for mmput_async().
+Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+---
+ kernel/bpf/mmap_unlock_work.h | 12 ++++++------
+ kernel/bpf/stackmap.c         |  2 +-
+ kernel/bpf/task_iter.c        | 12 ++++++------
+ 3 files changed, 13 insertions(+), 13 deletions(-)
 
-Patch 2 fixes a missing mmget() that allows the mm_struct to be freed
-before the iterator takes mmap_lock. It adds mmget_not_zero() and
-introduces an NMI/IRQ-safe mmput path using per-CPU irq_work, following the
-existing mmap_unlock irq_work pattern.
-
-Patch 3 switches from holding mmap_lock for the entire iteration to
-per-VMA locking via lock_vma_under_rcu(). This still doesn't fix the
-deadlock problem because holding the per-vma lock for the whole
-iteration can still cause lock ordering issues when a faultable helper
-is called in the body of the iterator.
-
-Patch 4 resolves the lock ordering problems caused by holding the
-per-VMA lock or the mmap_lock (not applicable after patch 2) across BPF
-program execution. It snapshots VMA fields under the lock, then drops
-the lock before returning to the BPF program. File references are
-managed via get_file()/fput() across iterations.
-
-Puranjay Mohan (4):
-  bpf: rename mmap_unlock_irq_work to bpf_iter_mm_irq_work
-  bpf: fix mm lifecycle in open-coded task_vma iterator
-  bpf: switch task_vma iterator from mmap_lock to per-VMA locks
-  bpf: return VMA snapshot from task_vma iterator
-
- include/linux/sched/mm.h      |   2 +-
- kernel/bpf/mmap_unlock_work.h |  12 +--
- kernel/bpf/stackmap.c         |   2 +-
- kernel/bpf/task_iter.c        | 152 ++++++++++++++++++++++++++++++----
- kernel/fork.c                 |   2 +-
- 5 files changed, 145 insertions(+), 25 deletions(-)
-
-
-base-commit: 1f318b96cc84d7c2ab792fcc0bfd42a7ca890681
+diff --git a/kernel/bpf/mmap_unlock_work.h b/kernel/bpf/mmap_unlock_work.h
+index 5d18d7d85bef..ba8e860f1180 100644
+--- a/kernel/bpf/mmap_unlock_work.h
++++ b/kernel/bpf/mmap_unlock_work.h
+@@ -6,13 +6,13 @@
+ #define __MMAP_UNLOCK_WORK_H__
+ #include <linux/irq_work.h>
+ 
+-/* irq_work to run mmap_read_unlock() in irq_work */
+-struct mmap_unlock_irq_work {
++/* irq_work to run mmap_read_unlock() or mmput_async() in irq_work */
++struct bpf_iter_mm_irq_work {
+ 	struct irq_work irq_work;
+ 	struct mm_struct *mm;
+ };
+ 
+-DECLARE_PER_CPU(struct mmap_unlock_irq_work, mmap_unlock_work);
++DECLARE_PER_CPU(struct bpf_iter_mm_irq_work, mmap_unlock_work);
+ 
+ /*
+  * We cannot do mmap_read_unlock() when the irq is disabled, because of
+@@ -21,9 +21,9 @@ DECLARE_PER_CPU(struct mmap_unlock_irq_work, mmap_unlock_work);
+  * percpu variable to do the irq_work. If the irq_work is already used
+  * by another lookup, we fall over.
+  */
+-static inline bool bpf_mmap_unlock_get_irq_work(struct mmap_unlock_irq_work **work_ptr)
++static inline bool bpf_mmap_unlock_get_irq_work(struct bpf_iter_mm_irq_work **work_ptr)
+ {
+-	struct mmap_unlock_irq_work *work = NULL;
++	struct bpf_iter_mm_irq_work *work = NULL;
+ 	bool irq_work_busy = false;
+ 
+ 	if (irqs_disabled()) {
+@@ -46,7 +46,7 @@ static inline bool bpf_mmap_unlock_get_irq_work(struct mmap_unlock_irq_work **wo
+ 	return irq_work_busy;
+ }
+ 
+-static inline void bpf_mmap_unlock_mm(struct mmap_unlock_irq_work *work, struct mm_struct *mm)
++static inline void bpf_mmap_unlock_mm(struct bpf_iter_mm_irq_work *work, struct mm_struct *mm)
+ {
+ 	if (!work) {
+ 		mmap_read_unlock(mm);
+diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+index da3d328f5c15..7ef1042a3448 100644
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -166,7 +166,7 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
+ 					  u32 trace_nr, bool user, bool may_fault)
+ {
+ 	int i;
+-	struct mmap_unlock_irq_work *work = NULL;
++	struct bpf_iter_mm_irq_work *work = NULL;
+ 	bool irq_work_busy = bpf_mmap_unlock_get_irq_work(&work);
+ 	struct vm_area_struct *vma, *prev_vma = NULL;
+ 	const char *prev_build_id;
+diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
+index 98d9b4c0daff..7c302ee78f7e 100644
+--- a/kernel/bpf/task_iter.c
++++ b/kernel/bpf/task_iter.c
+@@ -751,7 +751,7 @@ static struct bpf_iter_reg task_vma_reg_info = {
+ BPF_CALL_5(bpf_find_vma, struct task_struct *, task, u64, start,
+ 	   bpf_callback_t, callback_fn, void *, callback_ctx, u64, flags)
+ {
+-	struct mmap_unlock_irq_work *work = NULL;
++	struct bpf_iter_mm_irq_work *work = NULL;
+ 	struct vm_area_struct *vma;
+ 	bool irq_work_busy = false;
+ 	struct mm_struct *mm;
+@@ -797,7 +797,7 @@ const struct bpf_func_proto bpf_find_vma_proto = {
+ struct bpf_iter_task_vma_kern_data {
+ 	struct task_struct *task;
+ 	struct mm_struct *mm;
+-	struct mmap_unlock_irq_work *work;
++	struct bpf_iter_mm_irq_work *work;
+ 	struct vma_iterator vmi;
+ };
+ 
+@@ -1029,22 +1029,22 @@ __bpf_kfunc void bpf_iter_task_destroy(struct bpf_iter_task *it)
+ 
+ __bpf_kfunc_end_defs();
+ 
+-DEFINE_PER_CPU(struct mmap_unlock_irq_work, mmap_unlock_work);
++DEFINE_PER_CPU(struct bpf_iter_mm_irq_work, mmap_unlock_work);
+ 
+ static void do_mmap_read_unlock(struct irq_work *entry)
+ {
+-	struct mmap_unlock_irq_work *work;
++	struct bpf_iter_mm_irq_work *work;
+ 
+ 	if (WARN_ON_ONCE(IS_ENABLED(CONFIG_PREEMPT_RT)))
+ 		return;
+ 
+-	work = container_of(entry, struct mmap_unlock_irq_work, irq_work);
++	work = container_of(entry, struct bpf_iter_mm_irq_work, irq_work);
+ 	mmap_read_unlock_non_owner(work->mm);
+ }
+ 
+ static int __init task_iter_init(void)
+ {
+-	struct mmap_unlock_irq_work *work;
++	struct bpf_iter_mm_irq_work *work;
+ 	int ret, cpu;
+ 
+ 	for_each_possible_cpu(cpu) {
 -- 
 2.47.3
 
