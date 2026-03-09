@@ -1,127 +1,91 @@
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com [209.85.210.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80D6A9443
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 23:01:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E1BE3A7F71
+	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 23:06:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773097265; cv=none; b=RfxPVPAAlCmwrNVwNHSD9vTSKO0ITT8UKzuuoO/N582DXuv2TZMSsqwpgV2Zkoljp5+01JrkyYVMfoDu968I26jjEvvIhf7xM3V2S/7lzzCVpfLPkY6QltD3gstrYUFkQH6IosYmnktWna/Kb6gpAuYm6EVBIZIejsIDj68yUeo=
+	t=1773097593; cv=none; b=bGKhjyrGLUZlsIxFFvooA7z+4Q1esEs5n84z4/NUTw4j+CdYma+3ywG99QtShTuo8AOVUiLFaoQHmbfZZMy7GvqtvDl648z2WvcTJvR4nTPjorXU/j8sbdqFc/4vRO235p+tfMQ+lfyu1fDehT6LnQxNzUv1UPfhXU3dbwiDP9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773097265; c=relaxed/simple;
-	bh=P3qYzfKYOt8FwHTcacEegLDISUOV+YCtr1M8iST3rKY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tVRHejkns02S0hMk04UEVttlYv6kI53nJLQLkH8EJYclBbgJTlRXLeJTUYHoHPkeCkf4rYGQCQHbdxi8dASKC98UXko3QKI78MG17V6jvep8ksjh3tdPiN7PmLrWABxQPJIr59JcxLBTy/ZDS7ekV6ZQDdTjIUtcS464OR5Yink=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wbinvd.org; spf=pass smtp.mailfrom=wbinvd.org; dkim=pass (2048-bit key) header.d=wbinvd.org header.i=@wbinvd.org header.b=VFqaYTTX; arc=none smtp.client-ip=74.125.82.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wbinvd.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wbinvd.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wbinvd.org header.i=@wbinvd.org header.b="VFqaYTTX"
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2be26842fd5so3867292eec.1
-        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 16:01:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=wbinvd.org; s=wbinvd; t=1773097263; x=1773702063; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cli1xz6XUpbdpM0TirOuAWc3GKMiVxzxW5XLM+qAjyo=;
-        b=VFqaYTTXNBOL0VngrTxHNG2WfvxgKsX9C3SXoVeLqXhLOU5z7owa7/nPeEW/VBQ7m7
-         tfNRlqJ7C2XEn1M5wqN2HYaG7eA/RY2BZNJNpZuxgJz4pkUQIqP/XufFS9wJS0boHg7+
-         dYldM9z8CPdgGtyWEaCv1xUV1qSyYKWT5i6hLo+YZV7bGo74nOHjQTMd6AMeDXgnXZRL
-         W7h9jwEKJFnpr9lCoco1PHRDec/azpu+8iev9ZtLe6HV3bykHBc8Fw2KWEeK0Ws5EGZv
-         g60aEXEfkhd72BoH6QsTDBZh7SF5GmM1I3Sustb/QIyFP4aAeZGtAtLjeq2W42jssYdj
-         W2cg==
+	s=arc-20240116; t=1773097593; c=relaxed/simple;
+	bh=21aQJOFhI2LonnkW8Si/oPqv9ibWWLorXm2DMoEwoMQ=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=tuF54WJT2QfuddpFo6xJ3+3gguOwR+QnqmCNdakldJvu7aH9V7XAZ/LoL2FqABWnvas12aS0crVPlt11hWMHVSXPVKh6oicGH86p6WFBlNeeYWHRlmWLzQIfLONXXRqkRFVvSot+0ckXF1YxVTveHVjDmKn8RPZ8JyRareTKxxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.210.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-ot1-f71.google.com with SMTP id 46e09a7af769-7d75b6b8500so2794579a34.2
+        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 16:06:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773097263; x=1773702063;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Cli1xz6XUpbdpM0TirOuAWc3GKMiVxzxW5XLM+qAjyo=;
-        b=BLgE1R0TqusaTYByjO8oDTtMPBqnIb4zhhU7AjxWwbA5W+/jhJVcRxoyslBJki/qe8
-         U9Dn7IbKwE6f657ja1L9BCHzrA4Vg7bKdtzz6T/2L/STYY3nm1knmzN9C1yXAk0K8Ch0
-         tuZWvh46uiLgR02URL5cGzwo4QpiAHwmIz6h3ckpIwE1EcIJM+vIDUyC7oVC5gAG8GPd
-         ZAviLkeAOticRZKLMipScVM8EcEjKLJ6ovi0eeulnRlRM0h2Y01lvzjV2jF6r/4tBoI0
-         1a4BGOui33g+c6LzF/NXskIR4hqFds5od1jVB00lSBjyroECMXmO8x8vodtFICOEkDzm
-         vxow==
-X-Forwarded-Encrypted: i=1; AJvYcCXam3F1VRoJDdkxE9dfkrg6OliQ96XTlIOO9tS9rAoQjp7K7j818D8DU3SA6qovjzFxbUU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxa3dF9wYaXS8Ss4n4FB6oKMev/+o5qHy9lwdvdL/liWq/PcsTG
-	uct2KF8yGOxDVtSHkBs3jdRbxM02/BD1BxEkNL4CTYXRfl9Nt0c5iN0IP3kWp2PE1lm2fhAl7Zz
-	dzbYHWUA=
-X-Gm-Gg: ATEYQzzTZ4Vf348+hsg21xckjhWuTidJyJ8XMGoBfmlPLmjRAnp3wtrVk76hV1dYNzo
-	QxKfDE26uKwKOcOPMCunpMjV+N2dYXJewtEAfK71e0k0dkIoY5H1RI8Cicylqi2Al+7R3jUWyhc
-	7Zd/hJ4piBnvnkPEfMOgZ/yEy78/zPE/dDN5cAVvPzGhmqy4e3gkIXqqt17TdaLgqbKii9ElElQ
-	JyuPTcJtQtLzPVZ3bYW6zR94+DmutCv99F//Q4Z1/p8uMHfweccWUg55M8/7OdF5FcuSoH/o5PL
-	oX3GHR26apPetCyarMApQ5A3SPTVZSy2W8TjmnjE9XIBe54dewQUmEbezUq8MWzZSKZumcWso3i
-	PoyvySNGX65O4yZTfGLxIApsa7xqY1G0stGNFKmGGui+0TnxS2HwIAL1tk5oco9SHoPZDpE6PYK
-	1K4uSFTC9/TJIRPvksb+xxaStfyA==
-X-Received: by 2002:a05:693c:2c11:b0:2ba:a080:61c9 with SMTP id 5a478bee46e88-2be7a25f2d7mr463747eec.10.1773097263340;
-        Mon, 09 Mar 2026 16:01:03 -0700 (PDT)
-Received: from mozart.vkv.me ([2001:5a8:468b:d015:8af5:5a8f:8ef7:426b])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2be4f807a30sm10584123eec.6.2026.03.09.16.01.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Mar 2026 16:01:02 -0700 (PDT)
-Date: Mon, 9 Mar 2026 16:01:00 -0700
-From: Calvin Owens <calvin@wbinvd.org>
-To: Quentin Monnet <qmo@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org
-Subject: Re: Need update to libbpf/bpftool for bpf_stream_vprintk() removal
- (kernel sha 0cecd492f516)
-Message-ID: <aa9RLM_OwFmI8X8l@mozart.vkv.me>
-References: <aa8KBN1kQnng3yma@mozart.vkv.me>
- <e1918475-8028-45a6-a669-dc9031f73c2f@kernel.org>
+        d=1e100.net; s=20230601; t=1773097591; x=1773702391;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=435H/3739RNFxfTuBVP7Isv8yqfcwocdWd+oqIvQCxo=;
+        b=mEgErUlCcN+Mbk6AG+wfQmdjtUOpmU2R15lOGJ9PTnLn74PG0JLqcw3MaoAdZ1DrjK
+         17G/ju0etJjJTSYMKNEEvmZZa2cJRCS80bUnw5yB4rkeRQ6T4rjIhUzfjO/ml8DNOsaH
+         /eRJP+JkQK5w4HuZOHHf5Jq8568mXLnSkHHH85IyN0EAD0mfvjMssxQfzLub10HEuweW
+         9lRnZ5QmY5p9GwxdEXbkLc2iEl4Cn3WX20/Df6eEAjJRJ0RPzKuzOwuV9C6JkEwHybg3
+         Al2WwAbrj+/PlDNh0ib/jEPUbvb7xsK2lyw5G8E+cri5uiU5Np10QAHNu1jol5g3qAlu
+         oqUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUr240ZI7TPNkq4kQFurSKzKM5fxD1UmKjLUhMw75pskT9LjsfRfq9e6OgrOwQsrncnllQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPtBKcHbNRWXN17ho6IMMePAvrMbazRM8/vQA3oTfWdmWboAEW
+	xCEkiD0jEemer0uvkJXbdd5zDCoCr3RroCfL1PDo7IBLuAEZSkYoG0oAwRd9Grg7x6VyNy+t7aq
+	mIqkXKQk6GPtiq/V/hd0G2XENEZmmb+JWJ/T2jzyUaj8vvsjLrLc2uaZW5dA=
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <e1918475-8028-45a6-a669-dc9031f73c2f@kernel.org>
+X-Received: by 2002:a05:6820:168a:b0:67b:bc25:2661 with SMTP id
+ 006d021491bc7-67bbc2532c7mr1048906eaf.27.1773097591114; Mon, 09 Mar 2026
+ 16:06:31 -0700 (PDT)
+Date: Mon, 09 Mar 2026 16:06:31 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69af5277.a00a0220.b130.0019.GAE@google.com>
+Subject: [syzbot] Monthly bpf report (Mar 2026)
+From: syzbot <syzbot+liste2c3cfac8f434c3230cd@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, linux-kernel@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Monday 03/09 at 20:34 +0000, Quentin Monnet wrote:
-> 2026-03-09 10:57 UTC-0700 ~ Calvin Owens <calvin@wbinvd.org>
-> > Hi Andrii,
-> > 
-> > Your libbpf github sync at [1] happened just before [2] was merged...
-> > would you mind syncing that bpf_helpers.h change into libbpf/bpftool?
-> > 
-> >     In file included from skeleton/profiler.bpf.c:4:
-> >     libbpf/include/bpf/bpf_helpers.h:318:12: error: conflicting types for 'bpf_stream_vprintk'
-> >          318 | extern int bpf_stream_vprintk(int stream_id, const char *fmt__str, const void *args,
-> >              |            ^
-> >     ./vmlinux.h:128001:12: note: previous declaration is here
-> >       128001 | extern int bpf_stream_vprintk(int stream_id, const char *fmt__str, const void *args, u32 len__sz) __weak __ksym;
-> 
-> 
-> Hi, where did you observe that, please? I don't see it when compiling
-> bpftool from the main branch of the GitHub repo.
+Hello bpf maintainers/developers,
 
-Hi Quentin,
+This is a 31-day syzbot report for the bpf subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/bpf
 
-Thanks for looking, apologies for not adding you to the initial mail.
+During the period, 3 new issues were detected and 5 were fixed.
+In total, 25 issues are still open and 323 have already been fixed.
 
-It's bpftool-7.6.0 with libbpf-1.6.2 that is failing to build in my
-case (with 7.0-rc kernels), exactly what is described here:
+Some of the still happening issues:
 
-    https://github.com/libbpf/libbpf/issues/947
+Ref Crashes Repro Title
+<1> 19578   Yes   WARNING in reg_bounds_sanity_check (2)
+                  https://syzkaller.appspot.com/bug?extid=c950cc277150935cc0b5
+<2> 2433    Yes   WARNING in trace_suspend_resume
+                  https://syzkaller.appspot.com/bug?extid=99d4fec338b62b703891
+<3> 241     No    KMSAN: uninit-value in handle_bug
+                  https://syzkaller.appspot.com/bug?extid=ba80855313e6fa65717a
+<4> 216     Yes   inconsistent lock state in bpf_lru_push_free
+                  https://syzkaller.appspot.com/bug?extid=c69a0a2c816716f1e0d5
+<5> 102     No    INFO: task hung in dev_map_free (3)
+                  https://syzkaller.appspot.com/bug?extid=9bb2e1829da8582dcffa
+<6> 44      Yes   KASAN: slab-use-after-free Read in bpf_trace_run2 (3)
+                  https://syzkaller.appspot.com/bug?extid=59701a78e84b0bccfe1b
+<7> 1       Yes   possible deadlock in bpf_lru_push_free (2)
+                  https://syzkaller.appspot.com/bug?extid=18b26edb69b2e19f3b33
 
-I think it was just "bad luck" that it missed Andrii's sync, it was
-committed in the kernel 18 hours after his sync. But maybe I'm assuming
-too much from the timing...
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Calvin
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
 
-> > I'm happy to send patches if I can help, but I'm guessing this is one of
-> > those things that is easier to just do yourself with commit access...
-> > 
-> > Cheers,
-> > Calvin
-> > 
-> > [2] https://github.com/libbpf/libbpf/commit/6ddc03d4fe0535ac0fb6c8525db31ac88a018ddd
-> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0cecd492f516
-> 
-> 
-> I take care of bpftool, my ideal workflow is to sync after libbpf has
-> been updated. Andrii, if you have a moment to do a libbpf sync, I'm
-> happy to follow up with bpftool.
-> 
-> Quentin
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
