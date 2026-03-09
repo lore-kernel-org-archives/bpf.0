@@ -1,169 +1,126 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48E0B3BD629
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 16:43:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773074631; cv=pass; b=CUPu8rJiyb1YAY/5thHwUvX+BQSzPE/l4yY7qW1H7f2U8GFyheA0xgioRnoOxExJ/cafSah2lETOTcYob1EuFS39YSb4YJfIGdkk1ldxLxGiOOA4exwnkUIQgTAS1rBUNMMehkLlQlwcqbgk48yy74AyIfXojM0IlJfORGGgJnI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773074631; c=relaxed/simple;
-	bh=AkNgp1eLlxvEHqjLOIKt78ShAP+kfaM9ulUs6EDX/Cc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P6h95JnzL+SsnTzkuhXBOMOdzJCFmLeD6fuGOfhSJ5Ih/LcCfampebtf9nhxykSAMufs9L+R1WfToB4gjzsN4MQVuO7Niia3A+DOGDrZJ9l2+tVndi9a73e5LdUxKv+zQK7Qw6HFNu97DZ+OcMGckT1sr43HhKzFFToOKn2b4/M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P7xCDQbr; arc=pass smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E0DE38F255
+	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 16:44:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773074654; cv=none; b=nCFL5NfSMGsjtzIf6x0MUdlSsjLgfmJayftwrBDVk9xb63oLAazGQ6/JaQaThmxR2cQVPqcjWvzWGHWe3Ir1rz941hOtwqaQTT6VOdE8AuJRZvsndwNWuVyW2Vp//gFh9+ZBicKF0y6r/Cl31bTSg9fMLNJZcfiM6in98J0ugr0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773074654; c=relaxed/simple;
+	bh=jdOQB0L4Fflv1gMm7YHka2SOqeBet5RHR7I2KGVkz4c=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=T+YMnZKfGB8AhtD85erV7gNK7ebP3/SuBoF8Nc3iBQTlQ+AxF+DKnfhC9IUo3do/IslNAN675k7YHir3W5ZD+vQ2CVQSK23SMfjS8YTZzF7wT7vckoSdyNdyv0XiJsWfkMapo49ZtW9Cu+n27NtbY0NkCsXl9j/i7ADJy1AZiX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=fKbV43hG; arc=none smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P7xCDQbr"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-482f454be5bso120209125e9.0
-        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 09:43:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773074629; cv=none;
-        d=google.com; s=arc-20240605;
-        b=EehEyKCVWZ7fkgCyR173cvoTzpP0YhFdvVLHHeuHYaQHnM4htRe0NYiWNfl4mK5IYb
-         NQb5Aw04uDwDkaFGMKrjnOpGWHPcMLmt0TXOnLNWROHrXCQVHdft1d5W3nCe1TmdXhWE
-         EerRu2PF4pwMBFpmNo6A72zjuUT/LWx8jTT8mq4oWLQSeI7Yq2BOQ9RnRHDWbAuTFM5A
-         +gDHv37XoxA727fyz/yvR+9p8z4HK8F7T6AOKQEjuXTsyNSZMpHh8SfycAcBBQlwdAU6
-         thERblBp3DvMBvfrTuZWFiBvIDxuS5ZGjSZjU2RhRcGPNk/y+r6GO74cesHoaTIsaxcY
-         J0bw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=e4EhVoj49ZUMnMW1q1OJFdF+yBsMfqNiDQfLN/Qthj0=;
-        fh=9lU5pBBVa87dlQpIpX+nBBSuWiNIF/1UNjjuoFBRepw=;
-        b=ih6uRL6iZtNmjx9mPCGMChzAn3G1RxQ4dsPIsuyizasdL+RjrReIFINUMRMizY+mDX
-         C88Me/fGvWnsa4+vnGZZWwZxStuHEYQOsub+EI+i/IqGvg5V6RhXzNYNFHhmR++OtWlx
-         g2ulFZoXKHXLa7gsOLxfaE4kthOeiEdknzQ5sAEy6OHwqEkWgermc7HPn8XVjgwF4F+i
-         8wpBfB6VQ79Ifz5+82xdTnPp095yRLVhT/Swa2tnbj3amFGlFe97Xpm4lgAgabtnmbY4
-         Oa5qA2FJJhi0XpP4I59v8OkdtHMjysrPatCk51bFt0ZSfFb7H7fKoS9Q6nKF79MeUSmm
-         4+iw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="fKbV43hG"
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-509061dab77so22807431cf.2
+        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 09:44:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773074629; x=1773679429; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1773074652; x=1773679452; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=e4EhVoj49ZUMnMW1q1OJFdF+yBsMfqNiDQfLN/Qthj0=;
-        b=P7xCDQbriT8BjFo/mIY/dwGuBRA0+oMTZzeA7AifUhSrCOgbU6hH66b4+YO7V57Cxu
-         bDsbR4X2ZTc8QgQVGDRAYtvDuiprJVuIlR41trEUa1XmjlyAK+vn39sZhqHk+erpIEYS
-         fzyebRxwI0jsKGqNpTcTVgdJ7izk0dq1rxnQ3qQKDynG8hbixSzEkZY1rREmraqct9dc
-         EXIEI6z9X8+8yR6ClVsEqw10NrP8uDsrlhu4u75xmLZ18Dr+wSDtjOiZzoknk10pDnYl
-         S3yk+QtXGV/08twrq4x7C0FKdqnzxK4+miUmonONco1dXXGOvGSNXezcw9EJq3rfOWMd
-         d44A==
+        bh=ZkcB94mfZF3arnvqPMVSEZqSUd0e6HEVcHvUbaufTrY=;
+        b=fKbV43hGfRW1215Ao6bYUwp6WkxNQ4ltd6+qF5K36GkaiFjVHMKpFH1c8Ps9nFPrFh
+         dAQy9NBSwaLdVWqHgy05WzX8fvXxVkAbe8kkTC3cV7fgm0R/fmyqF+S1G2+r7iUTcGs1
+         ujV0RgQx6CubDGV6Yw4/EiVk+Qdls80FJqY5VvDIOZvuyRTQbz7nLjJH9WiaU6L3fmDW
+         I86AMXUszaXUDLrqfzy3Ln6QIBCL7exww0yGNyMCnTCmb8g4Z+TD2ZauhFW20iun0or3
+         WG1WBFJyPvvYl5RZtVcRKhfc3w8TOw4AP8viesD02YmOtvlZfH+yeKMm5d+DQ8l5o1Fd
+         AUjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773074629; x=1773679429;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=e4EhVoj49ZUMnMW1q1OJFdF+yBsMfqNiDQfLN/Qthj0=;
-        b=wpKjx5ssiLe4QTgLdnC/5IxO3dVTzrODN/z/MTME0DPhZDBK3eMBnMru20C80pj6WF
-         g0qNfRk1tO3EOMRZZTazvVlOsItjw2CVs4CXXnmRb/hvRnRLG+I7XU6x9sE0d1qzxj67
-         Y3RNz5O4fJV61MMdk0BFJPxS5vGfka7ClVowjX3SPO1ImV1Okp1tIVk6V+VleT108ubz
-         FkVSBK6CPwrVirMd5ExnSS44xR25TMtTf0glSjuM4ls1V3ShE3XRP3C6M/E8rL2XgbM3
-         uCTXSG+dxfib0gGuoavOGQ9pdhExdud98i5b/OnYZ679yhPhpMgXUCB+28EpTDLbKDCR
-         EALA==
-X-Forwarded-Encrypted: i=1; AJvYcCX/yph9cV5VYrqi1OuLupF0C4zpfOhuKRLIoQBhwKZKsK7MfAPAWL5uuRweUP6DFO6W334=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBjp/+lKLd4sd50S5lSKrefRmfrCN0SrIEvYZHWdSuGxkfBvs3
-	Xwu8IrUi2WzTXX5ulwfYb5TODVJsfLZSJ20/xxMC5cZ4aEkJxUsMAtAXmqPvHcdHZzu+JpNE0xO
-	e97Wy6SUY5eiUeKBqBh1w7QTTjIfV6T8=
-X-Gm-Gg: ATEYQzwUj6LgyliS1dTd2q/PO3O1cnUQX1r1ZCCV0CAEk4TLTBTDo1DL2FGZekFUerc
-	w/nU5sZ2hsho2ZEBBl8hd650dQyYKO2wCK/EYZHS0K7pnTJIMUKq7euc94AbUxn4cX2NzQSbGgV
-	uo/a9R9QSwTWnViwHaDL0Mj0Ct2TlpfxUfa1bcaTYN0QguDTo2ss4bnSxPQkZWYaQ06ixMO5ZAA
-	qDf+MyxWyhfOReJshZmKjOKXFTVaSnKXvKO7DeqFGxa62xF3Uc9z6IFo6PWwZkG4zCs4ZingOUw
-	1tEev9LOh+mQ3RPSwJIe11AK2tiGljqpMAL1SrIi6sfa4WjG417ICRfXutAwBVLsOJzlyJWME3W
-	nFomffp8jQdcQL0LRsKZeA1LRAg==
-X-Received: by 2002:a5d:5f82:0:b0:439:ddc0:4bef with SMTP id
- ffacd0b85a97d-439eff2fbd3mr537205f8f.8.1773074628559; Mon, 09 Mar 2026
- 09:43:48 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1773074652; x=1773679452;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZkcB94mfZF3arnvqPMVSEZqSUd0e6HEVcHvUbaufTrY=;
+        b=Xr2m3wWViIxQN775xnvyOY0XXGm5BvT3THv2F9yBiwtBfq9/fnZduYlvZe8oGc5PJy
+         /1Kxzto37PPLuQlwxlmSHNix5qehZslTmwmdZ9JM77PpBilLkPkdrXbZkAM2am/fyNqB
+         nM/jOq/OOHHFButjGUfpWDInZDwgxvX32cx8shU3imBB3AJhOMr6b9WBkllgtie3nxJM
+         BqL3fP25SuRaBYD68v2dlUFaWGji/7TKNv7QlREHaBTPteSFBtajAuPIWBs2a7PAvCQg
+         HMFMDUGWw6otOXMwI3hj0gXxBMm5CJr8tHWl2gHsJ6jK/pjWIZCzN1dxU8fXaMQpozZI
+         dRdg==
+X-Forwarded-Encrypted: i=1; AJvYcCUA0l9q1n8VZIAZjxP4qm9c6K1IMuGEK/ANt7GrKJQeXbuSR688LGxCOEZu+Jtb6t9OBoU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBd4w9gSHspP4PWNa09dKUpqerR0UJsknsgYfg5hWStFe74E7E
+	nWtOHUteHedGaTpPHdY7yFsXjxBr4UzJlE2SPIcXgHx2CsvGD6vsUz/xqscK8chHwmw=
+X-Gm-Gg: ATEYQzxzYpaZEXLJ/H1cSRaco8v30rcHaTqkD3Bkh66TA3a7foCpGcp/houmE5wHUj/
+	LrqzD2fEU488MFmJvM02Mj+Ud0XxQoASYMw6QsRjosL0g1Sf6AdCWDDaQpqUXyba3sdfA/bPUWX
+	csbIHa+kyuZXv7/MDXWrX9EC7oIombINvyS2yr20vPYmBkq81lMEmhioWB2vPnYrK5ChN/s+4Uy
+	L3Lo6akLyL8Rpg4IT6Bs7wsKLPEyjmzEamvn6kFSlbozgZReWoJRn4n8UYmS+YpVxTRPNStARUn
+	t+e3O1MgfTaot6kH4MMmvPWubjlHe7yHAQUGnWbACw1X9pZ8AZAuF4jq5fH6mRmlzoZD+NDmT5V
+	8JtKphBapRetOfY30ifMuaI1+5hcLtup2bh5YUj8knA8Fz6x/dqYPpIWr5l3unaSREPTkEPorz+
+	7m0m/lCqAWkbLSeamWlSUwe8A=
+X-Received: by 2002:ac8:5a91:0:b0:4ee:483:311f with SMTP id d75a77b69052e-508f49566camr153324811cf.54.1773074652455;
+        Mon, 09 Mar 2026 09:44:12 -0700 (PDT)
+Received: from localhost ([140.174.219.137])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-508f66da77csm65808051cf.30.2026.03.09.09.44.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Mar 2026 09:44:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260309022847.106150-1-zhaomzhao@126.com> <20260309022847.106150-3-zhaomzhao@126.com>
- <DGYECIPVC266.25320R7256YJT@etsalapatis.com>
-In-Reply-To: <DGYECIPVC266.25320R7256YJT@etsalapatis.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 9 Mar 2026 09:43:36 -0700
-X-Gm-Features: AaiRm50Dkzn77wqhRT6cnmHBFSFIlO8rogOJoWrV3he1NEuRyNufB70yN3teypA
-Message-ID: <CAADnVQKdrt3fRcfBrJqSfPP9ALVD59cAQFuDANQG+_=0XDEq5Q@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] tools/sched_ext: scx_sdt: Fix BPF verifier
- rejection on older LLVMs
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: Zhao Mengmeng <zhaomzhao@126.com>, Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, 
-	Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, sched-ext@lists.linux.dev, 
-	LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, zhaomengmeng@kylinos.cn
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 09 Mar 2026 12:44:10 -0400
+Message-Id: <DGYEI9OL9F85.2CFAJFEYT0VUS@etsalapatis.com>
+Subject: Re: [PATCH bpf v3 3/3] Revert "selftests/bpf: Update reg_bound
+ range refinement logic"
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Eduard Zingerman" <eddyz87@gmail.com>, <bpf@vger.kernel.org>,
+ <ast@kernel.org>, <andrii@kernel.org>
+Cc: <daniel@iogearbox.net>, <martin.lau@linux.dev>, <kernel-team@fb.com>,
+ <yonghong.song@linux.dev>, <shung-hsi.yu@suse.com>,
+ <paul.chaignon@gmail.com>
+X-Mailer: aerc 0.20.1
+References: <20260306-bpf-32-bit-range-overflow-v3-0-f7f67e060a6b@gmail.com>
+ <20260306-bpf-32-bit-range-overflow-v3-3-f7f67e060a6b@gmail.com>
+In-Reply-To: <20260306-bpf-32-bit-range-overflow-v3-3-f7f67e060a6b@gmail.com>
 
-On Mon, Mar 9, 2026 at 9:40=E2=80=AFAM Emil Tsalapatis <emil@etsalapatis.co=
-m> wrote:
+On Fri Mar 6, 2026 at 7:54 PM EST, Eduard Zingerman wrote:
+> This reverts commit da653de268d32a80e135c9eb960a8147c186f1bc.
+> Removed logic is now covered by range_refine_in_halves()
+> which handles both 32-bit and 64-bit refinements.
 >
-> On Sun Mar 8, 2026 at 10:28 PM EDT, Zhao Mengmeng wrote:
-> > From: Zhao Mengmeng <zhaomengmeng@kylinos.cn>
-> >
-> > Under Clang 17/18, when running scx_sdt scheduler, it fails with:
-> >
-> > libbpf: prog 'sdt_init_task': BPF program load failed: -EACCES
-> > libbpf: prog 'sdt_init_task': -- BEGIN PROG LOAD LOG --
-> > ...
-> > ; desc =3D desc_find_empty(alloc->root, &idx); @ scx_sdt.bpf.c:479
-> > 43: (79) r8 =3D *(u64 *)(r6 +32)        ; frame1: R6=3Dmap_value(map=3D=
-scx_sdt.bss,ks=3D4,vs=3D200,off=3D120) R8=3Dscalar()
-> > ; for (level =3D zero; level < SDT_TASK_LEVELS && can_loop; level++) { =
-@ scx_sdt.bpf.c:407
-> > 44: (e5) may_goto pc+51
-> > ; idx |=3D pos; @ scx_sdt.bpf.c:418
-> > 96: (bf) r7 =3D r2                      ; frame1: R2=3D0 R7=3D0
-> > 97: (bf) r1 =3D r10                     ; frame1: R1=3Dfp0 R10=3Dfp0
-> > ;  @ scx_sdt.bpf.c:0
-> > 98: (07) r1 +=3D -56                    ; frame1: R1=3Dfp-56
-> > ; bpf_for(u, 0, SDT_TASK_LEVELS) { @ scx_sdt.bpf.c:447
-> > 99: (b4) w2 =3D 0                       ; frame1: R2=3D0
-> > 100: (b4) w3 =3D 3                      ; frame1: R3=3D3
-> > 101: (85) call bpf_iter_num_new#82234         ; frame1: R0=3Dscalar() f=
-p-56=3Diter_num(ref_id=3D2,state=3Dactive,depth=3D0)
-> > 102: (18) r9 =3D 0x1ffffffffffffff8     ; frame1: R9=3D0x1fffffffffffff=
-f8
-> > 104: (bf) r1 =3D r10                    ; frame1: R1=3Dfp0 R10=3Dfp0
-> > ;  @ scx_sdt.bpf.c:0
-> > 105: (07) r1 +=3D -56                   ; frame1: R1=3Dfp-56
-> > ; bpf_for(u, 0, SDT_TASK_LEVELS) { @ scx_sdt.bpf.c:447
-> > 106: (85) call bpf_iter_num_next#82235        ; frame1: R0=3D0 fp-56=3D=
-iter_num(ref_id=3D2,state=3Ddrained,depth=3D0)
-> > 107: (15) if r0 =3D=3D 0x0 goto pc+29     ; frame1: R0=3D0
-> > ; if (tmp->nr_free > 0) @ scx_sdt.bpf.c:456
-> > 137: (bf) r1 =3D r10                    ; frame1: R1=3Dfp0 R10=3Dfp0
-> > ; bpf_for(u, 0, SDT_TASK_LEVELS) { @ scx_sdt.bpf.c:447
-> > 138: (07) r1 +=3D -56                   ; frame1: R1=3Dfp-56
-> > 139: (85) call bpf_iter_num_destroy#82232     ; frame1:
-> > 140: (b7) r9 =3D 0                      ; frame1: R9=3D0
-> > ; if (unlikely(desc =3D=3D NULL)) { @ scx_sdt.bpf.c:480
-> > 141: (15) if r8 =3D=3D 0x0 goto pc+15     ; frame1: R8=3Dscalar(umin=3D=
-1)
-> > ; chunk =3D desc->chunk; @ scx_sdt.bpf.c:485
-> > 142: (79) r4 =3D *(u64 *)(r8 +72)
-> > R8 invalid mem access 'scalar'
-> >
-> > The reason is these older compilers lacks native support for
-> > __BPF_FEATURE_ADDR_SPACE_CAST, __arena macro is defined as empty.
-> >
-> > Fix it by adding cast_kern when dereferencing variables with __arena ta=
-g.
-> >
->
-> I am not sure if we want to support older Clang versions at this point.
-> This issue is fixed for Clang 19, and adding the macros back in makes it
-> confusing for those who use the code as a starting point. And while
-> it would be nice to support older Clang versions, we already don't
-> handle Clang 15/16 that don't have arena support. So it's not
-> unreasonable if we say Clang 17/18 are also incompatible with this
-> example.
+> Suggested-by: Paul Chaignon <paul.chaignon@gmail.com>
+> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 
-+1
-People should upgrade their compilers.
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+
+> ---
+>  tools/testing/selftests/bpf/prog_tests/reg_bounds.c | 14 --------------
+>  1 file changed, 14 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c b/tools/=
+testing/selftests/bpf/prog_tests/reg_bounds.c
+> index 04938d0d431b38e086b50fe28b99e4ad2682742e..cb8dd2f63296b826491c8a010=
+f4ece4aa20c0560 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
+> @@ -519,20 +519,6 @@ static struct range range_refine(enum num_t x_t, str=
+uct range x, enum num_t y_t,
+>  		return range_intersection(x_t, x, x_swap);
+>  	}
+> =20
+> -	if (!t_is_32(x_t) && !t_is_32(y_t) && x_t !=3D y_t) {
+> -		if (x_t =3D=3D S64 && x.a > x.b) {
+> -			if (x.b < y.a && x.a <=3D y.b)
+> -				return range(x_t, x.a, y.b);
+> -			if (x.a > y.b && x.b >=3D y.a)
+> -				return range(x_t, y.a, x.b);
+> -		} else if (x_t =3D=3D U64 && y.a > y.b) {
+> -			if (y.b < x.a && y.a <=3D x.b)
+> -				return range(x_t, y.a, x.b);
+> -			if (y.a > x.b && y.b >=3D x.a)
+> -				return range(x_t, x.a, y.b);
+> -		}
+> -	}
+> -
+>  	/* otherwise, plain range cast and intersection works */
+>  	return range_intersection(x_t, x, y_cast);
+>  }
+
