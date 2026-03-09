@@ -1,184 +1,191 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA3383563FA
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 06:26:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6802135C181
+	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 06:33:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773037588; cv=none; b=QHzYbtx/B8CAsL9kfbEoxBIKmgf8rTJjbnYHn/7ZjGRnwcHu23AlMHjXi3S9XAl+ex0d98WZqPiJz1wPMFj4nFcres6lLtmGMXHKPSphvi5OEcW6HdY6zidUOkTby7uvT82lP8nxy37cl2b4U4Zu7R0idcOnFSlGSmaShtPw8fY=
+	t=1773038030; cv=none; b=O99A8I/wGtifE+EbRaWu2KT3KOCEryrm1ZQdDq4OKNcVfbcDezhvH4O/zkIjs5qRtoXEeZLCjHU0775IwLMrgE9h56zOGie1yinMj1MxpKPtnH55iELhpC96W2dkZvvPJgQOWOXOjc76giQQobrh+QjFZmhKyOPB6QjqoqZYD08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773037588; c=relaxed/simple;
-	bh=wAPHd1pDdaeVfK8pv9xwpBJnF+tChiKS7/rwSbvJ5d0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=oIUZnBG4tJf+SbYMldksiMaTJNsdy4so7Eq2IevN3QrMyMDb0iSdhg/m+ARrbM4CzfKo6LyUvNdNThgEPzLVoqifyQX1hdPifn7VUengiy8o7Xq3dJvqiIuksd0MtEFGOrJ7mELjsYtVYGMO8J7oSVATyHFSxHmXe3dCjkVvegM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fRgHGXob; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=jtMcDjMG; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1773038030; c=relaxed/simple;
+	bh=+SRuM85831/PXhm1hZOO6Mg/9e8NBEVhposo32GwxOY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uexptvkHp8Jl0AZlDmZWdkFYuuev1kDeZfGOr7lX57vwklPDccnu6k8u9n1dG+w+Dt9NYXjE8gBCt/pAhe42m+Ayl/FkGLfyDIBod40XM229i+WosNbK0VnuMVspqmLhh1QWi1KyhEWHcN4VV2znChiqKIDSFAI+eaSEcSte8NA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rKZiwJSX; arc=none smtp.client-ip=91.218.175.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fRgHGXob";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="jtMcDjMG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773037586;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rKZiwJSX"
+Message-ID: <8f97dbb5-de94-4ac0-8b3c-e0ce890fffc3@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773038016;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=C4wvI2K+mUpk9VdyVw79oHtN2sfcbsUCHhbZBCFsNac=;
-	b=fRgHGXobIwMSVwUxa7ioR6kkh9VuHydZFpjHvrXqaKixjpQtN0GxDEB+Cvh8tJKgr1D9Ck
-	fnXHbBukLb/u7RInu7+IlNpE5Ep/bcEf0fd4BPUpcgkw1jTaPsiNaENoc/6RoSqovzJXrY
-	W1+Mq0Qs+AfeEQT0y39/2S2rEi5U+Hs=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-676-2bljhvydOHynNENDW1J1tg-1; Mon, 09 Mar 2026 02:26:24 -0400
-X-MC-Unique: 2bljhvydOHynNENDW1J1tg-1
-X-Mimecast-MFC-AGG-ID: 2bljhvydOHynNENDW1J1tg_1773037583
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-485390246c8so8291425e9.0
-        for <bpf@vger.kernel.org>; Sun, 08 Mar 2026 23:26:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1773037583; x=1773642383; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=C4wvI2K+mUpk9VdyVw79oHtN2sfcbsUCHhbZBCFsNac=;
-        b=jtMcDjMG626PJyQP+TUhs6zzLIyD5sNYE1NX5llW7/o9cNIyfBBnyOaKkGNu5zcePY
-         R0GneTIzf9tNCasO9r/mQsafRbTjTVC0JVH1cZ5yiujx0odhdIf6M6rs0L8i7sKnqiv8
-         IjHhLg8ZlPHuLDFiI6k3Cbmte5kHlLTzAaWec0J8HL06HjgJQoV0LZ2kb7qecpQPlY/x
-         a8gJ0sWYWspJv7p642FbfPNkE3PmYKcpAjKW8Er5D55013PimK/FU10Bs3Q91l0QmikY
-         nqgll8rnWpgMoKj1nQ2eHh9Ff5XSi40RM6KyT+9ZPIbaRkmhUwLCvg/sdyrLLUZIAfgD
-         ZH4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773037583; x=1773642383;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C4wvI2K+mUpk9VdyVw79oHtN2sfcbsUCHhbZBCFsNac=;
-        b=eWvnVf+l/UDr0Afl/kJeKAFOijcXHPdgJYeOPj8AkTvUOfE3d67MZhJuqABTMjhEG5
-         F8W8QzDwJlC68+ckxI4Uycjxav1+OlZmZcbF3JUH+1XsdCD/Jd3xshDoZLt9XO05c0Pr
-         3qhM3jJFCsXea7u5x4o8xRBVzfeXPtSAWtw8TPKX8sktk9iKDTtap6lTOCcMOnqOdaKB
-         r1qZ1l3agPUP4byBuB6DvCRZswuStUyfAwknM8SC6JJ9a/nneFOwFPEJDmaoi4Ih+T7P
-         uYtFsgfw5IYP8d5J05/00ODayuAz96ad+AoEdNX4g2unhdFr2j4uC5KAkYmfm6bmBatU
-         A/1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXl8rjw5x2qn1E3N+PEVc3RnA6NiByds+mnkFUK52/LopVOLY+ZMl7YN60cG/3Ubmg+PEg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMLTyno666DnMz/YlDMvJnJ/VvSKdbSaKlv6InQcduTHHyv/2F
-	PPO5guiGgUpjBBZ43Km2hrwsEY80xrPAx97lwqb33cYEhMOEk3D4cykm5Ldzx2dlEDi/Ehkgna6
-	5mIkuBpTmt0UmN01EuJueGeQlOFgwbQsrycfjvEB2Ff79/fjjUfSJpg==
-X-Gm-Gg: ATEYQzyma4t+EB/a0qqFAO1QpR0bfzWidHSSlSmJlHw0P4wx8uE/Fto7mYnpqA0vJgj
-	9GUWOTFHesQJfrsrl+QqakdjDD3sZ4K8JfUihvH2Z9L2LFuE+3JR+jswk8Dhr4LHyP9/zrcCKDw
-	BzX+O/3Xjyb0aI651Ire242y4oZaCzRsta8iHV7ZzOoMid25IAbdRK0yC2LCi2S+GyvBbtHtVnt
-	pSd4pJVIwCLbtskxtCGnVYUD6lqfhiJ4mybXRo9qncmXFzyKbUCp25MmjsZBhy0nkO9e/96/9ZZ
-	QySW904wCOHElZ2Ny5g71yUodhPxEWloBW8iyU8239OA2OCnc10ZbL29IkeN76hDEbnnCmCmEnR
-	vZmFtUulAngNK4ga83fUiBSBZMn4G0WkkPis3bmTKav3WJq1w+sgdf+HiByy+5kKFQ4z3StcHXf
-	6KIEKhBF+qM7I+INE=
-X-Received: by 2002:a05:600c:358e:b0:485:3ec6:e634 with SMTP id 5b1f17b1804b1-4853ec6e713mr10720025e9.15.1773037583161;
-        Sun, 08 Mar 2026 23:26:23 -0700 (PDT)
-X-Received: by 2002:a05:600c:358e:b0:485:3ec6:e634 with SMTP id 5b1f17b1804b1-4853ec6e713mr10719305e9.15.1773037582629;
-        Sun, 08 Mar 2026 23:26:22 -0700 (PDT)
-Received: from gmonaco-thinkpadt14gen3.rmtit.csb (212-8-243-115.hosted-by-worldstream.net. [212.8.243.115])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4853f9f82a7sm6141395e9.10.2026.03.08.23.26.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Mar 2026 23:26:22 -0700 (PDT)
-Message-ID: <9cb773f5209fc21a3842abe9e60a27b6130c7fd4.camel@redhat.com>
-Subject: Re: [PATCH v3 26/30] tools: verification: Append extra cflags
-From: Gabriele Monaco <gmonaco@redhat.com>
-To: Leo Yan <leo.yan@arm.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
- Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>, James
- Clark <james.clark@linaro.org>,  Kees Cook <kees@kernel.org>, Quentin
- Monnet <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>,  Nicolas
- Schier	 <nsc@kernel.org>, Nick Desaulniers
- <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
- Stitt <justinstitt@google.com>, Alexei Starovoitov	 <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko	
- <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
- Zingerman	 <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song	
- <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
- Singh	 <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo	
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki"	
- <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui	
- <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra	
- <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Mark Rutland	
- <mark.rutland@arm.com>, Alexander Shishkin
- <alexander.shishkin@linux.intel.com>,  Adrian Hunter
- <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, William
- Breathitt Gray	 <wbg@kernel.org>, Barry Song <baohua@kernel.org>, Qinxin
- Xia	 <xiaqinxin@huawei.com>, Bartosz Golaszewski <brgl@kernel.org>, Kent
- Gibson	 <warthog618@gmail.com>, "K. Y. Srinivasan" <kys@microsoft.com>,
- Haiyang Zhang	 <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
- Dexuan Cui	 <decui@microsoft.com>, Long Li <longli@microsoft.com>, Jonathan
- Cameron	 <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, Nuno
- =?ISO-8859-1?Q?S=E1?=	 <nuno.sa@analog.com>, Andy Shevchenko
- <andy@kernel.org>, Andrew Morton	 <akpm@linux-foundation.org>, Willy
- Tarreau <w@1wt.eu>, Thomas =?ISO-8859-1?Q?Wei=DFschuh?=	
- <linux@weissschuh.net>, Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore	
- <robert.moore@intel.com>, Len Brown <lenb@kernel.org>, Srinivas Pandruvada	
- <srinivas.pandruvada@linux.intel.com>, Tejun Heo <tj@kernel.org>, David
- Vernet	 <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, Changwoo
- Min	 <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>, Steven Rostedt
-	 <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>, Jiri Kosina	
- <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-Date: Mon, 09 Mar 2026 07:26:16 +0100
-In-Reply-To: <20260308-tools_build_fix_zero_init-v3-26-6477808123b7@arm.com>
-References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
-	 <20260308-tools_build_fix_zero_init-v3-26-6477808123b7@arm.com>
-Autocrypt: addr=gmonaco@redhat.com; prefer-encrypt=mutual;
- keydata=mDMEZuK5YxYJKwYBBAHaRw8BAQdAmJ3dM9Sz6/Hodu33Qrf8QH2bNeNbOikqYtxWFLVm0
- 1a0JEdhYnJpZWxlIE1vbmFjbyA8Z21vbmFjb0BrZXJuZWwub3JnPoiZBBMWCgBBFiEEysoR+AuB3R
- Zwp6j270psSVh4TfIFAmjKX2MCGwMFCQWjmoAFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
- Q70psSVh4TfIQuAD+JulczTN6l7oJjyroySU55Fbjdvo52xiYYlMjPG7dCTsBAMFI7dSL5zg98I+8
- cXY1J7kyNsY6/dcipqBM4RMaxXsOtCRHYWJyaWVsZSBNb25hY28gPGdtb25hY29AcmVkaGF0LmNvb
- T6InAQTFgoARAIbAwUJBaOagAULCQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgBYhBMrKEfgLgd0WcK
- eo9u9KbElYeE3yBQJoymCyAhkBAAoJEO9KbElYeE3yjX4BAJ/ETNnlHn8OjZPT77xGmal9kbT1bC1
- 7DfrYVISWV2Y1AP9HdAMhWNAvtCtN2S1beYjNybuK6IzWYcFfeOV+OBWRDQ==
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+	 in-reply-to:in-reply-to:references:references;
+	bh=PNjq9OVMQ19n1uQjgdtdpJMa6SfrLwmBjiIgVYkqJoc=;
+	b=rKZiwJSX42aiS6fua1F44LKsc/dseamHL85FtfwXZ3PuTPltCFIf8kn0I9A4D2F8L8mWys
+	aNMtQAB/p4PliaFgZ5U6KBGsUVV2Trny2BhvZWd1z7rVX9yej9cp43eUWGPKBre8bXyfo9
+	IPBCrScYIsO5yD1FyteVkyZ/7NvgSWU=
+Date: Mon, 9 Mar 2026 14:33:25 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v7 1/5] bpf: Introduce the bpf_list_del kfunc.
+Content-Language: en-US
+To: Chengkaitao <pilgrimtao@gmail.com>, martin.lau@linux.dev, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ chengkaitao@kylinos.cn, linux-kselftest@vger.kernel.org
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260308134614.29711-1-pilgrimtao@gmail.com>
+ <20260308134614.29711-2-pilgrimtao@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <20260308134614.29711-2-pilgrimtao@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Sun, 2026-03-08 at 16:46 +0000, Leo Yan wrote:
-> Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
-> the compiler.
->=20
-> Signed-off-by: Leo Yan <leo.yan@arm.com>
-
-Thanks, for the patch, however I don't think this is necessary for RV as
-EXTRA_CFLAGS are already appended to CFLAGS elsewhere [1].
-
-Makefile.rv is included after the various Makefile.include, so I presume th=
-at's
-good to go for the new flags you're appending in this series.
-I did a quick check and I see -fzero-init-padding-bits=3Dall by just adding=
- 05/30
-of this series.
-
-[1] -
-https://elixir.bootlin.com/linux/v6.19.3/source/tools/verification/rv/Makef=
-ile.rv#L29
-
+On 8/3/26 21:46, Chengkaitao wrote:
+> From: Kaitao Cheng <chengkaitao@kylinos.cn>
+> 
+> If a user holds ownership of a node in the middle of a list, they
+> can directly remove it from the list without strictly adhering to
+> deletion rules from the head or tail.
+> 
+> We have added an additional parameter bpf_list_head *head to
+> bpf_list_del, as the verifier requires the head parameter to
+> check whether the lock is being held.
+> 
+> This is typically paired with bpf_refcount. After calling
+> bpf_list_del, it is generally necessary to drop the reference to
+> the list node twice to prevent reference count leaks.
+> 
+> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
 > ---
-> =C2=A0tools/verification/rv/Makefile | 1 +
-> =C2=A01 file changed, 1 insertion(+)
->=20
-> diff --git a/tools/verification/rv/Makefile b/tools/verification/rv/Makef=
-ile
-> index
-> 5b898360ba4818b12e8a16c27bd88c75d0076fb9..2882f0e93dca03b31d790b42d2ee3d8=
-f73cc
-> 5c8b 100644
-> --- a/tools/verification/rv/Makefile
-> +++ b/tools/verification/rv/Makefile
-> @@ -55,6 +55,7 @@ ifeq ($(config),1)
-> =C2=A0=C2=A0 include Makefile.config
-> =C2=A0endif
-> =C2=A0
-> +CFLAGS		+=3D $(EXTRA_CFLAGS)
-> =C2=A0CFLAGS		+=3D $(INCLUDES) $(LIB_INCLUDES)
-> =C2=A0
-> =C2=A0export CFLAGS OUTPUT srctree
+>  kernel/bpf/helpers.c  | 30 +++++++++++++++++++++++-------
+>  kernel/bpf/verifier.c |  6 +++++-
+>  2 files changed, 28 insertions(+), 8 deletions(-)
+> 
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 6eb6c82ed2ee..01b74c4ac00d 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -2426,20 +2426,23 @@ __bpf_kfunc int bpf_list_push_back_impl(struct bpf_list_head *head,
+>  	return __bpf_list_add(n, head, true, meta ? meta->record : NULL, off);
+>  }
+>  
+> -static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head, bool tail)
+> +static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head,
+> +					    struct list_head *n)
+>  {
+> -	struct list_head *n, *h = (void *)head;
+> +	struct list_head *h = (void *)head;
+>  	struct bpf_list_node_kern *node;
+>  
+>  	/* If list_head was 0-initialized by map, bpf_obj_init_field wasn't
+>  	 * called on its fields, so init here
+>  	 */
+> -	if (unlikely(!h->next))
+> +	if (unlikely(!h->next)) {
+>  		INIT_LIST_HEAD(h);
+> -	if (list_empty(h))
+> +		return NULL;
+> +	}
+> +
+> +	if (n == h)
+>  		return NULL;
+>  
+> -	n = tail ? h->prev : h->next;
+>  	node = container_of(n, struct bpf_list_node_kern, list_head);
+>  	if (WARN_ON_ONCE(READ_ONCE(node->owner) != head))
+>  		return NULL;
+
+This refactoring is worth, because the "struct list_head *n" seems
+better than "bool tail".
+
+But, such refactoring should be a preparatory patch. Importantly,
+refactoring should not introduce functional changes.
+
+Thanks,
+Leon
+
+> @@ -2451,12 +2454,24 @@ static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head, bool tai
+>  
+>  __bpf_kfunc struct bpf_list_node *bpf_list_pop_front(struct bpf_list_head *head)
+>  {
+> -	return __bpf_list_del(head, false);
+> +	struct list_head *h = (void *)head;
+> +
+> +	return __bpf_list_del(head, h->next);
+>  }
+>  
+>  __bpf_kfunc struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *head)
+>  {
+> -	return __bpf_list_del(head, true);
+> +	struct list_head *h = (void *)head;
+> +
+> +	return __bpf_list_del(head, h->prev);
+> +}
+> +
+> +__bpf_kfunc struct bpf_list_node *bpf_list_del(struct bpf_list_head *head,
+> +					       struct bpf_list_node *node)
+> +{
+> +	struct bpf_list_node_kern *kn = (void *)node;
+> +
+> +	return __bpf_list_del(head, &kn->list_head);
+>  }
+>  
+>  __bpf_kfunc struct bpf_list_node *bpf_list_front(struct bpf_list_head *head)
+> @@ -4545,6 +4560,7 @@ BTF_ID_FLAGS(func, bpf_list_push_front_impl)
+>  BTF_ID_FLAGS(func, bpf_list_push_back_impl)
+>  BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_list_pop_back, KF_ACQUIRE | KF_RET_NULL)
+> +BTF_ID_FLAGS(func, bpf_list_del, KF_ACQUIRE | KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_list_front, KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_list_back, KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 67c09b43a497..c9557d3fb8dd 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -12461,6 +12461,7 @@ enum special_kfunc_type {
+>  	KF_bpf_list_push_back_impl,
+>  	KF_bpf_list_pop_front,
+>  	KF_bpf_list_pop_back,
+> +	KF_bpf_list_del,
+>  	KF_bpf_list_front,
+>  	KF_bpf_list_back,
+>  	KF_bpf_cast_to_kern_ctx,
+> @@ -12521,6 +12522,7 @@ BTF_ID(func, bpf_list_push_front_impl)
+>  BTF_ID(func, bpf_list_push_back_impl)
+>  BTF_ID(func, bpf_list_pop_front)
+>  BTF_ID(func, bpf_list_pop_back)
+> +BTF_ID(func, bpf_list_del)
+>  BTF_ID(func, bpf_list_front)
+>  BTF_ID(func, bpf_list_back)
+>  BTF_ID(func, bpf_cast_to_kern_ctx)
+> @@ -12996,6 +12998,7 @@ static bool is_bpf_list_api_kfunc(u32 btf_id)
+>  	       btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
+>  	       btf_id == special_kfunc_list[KF_bpf_list_pop_front] ||
+>  	       btf_id == special_kfunc_list[KF_bpf_list_pop_back] ||
+> +	       btf_id == special_kfunc_list[KF_bpf_list_del] ||
+>  	       btf_id == special_kfunc_list[KF_bpf_list_front] ||
+>  	       btf_id == special_kfunc_list[KF_bpf_list_back];
+>  }
+> @@ -13118,7 +13121,8 @@ static bool check_kfunc_is_graph_node_api(struct bpf_verifier_env *env,
+>  	switch (node_field_type) {
+>  	case BPF_LIST_NODE:
+>  		ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
+> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_back_impl]);
+> +		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
+> +		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_del]);
+>  		break;
+>  	case BPF_RB_NODE:
+>  		ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_remove] ||
 
