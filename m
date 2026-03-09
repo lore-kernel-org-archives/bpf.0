@@ -1,152 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E7B63DBD71
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 15:55:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66A103D5226;
+	Mon,  9 Mar 2026 15:59:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773071736; cv=none; b=BL9f1ldMwoN7RbnZaWaICoOiAJdp+zAKs9/H1L893s7apBlQe2ka6xFwD2M0X9+z7u6zDm8e6c4Z8CS/b+y2nvUnWOP9G6skZxG/FKbjDtBCqNAf32XeM/38Hjz5T3dgA6pLil+veBCfcmhomYyhxuiS43BLjxzPuwlhWTj9/Kc=
+	t=1773071946; cv=none; b=NtnqTuF8t56YbmuwM4PbjdTWLvXx4kuGhYmKnurloGzTH+RGVSa/SzuifJJDYYClTZ9JO0MoqhFNnM54LFnPIIa/ochemhBtCLuGiV+0+m8LeXKzBJzN6VAaEWuZGhj5JZD3x9jowIB5DdqgOZ7ioHuCHqYA3nXAErndLYgZfHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773071736; c=relaxed/simple;
-	bh=zU8zBTw1WOAqo7nbleQUtnRqpvPQF8Mhmm+Oc0QDuNU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ee2tmgmEwq2B5KDPOUIUAUXvsVbVaC5r3IPAMNohH0jaBgZ+U2UC9yflqu9vBoY09QtgiQzDjCcsCeE1wQa/guXgvIgdppz/IguqFHbNuOinlg1RaWoIzQgO2SlkmBqdlCrXOEdjrc4Iju/LgqQcesJFAvTSE+oUjbraIRDfCe4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CBScxmAF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773071946; c=relaxed/simple;
+	bh=XjCiNsAC40h7dMKWtLaCdeJCA8OyX9rhMEPwBg7AirQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Sl9wZpzzYz8nnZ6XAj35ch67ND0TF8A+KsgjEhx/qIRQmfr1eoXgykr9/UhqnWXw6ReDLKEA0ZSGpI5qupnw+iDnW9Hm5QAeZjeyxLEpmBe+TONrR5xFDPeehy61zFps3mVJNIpQSVxXymwPlcRF+hSE1eEVi3W6TG6MFmHhzCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zyr4schr; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CBScxmAF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 018AAC2BCB2;
-	Mon,  9 Mar 2026 15:55:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773071736;
-	bh=zU8zBTw1WOAqo7nbleQUtnRqpvPQF8Mhmm+Oc0QDuNU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CBScxmAFLBU8Iv27uxzum9v+Cl2C7zeuu12N7DxppvsYaCstdz7BfiJvzqit0EVUM
-	 IdsEkWwhAumAFscM9XXTYSuPdKiKQU/BdlmSAWVmg5kzeFdHwi0dSbCfhy6/J42ddu
-	 R7r9gQJgpYlKw0EURZotRE/NgS/I5MlBiTBuBtNoYyIhPytASwwkQ/u08j6KceOmvH
-	 7Vflr+8vtC1utSK7GrINf7lroaAhQINFZn5l5vh16+aqIE4qB0ST+k5gzEaQMTLndF
-	 O/OYGr+kwRELdQQu5/3UXBWTgTweDDKp/pejC9R+7oU0ZkROwpYDCRBwsGTpbZjOHu
-	 Xu0IteoL0Vcqg==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: bpf@vger.kernel.org
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	Puranjay Mohan <puranjay12@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
-	kernel-team@meta.com
-Subject: [PATCH bpf v2 4/4] bpf: return VMA snapshot from task_vma iterator
-Date: Mon,  9 Mar 2026 08:54:58 -0700
-Message-ID: <20260309155506.23490-5-puranjay@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260309155506.23490-1-puranjay@kernel.org>
-References: <20260309155506.23490-1-puranjay@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zyr4schr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773071945; x=1804607945;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=XjCiNsAC40h7dMKWtLaCdeJCA8OyX9rhMEPwBg7AirQ=;
+  b=Zyr4schrZdj0/GasNAlO0vjqNlo9rRzHpUnsVf5IUV61j/egbGuGLE7k
+   46D4r8iKdjCTMv5W1KLiLaXTMdhsbdO+7gFiR4YvwK98XHlwt3pbf6U8T
+   XkZHI+12lIPPwl9j6oVif0f6icUjszaK90sUGNsKSQ7PbDzozvNJDqA6r
+   FDaTyCXcPmYFE1uu4OUsCrjuREbLveMmsGFxJGu9Oy0SNsHvwl4l4rHo4
+   uxJrkqwBNdO7wGfLbgE5JHQ53qWnt2STOWoK5moObGFUkhC9wIFMnMbJU
+   b2YHpij/hmgm7jswWwfxEJiMDnOlZSQnhn0/ZYoFu3QReGpYjOEiX+z0F
+   A==;
+X-CSE-ConnectionGUID: 243AAq6aTEeTLr+aeUVW7g==
+X-CSE-MsgGUID: jZgscOLtTAWhMXecgEoZxw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11723"; a="74001649"
+X-IronPort-AV: E=Sophos;i="6.23,109,1770624000"; 
+   d="scan'208";a="74001649"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2026 08:59:05 -0700
+X-CSE-ConnectionGUID: 94ByP5coQ0qgnYf3omjoYw==
+X-CSE-MsgGUID: 1pvQjpCEQB60R/AQ1hj1Jw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,109,1770624000"; 
+   d="scan'208";a="224735153"
+Received: from spandruv-desk2.jf.intel.com ([10.88.27.176])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2026 08:59:05 -0700
+Message-ID: <31d0568a9a1f2dd55ab040a95ce1c2165d95ba4f.camel@linux.intel.com>
+Subject: Re: [PATCH v3 21/30] tools: power: x86/intel-speed-select: Append
+ extra cflags
+From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To: Leo Yan <leo.yan@arm.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>, James
+ Clark <james.clark@linaro.org>,  Kees Cook <kees@kernel.org>, Quentin
+ Monnet <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>,  Nicolas
+ Schier	 <nsc@kernel.org>, Nick Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
+ Stitt <justinstitt@google.com>, Alexei Starovoitov	 <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko	
+ <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
+ Zingerman	 <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song	
+ <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
+ Singh	 <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo	
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki"	
+ <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui	
+ <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra	
+ <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Mark Rutland	
+ <mark.rutland@arm.com>, Alexander Shishkin
+ <alexander.shishkin@linux.intel.com>,  Adrian Hunter
+ <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, William
+ Breathitt Gray	 <wbg@kernel.org>, Barry Song <baohua@kernel.org>, Qinxin
+ Xia	 <xiaqinxin@huawei.com>, Bartosz Golaszewski <brgl@kernel.org>, Kent
+ Gibson	 <warthog618@gmail.com>, "K. Y. Srinivasan" <kys@microsoft.com>,
+ Haiyang Zhang	 <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+ Dexuan Cui	 <decui@microsoft.com>, Long Li <longli@microsoft.com>, Jonathan
+ Cameron	 <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, Nuno
+ =?ISO-8859-1?Q?S=E1?=	 <nuno.sa@analog.com>, Andy Shevchenko
+ <andy@kernel.org>, Andrew Morton	 <akpm@linux-foundation.org>, Willy
+ Tarreau <w@1wt.eu>, Thomas =?ISO-8859-1?Q?Wei=DFschuh?=	
+ <linux@weissschuh.net>, Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore	
+ <robert.moore@intel.com>, Len Brown <lenb@kernel.org>, Tejun Heo
+ <tj@kernel.org>,  David Vernet <void@manifault.com>, Andrea Righi
+ <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>,  Mark Brown
+ <broonie@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, Gabriele Monaco
+	 <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, Jiri Kosina	
+ <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
+Date: Mon, 09 Mar 2026 08:59:04 -0700
+In-Reply-To: <20260308-tools_build_fix_zero_init-v3-21-6477808123b7@arm.com>
+References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
+	 <20260308-tools_build_fix_zero_init-v3-21-6477808123b7@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Holding the per-VMA lock across the BPF program body creates a lock
-ordering problem when helpers acquire locks that depend on mmap_lock:
+On Sun, 2026-03-08 at 16:46 +0000, Leo Yan wrote:
+> Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied
+> to
+> the compiler.
+>=20
+> Signed-off-by: Leo Yan <leo.yan@arm.com>
+    Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-  vm_lock -> i_rwsem -> mmap_lock -> vm_lock
-
-Snapshot VMA fields under the per-VMA lock in _next(), then drop the
-lock before returning. The BPF program accesses only the snapshot.
-
-Copy vm_start, vm_end, vm_flags, vm_pgoff, vm_page_prot, vm_file, and
-vm_mm. vm_file is reference-counted with get_file() under the lock and
-released via fput() on the next iteration or in _destroy(). vm_mm uses
-the mm pointer already held via mmget().
-
-Fixes: 4ac454682158 ("bpf: Introduce task_vma open-coded iterator kfuncs")
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
----
- kernel/bpf/task_iter.c | 34 ++++++++++++++++++++++------------
- 1 file changed, 22 insertions(+), 12 deletions(-)
-
-diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-index e20c85e06afa..f04d6e310fd3 100644
---- a/kernel/bpf/task_iter.c
-+++ b/kernel/bpf/task_iter.c
-@@ -799,7 +799,7 @@ const struct bpf_func_proto bpf_find_vma_proto = {
- struct bpf_iter_task_vma_kern_data {
- 	struct task_struct *task;
- 	struct mm_struct *mm;
--	struct vm_area_struct *locked_vma;
-+	struct vm_area_struct snapshot;
- 	u64 last_addr;
- };
- 
-@@ -895,8 +895,8 @@ __bpf_kfunc int bpf_iter_task_vma_new(struct bpf_iter_task_vma *it,
- 		goto err_cleanup_iter;
- 	}
- 
--	kit->data->locked_vma = NULL;
- 	kit->data->last_addr = addr;
-+	memset(&kit->data->snapshot, 0, sizeof(kit->data->snapshot));
- 	return 0;
- 
- err_cleanup_iter:
-@@ -954,23 +954,33 @@ bpf_iter_task_vma_find_next(struct bpf_iter_task_vma_kern_data *data)
- __bpf_kfunc struct vm_area_struct *bpf_iter_task_vma_next(struct bpf_iter_task_vma *it)
- {
- 	struct bpf_iter_task_vma_kern *kit = (void *)it;
--	struct vm_area_struct *vma;
-+	struct vm_area_struct *snap, *vma;
- 
- 	if (!kit->data) /* bpf_iter_task_vma_new failed */
- 		return NULL;
- 
--	if (kit->data->locked_vma)
--		vma_end_read(kit->data->locked_vma);
-+	snap = &kit->data->snapshot;
-+
-+	if (snap->vm_file) {
-+		fput(snap->vm_file);
-+		snap->vm_file = NULL;
-+	}
- 
- 	vma = bpf_iter_task_vma_find_next(kit->data);
--	if (!vma) {
--		kit->data->locked_vma = NULL;
-+	if (!vma)
- 		return NULL;
--	}
- 
--	kit->data->locked_vma = vma;
-+	snap->vm_start = vma->vm_start;
-+	snap->vm_end = vma->vm_end;
-+	snap->vm_mm = kit->data->mm;
-+	snap->vm_page_prot = vma->vm_page_prot;
-+	snap->flags = vma->flags;
-+	snap->vm_pgoff = vma->vm_pgoff;
-+	snap->vm_file = vma->vm_file ? get_file(vma->vm_file) : NULL;
-+
- 	kit->data->last_addr = vma->vm_end;
--	return vma;
-+	vma_end_read(vma);
-+	return snap;
- }
- 
- __bpf_kfunc void bpf_iter_task_vma_destroy(struct bpf_iter_task_vma *it)
-@@ -978,8 +988,8 @@ __bpf_kfunc void bpf_iter_task_vma_destroy(struct bpf_iter_task_vma *it)
- 	struct bpf_iter_task_vma_kern *kit = (void *)it;
- 
- 	if (kit->data) {
--		if (kit->data->locked_vma)
--			vma_end_read(kit->data->locked_vma);
-+		if (kit->data->snapshot.vm_file)
-+			fput(kit->data->snapshot.vm_file);
- 		bpf_iter_mmput(kit->data->mm);
- 		put_task_struct(kit->data->task);
- 		bpf_mem_free(&bpf_global_ma, kit->data);
--- 
-2.47.3
-
+> ---
+> =C2=A0tools/power/x86/intel-speed-select/Makefile | 1 +
+> =C2=A01 file changed, 1 insertion(+)
+>=20
+> diff --git a/tools/power/x86/intel-speed-select/Makefile
+> b/tools/power/x86/intel-speed-select/Makefile
+> index
+> 6b299aae2ded89c3a70a3649996e258b98001ee7..61d6e81f3cf1d6427addb4f31c1
+> 369ac663ba3d6 100644
+> --- a/tools/power/x86/intel-speed-select/Makefile
+> +++ b/tools/power/x86/intel-speed-select/Makefile
+> @@ -19,6 +19,7 @@ ifeq ($(NL3_CFLAGS),)
+> =C2=A0NL3_CFLAGS =3D -I/usr/include/libnl3
+> =C2=A0endif
+> =C2=A0
+> +override CFLAGS +=3D $(EXTRA_CFLAGS)
+> =C2=A0override CFLAGS +=3D -O2 -Wall -g -D_GNU_SOURCE -I$(OUTPUT)include
+> $(NL3_CFLAGS)
+> =C2=A0override LDFLAGS +=3D -lnl-genl-3 -lnl-3
+> =C2=A0
