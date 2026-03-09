@@ -1,198 +1,123 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0627B27CCE0;
-	Mon,  9 Mar 2026 12:52:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D33153BD647;
+	Mon,  9 Mar 2026 12:54:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773060742; cv=none; b=M6kIqSFTHvxXzO6g7iFmMFq5wC3427dydMNe1EkNzWcp9XA/rQu0HCB7yEPtapK6XSgoiztOr6zjY+J86fF5NAPywJNqlyianfjSBbhsgJiDP+4hB9zF0bfCcI8/EHkj0fGvG5PF82vxtympZVI4ZcIvq01eg6LJPcuOV24SvC8=
+	t=1773060873; cv=none; b=GUcCjxtZ4uB2GIYE8sZYj/h2/Jd+mF7poXi51WH9PlkR3XTbhCCFjuCRV5GQsnSJ91ZK1qZjQ9nXJvlkRHxgwXQzEDcVM5IYUlX5pL6FPTvWrkLk5+Sr0v0vjrL0+vlHprufSrTztiy5GxXqiYWR1cVKf4hCOKC5aJEP3O53odE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773060742; c=relaxed/simple;
-	bh=y/jG+6uQ1t0ozNKeVUtujZ0ZKaA2GN0iLu+iflTIVOA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lEMbGy0V46WQYHZLuKG33Yp66YltdT7TK0yeCxYYihdOmwK5bjfibByGSykUguZBILs6CsdToLIBF6nz5CVojHgUjW4aQ3MrOqsBBs/xzgNDsvaEmHS2GZeFy4+OkVijW33rQLYqbpGmTrwemTZqRAOv44CuqX9k7iwQ0cJpS7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ldURGgjZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773060873; c=relaxed/simple;
+	bh=bmv2yxNC4kv3255SjuxNbeF6y4xHz5zJ8lAJJi0EVuQ=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=VnUiRSaRj5DaijlE5l+9Ip45hCA3tt7I4LX6H0nl6gStg/rVKw45HlbLk9TXgxTlygzLDGLtupnxUMDCE/b43NyUgOJWPkJKAYokPoxX2hxnh+9Xth/1Nzodx9p3gSuXXq3dP/Q6QYPf/J8cAqG5dln0h3Iczhj6XeqhjfJceHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jq8tAq0i; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ldURGgjZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF6D6C4CEF7;
-	Mon,  9 Mar 2026 12:52:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jq8tAq0i"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31BF3C4CEF7;
+	Mon,  9 Mar 2026 12:54:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773060741;
-	bh=y/jG+6uQ1t0ozNKeVUtujZ0ZKaA2GN0iLu+iflTIVOA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ldURGgjZsupuiOEO8szY33Gv/w+ULtozZoSBSo5IQVXqhoQhUcsCx0Zgys2VjhVIf
-	 XnKGHJhLZPWQk2hRodapK9iZ9+DPqAAg0di8KkMwUHFnWOwwYk3LrPq3XWv4D60fSm
-	 lBg6JImoLkDIgNjxuRpw4o1D/geJl7QjJcuo5jLAfBr8zU2ewgEU9W7V0yDQLNLwgT
-	 gzl+2ZHX3B0pqhwOxlUt0ECHEBrtLS2ysXNPuXRjkNt6xAjHCcBqhSasV3YANLhMgG
-	 5Ax23x/6raTJ/TFoxxfBwyEg6rBi70TldCa80OBwAp5X/nN7ymxdq8RVZfj+Ury4Lp
-	 kpMXnSdk5N14g==
-Message-ID: <9f5282ed-ddda-4d7c-b033-5b6d544d6cf4@kernel.org>
-Date: Mon, 9 Mar 2026 13:52:11 +0100
+	s=k20201202; t=1773060873;
+	bh=bmv2yxNC4kv3255SjuxNbeF6y4xHz5zJ8lAJJi0EVuQ=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=Jq8tAq0inoxR9GqEaSUKLy5RuK7UAFy7A3TVS2uXXnfemQE2NYukZRMJgYV+XT+0U
+	 sW/M331Vcx7NsT5f3zMWNM4H7QVr6Hna+IXBvK/DjU7anYSsHiDDQ4dmySTOyOcexh
+	 Thbu4iF3tQdlyekMdtp/KN1GC9m2CtBcGWAkxYtQz/DqKHQSwwyLcw8IqNgcISM3DQ
+	 GEAoSHNrT5cnYVZHBDs6jgwCJHt6erpABT1//qQ4jEyRhYmlnzDqzSJnkLRBCemvab
+	 J5cCuFmQt7N821O89dQeKDBthYJNGD05TGPheHxch+p2ka7dxmchxhhWio4Mdx+ucI
+	 d6npd1rPok7Vg==
+Content-Type: multipart/mixed; boundary="===============0450728247394666353=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net 4/5] net/mlx5e: RX, Fix XDP multi-buf frag counting
- for striding RQ: manual merge
-To: Tariq Toukan <tariqt@nvidia.com>, Dragos Tatulea <dtatulea@nvidia.com>
-Cc: Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
- Mark Bloch <mbloch@nvidia.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>, netdev@vger.kernel.org,
- linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, Gal Pressman <gal@nvidia.com>,
- Moshe Shemesh <moshe@nvidia.com>, Amery Hung <ameryhung@gmail.com>,
- Nimrod Oren <noren@nvidia.com>, Mark Brown <broonie@kernel.org>,
- linux-next@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>
-References: <20260305142634.1813208-1-tariqt@nvidia.com>
- <20260305142634.1813208-5-tariqt@nvidia.com>
-From: Matthieu Baerts <matttbe@kernel.org>
-Content-Language: fr
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20260305142634.1813208-5-tariqt@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
+Message-Id: <847cfc0fded072f6930f8ae9680f22f3d6b4191de77abeda97d430cf8a4f83d0@mail.kernel.org>
+In-Reply-To: <20260309121033.2594457-2-bqe@google.com>
+References: <20260309121033.2594457-2-bqe@google.com>
+Subject: Re: [RFC PATCH 1/1] bpf, docs: structured docs for the verifier
+From: bot+bpf-ci@kernel.org
+To: bqe@google.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
+Cc: bqe@google.com,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,corbet@lwn.net,bpf@vger.kernel.org,linux-doc@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon,  9 Mar 2026 12:54:33 +0000 (UTC)
+
+--===============0450728247394666353==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-Hi Tariq, Dragos,
+> Multi-part docseries (verifier-formal-*.rst) for BPF verifier.
 
-+cc: linux-next
+The files are named verifier-overview-*.rst, not
+verifier-formal-*.rst.
 
-On 05/03/2026 15:26, Tariq Toukan wrote:
-> From: Dragos Tatulea <dtatulea@nvidia.com>
-> 
-> XDP multi-buf programs can modify the layout of the XDP buffer when the
-> program calls bpf_xdp_pull_data() or bpf_xdp_adjust_tail(). The
-> referenced commit in the fixes tag corrected the assumption in the mlx5
-> driver that the XDP buffer layout doesn't change during a program
-> execution. However, this fix introduced another issue: the dropped
-> fragments still need to be counted on the driver side to avoid page
-> fragment reference counting issues.
+> diff --git a/Documentation/bpf/verifier-overview-2-domain.rst b/Documentation/bpf/verifier-overview-2-domain.rst
+> new file mode 100644
+> index 000000000000..8a9d36818f24
+> --- /dev/null
+> +++ b/Documentation/bpf/verifier-overview-2-domain.rst
 
-FYI, we got a small conflict when merging 'net' in 'net-next' in the
-MPTCP tree due to this patch applied in 'net':
+[ ... ]
 
-  db25c42c2e1f ("net/mlx5e: RX, Fix XDP multi-buf frag counting for striding RQ")
+> +* **Top ($\top$)**: The most general state. It represents *any* possible value. The verifier has zero knowledge. In the code, this is represented by the ``tnum_unknown`` bitmask and the widest possible numeric bounds (``umin_value = 0``, ``umax_value = U64_MAX``, ``smin_value = S64_MIN``, ``smax_value = S64_MAX``), applied via functions like ``__mark_reg_unknown()`` and ``__mark_reg_unbounded()``.
+> +* **Intermediate Values**: Partial knowledge (e.g., "the value is between 5 and 10," or "the lower 3 bits are 0").
+> +* **Bottom ($\bot$)**: The most specific state. It represents an impossible or contradictory state (e.g., a value that must be simultaneously > 10 and < 5). The verifier does not have an explicit ``struct`` for Bottom; instead, it manifests as contradictory bounds (e.g., ``umin_value > umax_value``). When the verifier encounters this, it identifies the execution path as dead code and stops exploring it.
 
-and this one from 'net-next':
+The $\top$ and $\bot$ LaTeX notations will not render in Sphinx
+RST. The kernel documentation build uses Sphinx with mathjax as
+the math renderer, but dollar-sign delimiters are not enabled by
+default. These will appear literally as "$\top$" and "$\bot$" in
+the generated HTML.
 
-  dff1c3164a69 ("net/mlx5e: SHAMPO, Always calculate page size")
+The standard RST inline math syntax would be :math:`\top` and
+:math:`\bot`. The same issue appears in a few other places across
+Parts 2, 3, and 4 (e.g. the $\top$ in the tnum_unknown example
+and in Part 3's overflow section and Part 4's subsumption
+examples).
 
------ Generic Message -----
-The best is to avoid conflicts between 'net' and 'net-next' trees but if
-they cannot be avoided when preparing patches, a note about how to fix
-them is much appreciated.
+> diff --git a/Documentation/bpf/verifier-overview-4-pruning.rst b/Documentation/bpf/verifier-overview-4-pruning.rst
+> new file mode 100644
+> index 000000000000..f1515011d721
+> --- /dev/null
+> +++ b/Documentation/bpf/verifier-overview-4-pruning.rst
 
-The conflict has been resolved on our side [1] and the resolution we
-suggest is attached to this email. Please report any issues linked to
-this conflict resolution as it might be used by others. If you worked on
-the mentioned patches, don't hesitate to ACK this conflict resolution.
----------------------------
+[ ... ]
 
-Rerere cache is available in [2].
+> +The verifier tracks this using ``REG_LIVE_READ`` and ``REG_LIVE_WRITTEN`` flags. During the ``states_equal()`` check, if a register is marked as dead in the *existing state*, the verifier knows that this register will remain dead regardless of how the current path is explored. As a result, it completely ignores the value of that register in the *current state*.
 
-[1] https://github.com/multipath-tcp/mptcp_net-next/commit/9cbb5f8a4a18
-[2] https://github.com/multipath-tcp/mptcp-upstream-rr-cache/commit/0bbafdd
+REG_LIVE_READ and REG_LIVE_WRITTEN do not exist anywhere in the
+current kernel tree. The actual liveness mechanism is implemented
+in compute_live_registers(), which uses bitmask-based
+insn_live_regs structs with in/out/use/def fields, and stores the
+results as insn_aux[i].live_regs_before.
 
-(...)
+Could these references be updated to describe the actual
+implementation?
 
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-> index efcfcddab376..40e53a612989 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+> diff --git a/Documentation/bpf/verifier-overview-5-advanced.rst b/Documentation/bpf/verifier-overview-5-advanced.rst
+> new file mode 100644
+> index 000000000000..f18d13dd8cab
+> --- /dev/null
+> +++ b/Documentation/bpf/verifier-overview-5-advanced.rst
 
-(...)
+[ ... ]
 
-> @@ -1975,13 +1974,12 @@ mlx5e_skb_from_cqe_mpwrq_nonlinear(struct mlx5e_rq *rq, struct mlx5e_mpw_info *w
->  			return NULL; /* page/packet was consumed by XDP */
->  		}
->  
-> -		nr_frags_free = old_nr_frags - sinfo->nr_frags;
-> -		if (unlikely(nr_frags_free)) {
-> -			frag_page -= nr_frags_free;
-> +		new_nr_frags = sinfo->nr_frags;
-> +		nr_frags_free = old_nr_frags - new_nr_frags;
-> +		if (unlikely(nr_frags_free))
->  			truesize -= (nr_frags_free - 1) * PAGE_SIZE +
+> +The ``struct bpf_verifier_state`` includes fields like ``active_spin_lock`` and ``active_rcu_lock``.
+> +
+> +* **Spinlocks**: When a program calls the helper ``bpf_spin_lock(map_value)``, the verifier's transfer function asserts that no lock is currently held. It then updates ``active_spin_lock`` with the identity of the map value.
 
-The conflict is in the context: this line above has been modified on
-'net-next' (s/PAGE_SIZE/page_size/), while the ones above it have been
-modified on 'net'.
+The field active_spin_lock does not exist in struct
+bpf_verifier_state. The actual fields are active_locks (u32),
+active_lock_id (u32), and active_lock_ptr (void *).
 
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
+Similarly, active_rcu_lock should be active_rcu_locks (plural) to
+match the actual field name in the struct.
+
 
 ---
-diff --cc drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-index 8fb57a4f36dd,268e20884757..f5c0e2a0ada9
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-@@@ -1977,13 -1971,12 +1973,12 @@@ mlx5e_skb_from_cqe_mpwrq_nonlinear(stru
-  			return NULL; /* page/packet was consumed by XDP */
-  		}
-  
-- 		nr_frags_free = old_nr_frags - sinfo->nr_frags;
-- 		if (unlikely(nr_frags_free)) {
-- 			frag_page -= nr_frags_free;
-+ 		new_nr_frags = sinfo->nr_frags;
-+ 		nr_frags_free = old_nr_frags - new_nr_frags;
-+ 		if (unlikely(nr_frags_free))
- -			truesize -= (nr_frags_free - 1) * PAGE_SIZE +
- +			truesize -= (nr_frags_free - 1) * page_size +
-  				ALIGN(pg_consumed_bytes,
-  				      BIT(rq->mpwqe.log_stride_sz));
-- 		}
-  
-  		len = mxbuf->xdp.data_end - mxbuf->xdp.data;
-  
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22853419607
+--===============0450728247394666353==--
