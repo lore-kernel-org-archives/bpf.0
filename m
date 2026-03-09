@@ -1,103 +1,93 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F0AC3D6488;
-	Mon,  9 Mar 2026 15:43:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 222EC3DA7D0;
+	Mon,  9 Mar 2026 15:44:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773071030; cv=none; b=rZcFkDrvntE5DPi1BhLAS2vnv9OIkWiG+lQeQClUYzMrRt1jktdAgmuYZQ8ILzKiNg/WaHvCdstyAFWYiibS5xSsFU7iYQI80cXP/4s36HdtDZ6nzcYa2NkAyEz30K6JGPKu6Ic0xMa5fSzI8l0lbGz4eB3nsNDGFo8SrnEf9eU=
+	t=1773071073; cv=none; b=WODci/g61V+8mkl6wrc0+Q99z9ggBaD6PsAT/WQ/N/AJvu71qaNYahfcguBuv4aYSiJ2+NSE3iaRUbWRqzOSkOCk8YCq89kVJ1oSOcrjBkE2iJ2nN0CVN6mgSfJT7G8/vajpjpc2tEP1kJP63F67lbG3KAkTB7HLzncwVy26hqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773071030; c=relaxed/simple;
-	bh=z5JIIR3l35H57ojW810ekNHpQRdUtfUvDV/Ck2UyYrY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kBzUKa+0n79LBP4WJcN74PQQCyukjRdt7A8uFTd2wSGrB/47HusMb9STmrYOSdPBGKwkvkM0e+684OBAzFdmduaYp3qE1mXNiP1EI8eLbY9g+KNYlH/21JHlOC7VqgYMeiXZtBuLycpbj9AL0xVqWvCFxgERYpQRNRTymFUN3v8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=lHa7ArPq; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="lHa7ArPq"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=uPx63lp+sPMATIo9ouOevMaRufSI74blMCToYQqW7Ks=; b=lHa7ArPqVNC9cAmf9bVeDPgUy6
-	fiNXQt+Kqei8WgabS7/SuhMqAut39oVSCxKSdbI2BDwyOBE3FBlJM30SKvTlGP5FCjXO2Tfyb1T9p
-	abCNmmZfIHwFpWmhFZAhMOZ/V3w1VQN53k/pra2ptD4D/mD5Pkng923q2BDBizQGLdbjM3Aoqhe65
-	IHAiIq6qipjuux0c3AaE1wje02ZRaNC0SBVmBrIt4tzEYIaz/+QJsVINoH1MMHXP+SRc3CLYH0BXh
-	8KvQeN8SzhaFt7r6Y2ragdEJQKAG6hE7Z74ln5+Kc+roxv7snoqBtSW7Rm0LAf+JmXTyd0ue6zOdH
-	4FlESyuw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vzclm-00000007dEu-3NvA;
-	Mon, 09 Mar 2026 15:43:46 +0000
-Date: Mon, 9 Mar 2026 08:43:46 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Christoph Hellwig <hch@infradead.org>,
-	Christian Brauner <brauner@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-nfs@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Chuck Lever <chuck.lever@oracle.com>,
-	Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>,
-	Olga Kornievskaia <okorniev@redhat.com>,
-	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
-	Trond Myklebust <trondmy@kernel.org>,
-	Anna Schumaker <anna@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>,
-	Christian Loehle <christian.loehle@arm.com>
-Subject: Re: [PATCH] kthread: remove kthread_exit()
-Message-ID: <aa7qson15uJpL-BL@infradead.org>
-References: <1ff1bce2-8bb4-463c-a631-16e14f4ea7e2@arm.com>
- <20260306-work-kernel-exit-v1-1-8f871f6281cb@kernel.org>
- <aaroReSCj1qXUeQb@infradead.org>
- <CAHk-=whCiPr-cR3hVv=46Qo0Nw_vN422YUxqU0GmNai+KRtg2w@mail.gmail.com>
+	s=arc-20240116; t=1773071073; c=relaxed/simple;
+	bh=6kD1xtE1WWvb8q5Sgj38ZAiQ3VqGPX0njcNklX6dX5U=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Z+fzkkJ4w7JIIjWq9Kub9+OKumAPtU61kTctx0LvSHlaH2s56tcfve5jeTAhBC+0odM2eRlbJqqjT3nGg9HXfs9qgNhxF0w29YYHry220SJPCpOGsU7Co63g5f/hLxC4Ji8FFWW01vC4qeTmLZptfNVOnPd82VmE4J4CsBuvJk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf07.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay03.hostedemail.com (Postfix) with ESMTP id 9473EB734D;
+	Mon,  9 Mar 2026 15:44:29 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf07.hostedemail.com (Postfix) with ESMTPA id 5F1FF20033;
+	Mon,  9 Mar 2026 15:44:05 +0000 (UTC)
+Date: Mon, 9 Mar 2026 11:44:13 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Leo Yan <leo.yan@arm.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Ian Rogers
+ <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>, James Clark
+ <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, Quentin Monnet
+ <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier
+ <nsc@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill
+ Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
+ <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
+ <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar
+ <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin
+ <alexander.shishkin@linux.intel.com>, Adrian Hunter
+ <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, William
+ Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, Qinxin Xia
+ <xiaqinxin@huawei.com>, Bartosz Golaszewski <brgl@kernel.org>, Kent Gibson
+ <warthog618@gmail.com>, "K. Y. Srinivasan" <kys@microsoft.com>, Haiyang
+ Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, Dexuan Cui
+ <decui@microsoft.com>, Long Li <longli@microsoft.com>, Jonathan Cameron
+ <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, Nuno
+ =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, Thomas
+ =?UTF-8?B?V2Vpw59zY2h1aA==?= <linux@weissschuh.net>, Josh Poimboeuf
+ <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>, Len Brown
+ <lenb@kernel.org>, Srinivas Pandruvada
+ <srinivas.pandruvada@linux.intel.com>, Tejun Heo <tj@kernel.org>, David
+ Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, Changwoo Min
+ <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>, Gabriele Monaco
+ <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, Jiri Kosina
+ <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v3 24/30] tools: tracing: Append extra cflags
+Message-ID: <20260309114413.09e05127@gandalf.local.home>
+In-Reply-To: <20260308-tools_build_fix_zero_init-v3-24-6477808123b7@arm.com>
+References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
+	<20260308-tools_build_fix_zero_init-v3-24-6477808123b7@arm.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whCiPr-cR3hVv=46Qo0Nw_vN422YUxqU0GmNai+KRtg2w@mail.gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout07
+X-Rspamd-Queue-Id: 5F1FF20033
+X-Stat-Signature: eafrht6xkmsqqmd9cnu6ar9xapr1638s
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX19rLbmrZoPaL0P3RR5YEAAcY/f/FTBjLlw=
+X-HE-Tag: 1773071045-495839
+X-HE-Meta: U2FsdGVkX18hYXf7K7ag/ax7Ts7l3Hno4V18G/TB3MoiJMt9J0UTBoWMbzCp847Is7JqEhDwYsa6RkhNVAj4HOjhz5B/q6HVutoXc50QRvze1HSHvgRmarYDaR89e13hcutkSur3qPJpb3WQFSh1kdMUPCjB2b9DrVsIeUUknDfC/QNDPoZ7dvLdsgAow4a1fKz845hKI16eOggjPm7NDBP6AlYzhvNte5IIqplnI5az3vz5xKL2rkARtnKqaf6MXyrlcHqNY6XkzrFZIQd+O8sxRIgW8+eDV6GtbJbCez+kywyEICXzGrVsrMmhLwpiud6RJloP8vMv+rRkU2DqAfIR8yWgoyU+kF5+JrXiNgyBGYPMzAUyWhyEeZZHpvBu+fhbJbFXvHWuECsbvAzeB/VloY8v8OcBTStcXIOjMjwqxrXqBaVCdaist9Q8JiqOCKevNg2BnurmQ+kFgTqqWQ==
 
-On Fri, Mar 06, 2026 at 10:27:26AM -0800, Linus Torvalds wrote:
-> On Fri, 6 Mar 2026 at 06:44, Christoph Hellwig <hch@infradead.org> wrote:
-> >
-> > More a comment on the previous patch, but I think exporting do_exit
-> > which can work on any task is a really bad idea.
+On Sun, 08 Mar 2026 16:46:29 +0000
+Leo Yan <leo.yan@arm.com> wrote:
+
+> Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
+> the compiler.
 > 
-> What is the advantage of a module only being able to do
-> kthread_exit(), and not able to do a regular do_exit()?
+> Signed-off-by: Leo Yan <leo.yan@arm.com>
 
-Because it can't fuck up the state of random tasks.
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-> I think the only real advantage of having a "kthread_exit()" is that
-> it's a nicer name.
-
-That's another one, but not the main point.
-
-> For example, I'm looking at kernel/vhost_task.c, and the only users
-> are things that *are* modules, and it's not hugely obvious that
-> there's a big advantage to saying "that task handling has to be
-> built-in for those modules".
-
-That's always built in for various good reasons.  As are other
-random do_exit callers.
-
+-- Steve
