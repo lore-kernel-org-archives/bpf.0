@@ -1,117 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F112036896F
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 08:54:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 605F9376489;
+	Mon,  9 Mar 2026 09:21:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773046465; cv=none; b=sJTfOz7vN8xzxAeS2qlGvRGZyQKUhq4ROfnhlr6sNZhaFUz47PCYvVfvHTFexGO6mVdLnxW/AfZqP99Fr5VRQuttD14zLB6I+A+fDkHz1+iUuUHmT9BdHRZTJxKrtVU3l5hY2alXTaLlmv1SXHVYMTXnHlSiES65T4zk1X3NPnw=
+	t=1773048093; cv=none; b=islOn8Ompiwh3l42fAZ4BDKdXV+W8y6+ciGoX4W2JEA3kzGdE1zqWi4yv+2zMT0TgLH7yD6Ca/BOgr7wzJ4n6+BfPv9voMH8RgTFTr1utDyb0bZ1eR4CwcfTUMAFdbkGXrsqDLfkBJ3bvouP/4ljkJeBu8X5niz9rLy/0kuBSHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773046465; c=relaxed/simple;
-	bh=wG5+/hVL6HjKUoRhP7gA3WSoKo1PhFh9knJZ5mzHy6Y=;
-	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PLlmp7RbZKpgmmsH8IhOQZJfo0Ah/5n+5XhUjmoJAwJQ2PwVQuDnWz/hCazKy5VO/nkUGnGHERJEzzcuRHHPujQ8rOh5IJt8bSrgPs15FnSA7k9pVBv03vKxSBo+20lCgDZp2Q/O2oSnJN0G/AAuW9pJsl6VcpmWqX7kAJLFODg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sCIWThDb; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sCIWThDb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DEBBC19423
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 08:54:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773046464;
-	bh=wG5+/hVL6HjKUoRhP7gA3WSoKo1PhFh9knJZ5mzHy6Y=;
-	h=From:In-Reply-To:References:Date:Subject:To:Cc:From;
-	b=sCIWThDb1pmD+lNgEh46tr1vNedfh7KDb/87oVDfsXY1s3m/gsVhqQ2nwHXly/rwv
-	 nX5+JMWc45p87a2svSkXrI9ciK1Bjt5muz4MF0D9hcgClxj/TbBFew/Y+s3QPXzY5J
-	 66GLmPG4XePGRrTcLf/vtY58jPNDILLKl5U5YnKEB7rr4H39QBlPLTVPgsvySPFdMQ
-	 xj6xqsa97AagA1+NhpCThgz+I4MmomXwcR4LBFvUDXsAXL4pdX5F1nJBsB6Q3WaVDe
-	 aXsSosImQpvl9rbkIdEZ570JaBJsZmDWPMUcoqZ9kSCTj+OeVPcaJZiYoSpgY5F0HF
-	 43k/sMXnLD6qw==
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-389f9895c81so99571111fa.2
-        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 01:54:24 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXyozul/ye7O33Ip0esVBkcWqP11blMvJROLbzizcAhra+0pXZ/bC6NfT9H5+kaIgVQB08=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHKiLfhUsW8Tr6SF0iyGtg8kemrfNLB0hexDNXXlnyFIHAp+Jf
-	WympNSdKeGvTPkPY/DQEmehCct1d0DT4mnAUHl6xNBVAV1DvXpXyFe/MgB+p+b+CiDOI0rnBiMk
-	PayUH2+KKpv4H/SgQuOXNTM8E9NP1+1yvt8cOjJBX/Q==
-X-Received: by 2002:a2e:b8d1:0:b0:383:1f06:559e with SMTP id
- 38308e7fff4ca-38a40910e52mr31075631fa.0.1773046462934; Mon, 09 Mar 2026
- 01:54:22 -0700 (PDT)
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 9 Mar 2026 01:54:21 -0700
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 9 Mar 2026 01:54:21 -0700
-From: Bartosz Golaszewski <brgl@kernel.org>
-In-Reply-To: <20260308-tools_build_fix_zero_init-v3-14-6477808123b7@arm.com>
+	s=arc-20240116; t=1773048093; c=relaxed/simple;
+	bh=/n48IteFM9Uvn1hHkPEG10SUV5w2fI61H77Ai/9kek0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=B8T0jrBnQYVE/Rzb5P9ri52xH5kRVNfi7LJJSewu58PrHFZ0BD01XhQ9CyjTD+DKPSR3Sm+WEx/MeLHE/1KFwekD5epvK9kZt+48E78fghB+5ehIiyIX3+Q2vKLvL8nE/wvFlN3eCJ7/YnuxUTvaN4annXX6VGXMDrTcu5fc8rk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fTs2C0qqNzKHMf3;
+	Mon,  9 Mar 2026 17:21:07 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 968AC4056E;
+	Mon,  9 Mar 2026 17:21:20 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP4 (Coremail) with SMTP id gCh0CgDXr0oOka5pHwUTAQ--.64074S2;
+	Mon, 09 Mar 2026 17:21:19 +0800 (CST)
+Message-ID: <b3b56b5c-7d42-4943-a81a-ed3f942e4ffd@huaweicloud.com>
+Date: Mon, 9 Mar 2026 17:21:18 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com> <20260308-tools_build_fix_zero_init-v3-14-6477808123b7@arm.com>
-Date: Mon, 9 Mar 2026 01:54:21 -0700
-X-Gmail-Original-Message-ID: <CAMRc=Mcts8eWGJG2RfTrJ4=ZtcGbraSfN7pnPUkuVs7LN3MJGQ@mail.gmail.com>
-X-Gm-Features: AaiRm53otyAIdQ8tJkI0Szk9_yhE2ni_y74h6y-9Tp-K59x5n9G2XJBB-whf1jY
-Message-ID: <CAMRc=Mcts8eWGJG2RfTrJ4=ZtcGbraSfN7pnPUkuVs7LN3MJGQ@mail.gmail.com>
-Subject: Re: [PATCH v3 14/30] tools: gpio: Append extra cflags
-To: Leo Yan <leo.yan@arm.com>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>, 
-	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, 
-	Quentin Monnet <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>, 
-	Bartosz Golaszewski <brgl@kernel.org>, Kent Gibson <warthog618@gmail.com>, 
-	"K. Y. Srinivasan" <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
-	Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>, 
-	Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, 
-	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
-	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>, 
-	Len Brown <lenb@kernel.org>, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, 
-	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [bpf-next v7 3/5] bpf: Add helper to detect indirect jump targets
+Content-Language: en-US
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, yonghong.song@linux.dev,
+ puranjay@kernel.org, a.s.protopopov@gmail.com, list+bpf@vahedi.org,
+ linux@armlinux.org.uk, yangtiezhu@loongson.cn, hengqi.chen@gmail.com,
+ johan.almbladh@anyfinetworks.com, paulburton@kernel.org,
+ hbathini@linux.ibm.com, chleroy@kernel.org, naveen@kernel.org,
+ luke.r.nels@gmail.com, xi.wang@gmail.com, bjorn@kernel.org,
+ pulehui@huawei.com, iii@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+ davem@davemloft.net, udknight@gmail.com, martin.lau@kernel.org,
+ clm@meta.com, ihor.solodrai@linux.dev
+References: <20260307103949.2340104-4-xukuohai@huaweicloud.com>
+ <ca484ba53c9ce4dac51c7ae3e8888cfe561b31c3826880c6fc89d5581c6de2fa@mail.kernel.org>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <ca484ba53c9ce4dac51c7ae3e8888cfe561b31c3826880c6fc89d5581c6de2fa@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:gCh0CgDXr0oOka5pHwUTAQ--.64074S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCrW8GF47Xry8uFW8tw43Wrg_yoW5Jw1xpF
+	W7Wr47CF4qyFWktr17CFyqkr1agws8Wr90yFWDW3yxAw1YgFn5XFWagw4IyFy5tryYk3W3
+	JF4j9ry7uanxArDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26rWY6Fy7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWrXVW8
+	Jr1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7
+	CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
+	6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07
+	j6a0PUUUUU=
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On Sun, 8 Mar 2026 17:46:19 +0100, Leo Yan <leo.yan@arm.com> said:
-> Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
-> the compiler.
->
-> Signed-off-by: Leo Yan <leo.yan@arm.com>
+On 3/8/2026 1:14 AM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+>> --- a/kernel/bpf/core.c
+>> +++ b/kernel/bpf/core.c
+>> @@ -1475,11 +1475,30 @@ int bpf_jit_blind_constants(struct bpf_verifier_env *env)
+>>   		insn = prog->insnsi + i + insn_delta;
+>>   		insn_cnt += insn_delta;
+>>   		i        += insn_delta;
+>> +
+>> +		/* bpf_patch_insn_data() calls adjust_insn_aux_data() to adjust insn_aux_data. The
+>> +		 * indirect_target flag for the original instruction is moved to the last of the new
+>> +		 * instructions, but the indirect jump target is actually the first one, so move
+>> +		 * it back.
+>> +		 */
+>> +		if (env->insn_aux_data[i].indirect_target) {
+>> +			env->insn_aux_data[i].indirect_target = 0;
+>> +			env->insn_aux_data[i - insn_delta].indirect_target = 1;
+>> +		}
+> 
+> This fixup handles the displacement caused by
+> bpf_jit_blind_constants() itself, but adjust_insn_aux_data() has
+> the same displacement behavior in every caller of
+> bpf_patch_insn_data(). Several patching passes run before
+> bpf_jit_blind_constants() in bpf_check():
+> 
+>    convert_ctx_accesses()      ->  bpf_patch_insn_data()
+>    do_misc_fixups()            ->  bpf_patch_insn_data()
+>    opt_subreg_zext_lo32_rnd_hi32() -> bpf_patch_insn_data()
+>    fixup_call_args()           ->  bpf_jit_blind_constants()  <-- only fixup here
+> 
+> All of these call adjust_insn_aux_data() which does:
+> 
+>    memmove(data + off + cnt - 1, data + off, ...)
+>    memset(data + off, 0, ...)
+> 
+> This moves indirect_target from data[off] to data[off + cnt - 1].
+> Meanwhile, bpf_insn_array_adjust() preserves xlated_off == off:
+> 
+>    if (insn_array->values[i].xlated_off <= off)
+>        continue;
+> 
+> So after an earlier pass patches an indirect target instruction,
+> the insn_array still says the target is at off, but
+> insn_aux_data has indirect_target set at off + cnt - 1.
+> 
+> If an indirect jump target is also, say, a helper call that
+> do_misc_fixups() replaces with multiple instructions, would
+> bpf_insn_is_indirect_target() return the wrong result for that
+> instruction? It seems like the fixup might need to be in
+> adjust_insn_aux_data() itself rather than only in
+> bpf_jit_blind_constants().
+> 
+
+OK, will move the fixup to adjust_insn_aux_data()
+
 > ---
->  tools/gpio/Makefile | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/tools/gpio/Makefile b/tools/gpio/Makefile
-> index 342e056c8c665ac075041ff7c7ca7ba94c691187..206fb6c91a569d64b1e4b906ada5ec866323053c 100644
-> --- a/tools/gpio/Makefile
-> +++ b/tools/gpio/Makefile
-> @@ -16,6 +16,7 @@ endif
->  # (this improves performance and avoids hard-to-debug behaviour);
->  MAKEFLAGS += -r
->
-> +override CFLAGS += $(EXTRA_CFLAGS)
->  override CFLAGS += -O2 -Wall -g -D_GNU_SOURCE -I$(OUTPUT)include
->
->  ALL_TARGETS := lsgpio gpio-hammer gpio-event-mon gpio-watch
->
-> --
-> 2.34.1
->
->
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22803043949
 
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
