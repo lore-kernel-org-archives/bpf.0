@@ -1,21 +1,21 @@
-Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395FA3D7D7F
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 15:32:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29F253D7D72
+	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 15:32:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773070359; cv=none; b=iQHmWNjd1KiLNbcbZMicpfULS4NFLUVFLSwxwD5+ZQwhVe8u38MVthW2jGl0XwGQpGPp4UjLCF4ZJUfB2X2hSTcBVVau8bvtfYOp7VbTwNdWamLRAO29KfHs8DsXHH11mGataCIqM9ejJSGdpT0wAIjWahRVsY7QHyIIyLZEAz4=
+	t=1773070369; cv=none; b=BpAzvcnBxn6QVQoNZqB5BaisQpUSlIowNWHdLcrjkRviXqC965hL13W00YvGj2txjKj2u4wtw2fyrzOfrvztwiSDFKnr07zMD6ZVyaCXnqdAWqg7BYQgWFrrWeAX+IkqVj59qxBuw3R3V0CAtl2ZpFRpNNlz3aWlSzg3/04oOJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773070359; c=relaxed/simple;
-	bh=el/jAe7QdJ/ypOCYkzyEsL/Q5bOa6lcn5Of60nvqwrU=;
+	s=arc-20240116; t=1773070369; c=relaxed/simple;
+	bh=gnYZLY+Woj8rWs+RO4xWLRxCNIHeQIKBF0zm5htDTWo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dDLJ2hGeye0EujhUV/ZP57A2K/nKx5zir39zLKOjmRqAyB9UxRnESDkkKwjkcsnGb9s+wS+QnQ/cO4b7wggNGiYjYKa16d6Bx+9rmF7mexqfAamzaVi9/mBDUwnVUgsCxAEw+0VXdLMHaFqZGLnk6k9e/zFC14z0FoLTxVnLXWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
+	 MIME-Version; b=HlbrOcp2jvbhmldsBA2SQ4btGWgAbro4Zs+brg1x+s7T8lljwKiphtgbQ7UL6duYjiG0Xst0yIOisatbxwVtunoEGGabdBQ+26gUs32LyfHK/tCZ+vaQ6smeTclG9TVBOMIGaqOAYhXkrBtvlWAeTUnA6kHqQ6+qKXlxA5Dl55k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 056792494433E; Mon,  9 Mar 2026 08:32:31 -0700 (PDT)
+	id 278682494435E; Mon,  9 Mar 2026 08:32:36 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: Alan Maguire <alan.maguire@oracle.com>,
 	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
@@ -24,9 +24,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	bpf@vger.kernel.org,
 	kernel-team@fb.com
-Subject: [PATCH dwarves v2 3/9] dwarf_loader: Refactor initial ret -1 to be macro PARM_DEFAULT_FAIL
-Date: Mon,  9 Mar 2026 08:32:30 -0700
-Message-ID: <20260309153231.1918756-1-yonghong.song@linux.dev>
+Subject: [PATCH dwarves v2 4/9] dwarf_laoder: Handle locations with DW_OP_fbreg
+Date: Mon,  9 Mar 2026 08:32:36 -0700
+Message-ID: <20260309153236.1918945-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260309153215.1917033-1-yonghong.song@linux.dev>
 References: <20260309153215.1917033-1-yonghong.song@linux.dev>
@@ -38,57 +38,91 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Later on, More macro return values will be implemented to make
-code easier to understand.
+DW_OP_fbreg means the parameter value will be stored on the
+stack. So the corresponding parameter register is not used.
+For example:
+
+  0x071f7717:   DW_TAG_subprogram
+                  DW_AT_name      ("jent_health_failure")
+                  DW_AT_calling_convention        (DW_CC_nocall)
+                  DW_AT_type      (0x071f7626 "unsigned int")
+                  ...
+
+  0x071f7728:     DW_TAG_formal_parameter
+                    DW_AT_location        (DW_OP_fbreg -8)
+                    DW_AT_name    ("ec")
+                    DW_AT_type    (0x071f7ab6 "rand_data *")
+                    ...
+
+  0x071f7734:     NULL
+
+In the above, the parameter 'ec' type is a pointer so it perfectly fits
+into a register. But the location uses 'DW_OP_fbreg -8' which prevents
+from generating a function with true signatures.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- dwarf_loader.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ dwarf_loader.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
 diff --git a/dwarf_loader.c b/dwarf_loader.c
-index 1ced5e2..7da3926 100644
+index 7da3926..d538607 100644
 --- a/dwarf_loader.c
 +++ b/dwarf_loader.c
-@@ -1195,12 +1195,14 @@ struct func_info {
- 	int skip_idx;
+@@ -1196,6 +1196,7 @@ struct func_info {
  };
 =20
-+#define	PARM_DEFAULT_FAIL	-1
-+
+ #define	PARM_DEFAULT_FAIL	-1
++#define	PARM_FAIL_CLANG		-2
+=20
  /* For DW_AT_location 'attr':
   * - if first location is DW_OP_regXX with expected number, return the r=
 egister;
-  *   otherwise save the register for later return
-  * - if location DW_OP_entry_value(DW_OP_regXX) with expected number is =
-in the
+@@ -1204,7 +1205,7 @@ struct func_info {
   *   list, return the register; otherwise save register for later return
-- * - otherwise if no register was found for locations, return -1.
-+ * - otherwise if no register was found for locations, return PARM_DEFAU=
+  * - otherwise if no register was found for locations, return PARM_DEFAU=
 LT_FAIL.
   */
- static int parameter__reg(Dwarf_Attribute *attr, int expected_reg)
+-static int parameter__reg(Dwarf_Attribute *attr, int expected_reg)
++static int parameter__reg(Dwarf_Attribute *attr, int expected_reg, struc=
+t cu *cu, struct conf_load *conf)
  {
-@@ -1210,7 +1212,7 @@ static int parameter__reg(Dwarf_Attribute *attr, in=
-t expected_reg)
- 	size_t exprlen, entry_len;
- 	ptrdiff_t offset =3D 0;
- 	int loc_num =3D -1;
--	int ret =3D -1;
-+	int ret =3D PARM_DEFAULT_FAIL;
+ 	Dwarf_Addr base, start, end;
+ 	Dwarf_Op *expr, *entry_ops;
+@@ -1240,6 +1241,16 @@ static int parameter__reg(Dwarf_Attribute *attr, i=
+nt expected_reg)
+ 			if (ret =3D=3D expected_reg)
+ 				goto out;
+ 			break;
++		case DW_OP_fbreg:
++			/* The locaiton like
++			 *   DW_AT_location        (DW_OP_fbreg +<num>)
++			 * indicates that the parameter is on the stack. But it is possible
++			 * that the parameter can fit in register(s). So conservatively
++			 * mark this parameter not suitable for true signatures.
++			 */
++			if (cu->producer_clang && conf->true_signature)
++				ret =3D PARM_FAIL_CLANG;
++			break;
+ 		/* match DW_OP_entry_value(DW_OP_regXX) at any location */
+ 		case DW_OP_entry_value:
+ 		case DW_OP_GNU_entry_value:
+@@ -1328,11 +1339,11 @@ static struct parameter *parameter__new(Dwarf_Die=
+ *die, struct cu *cu,
 =20
- 	/* use libdw__lock as dwarf_getlocation(s) has concurrency issues
- 	 * when libdw is not compiled with experimental --enable-thread-safety
-@@ -1328,7 +1330,7 @@ static struct parameter *parameter__new(Dwarf_Die *=
-die, struct cu *cu,
+ 		if (parm->has_loc) {
  			int expected_reg =3D cu->register_params[reg_idx];
- 			int actual_reg =3D parameter__reg(&attr, expected_reg);
+-			int actual_reg =3D parameter__reg(&attr, expected_reg);
++			int actual_reg =3D parameter__reg(&attr, expected_reg, cu, conf);
 =20
--			if (actual_reg < 0)
-+			if (actual_reg =3D=3D PARM_DEFAULT_FAIL)
+ 			if (actual_reg =3D=3D PARM_DEFAULT_FAIL)
  				parm->optimized =3D 1;
- 			else if (expected_reg >=3D 0 && expected_reg !=3D actual_reg)
+-			else if (expected_reg >=3D 0 && expected_reg !=3D actual_reg)
++			else if (actual_reg =3D=3D PARM_FAIL_CLANG || (expected_reg >=3D 0 &&=
+ expected_reg !=3D actual_reg))
  				/* mark parameters that use an unexpected
+ 				 * register to hold a parameter; these will
+ 				 * be problematic for users of BTF as they
 --=20
 2.47.3
 
