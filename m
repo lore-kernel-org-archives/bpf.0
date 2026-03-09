@@ -1,207 +1,128 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D12F39524F;
-	Mon,  9 Mar 2026 11:06:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC18E396B82
+	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 11:09:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773054384; cv=none; b=pSbRhLveAr9r84pU6Gbx/siuZ9XEACaEvYB0/d9/AmheKRIscw8IRZ+bS0UV4fJWM4UClSYxw4s+N1FSHpoKQiWHf9dfoJ8aIO9VNbHvYnS+anPGmPcCs89A31gEo2s4rLyI2lDhMbOdjznYX7jWMR6pPv/EImiRGoCfWZm1slg=
+	t=1773054575; cv=none; b=WsHo8lr3OfwblZ7JnyJWXT20VAcKzCfBr/fGmDqzHHxBCOnJaPtXK0VVd4lltbiwM20Xy2mPr7hNnPCBBrJVLX1DZQ+1n/Eqk74gqJcM7x9/bfRvDpzutoMHdIJb3+I+ApRjw7vq2hGWvxIS7kJ2n8aj6M1OBEi5Z9W1Xpa2K/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773054384; c=relaxed/simple;
-	bh=KbTZxQxtEbla+RaayCgnxDIdxTaPc95rLhr01jHDrak=;
+	s=arc-20240116; t=1773054575; c=relaxed/simple;
+	bh=mlB8qmzpghjkcBf2jC3IMZmhP8FmCGFD29j68Ajp3Ag=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cuXqI2dt+k26HYGMMLb+W87kH9mLFnzRRnxLXWnA3AiggOSdR/XdHDfCARY0BZBEcy7E5w0vfCzKEetDfRicqPk617t3bzTi0FSOrfLxcZvTOvxLXmf11B+MADSXTXRLBMU6qbbu2Mzm641FWbK1fQLtXnT+8gygxaXPG8dzyZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=h3uUuO6P; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=BottE4oBDa1Xg4nVzjEqyZhwxMMD80F+BNtB9vSxNGZj0rql5cm2PuNFbHK0JMQFb+BG1egTZc6blAA+QXh26UlPF1ZJ/Mil5LpYMIZ1HfKpf92XF0S4TZ0+jzW6XGmLdpkyj3+a9CmFC7MclbwdPRybIqRiqLRMaWh8glZaQSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jezcy0lB; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="h3uUuO6P"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 628MsJjq1613004;
-	Mon, 9 Mar 2026 11:05:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=rpIXdQ6m8izsaZzFlwX9FzwEH7Tcoi
-	a9WGkEgx1Zq74=; b=h3uUuO6PZc1Lc3NBXDEXwrVDHx50Tu+cMkcIiR+4gBzdVN
-	tKcI0EyLTscM1pj9uTMooR4CGrh3IhJPt5YtWcKLcT7mQIZEFkk9uSvFjxkXARqS
-	RjbdUEOT3SC+PnEST03T8KGcRjUgbsQYQVox+sVyuqtRaCh5REosiDQ9r1CVGhBo
-	WHY0E2URPQB0bFcdAaeI44Sk0ivDO10iZEdmnSfY2N0D5TvnmaTxGmHGryL0KHni
-	c7FNwkCPSeVyLNfMmhtxLl6Mur+B6H4Cy7mXfn4WH6LiNmkg1/GJTLyEeYXs6wSf
-	655w2P18Zcf2IB6mWfTTHHjwVCBhsFtec9t72BFQ==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4crcvr60k5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 09 Mar 2026 11:05:18 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 629AhIu7024649;
-	Mon, 9 Mar 2026 11:05:18 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cs0jjvfp9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 09 Mar 2026 11:05:17 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 629B5ETa31392438
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 9 Mar 2026 11:05:14 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 29DF42004D;
-	Mon,  9 Mar 2026 11:05:14 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0468220040;
-	Mon,  9 Mar 2026 11:05:12 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.109.207.131])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Mon,  9 Mar 2026 11:05:11 +0000 (GMT)
-Date: Mon, 9 Mar 2026 16:35:09 +0530
-From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-To: Viktor Malik <vmalik@redhat.com>
-Cc: linuxppc-dev@lists.ozlabs.org, Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-        Joe Perches <joe@perches.com>, Paul Mackerras <paulus@ozlabs.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        atrajeev@linux.ibm.com, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH] powerpc, perf: Check that current->mm is alive before
- getting user callchain
-Message-ID: <aa6pZaDySMl9JGKf@linux.ibm.com>
-References: <20260227082502.1882395-1-vmalik@redhat.com>
- <aab3EW1LfDcjSzzy@linux.ibm.com>
- <80766050-c745-411b-8ee6-8141d2cfe4ff@redhat.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jezcy0lB"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4852a8482fcso22187205e9.3
+        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 04:09:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773054572; x=1773659372; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=TAkOhHSMZTrDASu8q5NwKTyxSRAs80hErF+Sb+YPdeg=;
+        b=jezcy0lB8/o19JtaFUd8QCuHwBJpbbf4vrg7B7TrW6uk0X41J02L/TBor430Xroxpe
+         50aQkuG6nIKgKrnNciNJ1RAze5fUP5BQaZNzXFyllb5fX59AatZci6DR+rTkRmX9HQm5
+         dzqjJKzoPgqSbkrZ3UH5Mq5QvssJULDKkAnMx83pPMwF1kDjpovFIjTb9jNhuPpoiUez
+         AepTzX0YVdNDgIuyHfTYzURzLS/RlT2e845pA6lAdgCP3VImyMsbFZPWOOUVHVJNz2Yp
+         y6CS19uxETN0lGmEjcUP8ZZ7kiQKm9SUvOwQub3mMJL96osPmRBlgIbGy/AMBx/UMheH
+         F+Dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773054572; x=1773659372;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TAkOhHSMZTrDASu8q5NwKTyxSRAs80hErF+Sb+YPdeg=;
+        b=VdAV8bqCYYGSIZM1tV16TKiBPzEtak8yqupvSHg3ddSxQdwepXi6cr5i5gF9MxMdV2
+         vOHYKe896sb9PF8MfA8qg6KER0OUmFSeUzF+/adxdjLa71dTq1usVODJWo9aHjMRCD57
+         J1R5jXg8QOxV4hBqoDZvW8ZFxILjAu/Oy3TZS5mq3VrbC0UeYEc2aScsk1OJ46+mdqAi
+         YT663jLL1NamF4XuV61yo/438kgmw6hpen0tWd7VW4mLrquuO7kIRQF9uLwtzkiMrLcS
+         N8gSqQhE+nwyIJsQyN5Twk7rnVZqvbyD6/6HVMleh6rNuzFehTvTkIV3SvM91yTeJO2S
+         2/jQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV98Q3L1cU/XEAdBBLsA4Bn5uO4F0yNKcEVPZG+bs22V9Cw01F5WAMbwr0w0nvGxtaEVps=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw0e7DIt8y5+tf5vkDFGecWEJEnAzsRj3erMVe/j2QUYOMLkr7Y
+	k/Y2qeLZp8SeAx5NZF7Pt7a3XdBcWDzEcLAfxQkfORKn3KKJaj2CgOoI
+X-Gm-Gg: ATEYQzyD9aFv4XHhSQjOyHXoQ/ogfdKtljBVrS7WWgJBS05x3ehEhkK1caMUovLEhmz
+	uGZ9FOKbK5ahnktEvlks74EM8JJ5p3pmLvcEmtHLbREqd7T0vUQLFYiPDXyJQelmW3JSQ7LHY2v
+	ZJoI9s3R7RMIUm39tzD1M364nKzQxiW9gvAYHEAg7kXggyGERxwLPqthQ3UD3r3P0+VgF0mtr8j
+	O4AR5NVNyljRv1a4NCvVwyNH3/WE3lvgbnrkKRjJMPu1SUQA/2RDc9+d9UT7n9jhW4VZHKMfAHd
+	eOYnX3yPJfj4BEkWeraCmzfreFD3wHWnWbenl59deDpDB6g4xFZ5ovppJ7JqTFLxVAwFjLPstCJ
+	ML6hvY++763TFmnu6CRZmW3p3P1OQy5HzJA4cWAaVyK83hD0o9hYn2m6Ha0i+Af42Dei3TCuJVi
+	D5r71H5q/btWfuUm1Kazvy2+LhnxjNgQeFHyZbcF10RQHBV4SuHSBT7vqGY8n4xIF/L/iAnQsSn
+	s0T+i6LJ+0+rmxYboNGUiJMyEwDUWrO3meRamqsNL63wUU72W1WwZPIS5JX7/TFEcZRucIrAzU7
+	TOwYvh5hPCk=
+X-Received: by 2002:a05:600c:6384:b0:485:3026:2b8b with SMTP id 5b1f17b1804b1-48530262d83mr98771515e9.29.1773054571718;
+        Mon, 09 Mar 2026 04:09:31 -0700 (PDT)
+Received: from mail.gmail.com (2a01cb0889497e004d45b0158e0dd203.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:4d45:b015:8e0d:d203])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-485276b0adasm235611045e9.10.2026.03.09.04.09.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Mar 2026 04:09:31 -0700 (PDT)
+Date: Mon, 9 Mar 2026 12:09:29 +0100
+From: Paul Chaignon <paul.chaignon@gmail.com>
+To: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Cc: Eduard Zingerman <eddyz87@gmail.com>, Andrea Righi <arighi@nvidia.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>, bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>,
+	Kernel Team <kernel-team@meta.com>
+Subject: Re: [PATCH bpf-next 1/1] bpf: Avoid one round of bounds deduction
+Message-ID: <aa6qacWKIhTnW66e@mail.gmail.com>
+References: <aac2GMpnpoAKD4jX@mail.gmail.com>
+ <d9c98aac-6c4c-483e-9e9a-0659dc03f9e7@linux.dev>
+ <umlxk5jo72ii4efzcethwcwtr7e4scq5iicb57huuhb3qtvcuc@xhl3c6acyzga>
+ <ff92fa059a5f5427fec24be6758afa033ee43af2.camel@gmail.com>
+ <aamB3iv2njtHWgPB@Tunnel>
+ <6fze6gmkwsw7ph7moafjujufjpoyr5tyfupzcbdrk6bpqzoisa@dqohjosm7kas>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <80766050-c745-411b-8ee6-8141d2cfe4ff@redhat.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzA5MDEwMSBTYWx0ZWRfX9HRC0qNVEgfA
- bEUmuSVOi2BbDiiAWkeFZqtOIGjJvAHnAS9W6rAYwvm4QuLtM1zDIloqKxQHJLOBgu/saq1mIGM
- UfimMFy+EUqJ8bbqnX3zqm+hO/ftuXcyGQMHblLzKPSmZ00cFII1AWOVFZ0GgYJS14haQmAJLbN
- Z+T2SA+y4n87dnlBlEfKN1ArGrKavhOEPTkSEVq/FVn3bPkrU2kzplYNl4nTvh3vyOoQ+TzlPCL
- cB7Yol4zrQoUNSdD98rQFyDqP+L1vlucQ00RThHW5W+zGqhFe6Nyc4XtX/6QYNRkdFEMjDyWgGU
- brHURKwbga1dMbGOSQ7cOXtp7/y8ZU2stagjaPIzC32w1Y6qfeNYYlNga9WibYchAbr2ORm5p6Q
- hfuXsRQp/peJxAQFa0XfG6ll3QTnnGDDj8cXL22BJZSFDv3v5MkOAipgTPiLbO2KkpSO3cFtDjL
- Qx5tafzTDiq3w+9yCDg==
-X-Proofpoint-GUID: zOXVtuDP8n-88aBUmjAnr0rW02vS92rk
-X-Proofpoint-ORIG-GUID: ZHV80IJLcR6lIXaRXdAQ93ARIpmM0gGZ
-X-Authority-Analysis: v=2.4 cv=QoFTHFyd c=1 sm=1 tr=0 ts=69aea96f cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=kj9zAlcOel0A:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=VwQbUJbxAAAA:8
- a=20KFwNOVAAAA:8 a=eEc1wmYC7BjqnX_VJ48A:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-09_03,2026-03-06_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 spamscore=0 priorityscore=1501 phishscore=0
- lowpriorityscore=0 adultscore=0 clxscore=1015 malwarescore=0 suspectscore=0
- bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2602130000
- definitions=main-2603090101
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6fze6gmkwsw7ph7moafjujufjpoyr5tyfupzcbdrk6bpqzoisa@dqohjosm7kas>
 
-On Thu, Mar 05, 2026 at 01:45:44PM +0100, Viktor Malik wrote:
-> On 3/3/26 15:58, Saket Kumar Bhaskar wrote:
-> > On Fri, Feb 27, 2026 at 09:25:02AM +0100, Viktor Malik wrote:
-> >> It may happen that mm is already released, which leads to kernel panic.
-> >> This adds the NULL check for current->mm, similarly to 20afc60f892d
-> >> ("x86, perf: Check that current->mm is alive before getting user
-> >> callchain").
-> >>
-> >> I was getting this panic when running a profiling BPF program
-> >> (profile.py from bcc-tools):
-> >>
-> >>     [26215.051935] Kernel attempted to read user page (588) - exploit attempt? (uid: 0)
-> >>     [26215.051950] BUG: Kernel NULL pointer dereference on read at 0x00000588
-> >>     [26215.051952] Faulting instruction address: 0xc00000000020fac0
-> >>     [26215.051957] Oops: Kernel access of bad area, sig: 11 [#1]
-> >>     [...]
-> >>     [26215.052049] Call Trace:
-> >>     [26215.052050] [c000000061da6d30] [c00000000020fc10] perf_callchain_user_64+0x2d0/0x490 (unreliable)
-> >>     [26215.052054] [c000000061da6dc0] [c00000000020f92c] perf_callchain_user+0x1c/0x30
-> >>     [26215.052057] [c000000061da6de0] [c0000000005ab2a0] get_perf_callchain+0x100/0x360
-> >>     [26215.052063] [c000000061da6e70] [c000000000573bc8] bpf_get_stackid+0x88/0xf0
-> >>     [26215.052067] [c000000061da6ea0] [c008000000042258] bpf_prog_16d4ab9ab662f669_do_perf_event+0xf8/0x274
-> >>     [...]
-> >>
-> >> Fixes: 20002ded4d93 ("perf_counter: powerpc: Add callchain support")
-> >> Signed-off-by: Viktor Malik <vmalik@redhat.com>
-> >> ---
-> >>  arch/powerpc/perf/callchain_32.c | 3 +++
-> >>  arch/powerpc/perf/callchain_64.c | 3 +++
-> >>  2 files changed, 6 insertions(+)
-> >>
-> >> diff --git a/arch/powerpc/perf/callchain_32.c b/arch/powerpc/perf/callchain_32.c
-> >> index ddcc2d8aa64a..b46e21679566 100644
-> >> --- a/arch/powerpc/perf/callchain_32.c
-> >> +++ b/arch/powerpc/perf/callchain_32.c
-> >> @@ -144,6 +144,9 @@ void perf_callchain_user_32(struct perf_callchain_entry_ctx *entry,
-> >>  	sp = regs->gpr[1];
-> >>  	perf_callchain_store(entry, next_ip);
-> >>  
-> >> +	if (!current->mm)
-> >> +		return;
-> >> +
-> >>  	while (entry->nr < entry->max_stack) {
-> >>  		fp = (unsigned int __user *) (unsigned long) sp;
-> >>  		if (invalid_user_sp(sp) || read_user_stack_32(fp, &next_sp))
-> >> diff --git a/arch/powerpc/perf/callchain_64.c b/arch/powerpc/perf/callchain_64.c
-> >> index 115d1c105e8a..eaaadd6fa81b 100644
-> >> --- a/arch/powerpc/perf/callchain_64.c
-> >> +++ b/arch/powerpc/perf/callchain_64.c
-> >> @@ -79,6 +79,9 @@ void perf_callchain_user_64(struct perf_callchain_entry_ctx *entry,
-> >>  	sp = regs->gpr[1];
-> >>  	perf_callchain_store(entry, next_ip);
-> >>  
-> >> +	if (!current->mm)
-> >> +		return;
-> >> +
-> >>  	while (entry->nr < entry->max_stack) {
-> >>  		fp = (unsigned long __user *) sp;
-> >>  		if (invalid_user_sp(sp) || read_user_stack_64(fp, &next_sp))
-> >> -- 
-> >> 2.53.0
-> >>
-> > Sorry, I missed adding cc list for the last conversation so adding this for reference:
-> > 
-> >> Wouldn't be good if we check this in perf_callchain_user() as it will
-> >> cover both cases.
-> > 
-> > to which Viktor replied:
-> > I considered it but in that case, we'd also miss the top-level stack
-> > frame (the perf_callchain_store call above). Other arches include it so
-> > I followed the behavior for powerpc.
-> > 
-> > Viktor, agreed with your first point. I have another concern:
-> > 
-> > I was hitting this issue with stacktrace_build_id_nmi in bpf and
-> > applied this patch https://lore.kernel.org/bpf/20260126074331.815684-1-chen.dylane@linux.dev/T/#mf901967ebe77506f1bd6e3d876c2a85824d9519d
-> > 
-> > Wondering if the above generic fix is working do we need to add this
-> > check in powerpc specific code?
+On Mon, Mar 09, 2026 at 01:52:47PM +0800, Shung-Hsi Yu wrote:
+> Cc Andrea and Emil from the other thread:
 > 
-> I tried to apply that patch series but, unfortunately, keep getting the
-> panic when running the BCC profile tool.
+>   https://lore.kernel.org/all/20260220190736.230329-1-arighi@nvidia.com/t/#u
 > 
-> Also, looking at the patch, it seems that it would only solve the issue
-> when perf_callchain_user is called from a BPF context, however, I assume
-> that it may be called from other contexts, too.
+> On Thu, Mar 05, 2026 at 02:15:10PM +0100, Paul Chaignon wrote:
+> > On Thu, Mar 05, 2026 at 03:10:00AM -0800, Eduard Zingerman wrote:
+> > > On Thu, 2026-03-05 at 14:54 +0800, Shung-Hsi Yu wrote:
+> > > > On Wed, Mar 04, 2026 at 04:48:43PM -0800, Ihor Solodrai wrote:
+> > > > > On 3/3/26 11:27 AM, Paul Chaignon wrote:
+> [...]
+> > > I'll probably continue playing with cnums at leisure pace.
+> > > 
+> > > [a] https://github.com/eddyz87/bpf/tree/cnum-sync-bounds
+> > > [b] https://github.com/eddyz87/bpf/tree/32-bit-range-overflow
+> > 
+> > IIUC, your current patch doesn't maintain a cnum domain alongside the
+> > existing abstract domain, but instead builds it only when needed, in
+> > is_scalar_branch_taken. Would your long-term goal still be to replace
+> > the existing four ranges with two cnum domains?
 > 
-> Since perf_callchain_user_{32,64} are dereferencing current->mm while
-> walking the stack, I think that an explicit protection against
-> current->mm being NULL makes sense here, even in the presence of the
-> above patch. Especially since other arches have it, too.
-> 
-> Viktor
-> 
-Ok that looks convincing then, another thing is that, how about moving perf_callchain_store
-to perf_callchain_user and checking current->mm == NULL there for both perf_callchain_user_32/64.
-next_ip, lr and sp can be passed to perf_callchain_user_32/64.
+> Borrowing upon the above, would like to about ask about the work on
+> "avoiding inconsistent state with is_scalar_branch_taken vs
+> reg_set_min_max difference". Is the current plan to address that once we
+> have the cnum domains?
 
-Thanks,
-Saket
+IMO, the two are fairly orthogonal. If cnum is merged first, then it may
+help reduce invariant violations a bit (?). If it's merged in second, it
+will probably improve is_branch_taken's accuracy a bit.
+
+We're preparing a patchset with Hari (cc'ed) to use regs_refine_cond_op
+for is_branch_taken. It should fix the invariant violations once and
+for all—they're a pretty big syzbot sink at the moment for BPF :(
+I'm currently collecting test cases from new syzbot reproducers and will
+send it afterwards.
+
