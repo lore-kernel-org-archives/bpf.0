@@ -1,187 +1,137 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 867D130F7F2;
-	Mon,  9 Mar 2026 16:30:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB6731714AA
+	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 16:33:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773073853; cv=none; b=aA1Zz9S3X1B911pdknO0Sa3246KCgytoC6dvA6mCGeAhb6BWnQxczpIH/V5yyKKtlXsm23cUwnZhaN5RIMNYWtwNtNNIM9V/yxvprO55auLVwo3JlQ65BKeFgrbdVe5QX4nTlYbkFpMgVtLiNZlHkiVcwePWnoi9s/vg47tgVAw=
+	t=1773074017; cv=none; b=UQmRSPx8RobzgyVM1HL7xwJyXspYzppTFdtQVq9L6wpeSA/P8EEhGUtvKuRKrfJyF/Q6xcIuk7hBzfLz1VU5FGyfQt+SLW7UBsRTNWzkLw0LN/86Nr4NuGVRLRQbZSIBYD7quNpkapECggK02V8GdWbu2Euzv6fCnOzvDcA9lno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773073853; c=relaxed/simple;
-	bh=/g/YyAmYCQXluFTU0N+NMwUrGYpeFYyauq6d0pk9dMg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B0rS0tjZmcp3nQElbS0S0Yo9NlFgvXtMIc7QM/KG/QP7Ax3LusjQzhU166KTTlVxkQgPkeKeweePnCqpltZsi+YrgITNLqXUbV3AKqDsX6F0EKWDQx1cREP6WcJtg3obT2jcfkK5zobEYtsspjFjywfU4STxgwmBKD5MgLG4uUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=MuKabqMb; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1773074017; c=relaxed/simple;
+	bh=SaLEcj5dQz01ZP70/avYwjzuKAyMs/kWshBG00l3Csk=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=NQBUSaiAt9vB6D9C+4hnEpaZCn3DE4zg8APYBUs8SaX2HbmLnJ6nX3dsYUUJOl7vkMY/d+OGpzmytBEyv4+YJkRO8wXOU5Iee1Co2AxkWyPJVHApBXsyMbTpThUrlyjkTOJe69VBoOSGio/T2xw69N0RHY0wQKMKoz7bwf+gkbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kQQVsIWb; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="MuKabqMb"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 629F7tiO1275175;
-	Mon, 9 Mar 2026 16:29:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=u9Jv1xiXDQhoRB+qsZiT314gW/jnX6
-	o87tkiSY3Qjbw=; b=MuKabqMb+xg6/RZCHxRCXFEhM9L9ve9Xxh4PMw3nBl3eG0
-	F9ctw5HrR8mjlBWQYjxv6HhHolpryanLaJteXF35v/6fSu0bCIGpvNyFJOmaVrxx
-	ZmOCRYP4sZemqEYFRE0rulWPTV/DbxcY4EA2JGJdp3rmljszBf3GW4gAN4Zt/Q5z
-	K+z3U32Inmwo4q0ZMUXhIaP1BBEgWUUFpzaO7gLt2T/JCfIAn94mFwy9Iyo1Tad0
-	Cg3FQPMrqzBmvC2YgqjRylLfjYZdptzWavm/uuss9NEdgBRqixSNWLjYmLbiOcWP
-	VPfxlMBoJcwv2Sg/DPeDUA1+qF9eEvtJpxrYqKCQ==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4crcvr78cm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 09 Mar 2026 16:29:56 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 629DNmZo021181;
-	Mon, 9 Mar 2026 16:29:55 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4crxbsnukt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 09 Mar 2026 16:29:55 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 629GTsri56885708
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 9 Mar 2026 16:29:54 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 03D7520043;
-	Mon,  9 Mar 2026 16:29:54 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 44A8E20040;
-	Mon,  9 Mar 2026 16:29:51 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.124.216.7])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Mon,  9 Mar 2026 16:29:51 +0000 (GMT)
-Date: Mon, 9 Mar 2026 21:59:48 +0530
-From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-To: Viktor Malik <vmalik@redhat.com>
-Cc: linuxppc-dev@lists.ozlabs.org, Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@ozlabs.org>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v2] powerpc, perf: Check that current->mm is alive before
- getting user callchain
-Message-ID: <aa71fOBjQwvCFFNq@linux.ibm.com>
-References: <20260309144045.169427-1-vmalik@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kQQVsIWb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EEA9C4CEF7;
+	Mon,  9 Mar 2026 16:33:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773074016;
+	bh=SaLEcj5dQz01ZP70/avYwjzuKAyMs/kWshBG00l3Csk=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=kQQVsIWbxsO9zEfiaVDdbSJ8t0HFtDztSZiTUdojK3pfnc07oMRvcfeazase+Al81
+	 wILz/1HEhYC28N0qeXg+cZjBNKTIcpIHGYVerss7yaKDviIxelRHzYO1Mvh9JAVdqM
+	 wQZDhhfauOBsSyEbdB2UcGBHHrvKNLv2glb7VXnpiWaF54IbN9IWZK44S9EjvO1nVT
+	 IJhDzVv6x+MjYgLQ4kudO9PcqobSqt4DHJCXs/LhOpUlbCpjCsvRZCCVXCF+Ub51g9
+	 NoH+xxIds5WlAMQ6TOWRswsfET+R0amzLHSxG2u2Xc6BhM1ugZnAQ29JMFRNalf5z/
+	 dJ59SWmsJ2RaA==
+Content-Type: multipart/mixed; boundary="===============4840168270955531071=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260309144045.169427-1-vmalik@redhat.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzA5MDE0NSBTYWx0ZWRfX+rjeGaeASbO2
- DRRCfL+CMorHO5ng1qGUas6J8JvgX5kk/akDTzG+WtfiXrtQPT337K5va/I6ATguS1jUcTGEzH+
- 1qUEdOzZBCz8pZoFVqPQE09RWTe9C2CD2iBQySe1f/IjXU2FOEs+WMIyxZ5I/CNi7OUokx7MGRr
- ftoeP5tRJ1019lbSHRewSQ4jQXpPBJ9y2fZTZMqX2q8ZAZGqYrg4vWJjO9nMmDe884OBye9//WK
- o7c46o3MbT2VP1NjQ6u82nEMXLKlug+vWoX2qsrw4QH5vXXLzL++Z4Yh0Gor5EnSb0cyyuR3kEK
- iID65YQcNw8QuqYtIheYBhSBj9GOXivDtq5XhN/2nJ+L2GmR/zX0j49Hz9JiTrOVXdcQpH9L+sn
- ylSAOQIfC+dyoUZxr2omBDe1CasazDS71d3fBzHIg1hgGZk03AG6po7boYLsp+IK1VRK5fu5VsS
- u/bMuNFLnc+gZ6v7+Lg==
-X-Proofpoint-GUID: AykpcraF3vgF-W4mHKIkLrlGlLQPY39P
-X-Proofpoint-ORIG-GUID: 7ljpo1MiTfY3ZH2wBCg09610OOHkGqxF
-X-Authority-Analysis: v=2.4 cv=QoFTHFyd c=1 sm=1 tr=0 ts=69aef585 cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=kj9zAlcOel0A:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=20KFwNOVAAAA:8
- a=VnNF1IyMAAAA:8 a=e-EAHXkKvpEb-08ajsIA:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-09_04,2026-03-09_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 spamscore=0 priorityscore=1501 phishscore=0
- lowpriorityscore=0 adultscore=0 clxscore=1015 malwarescore=0 suspectscore=0
- bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2602130000
- definitions=main-2603090145
+Message-Id: <77b1bd109312c2b2dd53fe217a3504ff0454b36beab0f308c215e60b5633c4cc@mail.kernel.org>
+In-Reply-To: <20260309155506.23490-4-puranjay@kernel.org>
+References: <20260309155506.23490-4-puranjay@kernel.org>
+Subject: Re: [PATCH bpf v2 3/4] bpf: switch task_vma iterator from mmap_lock to per-VMA locks
+From: bot+bpf-ci@kernel.org
+To: puranjay@kernel.org,bpf@vger.kernel.org
+Cc: puranjay@kernel.org,puranjay12@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,memxor@gmail.com,mykyta.yatsenko5@gmail.com,kernel-team@meta.com,yatsenko@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon,  9 Mar 2026 16:33:36 +0000 (UTC)
 
-On Mon, Mar 09, 2026 at 03:40:45PM +0100, Viktor Malik wrote:
-> It may happen that mm is already released, which leads to kernel panic.
-> This adds the NULL check for current->mm, similarly to 20afc60f892d
-> ("x86, perf: Check that current->mm is alive before getting user
-> callchain").
-> 
-> I was getting this panic when running a profiling BPF program
-> (profile.py from bcc-tools):
-> 
->     [26215.051935] Kernel attempted to read user page (588) - exploit attempt? (uid: 0)
->     [26215.051950] BUG: Kernel NULL pointer dereference on read at 0x00000588
->     [26215.051952] Faulting instruction address: 0xc00000000020fac0
->     [26215.051957] Oops: Kernel access of bad area, sig: 11 [#1]
->     [...]
->     [26215.052049] Call Trace:
->     [26215.052050] [c000000061da6d30] [c00000000020fc10] perf_callchain_user_64+0x2d0/0x490 (unreliable)
->     [26215.052054] [c000000061da6dc0] [c00000000020f92c] perf_callchain_user+0x1c/0x30
->     [26215.052057] [c000000061da6de0] [c0000000005ab2a0] get_perf_callchain+0x100/0x360
->     [26215.052063] [c000000061da6e70] [c000000000573bc8] bpf_get_stackid+0x88/0xf0
->     [26215.052067] [c000000061da6ea0] [c008000000042258] bpf_prog_16d4ab9ab662f669_do_perf_event+0xf8/0x274
->     [...]
-> 
-> In addition, move storing the top-level stack entry to generic
-> perf_callchain_user to make sure the top-evel entry is always captured,
-> even if current->mm is NULL.
-> 
-> Fixes: 20002ded4d93 ("perf_counter: powerpc: Add callchain support")
-> Signed-off-by: Viktor Malik <vmalik@redhat.com>
-> ---
-> Changes in v2:
-> - Move call to perf_callchain_store() for the top-level stack entry to
->   common perf_callchain_user (Saket)
-> 
->  arch/powerpc/perf/callchain.c    | 5 +++++
->  arch/powerpc/perf/callchain_32.c | 1 -
->  arch/powerpc/perf/callchain_64.c | 1 -
->  3 files changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/powerpc/perf/callchain.c b/arch/powerpc/perf/callchain.c
-> index 26aa26482c9a..992cc5c98214 100644
-> --- a/arch/powerpc/perf/callchain.c
-> +++ b/arch/powerpc/perf/callchain.c
-> @@ -103,6 +103,11 @@ perf_callchain_kernel(struct perf_callchain_entry_ctx *entry, struct pt_regs *re
->  void
->  perf_callchain_user(struct perf_callchain_entry_ctx *entry, struct pt_regs *regs)
->  {
-> +	perf_callchain_store(entry, perf_arch_instruction_pointer(regs));
+--===============4840168270955531071==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
+> --- a/kernel/bpf/task_iter.c
+> +++ b/kernel/bpf/task_iter.c
+
+[ ... ]
+
+> +static struct vm_area_struct *
+> +bpf_iter_task_vma_find_next(struct bpf_iter_task_vma_kern_data *data)
+> +{
+> +	struct vm_area_struct *vma;
+> +	struct vma_iterator vmi;
+> +	unsigned long next_addr, next_end;
 > +
-> +	if (!current->mm)
-> +		return;
+> +retry:
+> +	rcu_read_lock();
+> +	vma_iter_init(&vmi, data->mm, data->last_addr);
+> +	vma = vma_next(&vmi);
+> +	if (!vma) {
+> +		rcu_read_unlock();
+> +		return NULL;
+> +	}
+> +	next_addr = vma->vm_start;
+> +	next_end = vma->vm_end;
+> +	rcu_read_unlock();
 > +
->  	if (!is_32bit_task())
->  		perf_callchain_user_64(entry, regs);
->  	else
-> diff --git a/arch/powerpc/perf/callchain_32.c b/arch/powerpc/perf/callchain_32.c
-> index ddcc2d8aa64a..0de21c5d272c 100644
-> --- a/arch/powerpc/perf/callchain_32.c
-> +++ b/arch/powerpc/perf/callchain_32.c
-> @@ -142,7 +142,6 @@ void perf_callchain_user_32(struct perf_callchain_entry_ctx *entry,
->  	next_ip = perf_arch_instruction_pointer(regs);
->  	lr = regs->link;
->  	sp = regs->gpr[1];
-> -	perf_callchain_store(entry, next_ip);
->  
->  	while (entry->nr < entry->max_stack) {
->  		fp = (unsigned int __user *) (unsigned long) sp;
-> diff --git a/arch/powerpc/perf/callchain_64.c b/arch/powerpc/perf/callchain_64.c
-> index 115d1c105e8a..30fb61c5f0cb 100644
-> --- a/arch/powerpc/perf/callchain_64.c
-> +++ b/arch/powerpc/perf/callchain_64.c
-> @@ -77,7 +77,6 @@ void perf_callchain_user_64(struct perf_callchain_entry_ctx *entry,
->  	next_ip = perf_arch_instruction_pointer(regs);
->  	lr = regs->link;
->  	sp = regs->gpr[1];
-> -	perf_callchain_store(entry, next_ip);
->  
->  	while (entry->nr < entry->max_stack) {
->  		fp = (unsigned long __user *) sp;
-> -- 
-> 2.53.0
-LGTM, feel free to add below tag:
-Reviewed-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-> 
+> +	vma = lock_vma_under_rcu(data->mm, next_addr);
+> +	if (!vma) {
+> +		if (next_end > data->last_addr)
+> +			data->last_addr = next_end;
+> +		else
+> +			data->last_addr += PAGE_SIZE;
+> +		goto retry;
+> +	}
+> +
+> +	if (unlikely(data->last_addr >= vma->vm_end)) {
+> +		data->last_addr = vma->vm_end;
+> +		vma_end_read(vma);
+> +		goto retry;
+> +	}
+
+When lock_vma_under_rcu() fails above, the code correctly ensures
+forward progress: it uses next_end when that advances past
+last_addr, otherwise falls back to PAGE_SIZE.
+
+However in this second branch, when lock_vma_under_rcu() succeeds
+but last_addr >= vma->vm_end, setting last_addr = vma->vm_end can
+move the iterator backward. Since the condition guarantees
+vma->vm_end <= last_addr, the assignment either keeps last_addr
+the same or reduces it.
+
+This can happen when a VMA is concurrently shrunk between the RCU
+walk and the lock_vma_under_rcu() call:
+
+  last_addr = 0x5000  (from prior iteration)
+  RCU walk finds VMA [0x3000, 0x8000), next_addr = 0x3000
+  VMA concurrently shrunk to [0x3000, 0x4000)
+  lock_vma_under_rcu(mm, 0x3000) locks [0x3000, 0x4000)
+  last_addr (0x5000) >= vm_end (0x4000)
+  last_addr = 0x4000  -- moved backward
+
+The backward movement causes the iterator to re-visit VMAs that
+were already returned to the BPF program.
+
+Could this use the same PAGE_SIZE advancement that the
+lock_vma_under_rcu() failure path uses? For example:
+
+  if (unlikely(data->last_addr >= vma->vm_end)) {
+      data->last_addr += PAGE_SIZE;
+      vma_end_read(vma);
+      goto retry;
+  }
+
+This would maintain the forward progress guarantee described in
+the commit message.
+
+> +
+> +	return vma;
+> +}
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22862450537
+--===============4840168270955531071==--
