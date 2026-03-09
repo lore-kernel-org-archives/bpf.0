@@ -1,128 +1,103 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24BDD3DA5C5
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 15:42:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773070945; cv=pass; b=EQQwx8Id4UQt4K8kiXfjZ0eQxCqKNiglj0vrlM9GaZDwyC/mYXJFEbXhpxDPO6jaIQf85vDuvlMJIkL8Fp/x/HdB1VOtTJCpoeXjfTqKR0EJwCMeWbx6Q5/+zA14t8OpB4tekrMLLidf5YquCI43RE0GW7vkzNue8MZi+KC7a28=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773070945; c=relaxed/simple;
-	bh=kGw5voA1KmJwKFY6CkPWjSKKQ3x715P8GBp4QFY51nw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BkvKa1C8khubdkCdQ1ZdZZEz2tKAEmECRMsoWRjgiicH/NytIpEAQpLpbCqzD9oB2j70Km8ADT7HaSbJ/zvFVcqF/8dGjhvkAXG/tqHxbLHBJ4hYAr1OhEi4i0o0MVntNiePyzaL/VUkgDo9QDI+KEgtq/0m2JZRPI2cbsog+HI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m2Csianl; arc=pass smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F0AC3D6488;
+	Mon,  9 Mar 2026 15:43:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773071030; cv=none; b=rZcFkDrvntE5DPi1BhLAS2vnv9OIkWiG+lQeQClUYzMrRt1jktdAgmuYZQ8ILzKiNg/WaHvCdstyAFWYiibS5xSsFU7iYQI80cXP/4s36HdtDZ6nzcYa2NkAyEz30K6JGPKu6Ic0xMa5fSzI8l0lbGz4eB3nsNDGFo8SrnEf9eU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773071030; c=relaxed/simple;
+	bh=z5JIIR3l35H57ojW810ekNHpQRdUtfUvDV/Ck2UyYrY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kBzUKa+0n79LBP4WJcN74PQQCyukjRdt7A8uFTd2wSGrB/47HusMb9STmrYOSdPBGKwkvkM0e+684OBAzFdmduaYp3qE1mXNiP1EI8eLbY9g+KNYlH/21JHlOC7VqgYMeiXZtBuLycpbj9AL0xVqWvCFxgERYpQRNRTymFUN3v8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=lHa7ArPq; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m2Csianl"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-439c5cce2c6so5467633f8f.3
-        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 08:42:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773070942; cv=none;
-        d=google.com; s=arc-20240605;
-        b=kbNyjxuxJ1uZ+XrQcfge0IB44CdpCAn+bzrgGsWiY6q7sECbC1hQif+hQo/GXttutM
-         6UbgOirpTYLE9Y1GBIRmhhrCvmSZXD7R2+ZGiPZ5hQnSWjwPvVVmcVYu8Fq7yJswQd0l
-         C66LLn//SpGMAXpMXlUJ8QhGVqW0Guk2RPD+LiGE9GOvbF/1l2/qWIMgekThxx0SRSjb
-         Ns8zdd14QiMCc6wXNYhb/PN73dAaqSLITiCVJk5pAkR3RtvDHt0wKmkPkoR8xo6GdFuH
-         nHqA1yWms57t4pNjxzl+wlAju5Yo9+G8DEL714JRTexe+1Df7c/bagKAvsa4+oRwUNb1
-         bQpw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=kGw5voA1KmJwKFY6CkPWjSKKQ3x715P8GBp4QFY51nw=;
-        fh=etmk/P+JfCblMqiM77QweMEI98TwBivYBxBlzrHD518=;
-        b=jCsQ5BRqbDbigbMZQWqcKFfmmbFLj4+Ml1b85Lzez+HVR0t5KK7ul84V7yAw6/o5wj
-         rWlAg5M9euKv3D8M3kyGKAbh0ynqPwMEcP8IzniddK2T19qfBDnXBxGuget46/p4S+Tl
-         ibNZNjzhwMbOVNSQLTy6/uT7q+yyleZIQoaXPDXbc8WL+x9NVidcZqzsSm8dEVG1FSpi
-         DMITTTXN80oDdqwDBtE7KfF9q80j/tAsiL0oKAnWJhyM88Vnck1gYPd6ujE3D7ReGGlZ
-         UHI9H/pz99ViIyXPsIducM/6vbAa+FKNt65jh3hRp1bwNkpUBADuf0BZmQh509Mag0Ra
-         L5UA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773070942; x=1773675742; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kGw5voA1KmJwKFY6CkPWjSKKQ3x715P8GBp4QFY51nw=;
-        b=m2CsianlYhiJf7cBMwPK8ILm29kV01cmwxqJiGfM72MbrMQL4XFiNi+JHu4qMny3m2
-         tvdPX6vpHlShHx1vim+yL16kEbfJx5FfkHwHq4/QRkShf35ASVj/qMmwgA9em+Tw2YjA
-         91lGRMnrJLCTlDgA8qcn1CQMNp04E+HsTyGDDevAuHcBabyvLqPcMh0LzAacn0jN/ats
-         wuu1pZKS3ZXluLYG+11mZzJmjs25dg4AOfPSps9ZehokQGOCJNqNl8RbbgihgsmGJweU
-         cy04bEstzCbyiIjdGx6G1a5yGiSBitzjndz9PU7TC/BKg+155GQNdKYKqq/LOD/MqcCC
-         SUeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773070942; x=1773675742;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=kGw5voA1KmJwKFY6CkPWjSKKQ3x715P8GBp4QFY51nw=;
-        b=per/p3gtQoG0TCRXRUAKSq0+IBSF/ptfQQ5vw7BRaTB2iesh3gQNyk3lVc/+YbhFpL
-         76Bii5EzGDz0XoZNfn5ETaQg8ISAi721m/ndA3141gR6TB4ZL2OXowNtZPQ9frenGezN
-         9gQx7pS19xaElEFMGJBtga7Y/egJ4pZDD4TUYQcSVTOxLSCvIIde3kS5o5XOOHwokk0G
-         kJCwDuNNyooNK/VwsL6GF51yt0KWW673oyEc7UeiWTU8Z2RERCRZxv7opbq0oXknHG/+
-         aO/2/Cfyg96+beN5yp/t0XsbreKc1cMKaSw9JeSAIDVtIa6ME75tDCjJOJ84bP942mw/
-         Tkjw==
-X-Forwarded-Encrypted: i=1; AJvYcCUlGjBkIZ9K9JRclt2F9dWxIM63sS3DvijMpRk9rSrxznwLMiQoK0UqpqmbTexdVZevZJw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxO855Irk0oQcAfvH7GQIY/f/17kgFVDqc5Z/RIidP9vTMaizTC
-	Ke/XVhIAzKG5I1bjY1VJfKxsswZWFmQfyfDNOeTkaeHAPqF9YN2YJoPuuMM3KEKIWXrUSAQoeK2
-	QBAnzcQ6pm+QbSjzSRG9L9cuvlRTQc7Q=
-X-Gm-Gg: ATEYQzy7aQiLqVEbk3xDdC+VHc82g4JvBq3aHcOk66S8NWmgkECV7owbwwuBsGgR+B6
-	cuySvVJf7viJMkQQoXhuYbVYDA+DvgiLNOdqwolv0ndDsuZpm+ieUCjsbQ7FnmxZDgUmz+DSalI
-	ZQyqIqTabEzYs6CYHlDm8+WaVA7ppO/Cfi46xKYXWmgVH8VcRPONHL4sUghcO2Lt5GS3gQBX7Ur
-	+Px82PTtPIHOIYLurfU83Nl+z8xHUMfuwiUeT5ZfQEhk5xB3GOnI51UGvoE70mW40tAMxGTj7W1
-	6lhXSaxAQmYkwlW6Uw2x0ShI7GX9tfTxibkr/HHz5LckCMvZ+kOxKLHPZqK3TBSQlxWGVeXMZfG
-	73CQIXD5uj5akbt3Su4xLB0pCXjLN9ZClu/bT
-X-Received: by 2002:a05:6000:288b:b0:439:b2ec:1710 with SMTP id
- ffacd0b85a97d-439da654313mr18931718f8f.3.1773070942410; Mon, 09 Mar 2026
- 08:42:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="lHa7ArPq"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=uPx63lp+sPMATIo9ouOevMaRufSI74blMCToYQqW7Ks=; b=lHa7ArPqVNC9cAmf9bVeDPgUy6
+	fiNXQt+Kqei8WgabS7/SuhMqAut39oVSCxKSdbI2BDwyOBE3FBlJM30SKvTlGP5FCjXO2Tfyb1T9p
+	abCNmmZfIHwFpWmhFZAhMOZ/V3w1VQN53k/pra2ptD4D/mD5Pkng923q2BDBizQGLdbjM3Aoqhe65
+	IHAiIq6qipjuux0c3AaE1wje02ZRaNC0SBVmBrIt4tzEYIaz/+QJsVINoH1MMHXP+SRc3CLYH0BXh
+	8KvQeN8SzhaFt7r6Y2ragdEJQKAG6hE7Z74ln5+Kc+roxv7snoqBtSW7Rm0LAf+JmXTyd0ue6zOdH
+	4FlESyuw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vzclm-00000007dEu-3NvA;
+	Mon, 09 Mar 2026 15:43:46 +0000
+Date: Mon, 9 Mar 2026 08:43:46 -0700
+From: Christoph Hellwig <hch@infradead.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Christoph Hellwig <hch@infradead.org>,
+	Christian Brauner <brauner@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-nfs@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Chuck Lever <chuck.lever@oracle.com>,
+	Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>,
+	Olga Kornievskaia <okorniev@redhat.com>,
+	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
+	Trond Myklebust <trondmy@kernel.org>,
+	Anna Schumaker <anna@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>,
+	Christian Loehle <christian.loehle@arm.com>
+Subject: Re: [PATCH] kthread: remove kthread_exit()
+Message-ID: <aa7qson15uJpL-BL@infradead.org>
+References: <1ff1bce2-8bb4-463c-a631-16e14f4ea7e2@arm.com>
+ <20260306-work-kernel-exit-v1-1-8f871f6281cb@kernel.org>
+ <aaroReSCj1qXUeQb@infradead.org>
+ <CAHk-=whCiPr-cR3hVv=46Qo0Nw_vN422YUxqU0GmNai+KRtg2w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260309134630.2638181-1-bqe@google.com> <87ldg1xdo9.fsf@trenco.lwn.net>
-In-Reply-To: <87ldg1xdo9.fsf@trenco.lwn.net>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 9 Mar 2026 08:42:11 -0700
-X-Gm-Features: AaiRm5118CIPDNbRTQ7etk8QlzD8w22P_KVYQ1O3uzq1vYrQVgyo0KfbrfC-gtA
-Message-ID: <CAADnVQKqzM0FXv-UgeBismj8o281Lcg+dPOf9OMnLb9sy45HYw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 0/1] bpf, docs: structured overview of verifier
-To: Jonathan Corbet <corbet@lwn.net>
-Cc: Burak Emir <bqe@google.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whCiPr-cR3hVv=46Qo0Nw_vN422YUxqU0GmNai+KRtg2w@mail.gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-On Mon, Mar 9, 2026 at 7:47=E2=80=AFAM Jonathan Corbet <corbet@lwn.net> wro=
-te:
->
-> Burak Emir <bqe@google.com> writes:
->
-> > This is an RFC for adding overview documentation for the BPF verifier.
+On Fri, Mar 06, 2026 at 10:27:26AM -0800, Linus Torvalds wrote:
+> On Fri, 6 Mar 2026 at 06:44, Christoph Hellwig <hch@infradead.org> wrote:
 > >
-> > The existing verifier.rst has detail but IMHO it lacks structure and
-> > background. Here is my humble proposal to make the verifier docs
-> > more helpful for newcomers.
-> >
-> > Finding a balance between overview and detail in documentation is
-> > never easy. The idea here is to describe abstract interpretation and ha=
-ve
-> > enough information that anyone interested can learn what is going on.
-> >
-> > Please let me know what you think. I used Gemini 3 to get a first draft=
-,
-> > which I then checked word-for-word and reworked.
->
-> I only got the cover letter for the second version, so these overall
-> comments are based on the first.
+> > More a comment on the previous patch, but I think exporting do_exit
+> > which can work on any task is a really bad idea.
+> 
+> What is the advantage of a module only being able to do
+> kthread_exit(), and not able to do a regular do_exit()?
 
-Jon,
-don't bother.
-This is a no go.
+Because it can't fuck up the state of random tasks.
+
+> I think the only real advantage of having a "kthread_exit()" is that
+> it's a nicer name.
+
+That's another one, but not the main point.
+
+> For example, I'm looking at kernel/vhost_task.c, and the only users
+> are things that *are* modules, and it's not hugely obvious that
+> there's a big advantage to saying "that task handling has to be
+> built-in for those modules".
+
+That's always built in for various good reasons.  As are other
+random do_exit callers.
+
