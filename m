@@ -1,124 +1,210 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6999234E75E
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 18:52:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773082346; cv=none; b=a+a41HRj2Z8IS/8YzvVyJySvR/Hw8csPJA8F8IIYEeT0EqAadZk/YYffbAtL7NRlhQIcd3GXd+qACgzTp5KWOzAq4V7UWt+26lfeR0L7LFNMCA7bta0a9xOkrqanE/IhEE4LuBD5sWs2AHJ7I0oAeBN83cMdfw3qw4+HB5eKVOw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773082346; c=relaxed/simple;
-	bh=sjCLPqARataqIVvkz3xM21eWNMUdgK/hENkSUt9uKNc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f9iy8CszFqyFt2i6s1fDQ11wAWcAHZj8udMuMdjpM1T76kC34Bms66LayBs0tVZ1HTiByFTagCfuaos1xTojDLSF38G0jqYPS8VvDomfXiWHuVocoEjSpLwEtAqTXABIhA2nL4JqDqFsshV1nIGwdt/dtuZ7dxLgHHPdAHMDv14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SoZSfjPb; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4F9427467F
+	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 18:53:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773082413; cv=pass; b=SBNcHyjkotkuAfJIwJ16Bx4Zl2P3se1DWdhec2BgnWB6zV/VHqcPL7mB5dcdZ/5SRIFBMZa9vf4VOPfLES4JvyVWhvYurv6ay4BZsBx7BkjZDhIuzUlSyjZ+tvscw9BtyWTyFg2BNRQqEHy8n2RDJ7OedVdbkFgOP0PFAhqTi6E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773082413; c=relaxed/simple;
+	bh=V6KxNuMLm6ZzWLbYWQAguNF+8tLcLMIeMaYNO5joh6s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lTJ+IdGFQfZd86vFWmjRsmxZihkPPfiK/rzqCguzNmSn7vNeC2ZHCLCjrt7ValbZZKJ1wKXc0EQ7Q+qTrjF0KqisGh900JKPH0fRVhntYWOFMZIW9zCERFeQTkD8waVqbeLLoDXsETyRkdnsDAK6ZJMPsRqvLzSXQjGiqEwavos=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jDjZeQIl; arc=pass smtp.client-ip=209.85.219.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SoZSfjPb"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4852a9c6309so26215825e9.0
-        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 11:52:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jDjZeQIl"
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-89a14be4733so87636686d6.2
+        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 11:53:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773082411; cv=none;
+        d=google.com; s=arc-20240605;
+        b=PcURPPxXRaJ97RH27yWnGZYQafAZU8ZaFxh2XlF4SYGxIUP1T/aNGjkMfGlmWUlDjz
+         BPRIe46XfUJJKQqxkI88QAt9fE7c8yZW4E+GrTaFR3gV3/jSQJ3qRrfWfQR9TDdFyV/u
+         5VsylKJivCDp6K3OUNDGN/vGK9dJv+NbdZYPlJ8uw9ccXJtFEVK36DCiZR8/Z7ja/Qih
+         0ITVfdry2GHolSwbwyreCzxAeTFJHCypveHNC+sXMtfMyYTRcxb9KQhGtmXF1Y65JTNT
+         KDJF1BiexEzJB+mLOuZH6B4Op3cQLfCMpvakOIiFOd7R/rhzzU85eoHNuBAKuMt/T9DQ
+         Xf4A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=73elTE7gXOHd2nqfwAGnB/hPm3mFOxh2FFR+H0T0CEA=;
+        fh=wuoBM2iG6RygDo0LeZeO4sLItrBYgH+73WXlfO0/nAU=;
+        b=jLBJ/MAIHBmUluYcE2xvybjGDjhocIe1wlG/M3EGuU7gFgjheba875g4XBscYcCcql
+         eP0j1D5n67MGarJz9OokXoMJDRAdr4bS5RS4B75XCrpevl75zgCGRVk3AfG+NEzKR1gh
+         fKyXIPpmOCvo24XLefhPY0FKL8q3rNEIrcygXdTpmFBpxf/s79ENE+4B2uSsy8l6OvPT
+         iamhVzDzYRGzF9uqtPWK7h9/ghGr7/CjDjc1SegDLlNV8bg3o0MuLllwk55Q9rLsDI/5
+         mx9wDuPyO54g8xVu/+EwESOAm+vwNoR00p7ViRQTQ11UraMx2G3TYT3V5JN66btzboyn
+         /bEQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773082344; x=1773687144; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=gIupF3wZ79zow2MRbYI0aPa3XBYiCLM68IYk9NH1FtA=;
-        b=SoZSfjPbwaf17nATSnZURqQb8ycDMZWrrVijGfzNH5CDtnBwIl2wgNchAyquk6Ld28
-         3Wz5PpksE/+BcMuPHhmal3funXqa4OQ+eEhGZ/3DI01QDqHeBX3tJpuyBQDQs+kNW8Mg
-         fk0UT5IHUMZMBYopeh8wyKr2TrumixFvi/z0N7WzEepH3elnJV4ksBcwcsErIY/6wc/o
-         P4zsHonEb+X60vhf7uQdWOkBX8Lf+uUWp1KbgzzS3cBU3mV+BqNoOtrumI+cfqcI43DW
-         ap3BWBDhTQ0aBgnFq52BsCF89iMWhsRNS/+JkjhDulWQ+dcvVtKDvohIUEAh0EhD3JiR
-         u0Lg==
+        d=gmail.com; s=20230601; t=1773082411; x=1773687211; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=73elTE7gXOHd2nqfwAGnB/hPm3mFOxh2FFR+H0T0CEA=;
+        b=jDjZeQIlhnWU/zOFM1PjJkIzl2M8H0js8SJmv74c3AxXC/mvD6OQoQVr7NU5HeCpk6
+         j9tgR38rO+JRFLtccb06Af+Gh+5DGi8knoy3s+2c7yWgoI/tK4GdHcdlcLqWhIuE+JDF
+         m8c46zX/ptfHZg/fkuweNOPx4zZCMimfzll8K0xxqku+ZVcJ3NBvzq47D697qeDjFeut
+         XUBbSzU8ZRagTAa9MibNq4iqQsWrv4RFnThT/n3MmYlWemQE+OklMvsg22gchGqB3Yth
+         qQyfeC8K6brcdKOi5Pi2lW3qg9r9bONvTLetUAJ97aheU64wGbffLrnjKqcnwXtDZYGa
+         qJgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773082344; x=1773687144;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gIupF3wZ79zow2MRbYI0aPa3XBYiCLM68IYk9NH1FtA=;
-        b=KHaMEiVaYSmLa/OetetR7mhUVY58V55EQw51YwNzSujiwUjUOYrxJZoARqzok1F1Gl
-         cwStlL3hk7+vRz+bbv0nOoYShucIZGFJogzSVTahCMnAdcM8LY3J1OKEjBxQso5i7Sxu
-         6T2O3UKqd7eBRn54Y2PO3DjAlkq0U6+jXLZS4oYUzcVW7Gacm5bUgw9PVpSDmDKQK1fA
-         jstU/mQbyOAvqAGyS5fKpkFMf4Ka73KZTzEnIpqCyUrt7aauaDAc0IORNpY5G9BXKzsC
-         uItNhAGL7tVhIniWmvL6RuI07i/ja49pXMG3XBZE6NXnZ6/hJQxz3iNECEsrrMnFZwvd
-         +XhQ==
-X-Gm-Message-State: AOJu0YwdyuDw+hlJZamV5PQ7ClI4DiUO9eaajpEri5nQ9lDzZsgkGCZR
-	CFnx779snwcS7nYn0C+45nYGYvlOR+tLK0IbeVkdcAHRXWFrlfDmogmsmCEhNFaCF2EDrw==
-X-Gm-Gg: ATEYQzyXdzVcclo/ugGnSZmDIgipwjia5gaw/9zrPObPCCB/g63+qywFAFBgqZV2/le
-	RnO6CQ+9mSmJ94ABi8D9u1LKsL2xQNdlnHpnjtnZZd7dP60Dew2s59WlvZzb2vvihwweBd/Lqio
-	eOIUHYBG2waS6C15S2He6V0WchH1ukZQyzuLIrC48yIxcTIvyOVGmnmoSTri6oO9sy6apTIfwlR
-	Afb3FIDPommFqOCIl8rX1ko7DgF1FFVTZGF/H6XxewGTrauwn0aVfAmYD7ASNsPeNSfBD+7A8qj
-	0Mx+hjT7Ov48luSHP/JPr0GXYpMpb6A0pVtC40lPaX73W/t4dQyY8kHAeWa3gqQitPgFjRjtTYy
-	6yFa8xtwUL/KqZwS5PXjlOQkR5O5NrB7DEWz38kSDPDBSi54Xa1COv7q3+f9aAEi3Zim0HxnBPH
-	NSdnZITt2blmB/WlPId3BpYFWxRnT0rXR8IXiHyz+mD31DlpFJsPO2MytG0RYOzjil+Q==
-X-Received: by 2002:a05:600d:644e:10b0:485:2af3:3f82 with SMTP id 5b1f17b1804b1-4852af3405fmr128679045e9.7.1773082343588;
-        Mon, 09 Mar 2026 11:52:23 -0700 (PDT)
-Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4852470c697sm92029695e9.31.2026.03.09.11.52.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Mar 2026 11:52:22 -0700 (PDT)
-Date: Mon, 9 Mar 2026 19:52:20 +0100
-From: Mahe Tardy <mahe.tardy@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>
-Subject: Re: [RFC PATCH bpf-next 1/4] bpf: Add netpoll kfuncs for sending UDP
- packets
-Message-ID: <aa8W5JfSZUo-Y8NG@gmail.com>
-References: <20260309131635.302424-1-mahe.tardy@gmail.com>
- <20260309131635.302424-2-mahe.tardy@gmail.com>
- <CAADnVQLyTjCk2xSdvT67kofCJS1cDOMpHdCFfNHrWg9nQMSUSA@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1773082411; x=1773687211;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=73elTE7gXOHd2nqfwAGnB/hPm3mFOxh2FFR+H0T0CEA=;
+        b=YnIttoQareCwCW/wBok9f6Yf0Zz79l2Fen6I5GwyIrW2sJj+X3Caneg1aXAVNF39Ht
+         oxloWsbAUzMQRLGrV1N5uLv65IjeeauojB1vKTh7b5qhfuAKE+2iQCdZEg1cYo6n2quQ
+         KSGgdNsCV/LpS7tRTnzW1T9um3KXcVO968IiPcoD9Flzz82qo9ZrAWVN7ylFfCXP363t
+         U40wHPC6XctUXMKUC/EIkSy2quhXj8/DilrwoY5NZgrnc67MpHEfs8zEtEU3rbjKoN5d
+         1upae0Va6qk4cxbMlcYWZTHgo6GWRGLN3j1Ctpm6b4ezNzeF3vr059Ww/CZZNDqXvP8P
+         1vMQ==
+X-Gm-Message-State: AOJu0Yyl+T9Hx8OK6vf2KTHx4v/HLtz8iGpjTuVmz5ihhOuX8vBSXX8+
+	5dK6fdFOy3XOYmiKzFdEzTkHB05ZOghVQRPMKNPIuBVx02WeS30eV38ZEMxwlh6cMtynqBDPq0t
+	sAPxkBoS2m8OBDHzf3TWYnB0JtYfUWh0=
+X-Gm-Gg: ATEYQzyh+J4tmENpOhiL1JqfBPUZhorWCUyTnWC5P5vsLgbEPSk1mUUV28aBOwoLjqP
+	WB7QfHKHO99DsrCqlWyD/HsTwUVueBGaJqy6FjuLbnOkMvE7XwDgHOmirinMD4ADnSxuGMKrBqF
+	+jelLXXe7BHHC5yZAw4Ejpc87S+fI0FysIdhXtqD3LHnNbtFTu/1oOcFUMsvZFAszEF/cCcccjX
+	crlNe3AgdRN0YPLYB6GxPFS3MI9RuEhahJnrA71akBVFCgDt+u2HGPXZ8tljxdK2q0s1McczciZ
+	trCCT3U=
+X-Received: by 2002:ad4:5d4c:0:b0:89a:994:973e with SMTP id
+ 6a1803df08f44-89a30adb186mr202414976d6.46.1773082410800; Mon, 09 Mar 2026
+ 11:53:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQLyTjCk2xSdvT67kofCJS1cDOMpHdCFfNHrWg9nQMSUSA@mail.gmail.com>
+References: <20260306190855.937198-1-qguanni@gmail.com> <20260306190855.937198-2-qguanni@gmail.com>
+ <87cy1cn9qh.fsf@gmail.com>
+In-Reply-To: <87cy1cn9qh.fsf@gmail.com>
+From: Guanni Qu <qguanni@gmail.com>
+Date: Mon, 9 Mar 2026 11:53:18 -0700
+X-Gm-Features: AaiRm52cb2pSRI7zi23xteHmsmvcnfPB602GH3HMGkDwefiAg_NpM75VZ6l1U8o
+Message-ID: <CAFzOa14nFdFTZHQ2Xmz-Mvcnk-0k=mxs0TqxgMQbKEg_qLJ+Qg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] bpf: Fix undefined behavior in interpreter
+ sdiv/smod for INT_MIN
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org, 
+	andrii@kernel.org, lkp@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 09, 2026 at 09:26:00AM -0700, Alexei Starovoitov wrote:
-> On Mon, Mar 9, 2026 at 6:17 AM Mahe Tardy <mahe.tardy@gmail.com> wrote:
+You're right, casting to u32 before negating avoids the UB entirely
+without needing a special case for S32_MIN. Will send v3 with that
+simplification. Thanks!
+
+On Mon, Mar 9, 2026 at 11:22=E2=80=AFAM Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
+>
+> Jenny Guanni Qu <qguanni@gmail.com> writes:
+>
+> > The BPF interpreter's signed 32-bit division and modulo handlers use
+> > the kernel abs() macro on s32 operands. The abs() macro documentation
+> > (include/linux/math.h) explicitly states the result is undefined when
+> > the input is the type minimum. When DST contains S32_MIN (0x80000000),
+> > abs((s32)DST) triggers undefined behavior and returns S32_MIN unchanged
+> > on arm64/x86. This value is then sign-extended to u64 as
+> > 0xFFFFFFFF80000000, causing do_div() to compute the wrong result.
 > >
+> > The verifier's abstract interpretation (scalar32_min_max_sdiv) computes
+> > the mathematically correct result for range tracking, creating a
+> > verifier/interpreter mismatch that can be exploited for out-of-bounds
+> > map value access.
+> >
+> > Introduce __safe_abs32() which handles S32_MIN correctly and replace
+> > all 8 abs((s32)...) call sites in the interpreter's sdiv32/smod32
+> > handlers.
+> >
+> > Fixes: ec0e2da95f72 ("bpf: Support new signed div/mod instructions.")
+> > Signed-off-by: Jenny Guanni Qu <qguanni@gmail.com>
+> > ---
+> >  kernel/bpf/core.c | 23 ++++++++++++++---------
+> >  1 file changed, 14 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> > index 3ece2da55625..663b9af6d19b 100644
+> > --- a/kernel/bpf/core.c
+> > +++ b/kernel/bpf/core.c
+> > @@ -16,7 +16,6 @@
+> >   * Andi Kleen - Fix a few bad bugs and races.
+> >   * Kris Katterjohn - Added many additional checks in bpf_check_classic=
+()
+> >   */
+> > -
+> >  #include <uapi/linux/btf.h>
+> >  #include <crypto/sha1.h>
+> >  #include <linux/filter.h>
+> > @@ -1736,6 +1735,12 @@ bool bpf_opcode_in_insntable(u8 code)
+> >  }
+> >
+> >  #ifndef CONFIG_BPF_JIT_ALWAYS_ON
+> > +/* Safe absolute value for s32 - abs() is undefined for S32_MIN */
+> > +static inline u32 __safe_abs32(s32 x)
+> > +{
+> > +     return x >=3D 0 ? (u32)x : x =3D=3D S32_MIN ? (u32)S32_MIN : (u32=
+)-x;
+> can we write it as x >=3D 0 ? (u32)x : -(u32)x; ?
+> By casting to u32 first, the negation operates in unsigned arithmetic
+> where overflow does not happen =E2=80=94 it wraps.
+> Please correct me if I'm wrong.
+> > +}
 > > +
-> > +       bnp = kzalloc(sizeof(*bnp), GFP_KERNEL);
-> 
-> AI generated it and humans reviewed it ?
-> Sigh. AI does a better job at this.
-> Think about this line again.
-
-Yes I reviewed this, but Song might know more on how this was generated,
-my experience with handling kernel memory is fairly limited (I'm mostly
-learning) but this looked good to me.
-
-As I'm seeing it we could have used more modern wrapper like:
-
-	bnp = kzalloc_obj(*bnp)
-
-But I'm not sure it would made a fundamental difference here since it
-would be the exact same flag.
-
-It's called from bpf_netpoll_create, that can be only called from
-sleepable programs (like SYSCALL here). And it's similar to how the
-crypto context is allocated in the bpf_crypto_ctx_create kfunc so I'm
-not sure I understand what's wrong in our variant. 
-
-Could you help me and be more explicit on what you think is wrong?
-
-> Also, don't bother with RFC. If you want the patches to
-> land don't use RFC tag.
-> 
-> RFC means "I don't know what I'm doing and I'm not asking
-> to land it in this shape".
-
-Okay thanks for the info, I'll remove the RFC for v2.
+> >  /**
+> >   *   ___bpf_prog_run - run eBPF program on a given context
+> >   *   @regs: is the array of MAX_BPF_EXT_REG eBPF pseudo-registers
+> > @@ -1900,8 +1905,8 @@ static u64 ___bpf_prog_run(u64 *regs, const struc=
+t bpf_insn *insn)
+> >                       DST =3D do_div(AX, (u32) SRC);
+> >                       break;
+> >               case 1:
+> > -                     AX =3D abs((s32)DST);
+> > -                     AX =3D do_div(AX, abs((s32)SRC));
+> > +                     AX =3D __safe_abs32((s32)DST);
+> > +                     AX =3D do_div(AX, __safe_abs32((s32)SRC));
+> >                       if ((s32)DST < 0)
+> >                               DST =3D (u32)-AX;
+> >                       else
+> > @@ -1928,8 +1933,8 @@ static u64 ___bpf_prog_run(u64 *regs, const struc=
+t bpf_insn *insn)
+> >                       DST =3D do_div(AX, (u32) IMM);
+> >                       break;
+> >               case 1:
+> > -                     AX =3D abs((s32)DST);
+> > -                     AX =3D do_div(AX, abs((s32)IMM));
+> > +                     AX =3D __safe_abs32((s32)DST);
+> > +                     AX =3D do_div(AX, __safe_abs32((s32)IMM));
+> >                       if ((s32)DST < 0)
+> >                               DST =3D (u32)-AX;
+> >                       else
+> > @@ -1955,8 +1960,8 @@ static u64 ___bpf_prog_run(u64 *regs, const struc=
+t bpf_insn *insn)
+> >                       DST =3D (u32) AX;
+> >                       break;
+> >               case 1:
+> > -                     AX =3D abs((s32)DST);
+> > -                     do_div(AX, abs((s32)SRC));
+> > +                     AX =3D __safe_abs32((s32)DST);
+> > +                     do_div(AX, __safe_abs32((s32)SRC));
+> >                       if (((s32)DST < 0) =3D=3D ((s32)SRC < 0))
+> >                               DST =3D (u32)AX;
+> >                       else
+> > @@ -1982,8 +1987,8 @@ static u64 ___bpf_prog_run(u64 *regs, const struc=
+t bpf_insn *insn)
+> >                       DST =3D (u32) AX;
+> >                       break;
+> >               case 1:
+> > -                     AX =3D abs((s32)DST);
+> > -                     do_div(AX, abs((s32)IMM));
+> > +                     AX =3D __safe_abs32((s32)DST);
+> > +                     do_div(AX, __safe_abs32((s32)IMM));
+> >                       if (((s32)DST < 0) =3D=3D ((s32)IMM < 0))
+> >                               DST =3D (u32)AX;
+> >                       else
+> > --
+> > 2.34.1
