@@ -1,47 +1,47 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 355CD410D3C
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 19:56:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D14CD413226
+	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 19:56:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773086191; cv=none; b=sx3XocbkWRwoThLRr1YBYTA/8ouSmTFnpb4x6J5DesXZj0KW3lThK04w9/n1fIZW6/b45HeFDg+cjr3PmeMytOEp8pWXn+JTTuEj2DDLGPgBXnqm4mb7ZOnYd1Gqx/ZIn2qXFpIC1Bux7MECMZexisYX+uRZ7Kv6V9Qz9Z0zKJM=
+	t=1773086212; cv=none; b=CB+ZZVZvgeFW54XD6ty0g9AXq3kIqnzmKlIVoc1mhBghdhDOcTRJ+5mNOejcKUA+FX1xpHU8giHI1G3ha+YtZirSoIVdd2cXUaJy5WiD/EophlYGa36eSJqn+K4FUhhB4Hl1tFZVPVA5MaBOhQflsz8YGoFDooV+IE+pE/FHpY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773086191; c=relaxed/simple;
-	bh=0ZtWuxi5/bN0FqE4jXS+rVcrsqsPgNUp097KCniG7RA=;
+	s=arc-20240116; t=1773086212; c=relaxed/simple;
+	bh=25QRI58pZ1JTfSGcElEYgd7VnRw3AMhuvcJzOeSGTsQ=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TQRrUH3/7MpnGOXuE6qXIoA5Qq5NcBTBNQI3ekxiKNxScXpeR1rvKvmlKtBpDfrzr+iuzwoOL5F9kRoBghF2pfbek0c2/8aAmfRHH+06G4WItIY8IUNR923aodt9Os4/LoUcXYLP8JQ4zKADxs1I5R6BcLmyTBrJ7GhyQNwkI0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eJGcxTGJ; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=KbKD+ccm0TpMJ44ANpJRV6nbUQGCgwub9gZ2R635t/yF6u5QcFqzb5ZfvgTYqSQkgitfOnPGgPwqXcJVemAPPWwsEZXHObx1g4PAQ52Mm0wqt1nRfk1oRemSJ/a4+r8xPTNl62CPB/C3ZzzVZc5EamRS0QXGVeOvqQvTir7ag4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ftza+sHn; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eJGcxTGJ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ftza+sHn"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773086189;
+	s=mimecast20190719; t=1773086210;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xYZMQLI95XYM4OiaH4/xWXuBB7YsmmM4YK4bGg819Ss=;
-	b=eJGcxTGJser+6ObYJU/6QmTleLKaXUYn8B6HGSD/zfMUhT3CNymzXdABSu5UX3gjyxHpxi
-	TBVFaQQzdWe0zIFVkIszCdzPGrBmRVuZTF2edz4s7r0KauFQBUlgK0EeioJqfVcv/fur/g
-	WRHv0slncPxhgejUy8B4PvHFvZxn7iE=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+	bh=RDq7zVRdZ8sP6j9D2aPFPVXMk92dd+FqieVgaPz5GP8=;
+	b=ftza+sHnDC5bZog0urE7Irj4QQc+sPnA7obYT6o/xOzaK2eNIqI1WUmFe8+gFkpWJ1gPsh
+	Z6lAUhzcx9txUV2AiF75uCaJ7urbTtldpcjXpm4DFacJr9/fvbBfLKBdEBawyQYtvw9Px6
+	9/p5fCH2lmThE3TgREKY4KcfNBl2xzg=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-161-jiPqcD2XNBaGeyS9ckuTTg-1; Mon,
- 09 Mar 2026 15:56:25 -0400
-X-MC-Unique: jiPqcD2XNBaGeyS9ckuTTg-1
-X-Mimecast-MFC-AGG-ID: jiPqcD2XNBaGeyS9ckuTTg_1773086182
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-452-R06WQcTAPiyl6XVz0u0gWw-1; Mon,
+ 09 Mar 2026 15:56:43 -0400
+X-MC-Unique: R06WQcTAPiyl6XVz0u0gWw-1
+X-Mimecast-MFC-AGG-ID: R06WQcTAPiyl6XVz0u0gWw_1773086200
 Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A595318005B8;
-	Mon,  9 Mar 2026 19:56:22 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3BB971800365;
+	Mon,  9 Mar 2026 19:56:40 +0000 (UTC)
 Received: from fedora.redhat.com (unknown [10.22.81.10])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 78A7630001A2;
-	Mon,  9 Mar 2026 19:56:17 +0000 (UTC)
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 71BD03002D0D;
+	Mon,  9 Mar 2026 19:56:35 +0000 (UTC)
 From: Wander Lairson Costa <wander@redhat.com>
 To: Steven Rostedt <rostedt@goodmis.org>,
 	Tomas Glozar <tglozar@redhat.com>,
@@ -56,9 +56,9 @@ To: Steven Rostedt <rostedt@goodmis.org>,
 	linux-trace-kernel@vger.kernel.org (open list:Real-time Linux Analysis (RTLA) tools),
 	linux-kernel@vger.kernel.org (open list:Real-time Linux Analysis (RTLA) tools),
 	bpf@vger.kernel.org (open list:BPF [MISC]:Keyword:(?:\b|_)bpf(?:\b|_))
-Subject: [PATCH v4 04/18] rtla: Introduce common_threshold_handler() helper
-Date: Mon,  9 Mar 2026 16:46:17 -0300
-Message-ID: <20260309195040.1019085-5-wander@redhat.com>
+Subject: [PATCH v4 05/18] rtla: Replace magic number with MAX_PATH
+Date: Mon,  9 Mar 2026 16:46:18 -0300
+Message-ID: <20260309195040.1019085-6-wander@redhat.com>
 In-Reply-To: <20260309195040.1019085-1-wander@redhat.com>
 References: <20260309195040.1019085-1-wander@redhat.com>
 Precedence: bulk
@@ -70,273 +70,150 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Several functions duplicate the logic for handling threshold actions.
-When a threshold is reached, these functions stop the trace, perform
-configured actions, and restart the trace if --on-threshold continue
-is set.
+The trace functions use a buffer to manipulate strings that will be
+written to tracefs files. These buffers are defined with a magic number
+of 1024, which is a common source of vulnerabilities.
 
-Create common_threshold_handler() to centralize this shared logic and
-avoid code duplication. The function executes the configured threshold
-actions and restarts the necessary trace instances when appropriate.
-
-Also add should_continue_tracing() helper to encapsulate the check
-for whether tracing should continue after a threshold event, improving
-code readability at call sites.
-
-In timerlat_top_bpf_main_loop(), use common_params directly instead
-of casting through timerlat_params when only common fields are needed.
+Replace the magic number 1024 with the MAX_PATH macro to make the code
+safer and more readable. While at it, replace other instances of the
+magic number with ARRAY_SIZE() when the buffer is locally defined.
 
 Signed-off-by: Wander Lairson Costa <wander@redhat.com>
 ---
- tools/tracing/rtla/src/common.c        | 61 ++++++++++++++++++--------
- tools/tracing/rtla/src/common.h        | 18 ++++++++
- tools/tracing/rtla/src/timerlat_hist.c | 19 ++++----
- tools/tracing/rtla/src/timerlat_top.c  | 32 +++++++-------
- 4 files changed, 86 insertions(+), 44 deletions(-)
+ tools/tracing/rtla/src/osnoise.c    |  2 +-
+ tools/tracing/rtla/src/timerlat_u.c |  4 ++--
+ tools/tracing/rtla/src/trace.c      | 20 ++++++++++----------
+ 3 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/tools/tracing/rtla/src/common.c b/tools/tracing/rtla/src/common.c
-index ceff76a62a30b..cbc207fa58707 100644
---- a/tools/tracing/rtla/src/common.c
-+++ b/tools/tracing/rtla/src/common.c
-@@ -175,6 +175,38 @@ common_apply_config(struct osnoise_tool *tool, struct common_params *params)
- }
+diff --git a/tools/tracing/rtla/src/osnoise.c b/tools/tracing/rtla/src/osnoise.c
+index ec074cd53dd84..9d1fd9981fe91 100644
+--- a/tools/tracing/rtla/src/osnoise.c
++++ b/tools/tracing/rtla/src/osnoise.c
+@@ -62,7 +62,7 @@ int osnoise_set_cpus(struct osnoise_context *context, char *cpus)
+ 	if (!context->curr_cpus)
+ 		return -1;
  
+-	snprintf(buffer, 1024, "%s\n", cpus);
++	snprintf(buffer, ARRAY_SIZE(buffer), "%s\n", cpus);
  
-+/**
-+ * common_threshold_handler - handle latency threshold overflow
-+ * @tool: pointer to the osnoise_tool instance containing trace contexts
-+ *
-+ * Executes the configured threshold actions (e.g., saving trace, printing,
-+ * sending signals). If the continue flag is set (--on-threshold continue),
-+ * restarts the auxiliary trace instances to continue monitoring.
-+ *
-+ * Return: 0 for success, -1 for error.
-+ */
-+int
-+common_threshold_handler(const struct osnoise_tool *tool)
-+{
-+	actions_perform(&tool->params->threshold_actions);
-+
-+	if (!should_continue_tracing(tool->params))
-+		/* continue flag not set, break */
-+		return 0;
-+
-+	/* continue action reached, re-enable tracing */
-+	if (tool->record && trace_instance_start(&tool->record->trace))
-+		goto err;
-+	if (tool->aa && trace_instance_start(&tool->aa->trace))
-+		goto err;
-+
-+	return 0;
-+
-+err:
-+	err_msg("Error restarting trace\n");
-+	return -1;
-+}
-+
- int run_tool(struct tool_ops *ops, int argc, char *argv[])
+ 	debug_msg("setting cpus to %s from %s", cpus, context->orig_cpus);
+ 
+diff --git a/tools/tracing/rtla/src/timerlat_u.c b/tools/tracing/rtla/src/timerlat_u.c
+index ce68e39d25fde..efe2f72686486 100644
+--- a/tools/tracing/rtla/src/timerlat_u.c
++++ b/tools/tracing/rtla/src/timerlat_u.c
+@@ -32,7 +32,7 @@
+ static int timerlat_u_main(int cpu, struct timerlat_u_params *params)
  {
- 	struct common_params *params;
-@@ -352,17 +384,14 @@ int top_main_loop(struct osnoise_tool *tool)
- 				/* stop tracing requested, do not perform actions */
- 				return 0;
+ 	struct sched_param sp = { .sched_priority = 95 };
+-	char buffer[1024];
++	char buffer[MAX_PATH];
+ 	int timerlat_fd;
+ 	cpu_set_t set;
+ 	int retval;
+@@ -83,7 +83,7 @@ static int timerlat_u_main(int cpu, struct timerlat_u_params *params)
  
--			actions_perform(&params->threshold_actions);
-+			retval = common_threshold_handler(tool);
-+			if (retval)
-+				return retval;
-+
- 
--			if (!params->threshold_actions.continue_flag)
--				/* continue flag not set, break */
-+			if (!should_continue_tracing(params))
- 				return 0;
- 
--			/* continue action reached, re-enable tracing */
--			if (record)
--				trace_instance_start(&record->trace);
--			if (tool->aa)
--				trace_instance_start(&tool->aa->trace);
- 			trace_instance_start(trace);
- 		}
- 
-@@ -403,18 +432,14 @@ int hist_main_loop(struct osnoise_tool *tool)
- 				/* stop tracing requested, do not perform actions */
- 				break;
- 
--			actions_perform(&params->threshold_actions);
-+			retval = common_threshold_handler(tool);
-+			if (retval)
-+				return retval;
- 
--			if (!params->threshold_actions.continue_flag)
--				/* continue flag not set, break */
--				break;
-+			if (!should_continue_tracing(params))
-+				return 0;
- 
--			/* continue action reached, re-enable tracing */
--			if (tool->record)
--				trace_instance_start(&tool->record->trace);
--			if (tool->aa)
--				trace_instance_start(&tool->aa->trace);
--			trace_instance_start(&tool->trace);
-+			trace_instance_start(trace);
- 		}
- 
- 		/* is there still any user-threads ? */
-diff --git a/tools/tracing/rtla/src/common.h b/tools/tracing/rtla/src/common.h
-index 7602c5593ef5d..c548decd3c40f 100644
---- a/tools/tracing/rtla/src/common.h
-+++ b/tools/tracing/rtla/src/common.h
-@@ -143,6 +143,24 @@ struct tool_ops {
- 	void (*free)(struct osnoise_tool *tool);
- };
- 
-+/**
-+ * should_continue_tracing - check if tracing should continue after threshold
-+ * @params: pointer to the common parameters structure
-+ *
-+ * Returns true if the continue action was configured (--on-threshold continue),
-+ * indicating that tracing should be restarted after handling the threshold event.
-+ *
-+ * Return: 1 if tracing should continue, 0 otherwise.
-+ */
-+static inline int
-+should_continue_tracing(const struct common_params *params)
-+{
-+	return params->threshold_actions.continue_flag;
-+}
-+
-+int
-+common_threshold_handler(const struct osnoise_tool *tool);
-+
- int osnoise_set_cpus(struct osnoise_context *context, char *cpus);
- void osnoise_restore_cpus(struct osnoise_context *context);
- 
-diff --git a/tools/tracing/rtla/src/timerlat_hist.c b/tools/tracing/rtla/src/timerlat_hist.c
-index 6ea397421f1c9..6b8eaef8a3a09 100644
---- a/tools/tracing/rtla/src/timerlat_hist.c
-+++ b/tools/tracing/rtla/src/timerlat_hist.c
-@@ -17,6 +17,7 @@
- #include "timerlat.h"
- #include "timerlat_aa.h"
- #include "timerlat_bpf.h"
-+#include "common.h"
- 
- struct timerlat_hist_cpu {
- 	int			*irq;
-@@ -1048,7 +1049,6 @@ static struct osnoise_tool
- 
- static int timerlat_hist_bpf_main_loop(struct osnoise_tool *tool)
+ 	/* add should continue with a signal handler */
+ 	while (true) {
+-		retval = read(timerlat_fd, buffer, 1024);
++		retval = read(timerlat_fd, buffer, ARRAY_SIZE(buffer));
+ 		if (retval < 0)
+ 			break;
+ 	}
+diff --git a/tools/tracing/rtla/src/trace.c b/tools/tracing/rtla/src/trace.c
+index 211ca54b15b0e..e1af54f9531b8 100644
+--- a/tools/tracing/rtla/src/trace.c
++++ b/tools/tracing/rtla/src/trace.c
+@@ -313,7 +313,7 @@ void trace_event_add_trigger(struct trace_events *event, char *trigger)
+ static void trace_event_disable_filter(struct trace_instance *instance,
+ 				       struct trace_events *tevent)
  {
--	struct timerlat_params *params = to_timerlat_params(tool->params);
+-	char filter[1024];
++	char filter[MAX_PATH];
  	int retval;
  
- 	while (!stop_tracing) {
-@@ -1056,18 +1056,17 @@ static int timerlat_hist_bpf_main_loop(struct osnoise_tool *tool)
+ 	if (!tevent->filter)
+@@ -325,7 +325,7 @@ static void trace_event_disable_filter(struct trace_instance *instance,
+ 	debug_msg("Disabling %s:%s filter %s\n", tevent->system,
+ 		  tevent->event ? : "*", tevent->filter);
  
- 		if (!stop_tracing) {
- 			/* Threshold overflow, perform actions on threshold */
--			actions_perform(&params->common.threshold_actions);
-+			retval = common_threshold_handler(tool);
-+			if (retval)
-+				return retval;
+-	snprintf(filter, 1024, "!%s\n", tevent->filter);
++	snprintf(filter, ARRAY_SIZE(filter), "!%s\n", tevent->filter);
  
--			if (!params->common.threshold_actions.continue_flag)
--				/* continue flag not set, break */
-+			if (!should_continue_tracing(tool->params))
- 				break;
- 
--			/* continue action reached, re-enable tracing */
--			if (tool->record)
--				trace_instance_start(&tool->record->trace);
--			if (tool->aa)
--				trace_instance_start(&tool->aa->trace);
--			timerlat_bpf_restart_tracing();
-+			if (timerlat_bpf_restart_tracing()) {
-+				err_msg("Error restarting BPF trace\n");
-+				return -1;
-+			}
- 		}
- 	}
- 	timerlat_bpf_detach();
-diff --git a/tools/tracing/rtla/src/timerlat_top.c b/tools/tracing/rtla/src/timerlat_top.c
-index dd727cb48b551..c6f6757c3fb6b 100644
---- a/tools/tracing/rtla/src/timerlat_top.c
-+++ b/tools/tracing/rtla/src/timerlat_top.c
-@@ -17,6 +17,7 @@
- #include "timerlat.h"
- #include "timerlat_aa.h"
- #include "timerlat_bpf.h"
-+#include "common.h"
- 
- struct timerlat_top_cpu {
- 	unsigned long long	irq_count;
-@@ -801,10 +802,10 @@ static struct osnoise_tool
- static int
- timerlat_top_bpf_main_loop(struct osnoise_tool *tool)
+ 	retval = tracefs_event_file_write(instance->inst, tevent->system,
+ 					  tevent->event, "filter", filter);
+@@ -344,7 +344,7 @@ static void trace_event_save_hist(struct trace_instance *instance,
  {
--	struct timerlat_params *params = to_timerlat_params(tool->params);
-+	const struct common_params *params = tool->params;
- 	int retval, wait_retval;
+ 	int retval, index, out_fd;
+ 	mode_t mode = 0644;
+-	char path[1024];
++	char path[MAX_PATH];
+ 	char *hist;
  
--	if (params->common.aa_only) {
-+	if (params->aa_only) {
- 		/* Auto-analysis only, just wait for stop tracing */
- 		timerlat_bpf_wait(-1);
- 		return 0;
-@@ -812,8 +813,8 @@ timerlat_top_bpf_main_loop(struct osnoise_tool *tool)
+ 	if (!tevent)
+@@ -359,7 +359,7 @@ static void trace_event_save_hist(struct trace_instance *instance,
+ 	if (retval)
+ 		return;
  
- 	/* Pull and display data in a loop */
- 	while (!stop_tracing) {
--		wait_retval = timerlat_bpf_wait(params->common.quiet ? -1 :
--						params->common.sleep_time);
-+		wait_retval = timerlat_bpf_wait(params->quiet ? -1 :
-+						params->sleep_time);
+-	snprintf(path, 1024, "%s_%s_hist.txt", tevent->system, tevent->event);
++	snprintf(path, ARRAY_SIZE(path), "%s_%s_hist.txt", tevent->system, tevent->event);
  
- 		retval = timerlat_top_bpf_pull_data(tool);
- 		if (retval) {
-@@ -821,28 +822,27 @@ timerlat_top_bpf_main_loop(struct osnoise_tool *tool)
- 			return retval;
- 		}
+ 	printf("  Saving event %s:%s hist to %s\n", tevent->system, tevent->event, path);
  
--		if (!params->common.quiet)
-+		if (!params->quiet)
- 			timerlat_print_stats(tool);
+@@ -391,7 +391,7 @@ static void trace_event_save_hist(struct trace_instance *instance,
+ static void trace_event_disable_trigger(struct trace_instance *instance,
+ 					struct trace_events *tevent)
+ {
+-	char trigger[1024];
++	char trigger[MAX_PATH];
+ 	int retval;
  
- 		if (wait_retval != 0) {
- 			/* Stopping requested by tracer */
--			actions_perform(&params->common.threshold_actions);
-+			retval = common_threshold_handler(tool);
-+			if (retval)
-+				return retval;
+ 	if (!tevent->trigger)
+@@ -405,7 +405,7 @@ static void trace_event_disable_trigger(struct trace_instance *instance,
  
--			if (!params->common.threshold_actions.continue_flag)
--				/* continue flag not set, break */
-+			if (!should_continue_tracing(tool->params))
- 				break;
+ 	trace_event_save_hist(instance, tevent);
  
--			/* continue action reached, re-enable tracing */
--			if (tool->record)
--				trace_instance_start(&tool->record->trace);
--			if (tool->aa)
--				trace_instance_start(&tool->aa->trace);
--			timerlat_bpf_restart_tracing();
-+			if (timerlat_bpf_restart_tracing()) {
-+				err_msg("Error restarting BPF trace\n");
-+				return -1;
-+			}
- 		}
+-	snprintf(trigger, 1024, "!%s\n", tevent->trigger);
++	snprintf(trigger, ARRAY_SIZE(trigger), "!%s\n", tevent->trigger);
  
- 		/* is there still any user-threads ? */
--		if (params->common.user_workload) {
--			if (params->common.user.stopped_running) {
-+		if (params->user_workload) {
-+			if (params->user.stopped_running) {
- 				debug_msg("timerlat user space threads stopped!\n");
- 				break;
- 			}
+ 	retval = tracefs_event_file_write(instance->inst, tevent->system,
+ 					  tevent->event, "trigger", trigger);
+@@ -444,7 +444,7 @@ void trace_events_disable(struct trace_instance *instance,
+ static int trace_event_enable_filter(struct trace_instance *instance,
+ 				     struct trace_events *tevent)
+ {
+-	char filter[1024];
++	char filter[MAX_PATH];
+ 	int retval;
+ 
+ 	if (!tevent->filter)
+@@ -456,7 +456,7 @@ static int trace_event_enable_filter(struct trace_instance *instance,
+ 		return 1;
+ 	}
+ 
+-	snprintf(filter, 1024, "%s\n", tevent->filter);
++	snprintf(filter, ARRAY_SIZE(filter), "%s\n", tevent->filter);
+ 
+ 	debug_msg("Enabling %s:%s filter %s\n", tevent->system,
+ 		  tevent->event ? : "*", tevent->filter);
+@@ -479,7 +479,7 @@ static int trace_event_enable_filter(struct trace_instance *instance,
+ static int trace_event_enable_trigger(struct trace_instance *instance,
+ 				      struct trace_events *tevent)
+ {
+-	char trigger[1024];
++	char trigger[MAX_PATH];
+ 	int retval;
+ 
+ 	if (!tevent->trigger)
+@@ -491,7 +491,7 @@ static int trace_event_enable_trigger(struct trace_instance *instance,
+ 		return 1;
+ 	}
+ 
+-	snprintf(trigger, 1024, "%s\n", tevent->trigger);
++	snprintf(trigger, ARRAY_SIZE(trigger), "%s\n", tevent->trigger);
+ 
+ 	debug_msg("Enabling %s:%s trigger %s\n", tevent->system,
+ 		  tevent->event ? : "*", tevent->trigger);
 -- 
 2.53.0
 
