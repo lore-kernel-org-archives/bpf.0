@@ -1,120 +1,103 @@
-Received: from canpmsgout12.his.huawei.com (canpmsgout12.his.huawei.com [113.46.200.227])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 818953859CC;
-	Mon,  9 Mar 2026 12:08:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.227
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 883B33ACEE8
+	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 12:10:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773058105; cv=none; b=klhHQI/lLrUVJUaHNJWFZdBs1vXP+wNqa1B9A36kePSNefbpIzrtsd2qHNIpsD7bmxGNe6t8FdqTAHDCU2QBQdtbyXusT6GywHhREammpl3mu3i012989U91zVWxtt2hUdkRoq77iNlO095NrvfYUsGUKBBsVxI6cny6uYXaSs4=
+	t=1773058244; cv=none; b=B/a1GPRD/sAPq90KWpPzVdErMW3pslnofbWzdNoW4XaCkc5+RkWlZIJhjXkvhiAUMeg2YTXO8tvCrXjN1xfScAa0pU3Eu9a1+qNNj2I20VFufan5r/rKee5mIvoODBF0HdbaCg99fELtB3NOYV4bXlcl1fnUaKL1J4qsu2n4Sq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773058105; c=relaxed/simple;
-	bh=g2sWoetMr2WaqFvwxERZ4WobytiHdKKwlE59fTrauKM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=qajskao4beJGCaKKwSHg/rUcnnric7NXqw1UHu/cAmAt97e8gHWZt+BrwnrXK33Q++iZ/DT2XMFKI7ck6hs7fKtLrx82tAzso9RPBmxpM5LJnaFDlu2MINLo9FKlZsCY46R7fp/8ad/G4SlNvftiIifDfxXlY0XEH+vzRRCZS4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=DNfHcxoq; arc=none smtp.client-ip=113.46.200.227
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1773058244; c=relaxed/simple;
+	bh=ZboW/udUnZLr3DpnSQSypW4B3rNXIC1R/Cck/6mcY4I=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=gChZOTweblnoYdjnRbhxRga1eUTBRs/lVWgvRhFEF+9l1gKOUebdPhOt+nSEszJnM3NFrRcO/QPLEhwL7vWgg4/nX06IMBpR2tIaMTnFECuYDky9NA+4TmSGVJ7Ff47QSpGYwprF2ugIN3+n7YpxizOUg50/wXIy1cKMBUhV3Fo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--bqe.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=s26i80Jk; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--bqe.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="DNfHcxoq"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=up4v/et4lJKRUJbSgjVJpe+Szh9u4uk8/4CweOLUjio=;
-	b=DNfHcxoqPIirpAZD1xO9rwIP9rvfNWtbFiOrBAvkuDPNGvPzt4mIPc3QleXeuzEza89i5ijQV
-	Fo1zeL0G9ox9mKCl379V5fNjHSFkQ1gfIR7njBcaFWYzTm7ICZxhBv6uwFfMmb99WwKBiWyoJ0r
-	KqjIZhODjz/PoZpKdjHMODM=
-Received: from mail.maildlp.com (unknown [172.19.163.163])
-	by canpmsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fTwcf4S6gznTVX;
-	Mon,  9 Mar 2026 20:02:42 +0800 (CST)
-Received: from kwepemj200003.china.huawei.com (unknown [7.202.194.15])
-	by mail.maildlp.com (Postfix) with ESMTPS id 716954048B;
-	Mon,  9 Mar 2026 20:08:19 +0800 (CST)
-Received: from [10.67.120.170] (10.67.120.170) by
- kwepemj200003.china.huawei.com (7.202.194.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Mon, 9 Mar 2026 20:08:16 +0800
-Message-ID: <8a2a8771-0bcf-4ed2-981b-6ad09943b691@huawei.com>
-Date: Mon, 9 Mar 2026 20:08:15 +0800
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="s26i80Jk"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-48535f4d5e1so3018775e9.0
+        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 05:10:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1773058242; x=1773663042; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=rCo2rIiouMfwX2ZUpe0hC69qR3TuDKUYi7cYN13hy24=;
+        b=s26i80JkWTMygZIoZ8ZRiYn3CXXzKjL+Hc28qjdWOYlNzdiMvIMj/4lNNgXflN0Xcs
+         iTSnJuezIB1ggk7GvSts9temcpXKI18PhhdmbuApx1SvUYDajDf5EMElszyTVufWDZX4
+         cqzEuzV4+tzl6Fzbh8jGAwoYDp3XYcolOry7i1t7Ehu3XuqV886SAwjiUgEVVAPpdssa
+         piStm1EhjVFAuEJWOg1BqgIrq5wSbWSWlAXW7rb3eLwSArCDLQZLQJfNXFrf0kTPO9LU
+         vWKjSuWi0gXfyksKHrkbgmN3AfmxazVCjYbvOtZoU9HNpb4PsUn+UfKPWRFIIX0jLQnd
+         5Y4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773058242; x=1773663042;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rCo2rIiouMfwX2ZUpe0hC69qR3TuDKUYi7cYN13hy24=;
+        b=MC/Y0uwnJO8KZYw4FVn94EuvubPApXPh1NyYE+bnhEu+jAm6uKwVznK7ETgV2FtCcl
+         rUkVGJyB14CAwg8GBdHSj3TRfLRFKy7ZILVyJcAFiux88gOWSROJOhUwzhBVCtly+Jsf
+         +xA9mwu7XhsnXpbh/bwfpippSqQJxGYuAfJCl+/qQdEsbZWMYIPiE+2wTh+uHcBIiKHy
+         ynW4J5CYQ4FjXyRbjXOcKAKp8VWby4hbwwJCXOVTl3mTJSXyOhrn43/9MPSvz9AzPTac
+         +7scwS97um+yqAaUvaLJVMqt/oyqpFb/nkRi6fbThr1ySbeOw3otfSyPTaejSw1sG5Qi
+         duUA==
+X-Forwarded-Encrypted: i=1; AJvYcCVhX9p2lmImD+tDmk1z/LzHPf2lOVI48S4mrBy9j99o9SsvyUruBuJBwcbmf3mzh797/JM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPHPpWa7NCtW9QGjeEvtIg/jTz0RN4tTsn5PiPomgzcy7vk6N+
+	PlMTFDyE6xsWCmtcsGUayQ6Ul/xQsfT2HK18Q/gPlkNDEC3WTUKzmSUyvABxA2zmNZwUmA==
+X-Received: from wmbgz6.prod.google.com ([2002:a05:600c:8886:b0:485:3925:a794])
+ (user=bqe job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:3b17:b0:477:76bf:e1fb
+ with SMTP id 5b1f17b1804b1-485269587bbmr177507875e9.16.1773058241842; Mon, 09
+ Mar 2026 05:10:41 -0700 (PDT)
+Date: Mon,  9 Mar 2026 12:10:15 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 13/30] tools: dma: Append extra cflags
-To: Leo Yan <leo.yan@arm.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Ian
- Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>, James Clark
-	<james.clark@linaro.org>, Kees Cook <kees@kernel.org>, Quentin Monnet
-	<qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier
-	<nsc@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill
- Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii
- Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
- Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
-	<yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
- Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo
-	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki"
-	<rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui
-	<rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra
-	<peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Mark Rutland
-	<mark.rutland@arm.com>, Alexander Shishkin
-	<alexander.shishkin@linux.intel.com>, Adrian Hunter
-	<adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, William
- Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, Bartosz
- Golaszewski <brgl@kernel.org>, Kent Gibson <warthog618@gmail.com>, "K. Y.
- Srinivasan" <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>, Wei
- Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>, Long Li
-	<longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>, David Lechner
-	<dlechner@baylibre.com>, =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, Andy
- Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
-	Willy Tarreau <w@1wt.eu>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
-	<linux@weissschuh.net>, Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore
-	<robert.moore@intel.com>, Len Brown <lenb@kernel.org>, Srinivas Pandruvada
-	<srinivas.pandruvada@linux.intel.com>, Tejun Heo <tj@kernel.org>, David
- Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, Changwoo Min
-	<changwoo@igalia.com>, Mark Brown <broonie@kernel.org>, Steven Rostedt
-	<rostedt@goodmis.org>, Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan
-	<shuah@kernel.org>, Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires
-	<bentiss@kernel.org>
-CC: <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>, <bpf@vger.kernel.org>,
-	<linux-perf-users@vger.kernel.org>
-References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
- <20260308-tools_build_fix_zero_init-v3-13-6477808123b7@arm.com>
-From: Qinxin Xia <xiaqinxin@huawei.com>
-In-Reply-To: <20260308-tools_build_fix_zero_init-v3-13-6477808123b7@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
- kwepemj200003.china.huawei.com (7.202.194.15)
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.473.g4a7958ca14-goog
+Message-ID: <20260309121033.2594457-1-bqe@google.com>
+Subject: [RFC PATCH 0/1] bpf, docs: structured overview of verifier
+From: Burak Emir <bqe@google.com>
+To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Burak Emir <bqe@google.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Jonathan Corbet <corbet@lwn.net>, bpf@vger.kernel.org, 
+	linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+This is an RFC for adding overview documentation for the BPF verifier.
 
+The existing verifier.rst has detail but IMHO it lacks structure and
+background. Here is my humble proposal to make the verifier docs
+more helpful for newcomers.
 
-On 2026/3/9 00:46:18, Leo Yan <leo.yan@arm.com> wrote:
-> Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
-> the compiler.
-> 
-> Signed-off-by: Leo Yan <leo.yan@arm.com>
-> ---
->   tools/dma/Makefile | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/dma/Makefile b/tools/dma/Makefile
-> index e4abf37bf020ca613b6dca340299198cb887126a..bdca05c69a8a12a4f9419eed8c1df71adac4f26d 100644
-> --- a/tools/dma/Makefile
-> +++ b/tools/dma/Makefile
-> @@ -16,6 +16,7 @@ endif
->   # (this improves performance and avoids hard-to-debug behaviour);
->   MAKEFLAGS += -r
->   
-> +override CFLAGS += $(EXTRA_CFLAGS)
->   override CFLAGS += -O2 -Wall -g -D_GNU_SOURCE -I$(OUTPUT)include
->   
->   ALL_TARGETS := dma_map_benchmark
-> 
-Acked-by: Qinxin Xia <xiaqinxin@huawei.com>
+Finding a balance between overview and detail in documentation is 
+never easy. The idea here is to describe abstract interpretation and have
+enough information that anyone interested can learn what is going on. 
+
+Please let me know what you think. I used Gemini 3 to get a first draft,
+which I then checked word-for-word and reworked.
+
+Burak Emir (1):
+  bpf, docs: structured docs for the verifier
+
+ Documentation/bpf/index.rst                   |  1 +
+ .../bpf/verifier-overview-1-abstr-interp.rst  | 74 +++++++++++++++
+ .../bpf/verifier-overview-2-domain.rst        | 91 +++++++++++++++++++
+ .../bpf/verifier-overview-3-dataflow.rst      | 83 +++++++++++++++++
+ .../bpf/verifier-overview-4-pruning.rst       | 59 ++++++++++++
+ .../bpf/verifier-overview-5-advanced.rst      | 70 ++++++++++++++
+ Documentation/bpf/verifier-overview-index.rst | 17 ++++
+ 7 files changed, 395 insertions(+)
+ create mode 100644 Documentation/bpf/verifier-overview-1-abstr-interp.rst
+ create mode 100644 Documentation/bpf/verifier-overview-2-domain.rst
+ create mode 100644 Documentation/bpf/verifier-overview-3-dataflow.rst
+ create mode 100644 Documentation/bpf/verifier-overview-4-pruning.rst
+ create mode 100644 Documentation/bpf/verifier-overview-5-advanced.rst
+ create mode 100644 Documentation/bpf/verifier-overview-index.rst
+
 -- 
-Thanks,
-Qinxin
+2.53.0.473.g4a7958ca14-goog
 
