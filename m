@@ -1,199 +1,126 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0EE53C1987
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 13:17:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F0DA3BED00
+	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 13:24:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773062234; cv=none; b=QHStAWgKflgvWj4exTaq49nJldaYZ1z/h6WNzDpqDAd9hB/+2rfWXWBYRIHuT40ZCLovd3iP7y71IYC+DcB1Ujawp4iiWQGHAQGrsBdOuZD1bI5canK93Slf9cv7ELTAGdQ8HwaRETgFELENpTPXZJQC7rcir53m3w7h9T20yZQ=
+	t=1773062692; cv=none; b=T4JEmyciNlv5i61Mb+endIyDu4AGSgLXMn7iSG2oqO5maPfcaviyHIV2sMUdiNsVEJ7l01n4wWgCldCaxNF6/oKmOM6+yUWaE+SMSWBQQTISmWUfy6lVZCfFMTLtul6U59wU2keEzNtR78LQk4iNDdWyYg9/E3a4eyN1HAlOmQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773062234; c=relaxed/simple;
-	bh=tyqCYxKTSRXXn5P+KvgoIOclP8HpyE+FZaE7u6Ktvvc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=q5CsjXO5kSZgGal/AvFQCNmF6V9zElTnnXdIOTVTitozim9CV5BPHYuWlzAOXVOt9zvqioUoDXXNPos/CzLMGRk1E1P51Mg/XDAef8Zu7YPi6du33rEAaJ5Tqn9X3tN6DuQN4tzCYUtULpV7q64YCDKnFWKLut93V456Din8EtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OWJL/4w4; arc=none smtp.client-ip=209.85.128.42
+	s=arc-20240116; t=1773062692; c=relaxed/simple;
+	bh=H1ooMesOsCfbxy1JEoKTVjQr5MpOiYSVF2li1xsXq0c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fzzO1BQJmaY7YsMwnXVAA49LrWi/p8D4C3dlh3LSrjyO5Krd+La1IeloHDi2ucdwDdHGRPtooDYPXUxKpSLZPQae073ctLBgVJPhXAn1GZEZ9FsFBwpmB0oYNLBoY0W8YuWerd8OToF/KsASa2W1TeBQQhCzunORSkHLZWiAXiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RYe7FFZM; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OWJL/4w4"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4853fd7b59aso3368735e9.2
-        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 06:17:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RYe7FFZM"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4853f2826f7so6599615e9.1
+        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 06:24:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773062231; x=1773667031; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L40ZBRJFw2dpBSHTfqlpum+bTSTo7kvXGM5RPcNlnO4=;
-        b=OWJL/4w4W945zzgLJvGbn1t+qEEtK6v2X3CMmLwJoRE7M6HqpQLWhWDIUIEz0bxjLM
-         h+h+QwXJu/L1Vm0ex/nsT7xzzziUSI4qS+y2uMRR7mESwCJUjiIdhSwzz58MstY05Kg3
-         n3zhaZNrkkDaLyaR8GEMChY0rEnLFNLpubrVSKWrsWngjsQgLXQo2eh7y+4um2xVp/y3
-         ecH4jJFGgDdzC+tJ9N0uRgG/8YzA4RlyFTTapaQ0H/xEys+Jt6N2V8MiTkS2/4OKkTLj
-         y2A79Ly62cgPb0sfetdb3crOgcrHQWOZeYKX9qpA6rvaonwxHSG+3xfefezVTm62prZD
-         UiNg==
+        d=gmail.com; s=20230601; t=1773062689; x=1773667489; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NopvELTUWATJredMr0Zqp2HDVCba8weCOzzaoYoC+s0=;
+        b=RYe7FFZMsfqpceSR9TNk99ORJHEryUyqXZTM3hDZXg5yuqDf3hyrwHKqada9m9jvD1
+         73Pd2NFyAnaGtSPsmCcwOGr5emkhuyo+sGlG3wk22qoejULBtf0Lw/Y53ELMN6Hm5S0u
+         +kXs3tZglTRbaPhl11x06tV6hH3iruZQVeT+nILQH5rOwbvM6NSfEyjW/PUiUxcCgr2C
+         K70HDP0wvdUm/dTmniGzGRL+TCKou13Q6nlB8nplB9SQQf/iu843joJb+yIgDXr1EEVM
+         hpc1RezO9z6Zh6fYC/28LgUZkjO9PjF5Abjmd2+1uz93l4rymMJ/WuBOvKkGOBe6QazN
+         jr2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773062231; x=1773667031;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=L40ZBRJFw2dpBSHTfqlpum+bTSTo7kvXGM5RPcNlnO4=;
-        b=OoqXpJ1842sgFUTmYa4KELj397aoMn+Hh62bKGn59EZLKLQ2THn/9IvFRNjdrmbE7j
-         pWZHXWN2TYcAsfI5q0lo8lbwUBZvd4sQCGgkp+CnJijLwxfV3K3IBxwzx1bBSSF5J01w
-         hVLRXWjXcZhDJKCppv4neEuf/p1ownLwMWjXk/33H5cfCxFzfhvoHdjdRXS3lPmfoVOT
-         5hY6r1OKvONASOTPBHu4SnAtRrXlLcefmeSqCULWsES2UaCNyG1NmNwbBGLF46OkyZ/s
-         20ZWc2W/RVBA+qE9YpVxGRHyNePzSjTYwUw+PUXGmFfXowk/mKyyXLRU4CHe0TaFXups
-         HIkA==
-X-Gm-Message-State: AOJu0YxXfcLC8JszyTmINX8zR6epxc72qbuomOR3CLheQlC7KA1bzbDT
-	pAf29glr1jzUp9DVFNy3R7j4y1VWDw/O/qI5rUnnpHaLWtu6OAXHPCJmA+I29srFhLCnaQ==
-X-Gm-Gg: ATEYQzyiF+pbuhkTsZy9sjv5iXmyL/OPJ39g57KDPoqAe7Uu0ZQLTZ7rRHcSP5sq/Mp
-	+wq8Xj2/ZrMyOf3AYLGPZ4o6LcJeXcLnhKRmbWPRv/LfQN+APGpych+rDN76rTgG8Gt4GEY1tRq
-	S+1blLCWlVC0bCyRSJHjzHU9vE4PLurHY7C6xqLu5Ph704Q9z1IcQWh/mpy+M+oUJPIH/IDKC2F
-	84VA+0iOA4AIm5eVYIpVhJkb/A6M7Fw1pL9pj6FD+QLCVfJHMcNWphrViqdlaCHW7DtCbAR6tuG
-	WpHxhe2VIw8KLgwS2d/uCudTv75MsahFctT09YkEpzrRDV+juaQ1hl0TMdjoYZqknrmIisWhNCR
-	CDXjWJHTdsVqCoDkb+GNcCheMTKBZb/taEp+OTCjbnBiXN+mGTUKW15qEZIXkhEZo7ZSHabCmbr
-	JyVZvJ7esrO1+s+hQSl4f1jMazf7A=
-X-Received: by 2002:a05:600c:3b02:b0:485:2f4a:6ae6 with SMTP id 5b1f17b1804b1-4852f4a6de6mr112906975e9.6.1773062229457;
-        Mon, 09 Mar 2026 06:17:09 -0700 (PDT)
-Received: from mtardy-friendly-lvh-runner.local ([2600:1900:4010:1a8::])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-485246ece8bsm128506395e9.4.2026.03.09.06.17.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Mar 2026 06:17:09 -0700 (PDT)
-From: Mahe Tardy <mahe.tardy@gmail.com>
-To: bpf@vger.kernel.org
-Cc: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	martin.lau@linux.dev,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	ast@kernel.org,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	Mahe Tardy <mahe.tardy@gmail.com>
-Subject: [RFC PATCH bpf-next 4/4] selftests/bpf: Add netpoll setup basic tests
-Date: Mon,  9 Mar 2026 13:16:35 +0000
-Message-Id: <20260309131635.302424-5-mahe.tardy@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260309131635.302424-1-mahe.tardy@gmail.com>
-References: <20260309131635.302424-1-mahe.tardy@gmail.com>
+        d=1e100.net; s=20230601; t=1773062689; x=1773667489;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NopvELTUWATJredMr0Zqp2HDVCba8weCOzzaoYoC+s0=;
+        b=D+9EvXp5gFCpoI8UR98RIKWUYWJHBtYa7mW11SP0Bbo5weKISby9HpTgKyoFA5Feah
+         Ue0vVUI82lq9bmzqbL5eehmsVgGaKU8Kgpy7h0OZIpbP17FuwQIrl/D+WKlIX+bWIXvH
+         MA8xBDlUUKHAir3CBkZS3WbyfAldDeQkpztVpm8MkgFUPb3v5N1z7l4GCC/MAIwi0nid
+         WZkjyUnqDoE0oY5KnMjdbl/AiVlLWdQQwaEJx+No4azJRp/HyTVImABCYmJfMO/caqrY
+         E++r6Nou5UCLKfbqKPkttiZHCdm9V1gAlfNcMCLwRmEWf+3TvxmLsvtzQdcaeGyTXCVI
+         vvPg==
+X-Gm-Message-State: AOJu0YzbxUfKXxJREiioG9OoNQResXOFOc5w6PF+smDRBT5GepAh0tHc
+	/cVczrXrSJCzCrRhsjEi6UQHZC+rf7h3XnqXciHb+CrN67MIR31V2eS597VGUw==
+X-Gm-Gg: ATEYQzxeFXyf+DPE5FTe+IGWEDf8WMWTE4+DwstDAcGSxZJkDNUKGbcu4Pd1SZE0Ib3
+	FcKKM8zIUkxvS5nRRmA2bUQ1vJb0A/azU2sQs59ckMgYAGD0Ie9ZCqV0fuju/d82NSZ+WenHwdu
+	7xXw27cxC/sGbtGDEIC8/F3JmHOiBr6bna3+m2BJbW8n3okGAh+7uA06dTEt7jGjQGcFR8WNWOz
+	QoHjncUwE9hZSh4L5tC7zvYN0xXfCFuREpsKn1dCVAl8cwpAS6gGxzgHklsvZn+4kNJHhrYceTn
+	RUiHkF2ZVFQ8bOKURUAxleOhVVTlZBj8FzVTjvZGJbL0PFdxZ7qtNHmWLKlPjDennWg98eGoob/
+	oCD6uSQdIJGYBYcGp5QCrG4VWGTWwAxSxmI2QhbOXEWsKfI9ecgcQMKEajDcLYBF9NF1xqqQpGN
+	m0KeMGqkww2W8qeuToV4ly3L5EMTuiY7Tn69+NC6MiAhGb6rpEHz3xu9mCdbzz1d49p/g7f+0lg
+	BZBGHYF342uUkh/DVoESvFgqnnZKUOaCn8rRs9NlRNpi7taDFJHGfs4yaXIpM2wgo7vb9VEYpTQ
+	QA==
+X-Received: by 2002:a05:600c:820c:b0:485:383b:d5bb with SMTP id 5b1f17b1804b1-485383bd752mr74888935e9.27.1773062688489;
+        Mon, 09 Mar 2026 06:24:48 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c? ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-485358cd26bsm78402855e9.8.2026.03.09.06.24.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Mar 2026 06:24:47 -0700 (PDT)
+Message-ID: <d8c8748a-4b13-4097-bdeb-495e6410a0df@gmail.com>
+Date: Mon, 9 Mar 2026 13:24:47 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 0/4] BPF controlled io_uring
+To: io-uring@vger.kernel.org
+Cc: bpf@vger.kernel.org, axboe@kernel.dk,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>
+References: <cover.1772109579.git.asml.silence@gmail.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <cover.1772109579.git.asml.silence@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Add a pair of BPF progs, netpoll_release and netpoll_acquire to test
-that the respective bpf_netpoll_release and bpf_netpoll_acquire behave
-as expected and that the verifier has been configured to catch
-unreleased references.
+On 2/26/26 12:48, Pavel Begunkov wrote:
+> Introduces a way to override the standard io_uring_enter syscall
+> execution with an extendible event loop, which can be controlled
+> by BPF via new io_uring struct_ops or from within the kernel.
+> 
+> There are multiple use cases I want to cover with this:
+> 
+> - Syscall avoidance. Instead of returning to the userspace for
+>    CQE processing, a part of the logic can be moved into BPF to
+>    avoid excessive number of syscalls.
+> 
+> - Access to in-kernel io_uring resources. For example, there are
+>    registered buffers that can't be directly accessed by the userspace,
+>    however we can give BPF the ability to peek at them. It can be used
+>    to take a look at in-buffer app level headers to decide what to do
+>    with data next and issuing IO using it.
+> 
+> - Smarter request ordering and linking. Request links are pretty
+>    limited and inflexible as they can't pass information from one
+>    request to another. With BPF we can peek at CQEs and memory and
+>    compile a subsequent request.
+> 
+> - Feature semi-deprecation. It can be used to simplify handling
+>    of deprecated features by moving it into the callback out core
+>    io_uring. For example, it should be trivial to simulate
+>    IOSQE_IO_DRAIN. Another target could be request linking logic.
+> 
+> - It can serve as a base for custom algorithms and fine tuning.
+>    Often, it'd be impractical to introduce a generic feature because
+>    it's either niche or requires a lot of configuration. For example,
+>    there is support min-wait, however BPF can help to further fine tune
+>    it by doing it in multiple steps with different number of CQEs /
+>    timeouts. Another feature people were asking about is allowing
+>    to over queue SQEs but make the kernel to maintain a given QD.
+> 
+> - Smarter polling. Napi polling is performed only once per syscall
+>    and then it switches to waiting. We can do smarter and intermix
+>    polling with waiting using the hook.
 
-Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
----
- .../selftests/bpf/prog_tests/netpoll.c        | 23 +++++++++
- .../selftests/bpf/progs/netpoll_basic.c       | 47 +++++++++++++++++++
- 2 files changed, 70 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/netpoll_basic.c
+Any comments for the patch set?
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/netpoll.c b/tools/testing/selftests/bpf/prog_tests/netpoll.c
-index f2548f1f9349..af40c4b21be7 100644
---- a/tools/testing/selftests/bpf/prog_tests/netpoll.c
-+++ b/tools/testing/selftests/bpf/prog_tests/netpoll.c
-@@ -7,15 +7,38 @@
- #include "test_progs.h"
- #include "network_helpers.h"
- #include "netpoll_sanity.skel.h"
-+#include "netpoll_basic.skel.h"
- 
- #define NS_TEST "netpoll_sanity_ns"
- #define NS_TEST_V6 "netpoll_sanity_ns_v6"
-+#define NS_BASIC_TEST "netpoll_basic_ns"
- #define DUMMY_DEV "dummy0"
- #define DUMMY_IP "10.0.0.1"
- #define REMOTE_IP "10.0.0.2"
- #define DUMMY_IP6 "fd00::1"
- #define REMOTE_IP6 "fd00::2"
- 
-+void test_netpoll_basic(void)
-+{
-+	struct nstoken *nstoken = NULL;
-+
-+	SYS(fail, "ip netns add %s", NS_BASIC_TEST);
-+	SYS(fail, "ip -net %s link add %s type dummy", NS_BASIC_TEST, DUMMY_DEV);
-+	SYS(fail, "ip -net %s addr add %s/24 dev %s", NS_BASIC_TEST, DUMMY_IP, DUMMY_DEV);
-+	SYS(fail, "ip -net %s link set %s up", NS_BASIC_TEST, DUMMY_DEV);
-+
-+	nstoken = open_netns(NS_BASIC_TEST);
-+	if (!ASSERT_OK_PTR(nstoken, "open_netns"))
-+		goto fail;
-+
-+	RUN_TESTS(netpoll_basic);
-+
-+fail:
-+	if (nstoken)
-+		close_netns(nstoken);
-+	SYS_NOFAIL("ip netns del %s &> /dev/null", NS_BASIC_TEST);
-+}
-+
- static void run_netpoll_test(const char *ns_name, const char *local_ip,
- 			      const char *remote_ip, bool ipv6)
- {
-diff --git a/tools/testing/selftests/bpf/progs/netpoll_basic.c b/tools/testing/selftests/bpf/progs/netpoll_basic.c
-new file mode 100644
-index 000000000000..2650e1e5410a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/netpoll_basic.c
-@@ -0,0 +1,47 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Isovalent. */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+#include "errno.h"
-+
-+SEC("syscall")
-+__success __retval(0)
-+int netpoll_release(void *ctx)
-+{
-+	struct bpf_netpoll_opts opts = { .dev_name = "dummy0" };
-+	struct bpf_netpoll *bnp;
-+	int err = 0;
-+
-+	bnp = bpf_netpoll_create(&opts, sizeof(opts), &err);
-+	if (!bnp)
-+		return err;
-+
-+	bpf_netpoll_release(bnp);
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+__failure __msg("Unreleased reference")
-+int netpoll_acquire(void *ctx)
-+{
-+	struct bpf_netpoll_opts opts = { .dev_name = "dummy0" };
-+	struct bpf_netpoll *bnp;
-+	int err = 0;
-+
-+	bnp = bpf_netpoll_create(&opts, sizeof(opts), &err);
-+	if (!bnp)
-+		return err;
-+
-+	bnp = bpf_netpoll_acquire(bnp);
-+	if (!bnp)
-+		return -EINVAL;
-+
-+	bpf_netpoll_release(bnp);
-+
-+	return 0;
-+}
-+
-+char __license[] SEC("license") = "GPL";
 -- 
-2.34.1
+Pavel Begunkov
 
