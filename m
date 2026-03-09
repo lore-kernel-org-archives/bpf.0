@@ -1,126 +1,163 @@
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E0DE38F255
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 16:44:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1347C3BE14A;
+	Mon,  9 Mar 2026 16:44:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773074654; cv=none; b=nCFL5NfSMGsjtzIf6x0MUdlSsjLgfmJayftwrBDVk9xb63oLAazGQ6/JaQaThmxR2cQVPqcjWvzWGHWe3Ir1rz941hOtwqaQTT6VOdE8AuJRZvsndwNWuVyW2Vp//gFh9+ZBicKF0y6r/Cl31bTSg9fMLNJZcfiM6in98J0ugr0=
+	t=1773074655; cv=none; b=jiIJmXdkHaPa/GL1PHUFkuBqFbwgQRi/1izVxMiemo6u0n68m6HP9l9579zHEXAXvleDUssZNZNHn/aq/Fb00M0IbRuhIc+PmydC3XlarWa/WIjYS+81439Mwa3bCt8CJP27RkL0sfLGUH7pUE/vTeOuz/j/ntpjfEcGUKk9zcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773074654; c=relaxed/simple;
-	bh=jdOQB0L4Fflv1gMm7YHka2SOqeBet5RHR7I2KGVkz4c=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=T+YMnZKfGB8AhtD85erV7gNK7ebP3/SuBoF8Nc3iBQTlQ+AxF+DKnfhC9IUo3do/IslNAN675k7YHir3W5ZD+vQ2CVQSK23SMfjS8YTZzF7wT7vckoSdyNdyv0XiJsWfkMapo49ZtW9Cu+n27NtbY0NkCsXl9j/i7ADJy1AZiX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=fKbV43hG; arc=none smtp.client-ip=209.85.160.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1773074655; c=relaxed/simple;
+	bh=Uk7QgN6xzOCWYu8MBXFyjWy0R+x2ZeLTbcNOpvXhzcE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=RNgSKDtNyomlCLk2B1/HCCni4CujI6n/mP1XFJicpkgAJ0qyRroUoOlfR8+xCaoub/bWP7GEgdzp0Nn4nzstp+sH30zI21eEzsE+ljIqthw8kyP7zOjYHp8tF+YjHsvNn+kcCmDaBJOnb2O6RUaQ3u/rHJmrGFFwfY0Lu82qmsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N83WeFjH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="fKbV43hG"
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-509061dab77so22807431cf.2
-        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 09:44:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1773074652; x=1773679452; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZkcB94mfZF3arnvqPMVSEZqSUd0e6HEVcHvUbaufTrY=;
-        b=fKbV43hGfRW1215Ao6bYUwp6WkxNQ4ltd6+qF5K36GkaiFjVHMKpFH1c8Ps9nFPrFh
-         dAQy9NBSwaLdVWqHgy05WzX8fvXxVkAbe8kkTC3cV7fgm0R/fmyqF+S1G2+r7iUTcGs1
-         ujV0RgQx6CubDGV6Yw4/EiVk+Qdls80FJqY5VvDIOZvuyRTQbz7nLjJH9WiaU6L3fmDW
-         I86AMXUszaXUDLrqfzy3Ln6QIBCL7exww0yGNyMCnTCmb8g4Z+TD2ZauhFW20iun0or3
-         WG1WBFJyPvvYl5RZtVcRKhfc3w8TOw4AP8viesD02YmOtvlZfH+yeKMm5d+DQ8l5o1Fd
-         AUjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773074652; x=1773679452;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZkcB94mfZF3arnvqPMVSEZqSUd0e6HEVcHvUbaufTrY=;
-        b=Xr2m3wWViIxQN775xnvyOY0XXGm5BvT3THv2F9yBiwtBfq9/fnZduYlvZe8oGc5PJy
-         /1Kxzto37PPLuQlwxlmSHNix5qehZslTmwmdZ9JM77PpBilLkPkdrXbZkAM2am/fyNqB
-         nM/jOq/OOHHFButjGUfpWDInZDwgxvX32cx8shU3imBB3AJhOMr6b9WBkllgtie3nxJM
-         BqL3fP25SuRaBYD68v2dlUFaWGji/7TKNv7QlREHaBTPteSFBtajAuPIWBs2a7PAvCQg
-         HMFMDUGWw6otOXMwI3hj0gXxBMm5CJr8tHWl2gHsJ6jK/pjWIZCzN1dxU8fXaMQpozZI
-         dRdg==
-X-Forwarded-Encrypted: i=1; AJvYcCUA0l9q1n8VZIAZjxP4qm9c6K1IMuGEK/ANt7GrKJQeXbuSR688LGxCOEZu+Jtb6t9OBoU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBd4w9gSHspP4PWNa09dKUpqerR0UJsknsgYfg5hWStFe74E7E
-	nWtOHUteHedGaTpPHdY7yFsXjxBr4UzJlE2SPIcXgHx2CsvGD6vsUz/xqscK8chHwmw=
-X-Gm-Gg: ATEYQzxzYpaZEXLJ/H1cSRaco8v30rcHaTqkD3Bkh66TA3a7foCpGcp/houmE5wHUj/
-	LrqzD2fEU488MFmJvM02Mj+Ud0XxQoASYMw6QsRjosL0g1Sf6AdCWDDaQpqUXyba3sdfA/bPUWX
-	csbIHa+kyuZXv7/MDXWrX9EC7oIombINvyS2yr20vPYmBkq81lMEmhioWB2vPnYrK5ChN/s+4Uy
-	L3Lo6akLyL8Rpg4IT6Bs7wsKLPEyjmzEamvn6kFSlbozgZReWoJRn4n8UYmS+YpVxTRPNStARUn
-	t+e3O1MgfTaot6kH4MMmvPWubjlHe7yHAQUGnWbACw1X9pZ8AZAuF4jq5fH6mRmlzoZD+NDmT5V
-	8JtKphBapRetOfY30ifMuaI1+5hcLtup2bh5YUj8knA8Fz6x/dqYPpIWr5l3unaSREPTkEPorz+
-	7m0m/lCqAWkbLSeamWlSUwe8A=
-X-Received: by 2002:ac8:5a91:0:b0:4ee:483:311f with SMTP id d75a77b69052e-508f49566camr153324811cf.54.1773074652455;
-        Mon, 09 Mar 2026 09:44:12 -0700 (PDT)
-Received: from localhost ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-508f66da77csm65808051cf.30.2026.03.09.09.44.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Mar 2026 09:44:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N83WeFjH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26F45C2BC86;
+	Mon,  9 Mar 2026 16:44:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773074654;
+	bh=Uk7QgN6xzOCWYu8MBXFyjWy0R+x2ZeLTbcNOpvXhzcE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=N83WeFjHOOqWdbT02p7u6F13MMV7RRau8GbcaBSyL47Q6vraRT6zI0/uD7vTeMN+7
+	 jEganNn2JAI3p1bhGbQgVTlIj/PYZ25c4VNozic7qKb9tSU1YYc6xWeetAnJuwud7a
+	 pSpMO/wkDQeTMONUSdQx3eHU/4lrDnGQQ3MZbE10I4mXfspZDeSov/kUkNe0L78NCB
+	 rLiNZBXTOVj0tOlyFahCjpdld9enU7FrrwsPTSrEy+IBzIG7ccingg6ZVLS4fysV0R
+	 cvMYjW5kHwTVCmuY0LVXEcsy6DmN2iZknFT4/P+pQzGtvpHCm6qJ5er7m3qAR6IPTW
+	 T4Mx+idBPe/FQ==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: "David Hildenbrand (Arm)" <david@kernel.org>, linux-kernel@vger.kernel.org
+Cc: "linux-mm @ kvack . org" <linux-mm@kvack.org>, "David Hildenbrand (Arm)"
+ <david@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Lorenzo
+ Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett"
+ <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@kernel.org>, Mike
+ Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal
+ Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, Pedro Falcato
+ <pfalcato@suse.de>, David Rientjes <rientjes@google.com>, Shakeel Butt
+ <shakeel.butt@linux.dev>, "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Alice Ryhl <aliceryhl@google.com>, Madhavan Srinivasan
+ <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, Christian
+ Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank
+ <frankja@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>, Gerald Schaefer
+ <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>,
+ Vasily Gorbik <gor@linux.ibm.com>, Jarkko Sakkinen <jarkko@kernel.org>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Arve =?utf-8?B?SGrDuG5uZXbDpWc=?=
+ <arve@android.com>, Todd Kjos
+ <tkjos@android.com>, Christian Brauner <brauner@kernel.org>, Carlos Llamas
+ <cmllamas@google.com>, Ian Abbott <abbotti@mev.co.uk>, H Hartley Sweeten
+ <hsweeten@visionengravers.com>, Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi
+ <rodrigo.vivi@intel.com>, Tvrtko Ursulin <tursulin@ursulin.net>, David
+ Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Jason
+ Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, Dimitri
+ Sivanich <dimitri.sivanich@hpe.com>, Arnd Bergmann <arnd@arndb.de>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Peter Zijlstra
+ <peterz@infradead.org>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, Eric Dumazet
+ <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>, "David S.
+ Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, Jakub
+ Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Miguel Ojeda
+ <ojeda@kernel.org>, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+ linux-s390@vger.kernel.org, linux-sgx@vger.kernel.org,
+ intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+ linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ netdev@vger.kernel.org, rust-for-linux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v1 02/16] mm/memory: remove "zap_details" parameter from
+ zap_page_range_single()
+In-Reply-To: <20260227200848.114019-3-david@kernel.org>
+References: <20260227200848.114019-1-david@kernel.org>
+ <20260227200848.114019-3-david@kernel.org>
+Date: Mon, 09 Mar 2026 16:44:10 +0000
+Message-ID: <m21phtx89x.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 09 Mar 2026 12:44:10 -0400
-Message-Id: <DGYEI9OL9F85.2CFAJFEYT0VUS@etsalapatis.com>
-Subject: Re: [PATCH bpf v3 3/3] Revert "selftests/bpf: Update reg_bound
- range refinement logic"
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Eduard Zingerman" <eddyz87@gmail.com>, <bpf@vger.kernel.org>,
- <ast@kernel.org>, <andrii@kernel.org>
-Cc: <daniel@iogearbox.net>, <martin.lau@linux.dev>, <kernel-team@fb.com>,
- <yonghong.song@linux.dev>, <shung-hsi.yu@suse.com>,
- <paul.chaignon@gmail.com>
-X-Mailer: aerc 0.20.1
-References: <20260306-bpf-32-bit-range-overflow-v3-0-f7f67e060a6b@gmail.com>
- <20260306-bpf-32-bit-range-overflow-v3-3-f7f67e060a6b@gmail.com>
-In-Reply-To: <20260306-bpf-32-bit-range-overflow-v3-3-f7f67e060a6b@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 
-On Fri Mar 6, 2026 at 7:54 PM EST, Eduard Zingerman wrote:
-> This reverts commit da653de268d32a80e135c9eb960a8147c186f1bc.
-> Removed logic is now covered by range_refine_in_halves()
-> which handles both 32-bit and 64-bit refinements.
+"David Hildenbrand (Arm)" <david@kernel.org> writes:
+
+> Nobody except memory.c should really set that parameter to non-NULL. So
+> let's just drop it and make unmap_mapping_range_vma() use
+> zap_page_range_single_batched() instead.
 >
-> Suggested-by: Paul Chaignon <paul.chaignon@gmail.com>
-> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
-
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-
+> Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
 > ---
->  tools/testing/selftests/bpf/prog_tests/reg_bounds.c | 14 --------------
->  1 file changed, 14 deletions(-)
+>  arch/s390/mm/gmap_helpers.c    |  2 +-
+>  drivers/android/binder_alloc.c |  2 +-
+>  include/linux/mm.h             |  5 ++---
+>  kernel/bpf/arena.c             |  3 +--
+>  kernel/events/core.c           |  2 +-
+>  mm/madvise.c                   |  3 +--
+>  mm/memory.c                    | 16 ++++++++++------
+>  net/ipv4/tcp.c                 |  5 ++---
+>  rust/kernel/mm/virt.rs         |  2 +-
+>  9 files changed, 20 insertions(+), 20 deletions(-)
 >
-> diff --git a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c b/tools/=
-testing/selftests/bpf/prog_tests/reg_bounds.c
-> index 04938d0d431b38e086b50fe28b99e4ad2682742e..cb8dd2f63296b826491c8a010=
-f4ece4aa20c0560 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-> @@ -519,20 +519,6 @@ static struct range range_refine(enum num_t x_t, str=
-uct range x, enum num_t y_t,
->  		return range_intersection(x_t, x, x_swap);
+> diff --git a/arch/s390/mm/gmap_helpers.c b/arch/s390/mm/gmap_helpers.c
+> index dea83e3103e5..ae2d59a19313 100644
+> --- a/arch/s390/mm/gmap_helpers.c
+> +++ b/arch/s390/mm/gmap_helpers.c
+> @@ -89,7 +89,7 @@ void gmap_helper_discard(struct mm_struct *mm, unsigned long vmaddr, unsigned lo
+>  		if (!vma)
+>  			return;
+>  		if (!is_vm_hugetlb_page(vma))
+> -			zap_page_range_single(vma, vmaddr, min(end, vma->vm_end) - vmaddr, NULL);
+> +			zap_page_range_single(vma, vmaddr, min(end, vma->vm_end) - vmaddr);
+>  		vmaddr = vma->vm_end;
 >  	}
-> =20
-> -	if (!t_is_32(x_t) && !t_is_32(y_t) && x_t !=3D y_t) {
-> -		if (x_t =3D=3D S64 && x.a > x.b) {
-> -			if (x.b < y.a && x.a <=3D y.b)
-> -				return range(x_t, x.a, y.b);
-> -			if (x.a > y.b && x.b >=3D y.a)
-> -				return range(x_t, y.a, x.b);
-> -		} else if (x_t =3D=3D U64 && y.a > y.b) {
-> -			if (y.b < x.a && y.a <=3D x.b)
-> -				return range(x_t, y.a, x.b);
-> -			if (y.a > x.b && y.b >=3D x.a)
-> -				return range(x_t, x.a, y.b);
-> -		}
-> -	}
-> -
->  	/* otherwise, plain range cast and intersection works */
->  	return range_intersection(x_t, x, y_cast);
+>  }
+> diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
+> index 241f16a9b63d..dd2046bd5cde 100644
+> --- a/drivers/android/binder_alloc.c
+> +++ b/drivers/android/binder_alloc.c
+> @@ -1185,7 +1185,7 @@ enum lru_status binder_alloc_free_page(struct list_head *item,
+>  	if (vma) {
+>  		trace_binder_unmap_user_start(alloc, index);
+>  
+> -		zap_page_range_single(vma, page_addr, PAGE_SIZE, NULL);
+> +		zap_page_range_single(vma, page_addr, PAGE_SIZE);
+>  
+>  		trace_binder_unmap_user_end(alloc, index);
+>  	}
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index ecff8268089b..a8138ff7d1fa 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -2835,11 +2835,10 @@ struct page *vm_normal_page_pud(struct vm_area_struct *vma, unsigned long addr,
+>  void zap_vma_ptes(struct vm_area_struct *vma, unsigned long address,
+>  		  unsigned long size);
+>  void zap_page_range_single(struct vm_area_struct *vma, unsigned long address,
+> -			   unsigned long size, struct zap_details *details);
+> +			   unsigned long size);
+>  static inline void zap_vma_pages(struct vm_area_struct *vma)
+>  {
+> -	zap_page_range_single(vma, vma->vm_start,
+> -			      vma->vm_end - vma->vm_start, NULL);
+> +	zap_page_range_single(vma, vma->vm_start, vma->vm_end - vma->vm_start);
+>  }
+>  struct mmu_notifier_range;
+>  
+> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+> index 144f30e740e8..c34510d83b1f 100644
+> --- a/kernel/bpf/arena.c
+> +++ b/kernel/bpf/arena.c
+> @@ -656,8 +656,7 @@ static void zap_pages(struct bpf_arena *arena, long uaddr, long page_cnt)
+>  	guard(mutex)(&arena->lock);
+>  	/* iterate link list under lock */
+>  	list_for_each_entry(vml, &arena->vma_list, head)
+> -		zap_page_range_single(vml->vma, uaddr,
+> -				      PAGE_SIZE * page_cnt, NULL);
+> +		zap_page_range_single(vml->vma, uaddr, PAGE_SIZE * page_cnt);
 >  }
 
+Acked-by: Puranjay Mohan <puranjay@kernel.org>
