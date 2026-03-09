@@ -1,120 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1914737BE8F
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 13:57:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E5A63D330A
+	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 14:29:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773064640; cv=none; b=TZWx6jatx/75Rz0cDpm4OhLoDud8qzNXjyM7F3EeTWgKFEUFj9t2EaFKKAFzQNKhg3zSiT877NAUE+jLX14RH+TQPwOha8msvosGMGT33IOzPwTQtVBXnDyzpQOKkfU6bUwWYxwVxjZ6IF5mjK+WXYxs2yxlVm4XSPw7szSrzgU=
+	t=1773066598; cv=none; b=sTt0dJSMx3B4Dio6plY3ILw9kspgjOzktdiapCPR+PIrdTQ0UE3i3Vs8ZW3bs3H16Ho4LYTPrpdaKWCAr8nQ6fN0xXkJKpTm5Hp/MmUV9jqG7nZMLqT/PfOs2JLP6QnSwVdpKE37zHl5QAUEKfhDbM79TxXbn+u/clpnmwtODBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773064640; c=relaxed/simple;
-	bh=YTlyaYk7PpX3cuau2SmIh3yb3TDKZyISR++MlIeKYbs=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=hG65d/A1XNTRLKMvIp26tW+ulV+AAKQzgYOGXMJfssV/dCmdJB9pp1067YeU9o5gVDBxTWhuVxAM2udluwq3Xb9yhSGf6jCHLd1ULBabNdiRsdhvB1kad7nz5J3dCuFWJHtJq4v4eXowaA5HrqdUdRSCh7dSc/DTwP/oug9XvXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mAwJHJMC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773066598; c=relaxed/simple;
+	bh=qGkfUw0cAuRi50whdAw9tYXjFfsurpxdwyuHiMRzvHk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GnZeIH5jInyMWqoyZGhlhc2qOWTQPnBSgkYhaBp4RqOqhvKR2e5F9y/5YjJ+2DPbSfFHwD5Ppk/Tw9urUtyL1cDJ0rssDmUVnfmf+EJ1dj6eQSz2VOYs5rAUhIF95ORTbi6amHxMZSEgKCiBOV6ilZgS6EnxTxmYcmEK/paa01Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=ihyQWMnv; arc=none smtp.client-ip=209.85.222.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mAwJHJMC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 740BEC4CEF7;
-	Mon,  9 Mar 2026 13:57:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773064639;
-	bh=YTlyaYk7PpX3cuau2SmIh3yb3TDKZyISR++MlIeKYbs=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=mAwJHJMCK0p6RCtuV01QVl19gpgLhpLX1acf8suYEV+Vt67QNobIsxFOYZaCiIP2G
-	 mpEGR0rXbJeeLusjQXrPEYxtFj8tF3YIvHWUvCcQMbItpDv8IhF6DYF3bvemiyOeUI
-	 W4v8y7osq25AGL3kW77uPTm8h2BPjdTr8zkMC0XLSOI+3b/yqWOWZaKUNPWVoXrBk6
-	 sm8wHG/KPIpp6eLXjDO9y9jlGTvUTFoCkuVRAszZxrD9uGu2hpS2G2dwW7d7bgu29p
-	 EFnmnGYM0fQiooLwMSLXdvgqkF5FdbxJADdJGtxJyjdHbHG9Xc50kzyXT2RaI10Xcd
-	 u3o/er4ImIvCQ==
-Content-Type: multipart/mixed; boundary="===============7845476690454596425=="
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="ihyQWMnv"
+Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-8cd847b4b23so132432185a.0
+        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 07:29:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1773066596; x=1773671396; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0bCgFz4UpYVbBeKSYmRS1UHS00xtZH8a/t+DzU0dS+U=;
+        b=ihyQWMnvVuXvR909Z1cWQbCW/x6Uje2bNeYH28gk0StuBuzAOqigvjL7w1dE9RCBvz
+         ZoZwM7cx4GGinybPk7GhMgYWs8ydFH/+Jkrso2JRthaffI2Zbp5XMm+3eSXkDs8OrWPp
+         1PdirPb87UjX0oH7606aIZq+oaAGP7vKybDN2bYMkprfF7k83xhQjnzcnPUik0YOPAdr
+         2/KizCv3zVMKKDWmAMInYE8tZ68AN+LVOAzGdtD0I5zgKs6YmQZljOhOH1YH4QRwNHq0
+         ro70VHn1/JFY0xIEfw2/X2a1ANbJoQ6e9TuLfleRF6ybM460qzLn7jf0fGZVrlG5Po2P
+         lTEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773066596; x=1773671396;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0bCgFz4UpYVbBeKSYmRS1UHS00xtZH8a/t+DzU0dS+U=;
+        b=tDtLjIz+qfntkgkd+UkuchpDCJM1aq+xM1OErQoHOxtvvuxOf4MwJOWaMAAEIIMtIn
+         1YhQnFh4dcNgZLIhp8Qyz+NpJez87wbKCSYG1hj37iM26zLRoglZUaFltCXIZLhmhXnH
+         BVMH6gg+D76b18UOS20eTKxURP4Yeor+LWf5QuibwH0Ea6RR39W+kMuKm/SM6lNJFVQq
+         AuXVIpdVlmlR3+Jcry7tkCTxup58IdgQFwLj549M3l0lyFajliMly2e4vGrJa/gtpH8g
+         ZJERti6vHw5N5x0Qx2szVEVJ9bZRKF9KOl4WvwYYx4PWpKkCxXW/BE8eOiZWuVFRNRUD
+         Z2cQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVKqe4/NTzVsupiJxswGoseFGdnfMwNnH8EK/56ayRVEp6eWjteA3nCeYXPUO1drkf8CbU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwcTcHdYanvc16LUhrM8WwPdTN4ooFcNgf64doFbWmgUbyXjrgZ
+	R+IzK61mhmtKIsHKj/9IAzoqIie42KrrYhCqG0YEo07GquNG+HhhYGWdSqc+ZZiPXg4=
+X-Gm-Gg: ATEYQzxTVWtpbQ1HGQYZ2rJGJTPiLzVXzEYUP6TdgpSvZYHwyqDoyh02tlHJoiHJM6+
+	f8Fbd4sqspV2/r4byelRO4IWqcL3IPsYFk6ZM29cyvpR+COE6xcigznOfGk51ORoNz7umVw5SgC
+	8xv6u5jWrhZ+U7l7La2U9CUQ77xIwubgfm4DS4UxhZDiHOj0N+crilUtPZHoVHqV9xhceQj926h
+	WR2npBPr5luB0BMQ3/47C/oTYDgk3sfFXfSa+ScNqdaTiR6xXji02d7CiTQRPdrBvjB5j/hYA1Z
+	vqT6l9eoHo9KCtCkjWK6g06jhzt8Zos/Kbu5s1/6waT7bDv6lQVyj5R35+3N07+Z+t2pwVPu888
+	gk3Q1xkIlB3atF4pYbppNRZzuS2lnTsuTzxsqQ3cGjJQ6LabGCzXI9I+n2J2EH7RNdfEfhMg6+F
+	GhlQFBKTKTPJ8b+5Nj+me2zSv+1y1O2/RW9ySx8WKx5oXDA64XDtNnu/Ag91XE/7EKNPkVu97Uv
+	A4aLLLV
+X-Received: by 2002:a05:620a:4809:b0:8ca:305b:749b with SMTP id af79cd13be357-8cd6d4d5456mr1426307785a.60.1773066595964;
+        Mon, 09 Mar 2026 07:29:55 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-112-119.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.112.119])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cd8d4cad48sm148711185a.33.2026.03.09.07.29.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Mar 2026 07:29:55 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1vzbcI-0000000GTxY-2R0b;
+	Mon, 09 Mar 2026 11:29:54 -0300
+Date: Mon, 9 Mar 2026 11:29:54 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	"linux-mm @ kvack . org" <linux-mm@kvack.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>,
+	Pedro Falcato <pfalcato@suse.de>,
+	David Rientjes <rientjes@google.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Janosch Frank <frankja@linux.ibm.com>,
+	Claudio Imbrenda <imbrenda@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>,
+	Todd Kjos <tkjos@android.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Carlos Llamas <cmllamas@google.com>, Ian Abbott <abbotti@mev.co.uk>,
+	H Hartley Sweeten <hsweeten@visionengravers.com>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Leon Romanovsky <leon@kernel.org>,
+	Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Andy Lutomirski <luto@kernel.org>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>, Miguel Ojeda <ojeda@kernel.org>,
+	linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+	linux-s390@vger.kernel.org, linux-sgx@vger.kernel.org,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	netdev@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	x86@kernel.org
+Subject: Re: [PATCH v1 16/16] mm/memory: support VM_MIXEDMAP in
+ zap_special_vma_range()
+Message-ID: <20260309142954.GM1687929@ziepe.ca>
+References: <20260227200848.114019-1-david@kernel.org>
+ <20260227200848.114019-17-david@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <cc821da4486a325d55ca172c85a4f7c1822cf60e30725fd80181f19a42e5623d@mail.kernel.org>
-In-Reply-To: <20260309131635.302424-2-mahe.tardy@gmail.com>
-References: <20260309131635.302424-2-mahe.tardy@gmail.com>
-Subject: Re: [RFC PATCH bpf-next 1/4] bpf: Add netpoll kfuncs for sending UDP packets
-From: bot+bpf-ci@kernel.org
-To: mahe.tardy@gmail.com,bpf@vger.kernel.org
-Cc: andrew+netdev@lunn.ch,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,martin.lau@linux.dev,daniel@iogearbox.net,john.fastabend@gmail.com,ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,song@kernel.org,mahe.tardy@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon,  9 Mar 2026 13:57:19 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260227200848.114019-17-david@kernel.org>
 
---===============7845476690454596425==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Fri, Feb 27, 2026 at 09:08:47PM +0100, David Hildenbrand (Arm) wrote:
+> There is demand for also zapping page table entries by drivers in
+> VM_MIXEDMAP VMAs[1].
+> 
+> Nothing really speaks against supporting VM_MIXEDMAP for driver use. We
+> just don't want arbitrary drivers to zap in ordinary (non-special) VMAs.
+> 
+> [1] https://lore.kernel.org/r/aYSKyr7StGpGKNqW@google.com
 
-> diff --git a/net/core/bpf_netpoll.c b/net/core/bpf_netpoll.c
-> new file mode 100644
-> index 000000000000..1d01d5f43ee1
-> --- /dev/null
-> +++ b/net/core/bpf_netpoll.c
+Are we sure about this?
 
-[ ... ]
+This whole function seems like a hack to support drivers that are not
+using an address_space.
 
-> +/**
-> + * bpf_netpoll_send_udp() - Send a UDP packet via netpoll.
-> + * @bnp:	The BPF netpoll context. Must be an RCU-protected pointer.
-> + * @data:	Pointer to the data to send.
-> + * @data__sz:	Size of the data to send (max 1460 bytes).
-> + *
-> + * Sends a UDP packet using the netpoll infrastructure. Can be called
-> + * from any context (process, softirq, hardirq).
-> + *
-> + * Return: 0 on success, negative errno on error.
-> + */
+I say that as one of the five driver authors who have made this
+mistake.
 
-Is the return value documentation here complete?  Tracing the call
-chain through netpoll_send_udp() -> netpoll_send_skb() ->
-__netpoll_send_skb(), the latter initializes its return value as
-NET_XMIT_DROP (which is 1) and returns it when the device is not
-running or not present:
+The locking to safely use this function is really hard to do properly,
+IDK if binder can shift to use address_space ??
 
-net/core/netpoll.c:__netpoll_send_skb() {
-    netdev_tx_t ret = NET_XMIT_DROP;
-    ...
-    if (!npinfo || !netif_running(dev) || !netif_device_present(dev)) {
-        dev_kfree_skb_irq(skb);
-        goto out;
-    }
-    ...
-    ret = NETDEV_TX_OK;
-out:
-    ...
-    return ret;
-}
-
-That positive 1 propagates back through netpoll_send_udp() which
-casts it to int and returns it unchanged.
-
-A BPF program following the documented contract and checking
-ret < 0 for errors would silently miss the case where the packet
-was dropped because the device went down.  Should the comment
-document this, or should the return value be normalized to a
-negative errno before returning to the caller?
-
-> +__bpf_kfunc int bpf_netpoll_send_udp(struct bpf_netpoll *bnp,
-> +				     const void *data, u32 data__sz)
-> +{
-> +	unsigned long flags;
-> +	int ret;
-> +
-> +	if (data__sz > BPF_NETPOLL_MAX_UDP_CHUNK)
-> +		return -E2BIG;
-> +
-> +	local_irq_save(flags);
-> +	ret = netpoll_send_udp(&bnp->np, data, data__sz);
-> +	local_irq_restore(flags);
-> +
-> +	return ret;
-> +}
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22855649225
---===============7845476690454596425==--
+Jason
