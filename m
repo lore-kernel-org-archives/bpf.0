@@ -1,51 +1,53 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E933F36AB7C
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 19:55:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57CF3410D24
+	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 19:55:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773086118; cv=none; b=O1arOqioq4nAomP5yVtitgMp0BVwXpWr41Jp1U/kDEU/GplD5mZxs3zSaB4Mk9HwkQNLUPWWjlrCEur0Wi1zDUl+YwJZfnv+YrAb/GfPvcEtMsTh/C9ylpsu25lBz5jQkfgREIT2rznyxZldNs3TnyG+5BMDxsDtxx2En+296yE=
+	t=1773086137; cv=none; b=NIspTx2Uznl3q//KItOb/EPaQH0yMKGWGqCQzpNprgEcBIip+xHq1gnwqbJ877UxPf8u667fcRZ0TzUUS/0ryvBG0MRgqxELgR5V1JNTcQEiJRxcwtTCn8/evRvyTahZZ64pHQgde7PhMXleGiMBTR5SG9yPoSWqcJeSXuMq7YE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773086118; c=relaxed/simple;
-	bh=EJdVD1L6g203nYafJu+0ydmi7h/+sZQ+w2DkUuJU8NM=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=nJGsfMHgts50d4LhyvWYqPmy20CQ/BwkGnT1KkqA9KVMPXyP5qQ0yLkAy9TzTQi81Z+Pmae0gSOf4GgCgP1EuRPvDB1KrKbUFudW6jIuI+R5ILv3oeRyNcKCr89u/ZLeiubO5UpCcAoFwRslOx7iov+6mFX7vrLGaKso7uUrfaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RKw3+2Us; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1773086137; c=relaxed/simple;
+	bh=KqlwctEUlNcxLO53vPKA7fumU1rNwVuIwzoAE18qmgw=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fgTX/SKeEw8/fw7PoOI/pXfa9qfcBhq6ZH2gQt044+VLGqdSKkrHuPCHLWHlWeGNrNwWqTjQgAD6grZQIHwlgk4P5JcebSi89KCtzO9q5GwjxUygpLCF9HUb4sVdzvmny/EUOEdlpCqpxeKTVSnDZ0ZQc2BntCRaITS/q/qJE/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jTa5Cugc; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RKw3+2Us"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jTa5Cugc"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773086116;
+	s=mimecast20190719; t=1773086134;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=a04vp0f5nYbiJJbrU1fnZhtMYiLV2Gp1bYe9yuSAagQ=;
-	b=RKw3+2UsFBSP7v66HZyUHD5MHkPP+rfH/bHnVb3iO4wWMWVpllAzJ+juR+ihr+gIBXRt7n
-	jy16EMdnQUHsMIP+OECkGjMdZREK22Qveb7oN7tEESVnQ4n1Y35YHUHxawb9I4dywF3dHm
-	0J78RJE0JzC2KA8TQBVgvD331ESm9EA=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8NaHn4CZT2EgZ3eFD+T/l9oKlirq6RgXEJIrRcdpmOE=;
+	b=jTa5CugcJLT9gFktdX0Qk19yrxWk+W9gqORCDsb9sLcC4fs44OzMwvYc5GY02aSf+n1D4d
+	nGLNr9HDvaI3wqlmo3iO9labemc4B9wMKx1/j+aucf4MGG04hERs/VYwkMziIOF36Pz0OT
+	y0T69ne2Jicit1+XikjdtgHVGNFsUNc=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-605-AuWqQx-pM12eQaf3Wi0aIg-1; Mon,
- 09 Mar 2026 15:55:12 -0400
-X-MC-Unique: AuWqQx-pM12eQaf3Wi0aIg-1
-X-Mimecast-MFC-AGG-ID: AuWqQx-pM12eQaf3Wi0aIg_1773086111
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-157-ky6hko67PV664qHevS0x5A-1; Mon,
+ 09 Mar 2026 15:55:31 -0400
+X-MC-Unique: ky6hko67PV664qHevS0x5A-1
+X-Mimecast-MFC-AGG-ID: ky6hko67PV664qHevS0x5A_1773086129
 Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D3DEF1800616;
-	Mon,  9 Mar 2026 19:55:10 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id F0AA61955DB9;
+	Mon,  9 Mar 2026 19:55:28 +0000 (UTC)
 Received: from fedora.redhat.com (unknown [10.22.81.10])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8764430001A2;
-	Mon,  9 Mar 2026 19:55:05 +0000 (UTC)
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id DB5D13000223;
+	Mon,  9 Mar 2026 19:55:23 +0000 (UTC)
 From: Wander Lairson Costa <wander@redhat.com>
 To: Steven Rostedt <rostedt@goodmis.org>,
 	Tomas Glozar <tglozar@redhat.com>,
 	Wander Lairson Costa <wander@redhat.com>,
-	Crystal Wood <crwood@redhat.com>,
 	Ivan Pravdin <ipravdin.official@gmail.com>,
+	Crystal Wood <crwood@redhat.com>,
 	Costa Shulyupin <costa.shul@redhat.com>,
 	John Kacur <jkacur@redhat.com>,
 	Tiezhu Yang <yangtiezhu@loongson.cn>,
@@ -54,9 +56,11 @@ To: Steven Rostedt <rostedt@goodmis.org>,
 	linux-trace-kernel@vger.kernel.org (open list:Real-time Linux Analysis (RTLA) tools),
 	linux-kernel@vger.kernel.org (open list:Real-time Linux Analysis (RTLA) tools),
 	bpf@vger.kernel.org (open list:BPF [MISC]:Keyword:(?:\b|_)bpf(?:\b|_))
-Subject: [PATCH v4 00/18] rtla: Robustness and code quality improvements
-Date: Mon,  9 Mar 2026 16:46:13 -0300
-Message-ID: <20260309195040.1019085-1-wander@redhat.com>
+Subject: [PATCH v4 01/18] rtla: Exit on memory allocation failures during initialization
+Date: Mon,  9 Mar 2026 16:46:14 -0300
+Message-ID: <20260309195040.1019085-2-wander@redhat.com>
+In-Reply-To: <20260309195040.1019085-1-wander@redhat.com>
+References: <20260309195040.1019085-1-wander@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,112 +70,560 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-This series addresses multiple issues in the rtla codebase related to
-error handling, string manipulation safety, and code maintainability.
-The changes improve the tool's reliability and bring the code more in
-line with kernel coding practices.
+Most memory allocations in rtla happen during early initialization
+before any resources are acquired that would require cleanup. In these
+cases, propagating allocation errors just adds complexity without any
+benefit. There's nothing to clean up, and the program must exit anyway.
 
-The series can be broadly divided into three categories:
+This patch introduces fatal allocation wrappers (calloc_fatal,
+reallocarray_fatal, strdup_fatal) that call fatal() on allocation
+failure. These wrappers simplify the code by eliminating unnecessary
+error propagation paths.
 
-Bug fixes address several correctness issues: a resource leak where
-opendir() was not paired with closedir() on success paths, I/O loops
-that failed to handle EINTR and partial writes correctly, a missing
-bounds check when indexing the softirq_name array with kernel-provided
-data, improper handling of pthread_create() failures, and a loop
-condition that checked a pointer instead of the character it points to.
+The patch converts early allocations to use these wrappers in
+actions_init() and related action functions, osnoise_context_alloc()
+and osnoise_init_tool(), trace_instance_init() and trace event
+functions, and parameter structure allocations in main functions.
 
-String handling improvements replace unsafe patterns throughout the
-codebase. The strncpy() function is replaced with a new strscpy()
-implementation that guarantees NUL-termination and provides truncation
-detection. A str_has_prefix() helper replaces verbose strncmp/strlen
-patterns for prefix matching. String comparisons are tightened to use
-exact matching where appropriate, preventing silent acceptance of
-malformed input like "100nsx" being parsed as "100ns".
+This simplifies the code while maintaining the same behavior: immediate
+exit on allocation failure during initialization. Allocations that
+require cleanup, such as those in histogram allocation functions with
+goto cleanup paths, are left unchanged and continue to return errors.
 
-Code quality improvements reduce duplication and improve readability.
-A common_threshold_handler() consolidates repeated threshold action
-logic. The extract_arg() macro simplifies key=value parsing. Magic
-numbers are replaced with named constants (MAX_PATH, ARRAY_SIZE), and
-redundant strlen() calls are cached in local variables.
+Signed-off-by: Wander Lairson Costa <wander@redhat.com>
+---
+ tools/tracing/rtla/src/actions.c       | 50 ++++++++++++--------------
+ tools/tracing/rtla/src/actions.h       |  8 ++---
+ tools/tracing/rtla/src/osnoise.c       | 22 ++++--------
+ tools/tracing/rtla/src/osnoise_hist.c  | 22 ++++--------
+ tools/tracing/rtla/src/osnoise_top.c   | 22 ++++--------
+ tools/tracing/rtla/src/timerlat_hist.c | 22 ++++--------
+ tools/tracing/rtla/src/timerlat_top.c  | 22 ++++--------
+ tools/tracing/rtla/src/trace.c         | 30 ++++------------
+ tools/tracing/rtla/src/trace.h         |  4 +--
+ tools/tracing/rtla/src/utils.c         | 35 ++++++++++++++++++
+ tools/tracing/rtla/src/utils.h         |  3 ++
+ 11 files changed, 108 insertions(+), 132 deletions(-)
 
-All changes have been tested with the existing rtla test suite.
-
-v4:
-- Patch 3: Rename commit title from "rtla: Simplify argument parsing"
-  to "rtla/actions: Simplify argument parsing" to clarify scope. Remove
-  spurious whitespace change to container_of macro (Tomas Glozar).
-- Patch 12: Fix a regression where strcmp() broke SCHED_DEADLINE
-  priority parsing in "d:runtime:period" format (e.g., "d:10ms:100ms").
-  Introduce match_time_unit() helper that checks the suffix is followed
-  by end-of-string or ':' delimiter. Note that strncmp_static() was
-  also considered but would fail because ARRAY_SIZE() includes the NUL
-  terminator (Tomas Glozar).
-- Patch 15: Add Fixes tag for stable backport tracking (Tomas Glozar).
-
-v3:
-- Address v2 feedback:
-  - Rename common_restart() to common_threshold_handler() to better
-    reflect its purpose (Tomas Glozar).
-  - Implement a proper strscpy() for safer string handling instead of
-    manual buffer sizing (Steven Rostedt).
-  - Remove restart_result enum in favor of simpler, direct return
-    values (Tomas Glozar).
-- Add several new bug fixes, including a softirq vector bounds check,
-  pthread_create() failure handling, robust I/O handling for
-  EINTR/partial writes, and a resource leak fix.
-- Introduce str_has_prefix() helper to replace verbose strncmp/strlen
-  patterns.
-- Tighten string parsing to enforce exact matching and reject invalid
-  suffixes (e.g., "100nsx").
-- Drop patches already merged via RTLA v6.20 pull request.
-
-v2:
-- exit on memory allocation failure
-- remove redundant strlen() calls
-- fix possible race on condition on stop_tracing variable access
-- ensure null termination on read() calls
-- fix checkpatch reports
-- make extract_args() an inline function
-- add the usage of common_restart() in more places
-
-Wander Lairson Costa (18):
-  rtla: Exit on memory allocation failures during initialization
-  rtla: Use strdup() to simplify code
-  rtla/actions: Simplify argument parsing
-  rtla: Introduce common_threshold_handler() helper
-  rtla: Replace magic number with MAX_PATH
-  rtla: Simplify code by caching string lengths
-  rtla: Add strscpy() and replace strncpy() calls
-  rtla/timerlat: Add bounds check for softirq vector
-  rtla: Handle pthread_create() failure properly
-  rtla: Add str_has_prefix() helper function
-  rtla: Use str_has_prefix() for prefix checks
-  rtla: Enforce exact match for time unit suffixes
-  rtla: Use str_has_prefix() for option prefix check
-  rtla/timerlat: Simplify RTLA_NO_BPF environment variable check
-  rtla/trace: Fix write loop in trace_event_save_hist()
-  rtla/trace: Fix I/O handling in save_trace_to_file()
-  rtla/utils: Fix resource leak in set_comm_sched_attr()
-  rtla/utils: Fix loop condition in PID validation
-
- tools/tracing/rtla/src/actions.c       | 103 ++++++++++++---------
- tools/tracing/rtla/src/actions.h       |   8 +-
- tools/tracing/rtla/src/common.c        |  65 ++++++++++----
- tools/tracing/rtla/src/common.h        |  18 ++++
- tools/tracing/rtla/src/osnoise.c       |  26 ++----
- tools/tracing/rtla/src/osnoise_hist.c  |  22 ++---
- tools/tracing/rtla/src/osnoise_top.c   |  22 ++---
- tools/tracing/rtla/src/timerlat.c      |   5 +-
- tools/tracing/rtla/src/timerlat_aa.c   |  10 +--
- tools/tracing/rtla/src/timerlat_hist.c |  41 ++++-----
- tools/tracing/rtla/src/timerlat_top.c  |  54 +++++------
- tools/tracing/rtla/src/timerlat_u.c    |   4 +-
- tools/tracing/rtla/src/trace.c         | 102 +++++++++++----------
- tools/tracing/rtla/src/trace.h         |   4 +-
- tools/tracing/rtla/src/utils.c         | 119 +++++++++++++++++++++----
- tools/tracing/rtla/src/utils.h         |  29 +++++-
- 16 files changed, 388 insertions(+), 244 deletions(-)
-
+diff --git a/tools/tracing/rtla/src/actions.c b/tools/tracing/rtla/src/actions.c
+index a42615011962d..22b8283a183f3 100644
+--- a/tools/tracing/rtla/src/actions.c
++++ b/tools/tracing/rtla/src/actions.c
+@@ -15,7 +15,7 @@ void
+ actions_init(struct actions *self)
+ {
+ 	self->size = action_default_size;
+-	self->list = calloc(self->size, sizeof(struct action));
++	self->list = calloc_fatal(self->size, sizeof(struct action));
+ 	self->len = 0;
+ 	self->continue_flag = false;
+ 
+@@ -50,8 +50,10 @@ static struct action *
+ actions_new(struct actions *self)
+ {
+ 	if (self->len >= self->size) {
+-		self->size *= 2;
+-		self->list = realloc(self->list, self->size * sizeof(struct action));
++		const size_t new_size = self->size * 2;
++
++		self->list = reallocarray_fatal(self->list, new_size, sizeof(struct action));
++		self->size = new_size;
+ 	}
+ 
+ 	return &self->list[self->len++];
+@@ -60,25 +62,21 @@ actions_new(struct actions *self)
+ /*
+  * actions_add_trace_output - add an action to output trace
+  */
+-int
++void
+ actions_add_trace_output(struct actions *self, const char *trace_output)
+ {
+ 	struct action *action = actions_new(self);
+ 
+ 	self->present[ACTION_TRACE_OUTPUT] = true;
+ 	action->type = ACTION_TRACE_OUTPUT;
+-	action->trace_output = calloc(strlen(trace_output) + 1, sizeof(char));
+-	if (!action->trace_output)
+-		return -1;
++	action->trace_output = calloc_fatal(strlen(trace_output) + 1, sizeof(char));
+ 	strcpy(action->trace_output, trace_output);
+-
+-	return 0;
+ }
+ 
+ /*
+  * actions_add_trace_output - add an action to send signal to a process
+  */
+-int
++void
+ actions_add_signal(struct actions *self, int signal, int pid)
+ {
+ 	struct action *action = actions_new(self);
+@@ -87,40 +85,32 @@ actions_add_signal(struct actions *self, int signal, int pid)
+ 	action->type = ACTION_SIGNAL;
+ 	action->signal = signal;
+ 	action->pid = pid;
+-
+-	return 0;
+ }
+ 
+ /*
+  * actions_add_shell - add an action to execute a shell command
+  */
+-int
++void
+ actions_add_shell(struct actions *self, const char *command)
+ {
+ 	struct action *action = actions_new(self);
+ 
+ 	self->present[ACTION_SHELL] = true;
+ 	action->type = ACTION_SHELL;
+-	action->command = calloc(strlen(command) + 1, sizeof(char));
+-	if (!action->command)
+-		return -1;
++	action->command = calloc_fatal(strlen(command) + 1, sizeof(char));
+ 	strcpy(action->command, command);
+-
+-	return 0;
+ }
+ 
+ /*
+  * actions_add_continue - add an action to resume measurement
+  */
+-int
++void
+ actions_add_continue(struct actions *self)
+ {
+ 	struct action *action = actions_new(self);
+ 
+ 	self->present[ACTION_CONTINUE] = true;
+ 	action->type = ACTION_CONTINUE;
+-
+-	return 0;
+ }
+ 
+ /*
+@@ -176,7 +166,8 @@ actions_parse(struct actions *self, const char *trigger, const char *tracefn)
+ 				/* Only one argument allowed */
+ 				return -1;
+ 		}
+-		return actions_add_trace_output(self, trace_output);
++		actions_add_trace_output(self, trace_output);
++		break;
+ 	case ACTION_SIGNAL:
+ 		/* Takes two arguments, num (signal) and pid */
+ 		while (token != NULL) {
+@@ -200,21 +191,26 @@ actions_parse(struct actions *self, const char *trigger, const char *tracefn)
+ 			/* Missing argument */
+ 			return -1;
+ 
+-		return actions_add_signal(self, signal, pid);
++		actions_add_signal(self, signal, pid);
++		break;
+ 	case ACTION_SHELL:
+ 		if (token == NULL)
+ 			return -1;
+-		if (strlen(token) > 8 && strncmp(token, "command=", 8) == 0)
+-			return actions_add_shell(self, token + 8);
+-		return -1;
++		if (strlen(token) > 8 && strncmp(token, "command=", 8))
++			return -1;
++		actions_add_shell(self, token + 8);
++		break;
+ 	case ACTION_CONTINUE:
+ 		/* Takes no argument */
+ 		if (token != NULL)
+ 			return -1;
+-		return actions_add_continue(self);
++		actions_add_continue(self);
++		break;
+ 	default:
+ 		return -1;
+ 	}
++
++	return 0;
+ }
+ 
+ /*
+diff --git a/tools/tracing/rtla/src/actions.h b/tools/tracing/rtla/src/actions.h
+index fb77069c972ba..034048682fefb 100644
+--- a/tools/tracing/rtla/src/actions.h
++++ b/tools/tracing/rtla/src/actions.h
+@@ -49,9 +49,9 @@ struct actions {
+ 
+ void actions_init(struct actions *self);
+ void actions_destroy(struct actions *self);
+-int actions_add_trace_output(struct actions *self, const char *trace_output);
+-int actions_add_signal(struct actions *self, int signal, int pid);
+-int actions_add_shell(struct actions *self, const char *command);
+-int actions_add_continue(struct actions *self);
++void actions_add_trace_output(struct actions *self, const char *trace_output);
++void actions_add_signal(struct actions *self, int signal, int pid);
++void actions_add_shell(struct actions *self, const char *command);
++void actions_add_continue(struct actions *self);
+ int actions_parse(struct actions *self, const char *trigger, const char *tracefn);
+ int actions_perform(struct actions *self);
+diff --git a/tools/tracing/rtla/src/osnoise.c b/tools/tracing/rtla/src/osnoise.c
+index 945eb61efc465..ec074cd53dd84 100644
+--- a/tools/tracing/rtla/src/osnoise.c
++++ b/tools/tracing/rtla/src/osnoise.c
+@@ -938,9 +938,7 @@ struct osnoise_context *osnoise_context_alloc(void)
+ {
+ 	struct osnoise_context *context;
+ 
+-	context = calloc(1, sizeof(*context));
+-	if (!context)
+-		return NULL;
++	context = calloc_fatal(1, sizeof(*context));
+ 
+ 	context->orig_stop_us		= OSNOISE_OPTION_INIT_VAL;
+ 	context->stop_us		= OSNOISE_OPTION_INIT_VAL;
+@@ -1017,24 +1015,16 @@ void osnoise_destroy_tool(struct osnoise_tool *top)
+ struct osnoise_tool *osnoise_init_tool(char *tool_name)
+ {
+ 	struct osnoise_tool *top;
+-	int retval;
+-
+-	top = calloc(1, sizeof(*top));
+-	if (!top)
+-		return NULL;
+ 
++	top = calloc_fatal(1, sizeof(*top));
+ 	top->context = osnoise_context_alloc();
+-	if (!top->context)
+-		goto out_err;
+ 
+-	retval = trace_instance_init(&top->trace, tool_name);
+-	if (retval)
+-		goto out_err;
++	if (trace_instance_init(&top->trace, tool_name)) {
++		osnoise_destroy_tool(top);
++		return NULL;
++	}
+ 
+ 	return top;
+-out_err:
+-	osnoise_destroy_tool(top);
+-	return NULL;
+ }
+ 
+ /*
+diff --git a/tools/tracing/rtla/src/osnoise_hist.c b/tools/tracing/rtla/src/osnoise_hist.c
+index 9d70ea34807ff..efbd2e834cf0e 100644
+--- a/tools/tracing/rtla/src/osnoise_hist.c
++++ b/tools/tracing/rtla/src/osnoise_hist.c
+@@ -466,9 +466,7 @@ static struct common_params
+ 	int c;
+ 	char *trace_output = NULL;
+ 
+-	params = calloc(1, sizeof(*params));
+-	if (!params)
+-		exit(1);
++	params = calloc_fatal(1, sizeof(*params));
+ 
+ 	actions_init(&params->common.threshold_actions);
+ 	actions_init(&params->common.end_actions);
+@@ -579,22 +577,16 @@ static struct common_params
+ 			params->common.hist.with_zeros = 1;
+ 			break;
+ 		case '4': /* trigger */
+-			if (params->common.events) {
+-				retval = trace_event_add_trigger(params->common.events, optarg);
+-				if (retval)
+-					fatal("Error adding trigger %s", optarg);
+-			} else {
++			if (params->common.events)
++				trace_event_add_trigger(params->common.events, optarg);
++			else
+ 				fatal("--trigger requires a previous -e");
+-			}
+ 			break;
+ 		case '5': /* filter */
+-			if (params->common.events) {
+-				retval = trace_event_add_filter(params->common.events, optarg);
+-				if (retval)
+-					fatal("Error adding filter %s", optarg);
+-			} else {
++			if (params->common.events)
++				trace_event_add_filter(params->common.events, optarg);
++			else
+ 				fatal("--filter requires a previous -e");
+-			}
+ 			break;
+ 		case '6':
+ 			params->common.warmup = get_llong_from_str(optarg);
+diff --git a/tools/tracing/rtla/src/osnoise_top.c b/tools/tracing/rtla/src/osnoise_top.c
+index d54d47947fb44..d2b4ac64e77b4 100644
+--- a/tools/tracing/rtla/src/osnoise_top.c
++++ b/tools/tracing/rtla/src/osnoise_top.c
+@@ -319,9 +319,7 @@ struct common_params *osnoise_top_parse_args(int argc, char **argv)
+ 	int c;
+ 	char *trace_output = NULL;
+ 
+-	params = calloc(1, sizeof(*params));
+-	if (!params)
+-		exit(1);
++	params = calloc_fatal(1, sizeof(*params));
+ 
+ 	actions_init(&params->common.threshold_actions);
+ 	actions_init(&params->common.end_actions);
+@@ -410,22 +408,16 @@ struct common_params *osnoise_top_parse_args(int argc, char **argv)
+ 			params->threshold = get_llong_from_str(optarg);
+ 			break;
+ 		case '0': /* trigger */
+-			if (params->common.events) {
+-				retval = trace_event_add_trigger(params->common.events, optarg);
+-				if (retval)
+-					fatal("Error adding trigger %s", optarg);
+-			} else {
++			if (params->common.events)
++				trace_event_add_trigger(params->common.events, optarg);
++			else
+ 				fatal("--trigger requires a previous -e");
+-			}
+ 			break;
+ 		case '1': /* filter */
+-			if (params->common.events) {
+-				retval = trace_event_add_filter(params->common.events, optarg);
+-				if (retval)
+-					fatal("Error adding filter %s", optarg);
+-			} else {
++			if (params->common.events)
++				trace_event_add_filter(params->common.events, optarg);
++			else
+ 				fatal("--filter requires a previous -e");
+-			}
+ 			break;
+ 		case '2':
+ 			params->common.warmup = get_llong_from_str(optarg);
+diff --git a/tools/tracing/rtla/src/timerlat_hist.c b/tools/tracing/rtla/src/timerlat_hist.c
+index 4e8c38a61197c..6ea397421f1c9 100644
+--- a/tools/tracing/rtla/src/timerlat_hist.c
++++ b/tools/tracing/rtla/src/timerlat_hist.c
+@@ -766,9 +766,7 @@ static struct common_params
+ 	int c;
+ 	char *trace_output = NULL;
+ 
+-	params = calloc(1, sizeof(*params));
+-	if (!params)
+-		exit(1);
++	params = calloc_fatal(1, sizeof(*params));
+ 
+ 	actions_init(&params->common.threshold_actions);
+ 	actions_init(&params->common.end_actions);
+@@ -914,22 +912,16 @@ static struct common_params
+ 			params->common.hist.with_zeros = 1;
+ 			break;
+ 		case '6': /* trigger */
+-			if (params->common.events) {
+-				retval = trace_event_add_trigger(params->common.events, optarg);
+-				if (retval)
+-					fatal("Error adding trigger %s", optarg);
+-			} else {
++			if (params->common.events)
++				trace_event_add_trigger(params->common.events, optarg);
++			else
+ 				fatal("--trigger requires a previous -e");
+-			}
+ 			break;
+ 		case '7': /* filter */
+-			if (params->common.events) {
+-				retval = trace_event_add_filter(params->common.events, optarg);
+-				if (retval)
+-					fatal("Error adding filter %s", optarg);
+-			} else {
++			if (params->common.events)
++				trace_event_add_filter(params->common.events, optarg);
++			else
+ 				fatal("--filter requires a previous -e");
+-			}
+ 			break;
+ 		case '8':
+ 			params->dma_latency = get_llong_from_str(optarg);
+diff --git a/tools/tracing/rtla/src/timerlat_top.c b/tools/tracing/rtla/src/timerlat_top.c
+index 284b74773c2b5..dd727cb48b551 100644
+--- a/tools/tracing/rtla/src/timerlat_top.c
++++ b/tools/tracing/rtla/src/timerlat_top.c
+@@ -537,9 +537,7 @@ static struct common_params
+ 	int c;
+ 	char *trace_output = NULL;
+ 
+-	params = calloc(1, sizeof(*params));
+-	if (!params)
+-		exit(1);
++	params = calloc_fatal(1, sizeof(*params));
+ 
+ 	actions_init(&params->common.threshold_actions);
+ 	actions_init(&params->common.end_actions);
+@@ -664,22 +662,16 @@ static struct common_params
+ 			params->common.user_data = true;
+ 			break;
+ 		case '0': /* trigger */
+-			if (params->common.events) {
+-				retval = trace_event_add_trigger(params->common.events, optarg);
+-				if (retval)
+-					fatal("Error adding trigger %s", optarg);
+-			} else {
++			if (params->common.events)
++				trace_event_add_trigger(params->common.events, optarg);
++			else
+ 				fatal("--trigger requires a previous -e");
+-			}
+ 			break;
+ 		case '1': /* filter */
+-			if (params->common.events) {
+-				retval = trace_event_add_filter(params->common.events, optarg);
+-				if (retval)
+-					fatal("Error adding filter %s", optarg);
+-			} else {
++			if (params->common.events)
++				trace_event_add_filter(params->common.events, optarg);
++			else
+ 				fatal("--filter requires a previous -e");
+-			}
+ 			break;
+ 		case '2': /* dma-latency */
+ 			params->dma_latency = get_llong_from_str(optarg);
+diff --git a/tools/tracing/rtla/src/trace.c b/tools/tracing/rtla/src/trace.c
+index b8be3e28680ee..211ca54b15b0e 100644
+--- a/tools/tracing/rtla/src/trace.c
++++ b/tools/tracing/rtla/src/trace.c
+@@ -191,9 +191,7 @@ void trace_instance_destroy(struct trace_instance *trace)
+  */
+ int trace_instance_init(struct trace_instance *trace, char *tool_name)
+ {
+-	trace->seq = calloc(1, sizeof(*trace->seq));
+-	if (!trace->seq)
+-		goto out_err;
++	trace->seq = calloc_fatal(1, sizeof(*trace->seq));
+ 
+ 	trace_seq_init(trace->seq);
+ 
+@@ -274,15 +272,9 @@ struct trace_events *trace_event_alloc(const char *event_string)
+ {
+ 	struct trace_events *tevent;
+ 
+-	tevent = calloc(1, sizeof(*tevent));
+-	if (!tevent)
+-		return NULL;
++	tevent = calloc_fatal(1, sizeof(*tevent));
+ 
+-	tevent->system = strdup(event_string);
+-	if (!tevent->system) {
+-		free(tevent);
+-		return NULL;
+-	}
++	tevent->system = strdup_fatal(event_string);
+ 
+ 	tevent->event = strstr(tevent->system, ":");
+ 	if (tevent->event) {
+@@ -296,31 +288,23 @@ struct trace_events *trace_event_alloc(const char *event_string)
+ /*
+  * trace_event_add_filter - record an event filter
+  */
+-int trace_event_add_filter(struct trace_events *event, char *filter)
++void trace_event_add_filter(struct trace_events *event, char *filter)
+ {
+ 	if (event->filter)
+ 		free(event->filter);
+ 
+-	event->filter = strdup(filter);
+-	if (!event->filter)
+-		return 1;
+-
+-	return 0;
++	event->filter = strdup_fatal(filter);
+ }
+ 
+ /*
+  * trace_event_add_trigger - record an event trigger action
+  */
+-int trace_event_add_trigger(struct trace_events *event, char *trigger)
++void trace_event_add_trigger(struct trace_events *event, char *trigger)
+ {
+ 	if (event->trigger)
+ 		free(event->trigger);
+ 
+-	event->trigger = strdup(trigger);
+-	if (!event->trigger)
+-		return 1;
+-
+-	return 0;
++	event->trigger = strdup_fatal(trigger);
+ }
+ 
+ /*
+diff --git a/tools/tracing/rtla/src/trace.h b/tools/tracing/rtla/src/trace.h
+index 1e5aee4b828dd..95b911a2228b2 100644
+--- a/tools/tracing/rtla/src/trace.h
++++ b/tools/tracing/rtla/src/trace.h
+@@ -45,6 +45,6 @@ void trace_events_destroy(struct trace_instance *instance,
+ int trace_events_enable(struct trace_instance *instance,
+ 			  struct trace_events *events);
+ 
+-int trace_event_add_filter(struct trace_events *event, char *filter);
+-int trace_event_add_trigger(struct trace_events *event, char *trigger);
++void trace_event_add_filter(struct trace_events *event, char *filter);
++void trace_event_add_trigger(struct trace_events *event, char *trigger);
+ int trace_set_buffer_size(struct trace_instance *trace, int size);
+diff --git a/tools/tracing/rtla/src/utils.c b/tools/tracing/rtla/src/utils.c
+index 18986a5aed3c1..75cdcc63d5a15 100644
+--- a/tools/tracing/rtla/src/utils.c
++++ b/tools/tracing/rtla/src/utils.c
+@@ -1032,3 +1032,38 @@ int strtoi(const char *s, int *res)
+ 	*res = (int) lres;
+ 	return 0;
+ }
++
++static inline void fatal_alloc(void)
++{
++	fatal("Error allocating memory\n");
++}
++
++void *calloc_fatal(size_t n, size_t size)
++{
++	void *p = calloc(n, size);
++
++	if (!p)
++		fatal_alloc();
++
++	return p;
++}
++
++void *reallocarray_fatal(void *p, size_t n, size_t size)
++{
++	p = reallocarray(p, n, size);
++
++	if (!p)
++		fatal_alloc();
++
++	return p;
++}
++
++char *strdup_fatal(const char *s)
++{
++	char *p = strdup(s);
++
++	if (!p)
++		fatal_alloc();
++
++	return p;
++}
+diff --git a/tools/tracing/rtla/src/utils.h b/tools/tracing/rtla/src/utils.h
+index f7c2a52a0ab54..e29c2eb5d569d 100644
+--- a/tools/tracing/rtla/src/utils.h
++++ b/tools/tracing/rtla/src/utils.h
+@@ -69,6 +69,9 @@ int set_comm_sched_attr(const char *comm_prefix, struct sched_attr *attr);
+ int set_comm_cgroup(const char *comm_prefix, const char *cgroup);
+ int set_pid_cgroup(pid_t pid, const char *cgroup);
+ int set_cpu_dma_latency(int32_t latency);
++void *calloc_fatal(size_t n, size_t size);
++void *reallocarray_fatal(void *p, size_t n, size_t size);
++char *strdup_fatal(const char *s);
+ #ifdef HAVE_LIBCPUPOWER_SUPPORT
+ int save_cpu_idle_disable_state(unsigned int cpu);
+ int restore_cpu_idle_disable_state(unsigned int cpu);
 -- 
 2.53.0
 
