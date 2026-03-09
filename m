@@ -1,88 +1,81 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE181DED42;
-	Mon,  9 Mar 2026 20:19:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22FE5C2EA
+	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 20:34:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773087572; cv=none; b=ZvguJLKx9jhTPcjiDIeqStWAHdMyZP79hfLzFVF+WVAnLU4r+X7AOf8q/lzEKO71qhW8MTd4TnbYjiPFUidgEZKGkEu928KeJ7dz07HSsPgZTU2fSIppgrwFltfSPWikqe6DMj8xoJ2YfFbYbVOCtEbwco5cBoKaKQinaItvuRs=
+	t=1773088446; cv=none; b=CcJkMrbYp5rrAsvdprf7XDgtXFZRu008AmSzSaXV7da81fXPILfdknyq02LY2W9FzoSmXkdvi9ibFzhKx/5IQN1EIPggUc2JiftgD1z3DHRCbCeYcTACkTOq58J14OH04A2PuiIDt+N1KjBmeiVAN/1eyifM994JxRMV0yI8pxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773087572; c=relaxed/simple;
-	bh=ofM93fWFg9wOYbbqABGamk2Cktt1rzuB3peBI04jSGM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hVNlPHxKuLXEcZzOBwBORz9bTuNLMtyKBX9pXh54bsUjRdjzmevmzOaQYpVkR2vNuUU+SCWRQW3XDRZvcKoDuCRy++ym/25IWqbY+DiVgp4ABdyZjDjtFlSZezBAlTBNIG+FLCEuT7GWqkyHN3zbaJFB7OWbP6AFYsHbfHDakoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gcYz0Ocv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773088446; c=relaxed/simple;
+	bh=3/48DpGpuVgHfkIni0tyHrV7eZrsIKRpAziMmE6eDB0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kP7eT+ACovegPJ9gLZIDV5KKLt889OC5qlscj8+YI+VjHfA1KzsiGcmPD14dkWCnt2NOnIsWXGtNQ+Qkq4gAIwT54IGsAoGpeMPm4r8JgHm0dsyci1eXTF2yChoWkXjPn3spWxsANqjq5kV//j9rC9BTCypBcgtrY02T3No/QIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BwZFui2U; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gcYz0Ocv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F22CC4CEF7;
-	Mon,  9 Mar 2026 20:19:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BwZFui2U"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3430BC2BC87;
+	Mon,  9 Mar 2026 20:34:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773087571;
-	bh=ofM93fWFg9wOYbbqABGamk2Cktt1rzuB3peBI04jSGM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gcYz0OcvvZtaGV5WQIiDGmqIa3liLRrsdSKGaRASR9HRDXNlSZRubqbUwfRo18MuW
-	 yQoLhUo0WAWPN0i6rbsXcx17ovSxuzsmqhGJqpVmcm4LKLt4VyH6HaBcFVxot1JTsz
-	 aH1ez9k1c2MCqTuZJJthNOBr++QxBhVI9Rk7ravSZ9LiJmXXFxHHdOPd+V6Uem/noj
-	 QJ1ktHAyRFXKm34k+Zxf615dv373m4Cy1wcDFweNxe4E6EvrTMlX0Y6ftYI4oW+6YP
-	 twNYF6oqYKXESxDxSGs8FZpCs3fOXHQZO/qkdvcG6qmFP5bFzK9TUQC1bAYKeXIcdH
-	 CuKWQBlGyr9jg==
-Date: Mon, 9 Mar 2026 13:19:27 -0700
-From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Leo Yan <leo.yan@arm.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>, 
-	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, Quentin Monnet <qmo@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@kernel.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, 
-	Qinxin Xia <xiaqinxin@huawei.com>, Bartosz Golaszewski <brgl@kernel.org>, 
-	Kent Gibson <warthog618@gmail.com>, "K. Y. Srinivasan" <kys@microsoft.com>, 
-	Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>, 
-	Long Li <longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>, 
-	David Lechner <dlechner@baylibre.com>, Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>, 
-	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Willy Tarreau <w@1wt.eu>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, 
-	Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>, 
-	Mark Brown <broonie@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
-	Benjamin Tissoires <bentiss@kernel.org>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH v3 19/30] tools: objtool: Append extra host cflags
-Message-ID: <uub7xebutunq7cl4szwepu3lqenat3c4mle5rdxjtumq4t5lzv@arbi62zsbic3>
-References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
- <20260308-tools_build_fix_zero_init-v3-19-6477808123b7@arm.com>
+	s=k20201202; t=1773088445;
+	bh=3/48DpGpuVgHfkIni0tyHrV7eZrsIKRpAziMmE6eDB0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=BwZFui2Ub9b6z5IUhDm9FSmrZtUqVBpKzeS/jSvwdvoNDC85vWRNUsRibsS0VEpka
+	 XvxivTPP4MOckgOUEzG/FRjBMpLwD2hMrvcJvmIlLD+x1V+qeCLnM98PiigNQEhujo
+	 IMsJRpaBRtSVzpj2wVgRyZo/JrA4KOfoXzjBj7fnMMrUBLKOI6qjYnDHHz4Yno6j6e
+	 Iolopg4cEQvwbFl90knpwN9N4OrDBvm9dEJa8lUhCTwmHRuTw6m7okXTpkK4ZJgmeT
+	 0x8JHoHvS58pNjcBTowgygJKiTVBwc/T/es9+Ab7YmGrOyiWUP7jcxanFIeCw0eext
+	 bAfjgEbm6J5gw==
+Message-ID: <e1918475-8028-45a6-a669-dc9031f73c2f@kernel.org>
+Date: Mon, 9 Mar 2026 20:34:03 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260308-tools_build_fix_zero_init-v3-19-6477808123b7@arm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: Need update to libbpf/bpftool for bpf_stream_vprintk() removal
+ (kernel sha 0cecd492f516)
+To: Calvin Owens <calvin@wbinvd.org>, Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org
+References: <aa8KBN1kQnng3yma@mozart.vkv.me>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <aa8KBN1kQnng3yma@mozart.vkv.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sun, Mar 08, 2026 at 04:46:24PM +0000, Leo Yan wrote:
-> Append HOST_EXTRACFLAGS to HOSTCFLAGS so that additional flags can be
-> applied to the host compiler.
+2026-03-09 10:57 UTC-0700 ~ Calvin Owens <calvin@wbinvd.org>
+> Hi Andrii,
 > 
-> Signed-off-by: Leo Yan <leo.yan@arm.com>
+> Your libbpf github sync at [1] happened just before [2] was merged...
+> would you mind syncing that bpf_helpers.h change into libbpf/bpftool?
+> 
+>     In file included from skeleton/profiler.bpf.c:4:
+>     libbpf/include/bpf/bpf_helpers.h:318:12: error: conflicting types for 'bpf_stream_vprintk'
+>          318 | extern int bpf_stream_vprintk(int stream_id, const char *fmt__str, const void *args,
+>              |            ^
+>     ./vmlinux.h:128001:12: note: previous declaration is here
+>       128001 | extern int bpf_stream_vprintk(int stream_id, const char *fmt__str, const void *args, u32 len__sz) __weak __ksym;
 
-Thanks!
 
-Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Hi, where did you observe that, please? I don't see it when compiling
+bpftool from the main branch of the GitHub repo.
 
--- 
-Josh
+
+> I'm happy to send patches if I can help, but I'm guessing this is one of
+> those things that is easier to just do yourself with commit access...
+> 
+> Cheers,
+> Calvin
+> 
+> [2] https://github.com/libbpf/libbpf/commit/6ddc03d4fe0535ac0fb6c8525db31ac88a018ddd
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0cecd492f516
+
+
+I take care of bpftool, my ideal workflow is to sync after libbpf has
+been updated. Andrii, if you have a moment to do a libbpf sync, I'm
+happy to follow up with bpftool.
+
+Quentin
