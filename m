@@ -1,169 +1,114 @@
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4846B27FB1F
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 03:37:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773027453; cv=none; b=pvrkzIRlUHvMh/JlnaZXFKk02ykA/t7xuelYChXZ/bRJPxfuElRgyIMYhkVO38PhEBYh9Ovtv8rAtiOlnEYnu4Pj9nP7Sv71acBndtjAj7NEuVqY4BdD/mleest4XZo6qMIQUzZs98JcRdzsAEJfHk6QjmOkd5VeU3j1nXVSeS4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773027453; c=relaxed/simple;
-	bh=nwFTga/392ZpBEUmDyM2fA8sFXdfCsdAuHr9LVqUiAA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DRNN7mcg+V9qjNOEb+ii0RHIcaWDFBl4MgA61sLpzIpLxjHtA1w70Kx3tpHsRcHHK8h14lICj42XbREi3myfs+crlJRyq8/XQBNjUKA9Z6E6eClN9rREmlauBotJ2S/fjsfp09ef8/gUUoyTj1pdkstM55UGct+r6ocrIIelvwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RLNRwKwX; arc=none smtp.client-ip=74.125.82.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C6D17262E
+	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 03:50:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.173
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773028230; cv=pass; b=qVXmxFzPf8XJm9sowEHmyBUpN+sjpSeqiZqmkDGDM5azabFVlg+Fv5dL+0wvQ7r9YNdqK4mggHySjBwKwMrNwN9fiIw2wewVecWPl/4DBV6z4FalJwwhamduFDBxEEwRKQd+/Ro3nU+v7FbNr3b+uNWELqvCzy+5JcIoDRwYfIQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773028230; c=relaxed/simple;
+	bh=RdEIT9ybKdemBVxAis1wIx3aLUIDAFAUwrYBUv8C/Y0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Pe9cCfemsaHlzn9PM6rf84y9Ngm3535hw9wy9FpGVL2CJKROghcapaLalyiGw+i6ZrGS2Bx6sS+2J8ex4Ilhib4vV0tOjgvZ3zVFQt90lWRJMWfoqWO+NA1PwrPjpmCvy+T3OPbLVGbljtAs6fjxpaeE3XGwIBlM6sl7BVx+cww=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BA8WbDW9; arc=pass smtp.client-ip=209.85.128.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RLNRwKwX"
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-2bdfd129c52so7449179eec.0
-        for <bpf@vger.kernel.org>; Sun, 08 Mar 2026 20:37:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BA8WbDW9"
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-79902e1fb71so173937b3.3
+        for <bpf@vger.kernel.org>; Sun, 08 Mar 2026 20:50:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773028228; cv=none;
+        d=google.com; s=arc-20240605;
+        b=OPFJdP6bSWjLdRQuikGv/X6b5eruQlr96vgPdA7x9iO3G1CU6blnQW/NublE3lymoq
+         P954gJ0DocuWsu8f5oY7pHfp4qYltWI/p7pSOBY0hYkyoAJJ0LtKr3MXH9SylOwQSL8l
+         M3qlHAKQ3+gx3z68lRsF1dS4Id45KWsw7jj4LRUEQAowVUJqIYGwDYIug/Jy/KGsDY4F
+         Wl2TzU4xV1mlV1sF0sxOEdJrD2ueE1GPJUorlBGBM7APo5up8nIBwlXwo4+BYJFJmZlG
+         06Z/PHQo942af6hG7oOXs5LOkZDOqYA8vws0eCnnX7/94uzNURf7n7m5MLaMGsFyA9UP
+         itmg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=RdEIT9ybKdemBVxAis1wIx3aLUIDAFAUwrYBUv8C/Y0=;
+        fh=CbfzIsWdXmtRa1jI7EGmFnzshm3HA1tEaoFIpXVq2CQ=;
+        b=d54eCmmlY5u+us5J7ul8xe0YV/acxYovm49+WoCvCf1yZG2eR5SZTv0NebB5z4oBDS
+         zT/DT6VqMtUTagDNz5XuGPIRzBn+jpC6xUE4lfpYZU5KrSxVf7iKdcj6Gmm2loDNaLu3
+         xTov2JPo9huq/M3YsdNqtbgaD68m52t706WWeQMMOBA+nwbU5/gBoVRWXOMxE8W7c0xg
+         NyZAT8V+8+PL3yAfHSWP6Bl3ctdKoWTXyi6u4Ckfc28IKSCsY8R7xOo5S1TBsbidMCAs
+         VVtwEqgJdqM/wVczbgz2rsj6ErCNDVk9ftGbqlDuWxrqM++JbLJ7Sw8ATdWMV4i8cgUJ
+         1X8Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773027451; x=1773632251; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lTdaOcT/DU4oMcYTLNfdDr6SytuHIB8obzd/B98sqrw=;
-        b=RLNRwKwXzsaFJKcm6yWIcY01wrf+cTHJ8GaGFx0xvoS2gZnquhwxpmnz9r6yXXjION
-         OAjLHtRVhurJsLWfjqLgUBiy2AJisseu/S/UCLGo2ITGPfB8xQAtYd9+6ESoAAQCE+y8
-         hZ+24qxeHiB9c31TOSMINAq6U3I8zck0qeTa28JjiGgKaXCw+Av5pUIcAib704sTwGEG
-         xxpn5qp8l6SKcWg2oqDWGFf0Fae5KoS6ZucyvDTjGA8pMeJG3w7JpnUbN4PQQBEvlMpy
-         kCzbEHMwDHumQIbpXPmQyj1eYCHdO/CPP/CvtJSETRnADm+HRWV8Czv/1Qt8KCUGyGG5
-         UjGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773027451; x=1773632251;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1773028228; x=1773633028; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lTdaOcT/DU4oMcYTLNfdDr6SytuHIB8obzd/B98sqrw=;
-        b=WSDpdxzOL40DiLamOPAEEzWkqNfsMUtVt60EntBjmSuBMNxlPVHaAUtRaCbm4GSJ69
-         OZJefjSvRcBN+hHYGYm59o9GZHkoo0kNarN40OQr+zekPYravV0SRt48ufz+Cj0/57OH
-         7dQdp1iFX6HdFBVjDOT27zpSOFr4FNl0QgrS0HXR6OdWLVAPhRTqZ5NXo+GGGKxiJwFK
-         RU8jAyCUlRx1DPV2NcN43iu9iK9ImPKng6Sgf9IJ7xGyhTh2EU70JI4JJJlYiRWamNTo
-         BLS++J2sxsoMwLRIMHpm4R2318+lEhi1zgewsW6iRunmETZr9tWx3pxrN4npVc7Wsq4s
-         Z0fQ==
-X-Gm-Message-State: AOJu0YxVmjfBZCiX+lLcFIzmwT5vZz62igDITBIEBTc2kHgxRo2JHqFT
-	H248jbkBGUDT+Efu1crfNLOVbSLLvbD0cCf8DRhBEYtEjiEPzE0vXV6aCB+onnVrhGU=
-X-Gm-Gg: ATEYQzytIWj79GrWnsjaJzDMovaYE9Yq2xyqo6s+kz6CbJRwRshFVll+LqdmLUJspUQ
-	YUDv88VG6feWMOVhnFTguM0oOtwwxZpQ5kakU64CCuSBav+6+ojQvCGpe0ssWcXZ11V3qmfCllY
-	fZr/nqeu1qObylIRPzw3cGFMennxHUBr7q63dSIGM/AsBUg72sj/iiyhYmxqrrDfA86rn512UlE
-	EmF/gIFsGzVmuHATUGYCqFwshv4/KEY+etjnSAnTMmdGD1jbNGQzzkyuZjGdpjsbTIKZJGe5ZvK
-	Rcmn2ZHINTCh1fA0vdomTsrIcyLd0rEIh6BffLkha/a5rViOIsOkSb+ScRHAedR5kEYyZQ99SD9
-	Xm/9ye/KZkWDdYkddNybg/Bo0vw2+99NeA6w8NhlP46DFQ9IYKLUdOHd7yvbdLW5UbD2ScqWHsA
-	bbswdYgwHOfx6R/abX7MRTHqSuUXO4i8qdzDZTifQQZJWgJ99TQEHLNzzmxT5rbdnQvAK2/frE6
-	DnXuYbughFIq3XAGzoxLMPJysY=
-X-Received: by 2002:a05:7022:160b:b0:11b:82b8:40ae with SMTP id a92af1059eb24-128c2df15f8mr4769534c88.18.1773027450995;
-        Sun, 08 Mar 2026 20:37:30 -0700 (PDT)
-Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-128d8ee3503sm1074922c88.0.2026.03.08.20.37.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Mar 2026 20:37:30 -0700 (PDT)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-kselftest@vger.kernel.org,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH v3 bpf-next] selftests/bpf: livepatch_trampoline: skip when prerequisites are missing
-Date: Mon,  9 Mar 2026 11:37:12 +0800
-Message-ID: <20260309033712.728133-1-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        bh=RdEIT9ybKdemBVxAis1wIx3aLUIDAFAUwrYBUv8C/Y0=;
+        b=BA8WbDW9yAFx8pPXEzjFFIQz9yPXKktwBcjHToCqXlMkSyB4VjsLFbJYo5HB/ViHqO
+         tn1YYnqMNQyIbDXZA3VfaxdQpxmOrwLL6wEcQGtAXLBGZRz74+wAcRPgwDtnAQ+E/zBg
+         tbsob4jBG1JjUaIkY+Nd+2NOiLUQ4c6nOv/ZBQdlN3tWMuL3sERNKZlNpL0F5zBG0MgF
+         YaTivA4ruulby3FGDw+dLYBupCVrGkyljcZIwmrAG5IIzNJ4mo+AB8/BLTl6etrsNDar
+         9gMKIHatpnuRSjC8sFAtdoaMYbWy6XuqcNUylw+VpfsNxeBJ8FKQIn6odFKrY8HwJkw2
+         lUSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773028228; x=1773633028;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=RdEIT9ybKdemBVxAis1wIx3aLUIDAFAUwrYBUv8C/Y0=;
+        b=Xg9QgN46lYPZrdMnnBC1yvpFWfXJBclnLyLap3OrcuUafChs+/uPLm54B0OPb4vOZA
+         JLFfTFWeKQWUUTnenciz1GACwBuG6n8HdW8DwweZfahQUf/O5+ERGCChCKzrhUHymRaS
+         Ipn9sEKoT1n9bAg9Ay0qzisU8o/wbR+4sArweiqULCvlTfkYaJYB5Ey7o1yFn/UEqXYz
+         zGWa9GIGrmEFw3SyDa0dT2DJxWT0nHIJJezIH0enFTAbHN/atd0Cmgje8k7wjjfQXLZQ
+         dWQ3dbwD9ea5BUzDoOJZt91yDilVA7TzNlWHB3XklgT6gP82Pcqk43dKA6NotY1fNxCI
+         leDQ==
+X-Gm-Message-State: AOJu0YzDsxZ9i/WQyfrwUesYkTNT98xbRmvyjXf5VRGBZ1Ubffr3TJWl
+	q952Y5AI3R4m8wdr/kcr+0a985ha3FVvlQhJHAG3t1TyxkKlJ9zBjfy4xJCUP9rZszapw98H4cv
+	5frTHcoFz/fZd/KCmJKr4d850uxBCCeA=
+X-Gm-Gg: ATEYQzwx39Oaxxplg6ib1yedLrPfQ2mzNf2X322BKnWPazifokwqxItozKuXymq9WI1
+	dQrJSB9r8HIEuPH2UbrDbgF2vqWyS5YrYsIHn2b5QgdibUYWX3DYGC09Jia2/Exs85y6sqF7YAe
+	a7TJygj9XX1dRYt5LR5MLu40ycByGKafrn4riLDvAKUDoMg8oOFBUKupvPrmsafvsFyuega1+jt
+	MdepqQg0MplnVjCOa80IyBhEefyR6SjojSaIhBtqdM8yeLvaTBNeXN5hrbwbJqmZHsEci7C9lri
+	4Pd3C+nx+ozKc6I1DK6tp5LUQp3ywg==
+X-Received: by 2002:a05:690c:c52c:b0:798:65ed:bb9b with SMTP id
+ 00721157ae682-798dd688c7fmr89351937b3.27.1773028228644; Sun, 08 Mar 2026
+ 20:50:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260305030258.5273-1-sun.jian.kdev@gmail.com> <aalGh2sjKl_mZp7G@krava>
+In-Reply-To: <aalGh2sjKl_mZp7G@krava>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Mon, 9 Mar 2026 11:50:17 +0800
+X-Gm-Features: AaiRm51uUEhkJcmn4QO3MwOWN1G6F5PFKmsYAMlcoRfnq31RLjwF3XvQDes7nMQ
+Message-ID: <CABFUUZHXROhFTgVtK9CS_PERkCEJrJ6d3wAfHP9GLa7o+mVLAg@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next] selftests/bpf: livepatch_trampoline: skip
+ when prerequisites are missing
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, Song Liu <song@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-livepatch_trampoline relies on livepatch sysfs and livepatch-sample.ko.
-When CONFIG_LIVEPATCH is disabled or the samples module isn't built, the
-test fails with ENOENT and causes false failures in minimal CI configs.
+On Thu, Mar 5, 2026 at 5:02=E2=80=AFPM Jiri Olsa <olsajiri@gmail.com> wrote=
+:
+>
+> load_livepatch returns -ENOENT if we fail to open the file, we could
+> check for it instead of putting together the path again
+>
+Hi Jiri,
+Thanks for the suggestion. v3 sent:
+https://lore.kernel.org/bpf/20260309033712.728133-1-sun.jian.kdev@gmail.com=
+/
 
-Skip the test when livepatch sysfs or the sample module is unavailable.
-Also avoid writing to livepatch sysfs when it's not present.
-
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
----
-
-v3:
-  - Skip on -ENOENT from load_livepatch() instead of duplicating module path logic (suggested by Jiri Olsa)
-  - Tested: ./test_progs -t livepatch_trampoline (SKIP when livepatch-sample.ko missing)
-
-v2:
-  - Skip when /sys/kernel/livepatch is missing
-  - Guard sysfs write in unload_livepatch() when enabled knob is absent
-
-v2: https://patchwork.kernel.org/project/netdevbpf/patch/20260305030258.5273-1-sun.jian.kdev@gmail.com/
-v1: https://patchew.org/linux/20260227042354.20926-1-sun.jian.kdev@gmail.com/
-
- .../bpf/prog_tests/livepatch_trampoline.c     | 22 +++++++++++++++++--
- 1 file changed, 20 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/livepatch_trampoline.c b/tools/testing/selftests/bpf/prog_tests/livepatch_trampoline.c
-index 72aa5376c30e..b306a4070513 100644
---- a/tools/testing/selftests/bpf/prog_tests/livepatch_trampoline.c
-+++ b/tools/testing/selftests/bpf/prog_tests/livepatch_trampoline.c
-@@ -2,9 +2,13 @@
- /* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
- 
- #include <test_progs.h>
-+#include <errno.h>
-+#include <unistd.h>
- #include "testing_helpers.h"
- #include "livepatch_trampoline.skel.h"
- 
-+#define LIVEPATCH_ENABLED_PATH "/sys/kernel/livepatch/livepatch_sample/enabled"
-+
- static int load_livepatch(void)
- {
- 	char path[4096];
-@@ -19,7 +23,8 @@ static int load_livepatch(void)
- static void unload_livepatch(void)
- {
- 	/* Disable the livepatch before unloading the module */
--	system("echo 0 > /sys/kernel/livepatch/livepatch_sample/enabled");
-+	if (!access(LIVEPATCH_ENABLED_PATH, F_OK))
-+		system("echo 0 > " LIVEPATCH_ENABLED_PATH);
- 
- 	unload_module("livepatch_sample", env_verbosity > VERBOSE_NONE);
- }
-@@ -81,9 +86,22 @@ static void __test_livepatch_trampoline(bool fexit_first)
- void test_livepatch_trampoline(void)
- {
- 	int retry_cnt = 0;
-+	int err;
-+
-+	/* Skip if kernel was built without CONFIG_LIVEPATCH */
-+	if (access("/sys/kernel/livepatch", F_OK)) {
-+		test__skip();
-+		return;
-+	}
- 
- retry:
--	if (load_livepatch()) {
-+	err = load_livepatch();
-+	if (err) {
-+		if (err == -ENOENT) {
-+			test__skip();
-+			return;
-+		}
-+
- 		if (retry_cnt) {
- 			ASSERT_OK(1, "load_livepatch");
- 			goto out;
-
-base-commit: 1f318b96cc84d7c2ab792fcc0bfd42a7ca890681
--- 
-2.43.0
-
+Regards,
+Sun Jian
