@@ -1,197 +1,83 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D6EE364E82;
-	Mon,  9 Mar 2026 19:25:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6CE1285C9D
+	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 19:29:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773084342; cv=none; b=sHS03S2ivAWwgpTdQUVrKd7wpz7ImVkiPDP1Vbi7qXE/Ee2arovjWtMs8Nmt30h+NN+NCEmLD+10gGNd69SWgGXo28SvJyqmuV1WyuBPZE97m7rDJ4MK0JcEFLvtmLhL3P9hvQHPqPui+mB4VdI3xuu9WAvcm346hOAKC7kiGqE=
+	t=1773084589; cv=none; b=dUsHXpxNNsuotqNGeMjefFObz5eWi4oj0cWpzvW4u0yzop0PFSpPjCCoBuHfLt6Qcxq/1jkq3kLx+DL5IB4GGZSRO2GuRfC0LuTaiHe8BgSP5T1EV6jodFL5a3tTZYXvPXgodxxmcZmfeyTVNz79zWugDHSYj8mlMGsKKU4stAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773084342; c=relaxed/simple;
-	bh=/plxhG2pqzW1lVcSQLNXlmDx0RwF44z/68Ak9rteqm0=;
+	s=arc-20240116; t=1773084589; c=relaxed/simple;
+	bh=6/2onErcooePOiOE7CEJaZC2/IrTBptbmixftJVcsTg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NwZdhwEHBGY2USEwILvS278nNi9mam1kxUVaVN+wVBKB1r6beMEWmsyqwHlSAuWVzWmqwsLY/OMjaaZ5qDPgytr1C69P60La4j4fIYUJ5XRDqfWcyuRiXA4149gP9cI5lvHRkTmQleMVLKC1hjRrD31EwMPmXHdh9MNzXYwi3+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hasmfglE; arc=none smtp.client-ip=91.218.175.170
+	 In-Reply-To:Content-Type; b=NKhGJvUWUC/Xr83ES7AqnU1uYmmcgPZMaA2D5uKQmxsSVxJyeWe9KDpXM435wFUBMn7kO3OHRQUOw7ftlRElywMFqq+WCcGw9QyrQ9mpg/54TvhrwcPPEEhWH6/e7kwyZhybfAX/Q6dhiAe5SusUDbW8lBL2K43rgdyuuxsq/VE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=bIvrQvcl; arc=none smtp.client-ip=91.218.175.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hasmfglE"
-Message-ID: <caa6ac68-9702-43fb-87cc-7393fb44c176@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="bIvrQvcl"
+Message-ID: <42d449a1-a67e-4ebb-bf89-272072ade681@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773084337;
+	t=1773084586;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=QbP7FmkwymGBuROqWd4eebwpTFEDokcujWEFa1MUA0E=;
-	b=hasmfglESXM6eSf4hHRyDEWkmoT6IttvjlKg5AvTM15Jmt9FMOmFj5RzkT0Wxv9Tm1wUaF
-	l2BByzwrBXEzcCScroqSU7NIKP1zbJPNkry3WX7SKuFOLz88nIYIPdNz85jp44uYNtdsbc
-	gFsm3sJV0jm5LUwykbgSZRsnXTr2h7U=
-Date: Mon, 9 Mar 2026 12:25:29 -0700
+	bh=VLZ3rZ1nBafkxSG74iDxaRzJlfo2vRV/ytjdSWJSrTQ=;
+	b=bIvrQvclCXg8jrDnSAALX/qMfzbYmqqMh59lfEuRLWGqPtnCFFcbHkCTj/10TTJDFq4cYW
+	1ghQ5mW2PJT25Jshi2NkM1lsNSRvEeJQ9jUk8qfc1jTC4y73o7jTIP2DklWB73twjDpzyS
+	1uDxKIbqCshSvtcbT17vqgdTSNi0YnM=
+Date: Mon, 9 Mar 2026 12:29:35 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH dwarves v2 0/9] pahole: Encode true signatures in kernel
- BTF
-Content-Language: en-GB
-To: Alan Maguire <alan.maguire@oracle.com>,
- Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- bpf@vger.kernel.org, kernel-team@fb.com
-References: <20260309153215.1917033-1-yonghong.song@linux.dev>
- <976a9e56-a221-4f63-8f10-caf2a3c8fa4f@oracle.com>
+Subject: Re: [RFC PATCH bpf-next 0/4] bpf: Introduce bpf_netpoll
+To: Mahe Tardy <mahe.tardy@gmail.com>, song@kernel.org
+Cc: bpf@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ daniel@iogearbox.net, john.fastabend@gmail.com, ast@kernel.org,
+ andrii@kernel.org, eddyz87@gmail.com
+References: <20260309131635.302424-1-mahe.tardy@gmail.com>
+Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <976a9e56-a221-4f63-8f10-caf2a3c8fa4f@oracle.com>
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20260309131635.302424-1-mahe.tardy@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
+On 3/9/26 6:16 AM, Mahe Tardy wrote:
+> This patch series introduces bpf_netpoll, a set of BPF kfuncs that allow
+> BPF programs to send UDP packets via the netpoll infrastructure. This
+> provides a mechanism for BPF programs (e.g., LSM hooks) to emit
+> telemetry over UDP without depending on the regular networking stack.
+> 
+> For reference, this was discussed at LSF/MM/BPF 2025[^1] in Montreal,
+> and again at Plumbers 2025 in Tokyo. Liam Wisehart mentioned this work
+> during his presentation of BpfJailer[^2].
+> 
+> The main use case is to be able to completely dispense with
+> agents/daemons for BPF programs after startup. In the case of
+> Isovalent's Tetragon, the idea would be to be able to emit security
+> alerts or export data from BPF even when the agent is down. For meta,
+> according to Liam presentation[^2], this could replace logging via
+> ringbuffers which created cross-binary versioning issues.
+> 
+> The implementation follows the established kfunc lifecycle pattern
+> (create/acquire/release with refcounting, kptr map storage, dtor
+> registration), for example used by the network bpf_crypto kfuncs.
+> 
+> Further patches would extend the bpf_netpoll_send kfunc to more program
+> types. Note that network program types should not encounter recursion
+> issues as netpoll bypasses the network stack and sends directly to the
+> driver.
 
-
-On 3/9/26 11:39 AM, Alan Maguire wrote:
-> On 09/03/2026 15:32, Yonghong Song wrote:
->> Current vmlinux BTF encoding is based on the source level signatures.
->> But the compiler may do some optimization and changed the signature.
->> If the user tried with source level signature, their initial implementation
->> may have wrong results and then the user need to check what is the
->> problem and work around it, e.g. through kprobe since kprobe does not
->> need vmlinux BTF.
->>
->> Majority of changed signatures are due to dead argument elimination.
->> The following is a more complex one. The original source signature:
->>    typedef struct {
->>          union {
->>                  void            *kernel;
->>                  void __user     *user;
->>          };
->>          bool            is_kernel : 1;
->>    } sockptr_t;
->>    typedef sockptr_t bpfptr_t;
->>    static int map_create(union bpf_attr *attr, bpfptr_t uattr) { ... }
->> After compiler optimization, the signature becomes:
->>    static int map_create(union bpf_attr *attr, bool uattr__is_kernel) { ... }
->> In the above, uattr__is_kernel corresponds to 'is_kernel' field in sockptr_t.
->> This makes it easier for developers to understand what changed.
->>
->> The new signature needs to properly follow ABI specification based on
->> locations. Otherwise, that signature should be discarded. For example,
->>
->>      0x0242f1f7:   DW_TAG_subprogram
->>                      DW_AT_name      ("memblock_find_in_range")
->>                      DW_AT_calling_convention        (DW_CC_nocall)
->>                      DW_AT_type      (0x0242decc "phys_addr_t")
->>                      ...
->>      0x0242f22e:     DW_TAG_formal_parameter
->>                        DW_AT_location        (indexed (0x14a) loclist = 0x005595bc:
->>                           [0xffffffff87a000f9, 0xffffffff87a00178): DW_OP_reg5 RDI
->>                           [0xffffffff87a00178, 0xffffffff87a001be): DW_OP_reg14 R14
->>                           [0xffffffff87a001be, 0xffffffff87a001c7): DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
->>                           [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg14 R14)
->>                        DW_AT_name    ("start")
->>                        DW_AT_type    (0x0242decc "phys_addr_t")
->>                        ...
->>      0x0242f239:     DW_TAG_formal_parameter
->>                        DW_AT_location        (indexed (0x14b) loclist = 0x005595e6:
->>                           [0xffffffff87a000f9, 0xffffffff87a00175): DW_OP_reg4 RSI
->>                           [0xffffffff87a00175, 0xffffffff87a001b8): DW_OP_reg3 RBX
->>                           [0xffffffff87a001b8, 0xffffffff87a001c7): DW_OP_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
->>                           [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg3 RBX)
->>                        DW_AT_name    ("end")
->>                        DW_AT_type    (0x0242decc "phys_addr_t")
->>                        ...
->>      0x0242f245:     DW_TAG_formal_parameter
->>                        DW_AT_location        (indexed (0x14c) loclist = 0x00559610:
->>                           [0xffffffff87a001e3, 0xffffffff87a001ef): DW_OP_breg4 RSI+0)
->>                        DW_AT_name    ("size")
->>                        DW_AT_type    (0x0242decc "phys_addr_t")
->>                        ...
->>      0x0242f250:     DW_TAG_formal_parameter
->>                        DW_AT_const_value     (4096)
->>                        DW_AT_name    ("align")
->>                        DW_AT_type    (0x0242decc "phys_addr_t")
->>                        ...
->>
->> The third argument should correspond to RDX for x86_64. But the location suggests that
->> the parameter value is stored in the address with 'RSI + 0'. It is not clear whether
->> the parameter value is stored in RDX or not. So we have to discard this funciton in
->> vmlinux BTF to avoid incorrect true signatures.
->>
->> For llvm, any function having
->>    DW_AT_calling_convention        (DW_CC_nocall)
->> in dwarf DW_TAG_subprogram will indicate that this function has signature changed.
->> I did experiment with latest bpf-next. For x86_64, there are 69103 kernel functions
->> and 875 kernel functions having signature changed. A series of patches are intended
->> to ensure true signatures are properly represented. Eventually, only 17 functions
->> cannot have true signatures due to locations.
->>
-> hi Yonghong, one high-level question before I start digging into this further.
-> Are there any minimum requirements on LLVM/clang version for this support? Thanks!
-
-This featureDW_AT_calling_convention is introduced into llvm on June 2022: https://reviews.llvm.org/D127134
-The release is llvm15. From Documentation/process/changes.rst, we have
-     Clang/LLVM (optional)  15.0.0           clang --version
-So we should be okay.
-
-But if the kernel is built with -O3 or FullLTO, there will be some
-additional signature changed functions and they will be checked
-only available at >= llvm23 (see https://github.com/llvm/llvm-project/pull/178973).
-But the number of those additional signature changed functions should not be that many.
-Also typical kernel build is -O2 so we are not missing signature changed
-functions in most cases.
-
->
-> Alan
->   
->> For arm64, there are 863 kernel functions having signature changed, and
->> 79 functions cannot have true signatures due to locations. I checked those
->> functions and look like llvm arm64 backend more relaxed to compute parameter
->> values.
->>
->> For the patch set, Patch 1 introduced usage of DW_AT_calling_convention, which
->> can precisely identify which function has signature changed. This can filter
->> majority of functions where their signature won't change.
->> Patches 2 to 7 tried to find functions with true signature.
->> Patch 8 enables to btf encoder to properly generate BTF.
->> Patch 9 includes a few tests.
->>
->> Changelog:
->>    v1 -> v2:
->>      - v1: https://lore.kernel.org/bpf/20260305225455.1151066-1-yonghong.song@linux.dev/
->>      - Added producer_clang guarding in btf_encoder. Otherwise, gcc kernel build
->>        will crash pahole.
->>      - Fix an early return in parameter__reg() which didn't do pthread_mutex_unlock()
->>        which caused the deadlock for arm64.
->>      - Add a few more places to guard with producer_clang and conf->true_signature
->>        to maintain the previous behavior if not clang or conf->true_signature is false.
->>
->> Yonghong Song (9):
->>    dwarf_loader: Reduce parameter checking with clang
->>      DW_AT_calling_convention attr
->>    dwarf_loader: Handle signatures with dead arguments
->>    dwarf_loader: Refactor initial ret -1 to be macro PARM_DEFAULT_FAIL
->>    dwarf_laoder: Handle locations with DW_OP_fbreg
->>    dwarf_loader: Change exprlen checking condition in parameter__reg()
->>    dwarf_loader: Detect optimized parameters with locations having
->>      constant values
->>    dwarf_loader: Handle expression lists
->>    btf_encoder: Handle optimized parameter properly
->>    tests: Add a few clang true signature tests
->>
->>   btf_encoder.c                                 |  13 +-
->>   dwarf_loader.c                                | 397 +++++++++++++++++-
->>   dwarves.h                                     |   3 +
->>   tests/true_signatures/clang_parm_aggregate.sh |  83 ++++
->>   tests/true_signatures/clang_parm_optimized.sh |  95 +++++
->>   .../clang_parm_optimized_stack.sh             |  95 +++++
->>   .../gcc_true_signatures.sh                    |   0
->>   7 files changed, 662 insertions(+), 24 deletions(-)
->>   create mode 100755 tests/true_signatures/clang_parm_aggregate.sh
->>   create mode 100755 tests/true_signatures/clang_parm_optimized.sh
->>   create mode 100755 tests/true_signatures/clang_parm_optimized_stack.sh
->>   rename tests/{ => true_signatures}/gcc_true_signatures.sh (100%)
->>
-
+netpoll may be an easy replacement for bpf_ringbuf_output, which can be 
+used in different running contexts. If it is to replace the user space 
+daemon in production, it loses too many things from the networking 
+stack: routing, tc, etc. It could escape the current tc/tracing bpf 
+prog, monitoring, QoS marking, qdisc, etc. There is still the encryption 
+piece as well.
