@@ -1,169 +1,189 @@
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44D1A2494ED
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 16:45:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433B113C9C4;
+	Mon,  9 Mar 2026 16:46:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773074734; cv=none; b=JzY0PlNSMZKT+1RBEaEJwCx6PGLZIOY0hWP0Sk6c/JdYOwpA7awBtyEqD3u/osMZWiOKTwX6oIyde9U5qjbk+Yu3iaT+oUmnRaaDGGfS3JfCla85PZKGOyHWMabvf0DPZUk9j7EkDJCYxbFe11Yxh28ALsf6YZU+ii/qQkEL4Wg=
+	t=1773074774; cv=none; b=EDhLhnuxAxquXOKGCBSiKBcLj8EN927fWHvxhWFdOa/c+wX0n55knk+O6jG5+iL7xXfXUerX7CQJBJ6M0FUPq1Y5zZaWyIqd2BsUbNkhBI4wNiOrMDz76rBsLQKSHac+pp8RgYsp16kytvds9Aco3ITDMkGmH1JymjPKoG49VMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773074734; c=relaxed/simple;
-	bh=zAR72wDXdxq5C9PjPsyeD4QQxyEK/1hXtEl2Xpss9d0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WmZCcU9bFaP27HjCdyFzN8WHwB+Z6DozVEW7jX1H8kGHf47SK14bXxKaT/kL2gxIijMrbjHRbP8u4ZyYl6vkQ/yj3cnbedjgC69fB1T9ZZq0wVM+Jl0hL6svyy2secxCb3+FU7Q7eC82vncgdXU1XoT6dC/7vfucvf47gISpvtY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=D5jINIZ0; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1773074774; c=relaxed/simple;
+	bh=Tqx7dK7zOG7rDfy0y5qpLKhV/OEzGrhs5r7m6DAJi38=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=nMitJQCdIfNRGGAS7Xj3H3bD7uOcGBv6pNVP8B2Eweq+zcJhdXgJP+5uF980Wx+7/HpaZ53qSZOpOhmoioPyuwVp6YFAUH3cahCECIczHQuE+lpJg0yYYRLnVcc3nS3m1gHuwIWQICKdwkcODHmrY439kL3c4p7FNzdTc8ltlwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LzK0cQVs; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="D5jINIZ0"
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-660ea6ceb5aso7979903a12.0
-        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 09:45:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1773074731; x=1773679531; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5aGclf2D5Ad+FZRYNo1Igm1i3XSKWX/TJgjzbw+i9o4=;
-        b=D5jINIZ0SJ1eMjToj0ZyLoC9gUATikIGHw+K7PJ4ARcB2lO6P6aIWG++AydC/803J3
-         rQaV/nbkGTwjwauzC69iZVXrCSKMjf+yWD354zJ3DhVUgZ3QV1FHTbwDXRcAF7PC2uRk
-         BKDB82EcvJ9j40pt/XPVMt6OQ4o+YXW2Yapfw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773074731; x=1773679531;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5aGclf2D5Ad+FZRYNo1Igm1i3XSKWX/TJgjzbw+i9o4=;
-        b=wUpfNSumP2wzzTYUaIoYGB76aK6aMdRDC8UETvDoel8CW3Y3Uvvb/IlEi/aVENZdoo
-         umwwlvbuGbKaCK1s6sTcrr/BLvu2D80kvWjHYybWEtRMsNbgWLhyGxvEkT73lRf/AY2r
-         Y+xDTS/F1cwxMWnsz6f/NvTQPutrfmVpS1N54eezBMNIk8o3CS2mitbvstZSUUhBtZDZ
-         +FNhxS8ohzkeEzmPrnZzD6zK7II5RIYdUGBvLWYqIgpga6FmHV1tn8vilOsef9IFwdgO
-         ChI8HC6rOJ4VwiMaa62XlU/usvXzU+M+D2pRSec2vtyc5Y0oaOU6O76LZG6lM8Qyv1+3
-         NHQg==
-X-Forwarded-Encrypted: i=1; AJvYcCXuncI6xWj7URuZJD+rbpv7NOOKvS0FPulZv8PexdgjeTm7g/VkwWM9v0DdF7buv9OPMyM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+WLgNGPPEJ9SRZfehZm44aY1t4myxSSisv18iDYMeAvJjOj/s
-	08WqvcBKZ+gTq6ERc31NSfO+eMf4sRfw9k0RRa7FNkk1eK7GihDiTIR80Yrq4kIjiAVH42vtg6t
-	k4mFgekA=
-X-Gm-Gg: ATEYQzyJ6mm0EALeKSQw9QnH5xMLA2RKJ0dFdOzKyd5gJ4pNjkwOQxf0+WQHY0kz6wp
-	WR3QnNxNKA97/1ZrgSHWsojNB+CySPrlU68I0h0HBEP4GJpNlm9AJ6UES+5Rc5k4rBe8EsO062k
-	/aPsuhgnj+pzRAJwyzojBsSeMI5rxKmwHhai1Sfrd7l3gaqKaP7HHc/hyViKh85KuVZq/GPfv/D
-	r778PUGtijxWW0pgbjUE3GB1uCI/wFi8CYOL6hfpc3HWlzimWb+NpYvghHdetGQycMD66woGEil
-	7AKCBwR8CJeqSI3X9sTFSSpRda01X+sY5/zDCDCD4tZP7d2aEiZSDFFAqPasrsNv/OnqUmRZKkQ
-	Z238CmTs7UPzlnca/c2b2kQyTHKk6yn+IAd0w+pBMwZxjND5X+Fzy4VhUwRB/yGwooW0KNBlRrl
-	56yQQJHzHMWdp2hOl/bklm/XXRFTUxmBOXIK1JzLVWlzt+5X7si6W/yW3VzruQ6VY9spJbAk8q
-X-Received: by 2002:a17:907:6ea2:b0:b8f:dec3:6606 with SMTP id a640c23a62f3a-b97119cc65dmr14662066b.23.1773074731213;
-        Mon, 09 Mar 2026 09:45:31 -0700 (PDT)
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com. [209.85.218.52])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b942ef47ae5sm378504766b.5.2026.03.09.09.45.30
-        for <bpf@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Mar 2026 09:45:31 -0700 (PDT)
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b9423d62cbbso456330366b.1
-        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 09:45:30 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWhQGki2kd030THw6LOM401BlsA2Nk4NRutiQtZNej1ArhWBQoUdP+supXVffz33S8400s=@vger.kernel.org
-X-Received: by 2002:a17:907:3e10:b0:b96:e1de:db04 with SMTP id
- a640c23a62f3a-b9711a1fe33mr14904266b.18.1773074262570; Mon, 09 Mar 2026
- 09:37:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LzK0cQVs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49200C2BC86;
+	Mon,  9 Mar 2026 16:46:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773074773;
+	bh=Tqx7dK7zOG7rDfy0y5qpLKhV/OEzGrhs5r7m6DAJi38=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=LzK0cQVs8ML2i3sxYVbeGEnQp3w8SiK+QCVVNiljg5JvL/h1NF64fnF/LeKgIGdiK
+	 FOGHzG/pM6V0WQ0+b8SQ0t/UMvJOUMcusbuLVmT/L9OqD1faOj86rMgMiOHjdxvqGI
+	 yIQ/9OIKCWBpkH4MHWrgENng96n48RfZlIt9izmWjO4cti60m/ZwnFqRYcL5mCDTwP
+	 DfuORlXZKGVaEPeUO4naijPeyrfCDna/PZ7pWLYmdFjFehFa05pbi7AVJIw8tnnEyc
+	 ZTPJPpl/MNPND8YXYuNEC+NesxXKrtqgA8aH5SvyaoIRcGYq2BHQTMuqf6hml1zBOr
+	 7JQtnjx5KlFCw==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: "David Hildenbrand (Arm)" <david@kernel.org>, linux-kernel@vger.kernel.org
+Cc: "linux-mm @ kvack . org" <linux-mm@kvack.org>, "David Hildenbrand (Arm)"
+ <david@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Lorenzo
+ Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett"
+ <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@kernel.org>, Mike
+ Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal
+ Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, Pedro Falcato
+ <pfalcato@suse.de>, David Rientjes <rientjes@google.com>, Shakeel Butt
+ <shakeel.butt@linux.dev>, "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Alice Ryhl <aliceryhl@google.com>, Madhavan Srinivasan
+ <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, Christian
+ Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank
+ <frankja@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>, Gerald Schaefer
+ <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>,
+ Vasily Gorbik <gor@linux.ibm.com>, Jarkko Sakkinen <jarkko@kernel.org>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Arve =?utf-8?B?SGrDuG5uZXbDpWc=?=
+ <arve@android.com>, Todd Kjos
+ <tkjos@android.com>, Christian Brauner <brauner@kernel.org>, Carlos Llamas
+ <cmllamas@google.com>, Ian Abbott <abbotti@mev.co.uk>, H Hartley Sweeten
+ <hsweeten@visionengravers.com>, Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi
+ <rodrigo.vivi@intel.com>, Tvrtko Ursulin <tursulin@ursulin.net>, David
+ Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Jason
+ Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, Dimitri
+ Sivanich <dimitri.sivanich@hpe.com>, Arnd Bergmann <arnd@arndb.de>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Peter Zijlstra
+ <peterz@infradead.org>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, Eric Dumazet
+ <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>, "David S.
+ Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, Jakub
+ Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Miguel Ojeda
+ <ojeda@kernel.org>, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+ linux-s390@vger.kernel.org, linux-sgx@vger.kernel.org,
+ intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+ linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ netdev@vger.kernel.org, rust-for-linux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v1 14/16] mm: rename zap_page_range_single() to
+ zap_vma_range()
+In-Reply-To: <20260227200848.114019-15-david@kernel.org>
+References: <20260227200848.114019-1-david@kernel.org>
+ <20260227200848.114019-15-david@kernel.org>
+Date: Mon, 09 Mar 2026 16:46:09 +0000
+Message-ID: <m2y0k1vtm6.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1ff1bce2-8bb4-463c-a631-16e14f4ea7e2@arm.com> <20260306-work-kernel-exit-v1-1-8f871f6281cb@kernel.org>
- <aaroReSCj1qXUeQb@infradead.org> <CAHk-=whCiPr-cR3hVv=46Qo0Nw_vN422YUxqU0GmNai+KRtg2w@mail.gmail.com>
- <aa7qson15uJpL-BL@infradead.org>
-In-Reply-To: <aa7qson15uJpL-BL@infradead.org>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 9 Mar 2026 09:37:26 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi_kwtWt4Swi=k2zJTnStoBaw3vneHz8ccVNDyVD1nvWg@mail.gmail.com>
-X-Gm-Features: AaiRm52k8FmvIAxaWFSwelL44z7-IyhgZowK3grBWDh2zbSjeLnGfYwalrLVlLs
-Message-ID: <CAHk-=wi_kwtWt4Swi=k2zJTnStoBaw3vneHz8ccVNDyVD1nvWg@mail.gmail.com>
-Subject: Re: [PATCH] kthread: remove kthread_exit()
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Christian Brauner <brauner@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-nfs@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Aaron Tomlin <atomlin@atomlin.com>, Chuck Lever <chuck.lever@oracle.com>, 
-	Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
-	Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, 
-	Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Rae Moar <raemoar63@gmail.com>, Christian Loehle <christian.loehle@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 
-On Mon, 9 Mar 2026 at 08:43, Christoph Hellwig <hch@infradead.org> wrote:
+"David Hildenbrand (Arm)" <david@kernel.org> writes:
+
+> Let's rename it to make it better match our new naming scheme.
 >
-> Because it can't f&*^ up the state of random tasks.
+> While at it, polish the kerneldoc.
+>
+> Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
+> ---
+>  arch/s390/mm/gmap_helpers.c          |  2 +-
+>  drivers/android/binder/page_range.rs |  4 ++--
+>  drivers/android/binder_alloc.c       |  2 +-
+>  include/linux/mm.h                   |  4 ++--
+>  kernel/bpf/arena.c                   |  2 +-
+>  kernel/events/core.c                 |  2 +-
+>  mm/madvise.c                         |  4 ++--
+>  mm/memory.c                          | 14 +++++++-------
+>  net/ipv4/tcp.c                       |  6 +++---
+>  rust/kernel/mm/virt.rs               |  4 ++--
+>  10 files changed, 22 insertions(+), 22 deletions(-)
+>
+> diff --git a/arch/s390/mm/gmap_helpers.c b/arch/s390/mm/gmap_helpers.c
+> index ae2d59a19313..f8789ffcc05c 100644
+> --- a/arch/s390/mm/gmap_helpers.c
+> +++ b/arch/s390/mm/gmap_helpers.c
+> @@ -89,7 +89,7 @@ void gmap_helper_discard(struct mm_struct *mm, unsigned long vmaddr, unsigned lo
+>  		if (!vma)
+>  			return;
+>  		if (!is_vm_hugetlb_page(vma))
+> -			zap_page_range_single(vma, vmaddr, min(end, vma->vm_end) - vmaddr);
+> +			zap_vma_range(vma, vmaddr, min(end, vma->vm_end) - vmaddr);
+>  		vmaddr = vma->vm_end;
+>  	}
+>  }
+> diff --git a/drivers/android/binder/page_range.rs b/drivers/android/binder/page_range.rs
+> index fdd97112ef5c..2fddd4ed8d4c 100644
+> --- a/drivers/android/binder/page_range.rs
+> +++ b/drivers/android/binder/page_range.rs
+> @@ -130,7 +130,7 @@ pub(crate) struct ShrinkablePageRange {
+>      pid: Pid,
+>      /// The mm for the relevant process.
+>      mm: ARef<Mm>,
+> -    /// Used to synchronize calls to `vm_insert_page` and `zap_page_range_single`.
+> +    /// Used to synchronize calls to `vm_insert_page` and `zap_vma_range`.
+>      #[pin]
+>      mm_lock: Mutex<()>,
+>      /// Spinlock protecting changes to pages.
+> @@ -719,7 +719,7 @@ fn drop(self: Pin<&mut Self>) {
+>  
+>      if let Some(vma) = mmap_read.vma_lookup(vma_addr) {
+>          let user_page_addr = vma_addr + (page_index << PAGE_SHIFT);
+> -        vma.zap_page_range_single(user_page_addr, PAGE_SIZE);
+> +        vma.zap_vma_range(user_page_addr, PAGE_SIZE);
+>      }
+>  
+>      drop(mmap_read);
+> diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
+> index dd2046bd5cde..e4488ad86a65 100644
+> --- a/drivers/android/binder_alloc.c
+> +++ b/drivers/android/binder_alloc.c
+> @@ -1185,7 +1185,7 @@ enum lru_status binder_alloc_free_page(struct list_head *item,
+>  	if (vma) {
+>  		trace_binder_unmap_user_start(alloc, index);
+>  
+> -		zap_page_range_single(vma, page_addr, PAGE_SIZE);
+> +		zap_vma_range(vma, page_addr, PAGE_SIZE);
+>  
+>  		trace_binder_unmap_user_end(alloc, index);
+>  	}
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 4bd1500b9630..833bedd3f739 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -2835,7 +2835,7 @@ struct page *vm_normal_page_pud(struct vm_area_struct *vma, unsigned long addr,
+>  
+>  void zap_vma_ptes(struct vm_area_struct *vma, unsigned long address,
+>  		  unsigned long size);
+> -void zap_page_range_single(struct vm_area_struct *vma, unsigned long address,
+> +void zap_vma_range(struct vm_area_struct *vma, unsigned long address,
+>  			   unsigned long size);
+>  /**
+>   * zap_vma - zap all page table entries in a vma
+> @@ -2843,7 +2843,7 @@ void zap_page_range_single(struct vm_area_struct *vma, unsigned long address,
+>   */
+>  static inline void zap_vma(struct vm_area_struct *vma)
+>  {
+> -	zap_page_range_single(vma, vma->vm_start, vma->vm_end - vma->vm_start);
+> +	zap_vma_range(vma, vma->vm_start, vma->vm_end - vma->vm_start);
+>  }
+>  struct mmu_notifier_range;
+>  
+> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+> index c34510d83b1f..37843c6a4764 100644
+> --- a/kernel/bpf/arena.c
+> +++ b/kernel/bpf/arena.c
+> @@ -656,7 +656,7 @@ static void zap_pages(struct bpf_arena *arena, long uaddr, long page_cnt)
+>  	guard(mutex)(&arena->lock);
+>  	/* iterate link list under lock */
+>  	list_for_each_entry(vml, &arena->vma_list, head)
+> -		zap_page_range_single(vml->vma, uaddr, PAGE_SIZE * page_cnt);
+> +		zap_vma_range(vml->vma, uaddr, PAGE_SIZE * page_cnt);
+>  }
 
-Christoph, you make no sense.
-
-"do_exit()" cannot mess up random tasks. It can only exit the
-*current* task. The task that is running right now in that module.
-
-And exiting a task is about the least effed up you can do to a task
-when you are in kernel mode.
-
-Compared to everything else you can do by mistake - like just
-corrupting task state randomly - it's a very benign operation, *and*
-it is obvious both in source code and in behavior. It's not like it is
-some subtle operation.
-
-I'd be *much* more worried about actual subtle bugs, not somebody
-explicitly calling exit.
-
-So what is the actual problem? No more random rants. Explain yourself
-without making wild handwaving gestures.
-
-Now, there are real exports in this area that are actually strange and
-should be removed: for some historical reason we export 'free_task()'
-which makes no sense to me at all (but probably did at some point).
-
-Now *that* is a strange export that can mess up another task in major ways.
-
-[ Ok, I was intrigued and I went and dug into history: we used to do
-it in the oprofile driver many many moons ago. ]
-
-And since I looked at the history of this all due to that odd export,
-that also made it clear that historically we used to export
-complete_and_exit(), which was this beauty:
-
-    NORET_TYPE void complete_and_exit(struct completion *comp, long code)
-    {
-        if (comp)
-                complete(comp);
-
-        do_exit(code);
-    }
-
-so you could always do "do_exit()" by just doing
-"complete_and_exit(NULL, code)".
-
-And yes, that function was exported since at least 2003 (it was
-exported even before that, under the name 'up_and_exit()', and that's
-the point where I couldn't be bothered any more because it predates
-even the old BK history).
-
-Yes, it was indeed renamed to kthread_complete_and_exit() back in
-2021, but that wasn't due to any fundamental "it has to work only on
-kthreads". It was simply because nothing but kthreads used it - and
-because that was also the time when kthread_exit() started doing
-*extra* things over and beyond just the regular do_exit().
-
-So it was a practical thing brought on by kthread changes, not some
-kind of "exit is evil" thing.
-
-And that "ktrhead_exit() does extra things" was the actual bug that
-needed fixing and caused nasty memory corruption due to subtle lack of
-cleanup when it was bypassed.
-
-End result: we've never historically felt that exit() was somehow bad,
-and when we limited it to kthreads and made it special, it caused
-actual bugs.
-
-            Linus
+Acked-by: Puranjay Mohan <puranjay@kernel.org>
