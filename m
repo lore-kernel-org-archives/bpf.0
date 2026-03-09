@@ -1,209 +1,207 @@
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B8E1DF74F
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 10:56:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D12F39524F;
+	Mon,  9 Mar 2026 11:06:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773053789; cv=none; b=NOvmvHtGoN+9fQzMC/hA/fOBnYW8xdFShLA1nNs766Rra3dyJe3hZqbVoJkW40p7DX2bTfJ6yOHnEnmZcMiAD9ZlxEabOD7uHvKUoLjrqsSCzMwmSm2Y5VuuaXx5rVgNZ+4PYZaEMemGBer5OGGho7wp4kEt2LR+2kytcjzBBCo=
+	t=1773054384; cv=none; b=pSbRhLveAr9r84pU6Gbx/siuZ9XEACaEvYB0/d9/AmheKRIscw8IRZ+bS0UV4fJWM4UClSYxw4s+N1FSHpoKQiWHf9dfoJ8aIO9VNbHvYnS+anPGmPcCs89A31gEo2s4rLyI2lDhMbOdjznYX7jWMR6pPv/EImiRGoCfWZm1slg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773053789; c=relaxed/simple;
-	bh=+dc6Lnwo5YZ7/3JzHek9nuMZRXBo/9cGU84S0tcDqyQ=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=PxIUqr3ThT6vGa+7JdI2uAKR4N+nFO1pQXL+hJ6AAe3gLKQQpxCRDhgGJR8GhU3drv6YnzzZCa5PLgHhIgNYIJy2YVNWVIGf5uoP6svTanX9fx1dU4WBIzTzVFW8svtD45RRzTiHHkELKgfyC7pomZnctx5cKtGColmggitHf0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=DtdmIMfW; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1773054384; c=relaxed/simple;
+	bh=KbTZxQxtEbla+RaayCgnxDIdxTaPc95rLhr01jHDrak=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cuXqI2dt+k26HYGMMLb+W87kH9mLFnzRRnxLXWnA3AiggOSdR/XdHDfCARY0BZBEcy7E5w0vfCzKEetDfRicqPk617t3bzTi0FSOrfLxcZvTOvxLXmf11B+MADSXTXRLBMU6qbbu2Mzm641FWbK1fQLtXnT+8gygxaXPG8dzyZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=h3uUuO6P; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="DtdmIMfW"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 4C69AC42870;
-	Mon,  9 Mar 2026 10:56:44 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id E800E5FFB8;
-	Mon,  9 Mar 2026 10:56:23 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B6F6610369B53;
-	Mon,  9 Mar 2026 11:56:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1773053782; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=Gzr14tOSv8CsjphFxN1CH5k+Wd2mUuktsUCoITd4ydI=;
-	b=DtdmIMfWFsDTwbpFaa3qJVfmdBivebdRRUV51CDLf68QcJQzLcX+IavHOIfxbdSVrrMKt7
-	ZwDbzNremPKThMvqMoRwZR91Fo6ApLa8JiihVvdiR0BZVSvIUFxpsCTBTzarb/2yeaydfH
-	MNxvGdWPARLwMwnoagBOsgx9JmWKm82GX+Wcltws1g4JD05nDSMZAROegGaBFnWTUhtb1j
-	8LokKLNO7jqwaIHUJOzMk1vw+9IWXHfFm2kJNpllgQXNvUfUi1SpcgkUOocFx/0ZAmluZj
-	kkWuAp5IVHqr7+l4B655xMReNyVuN7AyFESyLpY/2Xr04B9guY2YagSrSsjytw==
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="h3uUuO6P"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 628MsJjq1613004;
+	Mon, 9 Mar 2026 11:05:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=rpIXdQ6m8izsaZzFlwX9FzwEH7Tcoi
+	a9WGkEgx1Zq74=; b=h3uUuO6PZc1Lc3NBXDEXwrVDHx50Tu+cMkcIiR+4gBzdVN
+	tKcI0EyLTscM1pj9uTMooR4CGrh3IhJPt5YtWcKLcT7mQIZEFkk9uSvFjxkXARqS
+	RjbdUEOT3SC+PnEST03T8KGcRjUgbsQYQVox+sVyuqtRaCh5REosiDQ9r1CVGhBo
+	WHY0E2URPQB0bFcdAaeI44Sk0ivDO10iZEdmnSfY2N0D5TvnmaTxGmHGryL0KHni
+	c7FNwkCPSeVyLNfMmhtxLl6Mur+B6H4Cy7mXfn4WH6LiNmkg1/GJTLyEeYXs6wSf
+	655w2P18Zcf2IB6mWfTTHHjwVCBhsFtec9t72BFQ==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4crcvr60k5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 09 Mar 2026 11:05:18 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 629AhIu7024649;
+	Mon, 9 Mar 2026 11:05:18 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cs0jjvfp9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 09 Mar 2026 11:05:17 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 629B5ETa31392438
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 9 Mar 2026 11:05:14 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 29DF42004D;
+	Mon,  9 Mar 2026 11:05:14 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0468220040;
+	Mon,  9 Mar 2026 11:05:12 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.109.207.131])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Mon,  9 Mar 2026 11:05:11 +0000 (GMT)
+Date: Mon, 9 Mar 2026 16:35:09 +0530
+From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+To: Viktor Malik <vmalik@redhat.com>
+Cc: linuxppc-dev@lists.ozlabs.org, Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+        Joe Perches <joe@perches.com>, Paul Mackerras <paulus@ozlabs.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        atrajeev@linux.ibm.com, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH] powerpc, perf: Check that current->mm is alive before
+ getting user callchain
+Message-ID: <aa6pZaDySMl9JGKf@linux.ibm.com>
+References: <20260227082502.1882395-1-vmalik@redhat.com>
+ <aab3EW1LfDcjSzzy@linux.ibm.com>
+ <80766050-c745-411b-8ee6-8141d2cfe4ff@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 09 Mar 2026 11:56:17 +0100
-Message-Id: <DGY73WJ12XE3.32N9A9PF2QBKJ@bootlin.com>
-Cc: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <bpf@vger.kernel.org>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, "Gregory CLEMENT"
- <gregory.clement@bootlin.com>, =?utf-8?q?Beno=C3=AEt_Monin?=
- <benoit.monin@bootlin.com>, "Tawfik Bayouk" <tawfik.bayouk@mobileye.com>,
- "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-To: "Maxime Chevallier" <maxime.chevallier@bootlin.com>,
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, "Nicolas Ferre"
- <nicolas.ferre@microchip.com>, "Claudiu Beznea" <claudiu.beznea@tuxon.dev>,
- "Andrew Lunn" <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
- Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Alexei
- Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Jesper Dangaard Brouer" <hawk@kernel.org>, "John Fastabend"
- <john.fastabend@gmail.com>, "Stanislav Fomichev" <sdf@fomichev.me>,
- "Richard Cochran" <richardcochran@gmail.com>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH net-next 8/8] net: macb: add Tx zero-copy AF_XDP support
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260304-macb-xsk-v1-0-ba2ebe2bdaa3@bootlin.com>
- <20260304-macb-xsk-v1-8-ba2ebe2bdaa3@bootlin.com>
- <74089907-d7d3-4242-92a5-909812779932@bootlin.com>
- <DGVVCKPUZVSQ.3U7SG8TTTA1CM@bootlin.com>
- <d9643b78-66e6-4f04-9e94-426b99ed250d@bootlin.com>
-In-Reply-To: <d9643b78-66e6-4f04-9e94-426b99ed250d@bootlin.com>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <80766050-c745-411b-8ee6-8141d2cfe4ff@redhat.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzA5MDEwMSBTYWx0ZWRfX9HRC0qNVEgfA
+ bEUmuSVOi2BbDiiAWkeFZqtOIGjJvAHnAS9W6rAYwvm4QuLtM1zDIloqKxQHJLOBgu/saq1mIGM
+ UfimMFy+EUqJ8bbqnX3zqm+hO/ftuXcyGQMHblLzKPSmZ00cFII1AWOVFZ0GgYJS14haQmAJLbN
+ Z+T2SA+y4n87dnlBlEfKN1ArGrKavhOEPTkSEVq/FVn3bPkrU2kzplYNl4nTvh3vyOoQ+TzlPCL
+ cB7Yol4zrQoUNSdD98rQFyDqP+L1vlucQ00RThHW5W+zGqhFe6Nyc4XtX/6QYNRkdFEMjDyWgGU
+ brHURKwbga1dMbGOSQ7cOXtp7/y8ZU2stagjaPIzC32w1Y6qfeNYYlNga9WibYchAbr2ORm5p6Q
+ hfuXsRQp/peJxAQFa0XfG6ll3QTnnGDDj8cXL22BJZSFDv3v5MkOAipgTPiLbO2KkpSO3cFtDjL
+ Qx5tafzTDiq3w+9yCDg==
+X-Proofpoint-GUID: zOXVtuDP8n-88aBUmjAnr0rW02vS92rk
+X-Proofpoint-ORIG-GUID: ZHV80IJLcR6lIXaRXdAQ93ARIpmM0gGZ
+X-Authority-Analysis: v=2.4 cv=QoFTHFyd c=1 sm=1 tr=0 ts=69aea96f cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=kj9zAlcOel0A:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=VwQbUJbxAAAA:8
+ a=20KFwNOVAAAA:8 a=eEc1wmYC7BjqnX_VJ48A:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-09_03,2026-03-06_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 spamscore=0 priorityscore=1501 phishscore=0
+ lowpriorityscore=0 adultscore=0 clxscore=1015 malwarescore=0 suspectscore=0
+ bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2602130000
+ definitions=main-2603090101
 
-Hello Maxime,
-
-On Fri Mar 6, 2026 at 6:53 PM CET, Maxime Chevallier wrote:
-> On 06/03/2026 18:18, Th=C3=A9o Lebrun wrote:
->> Hello!
->>=20
->> On Fri Mar 6, 2026 at 1:48 PM CET, Maxime Chevallier wrote:
->>> On 04/03/2026 19:24, Th=C3=A9o Lebrun wrote:
->>>> Add a new buffer type (to `enum macb_tx_buff_type`). Near the end of
->>>> macb_tx_complete(), we go and read the XSK buffers using
->>>> xsk_tx_peek_release_desc_batch() and append those buffers to our Tx
->>>> ring.
->>>>
->>>> Additionally, in macb_tx_complete(), we signal to the XSK subsystem
->>>> number of bytes completed and conditionally mark the need_wakeup
->>>> flag.
->>>>
->>>> Lastly, we update XSK wakeup by writing the TCOMP bit in the per-queue
->>>> IMR register, to ensure NAPI scheduling will take place.
->>>>
->>>> Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
->>>> ---
->>>
->>> [...]
->>>
->>>> +static void macb_xdp_xmit_zc(struct macb *bp, unsigned int queue_inde=
-x, int budget)
->>>> +{
->>>> +	struct macb_queue *queue =3D &bp->queues[queue_index];
->>>> +	struct xsk_buff_pool *xsk =3D queue->xsk_pool;
->>>> +	dma_addr_t mapping;
->>>> +	u32 slot_available;
->>>> +	size_t bytes =3D 0;
->>>> +	u32 batch;
->>>> +
->>>> +	guard(spinlock_irqsave)(&queue->tx_ptr_lock);
->>>> +
->>>> +	/* This is a hard error, log it. */
->>>> +	slot_available =3D CIRC_SPACE(queue->tx_head, queue->tx_tail, bp->tx=
-_ring_size);
->>>> +	if (slot_available < 1) {
->>>> +		netif_stop_subqueue(bp->dev, queue_index);
->>>> +		netdev_dbg(bp->dev, "tx_head =3D %u, tx_tail =3D %u\n",
->>>> +			   queue->tx_head, queue->tx_tail);
->>>> +		return;
->>>> +	}
->>>> +
->>>> +	batch =3D min_t(u32, slot_available, budget);
->>>> +	batch =3D xsk_tx_peek_release_desc_batch(xsk, batch);
->>>> +	if (!batch)
->>>> +		return;
->>>> +
->>>> +	for (u32 i =3D 0; i < batch; i++) {
->>>> +		struct xdp_desc *desc =3D &xsk->tx_descs[i];
->>>> +
->>>> +		mapping =3D xsk_buff_raw_get_dma(xsk, desc->addr);
->>>> +		xsk_buff_raw_dma_sync_for_device(xsk, mapping, desc->len);
->>>> +
->>>> +		macb_xdp_submit_buff(bp, queue_index, (struct macb_tx_buff){
->>>> +			.ptr =3D NULL,
->>>> +			.mapping =3D mapping,
->>>> +			.size =3D desc->len,
->>>> +			.mapped_as_page =3D false,
->>>> +			.type =3D MACB_TYPE_XSK,
->>>> +		});
->>>> +
->>>> +		bytes +=3D desc->len;
->>>> +	}
->>>> +
->>>> +	/* Make newly initialized descriptor visible to hardware */
->>>> +	wmb();
->>>> +	spin_lock(&bp->lock);
->>>> +	macb_writel(bp, NCR, macb_readl(bp, NCR) | MACB_BIT(TSTART));
->>>> +	spin_unlock(&bp->lock);
->>>
->>> this lock is also taken in interrupt context, this should probably use =
-a
->>> irqsave/restore variant. Now, there are a few other parts of this drive=
-r
->>> that use a plain spin_lock() call and except for the paths that actuall=
-y
->>> run in interrupt context, they don't seem correct to me :(
->>=20
->> I almost sent a reply agreeing with you, but actually here is the
->> exhaustive `spin_lock(&bp->lock)` list:
->>=20
->>    #   Function                Context
->>    ------------------------------------------
->>    1   gem_wol_interrupt()     irq
->>    2   macb_interrupt()        irq
->>    3   macb_wol_interrupt()    irq
->>    4   macb_tx_error_task()    workqueue/user
->>    5   macb_tx_restart()       napi/softirq
->>    6   macb_xdp_xmit_zc()      napi/softirq
->>    7   macb_start_xmit()       user
->>    8   macb_xdp_submit_frame() user
->>=20
->> And all contexts are safe because it always is this sequence in non-IRQ
->> contexts (#4-8):
->>=20
->>    spin_lock_irqsave(&queue->tx_ptr_lock, flags);
->>    spin_lock(&bp->lock);
->>    spin_unlock(&bp->lock);
->>    spin_unlock_irqrestore(&queue->tx_ptr_lock, flags);
->
-> Is it because of the guard statement ?
->
->   guard(spinlock_irqsave)(&queue->tx_ptr_lock);
->
-> It really doesn't make it obvious that this is how it plays out :(
-
-Yes! A guard does an operation when called and one at scope end (in our
-case at the end of macb_xdp_xmit_zc()). That way we don't forget the
-cleanup, and we can do early returns without a list of labels and
-gotos (and mess up along the way).
-
-It uses the __attribute__((cleanup(cleanup_function))) compiler feature,
-that is aliased to `__cleanup()` in the kernel.
-https://gcc.gnu.org/onlinedocs/gcc/Common-Attributes.html#index-cleanup
-https://elixir.bootlin.com/linux/v6.19.6/source/include/linux/compiler_attr=
-ibutes.h#L76
-
-Guard definition for `spinlock_irqsave`:
-https://elixir.bootlin.com/linux/v6.19.6/source/include/linux/spinlock.h#L5=
-85-L588
-(delving into those macros is not recommended)
-
-Code documentation is good:
-https://elixir.bootlin.com/linux/v6.19.6/source/include/linux/cleanup.h#L10
+On Thu, Mar 05, 2026 at 01:45:44PM +0100, Viktor Malik wrote:
+> On 3/3/26 15:58, Saket Kumar Bhaskar wrote:
+> > On Fri, Feb 27, 2026 at 09:25:02AM +0100, Viktor Malik wrote:
+> >> It may happen that mm is already released, which leads to kernel panic.
+> >> This adds the NULL check for current->mm, similarly to 20afc60f892d
+> >> ("x86, perf: Check that current->mm is alive before getting user
+> >> callchain").
+> >>
+> >> I was getting this panic when running a profiling BPF program
+> >> (profile.py from bcc-tools):
+> >>
+> >>     [26215.051935] Kernel attempted to read user page (588) - exploit attempt? (uid: 0)
+> >>     [26215.051950] BUG: Kernel NULL pointer dereference on read at 0x00000588
+> >>     [26215.051952] Faulting instruction address: 0xc00000000020fac0
+> >>     [26215.051957] Oops: Kernel access of bad area, sig: 11 [#1]
+> >>     [...]
+> >>     [26215.052049] Call Trace:
+> >>     [26215.052050] [c000000061da6d30] [c00000000020fc10] perf_callchain_user_64+0x2d0/0x490 (unreliable)
+> >>     [26215.052054] [c000000061da6dc0] [c00000000020f92c] perf_callchain_user+0x1c/0x30
+> >>     [26215.052057] [c000000061da6de0] [c0000000005ab2a0] get_perf_callchain+0x100/0x360
+> >>     [26215.052063] [c000000061da6e70] [c000000000573bc8] bpf_get_stackid+0x88/0xf0
+> >>     [26215.052067] [c000000061da6ea0] [c008000000042258] bpf_prog_16d4ab9ab662f669_do_perf_event+0xf8/0x274
+> >>     [...]
+> >>
+> >> Fixes: 20002ded4d93 ("perf_counter: powerpc: Add callchain support")
+> >> Signed-off-by: Viktor Malik <vmalik@redhat.com>
+> >> ---
+> >>  arch/powerpc/perf/callchain_32.c | 3 +++
+> >>  arch/powerpc/perf/callchain_64.c | 3 +++
+> >>  2 files changed, 6 insertions(+)
+> >>
+> >> diff --git a/arch/powerpc/perf/callchain_32.c b/arch/powerpc/perf/callchain_32.c
+> >> index ddcc2d8aa64a..b46e21679566 100644
+> >> --- a/arch/powerpc/perf/callchain_32.c
+> >> +++ b/arch/powerpc/perf/callchain_32.c
+> >> @@ -144,6 +144,9 @@ void perf_callchain_user_32(struct perf_callchain_entry_ctx *entry,
+> >>  	sp = regs->gpr[1];
+> >>  	perf_callchain_store(entry, next_ip);
+> >>  
+> >> +	if (!current->mm)
+> >> +		return;
+> >> +
+> >>  	while (entry->nr < entry->max_stack) {
+> >>  		fp = (unsigned int __user *) (unsigned long) sp;
+> >>  		if (invalid_user_sp(sp) || read_user_stack_32(fp, &next_sp))
+> >> diff --git a/arch/powerpc/perf/callchain_64.c b/arch/powerpc/perf/callchain_64.c
+> >> index 115d1c105e8a..eaaadd6fa81b 100644
+> >> --- a/arch/powerpc/perf/callchain_64.c
+> >> +++ b/arch/powerpc/perf/callchain_64.c
+> >> @@ -79,6 +79,9 @@ void perf_callchain_user_64(struct perf_callchain_entry_ctx *entry,
+> >>  	sp = regs->gpr[1];
+> >>  	perf_callchain_store(entry, next_ip);
+> >>  
+> >> +	if (!current->mm)
+> >> +		return;
+> >> +
+> >>  	while (entry->nr < entry->max_stack) {
+> >>  		fp = (unsigned long __user *) sp;
+> >>  		if (invalid_user_sp(sp) || read_user_stack_64(fp, &next_sp))
+> >> -- 
+> >> 2.53.0
+> >>
+> > Sorry, I missed adding cc list for the last conversation so adding this for reference:
+> > 
+> >> Wouldn't be good if we check this in perf_callchain_user() as it will
+> >> cover both cases.
+> > 
+> > to which Viktor replied:
+> > I considered it but in that case, we'd also miss the top-level stack
+> > frame (the perf_callchain_store call above). Other arches include it so
+> > I followed the behavior for powerpc.
+> > 
+> > Viktor, agreed with your first point. I have another concern:
+> > 
+> > I was hitting this issue with stacktrace_build_id_nmi in bpf and
+> > applied this patch https://lore.kernel.org/bpf/20260126074331.815684-1-chen.dylane@linux.dev/T/#mf901967ebe77506f1bd6e3d876c2a85824d9519d
+> > 
+> > Wondering if the above generic fix is working do we need to add this
+> > check in powerpc specific code?
+> 
+> I tried to apply that patch series but, unfortunately, keep getting the
+> panic when running the BCC profile tool.
+> 
+> Also, looking at the patch, it seems that it would only solve the issue
+> when perf_callchain_user is called from a BPF context, however, I assume
+> that it may be called from other contexts, too.
+> 
+> Since perf_callchain_user_{32,64} are dereferencing current->mm while
+> walking the stack, I think that an explicit protection against
+> current->mm being NULL makes sense here, even in the presence of the
+> above patch. Especially since other arches have it, too.
+> 
+> Viktor
+> 
+Ok that looks convincing then, another thing is that, how about moving perf_callchain_store
+to perf_callchain_user and checking current->mm == NULL there for both perf_callchain_user_32/64.
+next_ip, lr and sp can be passed to perf_callchain_user_32/64.
 
 Thanks,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+Saket
