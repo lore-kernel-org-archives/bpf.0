@@ -1,161 +1,193 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A40A51F03D7
-	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 21:30:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAF8F36894A
+	for <bpf@vger.kernel.org>; Mon,  9 Mar 2026 21:33:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773091825; cv=none; b=qY2mCrw66ZGsV+ouuatyXZS0iUGSg+DiL80dsMPVjswwJakB4GVYArQSyRNcaX9NYr2g+W34hCmeFGF2HwALnzE4UooLHXURTZQrVVXsZLBK/su+tQW6BcIk4jmYZwludHvt8iUBfHC87/q0McL52syN78dWD5EU0U7TbvQp5uA=
+	t=1773092014; cv=none; b=rIoD35QHCBiCnAeiDMHFvy32s3/FDGCo8X9K0NfuQbJjSLuChrldHOdcI/1Q1a0eIPBkydmbLhpmv7UMGlWUAvMa3/x4QVEgHeA+xPJeEgMR2WJDPxbphaLQR03S5YvViLkNXbA9hKyacH1CG+A9VIA32supIsDJhu6e7jrHbv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773091825; c=relaxed/simple;
-	bh=6s0tY+Fgj1gsBq5K+90g9GbCiojVKS8+hwBf/wArtng=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EHD4TspKb9pdg+MPqF2pA57QNVD5um1M+NhrXj9gENRawr5Wg45t1Kuc2oBb4xQdHL49VcYgvhBzoKADNhgXwzFNx6aHmUw18NXd74grheiaaKcSsTXVBsG+KlKV/c/MHW3laMEPuZ7hTcT3EEj6cvUHm2Ii5vv9KrNUPjQnaH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aaUKnYmm; arc=none smtp.client-ip=91.218.175.170
+	s=arc-20240116; t=1773092014; c=relaxed/simple;
+	bh=sX6BwC3BCH9RqGWQ0rs0ZhqsSUA0OElBmhhKAo8x29U=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=lyAaWMP+fTk8E33Ay1i/w1RmKBk+7D17kV2TgDmFAGtnY6Wz5GesfUQSNRXtTlpQZ9MNfgcEUA6/ji5WeeI2uP3iWzvAcIr6dXn0+KQk6q1kqenopUKp5V/DIzS8kS9lDdCooxTB8jA+ddk8rtWldejaGd+KKtcR/IXEGH2zSQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HilA6hXG; arc=none smtp.client-ip=91.218.175.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aaUKnYmm"
-Message-ID: <ae8f2bcc-5ea2-4c3b-b250-7e562e5ebcdb@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HilA6hXG"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773091821;
+	t=1773092010;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Xd2kYaag2LGcF4sziW87KxnblCiC0T18UTjqH/Gn6vs=;
-	b=aaUKnYmmqjJ0HAysoWCXLKFyGZZIal9qobI9EAcN/PAMeDIj6t/K7YBky9mjNYaxjNcIx7
-	JTbwivqqvWCAZwd+LxO1IeRdyl0tycta4BtNQKZenVqto8SLVKUQa6PqW0GWs4bSanAhJF
-	+5JlV2SDOUKF9LbrwTBKuVwH5Jkcz/g=
-Date: Mon, 9 Mar 2026 14:30:16 -0700
+	bh=rdIdQECuuDl6/Ar1yEpr/74GArV/vN6WZaGFta6VVEM=;
+	b=HilA6hXGBS3zlK+1DJFkasUJrC0tswqKYMhZWKCAiaIEc2Egp+H0cvGUVM0xZu3ODgB951
+	JUlv+ib/MdrGbUsFxrOEB1lSez7AepQYHC/Pvh1Gc4MJ1WSuo97JCC338RbrmNabeyxyIK
+	fJ/df6cmzuFMGm5fFy3xj/H8Mslldow=
+From: Roman Gushchin <roman.gushchin@linux.dev>
+To: Shakeel Butt <shakeel.butt@linux.dev>
+Cc: lsf-pc@lists.linux-foundation.org,  Andrew Morton
+ <akpm@linux-foundation.org>,  Tejun Heo <tj@kernel.org>,  Michal Hocko
+ <mhocko@suse.com>,  Johannes Weiner <hannes@cmpxchg.org>,  Alexei
+ Starovoitov <ast@kernel.org>,  Michal =?utf-8?Q?Koutn=C3=BD?=
+ <mkoutny@suse.com>,  Hui Zhu
+ <hui.zhu@linux.dev>,  JP Kobryn <inwardvessel@gmail.com>,  Muchun Song
+ <muchun.song@linux.dev>,  Geliang Tang <geliang@kernel.org>,  Sweet Tea
+ Dorminy <sweettea-kernel@dorminy.me>,  Emil Tsalapatis
+ <emil@etsalapatis.com>,  David Rientjes <rientjes@google.com>,  Martin
+ KaFai Lau <martin.lau@linux.dev>,  Meta kernel team
+ <kernel-team@meta.com>,  linux-mm@kvack.org,  cgroups@vger.kernel.org,
+  bpf@vger.kernel.org,  linux-kernel@vger.kernel.org
+Subject: Re: [LSF/MM/BPF TOPIC] Reimagining Memory Cgroup (memcg_ext)
+In-Reply-To: <20260307182424.2889780-1-shakeel.butt@linux.dev> (Shakeel Butt's
+	message of "Sat, 7 Mar 2026 10:24:24 -0800")
+References: <20260307182424.2889780-1-shakeel.butt@linux.dev>
+Date: Mon, 09 Mar 2026 14:33:22 -0700
+Message-ID: <87sea8zo0t.fsf@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v3 1/2] bpf: Fix undefined behavior in interpreter
- sdiv/smod for INT_MIN
-Content-Language: en-GB
-To: Jenny Guanni Qu <qguanni@gmail.com>, bpf@vger.kernel.org
-Cc: daniel@iogearbox.net, ast@kernel.org, andrii@kernel.org,
- mykyta.yatsenko5@gmail.com, lkp@intel.com
-References: <20260309185716.717894-1-qguanni@gmail.com>
- <20260309185716.717894-2-qguanni@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260309185716.717894-2-qguanni@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 X-Migadu-Flow: FLOW_OUT
 
+Shakeel Butt <shakeel.butt@linux.dev> writes:
 
-
-On 3/9/26 11:57 AM, Jenny Guanni Qu wrote:
-> The BPF interpreter's signed 32-bit division and modulo handlers use
-> the kernel abs() macro on s32 operands. The abs() macro documentation
-> (include/linux/math.h) explicitly states the result is undefined when
-> the input is the type minimum. When DST contains S32_MIN (0x80000000),
-> abs((s32)DST) triggers undefined behavior and returns S32_MIN unchanged
-> on arm64/x86. This value is then sign-extended to u64 as
-> 0xFFFFFFFF80000000, causing do_div() to compute the wrong result.
+> Over the last couple of weeks, I have been brainstorming on how I would go
+> about redesigning memcg, taking inspiration from sched_ext and bpfoom, with a
+> focus on existing challenges and issues. This proposal outlines the high-level
+> direction. Followup emails and patch series will cover and brainstorm the
+> mechanisms (of course BPF) to achieve these goals.
 >
-> The verifier's abstract interpretation (scalar32_min_max_sdiv) computes
-> the mathematically correct result for range tracking, creating a
-> verifier/interpreter mismatch that can be exploited for out-of-bounds
-> map value access.
+> Memory cgroups provide memory accounting and the ability to control memory usage
+> of workloads through two categories of limits. Throttling limits (memory.max and
+> memory.high) cap memory consumption. Protection limits (memory.min and
+> memory.low) shield a workload's memory from reclaim under external memory
+> pressure.
 >
-> Introduce __safe_abs32() which handles S32_MIN correctly by casting
-> to u32 before negating, avoiding signed overflow entirely. Replace
-> all 8 abs((s32)...) call sites in the interpreter's sdiv32/smod32
-> handlers.
+> Challenges
+> ----------
 >
-> Fixes: ec0e2da95f72 ("bpf: Support new signed div/mod instructions.")
-> Signed-off-by: Jenny Guanni Qu <qguanni@gmail.com>
-
-LGTM with a nit below.
-
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
-
-> ---
->   kernel/bpf/core.c | 23 ++++++++++++++---------
->   1 file changed, 14 insertions(+), 9 deletions(-)
+> - Workload owners rarely know their actual memory requirements, leading to
+>   overprovisioned limits, lower utilization, and higher infrastructure costs.
 >
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 3ece2da55625..0bee54db03c1 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -16,7 +16,6 @@
->    * Andi Kleen - Fix a few bad bugs and races.
->    * Kris Katterjohn - Added many additional checks in bpf_check_classic()
->    */
-> -
+> - Throttling limit enforcement is synchronous in the allocating task's context,
+>   which can stall latency-sensitive threads.
+>
+> - The stalled thread may hold shared locks, causing priority inversion -- all
+>   waiters are blocked regardless of their priority.
+>
+> - Enforcement is indiscriminate -- there is no way to distinguish a
+>   performance-critical or latency-critical allocator from a latency-tolerant
+>   one.
+>
+> - Protection limits assume static working sets size, forcing owners to either
+>   overprovision or build complex userspace infrastructure to dynamically adjust
+>   them.
+>
+> Feature Wishlist
+> ----------------
+>
+> Here is the list of features and capabilities I want to enable in the
+> redesigned memcg limit enforcement world.
+>
+> Per-Memcg Background Reclaim
+>
+> In the new memcg world, with the goal of (mostly) eliminating direct synchronous
+> reclaim for limit enforcement, provide per-memcg background reclaimers which can
+> scale across CPUs with the allocation rate.
+>
+> Lock-Aware Throttling
+>
+> The ability to avoid throttling an allocating task that is holding locks, to
+> prevent priority inversion. In Meta's fleet, we have observed lock holders stuck
+> in memcg reclaim, blocking all waiters regardless of their priority or
+> criticality.
+>
+> Thread-Level Throttling Control
+>
+> Workloads should be able to indicate at the thread level which threads can be
+> synchronously throttled and which cannot. For example, while experimenting with
+> sched_ext, we drastically improved the performance of AI training workloads by
+> prioritizing threads interacting with the GPU. Similarly, applications can
+> identify the threads or thread pools on their performance-critical paths and
+> the memcg enforcement mechanism should not throttle them.
+>
+> Combined Memory and Swap Limits
+>
+> Some users (Google actually) need the ability to enforce limits based on
+> combined memory and swap usage, similar to cgroup v1's memsw limit, providing a
+> ceiling on total memory commitment rather than treating memory and swap
+> independently.
+>
+> Dynamic Protection Limits
+>
+> Rather than static protection limits, the kernel should support defining
+> protection based on the actual working set of the workload, leveraging signals
+> such as working set estimation, PSI, refault rates, or a combination thereof to
+> automatically adapt to the workload's current memory needs.
+>
+> Shared Memory Semantics
+>
+> With more flexibility in limit enforcement, the kernel should be able to
+> account for memory shared between workloads (cgroups) during enforcement.
+> Today, enforcement only looks at each workload's memory usage independently.
+> Sensible shared memory semantics would allow the enforcer to consider
+> cross-cgroup sharing when making reclaim and throttling decisions.
+>
+> Memory Tiering
+>
+> With a flexible limit enforcement mechanism, the kernel can balance memory
+> usage of different workloads across memory tiers based on their performance
+> requirements. Tier accounting and hotness tracking are orthogonal, but the
+> decisions of when and how to balance memory between tiers should be handled by
+> the enforcer.
+>
+> Collaborative Load Shedding
+>
+> Many workloads communicate with an external entity for load balancing and rely
+> on their own usage metrics like RSS or memory pressure to signal whether they
+> can accept more or less work. This is guesswork. Instead of the
+> workload guessing, the limit enforcer -- which is actually managing the
+> workload's memory usage -- should be able to communicate available headroom or
+> request the workload to shed load or reduce memory usage. This collaborative
+> load shedding mechanism would allow workloads to make informed decisions rather
+> than reacting to coarse signals.
+>
+> Cross-Subsystem Collaboration
+>
+> Finally, the limit enforcement mechanism should collaborate with the CPU
+> scheduler and other subsystems that can release memory. For example, dirty
+> memory is not reclaimable and the memory subsystem wakes up flushers to trigger
+> writeback. However, flushers need CPU to run -- asking the CPU scheduler to
+> prioritize them ensures the kernel does not lack reclaimable memory under
+> stressful conditions. Similarly, some subsystems free memory through workqueues
+> or RCU callbacks. While this may seem orthogonal to limit enforcement, we can
+> definitely take advantage by having visibility into these situations.
+>
+> Putting It All Together
+> -----------------------
+>
+> To illustrate the end goal, here is an example of the scenario I want to
+> enable. Suppose there is an AI agent controlling the resources of a host. I
+> should be able to provide the following policy and everything should work out
+> of the box:
+>
+> Policy: "keep system-level memory utilization below 95 percent;
+> avoid priority inversions by not throttling allocators holding locks; trim each
+> workload's usage to its working set without regressing its relevant performance
+> metrics; collaborate with workloads on load shedding and memory trimming
+> decisions; and under extreme memory pressure, collaborate with the OOM killer
+> and the central job scheduler to kill and clean up a workload."
 
-You should not change the above line.
+This is fantastic, thanks Shakeel!
 
->   #include <uapi/linux/btf.h>
->   #include <crypto/sha1.h>
->   #include <linux/filter.h>
-> @@ -1736,6 +1735,12 @@ bool bpf_opcode_in_insntable(u8 code)
->   }
->   
->   #ifndef CONFIG_BPF_JIT_ALWAYS_ON
-> +/* Safe absolute value for s32 - abs() is undefined for S32_MIN */
+I'd be very interested to discuss it! I suggested a somewhat
+similar/related topic to the bpf track (bpf use cases in mm), we might
+think of joining them.
 
-Maybe
-    /* Safe absolute value for s32 to prevent undefined behavior for abs(S32_MIN) */
-?
-
-> +static inline u32 __safe_abs32(s32 x)
-> +{
-> +	return x >= 0 ? (u32)x : -(u32)x;
-> +}
-> +
->   /**
->    *	___bpf_prog_run - run eBPF program on a given context
->    *	@regs: is the array of MAX_BPF_EXT_REG eBPF pseudo-registers
-> @@ -1900,8 +1905,8 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
->   			DST = do_div(AX, (u32) SRC);
->   			break;
->   		case 1:
-> -			AX = abs((s32)DST);
-> -			AX = do_div(AX, abs((s32)SRC));
-> +			AX = __safe_abs32((s32)DST);
-> +			AX = do_div(AX, __safe_abs32((s32)SRC));
->   			if ((s32)DST < 0)
->   				DST = (u32)-AX;
->   			else
-> @@ -1928,8 +1933,8 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
->   			DST = do_div(AX, (u32) IMM);
->   			break;
->   		case 1:
-> -			AX = abs((s32)DST);
-> -			AX = do_div(AX, abs((s32)IMM));
-> +			AX = __safe_abs32((s32)DST);
-> +			AX = do_div(AX, __safe_abs32((s32)IMM));
->   			if ((s32)DST < 0)
->   				DST = (u32)-AX;
->   			else
-> @@ -1955,8 +1960,8 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
->   			DST = (u32) AX;
->   			break;
->   		case 1:
-> -			AX = abs((s32)DST);
-> -			do_div(AX, abs((s32)SRC));
-> +			AX = __safe_abs32((s32)DST);
-> +			do_div(AX, __safe_abs32((s32)SRC));
->   			if (((s32)DST < 0) == ((s32)SRC < 0))
->   				DST = (u32)AX;
->   			else
-> @@ -1982,8 +1987,8 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
->   			DST = (u32) AX;
->   			break;
->   		case 1:
-> -			AX = abs((s32)DST);
-> -			do_div(AX, abs((s32)IMM));
-> +			AX = __safe_abs32((s32)DST);
-> +			do_div(AX, __safe_abs32((s32)IMM));
->   			if (((s32)DST < 0) == ((s32)IMM < 0))
->   				DST = (u32)AX;
->   			else
-
+Thanks!
