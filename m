@@ -1,90 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7E0F311967;
-	Tue, 10 Mar 2026 02:00:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 147B12EC0B2
+	for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 02:05:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773108030; cv=none; b=Y9uw50umkb9izoiNmReg3wfJYnw/0BLGvomnz/ShLDB3VWruGiX0tprk7E9opyAyetilhVypofUR74cvL1u7FouTVb/C8YFVT7P3Orq9MyRHs+MKUg78J5iHqASbXH/03t6m87/Mu3HKCFyf2Jm1WPOo7v++kNo2ZpU1oag/z5c=
+	t=1773108318; cv=none; b=o/7bo7LVLiPHlHndSjz4WsIRx2ZEF/xAzufkN3VY/590E4dgFkXqu4nsrJIjZUODADTgD7C9g5LHPy58/OtgAjZ/FoCxIaVZeZH7mjl1YOTYk/QxqqWG/rVS/I8YwHFxaJN6oy3MPJk7Qd3UlwkJzJ4Q7zyg0x/25Cl1kWNBtFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773108030; c=relaxed/simple;
-	bh=0JEemkAguTgCCENrKaLPi4A+rYINGEmJR8Uc+O0f2XU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=KcnMlVtthCV/1Unzp5bJFrhaAiPaKlXCDePNEqnab17Rti6ngBP5Q0hbFjnIqT+GfLjXa7T9F2dYFGwJeCqzZNSxCypHlQI7jB6pQ4Zjy3PEdHKdLuj4eQ6TimidnuTJ3zstpqNrng5HsRHNp2UodTA8AdfeL/GIIVtJWpOFfU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FHq3T5yM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773108318; c=relaxed/simple;
+	bh=F4N2nQ0Pb6QyL/SX20jNAYWQcUWv6ZIscg4pl4ar17Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bfPMdHhQ0jLg1ZjKnt1DJJ5NJHn8Tk2rOSLk6dGMNyvSYWZOSjBAgy+Pgnde6aXlpH6AADM+f0b5eD2RNWN3xg+Co8poKeptMP7lbEIkeIFSTOk17cDYEV8NmUmE4G+jiTPOkwY+F7ffr2iuZUrEiELn0w59np/A1l0KCDv0JQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oK/EC6+y; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FHq3T5yM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BB71C19423;
-	Tue, 10 Mar 2026 02:00:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773108029;
-	bh=0JEemkAguTgCCENrKaLPi4A+rYINGEmJR8Uc+O0f2XU=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=FHq3T5yME3laqaQwHCa6byGNjuQB3SLuNm7QXdoqmk0UBGbo+b8RIq8MbEhvTa11d
-	 uclNmzmMjAz8Jt/dLM1uNAMJZw3gmCYFu6EL5RgHgQQq/gttBQFRCDD8VDH3KTCbjs
-	 zG+w97kAjUs88GuhQOyDdAvWSDJJTL+kdQYtKFG9Gfp37C3r//A+W38YVjHpOl7sDv
-	 M9lYwS4iX0uhmpYbq7vz6BV76akNJmyLixS3nPJC89vrPoU0FV5PBCa17vFaUFqMk2
-	 A/yDFvTNQVGMNiw2EWGedFIdnjYH9eA6lWwf0RHa/1IhTEU1eA+e7XDvijKx9dS1U7
-	 TGhS8mHGq7uVg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B9EC63808200;
-	Tue, 10 Mar 2026 02:00:27 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oK/EC6+y"
+Message-ID: <9a212cc9-46cf-4c0a-a5a6-98544f46465b@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773108315;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VRlh5RjJuYVGai9f3GjW8BpNiqmsxx4jaE6EdUTZpWM=;
+	b=oK/EC6+yXXipqFpYwFdPARfLXG7OkH2671RH0/JpiZhQLaRS4nZiPf81WkWxqXkMzJQDea
+	nhPKyI8AZuk1qpqfxm6GoAGrQSvMa60SGyqzHCIVuXPW/d1HQxnpzwehlAu/+tZVs0CzmO
+	CfVLqK0Y8+xx484poCIj9NFJmXPeezg=
+Date: Tue, 10 Mar 2026 10:05:04 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH v4 2/2] selftests/bpf: Add tests for sdiv32/smod32 with
+ INT_MIN dividend
+To: Jenny Guanni Qu <qguanni@gmail.com>, bpf@vger.kernel.org
+Cc: daniel@iogearbox.net, ast@kernel.org, andrii@kernel.org,
+ mykyta.yatsenko5@gmail.com, yonghong.song@linux.dev, lkp@intel.com
+References: <20260309215910.4131143-1-qguanni@gmail.com>
+ <20260309215910.4131143-3-qguanni@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260309215910.4131143-3-qguanni@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 net-next] net/sched: do not reset queues in graft
- operations
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177310802654.2022132.5094822260637763016.git-patchwork-notify@kernel.org>
-Date: Tue, 10 Mar 2026 02:00:26 +0000
-References: <20260307163430.470644-1-edumazet@google.com>
-In-Reply-To: <20260307163430.470644-1-edumazet@google.com>
-To: Eric Dumazet <edumazet@google.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
- netdev@vger.kernel.org, bpf@vger.kernel.org, horms@kernel.org,
- jhs@mojatatu.com, victor@mojatatu.com, xiyou.wangcong@gmail.com,
- jiri@resnulli.us, toke@redhat.com, eric.dumazet@gmail.com,
- linyunsheng@huawei.com
-
-Hello:
-
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Sat,  7 Mar 2026 16:34:30 +0000 you wrote:
-> Following typical script is extremely disruptive,
-> because each graft operation calls dev_deactivate()
-> which resets all the queues of the device.
-> 
-> QPARAM="limit 100000 flow_limit 1000 buckets 4096"
-> TXQS=64
-> for ETH in eth1
-> do
->  tc qd del dev $ETH root 2>/dev/null
->  tc qd add dev $ETH root handle 1: mq
->  for i in `seq 1 $TXQS`
->  do
->    slot=$( printf %x $(( i )) )
->    tc qd add dev $ETH parent 1:$slot fq $QPARAM
->  done
-> done
-> 
-> [...]
-
-Here is the summary with links:
-  - [v2,net-next] net/sched: do not reset queues in graft operations
-    https://git.kernel.org/netdev/net-next/c/47e8dbb6e763
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+X-Migadu-Flow: FLOW_OUT
 
 
+On 3/10/26 5:59 AM, Jenny Guanni Qu wrote:
+> Add tests to verify that signed 32-bit division and modulo operations
+> produce correct results when the dividend is INT_MIN (0x80000000).
+>
+> The bug fixed in the previous commit only affects the BPF interpreter
+> path. When JIT is enabled (the default on most architectures), the
+> native CPU division instruction produces the correct result and these
+> tests pass regardless. With bpf_jit_enable=0, the interpreter is used
+> and without the previous fix, INT_MIN / 2 incorrectly returns
+> 0x40000000 instead of 0xC0000000 due to abs(S32_MIN) undefined
+> behavior, causing these tests to fail.
+>
+> Test cases:
+>    - SDIV32 INT_MIN / 2 = -1073741824 (imm and reg divisor)
+>    - SMOD32 INT_MIN % 2 = 0 (positive and negative divisor)
+>
+> Signed-off-by: Jenny Guanni Qu <qguanni@gmail.com>
+> ---
+>   .../selftests/bpf/progs/verifier_sdiv.c       | 58 +++++++++++++++++++
+>   1 file changed, 58 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_sdiv.c b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
+> index 148d2299e5b4..fd59d57e8e37 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_sdiv.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
+> @@ -1209,6 +1209,64 @@ __naked void smod32_ri_divisor_neg_1(void)
+>   	: __clobber_all);
+>   }
+>   
+> +SEC("socket")
+> +__description("SDIV32, INT_MIN divided by 2, imm")
+> +__success __success_unpriv __retval(-1073741824)
+> +__naked void sdiv32_int_min_div_2_imm(void)
+> +{
+> +	asm volatile ("					\
+> +	w0 = %[int_min];				\
+> +	w0 s/= 2;					\
+> +	exit;						\
+> +"	:
+> +	: __imm_const(int_min, INT_MIN)
+> +	: __clobber_all);
+> +}
+> +
+> +SEC("socket")
+> +__description("SDIV32, INT_MIN divided by 2, reg")
+> +__success __success_unpriv __retval(-1073741824)
+> +__naked void sdiv32_int_min_div_2_reg(void)
+> +{
+> +	asm volatile ("					\
+> +	w0 = %[int_min];				\
+> +	w1 = 2;						\
+> +	w0 s/= w1;					\
+> +	exit;						\
+> +"	:
+> +	: __imm_const(int_min, INT_MIN)
+> +	: __clobber_all);
+> +}
+> +
+> +SEC("socket")
+> +__description("SMOD32, INT_MIN modulo 2, imm")
+> +__success __success_unpriv __retval(0)
+> +__naked void smod32_int_min_mod_2_imm(void)
+> +{
+> +	asm volatile ("					\
+> +	w0 = %[int_min];				\
+> +	w0 s%%= 2;					\
+> +	exit;						\
+> +"	:
+> +	: __imm_const(int_min, INT_MIN)
+> +	: __clobber_all);
+> +}
+> +
+> +SEC("socket")
+> +__description("SMOD32, INT_MIN modulo -2, imm")
+> +__success __success_unpriv __retval(0)
+> +__naked void smod32_int_min_mod_neg2_imm(void)
+> +{
+> +	asm volatile ("					\
+> +	w0 = %[int_min];				\
+> +	w0 s%%= -2;					\
+> +	exit;						\
+> +"	:
+> +	: __imm_const(int_min, INT_MIN)
+> +	: __clobber_all);
+> +}
+> +
+> +
+>   #else
+>   
+
+
+Minor nits: extra blank line before #else, and smod32 tests only cover 
+the imm
+form — a reg variant (w0 s%%= w1) would make coverage symmetric with sdiv32.
+
+Neither worth a respin.
+
+Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+
+>   SEC("socket")
