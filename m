@@ -1,134 +1,171 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 295F2384236;
-	Tue, 10 Mar 2026 11:48:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 698F038A702
+	for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 11:49:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773143324; cv=none; b=PvzO6ePC+INk1UrGH3gzGH9JJ/qDfGlqpNhnUQIB/7LVwUd9kaF0w5eFrMD44zadBdbUITT3MW/9kikzweEY5sZIWy8DcnUvo4oZuTLcYrgg8bY+jHcaY81KR5sxOyxj/WuJTAiYvn0Gyyt6G91hBACD8MD3U2gsAqRQNPk5K+g=
+	t=1773143374; cv=none; b=CthDESIXGQ1o4K2YMwA6JIs8yIO5eVfY3uKdrUqAeNXhrFeKHll1W1HeCC+smOxiGt8/s/ysRJUiLnoc8WE7FHRRm3ylesg7i/p1O7c9COrZvLWmoS2mognBVNDKWMQaM+KH8sFXgisZHcNod/oE4SKR+tKqNm99GAGHk0Ovcx8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773143324; c=relaxed/simple;
-	bh=wmnudj8wOvC5q2tPSSZ1fMwaPxqqty8WnEeN4Tgn5pE=;
+	s=arc-20240116; t=1773143374; c=relaxed/simple;
+	bh=Zr3qcMn4OLx1slxxG1q/v6XHjn/W58Jij9qVOShgcro=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PMSt2zJoqdev5CWL5tjEh0HLO2ftQWAhskEdzH1Dxaz8bvzTh6DzDrhRImNlMrZk0FKxgNGFWviO25WejWblOAVxXC6Z8E5xkJFqENNNix7lg6y+CJOKgZVWQ/IM/kT4vfHREvSDWahlG55a0EDuSEkothIhuDHvxprCAJC9x7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E5B4716A3;
-	Tue, 10 Mar 2026 04:48:34 -0700 (PDT)
-Received: from localhost (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B93203F73B;
-	Tue, 10 Mar 2026 04:48:40 -0700 (PDT)
-Date: Tue, 10 Mar 2026 11:48:38 +0000
-From: Leo Yan <leo.yan@arm.com>
-To: Ian Rogers <irogers@google.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
-	Quentin Monnet <qmo@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=TjbURedlWcN+9mjW4gQUsru1NjVWXX/JEHuk5SzNCfIzMdWuiAUWVsQ7Z4QSmUPa+H9R7SySj+1sb8YpZ649/W8ZB/fH85hpjK6bPiLPMf6gEJsYZuMpHEBYkJkHzmR6MrlMu1a4yqEnwOH7/xgw1BHdSFry7MWLwg8XzTVwLRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b=PXjZhYpl; arc=none smtp.client-ip=209.85.167.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b="PXjZhYpl"
+Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-464bba3a9easo8479373b6e.0
+        for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 04:49:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall.org; s=google; t=1773143372; x=1773748172; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eRz2iGuRS5c9gUYKqTban2ycHL3n1P/vxXJWakDhtNM=;
+        b=PXjZhYpl/0RcIXC8chJ7scSvE5Gc0t9PMWcQuLETEA9mAUo997liJ6mkRtJLM98kvK
+         zktcoxY40FQk0tM4to7SERn5YNKhzzaYvNr30l2pBagYy1rYJA29gdPO4UnLUgIzOKQQ
+         gOWObrNLkUTL22syetszXwubcqcbJawC8B4XVal9HvVBQNcdVdChOunuk/AJXe2JstAy
+         aT7sbbbSKuJbqZblzgLp/4ACm73zNfcr0OBJPfDOlTgLPkWmykXksuk74zdVSyafdiFb
+         CcK7on7sPZ+TlthhdaWuXy/c2pH1Leuchq29jfh5IvzgB0rFWEidDmxXoiDG96KGtbZJ
+         9KaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773143372; x=1773748172;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eRz2iGuRS5c9gUYKqTban2ycHL3n1P/vxXJWakDhtNM=;
+        b=GfQ0ErzDZXjVjhBlUrt1Eogp0tbTRWPpAA0h8aBBri66CcccnO7PAVzZBjmTY302Il
+         JPK7pqqtB+jP/mKDUQ8kvPumQjfdBaYVCDxzP3Wmp+SZAl4vqgC/bIpPfZ3QiCQffuKz
+         evyLCUdg2Ezojeq8hVcqEktbEXpNOZtF5vibNjRPrMKrPb3WlgJW4u20U7KBN7LBXgVi
+         44xsfeaGlW1xmXP2jwSjxr9VALVyvLSogDBH9Wj4X42Mq4091dzndiYaYSHY3psu9ksm
+         /46yvjXVoGOloPpkhjfltu169vUOURnTiBSPtiTy5HovHeOmjkq16UqNL6hllmNP6ldj
+         CvNg==
+X-Forwarded-Encrypted: i=1; AJvYcCVBhJBMg0ZfPcgrwdfdoaoJ7snDIb0Mmuby33mznfGkTrsgQYSrxu+1922ata7iCZRT6u4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjsFULZYB8+X95kqVFTajUW7dolhLE5C/iJFPBkQdMENOR7hA9
+	02+pwiZHNo5R12TiRV9QkGsu74H+EhiS0SsjGHR1ci8MrKccrj879K3Lm81l69WxVRQ=
+X-Gm-Gg: ATEYQzzG9uI4D5bs4FIywX8cAXU4iUlUWlPGwu1qcJQXWjwgY3Jlpkx8Mhwi6vnTPvi
+	CbNLVxQKNCFsHoTMCQu8CNfA6UWuRHQrdzWPnCV8axEZxgarDgwSkQU36sTxkgmg/96kbVHtl50
+	gDto+Fs46uzUJQKBIvAeaQ7Kp+ujU9Ed06jfVXJMfbPDNmmWyxzcUmt7bzcxLX45R52TPu8nYwe
+	Ta2iCZZHAWvzCj1OY210NOVzWsNFrNxXJsRLz8Dr2MlYzIv8stoCPt+EOaqE3Be/jmJk38w7SMU
+	KgIWL1lbPJnmQ+xacUdJ18+LIm1SDvge6xI1Zf6HzMT0q3+9I8qiUJYC4E30FbwjV/u5oXpzUNc
+	YbmQd0Aq6zBWUdlj5UWKDWOYCLI0i3WrxEtU8Vz7F/sokZEa+ytPaqDhT6bsebyULINcO+Yo38G
+	s9mXe2Z1YIClD6YjGvtud0
+X-Received: by 2002:a05:6808:171a:b0:45c:a040:e53c with SMTP id 5614622812f47-466dcb1c40cmr7605844b6e.32.1773143372180;
+        Tue, 10 Mar 2026 04:49:32 -0700 (PDT)
+Received: from localhost ([216.228.127.131])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-466dfac3472sm7496849b6e.15.2026.03.10.04.49.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Mar 2026 04:49:30 -0700 (PDT)
+Date: Tue, 10 Mar 2026 13:49:25 +0200
+From: Nikolay Aleksandrov <razor@blackwall.org>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: netdev@vger.kernel.org, jiayuan.chen@shopee.com,
+	syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
+	Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
 	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	William Breathitt Gray <wbg@kernel.org>,
-	Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Kent Gibson <warthog618@gmail.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Long Li <longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
-	Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>,
-	Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, bpf@vger.kernel.org,
-	linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH v3 24/30] tools: tracing: Append extra cflags
-Message-ID: <20260310114838.GA4153946@e132581.arm.com>
-References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
- <20260308-tools_build_fix_zero_init-v3-24-6477808123b7@arm.com>
- <20260309114413.09e05127@gandalf.local.home>
- <CAP-5=fU4JF6=aocKhgyZqyqm0NOKpAKEmruFj2mgBHfkqbN2yw@mail.gmail.com>
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Jussi Maki <joamaki@gmail.com>, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH net v5 1/2] bonding: fix null-ptr-deref in
+ bond_rr_gen_slave_id()
+Message-ID: <abAFRbJNinhN3O5v@penguin>
+References: <20260309030702.128520-1-jiayuan.chen@linux.dev>
+ <20260309030702.128520-2-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fU4JF6=aocKhgyZqyqm0NOKpAKEmruFj2mgBHfkqbN2yw@mail.gmail.com>
+In-Reply-To: <20260309030702.128520-2-jiayuan.chen@linux.dev>
 
-On Mon, Mar 09, 2026 at 09:37:07AM -0700, Ian Rogers wrote:
-> On Mon, Mar 9, 2026 at 8:44 AM Steven Rostedt <rostedt@goodmis.org> wrote:
-> >
-> > On Sun, 08 Mar 2026 16:46:29 +0000
-> > Leo Yan <leo.yan@arm.com> wrote:
-> >
-> > > Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
-> > > the compiler.
-> > >
-> > > Signed-off-by: Leo Yan <leo.yan@arm.com>
-> >
-> > Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+On Mon, Mar 09, 2026 at 11:06:58AM +0800, Jiayuan Chen wrote:
+> From: Jiayuan Chen <jiayuan.chen@shopee.com>
 > 
-> Not a problem with the change but running this patch through an AI
-> agent brought up:
+> bond_rr_gen_slave_id() dereferences bond->rr_tx_counter without a NULL
+> check. rr_tx_counter is a per-CPU counter only allocated in bond_open()
+> when the bond mode is round-robin. If the bond device was never brought
+> up, rr_tx_counter remains NULL, causing a null-ptr-deref.
 > 
->   Should CFLAGS be initialized with default optimization and warning flags
->   (e.g., -g -O2 -Wall)?
+> The XDP redirect path can reach this code even when the bond is not up:
+> bpf_master_redirect_enabled_key is a global static key, so when any bond
+> device has native XDP attached, the XDP_TX -> xdp_master_redirect()
+> interception is enabled for all bond slaves system-wide. This allows the
+> path xdp_master_redirect() -> bond_xdp_get_xmit_slave() ->
+> bond_xdp_xmit_roundrobin_slave_get() -> bond_rr_gen_slave_id() to be
+> reached on a bond that was never opened.
 > 
->   Currently, latency-collector is built without these standard compilation
->   flags because they are missing from the Makefile. In other commits in this
->   series (like for libbpf and thermal), CFLAGS was explicitly initialized to
->  -g -O2 or -g -Wall when EXTRA_CFLAGS is not set.
+> Fix this by adding a NULL check with unlikely() in bond_rr_gen_slave_id()
+> before dereferencing rr_tx_counter. When rr_tx_counter is NULL (bond was
+> never opened), fall back to get_random_u32() for slave selection. The
+> allocation in bond_open() is kept, with WRITE_ONCE() added to safely
+> publish the pointer to the XDP read side. A plain read suffices for the
+> !bond->rr_tx_counter guard in bond_open() itself, as bond_open() runs
+> under RTNL lock and is the only writer of rr_tx_counter.
 > 
->   Additionally, should EXTRA_WARNINGS (provided by
->   tools/scripts/Makefile.include) be appended to CFLAGS here, similar to
->   how it is done for other tools?
+> Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to slave device")
+> Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com
+> Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.00cc.GAE@google.com/T/
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
+> ---
+>  drivers/net/bonding/bond_main.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+> 
 
-Thanks for sharing this, Ian.
+This is Jay's patch + the unlikely change, looks good to me.
+Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
 
-I would like to keep the scope of this series focused on appending the
--fzero-init-padding-bits=all option.  The comment above from AI is not
-relevant to this purpose, I'd leave it to the project maintainer for
-further refactoring.
+Cheers,
+ Nik
 
-As you suggested in other reples, I will update to append EXTRA_CFLAGS
-at the last so that it can override the default values.  I will also
-collect Steven's ACK tag.
-
-If there are any concerns, please let me know.
-
-Leo
+> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+> index 444519078da3..b8ec87625ce3 100644
+> --- a/drivers/net/bonding/bond_main.c
+> +++ b/drivers/net/bonding/bond_main.c
+> @@ -4290,9 +4290,11 @@ static int bond_open(struct net_device *bond_dev)
+>  	struct slave *slave;
+>  
+>  	if (BOND_MODE(bond) == BOND_MODE_ROUNDROBIN && !bond->rr_tx_counter) {
+> -		bond->rr_tx_counter = alloc_percpu(u32);
+> -		if (!bond->rr_tx_counter)
+> +		u32 __percpu *rr_tx_tmp = alloc_percpu(u32);
+> +
+> +		if (!rr_tx_tmp)
+>  			return -ENOMEM;
+> +		WRITE_ONCE(bond->rr_tx_counter, rr_tx_tmp);
+>  	}
+>  
+>  	/* reset slave->backup and slave->inactive */
+> @@ -4883,6 +4885,9 @@ static u32 bond_rr_gen_slave_id(struct bonding *bond)
+>  	struct reciprocal_value reciprocal_packets_per_slave;
+>  	int packets_per_slave = bond->params.packets_per_slave;
+>  
+> +	if (unlikely(!READ_ONCE(bond->rr_tx_counter)))
+> +		return get_random_u32();
+> +
+>  	switch (packets_per_slave) {
+>  	case 0:
+>  		slave_id = get_random_u32();
+> -- 
+> 2.43.0
+> 
