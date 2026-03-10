@@ -1,106 +1,78 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EDDA3D523B;
-	Tue, 10 Mar 2026 06:55:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38B883A961F;
+	Tue, 10 Mar 2026 07:29:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773125731; cv=none; b=R9MJCpCOdYMykrkKQtNp07U/xuY5gRLFF99sa/Di2rkqZkSqeoKAxcK/pFL1iAYFA+1eaiH8hKuppQ47aBNpEnxTbDTrWYr6Z1GkKAM5/AiizOAty1F7voQZesVeRdUK/XbSC6ZBxsFIPDTQm+yjVcS2wJBAXROpXmnT1WvnPJQ=
+	t=1773127779; cv=none; b=LLUiyT7SXi49k/8YtaWs3iSz3jrUMaPi2fQXdSOWyrqnyJ8ZUnTFBMYG1z4KA4wAx82cBMOW2YeCWOiLfZMQ4KDO5S9L/To2qBqBikrGnVnV6ElSUomBbJ1nP07CQJflDUOfJG7clxSfUg8VyiE+HTR3N70CbpJILQlcHuPFzUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773125731; c=relaxed/simple;
-	bh=Hpi5t4ZSj28tlk6eBF99nC/8mX7hHVzrgGlSFbm5oHY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=obrb9RvD5He3XNgU67h16bDbvCT9LbMIz4rAk+MQl8KH0rID4BiG2T6zEgi+UBX9gKRcx3nrOleZI1dj1TAAOotWNxPAL8yUOOHypacv+zfDWtPtKxITCuRM/6b2P+gT8NgyC1+cJ+rAYZyT5yrZ3rVlkaFcUxPbuO4bt7ziRpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4fVPkl6XknzYQtnw;
-	Tue, 10 Mar 2026 14:54:39 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 438A84058D;
-	Tue, 10 Mar 2026 14:55:25 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP1 (Coremail) with SMTP id cCh0CgBnt9dbwK9ptOx8AQ--.50254S2;
-	Tue, 10 Mar 2026 14:55:24 +0800 (CST)
-Message-ID: <1cd2c566-382c-4bbc-a1fa-1220fd76e827@huaweicloud.com>
-Date: Tue, 10 Mar 2026 14:55:23 +0800
+	s=arc-20240116; t=1773127779; c=relaxed/simple;
+	bh=CMqsrQUPybQdjV2uvX1ukTo3S1N3bl3uFt8kMxHhogs=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=hUjN1VoadmxNfcUXcKb2IDbsUk55HAF/W8HHmVG/Vdx7KBt2wCsKZs9gk3rHoAsBHTjK0d0MEo4JwpPSgq7ZcEFdCbbGQEABk3JzdX+jnl55iJtbA4bXpeaad7GbyMVuUJGlPGhjM3aIGrAEM74FGCgdLFQzIyQZel+jA+t2KPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ojyR+eLh; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ojyR+eLh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DB79C19423;
+	Tue, 10 Mar 2026 07:29:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773127778;
+	bh=CMqsrQUPybQdjV2uvX1ukTo3S1N3bl3uFt8kMxHhogs=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=ojyR+eLhafshvkoMfJKJ/VLucEhhE23KJL0p+DjM29iYtssPXZVVe2DGQjZPW1pMt
+	 pN4IRBULUkBPQCsYKDea7GmfmUCEbSpgeU8+G4bLu51bTmUV4ddVhZqXW8c9sgNBO2
+	 4k89CY2zO6fcv7DohI/vS8OITqIB5cjuNPhiiWANfPGr4DfW5krKvuERxbeB1+H8WM
+	 dpZRll0NLHeThxhsDxz2NKMSM9UjSBi4eVxoRNyO6k4FV9T0Fyw2G/gWxHnlNzd1+g
+	 y/4RP1tklYt4a+NL/aGwy7QVRrM1xDa4DdpF863LCO4ESWypI5QS8etVj87FuUn3v/
+	 Q/D8QPJkALtcA==
+Content-Type: multipart/mixed; boundary="===============7609470448589289696=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [bpf-next v8 0/5] emit ENDBR/BTI instructions for indirect jump
- targets
-Content-Language: en-US
-To: Anton Protopopov <a.s.protopopov@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Yonghong Song <yonghong.song@linux.dev>,
- Puranjay Mohan <puranjay@kernel.org>, Shahab Vahedi <list+bpf@vahedi.org>,
- Russell King <linux@armlinux.org.uk>, Tiezhu Yang <yangtiezhu@loongson.cn>,
- Hengqi Chen <hengqi.chen@gmail.com>,
- Johan Almbladh <johan.almbladh@anyfinetworks.com>,
- Paul Burton <paulburton@kernel.org>, Hari Bathini <hbathini@linux.ibm.com>,
- Christophe Leroy <chleroy@kernel.org>, Naveen N Rao <naveen@kernel.org>,
- Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
- =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
- Pu Lehui <pulehui@huawei.com>, Ilya Leoshkevich <iii@linux.ibm.com>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- "David S . Miller" <davem@davemloft.net>, Wang YanQing <udknight@gmail.com>
-References: <20260309140044.2652538-1-xukuohai@huaweicloud.com>
- <aa8EuW4fcwOXnIP7@mail.gmail.com>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <aa8EuW4fcwOXnIP7@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-Id: <eb603d18eb0634a5cb8de531b12479a8c7e00f2893a0415536c33f9a76ee9535@mail.kernel.org>
+In-Reply-To: <20260310064706.4985-1-yangtiezhu@loongson.cn>
+References: <20260310064706.4985-1-yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v1] LoongArch: BPF: Make arch_protect_bpf_trampoline() return 0
+From: bot+bpf-ci@kernel.org
+To: yangtiezhu@loongson.cn,chenhuacai@kernel.org,hengqi.chen@gmail.com
+Cc: loongarch@lists.linux.dev,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 10 Mar 2026 07:29:38 +0000 (UTC)
+
+--===============7609470448589289696==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:cCh0CgBnt9dbwK9ptOx8AQ--.50254S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7KFyUGw48ZF15ArW7JFW8JFb_yoW8Jw1UpF
-	Wvk342qFWDJr4kCrnrJay8GryagwsxJa1DtFn8C34xGw4Ygrn3tF4fKrW2vas0yr4YkwnF
-	vF4Y9a48u398CFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
-	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
-	6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvj
-	xUxZXoDUUUU
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On 3/10/2026 1:34 AM, Anton Protopopov wrote:
-> On 26/03/09 10:00PM, Xu Kuohai wrote:
->> On architectures with CFI protection enabled that require landing pad
->> instructions at indirect jump targets, such as x86 with CET/IBT eanbled
->                                                                    ^ enabled
->> and arm64 with BTI enabled, kernel panics when an indirect jump lands on
->> a target witout landing pad. Therefore, the JIT must emit landing pad
->             ^ without
->> instructions for indirect jump targets.
->>
->> The verifier already recognizes which instructions are indirect jump
->> targets during the verification phase. So we can stores this information
->                                                     ^ store
->> in env->insn_aux_data and pass it to the JIT as new parameter, so the JIT
->> knows which instructions are indirect jump targets.
->>
->> During JIT, constants blinding is performed. It rewrites the private copy
->> of instructions for the JITed program, but it does not adjust the global
->> env->insn_aux_data array. As a result, after constants blinding, the
->> instruction indexes used by JIT may no longer match the indexes in
->> env->insn_aux_data, so the JIT can not lookup env->insn_aux_data directly.
->>
->> To avoid this mistach, and considering that all existing arch-specific JITs
->                  ^ mismatch?
+> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+> index 3bd89f55960d..4f1af3b7a363 100644
+> --- a/arch/loongarch/net/bpf_jit.c
+> +++ b/arch/loongarch/net/bpf_jit.c
+> @@ -1568,6 +1568,11 @@ void arch_free_bpf_trampoline(void *image, unsigned int size)
+>  	bpf_prog_pack_free(image, size);
+>  }
+>
+> +int arch_protect_bpf_trampoline(void *image, unsigned int size)
+> +{
+> +	return 0;
+> +}
 
-I'll fix them and run a spelling check before sending the next version, thanks.
+The fix itself looks correct and is consistent with x86, arm64, and
+powerpc which all override arch_protect_bpf_trampoline() to return 0
+when using the prog pack allocator.
 
+Should this have a Fixes: tag? The race was introduced when LoongArch
+switched to the prog pack allocator without overriding the protect
+function. Consider adding:
+
+Fixes: 4ab17e762b34 ("LoongArch: BPF: Use BPF prog pack allocator")
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22891104109
+--===============7609470448589289696==--
