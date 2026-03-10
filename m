@@ -1,90 +1,122 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24F9138B7CB
-	for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 11:54:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
+Received: from mail.avm.de (mail.avm.de [212.42.244.120])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31D8342188A;
+	Tue, 10 Mar 2026 11:55:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.42.244.120
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773143699; cv=none; b=sVGqQSIsQVmEoAf96LLMAcOuUqTY3SNRXcWw9zyX207nrzYrKXXhHQlFrkUDwb9Ry2WG1XsXwk8IRCwoKrkxzejF6+xVCtV9DKEhfRoME3ClR8sM5g+foXnnfjtOy+5IMpNlF2EB1ZzRvU8fTAUDJ3oWvG6eHkvwV8GJ2vNi3ao=
+	t=1773143736; cv=none; b=JyjpjDNBamRX/d/0cBxhn8krCQOjexJ2vrQdxL9etQTgsSveWfmqAXU9Utungvjhf1ymk2tyTygW3eFbj9ceo2rBjCRHZq3BBsZECgAl7/pH+x9OcO6hwaUjZ7EqkgDRsUFouXu1RhYhXogSD8c1uEUyZLhZ0zSpr9skyUkgM2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773143699; c=relaxed/simple;
-	bh=NwrFKeZsGphgH1uImf5cIal46lgZGJ+EvMRZf6qCBvU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=AUW7+Fplms3VzO+LRp707KbPUO7h6jjyvEqEL0CG/FFwKMkeu36fQrK02n7muIJ2qJWZWKaL79Ftl2PcoFZWYH4o595KZ/+zQPjM4utnUMlYamuOiTBtdFi4VUfwl4va4dStIeAWlAGHS/gyGcRzJWD0vGxQ7BavGhOJxrE/Dng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=207.46.229.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [10.162.98.105])
-	by mtasvr (Coremail) with SMTP id _____wBHP2ZrBrBpNgUpAQ--.3025S3;
-	Tue, 10 Mar 2026 19:54:20 +0800 (CST)
-Received: from tangyazhou$zju.edu.cn ( [10.162.98.105] ) by
- ajax-webmail-mail-app2 (Coremail) ; Tue, 10 Mar 2026 19:54:18 +0800
- (GMT+08:00)
-Date: Tue, 10 Mar 2026 19:54:18 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: "Yazhou Tang" <tangyazhou@zju.edu.cn>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
-	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
-	song@kernel.org, yonghong.song@linux.dev, kpsingh@kernel.org,
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
-	tangyazhou518@outlook.com, shenghaoyuan0928@163.com, ziye@zju.edu.cn,
-	glapt.pro@outlook.com
-Subject: Re: [PATCH bpf v2 0/2] bpf: Reset register ID for BPF_END value
- tracking
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.3-cmXT6 build
- 20250620(94335109) Copyright (c) 2002-2026 www.mailtech.cn zju.edu.cn
-In-Reply-To: <20260304083228.142016-1-tangyazhou@zju.edu.cn>
-References: <20260304083228.142016-1-tangyazhou@zju.edu.cn>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	s=arc-20240116; t=1773143736; c=relaxed/simple;
+	bh=5P0DiWaZEPF/d3SPdMB+rZQJk1DY1mVuY8d9xffySsA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Y14YQFuhCN3Kna4n1bwdJLy6NiH7PsoBM7Us66PzPbSe668DAzp4tTo4cuQaqKhLnGId48d7VcOl3YdYa4gX896kymcYC+OJsptk56QFk5wYX8Gajg4MTVHJ9JF9m3oSlGutdRSt3+thWos4pR/PlY2QtSRm5Z/QKNjYzOak55w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=avm.de; spf=pass smtp.mailfrom=avm.de; dkim=pass (1024-bit key) header.d=avm.de header.i=@avm.de header.b=E8nt1Igf; arc=none smtp.client-ip=212.42.244.120
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=avm.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=avm.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=avm.de header.i=@avm.de header.b="E8nt1Igf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
+	t=1773143723; bh=5P0DiWaZEPF/d3SPdMB+rZQJk1DY1mVuY8d9xffySsA=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=E8nt1Igfikzg1UTgOGISAzAMiKswf2ND49bi7Kfi9UIZL/Ebzc+UJJz79rFMcVayH
+	 w+/EzW9fK7u4Bg5GlsqH3X/nHnzFmDjyW7AnMKYXmhb+RvNdMihtj8ZP/p/a51PpAe
+	 gPrdgwP6uGn176nZZmhXnabbuO0mAOF/przWQZhQ=
+Received: from [212.42.244.71] (helo=mail.avm.de)
+	by mail.avm.de with ESMTP (eXpurgate 4.55.2)
+	(envelope-from <phahn-oss@avm.de>)
+	id 69b006ab-b734-7f0000032729-7f000001bfd2-1
+	for <multiple-recipients>; Tue, 10 Mar 2026 12:55:23 +0100
+Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
+	by mail.avm.de (Postfix) with ESMTPS;
+	Tue, 10 Mar 2026 12:55:23 +0100 (CET)
+From: Philipp Hahn <phahn-oss@avm.de>
+Date: Tue, 10 Mar 2026 12:48:39 +0100
+Subject: [PATCH 13/61] squashfs: Prefer IS_ERR_OR_NULL over manual NULL
+ check
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <a4862b0.82304.19cd7991169.Coremail.tangyazhou@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:zC_KCgCHMUZqBrBpjFsyBg--.28745W
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBgwGCmmvIoomHQAAsT
-X-CM-DELIVERINFO: =?B?/3t1kQXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9ClO/q6ZOkCasTqtJfKs9+lFqAVkmb8L9N+c/2WwFWNxbif0LERvv8RvYWiQn4AmYf/H
-	Dk43/Vp3Y/eRgmm0mOopPm4w1n/RKGnYzHnI9RHy5DoQNbWLyxcSUZklOKRwhQ==
-X-Coremail-Antispam: 1Uk129KBj9xXoW7Gr1fAw4rJr17JF47CrW3urX_yoWDJFcEkw
-	10qFykWrWqg3WxCFyavF17Zry8CrW2gr13KF4UXF47Ary7Xr1UGrZ5GryrZ34jgFWfXFsr
-	Gr1a9asYyr47uosvyTuYvTs0mTUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUbPkYFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
-	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AK
-	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7xvr2IYc2Ij64
-	vIr40E4x8a64kEw24lFcxC0VAYjxAxZF0Ew4CEw7xC0wACY4xI67k04243AVC20s07M4II
-	rI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
-	4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
-	67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
-	x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
-	z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8Jr1l6VACY4xI67k042
-	43AbIYCTnIWIevJa73UjIFyTuYvjxU2jXdDUUUU
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260310-b4-is_err_or_null-v1-13-bd63b656022d@avm.de>
+References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
+In-Reply-To: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
+To: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com, 
+ bpf@vger.kernel.org, ceph-devel@vger.kernel.org, cocci@inria.fr, 
+ dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org, 
+ gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org, 
+ intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev, 
+ kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
+ linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org, 
+ linux-clk@vger.kernel.org, linux-erofs@lists.ozlabs.org, 
+ linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, linux-hyperv@vger.kernel.org, 
+ linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-leds@vger.kernel.org, linux-media@vger.kernel.org, 
+ linux-mips@vger.kernel.org, linux-mm@kvack.org, 
+ linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org, 
+ linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org, 
+ linux-phy@lists.infradead.org, linux-pm@vger.kernel.org, 
+ linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org, 
+ linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org, 
+ linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org, 
+ linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+ linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+ linux-wireless@vger.kernel.org, netdev@vger.kernel.org, 
+ ntfs3@lists.linux.dev, samba-technical@lists.samba.org, 
+ sched-ext@lists.linux.dev, target-devel@vger.kernel.org, 
+ tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev, 
+ Philipp Hahn <phahn-oss@avm.de>
+Cc: Phillip Lougher <phillip@squashfs.org.uk>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=775; i=phahn-oss@avm.de;
+ h=from:subject:message-id; bh=5P0DiWaZEPF/d3SPdMB+rZQJk1DY1mVuY8d9xffySsA=;
+ b=owEBbQGS/pANAwAKATQtBlPRrKzbAcsmYgBpsAYCOfXcw6nKYZXjZ+DBieT/hiu2NsAfQUre0
+ jlVRw6aXW2JATMEAAEKAB0WIQQ5bPBtrWDUcDQCppg0LQZT0ays2wUCabAGAgAKCRA0LQZT0ays
+ 213oB/sHjZoOpAMz20yPf5W58oaVS3VDOW1zZjyOZfXyKihmnOb8lV99cBPQClALjvBUcqLXemg
+ tpELfmCMWmmS2DLDh38s8m7H4SkSFm3iB+qUl+u8a8NGrDjTz2g0nlLXJ2i4mzmAqWbDldfEhAp
+ ePslhLAf6MqAOAwxF9goTetOQ472ZWbOa7vI5fCqcvwcF/q5QIEUmGs+z5b0yUklyrSflqQlQo4
+ adffOC5kl3ETGEGqBgVXEIg3h8JiDkJe6MaBbDmB/JG3IQRjeJ8YfJc6t+cVg+eXVpCRQOreMFS
+ jG7NgF/eCJBIlcELmHlOCy2pst+P0hiPrthj4RBlPC3hRS93
+X-Developer-Key: i=phahn-oss@avm.de; a=openpgp;
+ fpr=58AF7C2E007CDBE62C59E078F50EFDCF8AD04B1A
+X-purgate-ID: 149429::1773143723-265C1A3D-EB4B679C/0/0
+X-purgate-type: clean
+X-purgate-size: 777
+X-purgate-Ad: Categorized by eleven eXpurgate (R) https://www.eleven.de
+X-purgate: This mail is considered clean (visit https://www.eleven.de for further information)
+X-purgate: clean
 
-SGkgYWxsLAoKSnVzdCBhIGdlbnRsZSBwaW5nIG9uIHRoaXMgcGF0Y2hzZXQuCgpTaW5jZSBpdCBm
-aXhlcyBhIHBvdGVudGlhbCBvdXQtb2YtYm91bmRzIGFjY2VzcyBpc3N1ZSBhbmQgYWxyZWFkeSBj
-YXJyaWVzIEVkdWFyZCdzIEFja2VkLWJ5LCBJIHdhbnRlZCB0byBjaGVjayBpZiB0aGVyZSBpcyBh
-bnl0aGluZyBlbHNlIG5lZWRlZCBmcm9tIG15IHNpZGUsIG9yIGlmIGl0J3MgZ29vZCB0byBnbz8K
-ClRoYW5rcywKCllhemhvdQoKCgpPbiAzLzQvMjYgMTY6MzIsIFlhemhvdSBUYW5nIHdyb3RlOgoK
-Cgo+IEZyb206IFlhemhvdSBUYW5nIDx0YW5neWF6aG91NTE4QG91dGxvb2suY29tPgo+IAo+IFRo
-aXMgcGF0Y2hzZXQgZml4ZXMgYSByZWdpc3RlcidzIHNjYWxhciBJRCBpc3N1ZSBmb3IgQlBGX0VO
-RCBvcGVyYXRpb25zCj4gcmVwb3J0ZWQgYnkgR3VpbGxhdW1lIExhcG9ydGUuIFBsZWFzZSBzZWUg
-Y29tbWl0IGxvZyBvZiAxLzIgZm9yIG1vcmUgZGV0YWlscy4KPiAKPiAtLS0KPiAKPiBDaGFuZ2Vz
-IHYxID0+IHYyOgo+IAo+IDEuIFJlc2V0IHJlZ2lzdGVyIElEIGluc2lkZSBzY2FsYXJfYnl0ZV9z
-d2FwKCkgY29uZGl0aW9uYWxseS4gKEVkdWFyZCkKPiAKPiB2MTogaHR0cHM6Ly9sb3JlLmtlcm5l
-bC5vcmcvYnBmLzIwMjYwMzAzMDkzOTU2LjM5NTA3Ni0xLXRhbmd5YXpob3VAemp1LmVkdS5jbi8K
-PiAKPiBZYXpob3UgVGFuZyAoMik6Cj4gICAgYnBmOiBSZXNldCByZWdpc3RlciBJRCBmb3IgQlBG
-X0VORCB2YWx1ZSB0cmFja2luZwo+ICAgIHNlbGZ0ZXN0cy9icGY6IEFkZCB0ZXN0IGZvciBCUEZf
-RU5EIHJlZ2lzdGVyIElEIHJlc2V0Cj4gCj4gICBrZXJuZWwvYnBmL3ZlcmlmaWVyLmMgICAgICAg
-ICAgICAgICAgICAgICAgICAgfCAgNyArKysrKysKPiAgIC4uLi9zZWxmdGVzdHMvYnBmL3Byb2dz
-L3ZlcmlmaWVyX2Jzd2FwLmMgICAgICB8IDIyICsrKysrKysrKysrKysrKysrKysKPiAgIDIgZmls
-ZXMgY2hhbmdlZCwgMjkgaW5zZXJ0aW9ucygrKQo+IAoKCgo=
+Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
+check.
+
+Change generated with coccinelle.
+
+To: Phillip Lougher <phillip@squashfs.org.uk>
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
+---
+ fs/squashfs/cache.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/squashfs/cache.c b/fs/squashfs/cache.c
+index 67abd4dff222235e75d8c2b10d5e9b811d6e38d8..8888cc02966e2e33210c872c733205d4c581ecc9 100644
+--- a/fs/squashfs/cache.c
++++ b/fs/squashfs/cache.c
+@@ -198,7 +198,7 @@ void squashfs_cache_delete(struct squashfs_cache *cache)
+ {
+ 	int i, j;
+ 
+-	if (IS_ERR(cache) || cache == NULL)
++	if (IS_ERR_OR_NULL(cache))
+ 		return;
+ 
+ 	for (i = 0; i < cache->entries; i++) {
+
+-- 
+2.43.0
 
