@@ -1,171 +1,90 @@
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 698F038A702
-	for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 11:49:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24F9138B7CB
+	for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 11:54:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773143374; cv=none; b=CthDESIXGQ1o4K2YMwA6JIs8yIO5eVfY3uKdrUqAeNXhrFeKHll1W1HeCC+smOxiGt8/s/ysRJUiLnoc8WE7FHRRm3ylesg7i/p1O7c9COrZvLWmoS2mognBVNDKWMQaM+KH8sFXgisZHcNod/oE4SKR+tKqNm99GAGHk0Ovcx8=
+	t=1773143699; cv=none; b=sVGqQSIsQVmEoAf96LLMAcOuUqTY3SNRXcWw9zyX207nrzYrKXXhHQlFrkUDwb9Ry2WG1XsXwk8IRCwoKrkxzejF6+xVCtV9DKEhfRoME3ClR8sM5g+foXnnfjtOy+5IMpNlF2EB1ZzRvU8fTAUDJ3oWvG6eHkvwV8GJ2vNi3ao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773143374; c=relaxed/simple;
-	bh=Zr3qcMn4OLx1slxxG1q/v6XHjn/W58Jij9qVOShgcro=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TjbURedlWcN+9mjW4gQUsru1NjVWXX/JEHuk5SzNCfIzMdWuiAUWVsQ7Z4QSmUPa+H9R7SySj+1sb8YpZ649/W8ZB/fH85hpjK6bPiLPMf6gEJsYZuMpHEBYkJkHzmR6MrlMu1a4yqEnwOH7/xgw1BHdSFry7MWLwg8XzTVwLRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b=PXjZhYpl; arc=none smtp.client-ip=209.85.167.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b="PXjZhYpl"
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-464bba3a9easo8479373b6e.0
-        for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 04:49:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall.org; s=google; t=1773143372; x=1773748172; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eRz2iGuRS5c9gUYKqTban2ycHL3n1P/vxXJWakDhtNM=;
-        b=PXjZhYpl/0RcIXC8chJ7scSvE5Gc0t9PMWcQuLETEA9mAUo997liJ6mkRtJLM98kvK
-         zktcoxY40FQk0tM4to7SERn5YNKhzzaYvNr30l2pBagYy1rYJA29gdPO4UnLUgIzOKQQ
-         gOWObrNLkUTL22syetszXwubcqcbJawC8B4XVal9HvVBQNcdVdChOunuk/AJXe2JstAy
-         aT7sbbbSKuJbqZblzgLp/4ACm73zNfcr0OBJPfDOlTgLPkWmykXksuk74zdVSyafdiFb
-         CcK7on7sPZ+TlthhdaWuXy/c2pH1Leuchq29jfh5IvzgB0rFWEidDmxXoiDG96KGtbZJ
-         9KaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773143372; x=1773748172;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eRz2iGuRS5c9gUYKqTban2ycHL3n1P/vxXJWakDhtNM=;
-        b=GfQ0ErzDZXjVjhBlUrt1Eogp0tbTRWPpAA0h8aBBri66CcccnO7PAVzZBjmTY302Il
-         JPK7pqqtB+jP/mKDUQ8kvPumQjfdBaYVCDxzP3Wmp+SZAl4vqgC/bIpPfZ3QiCQffuKz
-         evyLCUdg2Ezojeq8hVcqEktbEXpNOZtF5vibNjRPrMKrPb3WlgJW4u20U7KBN7LBXgVi
-         44xsfeaGlW1xmXP2jwSjxr9VALVyvLSogDBH9Wj4X42Mq4091dzndiYaYSHY3psu9ksm
-         /46yvjXVoGOloPpkhjfltu169vUOURnTiBSPtiTy5HovHeOmjkq16UqNL6hllmNP6ldj
-         CvNg==
-X-Forwarded-Encrypted: i=1; AJvYcCVBhJBMg0ZfPcgrwdfdoaoJ7snDIb0Mmuby33mznfGkTrsgQYSrxu+1922ata7iCZRT6u4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjsFULZYB8+X95kqVFTajUW7dolhLE5C/iJFPBkQdMENOR7hA9
-	02+pwiZHNo5R12TiRV9QkGsu74H+EhiS0SsjGHR1ci8MrKccrj879K3Lm81l69WxVRQ=
-X-Gm-Gg: ATEYQzzG9uI4D5bs4FIywX8cAXU4iUlUWlPGwu1qcJQXWjwgY3Jlpkx8Mhwi6vnTPvi
-	CbNLVxQKNCFsHoTMCQu8CNfA6UWuRHQrdzWPnCV8axEZxgarDgwSkQU36sTxkgmg/96kbVHtl50
-	gDto+Fs46uzUJQKBIvAeaQ7Kp+ujU9Ed06jfVXJMfbPDNmmWyxzcUmt7bzcxLX45R52TPu8nYwe
-	Ta2iCZZHAWvzCj1OY210NOVzWsNFrNxXJsRLz8Dr2MlYzIv8stoCPt+EOaqE3Be/jmJk38w7SMU
-	KgIWL1lbPJnmQ+xacUdJ18+LIm1SDvge6xI1Zf6HzMT0q3+9I8qiUJYC4E30FbwjV/u5oXpzUNc
-	YbmQd0Aq6zBWUdlj5UWKDWOYCLI0i3WrxEtU8Vz7F/sokZEa+ytPaqDhT6bsebyULINcO+Yo38G
-	s9mXe2Z1YIClD6YjGvtud0
-X-Received: by 2002:a05:6808:171a:b0:45c:a040:e53c with SMTP id 5614622812f47-466dcb1c40cmr7605844b6e.32.1773143372180;
-        Tue, 10 Mar 2026 04:49:32 -0700 (PDT)
-Received: from localhost ([216.228.127.131])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-466dfac3472sm7496849b6e.15.2026.03.10.04.49.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2026 04:49:30 -0700 (PDT)
-Date: Tue, 10 Mar 2026 13:49:25 +0200
-From: Nikolay Aleksandrov <razor@blackwall.org>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: netdev@vger.kernel.org, jiayuan.chen@shopee.com,
-	syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
-	Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Jussi Maki <joamaki@gmail.com>, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH net v5 1/2] bonding: fix null-ptr-deref in
- bond_rr_gen_slave_id()
-Message-ID: <abAFRbJNinhN3O5v@penguin>
-References: <20260309030702.128520-1-jiayuan.chen@linux.dev>
- <20260309030702.128520-2-jiayuan.chen@linux.dev>
+	s=arc-20240116; t=1773143699; c=relaxed/simple;
+	bh=NwrFKeZsGphgH1uImf5cIal46lgZGJ+EvMRZf6qCBvU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=AUW7+Fplms3VzO+LRp707KbPUO7h6jjyvEqEL0CG/FFwKMkeu36fQrK02n7muIJ2qJWZWKaL79Ftl2PcoFZWYH4o595KZ/+zQPjM4utnUMlYamuOiTBtdFi4VUfwl4va4dStIeAWlAGHS/gyGcRzJWD0vGxQ7BavGhOJxrE/Dng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=207.46.229.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
+Received: from zju.edu.cn (unknown [10.162.98.105])
+	by mtasvr (Coremail) with SMTP id _____wBHP2ZrBrBpNgUpAQ--.3025S3;
+	Tue, 10 Mar 2026 19:54:20 +0800 (CST)
+Received: from tangyazhou$zju.edu.cn ( [10.162.98.105] ) by
+ ajax-webmail-mail-app2 (Coremail) ; Tue, 10 Mar 2026 19:54:18 +0800
+ (GMT+08:00)
+Date: Tue, 10 Mar 2026 19:54:18 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From: "Yazhou Tang" <tangyazhou@zju.edu.cn>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+	song@kernel.org, yonghong.song@linux.dev, kpsingh@kernel.org,
+	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+	tangyazhou518@outlook.com, shenghaoyuan0928@163.com, ziye@zju.edu.cn,
+	glapt.pro@outlook.com
+Subject: Re: [PATCH bpf v2 0/2] bpf: Reset register ID for BPF_END value
+ tracking
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2024.3-cmXT6 build
+ 20250620(94335109) Copyright (c) 2002-2026 www.mailtech.cn zju.edu.cn
+In-Reply-To: <20260304083228.142016-1-tangyazhou@zju.edu.cn>
+References: <20260304083228.142016-1-tangyazhou@zju.edu.cn>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260309030702.128520-2-jiayuan.chen@linux.dev>
+Message-ID: <a4862b0.82304.19cd7991169.Coremail.tangyazhou@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:zC_KCgCHMUZqBrBpjFsyBg--.28745W
+X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBgwGCmmvIoomHQAAsT
+X-CM-DELIVERINFO: =?B?/3t1kQXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
+	9q9ClO/q6ZOkCasTqtJfKs9+lFqAVkmb8L9N+c/2WwFWNxbif0LERvv8RvYWiQn4AmYf/H
+	Dk43/Vp3Y/eRgmm0mOopPm4w1n/RKGnYzHnI9RHy5DoQNbWLyxcSUZklOKRwhQ==
+X-Coremail-Antispam: 1Uk129KBj9xXoW7Gr1fAw4rJr17JF47CrW3urX_yoWDJFcEkw
+	10qFykWrWqg3WxCFyavF17Zry8CrW2gr13KF4UXF47Ary7Xr1UGrZ5GryrZ34jgFWfXFsr
+	Gr1a9asYyr47uosvyTuYvTs0mTUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUbPkYFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
+	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AK
+	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7xvr2IYc2Ij64
+	vIr40E4x8a64kEw24lFcxC0VAYjxAxZF0Ew4CEw7xC0wACY4xI67k04243AVC20s07M4II
+	rI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
+	4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+	67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+	x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
+	z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8Jr1l6VACY4xI67k042
+	43AbIYCTnIWIevJa73UjIFyTuYvjxU2jXdDUUUU
 
-On Mon, Mar 09, 2026 at 11:06:58AM +0800, Jiayuan Chen wrote:
-> From: Jiayuan Chen <jiayuan.chen@shopee.com>
-> 
-> bond_rr_gen_slave_id() dereferences bond->rr_tx_counter without a NULL
-> check. rr_tx_counter is a per-CPU counter only allocated in bond_open()
-> when the bond mode is round-robin. If the bond device was never brought
-> up, rr_tx_counter remains NULL, causing a null-ptr-deref.
-> 
-> The XDP redirect path can reach this code even when the bond is not up:
-> bpf_master_redirect_enabled_key is a global static key, so when any bond
-> device has native XDP attached, the XDP_TX -> xdp_master_redirect()
-> interception is enabled for all bond slaves system-wide. This allows the
-> path xdp_master_redirect() -> bond_xdp_get_xmit_slave() ->
-> bond_xdp_xmit_roundrobin_slave_get() -> bond_rr_gen_slave_id() to be
-> reached on a bond that was never opened.
-> 
-> Fix this by adding a NULL check with unlikely() in bond_rr_gen_slave_id()
-> before dereferencing rr_tx_counter. When rr_tx_counter is NULL (bond was
-> never opened), fall back to get_random_u32() for slave selection. The
-> allocation in bond_open() is kept, with WRITE_ONCE() added to safely
-> publish the pointer to the XDP read side. A plain read suffices for the
-> !bond->rr_tx_counter guard in bond_open() itself, as bond_open() runs
-> under RTNL lock and is the only writer of rr_tx_counter.
-> 
-> Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to slave device")
-> Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com
-> Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.00cc.GAE@google.com/T/
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
-> ---
->  drivers/net/bonding/bond_main.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
-> 
+SGkgYWxsLAoKSnVzdCBhIGdlbnRsZSBwaW5nIG9uIHRoaXMgcGF0Y2hzZXQuCgpTaW5jZSBpdCBm
+aXhlcyBhIHBvdGVudGlhbCBvdXQtb2YtYm91bmRzIGFjY2VzcyBpc3N1ZSBhbmQgYWxyZWFkeSBj
+YXJyaWVzIEVkdWFyZCdzIEFja2VkLWJ5LCBJIHdhbnRlZCB0byBjaGVjayBpZiB0aGVyZSBpcyBh
+bnl0aGluZyBlbHNlIG5lZWRlZCBmcm9tIG15IHNpZGUsIG9yIGlmIGl0J3MgZ29vZCB0byBnbz8K
+ClRoYW5rcywKCllhemhvdQoKCgpPbiAzLzQvMjYgMTY6MzIsIFlhemhvdSBUYW5nIHdyb3RlOgoK
+Cgo+IEZyb206IFlhemhvdSBUYW5nIDx0YW5neWF6aG91NTE4QG91dGxvb2suY29tPgo+IAo+IFRo
+aXMgcGF0Y2hzZXQgZml4ZXMgYSByZWdpc3RlcidzIHNjYWxhciBJRCBpc3N1ZSBmb3IgQlBGX0VO
+RCBvcGVyYXRpb25zCj4gcmVwb3J0ZWQgYnkgR3VpbGxhdW1lIExhcG9ydGUuIFBsZWFzZSBzZWUg
+Y29tbWl0IGxvZyBvZiAxLzIgZm9yIG1vcmUgZGV0YWlscy4KPiAKPiAtLS0KPiAKPiBDaGFuZ2Vz
+IHYxID0+IHYyOgo+IAo+IDEuIFJlc2V0IHJlZ2lzdGVyIElEIGluc2lkZSBzY2FsYXJfYnl0ZV9z
+d2FwKCkgY29uZGl0aW9uYWxseS4gKEVkdWFyZCkKPiAKPiB2MTogaHR0cHM6Ly9sb3JlLmtlcm5l
+bC5vcmcvYnBmLzIwMjYwMzAzMDkzOTU2LjM5NTA3Ni0xLXRhbmd5YXpob3VAemp1LmVkdS5jbi8K
+PiAKPiBZYXpob3UgVGFuZyAoMik6Cj4gICAgYnBmOiBSZXNldCByZWdpc3RlciBJRCBmb3IgQlBG
+X0VORCB2YWx1ZSB0cmFja2luZwo+ICAgIHNlbGZ0ZXN0cy9icGY6IEFkZCB0ZXN0IGZvciBCUEZf
+RU5EIHJlZ2lzdGVyIElEIHJlc2V0Cj4gCj4gICBrZXJuZWwvYnBmL3ZlcmlmaWVyLmMgICAgICAg
+ICAgICAgICAgICAgICAgICAgfCAgNyArKysrKysKPiAgIC4uLi9zZWxmdGVzdHMvYnBmL3Byb2dz
+L3ZlcmlmaWVyX2Jzd2FwLmMgICAgICB8IDIyICsrKysrKysrKysrKysrKysrKysKPiAgIDIgZmls
+ZXMgY2hhbmdlZCwgMjkgaW5zZXJ0aW9ucygrKQo+IAoKCgo=
 
-This is Jay's patch + the unlikely change, looks good to me.
-Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
-
-Cheers,
- Nik
-
-> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-> index 444519078da3..b8ec87625ce3 100644
-> --- a/drivers/net/bonding/bond_main.c
-> +++ b/drivers/net/bonding/bond_main.c
-> @@ -4290,9 +4290,11 @@ static int bond_open(struct net_device *bond_dev)
->  	struct slave *slave;
->  
->  	if (BOND_MODE(bond) == BOND_MODE_ROUNDROBIN && !bond->rr_tx_counter) {
-> -		bond->rr_tx_counter = alloc_percpu(u32);
-> -		if (!bond->rr_tx_counter)
-> +		u32 __percpu *rr_tx_tmp = alloc_percpu(u32);
-> +
-> +		if (!rr_tx_tmp)
->  			return -ENOMEM;
-> +		WRITE_ONCE(bond->rr_tx_counter, rr_tx_tmp);
->  	}
->  
->  	/* reset slave->backup and slave->inactive */
-> @@ -4883,6 +4885,9 @@ static u32 bond_rr_gen_slave_id(struct bonding *bond)
->  	struct reciprocal_value reciprocal_packets_per_slave;
->  	int packets_per_slave = bond->params.packets_per_slave;
->  
-> +	if (unlikely(!READ_ONCE(bond->rr_tx_counter)))
-> +		return get_random_u32();
-> +
->  	switch (packets_per_slave) {
->  	case 0:
->  		slave_id = get_random_u32();
-> -- 
-> 2.43.0
-> 
