@@ -1,161 +1,238 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3BE63E95AE;
-	Tue, 10 Mar 2026 07:39:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A50963E9F75
+	for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 07:56:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773128366; cv=none; b=MJOIgxe6V8l600xuzOyspQSMMGDZO9L73tln6aeJhJTHKGQruabss244higp0yb2+0I68BoauzFnlvPuurORxgQYJXeDKlWvN2/GJ2pYBxCu4P4E8bGMnOkNfaxPjEX/g2B6+NoiyFXR+Qfa78YD3Tu18Rd3wQVqdAptWdKV0pM=
+	t=1773129405; cv=none; b=Kbt/X7/Vf0PlQT8wvpcTKBmK2S08EkGFLAV0C3g246bA0LDdiaTrfMa7bthjZJYT7GtP6Hmaz+il7x/f4PREUJKn8ktrPFc4gpzt2ixFSBHoPMrYWiEigsl+9e8kP9BGpYGkhcJLBmyNBfrtYRp294A0pUYmqAMGynTyCdjBMTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773128366; c=relaxed/simple;
-	bh=sSM6VyXq3GO2cyQKqMQUbuDrniGTOcw6nGb9h+6jtc4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u8v3f7rjsS/yIs8I54VMFZAF5uYRJEfm/Y5BLG55+GZm9Bn+eCZsvmJPGvEitmDs0FSD72PAUjxUEhpmvlkXqoBHKRGEp44MKYlEkJQagCFfgjg9JHQ7oEgXeDjLNkpSKT2tP58chKBnjBdv8YvqcoiP1rGSjKQUXVEtD7Xiirw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4fVQjM4NzczYQv74;
-	Tue, 10 Mar 2026 15:38:31 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 068144057A;
-	Tue, 10 Mar 2026 15:39:17 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP3 (Coremail) with SMTP id _Ch0CgAnBVKgyq9pcMZ+AQ--.56907S2;
-	Tue, 10 Mar 2026 15:39:13 +0800 (CST)
-Message-ID: <017ac6a8-2a17-41c0-8bfd-bd7bdd76509f@huaweicloud.com>
-Date: Tue, 10 Mar 2026 15:39:12 +0800
+	s=arc-20240116; t=1773129405; c=relaxed/simple;
+	bh=2UiGpkxWJOENxagNwNXWT1UJi0xZTdx3Bai85UEa8TI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pf9S/Kc/Zf5pU9JqOvOxS6Kfv5dtXO1MkFjO/Ll2aW8JXeRYUzTJOE7ln740ix1Kzl/bWlQkt8LyodNfnvAFg3FeooweDYcye3J4JhRNpzaMnK/EN1FCpSCGG+XJyGauXl94tmVxnzpN0MjrLOI+mwEZWtblHn6ttwO17GxQhtY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=LUMpaUv8; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="LUMpaUv8"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4852a9c6309so30597645e9.0
+        for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 00:56:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1773129401; x=1773734201; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=H/T174RxQBtuXkKZ+Y9qcJr6xB7ezSpQIF7Dkf2TBCc=;
+        b=LUMpaUv8e+ChwOiSBrIQdzhL61zZhOB1yLn7/1g4T9LC9YwSjaljDiSuK+bZhb8DXV
+         fu3YQ/hJU6ncoG5f2alOZLUlyB4hz7dGnTOqCV84zqiE31EI7f7LdjHNBc3npB5dcoOp
+         cirJ7GeTv7KjBR+BEbgw5HOkYoFdMrQWRjpXA4K2TTfLef9DFKQWgCFXf+Ml6oLeknh1
+         AowFPjRzh5Q8rXM+S546kX0xZIkQ/vR/vWWQqY1wc59/67HMPF4E0XmDZmq5Ji5vpTRb
+         TUFaLdJvDqewoWCnOsI85oVxujc/4rUGUgBYUNwqDZ/kyKDZ2VVspH/R/UqZA866Gxl+
+         bg5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773129401; x=1773734201;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H/T174RxQBtuXkKZ+Y9qcJr6xB7ezSpQIF7Dkf2TBCc=;
+        b=XI2NByrFTJmULwR0DDihulhkk8F7h9OoeLNBStALVQGn5DYvNlOGPikG0jbjlj363f
+         yNkoqPiNy1a/nm4sSLRsdp9WJNJJkruljzNt67Aie6rrDdQ/t7gVwVc7clIuPPLYiUx7
+         CtPDyOhGO8IhwJ8WvAv4UHTRIViM1rlgVUdKLNBnZaLd27bmcsegYAecsH8ADYmABU3T
+         WoeVVmfRkAMY8NIxxh2XLwvXN7rDMu3Xl6gh4ckhoXpvrWj+AtqR+xOqSThyuK0418O6
+         PtJIa5ek24AB0WaCejSpt4rvqKjaP/R6NSN7uKdzxKndiH+l5tMpg0s6bt1Pm9X8Mm4A
+         4htQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWm6LzBjDMVTFIgsQyET/IX9Ni+zcVXZhcOlOuL2ZdULfXFg+XhOvz/W/xj4b3g2S69C6k=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7IiqKsFsoiCdMurJOcEB77GI0c1VQBuP8z6gFzlhNaB1ql4P8
+	RYaDcl2VR9eQ/qh0TGraCkmcyE8i9gi04zXYzcFPQpDd5X7jGVgPGx/icDJN1mD96ms=
+X-Gm-Gg: ATEYQzyHLrXR4+H/9VPj02PhHm65zwox4zNWhr/05NIdTN1gdPC7fRp6iT8fF+orDMp
+	sDpyAzdNEHD8yE9FZof3yZ1EgWOUda17DHnYKkS2BO5Ssk2tVgZk5MYWU8GjwsWmAkuVT4865bL
+	/S62qQOKhMiQ1fAz9Ahv2O+Vi8TpYGbbXlY7TNxdzVIzJZtChu408nUGRZzHTgiyiwQWji8nqsr
+	es+my+VAaZTy8ts07piAsotR7DqNb/liziAdXj5y874+2CkWoEAuMVaiDflrso/MSoQ5ATttnFw
+	sIPHeYoVEu0UMT6qse4hMp42PE0ha4ZTUgoWkmBFMeDNpZGlQY4eNeIJch1fV1JASko0PWyAgiJ
+	EUiaapqruz76m2oT547JIBQcJgpT7KXmBDKMFyzxvXY6nekpFLnvFxcnnkXKEi6FZP+ksM3eqtU
+	orjRrhjVNfgBqChIaDmg==
+X-Received: by 2002:a05:600c:3b8e:b0:485:3ae8:2231 with SMTP id 5b1f17b1804b1-4853ae824cemr122110075e9.30.1773129400681;
+        Tue, 10 Mar 2026 00:56:40 -0700 (PDT)
+Received: from u94a ([2401:e180:8d01:1fb3:e42c:360:78fd:1fec])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-829a48d3871sm12808100b3a.60.2026.03.10.00.56.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Mar 2026 00:56:39 -0700 (PDT)
+Date: Tue, 10 Mar 2026 15:56:31 +0800
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: Paul Chaignon <paul.chaignon@gmail.com>
+Cc: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+Subject: Re: [PATCH v2 bpf-next 1/2] bpf: Avoid one round of bounds deduction
+Message-ID: <xec3lnz6smkki57civu5z6hlr5vl6kqnec7f7zxza4vifs2qf7@g4o6gxqmcnlz>
+References: <5b8fed05cc97cd3730bbdfbb452699b7edd16963.1772840030.git.paul.chaignon@gmail.com>
+ <621f8a301a3a29af041ea8384ab09498e3f20322.camel@gmail.com>
+ <d4f6ebe35ff98cf3aeabe132027d7a05ae4dda4f.camel@gmail.com>
+ <d6ed91eb3fc9783811ae9981728a5db57decbfe4.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [bpf-next v8 1/5] bpf: Move constants blinding from JIT to
- verifier
-Content-Language: en-US
-To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Yonghong Song <yonghong.song@linux.dev>, Puranjay Mohan
- <puranjay@kernel.org>, Anton Protopopov <a.s.protopopov@gmail.com>,
- Shahab Vahedi <list+bpf@vahedi.org>, Russell King <linux@armlinux.org.uk>,
- Tiezhu Yang <yangtiezhu@loongson.cn>, Hengqi Chen <hengqi.chen@gmail.com>,
- Johan Almbladh <johan.almbladh@anyfinetworks.com>,
- Paul Burton <paulburton@kernel.org>, Hari Bathini <hbathini@linux.ibm.com>,
- Christophe Leroy <chleroy@kernel.org>, Naveen N Rao <naveen@kernel.org>,
- Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
- =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
- Pu Lehui <pulehui@huawei.com>, Ilya Leoshkevich <iii@linux.ibm.com>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- "David S . Miller" <davem@davemloft.net>, Wang YanQing <udknight@gmail.com>
-References: <20260309140044.2652538-1-xukuohai@huaweicloud.com>
- <20260309140044.2652538-2-xukuohai@huaweicloud.com>
- <7905ed2d99a46a2f7a4eb41d4cb9f1dec108ecd3.camel@gmail.com>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <7905ed2d99a46a2f7a4eb41d4cb9f1dec108ecd3.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:_Ch0CgAnBVKgyq9pcMZ+AQ--.56907S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CrWDKF45Zr48uFWfAF43ZFb_yoW8KFyxpF
-	4DJF17Cw4qgr4UWF47t3W8JF4Utw4jgFW7uF4YkrZYkFn0qrs7XF1ak3yj9FZxZry5Xw1r
-	Aay8Kr9Fka4v9aDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
-	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07
-	jxCztUUUUU=
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d6ed91eb3fc9783811ae9981728a5db57decbfe4.camel@gmail.com>
 
-On 3/10/2026 5:25 AM, Eduard Zingerman wrote:
-> On Mon, 2026-03-09 at 22:00 +0800, Xu Kuohai wrote:
-> 
-> This was discussed some time ago in [1]. In that message Daniel notes
-> the following:
-> 
->    > constant blinding needs to work from native bpf(2) as well as from
->    > cbpf->ebpf (seccomp-bpf, filters, etc)
-> 
-> It appears this patch does not address the cbpf->ebpf part, or did I
-> miss something?
-> 
-> [1] https://lore.kernel.org/bpf/284404c7-c6e0-4cf9-8ada-71ebfc681541@iogearbox.net/
->
+On Mon, Mar 09, 2026 at 10:53:50PM -0700, Eduard Zingerman wrote:
+> On Mon, 2026-03-09 at 18:30 -0700, Eduard Zingerman wrote:
+> > On Mon, 2026-03-09 at 18:07 -0700, Eduard Zingerman wrote:
+> > [...]
+> > 
+> > > Of-course, I might have some bugs in the test definition, but in case
+> > > the definition is correct, I think I'm inclined to agree with Ihor
+> > > here. If we can't mathematically prove that the sequence converges in
+> > > a fixed number of steps, putting a loop on top of it seem to be a
+> > > reasonable thing to do.
 
-Hmm, I overlooked that the cbpf jit also needs constant blinding. I'll add it back
-in bpf_prog_select_runtime() before the JIT is invoked.
+Got some evidence that 3 may be just the magic number (of course,
+assuming no bug in test definition, as well as the representativeness
+caveat; will try to further cross-check mine with [1][2]).
 
-> [...]
-> 
->> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
->> index 52162e4a7f84..7a7c49640a2f 100644
->> --- a/arch/powerpc/net/bpf_jit_comp.c
->> +++ b/arch/powerpc/net/bpf_jit_comp.c
-> 
-> [...]
-> 
->> @@ -272,7 +250,6 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
->>   				       extra_pass)) {
->>   			bpf_arch_text_copy(&fhdr->size, &hdr->size, sizeof(hdr->size));
->>   			bpf_jit_binary_pack_free(fhdr, hdr);
->> -			fp = org_fp;
-> 
-> Is it necessary to set `...; fp->jited = 0; ...` here?
-> It seems it does if extra_pass is set.
-> 
-Yes. When extra_pass is set, orig_fp and fp are the same, so the original
-fp = orig_fp cannot restore fp either.
+More below.
 
->>   			goto out_addrs;
->>   		}
->>   		bpf_jit_build_epilogue(code_base, &cgctx);
->> @@ -301,7 +278,9 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
->>   
->>   	if (!fp->is_func || extra_pass) {
->>   		if (bpf_jit_binary_pack_finalize(fhdr, hdr)) {
->> -			fp = org_fp;
->> +			fp->bpf_func = NULL;
->> +			fp->jited = 0;
->> +			fp->jited_len = 0;
->>   			goto out_addrs;
->>   		}
->>   		bpf_prog_fill_jited_linfo(fp, addrs);
+> > > [1] https://github.com/eddyz87/bpf/tree/deduce-bounds-reshuffle
+> > > [2] https://github.com/eddyz87/deduce-bounds-verif
+> > > 
+> > > [...]
+> > 
+> > Pushed an update to the test to check if new bounds are tighter than
+> > old bounds (instead of equivalent). Still get a failure log:
+> > 
+[...]
 > 
-> [...]
+> I added back third round of __reg_deduce_bounds():
 > 
->> diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
->> index 1f9a6b728beb..d6de2abfe4a7 100644
->> --- a/arch/s390/net/bpf_jit_comp.c
->> +++ b/arch/s390/net/bpf_jit_comp.c
+>   diff --git a/deduce_bounds_new.c b/deduce_bounds_new.c
+>   index b0bd8c8..dc498b2 100644
+>   --- a/deduce_bounds_new.c
+>   +++ b/deduce_bounds_new.c
+>   @@ -326,4 +326,5 @@ void reg_bounds_sync_new(struct bpf_reg_state *reg)
+>    {
+>           __reg_deduce_bounds(reg);
+>           __reg_deduce_bounds(reg);
+>   +       __reg_deduce_bounds(reg);
+>    }
 > 
-> [...]
+> And run cbmc with the following assertions (see [1]):
 > 
->> @@ -2383,7 +2360,6 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
->>   	if (!fp->is_func || extra_pass) {
->>   		if (bpf_jit_binary_lock_ro(header)) {
->>   			bpf_jit_binary_free(header);
->> -			fp = orig_fp;
+> 	assert(a.smin_value == b.smin_value);
+> 	assert(a.smax_value == b.smax_value);
+> 	assert(a.umin_value == b.umin_value);
+> 	assert(a.umax_value == b.umax_value);
+> 	
+> 	assert(a.s32_min_value == b.s32_min_value);
+> 	assert(a.s32_max_value == b.s32_max_value);
+> 	assert(a.u32_min_value == b.u32_min_value);
+> 	assert(a.u32_max_value == b.u32_max_value);
 > 
-> In the similar condition for powerpc you reset `...; prog->jited = 0; ...`,
-> is this case different?
->
+> This failed quickly with an example, showing different results for old
+> and new orderings, new being tighter.
+> 
+> And then with the following assertion:
+> 
+> 	bool old_better = a.smin_value < b.smin_value ||
+> 			  a.smax_value > b.smax_value ||
+> 			  a.umin_value < b.umin_value ||
+> 			  a.umax_value > b.umax_value ||
+> 			  a.s32_min_value < b.s32_min_value ||
+> 			  a.s32_max_value > b.s32_max_value ||
+> 			  a.u32_min_value < b.u32_min_value ||
+> 			  a.u32_max_value > b.u32_max_value;
+> 	assert(!old_better);
+> 
+> This finished in 20 minutes claiming successful verification.
+> Hence, I conclude that new ordering is strictly better than the old
+> ordering if there are three rounds of deductions.
+> 
+> I suggest we should keep three rounds of deductions and adopt the new
+> ordering (or play with orderings some more to choose which one is
+> better under 3 rounds).
 
-No difference, will fix it.
+Agree that perhaps we still need to keep 3 rounds of deduction after
+poking at this further.
 
->>   			goto free_addrs;
->>   		}
->>   	} else {
-> 
-> [...]
+I tried to run an updated cbmc script[a], manually editing the file to
+change the number of __reg_deduce_bounds calls made, and check whether
+an extra call would further change reg_state. For
+__reg_deduce_bounds_old, it needs 3 calls to pass verification, and for
+__reg_deduce_bounds_new, it still needs 3.
 
+Gist below:
+
+  static void reg_bounds_sync_new_loop(struct bpf_reg_state *current) {
+  	struct bpf_reg_state next;
+  	int i;
+  	__update_reg_bounds(current);
+  	/* Taking any call away from below make verification fails */
+  	__reg_deduce_bounds_new(current);
+  	__reg_deduce_bounds_new(current);
+  	__reg_deduce_bounds_new(current);
+  	/* Try to see if an extra round of __reg_deduce_bounds_new further
+  	 * changes anything.
+  	 */
+  	{
+  		next = *current;
+  		__reg_deduce_bounds_new(&next);
+          /* check equivalence */
+  		assert(next.var_off.value == current->var_off.value);
+  		...
+  	}
+  	__reg_bound_offset(current);
+  	__update_reg_bounds(current);
+  }
+
+On a quick glimpse, 2 rounds of __reg_deduce_bounds_new do seems to come
+closer to a fix-point than 2 rounds of __reg_deduce_bounds_old. However,
+for the following case it fails to converge in 2 rounds. Counter-example
+generated with [b].
+
+Input:
+
+  actual=8
+  reg.var_off.value=0
+  reg.var_off.mask=0xfffffffffffffff8
+  reg.umin_value=1
+  reg.umax_value=0xffffffffffffffe9
+  reg.smin_value=-23
+  reg.smax_value=24
+  reg.u32_min_value=8
+  reg.u32_max_value=0x80000008
+  reg.s32_min_value=-24
+  reg.s32_max_value=23
+  
+After 2 rounds of __reg_deduce_bounds_new:
+
+  current.var_off.value=0
+  current.var_off.mask=24
+  current.umin_value=8
+  current.umax_value=23
+  current.smin_value=8
+  current.smax_value=23
+  current.u32_min_value=8
+  current.u32_max_value=24
+  current.s32_min_value=8
+  current.s32_max_value=23
+
+After 3 rounds of __reg_deduce_bounds_new:
+  
+  next.var_off.value=0
+  next.var_off.mask=24
+  next.umin_value=8
+  next.umax_value=23
+  next.smin_value=8
+  next.smax_value=23
+  next.u32_min_value=8
+  next.u32_max_value=23 <--- different
+  next.s32_min_value=8
+  next.s32_max_value=23
+
+a: https://github.com/shunghsiyu/reg_bounds_sync-review/tree/reg_deduce_bounds-convergence
+b: https://github.com/shunghsiyu/reg_bounds_sync-review/blob/reg_deduce_bounds-convergence/reg_deduce_bounds_new-counter-example.c
+
+> [1] https://github.com/eddyz87/deduce-bounds-verif/tree/experiment
