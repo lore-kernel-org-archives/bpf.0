@@ -1,186 +1,117 @@
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4FCD3033D5
-	for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 05:53:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E131A31D726;
+	Tue, 10 Mar 2026 06:25:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773122038; cv=none; b=HoqvVT+89Q8wrfqV1qE303ekT47MZrQ3tT/zVWkuWfbMhiKd62RYP+FwD8z+h7/q/CQtorbdcHYuACLCCbXR/40FXisgN0G+4Sy1N0mRFJ5npFfRDz1b4c+8zGNK/KueVFa9LyNR96c9o8BiJY9FQ4G09CHXR64WO4wg8XQOjd0=
+	t=1773123957; cv=none; b=Wqu5VZGRDJmzop6uiK0iEDB/3FcNgpAIo/ue7QumD0tAW3WUQWtm2tTFzhkpTc7gpLiAmvNWdD15bRK/OgUSXyE6pp7d35KDE5vPTwlMdaFKZxORJKgLiRD947y6GzMdAIjJbtqraFGuJ3NXzPf/vg4NZ900NlGnzcRpfSrNMg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773122038; c=relaxed/simple;
-	bh=rQdPo8e1PoW2Gs+DE/31pynpa7P1/rM6rhCAdPpnrNc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=PheZniHJMW0TgeoUGZ5E9hJ4M2ms0yhksims8Fhlx9AWmGqBcuh402Rq338spOrUEvt0lmlK26mo6C5EqUoHkdhsDI9i2tho2xYcbEfHqLzLo6h73gSUL078W0bQYElIEBy7BDPJBCXfgyYE/l8ss1faA2V2ZPNuBmBnDxdiqTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d3nVmFkU; arc=none smtp.client-ip=209.85.222.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d3nVmFkU"
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-8cd830404c2so215082485a.2
-        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 22:53:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773122035; x=1773726835; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=6xDrLeY5aKyG7EdMYINUg+J1ID1PkakjrsnlqRo9TjM=;
-        b=d3nVmFkUKKYvOVZMPgzjc+UyctNHOncZboEkoZrdi3X8nVnptFT6tlrtN7N6JgBmHF
-         w85pMFwacnzh3K3WhScSJ3MTR/rrgXUvPmN82xJC9gEZWA6oP4fdQJlL6+a/hjE9HnHe
-         P0SLxBzcJEAvwmdR0uUcq2PvysJL5o3ONDgh1861JWBZdXqhm8VJA+1C0kOokwS56UjJ
-         4dO81dzkWSAkGCpkBDZcYg0utCmkd0OkqY+t34eOwcgobrAoNIilhCpP+9V2/uBuKCGT
-         Em+oYeUbUdKmdH3h2rzhcHg6QnrE2KsuxxWOfFWtj8ibtynGMS0n+wCQ7Td4xpKhBBnB
-         gWRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773122035; x=1773726835;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6xDrLeY5aKyG7EdMYINUg+J1ID1PkakjrsnlqRo9TjM=;
-        b=A4rUUbdNvLL9XLn8ReyssCvXwlyZh5SdljT5gOQzCg6wt7V/+bNrR4b1kCG4zixDDp
-         HR1XHF+sOhZaeH77uw80EZB0XpLLvhv0Cb3ZvSRRnMZc9SAMzMR13IR5dKWjfmocqS9i
-         UjKbX9j/z7/4AA71Y4b+FPYVvvZtUPcNQO5Bk5HFaftK0BsT2LNlrya5DXpmrqm0ZU5w
-         mf36f+toKyRQYiLUccLg7R4EEoGGsvBYOufoMv1/puT/4AWoJoj5Jn4L1ytXqCFDztYl
-         QujKKPtai4g2Cd/aV4Y9KjZONyRPCucl0OJAX9TDXqS+k26x7A8arANSJbjI16YX/fhG
-         IUxg==
-X-Forwarded-Encrypted: i=1; AJvYcCVasXvXF2Fpnce2Kzx0xsDTJXcQO6bgE6P0fVnDdcLjkuxqMRjHdkUudxzAFWdKwgzR5AQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+ca9VjupB+YsafuhShOaR4/dg+HFYnS6JgLWv26W5SyjgvOkd
-	Hh8IC8u1y99BsA/HrJ9P74deWAOa3KyPomApc5SXv7EQ/2eABGS5fsdw
-X-Gm-Gg: ATEYQzys+1E0OnLh5QkGoNL4sS6YwtHymn16GbfDYkz/2XgL8t4bOm+iu98ogOSLFcT
-	Ortj5b517g25f7beGVCfbAz6TE0NLJOlXDvXj2hFaoVhWhmSrW1UW4YiIHBkrhDxacXrCiqtJtf
-	vrAJM73Jz+TtjInEAcQ1VQwSOPGRYurR15ZGP9Ia0b4P3ESeg+rJ6b1z5LCKAUyn3T0J/6UDnbt
-	C9UR15hWtc+fhe9zcIRcwTp6J1pxoRmY3sSao9m2qKy4oH7gJCqqlxsmZnkYm3FGJGEbdFfwtBt
-	izRkg7o9I3TwPOP3pl0Pcw5aftJd5NPXA/g2pFwM1z7+7uqkNENXyEuuwWgy0hRL+GYuTe7Oc+V
-	gzE9bWsn3xek9SBwRE7pEuT4ktLBL2DdkTmu8dSlzDETJmVmUWS2oP2mhlGOvOEHzD1VorI4xpM
-	7DqYbJCrirPc+BYnZNr0F/Gs9uAiYrVTIe5RaPUJxgf/jF1qAfG3c=
-X-Received: by 2002:a05:620a:1726:b0:8c6:ed3d:be60 with SMTP id af79cd13be357-8cd6d4a14ccmr1727212585a.71.1773122035530;
-        Mon, 09 Mar 2026 22:53:55 -0700 (PDT)
-Received: from [192.168.0.56] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cd8d4cac0esm285167885a.36.2026.03.09.22.53.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Mar 2026 22:53:54 -0700 (PDT)
-Message-ID: <d6ed91eb3fc9783811ae9981728a5db57decbfe4.camel@gmail.com>
-Subject: Re: [PATCH v2 bpf-next 1/2] bpf: Avoid one round of bounds deduction
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Harishankar
- Vishwanathan <harishankar.vishwanathan@gmail.com>, Shung-Hsi Yu	
- <shung-hsi.yu@suse.com>
-Date: Mon, 09 Mar 2026 22:53:50 -0700
-In-Reply-To: <d4f6ebe35ff98cf3aeabe132027d7a05ae4dda4f.camel@gmail.com>
-References: 
-	<5b8fed05cc97cd3730bbdfbb452699b7edd16963.1772840030.git.paul.chaignon@gmail.com>
-		 <621f8a301a3a29af041ea8384ab09498e3f20322.camel@gmail.com>
-	 <d4f6ebe35ff98cf3aeabe132027d7a05ae4dda4f.camel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
+	s=arc-20240116; t=1773123957; c=relaxed/simple;
+	bh=I2F5ydqF9Mbitu91dvjlxpbaymkwGGcy7/CiG2OvX9M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hNVJpO3dOJYAHT2wwK57C1gdortCra/OtpS6edi+Cm+z32yo8Qh7ZOn9jNrd3GrlXpbLKyA8NdTdrTenUHM3XZfAV7V/BGR9sRSWConzrIRMdhtioOISSrzPubswuhwpYjujQTxLIbY16/L7T5H+J1HNEotcEwbIAvR1pTTS6NA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4fVP4f6PMfzYQtl1;
+	Tue, 10 Mar 2026 14:25:06 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 361724058D;
+	Tue, 10 Mar 2026 14:25:52 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP1 (Coremail) with SMTP id cCh0CgAXGdluua9pSHN6AQ--.50305S2;
+	Tue, 10 Mar 2026 14:25:51 +0800 (CST)
+Message-ID: <92df9926-c40f-4ad1-a487-4e84065de4d5@huaweicloud.com>
+Date: Tue, 10 Mar 2026 14:25:50 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [bpf-next v8 0/5] emit ENDBR/BTI instructions for indirect jump
+ targets
+Content-Language: en-US
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Yonghong Song <yonghong.song@linux.dev>,
+ Puranjay Mohan <puranjay@kernel.org>,
+ Anton Protopopov <a.s.protopopov@gmail.com>,
+ Shahab Vahedi <list+bpf@vahedi.org>, Russell King <linux@armlinux.org.uk>,
+ Tiezhu Yang <yangtiezhu@loongson.cn>, Hengqi Chen <hengqi.chen@gmail.com>,
+ Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+ Paul Burton <paulburton@kernel.org>, Hari Bathini <hbathini@linux.ibm.com>,
+ Christophe Leroy <chleroy@kernel.org>, Naveen N Rao <naveen@kernel.org>,
+ Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
+ =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+ Pu Lehui <pulehui@huawei.com>, Ilya Leoshkevich <iii@linux.ibm.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ "David S . Miller" <davem@davemloft.net>, Wang YanQing <udknight@gmail.com>
+References: <20260309140044.2652538-1-xukuohai@huaweicloud.com>
+ <DGYCB0V4LO08.ZQP15NRFMGKA@bootlin.com>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <DGYCB0V4LO08.ZQP15NRFMGKA@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:cCh0CgAXGdluua9pSHN6AQ--.50305S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KFyUGw48ZF15ArWrZFWkWFg_yoW8Xr4xpF
+	ZY9w1jqFWDJr4kCrnrJay8Gr1aga9xG3ZFyF1rG3yxGw1Y9rn3tF4fKr4Ivas8tr10k3sF
+	qF4j9a45u3y5AFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	4xRDUUUUU==
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On Mon, 2026-03-09 at 18:30 -0700, Eduard Zingerman wrote:
-> On Mon, 2026-03-09 at 18:07 -0700, Eduard Zingerman wrote:
->=20
-> [...]
->=20
-> > Of-course, I might have some bugs in the test definition, but in case
-> > the definition is correct, I think I'm inclined to agree with Ihor
-> > here. If we can't mathematically prove that the sequence converges in
-> > a fixed number of steps, putting a loop on top of it seem to be a
-> > reasonable thing to do.
-> >=20
-> > [1] https://github.com/eddyz87/bpf/tree/deduce-bounds-reshuffle
-> > [2] https://github.com/eddyz87/deduce-bounds-verif
-> >=20
-> > [...]
->=20
-> Pushed an update to the test to check if new bounds are tighter than
-> old bounds (instead of equivalent). Still get a failure log:
->=20
-> $ ./parse-log.sh out2.log
-> Values extracted from log:
-> =C2=A0 s32: [-1686110209,=C2=A0 1907957760]=C2=A0 v_s32=3D-1411416065
-> =C2=A0 u32: [ 1746894847,=C2=A0 4030210048]=C2=A0 v_u32=3D2883551231
-> =C2=A0 s64: [ -4350478693995380738,=C2=A0=C2=A0 2172132303447261182]=C2=
-=A0 v_s64=3D-4350478693150261249
-> =C2=A0 u64: [=C2=A0 2172132302103053322,=C2=A0 14096265381705949184]=C2=
-=A0 v_u64=3D14096265380559290367
->=20
-> Running C code directly:
-> input:
-> =C2=A0 s32: [0x9b7fffff, 0x71b92000] [-1686110209, 1907957760]
-> =C2=A0 u32: [0x681f7fff, 0xf0382000] [1746894847, 4030210048]
-> =C2=A0 s64: [0xc39ffead797ffffe, 0x1e24f6d2501ffffe] [-435047869399538073=
-8, 2172132303447261182]
-> =C2=A0 u64: [0x1e24f6d20001040a, 0xc39ffeadf0382000] [2172132302103053322=
-, 14096265381705949184]
->=20
-> old:
-> =C2=A0 s32: [0x9b7fffff, 0xf0382000] [-1686110209, -264757248]
-> =C2=A0 u32: [0x9b7fffff, 0xf0382000] [2608857087, 4030210048]
-> =C2=A0 s64: [0xc39ffead9b7fffff, 0xc39ffeadf0382000] [-435047869342495539=
-3, -4350478692003602432]
-> =C2=A0 u64: [0xc39ffead9b7fffff, 0xc39ffeadf0382000] [1409626538028459622=
-3, 14096265381705949184]
->=20
-> new:
-> =C2=A0 s32: [0x9b7fffff, 0x71b92000] [-1686110209, 1907957760]
-> =C2=A0 u32: [0x797ffffe, 0xf0382000] [2038431742, 4030210048]
-> =C2=A0 s64: [0xc39ffead797ffffe, 0xc39ffeadf0382000] [-435047869399538073=
-8, -4350478692003602432]
-> =C2=A0 u64: [0xc39ffead797ffffe, 0xc39ffeadf0382000] [1409626537971417087=
-8, 14096265381705949184]
+On 3/9/2026 11:00 PM, Alexis Lothoré wrote:
+> Hi Xu,
+> 
+> On Mon Mar 9, 2026 at 3:00 PM CET, Xu Kuohai wrote:
+>> On architectures with CFI protection enabled that require landing pad
+>> instructions at indirect jump targets, such as x86 with CET/IBT eanbled
+>> and arm64 with BTI enabled, kernel panics when an indirect jump lands on
+>> a target witout landing pad. Therefore, the JIT must emit landing pad
+>> instructions for indirect jump targets.
+>>
+>> The verifier already recognizes which instructions are indirect jump
+>> targets during the verification phase. So we can stores this information
+>> in env->insn_aux_data and pass it to the JIT as new parameter, so the JIT
+>> knows which instructions are indirect jump targets.
+>>
+>> During JIT, constants blinding is performed. It rewrites the private copy
+>> of instructions for the JITed program, but it does not adjust the global
+>> env->insn_aux_data array. As a result, after constants blinding, the
+>> instruction indexes used by JIT may no longer match the indexes in
+>> env->insn_aux_data, so the JIT can not lookup env->insn_aux_data directly.
+>>
+>> To avoid this mistach, and considering that all existing arch-specific JITs
+>> already implement constants blinding with largely duplicated code, move
+>> constants blinding from JIT to generic code, before copying instructions
+>> for each subprog.
+> 
+> Could you please add me in CC for any future revision ?
+>
 
-I added back third round of __reg_deduce_bounds():
+Sure, will do.
 
-  diff --git a/deduce_bounds_new.c b/deduce_bounds_new.c
-  index b0bd8c8..dc498b2 100644
-  --- a/deduce_bounds_new.c
-  +++ b/deduce_bounds_new.c
-  @@ -326,4 +326,5 @@ void reg_bounds_sync_new(struct bpf_reg_state *reg)
-   {
-          __reg_deduce_bounds(reg);
-          __reg_deduce_bounds(reg);
-  +       __reg_deduce_bounds(reg);
-   }
+> Thanks,
+> 
+> Alexis
+> 
 
-And run cbmc with the following assertions (see [1]):
-
-	assert(a.smin_value =3D=3D b.smin_value);
-	assert(a.smax_value =3D=3D b.smax_value);
-	assert(a.umin_value =3D=3D b.umin_value);
-	assert(a.umax_value =3D=3D b.umax_value);
-=09
-	assert(a.s32_min_value =3D=3D b.s32_min_value);
-	assert(a.s32_max_value =3D=3D b.s32_max_value);
-	assert(a.u32_min_value =3D=3D b.u32_min_value);
-	assert(a.u32_max_value =3D=3D b.u32_max_value);
-
-This failed quickly with an example, showing different results for old
-and new orderings, new being tighter.
-
-And then with the following assertion:
-
-	bool old_better =3D a.smin_value < b.smin_value ||
-			  a.smax_value > b.smax_value ||
-			  a.umin_value < b.umin_value ||
-			  a.umax_value > b.umax_value ||
-			  a.s32_min_value < b.s32_min_value ||
-			  a.s32_max_value > b.s32_max_value ||
-			  a.u32_min_value < b.u32_min_value ||
-			  a.u32_max_value > b.u32_max_value;
-	assert(!old_better);
-
-This finished in 20 minutes claiming successful verification.
-Hence, I conclude that new ordering is strictly better than the old
-ordering if there are three rounds of deductions.
-
-I suggest we should keep three rounds of deductions and adopt the new
-ordering (or play with orderings some more to choose which one is
-better under 3 rounds).
-
-[1] https://github.com/eddyz87/deduce-bounds-verif/tree/experiment
