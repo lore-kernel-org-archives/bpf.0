@@ -1,221 +1,134 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E0003E277B
-	for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 21:22:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773177781; cv=none; b=Q6c6VsyK4doOf6LPHhpLHPkOZ46pmL21E7KcJI1CeQk1IqZJmr0y7xo/NYY+iKxP8u4KBCUkZZ1k6ijGTqDwvOH21qMBQxk8eyZ37F+k64vhTKhvz+hB7RRzU3WcGCLDCcv57M3e7MTpYPMXiy/k04RNV72opmguq1fgm1/B/uk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773177781; c=relaxed/simple;
-	bh=1cSenaADeYpz69y+fz8kGgIfSyE1YZ/fkoMWAV5wOF8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OLYBARKeUBl1kvnDk5P/Ufxy1vSePLJ0IH8mW+WnAlZTWwzX5/6Ldxy+73Ph0fkKaHePo0aPB46fGWdd35VaV9D1XBn5OIRJDqJFy45h2fFLjDUfQs6Jh8/Vp/LQDF7dhGbV4rvLSzRF/22dXREhwd6uPOEW78wvXzjBngKefFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b=0zp2CYzS; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 114283EAC82
+	for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 21:28:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.181
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773178130; cv=pass; b=HtCg+2h6lg1fNtLELKB4YMjkli2HR2Uyuxh4PINJzrxPuZmVDdhTpV9iKz7tzmVe/7ewa4riMOEKUoEPzMto5e5Tcs7l+sumKoBFjTcnxOrCVEPawZJZI/D0my7jiBv+bBugsMY1H2SfimW6Xik8PnrUW6y3pjX5hDC2rUgaIqI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773178130; c=relaxed/simple;
+	bh=Bcu42IpU9LeHv30bZj0xvoUAV257BiREeFod9hqNOp0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RbJdGqpkI06Ch4UvvLRHCVLuN2i/hH259IVuRZRgurBEP/SHdSMrwF7WHuNBP5ijXO9iFqhfC7XdbNJ3bBjTpsyDkyMWoJwzgRwAoF4bHaKOpMZniOkBmffF+IBvJ8mPqNHbMmRxbEadsGOoBtdjlw1tBjbVM/kvZPABZ6rbheY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IMXdH4+s; arc=pass smtp.client-ip=209.85.128.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b="0zp2CYzS"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2ae3a2f6007so77570005ad.2
-        for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 14:22:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IMXdH4+s"
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-7986e538decso130874397b3.1
+        for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 14:28:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773178128; cv=none;
+        d=google.com; s=arc-20240605;
+        b=YWI1mb/7D9X4Xaq4mS7nETVXJam1JiJMxMGnynmp9KaN2r5xW7Yu8BtznUo5VGrvr+
+         iy1iEkFQ4qyekpI9yCcKo98sNL9RGm3mkRXXGu2BmcFOcje7aFko3GGumY1EDjIEgbLE
+         g6zpc6DfLwQnd8H20g88YsllSVixsF1gj94UdYHNgcO5IhYej883bjx6u7569gLvMDtL
+         EFK4ERvTC0aF6PnViVoelcXrxjrjBHdX5DyUF7vDOjsGgUf1Wo/1drgFoBj2KAfyE560
+         6YH9Zqr+p3+zRA08XkJzDLn8wunnw5N7IW/PrqFNzXQreyFF3xnwheL5QjEKHAbIbmvf
+         X8NQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=66aRBVBbi4NkhhBmjNES8wN8TfBDY65T859SJlCfrbI=;
+        fh=6mzBUIqY/8sgjA9Q3etLroAMdIZQQbTP6IP/1ObD1Go=;
+        b=cg5GDfij326ZKJoh/t4ze2ccnjlIhKHEKIRIYCgLqRTIIMxody/J3Ghj7bjqY2sP9W
+         Ynohi/W5g3bRHrmXGKnbEnmyySppluqwYMsQyO5saRLxmI7vM4Nh/Jb4FD21w0GEm6O2
+         eL34/9Q9GlwnUmbtJXvuB/dNE1T7stknacGNoE6+NSKXGPCnmU8Sy2oE+KRyLGptNTp9
+         cCzRxb6WWLFa478bcDD9qT74JKNvKgY+ZiOBuflsk1K7CyqvIOvrJXk2YXTFl5LNmLGH
+         Ehk5wwJ3jUtnjWDv545fdhl906iyZEDLZJLtaPOg1gVH7bBzr8sPlRxu1IhFsTIUlQMx
+         QIOg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20230601.gappssmtp.com; s=20230601; t=1773177775; x=1773782575; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1773178128; x=1773782928; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ISfec1K3jJo2AiWUBgbx3JM6HbVDacr1Hr+xolgCOdc=;
-        b=0zp2CYzS2lwnfkEZrNLLH6la9soJi22sQXk/kpy9H3/1w7ODf6CR30ZjC0g73X5/gs
-         NqSKNHUomU5qcSniqcnrBCviuqT1LhYsfIoZ4P5jQ82rXqy+QlBIqAGFIuZ/8Wh1/Gv0
-         +OerGvjQ6HrPRe9tafWar4NGeY1HpTkTGH0/901nCAeOf9MNmxve0kOlgkL0J/SxDvq8
-         m55FasPP8g5ExZH8xh26nq5ik0eXDCbMv/CjMt/LJ84T2XNQucZ4rtEHji6sDeiRk7hA
-         oqnKfaBDFed+cP5XWpfVK8/QhY8giqL4DuGxjQg8hDaxnLsJE9fUX91ozKsW2qEADCdF
-         vQFg==
+        bh=66aRBVBbi4NkhhBmjNES8wN8TfBDY65T859SJlCfrbI=;
+        b=IMXdH4+sLWh8HOy1ZOF+0yLZGh6paXi3fyqYEKj1E/24/J5nZler9cNAgkkH0nYb/q
+         zCN1FM1zXePJKcmhVTJdCS2z7Pwngpf90qRedZYVaalPAfAF4W3+XymuBZhDWjAfHPpW
+         ibwOEqk2ieX/3HiT0d5G/H1V0GVC3GTIb8SdPgh+byBJDOJF3/g/Yg/OKinHN82R4bHn
+         /zxNN5400esCo5OiFT505wa2uAIdYnCcSbX0PrHtEZ0Yg7FGrwKVhFLlAO0MW7ExytLl
+         AwQoLrRfk8kxLp7GvMj6PmorVVRYhs2woNAiEkfPFAMcI3U7wdCTRgojyYByDJd335DM
+         B+Qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773177775; x=1773782575;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20230601; t=1773178128; x=1773782928;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=ISfec1K3jJo2AiWUBgbx3JM6HbVDacr1Hr+xolgCOdc=;
-        b=uOoNF7SYxNT+v6PJMXJx7gmn8qjp8jNR3vXHtCpor7WGvAMsPYLK9N/BSA4HVo4WS+
-         L/CbiXDtvwad3wxVvIUwby81P+ypnzjVSHPEO74aKEssFtfPVt5fvHNbPoiQgAXj+Wz3
-         ootakye23lWXTup5dEMo6UFfgAhjhGnUu2bLsqwp/WVN3U8xsZ1JX8bQuG8cdT0YV3ME
-         uvBdFSOvl3QgGkOU9Q7RuYiR6NC2Hj3EfPmIrnb9MhmPA1kINt3tqVIjv5MgrZReQjkl
-         oA9Qt3+gUYxza98ykSZMt94hnoRFSt8TUJ/gy0u+D8AP3/4IjFMqbRE1DHib9rfudZ8r
-         2HPw==
-X-Forwarded-Encrypted: i=1; AJvYcCVcFFb9akolYYYBSqaNnrxtUygEiISeaQXk4V7XVk9Khmuv06gyHxTltkGrXdlD6rPOarw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyrExEUrwdUDpHQHp4aLcBqmUwN6GXBdb8Gr/zYgv//LDd6+5E+
-	iv/oCjeNl0kEy3+E89KiscFTBT1fdhRRRYN8L+g1KUCAgDo/oWK6XVsbcRWLmXoCwc8=
-X-Gm-Gg: ATEYQzzVyb8lfooTAGmfCj4QBGUtYdNBMowXr42uwIOARkmAdy+bpxWpaZr9HE2TsOY
-	aDK93+siVkjmQ/pxDxySfwqmn2K9A3qmhdC/N3qVVoSUapqgqZifizmXwy5XIaCClPydnpUPUVi
-	WT/ostQhSSHz7BZ7CBY9zLAHZABSEeG2MLDE9Medcf0c1k5ywlpeResXzQl3UYRoLNUslz9dKG5
-	xT/uy591S46TtTFtSaJr6Cc/7vKU47uQJHovMn2P6hVKfs3UHoXSwOJqrHgK2dctVrDpTr+CMTm
-	V5vYypZ/CAtBnvQ9/CjeMvS7UdRC7ioPYbBhOfEvznvUKjIX0vVthqL+668+9BF4YroktBsW1+T
-	PVzjEGozKCBXfxZ2C5YqGD2AlNEr513+y5ftANxP9h3r6WZRADg2i/tlRRtz5T+dnNytIBcqL9y
-	jsD3dKQWeVTwYFVpU=
-X-Received: by 2002:a17:902:cec1:b0:2ae:483f:b239 with SMTP id d9443c01a7336-2aeae876363mr1855375ad.30.1773177775172;
-        Tue, 10 Mar 2026 14:22:55 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:72::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2aeae222ab6sm2417595ad.10.2026.03.10.14.22.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2026 14:22:54 -0700 (PDT)
-From: Joe Damato <joe@dama.to>
-To: netdev@vger.kernel.org,
-	Michael Chan <michael.chan@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>
-Cc: linux-kernel@vger.kernel.org,
-	Joe Damato <joe@dama.to>,
-	bpf@vger.kernel.org
-Subject: [RFC net-next 07/10] net: bnxt: Add boilerplate GSO code
-Date: Tue, 10 Mar 2026 14:21:55 -0700
-Message-ID: <20260310212209.2263939-8-joe@dama.to>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260310212209.2263939-1-joe@dama.to>
-References: <20260310212209.2263939-1-joe@dama.to>
+        bh=66aRBVBbi4NkhhBmjNES8wN8TfBDY65T859SJlCfrbI=;
+        b=TcsXyzkNJsZ54RQR2cA4dHIuX0wAcFwUCVJzh7D4PFZaRRGvjaCL5FPVPllk166IxK
+         Ms416CQU5qX9DomShxS0XRT7PwR7Hbck/zdkfEIOzJlq31paz2ZmKD1DX7ieGgkAe2Ke
+         dolLLxFF9ucdLCr/F1nuJpIAx2HiAuQU+9G/KYjLHdcqFwACuaLtfLguLh3W2uzEFZda
+         4MuPLl4uveayOZH8KuQuemMZCIqZpLLcZpY/mAS9hC9VopUNCXletrLg2kFQW0ch0EqY
+         f9jI4vlskP8ot/LTREielkED/tvsMjLGcvVrkQdvJ9+YrXlqNlnvMiBMnX/MWmTSI1Wd
+         JLDw==
+X-Gm-Message-State: AOJu0YzJbo9C9PFlHZj2Z8SNM4z0Ppyt/xkDRdRJEjeY2L8eOn455p+j
+	LwvcHcGLIScaDEBMV4d6aVBcKt3ldo4xvw0zaQCsiMI2iWY1ZVz//EnpzCLWfdCsfzD8Zd9a84q
+	H56YYZXwZ5RmWoChQZyHU0HjTy85Q9Go=
+X-Gm-Gg: ATEYQzwKdt8/Qm7c0QyH9pAIESJvIuoRleJnHeIYkmE0NoJtzfBOnZNif8f/iYVQ+QA
+	geqYBWCHNxEi9+iSfNJlu9vAh/8fAuqlFUI2+cmOoUoBCn3VE/Np44SMBAx3w7onIlAyglEeD5K
+	XDc0jNa9VUJYTbVPwbZ4kr2GNhUPKtEX3bwVj3uf1cH4iJPzVGUSL11VycWo4OcW7kWBmBWz8kz
+	XuXgl0k8bToo6AiTwmFtFnY+sfH1wcx5DkaVBXaMVT1hJYQ7sL5R1ky5i6+XVy4KPtMOolfdY7/
+	i+L0/D4dolRr7hot94VHXBk=
+X-Received: by 2002:a05:690c:38b:b0:798:1e2:cd3f with SMTP id
+ 00721157ae682-7991800fe7dmr1706787b3.59.1773178127859; Tue, 10 Mar 2026
+ 14:28:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260310133504.94871-1-danjwade95@gmail.com>
+In-Reply-To: <20260310133504.94871-1-danjwade95@gmail.com>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Tue, 10 Mar 2026 14:28:37 -0700
+X-Gm-Features: AaiRm52tUdLmN2y3BS1nhP8ieIo3EASZy5NDgK-rZ7jw221VfCNTT0YQTdh8vlg
+Message-ID: <CAMB2axMNzeyNwiYUbTnAY2jpPXoahT36u1qt3u7cCpTryGqgPg@mail.gmail.com>
+Subject: Re: [PATCH bpf 0/2] bpf: Fix unsound scalar forking for BPF_OR
+To: Daniel Wade <danjwade95@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add bnxt_gso.c and bnxt_gso.h with a stub bnxt_sw_udp_gso_xmit()
-function, SW USO constants (BNXT_SW_USO_MAX_SEGS,
-BNXT_SW_USO_MAX_DESCS), and the is_sw_gso field in bnxt_sw_tx_bd
-with BNXT_SW_GSO_MID/LAST markers.
+On Tue, Mar 10, 2026 at 7:43=E2=80=AFAM Daniel Wade <danjwade95@gmail.com> =
+wrote:
+>
+> maybe_fork_scalars() unconditionally sets the pushed path dst register
+> to 0 for both BPF_AND and BPF_OR.  For AND this is correct (0 & K =3D=3D =
+0),
+> but for OR it is wrong (0 | K =3D=3D K, not 0).  This causes the verifier=
+ to
+> track an incorrect value on the pushed path, leading to a verifier/runtim=
+e
+> divergence that allows out-of-bounds map value access.
+>
+> Patch 1 fixes the bug by passing the opcode into maybe_fork_scalars() so
+> it sets the pushed value to K for BPF_OR, and 0 for BPF_AND.
+>
+> Patch 2 adds three selftests to verifier_bounds.c exercising the fix.
+>
+> Daniel Wade (2):
+>   bpf: Fix unsound scalar forking in maybe_fork_scalars() for BPF_OR
+>   selftests/bpf: Add tests for maybe_fork_scalars() OR vs AND handling
+>
 
-The full SW USO implementation will be added in a future commit.
+The fix and selftest make sense to me. To observe it, I also
+vibe-coded a poc to lookup an array map element and OOB write to
+another element and confirm the issue.
 
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Joe Damato <joe@dama.to>
----
- drivers/net/ethernet/broadcom/bnxt/Makefile   |  2 +-
- drivers/net/ethernet/broadcom/bnxt/bnxt.h     |  4 +++
- drivers/net/ethernet/broadcom/bnxt/bnxt_gso.c | 30 ++++++++++++++++++
- drivers/net/ethernet/broadcom/bnxt/bnxt_gso.h | 31 +++++++++++++++++++
- 4 files changed, 66 insertions(+), 1 deletion(-)
- create mode 100644 drivers/net/ethernet/broadcom/bnxt/bnxt_gso.c
- create mode 100644 drivers/net/ethernet/broadcom/bnxt/bnxt_gso.h
+May be missing a fix tag though:
+commit bffacdb80b93 ("bpf: Recognize special arithmetic shift in the verifi=
+er")
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/Makefile b/drivers/net/ethernet/broadcom/bnxt/Makefile
-index ba6c239d52fa..debef78c8b6d 100644
---- a/drivers/net/ethernet/broadcom/bnxt/Makefile
-+++ b/drivers/net/ethernet/broadcom/bnxt/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-$(CONFIG_BNXT) += bnxt_en.o
- 
--bnxt_en-y := bnxt.o bnxt_hwrm.o bnxt_sriov.o bnxt_ethtool.o bnxt_dcb.o bnxt_ulp.o bnxt_xdp.o bnxt_ptp.o bnxt_vfr.o bnxt_devlink.o bnxt_dim.o bnxt_coredump.o
-+bnxt_en-y := bnxt.o bnxt_hwrm.o bnxt_sriov.o bnxt_ethtool.o bnxt_dcb.o bnxt_ulp.o bnxt_xdp.o bnxt_ptp.o bnxt_vfr.o bnxt_devlink.o bnxt_dim.o bnxt_coredump.o bnxt_gso.o
- bnxt_en-$(CONFIG_BNXT_FLOWER_OFFLOAD) += bnxt_tc.o
- bnxt_en-$(CONFIG_DEBUG_FS) += bnxt_debugfs.o
- bnxt_en-$(CONFIG_BNXT_HWMON) += bnxt_hwmon.o
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.h b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-index 41d933a4c282..99c625b954d5 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-@@ -889,6 +889,7 @@ struct bnxt_sw_tx_bd {
- 	u8			is_ts_pkt;
- 	u8			is_push;
- 	u8			action;
-+	u8			is_sw_gso;
- 	unsigned short		nr_frags;
- 	union {
- 		u16			rx_prod;
-@@ -896,6 +897,9 @@ struct bnxt_sw_tx_bd {
- 	};
- };
- 
-+#define BNXT_SW_GSO_MID		1
-+#define BNXT_SW_GSO_LAST	2
-+
- struct bnxt_sw_rx_bd {
- 	void			*data;
- 	u8			*data_ptr;
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_gso.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_gso.c
-new file mode 100644
-index 000000000000..b296769ee4fe
---- /dev/null
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_gso.c
-@@ -0,0 +1,30 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/* Broadcom NetXtreme-C/E network driver.
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License as published by
-+ * the Free Software Foundation.
-+ */
-+
-+#include <linux/pci.h>
-+#include <linux/netdevice.h>
-+#include <linux/skbuff.h>
-+#include <net/netdev_queues.h>
-+#include <net/ip.h>
-+#include <net/ipv6.h>
-+#include <net/udp.h>
-+#include <net/tso.h>
-+#include <linux/bnxt/hsi.h>
-+
-+#include "bnxt.h"
-+#include "bnxt_gso.h"
-+
-+netdev_tx_t bnxt_sw_udp_gso_xmit(struct bnxt *bp,
-+				 struct bnxt_tx_ring_info *txr,
-+				 struct netdev_queue *txq,
-+				 struct sk_buff *skb)
-+{
-+	dev_kfree_skb_any(skb);
-+	dev_core_stats_tx_dropped_inc(bp->dev);
-+	return NETDEV_TX_OK;
-+}
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_gso.h b/drivers/net/ethernet/broadcom/bnxt/bnxt_gso.h
-new file mode 100644
-index 000000000000..f01e8102dcd7
---- /dev/null
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_gso.h
-@@ -0,0 +1,31 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/*
-+ * Broadcom NetXtreme-C/E network driver.
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License as published by
-+ * the Free Software Foundation.
-+ */
-+
-+#ifndef BNXT_GSO_H
-+#define BNXT_GSO_H
-+
-+/* Maximum segments the stack may send in a single SW USO skb.
-+ * This caps gso_max_segs for NICs without HW USO support.
-+ */
-+#define BNXT_SW_USO_MAX_SEGS	64
-+
-+/* Worst-case TX descriptors consumed by one SW USO packet:
-+ * Each segment: 1 long BD + 1 ext BD + payload BDs.
-+ * Total payload BDs across all segs <= num_segs + nr_frags (each frag
-+ * boundary crossing adds at most 1 extra BD).
-+ * So: 3 * max_segs + MAX_SKB_FRAGS + 1 = 3 * 64 + 17 + 1 = 210.
-+ */
-+#define BNXT_SW_USO_MAX_DESCS	(3 * BNXT_SW_USO_MAX_SEGS + MAX_SKB_FRAGS + 1)
-+
-+netdev_tx_t bnxt_sw_udp_gso_xmit(struct bnxt *bp,
-+				 struct bnxt_tx_ring_info *txr,
-+				 struct netdev_queue *txq,
-+				 struct sk_buff *skb);
-+
-+#endif
--- 
-2.52.0
+Reviewed-by: Amery Hung <ameryhung@gmail.com>
 
+>  kernel/bpf/verifier.c                         |  15 ++-
+>  .../selftests/bpf/progs/verifier_bounds.c     | 102 ++++++++++++++++++
+>  2 files changed, 112 insertions(+), 5 deletions(-)
+>
+> --
+> 2.43.0
+>
+>
