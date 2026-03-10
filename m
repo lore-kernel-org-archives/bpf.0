@@ -1,45 +1,47 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03C773E9F9D
-	for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 20:21:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EEE03E92A7
+	for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 20:21:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773174082; cv=none; b=IORoyQOoAgGRrQddz35UNcRSPDp4/pUa0weq/C33QpfkRUFxTJ+nWuaN12u1Z3FDFxCMf5V+rRt/NeUkX9J3OYJ3eJNK12m+DZ4BRTAYYC80Zu5uIt/ZIsXVQAb3BeB2vicjtC1NSyTNxUrTy3ctLsPj/TSTp85a4+DuRyZ/jlw=
+	t=1773174089; cv=none; b=Z0Bwi2tuR9rC3T9q5AxjhaJ2XiUIK30+ARqf25FDB5vE6GowEWBfpcA1zc2cHp1esdrvLn/uoKZF6cZ+GTRmL7TOGI/pTSSWJwnCRPRMHWqEHLQcfwsHG42/yJ78tFmfdXdArx1Kuqc8n5LLEIbyL2lqPuF9m+P+EDmAhi0qHrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773174082; c=relaxed/simple;
-	bh=MAAuyB9Pcwe4MtJ7KeINtACUoYETJVIh5qhuPRUlMOg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=J8w8LgR+uVYKhLmG/ZSJSILuOZgwXK87gY6JhEjkItBr/OalrAfnQcP/UhJXQuA49k5MMEeIa/iESjSBYcd+Uf9C/kpSQHUC3nbitGy6Y3Hx+150TfiqqChIckzjFSV/LVnvlEaXT03yFiX/C0ac5s3i7lGwYOckC1gzCrMfeNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=i5Ueet9G; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1773174089; c=relaxed/simple;
+	bh=celh8eF/dxD9cYaTHCfog7OqihCVIHrL/xhSFPiM/IM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=NoWPNh8MRakeNpRbxCRY4/oS/S40348pbQRVWqRKNt3t5dzPJWXsmdQJutQgoytbEgmEZHtu4wDk5PoSOjWnXh58KwvERTuHE41dChV0U4k9fJIGVzyUEhPCfxJlICEMq2b2pN6ezVnRXeU/RL1FlKthuEVN3Zuw9U1mF/lAsLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BqI+ZqEr; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i5Ueet9G"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BqI+ZqEr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773174080;
+	s=mimecast20190719; t=1773174087;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ToviXSUiN9JXVnvuExY/Z+f/0xWgRGfNYe4mMPqlw/M=;
-	b=i5Ueet9GoAHOQq38y7LgkxoszN04jalLBwME+lYZ1e53cmBB1AXxCmV0x2Sya/6bDTjbCx
-	e6IiEBDwBAQ11tAbsR6jBBw3Yakp9VJQNfsRH60Kfye5xQIWFd3mYpgfi3CPOxP4OM0Izu
-	aa7E+iO7ytXggDTijWG6wB5qWpyXDbI=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fJfG1JwDuOgTCv7ruA7kH2Kv1IMYgbflkixcGCsT6rE=;
+	b=BqI+ZqErbJKCKo6tUIuOh48nnu9CF/ni+nzArwekqZk7/AWq8bC/aDh/Fk6dYMRtTcSIjb
+	fysGTPRm3Pk99jmDDms4ww/lIvEKga96qPNq9DqUt5hXbSRyIHgG2W4ewYZuCv30SbSRj9
+	DuBJ06lw6H+JrJU1BZ276SXJt3C4ih8=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-683-75adqp5JMjeSaPsSZoBDRg-1; Tue,
- 10 Mar 2026 16:21:16 -0400
-X-MC-Unique: 75adqp5JMjeSaPsSZoBDRg-1
-X-Mimecast-MFC-AGG-ID: 75adqp5JMjeSaPsSZoBDRg_1773174074
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-340-zhdR7OEpObelt3aIxVCUZQ-1; Tue,
+ 10 Mar 2026 16:21:22 -0400
+X-MC-Unique: zhdR7OEpObelt3aIxVCUZQ-1
+X-Mimecast-MFC-AGG-ID: zhdR7OEpObelt3aIxVCUZQ_1773174080
 Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 26A621956054;
-	Tue, 10 Mar 2026 20:21:14 +0000 (UTC)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 446E81956088;
+	Tue, 10 Mar 2026 20:21:20 +0000 (UTC)
 Received: from grbell-thinkpadx1carbongen9.rmtusnh.csb (unknown [10.22.80.152])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 7000B180049D;
-	Tue, 10 Mar 2026 20:21:11 +0000 (UTC)
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D06F8180049D;
+	Tue, 10 Mar 2026 20:21:17 +0000 (UTC)
 From: Gregory Bell <grbell@redhat.com>
 To: bpf@vger.kernel.org
 Cc: martin.lau@linux.dev,
@@ -55,9 +57,11 @@ Cc: martin.lau@linux.dev,
 	haoluo@google.com,
 	jolsa@kernel.org,
 	Gregory Bell <grbell@redhat.com>
-Subject: [PATCH bpf-next 0/1] Fix BPF struct_ops BTF cleanup race condition
-Date: Tue, 10 Mar 2026 16:21:01 -0400
-Message-ID: <cover.1773170190.git.grbell@redhat.com>
+Subject: [PATCH bpf-next 1/1] bpf: Fix BTF module cleanup race condition in struct_ops
+Date: Tue, 10 Mar 2026 16:21:02 -0400
+Message-ID: <a46d40ac2b56f96b3b6e953847ad4719694d68eb.1773170190.git.grbell@redhat.com>
+In-Reply-To: <cover.1773170190.git.grbell@redhat.com>
+References: <cover.1773170190.git.grbell@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,10 +71,6 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-This patch fixes a race condition in BPF struct_ops where consecutive
-test runs fail due to a timing mismatch between BTF object cleanup and
-BTF module removal.
-
 When running BPF struct_ops tests consecutively, the second test fails
 because BTF object references take longer to be released while their
 associated module is removed from btf_modules list immediately
@@ -78,55 +78,35 @@ during module unload. This creates a race condition where the second
 test retrieves the cached BTF object but cannot find valid module
 information, causing btf_try_get_module() to return NULL.
 
-The fix synchronizes these cleanup operations by waiting for active BTF
-references to be released before completing module cleanup, eliminating
-the race condition.
+Fix this by modifying MODULE_STATE_GOING handling to wait for
+active BTF references to be released before completing module
+cleanup. This ensures BTF objects are properly cleaned up from the
+cache before their module metadata is removed, eliminating the timing
+window that caused the race condition.
 
-This issue is reproducible with any of the following tests: global_map_resize,
-pro_epilogue, struct_ops_module and struct_ops_multi
-
-	./test_progs -t global_map_resize; ./test_progs -t global_map_resize
-
-	#134/1   global_map_resize/global_map_resize_bss:OK
-	#134/2   global_map_resize/global_map_resize_data:OK
-	#134/3   global_map_resize/global_map_resize_invalid:OK
-	#134     global_map_resize:OK
-	Summary: 1/3 PASSED, 0 SKIPPED, 0 FAILED
-	global_map_resize_bss_subtest:PASS:test_global_map_resize__open 0 nsec
-	libbpf: map 'test_glo.bss': cannot be resized, last var must be an array
-	libbpf: map 'test_glo.bss': failed to adjust resized BTF, clearing BTF key/value info: -EINVAL
-	global_map_resize_bss_subtest:PASS:bpf_map__set_value_size 0 nsec
-	global_map_resize_bss_subtest:PASS:resize 0 nsec
-	global_map_resize_bss_subtest:PASS:percpu_arr_resize 0 nsec
-	global_map_resize_bss_subtest:PASS:array_len 0 nsec
-	global_map_resize_bss_subtest:PASS:bpf_map__initial_value (ptr) 0 nsec
-	global_map_resize_bss_subtest:PASS:bpf_map__initial_value (size) 0 nsec
-	libbpf: map 'st_ops_resize': failed to create: -EINVAL
-	libbpf: failed to load BPF skeleton 'test_global_map_resize': -EINVAL
-	global_map_resize_bss_subtest:FAIL:test_global_map_resize__load unexpected error: -22 (errno 22)
-	#134/1   global_map_resize/global_map_resize_bss:FAIL
-	global_map_resize_data_subtest:PASS:test_global_map_resize__open 0 nsec
-	global_map_resize_data_subtest:PASS:bpf_map__set_value_size 0 nsec
-	global_map_resize_data_subtest:PASS:resize 0 nsec
-	global_map_resize_data_subtest:PASS:percpu_arr_resize 0 nsec
-	global_map_resize_data_subtest:PASS:array_len 0 nsec
-	global_map_resize_data_subtest:PASS:bpf_map__initial_value (ptr) 0 nsec
-	global_map_resize_data_subtest:PASS:bpf_map__initial_value (size) 0 nsec
-	libbpf: map 'st_ops_resize': failed to create: -EINVAL
-	libbpf: failed to load BPF skeleton 'test_global_map_resize': -EINVAL
-	global_map_resize_data_subtest:FAIL:test_global_map_resize__load unexpected error: -22 (errno 22)
-	#134/2   global_map_resize/global_map_resize_data:FAIL
-	#134/3   global_map_resize/global_map_resize_invalid:OK
-	#134     global_map_resize:FAIL
-
-After the fix, consecutive runs work reliably without requiring delays.
-
-Gregory Bell (1):
-  bpf: Fix BTF module cleanup race condition in struct_ops
-
+Signed-off-by: Gregory Bell <grbell@redhat.com>
+---
  kernel/bpf/btf.c | 7 ++++++-
  1 file changed, 6 insertions(+), 1 deletion(-)
 
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 09fcbb125155..81c9f46a7bb7 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -8382,7 +8382,12 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
+ 		list_for_each_entry_safe(btf_mod, tmp, &btf_modules, list) {
+ 			if (btf_mod->module != module)
+ 				continue;
+-
++			unsigned int timeout = 1000;
++			while (refcount_read(&btf_mod->btf->refcnt) > 1
++			&& timeout > 0 ) {
++				msleep(1);
++				timeout--;
++			}
+ 			list_del(&btf_mod->list);
+ 			if (btf_mod->sysfs_attr)
+ 				sysfs_remove_bin_file(btf_kobj, btf_mod->sysfs_attr);
 -- 
 2.52.0
 
