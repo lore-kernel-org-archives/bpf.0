@@ -1,182 +1,131 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A30A3F167D;
-	Tue, 10 Mar 2026 22:06:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773180407; cv=none; b=s2L3c0pxh4LY2NVvOJGd0GFEvg3TjwsIvhNL7KMtjcT7qpstMJuEPC59la4LzVU6T+7cYcI/TcSPT0WN2tWUrvDXXUfvCZryWDptEJHFDhDjYVGB0uX5TNL3cnjx3euRfNfWg6xCucsVXTZtcJv62FVKWbJtS0C5enTdd6ot2jE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773180407; c=relaxed/simple;
-	bh=6bTjoVf93vpaN+5d3y+2SomvL/7mz6GeJJvVeeyB4rA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eqOuSc9Y+B4ZUf5Ivr1AXttWEcm1aCkdGWKC6ONOo/Xf8x2oY/gncmS+5jbtcEJKqGJhWApWZt0Zdh2Mums+jmaS/fJHCPWNMrhhhTmXzPZlp8dCeX5afw34I9PA2/75Y7ckq45Pix2VMAyKwxmqyZFMPRVbc744MYZMaClT0V0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZFqyv61+; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAB7D3D812E
+	for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 22:06:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.65
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773180418; cv=pass; b=JN9nybsxYblbWXP+dgTIoSPiT8Js2JwZ0ko3l25hEftyXO98t0WRT0c5pGGTYgrsKtqgtOxQM451xeGsj/1Rn9ig2glRx2f/ujrTiOfeGXVd9TGf0L8sE4OtMYzg8mg+eIPu4kBd2fQ4cWgjc1k/EXu7XuRj8jkB0+QwPif7LVs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773180418; c=relaxed/simple;
+	bh=ndidRG6JP1v9u5cMhjoRebo4Xp3f+BKq41sQRtRBwZw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mQdmeOUPHfHGhhJzgrwJ+aIPtRpK1wLEZz3ifr/yOTPsCgRfF8M8TF9FCPIdqO4Ex/LXhc4ToiutEP8jVrfXfONNPinYqeW934Pekj0eedthJJnHsmjjG4m4q9CMrOyr4pK6l/WQ8Tc26DFD1XaJKT1PpGd2cG8IK4IJ/t0Ea6A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SpBm9YtP; arc=pass smtp.client-ip=209.85.128.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZFqyv61+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773180400; x=1804716400;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=6bTjoVf93vpaN+5d3y+2SomvL/7mz6GeJJvVeeyB4rA=;
-  b=ZFqyv61+LjJaS/tCXnRKAsACKHu8mWv6u2pnwFKo3P0DkBLVmUegkmns
-   IDZGDn2qHF71fTghqV68lmaaFBGB4ZmRacc5ySPXbu1DgaOA1nBv0UvUn
-   uIcA+B1SySAjsnvdNwPhGpvA3wCW2DEiFo84BbUrZHmSEx2CQXvFcylDG
-   B66dMcwRktNMRDwsblnkvBBq0N8YwB5yGBZkrxn1Bme39x4g4Be7G29y6
-   ltvACYtn95PyUCJWy25S5q4y4uqMKPQ+v5wXJzm2Wp5nHS3Yng7m1PHYf
-   6ZA7w/fq5aEIqji+VVLXRCguTYYTFWbUykkWRG3Mw3zP6D8Cd9c5Zzdui
-   w==;
-X-CSE-ConnectionGUID: S2mAlsN+RqqD87tdvCj7kg==
-X-CSE-MsgGUID: HzNRzGp8ScaYEICicHDRtA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11725"; a="74156376"
-X-IronPort-AV: E=Sophos;i="6.23,113,1770624000"; 
-   d="scan'208";a="74156376"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2026 15:06:29 -0700
-X-CSE-ConnectionGUID: pUFGHEZZQ9ernXvYw4wKzg==
-X-CSE-MsgGUID: HTXByI8FSU6Ky31XvDcO4A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,113,1770624000"; 
-   d="scan'208";a="220298608"
-Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
-  by orviesa008.jf.intel.com with ESMTP; 10 Mar 2026 15:06:28 -0700
-From: Tony Nguyen <anthony.l.nguyen@intel.com>
-To: davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	andrew+netdev@lunn.ch,
-	netdev@vger.kernel.org
-Cc: Alexander Lobakin <aleksander.lobakin@intel.com>,
-	anthony.l.nguyen@intel.com,
-	jacob.e.keller@intel.com,
-	nxne.cnse.osdt.itp.upstreaming@intel.com,
-	horms@kernel.org,
-	maciej.fijalkowski@intel.com,
-	magnus.karlsson@intel.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	bpf@vger.kernel.org,
-	Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-Subject: [PATCH net-next 5/5] ice: add support for transmitting unreadable frags
-Date: Tue, 10 Mar 2026 15:06:22 -0700
-Message-ID: <20260310220624.537917-6-anthony.l.nguyen@intel.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20260310220624.537917-1-anthony.l.nguyen@intel.com>
-References: <20260310220624.537917-1-anthony.l.nguyen@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SpBm9YtP"
+Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-4853e1ce427so28797135e9.3
+        for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 15:06:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773180414; cv=none;
+        d=google.com; s=arc-20240605;
+        b=beUPG/+1SNHRT1fzohFTslJJHqF2l2opaSotLyooZzIhur/YhZHHySQ9Uu4YNt23E+
+         g0cwD201rOtbdLn111/7ezaYcy+18SQaV/rX0knS3IHSmUj1o2d99+ZjgtTyEDRmPm1h
+         WGMvJvpmOnhuY75pVqgKRAFHa24K5W9AgLV60/9dhzyN8VIXpw0Z3RisyJd7A2gJ/TGl
+         TY8hKDFxzb+P9R1g7Ku9EhLO0VXbwMclNfj+T824h2bO2wDgNXtn8OLyLNyy+PiRk8zi
+         L1HtjMUir1AayxZ7J88vVUl9DIJ9v14bDGDKLyC4RDitR7/2CoCYsMIVMCdkRjbhsPeN
+         lS/g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=rL4jDVVmx/+VPNOhteteSokIjmvy1xU2JiFgOfo5UPs=;
+        fh=5JFlNE9GcprIeH/Ak6UBkUoBFyr2L18x9v/IsvcM4D0=;
+        b=kGJCdd4LecNJjQ7isMBjB+u62PPA+3ZvwoctNlhmw9d0tTmX5+zjljQcA9NDgf6HQS
+         BysjrumoPBCBc3mQwl96FSkcRnx/JASxjMPJWw2rjXTDlLLOxolLXMsSIObc+7wyVK/8
+         UnQLaZLDbm0WSUWkOWJIyiNWPLsElA1+TNGtX5swqhQnyytpQQov3qBl9cW+dcP28kv4
+         /WRkb5NEkyccjXeyLnvJdt63UFoO7ylty5RWONOPZ6+/DRrwaftVeh6gs+Q2+XtcqtzW
+         sNGRRxhPZm+DbgX7y6H2xPopdzNsCcZDh9XKY7zzkgm8VCwuuXBMeh8RLsVAVx862Dab
+         hoGA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773180414; x=1773785214; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rL4jDVVmx/+VPNOhteteSokIjmvy1xU2JiFgOfo5UPs=;
+        b=SpBm9YtP69LJPACpQB/Li/fjzau3t0PNlzjkOhuBEgtdcwQ/7zmhSkTLn6GxGRgqK5
+         lh2D5N2a4531WHXyn5CEIt0m+BguJ2257V1gQCwHSFPnIT8nmkXG0V/razUdr3TefQNj
+         B+fmD8qoHYuCK8wAaCBsuA5rIt0YNBnBCj2QaKwARfNcEY32/TxdXS3YNroflrV5H7Zk
+         IVoAWzEbaXIE7d0q3U/g7CGqOI0Zx5fnuOw4N2mNVKYaBsTHtfe8ttKXWHY6tSxEIElx
+         P7nOKjeZCUhneOQt8IFW2r28Y/dNdTHUsgnJh3wlOIXzVninfMzla9txb07kBrSPf+15
+         DTew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773180414; x=1773785214;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rL4jDVVmx/+VPNOhteteSokIjmvy1xU2JiFgOfo5UPs=;
+        b=AGqYRZsTlOG1km7gyo2s5wVE5HY1HBkiEyNnw85sQ/nsma+UjXol9YWVNdcfzPSZTM
+         615CkCBWklqoVORNNBABEqxRwoMRW9CnOrzC0VhM/eASsKW7qoR3E8n4eyhO8n2W25FQ
+         OdJT8uHkjlf+2O3Mu9eGMkp/SywQS2NcMqX/C/J0Yv+19Xo9VH0Xo/WnFXpuLgn8sjgE
+         zf2YpOPKN0zM+0xBGtpwDcsDn5Q2lJYjINRuM/DpBWMO440MNEasuT7laU5Quft8rNx8
+         7Wz+1WvfS7iGxZHwQ7vS63vmmM2OSrMxh7bRMhd9oI1I1q7Wc4MAcUAJQDTUpq/VVjoQ
+         1BjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUpCdf8TGpiYawTLASym4hcMpwatByTI5dm5sl25iiOtYeCbgJF4/0cFWOxSiQI0ddHNHc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMMlGUlr6dSdGQjdRnJwBVzMVAuEkxy8zRCXdoun7xCRwYhZWZ
+	XyL1wdoSzCc5n2rlFZjNSBERDVVHcdzz/Jey4lS6FySvV9GLoWyvlZ+TiqcR6eE9M1emFr3n47v
+	aKEqkqMUWE8NpxnhDTYbyVXquKEGECuM=
+X-Gm-Gg: ATEYQzxoQXFtpDGzQiNut2JTbKY+44g5mobm/8PZsj9IfVLmZ7ZZhkgwNq+hRpDJKTG
+	EE2HT2x3N8c/5INhYaSjO9UoNGU3quLruT403ApJS1EZafh+5tPXVdL5egj76tAU2qlvSFucCPm
+	xdOkegfsmByn8B5I3KhEbpLdG2RKuLj0Xevuj5G1XTZizSwPtg66hY2MGbhD0ByaM6NOo6bnh4L
+	Q3fI3RiTP8HKl60FeyV7sJH6yQjKJucGyXzCCjP79wQRF2yjhATpa3TQ9PbfBl/uXO5BlgVNKYX
+	GbaB+9K2z/aXlGtH70EgaVw2XyUnBVK3oSlZW4p1FBUWk4CLCZoeg71uYrED
+X-Received: by 2002:a05:600c:444e:b0:477:b734:8c53 with SMTP id
+ 5b1f17b1804b1-4854b0c0cdamr7289455e9.12.1773180413717; Tue, 10 Mar 2026
+ 15:06:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260310111330.601765-1-alan.maguire@oracle.com>
+In-Reply-To: <20260310111330.601765-1-alan.maguire@oracle.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Tue, 10 Mar 2026 23:06:17 +0100
+X-Gm-Features: AaiRm50p-Ec0QT-ThJkQavMC0jJ_c3h6Rl8h_eBX5gXMOHi-rPj1L8K41Cr9B7s
+Message-ID: <CAP01T752KW1tiAT0RSP6cEXWAPv2P0zBqAR94xVRd-6zujjSwA@mail.gmail.com>
+Subject: Re: [PATCH bpf] selftests/bpf: Handle !CONFIG_SMC in bpf_smc.c
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net, 
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
+	haoluo@google.com, jolsa@kernel.org, alibuda@linux.alibaba.com, 
+	yanjun.zhu@linux.dev, bpf@vger.kernel.org, 
+	Colm Harrington <colm.harrington@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Alexander Lobakin <aleksander.lobakin@intel.com>
+On Tue, 10 Mar 2026 at 12:27, Alan Maguire <alan.maguire@oracle.com> wrote:
+>
+> Currently BPF selftests will fail to compile if CONFIG_SMC
+> is not set.
+>
+> Use BPF CO-RE to work around the case where CONFIG_SMC is
+> not set; use ___local variants of relevant structures and
+> utilize bpf_core_field_exists() for net->smc.
+>
+> The test continues to pass where
+>
+>   CONFIG_SMC=y
+>   CONFIG_SMC_HS_CTRL_BPF=y
+>
+> but these changes allow the selftests to build in the absence
+> of CONFIG_SMC=y.
+>
+> Also ensure that we get a pure skip rather than a skip+fail
+> by removing the SMC is unsupported part from the ASSERT_FALSE()
+> in get_smc_nl_family(); doing this means we get a skip without
+> a fail when CONFIG_SMC is not set:
+>
+> $ sudo ./test_progs -t bpf_smc
+> Summary: 1/0 PASSED, 1 SKIPPED, 0 FAILED
+>
+> Reported-by: Colm Harrington <colm.harrington@oracle.com>
+> Fixes: beb3c67297d9 ("bpf/selftests: Add selftest for bpf_smc_hs_ctrl")
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
 
-Advertise netmem Tx support in ice. The only change needed is to set
-ICE_TX_BUF_FRAG conditionally, only when skb_frag_is_net_iov() is
-false. Otherwise, the Tx buffer type will be ICE_TX_BUF_EMPTY and
-the driver will skip the DMA unmapping operation.
+Tested-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
-Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
----
- drivers/net/ethernet/intel/ice/ice_main.c   |  1 +
- drivers/net/ethernet/intel/ice/ice_sf_eth.c |  1 +
- drivers/net/ethernet/intel/ice/ice_txrx.c   | 17 +++++++++++++----
- 3 files changed, 15 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index 489718c6f7fe..10d2f9f8472b 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -3525,6 +3525,7 @@ static void ice_set_ops(struct ice_vsi *vsi)
- 
- 	netdev->netdev_ops = &ice_netdev_ops;
- 	netdev->queue_mgmt_ops = &ice_queue_mgmt_ops;
-+	netdev->netmem_tx = true;
- 	netdev->udp_tunnel_nic_info = &pf->hw.udp_tunnel_nic;
- 	netdev->xdp_metadata_ops = &ice_xdp_md_ops;
- 	ice_set_ethtool_ops(netdev);
-diff --git a/drivers/net/ethernet/intel/ice/ice_sf_eth.c b/drivers/net/ethernet/intel/ice/ice_sf_eth.c
-index bd5eeb27d3f8..f3ac5dfabc0c 100644
---- a/drivers/net/ethernet/intel/ice/ice_sf_eth.c
-+++ b/drivers/net/ethernet/intel/ice/ice_sf_eth.c
-@@ -59,6 +59,7 @@ static int ice_sf_cfg_netdev(struct ice_dynamic_port *dyn_port,
- 	ether_addr_copy(netdev->perm_addr, dyn_port->hw_addr);
- 	netdev->netdev_ops = &ice_sf_netdev_ops;
- 	netdev->queue_mgmt_ops = &ice_queue_mgmt_ops;
-+	netdev->netmem_tx = true;
- 	SET_NETDEV_DEVLINK_PORT(netdev, devlink_port);
- 
- 	err = register_netdev(netdev);
-diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.c b/drivers/net/ethernet/intel/ice/ice_txrx.c
-index 59b2ab09b87a..3008745c2b39 100644
---- a/drivers/net/ethernet/intel/ice/ice_txrx.c
-+++ b/drivers/net/ethernet/intel/ice/ice_txrx.c
-@@ -113,11 +113,17 @@ ice_prgm_fdir_fltr(struct ice_vsi *vsi, struct ice_fltr_desc *fdir_desc,
- static void
- ice_unmap_and_free_tx_buf(struct ice_tx_ring *ring, struct ice_tx_buf *tx_buf)
- {
--	if (tx_buf->type != ICE_TX_BUF_XDP_TX && dma_unmap_len(tx_buf, len))
-+	switch (tx_buf->type) {
-+	case ICE_TX_BUF_DUMMY:
-+	case ICE_TX_BUF_FRAG:
-+	case ICE_TX_BUF_SKB:
-+	case ICE_TX_BUF_XDP_XMIT:
- 		dma_unmap_page(ring->dev,
- 			       dma_unmap_addr(tx_buf, dma),
- 			       dma_unmap_len(tx_buf, len),
- 			       DMA_TO_DEVICE);
-+		break;
-+	}
- 
- 	switch (tx_buf->type) {
- 	case ICE_TX_BUF_DUMMY:
-@@ -337,12 +343,14 @@ static bool ice_clean_tx_irq(struct ice_tx_ring *tx_ring, int napi_budget)
- 			}
- 
- 			/* unmap any remaining paged data */
--			if (dma_unmap_len(tx_buf, len)) {
-+			if (tx_buf->type != ICE_TX_BUF_EMPTY) {
- 				dma_unmap_page(tx_ring->dev,
- 					       dma_unmap_addr(tx_buf, dma),
- 					       dma_unmap_len(tx_buf, len),
- 					       DMA_TO_DEVICE);
-+
- 				dma_unmap_len_set(tx_buf, len, 0);
-+				tx_buf->type = ICE_TX_BUF_EMPTY;
- 			}
- 		}
- 		ice_trace(clean_tx_irq_unmap_eop, tx_ring, tx_desc, tx_buf);
-@@ -1494,7 +1502,8 @@ ice_tx_map(struct ice_tx_ring *tx_ring, struct ice_tx_buf *first,
- 				       DMA_TO_DEVICE);
- 
- 		tx_buf = &tx_ring->tx_buf[i];
--		tx_buf->type = ICE_TX_BUF_FRAG;
-+		if (!skb_frag_is_net_iov(frag))
-+			tx_buf->type = ICE_TX_BUF_FRAG;
- 	}
- 
- 	/* record SW timestamp if HW timestamp is not available */
-@@ -2366,7 +2375,7 @@ void ice_clean_ctrl_tx_irq(struct ice_tx_ring *tx_ring)
- 		}
- 
- 		/* unmap the data header */
--		if (dma_unmap_len(tx_buf, len))
-+		if (tx_buf->type != ICE_TX_BUF_EMPTY)
- 			dma_unmap_single(tx_ring->dev,
- 					 dma_unmap_addr(tx_buf, dma),
- 					 dma_unmap_len(tx_buf, len),
--- 
-2.47.1
-
+> [...]
