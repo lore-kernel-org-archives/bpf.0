@@ -1,113 +1,141 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39F763B6378;
-	Tue, 10 Mar 2026 12:28:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59F4A3C9EC2
+	for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 12:28:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773145714; cv=none; b=YYkKrWTpvV1BCdEut7Nd0y3OeNd7lSOp9yLpWsbYu6r0umZce68M0AXdf+dwRFIuWgpcJ7UJVy7578BFMevBflxExLa4A/BQpsXBmcqMChEz3XkAN5p5wnWSQ9F3X14KDqkBjhR5I76Na0qns2N+W7/z/cYqrBunb4ho+bNsLgs=
+	t=1773145722; cv=none; b=Y/r9icNuYuIcbElltmgsrHPbyB4usqHMD7BnnM8I13xQFZUzwYy6b12zuNnuRBmMAyCGrwoA7C6YPSzveUkwyC2d9CoKRxKv/2ffcqfxEw+iqE/anvq7uDFnW599TnVMlXMDId46xUoxmPTh/F6nclG36MR7YeA6a1wD4Q64uKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773145714; c=relaxed/simple;
-	bh=NZ5oTCN6VGzePwnu776uK+3unhTqb8pwokxv1IJtK7c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=noHGQmxEL7IiXdiF1hNqEE9uS+fhYYF0hIJyU1chSxO/FtpJTW1bVVyqWOi1E4WPjAeBdzHrOL8ney+Biqjn3eN1PjYWD4Pfho2p9Fnl+y9Lm4V6kLLlMke34xalTNHMyPdq1PxQR9TH4x3t7rnw8iZk8l+7BH0gHYbtJACoJmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FOutLnoL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773145722; c=relaxed/simple;
+	bh=ziEQMgEt6cFWlyD+Y8SF8ydZXv730TVs827bnSESCP0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KiiqxCDmZCYhiRimy6cg4cFn85V/yoSPyZ7cTmYRc0P5k6SPbgIdtzqfM3foQYdAHsN2gL5lTCPt/HoNy2S5zl1Bs9z2dvya4P6U7P0MCxS+vvVH1eDI5fSo/1fgI89l1PbxSwRG4PxyICECE7+9eW8xOd2M3mgx1iEmLM+ZMxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BCrbUEYE; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=EmhJizYd; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FOutLnoL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8179C19423;
-	Tue, 10 Mar 2026 12:28:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773145714;
-	bh=NZ5oTCN6VGzePwnu776uK+3unhTqb8pwokxv1IJtK7c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FOutLnoL/seeB/icY17T5kE23weT+c8OWPxsN1CuLtbqZf1qO8twCXpCHPEW4zEb5
-	 uM5pcZxBh8XK3wQOjz6gQLnb8DbNMsJ6SwgjqzPaDdyeQRMdzDiadj+7d8CVSVSbbp
-	 WbSnGZkMbwo0cpPlViR1A0oh5e53oFE0sYAJxulW9oCNKaXKAhhACMzXx6XsRo3Hlx
-	 /XgKdmLcz/EtWl6VZEOUGY5PBqGn3Xb4X+aqLL+l2HoSL3wZMd6NhcSGeVt+ZFpBkn
-	 8s7ZymgPrZjLjSz7/xRlCoCIsHrVCduE0eaA6Z9IamuK4ZW4bnyThB9ZhLWcSUucoJ
-	 BJsDSXl6ZXWkQ==
-Date: Tue, 10 Mar 2026 12:28:20 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Philipp Hahn <phahn-oss@avm.de>
-Cc: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com,
-	bpf@vger.kernel.org, ceph-devel@vger.kernel.org, cocci@inria.fr,
-	dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
-	gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org,
-	intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev,
-	kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-	linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-erofs@lists.ozlabs.org,
-	linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org,
-	linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org,
-	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-	ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
-	sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
-	tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Max Filippov <jcmvbkbc@gmail.com>
-Subject: Re: [PATCH 18/61] sound: Prefer IS_ERR_OR_NULL over manual NULL check
-Message-ID: <19aa26fc-8570-492e-8e17-23d6950676f0@sirena.org.uk>
-References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
- <20260310-b4-is_err_or_null-v1-18-bd63b656022d@avm.de>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BCrbUEYE";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="EmhJizYd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773145720;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NE9w9NeJUlvy56dU7aps282nSTS20Xf4YKmb2h8N6aw=;
+	b=BCrbUEYEwaIVjFH2JFuJ5RbN4gEvSD7PAsEaO13VqkxSXx73+9QxzEU3DjASSHHCekmObU
+	gSp2zLAEAJEEEIhf0GLH+h6d9347SiVMak9WUv6VTpIAOWUaiigrMnMsAoWPV8wE5U6cmF
+	B1KkDl7RAbuDGb3LZWy8jCjCRSmv0Lc=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-38-7BlufARuOCC5PAaAoItpxQ-1; Tue, 10 Mar 2026 08:28:36 -0400
+X-MC-Unique: 7BlufARuOCC5PAaAoItpxQ-1
+X-Mimecast-MFC-AGG-ID: 7BlufARuOCC5PAaAoItpxQ_1773145716
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-485375aa56eso19145085e9.1
+        for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 05:28:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1773145715; x=1773750515; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NE9w9NeJUlvy56dU7aps282nSTS20Xf4YKmb2h8N6aw=;
+        b=EmhJizYdZn+HECUY1Zld2iv9HrBt2FC9nEfxF5ttvFCaw9hCFy/J8h5CPeThoW8bW6
+         H7bsr77uLlve4J6cVFY7BRDINsxPV+gyMXKVXsltBgM+aeaXO8/mSOYadXUokK1jH7XL
+         o2dARg7XgjZqFKJt/oBOGABUxlycq0XEddbqDB6RLMHzY6oCts7FnyGONPRHeHOWkmGR
+         JDqIjjcLEe64HHft12qaKc+WkMenJsbAcNgiAce6u8SKSA3NMU9DgDyPscEgudfhoXkl
+         oUB+3WyZjiyuaJw5fQAymoGCz/wSScIvlLvyT1zTlUVphlVdXPx6mpULqm8U7gkYCxDm
+         L6cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773145715; x=1773750515;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NE9w9NeJUlvy56dU7aps282nSTS20Xf4YKmb2h8N6aw=;
+        b=UwsrCtW+KzX9fiH92iitU4nXgnQ71m+1nAH2hzhZNmnHIddJIM62BKdAcR3EXFKFe3
+         HALswONuF1rlceLKmU7dOIwLkLTi3cHXyIX6ZaMAYR2gm3LJJETyIzZnM/YX9cWFb2yq
+         GjrV4Qrx6bcIGRpMcrchYkLtgV4tsb9k74U7l4duT+JK+eN34hlEzgcH4uOxBQaIxDfi
+         vlLuxHbZvMzMlOzvDaloSddgeGmQuhC6P4+F7eMfehUSLsIze/voWN7nD0uUy5GFBFmq
+         Sk/EL/Cxt+huLU/hnyPhsn0ws01xlguG96/dErK2rI0KlVRwYWAxOmmpi8iK7xxdHBKJ
+         Eg+g==
+X-Gm-Message-State: AOJu0YzvVeS343DQ8t1r8MeTuMRb9DBWZ46TEJHR5rKk+JBQMJVLPJao
+	bRZS7awMEGeltlxcZblbOgS3IS9jk4CMIHOgTys+MQLSYVcCzcmCOI8xqqIllO0eO2PUI7Y25kd
+	Dcb1RCGGm1vOMkM9SX6b/aiq/+XnT62HRi08tsPYoDPRKT4bswb/A
+X-Gm-Gg: ATEYQzzzzUTqaknwPfZ2MQS806oXB3fgwMzfTMDGrCDKf4u7Jev7bcyfRgfjuTHeZKd
+	hM+t8Ts+BIZcPe0TkgBpc2MvKsj6SQoCfcLg7HMEBb5L7PzzwvEQzGG7DwBG6NIGURealZnIt7H
+	teyLq/a9vQ54p2bwXuNsmH9Z0xhPXykhN9XwBmRZgwf0BR4L6xtwakCRG8fYkAOss3EASPm5KaY
+	4q22pLE37dSvnFVhT6ADOft6K8QEXs4lVifJiDEMAIFxja4DzhGjqh41YbS8vDKhB6gtFDpIz9k
+	EQ9tzUsiE8w8NgBhJVLGZmV8bEzYNRRxrkBvW4iTk8nZOz7EKqtiJYo+Wj1WQOwKZezcGGtHiOc
+	vfheVHo00XA==
+X-Received: by 2002:a05:600c:470d:b0:485:389b:ee5f with SMTP id 5b1f17b1804b1-485389bf08bmr137552215e9.2.1773145715570;
+        Tue, 10 Mar 2026 05:28:35 -0700 (PDT)
+X-Received: by 2002:a05:600c:470d:b0:485:389b:ee5f with SMTP id 5b1f17b1804b1-485389bf08bmr137551685e9.2.1773145715088;
+        Tue, 10 Mar 2026 05:28:35 -0700 (PDT)
+Received: from [10.43.17.131] ([213.175.37.14])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-485419c2930sm124103475e9.0.2026.03.10.05.28.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Mar 2026 05:28:34 -0700 (PDT)
+Message-ID: <6a914824-178a-47c3-98f7-f3c3086ab831@redhat.com>
+Date: Tue, 10 Mar 2026 13:28:33 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="7JjDB+7CEHk89uTh"
-Content-Disposition: inline
-In-Reply-To: <20260310-b4-is_err_or_null-v1-18-bd63b656022d@avm.de>
-X-Cookie: A fool and his honey are soon parted.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] selftests/bpf: Fix read_iter buffer termination in
+ test_bpffs
+To: Sun Jian <sun.jian.kdev@gmail.com>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>
+References: <20260310102145.857810-1-sun.jian.kdev@gmail.com>
+From: Viktor Malik <vmalik@redhat.com>
+Content-Language: en-US
+In-Reply-To: <20260310102145.857810-1-sun.jian.kdev@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 3/10/26 11:21, Sun Jian wrote:
+> read_iter() always NUL-terminated at the end of the buffer, so strstr()
+> could scan uninitialized stack bytes on short reads. Terminate at len and
+> use O_RDONLY.
+> 
+> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+> ---
+>  tools/testing/selftests/bpf/prog_tests/test_bpffs.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/test_bpffs.c b/tools/testing/selftests/bpf/prog_tests/test_bpffs.c
+> index ea933fd151c3..e8021ff0581c 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/test_bpffs.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/test_bpffs.c
+> @@ -17,11 +17,11 @@ static int read_iter(char *file)
+>  	char buf[1024];
+>  	int fd, len;
+>  
+> -	fd = open(file, 0);
+> +	fd = open(file, O_RDONLY);
+>  	if (fd < 0)
+>  		return -1;
+> -	while ((len = read(fd, buf, sizeof(buf))) > 0) {
+> -		buf[sizeof(buf) - 1] = '\0';
+> +	while ((len = read(fd, buf, sizeof(buf) - 1)) > 0) {
+> +		buf[len] = '\0';
 
---7JjDB+7CEHk89uTh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Does this fix any real issue with the test? I can see one very
+hypothetical false negative when the uninitialized memory would contain
+"iter" but that seems very unlikely to happen.
 
-On Tue, Mar 10, 2026 at 12:48:44PM +0100, Philipp Hahn wrote:
-> Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
-> check.
+Viktor
 
-I can't tell what the dependency story is here, it looks like there's
-none?  If that's the case you shouldn't send things as a single series,
-send separate patches to the various subsystems.
+>  		if (strstr(buf, "iter")) {
+>  			close(fd);
+>  			return 0;
+> 
+> base-commit: 1f318b96cc84d7c2ab792fcc0bfd42a7ca890681
 
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
-
---7JjDB+7CEHk89uTh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmmwDmMACgkQJNaLcl1U
-h9D4VAf/VCpoXjivQsq8mL1i6sHdID6byBqwG7egrwiRCrsZav80JlvY/F+1fWQl
-Fe3Ct+yRv1pWeNy67wSCZD3mtHtNH0JpwRTNxS1XQrnXc7CLjzKunCldDfzTbfom
-+QmXWHQB3Qo9ie1ugoAGet9gx/vkV0z+cv9sVHg1o1R7/AKqfgov7xnuP9Hlv9Uk
-p1pkMya/NhbXBsrh+BFbktLgp+7sAOMjWgtGZ3NfHzwju9n4Jdbl1JcPxgDl0SHp
-6z8kP2+oskOspesqLWw62mZF+bN32Ycjt1N7/EFjtPBdJKIcQJLICoACzxyQBZYg
-+i50s/oSRL1HiP4US2lxoy8BqxaqrQ==
-=U6jW
------END PGP SIGNATURE-----
-
---7JjDB+7CEHk89uTh--
