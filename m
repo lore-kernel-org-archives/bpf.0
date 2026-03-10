@@ -1,131 +1,150 @@
-Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAB7D3D812E
-	for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 22:06:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.65
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773180418; cv=pass; b=JN9nybsxYblbWXP+dgTIoSPiT8Js2JwZ0ko3l25hEftyXO98t0WRT0c5pGGTYgrsKtqgtOxQM451xeGsj/1Rn9ig2glRx2f/ujrTiOfeGXVd9TGf0L8sE4OtMYzg8mg+eIPu4kBd2fQ4cWgjc1k/EXu7XuRj8jkB0+QwPif7LVs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773180418; c=relaxed/simple;
-	bh=ndidRG6JP1v9u5cMhjoRebo4Xp3f+BKq41sQRtRBwZw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mQdmeOUPHfHGhhJzgrwJ+aIPtRpK1wLEZz3ifr/yOTPsCgRfF8M8TF9FCPIdqO4Ex/LXhc4ToiutEP8jVrfXfONNPinYqeW934Pekj0eedthJJnHsmjjG4m4q9CMrOyr4pK6l/WQ8Tc26DFD1XaJKT1PpGd2cG8IK4IJ/t0Ea6A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SpBm9YtP; arc=pass smtp.client-ip=209.85.128.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 767383CFF4F;
+	Tue, 10 Mar 2026 22:10:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773180636; cv=none; b=lz0R5VAXAhH48Lwtv0Ecmg3+TQ3o4pbPqIFCDzhlOTXyFLa1LEzsZkiUNXxzQY8AZ9vz3hgad9PNNYZA3bL9REaWYffIE8MWw0UyISvcy9nNPhwKNevHXLqwmxOUV4edEYGOSlKbkW3kE71lMmc/RDjOTrsNwItiUheWnCkjL0I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773180636; c=relaxed/simple;
+	bh=LGf7Kaidv2GQPcQDZz9qxc5JFxu4+rtVauMwHWogG2A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nP/7eStFqVVMNTn6p0b3PRD7GMp7Z7R3Ncp7WQDMMNKkFQbmk+DYsKV5wsv3Zuo9zq2qZvsPujIsae1+40w1IRbE7dUGqikeA/qIGTP2I/mvecTDVKDNW+/wsPuKmlHiIj3IVdla6svQ3q2BLbT3HeyyCsHX24/7yGiZZ+E2Q5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jpPjMQCp; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SpBm9YtP"
-Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-4853e1ce427so28797135e9.3
-        for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 15:06:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773180414; cv=none;
-        d=google.com; s=arc-20240605;
-        b=beUPG/+1SNHRT1fzohFTslJJHqF2l2opaSotLyooZzIhur/YhZHHySQ9Uu4YNt23E+
-         g0cwD201rOtbdLn111/7ezaYcy+18SQaV/rX0knS3IHSmUj1o2d99+ZjgtTyEDRmPm1h
-         WGMvJvpmOnhuY75pVqgKRAFHa24K5W9AgLV60/9dhzyN8VIXpw0Z3RisyJd7A2gJ/TGl
-         TY8hKDFxzb+P9R1g7Ku9EhLO0VXbwMclNfj+T824h2bO2wDgNXtn8OLyLNyy+PiRk8zi
-         L1HtjMUir1AayxZ7J88vVUl9DIJ9v14bDGDKLyC4RDitR7/2CoCYsMIVMCdkRjbhsPeN
-         lS/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=rL4jDVVmx/+VPNOhteteSokIjmvy1xU2JiFgOfo5UPs=;
-        fh=5JFlNE9GcprIeH/Ak6UBkUoBFyr2L18x9v/IsvcM4D0=;
-        b=kGJCdd4LecNJjQ7isMBjB+u62PPA+3ZvwoctNlhmw9d0tTmX5+zjljQcA9NDgf6HQS
-         BysjrumoPBCBc3mQwl96FSkcRnx/JASxjMPJWw2rjXTDlLLOxolLXMsSIObc+7wyVK/8
-         UnQLaZLDbm0WSUWkOWJIyiNWPLsElA1+TNGtX5swqhQnyytpQQov3qBl9cW+dcP28kv4
-         /WRkb5NEkyccjXeyLnvJdt63UFoO7ylty5RWONOPZ6+/DRrwaftVeh6gs+Q2+XtcqtzW
-         sNGRRxhPZm+DbgX7y6H2xPopdzNsCcZDh9XKY7zzkgm8VCwuuXBMeh8RLsVAVx862Dab
-         hoGA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773180414; x=1773785214; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rL4jDVVmx/+VPNOhteteSokIjmvy1xU2JiFgOfo5UPs=;
-        b=SpBm9YtP69LJPACpQB/Li/fjzau3t0PNlzjkOhuBEgtdcwQ/7zmhSkTLn6GxGRgqK5
-         lh2D5N2a4531WHXyn5CEIt0m+BguJ2257V1gQCwHSFPnIT8nmkXG0V/razUdr3TefQNj
-         B+fmD8qoHYuCK8wAaCBsuA5rIt0YNBnBCj2QaKwARfNcEY32/TxdXS3YNroflrV5H7Zk
-         IVoAWzEbaXIE7d0q3U/g7CGqOI0Zx5fnuOw4N2mNVKYaBsTHtfe8ttKXWHY6tSxEIElx
-         P7nOKjeZCUhneOQt8IFW2r28Y/dNdTHUsgnJh3wlOIXzVninfMzla9txb07kBrSPf+15
-         DTew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773180414; x=1773785214;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rL4jDVVmx/+VPNOhteteSokIjmvy1xU2JiFgOfo5UPs=;
-        b=AGqYRZsTlOG1km7gyo2s5wVE5HY1HBkiEyNnw85sQ/nsma+UjXol9YWVNdcfzPSZTM
-         615CkCBWklqoVORNNBABEqxRwoMRW9CnOrzC0VhM/eASsKW7qoR3E8n4eyhO8n2W25FQ
-         OdJT8uHkjlf+2O3Mu9eGMkp/SywQS2NcMqX/C/J0Yv+19Xo9VH0Xo/WnFXpuLgn8sjgE
-         zf2YpOPKN0zM+0xBGtpwDcsDn5Q2lJYjINRuM/DpBWMO440MNEasuT7laU5Quft8rNx8
-         7Wz+1WvfS7iGxZHwQ7vS63vmmM2OSrMxh7bRMhd9oI1I1q7Wc4MAcUAJQDTUpq/VVjoQ
-         1BjQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUpCdf8TGpiYawTLASym4hcMpwatByTI5dm5sl25iiOtYeCbgJF4/0cFWOxSiQI0ddHNHc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMMlGUlr6dSdGQjdRnJwBVzMVAuEkxy8zRCXdoun7xCRwYhZWZ
-	XyL1wdoSzCc5n2rlFZjNSBERDVVHcdzz/Jey4lS6FySvV9GLoWyvlZ+TiqcR6eE9M1emFr3n47v
-	aKEqkqMUWE8NpxnhDTYbyVXquKEGECuM=
-X-Gm-Gg: ATEYQzxoQXFtpDGzQiNut2JTbKY+44g5mobm/8PZsj9IfVLmZ7ZZhkgwNq+hRpDJKTG
-	EE2HT2x3N8c/5INhYaSjO9UoNGU3quLruT403ApJS1EZafh+5tPXVdL5egj76tAU2qlvSFucCPm
-	xdOkegfsmByn8B5I3KhEbpLdG2RKuLj0Xevuj5G1XTZizSwPtg66hY2MGbhD0ByaM6NOo6bnh4L
-	Q3fI3RiTP8HKl60FeyV7sJH6yQjKJucGyXzCCjP79wQRF2yjhATpa3TQ9PbfBl/uXO5BlgVNKYX
-	GbaB+9K2z/aXlGtH70EgaVw2XyUnBVK3oSlZW4p1FBUWk4CLCZoeg71uYrED
-X-Received: by 2002:a05:600c:444e:b0:477:b734:8c53 with SMTP id
- 5b1f17b1804b1-4854b0c0cdamr7289455e9.12.1773180413717; Tue, 10 Mar 2026
- 15:06:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jpPjMQCp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773180636; x=1804716636;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LGf7Kaidv2GQPcQDZz9qxc5JFxu4+rtVauMwHWogG2A=;
+  b=jpPjMQCpoC1/XvnlPeKWQolJKUzQXsWKdlw1RJizf5cuVZ1K/I43vj5V
+   uz+qmAf7uczhbsmU6GG9P/bmUDEclbLSFoCu6pe7aZzwK/HPQoOTlefEU
+   mYolnq+OAQub3p8UYLXOlpJIhfmBvx45D5GR7YkgUbeHpuaelMyqDs9w0
+   ks/Niup6SAtGuT9Ng7khlMLfInH/QP5PhY9Jw8ZGHKiT02n7Qin2ZZdkG
+   86K8F+yE63jKbqlK+YpbCWPgJq4NdlgaSY8E4GKnC1OvTU0cf2fihjrkR
+   0HRgoVBIy5u/pqr/xbjzYzaA5jG5aNOEl6/VqnCFuZ4PdqTvqT8B0ttye
+   A==;
+X-CSE-ConnectionGUID: IPGJlGEtTsexOzBzG5eVLg==
+X-CSE-MsgGUID: vFov3ttuTyiwIef8gHIybw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11725"; a="85717241"
+X-IronPort-AV: E=Sophos;i="6.23,113,1770624000"; 
+   d="scan'208";a="85717241"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2026 15:10:35 -0700
+X-CSE-ConnectionGUID: 8YtaUo58SPa+QM0pyMdfBw==
+X-CSE-MsgGUID: 7DKPCwGlR32znkWSeRkF8A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,113,1770624000"; 
+   d="scan'208";a="224948111"
+Received: from lkp-server01.sh.intel.com (HELO 418530b1a366) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 10 Mar 2026 15:10:32 -0700
+Received: from kbuild by 418530b1a366 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w05Ha-000000000Ma-0yAa;
+	Tue, 10 Mar 2026 22:10:30 +0000
+Date: Wed, 11 Mar 2026 06:10:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	bpf@vger.kernel.org, magnus.karlsson@intel.com,
+	stfomichev@gmail.com, kuba@kernel.org, pabeni@redhat.com,
+	horms@kernel.org, Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: Re: [PATCH net-next] xsk: use __xsk_rcv_zc_safe for ZC multi-buffer
+ Rx processing
+Message-ID: <202603110534.EYw1bSxj-lkp@intel.com>
+References: <20260310133024.422464-1-maciej.fijalkowski@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260310111330.601765-1-alan.maguire@oracle.com>
-In-Reply-To: <20260310111330.601765-1-alan.maguire@oracle.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Tue, 10 Mar 2026 23:06:17 +0100
-X-Gm-Features: AaiRm50p-Ec0QT-ThJkQavMC0jJ_c3h6Rl8h_eBX5gXMOHi-rPj1L8K41Cr9B7s
-Message-ID: <CAP01T752KW1tiAT0RSP6cEXWAPv2P0zBqAR94xVRd-6zujjSwA@mail.gmail.com>
-Subject: Re: [PATCH bpf] selftests/bpf: Handle !CONFIG_SMC in bpf_smc.c
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net, 
-	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
-	haoluo@google.com, jolsa@kernel.org, alibuda@linux.alibaba.com, 
-	yanjun.zhu@linux.dev, bpf@vger.kernel.org, 
-	Colm Harrington <colm.harrington@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260310133024.422464-1-maciej.fijalkowski@intel.com>
 
-On Tue, 10 Mar 2026 at 12:27, Alan Maguire <alan.maguire@oracle.com> wrote:
->
-> Currently BPF selftests will fail to compile if CONFIG_SMC
-> is not set.
->
-> Use BPF CO-RE to work around the case where CONFIG_SMC is
-> not set; use ___local variants of relevant structures and
-> utilize bpf_core_field_exists() for net->smc.
->
-> The test continues to pass where
->
->   CONFIG_SMC=y
->   CONFIG_SMC_HS_CTRL_BPF=y
->
-> but these changes allow the selftests to build in the absence
-> of CONFIG_SMC=y.
->
-> Also ensure that we get a pure skip rather than a skip+fail
-> by removing the SMC is unsupported part from the ASSERT_FALSE()
-> in get_smc_nl_family(); doing this means we get a skip without
-> a fail when CONFIG_SMC is not set:
->
-> $ sudo ./test_progs -t bpf_smc
-> Summary: 1/0 PASSED, 1 SKIPPED, 0 FAILED
->
-> Reported-by: Colm Harrington <colm.harrington@oracle.com>
-> Fixes: beb3c67297d9 ("bpf/selftests: Add selftest for bpf_smc_hs_ctrl")
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> ---
+Hi Maciej,
 
-Tested-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+kernel test robot noticed the following build errors:
 
-> [...]
+[auto build test ERROR on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Maciej-Fijalkowski/xsk-use-__xsk_rcv_zc_safe-for-ZC-multi-buffer-Rx-processing/20260310-222557
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20260310133024.422464-1-maciej.fijalkowski%40intel.com
+patch subject: [PATCH net-next] xsk: use __xsk_rcv_zc_safe for ZC multi-buffer Rx processing
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260311/202603110534.EYw1bSxj-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 122f0b13a237b5024747b4ee99002590cc9a220a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260311/202603110534.EYw1bSxj-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603110534.EYw1bSxj-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> net/xdp/xsk.c:188:2: error: call to undeclared function '__xsk_rcv_zc_safe'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     188 |         __xsk_rcv_zc_safe(xs, xskb, len, contd);
+         |         ^
+   net/xdp/xsk.c:188:2: note: did you mean '__xsk_rcv_zc'?
+   net/xdp/xsk.c:146:12: note: '__xsk_rcv_zc' declared here
+     146 | static int __xsk_rcv_zc(struct xdp_sock *xs, struct xdp_buff_xsk *xskb, u32 len,
+         |            ^
+   1 error generated.
+
+
+vim +/__xsk_rcv_zc_safe +188 net/xdp/xsk.c
+
+   162	
+   163	static int xsk_rcv_zc(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
+   164	{
+   165		struct xdp_buff_xsk *xskb = container_of(xdp, struct xdp_buff_xsk, xdp);
+   166		u32 frags = xdp_buff_has_frags(xdp);
+   167		struct xdp_buff_xsk *pos, *tmp;
+   168		struct list_head *xskb_list;
+   169		u32 contd = 0;
+   170		u32 num_desc;
+   171		int err;
+   172	
+   173		if (likely(!frags)) {
+   174			err = __xsk_rcv_zc(xs, xskb, len, contd);
+   175			if (err)
+   176				goto err;
+   177			return 0;
+   178		}
+   179	
+   180		contd = XDP_PKT_CONTD;
+   181		num_desc = xdp_get_shared_info_from_buff(xdp)->nr_frags + 1;
+   182		if (xskq_prod_nb_free(xs->rx, num_desc) < num_desc) {
+   183			xs->rx_queue_full++;
+   184			err = -ENOBUFS;
+   185			goto err;
+   186		}
+   187	
+ > 188		__xsk_rcv_zc_safe(xs, xskb, len, contd);
+   189		xskb_list = &xskb->pool->xskb_list;
+   190		list_for_each_entry_safe(pos, tmp, xskb_list, list_node) {
+   191			if (list_is_singular(xskb_list))
+   192				contd = 0;
+   193			len = pos->xdp.data_end - pos->xdp.data;
+   194			__xsk_rcv_zc_safe(xs, pos, len, contd);
+   195			list_del_init(&pos->list_node);
+   196		}
+   197	
+   198		return 0;
+   199	err:
+   200		xsk_buff_free(xdp);
+   201		return err;
+   202	}
+   203	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
