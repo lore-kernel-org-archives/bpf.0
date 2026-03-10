@@ -1,122 +1,131 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66EAA30C621
-	for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 02:05:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773108351; cv=pass; b=YDjUX8rzmfgnRMU5vTH7h7fEgkhW08S806peLY7mBXMKiTTCxp2RMPUjoI/LqfpHRDRmKbZoL7Z/LCDVM5THM0sNgHEgxxiAbxCc3xKzrrRzavL+FbBxpMcanCXQbsCtbg7oGQXeokBg58fQvEgZ2ciGlNF/nKEPOS1ObFAup8w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773108351; c=relaxed/simple;
-	bh=k20f8t1EOV/HEyg7uqeU/OGvcbfXWsNUgp/Vg457HkA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LsebSQTrk/ZQAEG1qrut/xjLVJxT0mWWrp0X30X0cvPOtcX43OYAMirKKbtmNW4qpXhGhoRfsjZcYcsPzw6mI8+yxu+dHU6Q/69l6EJKjYZPRSmQ1vse+GpodhK/B8UdkSCqT65zWz/daVwiy7ISUjO8lCVz6e+Qtp4HyNR6ny4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ku1WSM5Z; arc=pass smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B8C23112C1
+	for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 02:06:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773108401; cv=none; b=IZbCFkD4gjLG6pU+e/wtPvK+0C7Xr2Vz4H8yS2yZ0a22O6yqc8mYgySXqS58RnPktrMxum6aWZFQoVob13p5ZKpI4ksdefVwTUn6UijaiWiUzlVkfIJSGAAAi/rYyOZZmCccggz4/y5gqkxvzCByW8Y5Uxvbk2teADn2RG0X20k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773108401; c=relaxed/simple;
+	bh=TTdpw+ZfrEr36ZVnmAy/7MfXfSaLw+69NkvcyoTi0LM=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qRAH4o6lHyzEyfOLGu2Ped+g6g6XcIBb8mrE2CAN885W8tFBDRmBA4isSYybqjipQRbTaXKzZiT3CO+KM2wbvmgtklWkSuwLbW+PJPfl0zIN9IXQ0+AGOA+zpgCa+LB5CIqiBxsM3ypMpU9oKTcGzueX6jC8p1UR4PhrGCrh4Sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=ZkmR1tbD; arc=none smtp.client-ip=209.85.167.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ku1WSM5Z"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-439c5b40f60so5171471f8f.0
-        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 19:05:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773108349; cv=none;
-        d=google.com; s=arc-20240605;
-        b=lP+jftpIZqEnq60bsZqBeZd6Tlh+2cVDO1n8NectsWAID1OlZD4DhQNARVTRlkry2c
-         nQdnX9MkYkwOnPKNZnYsswc8eIX6FQmxVrEtHgyiKKxE1+GgHYxooVSNBMp5sxJZ5mNY
-         o46bHteH71HY7v3Iy01bp0eMMswCkWWWQAY4U5o/AIKSylwmiFCuTnidGrlwrf9SYgUs
-         r8oBh5veNn05Nhb0YxahLz/EJu9ilqpEgdj5DjGxvk3y+k593sO9/R5cuMTp+btKRWBf
-         vZeAWPs6W3+056xTewbCT6X3uXfZlq54Hk7+yhwhKtYk+Fp495d5fHSU6rHEYlvoafU7
-         uPrw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=xnHQw4FSCYovPcBM7FdZ3WfrebkEeQSNBMs5Gxas3Ic=;
-        fh=XRhdLwqrqRvMsma72DFkrWWa4NGtbOscb1NLwdTLQZ8=;
-        b=S9ARA+WGOjCkmJZx5WKP1zv5NDXAUdhyXOdlvog7ddsg/kKzsP+WLyiEXTt910OS6j
-         JkvNx/XLPosXMdSxWKyJZc59H4JpKxUJgqy3kO+9LG1aHTczA5aqoIFO1uaC5S8LjcvN
-         +Oz7KfI4gLbI1wYMSDMBJU1E/PybzKt1Hxn3lv6hwrAhj3S6znd/gmiDoZqLhaKdd48y
-         5R8m2iQ9/FxsECIEitqlokEjao0u7LY1XVJIOWkZKsmZChTJITJ4JJJ5SYtS3QmS3Bcn
-         wM91ldtbzKRTE2wIVAXqK4rftBcUj7O/YSmFdqIbSMrb5Sc+kU0vMNPi3qhZababPXws
-         LeiA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="ZkmR1tbD"
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-466f00535cfso1735136b6e.1
+        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 19:06:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773108349; x=1773713149; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xnHQw4FSCYovPcBM7FdZ3WfrebkEeQSNBMs5Gxas3Ic=;
-        b=ku1WSM5Z9CA/HHlyScKafmWYbY9m+1kz0iEmj01TWtjN8oJwlJGbpc8OuKjqYkzFl/
-         bMaj2VaaoFApYVdFrS5BYjdmGuGgdJrdDIP4gGYp5xFa7n66TD6Mf+P4ZEKmQEfEw9Cd
-         yHTTft0NiYjU4Cgwm1VzMlCv4EDMSwua1mWGfvjT04c1sD9jeyNpndL7sWyvpKYvumBk
-         kjvGPWeByC+Un3ga9Vam0wVvzdpzqBKjRLHVK2utKRxCac7ovTOso/eTg6Kh+Uwp+O7O
-         t2wBVZpJ8VRZW8xdIEx0dX1P4hsGJs+aUJWc1sZkIkkytZ28l5G7yzp0XQWBTyfPguOM
-         HuTg==
+        d=cloudflare.com; s=google09082023; t=1773108399; x=1773713199; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qppXRsV2V/FmRBwf00yJrZ1V5d8XLH+BfF9hDiyjOds=;
+        b=ZkmR1tbD7JD/UAlbOXzkk2bZFL9mxsjqcFZmiwbLn39PylDC7ophl96ywfQJ3B5FAh
+         bjmIq6dfD94ntBD9FFU2OOKta/A0aEGBrN6Gf+AQl1+1qYQeYuCsXc8gy4ecuOPfdOVA
+         q1QEa/Ri4JXt0BQZBF5WvRzzBE6H+VJzj85rIVAj4yGGBfqIjKzGny4Cyz/0BWCc6KOy
+         CnrzSeCvskK9fh2ZTGcVm/KnavWHAVGKhE5fhN2CQgJnMbvAsqNmpeKhIwzjeSzSKzno
+         k5+ET5TrK3BdWPtumLckP7fnkuPRQ7JzQjKz+PdBTt4Qcnq3l57e7f034VTbMVRnY69B
+         boQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773108349; x=1773713149;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=xnHQw4FSCYovPcBM7FdZ3WfrebkEeQSNBMs5Gxas3Ic=;
-        b=cF1hZwe9cy+xGuZHyixtAmfVvVWZW+cqh30TvtnjVePtswGWvqVLYzzqnZpuvORoub
-         EDtLRdCpPsvSjG6X6L585giIIOm9BVqbsn7fPd/Skt5pvlP+deOcA0hQnQ7JcS6jved/
-         acB+x3pnhG6rHrQ19A7vw0hBOWOuJY9GgtJmvNRXbWoxvUBPZ0qk/cjpNu+clDYlqJlJ
-         RRRS7v1BdH8B04IufcC7McTSx5kcr7eFWljqWvT8Qbi32B/2c/dFRWDSXe+w6tnv4ldM
-         SJ7mE3gqQbCLP2xslbzinAf1RRpw8eYHChDG2sQSwUsU1vMqVTeMJZEp5nXkl5+p0zDY
-         vtMg==
-X-Forwarded-Encrypted: i=1; AJvYcCWPtFFMA+lJWzayXlRQmW4kpY51vSOTSwWgtNJRqrdzrFX3O92TIyVTaKanZPPmNbl2JGs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YytAmG885uOY9ZbINVooN6TB24MVv1zO66cXCfJ5DKfiA9g+0JB
-	ziQIAQkjGM21G+mGm+ZjqVWQzf9ppnk6LgCQrbb1I3UguEdyNczKofqlcJQRSkj3mAmCW0TVDCj
-	HTjSE7ZB8HQRyKZJ6VeppQhhiBzlaGEc=
-X-Gm-Gg: ATEYQzxVjgj2G/BvhH0NpK+uQoBoHxJuYWX6XpB5tV89O8HTk6rBvCdFdPW1xcEG5tr
-	KZ4fOkP+9yqZJQCCktHB1/WNn3a+nz8eoX4/m8RddvN6/twudBijIk/5hkIrXhZkUCIITHlwXl+
-	dYJj3dapd9Oe0TeCD8pOtY+WuiEcaoQ3NyO7wel6IfOPocEw2Bz28HhwOE26BUzi+GnoUnpCeSc
-	dQ/lLkm1NxMK6KD2oo8UxSt+7EZWifEFLBkZh9tLvtlPIjte5J5sma//3bJcoQCJ9FfJixMR9FF
-	RduMSDoYo8XfAV59F9GhuoEBKPEL/MKCV1IqfWH9bOFKrmQ3iiS1OhxKgX5E3hr0yB8ULsv5b7u
-	LViFlX5bdKCpYV5LYdl9oEc+2DA==
-X-Received: by 2002:a05:6000:184a:b0:439:b81f:ada0 with SMTP id
- ffacd0b85a97d-439da86f76bmr24055151f8f.57.1773108348613; Mon, 09 Mar 2026
- 19:05:48 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1773108399; x=1773713199;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=qppXRsV2V/FmRBwf00yJrZ1V5d8XLH+BfF9hDiyjOds=;
+        b=gqPpOcpUu2wXdvo5+bhB31B4IVBInTGVurUiQEMlqbGND1i2Udk8Gu8KItrZs5XN60
+         TKBvhYHTqJCYh705NTZieUkvE9wfSsIugqggJDlkrCd0mBxdERC3cHkppM9IFAOFz1ye
+         LIjbXVDBQgk9KcfK1dysEsOFwkcmn/+3HTS355MUwR9EKV3DTeI6t02I1yzYfXXgSBaR
+         1Fai+UXs82d2hY91PcVJHtaZ5DkPkaFzIQL1ToAuZiGtOcB3nWkHXax07Xoe6d+Bgkad
+         krVwyd7ktnIb/GZ6Whi+4ChaGUKYqk6Y+pB/PjFqkbJJjl8hIuaqw9iz4/jglGCQ7CJm
+         mxzw==
+X-Forwarded-Encrypted: i=1; AJvYcCUBwkEOF55C3gqjoASgyjkNFOZ54+6G2yvC9Ah4TEeUznq5ry6Uqub2mOqdIfcbuF5yIFQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz6WhtPF7tQT12lpiM4IMfDV1LXxiEia2r45mtGwtL2C/1UTGyB
+	yCYoRVDaEikFFsTXpQ/TjOWwPYVqksrsHEZ1qdyVWbEbG2TReQJyXKS9a3A28VD8IwY=
+X-Gm-Gg: ATEYQzzF0JMjo88WermudhMyraAcSE+7+8J/3ruVvXk7QMkAcQZ/vmyE1uo+IRzbcY6
+	TV3NlELQWA57yPU5VYNDq7SqUryM346M+IViSGQxgkbIBdbCm/MG7i5amfrmrYNfBiv7BHTjtkj
+	WRF8pSMVxb0Qsgh789vFL64Jetg8z28JZvoOwnt/CVnbM9yCjKtFye5aDwIzUApfI3WN99SJqxd
+	C8mV/4Ny7fZxeI7R5sIphgnknN6R9tzRLmLcUrzkot7gsEA0YiknDBYyR//0FwPG234RD0E8euf
+	H6eRhiJNzugpQbNgFPtGheYN5EiXDBEf5HXY4lTKZBO7UqssWnJ27NUHGerL7vxLZWP1d5arcHn
+	gOfgR0Hu6pi2l+aDoip/mrEr2n0eYgVFnUNrgf7cPibJ5NcqCJ66je5R64teqqyFeCNYAnO/79E
+	iL5sHJHQ==
+X-Received: by 2002:a05:6820:2910:b0:67b:b337:d426 with SMTP id 006d021491bc7-67bb337dca0mr3993811eaf.61.1773108398883;
+        Mon, 09 Mar 2026 19:06:38 -0700 (PDT)
+Received: from 20HS2G4 ([2a09:bac1:76c0:540::22e:5f])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-67babf360b8sm4341204eaf.2.2026.03.09.19.06.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Mar 2026 19:06:37 -0700 (PDT)
+Date: Mon, 9 Mar 2026 21:06:34 -0500
+From: Chris Arges <carges@cloudflare.com>
+To: Joe Damato <joe@dama.to>, michael.chan@broadcom.com,
+	pavan.chebbi@broadcom.com, kuba@kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, kernel-team@cloudflare.com,
+	netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v3 0/5] bnxt_en: Add XDP RSS hash metadata
+ support
+Message-ID: <aa98qgA1AapbUCiW@20HS2G4>
+References: <20260306230600.1628196-1-carges@cloudflare.com>
+ <aa9rGglS62WGgSMk@devvm20253.cco0.facebook.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260308134614.29711-1-pilgrimtao@gmail.com> <20260308134614.29711-5-pilgrimtao@gmail.com>
- <4f40d120-41d1-4723-a410-63d095d2b31d@linux.dev>
-In-Reply-To: <4f40d120-41d1-4723-a410-63d095d2b31d@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 9 Mar 2026 19:05:37 -0700
-X-Gm-Features: AaiRm50pGcnLkggy7DiI7dJTNRGaKrpS8VH9Vhnq0M5rsIFc9PhWMcBV-OUE32M
-Message-ID: <CAADnVQLC7c+Spmk0VoatWsjA=ok-ofEOxp11L-C1DR+=GVCcTw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v7 4/5] selftests/bpf: Add test cases for bpf_list_del/add/is_first/is_last/empty
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: Chengkaitao <pilgrimtao@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Chengkaitao <chengkaitao@kylinos.cn>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aa9rGglS62WGgSMk@devvm20253.cco0.facebook.com>
 
-On Sun, Mar 8, 2026 at 11:44=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> w=
-rote:
->
-> > +long list_add_del_and_check(void *ctx)
-> > +{
-> > +     long err =3D 0;
-> > +     struct bpf_rb_node *rb;
-> > +     struct bpf_list_node *l_node, *l_node_ref;
-> > +     struct node_data *n_rb, *n_new, *n_new_ref;
-> > +
->
-> Prefer inverted Christmas tree style.
+On 2026-03-09 17:51:38, Joe Damato wrote:
+> On Fri, Mar 06, 2026 at 05:00:15PM -0600, Chris J Arges wrote:
+> > This series adds XDP RSS hash metadata extraction support for the bnxt_en
+> > driver and includes selftests to validate the functionality. I was able
+> > to test this on a BCM57414 NIC.
+> > 
+> > Note: I don't have hardware to test v3 completions at the moment.
+> > 
+> > Patches 1-3 implement the driver support:
+> >   - Patch 1 adds bnxt_xdp_buff to wrap xdp_buff with
+> >     pointers to the hardware RX completion descriptors and the
+> >     completion type. This is similar to other driver implementations.
+> >   - Patch 2 adds the xmo_rx_hash callback for CMP_TYPE_RX_L2_CMP completions.
+> >   - Patch 3 adds handling for CMP_TYPE_RX_L2_V3_CMP completions
+> > 
+> > Patches 4-5 add selftest coverage:
+> >   - Patch 4 refactors common BPF map helper functions out of the
+> >     existing xdp.py selftest into a shared net/lib/py/bpf.py module.
+> >   - Patch 5 adds an XDP metadata selftest that loads an XDP program
+> >     calling bpf_xdp_metadata_rx_hash. The test skips on devices without
+> >     xdp-rx-metadata-features.
+> > 
+> > v2: https://lore.kernel.org/netdev/20260303024510.644962-1-carges@cloudflare.com/
+> >   - bnxt xdp: actually fixed RCT issues
+> >   - bnxt xdp: Added patch 3 to handle CMP_TYPE_RX_L2_V3_CMP completions.
+> > 
+> > v1: https://lore.kernel.org/netdev/cover.1772211065.git.carges@cloudflare.com/
+> >   - selftests: moved tests into net/hw
+> >   - selftests: fix pylinter errors
+> >   - selftests: add check for no error count
+> >   - bnxt_xdp: followed RCT for variable declaration
+> >   - rebased on net-next
+> 
+> I think I commented this on the v2 [1], but it would be super helpful to put
+> the summary of changes in each patch itself to make it easier for reviewers.
+> 
+> I think you dropped my Reviewed-by's, so I'm not sure which patches changed
+> and which didn't :(
+> 
+> [1]: https://lore.kernel.org/netdev/aacsQvvOoL29Rvyw@devvm20253.cco0.facebook.com/
 
-Just to clarify.
+Thanks for the reviews and feedback, I'm learning. So when re-submitting, I'll
+be sure to keep your reviewed by if nothing has changed. In addition I'll make
+sure I put the changelog in each patch rather than just the cover letter.
 
-This is not a requirement, but "nice to have" in a new code
-if it doesn't interfere with logical declaration of variables.
+--chris
