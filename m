@@ -1,372 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DDD244A730;
-	Tue, 10 Mar 2026 09:02:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E66A35E93A
+	for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 10:22:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773133329; cv=none; b=JI02k0G/0ECh7U5sm3LQ6BKZu7Bj6s+aoVgArd0cQQquZiJdzpfWjguVYXZdq4J0iZced8VBFEeD/l4wagNG9ec9chCJhK4/BeN71/ArsTh8H0J/zpe1fW7N5Bj3DlFpzxaXFLmSXOAJpcus9KZPw55YsZ+z7ERCtcUN2bc+P3M=
+	t=1773138125; cv=none; b=EuqddEC/7aR+kLuvqU5V0SJx860ntyZz59ZkD+ML3qBMwmLBxKCmMsELfDcbMF/W9GIo4Nl2vopKvzIBEcd+mGmpoQohyG4ZY6DS8+evWNYy7vN45mFIY3LhOfZ7l961cyNT1cGocsguijeWvk0SY5aObUpXEq/XT/t1yMdxUzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773133329; c=relaxed/simple;
-	bh=7/+CScebjqrwjU/XOKnAk989QkKtZNfgllipDqNazeI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LRivcDb5BLAdz84lOavkAG4TPINR9HfxjlKzOoW+pPjEFof6YePeuwi0Pgzvu23A0wsHy5mPkUgckLWsLf9pR0L/367q4KRmWSrnALpxlQ7BIOx5s9dWtvrdJIqTg5NIq1g9oQwD8MSjTb+1wlBbTzN9eoUfD9RcHyflRemHF9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mP8URUXu; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773138125; c=relaxed/simple;
+	bh=OblWpqp19kDTyqAGzbzu2Q8zH9UYGbJQfvTQaIiJLRY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IG1/HCx6+C+SzvlNvMcDjQRgrJxUwKcnK/4wS8OMceyHh0pVXNwxHthDJeDPJ6WkrwyweTBM7ya+sHJqDOm133FgVHFAo/Cw3ZsKxBLEARFgth3LUu9N2ZCMXg0r2FQcop82GxmPyInUnpHXpFPIGsRS2ugR7VT5h0uXvB6SFsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K9g2NcIp; arc=none smtp.client-ip=209.85.210.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mP8URUXu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A158FC2BC86;
-	Tue, 10 Mar 2026 09:02:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773133329;
-	bh=7/+CScebjqrwjU/XOKnAk989QkKtZNfgllipDqNazeI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mP8URUXu+gs9UEViDQlvYV+n+TMFtmHuTXHhxdvyLZbokokALF50uLvL1UnkQL/G2
-	 Yk19UQVyYC1mn8IXOS+C8TjvUO96vS21umZVHAeGUKENQuSZ3RASvqhJfaICAgPcCI
-	 ox9lq4XjUTqP1rQ0+iQLfWqoTmHS6vRjuN++dM2iRGsXQePwSMBHMurrCaxxgl5ECS
-	 dKF5Lb8sGO81NJHXwaQXG4Zyhc2xnYYnMSSaBjCXNQ82R017qhftwaDGPgVTgegkDs
-	 7CDAuSGVI0bZDrm8DTYoXW/zk+TGRGX/zk1QByP+JRrWsDr0kJIra4rQ3SmxDkeU8v
-	 +rlaY2Mb1XiXw==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Andrea Righi <arighi@nvidia.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	shuah@kernel.org,
-	bpf@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K9g2NcIp"
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7d74fc959d8so1226115a34.2
+        for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 03:22:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773138123; x=1773742923; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=653FzskN4REwEFDcgD8vcg1axVo0C/yYw7++qUXSZzQ=;
+        b=K9g2NcIpBXFzNnohzdJE2krUeW2/q7S196XA36pQq7vw01Ypx8AfPZNS+ajfWGUwTN
+         DexqIJ+ACkMVg9R8s7RrbWJEreaLXDzBzWd5mITjBXelW3QrSckdJjEcKA05vm+DmZus
+         6yoS5H9Xmw/jhz7ZlnhhWRbrDsdLniSbLMGg3KHmNEm40rbFae5pYym1UPNE7wdhi5at
+         +c42yVift1mS+F9AIkVbj+7hA2+VHuiV5eiho1PjkQFoFNCXG9omq8ixsFrGCLrDmQPk
+         o9n2VNV2AmvzPkXvMHeniKBpg5jG0jJ1gxH/LMegqdD3SlSAHNGd9T5ttIlknAvPvf+E
+         z92A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773138123; x=1773742923;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=653FzskN4REwEFDcgD8vcg1axVo0C/yYw7++qUXSZzQ=;
+        b=PD0CgIplyd+IwlxtzT+9DrHWoysyhQ0RPnn9SnCoZcFNyB4lgwAWHdBj9guWwkbMVH
+         JwR4/K3JQYVfVObUiJ0CfZZAiMFnkd2HFuorGz84RO5cgKgODhYHyGl21Ihz1yZfqS/i
+         vZ9rZLaJTgAF6GhPt8f3SElCojaAfMTngEPbTFvaO5aUcFPOCxWO0jCH3cqy8n4gY6QA
+         GlIhITJ8iYib898SSVow7KTh8CN/tXx7qJKCJOT2VL0LoIETYtAeBjglmrAD7CorV6vD
+         8ZpTgbMfnMnWb1gzm2XblQfk3PPo82R1SvZb1e6/8xDtfYgOZUjmybcM5rF8znm86HtQ
+         aQFw==
+X-Gm-Message-State: AOJu0YwVPvaIV1IfHxNvuZRnMDjp7O7PgSvJeUESSCnLekFIYJ59GI07
+	8s8Rh2l5cJf0b51UUQ2fcYV/SySQmYrMHmRNbO69SPo07r6Vwzppm3eN
+X-Gm-Gg: ATEYQzz14DUqyTwKhEWWYzyXK59FL7PaAIB5JlHU+RxBvdmfFko3JYSbF4ZYrGO2gYm
+	a4uFQuhzymz6fFH8IqXWvkFAOOll0YulR8ENMDVBXYwA01zcmyAX6JhoLjvBR+0irgZOlPxrC4e
+	ZH/Q8SFZCj1RIn9gaYhGyfwItpjH5KH9OTKze26DoA9Y9SXJxnip3PKnJUlWOcHjNRngwYGnBxL
+	Qs/w8QKBQkFSsB81IATOKCMI5qsirQT19kcWJ9pNQyLfmlfebXsXKMl2C5A6zR4iTdRyF0ikDho
+	MGnE2eGEQ9oT1isl4slFIGb2Om/a4mOWRIbRgWA5bHQYyZUQ4O5x87dpGcAtF5AGZ84w7j+0+OV
+	RGWHwrvMeo0TAjjdVsk1liPZOCx/MwEfNtH3Qfbvblq3TwKNU1rGrpr0aNt6pUM2N6kzGwbAz7Y
+	77Ic37cI5bfmcqMhTR+WdGzrgRY+/SkYOe2hW4ih0zBwfizETQOYA1Y1a2fPNVVOgR4VmIoSYGx
+	cMWiQ1WETeuOtEHpCsvmgsfAXI=
+X-Received: by 2002:a05:6820:818a:b0:672:e67a:96cf with SMTP id 006d021491bc7-67b9bc81ea2mr9110007eaf.16.1773138123241;
+        Tue, 10 Mar 2026 03:22:03 -0700 (PDT)
+Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-67bb331eee0sm3877789eaf.8.2026.03.10.03.21.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Mar 2026 03:22:02 -0700 (PDT)
+From: Sun Jian <sun.jian.kdev@gmail.com>
+To: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.19-6.12] bpf: Fix u32/s32 bounds when ranges cross min/max boundary
-Date: Tue, 10 Mar 2026 05:01:15 -0400
-Message-ID: <20260310090145.2709021-15-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260310090145.2709021-1-sashal@kernel.org>
-References: <20260310090145.2709021-1-sashal@kernel.org>
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Sun Jian <sun.jian.kdev@gmail.com>
+Subject: [PATCH 1/2] selftests/bpf: Fix read_iter buffer termination in test_bpffs
+Date: Tue, 10 Mar 2026 18:21:44 +0800
+Message-ID: <20260310102145.857810-1-sun.jian.kdev@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.19.6
 Content-Transfer-Encoding: 8bit
 
-From: Eduard Zingerman <eddyz87@gmail.com>
+read_iter() always NUL-terminated at the end of the buffer, so strstr()
+could scan uninitialized stack bytes on short reads. Terminate at len and
+use O_RDONLY.
 
-[ Upstream commit fbc7aef517d8765e4c425d2792409bb9bf2e1f13 ]
-
-Same as in __reg64_deduce_bounds(), refine s32/u32 ranges
-in __reg32_deduce_bounds() in the following situations:
-
-- s32 range crosses U32_MAX/0 boundary, positive part of the s32 range
-  overlaps with u32 range:
-
-  0                                                   U32_MAX
-  |  [xxxxxxxxxxxxxx u32 range xxxxxxxxxxxxxx]              |
-  |----------------------------|----------------------------|
-  |xxxxx s32 range xxxxxxxxx]                       [xxxxxxx|
-  0                     S32_MAX S32_MIN                    -1
-
-- s32 range crosses U32_MAX/0 boundary, negative part of the s32 range
-  overlaps with u32 range:
-
-  0                                                   U32_MAX
-  |              [xxxxxxxxxxxxxx u32 range xxxxxxxxxxxxxx]  |
-  |----------------------------|----------------------------|
-  |xxxxxxxxx]                       [xxxxxxxxxxxx s32 range |
-  0                     S32_MAX S32_MIN                    -1
-
-- No refinement if ranges overlap in two intervals.
-
-This helps for e.g. consider the following program:
-
-   call %[bpf_get_prandom_u32];
-   w0 &= 0xffffffff;
-   if w0 < 0x3 goto 1f;    // on fall-through u32 range [3..U32_MAX]
-   if w0 s> 0x1 goto 1f;   // on fall-through s32 range [S32_MIN..1]
-   if w0 s< 0x0 goto 1f;   // range can be narrowed to  [S32_MIN..-1]
-   r10 = 0;
-1: ...;
-
-The reg_bounds.c selftest is updated to incorporate identical logic,
-refinement based on non-overflowing range halves:
-
-  ((x ∩ [0, smax]) ∩ (y ∩ [0, smax])) ∪
-  ((x ∩ [smin,-1]) ∩ (y ∩ [smin,-1]))
-
-Reported-by: Andrea Righi <arighi@nvidia.com>
-Reported-by: Emil Tsalapatis <emil@etsalapatis.com>
-Closes: https://lore.kernel.org/bpf/aakqucg4vcujVwif@gpd4/T/
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
-Link: https://lore.kernel.org/r/20260306-bpf-32-bit-range-overflow-v3-1-f7f67e060a6b@gmail.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
 ---
+ tools/testing/selftests/bpf/prog_tests/test_bpffs.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-LLM Generated explanations, may be completely bogus:
-
-Now I have a comprehensive understanding of this commit. Let me provide
-my analysis.
-
-## Analysis
-
-### What the commit fixes
-
-This commit fixes a correctness bug in the BPF verifier's
-`__reg32_deduce_bounds()` function. The function was missing logic to
-refine u32/s32 ranges when the s32 range crosses the sign boundary
-(wraps from positive to negative values). The 64-bit counterpart
-`__reg64_deduce_bounds()` already handled this case (added by commit
-00bf8d0c6c9be), but the 32-bit version was incomplete.
-
-### Bug mechanism
-
-When an s32 range crosses the U32_MAX/0 boundary, it splits into two
-intervals: a positive part [0..s32_max] and a negative part
-[s32_min..-1]. If the u32 range overlaps with only ONE of these halves,
-the verifier should be able to narrow both ranges. Without this fix, the
-verifier falls into states where `u32_min_value > u32_max_value`,
-causing **REG INVARIANTS VIOLATION** warnings and rejecting valid BPF
-programs.
-
-### Real-world impact
-
-- **Reported-by**: Andrea Righi (NVIDIA) and Emil Tsalapatis - two
-  independent reporters indicating real-world impact
-- The bug prevents legitimate BPF programs from loading (e.g., scx
-  scheduler programs)
-- The commit message includes a concrete example BPF program that fails
-  without this fix
-- BPF verifier bugs can have **security implications** since incorrect
-  range tracking could potentially allow out-of-bounds memory access if
-  the verifier is too permissive (though this specific bug makes it too
-  restrictive)
-
-### Code change analysis
-
-The kernel change is **small and surgical** - only 24 lines added to
-`__reg32_deduce_bounds()` in `verifier.c`. The logic directly mirrors
-the already-proven 64-bit equivalent at lines 2606-2621, just using
-u32/s32 types instead of u64/s64. The two cases are:
-
-1. u32 range entirely in the positive half of the split s32 range →
-   narrow both
-2. u32 range entirely in the negative half of the split s32 range →
-   narrow both
-
-### Selftest changes
-
-The selftest changes (reg_bounds.c) are more extensive but are test-
-only. They add `range_refine_in_halves()` and `range_union()` helper
-functions and rename `range_improve` to `range_intersection` for
-clarity. These changes mirror the verifier logic and ensure exhaustive
-testing.
-
-### Dependencies
-
-- The 64-bit equivalent (commit 00bf8d0c6c9be) should ideally be present
-  in the stable tree, as the new 32-bit code references
-  `__reg64_deduce_bounds()` in its comments. However, the actual kernel
-  code change is self-contained within `__reg32_deduce_bounds()`.
-- The companion commit d8f4532f56dd1 ("Revert selftests/bpf: Update
-  reg_bound range refinement logic") removes test logic now superseded
-  by this fix's test changes. For backporting, only the verifier.c
-  change is strictly needed.
-
-### Risk assessment
-
-- **Low risk**: The kernel change adds an `else` branch to existing
-  code, only activated when s32 range crosses the sign boundary. When
-  the ranges overlap in two intervals, no refinement is done (safe
-  fallback).
-- **Well-tested**: Has Reviewed-by and Acked-by tags from BPF subsystem
-  experts. Includes comprehensive selftest updates.
-- **Mirrors proven logic**: Directly copies the approach from
-  `__reg64_deduce_bounds()` which has been in mainline since July 2025.
-
-### Stable criteria assessment
-
-- **Fixes a real bug**: YES - verifier invariant violations, program
-  rejection
-- **Obviously correct**: YES - mirrors existing 64-bit logic, reviewed
-  by multiple experts
-- **Small and contained**: YES - 24 lines of kernel code in one function
-- **No new features**: Correct - fixes existing range deduction, no API
-  changes
-- **Security relevant**: BPF verifier correctness is always security-
-  sensitive
-
-## Verification
-
-- Verified `__reg64_deduce_bounds()` at lines 2567-2622 contains the
-  exact same pattern being added to `__reg32_deduce_bounds()` (read from
-  verifier.c)
-- Verified commit 00bf8d0c6c9be ("bpf: Improve bounds when s64 crosses
-  sign boundary") is the 64-bit predecessor by Paul Chaignon (git log +
-  git show)
-- Verified the revert commit d8f4532f56dd1 is companion cleanup of
-  superseded test logic
-- Confirmed two independent Reported-by tags (Andrea Righi/NVIDIA and
-  Emil Tsalapatis) from the commit message
-- Verified the code change is self-contained within
-  `__reg32_deduce_bounds()` by reading verifier.c lines 2460-2488
-- Confirmed the `else` branch only activates when `(u32)s32_min >
-  (u32)s32_max`, meaning s32 range crosses the sign boundary - this is
-  the expected guard condition
-
-**YES**
-
- kernel/bpf/verifier.c                         | 24 +++++++
- .../selftests/bpf/prog_tests/reg_bounds.c     | 62 +++++++++++++++++--
- 2 files changed, 82 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 783d984d7884d..48698c617bebc 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2460,6 +2460,30 @@ static void __reg32_deduce_bounds(struct bpf_reg_state *reg)
- 	if ((u32)reg->s32_min_value <= (u32)reg->s32_max_value) {
- 		reg->u32_min_value = max_t(u32, reg->s32_min_value, reg->u32_min_value);
- 		reg->u32_max_value = min_t(u32, reg->s32_max_value, reg->u32_max_value);
-+	} else {
-+		if (reg->u32_max_value < (u32)reg->s32_min_value) {
-+			/* See __reg64_deduce_bounds() for detailed explanation.
-+			 * Refine ranges in the following situation:
-+			 *
-+			 * 0                                                   U32_MAX
-+			 * |  [xxxxxxxxxxxxxx u32 range xxxxxxxxxxxxxx]              |
-+			 * |----------------------------|----------------------------|
-+			 * |xxxxx s32 range xxxxxxxxx]                       [xxxxxxx|
-+			 * 0                     S32_MAX S32_MIN                    -1
-+			 */
-+			reg->s32_min_value = (s32)reg->u32_min_value;
-+			reg->u32_max_value = min_t(u32, reg->u32_max_value, reg->s32_max_value);
-+		} else if ((u32)reg->s32_max_value < reg->u32_min_value) {
-+			/*
-+			 * 0                                                   U32_MAX
-+			 * |              [xxxxxxxxxxxxxx u32 range xxxxxxxxxxxxxx]  |
-+			 * |----------------------------|----------------------------|
-+			 * |xxxxxxxxx]                       [xxxxxxxxxxxx s32 range |
-+			 * 0                     S32_MAX S32_MIN                    -1
-+			 */
-+			reg->s32_max_value = (s32)reg->u32_max_value;
-+			reg->u32_min_value = max_t(u32, reg->u32_min_value, reg->s32_min_value);
-+		}
- 	}
- }
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_bpffs.c b/tools/testing/selftests/bpf/prog_tests/test_bpffs.c
+index ea933fd151c3..e8021ff0581c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_bpffs.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_bpffs.c
+@@ -17,11 +17,11 @@ static int read_iter(char *file)
+ 	char buf[1024];
+ 	int fd, len;
  
-diff --git a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-index d93a0c7b1786f..db3e25685b68f 100644
---- a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-+++ b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-@@ -422,15 +422,69 @@ static bool is_valid_range(enum num_t t, struct range x)
- 	}
- }
- 
--static struct range range_improve(enum num_t t, struct range old, struct range new)
-+static struct range range_intersection(enum num_t t, struct range old, struct range new)
- {
- 	return range(t, max_t(t, old.a, new.a), min_t(t, old.b, new.b));
- }
- 
-+/*
-+ * Result is precise when 'x' and 'y' overlap or form a continuous range,
-+ * result is an over-approximation if 'x' and 'y' do not overlap.
-+ */
-+static struct range range_union(enum num_t t, struct range x, struct range y)
-+{
-+	if (!is_valid_range(t, x))
-+		return y;
-+	if (!is_valid_range(t, y))
-+		return x;
-+	return range(t, min_t(t, x.a, y.a), max_t(t, x.b, y.b));
-+}
-+
-+/*
-+ * This function attempts to improve x range intersecting it with y.
-+ * range_cast(... to_t ...) looses precision for ranges that pass to_t
-+ * min/max boundaries. To avoid such precision loses this function
-+ * splits both x and y into halves corresponding to non-overflowing
-+ * sub-ranges: [0, smin] and [smax, -1].
-+ * Final result is computed as follows:
-+ *
-+ *   ((x ∩ [0, smax]) ∩ (y ∩ [0, smax])) ∪
-+ *   ((x ∩ [smin,-1]) ∩ (y ∩ [smin,-1]))
-+ *
-+ * Precision might still be lost if final union is not a continuous range.
-+ */
-+static struct range range_refine_in_halves(enum num_t x_t, struct range x,
-+					   enum num_t y_t, struct range y)
-+{
-+	struct range x_pos, x_neg, y_pos, y_neg, r_pos, r_neg;
-+	u64 smax, smin, neg_one;
-+
-+	if (t_is_32(x_t)) {
-+		smax = (u64)(u32)S32_MAX;
-+		smin = (u64)(u32)S32_MIN;
-+		neg_one = (u64)(u32)(s32)(-1);
-+	} else {
-+		smax = (u64)S64_MAX;
-+		smin = (u64)S64_MIN;
-+		neg_one = U64_MAX;
-+	}
-+	x_pos = range_intersection(x_t, x, range(x_t, 0, smax));
-+	x_neg = range_intersection(x_t, x, range(x_t, smin, neg_one));
-+	y_pos = range_intersection(y_t, y, range(x_t, 0, smax));
-+	y_neg = range_intersection(y_t, y, range(y_t, smin, neg_one));
-+	r_pos = range_intersection(x_t, x_pos, range_cast(y_t, x_t, y_pos));
-+	r_neg = range_intersection(x_t, x_neg, range_cast(y_t, x_t, y_neg));
-+	return range_union(x_t, r_pos, r_neg);
-+
-+}
-+
- static struct range range_refine(enum num_t x_t, struct range x, enum num_t y_t, struct range y)
- {
- 	struct range y_cast;
- 
-+	if (t_is_32(x_t) == t_is_32(y_t))
-+		x = range_refine_in_halves(x_t, x, y_t, y);
-+
- 	y_cast = range_cast(y_t, x_t, y);
- 
- 	/* If we know that
-@@ -444,7 +498,7 @@ static struct range range_refine(enum num_t x_t, struct range x, enum num_t y_t,
- 	 */
- 	if (x_t == S64 && y_t == S32 && y_cast.a <= S32_MAX  && y_cast.b <= S32_MAX &&
- 	    (s64)x.a >= S32_MIN && (s64)x.b <= S32_MAX)
--		return range_improve(x_t, x, y_cast);
-+		return range_intersection(x_t, x, y_cast);
- 
- 	/* the case when new range knowledge, *y*, is a 32-bit subregister
- 	 * range, while previous range knowledge, *x*, is a full register
-@@ -462,7 +516,7 @@ static struct range range_refine(enum num_t x_t, struct range x, enum num_t y_t,
- 		x_swap = range(x_t, swap_low32(x.a, y_cast.a), swap_low32(x.b, y_cast.b));
- 		if (!is_valid_range(x_t, x_swap))
- 			return x;
--		return range_improve(x_t, x, x_swap);
-+		return range_intersection(x_t, x, x_swap);
- 	}
- 
- 	if (!t_is_32(x_t) && !t_is_32(y_t) && x_t != y_t) {
-@@ -480,7 +534,7 @@ static struct range range_refine(enum num_t x_t, struct range x, enum num_t y_t,
- 	}
- 
- 	/* otherwise, plain range cast and intersection works */
--	return range_improve(x_t, x, y_cast);
-+	return range_intersection(x_t, x, y_cast);
- }
- 
- /* =======================
+-	fd = open(file, 0);
++	fd = open(file, O_RDONLY);
+ 	if (fd < 0)
+ 		return -1;
+-	while ((len = read(fd, buf, sizeof(buf))) > 0) {
+-		buf[sizeof(buf) - 1] = '\0';
++	while ((len = read(fd, buf, sizeof(buf) - 1)) > 0) {
++		buf[len] = '\0';
+ 		if (strstr(buf, "iter")) {
+ 			close(fd);
+ 			return 0;
+
+base-commit: 1f318b96cc84d7c2ab792fcc0bfd42a7ca890681
 -- 
-2.51.0
+2.43.0
 
