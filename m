@@ -1,221 +1,180 @@
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BBBF38D696;
-	Tue, 10 Mar 2026 12:17:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA31C3BD231;
+	Tue, 10 Mar 2026 12:23:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773145058; cv=none; b=JiDwH9zWZzFXyuC3+2z7R3ir84ZzQI/IQNpCAOU1mgUmmFt5h8/Gb8cw7shhfbsrXLaa5PNXnWEKvhKfTEzrjfA/WuGy9RMWhutwxZYOP1ov7g2V8OLmTf3ljZXE7im4+1y9bgFNUgMsBSRcwIy6lhuQc2oOpk0nVm1NykHcDc0=
+	t=1773145389; cv=none; b=i5eB2nZCPYrf28XlM/gWKg7DIIzAzgB537xGOSPzrwDstO8p/IDDFpTfPOpqP3fxCxHcpFdq/nFmzpS09V3ReaQ0X1tW9E50iSI56hJcW2cUySmQwAxKVBNn7CNrfNEaqaCs7SsqrMX73n8KQg1cG9jQ0bCetD9nJ+9xIGUprgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773145058; c=relaxed/simple;
-	bh=MVAorFwASedMUQdlRsrssouaBR0ncU3LBy/pU1ACdEg=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OoBGbbiTxHc6/ha/+cPa8bL84EbMhPBl2tj1ukceK/fT611UV57vg694Hk/qZK62HbVmPR7amlEKFn59yPlHJ0M6+XLtpxCacNqhcE+LV9MQzYSbWNlTz3jciiN+8pfKYSJt3EwoOglAx8e69KHz8kM9ENw7in3uVv8Ko9AwZCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=vbwNsLxe; arc=none smtp.client-ip=148.163.152.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	s=arc-20240116; t=1773145389; c=relaxed/simple;
+	bh=GC3Sg9J7xD8kIPv5UD36basFOlkNvWWf+dL0gpcN4gs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=MyQWJkFdrlXY7mgKMSQn0Zdt/fEPoBa4dTtSAhU5H0clPTVmyjoXXYhbvz6L/vDXSP3+nnsWvFjfLxRI5U5jPe4r3huaXasjutyVgWNWwt0/lbRcOmUyKFIKAoo5zOnyhEhIyQUUNu2P5cJ6sVtFjHxx6uM3K+ieMcJ0v9doe9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=USBW0I5R; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="vbwNsLxe"
-Received: from pps.filterd (m0354653.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62A8xuEP1367922;
-	Tue, 10 Mar 2026 12:17:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=yrMvraipRnMkORyFOvU3Oml7ZdrKvDGYUgiDs6XOkFs=; b=vbwN
-	sLxeQCoYwp2+OIKQEb6fM8s74m428M3b6xQE/hdMH8DWNdF/0rujZdIzzYN7BNlZ
-	DgM3HGyuwpPqdmXFo7jTctibYCfFKFZG8xfRvUM/Bj4rTGRvwViZpsyy4vQ8c7rC
-	zG3BY1dBAupoUYtwQDqOJtFZ9pZkip0PipUomd6zFrUlAmPfnt4selycLA3xc0P5
-	mmfa4BlX9msvS819il1sXqauwof9L3EiDd1Sn+22meSKI4kXxK3l5dnubg2h2ep0
-	5GndgMluRofoWgsOrl3lrrzBHXkDMbrtWsW582RXClwPXV9+ULgrTMIz4qeWywju
-	HEPqV5FlNGC5d1Vz0w==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4crxykgynp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 10 Mar 2026 12:17:07 +0000 (GMT)
-Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Tue, 10 Mar 2026 12:17:01 +0000
-From: Slava Imameev <slava.imameev@crowdstrike.com>
-To: <eddyz87@gmail.com>
-CC: <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <daniel@iogearbox.net>, <davem@davemloft.net>, <edumazet@google.com>,
-        <haoluo@google.com>, <horms@kernel.org>, <john.fastabend@gmail.com>,
-        <jolsa@kernel.org>, <kpsingh@kernel.org>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-open-source@crowdstrike.com>, <martin.lau@linux.dev>,
-        <netdev@vger.kernel.org>, <pabeni@redhat.com>, <sdf@fomichev.me>,
-        <shuah@kernel.org>, <slava.imameev@crowdstrike.com>, <song@kernel.org>,
-        <yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v4 1/2] bpf: Support new pointer param types via SCALAR_VALUE for trampolines
-Date: Tue, 10 Mar 2026 23:16:59 +1100
-Message-ID: <20260310121659.25801-1-slava.imameev@crowdstrike.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <c4f4e99f83a98179c3413dd7afe5e7e73a98e4d3.camel@gmail.com>
-References: <c4f4e99f83a98179c3413dd7afe5e7e73a98e4d3.camel@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="USBW0I5R"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72C6FC19423;
+	Tue, 10 Mar 2026 12:23:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773145389;
+	bh=GC3Sg9J7xD8kIPv5UD36basFOlkNvWWf+dL0gpcN4gs=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=USBW0I5R1IRmIxXZQ4igYISdfUhrLNnzBamW3ly9QC3INE+BegS2zslKhDKzhXDG7
+	 fKMU7RIbXNpol1PHCzCb5aV7jzNo2emhRzvTpOYCvay1rk9VpMjF/PBmugESDxkXYL
+	 S0eTx6lMzIbdUYaaQJ7wmSE0g/aO76gzcuT07juTvznRsdelMLPOv9tAcL33MuZDV4
+	 MJfe/XfyamWxe2yqSYGMcVQ926M3F363GVs0b2nOXa4FFqyaQNv/s+Jdn7Lo043fzU
+	 f7A0IS8nsfHXq1XpvhuTTXROF4mFHi4SpARL1EaftIE0z7e8v+uGDZL5stw1zyUhEs
+	 3V3NLgotla0yg==
+Message-ID: <2ff39929dad06ca7d009ccd6dfe873da22a07c8a.camel@kernel.org>
+Subject: Re: [PATCH 61/61] file: Drop unlikely() around IS_ERR_OR_NULL()
+From: Jeff Layton <jlayton@kernel.org>
+To: Philipp Hahn <phahn-oss@avm.de>, amd-gfx@lists.freedesktop.org, 
+	apparmor@lists.ubuntu.com, bpf@vger.kernel.org, ceph-devel@vger.kernel.org,
+ 	cocci@inria.fr, dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
+ 	gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org, 
+	intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev,
+ kvm@vger.kernel.org, 	linux-arm-kernel@lists.infradead.org,
+ linux-block@vger.kernel.org, 	linux-bluetooth@vger.kernel.org,
+ linux-btrfs@vger.kernel.org, 	linux-cifs@vger.kernel.org,
+ linux-clk@vger.kernel.org, 	linux-erofs@lists.ozlabs.org,
+ linux-ext4@vger.kernel.org, 	linux-fsdevel@vger.kernel.org,
+ linux-gpio@vger.kernel.org, 	linux-hyperv@vger.kernel.org,
+ linux-input@vger.kernel.org, 	linux-kernel@vger.kernel.org,
+ linux-leds@vger.kernel.org, 	linux-media@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org, 
+	linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org, 
+	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org, 
+	linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org, 
+	linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org, 
+	linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+ ntfs3@lists.linux.dev, 	samba-technical@lists.samba.org,
+ sched-ext@lists.linux.dev, 	target-devel@vger.kernel.org,
+ tipc-discussion@lists.sourceforge.net, 	v9fs@lists.linux.dev
+Cc: Christian Brauner <brauner@kernel.org>
+Date: Tue, 10 Mar 2026 08:23:01 -0400
+In-Reply-To: <20260310-b4-is_err_or_null-v1-61-bd63b656022d@avm.de>
+References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
+	 <20260310-b4-is_err_or_null-v1-61-bd63b656022d@avm.de>
+Autocrypt: addr=jlayton@kernel.org; prefer-encrypt=mutual;
+ keydata=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
+ QZIQXVeAA+smfTT0tDrisj1U5x6ZB9b3nBg65kc=
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH012.crowdstrike.sys (10.100.11.82) To
- 04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Disclaimer: USA
-X-Proofpoint-GUID: muf0gwpN1ymRFua10pBAXBtTyZj5PPg1
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEwMDEwNiBTYWx0ZWRfX9rflOR7IFCrl
- 21yIma0F3kFVahtBclWfwzZlWpUjCPemhbo/tINRuUODJLKM+FFZdufvJxZmhCfLNOKz46+BCTP
- SjqGpRntpcuue3NTMs50t9Sb1MxWM/XKdZEsdiM3x9pSTVawLZjDlD6YBFTFsrQQn2zubbYGPmP
- ZeuSGKGWkNlItQfF/iCwEGTCZnly7pkNEmlV0hJYGwklx2BvewIyOotQZnI+UPFnpDHLTlGn/vU
- xP3vTU73KcLUcnmeAZ9jAILPjun090IzM2PmPUiI9eUnvDdAA6cwXxT4CE7PB17wQX9KkP9Qs0Q
- RNpLsNNsUV3+kYhILzU2r8VeapNUzcA4/Y9wik+aTGLlPwD4ztcZGnCxIs+BCB6Bge3zkxMpCGh
- qtk3cmtTeENZKA2Jo8Z3eq4qq4IJGAiOr9tx0y5toBQPzV0QXBpaTwB8vCliWD85mr/GCte3DvI
- rEvRpIT7V1YESrV51Jw==
-X-Proofpoint-ORIG-GUID: muf0gwpN1ymRFua10pBAXBtTyZj5PPg1
-X-Authority-Analysis: v=2.4 cv=M7FA6iws c=1 sm=1 tr=0 ts=69b00bc3 cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=GCXdLZfFv8EKBZhKOxZ5:22 a=NEAV23lmAAAA:8
- a=3kasHXYAN1gmPJuvoZgA:9
-X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11724
- signatures=596818
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 clxscore=1015 suspectscore=0 priorityscore=1501
- malwarescore=0 bulkscore=0 adultscore=0 lowpriorityscore=0 phishscore=0
- spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2602130000
- definitions=main-2603100106
 
-On Tue, 03 Mar 2026 16:38:57 -0800, Eduard Zingerman wrote:
-> On Wed, 2026-03-04 at 11:22 +1100, Slava Imameev wrote:
-> > On Tue, 03 Mar 2026 14:43:01, Eduard Zingerman wrote:
-> > > On Wed, 2026-03-04 at 08:49 +1100, Slava Imameev wrote:
-> > > > On 2026-03-03 20:05 UTC, Eduard Zingerman wrote:
-> > > > 
-> > > > > > @@ -6902,11 +6921,7 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
-> > > > > >               }
-> > > > > >       }
-> > > > > > 
-> > > > > > -     /*
-> > > > > > -      * If it's a pointer to void, it's the same as scalar from the verifier
-> > > > > > -      * safety POV. Either way, no futher pointer walking is allowed.
-> > > > > > -      */
-> > > > > > -     if (is_void_or_int_ptr(btf, t))
-> > > > > > +     if (is_ptr_treated_as_scalar(btf, t))
-> > > > > >               return true;
-> > > > > 
-> > > > > I'm probably missing a point here, but what's wrong with Alexei's
-> > > > > suggestion to do this instead:
-> > > > > 
-> > > > >         if (is_ptr_treated_as_scalar(btf, t))
-> > > > >                  return true;
-> > > > > ?
-> > > 
-> > > Uh-oh, I copy-pasted the wrong snippet, sorry.
-> > > The correct snippet is:
-> > > 
-> > >          if (btf_type_is_struct_ptr(btf, t))
-> > >                   return true;
-> > > 
-> > > With it the selftests pass (except for `float` tests noted earlier).
-> > > And regardless of selftests, the code below this point will
-> > > error out if `t` is not a pointer to struct.
-> > 
-> > I think you tested with
-> > 
-> > 	if (!btf_type_is_struct_ptr(btf, t))
-> > 		return true;
-> > 
-> > I decided on a narrower condition, as
-> > 
-> > - if (!btf_type_is_struct_ptr(btf, t)) -
-> 
-> Yes, sorry again.
-> 
-> > changes the existing selection condition from "treat only these types
-> > as scalar" to "treat as scalar any type that is not a pointer to
-> > structure". Technically both approaches cover the problem I'm trying
-> > to solve - multilevel pointer support for structures, but the latter is
-> > open-ended and changes the current approach, which checks for pointers
-> > to int and void. So I'm extending this to int, void, enum 32/64,
-> > function, and corresponding multilevel pointers to these types and
-> > multilevel pointers to structures.
-> 
-> BTF is defined for the following non-modifier types:
-> - void        [allowed already]
-> - int         [allowed already]
-> - ptr         [multi-level pointers allowed by your patch]
-> - array       [disallowed?]
-> - struct      [single level pointers allowed already,
-> - union		   multi-level allowed by your patch]
-> - enum/enum64 [allowed by your patch]
-> - func_proto  [allowed by your patch]
-> - float       [disallowed]
-> 
-> And a few not reachable from function fields (I think BTF validation
-> checks that these can't be met, but would be good to double-check.
-> If it doesn't, it should):
-> - func
-> - var
-> - datasec
-> 
-> So, effectively you disallow reading from tracing context fields of
-> type: struct (non-pointer), array, float and a few types that can't be
-> specified for struct fields.
-> 
-> Does not seem necessary, tbh.
+On Tue, 2026-03-10 at 12:49 +0100, Philipp Hahn wrote:
+> IS_ERR_OR_NULL() already uses likely(!ptr) internally. checkpatch does
+> not like nesting it:
+> > WARNING: nested (un)?likely() calls, IS_ERR_OR_NULL already uses
+> > unlikely() internally
+> Remove the explicit use of unlikely().
+>=20
+> Change generated with coccinelle.
+>=20
+> To: Christian Brauner <brauner@kernel.org>
+> To: Jeff Layton <jlayton@kernel.org>
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
+> ---
+>  include/linux/file.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/include/linux/file.h b/include/linux/file.h
+> index 27484b444d3155685cdbb89f546f26ef66e3e1b4..007b9b9d365a052c1c056e125=
+71eaf4f8ef5a45c 100644
+> --- a/include/linux/file.h
+> +++ b/include/linux/file.h
+> @@ -163,7 +163,7 @@ static inline void class_fd_prepare_destructor(const =
+struct fd_prepare *fdf)
+>  {
+>  	if (unlikely(fdf->__fd >=3D 0))
+>  		put_unused_fd(fdf->__fd);
+> -	if (unlikely(!IS_ERR_OR_NULL(fdf->__file)))
+> +	if (!IS_ERR_OR_NULL(fdf->__file))
+>  		fput(fdf->__file);
+>  }
+> =20
 
-I verified whether PTR->FUNC, PTR->DATASEC, PTR->VAR can be passed to
-btf_ctx_access() in the current mainline.
-
-I added helpers that inject PTR->FUNC, PTR->DATASEC, PTR->VAR as pre or
-post calls to btf_check_meta(). In all cases, the BPF program load
-failed with errors "arg0 type FUNC / DATASEC / VAR is not a struct",
-which indicates that btf_check_meta() can indeed be called with
-PTR->FUNC, PTR->DATASEC, PTR->VAR.
-
-If the condition for pointer check is changed to
-`if (!btf_type_is_struct_ptr(btf, t))`, these BPF programs will load
-successfully with arguments set to scalar().
-
-Do we accept this change in behavior?
-
-Test case with invalid BTF types injection:
-https://github.com/slava-at-cs/bpf/commit/c49af6500ace4e4aceee01c570e3b067aae7e48c
-
-Branch:
-https://github.com/slava-at-cs/bpf/commits/inject-invalid-btf/
-
-To run test:
-./vmtest.sh -- ./test_progs -t verifier_btf_ctx_access
-
-The verifier log:
-=============
-0: R1=ctx() R10=fp0
-; asm volatile ("					\ @ verifier_btf_ctx_access.c:85
-0: (79) r2 = *(u64 *)(r1 +0)
-func 'bpf_fentry_test_invalid_ptr_func' arg0 type FUNC is not a struct
-invalid bpf_context access off=0 size=8
-processed 1 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
-=============
-
-=============
-0: R1=ctx() R10=fp0
-; asm volatile ("					\ @ verifier_btf_ctx_access.c:85
-0: (79) r2 = *(u64 *)(r1 +0)
-func 'bpf_fentry_test_invalid_ptr_func' arg0 type DATASEC is not a struct
-invalid bpf_context access off=0 size=8
-processed 1 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
-=============
-
-=============
-0: R1=ctx() R10=fp0
-; asm volatile ("					\ @ verifier_btf_ctx_access.c:85
-0: (79) r2 = *(u64 *)(r1 +0)
-func 'bpf_fentry_test_invalid_ptr_func' arg0 type VAR is not a struct
-invalid bpf_context access off=0 size=8
-processed 1 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
-=============
+Reviewed-by: Jeff Layton <jlayton@kernel.org>
