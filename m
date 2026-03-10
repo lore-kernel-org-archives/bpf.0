@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C85202BD00C
-	for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 19:10:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBA042BD00C;
+	Tue, 10 Mar 2026 19:10:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773169810; cv=none; b=sCUNb6ES+Z9OnHI5yeeznaajbfMVRTb2gUzQySGQXqwHMMTMUHBxiYXK7SYSSIJ146WkQ8bvaTAYeV26OGfMWH/w8xx5tDL8HuHtssSNXocuR8arDlpVICHg8nDtB99nE0xFhV3YPhYWZQHPQGp+hl79T4nKZHRUjgz4V8ryhAU=
+	t=1773169812; cv=none; b=kmpCmmpk5T8xnCSVk+KA1CmawtlTWYb0aBwo4YxLcruYvXieHWG4v7Jy7TCnbG4NwbRi8otWdcRk84v4p1h0lH5XRttpnu6bxF8cZM2Rj0jAztGOUHkDx0RdxiSmZF6WJ+3s30u8bPeFH770kVs3f6hRmi8g2E27MyulJJFwtW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773169810; c=relaxed/simple;
-	bh=4b66wyxKf5H+nD95WG8h7ysE8D5iM9uK3UeTodefuKk=;
+	s=arc-20240116; t=1773169812; c=relaxed/simple;
+	bh=ihdfgYmQoHZOKZoNO9sM/pCeu2BJgu6l6BTDMHQoKsA=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=UZLojZxoO7pjcEpk50Z3lFDl0wsGEOnKyOunLn9ugjtZUR+fBpHde1jR1vDKWHUXRYYQjeeu3wYsHicYB9kPI7RFXp6foLfVqRpdaGo6oGl5IdZuBWXuP1cziZKdl3cbi/8n+n81GAi79XlElY/RLxg80ONtjUHszeMNLe1Sww8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EKBtTwy4; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=rIzWXlXHJ7BXNmlJoNETD9kgNvDcGRfNuSgQs96Xc36SjB8UBYPAKEfuGNCCSZv4r1djk0vLrwAZVXFCZEU0O5hPoBsRJpP+UggqktP5PaQAAwNPGKt4jxk0DwZFgZ/04JlnZZMWISDoxqNEYRZXDU8a30luNh5lZ1JaoX8545c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oOkgfxy/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EKBtTwy4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5927FC19423;
-	Tue, 10 Mar 2026 19:10:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oOkgfxy/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D205C19425;
+	Tue, 10 Mar 2026 19:10:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773169810;
-	bh=4b66wyxKf5H+nD95WG8h7ysE8D5iM9uK3UeTodefuKk=;
+	s=k20201202; t=1773169811;
+	bh=ihdfgYmQoHZOKZoNO9sM/pCeu2BJgu6l6BTDMHQoKsA=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=EKBtTwy4XFoAiyRnzr2Sa7H/fevqrdCLl17bc8nU0JLdtEjG/YC4FYNJMLmlwJ2Iv
-	 3HwgrsAf3PuJngwr/7ZEjaCeSyfqBkeGdfYCEBBhvu59MC6+eTFJDiEuQDV6xCLN+C
-	 YbR79JLPcNHmqlQtYwic4nhGHn9x3tcqYXYUZzsmmAQDOhbCHYcb85BocSKjt01jX5
-	 W+UQykbGl6rLnB9Bj2FjkfeF9ZYuB4VDrzqja6y6cImVRRdrYTxpgqODkzHXAHaAAZ
-	 vMky7vRSXRH1LiOeTELAPXdcwIhhHB2h/1lDMVyUg+t39fU8y0o8opNdydYtzUyw5b
-	 4dqqnJ4zyZcLg==
+	b=oOkgfxy/fYKn7zc2YUOcb/bnKDeBdBk15XSnl6cv9ok59ntkwWlQu10fMBXRsvuP9
+	 hKNKFdNncYbP01Xj/2EeJH/VWKY63l+KS+DNDqzkfjrrsEjndROkW5TFu2tWec5w1h
+	 BiEQh9FmkjDcC1EdMxQQAwqbP8nOnZQG4rKNc1Vd2Xg/TLQgr4saxGbS5lka5xaG8t
+	 xxuLEPQvd3gD5JCqYIfYGQcBPa+Fon69g2NAb0CTp7VCEfHwYUKpuDH4z7aHhuUXV6
+	 79MExmKPQDT0e8in1zcmrJqbr8TgZ5K4vYaFXcyQ8EK92FyjCiXLU7KcQOiHjOpy4p
+	 l0FzjJWlorhZQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3FF493808200;
-	Tue, 10 Mar 2026 19:10:08 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CED83808200;
+	Tue, 10 Mar 2026 19:10:09 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,35 +37,45 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf] selftests/bpf: Fix pkg-config call on static builds
+Subject: Re: [PATCH bpf v4] bpf: fix constant blinding bypass for PROBE_MEM32
+ stores
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <177316980680.2469448.6126882075540124991.git-patchwork-notify@kernel.org>
-Date: Tue, 10 Mar 2026 19:10:06 +0000
-References: <abADBwn_ykblpABE@mail.gmail.com>
-In-Reply-To: <abADBwn_ykblpABE@mail.gmail.com>
-To: Paul Chaignon <paul.chaignon@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev
+ <177316980830.2469448.16863487105813117785.git-patchwork-notify@kernel.org>
+Date: Tue, 10 Mar 2026 19:10:08 +0000
+References: 
+ <Y6IT5VvNRchPBLI5D7JZHBzZrU9rb0ycRJPJzJSXGj7kJlX8RJwZFSM2YZjcDxoQKABkxt1T8Os2gi23PYyFuQe6KkZGWVyfz8K5afdy9ak=@protonmail.com>
+In-Reply-To: 
+ <Y6IT5VvNRchPBLI5D7JZHBzZrU9rb0ycRJPJzJSXGj7kJlX8RJwZFSM2YZjcDxoQKABkxt1T8Os2gi23PYyFuQe6KkZGWVyfz8K5afdy9ak=@protonmail.com>
+To: Sachin Kumar <xcyfun@protonmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org,
+ andrii@kernel.org, netdev@vger.kernel.org, jolsa@kernel.org,
+ haoluo@google.com, kpsingh@kernel.org, john.fastabend@gmail.com,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ eddyz87@gmail.com, sdf@fomichev.me, puranjay@kernel.org, emil@etsalapatis.com
 
 Hello:
 
 This patch was applied to bpf/bpf.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Tue, 10 Mar 2026 12:39:51 +0100 you wrote:
-> For commit b0dcdcb9ae75 ("resolve_btfids: Fix linker flags detection"),
-> I suggested setting HOSTPKG_CONFIG to $PKG_CONFIG when compiling
-> resolve_btfids, but I forgot the quotes around that variable.
+On Mon, 09 Mar 2026 18:25:42 +0000 you wrote:
+> BPF_ST | BPF_PROBE_MEM32 immediate stores are not handled by
+> bpf_jit_blind_insn(), allowing user-controlled 32-bit immediates to
+> survive unblinded into JIT-compiled native code when bpf_jit_harden >= 1.
 > 
-> As a result, when running vmtest.sh with static linking, it fails as
-> follows:
+> The root cause is that convert_ctx_accesses() rewrites BPF_ST|BPF_MEM
+> to BPF_ST|BPF_PROBE_MEM32 for arena pointer stores during verification,
+> before bpf_jit_blind_constants() runs during JIT compilation. The
+> blinding switch only matches BPF_ST|BPF_MEM (mode 0x60), not
+> BPF_ST|BPF_PROBE_MEM32 (mode 0xa0). The instruction falls through
+> unblinded.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf] selftests/bpf: Fix pkg-config call on static builds
-    https://git.kernel.org/bpf/bpf/c/e06e6b800123
+  - [bpf,v4] bpf: fix constant blinding bypass for PROBE_MEM32 stores
+    https://git.kernel.org/bpf/bpf/c/2321a9596d22
 
 You are awesome, thank you!
 -- 
