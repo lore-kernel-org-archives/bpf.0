@@ -1,173 +1,113 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63A7D3B6BF3;
-	Tue, 10 Mar 2026 13:09:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB5FC40DFD8;
+	Tue, 10 Mar 2026 13:11:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773148193; cv=none; b=dyd3qF9XM6J3toS3qK25hRzuFtgZaDVs15Kc95JFT8vO3McWxz4qhZ8qo3zHJs1C8Du8dfz39BFZk+uXTvJD+SneGwTCAjojf+DIqvtHLfj+bwrSJD7HjtZdN2YnYVl/tepxKWGhqLehWigMcs7Z7gucIYgSRRoGNPbkHJO8OHY=
+	t=1773148283; cv=none; b=tEABEEvqDqa0V7+ESDSq5kmLYcyaOJHELbUu/r5qwWJrzOw1Xw73QwWs6BfwZ+00IHzw7bpJoQbUm0f1cVvNQ2z61Q+UKECAR3uTIkXpjaFGoAvSlWaNs3cu0JlVPLnl6tfuqp4yckFPOSTdn9UO1fmQOTdv2g2C51zD3t3ba/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773148193; c=relaxed/simple;
-	bh=ZV4CmUiPL9oBq40UnTRMOl0MJXJqBNQ3mM9JxSZ6atc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=daaiRXlbpodHcrVbaWau1GDfbuQHuoVq1wL8gfOLKKM+bsWRevLv2YIRrpBycZ4Bcc2IQqkfSFCDatscW+Ae6q21Mj3qbZhc2NFhXcDA7YHs9qw9cYoYE6hWq7sljHfI5U7nUVVGl/LBBYx1tIOyfBO5liVBRmLjUjzFOJHic44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=eKXAjIAQ; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1773148283; c=relaxed/simple;
+	bh=5c5DIHV4hT2SeTfqSM2LG61yHypW02KyRFmvcmJdQnk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UbMLsg79aoUQgPLSqaMQHq+6phSGmNFKqhjEBsbqyWbEDSV5tzgJL5+dFXN1DuzMvJkHXBnOR1izy3ISkSS+LrfWnHcXhezTj1/QNdDbze8PNNttWzPhQFL+6HNinqs4lr0eeZXLFannlPzFyrLE9YSR1EuZWcmrPczPyo+eXok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=2IZB0CLI; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="eKXAjIAQ"
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 629NSQWl641632;
-	Tue, 10 Mar 2026 13:08:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=De3BmU
-	R/fVp2HRwkz1vDBQc/3iM/oIA0Ob2vAv3cVR0=; b=eKXAjIAQPEFYC71ThcLitu
-	kecSm078+NgPMP6u1bUMmq2hLmumEUiEIJRn5PNG039Lxu0fOKz2s213mNU+WJFq
-	RM4p/dFgnlLKBo18oAp+zjFx6JYFZNmT82Wb53bfiIvKSpL3OHqbbG3lSnpTSOz+
-	azLwrpy5EtgHun7C4RzJDcYO1wVwI/nlwCA6bVHCqRqkV7Lm2SSavHZTMrqQfadT
-	pZYVWTywEqkXvC9VcE1ARFzRzMSTCBpIdzYWoX0TGIubr4JbSdvXOy/0emunY4zq
-	Y+JixBoNWNjehSPLMHvrLM1UXd/HU9KEX6KAvahfhzFoo5DBut/G3O0PC+kwRbAg
-	==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4crcvmb024-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 10 Mar 2026 13:08:50 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62AAEpV1021172;
-	Tue, 10 Mar 2026 13:08:49 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4crxbssa89-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 10 Mar 2026 13:08:49 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62AD8jCY36307420
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 10 Mar 2026 13:08:45 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 50C1D2004D;
-	Tue, 10 Mar 2026 13:08:45 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9F3392004B;
-	Tue, 10 Mar 2026 13:08:44 +0000 (GMT)
-Received: from [9.52.200.149] (unknown [9.52.200.149])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 10 Mar 2026 13:08:44 +0000 (GMT)
-Message-ID: <3d9cdee6-bff8-406f-b2ed-40df6ca450f3@linux.ibm.com>
-Date: Tue, 10 Mar 2026 14:08:44 +0100
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="2IZB0CLI"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=l4GpPH3ubmx3aruEVyuRzz3DC1ibbOvvKhNccLuCdJw=; b=2IZB0CLIMhRCWLDyZPKVLAP3Zi
+	vkxq5N+BauqfWJ2D08pYk2yJx04ORVTcyKmDDrK6LuqW8XMpcwg6np0wljWMF5F1kr01sH+Q+jTrq
+	xDq8JKn+NuwXEQgsNA7+BSOA7KRyX1wksWfz9wKmL9hYInXwz8XUG9LBohaI66rEoRupv9ltfhBxQ
+	B67SFwm+9VlBJyWk6UVQWx2m2KvS0cFVxa8tSFUpKwxJS1FIprhUVpsGM4inI8xOeVYE3OTfvQkpq
+	d83SjBx8OUeAWD15fpQ3CkfgrZHzJdUM6o/iIAO634R5cNSd9paceV9MYix4ApeSzSnk0L+NmiwTZ
+	zlAStFSw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vzwrl-00000009Yu9-2fbO;
+	Tue, 10 Mar 2026 13:11:17 +0000
+Date: Tue, 10 Mar 2026 06:11:17 -0700
+From: Christoph Hellwig <hch@infradead.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Christoph Hellwig <hch@infradead.org>,
+	Christian Brauner <brauner@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-nfs@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Chuck Lever <chuck.lever@oracle.com>,
+	Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>,
+	Olga Kornievskaia <okorniev@redhat.com>,
+	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
+	Trond Myklebust <trondmy@kernel.org>,
+	Anna Schumaker <anna@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>,
+	Christian Loehle <christian.loehle@arm.com>
+Subject: Re: [PATCH] kthread: remove kthread_exit()
+Message-ID: <abAYdbtYE2tHPNnM@infradead.org>
+References: <1ff1bce2-8bb4-463c-a631-16e14f4ea7e2@arm.com>
+ <20260306-work-kernel-exit-v1-1-8f871f6281cb@kernel.org>
+ <aaroReSCj1qXUeQb@infradead.org>
+ <CAHk-=whCiPr-cR3hVv=46Qo0Nw_vN422YUxqU0GmNai+KRtg2w@mail.gmail.com>
+ <aa7qson15uJpL-BL@infradead.org>
+ <CAHk-=wi_kwtWt4Swi=k2zJTnStoBaw3vneHz8ccVNDyVD1nvWg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 0/6] x86/vdso: VDSO updates and fixes for sframes
-To: "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        x86@kernel.org, linux-mm@kvack.org,
-        Steven Rostedt <rostedt@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Indu Bhagat <indu.bhagat@oracle.com>,
-        "Jose E. Marchesi" <jemarch@gnu.org>,
-        Beau Belgrave <beaub@linux.microsoft.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Florian Weimer <fweimer@redhat.com>, Kees Cook <kees@kernel.org>,
-        "Carlos O'Donell" <codonell@redhat.com>, Sam James <sam@gentoo.org>,
-        Dylan Hatch <dylanbhatch@google.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@kernel.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-        Michal Hocko
- <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-References: <20260211141357.271402-1-jremus@linux.ibm.com>
-Content-Language: en-US
-From: Jens Remus <jremus@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <20260211141357.271402-1-jremus@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-GUID: 7vjkImBkAuczBtQ8WEn7Wfoh2iaA3T5G
-X-Proofpoint-ORIG-GUID: WarMn3BsPH2iU_rGZcaRWlmBrbOlI6pE
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEwMDExNCBTYWx0ZWRfXxPXTI3S/wt5V
- u2Q7FvO4P6OODjsFQfMczt5mSSXa6jXyiKIOXW9yKy0pd6pWFsCLS95tVPE2AWGaZJsvUdzjqAz
- hCi1mL/ONSs2DUzx4JETthFAQsdaWrcxt//dLyvuAWpsy15Ootg3YD2KbGjU6iKIegTmVaDZ+Ps
- PedLK878panxPJ2/L6+BrNv++Dn0SbtrCTtZiPp0T+Z93sumaL9E6+4NdHWHNa6aqQLhYrXu4XB
- yzMSzeUSZCt7o6MU+89jxA6ye0zT2XfbGhFBGKLPHVeBl5SsRmVUNVb9hSRmU86TEbc4LXsgSM+
- FoMEJOuHnQU6s3FVHrH5ylq7UNX1vs+H37PUB8+thUTfLsks+JuoK2UCXtJqOkcs9JdOLWZwiTf
- aQAWYApK7+nqrSmhvUwst72g/NVf8B60otD7CFg+Dlv1ON1xrRqxfkF8jq+Pd3JWMj6YXRXTTmN
- 0dC80PPkZY7m4VId0cw==
-X-Authority-Analysis: v=2.4 cv=B5q0EetM c=1 sm=1 tr=0 ts=69b017e2 cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=VwQbUJbxAAAA:8
- a=meVymXHHAAAA:8 a=VnNF1IyMAAAA:8 a=0MvmVg10__VCTnNSAJcA:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10 a=2JgSa4NbpEOStq-L5dxp:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-10_02,2026-03-09_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 phishscore=0 adultscore=0 lowpriorityscore=0 bulkscore=0
- priorityscore=1501 spamscore=0 clxscore=1015 impostorscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603100114
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wi_kwtWt4Swi=k2zJTnStoBaw3vneHz8ccVNDyVD1nvWg@mail.gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-On 2/11/2026 3:13 PM, Jens Remus wrote:
+On Mon, Mar 09, 2026 at 09:37:26AM -0700, Linus Torvalds wrote:
+> On Mon, 9 Mar 2026 at 08:43, Christoph Hellwig <hch@infradead.org> wrote:
+> >
+> > Because it can't f&*^ up the state of random tasks.
 > 
-> This enables generation of SFrame V3 stack trace information for VDSO on
-> x86-64.  It's a continuation of Josh's and Steve's work:
-> 
->    https://lore.kernel.org/all/cover.1737511963.git.jpoimboe@kernel.org/
->    https://lore.kernel.org/all/20250425023750.669174660@goodmis.org/
-> 
-> This series focuses only on the VDSO code. They are helpful fixes
-> and updates that doesn't rely on sframes (although the last patch
-> is sframe related).
-> 
-> This series applies on top of tip:x86/entry:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git  x86/entry
-> 
-> Like the unwind user sframe series [1] it depends on the binutils 2.46
-> release to be used to build the VDSO with SFrame V3 stack trace
-> information (using the assembler option --gsframe-3).
-> 
-> [1]: [PATCH v13 00/18] unwind_deferred: Implement sframe handling,
->     https://lore.kernel.org/all/20260127150554.2760964-1-jremus@linux.ibm.com/
-> 
-> Changes in v9 (see indivicual patch notes):
-> - Always define KEEP_SFRAME to either true/false in specific VDSO linker
->   scripts and use #if instead of #ifdef in common one. (Peter)
-> - Reword patch 6 commit message to provide more details.
-> - Note: Binutils 2.46 with SFrame V3 support has been released.
-Hello H. Peter,
+> Christoph, you make no sense.
 
-how do we proceed with this series?  I got your Acked-by for all but the
-last patch, which has all of your review feedback integrated in v9.  Is
-there a different tree I should rebase it on?
+Thanks, I always appreciated rational and detailed answers.
 
-Thanks and regards,
-Jens
--- 
-Jens Remus
-Linux on Z Development (D3303)
-jremus@de.ibm.com / jremus@linux.ibm.com
+> 
+> "do_exit()" cannot mess up random tasks. It can only exit the
+> *current* task. The task that is running right now in that module.
 
-IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
-IBM Data Privacy Statement: https://www.ibm.com/privacy/
+Yes.  And random code should not be able to end arbitrary tasks.
+
+> So what is the actual problem? No more random rants. Explain yourself
+> without making wild handwaving gestures.
+
+Wow, you're a bit aggressive, aren't you?  Maybe take your meds in the
+morning to stay a bit calmer.  As said before I don't think allowing
+random code (and module is a proxy for that) do exit a task.  They
+really should not be exiting random kthreads either, but certainly
+not more than that.
+
+> Now, there are real exports in this area that are actually strange and
+> should be removed: for some historical reason we export 'free_task()'
+> which makes no sense to me at all (but probably did at some point).
+> 
+> Now *that* is a strange export that can mess up another task in major ways.
+
+No argument about that, but that's not the point here.
 
