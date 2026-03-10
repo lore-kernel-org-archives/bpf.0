@@ -1,126 +1,132 @@
-Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66F463E9290
-	for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 20:11:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.67
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773173489; cv=pass; b=hzT3Cr5sTsugk3uA7ydTuxwYEvTVzViio3rtBjcfwcVA/uf3iTunDwpuxdeFcFy5wb5ItZpaQRr3Ilw2a1w4GHtRWcbnFliUTPJWuiTLQCiWFTEEw/Rbb9gVs/7rbfVyanhBgc1zpvj+RtPBzJdB7E1pA2H5e8uVoivpigQH/5c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773173489; c=relaxed/simple;
-	bh=ibUs8AJ/dN5iUBOGd4EoUhQ0y6ATrIvVnV6MMEAOtus=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gYrqf4/FGaJi0lcMe1VvBCbzBJzX9FnVQiw7dLAeB1GMr+Hrtbnd0SEwogjUSnPrAUcPov/SJPI4H+0sfAZaSq8U0czCG1wtIWPrd47uYVn5Q4pGKmZz9MaieD7m8VN2SPNEywzeGunrfJ2pZ06imzsv/9MSLVCw7yXDaz8zOFQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B5OBdHPg; arc=pass smtp.client-ip=209.85.221.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03C773E9F9D
+	for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 20:21:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773174082; cv=none; b=IORoyQOoAgGRrQddz35UNcRSPDp4/pUa0weq/C33QpfkRUFxTJ+nWuaN12u1Z3FDFxCMf5V+rRt/NeUkX9J3OYJ3eJNK12m+DZ4BRTAYYC80Zu5uIt/ZIsXVQAb3BeB2vicjtC1NSyTNxUrTy3ctLsPj/TSTp85a4+DuRyZ/jlw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773174082; c=relaxed/simple;
+	bh=MAAuyB9Pcwe4MtJ7KeINtACUoYETJVIh5qhuPRUlMOg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=J8w8LgR+uVYKhLmG/ZSJSILuOZgwXK87gY6JhEjkItBr/OalrAfnQcP/UhJXQuA49k5MMEeIa/iESjSBYcd+Uf9C/kpSQHUC3nbitGy6Y3Hx+150TfiqqChIckzjFSV/LVnvlEaXT03yFiX/C0ac5s3i7lGwYOckC1gzCrMfeNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=i5Ueet9G; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B5OBdHPg"
-Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-439c9bdc1eeso3815923f8f.3
-        for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 13:11:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773173487; cv=none;
-        d=google.com; s=arc-20240605;
-        b=AvVP+euk7ynTRG6KbMrPC9/rc5Jc/HTX2hJkGRCDB256TkDnY9pKjRBcz+UKsdWL6/
-         Mq5y2P5nT3A1R1UfbkNvehThaLhYaFHgsDBirhRJ98oxMdgyQ1+HW4W3dsFBUA1Sq45g
-         YusB+hKvPcTAJvexl2ahwZxBGNf0mkROuAbX8TOXWxvUaxcMFcWDkbTukNLskbipgzul
-         oFl02S+TLw85DEcsVjSOZJ5UgeqOBmxu/4ZhXbfi8SdX5kH0BQS6uX1XgAcjPGVwESpf
-         ddWOOpvMflHhEytILHwz3EUF6+JTeQadIPCRSqvxLi1wBlepCaCUlXO5sUptSWpKtVzp
-         ndGg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=ibUs8AJ/dN5iUBOGd4EoUhQ0y6ATrIvVnV6MMEAOtus=;
-        fh=RuIN8zP8gAdAD7gvAYgToXalcSeoxY9brfNd7bx991M=;
-        b=NjHIvVDNHeFH4wOoeld4zkV2LbRFSpqlyCvas48+dkydhZdRPvwHsnN4KRN1DIfI7E
-         8up079yIBGPn+djP7ZI/xDwHTMkh9FaG1yq0GENmm2HeYpmLtD88NHZtWKgLdVZ96W6P
-         pvy1iLnZ7BPFU/HdZzZ+tXHmPCZqKYPo/rlQRZBUw5hVuTpDXZPXasuN2VmX4IvYMdbl
-         BczwMxjDxTQ87uDZdBmjd5EQ0bzxaq+B6v8mKVGEgMx3PNewF7ebri3t331RlSccDI+v
-         x5E4AnXvHtqPuBM91UeZ8XWyd9Z922p5Zc+heqeexxiyPFQdcBJVZFNZZNMS4GwBlTdw
-         62bg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773173487; x=1773778287; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ibUs8AJ/dN5iUBOGd4EoUhQ0y6ATrIvVnV6MMEAOtus=;
-        b=B5OBdHPgs334r7x010aTA+1AX+DYvyPTwoA7DyjzbwGHT+TxAvEC+sjrJMWcyib3+3
-         HhqLdst9LU9ONQFGD3FiFmu76KEWGXEj+yYPiXWFZks1heFcFtJXsexu02J5gzAdNxlC
-         T/1XhRVRfP6icaPC9gUl8muH6jxYLDDdec28R9m3qOD+JVtYyHuRZs3jgk8qWnCIvgR9
-         zY7oh1U4d2JTMmFEvLfomp713jXcUJ0D9b6dDR0z6i8qRH1FgyUvLWBuwftbUAbL96/B
-         q6r1E0hWV3gZOyMaO1R6rVz0cfVHsVT3n5C0jjVk1JZFuI2sd32RYfolOxIW448qsAHc
-         5z8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773173487; x=1773778287;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ibUs8AJ/dN5iUBOGd4EoUhQ0y6ATrIvVnV6MMEAOtus=;
-        b=P3gIPONDIquCqMpZ0VmVtW02S8H/J5Bx7br8pWIEpbV1bj2oFZz6V+7Yfqww3tuleV
-         Y9gTwnSU1uSDf83OXMaczGeSUfGnucpM813K23QcX5hdkmEF5Ui6g8sXWBCmnp20OkvQ
-         fMo//QZlRH5BeLFFAGOFEJ4S1YVTnLfpYO9yKSuGWlWELvhMM0ori9lk1Wm1rDXZT7DT
-         2jfwknC5cYHcB6AHTGw5j4sxfubo92bkjVDQ8yXwkXl5bKE84Q+0p1maEOQ3TXO0OB9Z
-         Ng22fBxEvkippPuMmFH6pMuII3SlI7DmRngHTDzi9euAwyPz19G1MbUTTb1nqZCWZPo3
-         VSZA==
-X-Forwarded-Encrypted: i=1; AJvYcCV0NQ5uh0R7J8ylPFxa8FQWYuUtoAZ+wC+Iu+3PYyLGfkdmEldEtIGZBiDf+oTtxihbg70=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzYOCc/cWKVJo9JcGsaaO3IXeNiaDMBX590yynEP5eeDoS8rTyc
-	C5YWeqivR2id4TL+xXwPDotTB/LHNzTV1fl6PGkhWBnBzDBaTx4KDPDXoS/W/RfCE+48/exWY/z
-	M34OTlH2n3Ce1rW23aoU6cyBs7X2sV3Y=
-X-Gm-Gg: ATEYQzzk0xMaQNwuSxwqF6rYZX0gXpacQujKJLjyVkQtbwzyptCRSPK2XFC+GGz/Mmj
-	Cs/633NqME10CqueeS9YFVjrJQAmtkMrTHZVf2GIp8I/8n430M9NgH5vkb93f5zpJ2nIEZgOS5C
-	XC7ylbXozis7FnXZFYOcqqwFidkvTWGWPAh4Eoh+OcJdfLpD4FbggcluqMWsVB6QhUeHEKIOWtu
-	31ehcz+iJuYX3voql2ouusvEIQj6IkGOi3hmW9p3HAa7F3EGmI5UqbYSP6ksfCPBIrlJbEukFwq
-	Fx7sYNmSV85NzXgrsYzpARrkvhKpTI6y91e6a3cRg6QRomcnl+eBLtxBpDpE
-X-Received: by 2002:a05:6000:186b:b0:439:b046:2044 with SMTP id
- ffacd0b85a97d-439f81f2334mr391642f8f.12.1773173486625; Tue, 10 Mar 2026
- 13:11:26 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i5Ueet9G"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773174080;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ToviXSUiN9JXVnvuExY/Z+f/0xWgRGfNYe4mMPqlw/M=;
+	b=i5Ueet9GoAHOQq38y7LgkxoszN04jalLBwME+lYZ1e53cmBB1AXxCmV0x2Sya/6bDTjbCx
+	e6IiEBDwBAQ11tAbsR6jBBw3Yakp9VJQNfsRH60Kfye5xQIWFd3mYpgfi3CPOxP4OM0Izu
+	aa7E+iO7ytXggDTijWG6wB5qWpyXDbI=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-683-75adqp5JMjeSaPsSZoBDRg-1; Tue,
+ 10 Mar 2026 16:21:16 -0400
+X-MC-Unique: 75adqp5JMjeSaPsSZoBDRg-1
+X-Mimecast-MFC-AGG-ID: 75adqp5JMjeSaPsSZoBDRg_1773174074
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 26A621956054;
+	Tue, 10 Mar 2026 20:21:14 +0000 (UTC)
+Received: from grbell-thinkpadx1carbongen9.rmtusnh.csb (unknown [10.22.80.152])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 7000B180049D;
+	Tue, 10 Mar 2026 20:21:11 +0000 (UTC)
+From: Gregory Bell <grbell@redhat.com>
+To: bpf@vger.kernel.org
+Cc: martin.lau@linux.dev,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	Gregory Bell <grbell@redhat.com>
+Subject: [PATCH bpf-next 0/1] Fix BPF struct_ops BTF cleanup race condition
+Date: Tue, 10 Mar 2026 16:21:01 -0400
+Message-ID: <cover.1773170190.git.grbell@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260308134614.29711-1-pilgrimtao@gmail.com> <20260308134614.29711-6-pilgrimtao@gmail.com>
- <4f18c782-a09e-4584-8abb-0c81265840ad@linux.dev>
-In-Reply-To: <4f18c782-a09e-4584-8abb-0c81265840ad@linux.dev>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Tue, 10 Mar 2026 21:10:49 +0100
-X-Gm-Features: AaiRm52Oyt3zkGMAr9n346T0E13x1SZHHeDtnD6VAx-Cd1dkPohpqM6MF5aLI_M
-Message-ID: <CAP01T74Xbg9HiGA6qwPzkOnaq5XfGu_MA+bKX6g-OE9UwOoboQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v7 5/5] bpf: refactor kfunc checks using
- table-driven approach in verifier
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: Chengkaitao <pilgrimtao@gmail.com>, martin.lau@linux.dev, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, 
-	chengkaitao@kylinos.cn, linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On Mon, 9 Mar 2026 at 07:45, Leon Hwang <leon.hwang@linux.dev> wrote:
->
-> On 8/3/26 21:46, Chengkaitao wrote:
-> > From: Kaitao Cheng <chengkaitao@kylinos.cn>
-> >
-> > Replace per-kfunc btf_id chains in list/rbtree/res_lock and graph node
-> > checks with btf_id_in_kfunc_table() and static kfunc tables for easier
-> > maintenance.
-> >
->
-> Such refactoring should be the first patch? Less churn. Then, update the
-> list only.
->
-> However, is_bpf_rbtree_api_kfunc(), is_bpf_res_spin_lock_kfunc(), and
-> BPF_RB_NODE should be excluded, because you didn't touch them in this
-> series.
+This patch fixes a race condition in BPF struct_ops where consecutive
+test runs fail due to a timing mismatch between BTF object cleanup and
+BTF module removal.
 
-I think moving clean up earlier makes some sense, but why exclude
-rbtree and res spin lock?
-Looks better to me to do them all.
+When running BPF struct_ops tests consecutively, the second test fails
+because BTF object references take longer to be released while their
+associated module is removed from btf_modules list immediately
+during module unload. This creates a race condition where the second
+test retrieves the cached BTF object but cannot find valid module
+information, causing btf_try_get_module() to return NULL.
 
->
-> Thanks,
-> Leon
->
-> [...]
+The fix synchronizes these cleanup operations by waiting for active BTF
+references to be released before completing module cleanup, eliminating
+the race condition.
+
+This issue is reproducible with any of the following tests: global_map_resize,
+pro_epilogue, struct_ops_module and struct_ops_multi
+
+	./test_progs -t global_map_resize; ./test_progs -t global_map_resize
+
+	#134/1   global_map_resize/global_map_resize_bss:OK
+	#134/2   global_map_resize/global_map_resize_data:OK
+	#134/3   global_map_resize/global_map_resize_invalid:OK
+	#134     global_map_resize:OK
+	Summary: 1/3 PASSED, 0 SKIPPED, 0 FAILED
+	global_map_resize_bss_subtest:PASS:test_global_map_resize__open 0 nsec
+	libbpf: map 'test_glo.bss': cannot be resized, last var must be an array
+	libbpf: map 'test_glo.bss': failed to adjust resized BTF, clearing BTF key/value info: -EINVAL
+	global_map_resize_bss_subtest:PASS:bpf_map__set_value_size 0 nsec
+	global_map_resize_bss_subtest:PASS:resize 0 nsec
+	global_map_resize_bss_subtest:PASS:percpu_arr_resize 0 nsec
+	global_map_resize_bss_subtest:PASS:array_len 0 nsec
+	global_map_resize_bss_subtest:PASS:bpf_map__initial_value (ptr) 0 nsec
+	global_map_resize_bss_subtest:PASS:bpf_map__initial_value (size) 0 nsec
+	libbpf: map 'st_ops_resize': failed to create: -EINVAL
+	libbpf: failed to load BPF skeleton 'test_global_map_resize': -EINVAL
+	global_map_resize_bss_subtest:FAIL:test_global_map_resize__load unexpected error: -22 (errno 22)
+	#134/1   global_map_resize/global_map_resize_bss:FAIL
+	global_map_resize_data_subtest:PASS:test_global_map_resize__open 0 nsec
+	global_map_resize_data_subtest:PASS:bpf_map__set_value_size 0 nsec
+	global_map_resize_data_subtest:PASS:resize 0 nsec
+	global_map_resize_data_subtest:PASS:percpu_arr_resize 0 nsec
+	global_map_resize_data_subtest:PASS:array_len 0 nsec
+	global_map_resize_data_subtest:PASS:bpf_map__initial_value (ptr) 0 nsec
+	global_map_resize_data_subtest:PASS:bpf_map__initial_value (size) 0 nsec
+	libbpf: map 'st_ops_resize': failed to create: -EINVAL
+	libbpf: failed to load BPF skeleton 'test_global_map_resize': -EINVAL
+	global_map_resize_data_subtest:FAIL:test_global_map_resize__load unexpected error: -22 (errno 22)
+	#134/2   global_map_resize/global_map_resize_data:FAIL
+	#134/3   global_map_resize/global_map_resize_invalid:OK
+	#134     global_map_resize:FAIL
+
+After the fix, consecutive runs work reliably without requiring delays.
+
+Gregory Bell (1):
+  bpf: Fix BTF module cleanup race condition in struct_ops
+
+ kernel/bpf/btf.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+-- 
+2.52.0
+
