@@ -1,134 +1,162 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29A70259C9C;
-	Tue, 10 Mar 2026 06:47:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 123493D2FE6;
+	Tue, 10 Mar 2026 06:52:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773125231; cv=none; b=Z/41A7YUQZ08qWVpSLY7BKXge7u++TAj0AnYlTHMfrA9sZ2+AtKkxrGm1MShdQEzXoZtyBM0DRde6rEiQ72rROfU9hWYTlQDFD7ElwzMO3ekM3Aaqi+sWhZv9tEIIDuzP6KTTmSks/QWRTh0q/c8LVage/CCBaLDZ1cfXlJq6sY=
+	t=1773125577; cv=none; b=QDNwylL2LZ9jp5gmqn40qKJa4RLFfXuW3jSo2xQxM66umZmNCl/IDgohtr3wledD3lRnjiwRUmJrJCLISYsrfUmQiqKJNJe5qbzk+CZVdkkBDbsPNCXnDc9rzHmZX7CHPwUH7kdnHqjwtrHccTvBiAprIXYc258fOPicELUEk5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773125231; c=relaxed/simple;
-	bh=NGXnINS+4MWplVm84Ymg8CZ66+TZtIsYwugcsy69u8M=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=flBmW1EyQ7XJjP4SZ8IwI8WKSUIHlXKhHNuDOnABxP49YzfWOQml/ZlLVtmeKV9ElRQzHxUew7hcQOXpq6hSg5wcxknEMeByQhAF+ZhuSnRAsUYEyDHA8hud10IttMFLEFV5m2kPtqKyt9LGsia3/7GtuMb4oR9UNPnK3zg02Fk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8Axz6tsvq9p62oZAA--.15618S3;
-	Tue, 10 Mar 2026 14:47:08 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJAxHMJrvq9pRuhRAA--.23272S2;
-	Tue, 10 Mar 2026 14:47:07 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	Hengqi Chen <hengqi.chen@gmail.com>
-Cc: loongarch@lists.linux.dev,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v1] LoongArch: BPF: Make arch_protect_bpf_trampoline() return 0
-Date: Tue, 10 Mar 2026 14:47:06 +0800
-Message-ID: <20260310064706.4985-1-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
+	s=arc-20240116; t=1773125577; c=relaxed/simple;
+	bh=yIuBqtSvCnpw+/JYyZxc+lddC/2WuN+ViGmYB0qeyE0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UmZNosn909h+QHr06b+RDPgeJQksfNl8AagwO+pkivqd0lwIfwNy2e6g7ySil6EChfGxFEbI2NBDkE1krgP/BMY/odXaHlpUd8Jp5JSS7TnxZa4k7oISiIRqByKzK9P8Qcu4pKRTkjMLoW+Ln6UatD2J/letavaYIjDk9//z78s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fVPhP140jzKHMfY;
+	Tue, 10 Mar 2026 14:52:37 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id 0D4534056E;
+	Tue, 10 Mar 2026 14:52:52 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP3 (Coremail) with SMTP id _Ch0CgAH51PDv69ps+J6AQ--.54069S2;
+	Tue, 10 Mar 2026 14:52:51 +0800 (CST)
+Message-ID: <7466ab50-da7f-458e-b408-c98e07c0cc7a@huaweicloud.com>
+Date: Tue, 10 Mar 2026 14:52:51 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJAxHMJrvq9pRuhRAA--.23272S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxZr15Ww4rZr1Dtr47ZF48KrX_yoW5Ww1Dpr
-	y3Cryakr4kXr1UZr4DJ3Wjvr90qa1Dua1UGry8Kry8C3s8X348tryjk348XFWrCFWrt3W8
-	Xa1kXrnxta1DJagCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
-	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE
-	14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x
-	0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
-	7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcV
-	C0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF
-	04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7
-	CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jOdb8UUUUU=
+User-Agent: Mozilla Thunderbird
+Subject: Re: [bpf-next v8 1/5] bpf: Move constants blinding from JIT to
+ verifier
+Content-Language: en-US
+To: Anton Protopopov <a.s.protopopov@gmail.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Yonghong Song <yonghong.song@linux.dev>,
+ Puranjay Mohan <puranjay@kernel.org>, Shahab Vahedi <list+bpf@vahedi.org>,
+ Russell King <linux@armlinux.org.uk>, Tiezhu Yang <yangtiezhu@loongson.cn>,
+ Hengqi Chen <hengqi.chen@gmail.com>,
+ Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+ Paul Burton <paulburton@kernel.org>, Hari Bathini <hbathini@linux.ibm.com>,
+ Christophe Leroy <chleroy@kernel.org>, Naveen N Rao <naveen@kernel.org>,
+ Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
+ =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+ Pu Lehui <pulehui@huawei.com>, Ilya Leoshkevich <iii@linux.ibm.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ "David S . Miller" <davem@davemloft.net>, Wang YanQing <udknight@gmail.com>
+References: <20260309140044.2652538-1-xukuohai@huaweicloud.com>
+ <20260309140044.2652538-2-xukuohai@huaweicloud.com>
+ <aa8Bd0GQdEj960iP@mail.gmail.com>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <aa8Bd0GQdEj960iP@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:_Ch0CgAH51PDv69ps+J6AQ--.54069S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KFyUAFyDKw15urW7Xw4xJFb_yoW5JFyxpa
+	sYqF17Aryrt3y8Kr1UGF1qyFyUJr4IgF1rKFW8Wa429rnFgrykWa4UKFZ7Kay3CFy5Ww4f
+	X34Fgr9rZay0y37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
+	6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07
+	jzE__UUUUU=
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-Occasionally, there exists "text_copy_cb: operation failed" when executing
-bpf selftests, the reason is copy_to_kernel_nofault() failed and the ecode
-of estat register is 0x4 (PME: Page Modification Exception) due to the pte
-is not writeable, the root cause is that there is another place to set pte
-readonly which is in the generic weak arch_protect_bpf_trampoline().
+On 3/10/2026 1:20 AM, Anton Protopopov wrote:
 
-There are two ways to fix this race condition issue, the direct way is to
-modify the generic weak arch_protect_bpf_trampoline() to add a mutex lock
-for set_memory_rox(), but the other simple and proper way is to just make
-arch_protect_bpf_trampoline() return 0 in the arch-specific code because
-LoongArch already uses BPF prog pack allocator for trampoline.
+[...]
 
-Here are the trimmed kernel log messages:
+>>   	if (!jit_data) {
+>>   		jit_data = kzalloc_obj(*jit_data);
+>> -		if (!jit_data) {
+>> -			prog = orig_prog;
+>> +		if (!jit_data)
+>>   			goto out;
+>> -		}
+>>   		prog->aux->jit_data = jit_data;
+>>   	}
+>>   	priv_stack_ptr = prog->aux->priv_stack_ptr;
+>> @@ -3765,10 +3749,8 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>>   		priv_stack_alloc_sz = round_up(prog->aux->stack_depth, 8) +
+>>   				      2 * PRIV_STACK_GUARD_SZ;
+>>   		priv_stack_ptr = __alloc_percpu_gfp(priv_stack_alloc_sz, 8, GFP_KERNEL);
+>> -		if (!priv_stack_ptr) {
+>> -			prog = orig_prog;
+>> +		if (!priv_stack_ptr)
+>>   			goto out_priv_stack;
+>> -		}
+>>   
+>>   		priv_stack_init_guard(priv_stack_ptr, priv_stack_alloc_sz);
+>>   		prog->aux->priv_stack_ptr = priv_stack_ptr;
+>> @@ -3786,10 +3768,8 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>>   		goto skip_init_addrs;
+>>   	}
+>>   	addrs = kvmalloc_objs(*addrs, prog->len + 1);
+>> -	if (!addrs) {
+>> -		prog = orig_prog;
+>> +	if (!addrs)
+>>   		goto out_addrs;
+>> -	}
+>>   
+>>   	/*
+>>   	 * Before first pass, make a rough estimation of addrs[]
+>> @@ -3820,8 +3800,6 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>>   						   sizeof(rw_header->size));
+>>   				bpf_jit_binary_pack_free(header, rw_header);
+>>   			}
+>> -			/* Fall back to interpreter mode */
+>> -			prog = orig_prog;
+>>   			if (extra_pass) {
+>>   				prog->bpf_func = NULL;
+>>   				prog->jited = 0;
+>> @@ -3852,10 +3830,8 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>>   			header = bpf_jit_binary_pack_alloc(roundup(proglen, align) + extable_size,
+>>   							   &image, align, &rw_header, &rw_image,
+>>   							   jit_fill_hole);
+>> -			if (!header) {
+>> -				prog = orig_prog;
+>> +			if (!header)
+>>   				goto out_addrs;
+>> -			}
+>>   			prog->aux->extable = (void *) image + roundup(proglen, align);
+>>   		}
+>>   		oldproglen = proglen;
+>> @@ -3908,8 +3884,6 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>>   		prog->bpf_func = (void *)image + cfi_get_offset();
+>>   		prog->jited = 1;
+>>   		prog->jited_len = proglen - cfi_get_offset();
+>> -	} else {
+>> -		prog = orig_prog;
+>>   	}
+>>   
+>>   	if (!image || !prog->is_func || extra_pass) {
+>> @@ -3925,10 +3899,8 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>>   		kfree(jit_data);
+>>   		prog->aux->jit_data = NULL;
+>>   	}
+>> +
+>>   out:
+> 
+> small nit: is the label 'out' necessary now?
+> 
 
-  copy_to_kernel_nofault: memory access failed, ecode is 0x4
-  copy_to_kernel_nofault: caller is text_copy_cb+0x50/0xa0
-  text_copy_cb: operation failed
-  ------------[ cut here ]------------
-  bpf_prog_pack bug: missing bpf_arch_text_invalidate?
-  WARNING: kernel/bpf/core.c:1008 at bpf_prog_pack_free+0x200/0x228
-  ...
-  Call Trace:
-  [<9000000000248914>] show_stack+0x64/0x188
-  [<9000000000241308>] dump_stack_lvl+0x6c/0x9c
-  [<90000000002705bc>] __warn+0x9c/0x200
-  [<9000000001c428c0>] __report_bug+0xa8/0x1c0
-  [<9000000001c42b5c>] report_bug+0x64/0x120
-  [<9000000001c7dcd0>] do_bp+0x270/0x3c0
-  [<9000000000246f40>] handle_bp+0x120/0x1c0
-  [<900000000047b030>] bpf_prog_pack_free+0x200/0x228
-  [<900000000047b2ec>] bpf_jit_binary_pack_free+0x24/0x60
-  [<900000000026989c>] bpf_jit_free+0x54/0xb0
-  [<900000000029e10c>] process_one_work+0x184/0x610
-  [<900000000029ef8c>] worker_thread+0x24c/0x388
-  [<90000000002a902c>] kthread+0x13c/0x170
-  [<9000000001c7dfe8>] ret_from_kernel_thread+0x28/0x1c0
-  [<9000000000246624>] ret_from_kernel_thread_asm+0xc/0x88
-
-  ---[ end trace 0000000000000000 ]---
-
-Here is a simple shell script to reproduce:
-
-  #!/bin/bash
-
-  for ((i=1; i<=1000; i++))
-  do
-    echo "under testing $i ..."
-    dmesg -c > /dev/null
-    ./test_progs -t fentry_attach_stress > /dev/null
-    dmesg -t | grep "text_copy_cb: operation failed"
-    if [ $? -eq 0 ]; then
-      break
-    fi
-  done
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/loongarch/net/bpf_jit.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-index 3bd89f55960d..4f1af3b7a363 100644
---- a/arch/loongarch/net/bpf_jit.c
-+++ b/arch/loongarch/net/bpf_jit.c
-@@ -1568,6 +1568,11 @@ void arch_free_bpf_trampoline(void *image, unsigned int size)
- 	bpf_prog_pack_free(image, size);
- }
- 
-+int arch_protect_bpf_trampoline(void *image, unsigned int size)
-+{
-+	return 0;
-+}
-+
- /*
-  * Sign-extend the register if necessary
-  */
--- 
-2.42.0
+There is a "goto out" in the "if (!jit_data)" body, but it is the
+only one, I'll replace it with a direct "return prog" and remove
+the out label.
 
