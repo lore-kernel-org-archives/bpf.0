@@ -1,432 +1,245 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.17.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 619943A16BE
-	for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 15:37:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04E153AA4E6;
+	Tue, 10 Mar 2026 15:47:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773157059; cv=none; b=EZ5F5VU/+uUniE39cAfAWro5WBDZ9nr5mjgufPVWyrdYqaxSN2Pr3hNcUJQGsoCUFeS/H5mNeiQmv9PN3wmwe9p3VIrcqUalwjx5kfX/h2gBeUB3ijyloqDXpAQ+ua3sEQLPoP7FbszNgVVOtRaL9LgmMOjsQIs/xwQG+WKoQRM=
+	t=1773157678; cv=none; b=GJswgAn/cUqn3+eWmo0alzonFT2ZA/FYA9h/tK8X48fkW8rQOYkUvYo7QlrHKy6fcDfJi5Mu8/daN81jaDlV0jCPpJNglRPJv2VdGJAjYENU8/6oQZhFEM9LC8R7ch2a4JJoqQpRFQn/utF4XcGONtZ+Z3nSE2vrq/i4GCpQzrA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773157059; c=relaxed/simple;
-	bh=GrBJ8KgLDjzpDsC4+lsoO34Wi6iwbKlPguJNjP1d9vc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nSptaopQ/2DBFeiYSSZWcu5wXOpVG9KDdgCE20yV50nvm+WfBFJ+XGAK7o37tIKLGnnqr3tHrl/QyLezsWV3kUobvjBZJObCcp7OKqCes1vW+Qd5q/VHnOv0hWh+wsw0b+4HeBKxuEyDbLxCsq0pwbdKehoyOM/aYk0bOKVeTc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=yeaW4FrK; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=aw2rneJv; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=yeaW4FrK; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=aw2rneJv; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1773157678; c=relaxed/simple;
+	bh=nIfgenJGac4O6CqM8mWCtdayOts9dS1D2FhHmYYRcn4=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=VCUny37wxogF+tPnbmzvUSPBzo+0oSbqzFJKMsH2aFW75rMeXvT51hTn3cDuGzGrr7VzofXdjvj6I5aq7nPlJxNSOWOR4HHfsPYcAmQubElzCNBvlzqSVuaAfostNsOr3A1MJzGCb0G/O0JOz4g9DEhwXeKocK92yBmCIhMDHEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=h7K0qFC8; arc=none smtp.client-ip=212.227.17.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="yeaW4FrK";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="aw2rneJv";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="yeaW4FrK";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="aw2rneJv"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id B6D1E5BCEA;
-	Tue, 10 Mar 2026 15:37:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1773157055; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RNUCJFxoUAdE23YTl9IMhJP5SV/0oDKXCGWqAEKpeN8=;
-	b=yeaW4FrKrW+eKl+QF9ZIMvrxFE69M7oJdvu1cI9xk57s+k0YNDVMWQzEFIW2Z3R99TVg/9
-	vJN7X8+XyfuOSjutCyjJxc1KaY1bhsCBGBONPgrG+E5z8PUyEwJCdvFtiKk3FmeGj3VwQo
-	rnOTrbdg/kdUzNxTWc77MFStE4RRtmw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1773157055;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RNUCJFxoUAdE23YTl9IMhJP5SV/0oDKXCGWqAEKpeN8=;
-	b=aw2rneJvS1VlRrzjpU8CmSRcH7FDVDEqZW5wLuFH6V1PSjUBt0LS7rlZAJC2kS2ozMWXJY
-	WWQWLvi17MLe7LCw==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1773157055; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RNUCJFxoUAdE23YTl9IMhJP5SV/0oDKXCGWqAEKpeN8=;
-	b=yeaW4FrKrW+eKl+QF9ZIMvrxFE69M7oJdvu1cI9xk57s+k0YNDVMWQzEFIW2Z3R99TVg/9
-	vJN7X8+XyfuOSjutCyjJxc1KaY1bhsCBGBONPgrG+E5z8PUyEwJCdvFtiKk3FmeGj3VwQo
-	rnOTrbdg/kdUzNxTWc77MFStE4RRtmw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1773157055;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RNUCJFxoUAdE23YTl9IMhJP5SV/0oDKXCGWqAEKpeN8=;
-	b=aw2rneJvS1VlRrzjpU8CmSRcH7FDVDEqZW5wLuFH6V1PSjUBt0LS7rlZAJC2kS2ozMWXJY
-	WWQWLvi17MLe7LCw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 39D323F519;
-	Tue, 10 Mar 2026 15:37:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id +PrFCr46sGlKXwAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Tue, 10 Mar 2026 15:37:34 +0000
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-To: netdev@vger.kernel.org
-Cc: rbm@suse.com,
-	Fernando Fernandez Mancera <fmancera@suse.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Guillaume Nault <gnault@redhat.com>,
-	Ido Schimmel <idosch@nvidia.com>,
-	linux-kernel@vger.kernel.org (open list),
-	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools))
-Subject: [PATCH 08/10 net-next v2] bpf: remove ipv6_bpf_stub completely and use direct function calls
-Date: Tue, 10 Mar 2026 16:34:31 +0100
-Message-ID: <20260310153506.5181-9-fmancera@suse.de>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260310153506.5181-1-fmancera@suse.de>
-References: <20260310153506.5181-1-fmancera@suse.de>
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="h7K0qFC8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1773157662; x=1773762462; i=markus.elfring@web.de;
+	bh=ViIdeWt5br4rBsrGxHUMEkJDkD/ERSvSv/UV5SzvttY=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=h7K0qFC8lui0M3aEG2yhHOptmzLeK24S79cZCRktla9iVPsdh7MMZY9IQ+0fNsjy
+	 1Jmj8tPDjUYGV0N31jChpPIbrmEGAAiLmOFKWubyE3NTttjDE8UYZYzPrHWHwqRbT
+	 ZmJLoNHR6+mwIgea1XMDsroKD1VkpdbtDpYP5RQOlLeXbFM1sGNyCjcqO4VGv6oH0
+	 or7WNvOJCD7wct+ITkk6hEn2pz09hvl0HnH1IXkz/NhmxM4+GPG6PRDdXRWJwhNqD
+	 E/CyuUCmqvUAopwe+bMtAzI3unk/5Tnu7dsxuDhsN1+B/BFgi6IvYkOUfIHgIX1fz
+	 IDA+/KUXvW7fGiboiQ==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from client.hidden.invalid by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1N5lj7-1vYM6w3zfn-012TrV; Tue, 10
+ Mar 2026 16:41:18 +0100
+Message-ID: <924acf71-45df-4ea2-9bbd-b6f5ff262b2b@web.de>
+Date: Tue, 10 Mar 2026 16:41:12 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -5.30
-X-Spam-Level: 
-X-Spamd-Result: default: False [-5.30 / 50.00];
-	REPLY(-4.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[25];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:email];
-	RCVD_COUNT_TWO(0.00)[2];
-	FREEMAIL_CC(0.00)[suse.com,suse.de,davemloft.net,kernel.org,google.com,redhat.com,iogearbox.net,linux.dev,gmail.com,fomichev.me,nvidia.com,vger.kernel.org];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	R_RATELIMIT(0.00)[to_ip_from(RLrr9ek4ud4f4qwi71m7motjzt)];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com]
+User-Agent: Mozilla Thunderbird
+To: Philipp Hahn <phahn-oss@avm.de>, cocci@inria.fr,
+ Julia Lawall <Julia.Lawall@inria.fr>
+Cc: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com,
+ bpf@vger.kernel.org, ceph-devel@vger.kernel.org, dm-devel@lists.linux.dev,
+ dri-devel@lists.freedesktop.org, gfs2@lists.linux.dev,
+ intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
+ iommu@lists.linux.dev, kvm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
+ linux-bluetooth@vger.kernel.org, linux-btrfs@vger.kernel.org,
+ linux-cifs@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-hyperv@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+ linux-media@vger.kernel.org, linux-mips@vger.kernel.org, linux-mm@kvack.org,
+ linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org,
+ linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+ linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
+ linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+ nicolas.palix@imag.fr, ntfs3@lists.linux.dev,
+ samba-technical@lists.samba.org, sched-ext@lists.linux.dev,
+ target-devel@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
+ v9fs@lists.linux.dev
+References: <20260310-b4-is_err_or_null-v1-1-bd63b656022d@avm.de>
+Subject: Re: [PATCH 01/61] Coccinelle: Prefer IS_ERR_OR_NULL over manual NULL
+ check
+Content-Language: en-GB, de-DE
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20260310-b4-is_err_or_null-v1-1-bd63b656022d@avm.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:I49ufsxpBKiFBze+2Qm04f+elx94DZSymOaZcQTAnyd9Dy18WSZ
+ l5PlqGBdCeQJnqXYHB7LM8JEThQzWaqt46DhF3JOnbIEKCtwYJeZnzJMAXhMu3h78zedo+b
+ 2MDr9yfDF5xiOPbOsnoVg9HvEpZouoV7eAA1AasOX+/8mAaWp7eICgl3FZXuUGMMgTPEUmo
+ 9zEXJmftCILFnPJ5epBUQ==
 X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:04WXpfHKV24=;XM8484Tl0Gel7LmfPFVAhD+GUiz
+ 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
+ WH56U++o=
 
-As IPv6 is built-in only, the ipv6_bpf_stub can be removed completely.
+> Find and convert uses of IS_ERR() plus NULL check to IS_ERR_OR_NULL().
+=E2=80=A6
 
-Convert all ipv6_bpf_stub usage to direct function calls instead. The
-fallback functions introduced previously will prevent linkage errors
-when CONFIG_IPV6 is disabled.
+Can this information trigger any more consequences on corresponding summar=
+y phrases?
 
-Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
----
-v2: no changes
----
- include/net/ipv6.h       |  2 ++
- include/net/ipv6_stubs.h | 21 ---------------
- net/core/filter.c        | 56 +++++++++++++++++-----------------------
- net/core/lwt_bpf.c       | 10 ++++---
- net/ipv6/af_inet6.c      | 15 +++++------
- 5 files changed, 38 insertions(+), 66 deletions(-)
 
-diff --git a/include/net/ipv6.h b/include/net/ipv6.h
-index 06d1fa54cbf7..c55a5e60e821 100644
---- a/include/net/ipv6.h
-+++ b/include/net/ipv6.h
-@@ -1151,6 +1151,8 @@ void inet6_sock_destruct(struct sock *sk);
- int inet6_release(struct socket *sock);
- int inet6_bind(struct socket *sock, struct sockaddr_unsized *uaddr, int addr_len);
- int inet6_bind_sk(struct sock *sk, struct sockaddr_unsized *uaddr, int addr_len);
-+int inet6_bind_flags(struct sock *sk, struct sockaddr_unsized *uaddr,
-+		     int addr_len, u32 flags);
- int inet6_getname(struct socket *sock, struct sockaddr *uaddr,
- 		  int peer);
- int inet6_ioctl(struct socket *sock, unsigned int cmd, unsigned long arg);
-diff --git a/include/net/ipv6_stubs.h b/include/net/ipv6_stubs.h
-index d3013e721b14..c5c049b4473f 100644
---- a/include/net/ipv6_stubs.h
-+++ b/include/net/ipv6_stubs.h
-@@ -78,25 +78,4 @@ struct ipv6_stub {
- };
- extern const struct ipv6_stub *ipv6_stub __read_mostly;
- 
--/* A stub used by bpf helpers. Similarly ugly as ipv6_stub */
--struct ipv6_bpf_stub {
--	int (*inet6_bind)(struct sock *sk, struct sockaddr_unsized *uaddr, int addr_len,
--			  u32 flags);
--	struct sock *(*udp6_lib_lookup)(const struct net *net,
--				     const struct in6_addr *saddr, __be16 sport,
--				     const struct in6_addr *daddr, __be16 dport,
--				     int dif, int sdif, struct udp_table *tbl,
--				     struct sk_buff *skb);
--	int (*ipv6_setsockopt)(struct sock *sk, int level, int optname,
--			       sockptr_t optval, unsigned int optlen);
--	int (*ipv6_getsockopt)(struct sock *sk, int level, int optname,
--			       sockptr_t optval, sockptr_t optlen);
--	int (*ipv6_dev_get_saddr)(struct net *net,
--				  const struct net_device *dst_dev,
--				  const struct in6_addr *daddr,
--				  unsigned int prefs,
--				  struct in6_addr *saddr);
--};
--extern const struct ipv6_bpf_stub *ipv6_bpf_stub __read_mostly;
--
- #endif
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 62cae2bcc562..ae395b2b7966 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -73,7 +73,6 @@
- #include <net/seg6.h>
- #include <net/seg6_local.h>
- #include <net/lwtunnel.h>
--#include <net/ipv6_stubs.h>
- #include <net/bpf_sk_storage.h>
- #include <net/transp_v6.h>
- #include <linux/btf_ids.h>
-@@ -2276,7 +2275,7 @@ static int __bpf_redirect_neigh_v6(struct sk_buff *skb, struct net_device *dev,
- 			.saddr	      = ip6h->saddr,
- 		};
- 
--		dst = ipv6_stub->ipv6_dst_lookup_flow(net, NULL, &fl6, NULL);
-+		dst = ip6_dst_lookup_flow(net, NULL, &fl6, NULL);
- 		if (IS_ERR(dst))
- 			goto out_drop;
- 
-@@ -5570,12 +5569,12 @@ static int sol_ipv6_sockopt(struct sock *sk, int optname,
- 	}
- 
- 	if (getopt)
--		return ipv6_bpf_stub->ipv6_getsockopt(sk, SOL_IPV6, optname,
--						      KERNEL_SOCKPTR(optval),
--						      KERNEL_SOCKPTR(optlen));
-+		return do_ipv6_getsockopt(sk, SOL_IPV6, optname,
-+					  KERNEL_SOCKPTR(optval),
-+					  KERNEL_SOCKPTR(optlen));
- 
--	return ipv6_bpf_stub->ipv6_setsockopt(sk, SOL_IPV6, optname,
--					      KERNEL_SOCKPTR(optval), *optlen);
-+	return do_ipv6_setsockopt(sk, SOL_IPV6, optname,
-+				  KERNEL_SOCKPTR(optval), *optlen);
- }
- 
- static int __bpf_setsockopt(struct sock *sk, int level, int optname,
-@@ -5974,9 +5973,6 @@ static const struct bpf_func_proto bpf_sock_ops_cb_flags_set_proto = {
- 	.arg2_type	= ARG_ANYTHING,
- };
- 
--const struct ipv6_bpf_stub *ipv6_bpf_stub __read_mostly;
--EXPORT_SYMBOL_GPL(ipv6_bpf_stub);
--
- BPF_CALL_3(bpf_bind, struct bpf_sock_addr_kern *, ctx, struct sockaddr *, addr,
- 	   int, addr_len)
- {
-@@ -6000,11 +5996,9 @@ BPF_CALL_3(bpf_bind, struct bpf_sock_addr_kern *, ctx, struct sockaddr *, addr,
- 			return err;
- 		if (((struct sockaddr_in6 *)addr)->sin6_port == htons(0))
- 			flags |= BIND_FORCE_ADDRESS_NO_PORT;
--		/* ipv6_bpf_stub cannot be NULL, since it's called from
--		 * bpf_cgroup_inet6_connect hook and ipv6 is already loaded
--		 */
--		return ipv6_bpf_stub->inet6_bind(sk, (struct sockaddr_unsized *)addr,
--						 addr_len, flags);
-+
-+		return inet6_bind_flags(sk, (struct sockaddr_unsized *)addr,
-+					addr_len, flags);
- #endif /* CONFIG_IPV6 */
- 	}
- #endif /* CONFIG_INET */
-@@ -6215,7 +6209,7 @@ static int bpf_ipv4_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
- 		neigh = __ipv4_neigh_lookup_noref(dev,
- 						  (__force u32)params->ipv4_dst);
- 	else
--		neigh = __ipv6_neigh_lookup_noref_stub(dev, params->ipv6_dst);
-+		neigh = __ipv6_neigh_lookup_noref(dev, params->ipv6_dst);
- 
- 	if (!neigh || !(READ_ONCE(neigh->nud_state) & NUD_VALID))
- 		return BPF_FIB_LKUP_RET_NO_NEIGH;
-@@ -6283,12 +6277,11 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
- 			params->tbid = 0;
- 		}
- 
--		tb = ipv6_stub->fib6_get_table(net, tbid);
-+		tb = fib6_get_table(net, tbid);
- 		if (unlikely(!tb))
- 			return BPF_FIB_LKUP_RET_NOT_FWDED;
- 
--		err = ipv6_stub->fib6_table_lookup(net, tb, oif, &fl6, &res,
--						   strict);
-+		err = fib6_table_lookup(net, tb, oif, &fl6, &res, strict);
- 	} else {
- 		if (flags & BPF_FIB_LOOKUP_MARK)
- 			fl6.flowi6_mark = params->mark;
-@@ -6298,7 +6291,7 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
- 		fl6.flowi6_tun_key.tun_id = 0;
- 		fl6.flowi6_uid = sock_net_uid(net, NULL);
- 
--		err = ipv6_stub->fib6_lookup(net, oif, &fl6, &res, strict);
-+		err = fib6_lookup(net, oif, &fl6, &res, strict);
- 	}
- 
- 	if (unlikely(err || IS_ERR_OR_NULL(res.f6i) ||
-@@ -6319,11 +6312,11 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
- 		return BPF_FIB_LKUP_RET_NOT_FWDED;
- 	}
- 
--	ipv6_stub->fib6_select_path(net, &res, &fl6, fl6.flowi6_oif,
--				    fl6.flowi6_oif != 0, NULL, strict);
-+	fib6_select_path(net, &res, &fl6, fl6.flowi6_oif,
-+			 fl6.flowi6_oif != 0, NULL, strict);
- 
- 	if (check_mtu) {
--		mtu = ipv6_stub->ip6_mtu_from_fib6(&res, dst, src);
-+		mtu = ip6_mtu_from_fib6(&res, dst, src);
- 		if (params->tot_len > mtu) {
- 			params->mtu_result = mtu; /* union with tot_len */
- 			return BPF_FIB_LKUP_RET_FRAG_NEEDED;
-@@ -6344,9 +6337,7 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
- 		if (res.f6i->fib6_prefsrc.plen) {
- 			*src = res.f6i->fib6_prefsrc.addr;
- 		} else {
--			err = ipv6_bpf_stub->ipv6_dev_get_saddr(net, dev,
--								&fl6.daddr, 0,
--								src);
-+			err = ipv6_dev_get_saddr(net, dev, &fl6.daddr, 0, src);
- 			if (err)
- 				return BPF_FIB_LKUP_RET_NO_SRC_ADDR;
- 		}
-@@ -6358,7 +6349,7 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
- 	/* xdp and cls_bpf programs are run in RCU-bh so rcu_read_lock_bh is
- 	 * not needed here.
- 	 */
--	neigh = __ipv6_neigh_lookup_noref_stub(dev, dst);
-+	neigh = __ipv6_neigh_lookup_noref(dev, dst);
- 	if (!neigh || !(READ_ONCE(neigh->nud_state) & NUD_VALID))
- 		return BPF_FIB_LKUP_RET_NO_NEIGH;
- 	memcpy(params->dmac, neigh->ha, ETH_ALEN);
-@@ -6893,12 +6884,11 @@ static struct sock *sk_lookup(struct net *net, struct bpf_sock_tuple *tuple,
- 					    src6, tuple->ipv6.sport,
- 					    dst6, ntohs(tuple->ipv6.dport),
- 					    dif, sdif, &refcounted);
--		else if (likely(ipv6_bpf_stub))
--			sk = ipv6_bpf_stub->udp6_lib_lookup(net,
--							    src6, tuple->ipv6.sport,
--							    dst6, tuple->ipv6.dport,
--							    dif, sdif,
--							    net->ipv4.udp_table, NULL);
-+		else
-+			sk = __udp6_lib_lookup(net, src6, tuple->ipv6.sport,
-+					       dst6, tuple->ipv6.dport,
-+					       dif, sdif,
-+					       net->ipv4.udp_table, NULL);
- #endif
- 	}
- 
-diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
-index 9f40be0c3e71..f71ef82a5f3d 100644
---- a/net/core/lwt_bpf.c
-+++ b/net/core/lwt_bpf.c
-@@ -13,7 +13,6 @@
- #include <net/gre.h>
- #include <net/ip.h>
- #include <net/ip6_route.h>
--#include <net/ipv6_stubs.h>
- 
- struct bpf_lwt_prog {
- 	struct bpf_prog *prog;
-@@ -103,7 +102,12 @@ static int bpf_lwt_input_reroute(struct sk_buff *skb)
- 		dev_put(dev);
- 	} else if (skb->protocol == htons(ETH_P_IPV6)) {
- 		skb_dst_drop(skb);
--		err = ipv6_stub->ipv6_route_input(skb);
-+		if (IS_ENABLED(CONFIG_IPV6)) {
-+			ip6_route_input(skb);
-+			err = skb_dst(skb)->error;
-+		} else {
-+			err = -EAFNOSUPPORT;
-+		}
- 	} else {
- 		err = -EAFNOSUPPORT;
- 	}
-@@ -233,7 +237,7 @@ static int bpf_lwt_xmit_reroute(struct sk_buff *skb)
- 		fl6.daddr = iph6->daddr;
- 		fl6.saddr = iph6->saddr;
- 
--		dst = ipv6_stub->ipv6_dst_lookup_flow(net, skb->sk, &fl6, NULL);
-+		dst = ip6_dst_lookup_flow(net, skb->sk, &fl6, NULL);
- 		if (IS_ERR(dst)) {
- 			err = PTR_ERR(dst);
- 			goto err;
-diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
-index 448be9704313..75a9d9fe1308 100644
---- a/net/ipv6/af_inet6.c
-+++ b/net/ipv6/af_inet6.c
-@@ -460,6 +460,12 @@ int inet6_bind_sk(struct sock *sk, struct sockaddr_unsized *uaddr, int addr_len)
- 	return __inet6_bind(sk, uaddr, addr_len, flags);
- }
- 
-+int inet6_bind_flags(struct sock *sk, struct sockaddr_unsized *uaddr,
-+		     int addr_len, u32 flags)
-+{
-+	return __inet6_bind(sk, uaddr, addr_len, flags);
-+}
-+
- /* bind for INET6 API */
- int inet6_bind(struct socket *sock, struct sockaddr_unsized *uaddr, int addr_len)
- {
-@@ -1050,14 +1056,6 @@ static const struct ipv6_stub ipv6_stub_impl = {
- 	.ip6_xmit = ip6_xmit,
- };
- 
--static const struct ipv6_bpf_stub ipv6_bpf_stub_impl = {
--	.inet6_bind = __inet6_bind,
--	.udp6_lib_lookup = __udp6_lib_lookup,
--	.ipv6_setsockopt = do_ipv6_setsockopt,
--	.ipv6_getsockopt = do_ipv6_getsockopt,
--	.ipv6_dev_get_saddr = ipv6_dev_get_saddr,
--};
--
- static int __init inet6_init(void)
- {
- 	struct list_head *r;
-@@ -1227,7 +1225,6 @@ static int __init inet6_init(void)
- 	/* ensure that ipv6 stubs are visible only after ipv6 is ready */
- 	wmb();
- 	ipv6_stub = &ipv6_stub_impl;
--	ipv6_bpf_stub = &ipv6_bpf_stub_impl;
- out:
- 	return err;
- 
--- 
-2.53.0
+=E2=80=A6
+> +++ b/scripts/coccinelle/api/is_err_or_null.cocci
+> @@ -0,0 +1,125 @@
+=E2=80=A6
+> +virtual patch
+> +virtual report
+> +virtual org
 
+How will interests evolve further for the support of the operation mode =
+=E2=80=9Ccontext=E2=80=9D?
+
+
+> +@p1 depends on patch@
+> +expression E;
+> +@@
+> +(
+> +-	E !=3D NULL && !IS_ERR(E)
+> ++	!IS_ERR_OR_NULL(E)
+> +|
+> +-	E =3D=3D NULL || IS_ERR(E)
+> ++	IS_ERR_OR_NULL(E)
+> +|
+> +-	!IS_ERR(E) && E !=3D NULL
+> ++	!IS_ERR_OR_NULL(E)
+> +|
+> +-	IS_ERR(E) || E =3D=3D NULL
+> ++	IS_ERR_OR_NULL(E)
+> +)
+
+Did you eventually check probabilities for the occurrence of mentioned cas=
+e distinctions?
+
+
+> +@p2 depends on patch@
+=E2=80=A6
+
+I suggest to reconsider =E2=80=9Cside effects=E2=80=9D according to the sp=
+litting of these SmPL rules
+once more.
+
+
+=E2=80=A6
+> +@r2 depends on report || org@
+> +identifier I;
+> +expression E;
+> +position p;
+> +@@
+> +(
+> +*	(I =3D E) !=3D NULL && ... && !IS_ERR@p(I)
+> +|
+> +*	(I =3D E) =3D=3D NULL || ... || IS_ERR@p(I)
+> +)
+
+I doubt that the usage of SmPL asterisks fits to these two operation modes=
+.
+
+
+=E2=80=A6
+> +@p5 depends on patch disable unlikely @
+> +expression E;
+> +@@
+> +-\( likely \| unlikely \)(
+> +(
+> + IS_ERR_OR_NULL(E)
+> +|
+> + !IS_ERR_OR_NULL(E)
+> +)
+> +-)
+
+* Would it be nicer to move such SmPL code to the end of the patch rule li=
+sting?
+
+* Can this source code search pattern matter also for further operation mo=
+des?
+
+
+Regards,
+Markus
