@@ -1,97 +1,95 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36E839443
-	for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 00:54:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A327F2857F0
+	for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 00:56:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773104083; cv=none; b=PlhaeEEQhHRyUMSeavn9aMbzS0oAtICc8o/QShLNbH/FBofohA+w8XcP7eI5R2w1jPNIhvzP5ktMzIfp2fA+me8G3h1WKn84TdfctAJkCvWamfJGfRuJbXa178npdhmtVqVdeWnwy5/uw19TocYOVgyWzEC3F8JeaMxy7yahTQU=
+	t=1773104179; cv=none; b=MwAutabnRyWF9H3xyJ5rAdBxjkKwsIClbbOGtkWvHclpSLiJ4i89AbCQ0ZqwGh6bGo2Nt4QL/h/GAz6Bw8Zdhs5SBsJgdvEeQchLMH7ovKZkPBlcHb9YgwLja4RnfayI/t1EbEcAnLfQ1VSPi72xHR1TnxdTxFI7Be/QNICTejg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773104083; c=relaxed/simple;
-	bh=q/3n1xERGFt9pBxbxus768OlQpVMYV691SqiPTwnCNY=;
+	s=arc-20240116; t=1773104179; c=relaxed/simple;
+	bh=s92oNkNafdfctXObvGE8NO7WzoqZ9IG1GiDPjJn/QNQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qF2/McQuv0fDcmNmtseCgSk2DAHLFov2XCFCDjPMBP09D/HM2y23DSyBtG7F8nLTVmWcPC1/ufR87EjUrVtNTRtPpR+nPawgT7WQjxT6qALK2TTpqn/UIWROzJ+S6LMVMlyU239dXCW3GKQREbH7PvvgB5AW6NjHfiW5vPuuIT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b=CBZ2lG81; arc=none smtp.client-ip=209.85.215.180
+	 Content-Type:Content-Disposition:In-Reply-To; b=pFT9KxbLSah/RWkEAtuSHHFeuehIDvZZeL8U2r/5jfzOFDFI56EhGLjUH8UurQSxjtlfF2us9SZEoSmCAn3JhYJUAeSIo3YqHXcqhQxehAJbWq/QsAVheB1MMlE/6MPW/gjsDDuRXnk42838+y4avKywU8WCbCWb8rr5GfaZvtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b=niT0J8ON; arc=none smtp.client-ip=209.85.216.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b="CBZ2lG81"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-c7393c6832bso1688022a12.2
-        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 17:54:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b="niT0J8ON"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3598b95ad7dso6653450a91.2
+        for <bpf@vger.kernel.org>; Mon, 09 Mar 2026 17:56:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20230601.gappssmtp.com; s=20230601; t=1773104080; x=1773708880; darn=vger.kernel.org;
+        d=dama-to.20230601.gappssmtp.com; s=20230601; t=1773104177; x=1773708977; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references
          :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RgT23yH044LlGG/ozIQ2ZblhH3i8dVPmq39iaq5VJ3s=;
-        b=CBZ2lG81bVnNT7LA/ta8D0fvNT2TDXGpNjSvtvazaOwRtHN5nWBk8Oo+JbJ9zhIeaA
-         aCz4q9UQz28WV/E9zJXXXcr3xK6wMEfoZ9DFDNIW/QDsDXgTNwVRUPIzK4elvUT3LydJ
-         HIaqTRoIYfnj/xPYUtvkgwTHci7hu08LYUHZiyDl+gXz8lSEDzyldtJKM3mkwgoFygv4
-         xy3/8I9+0+njhiqGv4btzbTbKWxSk3bhsGCy7VnoODoUDbKhiLhl2qJuMgXglE1QgoiA
-         MjADmZrbYXFp/g4KkT1Rf9Ero1slR2P00AcuixHPNEfVXIKq5nve+rGR1Cfqvf4+R66A
-         NSOg==
+        bh=vJEBP0vpmZGuD2IAuFkbf5IyeDyevKXoGpCUDihNGFI=;
+        b=niT0J8ONWOM5X9QsHidoXN6qlgqpVY14B/BCbo4RSGfsOGflrQRKWu8Olq28x0IvdT
+         vb6e6AbAcmr9Y3XjELLTlMTjJk2B7bHS2+qIyEwWeyyGX7UB0O/g1vw/e8XBw7PplaQX
+         XU7Ofi+gLC0KeNs10PTDAofpxtTkGdKL+Gbg5D1eGTLJivHJcnreKfsVLTTyyBaudfUs
+         4hkTghxjC95RZJQ712bRilDjqcADxLq3X3DCCdKcaipMrgRAaMZUcBPOi3pSurBNZmZR
+         /Tk0nPLnnzAtM3GYkKZtXcLNI21WRVnGeXqv17t37G3TtNKtreJPXBiISWpcAXEbJvSY
+         ZLKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773104080; x=1773708880;
+        d=1e100.net; s=20230601; t=1773104177; x=1773708977;
         h=in-reply-to:content-disposition:mime-version:references
          :mail-followup-to:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RgT23yH044LlGG/ozIQ2ZblhH3i8dVPmq39iaq5VJ3s=;
-        b=NWxI81BhFXx/gv2jLVfI+9tShnn0C/L2Ih3fSAFqbuWr7zbUNO3OlLsLZot6cVMI4y
-         WHU32QwI2LKinF46uNlPnWKKr5Ke8BuQ7IdoMRAbKCTAd3VXrQ/tvA8cqcVaMTg5ilUq
-         lS7ZvYOG/rNgdEix378ZTA4uMpQK2PFph1wcPtw9DvAnc+669vnfjUlJdTnodwhxrzxV
-         naczv64tp4xuWhCJ53cjiQOUAG+YzsK3R4209sCZipc5oXCEZObySIziy4QfCNAulVFG
-         B80oIVt4nTrWCfCefFUrPnO2XsBZibvd3pGFak8hhDrsEFioQpx2SrRvEVcbPlFVzQGp
-         sb3A==
-X-Forwarded-Encrypted: i=1; AJvYcCUQYbwE1d21vH52agE1jgcMr8PN/Nkypfrxyko2G2jwv2GBg/hnvXuriS9TDDL7+loRxqg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6zBtGMYenB4JaxBsRiCL8q73aZBe4cPRY+zagoGzxDTWxv4lX
-	aMmH0YWksSFs9dZrm2VgxsfBi8F/gpraaAuvcF75NwHm1w9UC2xuapvD7ncIPmwH2+k=
-X-Gm-Gg: ATEYQzxDhn51vmR/61fvYJekLMcJPa/kL1yiDRejrhL6IO9wlLVqoWnf5Rm3dtPQt5K
-	PD7g2BEkQmDHh9sV7ZkHG837lP7LjX+3GYiuu/4lvA2cguW3lMNvdaEHjPRti20Hv2gnTPG8EDW
-	Mlfy8ZCcm7fQmBAAteDncb7C8u22o5lmvmv1A0c0521jA2Spe0XyJ1liHkeE+EEap8E0O7MAuIt
-	Q35l90HnXizqaEYf+Wx2eOIE5CrKDCqj90V99WnnkaCZH9vXo+6nSYkJrytwfbuq4JUyWF3Xyb9
-	GEh+xXPqVXt3DiJz9PMojxDG4ciW2WuLlUCXIlp6ifqUX6InNfAzwTELLVMFQIm8SIhk3/ScnSc
-	yRrZ58BTM47gtTo/eG+Zm8319YYyJfO+ks+yL2itk+OJoZvjxTgETM4QLMsS4KHYxvIAuMdCAnh
-	/ZFsY=
-X-Received: by 2002:a17:903:2c0d:b0:2ae:5bee:f0fd with SMTP id d9443c01a7336-2ae82530643mr146551245ad.51.1773104080629;
-        Mon, 09 Mar 2026 17:54:40 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:7::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae840c9967sm167614145ad.90.2026.03.09.17.54.40
+        bh=vJEBP0vpmZGuD2IAuFkbf5IyeDyevKXoGpCUDihNGFI=;
+        b=uf3GCCeWLLXLD3jltjd26hcXsiXa6LkZBwpTeP7euXoK566ZHngJPYYHXHfgrWxLOP
+         oZSYKhhCK9AxJIkRJy4zkTm9OYtHYtczrr1oD9wpUWssHytvZ7x+06MGhldpJie0/qo4
+         DGWd5CFh5vzKa6bgnSDsIOUlpo1CzzUci4HALsuQyZDR5G3GksQ/lOxPGKT38Eo2k2/R
+         QfRSrFSLsh9Wg0Q9F3NXPsS2JiVRtFhZ0uJZR9tgqV2JzNLRMUmYU4o1Ep26Ruh2VzZt
+         fRf7OZJRw1T5DtFXHx64aTjpJZcgF06ieKPeDfu8MnLRg9TYVoJ5sTiFb/UMrsYrigpU
+         Ki4A==
+X-Forwarded-Encrypted: i=1; AJvYcCUylfGCkYJl7ATm7gJZyYPUHq0ma71EJMRHjReH7Ly8DABhRvJyXiPnFJfL8cGLfpJwAqY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3eej5TNjlSBbZZ+BpsXIQ4uI8D01XdmbRTII895opf6xE0fJ8
+	QPRD+j67nocMGJiL6e9dV+nom47VZRp1+SRUGVHti2dXwTprPAp5O6pgaKKUdDHPoFw=
+X-Gm-Gg: ATEYQzw3uzUzPdgT/M6NUA42AlIoEMsHjLoUI+hj5j6JpoMsVhxaODpH+70l9ihEHiq
+	qw4IHVBDXatOMvenDzoWmkxc5QNVCFvjPrlgDR1kEAiujfmNnuRGVe6S+RFLe+vaY7X3EpWctJL
+	SzQLDsjPXLkgQjGQVC4Y2UjWCz56+3Ey6CnEtHdAH0fWkc5AIKY97DzYFczWZVRNtu5vs9CojaE
+	MCwSnwB1xte9o9zDsOIIKQkDkcI87IqX/dP3lOhRe4UmfT6MSnOkwDiJM5x1iTCc+OBrlnS0A1f
+	K0ib8AuB21/xKSav/6xT3Xzd2DTK5oZNMQ4gDDTliXYr6/mQsmvhlNJuXkgN8qoIb6ocRdq9Bn8
+	8tjWOrC69H1nMX0SrR+0d0+WqmnheMw+tHL9SQfM95nHHR7TXcZiMG7CRpLfB0esAs49ZvzaEIu
+	NP
+X-Received: by 2002:a17:90b:2792:b0:359:7eb:d91d with SMTP id 98e67ed59e1d1-359be3861e3mr11145247a91.26.1773104177009;
+        Mon, 09 Mar 2026 17:56:17 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-359bbac3c0asm4844336a91.0.2026.03.09.17.56.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Mar 2026 17:54:40 -0700 (PDT)
-Date: Mon, 9 Mar 2026 17:54:39 -0700
+        Mon, 09 Mar 2026 17:56:16 -0700 (PDT)
+Date: Mon, 9 Mar 2026 17:56:15 -0700
 From: Joe Damato <joe@dama.to>
 To: Chris J Arges <carges@cloudflare.com>
 Cc: michael.chan@broadcom.com, pavan.chebbi@broadcom.com, kuba@kernel.org,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Jesper Dangaard Brouer <hawk@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
 	Stanislav Fomichev <sdf@fomichev.me>, kernel-team@cloudflare.com,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v3 4/5] selftests: net: move common xdp.py
- functions into lib
-Message-ID: <aa9rz54M/NXPvDbw@devvm20253.cco0.facebook.com>
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v3 2/5] bnxt_en: Implement XDP RSS hash metadata
+ extraction
+Message-ID: <aa9sL/L3J4LVbybw@devvm20253.cco0.facebook.com>
 Mail-Followup-To: Joe Damato <joe@dama.to>,
 	Chris J Arges <carges@cloudflare.com>, michael.chan@broadcom.com,
 	pavan.chebbi@broadcom.com, kuba@kernel.org,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Jesper Dangaard Brouer <hawk@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
 	Stanislav Fomichev <sdf@fomichev.me>, kernel-team@cloudflare.com,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
 References: <20260306230600.1628196-1-carges@cloudflare.com>
- <20260306230600.1628196-5-carges@cloudflare.com>
+ <20260306230600.1628196-3-carges@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -100,22 +98,23 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260306230600.1628196-5-carges@cloudflare.com>
+In-Reply-To: <20260306230600.1628196-3-carges@cloudflare.com>
 
-On Fri, Mar 06, 2026 at 05:00:19PM -0600, Chris J Arges wrote:
-> This moves a few functions which can be useful to other python programs
-> that manipulate XDP programs. This also refactors xdp.py to use the
-> refactored functions.
+On Fri, Mar 06, 2026 at 05:00:17PM -0600, Chris J Arges wrote:
+> Add support for extracting RSS hash values and hash types from hardware
+> completion descriptors in XDP programs for bnxt_en.
+> 
+> Add IP_TYPE definition for determining if completion is ipv4 or ipv6. In
+> addition add ITYPE_ICMP flag for identifying ICMP completions.
 > 
 > Signed-off-by: Chris J Arges <carges@cloudflare.com>
 > ---
->  .../selftests/drivers/net/lib/py/__init__.py  |  2 +
->  tools/testing/selftests/drivers/net/xdp.py    | 95 +++++--------------
->  .../testing/selftests/net/lib/py/__init__.py  |  2 +
->  tools/testing/selftests/net/lib/py/bpf.py     | 68 +++++++++++++
->  4 files changed, 95 insertions(+), 72 deletions(-)
->  create mode 100644 tools/testing/selftests/net/lib/py/bpf.py
+>  drivers/net/ethernet/broadcom/bnxt/bnxt.c     |  5 ++
+>  drivers/net/ethernet/broadcom/bnxt/bnxt.h     |  2 +
+>  drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c | 47 +++++++++++++++++++
+>  drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h |  3 ++
+>  4 files changed, 57 insertions(+)
 
-Looks unchanged from the v2?
+Looks unchanged from the v2, so:
 
 Reviewed-by: Joe Damato <joe@dama.to>
