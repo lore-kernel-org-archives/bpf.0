@@ -1,128 +1,379 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04A643382E1
-	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 14:14:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B3BD3D6462
+	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 14:47:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773238486; cv=none; b=NsnJCzx7+m5Hoy3Vg3HiubvM5BJOKxsCSy6/TENVkCNMSxwQ6xp+GdZNw4nl7yfIb7AoB9jKAosAKAiVb3d8vzibmrZ6VdKL2RxNJ78f3XqIcwMRt7e3VnDO7YfDL8OcQyqd88o3lxzUbt6dY7J5epvCxI4jd1ZP+0lc+eoJ7vc=
+	t=1773240467; cv=none; b=ZL6yX+9XUKO2ZPfWlALMyHOmtllGC/1NqrdbE4Pdt2bhKtph0sCFMspysteJGZ3kZ6xKSrW8NIVoVZBuYPlpfh0OdMS/h5H6j2IgYuCQXV/JwCrbAsqpr1Y59BA3dZjPMt7R2KSma/buc1KQCiHn10btY4Swijl4u9r45R1qeck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773238486; c=relaxed/simple;
-	bh=POUJjzeRhBIXfPGojdZfC417KH92loTKx1KmDpRcfoc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gEUM6j9pVZzOg649HVrdBab+Xd0cXRuXpcX+MIgipZtuF2tRn2WNUPHOmeEccqDmN8jM4gkjQSoLw/up4XZBOuEDTCNps8LTajwCEmgO9PWneK+vvwH39tlBmMe4EQAWK1rt78kcuhJI/gbA60A47lVJQNo32uNrTZ5iPrs16bM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	s=arc-20240116; t=1773240467; c=relaxed/simple;
+	bh=M0M513xG9QJd0xlU03Fihqwn8kUOVJm+JuiFoPZVfPI=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=uYvScM8mjSkZL4nh5/jgZIh+jfsf/MbNxGMg7KqUxKs12B5AOWzTZxz5P7SElRJrSbKr5+UxNyT0SzD8IWQbzEeilEi61zE0ugrJpvoivkO8aOSPmvq+2aW6zbQMPyhh2sK6YZ+sUV6vs0/R6eaAOs7wWD9yluktuzxhlDxYIO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RzdMeCjd; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-660ea6ceb5aso1643686a12.0
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 07:14:44 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RzdMeCjd"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-439b6d9c981so1054f8f.1
+        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 07:47:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773240463; x=1773845263; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9OcgCVoXpwmk9jK46IQdFKL4LgjvcP8o4RT8R4WmikQ=;
+        b=RzdMeCjdRBSLy/nEidWIdmWX33QoHiOoIBtG5yCc/W+1jKl2zPJPmBaqytW0Ji4ywh
+         MXKN8XSrFkqiGXwnD6QzghV39GTDYMM0svwQmybhpsBAV4GbdBrWYV26fhE0A56bh2AM
+         MZRXlN2aASCvMT1bf20MJtnFrKsYCVVugHngRNg+1Fxz5sDu/c72/bsnEBZACTw4HyTg
+         lmBmzBBwCYy0dw3Rc9wHWPJutVBK/CAl25K4el7kT5x9cbCZefSi2eqjQC4P7igRrLO9
+         Fl4F7vwhWfsCysxv8Yjn+VR5sVDGZr6E0qt97SsGlBwI08UhKScvs2s3xPONZ7WK6ctK
+         4I/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773238483; x=1773843283;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wIz9Fr5w5J45ZN4rxwvT/0kjXMGfLP1VpB2aKPOax7k=;
-        b=v9Oap7t8VmzREObBU3TIMLioqg9czQNCCvxxdMN4giCGtnRPDZpui/P7nk+T6vzG8u
-         x1hw3SuA/F/z/eiXX/aQ9KkESTwDgwGk7KwXBWLvK7C1ucPgQ9Z2SchgpK9lfZmuZtGv
-         ePZXbabOFvDqKaI27gYLwcPGlp00YGcFNoELpiUVDQNo2aIuNq6LkxYu5XNHgOGDhInG
-         DLCHa6sFkVKiWlrtPydCtZc+MCx/Dxkz+YvbiIV4hMb2I68fVuMa9yS1LXvTOA2Is0WN
-         efKFEYFV6yp5ar+aObQIbAGZUhwyvMFF6i7mQC3vFFTTb0If4fxBCgNKeXPBJEOnD/0Z
-         KAdg==
-X-Forwarded-Encrypted: i=1; AJvYcCVSZTuINhdvudtzKS1iu94uiOrAefDIbVyM6bOzOTul+muoQgtUSy3LWLzkBtVg79lEPYY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyaxLxYPVi0Ra5kTxXr9PSDS/ZpHlp4UzO6hOt7vkjaVZuJpL1d
-	EmMMbxzRC2P4A6+uLsICPAgk1rRuBeMYgRB8CCup7nj4Bz3fsmAxnnoaAmjU6vKq1oDVIg==
-X-Gm-Gg: ATEYQzwMyecu31+AQqsgb5VuVrAbAgBqX0S/a8+Q+79yD/kyyBkMx+gLRTbbSQRd4KX
-	5rkHNY2M1uneC6o0YLnEzEMcW7AACHzn+1Am96uuELVWkcQowUCPnMLYunmvAkxptwtceA6NWui
-	FbtS0GqAZztlfQDDa6t8z1olqar8dQF9R6uJQwuRu5NraWZ+57r/Qa2VLQ7hOSWqdmPfIJdU7YN
-	MFrOWATlkI66RM+o3DiVi/TgAhgFAmm4vEZH84cv/mgSYePvfV5A8bYCjltwAZyxAb/l1U/Ghu0
-	9buyqQUEqKVwFLwz5/lQ5W+tQItCdVKAbGk+nOCZJCz73W8zOfVT2FJmj6hmHkyF7LjAdQocFhn
-	QrDQT1aRiX7CkdUXghnO/BdQ03n4VT+OxhBo71SpSoftgpiuBpZECEqqC6nyLrqzYV7qWzjhLBm
-	opJthClttJZ6oCVy7FqGjYeXRomDCLLWB6pwA1r2FkG5fkTGj9VcDhvw2DVvni
-X-Received: by 2002:a17:907:6d17:b0:b90:4838:46ff with SMTP id a640c23a62f3a-b972d817bb9mr157487466b.21.1773238482993;
-        Wed, 11 Mar 2026 07:14:42 -0700 (PDT)
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b972e14dc3asm62633166b.39.2026.03.11.07.14.42
-        for <bpf@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Mar 2026 07:14:42 -0700 (PDT)
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-66174cf4549so2119005a12.0
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 07:14:42 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUQCkE6yhnammDyFh6+uCNUO+JvXTL20/LQgz1J9mijyKAIYUbH8MOrgfDoMV6JYIgqmRk=@vger.kernel.org
-X-Received: by 2002:a17:907:6d16:b0:b88:4f25:81da with SMTP id
- a640c23a62f3a-b97113ff0b9mr462021166b.0.1773237981235; Wed, 11 Mar 2026
- 07:06:21 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1773240463; x=1773845263;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9OcgCVoXpwmk9jK46IQdFKL4LgjvcP8o4RT8R4WmikQ=;
+        b=NAmZDzeQeK71eRk7d8ngCbGI6UxF7p7okVT06XbRQeG41Fhbei18Tb/teGNQlTseoJ
+         DEqDgSYdlj/47HuE142JZmKwgU3pWOn0j1O9L1I8qiOTlJ+bBakqqtZ/HWP5cG9w8xpr
+         2C7D+vInMELD9kCSu3YCrTqOxq2tmMm/ACnP+mMketw3gKQxP0Vj2spXNA2ieL1uRwkZ
+         yQx3TBlBQyTaF6vx32j9vW8XNpZU1QdDFM15Mh8XCHXdnK3J6Zm2OElAvqYGyDpr2mMp
+         YARqIH7E/bZm+P5BFCR6rRodBU/ozOulLK9arX/UrNsOpf5rUhnJUPjtLDJF8Q1bDvCt
+         nvRA==
+X-Forwarded-Encrypted: i=1; AJvYcCXxxWteIm1jgtpu6ig4yG+SuuBM1kNAg9SX0AB0ojd/XMXQut0Ayus3uBfy/eMWZZqttxE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCzQO8YzWdYqaK3uRFj6FpTegPudND7X2NWA/R5txqFMM4U5fE
+	pGT8k4ssEYRUklOI45tItLUzR0z9cm75mJEqffvS/ZpGSdxe1jdIyr0B
+X-Gm-Gg: ATEYQzwwzCs28Ecq95nckMPxq/8BmUm5cKdWzkIFgxgryDGNnD8EldnYUUwyDw4/L1O
+	ckeLk1LxiHlzthCgkqyQAWvtdpvmXQGQHX0HxKNc+Tn45Ee5h9bTLNEXmXwtTo9RGfyW52sbuoy
+	ufm6mnmRTvckd8FtsRScKthm4FLCYMeQRyzL291G4dxghOiPNAgWsP1X/pPCTlVcE2Ml4tp67Hg
+	Ci8amserlF9jq4fYXHLqXCofBcw4wp1fXNQA1m+wUDfTt+tjwPw5c3dg+F12iJuwEap35KNJENJ
+	qsjxtegEhrRtIsUHczoNfoE7omuRbIaMcaTda1Ndg7Zdl37Oalg8AjY5naUgWj+AxKEt6zAgest
+	XKcHXzkAfTQpasT1RfwWfe+EeL+DfKmZfL0Z28Cty8wO5MEhxbbqqHSfLjaYnrWCzjRE98DqTFd
+	sHRdi/iddaH1MyQPZRQWBH9KcYxqfFNJP5BzUiVA==
+X-Received: by 2002:a05:6000:2dc1:b0:439:936b:c006 with SMTP id ffacd0b85a97d-439eff5ecebmr13646536f8f.20.1773240463156;
+        Wed, 11 Mar 2026 07:47:43 -0700 (PDT)
+Received: from localhost ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439f81a0480sm7127501f8f.12.2026.03.11.07.47.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Mar 2026 07:47:42 -0700 (PDT)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
+ daniel@iogearbox.net, memxor@gmail.com, martin.lau@kernel.org,
+ ameryhung@gmail.com, kernel-team@meta.com
+Subject: Re: [RFC PATCH bpf-next v2 01/11] bpf: Set kfunc dynptr arg type
+ flag based on prototype
+In-Reply-To: <20260307064439.3247440-2-ameryhung@gmail.com>
+References: <20260307064439.3247440-1-ameryhung@gmail.com>
+ <20260307064439.3247440-2-ameryhung@gmail.com>
+Date: Wed, 11 Mar 2026 14:47:42 +0000
+Message-ID: <87o6kutoc1.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
- <20260310-b4-is_err_or_null-v1-15-bd63b656022d@avm.de> <20260310100750.303af303@gandalf.local.home>
- <20260311141332.b611237d36b61b2409e66cb3@kernel.org> <20260311100332.6a2ce4b1@gandalf.local.home>
-In-Reply-To: <20260311100332.6a2ce4b1@gandalf.local.home>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 11 Mar 2026 15:06:07 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdX4kRGLaKMzPuhS1Pmxh609eiqQW-cAS_jWBBbt-vE6SA@mail.gmail.com>
-X-Gm-Features: AaiRm53WEGMMLW4z34e7P-lM1qFvsCJGZ_o4JNL5NPWbhJPKmcqz6k9bJcyL--8
-Message-ID: <CAMuHMdX4kRGLaKMzPuhS1Pmxh609eiqQW-cAS_jWBBbt-vE6SA@mail.gmail.com>
-Subject: Re: [PATCH 15/61] trace: Prefer IS_ERR_OR_NULL over manual NULL check
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Philipp Hahn <phahn-oss@avm.de>, amd-gfx@lists.freedesktop.org, 
-	apparmor@lists.ubuntu.com, bpf@vger.kernel.org, ceph-devel@vger.kernel.org, 
-	cocci@inria.fr, dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org, 
-	gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org, 
-	intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev, kvm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org, 
-	linux-bluetooth@vger.kernel.org, linux-btrfs@vger.kernel.org, 
-	linux-cifs@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-hyperv@vger.kernel.org, linux-input@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-mips@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org, 
-	linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org, 
-	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org, 
-	linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org, 
-	linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org, ntfs3@lists.linux.dev, 
-	samba-technical@lists.samba.org, sched-ext@lists.linux.dev, 
-	target-devel@vger.kernel.org, tipc-discussion@lists.sourceforge.net, 
-	v9fs@lists.linux.dev, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 
-Hi Steven,
+Amery Hung <ameryhung@gmail.com> writes:
 
-On Wed, 11 Mar 2026 at 15:03, Steven Rostedt <rostedt@goodmis.org> wrote:
-> On Wed, 11 Mar 2026 14:13:32 +0900
-> Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+> The verifier should decide whether a dynptr argument is read-only
+> based on if the type is "const struct bpf_dynptr *", not the type of
+> the register passed to the kfunc. This currently does not cause issues
+> because existing kfuncs that mutate struct bpf_dynptr are constructors
+> (e.g., bpf_dynptr_from_xxx and bpf_dynptr_clone). These kfuncs have
+> additional check in process_dynptr_func() to make sure the stack slot
+> does not contain initialized dynptr. Nonetheless, this should still be
+> fixed to avoid future issues when there is a non-constructor dynptr
+> kfunc that can mutate dynptr. This is also a small step toward unifying
+> kfunc and helper handling in the verifier, where the first step is to
+> generate kfunc prototype similar to bpf_func_proto before the main
+> verification loop.
 >
-> > Hmm, now IS_ERR_OR_NULL() is an inline function, so it is safe.
-> > But if you want to use IS_ERR_OR_NULL() here, it will be better something like
-> >
-> > node = rhashtable_walk_next(&iter);
-> > while (!IS_ERR_OR_NULL(node)) {
-> >       fprobe_remove_node_in_module(mod, node, &alist);
-> >       node = rhashtable_walk_next(&iter);
-> > }
+> We also need to correctly mark some kfunc arguments as "const struct
+> bpf_dynptr *" to align with other kfuncs that take non-mutable dynptr
+> argument and to not break their usage. Adding const qualifier does
+> not break backward compatibility.
 >
-> But now you need to have a duplicate code in order to acquire "node"
+> Signed-off-by: Amery Hung <ameryhung@gmail.com>
+> ---
+>  fs/verity/measure.c                            |  2 +-
+>  include/linux/bpf.h                            |  8 ++++----
+>  kernel/bpf/helpers.c                           | 10 +++++-----
+>  kernel/bpf/verifier.c                          | 18 +++++++++++++++++-
+>  kernel/trace/bpf_trace.c                       | 18 +++++++++---------
+>  tools/testing/selftests/bpf/bpf_kfuncs.h       |  6 +++---
+>  .../selftests/bpf/progs/dynptr_success.c       |  6 +++---
+>  .../bpf/progs/test_kfunc_dynptr_param.c        |  7 +------
+>  8 files changed, 43 insertions(+), 32 deletions(-)
 >
-> I think the patch just makes the code worse.
-
-Obviously we need a new for_each_*() helper hiding all the gory internals?
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> diff --git a/fs/verity/measure.c b/fs/verity/measure.c
+> index 6a35623ebdf0..3840436e4510 100644
+> --- a/fs/verity/measure.c
+> +++ b/fs/verity/measure.c
+> @@ -118,7 +118,7 @@ __bpf_kfunc_start_defs();
+>   *
+>   * Return: 0 on success, a negative value on error.
+>   */
+> -__bpf_kfunc int bpf_get_fsverity_digest(struct file *file, struct bpf_dynptr *digest_p)
+> +__bpf_kfunc int bpf_get_fsverity_digest(struct file *file, const struct bpf_dynptr *digest_p)
+>  {
+>  	struct bpf_dynptr_kern *digest_ptr = (struct bpf_dynptr_kern *)digest_p;
+>  	const struct inode *inode = file_inode(file);
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index b78b53198a2e..946a37b951f7 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -3621,8 +3621,8 @@ static inline int bpf_fd_reuseport_array_update_elem(struct bpf_map *map,
+>  struct bpf_key *bpf_lookup_user_key(s32 serial, u64 flags);
+>  struct bpf_key *bpf_lookup_system_key(u64 id);
+>  void bpf_key_put(struct bpf_key *bkey);
+> -int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_p,
+> -			       struct bpf_dynptr *sig_p,
+> +int bpf_verify_pkcs7_signature(const struct bpf_dynptr *data_p,
+> +			       const struct bpf_dynptr *sig_p,
+>  			       struct bpf_key *trusted_keyring);
+>  
+>  #else
+> @@ -3640,8 +3640,8 @@ static inline void bpf_key_put(struct bpf_key *bkey)
+>  {
+>  }
+>  
+> -static inline int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_p,
+> -					     struct bpf_dynptr *sig_p,
+> +static inline int bpf_verify_pkcs7_signature(const struct bpf_dynptr *data_p,
+> +					     const struct bpf_dynptr *sig_p,
+>  					     struct bpf_key *trusted_keyring)
+>  {
+>  	return -EOPNOTSUPP;
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 6eb6c82ed2ee..3d44896587ac 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -3000,8 +3000,8 @@ __bpf_kfunc int bpf_dynptr_clone(const struct bpf_dynptr *p,
+>   * Copies data from source dynptr to destination dynptr.
+>   * Returns 0 on success; negative error, otherwise.
+>   */
+> -__bpf_kfunc int bpf_dynptr_copy(struct bpf_dynptr *dst_ptr, u64 dst_off,
+> -				struct bpf_dynptr *src_ptr, u64 src_off, u64 size)
+> +__bpf_kfunc int bpf_dynptr_copy(const struct bpf_dynptr *dst_ptr, u64 dst_off,
+> +				const struct bpf_dynptr *src_ptr, u64 src_off, u64 size)
+>  {
+>  	struct bpf_dynptr_kern *dst = (struct bpf_dynptr_kern *)dst_ptr;
+>  	struct bpf_dynptr_kern *src = (struct bpf_dynptr_kern *)src_ptr;
+> @@ -3055,7 +3055,7 @@ __bpf_kfunc int bpf_dynptr_copy(struct bpf_dynptr *dst_ptr, u64 dst_off,
+>   * at @offset with the constant byte @val.
+>   * Returns 0 on success; negative error, otherwise.
+>   */
+> -__bpf_kfunc int bpf_dynptr_memset(struct bpf_dynptr *p, u64 offset, u64 size, u8 val)
+> +__bpf_kfunc int bpf_dynptr_memset(const struct bpf_dynptr *p, u64 offset, u64 size, u8 val)
+>  {
+>  	struct bpf_dynptr_kern *ptr = (struct bpf_dynptr_kern *)p;
+>  	u64 chunk_sz, write_off;
+> @@ -4069,8 +4069,8 @@ __bpf_kfunc void bpf_key_put(struct bpf_key *bkey)
+>   *
+>   * Return: 0 on success, a negative value on error.
+>   */
+> -__bpf_kfunc int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_p,
+> -			       struct bpf_dynptr *sig_p,
+> +__bpf_kfunc int bpf_verify_pkcs7_signature(const struct bpf_dynptr *data_p,
+> +			       const struct bpf_dynptr *sig_p,
+>  			       struct bpf_key *trusted_keyring)
+>  {
+>  #ifdef CONFIG_SYSTEM_DATA_VERIFICATION
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 1153a828ce8d..0f77c4c5b510 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -12276,6 +12276,22 @@ static bool is_kfunc_arg_dynptr(const struct btf *btf, const struct btf_param *a
+>  	return __is_kfunc_ptr_arg_type(btf, arg, KF_ARG_DYNPTR_ID);
+>  }
+>  
+> +static bool is_kfunc_arg_const_ptr(const struct btf *btf, const struct btf_param *arg)
+> +{
+> +	const struct btf_type *t, *resolved_t;
+> +
+> +	t = btf_type_skip_modifiers(btf, arg->type, NULL);
+> +	if (!t || !btf_type_is_ptr(t))
+> +		return false;
+> +
+> +	resolved_t = btf_type_skip_modifiers(btf, t->type, NULL);
+nit: t is ptr type, maybe we can do t = btf_type_by_id(btf, t->type)
+before the loop starts, as we know the result of the first iteration.
+> +	for (; t != resolved_t; t = btf_type_by_id(btf, t->type))
+> +		if (BTF_INFO_KIND(t->info) == BTF_KIND_CONST)
+nit: btf_kind() is a bit shorter than BTF_KIND_INFO()
+> +			return true;
+> +
+> +	return false;
+> +}
+The logic in this function looks correct to me. The refactoring makes
+sense as well (although I'm not 100% sure how this is relevant to this
+patch series)
+Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
+> +
+>  static bool is_kfunc_arg_list_head(const struct btf *btf, const struct btf_param *arg)
+>  {
+>  	return __is_kfunc_ptr_arg_type(btf, arg, KF_ARG_LIST_HEAD_ID);
+> @@ -13509,7 +13525,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+>  			enum bpf_arg_type dynptr_arg_type = ARG_PTR_TO_DYNPTR;
+>  			int clone_ref_obj_id = 0;
+>  
+> -			if (reg->type == CONST_PTR_TO_DYNPTR)
+> +			if (is_kfunc_arg_const_ptr(btf, &args[i]))
+>  				dynptr_arg_type |= MEM_RDONLY;
+>  
+>  			if (is_kfunc_arg_uninit(btf, &args[i]))
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 9bc0dfd235af..127c317376be 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -3391,7 +3391,7 @@ typedef int (*copy_fn_t)(void *dst, const void *src, u32 size, struct task_struc
+>   * direct calls into all the specific callback implementations
+>   * (copy_user_data_sleepable, copy_user_data_nofault, and so on)
+>   */
+> -static __always_inline int __bpf_dynptr_copy_str(struct bpf_dynptr *dptr, u64 doff, u64 size,
+> +static __always_inline int __bpf_dynptr_copy_str(const struct bpf_dynptr *dptr, u64 doff, u64 size,
+>  						 const void *unsafe_src,
+>  						 copy_fn_t str_copy_fn,
+>  						 struct task_struct *tsk)
+> @@ -3533,49 +3533,49 @@ __bpf_kfunc int bpf_send_signal_task(struct task_struct *task, int sig, enum pid
+>  	return bpf_send_signal_common(sig, type, task, value);
+>  }
+>  
+> -__bpf_kfunc int bpf_probe_read_user_dynptr(struct bpf_dynptr *dptr, u64 off,
+> +__bpf_kfunc int bpf_probe_read_user_dynptr(const struct bpf_dynptr *dptr, u64 off,
+>  					   u64 size, const void __user *unsafe_ptr__ign)
+>  {
+>  	return __bpf_dynptr_copy(dptr, off, size, (const void __force *)unsafe_ptr__ign,
+>  				 copy_user_data_nofault, NULL);
+>  }
+>  
+> -__bpf_kfunc int bpf_probe_read_kernel_dynptr(struct bpf_dynptr *dptr, u64 off,
+> +__bpf_kfunc int bpf_probe_read_kernel_dynptr(const struct bpf_dynptr *dptr, u64 off,
+>  					     u64 size, const void *unsafe_ptr__ign)
+>  {
+>  	return __bpf_dynptr_copy(dptr, off, size, unsafe_ptr__ign,
+>  				 copy_kernel_data_nofault, NULL);
+>  }
+>  
+> -__bpf_kfunc int bpf_probe_read_user_str_dynptr(struct bpf_dynptr *dptr, u64 off,
+> +__bpf_kfunc int bpf_probe_read_user_str_dynptr(const struct bpf_dynptr *dptr, u64 off,
+>  					       u64 size, const void __user *unsafe_ptr__ign)
+>  {
+>  	return __bpf_dynptr_copy_str(dptr, off, size, (const void __force *)unsafe_ptr__ign,
+>  				     copy_user_str_nofault, NULL);
+>  }
+>  
+> -__bpf_kfunc int bpf_probe_read_kernel_str_dynptr(struct bpf_dynptr *dptr, u64 off,
+> +__bpf_kfunc int bpf_probe_read_kernel_str_dynptr(const struct bpf_dynptr *dptr, u64 off,
+>  						 u64 size, const void *unsafe_ptr__ign)
+>  {
+>  	return __bpf_dynptr_copy_str(dptr, off, size, unsafe_ptr__ign,
+>  				     copy_kernel_str_nofault, NULL);
+>  }
+>  
+> -__bpf_kfunc int bpf_copy_from_user_dynptr(struct bpf_dynptr *dptr, u64 off,
+> +__bpf_kfunc int bpf_copy_from_user_dynptr(const struct bpf_dynptr *dptr, u64 off,
+>  					  u64 size, const void __user *unsafe_ptr__ign)
+>  {
+>  	return __bpf_dynptr_copy(dptr, off, size, (const void __force *)unsafe_ptr__ign,
+>  				 copy_user_data_sleepable, NULL);
+>  }
+>  
+> -__bpf_kfunc int bpf_copy_from_user_str_dynptr(struct bpf_dynptr *dptr, u64 off,
+> +__bpf_kfunc int bpf_copy_from_user_str_dynptr(const struct bpf_dynptr *dptr, u64 off,
+>  					      u64 size, const void __user *unsafe_ptr__ign)
+>  {
+>  	return __bpf_dynptr_copy_str(dptr, off, size, (const void __force *)unsafe_ptr__ign,
+>  				     copy_user_str_sleepable, NULL);
+>  }
+>  
+> -__bpf_kfunc int bpf_copy_from_user_task_dynptr(struct bpf_dynptr *dptr, u64 off,
+> +__bpf_kfunc int bpf_copy_from_user_task_dynptr(const struct bpf_dynptr *dptr, u64 off,
+>  					       u64 size, const void __user *unsafe_ptr__ign,
+>  					       struct task_struct *tsk)
+>  {
+> @@ -3583,7 +3583,7 @@ __bpf_kfunc int bpf_copy_from_user_task_dynptr(struct bpf_dynptr *dptr, u64 off,
+>  				 copy_user_data_sleepable, tsk);
+>  }
+>  
+> -__bpf_kfunc int bpf_copy_from_user_task_str_dynptr(struct bpf_dynptr *dptr, u64 off,
+> +__bpf_kfunc int bpf_copy_from_user_task_str_dynptr(const struct bpf_dynptr *dptr, u64 off,
+>  						   u64 size, const void __user *unsafe_ptr__ign,
+>  						   struct task_struct *tsk)
+>  {
+> diff --git a/tools/testing/selftests/bpf/bpf_kfuncs.h b/tools/testing/selftests/bpf/bpf_kfuncs.h
+> index 7dad01439391..ffb9bc1cace0 100644
+> --- a/tools/testing/selftests/bpf/bpf_kfuncs.h
+> +++ b/tools/testing/selftests/bpf/bpf_kfuncs.h
+> @@ -70,13 +70,13 @@ extern void *bpf_rdonly_cast(const void *obj, __u32 btf_id) __ksym __weak;
+>  
+>  extern int bpf_get_file_xattr(struct file *file, const char *name,
+>  			      struct bpf_dynptr *value_ptr) __ksym;
+> -extern int bpf_get_fsverity_digest(struct file *file, struct bpf_dynptr *digest_ptr) __ksym;
+> +extern int bpf_get_fsverity_digest(struct file *file, const struct bpf_dynptr *digest_ptr) __ksym;
+>  
+>  extern struct bpf_key *bpf_lookup_user_key(__s32 serial, __u64 flags) __ksym;
+>  extern struct bpf_key *bpf_lookup_system_key(__u64 id) __ksym;
+>  extern void bpf_key_put(struct bpf_key *key) __ksym;
+> -extern int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_ptr,
+> -				      struct bpf_dynptr *sig_ptr,
+> +extern int bpf_verify_pkcs7_signature(const struct bpf_dynptr *data_ptr,
+> +				      const struct bpf_dynptr *sig_ptr,
+>  				      struct bpf_key *trusted_keyring) __ksym;
+>  
+>  struct dentry;
+> diff --git a/tools/testing/selftests/bpf/progs/dynptr_success.c b/tools/testing/selftests/bpf/progs/dynptr_success.c
+> index e0d672d93adf..e0745b6e467e 100644
+> --- a/tools/testing/selftests/bpf/progs/dynptr_success.c
+> +++ b/tools/testing/selftests/bpf/progs/dynptr_success.c
+> @@ -914,7 +914,7 @@ void *user_ptr;
+>  char expected_str[384];
+>  __u32 test_len[7] = {0/* placeholder */, 0, 1, 2, 255, 256, 257};
+>  
+> -typedef int (*bpf_read_dynptr_fn_t)(struct bpf_dynptr *dptr, u64 off,
+> +typedef int (*bpf_read_dynptr_fn_t)(const struct bpf_dynptr *dptr, u64 off,
+>  				    u64 size, const void *unsafe_ptr);
+>  
+>  /* Returns the offset just before the end of the maximum sized xdp fragment.
+> @@ -1106,7 +1106,7 @@ int test_copy_from_user_str_dynptr(void *ctx)
+>  	return 0;
+>  }
+>  
+> -static int bpf_copy_data_from_user_task(struct bpf_dynptr *dptr, u64 off,
+> +static int bpf_copy_data_from_user_task(const struct bpf_dynptr *dptr, u64 off,
+>  					u64 size, const void *unsafe_ptr)
+>  {
+>  	struct task_struct *task = bpf_get_current_task_btf();
+> @@ -1114,7 +1114,7 @@ static int bpf_copy_data_from_user_task(struct bpf_dynptr *dptr, u64 off,
+>  	return bpf_copy_from_user_task_dynptr(dptr, off, size, unsafe_ptr, task);
+>  }
+>  
+> -static int bpf_copy_data_from_user_task_str(struct bpf_dynptr *dptr, u64 off,
+> +static int bpf_copy_data_from_user_task_str(const struct bpf_dynptr *dptr, u64 off,
+>  					    u64 size, const void *unsafe_ptr)
+>  {
+>  	struct task_struct *task = bpf_get_current_task_btf();
+> diff --git a/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c b/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
+> index d249113ed657..c3631fd41977 100644
+> --- a/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
+> +++ b/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
+> @@ -11,12 +11,7 @@
+>  #include <bpf/bpf_helpers.h>
+>  #include <bpf/bpf_tracing.h>
+>  #include "bpf_misc.h"
+> -
+> -extern struct bpf_key *bpf_lookup_system_key(__u64 id) __ksym;
+> -extern void bpf_key_put(struct bpf_key *key) __ksym;
+> -extern int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_ptr,
+> -				      struct bpf_dynptr *sig_ptr,
+> -				      struct bpf_key *trusted_keyring) __ksym;
+> +#include "bpf_kfuncs.h"
+>  
+>  struct {
+>  	__uint(type, BPF_MAP_TYPE_RINGBUF);
+> -- 
+> 2.47.3
