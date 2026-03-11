@@ -1,217 +1,262 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7636E38E111
-	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 22:37:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773268677; cv=pass; b=n3kgO1yB4Pl+hkvueFO1V3582seOTTZnAbVGM28zRM+ND3RrvcC1PM7OD+28tVyY1ztWX55Wx3Uc9FkE8/Ayvdq+rkwNTdbqL7YR37CviuuwlxeDdIYD7nEQyjno8Z4LZM9ghd4zV+UYUDVHYLdlfrioOXo+5tcBMbaxkmxCsxs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773268677; c=relaxed/simple;
-	bh=No+SZ0mPm+dszFojpRK4g9esvb91FrLdwCZRd/DB9q4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Nq1cn3W4J0t/7qwKTMGJ5bWrzyqDa597pj6zkjXK0Y5sjEnXG1rIz5JbPeEV4SkN1Sg6K6E0nMKO/HtdggDVAT8mUC5EktOBGVahia55KumAFucMtJJgahV9YzQjLXn5/mzLnBK1ROoweGccKtgNeFil7HCvpDFZfxwJZxw76aU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xqlmsg3c; arc=pass smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97B57EEBB
+	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 22:45:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773269138; cv=none; b=Atmm22VIS6ATini64m6BfFzgWGBzylsxU78WwvG1Q1P+qWdlbioWmH4peCqzsV1YG454tWWZDHcvxeFeXR7AcuoCsj9eSEy6e58s7ewYMgkF82UktVCtU0GEbREBrPmgt9FylFNnC3KsRu9sx7V1kfiiDzKeG4YqYL8vnAomoRc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773269138; c=relaxed/simple;
+	bh=PNbbiOaNcGHl2UMfM/KFHObdewCXhiz9WDMujIAl5F8=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z30CGFz1ucEtpNJXZJgXKdNC7tR4NWf6UPrcxi33Gv+VZIYvXLjasLAE+XJOEOx+tYGvDQ8SbTH/uA6gHc8BRxW11r+TMsphX+K9QwNsATqxbLZjdT4eK3bxuV5+EQp0+xDqWeeUSF41l5tez3otBAbjCbTe2p0gN/AOdznukCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KvLK79v7; arc=none smtp.client-ip=209.85.128.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xqlmsg3c"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3599019ae92so235680a91.0
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 15:37:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773268676; cv=none;
-        d=google.com; s=arc-20240605;
-        b=FHqtyPUm0oI4V3gwBhNy6ijLLdS/R885tpMtQCzQulb1wEZ1uG1/q8IGdK7RCbRFoQ
-         SJonKmMDBN/OeCk3yrcEbOybQzpzQBtN3cfHI5h7EVpnapdzddV3ZKw3wifwhyp499SR
-         eomgBvTtJAJghluGZPFctwGiHSPoWl62DNaxMj1a+LwObhrb7OPyrA55bwmGEdXhgfNj
-         4ZRHbvWHDAFmnOPSr4D9dC1Gg9QHK79C4F1iQWDSCqnszCj8FW9fgGGqVZpHAowfEOWo
-         cGNkA65r4MMzvZOVH/ktRSh2c5TseQqZc+OS+u6z44HOS7TmIKcSynQn+O2Y187ih6bq
-         Fg0g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=im8lCYLt3sIq/cVK2Hv56IkJrV7/hwtsfQIFRFCQbIk=;
-        fh=HFezYODqB0dHS8ZckTal1iiWnuisbLhk4gui7Bi0T/g=;
-        b=S/8EdwKkv6XYHcEBz8MhJ7KmllMildjTJM/EkEorI9dlmAbWXJDsrzx92Y2Qr+A1DI
-         jLA5m7AP1/g+fo+9TzCOLeVUPyzx17c2Y1oIH9nW1AbrDKMfl2tHyIqVFGa1TBLKqWdW
-         KMZZW1kRTHoOFQhuTjC9syjDcsN1aXsWkDLNh4fZQFG3ya2gNOYCrGMGA/7R8Vtz0wLN
-         vecm+/uKLv2DFCaxAsOotbDPpJPFGQ2qQ7QxTtU4lgWKnHGIJpZp1cio2JZERbg6SvFx
-         oj4PCq4tRe43/KFJPLa9RQDuHoDRrnA65way2XFwPFfzuEvLAy1fR0vChBBzD4Y+fr+u
-         Lt6Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KvLK79v7"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-48535a0ef86so2948275e9.1
+        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 15:45:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773268676; x=1773873476; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=im8lCYLt3sIq/cVK2Hv56IkJrV7/hwtsfQIFRFCQbIk=;
-        b=Xqlmsg3c7fxSHhazMEJAH2kBAYO+NowDhVf5CoxKFmeyKTXxy8Rii4HOZOZzFo9Hfs
-         fxxchYR983NFMapMk299fFdgfKZW/L57zfYrzVuQXTte1V1310232NlEwbGW44yur64J
-         76ILZkVbLUi6pJVFfK2RlMyCoz/tjTwdSETgXjOZekWYBn+2ShrKixJv3rB4R1P657O/
-         w2NtmT/abExNnY3WuazkNgkf1fe1L7GzMytKHM8NdcD+zFWg67f78Ot5+kJJQRneF7zz
-         q1tT4in4ED8uzGbbMtUqkijDswHDsRdTDl6bH7io2TPpzdgX9J8tMyXxwLVvAxTM5EYj
-         L11g==
+        d=gmail.com; s=20230601; t=1773269134; x=1773873934; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=e/Qc5twxAvR18BnVKuzO1KzLsNKi8PlkxaLqVdwZBnc=;
+        b=KvLK79v7nQ6HCHRXIRDj/ncDbRTsG+KYgWveitetxuZI3KSgqDH4kK0v4gpuDXH4kw
+         zyb5B9u2NSEq0c59UMRR2Rv30IyEEd/sQMa1Sop0+sFMzZCEiicqwJCxjKwO94AXCTpY
+         1oByGxb1z8zVAujQc0aamFAw4Sgqev878EeZl5gacRvF/YwY577L74V7mTUenbzZ/LE3
+         oh8mp/KJ7kfUpXxAuXadCuW08Evv0HBlHNwTERepFDr6HzFfuxiioIY05WB9iY9t1qYA
+         r7gXm/xLwxnyLFcPzD7q7v+DKlZhlin3xjNdzQOGnzZHZi+t5C8IVIz1GsC8p1TGryUo
+         rB7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773268676; x=1773873476;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=im8lCYLt3sIq/cVK2Hv56IkJrV7/hwtsfQIFRFCQbIk=;
-        b=AGC3tz9cvZr0W3Lsvv1ZRj+efB6XmVtr1nSN1UIIu69fwYukdChFQ0ZgvlepxA1AhP
-         vJoanuSU4HKcw9cPltGveDPXeGW6o3EmYdN2GgVc7XR7VXTQx5Hik6e3VY03z1FxLVsL
-         T5DsOFCIE0l/P9CI4ofC4kQ1NYNyRmTZGMEeLxwsSoy6wwNISn8BKi2aiyayhC8PhYSZ
-         qem0vaLJSpm7K+mf2Uezy0M8GksDd4wjC7g1zIRnFcchhVfXpPHDJGerKRcXwapj/Ltt
-         WrYCxlXLu0vFrMSM8VuvTmsK+fTxg2Zo+G+A/PhANeWOz3fswjGa/SPteV0UcnXF3bZo
-         TH3A==
-X-Gm-Message-State: AOJu0YzBn8Yoqf81r9uvftiGjkUsG0kl5GGTLpJ1BzqibSGnAkaCcNru
-	Idw+0sXdA+HMnpj90NS+2v04g0APyNlDiVlfHK+Du6rWiSH8kguZNk1db8hJG4mrcT7Oy2fZKgr
-	uJ9jk3qcSCrp0S0N98V898IBEBqZsoUPwCiBJ
-X-Gm-Gg: ATEYQzz4PPJp7112/qRIh7rle2AN2MSXbcXhdar6TWC/BuVAwfTFA0NuTIVXRcKS/HP
-	9Kl5TfALqqx6gffTUjwY4/6ITN7wNKvhsSm/MfNtvKRBM0R32Yt4jF/nuR6HOZ+Nq6pHfhorNpP
-	m6NORqrQdew8hqCF/JEOJ4uMH9CRLki3ZtOasHBSqbH6PxnfZFXcdhkL+hadGUI1n2uuvhJOePJ
-	rPu/1mT9rHrffwIzWUbK7MjZLpEbCjGxiJVUeKSpHEkrQywn8rcB/D7mebgY4ElIWnfvEixqE4D
-	CgfMy2c=
-X-Received: by 2002:a17:90b:1a8f:b0:359:7fe6:7e5 with SMTP id
- 98e67ed59e1d1-35a0199ca96mr3799571a91.24.1773268675774; Wed, 11 Mar 2026
- 15:37:55 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1773269134; x=1773873934;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=e/Qc5twxAvR18BnVKuzO1KzLsNKi8PlkxaLqVdwZBnc=;
+        b=HrIzuocxNn8UyzEptfGr6JVyeTUo2qA+sOY4MwNrrnvVIoV6Ed/XuD+yyyYy9ldY28
+         zAFTLt12lxYxjaPAXdD7vDAzpyfK8z19vnjkuK1EaSId49wk6R0AEU2ZKkzO8o1AadDE
+         RTGWy7GBmAthYAE58OwX/rm5IsacxtZRvpq2j1D9tAbczkm65vxBlCHYcJwQvEc2zz4C
+         iyyf3tIZHiYcS5ZXp7NMX55ZmiFg2GFM6ojvM6Q9xZIqZ4WSJIoQGbG2L0d+b7CQYYSd
+         sm53sY5JZzXkjIogf5YaJm47Z7LZegNeq66fTmTRhqXhdfdiTE4McAacFhJ7c+RgylhF
+         DD5w==
+X-Gm-Message-State: AOJu0Yw6VI3GEME5tGaKhWUYFY4TiETLTFxFmTcZtnc0Xv0ilZVLRHqc
+	JDzfJ+rVKTdwMVldXhI+yz47Jo0u+OorpBm1QfhLM7eP2iW4Z1ifcpVh
+X-Gm-Gg: ATEYQzwGejcBRXpwOHG3u5oIwX7nTbcWX+zmscYLmMteOodO+q373KQ6FKU6vpaREX4
+	k5lyzWhEa6t8IEF2svWC159kajcnYWk+5yWCYb8SILvxL+0YoEpVPmyPG00OSIXVbv9dps1ZUsF
+	9HeXgdfsBZvrJuzeuTNhbpFvQt9SO3YFuiI4968joWS0yHwUbhF63vyuJGKKeEl1CCvjtsfH5QA
+	T5YygblLyl+WHLv03lEsB0TX4mvAywSdSWj+VNhxYST0P2i72BFOVxpy8PvAbR7KMeOBygIGrXV
+	XyOPIZ/J6K0RTTV2BZtO7zYGsJkXnuuPqzDUNEK8QUNHSPOqe7BpnJHUOr/KM/T5mVPRTBujGoj
+	Z9TJdr2EA+3ZtdZjxQe19cvMqCrDShRrihICZ4zWPBsTBRDLViFxHf//BwStNMaCRkNyPjplQA0
+	o4f8Ob2gbyHsU=
+X-Received: by 2002:a05:600c:3593:b0:485:2fc5:39f with SMTP id 5b1f17b1804b1-4854b10d130mr72491895e9.29.1773269133678;
+        Wed, 11 Mar 2026 15:45:33 -0700 (PDT)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4854b0c3878sm28827415e9.16.2026.03.11.15.45.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Mar 2026 15:45:33 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Wed, 11 Mar 2026 23:45:30 +0100
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Shuah Khan <shuah@kernel.org>,
+	Feng Yang <yangfeng@kylinos.cn>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	Pu Lehui <pulehui@huawei.com>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: Re: [PATCH bpf-next v3 3/6] bpf: Disallow !kprobe_write_ctx progs
+ tail-calling kprobe_write_ctx progs
+Message-ID: <abHwii5stH93Vz5E@krava>
+References: <20260303150639.85007-1-leon.hwang@linux.dev>
+ <20260303150639.85007-4-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260307064439.3247440-1-ameryhung@gmail.com> <20260307064439.3247440-2-ameryhung@gmail.com>
- <CAEf4BzZubPSaS8SQSEQJvTphwgbaBfdC0CYEhsfQN8CJ7HS3pw@mail.gmail.com> <CAMB2axNR6qPRVy5YCiMygVseS+k9JxY9DFONNHD5Lt8=wD9MGQ@mail.gmail.com>
-In-Reply-To: <CAMB2axNR6qPRVy5YCiMygVseS+k9JxY9DFONNHD5Lt8=wD9MGQ@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 11 Mar 2026 15:37:43 -0700
-X-Gm-Features: AaiRm50vJaxcN-kF0b9evke2EZ18SvYUGjpaiaWXV923kNaZt8YtqIpRkaBWFlg
-Message-ID: <CAEf4BzYTO9e-UAEd+W+ftqQZLUZCWHWXAYVnVjHeNtsZL1=Pdw@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next v2 01/11] bpf: Set kfunc dynptr arg type flag
- based on prototype
-To: Amery Hung <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com, 
-	andrii@kernel.org, daniel@iogearbox.net, memxor@gmail.com, 
-	martin.lau@kernel.org, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260303150639.85007-4-leon.hwang@linux.dev>
 
-On Wed, Mar 11, 2026 at 1:01=E2=80=AFPM Amery Hung <ameryhung@gmail.com> wr=
-ote:
->
-> On Wed, Mar 11, 2026 at 12:44=E2=80=AFPM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Fri, Mar 6, 2026 at 10:44=E2=80=AFPM Amery Hung <ameryhung@gmail.com=
-> wrote:
-> > >
-> > > The verifier should decide whether a dynptr argument is read-only
-> > > based on if the type is "const struct bpf_dynptr *", not the type of
-> > > the register passed to the kfunc. This currently does not cause issue=
-s
-> > > because existing kfuncs that mutate struct bpf_dynptr are constructor=
-s
-> > > (e.g., bpf_dynptr_from_xxx and bpf_dynptr_clone). These kfuncs have
-> > > additional check in process_dynptr_func() to make sure the stack slot
-> > > does not contain initialized dynptr. Nonetheless, this should still b=
-e
-> > > fixed to avoid future issues when there is a non-constructor dynptr
-> > > kfunc that can mutate dynptr. This is also a small step toward unifyi=
-ng
-> > > kfunc and helper handling in the verifier, where the first step is to
-> > > generate kfunc prototype similar to bpf_func_proto before the main
-> > > verification loop.
-> > >
-> > > We also need to correctly mark some kfunc arguments as "const struct
-> > > bpf_dynptr *" to align with other kfuncs that take non-mutable dynptr
-> > > argument and to not break their usage. Adding const qualifier does
-> > > not break backward compatibility.
-> > >
-> > > Signed-off-by: Amery Hung <ameryhung@gmail.com>
-> > > ---
-> > >  fs/verity/measure.c                            |  2 +-
-> > >  include/linux/bpf.h                            |  8 ++++----
-> > >  kernel/bpf/helpers.c                           | 10 +++++-----
-> > >  kernel/bpf/verifier.c                          | 18 ++++++++++++++++=
-+-
-> > >  kernel/trace/bpf_trace.c                       | 18 +++++++++-------=
---
-> > >  tools/testing/selftests/bpf/bpf_kfuncs.h       |  6 +++---
-> > >  .../selftests/bpf/progs/dynptr_success.c       |  6 +++---
-> > >  .../bpf/progs/test_kfunc_dynptr_param.c        |  7 +------
-> > >  8 files changed, 43 insertions(+), 32 deletions(-)
-> > >
-> > > diff --git a/fs/verity/measure.c b/fs/verity/measure.c
-> > > index 6a35623ebdf0..3840436e4510 100644
-> > > --- a/fs/verity/measure.c
-> > > +++ b/fs/verity/measure.c
-> > > @@ -118,7 +118,7 @@ __bpf_kfunc_start_defs();
-> > >   *
-> > >   * Return: 0 on success, a negative value on error.
-> > >   */
-> > > -__bpf_kfunc int bpf_get_fsverity_digest(struct file *file, struct bp=
-f_dynptr *digest_p)
-> > > +__bpf_kfunc int bpf_get_fsverity_digest(struct file *file, const str=
-uct bpf_dynptr *digest_p)
-> >
-> > but kfunc is writing into digest_p, so that const is wrong?...
-> >
-> > >  {
-> > >         struct bpf_dynptr_kern *digest_ptr =3D (struct bpf_dynptr_ker=
-n *)digest_p;
-> > >         const struct inode *inode =3D file_inode(file);
-> >
-> > [...]
-> >
-> > > index 6eb6c82ed2ee..3d44896587ac 100644
-> > > --- a/kernel/bpf/helpers.c
-> > > +++ b/kernel/bpf/helpers.c
-> > > @@ -3000,8 +3000,8 @@ __bpf_kfunc int bpf_dynptr_clone(const struct b=
-pf_dynptr *p,
-> > >   * Copies data from source dynptr to destination dynptr.
-> > >   * Returns 0 on success; negative error, otherwise.
-> > >   */
-> > > -__bpf_kfunc int bpf_dynptr_copy(struct bpf_dynptr *dst_ptr, u64 dst_=
-off,
-> > > -                               struct bpf_dynptr *src_ptr, u64 src_o=
-ff, u64 size)
-> > > +__bpf_kfunc int bpf_dynptr_copy(const struct bpf_dynptr *dst_ptr, u6=
-4 dst_off,
-> >
-> > again, dst_ptr clearly is modifiable because we are copying data into i=
-t.
-> >
-> > What am I missing, why is this logically correct?
-> >
-> > (I understand that from purely C type system POV this is fine, because
-> > we don't modify bpf_dynptr struct itself on the stack, but bpf_dynptr
-> > is a representation of some memory, and if we are modifying this
-> > memory, then I think it should be not marked as const)
->
-> The patch is just to first make the arg type determination independent
-> from bpf_reg_state and make kfunc signature consistent based on what
-> commit 52f37c4e0f11 (bpf: Rework process_dynptr_func) has laid out.
->
-> Perhaps MEM_RDONLY is a bit misleading. In process_dynptr_func(), the
-> flag means the dynptr struct on the stack is immutable. Currently,
-> there is no way (and maybe no need?) to specify read-only dynptr.
->
+On Tue, Mar 03, 2026 at 11:06:36PM +0800, Leon Hwang wrote:
+> Uprobe programs that modify regs require different runtime assumptions
+> than those that do not. Mixing !kprobe_write_ctx progs with
+> kprobe_write_ctx progs via tail calls could break these assumptions.
+> 
+> To address this, reject the combination of !kprobe_write_ctx progs with
+> kprobe_write_ctx progs in bpf_map_owner_matches(), which prevents the
+> tail callee from modifying regs unexpectedly.
 
-are you basically trying to determine if CONST_DYNPTR_PTR is allowed or not=
-?
+hi,
+could you please give some example where this is actual problem?
+I'd expect it's up to user (whoever installs the tailcall map) to
+avoid such situations.
 
-> > > The verifier should decide whether a dynptr argument is read-only
+thanks,
+jirka
 
-can you please remind us what "read-only dynptr argument" means for verifie=
-r?
 
-> >
-> > > +                               const struct bpf_dynptr *src_ptr, u64=
- src_off, u64 size)
-> > >  {
-> > >         struct bpf_dynptr_kern *dst =3D (struct bpf_dynptr_kern *)dst=
-_ptr;
-> > >         struct bpf_dynptr_kern *src =3D (struct bpf_dynptr_kern *)src=
-_ptr;
-> >
-> > [...]
+> 
+> Also reject kprobe_write_ctx mismatches during initialization to
+> prevent bypassing the above restriction.
+> 
+> Without this check, the above restriction can be bypassed as follows.
+> 
+> struct {
+> 	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
+> 	__uint(max_entries, 1);
+> 	__uint(key_size, 4);
+> 	__uint(value_size, 4);
+> } jmp_table SEC(".maps");
+> 
+> SEC("?kprobe")
+> int prog_a(struct pt_regs *regs)
+> {
+> 	regs->ax = 0;
+> 	bpf_tail_call_static(regs, &jmp_table, 0);
+> 	return 0;
+> }
+> 
+> SEC("?kprobe")
+> int prog_b(struct pt_regs *regs)
+> {
+> 	bpf_tail_call_static(regs, &jmp_table, 0);
+> 	return 0;
+> }
+> 
+> The jmp_table is shared between prog_a and prog_b.
+> 
+> * Load prog_a.
+>   At this point, owner->kprobe_write_ctx=true.
+> * Load prog_b.
+>   At this point, prog_b passes the compatibility check.
+> * Add prog_a to jmp_table.
+> * Attach prog_b to a kernel function.
+> 
+> When the kernel function runs, prog_a will unexpectedly modify regs.
+> 
+> Fixes: 7384893d970e ("bpf: Allow uprobe program to change context registers")
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
+>  include/linux/bpf.h |  7 ++++---
+>  kernel/bpf/core.c   | 30 +++++++++++++++++++++++++-----
+>  2 files changed, 29 insertions(+), 8 deletions(-)
+> 
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 05b34a6355b0..dbafed52b2ba 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -285,9 +285,10 @@ struct bpf_list_node_kern {
+>   */
+>  struct bpf_map_owner {
+>  	enum bpf_prog_type type;
+> -	bool jited;
+> -	bool xdp_has_frags;
+> -	bool sleepable;
+> +	u32 jited:1;
+> +	u32 xdp_has_frags:1;
+> +	u32 sleepable:1;
+> +	u32 kprobe_write_ctx:1;
+>  	u64 storage_cookie[MAX_BPF_CGROUP_STORAGE_TYPE];
+>  	const struct btf_type *attach_func_proto;
+>  	enum bpf_attach_type expected_attach_type;
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index b24a613d99f2..121a697d4da5 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -2390,6 +2390,7 @@ static void bpf_map_owner_init(struct bpf_map_owner *owner, const struct bpf_pro
+>  	owner->jited = fp->jited;
+>  	owner->xdp_has_frags = aux->xdp_has_frags;
+>  	owner->sleepable = fp->sleepable;
+> +	owner->kprobe_write_ctx = aux->kprobe_write_ctx;
+>  	owner->expected_attach_type = fp->expected_attach_type;
+>  	owner->attach_func_proto = aux->attach_func_proto;
+>  	for_each_cgroup_storage_type(i)
+> @@ -2397,8 +2398,14 @@ static void bpf_map_owner_init(struct bpf_map_owner *owner, const struct bpf_pro
+>  			aux->cgroup_storage[i]->cookie : 0;
+>  }
+>  
+> +enum bpf_map_owner_match_type {
+> +	BPF_MAP_OWNER_MATCH_FOR_INIT,
+> +	BPF_MAP_OWNER_MATCH_FOR_UPDATE,
+> +};
+> +
+>  static bool bpf_map_owner_matches(const struct bpf_map *map, const struct bpf_prog *fp,
+> -				  enum bpf_prog_type prog_type)
+> +				  enum bpf_prog_type prog_type,
+> +				  enum bpf_map_owner_match_type match)
+>  {
+>  	struct bpf_map_owner *owner = map->owner;
+>  	struct bpf_prog_aux *aux = fp->aux;
+> @@ -2411,6 +2418,18 @@ static bool bpf_map_owner_matches(const struct bpf_map *map, const struct bpf_pr
+>  	    owner->sleepable != fp->sleepable)
+>  		return false;
+>  
+> +	switch (match) {
+> +	case BPF_MAP_OWNER_MATCH_FOR_INIT:
+> +		if (owner->kprobe_write_ctx != aux->kprobe_write_ctx)
+> +			return false;
+> +		break;
+> +
+> +	case BPF_MAP_OWNER_MATCH_FOR_UPDATE:
+> +		if (!owner->kprobe_write_ctx && aux->kprobe_write_ctx)
+> +			return false;
+> +		break;
+> +	}
+> +
+>  	if (map->map_type == BPF_MAP_TYPE_PROG_ARRAY &&
+>  	    owner->expected_attach_type != fp->expected_attach_type)
+>  		return false;
+> @@ -2436,7 +2455,8 @@ static bool bpf_map_owner_matches(const struct bpf_map *map, const struct bpf_pr
+>  }
+>  
+>  static bool __bpf_prog_map_compatible(struct bpf_map *map,
+> -				      const struct bpf_prog *fp)
+> +				      const struct bpf_prog *fp,
+> +				      enum bpf_map_owner_match_type match)
+>  {
+>  	enum bpf_prog_type prog_type = resolve_prog_type(fp);
+>  	bool ret = false;
+> @@ -2453,7 +2473,7 @@ static bool __bpf_prog_map_compatible(struct bpf_map *map,
+>  		bpf_map_owner_init(map->owner, fp, prog_type);
+>  		ret = true;
+>  	} else {
+> -		ret = bpf_map_owner_matches(map, fp, prog_type);
+> +		ret = bpf_map_owner_matches(map, fp, prog_type, match);
+>  	}
+>  err:
+>  	spin_unlock(&map->owner_lock);
+> @@ -2470,7 +2490,7 @@ bool bpf_prog_map_compatible(struct bpf_map *map, const struct bpf_prog *fp)
+>  	if (bpf_prog_is_dev_bound(fp->aux))
+>  		return false;
+>  
+> -	return __bpf_prog_map_compatible(map, fp);
+> +	return __bpf_prog_map_compatible(map, fp, BPF_MAP_OWNER_MATCH_FOR_UPDATE);
+>  }
+>  
+>  static int bpf_check_tail_call(const struct bpf_prog *fp)
+> @@ -2485,7 +2505,7 @@ static int bpf_check_tail_call(const struct bpf_prog *fp)
+>  		if (!map_type_contains_progs(map))
+>  			continue;
+>  
+> -		if (!__bpf_prog_map_compatible(map, fp)) {
+> +		if (!__bpf_prog_map_compatible(map, fp, BPF_MAP_OWNER_MATCH_FOR_INIT)) {
+>  			ret = -EINVAL;
+>  			goto out;
+>  		}
+> -- 
+> 2.52.0
+> 
