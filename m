@@ -1,80 +1,93 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F8A032D43C
-	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 13:40:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58E73282F0B;
+	Wed, 11 Mar 2026 14:03:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773236431; cv=none; b=IVRC7pUnQhd0sxasE0iQ+Vbcb76rEOK01N/AtbnwzwjqD7uZlyIK5F/f0Jer3jwWpaqQggfTJnA6bAB3dVAC9BURqrC+ExDmx8Fq+bnxu6myFEB63G4q4GP72Itk5xedv5oO0TJIMNDed1ZigXF/LJJR6LEJIx4IUeJdOcHTjGE=
+	t=1773237825; cv=none; b=YfeuVXpJaWRmredF+fd+cRX8/fGPonUHt/7I6khwDJcnF020k4gzDFfYRoRK5VVx7mDV9yHvFD4a8TuMfGfXdn70X1rgnHTILZ8lpYu7p5WNP9SolfeNkL3uFQjAFcys1XgnQvyrNQifbM+V4eF/5WLiA3aFFzhXl6lfVUPNVdE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773236431; c=relaxed/simple;
-	bh=MPM7tMrysfqhxFdsFB02wgIP94QCko05udW98oEoqOE=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=L5qUSSgwsq8shGfXwNKWHa9cbI8ZNaWDwDSedYMUQIIlR2jxC6yegu5527kPOicGxB1NKNeNftv558Ta76NLPyRRcJUHHZizoZvBD4ea5qw5i73WdGEKdICgO2Q+rvnymZjL6NV4zbvpNxs3SsNXNIuuUPvJI6J0QfPpOxtMG2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cypx8Njz; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cypx8Njz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E8E1C2BC9E;
-	Wed, 11 Mar 2026 13:40:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773236430;
-	bh=MPM7tMrysfqhxFdsFB02wgIP94QCko05udW98oEoqOE=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=cypx8NjzvNucKZmVP2gi77AxHfoXTKAak5QjlbQS1QG1OF48nG35S8xzUtvfEzVeB
-	 pVZV1OrgJ3z0NfLj1VtqeAdWlIxpJrKzFrFp/j0iPgLWStDMAGYoI2xX9sJWrq+2cy
-	 9iYfYF1lmUr+VW2RfmU1Cyd623VNB2q43hsxIsFqWzx/6T993/lWS9c/ce50Cik+dM
-	 k/ad3O1kKSUtncPA8vrR8d7jFJ7B/5xe8VcA4t5IMKD+iKNdVKX1jR7XfU7KNNk79/
-	 TeviAsYIQGGsuiozyKAkVU83kaKppLGwPU48okP4/AoiPSyoDwWHd78m9n4ug4aKfM
-	 xflIzw4k1XAsQ==
-Content-Type: multipart/mixed; boundary="===============6698351429997486596=="
+	s=arc-20240116; t=1773237825; c=relaxed/simple;
+	bh=Co6af1PDO/5BNnOq+gUEX5fdYaHwA4r9elfY/kzPOJ0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=uiJTIUuIlryWbuaxmhTCXv8ixFVpguQMxGNFPjmazsgavTuPnGEl38YL1iU8isiV7frdlvwg83drL2m1s1a39knxy59wChf+oE3JJd7ZLSqLD2u+/gPHmZAHYVLNJG11mv1wjZdNeLn4cPqr8vi7JajcONdd+QBoLOikye2vx9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf20.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay02.hostedemail.com (Postfix) with ESMTP id 4324D139CEA;
+	Wed, 11 Mar 2026 14:03:38 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf20.hostedemail.com (Postfix) with ESMTPA id 0CF3220025;
+	Wed, 11 Mar 2026 14:03:20 +0000 (UTC)
+Date: Wed, 11 Mar 2026 10:03:32 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: Philipp Hahn <phahn-oss@avm.de>, amd-gfx@lists.freedesktop.org,
+ apparmor@lists.ubuntu.com, bpf@vger.kernel.org, ceph-devel@vger.kernel.org,
+ cocci@inria.fr, dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
+ gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org,
+ intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev,
+ kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+ linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-erofs@lists.ozlabs.org,
+ linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mm@kvack.org,
+ linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org,
+ linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+ linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
+ linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+ ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
+ sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
+ tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev, Mathieu
+ Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH 15/61] trace: Prefer IS_ERR_OR_NULL over manual NULL
+ check
+Message-ID: <20260311100332.6a2ce4b1@gandalf.local.home>
+In-Reply-To: <20260311141332.b611237d36b61b2409e66cb3@kernel.org>
+References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
+	<20260310-b4-is_err_or_null-v1-15-bd63b656022d@avm.de>
+	<20260310100750.303af303@gandalf.local.home>
+	<20260311141332.b611237d36b61b2409e66cb3@kernel.org>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <38b32432e05af72b358055df9c81e89e951cde03d94efbe32c28568a76c13057@mail.kernel.org>
-In-Reply-To: <20260311130321.1055808-1-memxor@gmail.com>
-References: <20260311130321.1055808-1-memxor@gmail.com>
-Subject: Re: [PATCH] bpf: Release module BTF IDR before module unload
-From: bot+bpf-ci@kernel.org
-To: memxor@gmail.com,martin.lau@linux.dev
-Cc: ameryhung@gmail.com,andrii@kernel.org,ast@kernel.org,bpf@vger.kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,grbell@redhat.com,haoluo@google.com,john.fastabend@gmail.com,jolsa@kernel.org,kpsingh@kernel.org,memxor@gmail.com,sdf@fomichev.me,song@kernel.org,yonghong.song@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 11 Mar 2026 13:40:30 +0000 (UTC)
-
---===============6698351429997486596==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 0CF3220025
+X-Stat-Signature: ff8ct3tumfmuryqygkfkcm78w16u4scc
+X-Rspamd-Server: rspamout03
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1+skqrXXDxm4il2tsYmj25H0/GTzSRdMUI=
+X-HE-Tag: 1773237800-364001
+X-HE-Meta: U2FsdGVkX1+aU4mY7bFvO8lRauP/vgjT20dobHa0QHVROVhTP6xZNvlHFy+HnthX7C3DUw86Ksayk8kipkioUde1pGRJffeDzlmGTmiRQAtxOhSsM3gHnZJQZGdgNXBABYZdeE7OsMEvCI5Ff4ZQbbyu3yXHRyZXg5AHof/AO0vcusmeqjpCWWhtLLOcuZIY7+tOVjT7VktVnLaFPp1jjRLc3JQ2sJ4jp/SiL4aHgDK/k//b9d34oAYT+AlJT32Fm0BFv3eObF3U3OAnj7CnGXu0MyQ+0edSgYKqKIiOybnUsF1fYSODF4X+zk3bqwV4HOqJnRMkZevrGktYEsiiqb8/qNY0d6MZ
 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -1883,10 +1883,17 @@ void btf_get(struct btf *btf)
->  	refcount_inc(&btf->refcnt);
->  }
->
-> +static bool btf_is_module(const struct btf *btf);
+On Wed, 11 Mar 2026 14:13:32 +0900
+Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
 
-btf_is_module() is already declared with external linkage in
-include/linux/btf.h:
+> Hmm, now IS_ERR_OR_NULL() is an inline function, so it is safe.
+> But if you want to use IS_ERR_OR_NULL() here, it will be better something like
+> 
+> node = rhashtable_walk_next(&iter);
+> while (!IS_ERR_OR_NULL(node)) {
+> 	fprobe_remove_node_in_module(mod, node, &alist);
+> 	node = rhashtable_walk_next(&iter);
+> }
 
-    bool btf_is_module(const struct btf *btf);
+But now you need to have a duplicate code in order to acquire "node"
 
-and btf.c includes that header. Won't the static forward
-declaration here cause a build error? GCC rejects a static
-declaration that follows a non-static declaration of the same
-function. Dropping the 'static' keyword from this forward
-declaration should fix it.
+I think the patch just makes the code worse.
 
-> +
-> void btf_put(struct btf *btf)
-
-[ ... ]
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22954450342
---===============6698351429997486596==--
+-- Steve
