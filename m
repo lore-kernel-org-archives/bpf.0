@@ -1,121 +1,181 @@
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B058778F39;
-	Wed, 11 Mar 2026 00:16:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15A6C31DD97
+	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 00:20:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773188181; cv=none; b=i2EWN6pZMe8+Vt3a1nfivI3TDYN70wUqee/HZulAaULlezQKOJs7HxTawJBPRQHbmwD1JJ+sTqDFhZh4APZJCNgegzcdxeIMiQutwziMqBW71T2+rVkROA+OZyw96+PAW6SKCVjN3vd8ZlE4JokVdJQshqiR8O/ffkeoseKHnw4=
+	t=1773188442; cv=none; b=AyvWJ8X3odFqXz3lWINAKQ1iiv5bLrApbkFftxOnaBFMX3WlPKYZrwOBXIuQFkhgu2SznxVGfM02Dh5w88mEuHb9Ohv/ZAXax0CW9G7YcXoQZ79mP4l3+up+WGo7f6NNIAlytbKVUoGn7T7R9lcS99puVD8FkiitmUnvQtH0Sdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773188181; c=relaxed/simple;
-	bh=HHmVVMzB7LWlN0zlKien4jBG/TuDlI4RcZGysb9m8Vk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fCr4TN/DbSTIZeYdqUctNJeA+l8EomJclrlIObj95OA1pv6ZpTOygP6Tea6nrZD3U8t1nKEbwVlAjbTRISh/e6ssZ439PxfUvXb5k/ABXz9hh6ENTt34TElTXWvgyx4DfaU/7j3RNYTwX3f624dl5YqTeI526pgCb0boWeIgqx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=v5WQ+aGF; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+	s=arc-20240116; t=1773188442; c=relaxed/simple;
+	bh=hLsDEu+zR8PucaLR8pmIos5H/Zo+JHw2jybYjyVWfUU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cbUgXLL6ukAxdqkyLCwS2F6mNvLE1bzmUFdu4oz5fcY7yFBIdhiDqRM971wPNivCdipFMhHAVyCV1uVTxWZhGcAeys+MBj7fhYLg2g1WcdptpYO43RZi7/E0Oif6SB7hUe5RmkPSresDeOPB6SBVafAmOGP0RCK/tdEkX+sFzj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=e8jAVJTE; arc=none smtp.client-ip=91.218.175.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="v5WQ+aGF"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=G+5qjaihAOE3Wva2YLY8jATPGvyCa7CiJLk7V/SbO+c=; b=v5WQ+aGF0sps0WNhC7Zp3i4qfq
-	0Hb0SCVWpSXvSr7WdAe2bPHF4KfJ/Ed1eiaiCb8D0oCv1z5xwK7JuLf0tC0l8hY2t6eWn1tcNZSpg
-	QYrAEXTacs2n4b4dGxTmR/QZFsu7Xre8GI0M2CDH+d6uoN0gFUU9MJ/Uqp3GyqqaO1XmybhsS5lVz
-	KPXBqq6BLZCCQzpQ8jMEzm8MnKJZE/MMCDQxbCe0qlHGv5pHIS812K52VRhLCysEP1IhQjrayukQi
-	lGpFnxogge7mHLP+wP8QrSVC+xUyVfKJNzw96REdhpsHijJHvcSndISQsei/F/gJP6wWuF34GUcce
-	0I/0wllQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:55974)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1w07FF-000000005dP-41aF;
-	Wed, 11 Mar 2026 00:16:14 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.98.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1w07FB-000000005hj-1vhz;
-	Wed, 11 Mar 2026 00:16:09 +0000
-Date: Wed, 11 Mar 2026 00:16:09 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Philipp Hahn <phahn-oss@avm.de>
-Cc: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com,
-	bpf@vger.kernel.org, ceph-devel@vger.kernel.org, cocci@inria.fr,
-	dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
-	gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org,
-	intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev,
-	kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-	linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-erofs@lists.ozlabs.org,
-	linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org,
-	linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org,
-	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-	ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
-	sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
-	tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev,
-	Igor Russkikh <irusskikh@marvell.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Michael Chan <mchan@broadcom.com>,
-	Potnuri Bharat Teja <bharat@chelsio.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Taras Chornyi <taras.chornyi@plvision.eu>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Iyappan Subramanian <iyappan@os.amperecomputing.com>,
-	Keyur Chudgar <keyur@os.amperecomputing.com>,
-	Quan Nguyen <quan@os.amperecomputing.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH 38/61] net: Prefer IS_ERR_OR_NULL over manual NULL check
-Message-ID: <abC0Se_cstwTWp9r@shell.armlinux.org.uk>
-References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
- <20260310-b4-is_err_or_null-v1-38-bd63b656022d@avm.de>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="e8jAVJTE"
+Message-ID: <aed1731e-986e-484e-bc16-682b025d26cf@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773188438;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lw1FokbwUhlf20zD8yP5NKPUpoGDVamLwdYCvzK8A84=;
+	b=e8jAVJTETHw8g0MVlj5IF4O6gL6D9TYE/Y6adexCOozgwmlMeIXbWSDuyhs4QMsjCfVGK7
+	gSD8FCsomyUHpc+to2yia/3lWhewU8GOxQ0V5+B/AmeqWBWdgblKgjVFaiiVbTt+FIiSzK
+	Uml886jDAMoYDQBlmh1S5dG5WYkjUKU=
+Date: Tue, 10 Mar 2026 17:20:32 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260310-b4-is_err_or_null-v1-38-bd63b656022d@avm.de>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Subject: Re: [PATCH bpf-next 1/1] bpf: Fix BTF module cleanup race condition
+ in struct_ops
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Amery Hung <ameryhung@gmail.com>
+Cc: Gregory Bell <grbell@redhat.com>, bpf@vger.kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org
+References: <cover.1773170190.git.grbell@redhat.com>
+ <a46d40ac2b56f96b3b6e953847ad4719694d68eb.1773170190.git.grbell@redhat.com>
+ <CAP01T75MFfp8oBrogRvm+BRh7=fvm9pP0vTvNm=RW3r3=WDB7g@mail.gmail.com>
+ <CAMB2axPT8L60FGN5wben-pa73toOwLcD8cuGqbNUg6AB57ePYg@mail.gmail.com>
+ <CAP01T76cPcToNwu_NMFU6QDO8qZB+n9WA0_qxSzrasZV-=G-Qw@mail.gmail.com>
+ <CAMB2axMTkN5R3+JQL-2L0fWAqzOQOFOxp7+WKF4DLUF-FqgiPg@mail.gmail.com>
+ <CAP01T75dDL5pud_NmCmEapw6p1cZss9LTfh6sBxdxYinVQTP5Q@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <CAP01T75dDL5pud_NmCmEapw6p1cZss9LTfh6sBxdxYinVQTP5Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, Mar 10, 2026 at 12:49:04PM +0100, Philipp Hahn wrote:
-> diff --git a/drivers/net/mdio/mdio-xgene.c b/drivers/net/mdio/mdio-xgene.c
-> index a8f91a4b7fed0927ee14e408000cd3a2bfb9b09a..09b30b563295c6085dc1358ac361301e5cf6b2a8 100644
-> --- a/drivers/net/mdio/mdio-xgene.c
-> +++ b/drivers/net/mdio/mdio-xgene.c
-> @@ -265,7 +265,7 @@ struct phy_device *xgene_enet_phy_register(struct mii_bus *bus, int phy_addr)
->  	struct phy_device *phy_dev;
->  
->  	phy_dev = get_phy_device(bus, phy_addr, false);
-> -	if (!phy_dev || IS_ERR(phy_dev))
-> +	if (IS_ERR_OR_NULL(phy_dev))
 
-As noted in reply to your cover message, the check for NULL here is
-incorrect - get_phy_device() returns either a valid pointer or an
-error pointer, but never NULL.
+On 3/10/26 4:35 PM, Kumar Kartikeya Dwivedi wrote:
+> On Wed, 11 Mar 2026 at 00:17, Amery Hung <ameryhung@gmail.com> wrote:
+>>
+>> On Tue, Mar 10, 2026 at 3:48 PM Kumar Kartikeya Dwivedi
+>> <memxor@gmail.com> wrote:
+>>>
+>>> On Tue, 10 Mar 2026 at 23:38, Amery Hung <ameryhung@gmail.com> wrote:
+>>>>
+>>>> On Tue, Mar 10, 2026 at 2:41 PM Kumar Kartikeya Dwivedi
+>>>> <memxor@gmail.com> wrote:
+>>>>>
+>>>>> On Tue, 10 Mar 2026 at 21:21, Gregory Bell <grbell@redhat.com> wrote:
+>>>>>>
+>>>>>> When running BPF struct_ops tests consecutively, the second test fails
+>>>>>> because BTF object references take longer to be released while their
+>>>>>> associated module is removed from btf_modules list immediately
+>>>>>> during module unload. This creates a race condition where the second
+>>>>>> test retrieves the cached BTF object but cannot find valid module
+>>>>>> information, causing btf_try_get_module() to return NULL.
+>>>>>>
+>>>>>> Fix this by modifying MODULE_STATE_GOING handling to wait for
+>>>>>> active BTF references to be released before completing module
+>>>>>> cleanup. This ensures BTF objects are properly cleaned up from the
+>>>>>> cache before their module metadata is removed, eliminating the timing
+>>>>>> window that caused the race condition.
+>>>>>>
+>>>>>> Signed-off-by: Gregory Bell <grbell@redhat.com>
+>>>>>> ---
+>>>>>>   kernel/bpf/btf.c | 7 ++++++-
+>>>>>>   1 file changed, 6 insertions(+), 1 deletion(-)
+>>>>>>
+>>>>>> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+>>>>>> index 09fcbb125155..81c9f46a7bb7 100644
+>>>>>> --- a/kernel/bpf/btf.c
+>>>>>> +++ b/kernel/bpf/btf.c
+>>>>>> @@ -8382,7 +8382,12 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
+>>>>>>                  list_for_each_entry_safe(btf_mod, tmp, &btf_modules, list) {
+>>>>>>                          if (btf_mod->module != module)
+>>>>>>                                  continue;
+>>>>>> -
+>>>>>> +                       unsigned int timeout = 1000;
+>>>>>> +                       while (refcount_read(&btf_mod->btf->refcnt) > 1
+>>>>>> +                       && timeout > 0 ) {
+>>>>>> +                               msleep(1);
+>>>>>> +                               timeout--;
+>>>>>> +                       }
+>>>>>
+>>>>> This isn't the right way to address such issues. Your diagnosis is
+>>>>> correct but fix is just papering over real problems.
+>>>>
+>>>> Second that the fix is not right.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+pw-bot: cr
+
+>>>>
+>>>>>
+>>>>> The better way would be to block the discovery of such BTFs once the
+>>>>> module is unloaded.
+>>>>> I.e. once we return to userspace after module unload, subsequent calls
+>>>>> to obtain an fd for such BTFs should not succeed.
+>>>>> If someone is racing to look it up while the unload happens, so be it,
+>>>>> they will fail anyway.
+>>>>>
+>>>>> I would use a bool flag in struct btf, set it inside the critical
+>>>>> section at this point with WRITE_ONCE, then test it early in
+>>>>> bpf_find_btf_id and bpf_core_find_cands with || in !btf_is_module
+>>>>> condition.
+>>>>> Using READ_ONCE of course.
+>>>>> Also, we need to add it to btf_get_fd_by_id, so that once conversions
+>>>>> from stale IDs to FDs don't succeed.
+>>>>> Looking at load_module_btfs(), it already handles the ENOENT case when
+>>>>> id lookup succeeds, but fd lookup fails.
+>>>>> So for stale ids it should just skip over their errors if we return
+>>>>> the same ENOENT as the refcount_inc_not_zero case.
+>>>>> We will still report stale ids, but not allow their conversion.
+>>>>> We could filter id lookup too but it will penalize the common code and
+>>>>> we need extra radix tree lookup just for BTF case.
+>>>>>
+>>>>> For me locally, these changes seem to address the problem. I could
+>>>>> send the fix, but if you would like to take a stab at the above
+>>>>> change, please go ahead.
+>>>>>
+>>>>
+>>>> I guess this is worth a fix because it makes btf_get_fd_by_id() less
+>>>> likely to return to stale id. However, there is still a small window
+>>>> between btf_get_fd_by_id() and btf_try_get_module() so struct_ops map
+>>>> creation can still fail.
+>>>
+>>> That's fine, it means that module unload is happening in parallel, so
+>>> it's racy and non-deterministic anyway.
+>>> When the user controls the module unload though, they should not be
+>>> getting stale BTF fds once module unload has returned to user space.
+>>> At that point all associated artifacts shouldn't be discoverable.
+>>>
+>>>>
+>>>> As for the solution, there already is btf_mod->flags. So maybe instead
+>>>> of adding a bool, just test the flag?
+>>>
+>>> You mean struct btf instead of btf_mod? I don't see the flags field there.
+>>> The btf_mod->flags won't work, it's already deleted and freed by this
+>>> time, and requires us to go first from the BTF to the btf_mod.
+>>> So it has to be in struct btf.
+>>>
+>>
+>> I was thinking about updating btf_module->flags when handling
+>> MODULE_STATE_GOING. Then btf_get_fd_by_id() can call
+>> btf_try_get_module() to check flags if it's module BTF. If the module
+>> is already freed then it returns -ENOENT.
+> 
+> Hmm, interesting thought.
+> I guess the only downside is that it's O(n) lookup under mutex, which
+> can be costly with lots of modules, and always penalizes
+> get_fd_by_id() for handling race.
+> We also need to repeat it in bpf_core_find_cands and bpf_find_btf_id,
+> where we may repeat it multiple times in the loop, so the cost is
+> amplified.
+> 
+
+Is btf->id still needed somewhere after MODULE_STATE_GOING? Otherwise, 
+directly removing btf->id from btf_idr in btf_module_notify() should 
+stop the discovery.
