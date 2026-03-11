@@ -1,97 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 412523DA5CC
-	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 09:32:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5CA82BEFE7;
+	Wed, 11 Mar 2026 09:35:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773221546; cv=none; b=r3A+jr7M1dmxDT8g1uoVxFNgfxGhaBjXsjvacilj3BcyZzwORvfTtvKjYFUNV4Iy3JNQcH9GUF3znb9l+F0WMVKwXSlZ9Owut5CA7zZwTFl5kLWk6ISIHa9CZHWTkspowx9370Jj+s/kpd7WyOrSsNIru3yckSVg/sqoBfc61UM=
+	t=1773221709; cv=none; b=lHGzswplAReTaJcNNGmSseExIWB9V96pgr9IfJPoDzED+UV8el5BGpvHCJcbtGYkUU0+qoo3MYaGc81GWcBBOvQcujxaFOm7WKMbOqQGjsUkHT/kNPmFroLRSDRQDX+NBK6VEuWiRpJZgf1tGKtICQE4KWlLn6Eh1L+6gUGWSjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773221546; c=relaxed/simple;
-	bh=JGYhPK256pxU9EiY8jbQSSjgozqR8V5kd9EUseD+GRo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lDPbIJX30/OfdLsE2BHzTX7jbYMiPXOpA5j6nZZN0URtgNrQnRggRxPparRQodJln6PKo0iETdOrUjfDMLAU6+mt52wlIj51GDRWbeyEWHKG6nftPOXTd1tMgwd1Ubeyd3mhnJ+hfZD/E/jaONTblzUxAJdIQu923r0pSmwOvoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HFhFoVNi; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HFhFoVNi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 204A8C2BCC4
-	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 09:32:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773221546;
-	bh=JGYhPK256pxU9EiY8jbQSSjgozqR8V5kd9EUseD+GRo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=HFhFoVNiTrG9LQIv0ppKNoD/HrLrqirjTX+9UZCfZCZR1ACy9KY8vzAF+UubsxXyb
-	 7A/AuxjB4pyfRVKpNo6VtwqDxAsV9i3OOu1suwbvFFD+dDURdR+fYaKC55vrGeQY9Q
-	 cSfgyMDf/Q66zJ3KWwfMvjGW3KxBKWlpZI+D0gyhlDHCmqkd60AvBaOv309nWmMVWV
-	 CYlN2OWwesW62EumkmGZjYKDzJerzMaIQkjARv2P34b/XlQnitMbZc1GQEBU1oFAvA
-	 btyT8hZcwwyybJD9LXcRDJBi0I3lkqqR8+lcx+5G7+1oP2ywnfC8KCi8970yZ/P/V5
-	 nMGE+UjgzzO6g==
-Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-64ca2b32f46so10232966d50.3
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 02:32:26 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVG+VTp4CZCCbugn9QH/03Dv/lN3LKmwrejcULPGQbida2Y5td3pRAEX4uf6y0eaaFzToY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7m45AZoGFHDfbpWimdIJLt0Jz4UfDweaKR6Wi959o8VVFwYuf
-	5Oh6alnWM9iCL+b83BOE4hn+Wl86Kng7IUCXGntky9KmFA1YGvdFhJBc84gLoSwY+DQxLkCNAzU
-	qHrpUBnZRjOL+gMHHuOZC5pgirz3z3/I=
-X-Received: by 2002:a05:690e:144d:b0:64c:e890:fbb9 with SMTP id
- 956f58d0204a3-64d656f696dmr1649157d50.20.1773221544775; Wed, 11 Mar 2026
- 02:32:24 -0700 (PDT)
+	s=arc-20240116; t=1773221709; c=relaxed/simple;
+	bh=aa57vnTUh0SxWMfF1DF7EcfbL+UNLmA40TkPWU3lvMc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ABDKOcW5eJx3N5L1k0W0jaxWe8T1S3z19UXnPCPm5qWQvw8uBDDR56NQPq1t8AZRidVXOxjlF1CZ3QJZhf4wS+G0CWnAkacohs3Ci8jmLI36zK1SqTdJM6ryHzFoMYT34j+RPotvRk12QiInaHTR0mJ/zuLkbPvNlN8pfZiW2Uc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 14BBF169C;
+	Wed, 11 Mar 2026 02:35:01 -0700 (PDT)
+Received: from localhost (e132581.arm.com [10.1.196.87])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ECA6B3F73B;
+	Wed, 11 Mar 2026 02:35:06 -0700 (PDT)
+Date: Wed, 11 Mar 2026 09:35:05 +0000
+From: Leo Yan <leo.yan@arm.com>
+To: bot+bpf-ci@kernel.org
+Cc: acme@kernel.org, irogers@google.com, namhyung@kernel.org,
+	james.clark@linaro.org, kees@kernel.org, qmo@kernel.org,
+	nathan@kernel.org, nsc@kernel.org, nick.desaulniers+lkml@gmail.com,
+	morbo@google.com, justinstitt@google.com, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+	eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+	haoluo@google.com, jolsa@kernel.org, rafael@kernel.org,
+	daniel.lezcano@kernel.org, rui.zhang@intel.com, lukasz.luba@arm.com,
+	peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
+	alexander.shishkin@linux.intel.com, adrian.hunter@intel.com,
+	mhiramat@kernel.org, wbg@kernel.org, baohua@kernel.org,
+	xiaqinxin@huawei.com, brgl@kernel.org, warthog618@gmail.com,
+	kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+	decui@microsoft.com, longli@microsoft.com, jic23@kernel.org,
+	dlechner@baylibre.com, nuno.sa@analog.com, andy@kernel.org,
+	akpm@linux-foundation.org, w@1wt.eu, linux@weissschuh.net,
+	jpoimboe@kernel.org, robert.moore@intel.com, lenb@kernel.org,
+	srinivas.pandruvada@linux.intel.com, tj@kernel.org,
+	void@manifault.com, arighi@nvidia.com, changwoo@igalia.com,
+	broonie@kernel.org, rostedt@goodmis.org, gmonaco@redhat.com,
+	shuah@kernel.org, jikos@kernel.org, bentiss@kernel.org,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, bpf@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, martin.lau@kernel.org,
+	clm@meta.com, ihor.solodrai@linux.dev
+Subject: Re: [PATCH v4 06/30] libbpf: Remove duplicate $(CLANG_CROSS_FLAGS)
+Message-ID: <20260311093505.GH4153946@e132581.arm.com>
+References: <20260311-tools_build_fix_zero_init-v4-6-9e35bdb99cb3@arm.com>
+ <00482d80980f713b27b422ec1ea2d17d0f1daed19243b597c5954e470cc09c92@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de> <20260310-b4-is_err_or_null-v1-41-bd63b656022d@avm.de>
-In-Reply-To: <20260310-b4-is_err_or_null-v1-41-bd63b656022d@avm.de>
-From: Linus Walleij <linusw@kernel.org>
-Date: Wed, 11 Mar 2026 10:32:12 +0100
-X-Gmail-Original-Message-ID: <CAD++jLnDv00ErgVdQ4EBpKH9KMWrPD8ODrQ6m846zyQ=wNzCzQ@mail.gmail.com>
-X-Gm-Features: AaiRm52aI8z_G2E4qYaKWPEA43RhLektjwMDQXSLwHd-Xy_BYcin-6heFFY4jM4
-Message-ID: <CAD++jLnDv00ErgVdQ4EBpKH9KMWrPD8ODrQ6m846zyQ=wNzCzQ@mail.gmail.com>
-Subject: Re: [PATCH 41/61] pinctrl: Prefer IS_ERR_OR_NULL over manual NULL check
-To: Philipp Hahn <phahn-oss@avm.de>
-Cc: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com, 
-	bpf@vger.kernel.org, ceph-devel@vger.kernel.org, cocci@inria.fr, 
-	dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org, 
-	gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org, 
-	intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev, kvm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org, 
-	linux-bluetooth@vger.kernel.org, linux-btrfs@vger.kernel.org, 
-	linux-cifs@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-hyperv@vger.kernel.org, linux-input@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-mips@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org, 
-	linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org, 
-	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org, 
-	linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org, 
-	linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org, ntfs3@lists.linux.dev, 
-	samba-technical@lists.samba.org, sched-ext@lists.linux.dev, 
-	target-devel@vger.kernel.org, tipc-discussion@lists.sourceforge.net, 
-	v9fs@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00482d80980f713b27b422ec1ea2d17d0f1daed19243b597c5954e470cc09c92@mail.kernel.org>
 
-On Tue, Mar 10, 2026 at 12:55=E2=80=AFPM Philipp Hahn <phahn-oss@avm.de> wr=
-ote:
+On Wed, Mar 11, 2026 at 09:02:13AM +0000, bot+bpf-ci@kernel.org wrote:
+> > diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+> > index 168140f8e646..b1fbd0211c5e 100644
+> > --- a/tools/lib/bpf/Makefile
+> > +++ b/tools/lib/bpf/Makefile
+> > @@ -84,7 +84,6 @@ override CFLAGS += -Werror -Wall
+> >  override CFLAGS += $(INCLUDES)
+> >  override CFLAGS += -fvisibility=hidden
+> >  override CFLAGS += -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+> > -override CFLAGS += $(CLANG_CROSS_FLAGS)
+> 
+> At this commit, doesn't this removal lose CLANG_CROSS_FLAGS entirely
+> from the libbpf build?
+> 
+> The libbpf Makefile includes Makefile.include at the top, which does
+> append CLANG_CROSS_FLAGS to CFLAGS. But then the libbpf Makefile
+> overwrites CFLAGS with :=
+> 
+>     CFLAGS := -g -O2
+> 
+> which destroys everything Makefile.include appended. The removed line
+> above was the only thing that re-added the cross-compile flags after
+> that overwrite.
+> 
+> The next commit in the series (233d70853154 "libbpf: Initialize CFLAGS
+> before including Makefile.include") fixes this by moving the CFLAGS
+> initialization before the include, so Makefile.include's addition
+> survives. But at this commit, cross-compilation with Clang appears
+> broken.
+> 
+> Could these two patches be squashed or reordered so that the
+> initialization move comes first?
 
-> Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
-> check.
->
-> Change generated with coccinelle.
->
-> To: Linus Walleij <linusw@kernel.org>
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
+To be honest, I feel much more comfortable being corrected by a human
+rather than a bot :)
 
-Patch applied to the pinctrl tree as obviously correct.
+The comment is fair enough, I will squash the two patches.
 
-Yours,
-Linus Walleij
+Thanks,
+Leo
