@@ -1,125 +1,137 @@
-Received: from mail-ej1-f73.google.com (mail-ej1-f73.google.com [209.85.218.73])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A05E3D8110
-	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 16:01:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.73
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773244902; cv=none; b=hfObg9FYoESb4f6WB8ZS37QxirExKBbJZKQPFY648vnrORwCSja4fHwE0JEJxJy45QL3A6rUqLPmLkegWgtBs6w74He9a1C3CjFJg51piYrDUKi7Sfw3a7o8PrhWVI7YJ2YyBpKQ17164U7l7wMWI6Ab8TJTcHhNK8LTtiHF81M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773244902; c=relaxed/simple;
-	bh=alZSKgg1lU1wQh0A0HBF21ufoC8erK4cgoNEO+IVhhg=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=fX6j0vAmb1oJ9q0GzvEBix6+0UJKGUswaqgGT7eJANxh0vC+IlBQMvFqUCeRpVlHCyV9VJMq7+QJJbWshdhPlw0NjlaqJdgkabIMND+lK0+P0bhwOWMkfWXYKxJomb1DzhZa5xRGfUrx1p1j0GUIdAd0t/K+ZSahDJ0dG6dFt5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rgP3KJaq; arc=none smtp.client-ip=209.85.218.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76AB21E8320
+	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 16:02:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773244977; cv=pass; b=UHDRWujI4c71y1SFspgmzgWh6ISaMfT51LdP1VpzBl9V/BEzLvogUi3zwKS+1CTfWXQnRW0Jc76eTRihvIiYj/iKDHj/38jJABASlwlFlR0jlRGKzQOBxvdm6l73PzrXGpv5GCVTL6X1b29jHJByJSzuj4yWrZp/xXN9JS657jg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773244977; c=relaxed/simple;
+	bh=TTGYknl5DMVw66RIprGNex8QxI0DcgJDnPePFyUvgSo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Bz8MMEdUTCHrEZasja3IdGem+CTJBcSKNogPw4u0zE5EYQz2d5fuwvhdLTYuq52NqLmbMyGBLy/3V4QgDRDFSxB0YaFHY7WhwC1HZnge4vmO2fUbhLTmIVdnXtTAIPp6UsU8nbEO334puwTSC60vrgeJgraiOwZl3VzbNtRFzEY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LJk+dXwK; arc=pass smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rgP3KJaq"
-Received: by mail-ej1-f73.google.com with SMTP id a640c23a62f3a-b8ff07df5e4so1253814566b.3
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 09:01:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LJk+dXwK"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b943b75dc42so877174266b.3
+        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 09:02:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773244975; cv=none;
+        d=google.com; s=arc-20240605;
+        b=k71PdkYSmHZNHTwx3rZzQLtlL1ucR2I0mMT/faKK+fVb2f57MCXKmTbocVXkRLril2
+         WX7Yv6tZY7556FdXNj2IRdo7uPK6zmZu3suuwruDOJhtYOaQmTTXDrjJMnQ7INC05Ks0
+         w51yQyJey1iyiEB2KQJKdVN5KE9afm+nOZgPYVO+o/GWQpCiLNtB4zCnRoWmBFH9nmuG
+         i/qIuOLdNqs/1DWKEDK5IBDOwyrrGvh5tDTmoJJG2IobQlttF/AsStlmWq0De+mIM8cy
+         fwnvIpeu88GE4nw5BG2AkzOlFVYQEednJmfELcqCm/5gQExJdOLxM2cz+Pots2MwPeCg
+         kz9w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=UAvqaxfPguwjQoaqkzApmgLeUnEZxmw7DGBlz6NQr7k=;
+        fh=j/zE8PWHuDEx7y5CIbaDYgRuJvk3iT+O+oymPIfh6/s=;
+        b=SLNoKx8PaP5kePI7Ds51KNM8qr9QcrYQbdka1+mJAncJxjykYTjIlt+3aF72h7ORTa
+         V3WLmlb+SICgQqcZPpNTaLIOii85lTg/DitOAd0yZ+DoyIptq2xi8+xskL94iXDFMZhV
+         b721ngJHUzSUBkkAvlZY7L+MvgzhsosP5blXVBjE2K9tet+3JyDBRTQeyfHyuqU2QdWs
+         rNNXO39Y0UJHV2sJVES6bUSIdTwo2o1rnHS/3WAyX8cbjza7G/WS9pK5keBLUS7g4lvA
+         pzKhTNBM5q5Ffw9E6eiV8EjmXc+9iJd3JtH5H6MY6ZRIQgYchcqk+ylkzG4O1SL9PJGm
+         2ZSw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773244899; x=1773849699; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FZ9wJHN98p2eqW+aluFwwdS4VIjV0bOaQ4w+79zBhNs=;
-        b=rgP3KJaqF2BlecOpPvT5kKAcfsza44TQB2S2rx00vuamlvPC3PCFQtN7iBBVErQ0kT
-         4WdJtxceJIxgfEoqrKiMSBM220p/tm52QxQ+p/Vm9qhMEQGFaHmneuWDzyXc37rR6IvX
-         j5BlJPNzE5lVxK7VrA572ygi0hpBk5fcEnP2yH7V3Q+z+BLO1dy4fVpi0jRKEMeOTip2
-         HIDkQduGaTUGLYmL2Eky5xA41gFzkVV4qEEUwksw40H4w8eZCk0GeALUIDP+Gr7DNvF1
-         2+wUJnKujEB5WM6EYBJBnq343bDJzOoB3ZqK8V5pehsfNWev2da3jY31l4UTLmX5NLQo
-         YIPg==
+        d=gmail.com; s=20230601; t=1773244975; x=1773849775; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UAvqaxfPguwjQoaqkzApmgLeUnEZxmw7DGBlz6NQr7k=;
+        b=LJk+dXwKiSRqYB3vp3XTUpL3w4DjOP8FKD7KSueVKx32s0QGkdrjvOzKzdifW8MzQj
+         fm4XkR4VWvL+OoMavnMC57XhN4BslwTwtkFaX52Sl585gC9ar/vjLeFWtOA13DYF41+5
+         1Ns+z7hRCbOGC2ppcA9SmcArrddyG5BQ8nIAzYgppJUeeGNELm0txLOTp3zAslyu4iLV
+         YIwpvZBe5/0DIe4lMbIKzs2YFhI/1RBBbKRtzX/1rcIM24izQRs5KbnsClaTfqrgUPwk
+         buKTkI//n859RgJeaW2oUV5Z07kWMCMVYGOgzBLThPwrPhQM/Ut1EVvZL0dv6DiiM5UX
+         t/Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773244899; x=1773849699;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FZ9wJHN98p2eqW+aluFwwdS4VIjV0bOaQ4w+79zBhNs=;
-        b=k6WG1+Ejiyy1RFCePEz+EdU9SGpXB7GucRQ5IGMWOfTtp0Vrw5gHMXa7/wT9fgVI68
-         YBFbFZkLHWQjRjgrvvy8dTJU2b5HHOA27EPm7ZMlRPCxKI+lsbGp/l3vGL2OEYBEepXG
-         2J5zRTykhk77pBpHVthcyjESobB5KkQ9M7dUhShHljNtOqAS1zj8MmZ3sIAP/CTI06FN
-         yNpg53stagyez6peN2L7yxhhrX5R6m2LM8sKAOJ82Vtp8vLOTV/lISAL2xbcvur0YQWb
-         Nx9vaWytndlSr20uz6JrZoy9fi3DldAQeemKz5IIAxkp3oB6SWLAO+3Bu8ICcnkg2cYK
-         gErw==
-X-Forwarded-Encrypted: i=1; AJvYcCWN2iBdVVYNodVF9DSxwx/sGBbCQhSDI0oQcnhKnJopYkFGiNDpP8GBqTDwEsUBxMeSUic=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzC/1s1yM20JzeA2y2+WNw3bc8SOUcMihx4XI/p4wgYWVtiIaVF
-	sopo+e3IbIAyRQkJi1IXWT1XK7bOTuBy2GfOzYDMt83Lg2Li44pVXSgjEHasHEomKbV9lBc7N1z
-	tAVtbe9SZqbtMon80uw==
-X-Received: from wrbgw30.prod.google.com ([2002:a05:6000:40de:b0:439:ac29:98cb])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:907:6d22:b0:b93:3792:4b03 with SMTP id a640c23a62f3a-b972e4f775amr187595066b.32.1773244898034;
- Wed, 11 Mar 2026 09:01:38 -0700 (PDT)
-Date: Wed, 11 Mar 2026 16:01:36 +0000
-In-Reply-To: <20260311120418.GU1687929@ziepe.ca>
+        d=1e100.net; s=20230601; t=1773244975; x=1773849775;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=UAvqaxfPguwjQoaqkzApmgLeUnEZxmw7DGBlz6NQr7k=;
+        b=J1LQrlCNs2iNSEAhThP8WfdHXK9x/Nr/MZivpiiDVSRMLKHPDHAQUN4TndP+VSVZ+R
+         5hQkYP/UwOB6xN9SbaXy2Z/nEYUdDLUWJhBZgiKLEZNArLprt9I/TniEk69o/UzXJUaR
+         BHpi8IEQ9LVYOiwha409/PSigohZv/2mxa2rM7kUa86LI+C8sMYnZu1KdWoRqpB7T3Wr
+         OQWBftCb1yJGSagtfczKMoxtbRYjNZd5f8wDsXpftMjJA3VWXwMeSqcj6SheuZ8EDJUa
+         sB7i8XEA6MihD0eKEo7b8DfPSQJvoY+O3XMIkYOv8WIddyY/NQAIaQ65oijMFiX7D1CE
+         6Flw==
+X-Forwarded-Encrypted: i=1; AJvYcCUSzDP2B+Rk7v6I7wYZ3DYnvuPv3+ZFtoEn4rjZe4v/H2XJgyOniZ8FDZq6n7yEWJck4KI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjNUW1zBR4pA38SEPTR+mhLARgfetxU3hoM89O8Uk1U+dv3OK2
+	DdFyUPpDCBiv6/MzbDHiTIYCO6dTSfP3ey3MDn/t89UjyQUCH6zNybRjNT+bGZOHB3LGKoHM3qX
+	3FzYL451sd4uW0ldhnaZZPVXh6wsgNdE=
+X-Gm-Gg: ATEYQzzQUTJceet5oRfTGMmT7cKHdDTaZusABkpiI6R0aa0qjjRsnZEZVldZEG7hnuI
+	FqY5cFnSiQchopAhZ9uEDSUXKmXNjrN6QL/3H+gUF3yvqzAWHPq6dsYMUXO0WMHUqXiDnRnCBTa
+	6h+QsTuN2Nzyw4yhGsa+TZM8bNAEeoc9oywK9gUNmb84DR4GgpWKZ/YT7BTEl1zMMf5j6q1xJ3B
+	tI65KQZ91Q7v2MbD7YWPi+ACyI1FUyGZqrz8/qjz6J6QHl0P0IgPtv/iJbCqCtcA9ZA9+JxexLq
+	HDHNJWkccvGCzJ/YXOgqQdM9OngnVQchuDIe+RALefMaUPuWtKd0Q/qVGXZqi/OqMca2ygmVhj8
+	NetdSvMKqLBWx9cJe1voJDfcCJw==
+X-Received: by 2002:a17:906:fd87:b0:b96:eb58:92bd with SMTP id
+ a640c23a62f3a-b972e5aea9dmr196747766b.49.1773244974508; Wed, 11 Mar 2026
+ 09:02:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260227200848.114019-1-david@kernel.org> <20260227200848.114019-17-david@kernel.org>
- <20260309142954.GM1687929@ziepe.ca> <61df6369-333c-430a-bd18-c5b1acae68ea@kernel.org>
- <abE4JYo223OxWCBQ@google.com> <20260311120418.GU1687929@ziepe.ca>
-Message-ID: <abGR4GWMXC2tJyr8@google.com>
-Subject: Re: [PATCH v1 16/16] mm/memory: support VM_MIXEDMAP in zap_special_vma_range()
-From: Alice Ryhl <aliceryhl@google.com>
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>, linux-kernel@vger.kernel.org, 
-	"linux-mm @ kvack . org" <linux-mm@kvack.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, 
-	Pedro Falcato <pfalcato@suse.de>, David Rientjes <rientjes@google.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Jarkko Sakkinen <jarkko@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	"Arve =?utf-8?B?SGrDuG5uZXbDpWc=?=" <arve@android.com>, Todd Kjos <tkjos@android.com>, 
-	Christian Brauner <brauner@kernel.org>, Carlos Llamas <cmllamas@google.com>, Ian Abbott <abbotti@mev.co.uk>, 
-	H Hartley Sweeten <hsweeten@visionengravers.com>, Jani Nikula <jani.nikula@linux.intel.com>, 
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Leon Romanovsky <leon@kernel.org>, 
-	Dimitri Sivanich <dimitri.sivanich@hpe.com>, Arnd Bergmann <arnd@arndb.de>, 
+MIME-Version: 1.0
+References: <20260303131453.328674-1-hbathini@linux.ibm.com>
+ <CAADnVQKuARvSirPjnTcSifLPunCiKC4Nenq0Mr61GpzbW5WxWg@mail.gmail.com> <bbf6a46c-37e9-4d8d-968e-a99bb12dcc14@linux.ibm.com>
+In-Reply-To: <bbf6a46c-37e9-4d8d-968e-a99bb12dcc14@linux.ibm.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 11 Mar 2026 09:02:41 -0700
+X-Gm-Features: AaiRm50_VeFbt_qfNvj0SBCBDMtHqyGYVr_6h5_paNycvlXuoc5cm8NuE_iIB6Y
+Message-ID: <CAADnVQ+4N4WWLxan_qibZ7HmONJyMZaP=RF+a9tMSPoz=0LqkQ@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: improve test coverage for kfunc call
+To: Hari Bathini <hbathini@linux.ibm.com>
+Cc: Eduard <eddyz87@gmail.com>, Vineet Gupta <vineet.gupta@linux.dev>, 
+	"Jose E. Marchesi" <jemarch@gnu.org>, bpf <bpf@vger.kernel.org>, 
 	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Andy Lutomirski <luto@kernel.org>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Eric Dumazet <edumazet@google.com>, 
-	Neal Cardwell <ncardwell@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org, 
-	linux-s390@vger.kernel.org, linux-sgx@vger.kernel.org, 
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	linux-rdma@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	netdev@vger.kernel.org, rust-for-linux@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="utf-8"
+	Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 11, 2026 at 09:04:18AM -0300, Jason Gunthorpe wrote:
-> On Wed, Mar 11, 2026 at 09:38:45AM +0000, Alice Ryhl wrote:
-> > It doesn't really make sense to have multiple binder VMAs. What happens
-> > with Rust Binder is that process A is receiving transactions and has the
-> > VMA mapped once.
-> 
-> IIRC the problem is the kernel doesn't guarentee singleton VMAs,
-> userspace can always clone them with fork or something. Did binder
-> solve this somehow?
+On Wed, Mar 11, 2026 at 8:10=E2=80=AFAM Hari Bathini <hbathini@linux.ibm.co=
+m> wrote:
+>
+> >
+> >> +
+> >> +       /* Check zero-extension */
+> >> +       if (val !=3D (unsigned long)a)
+> >> +               return 1;
+> >> +       /* Check no sign-extension */
+> >> +       if (val < 0)
+> >> +               return 2;
+> >> +
+> >> +       val =3D b;
+> >> +       if (val !=3D (unsigned long)b)
+> >> +               return 3;
+> >> +       if (val < 0)
+> >> +               return 4;
+> >> +
+> >> +       val =3D c;
+> >> +       if (val !=3D (unsigned long)c)
+> >> +               return 5;
+> >> +       if (val < 0)
+> >> +               return 6;
+> >> +
+> >> +       return 0;
+> >> +}
+> >
+> > Overall this looks very useful.
+> > I would expand with another test where a,b,c are s8,s16,s32.
+>
+> Slightly different approach but kfunc_call_test4/bpf_kfunc_call_test4
+> cover signed arguments already?
 
-The Binder VMA is DONTCOPY, so it will not be present after fork.
-
-> Since you can't assume there is only one VMA the locking becomes a
-> mess to cover all the cases where userspace can trigger a VMA clone.
-> 
-> address space deals with this internally.
-> 
-> Thus, zap_special_vma_range() is extremely hard to use.
-
-I mean, the hard part about the locking is keeping them in sync. Binder
-just doesn't do that. Only the original VMA gets pages inserted or
-zapped. If you create a second VMA, you just get a useless read-only VMA
-that you can't do anything with.
-
-Alice
+Ahh. Then may be tweak it to adopt similar fine grained
+error reporting as your bpf_kfunc_call_test5()
+or go other way around an collapse all errors the way test4 is doing it.
