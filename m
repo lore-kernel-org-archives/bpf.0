@@ -1,172 +1,148 @@
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C24473C8703;
-	Wed, 11 Mar 2026 10:19:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A43B83CEBA1
+	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 10:31:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773224399; cv=none; b=KCVg/LEK/Jowjj5hytH5icaCk/m1tGTsIK8XsX3M4jF/8r2dPtzyWC0mRLodn7w8LJmXZX9yajrM2IDh4HbnrH8KbW35HdMGiuvIZ9WrR/o5IIeSubzyIJMHcokMYSfhrO2bVtvBUlJFw+jjHWkiQPZCRaJQLImldshKRQ45+Z4=
+	t=1773225113; cv=none; b=kvamw1WZ7xKz4t1j0gon9dEv9iU3TFxJ1F6LZDzGrzG8MQc3KhPlP+anddw3VqKinqg2INOBsNEae7/Ka6iAETH4nMk9Fb4bsOZ3OSf1A0le73GZB0obcasfzP3PdN4UYOe6uEVrbGhusTf/IiiytTKo2RwvbMRH8rVMDCnWR5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773224399; c=relaxed/simple;
-	bh=wlHzuUH0gUssp1UjidQbhAVH/CdfFqbsFbfXxNH8yRQ=;
-	h=In-Reply-To:References:From:To:Cc:Subject:MIME-Version:
-	 Content-Disposition:Content-Type:Message-Id:Date; b=Uf5MppnCYSGHoVeIFQ3dy/L4NyPbOeSjpE9muRac9t3Ol3pDckCSrW/qODAyRMAaqmn69eXO3d23LUK/eG6kswcMELzNuyjqIDI7MxXvJHkrJdsQKeizvT7vtAy9eB643l8UL/NEmQyGfjfPp2A1K2hC6FXjzdNTVdwsbHg5HdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=wMo/5xuC; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+	s=arc-20240116; t=1773225113; c=relaxed/simple;
+	bh=ySocSFrHgMZCuNx6RNYRgifMhoOZAZxfxZHX3fAUf9k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=H5vZgbQVJobiPNpxb+kgT3YC9aEGKXKG7my5Kjkem1SZjm+pR1A78QDr3yVzWWa+9GBdfVCQp3OOB1jMZQhSINPMWH8W0q5KKxUAj/xW3Ik6Azf4RooOZqlyqy1KKq0hxvbUl6fe7VMIcCIM8/anvtt3NoV1yXHZ/DNKJQG7TXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=R9pfRRDL; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=I6ACSZYh; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="wMo/5xuC"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
-	Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
-	In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=jy7ZZYhO/l6AOCV4Dt/j5MRaTr5NmlKcOirpso5gcsI=; b=wMo/5xuCM6GHbf1VABNSVs8FvT
-	J73OKmQkiNMTevw2lC5BF7diZINev13LOSSGOH7DX9JAgM52l7SAtQt88Kc898211sHTdwQiDo5Ls
-	V7u+IrRHQIbwyUzgzkMNvYhk0qiJ2OzvKRBeSRHKMHTM4FGyo9VGo/T7tbS/POr6Z4gJ+Go51Qvlg
-	9VXIG7PS/NxWbJ+7X55bQcbLxgSdsDAyELN5uq54LGPz0IOHh8OozOdyb6u/w2d6HmeyXtl+ww/nl
-	d5n8RycOmq/0HD5UtTr1yLdqbjGFl9JYQe6DdyAMWiWzuRCGipWHVMZkyTPmp9PO1tlgvLPwH/XVu
-	ELJITC+g==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:48598 helo=rmk-PC.armlinux.org.uk)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <rmk@armlinux.org.uk>)
-	id 1w0GFp-000000006BF-0GVv;
-	Wed, 11 Mar 2026 09:53:25 +0000
-Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.98.2)
-	(envelope-from <rmk@rmk-PC.armlinux.org.uk>)
-	id 1w0GFl-0000000CiU0-03iN;
-	Wed, 11 Mar 2026 09:53:21 +0000
-In-Reply-To: <abE7LWj04-JNxgS2@shell.armlinux.org.uk>
-References: <abE7LWj04-JNxgS2@shell.armlinux.org.uk>
-From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	bpf@vger.kernel.org,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	netdev@vger.kernel.org,
-	Paolo Abeni <pabeni@redhat.com>,
-	Stanislav Fomichev <sdf@fomichev.me>
-Subject: [PATCH net-next 15/15] net: stmmac: use queue rather than
- ->queue_index
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="R9pfRRDL";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="I6ACSZYh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773225111;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4k7qkLfO0zvJghANa0uRNiBLEsBgn/V1IaIH7gW/As4=;
+	b=R9pfRRDL+GXuY/i0Aq2nj8TGw/v+ksWfGrfJLEnrhgFZ9nUd8Z1Du+0HCVODSn6oK3vY2E
+	UxOFJZTu8E7VUN3Zq+BY9d7qWTCQdwonBGeJxXY6maB3UyNYeWBNSYMOw4YxYH8JW8X1Tn
+	VhpCaqcVJOOacwbwodfp0cfdWQ4ewPE=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-670-KsB-cIP_PR-E8_w3imK3mw-1; Wed, 11 Mar 2026 06:31:50 -0400
+X-MC-Unique: KsB-cIP_PR-E8_w3imK3mw-1
+X-Mimecast-MFC-AGG-ID: KsB-cIP_PR-E8_w3imK3mw_1773225109
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-439c5cce2deso8136422f8f.0
+        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 03:31:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1773225109; x=1773829909; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4k7qkLfO0zvJghANa0uRNiBLEsBgn/V1IaIH7gW/As4=;
+        b=I6ACSZYhijlQt83rsY8WVilK2oi/j4Uv/J1pO8QF802O/K34XNFamo+HrCtjeNA6ml
+         U05bXH9I/p31SK+bbqfE5zKy2JtHREVs9jGvrdzfX+SmGSdzE1lqwn+mP4JitEZq4EJH
+         LGdbmQFSQSXQLypaTln5Fgm08GCnz0PndIusxU9FXNzQIW7U2xLfoOcZnVU+Wd74hTLC
+         5ibFw14KuDy+V9UkYlVv9WN8Lj+UKnBJg7V44lvXZo8d5LO3vZJT6Ttv8XtOdJpzyK80
+         odOIlJf8EcnH2I10X7i8gcYsq5EIp7v+JDbHkB3Cyq5JsvnR9nTCHA8mZOMtnUjPUgTs
+         /xEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773225109; x=1773829909;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4k7qkLfO0zvJghANa0uRNiBLEsBgn/V1IaIH7gW/As4=;
+        b=gldGe0VqZ2c0zP4biHACNOCVsBLbRaeGgtPjqHNj3wAGvWNxELBYGeizO7IwB/zW+f
+         pzxrnOlI/TYCA7R/632NJDKLfA4KLCxWHKukmJdNRlhlPLbv90/I50MhmeYiid3Jgjfa
+         dzU5t3ixbVlOlq+bDgW/k9v5pXC/UuYAatLUQaqvV+itNb2ZtW1onlMFDAMAwt1JI9fl
+         Z8WzgcBAvejE6AxW6UELeS9zRbejmQoYEXLw7htsioj7f6QXP66qTP26IVqG3fjKxVbn
+         RSfm2o0jkYgy/vbYmoVtOwtezOIWPIHKMti35kthhxHJ2q3qFzXeLwbs1LbeglwOY33P
+         ugJw==
+X-Forwarded-Encrypted: i=1; AJvYcCWxqAf7NyNI/HoHKaBAH6dSR65zWHEvzfD/cskWo19jrieNPquv7t1dOzm/ED4v51p6jfw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx15HQVRKUFUw7tGEG5pgQoJrpEFfgPHuVqhBrPUyjAW9CM9EdG
+	2dBT7slEmxryjl2iwsFhzAfza+6eZBQ3BlCFyd658NVyScqUcT1pUsg5bEJdArmsHhV92xgh99w
+	OjWaVJBw0Za8BYArvMuIvoZtJkTId+e3O94YBKN2HWwCyJZxc9xDX
+X-Gm-Gg: ATEYQzys7AxaQ53A5IXswqX2cdIPHJYThw32w4z7MQRQ8ScKVT2pOgLjJoqhthj5PZU
+	cbFC7HC0C0TP3Q5zXnGsMXg4m5mNYYXzeldCAhyjxYXKGdWx/s0XnvJmdiTHd7iFyIkgf9m1p/C
+	5iuOHmO2zhBQNtsu+IaO1TN3j1zE4yExRj7MBazhes3okoZZGAia7bhuOnIuYc+L+Ks/IIagd82
+	eOrTq4MhjVYlEbeRcEYyCnnEFc8q0aWn8cSiqqC0el7M2p1nr4yLXDd/OYvwpzbGbB31iZ1nudY
+	ax3KtoL4KC3XyIqVesqR4zLRyYTByFYqvNj1np8+R3+Cq0PJI9QTAiKa8yKx69wYI56tx/Db835
+	kmtntkQpFMQaaA9Hu3bUbHrZaSDTQM/PMEGCPq1AVJngmp4MAaRybZhoV
+X-Received: by 2002:a5d:5d01:0:b0:439:b114:60c0 with SMTP id ffacd0b85a97d-439f8206d54mr4051663f8f.35.1773225109207;
+        Wed, 11 Mar 2026 03:31:49 -0700 (PDT)
+X-Received: by 2002:a5d:5d01:0:b0:439:b114:60c0 with SMTP id ffacd0b85a97d-439f8206d54mr4051611f8f.35.1773225108761;
+        Wed, 11 Mar 2026 03:31:48 -0700 (PDT)
+Received: from [192.168.0.135] (185-219-167-205-static.vivo.cz. [185.219.167.205])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439f818d5eesm6695370f8f.1.2026.03.11.03.31.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Mar 2026 03:31:48 -0700 (PDT)
+Message-ID: <25faef0f-7943-4c0b-97e4-4a3a45895e25@redhat.com>
+Date: Wed, 11 Mar 2026 11:31:47 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] selftests/bpf: Skip bpffs debug iter checks when
+ unavailable in test_bpffs
+To: sun jian <sun.jian.kdev@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
+ <eddyz87@gmail.com>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>
+References: <20260310102145.857810-1-sun.jian.kdev@gmail.com>
+ <20260310102145.857810-2-sun.jian.kdev@gmail.com>
+ <f0d1eb34-2d6a-487a-b486-3dc64c25df6c@redhat.com>
+ <CABFUUZFQfoVRJ6HJqadHhWNj4FVOk=snuSmuEepMD6jZfyrpJQ@mail.gmail.com>
+From: Viktor Malik <vmalik@redhat.com>
+Content-Language: en-US
+In-Reply-To: <CABFUUZFQfoVRJ6HJqadHhWNj4FVOk=snuSmuEepMD6jZfyrpJQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1w0GFl-0000000CiU0-03iN@rmk-PC.armlinux.org.uk>
-Sender: Russell King <rmk@armlinux.org.uk>
-Date: Wed, 11 Mar 2026 09:53:21 +0000
 
-We use a lot of ->queue_index where we already have the queue / channel
-index (which are actually the same index), which has been used to get
-the queue struct. Since queue and queue_index are identical in
-priv->(tx|rx)_queue[queue]->queue_index there is no point using the
-queue_index where we already have queue.
+On 3/11/26 08:55, sun jian wrote:
+> On Tue, Mar 10, 2026 at 8:32 PM Viktor Malik <vmalik@redhat.com> wrote:
+>>
+>> I don't think this is a good approach as it will mask genuine bugs that
+>> would cause the files to be missing/inaccessible with one of the above
+>> error codes.
+>>
+> Hi Viktor，
+> 
+> I don't think this change masks bugs in a silent way. It prints an explicit
+> INFO line when maps.debug/progs.debug are unavailable due to
+> EPERM/EACCES/ENOENT, and it still fails on other errors or unexpected
+> iterator output.
 
-Use queue rather than queue_index.
+Yeah but automatic CI doesn't care about INFO lines. It cares about
+pass/fail status and in this case, the test could falsely appear as
+passing, even though there's a bug in bpffs code causing the files not
+to exist or have wrong permissions.
 
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
----
- .../net/ethernet/stmicro/stmmac/stmmac_main.c | 25 ++++++++-----------
- 1 file changed, 11 insertions(+), 14 deletions(-)
+>> If you really need to execute the rest of the test cases in the file,
+>> how about you split the test into subtests and then just add the failing
+>> subtest to your DENYLIST?
+> 
+> Proper subtests  would require reworking the current fork-based flow to
+> report SKIP/FAIL to the harness, which would be a larger refactor than
+> intended here.
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 55b79e9e637f..8393cbd0875e 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -440,7 +440,7 @@ static void stmmac_set_queue_rx_buf_size(struct stmmac_priv *priv,
- 	else
- 		buf_size = priv->dma_conf.dma_buf_sz;
- 
--	stmmac_set_dma_bfsize(priv, priv->ioaddr, buf_size, rx_q->queue_index);
-+	stmmac_set_dma_bfsize(priv, priv->ioaddr, buf_size, chan);
- }
- 
- /**
-@@ -1902,7 +1902,7 @@ static int __init_dma_rx_desc_rings(struct stmmac_priv *priv,
- 						   NULL));
- 		netdev_info(priv->dev,
- 			    "Register MEM_TYPE_XSK_BUFF_POOL RxQ-%d\n",
--			    rx_q->queue_index);
-+			    queue);
- 		xsk_pool_set_rxq_info(rx_q->xsk_pool, &rx_q->xdp_rxq);
- 	} else {
- 		WARN_ON(xdp_rxq_info_reg_mem_model(&rx_q->xdp_rxq,
-@@ -1910,7 +1910,7 @@ static int __init_dma_rx_desc_rings(struct stmmac_priv *priv,
- 						   rx_q->page_pool));
- 		netdev_info(priv->dev,
- 			    "Register MEM_TYPE_PAGE_POOL RxQ-%d\n",
--			    rx_q->queue_index);
-+			    queue);
- 	}
- 
- 	if (rx_q->xsk_pool) {
-@@ -2310,9 +2310,7 @@ static int __alloc_dma_rx_desc_resources(struct stmmac_priv *priv,
- 	else
- 		napi_id = ch->rx_napi.napi_id;
- 
--	ret = xdp_rxq_info_reg(&rx_q->xdp_rxq, priv->dev,
--			       rx_q->queue_index,
--			       napi_id);
-+	ret = xdp_rxq_info_reg(&rx_q->xdp_rxq, priv->dev, queue, napi_id);
- 	if (ret) {
- 		netdev_err(priv->dev, "Failed to register xdp rxq info\n");
- 		return -EINVAL;
-@@ -3340,7 +3338,7 @@ static void stmmac_tx_timer_arm(struct stmmac_priv *priv, u32 queue)
- 	if (!tx_coal_timer)
- 		return;
- 
--	ch = &priv->channel[tx_q->queue_index];
-+	ch = &priv->channel[queue];
- 	napi = tx_q->xsk_pool ? &ch->rxtx_napi : &ch->tx_napi;
- 
- 	/* Arm timer only if napi is not already scheduled.
-@@ -6918,12 +6916,11 @@ void stmmac_enable_rx_queue(struct stmmac_priv *priv, u32 queue)
- 	stmmac_clear_rx_descriptors(priv, &priv->dma_conf, queue);
- 
- 	stmmac_init_rx_chan(priv, priv->ioaddr, priv->plat->dma_cfg,
--			    rx_q->dma_rx_phy, rx_q->queue_index);
-+			    rx_q->dma_rx_phy, queue);
- 
--	stmmac_set_queue_rx_tail_ptr(priv, rx_q, rx_q->queue_index,
--				     rx_q->buf_alloc_num);
-+	stmmac_set_queue_rx_tail_ptr(priv, rx_q, queue, rx_q->buf_alloc_num);
- 
--	stmmac_set_queue_rx_buf_size(priv, rx_q, rx_q->queue_index);
-+	stmmac_set_queue_rx_buf_size(priv, rx_q, queue);
- 
- 	stmmac_start_rx_dma(priv, queue);
- 
-@@ -6969,12 +6966,12 @@ void stmmac_enable_tx_queue(struct stmmac_priv *priv, u32 queue)
- 	stmmac_clear_tx_descriptors(priv, &priv->dma_conf, queue);
- 
- 	stmmac_init_tx_chan(priv, priv->ioaddr, priv->plat->dma_cfg,
--			    tx_q->dma_tx_phy, tx_q->queue_index);
-+			    tx_q->dma_tx_phy, queue);
- 
- 	if (tx_q->tbs & STMMAC_TBS_AVAIL)
--		stmmac_enable_tbs(priv, priv->ioaddr, 1, tx_q->queue_index);
-+		stmmac_enable_tbs(priv, priv->ioaddr, 1, queue);
- 
--	stmmac_set_queue_tx_tail_ptr(priv, tx_q, tx_q->queue_index, 0);
-+	stmmac_set_queue_tx_tail_ptr(priv, tx_q, queue, 0);
- 
- 	stmmac_start_tx_dma(priv, queue);
- 
--- 
-2.47.3
+I don't think it would be such a big refactoring. You can still use
+fork(), you just need to have separate `run` functions for different
+subtests. True, the init/teardown phase would be somewhat duplicated but
+I wouldn't see that as a big issue (and you can still factor it out).
+
+> My goal is to keep this as a minimal change while still achieving the main
+> purpose of this test: exercising the core bpffs operations (pinning and
+> renameat2 semantics), which are independent of the debug iterator files,
+> and clearly reporting when the iterator checks couldn't be performed.
+
+That's exactly what subtests are for, at least in my view. You want to
+check independent operations, you create a separate subtest for each.
+That way, you can filter out some subtests if they don't pass in your
+environment.
 
