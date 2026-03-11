@@ -1,234 +1,221 @@
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25E702DA759
-	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 23:03:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4C7B392C32
+	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 23:03:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.43
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773270196; cv=pass; b=oFnnw6tKfC04U+wqpTsPyPs/ASqsvcuk4w/n66iK+NwTs+rOWP1Rz15cQkyjgYi8F7DJEAM1jnGQaIDBQYv9+baSaJ4iJgXhjjVfnBW9O49kFBkPg1Fx72p6uRoTOLjVvBbz2k653Pzv54UB9qtmh/zt1Lj5D9WOB+WnOAhbWgk=
+	t=1773270219; cv=pass; b=aGGASMmjwk0axIVpU83QgIFm7GKDA28yYifj4BWjaNxO8+yIkYxj53SvLnWLIIbGjzQn3WtNMiQbVVjR1ri9jufKXvUlY5wvJgftunCeWlDY89O1LJPirXPrhES0JsgHAQX+wG27L0511druBgmDA+xoMVh0zPSwab1OFSb46nw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773270196; c=relaxed/simple;
-	bh=J2BzAUt05n/jQUFtmc1TlupJWF+4/koq5zZ9Fy6XhQw=;
+	s=arc-20240116; t=1773270219; c=relaxed/simple;
+	bh=jmsj5oKoQm/LmO5LlH+nHdu46F2DpGaY7QVmpGcp8os=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UaiaVsiWI1gy9S4qtyBgZ6/3ZfKVe3vL+WI3i8F/mVoHFeFtiw8v7BjdPRBrCC2a3LNJkMAm7ojJU/7U3KIvDt6W4brRUDaBbYTpY6IjcDsVJ8QEEUMq1A3cRuyGNnQOMbdXtgFgWe1r7/s/8zJf/f9UM5jghEmxhg2jx5IzTnc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SI607PNC; arc=pass smtp.client-ip=209.85.128.177
+	 To:Cc:Content-Type; b=VOdrpqQKd74UxcsaQfwb5xAi7sx8O020YTF6/gHZgJsB9rQ4zUuIDmnh/DwUw7tvXCNSpwM8WQSH9qVPvBYnqD6a99mfZ1uu6w1E9X5pJyaUD+JoSaTahYoLVmtaDkSfY7YA+dChklQbdivwrmgyTaYLIhDG+HdDPOEA3EzD+OY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=axOpFUqz; arc=pass smtp.client-ip=209.85.216.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SI607PNC"
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-7986c7b8076so4540047b3.2
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 16:03:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773270194; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="axOpFUqz"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3597b474cbdso193156a91.1
+        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 16:03:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773270217; cv=none;
         d=google.com; s=arc-20240605;
-        b=B23uLPm6Ksif4cEoMBL5xS/DEF6ovIizCwnSnD5wJEYcaTiPuY+N5LwDEQVv4pshp7
-         R8/wWMHmYjvHK2TUL22ELfrS/HuMiu9HU2JkpCvfvW7DjezKp8T0kc4hqqjrfL95I7in
-         JWb58S6ciCMqM3OaPUTgx2Sl7Zs6/jq4O2Y2y13Uxzf9wJrc8bM89KVXC9ge+CFd4k0U
-         vXOH1edjcbq23zN6823KICCJ83OdekpWXWkDqpjHdEPsGwJIw6gXu4YIXfTYAvUzD9+C
-         SQIm0Lqpq83yzDqH4UCoigLEm/oLCOEG+UuA0r1qamH//S6Ny4rPmZPHzDmKwr4LXhLv
-         G+Mw==
+        b=D6UyMswPJuaV0TbvyRfIC7YvSn5BQPDiLNShUzKq/8K9negzaOLwG/0gDZgpWoVrAd
+         Ex0KOPgPhc3ARN+9TigMNEU/5T/s+TdnAdcjcHt1IuQM/coqxgLCg4BAtm0n32fYv1or
+         bciXlT2A2Ud29qwOcnknLpr+nbXvAeIEbusM/HNb5jENBhLdkpLpyIAQclBUJZ6judPw
+         1CIDrlcd6E9dIsctydGAXx/O28FN8WEVQNtQXwgl8Za/B+K3OojTg8HKSgnhI/a1RgDK
+         syEHxXS0RdNVRElbvyPQOsdw7hFDw6GEjr/avniynZydsilgjtNFc25ylnrT26Fmbeu2
+         i01A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=p1nL4RVoOG6FSE4X+rL71zaGJT8RA06evE5D7IZSb+4=;
-        fh=6ElxuiIjr8MUw7uRyrqk6E+jhEPFMT0pHHkRrcSi3dU=;
-        b=M54yO1Zi5SONauSEO6Pw6XTCf2q5FnKJG8Zl+Y0lLnC1EEFx7q7l5guio3q9Z2V12w
-         oS05fFDvKcfCHAaeurLEZ0rj63IVImorgQjlk2rRJuQOC5XdG1GFhWOKqRskf7a80thC
-         Zj7xbK2AC6pLBUDza+BsOd4bIYiN8bDL6rt7MCfjtPv4Nrpg9anx8wmh//v8u4SOS4G4
-         dWcmKpWptmsdOC64X7wJGKpKSeSGASbeEU6d1FBkhSFIEQRb60z/D/o2dhNcHIuzoWmo
-         N0eZs0sO8vfaxZUyOZBVb7X6o/GilweKQs4qoKPezHaCUyxD+Hpa26bc7rKYkls9Foho
-         SlSg==;
+        bh=paqxgkSP/FXrDx4Kj+HG/1n4vaxw+qhNMUAyokZv/QQ=;
+        fh=mV8Uwy03aTQpEc71kkKqimIDFbwq2oIhKiU5zAUO9K0=;
+        b=CP73I8ANe/fa7zqVdQ5U3+Y9kGV/cpTPnwjmhEbs0eLbu49KQPiHZgUbYhYwqLq+1p
+         KFAMA6jZGmsGVWVHDahEEhhdWqPBnkqq8IzvCbyX2IFnt6WeXoZXoF53mYMlN7A9EJiL
+         Id0PrbsOwN8NKUoOUMtxEuJ/4KIX58dRTR1pUKPo9HlTROFu3SDg6pU8bKmHCGuJCqRf
+         3xxnRx5tWtUE/vFSjUTDTZ83P3cUdnOdVP5mp8Mwlc2MRlLVjyeNXFP11FKnrWbork4r
+         7GTnHwyIjxV0A0hudYmfHt+7s3ILOa/sMcME6+4jbpXA7XkjX1P2BQ8Hp3l8fvnU4xl6
+         mc3w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773270194; x=1773874994; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773270217; x=1773875017; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=p1nL4RVoOG6FSE4X+rL71zaGJT8RA06evE5D7IZSb+4=;
-        b=SI607PNCZjKM5J0PC0HQcoesj7tVYrSrqvSCl7W858mfWaUoAzl8ktUdNAM1wKztWn
-         6j5OJtTwYbkaJIXnillXl5lLp9SM1cghr42ndR4YXIi20ibGq4sB8/9qmUjN2dxcaF1b
-         jh/X2ZAU68gW3BZz/DX7zjX/9Xp8dcrxw70XGdYFSjv8lpZd0ubx/QXKbHfHC8v/KCPk
-         jWoCVRgahLMXUhZAOpk1NAbrydllGAZQLTuJ6oSkGp7QYmc9Y58rs8xH/xrYGz01Fd8o
-         hxjwrlxM2DqY13zmyg0+HCw91RcxKAYf67REeM8s3Tg+lU9K4F9LUBDY57QrWHcs3pbY
-         7c3w==
+        bh=paqxgkSP/FXrDx4Kj+HG/1n4vaxw+qhNMUAyokZv/QQ=;
+        b=axOpFUqzERnZUnQ1IKtyNi1uyEcyQTyF1NTdIMrXW2G854DX5wRySighUsV03wXYP6
+         +m3hfelqfzrYpSDOZjUhCKY7BiIo4b1JGUbu7vy6G/OozZciXgMXaFcO/rg2YPj1xyNd
+         RvSeG06Q8pa4Nl9g6D9Ypxa6g1FHQXbWiQ9Z5gygSUFrroQcC6SUNM2ceulnkrDh5tqg
+         OYV15oIVz87l+UrE5XFiNZQZ3itNWYUprpDK/D6saAYNR3+uAqPI0m7nHSMEmrKBjOay
+         rx3odv5kcqHjlfvEL6ZdSJgpb9AUaA4YjUo+rHo0TP256j2ftG6VsimIubfVKCRDSKwW
+         /cUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773270194; x=1773874994;
+        d=1e100.net; s=20230601; t=1773270217; x=1773875017;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=p1nL4RVoOG6FSE4X+rL71zaGJT8RA06evE5D7IZSb+4=;
-        b=rtByoMsX4wZCrnwudMtZqOkKsagLa37UbRgJrT62pwmvu9JUgsgdtv83Dr3SL8YSnd
-         aSFIh+3qabl/k5Bq9reOpZVS62AIIVBFtV7Ds3UhAQqA/VSUZP/K5643YKt7DMxFGRTw
-         OLQuhAmlyHZ0UVmFGzCzGsKlMBG8BVBkN0UIk4wZxk1jDoi4zFA9cnF4r9cxlxGp/rX8
-         pYq5hhAdqmtvGDy6V2RNW2cHWxAPtgW2/OaPIgWVkIQSo9TV1O+Rh9mHQ7DgU3ByO5tS
-         7N4XXf3mfd0g6vB7618rZNQiiHf2pkc51nq1pN/RiPMYAj7ZmIomRk5HiRMWIVpEAPvH
-         AK0Q==
-X-Gm-Message-State: AOJu0YzazrGm/ySLlpygUN1l3SoEIdVZWQg1xzXeXjeAd///a056C9eV
-	5FN10rQtk47Iqo1qr2onaieBloU5sQgiYb95EKVb2hf1Q6lrVraBMTJjlkzkGXbjSemgr/KvyIX
-	xTbkl4BEaB7lKmE/HYzUtvrYl1XmSGM8=
-X-Gm-Gg: ATEYQzwV3e0lzkUagCOvTTQAhmzXs30giOQyCGR7JlJiYCAaxUPVeXnSbtP4rCuEYLW
-	Kpn9XO6JiPCs7splj+e+UQ9riBJ9N8xAExSLUO2Pubues7+LGN3kkRuaXwNXfSBeVIyYp1mRd6E
-	M4lMBOkAWxczyjhJplY0onV+sIRFd6Wl9KJXlEkxP3RZ94XBtgnAO+cPl8+YB0hLe7gxqbPU8em
-	CiRBDHXwE9ZiuE1houaJBMAAR8wgsn5eeJbbOqYW8ustDi+WHf3su4DXNcNDt052/HP0o+huN7+
-	mw3R96c=
-X-Received: by 2002:a05:690c:6e84:b0:794:78d0:9b57 with SMTP id
- 00721157ae682-79917e9de17mr39016587b3.16.1773270194093; Wed, 11 Mar 2026
- 16:03:14 -0700 (PDT)
+        bh=paqxgkSP/FXrDx4Kj+HG/1n4vaxw+qhNMUAyokZv/QQ=;
+        b=S6mofvmrMSINKZmlPIARdewORzKMaiTzhG/RQgQZI1a6znHOhLaEjqgBPMymI8pP4m
+         apj3Kce1hQNTuUPZAWFlhF3r7ZEr+VEe6J54z6pQDTrmsHA1C03qB8qA+x/61nM2jW9J
+         pyhConpHJMHq3UxEh1k4LTG/blGSkq7MiXZH2d7ZbYPjgajUHyJcAlIZx4alrjgvaaCZ
+         ZUSqiWc+hXvkFjkiJntgJW90fzqTkrr0CoVUlOoDiFEu1bG36VmJi8c8Qr6qihiDq7+H
+         slIiof+0+E4LLwbxkOf/yAYbnR0HZYEtaDmxaGsqzeTCYiPaUDmAuXUTMPd4CIR3Qsz4
+         3W/Q==
+X-Gm-Message-State: AOJu0YyLV58FNQvV4UzNDP/49gg57MsSmjZJhR1BqesMLoLsZbgLSAoJ
+	Syu+1g1HwuuC+sOF2e7rudnHEHFyuqQLbbP6i+72TP91CxuKeyAB5KXq2hps72cSayhXgvZGtxo
+	T8Cgsb4liYJXu9VavU/+LtRCxcK5tQbg=
+X-Gm-Gg: ATEYQzwc1oLITIeV0zvQjIDreiJVmA4AGZcsoqxAXmdIzupQWnH1LQqJ/s9MSZgHfrS
+	EeoSBRnmlMZJwAFUXb4Pm1H9jYj5vzDUdYLtMylU3n8ExwN4F8Tg/tB1LaYQyDzUpUa7hs9fuiA
+	EAm2KLlM6yPR+vSVuk5KS1fuEnbzbhlFlXGOzFtxAudXfupqhIFR6Q5STK7kLgbjKzborYIMZPS
+	/Tky8/PD9WgM2spz0V431ZwtUy+E+O7gA76L39gaQ6WtdIYthwKt8nPVtPyDXdFWKmktow6JHxW
+	NxTE94DXUJ60Ayqs9A==
+X-Received: by 2002:a17:90b:48d0:b0:359:8312:90a2 with SMTP id
+ 98e67ed59e1d1-35a01263bc5mr3837978a91.11.1773270217034; Wed, 11 Mar 2026
+ 16:03:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260307064439.3247440-1-ameryhung@gmail.com> <20260307064439.3247440-2-ameryhung@gmail.com>
- <CAEf4BzZubPSaS8SQSEQJvTphwgbaBfdC0CYEhsfQN8CJ7HS3pw@mail.gmail.com>
- <CAMB2axNR6qPRVy5YCiMygVseS+k9JxY9DFONNHD5Lt8=wD9MGQ@mail.gmail.com> <CAEf4BzYTO9e-UAEd+W+ftqQZLUZCWHWXAYVnVjHeNtsZL1=Pdw@mail.gmail.com>
-In-Reply-To: <CAEf4BzYTO9e-UAEd+W+ftqQZLUZCWHWXAYVnVjHeNtsZL1=Pdw@mail.gmail.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Wed, 11 Mar 2026 16:03:02 -0700
-X-Gm-Features: AaiRm52aqQKm9IrpolvS8vKyhIuaxkmlqQ4ERAyf1ATinHmIsdtysTaU_QZQ0OY
-Message-ID: <CAMB2axN+8+V+29r9tuoVF57ObpvkUE5d5_8jtd5iRPYq4_gLGg@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next v2 01/11] bpf: Set kfunc dynptr arg type flag
- based on prototype
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com, 
-	andrii@kernel.org, daniel@iogearbox.net, memxor@gmail.com, 
-	martin.lau@kernel.org, kernel-team@meta.com
+References: <20260220-veristat_prepare-v2-0-15bff49022a7@meta.com> <20260220-veristat_prepare-v2-1-15bff49022a7@meta.com>
+In-Reply-To: <20260220-veristat_prepare-v2-1-15bff49022a7@meta.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 11 Mar 2026 16:03:24 -0700
+X-Gm-Features: AaiRm52GiyqfSLUaSPasKc0PYVvgz6CWqHaqzoDBgohMVnMwBBfljrTfpqxldH8
+Message-ID: <CAEf4Bza1sRe6mxM5ktWyCALnjJDDpX3d8AGaO4NOcAkmwA_fAA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/2] libbpf: Introduce bpf_program__clone()
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com, 
+	Mykyta Yatsenko <yatsenko@meta.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 11, 2026 at 3:37=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
+On Fri, Feb 20, 2026 at 11:18=E2=80=AFAM Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
 >
-> On Wed, Mar 11, 2026 at 1:01=E2=80=AFPM Amery Hung <ameryhung@gmail.com> =
-wrote:
-> >
-> > On Wed, Mar 11, 2026 at 12:44=E2=80=AFPM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Fri, Mar 6, 2026 at 10:44=E2=80=AFPM Amery Hung <ameryhung@gmail.c=
-om> wrote:
-> > > >
-> > > > The verifier should decide whether a dynptr argument is read-only
-> > > > based on if the type is "const struct bpf_dynptr *", not the type o=
-f
-> > > > the register passed to the kfunc. This currently does not cause iss=
-ues
-> > > > because existing kfuncs that mutate struct bpf_dynptr are construct=
-ors
-> > > > (e.g., bpf_dynptr_from_xxx and bpf_dynptr_clone). These kfuncs have
-> > > > additional check in process_dynptr_func() to make sure the stack sl=
-ot
-> > > > does not contain initialized dynptr. Nonetheless, this should still=
- be
-> > > > fixed to avoid future issues when there is a non-constructor dynptr
-> > > > kfunc that can mutate dynptr. This is also a small step toward unif=
-ying
-> > > > kfunc and helper handling in the verifier, where the first step is =
-to
-> > > > generate kfunc prototype similar to bpf_func_proto before the main
-> > > > verification loop.
-> > > >
-> > > > We also need to correctly mark some kfunc arguments as "const struc=
-t
-> > > > bpf_dynptr *" to align with other kfuncs that take non-mutable dynp=
-tr
-> > > > argument and to not break their usage. Adding const qualifier does
-> > > > not break backward compatibility.
-> > > >
-> > > > Signed-off-by: Amery Hung <ameryhung@gmail.com>
-> > > > ---
-> > > >  fs/verity/measure.c                            |  2 +-
-> > > >  include/linux/bpf.h                            |  8 ++++----
-> > > >  kernel/bpf/helpers.c                           | 10 +++++-----
-> > > >  kernel/bpf/verifier.c                          | 18 ++++++++++++++=
-+++-
-> > > >  kernel/trace/bpf_trace.c                       | 18 +++++++++-----=
-----
-> > > >  tools/testing/selftests/bpf/bpf_kfuncs.h       |  6 +++---
-> > > >  .../selftests/bpf/progs/dynptr_success.c       |  6 +++---
-> > > >  .../bpf/progs/test_kfunc_dynptr_param.c        |  7 +------
-> > > >  8 files changed, 43 insertions(+), 32 deletions(-)
-> > > >
-> > > > diff --git a/fs/verity/measure.c b/fs/verity/measure.c
-> > > > index 6a35623ebdf0..3840436e4510 100644
-> > > > --- a/fs/verity/measure.c
-> > > > +++ b/fs/verity/measure.c
-> > > > @@ -118,7 +118,7 @@ __bpf_kfunc_start_defs();
-> > > >   *
-> > > >   * Return: 0 on success, a negative value on error.
-> > > >   */
-> > > > -__bpf_kfunc int bpf_get_fsverity_digest(struct file *file, struct =
-bpf_dynptr *digest_p)
-> > > > +__bpf_kfunc int bpf_get_fsverity_digest(struct file *file, const s=
-truct bpf_dynptr *digest_p)
-> > >
-> > > but kfunc is writing into digest_p, so that const is wrong?...
-> > >
-> > > >  {
-> > > >         struct bpf_dynptr_kern *digest_ptr =3D (struct bpf_dynptr_k=
-ern *)digest_p;
-> > > >         const struct inode *inode =3D file_inode(file);
-> > >
-> > > [...]
-> > >
-> > > > index 6eb6c82ed2ee..3d44896587ac 100644
-> > > > --- a/kernel/bpf/helpers.c
-> > > > +++ b/kernel/bpf/helpers.c
-> > > > @@ -3000,8 +3000,8 @@ __bpf_kfunc int bpf_dynptr_clone(const struct=
- bpf_dynptr *p,
-> > > >   * Copies data from source dynptr to destination dynptr.
-> > > >   * Returns 0 on success; negative error, otherwise.
-> > > >   */
-> > > > -__bpf_kfunc int bpf_dynptr_copy(struct bpf_dynptr *dst_ptr, u64 ds=
-t_off,
-> > > > -                               struct bpf_dynptr *src_ptr, u64 src=
-_off, u64 size)
-> > > > +__bpf_kfunc int bpf_dynptr_copy(const struct bpf_dynptr *dst_ptr, =
-u64 dst_off,
-> > >
-> > > again, dst_ptr clearly is modifiable because we are copying data into=
- it.
-> > >
-> > > What am I missing, why is this logically correct?
-> > >
-> > > (I understand that from purely C type system POV this is fine, becaus=
-e
-> > > we don't modify bpf_dynptr struct itself on the stack, but bpf_dynptr
-> > > is a representation of some memory, and if we are modifying this
-> > > memory, then I think it should be not marked as const)
-> >
-> > The patch is just to first make the arg type determination independent
-> > from bpf_reg_state and make kfunc signature consistent based on what
-> > commit 52f37c4e0f11 (bpf: Rework process_dynptr_func) has laid out.
-> >
-> > Perhaps MEM_RDONLY is a bit misleading. In process_dynptr_func(), the
-> > flag means the dynptr struct on the stack is immutable. Currently,
-> > there is no way (and maybe no need?) to specify read-only dynptr.
-> >
+> From: Mykyta Yatsenko <yatsenko@meta.com>
 >
-> are you basically trying to determine if CONST_DYNPTR_PTR is allowed or n=
-ot?
+> Add bpf_program__clone() API that loads a single BPF program from a
+> prepared BPF object into the kernel, returning a file descriptor owned
+> by the caller.
+>
+> After bpf_object__prepare(), callers can use bpf_program__clone() to
+> load individual programs with custom bpf_prog_load_opts, instead of
+> loading all programs at once via bpf_object__load(). Non-zero fields in
+> opts override the defaults derived from the program and object
+> internals; passing NULL opts populates everything automatically.
+>
+> Internally, bpf_program__clone() resolves BTF-based attach targets
+> (attach_btf_id, attach_btf_obj_fd) and the sleepable flag, fills
+> func/line info, fd_array, license, and kern_version from the
+> prepared object before calling bpf_prog_load().
+>
+> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+> ---
+>  tools/lib/bpf/libbpf.c   | 64 ++++++++++++++++++++++++++++++++++++++++++=
+++++++
+>  tools/lib/bpf/libbpf.h   | 17 +++++++++++++
+>  tools/lib/bpf/libbpf.map |  1 +
+>  3 files changed, 82 insertions(+)
+>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 0c8bf0b5cce4..4b084bda3f47 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -9793,6 +9793,70 @@ __u32 bpf_program__line_info_cnt(const struct bpf_=
+program *prog)
+>         return prog->line_info_cnt;
+>  }
+>
+> +int bpf_program__clone(struct bpf_program *prog, const struct bpf_prog_l=
+oad_opts *opts)
+> +{
+> +       LIBBPF_OPTS(bpf_prog_load_opts, attr);
+> +       struct bpf_prog_load_opts *pattr =3D &attr;
+> +       struct bpf_object *obj;
+> +       int err, fd;
+> +
+> +       if (!prog)
+> +               return libbpf_err(-EINVAL);
+> +
+> +       if (!OPTS_VALID(opts, bpf_prog_load_opts))
+> +               return libbpf_err(-EINVAL);
+> +
+> +       obj =3D prog->obj;
+> +       if (obj->state < OBJ_PREPARED)
+> +               return libbpf_err(-EINVAL);
+> +
+> +       /* Copy caller opts, fall back to prog/object defaults */
+> +       OPTS_SET(pattr, expected_attach_type,
+> +                OPTS_GET(opts, expected_attach_type, 0) ?: prog->expecte=
+d_attach_type);
 
-Yes.
+OPTS_GET(opts, expected_attach_type, prog->expected_attach_type)
 
->
-> > > > The verifier should decide whether a dynptr argument is read-only
->
-> can you please remind us what "read-only dynptr argument" means for verif=
-ier?
+and same almost everywhere else
 
-Oh well... my apologies for the inconsistency in commit message and
-comments. It should be "immutable" instead of "read-only" here.
+> +       OPTS_SET(pattr, attach_btf_id, OPTS_GET(opts, attach_btf_id, 0) ?=
+: prog->attach_btf_id);
+> +       OPTS_SET(pattr, attach_btf_obj_fd,
+> +                OPTS_GET(opts, attach_btf_obj_fd, 0) ?: prog->attach_btf=
+_obj_fd);
+> +       OPTS_SET(pattr, attach_prog_fd, OPTS_GET(opts, attach_prog_fd, 0)=
+ ?: prog->attach_prog_fd);
+> +       OPTS_SET(pattr, prog_flags, OPTS_GET(opts, prog_flags, 0) ?: prog=
+->prog_flags);
+> +       OPTS_SET(pattr, prog_ifindex, OPTS_GET(opts, prog_ifindex, 0) ?: =
+prog->prog_ifindex);
+> +       OPTS_SET(pattr, kern_version, OPTS_GET(opts, kern_version, 0) ?: =
+obj->kern_version);
+> +       OPTS_SET(pattr, fd_array, OPTS_GET(opts, fd_array, NULL) ?: obj->=
+fd_array);
+> +       OPTS_SET(pattr, token_fd, OPTS_GET(opts, token_fd, 0) ?: obj->tok=
+en_fd);
+> +       if (attr.token_fd)
+> +               attr.prog_flags |=3D BPF_F_TOKEN_FD;
+> +
+> +       /* BTF func/line info */
+> +       if (obj->btf && btf__fd(obj->btf) >=3D 0) {
+> +               OPTS_SET(pattr, prog_btf_fd, OPTS_GET(opts, prog_btf_fd, =
+0) ?: btf__fd(obj->btf));
+> +               OPTS_SET(pattr, func_info, OPTS_GET(opts, func_info, NULL=
+) ?: prog->func_info);
+> +               OPTS_SET(pattr, func_info_cnt,
+> +                        OPTS_GET(opts, func_info_cnt, 0) ?: prog->func_i=
+nfo_cnt);
+> +               OPTS_SET(pattr, func_info_rec_size,
+> +                        OPTS_GET(opts, func_info_rec_size, 0) ?: prog->f=
+unc_info_rec_size);
+> +               OPTS_SET(pattr, line_info, OPTS_GET(opts, line_info, NULL=
+) ?: prog->line_info);
+> +               OPTS_SET(pattr, line_info_cnt,
+> +                        OPTS_GET(opts, line_info_cnt, 0) ?: prog->line_i=
+nfo_cnt);
+> +               OPTS_SET(pattr, line_info_rec_size,
+> +                        OPTS_GET(opts, line_info_rec_size, 0) ?: prog->l=
+ine_info_rec_size);
+> +       }
+> +
+> +       OPTS_SET(pattr, log_buf, OPTS_GET(opts, log_buf, NULL));
+> +       OPTS_SET(pattr, log_size, OPTS_GET(opts, log_size, 0));
+> +       OPTS_SET(pattr, log_level, OPTS_GET(opts, log_level, 0));
 
->
-> > >
-> > > > +                               const struct bpf_dynptr *src_ptr, u=
-64 src_off, u64 size)
-> > > >  {
-> > > >         struct bpf_dynptr_kern *dst =3D (struct bpf_dynptr_kern *)d=
-st_ptr;
-> > > >         struct bpf_dynptr_kern *src =3D (struct bpf_dynptr_kern *)s=
-rc_ptr;
-> > >
-> > > [...]
+as discussed offline, we shouldn't use OPTS_SET(), we control pattr
+size and layout, OPTS_SET doesn't contribute anything here and should
+only be used for writing into user-provided opts structs.
+
+> +
+> +       /* Resolve BTF attach targets, set sleepable/XDP flags, etc. */
+> +       if (prog->sec_def && prog->sec_def->prog_prepare_load_fn) {
+> +               err =3D prog->sec_def->prog_prepare_load_fn(prog, pattr, =
+prog->sec_def->cookie);
+> +               if (err)
+> +                       return libbpf_err(err);
+> +       }
+> +
+
+[...]
