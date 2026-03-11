@@ -1,271 +1,253 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f68.google.com (mail-wr1-f68.google.com [209.85.221.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ADFA3CBE7E;
-	Wed, 11 Mar 2026 09:26:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1799C3CB2F1
+	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 09:30:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.68
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773221207; cv=fail; b=TvCU2zp8jDY3p0xPXEppXuzKH1kQDyBYHOqlvjdmshoiR1L9noPNHOcQkDXX5qWOyTRNdGmkVrqyJ64YhMdboivXasx71yih02dPS5zfuQ9RdpXo1HwgZe2mlq3wkKXAD9Grcopwkz5n/pkfzwRZUP3gWLj7RKhAvhOXJAZcsuQ=
+	t=1773221443; cv=pass; b=SU/RcCfvvDFWVt73pG4i9HIZa1BCALfHrPYkdwHNrJTCYc9PsuPdhwTEGMHaczsrnMy+YG2Vs+C5MDogiBIunA8VscMqIlPjoHEzZCyzSAWgKvY7Dfho2hwOOqKsmOwfHH/dL7LbhqyxghfO/22GxisLEXXhOpKdFPKVMMX4vsI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773221207; c=relaxed/simple;
-	bh=m4nrxJrptq9qjGF+s6HBpmfa9vqvfEDymQUIf7o+O44=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=jIGaKL5hQDQ9dp7W4krSGCZ+oTrXdJ7WTr7bIwnQEknwXdP0j3sN62+xtLLXiARH1HnKHkOc81gXW+qyFdSBVTFhWk7yrqqia6jYKf+Xbe1pkSPxE4QVKoiHO7VaFm41s9+vwBVGxB68ENJUztKRVbFjJUgEHO1iy7NRanQC5ak=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QcwRVuv9; arc=fail smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1773221443; c=relaxed/simple;
+	bh=jePAwQx/Myt6yU3BIww6Iy8BtdAYG131T07D5srbLgs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SY59AWA5tzoBgtD7Ttti/9SjBiX4fMubeHgT0HBxBHhhZ+UrTePiWgLOAYUOiWcZgdJrh3jjq1/CjuqYbxHJDTTmDBKlwPLYM8qpcH21doruskjUwVl4/5TrFYui9a1zbznIDkz30qWuVwrHkxwwTFOAMLdZYd61OlypChkK3Kw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GJiGbDGG; arc=pass smtp.client-ip=209.85.221.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QcwRVuv9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773221204; x=1804757204;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=m4nrxJrptq9qjGF+s6HBpmfa9vqvfEDymQUIf7o+O44=;
-  b=QcwRVuv9wkSCB0AdIVlGsH1iFHZ1beskAPcSI7t2kj44XJIvDlWDiPGX
-   lUZhFO8rqFiFzMv3gfIj/f/XDLFQipZb+YMOdSh4HG6vETl21War9N0S0
-   11KWs+5qX34NcH1ubZl1vyu54VNW2y5TFX8G4WcCJWoZCCOxyuz4q81DZ
-   lhfQfKcoYUoAHkqD/7dcdjY4IkaqiLxDHWliMpIBBFeARB7Ld/1vS1A1p
-   K+4/BkVgripyN3LpONLXKGTrSmcAKKc2ls+B+MQsUFgBIg8dNmLUoBu3W
-   iPmwQeWVK93eH6eL40UrVIJiXTqgjKBCnTSH0OdhkEH+SfkGtvTR7sI6u
-   g==;
-X-CSE-ConnectionGUID: EBvRK5WPS8aUNmSCWYSY8Q==
-X-CSE-MsgGUID: 0qVv4l3yS6S5uJOlyBNmhQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11725"; a="85760871"
-X-IronPort-AV: E=Sophos;i="6.23,113,1770624000"; 
-   d="scan'208";a="85760871"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2026 02:26:42 -0700
-X-CSE-ConnectionGUID: 0Mvc00UjTyaR49tMurlA5w==
-X-CSE-MsgGUID: 6g3dkHLDRdOJkiETBGMAMA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,113,1770624000"; 
-   d="scan'208";a="225103701"
-Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
-  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2026 02:26:41 -0700
-Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Wed, 11 Mar 2026 02:26:40 -0700
-Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37 via Frontend Transport; Wed, 11 Mar 2026 02:26:40 -0700
-Received: from BN1PR04CU002.outbound.protection.outlook.com (52.101.56.2) by
- edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Wed, 11 Mar 2026 02:26:39 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=oIUmwbqBuCkYAHr/gwuMT/vbVyoJqHWc0S7qGkZSE95vriQ1cF1TkGN+a1PULfHbuDyi5DzAqAQ/PNHLIftR7JWBOHqHHT+jY93nxY5ZTaryKln3OoABQnwzl4ngeCG392k2OZCcRE+72NiuMFZgNGV9NuZjzzgtAKJSUl8jY6DJFEy1qNBSO6tQzZgbmelQ97j6UITzZy/WF4mr3LqAeRRhIoK91Gf/AWW++ljiOXiNYHRS0xvC/qW3hLE7seWkIxqqC0ez1Gs6saFyjGmdUV0qDNucOah0DJC0PY+O1yBivIsQu9Rd0Je4acivVundufd1+gxOD6g6HHhdSMq7zQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=m4nrxJrptq9qjGF+s6HBpmfa9vqvfEDymQUIf7o+O44=;
- b=aBxZmB6sbegqcdGoKmtlZAOcsGRPJoNprfagE+h604gJAqAH4K6+KucWi6/tq0TarS5X5ug6WwI+Si+VnXJZGApS0Hp/He0BJm3O4i23WnRjIVWfT9fxBljBNaC9feFMVULojEpaixsil7zHJjzk/0Ei5rAY1WtxxlD9gS77inUNlktnOneLWplQNQV5pzR1G/7mz7TJdxJYLzt+Mj/x0RU8p5JaYh9hVbgYF9ieJV6cDINYiTVfqLAr/y19QYfhTWGVROS2hV99XVvqL7Clf7EilkoyJs2OW80ipPvFVFHkn71YZyTAVFDtCuAtCu+i3Ictw5nF52YGMajqU7oSAw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from IA3PR11MB8986.namprd11.prod.outlook.com (2603:10b6:208:577::21)
- by PH7PR11MB6836.namprd11.prod.outlook.com (2603:10b6:510:1ef::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.3; Wed, 11 Mar
- 2026 09:26:37 +0000
-Received: from IA3PR11MB8986.namprd11.prod.outlook.com
- ([fe80::e6f0:6afb:6ef9:ab5c]) by IA3PR11MB8986.namprd11.prod.outlook.com
- ([fe80::e6f0:6afb:6ef9:ab5c%5]) with mapi id 15.20.9700.010; Wed, 11 Mar 2026
- 09:26:37 +0000
-From: "Loktionov, Aleksandr" <aleksandr.loktionov@intel.com>
-To: Philipp Hahn <phahn-oss@avm.de>, "amd-gfx@lists.freedesktop.org"
-	<amd-gfx@lists.freedesktop.org>, "apparmor@lists.ubuntu.com"
-	<apparmor@lists.ubuntu.com>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>, "cocci@inria.fr"
-	<cocci@inria.fr>, "dm-devel@lists.linux.dev" <dm-devel@lists.linux.dev>,
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-	"gfs2@lists.linux.dev" <gfs2@lists.linux.dev>,
-	"intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-	"intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-	"iommu@lists.linux.dev" <iommu@lists.linux.dev>, "kvm@vger.kernel.org"
-	<kvm@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-block@vger.kernel.org"
-	<linux-block@vger.kernel.org>, "linux-bluetooth@vger.kernel.org"
-	<linux-bluetooth@vger.kernel.org>, "linux-btrfs@vger.kernel.org"
-	<linux-btrfs@vger.kernel.org>, "linux-cifs@vger.kernel.org"
-	<linux-cifs@vger.kernel.org>, "linux-clk@vger.kernel.org"
-	<linux-clk@vger.kernel.org>, "linux-erofs@lists.ozlabs.org"
-	<linux-erofs@lists.ozlabs.org>, "linux-ext4@vger.kernel.org"
-	<linux-ext4@vger.kernel.org>, "linux-fsdevel@vger.kernel.org"
-	<linux-fsdevel@vger.kernel.org>, "linux-gpio@vger.kernel.org"
-	<linux-gpio@vger.kernel.org>, "linux-hyperv@vger.kernel.org"
-	<linux-hyperv@vger.kernel.org>, "linux-input@vger.kernel.org"
-	<linux-input@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-leds@vger.kernel.org"
-	<linux-leds@vger.kernel.org>, "linux-media@vger.kernel.org"
-	<linux-media@vger.kernel.org>, "linux-mips@vger.kernel.org"
-	<linux-mips@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-	"linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-	"linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-	"linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>,
-	"linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-rockchip@lists.infradead.org" <linux-rockchip@lists.infradead.org>,
-	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-	"linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-	"linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-	"linux-security-module@vger.kernel.org"
-	<linux-security-module@vger.kernel.org>, "linux-sh@vger.kernel.org"
-	<linux-sh@vger.kernel.org>, "linux-sound@vger.kernel.org"
-	<linux-sound@vger.kernel.org>, "linux-stm32@st-md-mailman.stormreply.com"
-	<linux-stm32@st-md-mailman.stormreply.com>,
-	"linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, "ntfs3@lists.linux.dev"
-	<ntfs3@lists.linux.dev>, "samba-technical@lists.samba.org"
-	<samba-technical@lists.samba.org>, "sched-ext@lists.linux.dev"
-	<sched-ext@lists.linux.dev>, "target-devel@vger.kernel.org"
-	<target-devel@vger.kernel.org>, "tipc-discussion@lists.sourceforge.net"
-	<tipc-discussion@lists.sourceforge.net>, "v9fs@lists.linux.dev"
-	<v9fs@lists.linux.dev>
-CC: Justin Sanders <justin@coraid.com>, Jens Axboe <axboe@kernel.dk>
-Subject: RE: [Intel-wired-lan] [PATCH 54/61] aoe: Prefer IS_ERR_OR_NULL over
- manual NULL check
-Thread-Topic: [Intel-wired-lan] [PATCH 54/61] aoe: Prefer IS_ERR_OR_NULL over
- manual NULL check
-Thread-Index: AQHcsKKXHKPQgNOZaE+8HrFfa/02l7WpEP8g
-Date: Wed, 11 Mar 2026 09:26:37 +0000
-Message-ID: <IA3PR11MB898643D5101D44C2BF0A8D7AE547A@IA3PR11MB8986.namprd11.prod.outlook.com>
-References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
- <20260310-b4-is_err_or_null-v1-54-bd63b656022d@avm.de>
-In-Reply-To: <20260310-b4-is_err_or_null-v1-54-bd63b656022d@avm.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: IA3PR11MB8986:EE_|PH7PR11MB6836:EE_
-x-ms-office365-filtering-correlation-id: 3b137b1f-021b-47d3-320e-08de7f504b55
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016|38070700021|921020|18002099003|56012099003|22082099003;
-x-microsoft-antispam-message-info: o9Bm9SPj2ErETACCCJiV1KvRnwRIZWxKp+r2VpCYTLVSrVoOXKHBBMTgWhVUDs2sANIccdbYTu+T62K218GKzN/aip0x72lnux++4JYJqlvh/+DLcxp1aRL+nnl8drAmndk+uoEKXHbjsrmbxKSpxxtM0yAgWpm+ZH5fdEYrQDmjD+U4clF8ZOIY5tdrP8KIkZKPgKHDF2WIQQw3kM6Neq/s19XJeWxmLprxLY7WEQtHIOBisCCjbPmMtmC0XeWKtE2QvujQvu1eudnbidCG6Owrkwkt7IMubEScD7/tiO4a6J8CaXb0tAJspoNXvqrDgBUuAlK6Zij7190dQ21EDY6HvvYrMZdBFum7HkCJ9c9euTvZsC4ESkWBnQwF4/dMWbNVJfHpB8DflELVEpkeDQ3x8Owrq/PTdR3oVwE/JTiZsKFpMvcfjloKUoUgBGjl7cK2eIKjQt6wm7RK6bMDB/1ajwKu+THF+Tg7TIUaB4p7dgM/iryDIosZN5plS1kAqVRyOkEiLAsO6f8ZbiVin+ueU3v211dxC7q+ylCyK3oioWwnNTn0243NE68MUoYZWMHZ5epFt6wq4t7JkSduO6Do/5LSsY9ynWsZnf5QwMmxXVPHYAa35TzmlVv/VQNApQGohJL/bIxrZD1Yl5/NbczocEPnIKZvTZsiZ0x0q0VZUEhP0bHuYPfQD0hUytJsjfviNaEYaOdc2HXjOuGQN4ezE9KU9/LVQB7y+Fu6Rvw+ygYyNvS5uRaazOasfnSyLhp3xd9l9KeyWCukEDFSJ5ns4y3fpZSU1j74TOlT+U4sj+sWuJNFh3Tl8Qe+8c16
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA3PR11MB8986.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(38070700021)(921020)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UmFhZFRwZVJNNEZKWmhMbFo0K2FpUGZKZjZBa0M1RUJDemJkaitZUUlsWVNG?=
- =?utf-8?B?S2Z2VC9yVHNXcHkxeTdpMGk5OHZLbU1FQys1M0FUOXhkaFVVbWFXZ1doMHlI?=
- =?utf-8?B?SHlqWktRTnBBdzJkZVQ2R21OZ29iNk9mN3pMVjRaZStuZWY0TE53VmZ4Y3A4?=
- =?utf-8?B?TEJ1N09FbFp2WllBZUcrOEVSSHdVN1FQZHQxVkREdnpxVEFMTTVMWmx6c2RC?=
- =?utf-8?B?dWlpNlZwRVRORlh6aGpUSUlnNGsvWGhmWGJDUzZLbUM4ZXpjQ2R4b1NTTlJj?=
- =?utf-8?B?VDNQdWt3THNiZFlYN1AwYS82S2dtRWFhb1BpZUZqZlhydDFab2VINm8rSTM2?=
- =?utf-8?B?djF0MlBqL0x6R0xJbEFoeWlIVG90WjV5VVBtU21oSnE5WjROQ2dyVlFvallu?=
- =?utf-8?B?YngxK09vMFdibjA3T00yaXJuOW5qMTBrRElDQmRJVWdWVytQOEh4a2dLVXZT?=
- =?utf-8?B?NzRISHd2bkZiQnp4N2pUVjRKS0tVSThxeEhPWU1keE5GQTJRZmlLcVl3Vm1x?=
- =?utf-8?B?aGo0R3dpeGo5Z29rNFhsZ1Y2OVdqWTNBYXFpcTh5K2lGZGtqM2pWclViUmEy?=
- =?utf-8?B?RlRZcXI1aFhlY2FIWCt5aFFGU0VQbXM4RmVvYkw5amp3VFlEdlI4WWRRTXdy?=
- =?utf-8?B?VlRrQ2ptWU9Ka2Nrd0xpUHlnR01VQ3cvQ2Q1ZjBhOS8xeENJaUw2R2ZTUzlu?=
- =?utf-8?B?cXlsRDVDL0tUZURUbDA1MnJsT0NYUUc0UUVpTTVSem9QSUpWeXJveHZNUG90?=
- =?utf-8?B?OWsxbEw3ZGJVbFYydUtDUGt4ZE5NZWpBbHFQNnF0RzNLSTdHYmNMQm1UUjJE?=
- =?utf-8?B?Zm14WFRlOVI2V0UyT2NLdnJURmdsNzJtTGt0T3pYOHdCVXo3VjRuTVJEOGpl?=
- =?utf-8?B?a3IwU1U2RXE0SG4vWG1RdmRwZnhFbzZUV0dLRXloQjUwSVJsZzNVam92T05L?=
- =?utf-8?B?ajE0amhwN2hnTzQ4MGRmVWxPcnN4b2ZKUjlTZSs5Y1RHdFovQm04V1ZiRkps?=
- =?utf-8?B?TmxDZXo1bmp0bjNsU25ZZjVwMWpSdS9lWjFtQ3dpQm1jcWJaVG1XV24yOUx5?=
- =?utf-8?B?V3ZxTmtDVVE4RVpyYjR0VngreGp3NUpmOWpFcHpmMnhkWGtCSnE2VUpYMmRp?=
- =?utf-8?B?Y3hGc0c1MkdhUXpIbzhQYTFjaEFNYy9MTzFqb00wbzlNN1JBZzNIMnVKZDZJ?=
- =?utf-8?B?WWhObjJtOU1hT2crV2dGU3U1UFl2K1dlTkpBZW15V1doSUU2bW9tK0NWV01C?=
- =?utf-8?B?N0pGTktIWWxuVjloQnRKdmFuekJxcGsyb3VrU1FINTduVC9IbllqSlNocVZN?=
- =?utf-8?B?eGZQWTdZNGdxelg0UFJSdi9LRjJ3ek9BVm1pem5VREtlMXB2QWQvQXJjRFYv?=
- =?utf-8?B?Y3VqR0VlR1JHeDNBY2NVSHJJUzVyOGZxU0VFbW9LMEF4UHJ3V2pnamRlblpv?=
- =?utf-8?B?VnBkcEdBcDRFeTBIc3hkaUg1ZFdORjdsTXh5SjFsckdibEF5eGtueXVHcW5r?=
- =?utf-8?B?NU5TT3BJL01rVTU3cXMwdmxRN3E2QU9KQjkwMHRFaURCRlR6cVV3N3puZ1o0?=
- =?utf-8?B?R1dKd0FmYjRHVitKMUMrNjY4N2RuTkRuamoxcGtCWUJCMmZkQkovODZZeWxk?=
- =?utf-8?B?WkZtRURoT3NYRDVFcEMzNEp1anIzcUdyWVV0UllXR2NYcXU2SWZvTkNKeVUw?=
- =?utf-8?B?Y2NuNkdhalN4eWEvVFFRS1RzUnIzTDdMM1BRMDZQdXNuRHFmd0I1YUF6OVd1?=
- =?utf-8?B?b0czL0hrMnRwNjg2K1cxL0RwZmozV1lCZUxxWnJJbjdzd2xiTDZiR3M4ZUk0?=
- =?utf-8?B?RkFFV25lZHN2S0JjVXpTbXBjeE0yeVZQN0o4RW5ncXhxcHR1blVWYjhQdTRo?=
- =?utf-8?B?aTgwWTE4aWI5MnRFUlJiYjZDU2U1YWpVdFR4ci9yOUJGMVB6MXMxSGp5dDkz?=
- =?utf-8?B?cERDamNzcS9adzh3WUJ2VGI5cmV4cW9Ma3kwZitISjhwRk93KzdBMWFWVEs1?=
- =?utf-8?B?MnBmdEpxUHNUaGRqVit4YVZvNFFVa20zNEJUVUFuT25IOUllWkhoREZOM1Ny?=
- =?utf-8?B?WEFEL0Q1c1lka0RFZmJVRFpJWjlENzM0N25Nek0xMVlmZ1Iza0Jua2JMWFVX?=
- =?utf-8?B?aXp6NC81UldQNHdLN0lZSXJXRHZob296U3JXb2RMc2grZmI3RmRGR2I0cUh4?=
- =?utf-8?B?MEE4TlpEK05FRzVodEs0bEtua0w5Z0k2ekFSV2ZndTc1YTRJcDUvY1lOSjVy?=
- =?utf-8?B?QVhZUTE0MXdPaXZKWVY1aHh0TEhmV2t2a3VUY3NsdVVkQ3RwazQrVlhRRGJn?=
- =?utf-8?B?enhjSkdsU01ZdHgxWmVQSTR2OGM2c2dQRHlhZkl4SElCZnptQXl6NHo3dCs0?=
- =?utf-8?Q?Yx2xsHvVHigxyfmA=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GJiGbDGG"
+Received: by mail-wr1-f68.google.com with SMTP id ffacd0b85a97d-439c4bde55cso5520317f8f.1
+        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 02:30:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773221440; cv=none;
+        d=google.com; s=arc-20240605;
+        b=FPOpTzF1LneDRD+jhHqveqrw4AWVTKHUd2mOu9M7KbLLaCJw1PHNl2GGRkplJANyW6
+         UNVppsOcI9Gib84NafkwGoWgMDKD4K5j9jDs5tmn41g5nFK85xLBDg0bF2S4fMw5pukZ
+         XAJuFq2/YeWzCd8eAPDRq/YenpIo5Tyl1m/19VMWD80+eM7RmUY/9JUtRa0/j6d7+sIl
+         AU8zTgUi3aJKD5NbeTE8khOZ3AD6/acPq98UxogGocw6RmROYhMyuA7B2trCvI27BZft
+         sF3HWq8gN7mDCH3NmcdnUUWwPvuAo2u4fC3XcHBf/v6lF3xyr0z1F/L3E3H5wDSFPe/w
+         T7Aw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=b+HR+fIjct4JSQB0drQqnH/BzJbHTpzwA3P1fT4mYIY=;
+        fh=YASLqI8+VwXU4lrvu3iyKAF3aNdJh8XSWAmPtb7srd4=;
+        b=PGifPtqpBVfEIjVoqUlEbk27uc0pnSJpFdntqjHSDQ2FCme+TkukXocJSHuCjB+uMF
+         RS0jpruTj8/OtWT+jHar0LuU0WrjTWg4ugT73OyjKUnTLeYs0XJl3Jf3vdSqK4GJUX6X
+         xc4dr3nZJ1G/ipfz8OiOunzE3KjrsuMWngTM8cvGy1edbovrYc1IuvThTAYM9tQPuXMg
+         t+3UzgDBqBYLFVd319rmzous+FKDwp5+UbWXEN9BQ52mlkqLTCnbfe4Z6H54bEFMo0Wz
+         4WOLoBVekxXiJKM+BpGL+qJgh1L8/3bqzTaR42XDnywUt7PVlRtCknu+qsI4bPISXLq+
+         WeGQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773221440; x=1773826240; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b+HR+fIjct4JSQB0drQqnH/BzJbHTpzwA3P1fT4mYIY=;
+        b=GJiGbDGGVx8429wC8oycgTqDIf+v1JKM1aKekOFHUs2cLuVlnli1OcwJisQj0+ORcz
+         acj4FWHySTqeN+1oEGfyGZY5lEIG5udtGIqKZZcBPtIr+69nBIrrEBtKrQoGFJd2noQ2
+         6rUxi7HZdI2fM33ENsEorc0tCalmYpUXmXDPnLg6r+4IAPT0Ow9zuCAKauPQtZHNpxxA
+         WDcvDSGTE8m9rUtEOcVxYXUO/uJGCTn6gQXBgxQXCbpzr2jyXeKn54R99Wl2p5WbUVtW
+         PwNuHwPq/VuViB9A98AULZYUangv/Xfl40rOdAFwiTGaGjXnE6ZfRxjTAHff01/PmN07
+         mfUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773221440; x=1773826240;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=b+HR+fIjct4JSQB0drQqnH/BzJbHTpzwA3P1fT4mYIY=;
+        b=bQhmB5ufIQx3ivYmv6aETGPxe49gjcxFtTgIIIw5d/GNmuODwcUjkMVqAA6f7Bx6OY
+         kANCHA3Ouvi4jYsDsQlx4RuJpp1XlrSA6+t66F6qg1HuNBKzVo8NtcN4D5XWSjIOHsdS
+         gBuo5OVgz96KV4O9pbNJYt/EE8edmskIWFBOM18FDyXUb/u8vT/5TLPJkWXmU24dLiLA
+         KEh/qw23X62yhQKhi9/Ud31juTBSbYjSz4t3EpNJgv1e0EeQ14CgMeIciq+84HHoR0QU
+         Jl126RbrsvGxupScQae1gQszLjcELQUfMuWZ55MvOcqqN0WG/CLVLoQ1/+tKt7d6qKKG
+         RmDw==
+X-Forwarded-Encrypted: i=1; AJvYcCW0sWfn8kZ+BRhybuVD8okhGpbtQznwA8WakkDk56wKBu6pRn6AH8rMup0v4FI2vKbX1Kc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDLlzZ2zfMwD5tfv+brwylhcGiGJPG/B5WkALuUux6Kb6RyQJ2
+	z4hZW446eNz0QARZksaGjA6fccEzkye3VlPtjqiAt/aODBmcljN6dePRN1cN3B/rytNKKSPPLLg
+	0OWnAJykt/PLDsJ15Z8pjOjR2ostonpM=
+X-Gm-Gg: ATEYQzzlpI1ygKgDgMM3PdjPIoPZE/DxV6kjuCxL0A5Z050rQmx9mY04iV2R9zkrDeF
+	jCdcpR2lBTKxQkboJa+KkCM7SKIUMhfkpOH0vHRDMWYPadAgsLowK1EINJLeoscvhe9IXqOazCH
+	N/BfFfUICGcamLn92Q4ZRRyvErY/ofKsEQDERetlwVt8GnAAaQEwRxNxjpAQFAtZ7nEajpMGeEY
+	28gqx0d1BiGuvJkbP7Uyqpz4SpC42iPnGKZRxO+O1vfIstRXkzVCOVwb+priwY4aKu4swDrzcMw
+	vwvmC+ij/AObHSvGKuXCkkAfIZy/75MRKQ2gl40FzZjbjU8p7eYJOIzaEnFQKi1lSTCosbY=
+X-Received: by 2002:a05:6000:2884:b0:439:c628:2228 with SMTP id
+ ffacd0b85a97d-439f843125amr3545033f8f.31.1773221440326; Wed, 11 Mar 2026
+ 02:30:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked: CrOTZb1KRrluE8Hi1qKRD454X4/8qRXPxHi1cqFPQYNvr17f1fATBKuEHUjSG1O0/Hvh6RKs6WeVHUo5EpnlqFyKsFw7LDG/GIpH5YjjRev4xPkZtie/dfZhrv5YkbetTk+MjZ8Asj/daThWAC8Zllg6yxdewJSZ8D4dkiye9+vWa9ukZPFzKvY1+65tMcplIRZvV88n5ehhcwlbn4RZ96lty+38Kp5E+09w1hvWqFY/RAdQprsQK7Zd7WsIAk8a7rlWJL9k8IIDPNrS0kNlcvkQyr9F0pz+zR8rGkj80VM1Nm95YwTUKIV55FRluvP5VKCN51YLe7kXO0zjLjfgrA==
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: IA3PR11MB8986.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b137b1f-021b-47d3-320e-08de7f504b55
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Mar 2026 09:26:37.1030
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: AxdWCRDv24cjq1vJ384aXrRsVpA5dEn9LMt6b7ZY4xpRPyA7+lzpYDvdn+c/fLlu4FAozNXPYwAhO263RnUUNdrC+EOY+Cy5UgkT++EsOPU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6836
-X-OriginatorOrg: intel.com
+References: <cover.1773170190.git.grbell@redhat.com> <a46d40ac2b56f96b3b6e953847ad4719694d68eb.1773170190.git.grbell@redhat.com>
+ <CAP01T75MFfp8oBrogRvm+BRh7=fvm9pP0vTvNm=RW3r3=WDB7g@mail.gmail.com>
+ <CAMB2axPT8L60FGN5wben-pa73toOwLcD8cuGqbNUg6AB57ePYg@mail.gmail.com>
+ <CAP01T76cPcToNwu_NMFU6QDO8qZB+n9WA0_qxSzrasZV-=G-Qw@mail.gmail.com>
+ <CAMB2axMTkN5R3+JQL-2L0fWAqzOQOFOxp7+WKF4DLUF-FqgiPg@mail.gmail.com>
+ <CAP01T75dDL5pud_NmCmEapw6p1cZss9LTfh6sBxdxYinVQTP5Q@mail.gmail.com> <aed1731e-986e-484e-bc16-682b025d26cf@linux.dev>
+In-Reply-To: <aed1731e-986e-484e-bc16-682b025d26cf@linux.dev>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Wed, 11 Mar 2026 10:30:02 +0100
+X-Gm-Features: AaiRm523WoCT8pKvesYyJqTt-WgOvaQ9vRTXdgIPkwLNGOm2RtZv71sXh1KKyZY
+Message-ID: <CAP01T741UV0TsvxxXRAT-zYjKoHwcpsr2bbMS-eFnxytcng7Kg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/1] bpf: Fix BTF module cleanup race condition
+ in struct_ops
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Amery Hung <ameryhung@gmail.com>, Gregory Bell <grbell@redhat.com>, bpf@vger.kernel.org, 
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
+	song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com, 
+	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogSW50ZWwtd2lyZWQtbGFu
-IDxpbnRlbC13aXJlZC1sYW4tYm91bmNlc0Bvc3Vvc2wub3JnPiBPbiBCZWhhbGYNCj4gT2YgUGhp
-bGlwcCBIYWhuDQo+IFNlbnQ6IFR1ZXNkYXksIE1hcmNoIDEwLCAyMDI2IDEyOjQ5IFBNDQo+IFRv
-OiBhbWQtZ2Z4QGxpc3RzLmZyZWVkZXNrdG9wLm9yZzsgYXBwYXJtb3JAbGlzdHMudWJ1bnR1LmNv
-bTsNCj4gYnBmQHZnZXIua2VybmVsLm9yZzsgY2VwaC1kZXZlbEB2Z2VyLmtlcm5lbC5vcmc7IGNv
-Y2NpQGlucmlhLmZyOyBkbS0NCj4gZGV2ZWxAbGlzdHMubGludXguZGV2OyBkcmktZGV2ZWxAbGlz
-dHMuZnJlZWRlc2t0b3Aub3JnOw0KPiBnZnMyQGxpc3RzLmxpbnV4LmRldjsgaW50ZWwtZ2Z4QGxp
-c3RzLmZyZWVkZXNrdG9wLm9yZzsgaW50ZWwtd2lyZWQtDQo+IGxhbkBsaXN0cy5vc3Vvc2wub3Jn
-OyBpb21tdUBsaXN0cy5saW51eC5kZXY7IGt2bUB2Z2VyLmtlcm5lbC5vcmc7DQo+IGxpbnV4LWFy
-bS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZzsgbGludXgtYmxvY2tAdmdlci5rZXJuZWwub3Jn
-Ow0KPiBsaW51eC1ibHVldG9vdGhAdmdlci5rZXJuZWwub3JnOyBsaW51eC1idHJmc0B2Z2VyLmtl
-cm5lbC5vcmc7IGxpbnV4LQ0KPiBjaWZzQHZnZXIua2VybmVsLm9yZzsgbGludXgtY2xrQHZnZXIu
-a2VybmVsLm9yZzsgbGludXgtDQo+IGVyb2ZzQGxpc3RzLm96bGFicy5vcmc7IGxpbnV4LWV4dDRA
-dmdlci5rZXJuZWwub3JnOyBsaW51eC0NCj4gZnNkZXZlbEB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4
-LWdwaW9Admdlci5rZXJuZWwub3JnOyBsaW51eC0NCj4gaHlwZXJ2QHZnZXIua2VybmVsLm9yZzsg
-bGludXgtaW5wdXRAdmdlci5rZXJuZWwub3JnOyBsaW51eC0NCj4ga2VybmVsQHZnZXIua2VybmVs
-Lm9yZzsgbGludXgtbGVkc0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LQ0KPiBtZWRpYUB2Z2VyLmtl
-cm5lbC5vcmc7IGxpbnV4LW1pcHNAdmdlci5rZXJuZWwub3JnOyBsaW51eC1tbUBrdmFjay5vcmc7
-DQo+IGxpbnV4LW1vZHVsZXNAdmdlci5rZXJuZWwub3JnOyBsaW51eC1tdGRAbGlzdHMuaW5mcmFk
-ZWFkLm9yZzsgbGludXgtDQo+IG5mc0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LW9tYXBAdmdlci5r
-ZXJuZWwub3JnOyBsaW51eC0NCj4gcGh5QGxpc3RzLmluZnJhZGVhZC5vcmc7IGxpbnV4LXBtQHZn
-ZXIua2VybmVsLm9yZzsgbGludXgtDQo+IHJvY2tjaGlwQGxpc3RzLmluZnJhZGVhZC5vcmc7IGxp
-bnV4LXMzOTBAdmdlci5rZXJuZWwub3JnOyBsaW51eC0NCj4gc2NzaUB2Z2VyLmtlcm5lbC5vcmc7
-IGxpbnV4LXNjdHBAdmdlci5rZXJuZWwub3JnOyBsaW51eC1zZWN1cml0eS0NCj4gbW9kdWxlQHZn
-ZXIua2VybmVsLm9yZzsgbGludXgtc2hAdmdlci5rZXJuZWwub3JnOyBsaW51eC0NCj4gc291bmRA
-dmdlci5rZXJuZWwub3JnOyBsaW51eC1zdG0zMkBzdC1tZC1tYWlsbWFuLnN0b3JtcmVwbHkuY29t
-Ow0KPiBsaW51eC10cmFjZS1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBsaW51eC11c2JAdmdlci5r
-ZXJuZWwub3JnOyBsaW51eC0NCj4gd2lyZWxlc3NAdmdlci5rZXJuZWwub3JnOyBuZXRkZXZAdmdl
-ci5rZXJuZWwub3JnOw0KPiBudGZzM0BsaXN0cy5saW51eC5kZXY7IHNhbWJhLXRlY2huaWNhbEBs
-aXN0cy5zYW1iYS5vcmc7IHNjaGVkLQ0KPiBleHRAbGlzdHMubGludXguZGV2OyB0YXJnZXQtZGV2
-ZWxAdmdlci5rZXJuZWwub3JnOyB0aXBjLQ0KPiBkaXNjdXNzaW9uQGxpc3RzLnNvdXJjZWZvcmdl
-Lm5ldDsgdjlmc0BsaXN0cy5saW51eC5kZXY7IFBoaWxpcHAgSGFobg0KPiA8cGhhaG4tb3NzQGF2
-bS5kZT4NCj4gQ2M6IEp1c3RpbiBTYW5kZXJzIDxqdXN0aW5AY29yYWlkLmNvbT47IEplbnMgQXhi
-b2UgPGF4Ym9lQGtlcm5lbC5kaz4NCj4gU3ViamVjdDogW0ludGVsLXdpcmVkLWxhbl0gW1BBVENI
-IDU0LzYxXSBhb2U6IFByZWZlciBJU19FUlJfT1JfTlVMTA0KPiBvdmVyIG1hbnVhbCBOVUxMIGNo
-ZWNrDQo+IA0KPiBQcmVmZXIgdXNpbmcgSVNfRVJSX09SX05VTEwoKSBvdmVyIHVzaW5nIElTX0VS
-UigpIGFuZCBhIG1hbnVhbCBOVUxMDQo+IGNoZWNrLg0KPiANCj4gQ2hhbmdlIGdlbmVyYXRlZCB3
-aXRoIGNvY2NpbmVsbGUuDQo+IA0KPiBUbzogSnVzdGluIFNhbmRlcnMgPGp1c3RpbkBjb3JhaWQu
-Y29tPg0KPiBUbzogSmVucyBBeGJvZSA8YXhib2VAa2VybmVsLmRrPg0KPiBDYzogbGludXgtYmxv
-Y2tAdmdlci5rZXJuZWwub3JnDQo+IENjOiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+
-IFNpZ25lZC1vZmYtYnk6IFBoaWxpcHAgSGFobiA8cGhhaG4tb3NzQGF2bS5kZT4NCj4gLS0tDQo+
-ICBkcml2ZXJzL2Jsb2NrL2FvZS9hb2VjbWQuYyB8IDIgKy0NCj4gIDEgZmlsZSBjaGFuZ2VkLCAx
-IGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMv
-YmxvY2svYW9lL2FvZWNtZC5jIGIvZHJpdmVycy9ibG9jay9hb2UvYW9lY21kLmMNCj4gaW5kZXgN
-Cj4gYTQ3NDRhMzBhOGFmNGZmMDUxMTNmMzIzNDAyMWVlYzcyODI2NWI0Zi4uYjMxZTUzOWE2NjQz
-M2EwYTVkNmU4MTExN2EzMg0KPiBkMTI3MzVmZmMxYmMgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMv
-YmxvY2svYW9lL2FvZWNtZC5jDQo+ICsrKyBiL2RyaXZlcnMvYmxvY2svYW9lL2FvZWNtZC5jDQo+
-IEBAIC0xMjY4LDcgKzEyNjgsNyBAQCBhb2Vfa3RzdGFydChzdHJ1Y3Qga3RzdGF0ZSAqaykNCj4g
-DQo+ICAJaW5pdF9jb21wbGV0aW9uKCZrLT5yZW5kZXopOw0KPiAgCXRhc2sgPSBrdGhyZWFkX3J1
-bihrdGhyZWFkLCBrLCAiJXMiLCBrLT5uYW1lKTsNCj4gLQlpZiAodGFzayA9PSBOVUxMIHx8IElT
-X0VSUih0YXNrKSkNCj4gKwlpZiAoSVNfRVJSX09SX05VTEwodGFzaykpDQo+ICAJCXJldHVybiAt
-RU5PTUVNOw0KPiAgCWstPnRhc2sgPSB0YXNrOw0KPiAgCXdhaXRfZm9yX2NvbXBsZXRpb24oJmst
-PnJlbmRleik7IC8qIGFsbG93IGt0aHJlYWQgdG8gc3RhcnQgKi8NCj4gDQo+IC0tDQo+IDIuNDMu
-MA0KDQpSZXZpZXdlZC1ieTogQWxla3NhbmRyIExva3Rpb25vdiA8YWxla3NhbmRyLmxva3Rpb25v
-dkBpbnRlbC5jb20+DQo=
+On Wed, 11 Mar 2026 at 01:20, Martin KaFai Lau <martin.lau@linux.dev> wrote=
+:
+>
+>
+> On 3/10/26 4:35 PM, Kumar Kartikeya Dwivedi wrote:
+> > On Wed, 11 Mar 2026 at 00:17, Amery Hung <ameryhung@gmail.com> wrote:
+> >>
+> >> On Tue, Mar 10, 2026 at 3:48=E2=80=AFPM Kumar Kartikeya Dwivedi
+> >> <memxor@gmail.com> wrote:
+> >>>
+> >>> On Tue, 10 Mar 2026 at 23:38, Amery Hung <ameryhung@gmail.com> wrote:
+> >>>>
+> >>>> On Tue, Mar 10, 2026 at 2:41=E2=80=AFPM Kumar Kartikeya Dwivedi
+> >>>> <memxor@gmail.com> wrote:
+> >>>>>
+> >>>>> On Tue, 10 Mar 2026 at 21:21, Gregory Bell <grbell@redhat.com> wrot=
+e:
+> >>>>>>
+> >>>>>> When running BPF struct_ops tests consecutively, the second test f=
+ails
+> >>>>>> because BTF object references take longer to be released while the=
+ir
+> >>>>>> associated module is removed from btf_modules list immediately
+> >>>>>> during module unload. This creates a race condition where the seco=
+nd
+> >>>>>> test retrieves the cached BTF object but cannot find valid module
+> >>>>>> information, causing btf_try_get_module() to return NULL.
+> >>>>>>
+> >>>>>> Fix this by modifying MODULE_STATE_GOING handling to wait for
+> >>>>>> active BTF references to be released before completing module
+> >>>>>> cleanup. This ensures BTF objects are properly cleaned up from the
+> >>>>>> cache before their module metadata is removed, eliminating the tim=
+ing
+> >>>>>> window that caused the race condition.
+> >>>>>>
+> >>>>>> Signed-off-by: Gregory Bell <grbell@redhat.com>
+> >>>>>> ---
+> >>>>>>   kernel/bpf/btf.c | 7 ++++++-
+> >>>>>>   1 file changed, 6 insertions(+), 1 deletion(-)
+> >>>>>>
+> >>>>>> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> >>>>>> index 09fcbb125155..81c9f46a7bb7 100644
+> >>>>>> --- a/kernel/bpf/btf.c
+> >>>>>> +++ b/kernel/bpf/btf.c
+> >>>>>> @@ -8382,7 +8382,12 @@ static int btf_module_notify(struct notifie=
+r_block *nb, unsigned long op,
+> >>>>>>                  list_for_each_entry_safe(btf_mod, tmp, &btf_modul=
+es, list) {
+> >>>>>>                          if (btf_mod->module !=3D module)
+> >>>>>>                                  continue;
+> >>>>>> -
+> >>>>>> +                       unsigned int timeout =3D 1000;
+> >>>>>> +                       while (refcount_read(&btf_mod->btf->refcnt=
+) > 1
+> >>>>>> +                       && timeout > 0 ) {
+> >>>>>> +                               msleep(1);
+> >>>>>> +                               timeout--;
+> >>>>>> +                       }
+> >>>>>
+> >>>>> This isn't the right way to address such issues. Your diagnosis is
+> >>>>> correct but fix is just papering over real problems.
+> >>>>
+> >>>> Second that the fix is not right.
+>
+> pw-bot: cr
+>
+> >>>>
+> >>>>>
+> >>>>> The better way would be to block the discovery of such BTFs once th=
+e
+> >>>>> module is unloaded.
+> >>>>> I.e. once we return to userspace after module unload, subsequent ca=
+lls
+> >>>>> to obtain an fd for such BTFs should not succeed.
+> >>>>> If someone is racing to look it up while the unload happens, so be =
+it,
+> >>>>> they will fail anyway.
+> >>>>>
+> >>>>> I would use a bool flag in struct btf, set it inside the critical
+> >>>>> section at this point with WRITE_ONCE, then test it early in
+> >>>>> bpf_find_btf_id and bpf_core_find_cands with || in !btf_is_module
+> >>>>> condition.
+> >>>>> Using READ_ONCE of course.
+> >>>>> Also, we need to add it to btf_get_fd_by_id, so that once conversio=
+ns
+> >>>>> from stale IDs to FDs don't succeed.
+> >>>>> Looking at load_module_btfs(), it already handles the ENOENT case w=
+hen
+> >>>>> id lookup succeeds, but fd lookup fails.
+> >>>>> So for stale ids it should just skip over their errors if we return
+> >>>>> the same ENOENT as the refcount_inc_not_zero case.
+> >>>>> We will still report stale ids, but not allow their conversion.
+> >>>>> We could filter id lookup too but it will penalize the common code =
+and
+> >>>>> we need extra radix tree lookup just for BTF case.
+> >>>>>
+> >>>>> For me locally, these changes seem to address the problem. I could
+> >>>>> send the fix, but if you would like to take a stab at the above
+> >>>>> change, please go ahead.
+> >>>>>
+> >>>>
+> >>>> I guess this is worth a fix because it makes btf_get_fd_by_id() less
+> >>>> likely to return to stale id. However, there is still a small window
+> >>>> between btf_get_fd_by_id() and btf_try_get_module() so struct_ops ma=
+p
+> >>>> creation can still fail.
+> >>>
+> >>> That's fine, it means that module unload is happening in parallel, so
+> >>> it's racy and non-deterministic anyway.
+> >>> When the user controls the module unload though, they should not be
+> >>> getting stale BTF fds once module unload has returned to user space.
+> >>> At that point all associated artifacts shouldn't be discoverable.
+> >>>
+> >>>>
+> >>>> As for the solution, there already is btf_mod->flags. So maybe inste=
+ad
+> >>>> of adding a bool, just test the flag?
+> >>>
+> >>> You mean struct btf instead of btf_mod? I don't see the flags field t=
+here.
+> >>> The btf_mod->flags won't work, it's already deleted and freed by this
+> >>> time, and requires us to go first from the BTF to the btf_mod.
+> >>> So it has to be in struct btf.
+> >>>
+> >>
+> >> I was thinking about updating btf_module->flags when handling
+> >> MODULE_STATE_GOING. Then btf_get_fd_by_id() can call
+> >> btf_try_get_module() to check flags if it's module BTF. If the module
+> >> is already freed then it returns -ENOENT.
+> >
+> > Hmm, interesting thought.
+> > I guess the only downside is that it's O(n) lookup under mutex, which
+> > can be costly with lots of modules, and always penalizes
+> > get_fd_by_id() for handling race.
+> > We also need to repeat it in bpf_core_find_cands and bpf_find_btf_id,
+> > where we may repeat it multiple times in the loop, so the cost is
+> > amplified.
+> >
+>
+> Is btf->id still needed somewhere after MODULE_STATE_GOING? Otherwise,
+> directly removing btf->id from btf_idr in btf_module_notify() should
+> stop the discovery.
+
+I looked at this, I think we will need to reset the btf->id too.
+Otherwise while btf_free_id is idempotent (no-op on free id), the
+released id can be reused and if we don't guard btf_free_id in btf_put
+it will remove it for some other BTF initialized in the meantime.
+We can likely set a flag or something to skip it in btf_put(). As long
+as the module is holding a reference nothing else should do it.
