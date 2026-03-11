@@ -1,129 +1,157 @@
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EEDD3B47F2
-	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 07:56:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773215772; cv=pass; b=t2CuwYw/ongBlfBYxn8Zgnb5hInM/Bds2x58QtuP7Asd1LTiAXWmTG85ffxo6hcRW5XJASTsRticVdWaOVpTmZgx77aPABP85P3M8LTDu/5SFNRzbfP9BJ01FD5O2r6rcKC5eUDU6YMAHd2syFNTR6Deeduxo+92C/7VOu0asak=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773215772; c=relaxed/simple;
-	bh=lAGj6nwkp++G9k/rSCeEKSrGzcAUEaSnQ17uO7koJgk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JJJ5+Ubp258rV6tIeWJVLEkNJWThaW04BYb8V6oo6y+Rg3Oxb4jym/18zkUqD/7ZPLWakmbLC5Qe4Ngq5fO34FNIgUDr4YlqoAACGVC5AktrMDLh0PjTbJpps31abn+J2g/g2qD4Il/LT5mybNwmEI8NmrJ3JoZ46gJrneAi/9s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IjpNT1Sl; arc=pass smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 154561A6838;
+	Wed, 11 Mar 2026 08:09:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773216594; cv=none; b=LP/vdf1UT6vBauU6NVKiKU0jSiRL/L8AcUx69XoOHg2QckIBHtpWagE4oYdD6diFYFlsbXxP/2BQrCh7QrOlqlqf4uFUm6h/nVTHCgwkOythv3d7xsn/aWy8rZfFNQVj1byfMX2kYJj+YiKKz4489Kfw0fTSUJARXAdoxAU/STg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773216594; c=relaxed/simple;
+	bh=Ev+RupPFx3vFthuT0C4F0wFHzLiDXKrbll1RNkDERZo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mDZ1Qx7UzQ9vR+mQlt9/UE2S85Eyx9r+0+1bgIRrZJ87BMfKctWl5Z8r7Mr374qngzz1rK4FedQLQArKQrpvUrtQTloUgAgh4q9TMYrknfPNfMSAECk6xxGaPWmosGnhZQ/UG50GWOWD7XCP/eOiQhNW+my/rN2+IVrD0/ITL8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YLFscuv2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IjpNT1Sl"
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-799001d73bdso21264547b3.0
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 00:56:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773215768; cv=none;
-        d=google.com; s=arc-20240605;
-        b=khyeyceG05DIBwgw5bIRGJz0XvAJJtzQKW15KlTRB8TCe8veIZIBy1O0Tn8i2DHIAa
-         zP4g7Z0dqoCoB2rR/a8rS6LiEVbFYqZaN4OO1/psN5JEJ+/1DBC9g4ijL4EQ31RJLGKQ
-         Mzz83xIwUqsZ5Ow+zGgBNPr1Nfo85E0r2IlnRCNrnfAK3NFrn02YlnaBMKL0NWFp4OkK
-         ith38dSY7y6b8yejHpSd1prlxsA7n2h8hVCyki2vHFil5HRAmifG3ylZSOAv3ueqm9QB
-         HKz5yFz1K6rSGSQ0Q3/Fq2i8u9qHlO8MudHg/bUGT0PpB7bnMRv3U3VpjlSDi48Zz27N
-         yqtw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=+EtDzf/2qX0/pcxNehTrmnkTztfsdGIQ04FR+hwnLr4=;
-        fh=ypUiCrC46WBTFeGR5vqpkLeSJSTW7CjijvDTiDd+Hug=;
-        b=D+5BRQILa7Yc1HC3+5xJSAGDJs3p3B5gziEx0qrL5KqrsmC4eDrQCVMfNEWMCTE/2u
-         0S9j7bPA2fo0bR3oFOVEKtAJsUzIYH5eVtdKtP9gK0bVwcSlVHlVqbCdMKgMEJTcmXwd
-         hA8qcbFUnNiPrVDpQXNcDl4Rvn6xgH4gpS/n+SaM6GI4vHu2EYna0CGAp/Qp91V2CNKX
-         0a9Y2vVkvbfrxlEFgir3XM5UeXzDSE2kC9VN77qrkOqxSsE7+DS5SJTtK40XBHV7HMzI
-         iFn0yL/2YYbYMXGGQASbjphfnsfPQJm7IEOFBehKluP3A03HupetIwjr8qugCi1i2oOw
-         s4Ig==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773215768; x=1773820568; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+EtDzf/2qX0/pcxNehTrmnkTztfsdGIQ04FR+hwnLr4=;
-        b=IjpNT1SlxlKtc9YXp5U0aFqnpqWyK0m+bOzVnDOkyI+zsMmbyytD6uiu0UiZDZ0KJt
-         pp1www2jjQdTjkJ9NYwrP0sSWl0njQyDKN15odjgWfyNK5/4idOOKVFhLqGi6TKDpTpR
-         AcxvHCeWjn6KfkD33/dOE3DNzeD1RapOYtDTkoAQ8VXiuMIqcU5zv81s/hRhxGUpHI/R
-         gVldmfbldF5jQxCrtbC6iXx6/RZ53Pjtj5NxuPzGI9yTdX6IiBcvDkUZqP0mBOlPnVzM
-         aEIikeSQibtBVzsMSeg2p0eKzUDOzptOvJSRa6f7o+zXRcnW2j3MitLfGovp3Yk+gd5U
-         vJKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773215768; x=1773820568;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=+EtDzf/2qX0/pcxNehTrmnkTztfsdGIQ04FR+hwnLr4=;
-        b=s8cjGEoh5Ad9oIsSaDeXvgB15iq+dWyYKLDCmyTqSgT7v67mzyl2rklnMpWrDRr8kg
-         vieKvz3SDN8gLaUTLboohRTkTdkAExXDBd7Vogf9yAYfyX4DCF2TwyoXSq9gZs1EeMy2
-         CZuYPlDb5IX6Qfl/pv+oLBs0dzqY6FHkHwuWTmoIH55bhGKalD/0YRhzTnpz+JcOhQqQ
-         s3sDjvr7x9q5uxYQgBrM8vNYQ3hUQdwIrcxBmv9MFXgof2Py4zw0kx9VvsMh/PZOaoBE
-         +mRomPujXWEiMrDtaeuK1Sti8FiL8qjUFU09l1rHlG23HslWpEs2RJGZaz/gUvjw3Plf
-         4e1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXQ1vzHYC+UdN16PXsyD2PDwu5GUM90daitJ69p7jD3b1P6lEgBJ7Z148cIIPPTEJ4bdGs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKbqBVgvnG8HeT4oNa+q3xA/qsDHUuYgqLkIAUCxdpEqew+z8T
-	grTEWlwvwUCEVkUqyuaKAcuEwWlK8qbY5p2Bmdx9Em/3H1REabpvr6xBDm1zmB5fVj86Eujq1vz
-	42nUPr2emLG/2kWolIaxaz2FKw8LBa5c=
-X-Gm-Gg: ATEYQzxgThAdfabcLbw0x8HJeY8q4hVwGXSFlKgtIjXvzKV/kR3C0n1XrMWSs72F5Gy
-	PZ49+C2JM5SSQ5CiplcSM3TbIoxXjxBmjhzNEvjnMtJbPf6uImFmtaqlewmIR9NSafRW8tA6//B
-	3v9qXeOndiCcDjKU0al1YL7EaUF+4N0SUeNpbqB1BBobyON7cYw/+EYN3U9CYpITCqrpis+e+Fh
-	femss8OtenNQaPB1+ClqNPy3L2hUZaYzMLkRs9W7ozWKbaJ69oFGFw72jgadLeBqx28ao6d105f
-	hlMmdlHWJXLwQJ2pkmsqggR3G2hF4g==
-X-Received: by 2002:a05:690c:2704:b0:797:f13a:c571 with SMTP id
- 00721157ae682-79917fa5df5mr12806597b3.58.1773215768327; Wed, 11 Mar 2026
- 00:56:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YLFscuv2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EF97C2BC9E;
+	Wed, 11 Mar 2026 08:09:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773216593;
+	bh=Ev+RupPFx3vFthuT0C4F0wFHzLiDXKrbll1RNkDERZo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=YLFscuv28t6jNAc42r7OavZhQeZvSUNStqr4Q7RFSOURjF6F4a+qrM3dZ18dhGWkF
+	 X3Q4wgVwkGzwZkdxpQkPksaXlYEI8vwMn3WBd/AVKeZc7kSwFZpu8HDj2NZbjH1jbC
+	 WKOonDy7O7ApDlcBH0pscWiPe+jDN7F4/VFe/CzIqaHf99gDDkESZx8I6jSIUfK7mB
+	 vG88BGnoCznJZICI1miWkoS/rI+HFCZyFlD9hIRhLm8jzSqpvneI9JCyoGKq0Purxu
+	 R+xWoOWF3J7Vf2YLrhnt5/4zPBse4v00ORNEvkDANUHfMoFc/3iG9OcAInOkA21TE0
+	 J0V3p3DYTNXtg==
+Message-ID: <ffc64d94-d3c8-4a51-b6f5-9da9ff633856@kernel.org>
+Date: Wed, 11 Mar 2026 09:09:38 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260310102145.857810-1-sun.jian.kdev@gmail.com>
- <20260310102145.857810-2-sun.jian.kdev@gmail.com> <f0d1eb34-2d6a-487a-b486-3dc64c25df6c@redhat.com>
-In-Reply-To: <f0d1eb34-2d6a-487a-b486-3dc64c25df6c@redhat.com>
-From: sun jian <sun.jian.kdev@gmail.com>
-Date: Wed, 11 Mar 2026 15:55:58 +0800
-X-Gm-Features: AaiRm53EkzwZReT_wk7QVC-Ygi0J86_yaQ2oUG5Ism0on_mG6PZTKx-yHNgXT0M
-Message-ID: <CABFUUZFQfoVRJ6HJqadHhWNj4FVOk=snuSmuEepMD6jZfyrpJQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] selftests/bpf: Skip bpffs debug iter checks when
- unavailable in test_bpffs
-To: Viktor Malik <vmalik@redhat.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 04/16] mm/memory: simplify calculation in
+ unmap_mapping_range_tree()
+To: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
+Cc: linux-kernel@vger.kernel.org, "linux-mm @ kvack . org"
+ <linux-mm@kvack.org>, Andrew Morton <akpm@linux-foundation.org>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
+ David Rientjes <rientjes@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Alice Ryhl <aliceryhl@google.com>, Madhavan Srinivasan
+ <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Janosch Frank <frankja@linux.ibm.com>,
+ Claudio Imbrenda <imbrenda@linux.ibm.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Jarkko Sakkinen <jarkko@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ =?UTF-8?Q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
+ Todd Kjos <tkjos@android.com>, Christian Brauner <brauner@kernel.org>,
+ Carlos Llamas <cmllamas@google.com>, Ian Abbott <abbotti@mev.co.uk>,
+ H Hartley Sweeten <hsweeten@visionengravers.com>,
+ Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
+ <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Leon Romanovsky <leon@kernel.org>,
+ Dimitri Sivanich <dimitri.sivanich@hpe.com>, Arnd Bergmann <arnd@arndb.de>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+ Vincenzo Frascino <vincenzo.frascino@arm.com>,
+ Eric Dumazet <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>,
+ "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Miguel Ojeda <ojeda@kernel.org>, linuxppc-dev@lists.ozlabs.org,
+ kvm@vger.kernel.org, linux-s390@vger.kernel.org, linux-sgx@vger.kernel.org,
+ intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+ linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ netdev@vger.kernel.org, rust-for-linux@vger.kernel.org, x86@kernel.org
+References: <20260227200848.114019-1-david@kernel.org>
+ <20260227200848.114019-5-david@kernel.org>
+ <6c6bf2d6-bc0f-4721-a57d-6b9c5f2a5c66@lucifer.local>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <6c6bf2d6-bc0f-4721-a57d-6b9c5f2a5c66@lucifer.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Mar 10, 2026 at 8:32=E2=80=AFPM Viktor Malik <vmalik@redhat.com> wr=
-ote:
->
-> I don't think this is a good approach as it will mask genuine bugs that
-> would cause the files to be missing/inaccessible with one of the above
-> error codes.
->
-Hi Viktor=EF=BC=8C
 
-I don't think this change masks bugs in a silent way. It prints an explicit
-INFO line when maps.debug/progs.debug are unavailable due to
-EPERM/EACCES/ENOENT, and it still fails on other errors or unexpected
-iterator output.
+> 
+>> -		start = ((zba - vba) << PAGE_SHIFT) + vma->vm_start;
+>> -		size = (zea - zba + 1) << PAGE_SHIFT;
+>> +		const pgoff_t start_idx = max(first_index, vma->vm_pgoff);
+>> +		const pgoff_t end_idx = min(last_index, vma_last_pgoff(vma)) + 1;
+> 
+> I guess since 'end' is by-convention the +1 of last this is fine
 
-> If you really need to execute the rest of the test cases in the file,
-> how about you split the test into subtests and then just add the failing
-> subtest to your DENYLIST?
+Exactly, the calculation itself is not changed.
 
-Proper subtests  would require reworking the current fork-based flow to
-report SKIP/FAIL to the harness, which would be a larger refactor than
-intended here.
+The +1 was previously hiding inside the "(zea - zba + 1)"
 
-My goal is to keep this as a minimal change while still achieving the main
-purpose of this test: exercising the core bpffs operations (pinning and
-renameat2 semantics), which are independent of the debug iterator files,
-and clearly reporting when the iterator checks couldn't be performed.
+Thanks!
 
-Regards,
-Sun Jian
+-- 
+Cheers,
+
+David
