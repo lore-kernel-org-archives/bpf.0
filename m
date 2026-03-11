@@ -1,293 +1,161 @@
-Received: from mail-wr1-f65.google.com (mail-wr1-f65.google.com [209.85.221.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86363285CA2
-	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 13:05:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.65
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773234353; cv=pass; b=WGUAKVbcy6thJV6UDeJGlYLeKSBNCfz78CovEFBOC0UMy+SyCDFe2RuchngR+vuer6h7ZnEGVtRpPiHVV5fnNdBVzc2us7I97atwhsAYImsiy5+ZsPg5aPtewaYefGmg/GVflZPwMacjbH2ZNz91o8pplK9XM0PrGehnh6/0gOs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773234353; c=relaxed/simple;
-	bh=3bzwQvQNbNdjpKlkbe91BQtvTMpe5tvkxTqgSSp0cBk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Kj6XlMEkKSuoaPLWNA8vyUTE/6kZ5BCgGf9s1UVa5YLxATQ7D7iYI+/GXWxIVSKozwkLo4creF9m7YoDftLklkhP2QghKaO97l3pjEzTi3YKiqZ+QAC/e/xF9ibmqoHlmzDrknzuMuvBTH+QuTGBVKq1zFlYHBnFN6/3pH6egqY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BmjsnKzR; arc=pass smtp.client-ip=209.85.221.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF2528507E;
+	Wed, 11 Mar 2026 13:08:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773234487; cv=none; b=pirMBszawCXNK3gXZpU7/5Fsbwjhd6ADFJDS1wdk9KWFTCsSVFqgqKfzqwpkIXtxq8aH37AtG43paMRQD6mvpYFVWSWYqbtSwA9ETzuOYVefLNXtyNORRuRmkd1x2d0nIOgGBrRFQxEHWJqaH1bXKh1zZPvLpZAYBBgvYrkMQiI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773234487; c=relaxed/simple;
+	bh=8E+RklUDOEWGr3ASBSUDYmUqwJJzbYjGPEsS2dVw21c=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=rOH2CapqnthCMvKe2byU5EarQI0cxHwWnu3JX0/VBKp6L84oyAGR/cBYGXz/YaR9Gm6lOfbDW8URtocf3AZCJHDZ/WIZjZukh+7/1F63WQXVH4xSNev83xp9cSRNjZTfkUU3LtcOV3q2M8kK+pXRTJ+wJFHkdt4gAKpNeoUetBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=ddBrJh5K; arc=none smtp.client-ip=148.163.152.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BmjsnKzR"
-Received: by mail-wr1-f65.google.com with SMTP id ffacd0b85a97d-439afc58ac7so11425195f8f.0
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 06:05:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773234350; cv=none;
-        d=google.com; s=arc-20240605;
-        b=a4Rv8v3EgaZQvTop/VWRahUbiR9Sr8OiSoqb/2qmKmIp+gpP5WN/jPMD6qGWH2tlcL
-         xnPmetM/rLMksuwNA3/OtVn+wdsViw6fJm54c0xxYsxkSF7BjTVbd0NHOQ1n0QqM91o/
-         ze+oc5SHHGwEVJAqQOTnpIwWtD+QAysBK+y5wxNJy1JnjUDCdhjkYYxJtCJO7VVrfHuF
-         3eTuxRr+SWrHgeoKW7ddfH5b2vmztmqAu7F8/O0Ptov8B1zmivQQjT1bYMxk5NcdexW2
-         HarbDNtBvJ5RcMyhufU2zkXJ4yRCEyqQuhs3cf8nX7UYNLghZDKOMW+nNlVmHXoLdhE3
-         OVbA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=zrh5nPFE38opBfMzcqqOLjEeog1IuM1EQ1JN98MnH90=;
-        fh=MVAHrx+iXeDGlibv9RdHmOQ5PDQuKCSvjw4pj79k9y8=;
-        b=c3L7gO1qA+tv39IAVp5a1jUQfo7uJbQcXMgp9TM3UGR9O0pvNZMTefVwVeY26nds7w
-         RnwJxku0TQ5PsIfBhmcbKm6EU+x5rAd++Ljl1YTvQBMnmwA/8pOb7oqfjfcmdoBJs3+d
-         1OUvYZT4yw9TUtTZYJPZP8OiCWXvKnVXuZXGqQanAXlukpLvukXsg+caGtB0qyBGmPjO
-         iQoQPWFecotj7UvxBu/9kPCHc56XRvHHIupBwIBjrgSLPLZO4bPxsK8zg53995AcR9xo
-         PEZtjrqMtyGl3O84o5e0meCU9vaEFjOR1R4qGaX4QJl0xujfx0LLuSs6Z2DJPOe8+KYY
-         j4tw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773234350; x=1773839150; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zrh5nPFE38opBfMzcqqOLjEeog1IuM1EQ1JN98MnH90=;
-        b=BmjsnKzRE71uEdf1nHcqXkp+224yNoAVw1vrTr0cETrZr2FGKcN/z8MiqFPRlkp2D6
-         Fa8RufsnONWQtqEFnRTS9yR46SW4Fob/5iopR3wjy8SZmA9elbGm/Lqk33MCOEeZa8lX
-         S2PJ2L5WXwjV8S9S6XnpP/yY5HpFqnyEEXJWTfer7vgrqY/x2mvZeUqu9ujXHr7zXF7M
-         Ma0eIq4chKag1r/d7uTX/DW0uq42u1iudhXivQsmMHL3Eprmg76LdIcLarNrcu44ikPn
-         nv5/bA3Hg6yqy9ym1u4kPdDN0ctv46cD4coGQXOWqDvrNqZ9ihxxMJrY3JnrVGQRnBDd
-         NMOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773234350; x=1773839150;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=zrh5nPFE38opBfMzcqqOLjEeog1IuM1EQ1JN98MnH90=;
-        b=Sz7TOlqiYNgoGRw+VUSD67kU8TAe6d+2I4MwXUl9WSt4m+gSi19hr6mqCd4PfjpKtJ
-         QiTxZFQnFUJSa6TwJDt8+xq981lI0fUJ10UxMeNQD72pDdwmjryv+Irf95k+7768X4xN
-         irGH97ZRGtrN/RW+UpdmJ6nO2pxq7Y1hOUwzKm3GuQ3n5WN1qMOKfbyuhl8D/vU5Z0RC
-         qHUmPw6ymXdJwPWrCTX8fLbFt+afb0M7ry245N0sS5YGf+eKZk405QAZMw31Nz/D9mag
-         MWePyUXzXU/BlnY3ZS2Moa+KREBCS04NYfO+BBurCYCD9AJmE3ncjl47yzt/SVQty2XR
-         HwqA==
-X-Forwarded-Encrypted: i=1; AJvYcCWOfitefoeO3vtALzhYqrmT94Vh3H88auH9kHjIJjSpW6rplZq0BuhAGlQHchCz8IjbMIY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyC6bk9XJLUpfEZCL75lVh75C6VyCXbQ6bRIbFLhdWXO8FqS+kG
-	/h4fbuLUeM3wO46J9cT5fKbbQZCKN1D0CRZWrxGgPcSipqzZgK2CdMF6HDphsueKz6B6bhjSDuO
-	qwYpE/jOSgO1z8+SWK6c1JiH+KMFcfug=
-X-Gm-Gg: ATEYQzxj+K1RPKunqcyTqjipy38kYkELPqm1lX4SkUqnBNmIZlw2clS6+TBtYjrXKIY
-	5MY4+wJ1BttnGI+uHATH1RKms/RDLG0BQlTo9ixbKpj+88R+gp9ZHZYK3AiU8nWcfYm/JsnLVch
-	HfZ5yuF2H9Lq2SOO6yywmK4VOE8VrWBKm2+wTTnY1r+A9LjyZ9JjBtSZp8uLotmWQ2agdfSQJKx
-	cGI1Wjb2403tjcWsbcjpdiKOUIGiyrq0bdt1aFgqtsQf8c6Mby5wSyvs09WrBrVjT0S6po79RIE
-	+xty7A8Gk02ZYRqNQ2j5PPyuveo8BtGGaYWT4/sHseq14IB7X829BaXgrZvT
-X-Received: by 2002:a05:6000:613:b0:439:f612:e6b4 with SMTP id
- ffacd0b85a97d-439f8227b4amr4707667f8f.55.1773234349614; Wed, 11 Mar 2026
- 06:05:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="ddBrJh5K"
+Received: from pps.filterd (m0354655.ppops.net [127.0.0.1])
+	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62B9TbZK983285;
+	Wed, 11 Mar 2026 13:07:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	default; bh=SrAeFWtveCtEjyE93SCzkC8c47nJq1JLGeA5lKkS2Y8=; b=ddBr
+	Jh5KHnMGBWqk+k3l/jEWGCFQC2jacrZpcM/i4rdK1IoC9xUVz8RrlbC2azQq4Om7
+	G/kHIsd2LhFgg7dv61Pbfo0LMHJDihuM1l5SmtUxVQMZFHX2szlZWZH6F0PdhPkk
+	vPoRaMl71fxdSvTWoliuIIiDveOwrrUpQZOm5iFisHn9TIMKi0KyTD3iCz7lDa1t
+	fSzdl2zVsrju3kzIOp3zbCy+GTCWU4krZ6+e+ZAyxxgGg42HJ+e2BGEdKmdaxPlX
+	EL681UyCPZkyEyprR4lkAr7YpYrlZtrOuH8Znrzdp7fbjawQ15KLJV+s8vHP+snf
+	X8eC+MRg932SktvdWA==
+Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
+	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4cu5tf8nrq-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 11 Mar 2026 13:07:20 +0000 (GMT)
+Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Wed, 11 Mar 2026 13:07:14 +0000
+From: Slava Imameev <slava.imameev@crowdstrike.com>
+To: <eddyz87@gmail.com>
+CC: <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <davem@davemloft.net>, <edumazet@google.com>,
+        <haoluo@google.com>, <horms@kernel.org>, <john.fastabend@gmail.com>,
+        <jolsa@kernel.org>, <kpsingh@kernel.org>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-open-source@crowdstrike.com>, <martin.lau@linux.dev>,
+        <netdev@vger.kernel.org>, <pabeni@redhat.com>, <sdf@fomichev.me>,
+        <shuah@kernel.org>, <slava.imameev@crowdstrike.com>, <song@kernel.org>,
+        <yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v4 1/2] bpf: Support new pointer param types via SCALAR_VALUE for trampolines
+Date: Thu, 12 Mar 2026 00:07:11 +1100
+Message-ID: <20260311130711.33966-1-slava.imameev@crowdstrike.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <979c7539ac475b3c428f609066e947844b6dd8b0.camel@gmail.com>
+References: <979c7539ac475b3c428f609066e947844b6dd8b0.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1773170190.git.grbell@redhat.com> <a46d40ac2b56f96b3b6e953847ad4719694d68eb.1773170190.git.grbell@redhat.com>
- <CAP01T75MFfp8oBrogRvm+BRh7=fvm9pP0vTvNm=RW3r3=WDB7g@mail.gmail.com>
- <CAMB2axPT8L60FGN5wben-pa73toOwLcD8cuGqbNUg6AB57ePYg@mail.gmail.com>
- <CAP01T76cPcToNwu_NMFU6QDO8qZB+n9WA0_qxSzrasZV-=G-Qw@mail.gmail.com>
- <CAMB2axMTkN5R3+JQL-2L0fWAqzOQOFOxp7+WKF4DLUF-FqgiPg@mail.gmail.com>
- <CAP01T75dDL5pud_NmCmEapw6p1cZss9LTfh6sBxdxYinVQTP5Q@mail.gmail.com>
- <aed1731e-986e-484e-bc16-682b025d26cf@linux.dev> <CAP01T741UV0TsvxxXRAT-zYjKoHwcpsr2bbMS-eFnxytcng7Kg@mail.gmail.com>
- <c04a0697-393d-41ec-ba2b-6b90f66097ae@oracle.com>
-In-Reply-To: <c04a0697-393d-41ec-ba2b-6b90f66097ae@oracle.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Wed, 11 Mar 2026 14:05:13 +0100
-X-Gm-Features: AaiRm52X_G1XSTHNbjhRz9jQrxVd_-sc7R2chbt3NJlMRu-UpEOgMOJ5srV7i7E
-Message-ID: <CAP01T77dE2podOUxuyF-9cOi-upv9qDWO1e67gGqs=g2F6X8+A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/1] bpf: Fix BTF module cleanup race condition
- in struct_ops
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Amery Hung <ameryhung@gmail.com>, 
-	Gregory Bell <grbell@redhat.com>, bpf@vger.kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: 04WPEXCH013.crowdstrike.sys (10.100.11.83) To
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70)
+X-Disclaimer: USA
+X-Proofpoint-ORIG-GUID: CcdMPNc4NXEkZivWkmHMQ8qkEE15fTCU
+X-Authority-Analysis: v=2.4 cv=ANV8z2x0 c=1 sm=1 tr=0 ts=69b16908 cx=c_pps
+ a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
+ a=EjBHVkixTFsA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=T2KQ53IYiC3MXPrxx8bB:22 a=vDKVRhTs-M86Ea50iKLw:22 a=pvr0aSInfWstAloVo1wA:9
+X-Proofpoint-GUID: CcdMPNc4NXEkZivWkmHMQ8qkEE15fTCU
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzExMDExMCBTYWx0ZWRfX/V+SIEDRrIH3
+ h0B1M2lbaQBFT+v3Dg0wWy2BTGQXEZTuW7b4NDCsxWl9xb08kla2l2yZc+jVYgqzk9NpbOTtib0
+ Z1cjWH3uaYHv6a8rH3HZENZfN6p7zb+gImb3xZTTwNGauYqJXGScdMmvYDY3ooMrVVV+bxpsdkD
+ kAkJAtlyAd52JuIVeXHz72Gomb1C/fCy9lPL3I3Apl5clT2gPEdW6B60+oW4Wi/Pi5aR6in/Vaa
+ roqtfC4f9FWbPvrGZR1HgdZT3sXt7SMBgERzyZ3cFbyhM4FYne/gL/24Xia+LtXt/qNI5QiYRIV
+ nGHi4BAkHj6lP3dHxNxTnaFKYTGYqmsyN2qIxZdRQmuDBNstGVAEvOa2Un5BIXxpL/oNARiX7FI
+ etg8So2gFqC4pRFdY0ahNWUS4kXKU4QxzCLmcgh1XGk7VOqPrEvh7ahMfYK1XB2gRH9HuJfYJQD
+ oiMog9E2xIj+9qEZHpg==
+X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11726
+ signatures=596818
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 suspectscore=0 priorityscore=1501 spamscore=0 malwarescore=0
+ clxscore=1015 lowpriorityscore=0 bulkscore=0 phishscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603110110
 
-On Wed, 11 Mar 2026 at 13:22, Alan Maguire <alan.maguire@oracle.com> wrote:
->
-> On 11/03/2026 09:30, Kumar Kartikeya Dwivedi wrote:
-> > On Wed, 11 Mar 2026 at 01:20, Martin KaFai Lau <martin.lau@linux.dev> w=
-rote:
-> >>
-> >>
-> >> On 3/10/26 4:35 PM, Kumar Kartikeya Dwivedi wrote:
-> >>> On Wed, 11 Mar 2026 at 00:17, Amery Hung <ameryhung@gmail.com> wrote:
-> >>>>
-> >>>> On Tue, Mar 10, 2026 at 3:48=E2=80=AFPM Kumar Kartikeya Dwivedi
-> >>>> <memxor@gmail.com> wrote:
-> >>>>>
-> >>>>> On Tue, 10 Mar 2026 at 23:38, Amery Hung <ameryhung@gmail.com> wrot=
-e:
-> >>>>>>
-> >>>>>> On Tue, Mar 10, 2026 at 2:41=E2=80=AFPM Kumar Kartikeya Dwivedi
-> >>>>>> <memxor@gmail.com> wrote:
-> >>>>>>>
-> >>>>>>> On Tue, 10 Mar 2026 at 21:21, Gregory Bell <grbell@redhat.com> wr=
-ote:
-> >>>>>>>>
-> >>>>>>>> When running BPF struct_ops tests consecutively, the second test=
- fails
-> >>>>>>>> because BTF object references take longer to be released while t=
-heir
-> >>>>>>>> associated module is removed from btf_modules list immediately
-> >>>>>>>> during module unload. This creates a race condition where the se=
-cond
-> >>>>>>>> test retrieves the cached BTF object but cannot find valid modul=
-e
-> >>>>>>>> information, causing btf_try_get_module() to return NULL.
-> >>>>>>>>
-> >>>>>>>> Fix this by modifying MODULE_STATE_GOING handling to wait for
-> >>>>>>>> active BTF references to be released before completing module
-> >>>>>>>> cleanup. This ensures BTF objects are properly cleaned up from t=
-he
-> >>>>>>>> cache before their module metadata is removed, eliminating the t=
-iming
-> >>>>>>>> window that caused the race condition.
-> >>>>>>>>
-> >>>>>>>> Signed-off-by: Gregory Bell <grbell@redhat.com>
-> >>>>>>>> ---
-> >>>>>>>>   kernel/bpf/btf.c | 7 ++++++-
-> >>>>>>>>   1 file changed, 6 insertions(+), 1 deletion(-)
-> >>>>>>>>
-> >>>>>>>> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> >>>>>>>> index 09fcbb125155..81c9f46a7bb7 100644
-> >>>>>>>> --- a/kernel/bpf/btf.c
-> >>>>>>>> +++ b/kernel/bpf/btf.c
-> >>>>>>>> @@ -8382,7 +8382,12 @@ static int btf_module_notify(struct notif=
-ier_block *nb, unsigned long op,
-> >>>>>>>>                  list_for_each_entry_safe(btf_mod, tmp, &btf_mod=
-ules, list) {
-> >>>>>>>>                          if (btf_mod->module !=3D module)
-> >>>>>>>>                                  continue;
-> >>>>>>>> -
-> >>>>>>>> +                       unsigned int timeout =3D 1000;
-> >>>>>>>> +                       while (refcount_read(&btf_mod->btf->refc=
-nt) > 1
-> >>>>>>>> +                       && timeout > 0 ) {
-> >>>>>>>> +                               msleep(1);
-> >>>>>>>> +                               timeout--;
-> >>>>>>>> +                       }
-> >>>>>>>
-> >>>>>>> This isn't the right way to address such issues. Your diagnosis i=
-s
-> >>>>>>> correct but fix is just papering over real problems.
-> >>>>>>
-> >>>>>> Second that the fix is not right.
-> >>
-> >> pw-bot: cr
-> >>
-> >>>>>>
-> >>>>>>>
-> >>>>>>> The better way would be to block the discovery of such BTFs once =
-the
-> >>>>>>> module is unloaded.
-> >>>>>>> I.e. once we return to userspace after module unload, subsequent =
-calls
-> >>>>>>> to obtain an fd for such BTFs should not succeed.
-> >>>>>>> If someone is racing to look it up while the unload happens, so b=
-e it,
-> >>>>>>> they will fail anyway.
-> >>>>>>>
-> >>>>>>> I would use a bool flag in struct btf, set it inside the critical
-> >>>>>>> section at this point with WRITE_ONCE, then test it early in
-> >>>>>>> bpf_find_btf_id and bpf_core_find_cands with || in !btf_is_module
-> >>>>>>> condition.
-> >>>>>>> Using READ_ONCE of course.
-> >>>>>>> Also, we need to add it to btf_get_fd_by_id, so that once convers=
-ions
-> >>>>>>> from stale IDs to FDs don't succeed.
-> >>>>>>> Looking at load_module_btfs(), it already handles the ENOENT case=
- when
-> >>>>>>> id lookup succeeds, but fd lookup fails.
-> >>>>>>> So for stale ids it should just skip over their errors if we retu=
-rn
-> >>>>>>> the same ENOENT as the refcount_inc_not_zero case.
-> >>>>>>> We will still report stale ids, but not allow their conversion.
-> >>>>>>> We could filter id lookup too but it will penalize the common cod=
-e and
-> >>>>>>> we need extra radix tree lookup just for BTF case.
-> >>>>>>>
-> >>>>>>> For me locally, these changes seem to address the problem. I coul=
-d
-> >>>>>>> send the fix, but if you would like to take a stab at the above
-> >>>>>>> change, please go ahead.
-> >>>>>>>
-> >>>>>>
-> >>>>>> I guess this is worth a fix because it makes btf_get_fd_by_id() le=
-ss
-> >>>>>> likely to return to stale id. However, there is still a small wind=
-ow
-> >>>>>> between btf_get_fd_by_id() and btf_try_get_module() so struct_ops =
-map
-> >>>>>> creation can still fail.
-> >>>>>
-> >>>>> That's fine, it means that module unload is happening in parallel, =
-so
-> >>>>> it's racy and non-deterministic anyway.
-> >>>>> When the user controls the module unload though, they should not be
-> >>>>> getting stale BTF fds once module unload has returned to user space=
-.
-> >>>>> At that point all associated artifacts shouldn't be discoverable.
-> >>>>>
-> >>>>>>
-> >>>>>> As for the solution, there already is btf_mod->flags. So maybe ins=
-tead
-> >>>>>> of adding a bool, just test the flag?
-> >>>>>
-> >>>>> You mean struct btf instead of btf_mod? I don't see the flags field=
- there.
-> >>>>> The btf_mod->flags won't work, it's already deleted and freed by th=
-is
-> >>>>> time, and requires us to go first from the BTF to the btf_mod.
-> >>>>> So it has to be in struct btf.
-> >>>>>
-> >>>>
-> >>>> I was thinking about updating btf_module->flags when handling
-> >>>> MODULE_STATE_GOING. Then btf_get_fd_by_id() can call
-> >>>> btf_try_get_module() to check flags if it's module BTF. If the modul=
-e
-> >>>> is already freed then it returns -ENOENT.
-> >>>
-> >>> Hmm, interesting thought.
-> >>> I guess the only downside is that it's O(n) lookup under mutex, which
-> >>> can be costly with lots of modules, and always penalizes
-> >>> get_fd_by_id() for handling race.
-> >>> We also need to repeat it in bpf_core_find_cands and bpf_find_btf_id,
-> >>> where we may repeat it multiple times in the loop, so the cost is
-> >>> amplified.
-> >>>
-> >>
-> >> Is btf->id still needed somewhere after MODULE_STATE_GOING? Otherwise,
-> >> directly removing btf->id from btf_idr in btf_module_notify() should
-> >> stop the discovery.
-> >
-> > I looked at this, I think we will need to reset the btf->id too.
-> > Otherwise while btf_free_id is idempotent (no-op on free id), the
-> > released id can be reused and if we don't guard btf_free_id in btf_put
-> > it will remove it for some other BTF initialized in the meantime.
-> > We can likely set a flag or something to skip it in btf_put(). As long
-> > as the module is holding a reference nothing else should do it.
-> >
->
-> I wonder if it'd make sense to reduce the cost of btf -> module lookup so=
- that
-> we could check the flag in contexts like btf_get_fd_by_id()? AI suggested=
- reworking
-> btf_module lookup from a linked list to a pair of xarrays keyed by struct=
- module *
-> and struct btf *, and it seems reasonable (testing it now). An easy win m=
-ight be
-> to get rid of the strcmp() to vmlinux in btf_is_module(), replacing it wi=
-th the
-> simpler predicate
->
->         btf->kernel_btf && btf->base_btf;
->
-> to reduce overhead of lots of btf_is_module() lookups. What do you think?
+Tue, 10 Mar 2026 11:52:10 -0700, Eduard Zingerman wrote:
+> [...]
+> 
+> > I verified whether PTR->FUNC, PTR->DATASEC, PTR->VAR can be passed to
+> > btf_ctx_access() in the current mainline.
+> > 
+> > I added helpers that inject PTR->FUNC, PTR->DATASEC, PTR->VAR as pre or
+> > post calls to btf_check_meta(). In all cases, the BPF program load
+> > failed with errors "arg0 type FUNC / DATASEC / VAR is not a struct",
+> > which indicates that btf_check_meta() can indeed be called with
+> > PTR->FUNC, PTR->DATASEC, PTR->VAR.
+> > 
+> > If the condition for pointer check is changed to
+> > `if (!btf_type_is_struct_ptr(btf, t))`, these BPF programs will load
+> > successfully with arguments set to scalar().
+> > 
+> > Do we accept this change in behavior?
+> 
+> Kernel validates BTF before loading, see kernel/bpf/btf.c:btf_resolve().
+> Validation is applied to kernel, module and program-level BTF.
+> Does BTF containing PTR->DATASEC and PTR->VAR pass validation?
+> If it does, validation should be updated to reject such cases.
+> For PTR->FUNC, which one is legit PTR->FUNC or PTR->FUNC_PROTO?
+> The legit one should be allowed and invalid should be rejected
+> at validation phase.
+> 
+> You can craft invalid BTF as in the following selftest:
+> tools/testing/selftests/bpf/prog_tests/btf.c.
+> 
+> [...]
 
-That is probably worth doing if btf_module lookup is taking up
-significant CPU time, but I think as a fix it would be too much churn,
-and be harder to backport.
-I shared a diff trying out Martin's idea and it seems to fix the issue.
+Invalid BTF pointer types PTR->DATASEC, PTR->FUNC, PTR->VAR are
+rejected by btf_ptr_resolve(), which is called through the sequence
+btf_check_all_types()->btf_resolve()->btf_ptr_resolve().
+
+PTR->FUNC_PROTO is a valid type.
+
+vmlinux BTF is processed by btf_parse_vmlinux, which calls
+btf_parse_base. Since btf_parse_base doesn't call btf_check_all_types,
+it becomes possible to invoke btf_ctx_access with PTR->DATASEC,
+PTR->FUNC, PTR->VAR in case of vmlinux BTF.
+
+Modules and programs BTF are processed by btf_parse, which calls
+btf_check_all_types and detects invalid pointer types, so
+btf_ctx_access cannot see PTR->DATASEC, PTR->FUNC, PTR->VAR in
+these cases.
+
+If btf_check_all_types is added to btf_parse_base, invalid pointer
+types get detected inside btf_parse_vmlinux, resulting in failure
+to process vmlinux BTF and effectively disabling BPF. libbpf
+returns this error:
+libbpf: Error in bpf_object__probe_loading(): -EINVAL. Couldn't load
+trivial BPF program. Make sure your kernel supports BPF
+(CONFIG_BPF_SYSCALL=y) and/or that RLIMIT_MEMLOCK is set to big
+enough value.
+
+If vmlinux BTF is trusted not to contain invalid types like
+PTR->DATASEC, PTR->FUNC, PTR->VAR, which seems reasonable, we can
+conclude that btf_ctx_access will never observe these types.
+
+Adopting the view that vmlinux BTF is consistent, we can replace
+btf_ctx_access's condition for inferring scalar() for pointers
+from "if (is_void_or_int_ptr(btf, t))" to
+"if (!btf_type_is_struct_ptr(btf, t))".
+
+Otherwise, we need to either check types for vmlinux BTF,
+incurring additional cost, or use explicit checks for pointer types
+that can be inferred as scalar by btf_ctx_access to exclude invalid
+types. This would let invalid pointer types be rejected with an
+error like "func 'bpf_fentry_test_invalid_ptr_func' arg0 type FUNC
+is not a struct".
+
