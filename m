@@ -1,217 +1,171 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F008230FF30
-	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 19:21:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773256910; cv=pass; b=Q0FCoP0HiuU4YB8V+yWpX99klCcm41HbS+izunRG/a+gedLpl3go1hc1+wx+Za6NK+DQvgmp+N4Om4/amadQDSnkbznwiIWQmRaK5cXnfKQEN0eic3l5TgmIapMVUHrKDX/ROQVsVE2JvkOyte2LWGRCvSHRJC2YHWz3J9sIzM4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773256910; c=relaxed/simple;
-	bh=PfDN3H0MtIRwTwaW/WNroMLSH+6j7sDSS6Z5FQKjSJA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ChWhqTGBN719zJ7gtwYTQKvM5W3DoDqa+vxlZNcNha/LXl3sQwhI3imvfT44j+JgvsaGJDI9T0/yHtQ5lubg/PqH/FPpGW6Noe0I5ggtKw4ETRm9GZFyXF9Wd0cGC1Dl+6mCr2z0ZJrZuw7D5v/RFnnTbi59ZrrwIs08CBoXepM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QaDbTpuY; arc=pass smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F4C931A07F
+	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 19:24:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773257094; cv=none; b=db6NI5puZN4pJf71UnWHDCT7Ns0L6HiZbRB60ndH1YjiiNlDtuYNUJBWhehbAqQ3Q4iGWw2QIB2mNtvWRrl83gjnP1ruV+OjJ6QtFo40Lkv3Q/1hk+Cgor8guiLVIJiqtJSHpJ/trbGT8CeS9BMdsjNJVE0lkshBhaUwfanSz2o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773257094; c=relaxed/simple;
+	bh=YO5F6xseRGMb/viupNnNgVMA9K53gz6EhnNZjtbn0lQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=MzWL9xBDa2L6Dl5zexQy583vqZN7oCCKWuqqXWtXpP3ZRcz+lV+q8S3qx1bSlTbxLjtaXjTwpCbSrQZB+4+MNqRBtwqj3MOAXCDKPEWKn0RbY4KEiSkz1XUdFNsPLJbLxlo0C/IJyeVM6BPG3pds/ynRgFtY2oaz8tU829s2TxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=AnDHW3Yr; arc=none smtp.client-ip=209.85.222.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QaDbTpuY"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-35a07ed3ebdso88926a91.1
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 12:21:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773256908; cv=none;
-        d=google.com; s=arc-20240605;
-        b=UnsrVhsuitrz/kls21iz7omBQoV/7lSrMXwIvJMTVdIfEvOhG7RPouWhpVL8AM8Frh
-         AdeyXgIS7j8hOC5AeeGKzNpvYDGWUsWnEP3RQRHa2yjicnevq9BjGAemNDF+a2IKHLVz
-         83H+RLsXat/CFgRWKroPFHKqia0+IAXDTAMzuSiMXKuUNE9t7hw0ddRhGWdxYtcyTgvT
-         IJtXaMLFfm+bOyMSYnGzyrGofGRFW6yVesL4Bv1uvhhdQ/Pf2Bl2MPCPHZ5WYGxh+iOq
-         wd2irpTFHt7GnUnkGrWXf6CMl3zijekzcWKDAbxcvqRBZLGk9/6DLSPq+asVZ3pJdZ+R
-         RKCA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ra0CAVuCzs/P1sfTzad2r9k485GOkvfEpIrrqXxEkvw=;
-        fh=yXExmN6nmBVgtcdu4YUlOAAuPo66azH8sT5BOeKaxZ0=;
-        b=XJAEj8lNTbYpPgRZf3YrKw7Le8Gz21ORzYcg+VY78t9uqKSrfoGwq+oAWqKFQcnh5x
-         F81IIFqypQfJWOL6hHnWwrMvwdSK949pb6cFQnh9VEhQN+k+DGFXGXJE/XHPRRot32iu
-         U4sG1m/GdbQYX5SayY/zMWA/wJXYn2lERlHMstTklGufmXAttpMggpt8XfVEDSMhqB0H
-         S9Z65ENPAbznfkwIVsOSI0okeOZdRopPHYR/NkA7vhL/YGvwGJL/E6p+voVD33glieBT
-         x1PZPhJ8ed4wlLAvnUiV9yYX8PoqhxyI3uFtGR3c00OdW4fDmp9P73c3HGr9EtV/hUhF
-         HkFw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="AnDHW3Yr"
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-8c9f6b78ca4so26055985a.0
+        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 12:24:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773256908; x=1773861708; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1773257092; x=1773861892; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ra0CAVuCzs/P1sfTzad2r9k485GOkvfEpIrrqXxEkvw=;
-        b=QaDbTpuY3uw2UyPbubQP9BDGn+9/b8H4fjvB+BKbVAPAop9JueCuTC6Ah4U1iGctY9
-         d/J0eGy9RNc5dKqBWOdhVUduec5iX2img/gDhwzZDv+oGPaMPvpBv8LFd/kr0JBfnz9Q
-         vFYOjRVBECBO+WvtrfpHHj6ZbTMowukqGyydeMzG/tY0k6BxPSTCsvEUUFrXY4iyG7M4
-         J4KBCHlDCH40/1ZuPohBoMM1Bka07+3ZW8mTbB6EEBLJmq5Ajr628aIBGYOQSW+HH5GL
-         souAwYmdsVUz6kV5h/RR1zKwmxfMCzJbcJfWvXIwjCDuzZv+poAZMDLCPxKF7iLVnPbs
-         EVkg==
+        bh=BNMNg6N3Vd5xctzLVKNk2t9/hKxkYr12RfGTtz13QKA=;
+        b=AnDHW3YrwCq5+BzPXxXYiPA0/8n5/Ky6wH71kgz2lgNeBYyDPYhJnW8jFiBKfXduXk
+         s37a7GYhFRX0Gd5Fr29wUal4P8XwBl8S2KhYwwTzt5/Z3m/DPDxHB3nEW74gVpZiRUz0
+         LW72Kut5GHBhJ8LLGtN/r6EbVsVZgKh34BQ1WEnK+/LBa+UU74AoGW1WhlqP/w2y1AMX
+         O/mC+E6yE1iu6tM8A09sR1DmS5SIWZrKhnDzGr5YztQC2/XXOJx6qtyHsLbI86glXmDv
+         PlCe+mWyGSNoDZEXjh8X2GA+TfyoJ/2ECTc3CfIhPH8lwB9GxY098u7sD9HHWMUkd/N8
+         ayqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773256908; x=1773861708;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ra0CAVuCzs/P1sfTzad2r9k485GOkvfEpIrrqXxEkvw=;
-        b=UbqtGSejU/FEZmPymy6jCw24yDxzoi0WoQmyb4Fm6iR/UsGzs0dje+tmfuFsai3z4f
-         Wu/pNgP6qDQRF+UjPxCNWB7OlAQluawLxbimmbpTKle9WQYpVpsNs3A6KhqIZZgs4Z35
-         lBq3tgzF++6Woi2eoL6U42YTnSgDvKiXvSejH5KLtDYazgQzuIVRLZGN/zY44ZsVuYQ0
-         QSivPiW14uK0IOxPqRRUYOI92L016vqc1W0kzwiZa94jVdxQHIeEERJSSIVWIfYHUqGV
-         XVibErnnmJn3dbKOscXpvb55zHUC0QfPT46gn2xI7XP7U/lameyI8oCsLdN7o+PyFcW7
-         Kxow==
-X-Forwarded-Encrypted: i=1; AJvYcCWupK0m2iXsGqRMqQ5hHKPurnYJ3kmKV+rgPQGiq9JoDb3cO5wr125OXkDbv/TZULWvxgU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4qwPow/znSfFpkKC1GNau23NZZeGAhucTqvOD9TIQTSTxR+U6
-	F3+QkX26qA4DxOaAz1dKqYkgl9NGlIceDSGSaMvcZoqio9dcpWcY66tuuA1eajQJtFvFEbwUWM5
-	weD4ESvbcIP5aR9h05h60Sn8+P7UHvDE=
-X-Gm-Gg: ATEYQzziROsn/dSUDnJ74MHFVEcEX7noDvqQBueRYFBn30xIUe2+CF5SmpmWjaY1N1o
-	bTn4mDRR/nfps1bWHLKNWgTEDTvQXayUtlFh4kn5avv5wlqaM2CtNtpS80/zc8snjRxGv1KzeCA
-	LX6I9wR+TB7er4qHuqcwkOfwpc1Fa+axrvrmLI9JFK0uK+a35PUFxGLPSpXf3D49q2osKGMvKIw
-	7t7vebL0Cw5XrUwErX7D3YWPzPbP/cxc9Cejd3MFy2WIOGm6p+5skdlpwyTTdOy7BgU8b4e0mP1
-	e1mfiv0=
-X-Received: by 2002:a17:90b:1dc9:b0:353:6373:590b with SMTP id
- 98e67ed59e1d1-35a011d4a77mr3342669a91.7.1773256908252; Wed, 11 Mar 2026
- 12:21:48 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1773257092; x=1773861892;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BNMNg6N3Vd5xctzLVKNk2t9/hKxkYr12RfGTtz13QKA=;
+        b=Dsibu8ahoBbApM/2MvEaNNwJB/K4FBQxMV+YQ0qvYH13xnFl8JizqQ1F9GFx6FgEa0
+         2xmAhus9Tu51uqwI6xZIyawVz3ytXSoRwOHmR8XaTPtCGx3kRm13asA+RM0ZVRLVtbVf
+         i+U3f/wkT9RKGSDvt3y1D3rCtez7RD8cv6c4KGQGfEVdEv6kz1RXHDuNYxNnMMggAldD
+         15lUFW/2NFYOq9hLjC2uqLHJSo32zU05xcv48s09b1Q3Yov67dxSdmYIFzJepc73oon9
+         IM4o1ravuzOjf7aGlSkdsILxRTMZH+lbg9Megal/Ib8ljKa8oTRhcKq5jSnB1lbZij9D
+         yiUg==
+X-Forwarded-Encrypted: i=1; AJvYcCWJmanK1D8Jkyt9WESXffCsyU5a292ttJ26PuPiKlOMK9C1GBP5HS3cY3wwEYc3CEW1okY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsZ+dmVGOVJcAbDTvjNt6DWk0OhVsteEzXyAo/r03gS7yqGeAq
+	YuRu38yUl/Lexe45ecHchmKnY9DLSPNQQUj/MbxMQXawr8hFywGw3LEkiYv3DrzCd3+1kbW9cjT
+	GP/Hf
+X-Gm-Gg: ATEYQzwOjZUYQdW411ZJ8WyZHrC42GWC5REi4yRoRxLO7lpBQjU6LfI2OJ9pg6fA4f+
+	f28dGfoXPt24+kq7hOSEYqHuRL27QrQfPItKFTFgxoqfxg1L1MMscrBaV34FkADEZTuHUrvguDM
+	EhQ8T+CRdDSs3v0L/6pOrfbwJnfo5IH0PBHM2N4Y1ENTAqDxkD6ps8e/n3/SXM8pV9Kr93ZFVT4
+	G8oaKPzNwJiYhLnGASJkVyhiiHhpH8G9ldBC0iPpOqDqFGj5hUvmzO25XhaOyZK34vAzLEASLik
+	9Dr25ID/cF/KbbofNzmUmrUyBK3XzEWU4SELBF6j1Tp3GZrR1AAZJ1Rgmrwue8pqD3fDobAk2E5
+	oY995P2CTL+3z9+xluTny1mLZVy9qtITkhgXDuV+5rBE2FMjDQd/o8b2cvtS2+OYP8va3wsAHvN
+	v4Z8l5fUO57xm10hQ95SbHWLs=
+X-Received: by 2002:a05:620a:1929:b0:8cd:8d50:16a1 with SMTP id af79cd13be357-8cda1a9b6d7mr482471185a.55.1773257092036;
+        Wed, 11 Mar 2026 12:24:52 -0700 (PDT)
+Received: from localhost ([140.174.219.137])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cda216b7fasm189964785a.47.2026.03.11.12.24.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Mar 2026 12:24:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260306113630.1281527-1-alan.maguire@oracle.com>
- <20260306113630.1281527-3-alan.maguire@oracle.com> <CAEf4Bza_kJowGmin4Hh2iOpwXZVgNoeGNniidSpZEjRjqWnVyA@mail.gmail.com>
- <128e9cac-c935-49ef-98df-30f3b6cd7822@oracle.com> <CAEf4BzZefR6qQwu1jENEMg15UCXXnfqfwHYRV5y4NAXWwuo4zw@mail.gmail.com>
- <50f76d21-ff5c-471d-bb11-208925778d32@oracle.com>
-In-Reply-To: <50f76d21-ff5c-471d-bb11-208925778d32@oracle.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 11 Mar 2026 12:21:34 -0700
-X-Gm-Features: AaiRm50a2ylX_W-HW57tX1hx9UtdhfBK9Qc9ksRO5ZAlERX2q8qnay9r9sifQE0
-Message-ID: <CAEf4BzatOXf0YgtQj0X+kQ=NSo_rFLAjQ0BHf-ZegFm+t43J3A@mail.gmail.com>
-Subject: Re: [PATCH v13 bpf-next 2/8] libbpf: Support layout section handling
- in BTF
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, qmo@kernel.org, 
-	ihor.solodrai@linux.dev, mykyta.yatsenko5@gmail.com, dwarves@vger.kernel.org, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 11 Mar 2026 15:24:50 -0400
+Message-Id: <DH076DCNJOAO.20TLWKWHB5KUX@etsalapatis.com>
+Cc: <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+ <eddyz87@gmail.com>, <martin.lau@kernel.org>, <memxor@gmail.com>,
+ <song@kernel.org>, <yonghong.song@linux.dev>, <yatsenko@meta.com>,
+ <clm@meta.com>, <ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next v5 1/2] bpf: Only enforce 8 frame call stack
+ limit for all-static stacks
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.20.1
+References: <20260311182831.91219-2-emil@etsalapatis.com>
+ <5e8af34fe927be2c273db8459897fb1f29616b91e7b21f4430c9d414734f6a40@mail.kernel.org>
+In-Reply-To: <5e8af34fe927be2c273db8459897fb1f29616b91e7b21f4430c9d414734f6a40@mail.kernel.org>
 
-On Wed, Mar 11, 2026 at 12:17=E2=80=AFPM Alan Maguire <alan.maguire@oracle.=
-com> wrote:
+On Wed Mar 11, 2026 at 3:16 PM EDT, bot+bpf-ci wrote:
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 4fbacd2149cd..0304e4329490 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -6733,9 +6733,11 @@ static int check_max_stack_depth_subprog(struct b=
+pf_verifier_env *env, int idx,
+>>  	struct bpf_insn *insn =3D env->prog->insnsi;
+>>  	int depth =3D 0, frame =3D 0, i, subprog_end, subprog_depth;
+>>  	bool tail_call_reachable =3D false;
+>> -	int ret_insn[MAX_CALL_FRAMES];
+>> -	int ret_prog[MAX_CALL_FRAMES];
+>> -	int j;
+>> +	int total;
+>> +	int tmp;
+>> +
+>> +	/* no caller idx */
+>> +	env->dinfo[idx].caller =3D -1;
 >
-> On 11/03/2026 18:16, Andrii Nakryiko wrote:
-> > On Wed, Mar 11, 2026 at 11:10=E2=80=AFAM Alan Maguire <alan.maguire@ora=
-cle.com> wrote:
-> >>
-> >> On 11/03/2026 17:46, Andrii Nakryiko wrote:
-> >>> On Fri, Mar 6, 2026 at 3:37=E2=80=AFAM Alan Maguire <alan.maguire@ora=
-cle.com> wrote:
-> >>>>
-> >>>> Support reading in layout fixing endian issues on reading;
-> >>>> also support writing layout section to raw BTF object.
-> >>>> There is not yet an API to populate the layout with meaningful
-> >>>> information.
-> >>>>
-> >>>> As part of this, we need to consider multiple valid BTF header
-> >>>> sizes; the original or the layout-extended headers.
-> >>>> So to support this, the "struct btf" representation is modified
-> >>>> to contain a "struct btf_header" and we copy the valid
-> >>>> portion from the raw data to it; this means we can always safely
-> >>>> check fields like btf->hdr.layout_len
-> >>>>
-> >>>> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> >>>> ---
-> >>>>  tools/lib/bpf/btf.c | 309 ++++++++++++++++++++++++++++-------------=
----
-> >>>>  1 file changed, 200 insertions(+), 109 deletions(-)
-> >>>>
-> >>>
-> >>> [...]
-> >>>
-> >>>>
-> >>>> -       memcpy(p, hdr, hdr->hdr_len);
-> >>>> +       memcpy(p, hdr, min((__u32)sizeof(struct btf_header), hdr->hd=
-r_len));
-> >>>
-> >>> in all these cases where we have sizeof(struct btf_header), this
-> >>> smells like a potential issue, tbh. We are silently truncating the
-> >>> original header here, potentially. Which is ok for read-only case, bu=
-t
-> >>> do we error out if someone is trying to modify/write such BTF where w=
-e
-> >>> don't really understand all of it? Should we?
-> >>>
-> >>
-> >> The kernel enforces that any additional data in the header beyond fiel=
-ds
-> >> we know how to deal with is zero. We don't enforce this here, but we
-> >> get a similar effect since we only copy the fields we care about. In e=
-ffect
-> >> we wind up removing the aspects of the BTF we don't know about, so if =
-we
-> >> read in such BTF, writing it out would not preserve any additional hea=
-der
-> >> information (say a new section offset/length) beyond the current size =
-of
-> >> struct btf_header. So writing such BTF after reading it in converts it=
- to
-> >> the BTF representation libbpf knows about (header fields + sections).
-> >
-> > I don't think we should be doing this. Let's error out when someone
-> > tries to modify BTF where we don't understand *all* aspects of it.
-> >
+> The function header comment above this hunk still reads:
 >
-> ok, so to do this I think we'd need to set a never_modifiable flag or sim=
-ilar
-> on parsing when we find non-zero unknown header data, and then fail
-> btf_ensure_modifiable().
+>     Since recursion is prevented by check_cfg() this algorithm
+>     only needs a local stack of MAX_CALL_FRAMES to remember callsites
+>
+> The local stack arrays (ret_insn[] and ret_prog[]) have been removed
+> in favor of per-subprog dinfo fields. Should this comment be updated
+> to reflect the new approach?
+>
+> This was also noted during the v3 and v4 reviews:
+> https://lore.kernel.org/bpf/ad397307a9cd76c9739ee05f4642c7b6a881b7dfb8a2f=
+acefa6b2062ffe328ea@mail.kernel.org/
+>
+> [ ... ]
+>
+>> diff --git a/tools/testing/selftests/bpf/progs/test_global_func3.c b/too=
+ls/testing/selftests/bpf/progs/test_global_func3.c
+>> index 142b682d3c2f..974fd8c19561 100644
+>> --- a/tools/testing/selftests/bpf/progs/test_global_func3.c
+>> +++ b/tools/testing/selftests/bpf/progs/test_global_func3.c
+>
+> [ ... ]
+>
+>>  SEC("tc")
+>> -__failure __msg("the call stack of 8 frames")
+>> +__failure __msg("the call stack of 9 frames")
+>>  int global_func3(struct __sk_buff *skb)
+>>  {
+>>  	return f8(skb);
+>
+> Should this be "the call stack of 8 frames" rather than 9?
+>
+> The test has 9 subprogs total (global_func3 plus f1 through f8), but
+> only 8 call levels. The entry function global_func3 starts at frame 0
+> and is not itself counted by the frame increment. Each static call
+> increments frame by one:
+>
+>     check_max_stack_depth_subprog() {
+>         ...
+>         frame =3D subprog_is_global(env, idx) ? 0 : frame + 1;
+>         if (frame >=3D MAX_CALL_FRAMES) {
+>             verbose(env, "the call stack of %d frames is too deep !\n",
+>                 frame);
+>
+> With 8 static calls (global_func3 -> f8 -> f7 -> ... -> f1), frame
+> reaches 8, which matches MAX_CALL_FRAMES. The verifier would print
+> "the call stack of 8 frames is too deep" and the __msg substring
+> check for "9 frames" would not match, causing the test to fail.
+>
+> The old test with global functions also had 8 call levels and
+> expected "8 frames", since frame++ produced the same count of 8.
+>
 
-yep, I'd like some better name that would mean "there are extra btf
-bits we don't understand", but I can't come up with a better name :)
-if you can, prefer that over not very semantically meaningful "never
-modifiable"
-
->
-> > And also you hinted at another missing part: BTF layout info
-> > "sanitization". Check bpf_object__sanitize_btf(), I think that one has
-> > to drop layout information if kernel doesn't support it (unless kernel
-> > will ignore layout info).
-> >
-> > Either way, can you please manually check that BPF object having BTF
-> > with kind layout can be successfully loaded on old kernel that doesn't
-> > yet know about BTF layout?
-> >
->
-> Good catch, we'll need to do this sanitization since older kernels will
-> reject layout info in the header for program BTF that contains layout inf=
-o.
-> I'll add a patch to the series to handle this (not needed today but good
-> to have if/when program BTF adds layout info).
-
-yep, thanks
+I'd say no to either suggestion. The updated expected failure message is
+correct, and the old comment still applies for consecutive static stack
+frames even if we don't refer to a single stack-allocated call stack anymor=
+e.
 
 >
-> >>
-> >> That seems ok to me, but I guess the user might want to at least know =
-this
-> >> was happening; would a warning or similar when encountering additional
-> >> non-zero fields be helpful maybe?
-> >>
-> >>
-> >>
-> >>>>         if (swap_endian)
-> >>>> -               btf_bswap_hdr(p);
-> >>>> +               btf_bswap_hdr(p, hdr->hdr_len);
-> >>>>         p +=3D hdr->hdr_len;
-> >>>>
-> >>>>         memcpy(p, btf->types_data, hdr->type_len);
-> >>>
-> >>> [..]
-> >>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
 >
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/229688=
+48938
+
