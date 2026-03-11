@@ -1,161 +1,121 @@
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF2528507E;
-	Wed, 11 Mar 2026 13:08:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 438332FD1AA
+	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 13:16:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773234487; cv=none; b=pirMBszawCXNK3gXZpU7/5Fsbwjhd6ADFJDS1wdk9KWFTCsSVFqgqKfzqwpkIXtxq8aH37AtG43paMRQD6mvpYFVWSWYqbtSwA9ETzuOYVefLNXtyNORRuRmkd1x2d0nIOgGBrRFQxEHWJqaH1bXKh1zZPvLpZAYBBgvYrkMQiI=
+	t=1773234970; cv=none; b=P3/I1fCVPa8RKrlonnxL9MA3YCNfhwX0fiPWBFu3epH2gtkg/nMRXy2xQ7dh4ioucug0jVcjfxmuUBi+J50O7gTRU7XExvdHh2VpgHr5S0W6NxLotslkzBEfcZl+eQJBAywW0Cby04LKnLXwZz3FTJtnKvnQpKTSOajT3lKwAdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773234487; c=relaxed/simple;
-	bh=8E+RklUDOEWGr3ASBSUDYmUqwJJzbYjGPEsS2dVw21c=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rOH2CapqnthCMvKe2byU5EarQI0cxHwWnu3JX0/VBKp6L84oyAGR/cBYGXz/YaR9Gm6lOfbDW8URtocf3AZCJHDZ/WIZjZukh+7/1F63WQXVH4xSNev83xp9cSRNjZTfkUU3LtcOV3q2M8kK+pXRTJ+wJFHkdt4gAKpNeoUetBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=ddBrJh5K; arc=none smtp.client-ip=148.163.152.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="ddBrJh5K"
-Received: from pps.filterd (m0354655.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62B9TbZK983285;
-	Wed, 11 Mar 2026 13:07:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=SrAeFWtveCtEjyE93SCzkC8c47nJq1JLGeA5lKkS2Y8=; b=ddBr
-	Jh5KHnMGBWqk+k3l/jEWGCFQC2jacrZpcM/i4rdK1IoC9xUVz8RrlbC2azQq4Om7
-	G/kHIsd2LhFgg7dv61Pbfo0LMHJDihuM1l5SmtUxVQMZFHX2szlZWZH6F0PdhPkk
-	vPoRaMl71fxdSvTWoliuIIiDveOwrrUpQZOm5iFisHn9TIMKi0KyTD3iCz7lDa1t
-	fSzdl2zVsrju3kzIOp3zbCy+GTCWU4krZ6+e+ZAyxxgGg42HJ+e2BGEdKmdaxPlX
-	EL681UyCPZkyEyprR4lkAr7YpYrlZtrOuH8Znrzdp7fbjawQ15KLJV+s8vHP+snf
-	X8eC+MRg932SktvdWA==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4cu5tf8nrq-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 11 Mar 2026 13:07:20 +0000 (GMT)
-Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Wed, 11 Mar 2026 13:07:14 +0000
-From: Slava Imameev <slava.imameev@crowdstrike.com>
-To: <eddyz87@gmail.com>
-CC: <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <daniel@iogearbox.net>, <davem@davemloft.net>, <edumazet@google.com>,
-        <haoluo@google.com>, <horms@kernel.org>, <john.fastabend@gmail.com>,
-        <jolsa@kernel.org>, <kpsingh@kernel.org>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-open-source@crowdstrike.com>, <martin.lau@linux.dev>,
-        <netdev@vger.kernel.org>, <pabeni@redhat.com>, <sdf@fomichev.me>,
-        <shuah@kernel.org>, <slava.imameev@crowdstrike.com>, <song@kernel.org>,
-        <yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v4 1/2] bpf: Support new pointer param types via SCALAR_VALUE for trampolines
-Date: Thu, 12 Mar 2026 00:07:11 +1100
-Message-ID: <20260311130711.33966-1-slava.imameev@crowdstrike.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <979c7539ac475b3c428f609066e947844b6dd8b0.camel@gmail.com>
-References: <979c7539ac475b3c428f609066e947844b6dd8b0.camel@gmail.com>
+	s=arc-20240116; t=1773234970; c=relaxed/simple;
+	bh=bQRlE5OR+3/41N9B/xBGXfMeOTv3hgeQ2WrY6jcTpBY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=T3GqgHlVDsOI44E0xyJcc+Vb68QWR9+I3wYlFBEqyzhegUkLdRdHudPBcHfyfiOgiagfLrp7qHqgseRQEI9HMuUWfRQoyzlUB7IzZSIYCWKkrumLPs90RzxfsuOlUPSYpot0ruAJgbMGP8AhNS2DwJGjnb6J91wXG0PCeVRe/uM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-5fff18d44fbso3416792137.1
+        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 06:16:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773234968; x=1773839768;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=34DR94e/1PAvLLEaib58vFA4GW0m5SGe6jvxchEhMek=;
+        b=IR8g56YTPnSdg2ysgW3f06xCldgjG59hV2JPbBsG5xYdUVfbe5n0oWE4KGVhNlLZvX
+         dLK6KGmRWwfRHzBWGmEkDb0mVV6PAFDJP1u70E3V/kbreRjFx5AzSAXLSpKOvfkov7ZI
+         33GIOUvcX1Y6vvQO0QjhRMx52REat90FO+fEHXdI393QlZqKu/hd0hkNkwhUVQyk5xfm
+         dRFN0UGh5R1x34f2SjI5olXnGhWBBec3FXSWkFFLQDCNm3IA45E2t6Zcm2JX1GVOwUIz
+         rEO7wxVLvnLThdfSSwyFxjmb/4ZSHmJBVxQooVhAAhjUm1Li8ruAJKjiHadnAlPV847+
+         CmTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXEgEPknlji+W5+E8NWugFWRrXDh1Cfh1s8NVf/vi9tHbtwpbZK/Jl897r0WNHat2fjzHE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywtl5CkKcQn/R94cMj3r82S2cPSvQ80UE9qtwJdc9tVmQEb/7Hx
+	zbJQoxRwr3UJoazcRMrJwRhtHjMZqOnM+LU04JqYQr5eIJhI9nJ0oRIJXLdJo0lp5fQ=
+X-Gm-Gg: ATEYQzzE9FOp6NIrt/CKrKQJoHmIUPX3zUWSXMBH5rPfqND7vKzREvS6f5gaA8pch1N
+	S4fpv5eKSa1A5RhZZ5Wsyq8unqj0zJxmef2vG0UBtgdnT43hqf3DZEg68EVB6JqDd0rjkVWgKN/
+	6k8s6w6mWZ4M66qB7yFEHwwlWRWZRItNXdPHfy5fg3qI4mPc/IiQ2IhG3K8jHbleMVIaCP2l5Lw
+	jEW2xwsQ4dxkdi7sHYBgILoL6jEHBF+bv1XYj+ZGpuRzKsHNUf4orTpEYAK5DnO51fb3FnNLgSw
+	qWF644lPxQV1H7D/fSPY7sVfSQHb6tUNaWAggHR71kotPuyZb2/0Z3lqrZyRbM2jBTXSDMlbLKl
+	/XT8l2QJYU3OKyGuIzqQzBeYe78KOBlViciREsPzrP0kriKRiWK02jda3uu/t18xWLy86YqtFQV
+	RBqOZWO5rjm1+dEN7zp8CRaSuPoDw9ijDar82oYNa72VVftazpAAH8f2oCTc6JnLh1
+X-Received: by 2002:a05:6102:3f52:b0:5ff:c510:b7cf with SMTP id ada2fe7eead31-601defb9800mr1063893137.29.1773234968152;
+        Wed, 11 Mar 2026 06:16:08 -0700 (PDT)
+Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com. [209.85.221.169])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-601de89c65bsm714247137.7.2026.03.11.06.16.07
+        for <bpf@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Mar 2026 06:16:07 -0700 (PDT)
+Received: by mail-vk1-f169.google.com with SMTP id 71dfb90a1353d-56b18f05f49so2419020e0c.1
+        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 06:16:07 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXokRdZSM4gsj0r+U40heXwX/iR7owkAolIzvYIo1WUyTD8O+fSpYqLNXGWW7bhdGxQTOQ=@vger.kernel.org
+X-Received: by 2002:a05:6122:1d05:b0:55b:7494:177b with SMTP id
+ 71dfb90a1353d-56b4752d806mr922396e0c.10.1773234967338; Wed, 11 Mar 2026
+ 06:16:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH013.crowdstrike.sys (10.100.11.83) To
- 04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Disclaimer: USA
-X-Proofpoint-ORIG-GUID: CcdMPNc4NXEkZivWkmHMQ8qkEE15fTCU
-X-Authority-Analysis: v=2.4 cv=ANV8z2x0 c=1 sm=1 tr=0 ts=69b16908 cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=vDKVRhTs-M86Ea50iKLw:22 a=pvr0aSInfWstAloVo1wA:9
-X-Proofpoint-GUID: CcdMPNc4NXEkZivWkmHMQ8qkEE15fTCU
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzExMDExMCBTYWx0ZWRfX/V+SIEDRrIH3
- h0B1M2lbaQBFT+v3Dg0wWy2BTGQXEZTuW7b4NDCsxWl9xb08kla2l2yZc+jVYgqzk9NpbOTtib0
- Z1cjWH3uaYHv6a8rH3HZENZfN6p7zb+gImb3xZTTwNGauYqJXGScdMmvYDY3ooMrVVV+bxpsdkD
- kAkJAtlyAd52JuIVeXHz72Gomb1C/fCy9lPL3I3Apl5clT2gPEdW6B60+oW4Wi/Pi5aR6in/Vaa
- roqtfC4f9FWbPvrGZR1HgdZT3sXt7SMBgERzyZ3cFbyhM4FYne/gL/24Xia+LtXt/qNI5QiYRIV
- nGHi4BAkHj6lP3dHxNxTnaFKYTGYqmsyN2qIxZdRQmuDBNstGVAEvOa2Un5BIXxpL/oNARiX7FI
- etg8So2gFqC4pRFdY0ahNWUS4kXKU4QxzCLmcgh1XGk7VOqPrEvh7ahMfYK1XB2gRH9HuJfYJQD
- oiMog9E2xIj+9qEZHpg==
-X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11726
- signatures=596818
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 suspectscore=0 priorityscore=1501 spamscore=0 malwarescore=0
- clxscore=1015 lowpriorityscore=0 bulkscore=0 phishscore=0 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603110110
+References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de> <20260310-b4-is_err_or_null-v1-36-bd63b656022d@avm.de>
+In-Reply-To: <20260310-b4-is_err_or_null-v1-36-bd63b656022d@avm.de>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 11 Mar 2026 14:15:56 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXQ8Q4jvkgFRJYhghz2BZRDC-9Mk6DbXxuaOc6C9DFHZQ@mail.gmail.com>
+X-Gm-Features: AaiRm52J84H77ROK64ZWWtJfaiCpnFeKyoSRmPbi-NC8CN6Ju1TJEFxJU9gZQQ8
+Message-ID: <CAMuHMdXQ8Q4jvkgFRJYhghz2BZRDC-9Mk6DbXxuaOc6C9DFHZQ@mail.gmail.com>
+Subject: Re: [PATCH 36/61] arch/sh: Prefer IS_ERR_OR_NULL over manual NULL check
+To: Philipp Hahn <phahn-oss@avm.de>
+Cc: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com, 
+	bpf@vger.kernel.org, ceph-devel@vger.kernel.org, cocci@inria.fr, 
+	dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org, 
+	gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org, 
+	intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev, kvm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org, 
+	linux-bluetooth@vger.kernel.org, linux-btrfs@vger.kernel.org, 
+	linux-cifs@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-hyperv@vger.kernel.org, linux-input@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org, 
+	linux-media@vger.kernel.org, linux-mips@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org, 
+	linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org, 
+	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org, 
+	linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org, 
+	linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org, 
+	linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, netdev@vger.kernel.org, ntfs3@lists.linux.dev, 
+	samba-technical@lists.samba.org, sched-ext@lists.linux.dev, 
+	target-devel@vger.kernel.org, tipc-discussion@lists.sourceforge.net, 
+	v9fs@lists.linux.dev, Yoshinori Sato <ysato@users.sourceforge.jp>, 
+	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Content-Type: text/plain; charset="UTF-8"
 
-Tue, 10 Mar 2026 11:52:10 -0700, Eduard Zingerman wrote:
-> [...]
-> 
-> > I verified whether PTR->FUNC, PTR->DATASEC, PTR->VAR can be passed to
-> > btf_ctx_access() in the current mainline.
-> > 
-> > I added helpers that inject PTR->FUNC, PTR->DATASEC, PTR->VAR as pre or
-> > post calls to btf_check_meta(). In all cases, the BPF program load
-> > failed with errors "arg0 type FUNC / DATASEC / VAR is not a struct",
-> > which indicates that btf_check_meta() can indeed be called with
-> > PTR->FUNC, PTR->DATASEC, PTR->VAR.
-> > 
-> > If the condition for pointer check is changed to
-> > `if (!btf_type_is_struct_ptr(btf, t))`, these BPF programs will load
-> > successfully with arguments set to scalar().
-> > 
-> > Do we accept this change in behavior?
-> 
-> Kernel validates BTF before loading, see kernel/bpf/btf.c:btf_resolve().
-> Validation is applied to kernel, module and program-level BTF.
-> Does BTF containing PTR->DATASEC and PTR->VAR pass validation?
-> If it does, validation should be updated to reject such cases.
-> For PTR->FUNC, which one is legit PTR->FUNC or PTR->FUNC_PROTO?
-> The legit one should be allowed and invalid should be rejected
-> at validation phase.
-> 
-> You can craft invalid BTF as in the following selftest:
-> tools/testing/selftests/bpf/prog_tests/btf.c.
-> 
-> [...]
+On Tue, 10 Mar 2026 at 12:56, Philipp Hahn <phahn-oss@avm.de> wrote:
+> Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
+> check.
+>
+> Change generated with coccinelle.
+>
+> To: Yoshinori Sato <ysato@users.sourceforge.jp>
+> To: Rich Felker <dalias@libc.org>
+> To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> Cc: linux-sh@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
 
-Invalid BTF pointer types PTR->DATASEC, PTR->FUNC, PTR->VAR are
-rejected by btf_ptr_resolve(), which is called through the sequence
-btf_check_all_types()->btf_resolve()->btf_ptr_resolve().
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-PTR->FUNC_PROTO is a valid type.
+Gr{oetje,eeting}s,
 
-vmlinux BTF is processed by btf_parse_vmlinux, which calls
-btf_parse_base. Since btf_parse_base doesn't call btf_check_all_types,
-it becomes possible to invoke btf_ctx_access with PTR->DATASEC,
-PTR->FUNC, PTR->VAR in case of vmlinux BTF.
+                        Geert
 
-Modules and programs BTF are processed by btf_parse, which calls
-btf_check_all_types and detects invalid pointer types, so
-btf_ctx_access cannot see PTR->DATASEC, PTR->FUNC, PTR->VAR in
-these cases.
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-If btf_check_all_types is added to btf_parse_base, invalid pointer
-types get detected inside btf_parse_vmlinux, resulting in failure
-to process vmlinux BTF and effectively disabling BPF. libbpf
-returns this error:
-libbpf: Error in bpf_object__probe_loading(): -EINVAL. Couldn't load
-trivial BPF program. Make sure your kernel supports BPF
-(CONFIG_BPF_SYSCALL=y) and/or that RLIMIT_MEMLOCK is set to big
-enough value.
-
-If vmlinux BTF is trusted not to contain invalid types like
-PTR->DATASEC, PTR->FUNC, PTR->VAR, which seems reasonable, we can
-conclude that btf_ctx_access will never observe these types.
-
-Adopting the view that vmlinux BTF is consistent, we can replace
-btf_ctx_access's condition for inferring scalar() for pointers
-from "if (is_void_or_int_ptr(btf, t))" to
-"if (!btf_type_is_struct_ptr(btf, t))".
-
-Otherwise, we need to either check types for vmlinux BTF,
-incurring additional cost, or use explicit checks for pointer types
-that can be inferred as scalar by btf_ctx_access to exclude invalid
-types. This would let invalid pointer types be rejected with an
-error like "func 'bpf_fentry_test_invalid_ptr_func' arg0 type FUNC
-is not a struct".
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
