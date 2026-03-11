@@ -1,119 +1,161 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA1CB1F0991
-	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 10:47:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACA003DEACD
+	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 12:04:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773226062; cv=none; b=WAf7PnDC9K66BI2vnlXXNql2dfGIBqZ2VFUevVxZPhD5MpoyCBAwLiIDCjgiB3YNPyvTg5/0uP/IE00JqlPYg08zQI1zyovXy9LopFJKk57PJHhAa6JbL3iMxkFWxp5GjuOYSlb8OSYUqqQ70OugTGrUG8CVXMqsMlGB2wRTtCE=
+	t=1773230663; cv=none; b=Onxuw1gAIILTCg2aFB3VPYu00lubCz2bxxpUwwMMLd20hNoaqpTTTZmqeSsrDo1o9/OJ5TWNhF4gUJiJ5gKrG8nG+G5qXy0RqfX2AjK+Tr3pgQJoUYI9P0WUGxHsI5DnHifNd+rBZ/5fvHM03Ebx9SpFiusLYBK/32ym03L++4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773226062; c=relaxed/simple;
-	bh=zRCIOZXGAulewyBbqGE0TlQlTPqeFeIDTbPGyy24MV0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=M/Kvey38hxllltljXfUMcc0Q0tWF+/5PyKrN9phktKQxGWnHkG3ATtbdm6KS0CpsAme7GrSDTLiT9fBCVdIL57ALELxUEsO1pj0IgxmWrCUGRlRMNdO7Et2C3DSFDYEl0Y2ARDIs2wdfyOtsmkSOaIdm1vxK5oWecDvWPZ648R4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l+NfnaGG; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773230663; c=relaxed/simple;
+	bh=s5EMe7bYHKODG/rm1X+QIPDr4bQTLFjKqTjmSxuIYLA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IKUKPrtvDZZKr+vjdx/nN35/GWNlzaEhCDB+JtnF+NI9dgMdpZx12jK8KPSr0VbiA6EjdaK8x8vRCVsg/5lR2EoLOt8CTC01D6uy/FMxgGQSPkSmwSCy28D4oHq72H2N68YwLeEyTVNSp0o6pQQ6/Y6pq1j4aFUx4wmE2oh5284=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=oJbNeSzI; arc=none smtp.client-ip=209.85.219.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l+NfnaGG"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-482f454be5bso9529125e9.0
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 03:47:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="oJbNeSzI"
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-89a14be4733so113458586d6.2
+        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 05:04:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773226059; x=1773830859; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=us9WYwCiTBLLsk5cVeG22xmuXfkRkjPu0Kbcd1njBZs=;
-        b=l+NfnaGGhGE/Qag8NAZKtowOcVY2wLQCbEgf8MnpvieTQKfxTgLXG7gVpu41GQE3Cp
-         lhcuSJ3ojhuoA+XvMW4ZK8DqWwguSBIQJdzHM+m0gGn1i58Im+PG8aw4GSSmMwNkHayu
-         W9J2Et5BO3MOuAYEpSQbP4o8f9J9gsDj/OANzpqDRda1qkC6GXeo6tLR1/FbLVhhy7Cf
-         MUxhHc5jx0lvSaHnxQ6WahuluHX1XzGqARVN8PyVe1PrQbU+agAKtUfEmOiyxhtTA+gY
-         BR6kn5ugraDiB91Rov4L/mant481Z758KVbs1s66hkgz+KSI4U1uv3Da1yI4gGWMgZ4d
-         Uvjg==
+        d=ziepe.ca; s=google; t=1773230661; x=1773835461; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=s5EMe7bYHKODG/rm1X+QIPDr4bQTLFjKqTjmSxuIYLA=;
+        b=oJbNeSzIwFnPHScHsQshxjdJjgN5YRgniLu4SRX713CC6CAYeQLHkIfpbljvCRRAnH
+         8GCdREp96tRlupjpA0l3esjCjroz6Q5dt0kA190IMCBZe9Y6TypRzoJM5ya12V1OkVub
+         EUQ+KzKHFncYXagt1P6wWI3tx3xXAcJ9nVqE0WJcPYHWyuoYrh+bRaAymwSQo3rHPIU3
+         l4mxZ//9rXYowokM76ZULSkPHRFaWLXI9DeuKwC79yu3oKxE8Iq2+zzTOrCWXVjPZrH9
+         CEu/YAUe//Hit+usny9ISZgFfiOdMPYNDj9YWIjqEKoVggIDs+kCLw9eATV/2xna2ACe
+         /3LA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773226059; x=1773830859;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=us9WYwCiTBLLsk5cVeG22xmuXfkRkjPu0Kbcd1njBZs=;
-        b=WrELlxACBI7OYkLHhgf1hr6gR+SUM3YWjoZ7aEZf0pOqa2ji2Ir67WekcCpua98SYZ
-         SVNydr9QsuToEEQ/uYC6QFx6xUmh3D2zUtlp9dFY2979fQ8e2Pm1M9Ux1nt6bHw/4LJr
-         lQr5DED0CbdhQkix7L+J8riMvzmTvJ3i9+j+BOAWOsY8L0RXluGD0Is5Y5I5zRlIse+g
-         wHi+JWHPrEgNuW1U82dx9PWKOhzvvlQ2NOigBJ0Zn5QsPBwvkDaDpcf6OwWID0+dYbYk
-         eYrWFAZx0DF3O8F4vOfmPEyonzBM7vSTytk7iksk8GYR/l6Q1NUf8v29PcnyzglXtknX
-         xrXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWxYtC6TDSCxAXjQIffsZZyCS9n7GWOTWaNWw0BmpjX5kF+GUcP2zC6iArxaAd1ZflV9XQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxw+HiaSaMblTG3EKHA3Vbs+yimMIw2EsmYoIR0dbjdOh5Ev4G/
-	hM3UnDmD9H6JvXSvVukcB57Mc81Q16p8A9wc4MMpEbMgOrQCkFEzI13s
-X-Gm-Gg: ATEYQzyEk77+K23QpasA97wlWiY2sEr0+K78X/DPn4C5EW4F/0M3HqO4YefF8yJwVkT
-	B8YOlWvlWm+Qa0pv4lJEGghNOkQCFl67CijIJ4a1J8MscJooMWOomZhxhLycgBBpGiTs3R50FG8
-	0r5dGF+A9e/8N4KboUWnfkWEzaDde8ZVpHa6fmxOHjuZwMQ9B+WcM5egIgDzUeB4TvGo1W5a53I
-	auHlCLbJtSnh/h+yh4oh3Eyt3JiXiERR7/iPq0iln0Q+pmdlYvZCyPHnS3GXydzMzmOC564XyIt
-	+bpdcLFzUgY8Dv5tIlOi+cVedmq8h7XhhKzZsu1sAPzw89GUJmSaDOumJ1u2QhNHS+CMDGnmg18
-	CQfpiNrfU/k9hnL0+dpHO5ATJYnUJJmSckqDepGYbF7znmWg2PhO76lBbxBooz4BgSNFDw+alZt
-	y1pTZB/o9HkbuQpYk8PPuTjlFkns/nR2NdwmqBAlWCJvGu//rzk/0PLerI35z8VUfuMebCIx63t
-	NE=
-X-Received: by 2002:a05:600c:5298:b0:479:13e9:3d64 with SMTP id 5b1f17b1804b1-4854b291dc2mr30148705e9.15.1773226058755;
-        Wed, 11 Mar 2026 03:47:38 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439f820a2f1sm5725154f8f.30.2026.03.11.03.47.37
+        d=1e100.net; s=20230601; t=1773230661; x=1773835461;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=s5EMe7bYHKODG/rm1X+QIPDr4bQTLFjKqTjmSxuIYLA=;
+        b=T3eXZiNrIpHdkYKJwKL8GK36IKkH1ct63AW/TK3q8oy7UVBxGiQmiJVJM5vNco97oQ
+         RW0BFClWMmlnxQomJy0pq8MTkZXtXLDDSo2wb23gBJYDJ8hIzTX11UH7vwaPXjIujr5t
+         51cG6Ea4JFvwq2no9b6KBAi8iZZj/Hml5hdZxFc3AJMVoVJlotdmt9p5fB4lYHvOEpPh
+         rz4xbsvpa4a7wehrZLu4LCzR2PvWmLJ4v5/fmC0LV9W4pAGjE+OxFV0PuDxAPDieNwJm
+         byT+kCAdHsRi1MJhgLKG4NnDzoIYf9UxHHYtCdGbt4mwLNls30hyZK+89y6BsFcP4Lde
+         +Zcg==
+X-Forwarded-Encrypted: i=1; AJvYcCWJpuwpSIfvExDSVS0jaLy9/Bw3g/OK9wGNZ7QiCn/Z9GxQmVcYDySkn+mjtLM+Lwgs1Kk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxz7oC/9UOhLFMkecIy+aFVLQ3kkNz1p5euV8I523toRDSnq7Od
+	pXmADC2pI0R4dXPMgLjuQyKK6WTnS756hBD7tqstVG2fY1+23jFajMhok6wJj/d9Wlw=
+X-Gm-Gg: ATEYQzxdfFBFM3lG9ff3A/yVa0KSuBD3SlEHHfHYIZ5Nm/G2EFEWIlW7qkJbCDDSXbX
+	N6V/3amA94Trvv+01M0BXgEVgGrdMebq71ykY3CFMS4buZWP1mkX95Qng8Gwe8rjW8bDBq6sHt0
+	akeBFzpOjwNlBNxugUtxsvLE+GcCi2Rt+6sOqVNV45b9gKjhTOc4QhiQJ3fxWseQGRTAhbLM38w
+	ZhOFW+K4EO98S6HylNBvpr/kYMxttx7hnRamJ6H4QfHX1Xk/Iw1IHxtsnpyap9WPa7+imWe3gAx
+	Fkwhbfj5upch6ne4CtP7b5TQaeWgXR8QlmmcFrzirlbSndND5FZsnqG9fajdgpK6tHQRSpVLJvJ
+	bPwOYcvzCtRjFJiOlp30bpFFiiv8o9uguXnVfSA6a5X+Kv7+aHEzjctZ/RiLtvjNBPthHy1TxUU
+	NkWmt4bDwNDl1E5JC8qYUA4Jd3Hp5q/ciAJbz17LhJmV25vxbHQWV9vkdeT/6qIsw+vHZpTSrlS
+	eZnNHXMxbRrzAID5aw=
+X-Received: by 2002:a05:6214:f2d:b0:899:fd8c:55c6 with SMTP id 6a1803df08f44-89a66a5858dmr29432376d6.23.1773230660563;
+        Wed, 11 Mar 2026 05:04:20 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-112-119.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.112.119])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89a65d17023sm12745086d6.49.2026.03.11.05.04.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Mar 2026 03:47:38 -0700 (PDT)
-Date: Wed, 11 Mar 2026 10:47:36 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
- linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-nfs@vger.kernel.org, bpf@vger.kernel.org, kunit-dev@googlegroups.com,
- linux-doc@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- netfs@lists.linux.dev, io-uring@vger.kernel.org, audit@vger.kernel.org,
- rcu@vger.kernel.org, kvm@vger.kernel.org, virtualization@lists.linux.dev,
- netdev@vger.kernel.org, linux-mm@kvack.org,
- linux-security-module@vger.kernel.org, Christian Loehle
- <christian.loehle@arm.com>, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] kthread: remove kthread_exit()
-Message-ID: <20260311104736.51b53405@pumpkin>
-In-Reply-To: <20260310-work-kernel-exit-v2-1-30711759d87b@kernel.org>
-References: <20260310-work-kernel-exit-v2-0-30711759d87b@kernel.org>
-	<20260310-work-kernel-exit-v2-1-30711759d87b@kernel.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+        Wed, 11 Mar 2026 05:04:19 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1w0IIU-000000069iv-3jx0;
+	Wed, 11 Mar 2026 09:04:18 -0300
+Date: Wed, 11 Mar 2026 09:04:18 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: "David Hildenbrand (Arm)" <david@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	"linux-mm @ kvack . org" <linux-mm@kvack.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>,
+	Pedro Falcato <pfalcato@suse.de>,
+	David Rientjes <rientjes@google.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Janosch Frank <frankja@linux.ibm.com>,
+	Claudio Imbrenda <imbrenda@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>,
+	Todd Kjos <tkjos@android.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Carlos Llamas <cmllamas@google.com>, Ian Abbott <abbotti@mev.co.uk>,
+	H Hartley Sweeten <hsweeten@visionengravers.com>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Leon Romanovsky <leon@kernel.org>,
+	Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Andy Lutomirski <luto@kernel.org>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>, Miguel Ojeda <ojeda@kernel.org>,
+	linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+	linux-s390@vger.kernel.org, linux-sgx@vger.kernel.org,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	netdev@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	x86@kernel.org
+Subject: Re: [PATCH v1 16/16] mm/memory: support VM_MIXEDMAP in
+ zap_special_vma_range()
+Message-ID: <20260311120418.GU1687929@ziepe.ca>
+References: <20260227200848.114019-1-david@kernel.org>
+ <20260227200848.114019-17-david@kernel.org>
+ <20260309142954.GM1687929@ziepe.ca>
+ <61df6369-333c-430a-bd18-c5b1acae68ea@kernel.org>
+ <abE4JYo223OxWCBQ@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <abE4JYo223OxWCBQ@google.com>
 
-On Tue, 10 Mar 2026 15:56:09 +0100
-Christian Brauner <brauner@kernel.org> wrote:
+On Wed, Mar 11, 2026 at 09:38:45AM +0000, Alice Ryhl wrote:
+> It doesn't really make sense to have multiple binder VMAs. What happens
+> with Rust Binder is that process A is receiving transactions and has the
+> VMA mapped once.
 
-> In 28aaa9c39945 ("kthread: consolidate kthread exit paths to prevent use-after-free")
-> we folded kthread_exit() into do_exit() when we fixed a nasty UAF bug.
-> We left kthread_exit() around as an alias to do_exit(). Remove it
-> completely.
-...
-> -#define module_put_and_kthread_exit(code) kthread_exit(code)
-> +#define module_put_and_kthread_exit(code) do_exit(code)
+IIRC the problem is the kernel doesn't guarentee singleton VMAs,
+userspace can always clone them with fork or something. Did binder
+solve this somehow?
 
-I'm intrigued...
-How does that actually know to do the module_put()?
-(I know it does one - otherwise my driver wouldn't unload.)
+Since you can't assume there is only one VMA the locking becomes a
+mess to cover all the cases where userspace can trigger a VMA clone.
 
-The corresponding try_module_get(THIS_MODULE) is done before the
-kthread_run() (and has to be 'put' if that fails).
-So there is an explicit 'get' but an implicit 'put'.
+address space deals with this internally.
 
-While a loadable module that creates a kthread usually needs to give
-the kthread a reference to its module and then have that reference
-released as the kthread exits, I can imagine cases where that isn't true.
-(Or broken code that just hopes the module won't be unloaded just
-as the kthread exits.)
+Thus, zap_special_vma_range() is extremely hard to use.
 
-It actually makes me think that module_put_and_exit() ought to have
-a 'module' parameter.
-Or, perhaps, kthread_create() should have the module parameter and
-hold a reference to that module until it exits.
-
-	David
+Jason
