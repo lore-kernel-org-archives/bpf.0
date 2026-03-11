@@ -1,197 +1,141 @@
-Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
+Received: from mail-yx1-f42.google.com (mail-yx1-f42.google.com [74.125.224.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE4C32D3ECF
-	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 04:17:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A47FB23EAB2
+	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 04:28:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.42
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773202637; cv=pass; b=mB2SVL4Ksnqy68KEdbPN+zL5ohqrgEJMFfkaiFT7cUtCWti6TmrPvVk8QkpohP78SIaCUJIbOXbJlYnuxaohO2qB/UFnzq3383N8COSNBAz/rdEy//5pkbkWdJ12yaqIYqrvlvVDP89BQir39Io8/CSYewNBLU2I7zmMg3OfY2E=
+	t=1773203319; cv=pass; b=h8u9PQxU5YubhRzhZv08lncYH/edUt85FrO+9qCZU7eaPTNIi1b0tSOXO8tWKpDKyBBMr5+REmQmEt5M/fgCYGhnkWeY2MKnxgyfEjIYNx2uefiPvNuuY5RZ6SCkjo6jbpSE4/wpG2CgGck9Z6vN7QdfCmejGRj6wVckrU4sbTU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773202637; c=relaxed/simple;
-	bh=LYiHq7xvyxJ+Ss27zWLVJLl6BJmg3VSJZYbOUkB7Et8=;
+	s=arc-20240116; t=1773203319; c=relaxed/simple;
+	bh=TtfcqyHBRIjtK6IeNrMjCnHPgWtOURI8gEbiWHKUhLo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EuZOTgfadQeWc4c4F8xTeUzhz153+F+kuQYvslrzqQW4ktQTs1wroUOdhFCVcMRYR7mRTUNeYqAVtVASriytJEBezfssD2ehCeDCng4PdMYTNHsbiNbit43eleQdUsuYFPgj7deRllE1ZFv9m0Jzhpc6MxZR7WH/QP0LLerAEYU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QMimxV7c; arc=pass smtp.client-ip=74.125.82.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=L/F5DOktBzZhgGi5LsIuxHEsRaF3oSbLeZ6YT8Kh+ZiXLwzADz3Rx82F8DFMuC/zgQMCJTdL40wgc+2rZNp0mXT32TGOLjuppq5XP7XBku9Y+irecxiQQYx4yLXPBYbyXcCQDUTpDyodCXUhVpsKQs8Urz5zwNmMbj/HDT8sGGE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Npt0ZXr3; arc=pass smtp.client-ip=74.125.224.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QMimxV7c"
-Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-1271195d2a7so978756c88.0
-        for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 21:17:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773202636; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Npt0ZXr3"
+Received: by mail-yx1-f42.google.com with SMTP id 956f58d0204a3-64ca09f2056so10148786d50.2
+        for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 21:28:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773203317; cv=none;
         d=google.com; s=arc-20240605;
-        b=i3V1NVKUrO8yNAGly0N4JSUmfq/qKfM2waF4T2iVAXZmK3rdT3M5SE6gOg5DZ0GsKY
-         XVDR2joL5FGFdKh7qwsO0ZsiCRHMndCPAM8nvRCB9YcT2ch9ZKCddvFVhjNUw4rqotVG
-         8+AQju+/FnU0uu9s3wALHVUh3TsqPxYy4Tf1zQCh5KsygmOaU7ACYhM2EFQMMxM69pFC
-         X9/rRPdPmVd6Y+ImeU9bYWwr57+aLGs3s5Jzcauy4GBBMZkaXgehDe8wCh/fzDiUzxka
-         8FfEfLrini7xRbMUQvw5Ev4dk+sdLtWgmZkheEu5iXEUoPJ0+eAyXyPUJSFNx3KyHAAY
-         iYJQ==
+        b=kvBxOMJa8W+2dZJGjkuYUi8i7ivHAO9SpJiBSyFzk2x+XB6aGdIec2tOu0+Yv2MT4s
+         CjvDuoZ9MxD8O3jrPYN+A0bFVNvSPYAFg2lu1MTrjFI0++Eulf6cCMkPsZnzhMSxeav2
+         9rEA16nbWJT8RhY+ktiRxcPpgt5F7+aaZZiEWPvQToyq1Skz8wS74Gw6NL7DtZujVPRB
+         Kr32ekjqJUG3TBnIkVCxWx2QU13KUTTuaEQCd60APEyiCHKTIfkgm+4yeQ/9zyxLxPRE
+         sYEEV1jQaLJDI2d7zE5omrAjoICV8M99FBOr+PxokcguB261UGz6Jh0s0PBrHIVDZ5in
+         +ssA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=uENPJmAfC/lW/uop31YwmYzEuEawM2Qvzy11V2b8dlU=;
-        fh=nFcRY6cN5MTK5YNK64+hDxkVQ0JFylQRgabbBhsOP9g=;
-        b=FadBDWWCImzXUFE1qhxFwt3vIq3wAlrU0OZLLNkitgJDWm/qcFZU+s9fRHgwOHfsrx
-         E/OiFg5fg9kWAHvu9vczn95lBo9OkVwKOcrVy4iBWX6YFhhOWAXYz6HlJ5jf+2Q/GsjA
-         UesMtWGZDpNB6qPmC1vbtUN6fUthUGFC6gc8jK+rvrOAw4inEaLLzP4QnZCzTGdweRPx
-         NNmQp0bGg7jlMsh8987qwAikE1tg51KC/FQ+R54Iq3SlwUKWsKJfVSV1hd7KIwGE4P0g
-         b4iNXYRmsgBrg0vSTm6rBTGpVeqs4dfTLSPdDlI2YQ9L+W0ccKpe4YCj7GbUE0x+2iNd
-         Ktaw==;
+        bh=5o3P6eHplYm7OFtUvHyPCeVIYrNp0w/amVRZXAgvY1A=;
+        fh=6mzBUIqY/8sgjA9Q3etLroAMdIZQQbTP6IP/1ObD1Go=;
+        b=iQnmbUjjGo0LqoYJCvN5Yl9hYW86rwwaAyt/gJY6oGcdeh2fmh+HceASadW655sxar
+         +drLFgA4X6PST9c0WPbRFYUeBKsfoew9sAV8X1TENcMq3KnxSUQxBCfn5gW+/zzbZCdJ
+         JAF4HNy6VzugYUbBuFDDh8EYA0mmFvKhf0H1obmYuEjSaLyC2n5fjCjz5SfrO+s5gY6M
+         4eJLoZu28ZSD8csx5kXBOheapz8l0jzAyThemRYZ6JWWkW8yTqfc9B+TS2Pd/LB3HqWl
+         DEyM1PabOs0nlLM+hGq0m8sgZD12M+A+Ijv7k0PgXR3ydUfbvKI9mvhdC9NcFGBM6fLX
+         oNtw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773202636; x=1773807436; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773203317; x=1773808117; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uENPJmAfC/lW/uop31YwmYzEuEawM2Qvzy11V2b8dlU=;
-        b=QMimxV7cN44WR7B67D/P0dlc58g2v41ig6Vi6/Vu28UGClputTM+0srfxhPBF1ecdI
-         s8FlBIqtTHcO0psv2Adb2Nl5KGzYlAOZ5LTARzg1rQSx/hjUeBC1NPsoyvJgz//rwauS
-         x0CERTIMVin/l4n8/PnJdbLYd54y0ODkKMGow53WXwPKbilwQwEVCNb+Aqu5PcoIQ94F
-         v1MZHhjMsVChNEoE3zvHKH0h9vyplqppy6ZDUOyBWiUp755YaLf3L43E9uEZx+G1VtP7
-         nOhnt3slCJoSBpkaoGzEybX+CABPv8TV6+TnV569hDWgXqfDwlKHxpLJeAKHfRo25ZRq
-         mWNw==
+        bh=5o3P6eHplYm7OFtUvHyPCeVIYrNp0w/amVRZXAgvY1A=;
+        b=Npt0ZXr3oSzNbR+UY/CWFFGGa2fng9oTJ539XQ/9gW9qcIAD77HOuTN471QaD753Cj
+         JSIUVkc1D6OgPbbz33IR2s+0bDxbJZ8ndPk61dIqM8fFJ7SgH7ZotNA/7W4nrTEAh/wx
+         EpK5vZgSsvMkyW7lsIOlPvh7xdltxhSeFaoAE+I1AGHU3iOT+C/tr8e9/zHKf/6ujnrq
+         GUQjMnxs6sCAn6cgTTzho8zT0+j5yqYY5udfEy5pbMq3TJmKSgya+x5qMmdsGtUqAdub
+         jgCbgoXbOadYGFkFrdHtMrJOXrMOE8Dst/f6vDqHTurhwkzDRKhSFhYHqD0YPINDZQqo
+         4grQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773202636; x=1773807436;
+        d=1e100.net; s=20230601; t=1773203317; x=1773808117;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=uENPJmAfC/lW/uop31YwmYzEuEawM2Qvzy11V2b8dlU=;
-        b=QuXAScd5ZnQz37mjuR8ayvp2aockuPp9Zg9EBFB3kAEb4nuHT0wlHc9Ts0VdxY8jqx
-         Mq8ISnZwqSIC/CrFptd8dfTgIVU7lmdUiy3DU5dZgxDxy6EQJ1GhdDxMxBses7wX58Ao
-         dH+axIaQCoCwu8EZC5V0ZFMVVOqLe5QrKCfufqW3UlMgVVbOtXL+Zq7bZk3Y8/bQ234D
-         2PclpPw5vU1c86sAczJUQkQ0DOgpIN9crAEYuvLJXAu63O2blEcHw+MxXk0rd57YgI+Y
-         lHDwtyb80n4sBXBTVCsldsBM7J+9+zC/YPQfvH1NDrkpM2DWHWMkp/c/ayODLplOsjEz
-         tSDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWj7Gt6/C/zPOrJ3PRBsenBdXzESRlU9TvfuoRRqYOPQdiDZ59hNGvLVQFTHsggxcllTj4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzpZXJ7luOn2vAZrLCNvf+oxoDk1B7gCMYZJEKbf4iVs68lo4m
-	7EF7K5jn5vvJa+GhwIwX8Y97FELmMkg9+kqD3YufjakfJSFtm+r4Aezn9Wt1BRBJ6ltHkJEyfLG
-	fkvsGI7BG4CD8t6wDqkV6HFrIU1brP5Ey547Y4Qag
-X-Gm-Gg: ATEYQzyU1ieEiieKe3VKHcFfBbD+3IetGN7vcsebp52JtpBFw/BIWWGql21BazgpmOi
-	tYtM8ljJUoLECFm4yxSn3MZBDPvWHp7EHL80W5m6nrxLBBc2OVIxTE4iFEyeg/BW6I1Gg75ksJH
-	kSNFNUMXPHdR0fVP6r6qBa5ZqWM0pq2d2Kqe7of2l+5EFsre0fR+eeIIYfEJTfMQvZdRuR3RgDp
-	O7S57ykSRmy0kw27Whx0gYNRP25Z+7b0428AamL21WOBCvufFgDZUjODoPKdyyDs2Pd4GWDRhJq
-	pb7QPIGYAKbNCgNaKobpL2zYl5Vl7rbML8wMSRTSCZS74DbzPE9EdCqxvfDN6ei+FFY6Um8=
-X-Received: by 2002:a05:7022:6098:b0:124:9acd:328d with SMTP id
- a92af1059eb24-128e780fa81mr554744c88.22.1773202631872; Tue, 10 Mar 2026
- 21:17:11 -0700 (PDT)
+        bh=5o3P6eHplYm7OFtUvHyPCeVIYrNp0w/amVRZXAgvY1A=;
+        b=UgVi6ON2BjVT0+PTyMYrAEvdNxTATU6ZHpmhEe4DwGdoqwP9nJMTpJ3m6xpxEsNQFR
+         lzrzEXnDtn+t0bgdcYxdyAle0ut6oLzj5vGniqiJ4y8NepEBzLlVboO1Jmq+fV2KnBaK
+         Ys/PjeOzx/QyWQj4PYXmv8ScS77GqViRHXfsrI43yallgld5XqrZzXgyDM94qmsTBK3k
+         wQ1jOiCuiuKiiAOj3SEDd8qvjEXNfdeaeTNdJ4KYzpJOqeQCGV2d/i9+oCCdZZEwfoYo
+         h/+YDClYob0goKiMwLVu6c3l0OeGLn6wb9ZjIHf57VujApMzIeqtzSeM5W1BMowJLHhn
+         EXpg==
+X-Gm-Message-State: AOJu0YxVS55e+sJ47Es9pxCJdLYkjlDbHaCUNLGaqTuhGootZet7BzRj
+	Y0lpZH7kjdkg32IY0JAsRkFlm5mV+63g3oHPMbn6FtAxNFcs9o7bMjCZugd0yXUC19Aw+2eniYl
+	7eg4c04e3oCLi3ooZv1JZ2V6O/YqYxBpOFfYb
+X-Gm-Gg: ATEYQzy8H9pLX8o0Awjse2btWLFhk/LhuP1S8vNhW79+9aaiJrwNNJLQGMhquX2fCPa
+	EsfQN3f8AU7aEU94CVWX8LrsUrC50RbjzdyySoKyFg7b4RY6NQ+oymvS5+nhKWRUMlSmm+Y+XJ7
+	LfYs10laqAl0H4eUvpLr5MD7B+6Oo+wxYiT44hRK/KDKNkX9ldQbobXm8lvD9LLxlGViEBWp2DM
+	yGtfbaW37ufo/q5MVLJbewCvz8aQi2SULmZIh+/zd5vhAy85wZ2oBRObWIHyRgtEWTCUjrmXTJ5
+	7FH4sXkvwoJ0jK5yvg==
+X-Received: by 2002:a05:690c:6806:b0:798:1bd:6bc7 with SMTP id
+ 00721157ae682-79917faf764mr10084157b3.47.1773203317596; Tue, 10 Mar 2026
+ 21:28:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
- <20260306-unix-proto-update-null-ptr-deref-v3-2-2f0c7410c523@rbox.co>
- <CAAVpQUCdzpwbu=fOrwCnaCFuD3U5SL73PB2nroqgUB4QdJ69og@mail.gmail.com> <3bf84a79-7335-483c-b629-2437e360387d@rbox.co>
-In-Reply-To: <3bf84a79-7335-483c-b629-2437e360387d@rbox.co>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Tue, 10 Mar 2026 21:17:00 -0700
-X-Gm-Features: AaiRm50MuWsI0wVYgHjWFEMgL9Nc1lx7e73JLHzLZPG4BRs6YGGTA8FHDUMRMq4
-Message-ID: <CAAVpQUB8fvyKSQ8UjBs4=FHmz0iME4SO=3CviS_dCzLNTLkjHQ@mail.gmail.com>
-Subject: Re: [PATCH bpf v3 2/5] bpf, sockmap: Use sock_map_sk_{acquire,release}()
- where open-coded
-To: Michal Luczaj <mhal@rbox.co>
-Cc: John Fastabend <john.fastabend@gmail.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Willem de Bruijn <willemb@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
+References: <20260310133504.94871-1-danjwade95@gmail.com> <CAMB2axMNzeyNwiYUbTnAY2jpPXoahT36u1qt3u7cCpTryGqgPg@mail.gmail.com>
+In-Reply-To: <CAMB2axMNzeyNwiYUbTnAY2jpPXoahT36u1qt3u7cCpTryGqgPg@mail.gmail.com>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Tue, 10 Mar 2026 21:28:26 -0700
+X-Gm-Features: AaiRm50871Cx_LCkbkZpmOKcLfg_UaFwvAQttoovBu5TEMDQOltVutbOaY9KM0Y
+Message-ID: <CAMB2axPdtvH6N3O9ms5pLa828hBhTipKnhrNJsXn07JSMi_3nA@mail.gmail.com>
+Subject: Re: [PATCH bpf 0/2] bpf: Fix unsound scalar forking for BPF_OR
+To: Daniel Wade <danjwade95@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 6, 2026 at 6:05=E2=80=AFAM Michal Luczaj <mhal@rbox.co> wrote:
+On Tue, Mar 10, 2026 at 2:28=E2=80=AFPM Amery Hung <ameryhung@gmail.com> wr=
+ote:
 >
-> On 3/6/26 06:44, Kuniyuki Iwashima wrote:
-> > On Thu, Mar 5, 2026 at 3:32=E2=80=AFPM Michal Luczaj <mhal@rbox.co> wro=
-te:
-> >>
-> >> Instead of repeating the same (un)locking pattern, reuse
-> >> sock_map_sk_{acquire,release}(). This centralizes the code and makes i=
-t
-> >> easier to adapt sockmap to af_unix-specific locking.
-> >>
-> >> Signed-off-by: Michal Luczaj <mhal@rbox.co>
-> >> ---
-> >>  net/core/sock_map.c | 21 +++++++--------------
-> >>  1 file changed, 7 insertions(+), 14 deletions(-)
-> >>
-> >> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-> >> index 02a68be3002a..7ba6a7f24ccd 100644
-> >> --- a/net/core/sock_map.c
-> >> +++ b/net/core/sock_map.c
-> >> @@ -353,11 +353,9 @@ static void sock_map_free(struct bpf_map *map)
-> >>                 sk =3D xchg(psk, NULL);
-> >>                 if (sk) {
-> >>                         sock_hold(sk);
-> >> -                       lock_sock(sk);
-> >> -                       rcu_read_lock();
-> >> +                       sock_map_sk_acquire(sk);
-> >>                         sock_map_unref(sk, psk);
-> >> -                       rcu_read_unlock();
-> >> -                       release_sock(sk);
-> >> +                       sock_map_sk_release(sk);
-> >>                         sock_put(sk);
-> >>                 }
-> >>         }
-> >> @@ -1176,11 +1174,9 @@ static void sock_hash_free(struct bpf_map *map)
-> >>                  */
-> >>                 hlist_for_each_entry_safe(elem, node, &unlink_list, no=
-de) {
-> >>                         hlist_del(&elem->node);
-> >> -                       lock_sock(elem->sk);
-> >> -                       rcu_read_lock();
-> >> +                       sock_map_sk_acquire(elem->sk);
-> >>                         sock_map_unref(elem->sk, elem);
-> >> -                       rcu_read_unlock();
-> >> -                       release_sock(elem->sk);
-> >> +                       sock_map_sk_release(elem->sk);
-> >>                         sock_put(elem->sk);
-> >>                         sock_hash_free_elem(htab, elem);
-> >>                 }
-> >> @@ -1676,8 +1672,7 @@ void sock_map_close(struct sock *sk, long timeou=
-t)
-> >>         void (*saved_close)(struct sock *sk, long timeout);
-> >>         struct sk_psock *psock;
-> >>
-> >> -       lock_sock(sk);
-> >> -       rcu_read_lock();
-> >> +       sock_map_sk_acquire(sk);
-> >>         psock =3D sk_psock(sk);
-> >>         if (likely(psock)) {
-> >>                 saved_close =3D psock->saved_close;
-> >> @@ -1685,16 +1680,14 @@ void sock_map_close(struct sock *sk, long time=
-out)
-> >>                 psock =3D sk_psock_get(sk);
-> >>                 if (unlikely(!psock))
-> >>                         goto no_psock;
-> >> -               rcu_read_unlock();
-> >>                 sk_psock_stop(psock);
-> >> -               release_sock(sk);
-> >> +               sock_map_sk_release(sk);
+> On Tue, Mar 10, 2026 at 7:43=E2=80=AFAM Daniel Wade <danjwade95@gmail.com=
+> wrote:
 > >
-> > I think sk_psock_stop() was intentionally put outside
-> > of rcu_read_lock() to not extend the grace period
-> > unnecessarily. e.g. while + __sk_msg_free().
+> > maybe_fork_scalars() unconditionally sets the pushed path dst register
+> > to 0 for both BPF_AND and BPF_OR.  For AND this is correct (0 & K =3D=
+=3D 0),
+> > but for OR it is wrong (0 | K =3D=3D K, not 0).  This causes the verifi=
+er to
+> > track an incorrect value on the pushed path, leading to a verifier/runt=
+ime
+> > divergence that allows out-of-bounds map value access.
 > >
-> > Maybe add __sock_map_sk_release() without
-> > rcu_read_unlock() ?
->
-> How about dropping this patch completely? The more I stare at it, I see n=
+> > Patch 1 fixes the bug by passing the opcode into maybe_fork_scalars() s=
 o
-> reason why af_unix state lock would matter in any of these places.
+> > it sets the pushed value to K for BPF_OR, and 0 for BPF_AND.
+> >
+> > Patch 2 adds three selftests to verifier_bounds.c exercising the fix.
+> >
+> > Daniel Wade (2):
+> >   bpf: Fix unsound scalar forking in maybe_fork_scalars() for BPF_OR
+> >   selftests/bpf: Add tests for maybe_fork_scalars() OR vs AND handling
+> >
+>
+> The fix and selftest make sense to me. To observe it, I also
+> vibe-coded a poc to lookup an array map element and OOB write to
+> another element and confirm the issue.
+>
+> May be missing a fix tag though:
+> commit bffacdb80b93 ("bpf: Recognize special arithmetic shift in the veri=
+fier")
 
-I agree.  Actually, once it's held, it can be released right away.
-The lock is only to ensure that peer is set after checking
-TCP_ESTABLISHED, but it continues holding unix_state_lock()
-unnecessarily long.
+oops. It is in patch 1. Please ignore my comment...
 
-Honestly I prefer Martin's idea, using unix_peer_get() in
-unix_stream_bpf_update_proto().
+>
+> Reviewed-by: Amery Hung <ameryhung@gmail.com>
+>
+> >  kernel/bpf/verifier.c                         |  15 ++-
+> >  .../selftests/bpf/progs/verifier_bounds.c     | 102 ++++++++++++++++++
+> >  2 files changed, 112 insertions(+), 5 deletions(-)
+> >
+> > --
+> > 2.43.0
+> >
+> >
