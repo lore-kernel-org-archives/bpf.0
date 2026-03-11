@@ -1,46 +1,46 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 041992D0607;
-	Wed, 11 Mar 2026 05:47:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16BBE33987;
+	Wed, 11 Mar 2026 05:49:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773208048; cv=none; b=KoW+zOwAOJg9ief/FoQjIYMpTMq/00x0W40vKxytZRhpvndGDIBYqXfWSHX0EoHuOG2KynhzIaPbKHEBHYy4OwZUSP2aquoG06X413wUlgXezfVaJJGshrEPEQxpZQ0hEeFGuS86S0b9Fk7Qs/oCRj5ReAlqHJeVRsSueb4CIXI=
+	t=1773208156; cv=none; b=fawbH2wbuIApb4FMPIlTRGaki6BQ8zVSc3K4aV54wlpt+fBqrAXVC5jFvRl9cWuNvb9JF1SGyAdYzjGzpGDc50j149K9HX2ZLgxe0XDym174egy9xk/KlLZmOiPrZ4ObIpzv9nxgGk/aKbSJsifpp7O7nURhxTHypaGS7PGCKVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773208048; c=relaxed/simple;
-	bh=6e9nm3L3Ml4roIesxDngfDxHgzLdoKE/dPXzpdnu5E4=;
+	s=arc-20240116; t=1773208156; c=relaxed/simple;
+	bh=O5F7KGiHldYe0iLATEy2BGJX8ZOn/3g3F7HDWezRE7k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JthOvV8qA6B48OIx73Y8gr4kSuWeIG4Tog68uokVGnUBcCXRHNnX7YtZ/SVtv7Vn+/IfT0dpEEz4UGCWNvgz1D2B5r654vno2iq/Vm5WXeKhEuwYg9bKMgbjjrhsqzlCztj+Gw/EL5F8fKiL7q5SrvG1KsSKSoGG38RB5YlE+28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=JEFzcPwp; arc=none smtp.client-ip=213.133.104.62
+	 In-Reply-To:Content-Type; b=ZJNvDEEDHjb21e5UqTwzDCNqL02i7TwL9NOyBOGhqDSUi2zIE686HjzRSp3hHNohBakYgIC4hrBChKfWE0OEQ7d4ZjiyfBsk/wfKWIi7GM43TLWu6i8cNDlWHCRx8cXoKXvDxbY+R8tXlRC0/bQs6IBa7JztIsalsVdq1UaTYtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=n5QZ/slt; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="JEFzcPwp"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="n5QZ/slt"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=7Yr8EZclJahCKTtZ/Xw6DqH7nt1Ujj1rZPquim7QHJ4=; b=JEFzcPwpzBaxCtB2FLUkSi1ZsU
-	JUXBztiKdPj9Gg5DHz4kbDZuqo/wpNmv+G1DK5UGy4VoHKvI92kQJNsmwwbBXfvN7H0CHvES4OiwV
-	f6cPQEdnEFCcaSc+1FZrL29kk3UQ/ZZPDM19yEPA8vcCq9E/iG8QSLYFLHKgmBx5jhucodN8+eXQk
-	RwU8A4R7qdf7+2kULSsVyq7aQSE6kwCsk14tV2JqqMBlFG2YeSdqirORjU0qFpdsRTJswcGSLlcSX
-	8CFP+BWd6bKOpqYwBAcVSjy+36HqQlOpnkbnT+/bbh0RptrET3elK/SMrq5yG2xNbwH82KT54Y3TQ
-	4KqNRKZQ==;
+	bh=wSiVWCkxw92vElpxVIKQb0klqCAZrA1dUZl2P16tIg8=; b=n5QZ/sltVcUn5Ko2hi98VTjFEd
+	M5EPVg/jZymXNVq5Lnxj97GSmdi2dPFm2Gj/GMH58r+R2FiF6khgwX7xeeUR1d9VxwM6Hu2LhzVlJ
+	oLDbMqf+iT9F09TGwqiC/uY1PrNLtages7CUuXfEQUQ9udWQuAnDPufa8ES0zb9vqZc2286L9sprO
+	KfP/J4QAW7tWMGUAT8JOz8I40FBwglIzuqWIBR6WTGEY2xvhSI/LgVZgVdsoKh3egBMgbgah8Bnyo
+	/vbp6hv0dZC+HmqwxCUrMXhnZdRQw7vt4HxIOjCylTTdvGZpRJCllGE5+W0TNRTkofefUU9m+i6Aa
+	wdU/nxuQ==;
 Received: from sslproxy01.your-server.de ([78.46.139.224])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1w0CPX-000EA3-39;
-	Wed, 11 Mar 2026 06:47:12 +0100
+	id 1w0CRR-000BTN-2v;
+	Wed, 11 Mar 2026 06:49:09 +0100
 Received: from localhost ([127.0.0.1])
 	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1w0CPW-0002vk-1V;
-	Wed, 11 Mar 2026 06:47:10 +0100
-Message-ID: <6da18a29-f545-4151-a7d4-58bcaf04b967@iogearbox.net>
-Date: Wed, 11 Mar 2026 06:47:09 +0100
+	id 1w0CRQ-000GZm-1i;
+	Wed, 11 Mar 2026 06:49:08 +0100
+Message-ID: <2fef1df2-b43c-4083-baaa-c49f77227066@iogearbox.net>
+Date: Wed, 11 Mar 2026 06:49:07 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,7 +48,7 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v4 3/4] bpf: bpf_out_neigh_v4: Fix nd_tbl NULL
+Subject: Re: [PATCH net v4 4/4] bpf: bpf_out_neigh_v6: Fix nd_tbl NULL
  dereference when IPv6 is disabled
 To: =?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>,
  Martin KaFai Lau <martin.lau@linux.dev>,
@@ -66,7 +66,7 @@ To: =?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>,
 Cc: Fernando Fernandez Mancera <fmancera@suse.de>, bpf@vger.kernel.org,
  netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20260307-net-nd_tbl_fixes-v4-0-e2677e85628c@suse.com>
- <20260307-net-nd_tbl_fixes-v4-3-e2677e85628c@suse.com>
+ <20260307-net-nd_tbl_fixes-v4-4-e2677e85628c@suse.com>
 Content-Language: en-US
 From: Daniel Borkmann <daniel@iogearbox.net>
 Autocrypt: addr=daniel@iogearbox.net; keydata=
@@ -112,7 +112,7 @@ Autocrypt: addr=daniel@iogearbox.net; keydata=
  rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
  DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
  owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
-In-Reply-To: <20260307-net-nd_tbl_fixes-v4-3-e2677e85628c@suse.com>
+In-Reply-To: <20260307-net-nd_tbl_fixes-v4-4-e2677e85628c@suse.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/27936/Tue Mar 10 07:24:39 2026)
@@ -120,13 +120,14 @@ X-Virus-Scanned: Clear (ClamAV 1.4.3/27936/Tue Mar 10 07:24:39 2026)
 On 3/7/26 9:50 PM, Ricardo B. Marlière wrote:
 > When booting with the 'ipv6.disable=1' parameter, the nd_tbl is never
 > initialized because inet6_init() exits before ndisc_init() is called which
-> initializes it. If bpf_redirect_neigh() is called from tc with an explicit
-> nexthop of nh_family == AF_INET6, bpf_out_neigh_v4() takes the AF_INET6
-> branch and calls ip_neigh_gw6(), which relies on ipv6_stub->nd_tbl.
+> initializes it. If bpf_redirect_neigh() is called with explicit AF_INET6
+> nexthop parameters, __bpf_redirect_neigh_v6() can skip the IPv6 FIB lookup
+> and call bpf_out_neigh_v6() directly. bpf_out_neigh_v6() then calls
+> ip_neigh_gw6(), which uses ipv6_stub->nd_tbl.
 > 
 >   BUG: kernel NULL pointer dereference, address: 0000000000000248
 >   Oops: Oops: 0000 [#1] SMP NOPTI
->   RIP: 0010:skb_do_redirect+0xb93/0xf00
+>   RIP: 0010:skb_do_redirect+0x44f/0xf40
 >   Call Trace:
 >    <TASK>
 >    ? srso_alias_return_thunk+0x5/0xfbef5
@@ -138,8 +139,6 @@ On 3/7/26 9:50 PM, Ricardo B. Marlière wrote:
 >    ? srso_alias_return_thunk+0x5/0xfbef5
 >    __dev_queue_xmit+0x6fa/0x1000
 >    ? srso_alias_return_thunk+0x5/0xfbef5
->    ? srso_alias_return_thunk+0x5/0xfbef5
->    ? alloc_skb_with_frags+0x58/0x200
 >    packet_sendmsg+0x10da/0x1700
 >    ? srso_alias_return_thunk+0x5/0xfbef5
 >    __sys_sendto+0x1f3/0x220
@@ -150,8 +149,8 @@ On 3/7/26 9:50 PM, Ricardo B. Marlière wrote:
 >    entry_SYSCALL_64_after_hwframe+0x77/0x7f
 >    </TASK>
 > 
-> Fix this by adding an early check in the AF_INET6 branch of
-> bpf_out_neigh_v4(). If IPv6 is disabled, unlock RCU and drop the packet.
+> Fix this by adding an early check in bpf_out_neigh_v6(). If IPv6 is
+> disabled, drop the packet before neighbor lookup.
 > 
 > Suggested-by: Fernando Fernandez Mancera <fmancera@suse.de>
 > Fixes: ba452c9e996d ("bpf: Fix bpf_redirect_neigh helper api to support supplying nexthop")
