@@ -1,321 +1,214 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C06FB1990C7
-	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 19:00:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 711E223C50A
+	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 19:07:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.173
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773255658; cv=pass; b=tRQ1x0mhjVhOpGVLAYx4P3mINVe6oJuNgcLLSxzE6ZKb4dPZuqExzFFZNusgMWMU/6Isg2D9SM38dAk6OmtiPLTW52rYb08md7NML9OVFfNkY1DsebgDx9cxu1zdgt9F7EbZYC6zkMiOIk1Li9N3y1f6O7GctJ3R1cSrD6IK1aA=
+	t=1773256035; cv=pass; b=FH960cR8CHn1sQniYKwE4b6UGcClOik/ZJwX20d6sjxRnhO6ij2+3PwseLVJj+EDjnj0aLmU1moCTc/INBy/cuoV/yxrfsowJkSQlLIxdEZUNOUX3jBxRBH8+kRTNYg1+o1bUXLzqnO9OiBnXB+Ta0qdDOzdUp5xxq+QOZ072S8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773255658; c=relaxed/simple;
-	bh=a1ZXRKphl5imqZjNE+Y8nJJfuQanpVMqZxkO8ED1aDc=;
+	s=arc-20240116; t=1773256035; c=relaxed/simple;
+	bh=hFRBK6KpwBBGpssFA73yb22Ddkh8qpZkts54f0kxqcY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=etja3zWvk2zwfBTl765JUb1vT5eB3aenPpfl6gv7dMh12oXyCKfOpStgbx8405SRpgtnPr9QL28Epa8CYGUb44Ss19ImLZN3klQTlGZ1+kCps/U9yAVTMmO38hT0//rTf+D8Y9F0iPvmWjlVFLnQcxqu1cOlFLtxvlQ1x/2CdoE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J82RAOTY; arc=pass smtp.client-ip=209.85.215.174
+	 To:Cc:Content-Type; b=ufoP1qZy7RMlT6HGc0T6fLjLuHXijPRL1vfiOmUZMNlfJo5XiDMfJDpVP4nwryULujaGh3qjJf+8r5I0u4LhTu+BC2+8y6yskaokcJ+asxWmxOqfRt1pnSLS0X1I2XFuuksFw4spM9Bf5LYYkM85X5OYF4VuuB94hYDN2z/VsSU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZwHENp+l; arc=pass smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J82RAOTY"
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-c73c990a96dso55216a12.0
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 12:00:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773255656; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZwHENp+l"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-82976220e97so142896b3a.3
+        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 12:07:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773256034; cv=none;
         d=google.com; s=arc-20240605;
-        b=ANPhrx8giaxVGyUJFRzHT96tmVj/d/GKEo3PgLheD2txaJaB0RxHlPTat40suJ51kJ
-         hE94L49UFwmGX2SQz55of2zvnBgBYi8GV1ZpEbclWpwWh2zh6adgWhRLEi22C2mW0Vx4
-         lSpWez07koFGYc6GCZprh9chJ2buIwdbbPVMWZPK1T/SLS06KX6NlC1isukEnOFmtSKC
-         Zl+ouTEyXTarkYoTiOFYUgv3U5YM418qZlZJtXCvUel3oJhgQVd6T4OTyN1i/EF0QLx5
-         vwDtBTVTYNIQSiw4gvAriTooVBLR8sNfF1ghebnV3zNsuikKSz6nnQmj2T9cmCRrx8JU
-         MXeA==
+        b=c+nz9SU5i4R6F8S+3qVNSPcu8Ee0zGJow5uNdWW7kzd3jQeVV8tDuQpLVqYAwT/jMl
+         uj8/gJctizmpTHlyXB47EvenHrZ6YJtYSIiJ8RuhJNXpzL/LOXZ1mu4fwTfWW+X8yn7R
+         UjfY5CwsoT6X/ap8+ekDIDc1UzL75hGTDtL9+gvu93+F7mYWIpfb0UOXf0NtUlgBNRYS
+         pKcmT+mJoWlzuiaVX+Xayin1X+dbe6hjuL7oBzy7bzF2P2CEeF8vTnABXVSV5mBiFvBv
+         z9Jmhhg5V162nkK2Wa/NDsDkeuzRbIMgiEVe7mXtl1aWr/JdhnR5+NrINyE0+v3fXwZ8
+         4ubg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=0FAeFSpvvJ+yRAPhqY1CjzDGLPwlqegDmP9v+/H/qYs=;
-        fh=1LhFiYc1Rq+qPcq6jOq+2i3N54xRLlAhlj0skHZQ83s=;
-        b=fATwMlB+lcqM7pODM/p/Z8f5+lM4vfA5uL70VDR+3bxIQupONssfB14KGmZRlNEKUY
-         +iI0lWKOk8qqdnNac6L2yCsKVmbIvYVZuBRCY5SST5FDLgvlJjwXIwdIhhGszyuEX/K6
-         xntlGP6H6oycB+50D1Q3Pd3v9CMt0wD5mGHFcKmAHDMhVWD4U3AVljCXWpV3+3rAoiBp
-         jaFbHdktzAx4NwT+3f1855BgqhO5exuqjjZKOCqonxzeT2bqIIU6t0RCBuoj9jEXyd8a
-         qKocQ9icjVmfh8pRFGyrqO1J2rsI8BI7CK+LHwFfxzaiR6/avY2258XcnIWN/ItsOmcR
-         ivTA==;
+        bh=u3mCcSLbcOcj1+TTvV6dKV23UK7ZIHGVZxAEOZvX0JQ=;
+        fh=3JFULSt81QhP9ARgOVVWpn+UY1r04WcyvJhNnAO9JVY=;
+        b=YoJ3MGPbf79Vz8AH6mqmBzlYSmYCoadhIgdT/8r4nNmk7KZscdZejWMHuT4gDcML5D
+         mqpWvQj6KXeIlK5d0ZjP2wG9x3KQD0oHJn4pkO3uaQSI/MAaubwqNzchR5T78M6Li+5E
+         +NKLou1mvlQgBWn81cXo+GuzLSkOaS/LsYKD/vguDAjZCxiMtQlGm7a2u8wPHfpWIpMw
+         lwTitzzASqe1pW0Pk1WkxsOPsublDyS0hzn+MQGbxogkUAGZmE6b7XPI6jO7jrGQt3Y8
+         EtN8nwjjYIncEYh69+Opnse1OtqjUJsovNbc48Sv2uL+yKomDUI/hn1ATAi5fkZVmj4k
+         +RUg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773255656; x=1773860456; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773256034; x=1773860834; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0FAeFSpvvJ+yRAPhqY1CjzDGLPwlqegDmP9v+/H/qYs=;
-        b=J82RAOTYOSqxJWZSEWoidVxWMonJ3W4utfVqnbsuBRb+eJVbyMoRlLVcdRcI2WpXgn
-         cNsa7xZ7ngJqit1CpO42Wjlu5VUUiRsSkLivUppQ66GSA7ezv1MaqZObq3beM/XxsY9i
-         9zcE5a5Rnt8tA/joxvcEuMAMOUtDfxCEby8MWlWs7AGefYKyO6Zem/oVG6xSOIkrwEbG
-         /c1v8kVOlIrjMgfb1nN/9LtUm5yUBEOCW2xytRRCMH9/6LzFONffLiLDaNN/vQEtZoDp
-         I6vXoodfjOzCvXyDVE4C5cffByMMSwId72ozJZ3vCp2cXGtc87dlnEXDADKy04FzRHa8
-         P9nw==
+        bh=u3mCcSLbcOcj1+TTvV6dKV23UK7ZIHGVZxAEOZvX0JQ=;
+        b=ZwHENp+lhYdcbVJYfHpCrLBxdXRKrwDB5Cyhto7XXDHfEeOsiW9dq5EGaEdiwm6hJG
+         nW1JhN9lyfu9ucyYU8FZrpQoCVeGg5jQvXlQfrOQGzVIEVTYFIld5SKqWiy081cTtZDC
+         YHLtAn7doB3R8X3g1pJZ+z30h+BIpOC56qSOLqXW+//LeFMRv/uqxa42sYzULbik+zF6
+         bfb42L8tW9zRzU29G6Dgh3GMSOgxzSbPqJmr9k0DmNTjEfQXdU8gE0gKVwgWiXO04a9w
+         nT+ZGlG28Z9Mdd1g97Sz1I5652kQGHXrAhbg22eUUKAYfGnz5R7sOTB54yb0sXud++Q6
+         sAtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773255656; x=1773860456;
+        d=1e100.net; s=20230601; t=1773256034; x=1773860834;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=0FAeFSpvvJ+yRAPhqY1CjzDGLPwlqegDmP9v+/H/qYs=;
-        b=HwrUNF/T3o9J0BNt3A68LVzFY8rjE1YG4yKH3Gt6PD3NXDb1I+TqhwNhlC6xxP7rl6
-         EiREun6U3k0znAQ3dFqEZkVbhi88lfquONsx5OWZ/z3BO9rmBFk8EZVIsJSXTBNEfvsl
-         6wbziqX1wiyWMCbhuJMoN5S7dhwVpcfS+O6RTB+gaYvRTgtaMwrOEhv0B69TZ0QZ+8Do
-         8fNbClhd69hJZWNg1gnMXFlIWX+K4z2xv/h3a64Gg7bLrz9/q6+YdcgsjPPimKDXuzCF
-         sXEn2jnR7zEX4XJF7Fzf43q2IK5mDZ2s4sS+ZH6jcx7Z04EU7NzJX+VySXCsGtMulWyi
-         AYkA==
-X-Gm-Message-State: AOJu0YxW7hWQRKw8JAVht8uHGXLa/WH2D10PD/SofUE48cP2Qsi4KmeA
-	3iH3qt0MdaURBIfRfR6G1KI9PnXJnu3MpPm2E1b70vuaTSlcSlnXnixnBwM7t7ACx1KkQt+ujY6
-	ELNE4JYYUGQSBQUhH75M6fvjhHFwqScY=
-X-Gm-Gg: ATEYQzymJbXlxV6CFJoZhKjXbFx13oymg9Yx4oBmGaxFQgDJMtvJhDnw0iKKtK54z8z
-	7/RW3TeqqgTfL9M8mAR01WLttIEHDy0+0Hknu8qt2t+r/CJf5a6GrRxcBVYjnGsDBqo+Zf7tSFe
-	BDmwsxq7sNtwCDDOd5f8TpgXleiV9yjcQbVfpOV3pfHJv7p/p2MuKAwCdIsY3dHKzcMmmtf0JuT
-	DSer5M0WYFOglGZnwlQCczfecYJMFgBguKRdTOw2zNEOeUoBiW2H+bWXkC1+7tTSrufm2lI2btx
-	zSMAOSI=
-X-Received: by 2002:a05:6a20:5482:b0:398:9044:77b7 with SMTP id
- adf61e73a8af0-398c61395c1mr3259630637.59.1773255655884; Wed, 11 Mar 2026
- 12:00:55 -0700 (PDT)
+        bh=u3mCcSLbcOcj1+TTvV6dKV23UK7ZIHGVZxAEOZvX0JQ=;
+        b=oJ1gaGyxuaW0sBG+aEwHSlX2/1oBYCvdEOH69Q3nkNR9HrmLmkeKxRTjoLBepFQ7Xm
+         ANUeGJntA9EcyBEkaj3frG5r5SJkMe+kqmipFvhj7hbJM7oipb0QZG8qienJpj/TG4O1
+         Cx9p4ynfuPb/ret4L5ihhwME8tUNNcWbnKlr2p3Qcukn5q3/g1QaB4spesyHByRdBMHO
+         FVgVvtq5WCs2icsVH9delTktbvQ+RbaSRRbqA2xPx8TEGnZR2OzBvYYhDMCHnZZQJXCy
+         uF6k6X6VwTTcF4cPvgRojNrwM0+dEyMIIUR6AWi6GUFY7iT3c9tVor9Z1zpAHcDPqFTU
+         rlFQ==
+X-Gm-Message-State: AOJu0Yx1b4UQcg80xIg8zx2085KU6hyb/tyJbE2YE72vjl8sB6B0mjKo
+	NE+7jXgUwWEh4r/kZ+PuBjroVsBBZFPeRnf51i3JvIWJ8vZJc7dh1k8gk3cjrJZLjwW8qx7d63K
+	hmGo6N45r+r5eEgIuGsv/WxD/4HPmoJw=
+X-Gm-Gg: ATEYQzwsW3GB1i1TC3reCOAa+OQsPzy4p2cuZNVW2eXaNJG/F34TfLrysoTf4Zzt3SI
+	zOIIJ2/CO4Ymby3ejkX0KqcsDq7GsZTEGgP9RW4L0uWmVL+gJM+spHgXNxBBVXa3sKYcv6ku5Xn
+	coPgHGmz1Tv56qCnCn80gx3/shY+qlF0U2NO2/FEpfocFLmQ7yKv3mN2f4JBXS9TlQ7b1+bC/J0
+	FDxoQXIajDqr81l/Jw1RCi8xnHkZbkpUwJrPdxmn+gPVHadYf8LpaMu7g5w0yWMao0IUouHnGQ0
+	jdiZnx4=
+X-Received: by 2002:a05:6a00:1c8f:b0:823:1570:1e81 with SMTP id
+ d2e1a72fcca58-829f715cf82mr3085330b3a.53.1773256033638; Wed, 11 Mar 2026
+ 12:07:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260309155506.23490-1-puranjay@kernel.org> <20260309155506.23490-4-puranjay@kernel.org>
-In-Reply-To: <20260309155506.23490-4-puranjay@kernel.org>
+References: <20260309155506.23490-1-puranjay@kernel.org> <20260309155506.23490-5-puranjay@kernel.org>
+In-Reply-To: <20260309155506.23490-5-puranjay@kernel.org>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 11 Mar 2026 12:00:43 -0700
-X-Gm-Features: AaiRm52PaA9HRNTYeVk21io-gAJF_7rwme-r5V301TivSI68HEMD-1fgP0nPH48
-Message-ID: <CAEf4BzZiVQ2=UKXOVs7Y5NArhmQvW81EpzMbkOogHgNnbjUcXw@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 3/4] bpf: switch task_vma iterator from mmap_lock
- to per-VMA locks
+Date: Wed, 11 Mar 2026 12:07:01 -0700
+X-Gm-Features: AaiRm53WRb3jbJxeVvktbY1LTV549iBkkY4mAK09vo1n_RFbyB3aubJZg0c0wCo
+Message-ID: <CAEf4Bzb9aPiAxOfo+_L6iaZPGrk3mPQ+6yuA6msTUHOV=xbGfg@mail.gmail.com>
+Subject: Re: [PATCH bpf v2 4/4] bpf: return VMA snapshot from task_vma iterator
 To: Puranjay Mohan <puranjay@kernel.org>
 Cc: bpf@vger.kernel.org, Puranjay Mohan <puranjay12@gmail.com>, 
 	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
 	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, 
 	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, kernel-team@meta.com, 
-	Mykyta Yatsenko <yatsenko@meta.com>
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, kernel-team@meta.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Mon, Mar 9, 2026 at 8:55=E2=80=AFAM Puranjay Mohan <puranjay@kernel.org>=
  wrote:
 >
-> The open-coded task_vma iterator holds mmap_lock for the entire duration
-> of iteration, increasing contention on this highly contended lock.
+> Holding the per-VMA lock across the BPF program body creates a lock
+> ordering problem when helpers acquire locks that depend on mmap_lock:
 >
-> Switch to per-VMA locking. Find the next VMA via an RCU-protected maple
-> tree walk and lock it with lock_vma_under_rcu(). lock_next_vma() is not
-> used because its fallback takes mmap_read_lock(), and the iterator must
-> work in non-sleepable contexts.
+>   vm_lock -> i_rwsem -> mmap_lock -> vm_lock
 >
-> Between the RCU walk and the lock, the VMA may be removed, shrunk, or
-> write-locked. On failure, advance past it using vm_end from the RCU
-> walk. Because the VMA slab is SLAB_TYPESAFE_BY_RCU, vm_end may be
-> stale; fall back to PAGE_SIZE advancement when it does not make forward
-> progress. VMAs inserted in gaps between iterations are not detected.
+> Snapshot VMA fields under the per-VMA lock in _next(), then drop the
+> lock before returning. The BPF program accesses only the snapshot.
 >
-> CONFIG_PER_VMA_LOCK is required; return -EOPNOTSUPP without it.
+> Copy vm_start, vm_end, vm_flags, vm_pgoff, vm_page_prot, vm_file, and
+> vm_mm. vm_file is reference-counted with get_file() under the lock and
+> released via fput() on the next iteration or in _destroy(). vm_mm uses
+> the mm pointer already held via mmget().
 >
+> Fixes: 4ac454682158 ("bpf: Introduce task_vma open-coded iterator kfuncs"=
+)
 > Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-> Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
 > ---
->  kernel/bpf/task_iter.c | 91 +++++++++++++++++++++++++++++++++---------
->  1 file changed, 72 insertions(+), 19 deletions(-)
+>  kernel/bpf/task_iter.c | 34 ++++++++++++++++++++++------------
+>  1 file changed, 22 insertions(+), 12 deletions(-)
 >
 > diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-> index e8efc9e1f602..e20c85e06afa 100644
+> index e20c85e06afa..f04d6e310fd3 100644
 > --- a/kernel/bpf/task_iter.c
 > +++ b/kernel/bpf/task_iter.c
-> @@ -9,6 +9,7 @@
->  #include <linux/bpf_mem_alloc.h>
->  #include <linux/btf_ids.h>
->  #include <linux/mm_types.h>
-> +#include <linux/mmap_lock.h>
->  #include <linux/sched/mm.h>
->  #include "mmap_unlock_work.h"
->
-> @@ -798,8 +799,8 @@ const struct bpf_func_proto bpf_find_vma_proto =3D {
+> @@ -799,7 +799,7 @@ const struct bpf_func_proto bpf_find_vma_proto =3D {
 >  struct bpf_iter_task_vma_kern_data {
 >         struct task_struct *task;
 >         struct mm_struct *mm;
-> -       struct bpf_iter_mm_irq_work *work;
-> -       struct vma_iterator vmi;
-> +       struct vm_area_struct *locked_vma;
-> +       u64 last_addr;
+> -       struct vm_area_struct *locked_vma;
+> +       struct vm_area_struct snapshot;
+>         u64 last_addr;
 >  };
 >
->  struct bpf_iter_task_vma {
-> @@ -858,12 +859,16 @@ __bpf_kfunc int bpf_iter_task_vma_new(struct bpf_it=
-er_task_vma *it,
->                                       struct task_struct *task, u64 addr)
->  {
->         struct bpf_iter_task_vma_kern *kit =3D (void *)it;
-> -       bool irq_work_busy =3D false;
->         int err;
->
->         BUILD_BUG_ON(sizeof(struct bpf_iter_task_vma_kern) !=3D sizeof(st=
-ruct bpf_iter_task_vma));
->         BUILD_BUG_ON(__alignof__(struct bpf_iter_task_vma_kern) !=3D __al=
-ignof__(struct bpf_iter_task_vma));
->
-> +       if (!IS_ENABLED(CONFIG_PER_VMA_LOCK)) {
-> +               kit->data =3D NULL;
-> +               return -EOPNOTSUPP;
-> +       }
-> +
->         /* is_iter_reg_valid_uninit guarantees that kit hasn't been initi=
-alized
->          * before, so non-NULL kit->data doesn't point to previously
->          * bpf_mem_alloc'd bpf_iter_task_vma_kern_data
-> @@ -879,12 +884,8 @@ __bpf_kfunc int bpf_iter_task_vma_new(struct bpf_ite=
-r_task_vma *it,
+> @@ -895,8 +895,8 @@ __bpf_kfunc int bpf_iter_task_vma_new(struct bpf_iter=
+_task_vma *it,
 >                 goto err_cleanup_iter;
 >         }
 >
-> -       /*
-> -        * Both mmap_lock and mmput irq_work slots must be free for _dest=
-roy().
-> -        * kit->data->work =3D=3D NULL is valid after bpf_mmap_unlock_get=
-_irq_work
-> -        */
-> -       irq_work_busy =3D bpf_mmap_unlock_get_irq_work(&kit->data->work);
-> -       if (irq_work_busy || bpf_iter_mmput_busy()) {
-> +       /* Ensure the mmput irq_work slot is free for _destroy(). */
-> +       if (bpf_iter_mmput_busy()) {
->                 err =3D -EBUSY;
->                 goto err_cleanup_iter;
->         }
-> @@ -894,16 +895,10 @@ __bpf_kfunc int bpf_iter_task_vma_new(struct bpf_it=
-er_task_vma *it,
->                 goto err_cleanup_iter;
->         }
->
-> -       if (!mmap_read_trylock(kit->data->mm)) {
-> -               err =3D -EBUSY;
-> -               goto err_cleanup_mmget;
-> -       }
-> -
-> -       vma_iter_init(&kit->data->vmi, kit->data->mm, addr);
-> +       kit->data->locked_vma =3D NULL;
-> +       kit->data->last_addr =3D addr;
+> -       kit->data->locked_vma =3D NULL;
+>         kit->data->last_addr =3D addr;
+> +       memset(&kit->data->snapshot, 0, sizeof(kit->data->snapshot));
 >         return 0;
 >
-> -err_cleanup_mmget:
-> -       bpf_iter_mmput(kit->data->mm);
 >  err_cleanup_iter:
->         put_task_struct(kit->data->task);
->         bpf_mem_free(&bpf_global_ma, kit->data);
-> @@ -912,13 +907,70 @@ __bpf_kfunc int bpf_iter_task_vma_new(struct bpf_it=
-er_task_vma *it,
->         return err;
->  }
->
-> +/*
-> + * Find and lock the next VMA at or after data->last_addr using an
-> + * RCU-protected maple tree walk followed by lock_vma_under_rcu().
-> + * On failure or if the VMA changed, advance past it using vm_end from
-> + * the RCU walk. SLAB_TYPESAFE_BY_RCU can make vm_end stale, so fall
-> + * back to PAGE_SIZE advancement to guarantee forward progress.
-> + */
-> +static struct vm_area_struct *
-> +bpf_iter_task_vma_find_next(struct bpf_iter_task_vma_kern_data *data)
-> +{
-> +       struct vm_area_struct *vma;
-> +       struct vma_iterator vmi;
-> +       unsigned long next_addr, next_end;
-> +
-> +retry:
-> +       rcu_read_lock();
-> +       vma_iter_init(&vmi, data->mm, data->last_addr);
-> +       vma =3D vma_next(&vmi);
-> +       if (!vma) {
-> +               rcu_read_unlock();
-> +               return NULL;
-> +       }
-> +       next_addr =3D vma->vm_start;
-> +       next_end =3D vma->vm_end;
-> +       rcu_read_unlock();
-
-are we doing this whole vma_iter_init+vma_next just to differentiate
-between lock_vma_under_rcu() return NULL because a) there is no VMA
-anymore and b) VMA is/was there, but we failed to lock it? Is that
-right? If so, let's add some explicit comment explaining that aspect
-specifically?
-
-better still would be to change lock_vma_under_rcu to return
-ERR_PTR(), maybe mm folks won't be against that?..
-
-> +
-> +       vma =3D lock_vma_under_rcu(data->mm, next_addr);
-> +       if (!vma) {
-> +               if (next_end > data->last_addr)
-> +                       data->last_addr =3D next_end;
-> +               else
-> +                       data->last_addr +=3D PAGE_SIZE;
-
-this feels very arbitrary and kind of wrong. if we are unlucky to look
-up vma that was moved to earlier, next retry won't look it up anymore,
-and we'll get better vm_end. So instead of arbitrary + PAGE_SIZE,
-let's just keep last_addr as is and retry?
-
-and speaking of, we should still pass data->last_addr into
-lock_vma_under_rcu(), IMO, given our vma_next() is speculative, no?
-
-> +               goto retry;
-> +       }
-> +
-> +       if (unlikely(data->last_addr >=3D vma->vm_end)) {
-> +               data->last_addr =3D vma->vm_end;
-> +               vma_end_read(vma);
-> +               goto retry;
-> +       }
-> +
-> +       return vma;
-> +}
-> +
+> @@ -954,23 +954,33 @@ bpf_iter_task_vma_find_next(struct bpf_iter_task_vm=
+a_kern_data *data)
 >  __bpf_kfunc struct vm_area_struct *bpf_iter_task_vma_next(struct bpf_ite=
 r_task_vma *it)
 >  {
 >         struct bpf_iter_task_vma_kern *kit =3D (void *)it;
-> +       struct vm_area_struct *vma;
+> -       struct vm_area_struct *vma;
+> +       struct vm_area_struct *snap, *vma;
 >
 >         if (!kit->data) /* bpf_iter_task_vma_new failed */
 >                 return NULL;
-> -       return vma_next(&kit->data->vmi);
+>
+> -       if (kit->data->locked_vma)
+> -               vma_end_read(kit->data->locked_vma);
+> +       snap =3D &kit->data->snapshot;
 > +
-> +       if (kit->data->locked_vma)
-> +               vma_end_read(kit->data->locked_vma);
-
-clear kit->data->locked_vma here
-
-> +
-> +       vma =3D bpf_iter_task_vma_find_next(kit->data);
-> +       if (!vma) {
-> +               kit->data->locked_vma =3D NULL;
-
-instead of here? what are we microoptimizing for?
-
-> +               return NULL;
+> +       if (snap->vm_file) {
+> +               fput(snap->vm_file);
+> +               snap->vm_file =3D NULL;
 > +       }
+
+we do the same in _destroy, and we might get more "trusted" stuff
+added, so to keep all that in sync, let's add a common function that
+will "clean up" vma snapshot?
+
+>
+>         vma =3D bpf_iter_task_vma_find_next(kit->data);
+> -       if (!vma) {
+> -               kit->data->locked_vma =3D NULL;
+> +       if (!vma)
+>                 return NULL;
+> -       }
+>
+> -       kit->data->locked_vma =3D vma;
+> +       snap->vm_start =3D vma->vm_start;
+> +       snap->vm_end =3D vma->vm_end;
+> +       snap->vm_mm =3D kit->data->mm;
+> +       snap->vm_page_prot =3D vma->vm_page_prot;
+> +       snap->flags =3D vma->flags;
+> +       snap->vm_pgoff =3D vma->vm_pgoff;
+> +       snap->vm_file =3D vma->vm_file ? get_file(vma->vm_file) : NULL;
 > +
-> +       kit->data->locked_vma =3D vma;
-> +       kit->data->last_addr =3D vma->vm_end;
 
-nit: this is "next addr", not "last addr"
+let's just memcpy() entire vma, and then get_file(vma->vm_file) for
+the explicitly trusted pointers? All other pointers are still useful
+even if untrusted (e.g., I can easily see useful application of
+vm_ops+vm_private_data and, separately, anon_vma). It's safe and
+correct to have those pointers, we just can't declare them as trusted.
+PROBEMEM semantics works fine here.
 
-> +       return vma;
+>         kit->data->last_addr =3D vma->vm_end;
+> -       return vma;
+> +       vma_end_read(vma);
+> +       return snap;
 >  }
 >
 >  __bpf_kfunc void bpf_iter_task_vma_destroy(struct bpf_iter_task_vma *it)
-> @@ -926,7 +978,8 @@ __bpf_kfunc void bpf_iter_task_vma_destroy(struct bpf=
+> @@ -978,8 +988,8 @@ __bpf_kfunc void bpf_iter_task_vma_destroy(struct bpf=
 _iter_task_vma *it)
 >         struct bpf_iter_task_vma_kern *kit =3D (void *)it;
 >
 >         if (kit->data) {
-> -               bpf_mmap_unlock_mm(kit->data->work, kit->data->mm);
-> +               if (kit->data->locked_vma)
-> +                       vma_end_read(kit->data->locked_vma);
+> -               if (kit->data->locked_vma)
+> -                       vma_end_read(kit->data->locked_vma);
+> +               if (kit->data->snapshot.vm_file)
+> +                       fput(kit->data->snapshot.vm_file);
 >                 bpf_iter_mmput(kit->data->mm);
 >                 put_task_struct(kit->data->task);
 >                 bpf_mem_free(&bpf_global_ma, kit->data);
