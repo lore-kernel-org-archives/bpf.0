@@ -1,64 +1,63 @@
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F4C931A07F
-	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 19:24:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B69892D47E6
+	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 19:25:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773257094; cv=none; b=db6NI5puZN4pJf71UnWHDCT7Ns0L6HiZbRB60ndH1YjiiNlDtuYNUJBWhehbAqQ3Q4iGWw2QIB2mNtvWRrl83gjnP1ruV+OjJ6QtFo40Lkv3Q/1hk+Cgor8guiLVIJiqtJSHpJ/trbGT8CeS9BMdsjNJVE0lkshBhaUwfanSz2o=
+	t=1773257150; cv=none; b=BQwyWI4e0BzfkqMcXIiKv6nmvUxubHddpJ71J1fb3+Ys9XKLhB5rGIAO2+PxZJQ343152dHDTj8hdSuaapGrMN6bWbHu5xthUUENyCcVMmQrUXjtoUD33GeIj9Ytngf9FdYvDKSf/mfn0vgnSVLIq74a0hea06jE5ZH3hVUzlKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773257094; c=relaxed/simple;
-	bh=YO5F6xseRGMb/viupNnNgVMA9K53gz6EhnNZjtbn0lQ=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=MzWL9xBDa2L6Dl5zexQy583vqZN7oCCKWuqqXWtXpP3ZRcz+lV+q8S3qx1bSlTbxLjtaXjTwpCbSrQZB+4+MNqRBtwqj3MOAXCDKPEWKn0RbY4KEiSkz1XUdFNsPLJbLxlo0C/IJyeVM6BPG3pds/ynRgFtY2oaz8tU829s2TxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=AnDHW3Yr; arc=none smtp.client-ip=209.85.222.171
+	s=arc-20240116; t=1773257150; c=relaxed/simple;
+	bh=r5oaOfML6FxJlKSK67EJ2WyEj+emcyjdTPYo2m/eMwI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=QTSLmR9btrkxF/IQOQuCWbxDuEU8DT9aFUtyIcnZIF5zEHaAgxU8pJ7WXbkVxb0rUDQuXV/dWHmOMLETyun3StPgac5BZbz1Ag5P6LyJbMwTM/6Z0pRNmZJAlNhemRFWNXlu/xCJ7jiK9n4wbkkDbO/lvz89ze0+SYrTgXruU+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=WGfwpjKo; arc=none smtp.client-ip=209.85.222.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="AnDHW3Yr"
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-8c9f6b78ca4so26055985a.0
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 12:24:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="WGfwpjKo"
+Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-8cd858e860aso26010185a.2
+        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 12:25:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1773257092; x=1773861892; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1773257148; x=1773861948; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BNMNg6N3Vd5xctzLVKNk2t9/hKxkYr12RfGTtz13QKA=;
-        b=AnDHW3YrwCq5+BzPXxXYiPA0/8n5/Ky6wH71kgz2lgNeBYyDPYhJnW8jFiBKfXduXk
-         s37a7GYhFRX0Gd5Fr29wUal4P8XwBl8S2KhYwwTzt5/Z3m/DPDxHB3nEW74gVpZiRUz0
-         LW72Kut5GHBhJ8LLGtN/r6EbVsVZgKh34BQ1WEnK+/LBa+UU74AoGW1WhlqP/w2y1AMX
-         O/mC+E6yE1iu6tM8A09sR1DmS5SIWZrKhnDzGr5YztQC2/XXOJx6qtyHsLbI86glXmDv
-         PlCe+mWyGSNoDZEXjh8X2GA+TfyoJ/2ECTc3CfIhPH8lwB9GxY098u7sD9HHWMUkd/N8
-         ayqQ==
+        bh=VX8//xLjNJJ5RYsA1Ec2YfMWqGMraq5eRlMZrHRKiSo=;
+        b=WGfwpjKobqUTyXXs0H+hYFHljTyFItJTfyrbxl2Zjky/G0dQv6ewKS1jn5Nv2YbR+C
+         vcgcu1xrgShljA+N1cpNmAciwupp1kXWTzWojbp1wBUclEvcotuycpn9jLwYpax6JOBW
+         lKPv1od0yxgXgqbNsOMaqPZ+CJtoTD5F/eV7D6y7oXxx2tMX6WLXvIPbqylxowWnoSqe
+         Oc6JnXJOvCIZMqNwg6xfMAEfDEU7L4y/FmoZwuw5AsncVpwtdo4rI79NGa5WlQET5T7+
+         Vuf0Yv0iRWxN3mH6siVeSos1rIDkQhIHCvgvtYUCUd2b/l5n/QZ29ZqtNrmbllOx4piO
+         Qe+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773257092; x=1773861892;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=1e100.net; s=20230601; t=1773257148; x=1773861948;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=BNMNg6N3Vd5xctzLVKNk2t9/hKxkYr12RfGTtz13QKA=;
-        b=Dsibu8ahoBbApM/2MvEaNNwJB/K4FBQxMV+YQ0qvYH13xnFl8JizqQ1F9GFx6FgEa0
-         2xmAhus9Tu51uqwI6xZIyawVz3ytXSoRwOHmR8XaTPtCGx3kRm13asA+RM0ZVRLVtbVf
-         i+U3f/wkT9RKGSDvt3y1D3rCtez7RD8cv6c4KGQGfEVdEv6kz1RXHDuNYxNnMMggAldD
-         15lUFW/2NFYOq9hLjC2uqLHJSo32zU05xcv48s09b1Q3Yov67dxSdmYIFzJepc73oon9
-         IM4o1ravuzOjf7aGlSkdsILxRTMZH+lbg9Megal/Ib8ljKa8oTRhcKq5jSnB1lbZij9D
-         yiUg==
-X-Forwarded-Encrypted: i=1; AJvYcCWJmanK1D8Jkyt9WESXffCsyU5a292ttJ26PuPiKlOMK9C1GBP5HS3cY3wwEYc3CEW1okY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzsZ+dmVGOVJcAbDTvjNt6DWk0OhVsteEzXyAo/r03gS7yqGeAq
-	YuRu38yUl/Lexe45ecHchmKnY9DLSPNQQUj/MbxMQXawr8hFywGw3LEkiYv3DrzCd3+1kbW9cjT
-	GP/Hf
-X-Gm-Gg: ATEYQzwOjZUYQdW411ZJ8WyZHrC42GWC5REi4yRoRxLO7lpBQjU6LfI2OJ9pg6fA4f+
-	f28dGfoXPt24+kq7hOSEYqHuRL27QrQfPItKFTFgxoqfxg1L1MMscrBaV34FkADEZTuHUrvguDM
-	EhQ8T+CRdDSs3v0L/6pOrfbwJnfo5IH0PBHM2N4Y1ENTAqDxkD6ps8e/n3/SXM8pV9Kr93ZFVT4
-	G8oaKPzNwJiYhLnGASJkVyhiiHhpH8G9ldBC0iPpOqDqFGj5hUvmzO25XhaOyZK34vAzLEASLik
-	9Dr25ID/cF/KbbofNzmUmrUyBK3XzEWU4SELBF6j1Tp3GZrR1AAZJ1Rgmrwue8pqD3fDobAk2E5
-	oY995P2CTL+3z9+xluTny1mLZVy9qtITkhgXDuV+5rBE2FMjDQd/o8b2cvtS2+OYP8va3wsAHvN
-	v4Z8l5fUO57xm10hQ95SbHWLs=
-X-Received: by 2002:a05:620a:1929:b0:8cd:8d50:16a1 with SMTP id af79cd13be357-8cda1a9b6d7mr482471185a.55.1773257092036;
-        Wed, 11 Mar 2026 12:24:52 -0700 (PDT)
+        bh=VX8//xLjNJJ5RYsA1Ec2YfMWqGMraq5eRlMZrHRKiSo=;
+        b=phSIe1CGB0uIyyhPQFY8zmjsyGSpeXRh4ObXKi28rxLn1BAUOHqZb+Hu+RpQwxJa0K
+         mT2XowGx7Wg8Mj8TTucWW6G2/C23mN5UfdtKDSsFg62QwnidOs73mJNqQqeNyvmDKewe
+         MFswDXI6bug2wwoi5+V0cPLvdGcVpt2VH25Malk2UFY7TvEHyGj/5khO6wxJxvkF7v7a
+         iq7/VHq7DPbCRBM+2ovE8sZZVtppVwalO0k032OUMMKFbJfP4sWXuMoxqqakYHuNu/q0
+         nEoAgG8o2AWT8yzEjmq3oPU+x727YFwgB5VxPHzzc/zzYZQnxfC2twpwjHweP13eFakm
+         JzZg==
+X-Forwarded-Encrypted: i=1; AJvYcCXPgGX4Ljn+n2/T4cBbU/UUZ9xM0CsT5ZN8Rc3SsKpxKh9iEfXXAyqrLcRPxP3AyS07LsI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPcyl23V1j+K1xC8lgUGt6OJFPIb7jeWqw85Mku/wG1cgOXtJ9
+	729by6GsawxIeGvr7abZwoMcvnh53AWGCqY4uZFU82h7ujEHNpXRcVYVE+S1VpbmRUM=
+X-Gm-Gg: ATEYQzx40gP2hdFg4eLUlg9QAFnRqDbDUBZaYOyE+b511d4qO4PtpR8hKm+HtyGAEev
+	IdAzyTK62jd2rurG63ZixELdC2WgTtLEYAjVbRGu813oLiDjSk26QmKwNIHfNs24+fbvGlvZoDC
+	ZP1HTbcDoGbF2S+b0A6CFTGl/5FgNV6PvEvGCr1htRhY6Se6h5h9BfRilhd7uSCi/8RG3pNwISQ
+	1Vx5xzqC6cpjI0uug8nwNyWhr4GPNZOEC1rlVyhENg4ELK0zynMuHKw4RUqDG9PcCy4/SKKXFRv
+	FdlE3IPySzgYnbB/SPT1gHxfJRcOxyJnXJ+G7GldnBp5g/rbka5PMoMw9KaClQXM/6jKfgz9wsT
+	VRX7noBxaesW3NSsr5+WF+JgZ+2T52Hao4LhUSnNqEo1NI8MBh4LXO6Onabcd+WFhwnsI/E8Ac6
+	oG9AFD7n1b+6kSUvz0WhJGrUcq1LeoTtDfYw==
+X-Received: by 2002:a05:620a:3183:b0:8cd:9863:331f with SMTP id af79cd13be357-8cda185e6c5mr467802885a.0.1773257147568;
+        Wed, 11 Mar 2026 12:25:47 -0700 (PDT)
 Received: from localhost ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cda216b7fasm189964785a.47.2026.03.11.12.24.51
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cda21346a0sm186908685a.34.2026.03.11.12.25.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Mar 2026 12:24:51 -0700 (PDT)
+        Wed, 11 Mar 2026 12:25:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,105 +66,102 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 11 Mar 2026 15:24:50 -0400
-Message-Id: <DH076DCNJOAO.20TLWKWHB5KUX@etsalapatis.com>
-Cc: <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
- <eddyz87@gmail.com>, <martin.lau@kernel.org>, <memxor@gmail.com>,
- <song@kernel.org>, <yonghong.song@linux.dev>, <yatsenko@meta.com>,
- <clm@meta.com>, <ihor.solodrai@linux.dev>
-Subject: Re: [PATCH bpf-next v5 1/2] bpf: Only enforce 8 frame call stack
- limit for all-static stacks
+Date: Wed, 11 Mar 2026 15:25:45 -0400
+Message-Id: <DH0772V1KDE0.MVITO4EWQATO@etsalapatis.com>
 From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>
+To: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>, <bpf@vger.kernel.org>,
+ <ast@kernel.org>, <andrii@kernel.org>, <daniel@iogearbox.net>,
+ <kafai@meta.com>, <kernel-team@meta.com>, <eddyz87@gmail.com>
+Cc: "Mykyta Yatsenko" <yatsenko@meta.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/4] bpf: Add sleepable execution path for
+ raw tracepoint programs
 X-Mailer: aerc 0.20.1
-References: <20260311182831.91219-2-emil@etsalapatis.com>
- <5e8af34fe927be2c273db8459897fb1f29616b91e7b21f4430c9d414734f6a40@mail.kernel.org>
-In-Reply-To: <5e8af34fe927be2c273db8459897fb1f29616b91e7b21f4430c9d414734f6a40@mail.kernel.org>
+References: <20260311-sleepable_tracepoints-v3-0-3e9bbde5bd22@meta.com>
+ <20260311-sleepable_tracepoints-v3-1-3e9bbde5bd22@meta.com>
+In-Reply-To: <20260311-sleepable_tracepoints-v3-1-3e9bbde5bd22@meta.com>
 
-On Wed Mar 11, 2026 at 3:16 PM EDT, bot+bpf-ci wrote:
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 4fbacd2149cd..0304e4329490 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -6733,9 +6733,11 @@ static int check_max_stack_depth_subprog(struct b=
-pf_verifier_env *env, int idx,
->>  	struct bpf_insn *insn =3D env->prog->insnsi;
->>  	int depth =3D 0, frame =3D 0, i, subprog_end, subprog_depth;
->>  	bool tail_call_reachable =3D false;
->> -	int ret_insn[MAX_CALL_FRAMES];
->> -	int ret_prog[MAX_CALL_FRAMES];
->> -	int j;
->> +	int total;
->> +	int tmp;
->> +
->> +	/* no caller idx */
->> +	env->dinfo[idx].caller =3D -1;
+On Wed Mar 11, 2026 at 2:22 PM EDT, Mykyta Yatsenko wrote:
+> From: Mykyta Yatsenko <yatsenko@meta.com>
 >
-> The function header comment above this hunk still reads:
+> Modify __bpf_trace_run() to support both sleepable and non-sleepable
+> BPF programs. When the program is sleepable:
 >
->     Since recursion is prevented by check_cfg() this algorithm
->     only needs a local stack of MAX_CALL_FRAMES to remember callsites
+> - Call might_fault() to annotate the faultable context
+> - Use migrate_disable()/migrate_enable() instead of
+>   rcu_read_lock()/rcu_read_unlock() to allow sleeping while
+>   still protecting percpu data access
+> - The outer rcu_tasks_trace lock is already held by the faultable
+>   tracepoint callback (__DECLARE_TRACE_SYSCALL), providing lifetime
+>   protection for the BPF program
 >
-> The local stack arrays (ret_insn[] and ret_prog[]) have been removed
-> in favor of per-subprog dinfo fields. Should this comment be updated
-> to reflect the new approach?
+> For non-sleepable programs, rcu_read_lock_dont_migrate() is replaced
+> with explicit migrate_disable()/rcu_read_lock() pairing.
 >
-> This was also noted during the v3 and v4 reviews:
-> https://lore.kernel.org/bpf/ad397307a9cd76c9739ee05f4642c7b6a881b7dfb8a2f=
-acefa6b2062ffe328ea@mail.kernel.org/
+> Remove preempt_disable_notrace()/preempt_enable_notrace() from
+> __BPF_DECLARE_TRACE_SYSCALL. Per-CPU protection and RCU locking are
+> now managed per-program inside __bpf_trace_run().
 >
-> [ ... ]
->
->> diff --git a/tools/testing/selftests/bpf/progs/test_global_func3.c b/too=
-ls/testing/selftests/bpf/progs/test_global_func3.c
->> index 142b682d3c2f..974fd8c19561 100644
->> --- a/tools/testing/selftests/bpf/progs/test_global_func3.c
->> +++ b/tools/testing/selftests/bpf/progs/test_global_func3.c
->
-> [ ... ]
->
->>  SEC("tc")
->> -__failure __msg("the call stack of 8 frames")
->> +__failure __msg("the call stack of 9 frames")
->>  int global_func3(struct __sk_buff *skb)
->>  {
->>  	return f8(skb);
->
-> Should this be "the call stack of 8 frames" rather than 9?
->
-> The test has 9 subprogs total (global_func3 plus f1 through f8), but
-> only 8 call levels. The entry function global_func3 starts at frame 0
-> and is not itself counted by the frame increment. Each static call
-> increments frame by one:
->
->     check_max_stack_depth_subprog() {
->         ...
->         frame =3D subprog_is_global(env, idx) ? 0 : frame + 1;
->         if (frame >=3D MAX_CALL_FRAMES) {
->             verbose(env, "the call stack of %d frames is too deep !\n",
->                 frame);
->
-> With 8 static calls (global_func3 -> f8 -> f7 -> ... -> f1), frame
-> reaches 8, which matches MAX_CALL_FRAMES. The verifier would print
-> "the call stack of 8 frames is too deep" and the __msg substring
-> check for "9 frames" would not match, causing the test to fail.
->
-> The old test with global functions also had 8 call levels and
-> expected "8 frames", since frame++ produced the same count of 8.
->
+> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 
-I'd say no to either suggestion. The updated expected failure message is
-correct, and the old comment still applies for consecutive static stack
-frames even if we don't refer to a single stack-allocated call stack anymor=
-e.
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
->
 > ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
+>  include/trace/bpf_probe.h |  2 --
+>  kernel/trace/bpf_trace.c  | 13 ++++++++++---
+>  2 files changed, 10 insertions(+), 5 deletions(-)
 >
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/229688=
-48938
+> diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
+> index 9391d54d3f12..d1de8f9aa07f 100644
+> --- a/include/trace/bpf_probe.h
+> +++ b/include/trace/bpf_probe.h
+> @@ -58,9 +58,7 @@ static notrace void							\
+>  __bpf_trace_##call(void *__data, proto)					\
+>  {									\
+>  	might_fault();							\
+> -	preempt_disable_notrace();					\
+>  	CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(__data, CAST_TO_U64(args))=
+;	\
+> -	preempt_enable_notrace();					\
+>  }
+> =20
+>  #undef DECLARE_EVENT_SYSCALL_CLASS
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 0b040a417442..3688a7e115d1 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -2076,7 +2076,7 @@ void __bpf_trace_run(struct bpf_raw_tp_link *link, =
+u64 *args)
+>  	struct bpf_run_ctx *old_run_ctx;
+>  	struct bpf_trace_run_ctx run_ctx;
+> =20
+> -	rcu_read_lock_dont_migrate();
+> +	migrate_disable();
+>  	if (unlikely(!bpf_prog_get_recursion_context(prog))) {
+>  		bpf_prog_inc_misses_counter(prog);
+>  		goto out;
+> @@ -2085,12 +2085,19 @@ void __bpf_trace_run(struct bpf_raw_tp_link *link=
+, u64 *args)
+>  	run_ctx.bpf_cookie =3D link->cookie;
+>  	old_run_ctx =3D bpf_set_run_ctx(&run_ctx.run_ctx);
+> =20
+> -	(void) bpf_prog_run(prog, args);
+> +	if (prog->sleepable) {
+> +		might_fault();
+> +		(void)bpf_prog_run(prog, args);
+> +	} else {
+> +		rcu_read_lock();
+> +		(void)bpf_prog_run(prog, args);
+> +		rcu_read_unlock();
+> +	}
+> =20
+>  	bpf_reset_run_ctx(old_run_ctx);
+>  out:
+>  	bpf_prog_put_recursion_context(prog);
+> -	rcu_read_unlock_migrate();
+> +	migrate_enable();
+>  }
+> =20
+>  #define UNPACK(...)			__VA_ARGS__
 
