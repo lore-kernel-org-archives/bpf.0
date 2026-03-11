@@ -1,104 +1,158 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAEC131F9A3;
-	Wed, 11 Mar 2026 21:36:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A16C2010EE
+	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 21:43:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773264979; cv=none; b=B3bjmMw1Gp5xOZyGM7rVpSKJaaDGgIzeUgVkZCDv/j+iNQmskaQ/yTL6VBj8IhKqK7zDT7FMA/j+03r5AXMAYLHNw0lgCunnhOuZIlN4xW8DSNC3qVNVRiNkamAyG152lBw/vOcefF4XMpJFheO4/RoitcB9eNttK3fS1OSDjBw=
+	t=1773265400; cv=none; b=b26WxZFy7pmGq9uKB8cdOkf/YnURxKbeErzmw6JQMrrPr5goUdWF8TeclpKLhXRGDv3LnCK+APdnakGpm258HscRhKaM9nBu5mNuf/u0SlWa+YihPNribq01AFT7wEz9KaXpR3Eo9QYHvhBAv3LQvMhk/w9OgX8q/hy0Ncickv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773264979; c=relaxed/simple;
-	bh=g8SZ11jzjBJsPzGm6q4EByRc1LqT5tmqbviCSXS4o24=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CzoGWgvzQNrGnt+93WenZnZ1zRMWz83LnncIDQ69XmmGwvH/I/BG1WPQs821ZuJy4YrHY32lsxu6S45oCSQTDAyBsUL5gO2CdXH0SmkV0idfNK1g1559ChNCfArwKov/yb6Dv/fTqHhM6KE5qEqMyb7veEdyT5AFEcx2F4UDATU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WTIWSTrJ; arc=none smtp.client-ip=95.215.58.178
+	s=arc-20240116; t=1773265400; c=relaxed/simple;
+	bh=cJ7O0ZLD0Pd5i+N/UryeSxeBbtkb1V+krtTpKFUgCQE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PBXfNPGZkwyu2iu/Z4oO6gIfVxEmZNKehCLsBAd+LQmuz6CK9FoGznstILhPrgKxcP9sQd6gFjKSgAVi86KAkIwsd2q/bd+1HJvIxOWeW2SccNUI7NTBXZ8CyHN0NQkfn+Sid+HeKRWhGWk49L9gwk2X2F/3xXBaBMD7Kyu/cLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=u2YC5kn5; arc=none smtp.client-ip=95.215.58.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WTIWSTrJ"
-Date: Wed, 11 Mar 2026 14:35:50 -0700
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="u2YC5kn5"
+Message-ID: <bc410b38-f5ab-47cf-a434-fa4f43751921@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773264975;
+	t=1773265387;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Telfpf5ptlGpB/om4pC5uPZFX+x6oNBegoretK0UrkE=;
-	b=WTIWSTrJNE/IH8KAHN4q6P27nFGK3ez/6AduhtafzWVM2kHwhzgvWyg3lqR4of8XKkrgfW
-	m8ZXwdWVbuDEouJn7z57FXHM0Opn/jUXqzyxQkSBC1o0LeZRCQaovR0fruTt9ZtvQXY8JG
-	yfdxyedVzx8yQu1uB/i8i2YiG4TwzV0=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: Greg Thelen <gthelen@google.com>
-Cc: lsf-pc@lists.linux-foundation.org, 
-	Andrew Morton <akpm@linux-foundation.org>, Tejun Heo <tj@kernel.org>, Michal Hocko <mhocko@suse.com>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Hui Zhu <hui.zhu@linux.dev>, JP Kobryn <inwardvessel@gmail.com>, 
-	Muchun Song <muchun.song@linux.dev>, Geliang Tang <geliang@kernel.org>, 
-	Sweet Tea Dorminy <sweettea-kernel@dorminy.me>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	David Rientjes <rientjes@google.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Meta kernel team <kernel-team@meta.com>, linux-mm@kvack.org, cgroups@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [LSF/MM/BPF TOPIC] Reimagining Memory Cgroup (memcg_ext)
-Message-ID: <abHWslV0KmjF7x80@linux.dev>
-References: <20260307182424.2889780-1-shakeel.butt@linux.dev>
- <CAHH2K0ZBJV1peAZVZC9Lm=rFRzSfxsvbrxRjyB=+0xkHGRcdLA@mail.gmail.com>
+	bh=oY0ScjjYBmbgesl65ClATdNaDwRrK4lWRWVjLXSQrjY=;
+	b=u2YC5kn5TmPwfryYEjMFgHQzd5h4eTKlPtBYCgUwaBqasWFA4drPEdJMCN13+e73nEndcL
+	oBC6yVMPjNQu37+6/rEArC1/32PpJ9WwGioiRErOhEv9exc7OrQA4JQN1dWDBlumZKW/E2
+	4rYWs/phHEC+VQ6OPg/Okg4Nfe1K5gU=
+Date: Wed, 11 Mar 2026 14:42:52 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Subject: Re: [PATCH] selftests/bpf: improve test coverage for kfunc call
+To: Hari Bathini <hbathini@linux.ibm.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Eduard <eddyz87@gmail.com>, "Jose E. Marchesi" <jemarch@gnu.org>,
+ bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Shuah Khan <shuah@kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+References: <20260303131453.328674-1-hbathini@linux.ibm.com>
+ <CAADnVQKuARvSirPjnTcSifLPunCiKC4Nenq0Mr61GpzbW5WxWg@mail.gmail.com>
+ <bbf6a46c-37e9-4d8d-968e-a99bb12dcc14@linux.ibm.com>
+ <CAADnVQ+4N4WWLxan_qibZ7HmONJyMZaP=RF+a9tMSPoz=0LqkQ@mail.gmail.com>
+ <09b101af-9722-4c45-bda0-c8a3dd417c03@linux.ibm.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <09b101af-9722-4c45-bda0-c8a3dd417c03@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHH2K0ZBJV1peAZVZC9Lm=rFRzSfxsvbrxRjyB=+0xkHGRcdLA@mail.gmail.com>
 X-Migadu-Flow: FLOW_OUT
 
-Hi Greg,
+On 3/11/26 11:03 AM, Hari Bathini wrote:
+>
+> On 11/03/26 9:32 pm, Alexei Starovoitov wrote:
+>> On Wed, Mar 11, 2026 at 8:10 AM Hari Bathini <hbathini@linux.ibm.com> 
+>> wrote:
+>>>
+>>>>
+>>>>> +
+>>>>> +       /* Check zero-extension */
+>>>>> +       if (val != (unsigned long)a)
+>>>>> +               return 1;
+>>>>> +       /* Check no sign-extension */
+>>>>> +       if (val < 0)
+>>>>> +               return 2;
+>>>>> +
+>>>>> +       val = b;
+>>>>> +       if (val != (unsigned long)b)
+>>>>> +               return 3;
+>>>>> +       if (val < 0)
+>>>>> +               return 4;
+>>>>> +
+>>>>> +       val = c;
+>>>>> +       if (val != (unsigned long)c)
+>>>>> +               return 5;
+>>>>> +       if (val < 0)
+>>>>> +               return 6;
+>>>>> +
+>>>>> +       return 0;
+>>>>> +}
+>>>>
+>>>> Overall this looks very useful.
+>>>> I would expand with another test where a,b,c are s8,s16,s32.
+>>>
+>>> Slightly different approach but kfunc_call_test4/bpf_kfunc_call_test4
+>>> cover signed arguments already?
+>>
+>> Ahh. Then may be tweak it to adopt similar fine grained
+>> error reporting as your bpf_kfunc_call_test5()
+>
+> I Prefer this.
+>
+> Does the below change to bpf_kfunc_call_test4 look fine:
+>
+> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c 
+> b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> index 48dcaf93bb9f..6237c2222633 100644
+> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> @@ -760,8 +760,30 @@ __bpf_kfunc struct sock 
+> *bpf_kfunc_call_test3(struct sock *sk)
+>
+>  __bpf_kfunc long noinline bpf_kfunc_call_test4(signed char a, short 
+> b, int c, long d)
 
-On Wed, Mar 11, 2026 at 12:29:45AM -0700, Greg Thelen wrote:
-> On Sat, Mar 7, 2026 at 10:24 AM Shakeel Butt <shakeel.butt@linux.dev> wrote:
-> >
-> >
-> 
-> Very interesting set of topics. A few more come to mind.
+I might regret for bringing this up as it could be yet another ABI 
+fiasco between gcc and llvm.
 
-Thanks.
+As per C standard, sign of unadorned char (i.e. w/o explicit signed or 
+unsigned prefix) is ABI defined.
+For gcc-bpf char is specified to be signed.
+So test4 has s8, while new test5 has u8. Would it make sense to have an 
+additional test without signed/unsigned annotation for char ?
+This will flag any discrepancy between the two compilers.
 
-> 
-> I've wondered about preallocating memory or guaranteeing access to
-> physical memory for a job. Memcg has max limits and min protections,
-> but no preallocation (i.e. no conceptual memcg free list). So if a job
-> is configured with 1GB min workingset protection that only ensures 1GB
-> won't be reclaimed, not that 1GB can be allocated in a reasonable
-> amount of time. This isn't just a job startup problem: if a page is
-> freed with MADV_DONTNEED a subsequent pgfault may require a lot of
-> time to handle, even if usage is below min.
+Thx,
+-Vineet
 
-This is indeed correct i.e. protection limits protect the workload from external
-reclaim but does not provide any gurantee on allocating memory in a reasonable
-cheap way (without triggering reclaim/compaction). This is one of the challenge
-to implement userspace oom-killer in an aggressively overcommitted environment.
+>  {
+> +       /*
+> +        * Make val as volatile to avoid compiler optimizations.
+> +        * Verify that negative signed values remain negative after
+> +        * sign-extension (JIT must sign-extend, not zero-extend).
+> +        */
+> +       volatile long val;
+> +
+> +       /* val will be positive, if JIT does zero-extension instead of 
+> sign-extension */
+> +       val = a;
+> +       if (val >= 0)
+> +               return 1;
+> +
+> +       val = b;
+> +       if (val >= 0)
+> +               return 2;
+> +
+> +       val = c;
+> +       if (val >= 0)
+> +               return 3;
+> +
+>         /* Provoke the compiler to assume that the caller has 
+> sign-extended a,
+>          * b and c on platforms where this is required (e.g. s390x).
+> +        *
+> +        * Original behavior: return sum for backward compatibility
+>          */
+>         return (long)a + (long)b + (long)c + d;
+>  }
+>
+>
+> - Hari
 
-However to me providing memory allocation guarantees is more of a system level
-feature and orthogonal to memcg. And I see your next para is about that :)
-
-Anyways I think if we keep system memory utilization below some value and
-guarantee there is always some free memory (this can be done by having common
-ancestor of all workloads and ancestor has a limit or node controller maintains
-the condition that the sum of limits of all top level cgroups is below some
-percentage of total memory) then we might not need memcg free list or similar
-mechanisms (most of the time, I think).
-
-> 
-> Initial allocation policies are controlled by mempolicy/cpuset. Should
-> we continue to keep allocation policies and resource accounting
-> separate? It's a little strange that memcg can (1) cap max usage of
-> tier X memory, and (2) provide minimum protection for tier X usage,
-> but has no influence on where memory is initially allocated?
-
-I think I understand your point but I think the implementation would be too
-messy. This is orthogonal to the proposal but I would say a good topic for
-LSFMMBPF if you want to lead the discussion.
