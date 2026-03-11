@@ -1,190 +1,133 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84362377028
-	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 23:38:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773272289; cv=pass; b=JnXl/8er5eLWFPoXGdkdHMSoIcKBdv7Bhtuk3PGhnX4XFDdz1pbqcjRKRy8dT9ArWBioFhOeZr6HQrKeBPBC74q0Q302gVOtvHkBoVexbrrSjgzxIrFAvaElSISQBAK/R1u1w571pBmrhSzZhN8zupzrjoAoUwFQZcwiIOWdBAA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773272289; c=relaxed/simple;
-	bh=PaEMK9G3SnpNNxiY44PYXbHAJqo1tfZ2/Na06xk0nbw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rc14U9C6X1ew//X1qrzyYVbfUsKzu+itNm1rz+k40fjF98MgKp3UfJoZuHF4eseYpEgOiWVS+oJAzAx+d4U6Qqqnn5vH3h2Z+vwik0C/viMX3I0cXjNvtmQpb+syjyYsc3R4WFECm8NzP5uILYXKM0WDLoWriAoyngGF+yIfxIc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SkTKukxy; arc=pass smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76802377028
+	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 23:39:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773272397; cv=none; b=Ldp3k9TxfF+cqor9+hI10V7fn5+zVLR0D3ks7LoFXJfm/c90K4ozWmnCCGP7h7Kp1aovASjnZydNrR8qO6DxV4JzFriNwpKElt+ze5iLlzqrxDPaEO3lhxm2WA67UpHyv3WL6HZx+b/YWKCRuhR0Ff2aiLIJpVRC4zhHdu0hEgs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773272397; c=relaxed/simple;
+	bh=Vzj9NUIISvpbA2BylgvIpgR40Ye/EcVqMmJ1q39Id6I=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=r6Sm7iaFep8jVhpJN254bApnrdGEshhE4x45eZwcjlygFcUdu1JY5ZMK7ncW31w6yuyELQ12ZrKXuUE3q+Mm6HGCKaQIpZMkYAVOiBsLXls0ZhMNsKbQT/TS1aDkukYOJWGBcW3P0SW4B9eT88nfxcEpPmDPhI4WCjQDCV88+aA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VR7LdgTA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SkTKukxy"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3598b95ad7dso291255a91.2
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 16:38:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773272288; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Dz98Q7bJEvyJdpaz76ZmzgeFhU//tzsqGL0V4HzWC7ijRzyIp5CHDaDRw69KWl6SHd
-         /pIlZqCJxO+wSgS+WsW1rsHujSI9GyB7y9kH2tl+dhfZG2uEr9gnlq6Wli/eVlNL381a
-         ltic+d6mO22vcHBziaxV0iCPwOnYd4hOSa+h043TwkAGFaOL1/wMKrjGTn2kWVXxNPBZ
-         i/ALW1Zq+pH7UnWKkBpkPie4xcCAdtFY8KsQUDN8Hb6BBGU1NVB6py2i8FPe70fInbmG
-         kKyNMlrYNOhRE073/Eu5+IhpIhavQsGrC8WxRp+Zz3/dLxad3kA0PmGNxzCInmjGFt2b
-         W6sQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=lg1BSN7SZeN8e1s6TD+FypmlHZGZs1b9Ja71KqsAJ5Q=;
-        fh=PJGYKXexio++gsWM7BREJm35TlAW758zSu7VkVujKDI=;
-        b=fmyLH6+9hmrDHyvKKVJZKD2GHMRRbP8fqFMNXp9cm/sYtbAGO4Z4i+5kik4DxO4h0I
-         X8q9FjEsOjp1+xswdW4q/A4sNW8JrKdD7tyc5pAfX7Py5PDg8Dk77HIsDRmFbo98KfTQ
-         x133MS/JVrA7cBM2SSN7O3ShzvhS7DyBhodtCKuetluRJ2fYhRGUlZ1hUZyx/5DHUBVb
-         oJs8TSCB976vZQdNHlnb4b3GICP/GF4yN4cuiwYbsSd1BQ4XeA466Dbc27tEGseCRHAa
-         v1qVUpWT3YTFM+k6OMm7r3gSDKxK5YC3fJ4vBgWKilmwE56Qw0S6j+SbACZf4DHrXVYy
-         uQ0Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773272288; x=1773877088; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lg1BSN7SZeN8e1s6TD+FypmlHZGZs1b9Ja71KqsAJ5Q=;
-        b=SkTKukxywKGog+0ujyKaK9U4N07AkZyryhHP2ocyTSYi/jwkhcPxauFbHG6cKSLBPI
-         rtrbm3UEpsjCVDaVIIRhn0Z7bznq5o+213b9fEnHNX2kAP25F9sGXYRxRyaWMw7vkhMS
-         OqVaBvO0xZnY9VMopmQqicIp9bnOaPxg9ee7+epD722N1812gCuucPceVDEC8DPGNrAp
-         onhOlqe0a7m/75enGzrWBd8eInR2YUG6YACTXvx791I+Qa3GgSk/cnDkhdQkKTx2y97B
-         Yp0xQqt+NAWIbis3AeSvKSwWcs2OF8qYzbO7gb4V9T47X6opdWLJnLCMSbsWJJcBCXTt
-         4PJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773272288; x=1773877088;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=lg1BSN7SZeN8e1s6TD+FypmlHZGZs1b9Ja71KqsAJ5Q=;
-        b=Oan7SdwLYhLfkeyFMehPBtN1TplfGm7kYrhehOwbRVJpEVZzGwAt7wdlVIHBpm9EKk
-         dDXrZMi/qp2uFgRYAn6XR2VaQ7Ldv5Mxr4rLuUjV4uBDfMC8Rm/tff6wx1ks7zkPVB+t
-         pMClw52Ou2nYSODKfJ6rVPLIi8PHOAa2EqBm6jXHZaMgqXyr54p30aT+Dr4OvDROk4Jq
-         3psKdjqEBacY0gBT4oc9rfbGSl2hCbcdH2t0cWogVZmC4y9LQf1yKgGAaTVEtU2VcJK1
-         RSJn6QoH4sd5vKkT8IDNIjKOK0NChNVwnThoHN5Jn2Wc0PMbxt+PM0a63yaf26fTAZr3
-         +UkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWGdQ4Jti7eQz5QPrwJXJFHGOUC4Hkmj04xenvzgeE7T6u6RTigA5uEyxmm/ZoLlFJVJpc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLQY/uIz3bvKcgIaNjppYIXBZJN1Tbi5H0JqCaoMl/H2qGSUdN
-	ZseJwYVoGEbWGT4Kf2jy1n2zlsd6rmyqmLa9VPh7v9XT/S0qEDzapapQe6WPInFbqL5Iwu7vIes
-	tqJDRy+1in7IUCYWQ1K5i+mercjR6kg0=
-X-Gm-Gg: ATEYQzyY91ywdI+6KAZpGwVMj/LbArS6r+D6xOwmrwIN7fVWj8yIVvHykdEmTAb6JFs
-	LCOm6DdBq0UtT00E+WP+yAT+m34Pu2V4Cz9mNe1Jmx0VOwYdzvjX4G3BvQJb5eZm0U2KeOYt3A0
-	kEwqZkkW2NsaXT+aBmwA2gfCYvokWFmXriA7fQfRyAbCZYMDsmgv+IONtn7XAzcaVFco/PLn2ZQ
-	+iqUiGFiR/Pzivxoa8X8iC5n5cgz0/QjLzoSKwSbT33LI8b7pS40av52fTU/Zo5LFgU2fvKCxfN
-	5q3fviQ=
-X-Received: by 2002:a17:90b:3d47:b0:356:41c2:897d with SMTP id
- 98e67ed59e1d1-35a012ab2damr3994247a91.8.1773272287882; Wed, 11 Mar 2026
- 16:38:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VR7LdgTA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FBC2C4CEF7;
+	Wed, 11 Mar 2026 23:39:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773272397;
+	bh=Vzj9NUIISvpbA2BylgvIpgR40Ye/EcVqMmJ1q39Id6I=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=VR7LdgTAIL0uiFwUC/60JMYr1G+sjCnQEztUbHS78qCYzPOTtQsGqd7EI1E7g7EwX
+	 SJWvP6wTc6RZ/FPDKu6WE0PX+vJu0G8awcsXetzWHt12whgygJcv0R6Vlduwq6HKgP
+	 MdtayJ51/BKAUqwpHl5iUtDw2C6ho94XtyLhgxMXEIHm1d43aULDhrG45mx9ZOYTTt
+	 zaIfreuUp31g3n8olpqOh9x3/Pz7ZwYjt04PgxQApTZlWPhZ9FTQwYMRb93YlR0Wcn
+	 M7WsgdWkiE7cfzN94h7Simn2d0aykzBYZqQUyv+PVaLdp/H5IPTClCVpIH9PCm5fJ9
+	 tcKt3aWgD5QtQ==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org,
+ ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com,
+ kernel-team@meta.com, eddyz87@gmail.com
+Cc: Mykyta Yatsenko <yatsenko@meta.com>, Kumar Kartikeya Dwivedi
+ <memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/4] bpf: Add sleepable execution path for
+ raw tracepoint programs
+In-Reply-To: <20260311-sleepable_tracepoints-v3-1-3e9bbde5bd22@meta.com>
+References: <20260311-sleepable_tracepoints-v3-0-3e9bbde5bd22@meta.com>
+ <20260311-sleepable_tracepoints-v3-1-3e9bbde5bd22@meta.com>
+Date: Wed, 11 Mar 2026 23:39:52 +0000
+Message-ID: <m2jyvij5pz.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260306113630.1281527-1-alan.maguire@oracle.com>
- <20260306113630.1281527-3-alan.maguire@oracle.com> <CAEf4Bza_kJowGmin4Hh2iOpwXZVgNoeGNniidSpZEjRjqWnVyA@mail.gmail.com>
- <128e9cac-c935-49ef-98df-30f3b6cd7822@oracle.com> <CAEf4BzZefR6qQwu1jENEMg15UCXXnfqfwHYRV5y4NAXWwuo4zw@mail.gmail.com>
- <50f76d21-ff5c-471d-bb11-208925778d32@oracle.com> <CAEf4BzatOXf0YgtQj0X+kQ=NSo_rFLAjQ0BHf-ZegFm+t43J3A@mail.gmail.com>
- <8294fca1-4d11-4c91-914a-c83d12f00ecc@oracle.com>
-In-Reply-To: <8294fca1-4d11-4c91-914a-c83d12f00ecc@oracle.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 11 Mar 2026 16:37:55 -0700
-X-Gm-Features: AaiRm51gD5IW_TYNTs-zz5q3ENGT69qimtc2o9IOJwthhjDaC3kLaYVLVymQUC8
-Message-ID: <CAEf4BzbNQhga9bQuj73yE3Eg0KDuntsr-EqNOLCjSz+9GgY6Sg@mail.gmail.com>
-Subject: Re: [PATCH v13 bpf-next 2/8] libbpf: Support layout section handling
- in BTF
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, qmo@kernel.org, 
-	ihor.solodrai@linux.dev, mykyta.yatsenko5@gmail.com, dwarves@vger.kernel.org, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Wed, Mar 11, 2026 at 12:35=E2=80=AFPM Alan Maguire <alan.maguire@oracle.=
-com> wrote:
->
-> On 11/03/2026 19:21, Andrii Nakryiko wrote:
-> > On Wed, Mar 11, 2026 at 12:17=E2=80=AFPM Alan Maguire <alan.maguire@ora=
-cle.com> wrote:
-> >>
-> >> On 11/03/2026 18:16, Andrii Nakryiko wrote:
-> >>> On Wed, Mar 11, 2026 at 11:10=E2=80=AFAM Alan Maguire <alan.maguire@o=
-racle.com> wrote:
-> >>>>
-> >>>> On 11/03/2026 17:46, Andrii Nakryiko wrote:
-> >>>>> On Fri, Mar 6, 2026 at 3:37=E2=80=AFAM Alan Maguire <alan.maguire@o=
-racle.com> wrote:
-> >>>>>>
-> >>>>>> Support reading in layout fixing endian issues on reading;
-> >>>>>> also support writing layout section to raw BTF object.
-> >>>>>> There is not yet an API to populate the layout with meaningful
-> >>>>>> information.
-> >>>>>>
-> >>>>>> As part of this, we need to consider multiple valid BTF header
-> >>>>>> sizes; the original or the layout-extended headers.
-> >>>>>> So to support this, the "struct btf" representation is modified
-> >>>>>> to contain a "struct btf_header" and we copy the valid
-> >>>>>> portion from the raw data to it; this means we can always safely
-> >>>>>> check fields like btf->hdr.layout_len
-> >>>>>>
-> >>>>>> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> >>>>>> ---
-> >>>>>>  tools/lib/bpf/btf.c | 309 ++++++++++++++++++++++++++++-----------=
------
-> >>>>>>  1 file changed, 200 insertions(+), 109 deletions(-)
-> >>>>>>
-> >>>>>
-> >>>>> [...]
-> >>>>>
-> >>>>>>
-> >>>>>> -       memcpy(p, hdr, hdr->hdr_len);
-> >>>>>> +       memcpy(p, hdr, min((__u32)sizeof(struct btf_header), hdr->=
-hdr_len));
-> >>>>>
-> >>>>> in all these cases where we have sizeof(struct btf_header), this
-> >>>>> smells like a potential issue, tbh. We are silently truncating the
-> >>>>> original header here, potentially. Which is ok for read-only case, =
-but
-> >>>>> do we error out if someone is trying to modify/write such BTF where=
- we
-> >>>>> don't really understand all of it? Should we?
-> >>>>>
-> >>>>
-> >>>> The kernel enforces that any additional data in the header beyond fi=
-elds
-> >>>> we know how to deal with is zero. We don't enforce this here, but we
-> >>>> get a similar effect since we only copy the fields we care about. In=
- effect
-> >>>> we wind up removing the aspects of the BTF we don't know about, so i=
-f we
-> >>>> read in such BTF, writing it out would not preserve any additional h=
-eader
-> >>>> information (say a new section offset/length) beyond the current siz=
-e of
-> >>>> struct btf_header. So writing such BTF after reading it in converts =
-it to
-> >>>> the BTF representation libbpf knows about (header fields + sections)=
-.
-> >>>
-> >>> I don't think we should be doing this. Let's error out when someone
-> >>> tries to modify BTF where we don't understand *all* aspects of it.
-> >>>
-> >>
-> >> ok, so to do this I think we'd need to set a never_modifiable flag or =
-similar
-> >> on parsing when we find non-zero unknown header data, and then fail
-> >> btf_ensure_modifiable().
-> >
-> > yep, I'd like some better name that would mean "there are extra btf
-> > bits we don't understand", but I can't come up with a better name :)
-> > if you can, prefer that over not very semantically meaningful "never
-> > modifiable"
-> >
->
-> would btf->unknown_hdr_data work?
+Mykyta Yatsenko <mykyta.yatsenko5@gmail.com> writes:
 
-what about btf->has_hdr_extra ?
+> From: Mykyta Yatsenko <yatsenko@meta.com>
 >
+> Modify __bpf_trace_run() to support both sleepable and non-sleepable
+> BPF programs. When the program is sleepable:
+>
+> - Call might_fault() to annotate the faultable context
+> - Use migrate_disable()/migrate_enable() instead of
+>   rcu_read_lock()/rcu_read_unlock() to allow sleeping while
+>   still protecting percpu data access
+> - The outer rcu_tasks_trace lock is already held by the faultable
+>   tracepoint callback (__DECLARE_TRACE_SYSCALL), providing lifetime
+>   protection for the BPF program
+>
+> For non-sleepable programs, rcu_read_lock_dont_migrate() is replaced
+> with explicit migrate_disable()/rcu_read_lock() pairing.
+>
+> Remove preempt_disable_notrace()/preempt_enable_notrace() from
+> __BPF_DECLARE_TRACE_SYSCALL. Per-CPU protection and RCU locking are
+> now managed per-program inside __bpf_trace_run().
+>
+> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+
+Acked-by: Puranjay Mohan <puranjay@kernel.org>
+
+> ---
+>  include/trace/bpf_probe.h |  2 --
+>  kernel/trace/bpf_trace.c  | 13 ++++++++++---
+>  2 files changed, 10 insertions(+), 5 deletions(-)
+>
+> diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
+> index 9391d54d3f12..d1de8f9aa07f 100644
+> --- a/include/trace/bpf_probe.h
+> +++ b/include/trace/bpf_probe.h
+> @@ -58,9 +58,7 @@ static notrace void							\
+>  __bpf_trace_##call(void *__data, proto)					\
+>  {									\
+>  	might_fault();							\
+> -	preempt_disable_notrace();					\
+>  	CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(__data, CAST_TO_U64(args));	\
+> -	preempt_enable_notrace();					\
+>  }
+>  
+>  #undef DECLARE_EVENT_SYSCALL_CLASS
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 0b040a417442..3688a7e115d1 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -2076,7 +2076,7 @@ void __bpf_trace_run(struct bpf_raw_tp_link *link, u64 *args)
+>  	struct bpf_run_ctx *old_run_ctx;
+>  	struct bpf_trace_run_ctx run_ctx;
+>  
+> -	rcu_read_lock_dont_migrate();
+> +	migrate_disable();
+>  	if (unlikely(!bpf_prog_get_recursion_context(prog))) {
+>  		bpf_prog_inc_misses_counter(prog);
+>  		goto out;
+> @@ -2085,12 +2085,19 @@ void __bpf_trace_run(struct bpf_raw_tp_link *link, u64 *args)
+>  	run_ctx.bpf_cookie = link->cookie;
+>  	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
+>  
+> -	(void) bpf_prog_run(prog, args);
+> +	if (prog->sleepable) {
+> +		might_fault();
+> +		(void)bpf_prog_run(prog, args);
+> +	} else {
+> +		rcu_read_lock();
+> +		(void)bpf_prog_run(prog, args);
+> +		rcu_read_unlock();
+> +	}
+>  
+>  	bpf_reset_run_ctx(old_run_ctx);
+>  out:
+>  	bpf_prog_put_recursion_context(prog);
+> -	rcu_read_unlock_migrate();
+> +	migrate_enable();
+>  }
+>  
+>  #define UNPACK(...)			__VA_ARGS__
+>
+> -- 
+> 2.52.0
