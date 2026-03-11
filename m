@@ -1,253 +1,184 @@
-Received: from mail-wm1-f68.google.com (mail-wm1-f68.google.com [209.85.128.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 359213C5DD8
-	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 09:06:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.68
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773220011; cv=pass; b=FqFWzDv1BD54J2TQcUXRQhDgEkhv5JzLnWDDIkoS80RmRkUzKuaiUZFfzq6+soIj+OmvhF5lQLeq0xX1uVoNmrToaefuOlwqhO9wjX14i+OxLSC7vgTmC1Wo8AmbJfdyEK7qnndvYvb5Tr0c6khFadb3C5DWMmeEgKgvBDyraAk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773220011; c=relaxed/simple;
-	bh=g/ROASbeaF/IjWI2I8zqA9k4mfccxN4DNjH2eSqizNk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EslcLtdyZz+YADviO3u7dtotkWpW2jPaQCrEKT778/Y58tKrH16vux/GstuZEwLjd4H389yELiGJqHCfcD9wifDbyWHvXnNp0wbn4Zb4p1pZV8MkMHwfwGfyZSiAkgD0HH79KgYuwBtcBVFRwGnciURYLK2M/Mv0kaZM5QhFNBw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R179TJlQ; arc=pass smtp.client-ip=209.85.128.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E2873AA4E6;
+	Wed, 11 Mar 2026 09:15:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773220528; cv=none; b=VPg9pPOphHQ0t9iGyPbBTVh5Td5awR8elD/ubbd8i3WKC9H/oJm3YqiyGghkFzzt/uaphcx6JNUGGQtCZQrlYUD/0UUJ4TelX6jvAHVdlzz7quIq5joF2vIQYdIgfKKC1/hj4rY8wIkMh3S9jDYfVF+3MdCnIUFogtbdqsGbEkk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773220528; c=relaxed/simple;
+	bh=/qi/E3sx1wLUyctUK7y+OHXYZPNKh6z9xCAoPwaS9tY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KJv//iT/jC3cibLGHfw3QWkJKpjB1XLJ/+ZW5MmVP/6gL67dWYy8KerPS4FUhHz38iZou3U55ygs3jcLOdZ/cAFliZIk+qP8F0RR/GxJtQLqV7ROZ6tpHYPXwMsizw16DilhHJF/7jduJqjBSRLGrTy7bQ1EuQm8zaVRA/BTT5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LgDro3Eo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R179TJlQ"
-Received: by mail-wm1-f68.google.com with SMTP id 5b1f17b1804b1-4852b81c73aso37376005e9.3
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 02:06:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773220003; cv=none;
-        d=google.com; s=arc-20240605;
-        b=UGfrFxsiFBGKeP8tPckGnBnvd5MXIDphpl2X5qtiCvYTz6RHFpVb3fqAGlsfarkwAv
-         zd40u9V629fKoEqmrMoJ3dhmMnmkptvCfnNSrV561+LDY8t+g4S5SBDFZQW6AQlIw/gF
-         gggxOu0pie9ttfua67srJG4guVdWjDK1I7/qLYbI/ngAKOpJCn9Azxz3CK7PSexhPBjy
-         PSWNenL2OmFF8ufk5d0dVGzk44Fy0Yx27zgsQoeWz6LfNWEql3NCn+6eU/vjwh+wiiPX
-         x18dKYmrM4FZwTdiv6J0EHkOM4TbUj0swEL/EJnIl3881lP6kFzMwwqBhoCT+EqMDtJx
-         Da2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=N1EaLBSYYrgNyCVq+XkPC1rTN11UT3UwwE/Ba6Rikgk=;
-        fh=+sMOFs5fR0Y9hF+4evNcyj3VPZE5BCZYRt3GxWLGuPI=;
-        b=cu/kCIppUTYQfKe4GgIhTT2RIOLnh1X0YFGSQ6h1dmv1RzbszdRztvMTddySktA3Hm
-         lT+6Rf3m9ojHzucPFt0xDlQ0Q1kqR+gWwLqCjcjlGPCE+oKLRzqt8idySmMszJuVFKK9
-         gtwv16a8MySYv9ydGOv62Y+5r4mjXcbVAkO6G6rlznENqXRRfv4YE3yWC5cYAnc1qgGc
-         J4gwl4iYU4QYsfyUe+su9me/O1kzxDsgc42rGH+yovhJCCrKkRGGjQjlBZqsIEOdswXN
-         a+2fnlhXWvAtcUZOaWPyNvo5O66iMVyt8gchAaHl6S5nlm/9Nz6l180AT/qKTW2ZEovN
-         B+AQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773220003; x=1773824803; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N1EaLBSYYrgNyCVq+XkPC1rTN11UT3UwwE/Ba6Rikgk=;
-        b=R179TJlQj+90ACKC8VEMuXbcKKJbuPlSv/j/HMnCxb9AHx7p8f8Njb9H0DxzgDVVeP
-         2dKThypdzDjHOKFoBFdUw1fmGI0G+oKNWfAFlXzWMbcwLqLexFVIjJvMCoALxylRDjaV
-         1d320ymnvbiIJH1O4fNHolBnlGW8l+Qs+T5B82h0SKLuUC4fTzy9R82B8IrjxV2awYnf
-         kTzDJFDCeBPPtsalDokwYhhg0xNHNj3sCZZJIlPHiH0sCOb35jv5Lc9KM9KWB27sNDt1
-         vNQif9LFXbJfSUR1Epmm5KHlh2SW34WDpQm0P/6ZARih0Hx45KWAu8diKRMArYIB/PPn
-         8u0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773220003; x=1773824803;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=N1EaLBSYYrgNyCVq+XkPC1rTN11UT3UwwE/Ba6Rikgk=;
-        b=Qj4eJBsh2cmLoJMB03XoXEDLteDo+SGdp4RV8SGP16XhRjQknbOgi4Go04BSC/AVXB
-         jg8CQU81oQiQ7M1e5taMAkRTb8Jxjo49bawzrMad7y1ZkvWMf5Ee45+BlrarEvtj21eD
-         sDBr6k7C6NkO5wRzMqX17IykTPiU0yn8SNMBuXytHs9ZwD1P9L21JSH62MODHZsbLvxJ
-         Ny7c94JcgCLTph2PKj0X3wfweeu/e3JaCXT848HGH1lt7JoxIc2I+Z88VFrA+aSBKX/8
-         FsqqFWBW6b2Xyw2BD7fwRguykcFn2lY2Z9STSazuFl2nIq00rq+XRy7g82CYAhm3DxiP
-         7xAA==
-X-Forwarded-Encrypted: i=1; AJvYcCWT/MBNpsXOVG2XshsjMwJIvCMlgQrPhqiqnVVBoRfCnWS1Fbeyt2nG7apx77TB5vI9ReM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmNMdEKOhhm7S0YtWCXtpgevcixlIsTMUeBBLLDKIXgiJGvkTE
-	u3/OFRZlmGBr/zb7sqt//YhYyKT0SUw4X2ByvPim6IbT6lFeH1bqybLeRED/sAsxAq9nUv5G8Dy
-	RTAfLKV+MYRNSoeMSwQOjHNNUFzOajJY=
-X-Gm-Gg: ATEYQzyDlVUqF2Hxiv3pApLdirh6YmftGPRHF/4osZnb1HpA4vLt+szKzEWqAhzIVt+
-	PB0y7YTzl7JOL9iIig6PK1T285JXn9UcruSWLFgizTpD52IQSXMa2ZGyizZT07VSJCFgF5BW6OD
-	KNOy167BxxdC8fXlz3oKk8Ry9L2M48ERAtbpCxJLASQ6iUnyMGd9yKfYKpxQSScT1mVh/RSO0HA
-	QibZsQtPAY2lAQJX7sYQgkXJ9q30Dl+F5Antl3v+kaMDsBWY7O/F0ijmqhDbFw0/FrZOQfcvS1l
-	AXUDXVMh6hDFzHAZl8FK5XfW1Z5MU/ZVbmhjQuqOzaAqDSyhssH1GU0a7AEv
-X-Received: by 2002:a05:600c:8b0a:b0:485:3ae8:2236 with SMTP id
- 5b1f17b1804b1-4854b123cd6mr28330295e9.32.1773220003052; Wed, 11 Mar 2026
- 02:06:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LgDro3Eo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FCD9C4CEF7;
+	Wed, 11 Mar 2026 09:15:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773220527;
+	bh=/qi/E3sx1wLUyctUK7y+OHXYZPNKh6z9xCAoPwaS9tY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=LgDro3Eo6GuEp/c7KpExTwow2lUTl/Pn1bh3kCtPgx5EZkzvkzK56JY3zwHnUDcCc
+	 2as2PvShmmr1XG14DpK2Vlg+JLgJPDOEbIdyLQiZA99gO2VhR6aNobJIyS0CqNvQtn
+	 yBA+KuKdx+4dfgWg9peWZmhGw4/QosQ2PPXaLIeUrGAHySdhxN3QZSvEY8TJQRF4w5
+	 5y2vcF8WS6Vs3oTWyB2qlm1mbS5CYuB5pIK+WazvnWck2cAfQHHfFT1RCTg/MOj6af
+	 KpqT4L8GJkV64xMCr6wNACXlhye3na8PI6Nzf9xRvk9/jbbFZy4EGpTLuB6A51j2SG
+	 LfTqtyCu5LFfA==
+Message-ID: <61df6369-333c-430a-bd18-c5b1acae68ea@kernel.org>
+Date: Wed, 11 Mar 2026 10:15:12 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260225210820.177674-1-wusamuel@google.com> <CAG2Kctp1q1QtB1-JT2cgBsYu-WceV1YdSM1sSwNm8pyGtZQ6TA@mail.gmail.com>
- <CAP01T776Ni9R6CT_phx5wNDUoN13Tztz3DD5ZgKWedNLx7Nb0g@mail.gmail.com>
- <CAP01T77EZDLhjwtZBSt+DXLG-ftHfows-p_6FgXZQDQGowcDtw@mail.gmail.com> <CAG2KctrkGjk3SMQ=8-rrYnKCTUseSmBV+kg+=OyT9M2mBT1bwg@mail.gmail.com>
-In-Reply-To: <CAG2KctrkGjk3SMQ=8-rrYnKCTUseSmBV+kg+=OyT9M2mBT1bwg@mail.gmail.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Wed, 11 Mar 2026 10:06:06 +0100
-X-Gm-Features: AaiRm52PHPIATVHLejy9VoMDSkcJIo-xhDv2D3PD2a7QMCb-5IDtVAgsuRLOLOM
-Message-ID: <CAP01T77YFR9227YpTZin-i7w-hNLWMM9ANuzmiAzLwzPGJ=gEw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 0/2] Add wakeup_source iterators
-To: Samuel Wu <wusamuel@google.com>
-Cc: "Paul E . McKenney" <paulmck@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, kernel-team@android.com, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 16/16] mm/memory: support VM_MIXEDMAP in
+ zap_special_vma_range()
+To: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: linux-kernel@vger.kernel.org, "linux-mm @ kvack . org"
+ <linux-mm@kvack.org>, Andrew Morton <akpm@linux-foundation.org>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
+ David Rientjes <rientjes@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Alice Ryhl <aliceryhl@google.com>, Madhavan Srinivasan
+ <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Janosch Frank <frankja@linux.ibm.com>,
+ Claudio Imbrenda <imbrenda@linux.ibm.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Jarkko Sakkinen <jarkko@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ =?UTF-8?Q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
+ Todd Kjos <tkjos@android.com>, Christian Brauner <brauner@kernel.org>,
+ Carlos Llamas <cmllamas@google.com>, Ian Abbott <abbotti@mev.co.uk>,
+ H Hartley Sweeten <hsweeten@visionengravers.com>,
+ Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
+ <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Leon Romanovsky <leon@kernel.org>,
+ Dimitri Sivanich <dimitri.sivanich@hpe.com>, Arnd Bergmann <arnd@arndb.de>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+ Vincenzo Frascino <vincenzo.frascino@arm.com>,
+ Eric Dumazet <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>,
+ "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Miguel Ojeda <ojeda@kernel.org>, linuxppc-dev@lists.ozlabs.org,
+ kvm@vger.kernel.org, linux-s390@vger.kernel.org, linux-sgx@vger.kernel.org,
+ intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+ linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ netdev@vger.kernel.org, rust-for-linux@vger.kernel.org, x86@kernel.org
+References: <20260227200848.114019-1-david@kernel.org>
+ <20260227200848.114019-17-david@kernel.org>
+ <20260309142954.GM1687929@ziepe.ca>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260309142954.GM1687929@ziepe.ca>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, 11 Mar 2026 at 01:23, Samuel Wu <wusamuel@google.com> wrote:
->
-> On Sat, Mar 7, 2026 at 12:17=E2=80=AFPM Kumar Kartikeya Dwivedi
-> <memxor@gmail.com> wrote:
-> >
-> > On Sat, 7 Mar 2026 at 00:28, Kumar Kartikeya Dwivedi <memxor@gmail.com>=
- wrote:
->
-> [...]
->
-> > > I think it's still unclear why this cannot be achieved by exploring
-> > > what Andrii proposed initially in [0], i.e. by using existing
-> > > primitives and adding extra kfuncs where necessary to solve
-> > > bottlenecks, and I didn't see any indication where it was explored
-> > > sufficiently.
-> > >
-> This is my bad, I misinterpreted/misunderstood Andrii's original
-> proposal to apply only to open-coded BPF iterators, hence the follow
-> up patches with them removed. However, I don't disagree this can be
-> achieved via open-coding. Both proposals are viable to traverse wakeup
-> sources via BPF, however I see two distinct advantages of the BPF
-> iterator:
->
-> 1. Iterators provide a stable kernel interface that decouples the BPF
-> code from the kernel's internal data structures and refactors
+On 3/9/26 15:29, Jason Gunthorpe wrote:
+> On Fri, Feb 27, 2026 at 09:08:47PM +0100, David Hildenbrand (Arm) wrote:
+>> There is demand for also zapping page table entries by drivers in
+>> VM_MIXEDMAP VMAs[1].
+>>
+>> Nothing really speaks against supporting VM_MIXEDMAP for driver use. We
+>> just don't want arbitrary drivers to zap in ordinary (non-special) VMAs.
+>>
+>> [1] https://lore.kernel.org/r/aYSKyr7StGpGKNqW@google.com
+> 
+> Are we sure about this?
 
-I think this is my concern; committing to a stable interface that
-we'll have to maintain forever.
-It's a narrow use case that can be better served by dedicated kfuncs
-and rolling your own solution.
-There will be no end to the number of iterators if we keep making one
-for every linked list in the kernel.
+Yes, I don't think relaxing this for drivers to use it on VM_MIXEDMAP is
+a problem.
 
-It would be different if the synchronization scheme for the
-wakeup_sources list was really complicated and hard to express inline
-in the verifier, but that is not the case.
+> 
+> This whole function seems like a hack to support drivers that are not
+> using an address_space.
 
-> 2. If wakeup sources are accessible via BPF, the next step should be
-> to deprecate the existing interfaces for wakeup sources, such as the
-> sysfs and debugfs stats. In that case, a text-based BPF iterator
-> output will provide less friction during the transition.
->
+I assume, then using
+unmap_mapping_folio()/unmap_mapping_pages()/unmap_mapping_range() instead.
 
-I would agree if this was a one-to-one conversion, where you just
-replace the directory for look up.
-But you'll be reading from one file vs several, so it's already a
-non-trivial change in the consumer.
-At that point, the conversion burden doesn't have the same weight in
-deciding whether to stick with textual representation.
+> 
+> I say that as one of the five driver authors who have made this
+> mistake.
+> 
+> The locking to safely use this function is really hard to do properly,
+> IDK if binder can shift to use address_space ??
+I cannot really tell.
 
-> > > I think all we need is the wakeup source read_lock()/unlock() APIs as
-> > > KF_ACQUIRE/KF_RELEASE kfuncs. Just need to ensure we pair each lock
-> > > with unlock by passing the index, which can be an opaque value
-> > > returned from the kfunc (e.g. dummy empty struct pointer encoding the
-> > > index). Then you can use bpf_for() to open-code the list iteration.
-> >
-> > I had a longer discussion with Paul on this. When having multiple open
-> > SRCU sections, mixing nested calls doesn't flatten the protection
-> > scopes and leads to all kinds of issues, an example of which is in
-> > [0]. That said, in this case, the verifier isn't tracking what the
-> > underlying SRCU section protects or isn't even aware of it, all it
-> > needs to ensure is that section is closed eventually, out-of-order
-> > unlocks are ok, it would just exist to allow looking at the list in a
-> > stable fashion using safe bpf_core_cast() accesses.
-> >
-> > So, I just wanted to clarify why I think this should be perfectly ok.
-> >
-> >   [0]: https://www.kernel.org/pub/linux/kernel/people/paulmck/Answers/R=
-CU/SRCUhoha.html
-> >
-> > (if you are like me, please follow the link at the bottom of [0]
-> > before feeling good about understanding the example).
->
-> Appreciate the thoughtful feedback from you and Paul. The example was
-> nuanced but well-explained by the post, however, a key difference I
-> see is that the BPF iterator solution creates continuous locking
-> segments during traversal, as opposed to hand-over-hand locking in the
-> example provided. I could be missing something fundamental here- do
-> you mind elaborating?
+Skimming over the code, it looks like it really always handles "single
+VMA" stuff ("Since a binder_alloc can only be mapped once, we ensure the
+vma corresponds to this mapping by checking whether the binder_alloc is
+still mapped"), which makes the locking rather trivial.
 
-It was just an illustration to identify what guarantees the verifier
-would need to enforce.
-The most we need to do is just ensure SRCU indices are passed back
-during unlock, in whatever order.
-Critical section will be using bpf_core_cast() anyway to do safe
-walking of the list.
-With the KF_ACQUIRE/KF_RELEASE kfuncs you will still have a continuous
-locking segment.
-Just enclose your list walking loop between lock() and unlock().
+It does seem to mostly allocate/free pages in a single VMA, where I
+think the existing usage of zap_vma_range() makes sense.
 
->
-> >
-> > > The iterator would become unnecessary, and everything can be done fro=
-m
-> > > a syscall program's BPF_PROG_RUN invocation. I didn't
-> > > check how we can get the pointer to the wakeup_sources LIST_HEAD, but
-> > > you could try several options (__ksym,
-> > > bpf_kallsyms_lookup_name+bpf_core_cast and then walk it, or return
-> > > pointer from a new kfunc and walk it using bpf_for()+bpf_core_cast())=
-.
-> > >
->
-> Getting the static variable is key to the open-coded approach, but a
-> clean way forward isn't obvious to me. Passing around raw addresses
-> seems brittle and can raise security concerns. The wrapper kfunc to
+So I'm not sure if using address_space would really be an improvement there.
 
-I don't understand the security concern. All of this happens inside
-the BPF program.
-If you're writing these addresses to user space and leaking them, it's your=
- bug.
-You can do that with iterators too. You have all the raw addresses
-available to you.
+Having that said, maybe binder folks can be motivated to look into that.
+But I would consider that future work.
 
-> get the static address might be the best option, but it feels like it
-> violates the power subsystem's encapsulation. The iterator approach
-> abstracts all of this cleanly.
->
-> > > Also, how much speed up does this really provide? It is hard to
-> > > understand the motivation from the current cover letter. Is the
-> > > bottleneck due to opening multiple files in sysfs? You will still hav=
-e
-> > > to read text and parse text from the iterator's output in your curren=
-t
-> > > solution. Wouldn't it be faster if you just used a syscall program,
-> > > and used binary output (using a ring buffer) to stream data to user
-> > > space?
->
-> With the BPF iterator approach on a Pixel 6 in a quiescent state, I'm
-> seeing a 10x speedup when traversing wakeup sources; the speedup would
-> likely be even greater on a loaded system.
->
+-- 
+Cheers,
 
-I'm sure you can replicate it with the approach described above.
-It might even be faster than parsing text from the file.
-
-> As alluded to earlier, the next step is to remove the
-> /sys/class/wakeup node and debugfs nodes. My apologies for not
-> explicitly listing this in the cover letter, but ultimately this would
-> save memory by removing those nodes, eliminate work by not creating
-> the nodes, and improve performance with a faster traversal, all while
-> transparently replacing legacy interfaces.
-
-And you can do that regardless of the type of solution chosen above.
-
->
-> Thanks!
-> Sam
->
-> [...]
+David
