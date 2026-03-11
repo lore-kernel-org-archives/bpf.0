@@ -1,197 +1,130 @@
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B8D230F812
-	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 02:07:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773194856; cv=pass; b=eYPmYYUpjTnUiJpEJIYUV44CR7dYMvP9XC1Uc6VmnTF+eG+lGqFl/fZ9v3jKjBCa6+ZujxZBFWlPRZn4ZRuwwAhD98aLVvHA96JUXGqqkOXj7l9EZMPNf+PYSvZn/qXgAiYL8jx+IWmXG3XgVz+ZooHfT8IGIL21++UfDDWM1Q4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773194856; c=relaxed/simple;
-	bh=8UJnLa/DDQ+b65RDSHa97nR/Rm6zetnRjswOkVb13wc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=byGraMQCie9pYDK7hyfJCwHVY6+oJ7d18FyYUD4bBwNC53+8/gHQFHF3kdMJE3gJYPTxGZa2ZdHRETsTevyL7LHCX2hAY3P8TZUDfnw+tebrl5xJi4Vj1Lk8SmBVyhVVN3qEQv7ELWcDfeD2EOtSNSbyNBwOa4aP39b6M7eyl6w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=SqpOgAb4; arc=pass smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60967311968
+	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 02:14:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773195267; cv=none; b=tcmsV7GDFDoIsejcXIYLZ6bqB8DYBo1hcjzZZ8rK8OwpY7fwGMnbQTp3UKCGlrEUojPer5E9L4ulZO2zTfTClImMwNUP/o4GuFxzAYusEiCyD/B0Z7rceaPaG2HuGSULZuvB52a355S03kzAd+Z8lDJl682t2Jg3OdzcDq9SiZc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773195267; c=relaxed/simple;
+	bh=R/FuKT4sVVaoqPze5PBEzM3e4Q6QcFxbH+TNvr40RvE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=aK9jZi0Q4Pzr/KXTniAnQTcmW9+nh3nPGE/Byoxd+h9hPBj+n6pDM86ncaqyqr6UfBmZPkTqE/QgJDJAs7XWZtv5/FwVczUdo9jNWk7+x9fN3TdjRJUQgEuAN9havonkrCz29W8Piex333rwwUxoM2dcFGMo0mMfX76wivUw5yU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=GSY1u04E; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="SqpOgAb4"
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5a13d1c6f25so4703784e87.3
-        for <bpf@vger.kernel.org>; Tue, 10 Mar 2026 19:07:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773194852; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Lqj2kijaTAyOG7BjUMD3g67W6hf/NAvbirvw2wMXjSjobBdck76J0VsvksE8xB0uDB
-         58sP8Ff13wClksM7vG/qCX8JaIKvZ4pgiwEdbr9OJy/NoGqGuwXWn1YgbqDvoTzfbcO6
-         pKyORNwxpqP4H3/cFmXUdXm993+vjy20qMD5hXM4ZIOCzmV5nHolK/wV0uBLzH+xX1U/
-         CbYzG8PKeKPq6GFq99sG0xlW1ovlSJi6hbezWD58fP7vxxytE0XGPPoSVIWlX35eSREp
-         cBjISpK+0jUDx9xQPSDxqAaivLiFxWrB/OX4vzDDcoSvLdzTtPrNMQSrvhsHWV+UNegJ
-         t33A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=+zLBLQzKjcztDlxJqoLP6w+B6xnZmfHibV4jlBQCebA=;
-        fh=97WA0hCz/YMNHr4CAvEX6H8+gWAtj7l8Vd8rsCDiAz4=;
-        b=ZVnF+Rs+59K6zjK5WAc0hTVYeyrW37n3JGUP3MkVObbvFFvWhYKCEOgLVMGecvqYMr
-         AYDX7FJS3Xd1hQ9I20Rs9H5NuLmkRORrlb17ZTn86/kCilzXKiYGAu4wwifO3Ha8B2N3
-         Sw4ke+TwVUkV2Enin6jI7xl5BHnoAYip+/4uugON4xKzGR9t0Z0kOEg96k+Ep83Q5z//
-         8TQ676k4bCQJFbKu1C78vsE28wLSf/egtty49YNSZXoMBEtS6+MRk3rqSM3hzesIpjfX
-         /O+G61jjo39usZejmYfUQu9OnFHix8g/HgJczWIXD065ZAfxZV+TjVzv/X5s7QVdIBPR
-         3uCQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1773194852; x=1773799652; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+zLBLQzKjcztDlxJqoLP6w+B6xnZmfHibV4jlBQCebA=;
-        b=SqpOgAb4CQOCp6QT1IhDiJXNOENCCAthmmQiQ2Xm1LqdH6AuNnr9pWEOxoaM6J2EHp
-         TaZvrNsWvEAAdeAh3rGZCGLrxzU767HUy57VJt43+079ae3+2kuAr2+JBVbU8T9+l/BT
-         vjjO+GANIyds0bGFgUhdgNG0FnF3NJi/nWQH4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773194852; x=1773799652;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=+zLBLQzKjcztDlxJqoLP6w+B6xnZmfHibV4jlBQCebA=;
-        b=JYrMrYI9HgAaFTyCJDb389/z3eftuTDAyNM+i6Ik75qvNQXH8dXJRvhEIA9enkmABy
-         oJBcjCf2r/9IHTYkZzRr/bLHN4DYNrU5PKh23H5X0WTuValrCJ9LQQeW/BT6E1qyob1t
-         mOJj5qj8IGuocw40YmqjCsYVj/YYzJ+nIjqOaLCoNd57rdpWRk93bdmarGFqhMAtnxfG
-         A3L7WuO/SYHM7KUDo5gLHYYL1CavcqvUlTf4ajQLdUGAnkRhV//NsMNKMcLMJ2rnp7WT
-         DaAJMZ7ir9fIB+RQc0KNMnlwMKBH6sbPRBJrANJCmxYc0FyGW/B11bQhpMbGZZOCbQNs
-         KGDA==
-X-Forwarded-Encrypted: i=1; AJvYcCX/sVbN+jfGKw/az16Em9W/1rCfVXjsiLHHt6pxdRdpLI1pSQQSaI9YTvJUB4q+lTohtpw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmS4NPAtAslUr9RFvUbxc0p/a8HfasjnUknWBq184HicBT34L4
-	oe4FlP6NrYfg7neCyLt2Op3RxTsaLqyabMYGOpOqQej/rhzPUveB7xpOWQUIkwp0u9P/Ka1X9WU
-	+80h4mZNFZ5k05UsLu67Qu/rQXovZiPXQWzvG1TDE
-X-Gm-Gg: ATEYQzxiYX/2xUf8LpOOsTZdmNWMCtYU9fh7ce6IHVJ5833jm+RUPVmJhLeb6t9cNBu
-	ovmW0ifx3yBFU7bE/YoTdcwV3ACETkLzaBo9TU1gyzBCRu8TuL1LBon69gfjxmL7MxDk3G2UlOc
-	HHXlIqfPYrDLyXxlZYqmfF4B73dxTOe2ZMj5v9MaAFxgfEhc2ygEMQYcSRocD97BQ77mHF+wQsd
-	y5sHFQsn0KNXBW1RHoX5BSUKYXUmNp6mSmDKrE9hmZ/uEpuh+HJRGGV/tRGqZn7eqT48NdhqYmx
-	qj+um5XMlg==
-X-Received: by 2002:ac2:4427:0:b0:5a1:3134:9bac with SMTP id
- 2adb3069b0e04-5a156cbd1bbmr169453e87.28.1773194852284; Tue, 10 Mar 2026
- 19:07:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="GSY1u04E"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62B1JPh81764289;
+	Wed, 11 Mar 2026 02:14:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=omegfS
+	C/naUJ/me4BJnKHHPViowBHhuButMY5ic7kQk=; b=GSY1u04EaLmpEJCaCuZJNk
+	RyKxXNFaPhcdtIpWe0ZQ+KpcvpuR66Kv9P6lRnuJd+5rbWOEYyf2i0TmUqwSQffH
+	g5X7iLudOsJanusNc95Wg2DzQQOMliFNQAvNDk7ZgwagE4kaIGX7mFjUkaLh5zpc
+	tyXMisILk3OEh+hlsx8x0Deun491WtTU1zSjd5Ejk0xWV46xrQbVSzEyiBAtBIkX
+	CVFiQlSMWnLF9mS40iLUlNGvRnz8YMScXGgVVUjZYmbT2DFf4Ek0cujkw1GaI0VJ
+	qML1dG33o7m+m4isasHSuPbmlEEoE8FNAbrw8dcKaJo7oHJlTdr/wnJLPmD62FSQ
+	==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4crcuydsk1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 11 Mar 2026 02:14:10 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62B0cf22029359;
+	Wed, 11 Mar 2026 02:14:09 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4csp6ur8x3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 11 Mar 2026 02:14:09 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62B2E5on30867718
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 11 Mar 2026 02:14:05 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 92EA820067;
+	Wed, 11 Mar 2026 02:14:05 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id CBE6820063;
+	Wed, 11 Mar 2026 02:14:02 +0000 (GMT)
+Received: from Linuxdev (unknown [9.43.124.195])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 11 Mar 2026 02:14:02 +0000 (GMT)
+From: Madhavan Srinivasan <maddy@linux.ibm.com>
+To: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Hari Bathini <hbathini@linux.ibm.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Saket Kumar Bhaskar <skb99@linux.ibm.com>,
+        Abhishek Dubey <adubey@linux.ibm.com>,
+        Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Subject: Re: [PATCH v4 0/6] powerpc64/bpf: various fixes
+Date: Wed, 11 Mar 2026 07:44:01 +0530
+Message-ID: <177319508345.269267.12670103641877227517.b4-ty@linux.ibm.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260303181031.390073-1-hbathini@linux.ibm.com>
+References: <20260303181031.390073-1-hbathini@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de> <20260310-b4-is_err_or_null-v1-56-bd63b656022d@avm.de>
-In-Reply-To: <20260310-b4-is_err_or_null-v1-56-bd63b656022d@avm.de>
-From: Chen-Yu Tsai <wenst@chromium.org>
-Date: Wed, 11 Mar 2026 11:07:21 +0900
-X-Gm-Features: AaiRm5028PWt8n-JnveiRgn8oYMksdR_-_nk4JOkvxMfplWs-GDr7RRk-OxICyw
-Message-ID: <CAGXv+5FQAVaJjqhv+Xq-ysOc4SHQn2mCNTgCAp8XocmWBWGGoA@mail.gmail.com>
-Subject: Re: [PATCH 56/61] clk: Prefer IS_ERR_OR_NULL over manual NULL check
-To: Philipp Hahn <phahn-oss@avm.de>
-Cc: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com, 
-	bpf@vger.kernel.org, ceph-devel@vger.kernel.org, cocci@inria.fr, 
-	dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org, 
-	gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org, 
-	intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev, kvm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org, 
-	linux-bluetooth@vger.kernel.org, linux-btrfs@vger.kernel.org, 
-	linux-cifs@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-hyperv@vger.kernel.org, linux-input@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-mips@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org, 
-	linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org, 
-	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org, 
-	linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org, 
-	linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org, ntfs3@lists.linux.dev, 
-	samba-technical@lists.samba.org, sched-ext@lists.linux.dev, 
-	target-devel@vger.kernel.org, tipc-discussion@lists.sourceforge.net, 
-	v9fs@lists.linux.dev, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Daniel Lezcano <daniel.lezcano@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=EK4LElZC c=1 sm=1 tr=0 ts=69b0cff2 cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=VwQbUJbxAAAA:8
+ a=9Bv8LlECD2avGt_Yqv0A:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzExMDAxNiBTYWx0ZWRfX9WxFJqfY5rjO
+ gLZqQoYvxna6J1RG+6hTXjdnFkQtMdjdWPKsyutQXxdRxUqroxCCrbq/0oQ9WauxapGK7B6dreY
+ osu2KWqYssn3RYnqJZX9mqoFKx17yC84p8MyhDnN38mKyM4zy2S07WVW3Om3VKSvL4lPFOMTSQM
+ IevPNHX1rNxcjg3gU8he0ZA/Yb3kaRXnuhBNScI7Dx5VyvhHd4FG030Obrs43PkIbM3RhfuXj2S
+ LtU9SIUWsnamDvDhhLpr5uJbdkmEyZp2Y9DzqhgY7XynN68bO0n2LMFDfl+vT4STwIOTayNAnJ/
+ Yd9ay13Xu/GK0SLM60VGtxTMjBgAUr67h+g8R/f6lB1j4sfZJAdrtDJbS62K6a1+WE4R5NGyrB0
+ bnpljKl6S4mKxbsw35wOezuoYabjIBayRpRoZkTjTJWLRYujfCDkHIAW52C2uNwdgvPZ2Qhlv9n
+ dxpyCbEOA2gvl7mUXyQ==
+X-Proofpoint-GUID: jCpWQnDs3LUG0CJE5W4-gzrJaXf-uDRk
+X-Proofpoint-ORIG-GUID: jCpWQnDs3LUG0CJE5W4-gzrJaXf-uDRk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-10_05,2026-03-09_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 lowpriorityscore=0 spamscore=0 suspectscore=0 clxscore=1011
+ bulkscore=0 impostorscore=0 priorityscore=1501 malwarescore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603110016
 
-On Tue, Mar 10, 2026 at 9:57=E2=80=AFPM Philipp Hahn <phahn-oss@avm.de> wro=
-te:
->
-> Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
-> check.
->
-> Semantich change: Previously the code only printed the warning on error,
-> but not when the pointer was NULL. Now the warning is printed in both
-> cases!
->
-> Change found with coccinelle.
->
-> To: Michael Turquette <mturquette@baylibre.com>
-> To: Stephen Boyd <sboyd@kernel.org>
-> To: Daniel Lezcano <daniel.lezcano@kernel.org>
-> To: Thomas Gleixner <tglx@kernel.org>
-> Cc: linux-clk@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
-> ---
->  drivers/clk/clk.c               | 4 ++--
->  drivers/clocksource/timer-pxa.c | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-> index 47093cda9df32223c1120c3710261296027c4cd3..35146e3869a7dd93741d10b72=
-23d4488a9216ed1 100644
-> --- a/drivers/clk/clk.c
-> +++ b/drivers/clk/clk.c
-> @@ -4558,7 +4558,7 @@ void clk_unregister(struct clk *clk)
->         unsigned long flags;
->         const struct clk_ops *ops;
->
-> -       if (!clk || WARN_ON_ONCE(IS_ERR(clk)))
-> +       if (WARN_ON_ONCE(IS_ERR_OR_NULL(clk)))
->                 return;
->
->         clk_debug_unregister(clk->core);
-> @@ -4744,7 +4744,7 @@ void __clk_put(struct clk *clk)
->  {
->         struct module *owner;
->
-> -       if (!clk || WARN_ON_ONCE(IS_ERR(clk)))
-> +       if (WARN_ON_ONCE(IS_ERR_OR_NULL(clk)))
+On Tue, 03 Mar 2026 23:40:24 +0530, Hari Bathini wrote:
+> List of fixes for powerpc64 BPF JIT:
+> - Patches 1, 2 & 6 fix issues with existing powerpc64 JIT and are
+>   tagged for -stable.
+> - Patches 3 & 4 resolve issues with bpf2bpf tailcall support added
+>   recently.
+> - Patch 5 resolves an issue reported by bot+bpf-ci@kernel.org while
+>   adding exceptions support on powerpc64 BPF JIT.
+> 
+> [...]
 
-clk_get_optional() returns NULL if the clk isn't present.
+Applied to powerpc/fixes.
 
-Drivers would just pass this to clk_put(). Your change here would cause
-this pattern to emit a very big warning.
+[1/6] powerpc64/bpf: do not increment tailcall count when prog is NULL
+      https://git.kernel.org/powerpc/c/521bd39d9d28ce54cbfec7f9b89c94ad4fdb8350
+[2/6] powerpc64/bpf: fix the address returned by bpf_get_func_ip
+      https://git.kernel.org/powerpc/c/157820264ac3dadfafffad63184b883eb28f9ae0
+[3/6] powerpc64/bpf: use consistent tailcall offset in trampoline
+      https://git.kernel.org/powerpc/c/3727d6ec13665c1d99bf6dedb107104368ba42b4
+[4/6] powerpc64/bpf: remove BPF redzone protection in trampoline stack
+      https://git.kernel.org/powerpc/c/2d347d10f8e20e28a9eab52edf55079ae1ec0aae
+[5/6] powerpc64/bpf: fix handling of BPF stack in exception callback
+      https://git.kernel.org/powerpc/c/51b8de4b3d27ec12128fa2405e526c527a77ae65
+[6/6] powerpc64/bpf: fix kfunc call support
+      https://git.kernel.org/powerpc/c/01b6ac72729610ae732ca2a66e3a642e23f6cd60
 
-I don't think this change should be landed.
-
-
-ChenYu
-
->                 return;
->
->         clk_prepare_lock();
-> diff --git a/drivers/clocksource/timer-pxa.c b/drivers/clocksource/timer-=
-pxa.c
-> index 7ad0e5adb2ffac4125c34710fc67f4b45f30331d..f65fb0b7fc318b766227e5e7a=
-4c0fb08ba11c8f9 100644
-> --- a/drivers/clocksource/timer-pxa.c
-> +++ b/drivers/clocksource/timer-pxa.c
-> @@ -218,7 +218,7 @@ void __init pxa_timer_nodt_init(int irq, void __iomem=
- *base)
->
->         timer_base =3D base;
->         clk =3D clk_get(NULL, "OSTIMER0");
-> -       if (clk && !IS_ERR(clk)) {
-> +       if (!IS_ERR_OR_NULL(clk)) {
->                 clk_prepare_enable(clk);
->                 pxa_timer_common_init(irq, clk_get_rate(clk));
->         } else {
->
-> --
-> 2.43.0
->
->
+cheers
