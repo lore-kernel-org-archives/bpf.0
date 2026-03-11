@@ -1,76 +1,78 @@
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F90B3E63AB
-	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 18:19:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E9043E6DC2;
+	Wed, 11 Mar 2026 18:20:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773253200; cv=none; b=l1/1SfsePWkLWL5b3x6pPTMSfzYFwxyMyRx37lDthtamd9DAZFwlI3C1+F0EH4VlOBx8JW5o0qEGrt8bHBRKfns+SDYEmLdLZOcUNzMAOIdZQihUxwsmllSFRSVRPmae6gkZUQD+bb9jx8k1w15dJGd9rMk3LtZpmjUgPuKMnSY=
+	t=1773253210; cv=none; b=kKmipsyhbPsozcQZxXaQcgif0+EaJo+vKWkcT4LmlpOgibzLhQYj9QmaaUWN+r27MCS/u9NYlsfAoEXul4Ep0j8ooY9G1FQiD/C4CFdyM6fERFKzoVED2qwodV14an8nFGJC4UANFUdqDHxEahaVfh6SqQfYypHnXrcpZRiIZYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773253200; c=relaxed/simple;
-	bh=wMsLXN2pdJ5CGkBzG7OFwRUc+pDGe9pNcT2vinhjEbo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=n7DFzir+1jmbEFspgaBIFEWUCfVg911s8A86fsv9dcR+XZeVpG3/txXDxzxx0XrfQ2vW0/KEihuQynI6jyndFSbYQcNoW4TOUCArwhvTBYcjSsi8gTdk55i3a1zGCn4jMfajFzDrrKdRntq4nhDH7AJLFtAnKXIHlMSPwwTzjOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iSzBx9Gp; arc=none smtp.client-ip=91.218.175.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1773253210; c=relaxed/simple;
+	bh=DaSduLqxZiXdsFIRRUAZC5SKDODNKUet4IE0LsHv4uw=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Ur8ldo3isNw03Tz/zc/H9s78MLdz5wbDwkucT1D72QFZ4baYoJyXEm0ebP2ccI6qGLvi5A+AzTLPJjAgzL+yb9SsDpM6QeJ0DG+Zn9GrkBtedw+2tjR/TyqJ74Y/iZk8tUKepDHFXcKdNO0cYrY2HJauue3XrvK/2ZKrhc8JywQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ElbHVzjG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iSzBx9Gp"
-Message-ID: <1b8a2b72-b08f-49fb-940e-f23d90ecec7d@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773253197;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=P2P6YoU9dCwYl3MSzSFu3W4hJnAvjdqVxxFlPujX3mo=;
-	b=iSzBx9GpMOu1q0JY9xJ278SzharsUN+Ku8wHoB/sixSkRf8dLRW2vkjlsQh/HPe7Ku9O0r
-	ZPqCXUjVUMacJWEGtqZKBdAN+iNTqxF5TTr5Bu1qab2setQPpM4T2X2hVaC7f78sBlvcxj
-	O5usEl/j6qxQgFRRGtR8cRfwiwcyIAI=
-Date: Wed, 11 Mar 2026 11:19:52 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ElbHVzjG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBC23C4CEF7;
+	Wed, 11 Mar 2026 18:20:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773253210;
+	bh=DaSduLqxZiXdsFIRRUAZC5SKDODNKUet4IE0LsHv4uw=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=ElbHVzjGRAMtftyPhr3sal80Yia7wuCiVFKZbcMx6+Kr8HTfRLA+T0pdGtjFtSc0F
+	 6KKLBhygR+Kad2WGpaB/jWWyqeeIH5qP8UVDUffcQFZnf0QYkm4vfN1qSab8E9XQWl
+	 Eb18W3jBRSfsB8IQ9ESdlsgZqTt1AmjgYJnzOV0CYXuIe7TE456uOUThJWKAOYRBgb
+	 mauJZmIfn9w0tZOlXK3O706JDVjYh6DDZJPCKDcLpjvM+sHKO8raiI+zAZx9xYLWqz
+	 +YNsywaM8MrpY0XiMbeHTzXiwsQH1r7SGujxrul0Xx4LCyWgXyByg0RUrFP6F5B3s/
+	 6tFUJIKcKx/Gg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3FED03808200;
+	Wed, 11 Mar 2026 18:20:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] selftests/bpf: Enforce definition order for __msg macros
- in BPF tests
-Content-Language: en-GB
-To: Cupertino Miranda <cupertino.miranda@oracle.com>, bpf@vger.kernel.org
-Cc: David Faust <david.faust@oracle.com>,
- Jose Marchesi <jose.marchesi@oracle.com>,
- Elena Zannoni <elena.zannoni@oracle.com>
-References: <20260305130035.192080-1-cupertino.miranda@oracle.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260305130035.192080-1-cupertino.miranda@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix const qualifier warning in
+ fexit_bpf2bpf.c
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177325320607.3779062.5511337420258180281.git-patchwork-notify@kernel.org>
+Date: Wed, 11 Mar 2026 18:20:06 +0000
+References: <20260305222132.470700-1-varunrmallya@gmail.com>
+In-Reply-To: <20260305222132.470700-1-varunrmallya@gmail.com>
+To: Varun R Mallya <varunrmallya@gmail.com>
+Cc: andrii@kernel.org, eddyz87@gmail.com, toke@redhat.com, ast@kernel.org,
+ daniel@iogearbox.net, song@kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 
+Hello:
 
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-On 3/5/26 5:00 AM, Cupertino Miranda wrote:
-> Ensure that __msg macros, and similars, used for BPF test validation are
-> processed in the order they are defined in the source code.
->
-> Neither GCC nor the C standard defines the order in which function
-> attributes are consumed. While Clang tends to preserve definition order,
-> GCC may process them out of sequence. This inconsistency causes BPF
-> tests with multiple __msg entries to fail when compiled with GCC.
->
-> This patch fixes the test runner to explicitly sort or process these
-> attributes to guarantee predictable matching behavior across different
-> compilers.
->
-> Signed-off-by: Cupertino Miranda <cupertino.miranda@oracle.com>
-> Cc: David Faust  <david.faust@oracle.com>
-> Cc: Jose Marchesi  <jose.marchesi@oracle.com>
-> Cc: Elena Zannoni  <elena.zannoni@oracle.com>
+On Fri,  6 Mar 2026 03:51:32 +0530 you wrote:
+> Building selftests with
+> clang 23.0.0 (6fae863eba8a72cdd82f37e7111a46a70be525e0) triggers
+> the following error:
+> 
+>   tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c:117:12:
+>   error: assigning to 'char *' from 'const char *' discards qualifiers
+>   [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+> 
+> [...]
 
-I simulated with a few examples, e.g., message sequence numbers
-like [4 3 5 2 0 1] and the patch looks correct. So
+Here is the summary with links:
+  - [bpf-next] selftests/bpf: Fix const qualifier warning in fexit_bpf2bpf.c
+    https://git.kernel.org/bpf/bpf-next/c/ca0f39a369c5
 
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
