@@ -1,61 +1,63 @@
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F3A3DBA0
-	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 18:28:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6639735CB64
+	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 18:28:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773253718; cv=none; b=GkuyRQ+UBnx/3/JKW4ftEh+IuhYiEks2sGwLhp1nDc0SGp2hDK4k/G/SL+Xnm4aydlU7ua4LHV8oC1SddV3b9OuhinzqRxn11BAT7b7hoipqjckI9yVzpvR7zRVi1nBufIk/o+JfUo+OVCxfB66OgDnre7zvdsBzpy5qkfhFL1M=
+	t=1773253720; cv=none; b=Wq2CQ/6v71mBlFYSuP+e0Shm4bab134LNNgK6HE75DaURDI9C4IXICuh4t/fL2//9E9OjQF+vdjeN6sb04OdiIYrnwv52zBqTzzM8puyxxJqQ4NXxVyfSGMdKZB5UlCZDcIqzKoPmJWBjd742W7nIKDi84BdPTWjS/xKeY4I4Lw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773253718; c=relaxed/simple;
-	bh=zcJWI1jaArSAvvTR3+miy5rBKt5pnaMqWi52zuop1nM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CJLM/Dg+CEU66aksWm74vDunU2Tco4mR3ww9LisUSRqxnb6GzmaRsT2/Vq33bTPfSqmYL0FQ2TlJ01+QX+hIBbD+fjgWkHEarqvFkaQt1+U2gj74otGQLH0FO4BujbNwY4qkjd3mX2LdeI+YffkL2wxzJZS8VhQco/M4eyH4KwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=UZkxpohM; arc=none smtp.client-ip=209.85.160.176
+	s=arc-20240116; t=1773253720; c=relaxed/simple;
+	bh=y9c6bAg3AhUykaPiMjGu3y7pOS4IXshLFHAHHyNicIY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=GeNvBOFECLR6x3KFHqBpRVjYk8wop9rP5FS6ETGABlJ+GsArMO0gc8B2l2pov4mHNpF60yGuHVHlY4W2eKVVBReRaK+bB2YLqJSmUo0ex3SH8DH3bpoBcHgXPY1gUzSDJXaLlsWoGF8/BALPC+8wfBZ4hIiY3wx/PQRWHu8eXnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=v94JR0HX; arc=none smtp.client-ip=209.85.219.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="UZkxpohM"
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-509307e3854so10748841cf.1
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 11:28:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="v94JR0HX"
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-899fb2b94c1so2042156d6.3
+        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 11:28:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1773253716; x=1773858516; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5j0xI05WknCDLzuikXM70Ga7+ARhfqZ9+rP/w6KEg1Q=;
-        b=UZkxpohMgLY7Ef0NhPTaOs9dErPW4HyloTForf1di0dhq8f1S8nqHpMuLIgzlrB57w
-         15uBBV+5gTlIchmK2PWmgKd0UMCpxaVap0B4daKes16y60MYWdq0NdQs/hQrZqa50iJc
-         fQ4/OnA4FIHDXa1yOEJ8w2L+mK3xirvyIEx39HprGzPTUUqMplYv4skw3tuGwkBRn8Oa
-         leZ55HAWa4P9Rhz9LfEQXbL2MrB/Dg6T8P4+E1KHvs/1PyTCQLrBaLp2Qmy69gI5LrlX
-         8V/rh0Zn8f5xGBqxBlE29tFlRn03vvQyc/mlQptWHm+jR2wO/kSkK+GEM4oGSvKsaoR7
-         JSoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773253716; x=1773858516;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1773253717; x=1773858517; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5j0xI05WknCDLzuikXM70Ga7+ARhfqZ9+rP/w6KEg1Q=;
-        b=GRut7osXfIsa7iAu9r3o6YV1icG9knkXZTX3lloP5VoVSA3iqCniow8Zq4gD4qt7Q4
-         ONAUFBwAywXhSVPGp+jHlEz1PmsgO0IgZdjf0UKqd0xKxuOFlMgyrgrlaaSbYhooJl97
-         pQK4aa8G0afcY8uwrIdDhaI3U70PZ/yAyWRikfsDbcVFm86D512OKFKG7mduaHfQchNM
-         6W6cyoagqtBqWeAxd616KQ71TC3VCtL9YIkQn02cghr/xAW5e2Iuhqzu739/3b4u3/jt
-         L6diEWwBmqFwycaIvspECtBIuOrWJ/tOJ4cUejbxES4xVuvyRO3aEZxjVJmf2rMHVb5g
-         1uJQ==
-X-Gm-Message-State: AOJu0YyugAondvsBeVm5nkQIiOKa6VZH1ePHq9bIjROIBxMr3mvR8P0n
-	swhGo2TtxxVgSx1jOh8orsrjRdLlHWBwwCafVanHZN4w8NvJE9YC6LRaVpXwmoywInK9T2F5iA7
-	NOB2L
-X-Gm-Gg: ATEYQzy6iTdqg0ROj1I/HrHJOKoiD/PHadbUx6ixtM25InmJHOiI6hcvH0hyDWjURXR
-	I8etyWKbTgRy8boc28fT4KkYFo8mPZP5s7cyDoaChH2o/SBiOtYaI7DEybyDLZvvjquACcVUI3B
-	rEYhyAIvovB2gTwRySU12Dyl3b4huHdsiofXd73lLWjWDg8vTSknr7FYz90d21ZD/W2v4dzN3bd
-	FUbCsBZ6TJCW8PnkdbGNRN8/PDQDB9Xy5OHsOob/cuXERsYUp91EjZAsGNaIMsWOCoWgvQ15yVf
-	YwbBwP/abFXeYSNa2f5VPpIFLevUPV3dfEyQCGvJmAzogY8Oo+JN0DbDNMhyGlc7CVG2dvtcr7/
-	QUbCkNgoX1+qDfYFE8bskIHwWizIR/GET/Yw4K5asNKiVFox+DNX+CdxNu2iJxv/HJCCfBIHY4A
-	GyztAdvLu8DVAE/j6wLbzmVA==
-X-Received: by 2002:a05:622a:3cb:b0:506:9af9:595 with SMTP id d75a77b69052e-50947272bf3mr8364671cf.26.1773253715721;
-        Wed, 11 Mar 2026 11:28:35 -0700 (PDT)
+        bh=i8aBMjKokQOI/Vf66ycn5lNL1bGcUXOfolYf32430EU=;
+        b=v94JR0HXn3lI3rjNjfeV8Qw7wb+Uv3hE+1he9DCt9yMotXAqhO0TqTGr8RNrOw8OVm
+         z1dRwR2Kte86LYKIQtm4iy7Oc1v3Glb6oyoMCFSBxgb/wNkQyHUQptd3qLdp1nDGp1+L
+         w4YoiJo7v6rHv4xl6NJs7HeZOeJyyTzo88V/S8tK4CcLxyCNRPuyQ27k3YCVm9rjs/0/
+         UjL38xe7iRAngmAlTRhYiUkls+C8gcd6WzTTXCFkKA8ETEKifft4vyXpeEPc1vVef4yP
+         4yzVqMHFl9PXlhJuesBrNAvBR1/DPZHfP4SEtTzMrXcr5AYGzdDloWWtdmhzC4p3kg31
+         txWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773253717; x=1773858517;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=i8aBMjKokQOI/Vf66ycn5lNL1bGcUXOfolYf32430EU=;
+        b=qMSO2jrn/aXiijRVnZvFX0FZEG5qF3/n6BrMjZsW6jVTZfpchMtL7kBWjAorKpvBAw
+         r8rjZlAIFV7ZoT2AxWpjxn1JBTnQwnh7BDCw9BZIvqEOp/F4YoPt9Y6bTAoou5TgJxvT
+         YqHJDDHuQ3Qk3O4kZmnqVulnMJ5m1cMyEVIHw+HymrQRh56JFGMMqbC18C80soZz/K6Z
+         YyWRrmew+arsGjBtNpbMFXHPEWlToHor/pVTCLyIlWG4ezyci3lbZd8dFVMgC9ymdeSK
+         enZTGlJQE7/2W0wUcYyRzN1RQpr9/WBixHtUEHj6oPOy1G9eMn2Wa53b7887/JnKEMU5
+         2HqA==
+X-Gm-Message-State: AOJu0YwITvm1u9Yx1G6R8oR2a6WLZ65+eBjQ/VX8L3Sg4LixCPUiKFJ7
+	Oyy7f2vGit40lA6Wc4BPcevPmCEuGr1whXRPkLVnkCnWVsmVVLPGO7Vg+oWV9lllg0ggvKW5EfW
+	ZnRw+
+X-Gm-Gg: ATEYQzzh2N5iSKrXblFIb7yNHVbxyEgcn3BTKN4Gvj9RRE9ljs2QxFWFPXOn6ZzcDJU
+	QhiDInVZAd6g5ffUgICslDY6NlXdTFN4KwdKn6jln/TQf9ZSzt93pbI6LvTucEVyM+f5mlHeSjG
+	G6bHByVMmVg8tJljY8oIAwrwNNjskPXkOrTk6xRhCoa8CyOaeArkEuoMpVRiqon4zTvEh8n5xsK
+	+ijNKyx24Qhx/3mnhp9Gl6duhFtnLqsOwcqLM4hZwgUjmpe4xykPyY1ZBDWz8EGuSte6IxzGMf9
+	1GR7VwHE8kFsH5spBo5cqanFAOGb3As55XyhKkqnCeWkkbDzaoh+csp6qHooSRNy23kQMMRNW0x
+	5sSMrm2Rsud8QbmrCcZcrEPbufxbz7pEZ0A9TdsMrL1YETcm3026J3g68nUaQJeTS8Dx4kqWDaK
+	0oRydP33Ob+to+/UJULnxvHQ==
+X-Received: by 2002:a05:6214:cab:b0:89a:ce8:ad9b with SMTP id 6a1803df08f44-89a669c0f65mr49660946d6.9.1773253717115;
+        Wed, 11 Mar 2026 11:28:37 -0700 (PDT)
 Received: from boreas.. ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89a65beeb7dsm21178946d6.19.2026.03.11.11.28.34
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89a65beeb7dsm21178946d6.19.2026.03.11.11.28.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Mar 2026 11:28:35 -0700 (PDT)
+        Wed, 11 Mar 2026 11:28:36 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: andrii@kernel.org,
@@ -66,11 +68,14 @@ Cc: andrii@kernel.org,
 	memxor@gmail.com,
 	song@kernel.org,
 	yonghong.song@linux.dev,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v5 0/2] bpf: Relax 8 frame limitation for global subprogs
-Date: Wed, 11 Mar 2026 14:28:29 -0400
-Message-ID: <20260311182831.91219-1-emil@etsalapatis.com>
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Mykyta Yatsenko <yatsenko@meta.com>
+Subject: [PATCH bpf-next v5 1/2] bpf: Only enforce 8 frame call stack limit for all-static stacks
+Date: Wed, 11 Mar 2026 14:28:30 -0400
+Message-ID: <20260311182831.91219-2-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20260311182831.91219-1-emil@etsalapatis.com>
+References: <20260311182831.91219-1-emil@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -79,62 +84,284 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The BPF verifier currently limits the maximum runtime call stack to
-8 frames. Larger BPF programs like sched-ext schedulers routinely
-fail verification because they exceed this limit, even as they use
-very little actual stack space for each frame.
+The BPF verifier currently enforces a call stack depth of 8 frames,
+regardless of the actual stack space consumption of those frames. The
+limit is necessary for static call stacks, because the bookkeeping data
+structures used by the verifier when stepping into static functions
+during verification only support 8 stack frames. However, this
+limitation only matters for static stack frames: Global subprogs are
+verified by themselves and do not require limiting the call depth.
 
-Relax the verifier to permit call stacks > 8 frames deep when the
-call stacks include global subprogs. The old 8 stack frame limit now
-only applies to call stacks composed entirely of static function calls.
-This works because global functions are each verified in isolation, so
-the verifier does not need to cross-reference verification state across
-the function call boundary, which has been the reason for limiting the
-call stack size in the first place.
+Relax this limitation to only apply to static stack frames. Verification
+now only fails when there is a sequence of 8 calls to non-global
+subprogs. Calling into a global subprog resets the counter. This allows
+deeper call stacks, provided all frames still fit in the stack.
 
-This patch does not change the verification time limit of 8 stack
-frames. Static functions that are inlined for verification purposes
-still only go 8 frames deep to avoid changing the verifier's internal
-data structures used for verification. These data structures only
-support holding information on up to 8 stack frames.
+The change does not increase the maximum size of the call stack, only
+the maximum number of frames we can place in it.
 
-This patch also does not adjust the actual maximum stack size of 512.
+Also change the progs/test_global_func3.c selftest to use static
+functions, since with the new patch it would otherwise unexpectedly
+pass verification.
 
-CHANGELOG
-=========
-
-v4 -> v5 (https://lore.kernel.org/bpf/20260309204430.201219-1-emil@etsalapatis.com/)
-- Move depth tracking state to verifier (Eduard) and free it after verification (Alexei)
-- Fix selftest patch title and formatting errors (Yonghong)
-
-v3 -> v4 (https://lore.kernel.org/bpf/20260303043106.406099-1-emil@etsalapatis.com/)
-- Factor out temp call depth tracking info into its own struct (Eduard)
-- Bring depth calculation loop in line with the other instances (Mykyta)
-- Add comment on why selftest call stack is 16 bytes/frame (Eduard)
-- Rename "cidx" to "caller" for clarity (Mykyta, Eduard)
-
-v2 -> v3 (https://lore.kernel.org/bpf/20260210213606.475415-1-emil@etsalapatis.com/)
-- Change logic to remove arbitrary limit on call depth (Eduard)
-- Add additional selftests (Eduard)
-
-v1 -> v2 (https://lore.kernel.org/bpf/20260202233716.835638-1-emil@etsalapatis.com)
-- Adjust patch to only increase the runtime stack depth, leaving the
-verification-time stack depth unchanged (Alexei)
-
+Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+---
+ include/linux/bpf_verifier.h                  |  9 +++
+ kernel/bpf/verifier.c                         | 62 +++++++++++++------
+ .../selftests/bpf/progs/test_global_func3.c   | 18 +++---
+ 3 files changed, 61 insertions(+), 28 deletions(-)
 
-Emil Tsalapatis (2):
-  bpf: Only enforce 8 frame call stack limit for all-static stacks
-  selftests/bpf: Add deep call stack selftests
-
- include/linux/bpf_verifier.h                  |  9 ++
- kernel/bpf/verifier.c                         | 62 ++++++++----
- .../bpf/prog_tests/test_global_funcs.c        |  2 +
- .../selftests/bpf/progs/test_global_func3.c   | 18 ++--
- .../bpf/progs/test_global_func_deep_stack.c   | 95 +++++++++++++++++++
- 5 files changed, 158 insertions(+), 28 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/test_global_func_deep_stack.c
-
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 090aa26d1c98..f31194c2f0a8 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -742,6 +742,12 @@ struct bpf_scc_info {
+ 
+ struct bpf_liveness;
+ 
++struct bpf_subprog_call_depth_info {
++	int ret_insn; /* caller instruction where we return to. */
++	int caller; /* caller subprogram idx */
++	int frame; /* # of consecutive static call stack frames on top of stack */
++};
++
+ /* single container for all structs
+  * one verifier_env per bpf_check() call
+  */
+@@ -851,6 +857,9 @@ struct bpf_verifier_env {
+ 	u32 scc_cnt;
+ 	struct bpf_iarray *succ;
+ 	struct bpf_iarray *gotox_tmp_buf;
++
++	/* temporary state used for call frame depth calculation */
++	struct bpf_subprog_call_depth_info *dinfo;
+ };
+ 
+ static inline struct bpf_func_info_aux *subprog_aux(struct bpf_verifier_env *env, int subprog)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 8e4f69918693..7dda75c5992e 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6733,9 +6733,11 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+ 	struct bpf_insn *insn = env->prog->insnsi;
+ 	int depth = 0, frame = 0, i, subprog_end, subprog_depth;
+ 	bool tail_call_reachable = false;
+-	int ret_insn[MAX_CALL_FRAMES];
+-	int ret_prog[MAX_CALL_FRAMES];
+-	int j;
++	int total;
++	int tmp;
++
++	/* no caller idx */
++	env->dinfo[idx].caller = -1;
+ 
+ 	i = subprog[idx].start;
+ 	if (!priv_stack_supported)
+@@ -6787,8 +6789,12 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+ 	} else {
+ 		depth += subprog_depth;
+ 		if (depth > MAX_BPF_STACK) {
++			total = 0;
++			for (tmp = idx; tmp >= 0; tmp = env->dinfo[tmp].caller)
++				total++;
++
+ 			verbose(env, "combined stack size of %d calls is %d. Too large\n",
+-				frame + 1, depth);
++				total, depth);
+ 			return -EACCES;
+ 		}
+ 	}
+@@ -6802,10 +6808,8 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+ 
+ 			if (!is_bpf_throw_kfunc(insn + i))
+ 				continue;
+-			if (subprog[idx].is_cb)
+-				err = true;
+-			for (int c = 0; c < frame && !err; c++) {
+-				if (subprog[ret_prog[c]].is_cb) {
++			for (tmp = idx; tmp >= 0 && !err; tmp = env->dinfo[tmp].caller) {
++				if (subprog[tmp].is_cb) {
+ 					err = true;
+ 					break;
+ 				}
+@@ -6821,8 +6825,6 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+ 		if (!bpf_pseudo_call(insn + i) && !bpf_pseudo_func(insn + i))
+ 			continue;
+ 		/* remember insn and function to return to */
+-		ret_insn[frame] = i + 1;
+-		ret_prog[frame] = idx;
+ 
+ 		/* find the callee */
+ 		next_insn = i + insn[i].imm + 1;
+@@ -6842,7 +6844,16 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+ 				return -EINVAL;
+ 			}
+ 		}
++
++		/* store caller info for after we return from callee */
++		env->dinfo[idx].frame = frame;
++		env->dinfo[idx].ret_insn = i + 1;
++
++		/* push caller idx into callee's dinfo */
++		env->dinfo[sidx].caller = idx;
++
+ 		i = next_insn;
++
+ 		idx = sidx;
+ 		if (!priv_stack_supported)
+ 			subprog[idx].priv_stack_mode = NO_PRIV_STACK;
+@@ -6850,7 +6861,7 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+ 		if (subprog[idx].has_tail_call)
+ 			tail_call_reachable = true;
+ 
+-		frame++;
++		frame = subprog_is_global(env, idx) ? 0 : frame + 1;
+ 		if (frame >= MAX_CALL_FRAMES) {
+ 			verbose(env, "the call stack of %d frames is too deep !\n",
+ 				frame);
+@@ -6864,12 +6875,12 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+ 	 * tail call counter throughout bpf2bpf calls combined with tailcalls
+ 	 */
+ 	if (tail_call_reachable)
+-		for (j = 0; j < frame; j++) {
+-			if (subprog[ret_prog[j]].is_exception_cb) {
++		for (tmp = idx; tmp >= 0; tmp = env->dinfo[tmp].caller) {
++			if (subprog[tmp].is_exception_cb) {
+ 				verbose(env, "cannot tail call within exception cb\n");
+ 				return -EINVAL;
+ 			}
+-			subprog[ret_prog[j]].tail_call_reachable = true;
++			subprog[tmp].tail_call_reachable = true;
+ 		}
+ 	if (subprog[0].tail_call_reachable)
+ 		env->prog->aux->tail_call_reachable = true;
+@@ -6877,13 +6888,18 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+ 	/* end of for() loop means the last insn of the 'subprog'
+ 	 * was reached. Doesn't matter whether it was JA or EXIT
+ 	 */
+-	if (frame == 0)
++	if (frame == 0 && env->dinfo[idx].caller < 0)
+ 		return 0;
+ 	if (subprog[idx].priv_stack_mode != PRIV_STACK_ADAPTIVE)
+ 		depth -= round_up_stack_depth(env, subprog[idx].stack_depth);
+-	frame--;
+-	i = ret_insn[frame];
+-	idx = ret_prog[frame];
++
++	/* pop caller idx from callee */
++	idx = env->dinfo[idx].caller;
++
++	/* retrieve caller state from its frame */
++	frame = env->dinfo[idx].frame;
++	i = env->dinfo[idx].ret_insn;
++
+ 	goto continue_func;
+ }
+ 
+@@ -6894,6 +6910,10 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
+ 	bool priv_stack_supported;
+ 	int ret;
+ 
++	env->dinfo = kvcalloc(env->subprog_cnt, sizeof(*env->dinfo), GFP_KERNEL_ACCOUNT);
++	if (!env->dinfo)
++		return -ENOMEM;
++
+ 	for (int i = 0; i < env->subprog_cnt; i++) {
+ 		if (si[i].has_tail_call) {
+ 			priv_stack_mode = NO_PRIV_STACK;
+@@ -6916,8 +6936,10 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
+ 		if (!i || si[i].is_async_cb) {
+ 			priv_stack_supported = !i && priv_stack_mode == PRIV_STACK_ADAPTIVE;
+ 			ret = check_max_stack_depth_subprog(env, i, priv_stack_supported);
+-			if (ret < 0)
++			if (ret < 0) {
++				kvfree(env->dinfo);
+ 				return ret;
++			}
+ 		}
+ 	}
+ 
+@@ -6928,6 +6950,8 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
+ 		}
+ 	}
+ 
++	kvfree(env->dinfo);
++
+ 	return 0;
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/progs/test_global_func3.c b/tools/testing/selftests/bpf/progs/test_global_func3.c
+index 142b682d3c2f..974fd8c19561 100644
+--- a/tools/testing/selftests/bpf/progs/test_global_func3.c
++++ b/tools/testing/selftests/bpf/progs/test_global_func3.c
+@@ -5,56 +5,56 @@
+ #include <bpf/bpf_helpers.h>
+ #include "bpf_misc.h"
+ 
+-__attribute__ ((noinline))
++static __attribute__ ((noinline))
+ int f1(struct __sk_buff *skb)
+ {
+ 	return skb->len;
+ }
+ 
+-__attribute__ ((noinline))
++static __attribute__ ((noinline))
+ int f2(int val, struct __sk_buff *skb)
+ {
+ 	return f1(skb) + val;
+ }
+ 
+-__attribute__ ((noinline))
++static __attribute__ ((noinline))
+ int f3(int val, struct __sk_buff *skb, int var)
+ {
+ 	return f2(var, skb) + val;
+ }
+ 
+-__attribute__ ((noinline))
++static __attribute__ ((noinline))
+ int f4(struct __sk_buff *skb)
+ {
+ 	return f3(1, skb, 2);
+ }
+ 
+-__attribute__ ((noinline))
++static __attribute__ ((noinline))
+ int f5(struct __sk_buff *skb)
+ {
+ 	return f4(skb);
+ }
+ 
+-__attribute__ ((noinline))
++static __attribute__ ((noinline))
+ int f6(struct __sk_buff *skb)
+ {
+ 	return f5(skb);
+ }
+ 
+-__attribute__ ((noinline))
++static __attribute__ ((noinline))
+ int f7(struct __sk_buff *skb)
+ {
+ 	return f6(skb);
+ }
+ 
+-__attribute__ ((noinline))
++static __attribute__ ((noinline))
+ int f8(struct __sk_buff *skb)
+ {
+ 	return f7(skb);
+ }
+ 
+ SEC("tc")
+-__failure __msg("the call stack of 8 frames")
++__failure __msg("the call stack of 9 frames")
+ int global_func3(struct __sk_buff *skb)
+ {
+ 	return f8(skb);
 -- 
 2.49.0
 
