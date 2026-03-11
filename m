@@ -1,301 +1,129 @@
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45B413A9D9F
-	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 07:30:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EEDD3B47F2
+	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 07:56:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.180
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773214231; cv=pass; b=P1JeGjfzFaIKOX+6JfbOTt5DuaFW7uoYULhD0JCe2SAhtfBK8mmQ1etXSfYGK95vyAKAboyBv+OVnl5lGqmCrWaj8XV2959zyPfD1deIihfA+rQMj0kwjoZ5lr6on4FjIPMFbHALc+EKUWToiw23ICgD9SwRoVGbO5beM2cXlNU=
+	t=1773215772; cv=pass; b=t2CuwYw/ongBlfBYxn8Zgnb5hInM/Bds2x58QtuP7Asd1LTiAXWmTG85ffxo6hcRW5XJASTsRticVdWaOVpTmZgx77aPABP85P3M8LTDu/5SFNRzbfP9BJ01FD5O2r6rcKC5eUDU6YMAHd2syFNTR6Deeduxo+92C/7VOu0asak=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773214231; c=relaxed/simple;
-	bh=H8/FiWaNGhJJte5rWNMs/F/MZA0wC/V1eA9sTWnkG2w=;
+	s=arc-20240116; t=1773215772; c=relaxed/simple;
+	bh=lAGj6nwkp++G9k/rSCeEKSrGzcAUEaSnQ17uO7koJgk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=avvHFUrl0OFH0hbPxpJ64ffmLWtrlWktEMSnU1qtzs6O6aJFzAy0lyl3CRGfBunGnDcnQQS/aXUOtFkVWynakA2vX/C2ARbx42GzgtOsln1VkTEMZInIxO4TAvKtrJ7lAYELtlyUPh+QLb8eDomkiKKGplhSX2AuplJNnjlTOgE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KbLShmpl; arc=pass smtp.client-ip=209.85.160.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=JJJ5+Ubp258rV6tIeWJVLEkNJWThaW04BYb8V6oo6y+Rg3Oxb4jym/18zkUqD/7ZPLWakmbLC5Qe4Ngq5fO34FNIgUDr4YlqoAACGVC5AktrMDLh0PjTbJpps31abn+J2g/g2qD4Il/LT5mybNwmEI8NmrJ3JoZ46gJrneAi/9s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IjpNT1Sl; arc=pass smtp.client-ip=209.85.128.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KbLShmpl"
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-50906a98ffeso452991cf.0
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 00:30:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773214222; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IjpNT1Sl"
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-799001d73bdso21264547b3.0
+        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 00:56:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773215768; cv=none;
         d=google.com; s=arc-20240605;
-        b=G/3Czq667ks0UzdKC4UrAb11/aCEFxe9D2l6B07ECtIlSkvCYqUfB5TPaPhA7pV2hb
-         f45tJH7ulgaFliVNV1Hnpf2W8nu2SLQQGT7JU14rW+Jsgm4MO5pZKDHB5jCIRQT+j42S
-         dDJ+qNhPL6Nf0qjMK1YwpQ29iQNQr2d/fAB9iRCCEblpLRzS3jxQInnPWDY41wJIx7te
-         HEk3nfptMGa9UQ1a4zzbVF5Fq/l5NOF4nowi+nOIU9Glgoae7aO15sYC+ayXNrx+LQjh
-         bI9KaDrB66vXmfilVUlaTs2KxsJbM3JYKWOKh/1y2XZjxkbXxaqtar/5AKqM7C4gcOIP
-         LVag==
+        b=khyeyceG05DIBwgw5bIRGJz0XvAJJtzQKW15KlTRB8TCe8veIZIBy1O0Tn8i2DHIAa
+         zP4g7Z0dqoCoB2rR/a8rS6LiEVbFYqZaN4OO1/psN5JEJ+/1DBC9g4ijL4EQ31RJLGKQ
+         Mzz83xIwUqsZ5Ow+zGgBNPr1Nfo85E0r2IlnRCNrnfAK3NFrn02YlnaBMKL0NWFp4OkK
+         ith38dSY7y6b8yejHpSd1prlxsA7n2h8hVCyki2vHFil5HRAmifG3ylZSOAv3ueqm9QB
+         HKz5yFz1K6rSGSQ0Q3/Fq2i8u9qHlO8MudHg/bUGT0PpB7bnMRv3U3VpjlSDi48Zz27N
+         yqtw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=t31ZXnqtqcleggzMvKNbvy7pSVYvoYusm5tH26uIFr4=;
-        fh=Zu/o8Lv9FPwoRPhS04gQAPbJgmWHGbnefd2N94E+/hI=;
-        b=SRVLq0FI8Tnbt4B6Rvjw9FaCCRmbFJeKgXsal4RSwAIqLjkEE7HgRmzDZcHR3IZTQD
-         Zi9HMtBz/EsFrmM2yYPsNEpSFNIRGBC3L+CFLBwtYIyjCgqyXl+J1G91HYIOoqHdcuNz
-         uJ6k8VEdubvcycyLE0sNeaR1RbnDEj1W+9pQTwyCyHQbZlqsknkkAJRPCeNsTKXzvOzA
-         cMt3Q+XxuTWTOmMyIZHrKsFxWck6ymt0JepaRRim2yZIKB6lQTzUiIuAcaq1/+xED04W
-         1jptLTMzgvDL1MVe8LZQpwk2ufQRmeD/8vJKsrxCfInthtTUwNovADSInvUjAHjCPCx4
-         nHsg==;
+        bh=+EtDzf/2qX0/pcxNehTrmnkTztfsdGIQ04FR+hwnLr4=;
+        fh=ypUiCrC46WBTFeGR5vqpkLeSJSTW7CjijvDTiDd+Hug=;
+        b=D+5BRQILa7Yc1HC3+5xJSAGDJs3p3B5gziEx0qrL5KqrsmC4eDrQCVMfNEWMCTE/2u
+         0S9j7bPA2fo0bR3oFOVEKtAJsUzIYH5eVtdKtP9gK0bVwcSlVHlVqbCdMKgMEJTcmXwd
+         hA8qcbFUnNiPrVDpQXNcDl4Rvn6xgH4gpS/n+SaM6GI4vHu2EYna0CGAp/Qp91V2CNKX
+         0a9Y2vVkvbfrxlEFgir3XM5UeXzDSE2kC9VN77qrkOqxSsE7+DS5SJTtK40XBHV7HMzI
+         iFn0yL/2YYbYMXGGQASbjphfnsfPQJm7IEOFBehKluP3A03HupetIwjr8qugCi1i2oOw
+         s4Ig==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773214222; x=1773819022; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773215768; x=1773820568; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=t31ZXnqtqcleggzMvKNbvy7pSVYvoYusm5tH26uIFr4=;
-        b=KbLShmplwiha/FzLifctIBBoG019l3Yl37d1kJSPr9s6o39bQj4ccd9FkDxzxJ714R
-         2Kd2QGbCf5YGGJl8jP4F6cIqQaZIgyUzUmQnwzX6MX1M9MlCAow+s67yhxeRkMTWKrLw
-         1+ugDr7/frHSNzUas9EcoBOilzo41qXY8rs46arWV4TcKxtNlOfy6BKEMYq/Iiu91OZ5
-         OMKMwceKCU5yal1USiAecPLFkGtr4sK1Q1ABeZew4bp6rnzQYhNecqAjmcMXI4xBzbO9
-         +kt3tPebyKJaFPwVOlHjCpMbndAQbMByylLK6hqOIx8F8byQJbpr6s/Y03ZBTltmva5k
-         M8qw==
+        bh=+EtDzf/2qX0/pcxNehTrmnkTztfsdGIQ04FR+hwnLr4=;
+        b=IjpNT1SlxlKtc9YXp5U0aFqnpqWyK0m+bOzVnDOkyI+zsMmbyytD6uiu0UiZDZ0KJt
+         pp1www2jjQdTjkJ9NYwrP0sSWl0njQyDKN15odjgWfyNK5/4idOOKVFhLqGi6TKDpTpR
+         AcxvHCeWjn6KfkD33/dOE3DNzeD1RapOYtDTkoAQ8VXiuMIqcU5zv81s/hRhxGUpHI/R
+         gVldmfbldF5jQxCrtbC6iXx6/RZ53Pjtj5NxuPzGI9yTdX6IiBcvDkUZqP0mBOlPnVzM
+         aEIikeSQibtBVzsMSeg2p0eKzUDOzptOvJSRa6f7o+zXRcnW2j3MitLfGovp3Yk+gd5U
+         vJKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773214222; x=1773819022;
+        d=1e100.net; s=20230601; t=1773215768; x=1773820568;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=t31ZXnqtqcleggzMvKNbvy7pSVYvoYusm5tH26uIFr4=;
-        b=bhcXNAtZFi48dU7HDC+6DtjJuPsPnEGBreLKRQLDwqhC/sGkP06Os7Z/k+OyxnSEdF
-         A9k7figGvmpppbdrlOUTw0raXlj2jEvRGuvPAv7SGSKUL+BMoEaN4wOlbr03pgkjKiv2
-         wM8FJyUzzYWPi63omYYv3f1JEEyV1QY41B0RaRF6KtpTxXQhG/Vx1TGQCyfyZWKhosFL
-         qLtA/hhDNy1d17NTW9zBkL11BxQLf7+5zMJ3gu0O83J4TXdmem8KpumMMn8zEdQgNML0
-         ascYyKCtkugc/okFNIykxK0lta31b0rHfceYY/35kr7fXH/p3E5qlIa6ELxTbsDzW/fB
-         Xjyw==
-X-Forwarded-Encrypted: i=1; AJvYcCXNDJPf0ryWCz2ZFxRd0py+Xj+1ZRc/aq4b4TzXALoAFa2kO2Y140UDiGHPE7bTNmc43Ck=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMRBg81Y8089ZWdpgjsJOQHE8AsKmC1fGtq03R7hMIHuUKFNwn
-	m1Dr4EAB23hyFE0fWmprMMOGrFkSsoBOgdUR0DT9SLQpsd/f6iaH+4PYg9AUssUFSDYVSL62OB7
-	qit6zIZy5lI1T4QIFFElD/zOQI/7TPDu4N37U6ZLh
-X-Gm-Gg: ATEYQzznxfVvKZrWRvZWzz0GOPLw/U7YSYKh5BNN8+qKxXqB4DNNg9NEwry3UHQpXRp
-	nDApmXjGNdPznWfK1dt+K74ZXGF0/pZXiByI759DiVy4Jdl0zlEjBMhDErI6MwFQu/oC5i6Ml6G
-	iyelC8Yn5uK4JXeuun1t9zRaQ6JEOSHS/BzJv/c/OWexxNa1B7XOKZ19AoF17jnKrzw45uNUuch
-	nM1VqrrL0BdzazMfiZN+UzXAuGLEgeaZH2M/i9TggVM0nwUGiOzM9miG0z3yM7ySZCiMZs03NnM
-	dncJI9s75Vlik4kSXKa3Rbt+NlUbuq/9V6DiKy/M+vvmXnVUsw==
-X-Received: by 2002:ac8:7dcc:0:b0:506:a3c8:d44d with SMTP id
- d75a77b69052e-50939a11387mr7655101cf.9.1773214221216; Wed, 11 Mar 2026
- 00:30:21 -0700 (PDT)
+        bh=+EtDzf/2qX0/pcxNehTrmnkTztfsdGIQ04FR+hwnLr4=;
+        b=s8cjGEoh5Ad9oIsSaDeXvgB15iq+dWyYKLDCmyTqSgT7v67mzyl2rklnMpWrDRr8kg
+         vieKvz3SDN8gLaUTLboohRTkTdkAExXDBd7Vogf9yAYfyX4DCF2TwyoXSq9gZs1EeMy2
+         CZuYPlDb5IX6Qfl/pv+oLBs0dzqY6FHkHwuWTmoIH55bhGKalD/0YRhzTnpz+JcOhQqQ
+         s3sDjvr7x9q5uxYQgBrM8vNYQ3hUQdwIrcxBmv9MFXgof2Py4zw0kx9VvsMh/PZOaoBE
+         +mRomPujXWEiMrDtaeuK1Sti8FiL8qjUFU09l1rHlG23HslWpEs2RJGZaz/gUvjw3Plf
+         4e1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXQ1vzHYC+UdN16PXsyD2PDwu5GUM90daitJ69p7jD3b1P6lEgBJ7Z148cIIPPTEJ4bdGs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKbqBVgvnG8HeT4oNa+q3xA/qsDHUuYgqLkIAUCxdpEqew+z8T
+	grTEWlwvwUCEVkUqyuaKAcuEwWlK8qbY5p2Bmdx9Em/3H1REabpvr6xBDm1zmB5fVj86Eujq1vz
+	42nUPr2emLG/2kWolIaxaz2FKw8LBa5c=
+X-Gm-Gg: ATEYQzxgThAdfabcLbw0x8HJeY8q4hVwGXSFlKgtIjXvzKV/kR3C0n1XrMWSs72F5Gy
+	PZ49+C2JM5SSQ5CiplcSM3TbIoxXjxBmjhzNEvjnMtJbPf6uImFmtaqlewmIR9NSafRW8tA6//B
+	3v9qXeOndiCcDjKU0al1YL7EaUF+4N0SUeNpbqB1BBobyON7cYw/+EYN3U9CYpITCqrpis+e+Fh
+	femss8OtenNQaPB1+ClqNPy3L2hUZaYzMLkRs9W7ozWKbaJ69oFGFw72jgadLeBqx28ao6d105f
+	hlMmdlHWJXLwQJ2pkmsqggR3G2hF4g==
+X-Received: by 2002:a05:690c:2704:b0:797:f13a:c571 with SMTP id
+ 00721157ae682-79917fa5df5mr12806597b3.58.1773215768327; Wed, 11 Mar 2026
+ 00:56:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260307182424.2889780-1-shakeel.butt@linux.dev>
-In-Reply-To: <20260307182424.2889780-1-shakeel.butt@linux.dev>
-From: Greg Thelen <gthelen@google.com>
-Date: Wed, 11 Mar 2026 00:29:45 -0700
-X-Gm-Features: AaiRm52ewDXuj78L5TdgZnsKsJPibJbmvYXCb1R6-Es0rphZaXLYpR2TicuVGA0
-Message-ID: <CAHH2K0ZBJV1peAZVZC9Lm=rFRzSfxsvbrxRjyB=+0xkHGRcdLA@mail.gmail.com>
-Subject: Re: [LSF/MM/BPF TOPIC] Reimagining Memory Cgroup (memcg_ext)
-To: Shakeel Butt <shakeel.butt@linux.dev>
-Cc: lsf-pc@lists.linux-foundation.org, 
-	Andrew Morton <akpm@linux-foundation.org>, Tejun Heo <tj@kernel.org>, 
-	Michal Hocko <mhocko@suse.com>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Alexei Starovoitov <ast@kernel.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Hui Zhu <hui.zhu@linux.dev>, 
-	JP Kobryn <inwardvessel@gmail.com>, Muchun Song <muchun.song@linux.dev>, 
-	Geliang Tang <geliang@kernel.org>, Sweet Tea Dorminy <sweettea-kernel@dorminy.me>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, David Rientjes <rientjes@google.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Meta kernel team <kernel-team@meta.com>, linux-mm@kvack.org, 
-	cgroups@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260310102145.857810-1-sun.jian.kdev@gmail.com>
+ <20260310102145.857810-2-sun.jian.kdev@gmail.com> <f0d1eb34-2d6a-487a-b486-3dc64c25df6c@redhat.com>
+In-Reply-To: <f0d1eb34-2d6a-487a-b486-3dc64c25df6c@redhat.com>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Wed, 11 Mar 2026 15:55:58 +0800
+X-Gm-Features: AaiRm53EkzwZReT_wk7QVC-Ygi0J86_yaQ2oUG5Ism0on_mG6PZTKx-yHNgXT0M
+Message-ID: <CABFUUZFQfoVRJ6HJqadHhWNj4FVOk=snuSmuEepMD6jZfyrpJQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] selftests/bpf: Skip bpffs debug iter checks when
+ unavailable in test_bpffs
+To: Viktor Malik <vmalik@redhat.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Mar 7, 2026 at 10:24=E2=80=AFAM Shakeel Butt <shakeel.butt@linux.de=
-v> wrote:
+On Tue, Mar 10, 2026 at 8:32=E2=80=AFPM Viktor Malik <vmalik@redhat.com> wr=
+ote:
 >
-> Over the last couple of weeks, I have been brainstorming on how I would g=
-o
-> about redesigning memcg, taking inspiration from sched_ext and bpfoom, wi=
-th a
-> focus on existing challenges and issues. This proposal outlines the high-=
-level
-> direction. Followup emails and patch series will cover and brainstorm the
-> mechanisms (of course BPF) to achieve these goals.
+> I don't think this is a good approach as it will mask genuine bugs that
+> would cause the files to be missing/inaccessible with one of the above
+> error codes.
 >
-> Memory cgroups provide memory accounting and the ability to control memor=
-y usage
-> of workloads through two categories of limits. Throttling limits (memory.=
-max and
-> memory.high) cap memory consumption. Protection limits (memory.min and
-> memory.low) shield a workload's memory from reclaim under external memory
-> pressure.
->
-> Challenges
-> ----------
->
-> - Workload owners rarely know their actual memory requirements, leading t=
-o
->   overprovisioned limits, lower utilization, and higher infrastructure co=
-sts.
->
-> - Throttling limit enforcement is synchronous in the allocating task's co=
-ntext,
->   which can stall latency-sensitive threads.
->
-> - The stalled thread may hold shared locks, causing priority inversion --=
- all
->   waiters are blocked regardless of their priority.
->
-> - Enforcement is indiscriminate -- there is no way to distinguish a
->   performance-critical or latency-critical allocator from a latency-toler=
-ant
->   one.
->
-> - Protection limits assume static working sets size, forcing owners to ei=
-ther
->   overprovision or build complex userspace infrastructure to dynamically =
-adjust
->   them.
->
-> Feature Wishlist
-> ----------------
->
-> Here is the list of features and capabilities I want to enable in the
-> redesigned memcg limit enforcement world.
->
-> Per-Memcg Background Reclaim
->
-> In the new memcg world, with the goal of (mostly) eliminating direct sync=
-hronous
-> reclaim for limit enforcement, provide per-memcg background reclaimers wh=
-ich can
-> scale across CPUs with the allocation rate.
->
-> Lock-Aware Throttling
->
-> The ability to avoid throttling an allocating task that is holding locks,=
- to
-> prevent priority inversion. In Meta's fleet, we have observed lock holder=
-s stuck
-> in memcg reclaim, blocking all waiters regardless of their priority or
-> criticality.
->
-> Thread-Level Throttling Control
->
-> Workloads should be able to indicate at the thread level which threads ca=
-n be
-> synchronously throttled and which cannot. For example, while experimentin=
-g with
-> sched_ext, we drastically improved the performance of AI training workloa=
-ds by
-> prioritizing threads interacting with the GPU. Similarly, applications ca=
-n
-> identify the threads or thread pools on their performance-critical paths =
-and
-> the memcg enforcement mechanism should not throttle them.
->
-> Combined Memory and Swap Limits
->
-> Some users (Google actually) need the ability to enforce limits based on
-> combined memory and swap usage, similar to cgroup v1's memsw limit, provi=
-ding a
-> ceiling on total memory commitment rather than treating memory and swap
-> independently.
->
-> Dynamic Protection Limits
->
-> Rather than static protection limits, the kernel should support defining
-> protection based on the actual working set of the workload, leveraging si=
-gnals
-> such as working set estimation, PSI, refault rates, or a combination ther=
-eof to
-> automatically adapt to the workload's current memory needs.
->
-> Shared Memory Semantics
->
-> With more flexibility in limit enforcement, the kernel should be able to
-> account for memory shared between workloads (cgroups) during enforcement.
-> Today, enforcement only looks at each workload's memory usage independent=
-ly.
-> Sensible shared memory semantics would allow the enforcer to consider
-> cross-cgroup sharing when making reclaim and throttling decisions.
->
-> Memory Tiering
->
-> With a flexible limit enforcement mechanism, the kernel can balance memor=
-y
-> usage of different workloads across memory tiers based on their performan=
-ce
-> requirements. Tier accounting and hotness tracking are orthogonal, but th=
-e
-> decisions of when and how to balance memory between tiers should be handl=
-ed by
-> the enforcer.
->
-> Collaborative Load Shedding
->
-> Many workloads communicate with an external entity for load balancing and=
- rely
-> on their own usage metrics like RSS or memory pressure to signal whether =
-they
-> can accept more or less work. This is guesswork. Instead of the
-> workload guessing, the limit enforcer -- which is actually managing the
-> workload's memory usage -- should be able to communicate available headro=
-om or
-> request the workload to shed load or reduce memory usage. This collaborat=
-ive
-> load shedding mechanism would allow workloads to make informed decisions =
-rather
-> than reacting to coarse signals.
->
-> Cross-Subsystem Collaboration
->
-> Finally, the limit enforcement mechanism should collaborate with the CPU
-> scheduler and other subsystems that can release memory. For example, dirt=
-y
-> memory is not reclaimable and the memory subsystem wakes up flushers to t=
-rigger
-> writeback. However, flushers need CPU to run -- asking the CPU scheduler =
-to
-> prioritize them ensures the kernel does not lack reclaimable memory under
-> stressful conditions. Similarly, some subsystems free memory through work=
-queues
-> or RCU callbacks. While this may seem orthogonal to limit enforcement, we=
- can
-> definitely take advantage by having visibility into these situations.
->
-> Putting It All Together
-> -----------------------
->
-> To illustrate the end goal, here is an example of the scenario I want to
-> enable. Suppose there is an AI agent controlling the resources of a host.=
- I
-> should be able to provide the following policy and everything should work=
- out
-> of the box:
->
-> Policy: "keep system-level memory utilization below 95 percent;
-> avoid priority inversions by not throttling allocators holding locks; tri=
-m each
-> workload's usage to its working set without regressing its relevant perfo=
-rmance
-> metrics; collaborate with workloads on load shedding and memory trimming
-> decisions; and under extreme memory pressure, collaborate with the OOM ki=
-ller
-> and the central job scheduler to kill and clean up a workload."
->
-> Initially I added this example for fun, but from [1] it seems like there =
-is a
-> real need to enable such capabilities.
->
-> [1] https://arxiv.org/abs/2602.09345
->
+Hi Viktor=EF=BC=8C
 
-Very interesting set of topics. A few more come to mind.
+I don't think this change masks bugs in a silent way. It prints an explicit
+INFO line when maps.debug/progs.debug are unavailable due to
+EPERM/EACCES/ENOENT, and it still fails on other errors or unexpected
+iterator output.
 
-I've wondered about preallocating memory or guaranteeing access to
-physical memory for a job. Memcg has max limits and min protections,
-but no preallocation (i.e. no conceptual memcg free list). So if a job
-is configured with 1GB min workingset protection that only ensures 1GB
-won't be reclaimed, not that 1GB can be allocated in a reasonable
-amount of time. This isn't just a job startup problem: if a page is
-freed with MADV_DONTNEED a subsequent pgfault may require a lot of
-time to handle, even if usage is below min.
+> If you really need to execute the rest of the test cases in the file,
+> how about you split the test into subtests and then just add the failing
+> subtest to your DENYLIST?
 
-Initial allocation policies are controlled by mempolicy/cpuset. Should
-we continue to keep allocation policies and resource accounting
-separate? It's a little strange that memcg can (1) cap max usage of
-tier X memory, and (2) provide minimum protection for tier X usage,
-but has no influence on where memory is initially allocated?
+Proper subtests  would require reworking the current fork-based flow to
+report SKIP/FAIL to the harness, which would be a larger refactor than
+intended here.
+
+My goal is to keep this as a minimal change while still achieving the main
+purpose of this test: exercising the core bpffs operations (pinning and
+renameat2 semantics), which are independent of the debug iterator files,
+and clearly reporting when the iterator checks couldn't be performed.
+
+Regards,
+Sun Jian
