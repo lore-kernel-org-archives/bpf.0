@@ -1,117 +1,121 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BCA02DECBF;
-	Wed, 11 Mar 2026 04:57:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39A6A23ABA8;
+	Wed, 11 Mar 2026 04:59:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773205071; cv=none; b=coepc91Ytzkh6zzAzp1UT9pjCSDiq06Pqhtpmc/t16LTj15Au/pzXJEiP/+MhC/7K5xPBaPc1Z4l7wkJen6V3Gkb1vqdzIBxc6p1ecUu8LQrpuCQk/iYRASLohvqXPgQ6nT8TpZs67KgCk+9//h6+XQXbax256in8BvyeAyrIwg=
+	t=1773205159; cv=none; b=AfUOn7Xr22tdivnqiMJmXtugg75clXxy/ixinW+84d9P9bQcU6XygWynS5vcLY1bvg0ClT+/FZLNRV3acp/hmfB7bGKfikZIxgb4DM7rG+GfxYVjjZgSZlcXDJ+WHdNfJlM6MXdJ14xAjKoxZwyPwj2kpc1le2hoxL9iMo6ym0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773205071; c=relaxed/simple;
-	bh=hP55Zf1wN5RB5crPQCCe5lc1Q7D93TirDOcJ0PERq48=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TWrXhQI01XF7OKzGh4kcxc76UV4x9OznIFm9G+wPLeVNpmn9lc9VRH1A+ddToitfzorCd572RkPCiuNWAiOO22sjdIbVD0FzKLSgdQOhW/uueXYc5aFzQULNHo3G2QYefe/CKq+y2aAdLHCXj939IjTOjB/AlZ6Ic8wApT5vH5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sbp4mhfo; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1773205159; c=relaxed/simple;
+	bh=hs7h01zebVZ3Cw5TSlyQoCCjwzUa+l8Cgq+3i/i+v4I=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=d+XpBF8R6hSjSTcMBfmH4ILegC+T+VFU6cnWCeL1UynvVuQvwhGK9HU46EbLxpSuUjgEosLLNlyp/vWQRByhJqvaUVytBWX5j1mOlK0gjr5ZpJ0vTdvEsR3BRMdUbUK3k1H4T5bY1NHCoXs6ClvsiRYESo1PnmzsuR0fJZq8vHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R7QWHNq5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sbp4mhfo"
-Message-ID: <6076b8c2-c198-442d-974f-b3084a0cd1b1@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773205068;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=o3GKruKazSJqdxffywFhZhbdqtqrnzIQRTyoTECkXVo=;
-	b=sbp4mhfoNFMO/ByBa4DmfjKKiA8zcPlX7AW9UF/OTfNksyWsS2ot7SrdPIb22cwO09a4xr
-	EL+cfpi3wKA0WxxPXvqO6jYyxaK7cO4EbbyqMIhO647x4QAgjJLZ7LiHDz2wfu4NiZa/Ef
-	ScU0Q4SPXXS0QqHFyUuN4BLAsDwFpjE=
-Date: Wed, 11 Mar 2026 12:57:34 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R7QWHNq5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7C9CC4CEF7;
+	Wed, 11 Mar 2026 04:59:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773205158;
+	bh=hs7h01zebVZ3Cw5TSlyQoCCjwzUa+l8Cgq+3i/i+v4I=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=R7QWHNq5KYIpTwVo6Up5GHHSOdSE2gpk5GaKkIBbqjAR4gbzmNPFWIlQW10KkTPof
+	 EwepFELDieEhDwLa7MFg7ekO96kgeq0l/+LlK0SmYNrKgD9B5JFn2p8cKdN19q4bAB
+	 ZH5nM61a+EeP1bfo59H2leGLnAv8MA9DVbVTjKyoY75UQZCsrcqb+6U4ml2aryZAOd
+	 53HkEOSnemZkK807SePgE6JYJ0qIK9ypnQbQrEKCx7cEo9CjlroOKs6BchxOV0buhD
+	 E4Ehzc8FteV6XUFhu9KE6nGI0Pkr7s204WVgcSsEwXmzro7D3LuhuKd0AU39V1R3Ja
+	 2cWkRLISF31UQ==
+Date: Wed, 11 Mar 2026 13:59:11 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Philipp Hahn <phahn-oss@avm.de>
+Cc: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com,
+ bpf@vger.kernel.org, ceph-devel@vger.kernel.org, cocci@inria.fr,
+ dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
+ gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org,
+ intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev,
+ kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+ linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-erofs@lists.ozlabs.org,
+ linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mm@kvack.org,
+ linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org,
+ linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+ linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
+ linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+ ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
+ sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
+ tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev, Philipp Zabel
+ <p.zabel@pengutronix.de>
+Subject: Re: [PATCH 57/61] reset: Prefer IS_ERR_OR_NULL over manual NULL
+ check
+Message-Id: <20260311135911.ced50d67e940cdf933a98d1a@kernel.org>
+In-Reply-To: <20260310-b4-is_err_or_null-v1-57-bd63b656022d@avm.de>
+References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
+	<20260310-b4-is_err_or_null-v1-57-bd63b656022d@avm.de>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [LSF/MM/BPF TOPIC] Reimagining Memory Cgroup (memcg_ext)
-To: Shakeel Butt <shakeel.butt@linux.dev>, lsf-pc@lists.linux-foundation.org
-Cc: Andrew Morton <akpm@linux-foundation.org>, Tejun Heo <tj@kernel.org>,
- Michal Hocko <mhocko@suse.com>, Johannes Weiner <hannes@cmpxchg.org>,
- Alexei Starovoitov <ast@kernel.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Roman Gushchin <roman.gushchin@linux.dev>,
- Hui Zhu <hui.zhu@linux.dev>, JP Kobryn <inwardvessel@gmail.com>,
- Muchun Song <muchun.song@linux.dev>, Geliang Tang <geliang@kernel.org>,
- Sweet Tea Dorminy <sweettea-kernel@dorminy.me>,
- Emil Tsalapatis <emil@etsalapatis.com>, David Rientjes
- <rientjes@google.com>, Martin KaFai Lau <martin.lau@linux.dev>,
- Meta kernel team <kernel-team@meta.com>, linux-mm@kvack.org,
- cgroups@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260307182424.2889780-1-shakeel.butt@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20260307182424.2889780-1-shakeel.butt@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+
+On Tue, 10 Mar 2026 12:49:23 +0100
+Philipp Hahn <phahn-oss@avm.de> wrote:
+
+> Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
+> check.
+> 
+> Semantich change: Previously the code only printed the warning on error,
+> but not when the pointer was NULL. Now the warning is printed in both
+> cases!
+> 
+> Change found with coccinelle.
+> 
+> To: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
+> ---
+>  drivers/reset/core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/reset/core.c b/drivers/reset/core.c
+> index fceec45c8afc1e74fe46311bdc023ff257e8d770..649bb4ebabb20a09349ccbfc62f8280621df450e 100644
+> --- a/drivers/reset/core.c
+> +++ b/drivers/reset/core.c
+> @@ -715,7 +715,7 @@ EXPORT_SYMBOL_GPL(reset_control_bulk_acquire);
+>   */
+>  void reset_control_release(struct reset_control *rstc)
+>  {
+> -	if (!rstc || WARN_ON(IS_ERR(rstc)))
+> +	if (WARN_ON(IS_ERR_OR_NULL(rstc)))
+
+This changes the behavior when rstc == NULL.
+WARN_ON does not hit when rstc == NULL in the original code.
+
+Thanks,
+
+>  		return;
+>  
+>  	if (reset_control_is_array(rstc))
+> 
+> -- 
+> 2.43.0
+> 
+> 
 
 
-On 3/8/26 2:24 AM, Shakeel Butt wrote:
-> Over the last couple of weeks, I have been brainstorming on how I would go
-> about redesigning memcg, taking inspiration from sched_ext and bpfoom, with a
-> focus on existing challenges and issues. This proposal outlines the high-level
-> direction. Followup emails and patch series will cover and brainstorm the
-> mechanisms (of course BPF) to achieve these goals.
->
-> Memory cgroups provide memory accounting and the ability to control memory usage
-> of workloads through two categories of limits. Throttling limits (memory.max and
-> memory.high) cap memory consumption. Protection limits (memory.min and
-> memory.low) shield a workload's memory from reclaim under external memory
-> pressure.
->
-> Challenges
-> ----------
->
-> - Workload owners rarely know their actual memory requirements, leading to
->    overprovisioned limits, lower utilization, and higher infrastructure costs.
->
-> - Throttling limit enforcement is synchronous in the allocating task's context,
->    which can stall latency-sensitive threads.
->
-> - The stalled thread may hold shared locks, causing priority inversion -- all
->    waiters are blocked regardless of their priority.
->
-> - Enforcement is indiscriminate -- there is no way to distinguish a
->    performance-critical or latency-critical allocator from a latency-tolerant
->    one.
->
-> - Protection limits assume static working sets size, forcing owners to either
->    overprovision or build complex userspace infrastructure to dynamically adjust
->    them.
->
-> Feature Wishlist
-> ----------------
->
-> Here is the list of features and capabilities I want to enable in the
-> redesigned memcg limit enforcement world.
->
-> Per-Memcg Background Reclaim
->
-> In the new memcg world, with the goal of (mostly) eliminating direct synchronous
-> reclaim for limit enforcement, provide per-memcg background reclaimers which can
-> scale across CPUs with the allocation rate.
-
-This sounds like a very useful approach. I have a few questions I'm 
-thinking through:
-
-How would you approach implementing this background reclaim? I'm imagining
-something like asynchronous memory.reclaim operations - is that in line
-with your thinking?
-
-And regarding cold page identification - do you have a preferred approach?
-I'm curious what the most practical way would be to accurately identify
-which pages to reclaim.
-
-Would be great to hear your perspective.
-
-
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
