@@ -1,966 +1,212 @@
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46E102D8760
-	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 20:50:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E319A1F7569
+	for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 21:31:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773262206; cv=none; b=JfvUzMJczSdrHRAoK/HdtUtlKDTWn0F9YVi0EBa4oCm5sJso7ukcwOPgZaHacBR3BZm940AAm/B+KM3kCPmYAf9RqbuQh93njckM9iaDNtG7CyTOLyXiCHF8FKDC9ccRFD2oIkscDGG0h41k53qMNrp2Cufokrx4fqacODI2WzA=
+	t=1773264685; cv=none; b=AWL32aLnUFpt8uWhj6rR6YLgriEyJLOnfTPVaaFqpgusMx0MktKHum7/XsZcOnyP+dIOdlAbPHBvh7TwJikDYRy6xmlUZb7ahYFQXzW/NSTdHDBhJb2Qa8sVaSe1pW7RqIksl7jUxS6xCa1eJoTQ0h2YDO9PZ2YNEWLeg2w+dMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773262206; c=relaxed/simple;
-	bh=iGWoNx8vQtWcJPTwlFnIfbyiyCMyydhNF2E5Xhnp/G8=;
-	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Subject:
-	 References:In-Reply-To; b=AWe8kpdK3oXT0k8JwZaegBpDPXhIVbFHd6IvuOUnrdpnpJJAEnupOihlZT9PymeE21qSthlgVuOQG+mG86H9QylFvXqxkQf3wVy9voU1y4nWYzSOLdeNWv8FpaJjjPrJ+CuBPQheW3ZwK+NAGRwPcfNTiCJcSgbYF5Z8BU0VcOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=ETLmJxeg; arc=none smtp.client-ip=209.85.160.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1773264685; c=relaxed/simple;
+	bh=c83sDHtMZGgmWT39aIisxMkV8QZsjptaj9QxOf0Cuwg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=e2BoBkgJJVkUZUPRO+Ud6mMImURcfv5Rb0AcpdAytaOyJTt8aEEI7eNKMicBnIJVnmRqqqILWvmoSkZSZt9OJ9sqLSyw5JN/BQsZ1aUW98Z1tvSg8XRp0njL7GrvihGAVPjk7pVPS0TLdTqYOfGE2Z431d/C5LU3gjwkXX9CYWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=RrwUEm0z; arc=none smtp.client-ip=209.85.160.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="ETLmJxeg"
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-509006c070eso2597851cf.0
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 13:50:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="RrwUEm0z"
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-408778a8ec4so239269fac.0
+        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 14:31:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1773262202; x=1773867002; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:to:from:content-transfer-encoding
-         :mime-version:message-id:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3eMbUzwNV9NhDeHKmCaJ7v77aPiCuH30+Mon58XxU6Q=;
-        b=ETLmJxegOFy5mvuyEbawgKIsFg4E+Kh5cNkUA1G6x6czWNGHjcTeJefVC0vjuKmUry
-         rxwOf6SZth7Cyfz5ikzey1BjvE0MLNjtcPaCbQ8DCuVOGlYX7z39HxlVGyRdufzFUxw6
-         Dj4kJF/epED1BuB5ri82feNfmpEX8vf6ye9BUbQmnm3YCNjUZ4Ky+6mbM8OeZWcdg2r2
-         vcG5GaJwe8TIQ33mxAqHJBRL9AgrhZ/I7wm2Qbe76ooX7GLQaK2DNNm2DNmeTw+ZGv5Y
-         HcVPYfG7NEHUNkPIETgxcEvTJ3Dc+G5B4H6nm+Z+CSMYJ4gPBZik/NkcxEoP/4HgHkYU
-         6v8Q==
+        d=cloudflare.com; s=google09082023; t=1773264683; x=1773869483; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lT7OY2GNLRRTQ6yGPrWNzwOwj8gZsZvwkTPkyqlRx3M=;
+        b=RrwUEm0zlX76Y4puZsOOpjHCew5NbqPdFe6kLaxHJ9mJrehQi97DVp66KjKq5+fqIr
+         AESzaBKIjhNLiqMVd0vwjbY7Fz4/zZJJ/x0ctTjr5mfDoleWslEQH0SyDJoRNzzGLoMC
+         48Gml41tTC2svXh0BgoWOQjA9elqZsco6jasZSrNISnt3eYtT59DyXbifIOF2gYtfa5p
+         z0PoKVjnD20C5cm/NeTWqAXY1oG5P9Vy8333QD15tLbBBQsrfSxxCu2+jdAhxUG9kOLY
+         kRiNO5SV979EliJWMRrCGndV7GFpI611XIV1vvRar3/tUloR5i4mkh4166SfPpCRbvH/
+         bpwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773262202; x=1773867002;
-        h=in-reply-to:references:subject:to:from:content-transfer-encoding
-         :mime-version:message-id:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3eMbUzwNV9NhDeHKmCaJ7v77aPiCuH30+Mon58XxU6Q=;
-        b=vAOBgatRP54lbwEHQW4/3MhITyGYD6Jb5vrCtLtl10JrJufiNgn74f548xXKBZLvLw
-         nj5U07USGNOM3D3YrGuclLlxjCFVBiKgDPG5c/vThvBaO6Ay+YAx9dbH+MkWZlCOq6v2
-         mDuADJ/B4sgi9am2oTNnHuwU2m/RmwRXSfbHUWpoqqHgVNvGO5P6PB9QSmgZbzdBFRNc
-         M/anCl/xHdZv0l3OR1FJ3aGhyf4w6cPdEQFprMbghzSAQuxTZGbY2gSfjodT1OzNnuhx
-         Jc9IQTKpJJJFOGn3kuJmfbeyuURIRvX6CEEXP7Wlp4wpXjc42b7Dzok5T7z4KbjGmchN
-         DFzA==
-X-Forwarded-Encrypted: i=1; AJvYcCUGYw1XfFGeB2iPhS0Zy3Ar6W5WUta82x4CYOJUQSA33Mm3Hqklo3taAC8FqHGxqsIRaoA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxErWIsT0je7ElbgB9leEPpvWlCwFjguvfgi2SC/q+UW/BJvnk9
-	r+DVKCiettJb60cTkJpwKcl2Ji9rEeo+BgKy243ZgdYIix88uCXSz7bhuI7wfhujBA==
-X-Gm-Gg: ATEYQzypbc7TSRD2jjuT13kkQ1OC7VHy1jtXtsWeYf2/zZVKFlYknEJDth5Z8UlO5fc
-	Fznht3HCF8/4U7ZtpjhQzBrEGwok8RJ0oi64Y5vUSgZVpLHadfccraH+2iLR91oByLl+i+1LZDd
-	yQsJwNyYw/5jMT89tuzdXnBtUbqJ5Tjk0elU4HSjdptE/uctP27+j8lf6VNO7wpczLaFRFAaeyF
-	Q8b4sABY6ZXyETybKtsisaVniktCGoMUptDOzHA4o3AASaz5ELj0zWmnjI6vSJmmYls7SwOMX51
-	JfWDcHsqGDQsfFzDWTBs0B4HR/6+kYCo1XWfTmoDUdSO8a2tb84u364YFjh00I7+DJmmr1RaQE8
-	v4Y/zDYl6MvZv3t9k01R6nuQaDXbk+oMQ2W1Rnmha4TqYo+09JneTkoQ8RN5GbU2jOordZwJKEb
-	ncMta166R4E0QVOEFuIFDqhrnczt5fPUYwGCHpGrLwkAK9O+Rl9iscloU+yhcXiWwe4/4H
-X-Received: by 2002:ac8:7d82:0:b0:509:18f4:6dba with SMTP id d75a77b69052e-5093a1a4dc9mr53671401cf.62.1773262201940;
-        Wed, 11 Mar 2026 13:50:01 -0700 (PDT)
-Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89a65bd5603sm20921496d6.2.2026.03.11.13.50.00
+        d=1e100.net; s=20230601; t=1773264683; x=1773869483;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lT7OY2GNLRRTQ6yGPrWNzwOwj8gZsZvwkTPkyqlRx3M=;
+        b=SArnznfiJMvhh6wbSXrx1K34EFkPi1fn0fPWikkvjdW2No+XL2Vq5fmkGSlQhjgCn3
+         yZhz8BmFf3FGav1OQTa4oBVIxu+vaS5DuH3WungefMZajp8DYKQu1wOFmFkgFCpAzMGn
+         Ke5Fg5SR5ISBlgJZyWwg42Xh6ZUf/P8IfNIgcoKJunSRg1YMsjQ1kFjK/MvT8fJlGvgG
+         GAIuku+WZk1Qe+8YLtVT9UlisSpt3YADVNvWXv8l93tblG18ghsLO+Tiyfvs6NL3ejdo
+         nGNR1wncesUh0wQaZusMGp5x9Ja+MFwW/Ru0e/tiEhYRLRIck5pvkRrxBhb4RlpVIBX0
+         10NQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVRPEefkHgCWkTpk1ZPoDMdqTjnxpBz67sAgFCdA6Fsm1uURz4xn8Z9fYw+wMbAPnCdh68=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzn3gBGPMpKaI04OM9HtiwcdFP6HfJ5ON8hH+4qN9dgyfmf604P
+	p3lbZYO40Z1GGnAWEnK+wLQQc6MhFaO85Zm9HDIlvJl9KWy4BzTr/EWB4d6Qj79bgY0=
+X-Gm-Gg: ATEYQzxTqJVIPxImvLe5JzSm4xWdan8W7vfQxAXTmJ6sA5KDO+hp/Ef81hNToAewjf0
+	wXJOB3aeXg+2/ZPLVZPaGk9NgQTOWaZ8BBex3Tj3fwPJWTSb8u5bwKpVFG8lrEc8DHVGHXEhHv7
+	swsMPiLulXQSiEeYY9Gf+59sgBhH11vlZmqenSnNCf2zcl5M+qAKi6x0gGrRi/TcKaQYFF/NMHK
+	a5KiY6r1FKzMlKTd+SkbAerGfMk6OEFxd59oRVGZq7XmLSLfhEXC+1oIrBAFFXp1Udgm201H9PH
+	wf5DkJ2TYcoexpRnbONoAmXGgTdIO7t9VVsQd/V79hIQneG+NtoB9w+gf99e8UFOtwg9SMwBccu
+	nvAIqhnhLywwNiB3DgR3eNGOIftplo04tGhIiK/JMhlD/9F8yM2p4eQSy6yrhhdpotPJ+vpfrhl
+	Mxj6uBDEM=
+X-Received: by 2002:a05:6871:c8e8:b0:417:4d3:1751 with SMTP id 586e51a60fabf-4177cbc0afemr2554702fac.51.1773264682724;
+        Wed, 11 Mar 2026 14:31:22 -0700 (PDT)
+Received: from [127.0.1.1] ([2a09:bac5:947d:4e6::7d:82])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4177e1fb90csm3530413fac.4.2026.03.11.14.31.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Mar 2026 13:50:00 -0700 (PDT)
-Date: Wed, 11 Mar 2026 16:50:00 -0400
-Message-ID: <a4ffe6eac1f9963e1bb092b4a6096154@paul-moore.com>
+        Wed, 11 Mar 2026 14:31:22 -0700 (PDT)
+From: Frederick Lawler <fred@cloudflare.com>
+Subject: [PATCH RFC bpf-next 0/4] audit: Expose audit subsystem to BPF LSM
+ programs via BPF kfuncs
+Date: Wed, 11 Mar 2026 16:31:16 -0500
+Message-Id: <20260311-bpf-auditd-send-message-v1-0-10a62db5c92f@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 
-Content-Type: text/plain; charset=UTF-8 
-Content-Transfer-Encoding: 8bit 
-X-Mailer: pstg-pwork:20260311_1557/pstg-lib:20260311_1557/pstg-pwork:20260311_1557
-From: Paul Moore <paul@paul-moore.com>
-To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>, Blaise Boscaccy <bboscaccy@linux.microsoft.com>, Jonathan Corbet <corbet@lwn.net>, James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>, =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>, "Dr. David Alan Gilbert" <linux@treblig.org>, Andrew Morton <akpm@linux-foundation.org>, James.Bottomley@HansenPartnership.com, dhowells@redhat.com, Fan Wu <wufan@kernel.org>, Ryan Foster <foster.ryan.r@gmail.com>, linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v2 7/10] security: Hornet LSM
-References: <20260227233930.2418522-8-bboscaccy@linux.microsoft.com>
-In-Reply-To: <20260227233930.2418522-8-bboscaccy@linux.microsoft.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACTfsWkC/x2MQQqDMBAAvxL23IVoqw1eCz6gV/GwNmvdg1GyK
+ oL498YeB2bmAOUorFCZAyJvojKFBNnNwGeg8GUUnxhym5c2swV2c4+0elk8KgePI6tS0h7k3N2
+ WT6LOQarnyL3s/3MD7/plrjDwvkB7nj+1WrsudwAAAA==
+X-Change-ID: 20260105-bpf-auditd-send-message-4a883067aab8
+To: Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+ "Serge E. Hallyn" <serge@hallyn.com>, Eric Paris <eparis@redhat.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
+ =?utf-8?q?G=C3=BCnther_Noack?= <gnoack@google.com>
+Cc: linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
+ audit@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ kernel-team@cloudflare.com, Frederick Lawler <fred@cloudflare.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4248; i=fred@cloudflare.com;
+ h=from:subject:message-id; bh=c83sDHtMZGgmWT39aIisxMkV8QZsjptaj9QxOf0Cuwg=;
+ b=owEBbQKS/ZANAwAKAasltHYDktNtAcsmYgBpsd8n9jExOwY7o7vGO2DRL/PAuhexDPVJt7YTU
+ J9BUtH+/MCJAjMEAAEKAB0WIQTLNBqMVmu1PHvjOe2rJbR2A5LTbQUCabHfJwAKCRCrJbR2A5LT
+ bSiQEACPtWTnlmslusEnuOQDnGDS4N1FtR7aFG6hDI7yVEwaImE6tXGY+mSrd1YI1Zx+ZOhgdff
+ 5GWPT8Y2SdW9MCXBYuKAueFZWHxjvvYuKimRdPhmZ1IeIoNVsUEgY6+V3o1md+ZCF8v04xyjFAV
+ kQdPCLhT2v0AgnDm1pIfVg/RqqreoZU6f4brM2tfC0S2dHy8HPP455izuXCzz4Zp8dgbwifdvSs
+ 0f4v4E4KqMbDISxrrgKjEUiZoyaUOoP5LAtSiW7asJQp7+2qBtFRuQnSkXlkQGWSJf3lckuzFlc
+ Ifd1x7TvTyT+98QJ33TdXN5JFeI5TKtO8UUG5PjikHSJ5MvGk+a/UWj0QlJQp+7yYUDhxfTIjZp
+ iKdsmll/RLcBA3RvNLN40ttiowey43rAvkQEG7DfcUgRwyPIIwH5Lf+/u5XndHACqcXtSqYXFGU
+ 61gMi3RKoQJxP/BXomczV/l5dz7r0G6NwOPE7XBG1Iq7I9wG24weoA5S1gnAiR2queukCYJgJHv
+ eQ0co8fwRCrpcZYd7IqaKVjTxRJJH9r9AiiyBgLOxRmBUX4G9h09WE3xXYQKlsyhQ5NsIPxUt+J
+ 8Yryhoc2ZQasaMZh/uA7CyVK8ZAcHS8pa2VPEaTLLpPQjAEyBF8VBocT55GvBVcZ0ayioCL8B/s
+ MloN+OPwk/6rXpg==
+X-Developer-Key: i=fred@cloudflare.com; a=openpgp;
+ fpr=CB341A8C566BB53C7BE339EDAB25B4760392D36D
 
-On Feb 27, 2026 Blaise Boscaccy <bboscaccy@linux.microsoft.com> wrote:
-> 
-> This adds the Hornet Linux Security Module which provides enhanced
-> signature verification and data validation for eBPF programs. This
-> allows users to continue to maintain an invariant that all code
-> running inside of the kernel has actually been signed and verified, by
-> the kernel.
-> 
-> This effort builds upon the currently excepted upstream solution. It
-> further hardens it by providing deterministic, in-kernel checking of
-> map hashes to solidify auditing along with preventing TOCTOU attacks
-> against lskel map hashes.
-> 
-> Target map hashes are passed in via PKCS#7 signed attributes. Hornet
-> determines the extent which the eBFP program is signed and defers to
-> other LSMs for policy decisions.
-> 
-> Signed-off-by: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-> Nacked-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> ---
->  Documentation/admin-guide/LSM/Hornet.rst | 310 ++++++++++++++++++++++
->  Documentation/admin-guide/LSM/index.rst  |   1 +
->  MAINTAINERS                              |   9 +
->  include/linux/oid_registry.h             |   3 +
->  include/uapi/linux/lsm.h                 |   1 +
->  security/Kconfig                         |   3 +-
->  security/Makefile                        |   1 +
->  security/hornet/Kconfig                  |  11 +
->  security/hornet/Makefile                 |   7 +
->  security/hornet/hornet.asn1              |  13 +
->  security/hornet/hornet_lsm.c             | 323 +++++++++++++++++++++++
->  11 files changed, 681 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/admin-guide/LSM/Hornet.rst
->  create mode 100644 security/hornet/Kconfig
->  create mode 100644 security/hornet/Makefile
->  create mode 100644 security/hornet/hornet.asn1
->  create mode 100644 security/hornet/hornet_lsm.c
-> 
-> diff --git a/Documentation/admin-guide/LSM/Hornet.rst b/Documentation/admin-guide/LSM/Hornet.rst
-> new file mode 100644
-> index 000000000000..0dd4c03b8a7e
-> --- /dev/null
-> +++ b/Documentation/admin-guide/LSM/Hornet.rst
-> @@ -0,0 +1,310 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +======
-> +Hornet
-> +======
-> +
-> +Hornet is a Linux Security Module that provides extensible signature
-> +verification for eBPF programs. This is selectable at build-time with
-> +``CONFIG_SECURITY_HORNET``.
-> +
-> +Overview
-> +========
-> +
-> +Hornet addresses concerns from users who require strict audit trails and
-> +verification guarantees for eBPF programs, especially in
-> +security-sensitive environments. Many production systems need assurance
-> +that only authorized, unmodified eBPF programs are loaded into the
-> +kernel. Hornet provides this assurance through cryptographic signature
-> +verification.
-> +
-> +When an eBPF program is loaded via the ``bpf()`` syscall, Hornet
-> +verifies a PKCS#7 signature attached to the program instructions. The
-> +signature is checked against the kernel's secondary keyring using the
-> +existing kernel cryptographic infrastructure. In addition to signing the
-> +program bytecode, Hornet supports signing SHA-256 hashes of associated
-> +BPF maps, enabling integrity verification of map contents at load time
-> +and at runtime.
-> +
-> +After verification, Hornet classifies the program into one of the
-> +following integrity states and passes the result to a downstream LSM hook
-> +(``bpf_prog_load_post_integrity``), allowing other security modules to
-> +make policy decisions based on the verification outcome:
-> +
-> +``LSM_INT_VERDICT_OK``
-> +  The program signature and all map hashes verified successfully.
-> +
-> +``LSM_INT_VERDICT_UNSIGNED``
-> +  No signature was provided with the program.
-> +
-> +``LSM_INT_VERDICT_PARTIALSIG``
-> +  The program signature verified, but the signing certificate is not
-> +  trusted in the secondary keyring ...
+The motivation behind the change is to give BPF LSM developers the
+ability to report accesses via the audit subsystem much like how LSMs
+operate today.
 
-Do you think there is value in separating this case out from _PARTIALSIG?
-Maybe a LSM_INT_VERDICT_UNKNOWNKEY?
+Series:
 
-> +  ... or the signature did not contain
-> +  hornet map hash data.
-> +
-> +``LSM_INT_VERDICT_BADSIG``
-> +  The signature or a map hash failed verification.
-> +
-> +Hornet itself does not enforce a policy on whether unsigned or partially
-> +signed programs should be rejected. It delegates that decision to
-> +downstream LSMs via the ``bpf_prog_load_post_integrity`` hook, making it
-> +a composable building block in a larger security architecture.
-> +
-> +Use Cases
-> +=========
-> +
-> +- **Locked-down production environments**: Ensure only eBPF programs
-> +  signed by a trusted authority can be loaded, preventing unauthorized
-> +  or tampered programs from running in the kernel.
-> +
-> +- **Audit and compliance**: Provide cryptographic evidence that loaded
-> +  eBPF programs match their expected build artifacts, supporting
-> +  compliance requirements in regulated industries.
-> +
-> +- **Supply chain integrity**: Verify that eBPF programs and their
-> +  associated map data have not been modified since they were built and
-> +  signed, protecting against supply chain attacks.
-> +
-> +Threat Model
-> +============
-> +
-> +Hornet protects against the following threats:
-> +
-> +- **Unauthorized eBPF program loading**: Programs that have not been
-> +  signed by a trusted key will be reported as unsigned or badly signed.
-> +
-> +- **Tampering with program instructions**: Any modification to the eBPF
-> +  bytecode after signing will cause signature verification to fail.
-> +
-> +- **Tampering with map data**: When map hashes are included in the
-> +  signature, Hornet verifies that frozen BPF maps match their expected
-> +  SHA-256 hashes at load time. Maps are also re-verified before program
-> +  execution via ``BPF_PROG_RUN``.
-> +
-> +Hornet does **not** protect against:
-> +
-> +- Compromise of the signing key itself.
-> +- Attacks that occur after a program has been loaded and verified.
-> +- Programs loaded by the kernel itself (kernel-internal loads bypass
-> +  the ``BPF_PROG_RUN`` map check).
-> +
-> +Known Limitations
-> +=================
-> +
-> +- Hornet requires programs to use :doc:`light skeletons
-> +  </bpf/libbpf/libbpf_naming_convention>` (lskels) for the signing
-> +  workflow, as the tooling operates on lskel-generated headers.
-> +
-> +- A maximum of 64 maps per program can be tracked for hash
-> +  verification.
-> +
-> +- Map hash verification requires the maps to be frozen before loading.
-> +  Maps that are not frozen at load time will cause verification to fail
-> +  when their hashes are included in the signature.
-> +
-> +- Hornet relies on the kernel's secondary keyring
-> +  (``VERIFY_USE_SECONDARY_KEYRING``) for certificate trust. Keys must
-> +  be provisioned into this keyring before programs can be verified.
+Patch 1: Introduces bpf_audit_*() kfuncs
+Patch 2: Enables bpf_audit_*() kfuns
+Patch 3: Prepares audit helpers used for testing
+Patch 4: Adds self tests
 
-I would add a bullet point describing the SHA256 limitation.  If I
-understand things correctly this restriction comes from the core BPF
-code and not Hornet itself, so it would be nice to have this documented
-as it isn't immediately clear when looking only at the Hornet code.
+Documentation will be added when this becomes a versioned series.
 
-> +Configuration
-> +=============
-> +
-> +Build Configuration
-> +-------------------
-> +
-> +Enable Hornet by setting the following kernel configuration option::
-> +
-> +  CONFIG_SECURITY_HORNET=y
-> +
-> +This option is found under :menuselection:`Security options --> Hornet
-> +support` and depends on ``CONFIG_SECURITY``.
-> +
-> +When enabled, Hornet is included in the default LSM initialization order
-> +and will appear in ``/sys/kernel/security/lsm``.
-> +
-> +Architecture
-> +============
-> +
-> +Signature Verification Flow
-> +---------------------------
-> +
-> +The following describes what happens when a userspace program calls
-> +``bpf(BPF_PROG_LOAD, ...)`` with a signature attached:
-> +
-> +1. The ``bpf_prog_load_integrity`` LSM hook is invoked.
-> +
-> +2. Hornet reads the signature from the userspace buffer specified by
-> +   ``attr->signature`` (with length ``attr->signature_size``).
-> +
-> +3. The PKCS#7 signature is verified against the program instructions
-> +   using ``verify_pkcs7_signature()`` with the kernel's secondary
-> +   keyring.
-> +
-> +4. The PKCS#7 message is parsed and its trust chain is validated via
-> +   ``validate_pkcs7_trust()``.
-> +
-> +5. Hornet extracts the authenticated attribute identified by
-> +   ``OID_hornet_data`` (OID ``2.25.316487325684022475439036912669789383960``)
-> +   from the PKCS#7 message. This attribute contains an ASN.1-encoded set
-> +   of map index/hash pairs.
-> +
-> +6. For each map hash entry, Hornet retrieves the corresponding BPF map
-> +   via its file descriptor, confirms it is frozen, computes its SHA-256
-> +   hash, and compares it against the signed hash.
-> +
-> +7. The resulting integrity verdict is passed to the
-> +   ``bpf_prog_load_post_integrity`` hook so that downstream LSMs can
-> +   enforce policy.
-> +
-> +Runtime Map Verification
-> +------------------------
-> +
-> +When ``bpf(BPF_PROG_RUN, ...)`` is called from userspace, Hornet
-> +re-verifies the hashes of all maps associated with the program. This
-> +ensures that map contents have not been modified between program load
-> +and execution. If any map hash no longer matches, the ``BPF_PROG_RUN``
-> +command is denied.
-> +
-> +Userspace Interface
-> +-------------------
-> +
-> +Signatures are passed to the kernel through fields in ``union bpf_attr``
-> +when using the ``BPF_PROG_LOAD`` command:
-> +
-> +``signature``
-> +  A pointer to a userspace buffer containing the PKCS#7 signature.
-> +
-> +``signature_size``
-> +  The size of the signature buffer in bytes.
-> +
-> +ASN.1 Schema
-> +------------
-> +
-> +Map hashes are encoded as a signed attribute in the PKCS#7 message using
-> +the following ASN.1 schema::
-> +
-> +  HornetData ::= SET OF Map
-> +
-> +  Map ::= SEQUENCE {
-> +      index   INTEGER,
-> +      sha     OCTET STRING
-> +  }
-> +
-> +Each ``Map`` entry contains the index of the map in the program's
-> +``fd_array`` and its expected SHA-256 hash. A zero-length ``sha`` field
-> +indicates that the map at that index should be skipped during
-> +verification.
-> +
-> +Tooling
-> +=======
-> +
-> +Helper scripts and a signature generation tool are provided in
-> +``scripts/hornet/`` to support the development of signed eBPF light
-> +skeletons.
-> +
-> +gen_sig
-> +-------
-> +
-> +``gen_sig`` is a C program (using OpenSSL) that creates a PKCS#7
-> +signature over eBPF program instructions and optionally includes
-> +SHA-256 hashes of BPF maps as signed attributes.
-> +
-> +Usage::
-> +
-> +  gen_sig --data <instructions.bin> \
-> +          --cert <signer.crt> \
-> +          --key <signer.key> \
-> +          [--pass <passphrase>] \
-> +          --out <signature.p7b> \
-> +          [--add <mapfile.bin>:<index> ...]
-> +
-> +``--data``
-> +  Path to the binary file containing eBPF program instructions to sign.
-> +
-> +``--cert``
-> +  Path to the signing certificate (PEM or DER format).
-> +
-> +``--key``
-> +  Path to the private key (PEM or DER format).
-> +
-> +``--pass``
-> +  Optional passphrase for the private key.
-> +
-> +``--out``
-> +  Path to write the output PKCS#7 signature.
-> +
-> +``--add``
-> +  Attach a map hash as a signed attribute. The argument is a path to a
-> +  binary map file followed by a colon and the map's index in the
-> +  ``fd_array``. This option may be specified multiple times.
-> +
-> +extract-skel.sh
-> +---------------
-> +
-> +Extracts a named field from an autogenerated eBPF lskel header file.
-> +Used internally by other helper scripts.
-> +
-> +extract-insn.sh
-> +---------------
-> +
-> +Extracts the eBPF program instructions (``opts_insn``) from an lskel
-> +header into a binary file suitable for signing with ``gen_sig``.
-> +
-> +extract-map.sh
-> +--------------
-> +
-> +Extracts the map data (``opts_data``) from an lskel header into a
-> +binary file suitable for hashing with ``gen_sig``.
-> +
-> +write-sig.sh
-> +------------
-> +
-> +Replaces the signature data in an lskel header with a new signature
-> +from a binary file. This is used to embed a freshly generated signature
-> +back into the header after signing.
-> +
-> +Signing Workflow
-> +================
-> +
-> +A typical workflow for building and signing an eBPF light skeleton is:
-> +
-> +1. **Compile the eBPF program**::
-> +
-> +     clang -O2 -target bpf -c program.bpf.c -o program.bpf.o
-> +
-> +2. **Generate the light skeleton header** using ``bpftool``::
-> +
-> +     bpftool gen skeleton -S program.bpf.o > loader.h
-> +
-> +3. **Extract instructions and map data** from the generated header::
-> +
-> +     scripts/hornet/extract-insn.sh loader.h > insn.bin
-> +     scripts/hornet/extract-map.sh loader.h > map.bin
-> +
-> +4. **Generate the signature** with ``gen_sig``::
-> +
-> +     scripts/hornet/gen_sig \
-> +       --key signing_key.pem \
-> +       --cert signing_key.x509 \
-> +       --data insn.bin \
-> +       --add map.bin:0 \
-> +       --out sig.bin
-> +
-> +5. **Embed the signature** back into the header::
-> +
-> +     scripts/hornet/write-sig.sh loader.h sig.bin > signed_loader.h
-> +
-> +6. **Build the loader program** using the signed header::
-> +
-> +     cc -o loader loader.c -lbpf
-> +
-> +The resulting loader program will pass the embedded signature to the
-> +kernel when loading the eBPF program, enabling Hornet to verify it.
-> +
-> +Testing
-> +=======
-> +
-> +Self-tests are provided in ``tools/testing/selftests/hornet/``. The test
-> +suite builds a minimal eBPF program (``trivial.bpf.c``), signs it using
-> +the workflow described above, and verifies that the signed program loads
-> +successfully.
-> diff --git a/Documentation/admin-guide/LSM/index.rst b/Documentation/admin-guide/LSM/index.rst
-> index b44ef68f6e4d..57f6e9fbe5fd 100644
-> --- a/Documentation/admin-guide/LSM/index.rst
-> +++ b/Documentation/admin-guide/LSM/index.rst
-> @@ -49,3 +49,4 @@ subdirectories.
->     SafeSetID
->     ipe
->     landlock
-> +   Hornet
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 55af015174a5..6e91234a9ba4 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11682,6 +11682,15 @@ S:	Maintained
->  F:	Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml
->  F:	drivers/iio/pressure/mprls0025pa*
->  
-> +HORNET SECURITY MODULE
-> +M:	Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-> +L:	linux-security-module@vger.kernel.org
-> +S:	Supported
-> +T:	git https://github.com/blaiseboscaccy/hornet.git
-> +F:	Documentation/admin-guide/LSM/Hornet.rst
-> +F:	scripts/hornet/
-> +F:	security/hornet/
-> +
->  HP BIOSCFG DRIVER
->  M:	Jorge Lopez <jorge.lopez2@hp.com>
->  L:	platform-driver-x86@vger.kernel.org
-> diff --git a/include/linux/oid_registry.h b/include/linux/oid_registry.h
-> index ebce402854de..bf852715aaea 100644
-> --- a/include/linux/oid_registry.h
-> +++ b/include/linux/oid_registry.h
-> @@ -150,6 +150,9 @@ enum OID {
->  	OID_id_ml_dsa_65,			/* 2.16.840.1.101.3.4.3.18 */
->  	OID_id_ml_dsa_87,			/* 2.16.840.1.101.3.4.3.19 */
->  
-> +	/* Hornet LSM */
-> +	OID_hornet_data,	  /* 2.25.316487325684022475439036912669789383960 */
-> +
->  	OID__NR
->  };
->  
-> diff --git a/include/uapi/linux/lsm.h b/include/uapi/linux/lsm.h
-> index 938593dfd5da..2ff9bcdd551e 100644
-> --- a/include/uapi/linux/lsm.h
-> +++ b/include/uapi/linux/lsm.h
-> @@ -65,6 +65,7 @@ struct lsm_ctx {
->  #define LSM_ID_IMA		111
->  #define LSM_ID_EVM		112
->  #define LSM_ID_IPE		113
-> +#define LSM_ID_HORNET		114
->  
->  /*
->   * LSM_ATTR_XXX definitions identify different LSM attributes
-> diff --git a/security/Kconfig b/security/Kconfig
-> index 6a4393fce9a1..283c4a103209 100644
-> --- a/security/Kconfig
-> +++ b/security/Kconfig
-> @@ -230,6 +230,7 @@ source "security/safesetid/Kconfig"
->  source "security/lockdown/Kconfig"
->  source "security/landlock/Kconfig"
->  source "security/ipe/Kconfig"
-> +source "security/hornet/Kconfig"
->  
->  source "security/integrity/Kconfig"
->  
-> @@ -274,7 +275,7 @@ config LSM
->  	default "landlock,lockdown,yama,loadpin,safesetid,apparmor,selinux,smack,tomoyo,ipe,bpf" if DEFAULT_SECURITY_APPARMOR
->  	default "landlock,lockdown,yama,loadpin,safesetid,tomoyo,ipe,bpf" if DEFAULT_SECURITY_TOMOYO
->  	default "landlock,lockdown,yama,loadpin,safesetid,ipe,bpf" if DEFAULT_SECURITY_DAC
-> -	default "landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,apparmor,ipe,bpf"
-> +	default "landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,apparmor,ipe,hornet,bpf"
->  	help
->  	  A comma-separated list of LSMs, in initialization order.
->  	  Any LSMs left off this list, except for those with order
-> diff --git a/security/Makefile b/security/Makefile
-> index 4601230ba442..b68cb56e419b 100644
-> --- a/security/Makefile
-> +++ b/security/Makefile
-> @@ -26,6 +26,7 @@ obj-$(CONFIG_CGROUPS)			+= device_cgroup.o
->  obj-$(CONFIG_BPF_LSM)			+= bpf/
->  obj-$(CONFIG_SECURITY_LANDLOCK)		+= landlock/
->  obj-$(CONFIG_SECURITY_IPE)		+= ipe/
-> +obj-$(CONFIG_SECURITY_HORNET)		+= hornet/
->  
->  # Object integrity file lists
->  obj-$(CONFIG_INTEGRITY)			+= integrity/
-> diff --git a/security/hornet/Kconfig b/security/hornet/Kconfig
-> new file mode 100644
-> index 000000000000..19406aa237ac
-> --- /dev/null
-> +++ b/security/hornet/Kconfig
-> @@ -0,0 +1,11 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +config SECURITY_HORNET
-> +	bool "Hornet support"
-> +	depends on SECURITY
-> +	default n
-> +	help
-> +	  This selects Hornet.
-> +	  Further information can be found in
-> +	  Documentation/admin-guide/LSM/Hornet.rst.
-> +
-> +	  If you are unsure how to answer this question, answer N.
-> diff --git a/security/hornet/Makefile b/security/hornet/Makefile
-> new file mode 100644
-> index 000000000000..26b6f954f762
-> --- /dev/null
-> +++ b/security/hornet/Makefile
-> @@ -0,0 +1,7 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +obj-$(CONFIG_SECURITY_HORNET) := hornet.o
-> +
-> +hornet-y := hornet.asn1.o \
-> +	hornet_lsm.o \
-> +
-> +$(obj)/hornet.asn1.o: $(obj)/hornet.asn1.c $(obj)/hornet.asn1.h
-> diff --git a/security/hornet/hornet.asn1 b/security/hornet/hornet.asn1
-> new file mode 100644
-> index 000000000000..c8d47b16b65d
-> --- /dev/null
-> +++ b/security/hornet/hornet.asn1
-> @@ -0,0 +1,13 @@
-> +-- SPDX-License-Identifier: BSD-3-Clause
-> +--
-> +-- Copyright (C) 2009 IETF Trust and the persons identified as authors
-> +-- of the code
-> +--
-> +-- https://www.rfc-editor.org/rfc/rfc5652#section-3
-> +
-> +HornetData ::= SET OF Map
-> +
-> +Map ::= SEQUENCE {
-> +	index			INTEGER ({ hornet_map_index }),
-> +	sha			OCTET STRING ({ hornet_map_hash })
-> +} ({ hornet_next_map })
-> diff --git a/security/hornet/hornet_lsm.c b/security/hornet/hornet_lsm.c
-> new file mode 100644
-> index 000000000000..6c821d6441fb
-> --- /dev/null
-> +++ b/security/hornet/hornet_lsm.c
-> @@ -0,0 +1,323 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Hornet Linux Security Module
-> + *
-> + * Author: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-> + *
-> + * Copyright (C) 2026 Microsoft Corporation
-> + */
-> +
-> +#include <linux/lsm_hooks.h>
-> +#include <uapi/linux/lsm.h>
-> +#include <linux/bpf.h>
-> +#include <linux/verification.h>
-> +#include <crypto/public_key.h>
-> +#include <linux/module_signature.h>
-> +#include <crypto/pkcs7.h>
-> +#include <linux/sort.h>
-> +#include <linux/asn1_decoder.h>
-> +#include <linux/oid_registry.h>
-> +#include "hornet.asn1.h"
-> +
-> +#define MAX_USED_MAPS 64
-> +
-> +struct hornet_maps {
-> +	bpfptr_t fd_array;
-> +};
-> +
-> +struct hornet_parse_context {
-> +	int indexes[MAX_USED_MAPS];
-> +	bool skips[MAX_USED_MAPS];
-> +	unsigned char hashes[SHA256_DIGEST_SIZE * MAX_USED_MAPS];
-> +	int hash_count;
-> +};
+Key features:
 
-I might include a brief comment at near the top of this file referencing
-the hash algorithm limitation in the Hornet docs, otherwise someone is
-surely going to advocate for hash agility improvements at some point.
+1. Audit logs include type=AUDIT_BPF_LSM_ACCESS, BPF program ID, and comm
+that triggered the hook by default
 
-> +struct hornet_prog_security_struct {
-> +	bool checked[MAX_USED_MAPS];
-> +	unsigned char hashes[SHA256_DIGEST_SIZE * MAX_USED_MAPS];
-> +};
-> +
-> +struct hornet_map_security_struct {
-> +	bool checked;
-> +	int index;
-> +};
-> +
-> +struct lsm_blob_sizes hornet_blob_sizes __ro_after_init = {
-> +	.lbs_bpf_map = sizeof(struct hornet_map_security_struct),
-> +	.lbs_bpf_prog = sizeof(struct hornet_prog_security_struct),
-> +};
-> +
-> +static inline struct hornet_prog_security_struct *
-> +hornet_bpf_prog_security(struct bpf_prog *prog)
-> +{
-> +	return prog->aux->security + hornet_blob_sizes.lbs_bpf_prog;
-> +}
-> +
-> +static inline struct hornet_map_security_struct *
-> +hornet_bpf_map_security(struct bpf_map *map)
-> +{
-> +	return map->security + hornet_blob_sizes.lbs_bpf_map;
-> +}
-> +
-> +static int hornet_verify_hashes(struct hornet_maps *maps,
-> +				struct hornet_parse_context *ctx,
-> +				struct bpf_prog *prog)
-> +{
-> +	int map_fd;
-> +	u32 i;
-> +	struct bpf_map *map;
-> +	int err = 0;
-> +	unsigned char hash[SHA256_DIGEST_SIZE];
-> +	struct hornet_prog_security_struct *security = hornet_bpf_prog_security(prog);
-> +	struct hornet_map_security_struct *map_security;
-> +
-> +	for (i = 0; i < ctx->hash_count; i++) {
-> +		if (ctx->skips[i]) {
-> +			security->checked[i] = false;
+We wanted audit log consumers to be able to track who and what created
+the entry. prog-id=%d is already used for BPF LOAD/UNLOAD logs, thus
+is reused here for this distinction. Though, it may be better to use
+the tag instead to capture which _specific_ version of the program
+made the log, since prog-id can be reused.
 
-I'm not going to argue against an explicit false assignement here, but
-as a FYI, when the LSM framework allocates the various object blobs it
-(re)sets the blob memory to zero via kzalloc().  Even if/when the LSM
-framwork moves to some other allocation scheme we will still need to keep
-that reset-to-zero behavior.
+2. Leverages BPF KF_AQUIRE/KF_RELEASE semantics to force use of
+  bpf_audit_log_end().
 
-The same applies to the BPF map blobs.
+One side effect of this decision is that the BPF documentation states
+that these flags allow the pointer to struct bpf_audit_context to be 
+stored in a map, and then exchanged through bpf_kptr_xchg(). However,
+there's prior work with net/netfilter/nf_conntrack_bpf.c such that the
+struct is not exposed as a kptr to support that functionality nor is
+that supplying a dtor function. The verifier will not allow this use case
+due to not exposing the __kptr. Ideally, we don't want the pointer to
+be exchanged anyway because the reporting program can become ambiguous.
+I am sure there are other edge cases WRT to keeping the audit buffer in a
+strange state too that I cannot think of at this moment.
 
-> +			continue;
-> +		}
-> +
-> +		err = copy_from_bpfptr_offset(&map_fd, maps->fd_array,
-> +					      ctx->indexes[i] * sizeof(map_fd),
-> +					      sizeof(map_fd));
-> +		if (err < 0)
-> +			return LSM_INT_VERDICT_BADSIG;
-> +
-> +		CLASS(fd, f)(map_fd);
-> +		if (fd_empty(f))
-> +			return LSM_INT_VERDICT_BADSIG;
-> +		if (unlikely(fd_file(f)->f_op != &bpf_map_fops))
-> +			return LSM_INT_VERDICT_BADSIG;
+3. All bpf_audit_log_*() functions are destructive
 
-I'm wondering if it is worth defining a generic LSM_INT_VERDICT_FAULT
-verdict to indicate a system error when verifying the integrity rather
-than a bad signature.  Yes, the enforcement action will likely be the
-same, but it might help when debugging or chasing forensic data.
+The audit subsystem allows for AUDIT_FAIL_PANIC to be set when the
+subsystem can detect that missing events. Further, some call paths may
+invoke a BUG_ON(). Therefore all the functions are marked destructive.
 
-> +		map = fd_file(f)->private_data;
-> +		if (!map->frozen)
-> +			return LSM_INT_VERDICT_BADSIG;
-> +
-> +		map->ops->map_get_hash(map, SHA256_DIGEST_SIZE, hash);
-> +
-> +		err = memcmp(hash, &ctx->hashes[i * SHA256_DIGEST_SIZE],
-> +			      SHA256_DIGEST_SIZE);
-> +		if (err)
-> +			return LSM_INT_VERDICT_BADSIG;
-> +
-> +		security->checked[i] = true;
-> +		memcpy(&security->hashes[i * SHA256_DIGEST_SIZE], hash, SHA256_DIGEST_SIZE);
-> +		map_security = hornet_bpf_map_security(map);
-> +		map_security->checked = true;
-> +		map_security->index = i;
-> +	}
-> +	return LSM_INT_VERDICT_OK;
-> +}
-> +
-> +int hornet_next_map(void *context, size_t hdrlen,
-> +		     unsigned char tag,
-> +		     const void *value, size_t vlen)
-> +{
-> +	struct hornet_parse_context *ctx = (struct hornet_parse_context *)context;
-> +
-> +	ctx->hash_count++;
+4. Functions are callable once per bpf_audit_context
 
-Do we need a check here to ensure that ctx->hash_count doesn't exceed
-MAX_USED_MAPS?  If not here, where do we ensure we don't blow past
-MAX_USED_MAPS?
+The rationale for this was to prevent abuse. Logs with repeated fields
+are not helpful, and may not be handled by user space audit coherently.
 
-What does Hornet do if the number of hashed maps is greater then
-MAX_USED_MAPS?  I'm guessing we would want it to return an error and
-fail the load?
+This is in the same vein as not providing a audit_format() wrapper.
 
-> +	return 0;
-> +}
-> +
-> +int hornet_map_index(void *context, size_t hdrlen,
-> +		     unsigned char tag,
-> +		     const void *value, size_t vlen)
-> +{
-> +	struct hornet_parse_context *ctx = (struct hornet_parse_context *)context;
-> +
-> +	if (vlen > 1)
-> +		return -EINVAL;
-> +
-> +	ctx->indexes[ctx->hash_count] = *(u8 *)value;
-> +	return 0;
-> +}
-> +
-> +int hornet_map_hash(void *context, size_t hdrlen,
-> +		    unsigned char tag,
-> +		    const void *value, size_t vlen)
-> +
-> +{
-> +	struct hornet_parse_context *ctx = (struct hornet_parse_context *)context;
-> +
-> +	if (vlen != SHA256_DIGEST_SIZE && vlen != 0)
-> +		return -EINVAL;
-> +
-> +	if (vlen) {
-> +		ctx->skips[ctx->hash_count] = false;
-> +		memcpy(&ctx->hashes[ctx->hash_count * SHA256_DIGEST_SIZE], value, vlen);
-> +	} else
-> +		ctx->skips[ctx->hash_count] = true;
-> +
-> +	return 0;
-> +}
-> +
-> +static int hornet_check_program(struct bpf_prog *prog, union bpf_attr *attr,
-> +				struct bpf_token *token, bool is_kernel)
-> +{
-> +	struct hornet_maps maps = {0};
-> +	bpfptr_t usig = make_bpfptr(attr->signature, is_kernel);
-> +	struct pkcs7_message *msg;
-> +	struct hornet_parse_context *ctx;
-> +	void *sig;
-> +	int err;
-> +	const void *authattrs;
-> +	size_t authattrs_len;
-> +
-> +	if (!attr->signature)
-> +		return LSM_INT_VERDICT_UNSIGNED;
-> +
-> +	ctx = kzalloc(sizeof(struct hornet_parse_context), GFP_KERNEL);
-> +	if (!ctx)
-> +		return -ENOMEM;
+Similarly, some functions such as bpf_audit_log_path() and
+bpf_audit_log_file() report the same information, thus can be
+interchangeable in use.
 
-I think I mentioned this previously, but let me repeat myself in case I
-didn't ... we don't want to mix LSM_INT_VERDICT enums and errno values
-in the return value.  Yes, you can probably get away with it in the
-majority of cases, but I worry it is a problem waiting to happen.  I
-count only four parameters right now, so adding a verdict enum pointer
-shouldn't be too difficult.
+5. API wraps security/lsm_audit.c
 
-> +	maps.fd_array = make_bpfptr(attr->fd_array, is_kernel);
-> +	sig = kzalloc(attr->signature_size, GFP_KERNEL);
-> +	if (!sig) {
-> +		err = -ENOMEM;
-> +		goto out;
-> +	}
-> +	err = copy_from_bpfptr(sig, usig, attr->signature_size);
-> +	if (err != 0)
-> +		goto cleanup_sig;
-> +
-> +	err = verify_pkcs7_signature(prog->insnsi, prog->len * sizeof(struct bpf_insn),
-> +				     sig, attr->signature_size, VERIFY_USE_SECONDARY_KEYRING,
-> +				     VERIFYING_BPF_SIGNATURE, NULL, NULL);
-> +	if (err < 0) {
-> +		err = LSM_INT_VERDICT_BADSIG;
-> +		goto cleanup_sig;
-> +	}
-> +
-> +	msg = pkcs7_parse_message(sig, attr->signature_size);
-> +	if (IS_ERR(msg)) {
-> +		err = LSM_INT_VERDICT_BADSIG;
-> +		goto cleanup_sig;
-> +	}
-> +
-> +	if (validate_pkcs7_trust(msg, VERIFY_USE_SECONDARY_KEYRING)) {
-> +		err = LSM_INT_VERDICT_PARTIALSIG;
-> +		goto cleanup_msg;
-> +	}
-> +	if (pkcs7_get_authattr(msg, OID_hornet_data,
-> +			       &authattrs, &authattrs_len) == -ENODATA) {
-> +		err = LSM_INT_VERDICT_PARTIALSIG;
-> +		goto cleanup_msg;
-> +	}
-> +
-> +	err = asn1_ber_decoder(&hornet_decoder, ctx, authattrs, authattrs_len);
-> +	if (err < 0 || authattrs == NULL) {
-> +		err = LSM_INT_VERDICT_PARTIALSIG;
-> +		goto cleanup_msg;
-> +	}
-> +	err = hornet_verify_hashes(&maps, ctx, prog);
-> +
-> +cleanup_msg:
-> +	pkcs7_free_message(msg);
-> +cleanup_sig:
-> +	kfree(sig);
-> +out:
-> +	kfree(ctx);
-> +	return err;
-> +}
-> +
-> +static const struct lsm_id hornet_lsmid = {
-> +	.name = "hornet",
-> +	.id = LSM_ID_HORNET,
-> +};
-> +
-> +static int hornet_bpf_prog_load_integrity(struct bpf_prog *prog, union bpf_attr *attr,
-> +					  struct bpf_token *token, bool is_kernel)
-> +{
-> +	int result = hornet_check_program(prog, attr, token, is_kernel);
+lsm_audit.c functions are multiplexed and not handled by BPF verifier
+very well, thus the wrapped functions are isolated to their sole
+purpose for use within hooks.
 
-Can you explain a bit why we check for the kernel flag in hornet_bpf(),
-but not here?  It may be that a brief comment in hornet_bpf() explaining
-the kernel flag exception would be helpful.
+Key considerations:
 
-> +	if (result < 0)
-> +		return result;
-> +
-> +	return security_bpf_prog_load_post_integrity(prog, attr, token, is_kernel,
-> +						     &hornet_lsmid, result);
-> +}
-> +
-> +static int hornet_verify_map(struct bpf_prog *prog, int index)
-> +{
-> +	unsigned char hash[SHA256_DIGEST_SIZE];
-> +	int i;
-> +	struct bpf_map *map;
-> +	struct hornet_prog_security_struct *security = hornet_bpf_prog_security(prog);
-> +	struct hornet_map_security_struct *map_security;
-> +
-> +	if (!security->checked[index])
-> +		return 0;
-> +
-> +	for (i = 0; i < prog->aux->used_map_cnt; i++) {
-> +		map = prog->aux->used_maps[i];
-> +		map_security = hornet_bpf_map_security(map);
-> +		if (map_security->index != index)
-> +			continue;
-> +
-> +		if (!map->frozen)
-> +			return -EINVAL;
+1. Audit field ordering
 
-Unless there is serious tampering going on we should never see an
-unfrozen map here, yes?
+AFAIK, user space audit is particular about what fields are
+present and their order. This patch series does not address ordering.
 
-We probably also want to use a return value other than -EINVAL as this
-is a access/permission denial.  I would think -EACCES or -EPERM would be
-more appropriate.
+My assumption is that the first three fields: type, prog-id, pid, comm
+are well known, and user space can make an assumption that other
+fields after those can appear in any order.
 
-> +		map->ops->map_get_hash(map, SHA256_DIGEST_SIZE, hash);
-> +		if (memcmp(hash, &security->hashes[index * SHA256_DIGEST_SIZE],
-> +			   SHA256_DIGEST_SIZE) != 0)
+If that is not acceptable, I would propose that we leverage the struct
+common_audit_data type order to be the order--much like how the type is
+used for log_once() functionality.
 
-Presumably this is just being extra careful?
+I am open to other ideas.
 
-> +			return -EINVAL;
+Signed-off-by: Frederick Lawler <fred@cloudflare.com>
+---
+Frederick Lawler (4):
+      audit: Implement bpf_audit_log_*() wrappers
+      audit/security: Enable audit BPF kfuncs
+      selftests/bpf: Add audit helpers for BPF tests
+      selftests/bpf: Add lsm_audit_kfuncs tests
 
-See above, -EACCES or -EPERM is likely a better choice here.
+ include/linux/lsm_audit.h                          |   1 +
+ include/uapi/linux/audit.h                         |   1 +
+ security/Makefile                                  |   2 +
+ security/lsm_audit_kfuncs.c                        | 306 +++++++++++
+ tools/testing/selftests/bpf/Makefile               |   3 +-
+ tools/testing/selftests/bpf/audit_helpers.c        | 281 ++++++++++
+ tools/testing/selftests/bpf/audit_helpers.h        |  55 ++
+ .../selftests/bpf/prog_tests/lsm_audit_kfuncs.c    | 598 +++++++++++++++++++++
+ .../selftests/bpf/progs/test_lsm_audit_kfuncs.c    | 263 +++++++++
+ 9 files changed, 1509 insertions(+), 1 deletion(-)
+---
+base-commit: ca0f39a369c5f927c3d004e63a5a778b08a9df94
+change-id: 20260105-bpf-auditd-send-message-4a883067aab8
 
-> +		else
-> +			return 0;
-> +	}
-> +	return -EINVAL;
+Best regards,
+-- 
+Frederick Lawler <fred@cloudflare.com>
 
-See above.
-
-> +}
-> +
-> +static int hornet_check_prog_maps(u32 ufd)
-> +{
-> +	CLASS(fd, f)(ufd);
-> +	struct bpf_prog *prog;
-> +	int i, result = 0;
-> +
-> +	if (fd_empty(f))
-> +		return -EBADF;
-> +	if (fd_file(f)->f_op != &bpf_prog_fops)
-> +		return -EINVAL;
-> +
-> +	prog = fd_file(f)->private_data;
-> +
-> +	mutex_lock(&prog->aux->used_maps_mutex);
-> +	if (!prog->aux->used_map_cnt)
-> +		goto out;
-> +
-> +	for (i = 0; i < prog->aux->used_map_cnt; i++) {
-> +		result = hornet_verify_map(prog, i);
-> +		if (result)
-> +			goto out;
-> +	}
-> +out:
-> +	mutex_unlock(&prog->aux->used_maps_mutex);
-> +	return result;
-> +}
-> +
-> +static int hornet_bpf(int cmd, union bpf_attr *attr, unsigned int size, bool kernel)
-> +{
-> +	if (cmd != BPF_PROG_RUN)
-> +		return 0;
-> +	if (kernel)
-> +		return 0;
-> +
-> +	return hornet_check_prog_maps(attr->test.prog_fd);
-> +}
-> +
-> +static struct security_hook_list hornet_hooks[] __ro_after_init = {
-> +	LSM_HOOK_INIT(bpf_prog_load_integrity, hornet_bpf_prog_load_integrity),
-> +	LSM_HOOK_INIT(bpf, hornet_bpf),
-> +};
-> +
-> +static int __init hornet_init(void)
-> +{
-> +	pr_info("Hornet: eBPF signature verification enabled\n");
-> +	security_add_hooks(hornet_hooks, ARRAY_SIZE(hornet_hooks), &hornet_lsmid);
-> +	return 0;
-> +}
-> +
-> +DEFINE_LSM(hornet) = {
-> +	.id = &hornet_lsmid,
-> +	.blobs = &hornet_blob_sizes,
-> +	.init = hornet_init,
-> +};
-> -- 
-> 2.52.0
-
---
-paul-moore.com
