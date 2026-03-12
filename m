@@ -1,129 +1,93 @@
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 188A43C454D
-	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 12:57:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB27F3BED5D
+	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 13:39:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773320257; cv=none; b=DDHJra5+Jn/r2lTDtrlOvvUPCOlmo1cVonI0pcH91Ice3jtLapTXV4esWBPTIcvE+o560wyF5O5qZR4Kd50EiUeicviasUDVQytN0llzqdw0WoQfvBWFZ8SpHw7Jxh7rvEXGBQpboU2XNqj7CrsAfBLdjJnKQXBNlO/V3Ff2R68=
+	t=1773322771; cv=none; b=JyTvjJ90J2eCb38kIEludfl0ox8/lEgwAZ0P22+AdZ3QPS/pnC2lnMoBNuYlAh+8/eltJQBvNYUiCIMmagFSw3XSO1Nk0Mpr/Y9vSn5f9D+OTnjI6AudKLV8fw8UTHGq3k1ROx2Ulp7IGYcXdPfGvFMALItStmAEz4L7KWKnCu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773320257; c=relaxed/simple;
-	bh=Rr1jkAP22lZkLvo3o90a9fRSWh9+kilNKtAarSScWFY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oJI5n+aVpjQyl0zTECMn/uIU6ubbfYsRMb82XyHZsooEhpwafpnPgxIkxdDVA5Y8wssuQTaS9lpwWvtgNNREuhlLr2mTtySVQdr6OHf4VFR5yeCIb683M56l7DxJ4QyFKaJ4cKA1Oa3gMX1QB9uHkZEp6YHulz7rUS+0ja6lkTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=fHqxjqGD; arc=none smtp.client-ip=209.85.160.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+	s=arc-20240116; t=1773322771; c=relaxed/simple;
+	bh=uCgy/4a3O45IKbt53bkbdtju6nVoH67NjrRZwRGOQKA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HlWtBq7r+IT6XfIIzzbas2jjPFeTuAq16elvDCNpoABDnUM2WOgGwlmLuXY/hbtIlaRh/iHPvbInZYqGLUv4zjTNrekYUKSWku7Idkf2AbbUy1ODrVwKCCMej5vE2bOZU/crIo77Q4Bv1L8P2GeaNy6iWDNMZUvYGqgLDKkLT9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IkOjbUcC; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="fHqxjqGD"
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-506a6cf8242so8849431cf.1
-        for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 05:57:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1773320252; x=1773925052; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=J1SF1XBHkHR0j7NZVucv0LxpGoGXl67PUefLsfwpAbo=;
-        b=fHqxjqGD7mReR8MT2yBowt9MuNKPAKQc++mWcb4ZOttX6YldICO+OnnxWIQjO0C8L5
-         wjOw0Gg7MqV4U+G9pES+s6h1NtZIjaKrBXMW81hrLyc8SxWYHtvQK3FlTjqiyroZskXE
-         jYj0kUENL7Yhu5zg+0UQ91XYlYYlozX9U8uAqBEFaih0fSnDo8kprjTDRYJ58gzKRExo
-         MSUW+Q+e0P2WpZGotx0DuVRaUqq4vGsUUSX1YbPnOxmRUKlXFY/aNRmXMXDbAEfx0Lnn
-         e41FpuPSZjTSuTkWfTMW8e1MvewVXC2p6zLd4GrSZjvSKS4Q06nDQYaSimUW3qR5RhoY
-         JV6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773320252; x=1773925052;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=J1SF1XBHkHR0j7NZVucv0LxpGoGXl67PUefLsfwpAbo=;
-        b=Z1Pda6GGRWuXFuJ7t6YY8/io3ZcRM5HXEnjvS2V/xZg8TEdS0CquRl0YXjYrAlwgcM
-         jVe/KnPnRPIn8moaAmOHxyES+RGg/oowZhw3AKRu/L1FMXh1ZZvJsftGhcXlekrGs5ET
-         CsaGc4yB+smzXPGqTXTWei61qE37LRTfHLWheaUrfeb6pqzvSXFE2Z4EVwqtVQxn5yJX
-         RfxYjlZWmc5L5dZBZcTvRTn8AdmjCWlcqCGrTjvWShHlVb6eItVPXHzU+C9+cHrPo9Wh
-         PvBPdGeTS39RZ6PEDgpNJ1ZiULqpGghQujQssEMdt7bs/K+Qfho5V0iC+kdbehUCykfM
-         TQog==
-X-Forwarded-Encrypted: i=1; AJvYcCUdubnrh6VKzksOr1X8kUv2kUHiHWE3Z/7hq2QGHD6PsLvkaLFCg69Pd6GBMYCqyz6J+7s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhOGCufAiAgeIUYK53un4gHV9O+nrjBuhAJFSPeVmQ84cwEqNN
-	PSlzBSrQOBU3livPw72BmL9poQqPftEeUAqJ0+E1t6igztGRXCZJca1H0HlfclA9dqY=
-X-Gm-Gg: ATEYQzyMqhmmC7brabNwFAyVoL0461E8yna5NxwoaVsQw0tyWyV/Mq4Qtx5Db4MR+Ko
-	miB9JCwfD2i9AVRJbmcdfZmQ0GcADvXgyKk2I07G6Kw+Q2QtehMCWmDPpbgObB9h6UB49KgcYHJ
-	nDpiJBX1fcfmkyhHq09mV2l2/Tm+oPwL4VSc3RC4vxKJFxalSnnBxl0TsqDCD0O/BtqbhdgXj9C
-	UfKdnPo8M22n1H7MFfBrMJFw52dVYEJSPEZTNlBJndQmk3w0n0fnlkv6Wqy1wRjVH/JP5RAi1KS
-	gDUAp0MTI/4e4TvEuM0Yw+aA8Pkmi9/jg8u1wldsRoO3zw6nlC2sV8ooW9gTcrf7nmI1MQh4tQS
-	aozG+2eUmzob/t8ic+BwXF/7GW2PUZtylhVLyfy0z9gSgpUkOe36kDJmzgK6V1jrbsT3XxFhyKS
-	uH9G5ld6BCxThEK3fJzN+jGEt80Pa92TZrchY6N0Zn3MCW0r7pwxmK0R1GdfIJathtYUsAPXloM
-	AGsDoeo
-X-Received: by 2002:ac8:5d4d:0:b0:509:cbc:127b with SMTP id d75a77b69052e-5093a1bd58fmr77950521cf.60.1773320251710;
-        Thu, 12 Mar 2026 05:57:31 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-112-119.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.112.119])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89a65bd318fsm33341196d6.8.2026.03.12.05.57.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2026 05:57:31 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1w0fbW-00000006fKD-1POa;
-	Thu, 12 Mar 2026 09:57:30 -0300
-Date: Thu, 12 Mar 2026 09:57:30 -0300
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Kuan-Wei Chiu <visitorckw@gmail.com>
-Cc: Philipp Hahn <phahn-oss@avm.de>, amd-gfx@lists.freedesktop.org,
-	apparmor@lists.ubuntu.com, bpf@vger.kernel.org,
-	ceph-devel@vger.kernel.org, cocci@inria.fr,
-	dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
-	gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org,
-	intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev,
-	kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-	linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-erofs@lists.ozlabs.org,
-	linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org,
-	linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org,
-	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-	ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
-	sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
-	tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev
-Subject: Re: [PATCH 00/61] treewide: Use IS_ERR_OR_NULL over manual NULL
- check - refactor
-Message-ID: <20260312125730.GI1469476@ziepe.ca>
-References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
- <abBlpGKO842B3yl9@google.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IkOjbUcC"
+Message-ID: <14e9e301-38da-4800-a1a6-9913c8d3cbf9@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773322757;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rMYxCY6UeSuDYqBhMw/GjMm6u1qYKBPdLAkA3zqj/aY=;
+	b=IkOjbUcC2VEP4LSLMMoZOUZeVQuS5QXzTMHpO6lSR8shlxoVxt9sz6+li1zVGw22ifVZKG
+	2hwPY0AvWefeYF1lFoDXA02IOu7sT2HB0bD8QruPmBC9AlSoGRUl9MZlc2+0TT5NNEAZwq
+	rPxTrFnaNGpH51JUlmZIGsIc4se4H/o=
+Date: Thu, 12 Mar 2026 21:39:03 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <abBlpGKO842B3yl9@google.com>
+Subject: Re: [PATCH bpf-next v3 3/6] bpf: Disallow !kprobe_write_ctx progs
+ tail-calling kprobe_write_ctx progs
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Shuah Khan <shuah@kernel.org>, Feng Yang <yangfeng@kylinos.cn>,
+ Menglong Dong <menglong8.dong@gmail.com>,
+ Puranjay Mohan <puranjay@kernel.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>, Pu Lehui <pulehui@huawei.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ netdev@vger.kernel.org, kernel-patches-bot@fb.com
+References: <20260303150639.85007-1-leon.hwang@linux.dev>
+ <20260303150639.85007-4-leon.hwang@linux.dev> <abHwii5stH93Vz5E@krava>
+ <931b490b-ab29-44fc-b888-8ac1ee8d8ccc@linux.dev> <abKZfhWs9Gojuvip@krava>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <abKZfhWs9Gojuvip@krava>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Mar 11, 2026 at 02:40:36AM +0800, Kuan-Wei Chiu wrote:
+On 2026/3/12 18:46, Jiri Olsa wrote:
+> On Thu, Mar 12, 2026 at 10:24:24AM +0800, Leon Hwang wrote:
+>> On 12/3/26 06:45, Jiri Olsa wrote:
+[...]
+>>
+>> Actually, without this patch, when "bpf_fentry_test1" runs, the arg "a"
+>> will be updated as 0. Thus, bpf_prog_test_run_tracing() returns -EFAULT
+>> instead of 0.
+>>
+>> bpf_prog_test_run_tracing()
+>> |-->bpf_fentry_test1()
+>>     |-->dummy_kprobe()
+>>         |-->kprobe() /* via tail call */
+>>             |-->regs->di = 0;
+>>     return 1; /* instead of 2 */
+>> return -EFAULT;
+>>
+>> Yep, the commit log is not clear to describe this abuse problem. Will
+>> update it.
+> 
+> ah right :-\ ok, I think we need to do the suggested one way check and
+> that should prevent kprobes having writeable ctx
+> 
 
-> IMHO, the necessity of IS_ERR_OR_NULL() often highlights a confusing or
-> flawed API design. It usually implies that the caller is unsure whether
-> a failure results in an error pointer or a NULL pointer. 
+Yeah, will apply strict both-ways check. See
+https://lore.kernel.org/bpf/8a3c7f14-b3d1-4208-acbd-76e5db6c5320@linux.dev/.
 
-+1
+Thanks,
+Leon
 
-IS_ERR_OR_NULL() should always be looked on with suspicion. Very
-little should be returning some tri-state 'ERR' 'NULL' 'SUCCESS'
-pointer. What does the middle condition even mean? IS_ERR_OR_NULL()
-implies ERR and NULL are semanticly the same, so fix the things to
-always use ERR.
-
-If you want to improve things work to get rid of the NULL checks this
-script identifies. Remove ERR or NULL because only one can ever
-happen, or fix the source to consistently return ERR.
-
-Jason
