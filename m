@@ -1,119 +1,144 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9351238D54
-	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 08:36:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AF1F38AC84;
+	Thu, 12 Mar 2026 08:54:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773304590; cv=none; b=EivqcOQsNs5UccW6T3U2UpMoE2mou3Ut/mNuBLLNh4+jBtqCfwdWLH1x4lgqJ26lTYpa+WxNV77TYlMv77f4lJ82fTuLPVuobSIPrxc1xgLDU/gr7iVo8Ec9PEFSiSy0xyz5D30M6aJOLerNrM3snXjxsBsoHWgdK6/zA5rQLrc=
+	t=1773305663; cv=none; b=VqjOCefkfkd357irls5/U+pvjR86jcTx0JBXCG6s+fXtmlTQypdwOtN5v2d7C8dCt2Jl0rI1ihyo3DBibPPKMkdXcuId7FHqDIy5XSjqU+vOguYVXBGfZPUOoeKGH77/G06WbDvbEUMfAtc09k1NMngXogfV5eh7ETO+VGmhXnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773304590; c=relaxed/simple;
-	bh=nTH+eojhoFFz9HncLBNVY0cEivOENhvAwAr6MGbzqKc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ceba0K4EiEpP9q31No0Md4YkB4v683t9qpH20CvZCmo28vlkclpKHhVITuxsEPPLQ7WvqLfYScYX9cvPBI/BG05wMsKRajJYa6t/7OBOM9pVETizMDTK8oGWrMbFJ1NcqhSZMQ2V6yiS+ifMi8SuzHFfnKY37VXDC/d+4nc8cjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DquNhBjV; arc=none smtp.client-ip=91.218.175.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1773305663; c=relaxed/simple;
+	bh=GlrPT++KQGjeiawQcqTnhhlsX455IV6grrneho6bqhE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gDSDHKmSGZ8AuXUC4GOSBSa9BRVp1Zs4RjpJ9BhApunMaTVFgGOumnyBlP+D/qnIypgIO5izsi1003D188jzyrXvKEllfruwaDj8qCUFQuj453NXfG/BCPofwDkFStahLgiDXut7/V3BZL/jyiGPkdBXBX0S8Gql/wsAEcVahHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=aeYFHgEt; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DquNhBjV"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773304586;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=7o6Ic5MlHNF41ckgEquaw90LYmRX6RnSZUbqSyihAno=;
-	b=DquNhBjV6TnkfTfEtasziI0Ea+1ve8SuniSNu5Q5kmIbZwisPCPNdviBTwiLHQqX+9nr48
-	nG3jWYx7rfhu2eoQs5yRGa4m4SretLqAP9cIIuUQrpHFAA61au4yHKVz5p6RvTiMbQFCzX
-	rUpSA587+LYmExLO1cHjq2m7k7UNlkU=
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="aeYFHgEt"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=IX9QCS5b6Xn8/dE+/kiOOEMjyLxuCn5DnqDHXAakk1Q=; b=aeYFHgEtYTI5faN/d/LqgD2Dp6
+	odc7r897g1zvAU6wvFcuBnivPiYJbIxNehFn3ZKXukEe2Lxlm/YIfB6y71RBd1b1jq/1tcm2ntQmR
+	jikwtnBlvs5XmwbNZx+7HZiA62AWry4n2J4zruKOj7swfs9a6L8E1Z0jirq8Gdfwg7PQ3rCw2Rar/
+	JGdtsGje6JyAXnBsa2hGg8O8vtb6pesAjYqqcwwsQqYlKNp1QYkcRCTzKay133DvUxElIUtY/we0Q
+	FkVmm8WLGj37z1lgPHsrU5chrBFb7nygXNfFR4R3dx3U24Lq9sucIwaAV0lQlE/B3QaJMP/YRmZjX
+	hgjfxbpA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:51292)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1w0bo1-000000007QA-0LuK;
+	Thu, 12 Mar 2026 08:54:09 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.98.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1w0bnx-0000000076N-39Oq;
+	Thu, 12 Mar 2026 08:54:05 +0000
+Date: Thu, 12 Mar 2026 08:54:05 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>,
 	Alexei Starovoitov <ast@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, bpf@vger.kernel.org,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	=?UTF-8?q?Alexis=20Lothor=C3=A9=20=28eBPF=20Foundation=29?= <alexis.lothore@bootlin.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v1] selftests/bpf: Improve tc_tunnel test reliability
-Date: Thu, 12 Mar 2026 16:35:54 +0800
-Message-ID: <20260312083615.31835-1-jiayuan.chen@linux.dev>
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>,
+	Stanislav Fomichev <sdf@fomichev.me>
+Subject: Re: [PATCH net-next 02/15] net: stmmac: helpers for filling
+ tx_q->tx_skbuff_dma
+Message-ID: <abJ_Le1xOP6roesb@shell.armlinux.org.uk>
+References: <abE7LWj04-JNxgS2@shell.armlinux.org.uk>
+ <E1w0GEg-0000000CiSj-2CVA@rmk-PC.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <E1w0GEg-0000000CiSj-2CVA@rmk-PC.armlinux.org.uk>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-From: Jiayuan Chen <jiayuan.chen@shopee.com>
+On Wed, Mar 11, 2026 at 09:52:14AM +0000, Russell King (Oracle) wrote:
+> +static void stmmac_set_tx_dma_entry(struct stmmac_tx_queue *tx_q,
+> +				    unsigned int entry,
+> +				    enum stmmac_txbuf_type type,
+> +				    dma_addr_t addr, size_t len,
+> +				    bool map_as_page)
+> +{
+...
+> +	tx_q->tx_skbuff_dma[entry].buf_type = type;
+...
+> +}
+> +
+> +static void stmmac_set_tx_skb_dma_entry(struct stmmac_tx_queue *tx_q,
+> +					unsigned int entry, dma_addr_t addr,
+> +					size_t len, bool map_as_page)
+> +{
+> +	stmmac_set_tx_dma_entry(tx_q, entry, STMMAC_TXBUF_T_SKB, addr, len,
+> +				map_as_page);
+> +}
 
-A test failure was discovered in BPF CI [1] caused by connection timeout.
-The current test timeout of 500ms is insufficient for CI environments,
-particularly under high load.
+...
 
-While the optimal timeout is unclear, this test was converted from the
-original test_tc_tunnel.sh script. The original script used nc with "-w 1"
-to specify a 1-second timeout [2]. Therefore, this test restores the
-timeout to 1s.
+> @@ -4471,10 +4495,8 @@ static netdev_tx_t stmmac_tso_xmit(struct sk_buff *skb, struct net_device *dev)
+>  	 * this DMA buffer right after the DMA engine completely finishes the
+>  	 * full buffer transmission.
+>  	 */
+> -	tx_q->tx_skbuff_dma[tx_q->cur_tx].buf = des;
+> -	tx_q->tx_skbuff_dma[tx_q->cur_tx].len = skb_headlen(skb);
+> -	tx_q->tx_skbuff_dma[tx_q->cur_tx].map_as_page = false;
+> -	tx_q->tx_skbuff_dma[tx_q->cur_tx].buf_type = STMMAC_TXBUF_T_SKB;
+> +	stmmac_set_tx_skb_dma_entry(tx_q, tx_q->cur_tx, des, skb_headlen(skb),
+> +				    false);
 
-Test:
-./test_progs -a tc_tunnel
- #478/1   tc_tunnel/ipip_none:OK
- #478/2   tc_tunnel/ipip6_none:OK
- #478/3   tc_tunnel/ip6tnl_none:OK
- #478/4   tc_tunnel/sit_none:OK
- #478/5   tc_tunnel/vxlan_eth:OK
- #478/6   tc_tunnel/ip6vxlan_eth:OK
- #478/7   tc_tunnel/gre_none:OK
- #478/8   tc_tunnel/gre_eth:OK
- #478/9   tc_tunnel/gre_mpls:OK
- #478/10  tc_tunnel/ip6gre_none:OK
- #478/11  tc_tunnel/ip6gre_eth:OK
- #478/12  tc_tunnel/ip6gre_mpls:OK
- #478/13  tc_tunnel/udp_none:OK
- #478/14  tc_tunnel/udp_eth:OK
- #478/15  tc_tunnel/udp_mpls:OK
- #478/16  tc_tunnel/ip6udp_none:OK
- #478/17  tc_tunnel/ip6udp_eth:OK
- #478/18  tc_tunnel/ip6udp_mpls:OK
- #478     tc_tunnel:OK
- Summary: 1/18 PASSED, 0 SKIPPED, 0 FAILED
+when nfrags is zero, tx_q->tx_skbuff_dma[tx_q->cur_tx].buf_type is set
+here.
 
-[1] https://github.com/kernel-patches/bpf/actions/runs/22674350732/job/65728072723
-[2] https://lore.kernel.org/all/20251027-tc_tunnel-v3-4-505c12019f9d@bootlin.com/
+>  
+>  	/* Prepare fragments */
+>  	for (i = 0; i < nfrags; i++) {
+> @@ -4489,17 +4511,14 @@ static netdev_tx_t stmmac_tso_xmit(struct sk_buff *skb, struct net_device *dev)
+>  		stmmac_tso_allocator(priv, des, skb_frag_size(frag),
+>  				     (i == nfrags - 1), queue);
+>  
+> -		tx_q->tx_skbuff_dma[tx_q->cur_tx].buf = des;
+> -		tx_q->tx_skbuff_dma[tx_q->cur_tx].len = skb_frag_size(frag);
+> -		tx_q->tx_skbuff_dma[tx_q->cur_tx].map_as_page = true;
+> -		tx_q->tx_skbuff_dma[tx_q->cur_tx].buf_type = STMMAC_TXBUF_T_SKB;
+> +		stmmac_set_tx_skb_dma_entry(tx_q, tx_q->cur_tx, des,
+> +					    skb_frag_size(frag), true);
+>  	}
 
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>
-Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
----
- tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+... and tx_q->cur_tx is not incremented because the loop is not
+executed.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c b/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
-index 7fc4d7dd70eff..23b5c522ea9fa 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
-@@ -168,7 +168,7 @@ static int check_server_rx_data(struct subtest_cfg *cfg,
- 
- static struct connection *connect_client_to_server(struct subtest_cfg *cfg)
- {
--	struct network_helper_opts opts = {.timeout_ms = 500};
-+	struct network_helper_opts opts = {.timeout_ms = 1000};
- 	int family = cfg->ipproto == 6 ? AF_INET6 : AF_INET;
- 	struct connection *conn = NULL;
- 	int client_fd, server_fd;
+>  
+> -	tx_q->tx_skbuff_dma[tx_q->cur_tx].last_segment = true;
+> +	stmmac_set_tx_dma_last_segment(tx_q, tx_q->cur_tx);
+>  
+>  	/* Only the last descriptor gets to point to the skb. */
+>  	tx_q->tx_skbuff[tx_q->cur_tx] = skb;
+> -	tx_q->tx_skbuff_dma[tx_q->cur_tx].buf_type = STMMAC_TXBUF_T_SKB;
+
+Thus this assignment of tx_q->tx_skbuff_dma[tx_q->cur_tx].buf_type is
+redundant. As the loop doesn't execute any code in the nfrags=0 case,
+there is no call to stmmac_tso_allocator(), and thus tx_q->cur_tx will
+be the same as when the previous stmmac_set_tx_skb_dma_entry() was
+called.
+
+Therefore, the AI review is incorrect.
+
 -- 
-2.43.0
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
