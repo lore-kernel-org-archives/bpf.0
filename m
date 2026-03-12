@@ -1,143 +1,174 @@
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DF52391855
-	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 10:53:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773312811; cv=pass; b=Gk/TO8pRKpZ2IGepboexRM1BM4+rEWNSS/HQyFRY+0DUknlO29XiMXxyQ4EBi7rckAuJ+1FvO6IhCqJWdWvYmo5EEbI7SkmDq1TbFe1UbKoFd3OqWbhV0pTU28VE8z11tbnQmSN8ThX9PnM8cAay/BqvsdT5sdYteaYPG48SHgM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773312811; c=relaxed/simple;
-	bh=+NJcR0MlTdrzYTaZmZD5S47nVuIArtoxlhCqn/AuTOU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cl8ABz0jDZIFVsAzW8OVzqxUlavlZCuZk+rmkdEFWOYatzCjZ2B72ecma9TJgbvF2jMH306KF4SN9PK/VBJdH0FjovRskE0iNj3NhnLH/gSGYEqS0pkehLcLuCHd4RsjiIJVm1OzRmtl3F1SB0644RT5SgMMgZhjUp88as3rxYA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TeeLF6Il; arc=pass smtp.client-ip=209.85.160.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB48423A9B3
+	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 11:03:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773313395; cv=none; b=PVQQP1iZN0ES2mV060MBVjoMPirENcBP9LbF+uXUu39utfImbOA+nDX+5fELMjJW2vNQ1NtWRZAezS555EomEhmHP1JGCoK5pHPAxdX14hIEiDzO4fltcV/Q5GS8rfKYKhkCx/dR+Ma2vIxKRYlS7un11g+Rwnojz3mFkC5vOpM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773313395; c=relaxed/simple;
+	bh=UUcVOa1ml4IT+so9c26zVBxSFJGrrX8ZlFFVzqIzMhI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XP8Edsz4dYFdMefDG4TVhDs0OVijooNPw9XOuuqdZJX/h3Qq8Obkj4rWJAB5FNv6v039NEaOo0CC12FLk/k6uvdGGz9aoCiI7JxV//0IDUvRWoMPxgftEJa41TETbFOJPzjj2IqLH9mEb2XbBlOYiykBMsR+FZarh9SNY8C3OPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MQPZrlpj; arc=none smtp.client-ip=95.215.58.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TeeLF6Il"
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-509101189f4so7598311cf.1
-        for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 03:53:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773312809; cv=none;
-        d=google.com; s=arc-20240605;
-        b=jvTwRVFTe5e812YddnewQuNNu/pQ2Hv82GFnQadZBei60IDPQFsfXno/oSniY8pGyJ
-         NuIVBuGO7L5eZIit0zvMeljmuRty+urE0rmduXxbhgTC6nIM9YLFnk5qrXnOGmLN/GlX
-         oKJ7LpU0/lqTJx7CvW6qR9l6g6h1F+XjtMv4xjm6uBCjMkTUJhC1eZiRLz5h/k3b/84R
-         uaSXXRc/9YqcAs8rS3LQE5Zn74TkXtX8TXG90o3r8ambp/nu9l+QO7NTD1JQ82C1bPil
-         SGB+2AiXcWkmPNF9G+7aoav5NBIj7I+33lG2UrErx6leIyVNzIrCbaDlQV0bepV0Qwni
-         nIrQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=/I81bSz93u926pibWsVVMFGC2cc5DCiOOxNJCuPHFmg=;
-        fh=FoVHJHt6Eila2ldZX8/m2v+mmTUcZq5oKD2Xu0YgOy0=;
-        b=CjedP0bGKDjRYw7j2MRSFjQM6cB0ql1PsI0wnbmXPQrmjFjzOW3IwzRaXOlmv1YJx8
-         J91C5vXL4ZDsm1bi37edI3k4okmcfOM6vQ3MYkFZ30kZvJzaxfg2jLVTuDsqB1fk3LEr
-         /JpxPMvClD/2kyMr81JCLfMMhsQZbaGDiS/u3dA+6Itf2CDObLG6jz1SqThyuLeWklZW
-         b85EZ4pBaszKtmP0trkAwVEj1ea4x3s0k+w/XP528ccpkK6sMf0NvzJ7jnBYe8CtXdtJ
-         Ji11a7gpKTrTdMo+0F3O/NNu54gz99itoZqNiqxak0zH94KSrm3xrECRxb0RcdT726L6
-         SfqQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773312809; x=1773917609; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/I81bSz93u926pibWsVVMFGC2cc5DCiOOxNJCuPHFmg=;
-        b=TeeLF6IljbQ6+U+GWvtrl2IxYnkpM4HTc0gzXZ7zt0s9FqhP6HuGUPTg031mfMYBA3
-         wJhCIfcwvk7DjMJLQLNOEKrmVGEVX/moxEFawwrhDEaQ9GjnpRiFY6/E4tHC2OUQg5i4
-         py9+yhKM2AxHf/0Bc0zSXERho3M5J8JTV9unmXKorkHWoyrCiTDnNtCOIna39vEd1hIM
-         Q3UvOkTahqftSbSzUV0UbR3LeAqS8cl1kb3izVq9oc5nHSABKvhyKvlTcIykgTar1hTw
-         2cokQlpqmKLKTz2n15HsE3Spm7XFOGu16HccEFm3lEz60Ci0m3NPaXPWCHDPdbibTQAR
-         uzjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773312809; x=1773917609;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=/I81bSz93u926pibWsVVMFGC2cc5DCiOOxNJCuPHFmg=;
-        b=W5idKFF5YzI6SQlQb+UA8n0oJ7002XKgyC1bTNJyY+rOBpcluclpCfZogCw5VJZ0rS
-         NGDgOKcUS5/WSOpu/2wus+fRLmq4W5E4i+oCKjPd4nsRmetafeZ8qGwEm7ce6KktcrXV
-         hiqkDHlc1RaOOS9mI3DZlefuKhOOOGFG99De5/j/qibXOjrBn/S38OMu7Ycy6EYKtWJ6
-         UX/sVlAE3Z2xbu3Yf9dytkot/bOKrfreCS5Qs1VrSkKA5nH/VlYSZoRr2VLlLr1mmdRk
-         CdnChqMaVCcIsseQQEjjqCSQHQwxIVa6KOVtyJxdExzLjyBUQIWdAadgU+/C7A4F8ulL
-         t7Pw==
-X-Gm-Message-State: AOJu0Yw2UiWEQy8EHYkXWUU0r5nPDrgyqFmW9ynSlnDuGQcm33DESomm
-	f28tic+EUy0WkzAvboAXKpx+3CZpetRtZfmu5BxolM/Nb7BXe46K4sOQUFI4RvENiqAdPzpiDZs
-	MMBXBosDd9llgU6ByYtq/SjruocdUVRI=
-X-Gm-Gg: ATEYQzxGDwlUlVOLhu1myvaoLVtIIH+2zzAvdztabu5RIlJCYr0tJNrmavQ6isHSbum
-	qbnWKHwfj8i7Mk+skQbcOY60hh6jAQjEL29YjdEOsk8itgOU340Zn6tNIW00i1fbwvj7gEcL2XG
-	KNdTFvQQ39bCf1k6ZxTP0SG46qvnW8eposZksh32bKZ/vewGGbYH3Kv7EohN8LsYcgQJBGIGyjq
-	D/fW8IMR6PqOEVXYMqDLU/LqjLJ0UMTG9vcrXvz/SO2UnVpE+m0tmUB25dlLk3JJAjGRY/rJZKc
-	isQFvvOU
-X-Received: by 2002:a05:622a:3c8:b0:509:31bd:3dec with SMTP id
- d75a77b69052e-5093a1bb83cmr69101951cf.70.1773312809078; Thu, 12 Mar 2026
- 03:53:29 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MQPZrlpj"
+Message-ID: <c72ba406-fc16-4ce0-b75f-3105b64caef6@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773313381;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oPLcfrBtEHAjQV2Y8IMtDKf+S0m+yy6x4yuZ7BKmpaY=;
+	b=MQPZrlpjRE7zwrBemW4uWnbZiEPqn9io2xefqJYQGvMgGYmiDOrmK1+Xbv/A0BYUWeBeJg
+	2oUnloLGfTplCIO/4S8qdKkoKXQypa6nmFfabbWmt9jwZtATSD17Qzzj7eiKY3m72aajVF
+	CbZzhwX+inukupwFR9KLISoKfqPJEhk=
+Date: Thu, 12 Mar 2026 19:02:36 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CA+WLDByd8qeUpVBijKooyZkBRB1iwGT8fjUEUKXgQEFAZ_pzHA@mail.gmail.com>
- <f7be55c8-be47-490f-8afd-65cfaa95fbfe@kernel.org>
-In-Reply-To: <f7be55c8-be47-490f-8afd-65cfaa95fbfe@kernel.org>
-From: Farbod Shahinfar <fshahinfar1@gmail.com>
-Date: Thu, 12 Mar 2026 11:53:18 +0100
-X-Gm-Features: AaiRm514giMYNb_7U1MacP7NPokCpoQiiKZVprFXSvGdVvdmYT-s3PP5hVf1x3o
-Message-ID: <CA+WLDBzKND2EF-f9GDpgEvS2VPvXk4A2=qUgZxvaFqP0zq1E5w@mail.gmail.com>
-Subject: Re: bpftool generated jited has unpreventable jump addresses
-To: Quentin Monnet <qmo@kernel.org>
-Cc: bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH net v5 1/2] bonding: fix null-ptr-deref in
+ bond_rr_gen_slave_id()
+To: Paolo Abeni <pabeni@redhat.com>, Nikolay Aleksandrov
+ <razor@blackwall.org>, Eric Dumazet <edumazet@google.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: netdev@vger.kernel.org, jiayuan.chen@shopee.com,
+ syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
+ Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Clark Williams <clrkwllms@kernel.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Jussi Maki <joamaki@gmail.com>,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev
+References: <20260309030702.128520-1-jiayuan.chen@linux.dev>
+ <20260309030702.128520-2-jiayuan.chen@linux.dev> <abAFRbJNinhN3O5v@penguin>
+ <CANn89i+5yOzdiBTWm4ekc0UvMxQp=mhXbz0rU5WnfxEu3NrAhg@mail.gmail.com>
+ <CANn89iLOyWzWW7w262Vsy2MOMVDXA0+UZGpEbsdLwe6e75mhKQ@mail.gmail.com>
+ <abARG4sHFdUNqcRV@penguin> <8d746046-eed9-4d82-a064-c20b6a131bdc@redhat.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <8d746046-eed9-4d82-a064-c20b6a131bdc@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Mar 9, 2026 at 6:25=E2=80=AFPM Quentin Monnet <qmo@kernel.org> wrot=
-e:
->
-> 2026-03-05 14:54 UTC+0100 ~ Farbod Shahinfar <fshahinfar1@gmail.com>
-> > Hi,
-> >
-> > I want to prepare a CFG for a jited eBPF program. The output of
-> > `bpftool prog dump jited id xx` reports jumps with kernel memory
-> > address (e.g., `ja      0xffffffffc013ad2a`) and it seems impossible
-> > to infer where the destination of the jump is. I thought maybe by
-> > knowing the base address of the program, I can manually convert jump
-> > destinations to relative addresses, but the base address is not known
-> > by bpftool (As far as I understood looking at the code).
->
->
-> Hi, if I remember correctly you may be able to get the base address for
-> the image from /proc/kallsyms, depending on your privileges and your
-> sysctl configuration, see:
->
-> https://docs.kernel.org/admin-guide/sysctl/net.html#bpf-jit-kallsyms
->
->
-> > My questions are:
-> > 1. Is this a real problem or am I missing something (I might be
-> > because the bpftool already reports CFG for xlated version)
->
->
-> As far as I'm aware, there hasn't been much interest so far in
-> generating the CFG for the JITed program, knowing that it's already
-> available for xlated instructions indeed.
->
->
-> > 2. If it is a limitation, how do you suggest to address the problem
-> > (if it is of interest to others of course). My initial guess is to
-> > return the load address of the program in the `bpf_prog_info` when
-> > doing `bpf_prog_get_info_by_fd`
->
->
-> If the sysctl knob is turned off, I'm not sure allowing the extraction
-> of image addresses through bpftool is a good idea.
->
-> Quentin
 
-Using the address in `/proc/kallsyms` things work. That solves my issue.
-Thanks a lot.
+On 3/12/26 6:36 PM, Paolo Abeni wrote:
+> On 3/10/26 1:39 PM, Nikolay Aleksandrov wrote:
+>> On Tue, Mar 10, 2026 at 01:07:15PM +0100, Eric Dumazet wrote:
+>>> On Tue, Mar 10, 2026 at 1:00 PM Eric Dumazet <edumazet@google.com> wrote:
+>>>> On Tue, Mar 10, 2026 at 12:49 PM Nikolay Aleksandrov
+>>>> <razor@blackwall.org> wrote:
+>>>>> On Mon, Mar 09, 2026 at 11:06:58AM +0800, Jiayuan Chen wrote:
+>>>>>> From: Jiayuan Chen <jiayuan.chen@shopee.com>
+>>>>>>
+>>>>>> bond_rr_gen_slave_id() dereferences bond->rr_tx_counter without a NULL
+>>>>>> check. rr_tx_counter is a per-CPU counter only allocated in bond_open()
+>>>>>> when the bond mode is round-robin. If the bond device was never brought
+>>>>>> up, rr_tx_counter remains NULL, causing a null-ptr-deref.
+>>>>>>
+>>>>>> The XDP redirect path can reach this code even when the bond is not up:
+>>>>>> bpf_master_redirect_enabled_key is a global static key, so when any bond
+>>>>>> device has native XDP attached, the XDP_TX -> xdp_master_redirect()
+>>>>>> interception is enabled for all bond slaves system-wide. This allows the
+>>>>>> path xdp_master_redirect() -> bond_xdp_get_xmit_slave() ->
+>>>>>> bond_xdp_xmit_roundrobin_slave_get() -> bond_rr_gen_slave_id() to be
+>>>>>> reached on a bond that was never opened.
+>>>>>>
+>>>>>> Fix this by adding a NULL check with unlikely() in bond_rr_gen_slave_id()
+>>>>>> before dereferencing rr_tx_counter. When rr_tx_counter is NULL (bond was
+>>>>>> never opened), fall back to get_random_u32() for slave selection. The
+>>>>>> allocation in bond_open() is kept, with WRITE_ONCE() added to safely
+>>>>>> publish the pointer to the XDP read side. A plain read suffices for the
+>>>>>> !bond->rr_tx_counter guard in bond_open() itself, as bond_open() runs
+>>>>>> under RTNL lock and is the only writer of rr_tx_counter.
+>>>>>>
+>>>>>> Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to slave device")
+>>>>>> Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com
+>>>>>> Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.00cc.GAE@google.com/T/
+>>>>>> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
+>>>>>> ---
+>>>>>>   drivers/net/bonding/bond_main.c | 9 +++++++--
+>>>>>>   1 file changed, 7 insertions(+), 2 deletions(-)
+>>>>>>
+>>>>> This is Jay's patch + the unlikely change, looks good to me.
+>>>>> Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
+>>>> Orthogonal to this patch  :
+>>>>
+>>>>   get_random_u32() typical cost is around 10 to 20 ns, I really wonder
+>>>> if this makes sense
+>>>> for the packets_per_slave == 0 or 1 case to haves this kind of
+>>>> randomness in the first place.
+>>>>
+>>>> Perhaps we could use a
+>>>>
+>>>> static DEFINE_PER_CPU(u32, rr_tx_counter)
+>>>>
+>>>> And :
+>>>>   slave_id = this_cpu_inc_return(rr_tx_counter);
+>>> I also have mixed feelings about this patch.
+>>>
+>>> We probably should detect that the device is not ready before hitting
+>>> something deeper in the stack.
+>>>
+>>> Sure, a NULL deref is avoided, bu what happens next ?
+>>>
+>>> We send a packet while the device is not UP, I am pretty sure this
+>>> violates at least some RCU rules in device dismantling.
+>> IIRC when the redirect continues, the packet should get dropped if the device is
+>> not up (checks at a few places), but that's outside of bond's jurisdiction and
+>> after the slave id is needed in xdp master redirect's path unfortunately.
+>> I'm not sure it can reach much further, it just has the master dev's slave id
+>> generation in its path.
+>>
+>> In any case we shouldn't crash in the slave id generation in the bonding,
+>> that ndo's only job is to return a slave id.
+> I'm sorry for the back and forth, but I share Eric's concern. I think
+> the approach suggested by Daniel:
+>
+> https://lore.kernel.org/netdev/4d15be93-b497-4499-996d-9f3a67a2abc6@iogearbox.net/
+>
+> or the initial patch form:
+>
+> https://lore.kernel.org/netdev/20260224112545.37888-1-jiayuan.chen@linux.dev/T/#m7c67bb12f85bc88d583788fb6e41113c46208ae7
+>
+> would be better. To respond to old concerns raised there: the check is
+> IMHO bond-specific, as control moves from the lower interface to the
+> upper bonding device, and the code is under an RCU critical section, the
+> device can't go away before the xmit is completed.
+>
+> /P
 
-Sincerely,
-Farbod
+
+Looking at this issue holistically:
+
+
+1. The XDP layer fix addresses the root cause of the current issue
+
+2. Adding a defensive null check in bond_rr_gen_slave_id() protects
+    against buggy callers - whether from XDP or future code paths. This
+    aligns with the defense-in-depth principle that Nikolay and Sebastian
+    highlighted.
+
+Could we include both in v1? This way, the bond layer is robust regardless
+
+of who calls it, preventing similar crashes from other potential code paths.
+
+
+Thanks
+
