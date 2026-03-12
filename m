@@ -1,290 +1,276 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA4753CC9F1
-	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 17:13:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773335630; cv=none; b=Dxl2eF9CpiCdGsGSYBEPYR6ssUsSTKUa4EaM319tO/8V63IpJ5iD5H+2qN4Fb8mpqJ1SOVAvMUnYtdZzsnSzRLOVUNbONbheyfSDy/AB+Hh6yhvLZAREXl2VCllP9dayQkIsv4whqILHcE6UzdtY/NJx5qk+MQkLcmFFAs2u+8E=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773335630; c=relaxed/simple;
-	bh=Lc7YJEuAUVOqWE81U0HI/1coZNXmZzfISLKE36iptAM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=GHelNGYE0ggf1pJV5FbnKEN0vMNk9lBL2iKqvWx5qh2b5SBxpgD3f+MWrsP3jSn878tzJiuL8+JxssoMJc8XB6oIH9oleYCQP+iNxJE+LpbSHeq1GqwMUPkHpnphZ9AMvecaTepuLvsjvB9ywJofmbCfGT+3kle/pODxzac/GWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G0cZbq1p; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8033F23B4
+	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 17:13:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773335633; cv=pass; b=eV9rvEYPZhPizC+axsdDumTs+fbRjTb1CGT9sIKXrUzp9TBXSduw9kkeapaEDmOc2+VPxlIdZ3t4rmE1dlJEemhxEdUpcVLtNe4r0qlgXcelMsMF4MA8wphZnzPk7fJAO8NEDBL75Ay8L4qQCYlBGxJAjY58vxdQ0BUOIwx6qNQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773335633; c=relaxed/simple;
+	bh=Qarh+60tr9Vhypw9EaR6FndlagE17HBNIP90zwt0hAc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=agMcKJT1yMNXycI1rY5Kb5b02Bq1gODqNL84fNkXugFxzrXYWsohMpsHpRGV4yghgB1GDPy/hXkbSG0VTqe8bKfjH43KicwzzCf23IaCJRadeLEuR8GU6GyFQ95oWU5t9EXe+K437kE3lRW94Cvo6Fpx8XMfkWV6uwSW0p3CcnM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=g1pOUXo1; arc=pass smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G0cZbq1p"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-439c5b40f60so1157045f8f.0
-        for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 10:13:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="g1pOUXo1"
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b9358bc9c50so167069666b.1
+        for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 10:13:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773335628; cv=none;
+        d=google.com; s=arc-20240605;
+        b=fidweMwcrEBmDuk8KCJ84G9s5ZVnU8b4QVWYOCQao88UM2/fke91ubptSsKOQ9jWHs
+         RguWxMMjWwdKK3B9bZK27saDSTkiaInWJHEN+KE9mvNMo0TdHMD9wZLk4W0b2DVpHQCu
+         PNKgWJwW7owBMRCLlydsH3sa2S3UnPtT59VtIspjDioadXc/zwgzdwndvQGLioLbZVaU
+         XYJsUVIzsOQHU8k38KW1r1xbVZY11kTvaZ7SXqfdobAeiZzCDGpsHoqD9oV2HR1sK78h
+         eyahGrajptDsiB6Mr2KrsfM3EddLbtWDo6iulTEDsMG78kxUA6MVY+YLvRoo5+kIh82v
+         jZPg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Q3Us2s0ytc91Z8HkFiJJSVXFlWx4veaTgJEHu++sdXI=;
+        fh=lB/GQ2Sk0V/va76Zlp/g6Sp7aQt/033fMCzylBCMoYw=;
+        b=Iw+2NHakgDERw+oS8FjdAg5V2Vb49mPsC9FpuFHGZsQsgZjAcg/0Cn+RHNfJxmqL6I
+         K2uV0AV664psas7UHrBwJs1jjtK76j1ITeRSkNgMqn5DrvELYv/CzWmjufcxxdSQnt96
+         UN7soOKFiBueN4hhExGZRnY4Pd04ZkXLpyeLzzFtVUsz2GX+4d5GBHLqGsH7NVxpvwTW
+         CzY45u+Q793mRexW1SSBQJaxUAlbqZ2MapztBnfjrtSZqe0WWQb8bj71Ttz2yXyENvTF
+         fYEQSy6X048UGiyaPNi0GrYlN+x8Ihr9hRphc9RI5Z7mRh2sLbL03Ce3/UyQp1OD9ZZ2
+         3NAQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773335626; x=1773940426; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=epKbyhVoePGh2R5wFHOngUtJeBBZFqY3FTPNJS7DyTk=;
-        b=G0cZbq1pvxukB8iwgypFZTMGhS954asRbzsoDuZV8exo6ocEm6ig5OInyBqGDfDF+x
-         aUUhzhMk7Q7XApR4JzDAIXjMYb7BjvYIvyOA5GknyIAt9t4amoinOlfnAL22nCM7SdHu
-         gxdd+OiMoE8zmExvu6Y0DRgIW/7BvOrlij85HaxVTsBrGY5DDJVURS4+pSEM9Cp0F76w
-         psfaadK2m0v7AK4CBbHZJJIXsttEZXsCpj0yxo1x4EHURsi7HEdNEPo903GomP7SM9qk
-         RvJN8nV8s/rbUOIwSFV9xqiMPC55KvQKZq4qHawHRxXnEhNwu0+N9Pmn3qOKflb1QCrS
-         HlJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773335626; x=1773940426;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1773335628; x=1773940428; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=epKbyhVoePGh2R5wFHOngUtJeBBZFqY3FTPNJS7DyTk=;
-        b=GJ8ly3FHZV6I2vdogDHG5ErLpWy3HbvmTs7ggRWBwxi5pkkz21eGjYOwby1dzO64dv
-         iQ3qqO3LQ6iLukCxg6n33fD3X3khkadFTkuZrO4Frry4wPThuLWSguMvILT5jzluKhe5
-         EMg668brRFyyTtGSQqzemr/OvxBqyTzsr3icF1NLuG4VZxDiWxf76yjolaJOIeHY61HV
-         Ms2KNSTOrpFAlxAmd8GDTwk8FTZ6+2AYJnz/IGeE08EhPcz+5gLQG2cuM+ZseaFP1N5d
-         vBxwj3Jf3XWjR6JqkktzPZR2ELEpfmYyGA6+0MmhOW9wmUG1EKPKevn/qPTfISTya50W
-         8pbw==
-X-Gm-Message-State: AOJu0YxyIzvk254G0TQ194/GE3pRmoonFr2fAMUnJMN3J1/fCoQgyF3S
-	FXdSYS4TCsSbQuxsBfe0CaPHrNKjgLwqyGUJmKy8pU+j9F5atkf75KDQ44adG4zs
-X-Gm-Gg: ATEYQzwgnh2n2RwACH3yd8aG5WlihVN2QDKbjxFCJhFcFv+ia2qX1U2kpR7zBzG8GJ9
-	3E2oishBXRBrFZTfxTFxf6tmv6QEqXF9EUL7DbVnTeW0XjT9+1oTeja1cBGc99ukERwT5/iZixt
-	QCVs49ZPhEs7OYLXlL/uiOhggpyqcmNbhClmJ/+yoYrQVO7mD4aSG52XUN20/8RMwyCF8owOX/I
-	lwi0O7wWYynmPN+rIz5P9K3/B7fUNNoowMI9eB5/h7ozhOkB7KOh86XRlDBLXDE/bBkLf5DFlw2
-	byy/2jCyomkykFhry9580uXyzl9feZgsGynz9977fbMCD0rFeiVkc4vSffvRh+3aO3i9LZgbbQ3
-	0O2WBP0GVEbqSQFVpvGdESGmJE7BN+x9Hp6KwJlBv6QbuIpORgdNEKW91W+zPc/e23RN6S/yMKj
-	/f3WMtv6ULDJcjJMJxdQ==
-X-Received: by 2002:a5d:5f82:0:b0:439:bdba:56c9 with SMTP id ffacd0b85a97d-43a04d7c255mr920825f8f.2.1773335625293;
-        Thu, 12 Mar 2026 10:13:45 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:4b::])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439fe20c0b4sm11107724f8f.25.2026.03.12.10.13.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2026 10:13:44 -0700 (PDT)
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Thu, 12 Mar 2026 10:13:37 -0700
-Subject: [PATCH bpf-next] bpftool: Allow explicitly skip llvm, libbfd and
- libcrypto dependencies
+        bh=Q3Us2s0ytc91Z8HkFiJJSVXFlWx4veaTgJEHu++sdXI=;
+        b=g1pOUXo1yEw3tcztV5PQwIUH9r6cnDWFyoK/aC8JfPNMQy3+UOqEl1Aus7NL5Dt5mL
+         gpiUzDbuF33wDg014yhrGIOElGAkJ6iTsF++R+18WlzjCDgBFZ91G69mB1jkwzr6thZe
+         7PrTTXIOZRk2HFyl3yKZdudMp6g0jyhYdoS/bzYbK3ez/KtIAcZCPQ1GitNQr4iHrRKy
+         +VOAHExXDllB7c4yihXidC70frGFR0drYirJuaJDlzoPvz1ig8tTVBbhGaX4StI+Toi8
+         ct/4KkGWylV6tK4R+Ot/oGZpAsA0Or+LyHlw1MJpuwySMFr9hql8o8idZ6l7QtX68bOt
+         BruQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773335628; x=1773940428;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Q3Us2s0ytc91Z8HkFiJJSVXFlWx4veaTgJEHu++sdXI=;
+        b=PPr/7yHKv3JDFM5bhmBAyPuPZY8zVmLAQHi1Z+cpMx7XrY3eH/Yz9CdXbYcZ305rHY
+         eOVpvgijRdnzENLqghvE0yQiCNtJ1VEKYrxbOW1VN+9zdLyokI6kUr9gFfz9gIM6ZZK0
+         EvMlUzCIJaMXacCWyJ+V3HzHjn2BvdR783NtCsjoVJdgkaJRvGhWjt7wtVmpWT3si/WN
+         FwbWm8tSyCnP5S48Ee4AhwCt6jn61wHPnY3n3UQKh0t25m+VSf0sZQvK+5lq1IDDDOZD
+         I0eV9Rkutksz+VR78+BLh9lfEuMTmsrr+4MALRR7dManXGEym3I9WGj+gsU9Ml17nnBo
+         TcNg==
+X-Forwarded-Encrypted: i=1; AJvYcCWrDlxijkIX5ZeD6cEn9S9fkGzQADzvzpfqLfqZ8s/nlhWsaEvip4DP2pKG+bJHbCLiLnw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOGd9QE8V6rx6lV1iy0HSkQzwHxbFeHuEq/TakR1VlpolM2b6G
+	wk6NOD76Pgcq/zrA29+dC9Z1BOogqh/Zt9avPpjziwy/Hq6BgM7sDtZsBHUj0gI25tsA2OZ4WRY
+	GyVqYl+j6sxkKMYAi/N8dfASCfZDVDfF1DtC8thZr
+X-Gm-Gg: ATEYQzyRHah/goocrm5RlwpUvUgEdQ8i3QvbsM/mliLuC5G9JI+InUj5itqZntfloNN
+	R9lGHFo3VfyfKlVNOxupvjgZ1aEd49BPyApIX44Ilb9xGnU8EHXH+ndlm/4EfNbn/4lfD7Knges
+	6RPCioJMZDehkLy1gCN+Ft3Gc0sY257LRLTvcUcDjp4dAchktt0t7jjZMd374F3kqLP2l8H39D0
+	E8ykJH0O5m+ghEC8FYEtjL1hfO3sm1HJC8VtgWj2dJX/MCqtBDMVmkArORf/bUU8w1+Jm4612Pj
+	chR6F7cYwsDEIpxnrW9nILJtabxrcUor9Ou7eQ==
+X-Received: by 2002:a17:906:68d:b0:b96:ff4f:11ec with SMTP id
+ a640c23a62f3a-b9765376406mr10240466b.44.1773335627950; Thu, 12 Mar 2026
+ 10:13:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260312-b4-bpftool_build-v1-1-1aadfecaf534@meta.com>
-X-B4-Tracking: v=1; b=H4sIAEH0smkC/x2MWwqAMAzAriL9tqCbD/AqIuJspwXZZFMRxLs7/
- AwkeSByEI7QZQ8EviSKdwnKPIN5ndzCKJQYVKGaQpcKTYVmt4f322hO2Qgtt6RbqnVtCFK2B7Z
- y/8sekoqO7wOG9/0AjiJnBGwAAAA=
-To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
- daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
- eddyz87@gmail.com
-Cc: Mykyta Yatsenko <yatsenko@meta.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773335623; l=7217;
- i=yatsenko@meta.com; s=20260220; h=from:subject:message-id;
- bh=nBMIp2HcB7TzupcldF4UbeZvDrYZuRebEcDKDBJ8xGs=;
- b=oIwYu9TiInG+DH1Dv/xolBrBSVr1j4aY+8rzerc3LxDmgk0n2Q4/MdPYZ/nTmd9EsQJ5vHfJ0
- CXRJZP1931/CnSS910n18y3npGIw7sX00uigLxyj5E2GSnuaLVxL4by
-X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
- pk=QUfct6THKRRhwIGGKcldE2w7zXPci1gMPcF7qij1gwA=
+References: <20260225210820.177674-1-wusamuel@google.com> <CAG2Kctp1q1QtB1-JT2cgBsYu-WceV1YdSM1sSwNm8pyGtZQ6TA@mail.gmail.com>
+ <CAP01T776Ni9R6CT_phx5wNDUoN13Tztz3DD5ZgKWedNLx7Nb0g@mail.gmail.com>
+ <CAP01T77EZDLhjwtZBSt+DXLG-ftHfows-p_6FgXZQDQGowcDtw@mail.gmail.com>
+ <CAG2KctrkGjk3SMQ=8-rrYnKCTUseSmBV+kg+=OyT9M2mBT1bwg@mail.gmail.com> <CAP01T77YFR9227YpTZin-i7w-hNLWMM9ANuzmiAzLwzPGJ=gEw@mail.gmail.com>
+In-Reply-To: <CAP01T77YFR9227YpTZin-i7w-hNLWMM9ANuzmiAzLwzPGJ=gEw@mail.gmail.com>
+From: Samuel Wu <wusamuel@google.com>
+Date: Thu, 12 Mar 2026 10:13:36 -0700
+X-Gm-Features: AaiRm51B_dIIfyACyk-OAOec3hanGlP08SBv_HehG83WVK_MCf0gXzElUeZ7ZiY
+Message-ID: <CAG2KctqiMYUChu7stigNj1UKmWgPyWAt6T1G9imu1QqnQ3NyGQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 0/2] Add wakeup_source iterators
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: "Paul E . McKenney" <paulmck@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, kernel-team@android.com, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Mykyta Yatsenko <yatsenko@meta.com>
+On Wed, Mar 11, 2026 at 2:06=E2=80=AFAM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
+>
+> On Wed, 11 Mar 2026 at 01:23, Samuel Wu <wusamuel@google.com> wrote:
+> >
+> > On Sat, Mar 7, 2026 at 12:17=E2=80=AFPM Kumar Kartikeya Dwivedi
+> > <memxor@gmail.com> wrote:
+> > >
+> > > On Sat, 7 Mar 2026 at 00:28, Kumar Kartikeya Dwivedi <memxor@gmail.co=
+m> wrote:
+> >
+> > [...]
+> >
+> > > > I think it's still unclear why this cannot be achieved by exploring
+> > > > what Andrii proposed initially in [0], i.e. by using existing
+> > > > primitives and adding extra kfuncs where necessary to solve
+> > > > bottlenecks, and I didn't see any indication where it was explored
+> > > > sufficiently.
+> > > >
+> > This is my bad, I misinterpreted/misunderstood Andrii's original
+> > proposal to apply only to open-coded BPF iterators, hence the follow
+> > up patches with them removed. However, I don't disagree this can be
+> > achieved via open-coding. Both proposals are viable to traverse wakeup
+> > sources via BPF, however I see two distinct advantages of the BPF
+> > iterator:
+> >
+> > 1. Iterators provide a stable kernel interface that decouples the BPF
+> > code from the kernel's internal data structures and refactors
+>
+> I think this is my concern; committing to a stable interface that
+> we'll have to maintain forever.
+> It's a narrow use case that can be better served by dedicated kfuncs
+> and rolling your own solution.
+> There will be no end to the number of iterators if we keep making one
+> for every linked list in the kernel.
+>
+> It would be different if the synchronization scheme for the
+> wakeup_sources list was really complicated and hard to express inline
+> in the verifier, but that is not the case.
+>
 
-Introduce SKIP_LLVM, SKIP_LIBBFD, and SKIP_CRYPTO build flags that let
-users build bpftool without these optional dependencies.
+I completely agree it's a viable approach, it seems to come down to
+where/who carries the maintenance burden. Regardless, let me explore
+how to prototype this cleanly to handle the details like the static
+address, and then we will have something concrete for comparisons. I
+appreciate the alternative suggestion and the feedback here.
 
-SKIP_LLVM=1 skips LLVM even when detected. SKIP_LIBBFD=1 prevents the
-libbfd JIT disassembly fallback when LLVM is absent. Together, they
-produce a bpftool with no disassembly support.
+> > 2. If wakeup sources are accessible via BPF, the next step should be
+> > to deprecate the existing interfaces for wakeup sources, such as the
+> > sysfs and debugfs stats. In that case, a text-based BPF iterator
+> > output will provide less friction during the transition.
+> >
+>
+> I would agree if this was a one-to-one conversion, where you just
+> replace the directory for look up.
+> But you'll be reading from one file vs several, so it's already a
+> non-trivial change in the consumer.
+> At that point, the conversion burden doesn't have the same weight in
+> deciding whether to stick with textual representation.
 
-SKIP_CRYPTO=1 excludes sign.c and removes the -lcrypto link dependency.
-Inline stubs in main.h return errors with a clear message if signing
-functions are called at runtime.
+My understanding is that most (all?) current consumers ultimately want
+the aggregate list of wakeup source stats, not a single node in
+isolation; the reason there are multiple nodes is to adhere to the
+precedent that sysfs nodes contain a singular stat. A single
+text-based output node with the aggregated stats would be a
+straightforward change that simplifies userspace code consuming these
+stats.
 
-Use BPFTOOL_WITHOUT_CRYPTO (not HAVE_LIBCRYPTO_SUPPORT) as the C
-define, following the BPFTOOL_WITHOUT_SKELETONS naming convention for
-bpftool-internal build config, leaving HAVE_LIBCRYPTO_SUPPORT free for
-proper feature detection in the future.
-
-All three flags are propagated through the selftests Makefile to bpftool
-sub-builds.
-
-Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
----
- tools/bpf/bpftool/Makefile           | 29 +++++++++++++++++++++++++----
- tools/bpf/bpftool/main.c             |  7 +++++++
- tools/bpf/bpftool/main.h             | 14 ++++++++++++++
- tools/testing/selftests/bpf/Makefile |  8 ++++++++
- 4 files changed, 54 insertions(+), 4 deletions(-)
-
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index 519ea5cb8ab1..4f83a7ec81a5 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -97,6 +97,12 @@ RM ?= rm -f
- 
- FEATURE_USER = .bpftool
- 
-+# Skip optional dependencies: LLVM (JIT disasm), libbfd (fallback
-+# disasm), libcrypto (program signing).
-+SKIP_LLVM ?=
-+SKIP_LIBBFD ?=
-+SKIP_CRYPTO ?=
-+
- FEATURE_TESTS := clang-bpf-co-re
- FEATURE_TESTS += llvm
- FEATURE_TESTS += libcap
-@@ -130,8 +136,8 @@ include $(FEATURES_DUMP)
- endif
- endif
- 
--LIBS = $(LIBBPF) -lelf -lcrypto -lz
--LIBS_BOOTSTRAP = $(LIBBPF_BOOTSTRAP) -lelf -lcrypto -lz
-+LIBS = $(LIBBPF) -lelf $(CRYPTO_LIBS) -lz
-+LIBS_BOOTSTRAP = $(LIBBPF_BOOTSTRAP) -lelf $(CRYPTO_LIBS) -lz
- 
- ifeq ($(feature-libelf-zstd),1)
- LIBS += -lzstd
-@@ -150,7 +156,12 @@ all: $(OUTPUT)bpftool
- SRCS := $(wildcard *.c)
- 
- ifeq ($(feature-llvm),1)
--  # If LLVM is available, use it for JIT disassembly
-+ifneq ($(SKIP_LLVM),1)
-+HAS_LLVM := 1
-+endif
-+endif
-+
-+ifeq ($(HAS_LLVM),1)
-   CFLAGS  += -DHAVE_LLVM_SUPPORT
-   LLVM_CONFIG_LIB_COMPONENTS := mcdisassembler all-targets
-   # llvm-config always adds -D_GNU_SOURCE, however, it may already be in CFLAGS
-@@ -165,6 +176,7 @@ ifeq ($(feature-llvm),1)
-   endif
-   LDFLAGS += $(shell $(LLVM_CONFIG) --ldflags)
- else
-+  ifneq ($(SKIP_LIBBFD),1)
-   # Fall back on libbfd
-   ifeq ($(feature-libbfd),1)
-     LIBS += -lbfd -ldl -lopcodes
-@@ -186,15 +198,24 @@ else
-       CFLAGS += -DDISASM_INIT_STYLED
-     endif
-   endif
-+  endif # SKIP_LIBBFD
- endif
- ifeq ($(filter -DHAVE_LLVM_SUPPORT -DHAVE_LIBBFD_SUPPORT,$(CFLAGS)),)
-   # No support for JIT disassembly
-   SRCS := $(filter-out jit_disasm.c,$(SRCS))
- endif
- 
-+ifeq ($(SKIP_CRYPTO),1)
-+  CFLAGS += -DBPFTOOL_WITHOUT_CRYPTO
-+  HOST_CFLAGS += -DBPFTOOL_WITHOUT_CRYPTO
-+  SRCS := $(filter-out sign.c,$(SRCS))
-+else
-+  CRYPTO_LIBS := -lcrypto
-+endif
-+
- BPFTOOL_BOOTSTRAP := $(BOOTSTRAP_OUTPUT)bpftool
- 
--BOOTSTRAP_OBJS = $(addprefix $(BOOTSTRAP_OUTPUT),main.o common.o json_writer.o gen.o btf.o sign.o)
-+BOOTSTRAP_OBJS = $(addprefix $(BOOTSTRAP_OUTPUT),main.o common.o json_writer.o gen.o btf.o $(if $(CRYPTO_LIBS),sign.o))
- $(BOOTSTRAP_OBJS): $(LIBBPF_BOOTSTRAP)
- 
- OBJS = $(patsubst %.c,$(OUTPUT)%.o,$(SRCS)) $(OUTPUT)disasm.o
-diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-index a829a6a49037..c91e1a6e1a1e 100644
---- a/tools/bpf/bpftool/main.c
-+++ b/tools/bpf/bpftool/main.c
-@@ -131,6 +131,11 @@ static int do_version(int argc, char **argv)
- 	const bool has_skeletons = false;
- #else
- 	const bool has_skeletons = true;
-+#endif
-+#ifdef BPFTOOL_WITHOUT_CRYPTO
-+	const bool has_crypto = false;
-+#else
-+	const bool has_crypto = true;
- #endif
- 	bool bootstrap = false;
- 	int i;
-@@ -163,6 +168,7 @@ static int do_version(int argc, char **argv)
- 		jsonw_start_object(json_wtr);	/* features */
- 		jsonw_bool_field(json_wtr, "libbfd", has_libbfd);
- 		jsonw_bool_field(json_wtr, "llvm", has_llvm);
-+		jsonw_bool_field(json_wtr, "crypto", has_crypto);
- 		jsonw_bool_field(json_wtr, "skeletons", has_skeletons);
- 		jsonw_bool_field(json_wtr, "bootstrap", bootstrap);
- 		jsonw_end_object(json_wtr);	/* features */
-@@ -181,6 +187,7 @@ static int do_version(int argc, char **argv)
- 		printf("features:");
- 		print_feature("libbfd", has_libbfd, &nb_features);
- 		print_feature("llvm", has_llvm, &nb_features);
-+		print_feature("crypto", has_crypto, &nb_features);
- 		print_feature("skeletons", has_skeletons, &nb_features);
- 		print_feature("bootstrap", bootstrap, &nb_features);
- 		printf("\n");
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index 1130299cede0..169392a4552d 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -293,6 +293,20 @@ struct kernel_config_option {
- int read_kernel_config(const struct kernel_config_option *requested_options,
- 		       size_t num_options, char **out_values,
- 		       const char *define_prefix);
-+#ifndef BPFTOOL_WITHOUT_CRYPTO
- int bpftool_prog_sign(struct bpf_load_and_run_opts *opts);
- __u32 register_session_key(const char *key_der_path);
-+#else
-+static inline int bpftool_prog_sign(struct bpf_load_and_run_opts *opts)
-+{
-+	p_err("program signing requires libcrypto");
-+	return -ENOTSUP;
-+}
-+
-+static inline __u32 register_session_key(const char *key_der_path)
-+{
-+	p_err("program signing requires libcrypto");
-+	return -1;
-+}
-+#endif
- #endif
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 869b582b1d1f..e27501c06b56 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -41,6 +41,8 @@ LIBELF_LIBS	:= $(shell $(PKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
- 
- SKIP_DOCS	?=
- SKIP_LLVM	?=
-+SKIP_LIBBFD	?=
-+SKIP_CRYPTO	?=
- 
- ifeq ($(srctree),)
- srctree := $(patsubst %/,%,$(dir $(CURDIR)))
-@@ -333,6 +335,9 @@ $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)    \
- 		    OUTPUT=$(HOST_BUILD_DIR)/bpftool/			       \
- 		    LIBBPF_OUTPUT=$(HOST_BUILD_DIR)/libbpf/		       \
- 		    LIBBPF_DESTDIR=$(HOST_SCRATCH_DIR)/			       \
-+		    SKIP_LLVM=$(SKIP_LLVM)				       \
-+		    SKIP_LIBBFD=$(SKIP_LIBBFD)				       \
-+		    SKIP_CRYPTO=$(SKIP_CRYPTO)				       \
- 		    prefix= DESTDIR=$(HOST_SCRATCH_DIR)/ install-bin
- 
- ifneq ($(CROSS_COMPILE),)
-@@ -345,6 +350,9 @@ $(CROSS_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)	\
- 		    OUTPUT=$(BUILD_DIR)/bpftool/				\
- 		    LIBBPF_OUTPUT=$(BUILD_DIR)/libbpf/				\
- 		    LIBBPF_DESTDIR=$(SCRATCH_DIR)/				\
-+		    SKIP_LLVM=$(SKIP_LLVM)					\
-+		    SKIP_LIBBFD=$(SKIP_LIBBFD)					\
-+		    SKIP_CRYPTO=$(SKIP_CRYPTO)					\
- 		    prefix= DESTDIR=$(SCRATCH_DIR)/ install-bin
- endif
- 
-
----
-base-commit: ca0f39a369c5f927c3d004e63a5a778b08a9df94
-change-id: 20260312-b4-bpftool_build-fe7d37d535bd
-
-Best regards,
--- 
-Mykyta Yatsenko <yatsenko@meta.com>
-
+> > > > I think all we need is the wakeup source read_lock()/unlock() APIs =
+as
+> > > > KF_ACQUIRE/KF_RELEASE kfuncs. Just need to ensure we pair each lock
+> > > > with unlock by passing the index, which can be an opaque value
+> > > > returned from the kfunc (e.g. dummy empty struct pointer encoding t=
+he
+> > > > index). Then you can use bpf_for() to open-code the list iteration.
+> > >
+> > > I had a longer discussion with Paul on this. When having multiple ope=
+n
+> > > SRCU sections, mixing nested calls doesn't flatten the protection
+> > > scopes and leads to all kinds of issues, an example of which is in
+> > > [0]. That said, in this case, the verifier isn't tracking what the
+> > > underlying SRCU section protects or isn't even aware of it, all it
+> > > needs to ensure is that section is closed eventually, out-of-order
+> > > unlocks are ok, it would just exist to allow looking at the list in a
+> > > stable fashion using safe bpf_core_cast() accesses.
+> > >
+> > > So, I just wanted to clarify why I think this should be perfectly ok.
+> > >
+> > >   [0]: https://www.kernel.org/pub/linux/kernel/people/paulmck/Answers=
+/RCU/SRCUhoha.html
+> > >
+> > > (if you are like me, please follow the link at the bottom of [0]
+> > > before feeling good about understanding the example).
+> >
+> > Appreciate the thoughtful feedback from you and Paul. The example was
+> > nuanced but well-explained by the post, however, a key difference I
+> > see is that the BPF iterator solution creates continuous locking
+> > segments during traversal, as opposed to hand-over-hand locking in the
+> > example provided. I could be missing something fundamental here- do
+> > you mind elaborating?
+>
+> It was just an illustration to identify what guarantees the verifier
+> would need to enforce.
+> The most we need to do is just ensure SRCU indices are passed back
+> during unlock, in whatever order.
+> Critical section will be using bpf_core_cast() anyway to do safe
+> walking of the list.
+> With the KF_ACQUIRE/KF_RELEASE kfuncs you will still have a continuous
+> locking segment.
+> Just enclose your list walking loop between lock() and unlock().
+>
+> >
+> > >
+> > > > The iterator would become unnecessary, and everything can be done f=
+rom
+> > > > a syscall program's BPF_PROG_RUN invocation. I didn't
+> > > > check how we can get the pointer to the wakeup_sources LIST_HEAD, b=
+ut
+> > > > you could try several options (__ksym,
+> > > > bpf_kallsyms_lookup_name+bpf_core_cast and then walk it, or return
+> > > > pointer from a new kfunc and walk it using bpf_for()+bpf_core_cast(=
+)).
+> > > >
+> >
+> > Getting the static variable is key to the open-coded approach, but a
+> > clean way forward isn't obvious to me. Passing around raw addresses
+> > seems brittle and can raise security concerns. The wrapper kfunc to
+>
+> I don't understand the security concern. All of this happens inside
+> the BPF program.
+> If you're writing these addresses to user space and leaking them, it's yo=
+ur bug.
+> You can do that with iterators too. You have all the raw addresses
+> available to you.
+>
+> > get the static address might be the best option, but it feels like it
+> > violates the power subsystem's encapsulation. The iterator approach
+> > abstracts all of this cleanly.
+> >
+> > > > Also, how much speed up does this really provide? It is hard to
+> > > > understand the motivation from the current cover letter. Is the
+> > > > bottleneck due to opening multiple files in sysfs? You will still h=
+ave
+> > > > to read text and parse text from the iterator's output in your curr=
+ent
+> > > > solution. Wouldn't it be faster if you just used a syscall program,
+> > > > and used binary output (using a ring buffer) to stream data to user
+> > > > space?
+> >
+> > With the BPF iterator approach on a Pixel 6 in a quiescent state, I'm
+> > seeing a 10x speedup when traversing wakeup sources; the speedup would
+> > likely be even greater on a loaded system.
+> >
+>
+> I'm sure you can replicate it with the approach described above.
+> It might even be faster than parsing text from the file.
+>
+> > As alluded to earlier, the next step is to remove the
+> > /sys/class/wakeup node and debugfs nodes. My apologies for not
+> > explicitly listing this in the cover letter, but ultimately this would
+> > save memory by removing those nodes, eliminate work by not creating
+> > the nodes, and improve performance with a faster traversal, all while
+> > transparently replacing legacy interfaces.
+>
+> And you can do that regardless of the type of solution chosen above.
+>
+> >
+> > Thanks!
+> > Sam
+> >
+> > [...]
