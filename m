@@ -1,228 +1,203 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 022E31E1C02
-	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 16:52:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1359439098E
+	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 16:54:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.42
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773334328; cv=pass; b=oW0hS4itNEtrBhO2npy2RD9XArVJOx9dbYqWeZVLn6pnSKOyLBBOclcou+RwGheq0U2wHRTs6wa/UH0xZc0NvyC1cWS6WDKI706FWDkNpEMUueFwYSfW12OI/WWnyictnhn1NjJmNYyWGId7nhjV0VZefYO8OWoE+JSZBK6jMLU=
+	t=1773334485; cv=pass; b=csoslBtvRQ1Rbj4QAJuaQgJxs1kR1EtLmcSgzKDwPyaf8/5Oq4WXr1CVBY/0rQSSPVfE6n82AokVJ2vuylDzipykGuPajSDAGdUYdvh3P0o3Rq1vTmpO83uFQLmIcSOBTxxGdCThf7zG++hziMOJPY03lOmb5hJHPIHJQFsUu9M=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773334328; c=relaxed/simple;
-	bh=h1kyu8M4L88XCUS9kAsxgjgw7U05l2ZMomlPo8dAfik=;
+	s=arc-20240116; t=1773334485; c=relaxed/simple;
+	bh=0ivvtg/7i339ZQR+9yPgWn9tEIiWD5JfW0IrpKNu4D4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TsFsKJgOX9Nq0mf9VkfwksBA5YbpKJpVVmqu96R0ByM/2V/btONhlcpP8JOaSpYdZnss/I8Do9ADjG1wcEfxLkRn+1Of98pNz/eq9BSWBJPVvcDuq2rssAvn+6s3KAtoGlpd5mexdtWd4NIPY/MtnlrKPs+UQ+uz7zj1NGDf5Sk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B9k6Ma/b; arc=pass smtp.client-ip=209.85.216.43
+	 To:Cc:Content-Type; b=b3YCi91R+5bAnc3pO4T1k1sqdm2NvLO7xWR2id8mjQfOVChpkFBZjo/iyIetrF3ldqR6pSvKuFUVO4njV3V4HC7pljs3R89lS8XGpV6/+piZ5MEZX9iFdQeT9lZ4rMBLQEHdH6PKoFAK/IVXgY711K9FeSEBJZpdua7B9HBljtA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kFrQITnb; arc=pass smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B9k6Ma/b"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-358e3cc5e7eso705868a91.0
-        for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 09:52:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773334326; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kFrQITnb"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-358ed696623so569887a91.0
+        for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 09:54:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773334483; cv=none;
         d=google.com; s=arc-20240605;
-        b=KiFZFsiNf+4R8FWM40SckrAL7K1SR5M1eEgJaeyxtCwU+9uL0M1irwuiVgS7Z7V5jr
-         4Liq2uEDePpGdiSN5QEpVOuP9SPn9MgrUMtdIjvKxTFgyj1ztNkeSpiby6ojXuPp1ZoM
-         vyJZhnD3eQgXitHYyq3MsfWWwaEBhae85idGAnVqhCF9CT7BEsrcaAVViL2l6AGZQ1YS
-         K7aLZSEFxnA6/aCDiiW9Rq8ptwgKvOkHCHKD6ai2yRMBIxoaV75yA7LnWvoHzw+KQ923
-         KXlYiX20Qce93fd/JFG2/k6cMx9pCm1WK1BJp7nZjOpw+LDMv4zJQSSTTfCVHl4F2KEu
-         wDGA==
+        b=FvMC8bW9ZVrmngR/4LjgIago0fOAn8XS6R42miWmnyG4HSCPADeE4aF0rTLMvBP8Wf
+         jTB5OsHqiM8YOXSGlhZaa2opaRWv0u18unO/njmVH5cr6PzpFoxRjfc5nnJiTvv6YQI1
+         lNE1lmmppi67XgTSaD7P7O8u3op13AhYNZx8nDzGXTvg44/lb3UmqQcaHuOvppr1fMwq
+         uy9djHm/y6upSv9iyy38s9E1zdh7i84II1flKSTr64Mu0+LX3ZReWR+IJyBTIVetUx4k
+         LK3M8QCYZoJUjMgkUVbZTEVSkr6YU3Pz42QUXPcno9T3jWsQVXlVoAVZg1ioGZJxOQRo
+         YkYQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=1YL2aIojcxVpPyoFH1sBjE+KhcQEXhixU2r1w5P2Bls=;
-        fh=Vz3UGfnQjOUcPWlMqShElwOuZFQr6OfoX0HOBASPaI4=;
-        b=cSrgBsUxx7sDPflsdIL5ttZx7P/Y722r7BkVnqmSnLWLA7GWKBFaTCShz6DZuwOzbR
-         k0hVyTjUzUhPx+zvYi3h7StCyR87dNfhqfRgU+cepLsYSnv4tLPx1nTZdYyI8Rc/2mMJ
-         zcEjW0E2jOcAGVQ8czH9EMBAkrPinOpx8ykiMqne5xjyfugHYzuqgjY3xLsbdI1ot49N
-         Zuxc+wU7oFoTmfPMKVLZSywEM07Fcp+4RNSIEeUya3MroFyHCxSNnwtmDaq6v0eMHXUX
-         2t3gXtOI6oSY9aMH/Hy1APKAykgpdO5m5yMLOswsGQG+eMELFGFWLVMm2RRLMXwmmZeb
-         RGZQ==;
+        bh=+kWy5KRAZzJ0k+gfnUe4+KiD3cukw8nZMNARL7dWDnQ=;
+        fh=w9e1W82qp51GWloHrbm8MPkH2RHC0+PoR8Y0corA6L0=;
+        b=HMS3fPwDUFXjYCt8iBNaSNNzNG/LSyFnWdhcJVZyEx2PD/nLYrBM9tu6MYjvXne/Za
+         vWhQ9gNv4VSGfLd2sO/7T3LuHcfLHkFL8adnr1MZuOMgBXjyq0ZcS0iqZ13YF6NYExTz
+         rGkyjAUH5bnmocvnMbAUl4UYdqF6EZ2v2pih2HzSg0qjY3qCjeHLhi7ub4a9qZK4wnHj
+         96bphlDZLLnL7SvZUyMpyZvKp396tdqplvtsLY0Hb2/umL4xBGcZP5WrIBMEUI9DnKvn
+         whzmVtXSv0q6rAMf0IGdPttLFlvDtmEkQDuW9eR5ov+k2pEBxk8Pl21cI6tqzPXW74de
+         492g==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773334326; x=1773939126; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773334483; x=1773939283; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1YL2aIojcxVpPyoFH1sBjE+KhcQEXhixU2r1w5P2Bls=;
-        b=B9k6Ma/bzu51D5Etl6PCSjZI+QQ7H2RPT3tqUppU2r4ddXSaueQBk9kt9n34u8OYfN
-         s9Vo+Ood/e0dQ2xJHsiVrjfFm9/3VTFXmuK+a2p0ApEADDO2CARwPeZHivjiTAJTSgdA
-         msxLIshjd++ZEzuIjGb0H0QDsYmS0XnK+1IaV6ZnBp9BPHcdx1vdvcm+2uttqH3mW+E1
-         8ql1EgF3XMfLeWaoceou9pyBS97G5A3QtEZdODRnAzqutyRZkIDiaGUU1fibPvWS3/N1
-         lnmEQi3Sa/KUutxpW3WU3qQhbNxZ4rbIt0Prf3xt+1+M45Bvl2JlaOsUGUjq4SwEUMGB
-         ruMQ==
+        bh=+kWy5KRAZzJ0k+gfnUe4+KiD3cukw8nZMNARL7dWDnQ=;
+        b=kFrQITnbSdq6fGGAo1Qs91MmVTz356ySgdYWMhoXz+qDA2sI5h/kKKPobud1lef9Qq
+         Vnjg2VUjWxY13G90CmzMMLIGG1mhAwthMdOZYeJon+O+0g87Kr6AJ417GKQwYBg4ntGg
+         crbqh1wylitW5W3iDY0c9cFEY7XSz1kk+X6ijp5ETi+DfQfNFfcOE0+jm8SyHkpkeZCH
+         z7cnWY15WdETUtxAXisuTIbTwonAFvkgAQR0r46HDiAaLCOdaFl6hAZomSDbAEI+l/d2
+         UjnUvLY2rcGWyZPKGUWcqGXGW+Udo+G6jXAxvhMluPCc79Lf1wiRS3jOdfepdDepHnRM
+         dA6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773334326; x=1773939126;
+        d=1e100.net; s=20230601; t=1773334483; x=1773939283;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=1YL2aIojcxVpPyoFH1sBjE+KhcQEXhixU2r1w5P2Bls=;
-        b=lp3Kl/r2DnQ7nvOOTuvGhIUavrBpUe/AdVueRpLfvbXUXXvZwJ5Ziz8m94RThuhMdR
-         1W52HYD3hKNUvzON0nWtbRiRdSJ8uy3WK3CPP5es7S9oCenceC6rTfxRz0EzIDDXid2a
-         W3Nu9DNjPn67RZEbsZcdiuBHC/dDl0PUjuTc8WiOwY+aXV3UwkwEEE7qz2y++PqAUQxS
-         vkSm/UH/40nQwoG8P27Yj2B7MCEPOmD4b9C2fHVNGcinBQO1brzMjDZpumErFd4xo9ik
-         DMv6K1wBn3gvl4Rv3KaEhXIIGHdronqu0dIW7hxfQimIzjmAUSSZPV4uw2KoYjM8kECz
-         he4A==
-X-Gm-Message-State: AOJu0Yy7R8zHpd+rWR04i7LiWvNuaE/Hr0k9ruuif4QGKoEQQzKdpCO0
-	eUGX70NF5RlfCjndEXxLCaJ+XaHYKCp2/tTnt080/aza50/RMv9wzD4WiWwQtSY3zd9UfbFwT9e
-	PLOIUd7aaMiwpQhLUlom8iUxOaYc99RXeKa88
-X-Gm-Gg: ATEYQzwMv1eg0OJIpmeMVFpVaR0fBD1eEsUYBAmwuT5noxYneEn5h2FJ6IFE2HdzXqp
-	/mQZ4xmI4rWewioMeiBr2eAJpyz08S1pHXX0Jw8Cmm2mugnw3wJxlxiOQqwH/8yoX+JkWKFlL6W
-	hB2KSbVKgoNAVMVBNnPUHVFTfZ1vLrPZx2Pb1x5ouyinHH4tiAQs7fNSsimd1OkY0sTr3kNYRVA
-	KMJlgsuD7o3d7aUhPWShaKVGgP9Up4lis1386m5BdobKA8nGjmaTRPO6QzQOzQNq/jU25fVXRt9
-	aHARyTmH2PzpMr5jEiozKHA=
-X-Received: by 2002:a17:90b:530c:b0:359:120f:d3aa with SMTP id
- 98e67ed59e1d1-35a21ea2f3dmr282656a91.14.1773334326240; Thu, 12 Mar 2026
- 09:52:06 -0700 (PDT)
+        bh=+kWy5KRAZzJ0k+gfnUe4+KiD3cukw8nZMNARL7dWDnQ=;
+        b=O/SL5efy8qpHBHXdi2Dy4PLU1K26ce3kG4io4zLzHVAOeEousPogDF5vOREIw1S2Cj
+         mIk+/u7FQXgPqLPU+3AFX7XCP+Oa4zyBYBWFe1IDM/KrcqBhejB/ElF7pd/QNQV0Ykdi
+         MGOU0Ll51l4KyR5FzW0SMMXoOF4c/3qWHfbfwALBtX51RfF15AE4DWuzObxHNLgCZrsa
+         AZPHOpf8YWDPcrPNRJ7wavUbmAyA1W8YWxWO+oLbxlBuuKzB06x5XmCGW+FIeG5LSMGi
+         ZG37krcOMVLLXQTWUv4PPIquKiuHunPQ1Y5SzuD8sert8117XTEDOXR7lg8JStGadESe
+         QkvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWpktPh1nJFMqpIaISa3eI5HSbW4wbh7X+INRtxDS6BQBFolTO96MMtJCcboR+LCHgY9iY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWE91v8gVOz36iIKWL1iegFKeHhZL8I1vMbFPZ/S5PZcPXHnn0
+	B1anF/7UWNfCVZRHiq+eZ6UCznO4WF0AqxAajdq6l4vjD59A1TqPhPNW229XVXUSRx5rx+04muy
+	2kMjak9KyWqNJKDcriH9AwA514XuhY8c=
+X-Gm-Gg: ATEYQzwuaNryjR9uhODx1Jefh3pf4OtxqBVWodAxAFQqRj5L7bdIjCwwKUG4/SqAJOY
+	k2gmS4PYOsB9xLviq/HhGrkWmWYheY6mCAn3wxfGSCsiGok/U/7od7Zm2SlptL/ikmLdzD5RgMX
+	bKYnIN5LR+mhPGrv2Mj3+zYu5HvluhBPpQVWLnXVA3AhDAtWiZWD9RPKr4JVyB/JGhzYBFw5Tud
+	umly4VS2Nkl59qdtzKLDnGLpF3NUWkjNdajQnxa3c4EJ5M/Q6EsPYA2cx71/vd3y+lADmjMlhgi
+	GnpvQIoYAPbYlM2b2HXVntQ=
+X-Received: by 2002:a17:90b:288e:b0:359:8d0d:5905 with SMTP id
+ 98e67ed59e1d1-35a21eba194mr250522a91.9.1773334483388; Thu, 12 Mar 2026
+ 09:54:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260312002025.2495953-1-memxor@gmail.com> <CAEf4Bzb0mJsdP7vRwXiHYmqv5NogxPfOR1bFgFme9aKcQDvswA@mail.gmail.com>
- <CAP01T75aH9W8w3F7JP7yjtOFQsy+dc_2MMMSxSdQ-bM8aC2O7g@mail.gmail.com>
-In-Reply-To: <CAP01T75aH9W8w3F7JP7yjtOFQsy+dc_2MMMSxSdQ-bM8aC2O7g@mail.gmail.com>
+References: <20260312150523.2054552-1-vineeth@bitbyteword.org>
+ <1e3c2830-765e-4271-89f7-0b6784b37597@efficios.com> <20260312112354.3dd99e36@gandalf.local.home>
+ <219d015d-076b-4c80-8f63-88569115fdad@efficios.com> <20260312114041.5193c729@gandalf.local.home>
+ <1becdbce-2c01-468a-bbab-42b5dea9fdf8@efficios.com> <CAO7JXPjnnruhM5oC6xMgnYaQ9efzYFqMCFiJLNM3HCQ+ZeCiJw@mail.gmail.com>
+In-Reply-To: <CAO7JXPjnnruhM5oC6xMgnYaQ9efzYFqMCFiJLNM3HCQ+ZeCiJw@mail.gmail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 12 Mar 2026 09:51:53 -0700
-X-Gm-Features: AaiRm520RnTx8vLIYFVJwXH8catU6M7srgmwFswswSndXw0BZany9cts5msstpM
-Message-ID: <CAEf4BzZhV+vqXVBOLorkfwYiydHr+nNpe1Jso2UtVX8mTk+gzA@mail.gmail.com>
-Subject: Re: [PATCH bpf v1] bpf: Release module BTF IDR before module unload
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org, Martin KaFai Lau <martin.lau@kernel.org>, 
-	Gregory Bell <grbell@redhat.com>, Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, kkd@meta.com, 
-	kernel-team@meta.com
+Date: Thu, 12 Mar 2026 09:54:29 -0700
+X-Gm-Features: AaiRm51tg7oVvkVGab0X55k0oYxIuUltKNvtNsrbO-Cw57of2y67mwv1ziUvJS0
+Message-ID: <CAEf4BzbnfyhCqp0ne=2gRnVxp-mdGmuZwDeFRyhRYH+eDcz2-w@mail.gmail.com>
+Subject: Re: [PATCH 00/15] tracepoint: Avoid double static_branch evaluation
+ at guarded call sites
+To: Vineeth Remanan Pillai <vineeth@bitbyteword.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Dmitry Ilvokhin <d@ilvokhin.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>, 
+	io-uring@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, 
+	Jon Maloy <jmaloy@redhat.com>, Aaron Conole <aconole@redhat.com>, 
+	Eelco Chaudron <echaudro@redhat.com>, Ilya Maximets <i.maximets@ovn.org>, netdev@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-sctp@vger.kernel.org, 
+	tipc-discussion@lists.sourceforge.net, dev@openvswitch.org, 
+	Oded Gabbay <ogabbay@kernel.org>, Koby Elbaz <koby.elbaz@intel.com>, 
+	dri-devel@lists.freedesktop.org, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, "Gautham R. Shenoy" <gautham.shenoy@amd.com>, 
+	Huang Rui <ray.huang@amd.com>, Mario Limonciello <mario.limonciello@amd.com>, 
+	Len Brown <lenb@kernel.org>, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	linux-pm@vger.kernel.org, MyungJoo Ham <myungjoo.ham@samsung.com>, 
+	Kyungmin Park <kyungmin.park@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, linaro-mm-sig@lists.linaro.org, 
+	Eddie James <eajames@linux.ibm.com>, Andrew Jeffery <andrew@codeconstruct.com.au>, 
+	Joel Stanley <joel@jms.id.au>, linux-fsi@lists.ozlabs.org, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Alex Deucher <alexander.deucher@amd.com>, Danilo Krummrich <dakr@kernel.org>, 
+	Matthew Brost <matthew.brost@intel.com>, Philipp Stanner <phasta@kernel.org>, 
+	Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, 
+	amd-gfx@lists.freedesktop.org, Jiri Kosina <jikos@kernel.org>, 
+	Benjamin Tissoires <bentiss@kernel.org>, linux-input@vger.kernel.org, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-i2c@vger.kernel.org, 
+	Mark Brown <broonie@kernel.org>, Michael Hennerich <michael.hennerich@analog.com>, 
+	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, linux-spi@vger.kernel.org, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	"Martin K. Petersen" <martin.petersen@oracle.com>, linux-scsi@vger.kernel.org, 
+	Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 12, 2026 at 9:39=E2=80=AFAM Kumar Kartikeya Dwivedi
-<memxor@gmail.com> wrote:
+On Thu, Mar 12, 2026 at 9:15=E2=80=AFAM Vineeth Remanan Pillai
+<vineeth@bitbyteword.org> wrote:
 >
-> On Thu, 12 Mar 2026 at 17:22, Andrii Nakryiko <andrii.nakryiko@gmail.com>=
- wrote:
+> On Thu, Mar 12, 2026 at 11:49=E2=80=AFAM Mathieu Desnoyers
+> <mathieu.desnoyers@efficios.com> wrote:
 > >
-> > On Wed, Mar 11, 2026 at 5:20=E2=80=AFPM Kumar Kartikeya Dwivedi
-> > <memxor@gmail.com> wrote:
+> > On 2026-03-12 11:40, Steven Rostedt wrote:
+> > > On Thu, 12 Mar 2026 11:28:07 -0400
+> > > Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
 > > >
-> > > Gregory reported in [0] that the global_map_resize test when run in
-> > > repeatedly ends up failing during program load. This stems from the f=
-act
-> > > that BTF reference has not dropped to zero after the previous run's
-> > > module is unloaded, and the older module's BTF is still discoverable =
-and
-> > > visible. Later, in libbpf, load_module_btfs() will find the ID for th=
-is
-> > > stale BTF, open its fd, and then it will be used during program load
-> > > where later steps taking module reference using btf_try_get_module()
-> > > fail since the underlying module for the BTF is gone.
+> > >>> Note, Vineeth came up with the naming. I would have done "do" but w=
+hen I
+> > >>> saw "invoke" I thought it sounded better.
+> > >>
+> > >> It works as long as you don't have a tracing subsystem called
+> > >> "invoke", then you get into identifier clash territory.
 > > >
-> > > Logically, once a module is unloaded, it's associated BTF artifacts
-> > > should become hidden. The BTF object inside the kernel may still rema=
-in
-> > > alive as long its reference counts are alive, but it should no longer=
- be
-> > > discoverable.
+> > > True. Perhaps we should do the double underscore trick.
 > > >
-> > > To fix this, let us call btf_free_id() from the MODULE_STATE_GOING ca=
-se
-> > > for the module unload to free the BTF associated IDR entry, and disab=
-le
-> > > its discovery once module unload returns to user space. If a race
-> > > happens during unload, the outcome is non-deterministic anyway. Howev=
-er,
-> > > user space should be able to rely on the guarantee that once it has
-> > > synchronously established a successful module unload, no more stale
-> > > artifacts associated with this module can be obtained subsequently.
+> > > Instead of:  trace_invoke_foo()
 > > >
-> > > Note that we must be careful to not invoke btf_free_id() in btf_put()
-> > > when btf_is_module() is true now. There could be a window where the
-> > > module unload drops a non-terminal reference, frees the IDR, but the
-> > > same ID gets reused and the second unconditional btf_free_id() ends u=
-p
-> > > releasing an unrelated entry.
+> > > use:  trace_invoke__foo()
+> > >
+> > >
+> > > Which will make it more visible to what the trace event is.
+> > >
+> > > Hmm, we probably should have used: trace__foo() for all tracepoints, =
+as
+> > > there's still functions that are called trace_foo() that are not
+> > > tracepoints :-p
 > >
-> > what if we just check module_is_live() state for module BTFs during
-> > GET_FD_BY_ID() operation and return -ENOENT? We already have
-> > refcount_inc_not_zero(&btf->refcnt), it's just another "it's still
-> > there, but not valid to be taken ahold by user space" condition
+> > One certain way to eliminate identifier clash would be to go for a
+> > prefix to "trace_", e.g.
+> >
+> > do_trace_foo()
+> > call_trace_foo()
 >
-> We will need the module pointer to be able to do module_is_live(), but
-> in this case the module is already gone.
-> I was achieving the same thing in my first proposal, I didn't share
-> the diff, but TL;DR was setting a bool in btf->module_unloaded and
-> checking for it after refcount_inc_not_zero.
-> Set btf->module_unloaded from MODULE_STATE_GOING.
+> This was the initial idea, but it had conflict in the existing source:
+> call_trace_sched_update_nr_running. do_trace_##name also had
+> collisions when I checked. So, went with trace_invoke_##name. Did not
+> check rest of the suggestions here though.
 >
-> I don't have much of a preference for the above or the current diff.
+> Thanks,
+> Vineeth
+>
+> > emit_trace_foo()
+> > __trace_foo()
 
-The part I don't particularly like is that we have two different cases
-when ID is removed, based on whether BTF is module BTF or not. What if
-we add `btf->id =3D 0;` after idr_remove within spinlock area in
-btf_free_id() and then call btf_Free_id() unconditionally both on
-module unload and in normal btf_put path?
+this seems like the best approach, IMO. double-underscored variants
+are usually used for some specialized/internal version of a function
+when we know that some conditions are correct (e.g., lock is already
+taken, or something like that). Which fits here: trace_xxx() will
+check if tracepoint is enabled, while __trace_xxx() will not check and
+just invoke the tracepoint? It's short, it's distinct, and it says "I
+know what I am doing".
 
->
+> > invoke_trace_foo()
+> > dispatch_trace_foo()
 > >
-> > >
-> > > We can be sure that by the time we reach final btf_put() for
-> > > btf_is_module() case, the btf_free_id() is already done, since the
-> > > module itself holds the BTF reference, and it will call this function
-> > > for the BTF before dropping its own reference.
-> > >
-> > >   [0]: https://lore.kernel.org/bpf/cover.1773170190.git.grbell@redhat=
-.com
-> > >
-> > > Fixes: 36e68442d1af ("bpf: Load and verify kernel module BTFs")
-> > > Suggested-by: Martin KaFai Lau <martin.lau@kernel.org>
-> > > Reported-by: Gregory Bell <grbell@redhat.com>
-> > > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> > > ---
-> > >  kernel/bpf/btf.c | 15 ++++++++++++++-
-> > >  1 file changed, 14 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> > > index 4872d2a6c42d..c44fb9c9386f 100644
-> > > --- a/kernel/bpf/btf.c
-> > > +++ b/kernel/bpf/btf.c
-> > > @@ -1883,10 +1883,17 @@ void btf_get(struct btf *btf)
-> > >         refcount_inc(&btf->refcnt);
-> > >  }
-> > >
-> > > +bool btf_is_module(const struct btf *btf);
-> > > +
-> > >  void btf_put(struct btf *btf)
-> > >  {
-> > >         if (btf && refcount_dec_and_test(&btf->refcnt)) {
-> > > -               btf_free_id(btf);
-> > > +               /*
-> > > +                * IDR for module BTFs is freed when module's BTF ref=
-erence is
-> > > +                * dropped, which _will_ happen before the final put.
-> > > +                */
-> > > +               if (!btf_is_module(btf))
-> > > +                       btf_free_id(btf);
-> > >                 call_rcu(&btf->rcu, btf_free_rcu);
-> > >         }
-> > >  }
-> > > @@ -8382,6 +8389,12 @@ static int btf_module_notify(struct notifier_b=
-lock *nb, unsigned long op,
-> > >                         if (btf_mod->module !=3D module)
-> > >                                 continue;
-> > >
-> > > +                       /*
-> > > +                        * For modules, we do the freeing of BTF IDR =
-as soon as
-> > > +                        * module goes away to disable BTF discovery,=
- since the
-> > > +                        * btf_try_get_module() on such BTFs will fai=
-l.
-> > > +                        */
-> > > +                       btf_free_id(btf_mod->btf);
-> > >                         list_del(&btf_mod->list);
-> > >                         if (btf_mod->sysfs_attr)
-> > >                                 sysfs_remove_bin_file(btf_kobj, btf_m=
-od->sysfs_attr);
-> > > --
-> > > 2.52.0
-> > >
+> > Thanks,
+> >
+> > Mathieu
+> >
+> >
+> >
+> > --
+> > Mathieu Desnoyers
+> > EfficiOS Inc.
+> > https://www.efficios.com
+>
