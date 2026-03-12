@@ -1,190 +1,210 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-oi1-f196.google.com (mail-oi1-f196.google.com [209.85.167.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 774C32E0B71
-	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 20:51:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773348693; cv=pass; b=H9Z7WwliAt19F4uLTIOUjGWfPBZKeeuTnWxXgKG7a4xD72C28y/1yQZdtaA4xZedMtXl6SUBDsMzWbPEakiud9EbMoi2czBcjzI93pVZHxhghz69RG9czpMjkhmworzaqNF2tsNEpkwQ1otJtCVymyUv3sKbPlYESMr26bLFxNw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773348693; c=relaxed/simple;
-	bh=yEXEB+XIExW6jhKbpp7aTQm0ye8is1mfuk9hTkr8dlw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XJ4ED9+l2xWNjWH9FQXYo7Zu/7/Qdhbq9h3kYoCBnK5kAFTj2NFubP57Z/y1AZ640Q5MiMj24AxVy3LpGICYajzoDwWMSNGJ3wS/0SQ9oPqXFV/odKwwuMwee5OaL3eCsW8idZuezAxsIOt9LnIoZVa/j9yGG+n8nnOL3cOJ7Is=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mRdP24tY; arc=pass smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0348B39EF23
+	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 20:53:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.196
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773348798; cv=none; b=NWIYOT8CrWaEzu0oD+KH12yswNvx9pJEEP6v3V1uMlmHurMNB6mldlgXv3PUXl8c1+ZR37W3XjTFeQI+sgIIiBG49SX279RLhO5ZwCOMjdGRvju4VcqlCXbpNj1W5qkJJLSu+NJB+qeORdirFpKpxef+6O+DPRIkxk9UWXD/YSY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773348798; c=relaxed/simple;
+	bh=jywq6ZapvLyqMtdAnKez9k1msXr+I1rB/CIhp8XCZy4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ExtDxutihX2znkmKfjyXcfsrCZ4THNPZntaKy/V4rToNRI7P9KlL9ZkhWgk9X0IaAG2rgJe9P2pcs22Vb071EybQDNwhpo01ddzH8qG2bZMDeYN81ZKqp4oBUAOUIrIhowziXR8AdEn/2Fjpuy9Q8gK7d69xbYPegVVHg+em9LU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hp6iuEaF; arc=none smtp.client-ip=209.85.167.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mRdP24tY"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-35a1a36f0c0so648708a91.2
-        for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 13:51:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773348692; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Lpikgj22eL6fytVnjMmXMiyfkrDT7RsTPCt1/fAhrgBgvdurf9ajR4jU7Z62BcYKdw
-         NfTSwDeMLAjZC0sXlSxeURXWVUbFi8Y3RLIFkEaoYtV23j370YCdY5TjTFWRTESkm7zU
-         FgDpLxXEAd9BvdPqiLFRtKENMkayPGZUO3dpulkBU8WGTqPNBLWFbfDhgsQ9f4aExQ69
-         61e7aUTi7sKiPeziWSO+sQU6KQjPz+0FbNzsJObVONfIA2Ze8n4+rtAWQ0DKGAAimHz3
-         fRrjGAG4bO/22HB7M9M0foQw/jyU1U4NxQUd9Y6/5uVwNrtd9bKwszrMxDoegmk7b72N
-         YYYw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=yMkSNysss/cPZE6pre4BlqUbGSIi/DTFDjvJ21md2YM=;
-        fh=un2GWPmYwFWbdF1XpxMPQYRxhKazl5Rxm/QZWha9hkc=;
-        b=b9yV2bMeKve9QVQ0kNHdmgiSWtmWtNa9IdkaUyvUISF4jgny7Xom1wWOOjknz9yHfB
-         +jQccCM0Tm1K//Fgnhpz2ZkTCcIHo4nlsRpYyyYEGkd4uYd6s+u2m13LdDqvD0Q8NDM+
-         e6cPUbXUeyjfplUA0d+GZfYT/hnE1NAQmjaB0965TeVOsuG1lpFTvSI2vyEmQ19wFYMH
-         zRVDy9tmgu7DyTSl/dw1xSKiMfFJlpC7p/52oDwtB89DGxutMi+Gf2PLP/iN9q1IUb5A
-         qEi/Q3YyQJcH/EYktmE/R+KvSzox1dojJYOkr/jwY3Tu+zZELvYUBgl8UcMHmEbMZlxu
-         rW/g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hp6iuEaF"
+Received: by mail-oi1-f196.google.com with SMTP id 5614622812f47-4673790ab85so1013427b6e.3
+        for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 13:53:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773348692; x=1773953492; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yMkSNysss/cPZE6pre4BlqUbGSIi/DTFDjvJ21md2YM=;
-        b=mRdP24tYtQZDtwQuA8l+wY1Ww9duGAtROeuju5DgKvatlQQrYv6OmiA2IYGj1g0nnV
-         xfihm3DEMT4yhHBdRLPBdqhi6MjPNkm/3soc7S56n2lGyWP9B/EplgCrWWfMXi/UJ47W
-         uRKuifo64oOn+WBe6JWB7zaYUePdjUBkYPogbpYQ9lfrunYCXiLvxdm9le9QTndKat8x
-         f2um+0EcVo3yZVx+a4/DWlk2kxiDRlIOjDCyymFqFc0lL4To6ipTHudHmxcV1auE3dsE
-         TcLIRcK58k6lubY2BihqyVfcrzzUsl2d9WnrECY3/mwMePn/4PeibyXv67FiNXEndV9U
-         GkRQ==
+        d=gmail.com; s=20230601; t=1773348789; x=1773953589; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=94uu4mGDGIm3eu56zPwC5IDPU+HLID50cuaKAJHOoY4=;
+        b=hp6iuEaFrWHpgdcp+7qPMBAcVhNenyhW1ruHCz6EFPQkaZiaPykGlJW1kaqwHhl8Yq
+         paoiX+0Ew2MszifMt3yhvw71nvVZp6Gc3OeBsc5GeDVdegytGRKzCoCZPklwiTz86KDU
+         88dBjql6tEVkf7XZZWkr5wsdSA8HF3TFjF9Jj4NCVcuCkVLeaLqKwL6FE5W4FgF2H/eY
+         zn1cyUO7dyFHXyKgjDaEZz7tkrj+32Nq38lAicsA0DS7hixnvdDqGJVqcyNyZdTO8St3
+         3Rvp9lo/e1HnvBo0PgzvMxpHeh9HZI8u5N6ucdGMa7yxKHO36ferLIqn6R/SolxHwUUz
+         L2gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773348692; x=1773953492;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=yMkSNysss/cPZE6pre4BlqUbGSIi/DTFDjvJ21md2YM=;
-        b=sT2nY85alGnAXyYXCW2RJcGc0LN4CEtsZN//dfyzhgn0BJrKrGM+ad2NGHV8qFM8D/
-         j9kTtFB59xu/kIEH7vdorTy+9YY1olAotm8nRvK93Zn5So7PWtCruPNurS1eo+MsGoiH
-         vfKdMYv4puxp0oEMmfxpIK0czA7L6I/vnukgCgBFOE7Ytr3b47aoAWwcoU7Kcvn0aI3k
-         p8q2Zv3KGeoMOAr0bXCsSmFWHNcKOIJHW1a3bLPoJCawcHF9kvhbqf+hT0PlVQXreYAI
-         vNQziDv90O//GA/G8bA7JCoaBSYc9BtYdzYAObT1KWaynCCG+QHQDDdgVne+rfm6ecCJ
-         mmuw==
-X-Gm-Message-State: AOJu0Yx97vDsIohrkgRtk7Jm7or6+MFzaceyCgWxuMcIoMb9nnl1NN+X
-	QU/3aAv1tyhjqgZf2fWDXogNg4rd4mzeUBagMmzzZAZ5aFJxNX/mChJbmEwJo5OvJmojWw5MsTv
-	qJdc9u8GkovJiK9BOA599+Wxrka/Vd4M=
-X-Gm-Gg: ATEYQzznpsKl5j+IO+vucP5ZOLR0lQPMM9FBRPnQHxaVpdYiKZzs8aoeatlEe6ytHK7
-	IvUUDA3Wmo9PS9XdsjoDjvT4rlPO1jgLE4JGBo7oeBdmENMH376AlsbJ4bPXcmQ+7/BthNRpUBi
-	tphuo1vPkULEF/fVvzqaZj/aHlXqe88ajNidDLwaj4QKpcRTfCpgfRjlyPslXUDZtJ33519NF4+
-	3mV+IpAW+daX41vXxG5apNhx/EIsLhmHinBKkVA/CCeg7/atyYU5f8fEeQo/VNJZi3eENueVgFF
-	p8LRZWfV1Qru/6cA5pHI1Y4=
-X-Received: by 2002:a17:90b:3501:b0:359:8230:abcc with SMTP id
- 98e67ed59e1d1-35a21eb7078mr869372a91.8.1773348691766; Thu, 12 Mar 2026
- 13:51:31 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1773348789; x=1773953589;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=94uu4mGDGIm3eu56zPwC5IDPU+HLID50cuaKAJHOoY4=;
+        b=OGbRb112xgjp0yzqkHqOdqwc6Et221y33EISw5J7wrLAdS0fxb6pO+i4p8ir/dc9iq
+         sWsjvsBeFPwnyyU7AF7qlJX9X843G/IAY9ps0nb0o2vXa9m0qQte8c1M4bGeMDwLDwEd
+         V0GALRVSpcjELvvL537qRWxVq8Pr7vz3acaQcK5W4D+Seo71I9H6OUvOend+udk1IyKS
+         SuqDq+y+/+1Rv4/GbqJ7qQU67zHD76y4qzqPoWzyIBVforG01FejET45FUzHyykaH7Yj
+         56zTT3POZKdvUIAzNMryDPFr6lGitcBVTAS0yIvrwFei6lTN1Iwl8TM0rxEKVuB09ox3
+         Gbiw==
+X-Gm-Message-State: AOJu0YwFnLaQG9X1LZ8pl7xoAgSkFEYm/CWepLY7rH8iahnoY3yYIp2L
+	YXluSxQJEqwlyvCfXVI5oO9iSYhUs59pfBL+Ietzg06Qumny/DIr8lK+XIFQVXRqSlM=
+X-Gm-Gg: ATEYQzz9IShTE0rJpt5h18p7GCpBd61AUsK7WFKh9qTnAvqQjzg3tREEBf9wfYFlWV4
+	yNeXxUnBmIpYQmJNs24KgeDG2e4oCOOWPl97vR7/w5DdFR/fJms7kmu9KTNASQqsvHF7ajfzcgI
+	sA4PO90uWNygxR7fSk/h47tI2CXzbvVGPzNdYPcHcTi79w3IRdsX2PDEA17CracdJXNcMPeIXUW
+	7pnyhZ2NNkDcu8bVJZVu6SkcyLQG8xTG0nAE1edSGuI4bU9PCZYxZNhE5R69D65yUrP4fOj2G9S
+	+wh/ykRMRtzWhV5T0cg8SJgx9k9JLnAhi+P9z6fBgKk0cEg7HY5s4+XqSbAuI09W473VfABgzXx
+	pM6xIImJ36SAdft+gydxeqkzggWUZhbAtWeR1tOm9/PkFy6Yyv8q/jwDUfe2asQWvLrvlEeIOkH
+	GImuox2OKJ8m1petebk2+XvZbg8QQ2RQ2GZr00PnmW6YtV
+X-Received: by 2002:a05:6808:15a2:b0:467:1e5:6766 with SMTP id 5614622812f47-4675766748fmr435692b6e.45.1773348788993;
+        Thu, 12 Mar 2026 13:53:08 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:44::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4177e1fb90csm6513403fac.4.2026.03.12.13.53.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Mar 2026 13:53:08 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Martin KaFai Lau <martin.lau@kernel.org>,
+	Gregory Bell <grbell@redhat.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf v3] bpf: Release module BTF IDR before module unload
+Date: Thu, 12 Mar 2026 13:53:07 -0700
+Message-ID: <20260312205307.1346991-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260311-sleepable_tracepoints-v3-0-3e9bbde5bd22@meta.com> <20260311-sleepable_tracepoints-v3-1-3e9bbde5bd22@meta.com>
-In-Reply-To: <20260311-sleepable_tracepoints-v3-1-3e9bbde5bd22@meta.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 12 Mar 2026 13:51:18 -0700
-X-Gm-Features: AaiRm518pFmWZqeZWjKEeF-9BhQ7qfB9n4MtL-YVXvTdmFozu9tirvFOkT8mTtE
-Message-ID: <CAEf4Bzbk4dLFUQzcrFXNw6Bgp7uzFhK-NHHTrbR6roy583ezPw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/4] bpf: Add sleepable execution path for raw
- tracepoint programs
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com, 
-	Mykyta Yatsenko <yatsenko@meta.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4712; h=from:subject; bh=uTKTtXrr/HBsusqh0xHGSq/egWIL4eFKRIomq4ZQJ2g=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBpsya3PCV5vyKCywOyAIJimklZVnOXnq1Fzv9Vln3J eF9CxZSJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCabMmtwAKCRBM4MiGSL8RylsYD/ sEVm3NzjR4oPdMbHz8M+RdZlafiGLWYhEUGlYjrofONuiwWg2vOJ5YcKF3wsiSKeUYeC/QytewDc05 73B/jMrx6rRjZQvlxoHZjGwCApxjGv8jk2OjPvVHK3B4JUn7S4RK03igJqL3txnCWTsU7jg4HGLaBq nSE48TghWPbkaYnO2ZbUDnEowxSH5wZKYmwJ5XeSWKvvOrxCavyr0CzhgF3b1KNCdosfP/Ce8JOGB2 EsjuKv3uk+pxSSgEBnpOr/br8+fcOvyKv47RzcBPtVXqPwmptcItDgwHD6skXEUBytlLWnjdxtjJ5p 1ROr8Sg1Tw/vntdfHov5kKnDphczvC0ZqJxyoQW5V6gdj1U3wQZbc9C06K4zMYIeTKeX0K5bqQqsQh 6eHmy5ev1kbyCXBpl0dtLDeHn1qtcR+a5nWNhYA4md7tI6QneGitwn82tZR67XSdu96bf7AGe4zJ6x VvdnWZKpNhPrKiENSm1TCHEk1b6Wk5cE91bzahhMJ6/qcLJa8bVYhW+B0PeIUlhkNb7tQLA/PzZY4s sf/43SY3Ohv8M5TDqDyiGFL+3SD+htYrcRfc/1Vp5dddCFX1IdI5UM7jpH5zloIz/bWNh5FQnqsznn YspLAN4cshDoj8Ax04SltD09FZr5H4TQHbddjIN0yxTHGUNkvxMg0r7Ws7jA==
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
+Content-Transfer-Encoding: 8bit
 
-On Wed, Mar 11, 2026 at 11:23=E2=80=AFAM Mykyta Yatsenko
-<mykyta.yatsenko5@gmail.com> wrote:
->
-> From: Mykyta Yatsenko <yatsenko@meta.com>
->
-> Modify __bpf_trace_run() to support both sleepable and non-sleepable
-> BPF programs. When the program is sleepable:
->
-> - Call might_fault() to annotate the faultable context
-> - Use migrate_disable()/migrate_enable() instead of
->   rcu_read_lock()/rcu_read_unlock() to allow sleeping while
->   still protecting percpu data access
-> - The outer rcu_tasks_trace lock is already held by the faultable
->   tracepoint callback (__DECLARE_TRACE_SYSCALL), providing lifetime
->   protection for the BPF program
+Gregory reported in [0] that the global_map_resize test when run in
+repeatedly ends up failing during program load. This stems from the fact
+that BTF reference has not dropped to zero after the previous run's
+module is unloaded, and the older module's BTF is still discoverable and
+visible. Later, in libbpf, load_module_btfs() will find the ID for this
+stale BTF, open its fd, and then it will be used during program load
+where later steps taking module reference using btf_try_get_module()
+fail since the underlying module for the BTF is gone.
 
-we should not rely on this, see uprobe_prog_run(), we should do
-something like that here, explicitly calling correct RCU flavor
-depending on sleepable/non-sleepable program
+Logically, once a module is unloaded, it's associated BTF artifacts
+should become hidden. The BTF object inside the kernel may still remain
+alive as long its reference counts are alive, but it should no longer be
+discoverable.
 
->
-> For non-sleepable programs, rcu_read_lock_dont_migrate() is replaced
-> with explicit migrate_disable()/rcu_read_lock() pairing.
->
-> Remove preempt_disable_notrace()/preempt_enable_notrace() from
-> __BPF_DECLARE_TRACE_SYSCALL. Per-CPU protection and RCU locking are
-> now managed per-program inside __bpf_trace_run().
->
-> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
-> ---
->  include/trace/bpf_probe.h |  2 --
->  kernel/trace/bpf_trace.c  | 13 ++++++++++---
->  2 files changed, 10 insertions(+), 5 deletions(-)
->
-> diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
-> index 9391d54d3f12..d1de8f9aa07f 100644
-> --- a/include/trace/bpf_probe.h
-> +++ b/include/trace/bpf_probe.h
-> @@ -58,9 +58,7 @@ static notrace void                                    =
-               \
->  __bpf_trace_##call(void *__data, proto)                                 =
-       \
->  {                                                                      \
->         might_fault();                                                  \
-> -       preempt_disable_notrace();                                      \
->         CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(__data, CAST_TO_U64(=
-args));        \
-> -       preempt_enable_notrace();                                       \
->  }
->
->  #undef DECLARE_EVENT_SYSCALL_CLASS
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 0b040a417442..3688a7e115d1 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -2076,7 +2076,7 @@ void __bpf_trace_run(struct bpf_raw_tp_link *link, =
-u64 *args)
->         struct bpf_run_ctx *old_run_ctx;
->         struct bpf_trace_run_ctx run_ctx;
->
-> -       rcu_read_lock_dont_migrate();
-> +       migrate_disable();
->         if (unlikely(!bpf_prog_get_recursion_context(prog))) {
->                 bpf_prog_inc_misses_counter(prog);
->                 goto out;
-> @@ -2085,12 +2085,19 @@ void __bpf_trace_run(struct bpf_raw_tp_link *link=
-, u64 *args)
->         run_ctx.bpf_cookie =3D link->cookie;
->         old_run_ctx =3D bpf_set_run_ctx(&run_ctx.run_ctx);
->
-> -       (void) bpf_prog_run(prog, args);
-> +       if (prog->sleepable) {
-> +               might_fault();
-> +               (void)bpf_prog_run(prog, args);
-> +       } else {
-> +               rcu_read_lock();
-> +               (void)bpf_prog_run(prog, args);
-> +               rcu_read_unlock();
-> +       }
->
->         bpf_reset_run_ctx(old_run_ctx);
->  out:
->         bpf_prog_put_recursion_context(prog);
-> -       rcu_read_unlock_migrate();
-> +       migrate_enable();
->  }
->
->  #define UNPACK(...)                    __VA_ARGS__
->
-> --
-> 2.52.0
->
+To fix this, let us call btf_free_id() from the MODULE_STATE_GOING case
+for the module unload to free the BTF associated IDR entry, and disable
+its discovery once module unload returns to user space. If a race
+happens during unload, the outcome is non-deterministic anyway. However,
+user space should be able to rely on the guarantee that once it has
+synchronously established a successful module unload, no more stale
+artifacts associated with this module can be obtained subsequently.
+
+Note that we must be careful to not invoke btf_free_id() in btf_put()
+when btf_is_module() is true now. There could be a window where the
+module unload drops a non-terminal reference, frees the IDR, but the
+same ID gets reused and the second unconditional btf_free_id() ends up
+releasing an unrelated entry.
+
+To avoid a special case for btf_is_module() case, set btf->id to zero to
+make btf_free_id() idempotent, such that we can unconditionally invoke it
+from btf_put(), and also from the MODULE_STATE_GOING case. Since zero is
+an invalid IDR, the idr_remove() should be a noop.
+
+Note that we can be sure that by the time we reach final btf_put() for
+btf_is_module() case, the btf_free_id() is already done, since the
+module itself holds the BTF reference, and it will call this function
+for the BTF before dropping its own reference.
+
+  [0]: https://lore.kernel.org/bpf/cover.1773170190.git.grbell@redhat.com
+
+Fixes: 36e68442d1af ("bpf: Load and verify kernel module BTFs")
+Acked-by: Martin KaFai Lau <martin.lau@kernel.org>
+Suggested-by: Martin KaFai Lau <martin.lau@kernel.org>
+Reported-by: Gregory Bell <grbell@redhat.com>
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+Changelog:
+v2 -> v3
+v2: https://lore.kernel.org/bpf/20260312180643.3806586-1-memxor@gmail.com
+
+ * Condition idr_remove(). (Andrii)
+ * Use READ_ONCE()/WRITE_ONCE() for btf->id accesses. (Martin)
+
+v1 -> v2
+v1: https://lore.kernel.org/bpf/20260312002025.2495953-1-memxor@gmail.com
+
+* Remove special case from btf_free_id(), and call it unconditionally. (Andrii)
+---
+ kernel/bpf/btf.c | 24 ++++++++++++++++++++----
+ 1 file changed, 20 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 4872d2a6c42d..71f9143fe90f 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -1787,7 +1787,16 @@ static void btf_free_id(struct btf *btf)
+ 	 * of the _bh() version.
+ 	 */
+ 	spin_lock_irqsave(&btf_idr_lock, flags);
+-	idr_remove(&btf_idr, btf->id);
++	if (btf->id) {
++		idr_remove(&btf_idr, btf->id);
++		/*
++		 * Clear the id here to make this function idempotent, since it will get
++		 * called a couple of times for module BTFs: on module unload, and then
++		 * the final btf_put(). btf_alloc_id() starts IDs with 1, so we can use
++		 * 0 as sentinel value.
++		 */
++		WRITE_ONCE(btf->id, 0);
++	}
+ 	spin_unlock_irqrestore(&btf_idr_lock, flags);
+ }
+
+@@ -8115,7 +8124,7 @@ static void bpf_btf_show_fdinfo(struct seq_file *m, struct file *filp)
+ {
+ 	const struct btf *btf = filp->private_data;
+
+-	seq_printf(m, "btf_id:\t%u\n", btf->id);
++	seq_printf(m, "btf_id:\t%u\n", READ_ONCE(btf->id));
+ }
+ #endif
+
+@@ -8197,7 +8206,7 @@ int btf_get_info_by_fd(const struct btf *btf,
+ 	if (copy_from_user(&info, uinfo, info_copy))
+ 		return -EFAULT;
+
+-	info.id = btf->id;
++	info.id = READ_ONCE(btf->id);
+ 	ubtf = u64_to_user_ptr(info.btf);
+ 	btf_copy = min_t(u32, btf->data_size, info.btf_size);
+ 	if (copy_to_user(ubtf, btf->data, btf_copy))
+@@ -8260,7 +8269,7 @@ int btf_get_fd_by_id(u32 id)
+
+ u32 btf_obj_id(const struct btf *btf)
+ {
+-	return btf->id;
++	return READ_ONCE(btf->id);
+ }
+
+ bool btf_is_kernel(const struct btf *btf)
+@@ -8382,6 +8391,13 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
+ 			if (btf_mod->module != module)
+ 				continue;
+
++			/*
++			 * For modules, we do the freeing of BTF IDR as soon as
++			 * module goes away to disable BTF discovery, since the
++			 * btf_try_get_module() on such BTFs will fail. This may
++			 * be called again on btf_put(), but it's ok to do so.
++			 */
++			btf_free_id(btf_mod->btf);
+ 			list_del(&btf_mod->list);
+ 			if (btf_mod->sysfs_attr)
+ 				sysfs_remove_bin_file(btf_kobj, btf_mod->sysfs_attr);
+--
+2.52.0
+
