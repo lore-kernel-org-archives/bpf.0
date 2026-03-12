@@ -1,90 +1,85 @@
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C6F62D1F40;
-	Thu, 12 Mar 2026 12:34:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C9B23090CD;
+	Thu, 12 Mar 2026 12:37:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773318854; cv=none; b=U1wqicnplkbX99V81P0JP/K3tjus9K+dDd04T/fabz6WXaOx/SObQ5JS+4f93ReL0QWFlSSWkcEwMNlOo7uUtPF8jBEe4ecNC1Rq+FvNh8HZ0Ypw8/u4+Ol4LC7CEbobbckCL91I+/wDo3imGBlxznEQCqXuNPkbb1UGd2FJ3u8=
+	t=1773319071; cv=none; b=cUJ5qQs6CNgcQO9gtofmx8FM6Y9v+SDrPdyillagCKDXavduoVL9vGE3hH8TXlIPqc1jifSXg/FmJd+a2dlFL3ME9Zvcq7tf2R8oLbL1qDmXcB6W6U/D21STEc3FBgfiC2maJHvwmZL42YdlbwsRVtujToGeZ+BfBtfvI12vQ2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773318854; c=relaxed/simple;
-	bh=Z+Hudt8nJcxvg68UzQXv3KGqHqWtK2S2+ZMveg2pHIc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qo7UrbHywg+oOk/1dyYTx8RFyJhxGCpZb0dd9ET0nvWcn6B7FM77ix8voed4jXdENKrYYZW4uFxZtpVK3CNTuVF+T0K/Arqwq3SUowKdI7XIkkIfi4CtzYKML8IzmrIo4jbQ8M6P1tU2GHyI2Zs9WyFZyHfZHL71GISpvHlkhy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=q78eQRd6; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+	s=arc-20240116; t=1773319071; c=relaxed/simple;
+	bh=SKkbJG38rCzY64Md0FQWaJ5K1k6+NZ5aFqVNayh2O4E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NyIqXZ1aCkwLqY4Lw6pRkt72wTtZysNI0YTKC2OpNxcTTglITYcI4hdBIveVO8ECFIjplTCar8BCnMwN+9GCfoXU6E4jIoRHTtu6WIKDLYLtNVXzmHoAD3VM7ngG2jKVxfHqd++p87iflAWKEOL62AA+xQYvSnLU4S6mSe+T5eE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vc6xcKXY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="q78eQRd6"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=+VYAGwg3xJVqZ6ED+4iEbnnq6LZZq3rNWT+MD/LpG68=; b=q78eQRd6Wb12x9J6acMLNga4Vi
-	rjSqiJgA/qNQ/+/Kuzn7C9NMhYDmt8QprMs0sgeZRxC7ibKWngo7LvWcFlTZlsYegwNePc/9DUedc
-	wAQwH8N5uYMXSRKENZKIHKvoWhvQHhzZGOgu7t7hmmqvPJ7uZ/JV/GUFthcd5pT08+LTIrnTPcd34
-	UIoXpHG403jiIa/+3gDHoZPOaUQwUCu/bhxwgD2Lf/sc/k8V0H4MsUnhrK2JBs68y+6xr+c1yULmm
-	oVGF4qRt2jVpcyDCvNwcj//teDOlpGzNKxPb3rJrK0fWyxImiqUk6baorIEq7+4LXsWnk1aNxv5nS
-	xV3aj6MA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:40838)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1w0fEv-000000007n5-2Vv8;
-	Thu, 12 Mar 2026 12:34:09 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.98.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1w0fEs-000000007Dk-3LAp;
-	Thu, 12 Mar 2026 12:34:06 +0000
-Date: Thu, 12 Mar 2026 12:34:06 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, bpf@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vc6xcKXY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77077C4CEF7;
+	Thu, 12 Mar 2026 12:37:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773319071;
+	bh=SKkbJG38rCzY64Md0FQWaJ5K1k6+NZ5aFqVNayh2O4E=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Vc6xcKXY+NlQKac6NA+Tq2nZfILA+ay7hAeJHSIJBfPRooD/w73CtY1usFLOMw+Jf
+	 lq+daW/OXmK3wecfjIQOUowURQMGvQuXGcdjFKWNawL+sTwvOjQyP2rrHtCObQ5dhw
+	 2qOIOUoFDgXck6DWtxVG/Xq1fd1Bz9aNgC26cEMzDd/9K3u6rKMw7gBZh0PhO8RklA
+	 G+uGl9FjOxem2ZVtPt7rrIG1qeEWyddidGK24UEn/oBHGgi/feymO0zOvRJ5WzIxUD
+	 VU/A8TDuudS8j7zxnCyT4cluqzRZ3Z8tm28ZaiSa8euKsHES1GB7MUnZ+i5RD8C1Hi
+	 4c/tY+sIIfZ+w==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Steven Rostedt <rostedt@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org,
-	Paolo Abeni <pabeni@redhat.com>,
-	Stanislav Fomichev <sdf@fomichev.me>
-Subject: Re: [PATCH net-next v2 13/15] net: stmmac: add helper to set
- transmit tail pointer
-Message-ID: <abKyvowPxQW9iTCc@shell.armlinux.org.uk>
-References: <abKQWloxp9_4OuJh@shell.armlinux.org.uk>
- <E1w0czK-0000000CzH7-19Fb@rmk-PC.armlinux.org.uk>
+	Andrii Nakryiko <andrii@kernel.org>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Song Liu <song@kernel.org>
+Subject: [PATCHv2 bpf-next] ftrace: Use hash argument for tmp_ops in update_ftrace_direct_mod
+Date: Thu, 12 Mar 2026 13:37:38 +0100
+Message-ID: <20260312123738.129926-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <E1w0czK-0000000CzH7-19Fb@rmk-PC.armlinux.org.uk>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Mar 12, 2026 at 10:09:54AM +0000, Russell King (Oracle) wrote:
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c b/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c
-> index 1bbf02504dad..d5c003f3fbbc 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c
-> @@ -427,7 +427,7 @@ static void dwmac4_display_ring(void *head, unsigned int size, bool rx,
->  			extp++;
->  		}
->  	} else if (desc_size == sizeof(struct dma_edesc)) {
-> -		struct dma_edesc *ep = (struct dma_edesc *)head;
-> +		struct dma_edesc *ep = dma_desc_to_edesc(head);
+The modify logic registers temporary ftrace_ops object (tmp_ops) to trigger
+the slow path for all direct callers to be able to safely modify attached
+addresses.
 
-Too-many-outstanding-patches-itis strikes again (I have more than 100
-outstnading patches at the moment.) dma_desc_to_edesc() is in a later
-patch that isn't part of this series.
+At the moment we use ops->func_hash for tmp_ops filter, which represents all
+the systems attachments. It's faster to use just the passed hash filter, which
+contains only the modified sites and is always a subset of the ops->func_hash.
 
+Fixes: e93672f770d7 ("ftrace: Add update_ftrace_direct_mod function")
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+ kernel/trace/ftrace.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+v2 changes:
+- updated comment and changelog [ci]
+
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 8df69e702706..413310912609 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -6606,9 +6606,9 @@ int update_ftrace_direct_mod(struct ftrace_ops *ops, struct ftrace_hash *hash, b
+ 	if (!orig_hash)
+ 		goto unlock;
+ 
+-	/* Enable the tmp_ops to have the same functions as the direct ops */
++	/* Enable the tmp_ops to have the same functions as the hash object. */
+ 	ftrace_ops_init(&tmp_ops);
+-	tmp_ops.func_hash = ops->func_hash;
++	tmp_ops.func_hash->filter_hash = hash;
+ 
+ 	err = register_ftrace_function_nolock(&tmp_ops);
+ 	if (err)
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+2.53.0
+
