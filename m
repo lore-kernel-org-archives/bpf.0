@@ -1,72 +1,88 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EF5F28643C;
-	Thu, 12 Mar 2026 00:53:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 855D9347510;
+	Thu, 12 Mar 2026 01:10:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773276832; cv=none; b=ZBwu1RMGPZuj4otyRPUgIrNDGpBz8mNIIPPTEu/ZdGRGh3LQJb6kF074lMWrxR+CHwW1mbNaA5BzJxlox2M0UGBt0aY78bhB5vFzmCK8PyDVPUnGkerWoqjY2XUWgT1eEDVqALq5+5yCeeeyHaNjCDsJn93dJ3kt7SH36QKTKd4=
+	t=1773277818; cv=none; b=qTZkwoUNlPVLSEneAjp4a1/hjQPfec+e9SJBr9cwYSNVbrIQx4QMcwIrI29DZtJ+Bv6Ols8YKNnmkqaWt6q8F1Q/wdGMXeggBfUyulrXTqHQoOulfIsiPWzEuTxWReRLtMQaIpxB+s56di1Wif67gCTess+64SnK5890aaaCAJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773276832; c=relaxed/simple;
-	bh=Q3+4Ab/bSeTUBy88ojfJKjl/bLS0Ga6QdrWQdkBqNbw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nYPeRgJ2kpj5W/eSJOEW7HwL12chURHgNgCXCJ7cthE9vQ6HsahU+GzUUCUn8hcbiRmyx8xcJy0ICEy8oGi2CvQvDHC4nSIXashSOqj7NHn1ARrmsDGYF5+BpskJwgNR113bJJvGkxDC2rlpZtByqp0mRDMIP0sAvnop1Y11GmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EVifggrt; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773277818; c=relaxed/simple;
+	bh=TKeJT/xjc5Pdb24yNwte/PfYRiwvbPDzgq9rKudiD1o=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=ghVxPdzkJsbC3DN8WePAiMffXxIMzNiCYaAbCA0wE49nGs8p5OdQHlRFmwxLl/ZHJWpeZXj+WhikR3gDm3fBoXJilLUgwr6oeCM9zWK0Kfb3mLakizRljPKNCgMrgv8Dc5EflfedAepnrOhfJV3b4e7W5SBSHV3hddwVg66wtQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aasaijiz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EVifggrt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69169C4CEF7;
-	Thu, 12 Mar 2026 00:53:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aasaijiz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B69BC19421;
+	Thu, 12 Mar 2026 01:10:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773276832;
-	bh=Q3+4Ab/bSeTUBy88ojfJKjl/bLS0Ga6QdrWQdkBqNbw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=EVifggrtTEp+4NAYtK6ELbT1Xnkshsm4UeF3liKNNBqbm5701b5JN3hwfdKdzxomZ
-	 Ca4phC6HYlsjLcc7+2GGt0ZT9idjniOK1x42yHhv4JBnrl7Kbp9fLHXXxjCoelT2Bc
-	 NjRTGHVMGKyEkDx94WBLUg1rO1THwv8qFHu3S0WiU220rz4WYNgTOraBWXUuP//Yto
-	 aSVTLrkH62iLNFZZvlDnH4GDYKpjVnltWFHbHjl1zeB8B3UY32/V62+PRreNRNunI2
-	 v4mWt7m/I+G7VbE98PPZ5vJGvI2tLOagfEsv9ZnMA2cQtuY+ul9fuFuC3GGFdidwdF
-	 CNvV3GRvyKX4g==
-Date: Wed, 11 Mar 2026 17:53:46 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: "Ricardo B. =?UTF-8?B?TWFybGnDqHJl?=" <rbm@suse.com>, Martin KaFai Lau
- <martin.lau@linux.dev>, John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP
- Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?=
- <toke@redhat.com>, David Ahern <dsahern@kernel.org>, Jay Vosburgh
- <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>, Hangbin Liu
- <liuhangbin@gmail.com>, Fernando Fernandez Mancera <fmancera@suse.de>,
- bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v4 0/4] {net,bpf}: nd_tbl fixes for when
- ipv6.disable=1
-Message-ID: <20260311175346.3ce9df1f@kernel.org>
-In-Reply-To: <92cea50b-8187-459f-bd0f-be0d253f49ff@iogearbox.net>
-References: <20260307-net-nd_tbl_fixes-v4-0-e2677e85628c@suse.com>
-	<20260310175858.70ed0391@kernel.org>
-	<92cea50b-8187-459f-bd0f-be0d253f49ff@iogearbox.net>
+	s=k20201202; t=1773277818;
+	bh=TKeJT/xjc5Pdb24yNwte/PfYRiwvbPDzgq9rKudiD1o=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=aasaijizLxUCax4qDJUxQG9vhHuby2UQJLj42UMGam6gHMDGV015yhzw32NPrGxZQ
+	 Mirsyq3wIM7PXGJQ8DoT82JDKtjMke4QjHWgWUyhyRfPCAdrTIbKyjyJoFp/oRxDga
+	 5jGAKlrKsECnK5Em1rYUabVs+9BZtkT+6gpTwqigQRT4c5pJSLRjTJF+M6GKHXmrJb
+	 vxfL/B4/UNMTDc5rDBmdoOyKe1OvHGNKyPXuIBGfNr1lVXNc1VxMn0DtqNM5jI1T7S
+	 vtOy3wBjNNs8Pioh8Pk3GG+IuGHVjlL3zIhzLVjsV4D/7FHYROGATyOpGiKUgRJvDP
+	 B5pH7WjFVePyw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3FE523808200;
+	Thu, 12 Mar 2026 01:10:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v4 0/4] {net,bpf}: nd_tbl fixes for when
+ ipv6.disable=1
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177327781404.3893274.18137587721158211759.git-patchwork-notify@kernel.org>
+Date: Thu, 12 Mar 2026 01:10:14 +0000
+References: <20260307-net-nd_tbl_fixes-v4-0-e2677e85628c@suse.com>
+In-Reply-To: <20260307-net-nd_tbl_fixes-v4-0-e2677e85628c@suse.com>
+To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgPHJibUBzdXNlLmNvbT4=?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org
+Cc: martin.lau@linux.dev, daniel@iogearbox.net, john.fastabend@gmail.com,
+ sdf@fomichev.me, ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, kpsingh@kernel.org,
+ haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ toke@redhat.com, dsahern@kernel.org, jv@jvosburgh.net, andrew+netdev@lunn.ch,
+ liuhangbin@gmail.com, fmancera@suse.de, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 
-On Wed, 11 Mar 2026 06:50:18 +0100 Daniel Borkmann wrote:
-> On 3/11/26 1:58 AM, Jakub Kicinski wrote:
-> > On Sat, 07 Mar 2026 17:50:52 -0300 Ricardo B. Marli=C3=A8re wrote: =20
-> >>        bpf: bpf_out_neigh_v4: Fix nd_tbl NULL dereference when IPv6 is=
- disabled
-> >>        bpf: bpf_out_neigh_v6: Fix nd_tbl NULL dereference when IPv6 is=
- disabled =20
-> >=20
-> > Hi Daniel, are you okay with these for net? =20
-> Yes, these look good to me. Go for it via net!
+Hello:
 
-Thanks!
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Sat, 07 Mar 2026 17:50:52 -0300 you wrote:
+> Hi,
+> 
+> Please consider merging these four patches to fix three crashes that were
+> found after this report:
+> 
+> https://lore.kernel.org/all/CAHXs0ORzd62QOG-Fttqa2Cx_A_VFp=utE2H2VTX5nqfgs7LDxQ@mail.gmail.com
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,v4,1/4] ipv6: move the disable_ipv6_mod knob to core code
+    https://git.kernel.org/netdev/net/c/94a4b1f95998
+  - [net,v4,2/4] net: bonding: Fix nd_tbl NULL dereference when IPv6 is disabled
+    https://git.kernel.org/netdev/net/c/30021e969d48
+  - [net,v4,3/4] bpf: bpf_out_neigh_v4: Fix nd_tbl NULL dereference when IPv6 is disabled
+    https://git.kernel.org/netdev/net/c/dcb4e2231469
+  - [net,v4,4/4] bpf: bpf_out_neigh_v6: Fix nd_tbl NULL dereference when IPv6 is disabled
+    https://git.kernel.org/netdev/net/c/d56b5d163458
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
