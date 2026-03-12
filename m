@@ -1,168 +1,180 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16262308F15
-	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 18:23:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A3811C8634;
+	Thu, 12 Mar 2026 18:31:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773339792; cv=none; b=Oz16PxhiSr6UBcNAfPbYf16g2soWBFG3rgCYIks9Y1+84dIbd/5SAZBWjWsSYD8xt82GklGKjrozAciQ771qg9H3WbE9MDRtgy2uPo37jn655C9QaMclEBwMdQAlrNbBLEtK6DLEaVbB7ppYvyQhnB7IHE6ndiyhCO9KpGBYEbo=
+	t=1773340287; cv=none; b=fooFC96nnUHNhL0XTwpHMUylRueq6StLX0CkSaCEaS98PIBwscbjMoJQbD2kwUa3I9UygCFrTvHUVvTgiMC6aHiRr446ayDb3K335lPto3b2R0YXqz6NzN3kqbmUsZZ409bE+DCE9A+RI9Hd1qiLIhI4Ph7y3hDUdQyhjz6Vll8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773339792; c=relaxed/simple;
-	bh=g6YRGDjYxBKu8MGO9lQLASK4R3cQW72fIQHlz3OkUDM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=q1C66HBfxnggQQs3pycj62vpCrU0uveQNYXal77gi4hjxjtdaTUnhVP8dmtfUvPVZhKR5aO4J+MV9R+FAl083XCP2EIRQeykCqNiJ2Rb4EuLdi5xiUrxkTIxMf+zIKYNY/uTdoNtpfviaiKX/ZnF4kXwjARLGKoodGSspWkKRCg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sxCAVJVd; arc=none smtp.client-ip=91.218.175.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1773340287; c=relaxed/simple;
+	bh=rp0qyt4sp3t2v5R7dsT9nLl4D8IeqGrfKOSwHQf9yp4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J9ceaLTbNrGPlKK1pFqSCmk1nuL1tLZz/FzMK1RCaIxLAWFPpJuqoN3TAdfAvB2TTAqEj2tDJp/HLKJSkmhDUAv8d6AxCopww/TN6VjpCjd1XhnaFKGQx+fhOMaZRZDOiXtLEXZ9h5FmGKUjfYuBwPxyxg4IEyrYijJv3ksNgCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HWm2pqMA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sxCAVJVd"
-Message-ID: <02e68ebf-5782-4632-aed8-0026a3aab96b@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773339779;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=F5m9WLRDks/gQ0io//zmrr+zH79F0yxD0HjSLUsTqJM=;
-	b=sxCAVJVdvT34lmdReeK/lCrmdVGsle2U9eRfsfXmr67kbZHbtOlbAk3zrcN4CrLwNHIdzc
-	e3cRHCln3ULrYHEfQ4pBfdBvbS2LYMZu0Bk7vyEgX2c/tHv9/s6ORS1HlLZYYqx7p+hd+M
-	UKPGmYHuM56TW46aQ1oJx9rNhbpyHnw=
-Date: Thu, 12 Mar 2026 11:22:54 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HWm2pqMA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 636D2C4CEF7;
+	Thu, 12 Mar 2026 18:31:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773340287;
+	bh=rp0qyt4sp3t2v5R7dsT9nLl4D8IeqGrfKOSwHQf9yp4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HWm2pqMA6QFDPUAPLPuhXTuoMJkcpiVXPREifz653Sb2MAVWJTWb1pbXn1Wox8sPK
+	 sAGR539NtwuI8NDB2uMWwRL/iGS7BOAeMmobKojiMh/1srwYZpRG82sLHr1PrClCT8
+	 suBk92+HLFgrSt4XiZ3trdm9iYUJjfd1GUaAKOD/QmvbJ5BO44cNhklCfSyVKRuCmX
+	 AeezgN++jcT0glq4BBWVB106k26B6FshUghtFq2SCxMZE5pZ0cbyvsGtkAut+YPIL8
+	 EWueQrAIcP0hZwUPAIP4YE26W+nj3G/nlHJ8rrZYqYCzC6HeFRCdzZfjxmOrUCbZN1
+	 LNd4iQccyEHnQ==
+Date: Thu, 12 Mar 2026 11:31:22 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Leo Yan <leo.yan@arm.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
+	Quentin Monnet <qmo@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	William Breathitt Gray <wbg@kernel.org>,
+	Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Kent Gibson <warthog618@gmail.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Long Li <longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
+	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
+	Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, bpf@vger.kernel.org,
+	linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v4 08/30] tools build: Append
+ -fzero-init-padding-bits=all to extra cflags
+Message-ID: <abMGesVohx_UUt44@google.com>
+References: <20260311-tools_build_fix_zero_init-v4-0-9e35bdb99cb3@arm.com>
+ <20260311-tools_build_fix_zero_init-v4-8-9e35bdb99cb3@arm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: improve test coverage for
- kfunc call
-Content-Language: en-GB
-To: Hari Bathini <hbathini@linux.ibm.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-References: <20260312080113.843408-1-hbathini@linux.ibm.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260312080113.843408-1-hbathini@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260311-tools_build_fix_zero_init-v4-8-9e35bdb99cb3@arm.com>
 
+On Wed, Mar 11, 2026 at 08:29:33AM +0000, Leo Yan wrote:
+> GCC-15 release claims [1]:
+> 
+>   {0} initializer in C or C++ for unions no longer guarantees clearing
+>   of the whole union (except for static storage duration initialization),
+>   it just initializes the first union member to zero. If initialization
+>   of the whole union including padding bits is desirable, use {} (valid
+>   in C23 or C++) or use -fzero-init-padding-bits=unions option to
+>   restore old GCC behavior.
+> 
+> As a result, this new behaviour might cause unexpected data when we
+> initialize a union with using the '{ 0 }' initializer.
+> 
+> Since commit dce4aab8441d ("kbuild: Use -fzero-init-padding-bits=all"),
+> the kernel has enabled -fzero-init-padding-bits=all to zero padding bits
+> in unions and structures.  This commit applies the same option for tools
+> building.
+> 
+> The option is not supported by any version older than GCC 15, nor is it
+> supported by LLVM.  This patch adds the cc-option and host-cc-option
+> functions to dynamically detect compiler option and append it to the
+> EXTRA_CFLAGS and HOST_EXTRACFLAGS respectively.
+> 
+> [1] https://gcc.gnu.org/gcc-15/changes.html
+> 
+> Acked-by: Quentin Monnet <qmo@kernel.org>
+> Signed-off-by: Leo Yan <leo.yan@arm.com>
 
+Acked-by: Namhyung Kim <namhyung@kernel.org>
 
-On 3/12/26 1:01 AM, Hari Bathini wrote:
-> On powerpc, immediate load instructions are sign extended. In case
-> of unsigned types, arguments should be explicitly zero-extended by
-> the caller. For kfunc call, this needs to be handled in the JIT code.
-> In bpf_kfunc_call_test4(), that tests for sign-extension of signed
-> argument types in kfunc calls, add some additional failure checks.
-> And add bpf_kfunc_call_test5() to test zero-extension of unsigned
-> argument types in kfunc calls.
->
-> Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
-
-LGTM with a nit below.
-
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
+Thanks,
+Namhyung
 
 > ---
->
-> Changes in v2:
-> - Added asm version of the selftest for consistent testing across
->    different BPF ISA versions.
-> - Added comments clearly stating the intent of the test cases.
-> - Updated sign-extension selftest to have additional failure checks.
->
->
->   .../selftests/bpf/prog_tests/kfunc_call.c     |  2 +
->   .../selftests/bpf/progs/kfunc_call_test.c     | 98 +++++++++++++++++++
->   .../selftests/bpf/test_kmods/bpf_testmod.c    | 54 +++++++++-
->   .../bpf/test_kmods/bpf_testmod_kfunc.h        |  1 +
->   4 files changed, 154 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-> index f79c8e53cb3e..62f3fb79f5d1 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-> @@ -74,6 +74,8 @@ static struct kfunc_test_params kfunc_tests[] = {
->   	TC_TEST(kfunc_call_test1, 12),
->   	TC_TEST(kfunc_call_test2, 3),
->   	TC_TEST(kfunc_call_test4, -1234),
-> +	TC_TEST(kfunc_call_test5, 0),
-> +	TC_TEST(kfunc_call_test5_asm, 0),
->   	TC_TEST(kfunc_call_test_ref_btf_id, 0),
->   	TC_TEST(kfunc_call_test_get_mem, 42),
->   	SYSCALL_TEST(kfunc_syscall_test, 0),
-> diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test.c b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-> index 8b86113a0126..5edc51564f71 100644
-> --- a/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-> +++ b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-> @@ -2,8 +2,106 @@
->   /* Copyright (c) 2021 Facebook */
->   #include <vmlinux.h>
->   #include <bpf/bpf_helpers.h>
-> +#include "bpf_misc.h"
->   #include "../test_kmods/bpf_testmod_kfunc.h"
->   
-> +SEC("tc")
-> +int kfunc_call_test5(struct __sk_buff *skb)
-> +{
-> +	struct bpf_sock *sk = skb->sk;
-> +	int ret;
-> +	u32 val32;
-> +	u16 val16;
-> +	u8 val8;
+>  tools/scripts/Makefile.include | 30 ++++++++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+> 
+> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
+> index b5ecf137febcae59f506e107a7f2e2ad72f4bef4..a2397ceae512c1bc54adb15cb1a111ff34e28e43 100644
+> --- a/tools/scripts/Makefile.include
+> +++ b/tools/scripts/Makefile.include
+> @@ -137,6 +137,36 @@ else
+>  EXTRA_WARNINGS += -Wshadow
+>  endif
+>  
+> +# output directory for tests below
+> +TMPOUT = .tmp_$$$$
 > +
-> +	if (!sk)
-> +		return -1;
+> +# try-run
+> +# Usage: option = $(call try-run, $(CC)...-o "$$TMP",option-ok,otherwise)
+> +# Exit code chooses option. "$$TMP" serves as a temporary file and is
+> +# automatically cleaned up.
+> +try-run = $(shell set -e;		\
+> +	TMP=$(TMPOUT)/tmp;		\
+> +	trap "rm -rf $(TMPOUT)" EXIT;	\
+> +	mkdir -p $(TMPOUT);		\
+> +	if ($(1)) >/dev/null 2>&1;	\
+> +	then echo "$(2)";		\
+> +	else echo "$(3)";		\
+> +	fi)
 > +
-> +	sk = bpf_sk_fullsock(sk);
-> +	if (!sk)
-> +		return -1;
+> +# cc-option
+> +# Usage: CFLAGS += $(call cc-option,-march=winchip-c6,-march=i586)
+> +cc-option = $(call try-run, \
+> +	$(CC) -Werror $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
 > +
-> +	/*
-> +	 * Test with constant values to verify zero-extension.
-> +	 * ISA-dependent BPF asm:
-> +	 *   With ALU32:    w1 = 0xFF; w2 = 0xFFFF; w3 = 0xFFFFffff
-> +	 *   Without ALU32: r1 = 0xFF; r2 = 0xFFFF; r3 = 0xFFFFffff
-> +	 * Both zero-extend to 64-bit before the kfunc call.
-> +	 */
-> +	ret = bpf_kfunc_call_test5(0xFF, 0xFFFF, 0xFFFFffffULL);
-
-Can we just use 0xFFFFffff instead of 0xFFFFffffULL?
-
-> +	if (ret)
-> +		return ret;
+> +host-cc-option = $(call try-run, \
+> +	$(HOSTCC) -Werror $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
 > +
-> +	val32 = bpf_get_prandom_u32();
-> +	val16 = val32 & 0xFFFF;
-> +	val8 = val32 & 0xFF;
-> +	ret = bpf_kfunc_call_test5(val8, val16, val32);
-> +	if (ret)
-> +		return ret;
+> +# Explicitly clear padding bits with the initializer '{ 0 }'
+> +FLAG_ZERO_INIT := $(call cc-option,-fzero-init-padding-bits=all)
+> +override EXTRA_CFLAGS += $(FLAG_ZERO_INIT)
+> +HOST_FLAG_ZERO_INIT := $(call host-cc-option,-fzero-init-padding-bits=all)
+> +override HOST_EXTRACFLAGS += $(HOST_FLAG_ZERO_INIT)
 > +
-> +	/*
-> +	 * Test multiplication with different operand sizes:
-> +	 *
-> +	 * val8 * 0xFF:
-> +	 *   - Both operands promote to int (32-bit signed)
-> +	 *   - Result: 32-bit multiplication, truncated to u8, then zero-extended
-> +	 *
-> +	 * val16 * 0xFFFF:
-> +	 *   - Both operands promote to int (32-bit signed)
-> +	 *   - Result: 32-bit multiplication, truncated to u16, then zero-extended
-> +	 *
-> +	 * val32 * 0xFFFFffffULL:
-> +	 *   - val32 (u32) promotes to unsigned long long (due to ULL suffix)
-> +	 *   - Result: 64-bit unsigned multiplication, truncated to u32, then zero-extended
-> +	 */
-> +	ret = bpf_kfunc_call_test5(val8 * 0xFF, val16 * 0xFFFF, val32 * 0xFFFFffffULL);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-
-[...]
-
+>  ifneq ($(findstring $(MAKEFLAGS), w),w)
+>  PRINT_DIR = --no-print-directory
+>  else
+> 
+> -- 
+> 2.34.1
+> 
