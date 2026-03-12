@@ -1,131 +1,181 @@
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D3D33D507
-	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 02:24:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA2FB1DF980
+	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 02:47:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773282295; cv=none; b=g2qfp2MDIxq3sJr1wTI/41TOaRCy5nlttTKF4iOEKNIIq3wEr0KPEAtEzMHkdNlMssSkm2C6nAhu1LqjGq6Mhs89Md6bHQbNJJgh10JgOlV1YdWluyCuobSz+AieMizm60cYlL/eO5XBW5/cwntPumFXwiMXAmYkVqPlLwl0bgM=
+	t=1773283637; cv=none; b=JaNctw5KOdHAoriOIJHRed16fzBQjjouwAP5pQKrj95R0aUUoS1M0kxwiEmI8LTAnTUnaOYnp5tD3bUzGuPMJpC1y/sIJBQcLHYBN9EzrGEldd9m5heriOCnebMfcfSEMdMe4b3fV2fCycD8DdFxVYbMXT8JSlmHRnZm0qqID+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773282295; c=relaxed/simple;
-	bh=t/o8JZUco4a+9p05JAFPQThPlGv3WyinrLjprD+EYkA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Kh6rc95kjc33qc5lSBkIEoK4WpoS7SuzgxhA6jWfjLpj9jJ1x1Ayf2ScqBtfYjZN2zSfakPG+xh8pZ4BD0Z0JueAcjc3J/0CD6wObWScVQo3mgeALzSLUsInVf59lHO2Ep96RydMXlDpbOR+2L2KJoe/n3u9zL3qdhed2Adkbfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WuIml8+b; arc=none smtp.client-ip=95.215.58.181
+	s=arc-20240116; t=1773283637; c=relaxed/simple;
+	bh=bn22wJ7ckCW5LunWe8zrG07xQ/9uHxRHUmDSBAcb/oU=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=WP9eOXghWTJnMKysx/UclQC2h+ZEBWpvoklz1SZQTUbtU/gvSDvP0by6gegKEsWjasinQMf2njYXrGs39L4kASbLWZfJ92qYAirgo5xFF6BAG9yh+nU3TBNIYiKRljdGMnJFjI2dua2wHf0ox7gPEquzoJhUVesane+6VXtPud8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pl1wvej5; arc=none smtp.client-ip=91.218.175.186
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WuIml8+b"
-Message-ID: <931b490b-ab29-44fc-b888-8ac1ee8d8ccc@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pl1wvej5"
+Content-Type: text/plain;
+	charset=us-ascii
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773282281;
+	t=1773283623;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=w+NS9REi3OjQ/Mu3hl26dakXZd5lzaswGeV0mI0VxH4=;
-	b=WuIml8+bFNWIai4pwtX4tSQzikrGoTasWPFRug7mytOWFiHVJNt6mTJkktE1FTWXVKRaLT
-	g1ZTGbjjaTi+mrujNQC9o7G5g6Q2iRFeWZg+YXNo/pvsk4EKezOY3WBmG3CzbloTpKjOfJ
-	6jEHTin93tow6aBkkOPbIY/3bFRGEoI=
-Date: Thu, 12 Mar 2026 10:24:24 +0800
+	bh=bn22wJ7ckCW5LunWe8zrG07xQ/9uHxRHUmDSBAcb/oU=;
+	b=pl1wvej5D2Yz+aDVoFPsDWCvqwPHXwNrvdxO4nqaau4RsfYAyzqGQIDN8yI6wkuerZ+X4P
+	ZDGbzlOcZxxm4FS8OyTxMRh9hMr0YrKMX3KTPpuJ9UK97OYQeLMnmLqJQCRsk4iXYPnBNm
+	d1zUpjd9ueHL/DhtAMgYjaQcmKsyMQ0=
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v3 3/6] bpf: Disallow !kprobe_write_ctx progs
- tail-calling kprobe_write_ctx progs
-Content-Language: en-US
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Shuah Khan <shuah@kernel.org>, Feng Yang <yangfeng@kylinos.cn>,
- Menglong Dong <menglong8.dong@gmail.com>,
- Puranjay Mohan <puranjay@kernel.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@kernel.org>, Pu Lehui <pulehui@huawei.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- netdev@vger.kernel.org, kernel-patches-bot@fb.com
-References: <20260303150639.85007-1-leon.hwang@linux.dev>
- <20260303150639.85007-4-leon.hwang@linux.dev> <abHwii5stH93Vz5E@krava>
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3864.400.21\))
+Subject: Re: [LSF/MM/BPF TOPIC] Reimagining Memory Cgroup (memcg_ext)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <abHwii5stH93Vz5E@krava>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: Muchun Song <muchun.song@linux.dev>
+In-Reply-To: <abHPsCypwo7ZhqIt@linux.dev>
+Date: Thu, 12 Mar 2026 10:46:10 +0800
+Cc: lsf-pc@lists.linux-foundation.org,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Tejun Heo <tj@kernel.org>,
+ Michal Hocko <mhocko@suse.com>,
+ Johannes Weiner <hannes@cmpxchg.org>,
+ Alexei Starovoitov <ast@kernel.org>,
+ =?utf-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Hui Zhu <hui.zhu@linux.dev>,
+ JP Kobryn <inwardvessel@gmail.com>,
+ Geliang Tang <geliang@kernel.org>,
+ Sweet Tea Dorminy <sweettea-kernel@dorminy.me>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ David Rientjes <rientjes@google.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Meta kernel team <kernel-team@meta.com>,
+ linux-mm@kvack.org,
+ cgroups@vger.kernel.org,
+ bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <8F3593EB-9D81-4459-8675-E922426DCB1E@linux.dev>
+References: <20260307182424.2889780-1-shakeel.butt@linux.dev>
+ <3ECC9B38-6C1A-4F60-9C18-98B7A1A56355@linux.dev> <abHPsCypwo7ZhqIt@linux.dev>
+To: Shakeel Butt <shakeel.butt@linux.dev>
 X-Migadu-Flow: FLOW_OUT
 
-On 12/3/26 06:45, Jiri Olsa wrote:
-> On Tue, Mar 03, 2026 at 11:06:36PM +0800, Leon Hwang wrote:
->> Uprobe programs that modify regs require different runtime assumptions
->> than those that do not. Mixing !kprobe_write_ctx progs with
->> kprobe_write_ctx progs via tail calls could break these assumptions.
->>
->> To address this, reject the combination of !kprobe_write_ctx progs with
->> kprobe_write_ctx progs in bpf_map_owner_matches(), which prevents the
->> tail callee from modifying regs unexpectedly.
-> 
-> hi,
-> could you please give some example where this is actual problem?
-> I'd expect it's up to user (whoever installs the tailcall map) to
-> avoid such situations.
-> 
-The self test in patch #6 can verify the problem, that
-kprobe_write_ctx=true progs can be abused to modify struct pt_regs via
-tail calls when tracing kernel functions using kprobe_write_ctx=false prog.
 
-Explain the problem by reusing the test code:
 
-int dummy_run;
-u64 data;
+> On Mar 12, 2026, at 04:39, Shakeel Butt <shakeel.butt@linux.dev> =
+wrote:
+>=20
+> On Wed, Mar 11, 2026 at 03:19:31PM +0800, Muchun Song wrote:
+>>=20
+>>=20
+>>> On Mar 8, 2026, at 02:24, Shakeel Butt <shakeel.butt@linux.dev> =
+wrote:
+>>>=20
+>=20
+> [...]
+>=20
+>>>=20
+>>> Per-Memcg Background Reclaim
+>>>=20
+>>> In the new memcg world, with the goal of (mostly) eliminating direct =
+synchronous
+>>> reclaim for limit enforcement, provide per-memcg background =
+reclaimers which can
+>>> scale across CPUs with the allocation rate.
+>>=20
+>> Hi Shakeel,
+>>=20
+>> I'm quite interested in this. Internally, we privately maintain a set
+>> of code to implement asynchronous reclamation, but we're also trying =
+to
+>> discard these private codes as much as possible. Therefore, we want =
+to
+>> implement a similar asynchronous reclamation mechanism in user space
+>> through the memory.reclaim mechanism. However, currently there's a =
+lack
+>> of suitable policy notification mechanisms to trigger user threads to
+>> proactively reclaim in advance.
+>=20
+> Cool, can you please share what "suitable policy notification =
+mechanisms" you
+> need for your use-case? This will give me more data on the comparison =
+between
+> memory.reclaim and the proposed approach.
 
-struct {
-	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-	__uint(max_entries, 1);
-	__uint(key_size, sizeof(__u32));
-	__uint(value_size, sizeof(__u32));
-} prog_array_dummy SEC(".maps");
+If we expect the proactive reclamation to be triggered when the current
+memcg's memory usage reaches a certain point, we have to continuously =
+read
+memory.current to determine whether it has reached our set watermark =
+value
+to trigger asynchronous reclamation. Perhaps we need an event that can =
+notify
+user-space threads when the current memory usage reaches a specific
+watermark value. Currently, the events supported by memory.events may =
+lack
+the capability for custom watermarks.
 
-SEC("?kprobe")
-int dummy_kprobe(void *ctx)
-{
-	dummy_run++;
-	bpf_tail_call_static(ctx, &prog_array_dummy, 0);
-	return 0;
-}
+>=20
+>=20
+>>=20
+>>>=20
+>>> Lock-Aware Throttling
+>>>=20
+>>> The ability to avoid throttling an allocating task that is holding =
+locks, to
+>>> prevent priority inversion. In Meta's fleet, we have observed lock =
+holders stuck
+>>> in memcg reclaim, blocking all waiters regardless of their priority =
+or
+>>> criticality.
+>>=20
+>> This is a real problem we encountered, especially with the jbd =
+handler
+>> resources of the ext4 file system. Our current attempt is to defer
+>> memory reclamation until returning to user space, in order to solve
+>> various priority inversion issues caused by the jbd handler. =
+Therefore,
+>> I would be interested to discuss this topic.
+>=20
+> Awesome, do you use memory.max and memory.high both and defer the =
+reclaim for
+> both? Are you deferring all the reclaims or just the ones where the =
+charging
+> process has the lock? (I need to look what jbd handler is).
+>=20
 
-SEC("?kprobe")
-int kprobe(struct pt_regs *regs)
-{
-	data = regs->di = 0;
-	return 0;
-}
+We do not use memory.high, although it supports deferring memory =
+reclamation
+to user-space, it also attempts to throttle memory allocation speed, =
+which
+introduces significant latency. In our application's case, we would =
+rather
+accept an OOM under such circumstances. We previously attempted to =
+address
+the priority inversion issue caused by the jbd handler separately (which =
+we
+frequently encounter since we use the ext4 file system), and you can =
+refer
+to this [1]. Of course, this solution lacks generality, as it requires
+calling new interfaces for various lock resources. Therefore, we =
+internally
+have a more aggressive idea: defer all reclamation triggered by =
+kernel-space
+memory allocation until just before returning to user-space. This should
+resolve the vast majority of priority inversion problems. The only =
+potential
+issue introduced is that kernel-space memory usage may briefly exceed =
+memory.max.
 
-The "kprobe" prog will be added to "prog_array_dummy" map.
+[1] =
+https://lore.kernel.org/linux-mm/cover.1750234270.git.hezhongkun.hzk@byted=
+ance.com/#r
 
-In user space, the "dummy_kprobe" prog will attach to kernel function
-"bpf_entry_test1".
-
-Actually, without this patch, when "bpf_fentry_test1" runs, the arg "a"
-will be updated as 0. Thus, bpf_prog_test_run_tracing() returns -EFAULT
-instead of 0.
-
-bpf_prog_test_run_tracing()
-|-->bpf_fentry_test1()
-    |-->dummy_kprobe()
-        |-->kprobe() /* via tail call */
-            |-->regs->di = 0;
-    return 1; /* instead of 2 */
-return -EFAULT;
-
-Yep, the commit log is not clear to describe this abuse problem. Will
-update it.
-
-Thanks,
-Leon
+Muchun,
+Thanks.
 
