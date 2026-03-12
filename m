@@ -1,28 +1,27 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 242C438F64F;
-	Thu, 12 Mar 2026 16:36:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FAC338F64D;
+	Thu, 12 Mar 2026 16:36:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773333377; cv=none; b=Ba/luYuV7AOocr7qMfMMRq1/ezknUjk+95WtJ+s1ud6e+Et21ZbHZckvEvVSMYqKn7/bKGCPgprSlU9AAFOMUJrlQYvWmokY9PznyTC6036KBiaz83bE9uBycYfnS/+xTweVkl6CodK0e2vQJIxyjIs9qYAho8N64CGhrQ7sFlk=
+	t=1773333378; cv=none; b=tR6dDt1doPrQmIi7QxAAaVT1JlzYJ0R3Z4r8RXGxs6omm04RBrP3Vw35LEoktgvsYWSFKfBYZj9jqQ/mTXwqHFI9R0K4fvFaq2zhQT6Sn02aXbfz3IFXUDgONFIS9e50icEocPA9MBH764cJM3Zvcc3tMsrE4hQjtImcB38ZjJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773333377; c=relaxed/simple;
-	bh=/OhEj+qBa2641IR0RX8OLbVcWBrncIqZi1dsC4Lgi94=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MzBaw7Nx4syUY2ph9aEcXX5igb8357YMQEn77ngRsfrVZMwLkjEQmkV4VF+jHIIzVI2+LW3Zj/m/4XjtlxhuJPeUaDxxzgNteM0flZIMHI9FmXKYtMJdtG97LBsCsWLAnIlNzSslGKnPnEgiOraULLIW4OWIWLXgGRZxsMWsPTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	s=arc-20240116; t=1773333378; c=relaxed/simple;
+	bh=mE55RNw7NfYQ/u3EEwQHOmpYYJu10KJvCBY6+ef2LwA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=r/TT18Sp7vKNizKRUvp3z/giwLpegVW+2LAIiaeLt36/yjSG9/NLHcRCuRMkDMWQHJfZnilkdSjYJ58SeN3ZnmFOSyIsqx9t3D81pZGhUZ0RJnIOSP5uME/fV/r/I08qOMsfJ/5J414xdsm3t16QXZ84j8bhHCykEBmC+UkjZys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fWtXW27QQzKHMRw;
-	Fri, 13 Mar 2026 00:35:55 +0800 (CST)
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4fWtWv51pczYQv5n;
+	Fri, 13 Mar 2026 00:35:23 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id E5CCD4056F;
+	by mail.maildlp.com (Postfix) with ESMTP id 1E27A4056F;
 	Fri, 13 Mar 2026 00:36:13 +0800 (CST)
 Received: from k01.k01 (unknown [10.67.174.197])
-	by APP4 (Coremail) with SMTP id gCh0CgAX8Ut567JpyHCmAg--.44387S7;
-	Fri, 13 Mar 2026 00:36:13 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgAX8Ut567JpyHCmAg--.44387S2;
+	Fri, 13 Mar 2026 00:36:10 +0800 (CST)
 From: Xu Kuohai <xukuohai@huaweicloud.com>
 To: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -54,12 +53,10 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Vasily Gorbik <gor@linux.ibm.com>,
 	"David S . Miller" <davem@davemloft.net>,
 	Wang YanQing <udknight@gmail.com>
-Subject: [PATCH bpf-next v9 5/5] bpf, arm64: Emit BTI for indirect jump target
-Date: Fri, 13 Mar 2026 01:02:55 +0800
-Message-ID: <20260312170255.3427799-6-xukuohai@huaweicloud.com>
+Subject: [-next v9 0/5] emit ENDBR/BTI instructions for indirect jump targets
+Date: Fri, 13 Mar 2026 01:02:50 +0800
+Message-ID: <20260312170255.3427799-1-xukuohai@huaweicloud.com>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260312170255.3427799-1-xukuohai@huaweicloud.com>
-References: <20260312170255.3427799-1-xukuohai@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,120 +64,109 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgAX8Ut567JpyHCmAg--.44387S7
-X-Coremail-Antispam: 1UD129KBjvJXoWxXrW8trW5XF45Cw1rWw4Uurg_yoW5uFWkpF
-	4DC3s0krWrGr4UWa1DXayDAFyakF4kGay3GFyFk3yIkrZIqFy5WF15KF12kFn3A3yrur1x
-	AayYkr17W34xJrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPCb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7Cj
-	xVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4
-	xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCa
-	FVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I
-	0En4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I
-	3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxV
-	W8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8I
-	cVCY1x0267AKxVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87
-	Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI
-	43ZEXa7IU0sqXPUUUUU==
+X-CM-TRANSID:gCh0CgAX8Ut567JpyHCmAg--.44387S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxuryrZF47Ar17Kr15Zw48tFb_yoWrCryfpF
+	savw13ur4kKr4fXr1fJF40kryaqw48J3W7ZFnxK3yxA3Z09rnruF4Sgw4FvF98Ary0k34Y
+	qr4a9r95G34DX37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvqb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6x
+	kF7I0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE
+	5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeV
+	CFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY
+	1x0262kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
+	C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
+	wI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
+	v20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2
+	jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0x
+	ZFpf9x07jxCztUUUUU=
 X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-From: Xu Kuohai <xukuohai@huawei.com>
+On architectures with CFI protection enabled that require landing pad
+instructions at indirect jump targets, such as x86 with CET/IBT enabled
+and arm64 with BTI enabled, kernel panics when an indirect jump lands on
+a target without landing pad. Therefore, the JIT must emit landing pad
+instructions for indirect jump targets.
 
-On CPUs that support BTI, the indirect jump selftest triggers a kernel
-panic because there is no BTI instructions at the indirect jump targets.
+The verifier already recognizes which instructions are indirect jump
+targets during the verification phase. So we can store this information
+in env->insn_aux_data and pass it to the JIT as new parameter, so the JIT
+knows which instructions are indirect jump targets.
 
-Fix it by emitting a BTI instruction for each indirect jump target.
+During JIT, constants blinding is performed. It rewrites the private copy
+of instructions for the JITed program, but it does not adjust the global
+env->insn_aux_data array. As a result, after constants blinding, the
+instruction indexes used by JIT may no longer match the indexes in
+env->insn_aux_data, so the JIT can not lookup env->insn_aux_data directly.
 
-For reference, below is a sample panic log.
+To avoid this mismatch, and considering that all existing arch-specific JITs
+already implement constants blinding with largely duplicated code, move
+constants blinding from JIT to generic code.
 
-Internal error: Oops - BTI: 0000000036000003 [#1]  SMP
-...
-Call trace:
- bpf_prog_2e5f1c71c13ac3e0_big_jump_table+0x54/0xf8 (P)
- bpf_prog_run_pin_on_cpu+0x140/0x468
- bpf_prog_test_run_syscall+0x280/0x3b8
- bpf_prog_test_run+0x22c/0x2c0
+v9:
+- Make constant blinding available for classic bpf (Eduard)
+- Clear prog->bpf_func, prog->jited ... on the error path of extra pass (Eduard)
+- Fix spelling errors and remove unused parameter (Anton Protopopov)
 
-Fixes: f4a66cf1cb14 ("bpf: arm64: Add support for indirect jumps")
-Reviewed-by: Anton Protopopov <a.s.protopopov@gmail.com>
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
----
- arch/arm64/net/bpf_jit_comp.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+v8: https://lore.kernel.org/bpf/20260309140044.2652538-1-xukuohai@huaweicloud.com/
+- Define void bpf_jit_blind_constants() function when CONFIG_BPF_JIT is not set 
+- Move indirect_target fixup for insn patching from bpf_jit_blind_constants()
+  to adjust_insn_aux_data()
 
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 7212ec89dfe3..aa5cd240cdda 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -1198,8 +1198,8 @@ static int add_exception_handler(const struct bpf_insn *insn,
-  * >0 - successfully JITed a 16-byte eBPF instruction.
-  * <0 - failed to JIT.
-  */
--static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
--		      bool extra_pass)
-+static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn *insn,
-+		      struct jit_ctx *ctx, bool extra_pass)
- {
- 	const u8 code = insn->code;
- 	u8 dst = bpf2a64[insn->dst_reg];
-@@ -1224,6 +1224,9 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 	int ret;
- 	bool sign_extend;
- 
-+	if (bpf_insn_is_indirect_target(env, ctx->prog, i))
-+		emit_bti(A64_BTI_J, ctx);
-+
- 	switch (code) {
- 	/* dst = src */
- 	case BPF_ALU | BPF_MOV | BPF_X:
-@@ -1899,7 +1902,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 	return 0;
- }
- 
--static int build_body(struct jit_ctx *ctx, bool extra_pass)
-+static int build_body(struct bpf_verifier_env *env, struct jit_ctx *ctx, bool extra_pass)
- {
- 	const struct bpf_prog *prog = ctx->prog;
- 	int i;
-@@ -1918,7 +1921,7 @@ static int build_body(struct jit_ctx *ctx, bool extra_pass)
- 		int ret;
- 
- 		ctx->offset[i] = ctx->idx;
--		ret = build_insn(insn, ctx, extra_pass);
-+		ret = build_insn(env, insn, ctx, extra_pass);
- 		if (ret > 0) {
- 			i++;
- 			ctx->offset[i] = ctx->idx;
-@@ -2079,7 +2082,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
- 	if (build_prologue(&ctx, was_classic))
- 		goto out_off;
- 
--	if (build_body(&ctx, extra_pass))
-+	if (build_body(env, &ctx, extra_pass))
- 		goto out_off;
- 
- 	ctx.epilogue_offset = ctx.idx;
-@@ -2127,7 +2130,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
- 	/* Dont write body instructions to memory for now */
- 	ctx.write = false;
- 
--	if (build_body(&ctx, extra_pass))
-+	if (build_body(env, &ctx, extra_pass))
- 		goto out_free_hdr;
- 
- 	ctx.epilogue_offset = ctx.idx;
-@@ -2136,7 +2139,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
- 	ctx.write = true;
- 
- 	/* Pass 3: Adjust jump offset and write final image */
--	if (build_body(&ctx, extra_pass) ||
-+	if (build_body(env, &ctx, extra_pass) ||
- 		WARN_ON_ONCE(ctx.idx != ctx.epilogue_offset))
- 		goto out_free_hdr;
- 
+v7: https://lore.kernel.org/bpf/20260307103949.2340104-1-xukuohai@huaweicloud.com
+- Move constants blinding logic back to bpf/core.c
+- Compute ip address before switch statement in x86 JIT
+- Clear JIT state from error path on arm64 and loongarch 
+
+v6: https://lore.kernel.org/bpf/20260306102329.2056216-1-xukuohai@huaweicloud.com/
+- Move constants blinding from JIT to verifier
+- Move call to bpf_prog_select_runtime from bpf_prog_load to verifier
+
+v5: https://lore.kernel.org/bpf/20260302102726.1126019-1-xukuohai@huaweicloud.com/
+- Switch to pass env to JIT directly to get rid of coping private insn_aux_data for
+  each prog
+
+v4: https://lore.kernel.org/all/20260114093914.2403982-1-xukuohai@huaweicloud.com/
+- Switch to the approach proposed by Eduard, using insn_aux_data to indentify indirect
+  jump targets, and emit ENDBR on x86
+
+v3: https://lore.kernel.org/bpf/20251227081033.240336-1-xukuohai@huaweicloud.com/
+- Get rid of unnecessary enum definition (Yonghong Song, Anton Protopopov)
+
+v2: https://lore.kernel.org/bpf/20251223085447.139301-1-xukuohai@huaweicloud.com/
+- Exclude instruction arrays not used for indirect jumps (Anton Protopopov)
+
+v1: https://lore.kernel.org/bpf/20251127140318.3944249-1-xukuohai@huaweicloud.com/
+
+
+Xu Kuohai (5):
+  bpf: Move constants blinding out of arch-specific JITs
+  bpf: Pass bpf_verifier_env to JIT
+  bpf: Add helper to detect indirect jump targets
+  bpf, x86: Emit ENDBR for indirect jump targets
+  bpf, arm64: Emit BTI for indirect jump target
+
+ arch/arc/net/bpf_jit_core.c      |  41 ++++-------
+ arch/arm/net/bpf_jit_32.c        |  43 +++--------
+ arch/arm64/net/bpf_jit_comp.c    |  87 ++++++++---------------
+ arch/loongarch/net/bpf_jit.c     |  61 +++++-----------
+ arch/mips/net/bpf_jit_comp.c     |  22 +-----
+ arch/parisc/net/bpf_jit_core.c   |  75 ++++++++------------
+ arch/powerpc/net/bpf_jit_comp.c  |  70 +++++++-----------
+ arch/riscv/net/bpf_jit_core.c    |  63 ++++++-----------
+ arch/s390/net/bpf_jit_comp.c     |  61 ++++++----------
+ arch/sparc/net/bpf_jit_comp_64.c |  63 ++++++-----------
+ arch/x86/net/bpf_jit_comp.c      |  71 ++++++-------------
+ arch/x86/net/bpf_jit_comp32.c    |  35 ++-------
+ include/linux/bpf.h              |   2 +
+ include/linux/bpf_verifier.h     |   9 +--
+ include/linux/filter.h           |  15 +++-
+ kernel/bpf/core.c                | 118 +++++++++++++++++++++----------
+ kernel/bpf/syscall.c             |   4 --
+ kernel/bpf/verifier.c            |  66 ++++++++++++-----
+ 18 files changed, 372 insertions(+), 534 deletions(-)
+
 -- 
 2.47.3
 
