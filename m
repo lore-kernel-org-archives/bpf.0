@@ -1,177 +1,202 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B53326A0A7
-	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 00:29:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 955112512DE
+	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 00:35:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773275400; cv=pass; b=NtHFF0GeTKlXE90RAOxhbd2APxDkDU6A+FaDwASHhFp4MQYlVWB2BKwATWK+y9UIzLhTTsOJSaI+WaUIDCH/Ws8IfZQeVIOc9k7Ouc/qEVAh0u5vdAhODnCqtkp1f4Q40ldSgn/vgH3WhoO+UBr6ddeueExCTpAzCSORyiZRzVE=
+	t=1773275746; cv=pass; b=eZEtGuRmEMiTOUFWFjpNRLMoK8jIPvM4FPIpRBb2aGOpRLnU4D2MsVevL1QA8Bi786h6pY2zsSZSjJ5bepyX59vZmfMy5b1DvvOxiimfq5rZNzYUVkZtn5BL78vi9UGPSCVApofNJPyZLjGzlL5RahKrl43nCOLcgopP77uXkjQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773275400; c=relaxed/simple;
-	bh=YcypzZhNU7pNSG3Co3XkiZS4WRLodx1GYdn6Od+L76g=;
+	s=arc-20240116; t=1773275746; c=relaxed/simple;
+	bh=1JvWAZWExy+VqPTR1n/QwQ7c24F+TMl5x108hGrmWpI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PIhSpS1ax2mUyCNixKCTSx1lehuUPPlr1G69PtqO6c+apyy5PJUbSgqNsUEVU6hS6PPdX7tr052Ma5x8BpoOmJCloG5H4KwaOK9RUuGp7tEnQOl3Z5Msxt/MvHR5TYEFOfGH5DT2TDUaIWN0Q6HxmH37BYcbXNcCBRBTptRsoug=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XVjbBdP7; arc=pass smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=HQmmjkZD8JEIHxmaXHzpHRb4LsUpr4GLeDn6Bt0I7vLDo67eyXoFtKpTmkXa71L3dX0piUZH5FlzemT1OQLhiHXVrz9fzpf+h3yrzOckGq26R1h2GtIL9HF17KKLKyyvcTSsIakYlgnImNjb8o/tbHs8kly0IjDvm9rObkrhabM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X0nl4Nwx; arc=pass smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XVjbBdP7"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2aea4ebb048so24875ad.1
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 17:29:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773275396; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X0nl4Nwx"
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b936331786dso48222566b.3
+        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 17:35:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773275744; cv=none;
         d=google.com; s=arc-20240605;
-        b=M73X+nhgf1Se5eGtnD+aAh/E+jJGEUDuSjLbETraqqevoOUi+MEA5yiYPN52Gqe/Uk
-         2U1wZtE/JzziMkZzAQdwXDAEXbKv5WzYpYorN8vZohgqel9ZVg0PHrZBPj/9OHCX4st8
-         mRlwwkW4Zxd7crPvbqYngyMkTeFsRCweVdu0YxpXpAZl0xxBieltPyGVa+Sblwwm7fL5
-         yaFEIThdkvYCsS8Cip9Pns/2Lll+u5ZL4Kq6AT2bWNl4YyuUH0DEuqUQmPdQnhpYNpK7
-         JHyyhN72KM2zV5N2WIq8loZNoMW3i5iwKdzJRUmt9QeBiAxsPgX8G9geKJGmNm3uqt1N
-         yjZw==
+        b=jy4dfn2WlGbzKtA7DBNyPI1XoTaD6vkGQIMdrs+Bs2Lv5ZdR5h08DUjIuEeKUeXpDh
+         nuaGF0M4RTuRAA1qSeJEfcKWoLQpN93a2p+3oeWq9S4Q2m1VM7qEWlDih9LOXaHBmRKd
+         I7rNYaE3ZLgLL5qWvICk+OOJ3hVLPq8VmEbKGKq+gdvHCUP8zfS8/5img/lgB3VhAErC
+         SDWygBtoyBaQpXOt7etKg/RvW2TudtsOgUlRv+HwEyYCI5fpcBUEXlpp4J5/PFFw9nyY
+         5Xz6lwEcb7QZLsTIKZLxL4EDBhcdYnLIsfLF94BKCR/+sfIohuAz1q4AemZKVtBQs2aS
+         aObw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=1PC+/wr2syCqvxGBoZe6+L+D9Kxcq5YGZvRoBAu0gk4=;
-        fh=JQN+nqSQI/yQhnjC+9EIR7ag0aXZEjUhfN8msapSM8c=;
-        b=ZuSw1R0o9DIfCAH1DFe7kHpgiNJcBzz4GgkDenIxi5FO2txTzRPnadZSdzFPFiJawI
-         U7k0joplekEL0g3qhi8oGg7f7WI+56ACiGfYKjCecUoMhs6QXWirA51DZvjpNmSEfCfu
-         SFbvjJhtJuYmKoNb1U7hzLhQ223m54GglvasL3JOB+NbsKjTZ7ck4Q2uFQd0yD2De9lK
-         IOMH67H18x3z4ymTsxgqhXKiZzV8XtxwUv+N6fL6pofg/lMRDFc8E5FoFEmmlxKyLdVk
-         DuV0+fe4Qmfs0jt06jGxllxeLy4R1xWTz0j294rxcnB36Rilmx+oIsEDEfNp8YI2Ihw3
-         zRyA==;
+        bh=Avm1ud4vVifZjsgecOmKobnWr0DR9jGYcoaueKEqoLw=;
+        fh=p9R8I3N69Ro6zTrNSn+S4t/IvOj46g+dlqtALAMwpw4=;
+        b=aDXgRTOahfbDyfi1DLnMLzTDQm5oGH2ZBKjfA9tTQ5ZhbHng7jELm0WNPLto7/u5mA
+         9EulPmjHC1UXtI7354LxZH1hANWTyzrmqSFICf7WfmtUCYnw3pB41YyxXKHmTt3IZxJn
+         MMYpNzoJvnEGZus0fvxAVLYd1ds+3Zbm9Nqfe4yMrDipkBj33pNEGSBLLPGmbvZMxyrM
+         iHs5kmvj+wv6TybVESrOua6li8lqjox0KwbiDJRIqyh9vEHa49VxGNwDbFMGt1Hl7Kxj
+         mtuHJUVTE029ApGaBZKCFzyepuqK+2VucNTGcaxmZas1j0B4jiCXks/xh7wtoZ6WPEJm
+         yCrA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773275396; x=1773880196; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773275744; x=1773880544; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1PC+/wr2syCqvxGBoZe6+L+D9Kxcq5YGZvRoBAu0gk4=;
-        b=XVjbBdP7BywbdQHnDO4m7R6dIcnBKfdSjjyxAOsnRIfeAtI8OB7DcQrXFTffvDlv9v
-         aOc3Kk2i1WHPrsFzZR1wOLt2OiDAqCWMWZnFQmZxNxmRHzvz5U481DdTnFQQQlbZahF6
-         eS8S4j8vM0tiaa9tIW9ko3rW6KKGUA6gjHKPfBE2oltaZgTS+BLlSqye8cH4VPR8mIQl
-         xNjycZD18On3+wcyBr/hfDx/XIedPP0P4bCQ+4VKExJ+Z2LBU+Svnqkg7KNl5RZDAGAE
-         8kaND5KiiKt0uLIv1dM8/2rAvj0Cn77WaY5SnliPXDfXUJ/e/Qe6bmwQnWIOykz4J2TH
-         02iA==
+        bh=Avm1ud4vVifZjsgecOmKobnWr0DR9jGYcoaueKEqoLw=;
+        b=X0nl4NwxwQV7WIfoo7WZixgw82dnE+LA02SlpUB5SZlh6B2AJb8c9QAPu2CP+/047u
+         3LMFyyOFzy9uCn5yApc5VumP201MCHaBiw+YYXHVIFwwyDMt9jnZlWj0U7I79H4lYhFY
+         lzCzC2RGmDBjmJfsApt5Vkh8ohHteMl0CZY7RLIami4488vvUTcgcOoACvR8sYSrekkv
+         grCIRWQdzBPnPyI/cMRDQkoBudpyA+ooHj551rPWBZUJ2IqMetHLSaKZLIo+r2qQ+Iww
+         pokS27Ivm94seN9hAkYj6puuYRLw5uYIbOchxGSliep3efFvomeQa6UqzY5eb6ebWTKd
+         DGAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773275396; x=1773880196;
+        d=1e100.net; s=20230601; t=1773275744; x=1773880544;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=1PC+/wr2syCqvxGBoZe6+L+D9Kxcq5YGZvRoBAu0gk4=;
-        b=HDakGT3zQ6ElqEnmK1o/nhIMpmiDhydpbpGKsbV/OtdCnQlxJUH/GGmsQT9C09KNSB
-         t+e2A4mL4CGMUBiE2FhBc2Zni9t0spzU7ilSfEzJBqOXnJxqQc7TNp6HVhzncUZV1hl4
-         ucP4WDO55GQiAAYGE7L1WvS2MqnArmr02Xb9gOfAm8EXdOubGqLxl6AjQIq8K7a6iUrK
-         Book6elrZjqaXrJdlhXSaK2v9ZYZ6Ore83pqoVlrNzSHRI2/MVp9ys/PyP+AyKL7n301
-         AyFMdIUNQdT+ljTFkYQ75oqHupxcbQ+iash+zrlWgM04LPdBj9IYX+gTWJc4AHfzKfuo
-         xYWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWqXZNcUj2q/+IWCP11rsuVX+KNP2nqhMdRij1eoBmRmlYp80W47wcKRoI44zLSlSXBbf4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWaCyrzfy0MDLYK1jixYW/v8KCBdPeY/WEJrIpVKyMFV5bZ7Mz
-	sgLBHlqgQb9pw+LR0H5hRIudh/nIM/3euLOe1LYY69btG7e64/jejw5TsOA6QZReEMKszT4a++u
-	2EeFX15CVM2KcqAruiFjHR0mpQ2JquwD33H9zAELD
-X-Gm-Gg: ATEYQzyw99OyAIHa6JqhLjzg04/QnEbcVZsFgHsdMm39JoQJ0dy9RY5LDsUXdM9JJDZ
-	tqDTX1mENOqGJ0U9iJDvITR2xHjZm71A0Erv/ZksJS4OjoGTWFvojgqkaOWmjRrA1kvxlxzwsFk
-	sXvHc5URS9/cpYG3a8w8xJJOWxx7vDYJeDyIh9/Jo5rpX4p5Q437mrwiOp19sX6aCnFDbgZHARF
-	qOLXleWXIkQHgcFf1WIYfvdKwrfPvOLoVibybANUUx1/wNvmW+z6eBx1OuJAnW4uOrDclHomS5h
-	4cOxVm+Fl2XEHyCa/ogljpxtQlxF1o+/BL/gIr+KI1H8H4M=
-X-Received: by 2002:a17:903:3c67:b0:2ae:80a3:98a9 with SMTP id
- d9443c01a7336-2aebd197d2bmr962485ad.11.1773275395866; Wed, 11 Mar 2026
- 17:29:55 -0700 (PDT)
+        bh=Avm1ud4vVifZjsgecOmKobnWr0DR9jGYcoaueKEqoLw=;
+        b=ZbR053i1OzHoKP6kxdvskvfpevlY2SaMOhlBh5IFDtB2xPe7ceqgle+n6Q0bOT5iQq
+         fngyPutmKg+q02Mtj/qRkU+AdK9K1e1isyvLidlLkDHXkRhvNSAStEyCtQ4NdnCviQzq
+         9JIgLXiQ0GR5CXr9lreDFoepfgV3cjXGpsopoJ0LewI3BQpBCD90qRpD1XXXQ/YuJ6nx
+         p/LKHKgvBrNZWtaFsaitPGcZeub5VcZn5mNeqAR2lX8wbyfeHBtsFcER2qdb82S69aVc
+         KFyurMGs6xO3i9dwK9c03T+GJBklzJLWCG+EmPMsIoCmKCazDsJWtjPJpexZI/dz1x+T
+         ki6A==
+X-Gm-Message-State: AOJu0YzHqnznvBhD002JNV+y876T3lwIy7NhFxf7xbXy7Rq9an644BYO
+	8XmB4kV03UelcUdv7PS3LrN9unwwlMqlBGaglC2UHUafqWY0tDt0+AMye1ivhpX7vrCoVJtGLHz
+	9O+BuOBLNWYxkeQedHdsJEXk/oh7u2i0=
+X-Gm-Gg: ATEYQzyAsqRrE08NGzeSk6YyUWwCcPAMBGXfHeB2ow+Mv4Ez5KEdHJqxpTcRIPURAdZ
+	lep8oYlCmlLsH9mJJNZYcfZmOPEqAz/ITMxQhbjImNQAk39pshm4h4JPoEUEdA/FnuxwymJo+Mg
+	QnU4x3/TyiWmDWPqHTctKFueLMWTCxViEXp9Vzg2B2lpND+52t6lgvR3b6trdDYZUoDdZCSaXN3
+	q28Wgea3zPG5lwUwidRJknS7VsV1fqGKNQj4KUwCQ8SQ1kEPL8W+DP1JmjJb7u1T5Feqxoy17XH
+	/WgdUHg118Uonu5ZSmF9JHuez4Bqy57mn3qPdmBgDw==
+X-Received: by 2002:a17:907:c1a:b0:b96:fbeb:f7b0 with SMTP id
+ a640c23a62f3a-b972e508856mr256631566b.39.1773275743712; Wed, 11 Mar 2026
+ 17:35:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260311-tools_build_fix_zero_init-v4-0-9e35bdb99cb3@arm.com> <20260311-tools_build_fix_zero_init-v4-12-9e35bdb99cb3@arm.com>
-In-Reply-To: <20260311-tools_build_fix_zero_init-v4-12-9e35bdb99cb3@arm.com>
-From: Ian Rogers <irogers@google.com>
-Date: Wed, 11 Mar 2026 17:29:44 -0700
-X-Gm-Features: AaiRm51j9bOAiNXwV4INuHof8fl1AJbNKlxnNgZFr0pcoAP2BOsfzP0vifju5JA
-Message-ID: <CAP-5=fUsOzjCAOEyJF1cwDbfjSHi=TKjWd1kL6tWWvLu19CFkA@mail.gmail.com>
-Subject: Re: [PATCH v4 12/30] tools build: Append extra host cflags
-To: Leo Yan <leo.yan@arm.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, 
-	Quentin Monnet <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>, 
-	Bartosz Golaszewski <brgl@kernel.org>, Kent Gibson <warthog618@gmail.com>, 
-	"K. Y. Srinivasan" <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
-	Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>, 
-	Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, 
-	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
-	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>, 
-	Len Brown <lenb@kernel.org>, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, 
-	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, bpf@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org
+References: <20260311225726.808332-3-puranjay@kernel.org> <480892a72caa391641ec52a010730d213241830683280a0583cfc334d8f39325@mail.kernel.org>
+In-Reply-To: <480892a72caa391641ec52a010730d213241830683280a0583cfc334d8f39325@mail.kernel.org>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Thu, 12 Mar 2026 00:35:32 +0000
+X-Gm-Features: AaiRm50Tz3caGo1ferZ9lksPWV8OqlRcZW9C65MhZSPZyRuBwrcXMOdvK8y9GcI
+Message-ID: <CANk7y0gOSQN7vULuBVwhVO=Tq6bB99jZwovras7F5yjNu5tVqg@mail.gmail.com>
+Subject: Re: [PATCH bpf v3 2/3] bpf: switch task_vma iterator from mmap_lock
+ to per-VMA locks
+To: bot+bpf-ci@kernel.org
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, martin.lau@kernel.org, eddyz87@gmail.com, 
+	memxor@gmail.com, mykyta.yatsenko5@gmail.com, kernel-team@meta.com, 
+	yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 11, 2026 at 1:31=E2=80=AFAM Leo Yan <leo.yan@arm.com> wrote:
+On Wed, Mar 11, 2026 at 11:53=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
 >
-> Append HOST_EXTRACFLAGS to HOSTCFLAGS so that additional flags can be
-> applied to the host compiler.
+> > diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
+> > index 2ccdc3228063..50dbeaeafd86 100644
+> > --- a/kernel/bpf/task_iter.c
+> > +++ b/kernel/bpf/task_iter.c
 >
-> Signed-off-by: Leo Yan <leo.yan@arm.com>
+> [ ... ]
+>
+> > +__bpf_kfunc struct vm_area_struct *bpf_iter_task_vma_next(struct bpf_i=
+ter_task_vma *it)
+> > +{
+> > +     struct bpf_iter_task_vma_kern *kit =3D (void *)it;
+> > +     struct vm_area_struct *vma;
+> > +
+> > +     if (!kit->data) /* bpf_iter_task_vma_new failed */
+> > +             return NULL;
+> > +
+> > +     if (kit->data->locked_vma) {
+> > +             vma_end_read(kit->data->locked_vma);
+> > +             kit->data->locked_vma =3D NULL;
+> > +     }
+>
+> [ ... ]
+>
+> >  __bpf_kfunc void bpf_iter_task_vma_destroy(struct bpf_iter_task_vma *i=
+t)
+> >  {
+> >       struct bpf_iter_task_vma_kern *kit =3D (void *)it;
+> >
+> >       if (kit->data) {
+> > -             bpf_mmap_unlock_mm(kit->data->work, kit->data->mm);
+> > +             if (kit->data->locked_vma)
+> > +                     vma_end_read(kit->data->locked_vma);
+> >               put_task_struct(kit->data->task);
+> >               /*
+> >                * mmput_async() -> schedule_work() -> __queue_work()
+> >                * takes pool->lock. BPF programs on traceable functions
+> >                * or tracepoints called under pool->lock, or programs
+> >                * running in NMI, can reach here and try to re-acquire
+> >                * pool->lock, causing a deadlock. queue_work() disables
+> >                * IRQs before taking pool->lock, so irqs_disabled()
+> >                * detects both cases.
+> >                */
+>
+> Is vma_end_read() safe to call from NMI context here?
+>
+> The comment above notes that BPF programs running in NMI can reach
+> this code. The old code deferred the mmap_lock release via irq_work
+> when irqs_disabled() to avoid exactly this class of problem.
+>
+> vma_end_read() calls vma_refcount_put(), which can call
+> rcuwait_wake_up() when a VMA writer is waiting:
+>
+>   vma_end_read()
+>     vma_refcount_put()
+>       rcuwait_wake_up(&mm->vma_writer_wait)
+>         wake_up_process(task)
+>           raw_spin_lock_irqsave(&p->pi_lock, ...)
+>
+
+This is a valid concern and fput() will have similar problems because
+it calls schedule_delayed_work(). I will have to think about how to
+fix it, the easiest would be to add the following to new:
+
+if (irqs_disabled()) {
+      kit->data =3D NULL;
+      return -EBUSY;
+  }
+
+Then the mmput_async()'s deferral to irq_work is not needed because
+the iterator returns early in _new().
+
+But this will make the iteratory useless in NMI because
+irqs_disabled() would always return true in NMI (unless I am missing
+something)
+
+> If an NMI fires while the interrupted context holds pi_lock or
+> rq->__lock, this path deadlocks. The same concern applies to the
+> vma_end_read() calls in bpf_iter_task_vma_next() and
+> bpf_iter_task_vma_find_next().
+>
+> The task_vma iterator kfuncs are in common_btf_ids registered for
+> BPF_PROG_TYPE_UNSPEC, so perf event programs running in NMI context
+> can use them.
+>
+> >               if (!irqs_disabled()) {
+> >                       mmput_async(kit->data->mm);
+> >                       bpf_mem_free(&bpf_global_ma, kit->data);
+> >               } else {
+> >                       irq_work_queue(&kit->data->irq_work);
+> >               }
+> >       }
+> >  }
+>
+>
 > ---
->  tools/build/Makefile | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
 >
-> diff --git a/tools/build/Makefile b/tools/build/Makefile
-> index 3a5a3808ab2a1dedd40f35ea322913e8a0788130..a86ce3d99e2bb1c005942d9c3=
-2191e6eaa55cf50 100644
-> --- a/tools/build/Makefile
-> +++ b/tools/build/Makefile
-> @@ -40,14 +40,16 @@ endif
->  FIXDEP         :=3D $(OUTPUT)fixdep
->  FIXDEP_IN      :=3D $(OUTPUT)fixdep-in.o
->
-> +HOSTCFLAGS     :=3D $(HOST_EXTRACFLAGS) $(KBUILD_HOSTCFLAGS)
-
-
-Hi Leo, should HOST_EXTRACFLAGS appear after KBUILD_HOSTCFLAGS here?
-This allows the extra flags to override the build system's flags.
-
-Thanks,
-Ian
-
->
-> +
->  # To track fixdep's dependencies properly, fixdep needs to run on itself=
-.
->  # Build it twice the first time.
->  $(FIXDEP_IN): FORCE
->         $(Q)if [ ! -f $(FIXDEP) ]; then                                  =
-       \
-> -               $(MAKE) $(build)=3Dfixdep HOSTCFLAGS=3D"$(KBUILD_HOSTCFLA=
-GS)";      \
-> +               $(MAKE) $(build)=3Dfixdep HOSTCFLAGS=3D"$(HOSTCFLAGS)";  =
-           \
->                 rm -f $(FIXDEP).o;                                       =
-       \
->         fi
-> -       $(Q)$(MAKE) $(build)=3Dfixdep HOSTCFLAGS=3D"$(KBUILD_HOSTCFLAGS)"
-> +       $(Q)$(MAKE) $(build)=3Dfixdep HOSTCFLAGS=3D"$(HOSTCFLAGS)"
->
->
->  $(FIXDEP): $(FIXDEP_IN)
->
-> --
-> 2.34.1
->
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/229786=
+81697
