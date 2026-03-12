@@ -1,96 +1,117 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BDE5283CAF
-	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 06:43:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F6CC1B4F1F
+	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 06:45:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773297795; cv=none; b=dae0uV0nZyLJg+ieUGtr7/EGkQHshsWH38rV6SqgC23wDetBv+YrIjyugdWVvgDB62/MQNpgFxSYavaJk0BWqiLZd+ztVES9bNyH6jRT3LnndPUTBcFDAUNT72+vCVPGQG4g/HWIuudPUEb3OYsR/0fMfEWFRTd2AQb2XyApMoU=
+	t=1773297958; cv=none; b=dPs5LZJ1Zuxzz1Xqxx2v26oFjsCDpWoSCEHQtCh9VLHg+yHTTDoQlNVCkiUXmc6+PRQfdNrnmJsXxhdOe3lZD1Ub++4yTRxOmNDdayc+izv6dl5b6sXMtJYN/dGw38OeT85CfD39kFKo+0Bw0aqVyWVFXxlI1TaJFfiIOoma2SU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773297795; c=relaxed/simple;
-	bh=gZKq7OR7mOOdC4WEU9jaX+2Gc8+Pd5s5ccoZyjYI0T4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lu+Itc1Oxai4C73AuEEySkDd3AlCPAGZooCq0BDBp7Y2+d1M4EIGhMXOMcowMd27i+ba5Qxwfdl1/WFyoGGIJ+JMpwllf149SRxW5Q8eu4wA+uuDNVMHYeb416hHiZHV1RYKxInthLW3bNQf7eh+e1s0/pPPEfDqsGSE2usRbF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wLz5TutG; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1773297958; c=relaxed/simple;
+	bh=ECFyOrlzRXIolP3InoCIBE+r6ZPmytUDBEW3lZKOZoE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SG2KS0Lbtc+nasGXjyBGVWwwwI6bqIYdiDQKpsb39tS7ntZ07bP4X2Im07RJImGEBSOA+W6HIKlaJJA1X0LK3HxJGllBYzEDzTvJImKjZPHTmDqlq15cCgdmpm2b77VOc9HFCR6dMx75wFqQ5cW9BqWj4cSrVX0PBA7Dl4nqqWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=dLzNcMAM; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wLz5TutG"
-Message-ID: <92089d01-d396-4fcc-b45d-46eac4c78b61@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773297791;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mj06PYjGlHsp3qxgmTdAavaHF8srCIflyI+SP6vMUNA=;
-	b=wLz5TutGkUbQL8ZJqZZP5a+Px47CiRPz6rOtvdiwNqY32adfM5TMqy7AGvThgejA7JQa8d
-	thaSstuSxZxjahC2L/cgl6W2Rct0Z+xVRhPDgHQt/PpFn03Vpjaiw/AQvL7NU/KzcPuVZo
-	LhB1DWUvAezMxFsgfiYoxwYQnb8wEw4=
-Date: Thu, 12 Mar 2026 14:43:00 +0800
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="dLzNcMAM"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4853aec185aso4958625e9.1
+        for <bpf@vger.kernel.org>; Wed, 11 Mar 2026 23:45:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1773297955; x=1773902755; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=D7QFQf2IHb8f0TdCkVhZUSu8p15WgosKW0MpH4S4ifI=;
+        b=dLzNcMAM3Q24MxREARGIOO01owfrZtHtuwYJhUki+ATl423UyppIB13uYL7lXtFGzP
+         UPXzmEtyRu8mXgcQYAXqmZS8m3IeKwMsX4MofS2moPTyjYHTQtlD+UamBnM5QouFA3ID
+         pCFIHelU512tmbrIbpB+wklF+ho6SttIJ/plU60BF8DtB0lDVZ+wlZjcmV6Ze/2j7frC
+         MRkKTw7Uqi8wVxNp3zAkiKgmN8vTyx/J8Znr3H63gAT2m8iESHVbBCmeZLz0zcDPjWop
+         20fF0AByUpPEWQN8L6XMst3Bwv7xhp/rNiZVwXkPh5/iR1mUeHNEPr6EFwIefsxtUoTV
+         EhQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773297955; x=1773902755;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=D7QFQf2IHb8f0TdCkVhZUSu8p15WgosKW0MpH4S4ifI=;
+        b=HboHbhmQe4E7okt9pX8DbAWJ0+LRMBQzNxFA4mUFpiF0jYO50LgbTClK12TWEtFe0G
+         w7DracyP3mv06KvLP/AmYs4yprjlUMaPsNIM7x0qy0/kMxSVYYJ0M/MbfNBrm8Rj68z5
+         A/deq3jYdGdjJ/yFjphJdARW5A+pKdXMYo/y5QJmnj+4xT8IYraxR+5rOF+G815MnmXk
+         IJSrIVb20O0gG8Neu6YVSSSH03ENs0bbu1Dshr+DP/2qTg06uzTxkbfNxlVc3zYMIcj6
+         7PGqg151aAPXMbNEImWiMTsJHK+ODhXdNRFHkq8S+7FAaSejFXPlz2g+DrrtfF1klxzO
+         ANKQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUxpEGHGlq+XU03ZHAAwnpP3ZzPLt8iI4d0oszEmQeRur9Pum/Fux2Mht598gz9K4yQTjE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwPfcnf6S0pR/m7xIdMvrjGDnmF+ybOkBehSV1U4VM8qyN73j4W
+	AoubtWDPqFr9n33PSRivOUo39Y+YhDYFXcExolVMXiuSF1PGgEF8GZkVl/R5/T3E0oI=
+X-Gm-Gg: ATEYQzwHZSHYpdY3ODVMAhuMv/Ud00JHnZDKT1hrmXeF2JY14zHNbahs+cidKPaFGyd
+	1QJe8m79O2XSUdIbFkpuIbvOsJ4bZx2ZytKMArxVypj82W8ttX9hHa6i4DEj8m3HA0z3+8gaag4
+	pL8ZQaCtcwDCwkzwVoh66EcsgZAYZp5ehpY3uIxBJ/Vs8+DE+gb7VV15JIa5HlqBnbBLkndTXK1
+	wXruYNLWYkNYz+0yd7cYDqUBaRhHmnUEy4wUpIs0gJOsRu/pX//srJakLxmChBRUVe2D7LTtPSr
+	wxq1lBjd5av9t6TDb+Ckqsb0HFlAjtSkJonHMmda5jydPo3TLGnyU7BugVHkYWJNIRdtXeSzlK/
+	eNrC+T/n6qrNr83mOldJQFLKLFZBtjwVGABPr1mnsGQeDACvLpfJR4niLdEmwyXBk4Nl+8fnMGO
+	Bbq9sUPjOnt10mQS6QwxE=
+X-Received: by 2002:a05:600c:a44:b0:485:3692:e8f7 with SMTP id 5b1f17b1804b1-4854b11212bmr80287175e9.25.1773297955276;
+        Wed, 11 Mar 2026 23:45:55 -0700 (PDT)
+Received: from u94a ([2401:e180:8d68:7358:55be:6563:4437:e6fe])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35a00332df4sm2548163a91.1.2026.03.11.23.45.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Mar 2026 23:45:54 -0700 (PDT)
+Date: Thu, 12 Mar 2026 14:45:47 +0800
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: Paul Chaignon <paul.chaignon@gmail.com>
+Cc: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org, 
+	ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, 
+	kernel-team@fb.com, yonghong.song@linux.dev, emil@etsalapatis.com, arighi@nvidia.com
+Subject: Re: [PATCH bpf v2 1/2] bpf: refine u32/s32 bounds when ranges cross
+ min/max boundary
+Message-ID: <bnw5mn5vwgezvhvzotrqcxfq5xixczjgzc2gj42565vnod5aai@rbwkdbuz5t3d>
+References: <20260305-bpf-32-bit-range-overflow-v2-0-7169206a3041@gmail.com>
+ <20260305-bpf-32-bit-range-overflow-v2-1-7169206a3041@gmail.com>
+ <aaocJ3gJr7019urU@Tunnel>
+ <fd6a7d7fc0eee70b0b3053b1db34e9e986b2a067.camel@gmail.com>
+ <aaoevIcblUpMyN3U@Tunnel>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v3 2/4] bpf: Verifier support for sleepable raw
- tracepoint programs
-Content-Language: en-US
-To: Menglong Dong <menglong.dong@linux.dev>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, bot+bpf-ci@kernel.org,
- Menglong Dong <menglong8.dong@gmail.com>
-Cc: mykyta.yatsenko5@gmail.com, bpf@vger.kernel.org, ast@kernel.org,
- andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com,
- kernel-team@meta.com, eddyz87@gmail.com, yatsenko@meta.com,
- martin.lau@kernel.org, yonghong.song@linux.dev, clm@meta.com,
- ihor.solodrai@linux.dev
-References: <20260311-sleepable_tracepoints-v3-2-3e9bbde5bd22@meta.com>
- <CAP01T77gknuNiiVKny-cThb6b-dFxGPmPKx1eMryLoN2AkHo8w@mail.gmail.com>
- <46583200-ee0e-41dd-a0a9-8944ad710a9a@linux.dev> <6246261.lOV4Wx5bFT@7940hx>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <6246261.lOV4Wx5bFT@7940hx>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aaoevIcblUpMyN3U@Tunnel>
 
-On 12/3/26 14:21, Menglong Dong wrote:
-> On 2026/3/12 13:50 Leon Hwang <leon.hwang@linux.dev> write:
->> On 12/3/26 07:07, Kumar Kartikeya Dwivedi wrote:
->>> On Wed, 11 Mar 2026 at 19:53, <bot+bpf-ci@kernel.org> wrote:
-
-[...]
-
->>>
->>> We can ignore AI for now, Leon has a change for this.
->>>
->> Just to confirm the change: is it
->> https://lore.kernel.org/bpf/20260303150639.85007-2-leon.hwang@linux.dev/?
->>
->> If yes, it is to add "fsession" to the verbose log message in
->> check_get_func_ip(). Then, the AI review is correct: "fsession" was
->> missing here.
->>
->> After searching for "fexit" in verifier.c, "FENTRY/FEXIT" can be updated
->> to "FENTRY/FEXIT/FSESSION" in bpf_check_attach_target(), and "fsession"
->> is missing in some comments. I'm not sure whether it is worth a patch to
->> do such cleanup work.
+On Fri, Mar 06, 2026 at 01:24:28AM +0100, Paul Chaignon wrote:
+> On Thu, Mar 05, 2026 at 04:18:42PM -0800, Eduard Zingerman wrote:
+> > On Fri, 2026-03-06 at 01:13 +0100, Paul Chaignon wrote:
+> > > On Thu, Mar 05, 2026 at 11:48:22AM -0800, Eduard Zingerman wrote:
 > 
-> Ah, when I search the "fentry.*fexit", I found that there do have
-> some missed things in:
-> - the comments
-> - the log message in check_get_func_ip() and check_attach_btf_id()
-> - the document in bpftool-prog.rst
-> - the help info in bpftool
-> - bash-completion of bpftool
+> [...]
 > 
-> I can send a series to fix these things, except the log message in
-> check_get_func_ip(), which is already in Leon's patch.
+> > > > diff --git a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
+> > > > index 0322f817d07be5d003c17dd7cedfa3aa4197678e..04938d0d431b38e086b50fe28b99e4ad2682742e 100644
+> > > > --- a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
+> > > > +++ b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
+> > > > @@ -422,15 +422,69 @@ static bool is_valid_range(enum num_t t, struct range x)
 > 
+> [...]
+> 
+> > > Don't we usually put changes to this file in a separate commit, as for
+> > > test changes in general?
+> > 
+> > W/o this change the reg_bounds.c tests would fail.
+> > So far we tried to keep selftests passing for every commit,
+> > to help with any potential bisecting.
 
-More appropriate to include it in your series, I think.
+Similarly we have stable AUTOSEL tends to just pick up kernel/bpf/
+changes and not the selftests ones. e.g. both 76e954155b45 ("bpf:
+Introduce tnum_step to step through tnum's members") and efc11a667878
+("bpf: Improve bounds when tnum has a single possible value") got picked
+for 6.18.17-rc1, but not 024cea2d647e "selftests/bpf: Avoid
+simplification of crafted bounds test".
 
-Thanks,
-Leon
-
+> Ah, I didn't know that. Definitely makes sense for bisecting.
+> I probably broke it at least once :(
+> 
+> [...]
+> 
