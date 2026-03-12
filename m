@@ -1,302 +1,156 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E89783803D1
-	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 21:03:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773349400; cv=pass; b=JYa9migq3YzkrmSz6tTutGUNtKEywOJ3uK30c7276UEHv7IDXz6VAipKmuWus7tEIuo2rT6kEN2HhixmNgekF1LEQ7r0zIQ/g7/erohASOFmKjTc4iK6XL8L0QFax/VWT88Y5Dv8P349ROQRs0gxCkTuNQgoS/zjY5W5DSu1Gag=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773349400; c=relaxed/simple;
-	bh=LxXu6+4j3aq8QT9rvVBSKHjHuSoaCEUYe+MBh20IXgY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FkFqLd16Kqa1rVAJFIaHx4R95Auk+TpX3OEaIgPpfyOdJTpeU5Shqkc7ONNIbdTkyBKhBbQxf9KWK0jN0xDsl23IhTlKS+88kRcDbtYzsXPKT0U8zShVHkOb/aE5iUl2EiZdE6N+xrSo4egtMDfkzLEkiYnaR3XjdFK9Lqjg55Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MV19eaR0; arc=pass smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69ECB35A3B6
+	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 21:15:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773350120; cv=none; b=Qv8i5xU+9T3FMonD35iYRcS+6d8NQvNuamarkUCmkZ/K0977Q3UxwS/e1rbA7EXXGR4YETyKPSLFAP23NKeCCNGmr++fxe3IWhgkFrKlZPdQppMdWIaf/1ulagCO1LqEyVzPmB+3ExT6ytc5bGLW7EZAvqQuIOOPK9XJf6+fXYg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773350120; c=relaxed/simple;
+	bh=z2HKshWhyIhbw3maJi1KWoYfb1ShZsVIostZxGXsMVI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZbaWzOyebY7NjvHlVSUgEC6PvSbJ7znjh5xc1iSPOtA2hx4Ag699tWG+GMtermy875SQf9wEZLpL3u4noNrltr2uxjFxToxQH+dlm8r6FJC638Wz8c/wQajEmn4oSDP4Of3K2IMOFnOsnflUflpHe3iTB955uELpgLrdez30OXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Em8IrcE3; arc=none smtp.client-ip=95.215.58.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MV19eaR0"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-829928e512aso827865b3a.2
-        for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 14:03:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773349395; cv=none;
-        d=google.com; s=arc-20240605;
-        b=aq1G3aJ7hibb9Mc9xQLL46t8F+ovFmwOQUetOaA/wtL8BF6L4tNop7yrijKq2SI45p
-         WiTYAeFwOTBcFLdPjP2a3Adckt9MHF9R0aTFFJVZgr2HNIvEIk7xZVkCRiTdwV26VzX0
-         KxAu+aUeDT9GNhT4maQqzcG6/Dgk2wPGT/nVEDhoCH6lnJxJ22B8j8bgrtayaiohA0vq
-         TGdYOJiXLtl6ejUlEB1LOJ2Fuiw3zzz+GbBvtVQhp+OQYLv6y/rXRUZ+Rkt5vWB/pzO4
-         TZqXmw7u7SUcBK/GpuKOSNdgPWZ3COkQZD7OVxaEeCEmsoFv50KV2tfZtYMRko2/YShY
-         dQmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Fls2CEGeTwBH00qB1WTPOc+8K2rx78cbDySAE6ZwMzU=;
-        fh=un2GWPmYwFWbdF1XpxMPQYRxhKazl5Rxm/QZWha9hkc=;
-        b=VrpIx7DiEeY8JHbDp5WkTnjnKR8tmhcQ78e3LekjhfCt+4Du1U7cu472LD88nId6Lb
-         khYOtUuezYFnBPHS0RBOQ9jOe9CiRz4oNkwzvhmJ3nELOp8HY/MeeQ22TORXCrKmLQEL
-         pYwZdfS9DAhptNEexLFDSDKN1tKIvnVNOca/E5bMYXiWzaPmMf0wKJBlhM76G0XF9sRk
-         tZ5j2ReFnqneMRkKH28Zn/soZEfj5g2a1L4jMvRH8gipeKa8v/ee284WJxvy+Ky2UleR
-         BEW2kVhMCP55vls9swf2LEPEEYRj4NS838IJV/b1GLtyBkKs3QCouP+W2nxsl3VN/4SQ
-         Q1HQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773349395; x=1773954195; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Fls2CEGeTwBH00qB1WTPOc+8K2rx78cbDySAE6ZwMzU=;
-        b=MV19eaR0mWGrpJ6oGdShT+F49rZw3S1mvAUDvjQ8IMHrLltfXGfqxJ7Bfj/AIQyqxQ
-         stAhuXzQqIU4DX1/YkEMDtZsRdV7tYUz1pMqJSCZBSnE79kygq2Xm/8pwu2vWYzGV2sJ
-         ofNEeDzSbpaSG2KOV3Q2Dgpr023OLPUrXpzks2tx+Zc2VbLVU6DY0llK0RL18Rn45NKN
-         B4nuvgiJvVGROWRYZ6XRD9nqzL+TkYwv5+RuBJtTocPG2r+eAn8oBFHaXLYr62quO5+o
-         bIphqLZ5y1TUbRboawklLQ/0qwdMhtRu3+naWMBX89nrkcB3tB8uSOkhai2tNX6SAEOV
-         LaRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773349395; x=1773954195;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Fls2CEGeTwBH00qB1WTPOc+8K2rx78cbDySAE6ZwMzU=;
-        b=G4Uk35eqaMdLgW19+DZbF6sPmcYrVM1o1Fp/VtIcRkzB7rNvePQm1qAVkJWZimrG4o
-         3rLh4USq0ZMcZMeCtGY1LJXo8864vP4AVL7Me5O40c5VDAUKL5i3eJC5I7CCFUngoPyV
-         8eYYBE2KUxVHf3Ayinc+GrLQi4BEfJ3MzygCx/3Wyy44gmZ9pxZ7OKtGthSFP1Acr+sz
-         dsqWRe7+0ne7JPZq03wKsIOvyBEe/8ZBVdrKLMlC6CSX/IlSKuB2BzkmSumZsLctIeI8
-         /TfXljEQQjCpdsm0CZrzudahWcxxX1YuBtV9acn0vfYGlWq7Vu6dhnzqF37uFJpaHX6V
-         jDqw==
-X-Gm-Message-State: AOJu0YwR5bxiRraex26/E/V0/9hSbeKIszyOZ20eXlBzuVugGvxTN390
-	Dg/VwYrxBsYJhySCtIlMVa6bMdZO2p0O10K7KcgRZdGutmCLPU0ItUOd7H1WXeOThw/LUhl/Sr1
-	Ew3El1yUF9bmZcb/ZQWRNbTrDF6lSOUI=
-X-Gm-Gg: ATEYQzx5VGxSppajMivv9qFvjOIaqG6bA8y4b9yd6TogcXeUrkdJc88ZV+8Cw4vSTBZ
-	aybgGFFbApY5Ge0oz5iS0Acn6loTTCa1eAble76BPod3Ycx+VuoT0lhYfo1WyJD0TyjwbwOzHzT
-	/Ia9j79SYWm6nYXuhnlkyUf9XZAtA56Pd63xqmq3ptZRsk5V1fNGNjlZEPrUAYt67Oyt8UhINiK
-	JGCvY97dCR2DSExfMQhhLRvr+J1EHLhsU/cxvlkFwHhQ3tQwZo7rgny9AOWjW0eH+0GaTs5UngA
-	davPZpCnxQJAh6xwE4TPUSw=
-X-Received: by 2002:a05:6a21:2d42:b0:366:14ac:8c70 with SMTP id
- adf61e73a8af0-398ece2251fmr536576637.70.1773349394867; Thu, 12 Mar 2026
- 14:03:14 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Em8IrcE3"
+Message-ID: <7468775e-8cfe-49e2-8271-2263c85f416a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773350113;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IcwTwI+oYmnBqCEvyYdSK17h3VM9k606dNGZTDFZDsE=;
+	b=Em8IrcE3OwZJRDf7Od3xyO7HP4tjTKUkr4b+dhsEqGaZXT8BPtD4GUii97gwDzWigp31es
+	oztI1KJlz5+WBYl3hnRgkZTi5jS939gL6gyKO6te5/NFmG1AmTa6XSunsCQQ9enBd0DSdh
+	M+PX0ohuvP1mBYreLLTr4+/ELjV2dCQ=
+Date: Thu, 12 Mar 2026 14:14:57 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260311-sleepable_tracepoints-v3-0-3e9bbde5bd22@meta.com> <20260311-sleepable_tracepoints-v3-4-3e9bbde5bd22@meta.com>
-In-Reply-To: <20260311-sleepable_tracepoints-v3-4-3e9bbde5bd22@meta.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 12 Mar 2026 14:03:01 -0700
-X-Gm-Features: AaiRm51KmGiW01xUbFS32xhv8ubul2mgIMas9F9vRV5zzqbC2WOa5uiDfjiqK_Y
-Message-ID: <CAEf4BzY255ncKM0GY3PwnwuX9UFcf0m_-ijx5EcrGzCJ76hqAQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 4/4] selftests/bpf: Add tests for sleepable
- raw tracepoint programs
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com, 
-	Mykyta Yatsenko <yatsenko@meta.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf v1] selftests/bpf: Bump path and command buffer sizes
+ in bpftool_helpers.c
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, =?UTF-8?Q?Alexis_Lothor=C3=A9?=
+ <alexis.lothore@bootlin.com>, bpf@vger.kernel.org, kernel-team@meta.com
+References: <20260312195017.210430-1-ihor.solodrai@linux.dev>
+ <CAEf4Bza-cEaCg1s9pppdRAS1idx71wjZ4+7g-gkM_JXzD1xSyg@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <CAEf4Bza-cEaCg1s9pppdRAS1idx71wjZ4+7g-gkM_JXzD1xSyg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Mar 11, 2026 at 11:23=E2=80=AFAM Mykyta Yatsenko
-<mykyta.yatsenko5@gmail.com> wrote:
->
-> From: Mykyta Yatsenko <yatsenko@meta.com>
->
-> Add tests for sleepable raw tracepoint programs:
-> - success: Attach a sleepable BPF program to the faultable sys_enter
->   tracepoint (tp_btf.s/sys_enter). Verify the program is triggered by
->   a syscall.
-> - reject_non_faultable: Verify that loading a sleepable BPF program
->   targeting a non-faultable tracepoint (tp_btf.s/sched_switch) is
->   rejected by the verifier.
->
-> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
-> ---
->  .../selftests/bpf/prog_tests/sleepable_raw_tp.c    | 40 ++++++++++++++++=
-++++
->  .../selftests/bpf/progs/test_sleepable_raw_tp.c    | 43 ++++++++++++++++=
-++++++
->  .../bpf/progs/test_sleepable_raw_tp_fail.c         | 18 +++++++++
->  tools/testing/selftests/bpf/verifier/sleepable.c   | 17 ++++++++-
->  4 files changed, 116 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/sleepable_raw_tp.c b/=
-tools/testing/selftests/bpf/prog_tests/sleepable_raw_tp.c
-> new file mode 100644
-> index 000000000000..e902b41591e7
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/sleepable_raw_tp.c
-> @@ -0,0 +1,40 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-> +
-> +#include <test_progs.h>
-> +#include <time.h>
-> +#include "test_sleepable_raw_tp.skel.h"
-> +#include "test_sleepable_raw_tp_fail.skel.h"
-> +
-> +static void test_sleepable_raw_tp_success(void)
-> +{
-> +       struct test_sleepable_raw_tp *skel;
-> +       int err;
-> +
-> +       skel =3D test_sleepable_raw_tp__open_and_load();
-> +       if (!ASSERT_OK_PTR(skel, "skel_open_load"))
-> +               return;
-> +
-> +       skel->bss->target_pid =3D getpid();
-> +
-> +       err =3D test_sleepable_raw_tp__attach(skel);
-> +       if (!ASSERT_OK(err, "skel_attach"))
-> +               goto cleanup;
-> +
-> +       syscall(__NR_nanosleep, &(struct timespec){ .tv_nsec =3D 555 }, N=
-ULL);
-> +
-> +       ASSERT_EQ(skel->bss->triggered, 1, "triggered");
-> +       ASSERT_EQ(skel->bss->err, 0, "err");
-> +       ASSERT_EQ(skel->bss->copied_tv_nsec, 555, "copied_tv_nsec");
-> +
-> +cleanup:
-> +       test_sleepable_raw_tp__destroy(skel);
-> +}
-> +
-> +void test_sleepable_raw_tp(void)
-> +{
-> +       if (test__start_subtest("success"))
-> +               test_sleepable_raw_tp_success();
-> +
-> +       RUN_TESTS(test_sleepable_raw_tp_fail);
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/test_sleepable_raw_tp.c b/=
-tools/testing/selftests/bpf/progs/test_sleepable_raw_tp.c
-> new file mode 100644
-> index 000000000000..ebacc766df57
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/test_sleepable_raw_tp.c
-> @@ -0,0 +1,43 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-> +
-> +#include <vmlinux.h>
-> +#include <asm/unistd.h>
-> +#include <bpf/bpf_tracing.h>
-> +#include <bpf/bpf_core_read.h>
-> +#include <bpf/bpf_helpers.h>
-> +
-> +char _license[] SEC("license") =3D "GPL";
-> +
-> +int target_pid;
-> +int triggered;
-> +long err;
-> +long copied_tv_nsec;
-> +
-> +SEC("tp_btf.s/sys_enter")
-> +int BPF_PROG(test_sleepable_sys_enter, struct pt_regs *regs, long id)
-> +{
-> +       struct task_struct *task =3D bpf_get_current_task_btf();
-> +       struct __kernel_timespec *ts;
-> +       long tv_nsec;
-> +
-> +       if (task->pid !=3D target_pid)
-> +               return 0;
-> +
-> +       if (id !=3D __NR_nanosleep)
-> +               return 0;
-> +
-> +       ts =3D (void *)PT_REGS_PARM1_CORE_SYSCALL(regs);
+On 3/12/26 1:40 PM, Andrii Nakryiko wrote:
+> On Thu, Mar 12, 2026 at 12:50 PM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
+>>
+>> The path length of 64 is way too low in some envirnoments, which leads
+>> to subtle failures due to truncation [1].
+>>
+>> Replace BPFTOOL_PATH_MAX_LEN with PATH_MAX, and set
+>> BPFTOOL_FULL_CMD_MAX_LEN to double of PATH_MAX.
+>>
+>> [1] https://github.com/libbpf/libbpf/actions/runs/22980753016/job/66719800527
+>>
+>> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+>> ---
+>>  tools/testing/selftests/bpf/bpftool_helpers.c | 13 ++++++-------
+>>  1 file changed, 6 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/bpftool_helpers.c b/tools/testing/selftests/bpf/bpftool_helpers.c
+>> index 929fc257f431..6a5e99b5e542 100644
+>> --- a/tools/testing/selftests/bpf/bpftool_helpers.c
+>> +++ b/tools/testing/selftests/bpf/bpftool_helpers.c
+>> @@ -2,18 +2,18 @@
+>>  #include <unistd.h>
+>>  #include <string.h>
+>>  #include <stdbool.h>
+>> +#include <limits.h>
+>>
+>>  #include "bpf_util.h"
+>>  #include "bpftool_helpers.h"
+>>
+>> -#define BPFTOOL_PATH_MAX_LEN           64
+>> -#define BPFTOOL_FULL_CMD_MAX_LEN       512
+>> +#define BPFTOOL_FULL_CMD_MAX_LEN       (PATH_MAX * 2)
+>>
+>>  #define BPFTOOL_DEFAULT_PATH           "tools/sbin/bpftool"
+>>
+>>  static int detect_bpftool_path(char *buffer, size_t size)
+>>  {
+>> -       char tmp[BPFTOOL_PATH_MAX_LEN];
+>> +       char tmp[PATH_MAX];
+>>         const char *env_path;
+>>
+>>         /* First, check if BPFTOOL environment variable is set */
+>> @@ -29,7 +29,7 @@ static int detect_bpftool_path(char *buffer, size_t size)
+>>         /* Check default bpftool location (will work if we are running the
+>>          * default flavor of test_progs)
+>>          */
+>> -       snprintf(tmp, BPFTOOL_PATH_MAX_LEN, "./%s", BPFTOOL_DEFAULT_PATH);
+>> +       snprintf(tmp, PATH_MAX, "./%s", BPFTOOL_DEFAULT_PATH);
+> 
+> nit, but why not s/PATH_MAX/sizeof(tmp)/?
 
-this is BTF-aware raw tracepoint, so let's use non-CO-RE variant of
-this macro (PT_REGS_PARM1_SYSCALL), which will perform direct regs->di
-access
+Hi Andrii, thanks for quick review.
 
-but then let's also have non-BTF-aware (SEC("raw_tp")) test, where
-you'll have to use PT_REGS_PARM1_CORE_SYSCALL().
+I just did the s/BPFTOOL_PATH_MAX_LEN/PATH_MAX in v1, will fix up.
 
-And let's also make sure that SEC("tp.s/syscalls/sys_enter_nanosleep")
-also works?
+> 
+>>         if (access(tmp, X_OK) == 0) {
+>>                 strscpy(buffer, tmp, size);
+>>                 return 0;
+>> @@ -38,7 +38,7 @@ static int detect_bpftool_path(char *buffer, size_t size)
+>>         /* Check alternate bpftool location (will work if we are running a
+>>          * specific flavor of test_progs, e.g. cpuv4 or no_alu32)
+>>          */
+>> -       snprintf(tmp, BPFTOOL_PATH_MAX_LEN, "../%s", BPFTOOL_DEFAULT_PATH);
+>> +       snprintf(tmp, PATH_MAX, "../%s", BPFTOOL_DEFAULT_PATH);
+>>         if (access(tmp, X_OK) == 0) {
+>>                 strscpy(buffer, tmp, size);
+>>                 return 0;
+>> @@ -50,7 +50,7 @@ static int detect_bpftool_path(char *buffer, size_t size)
+>>
+>>  static int run_command(char *args, char *output_buf, size_t output_max_len)
+>>  {
+>> -       static char bpftool_path[BPFTOOL_PATH_MAX_LEN] = {0};
+>> +       static char bpftool_path[PATH_MAX] = {0};
+> 
+> this doesn't matter in practical terms, but I'm not sure all people
+> realize that this initializes entire buffer with zeroes, not just
+> first byte. `= {0}` is super misleading, it's better to use `= {}` in
+> cases like this
 
-> +
-> +       /*
-> +        * Use bpf_copy_from_user() - a sleepable helper - to read user m=
-emory.
-> +        * This exercises the sleepable execution path of raw tracepoints=
-.
-> +        */
-> +       err =3D bpf_copy_from_user(&tv_nsec, sizeof(tv_nsec), &ts->tv_nse=
-c);
-> +       if (err)
-> +               return err;
-> +
-> +       copied_tv_nsec =3D tv_nsec;
-> +       triggered =3D 1;
-> +       return 0;
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/test_sleepable_raw_tp_fail=
-.c b/tools/testing/selftests/bpf/progs/test_sleepable_raw_tp_fail.c
-> new file mode 100644
-> index 000000000000..54100899f728
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/test_sleepable_raw_tp_fail.c
-> @@ -0,0 +1,18 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-> +
-> +#include <vmlinux.h>
-> +#include <bpf/bpf_tracing.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include "bpf_misc.h"
-> +
-> +char _license[] SEC("license") =3D "GPL";
-> +
-> +/* Sleepable program on a non-faultable tracepoint should fail to load *=
-/
-> +SEC("tp_btf.s/sched_switch")
-> +__failure __msg("Sleepable program cannot attach to non-faultable tracep=
-oint")
-> +int BPF_PROG(test_sleepable_sched_switch, bool preempt,
-> +            struct task_struct *prev, struct task_struct *next)
-> +{
-> +       return 0;
-> +}
-> diff --git a/tools/testing/selftests/bpf/verifier/sleepable.c b/tools/tes=
-ting/selftests/bpf/verifier/sleepable.c
-> index 1f0d2bdc673f..6dabc5522945 100644
-> --- a/tools/testing/selftests/bpf/verifier/sleepable.c
-> +++ b/tools/testing/selftests/bpf/verifier/sleepable.c
-> @@ -76,7 +76,20 @@
->         .runs =3D -1,
->  },
->  {
-> -       "sleepable raw tracepoint reject",
-> +       "sleepable raw tracepoint accept",
-> +       .insns =3D {
-> +       BPF_MOV64_IMM(BPF_REG_0, 0),
-> +       BPF_EXIT_INSN(),
-> +       },
-> +       .prog_type =3D BPF_PROG_TYPE_TRACING,
-> +       .expected_attach_type =3D BPF_TRACE_RAW_TP,
-> +       .kfunc =3D "sys_enter",
-> +       .result =3D ACCEPT,
-> +       .flags =3D BPF_F_SLEEPABLE,
-> +       .runs =3D -1,
-> +},
-> +{
-> +       "sleepable raw tracepoint reject non-faultable",
->         .insns =3D {
->         BPF_MOV64_IMM(BPF_REG_0, 0),
->         BPF_EXIT_INSN(),
-> @@ -85,7 +98,7 @@
->         .expected_attach_type =3D BPF_TRACE_RAW_TP,
->         .kfunc =3D "sched_switch",
->         .result =3D REJECT,
-> -       .errstr =3D "Only fentry/fexit/fmod_ret, lsm, iter, uprobe, and s=
-truct_ops programs can be sleepable",
-> +       .errstr =3D "Sleepable program cannot attach to non-faultable tra=
-cepoint",
->         .flags =3D BPF_F_SLEEPABLE,
->         .runs =3D -1,
->  },
->
-> --
-> 2.52.0
->
+I think setting the entire buffer to 0 to determine if the path is
+cached is an overkill, although in this particular case it's not
+important since the buffer is static.
+
+I'll change to {}, I agree it's more obvious.
+
+Not directly relevant, but fun news re {0} init, courtesy of Eduard:
+https://news.ycombinator.com/item?id=43792948
+
+
+> 
+>>         bool suppress_output = !(output_buf && output_max_len);
+>>         char command[BPFTOOL_FULL_CMD_MAX_LEN];
+>>         FILE *f;
+>> @@ -84,4 +84,3 @@ int get_bpftool_command_output(char *args, char *output_buf, size_t output_max_l
+>>  {
+>>         return run_command(args, output_buf, output_max_len);
+>>  }
+>> -
+>> --
+>> 2.53.0
+>>
+
