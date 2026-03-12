@@ -1,268 +1,110 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC28373BE8
-	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 03:36:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C76EC38C404;
+	Thu, 12 Mar 2026 04:21:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773286596; cv=none; b=C1bViTBFNo5GSviagYOrBfAEXxZwZ2+kEhZKr0HTciqp1aFIeFu1IXj4AEYVCMQh7hKq3LGCTCaBiCvggBpbw4ULWr0KiNNxqgjiEJzvegUXzmSe9J5W/pN7UhTKP1MkSTo72hl65v2gfINekOEWQPvK9hMAB8673GHF8r7dzm4=
+	t=1773289298; cv=none; b=mTLW2iB1RRQdI0pp4nlN6tATLuw+SB3/+gpprpgcetGpou8eWXXpdVY6FpqwQ5p9xsvKvzuACdEd88U6L62WX3+kOE4Qk1ZCN7HMT9UG0RCa/w7Z5pvE70kvuZdL3UM7qWZ5pKQe2js3L/Ylucqev3KOBZhNMsyh0Igzmx3YhHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773286596; c=relaxed/simple;
-	bh=gA79HwwC9YG0qehzJSnQ5zdv8V0OGEbH1xlPeE/ltJg=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=Xw+DZJzH5VRxeV0wHttVvOOTNKZ+MYQzm0wzKgadQmSXH81LuBiGylU0VpdkXozNM+7z2l1ZuMuPeIURUQCurg3Up9B1OVI9ovcxoSuFVU8AOrS5n00Nv9I4nI7JMlddRR1aVYUneFPXqF7E/RkJEjHW3SlwnLyD43XJulpOwEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IYZJby7Y; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1773289298; c=relaxed/simple;
+	bh=7bD8IEomgLkpBjekMzW1r7IdMHdkv+QsIfsDdwgT6Mo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rK8mcv63jXOdLlOjzgHMFTD0EUktGp1YpM/nhuYz+XxmKwrB3TP2WLmg2LzxceS4ymVGHCqyGMG9rdIoKopV2jex591GO8+gytpu7u+dSaeEXkmP4H3u5fwnSqMaNQJwz6uCiR/8LZ46dmRb8T4hq9WekrAZPNiziueGqtgQ83o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qta72D+A; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IYZJby7Y"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qta72D+A"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773289298; x=1804825298;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7bD8IEomgLkpBjekMzW1r7IdMHdkv+QsIfsDdwgT6Mo=;
+  b=Qta72D+A/6iSnBFVJWMsz9Rpz0R0MhNxaE6K+jY8foFa57dEJjnfubol
+   Xwz5/xlAmry79Pyvgn+DvUNSo6Vk9HiLOV4RkCWPF4eG1m/pLrFzUJTBS
+   ANRDfSMgsopCYIki7DK2a14VbaeDS8YCrq2AIhvR7m1DojPLYGQaEX7YB
+   kT6V4JVlZXAaJr814d+eXdkZDGrAFQLYjc2+2C8frFWyfKkpjKm9eskoR
+   icmID/SUbo7Cqhq7OKNndYSMPbyzfwS0bzUK1O8++yIuSNt/WiB7M3Iqb
+   Eml9aZzljUCklPt364A9VL6BIDCQKjnUTUMqJy41DKdDW9i5zGfdnVMxn
+   Q==;
+X-CSE-ConnectionGUID: 3pg3ExfyS6mdOfTIHC4E9Q==
+X-CSE-MsgGUID: 8kQ15/5YROyzRSXB41IaSw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11726"; a="74562535"
+X-IronPort-AV: E=Sophos;i="6.23,115,1770624000"; 
+   d="scan'208";a="74562535"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2026 21:21:38 -0700
+X-CSE-ConnectionGUID: W0MSw16FRyC1s0N38dWxbg==
+X-CSE-MsgGUID: q4mLhQcPRhWf4DVFpQI/eQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,115,1770624000"; 
+   d="scan'208";a="218131647"
+Received: from lkp-server01.sh.intel.com (HELO 418530b1a366) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 11 Mar 2026 21:21:33 -0700
+Received: from kbuild by 418530b1a366 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w0XYA-0000000024N-2uQ2;
+	Thu, 12 Mar 2026 04:21:30 +0000
+Date: Thu, 12 Mar 2026 12:21:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Matteo Croce <technoboy85@gmail.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 1/2] e1000e: add basic XDP support
+Message-ID: <202603121251.DVGQwVSr-lkp@intel.com>
+References: <20260311191437.3581-2-teknoraver@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773286583;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sIeIxnDFvCAVP63KN+jaya1voCxZiwj51bRsQygs0ok=;
-	b=IYZJby7YmNF5PqJObweKxlt2ztpfKjN1MBTXhN0dFwGBJiLYqMS0qgEUy1itQcuW8lfJ/X
-	MlXMyOy3uccORXsDLLBn5YQPZEHeG82Dc6J6io5oum0++DdKfNv9AXbaoxzAnTfsg6ItS1
-	P4z3KYzUznaP8gVpK/Pcy0wg8BxYNT8=
-Date: Thu, 12 Mar 2026 03:36:11 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: hui.zhu@linux.dev
-Message-ID: <12bb0c22707193b94e7740b562daec80300544fe@linux.dev>
-TLS-Required: No
-Subject: Re: [LSF/MM/BPF TOPIC] Reimagining Memory Cgroup (memcg_ext)
-To: "Shakeel Butt" <shakeel.butt@linux.dev>,
- lsf-pc@lists.linux-foundation.org
-Cc: "Andrew Morton" <akpm@linux-foundation.org>, "Tejun Heo" <tj@kernel.org>,
- "Michal Hocko" <mhocko@suse.com>, "Johannes Weiner" <hannes@cmpxchg.org>,
- "Alexei Starovoitov" <ast@kernel.org>, "=?utf-8?B?TWljaGFsIEtvdXRuw70=?="
- <mkoutny@suse.com>, "Roman Gushchin" <roman.gushchin@linux.dev>, "JP
- Kobryn" <inwardvessel@gmail.com>, "Muchun Song" <muchun.song@linux.dev>,
- "Geliang Tang" <geliang@kernel.org>, "Sweet Tea Dorminy"
- <sweettea-kernel@dorminy.me>, "Emil Tsalapatis" <emil@etsalapatis.com>,
- "David Rientjes" <rientjes@google.com>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Meta kernel team" <kernel-team@meta.com>,
- linux-mm@kvack.org, cgroups@vger.kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-In-Reply-To: <20260307182424.2889780-1-shakeel.butt@linux.dev>
-References: <20260307182424.2889780-1-shakeel.butt@linux.dev>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260311191437.3581-2-teknoraver@meta.com>
 
-2026=E5=B9=B43=E6=9C=888=E6=97=A5 02:24, "Shakeel Butt" <shakeel.butt@lin=
-ux.dev mailto:shakeel.butt@linux.dev?to=3D%22Shakeel%20Butt%22%20%3Cshake=
-el.butt%40linux.dev%3E > =E5=86=99=E5=88=B0:
+Hi Matteo,
 
+kernel test robot noticed the following build errors:
 
->=20
->=20Over the last couple of weeks, I have been brainstorming on how I wou=
-ld go
-> about redesigning memcg, taking inspiration from sched_ext and bpfoom, =
-with a
-> focus on existing challenges and issues. This proposal outlines the hig=
-h-level
-> direction. Followup emails and patch series will cover and brainstorm t=
-he
-> mechanisms (of course BPF) to achieve these goals.
->=20
->=20Memory cgroups provide memory accounting and the ability to control m=
-emory usage
-> of workloads through two categories of limits. Throttling limits (memor=
-y.max and
-> memory.high) cap memory consumption. Protection limits (memory.min and
-> memory.low) shield a workload's memory from reclaim under external memo=
-ry
-> pressure.
->=20
->=20Challenges
-> ----------
->=20
->=20- Workload owners rarely know their actual memory requirements, leadi=
-ng to
->  overprovisioned limits, lower utilization, and higher infrastructure c=
-osts.
->=20
->=20- Throttling limit enforcement is synchronous in the allocating task'=
-s context,
->  which can stall latency-sensitive threads.
->=20
->=20- The stalled thread may hold shared locks, causing priority inversio=
-n -- all
->  waiters are blocked regardless of their priority.
->=20
->=20- Enforcement is indiscriminate -- there is no way to distinguish a
->  performance-critical or latency-critical allocator from a latency-tole=
-rant
->  one.
->=20
->=20- Protection limits assume static working sets size, forcing owners t=
-o either
->  overprovision or build complex userspace infrastructure to dynamically=
- adjust
->  them.
->=20
->=20Feature Wishlist
-> ----------------
->=20
->=20Here is the list of features and capabilities I want to enable in the
-> redesigned memcg limit enforcement world.
->=20
->=20Per-Memcg Background Reclaim
->=20
->=20In the new memcg world, with the goal of (mostly) eliminating direct =
-synchronous
-> reclaim for limit enforcement, provide per-memcg background reclaimers =
-which can
-> scale across CPUs with the allocation rate.
+[auto build test ERROR on net-next/main]
 
-I am aware that several companies maintain out-of-tree patches for
-asynchronous reclaim, though some have not yet attempted to upstream
-them.
+url:    https://github.com/intel-lab-lkp/linux/commits/Matteo-Croce/e1000e-add-basic-XDP-support/20260312-032318
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20260311191437.3581-2-teknoraver%40meta.com
+patch subject: [PATCH net-next 1/2] e1000e: add basic XDP support
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20260312/202603121251.DVGQwVSr-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260312/202603121251.DVGQwVSr-lkp@intel.com/reproduce)
 
-Would it be feasible to introduce a generic memcg asynchronous reclaim
-framework into the upstream kernel, where eBPF is used to orchestrate
-and control the reclaim logic? In this model, the kernel's role would
-be to enforce "guardrails" for these operations=E2=80=94for instance,
-restricting a BPF program to initiating only one asynchronous reclaim
-pass at a time=E2=80=94to ensure system safety and predictability.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603121251.DVGQwVSr-lkp@intel.com/
 
-Best,
-Hui
+All errors (new ones prefixed by >>):
 
+>> ld.lld: error: undefined symbol: page_pool_create
+   >>> referenced by netdev.c
+   >>>               drivers/net/ethernet/intel/e1000e/netdev.o:(e1000e_setup_rx_resources) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: page_pool_alloc_pages
+   >>> referenced by netdev.c
+   >>>               drivers/net/ethernet/intel/e1000e/netdev.o:(e1000_alloc_rx_buffers_xdp) in archive vmlinux.a
 
->=20
->=20Lock-Aware Throttling
->=20
->=20The ability to avoid throttling an allocating task that is holding lo=
-cks, to
-> prevent priority inversion. In Meta's fleet, we have observed lock hold=
-ers stuck
-> in memcg reclaim, blocking all waiters regardless of their priority or
-> criticality.
->=20
->=20Thread-Level Throttling Control
->=20
->=20Workloads should be able to indicate at the thread level which thread=
-s can be
-> synchronously throttled and which cannot. For example, while experiment=
-ing with
-> sched_ext, we drastically improved the performance of AI training workl=
-oads by
-> prioritizing threads interacting with the GPU. Similarly, applications =
-can
-> identify the threads or thread pools on their performance-critical path=
-s and
-> the memcg enforcement mechanism should not throttle them.
->=20
->=20Combined Memory and Swap Limits
->=20
->=20Some users (Google actually) need the ability to enforce limits based=
- on
-> combined memory and swap usage, similar to cgroup v1's memsw limit, pro=
-viding a
-> ceiling on total memory commitment rather than treating memory and swap
-> independently.
->=20
->=20Dynamic Protection Limits
->=20
->=20Rather than static protection limits, the kernel should support defin=
-ing
-> protection based on the actual working set of the workload, leveraging =
-signals
-> such as working set estimation, PSI, refault rates, or a combination th=
-ereof to
-> automatically adapt to the workload's current memory needs.
->=20
->=20Shared Memory Semantics
->=20
->=20With more flexibility in limit enforcement, the kernel should be able=
- to
-> account for memory shared between workloads (cgroups) during enforcemen=
-t.
-> Today, enforcement only looks at each workload's memory usage independe=
-ntly.
-> Sensible shared memory semantics would allow the enforcer to consider
-> cross-cgroup sharing when making reclaim and throttling decisions.
->=20
->=20Memory Tiering
->=20
->=20With a flexible limit enforcement mechanism, the kernel can balance m=
-emory
-> usage of different workloads across memory tiers based on their perform=
-ance
-> requirements. Tier accounting and hotness tracking are orthogonal, but =
-the
-> decisions of when and how to balance memory between tiers should be han=
-dled by
-> the enforcer.
->=20
->=20Collaborative Load Shedding
->=20
->=20Many workloads communicate with an external entity for load balancing=
- and rely
-> on their own usage metrics like RSS or memory pressure to signal whethe=
-r they
-> can accept more or less work. This is guesswork. Instead of the
-> workload guessing, the limit enforcer -- which is actually managing the
-> workload's memory usage -- should be able to communicate available head=
-room or
-> request the workload to shed load or reduce memory usage. This collabor=
-ative
-> load shedding mechanism would allow workloads to make informed decision=
-s rather
-> than reacting to coarse signals.
->=20
->=20Cross-Subsystem Collaboration
->=20
->=20Finally, the limit enforcement mechanism should collaborate with the =
-CPU
-> scheduler and other subsystems that can release memory. For example, di=
-rty
-> memory is not reclaimable and the memory subsystem wakes up flushers to=
- trigger
-> writeback. However, flushers need CPU to run -- asking the CPU schedule=
-r to
-> prioritize them ensures the kernel does not lack reclaimable memory und=
-er
-> stressful conditions. Similarly, some subsystems free memory through wo=
-rkqueues
-> or RCU callbacks. While this may seem orthogonal to limit enforcement, =
-we can
-> definitely take advantage by having visibility into these situations.
->=20
->=20Putting It All Together
-> -----------------------
->=20
->=20To illustrate the end goal, here is an example of the scenario I want=
- to
-> enable. Suppose there is an AI agent controlling the resources of a hos=
-t. I
-> should be able to provide the following policy and everything should wo=
-rk out
-> of the box:
->=20
->=20Policy: "keep system-level memory utilization below 95 percent;
-> avoid priority inversions by not throttling allocators holding locks; t=
-rim each
-> workload's usage to its working set without regressing its relevant per=
-formance
-> metrics; collaborate with workloads on load shedding and memory trimmin=
-g
-> decisions; and under extreme memory pressure, collaborate with the OOM =
-killer
-> and the central job scheduler to kill and clean up a workload."
->=20
->=20Initially I added this example for fun, but from [1] it seems like th=
-ere is a
-> real need to enable such capabilities.
->=20
->=20[1] https://arxiv.org/abs/2602.09345
->
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
