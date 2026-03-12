@@ -1,71 +1,63 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C5DF227599
-	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 12:24:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C6F62D1F40;
+	Thu, 12 Mar 2026 12:34:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773318286; cv=none; b=ZIBo1vlw3deRnMgeyF9LuOZ4CcdNxaGylnjhE1vmxguQb7apymkkrr0aY/Fc25ldM2F/lDewMH9tR2dMp7Hvv2KyQ48haeHOZI33lQPhlkuAl7OvwaqMvam37uDBOhQQbeY7AA4daY3pAngU/8SolCQPmNeBUOO8vwQzWwWmK/s=
+	t=1773318854; cv=none; b=U1wqicnplkbX99V81P0JP/K3tjus9K+dDd04T/fabz6WXaOx/SObQ5JS+4f93ReL0QWFlSSWkcEwMNlOo7uUtPF8jBEe4ecNC1Rq+FvNh8HZ0Ypw8/u4+Ol4LC7CEbobbckCL91I+/wDo3imGBlxznEQCqXuNPkbb1UGd2FJ3u8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773318286; c=relaxed/simple;
-	bh=thDU1lc0YZXHDnsXSBJjM7lkH/txuV9wpd4r0xFdGdg=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VlJyBUGD+mtg5sikBu/8eYhV/3I775Yg4HMaN3asKh63XBX2MBeZLyRpKu0Ti6vLwe4kbjYo91CypskcFSHQWILHG5rqkTh8J7YiitmM8lFrcjX4ZKbGtWOmLe8W6Jxu2SEUJA9Baj+ewG4QUBA5ceS8eDCtQDZAszezRJ8t+YQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gZHx1K8l; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773318854; c=relaxed/simple;
+	bh=Z+Hudt8nJcxvg68UzQXv3KGqHqWtK2S2+ZMveg2pHIc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qo7UrbHywg+oOk/1dyYTx8RFyJhxGCpZb0dd9ET0nvWcn6B7FM77ix8voed4jXdENKrYYZW4uFxZtpVK3CNTuVF+T0K/Arqwq3SUowKdI7XIkkIfi4CtzYKML8IzmrIo4jbQ8M6P1tU2GHyI2Zs9WyFZyHfZHL71GISpvHlkhy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=q78eQRd6; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gZHx1K8l"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-48534b59cf3so8809895e9.2
-        for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 05:24:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773318284; x=1773923084; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=O8rYdnhSYW1AF/6LzB31WRXHxUO9w4SQomrMEzPi0XY=;
-        b=gZHx1K8l5SYgLcJAJueDdFbZ/bmQBY7W5JJlamnbDWX1r0r+5gWety4PbYkonTxD7X
-         BtKlZTgNkO8dZTQjGsv7b88xXaPwUYEhISqH12rEMjih/kzqoAUKfuXt+Kf/wYO7Klkk
-         4iiKydxl+1KBhhqcQGTFNh9InRleFmV3JAlr4ol//HUO0KbDqdEZl+mo41z2+HwpWA00
-         q5908BUBrjd+xJXgavS5+bOaRU+jj5Tz4+e1buSWvmKdUSlK+jAH45nFbzDOBINJySkI
-         nWAZWflnxN/IbaFo6CUIrUacPHsUGTRS5i+ReP7GX18CI5zr4Ksdu17eXMaOWk6kwzuD
-         wvLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773318284; x=1773923084;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O8rYdnhSYW1AF/6LzB31WRXHxUO9w4SQomrMEzPi0XY=;
-        b=RbACpoiJueG+uAfvmKFlK4Tu4lDoTKyxZI4pmPtYkYGYJpw01kOyB149xJfq+nWcOl
-         90jgiE05praCCn4SfL58/b06Btg4BzKt/zssVILKjgiPXMU0o30251xR8fNYJs649r/3
-         ku7pFPvMEOgTSN/aaRogh5zn8hl/PI/lZsXRVcD8S+ThU3qxw3kKN/5OuRZaHylHWDPi
-         rHWkGqSkQKFzYvciUrYnGGvi2Gc90vUwZb6Xsr302WCHc68998oIodC5VaHiOPVX4coX
-         7LtkixUozkIp7ouPvi/1JhfNNaNt+wRd45ZiPJ7+78jy2ohKUf7YA5LoyS96Z6yzU29S
-         nRJQ==
-X-Gm-Message-State: AOJu0YywsrXm/p87D1RQHlQMXBSxgxCYiUCjOd+Ktz3+cGb+e8d4w5jQ
-	iDsM8A0eXvoCTRcm5xO9coID9/YLqfHbVP5FEM9z3GgQaITNVm0VnwnK
-X-Gm-Gg: ATEYQzzUwhCghEM93Ycf41io0sjUKorBuq54j2z7ZcUWcS6RB1uZxRsAOI3OxZuYZvd
-	BP3YD6oubgOrhAXZAOheZ7gAIj1DKNqfkBHE+4bq6ml8C9khuSl8snaZy1x8kZ2Oh3s/WMzabf1
-	JFZHOUgfIAVVO5/YCcY03U9qGDY05IffB5PoSAnqydglWS0DcQG4Ur2EpNoeIk+A1b5FWr9gir3
-	tkbwOlQMktAENXIs7wiB1/FrrW1K+NWSun63cfMgltDi0r5tI74xB2A3uIoehpNALNnYkdsdImE
-	gbWRPUc9Fr1McZUBqV7luHY3boRHawyf9Yy3fPTjLRvPBexaV5NtpwUKJ7k3aauZgnfh+pOTbD7
-	To/5mwPbSQ8jIS0voHtO6z4VEYaFL2Rd6Nu4dW+4Kyi4pA7XiCkmZJET1eaWpbe2v15j6iqYH
-X-Received: by 2002:a05:600c:8b13:b0:485:30d4:6b9e with SMTP id 5b1f17b1804b1-4854b100b66mr105829985e9.21.1773318283507;
-        Thu, 12 Mar 2026 05:24:43 -0700 (PDT)
-Received: from krava ([2a02:8308:a00c:e200::d99c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4854b5e9179sm125863655e9.3.2026.03.12.05.24.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2026 05:24:43 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 12 Mar 2026 13:24:42 +0100
-To: Sun Jian <sun.jian.kdev@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, andrii@kernel.org,
-	shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-	eddyz87@gmail.com, martin.lau@linux.dev
-Subject: Re: [PATCH] selftests/bpf: modify_return: isolate fmod_ret hooks by
- pid
-Message-ID: <abKwikMNfT0lhfl3@krava>
-References: <20260312104219.1208802-1-sun.jian.kdev@gmail.com>
+	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="q78eQRd6"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=+VYAGwg3xJVqZ6ED+4iEbnnq6LZZq3rNWT+MD/LpG68=; b=q78eQRd6Wb12x9J6acMLNga4Vi
+	rjSqiJgA/qNQ/+/Kuzn7C9NMhYDmt8QprMs0sgeZRxC7ibKWngo7LvWcFlTZlsYegwNePc/9DUedc
+	wAQwH8N5uYMXSRKENZKIHKvoWhvQHhzZGOgu7t7hmmqvPJ7uZ/JV/GUFthcd5pT08+LTIrnTPcd34
+	UIoXpHG403jiIa/+3gDHoZPOaUQwUCu/bhxwgD2Lf/sc/k8V0H4MsUnhrK2JBs68y+6xr+c1yULmm
+	oVGF4qRt2jVpcyDCvNwcj//teDOlpGzNKxPb3rJrK0fWyxImiqUk6baorIEq7+4LXsWnk1aNxv5nS
+	xV3aj6MA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:40838)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1w0fEv-000000007n5-2Vv8;
+	Thu, 12 Mar 2026 12:34:09 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.98.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1w0fEs-000000007Dk-3LAp;
+	Thu, 12 Mar 2026 12:34:06 +0000
+Date: Thu, 12 Mar 2026 12:34:06 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, bpf@vger.kernel.org,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>,
+	Stanislav Fomichev <sdf@fomichev.me>
+Subject: Re: [PATCH net-next v2 13/15] net: stmmac: add helper to set
+ transmit tail pointer
+Message-ID: <abKyvowPxQW9iTCc@shell.armlinux.org.uk>
+References: <abKQWloxp9_4OuJh@shell.armlinux.org.uk>
+ <E1w0czK-0000000CzH7-19Fb@rmk-PC.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -74,104 +66,25 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260312104219.1208802-1-sun.jian.kdev@gmail.com>
+In-Reply-To: <E1w0czK-0000000CzH7-19Fb@rmk-PC.armlinux.org.uk>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Thu, Mar 12, 2026 at 06:42:19PM +0800, Sun Jian wrote:
+On Thu, Mar 12, 2026 at 10:09:54AM +0000, Russell King (Oracle) wrote:
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c b/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c
+> index 1bbf02504dad..d5c003f3fbbc 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c
+> @@ -427,7 +427,7 @@ static void dwmac4_display_ring(void *head, unsigned int size, bool rx,
+>  			extp++;
+>  		}
+>  	} else if (desc_size == sizeof(struct dma_edesc)) {
+> -		struct dma_edesc *ep = (struct dma_edesc *)head;
+> +		struct dma_edesc *ep = dma_desc_to_edesc(head);
 
-SNIP
+Too-many-outstanding-patches-itis strikes again (I have more than 100
+outstnading patches at the moment.) dma_desc_to_edesc() is in a later
+patch that isn't part of this series.
 
-> diff --git a/tools/testing/selftests/bpf/progs/modify_return.c b/tools/testing/selftests/bpf/progs/modify_return.c
-> index 3376d4849f58..5ff18ddb3050 100644
-> --- a/tools/testing/selftests/bpf/progs/modify_return.c
-> +++ b/tools/testing/selftests/bpf/progs/modify_return.c
-> @@ -7,16 +7,29 @@
->  #include <linux/bpf.h>
->  #include <bpf/bpf_helpers.h>
->  #include <bpf/bpf_tracing.h>
-> +#include <stdbool.h>
->  
->  char _license[] SEC("license") = "GPL";
->  
->  static int sequence = 0;
->  __s32 input_retval = 0;
-> +__u32 test_pid = 0;
-> +
-> +static __always_inline bool match_pid(void)
-> +{
-> +	__u64 pid_tgid = bpf_get_current_pid_tgid();
-> +
-> +	if (!test_pid)
-> +		return false;
-> +	return (__u32)(pid_tgid >> 32) == test_pid;
-> +}
->  
->  __u64 fentry_result = 0;
->  SEC("fentry/bpf_modify_return_test")
->  int BPF_PROG(fentry_test, int a, __u64 b)
->  {
-> +	if (!match_pid())
-> +		return 0;
-
-I think just simple pid check like we do in other places
-should be enough:
-
-	if (bpf_get_current_pid_tgid() >> 32 != test_pid)
-		return 0;
-
-jirka
-
-
->  	sequence++;
->  	fentry_result = (sequence == 1);
->  	return 0;
-> @@ -26,6 +39,8 @@ __u64 fmod_ret_result = 0;
->  SEC("fmod_ret/bpf_modify_return_test")
->  int BPF_PROG(fmod_ret_test, int a, int *b, int ret)
->  {
-> +	if (!match_pid())
-> +		return ret;
->  	sequence++;
->  	/* This is the first fmod_ret program, the ret passed should be 0 */
->  	fmod_ret_result = (sequence == 2 && ret == 0);
-> @@ -36,6 +51,8 @@ __u64 fexit_result = 0;
->  SEC("fexit/bpf_modify_return_test")
->  int BPF_PROG(fexit_test, int a, __u64 b, int ret)
->  {
-> +	if (!match_pid())
-> +		return 0;
->  	sequence++;
->  	/* If the input_reval is non-zero a successful modification should have
->  	 * occurred.
-> @@ -55,6 +72,8 @@ SEC("fentry/bpf_modify_return_test2")
->  int BPF_PROG(fentry_test2, int a, int *b, short c, int d, void *e, char f,
->  	     int g)
->  {
-> +	if (!match_pid())
-> +		return 0;
->  	sequence2++;
->  	fentry_result2 = (sequence2 == 1);
->  	return 0;
-> @@ -65,6 +84,8 @@ SEC("fmod_ret/bpf_modify_return_test2")
->  int BPF_PROG(fmod_ret_test2, int a, int *b, short c, int d, void *e, char f,
->  	     int g, int ret)
->  {
-> +	if (!match_pid())
-> +		return ret;
->  	sequence2++;
->  	/* This is the first fmod_ret program, the ret passed should be 0 */
->  	fmod_ret_result2 = (sequence2 == 2 && ret == 0);
-> @@ -76,6 +97,8 @@ SEC("fexit/bpf_modify_return_test2")
->  int BPF_PROG(fexit_test2, int a, int *b, short c, int d, void *e, char f,
->  	     int g, int ret)
->  {
-> +	if (!match_pid())
-> +		return 0;
->  	sequence2++;
->  	/* If the input_reval is non-zero a successful modification should have
->  	 * occurred.
-> 
-> base-commit: 80234b5ab240f52fa45d201e899e207b9265ef91
-> -- 
-> 2.43.0
-> 
-> 
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
