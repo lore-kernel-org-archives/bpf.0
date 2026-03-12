@@ -1,223 +1,169 @@
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C755938B138
-	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 10:42:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EE6A38F65A
+	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 10:46:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773312151; cv=none; b=jsBBKk2nn63npxhV7PCEbnYpEz1JqtCo222+9E//inMjqCf6cBYlhUWv+6qdPU7Q4Aamc1dFO4GFGGrjRWe6gosAURykoSEIg1MUtrFkBJQIJkPJTqq1/RTLtFwA9aNSZTBLvJ+B7bAUv3kHdp2lcMDuIXiTBxA5w1/s0kKCrDA=
+	t=1773312387; cv=none; b=G4NCersWZTU4lh0ZNsgIU8iO50a/J7vpNqF0WHwO6CnopNGcY8Ed3AoS01tEIuZg7PYaQDIexiyfry2cq2FX3SBnkByLkAJ3Yyuc5sjRXjjtITcAVR7DKaHd6yh3phQM/PB6dCOgRV47A6VUTGTuFZ8gE+9uljrZLSdxEd75HK8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773312151; c=relaxed/simple;
-	bh=d+CeAbFtZhkUiTaNfrdWTguX5PcTdUnSvhkWZ6mqxk8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f71qnTKaP5aErouTVzT39rK1dVM15rhRXLLP1f2Ub5XXGMngj+4A+KzrlNghhKL6VD8Uu7d6ipNekTwjo+SrAqZNs40T0fZeacSrKQx3T16Q+yEXovJeSbWmqF89KYOlD4RGDi+f9rabBcewmG3PR3ONzcIu/2cmU/SYULGiwGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hWRfP8Au; arc=none smtp.client-ip=209.85.167.170
+	s=arc-20240116; t=1773312387; c=relaxed/simple;
+	bh=QqK4fKBnKsrw0aRpPX6/Mgiw31EdmjhT0xJqXC7trww=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AIdYzY4BMM6c2F32Suk++WTEm+Fwhd83AikxER9sqgldoRc/BZi8duh6qIS/CRNncMlxJ3XnSGmfK2taBnSwcLa7SdIBhi2GLCz1TUK94ENah8Wf424Yu0ebB+n83emEUqGuBc8kbt01dI2o2rywiKLfHPngBsDqYBcUB24Jn9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WmJz0r2J; arc=none smtp.client-ip=209.85.221.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hWRfP8Au"
-Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-4670676ba03so338342b6e.1
-        for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 03:42:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WmJz0r2J"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-439ac15f35fso807607f8f.0
+        for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 03:46:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773312149; x=1773916949; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IvHmu8LUPGH1YebICVeQW+9lyevvMk2VGqIaR+2zRcM=;
-        b=hWRfP8AuIQzFZlY1GHBo/oEw+2w1HkWJJfIy154FwG31U9MheYayQJUKyCK4HRBlM1
-         sfJMdG2tDb1KaDiHeGBeAs6d0hfZM8CSpxLzvys2QpRf0rqkFJWzobIfNU1VlAVg8YyA
-         yLLTBlc1ENxwzgxY7Ii6ikgxz6gQJRTJ6Exp06gNDrC8faKJOoQTrYqlKTIEyy1jovq6
-         eYKzhPxkEFWw8y+3M8miM5HpsoAB/isUwYd2Ntux479gYzTnqC64YVzJ4qU61DdCSbkw
-         pxcNiNcGLoyO2xvXKChtgGTUWcmRc7oClaodCi3BgyqUIb85okFzLE4lb+vaBdiuozZo
-         llLQ==
+        d=gmail.com; s=20230601; t=1773312385; x=1773917185; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3vGgz7KnTK9vuGJli7OEIVFiI/JsHt8PWV7ea4j0pww=;
+        b=WmJz0r2JsEpo5cD2TGk5qGe9YT1BLr2qPgz6Dc3Ln+VU1zQh0pxz6dSCE9rogSQZw2
+         wmgZRkVKXH5tMpnkUw2ytOGRMNAHvoiV1pq2xYJa8q85X4NhTefMtvdErZOVx33eSBvp
+         N3CS3pLbnuj6VLr8O1tSSXqnVqjkqeEFuiBjJUyby+kAJbW8+kS/iYrFcrXo7Z0oxfER
+         620ATw+DjFOxJHsX8PsLsszseVTV8wZs1+xE6PoHy0F2a497O+dGYrkp8jXzHPOIp4TW
+         sJkPV8Fwrg9TB67662/SzV3K8HBfZ4RJJhwM0nGB6UoiKh3poCG+tj3aCOW+/Bc4GAgB
+         W56g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773312149; x=1773916949;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IvHmu8LUPGH1YebICVeQW+9lyevvMk2VGqIaR+2zRcM=;
-        b=X0aaLEISbWY+55GqB85tYcTqwYW/zEcFYHcJSUQvO6YooUPSMwZbcl7GwmVWSBhX36
-         F2lVV1fjaFgspG60WGmGuXa/qk80W8h2IENWTogLT4YaIIRYrcgOkiDBeDuZDcQT1xxq
-         UtiC1eg33kEeGEn+d85rb9MDOJJ13pwyD2UN7otct3Q0Rybwzt0JrjD58YvNm8YFbYBp
-         NoAWegcq7667awwWHRQDQPEMlEJGLp5tyKWtWBlDt3MmBVIOpE/sOrSh489mJoPm7HZc
-         7161EJknTuFd1c7HnnAmm8ZK3FPLvVEQ2wLG5DHe9GFC4Qltd9qa7+aC+JwgcrH5M2cO
-         6yeA==
-X-Gm-Message-State: AOJu0YwZKpXDYA7KdijOFmsP0DdpNH+vXk/uEH8/YmAKxTBJLOtwtn85
-	ACtZRxW/ZWsBnZrpMMhHYya7tWsJanxMQecMaWkBsACSyY7pURn4JV+xBkyegMsYx1xC8g==
-X-Gm-Gg: ATEYQzyn/aN3jXt3I5yXI43Yy0iHpU1uiJW8LbU6HEFQssIBSxjQkcu4doD/D42I98k
-	iI2v+Kc4zWdQpZuLUoF4KEJg7FgyP7723bPRs6+KL/TzZoLRNbYV3oezhnt0ct1ZTK+P3Mx9keG
-	CVt4jBs9EXRIm+G9joNsHIg8E3r3/NW93fP69yZ29kCGFAnceOQ0QaFuYedG4AhCR6cPV9dcBNq
-	Kgep+al1C9kRwxUgZJ3wRLTjnTT6gIjb8nfsNe+fjd77HoHOZMOuZQLQ+PmA9ncf9fNXZJoqbXq
-	Gc1t67TKdmvOgwloBVB82aL6WRVs8bAy8IJWtuqoKDujQ6OnW3Gw7tEHaQvxZe/0/PWhhDOr+Vg
-	95FEZ2XYxJCrOKTmesBKp9SMmxnUkErzj11r+nnp6CPi2rrRuk4ppssIb9ze/6KgaP3hxeJOqnN
-	Mbq4PzYObPN5UzSuz/fuqLlb68ZU5lTTEb6M+6+4vpDzqoLyAhBpkakYqYmOlWpxdF/X3F9d+7w
-	c+2FPcpy8iZT55ElUkk/c8=
-X-Received: by 2002:a05:6808:c3ed:b0:467:2509:c207 with SMTP id 5614622812f47-4673342c547mr3107070b6e.17.1773312148621;
-        Thu, 12 Mar 2026 03:42:28 -0700 (PDT)
-Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-46743aca62fsm1280665b6e.2.2026.03.12.03.42.25
+        d=1e100.net; s=20230601; t=1773312385; x=1773917185;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3vGgz7KnTK9vuGJli7OEIVFiI/JsHt8PWV7ea4j0pww=;
+        b=qRCMxEdBcJ4c0a9q48Fm6lZhtA25inTbj2fhE7m2lI+RZQ9sQVj8vF93vweuWRGueg
+         2ray7Us4gSx9YUtuGFWoQK8aO4sYcvqGDXDQWXQRRNUY38Bn+wmYZUkhlKvaE2leqavh
+         nP8w8WgPmijudEwFFm6svLY91BxZfAqoGrWXc6yCcC+W2Qk6mEx4OeyMzw3O4Sq9bzqG
+         m3HhtjzK1o7WCJLAbXefsAlx0G/5MD6JkrJmLzUbZ8YO7hy/87YMODNUcC+6fkVlBcxo
+         sYPaueh6xCRBgM9eUQZnFg0+RnFZ3Pn/bECKb74FlzmaoLX9xqv1naUTXtqJfvjZ0voI
+         SPXQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX++0sTb43FwjP1ekEYPF+uEJdHRGEfNNDo53xeS7lHbIGwy/x49+fPeqZkkPxu+FbzX4Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBwiGQqWxV/FmSzjF0vi1gg7ohX3SUf3GzGirSV7Ca01N1m1Mu
+	KG1C7hVyB8BJ1iQrlGrnTQidyiES+ZMsv7RLLQuQ7wqTrWduZr/o/Jf3
+X-Gm-Gg: ATEYQzxnuMd85qlKcX20mPkhz54e416ta1X3kS0jJ6NLPDK6weCY8YkXW0fTTHhnxrQ
+	yM/9u/gMYz8n5wwK6WTvOM6j89z0xXDPuLLl8z1RrT5iZfFNanJb0mmhZpZVT9gYydIkBpOFNGw
+	YLMILCyw1zezDRFOMSn2VQr5jh8TIY6P9yv56CQ30W70rW1trB3l347kkdsv4bGyQRKgT3FW/td
+	gS0rN9BwX4t4Ef4RHaO9syzQSj4NvQkCWFQFedw0y+Zz1k3v5j/KDyyZFcNsMEkdB1QvIs61q2B
+	HzNXEnPQHb+vTlAM2cD8tETT3BBp+astgWFwg65W/XF7qCIWe2UJgzzX+8UPx87yvCC4ImUtTrR
+	H0rahg27YXwII1QxR9MRG3vPC1N6vxbBFYMuNByMCVW34NAMrEhlTSNz4qDhuPeCnonDVMmbRhS
+	+V+eEcOSE=
+X-Received: by 2002:a5d:5d0b:0:b0:439:b79d:b9a5 with SMTP id ffacd0b85a97d-439f8431382mr10986545f8f.37.1773312384396;
+        Thu, 12 Mar 2026 03:46:24 -0700 (PDT)
+Received: from krava ([2a02:8308:a00c:e200::d99c])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439fe1a737csm6568266f8f.10.2026.03.12.03.46.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2026 03:42:28 -0700 (PDT)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	andrii@kernel.org,
-	shuah@kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	martin.lau@linux.dev,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH] selftests/bpf: modify_return: isolate fmod_ret hooks by pid
-Date: Thu, 12 Mar 2026 18:42:19 +0800
-Message-ID: <20260312104219.1208802-1-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        Thu, 12 Mar 2026 03:46:24 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Thu, 12 Mar 2026 11:46:22 +0100
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: Jiri Olsa <olsajiri@gmail.com>, bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Shuah Khan <shuah@kernel.org>,
+	Feng Yang <yangfeng@kylinos.cn>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	Pu Lehui <pulehui@huawei.com>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: Re: [PATCH bpf-next v3 3/6] bpf: Disallow !kprobe_write_ctx progs
+ tail-calling kprobe_write_ctx progs
+Message-ID: <abKZfhWs9Gojuvip@krava>
+References: <20260303150639.85007-1-leon.hwang@linux.dev>
+ <20260303150639.85007-4-leon.hwang@linux.dev>
+ <abHwii5stH93Vz5E@krava>
+ <931b490b-ab29-44fc-b888-8ac1ee8d8ccc@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <931b490b-ab29-44fc-b888-8ac1ee8d8ccc@linux.dev>
 
-modify_return's fmod_ret programs can override bpf_modify_return_test()'s
-return value, which conflicts with get_func_ip_test when selftests run in
-parallel.
+On Thu, Mar 12, 2026 at 10:24:24AM +0800, Leon Hwang wrote:
+> On 12/3/26 06:45, Jiri Olsa wrote:
+> > On Tue, Mar 03, 2026 at 11:06:36PM +0800, Leon Hwang wrote:
+> >> Uprobe programs that modify regs require different runtime assumptions
+> >> than those that do not. Mixing !kprobe_write_ctx progs with
+> >> kprobe_write_ctx progs via tail calls could break these assumptions.
+> >>
+> >> To address this, reject the combination of !kprobe_write_ctx progs with
+> >> kprobe_write_ctx progs in bpf_map_owner_matches(), which prevents the
+> >> tail callee from modifying regs unexpectedly.
+> > 
+> > hi,
+> > could you please give some example where this is actual problem?
+> > I'd expect it's up to user (whoever installs the tailcall map) to
+> > avoid such situations.
+> > 
+> The self test in patch #6 can verify the problem, that
+> kprobe_write_ctx=true progs can be abused to modify struct pt_regs via
+> tail calls when tracing kernel functions using kprobe_write_ctx=false prog.
+> 
+> Explain the problem by reusing the test code:
+> 
+> int dummy_run;
+> u64 data;
+> 
+> struct {
+> 	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
+> 	__uint(max_entries, 1);
+> 	__uint(key_size, sizeof(__u32));
+> 	__uint(value_size, sizeof(__u32));
+> } prog_array_dummy SEC(".maps");
+> 
+> SEC("?kprobe")
+> int dummy_kprobe(void *ctx)
+> {
+> 	dummy_run++;
+> 	bpf_tail_call_static(ctx, &prog_array_dummy, 0);
+> 	return 0;
+> }
+> 
+> SEC("?kprobe")
+> int kprobe(struct pt_regs *regs)
+> {
+> 	data = regs->di = 0;
+> 	return 0;
+> }
+> 
+> The "kprobe" prog will be added to "prog_array_dummy" map.
+> 
+> In user space, the "dummy_kprobe" prog will attach to kernel function
+> "bpf_entry_test1".
+> 
+> Actually, without this patch, when "bpf_fentry_test1" runs, the arg "a"
+> will be updated as 0. Thus, bpf_prog_test_run_tracing() returns -EFAULT
+> instead of 0.
+> 
+> bpf_prog_test_run_tracing()
+> |-->bpf_fentry_test1()
+>     |-->dummy_kprobe()
+>         |-->kprobe() /* via tail call */
+>             |-->regs->di = 0;
+>     return 1; /* instead of 2 */
+> return -EFAULT;
+> 
+> Yep, the commit log is not clear to describe this abuse problem. Will
+> update it.
 
-Store current tgid in BSS and make modify_return hooks act only for that
-tgid. For other tasks, fentry/fexit become no-ops and fmod_ret returns the
-original ret.
+ah right :-\ ok, I think we need to do the suggested one way check and
+that should prevent kprobes having writeable ctx
 
-Drop the serial-only restriction and remove the TODO comment.
-
-Tested:
-  sudo ./test_progs -t modify_return
-  sudo ./test_progs -t get_func_ip_test
-  sudo ./test_progs -j$(nproc) -t modify_return
-  sudo ./test_progs -j$(nproc) -t get_func_ip_test
-
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
----
- .../selftests/bpf/prog_tests/modify_return.c  |  8 ++++---
- .../selftests/bpf/progs/modify_return.c       | 23 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/modify_return.c b/tools/testing/selftests/bpf/prog_tests/modify_return.c
-index a70c99c2f8c8..4661d77ebdfc 100644
---- a/tools/testing/selftests/bpf/prog_tests/modify_return.c
-+++ b/tools/testing/selftests/bpf/prog_tests/modify_return.c
-@@ -5,6 +5,7 @@
-  */
- 
- #include <test_progs.h>
-+#include <unistd.h>
- #include "modify_return.skel.h"
- 
- #define LOWER(x) ((x) & 0xffff)
-@@ -23,11 +24,13 @@ static void run_test(__u32 input_retval, __u16 want_side_effect, __s16 want_ret)
- 	if (!ASSERT_OK_PTR(skel, "skel_load"))
- 		goto cleanup;
- 
-+	skel->bss->input_retval = input_retval;
-+	skel->bss->test_pid = getpid();
-+
- 	err = modify_return__attach(skel);
- 	if (!ASSERT_OK(err, "modify_return__attach failed"))
- 		goto cleanup;
- 
--	skel->bss->input_retval = input_retval;
- 	prog_fd = bpf_program__fd(skel->progs.fmod_ret_test);
- 	err = bpf_prog_test_run_opts(prog_fd, &topts);
- 	ASSERT_OK(err, "test_run");
-@@ -49,8 +52,7 @@ static void run_test(__u32 input_retval, __u16 want_side_effect, __s16 want_ret)
- 	modify_return__destroy(skel);
- }
- 
--/* TODO: conflict with get_func_ip_test */
--void serial_test_modify_return(void)
-+void test_modify_return(void)
- {
- 	run_test(0 /* input_retval */,
- 		 2 /* want_side_effect */,
-diff --git a/tools/testing/selftests/bpf/progs/modify_return.c b/tools/testing/selftests/bpf/progs/modify_return.c
-index 3376d4849f58..5ff18ddb3050 100644
---- a/tools/testing/selftests/bpf/progs/modify_return.c
-+++ b/tools/testing/selftests/bpf/progs/modify_return.c
-@@ -7,16 +7,29 @@
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
-+#include <stdbool.h>
- 
- char _license[] SEC("license") = "GPL";
- 
- static int sequence = 0;
- __s32 input_retval = 0;
-+__u32 test_pid = 0;
-+
-+static __always_inline bool match_pid(void)
-+{
-+	__u64 pid_tgid = bpf_get_current_pid_tgid();
-+
-+	if (!test_pid)
-+		return false;
-+	return (__u32)(pid_tgid >> 32) == test_pid;
-+}
- 
- __u64 fentry_result = 0;
- SEC("fentry/bpf_modify_return_test")
- int BPF_PROG(fentry_test, int a, __u64 b)
- {
-+	if (!match_pid())
-+		return 0;
- 	sequence++;
- 	fentry_result = (sequence == 1);
- 	return 0;
-@@ -26,6 +39,8 @@ __u64 fmod_ret_result = 0;
- SEC("fmod_ret/bpf_modify_return_test")
- int BPF_PROG(fmod_ret_test, int a, int *b, int ret)
- {
-+	if (!match_pid())
-+		return ret;
- 	sequence++;
- 	/* This is the first fmod_ret program, the ret passed should be 0 */
- 	fmod_ret_result = (sequence == 2 && ret == 0);
-@@ -36,6 +51,8 @@ __u64 fexit_result = 0;
- SEC("fexit/bpf_modify_return_test")
- int BPF_PROG(fexit_test, int a, __u64 b, int ret)
- {
-+	if (!match_pid())
-+		return 0;
- 	sequence++;
- 	/* If the input_reval is non-zero a successful modification should have
- 	 * occurred.
-@@ -55,6 +72,8 @@ SEC("fentry/bpf_modify_return_test2")
- int BPF_PROG(fentry_test2, int a, int *b, short c, int d, void *e, char f,
- 	     int g)
- {
-+	if (!match_pid())
-+		return 0;
- 	sequence2++;
- 	fentry_result2 = (sequence2 == 1);
- 	return 0;
-@@ -65,6 +84,8 @@ SEC("fmod_ret/bpf_modify_return_test2")
- int BPF_PROG(fmod_ret_test2, int a, int *b, short c, int d, void *e, char f,
- 	     int g, int ret)
- {
-+	if (!match_pid())
-+		return ret;
- 	sequence2++;
- 	/* This is the first fmod_ret program, the ret passed should be 0 */
- 	fmod_ret_result2 = (sequence2 == 2 && ret == 0);
-@@ -76,6 +97,8 @@ SEC("fexit/bpf_modify_return_test2")
- int BPF_PROG(fexit_test2, int a, int *b, short c, int d, void *e, char f,
- 	     int g, int ret)
- {
-+	if (!match_pid())
-+		return 0;
- 	sequence2++;
- 	/* If the input_reval is non-zero a successful modification should have
- 	 * occurred.
-
-base-commit: 80234b5ab240f52fa45d201e899e207b9265ef91
--- 
-2.43.0
-
+thanks,
+jirka
