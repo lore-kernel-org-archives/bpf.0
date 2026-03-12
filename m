@@ -1,196 +1,190 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF83036C9E3
-	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 20:40:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 774C32E0B71
+	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 20:51:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773348049; cv=pass; b=ZOxUyGNkChebY+iCaCOlKBYnJ8ukAoy02e0xtrWteG5v6dFjswcA96kIaoeji+q+e8f/dJC8rJhzydRxXT2b2/JLnOjb869z6xM37nWwjw1tSg1njHl66gMizMv2wd2Rnd5t5Nm5uA2rGNxEoG2/GMCFByYbPbgRwhuWbuklsFw=
+	t=1773348693; cv=pass; b=H9Z7WwliAt19F4uLTIOUjGWfPBZKeeuTnWxXgKG7a4xD72C28y/1yQZdtaA4xZedMtXl6SUBDsMzWbPEakiud9EbMoi2czBcjzI93pVZHxhghz69RG9czpMjkhmworzaqNF2tsNEpkwQ1otJtCVymyUv3sKbPlYESMr26bLFxNw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773348049; c=relaxed/simple;
-	bh=jNNzfNj0kzqKkzmJMAE2Km8gS3EcvmO8lyG6whragns=;
+	s=arc-20240116; t=1773348693; c=relaxed/simple;
+	bh=yEXEB+XIExW6jhKbpp7aTQm0ye8is1mfuk9hTkr8dlw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=a/Wnfgk4ExjpgsM0gOZl4bbVbkcCKqiEOrH9K9dX+VtGJsvsuzahXiN/UQTjHRcI3flZ7Yy6npmOJzb1m3gsGMaRmilZPbx2B3q0rg7NVW90LZafNv6x6CRBoiXve6IT4l2ikqKhsFJKRpj5EZ8wXGGWoA9yXqJKqYxHDQ/tDrI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D6lOSc74; arc=pass smtp.client-ip=209.85.215.172
+	 To:Cc:Content-Type; b=XJ4ED9+l2xWNjWH9FQXYo7Zu/7/Qdhbq9h3kYoCBnK5kAFTj2NFubP57Z/y1AZ640Q5MiMj24AxVy3LpGICYajzoDwWMSNGJ3wS/0SQ9oPqXFV/odKwwuMwee5OaL3eCsW8idZuezAxsIOt9LnIoZVa/j9yGG+n8nnOL3cOJ7Is=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mRdP24tY; arc=pass smtp.client-ip=209.85.216.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D6lOSc74"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c73bbdc01b7so555477a12.2
-        for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 13:40:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773348048; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mRdP24tY"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-35a1a36f0c0so648708a91.2
+        for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 13:51:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773348692; cv=none;
         d=google.com; s=arc-20240605;
-        b=ErR5YhpwGpro4PzLmB5Uxu+ok/11ava7y/uu7VeemdvV3pScqB1CrCgtisNlaIXYeF
-         U9K1l3j+lBC5HWNkUUXfraG+ZBXf1QNZc9LK/YOToo1XKlLKcArvwVG1ZJmv77LjK6/f
-         ZGu4PRNqAsl1eyOeQ3VUKutR+oirJOt7L0gF+vre3pLdSy243bLZsP2CCeh13kjMHAx8
-         nIb2gutdak/M7ZGvv82EH2E1aR7saD9ykUc6Znn2AJiny78NJoioujpqoJC11DqXgVTd
-         4eyOCUgwVuCI3QRwH4mC1Oms0+xyfB594HVAf7kOGINFQyrCQwhvRZe59LrmqgIBN4oJ
-         0vJw==
+        b=Lpikgj22eL6fytVnjMmXMiyfkrDT7RsTPCt1/fAhrgBgvdurf9ajR4jU7Z62BcYKdw
+         NfTSwDeMLAjZC0sXlSxeURXWVUbFi8Y3RLIFkEaoYtV23j370YCdY5TjTFWRTESkm7zU
+         FgDpLxXEAd9BvdPqiLFRtKENMkayPGZUO3dpulkBU8WGTqPNBLWFbfDhgsQ9f4aExQ69
+         61e7aUTi7sKiPeziWSO+sQU6KQjPz+0FbNzsJObVONfIA2Ze8n4+rtAWQ0DKGAAimHz3
+         fRrjGAG4bO/22HB7M9M0foQw/jyU1U4NxQUd9Y6/5uVwNrtd9bKwszrMxDoegmk7b72N
+         YYYw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=TVRU7lPCos05gvdNcrN1pur+meZrE13anrW0auAA+OY=;
-        fh=JBaJ8HSYyCi6rM+2aem4u6810OQJ/FBi8UsZKqUIyV4=;
-        b=U7C+nWlOd47cWuH3aI66xUP16ePYhHs/pvjcxCgtxKL9Q+6Pk2EGESDD0CBd4w36Lc
-         88ZRzzugjW1xXW5Una1bgsI4vNVm4mHiEFuq26NxKsFWetyFuO1H7hGLs6qObqav9En7
-         2TRMCCM9PCRf0j1b/Nyr25ycnVXjWTplq/LHJpRjpppaeMB9WaZkhvZwbEOf0RBG4E4Z
-         a4/QPlUYnhC9W16qYoUZYLSnvPmkgB83l5iCBq0TUxLHpDRAaUcC5Y+1L5wPZOrGWRqq
-         VG4L000dM7RPkMg4fKrSDGvEwxSGtEQYGYwcqg0tFWPmFAElQF6kkjrtlYRuBcPOlFDN
-         l+mQ==;
+        bh=yMkSNysss/cPZE6pre4BlqUbGSIi/DTFDjvJ21md2YM=;
+        fh=un2GWPmYwFWbdF1XpxMPQYRxhKazl5Rxm/QZWha9hkc=;
+        b=b9yV2bMeKve9QVQ0kNHdmgiSWtmWtNa9IdkaUyvUISF4jgny7Xom1wWOOjknz9yHfB
+         +jQccCM0Tm1K//Fgnhpz2ZkTCcIHo4nlsRpYyyYEGkd4uYd6s+u2m13LdDqvD0Q8NDM+
+         e6cPUbXUeyjfplUA0d+GZfYT/hnE1NAQmjaB0965TeVOsuG1lpFTvSI2vyEmQ19wFYMH
+         zRVDy9tmgu7DyTSl/dw1xSKiMfFJlpC7p/52oDwtB89DGxutMi+Gf2PLP/iN9q1IUb5A
+         qEi/Q3YyQJcH/EYktmE/R+KvSzox1dojJYOkr/jwY3Tu+zZELvYUBgl8UcMHmEbMZlxu
+         rW/g==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773348048; x=1773952848; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773348692; x=1773953492; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TVRU7lPCos05gvdNcrN1pur+meZrE13anrW0auAA+OY=;
-        b=D6lOSc74G5UuNoN9twcQMy2/P5mlC/RxG61tLfi7AWLm9no911WSaugA213slKuXJS
-         Kj4lJxtm2QEHxHMiuI7hsy43J+rYGdEaCSYcm4aQcDcezg9FJLfXxOEgopt6VG7dNuSC
-         WKBnpbDxq53OeQj8gOHh2SF54JL/dD7hNNuLm7LV94g6ffRWR4uzpPfpEux8xEj3ZKdT
-         M6JB2YDh4mHwJ5h2l/CaQEpOxJac2RDUkir+1XB88q2RR6MT+6n2e9S7VCtmIQp9rLF6
-         so3guKY9KaRV5QYDHgx77nDAXcMU2gFN9O77LG4pF1BIZRa3cuGr0/GDEt8DmbDaM+Wd
-         BR2A==
+        bh=yMkSNysss/cPZE6pre4BlqUbGSIi/DTFDjvJ21md2YM=;
+        b=mRdP24tYtQZDtwQuA8l+wY1Ww9duGAtROeuju5DgKvatlQQrYv6OmiA2IYGj1g0nnV
+         xfihm3DEMT4yhHBdRLPBdqhi6MjPNkm/3soc7S56n2lGyWP9B/EplgCrWWfMXi/UJ47W
+         uRKuifo64oOn+WBe6JWB7zaYUePdjUBkYPogbpYQ9lfrunYCXiLvxdm9le9QTndKat8x
+         f2um+0EcVo3yZVx+a4/DWlk2kxiDRlIOjDCyymFqFc0lL4To6ipTHudHmxcV1auE3dsE
+         TcLIRcK58k6lubY2BihqyVfcrzzUsl2d9WnrECY3/mwMePn/4PeibyXv67FiNXEndV9U
+         GkRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773348048; x=1773952848;
+        d=1e100.net; s=20251104; t=1773348692; x=1773953492;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=TVRU7lPCos05gvdNcrN1pur+meZrE13anrW0auAA+OY=;
-        b=WRCwkiHqcnvtwqODuNySAbeljztW2Nv1orU6dCDi4JFmXGIyW73gtvEW/U6wfuKUVc
-         H0EQMeCsIt9tJabxafKwImUg19b+Lz5jEAPo+xDCeIVKOJ+aEmmfF0pSx3Ii4up84m70
-         yxmJYo6f3/x1ho9fwzIYfRvNZAH6cXVrtMNQvyvpVsND34jErX6ommpknBpNjJ+mRS8H
-         /u8VFFU9gHytdqaxecjZTInb9ZF/Bca2398gdSf55mjS/og01Jka/Ql9eLhR6Yl8afoq
-         aBAMz/c0RMYZhXPt012BFSM2kLuONrBR/YKqYgnWFTo8V8tddcd9tgZ4Gd0yTE585Ida
-         QbQw==
-X-Forwarded-Encrypted: i=1; AJvYcCWpQPz17c17Qx8wE+bDgxWxMmOtQ/hhsovYus+d4PSh8TuVanhTRbbtNVhcwWd1TqPfuVY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxGA/SSl3jbZ1Oq+kGc6kK4IqmYuc5D1yBkcQgAtj2Iza0Jv4R5
-	4WZQXeNFExEtm8pP8O2Rry8wdgq9TTj2cqroz0XnpNdKo0VCg/OdJkyFvMHao3WfPKbtfqjaQG6
-	3YUFLJn4GZNuMi+skQRc8qaZXYI1qQ24=
-X-Gm-Gg: ATEYQzyCKcnCL+pW0aYpe5+qwKQJMjpK9Fx1ztA0omXXYsJwXUbQf24x9zij9CE1f8c
-	C/p6YQxddDvlIch7YVaZ87Unt28mrVMH11e7eWudjNVetNbSqaUumqY3ihcz3qM+rT4aIRvSWil
-	nn+CYGn1jbKc1GAMDIFgXWaXw/Dvqh5+kmMSB3/vu86Evfn6ulzIHCkpP12vHkPTiSC8LwprXqt
-	2z5DdaV8/nTLX5ssJObB4NtEbkRzS381i0eGuM6ARFGj0f+89Vdq/cpCRuINwqR/ZyPrtXj20W4
-	Ze3ZEO271MkRnFbDppltv4TWChj5l8gHng==
-X-Received: by 2002:a05:6a00:2e94:b0:824:ad1e:3b6e with SMTP id
- d2e1a72fcca58-82a19911ee0mr620449b3a.49.1773348048046; Thu, 12 Mar 2026
- 13:40:48 -0700 (PDT)
+        bh=yMkSNysss/cPZE6pre4BlqUbGSIi/DTFDjvJ21md2YM=;
+        b=sT2nY85alGnAXyYXCW2RJcGc0LN4CEtsZN//dfyzhgn0BJrKrGM+ad2NGHV8qFM8D/
+         j9kTtFB59xu/kIEH7vdorTy+9YY1olAotm8nRvK93Zn5So7PWtCruPNurS1eo+MsGoiH
+         vfKdMYv4puxp0oEMmfxpIK0czA7L6I/vnukgCgBFOE7Ytr3b47aoAWwcoU7Kcvn0aI3k
+         p8q2Zv3KGeoMOAr0bXCsSmFWHNcKOIJHW1a3bLPoJCawcHF9kvhbqf+hT0PlVQXreYAI
+         vNQziDv90O//GA/G8bA7JCoaBSYc9BtYdzYAObT1KWaynCCG+QHQDDdgVne+rfm6ecCJ
+         mmuw==
+X-Gm-Message-State: AOJu0Yx97vDsIohrkgRtk7Jm7or6+MFzaceyCgWxuMcIoMb9nnl1NN+X
+	QU/3aAv1tyhjqgZf2fWDXogNg4rd4mzeUBagMmzzZAZ5aFJxNX/mChJbmEwJo5OvJmojWw5MsTv
+	qJdc9u8GkovJiK9BOA599+Wxrka/Vd4M=
+X-Gm-Gg: ATEYQzznpsKl5j+IO+vucP5ZOLR0lQPMM9FBRPnQHxaVpdYiKZzs8aoeatlEe6ytHK7
+	IvUUDA3Wmo9PS9XdsjoDjvT4rlPO1jgLE4JGBo7oeBdmENMH376AlsbJ4bPXcmQ+7/BthNRpUBi
+	tphuo1vPkULEF/fVvzqaZj/aHlXqe88ajNidDLwaj4QKpcRTfCpgfRjlyPslXUDZtJ33519NF4+
+	3mV+IpAW+daX41vXxG5apNhx/EIsLhmHinBKkVA/CCeg7/atyYU5f8fEeQo/VNJZi3eENueVgFF
+	p8LRZWfV1Qru/6cA5pHI1Y4=
+X-Received: by 2002:a17:90b:3501:b0:359:8230:abcc with SMTP id
+ 98e67ed59e1d1-35a21eb7078mr869372a91.8.1773348691766; Thu, 12 Mar 2026
+ 13:51:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260312195017.210430-1-ihor.solodrai@linux.dev>
-In-Reply-To: <20260312195017.210430-1-ihor.solodrai@linux.dev>
+References: <20260311-sleepable_tracepoints-v3-0-3e9bbde5bd22@meta.com> <20260311-sleepable_tracepoints-v3-1-3e9bbde5bd22@meta.com>
+In-Reply-To: <20260311-sleepable_tracepoints-v3-1-3e9bbde5bd22@meta.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 12 Mar 2026 13:40:35 -0700
-X-Gm-Features: AaiRm53CXKiALYK57Vg0ziiTnLQXs8qz8uEXfEkisEOWi3bCEsMZ7o-Uv_qzjew
-Message-ID: <CAEf4Bza-cEaCg1s9pppdRAS1idx71wjZ4+7g-gkM_JXzD1xSyg@mail.gmail.com>
-Subject: Re: [PATCH bpf v1] selftests/bpf: Bump path and command buffer sizes
- in bpftool_helpers.c
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, 
-	=?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>, 
-	bpf@vger.kernel.org, kernel-team@meta.com
+Date: Thu, 12 Mar 2026 13:51:18 -0700
+X-Gm-Features: AaiRm518pFmWZqeZWjKEeF-9BhQ7qfB9n4MtL-YVXvTdmFozu9tirvFOkT8mTtE
+Message-ID: <CAEf4Bzbk4dLFUQzcrFXNw6Bgp7uzFhK-NHHTrbR6roy583ezPw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/4] bpf: Add sleepable execution path for raw
+ tracepoint programs
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com, 
+	Mykyta Yatsenko <yatsenko@meta.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 12, 2026 at 12:50=E2=80=AFPM Ihor Solodrai <ihor.solodrai@linux=
-.dev> wrote:
+On Wed, Mar 11, 2026 at 11:23=E2=80=AFAM Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
 >
-> The path length of 64 is way too low in some envirnoments, which leads
-> to subtle failures due to truncation [1].
+> From: Mykyta Yatsenko <yatsenko@meta.com>
 >
-> Replace BPFTOOL_PATH_MAX_LEN with PATH_MAX, and set
-> BPFTOOL_FULL_CMD_MAX_LEN to double of PATH_MAX.
+> Modify __bpf_trace_run() to support both sleepable and non-sleepable
+> BPF programs. When the program is sleepable:
 >
-> [1] https://github.com/libbpf/libbpf/actions/runs/22980753016/job/6671980=
-0527
+> - Call might_fault() to annotate the faultable context
+> - Use migrate_disable()/migrate_enable() instead of
+>   rcu_read_lock()/rcu_read_unlock() to allow sleeping while
+>   still protecting percpu data access
+> - The outer rcu_tasks_trace lock is already held by the faultable
+>   tracepoint callback (__DECLARE_TRACE_SYSCALL), providing lifetime
+>   protection for the BPF program
+
+we should not rely on this, see uprobe_prog_run(), we should do
+something like that here, explicitly calling correct RCU flavor
+depending on sleepable/non-sleepable program
+
 >
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> For non-sleepable programs, rcu_read_lock_dont_migrate() is replaced
+> with explicit migrate_disable()/rcu_read_lock() pairing.
+>
+> Remove preempt_disable_notrace()/preempt_enable_notrace() from
+> __BPF_DECLARE_TRACE_SYSCALL. Per-CPU protection and RCU locking are
+> now managed per-program inside __bpf_trace_run().
+>
+> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 > ---
->  tools/testing/selftests/bpf/bpftool_helpers.c | 13 ++++++-------
->  1 file changed, 6 insertions(+), 7 deletions(-)
+>  include/trace/bpf_probe.h |  2 --
+>  kernel/trace/bpf_trace.c  | 13 ++++++++++---
+>  2 files changed, 10 insertions(+), 5 deletions(-)
 >
-> diff --git a/tools/testing/selftests/bpf/bpftool_helpers.c b/tools/testin=
-g/selftests/bpf/bpftool_helpers.c
-> index 929fc257f431..6a5e99b5e542 100644
-> --- a/tools/testing/selftests/bpf/bpftool_helpers.c
-> +++ b/tools/testing/selftests/bpf/bpftool_helpers.c
-> @@ -2,18 +2,18 @@
->  #include <unistd.h>
->  #include <string.h>
->  #include <stdbool.h>
-> +#include <limits.h>
->
->  #include "bpf_util.h"
->  #include "bpftool_helpers.h"
->
-> -#define BPFTOOL_PATH_MAX_LEN           64
-> -#define BPFTOOL_FULL_CMD_MAX_LEN       512
-> +#define BPFTOOL_FULL_CMD_MAX_LEN       (PATH_MAX * 2)
->
->  #define BPFTOOL_DEFAULT_PATH           "tools/sbin/bpftool"
->
->  static int detect_bpftool_path(char *buffer, size_t size)
->  {
-> -       char tmp[BPFTOOL_PATH_MAX_LEN];
-> +       char tmp[PATH_MAX];
->         const char *env_path;
->
->         /* First, check if BPFTOOL environment variable is set */
-> @@ -29,7 +29,7 @@ static int detect_bpftool_path(char *buffer, size_t siz=
-e)
->         /* Check default bpftool location (will work if we are running th=
-e
->          * default flavor of test_progs)
->          */
-> -       snprintf(tmp, BPFTOOL_PATH_MAX_LEN, "./%s", BPFTOOL_DEFAULT_PATH)=
-;
-> +       snprintf(tmp, PATH_MAX, "./%s", BPFTOOL_DEFAULT_PATH);
-
-nit, but why not s/PATH_MAX/sizeof(tmp)/?
-
->         if (access(tmp, X_OK) =3D=3D 0) {
->                 strscpy(buffer, tmp, size);
->                 return 0;
-> @@ -38,7 +38,7 @@ static int detect_bpftool_path(char *buffer, size_t siz=
-e)
->         /* Check alternate bpftool location (will work if we are running =
-a
->          * specific flavor of test_progs, e.g. cpuv4 or no_alu32)
->          */
-> -       snprintf(tmp, BPFTOOL_PATH_MAX_LEN, "../%s", BPFTOOL_DEFAULT_PATH=
-);
-> +       snprintf(tmp, PATH_MAX, "../%s", BPFTOOL_DEFAULT_PATH);
->         if (access(tmp, X_OK) =3D=3D 0) {
->                 strscpy(buffer, tmp, size);
->                 return 0;
-> @@ -50,7 +50,7 @@ static int detect_bpftool_path(char *buffer, size_t siz=
-e)
->
->  static int run_command(char *args, char *output_buf, size_t output_max_l=
-en)
->  {
-> -       static char bpftool_path[BPFTOOL_PATH_MAX_LEN] =3D {0};
-> +       static char bpftool_path[PATH_MAX] =3D {0};
-
-this doesn't matter in practical terms, but I'm not sure all people
-realize that this initializes entire buffer with zeroes, not just
-first byte. `=3D {0}` is super misleading, it's better to use `=3D {}` in
-cases like this
-
->         bool suppress_output =3D !(output_buf && output_max_len);
->         char command[BPFTOOL_FULL_CMD_MAX_LEN];
->         FILE *f;
-> @@ -84,4 +84,3 @@ int get_bpftool_command_output(char *args, char *output=
-_buf, size_t output_max_l
->  {
->         return run_command(args, output_buf, output_max_len);
+> diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
+> index 9391d54d3f12..d1de8f9aa07f 100644
+> --- a/include/trace/bpf_probe.h
+> +++ b/include/trace/bpf_probe.h
+> @@ -58,9 +58,7 @@ static notrace void                                    =
+               \
+>  __bpf_trace_##call(void *__data, proto)                                 =
+       \
+>  {                                                                      \
+>         might_fault();                                                  \
+> -       preempt_disable_notrace();                                      \
+>         CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(__data, CAST_TO_U64(=
+args));        \
+> -       preempt_enable_notrace();                                       \
 >  }
-> -
+>
+>  #undef DECLARE_EVENT_SYSCALL_CLASS
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 0b040a417442..3688a7e115d1 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -2076,7 +2076,7 @@ void __bpf_trace_run(struct bpf_raw_tp_link *link, =
+u64 *args)
+>         struct bpf_run_ctx *old_run_ctx;
+>         struct bpf_trace_run_ctx run_ctx;
+>
+> -       rcu_read_lock_dont_migrate();
+> +       migrate_disable();
+>         if (unlikely(!bpf_prog_get_recursion_context(prog))) {
+>                 bpf_prog_inc_misses_counter(prog);
+>                 goto out;
+> @@ -2085,12 +2085,19 @@ void __bpf_trace_run(struct bpf_raw_tp_link *link=
+, u64 *args)
+>         run_ctx.bpf_cookie =3D link->cookie;
+>         old_run_ctx =3D bpf_set_run_ctx(&run_ctx.run_ctx);
+>
+> -       (void) bpf_prog_run(prog, args);
+> +       if (prog->sleepable) {
+> +               might_fault();
+> +               (void)bpf_prog_run(prog, args);
+> +       } else {
+> +               rcu_read_lock();
+> +               (void)bpf_prog_run(prog, args);
+> +               rcu_read_unlock();
+> +       }
+>
+>         bpf_reset_run_ctx(old_run_ctx);
+>  out:
+>         bpf_prog_put_recursion_context(prog);
+> -       rcu_read_unlock_migrate();
+> +       migrate_enable();
+>  }
+>
+>  #define UNPACK(...)                    __VA_ARGS__
+>
 > --
-> 2.53.0
+> 2.52.0
 >
