@@ -1,80 +1,80 @@
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECEB83EF658
-	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 16:05:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BA6A3F661C
+	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 16:09:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.174
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773331552; cv=pass; b=bbQ/feTkdZSO6A2YNaNQd19WR0qaPLiudMFicchHrH6MF1ZAPggoxV9OfIKCLaY6lke6nh8BmKgC96KQwZ7tv33pK9w0DMdMRR+I6LNMticyDf8VkEkdBFwTbokgsFFdI5SD8P9I1TJ9z60eIkCjdGfAZhp9ikfz0XbZkNo26RE=
+	t=1773331744; cv=pass; b=epZH+1Ki73lAGq0/nr0Zv2w+PB0p1SvLjo0CQ8TP1r/2q6RDVUYje21rFcs4fpkv2OZuu8x6Wx/fmyvdVvz0ihqXs1IYBTE/sUrorr/9L4yLZ/+YqUqzjBVIN0ocntbETN+Vs26B5lTJL+KkKuxzgtQLkSx/0RUi1zywMrZAMO0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773331552; c=relaxed/simple;
-	bh=uXwIo7R/AWmUX8v9NfNe8o8eyYKkzsQlLFxRYRKmo54=;
+	s=arc-20240116; t=1773331744; c=relaxed/simple;
+	bh=/9ZhlXnE8IpHyY7rKGq8AMXoEoLmeVmAM+IAe1Oezhg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jc9A2AscVhRRu5nsuEtz+mL5Duj+4fh+PvLMaExCLC00l99C2cRdg6KQYt6Cpz6VeJ/EOaX/242xXinGLXER9kNVd564NYztXPbFfEscJdy5FCcAMCApg6bsfZJkPck9QjxAy1gTFQzw00FDQ2tJbRSHv/3cxLPXPvYG2KLPCXI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bitbyteword.org; spf=pass smtp.mailfrom=bitbyteword.org; dkim=pass (2048-bit key) header.d=bitbyteword.org header.i=@bitbyteword.org header.b=ZV71t7Yr; arc=pass smtp.client-ip=209.85.128.179
+	 To:Cc:Content-Type; b=rwVM9tV12CvDAX3YFseBfOV5085cJJjZh7PkY7UydIqkCdhODDtA0Gh4guCKa4LBfl5o0NSzhzliMD4MhE9gx3+JgMHxNOR93NFc+BUfV+aAtYDb7F4HIa/WbqDmyFXpVANyF84+oskUy2qr4bD2LDp5bBV6aYcZ1Uh6nLBy9lc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bitbyteword.org; spf=pass smtp.mailfrom=bitbyteword.org; dkim=pass (2048-bit key) header.d=bitbyteword.org header.i=@bitbyteword.org header.b=m1ki3q6s; arc=pass smtp.client-ip=209.85.128.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bitbyteword.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bitbyteword.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bitbyteword.org header.i=@bitbyteword.org header.b="ZV71t7Yr"
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-798374d0f44so35258607b3.0
-        for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 09:05:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773331548; cv=none;
+	dkim=pass (2048-bit key) header.d=bitbyteword.org header.i=@bitbyteword.org header.b="m1ki3q6s"
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-7985ce90542so12999577b3.0
+        for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 09:09:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773331741; cv=none;
         d=google.com; s=arc-20240605;
-        b=cEy7ebddYivhJ08pMOSW/FB3lGdZZZCxlb2SLyqkb4lQpKZV70pSNHzQNNYpZ8T+fj
-         Tc5Et2Y3ei1Fxp/eainbXMH0O3FT4LDvzGuhiPimDtlgsJEhOX4q+E9oCiSxDyJ16zPJ
-         W7t5AyzCXXmfTS7DETzcnExFx6PjK08yt1W9df+Wrm2DTjQwTzJMOn8XZHXbjA5Uwhyb
-         K7w4x/l76YuVAbvHr8ecq3m6DbHwDGlXJ485CrD10ye6C+kWQyAmeCg7JOCmeVZI3ec/
-         X03/fnYk87mid8IqIgsFEG0TNJO8h02kf7/rI7MHdW3ahujjkx5uXKHg7U6jUGSWTfYf
-         tVJg==
+        b=bC/cxXlj0xt/QyEkkMtjJLX5uhJu9BCimnw0N180zqu/XTYDnmJ7YkJxR4Jf5OXcmQ
+         xM5qa5Dfl/e1PncuaZhPOYWu9EQqVcyLh4jM16Zck1rml3xh2siBBjM0JzD0ua5xec6m
+         b4oGpJvWvF3rW7Yk3y9TRZOLUa0GUlajGepBfW6cXKbmmr3uhlMoZPVxPrLs4K/adHxK
+         K56cdX387biZzNvoZP/mYBWkTiqDE9iPeuOOTBHBBRszmhmK7EXqQwXrShjvqUisTPLy
+         /8UygjTD/ZictR5WLagt1+s0KC6bghmujCjR+vS7c7d62b0q5et6e0XNQtyhG5jGiDBx
+         3cCA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=JmKlkavBf/yAOF4s82cTsdoYBcDg+c1w7g0d5bSER7o=;
-        fh=T5QxOL0M+ctOYYHDYaYkMFR+Ytgu1WPGkVpgzCzfuZg=;
-        b=Gz8bNyiCp/S+U+G+3CiamRdINC6s9AKHqfAbVVaXZ22B/YimgC35WnfwBzJP9IcdgQ
-         ePaf8zI5SxEkDuQPAAjnQI39K3Bg0ZiBxWuiNkH0K8BqD+om4VnMmIp0+Z0ojp1WZrym
-         xg1DbwVOPuVDJAslUoRR82+hWCBimfd6OEz5xPbmEFRHemBfXP21Mz7ei6jXgSY24L31
-         8VzxstVILoPFM4npd/4/jmh2h6ApM6jgBrRM796KCP9aFrB1D4VO0nQli0avi7/WUbhs
-         73etx0IAWoreq2TxB7/T4VgdSxtCfmbjlZOEhrQg4XrIxJaeMHC+lcYk7sevYCweh6uY
-         kXEQ==;
+        bh=kI5PTFr09piXXwe+dHgxbmefu5uh1N96l8rxcGpDT20=;
+        fh=FbDxPFY7tJA5wtO4hH6T2eFZyVzjGhGtxk4x90oOgB4=;
+        b=lWSQgTpC8v3yKCCX1f27X3HdF0nK9X2Eca5/V8Amjby3jFfWgC8U2W8MhbiaqGnTl6
+         qI6qBzwEw0pUpIfNxSuL0WaLzbte25wzfVY7PP284+oguVesAgr35gbhoLirF4j95lPy
+         zRzttu+q+xnXJywxDHUojCiwnO1AxhPWV81zC1o0R6aW8Rp+FeJGb18CT7EJ4sY/vkOD
+         hhmO+P6txRP0H8wlJZSRkRIafGiXvVcZ7do9RrxTLEWwnUMLun4ojYa1sFiG2rUiarVf
+         UEfOXMo46lo3FucFjMiRr47zgBx9TlVGNFvqk1X07U6Aogjjat9vkF8q31rg9T1fkEFn
+         R/DA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bitbyteword.org; s=google; t=1773331548; x=1773936348; darn=vger.kernel.org;
+        d=bitbyteword.org; s=google; t=1773331741; x=1773936541; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JmKlkavBf/yAOF4s82cTsdoYBcDg+c1w7g0d5bSER7o=;
-        b=ZV71t7Yr1bKEaCrw5G92Jfwsdtqtd7yVBewYsWTdMu4hlPrngoMiOi9Tg98BUXGj7V
-         J8zfT8WZvuSQVQoHqLeSQshOj58obuQHxEJH3i8/pbu12eU6C7Ce24M/UJLLYQE6Gyj4
-         MBJKDgq3YAhHELLZd+5LiW+wYl057MgHnzcIvUsegkYPkvlEfdww7dLPjrHlDmsadUdM
-         wSRYkiv5Ntk9U+9jkH4To9xPIEAmJ9iWvbmxM8yMdXibURUG9CU4usIPwIAMNK/zJ+LU
-         w3EzMZjLrprjIUB0o8QsaOC68H8pgsKxw2R93SbRJDixW4oABx/etf2ISufqJ1uZrO5X
-         OKgQ==
+        bh=kI5PTFr09piXXwe+dHgxbmefu5uh1N96l8rxcGpDT20=;
+        b=m1ki3q6sM4E2UACesTTqdadtI+Q0abqlUwfIdHI+OjmsRX2whEFMpQZptypVWhQx7h
+         QD04yZlyfzP3xSivF9scjOrX5/FKYwiLrKA2X7JGefZSd1ksKzyMr15sFt8BUlBtCA1S
+         qJU7H/z8w1uO+F9Lf0dqC/P0kEVsXjabxHZfvBx9uTBgICn+qEBxH7rHMoE2jVFa285u
+         ZgHMmgqvOB2dgKagDrzwCVgXrpWT6UXW/+5qlE/3A3PliRynwsbURLgRm9zWpjrvx8vj
+         l50ZunSLyn6Bt2c18cyLVOhmld8Lw2f3Z/Tl83A9P3MTDzd0bDNTqIw9vU+Apak8seEn
+         KC5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773331548; x=1773936348;
+        d=1e100.net; s=20230601; t=1773331741; x=1773936541;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=JmKlkavBf/yAOF4s82cTsdoYBcDg+c1w7g0d5bSER7o=;
-        b=BB/6ZQlL8WxcqKkRyNZK1HstpQYcW+C1VTlIMGtWTPEbeQubJ6CnvctIybHM0iWGX1
-         Alw5vvD0V5bd2v9f2emR9Z9v6WcmI6FmkCBv03B3nv0PI+LNN+UbYbkiku7rwPmETfR0
-         Ebo88/4484lTYipJASHAIPaDo4NngJ5Dcf2xmTMAgKeuyNQVe7guAQoqmwvA9WU4y3UZ
-         aKBGLsAy9SR/rh53hYVIMEgU0ljM392Pf+IXSymx9ibMpEpWN89zpwLSUsmWCUb8f4Zh
-         98G68QmfRrmn2M0mwNHmxHNE7FqGfNW309rF2tdk3RuV+m6WMdE2+kl7q6ZO9XXSPN++
-         YZEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVmk5z+dCGVKe1+E8w/Ug6AYN6rmH8BUpc2PEhlygjutpblKb9ErDarShDhY4Moux/8opI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxk4xEF8sBMB85Qf3RH3ulMcghrxT7e83mqotY7TJ/7PHYrOU3T
-	1HvS3YaFfiH3wRIVVOadJIxuTJtAJiTSkxEqZYoLfocOXMkTd3T311S826+VCLnHPxScWs6ETJ4
-	rfXnIo2sYWugUwgYQ1mgVj+vrCSuY90v0IH2xv2h4Uw==
-X-Gm-Gg: ATEYQzyaytoVoLgR5Aa5ir0lhVxG4qAp2KW0owl8lAGvjNsYuN+Ur6GJPRAHHGNUG3y
-	IpQUOdAx7h1iXyuPjNzI24H4BB5HINzpljYk0ywJHDcFHyTMQSRZAHZqIqx09kBmfrwrFANisVj
-	EhQDKFMqRUKw4ZjgII0rwE2QAG6FyUDd4bfbIOs8of9Xe/R1fC5WeYtZ2EOfY8RP/79IkutkLkN
-	uSDv6tRiFAYYmexxWSpxkwtJQ5j6B4vqfX73ZPQCE4QDvSTSNyzYExcsJ+ElRpuW/K+QRNAumG2
-	c91oo8U=
-X-Received: by 2002:a53:df06:0:b0:646:9ddf:5f2 with SMTP id
- 956f58d0204a3-64e62869514mr137952d50.31.1773331547890; Thu, 12 Mar 2026
- 09:05:47 -0700 (PDT)
+        bh=kI5PTFr09piXXwe+dHgxbmefu5uh1N96l8rxcGpDT20=;
+        b=WHn1uWkNHCMQqirg2syT5HeI1J0gveTXtGW3HJZs91Rbyjq/09p//J2R9Pd5Ttindg
+         jeYwxR7IWk0hl0do0Sf0+RJ+DXtt9aDpYP3TbR477Bdv34TpIElxsjO/DJqRHmY7UOlr
+         O9mz6bP7VtDkMg4Qzl+tAYxGplCyiQVA+mXN7c5VgVYNHwEfG/f+19Q+qddF4YUxhID2
+         PW78ztYjrgbFk5z7ShuM5dfD7jdqo2iNvGXuqSK+JlW6TgTDZ6Ku7xS8FU0Gkbz0NFvR
+         1kp61sRK/R128JMZiZw9g6FKBMXmkYCs4572VnyLHXYUhJ3xO6O82HV6a0CE01aH/+sI
+         hFWg==
+X-Forwarded-Encrypted: i=1; AJvYcCX3K0BlVB+8oVKDAd09+ib59+VCBFtF+HWuK6rx3YaAHsB86YcIsqFv/hRw7vt36k7b698=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMzS1nygCbxS9xNlfqFrUWg0LySBND3MJ5Rv000jd8RFtNeqGO
+	JmvQS00gGDspRyY7eHP1sRiRhTtt+5UFU7s3uUSN2F50S/khoHiVt+b5uxqjTQLys+n1IVmM4fh
+	UQHJvsPh0pu6ftx5TPJ+9iDJcUsXMj4bteOzZY3UeUQ==
+X-Gm-Gg: ATEYQzyAj08KGhhe/AwILJQOgQ7Cx38xisrIRNKVw6AOvT3ADr7aFnUqCA/DK/Gi9Lw
+	ydmumOxcPjDvEsO9ITrbKl/hLECX0EGzxMehIPoVXyBSSXL9R9DnTTQzQLNm+fwDXzjlvf3K8Sc
+	p39KgofdfRJQ4eomUjw4W5wOavJTrKqH+QnHSNQdCvVYKUG0sWhvMCjHu9kJq/8yE0b9iXtc62w
+	kCIRO2tppXQBEK6x9bV6z7qn25LiHL1mwI6ltJuGZAZ8q4ij0VaPjLBTJ/lxwhRwCVDAwnWSVh/
+	b5LTWhA=
+X-Received: by 2002:a05:690e:448d:b0:64a:e799:1d9c with SMTP id
+ 956f58d0204a3-64e63079bb0mr62693d50.60.1773331741406; Thu, 12 Mar 2026
+ 09:09:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -82,18 +82,20 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260312150523.2054552-1-vineeth@bitbyteword.org>
- <20260312150523.2054552-2-vineeth@bitbyteword.org> <20260312111255.7925b4e2@gandalf.local.home>
- <CAO7JXPhg-Etspj9YahZrq8cmZ2K6AGWDrMnHO+oD96P_SmOLBw@mail.gmail.com> <20260312155326.GB1282955@noisy.programming.kicks-ass.net>
-In-Reply-To: <20260312155326.GB1282955@noisy.programming.kicks-ass.net>
+ <1e3c2830-765e-4271-89f7-0b6784b37597@efficios.com> <20260312112354.3dd99e36@gandalf.local.home>
+ <219d015d-076b-4c80-8f63-88569115fdad@efficios.com> <20260312114041.5193c729@gandalf.local.home>
+ <1becdbce-2c01-468a-bbab-42b5dea9fdf8@efficios.com>
+In-Reply-To: <1becdbce-2c01-468a-bbab-42b5dea9fdf8@efficios.com>
 From: Vineeth Remanan Pillai <vineeth@bitbyteword.org>
-Date: Thu, 12 Mar 2026 12:05:37 -0400
-X-Gm-Features: AaiRm52SVVT4jiV0FzOGXISct6FMh2E9oWpuKL1FA2qkv7l8yLE2a6rVIE8wyUY
-Message-ID: <CAO7JXPiu8-LE_gG001_GQLoGVYakPdzmH2SXLqfzJjEUxbn1Rw@mail.gmail.com>
-Subject: Re: [PATCH 01/15] tracepoint: Add trace_invoke_##name() API
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Dmitry Ilvokhin <d@ilvokhin.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org, 
+Date: Thu, 12 Mar 2026 12:08:49 -0400
+X-Gm-Features: AaiRm50l09G2avZYKQas6kLTqrDst8ZjnHTnngudy3h6MyVa79lzABXaRh3Trz0
+Message-ID: <CAO7JXPjnnruhM5oC6xMgnYaQ9efzYFqMCFiJLNM3HCQ+ZeCiJw@mail.gmail.com>
+Subject: Re: [PATCH 00/15] tracepoint: Avoid double static_branch evaluation
+ at guarded call sites
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Dmitry Ilvokhin <d@ilvokhin.com>, Masami Hiramatsu <mhiramat@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org, 
 	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
 	Daniel Borkmann <daniel@iogearbox.net>, Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, 
@@ -128,66 +130,59 @@ Cc: Steven Rostedt <rostedt@goodmis.org>, Dmitry Ilvokhin <d@ilvokhin.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 12, 2026 at 11:53=E2=80=AFAM Peter Zijlstra <peterz@infradead.o=
-rg> wrote:
+On Thu, Mar 12, 2026 at 11:49=E2=80=AFAM Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
 >
-> On Thu, Mar 12, 2026 at 11:39:06AM -0400, Vineeth Remanan Pillai wrote:
-> > On Thu, Mar 12, 2026 at 11:13=E2=80=AFAM Steven Rostedt <rostedt@goodmi=
-s.org> wrote:
-> > >
-> > > On Thu, 12 Mar 2026 11:04:56 -0400
-> > > "Vineeth Pillai (Google)" <vineeth@bitbyteword.org> wrote:
-> > >
-> > > > Add trace_invoke_##name() as a companion to trace_##name().  When a
-> > > > caller already guards a tracepoint with an explicit enabled check:
-> > > >
-> > > >   if (trace_foo_enabled() && cond)
-> > > >       trace_foo(args);
-> > > >
-> > > > trace_foo() internally repeats the static_branch_unlikely() test, w=
-hich
-> > > > the compiler cannot fold since static branches are patched binary
-> > > > instructions.  This results in two static-branch evaluations for ev=
-ery
-> > > > guarded call site.
-> > > >
-> > > > trace_invoke_##name() calls __do_trace_##name() directly, skipping =
-the
-> > > > redundant static-branch re-check.  This avoids leaking the internal
-> > > > __do_trace_##name() symbol into call sites while still eliminating =
-the
-> > > > double evaluation:
-> > > >
-> > > >   if (trace_foo_enabled() && cond)
-> > > >       trace_invoke_foo(args);   /* calls __do_trace_foo() directly =
-*/
-> > > >
-> > > > Three locations are updated:
-> > > > - __DECLARE_TRACE: invoke form omits static_branch_unlikely, retain=
-s
-> > > >   the LOCKDEP RCU-watching assertion.
-> > > > - __DECLARE_TRACE_SYSCALL: same, plus retains might_fault().
-> > > > - !TRACEPOINTS_ENABLED stub: empty no-op so callers compile cleanly
-> > > >   when tracepoints are compiled out.
-> > > >
-> > > > Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-> > > > Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> > > > Signed-off-by: Vineeth Pillai (Google) <vineeth@bitbyteword.org>
-> > > > Assisted-by: Claude:claude-sonnet-4-6
-> > >
-> > > I'm guessing Claude helped with the other patches. Did it really help=
- with this one?
-> > >
+> On 2026-03-12 11:40, Steven Rostedt wrote:
+> > On Thu, 12 Mar 2026 11:28:07 -0400
+> > Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
 > >
-> > Claude wrote and build tested the whole series based on my guidance
-> > and prompt :-). I verified the series before sending it out, but
-> > claude did the initial work.
+> >>> Note, Vineeth came up with the naming. I would have done "do" but whe=
+n I
+> >>> saw "invoke" I thought it sounded better.
+> >>
+> >> It works as long as you don't have a tracing subsystem called
+> >> "invoke", then you get into identifier clash territory.
+> >
+> > True. Perhaps we should do the double underscore trick.
+> >
+> > Instead of:  trace_invoke_foo()
+> >
+> > use:  trace_invoke__foo()
+> >
+> >
+> > Which will make it more visible to what the trace event is.
+> >
+> > Hmm, we probably should have used: trace__foo() for all tracepoints, as
+> > there's still functions that are called trace_foo() that are not
+> > tracepoints :-p
 >
-> That seems like an unreasonable waste of energy. You could've had claude
-> write a Coccinelle script for you and saved a ton of tokens.
+> One certain way to eliminate identifier clash would be to go for a
+> prefix to "trace_", e.g.
+>
+> do_trace_foo()
+> call_trace_foo()
 
-Yeah true, Steve also mentioned this to me offline. Haven't used
-Coccinelle before, but now I know :-)
+This was the initial idea, but it had conflict in the existing source:
+call_trace_sched_update_nr_running. do_trace_##name also had
+collisions when I checked. So, went with trace_invoke_##name. Did not
+check rest of the suggestions here though.
 
 Thanks,
 Vineeth
+
+> emit_trace_foo()
+> __trace_foo()
+> invoke_trace_foo()
+> dispatch_trace_foo()
+>
+> Thanks,
+>
+> Mathieu
+>
+>
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> https://www.efficios.com
