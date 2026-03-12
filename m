@@ -1,150 +1,164 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3177B40DFD6
-	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 11:51:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773316310; cv=none; b=ERXinEvUSaOjDX9KFUBmfsqLUmlWaiOt0nIQFCkO1xQi8ZqqgFJnEbdF2HP3vmw9oKjoSdXF0HT52fnq5FeID7ju255kmhLf9k3fNLKObR5oPb4mDDFNqwYiJN9hb/lhaeCfPURMgtoCBi1UG1Jj9g9vaRK//pUVmYllRWXNQ30=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773316310; c=relaxed/simple;
-	bh=Z4Ws8mKCaJUX5OBeGlpIpwTVttxNk+a47sF/NaiBeZw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QofYVzCAPzfqppuiWorVNfZinGp4tlHgqWXf/EkhtbWexT4ek71tZtvT2lOrZHazTpDf1feZKZB4NYGWF5NY+dRv6c5fUh2wCa7yAoUdsm159ahLv12scJkaSleFKk6iDYmfczS6CyMTo2hRpoHr6NPK+1pkhf1an84ywHcSZeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OAvIqQhp; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0DF616CD33
+	for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 12:17:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.133.124
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773317872; cv=pass; b=s4mtSQgklW0KbtzVTO5GlLNEJBt/YBav/qgxgU6seiKswB154kjk3N7GxivLbtkZ1rwhjHx25hX4r7MqN8GU2g2iRlNM7kpkHU/2NgcrhtOLK/nkWT1PG9HOim/5H/FOFBSkip2uNNkuN8xKnm68c/L5qpbfStD51FOD8Vfq9ls=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773317872; c=relaxed/simple;
+	bh=Y8GxjVRD8Apu88bVk/HKLVl5r2+YOiziAVk1c0j/lTk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aRuWb7Pf1nRp/LD9M6DH4hQfkGfoa0Cv9XH8G085UeHhdZuvcSAqIy++IVeDS/62SKbEOK89Uimp4bkcu2eUnljsIE4MTvtcqKdieGVGy3d0RlymYaesH6kDgtbP3diPC89mDAagfHlwa7aVTSccF5eX12lMXL+YJHJB+6tOq6s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Sa+eGfNw; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=SesaDdOO; arc=pass smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OAvIqQhp"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-48534e9076fso7726425e9.0
-        for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 04:51:48 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Sa+eGfNw";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="SesaDdOO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773317870;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Fv/IdyPPMjitQJ9Y48M00/0r4huM0cWU48LQ2/sF1BQ=;
+	b=Sa+eGfNwpHaNewKAPTsI7IgWc/89UHn32G2eEQdM2s35qvoJkb9V/QmvydLmv+HkB3GZE3
+	zrPp/KRTAfsDSFY+sdyJe9lylhR1yC9ZI1tVWcra2X9cAWDi2MLOAv5FJXv5sn8se+1ZWN
+	QR9IWGqbtajKXB33HK6KdWUOE6r4B00=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-156-WEP-IxqvM8OlO307ojGHtg-1; Thu, 12 Mar 2026 08:17:49 -0400
+X-MC-Unique: WEP-IxqvM8OlO307ojGHtg-1
+X-Mimecast-MFC-AGG-ID: WEP-IxqvM8OlO307ojGHtg_1773317868
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-b96eed52862so159866966b.1
+        for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 05:17:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773317868; cv=none;
+        d=google.com; s=arc-20240605;
+        b=kpxnq3lip+GdK16I32kyhHCjXMqMwCI0sOpOAUhg3nwhYqRr0lHpIz9W4vyvMoTqct
+         3NivAcBBzuKgfV++qrLNfuOco8NoSSzM6MmW/YpzDSszXi/yrxh5GJ7cUjd1PZ7GxbhE
+         dd350U3iVAFAXCm/65bbq8Yr8/3DXIzGiIrPZfw3n3IHVesJpzMwGkalZxeEIQPIE1Q+
+         1pcsgUcMAymLq2510TSiKyAyWpo8utISbecezrRMytNHCULftACVShJW6QHCytQzSGby
+         cr/nD7NRODkYZODgAoYNqR4U8oDZ9F+LJ2hCpFI6Maf1qS1Fm8VQuZLEPczbm9xd9ccE
+         YR1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Fv/IdyPPMjitQJ9Y48M00/0r4huM0cWU48LQ2/sF1BQ=;
+        fh=kgQuPOrPxz3nyJlwdVIm8CKShvy6SCo/ef5G2V7GAvM=;
+        b=lgfCAj5P6mC+Q4CjEQ/mVqF394EQXMZnKKrFTt3j7+p8+YxyBIQIWZT9ih7JKzaYCU
+         jz2UBgmOcWVM0ERVXkIREmBolAaPOmVpufa38XEEad72O+Yvg3bOS9WUepFZYHo96bnG
+         h9vFXaIu2ivcetfEWLKhWQVlg4WjyiHrKQZuuT3rcM4/MtZYn+3pW1b7Yy41so3PHvwm
+         DMgQicRazbgaS+hjs5O9R5MSEsLeTnf8a9xsO5N755bTxh3TImMzdaXpPIEGfgdHhz2S
+         /TW/y3TzCA+N5lj3LBjunRsWyYHjGLxfJEyb/XaSckE8RI1AwMKvNZwVvGgenJWYNgwo
+         YdwA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773316307; x=1773921107; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nj2fNYw6BYUD7p+9nV81GYzh43IyNKQmwWVqvC/ypP8=;
-        b=OAvIqQhphz8ZZkPT76Odp13sxSfF5yR9OMaes8M89F2pnwjLsJT7eKNjdPJKd2mgle
-         GiewifYf5y+W9IoKybuin3i1aWn8zGGrOKM6YYYOuKldlLigKX/feAfJ+AmepzqrrQk0
-         lNmjoTkTvrz0+/SeVQLRzyfo3QPNzL+a9HwYPArhwYyyZkjdqchz+GujL1I7pq1FgeC+
-         gxOqArapWoQOP4rS15+1/P1ILSEcb2neD+ec9TA01zQJ74dHSJxe3RYJ4t6weoGYlvC1
-         3M6k+mIMCfdMrMTMzfd8BPu3WHVMeiAxiV8Ms9liTl27IFy30zbI987xMjuKl6wrEzTh
-         zutg==
+        d=redhat.com; s=google; t=1773317868; x=1773922668; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Fv/IdyPPMjitQJ9Y48M00/0r4huM0cWU48LQ2/sF1BQ=;
+        b=SesaDdOOrrCr2kBYEwjEoI5nmO0qOggNbqHLfyZjSqqz4qaxlHQ3ceyzfMLJxPdrV/
+         /Z/cZCZNPiV8O/XRDGf0grLNIb/4Xk4QuiEcIxmICxuJgC81x95Yf3I3GZjyQc6/g2Qn
+         hjpUInNOqcsMg0IFS1/EGM50bF5mi3JhJCkDWXgdp0Pp7mpm87D3v+ESdaeD8aLycicT
+         OtxsbdbON5dKzRA7crlymYJAsmrVmvsbPRslQS3hms2bM590I2k0IbwS+JFHAMAZNOEV
+         6uQTLC5kU7tXQyGcov6YSbfrNqXMYxIiVLFXIHMmE5LpBBfxBpryJY9EX/Keun8n6Fxv
+         uyZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773316307; x=1773921107;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Nj2fNYw6BYUD7p+9nV81GYzh43IyNKQmwWVqvC/ypP8=;
-        b=pckU+5zKIfUFB2pgM7UckFWfImxtHq8EwPKjVTD0LK1ECzvBL5l8xxw0BuoXsyGkj8
-         YHiffZWRYpZ3zbaDXWXgHoKwmSjI7ZpymLskmEis/nPzkgmKdW0bpevt1/baDfjK4WSP
-         cpOuEsms7Qmbfu8WLsBXKDp2HS6Gkpn/VkZPWRbTGW9Tej7Xz6c3/uKF+G2deiEj73OX
-         vEBL8HndIXo3nbAG14C/dvFwZoFpVPT29JMG6VKlOpZWBRlBElrdpPBZwjj3FoLPD4NF
-         Mvs8bk5CUM6tkE+yReClXkjPvG+RoTLmEO1ZCvIGxWMQJLAbWoRS4flrXuzZRsT9zvYj
-         kUEA==
-X-Gm-Message-State: AOJu0Yxz1xxnvQ3ZMu7scBlGtwJwGbvcRnPyaWVDb+FvpT5BTdf8rWbP
-	sF201wRwNI8wRZqlSFcTmAXSjtdBzfqCRSo199eVd2r2jiYs5aBnfxWO
-X-Gm-Gg: ATEYQzzpLMInXZzWv9VyBdORlyn1F6vA2jqizmKc7OksA5nkkgCe/Zaow+f6PB/jJuo
-	2DELf3zoP0ZTkxH04k32uVUBFn9WTSMIviebomaPGcLmzUtgOdUvj9WH7iE/y3+Ld/xU3OGKW5L
-	J2X1DzqppwgqsWmB9XoWj+OBNApJztIqo9Xq6fD4Oqr8fsZjrVnOPmXXCn4HFbf/jCWFdho3pTy
-	RkVI7FTCoUdbooqPmHTev2RTuA3RoWJ6krAQp2m+qWmjejfmhZ91vYcd0dRXDtV9gF8wITPtcMN
-	B3NjLAZbG4q8LosD5CW40zf5DREhkVt5CBLv7YNEAj5qqs8XuLEGRWfcLaLl2osWA/FqxpaOqQh
-	ziWWUphsURD4tyARKKz8iI3s5KnnOjvzQ4iYcmSV8TC63kW9ieY/KYEXSeE5YvAykPWcHKd0TaW
-	lr88sQ1jrT1OcCOFTHfXaNlq4PvmckV63JSvJZCtMpuiS9wfjRZwIFfKeaGHPA57+6K/Dn5IAVD
-	iUGMFvHmetZqT/jleaMYLqLfJXtVwRBUAZ5f3e60H+pHQ+HCHTId/vu3B3F6TjtF7YhQRtDn3Rn
-	Tf3D0vHY7DVXWTDZf5OyMA==
-X-Received: by 2002:a05:600c:8b8b:b0:485:2f4a:6ae6 with SMTP id 5b1f17b1804b1-4854b0a5370mr92896185e9.6.1773316307141;
-        Thu, 12 Mar 2026 04:51:47 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e00e621310b96d0fd4d.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:e621:310b:96d0:fd4d])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4854b0cc00asm68758265e9.7.2026.03.12.04.51.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2026 04:51:46 -0700 (PDT)
-Date: Thu, 12 Mar 2026 12:51:44 +0100
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: xulang <xulang@uniontech.com>
-Cc: bpf@vger.kernel.org, martin.lau@linux.dev, ast@kernel.org,
-	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
-	song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
-	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
-	jolsa@kernel.org, kaiyanm@hust.edu.cn, huyinhao@hust.edu.cn,
-	dzm91@hust.edu.cn, kernel@uniontech.com,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf v1] bpf: Fix OOB in bpf_obj_memcpy for cgroup storage
-Message-ID: <abKo0HZ3R_oY1BUa@mail.gmail.com>
-References: <204030CBF30066BE+20260312052525.1254217-1-xulang@uniontech.com>
+        d=1e100.net; s=20230601; t=1773317868; x=1773922668;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Fv/IdyPPMjitQJ9Y48M00/0r4huM0cWU48LQ2/sF1BQ=;
+        b=UrWdiJRsSsZ16NQmq9K4wc115Y3/EwN3Y59cnLtiMjwGJFQ12K2XYPAEoFfGXu8e7g
+         iEboruZkeeR98HeRLZIXcK2yiWadmFnZETFkhNZXYdD1tTkmZtSKBNRd2R3o/WRDQkZx
+         Umjx3e+ZYTdT7BDTt9jxykWCZNNt3DRgu0Z6wA5dFaHhBzTYg8gzSakRIf6LDXoVvUMf
+         MeEnAiRBH6oTzSzvEUci6lUQylfx5WRMDjlebm9Y4ecZOTcw/ZPCVFIS0Xt5xLFFuDZl
+         C9bamLDen9QMBWge+EEfy0aMABNvTYnRjgK9xihXsNx5mWYm3ocnVj7RFrN6JmD5oyky
+         0gHA==
+X-Forwarded-Encrypted: i=1; AJvYcCUpltip+TvgqKN+FUzjJBtX5lA6sBG9ZrgrgcsLmZAQ4l1oNfQD872WrRghnumhw0hPGec=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8DMhmSYiU3tVuuz5vGfeWknnt9NtoVr31kO/zLpffPgAd4MqH
+	ZUdj4nxi96tQxfDkg5pEak+5cO7ibGewvl89b1qjWeyFIJonhY6cdlll3ob/J9sdheULIoeukgo
+	pzE0NXzKdgUxVHU/mgaodVXRcYEIVi/ZW0ms3JUkTyPMzWQZYV2BvD47uzpIKOyLj61H304enDV
+	qPuTzGa2q0DJj3kHY0xLqGA/vSEtyZ
+X-Gm-Gg: ATEYQzzKYfHp7BegAfv8U/ryCyIKt4ozPJBZdbdlMrntFR9bqc3Oa+6g5IvhbYUFkjd
+	wOVWHPgICGJb0fmPhNJi8yGTNyAs5jItsg1mwZW8kqZKslqxSVFopodYADHuJhuDVY9J0wiYbnI
+	YndnITbBwalPxvVj9l3jxWdHGm8ZJTodtQu9X7OtviT5LR8V+QHA54ag6JsODUMdZiR5GsWzKkZ
+	GJaYw==
+X-Received: by 2002:a17:907:d0e:b0:b96:fbeb:f791 with SMTP id a640c23a62f3a-b972e52dbf3mr344031066b.47.1773317867655;
+        Thu, 12 Mar 2026 05:17:47 -0700 (PDT)
+X-Received: by 2002:a17:907:d0e:b0:b96:fbeb:f791 with SMTP id
+ a640c23a62f3a-b972e52dbf3mr344024766b.47.1773317865935; Thu, 12 Mar 2026
+ 05:17:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <204030CBF30066BE+20260312052525.1254217-1-xulang@uniontech.com>
+References: <20260309195040.1019085-1-wander@redhat.com> <20260309195040.1019085-13-wander@redhat.com>
+In-Reply-To: <20260309195040.1019085-13-wander@redhat.com>
+From: Tomas Glozar <tglozar@redhat.com>
+Date: Thu, 12 Mar 2026 13:17:33 +0100
+X-Gm-Features: AaiRm506rAH-yhuxCZ_tSpZIAy51Q5ko5bRzudg2PNgMFtqu0BW3sF-mgEVupVk
+Message-ID: <CAP4=nvRJXseK41UKN_=r-1LtSF_pMJbPTQ0xuznp9MSMcxx37A@mail.gmail.com>
+Subject: Re: [PATCH v4 12/18] rtla: Enforce exact match for time unit suffixes
+To: Wander Lairson Costa <wander@redhat.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Crystal Wood <crwood@redhat.com>, 
+	Ivan Pravdin <ipravdin.official@gmail.com>, Costa Shulyupin <costa.shul@redhat.com>, 
+	John Kacur <jkacur@redhat.com>, Tiezhu Yang <yangtiezhu@loongson.cn>, 
+	Daniel Bristot de Oliveira <bristot@kernel.org>, Daniel Wagner <dwagner@suse.de>, 
+	"open list:Real-time Linux Analysis (RTLA) tools" <linux-trace-kernel@vger.kernel.org>, 
+	"open list:Real-time Linux Analysis (RTLA) tools" <linux-kernel@vger.kernel.org>, 
+	"open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 12, 2026 at 01:25:25PM +0800, xulang wrote:
-> From: Lang Xu <xulang@uniontech.com>
-> 
-> An out-of-bounds read occurs when copying element from a
-> BPF_MAP_TYPE_CGROUP_STORAGE map to another map type with the same
-> value_size that is not 8-byte aligned.
-> 
-> The issue happens when:
-> 1. A CGROUP_STORAGE map is created with value_size not aligned to
->    8 bytes (e.g., 4 bytes)
-> 2. A HASH map is created with the same value_size (e.g., 4 bytes)
-> 3. Update element in 2 with data in 1
-> 
-> In the kernel, map elements are typically aligned to 8 bytes. However,
-> bpf_cgroup_storage_calculate_size() allocates storage based on the exact
-> value_size without alignment. When copy_map_value_long() is called, it
-> assumes all map values are 8-byte aligned and rounds up the copy size,
-> leading to a 4-byte out-of-bounds read from the cgroup storage buffer.
-> 
-> This patch fixes the issue by ensuring cgroup storage allocates 8-byte
-> aligned buffers, matching the assumptions in copy_map_value_long().
+po 9. 3. 2026 v 20:58 odes=C3=ADlatel Wander Lairson Costa
+<wander@redhat.com> napsal:
+>
+> The parse_ns_duration() function currently uses prefix matching for
+> detecting time units. This approach is problematic as it silently
+> accepts malformed strings such as "100nsx" or "100us_invalid" by
+> ignoring the trailing characters, leading to potential configuration
+> errors.
+>
+> Introduce a match_time_unit() helper that checks the suffix matches
+> exactly and is followed by either end-of-string or a ':' delimiter.
+> The ':' is needed because parse_ns_duration() is also called from
+> get_long_ns_after_colon() when parsing SCHED_DEADLINE priority
+> specifications in the format "d:runtime:period" (e.g., "d:10ms:100ms").
+>
+> A plain strcmp() would reject valid deadline strings because the suffix
+> "ms" is followed by ":100ms", not end-of-string. Similarly,
+> strncmp_static() would fail because ARRAY_SIZE() includes the NUL
+> terminator, making it equivalent to strcmp() for this comparison.
+>
 
-I don't think this bug is specific to the CGROUP_STORAGE maps. Wouldn't
-it affect any copy from a non-percpu map into a percpu hashmap? The
-reproducer in [1] copies from a BPF_MAP_TYPE_CGROUP_STORAGE map to a
-BPF_MAP_TYPE_LRU_PERCPU_HASH map, but I suspect you'd hit the same bug
-if copying from BPF_MAP_TYPE_HASH into BPF_MAP_TYPE_PERCPU_HASH because
-for BPF_MAP_TYPE_HASH the value size is also not rounded up to a
-multiple of 8.
+This fixes both the command and the corresponding unit test, thanks!
 
-1 - https://lore.kernel.org/all/14e6c70c.6c121.19c0399d948.Coremail.kaiyanm@hust.edu.cn/
+> The match_time_unit() helper solves both problems: it rejects malformed
+> input like "100msx" while correctly handling the colon-delimited
+> deadline format.
+>
 
-> 
-> Fixes: b741f1630346 ("bpf: introduce per-cpu cgroup local storage")
-> Reported-by: Kaiyan Mei <kaiyanm@hust.edu.cn>
-> Closes: https://lore.kernel.org/all/14e6c70c.6c121.19c0399d948.Coremail.kaiyanm@hust.edu.cn/
-> Signed-off-by: Lang Xu <xulang@uniontech.com>
-> ---
->  kernel/bpf/local_storage.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/kernel/bpf/local_storage.c b/kernel/bpf/local_storage.c
-> index 8fca0c64f7b1..54b32ba19194 100644
-> --- a/kernel/bpf/local_storage.c
-> +++ b/kernel/bpf/local_storage.c
-> @@ -487,14 +487,13 @@ static size_t bpf_cgroup_storage_calculate_size(struct bpf_map *map, u32 *pages)
->  {
->  	size_t size;
->  
-> +	size = round_up(map->value_size, 8);
->  	if (cgroup_storage_type(map) == BPF_CGROUP_STORAGE_SHARED) {
-> -		size = sizeof(struct bpf_storage_buffer) + map->value_size;
-> +		size += sizeof(struct bpf_storage_buffer);
->  		*pages = round_up(sizeof(struct bpf_cgroup_storage) + size,
->  				  PAGE_SIZE) >> PAGE_SHIFT;
->  	} else {
-> -		size = map->value_size;
-> -		*pages = round_up(round_up(size, 8) * num_possible_cpus(),
-> -				  PAGE_SIZE) >> PAGE_SHIFT;
-> +		*pages = round_up(size * num_possible_cpus(), PAGE_SIZE) >> PAGE_SHIFT;
->  	}
->  
->  	return size;
-> -- 
-> 2.51.0
-> 
-> 
+It now fails to reject this kind of input:
+
+$  rtla timerlat -P d:10ms:100ms:somethingsomething
+// this is also parsed as valid
+
+But that can be fixed in a future patchset, perhaps together with also migr=
+ating
+parse_seconds_duration() from prefix matching to match_time_unit() as well.
+
+That would prevent the same imprecise parsing issue for -d:
+
+$ rtla timerlat -d 1somethingsomething
+// this is also parsed as valid
+
+Tomas
+
