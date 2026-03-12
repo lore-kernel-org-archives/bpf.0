@@ -1,106 +1,139 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtpbgeu1.qq.com (smtpbgeu1.qq.com [52.59.177.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE21A397683;
-	Thu, 12 Mar 2026 04:34:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC273932E9;
+	Thu, 12 Mar 2026 05:25:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.59.177.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773290081; cv=none; b=N5GNdZnkF741sRvFxWWOhNkzQ2JZwEs89Mwsn2uIAWBMbDOMKotq8A/g3bXeCkmaU14wdzyJzCTEP/2w2IG9RuhraCth2h8dKNNJlLIgUTkizRifZBWLPWHEmZU9mV3kD2O52LyyTgywBz5xGDc1eEh6TRLwrk+sVdl6+2z2WoY=
+	t=1773293153; cv=none; b=VpEuBKNKrd2L47MOI2YhXK2Ilz4psuyRLxII4Sy/SPJ0OAGTKJsEyGLAdIMioyxRXwEmHpIeCC48QmbNVIsu2yOqosv3J6Cbd77o/ogqCxm6YoQx3vglKBV5bR5KLkMIWJkPMaKNzQ/hvFUfSGKg7EmNoTTsjzjnHFvfVYqIXeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773290081; c=relaxed/simple;
-	bh=LVpsjxK//rsEadbTuzbHtfoezi6enpVrHOBYLFvVq0M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lcCF1qOMajY7ghgjSSzaVQVz/HZpNSqtIHrpUfnXBmaUUKhVT6V17+XV5NlDL6PxOKLu9HEDqHdezwvX5n/09STxPJ/xmc5aNE76AEd777m5KSgyzvYDBIoF0OiBj6ECdRPsV5yhpOvH2HzB5Jq0dC9jTMrXx17jLZ5IL+fTpZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DX4b9bMP; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1773293153; c=relaxed/simple;
+	bh=W6U5osNGJdMj8LvVlf86aq0XyoPI4WAiCnA1DzrX4kM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZlEjOkD26GbD285jRBswe1oidtkhMdl9Q9qus4n4AO/i2f3MomXLvCcCS4WiH2BX2y1Q1nv4DAm0J8uvu3V2Wx2LaemDw2Y/XM/88uUxDtJNzmt1uWBTu0Uli4d7dJC3sdBRjJ27kgqfBoeGjJ8Kn6OBOlw6rX8k2kKdiKYLaPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=ZXYILeYX; arc=none smtp.client-ip=52.59.177.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DX4b9bMP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773290079; x=1804826079;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LVpsjxK//rsEadbTuzbHtfoezi6enpVrHOBYLFvVq0M=;
-  b=DX4b9bMP4i6IJm6j3yuVnhDHyn8Uu9fqbit3uCOiKq9Eu1bqE/23XDSA
-   2Bftm8L6djLfxe6B/7Yf5XTAC9CSk4jpG26QJdDsis0xxV3IZqjVbS/X3
-   xo+OVUC8HwXD7Ez9pw3XZJZ25UiM2pl9p/403v/4/x+JYoh3TeWSPoEJ5
-   KxVCNU3C3cn50Vd80EFv90FCzi/OttgXEG+xVSB0Ms2gAyf90rlbZ7AHA
-   9/Kx8RhY8Jr3bmsXQRAbTfFXuV59m2yOLOeS7+yWp15Ifzfr6AdzSiuPZ
-   NipYJPUjM1vjJAthgg6Dd3q6FuQNAYuVdaCP70NEbHLQW6OR9rs9RwZrt
-   Q==;
-X-CSE-ConnectionGUID: L0ICCTbpS9a6Soj92OL8YQ==
-X-CSE-MsgGUID: QaZnxdBcQYSZsThLaVLzYQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11726"; a="74070512"
-X-IronPort-AV: E=Sophos;i="6.23,115,1770624000"; 
-   d="scan'208";a="74070512"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2026 21:34:38 -0700
-X-CSE-ConnectionGUID: XhrHr4tTSvubEH/bUJ/NCA==
-X-CSE-MsgGUID: pxDWMSpuR0ubOV55xHpj7g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,115,1770624000"; 
-   d="scan'208";a="243708259"
-Received: from lkp-server01.sh.intel.com (HELO 418530b1a366) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 11 Mar 2026 21:34:34 -0700
-Received: from kbuild by 418530b1a366 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w0Xkl-0000000024l-0oNB;
-	Thu, 12 Mar 2026 04:34:31 +0000
-Date: Thu, 12 Mar 2026 12:34:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Matteo Croce <technoboy85@gmail.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>
-Cc: oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 1/2] e1000e: add basic XDP support
-Message-ID: <202603121204.pJemiT27-lkp@intel.com>
-References: <20260311191437.3581-2-teknoraver@meta.com>
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="ZXYILeYX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1773293140;
+	bh=knhVkK/o5wutC2ZYGK/P64zxrAtK3BiS82ZZ/Wcikfs=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=ZXYILeYX2IB2VEPC7Ru7RHqolAjmDeZPTfpMoprWxbvy/nTM3JFbLAE4fERhnHOw7
+	 hJBGgHi+3JZjfE8c0PbYAFctV7HnW120RDHOeZRCSl4WYtsoYxsoNsDM7kyyP+SdGR
+	 6J4eGHN4Z4iDg3R83i0vWxSyUCL8RjCDuKYygZTI=
+X-QQ-mid: zesmtpip2t1773293130t2541aa01
+X-QQ-Originating-IP: GPeJVjCYCEWM/dkCDLd605XtREQB8BuN6dQqiruXeyg=
+Received: from xulang-PC ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Thu, 12 Mar 2026 13:25:28 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 6035558201512336410
+EX-QQ-RecipientCnt: 19
+From: xulang <xulang@uniontech.com>
+To: bpf@vger.kernel.org
+Cc: martin.lau@linux.dev,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	kaiyanm@hust.edu.cn,
+	huyinhao@hust.edu.cn,
+	dzm91@hust.edu.cn,
+	kernel@uniontech.com,
+	linux-kernel@vger.kernel.org,
+	Lang Xu <xulang@uniontech.com>
+Subject: [PATCH bpf v1] bpf: Fix OOB in bpf_obj_memcpy for cgroup storage
+Date: Thu, 12 Mar 2026 13:25:25 +0800
+Message-ID: <204030CBF30066BE+20260312052525.1254217-1-xulang@uniontech.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260311191437.3581-2-teknoraver@meta.com>
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3b-0
+X-QQ-XMAILINFO: NThgMOl/3vH770NE2G4V/rDKHRil7K/pSGK692AKRgAXEB3CwgyCK7Kk
+	m8ZoTwx/Koze6GCeofExLjBTgWD5axlkvmJHqiKZzlIsMy1Ju/qVH7zslCWEMY6PLXtilZ5
+	RnU/jRPxuERFiP4T0nJNoSpfFgtvG/mokl8rZbnJRloY90Jg3+d2e3oj0+T+11k8cM6r7Yr
+	+UUimAgQf3umbpRpzrXJBtdJPl5/DQ8n6n1kvkMcpUEG8IXxzlvwNmhHAmqqBGyIVkNRfma
+	fEdBoz8aLIkn4hXfcAUWyKu7N3Bn2O0WtSv0QCIXI9U9M5HdlxEoM2o20k8bX5WXUOgSw3a
+	9tYtLgEgfIm13betHh5PWM/SjHpyLrm+2vx+oAjBnK0pIE+3zhdqslO4215jWKAioA/9uCp
+	L6WRgKWEaxFbur+ZdyG+eHlcySURWnrxESffuh0S61EvhLI/+WZnUWxTVedHN+5qqpBOjpJ
+	J91gwQixTHaW/O7QxnBUaRNIJx5ClwRKY0m7GeFHwxQJmREJKxGcztJA6z6m56p+Pgof2MT
+	NjxnBOYm4VKJrfsgyWLbCg5KanzVQCVH5mgJg/BEWi75ZrGfmtkI53NU/BetlO8l6tS3QXm
+	3YpHNkrBgqAUbIQRVJUrxa2GrLvuCCR79/2gIo91QWzUeCQF0fMQ41xyqE1wz2S/AUQ9ohW
+	JAQB0WUF55rZoduh/C6iy0NNnvu4/Lo8SLxIDTbFsBeqJf/BD3yzJJVzDYysYGUL/iBoQRd
+	QiQRorW/MjNj+LHHIsSsRUSRAKppB0TDDTqMznJNrer1+Deq+BT1cAoxVRcaAxLbNodO4Ge
+	4jsvY80Nzc05uzWRmvsVuzsw8G4/6xKZ+uF33bgFtJvuxviUDQKo9+AF6lyOvlgETdv/E4W
+	JwVNKLeSlAWP/5SLMirA2/FYxN+1ixEg/9cl44qpAlwbSuJ8tsYl42VWsOYi5i+WFb55yNW
+	2iyLQW6JMH4Mdry4+iMduQvloFBJY/mrCkALtPh7Cs6EOXfXG7bJ/J2GcGm8IG+2bcC7LSd
+	3kDQIxqlfOMI9RJJ03FKZFjtvfpc1YHPJgSpVyIpYtKnyl7WhH
+X-QQ-XMRINFO: Nq+8W0+stu50tPAe92KXseR0ZZmBTk3gLg==
+X-QQ-RECHKSPAM: 0
 
-Hi Matteo,
+From: Lang Xu <xulang@uniontech.com>
 
-kernel test robot noticed the following build errors:
+An out-of-bounds read occurs when copying element from a
+BPF_MAP_TYPE_CGROUP_STORAGE map to another map type with the same
+value_size that is not 8-byte aligned.
 
-[auto build test ERROR on net-next/main]
+The issue happens when:
+1. A CGROUP_STORAGE map is created with value_size not aligned to
+   8 bytes (e.g., 4 bytes)
+2. A HASH map is created with the same value_size (e.g., 4 bytes)
+3. Update element in 2 with data in 1
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Matteo-Croce/e1000e-add-basic-XDP-support/20260312-032318
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20260311191437.3581-2-teknoraver%40meta.com
-patch subject: [PATCH net-next 1/2] e1000e: add basic XDP support
-config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20260312/202603121204.pJemiT27-lkp@intel.com/config)
-compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260312/202603121204.pJemiT27-lkp@intel.com/reproduce)
+In the kernel, map elements are typically aligned to 8 bytes. However,
+bpf_cgroup_storage_calculate_size() allocates storage based on the exact
+value_size without alignment. When copy_map_value_long() is called, it
+assumes all map values are 8-byte aligned and rounds up the copy size,
+leading to a 4-byte out-of-bounds read from the cgroup storage buffer.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603121204.pJemiT27-lkp@intel.com/
+This patch fixes the issue by ensuring cgroup storage allocates 8-byte
+aligned buffers, matching the assumptions in copy_map_value_long().
 
-All errors (new ones prefixed by >>):
+Fixes: b741f1630346 ("bpf: introduce per-cpu cgroup local storage")
+Reported-by: Kaiyan Mei <kaiyanm@hust.edu.cn>
+Closes: https://lore.kernel.org/all/14e6c70c.6c121.19c0399d948.Coremail.kaiyanm@hust.edu.cn/
+Signed-off-by: Lang Xu <xulang@uniontech.com>
+---
+ kernel/bpf/local_storage.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-   ld: vmlinux.o: in function `e1000_alloc_rx_buffers_xdp':
->> netdev.c:(.text+0xc077cf): undefined reference to `page_pool_alloc_pages'
-   ld: vmlinux.o: in function `e1000e_setup_rx_resources':
->> (.text+0xc0c879): undefined reference to `page_pool_create'
-
+diff --git a/kernel/bpf/local_storage.c b/kernel/bpf/local_storage.c
+index 8fca0c64f7b1..54b32ba19194 100644
+--- a/kernel/bpf/local_storage.c
++++ b/kernel/bpf/local_storage.c
+@@ -487,14 +487,13 @@ static size_t bpf_cgroup_storage_calculate_size(struct bpf_map *map, u32 *pages)
+ {
+ 	size_t size;
+ 
++	size = round_up(map->value_size, 8);
+ 	if (cgroup_storage_type(map) == BPF_CGROUP_STORAGE_SHARED) {
+-		size = sizeof(struct bpf_storage_buffer) + map->value_size;
++		size += sizeof(struct bpf_storage_buffer);
+ 		*pages = round_up(sizeof(struct bpf_cgroup_storage) + size,
+ 				  PAGE_SIZE) >> PAGE_SHIFT;
+ 	} else {
+-		size = map->value_size;
+-		*pages = round_up(round_up(size, 8) * num_possible_cpus(),
+-				  PAGE_SIZE) >> PAGE_SHIFT;
++		*pages = round_up(size * num_possible_cpus(), PAGE_SIZE) >> PAGE_SHIFT;
+ 	}
+ 
+ 	return size;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.51.0
+
