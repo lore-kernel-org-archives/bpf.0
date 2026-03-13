@@ -1,172 +1,293 @@
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A600389116;
-	Fri, 13 Mar 2026 09:52:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CA8B38A724;
+	Fri, 13 Mar 2026 09:55:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773395547; cv=none; b=aCxnhkk3oOYXNpvFuImC/XE90s7WoqV0nsf3cEs5BMzNDRfVAwLdKdzEr+hB4lVhl/F2FCVicmJLKMtzsAYmUIvFNvJEsswpuDoRXtOkn/aZUNzSEGM95vHpWKleHcatpT3zvdRR2akJCZMS43mqVterFVoVmy9EagY9iTaicpg=
+	t=1773395742; cv=none; b=g3PjIErx+uRhlV8ib8kpQx54KvSebwvtO6+zY3+7UrREug5IlAT08Ckk479AUmaErJ6H13uCbR2im646kPrspsBrS9fjl5BtoF78+r/rQt0sdKlsaC4rzz7BXu7URkI7PtJYw998AyoSqJsIEwfkvwwVjorRTREq8ctSn55X0/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773395547; c=relaxed/simple;
-	bh=wlHzuUH0gUssp1UjidQbhAVH/CdfFqbsFbfXxNH8yRQ=;
-	h=In-Reply-To:References:From:To:Cc:Subject:MIME-Version:
-	 Content-Disposition:Content-Type:Message-Id:Date; b=oJ/QAF8ApujaV+I2f8sly/UNidSgDvemBDtxD2A4qkcvaX/XoHj4rcY0jVi7rV+/i6rz55qnBurEj2oY1zLk+2SR2YWpqW3iHXzhpuc29EwCMtvNr4nh45+WRDbHZIXw0yw1PBw+QnuLV9UMfOGbIF34Iyoift0GDFvUQ8Wkzf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=IS6TiZha; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+	s=arc-20240116; t=1773395742; c=relaxed/simple;
+	bh=5c2W3df8hujD+lsryMlfZVWTEtgYqljLNQ17LpwZ8OM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=GRssLa0mNpJXsd5rJ3E2Y2Zg4Ldfmf7Hlx1PTY1r2ydVEg6Uj+bjzSMIGr1tWHDh29AGhYMTHG9KyDfHMDyNeIwk7lbxx5x7YhDPZAfKkVzWblQPUZra2+eIzLsZl5X0IyrHCAJC6MG5i6x/O+2ecxhMR4E7OrRpepeCPO22/sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=SAp8ABQ0; arc=none smtp.client-ip=113.46.200.222
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="IS6TiZha"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
-	Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
-	In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=jy7ZZYhO/l6AOCV4Dt/j5MRaTr5NmlKcOirpso5gcsI=; b=IS6TiZhaV0r1bpOdecb9kd2zO3
-	dD+nbNrCUZkuwrfym0QXMmg1pFWyHd9jO0+DXZJnQ1dmdm6S0+UHCnxOnmt9S0uUdoiniBoqHGSds
-	0mAhaK7gupwWjWkExGdhAyM6yyGYSdOC3CVtLdTiVFby49GLG/22tLeYrOWQR+9AOzGbamw0163ob
-	j1rYlZfrRYq+w8eNoRQiGjHq4+7913owSh9W074U8TBLvoKSsKCZDOCsJs/7K8pKSUZQ7mFVRY4dI
-	Rs6IMA7eSNSTudh7m0WAiaob+l59EEUmUzRMUlVybxLihfLaRagXRbxmjKW1DiPBxYF6xLKMWIpMe
-	iLoJhtVg==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:47236 helo=rmk-PC.armlinux.org.uk)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <rmk@armlinux.org.uk>)
-	id 1w0zBo-000000000hB-43IP;
-	Fri, 13 Mar 2026 09:52:17 +0000
-Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.98.2)
-	(envelope-from <rmk@rmk-PC.armlinux.org.uk>)
-	id 1w0zBm-0000000D4GM-1hc0;
-	Fri, 13 Mar 2026 09:52:14 +0000
-In-Reply-To: <abPdzyXJHqt5v3bi@shell.armlinux.org.uk>
-References: <abPdzyXJHqt5v3bi@shell.armlinux.org.uk>
-From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	bpf@vger.kernel.org,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	netdev@vger.kernel.org,
-	Paolo Abeni <pabeni@redhat.com>,
-	Stanislav Fomichev <sdf@fomichev.me>
-Subject: [PATCH net-next v3 15/15] net: stmmac: use queue rather than
- ->queue_index
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="SAp8ABQ0"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=6HFrbM723sqpe+y7ai9Wss8seUmJrJRPOhgyOLXW9fA=;
+	b=SAp8ABQ0kr+FddtPCS+WkRyk4XQguR5O1iUQDkQFDf+FbPfr5uRjNYc3YKAAWgO4zNkAIQIaa
+	4AkO5FV2lwqDK9mv/pU6mg3/2C21oGWRs0xrBzuK70Y8KYe8bKmrY4eLwxQGJnhd/0JPrmueNNi
+	UjP3DBr3wI1MHHb4TkpNfZg=
+Received: from mail.maildlp.com (unknown [172.19.163.214])
+	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4fXKVT123FzLlTZ;
+	Fri, 13 Mar 2026 17:50:41 +0800 (CST)
+Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
+	by mail.maildlp.com (Postfix) with ESMTPS id 8DD694056D;
+	Fri, 13 Mar 2026 17:55:37 +0800 (CST)
+Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
+ (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Fri, 13 Mar
+ 2026 17:55:36 +0800
+Message-ID: <75690ddf-5acb-40c1-b6f2-9b9a4397e473@huawei.com>
+Date: Fri, 13 Mar 2026 17:55:35 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1w0zBm-0000000D4GM-1hc0@rmk-PC.armlinux.org.uk>
-Sender: Russell King <rmk@armlinux.org.uk>
-Date: Fri, 13 Mar 2026 09:52:14 +0000
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v9 1/5] bpf: Move constants blinding out of
+ arch-specific JITs
+Content-Language: en-US
+To: Xu Kuohai <xukuohai@huaweicloud.com>, <bpf@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+CC: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+	<martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Yonghong Song
+	<yonghong.song@linux.dev>, Puranjay Mohan <puranjay@kernel.org>, Anton
+ Protopopov <a.s.protopopov@gmail.com>, =?UTF-8?Q?Alexis_Lothor=C3=A9?=
+	<alexis.lothore@bootlin.com>, Shahab Vahedi <list+bpf@vahedi.org>, Russell
+ King <linux@armlinux.org.uk>, Tiezhu Yang <yangtiezhu@loongson.cn>, Hengqi
+ Chen <hengqi.chen@gmail.com>, Johan Almbladh
+	<johan.almbladh@anyfinetworks.com>, Paul Burton <paulburton@kernel.org>, Hari
+ Bathini <hbathini@linux.ibm.com>, Christophe Leroy <chleroy@kernel.org>,
+	Naveen N Rao <naveen@kernel.org>, Luke Nelson <luke.r.nels@gmail.com>, Xi
+ Wang <xi.wang@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+	<bjorn@kernel.org>, Ilya Leoshkevich <iii@linux.ibm.com>, Heiko Carstens
+	<hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, "David S . Miller"
+	<davem@davemloft.net>, Wang YanQing <udknight@gmail.com>
+References: <20260312170255.3427799-1-xukuohai@huaweicloud.com>
+ <20260312170255.3427799-2-xukuohai@huaweicloud.com>
+From: Pu Lehui <pulehui@huawei.com>
+In-Reply-To: <20260312170255.3427799-2-xukuohai@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ kwepemf100007.china.huawei.com (7.202.181.221)
 
-We use a lot of ->queue_index where we already have the queue / channel
-index (which are actually the same index), which has been used to get
-the queue struct. Since queue and queue_index are identical in
-priv->(tx|rx)_queue[queue]->queue_index there is no point using the
-queue_index where we already have queue.
 
-Use queue rather than queue_index.
 
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
----
- .../net/ethernet/stmicro/stmmac/stmmac_main.c | 25 ++++++++-----------
- 1 file changed, 11 insertions(+), 14 deletions(-)
+On 2026/3/13 1:02, Xu Kuohai wrote:
+> From: Xu Kuohai <xukuohai@huawei.com>
+> 
+> During the JIT stage, constants blinding rewrites instructions but only
+> rewrites the private instruction copy of the JITed subprog, leaving the
+> global instructions and insn_aux_data unchanged. This causes a mismatch
+> between subprog instructions and the global state, making it difficult
+> to look up the global insn_aux_data in the JIT.
+> 
+> To avoid this mismatch, and given that all arch-specific JITs already
+> support constants blinding, move it to the generic verifier code, and
+> switch to rewrite the global env->insnsi with the global states
+> adjusted, as other rewrites in the verifier do.
+> 
+> This removes the constants blinding calls in each JIT, which are largely
+> duplicated code across architectures.
+> 
+> Since constants blinding is only required for JIT, and there are two
+> entry functions for JIT, jit_subprogs() and bpf_prog_select_runtime(),
+> move the constants blinding invocation into the two functions.
+> 
+> If constants blinding fails, or if it succeeds but the subsequent JIT
+> compilation fails, kernel falls back to running the BPF program with
+> interpreter. To ensure a correct rollback, the program cloning before
+> instruction rewriting in the constants blinding is preserved. During
+> the blinding process, only the cloned instructions are patched, leaving
+> the original program untouched.
+> 
+> Since bpf_patch_insn_data() is chosen for the constants blinding in the
+> verifier path, and it adjusts the global auxiliary data in the verifier
+> state, a key question is whether this auxiliary data should be restored
+> when JIT fails?
+> 
+> Besides instructions, bpf_patch_insn_data() adjusts env->insn_aux_data,
+> env->subprog_info, prog->aux->poke_tab and env->insn_array_maps. env->
+> insn_aux_data and env->subprog_info are no longer used after JIT failure
+> and are freed at the end of bpf_check(). prog->aux->poke_tab is only
+> used by JIT. And when the JIT fails, programs using insn_array would be
+> rejected by bpf_insn_array_ready() function since no JITed addresses
+> available. This means env->insn_array_maps is only useful for JIT.
+> Therefore, all the auxiliary data adjusted does not need to be restored.
+> 
+> For classic BPF programs, constants blinding works as before since it
+> is still invoked from bpf_prog_select_runtime().
+> 
+> Reviewed-by: Anton Protopopov <a.s.protopopov@gmail.com>
+> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> ---
+>   arch/arc/net/bpf_jit_core.c      | 39 ++++++-----------
+>   arch/arm/net/bpf_jit_32.c        | 41 +++---------------
+>   arch/arm64/net/bpf_jit_comp.c    | 72 +++++++++----------------------
+>   arch/loongarch/net/bpf_jit.c     | 59 ++++++++------------------
+>   arch/mips/net/bpf_jit_comp.c     | 20 +--------
+>   arch/parisc/net/bpf_jit_core.c   | 73 +++++++++++++-------------------
+>   arch/powerpc/net/bpf_jit_comp.c  | 68 +++++++++++------------------
+>   arch/riscv/net/bpf_jit_core.c    | 61 ++++++++++----------------
+>   arch/s390/net/bpf_jit_comp.c     | 59 +++++++++-----------------
+>   arch/sparc/net/bpf_jit_comp_64.c | 61 +++++++++-----------------
+>   arch/x86/net/bpf_jit_comp.c      | 43 +++----------------
+>   arch/x86/net/bpf_jit_comp32.c    | 33 ++-------------
+>   include/linux/filter.h           | 11 ++++-
+>   kernel/bpf/core.c                | 66 +++++++++++++++++++++++++----
+>   kernel/bpf/verifier.c            | 40 +++++++++++------
+>   15 files changed, 281 insertions(+), 465 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 55b79e9e637f..8393cbd0875e 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -440,7 +440,7 @@ static void stmmac_set_queue_rx_buf_size(struct stmmac_priv *priv,
- 	else
- 		buf_size = priv->dma_conf.dma_buf_sz;
- 
--	stmmac_set_dma_bfsize(priv, priv->ioaddr, buf_size, rx_q->queue_index);
-+	stmmac_set_dma_bfsize(priv, priv->ioaddr, buf_size, chan);
- }
- 
- /**
-@@ -1902,7 +1902,7 @@ static int __init_dma_rx_desc_rings(struct stmmac_priv *priv,
- 						   NULL));
- 		netdev_info(priv->dev,
- 			    "Register MEM_TYPE_XSK_BUFF_POOL RxQ-%d\n",
--			    rx_q->queue_index);
-+			    queue);
- 		xsk_pool_set_rxq_info(rx_q->xsk_pool, &rx_q->xdp_rxq);
- 	} else {
- 		WARN_ON(xdp_rxq_info_reg_mem_model(&rx_q->xdp_rxq,
-@@ -1910,7 +1910,7 @@ static int __init_dma_rx_desc_rings(struct stmmac_priv *priv,
- 						   rx_q->page_pool));
- 		netdev_info(priv->dev,
- 			    "Register MEM_TYPE_PAGE_POOL RxQ-%d\n",
--			    rx_q->queue_index);
-+			    queue);
- 	}
- 
- 	if (rx_q->xsk_pool) {
-@@ -2310,9 +2310,7 @@ static int __alloc_dma_rx_desc_resources(struct stmmac_priv *priv,
- 	else
- 		napi_id = ch->rx_napi.napi_id;
- 
--	ret = xdp_rxq_info_reg(&rx_q->xdp_rxq, priv->dev,
--			       rx_q->queue_index,
--			       napi_id);
-+	ret = xdp_rxq_info_reg(&rx_q->xdp_rxq, priv->dev, queue, napi_id);
- 	if (ret) {
- 		netdev_err(priv->dev, "Failed to register xdp rxq info\n");
- 		return -EINVAL;
-@@ -3340,7 +3338,7 @@ static void stmmac_tx_timer_arm(struct stmmac_priv *priv, u32 queue)
- 	if (!tx_coal_timer)
- 		return;
- 
--	ch = &priv->channel[tx_q->queue_index];
-+	ch = &priv->channel[queue];
- 	napi = tx_q->xsk_pool ? &ch->rxtx_napi : &ch->tx_napi;
- 
- 	/* Arm timer only if napi is not already scheduled.
-@@ -6918,12 +6916,11 @@ void stmmac_enable_rx_queue(struct stmmac_priv *priv, u32 queue)
- 	stmmac_clear_rx_descriptors(priv, &priv->dma_conf, queue);
- 
- 	stmmac_init_rx_chan(priv, priv->ioaddr, priv->plat->dma_cfg,
--			    rx_q->dma_rx_phy, rx_q->queue_index);
-+			    rx_q->dma_rx_phy, queue);
- 
--	stmmac_set_queue_rx_tail_ptr(priv, rx_q, rx_q->queue_index,
--				     rx_q->buf_alloc_num);
-+	stmmac_set_queue_rx_tail_ptr(priv, rx_q, queue, rx_q->buf_alloc_num);
- 
--	stmmac_set_queue_rx_buf_size(priv, rx_q, rx_q->queue_index);
-+	stmmac_set_queue_rx_buf_size(priv, rx_q, queue);
- 
- 	stmmac_start_rx_dma(priv, queue);
- 
-@@ -6969,12 +6966,12 @@ void stmmac_enable_tx_queue(struct stmmac_priv *priv, u32 queue)
- 	stmmac_clear_tx_descriptors(priv, &priv->dma_conf, queue);
- 
- 	stmmac_init_tx_chan(priv, priv->ioaddr, priv->plat->dma_cfg,
--			    tx_q->dma_tx_phy, tx_q->queue_index);
-+			    tx_q->dma_tx_phy, queue);
- 
- 	if (tx_q->tbs & STMMAC_TBS_AVAIL)
--		stmmac_enable_tbs(priv, priv->ioaddr, 1, tx_q->queue_index);
-+		stmmac_enable_tbs(priv, priv->ioaddr, 1, queue);
- 
--	stmmac_set_queue_tx_tail_ptr(priv, tx_q, tx_q->queue_index, 0);
-+	stmmac_set_queue_tx_tail_ptr(priv, tx_q, queue, 0);
- 
- 	stmmac_start_tx_dma(priv, queue);
- 
--- 
-2.47.3
+[...]
+
+>   /*
+> diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
+> index b3581e926436..527baa50dc68 100644
+> --- a/arch/riscv/net/bpf_jit_core.c
+> +++ b/arch/riscv/net/bpf_jit_core.c
+> @@ -44,29 +44,19 @@ bool bpf_jit_needs_zext(void)
+>   struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>   {
+>   	unsigned int prog_size = 0, extable_size = 0;
+> -	bool tmp_blinded = false, extra_pass = false;
+> -	struct bpf_prog *tmp, *orig_prog = prog;
+> +	bool extra_pass = false;
+>   	int pass = 0, prev_ninsns = 0, i;
+>   	struct rv_jit_data *jit_data;
+>   	struct rv_jit_context *ctx;
+>   
+>   	if (!prog->jit_requested)
+> -		return orig_prog;
+> -
+> -	tmp = bpf_jit_blind_constants(prog);
+> -	if (IS_ERR(tmp))
+> -		return orig_prog;
+> -	if (tmp != prog) {
+> -		tmp_blinded = true;
+> -		prog = tmp;
+> -	}
+> +		return prog;
+>   
+>   	jit_data = prog->aux->jit_data;
+>   	if (!jit_data) {
+>   		jit_data = kzalloc_obj(*jit_data);
+>   		if (!jit_data) {
+> -			prog = orig_prog;
+> -			goto out;
+> +			return prog;
+>   		}
+>   		prog->aux->jit_data = jit_data;
+>   	}
+> @@ -83,15 +73,11 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>   	ctx->user_vm_start = bpf_arena_get_user_vm_start(prog->aux->arena);
+>   	ctx->prog = prog;
+>   	ctx->offset = kzalloc_objs(int, prog->len);
+> -	if (!ctx->offset) {
+> -		prog = orig_prog;
+> +	if (!ctx->offset)
+>   		goto out_offset;
+> -	}
+>   
+> -	if (build_body(ctx, extra_pass, NULL)) {
+> -		prog = orig_prog;
+> +	if (build_body(ctx, extra_pass, NULL))
+>   		goto out_offset;
+> -	}
+>   
+>   	for (i = 0; i < prog->len; i++) {
+>   		prev_ninsns += 32;
+> @@ -105,10 +91,8 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>   		bpf_jit_build_prologue(ctx, bpf_is_subprog(prog));
+>   		ctx->prologue_len = ctx->ninsns;
+>   
+> -		if (build_body(ctx, extra_pass, ctx->offset)) {
+> -			prog = orig_prog;
+> +		if (build_body(ctx, extra_pass, ctx->offset))
+>   			goto out_offset;
+> -		}
+>   
+>   		ctx->epilogue_offset = ctx->ninsns;
+>   		bpf_jit_build_epilogue(ctx);
+> @@ -126,10 +110,8 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>   							  &jit_data->ro_image, sizeof(u32),
+>   							  &jit_data->header, &jit_data->image,
+>   							  bpf_fill_ill_insns);
+> -			if (!jit_data->ro_header) {
+> -				prog = orig_prog;
+> +			if (!jit_data->ro_header)
+>   				goto out_offset;
+> -			}
+>   
+>   			/*
+>   			 * Use the image(RW) for writing the JITed instructions. But also save
+> @@ -150,7 +132,6 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>   
+>   	if (i == NR_JIT_ITERATIONS) {
+>   		pr_err("bpf-jit: image did not converge in <%d passes!\n", i);
+> -		prog = orig_prog;
+>   		goto out_free_hdr;
+>   	}
+>   
+> @@ -163,26 +144,27 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>   	ctx->nexentries = 0;
+>   
+>   	bpf_jit_build_prologue(ctx, bpf_is_subprog(prog));
+> -	if (build_body(ctx, extra_pass, NULL)) {
+> -		prog = orig_prog;
+> +	if (build_body(ctx, extra_pass, NULL))
+>   		goto out_free_hdr;
+> -	}
+>   	bpf_jit_build_epilogue(ctx);
+>   
+>   	if (bpf_jit_enable > 1)
+>   		bpf_jit_dump(prog->len, prog_size, pass, ctx->insns);
+>   
+> -	prog->bpf_func = (void *)ctx->ro_insns + cfi_get_offset();
+> -	prog->jited = 1;
+> -	prog->jited_len = prog_size - cfi_get_offset();
+> -
+>   	if (!prog->is_func || extra_pass) {
+>   		if (WARN_ON(bpf_jit_binary_pack_finalize(jit_data->ro_header, jit_data->header))) {
+>   			/* ro_header has been freed */
+>   			jit_data->ro_header = NULL;
+> -			prog = orig_prog;
+> -			goto out_offset;
+> +			jit_data->header = NULL;
+> +			goto out_free_hdr;
+
+Thank you for fixing this issue, and the riscv port looks good to me.
+
+Reviewed-by: Pu Lehui <pulehui@huawei.com> # riscv
+
+>   		}
+> +	}
+> +
+> +	prog->bpf_func = (void *)ctx->ro_insns + cfi_get_offset();
+> +	prog->jited = 1;
+> +	prog->jited_len = prog_size - cfi_get_offset();
+> +
+> +	if (!prog->is_func || extra_pass) {
+>   		/*
+>   		 * The instructions have now been copied to the ROX region from
+>   		 * where they will execute.
+> @@ -198,14 +180,15 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>   		kfree(jit_data);
+>   		prog->aux->jit_data = NULL;
+>   	}
+> -out:
+>   
+> -	if (tmp_blinded)
+> -		bpf_jit_prog_release_other(prog, prog == orig_prog ?
+> -					   tmp : orig_prog);
+>   	return prog;
+>   
+>   out_free_hdr:
+> +	if (extra_pass) {
+> +		prog->bpf_func = NULL;
+> +		prog->jited = 0;
+> +		prog->jited_len = 0;
+> +	}
+>   	if (jit_data->header) {
+>   		bpf_arch_text_copy(&jit_data->ro_header->size, &jit_data->header->size,
+>   				   sizeof(jit_data->header->size));
 
