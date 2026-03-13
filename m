@@ -1,69 +1,53 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B4B836B06D
-	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 17:48:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AF5A36166A;
+	Fri, 13 Mar 2026 18:04:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773424111; cv=none; b=tJ5/IFswEF0v+nGjRlWd6AnroNAKCP7CK3EPVl3HjVURO+TZMSTu2fdXQfLYPFfnuKXVqao+dXVQkn+UKR7TwVWEXuNKqIowPebaMstTZDDcG1NTL5i1ZB8sBZrHKzWjzcfmksPaAmC+xg+Kqw5sVnD0pmOvKHgn/FKXSJPEJt4=
+	t=1773425056; cv=none; b=f0f7fRXUgNaHLyXFo/TcFPpD7bzXZzjzyevNvMc4fjTsxLF03DvubIIACKsOEi6OrhSf8/gnjPQND7skl2XizEWuWcG/IRXfZ8C0nQ8R81FK0RULKzzAf0JUoaOFfDxx3/a4BMzWeAw7lalLvLgfxUONOolT0OH6ovnHLmYX51Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773424111; c=relaxed/simple;
-	bh=SBgN0ypaUE8BVba4+S7g3Z7yIqUtF3BpXH8EeF97N9A=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ilYsD+mXRvZSDehLnilAY6Jz1bjavMco3H8vpQ2M4A2aiOZW8fC/Q4BMh05KlUhv5jrJiUdiLyzDeg4DSuhlcz2KBGza2/OJkH9ex2NWyv2Hy2pGxnJ8J6fYbGD6xn12ZpRvrkpvu+UhMMOiXHkTa7SqAqsBxKiHSfeOcLTJPpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=AuV6ij6J; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1773425056; c=relaxed/simple;
+	bh=+4lUwDCn4bRvjfObGVzBiu5D9cZeYyd56OjA6Nl8Th0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=m48wwJo6rD3sZlWIDZ/dktlRyMTONTI2JamwvlsSimKt/Mvup1lLYTnuF2b8vg6s/mRhMHepogrWvqWmbKrhxVu9C825e+/n/OtSjpGMlib3t+LQAvxCWRh/m4l6wuLTjz6gf1UTPP4XeMKAAYc6DrjTtwUoKhgVIUhBr7oFOec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=euK8F/mM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="AuV6ij6J"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62D5lRKC2301893;
-	Fri, 13 Mar 2026 17:48:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=YhveXLQE6JNjpf3dad94UGkv2193x8Bk43y7zFHMH
-	3g=; b=AuV6ij6JE/EhdrWcwIuRvg3DwLMEo778+8vF/UsT695X8FzDiHAEMyLXE
-	4zj/JsmvrkQRY3rApxtRLtUN5sgZzUaAR5lc2Osmctx5C3N9b6YN/E2OpjAwrIvF
-	g7iwvxAF4ofnsQLPMt8kFrawJ8NgsuelY0GeO8MUrbC5/HAXPqXPQzk+02Z+02vM
-	LpaP9xRowXluIHK1S1CaT3QHuzxHQCjqKOKFiZY6L+OsWPNltxigMPtKgT1b7v2b
-	VV4Iae+aKB6Rt0cdE5V5i3HU0Q7YULvuQbyAqqEP7rpE6kCxnGwuiWanjfMlnTUP
-	RzANsa6dfZNT5XP7HQNMtCItH7eDw==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cuh960rkj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Mar 2026 17:48:15 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62DEwTwC021245;
-	Fri, 13 Mar 2026 17:48:14 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cuha9qppp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Mar 2026 17:48:14 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62DHmAFk40239516
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 13 Mar 2026 17:48:10 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5351C20049;
-	Fri, 13 Mar 2026 17:48:10 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AC12B20040;
-	Fri, 13 Mar 2026 17:48:09 +0000 (GMT)
-Received: from heavy.ibm.com (unknown [9.111.88.140])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 13 Mar 2026 17:48:09 +0000 (GMT)
-From: Ilya Leoshkevich <iii@linux.ibm.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Hari Bathini <hbathini@linux.ibm.com>
-Subject: [PATCH] s390/bpf: Zero-extend bpf prog return values and kfunc arguments
-Date: Fri, 13 Mar 2026 18:46:25 +0100
-Message-ID: <20260313174807.581826-1-iii@linux.ibm.com>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="euK8F/mM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2C80C19421;
+	Fri, 13 Mar 2026 18:04:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773425055;
+	bh=+4lUwDCn4bRvjfObGVzBiu5D9cZeYyd56OjA6Nl8Th0=;
+	h=From:To:Cc:Subject:Date:From;
+	b=euK8F/mMg/jLsaYUwS1rO5tCLBcd4pXg+AsPJwEVjZg+kpufS5rUWJd/nVS5VsbK2
+	 l7DOo9BLaG6RmLOa+14LUCfn8qfG69R6tyNk0nQZEdg/iP004LGAsQmcnR0eCpnijF
+	 /KgVe2uZfkmGeFHQt9HdVixxK8S32xvlQX3eIZsdN3lTzy/3ao3QASmI57ZP3VMkCa
+	 Y+oVQt7AFq3qama9HooFh0fa8oIsyJ8Te+IwcVlsB5XNXiHUnsAyuIVp2i8jx0quWe
+	 m4y8Or5bdEpyneXC8HhvkZ+O9gcNBK8vqIba/QWnFVQsp0XjtAXqccpSpsvfYZe90+
+	 aKjpdcIF8bXwg==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: bpf@vger.kernel.org
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	Puranjay Mohan <puranjay12@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Leo Yan <leo.yan@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Breno Leitao <leitao@debian.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-perf-users@vger.kernel.org,
+	kernel-team@meta.com
+Subject: [PATCH bpf 0/3] arm64: Add BRBE support for bpf_get_branch_snapshot()
+Date: Fri, 13 Mar 2026 11:03:31 -0700
+Message-ID: <20260313180352.3800358-1-puranjay@kernel.org>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -71,119 +55,145 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEzMDE0MCBTYWx0ZWRfX3Bbc6yk55fZm
- QAV6/xGWuX813xWuqcjQ/sUdiQprj33Sk0X4BpFc+I5VEU2jKaNCNBS24B/gO/5v8SEy91gXS17
- SUjCoMEkEo0DGDQGTDsu68nLMTROM6oTjeek/fw2jcmWCatb9oym2N+fhqxJMHdKoIdusxwjGnm
- /9Ju66GC3EOO7JrACGwTKPNgstpGrz2ZSAobmbhYXQQfC79I4h2UwVri7h5iBfj+K+9DHyR0kwQ
- ezkdUXCUiXRA9XFSiBXGfKTNbq9O2MhXktNGPwNZaT4HvZEjQwdpgCPFvsQAee5CEuvII3mGE1W
- h1tnadptgoaujdGCGdJS3scR48zAGjGjtjZQsnn6eQWGp/ZRAPyVMPORO1WUJ/O4EkiamYchlkL
- HhoF+Ta6vvTqnhj5fdIh2P5ILsXjpmqnQIVS39+HkOwv/bVyjmRV67D7wMrCdMeVZzhhaxpCneo
- iedCR9ohC7FA5l/K7Tg==
-X-Authority-Analysis: v=2.4 cv=FowIPmrq c=1 sm=1 tr=0 ts=69b44ddf cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
- a=f077Cj1veyUfnecLbkIA:9
-X-Proofpoint-GUID: rwVLHmt_o1RGUZxRjcUIaKAWO0x5czpO
-X-Proofpoint-ORIG-GUID: rwVLHmt_o1RGUZxRjcUIaKAWO0x5czpO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-13_03,2026-03-13_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 clxscore=1015 suspectscore=0 bulkscore=0 impostorscore=0
- lowpriorityscore=0 adultscore=0 phishscore=0 malwarescore=0
- priorityscore=1501 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2603050001
- definitions=main-2603130140
 
-s390x ABI requires callers to zero-extend unsigned arguments and
-sign-extend signed arguments, and callees to zero-extend unsigned
-return values and sign-extend signed return values.
+RFC: https://lore.kernel.org/all/20260102214043.1410242-1-puranjay@kernel.org/
+Changes from RFC:
+ - Fix pre-existing NULL pointer dereference in armv8pmu_sched_task()
+   found by Leo Yan during testing (patch 1)
+ - Pause BRBE before local_daif_save() to avoid branch pollution from
+   trace_hardirqs_off()
+ - Use local_daif_save() to prevent pNMI race from counter overflow
+   (Mark Rutland)
+ - Reuse perf_entry_from_brbe_regset() instead of duplicating register
+   read logic, by making it accept NULL event (Mark Rutland)
+ - Invalidate BRBE after reading to maintain record contiguity for
+   other consumers (Mark Rutland)
+ - Adjust selftest wasted_entries threshold for ARM64 (patch 3)
+ - Tested on ARM FVP with BRBE enabled
 
-s390 BPF JIT currently implements only sign extension. Fix this
-omission and implement zero extension too.
+This series enables the bpf_get_branch_snapshot() BPF helper on ARM64
+by implementing the perf_snapshot_branch_stack static call for ARM's
+Branch Record Buffer Extension (BRBE).
 
-Fixes: 528eb2cb87bc ("s390/bpf: Implement arch_prepare_bpf_trampoline()")
-Reported-by: Hari Bathini <hbathini@linux.ibm.com>
-Closes: https://lore.kernel.org/bpf/20260312080113.843408-1-hbathini@linux.ibm.com/
-Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
----
- arch/s390/net/bpf_jit_comp.c | 39 ++++++++++++++++++++++--------------
- 1 file changed, 24 insertions(+), 15 deletions(-)
+bpf_get_branch_snapshot() [1] allows BPF programs to capture hardware
+branch records on-demand from any BPF tracing context. This was
+previously only available on x86 (Intel LBR) since v5.16. With BRBE
+available on ARMv9, this series closes the gap for ARM64.
 
-diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
-index 1f9a6b728beb..d08d159b6319 100644
---- a/arch/s390/net/bpf_jit_comp.c
-+++ b/arch/s390/net/bpf_jit_comp.c
-@@ -830,25 +830,34 @@ static int bpf_jit_probe_post(struct bpf_jit *jit, struct bpf_prog *fp,
- }
- 
- /*
-- * Sign-extend the register if necessary
-+ * Sign- or zero-extend the register if necessary
-  */
--static int sign_extend(struct bpf_jit *jit, int r, u8 size, u8 flags)
-+static int sign_zero_extend(struct bpf_jit *jit, int r, u8 size, u8 flags)
- {
--	if (!(flags & BTF_FMODEL_SIGNED_ARG))
--		return 0;
--
- 	switch (size) {
- 	case 1:
--		/* lgbr %r,%r */
--		EMIT4(0xb9060000, r, r);
-+		if (flags & BTF_FMODEL_SIGNED_ARG)
-+			/* lgbr %r,%r */
-+			EMIT4(0xb9060000, r, r);
-+		else
-+			/* llgcr %r,%r */
-+			EMIT4(0xb9840000, r, r);
- 		return 0;
- 	case 2:
--		/* lghr %r,%r */
--		EMIT4(0xb9070000, r, r);
-+		if (flags & BTF_FMODEL_SIGNED_ARG)
-+			/* lghr %r,%r */
-+			EMIT4(0xb9070000, r, r);
-+		else
-+			/* llghr %r,%r */
-+			EMIT4(0xb9850000, r, r);
- 		return 0;
- 	case 4:
--		/* lgfr %r,%r */
--		EMIT4(0xb9140000, r, r);
-+		if (flags & BTF_FMODEL_SIGNED_ARG)
-+			/* lgfr %r,%r */
-+			EMIT4(0xb9140000, r, r);
-+		else
-+			/* llgfr %r,%r */
-+			EMIT4(0xb9160000, r, r);
- 		return 0;
- 	case 8:
- 		return 0;
-@@ -1798,9 +1807,9 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
- 				return -1;
- 
- 			for (j = 0; j < m->nr_args; j++) {
--				if (sign_extend(jit, BPF_REG_1 + j,
--						m->arg_size[j],
--						m->arg_flags[j]))
-+				if (sign_zero_extend(jit, BPF_REG_1 + j,
-+						     m->arg_size[j],
-+						     m->arg_flags[j]))
- 					return -1;
- 			}
- 		}
-@@ -2566,7 +2575,7 @@ static int invoke_bpf_prog(struct bpf_tramp_jit *tjit,
- 	EMIT6_PCREL_RILB_PTR(0xc0050000, REG_14, p->bpf_func);
- 	/* stg %r2,retval_off(%r15) */
- 	if (save_ret) {
--		if (sign_extend(jit, REG_2, m->ret_size, m->ret_flags))
-+		if (sign_zero_extend(jit, REG_2, m->ret_size, m->ret_flags))
- 			return -1;
- 		EMIT6_DISP_LH(0xe3000000, 0x0024, REG_2, REG_0, REG_15,
- 			      tjit->retval_off);
+Usage model
+-----------
+
+The helper works in conjunction with perf events. The userspace
+component of the BPF application opens a perf event with
+PERF_SAMPLE_BRANCH_STACK on each CPU, which configures the hardware
+to continuously record branches into BRBE (on ARM64) or LBR (on x86).
+A BPF program attached to a tracepoint, kprobe, or fentry hook can
+then call bpf_get_branch_snapshot() to snapshot the branch buffer at
+any point. Without an active perf event, BRBE is not recording and
+the buffer is empty.
+
+On-demand branch snapshots from BPF are useful for diagnosing which
+specific code path was taken inside a function. Stack traces only show
+function boundaries, but branch records reveal the exact sequence of
+jumps, calls, and returns within a function -- making it possible to
+identify which specific error check triggered a failure, or which
+callback implementation was invoked through a function pointer.
+
+For example, retsnoop [2] is a BPF-based tool for non-intrusive
+mass-tracing of kernel internals. Its LBR mode (--lbr) creates per-CPU
+perf events with PERF_SAMPLE_BRANCH_STACK and then uses
+bpf_get_branch_snapshot() in its fentry/fexit BPF programs to capture
+branch records whenever a traced function returns an error.
+
+Consider debugging a bpf() syscall that returns -EINVAL when creating
+a BPF map with invalid parameters. Running retsnoop on an ARM64 FVP
+with BRBE to trace the bpf() syscall and array_map_alloc_check():
+
+  $ retsnoop -e '*sys_bpf' -a 'array_map_alloc_check' --lbr=any \
+             -F -k vmlinux --debug full-lbr
+  $ simfail bpf-bad-map-max-entries-array  # in another terminal
+
+Output of retsnoop:
+
+  --- fentry BPF program (entries #63-#17) ---
+
+  [#63-#59] __htab_map_lookup_elem: hash table walk with memcmp        (hashtab.c)
+  [#58] __htab_map_lookup_elem+0x98  -> dump_bpf_prog+0xc850           (hashtab.c:750)
+  [#57-#55] ... dump_bpf_prog internal branches ...
+  [#54] dump_bpf_prog+0xcab8        -> bpf_get_current_pid_tgid+0x0    (helpers.c:225)
+  [#53] bpf_get_current_pid_tgid+0x1c -> dump_bpf_prog+0xcabc          (helpers.c:225)
+  [#52-#51] ... dump_bpf_prog -> __htab_map_lookup_elem ...
+  [#50-#47] __htab_map_lookup_elem: htab_map_hash (jhash2), select_bucket
+  [#46-#42] lookup_nulls_elem_raw: hash chain walk with memcmp         (hashtab.c:717)
+  [#41] __htab_map_lookup_elem+0x98  -> dump_bpf_prog+0xcaf8           (hashtab.c:750)
+  [#40-#37] ... dump_bpf_prog -> bpf_ktime_get_ns ...
+  [#36] bpf_ktime_get_ns+0x10       -> ktime_get_mono_fast_ns+0x0      (helpers.c:178)
+  [#35-#32] ktime_get_mono_fast_ns: tk_clock_read -> arch_counter_get_cntpct
+  [#31] ktime_get_mono_fast_ns+0x9c -> bpf_ktime_get_ns+0x14           (timekeeping.c:493)
+  [#30] bpf_ktime_get_ns+0x18       -> dump_bpf_prog+0xcd50            (helpers.c:178)
+  [#29-#25] ... dump_bpf_prog internal branches ...
+  [#24] dump_bpf_prog+0x11b28       -> __bpf_prog_exit_recur+0x0       (trampoline.c:1190)
+  [#23-#17] __bpf_prog_exit_recur: rcu_read_unlock, migrate_enable     (trampoline.c:1195)
+
+  --- array_map_alloc_check (entries #16-#12) ---
+
+  [#16] dump_bpf_prog+0x11b38       -> array_map_alloc_check+0x8       (arraymap.c:55)
+  [#15] array_map_alloc_check+0x18  -> array_map_alloc_check+0xb8      (arraymap.c:56)
+        . bpf_map_attr_numa_node       . bpf_map_attr_numa_node
+  [#14] array_map_alloc_check+0xbc  -> array_map_alloc_check+0x20      (arraymap.c:59)
+        . bpf_map_attr_numa_node
+  [#13] array_map_alloc_check+0x24  -> array_map_alloc_check+0x94      (arraymap.c:64)
+  [#12] array_map_alloc_check+0x98  -> dump_bpf_prog+0x11b3c           (arraymap.c:82)
+
+  --- fexit trampoline overhead (entries #11-#00) ---
+
+  [#11] dump_bpf_prog+0x11b5c       -> __bpf_prog_enter_recur+0x0      (trampoline.c:1145)
+  [#10-#03] __bpf_prog_enter_recur: rcu_read_lock, migrate_disable     (trampoline.c:1146)
+  [#02] __bpf_prog_enter_recur+0x114 -> dump_bpf_prog+0x11b60          (trampoline.c:1157)
+  [#01] dump_bpf_prog+0x11b6c       -> dump_bpf_prog+0xd230
+  [#00] dump_bpf_prog+0xd340        -> arm_brbe_snapshot_branch_stack+0x0 (arm_brbe.c:814)
+
+                   el0t_64_sync+0x168
+                   el0t_64_sync_handler+0x98
+                   el0_svc+0x28
+                   do_el0_svc+0x4c
+                   invoke_syscall.constprop.0+0x54
+    373us [-EINVAL] __arm64_sys_bpf+0x8
+                    __sys_bpf+0x87c
+                    map_create+0x120
+     95us [-EINVAL] array_map_alloc_check+0x8
+
+The FVP's BRBE buffer has 64 entries (BRBE supports 8, 16, 32, or
+64). Of these, entries #63-#17 (47) are consumed by the fentry BPF
+trampoline that ran before the function, and entries #11-#00 (12)
+are consumed by the fexit trampoline that runs after. Entry #00
+shows the very last branch recorded before BRBE is paused: the call
+into arm_brbe_snapshot_branch_stack().
+
+The 5 useful entries (#16-#12) show the exact path taken inside
+array_map_alloc_check(). Record #14 shows a jump from line 56
+(bpf_map_attr_numa_node) to line 59 (the if-condition), and #13
+shows an immediate jump from line 59 (attr->max_entries == 0) to
+line 64 (return -EINVAL), skipping lines 60-63. This pinpoints
+max_entries==0 as the cause -- a diagnosis impossible with stack
+traces alone.
+
+[1] 856c02dbce4f ("bpf: Introduce helper bpf_get_branch_snapshot")
+[2] https://github.com/anakryiko/retsnoop
+
+Puranjay Mohan (3):
+  perf/arm_pmuv3: Fix NULL pointer dereference in armv8pmu_sched_task()
+  perf/arm64: Add BRBE support for bpf_get_branch_snapshot()
+  selftests/bpf: Adjust wasted entries threshold for ARM64 BRBE
+
+ drivers/perf/arm_brbe.c                       | 70 ++++++++++++++++++-
+ drivers/perf/arm_brbe.h                       |  9 +++
+ drivers/perf/arm_pmuv3.c                      | 16 ++++-
+ .../bpf/prog_tests/get_branch_snapshot.c      |  9 +--
+ 4 files changed, 95 insertions(+), 9 deletions(-)
+
+
+base-commit: ca0f39a369c5f927c3d004e63a5a778b08a9df94
 -- 
-2.53.0
+2.52.0
 
