@@ -1,153 +1,74 @@
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A96D1F151C;
-	Fri, 13 Mar 2026 13:03:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA72327B4F7;
+	Fri, 13 Mar 2026 13:10:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773407010; cv=none; b=Ece1G2dBdQJP/lvLhQHSS8iXlHt990eNLHC1sBvxMqMVhQkut4X8pFTDbrouOJrqhmCFHFd4AgCLhGa830d19/nBesM98WzEj+O6CF0dV5y9vK57ADUKL4O1bxLl+ExYjKEMmhYBOOmg3rlD5sQ/7pZfeSI2w6iANeyndxqhfrg=
+	t=1773407436; cv=none; b=qEHTePaPAGqnGeSOYTfPgIqUARYPpkZ+KaoNPKsMM7Gn4gzppXc2wF9cKeHjlw8LQW+99AxePf+fEr3RzqqJpBGxH8re6ZEQp9ezpFovf8RVLaMng3d7Laqky520mYNXHC5BoqOMpR/hjhRjKKLbuwQvTr6rKjzCKs+dqNyDikI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773407010; c=relaxed/simple;
-	bh=1zmQ8zQMj4MGfJJo7YfPo05bQHIBl28jvNdCXvqs8x0=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NIWUoOcsTwqS64urkFMfsqAFbe5eQiIN1dP8dQE7utQj+XiUqaVNwXHwzGJBhoUQLHSaqqKuPB++PIhagxHg+BvqRXlwYTaziW5CVpTVs4zVG7aX4Y35M+08qbJD8EjYMXv1n9zGgnzfENqZvCCpoOUYKkieM7wbve9hYwhXxFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=nrI2fmyZ; arc=none smtp.client-ip=148.163.152.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	s=arc-20240116; t=1773407436; c=relaxed/simple;
+	bh=vwogDLBb4glPRani4L2Ss2Ekn/HoYwTUUMhHpHLV/mA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iRYCrQzwL8XRebBt0oc+yj4PWJZ2aZbHG4QIILD2faWwtpYS3jQ9pLMP65kCzsYWSZTz4h8yBYg2scLSGzj8KjxBSppNyU/nLvXTcxk4qzMjHNI6cUbzrp1U7fuy1wZFmLVWbTEfwXiEesaeWGMgaY9RLxCmzFCkHd0l3J4coiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MNojZUh+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="nrI2fmyZ"
-Received: from pps.filterd (m0354654.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62D97vHW895510;
-	Fri, 13 Mar 2026 13:02:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=DuoEQ2pV/7yVh3IEgtmtI4tqjtw5lKwCATX4jI1eMJk=; b=nrI2
-	fmyZNR0IfbImdv+cwvXz6rmnG/R3T/CDcd23LcksIgiNQMbD69Y/gKYy1D0aPUMp
-	/6jnUA0yA5C3Pc68vciYJXbgnYPNzRD6VezT7szniwUK1Au5+n4Y0hqRkVfphytx
-	TT8lYe1Lh6yz5nnXpTwinhG7tJqalZ6cB2CpfBxJ06IcxuTgPNCNdazpAwwyBv7V
-	X9u+PBH3QpcyatiIHZGfQjmNXPa+Zmh+mlBT48AUsWH7I5vgnujtZmQk0pBqCgcY
-	PWWaODp8mkACL2pgcsmmUPT5+cXXt5Y+YCzVgQzEbIpZuuNkwOmwLFdQjyp2DT/f
-	TRmqCcTFQe9LWX9qWQ==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4cuh51fjbx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Mar 2026 13:02:36 +0000 (GMT)
-Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Fri, 13 Mar 2026 13:02:30 +0000
-From: Slava Imameev <slava.imameev@crowdstrike.com>
-To: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>
-CC: <martin.lau@linux.dev>, <eddyz87@gmail.com>, <song@kernel.org>,
-        <yonghong.song@linux.dev>, <john.fastabend@gmail.com>,
-        <kpsingh@kernel.org>, <sdf@fomichev.me>, <haoluo@google.com>,
-        <jolsa@kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
-        <kuba@kernel.org>, <pabeni@redhat.com>, <horms@kernel.org>,
-        <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-open-source@crowdstrike.com>,
-        Slava Imameev
-	<slava.imameev@crowdstrike.com>
-Subject: [PATCH bpf-next v5 1/2] bpf: Support pointer param types via SCALAR_VALUE for trampolines
-Date: Sat, 14 Mar 2026 00:02:19 +1100
-Message-ID: <20260313130220.18590-2-slava.imameev@crowdstrike.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260313130220.18590-1-slava.imameev@crowdstrike.com>
-References: <20260313130220.18590-1-slava.imameev@crowdstrike.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MNojZUh+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F77CC19421;
+	Fri, 13 Mar 2026 13:10:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773407435;
+	bh=vwogDLBb4glPRani4L2Ss2Ekn/HoYwTUUMhHpHLV/mA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MNojZUh+gFaH2QRXBucakHU01BghXFsWk19vCgkM6aew/ebFi5ynWio67QbZFkXY7
+	 TCSO3KMjYnEJIOr72QVQ2fRJyHGJGGSFuuGoVhrq0ZRPPdtby2DECkB7hVr/6Wehe1
+	 HyKnhRCIY1AlzPWyCpddwDe/y70Npx+H3p7dKsKq11RK0yaA4FbE7tmi3ihbHW2uVy
+	 M/IKbO5V7DL8HVxyJUPUwU8lQVs6/3X2pZNnB1oxz5Sjv2N3gmJqG3fKtqzCKtwySo
+	 A49STKw1eLCTjH45zFraS5RBZnxV90Jx9o7p9WiwMzn3nyyLW7b3kgbx0n+6yHZjkH
+	 OBx7grXCjImhQ==
+Date: Fri, 13 Mar 2026 13:10:28 +0000
+From: Simon Horman <horms@kernel.org>
+To: Meghana Malladi <m-malladi@ti.com>
+Cc: vadim.fedorenko@linux.dev, haokexin@gmail.com, jacob.e.keller@intel.com,
+	sdf@fomichev.me, john.fastabend@gmail.com, hawk@kernel.org,
+	daniel@iogearbox.net, ast@kernel.org, pabeni@redhat.com,
+	kuba@kernel.org, edumazet@google.com, davem@davemloft.net,
+	andrew+netdev@lunn.ch, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, srk@ti.com,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Roger Quadros <rogerq@kernel.org>, danishanwar@ti.com
+Subject: Re: [PATCH net] net: ti: icssg-prueth: Fix memory leak in XDP_DROP
+ for non-zero-copy mode
+Message-ID: <20260313131028.GA1311528@kernel.org>
+References: <20260311095441.1691636-1-m-malladi@ti.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH014.crowdstrike.sys (10.100.11.87) To
- 04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Disclaimer: USA
-X-Proofpoint-GUID: FPZz3Yijip3avmZxro_xXoPlBhoxwFY_
-X-Authority-Analysis: v=2.4 cv=JtX8bc4C c=1 sm=1 tr=0 ts=69b40aec cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=R_n4Uisa8axJ7jemP0ek:22 a=pl6vuDidAAAA:8
- a=QHqYeUcJvB07a7jHZo8A:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEzMDEwMyBTYWx0ZWRfX3KXvbyNRxodf
- 5rfohIJ6e8Xbz6uCFo92bIPbttFs5WWfirsJC1wG6+RXjXgAesPxWjYL6fu7i2m13XZbcP+eX5h
- 6iUQe9VKdjgCibwhqW36aomZ2KiYu60KCLqqR1Eigzumy7o/7a99MhL4KMvBJ13ESO4WKZbkOow
- P14amWlOkrOCXzWW5yY6gjIIqw1ihXlZbhdV3tTImZThQcrIVI41eU6MpJ/eP7s+eh6bTz0jKrS
- TKR3Hm+wroTB5TEWrNIwl+edmjFlXyO4Cxq6PvCaiBiZ7E2KBZmWoo36Ddp3XpvttpF4HJHDy24
- CZZbbdfxKBGE/REKcHjKGNotPkQTG+POJt0M8Le2fcXdghCZ4rziD9dEgNL0GV8vfH2UPz0gPz/
- imHPMWPaLwpkxkCs4/X0EDBCFSLHDu0mxVq46d34qXIlZh1h8B2nBYSX/4BAK9cks6PkBd/ibV4
- ASNEmB+kiY49zABD9Gg==
-X-Proofpoint-ORIG-GUID: FPZz3Yijip3avmZxro_xXoPlBhoxwFY_
-X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11728
- signatures=596818
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 spamscore=0 phishscore=0 adultscore=0 malwarescore=0
- priorityscore=1501 impostorscore=0 bulkscore=0 lowpriorityscore=0
- suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2603050001
- definitions=main-2603130103
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260311095441.1691636-1-m-malladi@ti.com>
 
-Add BPF verifier support for single- and multi-level pointer
-parameters and return values in BPF trampolines by treating these
-parameters as SCALAR_VALUE.
+On Wed, Mar 11, 2026 at 03:24:41PM +0530, Meghana Malladi wrote:
+> Page recycling was removed from the XDP_DROP path in emac_run_xdp() to
+> avoid conflicts with AF_XDP zero-copy mode, which uses xsk_buff_free()
+> instead.
+> 
+> However, this causes a memory leak when running XDP programs that drop
+> packets in non-zero-copy mode (standard page pool mode). The pages are
+> never returned to the page pool, leading to OOM conditions.
+> 
+> Fix this by handling cleanup in the caller, emac_rx_packet().
+> When emac_run_xdp() returns ICSSG_XDP_CONSUMED for XDP_DROP, the
+> caller now recycles the page back to the page pool. The zero-copy
+> path, emac_rx_packet_zc() already handles cleanup correctly with
+> xsk_buff_free().
+> 
+> Fixes: 7a64bb388df3 ("net: ti: icssg-prueth: Add AF_XDP zero copy for RX")
+> Signed-off-by: Meghana Malladi <m-malladi@ti.com>
 
-This extends the existing support for int and void pointers that are
-already treated as SCALAR_VALUE.
-
-This provides consistent logic for single and multi-level pointers:
-if a type is treated as SCALAR for a single-level pointer, the same
-applies to multi-level pointers. The exception is pointer-to-struct,
-which is currently PTR_TO_BTF_ID for single-level but treated as
-scalar for multi-level pointers since the verifier lacks context
-to infer the size of target memory regions.
-
-Safety is ensured by existing BTF verification, which rejects invalid
-pointer types at the BTF verification stage.
-
-Signed-off-by: Slava Imameev <slava.imameev@crowdstrike.com>
----
- kernel/bpf/btf.c | 17 +++++++----------
- 1 file changed, 7 insertions(+), 10 deletions(-)
-
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 09fcbb125155..524bb2d6d964 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -6508,13 +6508,6 @@ struct btf *bpf_prog_get_target_btf(const struct bpf_prog *prog)
- 		return prog->aux->attach_btf;
- }
- 
--static bool is_void_or_int_ptr(struct btf *btf, const struct btf_type *t)
--{
--	/* skip modifiers */
--	t = btf_type_skip_modifiers(btf, t->type, NULL);
--	return btf_type_is_void(t) || btf_type_is_int(t);
--}
--
- u32 btf_ctx_arg_idx(struct btf *btf, const struct btf_type *func_proto,
- 		    int off)
- {
-@@ -6903,10 +6896,14 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
- 	}
- 
- 	/*
--	 * If it's a pointer to void, it's the same as scalar from the verifier
--	 * safety POV. Either way, no futher pointer walking is allowed.
-+	 * If it's a single or multilevel pointer, except a pointer
-+	 * to a structure, it's the same as scalar from the verifier
-+	 * safety POV. Multilevel pointers to structures are treated as
-+	 * scalars. The verifier lacks the context to infer the size of
-+	 * their target memory regions. Either way, no further pointer
-+	 * walking is allowed.
- 	 */
--	if (is_void_or_int_ptr(btf, t))
-+	if (!btf_type_is_struct_ptr(btf, t))
- 		return true;
- 
- 	/* this is a pointer to another type */
--- 
-2.34.1
+Reviewed-by: Simon Horman <horms@kernel.org>
 
