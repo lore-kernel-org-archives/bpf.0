@@ -1,75 +1,74 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E423822B1
-	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 21:58:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 767202D248D
+	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 22:02:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773439100; cv=none; b=dxLZs9in1778ZCBcJzko/GAV4vXWqFaGDbDbgoUePyv1i5WXjIhiFtGy7aYbT2Sl4DCWtUBy8V7/QqnDohqGn3Q8pKpbtfhAlo5koZcGT/EuxO10vhreowQZPxqm4Al049z3FsFkMoNVYlrlLEq/NUSHkgUUJ2uJGkho0LWDHgU=
+	t=1773439335; cv=none; b=LeqB/ZbzMU2C/oJtWN2TehcsQkjrjcknv9sM5TZrjxXCsdCEb3x1Lse6qR4BARXJg66tFFGS7IulUwy2k0Wz1tVJrdy9UgcmO0nUXw32rRh7uRm7HIarj+qHqE08Fas0LGB5e/JUudC0twYu/7Q3GB03M2hHWrNA+D/SnRhf//g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773439100; c=relaxed/simple;
-	bh=VHPvtBZkGmGQ9e6u2L+evz6ek8dGdfP/bWfoPbRC3zs=;
+	s=arc-20240116; t=1773439335; c=relaxed/simple;
+	bh=qXvj5r7hF4JCM7PHL6P1CbcIqTrZzQBonF7UVduL/nI=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=tyJr0JWiQhgj681vV7uP02qZM4sjGHqi/v71MGU/5Z0nfAyV02otIHOJ54J0tYo2VNhmU/PqD8UofhkHFX1ifVan23qQrNi0Bz63xdfmQsHNfG42NeNjrY9Is7Ml3uRJZsJNf64aQvy47wLI1b6G9PjOwnTUyaEVZN29uavevhA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qug/Hn30; arc=none smtp.client-ip=209.85.216.53
+	 Content-Type:MIME-Version; b=G3mHPpkQNUKPIObeT8A0BJRvZ4+0eMm4lrw1QhPPiIJ5/Fgg79PoBLd+ngm4zHT68/F+EVdQS6nPP3yZ8KpMQl9Jv+lNZRKuabtNfr+82os38MuVUKL9sjOwlj4shriHsZUDlllRU+O4KkYmNgsw2NaK4xLQHkXwPt64eCsikow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CQwvenSX; arc=none smtp.client-ip=209.85.210.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qug/Hn30"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-35a08ce49dcso2475875a91.2
-        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 14:58:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CQwvenSX"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-82985f42664so1768972b3a.0
+        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 15:02:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773439098; x=1774043898; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773439334; x=1774044134; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=VHPvtBZkGmGQ9e6u2L+evz6ek8dGdfP/bWfoPbRC3zs=;
-        b=Qug/Hn30wtza9tq3xr4i0xIRicyJ3g8P+N4mFtwUtfmvT1J5+u19kpR8x9Vi+P7i/u
-         XvZHGih5fcNZB++0G9KHU9xBQTtVQkI8XwWy2stlmRbiGZJBg/hyywyoBHyGS5NsG21k
-         Sox77AJm/KW9rRKsEaQaXpGSrEKat05PYREf4ntQlAUtKmnriRFdNZXK78lxdJJ8ss3i
-         m5Bb5r3SCqnDGq8LifPuYFmXd4e1gy9PfrHXgE9ajlYefUW1KxuNW9FVj1zsrqppZcCy
-         MYwa9ybn+K2pXEbboG4DElMYXlFJXWTxIOcg+uNEuyCmYMy11rBNuB50wWmKEzZhhe2c
-         yQ5g==
+        bh=qXvj5r7hF4JCM7PHL6P1CbcIqTrZzQBonF7UVduL/nI=;
+        b=CQwvenSXIHd4iS0sYbS1pvushNdYGByipYVpV3/G60rIM5Utu4KEcKTY2Xi+8vbE/k
+         z+2L2l4/bvSHocZ2RRc9O18BfurfEBm9q26aqOTw2KG6nZmqGdCcVXpk6RRePP9u6JaS
+         +lc4HFmarmUswuw/LdER/Dhf7P8jIhd/6RxoFQZgvNqf9Uy/JD+fuSEsFgOS5qCuUVPN
+         zhQYC2I8qoEABbQhUhOmYamIcCERzuierEp9K5PzSQqKtqH+DHza81G8nZ1RESiDZwib
+         AXAhjBOly4sTdAN9Eu0bL0C3icF9p7E0yf+x4i8owiaVYOdsr92NTd/MtYNi47NCjg48
+         HIUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773439098; x=1774043898;
+        d=1e100.net; s=20251104; t=1773439334; x=1774044134;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VHPvtBZkGmGQ9e6u2L+evz6ek8dGdfP/bWfoPbRC3zs=;
-        b=RQXy4Wa2bjZX4+gP8VCoo0C1VCNmRx6bKZGPT7sFFXv1lFVTgozXxfrZ2vGuBzy6aE
-         RqZm547E1LeMb9aCTptsWmmAPgdsMJidJOZR4mVCJ86/zuIw/HJ4M736OSNlAESCsRa5
-         8ZNVEjvdR6lVt9McQfa6APrK1XBEtoNcy0wMRXguL49BDG7mDvjTM2z93ZMqwbjO+l91
-         QBMVtdTanYNcVDRbcNfaBg1MTDmQhqUWz5YNOtJMuKdm7gPT6PhoZ1kZrSE2lf8Hup3S
-         2o7kcElPqISUhMyZ6KPPvJXRqmE7D25/4sPEx9iTZgcsLGb+yrucYi1OWHt4L8rxoQ+W
-         qMvA==
-X-Forwarded-Encrypted: i=1; AJvYcCWEVRTVfmj0UJGcHY2aXxQis4O3wZipE9UqqYPzBazRXlD0fWJigJCzWq5AWGBuIjUS8Go=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywub52riWSK5+EwXKkfFeOQAg822NUxmKjhzPv5N4CeFD61wiDB
-	6uZ5krp19JJKsnKwqRCho14iyfn09pa463oHwmYidxSicUVqnIYDarKoZ/fI2Q==
-X-Gm-Gg: ATEYQzxuW1OJ1BO4R0v2cG6lmrtXd4WHHb/moLhlJFNUSSDqiinF3ptI3pZqQOTu6KZ
-	xLA35eRvwMxfuijQd0orELIfyyYsHA+dSSuNXcZHEq6Dhbmq6IXAXSfV0pkj/75TaX2jlf3bE/M
-	UrexZxJtdcsDW7EB0BtQfsV5sCUnrfsXRtenedQwt/U1ff158lFhk1lUxjtuGN3Q/4oYpQouwqi
-	LwLUltaO7AkyUAUruwLaQlwCgoS7xmgWkXhBOZwVYx96mvY8cjuj654sKSPp1FfnP3l0d7NXp5e
-	1DkTkmmOUAQ83FpHUu1UrdmqI44V6uSrigVvYWcFVcwJW3jv2snPztL3mbl4bL6JV94Ab131U6V
-	dGAk8vGE32zy2YvJDp0r4uOF9QRguz7KFYorKjGBApHa0CU1ntDRg4FUN1xZ5tdT1xW7eolwWSG
-	vMsVIR+OexFSGKd21bN6C5DfY3CoH2KkukKTe6tmrfHGdCeFXSNlQ=
-X-Received: by 2002:a17:903:3905:b0:2ae:593c:48fe with SMTP id d9443c01a7336-2aeca9f8ddcmr51487065ad.13.1773439097817;
-        Fri, 13 Mar 2026 14:58:17 -0700 (PDT)
+        bh=qXvj5r7hF4JCM7PHL6P1CbcIqTrZzQBonF7UVduL/nI=;
+        b=TYGSY9Z8ua5yqyoyWv7Cl6ZnWjbMaCuQ1ZUMxakYdK0dOD8bssf5vZa2IKL7VykUdq
+         qFEn2BA5dbXW3GqN/Adwh9LAprCCPVKRKUrjA9Z5yfmb9dE7PF49NOq/05yXOump74Ax
+         iWOQa/MG9u/onGspImpCVyqAZBpZyCpqZAy1hiZsUGScrozKnUb5dYADH7dVC72eCi2P
+         loae+Ebx7Ie2v8Omc9IyjdfcExD3ubWNXxljFijdmQbtbIDMoPXn13N7cQuH3nVDNnGp
+         vTi/MiMEr+C+XNtPVY7PtdfG2ZbfXjaf70TSb1C8xuM81M+iQsJCr1OXR4vZSTxt0lH9
+         foWg==
+X-Forwarded-Encrypted: i=1; AJvYcCV4B4SUsNgy5SbyfpotI8CjBPn3Qap58WiH5wQaLzrWbkS3DglWC5WcOJc2tBFV41cjpKk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMxhFTKEn19Y5AnULCGVLxhiWiiLIaFg/t3l8Hc30KGsNgeKZq
+	V9w7BKLKX31bD81HcFm82PPV7pLNHUC5ba8MK6gYq5wsEno3EqeIoJ+3
+X-Gm-Gg: ATEYQzwtBbb+8gfTgYT0z8zpIL1iOzbf6uJqooz36jX+I+pOVdLpIWjccQc5Hn7v3LI
+	KbBhcI7bZwrURzfgUI+7UaCYSFHArb3/IP5ZjT5kCC6iBfKeIF8pUJKptk6dMeG4WVXkPo84oVK
+	WJcSccJxLR0LuCAturvsWPAKXqmiaNRrxetRsmzDHm4fm40ciavbWnTBmL5OJp4/3Wq0RbsjF5t
+	OBWn7xqBfL019WL+4z17j5jN3gvIOXl0dUdBdD2so4AOJNjwUZwpmL0XZHDb/+7uyD2hgsy1lfl
+	EfEG7f7MOsXprMYX+3NEepY/KhkRk4foZRQKKGSlyCYZecMKdFh8pv6MSGXmEbj/AZHNtY8NY/a
+	+1RAMZpkizBCuvVC5hDkt0HeK5R2DOoauG7Up8Dr7iKCVTw0wLSTp5+Y4+mllv1/yHfsWhxAf0s
+	4IK2J1HXHWDvARzGZh6IcN5VG/lz1NdKN6LNpSnwH9aN5H/dHuqpw=
+X-Received: by 2002:a05:6a00:4404:b0:81c:8d47:33ff with SMTP id d2e1a72fcca58-82a198d68f7mr3763476b3a.47.1773439333623;
+        Fri, 13 Mar 2026 15:02:13 -0700 (PDT)
 Received: from [192.168.0.56] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2aece809586sm29065585ad.63.2026.03.13.14.58.16
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82a072612e2sm8948335b3a.21.2026.03.13.15.02.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Mar 2026 14:58:17 -0700 (PDT)
-Message-ID: <c6d46d55d29d7b164e621040a3c80f1aae8180ea.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 3/3] selftests/bpf: Test case for refinement
- improvement using 64b bounds
+        Fri, 13 Mar 2026 15:02:13 -0700 (PDT)
+Message-ID: <ede050cd3a7ac94a839c2960a8a09b1dcd1f0777.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 0/3] Optimize bounds refinement by
+ reordering deductions
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Shung-Hsi Yu
- <shung-hsi.yu@suse.com>
-Date: Fri, 13 Mar 2026 14:58:14 -0700
-In-Reply-To: <622dc51c581cd4d652fff362188b2a5f73c1fe99.1773401138.git.paul.chaignon@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>,  Shung-Hsi Yu <shung-hsi.yu@suse.com>, Paul Chaignon
+ <paul.chaignon@gmail.com>, bpf@vger.kernel.org
+Date: Fri, 13 Mar 2026 15:02:10 -0700
+In-Reply-To: <cover.1773401138.git.paul.chaignon@gmail.com>
 References: <cover.1773401138.git.paul.chaignon@gmail.com>
-	 <622dc51c581cd4d652fff362188b2a5f73c1fe99.1773401138.git.paul.chaignon@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
@@ -80,59 +79,47 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Fri, 2026-03-13 at 12:43 +0100, Paul Chaignon wrote:
-> This new selftest demonstrates the improvement of bounds refinement from
-> the previous patch. It is inspired from a set of reg_bounds_sync inputs
-> generated using CBMC [1] by Shung-Hsi:
+On Fri, 2026-03-13 at 12:36 +0100, Paul Chaignon wrote:
+> This patchset optimizes the bounds refinement (reg_bounds_sync) by
+> reordering deductions in __reg_deduce_bounds. This reordering allows us
+> to improve precision slightly while losing one call to
+> __reg_deduce_bounds.
 >=20
-> =C2=A0 reg.smin_value=3D0x8000000000000002
-> =C2=A0 reg.smax_value=3D2
-> =C2=A0 reg.umin_value=3D2
-> =C2=A0 reg.umax_value=3D19
-> =C2=A0 reg.s32_min_value=3D2
-> =C2=A0 reg.s32_max_value=3D3
-> =C2=A0 reg.u32_min_value=3D2
-> =C2=A0 reg.u32_max_value=3D3
+> The first patch from Eduard refactors the __reg_deduce_bounds
+> subfunctions, the second patch implements the reordering, and the last
+> one adds a selftest.
 >=20
-> reg_bounds_sync returns R=3D[2; 3] without the previous patch, and R=3D2
-> with it. __reg64_deduce_bounds is able to derive that u64=3D2, but before
-> the previous patch, those bounds are overwritten in
-> __reg_deduce_mixed_bounds using the 32bits bounds.
+> Changes in v3:
+> =C2=A0 - Added first commit from Eduard that significantly helps with
+> =C2=A0=C2=A0=C2=A0 readability of second commit.
+> =C2=A0 - Reshuffled a bit more the functions in the second commit to impr=
+ove
+> =C2=A0=C2=A0=C2=A0 precision (Eduard).
+> =C2=A0 - Rebased.
+> Changes in v2:
+> =C2=A0 - Updated description to mention potential precision improvement a=
+nd
+> =C2=A0=C2=A0=C2=A0 to clarify the sequence of refinements (Shung-Hsi).
+> =C2=A0 - Added the second patch.
+> =C2=A0 - Rebased.
 >=20
-> To arrive to these reg_bounds_sync inputs, we bound the 32bits value
-> first to [2; 3]. We can then upper-bound s64 without impacting u64. At
-> that point, the refinement to u64=3D2 doesn't happen because the ranges
-> still overlap in two points:
+> Eduard Zingerman (1):
+> =C2=A0 bpf: better naming for __reg_deduce_bounds() parts
 >=20
-> =C2=A0 0=C2=A0 umin=3D2=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 umax=3D0xff..ff00..03=C2=A0=
-=C2=A0 U64_MAX
-> =C2=A0 |=C2=A0 [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 |
-> =C2=A0 |----------------------------|------------------------------|
-> =C2=A0 |xx]=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 [xxxxxxxxxxxxxxxxxxxxxxxxxxxx|
-> =C2=A0 0=C2=A0 smax=3D2=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 smin=3D0x800..02=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -1
->=20
-> With an upper-bound check at value 19, we can reach the above inputs for
-> reg_bounds_sync. At that point, the refinement to u64=3D2 happens and
-> because it isn't overwritten by __reg_deduce_mixed_bounds anymore,
-> reg_bounds_sync returns with reg=3D2.
->=20
-> The test validates this result by including an illegal instruction in
-> the (dead) branch reg !=3D 2.
->=20
-> Link: https://github.com/shunghsiyu/reg_bounds_sync-review/=C2=A0[1]
-> Co-developed-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-> Signed-off-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-> Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
-> ---
+> Paul Chaignon (2):
+> =C2=A0 bpf: Avoid one round of bounds deduction
+> =C2=A0 selftests/bpf: Test case for refinement improvement using 64b boun=
+ds
 
-Can confirm, this test case fails on current master.
+This note is mostly for Alexei,
 
-Tested-by: Eduard Zingerman <eddyz87@gmail.com>
+Me an Alexei discussed converting scalar tracking to cnums and whether
+we should proceed with this line of work in that light.
+After some additional tinkering, I think we should stick to what we
+have and land this patch-set. I'll share details on cnums later in a
+separate email, but tldr is that cnum representation is strictly less
+precise compared to combination of signed and unsigned ranges
+(probably this was obvious in the hindsight).
+
+Thanks,
+Eduard
