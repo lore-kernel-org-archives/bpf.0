@@ -1,127 +1,173 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15C361DF248
-	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 01:16:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773364583; cv=pass; b=jRa+i1J1l6MgLxis661sE5Y4nJat0I2/U9cuoxivz/FOQReLpLvuGlOppH2cj26zmGvun5aROT4hceib2wjqnRV/cVw2uWOc0KJefjxSIBSe7G4F8Z9sHeCxELc0RuFdEhInB13axUEcoH0C3y4xIBrNCK0pqVpwdWxWPYVraQI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773364583; c=relaxed/simple;
-	bh=ODWaR3nFXxhTq+knkAPMZkyyR9eyjra/Z+l652kZT7A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LekHuJj7pcc/78dj6QNPpKuupiAjM579nuMwF/VGynHfgPugDET3i2ur7P9mMoXrS4wozv4UGzTBEO3JIWHzsjL8piRaFPcf8ns1iR1i7Uu/mPQ23ZKtXH5uLlyJBOusaE15G4FpxeRWTPs1BvxJJbGRGanrKe7iUuhuz/mShWM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WbDVFGue; arc=pass smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B075D155389;
+	Fri, 13 Mar 2026 01:46:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773366402; cv=none; b=EgAWzMixXZnS1xZqYMX7/iEnTceEuwfnJkFy4tdLWSRBN+AgrC4+zfmyCc5D2E3wjrtZMB/jCsE5H1LkrTfjp0MxezhkC7/fRtQIlpr+EZahVHHOBSXHEMFUIJHfzMFb05/8X67rfOmCZj46/M2lSc1AqRs1NFIZVWO3hdUDVfk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773366402; c=relaxed/simple;
+	bh=JxLiJsJCjcSjqqg1Iejkt14acuRr9MgMMcPgKn1yzeE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=A60gGvc/dveS8IOloi7VluoDpWbPCgyAVnBWpesm+6LHQcdo/fuLqB2CW+ux4RBq8yM+Ff8mmYkjXMJS65ObPwWKP/Bm/abCLEK048XkphjNXaOn5e5Vwk4eFzU27hk5Cp4jHMblCECatZfjRXifetzoBVyuPRt1tFAo+x86ahk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HMU70Twu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WbDVFGue"
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b93698bb57aso325171466b.0
-        for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 18:16:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773364580; cv=none;
-        d=google.com; s=arc-20240605;
-        b=QQXPZXhUC8IcgwMPXWKEUO/IvcTeoIg7Qrq+rFOpzpLpwTqPwh/K1jQqNHJ2RyB2z3
-         SVCkVgjN2SI8+rdJ2H+HvaoVsEvd8xPC7f1Gm8+10z+Ful+IC+FVlh8YEWXkhAEzbqLf
-         VPgQf3EPBoDDQX8EU+TawgUnJsOyEVsIAVdgnM6w2giCNiyrR1MnP7m0N2mO8XIraR1J
-         Xn7CnZLhzqVPa195qWwk+bzNKb0A21YhCR4/JGJKy+cQPxlioSPhv3QUx/ARNENzLHW2
-         gyTcZBy32ROdehkgbHSGlw1Dn3I9D+Zqxl0Zy3Oz6FmKJ8HeAKdsdsxlO9+pJ72N858F
-         WYoA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=RAG7cR9Bz0TQVww/2OwxJdM2p8V7n9WqbxWdKMi/J1Y=;
-        fh=UoLNJr5bJQ/yjkafTC44ES/40zZbtinuL9cuy+Q6S44=;
-        b=fW5hjyARFKxeSu6rST+I1hbHoc/t7GobUOLMp3k6kGeS0pbKZ25kqeAEvXHZ75J/7y
-         ejJaqN4tekny1YAbAV8eIB0fuPDJkrQ9v7SzXNWZFtDcuu3qPwhwxveindDKsDEPdfvj
-         E4p2I9NB7WsOAfWS7RE6Hqt7PuclpUT7B6YSWOvp7KX9n4Z9K4P7lVywBowq7gDcQDh/
-         WNZT+Qh7VnMiTQC/09boD7ULGWV+I/+SPZHnq1JvL2FarXJqKPxk9H23yOfKPC9rn7L8
-         dCOfyboTLTfR+yYYZefCwbpVYIdMKKzur6bR5Qxg/Ule5joWUJmq8edclzIQAQQPPCcr
-         YYMg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773364580; x=1773969380; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RAG7cR9Bz0TQVww/2OwxJdM2p8V7n9WqbxWdKMi/J1Y=;
-        b=WbDVFGueBvQlu0+c7FzL5lDjB+51y43udKZrgsWPihasgVBhkZ9+S8yamAaJDSDPeg
-         1ADSR0KZYcarYQ97S6OqNrHMpckPCQPf2OCtESKEFhrIhaEagWfFQ3mbgYiQiooqpgLH
-         FPvfO+aOpbtr9jnYekOQiELt3WQJqD5E9cqrEQCfSMBUzFBjyr2C2zYPS1NTHyOWE0B9
-         uQ4NnGnAnmpYnbChKZJgLMIYrYZgvOW9jRu8VEFGF8yYynudVwIli/qLNsBkJDJ3q2qd
-         msNzG7Ol+1j2gy4cQIYeO28Fmz4Sbp0zmtqLQ0TMMpw9lctanrSpZ94v/sVg6byUxZhM
-         ZEZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773364580; x=1773969380;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RAG7cR9Bz0TQVww/2OwxJdM2p8V7n9WqbxWdKMi/J1Y=;
-        b=mSmuU9XP9R0msZMUb0Ei80wLkyC/MN6FhkYgkXmKXNVe7gRkD9ApUgixheZv7zVKUc
-         RPIpDTV0SSTJ9fckwqoS7oGHaANLYm0w7YLV897K5nyKY4nYz0N2CUf/g6AzYg5tbr+O
-         sK81wPw1V4UuD5WCL6V9JZ9+0h9q8hEkkIlb6odfIaL2kgu3i6dwywr2+geFjxKbqPCw
-         nHGAJh51yopS4ye0lEqkyXBK47LnZ4PdrKa0tNSg9OLtQcYse9spr43csw34F4Ytuco4
-         lN1IbTbFfv6OhOZdhQbY/AyQ6Vz1gP3zhjsqiulOQF3GH5zQTAn+cWUqLaQpqbr1hdhg
-         7eFg==
-X-Forwarded-Encrypted: i=1; AJvYcCWs5uSvn/4hEyuqw4DGh0N8ROLxH9ktw5616KfZKl7YbIWPsGZEt79uaZBspujiGXYpN4s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx18k0aTLLjRqbwDQ7LTP8C2e0kGlT/wpNNyhAewgM9Ge/+ULaI
-	HxxzTdBFXbPPOf9R199+JMS2paejR+1vLJx1uZWoM1qcCJzAGv/3tiaFbCnFL7TW9vde51hTa0+
-	QjVduHM5RDlN5s43xonWPYAlb+NsdKRw=
-X-Gm-Gg: ATEYQzxNpJ7gHysq7QbshBbrAqdAWTx3g+kNuyv9mW4adUc+8XMxLTWczSRVca0WhOy
-	5Bl9pRwSd/XHWKwxCqVGSRa39fZFwf9xctcB8vJ1x2SmIqqS9fTeiowXmAxBYDNH/uVoDuLYz7m
-	4dL6E6Q9RhNaWKd0mFZjONM9ZGsWDHBKfh9iYqckPnwrF0CxPNnqfv0IfVKybyiYihTnQTu4yM7
-	IZM7DYE31wFQXcxXNlnSpJKPlOaaJie73+xwm9DiTeQHBGRC62Nr0m4ZtvdBXmqU9+z/WdgJ+9z
-	Sw/jsyz9GkxnpVyDhts=
-X-Received: by 2002:a17:907:c1e:b0:b88:4f25:81da with SMTP id
- a640c23a62f3a-b973f6eac02mr376987366b.0.1773364579979; Thu, 12 Mar 2026
- 18:16:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HMU70Twu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54419C4CEF7;
+	Fri, 13 Mar 2026 01:46:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773366402;
+	bh=JxLiJsJCjcSjqqg1Iejkt14acuRr9MgMMcPgKn1yzeE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=HMU70TwufC5hBoEgocDZYlT0LM4cj5ifK7h2gplVyRXfFUVzRI9PlPqN/H2dsXh7z
+	 4OrsO98xox1SanwjyggQrgGVB1UT+OEzR8PVs2qArutxeviVOHrEIRmED85oKnj+Tc
+	 jsonszih7c2NUVgaliMYG+jkLSGTGC8z7azsf5WjuYKdm6okLfI/wxY35MPDTGChyF
+	 Arsw8HPFXXl9z/ndCBqKk0zbRCwxU7AYQKfrjYaKhCuE5BNuExpANOT3RJOql4MnF8
+	 b6OUw+6CQl1516Lqo88yJyZ1HhD3BszZKk6sIc/2E+Z+e2oeuEDYko2Cw2cP1TukqV
+	 dlEKye7upvmTQ==
+From: Jakub Kicinski <kuba@kernel.org>
+To: anthony.l.nguyen@intel.com
+Cc: Jakub Kicinski <kuba@kernel.org>,
+	horms@kernel.org,
+	aleksander.lobakin@intel.com,
+	edumazet@google.com,
+	sdf@fomichev.me,
+	aleksandr.loktionov@intel.com,
+	ast@kernel.org,
+	john.fastabend@gmail.com,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	davem@davemloft.net,
+	andrew+netdev@lunn.ch,
+	hawk@kernel.org,
+	nxne.cnse.osdt.itp.upstreaming@intel.com,
+	magnus.karlsson@intel.com,
+	pabeni@redhat.com,
+	jacob.e.keller@intel.com,
+	daniel@iogearbox.net,
+	maciej.fijalkowski@intel.com
+Subject: Re: [net-next,3/5] ice: migrate to netdev ops lock
+Date: Thu, 12 Mar 2026 18:46:28 -0700
+Message-ID: <20260313014628.1509116-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260310220624.537917-4-anthony.l.nguyen@intel.com>
+References: <20260310220624.537917-4-anthony.l.nguyen@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260312183817.104878-1-teknoraver@meta.com> <20260312183817.104878-2-teknoraver@meta.com>
- <20260312173041.36bbfe4e@kernel.org>
-In-Reply-To: <20260312173041.36bbfe4e@kernel.org>
-From: Matteo Croce <technoboy85@gmail.com>
-Date: Fri, 13 Mar 2026 02:15:43 +0100
-X-Gm-Features: AaiRm52yizaDdjEL-sEiEhHWB1GeEcg30yq4KwZRdHEWmjoGb6VT2S7HOf1R7hY
-Message-ID: <CAFnufp2BbYu4PcPoYEL-Z27S1ApVV-VS2Dh2DfwBVxzC_tUwKA@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 1/2] e1000e: add basic XDP support
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Tony Nguyen <anthony.l.nguyen@intel.com>, 
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Il giorno ven 13 mar 2026 alle ore 01:30 Jakub Kicinski
-<kuba@kernel.org> ha scritto:
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
+
+For local reproduction steps see https://netdev-ai.bots.linux.dev/ai-local.html
+---
+ice: migrate to netdev ops lock
+
+This commit migrates the ice driver to use netdev ops locking. Queue
+management ops unconditionally enable netdev locking, so the driver now
+uses _locked counterparts of NAPI configuration functions to avoid
+deadlocks.
+
+> diff --git a/drivers/net/ethernet/intel/ice/ice_dcb_lib.c b/drivers/net/ethernet/intel/ice/ice_dcb_lib.c
+> index bd77f1c001ee..08157dc04ed6 100644
+> --- a/drivers/net/ethernet/intel/ice/ice_dcb_lib.c
+> +++ b/drivers/net/ethernet/intel/ice/ice_dcb_lib.c
+> @@ -273,14 +273,13 @@ void ice_vsi_cfg_dcb_rings(struct ice_vsi *vsi)
+>  /**
+>   * ice_dcb_ena_dis_vsi - disable certain VSIs for DCB config/reconfig
+>   * @pf: pointer to the PF instance
+>   * @ena: true to enable VSIs, false to disable
+> - * @locked: true if caller holds RTNL lock, false otherwise
+>   *
+>   * Before a new DCB configuration can be applied, VSIs of type PF, SWITCHDEV
+>   * and CHNL need to be brought down. Following completion of DCB configuration
+>   * the VSIs that were downed need to be brought up again. This helper function
+>   * does both.
+>   */
+> -static void ice_dcb_ena_dis_vsi(struct ice_pf *pf, bool ena, bool locked)
+> +static void ice_dcb_ena_dis_vsi(struct ice_pf *pf, bool ena)
+>  {
+>  	int i;
 >
-> On Thu, 12 Mar 2026 19:38:16 +0100 Matteo Croce wrote:
-> > Assisted-by: claude-opus-4-6
+> @@ -294,9 +293,9 @@ static void ice_dcb_ena_dis_vsi(struct ice_pf *pf, bool ena, bool locked)
+>  		case ICE_VSI_CHNL:
+>  		case ICE_VSI_PF:
+>  			if (ena)
+> -				ice_ena_vsi(vsi, locked);
+> +				ice_ena_vsi(vsi, true);
+>  			else
+> -				ice_dis_vsi(vsi, locked);
+> +				ice_dis_vsi_locked(vsi);
+
+Does ice_dcb_ena_dis_vsi() need to acquire the netdev lock before calling
+ice_dis_vsi_locked() and ice_ena_vsi()?
+
+Looking at the disable path, ice_dis_vsi_locked() calls ice_vsi_close()
+which goes through ice_down() -> ice_napi_disable_all() ->
+napi_disable_locked(), and that function has netdev_assert_locked(n->dev) in
+net/core/dev.c. Similarly, ice_vsi_close() calls
+ice_vsi_clear_napi_queues_locked() -> netif_napi_set_irq_locked() which
+checks netdev_assert_locked_or_invisible().
+
+The enable path calls ice_ena_vsi() -> ice_open_internal() ->
+ice_vsi_open(), and that now calls ice_vsi_set_napi_queues_locked() ->
+netif_napi_set_irq_locked() (requires netdev lock) and ice_up_complete() ->
+ice_napi_enable_all() -> napi_enable_locked().
+
+The old code called ice_dis_vsi(vsi, locked) and ice_ena_vsi(vsi, locked)
+where the old ice_dis_vsi() only dealt with rtnl_lock. The new code switches
+to _locked variants that require the netdev lock but does not acquire it.
+
+Callers ice_pf_dcb_cfg() and ice_dcb_process_lldp_set_mib_change() hold
+rtnl_lock but not the netdev lock.
+
+[ ... ]
+
+> diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
+> index e7308e381e2f..a8e2db6dc05a 100644
+> --- a/drivers/net/ethernet/intel/ice/ice_main.c
+> +++ b/drivers/net/ethernet/intel/ice/ice_main.c
+
+[ ... ]
+
+> @@ -7563,7 +7570,7 @@ int ice_vsi_open(struct ice_vsi *vsi)
+>  		if (err)
+>  			goto err_set_qs;
 >
-> >  .../net/ethernet/intel/e1000e/netdev.c.orig   | 8529 +++++++++++++++++
-> >  .../net/ethernet/intel/e1000e/netdev.c.rej    |   46 +
+> -		ice_vsi_set_napi_queues(vsi);
+> +		ice_vsi_set_napi_queues_locked(vsi);
+>  	}
 >
-> Well, I guess this gives me an opportunity to test some new patch
-> ranking features..
-> --
-> pv-bot: slop
+>  	err = ice_up_complete(vsi);
 
-Oops, that's a leftover from a cherry-pick.
-I test the patches also on a machine with the e1000e card running an
-old kernel so I move patches back and forth.
-Surely I ran `git add -A` thinking that .orig and .rej were in
-.gitignore but apparently it isn't.
+Does ice_ena_vsi() need to take the netdev lock before calling
+ice_open_internal()?
 
-I will submit next week, sorry.
+ice_vsi_open() now calls ice_vsi_set_napi_queues_locked() which requires the
+netdev lock via netif_napi_set_irq_locked() -> netdev_assert_locked_or_
+invisible(). It also calls ice_up_complete() -> ice_napi_enable_all() ->
+napi_enable_locked().
 
+However, ice_ena_vsi() in ice_lib.c calls ice_open_internal() ->
+ice_vsi_open() while holding only rtnl_lock, not the netdev lock. This path
+is reached during PF reset rebuild:
 
---
-Matteo Croce
+ice_rebuild()
+    ice_vsi_rebuild_by_type()
+        ice_ena_vsi(vsi, false)
+            ice_open_internal()
+                ice_vsi_open()
 
-perl -e 'for($t=0;;$t++){print chr($t*($t>>8|$t>>13)&255)}' |aplay
+The netdev lock is NOT held at this point. ice_vsi_rebuild() took and
+released it earlier in ice_vsi_rebuild_by_type().
+
+Additionally, if ice_up_complete() fails, the error path goes through
+ice_down() -> ice_napi_disable_all() -> napi_disable_locked(), which has an
+explicit netdev_assert_locked(n->dev) check.
+-- 
+pw-bot: cr
