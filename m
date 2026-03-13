@@ -1,197 +1,157 @@
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F5D93431F5
-	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 06:17:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9D2D5474F;
+	Fri, 13 Mar 2026 06:55:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773382657; cv=none; b=B/eQyr4seC05qSmNxuVEPI/n+rEtaTdIQ1/2VHmLRieuaSbg1J+6H6Hy9GhK1T2/SFWRHdFCmyrrJjt9ZGcZSwxXPYsTR/tv4j2dPSdEvrX1W62cSW5cnhPxhWi/JWpwB1rU/vBaho3lZDJwD/LZ+5UxYVh2L0qM4935aCwQK4U=
+	t=1773384939; cv=none; b=RNUC5YWRcNPn1a0t2HpYv/a8PlXk4+yZLw0hFFUEHIOWSp1K/4QmAfz/MpLPoQ7qSzl5jUT3IucKlC183LOxKwU/nm9Fvw8uBhtEF1QNggWizfNiC/3KiwDxtCjqNB37jKkxYagVUYZ3RINhAQxttr8jb8cx5jask4oWuOtyb2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773382657; c=relaxed/simple;
-	bh=LFYTLDya4nUBuNoGJGqoPOOHGM2W4WbbOzsRrDENqYs=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=aiwD5INuDaeZBm+/Vm3HK4BYeETlUWlTtYjRnwHApf12ZXjIwdbbEwVGRdQv0kw1EP3vUx/sD0ej1hMm7sUn+gS/9vINcmeAtv4NPXftdlh77obHUhwWSb8Gl3rXcEs8ph+Vug/1ASCtPSCw4sjllB4XDqmzouAKIvDN/pzjUEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BymCD4Zr; arc=none smtp.client-ip=95.215.58.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1773384939; c=relaxed/simple;
+	bh=j3+p5+i5VDxxgE0WM6Ud50FOzeWOCZydwKAn+qv/VSM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UjhFD9/bv9Of9Lhng0CGUynbhbibw4XXyT7gZDYQH86frW7RlGgQKH8Rq3ELjnOwbVh9D4YRZQJTwMPOdr1uuzyRb22O/UE3+2XB5TvRdNglmC5U5ORdTKFUN3NnsRinrDIQwSmcQlhHiUFcKo4MMqXc486ftAiDBwhgVsfa0mM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Sjgk/651; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BymCD4Zr"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Sjgk/651"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=hZnEtLPqcaQ8qA3z/Vzbhjzdoofj5lcVtonecwvZDRM=; b=Sjgk/651R0+MoyArzAn9BLaPmZ
+	d/d4NPW7QAzlEBiMU7MT/ihC4nddwki4u8xJCDuOPvsNuoa7yVARPcCAAiTJn6f9Ahwkzo/IMAWqj
+	kimTEVuKKoQveZtI6BCzTQbWLkyDFIO8tzjMdKk+cccwsWH6Fvkb1eyBWEzq5JtNjQK6vNucS1jYi
+	1VUvPJmU7/7qnAQelCUiC5DIZ8+iJBDQeg4RG013hkKAlHKpgvgcPOBTl1UgtprU0WVy6AGF8n4LY
+	yOoaMniWTcbZLjg9ebEn94FWabd6tg4PQfoCM9XkcAgcCFet4fRrFluV9OIyKMzuAqSMG+Kiqb7BZ
+	OaxRY0+A==;
+Received: from localhost ([127.0.0.1])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1w0wQm-0009qL-1w;
+	Fri, 13 Mar 2026 07:55:32 +0100
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: kuba@kernel.org
+Cc: bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	jhs@mojatatu.com,
+	Keenan Dong <keenanat2000@gmail.com>,
+	Martin KaFai Lau <martin.lau@kernel.org>
+Subject: [PATCH net] clsact: Fix use-after-free in init/destroy rollback asymmetry
+Date: Fri, 13 Mar 2026 07:55:31 +0100
+Message-ID: <20260313065531.98639-1-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773382643;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=jlZNI/5acX8z6wx0x3sjimiPxTKa3g6pXUT2Z8+5yzk=;
-	b=BymCD4ZrgzFHF1x87zKIoazqFmSjkOaNt3zN1X5rdXKRlDMyukkg0amqB7bd+yuEz9vea7
-	DzSPS4PMBxu0jIJifSFscC8oOtcNwv0ncRczmqjPYxbE5UdMJq/xluC0f5QAFgPd87aecX
-	qNVBryDztRpsfB0Nyxr76bAhsphQFQA=
-Date: Fri, 13 Mar 2026 06:17:18 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "teawater" <hui.zhu@linux.dev>
-Message-ID: <90829ef692dabd1635daf6475bd09b192788376d@linux.dev>
-TLS-Required: No
-Subject: Re: [LSF/MM/BPF TOPIC] Reimagining Memory Cgroup (memcg_ext)
-To: "Muchun Song" <muchun.song@linux.dev>, "Shakeel Butt"
- <shakeel.butt@linux.dev>
-Cc: lsf-pc@lists.linux-foundation.org, "Andrew Morton"
- <akpm@linux-foundation.org>, "Tejun Heo" <tj@kernel.org>, "Michal Hocko"
- <mhocko@suse.com>, "Johannes Weiner" <hannes@cmpxchg.org>, "Alexei
- Starovoitov" <ast@kernel.org>, "=?utf-8?B?TWljaGFsIEtvdXRuw70=?="
- <mkoutny@suse.com>, "Roman Gushchin" <roman.gushchin@linux.dev>, "JP
- Kobryn" <inwardvessel@gmail.com>, "Geliang Tang" <geliang@kernel.org>,
- "Sweet Tea Dorminy" <sweettea-kernel@dorminy.me>, "Emil Tsalapatis"
- <emil@etsalapatis.com>, "David Rientjes" <rientjes@google.com>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Meta kernel team"
- <kernel-team@meta.com>, linux-mm@kvack.org, cgroups@vger.kernel.org,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <8F3593EB-9D81-4459-8675-E922426DCB1E@linux.dev>
-References: <20260307182424.2889780-1-shakeel.butt@linux.dev>
- <3ECC9B38-6C1A-4F60-9C18-98B7A1A56355@linux.dev>
- <abHPsCypwo7ZhqIt@linux.dev>
- <8F3593EB-9D81-4459-8675-E922426DCB1E@linux.dev>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/27938/Thu Mar 12 07:24:01 2026)
 
->=20
->=20>=20
->=20> On Mar 12, 2026, at 04:39, Shakeel Butt <shakeel.butt@linux.dev> wr=
-ote:
-> >=20=20
->=20>  On Wed, Mar 11, 2026 at 03:19:31PM +0800, Muchun Song wrote:
-> >=20
->=20> >=20
->=20> >=20
->=20> >=20
->=20>  On Mar 8, 2026, at 02:24, Shakeel Butt <shakeel.butt@linux.dev> wr=
-ote:
-> >=20=20
->=20>=20=20
->=20>  [...]
-> >=20=20
->=20>=20=20
->=20>  Per-Memcg Background Reclaim
-> >=20=20
->=20>  In the new memcg world, with the goal of (mostly) eliminating dire=
-ct synchronous
-> >  reclaim for limit enforcement, provide per-memcg background reclaime=
-rs which can
-> >  scale across CPUs with the allocation rate.
-> >=20
->=20> >=20
->=20> > Hi Shakeel,
-> > >=20=20
->=20> >  I'm quite interested in this. Internally, we privately maintain =
-a set
-> > >  of code to implement asynchronous reclamation, but we're also tryi=
-ng to
-> > >  discard these private codes as much as possible. Therefore, we wan=
-t to
-> > >  implement a similar asynchronous reclamation mechanism in user spa=
-ce
-> > >  through the memory.reclaim mechanism. However, currently there's a=
- lack
-> > >  of suitable policy notification mechanisms to trigger user threads=
- to
-> > >  proactively reclaim in advance.
-> > >=20
->=20>=20=20
->=20>  Cool, can you please share what "suitable policy notification mech=
-anisms" you
-> >  need for your use-case? This will give me more data on the compariso=
-n between
-> >  memory.reclaim and the proposed approach.
-> >=20
->=20If we expect the proactive reclamation to be triggered when the curre=
-nt
-> memcg's memory usage reaches a certain point, we have to continuously r=
-ead
-> memory.current to determine whether it has reached our set watermark va=
-lue
-> to trigger asynchronous reclamation. Perhaps we need an event that can =
-notify
-> user-space threads when the current memory usage reaches a specific
-> watermark value. Currently, the events supported by memory.events may l=
-ack
-> the capability for custom watermarks.
+Fix a use-after-free in the clsact qdisc upon init/destroy rollback asymmetry.
+The latter is achieved by first fully initializing a clsact instance, and
+then in a second step having a replacement failure for the new clsact qdisc
+instance. clsact_init() initializes ingress first and then takes care of the
+egress part. This can fail midway, for example, via tcf_block_get_ext(). Upon
+failure, the kernel will trigger the clsact_destroy() callback.
 
-I agree. Even with BPF controlling proactive reclamation, I believe
-there needs to be an event reflecting capacity changes to signal
-when to stop.=20
-Otherwise,=20the reclamation volume per batch would have to be set very
-low, leading to frequent BPF triggers and poor efficiency.
+Commit 1cb6f0bae504 ("bpf: Fix too early release of tcx_entry") details the
+way how the transition is happening. If tcf_block_get_ext on the q->ingress_block
+ends up failing, we took the tcx_miniq_inc reference count on the ingress
+side, but not yet on the egress side. clsact_destroy() tests whether the
+{ingress,egress}_entry was non-NULL. However, even in midway failure on the
+replacement, both are in fact non-NULL with a valid egress_entry from the
+previous clsact instance.
 
-Best,
-Hui
+What we really need to test for is whether the qdisc instance-specific ingress
+or egress side previously got initialized. This adds a small helper for checking
+the miniq initialization called mini_qdisc_pair_inited, and utilizes that upon
+clsact_destroy() in order to fix the use-after-free scenario. Convert the
+ingress_destroy() side as well so both are consistent to each other.
 
+Fixes: 1cb6f0bae504 ("bpf: Fix too early release of tcx_entry")
+Reported-by: Keenan Dong <keenanat2000@gmail.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Martin KaFai Lau <martin.lau@kernel.org>
+---
+ include/net/sch_generic.h |  5 +++++
+ net/sched/sch_ingress.c   | 14 ++++++++------
+ 2 files changed, 13 insertions(+), 6 deletions(-)
 
->=20
->=20>=20
->=20> >=20
->=20> >=20
->=20> >=20
->=20>=20=20
->=20>  Lock-Aware Throttling
-> >=20=20
->=20>  The ability to avoid throttling an allocating task that is holding=
- locks, to
-> >  prevent priority inversion. In Meta's fleet, we have observed lock h=
-olders stuck
-> >  in memcg reclaim, blocking all waiters regardless of their priority =
-or
-> >  criticality.
-> >=20
->=20> >=20
->=20> > This is a real problem we encountered, especially with the jbd ha=
-ndler
-> > >  resources of the ext4 file system. Our current attempt is to defer
-> > >  memory reclamation until returning to user space, in order to solv=
-e
-> > >  various priority inversion issues caused by the jbd handler. There=
-fore,
-> > >  I would be interested to discuss this topic.
-> > >=20
->=20>=20=20
->=20>  Awesome, do you use memory.max and memory.high both and defer the =
-reclaim for
-> >  both? Are you deferring all the reclaims or just the ones where the =
-charging
-> >  process has the lock? (I need to look what jbd handler is).
-> >=20
->=20We do not use memory.high, although it supports deferring memory recl=
-amation
-> to user-space, it also attempts to throttle memory allocation speed, wh=
-ich
-> introduces significant latency. In our application's case, we would rat=
-her
-> accept an OOM under such circumstances. We previously attempted to addr=
-ess
-> the priority inversion issue caused by the jbd handler separately (whic=
-h we
-> frequently encounter since we use the ext4 file system), and you can re=
-fer
-> to this [1]. Of course, this solution lacks generality, as it requires
-> calling new interfaces for various lock resources. Therefore, we intern=
-ally
-> have a more aggressive idea: defer all reclamation triggered by kernel-=
-space
-> memory allocation until just before returning to user-space. This shoul=
-d
-> resolve the vast majority of priority inversion problems. The only pote=
-ntial
-> issue introduced is that kernel-space memory usage may briefly exceed m=
-emory.max.
->=20
->=20[1] https://lore.kernel.org/linux-mm/cover.1750234270.git.hezhongkun.=
-hzk@bytedance.com/#r
->=20
->=20Muchun,
-> Thanks.
->
+diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
+index d5d55cb21686..beeacf2a1229 100644
+--- a/include/net/sch_generic.h
++++ b/include/net/sch_generic.h
+@@ -1429,6 +1429,11 @@ void mini_qdisc_pair_init(struct mini_Qdisc_pair *miniqp, struct Qdisc *qdisc,
+ void mini_qdisc_pair_block_init(struct mini_Qdisc_pair *miniqp,
+ 				struct tcf_block *block);
+ 
++static inline bool mini_qdisc_pair_inited(struct mini_Qdisc_pair *miniqp)
++{
++	return !!miniqp->p_miniq;
++}
++
+ void mq_change_real_num_tx(struct Qdisc *sch, unsigned int new_real_tx);
+ 
+ int sch_frag_xmit_hook(struct sk_buff *skb, int (*xmit)(struct sk_buff *skb));
+diff --git a/net/sched/sch_ingress.c b/net/sched/sch_ingress.c
+index cc6051d4f2ef..c3e18bae8fbf 100644
+--- a/net/sched/sch_ingress.c
++++ b/net/sched/sch_ingress.c
+@@ -113,14 +113,15 @@ static void ingress_destroy(struct Qdisc *sch)
+ {
+ 	struct ingress_sched_data *q = qdisc_priv(sch);
+ 	struct net_device *dev = qdisc_dev(sch);
+-	struct bpf_mprog_entry *entry = rtnl_dereference(dev->tcx_ingress);
++	struct bpf_mprog_entry *entry;
+ 
+ 	if (sch->parent != TC_H_INGRESS)
+ 		return;
+ 
+ 	tcf_block_put_ext(q->block, sch, &q->block_info);
+ 
+-	if (entry) {
++	if (mini_qdisc_pair_inited(&q->miniqp)) {
++		entry = rtnl_dereference(dev->tcx_ingress);
+ 		tcx_miniq_dec(entry);
+ 		if (!tcx_entry_is_active(entry)) {
+ 			tcx_entry_update(dev, NULL, true);
+@@ -290,10 +291,9 @@ static int clsact_init(struct Qdisc *sch, struct nlattr *opt,
+ 
+ static void clsact_destroy(struct Qdisc *sch)
+ {
++	struct bpf_mprog_entry *ingress_entry, *egress_entry;
+ 	struct clsact_sched_data *q = qdisc_priv(sch);
+ 	struct net_device *dev = qdisc_dev(sch);
+-	struct bpf_mprog_entry *ingress_entry = rtnl_dereference(dev->tcx_ingress);
+-	struct bpf_mprog_entry *egress_entry = rtnl_dereference(dev->tcx_egress);
+ 
+ 	if (sch->parent != TC_H_CLSACT)
+ 		return;
+@@ -301,7 +301,8 @@ static void clsact_destroy(struct Qdisc *sch)
+ 	tcf_block_put_ext(q->ingress_block, sch, &q->ingress_block_info);
+ 	tcf_block_put_ext(q->egress_block, sch, &q->egress_block_info);
+ 
+-	if (ingress_entry) {
++	if (mini_qdisc_pair_inited(&q->miniqp_ingress)) {
++		ingress_entry = rtnl_dereference(dev->tcx_ingress);
+ 		tcx_miniq_dec(ingress_entry);
+ 		if (!tcx_entry_is_active(ingress_entry)) {
+ 			tcx_entry_update(dev, NULL, true);
+@@ -309,7 +310,8 @@ static void clsact_destroy(struct Qdisc *sch)
+ 		}
+ 	}
+ 
+-	if (egress_entry) {
++	if (mini_qdisc_pair_inited(&q->miniqp_egress)) {
++		egress_entry = rtnl_dereference(dev->tcx_egress);
+ 		tcx_miniq_dec(egress_entry);
+ 		if (!tcx_entry_is_active(egress_entry)) {
+ 			tcx_entry_update(dev, NULL, false);
+-- 
+2.43.0
+
