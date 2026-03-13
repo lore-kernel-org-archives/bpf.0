@@ -1,85 +1,82 @@
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AD653914E7;
-	Fri, 13 Mar 2026 12:12:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CD2B390219
+	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 12:21:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773403972; cv=none; b=TuLTHGtjX5k3engj8UhLBNCv+GbBXfLyLd1PqWhudzf2hzXPcQWH5GTXTyrNli/jTvKtFLyFrPimde/w7kToCtj9JGRKCwH8vltDZfDuMnaaeSepgFZlSey+c4cjei3ei5fWbBbaFuIrW4P15ZoVjdU2b3dFArb3+uk2ddg8FnA=
+	t=1773404468; cv=none; b=q063AvvZF0yWtIU0WNpd1JovCeh2ryGiExO2R8O/JZaFQkwZYtHL+kLK0pXu3OgmyFsW65sHibHnpW9ZV6CD+SKkduY3C9kfGjIrUIyuJcH1m4nflM49clGH0NaO/AWLKMWsEGYr8o3yUFQrySvs8DeMViem2l6Hsg4eiuBKuI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773403972; c=relaxed/simple;
-	bh=WRdpW/rDTddEGMXURl4BSpPxlDy3sE/k4Qjo8ZFsYv4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PJBR/yZ7yhke1mtKnU54FJqbFSfvyk6avrJn8JojfYQPlTsCPc7FIJFThxp60TwRlQf9j+5C7QgrbjVoLRY8rdtuNn9uCwIWRPFUocpWB5J/kt3qpwZHvHg6edxju7YWx2+TAktPDwdqY1cdClBIOpRBbQwqbRD85vV2iGpA+9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=NSW/Ipve; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+	s=arc-20240116; t=1773404468; c=relaxed/simple;
+	bh=aVqu86OqOP/fq2iNPTX/U9dZWrwntmPZ9hmBVFi1R0o=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=MjQazdA8jI9QnBe4v2n/6EfxSwPQshgbHbYHg6yy2EtivusNeiP/NaEwE5qXlpNF1u9MNnwozLXogT0z5a36MN5BdLaY1evQKYXOH8sRhavhPkLlkn8liL4P605f9PUHdHC2JN/VYV667HmLTmncPRyD1Tv3ANxggRUXH2eB4zw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hqlk1y5a; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="NSW/Ipve"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=yqJfjj5bSFwQr78REbDblBhmHQrXei/rYwDnGeis3LI=; b=NSW/IpveyLpEwFh9iVvLICuEa/
-	V5L5gDT9bi0fyQok+5GH3TDAHnytb8vPzUXEWkFPt8n/4/rBGmdP+V24Z83zp67hvy6IWfzXGZryL
-	BZosecN7q0b5gjVntuE6X1OzPFKHoAa2RfBaKV2DrlBF67Q/bDS8O+0E7wYq0ngi3AlAH7bmW3LkI
-	ud8QqeD9XJoFouriJkrANerEpg1UDnJrgyNvFW+VTa/O2Tue9uN8T8okEXm84tmjkiZXYb9RIIs3H
-	pBQTdAjFiHv9s4DuM4kvgNOl4FL290pQ56RNH9KG2AB0DYDBUMDtzTQ1UL/RN4gOUA2qAeZLuDRoL
-	3S0HGyHA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:46278)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1w11Nl-000000000tT-1RFx;
-	Fri, 13 Mar 2026 12:12:45 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.98.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1w11Nh-000000008Cx-2mts;
-	Fri, 13 Mar 2026 12:12:41 +0000
-Date: Fri, 13 Mar 2026 12:12:41 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, bpf@vger.kernel.org,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org,
-	Paolo Abeni <pabeni@redhat.com>,
-	Stanislav Fomichev <sdf@fomichev.me>
-Subject: Re: [PATCH net-next v3 11/15] net: stmmac: add helper to get
- hardware transmit descriptor
-Message-ID: <abP_OfmKyiVtaupH@shell.armlinux.org.uk>
-References: <abPdzyXJHqt5v3bi@shell.armlinux.org.uk>
- <E1w0zBR-0000000D4Fy-3tXg@rmk-PC.armlinux.org.uk>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hqlk1y5a"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B72A0C19421;
+	Fri, 13 Mar 2026 12:21:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773404468;
+	bh=aVqu86OqOP/fq2iNPTX/U9dZWrwntmPZ9hmBVFi1R0o=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=Hqlk1y5a6sUOeEbqbGnBfwbGIXr320n93oz++PIRpQ2/M5i0r0/U69NH9ui6mNj7y
+	 bvCkyufni36whJhJAs+TTcGIKIfuuNltG2IYN4M/1BPSjHnFf7DQXWgJ5jyA9FqDjU
+	 nXHggjW7ke/5gXCWxHmSeT9G5Xz0viZxMdI4mLntcMIBswugyeb3EJkexgH/Tclbj7
+	 xO92cJqdGny18KvBBe7Zq72tFOrzw8vqGw/zledAzczNaoQuetJEFOJR/hiJzEOZGS
+	 x/otHC/Ci2v5G3yc/Ik6wt8kI8XwDaRDS0W/Z0L/VavcAGzK6sdKHCbzQ4xiW6v7+q
+	 p6W/HKatm83WA==
+Content-Type: multipart/mixed; boundary="===============7442985298383976832=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <E1w0zBR-0000000D4Fy-3tXg@rmk-PC.armlinux.org.uk>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Message-Id: <823e66acdcc6a34bc99cbbd93db6965e0b333c364d852e8cc727fd70df90ca08@mail.kernel.org>
+In-Reply-To: <a988ecf2c57e265b97917136b14b421038534e8c.1773401138.git.paul.chaignon@gmail.com>
+References: <a988ecf2c57e265b97917136b14b421038534e8c.1773401138.git.paul.chaignon@gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/3] bpf: better naming for __reg_deduce_bounds() parts
+From: bot+bpf-ci@kernel.org
+To: paul.chaignon@gmail.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,shung-hsi.yu@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 13 Mar 2026 12:21:07 +0000 (UTC)
 
-On Fri, Mar 13, 2026 at 09:51:53AM +0000, Russell King (Oracle) wrote:
-> Provide a helper to get the hardware transmit descriptor that takes
-> account of whether extended format and TBS are being used, returning
-> the base struct dma_desc pointer. This avoids multiple instances where
-> these tests are open coded.
-> 
-> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+--===============7442985298383976832==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Damn it, I merged the fix for the AI review on this patch into patch
-13 rather than this patch. :/
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 4fbacd2149cd..189e951886ed 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+[ ... ]
+
+> @@ -2518,6 +2518,10 @@ static void __reg32_deduce_bounds(struct bpf_reg_state *reg)
+>  		reg->s32_min_value = max_t(s32, reg->s32_min_value, (s32)reg->smin_value);
+>  		reg->s32_max_value = min_t(s32, reg->s32_max_value, (s32)reg->smax_value);
+>  	}
+> +}
+> +
+> +static void deduce_bounds_32_from_32(struct bpf_reg_state *reg)
+> +{
+>  	/* if u32 range forms a valid s32 range (due to matching sign bit),
+
+The new deduce_bounds_32_from_32() contains a comment referencing the
+old function name:
+
+    /* See __reg64_deduce_bounds() for detailed explanation.
+
+Since this commit renamed __reg64_deduce_bounds() to
+deduce_bounds_64_from_64(), should this cross-reference be updated
+to match?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23049683430
+--===============7442985298383976832==--
