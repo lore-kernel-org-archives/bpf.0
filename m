@@ -1,159 +1,118 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 008FF1DED4C;
-	Fri, 13 Mar 2026 02:32:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773369148; cv=none; b=ZGepfqpL5fW0lWh81sygzktIcCQftyZFcU809QF8h8iQsUQScwcNChhI1OV3uMDmZepVvs3eobuhu3ap8LB1ilSBcO3TmLs5K8I7iQX4FEmIzHcXycfWJ7StxOz4jiBa8hXgZ8B2D4T3OjmHZ7Ak1Q396tWVS1k64HXIvMdy65I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773369148; c=relaxed/simple;
-	bh=+vI6GSqtwKt0b9wsTQmOg3llRDsB0LamegMG9/0fPN0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kuoSnQjL8+EKQfNzicVWv6ASiLKCX/ax9ILuq71UKHidEbXej7BZL/H27IYYw6apAy6+aZkgxSfSz2DEg25Yy/3fWQDBC0pkJjJGPvbZLVN9QTB0vgXVypmg7CuovVn7UHBJJWfmUk9a3vbAV0s1fnByvau8rK12eXuqXRDT+nU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4fX7lm2DMRzYQtvD;
-	Fri, 13 Mar 2026 10:31:32 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 68FA24058F;
-	Fri, 13 Mar 2026 10:32:22 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP4 (Coremail) with SMTP id gCh0CgCngEs0d7NpbWnZAg--.21976S2;
-	Fri, 13 Mar 2026 10:32:21 +0800 (CST)
-Message-ID: <6538d913-7341-47bb-8717-3ef8685caf5d@huaweicloud.com>
-Date: Fri, 13 Mar 2026 10:32:20 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4B733D6EF
+	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 02:50:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.174
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773370207; cv=pass; b=HZC7LlCEcwv2I5GDv1zIzWtami1/dALQTzamp2twwTLx/5HeVO/5XHQV3NLvkAjtMV6F+7OBjLZaPCMI9rejdLKhIGnqTAB4KYnVd8m14Im5/dx/Odzsvv5gR4x0PWVIUInXu7A9sXDxGuKDTbI/GLOdxqUmp5QHi7fKZuVTK4g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773370207; c=relaxed/simple;
+	bh=1DDAUTZZs9nurII5sQuxTIy3I1smjx6u+1ntACDvnN8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iqeBd7ki2+8xL4ZLJIpdAhLaRMLJimIT9WoqWdS3sNn6/gkvVWNTxjrYWUQXpb4QXzUNHbShRYMYWX1gvmwJXO0q5dkUwD/bRNA8mHSOmaXzbR06jqIMfMw7VeF1mke3DJ2dHuI1h1slCHqrdd0kdSL+0+Mk7ixfCIrfjr7VZqM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C+AEaGjf; arc=pass smtp.client-ip=209.85.128.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C+AEaGjf"
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-7986d231b3cso43087187b3.1
+        for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 19:50:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773370205; cv=none;
+        d=google.com; s=arc-20240605;
+        b=P38ti7z4376bwn1XSouiw3V40/0BVSfjyYXb8lp+pofTDZEW3DGJbmY3GRLqsUCg1o
+         9KO27qLuxjbykYDmA2gGkkBcAbDev7M51wWfY0zHzd1/9MpfIL2Nsdaaf3VtRhT3DrAs
+         161T8ps2KJeX3Y1EMVirT8KRP5wsy8EtLr2hL/kK5CZU9bBblfN7CGoagwoEFyTeNGtP
+         aZK6WHU2feClVQWMiI17cvGugiVTMrDiPEYNiBLm3B79I9bHxir/LG4gdNgJXz+G3FFO
+         xTh9zkkl6ahWLDolfds+ywgE4AlK9VdKnA99oNX3VhIrX5orNsS7L9yHiQKsSDWEbecq
+         edkg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=1DDAUTZZs9nurII5sQuxTIy3I1smjx6u+1ntACDvnN8=;
+        fh=v45UWFWk5cnBPANThBvn4nmYiLhpC/UbGkLeJxLOA7Y=;
+        b=Yz5HaZmWfMUBJLsezxVNGwR42k5dSnP1A3ZuTJKgfLbGm9mURdFJKkHg5M+wht5jdI
+         XHFoqm3yRjw0ly2khzXQeqLWqHQLdMqcM3d63gB7wiILR5c2wmQx0uW3GySyQADA+o0j
+         hl9jOVgpr768sasWjTD/Wy8Rrsf3ESQ80XUMSMQQcwV3EsCDB6HRFTSoyIZaxzO7RKTn
+         UbrCNrBPN9d7spZK56IFAhZsz7YVbQdr6RtcuItI+g8eUeV4kqfJZuvWdDJO6sknnJzM
+         am/Pn5Xdh2bSO0dGXLuMQ8dG+5txEnptl4Mv7O95Zf0RbsTv6HvzshmqKf2PjONdJeCZ
+         G7Zw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773370205; x=1773975005; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1DDAUTZZs9nurII5sQuxTIy3I1smjx6u+1ntACDvnN8=;
+        b=C+AEaGjfdrInamjQjc9HyWG9UqSDlwsmvatT7cFDhFC+r0s0pR1fMVINF4RE7fQlFi
+         thCoJZbeD31ojUpjoBhIFxWeR5zMCR5K++3oonQcUZuH9+J8TTU9q1h/Uf8fWXUQh/Ns
+         /38xv+qUCKoLhtTbVKZFO+QCKsx654Xnk9vxBXXbSc+f71sunuzmDJ3YWs46FUcluyCA
+         KJn3pFHJXKPAWSatz5rfFI5GY+umbw0gPtaDlJlX33yoMgd/DyFohgeYc9Wgqny2wpgc
+         CRAwlKycX5rIPeao5yeH8FXgE0h6lFKY0qmXUGsfMzOjcIR9kxyw3m1e0k7DJM68dc8F
+         OMKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773370205; x=1773975005;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=1DDAUTZZs9nurII5sQuxTIy3I1smjx6u+1ntACDvnN8=;
+        b=BnVlK8rl9QYIVJ+yFVoiKzzGblxuvnoGVvJsQTHUTbCNHRjVMxb/B1lxpJjmIJyich
+         v7npaWxodpmIqlQF8eefSuUB6Lh3XHutAFQC4moa2Hlz5W1fOV4uJEo4pgUHt7YLqOA+
+         C61PiLf1eFbDVctdP1h+jCamjwyj6sg9OKo0+ZlFqYpzK9DYcDQowqg7SacMUMaYgOP6
+         iR5NcyeszOlVmC4ApNv1tJ8isRsNBwSTW2z5Z0bnZ+xiKtE9nqJSLKparH6+jDWThMGI
+         m7CuUX0NhMx4XCayicTFZ+OZa5QIjpEEyeKpqMgNO8dpNOG+X4MRw+BGs4QQ7dLbITdI
+         UAfQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWbQbmJD7TaXQcZiCNATu6tngMjFLE2fFGGrH1fJb8I1M0z9eCs2SDYpuG7tCIE6JwSa8I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmL3JTY9CxJlhIF8TKAaBwwc+QI8P0naC8Aw5N9u0f3JRlLDrs
+	I57l3ExZJtbOrUuMePVucZAS67BiXFJcgHeGaENeOLVcu3tc2yKqaD9u48Ey451henkvnTNXfqE
+	XRbI3QnApcz3LfW/zIk16oRl6U1pD+K0=
+X-Gm-Gg: ATEYQzxi5hr5ezpXnKXfmqwO4m4PCdYhzAqqjbsYNS/ic782b3d59UQUBiIWcUHElvz
+	yaE8bYtQkaKuAQK291KFSZOQkTW6pxDQ0aor+5FYlU3R2G/Vhl8yg8OvPt3lZaByQVAb85gU0pm
+	zILYU/A92UDLjwrR2hzfHoeP2JUrjzBdqAWW9h2I3WYYV3aT9a0H+WcuXjXSqqvbnZDNTQXwB+s
+	QRw+h6VVOpglOUZ5RnMdW9o5iryTURADVnvknlC6QoQhbc3isQIKJkP1fcsD7E1Gwk3ONvl0ELU
+	WExidN9VBUP/rwjGAQ==
+X-Received: by 2002:a05:690c:17:b0:797:a162:f7d8 with SMTP id
+ 00721157ae682-79a1bd1feb2mr19022287b3.27.1773370205576; Thu, 12 Mar 2026
+ 19:50:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v9 1/5] bpf: Move constants blinding out of
- arch-specific JITs
-Content-Language: en-US
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, yonghong.song@linux.dev,
- puranjay@kernel.org, a.s.protopopov@gmail.com, alexis.lothore@bootlin.com,
- list+bpf@vahedi.org, linux@armlinux.org.uk, yangtiezhu@loongson.cn,
- hengqi.chen@gmail.com, johan.almbladh@anyfinetworks.com,
- paulburton@kernel.org, hbathini@linux.ibm.com, chleroy@kernel.org,
- naveen@kernel.org, luke.r.nels@gmail.com, xi.wang@gmail.com,
- bjorn@kernel.org, pulehui@huawei.com, iii@linux.ibm.com, hca@linux.ibm.com,
- gor@linux.ibm.com, davem@davemloft.net, udknight@gmail.com,
- martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
-References: <20260312170255.3427799-2-xukuohai@huaweicloud.com>
- <23f4b038b245167ff440b79c0a445fcbc12e0a102884759623dd59b3d64d2ade@mail.kernel.org>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <23f4b038b245167ff440b79c0a445fcbc12e0a102884759623dd59b3d64d2ade@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:gCh0CgCngEs0d7NpbWnZAg--.21976S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJFWUKrWDWFWfKw4DtFW3GFg_yoW5AF4rpa
-	y0gFWkKF4qqF40qw17ZFWkAFW3tF4kJwnrGr45Wa43JF4jgrn3GF18KrsYvFWYkrykKr1I
-	vr4j9r98uw1DJFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26rWY6Fy7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWrXVW8
-	Jr1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-	CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
-	6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvj
-	xUVZ2-UUUUU
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+References: <20260310102145.857810-1-sun.jian.kdev@gmail.com>
+ <20260310102145.857810-2-sun.jian.kdev@gmail.com> <9f1acc68-823d-4003-a177-face6cdcc950@linux.dev>
+In-Reply-To: <9f1acc68-823d-4003-a177-face6cdcc950@linux.dev>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Fri, 13 Mar 2026 10:49:55 +0800
+X-Gm-Features: AaiRm52VZvdjd9yeA2XiME1nGhh8eFDEMbwgZDYRre9CaRo2zzF8ziC4MIE7nL8
+Message-ID: <CABFUUZHKVNB9F8ra3Ry6ymF7KKPP8u=zOEYEvZdqayVTYaZnJw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] selftests/bpf: Skip bpffs debug iter checks when
+ unavailable in test_bpffs
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/13/2026 1:50 AM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 4fbacd2149cd..3ccefd13121b 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
-> 
-> [ ... ]
-> 
->> @@ -22843,17 +22843,23 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
->>
->>   static int jit_subprogs(struct bpf_verifier_env *env)
->>   {
->> -	struct bpf_prog *prog = env->prog, **func, *tmp;
->> +	struct bpf_prog *orig_prog = env->prog, *prog, **func, *tmp;
->>   	int i, j, subprog_start, subprog_end = 0, len, subprog;
->>   	struct bpf_map *map_ptr;
->>   	struct bpf_insn *insn;
->>   	void *old_bpf_func;
->>   	int err, num_exentries;
->> -	int old_len, subprog_start_adjustment = 0;
->> +	bool blinded = false;
->>
->>   	if (env->subprog_cnt <= 1)
->>   		return 0;
->>
->> +	prog = bpf_jit_blind_constants(env, NULL);
->> +	if (IS_ERR(prog))
->> +		return -ENOMEM;
->> +	if (prog != orig_prog)
->> +		blinded = true;
-> 
-> When env is non-NULL, bpf_jit_blind_constants() uses
-> bpf_patch_insn_data() to insert blinding instructions.
-> bpf_patch_insn_data() calls adjust_insn_aux_data(), which expands
-> and shifts entries in env->insn_aux_data to match the now-longer
-> blinded program.
-> 
->> +
->>   	for (i = 0, insn = prog->insnsi; i < prog->len; i++, insn++) {
-> 
-> [ ... ]
-> 
->> @@ -23114,6 +23122,10 @@ static int jit_subprogs(struct bpf_verifier_env *env)
->>   	}
->>   	kfree(func);
->>   out_undo_insn:
->> +	if (blinded) {
->> +		bpf_jit_prog_release_other(orig_prog, prog);
->> +		env->prog = prog = orig_prog;
->> +	}
->>   	/* cleanup main prog to be interpreted */
->>   	prog->jit_requested = 0;
->>   	prog->blinding_requested = 0;
->> +	for (i = 0, insn = prog->insnsi; i < prog->len; i++, insn++) {
->>   		if (!bpf_pseudo_call(insn))
->>   			continue;
->>   		insn->off = 0;
->>   		insn->imm = env->insn_aux_data[i].call_imm;
->>   	}
-> 
-> After bpf_jit_prog_release_other() reverts to orig_prog, this loop
-> iterates using the original program's indices and length. However,
-> env->insn_aux_data was expanded and shifted by bpf_patch_insn_data()
-> during blinding to match the blinded program's instruction count.
-> 
-> The call_imm values were saved at blinded indices (earlier in
-> jit_subprogs, after the bpf_jit_blind_constants call), so reading
-> them back at original indices gets the wrong aux data entries.
-> 
-> On !CONFIG_BPF_JIT_ALWAYS_ON configs, could this cause incorrect
-> imm values to be restored into pseudo_call instructions, breaking
-> interpreter fallback?
-> 
+On Fri, Mar 13, 2026 at 5:44=E2=80=AFAM Yonghong Song <yonghong.song@linux.=
+dev> wrote:
 
-Right, I overlooked that insn_aux_data is used here. In fact, when
-blinded is true, we have rolled back to the clean, original program,
-so there is no need to restore call_imm.
+> In which situation these two files have issues? This already root
 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23013190773
+I observed this in a virtme-ng guest running as root, where accessing
+maps.debug/progs.debug returned EPERM while the later pin/rename checks
+still worked. root in the guest was not sufficient for accessing those debu=
+g
+ iterator files.
 
+> access. If file operation failed, that must be due to your special
+> situation.
+
+Agreed, this looks environment-specific. I'll check it further.
+
+Regards,
+Sun Jian
