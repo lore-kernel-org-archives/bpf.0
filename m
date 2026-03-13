@@ -1,64 +1,64 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0AEF3C3C1D
-	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 22:54:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D98773E3142
+	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 22:54:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773442476; cv=none; b=lh4QpPpj0QgrNMQS8byTqUz9+psbHX2A4WG8XgeaXlUJdkA8JRArMVCRTxyzOKVN/WbFxyI3D521eEE3WBzvLS42y0Nn0eWYoPqt/E3f8+z+Ndj9EhyE1Hb+5Jq0U2celp118Zbz9sb0R5eXecup7iwXE6YBYXsLvHssi0jJJO8=
+	t=1773442488; cv=none; b=FokOSQvNvJNLYWkU/+5TEdzoJtzbBxS5MGKiUmGOGrcg2QM3i3FLJtk/nWWJcuwUoCTNaJh3HCOgAWYIv9AMlS2v2Saopzi8JX1qECtbD/JoMIKDIXUiYr3FmkP0Q3j8neT4s8gcUcm2kchXri6oath1ybmMMv1gtVEGcYd44yk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773442476; c=relaxed/simple;
-	bh=nxjDQ0m1sS5TWNfbSTXWs9A0hdSulvyroBCkJW86rII=;
+	s=arc-20240116; t=1773442488; c=relaxed/simple;
+	bh=Rz3HICdJBTk3HqDJt2a/p1ky9eNo/C/ofzxiXhlwzuI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LQUEv+dQ97m74rIxliBcbc3V+FWnBhZYbg3pa+dt2hfzJ4WladM98RxXD2HrF5ADzHTVLYrdDHRvDaSWKgKi7AeWa/6O7fhRRqb+dmV3hZq14frOGx4d6RdMtxYIuApgOBxPnOC146H6onPQppyYUR6oRXXDDnZp5PpeCEJipEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MFAWr9i0; arc=none smtp.client-ip=209.85.128.50
+	 Content-Type:Content-Disposition:In-Reply-To; b=uCGm/90C8m2sy7w3zHI374RpyMrQ6qgBZm8uWt8gfqXmU6Uoq9M/8E7aX5kH3Pg7T5ivJyt0vVm0eG6/Gi/DwsPpHqh7hMMT74T7qYzrBQFkQjJaecF+Kqcyyt4LQEoYe0hUg4el7W1bzh70LhdD8u16EgvNh8XB3LMcrCpWsFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CTg0yiO8; arc=none smtp.client-ip=209.85.221.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MFAWr9i0"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-48540355459so23863735e9.3
-        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 15:54:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CTg0yiO8"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-439c5b40f60so2238974f8f.0
+        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 15:54:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773442473; x=1774047273; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773442485; x=1774047285; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y21EwQ+fvODC2ellwZavyelMqod8Zg41vsOyUK7dkHM=;
-        b=MFAWr9i0LT8trEmi1osuwQGA43m6ZhUS7X2RWSoJev3/JzI0X0ET3D7d90Zb0h2a5m
-         vgaWj04M/JAMHTcCIhgJUBP7dNftYlyO7HYpRwY+OAz3UOuAtVN0ypdQKJc3pACl17nQ
-         cUSXgZdw2bD8CZtHd73yYndrF13O5JrSQnWWn2Oy7RyKoAfRPH2Lyu/ABXw9I1sf4TUx
-         c/v/u/D/7ihGaNzPw88fxhoXSDPTUMiPwrWWfu1fdkBsOjWW2qM+jgEPP/OprcazqENL
-         VV/5+ZuIqwSkIn7MH8uUzncOKRODF+NO6hO69woJxtmx2+jGn1FD7QBILT8lNBZJttoS
-         UDEg==
+        bh=4uUGJ306uP9TftNpj8Jwm1zzquPGbhoGFWt1J2Cyxns=;
+        b=CTg0yiO8PYmmEPN/Ykl1ih2TTEmVnPQedCHDirF8CKwgkXECXD+FzfI472i32w2R8y
+         ttQZzNgu3RmjF7EV/m9F0RO0SLSSuUxuK/exuU6l8i1hedTfUXLM3keHRDSlsu6KuayT
+         udTFuPD1gxxG+9bsSTyX2f4DwJKsFiN8RhEbzrxw6/7uOWK/juokI+JCL2iOcaQ8W5TR
+         7hXJAabfYaYpmiOXSe0+3A1nxtgiJheTMwiPDebuBoq1VAZZWpwWsW9uVDwzDAKLrnjt
+         /wxiXGkH41I208ZPRU7MKwiW7Xf749he1m4mAMTDZtBRky6JwTOBkHvHhawVGpT5s+x+
+         SqIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773442473; x=1774047273;
+        d=1e100.net; s=20251104; t=1773442485; x=1774047285;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Y21EwQ+fvODC2ellwZavyelMqod8Zg41vsOyUK7dkHM=;
-        b=Uyrpwlz/935WhWlaP52Waq27d0LCVDOx68ywiGhfMNDyyrPgCiO0UY+10gg5CgE0c9
-         k+ddfr7fw2IiEnifhXOTsBoHMXaKMc4EvjlI/+1xko/0DzyoWrvs7JAVAbxRhyAU651F
-         yQy/7orWzHXoFHIAjlUXt7xoUmmiTeplFSFK7gqcH/fVHrJWw9MmS78m6qS1/MtzMHaV
-         uGoupCkBBuX92gK+JTAkExIgbezAtATLyrtM2wFLghC7ULIxiV+T/r0uWsSqs8QlnwT9
-         vo4C6SlA20oQQgRHefYKiQYrem/R4MttyIFsLsvMM3/pCVLXCXMiHUJnN5OVA4rsKYDX
-         rCaw==
-X-Gm-Message-State: AOJu0Yz8r92qUw9iLvCKQaomUO6m8bPLa3asU8e668Ay90FBVlJz1+fA
-	g8nQVYuBTE63xwrpP7y40aal1DrnlaiuAAXibAxpAzM0S2SBKv8LKYXxg137oA==
-X-Gm-Gg: ATEYQzyC1pgozGpKo7TmHF04wU7+av1hmkfpSQS5wYi3bQtiacjp8S4OjVcNn7+sVJQ
-	92cBiVM6JyK+DncQGzFV1tCSIMq0unt+Urn8jJRdjsTsybfuxiakAw6qiyQLfauDPUyDx74g9/w
-	2yGZqPFPY6NCVLT+3Gcpruci5cM+QxsE42DTtF2P0pz82WVhbuF+GtkhRgXQetBP6CGfByt0Q+H
-	y3/yK5d5PQLZuoMPDEHdQMbD9d742YMNtysgwIbNHV+1U5rC4QAQkc1ijZlqTjfbJLuystsBT9B
-	jQM5/Wq+DNHXGGBc0oLLx450pMIoOhkAwWeI0A2XjH5B9IrEFLMEruEa+et7Hmkzk/cjrjjXr+p
-	FdrAN4ktRzZEQiHHSVy6FcpgcPdbY/XFW7RdvViQrwH2fHRcPC2E7Ag+oAP280kSXJDl6+Y3HAW
-	4VnQGZ2IHMWqd/umWQkWP+zk5vd3YXgNL+pCTJ0v29h1/ScUbmrCJUgu3shyBVfSWsSUeuP2Axq
-	a8msg3UQk8imH/KhrIcVIjN4Ys23yDdSb6a8L8uKb7WBkUT8t1407RyUxZi/LvoNbWj5ZI12hqv
-	EjoE9wFxYB8=
-X-Received: by 2002:a05:600c:1f16:b0:485:3471:cffb with SMTP id 5b1f17b1804b1-485566e2401mr82975565e9.15.1773442472943;
-        Fri, 13 Mar 2026 15:54:32 -0700 (PDT)
+        bh=4uUGJ306uP9TftNpj8Jwm1zzquPGbhoGFWt1J2Cyxns=;
+        b=Haf+H3U71NGY7QFAZO2rMkEwP+0whtDcA7i1UZzsJtd6Y/xSQ3x9TP/cJZOKwAW4rd
+         npR4Mtv9PZSxxA5pOUvg1/PuZxybXzg7mAbs8EJxKEBVAuEWyq2inBT/HCGY6oDCFo67
+         4slK6ViKUGGIEJQQuGeCaFbgrXhZJ/vQyYyffcdw6ROut5kK9n4Cm1xTblCOwdLGb0ct
+         52dpMo6cBzBcKFOF+H/6PFwL2iBPvmDbm3CSYR2AqiXnG08qBntYpLSjpCb1kH9ytg5v
+         ihTCKW6zA/yTdRKJClLfDwU+jqs/tW/XWRkeAvPGIpdoh9HVvz8ZSKzcBT2PP2ltaR0d
+         OH4A==
+X-Gm-Message-State: AOJu0YwYn0JGJMcDrQ1/7dWH+8jOJ3O6at8FcyXkKZBCXLludGJH0Oo4
+	LeXlmtIEMweGVZ3ykSNrebSP7x1K+RAPa7mzbs5z7AEcxaEOLM/XBjmRFpLL4g==
+X-Gm-Gg: ATEYQzyOK79M0ntwz/p41UvrS1hRwZsFZf41Mr1XW/ynnIk4u/kbYrbre4aZgpMre6E
+	osVpKhoh0wKIs4i6rVL15a2LkRWNjQDYtlJku+j3PhAvXlxUn7scTiXPsnuOA56S2UEqyayAX0E
+	dKvmxJH/WmYNFtMvwWbXSZSP+vErfRxR1gj+ZZVHWVgYPd+VWO4iMAdpKmszeMC2CF04mErQ1+9
+	iS5DvWmp+yafhilx5Y3wJ+nmECzUTophF4BIoVO6a5UDEHcVI7UTbuaPXWSWHt0NjtyfcCAsCbT
+	bchdFlHbyMIkOZ3K6txmZf76WAaNNAqaxaQJcj45S7+9lg3c66MMJgvo1/9aEeKTIwsDhc3xAdh
+	zJf+dDM3exid4luUxQUzPmNMm/B6T6srOs04wUj8ZIUpxvkCp+YmhuOAkZB5D5kQwgJp6ow4gRi
+	RQGxjuk3zOEVFuUn36iQ3nrN2X/+xQZT90HY+A6EMGehpJGS/AyFeLQ9iK0kkVQr5J2/J6MVRSE
+	z47DWjrFP1q/Fj30LRyj/wrOFRkTXw4hgZiv+Q9LyZIg5ioQGWZ60UHz3dHi5OI+fR7BsLMB7Uc
+	3ooPVQnY9k0=
+X-Received: by 2002:a05:6000:310f:b0:439:b265:6c61 with SMTP id ffacd0b85a97d-43a04d7c54fmr10393805f8f.12.1773442484976;
+        Fri, 13 Mar 2026 15:54:44 -0700 (PDT)
 Received: from mail.gmail.com (2a01cb0889497e001bfc1843b6ac5345.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:1bfc:1843:b6ac:5345])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4854b65fd3dsm237867215e9.10.2026.03.13.15.54.32
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439fe2186e3sm24298454f8f.26.2026.03.13.15.54.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Mar 2026 15:54:32 -0700 (PDT)
-Date: Fri, 13 Mar 2026 23:54:30 +0100
+        Fri, 13 Mar 2026 15:54:44 -0700 (PDT)
+Date: Fri, 13 Mar 2026 23:54:43 +0100
 From: Paul Chaignon <paul.chaignon@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>,
@@ -67,8 +67,9 @@ Cc: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Subject: [PATCH bpf-next 1/4] bpf: Refactor reg_bounds_sanity_check
-Message-ID: <14685719219430e8d82b95f5f929428032f0c08e.1773441432.git.paul.chaignon@gmail.com>
+Subject: [PATCH bpf-next 2/4] bpf: Simulate branches to prune based on range
+ violations
+Message-ID: <aacec3599b3965e022be1b9792f29e88a1780a78.1773441432.git.paul.chaignon@gmail.com>
 References: <cover.1773441432.git.paul.chaignon@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -82,94 +83,133 @@ In-Reply-To: <cover.1773441432.git.paul.chaignon@gmail.com>
 
 From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
 
-This commit refactors reg_bounds_sanity_check to factor out the logic
-that performs the sanity check from the logic that does the reporting.
+This patch fixes the invariant violation warnings. These warnings
+happen after we refine ranges & tnum based on an incorrectly-detected
+branch condition. For example, the branch is always true, but we miss
+it in is_branch_taken; we then refine based on the branch being false
+and end up with incoherent ranges (e.g. umax < umin).
 
+To avoid this, we can simulate the refinement on both branches. More
+specifically, this patch simulates both branches taken using
+regs_refine_cond_op and reg_bounds_sync. If the resulting register
+states are ill-formed on one of the branches, is_branch_taken can mark
+that branch as "never taken".
+
+On a more formal note, we can deduce a branch is not taken when
+regs_refine_cond_op or reg_bounds_syncreturns an ill-formed state
+because the branch operators are sound (formally verified). Soundness
+means that the verifier is guaranteed to produce sound outputs on the
+taken branches. On the non-taken branch (explored because of
+imprecision in the bounds), the verifier is free to produce any output.
+We use ill-formedness as a signal that the branch is dead and prune
+that branch.
+
+We have had five patches fixing specific cases of invariant violations
+in the past, all added with selftests:
+- commit fbc7aef517d8 ("bpf: Fix u32/s32 bounds when ranges cross
+  min/max boundary")
+- commit efc11a667878 ("bpf: Improve bounds when tnum has a single
+  possible value")
+- commit f41345f47fb2 ("bpf: Use tnums for JEQ/JNE is_branch_taken
+  logic")
+- commit 00bf8d0c6c9b ("bpf: Improve bounds when s64 crosses sign
+  boundary")
+- commit 6279846b9b25 ("bpf: Forget ranges when refining tnum after
+  JSET")
+
+To confirm that this patch addresses all invariant violations, we have
+also reverted those five commits and verified that their related
+selftests don't cause any invariant violation warnings anymore. Those
+selftests still fail but only because of mis-detected branches or
+less-precise bounds than expected. This demonstrates that the current
+patch is enough to avoid the invariant violation warning AND that the
+previous five patches are still useful to improve branch detection.
+
+In addition to the selftests, this change was also tested with the
+Cilium complexity test suite: all programs were successfully loaded and
+it didn't change the number of processed instructions.
+
+Fixes: 5f99f312bd3b ("bpf: add register bounds sanity checks and sanitization")
+Reported-by: syzbot+c950cc277150935cc0b5@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=c950cc277150935cc0b5
+Co-developed-by: Paul Chaignon <paul.chaignon@gmail.com>
+Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
 Signed-off-by: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
 ---
- kernel/bpf/verifier.c | 50 ++++++++++++++++++++++++++++++-------------
- 1 file changed, 35 insertions(+), 15 deletions(-)
+ kernel/bpf/verifier.c | 53 ++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 52 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 4fbacd2149cd..974305ef3210 100644
+index 974305ef3210..bd3bdfb6b0c1 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -2798,40 +2798,60 @@ static void reg_bounds_sync(struct bpf_reg_state *reg)
- 	__update_reg_bounds(reg);
+@@ -16676,6 +16676,57 @@ static void find_good_pkt_pointers(struct bpf_verifier_state *vstate,
+ 	}));
  }
  
--static int reg_bounds_sanity_check(struct bpf_verifier_env *env,
--				   struct bpf_reg_state *reg, const char *ctx)
-+static bool range_bounds_violation(struct bpf_reg_state *reg)
- {
--	const char *msg;
--
--	if (reg->umin_value > reg->umax_value ||
--	    reg->smin_value > reg->smax_value ||
--	    reg->u32_min_value > reg->u32_max_value ||
--	    reg->s32_min_value > reg->s32_max_value) {
--		    msg = "range bounds violation";
--		    goto out;
--	}
-+	return (reg->umin_value > reg->umax_value || reg->smin_value > reg->smax_value ||
-+		reg->u32_min_value > reg->u32_max_value ||
-+		reg->s32_min_value > reg->s32_max_value);
-+}
- 
-+static bool const_tnum_out_of_sync_with_range_bounds(struct bpf_reg_state *reg)
++static void regs_refine_cond_op(struct bpf_reg_state *reg1, struct bpf_reg_state *reg2,
++				u8 opcode, bool is_jmp32);
++static u8 rev_opcode(u8 opcode);
++
++/* Learn more information about live branches by simulating both branches being taken using
++ * regs_refine_cond_op. Because regs_refine_cond_op is sound when the branch is taken, if it
++ * produces ill-formed register bounds, it must mean that the branch is dead.
++ */
++static int simulate_both_branches_taken(struct bpf_reg_state *false_reg1,
++					struct bpf_reg_state *false_reg2, u8 opcode, bool is_jmp32)
 +{
- 	if (tnum_is_const(reg->var_off)) {
- 		u64 uval = reg->var_off.value;
- 		s64 sval = (s64)uval;
- 
- 		if (reg->umin_value != uval || reg->umax_value != uval ||
- 		    reg->smin_value != sval || reg->smax_value != sval) {
--			msg = "const tnum out of sync with range bounds";
--			goto out;
-+			return true;
- 		}
++	struct bpf_reg_state false_reg1_c, false_reg2_c, true_reg1_c, true_reg2_c;
++
++	/* Create copies of reg states to simulate both branches because regs_refine_cond_op
++	 * will modify the reg states passed in.
++	 */
++	memcpy(&false_reg1_c, false_reg1, sizeof(struct bpf_reg_state));
++	memcpy(&false_reg2_c, false_reg2, sizeof(struct bpf_reg_state));
++	memcpy(&true_reg1_c, false_reg1, sizeof(struct bpf_reg_state));
++	memcpy(&true_reg2_c, false_reg2, sizeof(struct bpf_reg_state));
++
++	/* Fallthrough (FALSE) branch */
++	regs_refine_cond_op(&false_reg1_c, &false_reg2_c, rev_opcode(opcode), is_jmp32);
++	/* If there is a range bounds violation in *any* of the abstract values in either
++	 * reg_states in the FALSE branch (i.e. false_reg1, false_reg2), the FALSE branch must be
++	 * dead. Only TRUE branch will be taken.
++	 */
++	if (range_bounds_violation(&false_reg1_c) || range_bounds_violation(&false_reg2_c))
++		return 1;
++	reg_bounds_sync(&false_reg1_c);
++	reg_bounds_sync(&false_reg2_c);
++	if (range_bounds_violation(&false_reg1_c) || range_bounds_violation(&false_reg2_c))
++		return 1;
++
++	/* Jump (TRUE) branch */
++	regs_refine_cond_op(&true_reg1_c, &true_reg2_c, opcode, is_jmp32);
++	/* If there is a range bounds violation in *any* of the abstract values in either
++	 * reg_states in the TRUE branch (i.e. true_reg1, true_reg2), the TRUE branch must be dead.
++	 * Only TRUE branch will be taken.
++	 */
++	if (range_bounds_violation(&true_reg1_c) || range_bounds_violation(&true_reg2_c))
++		return 0;
++	reg_bounds_sync(&true_reg1_c);
++	reg_bounds_sync(&true_reg2_c);
++	if (range_bounds_violation(&true_reg1_c) || range_bounds_violation(&true_reg2_c))
++		return 0;
++
++	/* Both branches are possible, we can't determine which one will be taken. */
++	return -1;
++}
++
+ /*
+  * <reg1> <op> <reg2>, currently assuming reg2 is a constant
+  */
+@@ -16832,7 +16883,7 @@ static int is_scalar_branch_taken(struct bpf_reg_state *reg1, struct bpf_reg_sta
+ 		break;
  	}
-+	return false;
-+}
  
-+static bool const_subreg_tnum_out_of_sync_with_range_bounds(struct bpf_reg_state *reg)
-+{
- 	if (tnum_subreg_is_const(reg->var_off)) {
- 		u32 uval32 = tnum_subreg(reg->var_off).value;
- 		s32 sval32 = (s32)uval32;
+-	return -1;
++	return simulate_both_branches_taken(reg1, reg2, opcode, is_jmp32);
+ }
  
- 		if (reg->u32_min_value != uval32 || reg->u32_max_value != uval32 ||
- 		    reg->s32_min_value != sval32 || reg->s32_max_value != sval32) {
--			msg = "const subreg tnum out of sync with range bounds";
--			goto out;
-+			return true;
- 		}
- 	}
-+	return false;
-+}
-+
-+static int reg_bounds_sanity_check(struct bpf_verifier_env *env,
-+				   struct bpf_reg_state *reg, const char *ctx)
-+{
-+	const char *msg;
-+
-+	if (range_bounds_violation(reg)) {
-+		msg = "range bounds violation";
-+		goto out;
-+	}
-+
-+	if (const_tnum_out_of_sync_with_range_bounds(reg)) {
-+		msg = "const tnum out of sync with range bounds";
-+		goto out;
-+	}
-+
-+	if (const_subreg_tnum_out_of_sync_with_range_bounds(reg)) {
-+		msg = "const subreg tnum out of sync with range bounds";
-+		goto out;
-+	}
- 
- 	return 0;
- out:
+ static int flip_opcode(u32 opcode)
 -- 
 2.43.0
 
