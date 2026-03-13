@@ -1,93 +1,93 @@
-Received: from mail-yx1-f44.google.com (mail-yx1-f44.google.com [74.125.224.44])
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A512282F04
-	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 21:14:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96971372ED0
+	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 21:18:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.179
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773436498; cv=pass; b=U6UEHzlcUCOda6fL/qUpSjfIr5C8UNA6zyywbpWQKND6lq0eC+TuGy5xsdCmB32qxCIvkugOhtapUYaIHzU6bfvmguH8FSaToVtanl8Eazx0yN5P98C4SO6KYsd8jRvoVvEkAv4l4veWIDISrnhsFX1dhjyOHv975IHlhEQSzP4=
+	t=1773436727; cv=pass; b=Tzgq1+///3BNIe2yOdD7OFxVyFVPu/XF2jldDwgn0B7JYhug6JWmvqX6NVp20EAraxCE1NxLVcszfSlLFkqyY6CcP4gtlqkJmb/dWsusW5r+3Jnc3go5mAcroJVo7IkCFT6fodXa79V4KQ1VlrBOog6QLxfGm/m7AhtrfjVdj5w=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773436498; c=relaxed/simple;
-	bh=6jm5LLuesQBJ/G6hU0fm0QD3cDG/ka7OEt7yvUXm11M=;
+	s=arc-20240116; t=1773436727; c=relaxed/simple;
+	bh=7g9q7KkvQHvAJkxuC9kNzCUl854HTZO4qMXNsD/wssw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ny1k2/SCEEtEou3Uk8Wxx/T5vTDlik8RlooDD+RmSdnapdxIB3pjQwzwJCJ72Q1sBufLVLUOrbszw2rIrQyEcoKqHWLY1pLTBxOw9xpIXwLcFq8Ls7sYtucYh+F7PYxGIOc8ZVvNN807iGaRUcJ43ByjCXf5/IVZ+f1StTQCMU4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BK9xLv9K; arc=pass smtp.client-ip=74.125.224.44
+	 To:Cc:Content-Type; b=fo+H6qLY1AObede9G3JiuV15+Z+wQ5KjUQ6JZLCKumv/UwHChfEhhxVrQ68B2aLjCiR2SZu1fAmiimCNyH7pIUHsQaTGswIffpAdY29jevyjgoXgXa/HjlftucNqIi5bPmYvyDjT1KFlA0R2G1+B067g7n+aowIy0axcO+TnFCY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CoS+SOQE; arc=pass smtp.client-ip=209.85.128.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BK9xLv9K"
-Received: by mail-yx1-f44.google.com with SMTP id 956f58d0204a3-64c31ca77b4so2864003d50.2
-        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 14:14:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773436496; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CoS+SOQE"
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-79a2ee65171so2431727b3.2
+        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 14:18:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773436725; cv=none;
         d=google.com; s=arc-20240605;
-        b=FNWwjgdRRe4ntp9yg7Z3Y/wfG1orrh6S97qEMEvIId7PhIc/nwt2+AjGiLx4NFLIDY
-         fKPm8S39RIZycSZc6DXsKqEBi1dEIjBSAtd3Yqdov09T97JKFsGlBbxHn1psM+gKep1B
-         vqy4oqIO5tY2qPGfvu2vVbXCNtaEwgXTCO2L0Qgc7TEQr7vZz+1irCn689iiqEScIY3e
-         EGSQG7sTfcadnWsOIL1r8IgmtIDmuUrO1UVyLsI/pPgYiWeH96e8FScCmZF5cy/rf4K6
-         UQkrcHmJz9oiWfdkJ7KCzp5YLb6dkV5BuURCIZlOkCu3AKYo9CqvyVhvAj9s3PMooOGq
-         wbCA==
+        b=LfqoDyUBxVZpHHjz7r1DM/3HpZHg+XbYdoSuBNc58iY2zngtlLa6hIc/ity6ACejRQ
+         onaM2No7Wru5fR8QsHy68XkhxvpEnmAl6b1Xcapmv1hEqB+sY5ayeBTlpnt4uQn2YNS5
+         JpWiCZWTmOOPam25jGNmKjhIjM2zVrrARFIuJcd7C07VN5k6ozDZk/t23XfDstAH8GuC
+         v+GWPVfUyyed4cpxW7LuUAxFwpyTIW2Lt4nikF3uFDm86LQmwBqzM3fF2UWoJVgz6Ult
+         uBTIfvFADKJRs9jz9wD7zH65VciaqifV6B1wKypx7mzr9+KCwyNKPeGS2ZuF//ipDbz0
+         qFSw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=anccHqeYppIg8GJqXhmJPCH4JP9yUf0+wyqWJsiQcDM=;
+        bh=G5w+KWeohGoa+knsdy4MLeTSplc5f+5/aRbCiRvY8I0=;
         fh=5WNbLMzUIJSkT/c9iz+xFtbu/ra9gd2MHn/Koc3qUo0=;
-        b=RwIJMnPFfAO3TqyElb0rJ7VBvwSeVzlK11uIXHcChPXS0ef+GfIrUpX0v6pJfsN2rN
-         NOPNqW2bLvQBJRhIHe3sK5somsZMGXh6tmNq+GXS1mmOPfvYmNllM3SxeP0Pm/6v72vf
-         E4SXt4vVzBNET9lnWkK+AADnw4QU/hhSDTXbZJ+lXLeGCKmUkPs506C2go34oh7F0fzG
-         TZUQQazR9anpcJnEbo8uH3s448N6J7IfC2W12zzRf1OuWCM1/JSuYlCgRyOcCLlwQ0Ux
-         E/ctmslSubUxioYyp6xBbcYxW5UPJEqfuVC2zCDgBNlRfKTdgqxYPRabeRaTdfhO7IQy
-         hiDw==;
+        b=RL2o7MkIKCfxlVp4fSh3WE/eNZrUz0JzHxfEMG8OvD6TPNL7kbh+EalXEVTDnGIi0T
+         rLb+1k2umDI+JdDjbTFAgQjS2vTgcqA+DJnJUtIQ55DvfU1ViJD36OmkUMXVk8kfqm0x
+         dzR2tgUMN8C/zUPAEqYu6ZapOnwJHvU8amTYaQwnAUtR3+5q4RGjAriZ5toJ6w2NnkXp
+         lenqMB1BSOCZCbiPqN6eVZ6aTONkV2zRV3fBoEHQ1MNZH1KN9Nfio8FKDbpjBfZSc3sO
+         p/8X/TFffIK+dM6tm5voMxXL7Mc7Mr/dm5IqLxGp0ZoF1RVR3ICT4vrWZcgiUKKHxUKw
+         W6Cg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773436496; x=1774041296; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773436725; x=1774041525; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=anccHqeYppIg8GJqXhmJPCH4JP9yUf0+wyqWJsiQcDM=;
-        b=BK9xLv9KrhMPmIRPW0TuEzBCLRUeR1BTInRhjcvW1RXo8xz36EUXkM4dxltts1bFUS
-         qelcaAX4PPJD5Kp/t2ncz9gU6QWbUe7lU9gdb4SrTXv6XUSCPUS4eFU3OB9TmCFHaQcN
-         zYhhY4A3eJ/YL0rfC/IJ5RbtV/wjkNClVQKOiNapRhcFTjHyz9/T7URL0ykKEOrbzNy+
-         NtsJBjo6npno5pJt7uukFJ9BWcwyVzLIKO1KFB6ZAOtSbgyYloEcHgu14YIeVFKJ35Jp
-         lBjNDoW6asLa258mazl6AcX2FlQkLOuzQ8Y+1hexml/Pndk187OrgCtCDkWpVnTfA116
-         ESgw==
+        bh=G5w+KWeohGoa+knsdy4MLeTSplc5f+5/aRbCiRvY8I0=;
+        b=CoS+SOQEjhlntDcfoPzlMbqyOu+azz4LxwKSjuEAwqXgZYWI7A6Kh2W0H/htcQk2bw
+         q22m7JGhFNAjqSKjan1Oq98NXTBjcRLbmSrgsESMgaNDEX08K3jeuj9GSSJhbEHZiO9P
+         fg+2/qDfa+7kc+1Ll1DCLEP4dHAjFUjjvb8/1fVs9WuUkMWusWRdvgEjW9+RLR7wiKPw
+         JxWBelfmTLT/z/s4PzaEjBdGbknz9eVIi6r1tZARiQNhmlFYx2tXHLMsJoKCujXe2FDw
+         Xz+K2JIF8JkdSNvjMYvxnJ5tbFpaIh2+MSrR1GkUJEUJM0YGBdpqmEuF1lHd3MFe+qky
+         asNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773436496; x=1774041296;
+        d=1e100.net; s=20251104; t=1773436725; x=1774041525;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=anccHqeYppIg8GJqXhmJPCH4JP9yUf0+wyqWJsiQcDM=;
-        b=IiaLR8OAR+uM+zJLNElAXQjmAYt5zYeWAATyDTEKbCEN+Uk2aRAmXYD1+5BrgNhCOF
-         NmZ9Gw84rND2JVo3LoYjESwa1BGXItONuM1fxzbtnmsHABPEcO85itgz6KfxmM2idmMK
-         1VGc1/RXFLeoI52KNBDkEy8shhwkWGULsdiTLYr1BRJyK4/NKHEXZngPdHk5aTJlUh+S
-         HyYwuGyQU6JFvt7KADU7NoR+kcghytyHYlFYKULSwkTdAWak1L4hYN1W4tt/9Kg09qqx
-         1VT9CAVOKwTpfmiQTJXvjhdPkQaGbNg6HMI6Vk/zbecK0HuaP1ZDpUOaHPcBKRvlNypz
-         VwBw==
-X-Gm-Message-State: AOJu0YyQCSL/0H5EvRiV2IktGSn3tP9HU1an+sNyy/2lQU8FXp+d+Ci6
-	dC9gYDiSb4Mbal79xavxQEn8t2lcbrbEBcoCRKuivZRs/by7d2PX1YGgBBgeofmH1J4ODwnEMUn
-	YDQjetAY6n8CLPCTMhDsXHMgwzhOMc4hNJADe
-X-Gm-Gg: ATEYQzz31+Bj/DlmTdYGH8597KNTjAXpTE+JT4sse9d0QZS6/iougsrEu8fSRa3I+e8
-	3ZOs8JtMGa0FiQGNCjy9ul0Et8R8PO3xn5mGM2D6W4Cm94s1PFJjxpA/KtOo01B9QF3tukum7Ql
-	cIj02QpSUs7pbx6XHfT5IoGTXt2QAuMPYq/3fKRQ71SeaDnh4HqjNVguuu9iPW7hrzPzGzFO/no
-	a0zIZYlvUOzDcX/JIWNb5r++8X5hcfLyA+IwAqAETpPj5ize9jHmjpQKZHPDL7ZwSF55M0yFo7I
-	vfb3LHc6n1o6DOYy6A==
-X-Received: by 2002:a05:690c:7242:b0:799:8c6:9ccb with SMTP id
- 00721157ae682-79a1c20e520mr53791647b3.62.1773436496350; Fri, 13 Mar 2026
- 14:14:56 -0700 (PDT)
+        bh=G5w+KWeohGoa+knsdy4MLeTSplc5f+5/aRbCiRvY8I0=;
+        b=NgRsCd+9slsuzt5fEFXYErXeXjS/vqqCfYQMYb5vjejqqtjUt6ouR8eYYoA4BmbNbK
+         gAjSLmqBlYdktDfXUR7KORlNuEv65Zo6Y41yJ54fSaEkCn4JJcm55K3mw98+GTlcZHgv
+         7RGLgxDSPxiwI1L+BYupvfSRTQL56XqZXaQXTPh40tz+NClFmFu+V3YcWW2p8tAtJzSw
+         JaJ5qQW8+p5MP8aoHq8zKITC3u5Nk+6gLIouT/9Ogv9hT3ArxtMngRWxWJJ5WGf0YRDi
+         /3HPgqwvjxWzpsG+C6uycYZW6U+tu5S19j2Cjxbxme7cxt2QJ8iN+8x14wefWFny9yjd
+         zEBw==
+X-Gm-Message-State: AOJu0YwWO+ZE4CdyZBCVCUQhtRb2+DTV1OZNShJLAHXFNGoFeFrhBRbD
+	ntwB9Nyzt3tECmzmBRz/0tIjgt7uTKUUzYfMlQsfVmd5za967f5mwuDmJxheAZh1X030sfCb9Gi
+	Myr03BE9+GjHMxj8DDS/B0O53xDOogpY=
+X-Gm-Gg: ATEYQzzA7wFCyNq+r+jc7iFLXMZCLuexAb2VUxydvxbIczXLxgBNQ0h+6n+MYIg3Tx/
+	kh81c/rKSRU6eKQUz9NYIiPc44tHDnKTuWS7DwJyLF7Y3KwTI+OHQr+mfOgRxeAgnTu8takm5NN
+	poHXAf6aQELDgMVHREIRONAyFl5QCwhKjtkjmhUJZedcOEWbgNcK5uaDBm3aw+Nh7bkly57JM4R
+	ylWXC5yq1s1MsrF8xMq1Wl+FilLMyUYK3l/xh2nmUeSpbDYM/+yWvqjkjQeeF6bjvtDBA54zzpg
+	61Dg36g=
+X-Received: by 2002:a05:690c:a0d9:b0:798:991d:2294 with SMTP id
+ 00721157ae682-79a1c1299a5mr36515957b3.28.1773436725623; Fri, 13 Mar 2026
+ 14:18:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260313075318.11847-1-danjwade95@gmail.com> <20260313075318.11847-2-danjwade95@gmail.com>
-In-Reply-To: <20260313075318.11847-2-danjwade95@gmail.com>
+References: <20260313075318.11847-1-danjwade95@gmail.com> <20260313075318.11847-3-danjwade95@gmail.com>
+In-Reply-To: <20260313075318.11847-3-danjwade95@gmail.com>
 From: Amery Hung <ameryhung@gmail.com>
-Date: Fri, 13 Mar 2026 14:14:45 -0700
-X-Gm-Features: AaiRm51maWSR1Nq8dJpyVn7Vvonp5xz4XfFS2VGvRKSgCMlDpIY6gmC9NABHaMU
-Message-ID: <CAMB2axP6SbmKQH6Q+7jGehi=8vKm_-McJXhGvjB=eHbFwSJYxw@mail.gmail.com>
-Subject: Re: [PATCH bpf v3 1/2] bpf: Fix unsound scalar forking in
- maybe_fork_scalars() for BPF_OR
+Date: Fri, 13 Mar 2026 14:18:34 -0700
+X-Gm-Features: AaiRm50TsHO8zEGeuQiOgkXNSwCT0H380kotQox7F-5uXK-xVIQ_6z5YU1f3uGQ
+Message-ID: <CAMB2axOspp-6cAeH_a9AjuixJ+OgtzxmXyLRPvM3T-w02CSArQ@mail.gmail.com>
+Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: Add tests for
+ maybe_fork_scalars() OR vs AND handling
 To: Daniel Wade <danjwade95@gmail.com>
 Cc: bpf@vger.kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, 
 	ast@kernel.org
@@ -97,47 +97,148 @@ Content-Transfer-Encoding: quoted-printable
 On Fri, Mar 13, 2026 at 12:53=E2=80=AFAM Daniel Wade <danjwade95@gmail.com>=
  wrote:
 >
-> maybe_fork_scalars() is called for both BPF_AND and BPF_OR when the
-> source operand is a constant.  When dst has signed range [-1, 0], it
-> forks the verifier state: the pushed path gets dst =3D 0, the current
-> path gets dst =3D -1.
+> Add three test cases to verifier_bounds.c to verify that
+> maybe_fork_scalars() correctly tracks register values for BPF_OR
+> operations with constant source operands:
 >
-> For BPF_AND this is correct: 0 & K =3D=3D 0.
-> For BPF_OR this is wrong:    0 | K =3D=3D K, not 0.
+> 1. or_scalar_fork_rejects_oob: After ARSH 63 + OR 8, the pushed
+>    path should have dst =3D 8. With value_size =3D 8, accessing
+>    map_value + 8 is out of bounds and must be rejected.
 >
-> The pushed path therefore tracks dst as 0 when the runtime value is K,
-> producing an exploitable verifier/runtime divergence that allows
-> out-of-bounds map access.
+> 2. and_scalar_fork_still_works: Regression test ensuring AND
+>    forking continues to work. ARSH 63 + AND 4 produces pushed
+>    dst =3D 0 and current dst =3D 4, both within value_size =3D 8.
 >
-> Fix this by passing env->insn_idx (instead of env->insn_idx + 1) to
-> push_stack(), so the pushed path re-executes the ALU instruction with
-> dst =3D 0 and naturally computes the correct result for any opcode.
+> 3. or_scalar_fork_allows_inbounds: After ARSH 63 + OR 4, the
+>    pushed path has dst =3D 4, which is within value_size =3D 8
+>    and should be accepted.
 >
-> Fixes: bffacdb80b93 ("bpf: Recognize special arithmetic shift in the veri=
-fier")
+> These tests exercise the fix in the previous patch, which makes the
+> pushed path re-execute the ALU instruction so it computes the correct
+> result for BPF_OR.
+>
 > Signed-off-by: Daniel Wade <danjwade95@gmail.com>
+> ---
+> v3: Use single-line comment style (Alexei Starovoitov)
+> v2: Update tests for re-execute fix approach (Eduard Zingerman)
 
 Reviewed-by: Amery Hung <ameryhung@gmail.com>
 
+
 > ---
->  kernel/bpf/verifier.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  .../selftests/bpf/progs/verifier_bounds.c     | 90 +++++++++++++++++++
+>  1 file changed, 90 insertions(+)
 >
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index a9e2380327..68fa308520 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -14206,7 +14206,7 @@ static int maybe_fork_scalars(struct bpf_verifier=
-_env *env, struct bpf_insn *ins
->         else
->                 return 0;
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/=
+testing/selftests/bpf/progs/verifier_bounds.c
+> index a0bb7fb40e..bf834414ea 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+> @@ -1200,4 +1200,94 @@ l0_%=3D:   r0 =3D 0;                              =
+           \
+>         : __clobber_all);
+>  }
 >
-> -       branch =3D push_stack(env, env->insn_idx + 1, env->insn_idx, fals=
-e);
-> +       branch =3D push_stack(env, env->insn_idx, env->insn_idx, false);
->         if (IS_ERR(branch))
->                 return PTR_ERR(branch);
->
+> +SEC("socket")
+> +__description("maybe_fork_scalars: OR with constant rejects OOB")
+> +__failure __msg("invalid access to map value")
+> +__naked void or_scalar_fork_rejects_oob(void)
+> +{
+> +       asm volatile ("                                 \
+> +       r1 =3D 0;                                         \
+> +       *(u64*)(r10 - 8) =3D r1;                          \
+> +       r2 =3D r10;                                       \
+> +       r2 +=3D -8;                                       \
+> +       r1 =3D %[map_hash_8b] ll;                         \
+> +       call %[bpf_map_lookup_elem];                    \
+> +       if r0 =3D=3D 0 goto l0_%=3D;                          \
+> +       r9 =3D r0;                                        \
+> +       r6 =3D *(u64*)(r9 + 0);                           \
+> +       r6 s>>=3D 63;                                     \
+> +       r6 |=3D 8;                                        \
+> +       /* r6 is -1 (current) or 8 (pushed) */          \
+> +       if r6 s< 0 goto l0_%=3D;                          \
+> +       /* pushed path: r6 =3D 8, OOB for value_size=3D8 */ \
+> +       r9 +=3D r6;                                       \
+> +       r0 =3D *(u8*)(r9 + 0);                            \
+> +l0_%=3D: r0 =3D 0;                                         \
+> +       exit;                                           \
+> +"      :
+> +       : __imm(bpf_map_lookup_elem),
+> +         __imm_addr(map_hash_8b)
+> +       : __clobber_all);
+> +}
+> +
+> +SEC("socket")
+> +__description("maybe_fork_scalars: AND with constant still works")
+> +__success __retval(0)
+> +__naked void and_scalar_fork_still_works(void)
+> +{
+> +       asm volatile ("                                 \
+> +       r1 =3D 0;                                         \
+> +       *(u64*)(r10 - 8) =3D r1;                          \
+> +       r2 =3D r10;                                       \
+> +       r2 +=3D -8;                                       \
+> +       r1 =3D %[map_hash_8b] ll;                         \
+> +       call %[bpf_map_lookup_elem];                    \
+> +       if r0 =3D=3D 0 goto l0_%=3D;                          \
+> +       r9 =3D r0;                                        \
+> +       r6 =3D *(u64*)(r9 + 0);                           \
+> +       r6 s>>=3D 63;                                     \
+> +       r6 &=3D 4;                                        \
+> +       /* r6 is 0 (pushed, 0&4=3D=3D0) or 4 (current) */   \
+> +       /* both within value_size=3D8 */                  \
+> +       if r6 s< 0 goto l0_%=3D;                          \
+> +       r9 +=3D r6;                                       \
+> +       r0 =3D *(u8*)(r9 + 0);                            \
+> +l0_%=3D: r0 =3D 0;                                         \
+> +       exit;                                           \
+> +"      :
+> +       : __imm(bpf_map_lookup_elem),
+> +         __imm_addr(map_hash_8b)
+> +       : __clobber_all);
+> +}
+> +
+> +SEC("socket")
+> +__description("maybe_fork_scalars: OR with constant allows in-bounds")
+> +__success __retval(0)
+> +__naked void or_scalar_fork_allows_inbounds(void)
+> +{
+> +       asm volatile ("                                 \
+> +       r1 =3D 0;                                         \
+> +       *(u64*)(r10 - 8) =3D r1;                          \
+> +       r2 =3D r10;                                       \
+> +       r2 +=3D -8;                                       \
+> +       r1 =3D %[map_hash_8b] ll;                         \
+> +       call %[bpf_map_lookup_elem];                    \
+> +       if r0 =3D=3D 0 goto l0_%=3D;                          \
+> +       r9 =3D r0;                                        \
+> +       r6 =3D *(u64*)(r9 + 0);                           \
+> +       r6 s>>=3D 63;                                     \
+> +       r6 |=3D 4;                                        \
+> +       /* r6 is -1 (current) or 4 (pushed) */          \
+> +       /* pushed path: r6 =3D 4, within value_size=3D8 */  \
+
+I think the proper multi-line comment styles mean something like below
+instead of the netdev style you were using in v1
+
+/*
+ * r6 is -1 (current) or 4 (pushed)
+ * pushed path: r6 =3D 4, within value_size=3D8
+ */
+
+> +       if r6 s< 0 goto l0_%=3D;                          \
+> +       r9 +=3D r6;                                       \
+> +       r0 =3D *(u8*)(r9 + 0);                            \
+> +l0_%=3D: r0 =3D 0;                                         \
+> +       exit;                                           \
+> +"      :
+> +       : __imm(bpf_map_lookup_elem),
+> +         __imm_addr(map_hash_8b)
+> +       : __clobber_all);
+> +}
+> +
+>  char _license[] SEC("license") =3D "GPL";
 > --
 > 2.43.0
 >
