@@ -1,302 +1,143 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-yx1-f44.google.com (mail-yx1-f44.google.com [74.125.224.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EC16382F06
-	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 21:05:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773435904; cv=none; b=mmHND9vY77WswEHXYS+2pkc+amqE3d+Z4t51wcux7JkfRsbIA4K5LiEH4vXvlLLZyFDd7no0wzdS8OF3SYiOjcj85G79pz1tAZaBeWBqF+IZxFBwuW6eAcZ4pMC9qQIlyHXszZWU/Htj2zp5wC54d7z5I1HdvY9/CeC91VKyRAQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773435904; c=relaxed/simple;
-	bh=JZYp+sHtQC7bLCt5rA2IaPRvcpY1Z3TrxEXp/XBLz1A=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eWhGFk5arM6JBC2hI6qPtWY0iFp0RG+DI2mpJre5jDgueDc/kl6ZDK4v4A9S6qfg1GhTyR0CG6f9mk87vvMsqI3BU9XVn0wEOFNloZwi+TK0/o4Z9uMSt1LK5+luDMomPY/KfplCndtm4Ee1C0q7QzKfErGHJD7lfoFrLWRooLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l8ur5XeV; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A512282F04
+	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 21:14:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773436498; cv=pass; b=U6UEHzlcUCOda6fL/qUpSjfIr5C8UNA6zyywbpWQKND6lq0eC+TuGy5xsdCmB32qxCIvkugOhtapUYaIHzU6bfvmguH8FSaToVtanl8Eazx0yN5P98C4SO6KYsd8jRvoVvEkAv4l4veWIDISrnhsFX1dhjyOHv975IHlhEQSzP4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773436498; c=relaxed/simple;
+	bh=6jm5LLuesQBJ/G6hU0fm0QD3cDG/ka7OEt7yvUXm11M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ny1k2/SCEEtEou3Uk8Wxx/T5vTDlik8RlooDD+RmSdnapdxIB3pjQwzwJCJ72Q1sBufLVLUOrbszw2rIrQyEcoKqHWLY1pLTBxOw9xpIXwLcFq8Ls7sYtucYh+F7PYxGIOc8ZVvNN807iGaRUcJ43ByjCXf5/IVZ+f1StTQCMU4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BK9xLv9K; arc=pass smtp.client-ip=74.125.224.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l8ur5XeV"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-48535a0ef86so21781375e9.1
-        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 14:05:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BK9xLv9K"
+Received: by mail-yx1-f44.google.com with SMTP id 956f58d0204a3-64c31ca77b4so2864003d50.2
+        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 14:14:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773436496; cv=none;
+        d=google.com; s=arc-20240605;
+        b=FNWwjgdRRe4ntp9yg7Z3Y/wfG1orrh6S97qEMEvIId7PhIc/nwt2+AjGiLx4NFLIDY
+         fKPm8S39RIZycSZc6DXsKqEBi1dEIjBSAtd3Yqdov09T97JKFsGlBbxHn1psM+gKep1B
+         vqy4oqIO5tY2qPGfvu2vVbXCNtaEwgXTCO2L0Qgc7TEQr7vZz+1irCn689iiqEScIY3e
+         EGSQG7sTfcadnWsOIL1r8IgmtIDmuUrO1UVyLsI/pPgYiWeH96e8FScCmZF5cy/rf4K6
+         UQkrcHmJz9oiWfdkJ7KCzp5YLb6dkV5BuURCIZlOkCu3AKYo9CqvyVhvAj9s3PMooOGq
+         wbCA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=anccHqeYppIg8GJqXhmJPCH4JP9yUf0+wyqWJsiQcDM=;
+        fh=5WNbLMzUIJSkT/c9iz+xFtbu/ra9gd2MHn/Koc3qUo0=;
+        b=RwIJMnPFfAO3TqyElb0rJ7VBvwSeVzlK11uIXHcChPXS0ef+GfIrUpX0v6pJfsN2rN
+         NOPNqW2bLvQBJRhIHe3sK5somsZMGXh6tmNq+GXS1mmOPfvYmNllM3SxeP0Pm/6v72vf
+         E4SXt4vVzBNET9lnWkK+AADnw4QU/hhSDTXbZJ+lXLeGCKmUkPs506C2go34oh7F0fzG
+         TZUQQazR9anpcJnEbo8uH3s448N6J7IfC2W12zzRf1OuWCM1/JSuYlCgRyOcCLlwQ0Ux
+         E/ctmslSubUxioYyp6xBbcYxW5UPJEqfuVC2zCDgBNlRfKTdgqxYPRabeRaTdfhO7IQy
+         hiDw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773435902; x=1774040702; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7VdLlI8p3c2ml716EZ2LGSjLC8UKoGj5GsyCV00O6Eo=;
-        b=l8ur5XeVwelqO5kBCiDeim4AC8m3gX5rZG5wphU3brKBSzAr1T/vgIitS4OTHpkfIr
-         6qI7I8nFu0q/8hsYFXfh09pwxw3wM8pDNoO3kluemm/vQj7pgsQ9BgZphFWHNoNKLcxC
-         IePbpwrqIrW5Sol3f/iMYsrc+vUnBmfVu6lQrazuRapfIjO63GNX/xgJQj43IQXt8orq
-         xvv6uEgQZg2q9dlLRRbSM8cDT5p9MSQHXzuBBYPqnYKY7BRnhRfu84fDnFq41f1ecGnB
-         9ULxeJF1rZBgZBScxKiiSfSSMfYJ8XXHc5s8mHZPKLDfvDYZa8CorLqdnRIWcMbfaojv
-         Lu7A==
+        d=gmail.com; s=20230601; t=1773436496; x=1774041296; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=anccHqeYppIg8GJqXhmJPCH4JP9yUf0+wyqWJsiQcDM=;
+        b=BK9xLv9KrhMPmIRPW0TuEzBCLRUeR1BTInRhjcvW1RXo8xz36EUXkM4dxltts1bFUS
+         qelcaAX4PPJD5Kp/t2ncz9gU6QWbUe7lU9gdb4SrTXv6XUSCPUS4eFU3OB9TmCFHaQcN
+         zYhhY4A3eJ/YL0rfC/IJ5RbtV/wjkNClVQKOiNapRhcFTjHyz9/T7URL0ykKEOrbzNy+
+         NtsJBjo6npno5pJt7uukFJ9BWcwyVzLIKO1KFB6ZAOtSbgyYloEcHgu14YIeVFKJ35Jp
+         lBjNDoW6asLa258mazl6AcX2FlQkLOuzQ8Y+1hexml/Pndk187OrgCtCDkWpVnTfA116
+         ESgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773435902; x=1774040702;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7VdLlI8p3c2ml716EZ2LGSjLC8UKoGj5GsyCV00O6Eo=;
-        b=C+hxKPPtTdV/pYQm6jH7T55e2jMGGB+lEXiAworbKjWowgAKaYARlQ3wEnJlA6UilR
-         M5oJIUvo7mLXHXUGXZkFRYVHVKY7NspgahsqWeP3T9/zG2740RuKrMxEB8yfJeB/2FqJ
-         fTHtFGZx6ajd3uo99uZoArnkHGgJRMK/Bz02iYssbAhLT7XDmvFDlau1u8Gm9HTMKZ05
-         h2TL9SWK7Tm9Qif4q3GsHzbI4cGbfToyLkADdMTwuYGZ92uRX1vpW5mmrMsCLIFnioQP
-         nJ3EwfugNmn/5IKMHKw23BRmhvi7HGpwjA1E9RZa2zT6gLIRPYfbSaMemxOTzZlgnRIg
-         waWQ==
-X-Gm-Message-State: AOJu0Yz72ZvIXa8U1Mq9ctQ4eQf6YRvEEWwmaz7O4SoV+NhSuBIn7Le1
-	QyX8v6LdywAFBV7c5h2IFSmppQHVclRWnQBAngIkgBnwlOdxZYs8N9mW
-X-Gm-Gg: ATEYQzxzw25d1DJN3XbLaCIrG6cjpIBb8tceA1O+3tkS75+9mLp98M+NPkGu8Mql0Y0
-	G8DeTpX3jmY3pnCI97DGndPlTvkLRrnbKQJgvIeEXz6L/x6YePrC+wOKEEF8o4uCNuuUhNXuy7B
-	v3z2aGn8hsBlDGzfWJVtzawjuUANfAlyQvOgioBaMRv1w4UuLIpAl5iKo/On6MvrMlxKW+jyVSj
-	d5Mh+jnDyAI3zvTM9dpCrazCyHTcok3v/Z5GylIJMazGzQWWAkG8MrcwqHaeSM1wlvai/XtX0e2
-	9dAbLStBaDm8RjP7kVP3UaIugMPCqHSa0FoSWDMTEC3Msn6qvmcwXGwWK0kT/Mc4E2kgNzPZBqA
-	wxpJtLC6VKc/OTsPFNmpUS0TxUFXY9RaGM4HMLvHGZdQA6ZdvKZE6C72hEO9xfp7M2YEhmsTEQn
-	9c7FX5DVB2OTqVKSUk4Q==
-X-Received: by 2002:a05:600c:468e:b0:485:3f58:d9d with SMTP id 5b1f17b1804b1-48556714b67mr75883295e9.32.1773435901279;
-        Fri, 13 Mar 2026 14:05:01 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:54::])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-485563903bbsm51024855e9.0.2026.03.13.14.05.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Mar 2026 14:05:00 -0700 (PDT)
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Fri, 13 Mar 2026 14:04:25 -0700
-Subject: [PATCH bpf-next v4 5/5] selftests/bpf: Add tests for sleepable
- tracepoint programs
+        d=1e100.net; s=20251104; t=1773436496; x=1774041296;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=anccHqeYppIg8GJqXhmJPCH4JP9yUf0+wyqWJsiQcDM=;
+        b=IiaLR8OAR+uM+zJLNElAXQjmAYt5zYeWAATyDTEKbCEN+Uk2aRAmXYD1+5BrgNhCOF
+         NmZ9Gw84rND2JVo3LoYjESwa1BGXItONuM1fxzbtnmsHABPEcO85itgz6KfxmM2idmMK
+         1VGc1/RXFLeoI52KNBDkEy8shhwkWGULsdiTLYr1BRJyK4/NKHEXZngPdHk5aTJlUh+S
+         HyYwuGyQU6JFvt7KADU7NoR+kcghytyHYlFYKULSwkTdAWak1L4hYN1W4tt/9Kg09qqx
+         1VT9CAVOKwTpfmiQTJXvjhdPkQaGbNg6HMI6Vk/zbecK0HuaP1ZDpUOaHPcBKRvlNypz
+         VwBw==
+X-Gm-Message-State: AOJu0YyQCSL/0H5EvRiV2IktGSn3tP9HU1an+sNyy/2lQU8FXp+d+Ci6
+	dC9gYDiSb4Mbal79xavxQEn8t2lcbrbEBcoCRKuivZRs/by7d2PX1YGgBBgeofmH1J4ODwnEMUn
+	YDQjetAY6n8CLPCTMhDsXHMgwzhOMc4hNJADe
+X-Gm-Gg: ATEYQzz31+Bj/DlmTdYGH8597KNTjAXpTE+JT4sse9d0QZS6/iougsrEu8fSRa3I+e8
+	3ZOs8JtMGa0FiQGNCjy9ul0Et8R8PO3xn5mGM2D6W4Cm94s1PFJjxpA/KtOo01B9QF3tukum7Ql
+	cIj02QpSUs7pbx6XHfT5IoGTXt2QAuMPYq/3fKRQ71SeaDnh4HqjNVguuu9iPW7hrzPzGzFO/no
+	a0zIZYlvUOzDcX/JIWNb5r++8X5hcfLyA+IwAqAETpPj5ize9jHmjpQKZHPDL7ZwSF55M0yFo7I
+	vfb3LHc6n1o6DOYy6A==
+X-Received: by 2002:a05:690c:7242:b0:799:8c6:9ccb with SMTP id
+ 00721157ae682-79a1c20e520mr53791647b3.62.1773436496350; Fri, 13 Mar 2026
+ 14:14:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260313-sleepable_tracepoints-v4-5-debc688a66b3@meta.com>
-References: <20260313-sleepable_tracepoints-v4-0-debc688a66b3@meta.com>
-In-Reply-To: <20260313-sleepable_tracepoints-v4-0-debc688a66b3@meta.com>
-To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
- daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
- eddyz87@gmail.com
-Cc: Mykyta Yatsenko <yatsenko@meta.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773435891; l=6510;
- i=yatsenko@meta.com; s=20260220; h=from:subject:message-id;
- bh=fIDtUeIUB3xqM7bA+Am0k9zlmnK1oz9LSRMIrlVaU7c=;
- b=PCU+iWdpcUwCPbC1hh6tYDJDKbJDANDpiGuQ3ANWOn0PHb6Z/5eD4ZG0FBCXxWNydAYd6RW7R
- ZTRznwE34T+CODyo4zaSkOIUZMx6eqDMDGzN0RhinRoqagtlWZ+sP8I
-X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
- pk=QUfct6THKRRhwIGGKcldE2w7zXPci1gMPcF7qij1gwA=
+References: <20260313075318.11847-1-danjwade95@gmail.com> <20260313075318.11847-2-danjwade95@gmail.com>
+In-Reply-To: <20260313075318.11847-2-danjwade95@gmail.com>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Fri, 13 Mar 2026 14:14:45 -0700
+X-Gm-Features: AaiRm51maWSR1Nq8dJpyVn7Vvonp5xz4XfFS2VGvRKSgCMlDpIY6gmC9NABHaMU
+Message-ID: <CAMB2axP6SbmKQH6Q+7jGehi=8vKm_-McJXhGvjB=eHbFwSJYxw@mail.gmail.com>
+Subject: Re: [PATCH bpf v3 1/2] bpf: Fix unsound scalar forking in
+ maybe_fork_scalars() for BPF_OR
+To: Daniel Wade <danjwade95@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, 
+	ast@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Mykyta Yatsenko <yatsenko@meta.com>
+On Fri, Mar 13, 2026 at 12:53=E2=80=AFAM Daniel Wade <danjwade95@gmail.com>=
+ wrote:
+>
+> maybe_fork_scalars() is called for both BPF_AND and BPF_OR when the
+> source operand is a constant.  When dst has signed range [-1, 0], it
+> forks the verifier state: the pushed path gets dst =3D 0, the current
+> path gets dst =3D -1.
+>
+> For BPF_AND this is correct: 0 & K =3D=3D 0.
+> For BPF_OR this is wrong:    0 | K =3D=3D K, not 0.
+>
+> The pushed path therefore tracks dst as 0 when the runtime value is K,
+> producing an exploitable verifier/runtime divergence that allows
+> out-of-bounds map access.
+>
+> Fix this by passing env->insn_idx (instead of env->insn_idx + 1) to
+> push_stack(), so the pushed path re-executes the ALU instruction with
+> dst =3D 0 and naturally computes the correct result for any opcode.
+>
+> Fixes: bffacdb80b93 ("bpf: Recognize special arithmetic shift in the veri=
+fier")
+> Signed-off-by: Daniel Wade <danjwade95@gmail.com>
 
-Add functional tests for sleepable tracepoint programs that attach to
-the nanosleep syscall and use bpf_copy_from_user() to read user memory:
+Reviewed-by: Amery Hung <ameryhung@gmail.com>
 
-  - tp_btf: BTF-based raw tracepoint using SEC("tp_btf.s/sys_enter")
-    with PT_REGS_PARM1_SYSCALL (non-CO-RE macro for BTF programs).
-
-  - classic: Classic raw tracepoint using SEC("raw_tp.s/sys_enter")
-    with PT_REGS_PARM1_CORE_SYSCALL (CO-RE macro needed for classic).
-
-  - tracepoint: Classic tracepoint using
-    SEC("tp.s/syscalls/sys_enter_nanosleep") receiving
-    struct syscall_trace_enter with direct access to args[].
-
-Add a negative test (test_sleepable_raw_tp_fail) that verifies
-sleepable programs are rejected on non-faultable tracepoints
-(sched_switch).
-
-Update verifier/sleepable.c tests:
-  - Add "sleepable raw tracepoint accept" test for sys_enter.
-  - Rename reject test and update error message to match the new
-    descriptive "Sleepable program cannot attach to non-faultable
-    tracepoint" message.
-
-Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
----
- .../bpf/prog_tests/sleepable_tracepoints.c         | 57 ++++++++++++++++
- .../bpf/progs/test_sleepable_tracepoints.c         | 75 ++++++++++++++++++++++
- tools/testing/selftests/bpf/verifier/sleepable.c   | 17 ++++-
- 3 files changed, 147 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/sleepable_tracepoints.c b/tools/testing/selftests/bpf/prog_tests/sleepable_tracepoints.c
-new file mode 100644
-index 000000000000..308d53c31632
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/sleepable_tracepoints.c
-@@ -0,0 +1,57 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-+
-+#include <test_progs.h>
-+#include <time.h>
-+#include "test_sleepable_tracepoints.skel.h"
-+
-+static void run_test(struct bpf_program *prog,
-+		     struct test_sleepable_tracepoints *skel)
-+{
-+	struct bpf_link *link;
-+
-+	link = bpf_program__attach(prog);
-+	if (!ASSERT_OK_PTR(link, "prog_attach"))
-+		return;
-+
-+	skel->bss->target_pid = getpid();
-+	skel->bss->triggered = 0;
-+	skel->bss->err = 0;
-+	skel->bss->copied_tv_nsec = 0;
-+
-+	syscall(__NR_nanosleep, &(struct timespec){ .tv_nsec = 555 }, NULL);
-+
-+	ASSERT_EQ(skel->bss->triggered, 1, "triggered");
-+	ASSERT_EQ(skel->bss->err, 0, "err");
-+	ASSERT_EQ(skel->bss->copied_tv_nsec, 555, "copied_tv_nsec");
-+
-+	bpf_link__destroy(link);
-+}
-+
-+void test_sleepable_tracepoints(void)
-+{
-+	struct test_sleepable_tracepoints *skel;
-+
-+	skel = test_sleepable_tracepoints__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	bpf_program__set_autoload(skel->progs.handle_sched_switch, false);
-+
-+	if (!ASSERT_OK(test_sleepable_tracepoints__load(skel), "skel_load"))
-+		goto cleanup;
-+
-+	if (test__start_subtest("tp_btf"))
-+		run_test(skel->progs.handle_sys_enter_tp_btf, skel);
-+
-+	if (test__start_subtest("classic"))
-+		run_test(skel->progs.handle_sys_enter_raw_tp, skel);
-+
-+	if (test__start_subtest("tracepoint"))
-+		run_test(skel->progs.handle_sys_enter_tp, skel);
-+
-+cleanup:
-+	test_sleepable_tracepoints__destroy(skel);
-+
-+	RUN_TESTS(test_sleepable_tracepoints);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_sleepable_tracepoints.c b/tools/testing/selftests/bpf/progs/test_sleepable_tracepoints.c
-new file mode 100644
-index 000000000000..37e14f5e9f14
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_sleepable_tracepoints.c
-@@ -0,0 +1,75 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-+
-+#include <vmlinux.h>
-+#include <asm/unistd.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_core_read.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+int target_pid;
-+int triggered;
-+long err;
-+long copied_tv_nsec;
-+
-+static int copy_nanosleep_arg(struct __kernel_timespec *ts)
-+{
-+	long tv_nsec;
-+
-+	err = bpf_copy_from_user(&tv_nsec, sizeof(tv_nsec), &ts->tv_nsec);
-+	if (err)
-+		return err;
-+
-+	copied_tv_nsec = tv_nsec;
-+	triggered = 1;
-+	return 0;
-+}
-+
-+SEC("tp_btf.s/sys_enter")
-+int BPF_PROG(handle_sys_enter_tp_btf, struct pt_regs *regs, long id)
-+{
-+	struct task_struct *task = bpf_get_current_task_btf();
-+
-+	if (task->pid != target_pid)
-+		return 0;
-+
-+	if (id != __NR_nanosleep)
-+		return 0;
-+
-+	return copy_nanosleep_arg((void *)PT_REGS_PARM1_SYSCALL(regs));
-+}
-+
-+SEC("raw_tp.s/sys_enter")
-+int BPF_PROG(handle_sys_enter_raw_tp, struct pt_regs *regs, long id)
-+{
-+	struct task_struct *task = bpf_get_current_task_btf();
-+
-+	if (task->pid != target_pid)
-+		return 0;
-+
-+	if (id != __NR_nanosleep)
-+		return 0;
-+
-+	return copy_nanosleep_arg((void *)PT_REGS_PARM1_CORE_SYSCALL(regs));
-+}
-+
-+SEC("tp.s/syscalls/sys_enter_nanosleep")
-+int handle_sys_enter_tp(struct syscall_trace_enter *args)
-+{
-+	if ((bpf_get_current_pid_tgid() >> 32) != target_pid)
-+		return 0;
-+
-+	return copy_nanosleep_arg((void *)args->args[0]);
-+}
-+
-+/* Sleepable program on a non-faultable tracepoint should fail to load */
-+SEC("tp_btf.s/sched_switch")
-+__failure __msg("Sleepable program cannot attach to non-faultable tracepoint")
-+int BPF_PROG(handle_sched_switch, bool preempt,
-+	     struct task_struct *prev, struct task_struct *next)
-+{
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/verifier/sleepable.c b/tools/testing/selftests/bpf/verifier/sleepable.c
-index 1f0d2bdc673f..6dabc5522945 100644
---- a/tools/testing/selftests/bpf/verifier/sleepable.c
-+++ b/tools/testing/selftests/bpf/verifier/sleepable.c
-@@ -76,7 +76,20 @@
- 	.runs = -1,
- },
- {
--	"sleepable raw tracepoint reject",
-+	"sleepable raw tracepoint accept",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_TRACING,
-+	.expected_attach_type = BPF_TRACE_RAW_TP,
-+	.kfunc = "sys_enter",
-+	.result = ACCEPT,
-+	.flags = BPF_F_SLEEPABLE,
-+	.runs = -1,
-+},
-+{
-+	"sleepable raw tracepoint reject non-faultable",
- 	.insns = {
- 	BPF_MOV64_IMM(BPF_REG_0, 0),
- 	BPF_EXIT_INSN(),
-@@ -85,7 +98,7 @@
- 	.expected_attach_type = BPF_TRACE_RAW_TP,
- 	.kfunc = "sched_switch",
- 	.result = REJECT,
--	.errstr = "Only fentry/fexit/fmod_ret, lsm, iter, uprobe, and struct_ops programs can be sleepable",
-+	.errstr = "Sleepable program cannot attach to non-faultable tracepoint",
- 	.flags = BPF_F_SLEEPABLE,
- 	.runs = -1,
- },
-
--- 
-2.52.0
-
+> ---
+>  kernel/bpf/verifier.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index a9e2380327..68fa308520 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -14206,7 +14206,7 @@ static int maybe_fork_scalars(struct bpf_verifier=
+_env *env, struct bpf_insn *ins
+>         else
+>                 return 0;
+>
+> -       branch =3D push_stack(env, env->insn_idx + 1, env->insn_idx, fals=
+e);
+> +       branch =3D push_stack(env, env->insn_idx, env->insn_idx, false);
+>         if (IS_ERR(branch))
+>                 return PTR_ERR(branch);
+>
+> --
+> 2.43.0
+>
