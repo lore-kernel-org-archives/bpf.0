@@ -1,112 +1,118 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC7D2371CFF
-	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 22:48:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1D093C872F
+	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 22:53:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773442093; cv=none; b=e+HTDEGT79yATcDGQsmoqBr2zueeZzSmqXVAeoV475u/rs/vAVjEA0XtrBqSljfk4F7tda0zwV6xA0On84lGslnrJIHf/n+Med4UCCYosNEZiCE+gX3CYY1t+qvdtAVPRiMtR6YbVRD+XcsCX3lXA81HYhFQGh3boBqWZ6SbDt4=
+	t=1773442409; cv=none; b=JvCHuyRHi6lDehK+tisoMZs2Un/sw9RQfRmBivYx04t0CKdjUvR9QELHJtFX1j3rbOEFjSfKm10yh/AnuLBdKkj0l2acutuSsrKgNaBe/LPa5lOwoeyLG1EVBjusR7knAHgNi+ldlntBsfVhjgFTVK+TtbBGlqLJ3+JELjh3Fh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773442093; c=relaxed/simple;
-	bh=51djxRjrezoI25mptBEaNWl08itMphJ1AAFPvSshInc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UbmS9jUQdq3RPTeO2Hsa7jZ/Y0Wp1TGTZcZCAapPYBsiA+rw1lhs9YdcvV9QwE50A9U3gdNVhuXILWUbNSEtmwvtIJblqG5DqymmQt97jXkuG9Rup1QVAOR+Iuq/8YZuLWrC3885DpY8k7WWeeHtYqTEZFCHLdTztDWJUeeTgzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bt510l9H; arc=none smtp.client-ip=209.85.214.175
+	s=arc-20240116; t=1773442409; c=relaxed/simple;
+	bh=oicMRIDMquVSdhV+nyUcbfFUP+uFr3c7n1xFK4x/FTU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kDDL0/shBjqWlnBpkQ/la3j4lXVrjtja4S6b3MAfKA64yw1gKPFCrHIqpmiFS21p61SqrANS1FP+jUmxtOO7ixEwBWR0ooBhoyDSJZ+uY/zuxXXEKFRgS6O+j6kHj9S/vfngFgtiZ4XHuEGyntkzB5YdlXGRgePAFv9RENVmCjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bTHz/ys/; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bt510l9H"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2ae4988e039so24787035ad.1
-        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 15:48:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bTHz/ys/"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-48534237460so29256855e9.3
+        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 15:53:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773442091; x=1774046891; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=51djxRjrezoI25mptBEaNWl08itMphJ1AAFPvSshInc=;
-        b=bt510l9HEzsfvSKowN2tdgYZMsXf9T+BXdc2o28Vnke3BoSjI8+jJ2ZQ4O9b/lCaNv
-         fatoS1dYV+qFZZkZldxCqzllibAXFaENuTNiZAh1ZixL24VXRE5g2BJxrXCyJV8K77Lr
-         8Tthl5oRoM8k1cyWueDddDn/IeIwdoUzwrO7Zv5Iov3kPO8O0DGEHUdyF/Fb735Op/M5
-         3bJFhWoLUifpgMFnbajwTJYIF+zjkXNV6+Hwv6rshIe35Gr1MO4cZcCnNTITxqIX8gUM
-         zlv6rWGyRunR6a/+yNKo9pj9cuqoVuCB1FQjlZoLZosuuvcLT3mKfNlOOZ6lXnthI3ms
-         XlGQ==
+        d=gmail.com; s=20230601; t=1773442406; x=1774047206; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hDGpGzqG60M9Azdh5alR5eRheOMpxSNLCkqlQt8tL3s=;
+        b=bTHz/ys/8J52afVo2FqTqKtUf5viHk15ZfhZQeruPrH3IYN9foMUkprJrvaec0wcbj
+         Ku5mflfDWugqVk1faVik8otqf6eqT3KgXOX1N6nhR0pheifmvpeOH54t4TlbZXJACzpa
+         Ykp59nEStdOkmv0wAKN3XuubDXzPYElJM4NRvj6n2FwyJrsnNDDgIjQKYWkxeGnEqyQn
+         9ezb1n00djU6om93C7H6vfV9MfLZDrr+dkl5mYC1Le+UqKPtxl/D03pwc+gvod35Ktub
+         aks3+cCpS6cYpID7kTMqmm7Fzf0V06Ejs2i+F+q+OaceSFkFbiOmKZJ8f1aYhaT5Abpo
+         Q4RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773442091; x=1774046891;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=51djxRjrezoI25mptBEaNWl08itMphJ1AAFPvSshInc=;
-        b=cWrEBpWrA0NAt9qPl3PkT0uHY+DxdOCIwSKV5cPvsr0DbvTYUtEVRWBGHItVmWUJuA
-         eP2EeZrT8flC7+x+HWYFlQPMnFvAuhTQiBWnXg2jqJD33LoIvZ9nIsbzeSporRoBfYGn
-         zhdzD80oWkzVXbeYERJE1j4LurKV5HK5aE3WyP11eU21Zg1ZtwcCWb6cPdEKIdbj7tU/
-         NQv7EDfFzK/J2Q5D+7Q3acjM3d4p5Iw6ttNLpB1tmtZo6fttrlrwHWvPBjkPPPYYN978
-         2eDHeyRRZrd4d3JrwWrCt9tUqhodv+MabWrB6T9zKBtZqUj7hMx2zscpymYOYXL+t59/
-         urvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX2RAAGBGSVCTEUsLejOcqBkuoLWMmerodBoIUtGGCCZw7+rgEqFkdOpvD1Dzs+KaEKI54=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwIniptyUwol+uh4X7L/v8EZyM52JLNXIU1JNH22hOrHwm/2Dx7
-	z0igzjXNi7y+UBNzkXUSzoMEtwhHjUw1FwptDg+7+3Hs+uzXFizhXC2z
-X-Gm-Gg: ATEYQzz4TKycfU/+FNJib1Ta36afBodlcUnzNZSlb/RlLTz9J6ZwcqZwXdMys3fn+un
-	BGgPVoPSdhUH0B77cf7J5FzpZ1bbfDNxs5mb0XSW7K355vO4kdpaC6Pjls4o/MGxmOJg4gg3aw8
-	FMoXi3p/QMeT9/imM3ME1eWd6+YGT8G5fvKn2k15sOpyfewjHucy3ROrRKhTdsECbtYh4hAJd7D
-	0DmqksPotdGouZ8834pw3PzLJq6Lez7KQOUkFTqUzWI7zAU69+Eu1iFCuhvkGo1UpQJi2YmsMHh
-	hCmBlOLl4BOYVUB+8bKxiKjE61mRAcV93D9HrTQ17gnmDpFAXAiTboRIBMjdIvPQWlnhiC0Isd8
-	KmX6okhvdU7HhWmit6/UaRrkFEPWCk3mTl8MFCKPfKaD3bVwYLeYCyjHXMXET8CHjJpi7u7mc0L
-	omt/DfT4ksJbXI/n75sir3Nt3mNBmLyym0qs4tQuzJ/KcV2D1yK0o=
-X-Received: by 2002:a17:902:f711:b0:2ae:5350:3a4e with SMTP id d9443c01a7336-2aeca5ddef0mr53866705ad.21.1773442091299;
-        Fri, 13 Mar 2026 15:48:11 -0700 (PDT)
-Received: from [192.168.0.56] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2aece8098ecsm38305465ad.64.2026.03.13.15.48.10
+        d=1e100.net; s=20251104; t=1773442406; x=1774047206;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hDGpGzqG60M9Azdh5alR5eRheOMpxSNLCkqlQt8tL3s=;
+        b=ed1kOt5iFGuvFR9MOJEzhZmTMYgyG3bqTotpOC+NEEnG6LgOwTclCCZyJijqVxK1+o
+         FLo2iqJo1DhKw+nkbY3ZPt86k7c7CXUusMsMtR43WKzEjebEfngEAEkOUr6jap46MQOk
+         HkadV+Ue/icR0d27wJX7JBvFJnQAXZXeIn55q4vobJjxzQx+p4gi8xsjz0+RCADzGFSP
+         HM4EGY4XfOQZqEKKnwgqwXTLP7PRqp6mW6elElQlAZ9nJ1S2hKHEoCuyrJ9rNudx4+1l
+         e62XaPP6I2bBHLFIJkA/HWdd1ECYQYAeGsySMYs4D9jxFpIBeDKtLY8InZ9EpEqc+v8/
+         IDzQ==
+X-Gm-Message-State: AOJu0YyRbLo8jiWKKDeTlzm9jo3gsVWUbbEDhDblt7RblOijTJ6wJRd0
+	pd7E83XocmllYXTit/imonkLGKY/mK6FwE1BIde+xO0kX7Xzt9VYOX0SKsG62A==
+X-Gm-Gg: ATEYQzzaWa/VHhfJJ6MMqyCaMFf67xF59THbWyZoA6XJMD94dEOs1TU3ur98qAt7gE8
+	G1htdoN0OBsL1rx9HpOKS88N2vXzerw/rFUZosIW2JwAdXHmJAPcDqZT8W/EI5u8pFLxwCMlq3o
+	CKN+x5FPYKYDrp3SAFy6oefYdu1dzsKax/26VYNiPLbvArNaIp5gLlhpPMxGsOS+AUYt7gUG76j
+	L7DOOgxasbAOMm8orTO4S/7eYgbets/8BkxqdmGFObOwQ7ToOSkyze4wjynWiTPUMYnMpThkwjS
+	s7DFw+vlyt92ROZnA8R/BhfpqQq9q14a9yFK1oWKrWseKMlfdZD7txKwWe1rPPjBgx3FA824DE/
+	MrJBrfkjaHNlBQVWT8Tke6XuvJzL+rXgzZ7VVoUPxceAHsqAPxKmSwdzDG1yuWFG937Teij0RC5
+	CUbs3AUY7pCyJ94GFWPLMOEtfBau/8nOZ7u8YMvDIEh1yM2Tqaojq72VUcLKKrBmpq7aH5maUrP
+	K/SVR0FWD3DxZDfZqpLR6Oz5ZomkCkTMZ+FR6BHIEOWjEtSr+OSh+KeBrH6rIZJEokcRXwazUp/
+	mUma7DTWAio=
+X-Received: by 2002:a05:600c:628c:b0:485:3aa1:a7f1 with SMTP id 5b1f17b1804b1-485566c6a59mr77833965e9.7.1773442405844;
+        Fri, 13 Mar 2026 15:53:25 -0700 (PDT)
+Received: from mail.gmail.com (2a01cb0889497e001bfc1843b6ac5345.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:1bfc:1843:b6ac:5345])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48557c6700fsm28471115e9.22.2026.03.13.15.53.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Mar 2026 15:48:10 -0700 (PDT)
-Message-ID: <fdbfa0ce1cf508a9dc082036125634bfcc06c8e9.camel@gmail.com>
-Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: Add tests for
- maybe_fork_scalars() OR vs AND handling
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Daniel Wade <danjwade95@gmail.com>, bpf@vger.kernel.org
-Cc: daniel@iogearbox.net, ameryhung@gmail.com, ast@kernel.org
-Date: Fri, 13 Mar 2026 15:48:08 -0700
-In-Reply-To: <20260313075318.11847-3-danjwade95@gmail.com>
-References: <20260313075318.11847-1-danjwade95@gmail.com>
-	 <20260313075318.11847-3-danjwade95@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
+        Fri, 13 Mar 2026 15:53:24 -0700 (PDT)
+Date: Fri, 13 Mar 2026 23:53:23 +0100
+From: Paul Chaignon <paul.chaignon@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Subject: [PATCH bpf-next 0/4] Fix invariant violations and improve branch
+ detection
+Message-ID: <cover.1773441432.git.paul.chaignon@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, 2026-03-13 at 18:53 +1100, Daniel Wade wrote:
-> Add three test cases to verifier_bounds.c to verify that
-> maybe_fork_scalars() correctly tracks register values for BPF_OR
-> operations with constant source operands:
->=20
-> 1. or_scalar_fork_rejects_oob: After ARSH 63 + OR 8, the pushed
-> =C2=A0=C2=A0 path should have dst =3D 8. With value_size =3D 8, accessing
-> =C2=A0=C2=A0 map_value + 8 is out of bounds and must be rejected.
->=20
-> 2. and_scalar_fork_still_works: Regression test ensuring AND
-> =C2=A0=C2=A0 forking continues to work. ARSH 63 + AND 4 produces pushed
-> =C2=A0=C2=A0 dst =3D 0 and current dst =3D 4, both within value_size =3D =
-8.
->=20
-> 3. or_scalar_fork_allows_inbounds: After ARSH 63 + OR 4, the
-> =C2=A0=C2=A0 pushed path has dst =3D 4, which is within value_size =3D 8
-> =C2=A0=C2=A0 and should be accepted.
->=20
-> These tests exercise the fix in the previous patch, which makes the
-> pushed path re-execute the ALU instruction so it computes the correct
-> result for BPF_OR.
->=20
-> Signed-off-by: Daniel Wade <danjwade95@gmail.com>
-> ---
+This patchset fixes invariant violations on register bounds. These
+invariant violations cause a warning and happen when reg_bounds_sync is
+trying to refine register bounds while walking an impossible branch.
 
-I think that test-cases 'and_scalar_fork_still_works' and
-'or_scalar_fork_allows_inbounds' are somewhat redundant,
-but given that [1] only added negative tests let's keep these.
+This patchset takes this situation as an opportunity to improve
+verification performance. That is, the verifier will use the invariant
+violations as a signal that a branch cannot be taken and process it as
+dead code.
 
-[1] 9160335317cb ("selftests/bpf: Add tests for s>>=3D31 and s>>=3D63")
+This patchset implements this approach and covers it in selftests with
+a new invariant violation case. Some of the logic in reg_bounds_sync
+likely acts as a duplicate with logic from is_scalar_branch_taken. This
+patchset does not attempt to remove superfluous logic from
+is_scalar_branch_taken and leaves it to a future patchset (ex. once
+syzbot has confirmed that all invariant violations are fixed).
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+In the future, there is also a potential opportunity to simplify
+existing logic by merging reg_bounds_sync and range_bounds_violation
+(have reg_bounds_sync error out on invariant violation). That is
+however not needed to fix invariant violation, which we focus on in
+this patchset.
+
+Harishankar Vishwanathan (2):
+  bpf: Refactor reg_bounds_sanity_check
+  bpf: Simulate branches to prune based on range violations
+
+Paul Chaignon (2):
+  selftests/bpf: Cover invariant violation cases from syzbot
+  selftests/bpf: Remove invariant violation flags
+
+ kernel/bpf/verifier.c                         | 103 +++++++++++++++---
+ .../selftests/bpf/progs/verifier_bounds.c     |  46 +++++---
+ 2 files changed, 117 insertions(+), 32 deletions(-)
+
+-- 
+2.43.0
+
