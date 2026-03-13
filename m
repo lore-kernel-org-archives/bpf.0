@@ -1,151 +1,159 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2C16128395
-	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 02:18:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 008FF1DED4C;
+	Fri, 13 Mar 2026 02:32:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773368286; cv=none; b=T9pKjMv0OALdMwYdahqkfIb9BmuKXdElhDG1szC15LBxfWazGnATeWmha8Wa59DKZ/+NEZv2YP62bSyom0nmlwdaJbffszCTfhHk6Sk7ZSRLvNHyDdJCV4xBsj7jldlFL3wx70K30+16kG5EYAGsChIkIMT8KQOHndyqRTS9BmM=
+	t=1773369148; cv=none; b=ZGepfqpL5fW0lWh81sygzktIcCQftyZFcU809QF8h8iQsUQScwcNChhI1OV3uMDmZepVvs3eobuhu3ap8LB1ilSBcO3TmLs5K8I7iQX4FEmIzHcXycfWJ7StxOz4jiBa8hXgZ8B2D4T3OjmHZ7Ak1Q396tWVS1k64HXIvMdy65I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773368286; c=relaxed/simple;
-	bh=RO5L0IcsPTwoCRx/lx4zdhtJ9vMf/LzxnekwLj6RS+k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q7v+5nvP3/Dc7VniIvsj2bMi4WmEmzScyaiRqLijZH4xIznSn43OuqQ7OV99/Y2MAmFzo8m9cSaWf0KvNh5Q/eHfgZnMO50kyan27eyKIWEbIwLQwiLhw7+FfzSOd+opjoShQg+1HPBNIzlW4eJlJqgt0BWZEhx1EPm0pU3aKto=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Ka01h3rC; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Ka01h3rC"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-48558d6ef83so1271025e9.3
-        for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 19:18:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1773368283; x=1773973083; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PlFYSYiXO4Zwx7UG7C0mcEOzk5R3gKj4A/DxDA+DOoU=;
-        b=Ka01h3rCGZHgCFKcVjkmQPywK1MKVi+dRw7Lr7R/e4b/Thn7D3EwC2jlCOB4pVQAF4
-         mNrzL30Phw1tVQpW48IV4mpsud9+14IVE0OH64V15NDXyrSR9Ym9L/96/KXcC7H1As8I
-         xApNFBlOZux0NMEbsteK0P8eKMb5q/xR5k7piofYjmwq42uR6vd8Fb4HnN37IhleVXOw
-         mf6xo1GgzGoODpXeAni40ndkQQ8R+L56rDq28OwpfrN8oBUBSHrEtL+g7HvaOkony28o
-         wHENfsrS940/L9FE4L1A1Uvx/uYVDDs7nUbxSD+0/kfVabcmXC4AyXjB4dw+UPonjWgd
-         gK4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773368283; x=1773973083;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PlFYSYiXO4Zwx7UG7C0mcEOzk5R3gKj4A/DxDA+DOoU=;
-        b=Rr+VZHmHDpFu4VYvpKziEuQRI2WLAg0SUfjk1rMQQWGkAGufTk+OrhrekRzcmVHBsx
-         XotjVvGljR/yOUHpm/3MaKoVWS7Kb9TpOgePu5HS+8dURQDxkhkv00mjuM74ZTMsFrS2
-         snGF3XSySUnhSxp/csYGYLTqj0Ua/L43/IlbTmi8smQ+vKu1HJESHEnm4/EwA2384twk
-         jETYTr51gbhJMwaN6olgmhgwKXZP8gb+asJlk4Nb7dBOF4XrNVrudixh5rOeHg33Fuml
-         KpTJka/6yGeQucZUZARA/XBesVRQjR8NNW61psQp++xBAmNM6o5itVjJl4ivumvNqcDM
-         p3Ag==
-X-Forwarded-Encrypted: i=1; AJvYcCULy0Dl9PAR5aFfJrR2G6ZYx17VoRaLhY0Kiu0yCE5vxTKotTd6bmsghNoVRClzKIZ5cxU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEV5SPbZVgDX+l4CwLMedg7vpBxjPjyFuZT4+vw5FDXjAqNbbO
-	oqDYOGME/kL5MJAZKt2MvIIkfbFrB06J3+IxlxcuxB24EPHZfPVPWWozYyJ+iJz4RKU=
-X-Gm-Gg: ATEYQzyUkbpk9JJHsjo4oBcjPbWgcvrFSR+KXR7gMXlWHaNFoYQc2kOVqTRtrVYp1uy
-	Wr0qpquEcTP9wJlMJeaeqE7xX5PBoc+OKAnQSkF/O3FGv3O/bDJcGWaNtbQxwMcYG6x+bAKoXy3
-	CiBLAHF82hvy7j9s8OzUemgWZ9ANg13OrZup9YmTy2AIqpKYYmoICjwVlOMr1wO5H4PcjxOqqkS
-	Smp/WTYtPxF7x/9dvpgozJfB8r5MNzNmyeo6ogHqkuMaV3UbIU1vLm5ei19qq6LyuadHspH9fJT
-	D8x8FlRvJmDDfrfchzXllSGbDk2zSugBHXrWX5Gc976VbneyjW4mTZx9v42mY6o7VcL/SEgy2Sz
-	qBP6nhRf5CieWIW8I5Q6MKPP/AvgfTKMf28Hp5iJQS+9HP7hQQ2awFouI5ZYa/YQwLXYcGZAlq/
-	7fxIP47oYkE/dGmRfhxB8=
-X-Received: by 2002:a05:600c:4f54:b0:485:3b5b:eb8 with SMTP id 5b1f17b1804b1-485567052b8mr21200495e9.26.1773368283049;
-        Thu, 12 Mar 2026 19:18:03 -0700 (PDT)
-Received: from u94a ([2401:e180:8d68:7358:55be:6563:4437:e6fe])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82a07384a7dsm4472256b3a.57.2026.03.12.19.17.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2026 19:18:02 -0700 (PDT)
-Date: Fri, 13 Mar 2026 10:17:52 +0800
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: Paul Chaignon <paul.chaignon@gmail.com>
-Cc: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
-Subject: Re: [PATCH v2 bpf-next 1/2] bpf: Avoid one round of bounds deduction
-Message-ID: <wficveatl5cscfiaasqanow72ejlzifrcatj7z3r4dtu6nul77@bpfukkbrhml6>
-References: <5b8fed05cc97cd3730bbdfbb452699b7edd16963.1772840030.git.paul.chaignon@gmail.com>
- <621f8a301a3a29af041ea8384ab09498e3f20322.camel@gmail.com>
- <d4f6ebe35ff98cf3aeabe132027d7a05ae4dda4f.camel@gmail.com>
- <d6ed91eb3fc9783811ae9981728a5db57decbfe4.camel@gmail.com>
- <xec3lnz6smkki57civu5z6hlr5vl6kqnec7f7zxza4vifs2qf7@g4o6gxqmcnlz>
- <cc228139101e28d2bc76beb371a2c3f89eed75f3.camel@gmail.com>
- <abMHY2sCSe6xEKR3@mail.gmail.com>
+	s=arc-20240116; t=1773369148; c=relaxed/simple;
+	bh=+vI6GSqtwKt0b9wsTQmOg3llRDsB0LamegMG9/0fPN0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kuoSnQjL8+EKQfNzicVWv6ASiLKCX/ax9ILuq71UKHidEbXej7BZL/H27IYYw6apAy6+aZkgxSfSz2DEg25Yy/3fWQDBC0pkJjJGPvbZLVN9QTB0vgXVypmg7CuovVn7UHBJJWfmUk9a3vbAV0s1fnByvau8rK12eXuqXRDT+nU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4fX7lm2DMRzYQtvD;
+	Fri, 13 Mar 2026 10:31:32 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 68FA24058F;
+	Fri, 13 Mar 2026 10:32:22 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP4 (Coremail) with SMTP id gCh0CgCngEs0d7NpbWnZAg--.21976S2;
+	Fri, 13 Mar 2026 10:32:21 +0800 (CST)
+Message-ID: <6538d913-7341-47bb-8717-3ef8685caf5d@huaweicloud.com>
+Date: Fri, 13 Mar 2026 10:32:20 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <abMHY2sCSe6xEKR3@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v9 1/5] bpf: Move constants blinding out of
+ arch-specific JITs
+Content-Language: en-US
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, yonghong.song@linux.dev,
+ puranjay@kernel.org, a.s.protopopov@gmail.com, alexis.lothore@bootlin.com,
+ list+bpf@vahedi.org, linux@armlinux.org.uk, yangtiezhu@loongson.cn,
+ hengqi.chen@gmail.com, johan.almbladh@anyfinetworks.com,
+ paulburton@kernel.org, hbathini@linux.ibm.com, chleroy@kernel.org,
+ naveen@kernel.org, luke.r.nels@gmail.com, xi.wang@gmail.com,
+ bjorn@kernel.org, pulehui@huawei.com, iii@linux.ibm.com, hca@linux.ibm.com,
+ gor@linux.ibm.com, davem@davemloft.net, udknight@gmail.com,
+ martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
+References: <20260312170255.3427799-2-xukuohai@huaweicloud.com>
+ <23f4b038b245167ff440b79c0a445fcbc12e0a102884759623dd59b3d64d2ade@mail.kernel.org>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <23f4b038b245167ff440b79c0a445fcbc12e0a102884759623dd59b3d64d2ade@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:gCh0CgCngEs0d7NpbWnZAg--.21976S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJFWUKrWDWFWfKw4DtFW3GFg_yoW5AF4rpa
+	y0gFWkKF4qqF40qw17ZFWkAFW3tF4kJwnrGr45Wa43JF4jgrn3GF18KrsYvFWYkrykKr1I
+	vr4j9r98uw1DJFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26rWY6Fy7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWrXVW8
+	Jr1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+	CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
+	6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvj
+	xUVZ2-UUUUU
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On Thu, Mar 12, 2026 at 07:35:15PM +0100, Paul Chaignon wrote:
-> On Tue, Mar 10, 2026 at 12:45:39PM -0700, Eduard Zingerman wrote:
-> > On Tue, 2026-03-10 at 15:56 +0800, Shung-Hsi Yu wrote:
-> > 
-> > [...]
-> > 
-> > > Agree that perhaps we still need to keep 3 rounds of deduction after
-> > > poking at this further.
-> > > 
-> > > I tried to run an updated cbmc script[a], manually editing the file to
-> > > change the number of __reg_deduce_bounds calls made, and check whether
-> > > an extra call would further change reg_state. For
-> > > __reg_deduce_bounds_old, it needs 3 calls to pass verification, and for
-> > > __reg_deduce_bounds_new, it still needs 3.
-> > 
-> > Using the same logic I played with orderings a bit:
-> > - For new ordering 3 and 4 deduction rounds are proven to be identical.
-> > - For ordering in [1] 2 and 3 deduction rounds are proven to be identical,
+On 3/13/2026 1:50 AM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 4fbacd2149cd..3ccefd13121b 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
 > 
-> Nice!
+> [ ... ]
+> 
+>> @@ -22843,17 +22843,23 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
+>>
+>>   static int jit_subprogs(struct bpf_verifier_env *env)
+>>   {
+>> -	struct bpf_prog *prog = env->prog, **func, *tmp;
+>> +	struct bpf_prog *orig_prog = env->prog, *prog, **func, *tmp;
+>>   	int i, j, subprog_start, subprog_end = 0, len, subprog;
+>>   	struct bpf_map *map_ptr;
+>>   	struct bpf_insn *insn;
+>>   	void *old_bpf_func;
+>>   	int err, num_exentries;
+>> -	int old_len, subprog_start_adjustment = 0;
+>> +	bool blinded = false;
+>>
+>>   	if (env->subprog_cnt <= 1)
+>>   		return 0;
+>>
+>> +	prog = bpf_jit_blind_constants(env, NULL);
+>> +	if (IS_ERR(prog))
+>> +		return -ENOMEM;
+>> +	if (prog != orig_prog)
+>> +		blinded = true;
+> 
+> When env is non-NULL, bpf_jit_blind_constants() uses
+> bpf_patch_insn_data() to insert blinding instructions.
+> bpf_patch_insn_data() calls adjust_insn_aux_data(), which expands
+> and shifts entries in env->insn_aux_data to match the now-longer
+> blinded program.
+> 
+>> +
+>>   	for (i = 0, insn = prog->insnsi; i < prog->len; i++, insn++) {
+> 
+> [ ... ]
+> 
+>> @@ -23114,6 +23122,10 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+>>   	}
+>>   	kfree(func);
+>>   out_undo_insn:
+>> +	if (blinded) {
+>> +		bpf_jit_prog_release_other(orig_prog, prog);
+>> +		env->prog = prog = orig_prog;
+>> +	}
+>>   	/* cleanup main prog to be interpreted */
+>>   	prog->jit_requested = 0;
+>>   	prog->blinding_requested = 0;
+>> +	for (i = 0, insn = prog->insnsi; i < prog->len; i++, insn++) {
+>>   		if (!bpf_pseudo_call(insn))
+>>   			continue;
+>>   		insn->off = 0;
+>>   		insn->imm = env->insn_aux_data[i].call_imm;
+>>   	}
+> 
+> After bpf_jit_prog_release_other() reverts to orig_prog, this loop
+> iterates using the original program's indices and length. However,
+> env->insn_aux_data was expanded and shifted by bpf_patch_insn_data()
+> during blinding to match the blinded program's instruction count.
+> 
+> The call_imm values were saved at blinded indices (earlier in
+> jit_subprogs, after the bpf_jit_blind_constants call), so reading
+> them back at original indices gets the wrong aux data entries.
+> 
+> On !CONFIG_BPF_JIT_ALWAYS_ON configs, could this cause incorrect
+> imm values to be restored into pseudo_call instructions, breaking
+> interpreter fallback?
+> 
 
-\o/
+Right, I overlooked that insn_aux_data is used here. In fact, when
+blinded is true, we have rolled back to the clean, original program,
+so there is no need to restore call_imm.
 
-> >   1 round is not enough.
-> > 
-> > So, I think [2] is the way to go:
-> > 
-> > static void __reg_deduce_bounds(struct bpf_reg_state *reg)
-> > {
-> >         deduce_bounds_64_from_64(reg);
-> >         deduce_bounds_32_from_64(reg);
-> >         deduce_bounds_32_from_32(reg);
-> >         deduce_bounds_64_from_32(reg);
-> > }
-> > 
-> > With __reg_deduce_bounds() done 2 times.
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23013190773
 
-Can confirm that's the case on my side as well.
-
-> Thanks Eduard and Shung-Hsi for the amazing reviews and contributions!
-> I'll send a v3 with:
-> 1. The renaming commit from Eduard.
-> 2. The initial reshuffle + additional reshuffle from [1].
-> 3. The removal of one __reg_deduce_bounds.
-> 4. The selftest and I'll see if I can craft a second selftest from the
->    new inputs you shared Shung-Hsi.
-
-Perhaps I can try to see if I can come up with a better example, from
-the difference between initial reshuffle vs additional reshuffle.
-
-The problem is that I'm operating on a simplified assumption of "not
-being able to converage to a fix-point is bad because it could lead to
-bound invariant violation". So taking this chance to ask, does that all
-ties back to is_scalar_branch_taken and reg_set_min_max (or was it
-regs_refine_cond_op) difference?
-
-Also, when we fail to reach a fix-point, it does not become a problem
-immediately, but only becomes a invariant violation some where down the
-line when we again do bound deduction?
-
-I haven't actually look into an invariant violation myself, so details
-are rather hazy. 
-
-> > [1] https://github.com/eddyz87/deduce-bounds-verif/blob/76755f763f9282b74ca4e2251f83767502a98e5e/deduce_bounds_new.c#L321
-> > [2] https://github.com/eddyz87/bpf/tree/deduce-bounds-reshuffle
-> > 
-> > [...]
