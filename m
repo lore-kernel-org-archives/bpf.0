@@ -1,43 +1,43 @@
 Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78E07346760;
-	Fri, 13 Mar 2026 09:51:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37A2138838A;
+	Fri, 13 Mar 2026 09:51:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773395490; cv=none; b=iTobAzztKJJcsN/S9F8BiGi10mip32PNmGGDjy94hV3HssTzy7rSPtAJ6fVYW+3NNaIJ8XpwfEvrZGSI3lrdqSVbzhLzUH5t/WOlu5tu4jY+x8h+SW9kI8hgQxGWD9gouAQjW1vokKGWtw0bB9A00k1Gkl0RHXNt+ytZjWt6D4k=
+	t=1773395495; cv=none; b=t23HMwelxjJQkXVOMGDGKS8EfOTb1vaE/+jbGGCVoL5fl2EDJu14n/9JnpL2PhDsJDgYwUx+d6wDsFheOCIOBmmqmq+YZia2uVJNGDpptI4vlKv84lsKjmsOV/nq2UjfeC5/0/QyDiLitH1hDtizRLCYGpSNiOeNG8+yYMqSHTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773395490; c=relaxed/simple;
-	bh=hD3sAe18nPWW8oxFsuxTzsfxHAjUYL2Cp4S10XNcD5s=;
+	s=arc-20240116; t=1773395495; c=relaxed/simple;
+	bh=ZyEhh1KUApYFr6InHcH8dDUaTsgPWZb7a/3dyKeVt6Q=;
 	h=In-Reply-To:References:From:To:Cc:Subject:MIME-Version:
-	 Content-Disposition:Content-Type:Message-Id:Date; b=NS9yjAun4XNLSZCg7L20dduYn6832mp8osYQuRK/2q49MReUGRP7qfv5h8aYEgXOovZAgV90zTWbmn6rRE0w2hJSw6ufAj0JXK/DDM2HMvyyqb5YYOk1ZyAT54QB83WysS7U0ITBLmC8PllI7nrJ+ZJ32u31D2xTAApGkQwqvxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=UZxaPicK; arc=none smtp.client-ip=78.32.30.218
+	 Content-Disposition:Content-Type:Message-Id:Date; b=ekeHlB1h3SW8Ag59U/LcqFK4Ywh9uMSTfGELmQhpgyk4Kbn7xKtrVRPOnoTphwodgwRbHfkpCnRYb1WR/c+lqVdOanNnw2lg0mE4ikimowflxPMtnQ4jKBpzX3leTPFbVqO/Qm6P1GV/kKbexZzFyyVTgL1HrSGCVJtQPCYrv58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=j+k3xlp2; arc=none smtp.client-ip=78.32.30.218
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="UZxaPicK"
+	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="j+k3xlp2"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
 	Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
 	In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=ImtxcwWXXJt6qxVXIbd5mh51lvJgGcYRDTbE+CXfQNQ=; b=UZxaPicK56GyZaL9/SlNYEQUYa
-	JyEl5xWo47ir1fl7bemP4j1ynf4JovAH/l2+4KMhIaqN2IieTB4wepwVlKcPZKNzmYppb/nXe83qA
-	4THTWL7TfiEe9maQmx6wFzltMXz+mnQa/foTwHShp4SR3mIOtu6yT0OmY+2No5pGsKAVJm3EA/rhe
-	FIKky5iue6cV7G9hce8Z8QUriyNFDOyYL40p3tZThyst7lKSAOTLa4vJnlugxtzTwePCoSZGQjWwt
-	Z9/fTOKnYBvZ7ovMd+6rUgTg9wO65xe3ehanaH9U3qiP/o38M+fay9Z1enLyXdg8e/g25JfSqqq+M
-	V2hgK2ZA==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:33798 helo=rmk-PC.armlinux.org.uk)
+	bh=31gW1Ez9RW21ry4PNLhw5rfo5103IhHkPkxFZmjfbYk=; b=j+k3xlp2Jd8EBWl3mwLFraGduz
+	ChW4PRRo53cgNclreqakuupPTe50SRVo/7mTWmNIhaAi9ikGexU4/4jozV92QuJCiW28zFT6ruEc7
+	VFb9gCc7TLsL1pz90upnkSiY6sRPGgovC8PXFXFHic6mgsKW2YlUSUesq2hY0lgAP35SfbyxwGqSL
+	LR9KDNw+0r9kEGV21yHeKdXmVCreRyTrUYez2n3+j+4WfwMBG7zhG2+dAO6VwulYIMLYDxnyucLBU
+	PY0RAy5DTQeyiSKlXlJDOK5ja0i/8rb9eP7cmjkG+fOAhPT5C1ZXRqEd0U+b7sKIJlOQblxWLHjYm
+	5Qr0OL0w==;
+Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:37478 helo=rmk-PC.armlinux.org.uk)
 	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.98.2)
 	(envelope-from <rmk@armlinux.org.uk>)
-	id 1w0zAy-000000000dT-2bfI;
-	Fri, 13 Mar 2026 09:51:24 +0000
+	id 1w0zB3-000000000du-2IwL;
+	Fri, 13 Mar 2026 09:51:29 +0000
 Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.98.2)
 	(envelope-from <rmk@rmk-PC.armlinux.org.uk>)
-	id 1w0zAx-0000000D4FM-0yS9;
-	Fri, 13 Mar 2026 09:51:23 +0000
+	id 1w0zB2-0000000D4FS-1VOh;
+	Fri, 13 Mar 2026 09:51:28 +0000
 In-Reply-To: <abPdzyXJHqt5v3bi@shell.armlinux.org.uk>
 References: <abPdzyXJHqt5v3bi@shell.armlinux.org.uk>
 From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
@@ -56,8 +56,8 @@ Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>,
 	netdev@vger.kernel.org,
 	Paolo Abeni <pabeni@redhat.com>,
 	Stanislav Fomichev <sdf@fomichev.me>
-Subject: [PATCH net-next v3 05/15] net: stmmac: add helper to get size of a
- receive descriptor
+Subject: [PATCH net-next v3 06/15] net: stmmac: add helper to set receive tail
+ pointer
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,74 +67,108 @@ MIME-Version: 1.0
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1w0zAx-0000000D4FM-0yS9@rmk-PC.armlinux.org.uk>
+Message-Id: <E1w0zB2-0000000D4FS-1VOh@rmk-PC.armlinux.org.uk>
 Sender: Russell King <rmk@armlinux.org.uk>
-Date: Fri, 13 Mar 2026 09:51:23 +0000
+Date: Fri, 13 Mar 2026 09:51:28 +0000
 
-Add and use a helper to get the size of the hardware receive
-descriptor.
+Setting the queue receive tail pointer follows a common pattern:
+calculate the DMA address, and then call stmmac_set_rx_tail_ptr().
+The only difference between all the call sites is the index used.
+
+Factor this out into a static function, and add a comment about why
+it only uses the normal descriptor size.
 
 Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 ---
- .../net/ethernet/stmicro/stmmac/stmmac_main.c | 24 +++++++++----------
- 1 file changed, 11 insertions(+), 13 deletions(-)
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c | 40 +++++++++----------
+ 1 file changed, 20 insertions(+), 20 deletions(-)
 
 diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index a3dfd3501604..dca62e7b259a 100644
+index dca62e7b259a..8823f8f5b053 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -362,6 +362,14 @@ static inline u32 stmmac_tx_avail(struct stmmac_priv *priv, u32 queue)
- 			  priv->dma_conf.dma_tx_size);
+@@ -380,6 +380,18 @@ static struct dma_desc *stmmac_get_rx_desc(struct stmmac_priv *priv,
+ 		return &rx_q->dma_rx[index];
  }
  
-+static size_t stmmac_get_rx_desc_size(struct stmmac_priv *priv)
++static void stmmac_set_queue_rx_tail_ptr(struct stmmac_priv *priv,
++					 struct stmmac_rx_queue *rx_q,
++					 unsigned int chan, unsigned int index)
 +{
-+	if (priv->extend_desc)
-+		return sizeof(struct dma_extended_desc);
-+	else
-+		return sizeof(struct dma_desc);
++	/* This only needs to deal with normal descriptors as enhanced
++	 * descriptiors are only supported with dwmac1000 (<v4.0) which
++	 * does not implement .set_rx_tail_ptr
++	 */
++	rx_q->rx_tail_addr = rx_q->dma_rx_phy + index * sizeof(struct dma_desc);
++	stmmac_set_rx_tail_ptr(priv, priv->ioaddr, rx_q->rx_tail_addr, chan);
 +}
 +
- static struct dma_desc *stmmac_get_rx_desc(struct stmmac_priv *priv,
- 					   struct stmmac_rx_queue *rx_q,
- 					   unsigned int index)
-@@ -1432,10 +1440,7 @@ static void stmmac_display_rx_rings(struct stmmac_priv *priv,
- 		pr_info("\tRX Queue %u rings\n", queue);
+ /**
+  * stmmac_rx_dirty - Get RX queue dirty
+  * @priv: driver private structure
+@@ -3302,11 +3314,8 @@ static int stmmac_init_dma_engine(struct stmmac_priv *priv)
+ 		stmmac_init_rx_chan(priv, priv->ioaddr, priv->plat->dma_cfg,
+ 				    rx_q->dma_rx_phy, chan);
  
- 		head_rx = stmmac_get_rx_desc(priv, rx_q, 0);
--		if (priv->extend_desc)
--			desc_size = sizeof(struct dma_extended_desc);
--		else
--			desc_size = sizeof(struct dma_desc);
-+		desc_size = stmmac_get_rx_desc_size(priv);
+-		rx_q->rx_tail_addr = rx_q->dma_rx_phy +
+-				     (rx_q->buf_alloc_num *
+-				      sizeof(struct dma_desc));
+-		stmmac_set_rx_tail_ptr(priv, priv->ioaddr,
+-				       rx_q->rx_tail_addr, chan);
++		stmmac_set_queue_rx_tail_ptr(priv, rx_q, chan,
++					     rx_q->buf_alloc_num);
+ 	}
  
- 		/* Display RX ring */
- 		stmmac_display_ring(priv, head_rx, dma_conf->dma_rx_size, true,
-@@ -5412,11 +5417,7 @@ static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
- 		void *rx_head = stmmac_get_rx_desc(priv, rx_q, 0);
+ 	/* DMA TX Channel Configuration */
+@@ -4999,9 +5008,7 @@ static inline void stmmac_rx_refill(struct stmmac_priv *priv, u32 queue)
+ 		entry = STMMAC_GET_ENTRY(entry, priv->dma_conf.dma_rx_size);
+ 	}
+ 	rx_q->dirty_rx = entry;
+-	rx_q->rx_tail_addr = rx_q->dma_rx_phy +
+-			    (rx_q->dirty_rx * sizeof(struct dma_desc));
+-	stmmac_set_rx_tail_ptr(priv, priv->ioaddr, rx_q->rx_tail_addr, queue);
++	stmmac_set_queue_rx_tail_ptr(priv, rx_q, queue, rx_q->dirty_rx);
+ 	/* Wake up Rx DMA from the suspend state if required */
+ 	stmmac_enable_dma_reception(priv, priv->ioaddr, queue);
+ }
+@@ -5381,9 +5388,7 @@ static bool stmmac_rx_refill_zc(struct stmmac_priv *priv, u32 queue, u32 budget)
  
- 		netdev_dbg(priv->dev, "%s: descriptor ring:\n", __func__);
--		if (priv->extend_desc) {
--			desc_size = sizeof(struct dma_extended_desc);
--		} else {
--			desc_size = sizeof(struct dma_desc);
--		}
-+		desc_size = stmmac_get_rx_desc_size(priv);
+ 	if (rx_desc) {
+ 		rx_q->dirty_rx = entry;
+-		rx_q->rx_tail_addr = rx_q->dma_rx_phy +
+-				     (rx_q->dirty_rx * sizeof(struct dma_desc));
+-		stmmac_set_rx_tail_ptr(priv, priv->ioaddr, rx_q->rx_tail_addr, queue);
++		stmmac_set_queue_rx_tail_ptr(priv, rx_q, queue, rx_q->dirty_rx);
+ 	}
  
- 		stmmac_display_ring(priv, rx_head, priv->dma_conf.dma_rx_size, true,
- 				    rx_q->dma_rx_phy, desc_size);
-@@ -5604,10 +5605,7 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
- 		void *rx_head = stmmac_get_rx_desc(priv, rx_q, 0);
+ 	return ret;
+@@ -6951,10 +6956,8 @@ void stmmac_enable_rx_queue(struct stmmac_priv *priv, u32 queue)
+ 	stmmac_init_rx_chan(priv, priv->ioaddr, priv->plat->dma_cfg,
+ 			    rx_q->dma_rx_phy, rx_q->queue_index);
  
- 		netdev_dbg(priv->dev, "%s: descriptor ring:\n", __func__);
--		if (priv->extend_desc)
--			desc_size = sizeof(struct dma_extended_desc);
--		else
--			desc_size = sizeof(struct dma_desc);
-+		desc_size = stmmac_get_rx_desc_size(priv);
+-	rx_q->rx_tail_addr = rx_q->dma_rx_phy + (rx_q->buf_alloc_num *
+-			     sizeof(struct dma_desc));
+-	stmmac_set_rx_tail_ptr(priv, priv->ioaddr,
+-			       rx_q->rx_tail_addr, rx_q->queue_index);
++	stmmac_set_queue_rx_tail_ptr(priv, rx_q, rx_q->queue_index,
++				     rx_q->buf_alloc_num);
  
- 		stmmac_display_ring(priv, rx_head, priv->dma_conf.dma_rx_size, true,
- 				    rx_q->dma_rx_phy, desc_size);
+ 	if (rx_q->xsk_pool && rx_q->buf_alloc_num) {
+ 		buf_size = xsk_pool_get_rx_frame_size(rx_q->xsk_pool);
+@@ -7105,11 +7108,8 @@ int stmmac_xdp_open(struct net_device *dev)
+ 		stmmac_init_rx_chan(priv, priv->ioaddr, priv->plat->dma_cfg,
+ 				    rx_q->dma_rx_phy, chan);
+ 
+-		rx_q->rx_tail_addr = rx_q->dma_rx_phy +
+-				     (rx_q->buf_alloc_num *
+-				      sizeof(struct dma_desc));
+-		stmmac_set_rx_tail_ptr(priv, priv->ioaddr,
+-				       rx_q->rx_tail_addr, chan);
++		stmmac_set_queue_rx_tail_ptr(priv, rx_q, chan,
++					     rx_q->buf_alloc_num);
+ 
+ 		if (rx_q->xsk_pool && rx_q->buf_alloc_num) {
+ 			buf_size = xsk_pool_get_rx_frame_size(rx_q->xsk_pool);
 -- 
 2.47.3
 
