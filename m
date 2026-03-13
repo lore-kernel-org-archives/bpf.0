@@ -1,198 +1,213 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05ABF22256F;
-	Fri, 13 Mar 2026 09:30:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773394217; cv=none; b=JMqEAM6pv9b9SKwbE7ASIkC/36th3s6bNpZH+G56OgQsiBO99A73R9XtaGysbj6stEQtStw2fiRVKRTH8Z4UuATpD49eLnxYPIVFhBVplIgUjWtHcVSn7UAYdzqaG1pxyYHTmF5lKRnO2WHQd/AEq5PhEXbGwFmNbHZrYfnoaTM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773394217; c=relaxed/simple;
-	bh=qc05WWl7Lm9nFXBtakuH0KvtMf5pk/h1eBlPEav4eoM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=a4kGqKCNBBY+PmhQ2MS5Kk7dHzC7pQpXIJnxDzFfqXghrscETR82YOEwf34eEg3cnm7Xg3QhD+1DwS6FT8CLgyGOscW3DrQ9NtHnPlqs7dg+fz36GrYFNU73M95NZUoxgO3r5UQ0LF8/3cFKsqBFeTlscKK3tMv4w2qPWCYeX+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=VETa/Vrh; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2801B1A3160;
+	Fri, 13 Mar 2026 09:30:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.8
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773394259; cv=fail; b=ngw8Y/EZWp5iISPamg6q454x51tWg4u8ec9W2Wi9C8WbxSzNHPbC/PZ9PJdR4Iwap0iTTHwN5kCQQQ1URW5EvDgVQ9MUE2cEmM50g7xL0Wl2PKhPWlWm5Zna5VrXUBXJWH9cf82H6E7nnglAzZG/sWiZPORt8L8M4pdpPDEWyI4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773394259; c=relaxed/simple;
+	bh=saW5kHdvt5mpvmhnY4kunEJX4QTj8C3OH1g5nHTdI9w=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=YexI273JcdnPB49Da2Xivk8TpAh+e5SYw5YhQsiFDJ08/DHdh4jtOeAMURn9CKShuMWbAxCQZANG1sFqMWP8yI6NZ4Hvkslf9o5dbEcFASYtfor3T6b3621lB7d9t9v7CEbG6EU+u650YXZOTKQp/bnifKZiq9AaJYXTBUjfTJ0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YRtgHt/h; arc=fail smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="VETa/Vrh"
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62D6ZZER2206305;
-	Fri, 13 Mar 2026 09:29:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=HE5Qi3
-	EihYLD8YY4FpHuo1qkorI6ypCTOKTEtMLwtPE=; b=VETa/Vrh++h4coO1YfSlnp
-	yhuaT0ftUwRy+uWGwlvIDYctkWDxAnH5I1GPqlOYS9mmlTrAsrEQHLgqJeevExVH
-	Cqu/bKawYnJnnojM1AUdj4RW+tvsQztlQCquVKdIe8z0KuWXZL1najqspS6+YK6s
-	6SKIbSKdTjjiSNhsi3Anl3WihxoXaPErToNZ6pYTRps8rl0OoxU2Bt1b1htCgGWt
-	GEtQ6C0uFWzAp8SGaiOkN9gY4E6glhr1SYSZMixdKFmn745hzAGWMv/qw2n/gKoj
-	XSlyS4PP1Wk9uZKbhsTtNoUI1TJA7cQdhP8oBR8a0KgG5VsFI1iM2/SzQ1ub8WsQ
-	==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cuh98es5n-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Mar 2026 09:29:57 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62D5O8XI025686;
-	Fri, 13 Mar 2026 09:29:56 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cuha8e1ey-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Mar 2026 09:29:56 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62D9TsZT46334426
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 13 Mar 2026 09:29:54 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AFDDD2004F;
-	Fri, 13 Mar 2026 09:29:54 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7F2DC20043;
-	Fri, 13 Mar 2026 09:29:53 +0000 (GMT)
-Received: from [9.78.106.17] (unknown [9.78.106.17])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 13 Mar 2026 09:29:53 +0000 (GMT)
-Message-ID: <ec4e7ff6-55e3-4889-b507-fee71fab99f8@linux.ibm.com>
-Date: Fri, 13 Mar 2026 14:59:52 +0530
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YRtgHt/h"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773394258; x=1804930258;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=saW5kHdvt5mpvmhnY4kunEJX4QTj8C3OH1g5nHTdI9w=;
+  b=YRtgHt/hw7sjUyA5tYUr3UXWTzEYJP+DZfgmukmCOMBPMt+VXObyfE61
+   Sgoqs47xJCUr/f3VJGAHTO9bDzGQxuT4oXQOPOFoFWRbewi7AqmEr3Lqc
+   n0HVtTqvGFGXN0qgG/an5KM3YrJNWcekpL3BbQnY1Kp6pvqMqRp8lsMTX
+   mDXJA2mJk8zBYAArirP0z04rOl5X+uHhbwlk2F6QfFN5RB6RaLa6iolOI
+   8SP8Fz7qhYZunXX6jDfPMkAEYtxr2/GmDuBnQMMQPiJoFvSwwR//w+vll
+   Mxebvpdpi2eh0G7wTSVh21SJwc+GkNe9BBB2yIm8dxQMfmN+/2Dx6uVmF
+   A==;
+X-CSE-ConnectionGUID: W5VCmPakQbKXpmCfqXWUbQ==
+X-CSE-MsgGUID: iy2DlkPTQReSnBB+eBIzbw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11727"; a="92074477"
+X-IronPort-AV: E=Sophos;i="6.23,118,1770624000"; 
+   d="scan'208";a="92074477"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2026 02:30:58 -0700
+X-CSE-ConnectionGUID: dHY4I4NOTLO0IyT0GCArsw==
+X-CSE-MsgGUID: Ak2gSj65TkGkpggTv9aY0g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,118,1770624000"; 
+   d="scan'208";a="223480380"
+Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
+  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2026 02:30:57 -0700
+Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Fri, 13 Mar 2026 02:30:56 -0700
+Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
+ FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37 via Frontend Transport; Fri, 13 Mar 2026 02:30:56 -0700
+Received: from CY7PR03CU001.outbound.protection.outlook.com (40.93.198.32) by
+ edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Fri, 13 Mar 2026 02:30:46 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=k5l2Izpj3OvG+MkuJiORJXXRgYIxRUIKtGwV0Wgi1FanGvcnKH2kCbg1XOFUsg4+jZdGVjHYk/NP2yZ7N55an2lGO5Z0cFeiRzwgURn6TnPp6cyk9jbgMIuykH+5iz1zcrJNBGMlVcx7+o/boZFtc/z6JOZooBMHvdke+vYyhCaKLSSwEjCXFN6pwX1tFtdxerlFXWE3qxOvOz61vFtkk+eSFlVxOvVd0dNxPNZ80335cD8sb7tOb5VKbAUN21oUhP/uTwo3N4vnzOWI6ju1uqDxQtJXbLROc/xzT7F0K1xvXxH6ZJngdLggfPP+HuqMA8Tn7TqlohB1/5BV/4U4ng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Uj1GxmM2a3ZP4El7krI2740iLgDUWXQSlQ7/EYi0crI=;
+ b=IygtJZfQRh2f04AyoNJ613Mm8vlj8NrE/58iX1BH3S+ytDPFNvliGCIbBdW+2udJbQCS9U8A9o9ZSr56JB2WAtpb8SCn7uK1T7Yv/7eJmm25vpmqHjxBIm61AeCd7KCDKnmV+AFgUqSnN2WOikXD9yGMYUeO75LGpWPyZCZLJw3/i5uI9Wi+QtoXUQUtSps+MXiLPGBqYGcYu4+ZN9Rk7OWSFukQiFrd62oC5Wb5BXtEGFYlA9KSwVwVZvYoV38DEOkm1m7PB497qkmcOGzxKVwTHf1qK92mIkyMDZmnKIf+kydaQwqxSAplOSUrFkncfpa/lmxgY9vufQHGAbq5oQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from IA1PR11MB6097.namprd11.prod.outlook.com (2603:10b6:208:3d7::17)
+ by SA2PR11MB5178.namprd11.prod.outlook.com (2603:10b6:806:fa::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.4; Fri, 13 Mar
+ 2026 09:30:44 +0000
+Received: from IA1PR11MB6097.namprd11.prod.outlook.com
+ ([fe80::61e9:afe6:c2c0:722]) by IA1PR11MB6097.namprd11.prod.outlook.com
+ ([fe80::61e9:afe6:c2c0:722%6]) with mapi id 15.20.9723.004; Fri, 13 Mar 2026
+ 09:30:44 +0000
+Date: Fri, 13 Mar 2026 10:30:39 +0100
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: Paolo Abeni <pabeni@redhat.com>
+CC: Stanislav Fomichev <stfomichev@gmail.com>, <netdev@vger.kernel.org>,
+	<bpf@vger.kernel.org>, <magnus.karlsson@intel.com>, <kuba@kernel.org>,
+	<horms@kernel.org>
+Subject: Re: [PATCH net-next] xsk: remove doubled defines
+Message-ID: <abPZP0q1w8ArEMOd@boxer>
+References: <20260310134327.422540-1-maciej.fijalkowski@intel.com>
+ <abCOYwySxuQnkq_k@mini-arch>
+ <a544e971-a22e-47f0-b085-70ea743a4dc9@redhat.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <a544e971-a22e-47f0-b085-70ea743a4dc9@redhat.com>
+X-ClientProxiedBy: BE1P281CA0183.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:8d::17) To IA1PR11MB6097.namprd11.prod.outlook.com
+ (2603:10b6:208:3d7::17)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: improve test coverage for
- kfunc call
-To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org
-References: <20260312080113.843408-1-hbathini@linux.ibm.com>
- <02e68ebf-5782-4632-aed8-0026a3aab96b@linux.dev>
-Content-Language: en-US
-From: Hari Bathini <hbathini@linux.ibm.com>
-In-Reply-To: <02e68ebf-5782-4632-aed8-0026a3aab96b@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=M+pA6iws c=1 sm=1 tr=0 ts=69b3d915 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=V8glGbnc2Ofi9Qvn3v5h:22 a=VnNF1IyMAAAA:8
- a=wFA0YCTz-keeHaNuyW8A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: uNo_lfeklqp90At1W4DnGwbnh_K-iSrO
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEzMDA2OSBTYWx0ZWRfX0vxJCrOZ0oPL
- arfsMnBfTWl4syhgNkBS3wvrnCN1Nw1KK7nKDxfMPLa0Mxrai+WOUq9LjP1f9nYoyC3U75ImK4w
- 3uaoGp2YbsIKRgYw4kB/UazYPTKKj9jUyWTOCU95CKvOfrYZZzQt4F5/M7kUPsgiAB1/VK80eL6
- Y0tB6O+cC6p5nuwILb/lfwW/jmisz2z1YrG/hfsSG6/0UtQcv4+Sdsp2J/p2/4VPEo5D94H8VWi
- X6WWKikcH4F8720rOOR6fq4mv4zk8Sv3jgSCrRfr0JfO51XWkEcZUYXFcrmhTCfO6Xp6eNOq7bj
- zIQy8DYmYRKwzn95bzau48mEXzgBNAUPAeOD+F9DXUvWvJxPLehm/QmfHIEDidSVAWYPBsfIP2+
- 8ut3vffFCG0JzLT5A06O3Ewk0N/83i06w/c9mCvE4qh4MJhBQpekxTqw2uTNJfRphy7CaSeWsDA
- 3aY1jNIfrSCk4sXf+KQ==
-X-Proofpoint-ORIG-GUID: uNo_lfeklqp90At1W4DnGwbnh_K-iSrO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-13_01,2026-03-12_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 spamscore=0 suspectscore=0 priorityscore=1501
- impostorscore=0 phishscore=0 clxscore=1015 bulkscore=0 adultscore=0
- malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2603050001
- definitions=main-2603130069
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA1PR11MB6097:EE_|SA2PR11MB5178:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0113f72d-cf2e-4323-22f5-08de80e3338b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016|22082099003|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info: 7czXnhJuW7xtl6jQ3twwQ5rfb7cwhRHWOcHuAiK+4Og2+nw8Zg51bDgh9x7s6WGL7xgM4ZXx+GL0viGV4vTinbkfwff4/AgkfFOIPoFqadc96cB/LPbermjsQTjEE7+/JXxo+CJhVU7kRHL1eqblmxgRkJU808hZocola62BiZNO9aGsU4Nl95HlKCiwqFI4l1EuluHAerFxGJLj6gr6He8NT7H9f46pkODfyuvemfPuAYdowZkRjq6WnaQISCu6HDx0p+GJE7HLdtuUVGNxlUztgVq0Nr6NQbTiyTd1pCNKEVBtREQmoEWMZ8+MnOT84E9iGK8KOEPRlZ3kccHp/Y6+YfqKQClOiZvJKQ1X2Lu5s2+8Z4B3DGM3Qoeu7zGsmUC79RIZgKQ3TfpboGxLffEJmC6AMgfH4JPLe/MdnQcnvtzseyFmoVFgsnCSJDtrNwGbaxZsPVRCg078abUzHUr3JfbXa3eZ+h1AIc8ZOq59RC1oJ5aq/k+6S/an53hLDoZZN4c3/RXKJbSDP9g+/NZcbo3bVK+841XIJHcjNnocK9cfk99l46eRRwiILWvSqqUU3eMR8grShrw/erHPn4IO4e0LcYtIqKW+dVTn4KBrAF3++zPE0+2+rj2+GDyzkj/eA5WEJC1K0c15VTi4Pi4nKdYR/ycFHpWvoEbxvHUNqsQTJF6YcvhAyz8RAaGntprxVrDcHhTDRDJFlJDa+9iE93A+hQu0M+HLTwe5Xe0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR11MB6097.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nHZvlaCWIMqOAKCSwAPvzgBvFqRMecDaXvZS/Agac5keixOyanc61PTPoGgJ?=
+ =?us-ascii?Q?sv3SdFDBFg1Q+0MJnLbGaLwmdcb+iihootmnPhrhQqEXlhgGNTv+wEFB95Yw?=
+ =?us-ascii?Q?cNlhHX2DZFj6jJLk+4QJaOJ43p8nKXZA0MHikRPmUxjz7y3hR+8EYOaTAQ5R?=
+ =?us-ascii?Q?ICionMLC8jeNmnHjEaKMN3eOWaFVzel8uzZNnHiVzfe8yaWkTIYNNhRvd7DR?=
+ =?us-ascii?Q?elFhGgiR9ucVnU6c7QyOje7Xo71y6t/uXDsgKt+04T7e020V+9S6Y0PmNBy8?=
+ =?us-ascii?Q?cokgjqDNKB97MB81P5dRf1F+rdSxNfI6vgAp5bvSoUFMzuE48iqVJ2T2nv2F?=
+ =?us-ascii?Q?8NnWyPf/L2G7tbNIkhttkgNcqHoeebYmK3qSgMix2/QefCEBex78InB0+XJp?=
+ =?us-ascii?Q?7HvyM/piBekqHx9BxpcuXSss6DKRVzhyH2CPdPKlpLTKuN8qzwx+i0QimWBi?=
+ =?us-ascii?Q?Y70J6eXEVSsy/nmmkPTPgs0HrHsRh3tNPA9gcSU02XvM/B46wilFoQlbyIgp?=
+ =?us-ascii?Q?/DWXxeYxzqSNATNXThRAIY4gSYOqov4VDLV/+dXXp8pi28yeaTqtrWFBMxdC?=
+ =?us-ascii?Q?D2O9jxom87UTzzKxp4B7BrYI3kVQTs7KRWlL9xFyFr0YB1TUljR66LxLuwgW?=
+ =?us-ascii?Q?AndKvpAIreZRxKhY96BxetjSyptZ4F6iQ+S/LqN0BgYS3I553plDfz1UH8Bb?=
+ =?us-ascii?Q?Aes+YDmsx7LmW3cpKkJPqoHup/ejhgEYwNtSNe0VNNhNJ1vs7xUuVJlH8CYQ?=
+ =?us-ascii?Q?KYEsnNHsH31zPqbyiKmi5rFNpD//yYcnUilShmHSamQyMuiBVB95MjH0vDkd?=
+ =?us-ascii?Q?NFc5PgfB1Q7wq810r1/7DMBImsA3PpMee+/YioiZIgLjIvfNUEm4QhrupUAc?=
+ =?us-ascii?Q?2LM8dFIsgRDyPiWBVH0TVBJwlsXAI+hQmQrdcJ70WaV8L3FbHXzEwK5DWwsj?=
+ =?us-ascii?Q?Ri/U83L5tw95cv9UP2fy3LoKyIgqSor7BSvFnDd6wg1b3OqUZ6QgShoExMaU?=
+ =?us-ascii?Q?c6edUrUVzCC5slQu5iuEcgF7mIgqCLUeKn/shScRIZ5xcgXi3jTBwn7PituD?=
+ =?us-ascii?Q?qjwN9rSk4sV2w2U3cJJOnx8qwlfu+kzGQnwLbkYSdhtzqvLYm9prM7A9ymME?=
+ =?us-ascii?Q?YEJO9O8yV47aXX3tl/VciezQvags63DzMYyo2R/EeWPCOjZxSEh1/m+Btr/Y?=
+ =?us-ascii?Q?YZqT8HZmV3Ly7oEp3T/T4/TFnW+/AtDIPV4YZbT2u228ixDOwoSK95PrNyJT?=
+ =?us-ascii?Q?xAtajZ12ZzDHrv/NSCZcRh650eb6zFrxzsLgyOPb2H/mJ9QeU0xYv8kyHFkG?=
+ =?us-ascii?Q?+JNtNAbUINi23vdcc8ETSncq9Q3xdEskP9yTk4cXlR5O7yKorYW5gbTXWeP+?=
+ =?us-ascii?Q?463ocy3cbNWHYw+jf5pYAPCgqL9ZPcPBmr7hGfI7UFhMZsP5WJ6ZPtemTaT2?=
+ =?us-ascii?Q?e/W2mGOp4d9WdfX7Aagl8rBnn/GFxVmUfpzH5+k1XOvyv570B/5m3kjgsSjJ?=
+ =?us-ascii?Q?1HhG+p3QBsMCq7TJf77zH71ejS8XzfgItG5ILf+bK2wOD2MJOlBbHU/D8rfr?=
+ =?us-ascii?Q?PhagZrmxKyL8gKXZhsR4dMCO2KYrzFyuG/d2sWKH+ZD0es8sEMTH4fVZ8lW4?=
+ =?us-ascii?Q?mrrBW1RQdFqioQN7sB4jA8E4zOmPBCz79LzATedFuuMsLIy9U7AdnHpHHewt?=
+ =?us-ascii?Q?qgVFdZvyIbTQg/EMZSLkWmmrosYRuQmtrf6/lSEdtTr4GrVZikzjn/XhopdL?=
+ =?us-ascii?Q?722CjnItZliMJxv74AehsjnT3GlGgcQ=3D?=
+X-Exchange-RoutingPolicyChecked: mluJAoJLKH7qaf3vuVPIq5Egray4UrFiZDXxF8p/Mk6ivmgMl2VQj04u/j9u5oCdIJMXlQIcH+PyjtMKK3T5NRKILIgmr3s0e+SzN8l0ZR0fgPQv24d+9KSK1nK2sfbwt0LsI9jGIw7BhwSC3j96yluviyU7iYQ5CddPZncomz4hmqRK7+5R9YSXzhQr9jcCZoVAjayU8OtRxS+gAm29Ga9R5A8uBX1tmFayEMQWXTkUydjlWIF3kcVRmqSt7grmQwFx7JQiLYm3EV9bLoWhzJJ8T9nzMvuGyMvfsr2tBrIYuaSRlhWHXL1bsuaGNk5V2R78cxsIhRoe1Ca1niWjWw==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0113f72d-cf2e-4323-22f5-08de80e3338b
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR11MB6097.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2026 09:30:44.4741
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: krQTYsZknG9W1sOUIalxogXfdKgOCK6Txq6Tw4k6126JX+OCBkgT1791srvhCEpPYjjSJX6QMKPK2fkta8CrTvL21vjJ92/vCUAsgFCVW9E=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5178
+X-OriginatorOrg: intel.com
 
+On Thu, Mar 12, 2026 at 01:39:47PM +0100, Paolo Abeni wrote:
+> On 3/10/26 10:34 PM, Stanislav Fomichev wrote:
+> > On 03/10, Maciej Fijalkowski wrote:
+> >> Seems we have been carrying around doubled defines for unaligned mode
+> >> logic. Remove one of them.
+> >>
+> >> Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> >> ---
+> >>  include/net/xsk_buff_pool.h | 7 -------
+> >>  1 file changed, 7 deletions(-)
+> >>
+> >> diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
+> >> index 0b1abdb99c9e..ccb3b350001f 100644
+> >> --- a/include/net/xsk_buff_pool.h
+> >> +++ b/include/net/xsk_buff_pool.h
+> >> @@ -174,13 +174,6 @@ static inline void xp_dma_sync_for_device(struct xsk_buff_pool *pool,
+> >>  	dma_sync_single_for_device(pool->dev, dma, size, DMA_BIDIRECTIONAL);
+> >>  }
+> >>  
+> >> -/* Masks for xdp_umem_page flags.
+> >> - * The low 12-bits of the addr will be 0 since this is the page address, so we
+> >> - * can use them for flags.
+> >> - */
+> >> -#define XSK_NEXT_PG_CONTIG_SHIFT 0
+> >> -#define XSK_NEXT_PG_CONTIG_MASK BIT_ULL(XSK_NEXT_PG_CONTIG_SHIFT)
+> >> -
+> >>  static inline bool xp_desc_crosses_non_contig_pg(struct xsk_buff_pool *pool,
+> >>  						 u64 addr, u32 len)
+> >>  {
+> >> -- 
+> >> 2.43.0
+> >>
+> > 
+> > All consumers seem to be in net/xdp/xsk_buff_pool.c, 
+> 
+> AFAICS there are users in xsk_buff_pool.h, too:
+> 
+> $ git grep XSK_NEXT_PG_CONTIG_MASK include/
+> include/net/xsk_buff_pool.h:#define XSK_NEXT_PG_CONTIG_MASK
+> BIT_ULL(XSK_NEXT_PG_CONTIG_SHIFT)
+> include/net/xsk_buff_pool.h:    xskb->frame_dma = (dma_pages[addr >>
+> PAGE_SHIFT] & ~XSK_NEXT_PG_CONTIG_MASK) +
+> include/net/xsk_buff_pool.h:#define XSK_NEXT_PG_CONTIG_MASK
+> BIT_ULL(XSK_NEXT_PG_CONTIG_SHIFT)
+> include/net/xsk_buff_pool.h:           !(pool->dma_pages[addr >>
+> PAGE_SHIFT] & XSK_NEXT_PG_CONTIG_MASK);
+> 
+> > so why not remove the defines from xsk.h instead?
+> 
+> Indeed it looks like the macro definition is duplicated multiple times.
+> @Maciej: could you please drop all the unneeded dups?
 
+Thanks, let me send a v2 with a better cleanup:)
 
-On 12/03/26 11:52 pm, Yonghong Song wrote:
+> 
+> Thanks,
+> 
+> Paolo
 > 
 > 
-> On 3/12/26 1:01 AM, Hari Bathini wrote:
->> On powerpc, immediate load instructions are sign extended. In case
->> of unsigned types, arguments should be explicitly zero-extended by
->> the caller. For kfunc call, this needs to be handled in the JIT code.
->> In bpf_kfunc_call_test4(), that tests for sign-extension of signed
->> argument types in kfunc calls, add some additional failure checks.
->> And add bpf_kfunc_call_test5() to test zero-extension of unsigned
->> argument types in kfunc calls.
->>
->> Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
-> 
-> LGTM with a nit below.
-> 
-> Acked-by: Yonghong Song <yonghong.song@linux.dev>
-
-Thanks for the review, Yonghong.
-
-> 
->> ---
->>
->> Changes in v2:
->> - Added asm version of the selftest for consistent testing across
->>    different BPF ISA versions.
->> - Added comments clearly stating the intent of the test cases.
->> - Updated sign-extension selftest to have additional failure checks.
->>
->>
->>   .../selftests/bpf/prog_tests/kfunc_call.c     |  2 +
->>   .../selftests/bpf/progs/kfunc_call_test.c     | 98 +++++++++++++++++++
->>   .../selftests/bpf/test_kmods/bpf_testmod.c    | 54 +++++++++-
->>   .../bpf/test_kmods/bpf_testmod_kfunc.h        |  1 +
->>   4 files changed, 154 insertions(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/ 
->> tools/testing/selftests/bpf/prog_tests/kfunc_call.c
->> index f79c8e53cb3e..62f3fb79f5d1 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
->> @@ -74,6 +74,8 @@ static struct kfunc_test_params kfunc_tests[] = {
->>       TC_TEST(kfunc_call_test1, 12),
->>       TC_TEST(kfunc_call_test2, 3),
->>       TC_TEST(kfunc_call_test4, -1234),
->> +    TC_TEST(kfunc_call_test5, 0),
->> +    TC_TEST(kfunc_call_test5_asm, 0),
->>       TC_TEST(kfunc_call_test_ref_btf_id, 0),
->>       TC_TEST(kfunc_call_test_get_mem, 42),
->>       SYSCALL_TEST(kfunc_syscall_test, 0),
->> diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test.c b/ 
->> tools/testing/selftests/bpf/progs/kfunc_call_test.c
->> index 8b86113a0126..5edc51564f71 100644
->> --- a/tools/testing/selftests/bpf/progs/kfunc_call_test.c
->> +++ b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
->> @@ -2,8 +2,106 @@
->>   /* Copyright (c) 2021 Facebook */
->>   #include <vmlinux.h>
->>   #include <bpf/bpf_helpers.h>
->> +#include "bpf_misc.h"
->>   #include "../test_kmods/bpf_testmod_kfunc.h"
->> +SEC("tc")
->> +int kfunc_call_test5(struct __sk_buff *skb)
->> +{
->> +    struct bpf_sock *sk = skb->sk;
->> +    int ret;
->> +    u32 val32;
->> +    u16 val16;
->> +    u8 val8;
->> +
->> +    if (!sk)
->> +        return -1;
->> +
->> +    sk = bpf_sk_fullsock(sk);
->> +    if (!sk)
->> +        return -1;
->> +
->> +    /*
->> +     * Test with constant values to verify zero-extension.
->> +     * ISA-dependent BPF asm:
->> +     *   With ALU32:    w1 = 0xFF; w2 = 0xFFFF; w3 = 0xFFFFffff
->> +     *   Without ALU32: r1 = 0xFF; r2 = 0xFFFF; r3 = 0xFFFFffff
->> +     * Both zero-extend to 64-bit before the kfunc call.
->> +     */
->> +    ret = bpf_kfunc_call_test5(0xFF, 0xFFFF, 0xFFFFffffULL);
-> 
-> Can we just use 0xFFFFffff instead of 0xFFFFffffULL?
-
-Alexei, can you confirm if I need to respin with this change?
-
-- Hari
-
