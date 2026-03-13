@@ -1,143 +1,138 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D87F223323
-	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 21:41:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E423822B1
+	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 21:58:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773438090; cv=none; b=bL1yEj7OhQkSEGCX+mSyEqm+OTBzE2ahGOBOK4/W+jHuZXqApnSjBl4rMvJkH4IaCkYY/+M7B+kxExNXbnAvcBMO4TPNkN4yWfew7YW4R0Z6/BFdFCOWwQJcc747vpT1A0YWAZFSzvdyRqBAHfcd0F2CqbdDpTw1CEAxN2Faj3k=
+	t=1773439100; cv=none; b=dxLZs9in1778ZCBcJzko/GAV4vXWqFaGDbDbgoUePyv1i5WXjIhiFtGy7aYbT2Sl4DCWtUBy8V7/QqnDohqGn3Q8pKpbtfhAlo5koZcGT/EuxO10vhreowQZPxqm4Al049z3FsFkMoNVYlrlLEq/NUSHkgUUJ2uJGkho0LWDHgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773438090; c=relaxed/simple;
-	bh=RAQx+Emt6GfSxsFf4gWYK7iOpXQbGUzP/YnvQ4OxLWI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=CC2TXCzk02xn+bMcslQwdx3uU3PzUtnIezvxZd/w1Ybyy8xCEGCE9ftxjpvfXF8f2K6eiP/vCFt1dPxDmpBcSzr7axm4MO0wAgMhZmMzvN7l8w2hGqcbXKgfVUY9Z6f+XGp6ppO334Ti6UpEtxNnfF0FVqMDA2XjmJAdFSquwVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sbYNjnuL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773439100; c=relaxed/simple;
+	bh=VHPvtBZkGmGQ9e6u2L+evz6ek8dGdfP/bWfoPbRC3zs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=tyJr0JWiQhgj681vV7uP02qZM4sjGHqi/v71MGU/5Z0nfAyV02otIHOJ54J0tYo2VNhmU/PqD8UofhkHFX1ifVan23qQrNi0Bz63xdfmQsHNfG42NeNjrY9Is7Ml3uRJZsJNf64aQvy47wLI1b6G9PjOwnTUyaEVZN29uavevhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qug/Hn30; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sbYNjnuL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 831F8C19421;
-	Fri, 13 Mar 2026 21:41:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773438089;
-	bh=RAQx+Emt6GfSxsFf4gWYK7iOpXQbGUzP/YnvQ4OxLWI=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=sbYNjnuLXnk/PBZhBdkzBcrcxuy6fgTftTo1nyqCJ3vPkOHMZVpbZiSYyRwOvoNVE
-	 EjileyCBqAquWLxbBBQywjarAbercgQbOqXe85Juz8ZfXsNpq/eEoNaLkRSVJqz1dF
-	 X2B5DwcBu5iiVzx1IHHqgJEKcQjiw41CLtt8JEV72IWjxoDCD1hfdvll2Ta58LcqZp
-	 sBUCTDzpNkr/OIQpmXCMFpZrL9OUxOicyvunE8X8tRN569BK+UQ3rQEbIbijiKcqIC
-	 7ooDtO4ge+HfSS9MAjmToGkOu1SiLxaf4HtA1Xiwao3EPuxxowbUifn9psLE/GKQFF
-	 hTr6liM7ecR4w==
-Content-Type: multipart/mixed; boundary="===============0472075779639375511=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qug/Hn30"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-35a08ce49dcso2475875a91.2
+        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 14:58:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773439098; x=1774043898; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=VHPvtBZkGmGQ9e6u2L+evz6ek8dGdfP/bWfoPbRC3zs=;
+        b=Qug/Hn30wtza9tq3xr4i0xIRicyJ3g8P+N4mFtwUtfmvT1J5+u19kpR8x9Vi+P7i/u
+         XvZHGih5fcNZB++0G9KHU9xBQTtVQkI8XwWy2stlmRbiGZJBg/hyywyoBHyGS5NsG21k
+         Sox77AJm/KW9rRKsEaQaXpGSrEKat05PYREf4ntQlAUtKmnriRFdNZXK78lxdJJ8ss3i
+         m5Bb5r3SCqnDGq8LifPuYFmXd4e1gy9PfrHXgE9ajlYefUW1KxuNW9FVj1zsrqppZcCy
+         MYwa9ybn+K2pXEbboG4DElMYXlFJXWTxIOcg+uNEuyCmYMy11rBNuB50wWmKEzZhhe2c
+         yQ5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773439098; x=1774043898;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VHPvtBZkGmGQ9e6u2L+evz6ek8dGdfP/bWfoPbRC3zs=;
+        b=RQXy4Wa2bjZX4+gP8VCoo0C1VCNmRx6bKZGPT7sFFXv1lFVTgozXxfrZ2vGuBzy6aE
+         RqZm547E1LeMb9aCTptsWmmAPgdsMJidJOZR4mVCJ86/zuIw/HJ4M736OSNlAESCsRa5
+         8ZNVEjvdR6lVt9McQfa6APrK1XBEtoNcy0wMRXguL49BDG7mDvjTM2z93ZMqwbjO+l91
+         QBMVtdTanYNcVDRbcNfaBg1MTDmQhqUWz5YNOtJMuKdm7gPT6PhoZ1kZrSE2lf8Hup3S
+         2o7kcElPqISUhMyZ6KPPvJXRqmE7D25/4sPEx9iTZgcsLGb+yrucYi1OWHt4L8rxoQ+W
+         qMvA==
+X-Forwarded-Encrypted: i=1; AJvYcCWEVRTVfmj0UJGcHY2aXxQis4O3wZipE9UqqYPzBazRXlD0fWJigJCzWq5AWGBuIjUS8Go=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywub52riWSK5+EwXKkfFeOQAg822NUxmKjhzPv5N4CeFD61wiDB
+	6uZ5krp19JJKsnKwqRCho14iyfn09pa463oHwmYidxSicUVqnIYDarKoZ/fI2Q==
+X-Gm-Gg: ATEYQzxuW1OJ1BO4R0v2cG6lmrtXd4WHHb/moLhlJFNUSSDqiinF3ptI3pZqQOTu6KZ
+	xLA35eRvwMxfuijQd0orELIfyyYsHA+dSSuNXcZHEq6Dhbmq6IXAXSfV0pkj/75TaX2jlf3bE/M
+	UrexZxJtdcsDW7EB0BtQfsV5sCUnrfsXRtenedQwt/U1ff158lFhk1lUxjtuGN3Q/4oYpQouwqi
+	LwLUltaO7AkyUAUruwLaQlwCgoS7xmgWkXhBOZwVYx96mvY8cjuj654sKSPp1FfnP3l0d7NXp5e
+	1DkTkmmOUAQ83FpHUu1UrdmqI44V6uSrigVvYWcFVcwJW3jv2snPztL3mbl4bL6JV94Ab131U6V
+	dGAk8vGE32zy2YvJDp0r4uOF9QRguz7KFYorKjGBApHa0CU1ntDRg4FUN1xZ5tdT1xW7eolwWSG
+	vMsVIR+OexFSGKd21bN6C5DfY3CoH2KkukKTe6tmrfHGdCeFXSNlQ=
+X-Received: by 2002:a17:903:3905:b0:2ae:593c:48fe with SMTP id d9443c01a7336-2aeca9f8ddcmr51487065ad.13.1773439097817;
+        Fri, 13 Mar 2026 14:58:17 -0700 (PDT)
+Received: from [192.168.0.56] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2aece809586sm29065585ad.63.2026.03.13.14.58.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Mar 2026 14:58:17 -0700 (PDT)
+Message-ID: <c6d46d55d29d7b164e621040a3c80f1aae8180ea.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 3/3] selftests/bpf: Test case for refinement
+ improvement using 64b bounds
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Shung-Hsi Yu
+ <shung-hsi.yu@suse.com>
+Date: Fri, 13 Mar 2026 14:58:14 -0700
+In-Reply-To: <622dc51c581cd4d652fff362188b2a5f73c1fe99.1773401138.git.paul.chaignon@gmail.com>
+References: <cover.1773401138.git.paul.chaignon@gmail.com>
+	 <622dc51c581cd4d652fff362188b2a5f73c1fe99.1773401138.git.paul.chaignon@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <b72de8b719f8d7d01f3c90c05fe8c0c3640dce8164cd89c65433085593e0e856@mail.kernel.org>
-In-Reply-To: <20260313-sleepable_tracepoints-v4-2-debc688a66b3@meta.com>
-References: <20260313-sleepable_tracepoints-v4-2-debc688a66b3@meta.com>
-Subject: Re: [PATCH bpf-next v4 2/5] bpf: Add sleepable support for classic tracepoint programs
-From: bot+bpf-ci@kernel.org
-To: mykyta.yatsenko5@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,kafai@meta.com,kernel-team@meta.com,eddyz87@gmail.com
-Cc: yatsenko@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 13 Mar 2026 21:41:29 +0000 (UTC)
 
---===============0472075779639375511==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Fri, 2026-03-13 at 12:43 +0100, Paul Chaignon wrote:
+> This new selftest demonstrates the improvement of bounds refinement from
+> the previous patch. It is inspired from a set of reg_bounds_sync inputs
+> generated using CBMC [1] by Shung-Hsi:
+>=20
+> =C2=A0 reg.smin_value=3D0x8000000000000002
+> =C2=A0 reg.smax_value=3D2
+> =C2=A0 reg.umin_value=3D2
+> =C2=A0 reg.umax_value=3D19
+> =C2=A0 reg.s32_min_value=3D2
+> =C2=A0 reg.s32_max_value=3D3
+> =C2=A0 reg.u32_min_value=3D2
+> =C2=A0 reg.u32_max_value=3D3
+>=20
+> reg_bounds_sync returns R=3D[2; 3] without the previous patch, and R=3D2
+> with it. __reg64_deduce_bounds is able to derive that u64=3D2, but before
+> the previous patch, those bounds are overwritten in
+> __reg_deduce_mixed_bounds using the 32bits bounds.
+>=20
+> To arrive to these reg_bounds_sync inputs, we bound the 32bits value
+> first to [2; 3]. We can then upper-bound s64 without impacting u64. At
+> that point, the refinement to u64=3D2 doesn't happen because the ranges
+> still overlap in two points:
+>=20
+> =C2=A0 0=C2=A0 umin=3D2=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 umax=3D0xff..ff00..03=C2=A0=
+=C2=A0 U64_MAX
+> =C2=A0 |=C2=A0 [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 |
+> =C2=A0 |----------------------------|------------------------------|
+> =C2=A0 |xx]=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 [xxxxxxxxxxxxxxxxxxxxxxxxxxxx|
+> =C2=A0 0=C2=A0 smax=3D2=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 smin=3D0x800..02=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -1
+>=20
+> With an upper-bound check at value 19, we can reach the above inputs for
+> reg_bounds_sync. At that point, the refinement to u64=3D2 happens and
+> because it isn't overwritten by __reg_deduce_mixed_bounds anymore,
+> reg_bounds_sync returns with reg=3D2.
+>=20
+> The test validates this result by including an illegal instruction in
+> the (dead) branch reg !=3D 2.
+>=20
+> Link: https://github.com/shunghsiyu/reg_bounds_sync-review/=C2=A0[1]
+> Co-developed-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+> Signed-off-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+> Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
+> ---
 
-> diff --git a/kernel/trace/trace_syscalls.c b/kernel/trace/trace_syscalls.c
-> index 37317b81fcda..e9ddf9db2b56 100644
-> --- a/kernel/trace/trace_syscalls.c
-> +++ b/kernel/trace/trace_syscalls.c
-> @@ -1372,26 +1372,27 @@ static DECLARE_BITMAP(enabled_perf_exit_syscalls, NR_syscalls);
->  static int sys_perf_refcount_enter;
->  static int sys_perf_refcount_exit;
->
-> -static int perf_call_bpf_enter(struct trace_event_call *call, struct pt_regs *regs,
-> +static int perf_call_bpf_enter(struct trace_event_call *call,
->  			       struct syscall_metadata *sys_data,
-> -			       struct syscall_trace_enter *rec)
-> +			       int syscall_nr, unsigned long *args)
->  {
->  	struct syscall_tp_t {
->  		struct trace_entry ent;
->  		int syscall_nr;
->  		unsigned long args[SYSCALL_DEFINE_MAXARGS];
->  	} __aligned(8) param;
-> +	struct pt_regs regs;
->  	int i;
->
->  	BUILD_BUG_ON(sizeof(param.ent) < sizeof(void *));
->
-> -	/* bpf prog requires 'regs' to be the first member in the ctx (a.k.a. &param) */
-> -	perf_fetch_caller_regs(regs);
-> +	/* bpf prog requires 'regs' to be the first member in the ctx */
-> +	perf_fetch_caller_regs(&regs);
+Can confirm, this test case fails on current master.
 
-Should regs be zero-initialized here? The perf_fetch_caller_regs()
-comment in include/linux/perf_event.h states:
-
-    NOTE: assumes @regs is otherwise already 0 filled; this is
-    important for things like PERF_SAMPLE_REGS_INTR.
-
-The function only sets ip, sp, cs, and flags, leaving all other
-register fields at whatever happened to be on the stack.
-
-Previously, the regs pointer came from perf_trace_buf_alloc() which
-returned this_cpu_ptr(&__perf_regs[rctx]), a per-cpu variable that
-is zero-initialized at boot. The new stack-local struct does not
-get that zeroing.
-
-If a BPF program calls bpf_perf_event_output(), bpf_perf_event_output_tp()
-extracts this pointer:
-
-    struct pt_regs *regs = *(struct pt_regs **)tp_buff;
-
-and passes it through to perf_event_output(), where uninitialized
-register fields could end up in perf samples.
-
-Would initializing to zero fix this?
-
-    struct pt_regs regs = {};
-
-> +	*(struct pt_regs **)&param = &regs;
-
-[ ... ]
-
-> @@ -1515,21 +1519,22 @@ static void perf_sysenter_disable(struct trace_event_call *call)
->  		syscall_fault_buffer_disable();
->  }
->
-> -static int perf_call_bpf_exit(struct trace_event_call *call, struct pt_regs *regs,
-> -			      struct syscall_trace_exit *rec)
-> +static int perf_call_bpf_exit(struct trace_event_call *call,
-> +			      int syscall_nr, long ret_val)
->  {
->  	struct syscall_tp_t {
->  		struct trace_entry ent;
->  		int syscall_nr;
->  		unsigned long ret;
->  	} __aligned(8) param;
-> -
-> -	/* bpf prog requires 'regs' to be the first member in the ctx (a.k.a. &param) */
-> -	perf_fetch_caller_regs(regs);
-> +	struct pt_regs regs;
-> +
-> +	/* bpf prog requires 'regs' to be the first member in the ctx */
-> +	perf_fetch_caller_regs(&regs);
-
-Same uninitialized regs concern as perf_call_bpf_enter() above.
-
-> +	*(struct pt_regs **)&param = &regs;
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23070834076
---===============0472075779639375511==--
+Tested-by: Eduard Zingerman <eddyz87@gmail.com>
