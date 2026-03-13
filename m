@@ -1,206 +1,153 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B09345721
-	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 03:19:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38371304BDC
+	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 03:25:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773371982; cv=pass; b=J66ETYKYvDHGoY8tmK5CbINw7PyglSOkUT0BiHRMVAmjVnVc36mPwwQwTCbir5lefwdimPlTte5QolZeKULiUauoZgl0y0QOpb+ejG8kYtiTrUB5SAD0goL4iWBMRUDYsNGoj3KeMRkDdDtdxUYtBH4H3vWjxDOKJWS6Wm5ooAE=
+	t=1773372352; cv=pass; b=bmpPa+7q48RuUiCYlHCH6EdAAroYHIIQCZT5AhxS4GQIY630RSjGCIhq1gYb4JP/1Pao+E1DmjCvz2lqXc4flIP+OtbzxWgjOo57EktsTAGsCpZ7b0L/sZtdzeHZT8sqcCHmhHqMc4egEU2bWudxID58p2WePUd+zQ1vvErhR8M=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773371982; c=relaxed/simple;
-	bh=z5C5+rca80+rlH4kb5g/9Tr41VJjW5u74Z104MskDBM=;
+	s=arc-20240116; t=1773372352; c=relaxed/simple;
+	bh=jJS+hhpnUVOG/Ej47nAnN1GzIMfATuqoW3/771u/U+I=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Af0diQhwC3RZuOfJnawZ+fS1UP+tyzkUDnSBoMQgJ7weue7jwYs3MCXEbtdESLYAVDNv+Kh1oR0EW1graD+h/RKfPSbBW0Ugmd0DmlQCkizhcm997kMOElUxNDD3zLWzhUzIi5VwgHAhLRFcxIQKazqLmM14IGiYzIX26h4HuVA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G4nE7BZ+; arc=pass smtp.client-ip=209.85.221.41
+	 To:Cc:Content-Type; b=u+Nng16zf4y8KcbPlnIVnb2MGHvoqrXynD7RdB1aZPNfcg0ay2BMkaSlDj/vR8pMXNsy7pq7jmp2KjUYGkl2SWI/5nR9C1+3j2GNU0Uj4tRbswxLG0708gXOB1/uizuJ/w9f0BumQDhWfrLdS/jvNt4ABx64TRmUmuN/iZqkNSg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=euif4JZE; arc=pass smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G4nE7BZ+"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-439b9b190easo1220148f8f.2
-        for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 20:19:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773371979; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="euif4JZE"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4853e1ce427so18735495e9.3
+        for <bpf@vger.kernel.org>; Thu, 12 Mar 2026 20:25:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773372349; cv=none;
         d=google.com; s=arc-20240605;
-        b=jI3QozEC3IydftEpKs943nqdmNIFlICyiaevdm30NrkllL+a4pXxTwGPdFIlSmUVUc
-         8e/WDWZ6pYjLr3wSbpvX7ZxDCgnT+LuDzsb+DzEmt5qkMpIBV69inTHRLsB4S3Gpm5ai
-         zzed7WJuLc1l6DjvA6dEhKQvMeedE6qXHrUiwTMF/DKz53rYVBQc9jMGeExSchOkVRoL
-         hNk83JOzbL6bLBtA7OXuBrKxjQfy1NjhEnNSbF8t6lZ1YoB3FTtXtjmI1/kp73W7Mv84
-         yiDRIAHbr45d7Lf3JbjHWx5HQUZRyMmL0bax6nqGAJXbRO+UdgKnFa68LEg4AUIjyitX
-         AuFg==
+        b=ho3qsWuQw/VuWsNJ/Elf0HBFxs5lJBJ8s00m3Z/LBK04sOj4oj1o0wrtUX7WHl7E7O
+         08p+Rlykf7PetMP/D+f3QfefeF665pYenhL/UdyLFRcQ/i6tjRhJGgI5v9cS+YeKP06u
+         Cyecx0MfFA8WvB1j/90GPzQNJUGK5YXlJk2tXNPyKJKGO71qr9vnZjxIe7xY6XBOWL6U
+         N4x4wPcSpTaW6cQDxj5Fl0uY2xrzG4Iu5PJOSwZk5YiTuryU2l8MmlviUy9yHDSlAJr8
+         4ZvFswFCmhnyBWkPE7wIGuv5JbAkQfailmjviWimTEbsaNrG1AzZ2lLeZ3SvjoFMGnP5
+         anYQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=+6Gw/LsD1loG1u5d/wa3El7wK1OULiHLKLED7ss9fdI=;
-        fh=2Yq2ltyOUV7+aNQplXNYygsE7Xa5Z+4CYqYW5T8Xa14=;
-        b=Uk0cmIFsI4iAjpCWWoRXecOlFgJ9ubMYLn4UmJx3Z2rRfjU1TAoT2TjukWvVDai207
-         qnuc/N1l1yLtGNOqs+9ZwHybD482RCV/crCD/UvGY+UOUKLtmSk7nAJlSs0BIL9GWFje
-         SWvCHXdym23V+VINgOvh9lV+RXX0a8jKLS1qE4DOlTqFqg0dxeFCw0bs3TmtQYu8+W8V
-         OHIod3MOKnmKjyBC1LScit/iZXaNi1SUiCGe8+NP/8Ou+n/ZxmeZ1SbqQCJysQzcnM8H
-         GscFaOUsJ76vLByL9ZKXoDbl0TwLXSogKjljSGWEVA8szUZasj8xUUc/76uwbU8QRjoN
-         oTIw==;
+        bh=DjdNkWmuFGHAULzlA4K3CXU4TqPSpjiv6ig00VxhSt8=;
+        fh=J4/mukkHm1+4BsLTOwUvQ+tq8JCMeJiWAc+LhWh1PrA=;
+        b=UwAdGxEDPYEITlxliikJOLns1YpeYK1XEhQug7aX2UImImhn/0xNCmxZeHK+DIDglD
+         nuEtwrr8wnt4kZqc/jdLHc5+pNg57elVQ2gf9xMkOUvylCaZqmu2iwJ2u8v0UgLt056r
+         G6LFjXBhd053JwqVgzT0bkeUr3Nu38lh5CNI+XmJadg3RE3wk7z05cxYno9QRDzDXSXn
+         LSxcgU1Rl8GWVOIPPUDdC9006xNuefqH6N8fAVOt3LpLP7HqWA6lnwqKMvCHC+PBt2J+
+         nxQvAtjB7mLC2EG1K6kaVH4irXMn704thWLanWVVMs3Zwe4UzkN6xJETh7NsQNNusgxM
+         Z+Gg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773371979; x=1773976779; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773372349; x=1773977149; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+6Gw/LsD1loG1u5d/wa3El7wK1OULiHLKLED7ss9fdI=;
-        b=G4nE7BZ+6DZaLp8CT09J7OzT9iPJTPYkEWv3epAFkBZWmvVW3ouskeVkw+d8e4dD3T
-         OmsAafwxfEHLyNU+jFp48SZpGZGh/o3XaLBzcFPSD0yqP/U7pAe9FC2SjcfSVS9tz258
-         HMalmYtHot6V7W+Mcb+I5i3BOjoH+BemmlmCZV66KUYGNygQ004PVUuBVxGxOM/qlKce
-         WmoIS+pN9NMvxblaZ+gBtjgNzTlWl03SyrFOBaRPjuP3OVTX6QQz9Tfz6nYeA0HCRP4M
-         9sl4DXxamKDdzjxaG6K5K5wA2jA53RPRlre2bF+bVeCAjb4hoo1cIkHOknrztbzKrKiK
-         sG3Q==
+        bh=DjdNkWmuFGHAULzlA4K3CXU4TqPSpjiv6ig00VxhSt8=;
+        b=euif4JZE+vjNViFVoElHdNGDKly03h8ZDMvwh1xvoBbdfEwiJru15jF6gQ+wdpsR0h
+         zvISHzESYE/IJW2DhaJqkb/PmgsC+PEQp2HNgZfDmtjA6Be58Mql62r0J4yx6tfpBWab
+         e5NAhb0RZ/ogEnSvDcVm8iKn8U6PB0Qc8Osqan9YqPkAjv04QJIWnx8h0+fFroBkM6ie
+         scYZaMR0KIppwV9KgddshEe+5Mgjg118hNF1xNE5YSv0AfW90AzArPGLwy0TBwf252UV
+         eVnv4gOuFj1mbahKHKSmS7RJI8DBCmT5r1XBAsQio7TMq5PfyVZehhkZLL8tSySpTckq
+         Bylw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773371979; x=1773976779;
+        d=1e100.net; s=20251104; t=1773372349; x=1773977149;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=+6Gw/LsD1loG1u5d/wa3El7wK1OULiHLKLED7ss9fdI=;
-        b=kmlFKueLWA3zF7mENTe1XGyLDIhwbRASEidRq3V8deWMuXTHTIU9sAQS8L1yfLUIVU
-         G90/t6sBQk4e4feDnH1P7i28sU/wjq3bHpcfEgv3eo/sf44tt9nz5+UQNN46ntWE+0QZ
-         NyGWGjcipU4xJuJXPV6L1rw9Y3lQwF3lig8bc2C/aA1kN3JV9fndMWWQO9zndA0F4pWO
-         fAWz7fjEFCmlcU0RXySpXmbw/XJoKTW+fkXyiH8+jqLIJBwDJIBa6+73eNMtdnFeDV5K
-         WzBSmDbCw6ALnnOJ5jbzlCqlkNmO4WhK09vPmgehNVZLFVkqzNuHhU95Wyulwn4azsb9
-         1cvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWUgRaF407QX7lSTnqAYOpLzuRB5t9Jvh8qUbSr0oJ5Vd6aZyuTXh9jp3p8GXyAmS1zVqs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwjQ+yXYYbwuJ6sGAr21sk6zvMjDwwyGaGrIlLzX6nZpJUm/nAv
-	QjBXTKkm8M1nyrHO0TdxRh05Oh9j7Hmdj88VLZVHERFxgeXoZeqkzTH85aOy4sFMYHOo/7eB9BE
-	6Q7N4E3j87dwVWwTwbzUoYAFpuAGYVM8=
-X-Gm-Gg: ATEYQzzkq/Vzphg6BOUTWoXuUmUC4BsxYchgdHgkFNjCtnWV8DUCEvckUGVCQpjur/Z
-	qi+ArGUO45xWpQrjNkstHf8DRLsBXZ4JCbDuTbazA1H83rmNOONy+Za7Od8sixPzPaOR4WDzgHL
-	RZM4mQRAW/0JtiKahcEp0pV07jyBccwLUic6CkUoSNBSxkpmhGnYzZk0/jiksVbErdGUlE7xzPs
-	5Hyxc+hfTfiO+3V5nZRXwYk43LuLXmibGlvjbFPREBN9+O7GzvZrnhX/OZ92Ah/5+Qci7r6dIWH
-	YOGX+6fLTCk293ZfUPEOps/iL0dykGB3ul6btDyQYUK9C466zfNf/fVzz5Ds1g9TgOE=
-X-Received: by 2002:a5d:64c3:0:b0:439:ba75:7db0 with SMTP id
- ffacd0b85a97d-43a04d71539mr3164756f8f.1.1773371979457; Thu, 12 Mar 2026
- 20:19:39 -0700 (PDT)
+        bh=DjdNkWmuFGHAULzlA4K3CXU4TqPSpjiv6ig00VxhSt8=;
+        b=tHhmFcT1Z0z5USs36lk1/9QQmtgVEnBAjz1Iu+AKQDICmVXc+1Sa50Ch1ODcDaJTrW
+         DA8q3dY3Sh7Cg3M2DqEi74HLg/yeNyJ0BwpgDE4G9HzAC5Z14ZrNy0fj3o3k+Ob1+EB3
+         3REIXjon6AtDxSkkgSUAs59oThy8AiE5PPUz0Cypa0WB2xo3ikfdDsEngjEORSYnkXjz
+         XuWK1GA+m3eoTgxtygO6qvO1vYFwGJ3iA9Uz3tD7T2eEjeXL8cetSSOoAlyg983sUatl
+         23hckN13tVK3n4XMBB1motNhTauFrZvCpCJ30Lq+v5hOnGmB3Imtg8pgbfWA0oAMasn2
+         ES2w==
+X-Forwarded-Encrypted: i=1; AJvYcCWCSPp1s8TZ3xEk1JKzEUFY6yqZEaZZlRz6VJ8o7JLVC6zAzvFg+LugBbXHWYiWg9a7yGs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFr3sQkUr7cNURVN0aEynLTRzAv5V9s0c8d1RaAtzYFAmCFQNW
+	ZAnUxiQvODbYKclnsLepgdE6Wb5QKBjDZEnMn9gi7EMSPku/TCIgoCLgdH0gF/Wsf5DxPs4GjrR
+	uMZoSq+q8CQZSHEw8zsxJ/Hf/4lnc+o0=
+X-Gm-Gg: ATEYQzxxir/xTqe5KuEgvWshkyj24vI7VL7tyKLAVMGP/U4r70CutFPfphTGae/aGja
+	ScE7hgJyDCYTw+W7uF1kXbbMs4KizVJiyleXvrJD47ekHygB+sOv84CzzIvP5AGQH1+QugX7jqm
+	6IoOtI+5iXfgTnAl54bumNiPiUP2pxRTRPP4wKMMqtBts++4XPwlHAfeyW8l43Sp8ecRfKxfgS4
+	VX8eQ9ZqYhKi+Ee3x7yKTdMpOwtraMqxzyVl7qS+ewnJs4HKYVnk1LOkWaKQkx8J8OIYTNfeafT
+	sUWMfFju1W+R9gmQmgF0zZAvY3WrYfOEsJqf0Lwly9hYanThy5HCZMc/oywJwlVIFFM=
+X-Received: by 2002:a05:600c:19d2:b0:483:703e:4ad9 with SMTP id
+ 5b1f17b1804b1-485567027e6mr27457915e9.19.1773372349282; Thu, 12 Mar 2026
+ 20:25:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260311225726.808332-3-puranjay@kernel.org> <480892a72caa391641ec52a010730d213241830683280a0583cfc334d8f39325@mail.kernel.org>
- <CANk7y0gOSQN7vULuBVwhVO=Tq6bB99jZwovras7F5yjNu5tVqg@mail.gmail.com> <CAEf4BzYupi9RwB0SC_QOKncNd4viNu6Yp4-kmnbS1846A-uL5Q@mail.gmail.com>
-In-Reply-To: <CAEf4BzYupi9RwB0SC_QOKncNd4viNu6Yp4-kmnbS1846A-uL5Q@mail.gmail.com>
+References: <20260307064439.3247440-1-ameryhung@gmail.com> <20260307064439.3247440-2-ameryhung@gmail.com>
+ <CAEf4BzZubPSaS8SQSEQJvTphwgbaBfdC0CYEhsfQN8CJ7HS3pw@mail.gmail.com>
+ <CAMB2axNR6qPRVy5YCiMygVseS+k9JxY9DFONNHD5Lt8=wD9MGQ@mail.gmail.com>
+ <CAEf4BzYTO9e-UAEd+W+ftqQZLUZCWHWXAYVnVjHeNtsZL1=Pdw@mail.gmail.com>
+ <CAMB2axN+8+V+29r9tuoVF57ObpvkUE5d5_8jtd5iRPYq4_gLGg@mail.gmail.com>
+ <CAEf4BzY1O1Ne9Rf+O2terCT8f9e6pNFr3N4hOv98N84ZoehCaw@mail.gmail.com>
+ <CAMB2axN8Qe6r_siq5_6od7D_kDZPcYw_Z6KVOFtXNJVKzajqzw@mail.gmail.com> <CAEf4Bza5bNf6MsgNrr9WqE5ZKhRQ_PwtdCEwaWAVLJNmAZzv=A@mail.gmail.com>
+In-Reply-To: <CAEf4Bza5bNf6MsgNrr9WqE5ZKhRQ_PwtdCEwaWAVLJNmAZzv=A@mail.gmail.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 12 Mar 2026 20:19:28 -0700
-X-Gm-Features: AaiRm50d4jBysdvHnVvp8B2_0YXyw9lI936RZXBgc5_YuJrLP28IFSf8-1WlapY
-Message-ID: <CAADnVQK+6i13LykoNb91S=naBdGaenOdxnWV6mHc7ZB6dxpSSg@mail.gmail.com>
-Subject: Re: [PATCH bpf v3 2/3] bpf: switch task_vma iterator from mmap_lock
- to per-VMA locks
+Date: Thu, 12 Mar 2026 20:25:38 -0700
+X-Gm-Features: AaiRm50PvuBQGkWhfwi1pHRbvVaBb5_HrvDIvQ0oA3BFbrNbnKznFi_Ct8lbq8g
+Message-ID: <CAADnVQ+kQys+50hammWjsLFE8DK6FKgn1mPnKu3c9O_R64vJMQ@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next v2 01/11] bpf: Set kfunc dynptr arg type flag
+ based on prototype
 To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Puranjay Mohan <puranjay12@gmail.com>, bot+bpf-ci@kernel.org, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, 
-	Kernel Team <kernel-team@meta.com>, Yonghong Song <yonghong.song@linux.dev>, 
-	Chris Mason <clm@meta.com>, Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Amery Hung <ameryhung@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Kernel Team <kernel-team@meta.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 12, 2026 at 9:38=E2=80=AFAM Andrii Nakryiko
+On Thu, Mar 12, 2026 at 1:10=E2=80=AFPM Andrii Nakryiko
 <andrii.nakryiko@gmail.com> wrote:
 >
-> On Wed, Mar 11, 2026 at 5:35=E2=80=AFPM Puranjay Mohan <puranjay12@gmail.=
-com> wrote:
+> > > I guess I'd suggest
+> > >
+> > > struct bpf_dyntpr *const dptr
+> > >
+> > > to mark this through type system? that is, *constant pointer* to
+> > > dynptr, not a pointer to *constant dynptr*
+> > >
+> > > WDYT?
 > >
-> > On Wed, Mar 11, 2026 at 11:53=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
-> > >
-> > > > diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-> > > > index 2ccdc3228063..50dbeaeafd86 100644
-> > > > --- a/kernel/bpf/task_iter.c
-> > > > +++ b/kernel/bpf/task_iter.c
-> > >
-> > > [ ... ]
-> > >
-> > > > +__bpf_kfunc struct vm_area_struct *bpf_iter_task_vma_next(struct b=
-pf_iter_task_vma *it)
-> > > > +{
-> > > > +     struct bpf_iter_task_vma_kern *kit =3D (void *)it;
-> > > > +     struct vm_area_struct *vma;
-> > > > +
-> > > > +     if (!kit->data) /* bpf_iter_task_vma_new failed */
-> > > > +             return NULL;
-> > > > +
-> > > > +     if (kit->data->locked_vma) {
-> > > > +             vma_end_read(kit->data->locked_vma);
-> > > > +             kit->data->locked_vma =3D NULL;
-> > > > +     }
-> > >
-> > > [ ... ]
-> > >
-> > > >  __bpf_kfunc void bpf_iter_task_vma_destroy(struct bpf_iter_task_vm=
-a *it)
-> > > >  {
-> > > >       struct bpf_iter_task_vma_kern *kit =3D (void *)it;
-> > > >
-> > > >       if (kit->data) {
-> > > > -             bpf_mmap_unlock_mm(kit->data->work, kit->data->mm);
-> > > > +             if (kit->data->locked_vma)
-> > > > +                     vma_end_read(kit->data->locked_vma);
-> > > >               put_task_struct(kit->data->task);
-> > > >               /*
-> > > >                * mmput_async() -> schedule_work() -> __queue_work()
-> > > >                * takes pool->lock. BPF programs on traceable functi=
-ons
-> > > >                * or tracepoints called under pool->lock, or program=
-s
-> > > >                * running in NMI, can reach here and try to re-acqui=
-re
-> > > >                * pool->lock, causing a deadlock. queue_work() disab=
-les
-> > > >                * IRQs before taking pool->lock, so irqs_disabled()
-> > > >                * detects both cases.
-> > > >                */
-> > >
-> > > Is vma_end_read() safe to call from NMI context here?
-> > >
-> > > The comment above notes that BPF programs running in NMI can reach
-> > > this code. The old code deferred the mmap_lock release via irq_work
-> > > when irqs_disabled() to avoid exactly this class of problem.
-> > >
-> > > vma_end_read() calls vma_refcount_put(), which can call
-> > > rcuwait_wake_up() when a VMA writer is waiting:
-> > >
-> > >   vma_end_read()
-> > >     vma_refcount_put()
-> > >       rcuwait_wake_up(&mm->vma_writer_wait)
-> > >         wake_up_process(task)
-> > >           raw_spin_lock_irqsave(&p->pi_lock, ...)
-> > >
+> > I think they both make sense from different angles, but I am not sure
+> > which one is better.
 > >
-> > This is a valid concern and fput() will have similar problems because
-> > it calls schedule_delayed_work(). I will have to think about how to
-> > fix it, the easiest would be to add the following to new:
+> > From purely C's point of view. the pointer points to a struct dynptr
+> > that should not be mutated so "const struct dynptr *p" is correct.
 > >
-> > if (irqs_disabled()) {
-> >       kit->data =3D NULL;
-> >       return -EBUSY;
-> >   }
+> > From the BPF dynptr abstraction's point of view, the pointer points to
+> > the underlying memory (e.gg., skb, file, ringbuf, etc.), so "struct
+> > dynptr * const p".
 > >
-> > Then the mmput_async()'s deferral to irq_work is not needed because
-> > the iterator returns early in _new().
-> >
-> > But this will make the iteratory useless in NMI because
-> > irqs_disabled() would always return true in NMI (unless I am missing
-> > something)
+> > Any way we choose, I'd suggest that to be a separate patch. This patch
+> > at least makes things consistent and fixes a logical bug.
 >
-> It seems like having task_vma iterator work in NMI and irqs_disabled()
-> conditions is untenable due to all these issues... deferring mmput
-> through async irq_work is fine as it's fixed cost to keep track of
-> that. But doing async VMA releases for each VMA seems like a bigger
-> problem, as we'll need to dynamically allocate memory to keep a list
-> of VMAs yet to be released, which sucks. So yeah, perhaps just giving
-> up and making task_vma work only in "more normal" is what we have to
-> do? With do have task_work to work around this, so task_vma is still
-> extremely useful once add VMA snapshotting
+> if we could rely on decltag, I'd go with that. But *const is unusual
+> and stands out, so I'd go with that. I wonder if anyone else has any
+> thoughts.
 
-Since the fix is targeting bpf tree let's do the simplest/minimal fix
-if (irqs_disabled())  // EBUSY
-No irq_work deferral at all.
-Once the fix reaches bpf-next we can restart this discussion on how
-to make it usable in a wider context.
-I feel that with task_work all such cases of "nmi makes it hard"
-should be punted to humans to refactor their code to use task_work.
+I think C is inconsistent in how it propagates constantness.
+
+struct foo {
+  struct bar b;
+  struct bar *bp;
+};
+
+const struct foo *p;
+
+all fields of p->b are read only, but p->bp are not.
+
+So both:
+const struct bpf_dyntpr *dptr
+struct bpf_dyntpr *const dptr
+
+cannot really express that a memory that dynptr observes is
+read only.
+So, imo,  btf tag is the only option, because we can define
+what it means precisely.
