@@ -1,166 +1,227 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F6F03CCFA6
-	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 19:22:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773429750; cv=none; b=k3fZmiwp05N29nUkaVlmMWnaEWOJsngfqW81px+leBbVyq7+wrIjVZbXXs0YPlCHj7FmC5E09Xom6ceDwFgyhrIINk1xLqQq45zuw6vDnyRjsbQoggs85cEQkyVWeICNS4UKofQG9Hx2JvNnP05NBH+1VQuSVm/wzaDSlLSkgMk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773429750; c=relaxed/simple;
-	bh=pL/j9b13bFh0cZAZJhcCPZn1CaRo1RWOXdOwqzbKEsA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cj39l/VW5OuIneLp9+IeUxYNHiViNs/LujV65uGKFfRPoq0BE05VAu9wuSfNhMUJ7N3RMdYFKY71s3yqmAxU203N2NpM23MK3xUUh94nCwOAzCjwZU+unVxSRb75ZjmUlqygPIhCRHPM0OufJaMeuO88y+7L53h4h55RdcHobx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=cwr9QvSb; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=K+U59XI2; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=cwr9QvSb; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=K+U59XI2; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC8533E0C59
+	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 19:36:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773430608; cv=pass; b=CyMHdI7Kg7jxVgfd4uKx81j0EhVxfUERnj931uxOQLqB9w4zUNZDFv5AEZzOgaR0XG6WWakS9Hzqh1AQtjZp2HFAPbTdZEybOcWhYMR3VnrI18JYVbE8rb87K1qwjBE4fkIIxGjnSwmawVwTBH98TJNkkkBsQxTx04628EIevFY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773430608; c=relaxed/simple;
+	bh=ezLX4GQ2UZd5Q26qdT5MGScrIcB8+Te5OvetRMpXoXo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WAKvUjQCvGTaUWWJZFdBfU/og1V0NsKyu0qOSkYIBKhxtw/i+oKr2LNbMPvoVVibt+TtB/fjH/1zD7Rl8FNogqkXY0sIRnEzsKh+JOaCqcf6f2+iwwWRTZNOoNWVGh6sojyuH/U3sJdojXr2gDrf0dt6oerw5Y5JjVW1JUFIQSw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b=P3jkVOxO; arc=pass smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="cwr9QvSb";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="K+U59XI2";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="cwr9QvSb";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="K+U59XI2"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id B208C4D943;
-	Fri, 13 Mar 2026 19:22:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1773429744;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lEZDbFbdaiqtR0DORmYiMySif6us6CTI89GNtF8koIU=;
-	b=cwr9QvSbf3addifFtJFaEE3S5jwqDpZlb749Rs1kTiqHHQe0wIw+TMnTma/8mfA3QiWv+t
-	IZuKpLsIb+k3xwyZAXuL8F5GTiyGUJh1olDjZfpDExV1+UvdVwgZIIojOm6APRysjO8/lt
-	9WDXlxlJVmMpUXoO3id4LXjiv7t5UI0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1773429744;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lEZDbFbdaiqtR0DORmYiMySif6us6CTI89GNtF8koIU=;
-	b=K+U59XI2u6gqS+yANGWtG/Pii/V0SpIQQ7wMg6BtOp5KKFcWyvgFtoDkwX90d0NOWdybeR
-	Ua+tdtixGZm/opAA==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1773429744;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lEZDbFbdaiqtR0DORmYiMySif6us6CTI89GNtF8koIU=;
-	b=cwr9QvSbf3addifFtJFaEE3S5jwqDpZlb749Rs1kTiqHHQe0wIw+TMnTma/8mfA3QiWv+t
-	IZuKpLsIb+k3xwyZAXuL8F5GTiyGUJh1olDjZfpDExV1+UvdVwgZIIojOm6APRysjO8/lt
-	9WDXlxlJVmMpUXoO3id4LXjiv7t5UI0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1773429744;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lEZDbFbdaiqtR0DORmYiMySif6us6CTI89GNtF8koIU=;
-	b=K+U59XI2u6gqS+yANGWtG/Pii/V0SpIQQ7wMg6BtOp5KKFcWyvgFtoDkwX90d0NOWdybeR
-	Ua+tdtixGZm/opAA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6F14A406AC;
-	Fri, 13 Mar 2026 19:22:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 6cTyGvBjtGnfZAAAD6G6ig
-	(envelope-from <dsterba@suse.cz>); Fri, 13 Mar 2026 19:22:24 +0000
-Date: Fri, 13 Mar 2026 20:22:15 +0100
-From: David Sterba <dsterba@suse.cz>
-To: Philipp Hahn <phahn-oss@avm.de>
-Cc: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com,
-	bpf@vger.kernel.org, ceph-devel@vger.kernel.org, cocci@inria.fr,
-	dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
-	gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org,
-	intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev,
-	kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-	linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-erofs@lists.ozlabs.org,
-	linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org,
-	linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org,
-	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-	ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
-	sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
-	tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev,
-	Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>
-Subject: Re: [PATCH 02/61] btrfs: Prefer IS_ERR_OR_NULL over manual NULL check
-Message-ID: <20260313192215.GH5735@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
- <20260310-b4-is_err_or_null-v1-2-bd63b656022d@avm.de>
+	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="P3jkVOxO"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-82735a41920so1046160b3a.2
+        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 12:36:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773430600; cv=none;
+        d=google.com; s=arc-20240605;
+        b=BtsNRuDrL2DmsDsDOxIbV4lmtyzeKwGXE8bgLxwMFBsftWhMEME2K3toet0UyWdEXR
+         tJcgYRFVK8375Un9/8FKIA0Si6HSoYhCn0LUPbNidspqLO3jMO2+qsf3PQFKofD4JTKL
+         3NsaGRg9czkeMsQlYVueTUA+7GkMYFZImx+epmrkXNufCtUF+InIEs/pQfmwn2vmj1Rp
+         7G16KZ3EEjt7aYUlXG3LBAPDEwslh7vSPID8WBawGcK7/3uJCag+krDNnm/rKZA3BF5t
+         0mseuWjO8F+4zR6/57JBMZLzH45d9JQYmBk12x79dpzUFsF+zTax0x30x57uYdter/oP
+         4DwQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=7SZBQxP659/1Vz18iP/TaSiFqht3yaJrXilwyHpy4Uc=;
+        fh=Ax7t6h4Dn1dG9z6jdFCQReg2/PLjLNZkbZI+5cxZOQk=;
+        b=cH3CeEoSubLD3xkiBreCTYcpdNZRQdpIBgs1WgpE0zjErubonX8/tjIziDgOqL+BrX
+         9rn5WAb7sGP0B1APBMiR8v4a8mUjEAkQrHN8408XLq5z5BxFZu5oEwCwOefdO7PMVand
+         5akWpZGrxlA5KmroOgPXuZTJOmJAx1qC0uDdUJz7XSxA/RzjisYafElj3qAsLdzJg0zX
+         /jW4tfxpqE+lUfXcQYvjvevfFnpf6AQ4sKWR0kHPGkkfK2GaBqWF+droKWqPVIPpAwT5
+         e2UoCbU0tvkOz7p9ZN69RYCWg0cu+hPzFBzWqpLwECVmUFv1gYVSobnh+JvhRjEyWUn3
+         TcZQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1773430600; x=1774035400; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7SZBQxP659/1Vz18iP/TaSiFqht3yaJrXilwyHpy4Uc=;
+        b=P3jkVOxOHslCjq5kN5VLSwGw2DsvprYjkFPWKc9GB2Cr7X7BqL9v9zwu9axnixiuXF
+         nBu8Rx+Y4gg6u5AC4Cfro3uP4Pg89ZUvORouBk3mFbS7NLCkea83iBbINvVQJSIbj5ao
+         PaxDGc7bkYNuh49t+GrSWih8t1zWmHcPWPQUlI7g2emwxhUa9TqStNe3XemN3TF3zRED
+         SICbQ4lLYiR1gblEZx1iiuJ7ruo6PPZqDC/hVYjjlZGRTSbS3SFgusr5+zNlKPj4X46Q
+         oLmylLduhQpQue5yTynvtMsIs3y2z7MN/sV0jL6qaKg3hUH8n7QxOfPWxqWS6yHHeTBJ
+         2XZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773430600; x=1774035400;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=7SZBQxP659/1Vz18iP/TaSiFqht3yaJrXilwyHpy4Uc=;
+        b=oEzZCFUvsdUAhoARyLC8bwFUII0B/r1DiWFNWZ54HIxWjaRTncUmGuij+VRsbPAEYi
+         YE6lEnUjC8yLs2gsKkJqEzZ+zWTX6g+wTq8wyuT4p1CUZULb4c612jmN0+m5Zi3suzMB
+         dKiDomEe+1KQ7LeXde09BrKYtyhldMo5LeK3HbwOtRjaB3urowgM52Nf3TZWvdCxVnEH
+         TDRdKboJXuIoVR6GsJtOycit/7joM0BBXLITeg+u5ZPOLDoJ6mCckwM8m2x3rmgC/N8p
+         ygmygNYu2KTc+Y3oMmbNYz09e52PO/cg4JiBg5FcDuqoRSOh5+SKQ9nJ+5taGbUXTt+H
+         QDrQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWYJdYiEI4EYGLkDsjPpITT8csRIFFmb0wu7q3Y/5MIfW0Sj2IDFbGupApff3/iJxPMPdQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzAZGRD5T4QB1IMXux4DFKkFNdo3dQq4E+lPeTZ53Seak4fMKfc
+	62oYCSnIxzOZZteEX9moXApWiAyzAMUNBcVRDF6A4/gwGMQ+IML176MlDFeauAvNBNLJy61Dqds
+	jflwwcB4uBVZvJiILryXzAK5UyMfbujN+5Nu5Y0hL
+X-Gm-Gg: ATEYQzyOFyR8WSnxJXzmJ16lOwDJLZJfmrDJdEoiC2IiyaXb1QJnkjZ3gNvCivjjiM1
+	g31nr9g5ogNwxmJJ1iqr4ybc52tpbsl+Znu2wgvP/cdG2B4QGFGeDSqEitEmtlAiSvjZQwt0pUS
+	7AWrydJOfdQsbbclYv0RD8suV6t9uY0XS69YN9mP/7Xxzu+71m0VgPnRX3DuNT2krYu2yj1BdkR
+	CfsPgHrZruyZc3T5+kk9fquEVuPB2ret4subblQrxSqfGaxsDWDxkyQ05HobzTemgVBamisSKk5
+	J++wqmHrFsOpEQ4=
+X-Received: by 2002:a05:6a00:1388:b0:829:7ee0:1a44 with SMTP id
+ d2e1a72fcca58-82a197046dfmr4186054b3a.4.1773430599837; Fri, 13 Mar 2026
+ 12:36:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260310-b4-is_err_or_null-v1-2-bd63b656022d@avm.de>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Score: -2.50
-X-Spam-Level: 
-X-Spamd-Result: default: False [-2.50 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	HAS_REPLYTO(0.30)[dsterba@suse.cz];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MIME_TRACE(0.00)[0:+];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	R_RATELIMIT(0.00)[to_ip_from(RLk9qejt5hbtemdgupcccnrijf)];
-	TO_DN_SOME(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RCPT_COUNT_GT_50(0.00)[56];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:replyto,imap1.dmz-prg2.suse.org:helo];
-	REPLYTO_ADDR_EQ_FROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_SOME(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[]
-X-Spam-Flag: NO
+References: <20260307212058.169511-1-jhs@mojatatu.com> <20260310184713.7e810431@kernel.org>
+ <CAM0EoM=TAAfwZc3q1=RKWPrS778R_B8uM18ev_jYYz8oj4YiBA@mail.gmail.com>
+ <20260311175249.54abe1b6@kernel.org> <CAM0EoMnv14pSaJWW3ZQuegkbQEqqye0zp0-_tCaOEWEg=C3xCQ@mail.gmail.com>
+ <20260312165113.773a5f44@kernel.org> <CAM0EoMm0dMRKJyfCH80G=q4PnnTzzKVRvSrAU204FFKMn9NOtQ@mail.gmail.com>
+In-Reply-To: <CAM0EoMm0dMRKJyfCH80G=q4PnnTzzKVRvSrAU204FFKMn9NOtQ@mail.gmail.com>
+From: Jamal Hadi Salim <jhs@mojatatu.com>
+Date: Fri, 13 Mar 2026 15:36:28 -0400
+X-Gm-Features: AaiRm51FzVPEj5x8-7UQwBJ_H90URykuqOW7BBLFDfVKu8idWAvLsU3tRRb1ky8
+Message-ID: <CAM0EoM=KinOanha9nKJ=GyT2FU_o3Hg-tY5fWDfFO+PBuQfXpA@mail.gmail.com>
+Subject: Re: [PATCH net] net/sched: Mark qdisc for deletion if graft cannot delete
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com, 
+	pabeni@redhat.com, horms@kernel.org, jiri@resnulli.us, toke@toke.dk, 
+	vinicius.gomes@intel.com, stephen@networkplumber.org, vladbu@nvidia.com, 
+	cake@lists.bufferbloat.net, bpf@vger.kernel.org, ghandatmanas@gmail.com, 
+	km.kim1503@gmail.com, security@kernel.org, 
+	Victor Nogueira <victor@mojatatu.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 10, 2026 at 12:48:28PM +0100, Philipp Hahn wrote:
-> Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
-> check.
-> 
-> IS_ERR_OR_NULL() already uses likely(!ptr) internally. checkpatch does
-> not like nesting it:
-> > WARNING: nested (un)?likely() calls, IS_ERR_OR_NULL already uses
-> > unlikely() internally
-> Remove the explicit use of likely().
-> 
-> Change generated with coccinelle.
-> 
-> To: Chris Mason <clm@fb.com>
-> To: David Sterba <dsterba@suse.com>
-> Cc: linux-btrfs@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
+On Fri, Mar 13, 2026 at 11:56=E2=80=AFAM Jamal Hadi Salim <jhs@mojatatu.com=
+> wrote:
+>
+> On Thu, Mar 12, 2026 at 7:51=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> =
+wrote:
+> >
+> > On Thu, 12 Mar 2026 16:36:48 -0400 Jamal Hadi Salim wrote:
+> > > > > Two of the several (I think 4!) patches we had took a similar pat=
+h. I
+> > > > > am trying to remember at least one variant was bad for performanc=
+e and
+> > > > > the other was unstable. Let's see if we can revive it and take a
+> > > > > closer look. BTW - none were pretty, it was maybe half the lines =
+of
+> > > > > code but touched many things.
+> > > >
+> > > > FWIW / of course, we have to apply similar change to all(?) callers=
+ of
+> > > > __tcf_qdisc_find in cls_api. So LOC-wise it may end up also pretty =
+long.
+> > > > And it's not going to help the already spaghetti-looking locking. B=
+ut
+> > > > even if it's more LoC I quite like the idea of containing the poopy
+> > > > code to where problems originate which is the lockless filter handl=
+ing.
+> > > > Fingers crossed..
+> > >
+> > > Something like attached.
+> > > Unfortunately after running it for a few hours it reproduced.
+> > > The action code path (entered by virtue of filter code path execution=
+)
+> > > releases the rtnl when attempting to load an action module. A paralle=
+l
+> > > qdisc operation waiting for the lock then grabs it and we hit the sam=
+e
+> > > issue...
+> > >
+> > > So now we have to be more invasive and start coordinating the action
+> > > code etc, which is not appealing. Thoughts?
+> >
+> > I see. Doesn't seem entirely crazy to let tcf_proto_lookup_ops()
+> > return -EAGAIN without actually loading the module, and have it's
+> > call path (of which there are only 2?) do the module loading once
+> > all the locks are released. The call paths handle the EAGAIN and
+> > retry already they just assume tcf_proto_lookup_ops() has loaded
+> > the module so they don't have to.
+>
+> I might not be entirely following what you are saying. The core issue
+> is not module loading perse. We can avoid module loading in
+> tcf_proto_lookup_ops while the rtnl lock is released and the qdisc
+> refcnt is greater than 1 (which is what the patch i sent attempted).
+> The new quark is when we have actions associated with the filter.
+>
+> I will send you a much lengthier description of the issue in an hour
+> or two  to get us on the same page.
 
-Added to for-next, we seem to be using IS_ERR_OR_NULL() already in a
-few other places so this is makes sense for consistency. Thanks.
+Note, i am going to describe the scenario we saw with the action quark
+where "filter add" enters before "qdisc del"; the one described in the
+commit is the reverse order. We see the issue in both scenarios.
+
+Sorry, this is a lot of text ;->
+
+Let me explain the "expected" behavior
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+time x:   On cpu1: "filter add" enters increments refcnt to 2 after
+          finding the root qdisc (see __tcf_qdisc_find)
+time x+1: On cpu1: "filter add" in the action code releases the rtnl_lock
+          before calling request_module.
+time x+1: On cpu2: "qdisc del" enters for root qdisc, holding rtnl
+          (example refcnt =3D 1), see tc_get_qdisc().
+time x+2: On cpu2: "qdisc del" calls graft which calls qdisc_put() which
+          decrements refcnt to 1 and cant delete qdisc because refcnt is no=
+t 0;
+          "qdisc del" exits
+          ***We are in an inconsistent state at this point - IOW, the qdisc
+          needs to be deleted but cant because of the refcnt !=3D0.
+time x+3: On cpu1: "filter add" acquires the rtnl_lock again in the action
+          code (see time x+1).
+time x+4: On cpu1: "filter add" eventually completes; see tcf_block_release=
+()
+          invocation in tc_new_tfilter() which eventually calls qdisc_put()
+          which manages to decrement refcnt to 0. Qdisc is deleted..
+
+To reproduce the issue requires 3 threads - which is what the repro does.
+Note: sequence time x to x+2 is the same as "expected" flow above.
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+time x:   On cpu1: "filter add" enters increments refcnt to 2 after
+          finding the root qdisc (see __tcf_qdisc_find)
+time x+1: On cpu1: "filter add" in the action code releases the rtnl_lock
+          before calling request_module. Note: the action code path will be
+          momentarily rescheduled because of request_module call.
+time x+1: On cpu2: "qdisc del" enters for root qdisc, holding rtnl
+          (example refcnt =3D 1), see tc_get_qdisc().
+time x+2: On cpu2: "qdisc del" calls graft which calls qdisc_put() which
+          decrements refcnt to 1 and cant delete qdisc because refcnt is no=
+t 0;
+          "qdisc del" exits
+          ***We are in an inconsistent state at this point- IOW, the qdisc
+          needs to be deleted but cant because of the refcnt !=3D0.
+time x+3: On cpu3: "qdisc add" comes in and finds the deleted qdisc still
+          on the qdisc hash table since it hasnt been deleted (see inconsit=
+ent
+          state in time x+2). And then shit hits the fan (as described in t=
+he
+          commit, qdisc_tree_reduce_backlog() etc).
+
+In this specific example, the issue is that the classifier code path
+can't release the rtnl_lock while the qdisc's refcnt is bigger than 1.
+
+Does this make more sense?
+The reason we went with the "mark for delete" approach is at time x+3
+the "qdisc add" wont be able to find this qdisc. This is the common
+observed pattern - for example described in the commit message where
+we get have a slightly different flow with "qdisc del" before "filter
+add".
+
+cheers,
+jamal
