@@ -1,207 +1,220 @@
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4340037DEB9
-	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 20:49:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5D552571D7
+	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 21:03:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.54
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773434971; cv=pass; b=qz9GfaJwouoZYcHPL0OKp4rvOwFzOlBVKG/gKtobFveF542wJl6+ZPNU7iseaXUbz1gW1gxhHHkO1NUVFewDsyc711rBzFO4nGrwje9ULeRvapFFZckHHpSYYUWZeEpnCfK9gBC4IOuedSUOK2ICvix2T6TZjmZw/BMYi6O85Qk=
+	t=1773435839; cv=pass; b=JtrvixQWQfpNK6NYNxqg2bECDWCl8jjIDySGe4Kg3xOdL7bQpSHo3KSQdmdfdOlggdibPZo15tFyHFskLsAGuUOlEYDd9ymimJluTNbMXSz2Su6lDTogphouRwlcLcStq3QRPGEi89KadbR3djrQ14NHo+NiKDtJ12p9mHuBu/w=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773434971; c=relaxed/simple;
-	bh=O4wbrTj2iFx9LOPFO28szlepMww2CuIsX/kRVN1W6iA=;
+	s=arc-20240116; t=1773435839; c=relaxed/simple;
+	bh=1R0Lwql6nSOQ9kWNCc0PkQe60FSIwExCWTenK/CGDLk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TfbLZoN+SDiTqWP1zbcia4Pr4zwWiI/QhZlndFxH6wnn50tTzUhnmqfnnfed96aMt7+PFGCAFr6sBLVlGTf+ijOgHwJfUCc1gdR92Cx7i4gCBsr88blbae8bYDDwDf7qRp9vUDAD4sAhZi4bNtEy7+GOsECmMqFgEO+gtveHjQo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b09BfDRB; arc=pass smtp.client-ip=209.85.128.173
+	 To:Cc:Content-Type; b=DNsNLHnK7dbb1WnYkcDq1NQCTV+Id5L11vYBEG+39wJp1UkV/3Kf5lBw9aiHjCgnO5LWYN2nX5c9JXiYU/FPyKiJDzzG6Eoa/74dtTO7NHBZJGFO0rmKct7NURcLJmHyxXjoGi9e0WJpPsm4fu8MB+6JJYOsNnc2Np0sfJm1Kws=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rt+PPXzG; arc=pass smtp.client-ip=209.85.208.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b09BfDRB"
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-7982c3b7dfcso27998447b3.0
-        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 13:49:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773434969; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rt+PPXzG"
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-661568ce781so3926269a12.0
+        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 14:03:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773435836; cv=none;
         d=google.com; s=arc-20240605;
-        b=Iwi9dVXNg+W31CvEN70mY1nH334VdFDIAaHKqu28BC9BW73hgpiEHYoTz8fkrFLUBR
-         NfZBDYrYAlg8cxo+aC8QMgm1m+VA70lWPAJJRE3DeXZPeTSjG/5tCqi/6vSleooiS1hf
-         M/5+GzvDCvvEGjd0bqCtX4Esa7wsAGlFGNLYaWCkaA3m0K9Dt/+prBpu+mNzr+kZ3ysq
-         jDrq4/nxS0u5nVIW5kfzVURA1D+0pKonMuwtKc+xtZprkiAiD8SlCURX7ZtUYMFcN70b
-         03BN0v8q459ASlOfwO5yBuWlA7e29/t79XbDpPUJk+JbNuVZEwuEgpUqFjeXYdGN0yp4
-         zAxw==
+        b=eYSr1xVaAjg/sgBl7lnaJNF9VPct/7CHjQbAMEHmDEdJTAgDo9y24NvV079fNz+KTW
+         2S9HEUlJtM475Hmw71bG2RaKVY2glAwDlcTujychnPcYY3W6bhKDgjMyYJlI4x7mOZ7K
+         1qZt5BrTe2zQNIZddVGtY4jPmJ7PI4xCYcDm0CjNRnH59qJzA55K2o/EuUiuVQgZ11db
+         iWOG5Lfa12CD0T2U5Q87W6AzUx/xgmR28xA0z3Ohnoep3KYYS004Nmz6mamdC6X1sfo+
+         XkfMq51hofVlFQuVNn7pNq4VnRlYpsPZhx1jMa0eHBYP5LD/u6ujhUYp8HymEowmWdMV
+         k7wQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=tXiszcF7N7frIIzHU2H1mV1fC3d+rzKovPJ6OOhwrtc=;
-        fh=6ElxuiIjr8MUw7uRyrqk6E+jhEPFMT0pHHkRrcSi3dU=;
-        b=apG8piXI0ZtG1MH5uw7uX0AOIWii3C0HCfZ27wjcvX4Z9MRfPl+lnYTe89HiY00Km9
-         VJW2atPBmJhM1WK60HAT8YtumJ6hrpLxsvn4jbTO0mpjP3xkL1fycWkOO85FNly/GVkL
-         9enSvTNpdWeW+iTheR3oKXe8gNDm2p9AhTTBbx8dtvqdaLGR4xi5L7uicDwcJjby+7MA
-         /0y6pNy+/wzj28oeSQjS3JE9xZfoPmFgRWiJ/XB7uoCF0Ua4xmPKDdNk0vRkdmONa2Vl
-         I07ibUHEQaLDONb6FEyYSV0ZQs1FxvhUWSeUz7VkSghCQHSOCnmTmSiwf2OYYA9lp2a1
-         KjoA==;
+        bh=+/kZwgdWmNGCktNPe763uSTYgyKSmDilnHXCY6tJkRM=;
+        fh=24TcYdoMgfjV8b7K2YQf9RFVnKqSAbSHlpFqL1rD9cw=;
+        b=FdlP+6i9L3wQTqjfMV2Zt9Cew8KceJEKBTKkpO0ROIiPKOKRgzvia0HNTdQ14MWaSc
+         1haKhKommaLun4jZUipx1XhHLM9S8gEXLseJM5tTjOSKVKrnkXcjdlyoffkUs8XCQ56w
+         UxwTBPsXSPsSlraWFOGZjLzEp+PGFnjlsQMTqupC0q1AaXL4HBAZJjTTzkYIj8bsWOq/
+         5H1dk/JCPxbjywmp7isjxYPWib7WK+cbBco9HZybtNzarzo1eV013YNN2tETcMuQqVO3
+         /c3cLXfkMJbpv7XF6VayVNBPHZ/DmO/IFp1qgwxAbXPCqtlnfc76TsrDsNbwtttdu/pU
+         Famw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773434969; x=1774039769; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773435836; x=1774040636; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tXiszcF7N7frIIzHU2H1mV1fC3d+rzKovPJ6OOhwrtc=;
-        b=b09BfDRBn9O4CCA3xlpK44MKY+U0leb+gGBGpwYUB/JJ7wZMu8Mya+G+v54yM7AV+4
-         0j4v0qtHpezXDMVA3P1R4EzyPV9iKgIz3YgXFuNQCvhRhbr9/AL1Dx6UhvQC2MnJo3+u
-         XXjBhoLeXQ0LQrhMeJgNt01LNYKFI79+xvy8qafKlvcl8mQkMHCmoCRFb2QzD/NJalhX
-         GfpIp5bUC2nFd8LMGccz3Ze+0kiOiFBkzefR+MLp1i9yC9sfXSBMiKW+52fSuJ5Oq1eB
-         9oeW6+79Ke8fBYm4TFDFtnWcMRAr/ecooIqGW3ax3i9o+fUvAVo7AKzYmZ8b2tBod5I5
-         DWYg==
+        bh=+/kZwgdWmNGCktNPe763uSTYgyKSmDilnHXCY6tJkRM=;
+        b=Rt+PPXzGHR7RSUYpAnBr6bRN1SHpw6OIqwckkvAuccGhw+jMAkuNHVJFTjiXaIBVde
+         PWpy6GjywIVpCOM4riZ+Uydcf/rnRapbngH7gu7R/T5H49y2hGXfe0ncLJq3r2VFOaG7
+         df4bdsb1YdwNuNtLvTp7OvxCU0gL4dLTFyTiSDGocjyW+c7XUD+iL9jLnSk809oP9GZ5
+         tnZahy3Ke6e0jb3ecqRqhM7mHh0m7TJuQR/1ofBv0m8rPuJVK+62LuWWQXZ7wD/jNQnY
+         P3Z/mXm04cL16vB0uK+X1PPsR9S4XgyT6ZPHDD6XrKl0ix564D+vZe1jc404RZyZalqp
+         rjIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773434969; x=1774039769;
+        d=1e100.net; s=20251104; t=1773435836; x=1774040636;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=tXiszcF7N7frIIzHU2H1mV1fC3d+rzKovPJ6OOhwrtc=;
-        b=S20tQJBcFIxzbgnKeX994FQSeWTi2XZNbJkiR8NoBaj0ALsN1lckjx9XMo2OT9U+LN
-         C9Q8LsJeD1epMd564xoOfr7daMwFiWQcHvoOxbXjaGGpOAF8uvU7zV+abv6MLTV6cOnQ
-         VEbIg/r0dBY8bydC4P50ulkktX59Okck9lwnND3NCmWKkElNXfOgWKGoTQJlcIsl35al
-         +dWT1/JbN67uqYS/PxCP2YweY0Fu8W7ziOK4bpi0m2IlzivZ37jgzLklv11LC351IbKY
-         oUHfrtVgwMo82ffHgI7e0wpR+xUcVEleINVxqlX9H4KKmoQFtTFa7nV3xrzckfi2FocA
-         gvjg==
-X-Gm-Message-State: AOJu0YxXcEscHs8MAVn4QChPSusfPlvcEWBEsnOCPFuqzBKx25REo0eg
-	Hm9D8i8doZCW/QCKIj/1AQs5q2sq8erl4BbIiPOWV/lbOodvp7B5pD5C3rWTxM8xn+mUArE1BDH
-	NCHMuyZ/CFXybqKfl5b9P8yh/jusF+EE=
-X-Gm-Gg: ATEYQzxJdJuf87ykOMza5uliO+OWZu6yl+TrAA3NUIHBxgMbwngfpi/hTPtjrpAr3qo
-	Ae51UrrlgcSotJl3oJGH3mAZICUHpDrioWPfdDZj4JIQVCjfLsytWzTyO8wg18QGokJ+9CdjbOC
-	kSpoHa9YwLgj7OQ+PvrHVN+rZoSbT8uXzPEAo/xQyx9WOZGFA0cfLpB4w38DKFChnsXtn2d2trd
-	2OavrRZIXPdMYSUFdoIf39h3b3bziGXZc35pxzphd6ljx/H3n05b/Y9la3HTBQ0FddUxNiBt2SS
-	qFP1OC8=
-X-Received: by 2002:a05:690c:387:b0:796:3c39:eb96 with SMTP id
- 00721157ae682-79a1c08c187mr54233147b3.13.1773434969119; Fri, 13 Mar 2026
- 13:49:29 -0700 (PDT)
+        bh=+/kZwgdWmNGCktNPe763uSTYgyKSmDilnHXCY6tJkRM=;
+        b=YagJ2msamrLi5LDAN09sb8Do9ntIWFk+JfTTtkJD9iQdwZBXFoPgjiuS7o8MToHyv9
+         xX0ARMZC/itgnh6+gx3t7FIknqO/rdANrYfRPjf+HA1bIa+jLGkBY0KjliWyrIepcHWe
+         D3kBkXNGxwcy9CwoYmnqB6rzETXEWKKka4JS0Nhm5S6BikM0GnLLrYJ4VqvoqI140oMP
+         aTnTM5d0kXoimSFVBLaKm2MFPt4IUOTQlsf5AFa7A0LpMR6/mFAJEbGg8ppPWl/g2Kc2
+         RqMudANipkOh1uQjwzOytrOlNswuIYm5NfG6WBg0gO/f4JyshoV5jQyJ/tr7M+H+QkNQ
+         IIYg==
+X-Gm-Message-State: AOJu0YwSrBf4J3typujSywJMFvvC5V2hu63qXpW5xVk1kDqgLqmpLoQk
+	tWy3/qCQH/npwkYWow/TAIzaIz876avZaqWLcHSlI9L08QJdXKyRatC7N2+jYUMXO4xAo534hTu
+	yBqUzwO/fWFYxPH2QaLIATwpve2zzqu0QJFjK5jl66w==
+X-Gm-Gg: ATEYQzyRkRsV457bbwL2ypWRBFS476/ApwXXaaLoaCaSMcaHHYA4OQPtXg/hk50DxiV
+	HaCwBDH+Z//mTlz636IxzTkBqMdF9N/Ts0yL4gBTObmbMRTYKnq0MnqInFR3Kv6bpctBjwgccdp
+	PNWe1GtOD754q/SZN1pwcoyMKUUckuBdH8fWjTYuVbG/XmgWeBc/9FwT1u9C6uHaX6/7znQuFYo
+	7dFOcTyaV495UKdBJdJB9hzVv29/VNxQz6W7RM993igJgErzZdkG8eoJI/f5g/+qr6LWWG3jfIo
+	hezkW52AfpXXluAxm08FaFsLxtb54YAmz6z2AE8ERg==
+X-Received: by 2002:a05:6402:1ecf:b0:662:a4d4:abe0 with SMTP id
+ 4fb4d7f45d1cf-663ba9c2abemr3063467a12.3.1773435835673; Fri, 13 Mar 2026
+ 14:03:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260307064439.3247440-1-ameryhung@gmail.com> <CAEf4BzZab92hO9ERcfkkg2OHab9F4M9fmwc8yudDu7kjp_qu+A@mail.gmail.com>
-In-Reply-To: <CAEf4BzZab92hO9ERcfkkg2OHab9F4M9fmwc8yudDu7kjp_qu+A@mail.gmail.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Fri, 13 Mar 2026 13:49:18 -0700
-X-Gm-Features: AaiRm53lfScGUwYFmbGubf9WkTuJ-eGkQhpEuLUjD_uObXyRLbmaYiwZq73tqFY
-Message-ID: <CAMB2axPa=tgZm5a-2gP36VWf4Xt-ZrMDXBrTsVLYqY8UAzUnhA@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next v2 00/11] Dynptr cleanup and bugfixes
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com, 
-	andrii@kernel.org, daniel@iogearbox.net, memxor@gmail.com, 
-	martin.lau@kernel.org, kernel-team@meta.com
+References: <20260313180352.3800358-1-puranjay@kernel.org> <20260313180352.3800358-3-puranjay@kernel.org>
+ <CANk7y0jjd6XC7nd2BxtsVhs8vWp_9cC-ckXPGRQK_CW5BSuogQ@mail.gmail.com>
+In-Reply-To: <CANk7y0jjd6XC7nd2BxtsVhs8vWp_9cC-ckXPGRQK_CW5BSuogQ@mail.gmail.com>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Fri, 13 Mar 2026 21:03:44 +0000
+X-Gm-Features: AaiRm509-qHusHx4y7ZJiuiluPbpVvicudHEcA8o5FlqQsneTuZnsmCxW0jMUuM
+Message-ID: <CANk7y0iGmXCLNPJ=W4ZV9tRwWXXK4KmTATfV081kLX51RxJmkQ@mail.gmail.com>
+Subject: Re: [PATCH bpf 2/3] perf/arm64: Add BRBE support for bpf_get_branch_snapshot()
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Leo Yan <leo.yan@arm.com>, Rob Herring <robh@kernel.org>, Breno Leitao <leitao@debian.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-perf-users@vger.kernel.org, 
+	kernel-team@meta.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 11, 2026 at 12:39=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
+On Fri, Mar 13, 2026 at 7:59=E2=80=AFPM Puranjay Mohan <puranjay12@gmail.co=
+m> wrote:
 >
-> On Fri, Mar 6, 2026 at 10:44=E2=80=AFPM Amery Hung <ameryhung@gmail.com> =
-wrote:
+> On Fri, Mar 13, 2026 at 6:04=E2=80=AFPM Puranjay Mohan <puranjay@kernel.o=
+rg> wrote:
 > >
-> > This patchset (1) cleans up dynptr handling (2) refactors object parent=
--
-> > child relationship tracking to make it more precise and (3) fixes dynpt=
-r
-> > UAF bug due to a missing link between dynptr and the parent referenced
-> > object in the verifier.
+> > Implement the perf_snapshot_branch_stack static call for ARM's Branch
+> > Record Buffer Extension (BRBE), enabling the bpf_get_branch_snapshot()
+> > BPF helper on ARM64.
 > >
-> > This patchset will make dynptr tracks its parent object. In bpf qdisc
-> > programs, an skb may be freed through kfuncs. However, since dynptr
-> > currently does not track the parent referenced object (e.g., skb), the
-> > verifier will not invalidate the dynptr after the skb is freed,
-> > resulting in use-after-free. The similar issue also affects file dynptr=
-.
-> > To solve the issue, we need to track the parent skb in the derived
-> > dynptr and slices.
-> >
-> > However, we need to refactor the verifier's object tracking mechanism
-> > first because id and ref_obj_id cannot easily express more than simple
-> > object relationship. To illustrate this, we use an example as shown in
-> > the figure below.
-> >
-> > Before: object (id,ref_obj_id,dynptr_id)
-> >   id         =3D id of the object (used for nullness tracking)
-> >   ref_obj_id =3D id of the underlying referenced object (used for lifet=
-ime
-> >                tracking)
-> >   dynptr_id  =3D id of the parent dynptr of the slice (used for trackin=
+> > This is a best-effort snapshot helper intended for tracing and debuggin=
 g
-> >                parent dynptr, only for PTR_TO_MEM)
+> > use. It favors non-invasive snapshotting over strong serialization, and
+> > returns 0 whenever a clean snapshot cannot be obtained. Nested
+> > invocations are not serialized; callers may observe a 0-length result
+> > when a clean snapshot cannot be preserved.
 > >
-> >                       skb (0,1,0)
-> >                              ^ (try to link dynptr to parent ref_obj_id=
-)
-> >                              +-------------------------------+
-> >                              |           bpf_dynptr_clone    |
-> >                  dynptr A (2,1,0)                dynptr C (4,1,0)
-> >                            ^                               ^
-> >         bpf_dynptr_slice   |                               |
-> >                            |                               |
-> >               slice B (3,1,2)                 slice D (5,1,4)
-> >                          ^
-> >     bpf_dynptr_from_mem  |
-> >     (NOT allowed yet)    |
-> >              dynptr E (6,1,0)
+> > BRBE is paused before the helper does any other work to avoid recording
+> > its own branches. The sysreg writes used to pause are branchless.
+> > local_daif_save() blocks local exception delivery while reading the
+> > buffer. If a PMU overflow raced before that point and re-enabled BRBE,
+> > the helper detects the cleared PAUSED state and returns 0.
+> >
+> > Branch records are read using perf_entry_from_brbe_regset() without
+> > event-specific filtering. The BPF program is responsible for applying
+> > its own filter criteria. The BRBE buffer is invalidated after reading
+> > to maintain contiguity for other consumers.
+> >
+> > Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+> > ---
+> >  drivers/perf/arm_brbe.c  | 70 ++++++++++++++++++++++++++++++++++++++--
+> >  drivers/perf/arm_brbe.h  |  9 ++++++
+> >  drivers/perf/arm_pmuv3.c |  5 ++-
+> >  3 files changed, 81 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/perf/arm_brbe.c b/drivers/perf/arm_brbe.c
+> > index ba554e0c846c..db5e000b2575 100644
+> > --- a/drivers/perf/arm_brbe.c
+> > +++ b/drivers/perf/arm_brbe.c
+> > @@ -9,6 +9,7 @@
+> >  #include <linux/types.h>
+> >  #include <linux/bitmap.h>
+> >  #include <linux/perf/arm_pmu.h>
+> > +#include <asm/daifflags.h>
+> >  #include "arm_brbe.h"
+> >
+> >  #define BRBFCR_EL1_BRANCH_FILTERS (BRBFCR_EL1_DIRECT   | \
+> > @@ -618,10 +619,10 @@ static bool perf_entry_from_brbe_regset(int index=
+, struct perf_branch_entry *ent
+> >
+> >         brbe_set_perf_entry_type(entry, brbinf);
+> >
+> > -       if (!branch_sample_no_cycles(event))
+> > +       if (!event || !branch_sample_no_cycles(event))
+> >                 entry->cycles =3D brbinf_get_cycles(brbinf);
+> >
+> > -       if (!branch_sample_no_flags(event)) {
+> > +       if (!event || !branch_sample_no_flags(event)) {
+> >                 /* Mispredict info is available for source only and com=
+plete branch records. */
+> >                 if (!brbe_record_is_target_only(brbinf)) {
+> >                         entry->mispred =3D brbinf_get_mispredict(brbinf=
+);
+> > @@ -803,3 +804,68 @@ void brbe_read_filtered_entries(struct perf_branch=
+_stack *branch_stack,
+> >  done:
+> >         branch_stack->nr =3D nr_filtered;
+> >  }
+> > +
+> > +/*
+> > + * Best-effort BRBE snapshot for BPF tracing. Pause BRBE to avoid
+> > + * self-recording and return 0 if the snapshot state appears disturbed=
+.
+> > + */
+> > +int arm_brbe_snapshot_branch_stack(struct perf_branch_entry *entries, =
+unsigned int cnt)
+> > +{
+> > +       unsigned long flags;
+> > +       int nr_hw, nr_banks, nr_copied =3D 0;
+> > +       u64 brbidr, brbfcr, brbcr;
+> > +
+> > +       if (!cnt)
+> > +               return 0;
+> > +
+> > +       /* Pause BRBE first to avoid recording our own branches. */
+> > +       brbfcr =3D read_sysreg_s(SYS_BRBFCR_EL1);
+> > +       brbcr =3D read_sysreg_s(SYS_BRBCR_EL1);
+> > +       write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+> > +       isb();
+> > +
+> > +       /* Block local exception delivery while reading the buffer. */
+> > +       flags =3D local_daif_save();
+> > +
+> > +       /*
+> > +        * A PMU overflow before local_daif_save() could have re-enable=
+d
+> > +        * BRBE, clearing the PAUSED bit. Bail out.
+> > +        */
+> > +       if (!(read_sysreg_s(SYS_BRBFCR_EL1) & BRBFCR_EL1_PAUSED))
+> > +               goto out;
+> > +
 >
-> Ugh... This cover letter is... intimidating. It's good to have all
-> this information, but for someone who didn't whiteboard this with you,
-> I think it's a bit too hard and overwhelming to comprehend. You are
-> also intermingling both problem statements and possible/actual
-> solution (and problems with earlier possible solutions) all in the
-> same go.
->
-> May I suggest a bit of restructuring? This diagram you have here is a
-> great start. I'd use it to "set the scene" and explain an example we
-> are going to look at first. (Keep all the IDs, but mention that they
-> will be more relevant a bit later and reader shouldn't concentrate on
-> them just yet), and just explain that in BPF we have this potential
-> hierarchy of interdependent things that have related lifetimes. When
-> skb is released, all dynptrs and slices derived from those should be
-> released. But also mention that it can't be all-or-nothing, in the
-> sense that if dynptr A is "released", skb and dynptr C should still be
-> valid.
->
-> And it's currently not the case. That's the problem we are trying to
-> solve. At this point you might use those IDs to explain why we can't
-> solve the release problems with the way we use id and ref_obj_id.
->
-> Then explain the idea of parent_id and how it fixes this hierarchy
-> reconstruction problem.
->
-> But then, mention that socket casting problem which introduces shared
-> lifetime while objects are actually semi-independent (from verifier
-> POV) due to independent NULL-ness. Which makes parent_id not enough
-> and we still need ref_obj_id (maybe we should rename it to
-> lifetime_id, don't know).
->
-> In short, I think there is a clear logical story here, but your cover
-> letter hides it a bit behind the wall of dense text, which is hard to
-> get through initially.
+> The code below doesn't implement filtering, I am currently trying to
+> figure out the best way to implement that by reusing
+> read_branch_records() somehow.
 >
 
-Thanks for the writing suggestions. I will try to make it easier to
-follow in the next respin. Really appreciate you sharing your thoughts
-on how to structure the cover letter.
-
-> >
-> > Lets first try to fix the bug by letting dynptr track the parent skb
-> > using ref_obj_id and propagating the ref_obj_id to slices so that when
-> > the skb goes away the derived dynptrs and slices will also be
-> > invalidated. However, if dynptr A is destroyed by overwriting the stack
-> > slot, release_reference(ref_obj_id=3D1) would be called and all nodes w=
-ill
-> > be invaldiated. The correct handling should leave skb, dynptr C, and
-> > slice D intact since non-referenced dynptr clone's lifetime does not
-> > need to tie to the original dynptr. This is not a problem before since
-> > dynptr created from skb has ref_obj_id =3D 0. In the future if we start
-> > allowing creating dynptr from slice, the current design also cannot
-> > correctly handle the removal of dynptr E. All objects will be
-> > incorrectly invalidated instead of only invalidating childrens of
-> > dynptr E. While it is possible to solve the issue by adding more
-> > specialized handling in the dynptr paths [0], it creates more complexit=
-y.
-> >
->
-> [...]
+So, I thought about this more and feel that we don't need to filter
+for a specific event because the BPF program is not associated with a
+specific event, rather it is associated with the CPU where it is
+running, So bpf_get_branch_snapshot() should return the branch records
+from the PMU of that CPU. Now, if there are two events on that cpu
+with different branch filter types, let's say
+PERF_SAMPLE_BRANCH_IND_CALL in one event and
+PERF_SAMPLE_BRANCH_ANY_RETURN in another event, the perf subsystem
+configures BRBE to record the union and then does per event filtering
+in software (brbe_read_filtered_entries()), but the BPF program should
+still return everything that was recorded on the CPU, which this patch
+is doing.
