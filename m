@@ -1,293 +1,225 @@
-Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CA8B38A724;
-	Fri, 13 Mar 2026 09:55:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A082B38F649
+	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 10:15:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773395742; cv=none; b=g3PjIErx+uRhlV8ib8kpQx54KvSebwvtO6+zY3+7UrREug5IlAT08Ckk479AUmaErJ6H13uCbR2im646kPrspsBrS9fjl5BtoF78+r/rQt0sdKlsaC4rzz7BXu7URkI7PtJYw998AyoSqJsIEwfkvwwVjorRTREq8ctSn55X0/0=
+	t=1773396939; cv=none; b=ELgCqGllBfi2+MCTFkhHoFJ2u3h09pYufYGYHO9M74jsJpvBxSJxcGPEWP3QHhqjsELXuLl+N6M/pKqns4wV2PXFPqRa5b76JWHW+w/uufJzAnO4IYmxo9LgAJCz1yJv2FLnQDlo54cjgFKrekcDsOrW157a7iTSCzPnVmCuXyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773395742; c=relaxed/simple;
-	bh=5c2W3df8hujD+lsryMlfZVWTEtgYqljLNQ17LpwZ8OM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=GRssLa0mNpJXsd5rJ3E2Y2Zg4Ldfmf7Hlx1PTY1r2ydVEg6Uj+bjzSMIGr1tWHDh29AGhYMTHG9KyDfHMDyNeIwk7lbxx5x7YhDPZAfKkVzWblQPUZra2+eIzLsZl5X0IyrHCAJC6MG5i6x/O+2ecxhMR4E7OrRpepeCPO22/sw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=SAp8ABQ0; arc=none smtp.client-ip=113.46.200.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1773396939; c=relaxed/simple;
+	bh=3iQ/he8K3to5eOGg5sxY1o3HG8suDE7wrLNCdx3KbQQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gncZhMIp8ZBpMTDUvuwir8BlWBmBSQo3HKLl7mwoeSERB2cZ0vet1nxMunYB8+0cKf6VAtFxcvXFHemlwCqKYcMdOfDFmmK29JvxwvQKTrFcqBBBybfmnrOWDvbYxUMgSsXCsrEUL4VEJ2+7wJSdio6kPyVIErdXF4OTSqD8AFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qFsOcU+T; arc=none smtp.client-ip=91.218.175.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="SAp8ABQ0"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=6HFrbM723sqpe+y7ai9Wss8seUmJrJRPOhgyOLXW9fA=;
-	b=SAp8ABQ0kr+FddtPCS+WkRyk4XQguR5O1iUQDkQFDf+FbPfr5uRjNYc3YKAAWgO4zNkAIQIaa
-	4AkO5FV2lwqDK9mv/pU6mg3/2C21oGWRs0xrBzuK70Y8KYe8bKmrY4eLwxQGJnhd/0JPrmueNNi
-	UjP3DBr3wI1MHHb4TkpNfZg=
-Received: from mail.maildlp.com (unknown [172.19.163.214])
-	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4fXKVT123FzLlTZ;
-	Fri, 13 Mar 2026 17:50:41 +0800 (CST)
-Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
-	by mail.maildlp.com (Postfix) with ESMTPS id 8DD694056D;
-	Fri, 13 Mar 2026 17:55:37 +0800 (CST)
-Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
- (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Fri, 13 Mar
- 2026 17:55:36 +0800
-Message-ID: <75690ddf-5acb-40c1-b6f2-9b9a4397e473@huawei.com>
-Date: Fri, 13 Mar 2026 17:55:35 +0800
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qFsOcU+T"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773396932;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yvfFpAeEzO8mpJMgvfojf+PtfgHI/igh01b3biiWulw=;
+	b=qFsOcU+T/lKC5uaoxx2i7gVwSaRAZiw5Rbuz+aBrVIORZA4ull+Uld8ft0d8CKAXDGTFq1
+	aCMPZnS9tduygQS7RZNgju3rnwsBELie0lgfZvP652ap4N6jLpIfyOzQ62LSGDh16UPFAx
+	hPEeo3QL69GxbPFxqQ/n4yxGag8ILs4=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: xukuohai@huaweicloud.com
+Cc: a.s.protopopov@gmail.com,
+	alexis.lothore@bootlin.com,
+	andrii@kernel.org,
+	ast@kernel.org,
+	bjorn@kernel.org,
+	bpf@vger.kernel.org,
+	chleroy@kernel.org,
+	daniel@iogearbox.net,
+	davem@davemloft.net,
+	eddyz87@gmail.com,
+	gor@linux.ibm.com,
+	hbathini@linux.ibm.com,
+	hca@linux.ibm.com,
+	hengqi.chen@gmail.com,
+	iii@linux.ibm.com,
+	johan.almbladh@anyfinetworks.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux@armlinux.org.uk,
+	list+bpf@vahedi.org,
+	luke.r.nels@gmail.com,
+	martin.lau@linux.dev,
+	naveen@kernel.org,
+	paulburton@kernel.org,
+	pulehui@huawei.com,
+	puranjay@kernel.org,
+	udknight@gmail.com,
+	xi.wang@gmail.com,
+	yangtiezhu@loongson.cn,
+	yonghong.song@linux.dev,
+	Leon Hwang <leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next v9 4/5] bpf, x86: Emit ENDBR for indirect jump targets
+Date: Fri, 13 Mar 2026 18:15:05 +0800
+Message-ID: <20260313101505.104686-1-leon.hwang@linux.dev>
+In-Reply-To: <20260312170255.3427799-5-xukuohai@huaweicloud.com>
+References: <20260312170255.3427799-5-xukuohai@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v9 1/5] bpf: Move constants blinding out of
- arch-specific JITs
-Content-Language: en-US
-To: Xu Kuohai <xukuohai@huaweicloud.com>, <bpf@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
-CC: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
-	<martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Yonghong Song
-	<yonghong.song@linux.dev>, Puranjay Mohan <puranjay@kernel.org>, Anton
- Protopopov <a.s.protopopov@gmail.com>, =?UTF-8?Q?Alexis_Lothor=C3=A9?=
-	<alexis.lothore@bootlin.com>, Shahab Vahedi <list+bpf@vahedi.org>, Russell
- King <linux@armlinux.org.uk>, Tiezhu Yang <yangtiezhu@loongson.cn>, Hengqi
- Chen <hengqi.chen@gmail.com>, Johan Almbladh
-	<johan.almbladh@anyfinetworks.com>, Paul Burton <paulburton@kernel.org>, Hari
- Bathini <hbathini@linux.ibm.com>, Christophe Leroy <chleroy@kernel.org>,
-	Naveen N Rao <naveen@kernel.org>, Luke Nelson <luke.r.nels@gmail.com>, Xi
- Wang <xi.wang@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
-	<bjorn@kernel.org>, Ilya Leoshkevich <iii@linux.ibm.com>, Heiko Carstens
-	<hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, "David S . Miller"
-	<davem@davemloft.net>, Wang YanQing <udknight@gmail.com>
-References: <20260312170255.3427799-1-xukuohai@huaweicloud.com>
- <20260312170255.3427799-2-xukuohai@huaweicloud.com>
-From: Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <20260312170255.3427799-2-xukuohai@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- kwepemf100007.china.huawei.com (7.202.181.221)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
 
+On Fri, Mar 13, 2026 at 01:02:54AM +0800, Xu Kuohai wrote:
+>From: Xu Kuohai <xukuohai@huawei.com>
+>
+>On CPUs that support CET/IBT, the indirect jump selftest triggers
+>a kernel panic because the indirect jump targets lack ENDBR
+>instructions.
+>
+>To fix it, emit an ENDBR instruction to each indirect jump target. Since
+>the ENDBR instruction shifts the position of original jited instructions,
+>fix the instruction address calculation wherever the addresses are used.
+>
+>For reference, below is a sample panic log.
+>
+> Missing ENDBR: bpf_prog_2e5f1c71c13ac3e0_big_jump_table+0x97/0xe1
+> ------------[ cut here ]------------
+> kernel BUG at arch/x86/kernel/cet.c:133!
+> Oops: invalid opcode: 0000 [#1] SMP NOPTI
+>
+> ...
+>
+>  ? 0xffffffffc00fb258
+>  ? bpf_prog_2e5f1c71c13ac3e0_big_jump_table+0x97/0xe1
+>  bpf_prog_test_run_syscall+0x110/0x2f0
+>  ? fdget+0xba/0xe0
+>  __sys_bpf+0xe4b/0x2590
+>  ? __kmalloc_node_track_caller_noprof+0x1c7/0x680
+>  ? bpf_prog_test_run_syscall+0x215/0x2f0
+>  __x64_sys_bpf+0x21/0x30
+>  do_syscall_64+0x85/0x620
+>  ? bpf_prog_test_run_syscall+0x1e2/0x2f0
+>
+>Fixes: 493d9e0d6083 ("bpf, x86: add support for indirect jumps")
+>Reviewed-by: Anton Protopopov <a.s.protopopov@gmail.com>
+>Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+>---
+> arch/x86/net/bpf_jit_comp.c | 26 +++++++++++++++-----------
+> 1 file changed, 15 insertions(+), 11 deletions(-)
+>
+>diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+>index 72d9a5faa230..2d29830700f1 100644
+>--- a/arch/x86/net/bpf_jit_comp.c
+>+++ b/arch/x86/net/bpf_jit_comp.c
+>@@ -1649,8 +1649,8 @@ static int emit_spectre_bhb_barrier(u8 **pprog, u8 *ip,
+> 	return 0;
+> }
+>
+>-static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image, u8 *rw_image,
+>-		  int oldproglen, struct jit_context *ctx, bool jmp_padding)
+>+static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+>+		  u8 *rw_image, int oldproglen, struct jit_context *ctx, bool jmp_padding)
+> {
+> 	bool tail_call_reachable = bpf_prog->aux->tail_call_reachable;
+> 	struct bpf_insn *insn = bpf_prog->insnsi;
+>@@ -1663,7 +1663,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image, u8 *rw_image
+> 	void __percpu *priv_stack_ptr;
+> 	int i, excnt = 0;
+> 	int ilen, proglen = 0;
+>-	u8 *prog = temp;
+>+	u8 *ip, *prog = temp;
+> 	u32 stack_depth;
+> 	int err;
+>
+>@@ -1734,6 +1734,13 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image, u8 *rw_image
+> 				dst_reg = X86_REG_R9;
+> 		}
+>
+>+#ifdef CONFIG_X86_KERNEL_IBT
+>+		if (bpf_insn_is_indirect_target(env, bpf_prog, i - 1))
+>+			EMIT_ENDBR();
+>+#endif
 
-On 2026/3/13 1:02, Xu Kuohai wrote:
-> From: Xu Kuohai <xukuohai@huawei.com>
-> 
-> During the JIT stage, constants blinding rewrites instructions but only
-> rewrites the private instruction copy of the JITed subprog, leaving the
-> global instructions and insn_aux_data unchanged. This causes a mismatch
-> between subprog instructions and the global state, making it difficult
-> to look up the global insn_aux_data in the JIT.
-> 
-> To avoid this mismatch, and given that all arch-specific JITs already
-> support constants blinding, move it to the generic verifier code, and
-> switch to rewrite the global env->insnsi with the global states
-> adjusted, as other rewrites in the verifier do.
-> 
-> This removes the constants blinding calls in each JIT, which are largely
-> duplicated code across architectures.
-> 
-> Since constants blinding is only required for JIT, and there are two
-> entry functions for JIT, jit_subprogs() and bpf_prog_select_runtime(),
-> move the constants blinding invocation into the two functions.
-> 
-> If constants blinding fails, or if it succeeds but the subsequent JIT
-> compilation fails, kernel falls back to running the BPF program with
-> interpreter. To ensure a correct rollback, the program cloning before
-> instruction rewriting in the constants blinding is preserved. During
-> the blinding process, only the cloned instructions are patched, leaving
-> the original program untouched.
-> 
-> Since bpf_patch_insn_data() is chosen for the constants blinding in the
-> verifier path, and it adjusts the global auxiliary data in the verifier
-> state, a key question is whether this auxiliary data should be restored
-> when JIT fails?
-> 
-> Besides instructions, bpf_patch_insn_data() adjusts env->insn_aux_data,
-> env->subprog_info, prog->aux->poke_tab and env->insn_array_maps. env->
-> insn_aux_data and env->subprog_info are no longer used after JIT failure
-> and are freed at the end of bpf_check(). prog->aux->poke_tab is only
-> used by JIT. And when the JIT fails, programs using insn_array would be
-> rejected by bpf_insn_array_ready() function since no JITed addresses
-> available. This means env->insn_array_maps is only useful for JIT.
-> Therefore, all the auxiliary data adjusted does not need to be restored.
-> 
-> For classic BPF programs, constants blinding works as before since it
-> is still invoked from bpf_prog_select_runtime().
-> 
-> Reviewed-by: Anton Protopopov <a.s.protopopov@gmail.com>
-> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-> ---
->   arch/arc/net/bpf_jit_core.c      | 39 ++++++-----------
->   arch/arm/net/bpf_jit_32.c        | 41 +++---------------
->   arch/arm64/net/bpf_jit_comp.c    | 72 +++++++++----------------------
->   arch/loongarch/net/bpf_jit.c     | 59 ++++++++------------------
->   arch/mips/net/bpf_jit_comp.c     | 20 +--------
->   arch/parisc/net/bpf_jit_core.c   | 73 +++++++++++++-------------------
->   arch/powerpc/net/bpf_jit_comp.c  | 68 +++++++++++------------------
->   arch/riscv/net/bpf_jit_core.c    | 61 ++++++++++----------------
->   arch/s390/net/bpf_jit_comp.c     | 59 +++++++++-----------------
->   arch/sparc/net/bpf_jit_comp_64.c | 61 +++++++++-----------------
->   arch/x86/net/bpf_jit_comp.c      | 43 +++----------------
->   arch/x86/net/bpf_jit_comp32.c    | 33 ++-------------
->   include/linux/filter.h           | 11 ++++-
->   kernel/bpf/core.c                | 66 +++++++++++++++++++++++++----
->   kernel/bpf/verifier.c            | 40 +++++++++++------
->   15 files changed, 281 insertions(+), 465 deletions(-)
+NIT: is this CONFIG check necessary?
 
-[...]
+EMIT_ENDBR already checks it.
 
->   /*
-> diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
-> index b3581e926436..527baa50dc68 100644
-> --- a/arch/riscv/net/bpf_jit_core.c
-> +++ b/arch/riscv/net/bpf_jit_core.c
-> @@ -44,29 +44,19 @@ bool bpf_jit_needs_zext(void)
->   struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
->   {
->   	unsigned int prog_size = 0, extable_size = 0;
-> -	bool tmp_blinded = false, extra_pass = false;
-> -	struct bpf_prog *tmp, *orig_prog = prog;
-> +	bool extra_pass = false;
->   	int pass = 0, prev_ninsns = 0, i;
->   	struct rv_jit_data *jit_data;
->   	struct rv_jit_context *ctx;
->   
->   	if (!prog->jit_requested)
-> -		return orig_prog;
-> -
-> -	tmp = bpf_jit_blind_constants(prog);
-> -	if (IS_ERR(tmp))
-> -		return orig_prog;
-> -	if (tmp != prog) {
-> -		tmp_blinded = true;
-> -		prog = tmp;
-> -	}
-> +		return prog;
->   
->   	jit_data = prog->aux->jit_data;
->   	if (!jit_data) {
->   		jit_data = kzalloc_obj(*jit_data);
->   		if (!jit_data) {
-> -			prog = orig_prog;
-> -			goto out;
-> +			return prog;
->   		}
->   		prog->aux->jit_data = jit_data;
->   	}
-> @@ -83,15 +73,11 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
->   	ctx->user_vm_start = bpf_arena_get_user_vm_start(prog->aux->arena);
->   	ctx->prog = prog;
->   	ctx->offset = kzalloc_objs(int, prog->len);
-> -	if (!ctx->offset) {
-> -		prog = orig_prog;
-> +	if (!ctx->offset)
->   		goto out_offset;
-> -	}
->   
-> -	if (build_body(ctx, extra_pass, NULL)) {
-> -		prog = orig_prog;
-> +	if (build_body(ctx, extra_pass, NULL))
->   		goto out_offset;
-> -	}
->   
->   	for (i = 0; i < prog->len; i++) {
->   		prev_ninsns += 32;
-> @@ -105,10 +91,8 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
->   		bpf_jit_build_prologue(ctx, bpf_is_subprog(prog));
->   		ctx->prologue_len = ctx->ninsns;
->   
-> -		if (build_body(ctx, extra_pass, ctx->offset)) {
-> -			prog = orig_prog;
-> +		if (build_body(ctx, extra_pass, ctx->offset))
->   			goto out_offset;
-> -		}
->   
->   		ctx->epilogue_offset = ctx->ninsns;
->   		bpf_jit_build_epilogue(ctx);
-> @@ -126,10 +110,8 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
->   							  &jit_data->ro_image, sizeof(u32),
->   							  &jit_data->header, &jit_data->image,
->   							  bpf_fill_ill_insns);
-> -			if (!jit_data->ro_header) {
-> -				prog = orig_prog;
-> +			if (!jit_data->ro_header)
->   				goto out_offset;
-> -			}
->   
->   			/*
->   			 * Use the image(RW) for writing the JITed instructions. But also save
-> @@ -150,7 +132,6 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
->   
->   	if (i == NR_JIT_ITERATIONS) {
->   		pr_err("bpf-jit: image did not converge in <%d passes!\n", i);
-> -		prog = orig_prog;
->   		goto out_free_hdr;
->   	}
->   
-> @@ -163,26 +144,27 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
->   	ctx->nexentries = 0;
->   
->   	bpf_jit_build_prologue(ctx, bpf_is_subprog(prog));
-> -	if (build_body(ctx, extra_pass, NULL)) {
-> -		prog = orig_prog;
-> +	if (build_body(ctx, extra_pass, NULL))
->   		goto out_free_hdr;
-> -	}
->   	bpf_jit_build_epilogue(ctx);
->   
->   	if (bpf_jit_enable > 1)
->   		bpf_jit_dump(prog->len, prog_size, pass, ctx->insns);
->   
-> -	prog->bpf_func = (void *)ctx->ro_insns + cfi_get_offset();
-> -	prog->jited = 1;
-> -	prog->jited_len = prog_size - cfi_get_offset();
-> -
->   	if (!prog->is_func || extra_pass) {
->   		if (WARN_ON(bpf_jit_binary_pack_finalize(jit_data->ro_header, jit_data->header))) {
->   			/* ro_header has been freed */
->   			jit_data->ro_header = NULL;
-> -			prog = orig_prog;
-> -			goto out_offset;
-> +			jit_data->header = NULL;
-> +			goto out_free_hdr;
+#ifdef CONFIG_X86_KERNEL_IBT
+#define EMIT_ENDBR()		EMIT(gen_endbr(), 4)
+#define EMIT_ENDBR_POISON()	EMIT(gen_endbr_poison(), 4)
+#else
+#define EMIT_ENDBR()
+#define EMIT_ENDBR_POISON()
+#endif
 
-Thank you for fixing this issue, and the riscv port looks good to me.
+Thanks,
+Leon
 
-Reviewed-by: Pu Lehui <pulehui@huawei.com> # riscv
-
->   		}
-> +	}
-> +
-> +	prog->bpf_func = (void *)ctx->ro_insns + cfi_get_offset();
-> +	prog->jited = 1;
-> +	prog->jited_len = prog_size - cfi_get_offset();
-> +
-> +	if (!prog->is_func || extra_pass) {
->   		/*
->   		 * The instructions have now been copied to the ROX region from
->   		 * where they will execute.
-> @@ -198,14 +180,15 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
->   		kfree(jit_data);
->   		prog->aux->jit_data = NULL;
->   	}
-> -out:
->   
-> -	if (tmp_blinded)
-> -		bpf_jit_prog_release_other(prog, prog == orig_prog ?
-> -					   tmp : orig_prog);
->   	return prog;
->   
->   out_free_hdr:
-> +	if (extra_pass) {
-> +		prog->bpf_func = NULL;
-> +		prog->jited = 0;
-> +		prog->jited_len = 0;
-> +	}
->   	if (jit_data->header) {
->   		bpf_arch_text_copy(&jit_data->ro_header->size, &jit_data->header->size,
->   				   sizeof(jit_data->header->size));
-
+>+
+>+		ip = image + addrs[i - 1] + (prog - temp);
+>+
+> 		switch (insn->code) {
+> 			/* ALU */
+> 		case BPF_ALU | BPF_ADD | BPF_X:
+>@@ -2440,8 +2447,6 @@ st:			if (is_imm8(insn->off))
+>
+> 			/* call */
+> 		case BPF_JMP | BPF_CALL: {
+>-			u8 *ip = image + addrs[i - 1];
+>-
+> 			func = (u8 *) __bpf_call_base + imm32;
+> 			if (src_reg == BPF_PSEUDO_CALL && tail_call_reachable) {
+> 				LOAD_TAIL_CALL_CNT_PTR(stack_depth);
+>@@ -2465,7 +2470,8 @@ st:			if (is_imm8(insn->off))
+> 			if (imm32)
+> 				emit_bpf_tail_call_direct(bpf_prog,
+> 							  &bpf_prog->aux->poke_tab[imm32 - 1],
+>-							  &prog, image + addrs[i - 1],
+>+							  &prog,
+>+							  ip,
+> 							  callee_regs_used,
+> 							  stack_depth,
+> 							  ctx);
+>@@ -2474,7 +2480,7 @@ st:			if (is_imm8(insn->off))
+> 							    &prog,
+> 							    callee_regs_used,
+> 							    stack_depth,
+>-							    image + addrs[i - 1],
+>+							    ip,
+> 							    ctx);
+> 			break;
+>
+>@@ -2639,7 +2645,7 @@ st:			if (is_imm8(insn->off))
+> 			break;
+>
+> 		case BPF_JMP | BPF_JA | BPF_X:
+>-			emit_indirect_jump(&prog, insn->dst_reg, image + addrs[i - 1]);
+>+			emit_indirect_jump(&prog, insn->dst_reg, ip);
+> 			break;
+> 		case BPF_JMP | BPF_JA:
+> 		case BPF_JMP32 | BPF_JA:
+>@@ -2729,8 +2735,6 @@ st:			if (is_imm8(insn->off))
+> 			ctx->cleanup_addr = proglen;
+> 			if (bpf_prog_was_classic(bpf_prog) &&
+> 			    !ns_capable_noaudit(&init_user_ns, CAP_SYS_ADMIN)) {
+>-				u8 *ip = image + addrs[i - 1];
+>-
+> 				if (emit_spectre_bhb_barrier(&prog, ip, bpf_prog))
+> 					return -EINVAL;
+> 			}
+>@@ -3791,7 +3795,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+> 	for (pass = 0; pass < MAX_PASSES || image; pass++) {
+> 		if (!padding && pass >= PADDING_PASSES)
+> 			padding = true;
+>-		proglen = do_jit(prog, addrs, image, rw_image, oldproglen, &ctx, padding);
+>+		proglen = do_jit(env, prog, addrs, image, rw_image, oldproglen, &ctx, padding);
+> 		if (proglen <= 0) {
+> out_image:
+> 			image = NULL;
