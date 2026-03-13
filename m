@@ -1,116 +1,218 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 665EB395279
-	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 14:20:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 082F13A2560
+	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 14:20:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.52
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773411630; cv=pass; b=uVGC+4AMV2myv15NVAegev+byc18CzagN/amMzWk49H0AepXHrzHJXaT/wK3SVTYiUzVKCzwkhyuYYFMCN/W4RbMa6E/fZFqFyUWy3sdYBVGVEXjvobaSsLlokfPR96bWs+A9qA+gs6dHMjk76C9ywHCDAQ/e4CbvbCnWIOWJ1s=
+	t=1773411641; cv=pass; b=raF4QUa2omu4U1DugnyezaUUKbcZ3zJbI4s1+BIz033ssL8uV0beCtKwLrYmigTEtjconlZzM4L2AsF2g5jp4mnMLgxKsNsj350v1VBB2jynb9GiywQk482L+AjeAIFjPOEqXG5zaZSBRNeF5G9qFdM6gkLlBb4bnS9JQCIuPbg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773411630; c=relaxed/simple;
-	bh=ckmpy3mw1UK9sEOGwbASSY5L7qTviwDScKOnF+2PxxU=;
+	s=arc-20240116; t=1773411641; c=relaxed/simple;
+	bh=BcGrGeHXe2jO7d1iGFXYIT6nIOBt21TcAx873DkzSmc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KmwsUi6+68xyq6AMFdZXq0YhuT3UgjA7ZFLUC1a1yBq6Mke9D2J229C0LGUzvnJDVdOZEYF/j0dUCijJ6IfypaLRZ4D/aEZxWQgLsBUr7E0QIwYQZ3B08ohHCVsWYJWhLY4nAiwoCk5TxMPJ6YCjI+FFsJnqFEsooWPePbTD/ek=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VQ0oQ3BB; arc=pass smtp.client-ip=209.85.218.49
+	 To:Cc:Content-Type; b=ldYRdrR64u3c43AEjyt52yfknuil3e371hT//exwf3NgPqAIFnFFW5G4YWw4HKF6k9RrYtG2MBwHC0eIJCGV8fr+B5cgoMv3MGe/Gircju3n8xVOrcxoXo4s7FMdjSXWcfNtp1hh4CJZexnrp6lNrGXp9hU+gXQU8vOlLw/1bLs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kG3HQbER; arc=pass smtp.client-ip=209.85.221.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VQ0oQ3BB"
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-b7cf4a975d2so300109866b.2
-        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 07:20:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773411628; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kG3HQbER"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-439d8df7620so1678670f8f.0
+        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 07:20:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773411637; cv=none;
         d=google.com; s=arc-20240605;
-        b=gnb1vF3qTVUJQa3Zx6sqOUeh3TT7UGgkQNsq3vpsup126G1BxDcmTCe64MRCw072cG
-         1cGBjSYCmvYKmEglPNnxotuuMz+pfe8o/IwOKKdJB94pxRVkJWr70Fn+EylfxoJE8lgj
-         Lrp2ZOHG8UqwAJtpXtIGNHvyIfp+/nTiWO2n0837xLinRl5JX6lwYtwjovMNymtFhSlS
-         dMuI4PpxzXg6HT3YcOpDbZyicYLMGYU5iRk+2JYU52iaVyXqY9Do4k+ma3Txh7+XxvVf
-         Nu/nLV+92udM9aP2wJUezDVVGNabtqnicaEbXHHAD+cC+uKz1oP+42LrxMicX5yVwbRs
-         IcqA==
+        b=lQtWnnFt/xYpYtZ7ewYW+PxvwrKzkMRQTlqafRGe6T6XNs7lNYqb8+njFZOnbAqW03
+         WC8yN7BTHKZpIxh389T55zFPyuzqfEh92nYKVPOcX77zundwkGCgnD0h32xeQRtIwbRC
+         z2lbinlRwj1eg4Gd69xfouOkHhkey4dI/XWOD1olv+Iqu7TXV22FowNPyRQ3O81DnDyl
+         slvYEoi1HzFUMriffPdANIfAgtr5pZEsLrBiPYcZ2xNMl5Av+n2OUwSgk92pie+IjKgR
+         hrwzcNuTPPkdToe6RitzimM7wxFMyTbHqSGZ6xzp4yk5uMUepmhndSPSfM/e9kCxBPhA
+         qWHQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=ckmpy3mw1UK9sEOGwbASSY5L7qTviwDScKOnF+2PxxU=;
-        fh=ZYfgn00HtOgaMN2yfd5O4cx5jR/w2Hofi170fnkmdmk=;
-        b=VCifTkuSfA1imdApZUQ9LpaSV0ecdrSmmcY0oC6Jq7Dd6lEZzv234sZ3uG0kcAiJo5
-         iCzZUi8l8TB3x9F4bd9SuCD51TnW2cpUigwXMbL+OY22UyyDpSqDJ2IppbO8IQpw1ib5
-         YwdvIn4pMq7jGbaRVAIivf5wQWcFOxxCshskbLCN3sGUCYx+rJouzuvJNpaTiwnX60mo
-         sVTAlzHlVxNaG2i4MBm0IKTq9Z3c0XJSg8jKBw3Vgq2leQskm2L6kQurkiIdoCYf8HPD
-         piCvY3qx3x0zuUGMBS/WIIF0GYNyX50hjoSxFQvIlLh4U8d/13RGm3QeKkQx3y+wSloT
-         2LSw==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=bWchfiAssZCYRh2ybEE9+73QVqevcBXDejsJHQ9I4ag=;
+        fh=xQtsLQihPqtJvb71PsuAF1pNQRd8f+9AxjHcMCc8DQw=;
+        b=By/hfIW8DEPmyToUZUKtO203PK3x2b481g3AFvXfo9SXTSkQ30KGGsYNWw6cQT77nS
+         sav2xfvYrI5iulB61G2dx99YrmtvzaF3h+pjlS2DXuP50+VnRyB5FfRsXU6UjSb58ZgK
+         pnKgpDX8DeSfcXDpABmrbsCl1s4VLD03viS8QVq8505WEbc/nfvwtwB2qrxIR6gOnTwP
+         7hs6YA+Hs/lcRmCRw7DF/CfHIbvLe6SqHsyrXjygzHUJ+pTAw3Z0KjS8CuBTnxDl0FN0
+         3uGi28Kz12h3KjAL8nyuNcKg5gC7tWPB8TLICaYui4jdIyGWZMdIeMZWhRda/Z+ap2W8
+         ibEw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773411628; x=1774016428; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ckmpy3mw1UK9sEOGwbASSY5L7qTviwDScKOnF+2PxxU=;
-        b=VQ0oQ3BBX+NKPpXwhfJnE3bQFV6OpDwvP2Cn7jW6Nbj9DG8VUQxOZLuBQGDzeT6paN
-         XdKzdeuUcUZ7G6AUIAmDojIeiiqwIFxPiMyjRIlSI5v4DknxTrc15GtOUH3JN7tXIlxM
-         W8FgZ+SWEcGA1IaeajJ8kyKXj5GzUSLh6/pKv9MMPCAZab2VDlZlRqewQmWoaJOSQwZ6
-         BVdupAtMGI6fUidSrL6M5+qBi1FwE29ALLQgW5gP/qZQz/2KeiIEN+mOnK45t3rttCxR
-         8hQoNlAuQ5Cch9oZed9YePQhEivZBlUoWoS/O/mLsBC0jBvvSHcWUowcabrlTJagi2tF
-         at8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773411628; x=1774016428;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1773411637; x=1774016437; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ckmpy3mw1UK9sEOGwbASSY5L7qTviwDScKOnF+2PxxU=;
-        b=HlpD18Lm+IyOn8kwGm8XXJ+SQjz41D7SaFpsTNUrVLgV7fczVkHa690Aez9ngA6WI6
-         gtcHraUNQzUR0Pwt3/qukRf+w4UEBSenqBewmr3ZWhLozFYzy5EFeQDGZMyGzZIG7+AH
-         LsKJ3aWbD0P7cs+WbqQ3JjMR+Dp7eTpZMhr3UU5bnryAITy9ZF1GV/t7HvLYQ89IyQFv
-         i+JSbxNLpyDGT0oXbVoThtMHnnmxP8cn9yT+W23AJssz+5no7aWP/wYksCOj9t51XEZG
-         PrhipfHiIsjiXcr3ZtrrMq+E1lvN7MbFyNpjP+6ooo5B48wGFRMR//FWAjLf0Vje9bXh
-         PaeA==
-X-Forwarded-Encrypted: i=1; AJvYcCUdvQIF3ocSp6kkPffrweSYMWxmKM6u2ibPCQPn+sANg8QRPQ0IawYLUFzqi0NYOFLnR74=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzht86mKSv1X+W0mmnCYuX4PCjsSkRNL6iq+IYvOyP5krgjkjtj
-	q3vNDJNqhdev9e9we5ZcTh6qaWnZdBG6SumwaNwFFmRcY5VgRCihRtedbUORJc/ovXqGrgF8vNf
-	Df/VV/E0bFDGnndwOmMZbAdMyA55mdu8=
-X-Gm-Gg: ATEYQzxsz0NzYhRuqYPWZbEXLUbCNH5+xE6jn8HssEkL7f1PqypQeVvcjGPPzhvT72J
-	o3ng8ac3ZkWssN2N0mu90E5nAm+nVGTe46uTJdqo/HbdLObjCwFzCt8ab9QGFT/nsxhU4G89ITN
-	G9Wc7jR8K+aA+RCAqYNnLq3ZZW+tYvwPDIcL3SvP5TGKjqNQOiQdBywnSn0Sa0MbVqbZbdF8czm
-	Nz2ghQYWe6X8Rrm4r/s07UTeHsl5YBdNz/RtOqjE1Qo9UV6Sl81Avc2g9p9ldrovMPdHqxt2yCD
-	RXVJ/3eRZg==
-X-Received: by 2002:a17:906:338d:b0:b97:408f:edba with SMTP id
- a640c23a62f3a-b976519a11fmr150342866b.35.1773411627235; Fri, 13 Mar 2026
- 07:20:27 -0700 (PDT)
+        bh=bWchfiAssZCYRh2ybEE9+73QVqevcBXDejsJHQ9I4ag=;
+        b=kG3HQbERLbJYaeuTD9m/kguBCv5zI+Mq+aWyiXKCA3R9iPTVQGA+nuQzt+uyA5O6By
+         M6dRitgyWHk+3zw9mbz157+RGAR2UUZnU+xdTYukCIJfM24F5fr+Bm2BMRsAanZlreJM
+         CJLsihgB5/f6xcAXxGvEjaHb0xeM583mveFAiGBb1Z3M9KovKTRC8M5/uHLG2P2GMJMF
+         mAN54oATyO8LQCn/RQcVEyVpAoT+qHebTROoXCvaHxPj3HM+1bjlqBMIr34Cheho/k8Z
+         3YiBWjsg5D0aOKT4lAb7pERgpoGD7+Kj/lyKWRQobX3/GqM9Ipt6Hf5Bn8ZeyTeMk/4g
+         IWdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773411637; x=1774016437;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=bWchfiAssZCYRh2ybEE9+73QVqevcBXDejsJHQ9I4ag=;
+        b=V7UIcOQBntzFcsfbTkLds6cJ0CE5M6i+C8oLUdn+nA5Csp9jYMN0hHIfV0IHwBpxsW
+         Hrf+0SXpJjccu6Zgbd0jmzRzxjhBuGhdI6f5SvLgCbJkcel1quz2/2e+8Br3hJsa2VAX
+         omfPN+PNsW8G3cUR+MrwJCHZ48JZFwCdn8owqtY5vPL55k63Gricax9PeowqCvZ7PTKy
+         sRVE/It4+KNZGrZ+UEjMGFyouyyCKMVjt+QiEvAgDirSdkbxK60fYqnew+DeIxoo6rMT
+         wezz0koz7Gn12ThrNGFhsOZxvcktzzrVGaHM+OoNu7gkMuErUAB2yC1ne7G2yZILsun0
+         zboQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW4lOFWHqhtRXNOd49wzM1JveggJ/Yt+uSNJV3ZgNbY1XvaQZeew1cgiO4XmzuALZjMI5g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwatpIIJM8foz6TjMt5hcymF/1XKu6ReAIKWzmec7eebjhubEP+
+	TVvXRlN2RvoZ8TiaJVsmeMQov4FKqJLXxKK65+91Fjd1sseIIgr60h7nM8ENOdGvW5Vofaxzdjb
+	e6tE0vPbsKIf6us/SJnpURUrycK9swOc=
+X-Gm-Gg: ATEYQzwaASG3SHQ4WnjF8NZ4GBIZByaFO5gdnPcotO8nEHUjyhsH27fGEkRq5XGKQ9i
+	y2ayAGzaX/8bBQ+PrbkocEdd/73kRja4sAGRMxRhC2h2h9q5ousSA/dG5acGt+R8k5ZFv6QDTu0
+	yUsVUsZQAG4oZEElirDPpRuoGtw5lAQ0q78PvfnL9+hJaEN0B/rpDlkTFtPV5T3xU2Ys/2JJ4Lu
+	JMcYTZJUHjqogN99YP+cvnMo65d98hrASF9qmeZq1L8lRtRbAE/Tv+XKmqyl2UXAinFwzjvHdk1
+	ZojOor645VBewKh9nTkHKCnhCUshaPAcZ3u70Yw1075QkUQ2SNJasriFvGcQkR05/RA=
+X-Received: by 2002:a05:6000:186f:b0:439:b629:42d7 with SMTP id
+ ffacd0b85a97d-43a04dcbb39mr6923759f8f.46.1773411636611; Fri, 13 Mar 2026
+ 07:20:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260312183817.104878-1-teknoraver@meta.com> <20260313131624.6562-1-kohei@enjuk.jp>
-In-Reply-To: <20260313131624.6562-1-kohei@enjuk.jp>
-From: Matteo Croce <technoboy85@gmail.com>
-Date: Fri, 13 Mar 2026 15:19:50 +0100
-X-Gm-Features: AaiRm512HRVQlYKx8veJJyzZ-hM-j0qXfMX8S7Ikh0C8Ns4fLLpJwVe8NvjC1OQ
-Message-ID: <CAFnufp1xYV9+o=25OSjUc==tjRitqNoO1THwxtPvq7puJZkzjA@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 0/2] e1000e: add XDP support
-To: Kohei Enju <kohei@enjuk.jp>
-Cc: andrew+netdev@lunn.ch, anthony.l.nguyen@intel.com, ast@kernel.org, 
-	bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net, 
-	edumazet@google.com, hawk@kernel.org, john.fastabend@gmail.com, 
-	kuba@kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	pabeni@redhat.com, przemyslaw.kitszel@intel.com
+References: <20260312080113.843408-1-hbathini@linux.ibm.com>
+ <02e68ebf-5782-4632-aed8-0026a3aab96b@linux.dev> <ec4e7ff6-55e3-4889-b507-fee71fab99f8@linux.ibm.com>
+In-Reply-To: <ec4e7ff6-55e3-4889-b507-fee71fab99f8@linux.ibm.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 13 Mar 2026 07:20:25 -0700
+X-Gm-Features: AaiRm523Q6Wteh_7o3CKQT5m-0--e3n8H5bS0Ist7DgivFI_rPZYAXRBWJjbods
+Message-ID: <CAADnVQK--hKVH=FBMLiF7io2kBLfqwkXM9porBS1T--og=R4Yw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: improve test coverage for
+ kfunc call
+To: Hari Bathini <hbathini@linux.ibm.com>, Ilya Leoshkevich <iii@linux.ibm.com>
+Cc: Yonghong Song <yonghong.song@linux.dev>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Il giorno ven 13 mar 2026 alle ore 14:16 Kohei Enju <kohei@enjuk.jp> ha scritto:
+On Fri, Mar 13, 2026 at 2:30=E2=80=AFAM Hari Bathini <hbathini@linux.ibm.co=
+m> wrote:
 >
-> On Thu, 12 Mar 2026 19:38:15 +0100, Matteo Croce wrote:
-> > Add XDP support to e1000e driver. First patch adds basic XDP support,
-> > while the second one adds support for AF_XDP.
-> > Tested on an Intel 82574L Gigabit card.
 >
-> I'd Cc intel-wired-lan@lists.osuosl.org since this series is about e1000e.
-> Is there any reason not to Cc the list?
+>
+> On 12/03/26 11:52 pm, Yonghong Song wrote:
+> >
+> >
+> > On 3/12/26 1:01 AM, Hari Bathini wrote:
+> >> On powerpc, immediate load instructions are sign extended. In case
+> >> of unsigned types, arguments should be explicitly zero-extended by
+> >> the caller. For kfunc call, this needs to be handled in the JIT code.
+> >> In bpf_kfunc_call_test4(), that tests for sign-extension of signed
+> >> argument types in kfunc calls, add some additional failure checks.
+> >> And add bpf_kfunc_call_test5() to test zero-extension of unsigned
+> >> argument types in kfunc calls.
+> >>
+> >> Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
+> >
+> > LGTM with a nit below.
+> >
+> > Acked-by: Yonghong Song <yonghong.song@linux.dev>
+>
+> Thanks for the review, Yonghong.
+>
+> >
+> >> ---
+> >>
+> >> Changes in v2:
+> >> - Added asm version of the selftest for consistent testing across
+> >>    different BPF ISA versions.
+> >> - Added comments clearly stating the intent of the test cases.
+> >> - Updated sign-extension selftest to have additional failure checks.
+> >>
+> >>
+> >>   .../selftests/bpf/prog_tests/kfunc_call.c     |  2 +
+> >>   .../selftests/bpf/progs/kfunc_call_test.c     | 98 +++++++++++++++++=
+++
+> >>   .../selftests/bpf/test_kmods/bpf_testmod.c    | 54 +++++++++-
+> >>   .../bpf/test_kmods/bpf_testmod_kfunc.h        |  1 +
+> >>   4 files changed, 154 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/
+> >> tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+> >> index f79c8e53cb3e..62f3fb79f5d1 100644
+> >> --- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+> >> +++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+> >> @@ -74,6 +74,8 @@ static struct kfunc_test_params kfunc_tests[] =3D {
+> >>       TC_TEST(kfunc_call_test1, 12),
+> >>       TC_TEST(kfunc_call_test2, 3),
+> >>       TC_TEST(kfunc_call_test4, -1234),
+> >> +    TC_TEST(kfunc_call_test5, 0),
+> >> +    TC_TEST(kfunc_call_test5_asm, 0),
+> >>       TC_TEST(kfunc_call_test_ref_btf_id, 0),
+> >>       TC_TEST(kfunc_call_test_get_mem, 42),
+> >>       SYSCALL_TEST(kfunc_syscall_test, 0),
+> >> diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test.c b/
+> >> tools/testing/selftests/bpf/progs/kfunc_call_test.c
+> >> index 8b86113a0126..5edc51564f71 100644
+> >> --- a/tools/testing/selftests/bpf/progs/kfunc_call_test.c
+> >> +++ b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
+> >> @@ -2,8 +2,106 @@
+> >>   /* Copyright (c) 2021 Facebook */
+> >>   #include <vmlinux.h>
+> >>   #include <bpf/bpf_helpers.h>
+> >> +#include "bpf_misc.h"
+> >>   #include "../test_kmods/bpf_testmod_kfunc.h"
+> >> +SEC("tc")
+> >> +int kfunc_call_test5(struct __sk_buff *skb)
+> >> +{
+> >> +    struct bpf_sock *sk =3D skb->sk;
+> >> +    int ret;
+> >> +    u32 val32;
+> >> +    u16 val16;
+> >> +    u8 val8;
+> >> +
+> >> +    if (!sk)
+> >> +        return -1;
+> >> +
+> >> +    sk =3D bpf_sk_fullsock(sk);
+> >> +    if (!sk)
+> >> +        return -1;
+> >> +
+> >> +    /*
+> >> +     * Test with constant values to verify zero-extension.
+> >> +     * ISA-dependent BPF asm:
+> >> +     *   With ALU32:    w1 =3D 0xFF; w2 =3D 0xFFFF; w3 =3D 0xFFFFffff
+> >> +     *   Without ALU32: r1 =3D 0xFF; r2 =3D 0xFFFF; r3 =3D 0xFFFFffff
+> >> +     * Both zero-extend to 64-bit before the kfunc call.
+> >> +     */
+> >> +    ret =3D bpf_kfunc_call_test5(0xFF, 0xFFFF, 0xFFFFffffULL);
+> >
+> > Can we just use 0xFFFFffff instead of 0xFFFFffffULL?
+>
+> Alexei, can you confirm if I need to respin with this change?
 
-Hi, get_maintainers said "moderated list" so I thought that I had to
-register first to send a message.
-I'll post the v3 there too, hoping that a moderator approves it.
+I prefer the explicit type when the constant is on the boundary.
 
+I was about to apply it, but it fails on s390. See CI:
 
---
-Matteo Croce
+Error: #160 kfunc_call
+Error: #160/13 kfunc_call/kfunc_call_test5_asm
+Error: #160/13 kfunc_call/kfunc_call_test5_asm
+verify_success:PASS:skel 0 nsec
+verify_success:PASS:bpf_object__find_program_by_name 0 nsec
+verify_success:PASS:kfunc_call_test5_asm 0 nsec
+verify_success:FAIL:retval unexpected retval: actual 6 !=3D expected 0
+Test Results:
+bpftool: PASS
+test_progs: FAIL (returned 1)
 
-perl -e 'for($t=0;;$t++){print chr($t*($t>>8|$t>>13)&255)}' |aplay
+It doesn't look to be endianness related (which is often
+the case for breaking s390).
+In this case it could be an s390 JIT issue?
+
+Ilya ?
+
+pw-bot: cr
