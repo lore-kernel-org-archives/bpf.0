@@ -1,142 +1,87 @@
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C70437DEAC;
-	Fri, 13 Mar 2026 23:14:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0390C3612F6
+	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 23:35:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773443643; cv=none; b=qILY5dHtLPJMEE9GpWlzUS1phNrHuHBkBLOv5BAbT4fkuJ6H94D6igupE1PzQPQuWdmamMXn1yRdEs24XeiVfsuPJqdr0r00v5UfvTzUW2yYOTb23WS7eRXwzqBz4++5hB8ZX0jPWBVpLSYaWEK73qf1oD/O2HtlH32DM8loR/o=
+	t=1773444938; cv=none; b=AoryS8iT4JIbxRy1Y24nkNAyWAWcOSX921bpgkaNjG2GpoE4Vpt0yVlS2/oveV17YNIkzBAhzHCjx5QyQq0HhoffXwQqyXniULuXI0NbCCDlDQSRQdp8utuXcSSWjFrMdJV8Bkk0vOUdX3TIrftRDKwKX7jEvUyrQOW1nFBFlqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773443643; c=relaxed/simple;
-	bh=e8Enhk3QXOf5yExYNdKIRG+B0oRQhLkMaPFJgAFIUOw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QbKOOAg4kPYbSZF2wFi2YCnGGYCcwOnVApO+rjAMr/Ks7P9YtoZxx5xocljOh7fGIjDAbB/Fd/sC/63kep6jJDcEiveCHEzJ6cUfdST+a6GuGONj4+WaE0KZTVcUKR1ELwlZFAM2XnhwbcJA88ayxbRH8/VH8rTEMpH8QR9KA9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=xXc7051f; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+	s=arc-20240116; t=1773444938; c=relaxed/simple;
+	bh=tQw+PV5Xj0a+TTmuV7pe2KAbPFfoSu4etuQsOcb5F28=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=ST4p+6Q7lZSZuU+R52tQgEN9ktdMr9aKpcHX0sv1+TAK5TZZQ8ZhxQW1KyiWLHFTJ30LyhTTqLToteOhSljhDy5koljNf0s5n+fNvUVQDw/64tP5KddVB8TY753cFkzH2eg8Qld2rZSWBmWJgBJHpU6+RgKYMfIu9x9xeqoTkV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dvY5EEBy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="xXc7051f"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=888cROttyB4Mj3b/fjU2ay+60B251y1m25xcSu13rsg=; b=xXc7051f1MEEuQmjSkevTHfm/f
-	RVZsc7Fd5Ygud2adC6JbbtX3Gmvt5co0Ax3Y5gXAyQdtdCV9avbke7TyZ5nzj/rOnizztf1BZkKOe
-	OteMcqZE3GJC2GRj5jGTPbyGoN8HLOWvwtfziTMe8ZnCn7oIuYFIr781jB7sd3kj+qIzWIeobG8vW
-	ggrGLs77qR9CY4gcyPhv3qmtzowjlqJ5D4TPPjivUbOYGYDmFdV+a3RmfIsk5GQeb7S40aXnkbNPX
-	yrVGyWKdQEJYUm8Q8lhA1pLjo00eiAdN2HNX580Dha9HC7SaJGDsydNDvEH2+z37o8datC3XxZfy3
-	sBJkoPRA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:54294)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1w1BhZ-000000001bH-1R66;
-	Fri, 13 Mar 2026 23:13:53 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.98.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1w1BhR-000000000Bt-4A74;
-	Fri, 13 Mar 2026 23:13:46 +0000
-Date: Fri, 13 Mar 2026 23:13:45 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: "\\Jitendra Vegiraju" <jitendra.vegiraju@broadcom.com>
-Cc: netdev@vger.kernel.org, alexandre.torgue@foss.st.com,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, mcoquelin.stm32@gmail.com,
-	bcm-kernel-feedback-list@broadcom.com, richardcochran@gmail.com,
-	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-	john.fastabend@gmail.com, rohan.g.thomas@altera.com,
-	linux-kernel@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
-	andrew+netdev@lunn.ch, horms@kernel.org, sdf@fomichev.me,
-	me@ziyao.cc, siyanteng@cqsoftware.com.cn,
-	prabhakar.mahadev-lad.rj@bp.renesas.com,
-	weishangjuan@eswincomputing.com, wens@kernel.org,
-	vladimir.oltean@nxp.com, lizhi2@eswincomputing.com,
-	boon.khai.ng@altera.com, maxime.chevallier@bootlin.com,
-	matthew.gerlach@altera.com, chenchuangyu@xiaomi.com,
-	yangtiezhu@loongson.cn, ovidiu.panait.rb@renesas.com,
-	chenhuacai@kernel.org, florian.fainelli@broadcom.com,
-	quic_abchauha@quicinc.com
-Subject: Re: [PATCH net-next v7 2/5] net: stmmac: Add DW25GMAC support in
- stmmac core driver
-Message-ID: <abSaKe3d4fcBMqLm@shell.armlinux.org.uk>
-References: <20260313222206.778760-1-jitendra.vegiraju@broadcom.com>
- <20260313222206.778760-3-jitendra.vegiraju@broadcom.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dvY5EEBy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A938C19421;
+	Fri, 13 Mar 2026 23:35:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773444937;
+	bh=tQw+PV5Xj0a+TTmuV7pe2KAbPFfoSu4etuQsOcb5F28=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=dvY5EEByPCVQPVMPByh49nvhw5u3ltaPnwKHkgVKn2UlTnAwvhPQK/pX94IELtLBE
+	 uALHnIIYPQuUjgXKy5lSlGtDxsv0fFMjNtAp+yHeStU1Rogr5bDb1DuuwuPpRD1ohR
+	 +JTSt1dFmJzk4zoF2vgo+mwxBYcgwrV4CpXmjn+4h8K6wPjg3xNAphkmOhcf8zX196
+	 UJNj19tBZHbtdG5S8qAd4EOaw1VnFgGE8HSMeyyHtq8TGlbyX3Y5w/QdzRwTyx5aGk
+	 sJ8Jm4qiLotib1Zr52OTB35AohwyQwqkE1Nc8m41R60yk8LYyBj+Qn1Q5jWFzJkeyz
+	 lbs4wY7+4DObA==
+Content-Type: multipart/mixed; boundary="===============5885055955342180428=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260313222206.778760-3-jitendra.vegiraju@broadcom.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Message-Id: <4e8f00df703cab5ebf1e1f6f676a8dc8bbc36205d2866efa15c04b983ac4c39a@mail.kernel.org>
+In-Reply-To: <aacec3599b3965e022be1b9792f29e88a1780a78.1773441432.git.paul.chaignon@gmail.com>
+References: <aacec3599b3965e022be1b9792f29e88a1780a78.1773441432.git.paul.chaignon@gmail.com>
+Subject: Re: [PATCH bpf-next 2/4] bpf: Simulate branches to prune based on range violations
+From: bot+bpf-ci@kernel.org
+To: paul.chaignon@gmail.com,bpf@vger.kernel.org
+Cc: harishankar.vishwanathan@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,shung-hsi.yu@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 13 Mar 2026 23:35:37 +0000 (UTC)
 
-On Fri, Mar 13, 2026 at 03:22:03PM -0700, \Jitendra Vegiraju wrote:
-> @@ -42,13 +42,18 @@
->  #define DWXGMAC_CORE_2_20	0x22
->  #define DWXLGMAC_CORE_2_00	0x20
->  
-> +#define DW25GMAC_CORE_3_20	0x32
-> +#define DW25GMAC_CORE_4_00	0x40
-> +
+--===============5885055955342180428==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Do these live in the same versioning numberspace as DWXGMAC and
-DWXLGMAC?
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 974305ef3210..bd3bdfb6b0c1 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
-> +int dw25gmac_setup(struct stmmac_priv *priv)
-> +{
-> +	struct mac_device_info *mac = priv->hw;
-> +
-> +	dev_info(priv->device, "\tDW25GMAC\n");
-> +
-> +	priv->dev->priv_flags |= IFF_UNICAST_FLT;
-> +	mac->pcsr = priv->ioaddr;
-> +	mac->multicast_filter_bins = priv->plat->multicast_filter_bins;
-> +	mac->unicast_filter_entries = priv->plat->unicast_filter_entries;
-> +	mac->mcast_bits_log2 = 0;
-> +
-> +	if (mac->multicast_filter_bins)
-> +		mac->mcast_bits_log2 = ilog2(mac->multicast_filter_bins);
+[ ... ]
 
-The above seems to be common amongst the other two setup functions.
-Maybe there should be a helper for this?
+> +	/* Jump (TRUE) branch */
+> +	regs_refine_cond_op(&true_reg1_c, &true_reg2_c, opcode, is_jmp32);
+> +	/* If there is a range bounds violation in *any* of the abstract values in either
+> +	 * reg_states in the TRUE branch (i.e. true_reg1, true_reg2), the TRUE branch must be dead.
+> +	 * Only TRUE branch will be taken.
+> +	 */
+            ^^^^
+The comment says "Only TRUE branch will be taken" but the code
+returns 0 here, meaning the TRUE branch is dead and only the FALSE
+(fallthrough) branch will be taken. Should this say "Only FALSE
+branch will be taken"? The equivalent comment in the FALSE branch
+section above is correct.
 
-> +
-> +	mac->link.caps = MAC_ASYM_PAUSE | MAC_SYM_PAUSE |
-> +			 MAC_1000FD | MAC_2500FD | MAC_5000FD |
-> +			 MAC_10000FD | MAC_25000FD;
-> +	mac->link.duplex = 0;
-> +	mac->link.speed10 = XGMAC_CONFIG_SS_10_MII;
-> +	mac->link.speed100 = XGMAC_CONFIG_SS_100_MII;
-> +	mac->link.speed1000 = XGMAC_CONFIG_SS_1000_GMII;
-> +	mac->link.speed2500 = XGMAC_CONFIG_SS_2500_GMII;
-> +	mac->link.xgmii.speed2500 = XGMAC_CONFIG_SS_2500;
-> +	mac->link.xgmii.speed5000 = XGMAC_CONFIG_SS_5000;
-> +	mac->link.xgmii.speed10000 = XGMAC_CONFIG_SS_10000;
-> +	mac->link.xgmii.speed25000 = XGMAC_CONFIG_SS_25000;
-> +	mac->link.speed_mask = XGMAC_CONFIG_SS_MASK;
+> +	if (range_bounds_violation(&true_reg1_c) || range_bounds_violation(&true_reg2_c))
+> +		return 0;
 
-Is there any point populating link.speed10 and link.speed100 ?
-You're telling phylink that 10/100M speeds aren't supported in
-link.caps, so these speeds won't ever be used.
+[ ... ]
 
-> +
-> +	mac->mii.addr = XGMAC_MDIO_ADDR;
-> +	mac->mii.data = XGMAC_MDIO_DATA;
-> +	mac->mii.addr_mask = GENMASK(20, 16);
-> +	mac->mii.reg_mask = GENMASK(15, 0);
-> +	mac->mii.clk_csr_mask = GENMASK(21, 19);
+Also, in the commit message:
 
-This will be the third instance of this particular mii data setup.
-Please consider adding a function to do this setup.
+> regs_refine_cond_op or reg_bounds_syncreturns an ill-formed state
 
-Thanks.
+There is a missing space between "reg_bounds_sync" and "returns".
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23074156227
+--===============5885055955342180428==--
