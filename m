@@ -1,125 +1,152 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 767202D248D
-	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 22:02:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A35E83A1DB
+	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 22:30:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773439335; cv=none; b=LeqB/ZbzMU2C/oJtWN2TehcsQkjrjcknv9sM5TZrjxXCsdCEb3x1Lse6qR4BARXJg66tFFGS7IulUwy2k0Wz1tVJrdy9UgcmO0nUXw32rRh7uRm7HIarj+qHqE08Fas0LGB5e/JUudC0twYu/7Q3GB03M2hHWrNA+D/SnRhf//g=
+	t=1773441036; cv=none; b=kQqoD7WT3W1MKo68uLjW3+MRNXzYmvrArFxSAxroyTBfk/6huHKK8ZjLYz5BSx1sQJ8Zx8KRdGhl/Gf92066jlAgVVC2yoVc2m09cws62QKGn/WfPjGDWPb5aYxaDFOV4G8XfujJ+X/kQe4ut4zOXkhFHL/I3cREs9mLZWiEFd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773439335; c=relaxed/simple;
-	bh=qXvj5r7hF4JCM7PHL6P1CbcIqTrZzQBonF7UVduL/nI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=G3mHPpkQNUKPIObeT8A0BJRvZ4+0eMm4lrw1QhPPiIJ5/Fgg79PoBLd+ngm4zHT68/F+EVdQS6nPP3yZ8KpMQl9Jv+lNZRKuabtNfr+82os38MuVUKL9sjOwlj4shriHsZUDlllRU+O4KkYmNgsw2NaK4xLQHkXwPt64eCsikow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CQwvenSX; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773441036; c=relaxed/simple;
+	bh=OSIhld/8cPmcioyVfZ926MRv4gb50JYRi8mjnvQAO74=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uRpfpsTgDR44aC34rZRwy8xfyIn8jKrzhB/SqYPqs0+equflPhZgp6mxxlEEXfFf0QEhoiw8QKGxjxJeE9p4XcOLd0hc4/ZsNR5yon5lEmQCsO0mOt/6pdZ1fnYlMAwkJNyorXKWsaLp1YQDWy0rzQep23G6S5wANn4b8s0uCd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=Ff7n9r/z; arc=none smtp.client-ip=209.85.167.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CQwvenSX"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-82985f42664so1768972b3a.0
-        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 15:02:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Ff7n9r/z"
+Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-466ec4c6852so1743586b6e.3
+        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 15:30:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773439334; x=1774044134; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=qXvj5r7hF4JCM7PHL6P1CbcIqTrZzQBonF7UVduL/nI=;
-        b=CQwvenSXIHd4iS0sYbS1pvushNdYGByipYVpV3/G60rIM5Utu4KEcKTY2Xi+8vbE/k
-         z+2L2l4/bvSHocZ2RRc9O18BfurfEBm9q26aqOTw2KG6nZmqGdCcVXpk6RRePP9u6JaS
-         +lc4HFmarmUswuw/LdER/Dhf7P8jIhd/6RxoFQZgvNqf9Uy/JD+fuSEsFgOS5qCuUVPN
-         zhQYC2I8qoEABbQhUhOmYamIcCERzuierEp9K5PzSQqKtqH+DHza81G8nZ1RESiDZwib
-         AXAhjBOly4sTdAN9Eu0bL0C3icF9p7E0yf+x4i8owiaVYOdsr92NTd/MtYNi47NCjg48
-         HIUg==
+        d=cloudflare.com; s=google09082023; t=1773441032; x=1774045832; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=E4YrcG7dyAIkvfBnIr5QQD0gb9f+0O2huZFQNopL/90=;
+        b=Ff7n9r/zr+VKvyUBkUT3Z1vF/0Vy1YOUjtixiRJRd1gKvFRb08+KROWBFvvIOqyKiA
+         pM+JwvGlV/4u1uei202IMCJyYKUydAojOzYCBxLc1MSLRdCF/qwoQbzCUc5Ywq4JMPvY
+         EcrI/x+5enAu/3KfcsZwPqR8Nhzb5+qCnSsZVheSaHOeQrb7DVJGiPykjXvV9QCxSKGP
+         UJ9gibFE9AJHrvSd5j0gdbug3qeg/cDK3VEwNrTCyewV6rvWih1x9LBAavSP9xNhMxPP
+         TsP5Bnlj1bv9z4qD3mvV5fENjHU6IgXpjtHVmnaZhv9iAmSm906O1NYITYqJE/pOJNkg
+         4VdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773439334; x=1774044134;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qXvj5r7hF4JCM7PHL6P1CbcIqTrZzQBonF7UVduL/nI=;
-        b=TYGSY9Z8ua5yqyoyWv7Cl6ZnWjbMaCuQ1ZUMxakYdK0dOD8bssf5vZa2IKL7VykUdq
-         qFEn2BA5dbXW3GqN/Adwh9LAprCCPVKRKUrjA9Z5yfmb9dE7PF49NOq/05yXOump74Ax
-         iWOQa/MG9u/onGspImpCVyqAZBpZyCpqZAy1hiZsUGScrozKnUb5dYADH7dVC72eCi2P
-         loae+Ebx7Ie2v8Omc9IyjdfcExD3ubWNXxljFijdmQbtbIDMoPXn13N7cQuH3nVDNnGp
-         vTi/MiMEr+C+XNtPVY7PtdfG2ZbfXjaf70TSb1C8xuM81M+iQsJCr1OXR4vZSTxt0lH9
-         foWg==
-X-Forwarded-Encrypted: i=1; AJvYcCV4B4SUsNgy5SbyfpotI8CjBPn3Qap58WiH5wQaLzrWbkS3DglWC5WcOJc2tBFV41cjpKk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMxhFTKEn19Y5AnULCGVLxhiWiiLIaFg/t3l8Hc30KGsNgeKZq
-	V9w7BKLKX31bD81HcFm82PPV7pLNHUC5ba8MK6gYq5wsEno3EqeIoJ+3
-X-Gm-Gg: ATEYQzwtBbb+8gfTgYT0z8zpIL1iOzbf6uJqooz36jX+I+pOVdLpIWjccQc5Hn7v3LI
-	KbBhcI7bZwrURzfgUI+7UaCYSFHArb3/IP5ZjT5kCC6iBfKeIF8pUJKptk6dMeG4WVXkPo84oVK
-	WJcSccJxLR0LuCAturvsWPAKXqmiaNRrxetRsmzDHm4fm40ciavbWnTBmL5OJp4/3Wq0RbsjF5t
-	OBWn7xqBfL019WL+4z17j5jN3gvIOXl0dUdBdD2so4AOJNjwUZwpmL0XZHDb/+7uyD2hgsy1lfl
-	EfEG7f7MOsXprMYX+3NEepY/KhkRk4foZRQKKGSlyCYZecMKdFh8pv6MSGXmEbj/AZHNtY8NY/a
-	+1RAMZpkizBCuvVC5hDkt0HeK5R2DOoauG7Up8Dr7iKCVTw0wLSTp5+Y4+mllv1/yHfsWhxAf0s
-	4IK2J1HXHWDvARzGZh6IcN5VG/lz1NdKN6LNpSnwH9aN5H/dHuqpw=
-X-Received: by 2002:a05:6a00:4404:b0:81c:8d47:33ff with SMTP id d2e1a72fcca58-82a198d68f7mr3763476b3a.47.1773439333623;
-        Fri, 13 Mar 2026 15:02:13 -0700 (PDT)
-Received: from [192.168.0.56] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82a072612e2sm8948335b3a.21.2026.03.13.15.02.12
+        d=1e100.net; s=20251104; t=1773441032; x=1774045832;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E4YrcG7dyAIkvfBnIr5QQD0gb9f+0O2huZFQNopL/90=;
+        b=Tk9eB3rCCwf4eaAim0oQJJJ4A6EYSEeAKNYQ3TZjRJAexI/hXlW4R3zht/mgs5PdUV
+         g7ulGz2QpOB0U0Ax6238bQmjUL8wpk5Kj2RGhFC+OK2zBnpbgK1BMf5skQioZhjcjuCy
+         EgWwscmutH9VCcAyk39ei2UZMp/7e7G6WsD51KxqymPePh6P/7+amjcLxBYqyqWP/mGF
+         ADdZI+p0/WbasFWAuBk94UzqhnRRR8rNGr+r/fC+ICqUdinJ+uoyxxWQvqNeQBIv8Myd
+         t/GnYF2ohzkqd9vZv2WH+mk4aIHPbh7A0yH2VDuQKIwHuN+C296RUpu+Y94VSFHk4oyV
+         ZQkw==
+X-Forwarded-Encrypted: i=1; AJvYcCXDk6SmKSJcPX3czsaAwG6hKg2aOP2zESz5/7mFM2zJuzvV744Yr4KLDJI1XF6hTkKxY2w=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6oeLKxUDrVYnNwEY4aEZPmxeoxltNx7DNBZIBo4RSoQVyU+1P
+	OoXRIpWToOoYKQpKdGeN5HYfUh/dVe5MFmEYxqbMt1WIBQ8bTPWiFD42mDXM7zrt1Ow=
+X-Gm-Gg: ATEYQzwNN4f4oWTB14E8/S2XLejazr+/+cEOox/GGg885bVEUaK7+zpDq2MOZv6b+yR
+	yZXxx/KtZcUvYR/CkXrkAYYMw507b1wRocqrnGvw3oc5IMv0ts7RdAHViUmbDTtUoTBDsc07CvN
+	cyF/c7TQJdp1Z9yl97JnnIECiJQmAdTdZbFvZmNLgYTwbV8sSrdNjPJh1H2IhWTxwSOSTH1sTHK
+	4sqrsv6tIppIsROVWUiYHv0xbVE84KU952TJ1CuLfk+yDZLMh+YBNHfghH/HT+jxWwBjxILs30v
+	JB5cG/FwySRGZbBIAjxS8J/339W9EonvbXUX5cQv+AtpjMyWJAQbFhouBDjbux21ML5ybRafm5D
+	nos0NSmM57mhDWrn82KVGf18FFC3IYArwb/KY7+DWOKWbUw3Eo6c2jB64OBzjfoT+t4oGLISi7W
+	GYVL67P482
+X-Received: by 2002:a05:6808:23d1:b0:467:15ad:9de5 with SMTP id 5614622812f47-467570a27f2mr2598220b6e.13.1773441032469;
+        Fri, 13 Mar 2026 15:30:32 -0700 (PDT)
+Received: from 20HS2G4.. ([2a09:bac1:76c0:540::22f:7d])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-467342fab49sm5408516b6e.16.2026.03.13.15.30.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Mar 2026 15:02:13 -0700 (PDT)
-Message-ID: <ede050cd3a7ac94a839c2960a8a09b1dcd1f0777.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 0/3] Optimize bounds refinement by
- reordering deductions
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>,  Shung-Hsi Yu <shung-hsi.yu@suse.com>, Paul Chaignon
- <paul.chaignon@gmail.com>, bpf@vger.kernel.org
-Date: Fri, 13 Mar 2026 15:02:10 -0700
-In-Reply-To: <cover.1773401138.git.paul.chaignon@gmail.com>
-References: <cover.1773401138.git.paul.chaignon@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
+        Fri, 13 Mar 2026 15:30:30 -0700 (PDT)
+From: Chris J Arges <carges@cloudflare.com>
+To: Joe Damato <joe@dama.to>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Andy Gospodarek <gospo@broadcom.com>,
+	Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>
+Cc: Chris J Arges <carges@cloudflare.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH net-next v4 0/6] bnxt_en: Add XDP RSS hash metadata support
+Date: Fri, 13 Mar 2026 17:27:30 -0500
+Message-ID: <20260313223029.454755-1-carges@cloudflare.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, 2026-03-13 at 12:36 +0100, Paul Chaignon wrote:
-> This patchset optimizes the bounds refinement (reg_bounds_sync) by
-> reordering deductions in __reg_deduce_bounds. This reordering allows us
-> to improve precision slightly while losing one call to
-> __reg_deduce_bounds.
->=20
-> The first patch from Eduard refactors the __reg_deduce_bounds
-> subfunctions, the second patch implements the reordering, and the last
-> one adds a selftest.
->=20
-> Changes in v3:
-> =C2=A0 - Added first commit from Eduard that significantly helps with
-> =C2=A0=C2=A0=C2=A0 readability of second commit.
-> =C2=A0 - Reshuffled a bit more the functions in the second commit to impr=
-ove
-> =C2=A0=C2=A0=C2=A0 precision (Eduard).
-> =C2=A0 - Rebased.
-> Changes in v2:
-> =C2=A0 - Updated description to mention potential precision improvement a=
-nd
-> =C2=A0=C2=A0=C2=A0 to clarify the sequence of refinements (Shung-Hsi).
-> =C2=A0 - Added the second patch.
-> =C2=A0 - Rebased.
->=20
-> Eduard Zingerman (1):
-> =C2=A0 bpf: better naming for __reg_deduce_bounds() parts
->=20
-> Paul Chaignon (2):
-> =C2=A0 bpf: Avoid one round of bounds deduction
-> =C2=A0 selftests/bpf: Test case for refinement improvement using 64b boun=
-ds
+This series adds XDP RSS hash metadata extraction support for the bnxt_en
+driver and includes selftests to validate the functionality. I was able
+to test this on a BCM57414 NIC.
 
-This note is mostly for Alexei,
+Patches 1-4 implement the driver support:
+  - Patch 1 adds bnxt_xdp_buff to wrap xdp_buff with
+    pointers to the hardware RX completion descriptors and the
+    completion type. This is similar to other driver implementations.
+  - Patch 2 adds xmo_rx_hash callback for CMP_TYPE_RX_L2_CMP completions.
+  - Patch 3 moves bnxt_rss_ext_op to bnxt.h
+  - Patch 4 adds handling for CMP_TYPE_RX_L2_V3_CMP completions
 
-Me an Alexei discussed converting scalar tracking to cnums and whether
-we should proceed with this line of work in that light.
-After some additional tinkering, I think we should stick to what we
-have and land this patch-set. I'll share details on cnums later in a
-separate email, but tldr is that cnum representation is strictly less
-precise compared to combination of signed and unsigned ranges
-(probably this was obvious in the hindsight).
+Patches 5-6 add selftest coverage:
+  - Patch 5 refactors common BPF map helper functions out of the
+    existing xdp.py selftest into a shared net/lib/py/bpf.py module.
+  - Patch 6 adds an XDP metadata selftest that loads an XDP program
+    calling bpf_xdp_metadata_rx_hash. The test skips on devices without
+    xdp-rx-metadata-features.
 
-Thanks,
-Eduard
+Changes from v3: https://lore.kernel.org/netdev/20260306230600.1628196-1-carges@cloudflare.com/
+  - split out bnxt_rss_ext_op into header
+  - address RCT issue
+  - rebased on net-next
+
+Changes from v2: https://lore.kernel.org/netdev/20260303024510.644962-1-carges@cloudflare.com/
+  - bnxt xdp: actually fixed RCT issues
+  - bnxt xdp: Added patch 3 to handle CMP_TYPE_RX_L2_V3_CMP completions.
+
+Changes from v1: https://lore.kernel.org/netdev/cover.1772211065.git.carges@cloudflare.com/
+  - selftests: moved tests into net/hw
+  - selftests: fix pylinter errors
+  - selftests: add check for no error count
+  - bnxt_xdp: followed RCT for variable declaration
+  - rebased on net-next
+
+Chris J Arges (6):
+  bnxt_en: use bnxt_xdp_buff for xdp context
+  bnxt_en: Implement XDP RSS hash metadata extraction
+  bnxt_en: Move bnxt_rss_ext_op into header
+  bnxt_en: Implement XDP RSS hash metadata extraction for V3_CMP
+  selftests: net: move common xdp.py functions into lib
+  selftests: drv-net: xdp: Add rss_hash metadata tests
+
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c     |  47 +++--
+ drivers/net/ethernet/broadcom/bnxt/bnxt.h     |  19 ++
+ drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c |  57 ++++++
+ drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h |  10 ++
+ .../testing/selftests/drivers/net/hw/Makefile |   1 +
+ .../drivers/net/hw/lib/py/__init__.py         |   2 +
+ .../selftests/drivers/net/hw/xdp_metadata.py  | 146 ++++++++++++++++
+ .../selftests/drivers/net/lib/py/__init__.py  |   2 +
+ tools/testing/selftests/drivers/net/xdp.py    |  95 +++-------
+ .../testing/selftests/net/lib/py/__init__.py  |   2 +
+ tools/testing/selftests/net/lib/py/bpf.py     |  68 ++++++++
+ .../selftests/net/lib/xdp_metadata.bpf.c      | 163 ++++++++++++++++++
+ 12 files changed, 513 insertions(+), 99 deletions(-)
+ create mode 100644 tools/testing/selftests/drivers/net/hw/xdp_metadata.py
+ create mode 100644 tools/testing/selftests/net/lib/py/bpf.py
+ create mode 100644 tools/testing/selftests/net/lib/xdp_metadata.bpf.c
+
+-- 
+2.43.0
+
