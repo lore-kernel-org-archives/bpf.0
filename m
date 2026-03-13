@@ -1,71 +1,84 @@
-Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3B23A6F1C
-	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 14:50:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27FA136167E;
+	Fri, 13 Mar 2026 15:56:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773413443; cv=none; b=uXfIoj3FPzEEkD+NOPc9St16jmx8RhuO+Zi8U3EuTwSgx3RzQTrb/KJEqNqbNiFAd8E30h0TrhCSY/it+Z1bVHMotyTnLn+0/XUa3S/eNmm6lyDrek8q6bT+Pz2ZcC7XsvhCJXCZjU2VqsEbd5MxCltC+px7ZJXNdl54CZSqB3I=
+	t=1773417364; cv=none; b=TzzqrMNXI0ofnCueq177hAYAieC04qRtRYYb9Lr1MGfyEx+HzdX4S87xcFM8SEBpcrbayiirUY/eqaB319IevTn9tRfEI86OH1cELHDsGN46lUsx8NJgQnjaWEnqTIvc+Dq2o/dA7L7T1+rmGBlj94au5GLsNpRvfZIgLOTq6Wk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773413443; c=relaxed/simple;
-	bh=jTpNmNzq5hb9oySY4Wy9mvNAKspFAqshWPXkSwe0BYM=;
+	s=arc-20240116; t=1773417364; c=relaxed/simple;
+	bh=6ooeKtjYil+mRAJH+ITgn5AMUBCanAMgyseJSfl/7Vk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mqYL+Ro0QNMNQS5w5q8T+TXSOAJqBOfw7+fIfB9oGDVfIViL6U/5oR+0Q+k5yGGULG+L6BehdJnVsHfhY//pbfB1I6raHZRU+AKEv87+Cg9eTpTc4ccx1pNXd59Aj8Y6dKlmRo6HyNzJZI81kFMkRTw01CHNdQJ/OKgDhRiiwks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BO2A4zvJ; arc=none smtp.client-ip=74.125.82.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BO2A4zvJ"
-Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-2be4781d2baso6271040eec.0
-        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 07:50:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773413441; x=1774018241; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+AMQmdUQA1m4tr/S/j/CmgmciqopOGOeSDwB5uJ/htY=;
-        b=BO2A4zvJMnga7p1LULepnyLlAn0RdzrgE00Fjfgc72GbNvjfM9jWO21PTtLOFdVTWS
-         t+zHP8+CSyVDSc9nkMdszMNkidPwICAoVLXdqyYnBDREiKLvUtWsCgQw9oroAf2KWiZm
-         OTvDrNK8YZxmRrNai1Ejh5eOccm2JBgx7tIzHm9uAdwT+jFzlrN1xBof1Q/VblFNTEwf
-         /pW3ITx/VZR6lx3VKfICk3ZEWIurHLwL3trhNsStV5aL5N5IlAe7nDoVqQtNTkc+lv8s
-         VqnL1rj10/2s5Jz9/2tJ0s8nRs4KofOdFoN5i5IgXSVfIIS33sJhHnQRajzU2+lEvko7
-         n2LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773413441; x=1774018241;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+AMQmdUQA1m4tr/S/j/CmgmciqopOGOeSDwB5uJ/htY=;
-        b=bsanZnWdsTiAfoJLk2gp7DH3qwtZHkWNjBqWo9ge8zpItg8KyteiMTX6JDRrcKUX+6
-         Ccl9mwflQlylOq1FAJGKIK4eCrQI1VTgTEzzSnSpVfEEYV1sn9N4xgi03P01eD0tTS1Y
-         UZxTXPwaKccJbqqhCMQaQzg0sSAeEsUVDoWlFaSfgJNmgW5npMapACSx/TgM8V2IuBe9
-         qRonXRm2oFWa+XTokaxA11Vn/JFfaXIKHJbSIJztHBnsx2ULHGycCZlSxETiIMUl4NUX
-         YDruMIomfmMH6pfjg6N5ZZVvlA2x9GKyt5XMNGqaZZaiKRJSH34JYVaeYbaJ3NJ199jf
-         Oo7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUKSRoqXjN+5jFMfJdJpMy6f/YO6rGTDjTqMEgjpIWNDWdCdj3yjX2DwMS8NGP3nZDSbg8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2+z4A5vGX7Us5CsEGwO+0Y+5N3bmWdO0VKMDXnF241JM7lEcs
-	IKo9lfMEptDrZ8qCGtaBUHt5qth1ztcZQ+7ASmvZOtMiPzdEww9jyGg=
-X-Gm-Gg: ATEYQzxPzvyo3lfStSOrrVKK0US2Q9a7nFrS27dd9rojz/nkhX/q8Ezd4lDt/vNh9Oi
-	zEO1XR4XvHx0SVag6wgVB+gAKN/0nWh+9d2hJ8iXaSGJxzCAzYzt9f+oovCPtQUigf5QjfCeYr9
-	ioRjFURKt/jMNzhPYiU1wlbRD9HaGpPW/7vftOMVn6QWZOndZGBtBXpKthWhLM/5Q+RpG8rAFrY
-	ad8vCG50WQoulyV4nTirN6Yu8kjsDsoMRmnEb+31IUW5SDo6xDgz7E3ut6Ua6l33IOJl8jOnDeD
-	iTNIrQXyXm+Tq5vk841uZPv7ljM+1FOytVBOtt1CRa219kGp6EiP/1qPlXHv4kwGYEvBBVnYe1Y
-	DPrRO/WN/w8aiO1iqkOrQ4ydfPfIuslS72BUI/yiQzV97p1aYeyLFKxO6O9cA7/0Jnc2r3mMdzV
-	sw9cOTPFxtq5/WWwZp21nm5URHTahRWN9lItFWcZOkS+8KEkFGZmqxCz7l2Ip9rj3E/qjbK4rxn
-	a9mKkWtprZ9SWiXclW0twnefKnw
-X-Received: by 2002:a05:7300:1893:b0:2bd:f280:58d4 with SMTP id 5a478bee46e88-2bea541a70cmr1860057eec.6.1773413440904;
-        Fri, 13 Mar 2026 07:50:40 -0700 (PDT)
-Received: from localhost (c-76-102-12-149.hsd1.ca.comcast.net. [76.102.12.149])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2beab3a1117sm3382462eec.3.2026.03.13.07.50.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Mar 2026 07:50:40 -0700 (PDT)
-Date: Fri, 13 Mar 2026 07:50:39 -0700
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com,
-	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org
-Subject: Re: [PATCH v2 net-next] xsk: remove repeated defines
-Message-ID: <abQkPzFIjAowYsrF@mini-arch>
-References: <20260313111931.438911-1-maciej.fijalkowski@intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=oQ8Bm8VssnNaPLeG7xFDYsJqIGfwvOJ5sW+bj/AbDvF/+B/0CxMKwq4Q99MVMe0DjSG1Sw3zNrSVBwKIzVpc8QBn/9WQ+gHepmlBaTR9suEEovdgPoTuCMIev8KZlmZpW6/1+YpWT+B5I+51t512U6XDBnlgNwqQ1nLFxSOMvME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3D61D176A;
+	Fri, 13 Mar 2026 08:55:56 -0700 (PDT)
+Received: from localhost (e132581.arm.com [10.1.196.87])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 19FD93F73B;
+	Fri, 13 Mar 2026 08:56:02 -0700 (PDT)
+Date: Fri, 13 Mar 2026 15:56:00 +0000
+From: Leo Yan <leo.yan@arm.com>
+To: Ian Rogers <irogers@google.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
+	Quentin Monnet <qmo@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	William Breathitt Gray <wbg@kernel.org>,
+	Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Kent Gibson <warthog618@gmail.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Long Li <longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
+	Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, bpf@vger.kernel.org,
+	linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v4 05/30] bpftool: Avoid adding EXTRA_CFLAGS to
+ HOST_CFLAGS
+Message-ID: <20260313155600.GP4153946@e132581.arm.com>
+References: <20260311-tools_build_fix_zero_init-v4-0-9e35bdb99cb3@arm.com>
+ <20260311-tools_build_fix_zero_init-v4-5-9e35bdb99cb3@arm.com>
+ <CAP-5=fUOYsnbB4B0khUetRWOFMtHuO6_ESG30b1ZW01n_-gt6g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -74,14 +87,53 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260313111931.438911-1-maciej.fijalkowski@intel.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fUOYsnbB4B0khUetRWOFMtHuO6_ESG30b1ZW01n_-gt6g@mail.gmail.com>
 
-On 03/13, Maciej Fijalkowski wrote:
-> Seems we have been carrying around repeated defines for unaligned mode
-> logic. Remove redundant ones.
+On Thu, Mar 12, 2026 at 10:19:01AM -0700, Ian Rogers wrote:
+> On Wed, Mar 11, 2026 at 1:30 AM Leo Yan <leo.yan@arm.com> wrote:
+> >
+> > Prepare for future changes where EXTRA_CFLAGS may include flags not
+> > applicable to the host compiler.
+> >
+> > Move the HOST_CFLAGS assignment before appending EXTRA_CFLAGS to
+> > CFLAGS so that HOST_CFLAGS does not inherit flags from EXTRA_CFLAGS.
+> >
+> > Acked-by: Quentin Monnet <qmo@kernel.org>
+> > Signed-off-by: Leo Yan <leo.yan@arm.com>
+> > ---
+> >  tools/bpf/bpftool/Makefile | 8 ++++++--
+> >  1 file changed, 6 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+> > index 519ea5cb8ab1c0ee31acc67fc5f96b40e21005c2..3e7d8359e1b2a81a29a47544be8539e3b191a0e8 100644
+> > --- a/tools/bpf/bpftool/Makefile
+> > +++ b/tools/bpf/bpftool/Makefile
+> > @@ -81,6 +81,12 @@ CFLAGS += -DPACKAGE='"bpftool"' -D__EXPORTED_HEADERS__ \
+> >  ifneq ($(BPFTOOL_VERSION),)
+> >  CFLAGS += -DBPFTOOL_VERSION='"$(BPFTOOL_VERSION)"'
+> >  endif
+> > +
+> > +# This must be done before appending EXTRA_CFLAGS to CFLAGS to avoid
+> > +# including flags that are not applicable to the host compiler.
+> > +HOST_CFLAGS := $(subst -I$(LIBBPF_INCLUDE),-I$(LIBBPF_BOOTSTRAP_INCLUDE),\
+> > +               $(subst $(CLANG_CROSS_FLAGS),,$(CFLAGS)))
+> > +
+> >  ifneq ($(EXTRA_CFLAGS),)
+> >  CFLAGS += $(EXTRA_CFLAGS)
+> >  endif
+> > @@ -88,8 +94,6 @@ ifneq ($(EXTRA_LDFLAGS),)
+> >  LDFLAGS += $(EXTRA_LDFLAGS)
+> >  endif
+> >
+> > -HOST_CFLAGS := $(subst -I$(LIBBPF_INCLUDE),-I$(LIBBPF_BOOTSTRAP_INCLUDE),\
+> > -               $(subst $(CLANG_CROSS_FLAGS),,$(CFLAGS)))
+> >  HOST_LDFLAGS := $(LDFLAGS)
 > 
-> Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-> ---
-> v2: remove another repeated define (Stan, Paolo)
+> Should HOST_LDFLAGS be similarly moved? Otherwise, it seems target
+> flags in EXTRA_LDFLAGS will be added for the host.
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+Though this series is irrelevant to LDFLAGS, I am fine to move
+HOST_LDFLAGS together.
+
+Quentin, how about you think?
