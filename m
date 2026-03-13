@@ -1,75 +1,63 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E174179CD
-	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 11:43:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AD653914E7;
+	Fri, 13 Mar 2026 12:12:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773402192; cv=none; b=oBOP7lNMQTYwkAq/OvK/mpTaimqgldkZpDTJckd8NNk7EZ0nyA/j6XP5gvavhSLV/DL9RIGASsSQs9EX2uZ0KSmTkuZTHT2YWqHd9RXuOgF4NTgVpVZCOSJu0zvgdPxiOwzraBN1xZQvPN7++n9e/GsfvZTxSmkndMfgeouyZtU=
+	t=1773403972; cv=none; b=TuLTHGtjX5k3engj8UhLBNCv+GbBXfLyLd1PqWhudzf2hzXPcQWH5GTXTyrNli/jTvKtFLyFrPimde/w7kToCtj9JGRKCwH8vltDZfDuMnaaeSepgFZlSey+c4cjei3ei5fWbBbaFuIrW4P15ZoVjdU2b3dFArb3+uk2ddg8FnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773402192; c=relaxed/simple;
-	bh=cTLzwqLuce6s/KaEYrNF72CIARjRevIOt5nVP4quDQk=;
+	s=arc-20240116; t=1773403972; c=relaxed/simple;
+	bh=WRdpW/rDTddEGMXURl4BSpPxlDy3sE/k4Qjo8ZFsYv4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AL0M0GznaYvnnQ6kbgev5CTY05YqGz3RBZXexHld9hkuooDZbSjOW4FZLZmJDtxZsnkS+IHJlIQy3DlUbOjiefXE7dcNeIZ273T1HaivOr6I0OEWHa3oyM66+aCN798zFqO/BMQ7oRhL87vokGBzDk/t2FTpUz4Rt8UtjP2AOvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gz4ekrpG; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=PJBR/yZ7yhke1mtKnU54FJqbFSfvyk6avrJn8JojfYQPlTsCPc7FIJFThxp60TwRlQf9j+5C7QgrbjVoLRY8rdtuNn9uCwIWRPFUocpWB5J/kt3qpwZHvHg6edxju7YWx2+TAktPDwdqY1cdClBIOpRBbQwqbRD85vV2iGpA+9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=NSW/Ipve; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gz4ekrpG"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4853f2826f7so20205995e9.1
-        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 04:43:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773402189; x=1774006989; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KGGeg1/sH0c5V5ArF91KXy/Lv7DSS3m8tyfjlPavfXY=;
-        b=gz4ekrpGeAuRBdmVKUUkN85YeCA1PQerujWFztgtd1gQHRoSsmJ7tL0pxvnNYOPfVc
-         xdsJuXGZcOmTc9POBuXuLaxfW2S11NDI9gkxHKFBWlKvS6SjUIueMiddjAJi/tkeQaWH
-         W2KZIxO/il5BsfGgt2T8L+XQArU/Jl0XWqx3DCwpoviiyAMJ1L3aRP3DNJaAAnyKvBn6
-         DJEWZzpMcBJdvhEtM518REAwk9FtvPZfnVHhebN2fxv8l09iMKymRrnFLGZXLKWB7SAw
-         XDHP+4rXt5U/xWKShOwJFcOjZ84FRwT3JXK08ofODbiIOfIMwyERk442MrBtvBh4StOD
-         sgpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773402189; x=1774006989;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KGGeg1/sH0c5V5ArF91KXy/Lv7DSS3m8tyfjlPavfXY=;
-        b=khtQcb2jd1uBUp+Dt8sQCGjxz/19x02w5WjWGyDbv343bLxuWDdkEdyWe+SQFh8O3/
-         eIRvBnIAt3WtwJ/Si65zt5b/c9T+or/QZe8VPY+UzyI/V823REJ1KqjUfGfGw7ahq2wt
-         ziQr2DpXCtgGFtJxWHjwNft9kW9kzBZU7+aUqrx0hjDJPKoeNxumVPyrMJlyaXwsl9Tl
-         ZUk5WvnCrwzMk9yazhVcEA/I7LhZ0X+3vxGq0kXalsO8k7hEmWQ1g7fz6sGCQPj+vU+n
-         ykyE+ONue0zs3Xtu4eGVaV6gsNvFCK97VIp24oIqamUPwB5nGcTU98Y11DQIMWfD3qxK
-         hIKQ==
-X-Gm-Message-State: AOJu0YyGM5uNKXn6ticydA/YCbE/K/OYw9xE7ynMudqQsFAmCkplHUno
-	tHVyVX2P11MVTHnuLW0yQfeuLz8O31UeFQnVO4rNH6PDyVz/7uXmkRcSMdkD201U
-X-Gm-Gg: ATEYQzxPcpls8RVevEZF4zSCGBEmA5EfxMktd+cewc1E4smvrgGEjMnN6TCADqCrTH1
-	6mOZ2pgA4XUxfzOwHcNUMz0RlNrqEllN7dlAdoyftcXkAzaxubGHQey3wupcVH4gnTM9FSsAtMm
-	eAQVMjnIhC0DWoLMUpaRDaD5f5xDdb9mWZCH0zxHGf802wXrSMPW77kQse31rOTtocOApzyxZVx
-	oeO5WAPndbQ/jJg3gvXQbhTzPIeTd/up3Kgn9knkLwX9PTUze3Bl3Vm52mLHo+ZlNkPXDh7iJaE
-	bxXvNkNkRhxi7lSEsaQaJ2KEaGUcCVGLFgz8P09z+x66aqYY7UbvHFA2RWx0v568UyrFAja5PK5
-	TTpY0pJcsKiMFtVS6fcgOGcc6uTvZ782gcDR3nItMNF4BpPobOAg+lCBPV2B0wqRxXQ5Gv+4lEm
-	QfMZuYuZBHztDmNR73Ta73aaah0rMY2djr3Nt+X9UTyPFHolPtqCxNrGXXb6GO/HrVVBxB4Vf2U
-	VQx/SSS3rIJhzS0u0RaOLOdgg0av+jSz9cD1U0UXLzOhFHoKgOcqtIOdTS0bfgQwmuH550pLgBH
-	V0vl7eIwSsA=
-X-Received: by 2002:a05:600c:1d1a:b0:485:2ce2:4c8a with SMTP id 5b1f17b1804b1-485566cfb00mr43880585e9.1.1773402189110;
-        Fri, 13 Mar 2026 04:43:09 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e001bfc1843b6ac5345.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:1bfc:1843:b6ac:5345])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4854b5e912fsm547117595e9.2.2026.03.13.04.43.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Mar 2026 04:43:08 -0700 (PDT)
-Date: Fri, 13 Mar 2026 12:43:07 +0100
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
+	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="NSW/Ipve"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=yqJfjj5bSFwQr78REbDblBhmHQrXei/rYwDnGeis3LI=; b=NSW/IpveyLpEwFh9iVvLICuEa/
+	V5L5gDT9bi0fyQok+5GH3TDAHnytb8vPzUXEWkFPt8n/4/rBGmdP+V24Z83zp67hvy6IWfzXGZryL
+	BZosecN7q0b5gjVntuE6X1OzPFKHoAa2RfBaKV2DrlBF67Q/bDS8O+0E7wYq0ngi3AlAH7bmW3LkI
+	ud8QqeD9XJoFouriJkrANerEpg1UDnJrgyNvFW+VTa/O2Tue9uN8T8okEXm84tmjkiZXYb9RIIs3H
+	pBQTdAjFiHv9s4DuM4kvgNOl4FL290pQ56RNH9KG2AB0DYDBUMDtzTQ1UL/RN4gOUA2qAeZLuDRoL
+	3S0HGyHA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:46278)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1w11Nl-000000000tT-1RFx;
+	Fri, 13 Mar 2026 12:12:45 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.98.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1w11Nh-000000008Cx-2mts;
+	Fri, 13 Mar 2026 12:12:41 +0000
+Date: Fri, 13 Mar 2026 12:12:41 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, bpf@vger.kernel.org,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Subject: [PATCH bpf-next v3 3/3] selftests/bpf: Test case for refinement
- improvement using 64b bounds
-Message-ID: <622dc51c581cd4d652fff362188b2a5f73c1fe99.1773401138.git.paul.chaignon@gmail.com>
-References: <cover.1773401138.git.paul.chaignon@gmail.com>
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>,
+	Stanislav Fomichev <sdf@fomichev.me>
+Subject: Re: [PATCH net-next v3 11/15] net: stmmac: add helper to get
+ hardware transmit descriptor
+Message-ID: <abP_OfmKyiVtaupH@shell.armlinux.org.uk>
+References: <abPdzyXJHqt5v3bi@shell.armlinux.org.uk>
+ <E1w0zBR-0000000D4Fy-3tXg@rmk-PC.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -78,95 +66,20 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1773401138.git.paul.chaignon@gmail.com>
+In-Reply-To: <E1w0zBR-0000000D4Fy-3tXg@rmk-PC.armlinux.org.uk>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-This new selftest demonstrates the improvement of bounds refinement from
-the previous patch. It is inspired from a set of reg_bounds_sync inputs
-generated using CBMC [1] by Shung-Hsi:
+On Fri, Mar 13, 2026 at 09:51:53AM +0000, Russell King (Oracle) wrote:
+> Provide a helper to get the hardware transmit descriptor that takes
+> account of whether extended format and TBS are being used, returning
+> the base struct dma_desc pointer. This avoids multiple instances where
+> these tests are open coded.
+> 
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 
-  reg.smin_value=0x8000000000000002
-  reg.smax_value=2
-  reg.umin_value=2
-  reg.umax_value=19
-  reg.s32_min_value=2
-  reg.s32_max_value=3
-  reg.u32_min_value=2
-  reg.u32_max_value=3
+Damn it, I merged the fix for the AI review on this patch into patch
+13 rather than this patch. :/
 
-reg_bounds_sync returns R=[2; 3] without the previous patch, and R=2
-with it. __reg64_deduce_bounds is able to derive that u64=2, but before
-the previous patch, those bounds are overwritten in
-__reg_deduce_mixed_bounds using the 32bits bounds.
-
-To arrive to these reg_bounds_sync inputs, we bound the 32bits value
-first to [2; 3]. We can then upper-bound s64 without impacting u64. At
-that point, the refinement to u64=2 doesn't happen because the ranges
-still overlap in two points:
-
-  0  umin=2                             umax=0xff..ff00..03   U64_MAX
-  |  [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]      |
-  |----------------------------|------------------------------|
-  |xx]                           [xxxxxxxxxxxxxxxxxxxxxxxxxxxx|
-  0  smax=2                      smin=0x800..02               -1
-
-With an upper-bound check at value 19, we can reach the above inputs for
-reg_bounds_sync. At that point, the refinement to u64=2 happens and
-because it isn't overwritten by __reg_deduce_mixed_bounds anymore,
-reg_bounds_sync returns with reg=2.
-
-The test validates this result by including an illegal instruction in
-the (dead) branch reg != 2.
-
-Link: https://github.com/shunghsiyu/reg_bounds_sync-review/ [1]
-Co-developed-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Signed-off-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
----
- .../selftests/bpf/progs/verifier_bounds.c     | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-index ce09379130aa..3724d5e5bcb3 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-@@ -2037,4 +2037,37 @@ __naked void signed_unsigned_intersection32_case2(void *ctx)
- 	: __clobber_all);
- }
- 
-+/* After instruction 3, the u64 and s64 ranges look as follows:
-+ * 0  umin=2                             umax=0xff..ff00..03   U64_MAX
-+ * |  [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]      |
-+ * |----------------------------|------------------------------|
-+ * |xx]                           [xxxxxxxxxxxxxxxxxxxxxxxxxxxx|
-+ * 0  smax=2                      smin=0x800..02               -1
-+ *
-+ * The two ranges can't be refined because they overlap in two places. Once we
-+ * add an upper-bound to u64 at instruction 4, the refinement can happen. This
-+ * test validates that this refinement does happen and is not overwritten by
-+ * the less-precise 32bits ranges.
-+ */
-+SEC("socket")
-+__description("bounds refinement: 64bits ranges not overwritten by 32bits ranges")
-+__msg("3: (65) if r0 s> 0x2 {{.*}} R0=scalar(smin=0x8000000000000002,smax=2,umin=smin32=umin32=2,umax=0xffffffff00000003,smax32=umax32=3")
-+__msg("4: (25) if r0 > 0x13 {{.*}} R0=2")
-+__success __log_level(2)
-+__naked void refinement_32bounds_not_overwriting_64bounds(void *ctx)
-+{
-+	asm volatile("			\
-+	call %[bpf_get_prandom_u32];	\
-+	if w0 < 2 goto +5;		\
-+	if w0 > 3 goto +4;		\
-+	if r0 s> 2 goto +3;		\
-+	if r0 > 19 goto +2;		\
-+	if r0 == 2 goto +1;		\
-+	r10 = 0;			\
-+	exit;				\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
 -- 
-2.43.0
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
