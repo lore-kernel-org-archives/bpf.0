@@ -1,119 +1,75 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CB7E3DAC02;
-	Fri, 13 Mar 2026 18:04:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 667983DDDB0
+	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 18:32:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773425066; cv=none; b=lHxX2Fweh/ccb0w5WDptFaFEpFKLenMCbFZmXn/Xgpy1y5VLJUWsu9BLiZ0GRl7o0hA8OGbF52FkJhB23VZHGHMk793l6vGM4j6qZaoKuswRE17V1TacyP/I3Q0pSHd24vSVX5YesKsLJBNhjfC5GXOisiDybVgxjgErP6+b+xw=
+	t=1773426729; cv=none; b=BK71AXADvObpT2M/key94EtBhSGEDZK64edCHUqilyef4dnlEp+HZSheK6yiYdeojPtCzXyQQ6jfhsrvRQfEq8xU0qf91oCxQT1OZ4WtBUG4eBEa+Jqdy4sS9OW2KKl706d1vBvL6x/Yutc60xlTigFvpIsB33jv/Nr4dtJ9UM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773425066; c=relaxed/simple;
-	bh=/hJzZqLtW90/z2cs76iSHZO9bAMYHyE+DmDY/xzj7dk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UIeL0k8lmvhBtAFjtuWOS2CrBGJXElupRmu/p0XVLvGm5xkzalb7dnXVVUPDqgc8lN4gvNUFSdFufFmKofAVtaMEgXyASJI86adkDc3uU2GKD4s0yZnTvSnqP0ePFW4w0SWouGDcfZKX3Mn/RwV3Hc7ekMy0P6BcGrmqEGZPWyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JrLB9pUH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773426729; c=relaxed/simple;
+	bh=AaQFuMvnjyDfkeAZUTpVvS2snrH40JPIo9mAFraFUFE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hYdMh7EgpcmhZ4KuYWC+Sa6KOEQ24ob3FX9dME648TPABFI6/VRiiiD8tFxQ7+j7dhncVtIridY7p2TKUqQFsbzDm1ik+CX5TNGir8p5urezDMCuT8I8i5i33G0VUpKPWVo7Z6NJUJigEeYPITr9C0Yi3lQlid/9WlUGeLrr8xI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZCXF5YQk; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JrLB9pUH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE4C5C19424;
-	Fri, 13 Mar 2026 18:04:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773425065;
-	bh=/hJzZqLtW90/z2cs76iSHZO9bAMYHyE+DmDY/xzj7dk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=JrLB9pUHNrt7KrF2ESCD69HTOOsFnghTyF3hfod84m2fJzISUaRXcJMj8j0gCj87T
-	 /FbVMfiQ1z4mScDvxuzJ3Qd1BJZRn6t/FtTevOpNUzDX+EA43gN1h5zbJVnEUZYewn
-	 aLg6VnPMouUcvQ9ZUfTgVpZlxubVFx5BEqv2imL01qr+WG4DSRM+c/wlFs9OpyTE8I
-	 0kxS3JAqrVNL/PW2793MrCCGVQUISPb0zs5TGFWrJQmcplYXdqCxf1FxP0bOoq3KxN
-	 05JgN2KmGnU4oLRxa8wyustIsQZWr+hGXkj/AWw/sTAQFEV3pktW0ddJfXxFutCe5A
-	 aFaqWB7BeTLeg==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: bpf@vger.kernel.org
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	Puranjay Mohan <puranjay12@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Leo Yan <leo.yan@arm.com>,
-	Rob Herring <robh@kernel.org>,
-	Breno Leitao <leitao@debian.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-perf-users@vger.kernel.org,
-	kernel-team@meta.com
-Subject: [PATCH bpf 3/3] selftests/bpf: Adjust wasted entries threshold for ARM64 BRBE
-Date: Fri, 13 Mar 2026 11:03:34 -0700
-Message-ID: <20260313180352.3800358-4-puranjay@kernel.org>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260313180352.3800358-1-puranjay@kernel.org>
-References: <20260313180352.3800358-1-puranjay@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZCXF5YQk"
+Message-ID: <a370fae9-ffcd-4713-a2a8-1b9df5c51da9@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773426714;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/fk82VMnZFWi3o0UqGB57eiM3JaDB+xZIyM+NQYIb1U=;
+	b=ZCXF5YQklKw/C3uYEzHN1YytSfaJbBQzUiaPNwM8A9W5Hf1eEbkk/fERJHg1jpEWwli4nv
+	9YwwGQk4M7aVGQvKERRrcwFHf8FSBhziGkqbzQ952NWE+WsnZ1wYFXAZZ+YqxjFqX3KPwQ
+	bRX7914VpPsVOqB57hn4aTq+zcr3IbY=
+Date: Fri, 13 Mar 2026 11:31:50 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] clsact: Fix use-after-free in init/destroy rollback
+ asymmetry
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: kuba@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ jhs@mojatatu.com, Keenan Dong <keenanat2000@gmail.com>,
+ Martin KaFai Lau <martin.lau@kernel.org>
+References: <20260313065531.98639-1-daniel@iogearbox.net>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20260313065531.98639-1-daniel@iogearbox.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-The get_branch_snapshot test checks that bpf_get_branch_snapshot()
-doesn't waste too many branch entries on infrastructure overhead. The
-threshold of < 10 was calibrated for x86 where about 7 entries are
-wasted.
+On 3/12/26 11:55 PM, Daniel Borkmann wrote:
+> Fix a use-after-free in the clsact qdisc upon init/destroy rollback asymmetry.
+> The latter is achieved by first fully initializing a clsact instance, and
+> then in a second step having a replacement failure for the new clsact qdisc
+> instance. clsact_init() initializes ingress first and then takes care of the
+> egress part. This can fail midway, for example, via tcf_block_get_ext(). Upon
+> failure, the kernel will trigger the clsact_destroy() callback.
+> 
+> Commit 1cb6f0bae504 ("bpf: Fix too early release of tcx_entry") details the
+> way how the transition is happening. If tcf_block_get_ext on the q->ingress_block
+> ends up failing, we took the tcx_miniq_inc reference count on the ingress
+> side, but not yet on the egress side. clsact_destroy() tests whether the
+> {ingress,egress}_entry was non-NULL. However, even in midway failure on the
+> replacement, both are in fact non-NULL with a valid egress_entry from the
+> previous clsact instance.
+> 
+> What we really need to test for is whether the qdisc instance-specific ingress
+> or egress side previously got initialized. This adds a small helper for checking
+> the miniq initialization called mini_qdisc_pair_inited, and utilizes that upon
+> clsact_destroy() in order to fix the use-after-free scenario. Convert the
+> ingress_destroy() side as well so both are consistent to each other.
 
-On ARM64, the BPF trampoline generates more branches than x86,
-resulting in about 13 wasted entries. The overhead comes from
-__bpf_prog_exit_recur which on ARM64 makes out-of-line calls to
-__rcu_read_unlock and generates more conditional branches than x86:
-
-  [#24] dump_bpf_prog+0x118d0       ->  __bpf_prog_exit_recur+0x0
-  [#23] __bpf_prog_exit_recur+0x78  ->  __bpf_prog_exit_recur+0xf4
-  [#22] __bpf_prog_exit_recur+0xf8  ->  __bpf_prog_exit_recur+0x80
-  [#21] __bpf_prog_exit_recur+0x80  ->  __rcu_read_unlock+0x0
-  [#20] __rcu_read_unlock+0x24      ->  __bpf_prog_exit_recur+0x84
-  [#19] __bpf_prog_exit_recur+0xe0  ->  __bpf_prog_exit_recur+0x11c
-  [#18] __bpf_prog_exit_recur+0x120 ->  __bpf_prog_exit_recur+0xe8
-  [#17] __bpf_prog_exit_recur+0xf0  ->  dump_bpf_prog+0x118d4
-
-Increase the threshold to < 16 to accommodate ARM64.
-
-The test passes after the change:
-
- [root@(none) bpf]# ./test_progs -t get_branch_snapshot
- #136     get_branch_snapshot:OK
- Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
----
- .../selftests/bpf/prog_tests/get_branch_snapshot.c       | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c b/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c
-index 0394a1156d99..dcb0ba3d6285 100644
---- a/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c
-+++ b/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c
-@@ -116,13 +116,14 @@ void serial_test_get_branch_snapshot(void)
- 
- 	ASSERT_GT(skel->bss->test1_hits, 6, "find_looptest_in_lbr");
- 
--	/* Given we stop LBR in software, we will waste a few entries.
-+	/* Given we stop LBR/BRBE in software, we will waste a few entries.
- 	 * But we should try to waste as few as possible entries. We are at
--	 * about 7 on x86_64 systems.
--	 * Add a check for < 10 so that we get heads-up when something
-+	 * about 7 on x86_64 and about 13 on arm64 systems (the arm64 BPF
-+	 * trampoline generates more branches than x86_64).
-+	 * Add a check for < 16 so that we get heads-up when something
- 	 * changes and wastes too many entries.
- 	 */
--	ASSERT_LT(skel->bss->wasted_entries, 10, "check_wasted_entries");
-+	ASSERT_LT(skel->bss->wasted_entries, 16, "check_wasted_entries");
- 
- cleanup:
- 	get_branch_snapshot__destroy(skel);
--- 
-2.52.0
+Acked-by: Martin KaFai Lau <martin.lau@kernel.org>
 
