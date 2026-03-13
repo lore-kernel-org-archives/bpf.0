@@ -1,220 +1,185 @@
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5D552571D7
-	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 21:03:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773435839; cv=pass; b=JtrvixQWQfpNK6NYNxqg2bECDWCl8jjIDySGe4Kg3xOdL7bQpSHo3KSQdmdfdOlggdibPZo15tFyHFskLsAGuUOlEYDd9ymimJluTNbMXSz2Su6lDTogphouRwlcLcStq3QRPGEi89KadbR3djrQ14NHo+NiKDtJ12p9mHuBu/w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773435839; c=relaxed/simple;
-	bh=1R0Lwql6nSOQ9kWNCc0PkQe60FSIwExCWTenK/CGDLk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DNsNLHnK7dbb1WnYkcDq1NQCTV+Id5L11vYBEG+39wJp1UkV/3Kf5lBw9aiHjCgnO5LWYN2nX5c9JXiYU/FPyKiJDzzG6Eoa/74dtTO7NHBZJGFO0rmKct7NURcLJmHyxXjoGi9e0WJpPsm4fu8MB+6JJYOsNnc2Np0sfJm1Kws=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rt+PPXzG; arc=pass smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0C4628AB0B
+	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 21:04:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773435897; cv=none; b=faT70BKYfn3J6CvyTaNpEpFZsoyZtYYbtwKQxpmf8W7+oBOgRppz1+yc/EzUNJ7gWZGPyewR5C2jkIFu2AmsVLlFT5MT6nZNyUyfdjiDsKxCBN28cc3SKJsigy1aEvIxtEYK5HfS0xPNjsu9ALyFScDS+FR5R9PlJbexETud0CY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773435897; c=relaxed/simple;
+	bh=UNeIpL8NXUxw4tHjCvcj9W9LiVp1qyd7R6QEqUvikGI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HTcEkJVZZF28B0JTHpgBoldxQf7IRJyk2VnXuqrHgN4J/W/qe5eGAdRpnEXRBV+53i2djTetYCWZzc10b23t7AehgT0MFy7dKXDKLeKw0Re98TD+JSjk7UnW1zzO8gQ33VgPTd7C2nQ/6ctb1SeLVCAqLW7fJEdN2wD2mFCqEdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R7C0yPuW; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rt+PPXzG"
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-661568ce781so3926269a12.0
-        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 14:03:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773435836; cv=none;
-        d=google.com; s=arc-20240605;
-        b=eYSr1xVaAjg/sgBl7lnaJNF9VPct/7CHjQbAMEHmDEdJTAgDo9y24NvV079fNz+KTW
-         2S9HEUlJtM475Hmw71bG2RaKVY2glAwDlcTujychnPcYY3W6bhKDgjMyYJlI4x7mOZ7K
-         1qZt5BrTe2zQNIZddVGtY4jPmJ7PI4xCYcDm0CjNRnH59qJzA55K2o/EuUiuVQgZ11db
-         iWOG5Lfa12CD0T2U5Q87W6AzUx/xgmR28xA0z3Ohnoep3KYYS004Nmz6mamdC6X1sfo+
-         XkfMq51hofVlFQuVNn7pNq4VnRlYpsPZhx1jMa0eHBYP5LD/u6ujhUYp8HymEowmWdMV
-         k7wQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=+/kZwgdWmNGCktNPe763uSTYgyKSmDilnHXCY6tJkRM=;
-        fh=24TcYdoMgfjV8b7K2YQf9RFVnKqSAbSHlpFqL1rD9cw=;
-        b=FdlP+6i9L3wQTqjfMV2Zt9Cew8KceJEKBTKkpO0ROIiPKOKRgzvia0HNTdQ14MWaSc
-         1haKhKommaLun4jZUipx1XhHLM9S8gEXLseJM5tTjOSKVKrnkXcjdlyoffkUs8XCQ56w
-         UxwTBPsXSPsSlraWFOGZjLzEp+PGFnjlsQMTqupC0q1AaXL4HBAZJjTTzkYIj8bsWOq/
-         5H1dk/JCPxbjywmp7isjxYPWib7WK+cbBco9HZybtNzarzo1eV013YNN2tETcMuQqVO3
-         /c3cLXfkMJbpv7XF6VayVNBPHZ/DmO/IFp1qgwxAbXPCqtlnfc76TsrDsNbwtttdu/pU
-         Famw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R7C0yPuW"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-48532925a4bso13867455e9.1
+        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 14:04:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773435836; x=1774040636; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+/kZwgdWmNGCktNPe763uSTYgyKSmDilnHXCY6tJkRM=;
-        b=Rt+PPXzGHR7RSUYpAnBr6bRN1SHpw6OIqwckkvAuccGhw+jMAkuNHVJFTjiXaIBVde
-         PWpy6GjywIVpCOM4riZ+Uydcf/rnRapbngH7gu7R/T5H49y2hGXfe0ncLJq3r2VFOaG7
-         df4bdsb1YdwNuNtLvTp7OvxCU0gL4dLTFyTiSDGocjyW+c7XUD+iL9jLnSk809oP9GZ5
-         tnZahy3Ke6e0jb3ecqRqhM7mHh0m7TJuQR/1ofBv0m8rPuJVK+62LuWWQXZ7wD/jNQnY
-         P3Z/mXm04cL16vB0uK+X1PPsR9S4XgyT6ZPHDD6XrKl0ix564D+vZe1jc404RZyZalqp
-         rjIw==
+        d=gmail.com; s=20230601; t=1773435894; x=1774040694; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YpOrp33ZVwwVkVDJ6OFcHXsQNncr3+h0EO+3U+Hfs70=;
+        b=R7C0yPuWhloRFkUCCOLe538mDKQETU7JsMoUy0/MGtXYPcVufl06oHmJvwLZb19C9V
+         ZkQvMrKSjrShQyQ0IHt+WtcK2c2ZNqW7Wg3Gv0CIYbthissZesvxtfjw8jCLbsaLasjs
+         EP2oYrZI7MtMB5IQQhN/xjlhJImSWz6dsAG1rbEk6q4Pka61qxElCrKXf0Yj3wOEpitZ
+         2Z2FkASAWzZnlRoEIpYmyeo+ZPo3a9/aybF9oUsL7X/3tZ5F1AT+Z/1FUAdYI/wY5NqZ
+         CDk4g0Y9oZKpGZxQp1lqpGsfC0sonIJvwcJv1QMYiPGK4UVsjYsuJK4P+loOfjvEqCdS
+         A+Hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773435836; x=1774040636;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=+/kZwgdWmNGCktNPe763uSTYgyKSmDilnHXCY6tJkRM=;
-        b=YagJ2msamrLi5LDAN09sb8Do9ntIWFk+JfTTtkJD9iQdwZBXFoPgjiuS7o8MToHyv9
-         xX0ARMZC/itgnh6+gx3t7FIknqO/rdANrYfRPjf+HA1bIa+jLGkBY0KjliWyrIepcHWe
-         D3kBkXNGxwcy9CwoYmnqB6rzETXEWKKka4JS0Nhm5S6BikM0GnLLrYJ4VqvoqI140oMP
-         aTnTM5d0kXoimSFVBLaKm2MFPt4IUOTQlsf5AFa7A0LpMR6/mFAJEbGg8ppPWl/g2Kc2
-         RqMudANipkOh1uQjwzOytrOlNswuIYm5NfG6WBg0gO/f4JyshoV5jQyJ/tr7M+H+QkNQ
-         IIYg==
-X-Gm-Message-State: AOJu0YwSrBf4J3typujSywJMFvvC5V2hu63qXpW5xVk1kDqgLqmpLoQk
-	tWy3/qCQH/npwkYWow/TAIzaIz876avZaqWLcHSlI9L08QJdXKyRatC7N2+jYUMXO4xAo534hTu
-	yBqUzwO/fWFYxPH2QaLIATwpve2zzqu0QJFjK5jl66w==
-X-Gm-Gg: ATEYQzyRkRsV457bbwL2ypWRBFS476/ApwXXaaLoaCaSMcaHHYA4OQPtXg/hk50DxiV
-	HaCwBDH+Z//mTlz636IxzTkBqMdF9N/Ts0yL4gBTObmbMRTYKnq0MnqInFR3Kv6bpctBjwgccdp
-	PNWe1GtOD754q/SZN1pwcoyMKUUckuBdH8fWjTYuVbG/XmgWeBc/9FwT1u9C6uHaX6/7znQuFYo
-	7dFOcTyaV495UKdBJdJB9hzVv29/VNxQz6W7RM993igJgErzZdkG8eoJI/f5g/+qr6LWWG3jfIo
-	hezkW52AfpXXluAxm08FaFsLxtb54YAmz6z2AE8ERg==
-X-Received: by 2002:a05:6402:1ecf:b0:662:a4d4:abe0 with SMTP id
- 4fb4d7f45d1cf-663ba9c2abemr3063467a12.3.1773435835673; Fri, 13 Mar 2026
- 14:03:55 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1773435894; x=1774040694;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YpOrp33ZVwwVkVDJ6OFcHXsQNncr3+h0EO+3U+Hfs70=;
+        b=j4yls6yp7PEJe8Z+5lgreU+hqkiI+JRUbcB0D6eTUNslEOd8wzbPcEa5WOUGPrlO2W
+         o380jA6CaeZxu/+gTmdQzhgSZstpn9gjlm4EVpIc39wLJU4D+dynJ/8xQYSPeK30zxH0
+         LAOK9Ha76ublOGTrqz7zZOENWIJDBE3hKaotfqBxbqwk5NV1RzfC1ypxXgdzA0b34Aq9
+         iM8kBs4hDV0bXCBRChk6F/WfI+ZrMu5xUCKjjpuBceJuk3Bam+bFfnMUzupVATARpo6x
+         VFPpJMFcg9Xv059O74v9LjaUP/6b/zg/bBkk8onk2oZCV3GwcwjfDdqYFChBaavB+64W
+         n/HQ==
+X-Gm-Message-State: AOJu0YzC0DALbdxB4vgeI1QBcwIn867X0ghPemHRznb1bV8uWU+wGLgb
+	l8bvr1GPATf35NUecX4558YW5Aa1ZG1m9pcFknrRv9D+ZcJLVeAgwui2
+X-Gm-Gg: ATEYQzzRZxnEu+wDiRHroeBNR1NbhXu6TJVIz9kQcRC6AL9wGeAsb+8crZIp25E530v
+	mpAfQyJDcp3VlWb+ramdb6tnssVokaXJNxHNq3SP+mnlHv0YRMU9eUsZKOl01DMcRXil2clWPdT
+	pqxao9jvsViDY/ifqUFxd+/twcZJ5XDsNzpXA5jl16UMtRrXF3Kob6kwiJjHUaa3kNJU5J04YWS
+	UCook6cOFpdXmtl0tiNV4hL7BzQHtxqlFCURnJXO0p0HYqQWLC81cIRifRmw8OBPGmsnjkZNMvi
+	1uhh5WPd84S+q/pHkmZXNb5e/u0kTq6QjanWmRDHRL+TZ2hGtOSElPnR5Ulm+D9sHnVLJ7Wt76I
+	A3Ex0uL1XKpMK2yoL6xE5Mv/cCUch0R9pm4mN/RWjIo1jxstM49I6AsfiTzJQwBa+RqfvpoGiab
+	szm01XNrkvobeenh2opLHQdJNH1RJK
+X-Received: by 2002:a05:600c:4f54:b0:485:3b5b:eb8 with SMTP id 5b1f17b1804b1-485567052b8mr77552495e9.26.1773435893884;
+        Fri, 13 Mar 2026 14:04:53 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:40::])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4854b66ffe2sm215626285e9.13.2026.03.13.14.04.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Mar 2026 14:04:53 -0700 (PDT)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Subject: [PATCH bpf-next v4 0/5] bpf: Add support for sleepable tracepoint
+ programs
+Date: Fri, 13 Mar 2026 14:04:20 -0700
+Message-Id: <20260313-sleepable_tracepoints-v4-0-debc688a66b3@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260313180352.3800358-1-puranjay@kernel.org> <20260313180352.3800358-3-puranjay@kernel.org>
- <CANk7y0jjd6XC7nd2BxtsVhs8vWp_9cC-ckXPGRQK_CW5BSuogQ@mail.gmail.com>
-In-Reply-To: <CANk7y0jjd6XC7nd2BxtsVhs8vWp_9cC-ckXPGRQK_CW5BSuogQ@mail.gmail.com>
-From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Fri, 13 Mar 2026 21:03:44 +0000
-X-Gm-Features: AaiRm509-qHusHx4y7ZJiuiluPbpVvicudHEcA8o5FlqQsneTuZnsmCxW0jMUuM
-Message-ID: <CANk7y0iGmXCLNPJ=W4ZV9tRwWXXK4KmTATfV081kLX51RxJmkQ@mail.gmail.com>
-Subject: Re: [PATCH bpf 2/3] perf/arm64: Add BRBE support for bpf_get_branch_snapshot()
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Leo Yan <leo.yan@arm.com>, Rob Herring <robh@kernel.org>, Breno Leitao <leitao@debian.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-perf-users@vger.kernel.org, 
-	kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANV7tGkC/3XN3QrCIBwF8FcZXmf4MUd11XtEhM6/TVgqKrIYe
+ /fELupml4fD+Z0VJYgWErp0K4pQbLLe1dAfOjRO0j0BW10zYoQNhNEBpxkgSDXDI0c5QvDW5YT
+ 5iUqgPSVCEFS3IYKxS3NvSAWDHSwZ3Wsz2ZR9fLfDwlr/tZnYsQvDBBPOiZZGD4KY6wuyPI7+1
+ cDCfwindA/hFeFwVkqDUJqxP2Tbtg9ck+KOCAEAAA==
+To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+ daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
+ eddyz87@gmail.com
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773435891; l=4759;
+ i=yatsenko@meta.com; s=20260220; h=from:subject:message-id;
+ bh=UNeIpL8NXUxw4tHjCvcj9W9LiVp1qyd7R6QEqUvikGI=;
+ b=LJDXkcbPQ+xwTGeqFiqkB3mLCXrq6tHWmKmopNLVUPYkWsyS2T+Y6DjuUD+D2W5tEhX1YPOYQ
+ d6qWkmSQhLSD+nWXx7baq81wv2RGC6POPNBkFSQ14fxHiXV1oz3MKgp
+X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
+ pk=QUfct6THKRRhwIGGKcldE2w7zXPci1gMPcF7qij1gwA=
 
-On Fri, Mar 13, 2026 at 7:59=E2=80=AFPM Puranjay Mohan <puranjay12@gmail.co=
-m> wrote:
->
-> On Fri, Mar 13, 2026 at 6:04=E2=80=AFPM Puranjay Mohan <puranjay@kernel.o=
-rg> wrote:
-> >
-> > Implement the perf_snapshot_branch_stack static call for ARM's Branch
-> > Record Buffer Extension (BRBE), enabling the bpf_get_branch_snapshot()
-> > BPF helper on ARM64.
-> >
-> > This is a best-effort snapshot helper intended for tracing and debuggin=
-g
-> > use. It favors non-invasive snapshotting over strong serialization, and
-> > returns 0 whenever a clean snapshot cannot be obtained. Nested
-> > invocations are not serialized; callers may observe a 0-length result
-> > when a clean snapshot cannot be preserved.
-> >
-> > BRBE is paused before the helper does any other work to avoid recording
-> > its own branches. The sysreg writes used to pause are branchless.
-> > local_daif_save() blocks local exception delivery while reading the
-> > buffer. If a PMU overflow raced before that point and re-enabled BRBE,
-> > the helper detects the cleared PAUSED state and returns 0.
-> >
-> > Branch records are read using perf_entry_from_brbe_regset() without
-> > event-specific filtering. The BPF program is responsible for applying
-> > its own filter criteria. The BRBE buffer is invalidated after reading
-> > to maintain contiguity for other consumers.
-> >
-> > Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-> > ---
-> >  drivers/perf/arm_brbe.c  | 70 ++++++++++++++++++++++++++++++++++++++--
-> >  drivers/perf/arm_brbe.h  |  9 ++++++
-> >  drivers/perf/arm_pmuv3.c |  5 ++-
-> >  3 files changed, 81 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/perf/arm_brbe.c b/drivers/perf/arm_brbe.c
-> > index ba554e0c846c..db5e000b2575 100644
-> > --- a/drivers/perf/arm_brbe.c
-> > +++ b/drivers/perf/arm_brbe.c
-> > @@ -9,6 +9,7 @@
-> >  #include <linux/types.h>
-> >  #include <linux/bitmap.h>
-> >  #include <linux/perf/arm_pmu.h>
-> > +#include <asm/daifflags.h>
-> >  #include "arm_brbe.h"
-> >
-> >  #define BRBFCR_EL1_BRANCH_FILTERS (BRBFCR_EL1_DIRECT   | \
-> > @@ -618,10 +619,10 @@ static bool perf_entry_from_brbe_regset(int index=
-, struct perf_branch_entry *ent
-> >
-> >         brbe_set_perf_entry_type(entry, brbinf);
-> >
-> > -       if (!branch_sample_no_cycles(event))
-> > +       if (!event || !branch_sample_no_cycles(event))
-> >                 entry->cycles =3D brbinf_get_cycles(brbinf);
-> >
-> > -       if (!branch_sample_no_flags(event)) {
-> > +       if (!event || !branch_sample_no_flags(event)) {
-> >                 /* Mispredict info is available for source only and com=
-plete branch records. */
-> >                 if (!brbe_record_is_target_only(brbinf)) {
-> >                         entry->mispred =3D brbinf_get_mispredict(brbinf=
-);
-> > @@ -803,3 +804,68 @@ void brbe_read_filtered_entries(struct perf_branch=
-_stack *branch_stack,
-> >  done:
-> >         branch_stack->nr =3D nr_filtered;
-> >  }
-> > +
-> > +/*
-> > + * Best-effort BRBE snapshot for BPF tracing. Pause BRBE to avoid
-> > + * self-recording and return 0 if the snapshot state appears disturbed=
-.
-> > + */
-> > +int arm_brbe_snapshot_branch_stack(struct perf_branch_entry *entries, =
-unsigned int cnt)
-> > +{
-> > +       unsigned long flags;
-> > +       int nr_hw, nr_banks, nr_copied =3D 0;
-> > +       u64 brbidr, brbfcr, brbcr;
-> > +
-> > +       if (!cnt)
-> > +               return 0;
-> > +
-> > +       /* Pause BRBE first to avoid recording our own branches. */
-> > +       brbfcr =3D read_sysreg_s(SYS_BRBFCR_EL1);
-> > +       brbcr =3D read_sysreg_s(SYS_BRBCR_EL1);
-> > +       write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
-> > +       isb();
-> > +
-> > +       /* Block local exception delivery while reading the buffer. */
-> > +       flags =3D local_daif_save();
-> > +
-> > +       /*
-> > +        * A PMU overflow before local_daif_save() could have re-enable=
-d
-> > +        * BRBE, clearing the PAUSED bit. Bail out.
-> > +        */
-> > +       if (!(read_sysreg_s(SYS_BRBFCR_EL1) & BRBFCR_EL1_PAUSED))
-> > +               goto out;
-> > +
->
-> The code below doesn't implement filtering, I am currently trying to
-> figure out the best way to implement that by reusing
-> read_branch_records() somehow.
->
+This series adds support for sleepable BPF programs attached to raw
+tracepoints (tp_btf), classic raw tracepoints (raw_tp), and classic
+tracepoints (tp). The motivation is to allow BPF programs on syscall
+tracepoints to use sleepable helpers such as bpf_copy_from_user(),
+enabling reliable user memory reads that can page-fault.
 
-So, I thought about this more and feel that we don't need to filter
-for a specific event because the BPF program is not associated with a
-specific event, rather it is associated with the CPU where it is
-running, So bpf_get_branch_snapshot() should return the branch records
-from the PMU of that CPU. Now, if there are two events on that cpu
-with different branch filter types, let's say
-PERF_SAMPLE_BRANCH_IND_CALL in one event and
-PERF_SAMPLE_BRANCH_ANY_RETURN in another event, the perf subsystem
-configures BRBE to record the union and then does per event filtering
-in software (brbe_read_filtered_entries()), but the BPF program should
-still return everything that was recorded on the CPU, which this patch
-is doing.
+Currently, raw tracepoint BPF programs always run with RCU read lock
+held inside __bpf_trace_run(), which prevents calling any helper that
+might sleep. Faultable tracepoints (__DECLARE_TRACE_SYSCALL) already
+run under rcu_tasks_trace protection in process context where sleeping
+is safe.
+
+This series removes that restriction for faultable tracepoints:
+
+Patch 1 modifies __bpf_trace_run() to support sleepable programs
+following the uprobe_prog_run() pattern: use explicit
+rcu_read_lock_trace() for sleepable programs and rcu_read_lock() for
+non-sleepable programs. Also removes preempt_disable from the faultable
+tracepoint BPF callback wrapper, since per-CPU protection and RCU
+locking are now managed per-program inside __bpf_trace_run().
+
+Patch 2 adds sleepable support for classic tracepoints
+(BPF_PROG_TYPE_TRACEPOINT) by introducing trace_call_bpf_faultable()
+and restructuring perf_syscall_enter/exit() to run BPF programs in
+faultable context before the preempt-disabled per-cpu buffer
+allocation.
+
+Patch 3 allows BPF_TRACE_RAW_TP, BPF_PROG_TYPE_RAW_TRACEPOINT, and
+BPF_PROG_TYPE_TRACEPOINT programs to be loaded as sleepable, with
+load-time and attach-time checks to reject sleepable programs on
+non-faultable tracepoints.
+
+Patch 4 adds libbpf SEC_DEF handlers: tp_btf.s, raw_tp.s,
+raw_tracepoint.s, tp.s, and tracepoint.s.
+
+Patch 5 adds selftests covering tp_btf.s, raw_tp.s, and tp.s positive
+cases using bpf_copy_from_user() on sys_enter nanosleep, plus negative
+tests for non-faultable tracepoints.
+
+Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+---
+Changes in v4:
+- Follow uprobe_prog_run() pattern with explicit rcu_read_lock_trace()
+  instead of relying on outer rcu_tasks_trace lock
+- Add sleepable support for classic raw tracepoints (raw_tp.s)
+- Add sleepable support for classic tracepoints (tp.s) with new
+  trace_call_bpf_faultable() and restructured perf_syscall_enter/exit()
+- Add raw_tp.s, raw_tracepoint.s, tp.s, tracepoint.s SEC_DEF handlers
+- Replace growing type enumeration in error message with generic
+  "program of this type cannot be sleepable"
+- Use PT_REGS_PARM1_SYSCALL (non-CO-RE) in BTF test
+- Add classic raw_tp and classic tracepoint sleepable tests
+- Link to v3: https://lore.kernel.org/r/20260311-sleepable_tracepoints-v3-0-3e9bbde5bd22@meta.com
+
+Changes in v3:
+  - Moved faultable tracepoint check from attach time to load time in
+    bpf_check_attach_target(), providing a clear verifier error message
+  - Removed cant_sleep() call from non-sleepable path in
+    __bpf_trace_run()
+  - Folded preempt_disable removal into the sleepable execution path
+    patch
+  - Used RUN_TESTS() with __failure/__msg for negative test case instead
+    of explicit userspace program
+  - Reduced series from 6 patches to 4
+  - Link to v2: https://lore.kernel.org/r/20260225-sleepable_tracepoints-v2-0-0330dafd650f@meta.com
+
+Changes in v2:
+  - Address AI review points - modified the order of the patches
+  - Link to v1: https://lore.kernel.org/bpf/20260218-sleepable_tracepoints-v1-0-ec2705497208@meta.com/
+
+---
+Mykyta Yatsenko (5):
+      bpf: Add sleepable support for raw tracepoint programs
+      bpf: Add sleepable support for classic tracepoint programs
+      bpf: Verifier support for sleepable tracepoint programs
+      libbpf: Add section handlers for sleepable tracepoints
+      selftests/bpf: Add tests for sleepable tracepoint programs
+
+ include/linux/trace_events.h                       |   6 ++
+ include/trace/bpf_probe.h                          |   2 -
+ kernel/bpf/syscall.c                               |   5 +
+ kernel/bpf/verifier.c                              |  13 ++-
+ kernel/events/core.c                               |   9 ++
+ kernel/trace/bpf_trace.c                           |  59 +++++++++++-
+ kernel/trace/trace_syscalls.c                      | 104 +++++++++++----------
+ tools/lib/bpf/libbpf.c                             |  32 ++++++-
+ .../bpf/prog_tests/sleepable_tracepoints.c         |  57 +++++++++++
+ .../bpf/progs/test_sleepable_tracepoints.c         |  75 +++++++++++++++
+ tools/testing/selftests/bpf/verifier/sleepable.c   |  17 +++-
+ 11 files changed, 317 insertions(+), 62 deletions(-)
+---
+base-commit: bd2e02e3c9215305dfa344c050d5822f19929cf7
+change-id: 20260216-sleepable_tracepoints-381ae1410550
+
+Best regards,
+-- 
+Mykyta Yatsenko <yatsenko@meta.com>
+
