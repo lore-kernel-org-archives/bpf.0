@@ -1,33 +1,60 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFAD038CFFF;
-	Fri, 13 Mar 2026 16:26:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 446733C5DDE;
+	Fri, 13 Mar 2026 16:52:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773419196; cv=none; b=JvUraB4mxfDNxIz+dk8lO/LfrewVwb+rtANRZFr2aBLyAUuLx4ZhxXvmf1h7YcpkzOHzaGt5GaagUxludBGiFVeUPMV2g/drfoI284c3oS44UtdVZSVWVcQegJnyMEhaihD/61LgE9kGbrk8LelnQgZgw7KitoIcts70OUPG9Ck=
+	t=1773420749; cv=none; b=s71+jWIfI1G9xaF3AeUmsXoFBzndzpH49e2b34HXOJwymb2LbpIs48GPGuB+8RL2RJTm7YgFOqIlRyvyDCcZKopnxdoWh46GLX/xyPcNzJqQFfE88JLmKhK9Ox8ZcsC294rSrHgQjmGKuLZF3lFshrFhjIiuw+NTbRugl1xkXac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773419196; c=relaxed/simple;
-	bh=AfxxKs2KdlZH6f4DtzjOy6zLTdABVf9Ufjw9UhlQVKk=;
+	s=arc-20240116; t=1773420749; c=relaxed/simple;
+	bh=q54FFooi9TYoUDLzssQJ4YkpkMjrzanbg74Jao2ivAg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mb5sqdRxiFNCpsXvvKKfc9yNzc079Xbicc6C8t5/bE4CAO+zTOT2bBUPo3mpNTeZg3vMal5YaJo78csyG5HuvTsy+Uhbz9qscMVsrwkyoIsQNboA/E3F5UuqG9hDc5NmxKFgq+mnM5dqtra9Gx0dfvQsOANUE8yb4QqR6JUF5GU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NfmsN5PQ; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=OKyiWKCj9pF3BbN92Bq5JLmBXH2pY0KFekqXsGDb1RlAA346ZdF+3Eumj1rg7IKxgg52wVLOSbaN4+nVz1lm1U+3LL5ZjL6Vby66kqxactUBmkKPfPxsTwM+lNLb3kDZKp2NJvipMjQHFj+MZocq3qVzDt2Bs/tXtNhIwWecR2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=GfQsk9do; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NfmsN5PQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAABFC19421;
-	Fri, 13 Mar 2026 16:26:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773419196;
-	bh=AfxxKs2KdlZH6f4DtzjOy6zLTdABVf9Ufjw9UhlQVKk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=NfmsN5PQ0SU0nWpk7AibNnDc3kc7s/4QP2FYjwVVlFozUV6/eyLJXCmw0zrEml684
-	 pTXEeKVCXi777niHBawr1hlOeiX6TPn7nxYeL9+WwMmz9Ux8RIZ9kjngPzuNr0SLrN
-	 ngsdEYVCFkZbJbZAkUwhUwALTriR97EdKEd9oXzcW2uo94FlzQx0IDZ+jkFEgZDmZV
-	 pwItaAfHuE4tOHVhD+jQuGjP8IZAvRDCIln9feFUpbKCbGDjaLi9TpCGYDZXeHqq3C
-	 taop9WqXxxd9NCm4LkbZNPrxoyhuAoasJeEcD5DLIsB1xoJgxOs0YtqA3bYvvG2NtA
-	 DSyGhAN4CJBPw==
-Message-ID: <9f59fabc-8668-4e2e-bf4e-c7726890cf07@kernel.org>
-Date: Fri, 13 Mar 2026 16:26:24 +0000
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="GfQsk9do"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62D4Vg102278217;
+	Fri, 13 Mar 2026 16:51:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=AC2zBX
+	F891MtSTStOPogcDxbY2Tjw+/PtdEifJjKKtg=; b=GfQsk9doJqFTBxBozMRjb4
+	k+6j94ZOgbp8Lz8KbzEFU1yoWgIEcPw+K790Wdxqf0W5DYoaQbFr2Bxynqy2/N0F
+	lMSKXVnqi2nhndLmn8v+MN9J5Lny9wkX6BT7WBoOxyjZT6MMg5+VIp4wPhsmMbrK
+	R3E4k6btjXflC8jv+oSjdphyh52abK+sTZE0J0rs4ygJJ05PUIXKGD91s1c6uXrJ
+	OehwhcfFt8CG2I+UmiI0QSMcImOLsAVGzOpLAs5Fh3xPuym9awDsj3tCAq5jvaWF
+	h1zDHCGr8XCEJXucp8ZQew9VNfvLMwL+rX2nDAkOaYI2Doew2U7A6poyZCV5N25A
+	==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cuh91rtt3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 13 Mar 2026 16:51:50 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62DF2aJh006036;
+	Fri, 13 Mar 2026 16:51:49 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cuha9qfmk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 13 Mar 2026 16:51:49 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62DGplG450266616
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 13 Mar 2026 16:51:47 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9C96820043;
+	Fri, 13 Mar 2026 16:51:47 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 10CA720040;
+	Fri, 13 Mar 2026 16:51:47 +0000 (GMT)
+Received: from [0.0.0.0] (unknown [9.111.88.140])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 13 Mar 2026 16:51:46 +0000 (GMT)
+Message-ID: <86ea999a-12a9-426a-ab8b-abfc5efa8de4@linux.ibm.com>
+Date: Fri, 13 Mar 2026 17:51:46 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,106 +62,75 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 05/30] bpftool: Avoid adding EXTRA_CFLAGS to
- HOST_CFLAGS
-To: Leo Yan <leo.yan@arm.com>
-Cc: Ian Rogers <irogers@google.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, James Clark <james.clark@linaro.org>,
- Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nsc@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Adrian Hunter <adrian.hunter@intel.com>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>,
- Qinxin Xia <xiaqinxin@huawei.com>, Bartosz Golaszewski <brgl@kernel.org>,
- Kent Gibson <warthog618@gmail.com>, "K. Y. Srinivasan" <kys@microsoft.com>,
- Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
- Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>,
- Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>,
- =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
- Andy Shevchenko <andy@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>,
- Len Brown <lenb@kernel.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
- Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>,
- Mark Brown <broonie@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>,
- Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-References: <20260311-tools_build_fix_zero_init-v4-0-9e35bdb99cb3@arm.com>
- <20260311-tools_build_fix_zero_init-v4-5-9e35bdb99cb3@arm.com>
- <CAP-5=fUOYsnbB4B0khUetRWOFMtHuO6_ESG30b1ZW01n_-gt6g@mail.gmail.com>
- <20260313155600.GP4153946@e132581.arm.com>
- <cdc75030-e750-42ad-a068-55abe3a10d82@kernel.org>
- <20260313162430.GR4153946@e132581.arm.com>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20260313162430.GR4153946@e132581.arm.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: improve test coverage for
+ kfunc call
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Hari Bathini <hbathini@linux.ibm.com>
+Cc: Yonghong Song <yonghong.song@linux.dev>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+References: <20260312080113.843408-1-hbathini@linux.ibm.com>
+ <02e68ebf-5782-4632-aed8-0026a3aab96b@linux.dev>
+ <ec4e7ff6-55e3-4889-b507-fee71fab99f8@linux.ibm.com>
+ <CAADnVQK--hKVH=FBMLiF7io2kBLfqwkXM9porBS1T--og=R4Yw@mail.gmail.com>
+Content-Language: en-US
+From: Ilya Leoshkevich <iii@linux.ibm.com>
+In-Reply-To: <CAADnVQK--hKVH=FBMLiF7io2kBLfqwkXM9porBS1T--og=R4Yw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-GUID: uwxZQaOgW6aGcaadJEHNHSPRYhja9D63
+X-Authority-Analysis: v=2.4 cv=E6/AZKdl c=1 sm=1 tr=0 ts=69b440a6 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=L2Ql71LPTLevAORkKs8A:9
+ a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEzMDEzMiBTYWx0ZWRfX2Q+j1MHcK8Tc
+ 7+q0kG+kmaj/wAuViNfTTTz5qA8X+xmb0jGB29MSpvspugosTWqd0XNkpANegcxcnMFZJk19YtY
+ BOC/8qCaYJWVdRFVKKzuzmi0mjQwUzI+ChYOjGX/TSg9X2AIUIExt9G9ZE1fweeBN6D1nVByM/w
+ QhpazVxWri1bpILh/jBhY+UhAMuWFNl2lLlxFYgRlPWFfkBaJY3R4pDp92T+jM00IQbtEClTtnD
+ hQb00J9+8X8vyBzYJnnNrhlIZcnmWIePYMotAYcn+fJrhLX9HXjaDty/4I4XCZ+ddRtZzOKPjBN
+ +elszvvHf6mzbhOdELuRHdsY/z+zf/r1juF2Fy9C9gco87y7kXNSZdFdtje+UDl9ewESdnyRlcK
+ X1MmSNeRkOP/EDdOWVJEJ5l4UAphm1CuNKESeiuitOhkVXf1KT+25PvfWXtQ8ZYXCVbQSE3kxRV
+ XxhUr5YmvpgdJQto1DA==
+X-Proofpoint-ORIG-GUID: wC0qMM4hgjbjukEJuRVJaTWautxGqhg8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-13_03,2026-03-13_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 impostorscore=0 clxscore=1015 malwarescore=0 phishscore=0
+ suspectscore=0 priorityscore=1501 spamscore=0 lowpriorityscore=0 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603130132
 
-2026-03-13 16:24 UTC+0000 ~ Leo Yan <leo.yan@arm.com>
-> On Fri, Mar 13, 2026 at 04:07:27PM +0000, Quentin Monnet wrote:
-> 
-> [...]
-> 
->>>>> +
->>>>> +# This must be done before appending EXTRA_CFLAGS to CFLAGS to avoid
->>>>> +# including flags that are not applicable to the host compiler.
->>>>> +HOST_CFLAGS := $(subst -I$(LIBBPF_INCLUDE),-I$(LIBBPF_BOOTSTRAP_INCLUDE),\
->>>>> +               $(subst $(CLANG_CROSS_FLAGS),,$(CFLAGS)))
->>>>> +
->>>>>  ifneq ($(EXTRA_CFLAGS),)
->>>>>  CFLAGS += $(EXTRA_CFLAGS)
->>>>>  endif
->>>>> @@ -88,8 +94,6 @@ ifneq ($(EXTRA_LDFLAGS),)
->>>>>  LDFLAGS += $(EXTRA_LDFLAGS)
->>>>>  endif
->>>>>
->>>>> -HOST_CFLAGS := $(subst -I$(LIBBPF_INCLUDE),-I$(LIBBPF_BOOTSTRAP_INCLUDE),\
->>>>> -               $(subst $(CLANG_CROSS_FLAGS),,$(CFLAGS)))
->>>>>  HOST_LDFLAGS := $(LDFLAGS)
->>>>
->>>> Should HOST_LDFLAGS be similarly moved? Otherwise, it seems target
->>>> flags in EXTRA_LDFLAGS will be added for the host.
->>>
->>> Though this series is irrelevant to LDFLAGS, I am fine to move
->>> HOST_LDFLAGS together.
->>
->>
->> If we move the HOST_LDFLAGS earlier so that they no longer receive the
->> EXTRA_LDFLAGS, then we lose the possibility to use any EXTRA variable to
->> pass additional flags to HOST_LDFLAGS. So OK to move, but maybe add a
->> "HOST_LDFLAGS += $(HOST_EXTRALDFLAGS)" to it for consistency with the
->> processing of HOST_CFLAGS?
-> 
-> Adding HOST_EXTRALDFLAGS seems a bit over designed to me, as there is
-> no use case for it currently.  To avoid complexity, let's keep this
-> patch as it is, we can add HOST_EXTRALDFLAGS if later have requirement.
-> 
-> P.s. I saw that you already replied the same comment in the previous
-> version.  I should have confirmed at that time, sorry for the duplicate
-> discussion.
+On 3/13/26 15:20, Alexei Starovoitov wrote:
+[...]
+> I was about to apply it, but it fails on s390. See CI:
+>
+> Error: #160 kfunc_call
+> Error: #160/13 kfunc_call/kfunc_call_test5_asm
+> Error: #160/13 kfunc_call/kfunc_call_test5_asm
+> verify_success:PASS:skel 0 nsec
+> verify_success:PASS:bpf_object__find_program_by_name 0 nsec
+> verify_success:PASS:kfunc_call_test5_asm 0 nsec
+> verify_success:FAIL:retval unexpected retval: actual 6 != expected 0
+> Test Results:
+> bpftool: PASS
+> test_progs: FAIL (returned 1)
+>
+> It doesn't look to be endianness related (which is often
+> the case for breaking s390).
+> In this case it could be an s390 JIT issue?
+>
+> Ilya ?
+>
+> pw-bot: cr
 
+I implemented sign-extension required by the s390x ABI, but forgot about 
+zero-extension.
 
-That's fine :) - And agreed, it's probably best to leave it as-is for
-now. Thanks!
+I will send the fix soon, after ./test_progs completes.
 
-Quentin
