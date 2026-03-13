@@ -1,63 +1,63 @@
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F53F386441
-	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 22:30:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2FA8386C26
+	for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 22:31:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773441060; cv=none; b=rTi1m6/x3Vy55JBtx0psJvWkmjbNhcoVoPATtpf3vKHkGAynJKFuL8pjxsOugJ+sBEtEyZy1mYUgd5H7bNbZLTBAzk2BjipGPItQt14hTTp/+nvVYT8bavssZItbr2yRH7l8M9r+KolN8vKloLSB0XFehOhQvvxsCn2rYu3nzxE=
+	t=1773441063; cv=none; b=mKlSBfCERb8opPsqjFypQe2hUh2QemGx7HO4b/Gse0FLas/Y8FQ0wdxR013eWzHolw+v8wAq2Qknu7daJxrBVXcImouqhGk3X52a1FwuED8je6+AH8AQ0oZoOMZhaBNphaju86o4PjgUuxjU6AB9sRU9nCLrOcbQgrS1SWUUIAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773441060; c=relaxed/simple;
-	bh=OtHFbcpOVbLFwcytf7vnE+Hfd6w3VV2I2VNOK9waWGA=;
+	s=arc-20240116; t=1773441063; c=relaxed/simple;
+	bh=4mx+e9oVG6CrcMMG3/eO6hOms8NOKTTMBQ+YcrRMFRU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JDRiXRzDBbzn0u+IqUXE1Cph8kQqbjNDYYp2IkumLZ3U6iCCM/yBKt43tTaWJzYNY5sih8NiBx4exWiS0bXJtCioR9JOJrh00e12bvX5qiS+cm6F2xYAbS56PFQaL7l5SRew2FC2OfqLlI4zz+l30+ZvcEn79C9IbKDkDekJSDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=IZmqc4iO; arc=none smtp.client-ip=209.85.167.175
+	 MIME-Version; b=Pwus1ow74L3xmfk2xsGoYnQ3KLmV4DPRAQd67yU+3yd5GGtuRSOczELRwm6G8UP7/6bh3NEHZCg4Rw9uT0u1nJT+Gh+n96F3HS+P+q/nq9iIGN0uV9Oh8FhbWgss29PGGkjoGFKNCEoTG8+lPlVvQxmRadTpsHv5yMD76rKhPF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=TOTppMoQ; arc=none smtp.client-ip=209.85.167.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="IZmqc4iO"
-Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-46702742c99so1720830b6e.3
-        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 15:30:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="TOTppMoQ"
+Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-45f053b7b90so1803109b6e.0
+        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 15:31:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1773441057; x=1774045857; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1773441061; x=1774045861; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QLKdgna2TJg/4cf6a9WLp0moZG16XDEww02DyhezqPc=;
-        b=IZmqc4iOxoBtUFX6VTFP8z/4pf2m6t55C5WJyM7E6R8pUwH4XcXqwqhvf40zXvYOS4
-         O4stlxlMA+ijEMBcRLuvuQ9ioFM2WGqHfS5QYsh21PLWbEnOl+AdAqFmzckLECew1FB4
-         s5MMJoBrRIdkcJUbwJX7UaId8UHl/DPDBw00dDXMSVWiQJOA8q/39OQi+b5GimCYhYrK
-         C12qfD2xhl+4uwzOWBO8ivqS71X2UkboQ4a/+s4kft4DpPT8TWoxCKyd7aRNlXjR1pgG
-         RjVbgWXbJiwBRQieGGyOX9Lcb2aD0NHN9/e3S11ivhMIMuOTwYF+64ba8u2mKF1zft5O
-         nWSQ==
+        bh=s0xGdOzKFMVP5ynlZwdIR9piZg01nlaRfSX1gpCcslY=;
+        b=TOTppMoQ8aJarVmSBMuAdvj9iapkP7dnGWIJ0NJ7lCwzKF/Xan6tFKV9eodJ299Cse
+         i8wPJW6SUZ9TSfOi95aeoY4CatQb/pB8CNyQmzKuXcwhnhnM2c0Wn6b42SbgG5KP33ZI
+         eGMS9FKiOgGevk6WJGUdHXhnnfxrw2zMmLoCG+Ie7wRuWbxzEpx+WD8K8jQ/5YKcc8VY
+         DHHLsuHS2AuBUfuCkxzinJQ6hV2QFEZvXhl3JHEoXRMYu5g/EBzEFoSCCF9NJ88MuuAD
+         OWt0IZ+/HmcKYTbqloZMmsRQAqQckarFrAmMPvWPoTQa7Em6nLvfS38m6oUtZTkzY4IU
+         IUug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773441057; x=1774045857;
+        d=1e100.net; s=20251104; t=1773441061; x=1774045861;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=QLKdgna2TJg/4cf6a9WLp0moZG16XDEww02DyhezqPc=;
-        b=cg4bEENtwnGjlfQMR6jNPZF4b87MhWlfcLxBLa7aJqvNd2d/h95A7gzt34qol/BtN2
-         me2ntpCIKDw+FtP4B97mxbaTZ12GgZNacYdoc+8M2T2Sfr1ftSUWHZA9LkfFUISE+hQW
-         z/tXwuQT5JgUgE4XanK3biU+sJRh4C7dX1v1TThG3UWxJO4xv5KIRhK4nIJSqqoV+WE/
-         urMnRKS/inezxFCvFqAnek7wTlNGOmrFQKwMt/aP61ssuSPWnQ6RjQEVIVQ1lRLg5Oim
-         yHh68f6S5uyDqAZWYaLWosHwU/NgqyX9ZZE3AT1rrkyqp1Q8+fH6vQrH+9/cKuXafxEX
-         WTrg==
-X-Forwarded-Encrypted: i=1; AJvYcCViIXbaXYPmxQmGP0R3ChZ4bp4P5AMlHgUzjRB0vUcQkQpE2FYq2VCnjZ1Sb1ftp4r2FCA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+Gex53UIYb5qE7Fp0iJEvGEYEgkmYE7UT4QxcBw7TeXIWAR4y
-	EWp1OTDFxnmjh2PyZ+MeHUvB8bwNGmq7DeTDUF2IApauFEBecSi276sqr7l0jw3G3RI=
-X-Gm-Gg: ATEYQzx3ljOmJZGyyVbYGUN4d7eZbvpAf5PxM8yQngz0cJvqgSOYrMc5PexGzOEbUxM
-	ixhC1GlBFy7euGFAWuGhN7N375zcrV58vupiXlFbuHjgOozqHuUDRA5yeiIktVmLIvMcGKgZ5l4
-	WHVEV0YurOb3ywc/T/G030bq/rBSSMZijJBhipKXiQO5VKiyO5zUKkhDYL6RJVq743ohlL16Ldf
-	exBaIUVHduYX0YZjWptBeJNhijwIGntaTEMn2Yfw0rkfe8LUxAM3/0AlJCxNNsfvSvG8+TaTahF
-	WmfR4H5Cn+oAESXea7qC+CeYbJo639jpAlbS/StPzTfLXQLbKL1gtk46OoXPd7jn4trmaagP35+
-	o/LeZBWS3JJBV7ZwWuDpC7hgmu61ZuEMJNcbxsMmWGKq8lnDGowhOqeLcMWgbENrESU1YyN66U1
-	g1kgLHXl4UfJBiyytljTA=
-X-Received: by 2002:a05:6808:a550:20b0:467:2926:1252 with SMTP id 5614622812f47-46761727390mr1271145b6e.30.1773441057445;
-        Fri, 13 Mar 2026 15:30:57 -0700 (PDT)
+        bh=s0xGdOzKFMVP5ynlZwdIR9piZg01nlaRfSX1gpCcslY=;
+        b=a8p8sebk3izvHPknp8Y4kISRZumDRwMDyqpTkO03uUf8URhvKhW3Mq99jMiqCvZ29F
+         oo/YnqnbqaJXdGiwqO2xRhNeqJmaHpnw77UPYBCZn0WDZjXrCQO8CTPenwc5Neg7nMPv
+         t0nuY7uJm92aAAN+JthQ+AD8052n2vMHr2gCIdVpNDH69mEbCmDZ6pO9QRi41dTSI1ow
+         w3tkZzU5yHHHoL9MAKZgVk3F43daBcC7rmPdHbD2EaMHh1ynvhuh9WBS3rZKp4jEttZ7
+         rIa9Eoi1nIk0/lDgmHYmqqOOLRUVjNPp34oToTNaOHTQEFPInLrZs5RIOUxVmlsogtqP
+         +viw==
+X-Forwarded-Encrypted: i=1; AJvYcCXTlnrK9Lg0j5HMmAs162oNe3V4/FZj1Rzx6VU1NYPa2263/eU+KNBMrLyEcSXwrF2ddcU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxePXMeUv48HGte+exZGeIO8eocCQVgM/dehmWErnwztPIHkVZn
+	vi60eTDdy9RN2O1b/1WWbhQ9K8yz54Lw3NFNXD4+J18QTbIw6C5WzTSTg09L8Y/qd5g=
+X-Gm-Gg: ATEYQzwULop1Hhd88TFPn4CLfR0sUTii9iNyZ/4P99aL3hhAQawfp86W1urjo0jnT5R
+	upyQzHuAS8X94gpwaX12OAi0IZWsDhK1Mn08WqU9Mb+wAam1YdqrxiyqyIq+fZl5owBJ/6FDb+H
+	U7oN7H3hOBhmU/rjROVZK1VR/mFBTIT7OGFy2FtLlks501aW06WG68g5VbyGROyqoZ0hccAfEBZ
+	IvXEOspC1wCqpt1R9Nux0PBpREoz5WzKs4G89HAVNUCnuIUmzqy0rFmV+ii9IDdRxSY+9qbfDyi
+	6Kx6fhMBJYWjr3EzN5ShxnA1ziGnxB7z1RXL+vMcX2m0JNvzyopm2OBV/cTH4Il/xiH1u2yXfxW
+	Y4GFsyf8jeZeT/jxOnk0xRK+WEhBml0BRDut2TvLYtYQthT0YufKoHdo7sqnSEnRDdgzilpyLhB
+	oxsBlMwQ7G
+X-Received: by 2002:a05:6808:4704:b0:467:11fa:40a1 with SMTP id 5614622812f47-46757598a6amr2320563b6e.43.1773441060705;
+        Fri, 13 Mar 2026 15:31:00 -0700 (PDT)
 Received: from 20HS2G4.. ([2a09:bac1:76c0:540::22f:7d])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-467342fab49sm5408516b6e.16.2026.03.13.15.30.56
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-467342fab49sm5408516b6e.16.2026.03.13.15.30.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Mar 2026 15:30:56 -0700 (PDT)
+        Fri, 13 Mar 2026 15:30:59 -0700 (PDT)
 From: Chris J Arges <carges@cloudflare.com>
 To: Joe Damato <joe@dama.to>,
 	Jakub Kicinski <kuba@kernel.org>,
@@ -77,9 +77,9 @@ Cc: Chris J Arges <carges@cloudflare.com>,
 	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next v4 3/6] bnxt_en: Move bnxt_rss_ext_op into header
-Date: Fri, 13 Mar 2026 17:27:33 -0500
-Message-ID: <20260313223029.454755-4-carges@cloudflare.com>
+Subject: [PATCH net-next v4 4/6] bnxt_en: Implement XDP RSS hash metadata extraction for V3_CMP
+Date: Fri, 13 Mar 2026 17:27:34 -0500
+Message-ID: <20260313223029.454755-5-carges@cloudflare.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260313223029.454755-1-carges@cloudflare.com>
 References: <20260313223029.454755-1-carges@cloudflare.com>
@@ -91,72 +91,41 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This allows bnxt_rss_ext_op to be used by other functions. In addition this
-modifies the rxcmp argument to be const since the function only reads from
-this structure.
+This adds another conditional when cmp_type is CMP_TYPE_RX_L2_V3_CMP for
+drivers that support this completion format.
+
+This re-uses bnxt_rss_ext_op to provide similar functionality. One
+limitation is for L4 hash-types, protocol-specific bits can't be
+determined.
 
 Signed-off-by: Chris J Arges <carges@cloudflare.com>
 ---
- drivers/net/ethernet/broadcom/bnxt/bnxt.c | 17 -----------------
- drivers/net/ethernet/broadcom/bnxt/bnxt.h | 17 +++++++++++++++++
- 2 files changed, 17 insertions(+), 17 deletions(-)
+v4: re-uses bnxt_rss_ext_op
+---
+ drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-index 4881d9359549..8176d34b3408 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-@@ -2077,23 +2077,6 @@ static struct sk_buff *bnxt_rx_vlan(struct sk_buff *skb, u8 cmp_type,
- 	return NULL;
- }
- 
--static enum pkt_hash_types bnxt_rss_ext_op(struct bnxt *bp,
--					   struct rx_cmp *rxcmp)
--{
--	u8 ext_op;
--
--	ext_op = RX_CMP_V3_HASH_TYPE(bp, rxcmp);
--	switch (ext_op) {
--	case EXT_OP_INNER_4:
--	case EXT_OP_OUTER_4:
--	case EXT_OP_INNFL_3:
--	case EXT_OP_OUTFL_3:
--		return PKT_HASH_TYPE_L4;
--	default:
--		return PKT_HASH_TYPE_L3;
--	}
--}
--
- /* returns the following:
-  * 1       - 1 packet successfully received
-  * 0       - successful TPA_START, packet not completed yet
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.h b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-index 34bb98709f2b..f8b8068bb47e 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-@@ -2902,6 +2902,23 @@ static inline bool bnxt_sriov_cfg(struct bnxt *bp)
- #endif
- }
- 
-+static inline enum pkt_hash_types bnxt_rss_ext_op(struct bnxt *bp,
-+						  const struct rx_cmp *rxcmp)
-+{
-+	u8 ext_op;
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
+index 1f920464b426..babcd463e50e 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
+@@ -514,6 +514,16 @@ int bnxt_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
+ 		default:
+ 			break;
+ 		}
++	} else if (xdp->cmp_type == CMP_TYPE_RX_L2_V3_CMP) {
++		struct bnxt *bp = netdev_priv(xdp->xdp.rxq->dev);
 +
-+	ext_op = RX_CMP_V3_HASH_TYPE(bp, rxcmp);
-+	switch (ext_op) {
-+	case EXT_OP_INNER_4:
-+	case EXT_OP_OUTER_4:
-+	case EXT_OP_INNFL_3:
-+	case EXT_OP_OUTFL_3:
-+		return PKT_HASH_TYPE_L4;
-+	default:
-+		return PKT_HASH_TYPE_L3;
-+	}
-+}
++		if (rxcmp1->rx_cmp_flags2 & cpu_to_le32(RX_CMP_FLAGS2_IP_TYPE))
++			hash_type |= XDP_RSS_TYPE_L3_IPV6;
++		else
++			hash_type |= XDP_RSS_TYPE_L3_IPV4;
 +
- extern const u16 bnxt_bstore_to_trace[];
- extern const u16 bnxt_lhint_arr[];
++		if (bnxt_rss_ext_op(bp, rxcmp) == PKT_HASH_TYPE_L4)
++			hash_type |= XDP_RSS_L4;
+ 	}
  
+ 	*rss_type = hash_type;
 -- 
 2.43.0
 
