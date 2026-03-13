@@ -1,74 +1,62 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from www2881.sakura.ne.jp (www2881.sakura.ne.jp [49.212.198.91])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA72327B4F7;
-	Fri, 13 Mar 2026 13:10:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1429B3BB40;
+	Fri, 13 Mar 2026 13:17:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.198.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773407436; cv=none; b=qEHTePaPAGqnGeSOYTfPgIqUARYPpkZ+KaoNPKsMM7Gn4gzppXc2wF9cKeHjlw8LQW+99AxePf+fEr3RzqqJpBGxH8re6ZEQp9ezpFovf8RVLaMng3d7Laqky520mYNXHC5BoqOMpR/hjhRjKKLbuwQvTr6rKjzCKs+dqNyDikI=
+	t=1773407855; cv=none; b=BoXgc96uu1P8PkbmXlZAFGQwt4vZUmNBhCJxz6UfTlygo8f83mP09LlnhIyyK3eHvNeJFXx5yi2vFVGryGqjnjJInm2KW47mpyoOLDR+dSW/Wi7WjbrE1TrfiYJIl05J5NKJsdVgoaABgHuA7MhmUg5ECzjJLYJcL74Xo3c7Htg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773407436; c=relaxed/simple;
-	bh=vwogDLBb4glPRani4L2Ss2Ekn/HoYwTUUMhHpHLV/mA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iRYCrQzwL8XRebBt0oc+yj4PWJZ2aZbHG4QIILD2faWwtpYS3jQ9pLMP65kCzsYWSZTz4h8yBYg2scLSGzj8KjxBSppNyU/nLvXTcxk4qzMjHNI6cUbzrp1U7fuy1wZFmLVWbTEfwXiEesaeWGMgaY9RLxCmzFCkHd0l3J4coiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MNojZUh+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773407855; c=relaxed/simple;
+	bh=PTIXyQyDlwPJ3Xof3a3BmfGAp+M4OPOQDCa2TTf6ZqQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=NvwdKqC/5Sz1CzCNDxucfcqGXYOFnqPfRiPyOpMWJ9xI4d0rs9GergDdS97ZBMKHg5lF7Nx0qyAxj7GODfDgZCY7IT3+tKLzXL4KVZhyJCK+EieC2nbftFAoTbjvSSlmNvAr0L7qhtXDOKwSadd3GYDA568tUKXM8eIaf77Ryo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=enjuk.jp; spf=pass smtp.mailfrom=enjuk.jp; dkim=pass (2048-bit key) header.d=enjuk.jp header.i=@enjuk.jp header.b=Ij5fSZTR; arc=none smtp.client-ip=49.212.198.91
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=enjuk.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=enjuk.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MNojZUh+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F77CC19421;
-	Fri, 13 Mar 2026 13:10:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773407435;
-	bh=vwogDLBb4glPRani4L2Ss2Ekn/HoYwTUUMhHpHLV/mA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MNojZUh+gFaH2QRXBucakHU01BghXFsWk19vCgkM6aew/ebFi5ynWio67QbZFkXY7
-	 TCSO3KMjYnEJIOr72QVQ2fRJyHGJGGSFuuGoVhrq0ZRPPdtby2DECkB7hVr/6Wehe1
-	 HyKnhRCIY1AlzPWyCpddwDe/y70Npx+H3p7dKsKq11RK0yaA4FbE7tmi3ihbHW2uVy
-	 M/IKbO5V7DL8HVxyJUPUwU8lQVs6/3X2pZNnB1oxz5Sjv2N3gmJqG3fKtqzCKtwySo
-	 A49STKw1eLCTjH45zFraS5RBZnxV90Jx9o7p9WiwMzn3nyyLW7b3kgbx0n+6yHZjkH
-	 OBx7grXCjImhQ==
-Date: Fri, 13 Mar 2026 13:10:28 +0000
-From: Simon Horman <horms@kernel.org>
-To: Meghana Malladi <m-malladi@ti.com>
-Cc: vadim.fedorenko@linux.dev, haokexin@gmail.com, jacob.e.keller@intel.com,
-	sdf@fomichev.me, john.fastabend@gmail.com, hawk@kernel.org,
-	daniel@iogearbox.net, ast@kernel.org, pabeni@redhat.com,
-	kuba@kernel.org, edumazet@google.com, davem@davemloft.net,
-	andrew+netdev@lunn.ch, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, srk@ti.com,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Roger Quadros <rogerq@kernel.org>, danishanwar@ti.com
-Subject: Re: [PATCH net] net: ti: icssg-prueth: Fix memory leak in XDP_DROP
- for non-zero-copy mode
-Message-ID: <20260313131028.GA1311528@kernel.org>
-References: <20260311095441.1691636-1-m-malladi@ti.com>
+	dkim=pass (2048-bit key) header.d=enjuk.jp header.i=@enjuk.jp header.b="Ij5fSZTR"
+Received: from x1 (198.223.13.160.dy.iij4u.or.jp [160.13.223.198])
+	(authenticated bits=0)
+	by www2881.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 62DDGPtG073732
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Fri, 13 Mar 2026 22:16:25 +0900 (JST)
+	(envelope-from kohei@enjuk.jp)
+DKIM-Signature: a=rsa-sha256; bh=PTIXyQyDlwPJ3Xof3a3BmfGAp+M4OPOQDCa2TTf6ZqQ=;
+        c=relaxed/relaxed; d=enjuk.jp;
+        h=From:Message-ID:To:Subject:Date;
+        s=rs20251215; t=1773407785; v=1;
+        b=Ij5fSZTRwLdzKF+NYeq9AGJZ93CQ7ZOCv8TrzhFVoqk3XUSd6fsusio7SjKHXVSa
+         9/KU0soicUNVKtfF2R5e14hUXi54a7wStpQWP59JnYVpEgAE1y7u/SxSLWjMP0X5
+         FM7k1upwn+1i7QgP/Dd7IIztfvsli21AR5blMvLYawRNIbuxMchdG97rJWMlBnZm
+         1QYjuoEJ55xp4VBKZm9rEQPjwmljb+xCi2+OtGWzdlWc2MHjuHU6dHrxUnkMAtp7
+         gOd51uchJIuJ70WdwpkqNISN+HTLGzNhp9rN5/70TVO6wGpjDNlsYRHka0/3NYBs
+         efy6GBIGqipxsOlh73/ZSA==
+From: Kohei Enju <kohei@enjuk.jp>
+To: technoboy85@gmail.com
+Cc: andrew+netdev@lunn.ch, anthony.l.nguyen@intel.com, ast@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        edumazet@google.com, hawk@kernel.org, john.fastabend@gmail.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, przemyslaw.kitszel@intel.com
+Subject: Re: [PATCH net-next v2 0/2] e1000e: add XDP support
+Date: Fri, 13 Mar 2026 22:16:24 +0900
+Message-ID: <20260313131624.6562-1-kohei@enjuk.jp>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260312183817.104878-1-teknoraver@meta.com>
+References: <20260312183817.104878-1-teknoraver@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260311095441.1691636-1-m-malladi@ti.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Mar 11, 2026 at 03:24:41PM +0530, Meghana Malladi wrote:
-> Page recycling was removed from the XDP_DROP path in emac_run_xdp() to
-> avoid conflicts with AF_XDP zero-copy mode, which uses xsk_buff_free()
-> instead.
-> 
-> However, this causes a memory leak when running XDP programs that drop
-> packets in non-zero-copy mode (standard page pool mode). The pages are
-> never returned to the page pool, leading to OOM conditions.
-> 
-> Fix this by handling cleanup in the caller, emac_rx_packet().
-> When emac_run_xdp() returns ICSSG_XDP_CONSUMED for XDP_DROP, the
-> caller now recycles the page back to the page pool. The zero-copy
-> path, emac_rx_packet_zc() already handles cleanup correctly with
-> xsk_buff_free().
-> 
-> Fixes: 7a64bb388df3 ("net: ti: icssg-prueth: Add AF_XDP zero copy for RX")
-> Signed-off-by: Meghana Malladi <m-malladi@ti.com>
+On Thu, 12 Mar 2026 19:38:15 +0100, Matteo Croce wrote:
+> Add XDP support to e1000e driver. First patch adds basic XDP support,
+> while the second one adds support for AF_XDP.
+> Tested on an Intel 82574L Gigabit card.
 
-Reviewed-by: Simon Horman <horms@kernel.org>
-
+I'd Cc intel-wired-lan@lists.osuosl.org since this series is about e1000e.
+Is there any reason not to Cc the list?
