@@ -1,35 +1,50 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66BA119DF62;
-	Sat, 14 Mar 2026 19:20:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99D0627A916;
+	Sat, 14 Mar 2026 20:48:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773516011; cv=none; b=T3qqlU4MTjvdZ5og+gZrhOsAIaJmh0n9vkTlfRwiXWd2i4Q1HUnJpninVtoPSCUNcVQQl2mB8+Nm+kig7vWaIF10dtHSg0VG22zC+ZwAuWaJYJyssWGNyaDRhekqUT62Y2qDMwoV+rZm43fEJXvXKUJ+qmEkWvTEKCViKCEeFIk=
+	t=1773521314; cv=none; b=uWfbYFPczrM6srBPN4RTaGCf3NJ0Gjzq/uOjLYCoSLKBAnheb2bNVtbPUOnYmUkuKHfwFhdAm8xwhkQl24Tv+f7PByMY3DvuaW2ECRKeE2TP1BicDkMkR5xpwBtIGiUEaytuA8m0K1qFT/a8gS3YVE3ZL/TcfLS72RqWJEDeiNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773516011; c=relaxed/simple;
-	bh=mv9gRneToAJrV7gs2ldMrUIGYl8qxv9erSyv2O03I8k=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=A5LWMvpJjT46HN8sNsxlIsTAsWWRsOrnP5p9jc5wkvHl1+tts8ORdC2XXaI3/zPFQuZ/fB3uRkXhNAv9VmAN3C4vqWy3iJ2BfF5kf9obsLFoFS3AJ1TW76MNrigGdKnTjPZqFvxd2W/z6ZN3qw3Nr46mqLLFcgNDT2fxiIlzgjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JioKRn5p; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773521314; c=relaxed/simple;
+	bh=566j+opjh6kIWw86a7s2WVkmcHeNSeGSrU//p5vjg9U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QZUk7DazzOs5mDOCDS/cfdEqKjQRMnmrbuv21j99Oj0aCA7LyGSLRR3XsHLlrZ5/yACLt9njjI9ocZhGWnAbn6oHnfzpaBTQWUyd4BbUWML0I96ih0j6AUAncq6X7biCzDt+fZNTPgqoB5A1UHzWT0wFw69lsC9yeOKYHYzRW+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wk0PLOYF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JioKRn5p"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD3C6C116C6;
-	Sat, 14 Mar 2026 19:20:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wk0PLOYF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69746C116C6;
+	Sat, 14 Mar 2026 20:48:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773516010;
-	bh=mv9gRneToAJrV7gs2ldMrUIGYl8qxv9erSyv2O03I8k=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=JioKRn5phSWN+Pg9U/nDu8tULPa8K/S0HTFil7Iprr7qTyQHyzv+J5oZgqCPv6PGD
-	 Yt6nsRToT/SapJ8I3iW/WBWOTNQpSz2qdvOUrd339/V46piNjJbn2JPDts3Hjc5paA
-	 gy7akA7lp4vI5HSRoeT+Roqmc083GavdEgFU6Kn3w7Uc+xhVcENMQ2vij5rpxLLsUS
-	 JqNT85OoUoGKr1BFSaTsigUQ9XR4uleIe7anm0c8tpXPhWT8+zWYKUw1BEYI0Ad32D
-	 Kys43C2V2pGjqsuCs6ZxAcmZzmzpf0Ic31sRHMoYO6nS5NzWf0OuYG92c/ahINweDI
-	 8beNP4I73VXtg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3FFD53808200;
-	Sat, 14 Mar 2026 19:20:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1773521314;
+	bh=566j+opjh6kIWw86a7s2WVkmcHeNSeGSrU//p5vjg9U=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Wk0PLOYF8f8hduTvgIu+1kIHq+g2nI2BeJFoFets8Jg+lS2R+CSQFSggAnZLD/Yv/
+	 xBTg/5JFp8FMCsDVvk5uSDYMt5DWpQTYqZr6z/KdUeiaYGnKoBCAvKXjrP0+6nJ8dc
+	 lXp9mwAwbTaAPg52T26DiFGySBEoqZVaYiYe+M4uF+qj1/WH3wFIqmBJZ3Hb3LQyXt
+	 LfKicObKE0q9l4wV/i2KSRU6lzYUPi1uCUzCPiEBUPX8V6kDUZbEShg2wsOPT9SBPN
+	 FW4H5JUiZHfVi+OhfarztYSmQKA2lcW/8UT6pAvadwy+ubz9VYvGjhvK/eYayANSMS
+	 1ZWvW+i+kMzzg==
+From: Eric Biggers <ebiggers@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	bpf@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Eric Biggers <ebiggers@kernel.org>
+Subject: [PATCH bpf-next] bpf: Remove inclusion of crypto/sha1.h
+Date: Sat, 14 Mar 2026 13:47:34 -0700
+Message-ID: <20260314204734.46111-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,47 +52,36 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net: ti: icssg-prueth: Fix memory leak in XDP_DROP
- for
- non-zero-copy mode
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177351600505.1761235.8171503216454901330.git-patchwork-notify@kernel.org>
-Date: Sat, 14 Mar 2026 19:20:05 +0000
-References: <20260311095441.1691636-1-m-malladi@ti.com>
-In-Reply-To: <20260311095441.1691636-1-m-malladi@ti.com>
-To: Meghana Malladi <m-malladi@ti.com>
-Cc: vadim.fedorenko@linux.dev, haokexin@gmail.com, jacob.e.keller@intel.com,
- sdf@fomichev.me, john.fastabend@gmail.com, hawk@kernel.org,
- daniel@iogearbox.net, ast@kernel.org, pabeni@redhat.com, kuba@kernel.org,
- edumazet@google.com, davem@davemloft.net, andrew+netdev@lunn.ch,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, srk@ti.com, vigneshr@ti.com,
- rogerq@kernel.org, danishanwar@ti.com
 
-Hello:
+Since commit 603b44162325 ("bpf: Update the bpf_prog_calc_tag to use
+SHA256") made kernel/bpf/core.c use only SHA-256 and not SHA-1, the
+header <crypto/sha1.h> no longer needs to be included.  Remove the
+inclusion so that it no longer unnecessarily comes up in searches for
+which kernel code is still using the obsolete SHA-1 algorithm.
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Signed-off-by: Eric Biggers <ebiggers@kernel.org>
+---
+ kernel/bpf/core.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-On Wed, 11 Mar 2026 15:24:41 +0530 you wrote:
-> Page recycling was removed from the XDP_DROP path in emac_run_xdp() to
-> avoid conflicts with AF_XDP zero-copy mode, which uses xsk_buff_free()
-> instead.
-> 
-> However, this causes a memory leak when running XDP programs that drop
-> packets in non-zero-copy mode (standard page pool mode). The pages are
-> never returned to the page pool, leading to OOM conditions.
-> 
-> [...]
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 3ece2da55625c..f11ab6f354e2e 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -16,11 +16,10 @@
+  * Andi Kleen - Fix a few bad bugs and races.
+  * Kris Katterjohn - Added many additional checks in bpf_check_classic()
+  */
+ 
+ #include <uapi/linux/btf.h>
+-#include <crypto/sha1.h>
+ #include <linux/filter.h>
+ #include <linux/skbuff.h>
+ #include <linux/vmalloc.h>
+ #include <linux/prandom.h>
+ #include <linux/bpf.h>
 
-Here is the summary with links:
-  - [net] net: ti: icssg-prueth: Fix memory leak in XDP_DROP for non-zero-copy mode
-    https://git.kernel.org/netdev/net/c/719d3e71691d
-
-You are awesome, thank you!
+base-commit: 1c9982b4961334c1edb0745a04cabd34bc2de675
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.53.0
 
