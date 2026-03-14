@@ -1,121 +1,83 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C59F32E68D;
-	Sat, 14 Mar 2026 17:06:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66BA119DF62;
+	Sat, 14 Mar 2026 19:20:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773507992; cv=none; b=RuQYrM5fGybCkTxUEg00ZsYgSjON7+PAKwKoNQOoA5TNZBuee9YeylXq9t1YXzShhR/7ffj4Qnbf291h/Rz6x4oNpVS78vdAvKgT7WT+ywpD+AtqhqiUkTrvSYuRe5itYc+3Wg8ra+eG728AunwkAVCQbameSIj5EbenNwIF5NM=
+	t=1773516011; cv=none; b=T3qqlU4MTjvdZ5og+gZrhOsAIaJmh0n9vkTlfRwiXWd2i4Q1HUnJpninVtoPSCUNcVQQl2mB8+Nm+kig7vWaIF10dtHSg0VG22zC+ZwAuWaJYJyssWGNyaDRhekqUT62Y2qDMwoV+rZm43fEJXvXKUJ+qmEkWvTEKCViKCEeFIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773507992; c=relaxed/simple;
-	bh=BP6PDAwL7ZQIFhbNuWPztuxpeFKM2OWgbd3nAKkdShI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XX+x6pgS8VQYXoaN04lXOYyVX9t11jXLdtonSiAUfD3z4W3SxIjTvlFKRLIn9ONWmya5a07LCq74D8TVgrya6WBFPy0xp0+gS0BVtolkRRqmkkD4zBIMVVao0cYaNeUtx93Tmrl+B7EJr9Bb2FMXCiyaFieOVrJVfl/bGvDtnQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Uwt4ZS7G; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1773516011; c=relaxed/simple;
+	bh=mv9gRneToAJrV7gs2ldMrUIGYl8qxv9erSyv2O03I8k=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=A5LWMvpJjT46HN8sNsxlIsTAsWWRsOrnP5p9jc5wkvHl1+tts8ORdC2XXaI3/zPFQuZ/fB3uRkXhNAv9VmAN3C4vqWy3iJ2BfF5kf9obsLFoFS3AJ1TW76MNrigGdKnTjPZqFvxd2W/z6ZN3qw3Nr46mqLLFcgNDT2fxiIlzgjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JioKRn5p; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Uwt4ZS7G"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773507990; x=1805043990;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BP6PDAwL7ZQIFhbNuWPztuxpeFKM2OWgbd3nAKkdShI=;
-  b=Uwt4ZS7GhduaC5gYc1F+SynASRWlHe7ZPq1GEdSkbjtNMpTd5Y4k5PTO
-   TlYT2+gZLTrCa2QqAbGPUwoEBCd62kX3y1+ynnihsBwvPtE4wOHlqwk1c
-   ObD6D4Bqxp/V9p5bRRaLM/40eTJWBrvz56qMbLPEjzSVM+Nmq2Nj9hka9
-   aHsf+fUHbhcmO1rtIOWzguHmiiLBd8sXM3E+bWiEvLUTod06tPseXSSWs
-   buZs16cMufUjRejOzkOf9MrU/wW5pki0BkDTwI2NFplyJaN4S/bgimIR1
-   fePhJAXG34M2bIBp7wQAAErelOgGjlmVOaMMD482Laa/J+ygvLjnVQdKz
-   Q==;
-X-CSE-ConnectionGUID: Mb8+q8B9TRqg1JH3RhtXCA==
-X-CSE-MsgGUID: AHUvEtNuRRWFKFIinb99XQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11729"; a="74291606"
-X-IronPort-AV: E=Sophos;i="6.23,119,1770624000"; 
-   d="scan'208";a="74291606"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2026 10:06:29 -0700
-X-CSE-ConnectionGUID: S7Qzg7o5QjeaYBCY2orMyA==
-X-CSE-MsgGUID: 1B0hQ5hhSyOavx3FZxVKcw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,119,1770624000"; 
-   d="scan'208";a="221543533"
-Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
-  by orviesa008.jf.intel.com with ESMTP; 14 Mar 2026 10:06:23 -0700
-Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w1SRQ-000000003pJ-4Brw;
-	Sat, 14 Mar 2026 17:06:21 +0000
-Date: Sat, 14 Mar 2026 18:05:40 +0100
-From: kernel test robot <lkp@intel.com>
-To: Levi Zim via B4 Relay <devnull+rsworktech.outlook.com@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>
-Cc: oe-kbuild-all@lists.linux.dev, Amery Hung <ameryhung@gmail.com>,
-	linux-riscv@lists.infradead.org, stable@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev, Levi Zim <rsworktech@outlook.com>
-Subject: Re: [PATCH bpf] bpf: do not use kmalloc_nolock when
- !HAVE_CMPXCHG_DOUBLE
-Message-ID: <202603141857.sLJ0vJoa-lkp@intel.com>
-References: <20260314-bpf-kmalloc-nolock-v1-1-24abf3f75a9f@outlook.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JioKRn5p"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD3C6C116C6;
+	Sat, 14 Mar 2026 19:20:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773516010;
+	bh=mv9gRneToAJrV7gs2ldMrUIGYl8qxv9erSyv2O03I8k=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=JioKRn5phSWN+Pg9U/nDu8tULPa8K/S0HTFil7Iprr7qTyQHyzv+J5oZgqCPv6PGD
+	 Yt6nsRToT/SapJ8I3iW/WBWOTNQpSz2qdvOUrd339/V46piNjJbn2JPDts3Hjc5paA
+	 gy7akA7lp4vI5HSRoeT+Roqmc083GavdEgFU6Kn3w7Uc+xhVcENMQ2vij5rpxLLsUS
+	 JqNT85OoUoGKr1BFSaTsigUQ9XR4uleIe7anm0c8tpXPhWT8+zWYKUw1BEYI0Ad32D
+	 Kys43C2V2pGjqsuCs6ZxAcmZzmzpf0Ic31sRHMoYO6nS5NzWf0OuYG92c/ahINweDI
+	 8beNP4I73VXtg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3FFD53808200;
+	Sat, 14 Mar 2026 19:20:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260314-bpf-kmalloc-nolock-v1-1-24abf3f75a9f@outlook.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] net: ti: icssg-prueth: Fix memory leak in XDP_DROP
+ for
+ non-zero-copy mode
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177351600505.1761235.8171503216454901330.git-patchwork-notify@kernel.org>
+Date: Sat, 14 Mar 2026 19:20:05 +0000
+References: <20260311095441.1691636-1-m-malladi@ti.com>
+In-Reply-To: <20260311095441.1691636-1-m-malladi@ti.com>
+To: Meghana Malladi <m-malladi@ti.com>
+Cc: vadim.fedorenko@linux.dev, haokexin@gmail.com, jacob.e.keller@intel.com,
+ sdf@fomichev.me, john.fastabend@gmail.com, hawk@kernel.org,
+ daniel@iogearbox.net, ast@kernel.org, pabeni@redhat.com, kuba@kernel.org,
+ edumazet@google.com, davem@davemloft.net, andrew+netdev@lunn.ch,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, srk@ti.com, vigneshr@ti.com,
+ rogerq@kernel.org, danishanwar@ti.com
 
-Hi Levi,
+Hello:
 
-kernel test robot noticed the following build warnings:
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-[auto build test WARNING on e06e6b8001233241eb5b2e2791162f0585f50f4b]
+On Wed, 11 Mar 2026 15:24:41 +0530 you wrote:
+> Page recycling was removed from the XDP_DROP path in emac_run_xdp() to
+> avoid conflicts with AF_XDP zero-copy mode, which uses xsk_buff_free()
+> instead.
+> 
+> However, this causes a memory leak when running XDP programs that drop
+> packets in non-zero-copy mode (standard page pool mode). The pages are
+> never returned to the page pool, leading to OOM conditions.
+> 
+> [...]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Levi-Zim-via-B4-Relay/bpf-do-not-use-kmalloc_nolock-when-HAVE_CMPXCHG_DOUBLE/20260314-195705
-base:   e06e6b8001233241eb5b2e2791162f0585f50f4b
-patch link:    https://lore.kernel.org/r/20260314-bpf-kmalloc-nolock-v1-1-24abf3f75a9f%40outlook.com
-patch subject: [PATCH bpf] bpf: do not use kmalloc_nolock when !HAVE_CMPXCHG_DOUBLE
-config: x86_64-rhel-9.4 (https://download.01.org/0day-ci/archive/20260314/202603141857.sLJ0vJoa-lkp@intel.com/config)
-compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260314/202603141857.sLJ0vJoa-lkp@intel.com/reproduce)
+Here is the summary with links:
+  - [net] net: ti: icssg-prueth: Fix memory leak in XDP_DROP for non-zero-copy mode
+    https://git.kernel.org/netdev/net/c/719d3e71691d
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603141857.sLJ0vJoa-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/net/bpf_sk_storage.h:15,
-                    from net/core/sock.c:141:
->> include/linux/bpf_local_storage.h:22:19: warning: 'KMALLOC_NOLOCK_SUPPORTED' defined but not used [-Wunused-const-variable=]
-      22 | static const bool KMALLOC_NOLOCK_SUPPORTED = IS_ENABLED(CONFIG_HAVE_CMPXCHG_DOUBLE);
-         |                   ^~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/KMALLOC_NOLOCK_SUPPORTED +22 include/linux/bpf_local_storage.h
-
-    21	
-  > 22	static const bool KMALLOC_NOLOCK_SUPPORTED = IS_ENABLED(CONFIG_HAVE_CMPXCHG_DOUBLE);
-    23	
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
