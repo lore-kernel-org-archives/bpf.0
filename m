@@ -1,46 +1,52 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7538A378839;
-	Sat, 14 Mar 2026 14:46:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 996B237CD41;
+	Sat, 14 Mar 2026 15:00:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773499606; cv=none; b=XuNPLXH5lMRtOygBq6+51d5VmeXS074iovUCourhN1fTF6cxRmswmhepo5vJmZkVCxxCTzxhrzljmgpmRXu+3tzTghuWbMyGRRodJVgviBp2r4xvCqQktq6O8UoeUQ5PQm+DzJmCRiKxihXrrDuNOOUJ/2hRXxrOm9txBWs2mzY=
+	t=1773500406; cv=none; b=tYeRR4aWqu9ekyPIyXJ3NTZ/fllv7NBuvsEV9h+2GfoWv8WxFzdPNXKl4PoDKuCJ/hSiz038L/a66N7lnibb0ifCbGKNYvUEosVAJbFeaUcBfqTK1UFMHoNx2CUl03pXPPqeKAVr9+655JcwRoH6ntlTr4OY8YBI8ZjSazjlLrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773499606; c=relaxed/simple;
-	bh=6RU8YXK4lZN6siF8UbKrqN5vMtCFPb/4s6yA+Sn9MNI=;
+	s=arc-20240116; t=1773500406; c=relaxed/simple;
+	bh=GPPo7UyZhsa34vSl+juXV9cWHndyC5ux+fomdX4hXxk=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mAgBZC7IAMGf3ruUFhbT9Aqq7/pJCjlXLzoMU28J0jSWDttda+6Tg5SrraHQV4X9GFt8PRYPfEqE7ZW7CRq2YKzo3PD9WVpehDG1D0Vy/GkEon++zMky/nzqSDPE5yCeFkgXhmEENF06Wj8cuvEmNC/eZtfFylHfGIWoLRRZpvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AQ1uOxYh; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=BAqM4LWulmfjTAS1BCbiuS/nV1BXoapdM5cqE0peqWcGrsFtU7kp4D21+Ip7BneAqxUve1a6PnB1149PakYxOV9DmtpsSbzZnN75+98Z0Jpeg335CenNV8ewN0S8SHC1lkYXmfziMzlEy8Zn6h84lHLceVukfzDaeWKennmxBaY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H4WQH8Ne; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AQ1uOxYh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE559C116C6;
-	Sat, 14 Mar 2026 14:46:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H4WQH8Ne"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F09BC116C6;
+	Sat, 14 Mar 2026 15:00:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773499606;
-	bh=6RU8YXK4lZN6siF8UbKrqN5vMtCFPb/4s6yA+Sn9MNI=;
+	s=k20201202; t=1773500406;
+	bh=GPPo7UyZhsa34vSl+juXV9cWHndyC5ux+fomdX4hXxk=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=AQ1uOxYhsn2rdSSZbRTwlAsHhN71r/yB1LGVZKoyRhq+d/8gNjQcqlmeBFv7TK1Nb
-	 BXvDdS0re0es8eY6VmP5BKMxnV/d2Ccix0TzykXmK0kCNiyEohZUt47HOXGbj/EqQZ
-	 KJdppcJYsvREbHU2EM3r0z9znqt8cE66ID55MNjSIDOjLXBAQM2kO6Z9f4EcEA9sr7
-	 5QrkIAGG1Bm07Y/NNxU0spRVIzrmgP/3X2EcHuH8yH0thGotdIT+cwspNZzggSEWkW
-	 gkOHK0sB2zGVAr0Xsr6vPmcVQuntI8mrBbB+EMVeGDYGogY8qswBMcmp3g8jAp3x6P
-	 p4QdsSHyb6q7w==
-Date: Sat, 14 Mar 2026 07:46:44 -0700
+	b=H4WQH8NeAT2PaoMQAqqfNJ0e6dF5J9je+HIQckI7eVx5ReiBa/54cP11AJ0HDYAx2
+	 7/6qkvNGzyvd8B1jm6+VA1a4/ucNTM/CY2sAOKiVNOCbJt/UrsytRYbRdJf7AcIDFh
+	 EbInrsUs/+XrMrXla93s/LrPDFfGIc3U63t3qlrnwZaa6FAj7UJlrnrCH4AMt/Z73C
+	 bh/hHbBvSCjVrsGvjDFAvT9oHnwO7iVVMLXPcgZjL1/k/S2RIEaHg00Puw+SI/lfMi
+	 wzV5sI9aeBrwwbTi20Qbg7L9+Qcuh722fsoVsTXeT2t0rDoH8ujqiwI67+np6uMkaQ
+	 Vk6xjVH4cXlZA==
+Date: Sat, 14 Mar 2026 08:00:04 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: Stanislav Fomichev <stfomichev@gmail.com>, <netdev@vger.kernel.org>,
- <bpf@vger.kernel.org>, <magnus.karlsson@intel.com>, <pabeni@redhat.com>,
- <horms@kernel.org>
-Subject: Re: [PATCH net-next] xsk: use __xsk_rcv_zc_safe for ZC multi-buffer
- Rx processing
-Message-ID: <20260314074644.027eeb3f@kernel.org>
-In-Reply-To: <abPrzvYABPo7iAzq@boxer>
-References: <20260310133024.422464-1-maciej.fijalkowski@intel.com>
-	<abCUMtO8Trtzs23d@mini-arch>
-	<20260312173348.4e70cdec@kernel.org>
-	<abPZXXt/xCis3tIg@boxer>
-	<abPrzvYABPo7iAzq@boxer>
+To: Jamal Hadi Salim <jhs@mojatatu.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+ pabeni@redhat.com, horms@kernel.org, jiri@resnulli.us, toke@toke.dk,
+ vinicius.gomes@intel.com, stephen@networkplumber.org, vladbu@nvidia.com,
+ cake@lists.bufferbloat.net, bpf@vger.kernel.org, ghandatmanas@gmail.com,
+ km.kim1503@gmail.com, security@kernel.org, Victor Nogueira
+ <victor@mojatatu.com>
+Subject: Re: [PATCH net] net/sched: Mark qdisc for deletion if graft cannot
+ delete
+Message-ID: <20260314080004.3e8575d8@kernel.org>
+In-Reply-To: <CAM0EoM=KinOanha9nKJ=GyT2FU_o3Hg-tY5fWDfFO+PBuQfXpA@mail.gmail.com>
+References: <20260307212058.169511-1-jhs@mojatatu.com>
+	<20260310184713.7e810431@kernel.org>
+	<CAM0EoM=TAAfwZc3q1=RKWPrS778R_B8uM18ev_jYYz8oj4YiBA@mail.gmail.com>
+	<20260311175249.54abe1b6@kernel.org>
+	<CAM0EoMnv14pSaJWW3ZQuegkbQEqqye0zp0-_tCaOEWEg=C3xCQ@mail.gmail.com>
+	<20260312165113.773a5f44@kernel.org>
+	<CAM0EoMm0dMRKJyfCH80G=q4PnnTzzKVRvSrAU204FFKMn9NOtQ@mail.gmail.com>
+	<CAM0EoM=KinOanha9nKJ=GyT2FU_o3Hg-tY5fWDfFO+PBuQfXpA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,20 +56,137 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Fri, 13 Mar 2026 11:49:50 +0100 Maciej Fijalkowski wrote:
-> On Fri, Mar 13, 2026 at 10:31:09AM +0100, Maciej Fijalkowski wrote:
-> > On Thu, Mar 12, 2026 at 05:33:48PM -0700, Jakub Kicinski wrote:  
-> > > The pre-req is in both trees now. Please repost?  
-> > 
-> > Will do.  
+On Fri, 13 Mar 2026 15:36:28 -0400 Jamal Hadi Salim wrote:
+> In this specific example, the issue is that the classifier code path
+> can't release the rtnl_lock while the qdisc's refcnt is bigger than 1.
 > 
-> Argh, seems like it's not there. Maybe you meant Nikhil Rao's fixes, but
-> the pre-req for this patch [0] has been applied to bpf-next, I do not see
-> it on neither net-next nor net tree.
-> 
-> On bpf-next I see this as f620af11c27b ("xsk: avoid double checking against rx
-> queue being full").
-> 
-> [0] : https://lore.kernel.org/bpf/20260218150000.301176-1-maciej.fijalkowski@intel.com/
+> Does this make more sense?
+> The reason we went with the "mark for delete" approach is at time x+3
+> the "qdisc add" wont be able to find this qdisc. This is the common
+> observed pattern - for example described in the commit message where
+> we get have a slightly different flow with "qdisc del" before "filter
+> add".
 
-I see, repost for bpf-next then?
+Maybe a (completely untested) diff will help illustrate my thinking 
+better than words:
+
+diff --git a/include/net/pkt_cls.h b/include/net/pkt_cls.h
+index 99ac747b7906..c13c9e8619e4 100644
+--- a/include/net/pkt_cls.h
++++ b/include/net/pkt_cls.h
+@@ -27,6 +27,9 @@ void unregister_tcf_proto_ops(struct tcf_proto_ops *ops);
+ #define NET_CLS_ALIAS_PREFIX "net-cls-"
+ #define MODULE_ALIAS_NET_CLS(kind)	MODULE_ALIAS(NET_CLS_ALIAS_PREFIX kind)
+ 
++extern char *rtnl_load_mod;
++void rtnl_load_mod_check(void);
++
+ struct tcf_block_ext_info {
+ 	enum flow_block_binder_type binder_type;
+ 	tcf_chain_head_change_t *chain_head_change;
+diff --git a/net/sched/act_api.c b/net/sched/act_api.c
+index 332fd9695e54..c21dd2e36592 100644
+--- a/net/sched/act_api.c
++++ b/net/sched/act_api.c
+@@ -1368,11 +1368,15 @@ struct tc_action_ops *tc_action_load_ops(struct nlattr *nla, u32 flags,
+ #ifdef CONFIG_MODULES
+ 		bool rtnl_held = !(flags & TCA_ACT_FLAGS_NO_RTNL);
+ 
+-		if (rtnl_held)
+-			rtnl_unlock();
++		if (rtnl_held) {
++			if (WARN_ON_ONCE(rtnl_load_mod))
++				return ERR_PTR(-EINVAL);
++			rtnl_load_mod = kasprintf(GFP_KERNEL,
++						  NET_ACT_ALIAS_PREFIX "%s",
++						  act_name);
++			return ERR_PTR(-EAGAIN);
++		}
+ 		request_module(NET_ACT_ALIAS_PREFIX "%s", act_name);
+-		if (rtnl_held)
+-			rtnl_lock();
+ 
+ 		a_o = tc_lookup_action_n(act_name);
+ 
+@@ -2107,6 +2111,9 @@ static int tcf_action_add(struct net *net, struct nlattr *nla,
+ 				      &attr_size, flags, 0, extack);
+ 		if (ret != -EAGAIN)
+ 			break;
++		rtnl_unlock();
++		rtnl_load_mod_check();
++		rtnl_lock();
+ 	}
+ 
+ 	if (ret < 0)
+diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
+index 4829c27446e3..1b0f762d6e4b 100644
+--- a/net/sched/cls_api.c
++++ b/net/sched/cls_api.c
+@@ -46,6 +46,19 @@
+ /* The list of all installed classifier types */
+ static LIST_HEAD(tcf_proto_base);
+ 
++char *rtnl_load_mod;
++
++void rtnl_load_mod_check(void)
++{
++	char *mod = rtnl_load_mod;
++
++	if (mod) {
++		rtnl_load_mod = NULL;
++		request_module("%s", mod);
++		kfree(mod);
++	}
++}
++
+ /* Protects list of registered TC modules. It is pure SMP lock. */
+ static DEFINE_RWLOCK(cls_mod_lock);
+ 
+@@ -255,17 +268,15 @@ tcf_proto_lookup_ops(const char *kind, bool rtnl_held,
+ 	if (ops)
+ 		return ops;
+ #ifdef CONFIG_MODULES
+-	if (rtnl_held)
+-		rtnl_unlock();
++	if (rtnl_held) {
++		if (WARN_ON_ONCE(rtnl_load_mod))
++			return ERR_PTR(-EINVAL);
++		rtnl_load_mod = kasprintf(GFP_KERNEL,
++					  NET_CLS_ALIAS_PREFIX "%s", kind);
++		return ERR_PTR(-EAGAIN);
++	}
+ 	request_module(NET_CLS_ALIAS_PREFIX "%s", kind);
+-	if (rtnl_held)
+-		rtnl_lock();
+ 	ops = __tcf_proto_lookup_ops(kind);
+-	/* We dropped the RTNL semaphore in order to perform
+-	 * the module load. So, even if we succeeded in loading
+-	 * the module we have to replay the request. We indicate
+-	 * this using -EAGAIN.
+-	 */
+ 	if (ops) {
+ 		module_put(ops->owner);
+ 		return ERR_PTR(-EAGAIN);
+@@ -2459,6 +2470,7 @@ static int tc_new_tfilter(struct sk_buff *skb, struct nlmsghdr *n,
+ 		 * of target chain.
+ 		 */
+ 		rtnl_held = true;
++		rtnl_load_mod_check();
+ 		/* Replay the request. */
+ 		goto replay;
+ 	}
+@@ -3230,9 +3242,13 @@ static int tc_ctl_chain(struct sk_buff *skb, struct nlmsghdr *n,
+ 	tcf_chain_put(chain);
+ errout_block:
+ 	tcf_block_release(q, block, true);
+-	if (err == -EAGAIN)
++	if (err == -EAGAIN) {
++		rtnl_unlock();
++		rtnl_load_mod_check();
++		rtnl_lock();
+ 		/* Replay the request. */
+ 		goto replay;
++	}
+ 	return err;
+ 
+ errout_block_locked:
