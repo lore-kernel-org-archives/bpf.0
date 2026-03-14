@@ -1,134 +1,207 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D6C91E1DFC;
-	Sat, 14 Mar 2026 00:24:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F98E246BC0
+	for <bpf@vger.kernel.org>; Sat, 14 Mar 2026 01:29:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773447857; cv=none; b=OmkocTklgA31pph7YOFzSAPAIu9zBaDf4y45ruIhU0+40SD0g/vLUJ7qimS2NoWqjMLV1VnwcOzEEMoNfFwCtJp11/tE55yrT/tlaOaf/te6EbxJXo5rPn3UsJ+BGfgL3hd5/fnKrokdT+gM4fx1cJodd0sUuGlZ9NWiLxeKbtY=
+	t=1773451779; cv=none; b=bEw3tQ7K6TTncWbOtfNAwjFQobUF7wzmpV3OSvz3VzEyRfC3VDh6NoAuGvIRN/EH5YO0lm3nlJKlT8Q92CN1eSR1UHNBhfu7jZiIuOKXGiiSDmMXAewyHMWXen6jXvqkfQ25gi2XDtAUn+WfgN4/3rCVVr9QdrzPZXts1QpyqUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773447857; c=relaxed/simple;
-	bh=WQRXpjIwf6KYkSpJNf4xnZTekqBOFUxWV+yK0mOoxb8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IuXgEA8LGhFGAY716oX5be948llbvXznJxvd45NbEuNc0+F6rONKtXKYfWsPqkyhToOiDU0x9i09RVRYOv1NEaLi90l2V7mzYTW5u5is/EJ21nH6vc8euzuipTFjZN/qNJMlKrtJJbLKBCgHsYrSpZkuemFfRjcR4XX5iP4fVxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i0nggihj; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773451779; c=relaxed/simple;
+	bh=joHvCo3Mef3lidTNmKFQXs+zuz68Ddv2REm0xsdd24w=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=mM7XNdfZLguUCsRsExHb7dKUSNKxp9RUSDKJMlhoqPWdUTIFoeK3Ulu6PdCycowiHpTQjTstKfXawkTmoAabXmPgBA2BL731gu72PuzSwlFSEWpL+4WKqmQEf4u+wpj1LsyuQrlvn339RbVz9fQuLoieqzV5EMyF/+F7WkMJSTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Re4Ido98; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i0nggihj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 088E7C19421;
-	Sat, 14 Mar 2026 00:24:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773447856;
-	bh=WQRXpjIwf6KYkSpJNf4xnZTekqBOFUxWV+yK0mOoxb8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=i0nggihjXmXTKML8sut6lB5srcFWHmMKN3tSb0vnbiKDcMNVltZU2CmPxcxFrG3o3
-	 nQrXA1wQ5YuTbmhgcTPNORS+379TzqDGm/7lSrQ1+WOrB6YJhRCIjKA7zUUcBgPch0
-	 EYChM4p2xmMbNvogwcdaYFHJ9nHAZ56sOZLrj4G67jwJtQWWuJzeM6LK+rXxZtPvPL
-	 7hsCy1/fez24lkAmdr6y8xZG7yqBOpidyJ0h37yL3W7fcEPRQk675mEsDmHjbA8Xn+
-	 hN93oY8bX37rGdXAEkgAe3QI7f5zrI2DHLm42gIk1V7HmETARtzUHgwH52MHcPBfBz
-	 VF6ZMYEbGWSgg==
-Date: Fri, 13 Mar 2026 18:24:12 -0600
-From: Keith Busch <kbusch@kernel.org>
-To: Vineeth Remanan Pillai <vineeth@bitbyteword.org>
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Dmitry Ilvokhin <d@ilvokhin.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-	io-uring@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-	Xin Long <lucien.xin@gmail.com>, Jon Maloy <jmaloy@redhat.com>,
-	Aaron Conole <aconole@redhat.com>,
-	Eelco Chaudron <echaudro@redhat.com>,
-	Ilya Maximets <i.maximets@ovn.org>, netdev@vger.kernel.org,
-	bpf@vger.kernel.org, linux-sctp@vger.kernel.org,
-	tipc-discussion@lists.sourceforge.net, dev@openvswitch.org,
-	Oded Gabbay <ogabbay@kernel.org>, Koby Elbaz <koby.elbaz@intel.com>,
-	dri-devel@lists.freedesktop.org,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	"Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-	Huang Rui <ray.huang@amd.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Len Brown <lenb@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	linux-pm@vger.kernel.org, MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Kyungmin Park <kyungmin.park@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	linaro-mm-sig@lists.linaro.org, Eddie James <eajames@linux.ibm.com>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Joel Stanley <joel@jms.id.au>, linux-fsi@lists.ozlabs.org,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Philipp Stanner <phasta@kernel.org>,
-	Harry Wentland <harry.wentland@amd.com>,
-	Leo Li <sunpeng.li@amd.com>, amd-gfx@lists.freedesktop.org,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	linux-input@vger.kernel.org,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	linux-i2c@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	linux-spi@vger.kernel.org,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	linux-scsi@vger.kernel.org, Chris Mason <clm@fb.com>,
-	David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/15] tracepoint: Add trace_invoke_##name() API
-Message-ID: <abSqrJ1J59RQC47U@kbusch-mbp>
-References: <20260312150523.2054552-1-vineeth@bitbyteword.org>
- <20260312150523.2054552-2-vineeth@bitbyteword.org>
- <20260312111255.7925b4e2@gandalf.local.home>
- <CAO7JXPhg-Etspj9YahZrq8cmZ2K6AGWDrMnHO+oD96P_SmOLBw@mail.gmail.com>
- <20260312155326.GB1282955@noisy.programming.kicks-ass.net>
- <CAO7JXPiu8-LE_gG001_GQLoGVYakPdzmH2SXLqfzJjEUxbn1Rw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Re4Ido98"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-35a07ed3ebdso1335606a91.1
+        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 18:29:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773451777; x=1774056577; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=7EmrSuHvutIrDBDAGlQ6buLIUtau7tLM1U33dA0uIH0=;
+        b=Re4Ido98JXTAFfYrWIaY3DC16EXt+KJGfQPojW1m9PHjIi/Gx9rdLbKReJ7dEKM6sk
+         ouzyDtQPIPHZMANla7gk3p05kz89Rzwop5rYC2PSdDuci9+0KgCc7ksPOVdLMdyXJQ7E
+         4qQCb/x7yq0dWnoL85/jarSx2Y7k4zZGojkvyCy9lzxB8hlk9BzUN5MiAithFecooXaD
+         8rGd1CJ5SGF4jJOY/yPoQIWm0XrQixroUYI+lK9EEbD3z3Wm95Y8E67Pb3OpktIS526+
+         xTEPnxxJWNU45if72/5qK+CyU3/rt4hn33CRO/PQuPJCG37fu4uiN6tvm1+tQb6pTPBe
+         3Jrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773451777; x=1774056577;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7EmrSuHvutIrDBDAGlQ6buLIUtau7tLM1U33dA0uIH0=;
+        b=qIsSO2w1IHBBZMAWqCxfdzx+urbGGbFd2S2z5Ipr1oRpeodr1NA2WcLbzGKpllYm1m
+         BOFCP9w+DGStwZzl+58QCNx9toOaDrGeoLlE2uFDXXHHmybAe212bKeU2vN7BD4uSipn
+         5v+S2SDBiECRu2L7TwIAOKchgAU3HzMZksdO4mytw18SdLsXNdzVfwLF1m27qrvbDHAi
+         G8E1ZrVH6zNn1S+ks6f74FLK8fC+YIeVB2x+5P8FqrNe/1jzrlMLwTg0GIhX5MFOQ6UT
+         oCy856+AUa72Hs7Gz7jjdwSbN1lANCpKpyR30aOMp6jEe5AH75Z0y+KwxqFXciD+yFja
+         3vQg==
+X-Forwarded-Encrypted: i=1; AJvYcCW9wXHLrFeypGDxljDavy7kjfrhjrix7k6sQKlDUjKsxolBIuU+PgcJ57cyii0hhiO3URM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywl4NwVP/SunpCiF+cFlhJ+Pz4a0hqhY/KaqVSJ5+UFFDNl4ANQ
+	LO24tMAK+cfvDfd42ajQcRrMyRmib/fTYmi9YPWIqD6YZnok933NKK/WBYlWHbbt
+X-Gm-Gg: ATEYQzwe8KW0u1MRVLOgLUPLRn9ABBqE0udVjHPKak1bJ+TXZN7IUwptPpofNtiNB5F
+	9TIvW196bWEUC8Ri+Q5euP50BQTW4UAFpfyci1cEm2CNCFfnf9+UpBcDwA2De9ikBWm0OrXx785
+	YVZSplxHGbuyxaRmUl1dze8hshUxTdLlAwlydnqLZIAUEBN7ke9xXbfIKZ5jsjKsH5/d2AcbVv4
+	88SSOmLpFFvLsttVGg5MTorpfonaZjIK/eh0x4fMlOHxAwvXDHuhgokwCBj2CVbeAWE7FljIqbK
+	CIfYbDYD9cskp4zFO2dvQMoMoxQqpJ1OPGxEFQmnzXAddHkFJRzdk0ZgvkPpey3lVyQv1ggTxmi
+	Es3SGlyjaWs5gFDxNjRYLmAU4kvrXN+Dx171k1T0PZYF6bOeE2l2dGqqay8JJiWgpDMe9KgQVza
+	mGJSrPXUoeUm1miDX5yh+iZPEMzsfGAv5ZGXr/qMmziXkFznD3BKM=
+X-Received: by 2002:a17:90b:2683:b0:359:8d2e:6f79 with SMTP id 98e67ed59e1d1-35a21f6874bmr5053778a91.14.1773451777422;
+        Fri, 13 Mar 2026 18:29:37 -0700 (PDT)
+Received: from [192.168.0.56] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35a02fc8465sm9531222a91.9.2026.03.13.18.29.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Mar 2026 18:29:37 -0700 (PDT)
+Message-ID: <4e4c3be9bfca85c5343834b5d6b1d6283fd6a1f5.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v9 1/5] bpf: Move constants blinding out of
+ arch-specific JITs
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Xu Kuohai <xukuohai@huaweicloud.com>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
+ Lau <martin.lau@linux.dev>, Yonghong Song	 <yonghong.song@linux.dev>,
+ Puranjay Mohan <puranjay@kernel.org>, Anton Protopopov
+ <a.s.protopopov@gmail.com>, Alexis =?ISO-8859-1?Q?Lothor=E9?=
+ <alexis.lothore@bootlin.com>,  Shahab Vahedi <list+bpf@vahedi.org>, Russell
+ King <linux@armlinux.org.uk>, Tiezhu Yang <yangtiezhu@loongson.cn>,  Hengqi
+ Chen <hengqi.chen@gmail.com>, Johan Almbladh
+ <johan.almbladh@anyfinetworks.com>, Paul Burton	 <paulburton@kernel.org>,
+ Hari Bathini <hbathini@linux.ibm.com>, Christophe Leroy
+ <chleroy@kernel.org>, Naveen N Rao <naveen@kernel.org>, Luke Nelson	
+ <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, 
+ =?ISO-8859-1?Q?Bj=F6rn_T=F6pel?=	 <bjorn@kernel.org>, Pu Lehui
+ <pulehui@huawei.com>, Ilya Leoshkevich	 <iii@linux.ibm.com>, Heiko Carstens
+ <hca@linux.ibm.com>, Vasily Gorbik	 <gor@linux.ibm.com>, "David S . Miller"
+ <davem@davemloft.net>, Wang YanQing	 <udknight@gmail.com>
+Date: Fri, 13 Mar 2026 18:29:33 -0700
+In-Reply-To: <20260312170255.3427799-2-xukuohai@huaweicloud.com>
+References: <20260312170255.3427799-1-xukuohai@huaweicloud.com>
+	 <20260312170255.3427799-2-xukuohai@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAO7JXPiu8-LE_gG001_GQLoGVYakPdzmH2SXLqfzJjEUxbn1Rw@mail.gmail.com>
 
-On Thu, Mar 12, 2026 at 12:05:37PM -0400, Vineeth Remanan Pillai wrote:
-> On Thu, Mar 12, 2026 at 11:53 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > That seems like an unreasonable waste of energy. You could've had claude
-> > write a Coccinelle script for you and saved a ton of tokens.
-> 
-> Yeah true, Steve also mentioned this to me offline. Haven't used
-> Coccinelle before, but now I know :-)
+On Fri, 2026-03-13 at 01:02 +0800, Xu Kuohai wrote:
 
-[+ Chris Mason]
+[...]
 
-At the risk of creating a distraction...
+> diff --git a/arch/arc/net/bpf_jit_core.c b/arch/arc/net/bpf_jit_core.c
+> index 1421eeced0f5..973ceae48675 100644
+> --- a/arch/arc/net/bpf_jit_core.c
+> +++ b/arch/arc/net/bpf_jit_core.c
 
-This discussion got me thinking the right skill loaded should have the
-AI implicitly use coccinelle to generate the patchset rather than do it
-by hand. You could prompt with simple language for a pattern
-substitution rather than explicitly request coccinelle, and it should
-generate a patch set using a script rather than spending tokens on doing
-it "by hand".
+[...]
 
-I sent such a "skill" to Chris' kernel "review-prompts":
+> @@ -229,12 +211,19 @@ static void jit_ctx_cleanup(struct jit_context *ctx=
+)
+> =C2=A0		ctx->bpf2insn_valid =3D false;
+> =C2=A0
+> =C2=A0	/* Freeing "bpf_header" is enough. "jit.buf" is a sub-array of it.=
+ */
+> -	if (!ctx->success && ctx->bpf_header) {
+> -		bpf_jit_binary_free(ctx->bpf_header);
+> -		ctx->bpf_header =3D NULL;
+> -		ctx->jit.buf=C2=A0=C2=A0=C2=A0 =3D NULL;
+> -		ctx->jit.index=C2=A0 =3D 0;
+> -		ctx->jit.len=C2=A0=C2=A0=C2=A0 =3D 0;
+> +	if (!ctx->success) {
+> +		if (ctx->bpf_header) {
+> +			bpf_jit_binary_free(ctx->bpf_header);
+> +			ctx->bpf_header =3D NULL;
+> +			ctx->jit.buf=C2=A0=C2=A0=C2=A0 =3D NULL;
+> +			ctx->jit.index=C2=A0 =3D 0;
+> +			ctx->jit.len=C2=A0=C2=A0=C2=A0 =3D 0;
+> +		}
+> +		if (ctx->is_extra_pass) {
 
-  https://github.com/masoncl/review-prompts/pull/35
+Nit: The idea is that for !ctx->is_extra_pass
+     ctx->prog->bpf_func !=3D NULL only when ctx->success is true, right?
+     Maybe just drop the condition?
 
-I used patch one from this series as the starting point and let the AI
-figure the rest out. The result actually found additional patterns that
-could take advantage of the optimisation that this series did not
-include. The resulting kernel tree that the above github pull request
-references cost 2.8k tokens to create with the skill.
+> +			ctx->prog->bpf_func =3D NULL;
+> +			ctx->prog->jited =3D 0;
+> +			ctx->prog->jited_len =3D 0;
+> +		}
+> =C2=A0	}
+> =C2=A0
+> =C2=A0	ctx->emit =3D false;
+> diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
+> index deeb8f292454..e6b1bb2de627 100644
+> --- a/arch/arm/net/bpf_jit_32.c
+> +++ b/arch/arm/net/bpf_jit_32.c
+> @@ -2144,9 +2144,7 @@ bool bpf_jit_needs_zext(void)
+> =C2=A0
+> =C2=A0struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+> =C2=A0{
+> -	struct bpf_prog *tmp, *orig_prog =3D prog;
+> =C2=A0	struct bpf_binary_header *header;
+> -	bool tmp_blinded =3D false;
+> =C2=A0	struct jit_ctx ctx;
+> =C2=A0	unsigned int tmp_idx;
+> =C2=A0	unsigned int image_size;
+
+The code in arch/arc is modified to do `... ctx->prog->jited =3D 0; ...`,
+but for arm32 there is no such modification. Why is that so?
+
+[...]
+
+> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.=
+c
+> index adf84962d579..cd5a72fff500 100644
+> --- a/arch/arm64/net/bpf_jit_comp.c
+> +++ b/arch/arm64/net/bpf_jit_comp.c
+> @@ -2009,14 +2009,12 @@ struct arm64_jit_data {
+
+[...]
+
+> @@ -2245,13 +2211,15 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_p=
+rog *prog)
+> =C2=A0		kfree(jit_data);
+> =C2=A0		prog->aux->jit_data =3D NULL;
+> =C2=A0	}
+> -out:
+> -	if (tmp_blinded)
+> -		bpf_jit_prog_release_other(prog, prog =3D=3D orig_prog ?
+> -					=C2=A0=C2=A0 tmp : orig_prog);
+> +
+> =C2=A0	return prog;
+> =C2=A0
+> =C2=A0out_free_hdr:
+> +	if (extra_pass) {
+> +		prog->bpf_func =3D NULL;
+> +		prog->jited =3D 0;
+> +		prog->jited_len =3D 0;
+> +	}
+
+Just for my understanding, is the following correct?
+- Previously, a call bpf_jit_blind_constants() always cloned the prog.
+- Jits only set prog->jited to true upon successful compilation.
+- On error exit jits restored the original prog with it's prog->jited =3D=
+=3D 0.
+
+What happened in case of an extra pass?
+I'd expect that in case of an extra pass prog->jited would be true
+even before program is cloned by blind_constants() (and that's what
+arc code uses to figure out if the current pass is an extra pass).
+If so, old code would preserve prog->jited as true even in case of
+extra pass failure. Is that true or am I confused?
+
+Just trying to understand why this patch has to deal with the above
+snippet at all. In case it is indeed necessary, it seems the logic
+should be similar for all jits, is there a way to push this snippet to
+some common code? E.g. in verifier.c where the extra pass is initiated.
+
+[...]
