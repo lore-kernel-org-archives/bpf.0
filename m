@@ -1,213 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CBAF1DD525;
-	Sat, 14 Mar 2026 16:02:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C59F32E68D;
+	Sat, 14 Mar 2026 17:06:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773504178; cv=none; b=gK3zd3+y1/dX9TiPwodfKuR++r/7Z5S0DlkexF/1NI6I1OAMoPSfV3Nh6qYpRnEDsU/TrXC8v/KxsNI98zhbwUF0qeDKqhw6QF3O2lSToSL9tO+eqL2nll3PLZK7xZ0tPLuuAuohXfg5DXelg+WR+y0lbAX/YhtDwg2OIrc/gcg=
+	t=1773507992; cv=none; b=RuQYrM5fGybCkTxUEg00ZsYgSjON7+PAKwKoNQOoA5TNZBuee9YeylXq9t1YXzShhR/7ffj4Qnbf291h/Rz6x4oNpVS78vdAvKgT7WT+ywpD+AtqhqiUkTrvSYuRe5itYc+3Wg8ra+eG728AunwkAVCQbameSIj5EbenNwIF5NM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773504178; c=relaxed/simple;
-	bh=gW273cX5oHbg/QoABE2SB7PT0aTQ/h5U216t18qbRMs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=L6iYqLqFHfHcVlOFxP7GnZqm6i9aXxfcttArtCriTDW3xXz5clzkxG67nsWEbfjCi0tzvbBBPSXHCsLJGRQmsiSE4C1ZyuLbA3RCDP9o6UEYOK8xEyJ7HAQW0Jh/O5fIf1jQXYJ5GOxB/1Yao2z0omGkHz2Dxe+7GsXp5avjp28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QYASmWMm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773507992; c=relaxed/simple;
+	bh=BP6PDAwL7ZQIFhbNuWPztuxpeFKM2OWgbd3nAKkdShI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XX+x6pgS8VQYXoaN04lXOYyVX9t11jXLdtonSiAUfD3z4W3SxIjTvlFKRLIn9ONWmya5a07LCq74D8TVgrya6WBFPy0xp0+gS0BVtolkRRqmkkD4zBIMVVao0cYaNeUtx93Tmrl+B7EJr9Bb2FMXCiyaFieOVrJVfl/bGvDtnQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Uwt4ZS7G; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QYASmWMm"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 236E1C116C6;
-	Sat, 14 Mar 2026 16:02:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773504178;
-	bh=gW273cX5oHbg/QoABE2SB7PT0aTQ/h5U216t18qbRMs=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=QYASmWMmM5rPb6P6M/GW67xjWV0DT2QV6FnyrC4XUjVrQaRAM6mP1gsANpFO3gcHl
-	 XzYCqtfvxi8oGwntcVW4pRyoh+nejoV8cnOZ3aCD/JYyWJDtMsgMtoVMvz2T49HX4x
-	 7StCfls88j2SlaMD7GE6yzX1ACkZHXN7D2HXTYTlyHvDY7WwvGLqkZ7x7/IjyiHDtw
-	 cXORGe1sfs+kcBbXhAnBJGoKxDZEZTwJTHrV/IVBh0w0ysCBml3lTIBPJ41jHmuYyc
-	 aIaE6RynhHdB8cRc422lONZiGyS6rpbBjwsWrpTNKfmjrnNL/Goah+oRSCir4ByhIE
-	 e0Nf50eLdE1Hg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 117BC10706E2;
-	Sat, 14 Mar 2026 16:02:58 +0000 (UTC)
-From: Levi Zim via B4 Relay <devnull+rsworktech.outlook.com@kernel.org>
-Date: Sun, 15 Mar 2026 00:02:48 +0800
-Subject: [PATCH bpf v3] bpf: do not use kmalloc_nolock when
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Uwt4ZS7G"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773507990; x=1805043990;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BP6PDAwL7ZQIFhbNuWPztuxpeFKM2OWgbd3nAKkdShI=;
+  b=Uwt4ZS7GhduaC5gYc1F+SynASRWlHe7ZPq1GEdSkbjtNMpTd5Y4k5PTO
+   TlYT2+gZLTrCa2QqAbGPUwoEBCd62kX3y1+ynnihsBwvPtE4wOHlqwk1c
+   ObD6D4Bqxp/V9p5bRRaLM/40eTJWBrvz56qMbLPEjzSVM+Nmq2Nj9hka9
+   aHsf+fUHbhcmO1rtIOWzguHmiiLBd8sXM3E+bWiEvLUTod06tPseXSSWs
+   buZs16cMufUjRejOzkOf9MrU/wW5pki0BkDTwI2NFplyJaN4S/bgimIR1
+   fePhJAXG34M2bIBp7wQAAErelOgGjlmVOaMMD482Laa/J+ygvLjnVQdKz
+   Q==;
+X-CSE-ConnectionGUID: Mb8+q8B9TRqg1JH3RhtXCA==
+X-CSE-MsgGUID: AHUvEtNuRRWFKFIinb99XQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11729"; a="74291606"
+X-IronPort-AV: E=Sophos;i="6.23,119,1770624000"; 
+   d="scan'208";a="74291606"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2026 10:06:29 -0700
+X-CSE-ConnectionGUID: S7Qzg7o5QjeaYBCY2orMyA==
+X-CSE-MsgGUID: 1B0hQ5hhSyOavx3FZxVKcw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,119,1770624000"; 
+   d="scan'208";a="221543533"
+Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
+  by orviesa008.jf.intel.com with ESMTP; 14 Mar 2026 10:06:23 -0700
+Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w1SRQ-000000003pJ-4Brw;
+	Sat, 14 Mar 2026 17:06:21 +0000
+Date: Sat, 14 Mar 2026 18:05:40 +0100
+From: kernel test robot <lkp@intel.com>
+To: Levi Zim via B4 Relay <devnull+rsworktech.outlook.com@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>
+Cc: oe-kbuild-all@lists.linux.dev, Amery Hung <ameryhung@gmail.com>,
+	linux-riscv@lists.infradead.org, stable@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev, Levi Zim <rsworktech@outlook.com>
+Subject: Re: [PATCH bpf] bpf: do not use kmalloc_nolock when
  !HAVE_CMPXCHG_DOUBLE
+Message-ID: <202603141857.sLJ0vJoa-lkp@intel.com>
+References: <20260314-bpf-kmalloc-nolock-v1-1-24abf3f75a9f@outlook.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260315-bpf-kmalloc-nolock-v3-1-91c72bf91902@outlook.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4XNyQ6CMBAG4Fchc7amCxT15HsYDwWm0rAMabHRE
- N7dpjcvepnkn+WbDQJ6hwEuxQYeowuO5hTUoYC2N/MDmetSBsml5kqUrFksGyYzjtSymVIdmOa
- dOXHUQnUI6XDxaN0rozdI+3BPzd6Flfw7P4oij36ZUTDBZGkaq2xdmbO90nMdiYZjS1MGo/yPy
- IRUtUalsLRG19/Ivu8fv2qK1AABAAA=
-X-Change-ID: 20260314-bpf-kmalloc-nolock-60da80e613de
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, 
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>
-Cc: Amery Hung <ameryhung@gmail.com>, linux-riscv@lists.infradead.org, 
- stable@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-rt-devel@lists.linux.dev, Levi Zim <rsworktech@outlook.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5177;
- i=rsworktech@outlook.com; s=ryzen; h=from:subject:message-id;
- bh=F3NzhvAzd0zCVDcRlr7RmrSHpJygKeFMqZIONIS/DVY=;
- b=owEBbQKS/ZANAwAKAW87mNQvxsnYAcsmYgBptYataz9Rjqgmj6vGqmsIM8a6ZekZLkTCdBL8E
- xjDsqOUPQWJAjMEAAEKAB0WIQQolnD5HDY18KF0JEVvO5jUL8bJ2AUCabWGrQAKCRBvO5jUL8bJ
- 2F2AD/9oKgja014FkRBZt0+EeVAdwGQx2xV8nIGzJFegeQEj1nn2IEPSyYITgmeLJ+wp0LhaJ7M
- KZ2ZG7quAiDTUYPLSTk1+qNAR+JaDp15cA1/GHDrdFoLCEO0A4TYRP4eMrqQIOIZra2hF+7EX0C
- v6ndojsunyGRPgeDln9cs6pYfa1XUa8dHgD9bSivT1DluvOajJU1gXjbhTKEOeasYdzMt1IQfNw
- kQX7wq/P3JoUFMTJCL4I66odN1QlGfe2sS7xNg5GOu08NtxDrXY8QkbSLNGAqYA/t5lKwOjdjNg
- MfdFm4zzKcTm4Qe9STv6V9cQjVoG3kRqCbP35meqrOq690na+7HUW4RrAjozujCSLeQ8Zv2s32q
- o9m6p3nzUyP6wB2/sJkwk8eD7S3o4X9ODWpdSAr76mi+9o5AHTvTA2BdaHE4yDhjfSByRrZxjin
- riSi1Foj46ovVjKDCFwdEN0ocJFHCfUW1GjnXA2qjM2Sale7GV7fS/UNNnftktWBTyYA2Jw8hyK
- V30UKE2bZsSHx5wsDVKV/YphBApMDRFi+2OUkKhFIJovNl7pxU2DxjHiKa0T5r1u6xAVlpvEfA7
- 5lHcoM60D8Hn0Xn4JcC9YioctxKS6UI/2FPAVvrham+ytnO0SIbDZbXaiqjWhkr/F7qR0LE3eGI
- k2lMPSDkv1fCCIA==
-X-Developer-Key: i=rsworktech@outlook.com; a=openpgp;
- fpr=17AADD6726DDC58B8EE5881757670CCFA42CCF0A
-X-Endpoint-Received: by B4 Relay for rsworktech@outlook.com/ryzen with
- auth_id=536
-X-Original-From: Levi Zim <rsworktech@outlook.com>
-Reply-To: rsworktech@outlook.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260314-bpf-kmalloc-nolock-v1-1-24abf3f75a9f@outlook.com>
 
-From: Levi Zim <rsworktech@outlook.com>
+Hi Levi,
 
-kmalloc_nolock always fails for architectures that lack cmpxchg16b.
-For example, this causes bpf_task_storage_get with flag
-BPF_LOCAL_STORAGE_GET_F_CREATE to fails on riscv64 6.19 kernel.
+kernel test robot noticed the following build warnings:
 
-Fix it by enabling use_kmalloc_nolock only when HAVE_CMPXCHG_DOUBLE.
-But leave the PREEMPT_RT case as is because it requires kmalloc_nolock
-for correctness. Add a comment about this limitation that architecture's
-lack of CMPXCHG_DOUBLE combined with PREEMPT_RT could make
-bpf_local_storage_alloc always fail.
+[auto build test WARNING on e06e6b8001233241eb5b2e2791162f0585f50f4b]
 
-Fixes: f484f4a3e058 ("bpf: Replace bpf memory allocator with kmalloc_nolock() in local storage")
-Cc: stable@vger.kernel.org
-Signed-off-by: Levi Zim <rsworktech@outlook.com>
----
-I find that bpf_task_storage_get with flag BPF_LOCAL_STORAGE_GET_F_CREATE
-always fails for me on 6.19 kernel on riscv64 and bisected it.
+url:    https://github.com/intel-lab-lkp/linux/commits/Levi-Zim-via-B4-Relay/bpf-do-not-use-kmalloc_nolock-when-HAVE_CMPXCHG_DOUBLE/20260314-195705
+base:   e06e6b8001233241eb5b2e2791162f0585f50f4b
+patch link:    https://lore.kernel.org/r/20260314-bpf-kmalloc-nolock-v1-1-24abf3f75a9f%40outlook.com
+patch subject: [PATCH bpf] bpf: do not use kmalloc_nolock when !HAVE_CMPXCHG_DOUBLE
+config: x86_64-rhel-9.4 (https://download.01.org/0day-ci/archive/20260314/202603141857.sLJ0vJoa-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260314/202603141857.sLJ0vJoa-lkp@intel.com/reproduce)
 
-In f484f4a3e058 ("bpf: Replace bpf memory allocator with kmalloc_nolock()
-in local storage"), bpf memory allocator is replaced with kmalloc_nolock.
-This approach is problematic for architectures that lack CMPXCHG_DOUBLE
-because kmalloc_nolock always fails in this case:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603141857.sLJ0vJoa-lkp@intel.com/
 
-In function kmalloc_nolock (kmalloc_nolock_noprof): 
+All warnings (new ones prefixed by >>):
 
-	if (!(s->flags & __CMPXCHG_DOUBLE) && !kmem_cache_debug(s))
-		/*
-		 * kmalloc_nolock() is not supported on architectures that
-		 * don't implement cmpxchg16b, but debug caches don't use
-		 * per-cpu slab and per-cpu partial slabs. They rely on
-		 * kmem_cache_node->list_lock, so kmalloc_nolock() can
-		 * attempt to allocate from debug caches by
-		 * spin_trylock_irqsave(&n->list_lock, ...)
-		 */
-		return NULL;
+   In file included from include/net/bpf_sk_storage.h:15,
+                    from net/core/sock.c:141:
+>> include/linux/bpf_local_storage.h:22:19: warning: 'KMALLOC_NOLOCK_SUPPORTED' defined but not used [-Wunused-const-variable=]
+      22 | static const bool KMALLOC_NOLOCK_SUPPORTED = IS_ENABLED(CONFIG_HAVE_CMPXCHG_DOUBLE);
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~
 
-Fix it by enabling use_kmalloc_nolock only when HAVE_CMPXCHG_DOUBLE.
-(But not for a PREEMPT_RT case as explained in the comment and commitmsg)
 
-Note for stable: this only needs to be picked into v6.19 if the patch
-makes it into 7.0.
----
-Changes in v3:
-- Use macro instead of const static variable to avoid triggering
-  warnings.
-- Wrap lines at 80 columns
-- Link to v2: https://lore.kernel.org/r/20260314-bpf-kmalloc-nolock-v2-1-576e33e4fa67@outlook.com
+vim +/KMALLOC_NOLOCK_SUPPORTED +22 include/linux/bpf_local_storage.h
 
-Changes in v2:
-- Drop the modification to the PREEMPT_RT case as it requires
-  kmalloc_nolock for correctness.
-- Add a comment to the PREEMPT_RT case about the limitation when
-  not HAVE_CMPXCHG_DOUBLE but enables PREEMPT_RT.
-- Link to v1: https://lore.kernel.org/r/20260314-bpf-kmalloc-nolock-v1-1-24abf3f75a9f@outlook.com
----
- include/linux/bpf_local_storage.h | 1 +
- kernel/bpf/bpf_cgrp_storage.c     | 3 ++-
- kernel/bpf/bpf_local_storage.c    | 4 ++++
- kernel/bpf/bpf_task_storage.c     | 3 ++-
- 4 files changed, 9 insertions(+), 2 deletions(-)
+    21	
+  > 22	static const bool KMALLOC_NOLOCK_SUPPORTED = IS_ENABLED(CONFIG_HAVE_CMPXCHG_DOUBLE);
+    23	
 
-diff --git a/include/linux/bpf_local_storage.h b/include/linux/bpf_local_storage.h
-index 8157e8da61d40..d8f2c5d63a80e 100644
---- a/include/linux/bpf_local_storage.h
-+++ b/include/linux/bpf_local_storage.h
-@@ -18,6 +18,7 @@
- #include <asm/rqspinlock.h>
- 
- #define BPF_LOCAL_STORAGE_CACHE_SIZE	16
-+#define KMALLOC_NOLOCK_SUPPORTED IS_ENABLED(CONFIG_HAVE_CMPXCHG_DOUBLE)
- 
- struct bpf_local_storage_map_bucket {
- 	struct hlist_head list;
-diff --git a/kernel/bpf/bpf_cgrp_storage.c b/kernel/bpf/bpf_cgrp_storage.c
-index c2a2ead1f466d..cd18193c44058 100644
---- a/kernel/bpf/bpf_cgrp_storage.c
-+++ b/kernel/bpf/bpf_cgrp_storage.c
-@@ -114,7 +114,8 @@ static int notsupp_get_next_key(struct bpf_map *map, void *key, void *next_key)
- 
- static struct bpf_map *cgroup_storage_map_alloc(union bpf_attr *attr)
- {
--	return bpf_local_storage_map_alloc(attr, &cgroup_cache, true);
-+	return bpf_local_storage_map_alloc(attr, &cgroup_cache,
-+					   KMALLOC_NOLOCK_SUPPORTED);
- }
- 
- static void cgroup_storage_map_free(struct bpf_map *map)
-diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-index 9c96a4477f81a..a6c240da87668 100644
---- a/kernel/bpf/bpf_local_storage.c
-+++ b/kernel/bpf/bpf_local_storage.c
-@@ -893,6 +893,10 @@ bpf_local_storage_map_alloc(union bpf_attr *attr,
- 	/* In PREEMPT_RT, kmalloc(GFP_ATOMIC) is still not safe in non
- 	 * preemptible context. Thus, enforce all storages to use
- 	 * kmalloc_nolock() when CONFIG_PREEMPT_RT is enabled.
-+	 *
-+	 * However, kmalloc_nolock would fail on architectures that do not
-+	 * have CMPXCHG_DOUBLE. On such architectures with PREEMPT_RT,
-+	 * bpf_local_storage_alloc would always fail.
- 	 */
- 	smap->use_kmalloc_nolock = IS_ENABLED(CONFIG_PREEMPT_RT) ? true : use_kmalloc_nolock;
- 
-diff --git a/kernel/bpf/bpf_task_storage.c b/kernel/bpf/bpf_task_storage.c
-index 605506792b5b4..6e8597edea314 100644
---- a/kernel/bpf/bpf_task_storage.c
-+++ b/kernel/bpf/bpf_task_storage.c
-@@ -212,7 +212,8 @@ static int notsupp_get_next_key(struct bpf_map *map, void *key, void *next_key)
- 
- static struct bpf_map *task_storage_map_alloc(union bpf_attr *attr)
- {
--	return bpf_local_storage_map_alloc(attr, &task_cache, true);
-+	return bpf_local_storage_map_alloc(attr, &task_cache,
-+					   KMALLOC_NOLOCK_SUPPORTED);
- }
- 
- static void task_storage_map_free(struct bpf_map *map)
-
----
-base-commit: e06e6b8001233241eb5b2e2791162f0585f50f4b
-change-id: 20260314-bpf-kmalloc-nolock-60da80e613de
-
-Best regards,
 -- 
-Levi Zim <rsworktech@outlook.com>
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
