@@ -1,76 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0415317B50F;
-	Sat, 14 Mar 2026 11:09:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C814136165B
+	for <bpf@vger.kernel.org>; Sat, 14 Mar 2026 13:35:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773486574; cv=none; b=t4lK8b8mVMtrnx6co6U0ngt1VrwZyRJP7ZDWKfCbT+nmSWmHqf37FcVq8azolKVwYF+nOoHkYniTJeIBrEl2WkpzdwI/ut3hRMCIntQvaxy0754xu6QhdGPMbWsP/X0JB/Jcocr7vLRrOApoewzbsgoGa2uPsMolk8Df7crgdD4=
+	t=1773495334; cv=none; b=uKBY8S4EyeXOjq+Sux/bozHLl2Kvo0j3XeZIhUTEkSWjEAFUMICjCVXJolR+yQAjxIbk8bbV3H7UrH6//eYQ3bOPAsGpR2oH2rcZvTe+F8eqjcaouMRrxLiGBQexSs2/JFVJVMcrGapGHaY7J9cD4TZ7o0Z1XlGHiQiAwu9W2oA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773486574; c=relaxed/simple;
-	bh=FsIdoywK9beEGP500Y5qRV1jmRWb97tBn7YIlx7LUOQ=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=U4qZnoEQgLLpqsXiQ7K6opvYgy3i3e5HgroThZfrMHcTpbDPWWx6fpGmDbwh0olHOh+/1WQio1WeqrrycwG7JRI5JIR20HU/a1y49gRog77aS0sHENbPp78QEjEiOm90YlM5ZMKxNliecsrHXx9DgjRj7OUTDB5xVu/uI7K2g5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cwgP8Hvl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773495334; c=relaxed/simple;
+	bh=AbzF/s5Ma0nc+4MMYzU3BmkmqQ4Q8NaSHT8hlrS8KXI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bTnNvMzA8wJAMyV+YIzhJe+w0TICEb2O/01JbR8ACuTZWlUO56rIDQ0n82sVIf4tIoz80o6EHeaA3aTRUTqKP41yJchcTe7yviasQHQSXrq6ZfgbU5VR7PsFDvZf9uMZFM7FIst+3elDlUsRX3Pj6wm0Vyx4gRxqfVx+oSwVOlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ATcLf6pU; arc=none smtp.client-ip=91.218.175.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cwgP8Hvl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 072E8C116C6;
-	Sat, 14 Mar 2026 11:09:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773486573;
-	bh=FsIdoywK9beEGP500Y5qRV1jmRWb97tBn7YIlx7LUOQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=cwgP8Hvlsp1NLiGJ3Waw5c+mGf4ZOp059dd1X+SRUpFCs8OMZHVcw4Y/XDG8fxwP7
-	 Nbq6Wwzjf4wWcr8AYL0V1rpCYv0YAuW1feiHX3eNobdrA/tQYDhBwWAPGElblCAQTn
-	 XjFLKQxIsAhF4n5wYJi8T7VC3AsM5WMVeGg1W2ODJYz9554cE3CJR0+K6NW9OLUfKK
-	 v4+IsP6bHZsONsEXdwWJDrwFXgM3jJ8WyXmc5hm1bLDVbkMFTzRazKU4gvxD8LhrTg
-	 0cAngWpWCFC/HKS2C1dAh9YmXJQFkE8GcKRDZ8IFBSxC3DehkLMO18ZCORh0JI4AtD
-	 uS1gozNea7dQA==
-Content-Type: multipart/mixed; boundary="===============7202453078316456263=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ATcLf6pU"
+Message-ID: <9ddae3d2-173d-460d-b283-12c983164a69@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773495330;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YCQypaxGFFgaS/osfKeG64nMyEQeNeo+f0gUaL2VzCQ=;
+	b=ATcLf6pUL5PolIpynwkOemQNh/JOzJgYMTtGVocrmmsdcKE9lPzi9ndB0PzBgNNSSM0ICr
+	wjFQQqPQVnbd6X4T9U0cuetJfLL/c4CIy5VLk81YnMRZS549AA5wpqCADTy63tsjdpB759
+	OpD0gUF9wxLUxYQXXBGzc5UvPvV0Rpc=
+Date: Sat, 14 Mar 2026 21:35:10 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <dfa065670c02c16c71cac4773c62208f2b031198d9cf070d1b69a5ce0ff3d7ab@mail.kernel.org>
-In-Reply-To: <20260314-bpf-kmalloc-nolock-v1-1-24abf3f75a9f@outlook.com>
-References: <20260314-bpf-kmalloc-nolock-v1-1-24abf3f75a9f@outlook.com>
-Subject: Re: [PATCH bpf] bpf: do not use kmalloc_nolock when !HAVE_CMPXCHG_DOUBLE
-From: bot+bpf-ci@kernel.org
-To: rsworktech@outlook.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,bigeasy@linutronix.de,clrkwllms@kernel.org,rostedt@goodmis.org,pjw@kernel.org,palmer@dabbelt.com,aou@eecs.berkeley.edu,alex@ghiti.fr
-Cc: ameryhung@gmail.com,linux-riscv@lists.infradead.org,stable@vger.kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-rt-devel@lists.linux.dev,rsworktech@outlook.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat, 14 Mar 2026 11:09:33 +0000 (UTC)
+Subject: Re: [PATCH bpf-next v9 4/5] bpf, x86: Emit ENDBR for indirect jump
+ targets
+To: Xu Kuohai <xukuohai@huaweicloud.com>
+Cc: a.s.protopopov@gmail.com, alexis.lothore@bootlin.com, andrii@kernel.org,
+ ast@kernel.org, bjorn@kernel.org, bpf@vger.kernel.org, chleroy@kernel.org,
+ daniel@iogearbox.net, davem@davemloft.net, eddyz87@gmail.com,
+ gor@linux.ibm.com, hbathini@linux.ibm.com, hca@linux.ibm.com,
+ hengqi.chen@gmail.com, iii@linux.ibm.com, johan.almbladh@anyfinetworks.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux@armlinux.org.uk, list+bpf@vahedi.org, luke.r.nels@gmail.com,
+ martin.lau@linux.dev, naveen@kernel.org, paulburton@kernel.org,
+ pulehui@huawei.com, puranjay@kernel.org, udknight@gmail.com,
+ xi.wang@gmail.com, yangtiezhu@loongson.cn, yonghong.song@linux.dev
+References: <20260312170255.3427799-5-xukuohai@huaweicloud.com>
+ <20260313101505.104686-1-leon.hwang@linux.dev>
+ <f384599a-75b8-4387-80db-b20429a0bafd@huaweicloud.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <f384599a-75b8-4387-80db-b20429a0bafd@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
---===============7202453078316456263==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On 2026/3/14 14:48, Xu Kuohai wrote:
+> On 3/13/2026 6:15 PM, Leon Hwang wrote:
+>>> +#ifdef CONFIG_X86_KERNEL_IBT
+>>> +        if (bpf_insn_is_indirect_target(env, bpf_prog, i - 1))
+>>> +            EMIT_ENDBR();
+>>> +#endif
+>> NIT: is this CONFIG check necessary?
+>>
+>> EMIT_ENDBR already checks it.
+>>
+>> #ifdef CONFIG_X86_KERNEL_IBT
+>> #define EMIT_ENDBR()        EMIT(gen_endbr(), 4)
+>> #define EMIT_ENDBR_POISON()    EMIT(gen_endbr_poison(), 4)
+>> #else
+>> #define EMIT_ENDBR()
+>> #define EMIT_ENDBR_POISON()
+>> #endif
+> 
+> Well, the code was originally written exactly without the #ifdef, but it
+> triggered
+> -Wempty-body warning: https://lore.kernel.org/bpf/202603051414.AAMjmOHv-
+> lkp@intel.com/.
+> 
 
-> diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-> index 9c96a4477f81..8e4b0fe6d12a 100644
-> --- a/kernel/bpf/bpf_local_storage.c
-> +++ b/kernel/bpf/bpf_local_storage.c
-> @@ -894,7 +894,8 @@ bpf_local_storage_map_alloc(union bpf_attr *attr,
->  	 * preemptible context. Thus, enforce all storages to use
->  	 * kmalloc_nolock() when CONFIG_PREEMPT_RT is enabled.
->  	 */
-> -	smap->use_kmalloc_nolock = IS_ENABLED(CONFIG_PREEMPT_RT) ? true : use_kmalloc_nolock;
-> +	smap->use_kmalloc_nolock = IS_ENABLED(CONFIG_PREEMPT_RT) &&
-> +		KMALLOC_NOLOCK_SUPPORTED ? true : use_kmalloc_nolock;
+Let's update the macros instead, which can avoid the build warning and
+get rid of the CONFIG check as well.
 
-Should the comment above be updated to reflect the new behavior?
-It currently says "enforce all storages to use kmalloc_nolock()
-when CONFIG_PREEMPT_RT is enabled", but the code now only enforces
-kmalloc_nolock when both CONFIG_PREEMPT_RT and
-CONFIG_HAVE_CMPXCHG_DOUBLE are enabled. On PREEMPT_RT without
-HAVE_CMPXCHG_DOUBLE, the override is silently skipped and the
-caller's value is used instead.
+#define EMIT_ENDBR() do { } while (0)
+#define EMIT_ENDBR_POISON() do { } while (0)
 
+The way of "do { } while (0)" is commonly used in kernel.
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Thanks,
+Leon
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23086356774
---===============7202453078316456263==--
