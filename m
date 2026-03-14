@@ -1,179 +1,244 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D78A18EB0
-	for <bpf@vger.kernel.org>; Sat, 14 Mar 2026 08:22:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 701262D0C84;
+	Sat, 14 Mar 2026 08:22:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773476537; cv=none; b=KpxENllskLFDE/0NfYxCMoTWfZ/A0xn424pNJ6HhrzJ+V8rQFX9t4b0CHk94veSO/SY5OkkF7doh19QTBXyjyyElNDJk14SiERXqpVkmRlXCcePmwPgIsGKopD99otwctr1yEIS/fKA4noDX830iRz5At97JhsukuPZ1Zb2C+yI=
+	t=1773476547; cv=none; b=J8R0wnS/CfdR00Gs/DRuigqZqpHETtMWypasp3ZTB32NK7emO/MRAV1n5Jal4pzJNIM6NhvKmnLqQkqHttkD3uXktEJDHj4OY33cgZ+EgntM4+BNXzpKA67hxleVBwtEgaXo6qVmfD+OzCeGMRK90UpAvP28hdXCcBglqbHCu/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773476537; c=relaxed/simple;
-	bh=0g3EkGgNCZvQiEuyfJeFxyNwMRwUfwQ01w/Zn1aXDL8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UH1H7NTOWoehOokZKdHjlXAMc71vLS51Rbo9JnekPvi8BJTxRdvye90BD1yWDwwv2zCyocBoqDxHDsREj4hZo49Fg+NWetQPLa1g7V63Fee/iW6cL05wmAeLiN/kF3QA1ar99O/mpQC/zwTaj1KMd0LBoQ2pTmSc8RjzfoclfNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ypma7PKx; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773476547; c=relaxed/simple;
+	bh=P3ABxIPOf8zEAcTu57EZzEy3wSIYoWqvCkG1xqKEDBs=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ibhWfHdjQthprIoR5lTMzwWdWaF1K7G5bQWXZk61yQJClTmn85PYeCHw4J1Ropj/SgWqd6c3WoZpDgasUHJhnbX3gEkp505yLBxGgcBoDTcWZkSbrizLCn52QkKndYvwV97BNwFL3GIBxPKaWx/nHeI4qNnZaDpuvqCV/0BXKdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=UgcW2mB2; arc=none smtp.client-ip=148.163.148.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ypma7PKx"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2ab46931cf1so29585805ad.0
-        for <bpf@vger.kernel.org>; Sat, 14 Mar 2026 01:22:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773476536; x=1774081336; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Bf4YVj94uBUW+tFJKJRpV0cCZPxT/+Q8jbshvKXcr24=;
-        b=Ypma7PKxTLj+aWzXomFBBZJ6xdsfeP07IbPjvLbtTngNuY3vxXruKEpRc0KpBsyjfC
-         G1/P2XGkKG21Y0hefn+yDq/Yv4YAUXSmYPmYDO7S8j08i71sp4QBUqrgjmKGaaqAashr
-         HHjcQ5lcDGR0RWVZbpHbIVPPxoWeuwDH/Bihsi5/X1ikCVL851pW3G6VYCwR+nc++gB0
-         MfJEpQ0o9MgcvF6jVdhxfhSapyUUzTcqcL25T5TFYyM2zbxwOCr6cS+w4zNDCs497D6E
-         DWbVfxCWSMW7k/DdLFv7ElKQQMkwvK06w5vwt6m5fZRgUGSoOzqVf7EDNrEKxXGmLOLx
-         AdSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773476536; x=1774081336;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bf4YVj94uBUW+tFJKJRpV0cCZPxT/+Q8jbshvKXcr24=;
-        b=Ds3QK22PH32XgBiEQ0fV5FXNOE3ggEhWXZsdp8uptIlk1bupg3OhuoYgb35IIvAR0n
-         bzGWzVbg+USLO9v33ZPAJ2xIGuE4elDa8cl/UAGdMbm+gm++0yRJEdd/7n+qF5GpjtD2
-         LRbpOonaEUsy/EBeXMfLqLOSV55J1HrP6GJ4CdgTvrc3VDNjoCEcxngb1bWZR1HwCCcb
-         4vRUwDq0FfF+x+RLvAfv9MsEisgGzrmQadZ1sBeMPYbqfvOXDE1EUbIyzAwN66QXoZa8
-         gi7Wyq0yJSmfFttYWy/TE79eFnCoWxWGuAjGI0qe7UkHEsYHWt4t6bpBF4176GMjKjZN
-         y3FQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUdcK8xehaLbSXbHBlOF1gvLBl6CKN7AKf2kKvqftqEelXc/ftMq3H16EEQkM7r1cQy2Nk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/IfzGsul9HTOpfyJYCdYf6q/3bkonE75rLeGR/sFPWn3X42SE
-	sxwiuXU6WNK8Gc20PhfP7WmUpFspfEDt5nhNAsg0522WEJa1r0Mi2TqJ
-X-Gm-Gg: ATEYQzyKPRXywOJ+DKFfA9o7cPf3obkVYAMLkb+T6bC3uI40m3sm5aa7ByVtvCgp2OL
-	Kb5wvexyPFH+hrXu4qh1of8G+8ros1XO1mBfOePk2kjlAWwt1M3IkcWPWHg+UDeaa2BdfBkcd8b
-	SXusS4Ep1xcQnjFx76lDyeU/aQyFS+m4ZoDqAAGiI7UIMkaZKrbxsDwL+I++Jb8BfZhG8YIL1vQ
-	bEc1F++6a5iB2L1Gqk8l3x7apI4pjQ0Eu03B+FBq5W1Gjbe07XqqZsLmLJCM/KA/PG4QvOYF7un
-	zT9hLYB5bDFRmSdxowSjTdcG38zeD7HMbQv9mZgi71Qxssa5VFAg7P/4vjrpdI6aHU5B4AzWnz4
-	b8MzV2b2Vkoo5th9xK0Qjjq7C4XLghzi6N5xKQDutg7y3MEaD2MuKWKo9GD/I7scm68yL+rbG3K
-	zqY+MQE0Jp3hzYljTdTi9Y4pePCI6mBVSB1FGui0pNGx13jK7hUMs=
-X-Received: by 2002:a17:903:1a28:b0:2ae:c981:2a1c with SMTP id d9443c01a7336-2aeca645a6amr63923925ad.25.1773476535916;
-        Sat, 14 Mar 2026 01:22:15 -0700 (PDT)
-Received: from [192.168.0.56] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2aece7ee6c6sm45317015ad.48.2026.03.14.01.22.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Mar 2026 01:22:15 -0700 (PDT)
-Message-ID: <bff0a144925370ba4c34be610f910a8ca0f91efb.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 0/3] Optimize bounds refinement by
- reordering deductions
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Shung-Hsi Yu
- <shung-hsi.yu@suse.com>, Paul Chaignon <paul.chaignon@gmail.com>,  bpf
- <bpf@vger.kernel.org>
-Date: Sat, 14 Mar 2026 01:22:12 -0700
-In-Reply-To: <CAADnVQKw-8ZBy3H+kP_nvtFY=8neF1Lm3tuVoQ=OpKrxb-qj8w@mail.gmail.com>
-References: <cover.1773401138.git.paul.chaignon@gmail.com>
-	 <ede050cd3a7ac94a839c2960a8a09b1dcd1f0777.camel@gmail.com>
-	 <CAADnVQKw-8ZBy3H+kP_nvtFY=8neF1Lm3tuVoQ=OpKrxb-qj8w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="UgcW2mB2"
+Received: from pps.filterd (m0354652.ppops.net [127.0.0.1])
+	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62E5U9VR3221722;
+	Sat, 14 Mar 2026 08:21:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:message-id:mime-version:subject:to; s=default; bh=1WM0f1XuPWzaX
+	N1uWAgzme+jqDwi39J4zu7whwSSBk0=; b=UgcW2mB2EGuF93T+CgkfGfh7siBjQ
+	VeF0x3UTO7jRc+wc2zUPOz0949d/L7PF4n4M/Y6JBF49G7gYnJQ++56tg6hjkT4N
+	EgvZUfjQYvVWA3YlHhE+ZdoPAv2coqVcFAtGvwA4Rj3FPySTclSKvpNzjtffEeP1
+	ArM88Vo+3M0dUOWd7vdEl9CVeUHfZDr0JQB/FlSlXpT2uophp/cS5KoJInaEfztM
+	TqsTH5fN55UnfTXTvCXWyq+ib8VZyAoCy0dqwGrK3paq4LDlMRyQCOSxtMiKKFNV
+	qpX65E2d+dKgryHLp70y6qxHDiu/G3aifQzk9aeQe873PEgn5G+iym51w==
+Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
+	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4cw08eghfa-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 14 Mar 2026 08:21:47 +0000 (GMT)
+Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Sat, 14 Mar 2026 08:21:41 +0000
+From: Slava Imameev <slava.imameev@crowdstrike.com>
+To: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>
+CC: <martin.lau@linux.dev>, <eddyz87@gmail.com>, <song@kernel.org>,
+        <yonghong.song@linux.dev>, <john.fastabend@gmail.com>,
+        <kpsingh@kernel.org>, <sdf@fomichev.me>, <haoluo@google.com>,
+        <jolsa@kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
+        <kuba@kernel.org>, <pabeni@redhat.com>, <horms@kernel.org>,
+        <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-open-source@crowdstrike.com>,
+        Slava Imameev
+	<slava.imameev@crowdstrike.com>
+Subject: [PATCH bpf-next v6 0/2] bpf: Add multi-level pointer parameter support for trampolines
+Date: Sat, 14 Mar 2026 19:21:25 +1100
+Message-ID: <20260314082127.7939-1-slava.imameev@crowdstrike.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: 04WPEXCH016.crowdstrike.sys (10.100.11.68) To
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70)
+X-Disclaimer: USA
+X-Proofpoint-ORIG-GUID: H_scvHAuH3d5ptBRvBYBdodjvZsBY8RV
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzE0MDA2MyBTYWx0ZWRfX2fH0IAyNojsJ
+ qCc+hTsFLfbL4SY6AQBb05ArwA0rCP5PB0InmurjgyfEogHgvhNTwsfo20FPryMbKpoXvhn7FRo
+ Ieei8lIuNNlDSVcTGJe1i4uCvAxqgvEZiffKShEnIMg3mmwx+Nunn774BCfXqYfY6OFUvk6LDUa
+ BQe/j3jfIMBZmLQjkn8lEuS48j8n28083NGS07NvvbJgwFj++WJA+zsxBe3IXst5wDKuf5kRLXH
+ I4m7B22ETSXCHJUI234KvGF9xb/6HxBifgfLqBFICLjJgt/4gYhyI6ueqy+IiqvN25KV/sl4UOW
+ a0O3Lgi2dNnX1foPa5HCFkxLameseeW5Kz90027/chjM9CL2ovFPPzVcANLGS8iOWx1z4mm5g9A
+ fkwQyzO5+uQUtWjOxX3/HphwfBRPLLi0A2mCSMxza9fVB3CnrR5UiRhD6YIbuMMNd8bRKzgZAvB
+ SnCrJ1PfXSbOFjyvjmw==
+X-Authority-Analysis: v=2.4 cv=fsfRpV4f c=1 sm=1 tr=0 ts=69b51a9b cx=c_pps
+ a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
+ a=EjBHVkixTFsA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=T2KQ53IYiC3MXPrxx8bB:22 a=2KvRFfd_T_-xjmS8C1aD:22 a=VwQbUJbxAAAA:8
+ a=QyXUC8HyAAAA:8 a=g1g6oSFQjXiNt9peMvgA:9
+X-Proofpoint-GUID: H_scvHAuH3d5ptBRvBYBdodjvZsBY8RV
+X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11728
+ signatures=596818
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 priorityscore=1501 malwarescore=0 clxscore=1015 bulkscore=0
+ suspectscore=0 spamscore=0 phishscore=0 impostorscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603140063
 
-On Fri, 2026-03-13 at 19:18 -0700, Alexei Starovoitov wrote:
-> On Fri, Mar 13, 2026 at 3:02=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.c=
-om> wrote:
-> > have and land this patch-set. I'll share details on cnums later in a
-> > separate email, but tldr is that cnum representation is strictly less
-> > precise compared to combination of signed and unsigned ranges
-> > (probably this was obvious in the hindsight).
->=20
-> Understood. Applied the patches,
-> but I thought that the main advantage of circular representation
-> that it represents both, since the sign is "absorbed" by the circle.
-> What did the paper claim?
+This is v6 of a series adding support for new pointer types for
+trampoline parameters.
 
-Actually, the paper [0] does not compare wrapped intervals to a pair
-of signed and unsigned domains tracked in sync. It compares wrapped
-intervals to one or the other.
+Originally, only support for multi-level pointers was proposed.
+As suggested during review, it was extended to single-level pointers.
+During discussion, it was proposed to add support for any single or
+multi-level pointer type that is not a single-level pointer to a
+structure, with the condition if (!btf_type_is_struct(t)). The safety
+of this condition is based on BTF data verification performed for
+modules and programs, and vmlinux BTF being trusted to not contain
+invalid types, so it is not possible for invalid types, like
+PTR->DATASEC, PTR->FUNC, PTR->VAR and corresponding multi-level
+pointers, to reach btf_ctx_access.
 
-Probably this was obvious from the beginning, but I had to
-re-implement reg_bounds_sync() to understand the problem.
-When signed and unsigned intervals are tracked separately,
-this can describe two arcs on the "number circle".
-For example, consider a pair of 32-bit ranges, signed [-128, 127]
-and unsigned [1, U32_MAX]. When combined, these describe two arcs:
-[-128, -1] and [1, 127]. However, a single wrapped interval will
-approximate the above as [-128, 127], loosing some precision.
+These changes appear to be a safe extension since any future support
+for arrays and output values would require annotation (similar to
+Microsoft SAL), which differentiates between current unannotated
+scalar cases and new annotated cases.
 
-This example is taken from one of the tests in the reg_bounds.c.
-I hit it while rewriting logic deducing 64-bit bounds from 32-bit
-bounds, implementation that used intersection of cnums defined
-by signed and unsigned intervals failed to refine the following case:
+This series adds BPF verifier support for single- and multi-level
+pointer parameters and return values in BPF trampolines. The
+implementation treats these parameters as SCALAR_VALUE.
 
-  ACTUAL   FALSE1: scalar(u64=3D[0; U64_MAX],u32=3D[1; 4294967295],s64=3D[0=
-xffffffffffffff80; 0x7f],s32=3D[0xffffff80; 0x7f])
-  EXPECTED FALSE1: scalar(u64=3D[1; U64_MAX],u32=3D[1; 4294967295],s64=3D[0=
-xffffffffffffff80; 0x7f],s32=3D[0xffffff80; 0x7f])
-                               ^-- here
+This is consistent with existing pointers to int and void that are
+already treated as SCALAR.
 
-Hence, the final implementation passing all the tests has to consider
-signed and unsigned domains separately (see [1]).
+This provides consistent logic for single- and multi-level pointers:
+if the type is treated as SCALAR for a single-level pointer, the
+same applies to multi-level pointers, except for pointers to structs
+which are currently PTR_TO_BTF_ID. However, in the case of
+multi-level pointers, they are treated as scalar since the verifier
+lacks the context to infer the size of their target memory regions.
 
-Thus, we cannot replace signed / unsigned ranges with a single wrapped
-interval w/o dropping some precision.
+Background:
 
-I'd argue that complete re-implementation of reg_bounds_sync() in
-cnums does look a bit simpler compared to current code, but one needs
-to take into account the supporting code in [2] and [3].
+Prior to these changes, accessing multi-level pointer parameters or
+return values through BPF trampoline context arrays resulted in
+verification failures in btf_ctx_access, producing errors such as:
 
-On the bright side, I noticed that current code inferring 64-bit
-bounds from 32-bit ranges does not handle several cases, namely:
+func '%s' arg%d type %s is not a struct
 
+For example, consider a BPF program that logs an input parameter of
+type struct posix_acl **:
 
-N*2^32                   (N+1)*2^32                (N+2)*2^32              =
-  (N+3)*2^32
-||--|=3D=3D=3D=3D=3D|----|----------||--|=3D=3D=3D=3D=3D|---------------||-=
--|=3D=3D=3D=3D=3D|------------|--||
-    |< b >|    |              |< b >|                   |< b >|            =
-|
-               |              |                               |            =
-|
-               |<-------------+--------- a -------------------|----------->=
-|
-                              |                               |
-                              |<-------- t ------------------>|
+SEC("fentry/__posix_acl_chmod")
+int BPF_PROG(trace_posix_acl_chmod, struct posix_acl **ppacl, gfp_t gfp,
+             umode_t mode)
+{
+    bpf_printk("__posix_acl_chmod ppacl = %px\n", ppacl);
+    return 0;
+}
 
-Or with b crossing the U32_MAX / 0 boundary:
+This program failed BPF verification with the following error:
 
-N*2^32                   (N+1)*2^32                (N+2)*2^32              =
-  (N+3)*2^32
-||=3D=3D=3D|---------|------|=3D=3D=3D||=3D=3D=3D|----------------|=3D=3D=
-=3D||=3D=3D=3D|---------|------|=3D=3D=3D||
- |b >|         |      |< b||b >|                |< b||b >|         |      |=
-< b|
-               |      |                                  |         |
-               |<-----+----------------- a --------------+-------->|
-                      |                                  |
-                      |<---------------- t ------------->|
+libbpf: prog 'trace_posix_acl_chmod': -- BEGIN PROG LOAD LOG --
+0: R1=ctx() R10=fp0
+; int BPF_PROG(trace_posix_acl_chmod, struct posix_acl **ppacl,
+gfp_t gfp, umode_t mode) @ posix_acl_monitor.bpf.c:23
+0: (79) r6 = *(u64 *)(r1 +16)         ; R1=ctx() R6_w=scalar()
+1: (79) r1 = *(u64 *)(r1 +0)
+func '__posix_acl_chmod' arg0 type PTR is not a struct
+invalid bpf_context access off=0 size=8
+processed 2 insns (limit 1000000) max_states_per_insn 0 total_states 0
+peak_states 0 mark_read 0
+-- END PROG LOAD LOG --
 
-(a is a 64-bit range, b is a 32-bit range, t is a refined 64-bit range,
- such that =E2=88=80 v =E2=88=88 a, (u32)a =E2=88=88 b: v =E2=88=88 t)
+The common workaround involved using helper functions to fetch
+parameter values by passing the address of the context array entry:
 
-cnum based code handling such cases (see [1,4]) is a tad simpler
-conceptually compared to interval based code (see [5]).
-But it is doable in both domains.
+SEC("fentry/__posix_acl_chmod")
+int BPF_PROG(trace_posix_acl_chmod, struct posix_acl **ppacl, gfp_t gfp,
+             umode_t mode)
+{
+    struct posix_acl **pp;
+    bpf_probe_read_kernel(&pp, sizeof(ppacl), &ctx[0]);
+    bpf_printk("__posix_acl_chmod %px\n", pp);
+    return 0;
+}
 
-So, unless people agree with me that [1] is easier to understand /
-maintain, there is little reason to switch to wrapped intervals.
+This approach introduced helper call overhead and created
+inconsistency with parameter access patterns.
 
-[0] https://jorgenavas.github.io/papers/ACM-TOPLAS-wrapped.pdf
-[1] https://github.com/eddyz87/bpf/blob/cnum-sync-bounds/kernel/bpf/verifie=
-r.c#L2521
-[2] https://github.com/eddyz87/bpf/blob/cnum-sync-bounds/kernel/bpf/cnum_de=
-fs.h
-[3] https://github.com/eddyz87/bpf/blob/cnum-sync-bounds/kernel/bpf/cnum.c
-[4] https://github.com/eddyz87/cnum-verif/blob/master/cnum.c#L92
-[5] https://github.com/eddyz87/cnum-verif/blob/master/cnum.c#L171
+Improvements:
+
+With this patch, trampoline programs can directly access multi-level
+pointer parameters, eliminating helper call overhead and explicit ctx
+access while ensuring consistent parameter handling. For example, the
+following ctx access with a helper call:
+
+SEC("fentry/__posix_acl_chmod")
+int BPF_PROG(trace_posix_acl_chmod, struct posix_acl **ppacl, gfp_t gfp,
+             umode_t mode)
+{
+    struct posix_acl **pp;
+    bpf_probe_read_kernel(&pp, sizeof(pp), &ctx[0]);
+    bpf_printk("__posix_acl_chmod %px\n", pp);
+    ...
+}
+
+is replaced by a load instruction:
+
+SEC("fentry/__posix_acl_chmod")
+int BPF_PROG(trace_posix_acl_chmod, struct posix_acl **ppacl, gfp_t gfp,
+             umode_t mode)
+{
+    bpf_printk("__posix_acl_chmod %px\n", ppacl);
+    ...
+}
+
+The bpf_core_cast macro can be used for deeper level dereferences.
+
+v1 -> v2:
+* corrected maintainer's email
+v2 -> v3:
+* Addressed reviewers' feedback:
+	* Changed the register type from PTR_TO_MEM to SCALAR_VALUE.
+	* Modified tests to accommodate SCALAR_VALUE handling.
+* Fixed a compilation error for loongarch
+	* https://lore.kernel.org/oe-kbuild-all/202602181710.tEK6nOl6-lkp@intel.com/
+* Addressed AI bot review
+	* Added a commentary to address a NULL pointer case
+	* Removed WARN_ON
+	* Fixed a commentary
+v3 -> v4:
+* Added more consistent support for single and multi-level pointers
+as suggested by reviewers.
+	* added single level pointers to enum 32 and 64
+	* added single level pointers to functions
+	* harmonized support for single and multi-level pointer types
+	* added new tests to support the above changes
+* Removed create_bad_kaddr that allocated and invalidated kernel VA
+for tests, and replaced it with hardcoded values similar to
+bpf_testmod_return_ptr as suggested by reviewers.
+v4 -> v5:
+* As suggested, extended support to single-level pointers and
+covered all supported valid pointer (single- and multi-level) types
+with a wider condition if (!btf_type_is_struct(t)).
+* As requested, simplified tests by keeping only tests that check
+the verifier log for scalar().
+v5 -> v6:
+* Fixed the test message based on the bot's feedback.
+
+Slava Imameev (2):
+  bpf: Support pointer param types via SCALAR_VALUE for trampolines
+  selftests/bpf: Add trampolines single and multi-level pointer params
+    test coverage
+
+ kernel/bpf/btf.c                              | 17 ++---
+ net/bpf/test_run.c                            | 17 +++++
+ .../selftests/bpf/prog_tests/verifier.c       |  2 +
+ .../bpf/progs/verifier_ctx_ptr_param.c        | 68 +++++++++++++++++++
+ 4 files changed, 94 insertions(+), 10 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_ctx_ptr_param.c
+
+-- 
+2.34.1
+
