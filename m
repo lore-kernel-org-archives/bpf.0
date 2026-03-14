@@ -1,86 +1,113 @@
 Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F080770818;
-	Sat, 14 Mar 2026 09:40:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED08A8003D;
+	Sat, 14 Mar 2026 09:42:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773481255; cv=none; b=ZQScEvBHs1KtwXadHGGFg4APKpoy4ny2z2omlVo904gJvvqzmS3TG+8kaaKVpbprdATeRtcp+uBl4mqgrXh1f6wt1qigWf+20iuc+mpCtdVx1H23avdFf/SHMGQ4qxBz4AurqkqwuBMJ618AdPUtk0H0LmnA7+qFZfbs+yPQ2+w=
+	t=1773481350; cv=none; b=VDLDORYOaMOZRx5cFrVBW8/ED1M4tWbf6gywbHPU07korh8MJDMmqAm6fKm3wpyFU3uO4OgZW4h4wA4XtLSfkcPlZ7bvo2AIZ9BfvZcsmYKEboiK1ibUpdzM/isa0Ku26CgQuSsfh+HXI1suQT+Hm4H+YKZ+inMySihhkPt96qQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773481255; c=relaxed/simple;
-	bh=tapsd7sY+iaJfd5ufSW1IAp2nbsWh+HpxFDYsUl0rLI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=mneq5qwwZeiuitgiBzCvUqthERzmXuKN+QcLCUJh+jySf5bHK//J7qhM8KJLK5V2Dqd+I1zLGnYSoZb0fuIkJ2nwWGMIC2Q5WNkdop1shm8oL7lVGpOhzC5C/FdoeeMegSEZe4IlNVkLYb/+x6gYBWh4fM8yVmryS8KYlDepO7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=03V3inru; arc=none smtp.client-ip=78.32.30.218
+	s=arc-20240116; t=1773481350; c=relaxed/simple;
+	bh=40ha3UUc1mTF2YzNrGWxPNtWBskQkGWak6K81Ffdrl8=;
+	h=In-Reply-To:References:From:To:Cc:Subject:MIME-Version:
+	 Content-Disposition:Content-Type:Message-Id:Date; b=iFEYdVj5HRX0T7YaScXW2G42c8xHqfNpqA8s9jatLkdJr4qgn5DZd8f7IamjXq41ZCFLBW6dx6RZdnClkPu05oBxvl9lT4/+QxdEIAVhrBtkrB1PKBzfEmMXy06M9tzXyO4DI1aMym+NXRdkBNlXsmxWbKMs6743evt1S+KBoCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=Rabh65Nd; arc=none smtp.client-ip=78.32.30.218
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="03V3inru"
+	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="Rabh65Nd"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:Content-Type:MIME-Version:
-	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=giw/FPcMzl3MM6EQUmYxXJkdtyw1xyqeK51ftMdqupE=; b=03V3inru0PLoJXwGQMDfz5TK2v
-	BpL62WmfhgC249rMgbEau0fi+HCUclWJL5+iPmbzp4qMEIzJ68VQKtS5xm6HcJY9cQLnA1dJ/Ypbo
-	9eSYCgQHavUv21avLBPDm7gdSc5P3YsOyL2IZmmLGgA0CD8r7ZMl/JSY02qkUfKP348laAEUBqeZj
-	XS2bgi+LJDD49LMElN54zuD+YQop7obZ8p60i2+A1ZZ0/YsDrWTGfxTSO+YdC1462gJ0WHQCRCtUb
-	B+NO3bmYdv0eA9vPdXlglCKC37IG/q21wkE+fwZKcBq+jF19cIdqh3mbA0djmX7UvICOaU7MsREmD
-	+aJ9Yl/Q==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:46212)
+	d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
+	Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
+	In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=tWUNNp6YFhZcSa6rDVrWkFfDII00kYuQk+eRtQg9bY8=; b=Rabh65NdMHQyYlSvBQ4iqeH5As
+	Jjfw4pMOXC+UkoLd9WSQb+/p61P/hKNQxIfj6M9HnHsfYblTB1OLYac3lBAfxo1wzn1fD3nkwHAHK
+	is9wCrUfCfNh3Aa9he0p2JlTOj7rnRaO9EB3wiT6+torl3oq0RDLAmHygRmvBZz+Xe8VLMjsoERv7
+	DOrEp0c3445FtIe3zf9StfTC52/AJrw76RVUX8ZK3oULSg4yyOg58nM8BY/KzJFbp6pSLAnkaodo4
+	Q4JwmwW/j2jD7UkoF9OiZM3cx4nSRozbdBFQl1B8uIFfaAkbLI9sL/IH7qq8a4noROxYSOz5MFU44
+	efamlP5g==;
+Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:36466 helo=rmk-PC.armlinux.org.uk)
 	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.98.2)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1w1LUB-000000001zP-2tES;
-	Sat, 14 Mar 2026 09:40:43 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.98.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1w1LU8-000000000hS-3fbY;
-	Sat, 14 Mar 2026 09:40:40 +0000
-Date: Sat, 14 Mar 2026 09:40:40 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+	(envelope-from <rmk@armlinux.org.uk>)
+	id 1w1LVp-000000001zo-32NV;
+	Sat, 14 Mar 2026 09:42:25 +0000
+Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.98.2)
+	(envelope-from <rmk@rmk-PC.armlinux.org.uk>)
+	id 1w1LVo-0000000DGRl-44lt;
+	Sat, 14 Mar 2026 09:42:25 +0000
+In-Reply-To: <abUtGH9KB03PH5Ne@shell.armlinux.org.uk>
+References: <abUtGH9KB03PH5Ne@shell.armlinux.org.uk>
+From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
 To: Andrew Lunn <andrew@lunn.ch>
 Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>,
 	Alexei Starovoitov <ast@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, bpf@vger.kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	bpf@vger.kernel.org,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Jesper Dangaard Brouer <hawk@kernel.org>,
 	linux-arm-kernel@lists.infradead.org,
-	linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	netdev@vger.kernel.org,
 	Paolo Abeni <pabeni@redhat.com>,
 	Stanislav Fomichev <sdf@fomichev.me>
-Subject: [PATCH net-next v4 00/15] net: stmmac: clean up descriptor handling
- part 1
-Message-ID: <abUtGH9KB03PH5Ne@shell.armlinux.org.uk>
+Subject: [PATCH net-next v4 01/15] net: stmmac: rearrange stmmac_tx_info
+ members to pack better
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <E1w1LVo-0000000DGRl-44lt@rmk-PC.armlinux.org.uk>
+Sender: Russell King <rmk@armlinux.org.uk>
+Date: Sat, 14 Mar 2026 09:42:24 +0000
 
-Hi,
+Rearrange the struct stmmac_tx_info members to pack better, essentially
+by sorting by type size:
 
-Part 1 of cleaning up the stmmac descriptor handling. Rearrange the
-struct stmmac_tx_info to pack better, and introduce helpers for
-duplicated code handing the transmit and receive descriptors. Remove
-unnecessary struct members that are only transitorily used.
+xsk_meta	embeds only a pointer - 32 or 64 bit
+buf		dma address, 32 or 64 bit
+len		normally 32 bit
+buf_type	dependent on arch
+map_as_page	normally 8 bit
+last_segment	normally 8 bit
+is_jumbo	normally 8 bit
 
-v4: merge fixes from v2 into correct patch (11 not 13)
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+---
+ drivers/net/ethernet/stmicro/stmmac/stmmac.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- drivers/net/ethernet/stmicro/stmmac/descs.h        |   2 +
- drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c |   2 +-
- drivers/net/ethernet/stmicro/stmmac/stmmac.h       |   8 +-
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c  | 458 +++++++++------------
- 4 files changed, 197 insertions(+), 273 deletions(-)
-
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac.h b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+index bba9bb9c95bf..b096a9e090e3 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+@@ -47,13 +47,13 @@ enum stmmac_txbuf_type {
+ };
+ 
+ struct stmmac_tx_info {
++	struct xsk_tx_metadata_compl xsk_meta;
+ 	dma_addr_t buf;
+-	bool map_as_page;
+ 	unsigned len;
++	enum stmmac_txbuf_type buf_type;
++	bool map_as_page;
+ 	bool last_segment;
+ 	bool is_jumbo;
+-	enum stmmac_txbuf_type buf_type;
+-	struct xsk_tx_metadata_compl xsk_meta;
+ };
+ 
+ #define STMMAC_TBS_AVAIL	BIT(0)
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+2.47.3
+
