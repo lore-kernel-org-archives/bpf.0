@@ -1,128 +1,93 @@
-Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE23218B0F;
-	Sat, 14 Mar 2026 06:17:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6A718EB0;
+	Sat, 14 Mar 2026 06:48:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773469068; cv=none; b=uoGaxFuE0GhSDughn2AEHI+EHUEVXavAT/1hFsGxfTARfZG6ZckNkuV7YT1pwtMJ+cHftq5ofbFn0AeEe1gxoS0i+YGJ1qbeRAKYnB6nSqcF5ILY8KQxdeIUykRQ7NynsLbLZPNPOvx3Yl1VGFVxdwYSxIo6fLxVqIs7mwL0jcA=
+	t=1773470919; cv=none; b=rNd7pjhifz3Z9jMZ2q88Ai1jCwbjsnXM2nXf2NwO2GqanUCqZ2+kuEWIdYlZJ8sPIU6lC2K0Z5AT0T6/rxwjhjBf8LdNq8nLEzwECcWRFQV2u1khYEWEMN1BhggmIJsy+PpzS8ox9WDao/+uQJeUa+DiFORmXyDdqHtP0wAMDn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773469068; c=relaxed/simple;
-	bh=exSq1+nyMdnVYrdoedu76d6IsOt5pNWn9a7vuf+Cq18=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=prsy6iS4zJolPi7Y7HkH8OA3HeuBEo0IqjLTExNWqGOM0fRwaKzl3YlKKdRyT8dj9L2gYpdJDY4fvpxZQ8LCNQXZMFTMTnALwNdZqpfWL2bhRCsxn7YPDWw2Ea0dNhnS4ISIAqDDBQEBjOn2pH6ekQpxcUGwt4NcbyOlezOEf78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=x/BDMSS9; arc=none smtp.client-ip=148.163.148.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="x/BDMSS9"
-Received: from pps.filterd (m0354652.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62E3x0Lw3051533;
-	Sat, 14 Mar 2026 06:17:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=PW0Y12woatit9y13BzrGbqEQrxprAIQiZw7ZpldBc/8=; b=x/BD
-	MSS918ZkuLpiKfe8kuTdv1qrkrMzh5t1dfNqaXVYTVLt8vtIlQL0leKr/zwfRY2A
-	Qg9q59cxCx4NGs3om3xPqNI8b6nCvdsa04ZuDZ8rceudRMj5gTp5BWc0r8uUVCMP
-	SAlP4oKorXpDqTgak8HrZLRFKZABGQtDG/bVM/cuftWirIamm3kVf073ghBr/jiv
-	UIpS+TWXFl6zMHNCy7qFuUGEEAdlxK3L1pAYrn/aVfGGXrWxldWHfjW7CpOkPIYZ
-	9f1yyo1qraVwxrDAs5wgAERBQhtNeUPuznfeefJLJx13zKsyGEagAZFvIV0qSizT
-	YZ7Fu7zhfut0z5XKog==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4cw08eg904-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 14 Mar 2026 06:17:03 +0000 (GMT)
-Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Sat, 14 Mar 2026 06:16:56 +0000
-From: Slava Imameev <slava.imameev@crowdstrike.com>
-To: <alexei.starovoitov@gmail.com>
-CC: <andrii@kernel.org>, <ast@kernel.org>, <bot+bpf-ci@kernel.org>,
-        <bpf@vger.kernel.org>, <clm@meta.com>, <daniel@iogearbox.net>,
-        <davem@davemloft.net>, <eddyz87@gmail.com>, <edumazet@google.com>,
-        <haoluo@google.com>, <horms@kernel.org>, <ihor.solodrai@linux.dev>,
-        <john.fastabend@gmail.com>, <jolsa@kernel.org>, <kpsingh@kernel.org>,
-        <kuba@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-open-source@crowdstrike.com>,
-        <martin.lau@kernel.org>, <martin.lau@linux.dev>,
-        <netdev@vger.kernel.org>, <pabeni@redhat.com>, <sdf@fomichev.me>,
-        <shuah@kernel.org>, <slava.imameev@crowdstrike.com>, <song@kernel.org>,
-        <yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v5 2/2] selftests/bpf: Add trampolines single and multi-level pointer params test coverage
-Date: Sat, 14 Mar 2026 17:16:54 +1100
-Message-ID: <20260314061654.3858-1-slava.imameev@crowdstrike.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <CAADnVQKcutn9QO4UjfcnPw+Tnv2pmHavXCa-BC083rrgP8w_ng@mail.gmail.com>
-References: <CAADnVQKcutn9QO4UjfcnPw+Tnv2pmHavXCa-BC083rrgP8w_ng@mail.gmail.com>
+	s=arc-20240116; t=1773470919; c=relaxed/simple;
+	bh=GOJsqjJz8DHUihozGv9lB3YYbiUOZcWJow/w2TqbaW8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YUfYwCpm1GgUcNiA8zYfeUjEGtD5VBrRhBzKBOEestC+ZKfDPrhonAgFrcMxIK4P/yFSzyuWmpx0mTHGL+zV5AC3+bOOcAr+Nexf8XTcJ6lXCxM1FQC4iQlbT9HXUVvbiBPKmoxxWVm9By1JwBn/YKNOs0bXWSUfkEqteYYhgwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fXsPS1rVzzKHMdW;
+	Sat, 14 Mar 2026 14:48:12 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 5CC8940575;
+	Sat, 14 Mar 2026 14:48:33 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP4 (Coremail) with SMTP id gCh0CgA3EEu9BLVp9wZqAw--.757S2;
+	Sat, 14 Mar 2026 14:48:30 +0800 (CST)
+Message-ID: <f384599a-75b8-4387-80db-b20429a0bafd@huaweicloud.com>
+Date: Sat, 14 Mar 2026 14:48:29 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH014.crowdstrike.sys (10.100.11.87) To
- 04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Disclaimer: USA
-X-Proofpoint-ORIG-GUID: ZMTuJ3E3jwqQugIzRAMkUAe_Ok94aS14
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzE0MDA0NiBTYWx0ZWRfX9okSR4b0OCKa
- awFeTYZwiyKmgfIoHONfTvPibTe31XIi944+vaBk53kEIhFK95ngo2YD5BPSPERM7w0xVon+DbB
- I41hupbyIbrZGkm4IgefdlcCEedKbf3MljYhfczuL5ovHy0MqKMLkrnERRHL6dKKkJHH/I3mkGg
- f/w/i8lWHPdmfNT65vbGgfS1HoRAUAitFPX0BXuHTBYT+pDyZb68ZZtAJG6idNCoQhCpOLR4Kkf
- Z2xwztIhCaBLjIvpFEpt0xYLw6EpMXAUnUps78M82HQzOatRwWqTtkUCqUvvCFdv4y0U9rTEfoi
- WQ+CMgKxBtVhmpTFeaIJHrqsQBK+inHacJM7Rb9NA/bAd6vWejCyCFRFm7GOQEKkNLwFlBxDKyr
- cZSU90dxwcGEEWOaOTPeigWKLXQHNZ0slWV2Vd1PBrTQTTiCNfU194aEi7XWTaJEFHe5L90spKL
- Yi9GNv9ETpjhI/b7u3w==
-X-Authority-Analysis: v=2.4 cv=fsfRpV4f c=1 sm=1 tr=0 ts=69b4fd5f cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=2KvRFfd_T_-xjmS8C1aD:22 a=VwQbUJbxAAAA:8
- a=DICdAnnu9tm1VdgAv38A:9
-X-Proofpoint-GUID: ZMTuJ3E3jwqQugIzRAMkUAe_Ok94aS14
-X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11728
- signatures=596818
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 priorityscore=1501 malwarescore=0 clxscore=1015 bulkscore=0
- suspectscore=0 spamscore=0 phishscore=0 impostorscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603140046
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v9 4/5] bpf, x86: Emit ENDBR for indirect jump
+ targets
+Content-Language: en-US
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: a.s.protopopov@gmail.com, alexis.lothore@bootlin.com, andrii@kernel.org,
+ ast@kernel.org, bjorn@kernel.org, bpf@vger.kernel.org, chleroy@kernel.org,
+ daniel@iogearbox.net, davem@davemloft.net, eddyz87@gmail.com,
+ gor@linux.ibm.com, hbathini@linux.ibm.com, hca@linux.ibm.com,
+ hengqi.chen@gmail.com, iii@linux.ibm.com, johan.almbladh@anyfinetworks.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux@armlinux.org.uk, list+bpf@vahedi.org, luke.r.nels@gmail.com,
+ martin.lau@linux.dev, naveen@kernel.org, paulburton@kernel.org,
+ pulehui@huawei.com, puranjay@kernel.org, udknight@gmail.com,
+ xi.wang@gmail.com, yangtiezhu@loongson.cn, yonghong.song@linux.dev
+References: <20260312170255.3427799-5-xukuohai@huaweicloud.com>
+ <20260313101505.104686-1-leon.hwang@linux.dev>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <20260313101505.104686-1-leon.hwang@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:gCh0CgA3EEu9BLVp9wZqAw--.757S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrAr4kuryrAw18uFy7XF1fJFb_yoWxWFg_ZF
+	sY9r97urWkua4qgrWDA348uwn2q3WDGF98Gr15Kw17K340yr4Sqr1rCaykZws5Ca4vqrs3
+	A3W8Xa90yas09jkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbx8YFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
+	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+	67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
+	j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
+	kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AK
+	xVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+	0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wryl
+	IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+	AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j
+	6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jxCz
+	tUUUUU=
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On Sat, 14 Mar 2026 02:42:28 Alexei Starovoitov wrote:
-> On Fri, Mar 13, 2026 at 6:55=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
-> >
-> > > diff --git a/tools/testing/selftests/bpf/progs/verifier_ctx_ptr_param.c=
->  b/tools/testing/selftests/bpf/progs/verifier_ctx_ptr_param.c
-> > > new file mode 100644
-> > > index 000000000000..b507dc850543
-> > > --- /dev/null
-> > > +++ b/tools/testing/selftests/bpf/progs/verifier_ctx_ptr_param.c
-> >
-> > [ ... ]
-> >
-> > > +SEC("fentry/bpf_fentry_test_ppfile")
-> > > +__description("fentry/struct file***: struct file *** inferred as scal=
-> ar")
-> >
-> > The description says "struct file ***" (triple pointer), but
-> > bpf_fentry_test_ppfile() takes a struct file ** (double pointer):
-> >
-> > net/bpf/test_run.c:
->     noinline void bpf_fentry_test_ppfile(struct file **ppf)
-> >
-> > Should the description be
-> > "fentry/struct file**: struct file ** inferred as scalar" instead?
+On 3/13/2026 6:15 PM, Leon Hwang wrote:
+>> +#ifdef CONFIG_X86_KERNEL_IBT
+>> +		if (bpf_insn_is_indirect_target(env, bpf_prog, i - 1))
+>> +			EMIT_ENDBR();
+>> +#endif
+> NIT: is this CONFIG check necessary?
 > 
-> Pls don't ignore bot reviews...
-> Do you agree or not?
+> EMIT_ENDBR already checks it.
+> 
+> #ifdef CONFIG_X86_KERNEL_IBT
+> #define EMIT_ENDBR()		EMIT(gen_endbr(), 4)
+> #define EMIT_ENDBR_POISON()	EMIT(gen_endbr_poison(), 4)
+> #else
+> #define EMIT_ENDBR()
+> #define EMIT_ENDBR_POISON()
+> #endif
 
-I'm not ignoring the bot - I'm in Australia and pushed this
-patch late at night at 12:05 AM Saturday. The bot replied 50 minutes
-later at 12:55 AM Saturday, and I was already not at my desktop.
+Well, the code was originally written exactly without the #ifdef, but it triggered
+-Wempty-body warning: https://lore.kernel.org/bpf/202603051414.AAMjmOHv-lkp@intel.com/.
 
-I will make the necessary changes to the test description. The bot is
-correct that it should have been "struct file **" - I mistakenly
-carried over the triple pointer description when copy-pasting the
-comments.
