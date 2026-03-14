@@ -1,63 +1,63 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 430F21F5EA
-	for <bpf@vger.kernel.org>; Sat, 14 Mar 2026 02:15:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50B831F5EA
+	for <bpf@vger.kernel.org>; Sat, 14 Mar 2026 02:15:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773454531; cv=none; b=WAGi7v1ylZJWQco06xyRLaWMFW3KUuCmPrSSPvGufPfb4Wu8X8rUidFFE09RODd8tWjKIen7iZXKnrZ8XVTIoSTnZPM4z96kGi+VSdqXNRj+ejPC0E/UfS1HYt8dQZ3xPeziCHSNKjhOwBo0YZ3w5KtCj4GV5y34VSfnYVgP2ak=
+	t=1773454534; cv=none; b=sIwWgjUMlLxEbb70I9v8HTZECGPO17l41rMsgf6KRzGo6eH7k0ftQgJOqRzAzElcShYZQUj1oTFrBDkXK2pCjM6VCSAkZd58FiHAev+ftasLM/KsQAJ3vVHgq794m1wXWN9UxUx9u3h7atrgYiLLMi/QOfaEKX0uLIAJzz4lwZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773454531; c=relaxed/simple;
-	bh=2obfrN3xukBlw8gUZrMELYjYemu9iLsVISnT6DiONJM=;
+	s=arc-20240116; t=1773454534; c=relaxed/simple;
+	bh=jYwGpNiYiCE/9nEXbY5VfJIINt0H1QWNggxGxDjJ3ww=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WOWz43iFmfV6NsCzPNCTGWAA5+cjxo3X+gXHjskq3G+kiL6v/srO4tgc8mAUFTn7AK+ud2GLJsdYF11h0op2vv4nUBE+WCfHoLdhaQ/mZb//3WsW+slGoFrRPNKZG86qYMjIWppdyCo4uVuhA6xDWoHqD8F4xzA7fUPBcvWPqS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vfb08vpc; arc=none smtp.client-ip=209.85.214.171
+	 MIME-Version; b=O+9gzYe0qCCBORid4a1yqoEAIxaZ9PGd9O1ZXKVOZ8qz17xSMHVP6lBpewZ84cTWmMd/ohMODAFXC3jdxaVPAx+dlifzEgRliU3sYAG+BjN8UHocFxik7iEcL3uI1+ghOMWQi13X6XZQitMxcGw1ixMcpCauFt71mziESwoZxpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EFSxvuZA; arc=none smtp.client-ip=209.85.215.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vfb08vpc"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2ad9a9be502so17206715ad.0
-        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 19:15:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EFSxvuZA"
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c70f91776fcso1194451a12.0
+        for <bpf@vger.kernel.org>; Fri, 13 Mar 2026 19:15:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773454530; x=1774059330; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773454532; x=1774059332; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dM7fg0AcCxqw0lX68DJdhcMJr61PKTQOot6DwWedJ1Q=;
-        b=Vfb08vpcBqzg4UixF4n9E2k+q9lTY5Olxe6Mqc2/7MswdhSUjxeXbAstvxox6L7GZS
-         PK892CdXliiKXEwvBnmO36nLSgfpx3j3EeDK63oZmJ8uhTEvpN/l7lAeI7NxpyDfvrlJ
-         cl44LW9A3cye2i4hwdNqCuc6Xc8YBioamdCMO2TpnGukgm1Uw2txHDLRu+Bj2bUceAxu
-         wCHtQIUih/mOYXYV/hkRYGxXxzn3VGLYA70aPDm3QV09GAq3d9YaLCJzqWKFzay6rZP1
-         clC05ncZxhE9gcz71eHcfc4QtOl/nzcDGj2HMbUqIC1LcwmdcTzj3YlLQT46OMoOQ5+u
-         jN7g==
+        bh=Nzqp7Zv9Oh2AN/hjLVnU+QXpZxAjV2vKbrJiSpiOKrg=;
+        b=EFSxvuZAG/yGLDOcxlDI9HDl8HOlh3rq/OzuL6kIgqJSPyG+kWB1P/pCLErKSE+f68
+         Bo5kypdj0THY60Sv6M7bGmTn/wba1ywTmqx5j2MCc2L7+xonltEQ23/fypNiRdpAEgLO
+         HKRCgYPhStKvQoBVY5s/BFiLpqP5NJHXLu2Ax4JktbqIyNbtLri2UbAzLqreTogEbAWn
+         puLh9sqpYI5UQy6QzdVdfMb12a8PAjNCJRYel2sby6CNCr6VGTaU3M4YoKq/16hk01Z/
+         eNo3SjvqXQkRVDahNq8B6xmxGRTVNWvQjnVM/xb6LVCviXdWhuPCczN5O8Y1tVAod0KM
+         mNCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773454530; x=1774059330;
+        d=1e100.net; s=20251104; t=1773454532; x=1774059332;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=dM7fg0AcCxqw0lX68DJdhcMJr61PKTQOot6DwWedJ1Q=;
-        b=Tg3wjazbsJwPUmnbP446R94QYjBwJunAje6WdybNYazf9JESxOyjtgrT0SNXBqyFgh
-         G1/kPFu9uYLSRMBsAOg8AJiPMDy8yqdxunOzd/N27hahNSJ5VdUHro4qYXnwHF9MnT3T
-         eBBMFczJzPXTSCXgLxaxlA5/18HZ8QNtBMceqrldrM8mJ8iNxLD5n1f94Hw7xdEYllIB
-         sp2W7dxzUK8DTQG+8xwKfKtxUw1BNeiuApFgvC1WLp+W583ABmrCGPqAPp89BM2o/GI6
-         UuYwkFf20EzMT5Ly12fbPEdgt6Xbk3CmnSxihwUYNuH9Bjr5rxWIhLGmehZmLugj3BP2
-         WR6w==
-X-Gm-Message-State: AOJu0YyKhBdZSLvcOrqvd5rGd5CtZcxZfTRAT898pg+eCX7vA/8jqCbC
-	fzlGBfbyltLObjfvfQRiHbgBOuDdsG8CPeD5ctO2csta914+R84yAHyXeHClnO+ouMk=
-X-Gm-Gg: ATEYQzxInK9RHBRKLntscFnpY0kl203ZEiF5AR3GY/AQ9HEsPEWWxxFOCfXhkowsn1b
-	KVG7ZEU7jUrF+ifBTu4r/kCuyG3WPtdj6XfQdXfT3cLi+y3UhKaIqxnj/1F9afm2n3mBY05KlJR
-	sbPxAlFwGaI4li6UItOW/nXOZ4/cqI7qiDTqt135ZLTR1QLnDjnribDIiOWDBC7Gm74Srk7E2NZ
-	pRi4JTV1SXR+qBn2Cdu8wE4SXgYOz5Esdxd5d+kLFQYriOiavaKIJmngZ5889iktOmoZI3yHB/9
-	iZ/pFLtkWvPrqWkFN0jEDJipnfoTuZu7u21gBcuVrq44XQuxgIotf6FqXZ3v5lubSDfiytGpDbv
-	mKKmgaEFK5ghXzFV4I4VECbXdVVocDLxKuzKYQyBwkEFPIqkOvu8vugMgds/yZukaV+ZosVvZse
-	JA5VS3pvw9+lP4oZYOWWMq6vaM5qg3ZBKvBXlSZNv8gNdf+eiiQ1jbdasBKKoeqomNK+JNzm64E
-	Pm9ZDiJKg==
-X-Received: by 2002:a17:903:19d0:b0:2ae:4f15:1aba with SMTP id d9443c01a7336-2aecab22c09mr60070625ad.30.1773454529526;
-        Fri, 13 Mar 2026 19:15:29 -0700 (PDT)
+        bh=Nzqp7Zv9Oh2AN/hjLVnU+QXpZxAjV2vKbrJiSpiOKrg=;
+        b=XUUPTOqz34eIips9O9IiKx8s70BAikIb/c99+SxVRxF0flud/4z/dbz7JBekzWIbTS
+         tlyawIP+i+ULMCk9JrlvXJ2b1sJLfdEz7n/YKzAyzjHb13oRzuy5K8O7r4p8YxuNXFeX
+         nTitnKgMwtWccL5m5h1ai+VDyA/JhRSl+e7qoDr6onDC5cnOmn++l24U+Tf74r3MwNSq
+         hVrfj4vFk5UwtU2rTlghMBoTdD4JZ7ONnM2u7t1lVlvedzT2YDkYyOplZejzwSYooI30
+         5fZ0sllC7FsY/wVPis7xD6gS/d/a4g9bVENFFWplxmlJEZ7KrWjqjk77upTUeqbP/7s9
+         5dnA==
+X-Gm-Message-State: AOJu0YzlOHEuHXr+LDqKAb6oOtDehScPJhGR4dGtAGbf4RdaMIiD4Xwh
+	wzat2NthPWt2gZp6dm20+8U3Cbfif9jisd0f9VcTqeXcv4CvhzUw59g1uPQiv/PpJR8=
+X-Gm-Gg: ATEYQzwC307YLaXHx1QvpjnYb6FjcIy0mQpZGPPdcde0USR25e+d659uR7hbuRH6hVp
+	mGH6tdhq07giykcSvB+XDYFpK4Uqs9LsJP3wNkkwCwDGfgQ3CRfQ1HEo6re7M8b10+5X/bBtys4
+	szgS56rcy7Ih0Rcy/Ag1m/rtV7E7ht1ni6VLJohgGUR5+d4V6AHIKiFyxGKmk1/KFxvrVpL+bLm
+	K00V6j5phxSobgymDHGu+8f1Oiw08IpCzygwWoWZcyfkIKMd/VK4EI0YGlg8bs5FBO/kbUWNilh
+	n7HYwEhIx0KjXpXxmNeCNEXnk+1rW5vh5Ux/4Jle+dnFRtjyOPbT8bChhPCvUgzpHz+STKfkxeZ
+	Bpebcr7tGlFvOQkoh2KzJXy3DQU5IV6dZ+AwszCLP2YaYxkjvgmTRat8NZO/6wohRmskLCW4gop
+	iEI/4OZisBa8XtmE4AKVgXCHwBmiwLbmRhIbKwIMpP+/70mKoW0R2pzc8/nitJVyOazswFbVTiV
+	evsOKvxa2/9AmlYcX0w
+X-Received: by 2002:a17:903:1b63:b0:2ae:8077:b1c1 with SMTP id d9443c01a7336-2aecaaf4bc3mr51337345ad.30.1773454532507;
+        Fri, 13 Mar 2026 19:15:32 -0700 (PDT)
 Received: from kali-VMware-Virtual-Platform.. ([185.218.127.178])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2aece627683sm33450305ad.32.2026.03.13.19.15.26
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2aece627683sm33450305ad.32.2026.03.13.19.15.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Mar 2026 19:15:29 -0700 (PDT)
+        Fri, 13 Mar 2026 19:15:31 -0700 (PDT)
 From: Daniel Wade <danjwade95@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -65,9 +65,9 @@ Cc: daniel@iogearbox.net,
 	ameryhung@gmail.com,
 	ast@kernel.org,
 	danjwade95@gmail.com
-Subject: [PATCH bpf v4 1/2] bpf: Fix unsound scalar forking in maybe_fork_scalars() for BPF_OR
-Date: Sat, 14 Mar 2026 13:15:20 +1100
-Message-ID: <20260314021521.128361-2-danjwade95@gmail.com>
+Subject: [PATCH bpf v4 2/2] selftests/bpf: Add tests for maybe_fork_scalars() OR vs AND handling
+Date: Sat, 14 Mar 2026 13:15:21 +1100
+Message-ID: <20260314021521.128361-3-danjwade95@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260314021521.128361-1-danjwade95@gmail.com>
 References: <20260314021521.128361-1-danjwade95@gmail.com>
@@ -79,43 +79,136 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-maybe_fork_scalars() is called for both BPF_AND and BPF_OR when the
-source operand is a constant.  When dst has signed range [-1, 0], it
-forks the verifier state: the pushed path gets dst = 0, the current
-path gets dst = -1.
+Add three test cases to verifier_bounds.c to verify that
+maybe_fork_scalars() correctly tracks register values for BPF_OR
+operations with constant source operands:
 
-For BPF_AND this is correct: 0 & K == 0.
-For BPF_OR this is wrong:    0 | K == K, not 0.
+1. or_scalar_fork_rejects_oob: After ARSH 63 + OR 8, the pushed
+   path should have dst = 8. With value_size = 8, accessing
+   map_value + 8 is out of bounds and must be rejected.
 
-The pushed path therefore tracks dst as 0 when the runtime value is K,
-producing an exploitable verifier/runtime divergence that allows
-out-of-bounds map access.
+2. and_scalar_fork_still_works: Regression test ensuring AND
+   forking continues to work. ARSH 63 + AND 4 produces pushed
+   dst = 0 and current dst = 4, both within value_size = 8.
 
-Fix this by passing env->insn_idx (instead of env->insn_idx + 1) to
-push_stack(), so the pushed path re-executes the ALU instruction with
-dst = 0 and naturally computes the correct result for any opcode.
+3. or_scalar_fork_allows_inbounds: After ARSH 63 + OR 4, the
+   pushed path has dst = 4, which is within value_size = 8
+   and should be accepted.
 
-Fixes: bffacdb80b93 ("bpf: Recognize special arithmetic shift in the verifier")
+These tests exercise the fix in the previous patch, which makes the
+pushed path re-execute the ALU instruction so it computes the correct
+result for BPF_OR.
+
 Signed-off-by: Daniel Wade <danjwade95@gmail.com>
 Reviewed-by: Amery Hung <ameryhung@gmail.com>
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/verifier.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../selftests/bpf/progs/verifier_bounds.c     | 94 +++++++++++++++++++
+ 1 file changed, 94 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index a9e2380327..68fa308520 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -14206,7 +14206,7 @@ static int maybe_fork_scalars(struct bpf_verifier_env *env, struct bpf_insn *ins
- 	else
- 		return 0;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+index a0bb7fb40e..d8fe6f98e7 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
++++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+@@ -1200,4 +1200,98 @@ l0_%=:	r0 = 0;						\
+ 	: __clobber_all);
+ }
  
--	branch = push_stack(env, env->insn_idx + 1, env->insn_idx, false);
-+	branch = push_stack(env, env->insn_idx, env->insn_idx, false);
- 	if (IS_ERR(branch))
- 		return PTR_ERR(branch);
- 
++SEC("socket")
++__description("maybe_fork_scalars: OR with constant rejects OOB")
++__failure __msg("invalid access to map value")
++__naked void or_scalar_fork_rejects_oob(void)
++{
++	asm volatile ("					\
++	r1 = 0;						\
++	*(u64*)(r10 - 8) = r1;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = %[map_hash_8b] ll;				\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto l0_%=;				\
++	r9 = r0;					\
++	r6 = *(u64*)(r9 + 0);				\
++	r6 s>>= 63;					\
++	r6 |= 8;					\
++	/* r6 is -1 (current) or 8 (pushed) */		\
++	if r6 s< 0 goto l0_%=;				\
++	/* pushed path: r6 = 8, OOB for value_size=8 */	\
++	r9 += r6;					\
++	r0 = *(u8*)(r9 + 0);				\
++l0_%=:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_hash_8b)
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("maybe_fork_scalars: AND with constant still works")
++__success __retval(0)
++__naked void and_scalar_fork_still_works(void)
++{
++	asm volatile ("					\
++	r1 = 0;						\
++	*(u64*)(r10 - 8) = r1;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = %[map_hash_8b] ll;				\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto l0_%=;				\
++	r9 = r0;					\
++	r6 = *(u64*)(r9 + 0);				\
++	r6 s>>= 63;					\
++	r6 &= 4;					\
++	/*						\
++	 * r6 is 0 (pushed, 0&4==0) or 4 (current)	\
++	 * both within value_size=8			\
++	 */						\
++	if r6 s< 0 goto l0_%=;				\
++	r9 += r6;					\
++	r0 = *(u8*)(r9 + 0);				\
++l0_%=:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_hash_8b)
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("maybe_fork_scalars: OR with constant allows in-bounds")
++__success __retval(0)
++__naked void or_scalar_fork_allows_inbounds(void)
++{
++	asm volatile ("					\
++	r1 = 0;						\
++	*(u64*)(r10 - 8) = r1;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = %[map_hash_8b] ll;				\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto l0_%=;				\
++	r9 = r0;					\
++	r6 = *(u64*)(r9 + 0);				\
++	r6 s>>= 63;					\
++	r6 |= 4;					\
++	/*						\
++	 * r6 is -1 (current) or 4 (pushed)		\
++	 * pushed path: r6 = 4, within value_size=8	\
++	 */						\
++	if r6 s< 0 goto l0_%=;				\
++	r9 += r6;					\
++	r0 = *(u8*)(r9 + 0);				\
++l0_%=:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_hash_8b)
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
