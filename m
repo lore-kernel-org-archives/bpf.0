@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04DA1EEB3;
-	Sat, 14 Mar 2026 15:31:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CBAF1DD525;
+	Sat, 14 Mar 2026 16:02:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773502308; cv=none; b=ZrtH0upbK8CbXJNxctjLr+k+mHqLRAc+WdKdkq4+6tw9JkFzyE3p4Pdb9jX6XQMUKSAuvkRUKWii1/HHdPstzq2+1O68D0wgtVT49eLbAHCm/h115Rp9LU2/IrKy2MKBoQx5umWcXkLGCnGbP8qdW491t11Je3vhFEMpJjGtykI=
+	t=1773504178; cv=none; b=gK3zd3+y1/dX9TiPwodfKuR++r/7Z5S0DlkexF/1NI6I1OAMoPSfV3Nh6qYpRnEDsU/TrXC8v/KxsNI98zhbwUF0qeDKqhw6QF3O2lSToSL9tO+eqL2nll3PLZK7xZ0tPLuuAuohXfg5DXelg+WR+y0lbAX/YhtDwg2OIrc/gcg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773502308; c=relaxed/simple;
-	bh=3oto4NzWUu1PAVH049AXdYT4Jt2n+mb0nBzsSwynlzE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=QxCo5KwhTva+FiMWzKatF2ThD5mQ76S3Jty+QQ87JXrnxCe1EGGloQbMM1A3gtKlm6luDMyGHjNlcHAFxJJhuUVNWUGBsG9VY00lefw8qiaV715l+5KnI/rRSpGOt9N87IdYiiME+krRK8+v7G71uJk0KVKpnILHBzkeDZ2BhvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iQPP8QB+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773504178; c=relaxed/simple;
+	bh=gW273cX5oHbg/QoABE2SB7PT0aTQ/h5U216t18qbRMs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=L6iYqLqFHfHcVlOFxP7GnZqm6i9aXxfcttArtCriTDW3xXz5clzkxG67nsWEbfjCi0tzvbBBPSXHCsLJGRQmsiSE4C1ZyuLbA3RCDP9o6UEYOK8xEyJ7HAQW0Jh/O5fIf1jQXYJ5GOxB/1Yao2z0omGkHz2Dxe+7GsXp5avjp28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QYASmWMm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iQPP8QB+"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6F5C5C116C6;
-	Sat, 14 Mar 2026 15:31:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QYASmWMm"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 236E1C116C6;
+	Sat, 14 Mar 2026 16:02:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773502307;
-	bh=3oto4NzWUu1PAVH049AXdYT4Jt2n+mb0nBzsSwynlzE=;
+	s=k20201202; t=1773504178;
+	bh=gW273cX5oHbg/QoABE2SB7PT0aTQ/h5U216t18qbRMs=;
 	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=iQPP8QB+76beLhL9mgIsGOEnujrXfyNA/t375e1sEvAXmazwvZph7TkB1QH6ZhSVr
-	 IScYlS/3J9Ge+/rlKQ+nCNooke286BA1Soh0MznOFTlJJm+4uu1FocrQu2TOsvCHN3
-	 ZL5JtLCryVxZ/dS7oZmXrWFU3Pkl1c5Dc2x4jqwvsUuTEg6uV+g86Ye9tdmToWDnwt
-	 KCE173RlgKVlbs/OMwAa9UrcLyx2lZzUEHs2HLu+MaI9deK24lDcCUm+KtKSbYImhT
-	 eAMbKK7A0ySpP0XH/aeGrBFIqB0NHoUTOsQTCNYScGegsl4R4QtM4i179y3AiqagBS
-	 Un9V0yvtYCSsQ==
+	b=QYASmWMmM5rPb6P6M/GW67xjWV0DT2QV6FnyrC4XUjVrQaRAM6mP1gsANpFO3gcHl
+	 XzYCqtfvxi8oGwntcVW4pRyoh+nejoV8cnOZ3aCD/JYyWJDtMsgMtoVMvz2T49HX4x
+	 7StCfls88j2SlaMD7GE6yzX1ACkZHXN7D2HXTYTlyHvDY7WwvGLqkZ7x7/IjyiHDtw
+	 cXORGe1sfs+kcBbXhAnBJGoKxDZEZTwJTHrV/IVBh0w0ysCBml3lTIBPJ41jHmuYyc
+	 aIaE6RynhHdB8cRc422lONZiGyS6rpbBjwsWrpTNKfmjrnNL/Goah+oRSCir4ByhIE
+	 e0Nf50eLdE1Hg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5783710706D1;
-	Sat, 14 Mar 2026 15:31:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 117BC10706E2;
+	Sat, 14 Mar 2026 16:02:58 +0000 (UTC)
 From: Levi Zim via B4 Relay <devnull+rsworktech.outlook.com@kernel.org>
-Date: Sat, 14 Mar 2026 23:31:28 +0800
-Subject: [PATCH bpf v2] bpf: do not use kmalloc_nolock when
+Date: Sun, 15 Mar 2026 00:02:48 +0800
+Subject: [PATCH bpf v3] bpf: do not use kmalloc_nolock when
  !HAVE_CMPXCHG_DOUBLE
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -40,11 +40,11 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260314-bpf-kmalloc-nolock-v2-1-576e33e4fa67@outlook.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/31NSw6CMBC9Cpm1Y/pBVFbew7AodCoN0CEtEg3h7
- jYcwM1L3n+DRNFTgrrYINLqk+eQiToV0PUmvAi9zRyUUJXQssR2djhMZhy5w8AZB6yENTdBldS
- WIBfnSM5/jtEn5Dw0Wex9Wjh+j6NVHta/zVWiRFWa1ml3vZi7e/B7GZmHc8cTNPu+/wC4ZOdtu
- wAAAA==
+Message-Id: <20260315-bpf-kmalloc-nolock-v3-1-91c72bf91902@outlook.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4XNyQ6CMBAG4Fchc7amCxT15HsYDwWm0rAMabHRE
+ N7dpjcvepnkn+WbDQJ6hwEuxQYeowuO5hTUoYC2N/MDmetSBsml5kqUrFksGyYzjtSymVIdmOa
+ dOXHUQnUI6XDxaN0rozdI+3BPzd6Flfw7P4oij36ZUTDBZGkaq2xdmbO90nMdiYZjS1MGo/yPy
+ IRUtUalsLRG19/Ivu8fv2qK1AABAAA=
 X-Change-ID: 20260314-bpf-kmalloc-nolock-60da80e613de
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
@@ -62,21 +62,21 @@ Cc: Amery Hung <ameryhung@gmail.com>, linux-riscv@lists.infradead.org,
  stable@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-rt-devel@lists.linux.dev, Levi Zim <rsworktech@outlook.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4940;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5177;
  i=rsworktech@outlook.com; s=ryzen; h=from:subject:message-id;
- bh=OgmsL+IoFTwpgQ53xi0uCbqj+KUlvmYc6EsmLeVQARY=;
- b=owEBbQKS/ZANAwAKAW87mNQvxsnYAcsmYgBptX9aBEUQoXxUoQbiBYRV3LwvC1cyq5/288bP7
- 35R5HsR91qJAjMEAAEKAB0WIQQolnD5HDY18KF0JEVvO5jUL8bJ2AUCabV/WgAKCRBvO5jUL8bJ
- 2BRsD/96Swu0tWcACwdoVeOTVhC7njCgpPYwK7wSVhEobsYCLke6OMJCvhzTH9oy3RdMe9w0TWL
- TjRmb7Lmy5uMgLM6EFp+buP+147gkZKf8pjUDTjDpqXeHIBwqD5b4c8lXSCwmPXJDT1T8yTkW7k
- f2Dq3kAz4bD5VPbWOEu2cAYK+VkQVfHUD7qKvhMnkn/lh/2HNNYbcS6HhcWHbWNavYWkYT+4/zK
- ymDxTC0qpCa8qNCyIgz7rkH2CDddoOXRi5QScgb9BR+EZMy7rQyoeGyQ1xnEsF1qeihAzIwdHGb
- PnoRdg0iNIK8Zgv0lqflDDOo46IxQRVHv4oB2zeAxGV/XuOIMp9WDBC0kGQv5sydzb/ATIWbNey
- QE9KicHd8ZgiLOlO7/FMQRrupfMZq4aJzpxx3PS8+MpN8owd+4XYbd5k4p2s+tCfUDB+9QtgmH+
- KSO+DSXbUeuVSJqx4mGPaBS960sshd0Os1fvag8eqF0z3RnvHxBFVj8rfA58wW7t2C4usIS/6rc
- 7/txBQVAV8I+ukor2HacVOsvhEfpfxnmJ7KOIIwnnRLdaN/l3sp2sEFmJzqmca5D6i1ye70N3yY
- UftIwAZFk8nldDqLTu8DkBjR2eLg615FVkL57XrZqrh9M8fFjb/13T37CAU6xV8LIQr9KXcq8OA
- FC9BoF/h2QyyAOQ==
+ bh=F3NzhvAzd0zCVDcRlr7RmrSHpJygKeFMqZIONIS/DVY=;
+ b=owEBbQKS/ZANAwAKAW87mNQvxsnYAcsmYgBptYataz9Rjqgmj6vGqmsIM8a6ZekZLkTCdBL8E
+ xjDsqOUPQWJAjMEAAEKAB0WIQQolnD5HDY18KF0JEVvO5jUL8bJ2AUCabWGrQAKCRBvO5jUL8bJ
+ 2F2AD/9oKgja014FkRBZt0+EeVAdwGQx2xV8nIGzJFegeQEj1nn2IEPSyYITgmeLJ+wp0LhaJ7M
+ KZ2ZG7quAiDTUYPLSTk1+qNAR+JaDp15cA1/GHDrdFoLCEO0A4TYRP4eMrqQIOIZra2hF+7EX0C
+ v6ndojsunyGRPgeDln9cs6pYfa1XUa8dHgD9bSivT1DluvOajJU1gXjbhTKEOeasYdzMt1IQfNw
+ kQX7wq/P3JoUFMTJCL4I66odN1QlGfe2sS7xNg5GOu08NtxDrXY8QkbSLNGAqYA/t5lKwOjdjNg
+ MfdFm4zzKcTm4Qe9STv6V9cQjVoG3kRqCbP35meqrOq690na+7HUW4RrAjozujCSLeQ8Zv2s32q
+ o9m6p3nzUyP6wB2/sJkwk8eD7S3o4X9ODWpdSAr76mi+9o5AHTvTA2BdaHE4yDhjfSByRrZxjin
+ riSi1Foj46ovVjKDCFwdEN0ocJFHCfUW1GjnXA2qjM2Sale7GV7fS/UNNnftktWBTyYA2Jw8hyK
+ V30UKE2bZsSHx5wsDVKV/YphBApMDRFi+2OUkKhFIJovNl7pxU2DxjHiKa0T5r1u6xAVlpvEfA7
+ 5lHcoM60D8Hn0Xn4JcC9YioctxKS6UI/2FPAVvrham+ytnO0SIbDZbXaiqjWhkr/F7qR0LE3eGI
+ k2lMPSDkv1fCCIA==
 X-Developer-Key: i=rsworktech@outlook.com; a=openpgp;
  fpr=17AADD6726DDC58B8EE5881757670CCFA42CCF0A
 X-Endpoint-Received: by B4 Relay for rsworktech@outlook.com/ryzen with
@@ -127,6 +127,12 @@ Fix it by enabling use_kmalloc_nolock only when HAVE_CMPXCHG_DOUBLE.
 Note for stable: this only needs to be picked into v6.19 if the patch
 makes it into 7.0.
 ---
+Changes in v3:
+- Use macro instead of const static variable to avoid triggering
+  warnings.
+- Wrap lines at 80 columns
+- Link to v2: https://lore.kernel.org/r/20260314-bpf-kmalloc-nolock-v2-1-576e33e4fa67@outlook.com
+
 Changes in v2:
 - Drop the modification to the PREEMPT_RT case as it requires
   kmalloc_nolock for correctness.
@@ -134,35 +140,35 @@ Changes in v2:
   not HAVE_CMPXCHG_DOUBLE but enables PREEMPT_RT.
 - Link to v1: https://lore.kernel.org/r/20260314-bpf-kmalloc-nolock-v1-1-24abf3f75a9f@outlook.com
 ---
- include/linux/bpf_local_storage.h | 2 ++
- kernel/bpf/bpf_cgrp_storage.c     | 2 +-
+ include/linux/bpf_local_storage.h | 1 +
+ kernel/bpf/bpf_cgrp_storage.c     | 3 ++-
  kernel/bpf/bpf_local_storage.c    | 4 ++++
- kernel/bpf/bpf_task_storage.c     | 2 +-
- 4 files changed, 8 insertions(+), 2 deletions(-)
+ kernel/bpf/bpf_task_storage.c     | 3 ++-
+ 4 files changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/include/linux/bpf_local_storage.h b/include/linux/bpf_local_storage.h
-index 8157e8da61d40..a7ae5dde15bcb 100644
+index 8157e8da61d40..d8f2c5d63a80e 100644
 --- a/include/linux/bpf_local_storage.h
 +++ b/include/linux/bpf_local_storage.h
-@@ -19,6 +19,8 @@
+@@ -18,6 +18,7 @@
+ #include <asm/rqspinlock.h>
  
  #define BPF_LOCAL_STORAGE_CACHE_SIZE	16
++#define KMALLOC_NOLOCK_SUPPORTED IS_ENABLED(CONFIG_HAVE_CMPXCHG_DOUBLE)
  
-+static const bool KMALLOC_NOLOCK_SUPPORTED = IS_ENABLED(CONFIG_HAVE_CMPXCHG_DOUBLE);
-+
  struct bpf_local_storage_map_bucket {
  	struct hlist_head list;
- 	rqspinlock_t lock;
 diff --git a/kernel/bpf/bpf_cgrp_storage.c b/kernel/bpf/bpf_cgrp_storage.c
-index c2a2ead1f466d..09c557e426968 100644
+index c2a2ead1f466d..cd18193c44058 100644
 --- a/kernel/bpf/bpf_cgrp_storage.c
 +++ b/kernel/bpf/bpf_cgrp_storage.c
-@@ -114,7 +114,7 @@ static int notsupp_get_next_key(struct bpf_map *map, void *key, void *next_key)
+@@ -114,7 +114,8 @@ static int notsupp_get_next_key(struct bpf_map *map, void *key, void *next_key)
  
  static struct bpf_map *cgroup_storage_map_alloc(union bpf_attr *attr)
  {
 -	return bpf_local_storage_map_alloc(attr, &cgroup_cache, true);
-+	return bpf_local_storage_map_alloc(attr, &cgroup_cache, KMALLOC_NOLOCK_SUPPORTED);
++	return bpf_local_storage_map_alloc(attr, &cgroup_cache,
++					   KMALLOC_NOLOCK_SUPPORTED);
  }
  
  static void cgroup_storage_map_free(struct bpf_map *map)
@@ -182,15 +188,16 @@ index 9c96a4477f81a..a6c240da87668 100644
  	smap->use_kmalloc_nolock = IS_ENABLED(CONFIG_PREEMPT_RT) ? true : use_kmalloc_nolock;
  
 diff --git a/kernel/bpf/bpf_task_storage.c b/kernel/bpf/bpf_task_storage.c
-index 605506792b5b4..9f74fd1ef7f46 100644
+index 605506792b5b4..6e8597edea314 100644
 --- a/kernel/bpf/bpf_task_storage.c
 +++ b/kernel/bpf/bpf_task_storage.c
-@@ -212,7 +212,7 @@ static int notsupp_get_next_key(struct bpf_map *map, void *key, void *next_key)
+@@ -212,7 +212,8 @@ static int notsupp_get_next_key(struct bpf_map *map, void *key, void *next_key)
  
  static struct bpf_map *task_storage_map_alloc(union bpf_attr *attr)
  {
 -	return bpf_local_storage_map_alloc(attr, &task_cache, true);
-+	return bpf_local_storage_map_alloc(attr, &task_cache, KMALLOC_NOLOCK_SUPPORTED);
++	return bpf_local_storage_map_alloc(attr, &task_cache,
++					   KMALLOC_NOLOCK_SUPPORTED);
  }
  
  static void task_storage_map_free(struct bpf_map *map)
