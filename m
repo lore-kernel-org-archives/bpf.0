@@ -1,145 +1,60 @@
-Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DB0F373C0C
-	for <bpf@vger.kernel.org>; Sun, 15 Mar 2026 16:45:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C91C325A655;
+	Sun, 15 Mar 2026 17:02:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773593103; cv=none; b=HNzXiHbLrjmntnB3TkBpvzPQUEanqwGqwuKbWVsyWvyvFDAAHliuz74LpSRRHI8KS3YtVRw8FekVNFF0KxYihRnR3swKrmor00HBoDdEhHZ6GmvqrGyfOyyDO07C0qhY9JTsROE949NFyoRVJK60DCS2QWMs27PhhUKVNz+OclY=
+	t=1773594170; cv=none; b=d/eVlz1o4wQbe9LaUVNC/KgX2eMNiw70AGFnNPOmo/J7vLCwEz19yb8ZN/S9piBPY0sc56hI0xoqQSdx0cyKzCSXcSPAVxGZRaxOLRrMIRrCfhN1+Kj39PEJogqEYa0GUi1duQFJvHhGuwcCVu4dhHqkHajfxU1iSToux+PZDmc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773593103; c=relaxed/simple;
-	bh=EaUAwKfk1pYCiPnR95+voQwIKZP/WHGMOY8kPjCJGQ8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qD9V/Rn2dOtisfQs4SLfqYoHtae4U8fvfDqL9Vw9+8RFDjh16DJVCugPLn6/HQaSSIR6xp9OXLmemDXSF0EcrUh+ztQE/gvDIxPjkHzL0AtLZy8zCLPZafCI1ygAvXhUYcTXG9l2Mqs9Y065J2E4rGl0jCLSRDyiW3S77EMoKAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IYaFTzyQ; arc=none smtp.client-ip=95.215.58.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1773594170; c=relaxed/simple;
+	bh=zy2/z1sXTGswAXzUUoF4kMirR7eYtWRiusezRTgh5s4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=g1sudbhwf7tQ2iBV4a1+Aauoo5k7dpAiz5WlO4s1yy/4EAAi3xvrpujY25ITsAp4Mp0jtfbR2IUNpaYp8EuYCUweepxorQB7okgZzSForY7NC45eGKDGovzE7kjyPyjdKZ3C/XirFMgy1pNTnZ/z7RWG6mCbiW2GgBDIxUHHCXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t0+gkML2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IYaFTzyQ"
-Message-ID: <6555dc32-b651-4c45-adaf-e3aecb013904@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773593100;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bfVgWC/kUc0Eksi2IfYDFwks3YrVHqxzEhca1Pyur7g=;
-	b=IYaFTzyQtoHqS74uWZY/TQAeJinECnpokR5dvOinjxOCHCiRxNZlyYeg/CSSA1eeTS4+fl
-	WgmWQwjVZZQDHRSAYEFVr03UQJrBpnQN1YnE5Hm7AQgUA/7f+3hullFiXkp5q98BiE1uWV
-	L4i34PgWPDj6QCqYpw0EWLQBi56Ht6A=
-Date: Sun, 15 Mar 2026 09:44:46 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t0+gkML2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94CA3C4CEF7;
+	Sun, 15 Mar 2026 17:02:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773594170;
+	bh=zy2/z1sXTGswAXzUUoF4kMirR7eYtWRiusezRTgh5s4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=t0+gkML2+e2/jn6cN+bhDFGyl71Mf4TLa+A9Hizu8tFguiNo8kOnCQ+ThblMFynni
+	 4YZbzWigvSOeYm3oDFgm+H9faSPqmNcZfZCsgqlaMuorLTCg/TRBHZkOFbEzOuB0xh
+	 5FKBxdaz/Qy2mETzaTMqr9twXgFKV2CHpvnoUqq9VTg8Z69YsGyOjax+WIvXaVfj3S
+	 6BjePrMdxtuluW4chV5n6Xg815EpQ7AeONQaRgP3R4YwRax3n+ZyCIuONdEqMl2pKW
+	 fP+I399isEdR55o6GGs5jAsqCnai6A5gKDHX6/hnW9jtyYAhF/3mslcIiNwOam1KmF
+	 hImyGahvDUnWw==
+Date: Sun, 15 Mar 2026 10:02:47 -0700
+From: Eric Biggers <ebiggers@kernel.org>
+To: syzbot ci <syzbot+ci46064f472908848f@syzkaller.appspotmail.com>
+Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+	daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com,
+	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
+	linux-kernel@vger.kernel.org, martin.lau@linux.dev, sdf@fomichev.me,
+	song@kernel.org, yonghong.song@linux.dev, syzbot@lists.linux.dev,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot ci] Re: bpf: Remove inclusions of crypto/sha1.h
+Message-ID: <20260315170247.GA23968@quark>
+References: <20260314210810.67348-1-ebiggers@kernel.org>
+ <69b69e5e.050a0220.248e02.00f9.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v1] selftests/bpf: Improve connect_force_port
- test reliability
-Content-Language: en-GB
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260312062042.387367-1-jiayuan.chen@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260312062042.387367-1-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <69b69e5e.050a0220.248e02.00f9.GAE@google.com>
 
+On Sun, Mar 15, 2026 at 04:56:14AM -0700, syzbot ci wrote:
+> net/ipv6/addrconf.c:3341:25: error: variable has incomplete type 'struct sha1_ctx'
+> net/ipv6/addrconf.c:3344:13: error: use of undeclared identifier 'SHA1_BLOCK_SIZE'
+> net/ipv6/addrconf.c:3369:2: error: call to undeclared function 'sha1_init'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+> net/ipv6/addrconf.c:3378:2: error: call to undeclared function 'sha1_update'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
 
+Thanks.  The BPF CI caught this first, and this was already fixed in v3.
 
-On 3/11/26 11:20 PM, Jiayuan Chen wrote:
-> From: Jiayuan Chen <jiayuan.chen@shopee.com>
->
-> No functional changes.
-
-This is not true as you mentioned below.
-
->
-> The connect_force_port test can fail intermittently because the
-> hardcoded server ports (60123/60124) may already be in use by other
-> tests or processes in CI environments [1].
->
-> Fix this by using dynamically assigned ports (port 0) for start_server
-> and propagating the actual port to the BPF programs at runtime via
-> skel->bss->port. Convert the test from the legacy bpf_object__open_file
-> loading model to the skeleton (skel) pattern, which provides direct
-> access to BPF global variables without introducing maps or other
-> mechanisms.
-
-I suggest you have two patches:
-   . patch 1: fix port issue
-   . patch 2: improve code from bpf_object__*() to skel based.
-     patch 2 is optional.
-
->
-> Test:
->
->    ./test_progs -a connect_force_port -v
->
->    test_v4:PASS:skel4_open_and_load 0 nsec
->    attach_progs:PASS:attach connect 0 nsec
->    attach_progs:PASS:attach getpeername 0 nsec
->    attach_progs:PASS:attach getsockname 0 nsec
->    run_tests:PASS:start_server tcp 0 nsec
->    run_tests:PASS:get_socket_local_port 0 nsec
->    run_tests:PASS:connect_to_fd 0 nsec
->    run_tests:PASS:verify_ports 0 nsec
->    run_tests:PASS:start_server udp 0 nsec
->    run_tests:PASS:get_socket_local_port 0 nsec
->    run_tests:PASS:connect_to_fd 0 nsec
->    run_tests:PASS:verify_ports 0 nsec
->    test_v6:PASS:skel6_open_and_load 0 nsec
->    attach_progs:PASS:attach connect 0 nsec
->    attach_progs:PASS:attach getpeername 0 nsec
->    attach_progs:PASS:attach getsockname 0 nsec
->    run_tests:PASS:start_server tcp 0 nsec
->    run_tests:PASS:get_socket_local_port 0 nsec
->    run_tests:PASS:connect_to_fd 0 nsec
->    run_tests:PASS:verify_ports 0 nsec
->    run_tests:PASS:start_server udp 0 nsec
->    run_tests:PASS:get_socket_local_port 0 nsec
->    run_tests:PASS:connect_to_fd 0 nsec
->    run_tests:PASS:verify_ports 0 nsec
->    #80      connect_force_port:OK
->    Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
->
-> [1] https://github.com/kernel-patches/bpf/actions/runs/22697676317/job/65808536038
->
-> Cc: Jiayuan Chen <jiayuan.chen@linux.dev>
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
-> ---
->   .../bpf/prog_tests/connect_force_port.c       | 190 +++++++++---------
->   .../selftests/bpf/progs/connect_force_port4.c |  10 +-
->   .../selftests/bpf/progs/connect_force_port6.c |  10 +-
->   3 files changed, 108 insertions(+), 102 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/connect_force_port.c b/tools/testing/selftests/bpf/prog_tests/connect_force_port.c
-> index 24d553109f8dd..3e62f9b9f1d94 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/connect_force_port.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/connect_force_port.c
-> @@ -3,6 +3,8 @@
->   #include <test_progs.h>
->   #include "cgroup_helpers.h"
->   #include "network_helpers.h"
-> +#include "connect_force_port4.skel.h"
-> +#include "connect_force_port6.skel.h"
->   
->   static int verify_ports(int family, int fd,
->   			__u16 expected_local, __u16 expected_peer)
-> @@ -46,122 +48,122 @@ static int verify_ports(int family, int fd,
->   	return 0;
->   }
->   
->
-[...]
-
+- Eric
