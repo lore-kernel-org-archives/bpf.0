@@ -1,433 +1,195 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1460C175A70;
-	Sun, 15 Mar 2026 06:05:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E042340DFAF
+	for <bpf@vger.kernel.org>; Sun, 15 Mar 2026 07:49:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773554740; cv=none; b=OFSOnfxHfrTVhIN+65UyjttmXNpIp4NVkzFIs4FQlEX/Rm2K4uC6qdWJxxr1uObb3gVSUL9NGyY5+JtDj+iv0/OIg6xcXH7e/P/H7ikL8MJ9GJm2rWsdYffnrS7B7x3rO7zoR4hBxJKTmZ3dBleV/rPV2yugsAyTjbffrVEABQM=
+	t=1773560943; cv=none; b=i0cnjgKndj4t71CGWapq4IFoL0Js5tFA4FEO8/Ne6B5tGREg30yCgaphpXCpY9Inw3cTGN0zYPnqKXxOy1RFzs1i8PJiJDoFpzT8rfJCo+eMsA1af8c5BrMAcxJsYZ+BomRQvP74uayzk0wreRsxDnfbUmxr+uv0blbqi5plbVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773554740; c=relaxed/simple;
-	bh=wyI2M0AKUwykqSAQb/jTITWlNbRZYw5mTJD4YdCFD+8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nvxUDDGFjQRKoxuvs8h8JUBiVM/PJ2HVG5eo8zu+r/Rp9R+JHk96z6n7I9eqkhtbwsamIyMg3ijYVAjRqPD6IfYOL9WP082+SJ/osO9t3DNoJDWCUNGBqiL0LEDJPlyYyOzSVNUEhoN9bO4KCXiYstgpyL2rmhW9BjFFqwi+g8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GvraZl6r; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1773560943; c=relaxed/simple;
+	bh=9+4WEo4/E7Ja2Uugyi2TnrkC0M1eH8c1DA4EnTfUmsQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EaPzphR+IvXEMhn1huzXyQdTjJILArl2LHQ8eTXuT0Ee5Dj9135WzCfM/KoELly5io9FZZvt/10imfWnqZEgstTa7KBq55HSG6ngbhVYUEugz+1jj4+hw0eepz0Q4RtnoVxSP3waz9MVq6PVraexmb/ehRlYfQzHk6QENTsF7e0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CK7T/FrX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GvraZl6r"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773554739; x=1805090739;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wyI2M0AKUwykqSAQb/jTITWlNbRZYw5mTJD4YdCFD+8=;
-  b=GvraZl6rCv3Z/X8e7TGEFL7KV1+R6IhaWJyNv8I9+e9TpC1bs/QeYBBI
-   CXWi1osRR5ElkBTyt+MIIol4QecgXQyHTt6BabFYeRYTKTOcvDbkZXybX
-   BAMqs/mNJMFYoW1z1dqIFdmddzby7al4ux+feYxi5fURbH/iPYRiqbOTz
-   /HMgPNQ2Uzpg3me9tfFMOK58FJB5UBAVnWuBUK3pYqXHTlil3eu6mdok1
-   OEXo3HVvnbLhMpa+RByy+oGmVIC3uV31QFlJIQM5T5Dv0JjQ/STSnIgUe
-   FvFfes0jE051UzAg5/R8KkBA1cEFLqPcHjCVpg4V8HToIximy5hqkdOYw
-   g==;
-X-CSE-ConnectionGUID: UewVkNbmTiCcpVxYA6K93w==
-X-CSE-MsgGUID: zgR9XVx7TwCV2lTVw2/38g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11729"; a="85691101"
-X-IronPort-AV: E=Sophos;i="6.23,119,1770624000"; 
-   d="scan'208";a="85691101"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2026 23:05:38 -0700
-X-CSE-ConnectionGUID: kn1yRXrdRKatPlt/1fV69A==
-X-CSE-MsgGUID: C2VuPskURL6GpEUglA143g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,119,1770624000"; 
-   d="scan'208";a="246590957"
-Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
-  by fmviesa001.fm.intel.com with ESMTP; 14 Mar 2026 23:05:31 -0700
-Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w1ebQ-000000003yr-3J69;
-	Sun, 15 Mar 2026 06:05:28 +0000
-Date: Sun, 15 Mar 2026 07:05:04 +0100
-From: kernel test robot <lkp@intel.com>
-To: Xu Kuohai <xukuohai@huaweicloud.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Anton Protopopov <a.s.protopopov@gmail.com>,
-	Alexis =?iso-8859-1?Q?Lothor=E9?= <alexis.lothore@bootlin.com>,
-	Shahab Vahedi <list+bpf@vahedi.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	Hengqi Chen <hengqi.chen@gmail.com>,
-	Johan Almbladh <johan.almbladh@anyfinetworks.com>,
-	Paul Burton <paulburton@kernel.org>,
-	Hari Bathini <hbathini@linux.ibm.com>,
-	Christophe Leroy <chleroy@kernel.org>,
-	Naveen N Rao <naveen@kernel.org>,
-	Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	Pu Lehui <pulehui@huawei.com>, Ilya Leoshkevich <iii@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Wang YanQing <udknight@gmail.com>
-Subject: Re: [PATCH bpf-next v9 1/5] bpf: Move constants blinding out of
- arch-specific JITs
-Message-ID: <202603150744.o3j4EtgB-lkp@intel.com>
-References: <20260312170255.3427799-2-xukuohai@huaweicloud.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CK7T/FrX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FBDBC2BCB4
+	for <bpf@vger.kernel.org>; Sun, 15 Mar 2026 07:49:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773560942;
+	bh=9+4WEo4/E7Ja2Uugyi2TnrkC0M1eH8c1DA4EnTfUmsQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=CK7T/FrX5FZS7o+zenPMYzRCa4G8OitUfsBOEcs5SygEMPsptzXeoOwXtJjF3oNE7
+	 FvzC6hyTNtvtU+hIDx0zZ4LoQrYGaNhYVBaLURXCmHyhbx0q+imHydbhmzTwfCMDZR
+	 tJDRxYg8DyzwbgE2IFT6puizsIAwu4MZGcvRIl33JQcCz2bi1xkC7VZy8lfvTMEPUZ
+	 LwD98Xx1gHnScUyfvee5ieLxS3dtJq+s3o+bz10rl7KS28ClK28NhLrxLvn0VCU66i
+	 LrW8zuQzsqb0DXCjCg1ZnEy2pppIYv5AZz7aqkx7mmO1UPlbKxv3cw11PrfDrzaJVQ
+	 KsSdD4Jd8yGSA==
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b9795ca4e6dso139729766b.2
+        for <bpf@vger.kernel.org>; Sun, 15 Mar 2026 00:49:02 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUON2YdHLqnt/gtWZ/WlHtL5S9nXpRxvP209DGJH12IOuqZJkxUtBnhKC+8gREw4GCCI7w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyFJWwa89FIQ9m39Eq6CMKBgsOSCzyiGNLYCHKQEjqiPTVDlPX3
+	xrmRxI+XGId2jUtcG/jIaFkKmZbcvw+HTi7RFkI3lcoRHu18MDtRbSWXQX3YBVwqB4kAVZIZ1wj
+	hA3kQxAKbpl1lH2eHHg19vJvBH9d/zok=
+X-Received: by 2002:a17:906:209c:b0:b96:f9c9:9d2b with SMTP id
+ a640c23a62f3a-b9764f4ba23mr342750866b.8.1773560940809; Sun, 15 Mar 2026
+ 00:49:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260312170255.3427799-2-xukuohai@huaweicloud.com>
+References: <20260303084314.628311-1-xry111@xry111.site>
+In-Reply-To: <20260303084314.628311-1-xry111@xry111.site>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Sun, 15 Mar 2026 15:48:52 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6RXYGkt4uLgOCd_1UvmKvUyQBnvoZqFEXH=Qchq3TZfw@mail.gmail.com>
+X-Gm-Features: AaiRm52aiU_o36LSlB2hsQZX7tuT4jvOtCTcnbwsPZbPZNmEOqTUp5FGztod56A
+Message-ID: <CAAhV-H6RXYGkt4uLgOCd_1UvmKvUyQBnvoZqFEXH=Qchq3TZfw@mail.gmail.com>
+Subject: Re: [PATCH v3] LoongArch: Fix calling smp_processor_id() in
+ preemptible code
+To: Xi Ruoyao <xry111@xry111.site>
+Cc: WANG Xuerui <kernel@xen0n.name>, Hengqi Chen <hengqi.chen@gmail.com>, 
+	Mingcong Bai <jeffbai@aosc.io>, Zixing Liu <liushuyu@aosc.io>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Tiezhu Yang <yangtiezhu@loongson.cn>, 
+	George Guo <guodongtai@kylinos.cn>, Chenghao Duan <duanchenghao@kylinos.cn>, 
+	loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Xu,
+Applied, thanks.
 
-kernel test robot noticed the following build errors:
+Huacai
 
-[auto build test ERROR on bpf-next/net]
-[also build test ERROR on bpf-next/master bpf/master powerpc/next powerpc/fixes next-20260313]
-[cannot apply to linus/master v6.16-rc1]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Xu-Kuohai/bpf-Move-constants-blinding-out-of-arch-specific-JITs/20260315-041957
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git net
-patch link:    https://lore.kernel.org/r/20260312170255.3427799-2-xukuohai%40huaweicloud.com
-patch subject: [PATCH bpf-next v9 1/5] bpf: Move constants blinding out of arch-specific JITs
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260315/202603150744.o3j4EtgB-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260315/202603150744.o3j4EtgB-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603150744.o3j4EtgB-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> kernel/bpf/verifier.c:22809:5: error: call to undeclared function 'bpf_jit_prog_release_other'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    22809 |                                 bpf_jit_prog_release_other(orig_prog, prog);
-          |                                 ^
-   kernel/bpf/verifier.c:23035:3: error: call to undeclared function 'bpf_jit_prog_release_other'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    23035 |                 bpf_jit_prog_release_other(prog, orig_prog);
-          |                 ^
-   2 errors generated.
-
-
-vim +/bpf_jit_prog_release_other +22809 kernel/bpf/verifier.c
-
- 22777	
- 22778	static int jit_subprogs(struct bpf_verifier_env *env)
- 22779	{
- 22780		struct bpf_prog *orig_prog = env->prog, *prog, **func, *tmp;
- 22781		int i, j, subprog_start, subprog_end = 0, len, subprog;
- 22782		struct bpf_map *map_ptr;
- 22783		struct bpf_insn *insn;
- 22784		void *old_bpf_func;
- 22785		int err, num_exentries;
- 22786		bool blinded = false;
- 22787	
- 22788		if (env->subprog_cnt <= 1)
- 22789			return 0;
- 22790	
- 22791		prog = bpf_jit_blind_constants(env, NULL);
- 22792		if (IS_ERR(prog))
- 22793			return -ENOMEM;
- 22794		if (prog != orig_prog)
- 22795			blinded = true;
- 22796	
- 22797		for (i = 0, insn = prog->insnsi; i < prog->len; i++, insn++) {
- 22798			if (!bpf_pseudo_func(insn) && !bpf_pseudo_call(insn))
- 22799				continue;
- 22800	
- 22801			/* Upon error here we cannot fall back to interpreter but
- 22802			 * need a hard reject of the program. Thus -EFAULT is
- 22803			 * propagated in any case.
- 22804			 */
- 22805			subprog = find_subprog(env, i + insn->imm + 1);
- 22806			if (verifier_bug_if(subprog < 0, env, "No program to jit at insn %d",
- 22807					    i + insn->imm + 1)) {
- 22808				if (blinded) {
- 22809					bpf_jit_prog_release_other(orig_prog, prog);
- 22810					env->prog = orig_prog;
- 22811				}
- 22812				return -EFAULT;
- 22813			}
- 22814			/* temporarily remember subprog id inside insn instead of
- 22815			 * aux_data, since next loop will split up all insns into funcs
- 22816			 */
- 22817			insn->off = subprog;
- 22818			/* remember original imm in case JIT fails and fallback
- 22819			 * to interpreter will be needed
- 22820			 */
- 22821			env->insn_aux_data[i].call_imm = insn->imm;
- 22822			/* point imm to __bpf_call_base+1 from JITs point of view */
- 22823			insn->imm = 1;
- 22824			if (bpf_pseudo_func(insn)) {
- 22825	#if defined(MODULES_VADDR)
- 22826				u64 addr = MODULES_VADDR;
- 22827	#else
- 22828				u64 addr = VMALLOC_START;
- 22829	#endif
- 22830				/* jit (e.g. x86_64) may emit fewer instructions
- 22831				 * if it learns a u32 imm is the same as a u64 imm.
- 22832				 * Set close enough to possible prog address.
- 22833				 */
- 22834				insn[0].imm = (u32)addr;
- 22835				insn[1].imm = addr >> 32;
- 22836			}
- 22837		}
- 22838	
- 22839		err = bpf_prog_alloc_jited_linfo(prog);
- 22840		if (err)
- 22841			goto out_undo_insn;
- 22842	
- 22843		err = -ENOMEM;
- 22844		func = kzalloc_objs(prog, env->subprog_cnt);
- 22845		if (!func)
- 22846			goto out_undo_insn;
- 22847	
- 22848		for (i = 0; i < env->subprog_cnt; i++) {
- 22849			subprog_start = subprog_end;
- 22850			subprog_end = env->subprog_info[i + 1].start;
- 22851	
- 22852			len = subprog_end - subprog_start;
- 22853			/* bpf_prog_run() doesn't call subprogs directly,
- 22854			 * hence main prog stats include the runtime of subprogs.
- 22855			 * subprogs don't have IDs and not reachable via prog_get_next_id
- 22856			 * func[i]->stats will never be accessed and stays NULL
- 22857			 */
- 22858			func[i] = bpf_prog_alloc_no_stats(bpf_prog_size(len), GFP_USER);
- 22859			if (!func[i])
- 22860				goto out_free;
- 22861			memcpy(func[i]->insnsi, &prog->insnsi[subprog_start],
- 22862			       len * sizeof(struct bpf_insn));
- 22863			func[i]->type = prog->type;
- 22864			func[i]->len = len;
- 22865			if (bpf_prog_calc_tag(func[i]))
- 22866				goto out_free;
- 22867			func[i]->is_func = 1;
- 22868			func[i]->sleepable = prog->sleepable;
- 22869			func[i]->blinded = prog->blinded;
- 22870			func[i]->aux->func_idx = i;
- 22871			/* Below members will be freed only at prog->aux */
- 22872			func[i]->aux->btf = prog->aux->btf;
- 22873			func[i]->aux->subprog_start = subprog_start;
- 22874			func[i]->aux->func_info = prog->aux->func_info;
- 22875			func[i]->aux->func_info_cnt = prog->aux->func_info_cnt;
- 22876			func[i]->aux->poke_tab = prog->aux->poke_tab;
- 22877			func[i]->aux->size_poke_tab = prog->aux->size_poke_tab;
- 22878			func[i]->aux->main_prog_aux = prog->aux;
- 22879	
- 22880			for (j = 0; j < prog->aux->size_poke_tab; j++) {
- 22881				struct bpf_jit_poke_descriptor *poke;
- 22882	
- 22883				poke = &prog->aux->poke_tab[j];
- 22884				if (poke->insn_idx < subprog_end &&
- 22885				    poke->insn_idx >= subprog_start)
- 22886					poke->aux = func[i]->aux;
- 22887			}
- 22888	
- 22889			func[i]->aux->name[0] = 'F';
- 22890			func[i]->aux->stack_depth = env->subprog_info[i].stack_depth;
- 22891			if (env->subprog_info[i].priv_stack_mode == PRIV_STACK_ADAPTIVE)
- 22892				func[i]->aux->jits_use_priv_stack = true;
- 22893	
- 22894			func[i]->jit_requested = 1;
- 22895			func[i]->blinding_requested = prog->blinding_requested;
- 22896			func[i]->aux->kfunc_tab = prog->aux->kfunc_tab;
- 22897			func[i]->aux->kfunc_btf_tab = prog->aux->kfunc_btf_tab;
- 22898			func[i]->aux->linfo = prog->aux->linfo;
- 22899			func[i]->aux->nr_linfo = prog->aux->nr_linfo;
- 22900			func[i]->aux->jited_linfo = prog->aux->jited_linfo;
- 22901			func[i]->aux->linfo_idx = env->subprog_info[i].linfo_idx;
- 22902			func[i]->aux->arena = prog->aux->arena;
- 22903			func[i]->aux->used_maps = env->used_maps;
- 22904			func[i]->aux->used_map_cnt = env->used_map_cnt;
- 22905			num_exentries = 0;
- 22906			insn = func[i]->insnsi;
- 22907			for (j = 0; j < func[i]->len; j++, insn++) {
- 22908				if (BPF_CLASS(insn->code) == BPF_LDX &&
- 22909				    (BPF_MODE(insn->code) == BPF_PROBE_MEM ||
- 22910				     BPF_MODE(insn->code) == BPF_PROBE_MEM32 ||
- 22911				     BPF_MODE(insn->code) == BPF_PROBE_MEM32SX ||
- 22912				     BPF_MODE(insn->code) == BPF_PROBE_MEMSX))
- 22913					num_exentries++;
- 22914				if ((BPF_CLASS(insn->code) == BPF_STX ||
- 22915				     BPF_CLASS(insn->code) == BPF_ST) &&
- 22916				     BPF_MODE(insn->code) == BPF_PROBE_MEM32)
- 22917					num_exentries++;
- 22918				if (BPF_CLASS(insn->code) == BPF_STX &&
- 22919				     BPF_MODE(insn->code) == BPF_PROBE_ATOMIC)
- 22920					num_exentries++;
- 22921			}
- 22922			func[i]->aux->num_exentries = num_exentries;
- 22923			func[i]->aux->tail_call_reachable = env->subprog_info[i].tail_call_reachable;
- 22924			func[i]->aux->exception_cb = env->subprog_info[i].is_exception_cb;
- 22925			func[i]->aux->changes_pkt_data = env->subprog_info[i].changes_pkt_data;
- 22926			func[i]->aux->might_sleep = env->subprog_info[i].might_sleep;
- 22927			if (!i)
- 22928				func[i]->aux->exception_boundary = env->seen_exception;
- 22929			func[i] = bpf_int_jit_compile(func[i]);
- 22930			if (!func[i]->jited) {
- 22931				err = -ENOTSUPP;
- 22932				goto out_free;
- 22933			}
- 22934			cond_resched();
- 22935		}
- 22936	
- 22937		/* at this point all bpf functions were successfully JITed
- 22938		 * now populate all bpf_calls with correct addresses and
- 22939		 * run last pass of JIT
- 22940		 */
- 22941		for (i = 0; i < env->subprog_cnt; i++) {
- 22942			insn = func[i]->insnsi;
- 22943			for (j = 0; j < func[i]->len; j++, insn++) {
- 22944				if (bpf_pseudo_func(insn)) {
- 22945					subprog = insn->off;
- 22946					insn[0].imm = (u32)(long)func[subprog]->bpf_func;
- 22947					insn[1].imm = ((u64)(long)func[subprog]->bpf_func) >> 32;
- 22948					continue;
- 22949				}
- 22950				if (!bpf_pseudo_call(insn))
- 22951					continue;
- 22952				subprog = insn->off;
- 22953				insn->imm = BPF_CALL_IMM(func[subprog]->bpf_func);
- 22954			}
- 22955	
- 22956			/* we use the aux data to keep a list of the start addresses
- 22957			 * of the JITed images for each function in the program
- 22958			 *
- 22959			 * for some architectures, such as powerpc64, the imm field
- 22960			 * might not be large enough to hold the offset of the start
- 22961			 * address of the callee's JITed image from __bpf_call_base
- 22962			 *
- 22963			 * in such cases, we can lookup the start address of a callee
- 22964			 * by using its subprog id, available from the off field of
- 22965			 * the call instruction, as an index for this list
- 22966			 */
- 22967			func[i]->aux->func = func;
- 22968			func[i]->aux->func_cnt = env->subprog_cnt - env->hidden_subprog_cnt;
- 22969			func[i]->aux->real_func_cnt = env->subprog_cnt;
- 22970		}
- 22971		for (i = 0; i < env->subprog_cnt; i++) {
- 22972			old_bpf_func = func[i]->bpf_func;
- 22973			tmp = bpf_int_jit_compile(func[i]);
- 22974			if (tmp != func[i] || func[i]->bpf_func != old_bpf_func) {
- 22975				verbose(env, "JIT doesn't support bpf-to-bpf calls\n");
- 22976				err = -ENOTSUPP;
- 22977				goto out_free;
- 22978			}
- 22979			cond_resched();
- 22980		}
- 22981	
- 22982		/*
- 22983		 * Cleanup func[i]->aux fields which aren't required
- 22984		 * or can become invalid in future
- 22985		 */
- 22986		for (i = 0; i < env->subprog_cnt; i++) {
- 22987			func[i]->aux->used_maps = NULL;
- 22988			func[i]->aux->used_map_cnt = 0;
- 22989		}
- 22990	
- 22991		/* finally lock prog and jit images for all functions and
- 22992		 * populate kallsysm. Begin at the first subprogram, since
- 22993		 * bpf_prog_load will add the kallsyms for the main program.
- 22994		 */
- 22995		for (i = 1; i < env->subprog_cnt; i++) {
- 22996			err = bpf_prog_lock_ro(func[i]);
- 22997			if (err)
- 22998				goto out_free;
- 22999		}
- 23000	
- 23001		for (i = 1; i < env->subprog_cnt; i++)
- 23002			bpf_prog_kallsyms_add(func[i]);
- 23003	
- 23004		/* Last step: make now unused interpreter insns from main
- 23005		 * prog consistent for later dump requests, so they can
- 23006		 * later look the same as if they were interpreted only.
- 23007		 */
- 23008		for (i = 0, insn = prog->insnsi; i < prog->len; i++, insn++) {
- 23009			if (bpf_pseudo_func(insn)) {
- 23010				insn[0].imm = env->insn_aux_data[i].call_imm;
- 23011				insn[1].imm = insn->off;
- 23012				insn->off = 0;
- 23013				continue;
- 23014			}
- 23015			if (!bpf_pseudo_call(insn))
- 23016				continue;
- 23017			insn->off = env->insn_aux_data[i].call_imm;
- 23018			subprog = find_subprog(env, i + insn->off + 1);
- 23019			insn->imm = subprog;
- 23020		}
- 23021	
- 23022		prog->jited = 1;
- 23023		prog->bpf_func = func[0]->bpf_func;
- 23024		prog->jited_len = func[0]->jited_len;
- 23025		prog->aux->extable = func[0]->aux->extable;
- 23026		prog->aux->num_exentries = func[0]->aux->num_exentries;
- 23027		prog->aux->func = func;
- 23028		prog->aux->func_cnt = env->subprog_cnt - env->hidden_subprog_cnt;
- 23029		prog->aux->real_func_cnt = env->subprog_cnt;
- 23030		prog->aux->bpf_exception_cb = (void *)func[env->exception_callback_subprog]->bpf_func;
- 23031		prog->aux->exception_boundary = func[0]->aux->exception_boundary;
- 23032		bpf_prog_jit_attempt_done(prog);
- 23033	
- 23034		if (blinded)
- 23035			bpf_jit_prog_release_other(prog, orig_prog);
- 23036	
- 23037		return 0;
- 23038	out_free:
- 23039		/* We failed JIT'ing, so at this point we need to unregister poke
- 23040		 * descriptors from subprogs, so that kernel is not attempting to
- 23041		 * patch it anymore as we're freeing the subprog JIT memory.
- 23042		 */
- 23043		for (i = 0; i < prog->aux->size_poke_tab; i++) {
- 23044			map_ptr = prog->aux->poke_tab[i].tail_call.map;
- 23045			map_ptr->ops->map_poke_untrack(map_ptr, prog->aux);
- 23046		}
- 23047		/* At this point we're guaranteed that poke descriptors are not
- 23048		 * live anymore. We can just unlink its descriptor table as it's
- 23049		 * released with the main prog.
- 23050		 */
- 23051		for (i = 0; i < env->subprog_cnt; i++) {
- 23052			if (!func[i])
- 23053				continue;
- 23054			func[i]->aux->poke_tab = NULL;
- 23055			bpf_jit_free(func[i]);
- 23056		}
- 23057		kfree(func);
- 23058	out_undo_insn:
- 23059		if (blinded) {
- 23060			bpf_jit_prog_release_other(orig_prog, prog);
- 23061			env->prog = prog = orig_prog;
- 23062		}
- 23063		/* cleanup main prog to be interpreted */
- 23064		prog->jit_requested = 0;
- 23065		prog->blinding_requested = 0;
- 23066		for (i = 0, insn = prog->insnsi; i < prog->len; i++, insn++) {
- 23067			if (!bpf_pseudo_call(insn))
- 23068				continue;
- 23069			insn->off = 0;
- 23070			insn->imm = env->insn_aux_data[i].call_imm;
- 23071		}
- 23072		bpf_prog_jit_attempt_done(prog);
- 23073		return err;
- 23074	}
- 23075	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Tue, Mar 3, 2026 at 4:43=E2=80=AFPM Xi Ruoyao <xry111@xry111.site> wrote=
+:
+>
+> Fix the warning:
+>
+>     BUG: using smp_processor_id() in preemptible [00000000] code: sys
+> temd/1
+>     caller is larch_insn_text_copy+0x40/0xf0
+>
+> Simply changing it to raw_smp_processor_id() is not enough: if preempt
+> and CPU hotplug happens after raw_smp_processor_id() but before
+> stop_machine(), the CPU where raw_smp_processor_id() has run may be
+> offline when stop_machine() and no CPU will run copy_to_kernel_nofault()
+> in text_copy_cb().  Thus guard the larch_insn_text_copy() calls with
+> cpus_read_lock() and change stop_machine() to stop_machine_cpuslocked()
+> to prevent this.
+>
+> I've considered moving the locks inside larch_insn_text_copy() but
+> doing so seems not an easy hack.  In bpf_arch_text_poke() obviously the
+> memcpy() call must be guarded by text_mutex, so we have to leave the
+> acquire of text_mutex out of larch_insn_text_copy.  But in the entire
+> kernel the acquire of mutexes is always after cpus_read_lock(), so we
+> cannot put cpus_read_lock() into larch_insn_text_copy() while leaving
+> the text_mutex acquire out (or we risk a deadlock due to inconsistent
+> lock acquire order).  So let's fix the bug first and leave the
+> posssible refactor as future work.
+>
+> Fixes: 9fbd18cf4c69 ("LoongArch: BPF: Add dynamic code modification suppo=
+rt")
+> Signed-off-by: Xi Ruoyao <xry111@xry111.site>
+> ---
+>
+> Change since [v2]:
+> - Include the annotation of v1 in the commit message.
+>
+> Change since [v1] to v2:
+> - Add lockdep_assert_cpus_held() with a comment to prevent people from
+>   calling larch_insn_text_copy() w/o acquiring the cpus lock in the
+>   future.
+>
+> [v1]:https://lore.kernel.org/20260225141404.178823-2-xry111@xry111.site
+> [v2]:https://lore.kernel.org/20260227080351.663693-1-xry111@xry111.site
+>
+>  arch/loongarch/kernel/inst.c | 10 ++++++++--
+>  arch/loongarch/net/bpf_jit.c |  6 ++++++
+>  2 files changed, 14 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/loongarch/kernel/inst.c b/arch/loongarch/kernel/inst.c
+> index bf037f0c6b26..7545ae3c796e 100644
+> --- a/arch/loongarch/kernel/inst.c
+> +++ b/arch/loongarch/kernel/inst.c
+> @@ -263,14 +263,20 @@ int larch_insn_text_copy(void *dst, void *src, size=
+_t len)
+>                 .dst =3D dst,
+>                 .src =3D src,
+>                 .len =3D len,
+> -               .cpu =3D smp_processor_id(),
+> +               .cpu =3D raw_smp_processor_id(),
+>         };
+>
+> +       /*
+> +        * Ensure copy.cpu won't be hot removed before stop_machine.  If
+> +        * it's removed nobody will really update the text.
+> +        */
+> +       lockdep_assert_cpus_held();
+> +
+>         start =3D round_down((size_t)dst, PAGE_SIZE);
+>         end   =3D round_up((size_t)dst + len, PAGE_SIZE);
+>
+>         set_memory_rw(start, (end - start) / PAGE_SIZE);
+> -       ret =3D stop_machine(text_copy_cb, &copy, cpu_online_mask);
+> +       ret =3D stop_machine_cpuslocked(text_copy_cb, &copy, cpu_online_m=
+ask);
+>         set_memory_rox(start, (end - start) / PAGE_SIZE);
+>
+>         return ret;
+> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+> index 3bd89f55960d..e8e0ad34928c 100644
+> --- a/arch/loongarch/net/bpf_jit.c
+> +++ b/arch/loongarch/net/bpf_jit.c
+> @@ -1379,9 +1379,11 @@ void *bpf_arch_text_copy(void *dst, void *src, siz=
+e_t len)
+>  {
+>         int ret;
+>
+> +       cpus_read_lock();
+>         mutex_lock(&text_mutex);
+>         ret =3D larch_insn_text_copy(dst, src, len);
+>         mutex_unlock(&text_mutex);
+> +       cpus_read_unlock();
+>
+>         return ret ? ERR_PTR(-EINVAL) : dst;
+>  }
+> @@ -1429,10 +1431,12 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_po=
+ke_type old_t,
+>         if (ret)
+>                 return ret;
+>
+> +       cpus_read_lock();
+>         mutex_lock(&text_mutex);
+>         if (memcmp(ip, new_insns, LOONGARCH_LONG_JUMP_NBYTES))
+>                 ret =3D larch_insn_text_copy(ip, new_insns, LOONGARCH_LON=
+G_JUMP_NBYTES);
+>         mutex_unlock(&text_mutex);
+> +       cpus_read_unlock();
+>
+>         return ret;
+>  }
+> @@ -1450,10 +1454,12 @@ int bpf_arch_text_invalidate(void *dst, size_t le=
+n)
+>         for (i =3D 0; i < (len / sizeof(u32)); i++)
+>                 inst[i] =3D INSN_BREAK;
+>
+> +       cpus_read_lock();
+>         mutex_lock(&text_mutex);
+>         if (larch_insn_text_copy(dst, inst, len))
+>                 ret =3D -EINVAL;
+>         mutex_unlock(&text_mutex);
+> +       cpus_read_unlock();
+>
+>         kvfree(inst);
+>
+> --
+> 2.53.0
+>
+>
