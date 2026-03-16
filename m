@@ -1,96 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A4CF394798;
-	Mon, 16 Mar 2026 12:10:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35E3B625
+	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 13:04:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773663053; cv=none; b=RE/DGLl22NGZsbscOdunWzho4HJJNYxWPdf5YqXbVa+/rAsknqrPfzi5QpIeXmc5RtirJo3EnPY0TMTD5sQunJT0+G66EKvAZPWm2fp0Md/iXdtElcpySMxA20HyRoUUHTeMrGRCCbdDn4xED9d+2UwMSA8FfYA+SaiMQbBYs5Q=
+	t=1773666294; cv=none; b=pt3q8iIsWggf4RP9HRKrQKvb7m7kwLvgxVnxhDYiZHR/7jk+yqXvrEIgXqvzb4lzau6iStBdbnMTjOnD2dZ3ettfQqMZcimV+PoOvNKq15CJ46bJNLvDgna17wolz8Eeebw1msj8DzMDZ0QEQdCEy7AA0zcqCEIuYrFBWTwvFWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773663053; c=relaxed/simple;
-	bh=3r93kC60i9nMLoCjyhvzNMHJizojUVHNPVuaMI6kQSg=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=WBD45Tf0s2/zQTZMm9xN4BBd22D6s3KxTMaSrKXY6lHHrpnkv1+vWKlW1WJODSZnW0JVy3p92tYkm+CzeJdHxy5+fQw4eRxWy+XlXkShx/SnvTgHVDz89U7Do6Iua0ElJoDUbFzbXbG3fH2ScHq8r7w5B+wo0/j56bxZ1QV7uf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iTlL48/V; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773666294; c=relaxed/simple;
+	bh=coROkVKO2LP6M4Zm/yvO7bdjOMBXJEvIaFPryU8r1zQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pt31NiuzBeyfIbAs5OMsc0qlKZ0iAdDUlxyBlgGWJUvAHLRSOnapbFlpqVoNXePoaJyKZoKNHl7mt6154sNpxBTS4iDxMFlM57wisP7bs+psSz/aLkkKKU+T3hARDdnKeoGE6+wgB1YGbwc+MVbaPf7UODACpiyHlX9+N2eiQnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R6sqqN0w; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iTlL48/V"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A07FDC19421;
-	Mon, 16 Mar 2026 12:10:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773663053;
-	bh=3r93kC60i9nMLoCjyhvzNMHJizojUVHNPVuaMI6kQSg=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=iTlL48/Vr2NRrw2DnSjiZA8PDpxNTAaj9Xjl2i3ub1cM/GqVO4zi5X6mGm2HE5J2r
-	 4wa3PXesM1MprPM/43soN93AQVMi3mH4LyWtDpxWkvlWVcYBHNgy8fsj+fLhMWbh1W
-	 yuEP6NN76eQanzE4ZpHEYicz4EZn1RnWeZ7BU8Mo+coBmrtFWz67roZiK5jDpZI5AT
-	 UZALNILumdyOWAhf9n4AqUaNTJNpzSmmMsZRrYFurWSC5yqoieEJEGUOd7GRFT9D9F
-	 9uQ+bwmPtqxsAFZWuTpXZpcQ4pABJI1Ezggx8zjl5Cexh5ldOcJ0EvScCSkpj1QKAA
-	 0OidpNbL1n3iQ==
-Content-Type: multipart/mixed; boundary="===============0519777484936541016=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R6sqqN0w"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-483487335c2so43983575e9.2
+        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 06:04:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773666291; x=1774271091; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WuEn7ehp2dcDf/0JXcNA12V/0d3/A/jz0zpMPpL9KQE=;
+        b=R6sqqN0wbUrF9FiSnor0XVW2yML1aDuSaqsr8WJ1x/5LCsPLKiQfCw2BPCFKQTneyF
+         ItgiuldKahpHSz7PpaKEhW/C9D3ISO0u7fYDtgWfClQZzdpTGhX5Fw1iqK8CDfEi+WZX
+         OyLd6XKETkZBGihex1xjIunIiUHbvxWEsoT+dPYw5bEkBj+YtJTARZogoJ6SHCLZMCoh
+         uR3rEDWVOdHTzfe0IGjuCFcFeyTy0JsSmRfoG2vRECnwpPnQSQClLhbiG4PdjbPVMY0z
+         oPWuXEtz2w/4h6gXA40JGWvDVZ1s1eroc+roKinrFX0OuTH2O7fTNPOMcMpmGaj7mo7H
+         Ud1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773666291; x=1774271091;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WuEn7ehp2dcDf/0JXcNA12V/0d3/A/jz0zpMPpL9KQE=;
+        b=C4doGkN4v03SUNCxS6p3Nit9xmbLWzStoJkw31NCV5chtMnHrVaAz9PCFSRnTweDK3
+         7t15TJ2a8s2+xnINUse+ADYfC7aiF9unteL2idNuPPq6+KNIGaGZiikq2rv7Xo/8T6+d
+         K3VNAcG9nkCKNLcBOmJvBLiJJcXXiMlefGAh0w9JOMsvzuNNHqCQPS0q6Zaj7CVRuL/r
+         frgqcCZr84EKiiXz2DSsC0YSVwb+uM5VEhwrictaPOtxuQzC6Ad1+ey3bEcsuRNf+3Cv
+         4feWi+7X+EaRA262WdaJacNajcpaRMgz1mg9T1+oVqVwMkWA0XNDQXpzLnzWCH0Hg5wP
+         R/uQ==
+X-Forwarded-Encrypted: i=1; AJvYcCULu3+n9p0ju5BB2b3Tm57JaiNliD9/RBXd/aePVgT0cVo5TIRcdwjpfgIxSq0R6ysyGDE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKyRCsjy7x5H6UJu+JEUw8cx3tG2/I9209CoERDbi23xJT1z5R
+	y0tlW2iMIsc/ttHbWoYvmiwndXCU7FODrveNoo5edpnRaeWhyyHsPuvu
+X-Gm-Gg: ATEYQzxj46+RGcljLsaAGSRbd2VOs4R8tkTypeB9cC4fyIfFxsM+JE122gZkwKZeMKM
+	NFLQwTRyxXOxbnEzfDiBTeKHzXK5T6hDX6YsA0vMcQ3GX8RWCEM4bq427t4zdqqE3CHVuzP3lsc
+	e+RqaPo4ehADKyjSLl06mk/rx2lZ0/O354YEKArU1mtbxdCq764lxqRKhIysQzVS+3U7ojC0DPv
+	JwQDPQiEQM88Si8pkJyw6Y/jISZjesZQgC0qq5vmu9X4Vhxe7u/UKK0UhupRDoKtqD8tzBXHl2B
+	ewD/AHj+lmkUhU5Yjo5UG4wMAVLLxhpO7bo+SY7/jtXXG1qKDEq8fmxVgAgZe/5xBSEmuAEjJ48
+	5tgAebpMSF1k7eiRcBP3uFX5/okMrVn8aXxZB4Kx/WjN7exvM4gEWMgz6oxYB/NTG/GaC4X4EuZ
+	mmMQ9pRFQyxtDp0197Ter6u6wKajxNjQVXHDOA2+LVS1wHMcZG5HbkVkHWHT5buLtZ2OwDnVwIt
+	5CqR4VEK6gg6XWCs8jAUfYkewKuQj5BwGcbCoJa0mMGCT8a7nnEg4u8K1ombZ0pUtfB6NzGxrfE
+	YXVv2GWf/XY=
+X-Received: by 2002:a05:600c:8488:b0:485:3f1c:d897 with SMTP id 5b1f17b1804b1-485566d2fdcmr203737915e9.9.1773666291248;
+        Mon, 16 Mar 2026 06:04:51 -0700 (PDT)
+Received: from mail.gmail.com (2a01cb0889497e0077fb9a9968087a66.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:77fb:9a99:6808:7a66])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-485564043a2sm130013895e9.2.2026.03.16.06.04.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Mar 2026 06:04:50 -0700 (PDT)
+Date: Mon, 16 Mar 2026 14:04:48 +0100
+From: Paul Chaignon <paul.chaignon@gmail.com>
+To: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Emil Tsalapatis <emil@etsalapatis.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Hengqi Chen <hengqi.chen@gmail.com>, loongarch@lists.linux.dev,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v1 1/2] selftests/bpf: Check alignment flag if
+ expected result is REJECT
+Message-ID: <abf_8FcnQr50CCTn@mail.gmail.com>
+References: <20260310064507.4228-1-yangtiezhu@loongson.cn>
+ <20260310064507.4228-2-yangtiezhu@loongson.cn>
+ <DH02R7I6EAUH.16649BMB7V1N8@etsalapatis.com>
+ <fe04d981-fc83-0ba6-4dee-8fc0c953e09f@loongson.cn>
+ <abKHi9Pr5iUbIQZI@mail.gmail.com>
+ <7ea56716-fd5f-1740-e634-1dec4196dd2c@loongson.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <aef1558e6629e0d25cba7f4d95b7b19e47aad8585035bdf6b93483c26856ef69@mail.kernel.org>
-In-Reply-To: <20260316112843.78657-4-pilgrimtao@gmail.com>
-References: <20260316112843.78657-4-pilgrimtao@gmail.com>
-Subject: Re: [PATCH bpf-next v8 3/8] bpf: Introduce the bpf_list_del kfunc.
-From: bot+bpf-ci@kernel.org
-To: pilgrimtao@gmail.com,martin.lau@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,chengkaitao@kylinos.cn,linux-kselftest@vger.kernel.org
-Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 16 Mar 2026 12:10:52 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7ea56716-fd5f-1740-e634-1dec4196dd2c@loongson.cn>
 
---===============0519777484936541016==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Thu, Mar 12, 2026 at 07:06:38PM +0800, Tiezhu Yang wrote:
+> On 03/12/2026 05:29 PM, Paul Chaignon wrote:
+> > On Thu, Mar 12, 2026 at 02:59:57PM +0800, Tiezhu Yang wrote:
 
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index e87b263c5fe6..dac346eb1e2f 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -2437,6 +2437,8 @@ static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head,
->  	 */
->  	if (unlikely(!h->next))
->  		INIT_LIST_HEAD(h);
-> +
-> +	/* verifier to guarantee n is a list node rather than the head */
->  	if (list_empty(h))
->  		return NULL;
+[...]
 
-Is this comment accurate for all callers of __bpf_list_del()?
+> > > -#14/p Dest pointer in r0 - succeed, check 5 OK
+> > > +#14/p Dest pointer in r0 - succeed, check 5 OK (NOTE: not executed due to
+> > > unknown alignment)
+> > 
+> > As stated in my previous answer, this note would be incorrect: the
+> > program was executed in test case #14 because it was rejected, not
+> > because of unknown alignment.
+> 
+> OK, please ignore this patch.
 
-For bpf_list_pop_front() and bpf_list_pop_back(), n is derived
-from h->next or h->prev. When the list is empty, h->next == h,
-so n is the head itself:
+I think the second patch in this set is still worthwhile, so maybe
+resend it on its own?
 
-kernel/bpf/helpers.c:bpf_list_pop_front() {
-    struct list_head *h = (void *)head;
-    return __bpf_list_del(head, h->next);
-                                ^^^^^^^ h when list is empty
-}
+Paul
 
-In that case, the list_empty() check is the runtime defense
-against n == h, not the verifier. The verifier type guarantee
-only applies to the new bpf_list_del() path where node is a
-separate bpf_list_node argument.
-
-Since __bpf_list_del() is shared by all three callers, this
-comment could mislead a future reader into thinking the
-list_empty() check is redundant, when it is actually essential
-for the pop paths.
-
-Would it be better to move this comment into bpf_list_del()
-itself, or to qualify it as applying only to the bpf_list_del
-path?
-
-[ ... ]
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23141914395
---===============0519777484936541016==--
+> 
+> Thanks,
+> Tiezhu
+> 
