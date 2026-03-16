@@ -1,152 +1,188 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AD30388361;
-	Mon, 16 Mar 2026 11:32:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 608C1392806
+	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 11:51:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773660759; cv=none; b=CH5AuNN7bqAmf8bPhGSfBjGut86Dbe2DJH5ej2pBbaDNTwjX4lJoFy2isdZthvJ1izFIuvVt7BjZfXMX3onClbgdx/BhIwShpXk+TVi226P3cmfAxFqIrJFk5FTX/JjhEcxjivBm0spFXaWYPCmVcI7/qwEXzu2y8t/dQf+oSOM=
+	t=1773661865; cv=none; b=QMEQ/1o6ut4EkKSjAjKRIfhXRnfUMAJULhz/2rv1NiO3TMCNiV1awlLxleaadSgsTNwsFruU4rQXM3CHa7Ug+VtxMesrKQ2ttKWCtGu2NQm1WbKjzwCWGzDNCqwo5yKCThQX5IJPBJpfGgShFM8a980Yw+dQgGbRoHpE5Q6e1y8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773660759; c=relaxed/simple;
-	bh=nbYpfaEAsn7PoS9SB1y3ioIZ4TDt//kylLT/jdFXuaQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=f/JLFiVSoi8sGdslMVN9DDKyxAMi7FHNd5Ss4N3NXWjX82Dd7uVwmHsemPx2SOEMN/EMT+LicnDckvvwCIoRmaQOfGsOoPQ06/X5z3i7uSBzdrWEldtH3zt6ZSg1L5qUWWscpZm0OKW44UxGlD+OjNQdeu5R9AEEdMlR2sRRze0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4DD0E1477;
-	Mon, 16 Mar 2026 04:32:31 -0700 (PDT)
-Received: from e142334-100.cambridge.arm.com (e142334-100.cambridge.arm.com [10.1.194.63])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0BC0E3F778;
-	Mon, 16 Mar 2026 04:32:34 -0700 (PDT)
-From: Muhammad Usama Anjum <usama.anjum@arm.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Brendan Jackman <jackmanb@google.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Zi Yan <ziy@nvidia.com>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Nick Terrell <terrelln@fb.com>,
-	David Sterba <dsterba@suse.com>,
-	"Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Ryan.Roberts@arm.com,
-	david.hildenbrand@arm.com
-Cc: Muhammad Usama Anjum <usama.anjum@arm.com>
-Subject: [PATCH v2 3/3] mm/page_alloc: Optimize __free_contig_frozen_range()
-Date: Mon, 16 Mar 2026 11:31:44 +0000
-Message-ID: <20260316113209.945853-4-usama.anjum@arm.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260316113209.945853-1-usama.anjum@arm.com>
-References: <20260316113209.945853-1-usama.anjum@arm.com>
+	s=arc-20240116; t=1773661865; c=relaxed/simple;
+	bh=qajJOJLw9mBKXM/E3+A51MHsuJgG4aC81Z0RI5fTgEg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mcJ2Pv/b1OSpSB1ZH8zMfurfPT+1SmV16E/3rJU+xVfNx+IabYXFIn2LL80VeHT2cg0Vwi5pCCEbkrU4WYkLtIXwprH5uXakL6B4m9usK7Lj/mkIup4zL1FoEdwFPo8/k8YC+adYOTR8/rkVtdVk97//h1Y3hoCcz0KyUeqqmqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ojJzDsWN; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=dnBugXEN; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ojJzDsWN";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="dnBugXEN"
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62GBhsZ4323839
+	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 11:51:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	qunPmJdABJcMXtrTkw0tgSEaTgsE7szyRj+/D/lI0Nk=; b=ojJzDsWNfjCQlG+b
+	VxYlZjBAVLSeZCHiG4pmkK71Flhmt+ZrHnldp7v0YaLF7XkcVedMQxvFMAiyN79/
+	/4TvNGS/J+5ix6BkUiTiXquQ0tLHhujkdJkbA73eeIyniWCE9uUQIVEFS/0GEPP8
+	q668pYC6r4HN58sH1YKslxOB+MKerr4cHKe4RFYc9xGchoe3r85b4Xd5nEpiV/fU
+	y2cy00oI0nPtmtAhjlana8tNoA6w7aZ4d1Nm3B62NS9yLeIHczsCFp7lUpAPfYOA
+	TPt1AGMTUGSYAJRsiejp1D1TvQ7yRZW9caLbeBzy/k7boBHE6Pa/F8sh5LP1tvfi
+	AiZQ5w==
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cw03qnqhd-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 11:51:00 +0000 (GMT)
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8cd81be6f05so2807650185a.2
+        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 04:51:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1773661860; x=1774266660; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qunPmJdABJcMXtrTkw0tgSEaTgsE7szyRj+/D/lI0Nk=;
+        b=dnBugXENY2Dk2Gr1xJ496hXdeFA+/UrPz7kEO27XzLc4sm3W6dyUny6uNBzNY9p9bO
+         NUVEmf6BtuG01Y5Xo1nEL5Sb74ux19y53e39Ypfvi3OrVayv7LSDVhvSf3neIPUCOiwH
+         D/J17KXyWoo9EdjjBGSZ+uubFIMHJjF62sbcuOC8Q34SxYzkALKdOIdMOFCzpbkZlI20
+         Iltx6arimaw77BzEg4o4EHeZascj0zv5qGyf087+tj637jzW1EwSkFdeoKpsdRSzNLuH
+         jeQo+gnCWl0cVV5OxkONAg5vV7HmoXIC3MrB6CwGvS469KbKawLMUrwedV1zWsyG4kOS
+         mBdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773661860; x=1774266660;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qunPmJdABJcMXtrTkw0tgSEaTgsE7szyRj+/D/lI0Nk=;
+        b=GTohbXDdgEFcbowj25fcGIWudTRxgtMmhZCU0WXwNyLl0F90YdwHxGUGRr8suAdv61
+         LrgwieqkH/xLYqeCBuzsT9p/ACn8NQtLbL8IUPB+fC/nqNAM816R6e8l2V4rI5sqP4BH
+         Su5CWWrvOQqFcsXd+Ptnisf9A8HDXL4WsWoJseHTMaEWNBPKNkora/XFdFZ1J44Yk8cZ
+         ib4vIPs3bqS9fZl7Z7pgEht10bdAxPLNoiXaAp/Z2OXYtfc1ahfgAOeXFqJow3uu5cWJ
+         UdHOQdm+3I3sqINdF19kdb3XaHDBon4Drs2XXkMUFAKkMYXo4EtrM6f+qmOZCczDnaQm
+         vZ1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUSmMTX/NNm7ym/R62J5n4xqZxW9tt8/9dlFFoI3J0CSiYPV5oXC+fiAPOihHsUIL0tQmI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0qIor6cKx0BDxyLnu/t+OrYCanyUoMRMLjaMvKKus3jlS4lWU
+	GYcWBChTp6bufMm3h35LxuQSFdSdahlIMbLlUupPXtjHC6wkpiAuF4lKr//mT4ZuKxlfsHD7aLg
+	1C/Qn7Kqct9Fsd+L/1LoI24N9/VKIU/ySVt5AwhuYl8WAwSThJCWsETo=
+X-Gm-Gg: ATEYQzxHTKiRAArYFTPBz0t29tyj6ti/z/iUJJYsgTABBF2Fc3CB7nREIOawdHzHuc3
+	LuhACrrUtyrJ3XVnVHT8hzURrZv8UZaohbO+ANjv7soad4sl8pnoxh/Strcn/NUWy2Ype/6Hr5O
+	xU/fCCfWJ4DXiDTRUH084ZgSB0fKB6ZhNCwPhYpQ+oEW9uGGhpDbeHqRL5f+wwwnEcYhY/XHIzl
+	0yyIeVE4yXQ6uCmBqdttNWU1YanbgGERMmchp/jbLlVOJh3IV2C5jC9R/I7qhYeMxdNIvcAyYRy
+	dlArCoy4eUCM2WZDrM/jLSEntbrntGnvIz4odIcqHLSonh0SA4j7ciTaBhCnRZ0+MfDPXYltPZH
+	h10Zq04pS2OTR6CmBb3wywr6FsjVkARPwT8ue146iQL32SQxWvtS4DWU7PRbBTsodCMV4DjsX98
+	Hg9nHUScUb
+X-Received: by 2002:a05:620a:2916:b0:8be:6733:92ab with SMTP id af79cd13be357-8cdb57a672dmr1626228385a.0.1773661859776;
+        Mon, 16 Mar 2026 04:50:59 -0700 (PDT)
+X-Received: by 2002:a05:620a:2916:b0:8be:6733:92ab with SMTP id af79cd13be357-8cdb57a672dmr1626224385a.0.1773661859231;
+        Mon, 16 Mar 2026 04:50:59 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:5dfc:3995:22ce:d286? ([2a05:6e02:1041:c10:5dfc:3995:22ce:d286])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-485696a12d0sm23785665e9.13.2026.03.16.04.50.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Mar 2026 04:50:58 -0700 (PDT)
+Message-ID: <e6c0df77-98e3-4a34-be84-6b43ec263215@oss.qualcomm.com>
+Date: Mon, 16 Mar 2026 12:50:56 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 01/30] tools: lib: thermal: Fix typo
+To: Leo Yan <leo.yan@arm.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>,
+        James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
+        Quentin Monnet <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <nsc@kernel.org>,
+        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau
+ <martin.lau@linux.dev>,
+        Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        William Breathitt Gray <wbg@kernel.org>,
+        Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>,
+        Bartosz Golaszewski <brgl@kernel.org>,
+        Kent Gibson <warthog618@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        David Lechner <dlechner@baylibre.com>,
+        =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Andrew Morton
+ <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
+        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
+        Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>,
+        Mark Brown <broonie@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+        Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <bentiss@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+References: <20260311-tools_build_fix_zero_init-v4-0-9e35bdb99cb3@arm.com>
+ <20260311-tools_build_fix_zero_init-v4-1-9e35bdb99cb3@arm.com>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
+In-Reply-To: <20260311-tools_build_fix_zero_init-v4-1-9e35bdb99cb3@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: A3JMImtb0epxWD6UWG7H-f9Gb1chbn_U
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzE2MDA5MCBTYWx0ZWRfX2EugYSl0pXR6
+ Xw4pqF8hqLo932cXws3sd+XuRVx4FLfYrfFdPW1lj+TV5gGjbVBRjsQJkNMnKkw7CNxClQrTl9t
+ rHk1+bscPA7v/AcVWPGFGyBJvG875LSyXLnoC36Riz7IaIcTVDtVaPGuLqEcS3dzc6pBl6/+qAm
+ vrl/+ivrhgbBOY48OKendA20gjNx09xn/yyjfyAyuaIJSzYaKjynbLd2sHazCXngvxpkpySOSAD
+ ds3b6n9sq8pFSG/CZNEJPUFFZAlYNwkKtzytYFzOnDjx0fBrs3P9z7SMZw5esXz5d/KrjN4lBDL
+ ZA+LA8kzlG07x2+fHGekK5hcfXH3cGjDaDICFzRyb4cV4cV566oc9y4S6YqUoj8oe1NE+KJE5CN
+ JTrrK1QC2pN8/Q1SFdE/UnXpvOP8nHUvEnhdiU1A6vIOk1G+ZDLqDFMpcCDGk5c2UTbISuD3gQM
+ V+Bb8YHs71k+Af8zlkw==
+X-Proofpoint-ORIG-GUID: A3JMImtb0epxWD6UWG7H-f9Gb1chbn_U
+X-Authority-Analysis: v=2.4 cv=ZbQQ98VA c=1 sm=1 tr=0 ts=69b7eea4 cx=c_pps
+ a=50t2pK5VMbmlHzFWWp8p/g==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=Yq5XynenixoA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=rJkE3RaqiGZ5pbrm-msn:22 a=7CQSdrXTAAAA:8
+ a=VwQbUJbxAAAA:8 a=Qrd8ctaAbqGiTqi1YC0A:9 a=QEXdDO2ut3YA:10 a=u2kJyrKl4JkA:10
+ a=0lgtpPvCYYIA:10 a=IoWCM6iH3mJn3m4BftBB:22 a=a-qgeE7W1pNrGK8U0ZQC:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-16_04,2026-03-16_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 priorityscore=1501 adultscore=0 suspectscore=0
+ lowpriorityscore=0 malwarescore=0 clxscore=1015 phishscore=0 spamscore=0
+ bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2603050001
+ definitions=main-2603160090
 
-Apply the same batch-freeing optimization from free_contig_range() to the
-frozen page path. The previous __free_contig_frozen_range() freed each
-order-0 page individually via free_frozen_pages(), which is slow for the
-same reason the old free_contig_range() was: each page goes to the
-order-0 pcp list rather than being coalesced into higher-order blocks.
+On 3/11/26 09:29, Leo Yan wrote:
+> s/CFGLAS/CFLAGS
+> 
+> Fixes: 47c4b0de080a ("tools/lib/thermal: Add a thermal library")
+> Signed-off-by: Leo Yan <leo.yan@arm.com>
+> ---
 
-Rewrite __free_contig_frozen_range() to call free_pages_prepare() for
-each order-0 page, then batch the prepared pages into the largest
-possible power-of-2 aligned chunks via free_prepared_contig_range().
-If free_pages_prepare() fails (e.g. HWPoison, bad page) the page is
-deliberately not freed; it should not be returned to the allocator.
+Acked-by: Daniel Lezcano <daniel.lezcano@kernel.org>
 
-I've tested CMA through debugfs. The test allocates 16384 pages per
-allocation for several iterations. There is 3.5x improvement.
-
-Before: 1406 usec per iteration
-After:   402 usec per iteration
-
-Before:
-
-    70.89%     0.69%  cma              [kernel.kallsyms]      [.] free_contig_frozen_range
-            |
-            |--70.20%--free_contig_frozen_range
-            |          |
-            |          |--46.41%--__free_frozen_pages
-            |          |          |
-            |          |           --36.18%--free_frozen_page_commit
-            |          |                     |
-            |          |                      --29.63%--_raw_spin_unlock_irqrestore
-            |          |
-            |          |--8.76%--_raw_spin_trylock
-            |          |
-            |          |--7.03%--__preempt_count_dec_and_test
-            |          |
-            |          |--4.57%--_raw_spin_unlock
-            |          |
-            |          |--1.96%--__get_pfnblock_flags_mask.isra.0
-            |          |
-            |           --1.15%--free_frozen_page_commit
-            |
-             --0.69%--el0t_64_sync
-
-After:
-
-    23.57%     0.00%  cma              [kernel.kallsyms]      [.] free_contig_frozen_range
-            |
-            ---free_contig_frozen_range
-               |
-               |--20.45%--__free_contig_frozen_range
-               |          |
-               |          |--17.77%--free_pages_prepare
-               |          |
-               |           --0.72%--free_prepared_contig_range
-               |                     |
-               |                      --0.55%--__free_frozen_pages
-               |
-                --3.12%--free_pages_prepare
-
-Suggested-by: Zi Yan <ziy@nvidia.com>
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
----
- mm/page_alloc.c | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
-
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 6a9430f720579..2e99fa85cdc8e 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -7020,8 +7020,22 @@ static int __alloc_contig_verify_gfp_mask(gfp_t gfp_mask, gfp_t *gfp_cc_mask)
- 
- static void __free_contig_frozen_range(unsigned long pfn, unsigned long nr_pages)
- {
--	for (; nr_pages--; pfn++)
--		free_frozen_pages(pfn_to_page(pfn), 0);
-+	struct page *page = pfn_to_page(pfn);
-+	struct page *start = NULL;
-+	unsigned long i;
-+
-+	for (i = 0; i < nr_pages; i++, page++) {
-+		if (free_pages_prepare(page, 0)) {
-+			if (!start)
-+				start = page;
-+		} else if (start) {
-+			free_prepared_contig_range(start, page - start);
-+			start = NULL;
-+		}
-+	}
-+
-+	if (start)
-+		free_prepared_contig_range(start, page - start);
- }
- 
- /**
--- 
-2.47.3
+Thanks !
 
