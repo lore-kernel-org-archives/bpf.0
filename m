@@ -1,64 +1,62 @@
-Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93CECBA21;
-	Mon, 16 Mar 2026 13:52:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.169.211.239
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C7E43932E4;
+	Mon, 16 Mar 2026 14:06:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773669171; cv=none; b=QNgyYYTwbfBTJ9OtpAEQvXX9kyYaYO3k4oF18ruowh2SdSi1qJeYks2DZ8LzjwT2uGQn0w9JM9Xyrhj1IsXXvc7DGfsibFS6VVSwUYsYMgi4kSL3i28WZM4u3MhuxK8a+4GxECVI6ytqCwvEeouHL15CK3OqIM6kaSuMoBPmHgk=
+	t=1773669967; cv=none; b=AqQEyKxdyTHQck4fDsfEu6kx2SZQ1DI49bk2B8bvL6/oBPGenJYWYlHvB9D1WhB0Th3+k9W193m6xLJAzgHalFVF/yJCRp/0bIhBtdNldklpnuD9JM8g3IJXUipQt2I7vRWe/PHwqZbkVLzQRHocyv7IoqjDCuPJZR8R5b6IeJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773669171; c=relaxed/simple;
-	bh=RdDJalH/fogGxbxxcKkLHnxdU8FhKFFBzboUhRrUXNI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=L8Ue9yvOOjUjgyUtxwi95nX85FJQWhRNib90JlcwPy1XYTB5zMHrOe35oo/lkkZeb8o4lKPXhvk9JwQhNAXcnxOdhRT8j5o/O8KDeIKRH43qhjwPNWAQ0CcMPpXue0sy4B6xQhAItWwQ0ZmvyV/mcZdbus3MipxmsZpHIEGk7/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=GfUwLmAA; arc=none smtp.client-ip=18.169.211.239
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+	s=arc-20240116; t=1773669967; c=relaxed/simple;
+	bh=tP7Fube0d7HkUTB6sd7wafZGMdXfrYYWaOxavgk+TLQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tWAksjBDNbaRL0Jr5TVyisA2YpxK8fjyNkYehmATt5As2S3KuYAyiw03bEUpH/RZXmppJ/1F5axJpHLXTdjGf6xVnVFpSiT9USyknikbXS0loc83vmqg8fQc18aHvXQ1p8oE5vbWNfw1PHeu4Fn6spZ2/ZXJjyKsT8z3vTNdhWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fSC339Y7; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="GfUwLmAA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1773669130;
-	bh=/5fzZ7ip5culErJUozUqvEwptDYuVVndbhx2Gz3XeIk=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=GfUwLmAAJMhwbZge42iXCd5lxfvDC9w0hVb2P74c9Kd6Vf65NgXroAk+aGCw9SgZU
-	 7REbNVQygESoX0WevWgcu94On4XFTTtCPZHH5Oyg9VygqG0hl2QsqSa5pGs78oo7VZ
-	 AEtK4is91ZlYYCApefU5+Wpb5BEnSCa06jEQCkTU=
-X-QQ-mid: zesmtpip4t1773669124t516cfaa0
-X-QQ-Originating-IP: 1Oni74ju8vtGuWxxzSw/Il2KMUqqapxFokvYokZIDEY=
-Received: from xulang-PC ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 16 Mar 2026 21:52:01 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 16117058688590752373
-EX-QQ-RecipientCnt: 20
-From: xulang <xulang@uniontech.com>
-To: martin.lau@linux.dev
-Cc: andrii@kernel.org,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fSC339Y7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773669965; x=1805205965;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=tP7Fube0d7HkUTB6sd7wafZGMdXfrYYWaOxavgk+TLQ=;
+  b=fSC339Y71oYwpLay2ygr4m1ijCdEwJfxQZpB7B8U92eoGcWEtZn9AKqs
+   cG/rf06VAnWvXkjyGbFdrJocng8m2dpHL8H7lOVJ80avdTHFbDXyrNEjs
+   U3UsSRUj9tggBG7mQRKWcCQv9VfkEp+M5usEZLY7gci+k7mUcONVnDlgU
+   SS5ZEX0ZOtxXdtLFRV+TI0vTc5PBOZqZYBASWdYx5a7X4Y2Ip3g+3WiXm
+   OiV6CrH5uUuNsERjdGwvMXQJ5kynHz4uuqZlM1frzCJ7uvVMYFpLahZ+L
+   8tZ3lXurJLd9226LMJKbulDi/K//79xPSafiHAwqULrRVzjMqXvToC+Wj
+   A==;
+X-CSE-ConnectionGUID: R/I30fj/Qj25cejPJUk/Cg==
+X-CSE-MsgGUID: p/kYaDkmSJShrKB+kmS9aA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11731"; a="74602792"
+X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
+   d="scan'208";a="74602792"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2026 07:06:05 -0700
+X-CSE-ConnectionGUID: Jo1VdOIGQE+h5G3HgDPY4Q==
+X-CSE-MsgGUID: OSoRvGYcRFmK6kgE+TBa8A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
+   d="scan'208";a="252448320"
+Received: from boxer.igk.intel.com ([10.102.20.173])
+  by orviesa002.jf.intel.com with ESMTP; 16 Mar 2026 07:06:01 -0700
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	magnus.karlsson@intel.com,
+	stfomichev@gmail.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
 	ast@kernel.org,
-	bpf@vger.kernel.org,
 	daniel@iogearbox.net,
-	dzm91@hust.edu.cn,
-	eddyz87@gmail.com,
-	haoluo@google.com,
-	huyinhao@hust.edu.cn,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	kaiyanm@hust.edu.cn,
-	kernel@uniontech.com,
-	kpsingh@kernel.org,
-	linux-kernel@vger.kernel.org,
-	paul.chaignon@gmail.com,
-	sdf@fomichev.me,
-	song@kernel.org,
-	xulang@uniontech.com,
-	yonghong.song@linux.dev
-Subject: Re: [PATCH bpf v1] bpf: Fix OOB in bpf_obj_memcpy for cgroup storage
-Date: Mon, 16 Mar 2026 21:51:59 +0800
-Message-ID: <D3B60D7890B13875+reply-to-v1-review@uniontech.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <db2e04a2-3cf4-40f3-85ef-14197148d027@linux.dev>
-References: <db2e04a2-3cf4-40f3-85ef-14197148d027@linux.dev>
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: [PATCH v2 bpf-next] xsk: use __xsk_rcv_zc_safe for ZC multi-buffer Rx processing
+Date: Mon, 16 Mar 2026 15:05:57 +0100
+Message-Id: <20260316140557.461288-1-maciej.fijalkowski@intel.com>
+X-Mailer: git-send-email 2.38.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,61 +64,41 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3b-0
-X-QQ-XMAILINFO: M6W1gzdQR5sqZTOFKvRfOgSKwobLv4q4lweMmHcCcYI3C3iUaOcVcW1+
-	Xq3OhV+TxONIs+vHpIyb45CXAXyfINedzLEyXMvXf6hYhM43tU7lblW+U1AbpdK+ULew+lr
-	694i4TQ7WY9CTD9UMLwAVxqgqNjfV76NT3UQHJ4CIZvikF7PVYabLTU8e+BjFsoZCnl3z2c
-	6lzQQgeE5W+zattVDc1aAnkxAG0p01HBT4ThBAqywRhwgmmtDQnnbZJxLu0L2CGUJ0RRTjC
-	5vxlf7AnccuaI9MXzYjtO5eEaN5ancNm57ppSmazNnfbYHNGNYf5F4k7ODjupL4gQU4ywic
-	uqKNWb9vQLT8USEGZONP5ojrNSRAhPa2/JeV7x1BMg21tx4yoMuE2kYW6uHeDk5lWl8rj4b
-	GPrgb8ZR7oSxms5XrkS/QXRi0FDLdi1532HY34rVFj8dwH8sxd+O2sFSeplcXz9YTQvN6Qm
-	rOtJ0OYlNoLhQaomwvu9cjhCCCCOTRj0wo18ahixDg+A6CpiLODzIYZ2Q1CsAN/QPQ3zww/
-	YAY/YvBzivnUypbmXMsXOfk1BSMUr2q8KOQr89oi6Z+lCVQ0dQAMsFOo90kHAMWvPXFfpO6
-	m7liAqHbZqRhxa2UiLTQA0fbMbVD6bt27vvxNCfwUqPYoi3tpIlQO2vFykisrAdSPJm+F2e
-	/v4HEnAVrPXps0UhL+7S6x6gYMUBGxxCL/JFleWIaOzj1KUNL5xsHs3OZmio1PmnWt2rffw
-	YpLAbIfvGcVg8tkd6SA5eAilEMlSiC+Ump6uz2bcyokXA0NFv/9k4Dn6aSnMtCy5byrE6Xd
-	895vDDqFrLMcH+OF/jDmQcYcpmN+QKowa1P6ZIuOsTUMOY7eB7owTAmKtG7pHXBWCjz5srT
-	Dt0RUZU3JPfwXyWs0OyAObdF2PGtk7wNm68T0KqMdN+fWWPoHBplie+x4uhUlWqIhShcZ8G
-	Nvlvn+cYFDMx2l8yD88+Z3BEPowTwTgwlGsGLIHW+D4UZz/9y03sdeLZKBt1Swgu/ZTQb1W
-	qLtUjuNmwwLr+UDjiQ6h76b+h6ZCk=
-X-QQ-XMRINFO: MSVp+SPm3vtSI1QTLgDHQqIV1w2oNKDqfg==
-X-QQ-RECHKSPAM: 0
 
-From: Lang Xu <xulang@uniontech.com>
+Commit f620af11c27b ("xsk: avoid double checking against rx queue being
+full") addressed a case in copy mode, when working with multi-buffer
+xdp_buff, where we were peeking onto XSK Rx queue twice, to find out if
+there is a space to produce descriptors.
 
-> Please create a selftest for this.
+Adjust ZC path to follow the same principle.
 
-Going to do that. To stably reproduce this bug, I need the KASAN
-config enabled, how do I ensure it's enabled during a selftest cycle,
-by adding the line below to the 'config'? not quite sure.
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+---
+v2: route patch via bpf-next, not net-next
+---
+ net/xdp/xsk.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -46,6 +46,7 @@ CONFIG_IPV6_GRE=y
- CONFIG_IPV6_SEG6_BPF=y
- CONFIG_IPV6_SIT=y
- CONFIG_IPV6_TUNNEL=y
-+CONFIG_KASAN=y
- CONFIG_KEYS=y
- CONFIG_LIRC=y
- CONFIG_LWTUNNEL=y
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index ef265e45810c..cdf93728fcba 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -196,13 +196,13 @@ static int xsk_rcv_zc(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
+ 		goto err;
+ 	}
+ 
+-	__xsk_rcv_zc(xs, xskb, len, contd);
++	__xsk_rcv_zc_safe(xs, xskb, len, contd);
+ 	xskb_list = &xskb->pool->xskb_list;
+ 	list_for_each_entry_safe(pos, tmp, xskb_list, list_node) {
+ 		if (list_is_singular(xskb_list))
+ 			contd = 0;
+ 		len = pos->xdp.data_end - pos->xdp.data;
+-		__xsk_rcv_zc(xs, pos, len, contd);
++		__xsk_rcv_zc_safe(xs, pos, len, contd);
+ 		list_del_init(&pos->list_node);
+ 	}
+ 
+-- 
+2.43.0
 
-> This is fixing the src side of the "copy_map_value_long(map, dst, src)".
-> The src could also be from a skb? What is the value_size that the
-> verifier is checking for bpf_map_update_elem?
-
-The value_size checked by verifier is exactly the size with which
-the map is defined, i.e., not the size rounded up to 8-byte by kernel
-
-As for bpf_map_update_elem->..->copy_map_value_long, 'src' couldn't be from
-'skb' which mismatches the expected ptr-type of 'bpf_map_update_elem',
-I've tried codes like these:
-
-1. bpf_map_update_elem(&lru_map, &key, skb, BPF_ANY);
-2. bpf_map_update_elem(&lru_map, &key, skb->sk, BPF_ANY);  // null checked
-3. bpf_map_update_elem(&lru_map, &key, skb->flow_keys, BPF_ANY);
-
-All these ptrs mismatch the expected ptr-type, which can be detected by the verifier.
-The verifier complains with msg like 'R3 type=ctx expected=fp, pkt, pkt_meta, map_key,
-map_value, mem, ringbuf_mem, buf, trusted_ptr'
