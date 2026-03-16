@@ -1,86 +1,48 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1C5134DCCC
-	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 11:29:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7BC92472B6;
+	Mon, 16 Mar 2026 11:32:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773660595; cv=none; b=tH0eOF/ph+/yfA4CdCOwLTUAkiVURsrZeRS98ZeS9J6CeOvNlWeCXqHJaoAgS5WApxWo/BpetjZ6xOGke1r7pz9QSAeJ+zTccpa2yv4syZWhSj+CcLOLXN72+Yz+s+MWmDSNbMIZQQw6HTTDCDR3amjMVBVUDwEfkK5XeojOgQQ=
+	t=1773660751; cv=none; b=IEmMafB07tI7e5DWCw7jwocQF180hAdrXJrj4gIg/UDLtRcdgMquwlNhdaUwkxp+IAxxXZlbLH9EV2WFYOwsoL4355ADOuu+NttO0UVV3lz+v5GabFJ//EmiO7bfY8Px6v/TIaBPuzxOoodGLSUPnPnYPcd5hpc0R3yjTmY9Dds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773660595; c=relaxed/simple;
-	bh=iFNWymfmfxX/QJqdbdhLQocWSeqa+lLLvreHPgxAa/o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WPMXc+po8EdvM4/1DTc8wS1RRZE6FUpiLYu4o+3DzU+gWS+kkCbfoMGKnVPDKEnyrfX0AxG46zKZrhQ6abLgSOdKHnf3h+K10k6eQuE61cEJW39AaVTDahxopumWhVBZQ6BfprO8lpDYhcEbpcWJD5Dc5dGlk7YTnof9dYeijfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OSrMChax; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OSrMChax"
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-c70c112cb61so2943903a12.0
-        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 04:29:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773660593; x=1774265393; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sZLdK6dkEj8TjVSrlUlFfcQoiH20fwv6lL/iTYgpM30=;
-        b=OSrMChaxTPi4rDkJrzJHNphoewSkJtP5z7riBpE2UEna6QWdR8LbiXTQG3+mFnfa5s
-         btHmPhExpGSCLUAMdyKWw+1Huy2EbqZDP6kVlEYskK7LaNubH0TLP+0dK6iuk7SFMz0j
-         20MyrehWCqBTVe5yYbrMqv5ofIW/Xmdp5nWr2MhjqMmsrYnBoLWe5EHZSJTL54RuQmI7
-         x2ceCsGGuayqUps9/n18uygPhisCZCIHHcSm8SmY3vjfuHlZhH0l89FQF5+kH2kXMo4Z
-         n3xI6ZcKMo9s9jRh1aWrhg59+W04FEGsHJiNht/YJBykyvTEA1HePlaXRjWgih2TT2gT
-         wqMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773660593; x=1774265393;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=sZLdK6dkEj8TjVSrlUlFfcQoiH20fwv6lL/iTYgpM30=;
-        b=K9nEkJERwBMlaiOVrL/d1ALwAOCgjMo4bP5zDUCzmoYBQkxhVPjEypKGo8IZGfD/v7
-         RyS7aw30aFIrFPc6NCaJXIMkWhDjyIcQVLabXE2I87zNJ8GHiuw5kbLn6Rbh/pVrjXKN
-         iTvpkDQYHHjijX5EaQHVMz7xHTNiWtHoVcl5lmXzuaNbK/UBmeETLaJG/NEsHww8iu4I
-         ZY//mfpBQqtEukACt7fd03XEr7JLFjCiqZ9mmAdL/Y++MTco6rEoYJ4SJHMf/KTBucss
-         IODFt1wqJX/WdK10vipYWWh9ERMRy3fVb1ZRLgobryLideJYujLcYdrWdeD8xQj4ajM0
-         W55A==
-X-Gm-Message-State: AOJu0YyRtNgm7G5gNfXnEb0UP9K+hpHszbNQBkTZOmYhSRQ2Al753F5l
-	JVgc8iLV8UQxlV3V9P9ixrW+QjA272QcQt3j57osYcvc75k/UErn8+Wr
-X-Gm-Gg: ATEYQzxWWWzCj6EjBWkzfKdnXfQrXpq+/HBWnhJQj11CDLGVJqfyiZSt6Jixu2cHxwz
-	q3QDSoKkbulm2uZ+WI4rQ+7r05+f5M5tc7LjfYmGw8DICttdpaWFIeSfanbWTlpsB4HiX0eXdSO
-	79zawS/WeZCnZ3EdLaFbmHoIFuJ6G30KQtgcLdqQZnP8c9OvSD9xJ46LkHEtaBeMxRPW96rYR6k
-	sEpmSYujyUS011cgOwn+R8eX0zD3aKq9QezVYAEbplBn3+JtufxaDRNXQ0syg4UAlOqS695U6DT
-	HAXUNVKiFR2dN8hZDyMjTMf5u0v6L1OMN5z0fEX5d5vXBM/2C+NP3W1o48/SkLl/3p06qIlSJFt
-	zmXdkLjSlaoE1ixMbfTe/xi9UeMthyiva1HpJz+W9NOm4ys+WA1YM8epZg2YtQ43rBgVmB6zfQQ
-	Rt6s3wCe6L6OjkURDm/3SgoRXKITSLgIJjuIXRP3leYYxsBmfbgc+LlCfNYNNNxhL4+w==
-X-Received: by 2002:a05:6a21:685:b0:398:6ea8:21d8 with SMTP id adf61e73a8af0-398ec9b4a31mr11583444637.15.1773660592920;
-        Mon, 16 Mar 2026 04:29:52 -0700 (PDT)
-Received: from localhost.localdomain ([116.128.244.171])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c7401588ecesm4684940a12.32.2026.03.16.04.29.45
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 16 Mar 2026 04:29:51 -0700 (PDT)
-From: Chengkaitao <pilgrimtao@gmail.com>
-To: martin.lau@linux.dev,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	chengkaitao@kylinos.cn,
-	linux-kselftest@vger.kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v8 8/8] selftests/bpf: Add test cases for bpf_list_del/add/is_first/is_last/empty
-Date: Mon, 16 Mar 2026 19:28:43 +0800
-Message-ID: <20260316112843.78657-9-pilgrimtao@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260316112843.78657-1-pilgrimtao@gmail.com>
-References: <20260316112843.78657-1-pilgrimtao@gmail.com>
+	s=arc-20240116; t=1773660751; c=relaxed/simple;
+	bh=fnH36t4mItPhfscRo9Coc8iSZQb6qgP1ccNg8bmjleY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=J53g/L3ln7VnC6NplPx4+srdmr6ro2YGVY2DZ/s+B9eWK1ayf+woAFkZaSwuIYO5Vx52m6cUWFmwDkl0ZydHkWJtMB8G/ZpizaLPod/clXsrx+J1IWRKHKEBgBp6OF+X62Au9h81pfGTe9BYkayqhgFhOL+VsxHK1ecCBegagr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2B1891477;
+	Mon, 16 Mar 2026 04:32:23 -0700 (PDT)
+Received: from e142334-100.cambridge.arm.com (e142334-100.cambridge.arm.com [10.1.194.63])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DA7DE3F778;
+	Mon, 16 Mar 2026 04:32:26 -0700 (PDT)
+From: Muhammad Usama Anjum <usama.anjum@arm.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Brendan Jackman <jackmanb@google.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Zi Yan <ziy@nvidia.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Nick Terrell <terrelln@fb.com>,
+	David Sterba <dsterba@suse.com>,
+	"Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Ryan.Roberts@arm.com,
+	david.hildenbrand@arm.com
+Cc: Muhammad Usama Anjum <usama.anjum@arm.com>
+Subject: [PATCH v2 0/3] mm: Free contiguous order-0 pages efficiently
+Date: Mon, 16 Mar 2026 11:31:41 +0000
+Message-ID: <20260316113209.945853-1-usama.anjum@arm.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -89,372 +51,102 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Kaitao Cheng <chengkaitao@kylinos.cn>
+Hi All,
 
-Extend refcounted_kptr with tests for bpf_list_add (including prev from
-bpf_list_front and bpf_refcount_acquire), bpf_list_del (including node
-from bpf_rbtree_remove and bpf_refcount_acquire), bpf_list_empty,
-bpf_list_is_first/last, and push_back on uninit head.
+A recent change to vmalloc caused some performance benchmark regressions (see
+[1]). I'm attempting to fix that (and at the same time significantly improve
+beyond the baseline) by freeing a contiguous set of order-0 pages as a batch.
 
-To verify the validity of bpf_list_del/add, the test also expects the
-verifier to reject calls to bpf_list_del/add made without holding the
-spin_lock.
+At the same time I observed that free_contig_range() was essentially doing the
+same thing as vfree() so I've fixed it there too. While at it, optimize the
+__free_contig_frozen_range() as well.
 
-Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+[1] https://lore.kernel.org/all/66919a28-bc81-49c9-b68f-dd7c73395a0d@arm.com
+
+v6.18      - Before the patch causing regression was added
+mm-new     - current latest code
+this series - v2 series of these patches
+
+(>0 is faster, <0 is slower, (R)/(I) = statistically significant
+Regression/Improvement)
+
+v6.18 vs mm-new
++-----------------+----------------------------------------------------------+-------------------+-------------+
+| Benchmark       | Result Class                                             |   v6.18    (base) |    mm-new   |
++=================+==========================================================+===================+=============+
+| micromm/vmalloc | fix_align_alloc_test: p:1, h:0, l:500000 (usec)          |         653643.33 | (R) -50.92% |
+|                 | fix_size_alloc_test: p:1, h:0, l:500000 (usec)           |         366167.33 | (R) -11.96% |
+|                 | fix_size_alloc_test: p:4, h:0, l:500000 (usec)           |         489484.00 | (R) -35.21% |
+|                 | fix_size_alloc_test: p:16, h:0, l:500000 (usec)          |        1011250.33 | (R) -36.45% |
+|                 | fix_size_alloc_test: p:16, h:1, l:500000 (usec)          |        1086812.33 | (R) -31.83% |
+|                 | fix_size_alloc_test: p:64, h:0, l:100000 (usec)          |         657940.00 | (R) -38.62% |
+|                 | fix_size_alloc_test: p:64, h:1, l:100000 (usec)          |         765422.00 | (R) -24.84% |
+|                 | fix_size_alloc_test: p:256, h:0, l:100000 (usec)         |        2468585.00 | (R) -37.83% |
+|                 | fix_size_alloc_test: p:256, h:1, l:100000 (usec)         |        2815758.33 | (R) -26.32% |
+|                 | fix_size_alloc_test: p:512, h:0, l:100000 (usec)         |        4851969.00 | (R) -37.76% |
+|                 | fix_size_alloc_test: p:512, h:1, l:100000 (usec)         |        4496257.33 | (R) -31.15% |
+|                 | full_fit_alloc_test: p:1, h:0, l:500000 (usec)           |         570605.00 |      -8.97% |
+|                 | kvfree_rcu_1_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         500866.00 |      -5.88% |
+|                 | kvfree_rcu_2_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         499733.00 |      -6.95% |
+|                 | long_busy_list_alloc_test: p:1, h:0, l:500000 (usec)     |        5266237.67 | (R) -40.19% |
+|                 | pcpu_alloc_test: p:1, h:0, l:500000 (usec)               |         490284.00 |      -2.10% |
+|                 | random_size_align_alloc_test: p:1, h:0, l:500000 (usec)  |         850986.33 | (R) -48.03% |
+|                 | random_size_alloc_test: p:1, h:0, l:500000 (usec)        |        2712106.00 | (R) -40.48% |
+|                 | vm_map_ram_test: p:1, h:0, l:500000 (usec)               |         111151.33 |       3.52% |
++-----------------+----------------------------------------------------------+-------------------+-------------+
+
+v6.18 vs mm-new with patches
++-----------------+----------------------------------------------------------+-------------------+--------------+
+| Benchmark       | Result Class                                             |   v6.18 (base)    |  this series |
++=================+==========================================================+===================+==============+
+| micromm/vmalloc | fix_align_alloc_test: p:1, h:0, l:500000 (usec)          |         653643.33 |      -14.02% |
+|                 | fix_size_alloc_test: p:1, h:0, l:500000 (usec)           |         366167.33 |       -7.23% |
+|                 | fix_size_alloc_test: p:4, h:0, l:500000 (usec)           |         489484.00 |       -1.57% |
+|                 | fix_size_alloc_test: p:16, h:0, l:500000 (usec)          |        1011250.33 |        1.57% |
+|                 | fix_size_alloc_test: p:16, h:1, l:500000 (usec)          |        1086812.33 |   (I) 15.75% |
+|                 | fix_size_alloc_test: p:64, h:0, l:100000 (usec)          |         657940.00 |    (I) 9.05% |
+|                 | fix_size_alloc_test: p:64, h:1, l:100000 (usec)          |         765422.00 |   (I) 38.45% |
+|                 | fix_size_alloc_test: p:256, h:0, l:100000 (usec)         |        2468585.00 |   (I) 12.56% |
+|                 | fix_size_alloc_test: p:256, h:1, l:100000 (usec)         |        2815758.33 |   (I) 38.61% |
+|                 | fix_size_alloc_test: p:512, h:0, l:100000 (usec)         |        4851969.00 |   (I) 13.43% |
+|                 | fix_size_alloc_test: p:512, h:1, l:100000 (usec)         |        4496257.33 |   (I) 49.21% |
+|                 | full_fit_alloc_test: p:1, h:0, l:500000 (usec)           |         570605.00 |       -8.47% |
+|                 | kvfree_rcu_1_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         500866.00 |       -8.17% |
+|                 | kvfree_rcu_2_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         499733.00 |       -5.54% |
+|                 | long_busy_list_alloc_test: p:1, h:0, l:500000 (usec)     |        5266237.67 |    (I) 4.63% |
+|                 | pcpu_alloc_test: p:1, h:0, l:500000 (usec)               |         490284.00 |        1.53% |
+|                 | random_size_align_alloc_test: p:1, h:0, l:500000 (usec)  |         850986.33 |       -0.00% |
+|                 | random_size_alloc_test: p:1, h:0, l:500000 (usec)        |        2712106.00 |        1.22% |
+|                 | vm_map_ram_test: p:1, h:0, l:500000 (usec)               |         111151.33 |    (I) 4.98% |
++-----------------+----------------------------------------------------------+-------------------+--------------+
+
+mm-new vs vmalloc_2 results are in 2/3 patch.
+
+So this series is mitigating the regression on average as results show -14% to 49% improvement.
+
+Thanks,
+Muhammad Usama Anjum
+
 ---
- .../testing/selftests/bpf/bpf_experimental.h  |  16 +
- .../selftests/bpf/progs/refcounted_kptr.c     | 311 ++++++++++++++++++
- 2 files changed, 327 insertions(+)
+Changes since v1:
+- Update description
+- Rebase on mm-new and rerun benchmarks/tests
+- Patch 1: move FPI_PREPARED check and add todo
+- Patch 2: Rework catering newer changes in vfree()
+- New Patch 3: optimizes __free_contig_frozen_range()
 
-diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-index 44466acf8083..5821f0000e1f 100644
---- a/tools/testing/selftests/bpf/bpf_experimental.h
-+++ b/tools/testing/selftests/bpf/bpf_experimental.h
-@@ -85,6 +85,22 @@ extern int bpf_list_push_back_impl(struct bpf_list_head *head,
- /* Convenience macro to wrap over bpf_list_push_back_impl */
- #define bpf_list_push_back(head, node) bpf_list_push_back_impl(head, node, NULL, 0)
- 
-+/* Description
-+ *	Insert 'new' after 'prev' in the BPF linked list with head 'head'.
-+ *	The bpf_spin_lock protecting the list must be held. 'prev' must already
-+ *	be in that list; 'new' must not be in any list. The 'meta' and 'off'
-+ *	parameters are rewritten by the verifier, no need for BPF programs to
-+ *	set them.
-+ * Returns
-+ *	0 on success, -EINVAL if head is NULL, prev is not in the list with head,
-+ *	or new is already in a list.
-+ */
-+extern int bpf_list_add_impl(struct bpf_list_head *head, struct bpf_list_node *new,
-+			     struct bpf_list_node *prev, void *meta, __u64 off) __ksym;
-+
-+/* Convenience macro to wrap over bpf_list_add_impl */
-+#define bpf_list_add(head, new, prev) bpf_list_add_impl(head, new, prev, NULL, 0)
-+
- /* Description
-  *	Remove the entry at the beginning of the BPF linked list.
-  * Returns
-diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr.c b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-index c847398837cc..e5558994a76d 100644
---- a/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-+++ b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-@@ -367,6 +367,317 @@ long insert_rbtree_and_stash__del_tree_##rem_tree(void *ctx)		\
- INSERT_STASH_READ(true, "insert_stash_read: remove from tree");
- INSERT_STASH_READ(false, "insert_stash_read: don't remove from tree");
- 
-+SEC("tc")
-+__description("list_empty_test: list empty before add, non-empty after add")
-+__success __retval(0)
-+int list_empty_test(void *ctx)
-+{
-+	struct node_data *node_new;
-+
-+	bpf_spin_lock(&lock);
-+	if (!bpf_list_empty(&head)) {
-+		bpf_spin_unlock(&lock);
-+		return -1;
-+	}
-+	bpf_spin_unlock(&lock);
-+
-+	node_new = bpf_obj_new(typeof(*node_new));
-+	if (!node_new)
-+		return -2;
-+
-+	bpf_spin_lock(&lock);
-+	bpf_list_push_front(&head, &node_new->l);
-+
-+	if (bpf_list_empty(&head)) {
-+		bpf_spin_unlock(&lock);
-+		return -3;
-+	}
-+	bpf_spin_unlock(&lock);
-+	return 0;
-+}
-+
-+static struct node_data *__add_in_list(struct bpf_list_head *head,
-+				       struct bpf_spin_lock *lock)
-+{
-+	struct node_data *node_new, *node_ref;
-+
-+	node_new = bpf_obj_new(typeof(*node_new));
-+	if (!node_new)
-+		return NULL;
-+
-+	node_ref = bpf_refcount_acquire(node_new);
-+
-+	bpf_spin_lock(lock);
-+	bpf_list_push_front(head, &node_new->l);
-+	bpf_spin_unlock(lock);
-+	return node_ref;
-+}
-+
-+SEC("tc")
-+__description("list_is_edge_test: is_first on first node, is_last on last node")
-+__success __retval(0)
-+int list_is_edge_test(void *ctx)
-+{
-+	struct node_data *node_first, *node_last;
-+	int err = 0;
-+
-+	node_last = __add_in_list(&head, &lock);
-+	if (!node_last)
-+		return -1;
-+
-+	node_first = __add_in_list(&head, &lock);
-+	if (!node_first) {
-+		bpf_obj_drop(node_last);
-+		return -2;
-+	}
-+
-+	bpf_spin_lock(&lock);
-+	if (!bpf_list_is_first(&head, &node_first->l)) {
-+		err = -3;
-+		goto fail;
-+	}
-+	if (!bpf_list_is_last(&head, &node_last->l))
-+		err = -4;
-+
-+fail:
-+	bpf_spin_unlock(&lock);
-+	bpf_obj_drop(node_first);
-+	bpf_obj_drop(node_last);
-+	return err;
-+}
-+
-+SEC("tc")
-+__description("list_del_test1: del returns removed nodes")
-+__success __retval(0)
-+int list_del_test1(void *ctx)
-+{
-+	struct node_data *node_first, *node_last;
-+	struct bpf_list_node *bpf_node_first, *bpf_node_last;
-+	int err = 0;
-+
-+	node_last = __add_in_list(&head, &lock);
-+	if (!node_last)
-+		return -1;
-+
-+	node_first = __add_in_list(&head, &lock);
-+	if (!node_first) {
-+		bpf_obj_drop(node_last);
-+		return -2;
-+	}
-+
-+	bpf_spin_lock(&lock);
-+	bpf_node_last = bpf_list_del(&head, &node_last->l);
-+	bpf_node_first = bpf_list_del(&head, &node_first->l);
-+	bpf_spin_unlock(&lock);
-+
-+	if (bpf_node_first)
-+		bpf_obj_drop(container_of(bpf_node_first, struct node_data, l));
-+	else
-+		err = -3;
-+
-+	if (bpf_node_last)
-+		bpf_obj_drop(container_of(bpf_node_last, struct node_data, l));
-+	else
-+		err = -4;
-+
-+	bpf_obj_drop(node_first);
-+	bpf_obj_drop(node_last);
-+	return err;
-+}
-+
-+SEC("tc")
-+__description("list_del_test2: remove an arbitrary node from the list")
-+__success __retval(0)
-+int list_del_test2(void *ctx)
-+{
-+	struct bpf_rb_node *rb;
-+	struct bpf_list_node *l;
-+	struct node_data *n;
-+	long err;
-+
-+	err = __insert_in_tree_and_list(&head, &root, &lock);
-+	if (err)
-+		return err;
-+
-+	bpf_spin_lock(&lock);
-+	rb = bpf_rbtree_first(&root);
-+	if (!rb) {
-+		bpf_spin_unlock(&lock);
-+		return -4;
-+	}
-+
-+	rb = bpf_rbtree_remove(&root, rb);
-+	if (!rb) {
-+		bpf_spin_unlock(&lock);
-+		return -5;
-+	}
-+
-+	n = container_of(rb, struct node_data, r);
-+	l = bpf_list_del(&head, &n->l);
-+	bpf_spin_unlock(&lock);
-+	bpf_obj_drop(n);
-+	if (!l)
-+		return -6;
-+
-+	bpf_obj_drop(container_of(l, struct node_data, l));
-+	return 0;
-+}
-+
-+SEC("tc")
-+__description("list_add_test1: insert new node after prev")
-+__success __retval(0)
-+int list_add_test1(void *ctx)
-+{
-+	struct node_data *node_first;
-+	struct node_data *new_node;
-+	long err = 0;
-+
-+	node_first = __add_in_list(&head, &lock);
-+	if (!node_first)
-+		return -1;
-+
-+	new_node = bpf_obj_new(typeof(*new_node));
-+	if (!new_node) {
-+		err = -2;
-+		goto fail;
-+	}
-+
-+	bpf_spin_lock(&lock);
-+	err = bpf_list_add(&head, &new_node->l, &node_first->l);
-+	bpf_spin_unlock(&lock);
-+	if (err) {
-+		err = -3;
-+		goto fail;
-+	}
-+
-+fail:
-+	bpf_obj_drop(node_first);
-+	return 0;
-+}
-+
-+SEC("tc")
-+__description("list_add_test2: list_add accepts list_front return value as prev")
-+__success __retval(0)
-+int list_add_test2(void *ctx)
-+{
-+	struct node_data *new_node, *tmp;
-+	struct bpf_list_node *bpf_node;
-+	long err = 0;
-+
-+	tmp = __add_in_list(&head, &lock);
-+	if (!tmp)
-+		return -1;
-+
-+	new_node = bpf_obj_new(typeof(*new_node));
-+	if (!new_node) {
-+		err = -2;
-+		goto fail;
-+	}
-+
-+	bpf_spin_lock(&lock);
-+	bpf_node = bpf_list_front(&head);
-+	if (!bpf_node) {
-+		bpf_spin_unlock(&lock);
-+		bpf_obj_drop(new_node);
-+		err = -3;
-+		goto fail;
-+	}
-+
-+	err = bpf_list_add(&head, &new_node->l, bpf_node);
-+	bpf_spin_unlock(&lock);
-+	if (err) {
-+		err = -4;
-+		goto fail;
-+	}
-+
-+fail:
-+	bpf_obj_drop(tmp);
-+	return err;
-+}
-+
-+struct uninit_head_val {
-+	struct bpf_spin_lock lock;
-+	struct bpf_list_head head __contains(node_data, l);
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__type(key, int);
-+	__type(value, struct uninit_head_val);
-+	__uint(max_entries, 1);
-+} uninit_head_map SEC(".maps");
-+
-+SEC("tc")
-+__description("list_push_back_uninit_head: push_back on 0-initialized list head")
-+__success __retval(0)
-+int list_push_back_uninit_head(void *ctx)
-+{
-+	struct uninit_head_val *st;
-+	struct node_data *node;
-+	int ret = -1, key = 0;
-+
-+	st = bpf_map_lookup_elem(&uninit_head_map, &key);
-+	if (!st)
-+		return -1;
-+
-+	node = bpf_obj_new(typeof(*node));
-+	if (!node)
-+		return -1;
-+
-+	bpf_spin_lock(&st->lock);
-+	ret = bpf_list_push_back(&st->head, &node->l);
-+	bpf_spin_unlock(&st->lock);
-+
-+	return ret;
-+}
-+
-+SEC("?tc")
-+__failure __msg("bpf_spin_lock at off=32 must be held for bpf_list_head")
-+long list_del_without_lock_fail(void *ctx)
-+{
-+	struct bpf_rb_node *rb;
-+	struct bpf_list_node *l;
-+	struct node_data *n;
-+
-+	bpf_spin_lock(&lock);
-+	rb = bpf_rbtree_first(&root);
-+	bpf_spin_unlock(&lock);
-+	if (!rb)
-+		return -1;
-+
-+	n = container_of(rb, struct node_data, r);
-+	/* Error case: delete list node without holding lock */
-+	l = bpf_list_del(&head, &n->l);
-+	if (!l)
-+		return -2;
-+	bpf_obj_drop(container_of(l, struct node_data, l));
-+
-+	return 0;
-+}
-+
-+SEC("?tc")
-+__failure __msg("bpf_spin_lock at off=32 must be held for bpf_list_head")
-+long list_add_without_lock_fail(void *ctx)
-+{
-+	struct bpf_rb_node *rb;
-+	struct bpf_list_node *l;
-+	struct node_data *n;
-+
-+	bpf_spin_lock(&lock);
-+	rb = bpf_rbtree_first(&root);
-+	l = bpf_list_front(&head);
-+	bpf_spin_unlock(&lock);
-+	if (!rb || !l)
-+		return -1;
-+
-+	n = container_of(l, struct node_data, l);
-+	/* Error case: add list node without holding lock */
-+	if (bpf_list_add(&head, &n->l, l))
-+		return -2;
-+
-+	return 0;
-+}
-+
- SEC("tc")
- __success
- long rbtree_refcounted_node_ref_escapes(void *ctx)
+Muhammad Usama Anjum (1):
+  mm/page_alloc: Optimize __free_contig_frozen_range()
+
+Ryan Roberts (2):
+  mm/page_alloc: Optimize free_contig_range()
+  vmalloc: Optimize vfree
+
+ include/linux/gfp.h |   2 +
+ mm/page_alloc.c     | 128 +++++++++++++++++++++++++++++++++++++++++---
+ mm/vmalloc.c        |  34 ++++++++----
+ 3 files changed, 149 insertions(+), 15 deletions(-)
+
 -- 
-2.50.1 (Apple Git-155)
+2.47.3
 
