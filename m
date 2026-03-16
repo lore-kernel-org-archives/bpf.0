@@ -1,310 +1,253 @@
-Received: from mail-pl1-f225.google.com (mail-pl1-f225.google.com [209.85.214.225])
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8507285058
-	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 20:14:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.225
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773692059; cv=pass; b=cso/Al88yB256XLbvl46zR3LIT0wYihzU7mG5RYG+Xzy0ikBzTBdS/AupUOTe6vqce2JCCJR+LVqa2iskbITq+aoy4jNwDC0OgG8Ur31tCcUM/IbC0T+C5u+pAhvhgUxaoLv3vTRfV/HaBRSezJd+O9vFbIwQXc+9o+xbqgkhts=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773692059; c=relaxed/simple;
-	bh=diRDr/+5p0+/L9c9Mv4Or2wlfWAQzrXayhOS4n1m03o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UaRrSAI3UOAtGAFubwKmmfRzoUc6Wp5CraOcRHK2w0hUTMe56mW2s2xxh+IL/8tYELJZA6G3DU4EDePeyM7BE/2lCU0AtIUO4KXhafr1kofBItssqwtj+Wq4KfIoUCg3VtnIIs73lwLyAfcKV2GqofGJxxrTLZekcQ4x/51o298=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=HNpoObIr; arc=pass smtp.client-ip=209.85.214.225
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCCE03DB633
+	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 20:18:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773692338; cv=none; b=E8ebu7LPMQA8j7BR6fWNyRwQlASX9GvL4d0HhUDb6Nyhr0sT4M9I4YkZH9VBhKgyTKEkH+E31YvBkL74X+ahnKWPIFEg0Il6LguSgqTOwEGyIzA7JiUUbdqnRA8h6NY5NQxBPxSYND70VbMVzRCVzUeemd5yLMzzMiDrgMxbrdo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773692338; c=relaxed/simple;
+	bh=NBiMnrImnHItmf4STDeqjB8MTSVn+E/Hd512IYeKlho=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=VoNXjyK8vINgZc3zQpXNpiHfWVYCCxl5osh6i03257+zZ6TOXoYrd2CfpQv6EANyyKeW5Pn+Gaz6uJ/3BxyalnERdoA6BqLsxtcnqS7kYdaWWMhK+ZcMYhJG00sI7yaeiWu99RMPYNl+BsgrY+4o5Az0qUXWK82TcRzY79I+UiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=i4Pt0nIU; arc=none smtp.client-ip=209.85.222.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="HNpoObIr"
-Received: by mail-pl1-f225.google.com with SMTP id d9443c01a7336-2ab46931cf1so814385ad.0
-        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 13:14:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773692058; x=1774296858;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Lexh0FPoUVCHJNBkP5tl4kw1j/BVfIFrb0t7ALcSJ5I=;
-        b=M9dTy0TXR0NVtYYf27IW4ZR2PrAy/Ov99l02h76oM4XAZh32CMF7wYHdAvXkgkitmq
-         HfyCQ8JaIZmcbqRlseQVo+1dYOMrqC9yVXsbLRgrG1nGxkJeVvS+r0D+jhOo7gw5Slmx
-         HKNpnzW8q0/ojMc6GeFup7cnT8+rFt3dbC6+C5I8tZwBdIIsNsxPXxWZTdKQMHvZAbmO
-         KcrIhVFgFwMv9AMy2HHcjKXgYkq1LNd85YQmrRIvq2qcU/NehQKqDCV+ZwDGxyy12wJs
-         1QuecVHbkjp7jhAQoQzMFprxiToIYYVyj6ILOEPrylcPaAArpsDqTuOsar61yFUylycN
-         VSZQ==
-X-Forwarded-Encrypted: i=2; AJvYcCWG00e4Y58CREUCEaRuUVx85KPEKe9GYBvBKfcALHTayuf9N3TNAkkK7z30EScTuNlWxVk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyvtXRzFOfz4SxJGG39RzGK2qd+UKwU5hQbYjmyqjZ9pNVs7QH
-	slr87TgcF33VcqWJ4KUu6P++VwOoUSAIDsUOIGqDmeXlhCKuNwMItlBbUiYxPL+9CNftnS9NSe+
-	xHxowBTb0a/0c5/CxsxCIkRHipCbCQm0NBq+2OW79iuSuxWlFymy5URYSnYwB6EWGRu5QYDGNjX
-	Rw6gdQ17e9XTGdHQgsttUzo6uAZiSn26SSjnvYN+CKLOgFXEKYnaINo9sAsvfRKkfi1keKyFYM/
-	tOepqMCbJ3vhg==
-X-Gm-Gg: ATEYQzwyCvmmneky2H34Yg0rC7F0Rlbu+n6T6KAVlPRcPuR0xs+y9sv4hXT39n3Rysq
-	2yxdWWVPIUKGvUFsZZ3auIlC8DuYuPTcnsLlwDdACPXbWgLVJYYPAQX+PnaO/vU7dyeH2lMjmaQ
-	nCqEiLKJplx0nplIXj2XKdn5bAmBPc6q5E7khksZYvE9FmOeW21OPaXoKye8uxHudUxBdS4dKzi
-	otewH7eEA6Jt9hbrdMnjkFVhBY9Ndab1xb5ab9kFiCm8EM5nu7W0pZid6k9PHNf/9LNptiMfFV1
-	13JB+2sQP+QEiPlu78hT55b+coDrtrmTyXGsLFl2APW0QNWoqrGIeM21QWLGr2cfkgrvYW7UuLr
-	Rc6MOdjB9t5ttwVw+vJQqh3jjWmcYAmWl8BpwSRLCq0NZ1jr6hmuipgItpOMDAcHKYygg65K0z5
-	Ut1ucsPMUwQpc12trsGEAe3EtUd0fvNkhOfHf5rQo0wbwD2jkJACrYJ4IADVy0lb+Jgg==
-X-Received: by 2002:a17:903:2ca:b0:2b0:6365:217e with SMTP id d9443c01a7336-2b06513bc05mr1946905ad.15.1773692057942;
-        Mon, 16 Mar 2026 13:14:17 -0700 (PDT)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-117.dlp.protect.broadcom.com. [144.49.247.117])
-        by smtp-relay.gmail.com with ESMTPS id d9443c01a7336-2aece7e15d9sm14195565ad.34.2026.03.16.13.14.17
-        for <bpf@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 16 Mar 2026 13:14:17 -0700 (PDT)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-43b3e0a73f8so2318978f8f.3
-        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 13:14:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773692055; cv=none;
-        d=google.com; s=arc-20240605;
-        b=G46KpO+ZZGgoJDJ//ABAuM0xNrtS98jemC5wQFFm5vrS3/WRmO/mfar96xABhHL7/t
-         mI/kIZOLgQZtHnjtShAZ1JVZKEDW1dO4a0Bx9wlozuup7qK6zjFUy8W+zRqMWiCiZycE
-         BOE00H70IkPxCms3k10fOsahNkLWc0/5hx1bkg4+IHBCI4/pQ0K6B7fvKTkjw/g95PXs
-         3h21jjwl365ru1Hpsz0AfjwrT4V1r4BtosUVtZ/oghp1Lmpr1lpyTZetM13aeG3UZ16t
-         16N3czOMAPXgnas4jou5gyg1oGJ+gIhBQC7N2Thr4OfB64FqBEGvYr332lHfe8RrVD2+
-         r3aw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=Lexh0FPoUVCHJNBkP5tl4kw1j/BVfIFrb0t7ALcSJ5I=;
-        fh=dkJw72uAvPi9dbiG9ZTiGV5Id4d6kZoD1++Z1cAis7g=;
-        b=OqwcKeqovxCzXu4ATd9xjw5PEQgxmIIL9HnGAHYlq0U/QUIRO+jc6VtYP+zDA2LCJr
-         /Mrl+p8tEpvRE/jU1oKdFNCZg0oPreGX9Nxj1NGnLFSwFN4rH1EaQfwKyjETE7iqxBtL
-         F5BZ1z1eowPy3TPAj4Ilw7z76lFf9n6N3ZCJa346YLL9e4049X80XPd71MVBURMj2DE8
-         nEroDCzNOGM6uGLpcjLHs6Zxi2/TaVJt8wRmXfJ9WnzhiZu55hblwyYfT+ph5Q7esJBb
-         clJZG2j+yRtYgkrV9DOPRq6EhTpQOJbSiGNF+nan8mz2nGRq5DF2tVjguVXp3oVhxv3I
-         NSdQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="i4Pt0nIU"
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-8cb4136d865so670176485a.1
+        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 13:18:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1773692055; x=1774296855; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lexh0FPoUVCHJNBkP5tl4kw1j/BVfIFrb0t7ALcSJ5I=;
-        b=HNpoObIrIN+tT/nfT5uYwZ0JfW3M6mHCUeUVL1kP8XHSTxvrgsIvVxdMJKa3/aBGAk
-         ou4ZKBJw0nAMOwuRH/sojqrGrCtQb1iX8jTQf1zuFAPDdSx4nWkkfFrVya1VPCJ4neKL
-         LHXSEyqfABk97/O/QYhs4mEHCkp1A60bJsKVk=
-X-Forwarded-Encrypted: i=1; AJvYcCUxehmsdPicPGfPtv4YfYB6h1fosSR4ru9zfGWHMlLJLk9V4weQWxQb17ZDEs5vX/eLLO8=@vger.kernel.org
-X-Received: by 2002:a05:6000:1849:b0:439:beb9:5a96 with SMTP id ffacd0b85a97d-43a04db6013mr24504399f8f.31.1773692055522;
-        Mon, 16 Mar 2026 13:14:15 -0700 (PDT)
-X-Received: by 2002:a05:6000:1849:b0:439:beb9:5a96 with SMTP id
- ffacd0b85a97d-43a04db6013mr24504362f8f.31.1773692054993; Mon, 16 Mar 2026
- 13:14:14 -0700 (PDT)
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1773692336; x=1774297136; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AJjKpy2NSz8yXDUCSA4nsuucIHU5voD46HWaF5DCjJo=;
+        b=i4Pt0nIUBSLywZkliw5YsWXRkZxgDZRYCTofnmyHs8r9+ew/B07ZnoNl72+fo5I0zN
+         qnVoFJKkK44RmaMYlpA5bTDtxCxnN/aZhUBP9h9JE4PmhzIJB5QgLNECWl/nUZFUkfmQ
+         FeJ97LqAHh71NRWwA0PiZBZ1jrViUd+5LqSB5v2YnuhPZSVYIzWbi7w/2FEwK8qMUFd9
+         sQjNfZ7F0rD0HJU8rPj/xcdf8LadCWoXp/M6u0u5b1yBB3jY1GHEEZsZG0q3B7N+C6j6
+         XHssZwZjNwX7mz6XF2rsoHMD9UifhADCUPboSnk9VWDp91L9VmP4nanNmbkHfTwuYZq/
+         q+6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773692336; x=1774297136;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AJjKpy2NSz8yXDUCSA4nsuucIHU5voD46HWaF5DCjJo=;
+        b=tC1VIL2xiP/H85btyXJBxENee+u38mcvNnVRYKYsqwzAqPUScFLgallGV5DsExdASw
+         ZmXd716YENmz9Pr/yDdOTw2jM+x4DHPAXfbl8tf1ttdC2t/crUce/I7pu9ct180b8flT
+         cKvd9QEe3KRQKET4GO37kmFMyfwxA58ZxHsXXA0dL/b7GZ1CYhEA/fG65juMWVYm+fKk
+         5OS9ZY6hRmrmt+cK2gmVMwPPtzjJcMYN8a7u4b+Pj2Bbd68Qr+TNlzISW580pk0c/T70
+         FdN6JflpxbPS20pV0A+ii8S6P9ZLV54/xY88VSYkG5lOOKE1SiMaUV5OY1pZU6ndel1H
+         xg2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWL+T7dBI5XRVTehLgUs21EzpMIb8RpYRy16/zUQekn4FSMmRpuUT7f2UCHbU4R51oakyo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxoIa8tuRaJhpxFUDLTgkG1WH92zTvZjEVCTzrTdaZ/tiklh0vq
+	ydUNbqi371MTDpqxMtsFrcfDt86tsS7XBmE0X3HKYHNsK1WLf5vZDfUCqh67f3KLqf8=
+X-Gm-Gg: ATEYQzxMe6ko9ZXmCMZ8IA+15l5mphxEePbpBi9XCFQWIRtW2Fl5ZGStHWindNebniQ
+	P2MENPh1fK8OV4EYCl7wKlziXWPuIWCckiGkLvfLk6zdJH0wH/mgXiG14d9znsVoQb2mYi9w9sh
+	GcrcyQxoQ1BpAzTv8lZIOgk8FtU8LMrgbqKwpDr6qadG7RrmGrE6SZu29hHl8F+Lc7WzxF6Cr5Q
+	xrf8ZbjAJ+7AuBgMcia0Nwu54ybrED2iT++/nkKIEfU+nC4tQfEZYl+d9mKJjneBC+YjZRArfy5
+	RXL9n1GLrMPR83K1LgJ04MoVA31ihJZ/IORfw0A0H7glP05uW2ak1cNCQUgJWBfsFtPlOI/Yi+y
+	W48Nq7fvd564yKZMf9KhY3Wa6R/5LoUB21/GzWZ4EH+U81e7e/GUbOS36xTrGKqZIiVjeJTy7+U
+	t/pHKTldM4R+xemARgIYB+Y+s=
+X-Received: by 2002:a05:620a:450d:b0:8c6:a5bc:8a90 with SMTP id af79cd13be357-8cdb5a4b9e8mr2017394285a.14.1773692335627;
+        Mon, 16 Mar 2026 13:18:55 -0700 (PDT)
+Received: from localhost ([140.174.219.137])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cdd8028300sm245195685a.46.2026.03.16.13.18.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Mar 2026 13:18:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260313222206.778760-1-jitendra.vegiraju@broadcom.com>
- <20260313222206.778760-3-jitendra.vegiraju@broadcom.com> <abSaKe3d4fcBMqLm@shell.armlinux.org.uk>
-In-Reply-To: <abSaKe3d4fcBMqLm@shell.armlinux.org.uk>
-From: Jitendra Vegiraju <jitendra.vegiraju@broadcom.com>
-Date: Mon, 16 Mar 2026 13:14:02 -0700
-X-Gm-Features: AaiRm51rhr8AUuKjJ896JXx8rkZIE9TCvoAwPiDICMMkm27V0tquX6eEi5cGDi4
-Message-ID: <CAMdnO-+UEb8sVf8=Aj7G6UgY-DxWe3bFYbSbKJRdU4woEX+dWQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v7 2/5] net: stmmac: Add DW25GMAC support in
- stmmac core driver
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc: netdev@vger.kernel.org, alexandre.torgue@foss.st.com, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	mcoquelin.stm32@gmail.com, bcm-kernel-feedback-list@broadcom.com, 
-	richardcochran@gmail.com, ast@kernel.org, daniel@iogearbox.net, 
-	hawk@kernel.org, john.fastabend@gmail.com, rohan.g.thomas@altera.com, 
-	linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
-	andrew+netdev@lunn.ch, horms@kernel.org, sdf@fomichev.me, me@ziyao.cc, 
-	siyanteng@cqsoftware.com.cn, prabhakar.mahadev-lad.rj@bp.renesas.com, 
-	weishangjuan@eswincomputing.com, wens@kernel.org, vladimir.oltean@nxp.com, 
-	lizhi2@eswincomputing.com, boon.khai.ng@altera.com, 
-	maxime.chevallier@bootlin.com, matthew.gerlach@altera.com, 
-	chenchuangyu@xiaomi.com, yangtiezhu@loongson.cn, ovidiu.panait.rb@renesas.com, 
-	chenhuacai@kernel.org, florian.fainelli@broadcom.com, 
-	quic_abchauha@quicinc.com
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000f0382b064d29dc1f"
-
---000000000000f0382b064d29dc1f
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 16 Mar 2026 16:18:52 -0400
+Message-Id: <DH4HGGKLQ2EG.33P3WH3OF05RX@etsalapatis.com>
+Cc: <ast@kernel.org>, <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
+ <andrii@kernel.org>, <martin.lau@linux.dev>, <eddyz87@gmail.com>,
+ <song@kernel.org>, <yonghong.song@linux.dev>, <kpsingh@kernel.org>,
+ <sdf@fomichev.me>, <haoluo@google.com>, <jolsa@kernel.org>,
+ <tangyazhou518@outlook.com>, <shenghaoyuan0928@163.com>, <ziye@zju.edu.cn>
+Subject: Re: [PATCH bpf 2/2] selftests/bpf: Add test for large offset
+ bpf-to-bpf call
+From: <emil@etsalapatis.com>
+To: "Yazhou Tang" <tangyazhou@zju.edu.cn>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.20.1
+References: <20260316190220.113417-1-tangyazhou@zju.edu.cn>
+ <20260316190220.113417-3-tangyazhou@zju.edu.cn>
+In-Reply-To: <20260316190220.113417-3-tangyazhou@zju.edu.cn>
 
-Hi Russell,
-Thank you for reviewing the patches.
+On Mon Mar 16, 2026 at 3:02 PM EDT, Yazhou Tang wrote:
+> From: Yazhou Tang <tangyazhou518@outlook.com>
+>
+> The test utilizes an inline assembly block with `.rept 200000` to generat=
+e
+> a massive dummy subprogram. By placing this padding between the main prog=
+ram
+> and the target subprogram, it forces the verifier to process a bpf-to-bpf=
+ call
+> with the `imm` field exceeding the s16 range.
+>
+> The user-space test driver dynamically adapts to the host's JIT configura=
+tion:
+> - When JIT is enabled, it asserts that the program is successfully loaded=
+,
+>   JIT-compiled, and executes correctly (returning the expected value).
+> - When JIT is disabled, it asserts that the program is cleanly rejected b=
+y
+>   the verifier with -EINVAL (or -ENOSPC if the verifier log buffer is tru=
+ncated),
+>   and strictly matches the expected error log.
+>
+> Co-developed-by: Tianci Cao <ziye@zju.edu.cn>
+> Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
+> Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
+> Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
+> Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
+> ---
+>  .../selftests/bpf/prog_tests/call_large_imm.c | 49 +++++++++++++++++++
+>  .../selftests/bpf/progs/call_large_imm.c      | 38 ++++++++++++++
+>  2 files changed, 87 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/call_large_imm=
+.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/call_large_imm.c
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/call_large_imm.c b/to=
+ols/testing/selftests/bpf/prog_tests/call_large_imm.c
+> new file mode 100644
+> index 000000000000..ba4a2e27fa5d
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/call_large_imm.c
+> @@ -0,0 +1,49 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <test_progs.h>
+> +#include "call_large_imm.skel.h"
+> +
+> +void test_call_large_imm(void)
+> +{
+> +	struct call_large_imm *skel;
+> +	int err, prog_fd;
+> +	char log_buf[4096] =3D {};
+
+No need to init the log_buf, it will be NUL-terminated if load runs.
+
+> +	char dummy_data[64] =3D {};
+
+Nit: Why define dummy_data? You can make the function you're calling an
+int (void) syscall to avoid this.
+
+> +
+> +	LIBBPF_OPTS(bpf_test_run_opts, opts,
+> +		.data_in =3D dummy_data,
+> +		.data_size_in =3D sizeof(dummy_data),
+> +	);
+> +
+> +	skel =3D call_large_imm__open();
+> +	if (!ASSERT_OK_PTR(skel, "skel_open"))
+> +		return;
+> +
+> +	if (!env.jit_enabled)
+> +		bpf_program__set_log_buf(skel->progs.call_large_imm_test,
+> +					 log_buf, sizeof(log_buf));
+> +
+> +	err =3D call_large_imm__load(skel);
+> +
+> +	if (env.jit_enabled) {
+
+So we only test one path at a time, correct? I understand there's no
+good way to turn JIT compilation on and off, but as it stands
+
+> +		if (!ASSERT_OK(err, "load_should_succeed_with_jit"))
+> +			goto cleanup;
+> +
+> +		prog_fd =3D bpf_program__fd(skel->progs.call_large_imm_test);
+> +		err =3D bpf_prog_test_run_opts(prog_fd, &opts);
+> +
+> +		if (ASSERT_OK(err, "prog_run_success"))
+> +			ASSERT_EQ(opts.retval, 3, "prog_retval");
+> +
+> +	} else {
+> +		ASSERT_ERR(err, "load_should_fail_in_interpreter");
+> +		ASSERT_TRUE(err =3D=3D -EINVAL || err =3D=3D -ENOSPC, "err_should_be_e=
+inval_or_enospc");
+> +
+> +		if (!ASSERT_OK_PTR(strstr(log_buf, "bpf-to-bpf call offset out of rang=
+e for interpreter"),
+> +				   "check_verifier_log_msg")) {
+> +			printf("Actual verifier log:\n%s\n", log_buf);
+> +		}
+> +	}
+> +
+> +cleanup:
+> +	call_large_imm__destroy(skel);
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/call_large_imm.c b/tools/t=
+esting/selftests/bpf/progs/call_large_imm.c
+> new file mode 100644
+> index 000000000000..d0057f88b48b
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/call_large_imm.c
+> @@ -0,0 +1,38 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <linux/bpf.h>
+> +#include <bpf/bpf_helpers.h>
+> +
+> +struct __sk_buff;
+
+Can be removed if you use a syscall prog instead of a socket.
+
+> +
+> +static __attribute__((noinline)) void padding_subprog(void)
+> +{
+> +	asm volatile ("					\
+> +		r0 =3D 0;					\
+> +		.rept 200000;				\
+> +		r0 +=3D 0;				\
+> +		.endr;					\
+> +	" ::: "r0");
+> +}
+> +
+> +static __attribute__((noinline)) int target_subprog(struct __sk_buff *ct=
+x)
+> +{
+> +	volatile int magic_ret =3D 3;
+> +	return magic_ret;
 
 
-On Fri, Mar 13, 2026 at 4:14=E2=80=AFPM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
->
-> On Fri, Mar 13, 2026 at 03:22:03PM -0700, \Jitendra Vegiraju wrote:
-> > @@ -42,13 +42,18 @@
-> >  #define DWXGMAC_CORE_2_20    0x22
-> >  #define DWXLGMAC_CORE_2_00   0x20
-> >
-> > +#define DW25GMAC_CORE_3_20   0x32
-> > +#define DW25GMAC_CORE_4_00   0x40
-> > +
->
-> Do these live in the same versioning numberspace as DWXGMAC and
-> DWXLGMAC?
->
-> > +int dw25gmac_setup(struct stmmac_priv *priv)
-> > +{
-> > +     struct mac_device_info *mac =3D priv->hw;
-> > +
-> > +     dev_info(priv->device, "\tDW25GMAC\n");
-> > +
-> > +     priv->dev->priv_flags |=3D IFF_UNICAST_FLT;
-> > +     mac->pcsr =3D priv->ioaddr;
-> > +     mac->multicast_filter_bins =3D priv->plat->multicast_filter_bins;
-> > +     mac->unicast_filter_entries =3D priv->plat->unicast_filter_entrie=
-s;
-> > +     mac->mcast_bits_log2 =3D 0;
-> > +
-> > +     if (mac->multicast_filter_bins)
-> > +             mac->mcast_bits_log2 =3D ilog2(mac->multicast_filter_bins=
-);
->
-> The above seems to be common amongst the other two setup functions.
-> Maybe there should be a helper for this?
->
-Ack. Will address this in v8.
-> > +
-> > +     mac->link.caps =3D MAC_ASYM_PAUSE | MAC_SYM_PAUSE |
-> > +                      MAC_1000FD | MAC_2500FD | MAC_5000FD |
-> > +                      MAC_10000FD | MAC_25000FD;
-> > +     mac->link.duplex =3D 0;
-> > +     mac->link.speed10 =3D XGMAC_CONFIG_SS_10_MII;
-> > +     mac->link.speed100 =3D XGMAC_CONFIG_SS_100_MII;
-> > +     mac->link.speed1000 =3D XGMAC_CONFIG_SS_1000_GMII;
-> > +     mac->link.speed2500 =3D XGMAC_CONFIG_SS_2500_GMII;
-> > +     mac->link.xgmii.speed2500 =3D XGMAC_CONFIG_SS_2500;
-> > +     mac->link.xgmii.speed5000 =3D XGMAC_CONFIG_SS_5000;
-> > +     mac->link.xgmii.speed10000 =3D XGMAC_CONFIG_SS_10000;
-> > +     mac->link.xgmii.speed25000 =3D XGMAC_CONFIG_SS_25000;
-> > +     mac->link.speed_mask =3D XGMAC_CONFIG_SS_MASK;
->
-> Is there any point populating link.speed10 and link.speed100 ?
-> You're telling phylink that 10/100M speeds aren't supported in
-> link.caps, so these speeds won't ever be used.
->
-Thanks, I missed this. Will remove 10/100M entries.
-> > +
-> > +     mac->mii.addr =3D XGMAC_MDIO_ADDR;
-> > +     mac->mii.data =3D XGMAC_MDIO_DATA;
-> > +     mac->mii.addr_mask =3D GENMASK(20, 16);
-> > +     mac->mii.reg_mask =3D GENMASK(15, 0);
-> > +     mac->mii.clk_csr_mask =3D GENMASK(21, 19);
->
-> This will be the third instance of this particular mii data setup.
-> Please consider adding a function to do this setup.
->
-I will move this code segment to common helper function.
-> Thanks.
->
-> --
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+If we remove the printk below, we can just leave this empty or have it
+return 3 directly. Is there a reason to define the constant we're
+returning indirectly? If there is there should be a comment about it
+because right now it's not readily apparent.
 
---000000000000f0382b064d29dc1f
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+> +}
+> +
+> +SEC("socket")
+> +int call_large_imm_test(struct __sk_buff *ctx)
+> +{
+> +	int ret =3D 0;
+> +
+> +	if (ctx =3D=3D (void *)0)
 
-MIIVNwYJKoZIhvcNAQcCoIIVKDCCFSQCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ghKkMIIGqDCCBJCgAwIBAgIQfofDCS7XZu8vIeKo0KeY9DANBgkqhkiG9w0BAQwFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNTNaFw0yOTA0MTkwMDAwMDBaMFIxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSgwJgYDVQQDEx9HbG9iYWxTaWduIEdDQyBS
-NiBTTUlNRSBDQSAyMDIzMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAwjAEbSkPcSyn
-26Zn9VtoE/xBvzYmNW29bW1pJZ7jrzKwPJm/GakCvy0IIgObMsx9bpFaq30X1kEJZnLUzuE1/hlc
-hatYqyORVBeHlv5V0QRSXY4faR0dCkIhXhoGknZ2O0bUJithcN1IsEADNizZ1AJIaWsWbQ4tYEYj
-ytEdvfkxz1WtX3SjtecZR+9wLJLt6HNa4sC//QKdjyfr/NhDCzYrdIzAssoXFnp4t+HcMyQTrj0r
-pD8KkPj96sy9axzegLbzte7wgTHbWBeJGp0sKg7BAu+G0Rk6teO1yPd75arbCvfY/NaRRQHk6tmG
-71gpLdB1ZhP9IcNYyeTKXIgfMh2tVK9DnXGaksYCyi6WisJa1Oa+poUroX2ESXO6o03lVxiA1xyf
-G8lUzpUNZonGVrUjhG5+MdY16/6b0uKejZCLbgu6HLPvIyqdTb9XqF4XWWKu+OMDs/rWyQ64v3mv
-Sa0te5Q5tchm4m9K0Pe9LlIKBk/gsgfaOHJDp4hYx4wocDr8DeCZe5d5wCFkxoGc1ckM8ZoMgpUc
-4pgkQE5ShxYMmKbPvNRPa5YFzbFtcFn5RMr1Mju8gt8J0c+dxYco2hi7dEW391KKxGhv7MJBcc+0
-x3FFTnmhU+5t6+CnkKMlrmzyaoeVryRTvOiH4FnTNHtVKUYDsCM0CLDdMNgoxgkCAwEAAaOCAX4w
-ggF6MA4GA1UdDwEB/wQEAwIBhjBMBgNVHSUERTBDBggrBgEFBQcDAgYIKwYBBQUHAwQGCisGAQQB
-gjcUAgIGCisGAQQBgjcKAwwGCisGAQQBgjcKAwQGCSsGAQQBgjcVBjASBgNVHRMBAf8ECDAGAQH/
-AgEAMB0GA1UdDgQWBBQAKTaeXHq6D68tUC3boCOFGLCgkjAfBgNVHSMEGDAWgBSubAWjkxPioufi
-1xzWx/B/yGdToDB7BggrBgEFBQcBAQRvMG0wLgYIKwYBBQUHMAGGImh0dHA6Ly9vY3NwMi5nbG9i
-YWxzaWduLmNvbS9yb290cjYwOwYIKwYBBQUHMAKGL2h0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5j
-b20vY2FjZXJ0L3Jvb3QtcjYuY3J0MDYGA1UdHwQvMC0wK6ApoCeGJWh0dHA6Ly9jcmwuZ2xvYmFs
-c2lnbi5jb20vcm9vdC1yNi5jcmwwEQYDVR0gBAowCDAGBgRVHSAAMA0GCSqGSIb3DQEBDAUAA4IC
-AQCRkUdr1aIDRmkNI5jx5ggapGUThq0KcM2dzpMu314mJne8yKVXwzfKBtqbBjbUNMODnBkhvZcn
-bHUStur2/nt1tP3ee8KyNhYxzv4DkI0NbV93JChXipfsan7YjdfEk5vI2Fq+wpbGALyyWBgfy79Y
-IgbYWATB158tvEh5UO8kpGpjY95xv+070X3FYuGyeZyIvao26mN872FuxRxYhNLwGHIy38N9ASa1
-Q3BTNKSrHrZngadofHglG5W3TMFR11JOEOAUHhUgpbVVvgCYgGA6dSX0y5z7k3rXVyjFOs7KBSXr
-dJPKadpl4vqYphH7+P40nzBRcxJHrv5FeXlTrb+drjyXNjZSCmzfkOuCqPspBuJ7vab0/9oeNERg
-nz6SLCjLKcDXbMbKcRXgNhFBlzN4OUBqieSBXk80w2Nzx12KvNj758WavxOsXIbX0Zxwo1h3uw75
-AI2v8qwFWXNclO8qW2VXoq6kihWpeiuvDmFfSAwRLxwwIjgUuzG9SaQ+pOomuaC7QTKWMI0hL0b4
-mEPq9GsPPQq1UmwkcYFJ/Z4I93DZuKcXmKMmuANTS6wxwIEw8Q5MQ6y9fbJxGEOgOgYL4QIqNULb
-5CYPnt2LeiIiEnh8Uuh8tawqSjnR0h7Bv5q4mgo3L1Z9QQuexUntWD96t4o0q1jXWLyrpgP7Zcnu
-CzCCBYMwggNroAMCAQICDkXmuwODM8OFZUjm/0VRMA0GCSqGSIb3DQEBDAUAMEwxIDAeBgNVBAsT
-F0dsb2JhbFNpZ24gUm9vdCBDQSAtIFI2MRMwEQYDVQQKEwpHbG9iYWxTaWduMRMwEQYDVQQDEwpH
-bG9iYWxTaWduMB4XDTE0MTIxMDAwMDAwMFoXDTM0MTIxMDAwMDAwMFowTDEgMB4GA1UECxMXR2xv
-YmFsU2lnbiBSb290IENBIC0gUjYxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzARBgNVBAMTCkdsb2Jh
-bFNpZ24wggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQCVB+hzymb57BTKezz3DQjxtEUL
-LIK0SMbrWzyug7hBkjMUpG9/6SrMxrCIa8W2idHGsv8UzlEUIexK3RtaxtaH7k06FQbtZGYLkoDK
-RN5zlE7zp4l/T3hjCMgSUG1CZi9NuXkoTVIaihqAtxmBDn7EirxkTCEcQ2jXPTyKxbJm1ZCatzEG
-xb7ibTIGph75ueuqo7i/voJjUNDwGInf5A959eqiHyrScC5757yTu21T4kh8jBAHOP9msndhfuDq
-jDyqtKT285VKEgdt/Yyyic/QoGF3yFh0sNQjOvddOsqi250J3l1ELZDxgc1Xkvp+vFAEYzTfa5MY
-vms2sjnkrCQ2t/DvthwTV5O23rL44oW3c6K4NapF8uCdNqFvVIrxclZuLojFUUJEFZTuo8U4lptO
-TloLR/MGNkl3MLxxN+Wm7CEIdfzmYRY/d9XZkZeECmzUAk10wBTt/Tn7g/JeFKEEsAvp/u6P4W4L
-sgizYWYJarEGOmWWWcDwNf3J2iiNGhGHcIEKqJp1HZ46hgUAntuA1iX53AWeJ1lMdjlb6vmlodiD
-D9H/3zAR+YXPM0j1ym1kFCx6WE/TSwhJxZVkGmMOeT31s4zKWK2cQkV5bg6HGVxUsWW2v4yb3BPp
-DW+4LtxnbsmLEbWEFIoAGXCDeZGXkdQaJ783HjIH2BRjPChMrwIDAQABo2MwYTAOBgNVHQ8BAf8E
-BAMCAQYwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUrmwFo5MT4qLn4tcc1sfwf8hnU6AwHwYD
-VR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwDQYJKoZIhvcNAQEMBQADggIBAIMl7ejR/ZVS
-zZ7ABKCRaeZc0ITe3K2iT+hHeNZlmKlbqDyHfAKK0W63FnPmX8BUmNV0vsHN4hGRrSMYPd3hckSW
-tJVewHuOmXgWQxNWV7Oiszu1d9xAcqyj65s1PrEIIaHnxEM3eTK+teecLEy8QymZjjDTrCHg4x36
-2AczdlQAIiq5TSAucGja5VP8g1zTnfL/RAxEZvLS471GABptArolXY2hMVHdVEYcTduZlu8aHARc
-phXveOB5/l3bPqpMVf2aFalv4ab733Aw6cPuQkbtwpMFifp9Y3s/0HGBfADomK4OeDTDJfuvCp8g
-a907E48SjOJBGkh6c6B3ace2XH+CyB7+WBsoK6hsrV5twAXSe7frgP4lN/4Cm2isQl3D7vXM3PBQ
-ddI2aZzmewTfbgZptt4KCUhZh+t7FGB6ZKppQ++Rx0zsGN1s71MtjJnhXvJyPs9UyL1n7KQPTEX/
-07kwIwdMjxC/hpbZmVq0mVccpMy7FYlTuiwFD+TEnhmxGDTVTJ267fcfrySVBHioA7vugeXaX3yL
-SqGQdCWnsz5LyCxWvcfI7zjiXJLwefechLp0LWEBIH5+0fJPB1lfiy1DUutGDJTh9WZHeXfVVFsf
-rSQ3y0VaTqBESMjYsJnFFYQJ9tZJScBluOYacW6gqPGC6EU+bNYC1wpngwVayaQQMIIGbTCCBFWg
-AwIBAgIMGHX6KxYK3WW2YyprMA0GCSqGSIb3DQEBCwUAMFIxCzAJBgNVBAYTAkJFMRkwFwYDVQQK
-ExBHbG9iYWxTaWduIG52LXNhMSgwJgYDVQQDEx9HbG9iYWxTaWduIEdDQyBSNiBTTUlNRSBDQSAy
-MDIzMB4XDTI0MDkyNTEzNTAzMVoXDTI2MDkyNjEzNTAzMVowgbMxCzAJBgNVBAYTAlVTMRMwEQYD
-VQQIEwpDYWxpZm9ybmlhMREwDwYDVQQHEwhTYW4gSm9zZTEZMBcGA1UEYRMQTlRSVVMrREUtNjYx
-MDExNzEWMBQGA1UEChMNQlJPQURDT00gSU5DLjEaMBgGA1UEAxMRSml0ZW5kcmEgVmVnaXJhanUx
-LTArBgkqhkiG9w0BCQEWHmppdGVuZHJhLnZlZ2lyYWp1QGJyb2FkY29tLmNvbTCCASIwDQYJKoZI
-hvcNAQEBBQADggEPADCCAQoCggEBAKWV+9PYvG4njqRsbQas79f8Q46VL7b1ZxvWT6ik6VMbdRZx
-tfpfZalVXksqcb02/N1H7UA9V04cV2q97FkSr/KxeFLMetPb3cVJZICg23IRO2NTPdmgPFzwkPTo
-35h9h/OYLgh3/9a1nTsC2xqJa8GtohD5+42rsskGcI57U4n1r1L4R5IL9ypSqDxX/xVEAdGI5FTj
-VgvoZC6iuEbnez+yO8TT3wun9b/PQowOB5P0CwIFv7ERW0S1s6B8yrbsoaTrz0vQaEA786k1pZkg
-ykC1+zXq/iTyZuPP4B4RkzFd43Pw+GAH0Tt2nx5V4rNisJHeAVNU92Gj01cEg0I+FnsCAwEAAaOC
-Ad8wggHbMA4GA1UdDwEB/wQEAwIFoDCBkwYIKwYBBQUHAQEEgYYwgYMwRgYIKwYBBQUHMAKGOmh0
-dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjZzbWltZWNhMjAyMy5jcnQw
-OQYIKwYBBQUHMAGGLWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjZzbWltZWNhMjAy
-MzBlBgNVHSAEXjBcMAkGB2eBDAEFAwEwCwYJKwYBBAGgMgEoMEIGCisGAQQBoDIKAwIwNDAyBggr
-BgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIw
-ADBBBgNVHR8EOjA4MDagNKAyhjBodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjZzbWlt
-ZWNhMjAyMy5jcmwwKQYDVR0RBCIwIIEeaml0ZW5kcmEudmVnaXJhanVAYnJvYWRjb20uY29tMBMG
-A1UdJQQMMAoGCCsGAQUFBwMEMB8GA1UdIwQYMBaAFAApNp5ceroPry1QLdugI4UYsKCSMB0GA1Ud
-DgQWBBRq5Jlxz3MqC+zEgUxK566xEc2g3DANBgkqhkiG9w0BAQsFAAOCAgEARXrmeeWA31pp9Tr0
-M6mOlMv+Pr2raES4GzPSyftvxf6tBQCBNaqi6LSbyusDYOj3mG9bp6VeVn+68OxNY9iNAk+ujtId
-f3+30BlZOQ1v8z9u2peUOUtWI60y2MxhdH0X0n2H+BCGvUOFqs5z440jqqy1HsscZTXHB7FEZmVP
-fyD+0Z6cxyh7WNC6+BgLiFwf8iqmAbu7Yb1sGTUGyS5gfYEjJbF2PJfwNUcJDd7eS4w5Ju5mK5y7
-spgjH2/JmDgbkpSk9JyuWfjGZIg4ah/q2nb6UMd1XJb6gLQZuzPOI3SgXPvd8MHGjKZrX2BHOBSC
-bJJ8rp4w4a9QMS6dde2MFObusxkZAft4tUnwo+ProchHs7iA85sL7sWEZhAmjmKKCpECpEfZm0+/
-hpvKQV3AZp5vBstb4IVL8QmLj8beDVHYnNhEicsSiG1wW7zSYyBnmGbFRrFQIJnJDWPjTZOlVEyp
-T1ShrXRCtqJpOt6rgg+rFEY3D8j6/bAkJXnmKnE2LZ0YyrrKk7eC6UfNNimx38w3NWchtcGY8zJn
-Y/1/C9Jv/mWm/2lK8nvusOFxhKmbG83Hx8toQdZ5F1kYk6zAWjfB7lwXr/En9mCmLieJ18hen9EK
-qbYyUkmCmuoLi5GXFMJy+iQv6DgMVQ7CACagybU6FUrmL9lVa+A6caBEEh4xggJXMIICUwIBATBi
-MFIxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSgwJgYDVQQDEx9HbG9i
-YWxTaWduIEdDQyBSNiBTTUlNRSBDQSAyMDIzAgwYdforFgrdZbZjKmswDQYJYIZIAWUDBAIBBQCg
-gccwLwYJKoZIhvcNAQkEMSIEINUVUbysjL9+gNiqoYke75wxwIG38bARO/RSYDlx0FPlMBgGCSqG
-SIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI2MDMxNjIwMTQxNVowXAYJKoZI
-hvcNAQkPMU8wTTALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG
-9w0DBzALBgkqhkiG9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAJvC306FDFxC
-YyuqhwG9kk4ZE2u8CfOZbr12Sk/AAb5hZtzCfbOsLufo0ZNcY4TWW9REt6+7uiiyxAHKgN9hchsK
-k0bLdOuuTkbOInqAxku1J//a0k7EXnUqwpMJPLSsTRs56Czw/fw0PQuuw5JFVc4C/8dk/i7fMiC4
-D3DwfGGM4pM40xg8LC5ACVZcmEKCovxmlcPEzx2drZIBCOznEF2j/CaSyb/ym3+uBpejbUMyqgBl
-9mEMRE7lrcnKmvIiFmGLiXsx2B1dXeOdg/hjYxXJ0O4XAQGhLZDFKUxlsRqV7TIWsJZWYNp1QF1R
-u0jyC1v6qRrjB6uG0y/7HMIG4yo=
---000000000000f0382b064d29dc1f--
+Nit: Would if (!ctx) work? What is this condition's purpose in the first
+place? If it's deliberate, again can we add a comment?
+
+> +		padding_subprog();
+> +
+> +	et =3D target_subprog(ctx);
+> +
+> +	bpf_printk("Target subprog returned: %d\n", ret);
+
+Let's remove this, there's no reason to emit to the trace pipe even on
+success.
+
+> +
+> +	return ret;
+> +}
+> +
+> +char LICENSE[] SEC("license") =3D "GPL";
+
