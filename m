@@ -1,66 +1,66 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0681F3542F8
-	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 21:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F37E28C2BF
+	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 21:46:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773697617; cv=none; b=drFrTwyTJBptdy83kT16o3iwoqjRAMKSlFpeK3i8gDJIfTNVK8cW4o7oHkxo4HUg2WF/eiSt1809jDEsYIXj1X3xfoObh8gUatOipn5BQjJ+Vwu1lPzdkT9VpAdkNzTwiQHtNbeZggPLNTQYn+gJiK4bkdXmPv2ZEQCqCU5x1fs=
+	t=1773697618; cv=none; b=rtniJeaPzWz90kDFWIozpXeaN+iHoIOdY1yG76UDTzqzaiCVXUoAlP6Yl8qIJcVnx6szNx4VuaE4T9MEgGRJ1y4R3IKS7vZ/SxFl1xNvpLFVvEmkB4I4WI9X1bdOAEbuSbxRG6T0Gbidcr50Z4Vr/GcDJw7VmVP1TMtVvhtwpiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773697617; c=relaxed/simple;
-	bh=6KVvW/aM8vqFtMnjBm980/8EV3PRNui+l3ERq+9UpS8=;
+	s=arc-20240116; t=1773697618; c=relaxed/simple;
+	bh=vrjWRnlgKENGDaiuFyFNVhFkvThmKOo1U0iI6F5NZi8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=SWc9LS4Lvk34Y+I0bFnvFE/H/v9TKZuNywHuuLNlFm3jvQyj1rifl3oXAKAkGAYT2buaZDggoOvwHHYmk1dQezhVMEZZ0y1/C2LouBMvJXAN1meSCdJr/CbrMN15Yej7B8SPVxGTZVci5o8f+WEIZy4jnjHHewjhH5mjKiKa100=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eQNesvRR; arc=none smtp.client-ip=209.85.128.43
+	 In-Reply-To:To:Cc; b=u5q9x4r5omNz1cAKLcfjX+1WCzbVSguXC+U6vZPj7Tivid3yJfa/bYLfjZaYE4o2rj2N/l3frIBX53GE9iqwVBA6IN1XQjjd2Rwpj9nyqfCrGz7eDd1koF8RGkWTHOyblgArl49Ij1dxSGs0fzPkpbsjr5GHL6wpV8vaTFeyxfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=atLJxqX6; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eQNesvRR"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-48541edecf9so55153175e9.1
-        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 14:46:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="atLJxqX6"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-48534237460so55429435e9.3
+        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 14:46:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773697614; x=1774302414; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773697616; x=1774302416; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=g4vEcbduH5bp7ek2wgqFiKxn5o1+bgYsdM6x832qHzw=;
-        b=eQNesvRR0KFM32W0gAwuc3VqDaUffIPaEF6JpScFAfRta7f71os50L0wulsu3aUTmZ
-         xFk8alpZh6EbhXwwV+9mbXEC07O3wZfI38jR4mzpE6Dq+Vh4EMRdIb4SQkmrh5CtDnv2
-         vAGdOfE1F0LIKjYqXdZMVo121b654rttl0oKXqF7Myh45lYgYYFjktYryXLlLQW95VY8
-         wLL5ihmkkkYRYoKlQ/sO4AbJblZBdkZKj5RnpHZ80FqJ1iiebmOAiXfxpx8GNI+8fdi2
-         wea/a43Vat4txRrZxqMexyiwFlNkl82+aT7QU4/z5daz+GcNoRYOkIo49sl9CArgL4m9
-         tDMw==
+        bh=63w26VQ4bd8MnGIRXE6gPj9gVwarYkuK0a7aogcvQAE=;
+        b=atLJxqX6OEEpLFemttnBPwt0M6YZFNkkH0vOchDpsCapl4uO0sdt/4NUpxMb7gjFSV
+         vFtqwVRPTEGyP/Iwa0gAis3TzNcnsAKmYUAbfb3QsMNAZUSkxqjT4xmdBSMvKRtQs/XM
+         f5slWwRJnwi5PcsudHcJ3G2b3oNklNVrnLndsQHD+H8f+01Wrrjxv9WCum+yhtiWOnhL
+         ZNNtbJUqFj5DbtZY36hjhQN983BqwICafVm4QN6OObtX6ZlddlfcczwzcqC5VrH+znGv
+         eRdQOzJKYljkYv2V8Cnmdg3H2ynL5Jt191wIFMbm4sf4obP4fmUHh5g5han+932HZP56
+         KEkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773697614; x=1774302414;
+        d=1e100.net; s=20251104; t=1773697616; x=1774302416;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=g4vEcbduH5bp7ek2wgqFiKxn5o1+bgYsdM6x832qHzw=;
-        b=eZI6ET/RmH0Q44NvHT0SUvU0IpjX+PAwIZUv12Y03zbb2Ow2aWCITOH1eQLuC1NU6f
-         2df4eBuONZW4yWaC9j3acTG8q8y26tfVhNcXwvXcHYG+OsWkNaMr7rIACQM+hRTPlgyE
-         6SObFIw867o513JKYtLPQ7+G7oU6qxuXsCFNVPnFnIZMSQyiO1x4AHnoNNCPqzxEHR6y
-         +8gBqbE4++qrNt88hZpHYlUiUX093wX57pbcKJAUifJECuzBlWVsANffSQ3Jdqt0KgWA
-         x5oQ/dg+e42Khjj/SufEEY3toR9DOMyS1428foQcXgoU/PDaUA8wMLLCWDgvDLuzvM6D
-         qvQg==
-X-Gm-Message-State: AOJu0YyXXhYyPVoClxzB54Tym3C9llZueyl3S5ZfnVYAfN6YkjNMteny
-	1JBSvgBEvd91IQZNQKtPlWgFJrHuWtLOsgFHtCPqW3EaZ8stXwRHnLXR
-X-Gm-Gg: ATEYQzzmkKnkqcpzwQvbHqZBa/kG25sEoe88O4WJCLQb5hTn3pah5G7Gq97h0Fml4oa
-	wjCHSdXlhyXFjMT6ZobcXF28E45gy52jNvogh8VMmbj2id/Fp6gQ+UpaU7EX48V/pNb4X833yx9
-	PUM0k/wAgFR6IpYWjlAgHHahDLzB0x2dFY2QEeTHC1iq1rk4/Hau2BR+ID+Z+hg4+h0b2Gn24Um
-	NWA3K3rnnHbrvesNEnsdwlKl/fbLCGw0TVxKuefmP5wDllhdbFQ79iHWZmcEFebyls9AncUT9aa
-	IIh/TSLK5iQW2VtLVlBPzGzNdomlw21wTMGdwBd6lGyzFySMPjFU2ibHLqYI6OwFmlh8SB+yFMk
-	XGl+Js3SGQOUvlUk/dBiBa0V9r83o3/vEeqcfa/jz+mMSzUxTsqyGVtnAx2FAAqCqdwwqprfoo2
-	mwyAQO8SEbJ+fj
-X-Received: by 2002:a05:600c:5395:b0:485:4278:2558 with SMTP id 5b1f17b1804b1-485566c6a81mr257448145e9.6.1773697614249;
-        Mon, 16 Mar 2026 14:46:54 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:5::])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4856eaffbbdsm18465515e9.15.2026.03.16.14.46.53
+        bh=63w26VQ4bd8MnGIRXE6gPj9gVwarYkuK0a7aogcvQAE=;
+        b=YJc721jrHnLSalNEcecMPlLzzQ2Z055GCNO8QRjZvjlnUdI3gOABwtg8NtSYOIs8yQ
+         Q+mEj/UGN0UE9tj6aToC4r+KAJb8H4jwMOHh9RqED/6k8fznWgy5FlMUljClGcglPA9T
+         MaJKiILUhAHE42OEb/a5YTdyER7ugpUJwvqsfFx5K26lyQe5jmavGg5BBR71WorcJCLR
+         TeKyuds38wDOGd0a+0aL5LLiChUzfRVBG+AHVbkQieF8y4mbj7q4veRjaT2FdMDNLlI6
+         YHqLXyhdQt38W8b6UXrZWXqpG346VlmGpz4B2mE54ZtWugvnIIVSwjT2+bDaVNuDMV6P
+         /2jw==
+X-Gm-Message-State: AOJu0Yx/NcXrvZPfprNi4WYgpbqZn3rGr5eKD/4D7UT46pcP8ZxhsRH/
+	EXUS88JKYHvEJpk8JaZHMOwye749AAs0UIJRQvFKaYnyRjhvQ5HG5DXQ
+X-Gm-Gg: ATEYQzz4vxrRt9bBAXTFWPDvmYX4kacc4hWfrBfTfSX5abKbAK4Ox9hfvwZ3is9w8Sk
+	lDexLwCwHifNNnXXrNtvVotL37IjF6ZI2HZxIKtYabs0/SBITaZNtS/jSnt+JSHRXbzM3DmNDQ3
+	vwyc8uCWbzip63Cp71nc5x/A3qkdS9O9Zp2muhNIdGgnl7zHAsvEQm5R0FxjSJT9NFW11mz3Gip
+	MN3LiQ9Fp9Uc8xBSibdLrXucCSGqRC3LXb9S69rWxJGsbfY+PCSij6Dr9rDmg78qxFun36QzDNU
+	aItcbN8QSip2YPKBWub5wbXbQ+LRS5xq5jA0zdGfHeobqAhekDNWa2vlVPvrfprOxieny5ySGHK
+	ZKKWl/l9mB7NCgg7sgEBqfpKWLdw7Lww+yxS+sizjMV7wLZJxy37hrQLlzmLhQ3Z4/Ja3tB6zS+
+	7rDYyn0dODGxAZAQwexqzTf/XC
+X-Received: by 2002:a05:600c:4586:b0:485:363b:fafe with SMTP id 5b1f17b1804b1-485566c6a15mr256056205e9.1.1773697615543;
+        Mon, 16 Mar 2026 14:46:55 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:74::])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4856ea9dc46sm23904535e9.8.2026.03.16.14.46.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Mar 2026 14:46:53 -0700 (PDT)
+        Mon, 16 Mar 2026 14:46:55 -0700 (PDT)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Mon, 16 Mar 2026 14:46:47 -0700
-Subject: [PATCH bpf-next v5 4/5] libbpf: Add section handlers for sleepable
- tracepoints
+Date: Mon, 16 Mar 2026 14:46:48 -0700
+Subject: [PATCH bpf-next v5 5/5] selftests/bpf: Add tests for sleepable
+ tracepoint programs
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,7 +69,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260316-sleepable_tracepoints-v5-4-85525de71d25@meta.com>
+Message-Id: <20260316-sleepable_tracepoints-v5-5-85525de71d25@meta.com>
 References: <20260316-sleepable_tracepoints-v5-0-85525de71d25@meta.com>
 In-Reply-To: <20260316-sleepable_tracepoints-v5-0-85525de71d25@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
@@ -77,113 +77,224 @@ To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
  eddyz87@gmail.com
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773697607; l=3939;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773697607; l=6502;
  i=yatsenko@meta.com; s=20260220; h=from:subject:message-id;
- bh=9ZfIL/C4emuap6Ca7YKI4DksQl8pT1DrPTyUTfS7Lqw=;
- b=1P9Ja97J2FBHWlx6neRkeiWaUSlduBenwwCwbxl1qekQngOLecekRLIOhIS+t2n+/sbwyi37k
- IpmBLvsfowuD4ZCo6wmX9alT+9JRP7ZiVXAATfJ9QdJR05M82h0sVUd
+ bh=NTxaLa8aw7wxNkZHy7Yr+X6gJI0+nU/rFPWahI3Se0U=;
+ b=otEr4R6yS+qwf6wCpKz3GDoUbEz2+7kFK4De+rFXSFHDh/c71hoDX0AK+bNCVCVzdVdxyW6Ev
+ AbAu0oZjLXZB1X1fjlwcQjaXlg+6WhdDLbOYKV8KKUQiFfurp/a2KSR
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=QUfct6THKRRhwIGGKcldE2w7zXPci1gMPcF7qij1gwA=
 
 From: Mykyta Yatsenko <yatsenko@meta.com>
 
-Add SEC_DEF entries for sleepable tracepoint variants:
-  - "tp_btf.s+"     for sleepable BTF-based raw tracepoints
-  - "raw_tp.s+"     for sleepable classic raw tracepoints
-  - "raw_tracepoint.s+" (alias)
-  - "tp.s+"         for sleepable classic tracepoints
-  - "tracepoint.s+" (alias)
+Add functional tests for sleepable tracepoint programs that attach to
+the nanosleep syscall and use bpf_copy_from_user() to read user memory:
 
-Update attach_raw_tp() to recognize "raw_tp.s" and
-"raw_tracepoint.s" prefixes when extracting the tracepoint name.
+  - tp_btf: BTF-based raw tracepoint using SEC("tp_btf.s/sys_enter")
+    with PT_REGS_PARM1_SYSCALL (non-CO-RE macro for BTF programs).
 
-Rewrite attach_tp() to use a prefix array including "tp.s/" and
-"tracepoint.s/" variants for proper section name parsing.
+  - classic: Classic raw tracepoint using SEC("raw_tp.s/sys_enter")
+    with PT_REGS_PARM1_CORE_SYSCALL (CO-RE macro needed for classic).
+
+  - tracepoint: Classic tracepoint using
+    SEC("tp.s/syscalls/sys_enter_nanosleep") receiving
+    struct syscall_trace_enter with direct access to args[].
+
+Add a negative test (handle_sched_switch) that verifies sleepable
+programs are rejected on non-faultable tracepoints (sched_switch).
+
+Update verifier/sleepable.c tests:
+  - Add "sleepable raw tracepoint accept" test for sys_enter.
+  - Rename reject test and update error message to match the new
+    descriptive "Sleepable program cannot attach to non-faultable
+    tracepoint" message.
 
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
- tools/lib/bpf/libbpf.c | 39 ++++++++++++++++++++++++++++++++-------
- 1 file changed, 32 insertions(+), 7 deletions(-)
+ .../bpf/prog_tests/sleepable_tracepoints.c         | 57 ++++++++++++++++
+ .../bpf/progs/test_sleepable_tracepoints.c         | 75 ++++++++++++++++++++++
+ tools/testing/selftests/bpf/verifier/sleepable.c   | 17 ++++-
+ 3 files changed, 147 insertions(+), 2 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 0662d72bad20..625d49a21bcf 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -9858,11 +9858,16 @@ static const struct bpf_sec_def section_defs[] = {
- 	SEC_DEF("netkit/peer",		SCHED_CLS, BPF_NETKIT_PEER, SEC_NONE),
- 	SEC_DEF("tracepoint+",		TRACEPOINT, 0, SEC_NONE, attach_tp),
- 	SEC_DEF("tp+",			TRACEPOINT, 0, SEC_NONE, attach_tp),
-+	SEC_DEF("tracepoint.s+",	TRACEPOINT, 0, SEC_SLEEPABLE, attach_tp),
-+	SEC_DEF("tp.s+",		TRACEPOINT, 0, SEC_SLEEPABLE, attach_tp),
- 	SEC_DEF("raw_tracepoint+",	RAW_TRACEPOINT, 0, SEC_NONE, attach_raw_tp),
- 	SEC_DEF("raw_tp+",		RAW_TRACEPOINT, 0, SEC_NONE, attach_raw_tp),
-+	SEC_DEF("raw_tracepoint.s+",	RAW_TRACEPOINT, 0, SEC_SLEEPABLE, attach_raw_tp),
-+	SEC_DEF("raw_tp.s+",		RAW_TRACEPOINT, 0, SEC_SLEEPABLE, attach_raw_tp),
- 	SEC_DEF("raw_tracepoint.w+",	RAW_TRACEPOINT_WRITABLE, 0, SEC_NONE, attach_raw_tp),
- 	SEC_DEF("raw_tp.w+",		RAW_TRACEPOINT_WRITABLE, 0, SEC_NONE, attach_raw_tp),
- 	SEC_DEF("tp_btf+",		TRACING, BPF_TRACE_RAW_TP, SEC_ATTACH_BTF, attach_trace),
-+	SEC_DEF("tp_btf.s+",		TRACING, BPF_TRACE_RAW_TP, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_trace),
- 	SEC_DEF("fentry+",		TRACING, BPF_TRACE_FENTRY, SEC_ATTACH_BTF, attach_trace),
- 	SEC_DEF("fmod_ret+",		TRACING, BPF_MODIFY_RETURN, SEC_ATTACH_BTF, attach_trace),
- 	SEC_DEF("fexit+",		TRACING, BPF_TRACE_FEXIT, SEC_ATTACH_BTF, attach_trace),
-@@ -12985,23 +12990,41 @@ struct bpf_link *bpf_program__attach_tracepoint(const struct bpf_program *prog,
- 
- static int attach_tp(const struct bpf_program *prog, long cookie, struct bpf_link **link)
- {
-+	static const char *const prefixes[] = {
-+		"tp.s/",
-+		"tp/",
-+		"tracepoint.s/",
-+		"tracepoint/",
-+	};
- 	char *sec_name, *tp_cat, *tp_name;
-+	size_t i;
- 
- 	*link = NULL;
- 
--	/* no auto-attach for SEC("tp") or SEC("tracepoint") */
--	if (strcmp(prog->sec_name, "tp") == 0 || strcmp(prog->sec_name, "tracepoint") == 0)
-+	/* no auto-attach for bare SEC("tp"), SEC("tracepoint") and .s variants */
-+	if (strcmp(prog->sec_name, "tp") == 0 ||
-+	    strcmp(prog->sec_name, "tracepoint") == 0 ||
-+	    strcmp(prog->sec_name, "tp.s") == 0 ||
-+	    strcmp(prog->sec_name, "tracepoint.s") == 0)
- 		return 0;
- 
- 	sec_name = strdup(prog->sec_name);
- 	if (!sec_name)
- 		return -ENOMEM;
- 
--	/* extract "tp/<category>/<name>" or "tracepoint/<category>/<name>" */
--	if (str_has_pfx(prog->sec_name, "tp/"))
--		tp_cat = sec_name + sizeof("tp/") - 1;
--	else
--		tp_cat = sec_name + sizeof("tracepoint/") - 1;
-+	/* extract "<prefix><category>/<name>" */
-+	tp_cat = NULL;
-+	for (i = 0; i < ARRAY_SIZE(prefixes); i++) {
-+		if (str_has_pfx(prog->sec_name, prefixes[i])) {
-+			tp_cat = sec_name + strlen(prefixes[i]);
-+			break;
-+		}
-+	}
-+	if (!tp_cat) {
-+		free(sec_name);
-+		return -EINVAL;
-+	}
+diff --git a/tools/testing/selftests/bpf/prog_tests/sleepable_tracepoints.c b/tools/testing/selftests/bpf/prog_tests/sleepable_tracepoints.c
+new file mode 100644
+index 000000000000..308d53c31632
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/sleepable_tracepoints.c
+@@ -0,0 +1,57 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
 +
- 	tp_name = strchr(tp_cat, '/');
- 	if (!tp_name) {
- 		free(sec_name);
-@@ -13065,6 +13088,8 @@ static int attach_raw_tp(const struct bpf_program *prog, long cookie, struct bpf
- 		"raw_tracepoint",
- 		"raw_tp.w",
- 		"raw_tracepoint.w",
-+		"raw_tp.s",
-+		"raw_tracepoint.s",
- 	};
- 	size_t i;
- 	const char *tp_name = NULL;
++#include <test_progs.h>
++#include <time.h>
++#include "test_sleepable_tracepoints.skel.h"
++
++static void run_test(struct bpf_program *prog,
++		     struct test_sleepable_tracepoints *skel)
++{
++	struct bpf_link *link;
++
++	link = bpf_program__attach(prog);
++	if (!ASSERT_OK_PTR(link, "prog_attach"))
++		return;
++
++	skel->bss->target_pid = getpid();
++	skel->bss->triggered = 0;
++	skel->bss->err = 0;
++	skel->bss->copied_tv_nsec = 0;
++
++	syscall(__NR_nanosleep, &(struct timespec){ .tv_nsec = 555 }, NULL);
++
++	ASSERT_EQ(skel->bss->triggered, 1, "triggered");
++	ASSERT_EQ(skel->bss->err, 0, "err");
++	ASSERT_EQ(skel->bss->copied_tv_nsec, 555, "copied_tv_nsec");
++
++	bpf_link__destroy(link);
++}
++
++void test_sleepable_tracepoints(void)
++{
++	struct test_sleepable_tracepoints *skel;
++
++	skel = test_sleepable_tracepoints__open();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		return;
++
++	bpf_program__set_autoload(skel->progs.handle_sched_switch, false);
++
++	if (!ASSERT_OK(test_sleepable_tracepoints__load(skel), "skel_load"))
++		goto cleanup;
++
++	if (test__start_subtest("tp_btf"))
++		run_test(skel->progs.handle_sys_enter_tp_btf, skel);
++
++	if (test__start_subtest("classic"))
++		run_test(skel->progs.handle_sys_enter_raw_tp, skel);
++
++	if (test__start_subtest("tracepoint"))
++		run_test(skel->progs.handle_sys_enter_tp, skel);
++
++cleanup:
++	test_sleepable_tracepoints__destroy(skel);
++
++	RUN_TESTS(test_sleepable_tracepoints);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_sleepable_tracepoints.c b/tools/testing/selftests/bpf/progs/test_sleepable_tracepoints.c
+new file mode 100644
+index 000000000000..37e14f5e9f14
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_sleepable_tracepoints.c
+@@ -0,0 +1,75 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
++
++#include <vmlinux.h>
++#include <asm/unistd.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_core_read.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++char _license[] SEC("license") = "GPL";
++
++int target_pid;
++int triggered;
++long err;
++long copied_tv_nsec;
++
++static int copy_nanosleep_arg(struct __kernel_timespec *ts)
++{
++	long tv_nsec;
++
++	err = bpf_copy_from_user(&tv_nsec, sizeof(tv_nsec), &ts->tv_nsec);
++	if (err)
++		return err;
++
++	copied_tv_nsec = tv_nsec;
++	triggered = 1;
++	return 0;
++}
++
++SEC("tp_btf.s/sys_enter")
++int BPF_PROG(handle_sys_enter_tp_btf, struct pt_regs *regs, long id)
++{
++	struct task_struct *task = bpf_get_current_task_btf();
++
++	if (task->pid != target_pid)
++		return 0;
++
++	if (id != __NR_nanosleep)
++		return 0;
++
++	return copy_nanosleep_arg((void *)PT_REGS_PARM1_SYSCALL(regs));
++}
++
++SEC("raw_tp.s/sys_enter")
++int BPF_PROG(handle_sys_enter_raw_tp, struct pt_regs *regs, long id)
++{
++	struct task_struct *task = bpf_get_current_task_btf();
++
++	if (task->pid != target_pid)
++		return 0;
++
++	if (id != __NR_nanosleep)
++		return 0;
++
++	return copy_nanosleep_arg((void *)PT_REGS_PARM1_CORE_SYSCALL(regs));
++}
++
++SEC("tp.s/syscalls/sys_enter_nanosleep")
++int handle_sys_enter_tp(struct syscall_trace_enter *args)
++{
++	if ((bpf_get_current_pid_tgid() >> 32) != target_pid)
++		return 0;
++
++	return copy_nanosleep_arg((void *)args->args[0]);
++}
++
++/* Sleepable program on a non-faultable tracepoint should fail to load */
++SEC("tp_btf.s/sched_switch")
++__failure __msg("Sleepable program cannot attach to non-faultable tracepoint")
++int BPF_PROG(handle_sched_switch, bool preempt,
++	     struct task_struct *prev, struct task_struct *next)
++{
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/verifier/sleepable.c b/tools/testing/selftests/bpf/verifier/sleepable.c
+index 1f0d2bdc673f..6dabc5522945 100644
+--- a/tools/testing/selftests/bpf/verifier/sleepable.c
++++ b/tools/testing/selftests/bpf/verifier/sleepable.c
+@@ -76,7 +76,20 @@
+ 	.runs = -1,
+ },
+ {
+-	"sleepable raw tracepoint reject",
++	"sleepable raw tracepoint accept",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type = BPF_PROG_TYPE_TRACING,
++	.expected_attach_type = BPF_TRACE_RAW_TP,
++	.kfunc = "sys_enter",
++	.result = ACCEPT,
++	.flags = BPF_F_SLEEPABLE,
++	.runs = -1,
++},
++{
++	"sleepable raw tracepoint reject non-faultable",
+ 	.insns = {
+ 	BPF_MOV64_IMM(BPF_REG_0, 0),
+ 	BPF_EXIT_INSN(),
+@@ -85,7 +98,7 @@
+ 	.expected_attach_type = BPF_TRACE_RAW_TP,
+ 	.kfunc = "sched_switch",
+ 	.result = REJECT,
+-	.errstr = "Only fentry/fexit/fmod_ret, lsm, iter, uprobe, and struct_ops programs can be sleepable",
++	.errstr = "Sleepable program cannot attach to non-faultable tracepoint",
+ 	.flags = BPF_F_SLEEPABLE,
+ 	.runs = -1,
+ },
 
 -- 
 2.52.0
