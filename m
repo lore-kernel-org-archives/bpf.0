@@ -1,163 +1,480 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF8031C8634
-	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 14:17:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C9686FC5
+	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 14:24:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=148.163.148.77
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773670645; cv=pass; b=aAyyjmKjyEiTA26J+aRAVr9FXXtc4OJ/qwgKBLvmSLPdzCBhTflXmlwKSzX5iZz4C7Z+abN/fyXxvyzuRj6Ad4FKECBOJRNXjr+SSUBzlNO8cHyt8skEhGDqmlcaOB6oSeJW9W3aQFs+S8mfcNA6xRAnezJW1SqlksiQYP3Bwck=
+	t=1773671047; cv=pass; b=WT/+Ys+AdFt68MLSRa3LxFR+MQOTlqov33Z6V4vV7sj3QB2YEZ3F+GW9TjEBBdcpjHynFDJ6S2/uUdD3GyMf7XwlXbd/UAwi6F2cLBPnBp5r/wfFBtITaEnbkav60B3aXYibzYtkRKJcV0GUA8Ito80mSTDfvlvqgF2UBihdDL8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773670645; c=relaxed/simple;
-	bh=5ExJGKQqqkgOKiYAl01vajNqrVmhutAhhk5RAfQPwdk=;
+	s=arc-20240116; t=1773671047; c=relaxed/simple;
+	bh=e+itkGHPNQBEvqRYeUQt862KcGKFcv1DVzeceQmv1tI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uakVjaa8wjyMi/szr/VlL+FMVUl2Ntfr44Kn3LQ78XuIqBAfjnxcNMiEyom5f0bwVwBf1VjEeGn1C5AXmZgyllNUkA6ozndQs9Hs3QazVqR07EaMCWcaq/kQseEGKeTulifqAJgrJfCWWX4i1v+dxHqbKrSHLV0j51/QrgDNQLQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MUc/i+b4; arc=pass smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=qrKs/o8uzoBEX6agUjGGd5G9TkPOOMokbQHPVuSiH9KJ69KVohko5xoLgGgJnCS0UUDJDXv6elIgvrAVs8INMmz5TtK1POfG/bBbMfhPfyoaXBqfJD2N29BY25lj6fXMqQfam196M4Vw/3QqwWjyoSZe2eyKYmj+ZI6/zNJ/nQg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=mS2CEtOL; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=X8AH0trm; arc=pass smtp.client-ip=148.163.148.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MUc/i+b4"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-485345e1013so40487795e9.1
-        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 07:17:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773670640; cv=none;
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="mS2CEtOL";
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="X8AH0trm"
+Received: from pps.filterd (m0354650.ppops.net [127.0.0.1])
+	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62GA1CoS2720601
+	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 14:23:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	default; bh=Nxjnl0eTT566QLFInZZV/mJV5WJXHx1hLtDwVbwC8fI=; b=mS2C
+	EtOLyBW1QBbvgiiW4d8nl0jUSdnjYV24V5RXJFw6u08Q/peSClTHzhVp9ryFpo7V
+	d8wvER4ZpE0krdanrUmjlDiQCTEPEei5pBmtE192RJW8spbrYT3cDwKLiyZLjTvm
+	YBxnRZK4Kv2bi+/zmDqg1NCz05yclHE5tSxCQSgQ+XvioUHpQMLbtpAgxm3L7MVD
+	Y3gTpk7v/jsgH573J1qxUI9YSwSVTWIFojWb1V6np0UI1CYB3d68CoGEJAnI8dzt
+	jzvKeGShPFN4SqYWQmSO203YzDxI1F6lmew1dNJYlR66Ax1ZJfLbxDHPhHqArW4I
+	CIS9ph6zXhsA26ZZqw==
+Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
+	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4cwm5ad8br-4
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 14:23:59 +0000 (GMT)
+Received: from 04WPEXCH014.crowdstrike.sys (10.100.11.87) by
+ 04WPEXCH009.crowdstrike.sys (10.100.11.79) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Mon, 16 Mar 2026 14:23:54 +0000
+Received: from mail-yw1-f198.google.com (10.100.11.78) by
+ 04WPEXCH014.crowdstrike.sys (10.100.11.87) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35 via Frontend Transport; Mon, 16 Mar 2026 14:23:54 +0000
+Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-794d80fea59so79938247b3.1
+        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 07:23:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773671034; cv=none;
         d=google.com; s=arc-20240605;
-        b=LnOaJQWGKg8Y8GBS0jnJ38YEBslmGMdxWC6bRLgreTizONxyvNLY3pitJDk26rSItT
-         qAbprCuSLltSvv1PBJsJ1dS2NAZvTN3WnOKITkXPcD23UqQjNmENaKJqtobgKkwnZ5fJ
-         87ph78giCV7nDl3RL5z7NDOwNPKeYggtbD87R2/Fr8tlHocK75+cntiIOCs9KpAOJ3QG
-         M4PLDZMCepwbsbx/kttXNG5afVPaBPKgJybhEHxdfGUgb1Xdg7QsQhrbi+WqUY1AA6b5
-         B5KLOsvKdMeXXZIDJtNjrE6Hnrv/pL08iqeyBEUBMr1eHrmkXS5iZj2EVUWPC8Tjt/8R
-         1X6Q==
+        b=Xe/9aZMpIWUENWmaFMq9kCvKrsF7iDj5gWFv8JfvzotiHIiy9xHHSBbQfu9cPxPTkT
+         KwaxF0bxB6BkBgaVvPKgCkiQsZKGgu5y4e7xqN/UWt/y9vDFkhAsLxT4er+p4FOYjMfh
+         sdTEQ4EaTjgkHQ4ooizAWoUJtQrS5V89/NPa5jIguKPv1NTXZdYlw01vkHVmNuA51FMi
+         RbGuM+eJjOLzNIdxp7Ulksh9jxEtOxI1dGlqRR62wgo521xuYmjmHTAlaz6vUyJkjPxS
+         b7cug+bdOHt0SrGAB4wMttK8HeIOldDv0PQNNrODKoiabp2X7PbEhLtEX1l7Q09eQPxU
+         QYTg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=lmBn1aXsKzUNTVIGoWkY2AXVOYef5Jy5uJj2KWu6G54=;
-        fh=A+Nmk0fbWuOl7D3aP1ypDVjf1uSFBYYAzEnl7B+8X64=;
-        b=luT8gKR45gQvYpUJ56qPm9S94+76BoEec7QEIDaHNj465E1CvB5mXYUpPfXqBN6KOd
-         pujHnKTafZufo4SYctQp6c9uD/Lz9pqUGnTDlJA0qye4fjpSGx9gp2pK1tkQf1dPwzHG
-         cC5Oof8MSQ4BQOElonhBkO/0uNyfHuFaPc4GKyOFQT4dcLHAo4+2g9y5iWO/6sgLggof
-         6QDwiV1ud9idNv5zgNlzXlXwj9SMIstwk6FrSQnSheba8V7ZedU6F9MgtG5FAVZFPBkw
-         clQslEb4g79dAyjpygI3s+8fDtkFym2tEywc92FLyWwl64ESKArTQBT+vrxqcm9/oej6
-         xIOA==;
+        bh=Nxjnl0eTT566QLFInZZV/mJV5WJXHx1hLtDwVbwC8fI=;
+        fh=+w0G+q4y+eB5FMrATZRe99V7zuaeUek2nbVgOGF6Seg=;
+        b=Db1NV+emJRASiUbi315D/OoU/603Hku5dWooGDEl2Mex5ngXHWBCYZJ3dbZmAqRWeA
+         6PZkEy+W+3JrhihhQmXi3HcBnVlHykWko+GSdLBnEZY9fQ94xgt62s/GmwgV2kosrrdr
+         sDUHyZHFNi+7qj8gPo7StSFX/fQNk3D3IgkoM+0ZEmu/qNBBzMdVZtZpfkZvu3vFE4pX
+         J+c5y0ZhIDt2QxJT901glCwGNeEOhJVMv/aHtKgFI1OrUasVB2GOaz0EPWEYDyEdDoo3
+         M8keUPJ7kOanVJurDnEMFFRMnegwUsKEo0BoAmqRrPZHUMwxSQt+HdQrFE6aDV4V++hT
+         3h7w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773670640; x=1774275440; darn=vger.kernel.org;
+        d=crowdstrike.com; s=google; t=1773671034; x=1774275834; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lmBn1aXsKzUNTVIGoWkY2AXVOYef5Jy5uJj2KWu6G54=;
-        b=MUc/i+b4a82D4pWwB1wRLJI9NT/+CBuN+DxuLbm8D2Nob5nPTApzb3pf61dWc29JAW
-         clnvek8WcoUN7z2tvHsy6Wwb/dlApRwjGbn8b+FsXL+PUqpJ176ibsodV+7pDysEShQF
-         WBLTfNfZ93H3Lhzexb2Q58oC7eBKJ4JvYAvtgRbifdqwDPzcXddYBZ/0yQJELwGMVCTS
-         ZVBnmOER8xL3lMlqkWBypwyFbeaZXqjX27qoOxIWs8YluIc9f1yByJ+izVCIcItO9tCD
-         FBuKeqv83UWA5Qd9Bl1bpodbdZh2MSuQ38vqIqFJR0H0Mvuj0OgA+tV/wcuFUhQvn8+Q
-         2Jng==
+        bh=Nxjnl0eTT566QLFInZZV/mJV5WJXHx1hLtDwVbwC8fI=;
+        b=X8AH0trmqtb0K2v/34OFqqUXUNq5959KU66WCmb0928jlWVAc3n+6SMCKnDzVRscTi
+         BZBdgjxPX0obIVP/5ws+W2rXj+psUMeiYRcDPIYfbte1jJBkVimoWsQlv6pcsOUm56me
+         T+dBJZM5/0k6lqutUvuiXJzq1ZNuE6zqZ+O2TRG64dHQMrqvBBE6s7IIg9TyiU1izTAU
+         w3MzJKabp5k/Ih3nGLXI+vy3/awP01hIRWUAI/q6crJVqTigEA+GKxoPkoyWyeUEmo9H
+         FsABETm6rJZdOWmDFmn1ClKSLgzDL8qJ53jTyOh5ZQb7PUaSVk2z7QPDe5U2Lv1JDXIE
+         anzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773670640; x=1774275440;
+        d=1e100.net; s=20251104; t=1773671034; x=1774275834;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=lmBn1aXsKzUNTVIGoWkY2AXVOYef5Jy5uJj2KWu6G54=;
-        b=fG3aeTNOrHV/yvnbMlO0nITIkrfQzM9kiu/y7Z/tD2ugWYpxERT+P2+hIQUHio1fLs
-         4LA2FjaYBqgp4I3FdpJXG2/HS65o/pHutYUldRvAzJRz2by0GKveX19Oo/GUa1yb4MNn
-         fCydvGjjb9bQlpnt2CHBfkMpBysR1oG9ya06JIj+ZP+BfZ2bbrxw/8LLZwQycrkbDVnM
-         o2N6lmEMe4HqtM1wbXSscluuaQnIzDORlrq8Uzuj8JXXrKGv+ylIlTS9N2lEPNEciUQc
-         4eZRn+PKpiPGm+gTHoNPtKKQ/w43i0o2jxuAgHIzD360YTDajDBHx6SVkr4mHTrlGdvF
-         d6gA==
-X-Forwarded-Encrypted: i=1; AJvYcCVErcxRBJZsX0rhPXRfE/UFb1LmVSBtnOzk3dEmoE9r8jZ9FmYcQKQgAS2m+DNojks2wg4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZwgjIYdTvc398LVfDd4/PaSFjbZkcC5+foDodRlIh8PMGiokm
-	UmdLKhQmgYjnpXtQC35rVOEgcvznhXawo3xo7ZhFp8phmH5aQ+iEyMkd3B4vRz4oCv3T3QYOx2y
-	m7nBpFX+uJ1rZ699R8m0n08i5T+E41x4=
-X-Gm-Gg: ATEYQzxjjF7DqgW4aTzeDmnkaanOcFP2o2vvT6/XYmGU6ebBpf9isWQSYvOVEWsuafP
-	R23X4fO/rTPpMDDT2D5Tu7nh8vZdfEksD48RdnovrZ8ufQ65F3Qa47I56oU+JbpftQRkKEiJzG5
-	ijiWVe67IPuJKXDKbBbj+8phhbn+0xlafqXnv0QdII9WUBpVSQs6fYQ2l8Phk9Jwtfb0arwd1Us
-	uSzxzdUyxgYBtIdVQgzpNRTF9Hf3q5utifA6LBDnFH4UIqso58GgV+50xCmCNvS4CYuG6aSmDWb
-	p2W5XxUb9L+pE8w5vRlv1T2NHBuD4RFTpVRCYkVYlkP6VH1eItTwPqYbZMoI389fvGxCdOGP9Kb
-	TJg==
-X-Received: by 2002:a05:6000:3109:b0:439:c560:bb78 with SMTP id
- ffacd0b85a97d-439fe1a069dmr30731666f8f.22.1773670639789; Mon, 16 Mar 2026
- 07:17:19 -0700 (PDT)
+        bh=Nxjnl0eTT566QLFInZZV/mJV5WJXHx1hLtDwVbwC8fI=;
+        b=EPEgI6RR2/b4SvUPsaxDfsofGq9qwu9EVZ8wxmrGSeFaUtPKrg4krrGWFhYdhvuV2j
+         nvJszEUdyLpJTj+9uucS3qDoJh+8QmpoSALnH/fE+7ldHNVKr/XexiOQg5gFjS3rvkMf
+         JbKXgh8XEkLwTIXApPnypwd4Zw4mpeYi16r8z5VZMwnmklVUZYy6bXFIQdpFJiwiK++3
+         zu4C5TZdqX7t45OiJajQoneygSLQSadQ6txaAi83ZHbV71fnxVmOfjcQHTe+Bwg0CTJ5
+         BUJIpwA/BozAjKnzvKNbQrG/7hJ+35vpDm8kTK48ozVBDjlkHaeBNN7awy/lWCvPDoPH
+         5FYw==
+X-Forwarded-Encrypted: i=1; AJvYcCVVpIp7b9f4DinpkAAC+V0hQbgNxHk5UqdD4bPQKSR4O45k1OppNEl4t6gcbfEW0RgZNlE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzuDtoygynh08smC49RuR0ZLibIMa/j15uJpOADyqpBHPcNlkIP
+	RIChri3Qt/Qxh50oqm/8ATooovCQacIkTo0ycV7cmqD3TXx4WSyNks2ZG6Wxrmn9klvTijxBccs
+	wyf+QiluIIQfhXazuAbpkU/iNfvW8Lk2/axSTzeuJAvSJXMx1uEmRp/5vZMJrM4DmlhGv0Wf0En
+	u/up4WNnXivfF05EYNf3QnmltDWU67r1sHlQc6wLzYBps=
+X-Gm-Gg: ATEYQzy5JTyAQkgnPMe21IsCw2Dn4hOUpv8xSznHCYmt8w6Uo8ZVxnQqXpmAlfuXELT
+	WvuYZ9okJi6QxVMcwMUZ1tMUeTqxC2xNWDGSovdcMRwXhuj6vC1Rs8zj+NUTa48JHi2+JcROArG
+	Hxg3B+jQ6P0UN23m3GQTZutkCBUglFdcrkwvzAffpJRm+0oGrnLJIL9hWDL9SrqiymDbChXmmwm
+	1gE
+X-Received: by 2002:a05:690c:6d81:b0:79a:5466:bb6a with SMTP id 00721157ae682-79a5466bf51mr22591997b3.48.1773671034081;
+        Mon, 16 Mar 2026 07:23:54 -0700 (PDT)
+X-Received: by 2002:a05:690c:6d81:b0:79a:5466:bb6a with SMTP id
+ 00721157ae682-79a5466bf51mr22591457b3.48.1773671033217; Mon, 16 Mar 2026
+ 07:23:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260311-tools_build_fix_zero_init-v4-0-9e35bdb99cb3@arm.com>
- <20260311-tools_build_fix_zero_init-v4-7-9e35bdb99cb3@arm.com> <20260316101800.GB8048@e132581.arm.com>
-In-Reply-To: <20260316101800.GB8048@e132581.arm.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 16 Mar 2026 07:17:08 -0700
-X-Gm-Features: AaiRm52U4nGYmhrhg5_rJVsmWgv2fI-zySEYrY3v3DyOI4rw9kmBbiG37OT5JGw
-Message-ID: <CAADnVQLN6bYHnusnC5QnDoGGUO-A=qnM6fP9bhEVXEHD6_y9EQ@mail.gmail.com>
-Subject: Re: [PATCH v4 07/30] libbpf: Initialize CFLAGS before including Makefile.include
-To: Leo Yan <leo.yan@arm.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Ian Rogers <irogers@google.com>, 
-	Namhyung Kim <namhyung@kernel.org>, James Clark <james.clark@linaro.org>, 
-	Kees Cook <kees@kernel.org>, Quentin Monnet <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nsc@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>, 
-	Bartosz Golaszewski <brgl@kernel.org>, Kent Gibson <warthog618@gmail.com>, 
-	"K. Y. Srinivasan" <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
-	Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>, 
-	Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, 
-	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
-	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>, 
-	Len Brown <lenb@kernel.org>, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, 
-	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, bpf <bpf@vger.kernel.org>, 
-	"linux-perf-use." <linux-perf-users@vger.kernel.org>
+References: <20260220-veristat_prepare-v2-0-15bff49022a7@meta.com>
+ <20260220-veristat_prepare-v2-1-15bff49022a7@meta.com> <CAOu3gNgW9+C7bOPkt0CGs8d_ad_TNyQ0AKv7_Jfg4=F5PET4ow@mail.gmail.com>
+ <CAEf4BzYbUhpwP3nq=M4Ph12LwRYO+mYSQB8SJjsw0AzZAFqyVQ@mail.gmail.com>
+In-Reply-To: <CAEf4BzYbUhpwP3nq=M4Ph12LwRYO+mYSQB8SJjsw0AzZAFqyVQ@mail.gmail.com>
+From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+Date: Mon, 16 Mar 2026 10:23:42 -0400
+X-Gm-Features: AaiRm50ztpwxnzuqNaJF769FIQ0FVQCBzTb9oslnj6fNP2R7mAbb2rWupRexw6c
+Message-ID: <CAOu3gNgv_nJ6tjZOZ-FnJNYntbnpKn+nRnO4G6j0fkBmeeu=GQ@mail.gmail.com>
+Subject: Re: [External] [PATCH bpf-next v2 1/2] libbpf: Introduce bpf_program__clone()
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, kernel-team@meta.com,
+        DL Linux Open Source Team <linux-open-source@crowdstrike.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-Disclaimer: USA
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzE2MDEwOCBTYWx0ZWRfX1vMrq1Y9B87X
+ tiY3D5zKH5IGM0ktQ3nibv+n4SPb1Z73SCXegPow/vZgZigVND9CkoX+uMkIVInDqbiqW2p2FAK
+ HnZwoI6SABkVfZJxeCRiQh7Df7PCoO/7BsYBvGcy1I0VVgTQYo1nxUXXCc2Azg+eHj89h76yXSs
+ iaLZiUdHhd2MqRbCqv9I5tTlnqNRsH+Fi5s1wbCQuHv8XMzpEuo0lsjnuOlsipXN1lg3AtZVJa1
+ q02ImoEM66IzWCAjDELCWeCJdAqEAEw3H5ukdfByms8HcVko8NEg4EySTzJDM+CWusJ+3gsqXTT
+ uNy8015S/J/0ynhCMpEOEPqk/zRcJn426/3vMzyBg0VY8zRrjn7DUH28NLhkGv8L2HgNsy5PNtz
+ Qoe3QtOxInX8Y38o3wCm+EUCY9B/OqTVXz+xPGwL8Ktz0ys5w6ViCIW0i20peevPl9GKAVR6f/k
+ /gcyCg2rD7ebNgSEV8g==
+X-Proofpoint-GUID: EG28lX1n1O9WfWdAqK0egnYuQU_IhzDi
+X-Proofpoint-ORIG-GUID: EG28lX1n1O9WfWdAqK0egnYuQU_IhzDi
+X-Authority-Analysis: v=2.4 cv=Zf8Q98VA c=1 sm=1 tr=0 ts=69b8127f cx=c_pps
+ a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
+ a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=KZhmPCYDdY0A:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=T2KQ53IYiC3MXPrxx8bB:22 a=t04HzT_fAfAF5W-3wVZy:22
+ a=VwQbUJbxAAAA:8 a=pl6vuDidAAAA:8 a=Pgacwa0oAAAA:8 a=pGLkceISAAAA:8
+ a=VabnemYjAAAA:8 a=p0ho9-ptypg51FJgv_EA:9 a=QEXdDO2ut3YA:10
+ a=xnLNWz09G3ZUmE6K9NTY:22 a=gKebqoRLp9LExxC7YDUY:22
+X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11731
+ signatures=596818
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 impostorscore=0 lowpriorityscore=0 spamscore=0 malwarescore=0
+ phishscore=0 suspectscore=0 priorityscore=1501 adultscore=0 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603160108
 
-On Mon, Mar 16, 2026 at 3:18=E2=80=AFAM Leo Yan <leo.yan@arm.com> wrote:
+On Wed, Mar 11, 2026 at 6:52=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
 >
-> Hi BPF maintainers,
->
-> On Wed, Mar 11, 2026 at 08:29:32AM +0000, Leo Yan wrote:
-> > tools/scripts/Makefile.include may expand EXTRA_CFLAGS in a future
-> > change.  This could alter the initialization of CFLAGS, as the default
-> > options "-g -O2" would never be set once EXTRA_CFLAGS is expanded.
+> On Fri, Mar 6, 2026 at 9:22=E2=80=AFAM Andrey Grodzovsky
+> <andrey.grodzovsky@crowdstrike.com> wrote:
 > >
-> > Prepare for this by moving the CFLAGS initialization before including
-> > tools/scripts/Makefile.include, so it is not affected by the extended
-> > EXTRA_CFLAGS.
+> > Mykyta and Andrii Hi!
 > >
-> > Append EXTRA_CFLAGS to CFLAGS only after including Makefile.include and
-> > place it last so that the extra flags propagate properly and can
-> > override the default options.
+> > We're evaluating the bpf_object__prepare() +
+> > bpf_program__clone() API for use in a production BPF
+> > application that manages hundreds of BPF programs with
+> > selective (dynamic) loading =E2=80=94 some programs are loaded at
+> > startup, others loaded/unloaded at runtime based on feature
+> > configuration.
 > >
-> > Signed-off-by: Leo Yan <leo.yan@arm.com>
+> > We have a few questions about the intended usage and
+> > potential extensions of this API:
+> >
+> > 1. Compatibility with bpf_object__load() and object state
+> >
+> > After bpf_object__prepare(), the object is in OBJ_PREPARED
+> > state. Several libbpf APIs (e.g., bpf_program__set_type())
+> > gate on OBJ_LOADED state.
+> >
+> > Is there a recommended way to transition the object to
+> > OBJ_LOADED after cloning all desired programs? For example,
+> > would a bpf_object__finalize() or similar API that runs
+> > post_load_cleanup() and sets OBJ_LOADED be in scope? This
+> > would allow users to benefit from prepare() + clone() for
+> > selective loading while keeping the object in a state that
+> > the rest of libbpf expects. Or, is the new API not intended
+> > to work with bpf_object in the first place ?
 >
-> Before sending a new version, I'd check if you have a chance to review
-> the libbpf patches.  The libbpf change is crucial for this series.
+> exactly, it's not. It's an escape hatch out of bpf_object into
+> low-level FD, it was never designed to produce something that should
+> be put back into bpf_object. This clone stuff if for generic low-level
+> tooling like veristat and/or maybe bpftool's generic program loading.
+> And another one is cloning the same fentry program to be attached into
+> multiple uniform targets (I do a similar hack in retsnoop, for
+> instance).
 >
-> Another reason for pinging because I received a bpf-ci report about test
-> failures for this series [1].  The failures looks to be unrelated, as
-> the tests fail starting from the first patch, which is irrelevant to BPF
-> code [2].  I tried reaching kernel-ci@meta.com last week but haven't
-> received a response yet.
+> In none of those cases cloned FDs are meant to be interoperable with
+> bpf_object/bpf_program abstractions.
 >
-> If bpf-ci testing is mandatory for libbpf patches, could you advise me
-> on the correct workflow (e.g., whether the patches should be based on a
-> specific branch)?
+> >
+> > 2. Storing the clone FD back on struct bpf_program
+> >
+> > bpf_program__clone() returns a caller-owned FD, but APIs
+> > like bpf_program__attach() read prog->fd internally.
+> > Without a way to set the FD back on the program struct, the
+> > caller must reimplement attach logic (section-type dispatch
+> > for kprobe, fentry, raw_tp, etc.).
+> >
+> > Would a bpf_program__set_fd() setter (similar to the
+> > existing btf__set_fd()) be acceptable to store the clone FD
+> > back, making bpf_program__attach() and related APIs usable
+> > with cloned programs?
+>
+> technically this could be done, probably, but it just feels too dirty,
+> tbh... there is so much program-specific information that libbpf
+> internally preserves (and gives access to most of it through
+> bpf_program's getter) that would need to be invalidated and/or
+> re-fetched with this set_fd() approach, that I don't really even want
+> to consider this too seriously... but see below
+>
+> >
+> > 3. Use case: selective program loading from a single BPF
+> >  object
+> >
+> > Our use case involves a single large BPF object (skeleton)
+> > with hundreds of programs where a subset is loaded at
+> > startup and others are loaded/unloaded dynamically based on
+> > runtime configuration. The current approach requires either:
+> > - Loading all programs upfront (wasteful), or
+> > - Maintaining out-of-tree patches to libbpf for selective
+> > loading
+> >
+> > Last year we made an attempt to upstream our solution to
+> > this use case to libbpf[1] but Andrii pointed out how our
+> > approach was problematic for upstream. He then proposed
+> > splitting bpf_object__load() into two steps:
+> > bpf_object__prepare() (creates maps, loads BTF, does
+> > relocations, produces final program instructions) and then
+> > bpf_object__load().  We are trying to follow up on his
+> > input and become more upstream compliant.
+> >
+> > The prepare() + clone() API seems similiar to this,
+> > but the questions above about object state and FD ownership
+> > are the main gaps for production adoption. Are there plans
+> > to address these in future revisions, or is this
+> > intentionally scoped to testing/tooling use cases only?
+>
+> I remember your use case. I don't think clone is really a great fit
+> *if* you still want to stay at bpf_object/bpf skeleton high-level of
+> API (i.e., if you want to use bpf_program__attach() APIs and BPF
+> links).
+>
+> While definitely a complication, I think we can add support for
+> loading BPF program after bpf_object__load() happened. You'd have to
+> keep your optional programs as non-autoloaded (or
+> bpf_program__set_autoload(false) explicitly), and I'm thinking we
+> might want to make this behavior opt-in explicitly through
+> bpf_object_open_opts(), as there are various points in bpf_object
+> lifetime where we make some decisions with the assumption that
+> programs will never be loaded, so we'll need to explicitly indicate
+> that *all* programs would need to be considered loadable, but maybe
+> much later.
+>
+> Another thing that won't (or rather might not) work is declarative
+> prog_array initialization and struct_ops. Those two steps happen in
+> bpf_object__load() after all programs are loaded. I don't think that
+> is the problem for you, but I just want to point out that program
+> loading is not always the last step.
+>
+> But other than that, despite added complications, it's probably better
+> to just allow to load programs lazily after bpf_object__load(), after
+> all.
 
-yes. It is mandatory and libbpf patches must go through bpf-next tree,
-so pls send them separately.
+Thanks for the detailed info! We can start working on this ourselves
+once we have some available time, we hope for your guidance during the proc=
+ess.
+
+Andrey
+
+
+>
+> >
+> > Thanks,
+> > Andrey
+> >
+> > [1] -https://urldefense.com/v3/__https://lore.kernel.org/all/2025012221=
+5206.59859-1-slava.imameev@crowdstrike.com/t/*m93ec917b3dfe3115be2a4b6439e2=
+c649c791686d__;Iw!!BmdzS3_lV9HdKG8!w-rWKr0W2k1zo6qkXsDgmORVg5c3X9udhVYztkyv=
+Yonp_0GlVjNom_gDbcKSSOd7U-A_SQbGGfppVaaB5OYu01bMugTLr-R_tnkExA$
+> >
+> > On Fri, Feb 20, 2026 at 2:18=E2=80=AFPM Mykyta Yatsenko
+> > <mykyta.yatsenko5@gmail.com> wrote:
+> > >
+> > > From: Mykyta Yatsenko <yatsenko@meta.com>
+> > >
+> > > Add bpf_program__clone() API that loads a single BPF program from a
+> > > prepared BPF object into the kernel, returning a file descriptor owne=
+d
+> > > by the caller.
+> > >
+> > > After bpf_object__prepare(), callers can use bpf_program__clone() to
+> > > load individual programs with custom bpf_prog_load_opts, instead of
+> > > loading all programs at once via bpf_object__load(). Non-zero fields =
+in
+> > > opts override the defaults derived from the program and object
+> > > internals; passing NULL opts populates everything automatically.
+> > >
+> > > Internally, bpf_program__clone() resolves BTF-based attach targets
+> > > (attach_btf_id, attach_btf_obj_fd) and the sleepable flag, fills
+> > > func/line info, fd_array, license, and kern_version from the
+> > > prepared object before calling bpf_prog_load().
+> > >
+> > > Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+> > > ---
+> > >  tools/lib/bpf/libbpf.c   | 64 ++++++++++++++++++++++++++++++++++++++=
+++++++++++
+> > >  tools/lib/bpf/libbpf.h   | 17 +++++++++++++
+> > >  tools/lib/bpf/https://urldefense.com/v3/__http://libbpf.map__;!!Bmdz=
+S3_lV9HdKG8!3OeUmMPxKbEw0Wl_ZYw9yzRwdxA2X7kuWyzFOxvKuIsQg1fhhJtfaqSd4n0N6Uo=
+kYqOuQporDXrIKYc3k7dvu4Rel1BiJSjA99yzJZk$  |  1 +
+> > >  3 files changed, 82 insertions(+)
+> > >
+> > > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > > index 0c8bf0b5cce4..4b084bda3f47 100644
+> > > --- a/tools/lib/bpf/libbpf.c
+> > > +++ b/tools/lib/bpf/libbpf.c
+> > > @@ -9793,6 +9793,70 @@ __u32 bpf_program__line_info_cnt(const struct =
+bpf_program *prog)
+> > >         return prog->line_info_cnt;
+> > >  }
+> > >
+> > > +int bpf_program__clone(struct bpf_program *prog, const struct bpf_pr=
+og_load_opts *opts)
+> > > +{
+> > > +       LIBBPF_OPTS(bpf_prog_load_opts, attr);
+> > > +       struct bpf_prog_load_opts *pattr =3D &attr;
+> > > +       struct bpf_object *obj;
+> > > +       int err, fd;
+> > > +
+> > > +       if (!prog)
+> > > +               return libbpf_err(-EINVAL);
+> > > +
+> > > +       if (!OPTS_VALID(opts, bpf_prog_load_opts))
+> > > +               return libbpf_err(-EINVAL);
+> > > +
+> > > +       obj =3D prog->obj;
+> > > +       if (obj->state < OBJ_PREPARED)
+> > > +               return libbpf_err(-EINVAL);
+> > > +
+> > > +       /* Copy caller opts, fall back to prog/object defaults */
+> > > +       OPTS_SET(pattr, expected_attach_type,
+> > > +                OPTS_GET(opts, expected_attach_type, 0) ?: prog->exp=
+ected_attach_type);
+> > > +       OPTS_SET(pattr, attach_btf_id, OPTS_GET(opts, attach_btf_id, =
+0) ?: prog->attach_btf_id);
+> > > +       OPTS_SET(pattr, attach_btf_obj_fd,
+> > > +                OPTS_GET(opts, attach_btf_obj_fd, 0) ?: prog->attach=
+_btf_obj_fd);
+> > > +       OPTS_SET(pattr, attach_prog_fd, OPTS_GET(opts, attach_prog_fd=
+, 0) ?: prog->attach_prog_fd);
+> > > +       OPTS_SET(pattr, prog_flags, OPTS_GET(opts, prog_flags, 0) ?: =
+prog->prog_flags);
+> > > +       OPTS_SET(pattr, prog_ifindex, OPTS_GET(opts, prog_ifindex, 0)=
+ ?: prog->prog_ifindex);
+> > > +       OPTS_SET(pattr, kern_version, OPTS_GET(opts, kern_version, 0)=
+ ?: obj->kern_version);
+> > > +       OPTS_SET(pattr, fd_array, OPTS_GET(opts, fd_array, NULL) ?: o=
+bj->fd_array);
+> > > +       OPTS_SET(pattr, token_fd, OPTS_GET(opts, token_fd, 0) ?: obj-=
+>token_fd);
+> > > +       if (attr.token_fd)
+> > > +               attr.prog_flags |=3D BPF_F_TOKEN_FD;
+> > > +
+> > > +       /* BTF func/line info */
+> > > +       if (obj->btf && btf__fd(obj->btf) >=3D 0) {
+> > > +               OPTS_SET(pattr, prog_btf_fd, OPTS_GET(opts, prog_btf_=
+fd, 0) ?: btf__fd(obj->btf));
+> > > +               OPTS_SET(pattr, func_info, OPTS_GET(opts, func_info, =
+NULL) ?: prog->func_info);
+> > > +               OPTS_SET(pattr, func_info_cnt,
+> > > +                        OPTS_GET(opts, func_info_cnt, 0) ?: prog->fu=
+nc_info_cnt);
+> > > +               OPTS_SET(pattr, func_info_rec_size,
+> > > +                        OPTS_GET(opts, func_info_rec_size, 0) ?: pro=
+g->func_info_rec_size);
+> > > +               OPTS_SET(pattr, line_info, OPTS_GET(opts, line_info, =
+NULL) ?: prog->line_info);
+> > > +               OPTS_SET(pattr, line_info_cnt,
+> > > +                        OPTS_GET(opts, line_info_cnt, 0) ?: prog->li=
+ne_info_cnt);
+> > > +               OPTS_SET(pattr, line_info_rec_size,
+> > > +                        OPTS_GET(opts, line_info_rec_size, 0) ?: pro=
+g->line_info_rec_size);
+> > > +       }
+> > > +
+> > > +       OPTS_SET(pattr, log_buf, OPTS_GET(opts, log_buf, NULL));
+> > > +       OPTS_SET(pattr, log_size, OPTS_GET(opts, log_size, 0));
+> > > +       OPTS_SET(pattr, log_level, OPTS_GET(opts, log_level, 0));
+> > > +
+> > > +       /* Resolve BTF attach targets, set sleepable/XDP flags, etc. =
+*/
+> > > +       if (prog->sec_def && prog->sec_def->prog_prepare_load_fn) {
+> > > +               err =3D prog->sec_def->prog_prepare_load_fn(prog, pat=
+tr, prog->sec_def->cookie);
+> > > +               if (err)
+> > > +                       return libbpf_err(err);
+> > > +       }
+> > > +
+> > > +       fd =3D bpf_prog_load(prog->type, prog->name, obj->license, pr=
+og->insns, prog->insns_cnt,
+> > > +                          pattr);
+> > > +
+> > > +       return libbpf_err(fd);
+> > > +}
+> > > +
+> > >  #define SEC_DEF(sec_pfx, ptype, atype, flags, ...) {                =
+       \
+> > >         .sec =3D (char *)sec_pfx,                                    =
+         \
+> > >         .prog_type =3D BPF_PROG_TYPE_##ptype,                        =
+         \
+> > > diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> > > index dfc37a615578..0be34852350f 100644
+> > > --- a/tools/lib/bpf/libbpf.h
+> > > +++ b/tools/lib/bpf/libbpf.h
+> > > @@ -2021,6 +2021,23 @@ LIBBPF_API int libbpf_register_prog_handler(co=
+nst char *sec,
+> > >   */
+> > >  LIBBPF_API int libbpf_unregister_prog_handler(int handler_id);
+> > >
+> > > +/**
+> > > + * @brief **bpf_program__clone()** loads a single BPF program from a=
+ prepared
+> > > + * BPF object into the kernel, returning its file descriptor.
+> > > + *
+> > > + * The BPF object must have been previously prepared with
+> > > + * **bpf_object__prepare()**. If @opts is provided, any non-zero fie=
+ld
+> > > + * overrides the defaults derived from the program/object internals.
+> > > + * If @opts is NULL, all fields are populated automatically.
+> > > + *
+> > > + * The returned FD is owned by the caller and must be closed with cl=
+ose().
+> > > + *
+> > > + * @param prog BPF program from a prepared object
+> > > + * @param opts Optional load options; non-zero fields override defau=
+lts
+> > > + * @return program FD (>=3D 0) on success; negative error code on fa=
+ilure
+> > > + */
+> > > +LIBBPF_API int bpf_program__clone(struct bpf_program *prog, const st=
+ruct bpf_prog_load_opts *opts);
+> > > +
+> > >  #ifdef __cplusplus
+> > >  } /* extern "C" */
+> > >  #endif
+> > > diff --git a/tools/lib/bpf/https://urldefense.com/v3/__http://libbpf.=
+map__;!!BmdzS3_lV9HdKG8!3OeUmMPxKbEw0Wl_ZYw9yzRwdxA2X7kuWyzFOxvKuIsQg1fhhJt=
+faqSd4n0N6UokYqOuQporDXrIKYc3k7dvu4Rel1BiJSjA99yzJZk$  b/tools/lib/bpf/http=
+s://urldefense.com/v3/__http://libbpf.map__;!!BmdzS3_lV9HdKG8!3OeUmMPxKbEw0=
+Wl_ZYw9yzRwdxA2X7kuWyzFOxvKuIsQg1fhhJtfaqSd4n0N6UokYqOuQporDXrIKYc3k7dvu4Re=
+l1BiJSjA99yzJZk$
+> > > index d18fbcea7578..e727a54e373a 100644
+> > > --- a/tools/lib/bpf/https://urldefense.com/v3/__http://libbpf.map__;!=
+!BmdzS3_lV9HdKG8!3OeUmMPxKbEw0Wl_ZYw9yzRwdxA2X7kuWyzFOxvKuIsQg1fhhJtfaqSd4n=
+0N6UokYqOuQporDXrIKYc3k7dvu4Rel1BiJSjA99yzJZk$
+> > > +++ b/tools/lib/bpf/https://urldefense.com/v3/__http://libbpf.map__;!=
+!BmdzS3_lV9HdKG8!3OeUmMPxKbEw0Wl_ZYw9yzRwdxA2X7kuWyzFOxvKuIsQg1fhhJtfaqSd4n=
+0N6UokYqOuQporDXrIKYc3k7dvu4Rel1BiJSjA99yzJZk$
+> > > @@ -452,6 +452,7 @@ LIBBPF_1.7.0 {
+> > >                 bpf_map__set_exclusive_program;
+> > >                 bpf_map__exclusive_program;
+> > >                 bpf_prog_assoc_struct_ops;
+> > > +               bpf_program__clone;
+> > >                 bpf_program__assoc_struct_ops;
+> > >                 btf__permute;
+> > >  } LIBBPF_1.6.0;
+> > >
+> > > --
+> > > 2.47.3
+> > >
+> > >
