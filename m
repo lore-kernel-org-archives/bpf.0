@@ -1,90 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75F39288AD;
-	Mon, 16 Mar 2026 01:49:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46D171A0BD6
+	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 03:02:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773625767; cv=none; b=gy2bMxJNmqwAq5Z/BJMwRkIkng0wQIZcNqWels37wkm660MkrMmZsrlwMceokH2Dl6fvAKlXHwPAvJb3PahImwgvWFtsvQpx2yVhekKguKEd+lRgTh82vyEwK/Wc9slKcJaSek+snpgpbW150AU/zK2Df1G57GTvWZzhtkEcsic=
+	t=1773630165; cv=none; b=Ccmi2MlksEzOdDvKBTR5ztcJC0C81HbwJ4ISMFwIYspHMErVBcs6Yrvaaxg0wRsKFAuEc3wgAcf+Xmd3zATxxKqgH30A5AcCbaU61bIikhdavElQSOGC+brR/pLGAxhk/o7RhGn6NK2H8L/y4kM74td793E8RuyPSUVYUOs0Y+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773625767; c=relaxed/simple;
-	bh=49DKbJ2akvpTxFFdAzXpo9gxcykYKuOsV8l6BaRz7Zo=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=FdE06FNLvfMW4y5bImNBlgZkVq8kLnJqVNyQwto6lGWsrshaAKobdS/ANkts/DEsMkOSK4wB0zk3XH6dyMFI6ICZxKxB5FlP646wNu4qnV60wXWAOhWB17nfDp4l2kwLpS2VfPGL7dT5nfgYH4O9lc7dTILxhMYi/rIg90/uCJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=LqhsYN6a; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773630165; c=relaxed/simple;
+	bh=bXfROKGIpD7uNrbt3P0W8H0r6CwusT6WnnP2FHJRDH0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=STvDxuHg48UF9VD3x0jynUunUOtPtMx379KGjPC5hNkDLseS9va7lXUU/s4DfFk2Pbu0RSW4Rkuo8dWtxcbm+7goj5EfNFf0qug6klXDYrtOdsa3+7XsY37folu+7r+MNx7WLFvLwZVqePNEKV3ku+pbl4lwkq1HfQVqynddlRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lME4OytX; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="LqhsYN6a"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DE51C4CEF7;
-	Mon, 16 Mar 2026 01:49:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1773625767;
-	bh=49DKbJ2akvpTxFFdAzXpo9gxcykYKuOsV8l6BaRz7Zo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=LqhsYN6aRdj0khaTOrMtu85Myq6Tp+iQVgIqKVCv4HCPxw5E2j1i1owENsDugu9qS
-	 z8yiMjaYrdWBkrfbJc4pUA2iCe7Onm/84lGvucfz2q96rRzOInYVqqpnHBgW4Htk2T
-	 ESZjOCMSOBbtNy3xGokfL9Dy1WG/Q17KM9MZMKuE=
-Date: Sun, 15 Mar 2026 18:49:25 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
- bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
- will@kernel.org, peterz@infradead.org, mark.rutland@arm.com,
- harisokn@amazon.com, cl@gentwo.org, ast@kernel.org, rafael@kernel.org,
- daniel.lezcano@linaro.org, memxor@gmail.com, zhenglifeng1@huawei.com,
- xueshuai@linux.alibaba.com, rdunlap@infradead.org,
- david.laight.linux@gmail.com, joao.m.martins@oracle.com,
- boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-Subject: Re: [PATCH v10 00/12] barrier: Add
- smp_cond_load_{relaxed,acquire}_timeout()
-Message-Id: <20260315184925.b6f93386e918ca79614843e3@linux-foundation.org>
-In-Reply-To: <20260316013651.3225328-1-ankur.a.arora@oracle.com>
-References: <20260316013651.3225328-1-ankur.a.arora@oracle.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lME4OytX"
+Message-ID: <b3e25c27-6e18-4d12-8799-344367fe723a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773630161;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=V165vY637xMUVaxU2R4TFGGzMmhg6Qeg6T4fpI0wKm8=;
+	b=lME4OytXbOXVIj746pt/i+bpDAHQYNAN1b7pkw37Djry677MpifcnWdHr7Yy6HDPp3fD8F
+	KzMdihUTe9gDVvht2yDVz3laW4DQESbIEFmi0p/AOxpKuek2sBbeUAsJE4fxP3TKzXnJbo
+	u/blV1WFCfug+Z9b21r/cAmMySTOHH8=
+Date: Sun, 15 Mar 2026 20:02:34 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Subject: Re: [LSF/MM/BPF TOPIC] BPF local storage for every packet
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: lsf-pc@lists.linux-foundation.org, bpf@vger.kernel.org,
+ kernel-team@cloudflare.com
+References: <87ecmffopy.fsf@cloudflare.com>
+ <aa2fada2-3f61-4f3d-9f55-36538f566333@linux.dev>
+ <87ikbcoc4o.fsf@cloudflare.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Zhu Yanjun <yanjun.zhu@linux.dev>
+In-Reply-To: <87ikbcoc4o.fsf@cloudflare.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Sun, 15 Mar 2026 18:36:39 -0700 Ankur Arora <ankur.a.arora@oracle.com> wrote:
 
-> Hi,
-> 
-> This series adds waited variants of the smp_cond_load() primitives:
-> smp_cond_load_relaxed_timeout(), and smp_cond_load_acquire_timeout().
+在 2026/3/3 13:07, Jakub Sitnicki 写道:
+> On Tue, Mar 03, 2026 at 07:06 AM -08, Zhu Yanjun wrote:
+>> 在 2026/2/20 6:56, Jakub Sitnicki 写道:
+>>> In the upcoming days we are going to post an RFC which proposes to
+>>> extend the concept of BPF local storage to socket buffers (sk_buff, skb)
+>>> as means to attach arbitrary metadata to packets from BPF programs [1]
+>>> (slides 41-55).
+>>> Design wise, BPF local storage is a great fit for a packet metadata
+>>> container, as it that avoids some of the shortcoming of the the XDP
+>>> metadata interface:
+>>> 1. Users interact with storage through BPF maps and can take advantage
+>>>      of existing built-in BPF map types, while still being able to
+>>>      implement a custom data format,
+>>> 2. Maps within local storage can have different properties controlled by
+>>>      map flags. For example, maps with BPF_F_CLONE set can survive packet
+>>>      cloning. Other flags could allow map contents to survive sk_buff
+>>>      scrubbing during encapsulation/decapsulation or pass across network
+>>>      namespace boundaries.
+>>> 3. Local storage supports multiple users out of the box - each user
+>>>      creates their own map, eliminating the need to coordinate data
+>>>      layout,
+>>> 4. Local storage has its own backing memory, so persisting it across
+>>>      network stack layers requires no changes to the network stack.
+>>> However, this flexibility comes at a cost. While XDP metadata requires
+>>> no allocations [2], an initial write to BPF local storage requires two:
+>>> one for bpf_local_storage_elem, and one for bpf_local_storage itself.
+>>> We would like to align this work with the needs of other BPF local
+>>> storage users (socks, cgroups, tasks, inodes), where allocation overhead
+>>> has been a concern as well [2].
+>>> Optimization ideas we would like to put up for discussion:
+>>> - slimming down bpf_local_storage so it can be embedded as an skb
+>>>     extension chunk,
+>> Interested in this topic. I hope to join this meeting.
+> Thanks for the interest. I've since posted the RFC for that [1] and the
+> topic is, at least partially, no longer relevant. We won't be adding new
+> users of BPF local storage [2].
 >
-> ...
+> I've proposed to the PC that we can change it to:
 >
+> 1) How to make regular BPF maps work as a stash-away storage for skb
+> metadata. I've highlighted my initial concerns [3] and will give it a
+> try to get hands-on experience with this approach.
+>
+> 2) Or if we decide to go with a secondary skb metadata embedded in the
+> skb_ext - which is another direction I wanted to explore, then we could
+> discuss how to optimize skb_ext (this overlaps with the original
+> proposal).
 
-How are we to determine that this change is successful, useful, etc? 
-Reduced CPU consumption?  Reduced energy usage?  Improved latencies?
+Thanks a lot. I’m very interested in this topic and was wondering 
+whether it is on the agenda for the LSF meeting.
+
+Zhu Yanjun
 
 >
-> Finally update poll_idle() and resilient queued spinlocks to use them.
+> Thanks,
+> -jkbs
+>
+> [1] https://lore.kernel.org/all/20260226-skb-local-storage-v1-0-4ca44f0dd9d1@cloudflare.com/
+> [2] https://lore.kernel.org/all/CAADnVQKVfyh3_OZshvYf7GJUF-ph2eMfmaQsxNgwBJd1AJgXTQ@mail.gmail.com/
+> [3] https://lore.kernel.org/all/87wlzydk12.fsf@cloudflare.com/
 
-Have you identified other suitable sites for conversion?
+-- 
+Best Regards,
+Yanjun.Zhu
 
-> 
->  Documentation/atomic_t.txt           | 14 +++--
->  arch/arm64/Kconfig                   |  3 +
->  arch/arm64/include/asm/barrier.h     | 23 +++++++
->  arch/arm64/include/asm/cmpxchg.h     | 62 +++++++++++++++----
->  arch/arm64/include/asm/delay-const.h | 27 +++++++++
->  arch/arm64/include/asm/rqspinlock.h  | 85 --------------------------
->  arch/arm64/lib/delay.c               | 15 ++---
->  drivers/cpuidle/poll_state.c         | 21 +------
->  drivers/soc/qcom/rpmh-rsc.c          |  8 +--
->  include/asm-generic/barrier.h        | 90 ++++++++++++++++++++++++++++
->  include/linux/atomic.h               | 10 ++++
->  include/linux/atomic/atomic-long.h   | 18 +++---
->  include/linux/sched/idle.h           | 29 +++++++++
->  kernel/bpf/rqspinlock.c              | 77 +++++++++++++++---------
->  scripts/atomic/gen-atomic-long.sh    | 16 +++--
->  15 files changed, 320 insertions(+), 178 deletions(-)
->  create mode 100644 arch/arm64/include/asm/delay-const.h
-
-Some sort of testing in lib/tests/ would be appropriate and useful.
