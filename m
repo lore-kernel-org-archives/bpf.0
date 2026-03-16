@@ -1,160 +1,153 @@
-Received: from flow-a3-smtp.messagingengine.com (flow-a3-smtp.messagingengine.com [103.168.172.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79B41364E85;
-	Mon, 16 Mar 2026 22:10:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC4D13B5B3
+	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 22:14:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773699061; cv=none; b=X2HD+TcaXbBKqJwG3FOGvtGJ46b+9I3gceqYyzbiFh6CNe9xr5K5tYkgxy7/FPoH9bW5ibjyU1GRsjl45lwRwaFkYUlkIK460MM/W7tnIzi7BdP62SHY3AFNuzkzLwFRLz8crKfu/KWSHUHvsA941n8ETVzAIJYgBbCgkdzV/Y8=
+	t=1773699243; cv=none; b=BlKRKrCKRWNi2eIgJeI1t5//r2karMdaCCJePWPur5jGRxRGud2wzYSBWmEYg7+TEboOCmN/4Nrdu0SX9ytRff/C4ujIHZ9PfJGoVnnIsMNityIU986cDqybEgzji/QTwPdpKHqJRJDsyfXDgJhS0c3H3jTX6X0hjjt+jFpAqp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773699061; c=relaxed/simple;
-	bh=bR3l1XBxxG0Br6WPViaTYx4jBj801ByLeboUNggNeu4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=A38yHLwEglJnAk0B2QCy7stC9vMmro0enVPstLHcOoOWf+ISPC3fMoHAiOFXJpgQ+JEGYQrlTu0OIZqL9gIfg9EuELK7OlOHQThyqCuvdDItVMWZTKlH5lCT2EoHtG4zqNZ3haS7IZ2EcyWbx12HIJK/xKpWlKg0tgYFk4eMcz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=eyO5nsRG; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=guCypQjf; arc=none smtp.client-ip=103.168.172.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
+	s=arc-20240116; t=1773699243; c=relaxed/simple;
+	bh=yf7LnFAH/20ojMzGfvo3YFdGZZ+8Gj569dfrgxe2Ve4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HeGnonlG+jydVkYiWZSAm3DM3p4gQ7AjI3+kSeAlCPiPXhEpGaIVF5SjgrvwQTWHoMbxq6KWUkNadmKaXD2gMWro0ou0vJBbqWLd60sUYxR5RdApAJ1wIj/8Reu/tCnqmcsKRmmtWOXAyFrF/Dq5zntZqjJMprH5inok8uTCfDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=UqCxBnGc; arc=none smtp.client-ip=209.85.167.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="eyO5nsRG";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="guCypQjf"
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailflow.phl.internal (Postfix) with ESMTP id 96E81138028E;
-	Mon, 16 Mar 2026 18:10:56 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-01.internal (MEProxy); Mon, 16 Mar 2026 18:10:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1773699056;
-	 x=1773706256; bh=pZj8f0JboyjKt94J8KB7OLIiCOoml43GOZ4w8rDpLPA=; b=
-	eyO5nsRGgscBaSPTlSrjx8D8qsmxFZTD+YBT90C8JLtkSU+JG9otBsGP68/aDjfq
-	Ip8/CY7pDqj8uLfl6tk9PaoCLmHFx9BmC+OLDsgQIKz5wruWwvglBIFTzX8Bgo1G
-	D7tyDhfcq/yYvbxAZYbPlVlov+W1BUQwVVZx34myYfSzzczy+o0TvO2AJR+dEy1d
-	h9Fy4zA0IHy3AyAu2lJw7cTPeRVsoH7Q9DZJUhPGVmEq8IZ5byXvr46eUf3RwYLV
-	Pd21rN+O2sxo21UD0KoApMpHYwnhY5vI1CKlHqs6nb1Q0ON5mjBcz18/WvPyI4M2
-	g7ed/wORmv3aHNEvlM9NEQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1773699056; x=
-	1773706256; bh=pZj8f0JboyjKt94J8KB7OLIiCOoml43GOZ4w8rDpLPA=; b=g
-	uCypQjfxr+Zi7JxdTC/p3wGQ4VV0q/Wv3rf4QuOSSvRwPZ4hwWoKXSQwRlJppx/A
-	eTD/kX8ytMBkqeeAHXi8QojGoDJPwhemKEl1A5BQyy+VTfQ0kjCklEhRU0D9TNU6
-	QzoouUhJdY7Fi24kVLMS4vkfF5Xif+sxcGuZ+ZH9bmNOAZhg/6jHFnuxjrIUYo4Y
-	sJAjmQ/c58h+MsTVokuL8c2t4xBbVGwnTgXIvKplEwnaY81NNzKXbPGa+zPU58N/
-	vwQ/zZfUYT5zYdyXfBWrfC5sZSkqzhpuD1WACxXIM/TD7Jh2N1ZXy8qS+O1DtSBY
-	h24uS6YuZ9c79L+rKNYRA==
-X-ME-Sender: <xms:73-4aYdtUUIQC679P0YPl8k6UZ10Tz8-qTD319yDZEtXusdBhZuXRA>
-    <xme:73-4aTUav9FvduIIOmc0jldmINr5W_MhUsWQFGzP1fBm1dpf8ggOxSMvCMHniLmCu
-    LbRPk360ujIo39hLA6fsP95YlnCLki5WcrUsiuRyEwh6NcxWlxF>
-X-ME-Received: <xmr:73-4aSY56rJyFtQwMFw-H9dfM29zbbMWxWkWrpi3kYaZ1kbqDyXdf5bHU5U>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvleelheegucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfgjfhfogggtgfesthejre
-    dtredtvdenucfhrhhomheptehlvgigucghihhllhhirghmshhonhcuoegrlhgvgiesshhh
-    rgiisghothdrohhrgheqnecuggftrfgrthhtvghrnhepvdekfeejkedvudfhudfhteekud
-    fgudeiteetvdeukedvheetvdekgfdugeevueeunecuvehluhhsthgvrhfuihiivgeptden
-    ucfrrghrrghmpehmrghilhhfrhhomheprghlvgigsehshhgriigsohhtrdhorhhgpdhnsg
-    gprhgtphhtthhopeehhedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepphhhrghh
-    nhdqohhsshesrghvmhdruggvpdhrtghpthhtoheprghmugdqghhfgieslhhishhtshdrfh
-    hrvggvuggvshhkthhophdrohhrghdprhgtphhtthhopegrphhprghrmhhorheslhhishht
-    shdruhgsuhhnthhurdgtohhmpdhrtghpthhtohepsghpfhesvhhgvghrrdhkvghrnhgvlh
-    drohhrghdprhgtphhtthhopegtvghphhdquggvvhgvlhesvhhgvghrrdhkvghrnhgvlhdr
-    ohhrghdprhgtphhtthhopegtohgttghisehinhhrihgrrdhfrhdprhgtphhtthhopegumh
-    dquggvvhgvlheslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopegurhhiqdgu
-    vghvvghlsehlihhsthhsrdhfrhgvvgguvghskhhtohhprdhorhhgpdhrtghpthhtohepgh
-    hfshdvsehlihhsthhsrdhlihhnuhigrdguvghv
-X-ME-Proxy: <xmx:73-4aQltNdDVIdEqvCmz7Mlt0qW50NA4CHgJQUMNlacMN4MGiVKHfA>
-    <xmx:73-4acHdFw15OLpR73_B1AdIXJMG-pYssiD_C0T2dj2N-8ux7fVHFg>
-    <xmx:73-4aU6P6J2BtdvPwSPzfrUNjz9-qYacHOOWBucSAMlha23fXDTcIg>
-    <xmx:73-4aaO5YEqAXlnOLRO88GZx1RbxPW8QtXAeqZQNaqmxlgOL7PgFkQ>
-    <xmx:8H-4abIvs_QYur641c9BpnDuFQ6ssCC-7-o-rPLEHWyRxStBDxJEr6SL>
-Feedback-ID: i03f14258:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 16 Mar 2026 18:10:52 -0400 (EDT)
-Date: Mon, 16 Mar 2026 16:10:50 -0600
-From: Alex Williamson <alex@shazbot.org>
-To: Philipp Hahn <phahn-oss@avm.de>
-Cc: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com,
- bpf@vger.kernel.org, ceph-devel@vger.kernel.org, cocci@inria.fr,
- dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
- gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org,
- intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev,
- kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
- linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-erofs@lists.ozlabs.org,
- linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-hyperv@vger.kernel.org,
- linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-mm@kvack.org,
- linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org,
- linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
- linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
- linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
- ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
- sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
- tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev,
- alex@shazbot.org
-Subject: Re: [PATCH 46/61] vfio: Prefer IS_ERR_OR_NULL over manual NULL
- check
-Message-ID: <20260316161050.01c82973@shazbot.org>
-In-Reply-To: <20260310-b4-is_err_or_null-v1-46-bd63b656022d@avm.de>
-References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
-	<20260310-b4-is_err_or_null-v1-46-bd63b656022d@avm.de>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="UqCxBnGc"
+Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-467166cb638so1830772b6e.2
+        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 15:14:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1773699241; x=1774304041; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GPwvoJ+HhUgl8bXKAn5EwOyGikkP/OfmER1NlRgJVCc=;
+        b=UqCxBnGcVj/kgX5D4NZC3jgBUDKglK/dBZ2D8JCiU5N6z+BCi5rLT+4iQTlrXMQDHU
+         47zReOSuhbX0d0a9iY8QnIBnlZk6nyIMpXLVO1jCl1D0DNv6WPRqMKIur6TnC1BEx+uM
+         eFd/wy2r9VcoXFv3XWP3UWv26DtViyngxyTy17qvuTa34YvIY56SVfzzz1oMrU2cbRkM
+         c+TBE9jh9PzZVDsowco/z1hrbSrcncUQzKAseTAdWAt4+vyKO+TTYKB2SaFPDgu0yh0Q
+         LGyatNtpuW5z2uyKTFEpaYdkS1GN9fPCIT9JUtv3+6prbKfz8YR21KpIL4DKt6xJLe06
+         RRqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773699241; x=1774304041;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GPwvoJ+HhUgl8bXKAn5EwOyGikkP/OfmER1NlRgJVCc=;
+        b=gWTtiknyGWG/s+cWBbSB11yaMjcfk4PuDs1M8su5fseOYAD0uE0ziKy8ZZ5SFQhp02
+         ry0CFF+mEbycvXZqankxXCdhmgmtkreRRfnwXZ1fL86Nr4KokHmr2qXlM0Fv8cYEhn5k
+         WP+zBHVvPM5QOw8lTzJHolIiAEyt0dGYr5K+H6iqO1SYTJFImDGfC/DlomL6Qlb0Buer
+         Uy7667937qcCON+oVXhqvYnHvhFMEBxAbZ+0RvK2n6S8ss2BMSM9EvAvIgOWWNtDaLnv
+         O42c6xVviF7wFHTGZGd22GdXhnKk09lteQ3s3rtsohqNsJFRwxE1g76nazEc1+2u3o3H
+         Yt0A==
+X-Forwarded-Encrypted: i=1; AJvYcCXgAzb73jaQd4UotUTDh6e3xrnnsPuU82DtntzU0i2Piwf8M48NANfvFZrrnIYqR/gn/oc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5VY35bMrydylvSrS6u/MUidwbiSvufciwIDuRDlonUplEussq
+	lG3UhmSNFc3NvKFT4WQ6mFlIG5OfqqOPLZytRMzfIRpASENn6qRh98RJDCyeai2pGVVnXW7OAap
+	xwsAVw8Y=
+X-Gm-Gg: ATEYQzyCWd8KdTTpMp98o1cKYsLJEOQ4Cia64UMDCEO2pN9BuT4bBLrxcbsuvajnCPT
+	1LOSgJOd+BQEWJT3u9ZqG+B/u0bCzIJ1vq81Xu87+w9sucU9pqfPqjSRFMgT+gQQDCvDU+P2J32
+	SOhw+lHZCWUeWB07VpQnn8NqS6nLIi0ArCMpyiF07kakdsQSLW4UY8mcFvPpDM260goMTjzFV3Z
+	rINKR0dVTBLWipnrmir5/heVyen7q38bN6Vcv2Ap5+qJkwrg6LYJOYz5sPIVHOaDEtq2OFA4f3Y
+	fUECbEo7ZHAkSLr3KB370hr/1FRA24EXzzZCx4qHvqHwIsNo7UrGfmkPYAL9DsKPxin6AxzNkb9
+	5+62Aw65Sxi8t1nWVFcydPjrKR3Li7oTaKlqi1JKVZTOtjbLz996OEFEtYU7sf/NMNFJtpOj1NM
+	IFoRJosqtlQM+JP2Tgx5t+baRzjIHqC+9sBQaizUV3b8f3nxOJJI6fA76wp2dbdp8U5+UFp4Wt7
+	A6bsHSsFg==
+X-Received: by 2002:a05:6808:6ecc:b0:467:2a6e:adad with SMTP id 5614622812f47-467570374dbmr7908027b6e.11.1773699240783;
+        Mon, 16 Mar 2026 15:14:00 -0700 (PDT)
+Received: from [192.168.1.150] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-467342ef6fesm10347379b6e.14.2026.03.16.15.13.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Mar 2026 15:14:00 -0700 (PDT)
+Message-ID: <c75e0728-4619-4435-b4a4-9c80331a5408@kernel.dk>
+Date: Mon, 16 Mar 2026 16:13:59 -0600
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 0/4] BPF controlled io_uring
+To: Caleb Sander Mateos <csander@purestorage.com>,
+ Pavel Begunkov <asml.silence@gmail.com>
+Cc: io-uring@vger.kernel.org, bpf@vger.kernel.org,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>
+References: <cover.1772109579.git.asml.silence@gmail.com>
+ <d8c8748a-4b13-4097-bdeb-495e6410a0df@gmail.com>
+ <CADUfDZoBTwnCo-f_st9-jdgNhHLWUCjZQFpGdowGUA5BoJ836w@mail.gmail.com>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CADUfDZoBTwnCo-f_st9-jdgNhHLWUCjZQFpGdowGUA5BoJ836w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On Tue, 10 Mar 2026 12:49:12 +0100
-Philipp Hahn <phahn-oss@avm.de> wrote:
+On 3/9/26 9:02 AM, Caleb Sander Mateos wrote:
+> On Mon, Mar 9, 2026 at 6:24?AM Pavel Begunkov <asml.silence@gmail.com> wrote:
+>>
+>> On 2/26/26 12:48, Pavel Begunkov wrote:
+>>> Introduces a way to override the standard io_uring_enter syscall
+>>> execution with an extendible event loop, which can be controlled
+>>> by BPF via new io_uring struct_ops or from within the kernel.
+>>>
+>>> There are multiple use cases I want to cover with this:
+>>>
+>>> - Syscall avoidance. Instead of returning to the userspace for
+>>>    CQE processing, a part of the logic can be moved into BPF to
+>>>    avoid excessive number of syscalls.
+>>>
+>>> - Access to in-kernel io_uring resources. For example, there are
+>>>    registered buffers that can't be directly accessed by the userspace,
+>>>    however we can give BPF the ability to peek at them. It can be used
+>>>    to take a look at in-buffer app level headers to decide what to do
+>>>    with data next and issuing IO using it.
+>>>
+>>> - Smarter request ordering and linking. Request links are pretty
+>>>    limited and inflexible as they can't pass information from one
+>>>    request to another. With BPF we can peek at CQEs and memory and
+>>>    compile a subsequent request.
+>>>
+>>> - Feature semi-deprecation. It can be used to simplify handling
+>>>    of deprecated features by moving it into the callback out core
+>>>    io_uring. For example, it should be trivial to simulate
+>>>    IOSQE_IO_DRAIN. Another target could be request linking logic.
+>>>
+>>> - It can serve as a base for custom algorithms and fine tuning.
+>>>    Often, it'd be impractical to introduce a generic feature because
+>>>    it's either niche or requires a lot of configuration. For example,
+>>>    there is support min-wait, however BPF can help to further fine tune
+>>>    it by doing it in multiple steps with different number of CQEs /
+>>>    timeouts. Another feature people were asking about is allowing
+>>>    to over queue SQEs but make the kernel to maintain a given QD.
+>>>
+>>> - Smarter polling. Napi polling is performed only once per syscall
+>>>    and then it switches to waiting. We can do smarter and intermix
+>>>    polling with waiting using the hook.
+>>
+>> Any comments for the patch set?
+> 
+> I'm not opposed to this feature, but I agree with Ming that it seems
+> largely orthogonal to his patchset allowing BPF programs to access
+> io_uring registered buffers[1]. This patchset doesn't provide any
+> kfuncs for interacting with registered buffers, so we would still need
+> something like the kfuncs implemented by Ming's patchset to allow BPF
+> programs to access registered buffers directly. Although either the
+> ->loop_step() or ->prep()/->issue() interface could allow userspace to
+> run a BPF program in the context of the io_uring, I wouldn't be keen
+> on reimplementing the entire io_uring_enter() loop logic just to
+> intercept a few requests to run BPF programs. The ->prep()/->issue()
+> abstraction seems more straightforward to me, though I understand that
+> it's not as general as the ability to modify the behavior of the
+> entire io_uring_enter() syscall.
 
-> Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
-> check.
-> 
-> Change generated with coccinelle.
-> 
-> To: Alex Williamson <alex@shazbot.org>
-> Cc: kvm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
-> ---
->  drivers/vfio/vfio_main.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
-> index 742477546b15d4dbaf9ebcfb2e67627db71521e0..d71922dfde5885967398deddec3e9e04b05adfec 100644
-> --- a/drivers/vfio/vfio_main.c
-> +++ b/drivers/vfio/vfio_main.c
-> @@ -923,7 +923,7 @@ vfio_ioctl_device_feature_mig_device_state(struct vfio_device *device,
->  
->  	/* Handle the VFIO_DEVICE_FEATURE_SET */
->  	filp = device->mig_ops->migration_set_state(device, mig.device_state);
-> -	if (IS_ERR(filp) || !filp)
-> +	if (IS_ERR_OR_NULL(filp))
->  		goto out_copy;
->  
->  	return vfio_ioct_mig_return_fd(filp, arg, &mig);
-> 
+Caleb/Ming, any objections to merging this patchset? I think we all
+agree it doesn't cover everything that we would want, so far we have two
+different patchsets out there, but they also aren't mutually exclusive.
+In the hopes of getting the ball rolling on the buffer side too, I'd
+like to move forward and merge this and then we can rebase Ming's stuff
+on top where it makes sense?
 
-As others have expressed in general, this doesn't seem to be cleaner
-and tends to mask that we consider IS_ERR() and NULL as separate cases
-in the goto.  This code looks like it could use some refactoring, and
-likely that refactoring should handle the IS_ERR() and NULL cases
-separately, but conflating them here is not an improvement.  Thanks,
-
-Alex
+-- 
+Jens Axboe
