@@ -1,157 +1,225 @@
-Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B42737186C
-	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 23:39:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.67
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773704380; cv=pass; b=FIilTUZYe2FZBGsmqe6xEt63tShi9WPOBSKLBUTeBXZC3mCK2NBhUgL3F6mSTGOPIYDtj1t0PpVsXkBZThqAIknv24srGkMmT1j6/DvnRNjQSLTxnskBP9t1bEDQk+rbSQfQZoEWVlQgb06/8HXPE3nV6127ZuUCvjd4HONpEVo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773704380; c=relaxed/simple;
-	bh=LUpdFr8nOZ8lx3r0F4s/5dNqsY4EtiZ0vGoDtM9n5pE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gV/t4RdM2ouUS+z4ZUIrH8h5IP/5guXy+sgqUohJ7j2zpaCSCkWUIY+iusPmqNzvwpxI8MFB84AELsADi/FOfK7ssu4tj0UHId/hx1ppa2GPKCt161t+pq5Ew0Oyg0VBLUqHJHJTHVJ0JudyoikqiFWgjYjnk72K1HArmSlFqR8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SCo198qa; arc=pass smtp.client-ip=209.85.221.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 389031DFD96;
+	Mon, 16 Mar 2026 23:41:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773704498; cv=none; b=nWUkDXUGrZUUpi/PtvatTNi52X/5pjDKBR+/HgNR+1DAwQoQTnuVue+GAt4Otnz0Av2hXFhPANkFbTHuZbZehKKEMaWhFHCExZsRqGhBIVu1xmZW7XGbWhBxW55dczmcss76okw13Ge2DRJp885iMIOI9kQWpzaMzAx13IZuxxU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773704498; c=relaxed/simple;
+	bh=9uiCqGnbSqPhfoTIaiNM8CkxTkZTnOzNiroU99fnTHg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OjP0wFlOxfbu2RR4NgA2Vrd0AFILu/JFvwQmwBHT0ocTtcX0UWzNL+T8HQdOyo2yXyLoAze7niFQyfk1vqcSXSOW9WNfZstHmEp/Gd1X4t7ff82nAeTyVLv3Sxo4xFdUSKoJ2/lN6XelrnwG6X+4jiGW2Yqgmu4liQ+KPaqkH1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vMU/P+0X; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SCo198qa"
-Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-43b4121c40aso1526231f8f.0
-        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 16:39:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773704377; cv=none;
-        d=google.com; s=arc-20240605;
-        b=FtjFxawgNeQwkV6hdCWloylgBFvBC3NJzBWzX0s4axLayXMyHcOB3nc+OvPu8X8ZaP
-         QMjnLwBv4lXXWWAJn0iiClbtfKXpGs6jQFpxSsqM66CM6Dgtzdah7dEaJcJCPb/H5YjT
-         73e59U1suLgghOCH6/UaPhW23HEyJa5DkuHzdMjxHTFlQ864TNOEk6dDwyazHHUPv3Vh
-         QXDR/BYpWsRWCFFcEwevz4UBMmnj8c7ScDiiroX2OMP/WPidLBbV0c5eLA5eDngZGdRn
-         wl/hK0yv8ia8F85AD+AlLiGp8kEa6bHOV/Pg9m4cw+052T4KcgZH+2j0gBuOkg2Q8UWB
-         L0TA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=qP4EcfO8blTbLu9B8ieQwix5cbr1SvW0uRiRyDgzQTQ=;
-        fh=t/xt8nOnSSsDVKlHcO7LjCKKUeyArGNUXJg/utSjGHs=;
-        b=YnlJomVOxrnzOb3mg7LhQdBdyhQyntQwtDv7rv5rziCljy9kztpMaFvTbh+8I3y6TM
-         0u6nysJGeH53zcXupzsC/D5jvyAom/B4RuHTW7vWhuHDfjh4KXZpeTDr83HAxr0liYCZ
-         ueIkHzJRo4DzmoYyMtvXiYNRqBkVQxGYQSt3OtauPgp8Ryvd1Z/8y+PtCpNYMxi8UWE9
-         E5yW12b/GG/I2gAn7JjKDaYeu/FTpv60E0q6LLnUQPbEbnWagKNIZMJU5ISALZ/d4880
-         CFqzq3J7TAPCGJTjW9bTIYpyHsc8Y4m+n4hSQY+YHtuanIZ3egNCUhO1XIHbD0gQ5PJo
-         fxnw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773704377; x=1774309177; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qP4EcfO8blTbLu9B8ieQwix5cbr1SvW0uRiRyDgzQTQ=;
-        b=SCo198qa3ivRrg9DFLNBzW8DIMnj5dEHzweq1pyhzDTd9Fgr8j/hW2e2wbsAU/tv9D
-         KbfHwY4ztJl6RBU/XH56g8umbWVE4AyMXr2ZBdSN2cLPZ+cDZkIzbUr5JNFQm2wSSU+C
-         KsemCq9ymHUQ3TIUdSdzA9c7u5uYZuMuXGngwRZTWblYCpDsrQ2fUtHopfLHNtw+TCjq
-         X69GBP5qgzpUDai87xEHnQss3UFBerVhZzEJpiMBGv+2+NkZr9zEmqChabEhi/Bn0CWd
-         mVZgE00Y7eqzAnPtqGE929lvapCTxu/ySvJy96ZpYARsC0VSA3uyPmc0gPDu7LOiypzf
-         V3Lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773704377; x=1774309177;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qP4EcfO8blTbLu9B8ieQwix5cbr1SvW0uRiRyDgzQTQ=;
-        b=N/SF0wbVYz60E0pDJiMzkiUdmfLOhZ/v8LVTJVo0AuQTLNbOHvmXMn+IIfWtyspXrR
-         4Qb2i3011Lck4YRkL5EAsiN1Ep1NOaqVp5FZLvGhXCDeHCowPOpCC6Yce1SkZyPUGkRR
-         ZA1OL55cRuPHOk5aseg7R8CCrH+zRUCp0Ra8sk5Y69ydMwR+gSdzjQpo2pRNRnvcUfFC
-         GiDf6qrYTkUtgYgRYP/PKx3Uf1J4o8xnbSG9mvuB0qZDGM+2SrATxArZfF7JsuMGlsB7
-         DhV+KQF9+7mA/zA/K7USKayv5GdTLsuKBPJJeEMMV17Y/Aqm1ezj1hBbjWxVn9HTbZbY
-         5fww==
-X-Forwarded-Encrypted: i=1; AJvYcCU7qGQ+GRZQay65QeydZYCiWIZPtBJxXB2jE9Bl6Rz4IVrGDsTJ+aBbbDy29hOo0dJRuIA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxzXT8Bg4goVK0ml0NARxbSCG0M+RRNf6s28FwpboBDq9qux6wj
-	VdqhCzmS4hbY/Mltgvq2T0Nur/By1+CZ9ro3L7fHtuDngWBnJQaQaSgVgTFgeIen+tXS54LNswM
-	x+hhIt/yRCz3POMr4H3OP35ZEjZ7QESU=
-X-Gm-Gg: ATEYQzwOPIOmFmfVStCBDZLsxXGd8xYMVVsq+HwZOleViOhsGIr1tzu9Yb8YQbDrmMN
-	+ExKmwbAmcNTfmRA245HlMu/6znSZh6FPVadTU3J6Yls4wanR7/t8O6RuxoBH2DlCMLpBuKGWOd
-	l90rjwK6vD6LW2gZV9GfQ8ygiZ8aq0eBNjKPx+7sjBSzNB3gxNZykzTsNtZXqMVZ8Op3yJQ8f6C
-	29qHnQEwGAIILyVW53KHbBRHD+HRIQVDCO1M+om2ZDcp2yX1kp1zr6ThP583gUcCcYGRPU+P5Hq
-	UGUMXJ3FVJxHEmlWs8OtZMwCrfA44cvVBkLb74AD0R+mabx+hjyh8M1T1gY=
-X-Received: by 2002:a05:6000:2f85:b0:43b:4352:1bd8 with SMTP id
- ffacd0b85a97d-43b43521dcfmr11092768f8f.53.1773704377224; Mon, 16 Mar 2026
- 16:39:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vMU/P+0X"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5DB6C19421;
+	Mon, 16 Mar 2026 23:41:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773704497;
+	bh=9uiCqGnbSqPhfoTIaiNM8CkxTkZTnOzNiroU99fnTHg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=vMU/P+0XDhwKJNIs9JwFJjfbd02zAfOiY/euOT51RHRJQFX9kY8Sodn9/mvrgCHLY
+	 apdQXaqfpZ8/xrlQ9r2aR4kqpLZv5akKx5AE8MNVB76avA4Oz3ENj8eSlO0Jdkv4I3
+	 dRcTl5mHe7zw6y5wIAwgBJl7xswgVzeMwFD1Fw+rnQbriERonbJWZZYgJq9Wo9zfwc
+	 I0n8vWJSvjURubx99DSoE/hOVyx6d30zv3bR4HPjSgy2RapgoD2cRHZoj9mHJAYQDi
+	 MCyZDJes+05OAoGxEcrbzdNi1aLUSp9TS9CwDuLWDYo7ex+KhtbEN1DGneKSvvW0tA
+	 0bt6EeWkDtlaQ==
+Date: Mon, 16 Mar 2026 16:41:37 -0700
+From: "Darrick J. Wong" <djwong@kernel.org>
+To: Joanne Koong <joannelkoong@gmail.com>
+Cc: linux-fsdevel <linux-fsdevel@vger.kernel.org>, bpf@vger.kernel.org,
+	linux-ext4 <linux-ext4@vger.kernel.org>,
+	Miklos Szeredi <miklos@szeredi.hu>,
+	Bernd Schubert <bernd@bsbernd.com>, Theodore Ts'o <tytso@mit.edu>,
+	Neal Gompa <neal@gompa.dev>, Amir Goldstein <amir73il@gmail.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Jeff Layton <jlayton@kernel.org>, John@groves.net,
+	demiobenour@gmail.com
+Subject: Re: [PATCHBLIZZARD v7] fuse/libfuse/e2fsprogs: containerize ext4 for
+ safer operation
+Message-ID: <20260316234137.GJ1742010@frogsfrogsfrogs>
+References: <20260223224617.GA2390314@frogsfrogsfrogs>
+ <CAJnrk1Yd1J60-Ek=O7jzZQg454pbr3O=b71yZHzYbrWfqJr__w@mail.gmail.com>
+ <20260316180408.GN6069@frogsfrogsfrogs>
+ <CAJnrk1bmJYMt27xedN2Xza0KPXfYEbh-9g=3fNWru-HRM9WFEw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260316222758.1558463-1-arighi@nvidia.com>
-In-Reply-To: <20260316222758.1558463-1-arighi@nvidia.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Tue, 17 Mar 2026 00:39:00 +0100
-X-Gm-Features: AaiRm50QTIyuUJ_7soIEToEoeT5sSCTG2VivsOgvUWqhQsYvjGCB-NLOj-MT8JM
-Message-ID: <CAP01T75eKpvw+95NqNWg9P-1+kzVzojpN0NLat+28SF1B9wQQQ@mail.gmail.com>
-Subject: Re: [PATCH] bpf: Always defer local storage free
-To: Andrea Righi <arighi@nvidia.com>, "Paul E . McKenney" <paulmck@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Amery Hung <ameryhung@gmail.com>, Tejun Heo <tj@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org, sched-ext@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJnrk1bmJYMt27xedN2Xza0KPXfYEbh-9g=3fNWru-HRM9WFEw@mail.gmail.com>
 
-On Mon, 16 Mar 2026 at 23:28, Andrea Righi <arighi@nvidia.com> wrote:
->
-> bpf_task_storage_delete() can be invoked from contexts that hold a raw
-> spinlock, such as sched_ext's ops.exit_task() callback, that is running
-> with the rq lock held.
->
-> The delete path eventually calls bpf_selem_unlink(), which frees the
-> element via bpf_selem_free_list() -> bpf_selem_free(). For task storage
-> with use_kmalloc_nolock, call_rcu_tasks_trace() is used, which is not
-> safe from raw spinlock context, triggering the following:
->
+On Mon, Mar 16, 2026 at 04:08:55PM -0700, Joanne Koong wrote:
+> On Mon, Mar 16, 2026 at 11:04 AM Darrick J. Wong <djwong@kernel.org> wrote:
+> >
+> > On Mon, Mar 16, 2026 at 10:56:21AM -0700, Joanne Koong wrote:
+> > > On Mon, Feb 23, 2026 at 2:46 PM Darrick J. Wong <djwong@kernel.org> wrote:
+> > > >
+> > > > There are some warts remaining:
+> > > >
+> > > > a. I would like to continue the discussion about how the design review
+> > > >    of this code should be structured, and how might I go about creating
+> > > >    new userspace filesystem servers -- lightweight new ones based off
+> > > >    the existing userspace tools?  Or by merging lklfuse?
+> > >
+> > > What do you mean by "merging lklfuse"?
+> >
+> > Merging the lklfuse project into upstream Linux, which involves running
+> > the whole kit and caboodle through our review process, and then fixing
+> 
+> Gotcha, so it would basically be having to port this arch/lkl
+> directory [1] into the linux tree
 
-Paul posted [0] to fix it in SRCU. It was always safe to
-call_rcu_tasks_trace() under raw spin lock, but became problematic on
-RT with the recent conversion that uses SRCU underneath, please give
-[0] a spin. While I couldn't reproduce the warning using scx_cosmos, I
-verified that it goes away for me when calling the path from atomic
-context.
+Right.
 
-  [0]: https://lore.kernel.org/rcu/841c8a0b-0f50-4617-98b2-76523e13b910@paulmck-laptop
+> > user-mode-linux to work anywhere other than x86.
+> 
+> Are lklfuse and user-mode-linux (UML) two separate things or is
+> lklfuse dependent on user-mode-linux?
 
->  =============================
->  [ BUG: Invalid wait context ]
->  7.0.0-rc1-virtme #1 Not tainted
->  -----------------------------
->  (udev-worker)/115 is trying to lock:
->  ffffffffa6970dd0 (rcu_tasks_trace_srcu_struct_srcu_usage.lock){....}-{3:3}, at: spin_lock_irqsave_ssp_contention+0x54/0x90
->  other info that might help us debug this:
->  context-{5:5}
->  3 locks held by (udev-worker)/115:
->   #0: ffff8e16c634ce58 (&p->pi_lock){-.-.}-{2:2}, at: _task_rq_lock+0x2c/0x100
->   #1: ffff8e16fbdbdae0 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x24/0xb0
->   #2: ffffffffa6971b60 (rcu_read_lock){....}-{1:3}, at: __bpf_prog_enter+0x64/0x110
->  ...
->  Sched_ext: cosmos_1.0.7_g780e898fc_dirty_x86_64_unknown_linux_gnu (enabled+all), task: runnable_at=-2ms
->  Call Trace:
->   dump_stack_lvl+0x6f/0xb0
->   __lock_acquire+0xf86/0x1de0
->   lock_acquire+0xcf/0x310
->   _raw_spin_lock_irqsave+0x39/0x60
->   spin_lock_irqsave_ssp_contention+0x54/0x90
->   srcu_gp_start_if_needed+0x2a7/0x490
->   bpf_selem_unlink+0x24b/0x590
->   bpf_task_storage_delete+0x3a/0x90
->   bpf_prog_3b623b4be76cfb86_scx_pmu_task_fini+0x26/0x2a
->   bpf_prog_4b1530d9d9852432_cosmos_exit_task+0x1d/0x1f
->   bpf__sched_ext_ops_exit_task+0x4b/0xa7
->   __scx_disable_and_exit_task+0x10a/0x200
->   scx_disable_and_exit_task+0xe/0x60
->
-> Fix by deferring memory deallocation to ensure it occurs outside the raw
-> spinlock context.
->
-> Fixes: f484f4a3e058 ("bpf: Replace bpf memory allocator with kmalloc_nolock() in local storage")
-> Signed-off-by: Andrea Righi <arighi@nvidia.com>
-> ---
-> [...]
+I was under the impression that lklfuse uses UML.  Given the weird
+things in arch/lkl/Kconfig:
+
+config 64BIT
+	bool "64bit kernel"
+	default y if OUTPUT_FORMAT = "pe-x86-64"
+	default $(success,$(srctree)/arch/lkl/scripts/cc-objdump-file-format.sh|grep -q '^elf64-') if OUTPUT_FORMAT != "pe-x86-64"
+
+I was kinda guessing x86_64 was the primary target of the developers?
+
+/me notes that he's now looked into libguestfs per Demi Marie's comments
+and some curiosity on the part of ngompa and i>
+
+Whatever it is that libguestfs does to stand up unprivileged fs mounts
+also could fit this bill.  It's *really* slow to start because it takes
+the booted kernel, creates a largeish initramfs, boots that combo via
+libvirt, and then fires up a fuse server to talk to the vm kernel.
+
+I think all you'd have to do is change libguestfs to start the VM and
+run the fuse server inside a systemd container instead of directly from
+the CLI.
+
+> > > Could you explain what the limitations of lklfuse are compared to the
+> > > fuse iomap approach in this patchset?
+> >
+> > The ones I know about are:
+> >
+> > 1> There's no support for vmapped kernel memory in UML mode, so anyone
+> > who requires a large contiguous memory buffer cannot assemble them out
+> > of "physical" pages.  This has been a stumbling block for XFS in the
+> > past.
+> >
+> > 2> LKLFUSE still uses the classic fuse IO paths, which means that at
+> > best you can directio the IO through the lklfuse kernel.  At worst you
+> > have to use the pagecache inside the lklfuse kernel, which is very
+> > wasteful.
+> 
+> For the security / isolation use cases you've described, is
+> near-native performance a hard requirement?
+
+Not a hard requirement, just a means to convince people that they can
+choose containment without completely collapsing performance.
+
+> As I understand it, the main use cases of this will be for mounting
+> untrusted disk images and CI/filesystem testing, or are there broader
+> use cases beyond this?
+
+That covers nearly all of it.
+
+> >
+> > 3> lklfuse hasn't been updated since 6.6.
+> 
+> Gotcha. So if I'm understanding it correctly, the pros/cons come down to:
+> lklfuse pros:
+> - (arguably) easier setup cost. once it's setup (assuming it's
+> possible to add support for the vmapped kernel memory thing you
+> mentioned above), it'll automatically work for every filesystem vs.
+> having to implement a fuse-iomap server for every filesystem
+
+Or even a good non-iomap fuse server for every filesystem.  Admittedly
+the weak part of fuse4fs is that libext2fs is not as robust as the
+kernel is.
+
+> - easier to maintain vs. having to maintain each filesystem's
+> userspace server implementation
+
+Yeah.
+
+> lklfuse cons:
+> - worse (not sure by how much) performance
+
+Probably a lot, because now you have to run a full IO stack all the way
+through lklfuse.
+
+> - once it's merged into the kernel, we can't choose to not
+> maintain/support it in the future
+
+Correct.
+
+> Am I understanding this correctly?
+> 
+> In my opinion, if near-native performance is not a hard requirement,
+> it seems like less pain overall to go with lklfuse. lklfuse seems a
+> lot easier to maintain and I'm not sure if some complexities like
+> btrfs's copy-on-write could be handled properly with fuse-iomap.
+
+btrfs cow can be done with iomap, at least on the directio end.  It's
+the other features like fsverity/fscrypt/data checksumming that aren't
+currently supported by iomap.
+
+> What are your thoughts on this?
+
+"Gee, what if I could simplify most of my own work out of existence?"
+
+--D
+
+> Thanks,
+> Joanne
+> 
+> [1] https://github.com/lkl/linux/tree/master/arch/lkl
+> 
+> >
+> > --D
+> >
+> > > Thanks,
+> > > Joanne
+> > >
+> > > >
+> > > > b. ext4 doesn't support out of place writes so I don't know if that
+> > > >    actually works correctly.
+> > > >
+> > > > c. fuse2fs doesn't support the ext4 journal.  Urk.
+> > > >
+> > > > d. There's a VERY large quantity of fuse2fs improvements that need to be
+> > > >    applied before we get to the fuse-iomap parts.  I'm not sending these
+> > > >    (or the fstests changes) to keep the size of the patchbomb at
+> > > >    "unreasonably large". :P  As a result, the fstests and e2fsprogs
+> > > >    postings are very targeted.
+> > > >
+> > > > e. I've dropped the fstests part of the patchbomb because v6 was just
+> > > >    way too long.
+> > > >
+> > > > I would like to get the main parts of this submission reviewed for 7.1
+> > > > now that this has been collecting comments and tweaks in non-rfc status
+> > > > for 3.5 months.
+> > > >
+> > > > Kernel:
+> > > > https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/log/?h=fuse-iomap-bpf
+> > > >
+> > > > libfuse:
+> > > > https://git.kernel.org/pub/scm/linux/kernel/git/djwong/libfuse.git/log/?h=fuse-iomap-bpf
+> > > >
+> > > > e2fsprogs:
+> > > > https://git.kernel.org/pub/scm/linux/kernel/git/djwong/e2fsprogs.git/log/?h=fuse-iomap-bpf
+> > > >
+> > > > fstests:
+> > > > https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfstests-dev.git/log/?h=fuse2fs
+> > > >
+> > > > --Darrick
+> 
