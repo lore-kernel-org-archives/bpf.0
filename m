@@ -1,166 +1,163 @@
-Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com [209.85.222.46])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B469A1A76BB
-	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 14:16:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773670568; cv=none; b=tWFgLkWyUn7I/WlvuKeZmSygptDo7rVBbSx5+/uCL1brZV1qFyCAOjoGxG2UJr1ES8XXQtcQl+IaEByOFehJ4RSZbdc9g0xut7vHy82d0gtcP6UBEdUpVwwIMZkQub6kXdqHlsQIRgqpFkQFJZy/KNxkpmGt6r4AYR4Fz6ohxC8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773670568; c=relaxed/simple;
-	bh=QJkROlYAAMtA2AGK13Zr9Dg6PXgZQvDDOmnAOX7+8uM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=OeEHdEYTfBUQOV1/YyHP9P2o8l4uO259j3mhDnkDpnkcVwG88HO0sJsdkeVsvjRluy/dXlIIkm+ksw8uNW3ZiTEd4bDbwqN3CB9Pa3WXbxVspNVeTqEwX61l2a7U2ox9Ezbscu0tOZzFZqU/E8injHlXfZOpw9uebPEae4xbX5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=yBUJs0Th; arc=none smtp.client-ip=209.85.222.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF8031C8634
+	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 14:17:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773670645; cv=pass; b=aAyyjmKjyEiTA26J+aRAVr9FXXtc4OJ/qwgKBLvmSLPdzCBhTflXmlwKSzX5iZz4C7Z+abN/fyXxvyzuRj6Ad4FKECBOJRNXjr+SSUBzlNO8cHyt8skEhGDqmlcaOB6oSeJW9W3aQFs+S8mfcNA6xRAnezJW1SqlksiQYP3Bwck=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773670645; c=relaxed/simple;
+	bh=5ExJGKQqqkgOKiYAl01vajNqrVmhutAhhk5RAfQPwdk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uakVjaa8wjyMi/szr/VlL+FMVUl2Ntfr44Kn3LQ78XuIqBAfjnxcNMiEyom5f0bwVwBf1VjEeGn1C5AXmZgyllNUkA6ozndQs9Hs3QazVqR07EaMCWcaq/kQseEGKeTulifqAJgrJfCWWX4i1v+dxHqbKrSHLV0j51/QrgDNQLQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MUc/i+b4; arc=pass smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="yBUJs0Th"
-Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-950b8124974so1123497241.2
-        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 07:16:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MUc/i+b4"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-485345e1013so40487795e9.1
+        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 07:17:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773670640; cv=none;
+        d=google.com; s=arc-20240605;
+        b=LnOaJQWGKg8Y8GBS0jnJ38YEBslmGMdxWC6bRLgreTizONxyvNLY3pitJDk26rSItT
+         qAbprCuSLltSvv1PBJsJ1dS2NAZvTN3WnOKITkXPcD23UqQjNmENaKJqtobgKkwnZ5fJ
+         87ph78giCV7nDl3RL5z7NDOwNPKeYggtbD87R2/Fr8tlHocK75+cntiIOCs9KpAOJ3QG
+         M4PLDZMCepwbsbx/kttXNG5afVPaBPKgJybhEHxdfGUgb1Xdg7QsQhrbi+WqUY1AA6b5
+         B5KLOsvKdMeXXZIDJtNjrE6Hnrv/pL08iqeyBEUBMr1eHrmkXS5iZj2EVUWPC8Tjt/8R
+         1X6Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=lmBn1aXsKzUNTVIGoWkY2AXVOYef5Jy5uJj2KWu6G54=;
+        fh=A+Nmk0fbWuOl7D3aP1ypDVjf1uSFBYYAzEnl7B+8X64=;
+        b=luT8gKR45gQvYpUJ56qPm9S94+76BoEec7QEIDaHNj465E1CvB5mXYUpPfXqBN6KOd
+         pujHnKTafZufo4SYctQp6c9uD/Lz9pqUGnTDlJA0qye4fjpSGx9gp2pK1tkQf1dPwzHG
+         cC5Oof8MSQ4BQOElonhBkO/0uNyfHuFaPc4GKyOFQT4dcLHAo4+2g9y5iWO/6sgLggof
+         6QDwiV1ud9idNv5zgNlzXlXwj9SMIstwk6FrSQnSheba8V7ZedU6F9MgtG5FAVZFPBkw
+         clQslEb4g79dAyjpygI3s+8fDtkFym2tEywc92FLyWwl64ESKArTQBT+vrxqcm9/oej6
+         xIOA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1773670565; x=1774275365; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1773670640; x=1774275440; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=G+pZogzXY0yFkLhI9otlHstzKzlH6EsSqZlTH+u5uWI=;
-        b=yBUJs0ThfOMd/s94gMUZpyhuGcJ9LQJdi9D+Jz7mkWH4Fow5FBdeWXzKuuNXHRTaL6
-         ckxTwd5lluNe1doeUx6QfQ9bHyNEMDTOm/cecSPqdg0IVj5Qwa4XYE22sD2yWRBH2xIH
-         59KDIadZCZPxTbP3Lz25iBATZF2GqefI1Hc8faEu7sTAMWF4AZT38H64zsj1/nW90O3g
-         jGqPz8DdFUe/RB4uw7XjBGc8utnW+yIGRQzTAfu8rkOWxYXNyT0Wv1BTKQ9SQFzwLu7w
-         XHxfTzxaqdDC0Au7DVsM3cyx2HLL/zcugOMeEV63Sj+j9TE9qmJo96pVO13Clo+795Rd
-         8QtQ==
+        bh=lmBn1aXsKzUNTVIGoWkY2AXVOYef5Jy5uJj2KWu6G54=;
+        b=MUc/i+b4a82D4pWwB1wRLJI9NT/+CBuN+DxuLbm8D2Nob5nPTApzb3pf61dWc29JAW
+         clnvek8WcoUN7z2tvHsy6Wwb/dlApRwjGbn8b+FsXL+PUqpJ176ibsodV+7pDysEShQF
+         WBLTfNfZ93H3Lhzexb2Q58oC7eBKJ4JvYAvtgRbifdqwDPzcXddYBZ/0yQJELwGMVCTS
+         ZVBnmOER8xL3lMlqkWBypwyFbeaZXqjX27qoOxIWs8YluIc9f1yByJ+izVCIcItO9tCD
+         FBuKeqv83UWA5Qd9Bl1bpodbdZh2MSuQ38vqIqFJR0H0Mvuj0OgA+tV/wcuFUhQvn8+Q
+         2Jng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773670565; x=1774275365;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=G+pZogzXY0yFkLhI9otlHstzKzlH6EsSqZlTH+u5uWI=;
-        b=mbc+YNKX5fHzUe3zk35u9qn3doPBLaN/lbHKvSXhPDZZ0C5ml2ncjIt5/kZ1VAHzsH
-         a6GsPwNpZI3fiY4KDqX/JTmXNF+EUaasDKGnOY/tuX/is1cJ8XvgOxGSu57SCTheloTX
-         Q2qetcxzJp4f8Pcni250ymxS7XfUTk89avSa06Mh1FFOw3l1vdrG9SCnXxvMgcRS3zNv
-         loejJWPQ7dHs/zAl/OlN5Q0sTRJHkEjiqgPNHkqHSkTFdE22PSM+RofPKgJc3CW6axDG
-         4r7J+7m1mGoFrVVXdVG0JD8VBbwKNjYomogSS9UfRW9vcwribVcyjZK5ndYtZIv94MZK
-         5nkA==
-X-Forwarded-Encrypted: i=1; AJvYcCUw2z0fmlwYFpGyRDWb4O7YQ6ledWYyorCmauh6gkDx3em41ysgLiB7ihqf2WlvEqpr4Ts=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxIyJqAEhADWHmlzhiWEoY5SHysRBD2+Nr8m2X5Op5nybz4RqjN
-	Oz0RQOuJReiQ2FmUgPxOtIJ74WtSjRA/9F08FxaI4DoUBX9CAQuMijdQwfX7jCk7yIA=
-X-Gm-Gg: ATEYQzxCNGwAkDRWr7aB/rSER9BdcLpBNMcn/rAyT6yiJN68bwS/xtrTX3NR5JqfBPB
-	WXdxY+x8Ysg3uatBaC91Ms7lnyMmnJW+Ok863MAWz2y1cE4CpwxDKbMGRqNZLJkgtjD+1BUw5Pw
-	/T+Uj+QiCzLIweUopjP1RIv4p3vDYwa+5xSpfg+skGOU4n6V9PgE12XHjXzVxqjtF1WKGvGBgQx
-	Atb3ZhjjZjMmWoNeTfF/30IFiDtbprlrMtC0JJZXM+TEH850MNSHmDZgtirGK3YT3ACA+v8cba8
-	5hDZMbHWdLcF+X2lWa4sSVv6z5sd/u3fYTXOD8q0yDDBJLIYaJbCBw4ocfx3njZ/jZnDIWJ7W1H
-	6gBt/TxzZV2RNayyypTAocm10XSmk+HWmN/O6ycI51IBJbkohgx46E5kiOve5ESz3J0rp2CROpz
-	kewKmaoYpKrf3ymr/cK8/EyN4=
-X-Received: by 2002:a05:6102:2911:b0:5ff:d434:b507 with SMTP id ada2fe7eead31-6020e2cbe78mr5485366137.17.1773670565121;
-        Mon, 16 Mar 2026 07:16:05 -0700 (PDT)
-Received: from localhost ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cda2152a41sm1223428785a.43.2026.03.16.07.16.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Mar 2026 07:16:04 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1773670640; x=1774275440;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=lmBn1aXsKzUNTVIGoWkY2AXVOYef5Jy5uJj2KWu6G54=;
+        b=fG3aeTNOrHV/yvnbMlO0nITIkrfQzM9kiu/y7Z/tD2ugWYpxERT+P2+hIQUHio1fLs
+         4LA2FjaYBqgp4I3FdpJXG2/HS65o/pHutYUldRvAzJRz2by0GKveX19Oo/GUa1yb4MNn
+         fCydvGjjb9bQlpnt2CHBfkMpBysR1oG9ya06JIj+ZP+BfZ2bbrxw/8LLZwQycrkbDVnM
+         o2N6lmEMe4HqtM1wbXSscluuaQnIzDORlrq8Uzuj8JXXrKGv+ylIlTS9N2lEPNEciUQc
+         4eZRn+PKpiPGm+gTHoNPtKKQ/w43i0o2jxuAgHIzD360YTDajDBHx6SVkr4mHTrlGdvF
+         d6gA==
+X-Forwarded-Encrypted: i=1; AJvYcCVErcxRBJZsX0rhPXRfE/UFb1LmVSBtnOzk3dEmoE9r8jZ9FmYcQKQgAS2m+DNojks2wg4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZwgjIYdTvc398LVfDd4/PaSFjbZkcC5+foDodRlIh8PMGiokm
+	UmdLKhQmgYjnpXtQC35rVOEgcvznhXawo3xo7ZhFp8phmH5aQ+iEyMkd3B4vRz4oCv3T3QYOx2y
+	m7nBpFX+uJ1rZ699R8m0n08i5T+E41x4=
+X-Gm-Gg: ATEYQzxjjF7DqgW4aTzeDmnkaanOcFP2o2vvT6/XYmGU6ebBpf9isWQSYvOVEWsuafP
+	R23X4fO/rTPpMDDT2D5Tu7nh8vZdfEksD48RdnovrZ8ufQ65F3Qa47I56oU+JbpftQRkKEiJzG5
+	ijiWVe67IPuJKXDKbBbj+8phhbn+0xlafqXnv0QdII9WUBpVSQs6fYQ2l8Phk9Jwtfb0arwd1Us
+	uSzxzdUyxgYBtIdVQgzpNRTF9Hf3q5utifA6LBDnFH4UIqso58GgV+50xCmCNvS4CYuG6aSmDWb
+	p2W5XxUb9L+pE8w5vRlv1T2NHBuD4RFTpVRCYkVYlkP6VH1eItTwPqYbZMoI389fvGxCdOGP9Kb
+	TJg==
+X-Received: by 2002:a05:6000:3109:b0:439:c560:bb78 with SMTP id
+ ffacd0b85a97d-439fe1a069dmr30731666f8f.22.1773670639789; Mon, 16 Mar 2026
+ 07:17:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260311-tools_build_fix_zero_init-v4-0-9e35bdb99cb3@arm.com>
+ <20260311-tools_build_fix_zero_init-v4-7-9e35bdb99cb3@arm.com> <20260316101800.GB8048@e132581.arm.com>
+In-Reply-To: <20260316101800.GB8048@e132581.arm.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 16 Mar 2026 07:17:08 -0700
+X-Gm-Features: AaiRm52U4nGYmhrhg5_rJVsmWgv2fI-zySEYrY3v3DyOI4rw9kmBbiG37OT5JGw
+Message-ID: <CAADnVQLN6bYHnusnC5QnDoGGUO-A=qnM6fP9bhEVXEHD6_y9EQ@mail.gmail.com>
+Subject: Re: [PATCH v4 07/30] libbpf: Initialize CFLAGS before including Makefile.include
+To: Leo Yan <leo.yan@arm.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Namhyung Kim <namhyung@kernel.org>, James Clark <james.clark@linaro.org>, 
+	Kees Cook <kees@kernel.org>, Quentin Monnet <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nsc@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>, 
+	Bartosz Golaszewski <brgl@kernel.org>, Kent Gibson <warthog618@gmail.com>, 
+	"K. Y. Srinivasan" <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
+	Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>, 
+	Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, 
+	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
+	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
+	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>, 
+	Len Brown <lenb@kernel.org>, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, 
+	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, bpf <bpf@vger.kernel.org>, 
+	"linux-perf-use." <linux-perf-users@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 16 Mar 2026 10:16:03 -0400
-Message-Id: <DH49QO1Y58GG.2LRJUAR3P1HJT@etsalapatis.com>
-Cc: <andrii@kernel.org>, <eddyz87@gmail.com>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <martin.lau@linux.dev>, <song@kernel.org>,
- <yonghong.song@linux.dev>, <john.fastabend@gmail.com>,
- <kpsingh@kernel.org>, <sdf@fomichev.me>, <haoluo@google.com>,
- <jolsa@kernel.org>, <shuah@kernel.org>
-Subject: Re: [PATCH] selftests/bpf: restrict ns_current_pid_tgid updates to
- target task
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Sun Jian" <sun.jian.kdev@gmail.com>, <bpf@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.20.1
-References: <20260316073409.4040-1-sun.jian.kdev@gmail.com>
-In-Reply-To: <20260316073409.4040-1-sun.jian.kdev@gmail.com>
 
-On Mon Mar 16, 2026 at 3:34 AM EDT, Sun Jian wrote:
-> ns_current_pid_tgid uses a shared syscall tracepoint for
-> current_pid_tgid tracepoint subtests. When selftests run in parallel,
-> unrelated tasks can trigger the same hook and overwrite BSS results,
-> causing false failures.
+On Mon, Mar 16, 2026 at 3:18=E2=80=AFAM Leo Yan <leo.yan@arm.com> wrote:
 >
-> Store the expected pid/tgid in BSS and update user_pid/user_tgid only
-> when bpf_get_ns_current_pid_tgid() returns values matching the target
-> task.
+> Hi BPF maintainers,
 >
-> This prevents unrelated tasks from interfering with the test, allows
-> dropping the serial-only restriction, and removes the obsolete TODO
-> comment.
+> On Wed, Mar 11, 2026 at 08:29:32AM +0000, Leo Yan wrote:
+> > tools/scripts/Makefile.include may expand EXTRA_CFLAGS in a future
+> > change.  This could alter the initialization of CFLAGS, as the default
+> > options "-g -O2" would never be set once EXTRA_CFLAGS is expanded.
+> >
+> > Prepare for this by moving the CFLAGS initialization before including
+> > tools/scripts/Makefile.include, so it is not affected by the extended
+> > EXTRA_CFLAGS.
+> >
+> > Append EXTRA_CFLAGS to CFLAGS only after including Makefile.include and
+> > place it last so that the extra flags propagate properly and can
+> > override the default options.
+> >
+> > Signed-off-by: Leo Yan <leo.yan@arm.com>
 >
-> Tested:
->   ./test_progs -t current_pid_tgid
->   ./test_progs -j$(nproc) -t current_pid_tgid
+> Before sending a new version, I'd check if you have a chance to review
+> the libbpf patches.  The libbpf change is crucial for this series.
 >
-> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+> Another reason for pinging because I received a bpf-ci report about test
+> failures for this series [1].  The failures looks to be unrelated, as
+> the tests fail starting from the first patch, which is irrelevant to BPF
+> code [2].  I tried reaching kernel-ci@meta.com last week but haven't
+> received a response yet.
+>
+> If bpf-ci testing is mandatory for libbpf patches, could you advise me
+> on the correct workflow (e.g., whether the patches should be based on a
+> specific branch)?
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-
-> ---
->  .../testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c | 5 +++--
->  .../testing/selftests/bpf/progs/test_ns_current_pid_tgid.c | 7 +++++++
->  2 files changed, 10 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c=
- b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-> index 99c953f2be21..e3938bb48151 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-> @@ -34,6 +34,8 @@ static int get_pid_tgid(pid_t *pid, pid_t *tgid,
->  	bss->ino =3D st.st_ino;
->  	bss->user_pid =3D 0;
->  	bss->user_tgid =3D 0;
-> +	bss->expected_pid =3D *pid;
-> +	bss->expected_tgid =3D *tgid;
->  	return 0;
->  }
-> =20
-> @@ -200,8 +202,7 @@ static void test_ns_current_pid_tgid_new_ns(int (*fn)=
-(void *), void *arg)
->  		return;
->  }
-> =20
-> -/* TODO: use a different tracepoint */
-> -void serial_test_current_pid_tgid(void)
-> +void test_current_pid_tgid(void)
->  {
->  	if (test__start_subtest("root_ns_tp"))
->  		test_current_pid_tgid_tp(NULL);
-> diff --git a/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c=
- b/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
-> index 386315afad65..d02c182a7100 100644
-> --- a/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
-> +++ b/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
-> @@ -14,6 +14,8 @@ struct {
-> =20
->  __u64 user_pid =3D 0;
->  __u64 user_tgid =3D 0;
-> +__u64 expected_pid =3D 0;
-> +__u64 expected_tgid =3D 0;
->  __u64 dev =3D 0;
->  __u64 ino =3D 0;
-> =20
-> @@ -24,6 +26,11 @@ static void get_pid_tgid(void)
->  	if (bpf_get_ns_current_pid_tgid(dev, ino, &nsdata, sizeof(struct bpf_pi=
-dns_info)))
->  		return;
-> =20
-> +	if (expected_pid && nsdata.pid !=3D expected_pid)
-> +		return;
-> +	if (expected_tgid && nsdata.tgid !=3D expected_tgid)
-> +		return;
-> +
->  	user_pid =3D nsdata.pid;
->  	user_tgid =3D nsdata.tgid;
->  }
->
-> base-commit: f338e77383789c0cae23ca3d48adcc5e9e137e3c
-
+yes. It is mandatory and libbpf patches must go through bpf-next tree,
+so pls send them separately.
