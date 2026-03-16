@@ -1,114 +1,118 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35E3B625
-	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 13:04:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B44B3988EE;
+	Mon, 16 Mar 2026 13:30:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773666294; cv=none; b=pt3q8iIsWggf4RP9HRKrQKvb7m7kwLvgxVnxhDYiZHR/7jk+yqXvrEIgXqvzb4lzau6iStBdbnMTjOnD2dZ3ettfQqMZcimV+PoOvNKq15CJ46bJNLvDgna17wolz8Eeebw1msj8DzMDZ0QEQdCEy7AA0zcqCEIuYrFBWTwvFWs=
+	t=1773667835; cv=none; b=dMmWbQcH9JXXE3dVUgMNW4DFLAhgCEZhhlhpCenx9HwWxkTmE1uTzwVMrvrtGunNs1VrPWP5rZM4lkGQSP7FsIOJODAJxpbrEmTA5eCCzSOxYC5y/ou/ovFowog2PpdEUnuaZZ3pNPDtvj+wqVD6PA4W2aQFgtQyVmbqVOi490o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773666294; c=relaxed/simple;
-	bh=coROkVKO2LP6M4Zm/yvO7bdjOMBXJEvIaFPryU8r1zQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pt31NiuzBeyfIbAs5OMsc0qlKZ0iAdDUlxyBlgGWJUvAHLRSOnapbFlpqVoNXePoaJyKZoKNHl7mt6154sNpxBTS4iDxMFlM57wisP7bs+psSz/aLkkKKU+T3hARDdnKeoGE6+wgB1YGbwc+MVbaPf7UODACpiyHlX9+N2eiQnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R6sqqN0w; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R6sqqN0w"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-483487335c2so43983575e9.2
-        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 06:04:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773666291; x=1774271091; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WuEn7ehp2dcDf/0JXcNA12V/0d3/A/jz0zpMPpL9KQE=;
-        b=R6sqqN0wbUrF9FiSnor0XVW2yML1aDuSaqsr8WJ1x/5LCsPLKiQfCw2BPCFKQTneyF
-         ItgiuldKahpHSz7PpaKEhW/C9D3ISO0u7fYDtgWfClQZzdpTGhX5Fw1iqK8CDfEi+WZX
-         OyLd6XKETkZBGihex1xjIunIiUHbvxWEsoT+dPYw5bEkBj+YtJTARZogoJ6SHCLZMCoh
-         uR3rEDWVOdHTzfe0IGjuCFcFeyTy0JsSmRfoG2vRECnwpPnQSQClLhbiG4PdjbPVMY0z
-         oPWuXEtz2w/4h6gXA40JGWvDVZ1s1eroc+roKinrFX0OuTH2O7fTNPOMcMpmGaj7mo7H
-         Ud1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773666291; x=1774271091;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WuEn7ehp2dcDf/0JXcNA12V/0d3/A/jz0zpMPpL9KQE=;
-        b=C4doGkN4v03SUNCxS6p3Nit9xmbLWzStoJkw31NCV5chtMnHrVaAz9PCFSRnTweDK3
-         7t15TJ2a8s2+xnINUse+ADYfC7aiF9unteL2idNuPPq6+KNIGaGZiikq2rv7Xo/8T6+d
-         K3VNAcG9nkCKNLcBOmJvBLiJJcXXiMlefGAh0w9JOMsvzuNNHqCQPS0q6Zaj7CVRuL/r
-         frgqcCZr84EKiiXz2DSsC0YSVwb+uM5VEhwrictaPOtxuQzC6Ad1+ey3bEcsuRNf+3Cv
-         4feWi+7X+EaRA262WdaJacNajcpaRMgz1mg9T1+oVqVwMkWA0XNDQXpzLnzWCH0Hg5wP
-         R/uQ==
-X-Forwarded-Encrypted: i=1; AJvYcCULu3+n9p0ju5BB2b3Tm57JaiNliD9/RBXd/aePVgT0cVo5TIRcdwjpfgIxSq0R6ysyGDE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKyRCsjy7x5H6UJu+JEUw8cx3tG2/I9209CoERDbi23xJT1z5R
-	y0tlW2iMIsc/ttHbWoYvmiwndXCU7FODrveNoo5edpnRaeWhyyHsPuvu
-X-Gm-Gg: ATEYQzxj46+RGcljLsaAGSRbd2VOs4R8tkTypeB9cC4fyIfFxsM+JE122gZkwKZeMKM
-	NFLQwTRyxXOxbnEzfDiBTeKHzXK5T6hDX6YsA0vMcQ3GX8RWCEM4bq427t4zdqqE3CHVuzP3lsc
-	e+RqaPo4ehADKyjSLl06mk/rx2lZ0/O354YEKArU1mtbxdCq764lxqRKhIysQzVS+3U7ojC0DPv
-	JwQDPQiEQM88Si8pkJyw6Y/jISZjesZQgC0qq5vmu9X4Vhxe7u/UKK0UhupRDoKtqD8tzBXHl2B
-	ewD/AHj+lmkUhU5Yjo5UG4wMAVLLxhpO7bo+SY7/jtXXG1qKDEq8fmxVgAgZe/5xBSEmuAEjJ48
-	5tgAebpMSF1k7eiRcBP3uFX5/okMrVn8aXxZB4Kx/WjN7exvM4gEWMgz6oxYB/NTG/GaC4X4EuZ
-	mmMQ9pRFQyxtDp0197Ter6u6wKajxNjQVXHDOA2+LVS1wHMcZG5HbkVkHWHT5buLtZ2OwDnVwIt
-	5CqR4VEK6gg6XWCs8jAUfYkewKuQj5BwGcbCoJa0mMGCT8a7nnEg4u8K1ombZ0pUtfB6NzGxrfE
-	YXVv2GWf/XY=
-X-Received: by 2002:a05:600c:8488:b0:485:3f1c:d897 with SMTP id 5b1f17b1804b1-485566d2fdcmr203737915e9.9.1773666291248;
-        Mon, 16 Mar 2026 06:04:51 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e0077fb9a9968087a66.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:77fb:9a99:6808:7a66])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-485564043a2sm130013895e9.2.2026.03.16.06.04.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Mar 2026 06:04:50 -0700 (PDT)
-Date: Mon, 16 Mar 2026 14:04:48 +0100
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: Emil Tsalapatis <emil@etsalapatis.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Hengqi Chen <hengqi.chen@gmail.com>, loongarch@lists.linux.dev,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v1 1/2] selftests/bpf: Check alignment flag if
- expected result is REJECT
-Message-ID: <abf_8FcnQr50CCTn@mail.gmail.com>
-References: <20260310064507.4228-1-yangtiezhu@loongson.cn>
- <20260310064507.4228-2-yangtiezhu@loongson.cn>
- <DH02R7I6EAUH.16649BMB7V1N8@etsalapatis.com>
- <fe04d981-fc83-0ba6-4dee-8fc0c953e09f@loongson.cn>
- <abKHi9Pr5iUbIQZI@mail.gmail.com>
- <7ea56716-fd5f-1740-e634-1dec4196dd2c@loongson.cn>
+	s=arc-20240116; t=1773667835; c=relaxed/simple;
+	bh=12QmHVFW6kvGAsAEHlRgc6k9FaOX+eCOvB+1XSjB85g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Bbj9i3OmX6tLHsLG9LsVUer8BMIseUV+cewr4p5b4W0GLlnwPuU7seL8aE/at0nXm72aSd8dJNxLetLzuHHuYyH1LmmKQGBoR67oCN6y9fm4gvzOaf7ZCgi6tFdE7Nt15YoWXaTLjQ3vkM5D8UeKzGqO7h9DPbsmd2QLdRgsNKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 357291477;
+	Mon, 16 Mar 2026 06:30:25 -0700 (PDT)
+Received: from [10.57.61.116] (unknown [10.57.61.116])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9D4953F778;
+	Mon, 16 Mar 2026 06:30:22 -0700 (PDT)
+Message-ID: <2c7466f5-d952-4356-9b55-9d2ebb3471f2@arm.com>
+Date: Mon, 16 Mar 2026 13:30:19 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7ea56716-fd5f-1740-e634-1dec4196dd2c@loongson.cn>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 50/61] iommu: Prefer IS_ERR_OR_NULL over manual NULL check
+To: Philipp Hahn <phahn-oss@avm.de>, amd-gfx@lists.freedesktop.org,
+ apparmor@lists.ubuntu.com, bpf@vger.kernel.org, ceph-devel@vger.kernel.org,
+ cocci@inria.fr, dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
+ gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org,
+ intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev,
+ kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+ linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-erofs@lists.ozlabs.org,
+ linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mm@kvack.org,
+ linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org,
+ linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+ linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
+ linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+ ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
+ sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
+ tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev
+Cc: Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>
+References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
+ <20260310-b4-is_err_or_null-v1-50-bd63b656022d@avm.de>
+From: Robin Murphy <robin.murphy@arm.com>
+Content-Language: en-GB
+In-Reply-To: <20260310-b4-is_err_or_null-v1-50-bd63b656022d@avm.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Mar 12, 2026 at 07:06:38PM +0800, Tiezhu Yang wrote:
-> On 03/12/2026 05:29 PM, Paul Chaignon wrote:
-> > On Thu, Mar 12, 2026 at 02:59:57PM +0800, Tiezhu Yang wrote:
+On 2026-03-10 11:49 am, Philipp Hahn wrote:
+> Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
+> check.
 
-[...]
+AFAICS it doesn't look possible for the argument to be anything other 
+than valid at both callsites, so *both* conditions here seem in fact to 
+be entirely redundant.
 
-> > > -#14/p Dest pointer in r0 - succeed, check 5 OK
-> > > +#14/p Dest pointer in r0 - succeed, check 5 OK (NOTE: not executed due to
-> > > unknown alignment)
-> > 
-> > As stated in my previous answer, this note would be incorrect: the
-> > program was executed in test case #14 because it was rejected, not
-> > because of unknown alignment.
+> Change generated with coccinelle.
+
+Please use coccinelle responsibly. Mechanical changes are great for 
+scripted API updates, but for cleanup, whilst it's ideal for *finding* 
+areas of code that are worth looking at, the code then wants actually 
+looking at, in its whole context, because meaningful cleanup often goes 
+deeper than trivial replacement.
+
+In particular, anywhere IS_ERR_OR_NULL() is genuinely relevant is 
+usually a sign of bad interface design, so if you're looking at this 
+then you really should be looking first and foremost to remove any 
+checks that are already unnecessary, and for the remainder, to see if 
+the thing being checked can be improved to not mix the two different 
+styles. That would be constructive and (usually) welcome cleanup. Simply 
+churning a bunch of code with this ugly macro that's arguably less 
+readable than what it replaces, not so much.
+
+Thanks,
+Robin.
+
+> To: Joerg Roedel <joro@8bytes.org>
+> To: Will Deacon <will@kernel.org>
+> To: Robin Murphy <robin.murphy@arm.com>
+> Cc: iommu@lists.linux.dev
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
+> ---
+>   drivers/iommu/omap-iommu.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> OK, please ignore this patch.
-
-I think the second patch in this set is still worthwhile, so maybe
-resend it on its own?
-
-Paul
-
+> diff --git a/drivers/iommu/omap-iommu.c b/drivers/iommu/omap-iommu.c
+> index 8231d7d6bb6a9202025643639a6b28e6faa84659..500a42b57a997696ff37c76f028a717ab71d01f9 100644
+> --- a/drivers/iommu/omap-iommu.c
+> +++ b/drivers/iommu/omap-iommu.c
+> @@ -881,7 +881,7 @@ static int omap_iommu_attach(struct omap_iommu *obj, u32 *iopgd)
+>    **/
+>   static void omap_iommu_detach(struct omap_iommu *obj)
+>   {
+> -	if (!obj || IS_ERR(obj))
+> +	if (IS_ERR_OR_NULL(obj))
+>   		return;
+>   
+>   	spin_lock(&obj->iommu_lock);
 > 
-> Thanks,
-> Tiezhu
-> 
+
