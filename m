@@ -1,108 +1,154 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C552332ED3;
-	Mon, 16 Mar 2026 17:46:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773683208; cv=none; b=hjEpjVlwEhZqcz6jw3xNDd7pWY/Z2KRCCnppkjax4RrmljmCPqfjsidJopN7m5cc/ergVyAu08KHTwcd29AqCJ0XIIxZf3iQqJ+lxLrhhAlIJzYeDlEuoAPm3jKL1BrBS8FU2sWaPnqDThFZr6HUgmz3p1YDpZDwB5u9TU59Jc4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773683208; c=relaxed/simple;
-	bh=oUdqkprAKNLqdy+Z9DsSiRaGN2K4IDbzQNUWqrM2lm4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=akt0qKHGAXNRs2jZ93Wf8V9MnWqeXbKX7ZDGy8yqTKzqd1OQEMJd+pJFxrntBRkibhtqFLgJqcSDN7jqLGZ0d7RkeXp7GAd3RjBk1BJMsQgZkSankkExtuIGsMxYN5hzdhB4CjhiJvfma8DJFYNPlXtssHke/XW6SwKj3+/Ghiw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WoqNhiVd; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1524A334374
+	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 17:56:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773683796; cv=pass; b=Rw73dRuRZii/QO5rt728QccsIfVErEZyZ0E0aoGX/BX/dCape2IOEcUpnB3ogu/yT2qyydVko9GtgjhSf+kfxya18TNbRWRDHD6xLtR3RyT36fwjIEu86fFgQQPHnU3U+QdnegBSGkBaoP12S6o0VqdEymH3+dXQeaHmjlHzLKQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773683796; c=relaxed/simple;
+	bh=I1vbAzFZtc0KG+gZfLVD1SzRI7ZL+EQR3nZxbZkmL9Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UpQSdpyaXk+IL0Ul1nkDZ/KHJvm4TvZPo6mOZ+bT8DdJc7o1LLkIWuJM1IkPIx9J5st9lNE7DKu2NECIh4x1rTvHOuGHSr77ninXtVppyjdKz9fCtrU66QSDk/PPmxw1c3k3A5N2ja2Cuy0exaf7WprkOnwcrqHdJ0el2Gg6EV4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VbqNu+T5; arc=pass smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WoqNhiVd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773683208; x=1805219208;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=oUdqkprAKNLqdy+Z9DsSiRaGN2K4IDbzQNUWqrM2lm4=;
-  b=WoqNhiVdC8/jsazxTgK3nb+8397y/2rvdJ+gJJ71TJlqp16Hnm2i3ToC
-   Xjw8HnkJixIzIMPO1eUvXpxFXjfHsEAVGRqtztoPHriCUBro5dE9hqy9p
-   zJvCJ8G80oVqbZz2pIqNfsVysoF1UGW6b5pVUwIZUlbTc9TdrjKFgPGVo
-   QdxSqFG+a+/a0gVOpkyCPbILiCCzdNyCG8dvjrB/YUhPpgNaLGQkgUGAk
-   H/MNYXj8tJpqJNTYrOsT7LU+ZsZckIALOkJNio2fRjSHpQutjP2nNQ2Y3
-   tQeEx67it0Py6pxMqtAsFEF0x4ZuY7rckdEPNIH3LMXK+nztd8WiGXsqs
-   A==;
-X-CSE-ConnectionGUID: NW2cB2yBQYW3cr8iykJI0g==
-X-CSE-MsgGUID: TG03JD1CT2uhsH9SjYq+Vg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11731"; a="62275742"
-X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="62275742"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2026 10:46:47 -0700
-X-CSE-ConnectionGUID: TLKOM8CPSlmSJSaVJypwyA==
-X-CSE-MsgGUID: a72xo32NTpy8WRvQmEsDXQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="222075763"
-Received: from boxer.igk.intel.com ([10.102.20.173])
-  by orviesa008.jf.intel.com with ESMTP; 16 Mar 2026 10:46:45 -0700
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To: netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org,
-	magnus.karlsson@intel.com,
-	stfomichev@gmail.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	larysa.zaremba@intel.com,
-	aleksander.lobakin@intel.com,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH net 6/6] selftests: bpf: have a separate variable for drop test
-Date: Mon, 16 Mar 2026 18:45:50 +0100
-Message-Id: <20260316174550.462177-7-maciej.fijalkowski@intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20260316174550.462177-1-maciej.fijalkowski@intel.com>
-References: <20260316174550.462177-1-maciej.fijalkowski@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VbqNu+T5"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-439b73f4ab4so5499985f8f.1
+        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 10:56:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773683793; cv=none;
+        d=google.com; s=arc-20240605;
+        b=YXEzfQic6zSlf/xrKNgQ5ahen3aHx1fTVPWI4n1FGh/kTJSZwh37vvv4ddCceaw1Yn
+         pxVTyFtzedkRWKGb1lgAzdcmnWWrx3isGpda4iOzUvUJZcutAIUzW7P48LB5fOl0jiP4
+         /oVU9vBaa87vG1G2O6kTmXqgiVy1m2pxQg7RC+Ppahnd0ip5qwY9SYtK5wdYcKQjcu3G
+         o/PD1mNc4XkqorcFrWP/yhvbBHvsmuyBlYskfz9Zd6XlOXO1Ig0Th5HBYBY5qRbF83y5
+         A1L1sg+VkJm5V9jX/Sodna5+Kt9GxcgymeFcSG+UIrQl8TeHa3mMiBX59YmYzu6xmSNK
+         Im1Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=nLN8x7h3gKI0NxYeYvj5GuYRQATdaCAiSq+73Q3o4Nk=;
+        fh=T/bq3F/bbNb2L8T7ccUB3YipRABtsW09HD8UGH7rwPQ=;
+        b=Z9HIZqB1ebZFE5aoL4If0Qnd30MTTx/VWHTXN6V/VaFSecdXkHfLfaXM0Ktilx+BFU
+         d+CLUV+a6Vyzsy84sFFIM+ey25F9tf5sHJQfnxdk7sArpzR43a05XQLH26KPuuYCpGxT
+         hEx+GrCDX1xL8K+t5i4yOIXP2wCqAKuQ3tklJmnVAtVpZFmw+VdbsyNN9KCv4Qcjachu
+         rj/CytTXnhzy9ORKBXK4zXYJxQuSS4gNKTlp6lK4dVukW3HpBhqSTxJuLtp4ftHYNt5M
+         +6wZ8rMxQgrucT8TUEsQsLyypWCBIOAoXFBMennVbhLegpYLYbrHmvZ3Li2fkAZW/LYN
+         4ZPw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773683793; x=1774288593; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nLN8x7h3gKI0NxYeYvj5GuYRQATdaCAiSq+73Q3o4Nk=;
+        b=VbqNu+T56XiJ5b6lsaCKvhkwWlyWO/maLFnOJHzDC2lyZ1i3OblWQqeaP2TokZTtco
+         B2kbxC1MqknfA0jskEMTyn/BudH6NvwOU1WVCbIEt+eHcn/wGfGe5he8OpSlbouIgsP0
+         zJHKHfYYbdqxqVj6XNv1ckge+NSwis+kPk3/Itz2KCPROhV97+GBlt01SLLhG41cqb6I
+         htah7i1/JVmrHTjQ7m7S95XVbK194A72YT9ts98q4tBiD/ItplDdP9V7Ox28VXW3n94Q
+         +JLOg26S7EaP6u9UwCne+Xr9+MShZOw1etgkpFpQYTPSw+D/y8Otsd/+Sw/I4vcAKqoc
+         KsCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773683793; x=1774288593;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=nLN8x7h3gKI0NxYeYvj5GuYRQATdaCAiSq+73Q3o4Nk=;
+        b=g6BcUz2KUZk+hEMfnafnbLCgCwKHKdvLayP2FuDVpmc4HQpfoBv22zTx6glKRMPkGs
+         nh6Bde90aKS+72ED3uG4Db/jlLvZw6SPBRahDuabcDIPLbWGCb/sT4fvPwUbQg0PDUa0
+         gr8VOyRZw3tKXlsPZFFCBTCha5FvIlY/PSeUeW7BRSKSkLbhaMAosXaqwLQqWYF9WdWm
+         T9kTx8iB8sqXTZe/T7j3xczKLD+af4apc5jiocb846jDYu3bTR2P1XTo8HXiMNZiEc4F
+         4Wie/QmzJx2B2oIDJRgVlC4pcudmOI01d8oFd3ASVMjvZT1CJkMg8SUgHPjYqIVF88e7
+         CyHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXhH/GslIFGqIIZ3JAPHvc9QO5Ou6B+/ht4ECMyCEPR2BUOxJYwc1LDEBZIXfyBJEOMg90=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywui7JAjAVqIvj7iMIRH4BQH9oE4BHg7D2r5IN/BZ2Clg68oJ04
+	+e6Ttyl6oMF4FYCEkmRg8cTmCojj6NB4gDdscWSCRYGgmox65Tdw9ILSAEBtrVTlfEH5bJ216qw
+	UVUhcqArLQeU9mEYzGpsy/qAXkGmU8WQ=
+X-Gm-Gg: ATEYQzyaioNA+DPaq41UqH/xGhmy7eK2Gjp0cMZ7rdG6FqIYwU1nD3qAV4c0zszrCdr
+	3H7HoSkFBSRkiHR+o//Xwh5QmlKitlNz86IP+Jg7xjV9Byfp3Ytwkcxv8mN99hqt4u77e7WQmh+
+	cnh4GxrZlE38O9C53Hrjg/yiaCPYZt1HUJFtZdsG3KfBOZJRnqVQkK2bsh3KOHsQmTfPQDOFBXr
+	m3C/EAb3JXvdwQT4bLqSAeTFw22gdkQUzl+zuKNvxUcf/jPwzsq4bTbamtfZobmPD8EPvfpPnWJ
+	G8zFKw==
+X-Received: by 2002:a05:6000:1787:b0:439:c6d9:7fc with SMTP id
+ ffacd0b85a97d-43a04d95261mr25316775f8f.25.1773683793152; Mon, 16 Mar 2026
+ 10:56:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260223224617.GA2390314@frogsfrogsfrogs>
+In-Reply-To: <20260223224617.GA2390314@frogsfrogsfrogs>
+From: Joanne Koong <joannelkoong@gmail.com>
+Date: Mon, 16 Mar 2026 10:56:21 -0700
+X-Gm-Features: AaiRm511WAGRtITI8RxyWj-xfdb_uS3eh6Gi0osoQrCb5u55mxyV9n1ZU3-bjXI
+Message-ID: <CAJnrk1Yd1J60-Ek=O7jzZQg454pbr3O=b71yZHzYbrWfqJr__w@mail.gmail.com>
+Subject: Re: [PATCHBLIZZARD v7] fuse/libfuse/e2fsprogs: containerize ext4 for
+ safer operation
+To: "Darrick J. Wong" <djwong@kernel.org>
+Cc: linux-fsdevel <linux-fsdevel@vger.kernel.org>, bpf@vger.kernel.org, 
+	linux-ext4 <linux-ext4@vger.kernel.org>, Miklos Szeredi <miklos@szeredi.hu>, 
+	Bernd Schubert <bernd@bsbernd.com>, "Theodore Ts'o" <tytso@mit.edu>, Neal Gompa <neal@gompa.dev>, 
+	Amir Goldstein <amir73il@gmail.com>, Christian Brauner <brauner@kernel.org>, 
+	Jeff Layton <jlayton@kernel.org>, John@groves.net, demiobenour@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Currently two different XDP programs share a static variable for
-different purposes (picking where to redirect on shared umem test &
-whether to drop a packet). This can be a problem when running full test
-suite - idx can be written by shared umem test and this value can cause
-a false behavior within XDP drop half test.
+On Mon, Feb 23, 2026 at 2:46=E2=80=AFPM Darrick J. Wong <djwong@kernel.org>=
+ wrote:
+>
+> There are some warts remaining:
+>
+> a. I would like to continue the discussion about how the design review
+>    of this code should be structured, and how might I go about creating
+>    new userspace filesystem servers -- lightweight new ones based off
+>    the existing userspace tools?  Or by merging lklfuse?
 
-Introduce a dedicated variable for drop half test so that these two
-don't step on each other toes.
+What do you mean by "merging lklfuse"?
 
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
----
- tools/testing/selftests/bpf/progs/xsk_xdp_progs.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Could you explain what the limitations of lklfuse are compared to the
+fuse iomap approach in this patchset?
 
-diff --git a/tools/testing/selftests/bpf/progs/xsk_xdp_progs.c b/tools/testing/selftests/bpf/progs/xsk_xdp_progs.c
-index 683306db8594..40609d8c2471 100644
---- a/tools/testing/selftests/bpf/progs/xsk_xdp_progs.c
-+++ b/tools/testing/selftests/bpf/progs/xsk_xdp_progs.c
-@@ -15,6 +15,7 @@ struct {
- 	__uint(value_size, sizeof(int));
- } xsk SEC(".maps");
- 
-+static unsigned int drop_idx;
- static unsigned int idx;
- int adjust_value = 0;
- int count = 0;
-@@ -27,7 +28,7 @@ SEC("xdp.frags") int xsk_def_prog(struct xdp_md *xdp)
- SEC("xdp.frags") int xsk_xdp_drop(struct xdp_md *xdp)
- {
- 	/* Drop every other packet */
--	if (idx++ % 2)
-+	if (drop_idx++ % 2)
- 		return XDP_DROP;
- 
- 	return bpf_redirect_map(&xsk, 0, XDP_DROP);
--- 
-2.43.0
+Thanks,
+Joanne
 
+>
+> b. ext4 doesn't support out of place writes so I don't know if that
+>    actually works correctly.
+>
+> c. fuse2fs doesn't support the ext4 journal.  Urk.
+>
+> d. There's a VERY large quantity of fuse2fs improvements that need to be
+>    applied before we get to the fuse-iomap parts.  I'm not sending these
+>    (or the fstests changes) to keep the size of the patchbomb at
+>    "unreasonably large". :P  As a result, the fstests and e2fsprogs
+>    postings are very targeted.
+>
+> e. I've dropped the fstests part of the patchbomb because v6 was just
+>    way too long.
+>
+> I would like to get the main parts of this submission reviewed for 7.1
+> now that this has been collecting comments and tweaks in non-rfc status
+> for 3.5 months.
+>
+> Kernel:
+> https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/log/=
+?h=3Dfuse-iomap-bpf
+>
+> libfuse:
+> https://git.kernel.org/pub/scm/linux/kernel/git/djwong/libfuse.git/log/?h=
+=3Dfuse-iomap-bpf
+>
+> e2fsprogs:
+> https://git.kernel.org/pub/scm/linux/kernel/git/djwong/e2fsprogs.git/log/=
+?h=3Dfuse-iomap-bpf
+>
+> fstests:
+> https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfstests-dev.git/l=
+og/?h=3Dfuse2fs
+>
+> --Darrick
