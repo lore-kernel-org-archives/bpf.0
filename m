@@ -1,92 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9410346FA9
-	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 22:22:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 557A4368291;
+	Mon, 16 Mar 2026 22:27:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773699749; cv=none; b=Ebg7rbBbsIeg3p2+NzvSVNGP6/6uF0H1Rb+DJ7D7OgVIJTJwQFJ2sNVf6SweoEguS/bELlJAmGmxnGxlo51pBU0DBPqyViBPIPdps1IScf0Er9biUXZP7oVrZhUPw/Lb0I1Z2boI/JVgNhiRxRJXkZziRTNrCsum8SgOiKGyqQM=
+	t=1773700065; cv=none; b=BBipaTLh8+EcBHn8Wif3xF0cqF7RefoA2Ueneo7n+BiztxrYQLoVBhCq9lELkB4f9TZvVL5ojBF/kb0RqK21wT/+WQ+CtTsqoi1MbQCvDeaQX5Ofj3YMOw3ZHG3f91bH0NI7OtDZX9S055SFAeTkackgF0m1ReExH8ubWmVRKFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773699749; c=relaxed/simple;
-	bh=p1fOV5KYN5slEUV2Dm6egotAnQlzmjDFG3Fx97s+3mY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=RuuUxYDmhKIoaJg6zytXH4at2BzS0ojCl7LlkMgQeL5XDdB8QFIm4sNhebrU5X0qYJs6TByICX/FIhIGNMxpR9U3WsVDmhAlJPUEmhIxL+FvNwqRtyvipLNAou9p9d37O4Lb8SiU/a8RCuiftPZuBAyp8X0KaF7FlfG4u/8Kd3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mZuHEhVr; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773700065; c=relaxed/simple;
+	bh=OJlcpQpHkNiFDHBKElKokhr6lSjmnGtG6ejDF5GDiko=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qbFvQd0r41fCKjkYnuMP0wOxjufSrTwAG60rHS+5OzlCSMaFRnWaqCGSuedobtqkVRDIt++b2czZxMtzxoe3bJV2QbPylCsE4HTozWUf2pm2e51R+McDxIeMXLsiI1nGHJShO1wnBxyYymZuJRsYR+O1j7+/BJynFgTErXIC7u8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=m4uk2Nex; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mZuHEhVr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8BC7C19421;
-	Mon, 16 Mar 2026 22:22:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773699749;
-	bh=p1fOV5KYN5slEUV2Dm6egotAnQlzmjDFG3Fx97s+3mY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=mZuHEhVrWNDJevHPZzC3KvsGPdzZTeY7QIQBau4kpSy3RIgOGLE1UT20W0V/U+rX4
-	 NQ3lsegOfeGmD5WKLyfsVC2lJWBfKSQwBKWUmyCPo8YRYJFwiO4w54hgDKrXvEIaK0
-	 AeL6AFbE0Fg1rSLQd0ZaDMRIy5Lx4R0k98PkBofXwAIUlHwXKKP388mLyWCgYbIRjn
-	 qIr19ggLgUuF+F0epfUQLbiJeDxgf0a4aG0WgDjRJ9F66cm4kEBc2VNpmXnr9+ruk2
-	 jEtp+0DB93mIq+kqjBOLJ5XrgqsrGEyiVbKfL1fWHT7MK/P9nZvC8N7u7JGIZ6EXio
-	 TopkPl2wo8fzw==
-Content-Type: multipart/mixed; boundary="===============3712691076000029305=="
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="m4uk2Nex"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1773700062;
+	bh=OJlcpQpHkNiFDHBKElKokhr6lSjmnGtG6ejDF5GDiko=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=m4uk2Nex3xyIREXtespm+kOv3CAz3sfNvC1O1sjYFKn9tgTAdBreqEaPKVoehtg6C
+	 4eOUxGWjxYznoAJZ8QN4yABHlOZgj6kHqKd39ttdiecKPW6ycTZN5++6RFMjxJz37U
+	 CXfNsEPClShOsReniYlLhZmWzXfCNXg9ci4slqEE=
+Date: Mon, 16 Mar 2026 23:27:41 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Leo Yan <leo.yan@arm.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>, 
+	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, Quentin Monnet <qmo@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@kernel.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, 
+	Qinxin Xia <xiaqinxin@huawei.com>, Bartosz Golaszewski <brgl@kernel.org>, 
+	Kent Gibson <warthog618@gmail.com>, "K. Y. Srinivasan" <kys@microsoft.com>, 
+	Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>, 
+	Long Li <longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>, 
+	David Lechner <dlechner@baylibre.com>, Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>, 
+	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Willy Tarreau <w@1wt.eu>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, 
+	Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>, 
+	Mark Brown <broonie@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+	Benjamin Tissoires <bentiss@kernel.org>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v4 29/30] selftests/nolibc: Append extra cflags
+Message-ID: <aacd52ed-4ef6-49f1-90a4-0affeea908e6@t-8ch.de>
+References: <20260311-tools_build_fix_zero_init-v4-0-9e35bdb99cb3@arm.com>
+ <20260311-tools_build_fix_zero_init-v4-29-9e35bdb99cb3@arm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <343cef31e681819b4e1f5a861e3aee63cdf693b6af069da87fdc546472230b3a@mail.kernel.org>
-In-Reply-To: <20260316-sleepable_tracepoints-v5-2-85525de71d25@meta.com>
-References: <20260316-sleepable_tracepoints-v5-2-85525de71d25@meta.com>
-Subject: Re: [PATCH bpf-next v5 2/5] bpf: Add sleepable support for classic tracepoint programs
-From: bot+bpf-ci@kernel.org
-To: mykyta.yatsenko5@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,kafai@meta.com,kernel-team@meta.com,eddyz87@gmail.com
-Cc: yatsenko@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 16 Mar 2026 22:22:28 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260311-tools_build_fix_zero_init-v4-29-9e35bdb99cb3@arm.com>
 
---===============3712691076000029305==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On 2026-03-11 08:29:54+0000, Leo Yan wrote:
+> Include tools/scripts/Makefile.include, which may provide additional
+> flags in EXTRA_CFLAGS, and append to CFLAGS.
+> 
+> Since Makefile.include already defines cc-option, remove the redundant
+> definition and include.
+> 
+> Signed-off-by: Leo Yan <leo.yan@arm.com>
+> ---
+>  tools/testing/selftests/nolibc/Makefile | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+> index 0370489d938b540721a4fb814ebb68c463760e73..d1a9c1d5988bdc6a8778ef418aaa4c5ac1d26a10 100644
+> --- a/tools/testing/selftests/nolibc/Makefile
+> +++ b/tools/testing/selftests/nolibc/Makefile
+> @@ -3,15 +3,13 @@
+>  TEST_GEN_PROGS := nolibc-test libc-test
+>  
+>  include ../lib.mk
+> -include $(top_srcdir)/scripts/Makefile.compiler
+> -
+> -cc-option = $(call __cc-option, $(CC),,$(1),$(2))
+> +include $(top_srcdir)/tools/scripts/Makefile.include
+>  
+>  include Makefile.include
+>  
+>  $(OUTPUT)/nolibc-test: CFLAGS = -nostdlib -nostdinc -static \
+>  	 -isystem $(top_srcdir)/tools/include/nolibc -isystem $(top_srcdir)/usr/include \
+> -	 $(CFLAGS_NOLIBC_TEST)
+> +	 $(CFLAGS_NOLIBC_TEST) $(EXTRA_CFLAGS)
+>  $(OUTPUT)/nolibc-test: LDLIBS = $(if $(LLVM),,-lgcc)
+>  $(OUTPUT)/nolibc-test: nolibc-test.c nolibc-test-linkage.c | headers
 
-> diff --git a/kernel/trace/trace_syscalls.c b/kernel/trace/trace_syscalls.c
-> index 37317b81fcda..8a7677c15f93 100644
-> --- a/kernel/trace/trace_syscalls.c
-> +++ b/kernel/trace/trace_syscalls.c
+The rule for "libc-test", which uses the standard $(LINK.c) to invoke
+the compiler, does not respect $(EXTRA_CFLAGS) automatically.
+Is this intentional? It also affects all other users of lib.mk which
+don't have any custom cflags handling.
 
-[ ... ]
-
-> @@ -1411,12 +1412,7 @@ static void perf_syscall_enter(void *ignore, struct pt_regs *regs, long id)
->  	int size = 0;
->  	int uargs = 0;
-
-perf_syscall_enter() still declares fake_regs:
-
-    struct pt_regs *fake_regs;
-
-and passes it to perf_trace_buf_alloc():
-
-    rec = perf_trace_buf_alloc(size, &fake_regs, &rctx);
-
-but the value is never read after that. Previously it was passed
-to perf_call_bpf_enter() for perf_fetch_caller_regs(), but
-perf_call_bpf_enter() now creates its own stack-local pt_regs.
-
-The same applies to fake_regs in perf_syscall_exit().
-
-Could these be cleaned up, perhaps by passing NULL to
-perf_trace_buf_alloc() since it already handles that case?
-
-    void *perf_trace_buf_alloc(int size, struct pt_regs **regs, ...)
-    {
-        ...
-        if (regs)
-            *regs = this_cpu_ptr(&__perf_regs[rctx]);
-        ...
-    }
+If so, there should be an override for the "libc-test" target, too.
+But if I am supposed to pick up this patch, I can fix it up when applying.
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23167661157
---===============3712691076000029305==--
+Thomas
