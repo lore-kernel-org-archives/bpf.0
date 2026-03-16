@@ -1,184 +1,358 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010019.outbound.protection.outlook.com [52.101.201.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E0593A75BF;
-	Mon, 16 Mar 2026 15:49:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773676192; cv=none; b=mXrBMrjEtqIPz/uhanl9xM5owDPHxXuZmT+5DSpsUlxwDWRBsE1y99pQKR4PJlGdTaCWOhpGbpVgkUlsdWRsQtLfuDDUPnmS5mIQuTaROoBFUKQZD9kiKD2goKbv8EIeuJUvhUPuA2BSpFRM3LH6/P5c4VkhmQNxeQPS6nc73tw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773676192; c=relaxed/simple;
-	bh=yjd8NtgZHV8vh5dTR2BKFX8AF+cyPjyTRX8mDhKOXNk=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:References:
-	 In-Reply-To:Content-Type; b=Ab4YCwmPWyMtachLLwgF+29FujJiSh0+Br/VONcwzRn65XJW2L7fCBvKTveEuUrAbPVVEdKF8fXkLFmrWvRCJMhxJ1vj+SH94TtmygiRpvpdk+0V+MpDtuvhCzPv9MyPBfQqEwh1CC8l0coy1UOI8yURrGY310k1JdgVrVS8iRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dnNdS6JP; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B24D93246F8;
+	Mon, 16 Mar 2026 16:02:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.19
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773676941; cv=fail; b=H9q8MXTrjA5uCRlaqr6Vzu4JWL9eJex4veS2K8UMu/l7qrvl/hWiFmwSzSuL3qf665/HAOfkFkXm6MpKtZi1D9YhoDbuYYIfqBT+USbkWBOraBz5RTIeTFQTTCTkMKgqoE9vo/4ZTjHxwh3QLPtRnYWKJsCVXgY307W7BQryH6g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773676941; c=relaxed/simple;
+	bh=KLY7+cEhuLeWbeenoBzSmo0f3NqKj158If2wnAwo6jk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=haEIfCCbGnPFtrxxeemqcC6wXhRVomCBhXhrCXKFCMzOVcxfkOXmWHxHe5Mj5oF2oyssqNVmsA8ppvNbuxIj+jNH/DjFDbWEDgsM8b7RJMQI8WqJvYmGMTdQOHVjavlFwBavIcrcrnm6/Wt1ddp+Dghpfonp/Mfl8a1dRMfjcl4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=DlcJ066u; arc=fail smtp.client-ip=52.101.201.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dnNdS6JP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7C85C19421;
-	Mon, 16 Mar 2026 15:49:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773676191;
-	bh=yjd8NtgZHV8vh5dTR2BKFX8AF+cyPjyTRX8mDhKOXNk=;
-	h=Date:From:Subject:To:References:In-Reply-To:From;
-	b=dnNdS6JPE6qD2jCA3kQJjIdRQTEImwtT4IQd5np/fj4QggzDeGkshtI8ChdkVfnNm
-	 qJoSB1cAsevGgmwZHC+UNpQ6/Zqv55lzoc+Vn9HSZ1o3n2pBIUMfgfhu5eTKasUwOv
-	 nnOVYNmuGNN4BVuJTYa+xoO20R5sGn2/SyZHXFVgXXoIbBlAv9yC/6G7IrRl1A9Jqq
-	 Lm3/6jmPUQQEel7kT+F3tS9PEYNIvb8KbN+EjeRT7BwnzwD3EvL2r+HFdpZ5pLSrKi
-	 JFLMV99cXmWqvB2RWYEFMPfEn4S3qZVL1zq6wyoF7YV1ETfMFVTNF5TzyhXSCY2Bu8
-	 ajuv4mXvA4vwA==
-Message-ID: <e59ab258-7331-412c-b490-657e32ec1fe0@kernel.org>
-Date: Mon, 16 Mar 2026 16:49:45 +0100
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="DlcJ066u"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=c3lURQrW6JYRFoQfDGLIxaozHl3U9DINjFeXx3QVaQc04z7aH50cXXo5PfYmFkfBtpRigV/VtKsHWkInHVCrc1OacoMVcEWjNPAn80tVUa5wjHJBT5oR9NnJD6VpCblf733hE6fOE+Rdg7Pnji45PEqeGv27HBOow8bEoi4rFucOPgZxeh9EEkj6QWG+qCsY3/bwPNVTfD68wCS5BKDcDuU0xpOH5CmMgVyYCBe0znevUKIMh7qm0Ym6cKvGyS47y8mYg5tozwEpaCbeXDCJudugzH5wkoXYq1J48gMFbhXHrfgpczEvTQecPvorCsgfMyT+w+CrrEHGeZo54vqJ+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/wEaGMYke7+vjlkxbh2iN6aIMFtd9WvZ11X4TJzBzFY=;
+ b=HJmXxsWM0rQODPpS5s2F72dXRwrfrGf3Dz5zf/dM2cqO8Hmi5sSNKpAB+rSeHJxDOqts/uEBnOOA6qSCulTq4tG92W1flx2xqps8Xbq2tdeiSaVM8rQWvp5tqmmwjZbeoj/OPze33gACKe0dnE5aBBNIRuF2ZKsRMH5fvBGw0S1bTXmsz/KROkd7QySPjei7RUmZTalb1kfH1T62xVl2s9g+bTxkixmhC4xl+WAa2wpQA1G0fWjHeM5GNE1RgiFeXtTSyZJWP+nGOrnWwIWgszg4P2BzSmtBYYh/eF4vzqdif/5Iscydwq9jt4ZxfQ4QvcuW44HUM3i+Ahv8i0ZUGg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/wEaGMYke7+vjlkxbh2iN6aIMFtd9WvZ11X4TJzBzFY=;
+ b=DlcJ066uRDADJKJU+VMIV2reA2caUrJ7cHdEOE/7IdnKLxnA7ACznplFk7foWZpHFOXJbLcYaA9U4MzC3eNRb5vTjnJ41vgy3Ti1U2eHNfd9egrbJzTmzn2Cgxb/eaRkIXuV62WQF5f5KGcG6ZIR09gVIw/gixdhKaUIlkBr7i9Iw5UTpjupRiKeZZQSKU1LxEVuba3AVPrf4U7/DzW2w1byXgp66eCCAnGqeaCIkUAi5euTxCeQ0gIGKHZxYaNVw7WR/bfmIaNq7/kiCT03BesmCOd60qS9f3qtz0TmaN5JlddYimHRuWLO6Nq83EexBEOXHIuV09kwPYqp7zpBdQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
+ IA1PR12MB7567.namprd12.prod.outlook.com (2603:10b6:208:42d::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.17; Mon, 16 Mar
+ 2026 16:02:11 +0000
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::f01d:73d2:2dda:c7b2]) by DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::f01d:73d2:2dda:c7b2%4]) with mapi id 15.20.9723.016; Mon, 16 Mar 2026
+ 16:02:10 +0000
+From: Zi Yan <ziy@nvidia.com>
+To: Vlastimil Babka <vbabka@suse.cz>,
+ Muhammad Usama Anjum <usama.anjum@arm.com>, Ryan.Roberts@arm.com
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Brendan Jackman <jackmanb@google.com>, Johannes Weiner <hannes@cmpxchg.org>,
+ Uladzislau Rezki <urezki@gmail.com>, Nick Terrell <terrelln@fb.com>,
+ David Sterba <dsterba@suse.com>,
+ "Vishal Moola (Oracle)" <vishal.moola@gmail.com>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, david.hildenbrand@arm.com
+Subject: Re: [PATCH v2 1/3] mm/page_alloc: Optimize free_contig_range()
+Date: Mon, 16 Mar 2026 12:02:03 -0400
+X-Mailer: MailMate (2.0r6290)
+Message-ID: <703BB8CD-23D9-4012-8333-366837D7E95A@nvidia.com>
+In-Reply-To: <220e97f0-dc82-4f37-b833-7160aee46cea@suse.cz>
+References: <20260316113209.945853-1-usama.anjum@arm.com>
+ <20260316113209.945853-2-usama.anjum@arm.com>
+ <220e97f0-dc82-4f37-b833-7160aee46cea@suse.cz>
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: SJ0PR05CA0107.namprd05.prod.outlook.com
+ (2603:10b6:a03:334::22) To DS7PR12MB9473.namprd12.prod.outlook.com
+ (2603:10b6:8:252::5)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Vlastimil Babka <vbabka@kernel.org>
-Subject: Re: [PATCH v2 2/3] vmalloc: Optimize vfree
-Content-Language: en-US
-To: Muhammad Usama Anjum <usama.anjum@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Mike Rapoport
- <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Brendan Jackman <jackmanb@google.com>,
- Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
- Uladzislau Rezki <urezki@gmail.com>, Nick Terrell <terrelln@fb.com>,
- David Sterba <dsterba@suse.com>,
- "Vishal Moola (Oracle)" <vishal.moola@gmail.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, Ryan.Roberts@arm.com,
- david.hildenbrand@arm.com
-References: <20260316113209.945853-1-usama.anjum@arm.com>
- <20260316113209.945853-3-usama.anjum@arm.com>
-In-Reply-To: <20260316113209.945853-3-usama.anjum@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|IA1PR12MB7567:EE_
+X-MS-Office365-Filtering-Correlation-Id: c6cf7ca7-e201-4464-7c02-08de83756193
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|22082099003|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	qwF7YFx02HmugEQ/VBXWtnOlQUzIGpEb8NDDLM+t7ZHXfT0hidgFQlnu7lte+UnQ7UZkPCL3y7qmWQOShy7Q8ul96e+FE0rMYdbsbYlIScBSWdaywq9E8Ei/KbfkHxalEhELvLsc7s33Esiy0zHas12fDfd/SaIbHnW3I8o8HcHNWGIB5Roahuoe1zk/p7NS8p0kj1LqIPtqcfOk/UQWSwQPph0ds5gXJet7vxL+5DPouGYiBDmEg7XxpNWXPeZPQrctBC/ddxNMBWMFbrVajohxdskxjgI4E9V/ZlgTEOjG1sp3Or0DXU0e6p/6RHCXQFKBqAUa+pb5WarvNioYQDL8sjMdUiI/Nt6ezBWbectDg1i2a9aM6g37tNQMxbvhXTUoRqaAxOTC+jo3V2jkSevV6SF6amzxin/IAL2XGCBLz6uSPgZdC4GvY+RDLWjx05hX2sYh0XCPvEr0m83R70ym19vrWcAwbbcLAF/Cfn+/GfPjqEeHu0LrBRvUq+1zYmntoJm56cmfnp7wMcy6ypKHQ0C4rtEeDBVOi6UdeiMzMJ91GO9cMuaUkbw8ynskR5ROYxPxnOG6XbaBcb6Wh1yxqFgQlT4EEBdt6iSLb+9Kb2KwGLzPQpk0WFfNO9+aqpZ6PiiNaDn9LN3TGj9gMpfOe5QdDD6Z9FBJtK2KI6yWBCWtMifYEvUCU/eHuuIDyxdpab/cIdWehGPuRjdPY+fAiwoNtxfaMsDhyKqVHys=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?GXoUWoVzkri7sTFwoE0hmq2vAHJ7Db0xRpNuAU1FxkwJx6a1ETBZ4Hpur0ll?=
+ =?us-ascii?Q?bFN30nJT3BENg84W585y9+9h4uXdm1CNOrNtHLv9Z06vdvidaoHdZvig63FX?=
+ =?us-ascii?Q?YzxHSLO7Oz2FR8dtySAuFf7iFkZug9eePM0P6OOgIMKYHHGJZLmc9UPsHWvw?=
+ =?us-ascii?Q?iVfbytMA7GCvSnJCiWY8GCoXSOT4+ySGkZbwn4ZA+f2nesjPitmi+qC7+4DF?=
+ =?us-ascii?Q?GsHHgfdHmGppL7ptYQ5v0wR/X+ilUW4409XzohPTcupze5dfqtU8hgy/35be?=
+ =?us-ascii?Q?vt8uW/ms0IPD9mhpmnwCldMQx7gYfJ1K2lvWkSRjWUEy78p9hOJyfMHW2tyt?=
+ =?us-ascii?Q?sziGjMwGY9q3FNZbd45lP2346BTcb0Y2fWlmnIK6kuGdZCxR+wWQtwE5NBJ8?=
+ =?us-ascii?Q?Y5gGLMPS/w+hlnlL1jw+qSJ0SDGXH/byyRapEAzIM3smLijNHMxnMa9dypjZ?=
+ =?us-ascii?Q?qCkrkK4vAuy+/cYY7L8I0TfBBW5WIAmBAhcoHuX6Uy+y8Oc+k9+UO2f1dyNS?=
+ =?us-ascii?Q?L2Z1GDofxL3Of5fmScCzZqorl1wVhQKPdR89e0R9YRYjud8/4GupaGuAtRmL?=
+ =?us-ascii?Q?iNWjHfja6fycTD7li13Skajpt/eR1yjBoD2V2xxox9S/bxfuBEpnEc3G6vCD?=
+ =?us-ascii?Q?rp82054GLlC3X5mqF8NY7A8jlwCo0aE+6Do7bpjePG/CjCIJVFw/vHoKeYPz?=
+ =?us-ascii?Q?zOAcGam5ZHuD1xkhn9y8yzHLujVm2e42LnD5gnQh5HEMKHhAW/5yewvoSgfc?=
+ =?us-ascii?Q?ecoOnGKREHQAQXe8danSS1hUzlB6kNX8ITuA3j0822AJJckQS+aBPoMNaYXL?=
+ =?us-ascii?Q?NP4KSOhf/rS+ws+L1utl9/aQ6b6728WXr7fKXYmJmh+nMvNx0d3NFpTT0laK?=
+ =?us-ascii?Q?0MCFDpxEZP49RfOHFVpdNjpYsrVHKgbTR5fcrVsilx7WOiRaNvhUH3XpS9qD?=
+ =?us-ascii?Q?XWrZrcdLY6K5BA3yOgt9CeuMorxi3fJ0gaalG1+A8G/grZROz+dBbHVTFZIJ?=
+ =?us-ascii?Q?yHm65u5JuxaQhAlfrrlgm9JMuR2VoF0VeOMJqH/j0YlalFdfEyuFrQEVwk5I?=
+ =?us-ascii?Q?qvdOmu3o1yqa2aMKYpBTtq/3bjogppQpWEcwcgV0DL7p3OLCkx/C25UbA4u/?=
+ =?us-ascii?Q?8i1sOsABfw8MhRE1r2mPVFroNx8BQGxk7Yp1Epq6xVZLaziaIX2nQpviG7kA?=
+ =?us-ascii?Q?1e1Abu8oApK/FUx4qHaaLR1Il1DBmuq56xccKm3O+Ql1l4YoZp3QOnwvudpq?=
+ =?us-ascii?Q?D+SJ3luBVDNWHGXtaHnc1Nhdk9Hu3qt3ey4v6kPGInIzSAsPPHfTx30UrQGE?=
+ =?us-ascii?Q?HKcMMbSD/zd2p0FBXbmYajCk6MP3fHHJRkuLxF5es4/RRuVlzt8T2nzREsR2?=
+ =?us-ascii?Q?+kJ939zeIPtwL+HFeZ/PSlAml3QFBnSEziag8Ma/z3WourA2/f0wbPViwsN8?=
+ =?us-ascii?Q?tVHxfmUAnMnO+TTNIGzRMtnOxhHcEPCEAQ+l74RSwvm6eBM/P5LBXEBf+Qlj?=
+ =?us-ascii?Q?qTTfYrztVT9sqj5acQ8CwRueBn7/ycY7SzRuxDiDYsK7PP8SQu9IRLGkxE6Z?=
+ =?us-ascii?Q?LBz0AJX8ram3eNiybhnb1YtxZWIeTWUiou+yoVsS6NzReQ/lOSoyEBr99CV3?=
+ =?us-ascii?Q?dxTpN+/Ep5d3tx+p+4WELWLnqM+g234skeX3eaI/EDA4voFBKlYZbI5RusPD?=
+ =?us-ascii?Q?RobrwNgzP2lz6GfKSz8NttCdhdFyF4HhaDXH+KQUsym8m1Ki?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c6cf7ca7-e201-4464-7c02-08de83756193
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2026 16:02:10.7955
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5KWljkYqJB3sYWkatQNEJ2bENLUIZL1m92Bfu69zPqNNScq3hDPH9eJkvNBZs6AZ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7567
 
-On 3/16/26 12:31, Muhammad Usama Anjum wrote:
-> From: Ryan Roberts <ryan.roberts@arm.com>
-> 
-> Whenever vmalloc allocates high order pages (e.g. for a huge mapping) it
-> must immediately split_page() to order-0 so that it remains compatible
-> with users that want to access the underlying struct page.
-> Commit a06157804399 ("mm/vmalloc: request large order pages from buddy
-> allocator") recently made it much more likely for vmalloc to allocate
-> high order pages which are subsequently split to order-0.
-> 
-> Unfortunately this had the side effect of causing performance
-> regressions for tight vmalloc/vfree loops (e.g. test_vmalloc.ko
-> benchmarks). See Closes: tag. This happens because the high order pages
-> must be gotten from the buddy but then because they are split to
-> order-0, when they are freed they are freed to the order-0 pcp.
-> Previously allocation was for order-0 pages so they were recycled from
-> the pcp.
-> 
-> It would be preferable if when vmalloc allocates an (e.g.) order-3 page
-> that it also frees that order-3 page to the order-3 pcp, then the
-> regression could be removed.
-> 
-> So let's do exactly that; use the new __free_contig_range() API to
-> batch-free contiguous ranges of pfns. This not only removes the
-> regression, but significantly improves performance of vfree beyond the
-> baseline.
-> 
-> A selection of test_vmalloc benchmarks running on arm64 server class
-> system. mm-new is the baseline. Commit a06157804399 ("mm/vmalloc: request
-> large order pages from buddy allocator") was added in v6.19-rc1 where we
-> see regressions. Then with this change performance is much better. (>0
-> is faster, <0 is slower, (R)/(I) = statistically significant
-> Regression/Improvement):
-> 
-> +-----------------+----------------------------------------------------------+-------------------+--------------------+
-> | Benchmark       | Result Class                                             |   mm-new          |  this series       |
-> +=================+==========================================================+===================+====================+
-> | micromm/vmalloc | fix_align_alloc_test: p:1, h:0, l:500000 (usec)          |        1331843.33 |         (I) 67.17% |
-> |                 | fix_size_alloc_test: p:1, h:0, l:500000 (usec)           |         415907.33 |             -5.14% |
-> |                 | fix_size_alloc_test: p:4, h:0, l:500000 (usec)           |         755448.00 |         (I) 53.55% |
-> |                 | fix_size_alloc_test: p:16, h:0, l:500000 (usec)          |        1591331.33 |         (I) 57.26% |
-> |                 | fix_size_alloc_test: p:16, h:1, l:500000 (usec)          |        1594345.67 |         (I) 68.46% |
-> |                 | fix_size_alloc_test: p:64, h:0, l:100000 (usec)          |        1071826.00 |         (I) 79.27% |
-> |                 | fix_size_alloc_test: p:64, h:1, l:100000 (usec)          |        1018385.00 |         (I) 84.17% |
-> |                 | fix_size_alloc_test: p:256, h:0, l:100000 (usec)         |        3970899.67 |         (I) 77.01% |
-> |                 | fix_size_alloc_test: p:256, h:1, l:100000 (usec)         |        3821788.67 |         (I) 89.44% |
-> |                 | fix_size_alloc_test: p:512, h:0, l:100000 (usec)         |        7795968.00 |         (I) 82.67% |
-> |                 | fix_size_alloc_test: p:512, h:1, l:100000 (usec)         |        6530169.67 |        (I) 118.09% |
-> |                 | full_fit_alloc_test: p:1, h:0, l:500000 (usec)           |         626808.33 |             -0.98% |
-> |                 | kvfree_rcu_1_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         532145.67 |             -1.68% |
-> |                 | kvfree_rcu_2_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         537032.67 |             -0.96% |
-> |                 | long_busy_list_alloc_test: p:1, h:0, l:500000 (usec)     |        8805069.00 |         (I) 74.58% |
-> |                 | pcpu_alloc_test: p:1, h:0, l:500000 (usec)               |         500824.67 |              4.35% |
-> |                 | random_size_align_alloc_test: p:1, h:0, l:500000 (usec)  |        1637554.67 |         (I) 76.99% |
-> |                 | random_size_alloc_test: p:1, h:0, l:500000 (usec)        |        4556288.67 |         (I) 72.23% |
-> |                 | vm_map_ram_test: p:1, h:0, l:500000 (usec)               |         107371.00 |             -0.70% |
-> +-----------------+----------------------------------------------------------+-------------------+--------------------+
-> 
-> Fixes: a06157804399 ("mm/vmalloc: request large order pages from buddy allocator")
-> Closes: https://lore.kernel.org/all/66919a28-bc81-49c9-b68f-dd7c73395a0d@arm.com/
-> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
-> Co-developed-by: Muhammad Usama Anjum <usama.anjum@arm.com>
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
-> ---
-> Changes since v1:
-> - Rebase on mm-new
-> - Rerun benchmarks
-> ---
->  mm/vmalloc.c | 34 +++++++++++++++++++++++++---------
->  1 file changed, 25 insertions(+), 9 deletions(-)
-> 
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index c607307c657a6..8b935395fb068 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -3459,18 +3459,34 @@ void vfree(const void *addr)
->  
->  	if (unlikely(vm->flags & VM_FLUSH_RESET_PERMS))
->  		vm_reset_perms(vm);
-> -	for (i = 0; i < vm->nr_pages; i++) {
-> -		struct page *page = vm->pages[i];
-> +
-> +	if (vm->nr_pages) {
-> +		bool account = !(vm->flags & VM_MAP_PUT_PAGES);
-> +		unsigned long start_pfn, pfn;
-> +		struct page *page = vm->pages[0];
-> +		int nr = 1;
->  
->  		BUG_ON(!page);
-> -		/*
-> -		 * High-order allocs for huge vmallocs are split, so
-> -		 * can be freed as an array of order-0 allocations
-> -		 */
-> -		if (!(vm->flags & VM_MAP_PUT_PAGES))
-> +		start_pfn = page_to_pfn(page);
-> +		if (account)
->  			mod_lruvec_page_state(page, NR_VMALLOC, -1);
-> -		__free_page(page);
-> -		cond_resched();
-> +
-> +		for (i = 1; i < vm->nr_pages; i++) {
-> +			page = vm->pages[i];
-> +			BUG_ON(!page);
+On 16 Mar 2026, at 11:21, Vlastimil Babka wrote:
 
-We shouldn't be adding BUG_ON()'s. Rather demote also the pre-existing one
-to VM_WARN_ON_ONCE() and skip gracefully.
+> On 3/16/26 12:31, Muhammad Usama Anjum wrote:
+>> From: Ryan Roberts <ryan.roberts@arm.com>
+>>
+>> Decompose the range of order-0 pages to be freed into the set of large=
+st
+>> possible power-of-2 size and aligned chunks and free them to the pcp o=
+r
+>> buddy. This improves on the previous approach which freed each order-0=
 
-> +			if (account)
-> +				mod_lruvec_page_state(page, NR_VMALLOC, -1);
+>> page individually in a loop. Testing shows performance to be improved =
+by
+>> more than 10x in some cases.
+>>
+>> Since each page is order-0, we must decrement each page's reference
+>> count individually and only consider the page for freeing as part of a=
 
-I think we should be able to batch this too to use "nr"?
+>> high order chunk if the reference count goes to zero. Additionally
+>> free_pages_prepare() must be called for each individual order-0 page
+>> too, so that the struct page state and global accounting state can be
+>> appropriately managed. But once this is done, the resulting high order=
 
-> +			pfn = page_to_pfn(page);
-> +			if (start_pfn + nr == pfn) {
-> +				nr++;
-> +				continue;
-> +			}
-> +			__free_contig_range(start_pfn, nr);
-> +			start_pfn = pfn;
-> +			nr = 1;
-> +			cond_resched();> +		}
-> +		__free_contig_range(start_pfn, nr);
->  	}
->  	kvfree(vm->pages);
->  	kfree(vm);
+>> chunks can be freed as a unit to the pcp or buddy.
+>>
+>> This significantly speeds up the free operation but also has the side
+>> benefit that high order blocks are added to the pcp instead of each pa=
+ge
+>> ending up on the pcp order-0 list; memory remains more readily availab=
+le
+>> in high orders.
+>>
+>> vmalloc will shortly become a user of this new optimized
+>> free_contig_range() since it aggressively allocates high order
+>> non-compound pages, but then calls split_page() to end up with
+>> contiguous order-0 pages. These can now be freed much more efficiently=
+=2E
+>>
+>> The execution time of the following function was measured in a server
+>> class arm64 machine:
+>>
+>> static int page_alloc_high_order_test(void)
+>> {
+>> 	unsigned int order =3D HPAGE_PMD_ORDER;
+>> 	struct page *page;
+>> 	int i;
+>>
+>> 	for (i =3D 0; i < 100000; i++) {
+>> 		page =3D alloc_pages(GFP_KERNEL, order);
+>> 		if (!page)
+>> 			return -1;
+>> 		split_page(page, order);
+>> 		free_contig_range(page_to_pfn(page), 1UL << order);
+>> 	}
+>>
+>> 	return 0;
+>> }
+>>
+>> Execution time before: 4097358 usec
+>> Execution time after:   729831 usec
+>>
+>> Perf trace before:
+>>
+>>     99.63%     0.00%  kthreadd         [kernel.kallsyms]      [.] kthr=
+ead
+>>             |
+>>             ---kthread
+>>                0xffffb33c12a26af8
+>>                |
+>>                |--98.13%--0xffffb33c12a26060
+>>                |          |
+>>                |          |--97.37%--free_contig_range
+>>                |          |          |
+>>                |          |          |--94.93%--___free_pages
+>>                |          |          |          |
+>>                |          |          |          |--55.42%--__free_froz=
+en_pages
+>>                |          |          |          |          |
+>>                |          |          |          |           --43.20%--=
+free_frozen_page_commit
+>>                |          |          |          |                     =
+|
+>>                |          |          |          |                     =
+ --35.37%--_raw_spin_unlock_irqrestore
+>>                |          |          |          |
+>>                |          |          |          |--11.53%--_raw_spin_t=
+rylock
+>>                |          |          |          |
+>>                |          |          |          |--8.19%--__preempt_co=
+unt_dec_and_test
+>>                |          |          |          |
+>>                |          |          |          |--5.64%--_raw_spin_un=
+lock
+>>                |          |          |          |
+>>                |          |          |          |--2.37%--__get_pfnblo=
+ck_flags_mask.isra.0
+>>                |          |          |          |
+>>                |          |          |           --1.07%--free_frozen_=
+page_commit
+>>                |          |          |
+>>                |          |           --1.54%--__free_frozen_pages
+>>                |          |
+>>                |           --0.77%--___free_pages
+>>                |
+>>                 --0.98%--0xffffb33c12a26078
+>>                           alloc_pages_noprof
+>>
+>> Perf trace after:
+>>
+>>      8.42%     2.90%  kthreadd         [kernel.kallsyms]         [k] _=
+_free_contig_range
+>>             |
+>>             |--5.52%--__free_contig_range
+>>             |          |
+>>             |          |--5.00%--free_prepared_contig_range
+>>             |          |          |
+>>             |          |          |--1.43%--__free_frozen_pages
+>>             |          |          |          |
+>>             |          |          |           --0.51%--free_frozen_pag=
+e_commit
+>>             |          |          |
+>>             |          |          |--1.08%--_raw_spin_trylock
+>>             |          |          |
+>>             |          |           --0.89%--_raw_spin_unlock
+>>             |          |
+>>             |           --0.52%--free_pages_prepare
+>>             |
+>>              --2.90%--ret_from_fork
+>>                        kthread
+>>                        0xffffae1c12abeaf8
+>>                        0xffffae1c12abe7a0
+>>                        |
+>>                         --2.69%--vfree
+>>                                   __free_contig_range
+>>
+>> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+>> Co-developed-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+>> ---
+>> Changes since v1:
+>> - Rebase on mm-new
+>> - Move FPI_PREPARED check inside __free_pages_prepare() now that
+>>   fpi_flags are already being passed.
+>> - Add todo (Zi Yan)
+>> - Rerun benchmarks
+>> - Convert VM_BUG_ON_PAGE() to VM_WARN_ON_ONCE()
+>> - Rework order calculation in free_prepared_contig_range() and use
+>>   MAX_PAGE_ORDER as high limit instead of pageblock_order as it must
+>>   be up to internal __free_frozen_pages() how it frees them
+>> ---
+>>  include/linux/gfp.h |   2 +
+>>  mm/page_alloc.c     | 110 ++++++++++++++++++++++++++++++++++++++++++-=
+-
+>>  2 files changed, 108 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/include/linux/gfp.h b/include/linux/gfp.h
+>> index f82d74a77cad8..96ac7aae370c4 100644
+>> --- a/include/linux/gfp.h
+>> +++ b/include/linux/gfp.h
+>> @@ -467,6 +467,8 @@ void free_contig_frozen_range(unsigned long pfn, u=
+nsigned long nr_pages);
+>>  void free_contig_range(unsigned long pfn, unsigned long nr_pages);
+>>  #endif
+>>
+>> +unsigned long __free_contig_range(unsigned long pfn, unsigned long nr=
+_pages);
+>> +
+>>  DEFINE_FREE(free_page, void *, free_page((unsigned long)_T))
+>>
+>>  #endif /* __LINUX_GFP_H */
+>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+>> index 75ee81445640b..6a9430f720579 100644
+>> --- a/mm/page_alloc.c
+>> +++ b/mm/page_alloc.c
+>> @@ -91,6 +91,13 @@ typedef int __bitwise fpi_t;
+>>  /* Free the page without taking locks. Rely on trylock only. */
+>>  #define FPI_TRYLOCK		((__force fpi_t)BIT(2))
+>>
+>> +/*
+>> + * free_pages_prepare() has already been called for page(s) being fre=
+ed.
+>> + * TODO: Perform per-subpage free_pages_prepare() checks for order > =
+0 pages
+>> + * (HWPoison, PageNetpp, bad free page).
+>> + */
+>
+> I'm confused, and reading the v1 thread didn't help either. Where would=
+ the
+> subpages to check come from? AFAICS we start from order-0 pages always.=
 
+> __free_contig_range calls free_pages_prepare on every page with order 0=
+
+> unconditionally, so we check every page as an order-0 page. If we then =
+free
+> the bunch of individually checked pages as a high-order page, there's n=
+o
+> reason to check those subpages again, no? Am I missing something?
+
+There are two kinds of order > 0 pages, compound and not compound.
+free_pages_prepare() checks all tail pages of a compound order > 0 pages =
+too.
+For non compound ones, free_pages_prepare() only has free_page_is_bad()
+check on tail ones.
+
+So my guess is that the TODO is to check all subpages on a non compound
+order > 0 one in the same manner. This is based on the assumption that
+all non compound order > 0 page users use split_page() after the allocati=
+on,
+treat each page individually, and free them back altogether. But I am not=
+
+sure if this is true for all users allocating non compound order > 0 page=
+s.
+And free_pages_prepare_bulk() might be a better name for such functions.
+
+The above confusion is also a reason I asked Ryan to try adding a unsplit=
+_page()
+function to fuse back non compound order > 0 pages and free the fused one=
+
+as we are currently doing. But that looks like a pain to implment. Maybe =
+an
+alternative to this FPI_PREPARED is to add FPI_FREE_BULK and loop through=
+ all
+subpages if FPI_FREE_BULK is set with
+__free_pages_prepare(page + i, 0, fpi_flags & ~FPI_FREE_BULK) in
+__free_pages_ok().
+
+
+Best Regards,
+Yan, Zi
