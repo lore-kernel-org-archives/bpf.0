@@ -1,178 +1,173 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9CF2372684;
-	Mon, 16 Mar 2026 08:35:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB8F383A14;
+	Mon, 16 Mar 2026 10:18:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773650116; cv=none; b=bWJh4fEoTs6e+MG4yI44dQo/zMng1KKts1P8WJleLbhsC/kIxsXn4+9w0XhkUS1eui0W0DwXmvAgwgGaXsy+qxzZ8qVVLG+zEAGho9k0kq4pCDZid1oUpboG0YgzZlq9Mw+vavAk2G0N1GX204gmUfW40z2fpTKkvfa0e2jku5c=
+	t=1773656285; cv=none; b=J2Nz/a/yUeKqcibAXiiFL1N3WA30do6PLq/rz/7Omp043mbxbWOV5gXCrrROiee+1I/HmPfO1wdQDDPtB6H2tgvwdBqfL32l7N4A4QFdN+LYxr1kN6wdv2x/HrCSk68/EQXOoTqE3Zka5G0lEkxipyiXuSWb5jEFUTiM6ZycYMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773650116; c=relaxed/simple;
-	bh=yyB7Xc2VFt+2AztXEbknRu9X2dBM4czY1jzpWiKP5i4=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=WLdg5l6o0fcAjPfghBcWZgCEl8a0ZahOIURf4qaxFQjQ5v7UzIJRK44uG0wbm9j++mUTnAkLYpvLo8gp+d7Uf4VWzYNvHs07zCu/bMPHUL4oorMWSfPkMA3NxGgYp8lKDunr2XoQbhQ4mpbQfukB+TlYQHPS7PSIcVQWqNsNaxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F0SqaIvt; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F0SqaIvt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E418DC19421;
-	Mon, 16 Mar 2026 08:35:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773650116;
-	bh=yyB7Xc2VFt+2AztXEbknRu9X2dBM4czY1jzpWiKP5i4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=F0SqaIvtVpuua/wvdKffXY5n4eae3PMQgmoSWU+1NZRhoJIytGF8CILlzDiJA2EeV
-	 +U7RtyU1vnJB1zO6GIr1GKppyVrMj4BQ1c1zc81Orqh9Wz4IY/weszSrf7tzKTA+gA
-	 q8YrgVxz3Bp5qNIM0QPN3QG58sWOC0tHKVnkrZHZWc1gVIWBCXzioF9A+hbQPExRKe
-	 gzbv9AjLGZUUJGo0Xrkv0geX+8HhJV0d+TfhbELvOCIS7Fa13k+1LzT7q3GS30b5wL
-	 pxyxCDpnT3LFpxo44aS9CJw/KOyIKB1rbUF0o9NYTTf+vcNunCPFU9E82iwVFvdkVj
-	 zeNoXAk/OyDKA==
-Content-Type: multipart/mixed; boundary="===============5043058372494968077=="
+	s=arc-20240116; t=1773656285; c=relaxed/simple;
+	bh=c30q8cP+1tW7hMgKrmZODRuHGnO1oWLiLKKYH9vT2C8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tXVqCkEs09iLDfzGD7rSTlXB9+bIGIJCHgdgUKGRNap6YpVsr4TtR+e7xHDKZxe0PgZvRn26LAv8BOihsHpri5dZZjXj7cJBYQuX0bvVDTYMAk7GLLnBETHcotVlv5Y9kKDy4lJeZ36zYdXUQKTEcS3wCf45+z1B6BMqE9UAl+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 422051477;
+	Mon, 16 Mar 2026 03:17:57 -0700 (PDT)
+Received: from localhost (e132581.arm.com [10.1.196.87])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CAD483F73B;
+	Mon, 16 Mar 2026 03:18:02 -0700 (PDT)
+Date: Mon, 16 Mar 2026 10:18:00 +0000
+From: Leo Yan <leo.yan@arm.com>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>,
+	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
+	Quentin Monnet <qmo@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	William Breathitt Gray <wbg@kernel.org>,
+	Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Kent Gibson <warthog618@gmail.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Long Li <longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
+	Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, bpf@vger.kernel.org,
+	linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v4 07/30] libbpf: Initialize CFLAGS before including
+ Makefile.include
+Message-ID: <20260316101800.GB8048@e132581.arm.com>
+References: <20260311-tools_build_fix_zero_init-v4-0-9e35bdb99cb3@arm.com>
+ <20260311-tools_build_fix_zero_init-v4-7-9e35bdb99cb3@arm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <d97442169a77b667c7f12664cd684f51a8914d4e2c05ef64344aacaae11c3415@mail.kernel.org>
-In-Reply-To: <20260316075138.465430-9-jolsa@kernel.org>
-References: <20260316075138.465430-9-jolsa@kernel.org>
-Subject: Re: [PATCHv3 bpf-next 08/24] bpf: Add bpf_trampoline_multi_attach/detach functions
-From: bot+bpf-ci@kernel.org
-To: jolsa@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
-Cc: bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,kafai@fb.com,eddyz87@gmail.com,songliubraving@fb.com,yhs@fb.com,menglong8.dong@gmail.com,rostedt@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 16 Mar 2026 08:35:15 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260311-tools_build_fix_zero_init-v4-7-9e35bdb99cb3@arm.com>
 
---===============5043058372494968077==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi BPF maintainers,
 
-> The detach works as follows:
-> - we lock all the needed trampolines
-> - remove the program from each (__bpf_trampoline_unlink_prog)
-> - the trampoline_multi_ops passed in __bpf_trampoline_link_prog gathers
->   ftrace_hash (ip -> trampoline) objects
+On Wed, Mar 11, 2026 at 08:29:32AM +0000, Leo Yan wrote:
+> tools/scripts/Makefile.include may expand EXTRA_CFLAGS in a future
+> change.  This could alter the initialization of CFLAGS, as the default
+> options "-g -O2" would never be set once EXTRA_CFLAGS is expanded.
+> 
+> Prepare for this by moving the CFLAGS initialization before including
+> tools/scripts/Makefile.include, so it is not affected by the extended
+> EXTRA_CFLAGS.
+> 
+> Append EXTRA_CFLAGS to CFLAGS only after including Makefile.include and
+> place it last so that the extra flags propagate properly and can
+> override the default options.
+> 
+> Signed-off-by: Leo Yan <leo.yan@arm.com>
 
-The detach description references __bpf_trampoline_link_prog, but the
-detach path calls __bpf_trampoline_unlink_prog.
+Before sending a new version, I'd check if you have a chance to review
+the libbpf patches.  The libbpf change is crucial for this series.
 
-> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> index d55651b13511..9331cca8c0b4 100644
-> --- a/kernel/bpf/trampoline.c
-> +++ b/kernel/bpf/trampoline.c
+Another reason for pinging because I received a bpf-ci report about test
+failures for this series [1].  The failures looks to be unrelated, as
+the tests fail starting from the first patch, which is irrelevant to BPF
+code [2].  I tried reaching kernel-ci@meta.com last week but haven't
+received a response yet.
 
-[ ... ]
+If bpf-ci testing is mandatory for libbpf patches, could you advise me
+on the correct workflow (e.g., whether the patches should be based on a
+specific branch)?
 
-> +static int modify_fentry_multi(struct bpf_trampoline *tr, u32 orig_flags, void *old_addr,
-> +			       void *new_addr, bool lock_direct_mutex, void *ptr)
-> +{
-> +	unsigned long addr = (unsigned long) new_addr;
-> +	unsigned long ip = ftrace_location(tr->ip);
-> +	struct fentry_multi_data *data = ptr;
+Thanks.
+
+[1] https://github.com/kernel-patches/bpf/actions/runs/22944268645
+[2] https://patchwork.kernel.org/project/netdevbpf/patch/20260311-tools_build_fix_zero_init-v4-1-9e35bdb99cb3@arm.com/
+
+> ---
+>  tools/lib/bpf/Makefile | 16 +++++++++-------
+>  1 file changed, 9 insertions(+), 7 deletions(-)
+> 
+> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+> index b1fbd0211c5edde7be3d98630b16e53e028d9116..eca584fb061e16013e76827e4203f6be0477a73e 100644
+> --- a/tools/lib/bpf/Makefile
+> +++ b/tools/lib/bpf/Makefile
+> @@ -49,6 +49,14 @@ man_dir_SQ = '$(subst ','\'',$(man_dir))'
+>  export man_dir man_dir_SQ INSTALL
+>  export DESTDIR DESTDIR_SQ
+>  
+> +# Defer assigning EXTRA_CFLAGS to CFLAGS until after including
+> +# tools/scripts/Makefile.include, as it may add flags to EXTRA_CFLAGS.
+> +ifdef EXTRA_CFLAGS
+> +  CFLAGS :=
+> +else
+> +  CFLAGS := -g -O2
+> +endif
 > +
-> +	if (bpf_trampoline_use_jmp(tr->flags))
-> +		addr = ftrace_jmp_set(addr);
-> +	return add_ftrace_hash_entry_direct(data->modify, ip, addr) ? 0 : -ENOMEM;
-> +}
-
-Unlike the standard modify_fentry() which calls direct_ops_mod() ->
-update_ftrace_direct_mod() to update ftrace immediately,
-modify_fentry_multi() only adds a hash entry.  The actual ftrace
-update is deferred until after the link loop.
-
-This matters because bpf_trampoline_update() unconditionally calls
-bpf_tramp_image_put() on the old cur_image after a successful
-modify_fentry callback:
-
-    bpf_trampoline_update() {
-        ...
-        err = ops->modify_fentry(tr, ...);
-        ...
-        if (tr->cur_image)
-            bpf_tramp_image_put(tr->cur_image);
-        tr->cur_image = im;
-    }
-
-With the standard ops, the old image is already unreachable when put.
-With multi ops, ftrace still points to the old image when it is put.
-bpf_tramp_image_put() text-pokes the old image to skip fexit programs
-and starts deferred freeing.
-
-In the success path, the window between image_put and the batched
-update_ftrace_direct_mod is brief (bounded by trampoline_lock_all).
-
-However, in the rollback path below, ftrace is never updated at all:
-
-[ ... ]
-
-> +	trampoline_lock_all();
-> +
-> +	for (i = 0; i < cnt; i++) {
-> +		mnode = &link->nodes[i];
-> +		err = __bpf_trampoline_link_prog(&mnode->node, mnode->trampoline, NULL,
-> +						 &trampoline_multi_ops, &data);
-> +		if (err)
-> +			goto rollback_unlink;
-> +	}
-
-[ ... ]
-
-> +rollback_unlink:
-> +	for (j = 0; j < i; j++) {
-> +		mnode = &link->nodes[j];
-> +		WARN_ON_ONCE(__bpf_trampoline_unlink_prog(&mnode->node, mnode->trampoline,
-> +					NULL, &trampoline_multi_ops, &data));
-> +	}
-> +	trampoline_unlock_all();
-> +
-> +	i = cnt;
-
-If a trampoline at index 0 already had programs attached through the
-standard single-trampoline path, and __bpf_trampoline_link_prog
-succeeds for it but fails for a later trampoline, the rollback path
-restores tr->cur_image to a correct new image but never calls
-update_ftrace_direct_mod.
-
-At that point, ftrace still routes calls through the old image that
-was put during the link phase.  bpf_tramp_image_put() has already
-patched that old image to skip fexit programs and started the deferred
-freeing sequence (percpu_ref_kill).
-
-Could this leave existing fexit/fmod_ret programs on that trampoline
-non-functional?  And once the percpu_ref drains during a quiet period,
-would the old image be freed while ftrace still references it?
-
-[ ... ]
-
-> +int bpf_trampoline_multi_detach(struct bpf_prog *prog, struct bpf_tracing_multi_link *link)
-> +{
-> +	struct bpf_tracing_multi_node *mnode;
-> +	struct fentry_multi_data data = {};
-> +	int i, cnt = link->nodes_cnt;
-> +
-> +	data.unreg  = alloc_ftrace_hash(FTRACE_HASH_DEFAULT_BITS);
-> +	data.modify = alloc_ftrace_hash(FTRACE_HASH_DEFAULT_BITS);
-> +
-> +	if (!data.unreg || !data.modify) {
-> +		free_fentry_multi_data(&data);
-> +		return -ENOMEM;
-> +	}
-
-bpf_trampoline_multi_detach can return -ENOMEM here without detaching
-anything.  In e80a839e3d2c ("bpf: Add support for tracing multi
-link"), this is called from bpf_tracing_multi_link_release():
-
-    WARN_ON_ONCE(bpf_trampoline_multi_detach(link->prog, tr_link));
-
-If detach fails, the programs remain linked to the trampolines via
-mnode->node.tramp_hlist, but the link (and its embedded nodes array)
-is freed by bpf_tracing_multi_link_dealloc().  Would this leave
-dangling hlist entries in each trampoline's progs_hlist?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23133791558
---===============5043058372494968077==--
+>  include $(srctree)/tools/scripts/Makefile.include
+>  
+>  # copy a bit from Linux kbuild
+> @@ -70,13 +78,6 @@ LIB_TARGET	= libbpf.a libbpf.so.$(LIBBPF_VERSION)
+>  LIB_FILE	= libbpf.a libbpf.so*
+>  PC_FILE		= libbpf.pc
+>  
+> -# Set compile option CFLAGS
+> -ifdef EXTRA_CFLAGS
+> -  CFLAGS := $(EXTRA_CFLAGS)
+> -else
+> -  CFLAGS := -g -O2
+> -endif
+> -
+>  # Append required CFLAGS
+>  override CFLAGS += -std=gnu89
+>  override CFLAGS += $(EXTRA_WARNINGS) -Wno-switch-enum
+> @@ -84,6 +85,7 @@ override CFLAGS += -Werror -Wall
+>  override CFLAGS += $(INCLUDES)
+>  override CFLAGS += -fvisibility=hidden
+>  override CFLAGS += -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+> +override CFLAGS += $(EXTRA_CFLAGS)
+>  
+>  # flags specific for shared library
+>  SHLIB_FLAGS := -DSHARED -fPIC
+> 
+> -- 
+> 2.34.1
+> 
