@@ -1,114 +1,157 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6A9F34B434
-	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 23:37:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773704238; cv=none; b=cLfXkNQr/k1WyK+77KjGtFzq9KdCFtZhj3CSd7lluVMUGVJZvHEQ1W7OsLdy9iOnd9qaPxzM3W4AY6t2BXe/vdG9JWzR0C1hZergnPZED6Hq8WkN3VpfzIASBNS/7JG5SCcp4dX5f+0RBmbGTU/5+mdmmqMreD1t0WiYDa2g+UI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773704238; c=relaxed/simple;
-	bh=2DmUkIQk68nUHosP/saZetuyTBWym4GTB8xne8YydJ0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tKH+N3Xa7nsn2gt81mMXo//WjNf/ZIDKqFKnxnEMk9ojdFZ2Lmb/otR6mdOC2nPXLMvDNy0Lv+cBvV9iE8bHTBpJuu7j9VhaAMlUPz6RN2RdJRWDh3swdlC4cSeh5x1GbqVxkNm8uuBFqZOhLLwjlTfgXMbBnbl0RW/g801TFAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QPC5WxpA; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B42737186C
+	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 23:39:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.67
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773704380; cv=pass; b=FIilTUZYe2FZBGsmqe6xEt63tShi9WPOBSKLBUTeBXZC3mCK2NBhUgL3F6mSTGOPIYDtj1t0PpVsXkBZThqAIknv24srGkMmT1j6/DvnRNjQSLTxnskBP9t1bEDQk+rbSQfQZoEWVlQgb06/8HXPE3nV6127ZuUCvjd4HONpEVo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773704380; c=relaxed/simple;
+	bh=LUpdFr8nOZ8lx3r0F4s/5dNqsY4EtiZ0vGoDtM9n5pE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gV/t4RdM2ouUS+z4ZUIrH8h5IP/5guXy+sgqUohJ7j2zpaCSCkWUIY+iusPmqNzvwpxI8MFB84AELsADi/FOfK7ssu4tj0UHId/hx1ppa2GPKCt161t+pq5Ew0Oyg0VBLUqHJHJTHVJ0JudyoikqiFWgjYjnk72K1HArmSlFqR8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SCo198qa; arc=pass smtp.client-ip=209.85.221.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QPC5WxpA"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-485345e1013so1322315e9.1
-        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 16:37:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SCo198qa"
+Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-43b4121c40aso1526231f8f.0
+        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 16:39:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773704377; cv=none;
+        d=google.com; s=arc-20240605;
+        b=FtjFxawgNeQwkV6hdCWloylgBFvBC3NJzBWzX0s4axLayXMyHcOB3nc+OvPu8X8ZaP
+         QMjnLwBv4lXXWWAJn0iiClbtfKXpGs6jQFpxSsqM66CM6Dgtzdah7dEaJcJCPb/H5YjT
+         73e59U1suLgghOCH6/UaPhW23HEyJa5DkuHzdMjxHTFlQ864TNOEk6dDwyazHHUPv3Vh
+         QXDR/BYpWsRWCFFcEwevz4UBMmnj8c7ScDiiroX2OMP/WPidLBbV0c5eLA5eDngZGdRn
+         wl/hK0yv8ia8F85AD+AlLiGp8kEa6bHOV/Pg9m4cw+052T4KcgZH+2j0gBuOkg2Q8UWB
+         L0TA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=qP4EcfO8blTbLu9B8ieQwix5cbr1SvW0uRiRyDgzQTQ=;
+        fh=t/xt8nOnSSsDVKlHcO7LjCKKUeyArGNUXJg/utSjGHs=;
+        b=YnlJomVOxrnzOb3mg7LhQdBdyhQyntQwtDv7rv5rziCljy9kztpMaFvTbh+8I3y6TM
+         0u6nysJGeH53zcXupzsC/D5jvyAom/B4RuHTW7vWhuHDfjh4KXZpeTDr83HAxr0liYCZ
+         ueIkHzJRo4DzmoYyMtvXiYNRqBkVQxGYQSt3OtauPgp8Ryvd1Z/8y+PtCpNYMxi8UWE9
+         E5yW12b/GG/I2gAn7JjKDaYeu/FTpv60E0q6LLnUQPbEbnWagKNIZMJU5ISALZ/d4880
+         CFqzq3J7TAPCGJTjW9bTIYpyHsc8Y4m+n4hSQY+YHtuanIZ3egNCUhO1XIHbD0gQ5PJo
+         fxnw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773704235; x=1774309035; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FrJSvnP5t2ZAkb3zCRgf6mgahxyGJGt35l4bNQI7QjY=;
-        b=QPC5WxpABMCAeZi6z60g8BZHDoFHTdbDEMC5sJa1WQXmjRCtM7qyq1BN3aLbPQrknC
-         l1JpxGID+JiHi0+D8Eo3kaW7kskN56iB3hw4sSVwcb21I5MJm4pm32zKJs15qqp4L21u
-         nnQfljhQ27BTYWgKwQE2nxFLv61CZ3mkm/+5jIXnrPhihFBG6xfnJYijzGDNfY2RsQ5/
-         oA/ud4M333RvrCvS/BprY4etcc4XsZdKYFfI+xkKrzwq9Dw+nH9TtyokxzNwlIXPMItP
-         9fQXC7jZtjHgpskaUBFTZqqxDBQX76FAbyL7lE/nbtlKrRbnKhkg3Vve9tI8fS8qhoCq
-         nQ2Q==
+        d=gmail.com; s=20230601; t=1773704377; x=1774309177; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qP4EcfO8blTbLu9B8ieQwix5cbr1SvW0uRiRyDgzQTQ=;
+        b=SCo198qa3ivRrg9DFLNBzW8DIMnj5dEHzweq1pyhzDTd9Fgr8j/hW2e2wbsAU/tv9D
+         KbfHwY4ztJl6RBU/XH56g8umbWVE4AyMXr2ZBdSN2cLPZ+cDZkIzbUr5JNFQm2wSSU+C
+         KsemCq9ymHUQ3TIUdSdzA9c7u5uYZuMuXGngwRZTWblYCpDsrQ2fUtHopfLHNtw+TCjq
+         X69GBP5qgzpUDai87xEHnQss3UFBerVhZzEJpiMBGv+2+NkZr9zEmqChabEhi/Bn0CWd
+         mVZgE00Y7eqzAnPtqGE929lvapCTxu/ySvJy96ZpYARsC0VSA3uyPmc0gPDu7LOiypzf
+         V3Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773704235; x=1774309035;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=FrJSvnP5t2ZAkb3zCRgf6mgahxyGJGt35l4bNQI7QjY=;
-        b=ottJ4RSZ8U0d631TXqADnJG0aQySr905/6639lWstag8Di6OlKkE7DBfW1E6TSt8G3
-         rIF3iaqzMVrshQF4c/ZyHsjkjCspCADF7sU3XRLQa6C0xnd9bZ9GzwzytzfAXdtxm7xO
-         LjpQMO3eK1/oKNZJju5R5/jXYSgjnYu3ZlHsGc9mttCcFGsQSrcKs47BEU20mpGpbt3T
-         jbfRygnL5n93l6gy11S/ALb1RlD61oBEu2az4Uqs8HwleMAc0pddMB2LHzrzwz3L5bev
-         t3pTLvSShuh4sz8iV3bCJK/29DTN3V4x1sP2tvpMCKsaptxObkaFXcX+sJkcKwhKax7K
-         xuxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUJvX0uBMIqsynWnLF9Mb/A+kNyS/r0rxF/Cu0NP3UOK1GbPOIj5SUhc6QbSLrFlR3iNPU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxyscJkdda3F+GDbjpHo5UXRq+2Gpf3ZtHoMWPYdtHTOLs++BF5
-	Utg59cp79L7VHdfPlp7lAx4SeIe1hkNx+22LILJFCKaKdkamxC5rB622
-X-Gm-Gg: ATEYQzx0xV4vRfHupBQzOAootOJRZ0NQ14bVLMiN2jdzkJocqHB8+PvIbUNFWv4rOnw
-	JLycP7xCD9jwXOB5kLe3OX6GlvsRvbiB5/ea7XUd3a6Yn+nANJAFln7klUVjeXlZCCqptvv3OoX
-	L1ay0TYnAaZaYROqAY0wqxPJHNlEu0Rgkhm0lttAHYLWHwTRgzd2GOSPcinl0yV4840/F9N2fK3
-	5CzuegKcVTGhU65zh9gIQ+QnoajheydqGii53IpM6Kc9ccuU9M50y+XWd4SCYotWmtNBWqROvwB
-	n2uUmUYpoir0vHHtYH+uBlzN0MERgbEp9hrcf6on4cY0xBsUDJpXsV9TlWulV4eJOooqgvH403c
-	HrivnCzgULrbffZMgDs0RnsvGLdRActBvl/U53XQ1K3EHX12O+TxF2nKR5VetDCO1rXH3L0VREv
-	XQRkUnQ4a/IurS5Qa6Blt2Y0aW0GQejjjFGLdtTMzetuKWP4R/U8pqE4dS12zIVX3YGONuvqbhM
-	sY=
-X-Received: by 2002:a05:600c:17ca:b0:485:343b:38d with SMTP id 5b1f17b1804b1-4856eaac647mr13270265e9.5.1773704234827;
-        Mon, 16 Mar 2026 16:37:14 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b42e680ddsm14706435f8f.13.2026.03.16.16.37.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Mar 2026 16:37:14 -0700 (PDT)
-Date: Mon, 16 Mar 2026 23:37:12 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-pm@vger.kernel.org, bpf@vger.kernel.org, arnd@arndb.de,
- catalin.marinas@arm.com, will@kernel.org, peterz@infradead.org,
- mark.rutland@arm.com, harisokn@amazon.com, cl@gentwo.org, ast@kernel.org,
- rafael@kernel.org, daniel.lezcano@linaro.org, memxor@gmail.com,
- zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com, rdunlap@infradead.org,
- joao.m.martins@oracle.com, boris.ostrovsky@oracle.com,
- konrad.wilk@oracle.com
-Subject: Re: [PATCH v10 00/12] barrier: Add
- smp_cond_load_{relaxed,acquire}_timeout()
-Message-ID: <20260316233712.7cbfac27@pumpkin>
-In-Reply-To: <874imftol4.fsf@oracle.com>
-References: <20260316013651.3225328-1-ankur.a.arora@oracle.com>
-	<20260315184925.b6f93386e918ca79614843e3@linux-foundation.org>
-	<874imftol4.fsf@oracle.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+        d=1e100.net; s=20251104; t=1773704377; x=1774309177;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qP4EcfO8blTbLu9B8ieQwix5cbr1SvW0uRiRyDgzQTQ=;
+        b=N/SF0wbVYz60E0pDJiMzkiUdmfLOhZ/v8LVTJVo0AuQTLNbOHvmXMn+IIfWtyspXrR
+         4Qb2i3011Lck4YRkL5EAsiN1Ep1NOaqVp5FZLvGhXCDeHCowPOpCC6Yce1SkZyPUGkRR
+         ZA1OL55cRuPHOk5aseg7R8CCrH+zRUCp0Ra8sk5Y69ydMwR+gSdzjQpo2pRNRnvcUfFC
+         GiDf6qrYTkUtgYgRYP/PKx3Uf1J4o8xnbSG9mvuB0qZDGM+2SrATxArZfF7JsuMGlsB7
+         DhV+KQF9+7mA/zA/K7USKayv5GdTLsuKBPJJeEMMV17Y/Aqm1ezj1hBbjWxVn9HTbZbY
+         5fww==
+X-Forwarded-Encrypted: i=1; AJvYcCU7qGQ+GRZQay65QeydZYCiWIZPtBJxXB2jE9Bl6Rz4IVrGDsTJ+aBbbDy29hOo0dJRuIA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxzXT8Bg4goVK0ml0NARxbSCG0M+RRNf6s28FwpboBDq9qux6wj
+	VdqhCzmS4hbY/Mltgvq2T0Nur/By1+CZ9ro3L7fHtuDngWBnJQaQaSgVgTFgeIen+tXS54LNswM
+	x+hhIt/yRCz3POMr4H3OP35ZEjZ7QESU=
+X-Gm-Gg: ATEYQzwOPIOmFmfVStCBDZLsxXGd8xYMVVsq+HwZOleViOhsGIr1tzu9Yb8YQbDrmMN
+	+ExKmwbAmcNTfmRA245HlMu/6znSZh6FPVadTU3J6Yls4wanR7/t8O6RuxoBH2DlCMLpBuKGWOd
+	l90rjwK6vD6LW2gZV9GfQ8ygiZ8aq0eBNjKPx+7sjBSzNB3gxNZykzTsNtZXqMVZ8Op3yJQ8f6C
+	29qHnQEwGAIILyVW53KHbBRHD+HRIQVDCO1M+om2ZDcp2yX1kp1zr6ThP583gUcCcYGRPU+P5Hq
+	UGUMXJ3FVJxHEmlWs8OtZMwCrfA44cvVBkLb74AD0R+mabx+hjyh8M1T1gY=
+X-Received: by 2002:a05:6000:2f85:b0:43b:4352:1bd8 with SMTP id
+ ffacd0b85a97d-43b43521dcfmr11092768f8f.53.1773704377224; Mon, 16 Mar 2026
+ 16:39:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20260316222758.1558463-1-arighi@nvidia.com>
+In-Reply-To: <20260316222758.1558463-1-arighi@nvidia.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Tue, 17 Mar 2026 00:39:00 +0100
+X-Gm-Features: AaiRm50QTIyuUJ_7soIEToEoeT5sSCTG2VivsOgvUWqhQsYvjGCB-NLOj-MT8JM
+Message-ID: <CAP01T75eKpvw+95NqNWg9P-1+kzVzojpN0NLat+28SF1B9wQQQ@mail.gmail.com>
+Subject: Re: [PATCH] bpf: Always defer local storage free
+To: Andrea Righi <arighi@nvidia.com>, "Paul E . McKenney" <paulmck@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Amery Hung <ameryhung@gmail.com>, Tejun Heo <tj@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org, sched-ext@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, 16 Mar 2026 15:08:07 -0700
-Ankur Arora <ankur.a.arora@oracle.com> wrote:
+On Mon, 16 Mar 2026 at 23:28, Andrea Righi <arighi@nvidia.com> wrote:
+>
+> bpf_task_storage_delete() can be invoked from contexts that hold a raw
+> spinlock, such as sched_ext's ops.exit_task() callback, that is running
+> with the rq lock held.
+>
+> The delete path eventually calls bpf_selem_unlink(), which frees the
+> element via bpf_selem_free_list() -> bpf_selem_free(). For task storage
+> with use_kmalloc_nolock, call_rcu_tasks_trace() is used, which is not
+> safe from raw spinlock context, triggering the following:
+>
 
-...
-> However, as David Laight pointed out in this thread
-> (https://lore.kernel.org/lkml/20260214113122.70627a8b@pumpkin/)
-> that this would be fine so long as the polling is on memory, but would
-> need some work to handle MMIO.
+Paul posted [0] to fix it in SRCU. It was always safe to
+call_rcu_tasks_trace() under raw spin lock, but became problematic on
+RT with the recent conversion that uses SRCU underneath, please give
+[0] a spin. While I couldn't reproduce the warning using scx_cosmos, I
+verified that it goes away for me when calling the path from atomic
+context.
 
-I'm not sure the current code works with MMIO on arm64.
-I was looking at the osq_lock() code, it uses smp_cond_load() with 'expr'
-being 'VAL || need_resched()' expecting to get woken by the IPI associated
-with the preemption being requested.
-But the arm64 code relies on 'wfe' being woken when the memory write
-'breaks' the 'ldx' for the monitored location.
-That will only work for cached addresses.
+  [0]: https://lore.kernel.org/rcu/841c8a0b-0f50-4617-98b2-76523e13b910@paulmck-laptop
 
-For osq_lock(), while an IPI will wake it up, there is also a small timing
-window where the IPI can happen before the ldx and so not actually wake up it.
-This is true whenever 'expr' is non-trivial.
-On arm64 I think you could use explicit sev and wfe - but that will wake all
-'sleeping' cpu; and you may not want the 'thundering herd'.
-
-	David
+>  =============================
+>  [ BUG: Invalid wait context ]
+>  7.0.0-rc1-virtme #1 Not tainted
+>  -----------------------------
+>  (udev-worker)/115 is trying to lock:
+>  ffffffffa6970dd0 (rcu_tasks_trace_srcu_struct_srcu_usage.lock){....}-{3:3}, at: spin_lock_irqsave_ssp_contention+0x54/0x90
+>  other info that might help us debug this:
+>  context-{5:5}
+>  3 locks held by (udev-worker)/115:
+>   #0: ffff8e16c634ce58 (&p->pi_lock){-.-.}-{2:2}, at: _task_rq_lock+0x2c/0x100
+>   #1: ffff8e16fbdbdae0 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x24/0xb0
+>   #2: ffffffffa6971b60 (rcu_read_lock){....}-{1:3}, at: __bpf_prog_enter+0x64/0x110
+>  ...
+>  Sched_ext: cosmos_1.0.7_g780e898fc_dirty_x86_64_unknown_linux_gnu (enabled+all), task: runnable_at=-2ms
+>  Call Trace:
+>   dump_stack_lvl+0x6f/0xb0
+>   __lock_acquire+0xf86/0x1de0
+>   lock_acquire+0xcf/0x310
+>   _raw_spin_lock_irqsave+0x39/0x60
+>   spin_lock_irqsave_ssp_contention+0x54/0x90
+>   srcu_gp_start_if_needed+0x2a7/0x490
+>   bpf_selem_unlink+0x24b/0x590
+>   bpf_task_storage_delete+0x3a/0x90
+>   bpf_prog_3b623b4be76cfb86_scx_pmu_task_fini+0x26/0x2a
+>   bpf_prog_4b1530d9d9852432_cosmos_exit_task+0x1d/0x1f
+>   bpf__sched_ext_ops_exit_task+0x4b/0xa7
+>   __scx_disable_and_exit_task+0x10a/0x200
+>   scx_disable_and_exit_task+0xe/0x60
+>
+> Fix by deferring memory deallocation to ensure it occurs outside the raw
+> spinlock context.
+>
+> Fixes: f484f4a3e058 ("bpf: Replace bpf memory allocator with kmalloc_nolock() in local storage")
+> Signed-off-by: Andrea Righi <arighi@nvidia.com>
+> ---
+> [...]
