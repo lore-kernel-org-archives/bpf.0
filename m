@@ -1,358 +1,158 @@
-Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010019.outbound.protection.outlook.com [52.101.201.19])
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B24D93246F8;
-	Mon, 16 Mar 2026 16:02:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.19
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773676941; cv=fail; b=H9q8MXTrjA5uCRlaqr6Vzu4JWL9eJex4veS2K8UMu/l7qrvl/hWiFmwSzSuL3qf665/HAOfkFkXm6MpKtZi1D9YhoDbuYYIfqBT+USbkWBOraBz5RTIeTFQTTCTkMKgqoE9vo/4ZTjHxwh3QLPtRnYWKJsCVXgY307W7BQryH6g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773676941; c=relaxed/simple;
-	bh=KLY7+cEhuLeWbeenoBzSmo0f3NqKj158If2wnAwo6jk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=haEIfCCbGnPFtrxxeemqcC6wXhRVomCBhXhrCXKFCMzOVcxfkOXmWHxHe5Mj5oF2oyssqNVmsA8ppvNbuxIj+jNH/DjFDbWEDgsM8b7RJMQI8WqJvYmGMTdQOHVjavlFwBavIcrcrnm6/Wt1ddp+Dghpfonp/Mfl8a1dRMfjcl4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=DlcJ066u; arc=fail smtp.client-ip=52.101.201.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3E173246FE
+	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 16:05:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773677145; cv=none; b=kc9pK1Sz/eBjsyBEARUG/f0JLnOEJ1N5dLEdSM9Eyw8UH8q46aYRjv/ht5HeiqO0hQi1DTch03tRiJWSp7qYv3UzDa5IorQVTWlojBQdtb4Ez9MZse913JpQuPcel3uHXHy+N3p2428Mi0j14ocA/p78B5GY2xABYlsiJPQ9EgI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773677145; c=relaxed/simple;
+	bh=lkRYUP0CQqhJFv28v0xUpwJVmnqY1Gda61vqxO/hDxo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Iex+U683+N11nc2GziNHuTMgRsC0gdv07xmjP9OQieUjQ7+3xneT3AAvrBKAeOpb1xNwJyrxxfjTULGVp0+rwW9SP1wFwxZiXTyJM+juWXfbfEtVNQM+tWQwwIaBneluyXxUpciNEMCRFFyW0d3UtMV+gYIdLiXAxwUCdtEERsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LYv9c72q; arc=none smtp.client-ip=95.215.58.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="DlcJ066u"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=c3lURQrW6JYRFoQfDGLIxaozHl3U9DINjFeXx3QVaQc04z7aH50cXXo5PfYmFkfBtpRigV/VtKsHWkInHVCrc1OacoMVcEWjNPAn80tVUa5wjHJBT5oR9NnJD6VpCblf733hE6fOE+Rdg7Pnji45PEqeGv27HBOow8bEoi4rFucOPgZxeh9EEkj6QWG+qCsY3/bwPNVTfD68wCS5BKDcDuU0xpOH5CmMgVyYCBe0znevUKIMh7qm0Ym6cKvGyS47y8mYg5tozwEpaCbeXDCJudugzH5wkoXYq1J48gMFbhXHrfgpczEvTQecPvorCsgfMyT+w+CrrEHGeZo54vqJ+w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/wEaGMYke7+vjlkxbh2iN6aIMFtd9WvZ11X4TJzBzFY=;
- b=HJmXxsWM0rQODPpS5s2F72dXRwrfrGf3Dz5zf/dM2cqO8Hmi5sSNKpAB+rSeHJxDOqts/uEBnOOA6qSCulTq4tG92W1flx2xqps8Xbq2tdeiSaVM8rQWvp5tqmmwjZbeoj/OPze33gACKe0dnE5aBBNIRuF2ZKsRMH5fvBGw0S1bTXmsz/KROkd7QySPjei7RUmZTalb1kfH1T62xVl2s9g+bTxkixmhC4xl+WAa2wpQA1G0fWjHeM5GNE1RgiFeXtTSyZJWP+nGOrnWwIWgszg4P2BzSmtBYYh/eF4vzqdif/5Iscydwq9jt4ZxfQ4QvcuW44HUM3i+Ahv8i0ZUGg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/wEaGMYke7+vjlkxbh2iN6aIMFtd9WvZ11X4TJzBzFY=;
- b=DlcJ066uRDADJKJU+VMIV2reA2caUrJ7cHdEOE/7IdnKLxnA7ACznplFk7foWZpHFOXJbLcYaA9U4MzC3eNRb5vTjnJ41vgy3Ti1U2eHNfd9egrbJzTmzn2Cgxb/eaRkIXuV62WQF5f5KGcG6ZIR09gVIw/gixdhKaUIlkBr7i9Iw5UTpjupRiKeZZQSKU1LxEVuba3AVPrf4U7/DzW2w1byXgp66eCCAnGqeaCIkUAi5euTxCeQ0gIGKHZxYaNVw7WR/bfmIaNq7/kiCT03BesmCOd60qS9f3qtz0TmaN5JlddYimHRuWLO6Nq83EexBEOXHIuV09kwPYqp7zpBdQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
- IA1PR12MB7567.namprd12.prod.outlook.com (2603:10b6:208:42d::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.17; Mon, 16 Mar
- 2026 16:02:11 +0000
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::f01d:73d2:2dda:c7b2]) by DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::f01d:73d2:2dda:c7b2%4]) with mapi id 15.20.9723.016; Mon, 16 Mar 2026
- 16:02:10 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: Vlastimil Babka <vbabka@suse.cz>,
- Muhammad Usama Anjum <usama.anjum@arm.com>, Ryan.Roberts@arm.com
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Brendan Jackman <jackmanb@google.com>, Johannes Weiner <hannes@cmpxchg.org>,
- Uladzislau Rezki <urezki@gmail.com>, Nick Terrell <terrelln@fb.com>,
- David Sterba <dsterba@suse.com>,
- "Vishal Moola (Oracle)" <vishal.moola@gmail.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, david.hildenbrand@arm.com
-Subject: Re: [PATCH v2 1/3] mm/page_alloc: Optimize free_contig_range()
-Date: Mon, 16 Mar 2026 12:02:03 -0400
-X-Mailer: MailMate (2.0r6290)
-Message-ID: <703BB8CD-23D9-4012-8333-366837D7E95A@nvidia.com>
-In-Reply-To: <220e97f0-dc82-4f37-b833-7160aee46cea@suse.cz>
-References: <20260316113209.945853-1-usama.anjum@arm.com>
- <20260316113209.945853-2-usama.anjum@arm.com>
- <220e97f0-dc82-4f37-b833-7160aee46cea@suse.cz>
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: SJ0PR05CA0107.namprd05.prod.outlook.com
- (2603:10b6:a03:334::22) To DS7PR12MB9473.namprd12.prod.outlook.com
- (2603:10b6:8:252::5)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LYv9c72q"
+Message-ID: <49ac3434-e441-4681-99ba-a1ed735417dd@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773677141;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5C0nriLycJRgBWtwXORu4DTAPeWPKQtvN2yalOvskN8=;
+	b=LYv9c72q/wN0lxcXA1B3N0I7jqZs8viZzQIqt6U3AV3kDrVwguBPOjrWedw6Q9RsshA/sw
+	A+Sp1MsmDQ7eOiw/kPPAXd2Egm6yI0LUUn7uAexx11NAyqzGQbjS/ZCuTqjowjwDyFsOS/
+	D0qdKRJ+rz8BuNXBLdKilk5xxLqIzwI=
+Date: Mon, 16 Mar 2026 09:05:28 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|IA1PR12MB7567:EE_
-X-MS-Office365-Filtering-Correlation-Id: c6cf7ca7-e201-4464-7c02-08de83756193
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|22082099003|18002099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	qwF7YFx02HmugEQ/VBXWtnOlQUzIGpEb8NDDLM+t7ZHXfT0hidgFQlnu7lte+UnQ7UZkPCL3y7qmWQOShy7Q8ul96e+FE0rMYdbsbYlIScBSWdaywq9E8Ei/KbfkHxalEhELvLsc7s33Esiy0zHas12fDfd/SaIbHnW3I8o8HcHNWGIB5Roahuoe1zk/p7NS8p0kj1LqIPtqcfOk/UQWSwQPph0ds5gXJet7vxL+5DPouGYiBDmEg7XxpNWXPeZPQrctBC/ddxNMBWMFbrVajohxdskxjgI4E9V/ZlgTEOjG1sp3Or0DXU0e6p/6RHCXQFKBqAUa+pb5WarvNioYQDL8sjMdUiI/Nt6ezBWbectDg1i2a9aM6g37tNQMxbvhXTUoRqaAxOTC+jo3V2jkSevV6SF6amzxin/IAL2XGCBLz6uSPgZdC4GvY+RDLWjx05hX2sYh0XCPvEr0m83R70ym19vrWcAwbbcLAF/Cfn+/GfPjqEeHu0LrBRvUq+1zYmntoJm56cmfnp7wMcy6ypKHQ0C4rtEeDBVOi6UdeiMzMJ91GO9cMuaUkbw8ynskR5ROYxPxnOG6XbaBcb6Wh1yxqFgQlT4EEBdt6iSLb+9Kb2KwGLzPQpk0WFfNO9+aqpZ6PiiNaDn9LN3TGj9gMpfOe5QdDD6Z9FBJtK2KI6yWBCWtMifYEvUCU/eHuuIDyxdpab/cIdWehGPuRjdPY+fAiwoNtxfaMsDhyKqVHys=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?GXoUWoVzkri7sTFwoE0hmq2vAHJ7Db0xRpNuAU1FxkwJx6a1ETBZ4Hpur0ll?=
- =?us-ascii?Q?bFN30nJT3BENg84W585y9+9h4uXdm1CNOrNtHLv9Z06vdvidaoHdZvig63FX?=
- =?us-ascii?Q?YzxHSLO7Oz2FR8dtySAuFf7iFkZug9eePM0P6OOgIMKYHHGJZLmc9UPsHWvw?=
- =?us-ascii?Q?iVfbytMA7GCvSnJCiWY8GCoXSOT4+ySGkZbwn4ZA+f2nesjPitmi+qC7+4DF?=
- =?us-ascii?Q?GsHHgfdHmGppL7ptYQ5v0wR/X+ilUW4409XzohPTcupze5dfqtU8hgy/35be?=
- =?us-ascii?Q?vt8uW/ms0IPD9mhpmnwCldMQx7gYfJ1K2lvWkSRjWUEy78p9hOJyfMHW2tyt?=
- =?us-ascii?Q?sziGjMwGY9q3FNZbd45lP2346BTcb0Y2fWlmnIK6kuGdZCxR+wWQtwE5NBJ8?=
- =?us-ascii?Q?Y5gGLMPS/w+hlnlL1jw+qSJ0SDGXH/byyRapEAzIM3smLijNHMxnMa9dypjZ?=
- =?us-ascii?Q?qCkrkK4vAuy+/cYY7L8I0TfBBW5WIAmBAhcoHuX6Uy+y8Oc+k9+UO2f1dyNS?=
- =?us-ascii?Q?L2Z1GDofxL3Of5fmScCzZqorl1wVhQKPdR89e0R9YRYjud8/4GupaGuAtRmL?=
- =?us-ascii?Q?iNWjHfja6fycTD7li13Skajpt/eR1yjBoD2V2xxox9S/bxfuBEpnEc3G6vCD?=
- =?us-ascii?Q?rp82054GLlC3X5mqF8NY7A8jlwCo0aE+6Do7bpjePG/CjCIJVFw/vHoKeYPz?=
- =?us-ascii?Q?zOAcGam5ZHuD1xkhn9y8yzHLujVm2e42LnD5gnQh5HEMKHhAW/5yewvoSgfc?=
- =?us-ascii?Q?ecoOnGKREHQAQXe8danSS1hUzlB6kNX8ITuA3j0822AJJckQS+aBPoMNaYXL?=
- =?us-ascii?Q?NP4KSOhf/rS+ws+L1utl9/aQ6b6728WXr7fKXYmJmh+nMvNx0d3NFpTT0laK?=
- =?us-ascii?Q?0MCFDpxEZP49RfOHFVpdNjpYsrVHKgbTR5fcrVsilx7WOiRaNvhUH3XpS9qD?=
- =?us-ascii?Q?XWrZrcdLY6K5BA3yOgt9CeuMorxi3fJ0gaalG1+A8G/grZROz+dBbHVTFZIJ?=
- =?us-ascii?Q?yHm65u5JuxaQhAlfrrlgm9JMuR2VoF0VeOMJqH/j0YlalFdfEyuFrQEVwk5I?=
- =?us-ascii?Q?qvdOmu3o1yqa2aMKYpBTtq/3bjogppQpWEcwcgV0DL7p3OLCkx/C25UbA4u/?=
- =?us-ascii?Q?8i1sOsABfw8MhRE1r2mPVFroNx8BQGxk7Yp1Epq6xVZLaziaIX2nQpviG7kA?=
- =?us-ascii?Q?1e1Abu8oApK/FUx4qHaaLR1Il1DBmuq56xccKm3O+Ql1l4YoZp3QOnwvudpq?=
- =?us-ascii?Q?D+SJ3luBVDNWHGXtaHnc1Nhdk9Hu3qt3ey4v6kPGInIzSAsPPHfTx30UrQGE?=
- =?us-ascii?Q?HKcMMbSD/zd2p0FBXbmYajCk6MP3fHHJRkuLxF5es4/RRuVlzt8T2nzREsR2?=
- =?us-ascii?Q?+kJ939zeIPtwL+HFeZ/PSlAml3QFBnSEziag8Ma/z3WourA2/f0wbPViwsN8?=
- =?us-ascii?Q?tVHxfmUAnMnO+TTNIGzRMtnOxhHcEPCEAQ+l74RSwvm6eBM/P5LBXEBf+Qlj?=
- =?us-ascii?Q?qTTfYrztVT9sqj5acQ8CwRueBn7/ycY7SzRuxDiDYsK7PP8SQu9IRLGkxE6Z?=
- =?us-ascii?Q?LBz0AJX8ram3eNiybhnb1YtxZWIeTWUiou+yoVsS6NzReQ/lOSoyEBr99CV3?=
- =?us-ascii?Q?dxTpN+/Ep5d3tx+p+4WELWLnqM+g234skeX3eaI/EDA4voFBKlYZbI5RusPD?=
- =?us-ascii?Q?RobrwNgzP2lz6GfKSz8NttCdhdFyF4HhaDXH+KQUsym8m1Ki?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c6cf7ca7-e201-4464-7c02-08de83756193
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2026 16:02:10.7955
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5KWljkYqJB3sYWkatQNEJ2bENLUIZL1m92Bfu69zPqNNScq3hDPH9eJkvNBZs6AZ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7567
+Subject: Re: [PATCH] s390/bpf: Zero-extend bpf prog return values and kfunc
+ arguments
+To: Ilya Leoshkevich <iii@linux.ibm.com>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+ Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev
+ <agordeev@linux.ibm.com>, Hari Bathini <hbathini@linux.ibm.com>
+References: <20260313174807.581826-1-iii@linux.ibm.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20260313174807.581826-1-iii@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On 16 Mar 2026, at 11:21, Vlastimil Babka wrote:
+On 3/13/26 10:46 AM, Ilya Leoshkevich wrote:
+> s390x ABI requires callers to zero-extend unsigned arguments and
+> sign-extend signed arguments, and callees to zero-extend unsigned
+> return values and sign-extend signed return values.
+> 
+> s390 BPF JIT currently implements only sign extension. Fix this
+> omission and implement zero extension too.
+> 
+> Fixes: 528eb2cb87bc ("s390/bpf: Implement arch_prepare_bpf_trampoline()")
+> Reported-by: Hari Bathini <hbathini@linux.ibm.com>
+> Closes: https://lore.kernel.org/bpf/20260312080113.843408-1-hbathini@linux.ibm.com/
+> Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+> ---
+>  arch/s390/net/bpf_jit_comp.c | 39 ++++++++++++++++++++++--------------
+>  1 file changed, 24 insertions(+), 15 deletions(-)
 
-> On 3/16/26 12:31, Muhammad Usama Anjum wrote:
->> From: Ryan Roberts <ryan.roberts@arm.com>
->>
->> Decompose the range of order-0 pages to be freed into the set of large=
-st
->> possible power-of-2 size and aligned chunks and free them to the pcp o=
-r
->> buddy. This improves on the previous approach which freed each order-0=
+Hi Ilya,
 
->> page individually in a loop. Testing shows performance to be improved =
-by
->> more than 10x in some cases.
->>
->> Since each page is order-0, we must decrement each page's reference
->> count individually and only consider the page for freeing as part of a=
+Tested-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
->> high order chunk if the reference count goes to zero. Additionally
->> free_pages_prepare() must be called for each individual order-0 page
->> too, so that the struct page state and global accounting state can be
->> appropriately managed. But once this is done, the resulting high order=
+This bug made the BPF CI red. I applied as temporary CI diff.
 
->> chunks can be freed as a unit to the pcp or buddy.
->>
->> This significantly speeds up the free operation but also has the side
->> benefit that high order blocks are added to the pcp instead of each pa=
-ge
->> ending up on the pcp order-0 list; memory remains more readily availab=
-le
->> in high orders.
->>
->> vmalloc will shortly become a user of this new optimized
->> free_contig_range() since it aggressively allocates high order
->> non-compound pages, but then calls split_page() to end up with
->> contiguous order-0 pages. These can now be freed much more efficiently=
-=2E
->>
->> The execution time of the following function was measured in a server
->> class arm64 machine:
->>
->> static int page_alloc_high_order_test(void)
->> {
->> 	unsigned int order =3D HPAGE_PMD_ORDER;
->> 	struct page *page;
->> 	int i;
->>
->> 	for (i =3D 0; i < 100000; i++) {
->> 		page =3D alloc_pages(GFP_KERNEL, order);
->> 		if (!page)
->> 			return -1;
->> 		split_page(page, order);
->> 		free_contig_range(page_to_pfn(page), 1UL << order);
->> 	}
->>
->> 	return 0;
->> }
->>
->> Execution time before: 4097358 usec
->> Execution time after:   729831 usec
->>
->> Perf trace before:
->>
->>     99.63%     0.00%  kthreadd         [kernel.kallsyms]      [.] kthr=
-ead
->>             |
->>             ---kthread
->>                0xffffb33c12a26af8
->>                |
->>                |--98.13%--0xffffb33c12a26060
->>                |          |
->>                |          |--97.37%--free_contig_range
->>                |          |          |
->>                |          |          |--94.93%--___free_pages
->>                |          |          |          |
->>                |          |          |          |--55.42%--__free_froz=
-en_pages
->>                |          |          |          |          |
->>                |          |          |          |           --43.20%--=
-free_frozen_page_commit
->>                |          |          |          |                     =
-|
->>                |          |          |          |                     =
- --35.37%--_raw_spin_unlock_irqrestore
->>                |          |          |          |
->>                |          |          |          |--11.53%--_raw_spin_t=
-rylock
->>                |          |          |          |
->>                |          |          |          |--8.19%--__preempt_co=
-unt_dec_and_test
->>                |          |          |          |
->>                |          |          |          |--5.64%--_raw_spin_un=
-lock
->>                |          |          |          |
->>                |          |          |          |--2.37%--__get_pfnblo=
-ck_flags_mask.isra.0
->>                |          |          |          |
->>                |          |          |           --1.07%--free_frozen_=
-page_commit
->>                |          |          |
->>                |          |           --1.54%--__free_frozen_pages
->>                |          |
->>                |           --0.77%--___free_pages
->>                |
->>                 --0.98%--0xffffb33c12a26078
->>                           alloc_pages_noprof
->>
->> Perf trace after:
->>
->>      8.42%     2.90%  kthreadd         [kernel.kallsyms]         [k] _=
-_free_contig_range
->>             |
->>             |--5.52%--__free_contig_range
->>             |          |
->>             |          |--5.00%--free_prepared_contig_range
->>             |          |          |
->>             |          |          |--1.43%--__free_frozen_pages
->>             |          |          |          |
->>             |          |          |           --0.51%--free_frozen_pag=
-e_commit
->>             |          |          |
->>             |          |          |--1.08%--_raw_spin_trylock
->>             |          |          |
->>             |          |           --0.89%--_raw_spin_unlock
->>             |          |
->>             |           --0.52%--free_pages_prepare
->>             |
->>              --2.90%--ret_from_fork
->>                        kthread
->>                        0xffffae1c12abeaf8
->>                        0xffffae1c12abe7a0
->>                        |
->>                         --2.69%--vfree
->>                                   __free_contig_range
->>
->> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
->> Co-developed-by: Muhammad Usama Anjum <usama.anjum@arm.com>
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
->> ---
->> Changes since v1:
->> - Rebase on mm-new
->> - Move FPI_PREPARED check inside __free_pages_prepare() now that
->>   fpi_flags are already being passed.
->> - Add todo (Zi Yan)
->> - Rerun benchmarks
->> - Convert VM_BUG_ON_PAGE() to VM_WARN_ON_ONCE()
->> - Rework order calculation in free_prepared_contig_range() and use
->>   MAX_PAGE_ORDER as high limit instead of pageblock_order as it must
->>   be up to internal __free_frozen_pages() how it frees them
->> ---
->>  include/linux/gfp.h |   2 +
->>  mm/page_alloc.c     | 110 ++++++++++++++++++++++++++++++++++++++++++-=
--
->>  2 files changed, 108 insertions(+), 4 deletions(-)
->>
->> diff --git a/include/linux/gfp.h b/include/linux/gfp.h
->> index f82d74a77cad8..96ac7aae370c4 100644
->> --- a/include/linux/gfp.h
->> +++ b/include/linux/gfp.h
->> @@ -467,6 +467,8 @@ void free_contig_frozen_range(unsigned long pfn, u=
-nsigned long nr_pages);
->>  void free_contig_range(unsigned long pfn, unsigned long nr_pages);
->>  #endif
->>
->> +unsigned long __free_contig_range(unsigned long pfn, unsigned long nr=
-_pages);
->> +
->>  DEFINE_FREE(free_page, void *, free_page((unsigned long)_T))
->>
->>  #endif /* __LINUX_GFP_H */
->> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
->> index 75ee81445640b..6a9430f720579 100644
->> --- a/mm/page_alloc.c
->> +++ b/mm/page_alloc.c
->> @@ -91,6 +91,13 @@ typedef int __bitwise fpi_t;
->>  /* Free the page without taking locks. Rely on trylock only. */
->>  #define FPI_TRYLOCK		((__force fpi_t)BIT(2))
->>
->> +/*
->> + * free_pages_prepare() has already been called for page(s) being fre=
-ed.
->> + * TODO: Perform per-subpage free_pages_prepare() checks for order > =
-0 pages
->> + * (HWPoison, PageNetpp, bad free page).
->> + */
->
-> I'm confused, and reading the v1 thread didn't help either. Where would=
- the
-> subpages to check come from? AFAICS we start from order-0 pages always.=
+Interestingly, an AI bot investigated the test failure and came up
+with a similar patch [1]. Gotta teach it to scan upstream for existing
+fixes first :)
 
-> __free_contig_range calls free_pages_prepare on every page with order 0=
+Thank you!
 
-> unconditionally, so we check every page as an order-0 page. If we then =
-free
-> the bunch of individually checked pages as a high-order page, there's n=
-o
-> reason to check those subpages again, no? Am I missing something?
-
-There are two kinds of order > 0 pages, compound and not compound.
-free_pages_prepare() checks all tail pages of a compound order > 0 pages =
-too.
-For non compound ones, free_pages_prepare() only has free_page_is_bad()
-check on tail ones.
-
-So my guess is that the TODO is to check all subpages on a non compound
-order > 0 one in the same manner. This is based on the assumption that
-all non compound order > 0 page users use split_page() after the allocati=
-on,
-treat each page individually, and free them back altogether. But I am not=
-
-sure if this is true for all users allocating non compound order > 0 page=
-s.
-And free_pages_prepare_bulk() might be a better name for such functions.
-
-The above confusion is also a reason I asked Ryan to try adding a unsplit=
-_page()
-function to fuse back non compound order > 0 pages and free the fused one=
-
-as we are currently doing. But that looks like a pain to implment. Maybe =
-an
-alternative to this FPI_PREPARED is to add FPI_FREE_BULK and loop through=
- all
-subpages if FPI_FREE_BULK is set with
-__free_pages_prepare(page + i, 0, fpi_flags & ~FPI_FREE_BULK) in
-__free_pages_ok().
+[1] https://github.com/kernel-patches/vmtest/issues/459
 
 
-Best Regards,
-Yan, Zi
+> 
+> diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
+> index 1f9a6b728beb..d08d159b6319 100644
+> --- a/arch/s390/net/bpf_jit_comp.c
+> +++ b/arch/s390/net/bpf_jit_comp.c
+> @@ -830,25 +830,34 @@ static int bpf_jit_probe_post(struct bpf_jit *jit, struct bpf_prog *fp,
+>  }
+>  
+>  /*
+> - * Sign-extend the register if necessary
+> + * Sign- or zero-extend the register if necessary
+>   */
+> -static int sign_extend(struct bpf_jit *jit, int r, u8 size, u8 flags)
+> +static int sign_zero_extend(struct bpf_jit *jit, int r, u8 size, u8 flags)
+>  {
+> -	if (!(flags & BTF_FMODEL_SIGNED_ARG))
+> -		return 0;
+> -
+>  	switch (size) {
+>  	case 1:
+> -		/* lgbr %r,%r */
+> -		EMIT4(0xb9060000, r, r);
+> +		if (flags & BTF_FMODEL_SIGNED_ARG)
+> +			/* lgbr %r,%r */
+> +			EMIT4(0xb9060000, r, r);
+> +		else
+> +			/* llgcr %r,%r */
+> +			EMIT4(0xb9840000, r, r);
+>  		return 0;
+>  	case 2:
+> -		/* lghr %r,%r */
+> -		EMIT4(0xb9070000, r, r);
+> +		if (flags & BTF_FMODEL_SIGNED_ARG)
+> +			/* lghr %r,%r */
+> +			EMIT4(0xb9070000, r, r);
+> +		else
+> +			/* llghr %r,%r */
+> +			EMIT4(0xb9850000, r, r);
+>  		return 0;
+>  	case 4:
+> -		/* lgfr %r,%r */
+> -		EMIT4(0xb9140000, r, r);
+> +		if (flags & BTF_FMODEL_SIGNED_ARG)
+> +			/* lgfr %r,%r */
+> +			EMIT4(0xb9140000, r, r);
+> +		else
+> +			/* llgfr %r,%r */
+> +			EMIT4(0xb9160000, r, r);
+>  		return 0;
+>  	case 8:
+>  		return 0;
+> @@ -1798,9 +1807,9 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
+>  				return -1;
+>  
+>  			for (j = 0; j < m->nr_args; j++) {
+> -				if (sign_extend(jit, BPF_REG_1 + j,
+> -						m->arg_size[j],
+> -						m->arg_flags[j]))
+> +				if (sign_zero_extend(jit, BPF_REG_1 + j,
+> +						     m->arg_size[j],
+> +						     m->arg_flags[j]))
+>  					return -1;
+>  			}
+>  		}
+> @@ -2566,7 +2575,7 @@ static int invoke_bpf_prog(struct bpf_tramp_jit *tjit,
+>  	EMIT6_PCREL_RILB_PTR(0xc0050000, REG_14, p->bpf_func);
+>  	/* stg %r2,retval_off(%r15) */
+>  	if (save_ret) {
+> -		if (sign_extend(jit, REG_2, m->ret_size, m->ret_flags))
+> +		if (sign_zero_extend(jit, REG_2, m->ret_size, m->ret_flags))
+>  			return -1;
+>  		EMIT6_DISP_LH(0xe3000000, 0x0024, REG_2, REG_0, REG_15,
+>  			      tjit->retval_off);
+
