@@ -1,128 +1,92 @@
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 650DE13B5B3
-	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 22:14:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9410346FA9
+	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 22:22:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773699284; cv=none; b=KWQAepn3i9TTlyxMwA8NvaQBGl+NNRk5Q789/xKozD1Rm+F0UUpOePOsPXLjVJ4KkrSB5I456FW/3y3iF6eeHlOEvqq+Tv09qBEUHOz/xMMD9VLuBstOiljFRFL3bSJTseN7bDFTQmLM7R5gJbLIFRMuflX1iAtwLJOZcoTqGgE=
+	t=1773699749; cv=none; b=Ebg7rbBbsIeg3p2+NzvSVNGP6/6uF0H1Rb+DJ7D7OgVIJTJwQFJ2sNVf6SweoEguS/bELlJAmGmxnGxlo51pBU0DBPqyViBPIPdps1IScf0Er9biUXZP7oVrZhUPw/Lb0I1Z2boI/JVgNhiRxRJXkZziRTNrCsum8SgOiKGyqQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773699284; c=relaxed/simple;
-	bh=HGj5yiUG7iKWATjOzUz8OSk7F9PspHcBFX+MhNveJts=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kaUOodzq5YLBCy12vxsrcBva0/WSlyOeTBMSdbRVf9XKFT7ZpAaQnOuoWZPu3CrNP9uXgrIAME+BStZjwKMLRELYCZQHkiu+P4YIUhZMQ4yXyQYkZhhW8vYGwcLV6BWErTo/75MzZOZ8ZDhJ7hZDvLswImW6kBrFR1xtyZHO+lk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gTH+pELL; arc=none smtp.client-ip=209.85.219.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773699749; c=relaxed/simple;
+	bh=p1fOV5KYN5slEUV2Dm6egotAnQlzmjDFG3Fx97s+3mY=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=RuuUxYDmhKIoaJg6zytXH4at2BzS0ojCl7LlkMgQeL5XDdB8QFIm4sNhebrU5X0qYJs6TByICX/FIhIGNMxpR9U3WsVDmhAlJPUEmhIxL+FvNwqRtyvipLNAou9p9d37O4Lb8SiU/a8RCuiftPZuBAyp8X0KaF7FlfG4u/8Kd3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mZuHEhVr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gTH+pELL"
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-89c4b4ece7bso2159616d6.0
-        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 15:14:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773699282; x=1774304082; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1xVo0DvHLvdFL5zFcyTS5pi/B+LyIVJQdufAwf30Klo=;
-        b=gTH+pELLcKYJsiNcJvWi2+XVvonHdHeESyISqkJ/8XBdU31sJZU54Dafsf+tOfcO7S
-         LZzyi6Q27OscB9DBKM9PSCFNq3bIKRKI8AzHzvgxAHOFdvk69VUkYpszBl0bMrG4o+qm
-         CwmF7fOYP9iFPaXJtuSJY6C3P99CZv0dmNHpssHaizJu4v8p7xTVxvu8E+VKDP9XyYbh
-         bsCGmdfxFVAydBEnEm8d5FNfbjZhIDOlfDb/GdiFjs729HlD/PyygvwmB898d4lbFH77
-         chh4j6zq4JEDejcZCjtpD+Tj/P4lZ76LcXgXMzYv+feMt9RPGjhgVGCYOHqugQ2mI7VP
-         EKaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773699282; x=1774304082;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=1xVo0DvHLvdFL5zFcyTS5pi/B+LyIVJQdufAwf30Klo=;
-        b=a6tI8XswoyDE/OTzi2sX1fvZy8QmuLhv5tHlFk2OyYgf7NMh18MhP3NS5B5oAZ1xPR
-         eXiDxWxae2PxmFkjVeBQkbmwsVb6wnm+NLobhp9j811CJ04ByfqJE+8eQFyoe9guH7wB
-         DshWtu6ilb+0pN0L9dEST9biYo5o7GXElJ+mwDz4miYtdyv7YimF9J6sAd8upDspiUd9
-         WObC4SSC0Qww8WekGR01rYi4JkBKUgg/NlbuDsSGqR0qVEMyHQ0JrUS8PecYZx0xpZGB
-         7+caNNHDeI6bgKkMyBK7hm1N0GiEeLkRCBw560h6Dw9exO0QV8ykNPDk3fOz7yVHORU8
-         5fkA==
-X-Forwarded-Encrypted: i=1; AJvYcCUyjC2yLTJ9ziJc9WkWIOy2JBOZzDmpWGA3A1VPcOvXvDAndkjt3FZ3BMc4Hfy20kdr+Ws=@vger.kernel.org
-X-Gm-Message-State: AOJu0YysOlBR/hKWiMsz8t4VWyoP5+aBExlR3HJjtUiY7NNwqR/GPUTL
-	EXiNLKjrbsf9nPfNdMg2vMLFspuDhhHi7UlHgPXvDlbdbYCIn2jkMQzf
-X-Gm-Gg: ATEYQzwOo5aRX1LEJ1shhc0yeWq/eM3anxBQbp3/b2nvy7tmo8vcQDrmw2vLBQcDFa6
-	wDlcHMgD4bV0VI/u7cNUu7dcRmzBiQfxRx784thnx21Hf2Mc+XWl7NnM/yphFHP1Lz1iCO5Zr11
-	jGS6rvsBk1sxqrfN0df4ng6SSNFE8nbjZQPT4lVmGr3r840HbZrYI9vK7vVlm5s/U08vIl+0Bi5
-	cNJ14UJ+8S/gmSOY2efzKudY89HaP80OR/fuu4CjZOLrxuCV+JBCMUnkk2Is7Om5cHp1S7/x0Eh
-	NHP/4VdzczFay0BYQCtbfJ4fPJ96T7uY/G9ooGxNDXaVdmvRMxMf2Di6E2m/dJYGUDAWLAqBeBB
-	Yk5DmaQJXYQ1A+GsIJmm8tRvuTPrthFM+R175dV6AJc6/Vvrj4O6O9xIUBCPI0yCie388Cyh6qV
-	nA8GCl3ct7O4xavU348/A+IsEybubXoEO3/Nepa6xzkX+LXY6e9YxAwLzOF9b4uDqFerTfK6RR3
-	cNSff0+xje5VDLqycXtCNL7B5ZD491UT2q2D7bDGA==
-X-Received: by 2002:a05:6214:252a:b0:89a:424:984b with SMTP id 6a1803df08f44-89c5e3c81ffmr17623666d6.31.1773699282359;
-        Mon, 16 Mar 2026 15:14:42 -0700 (PDT)
-Received: from kerndev.lan (pool-100-15-227-251.washdc.fios.verizon.net. [100.15.227.251])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89a65beeb7dsm145596556d6.19.2026.03.16.15.14.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Mar 2026 15:14:42 -0700 (PDT)
-From: David Windsor <dwindsor@gmail.com>
-To: fred@cloudflare.com
-Cc: paul@paul-moore.com,
-	bpf@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	audit@vger.kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	kpsingh@kernel.org
-Subject: Re: [PATCH RFC 1/4] audit: Implement bpf_audit_log_*() wrappers
-Date: Mon, 16 Mar 2026 18:14:40 -0400
-Message-ID: <20260316221440.2043299-1-dwindsor@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260311-bpf-auditd-send-message-v1-1-10a62db5c92f@cloudflare.com>
-References: <20260311-bpf-auditd-send-message-v1-1-10a62db5c92f@cloudflare.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mZuHEhVr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8BC7C19421;
+	Mon, 16 Mar 2026 22:22:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773699749;
+	bh=p1fOV5KYN5slEUV2Dm6egotAnQlzmjDFG3Fx97s+3mY=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=mZuHEhVrWNDJevHPZzC3KvsGPdzZTeY7QIQBau4kpSy3RIgOGLE1UT20W0V/U+rX4
+	 NQ3lsegOfeGmD5WKLyfsVC2lJWBfKSQwBKWUmyCPo8YRYJFwiO4w54hgDKrXvEIaK0
+	 AeL6AFbE0Fg1rSLQd0ZaDMRIy5Lx4R0k98PkBofXwAIUlHwXKKP388mLyWCgYbIRjn
+	 qIr19ggLgUuF+F0epfUQLbiJeDxgf0a4aG0WgDjRJ9F66cm4kEBc2VNpmXnr9+ruk2
+	 jEtp+0DB93mIq+kqjBOLJ5XrgqsrGEyiVbKfL1fWHT7MK/P9nZvC8N7u7JGIZ6EXio
+	 TopkPl2wo8fzw==
+Content-Type: multipart/mixed; boundary="===============3712691076000029305=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <343cef31e681819b4e1f5a861e3aee63cdf693b6af069da87fdc546472230b3a@mail.kernel.org>
+In-Reply-To: <20260316-sleepable_tracepoints-v5-2-85525de71d25@meta.com>
+References: <20260316-sleepable_tracepoints-v5-2-85525de71d25@meta.com>
+Subject: Re: [PATCH bpf-next v5 2/5] bpf: Add sleepable support for classic tracepoint programs
+From: bot+bpf-ci@kernel.org
+To: mykyta.yatsenko5@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,kafai@meta.com,kernel-team@meta.com,eddyz87@gmail.com
+Cc: yatsenko@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 16 Mar 2026 22:22:28 +0000 (UTC)
 
-Hi Frederick,
+--===============3712691076000029305==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-On Wed, Mar 11, 2026 at 04:31:17PM -0500, Frederick Lawler wrote:
-> +__bpf_kfunc int bpf_audit_log_cause(struct bpf_audit_context *ac,
-> +				    const char *cause__str)
-> +{
-> +	if (log_once(ac, BIT_ULL(LSM_AUDIT_DATA_CAUSE)))
-> +		return -EINVAL;
-> +
-> +	audit_log_format(ac->ab, " cause=");
-> +	audit_log_untrustedstring(ac->ab, cause__str);
-> +	return 0;
-> +}
+> diff --git a/kernel/trace/trace_syscalls.c b/kernel/trace/trace_syscalls.c
+> index 37317b81fcda..8a7677c15f93 100644
+> --- a/kernel/trace/trace_syscalls.c
+> +++ b/kernel/trace/trace_syscalls.c
 
-Rather than putting everything in the cause field, could we perhaps
-have a separate kfunc here that appends normal stringpairs (not
-format strings) to the audit record:
+[ ... ]
 
-  bpf_audit_log_str(ac, "result", "denied");
-  bpf_audit_log_str(ac, "op", "read");
-  bpf_audit_log_str(ac, "scontext", ctx_str);
+> @@ -1411,12 +1412,7 @@ static void perf_syscall_enter(void *ignore, struct pt_regs *regs, long id)
+>  	int size = 0;
+>  	int uargs = 0;
 
-I know you didn't want to wrap audit_log_format(), which makes sense,
-this would be a midway point between that and stuffing everything in
-one field.
+perf_syscall_enter() still declares fake_regs:
 
-> +__bpf_kfunc int bpf_audit_log_net_sock(struct bpf_audit_context *ac, int netif,
-> +				       const struct socket *sock)
-> +{
-> +	struct lsm_network_audit net = { .sk = sock->sk, .netif = netif };
-> +	struct common_audit_data ad;
-> +
-> +	ad.type = LSM_AUDIT_DATA_NET;
-> +	ad.u.net = &net;
-> +	return __audit_log_lsm_data(ac, &ad);
-> +}
+    struct pt_regs *fake_regs;
 
-Should we also wrap ipv4_skb_to_auditdata() /
-ipv6_skb_to_auditdata()? Smack uses it in smack_socket_sock_rcv_skb.
+and passes it to perf_trace_buf_alloc():
 
-Thanks,
-David
+    rec = perf_trace_buf_alloc(size, &fake_regs, &rctx);
+
+but the value is never read after that. Previously it was passed
+to perf_call_bpf_enter() for perf_fetch_caller_regs(), but
+perf_call_bpf_enter() now creates its own stack-local pt_regs.
+
+The same applies to fake_regs in perf_syscall_exit().
+
+Could these be cleaned up, perhaps by passing NULL to
+perf_trace_buf_alloc() since it already handles that case?
+
+    void *perf_trace_buf_alloc(int size, struct pt_regs **regs, ...)
+    {
+        ...
+        if (regs)
+            *regs = this_cpu_ptr(&__perf_regs[rctx]);
+        ...
+    }
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23167661157
+--===============3712691076000029305==--
