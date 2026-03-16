@@ -1,225 +1,249 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 389031DFD96;
-	Mon, 16 Mar 2026 23:41:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A10537AA6D
+	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 23:59:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773704498; cv=none; b=nWUkDXUGrZUUpi/PtvatTNi52X/5pjDKBR+/HgNR+1DAwQoQTnuVue+GAt4Otnz0Av2hXFhPANkFbTHuZbZehKKEMaWhFHCExZsRqGhBIVu1xmZW7XGbWhBxW55dczmcss76okw13Ge2DRJp885iMIOI9kQWpzaMzAx13IZuxxU=
+	t=1773705568; cv=none; b=WyYoLBSyIRBhSZqQAJTNg1eu9vongM/84vPQcD2boJwBEQHCGoV7ETMLgQgM/Y1QgQpVVC4obvZImmoHnLe0qofq6jLyxZi11InLKAgoeZJLCKiFQPBQyViV4LT7oQIlyDdwIS4V8v3e7FxmxcM2eShl9+smXpVWvKtVSsav3eo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773704498; c=relaxed/simple;
-	bh=9uiCqGnbSqPhfoTIaiNM8CkxTkZTnOzNiroU99fnTHg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OjP0wFlOxfbu2RR4NgA2Vrd0AFILu/JFvwQmwBHT0ocTtcX0UWzNL+T8HQdOyo2yXyLoAze7niFQyfk1vqcSXSOW9WNfZstHmEp/Gd1X4t7ff82nAeTyVLv3Sxo4xFdUSKoJ2/lN6XelrnwG6X+4jiGW2Yqgmu4liQ+KPaqkH1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vMU/P+0X; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773705568; c=relaxed/simple;
+	bh=5J66tsqfN0dFzYI9JDGlx1uCRPUcQrwG1l30iSWodSA=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=gDburHmh6pM7bBtUHtWKYtXZKz23X/j2doVNa8tGAvUVHDhlJYhCUoXeRXd0pbM5yAwQCbGIAXFpW77W0G7BY4rxg/p81CUEnwidjCfsploEX10IEzuoTLwYaqws2a5VocydHofVj+1/LJibCi4fxXR1JSXbcTyJWbpB0BhY8gQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=yju+L1I3; arc=none smtp.client-ip=209.85.222.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vMU/P+0X"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5DB6C19421;
-	Mon, 16 Mar 2026 23:41:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773704497;
-	bh=9uiCqGnbSqPhfoTIaiNM8CkxTkZTnOzNiroU99fnTHg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vMU/P+0XDhwKJNIs9JwFJjfbd02zAfOiY/euOT51RHRJQFX9kY8Sodn9/mvrgCHLY
-	 apdQXaqfpZ8/xrlQ9r2aR4kqpLZv5akKx5AE8MNVB76avA4Oz3ENj8eSlO0Jdkv4I3
-	 dRcTl5mHe7zw6y5wIAwgBJl7xswgVzeMwFD1Fw+rnQbriERonbJWZZYgJq9Wo9zfwc
-	 I0n8vWJSvjURubx99DSoE/hOVyx6d30zv3bR4HPjSgy2RapgoD2cRHZoj9mHJAYQDi
-	 MCyZDJes+05OAoGxEcrbzdNi1aLUSp9TS9CwDuLWDYo7ex+KhtbEN1DGneKSvvW0tA
-	 0bt6EeWkDtlaQ==
-Date: Mon, 16 Mar 2026 16:41:37 -0700
-From: "Darrick J. Wong" <djwong@kernel.org>
-To: Joanne Koong <joannelkoong@gmail.com>
-Cc: linux-fsdevel <linux-fsdevel@vger.kernel.org>, bpf@vger.kernel.org,
-	linux-ext4 <linux-ext4@vger.kernel.org>,
-	Miklos Szeredi <miklos@szeredi.hu>,
-	Bernd Schubert <bernd@bsbernd.com>, Theodore Ts'o <tytso@mit.edu>,
-	Neal Gompa <neal@gompa.dev>, Amir Goldstein <amir73il@gmail.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Jeff Layton <jlayton@kernel.org>, John@groves.net,
-	demiobenour@gmail.com
-Subject: Re: [PATCHBLIZZARD v7] fuse/libfuse/e2fsprogs: containerize ext4 for
- safer operation
-Message-ID: <20260316234137.GJ1742010@frogsfrogsfrogs>
-References: <20260223224617.GA2390314@frogsfrogsfrogs>
- <CAJnrk1Yd1J60-Ek=O7jzZQg454pbr3O=b71yZHzYbrWfqJr__w@mail.gmail.com>
- <20260316180408.GN6069@frogsfrogsfrogs>
- <CAJnrk1bmJYMt27xedN2Xza0KPXfYEbh-9g=3fNWru-HRM9WFEw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="yju+L1I3"
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-8cd78a4ce8dso736431185a.3
+        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 16:59:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1773705566; x=1774310366; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eiL+O3D9v4o4KKOA1yswmkmXXXbRU2SUJDjwWqInU3U=;
+        b=yju+L1I3OnMBJlPhlWJmRec1IMwHgqkxDB44Jq0Ulh/eyaprxcbvymksZBG+mvRngh
+         +5FSW0R0vTHVUG7hjMiw4UiSUbsaYAeUlmEeS29W1sLjn1X3oNI4p/OcVM+GqvHd6lX/
+         64ZSdfnEkVpPSpQBjwqsIuVtmJDMVFt/8zX4/rLRlEs7zslSLVi5Ddu7HOkjcyzefQTj
+         G7dAnh0NmHaMxARkNg3lIDflDw/mMGfONH+xRD3r2WXjzohwu5UDga/2cCrmHTl6E2LC
+         k5qNYgPA7S9XP+rOBr41C4H4+PhDI2zjfEqkC9xXprsCkYqUfxtE7yrWM9lgkP0POjm/
+         fqEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773705566; x=1774310366;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eiL+O3D9v4o4KKOA1yswmkmXXXbRU2SUJDjwWqInU3U=;
+        b=TddixnJjz1xh2ygq/4Ou+glbXJlpZfO7/N/YtTmSQmJKbHLBDoQduBeL2Cxjo9/x2o
+         R4p08nkh4J+zr15KaJqqsQavjD5tm+Gj/VCJ+1UJA7sad1xU59uHydp+mqYcYgQysdyn
+         2lp3HLLwsEWEc7IsizozHYXp6G3hCPV/l4VmtxKdYGezZOTB7M5Ukc8duoq85TxcbYYy
+         Ggd9Z65AEcuoUGUx3/dgoN3F3ZwhALEvdltqnucNUtZNj1a+Px/Vee9kLC3FHzk8oN0p
+         g4yv3K51Vq6twM37bJEgQSz/2gc3nfJ/ksr7vOA0nJOu2rv6m3dG1yMsBMEmN4EwtVJb
+         y/bA==
+X-Forwarded-Encrypted: i=1; AJvYcCW8p7pj7BR6aMlT7rONaSdnKesez0etJn3qMoDYd1YaFFt/lwpWy2TgJZ4PwxNCC5F6mEs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzG0p2fFL92dNcs160X40cdTS6EbYOb4Dnjg/i8DoOVnnYOhFqu
+	22UH9hKQc1nqNJi6ajnMpdsMo5EkF1Z0OODR0o1lL9/HZc+ZjhrrXsG8yBGV3lC7Qpk=
+X-Gm-Gg: ATEYQzzZre0kf1xspBzyudMBks5e/hkmxjgkCAqfjs1WFwzqjhXRxjFSyrxddBzaW6T
+	QyQWISD6kOOCLoJ/MifMvrlwW42vf+pRhztclWw1mQUGqOBj/z/+VV04K+0jz6pdybfv3kGjuB5
+	DVNkYvP5Y+Ig9e+huc62Nt2rTpcw7ku+iaRHjQ7qnaZVT6DNfwqsirstyPcEiIxF36NZy5ujBOV
+	ti6/tZWX1COEFofKzl8Fq9Ihdg8ib3yWCcZaX6Nnbe9CofGPaXCSz/8mzfe6M6eTyE4mvx0/DXZ
+	oQv9CvbrjagfxZKWhFmFmkRyRg1dyuZNvpFd70QxqxcTzDTX350U10CbswKztgL1bW1SGjc1hAn
+	ADrDRFL0HiiF0BlUCofk3FQvA6sE5nUbz11OgmkA2qvtj72P4U6brgqVgmNKrl1DQEijO56Xo0G
+	Fz81c/t0an0qYPgHuJRBhbTB4=
+X-Received: by 2002:a05:620a:5584:b0:8cd:b641:b730 with SMTP id af79cd13be357-8cdb641ba78mr1544021585a.66.1773705565782;
+        Mon, 16 Mar 2026 16:59:25 -0700 (PDT)
+Received: from localhost ([140.174.219.137])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cda210daa1sm1342450085a.26.2026.03.16.16.59.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Mar 2026 16:59:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJnrk1bmJYMt27xedN2Xza0KPXfYEbh-9g=3fNWru-HRM9WFEw@mail.gmail.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 16 Mar 2026 19:59:19 -0400
+Message-Id: <DH4M59BX1H28.1ARH281EFIDWO@etsalapatis.com>
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>, <bpf@vger.kernel.org>,
+ <ast@kernel.org>, <andrii@kernel.org>, <daniel@iogearbox.net>,
+ <kafai@meta.com>, <kernel-team@meta.com>, <eddyz87@gmail.com>
+Cc: "Mykyta Yatsenko" <yatsenko@meta.com>
+Subject: Re: [PATCH bpf-next v3 1/2] libbpf: Introduce bpf_program__clone()
+X-Mailer: aerc 0.20.1
+References: <20260316-veristat_prepare-v3-0-94e5691e0494@meta.com>
+ <20260316-veristat_prepare-v3-1-94e5691e0494@meta.com>
+In-Reply-To: <20260316-veristat_prepare-v3-1-94e5691e0494@meta.com>
 
-On Mon, Mar 16, 2026 at 04:08:55PM -0700, Joanne Koong wrote:
-> On Mon, Mar 16, 2026 at 11:04 AM Darrick J. Wong <djwong@kernel.org> wrote:
-> >
-> > On Mon, Mar 16, 2026 at 10:56:21AM -0700, Joanne Koong wrote:
-> > > On Mon, Feb 23, 2026 at 2:46 PM Darrick J. Wong <djwong@kernel.org> wrote:
-> > > >
-> > > > There are some warts remaining:
-> > > >
-> > > > a. I would like to continue the discussion about how the design review
-> > > >    of this code should be structured, and how might I go about creating
-> > > >    new userspace filesystem servers -- lightweight new ones based off
-> > > >    the existing userspace tools?  Or by merging lklfuse?
-> > >
-> > > What do you mean by "merging lklfuse"?
-> >
-> > Merging the lklfuse project into upstream Linux, which involves running
-> > the whole kit and caboodle through our review process, and then fixing
-> 
-> Gotcha, so it would basically be having to port this arch/lkl
-> directory [1] into the linux tree
+On Mon Mar 16, 2026 at 5:49 PM EDT, Mykyta Yatsenko wrote:
+> From: Mykyta Yatsenko <yatsenko@meta.com>
+>
+> Add bpf_program__clone() API that loads a single BPF program from a
+> prepared BPF object into the kernel, returning a file descriptor owned
+> by the caller.
+>
+> After bpf_object__prepare(), callers can use bpf_program__clone() to
+> load individual programs with custom bpf_prog_load_opts, instead of
+> loading all programs at once via bpf_object__load(). Non-zero fields in
+> opts override the defaults derived from the program and object
+> internals; passing NULL opts populates everything automatically.
+>
+> Internally, bpf_program__clone() resolves BTF-based attach targets
+> (attach_btf_id, attach_btf_obj_fd) and the sleepable flag, fills
+> func/line info, fd_array, license, and kern_version from the
+> prepared object before calling bpf_prog_load().
+>
+> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 
-Right.
+The bot's suggestion is technically right, but unrelated to the=20
+correctness of the patch. It's implicitly assumed in the code currently
+that the provided arguments can be fixed up by bpf_prepare_load_fn (that's=
+=20
+what fixup functions are for). Adding a mention that "as with the regular
+code path, fields may be overriden by bpf_prepare_load_fn" couldn't
+hurt, but is imo optional:
 
-> > user-mode-linux to work anywhere other than x86.
-> 
-> Are lklfuse and user-mode-linux (UML) two separate things or is
-> lklfuse dependent on user-mode-linux?
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-I was under the impression that lklfuse uses UML.  Given the weird
-things in arch/lkl/Kconfig:
+> ---
+>  tools/lib/bpf/libbpf.c   | 61 ++++++++++++++++++++++++++++++++++++++++++=
+++++++
+>  tools/lib/bpf/libbpf.h   | 17 ++++++++++++++
+>  tools/lib/bpf/libbpf.map |  1 +
+>  3 files changed, 79 insertions(+)
+>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 0662d72bad20..0f6b9e773c52 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -9802,6 +9802,67 @@ __u32 bpf_program__line_info_cnt(const struct bpf_=
+program *prog)
+>  	return prog->line_info_cnt;
+>  }
+> =20
+> +int bpf_program__clone(struct bpf_program *prog, const struct bpf_prog_l=
+oad_opts *opts)
+> +{
+> +	LIBBPF_OPTS(bpf_prog_load_opts, attr);
+> +	struct bpf_object *obj;
+> +	int err, fd;
+> +
+> +	if (!prog)
+> +		return libbpf_err(-EINVAL);
+> +
+> +	if (!OPTS_VALID(opts, bpf_prog_load_opts))
+> +		return libbpf_err(-EINVAL);
+> +
+> +	obj =3D prog->obj;
+> +	if (obj->state < OBJ_PREPARED)
+> +		return libbpf_err(-EINVAL);
+> +
+> +	/* Copy caller opts, fall back to prog/object defaults */
+> +	attr.expected_attach_type =3D
+> +		OPTS_GET(opts, expected_attach_type, 0) ?: prog->expected_attach_type;
+> +	attr.attach_btf_id =3D OPTS_GET(opts, attach_btf_id, 0) ?: prog->attach=
+_btf_id;
+> +	attr.attach_btf_obj_fd =3D OPTS_GET(opts, attach_btf_obj_fd, 0) ?: prog=
+->attach_btf_obj_fd;
+> +	attr.attach_prog_fd =3D OPTS_GET(opts, attach_prog_fd, 0) ?: prog->atta=
+ch_prog_fd;
+> +	attr.prog_flags =3D OPTS_GET(opts, prog_flags, 0) ?: prog->prog_flags;
+> +	attr.prog_ifindex =3D OPTS_GET(opts, prog_ifindex, 0) ?: prog->prog_ifi=
+ndex;
+> +	attr.kern_version =3D OPTS_GET(opts, kern_version, 0) ?: obj->kern_vers=
+ion;
+> +	attr.fd_array =3D OPTS_GET(opts, fd_array, NULL) ?: obj->fd_array;
+> +	attr.fd_array_cnt =3D OPTS_GET(opts, fd_array_cnt, 0) ?: obj->fd_array_=
+cnt;
+> +	attr.token_fd =3D OPTS_GET(opts, token_fd, 0) ?: obj->token_fd;
+> +	if (attr.token_fd)
+> +		attr.prog_flags |=3D BPF_F_TOKEN_FD;
+> +
+> +	/* BTF func/line info */
+> +	if (obj->btf && btf__fd(obj->btf) >=3D 0) {
+> +		attr.prog_btf_fd =3D OPTS_GET(opts, prog_btf_fd, 0) ?: btf__fd(obj->bt=
+f);
+> +		attr.func_info =3D OPTS_GET(opts, func_info, NULL) ?: prog->func_info;
+> +		attr.func_info_cnt =3D OPTS_GET(opts, func_info_cnt, 0) ?: prog->func_=
+info_cnt;
+> +		attr.func_info_rec_size =3D
+> +			OPTS_GET(opts, func_info_rec_size, 0) ?: prog->func_info_rec_size;
+> +		attr.line_info =3D OPTS_GET(opts, line_info, NULL) ?: prog->line_info;
+> +		attr.line_info_cnt =3D OPTS_GET(opts, line_info_cnt, 0) ?: prog->line_=
+info_cnt;
+> +		attr.line_info_rec_size =3D
+> +			OPTS_GET(opts, line_info_rec_size, 0) ?: prog->line_info_rec_size;
+> +	}
+> +
+> +	attr.log_buf =3D OPTS_GET(opts, log_buf, NULL);
+> +	attr.log_size =3D OPTS_GET(opts, log_size, 0);
+> +	attr.log_level =3D OPTS_GET(opts, log_level, 0);
+> +
+> +	/* Resolve BTF attach targets, set sleepable/XDP flags, etc. */
+> +	if (prog->sec_def && prog->sec_def->prog_prepare_load_fn) {
+> +		err =3D prog->sec_def->prog_prepare_load_fn(prog, &attr, prog->sec_def=
+->cookie);
+> +		if (err)
+> +			return libbpf_err(err);
+> +	}
+> +
+> +	fd =3D bpf_prog_load(prog->type, prog->name, obj->license, prog->insns,=
+ prog->insns_cnt,
+> +			   &attr);
+> +
+> +	return libbpf_err(fd);
+> +}
+> +
+>  #define SEC_DEF(sec_pfx, ptype, atype, flags, ...) {			    \
+>  	.sec =3D (char *)sec_pfx,						    \
+>  	.prog_type =3D BPF_PROG_TYPE_##ptype,				    \
+> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> index dfc37a615578..0be34852350f 100644
+> --- a/tools/lib/bpf/libbpf.h
+> +++ b/tools/lib/bpf/libbpf.h
+> @@ -2021,6 +2021,23 @@ LIBBPF_API int libbpf_register_prog_handler(const =
+char *sec,
+>   */
+>  LIBBPF_API int libbpf_unregister_prog_handler(int handler_id);
+> =20
+> +/**
+> + * @brief **bpf_program__clone()** loads a single BPF program from a pre=
+pared
+> + * BPF object into the kernel, returning its file descriptor.
+> + *
+> + * The BPF object must have been previously prepared with
+> + * **bpf_object__prepare()**. If @opts is provided, any non-zero field
+> + * overrides the defaults derived from the program/object internals.
+> + * If @opts is NULL, all fields are populated automatically.
+> + *
+> + * The returned FD is owned by the caller and must be closed with close(=
+).
+> + *
+> + * @param prog BPF program from a prepared object
+> + * @param opts Optional load options; non-zero fields override defaults
+> + * @return program FD (>=3D 0) on success; negative error code on failur=
+e
+> + */
+> +LIBBPF_API int bpf_program__clone(struct bpf_program *prog, const struct=
+ bpf_prog_load_opts *opts);
+> +
+>  #ifdef __cplusplus
+>  } /* extern "C" */
+>  #endif
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> index d18fbcea7578..e727a54e373a 100644
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -452,6 +452,7 @@ LIBBPF_1.7.0 {
+>  		bpf_map__set_exclusive_program;
+>  		bpf_map__exclusive_program;
+>  		bpf_prog_assoc_struct_ops;
+> +		bpf_program__clone;
+>  		bpf_program__assoc_struct_ops;
+>  		btf__permute;
+>  } LIBBPF_1.6.0;
 
-config 64BIT
-	bool "64bit kernel"
-	default y if OUTPUT_FORMAT = "pe-x86-64"
-	default $(success,$(srctree)/arch/lkl/scripts/cc-objdump-file-format.sh|grep -q '^elf64-') if OUTPUT_FORMAT != "pe-x86-64"
-
-I was kinda guessing x86_64 was the primary target of the developers?
-
-/me notes that he's now looked into libguestfs per Demi Marie's comments
-and some curiosity on the part of ngompa and i>
-
-Whatever it is that libguestfs does to stand up unprivileged fs mounts
-also could fit this bill.  It's *really* slow to start because it takes
-the booted kernel, creates a largeish initramfs, boots that combo via
-libvirt, and then fires up a fuse server to talk to the vm kernel.
-
-I think all you'd have to do is change libguestfs to start the VM and
-run the fuse server inside a systemd container instead of directly from
-the CLI.
-
-> > > Could you explain what the limitations of lklfuse are compared to the
-> > > fuse iomap approach in this patchset?
-> >
-> > The ones I know about are:
-> >
-> > 1> There's no support for vmapped kernel memory in UML mode, so anyone
-> > who requires a large contiguous memory buffer cannot assemble them out
-> > of "physical" pages.  This has been a stumbling block for XFS in the
-> > past.
-> >
-> > 2> LKLFUSE still uses the classic fuse IO paths, which means that at
-> > best you can directio the IO through the lklfuse kernel.  At worst you
-> > have to use the pagecache inside the lklfuse kernel, which is very
-> > wasteful.
-> 
-> For the security / isolation use cases you've described, is
-> near-native performance a hard requirement?
-
-Not a hard requirement, just a means to convince people that they can
-choose containment without completely collapsing performance.
-
-> As I understand it, the main use cases of this will be for mounting
-> untrusted disk images and CI/filesystem testing, or are there broader
-> use cases beyond this?
-
-That covers nearly all of it.
-
-> >
-> > 3> lklfuse hasn't been updated since 6.6.
-> 
-> Gotcha. So if I'm understanding it correctly, the pros/cons come down to:
-> lklfuse pros:
-> - (arguably) easier setup cost. once it's setup (assuming it's
-> possible to add support for the vmapped kernel memory thing you
-> mentioned above), it'll automatically work for every filesystem vs.
-> having to implement a fuse-iomap server for every filesystem
-
-Or even a good non-iomap fuse server for every filesystem.  Admittedly
-the weak part of fuse4fs is that libext2fs is not as robust as the
-kernel is.
-
-> - easier to maintain vs. having to maintain each filesystem's
-> userspace server implementation
-
-Yeah.
-
-> lklfuse cons:
-> - worse (not sure by how much) performance
-
-Probably a lot, because now you have to run a full IO stack all the way
-through lklfuse.
-
-> - once it's merged into the kernel, we can't choose to not
-> maintain/support it in the future
-
-Correct.
-
-> Am I understanding this correctly?
-> 
-> In my opinion, if near-native performance is not a hard requirement,
-> it seems like less pain overall to go with lklfuse. lklfuse seems a
-> lot easier to maintain and I'm not sure if some complexities like
-> btrfs's copy-on-write could be handled properly with fuse-iomap.
-
-btrfs cow can be done with iomap, at least on the directio end.  It's
-the other features like fsverity/fscrypt/data checksumming that aren't
-currently supported by iomap.
-
-> What are your thoughts on this?
-
-"Gee, what if I could simplify most of my own work out of existence?"
-
---D
-
-> Thanks,
-> Joanne
-> 
-> [1] https://github.com/lkl/linux/tree/master/arch/lkl
-> 
-> >
-> > --D
-> >
-> > > Thanks,
-> > > Joanne
-> > >
-> > > >
-> > > > b. ext4 doesn't support out of place writes so I don't know if that
-> > > >    actually works correctly.
-> > > >
-> > > > c. fuse2fs doesn't support the ext4 journal.  Urk.
-> > > >
-> > > > d. There's a VERY large quantity of fuse2fs improvements that need to be
-> > > >    applied before we get to the fuse-iomap parts.  I'm not sending these
-> > > >    (or the fstests changes) to keep the size of the patchbomb at
-> > > >    "unreasonably large". :P  As a result, the fstests and e2fsprogs
-> > > >    postings are very targeted.
-> > > >
-> > > > e. I've dropped the fstests part of the patchbomb because v6 was just
-> > > >    way too long.
-> > > >
-> > > > I would like to get the main parts of this submission reviewed for 7.1
-> > > > now that this has been collecting comments and tweaks in non-rfc status
-> > > > for 3.5 months.
-> > > >
-> > > > Kernel:
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/log/?h=fuse-iomap-bpf
-> > > >
-> > > > libfuse:
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/djwong/libfuse.git/log/?h=fuse-iomap-bpf
-> > > >
-> > > > e2fsprogs:
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/djwong/e2fsprogs.git/log/?h=fuse-iomap-bpf
-> > > >
-> > > > fstests:
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfstests-dev.git/log/?h=fuse2fs
-> > > >
-> > > > --Darrick
-> 
