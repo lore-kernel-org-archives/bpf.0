@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6666D3E9F75
-	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 18:57:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51B9D39FCB6
+	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 18:57:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773687470; cv=none; b=lHpq2nX8tor5f6E0ziiXQufMel5rRT1tmvNRW6Hl/Y8DJ/Lf4yRWWxkMZVaHMa6hI1DMCNs+gpvOwSeN6Nj+SnCOopZxkn7g2wEe6Sy+flcjwtoY364NPA96KB/mT/P1E/DyaBLtBRG4OuFd9kOepxkxmXAa68K1+BKA6eACMcc=
+	t=1773687474; cv=none; b=Lf5L0GpvjhxLzohIGp56LzphQg13TJn19IRxEISZ6DmEcPcf8NPZKXm7JpZ8XxAILzrk7wMS3mwMferVoEL7ktNviBwDKG0l20UOaIDCT8bnrmt0CBIPLAyE/W8gErLjnJSZpFYDNArBmMXkrSn9e9YtSOzoVwvh6VhDlZ0phsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773687470; c=relaxed/simple;
-	bh=qLLI0+TXe0U0ttKh09Q1qrFMf2TVGhuOrTkluKdUl5U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SCaYnLG3FgigF3QrnAO72DGx5ZHcOP2TWKVzn4MbldR6ehNrXqBCx6YykVo2h6NJWAPAwDmFHA/TZ/TBoo7nn/iInLzq6qY+ftdyKAHplaq8V1LFdPpNJAfZfMMYd/kSsPKmUvXEbg+0rHcRX+ixvMQu1A/6D3e4uRf6h9VOYtE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hsx12y8f; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773687474; c=relaxed/simple;
+	bh=q3N4rcGCPIhnIS+Z8K0dN7TWF7UMBZ/V246dN8PwsNU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=O6QtEq8B9EKnjGdYBkfIEipZvcNw0PZtVAXb9rvaxdBhElIizYg18OfOImRwUV7+ERCx00BNHZ5CDBd69szJvzMJiINJaYmiHP2JPvZDM7ktoYiCFitU7reFJERtHWuurPeN6YFiXthujhv311F0auBvJLrQhE2lnYe/DJ/zACg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AmMQ+YB9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hsx12y8f"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2CE2C19421;
-	Mon, 16 Mar 2026 18:57:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AmMQ+YB9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99E07C2BC87;
+	Mon, 16 Mar 2026 18:57:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773687469;
-	bh=qLLI0+TXe0U0ttKh09Q1qrFMf2TVGhuOrTkluKdUl5U=;
-	h=From:To:Cc:Subject:Date:From;
-	b=hsx12y8ftQ10PoJmrq/ewTHhfufbD1N9GUACHv5kTZGa30OnK+qub12n1c41iVKFX
-	 1I1aPS4hYiaiioDERtnK9euPb0X6HkPuRVHosry+8vMY0r+guAv6xR/CdyO337x+Ft
-	 pxFM8FP8TqC7FU4ew/kIlCum+ik6tAZKPlotUOlWvb8KV5/vLlnyvzpjuYHDVsG/X7
-	 N1X7OKzswVbelPJQ1/oA9ur+t4cez45lYl9WkL9hUA0OUuM3b4ci4/gWmzDPDzhh1Y
-	 CVUiu6u8qHTuTuIq2TtAmb5yjkC39a0mSCqPS8Osomc3cf9DXcyD55jLTkKoeTO4cf
-	 E4PyD3GTXPOnA==
+	s=k20201202; t=1773687473;
+	bh=q3N4rcGCPIhnIS+Z8K0dN7TWF7UMBZ/V246dN8PwsNU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=AmMQ+YB9SeEHKdvZFoNI/9TNexayL69bwTmaKm0H/fa7YqZpiHcs44CHBqcDfAoOF
+	 it3HtNsFARm7BlZcFokVPXsmaYnpy5CQQqm5zf5HeMOVL9kaokX+aGb07pfU58qOoq
+	 7jI8hGYvPnROGNEx3HOOcPrkFAoh9WUjCwdEoAs8RuxWcKXFmHwW5p4buXyE6EGgG+
+	 /Jp35m6eb7f5EcGGIpynKo7Z6rs4SM3QralcMq2JI+mEUYX5cbs+ADJWPxO0u0+4N7
+	 brDAB1ZHBW9ZkV7JfFOY630upbWkQcHDaoY9EJIrJd6owMTvdU+Dv/PeqRNpBVVTjl
+	 iArUAv5oeCT3g==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -37,10 +38,12 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
 	kernel-team@meta.com
-Subject: [PATCH bpf v4 0/3] bpf: fix and improve open-coded task_vma iterator
-Date: Mon, 16 Mar 2026 11:57:30 -0700
-Message-ID: <20260316185736.649940-1-puranjay@kernel.org>
+Subject: [PATCH bpf v4 1/3] bpf: fix mm lifecycle in open-coded task_vma iterator
+Date: Mon, 16 Mar 2026 11:57:31 -0700
+Message-ID: <20260316185736.649940-2-puranjay@kernel.org>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260316185736.649940-1-puranjay@kernel.org>
+References: <20260316185736.649940-1-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,67 +52,126 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Changelog:
-v3: https://lore.kernel.org/all/20260311225726.808332-1-puranjay@kernel.org/
-Changes in v4:
-- Disable task_vma iterator in irq_disabled() contexts to mitigate deadlocks (Alexei)
-- Use a helper function to reset the snapshot (Andrii)
-- Remove the redundant snap->vm_mm = kit->data->mm; (Andrii)
-- Remove all irq_work deferral as the iterator will not work in
-  irq_disabled() sections anymore and _new() will return -EBUSY early.
+The open-coded task_vma iterator reads task->mm and acquires
+mmap_read_trylock() but never calls mmget(). The mm can reach
+mm_users == 0 if the task exits while the iterator holds the lock.
 
-v2: https://lore.kernel.org/all/20260309155506.23490-1-puranjay@kernel.org/
-Changes in v3:
-- Remove the rename patch 1 (Andrii)
-- Put the irq_work in the iter data, per-cpu slot is not needed (Andrii)
-- Remove the unnecessary !in_hardirq() in the deferral path (Alexei)
-- Use PAGE_SIZE advancement in case vma shrinks back to maintain the
-  forward progress guarantee (AI)
+Add mmget_not_zero() before mmap_read_trylock(). Drop the mm reference
+via mmput_async() in _destroy() and the error path.
 
-v1: https://lore.kernel.org/all/20260304142026.1443666-1-puranjay@kernel.org/
-Changes in v2:
-- Add a preparatory patch to rename mmap_unlock_irq_work to
-  bpf_iter_mm_irq_work (Mykyta)
-- Fix bpf_iter_mmput() to also defer for IRQ disabled regions (Alexei)
-- Fix a build issue where mmpu_async() is not available without
-  CONFIG_MMU (kernel test robot)
-- Reuse mmap_unlock_irq_work (after rename) for mmput (Mykyta)
-- Move vma lookup (retry block) to a separate function (Mykyta)
+Reject irqs-disabled contexts (including NMI) up front. Operations used
+by _next() and _destroy() (mmap_read_unlock, mmput_async) take
+spinlocks with IRQs disabled (pool->lock, pi_lock). Running from NMI
+or from a tracepoint that fires with those locks held could deadlock.
 
-This series fixes the mm lifecycle handling in the open-coded task_vma
-BPF iterator and switches it from mmap_lock to per-VMA locking to reduce
-contention. It then fixes a deadlock that is caused by holding locks
-accross the body of the iterator where faulting is allowed.
+Widen the mmput_async() #if guard to include CONFIG_BPF_SYSCALL,
+following the same approach used for CONFIG_FUTEX_PRIVATE_HASH.
 
-Patch 1 fixes a missing mmget() that allows the mm_struct to be freed
-before the iterator takes mmap_lock. It adds mmget_not_zero() and
-disables task_vma iterator in irq_disabled() contexts by returning
--EBUSY from the _new() kfunc. This allow using mmput_async() safely.
+Fixes: 4ac454682158 ("bpf: Introduce task_vma open-coded iterator kfuncs")
+Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+---
+ include/linux/sched/mm.h |  2 +-
+ kernel/bpf/task_iter.c   | 31 ++++++++++++++++++++++++++++---
+ kernel/fork.c            |  2 +-
+ 3 files changed, 30 insertions(+), 5 deletions(-)
 
-Patch 2 switches from holding mmap_lock for the entire iteration to
-per-VMA locking via lock_vma_under_rcu(). This still doesn't fix the
-deadlock problem because holding the per-vma lock for the whole
-iteration can still cause lock ordering issues when a faultable helper
-is called in the body of the iterator.
-
-Patch 3 resolves the lock ordering problems caused by holding the
-per-VMA lock or the mmap_lock (not applicable after patch 2) across BPF
-program execution. It snapshots VMA fields under the lock, then drops
-the lock before returning to the BPF program. File references are
-managed via get_file()/fput() across iterations.
-
-Puranjay Mohan (3):
-  bpf: fix mm lifecycle in open-coded task_vma iterator
-  bpf: switch task_vma iterator from mmap_lock to per-VMA locks
-  bpf: return VMA snapshot from task_vma iterator
-
- include/linux/sched/mm.h |   2 +-
- kernel/bpf/task_iter.c   | 123 +++++++++++++++++++++++++++++++++++----
- kernel/fork.c            |   2 +-
- 3 files changed, 113 insertions(+), 14 deletions(-)
-
-
-base-commit: e06e6b8001233241eb5b2e2791162f0585f50f4b
+diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
+index 95d0040df584..5908de0c2f82 100644
+--- a/include/linux/sched/mm.h
++++ b/include/linux/sched/mm.h
+@@ -140,7 +140,7 @@ static inline bool mmget_not_zero(struct mm_struct *mm)
+ 
+ /* mmput gets rid of the mappings and all user-space */
+ extern void mmput(struct mm_struct *);
+-#if defined(CONFIG_MMU) || defined(CONFIG_FUTEX_PRIVATE_HASH)
++#if defined(CONFIG_MMU) || defined(CONFIG_FUTEX_PRIVATE_HASH) || defined(CONFIG_BPF_SYSCALL)
+ /* same as above but performs the slow path from the async context. Can
+  * be called from the atomic context as well
+  */
+diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
+index 98d9b4c0daff..718f0f9b6396 100644
+--- a/kernel/bpf/task_iter.c
++++ b/kernel/bpf/task_iter.c
+@@ -9,6 +9,7 @@
+ #include <linux/bpf_mem_alloc.h>
+ #include <linux/btf_ids.h>
+ #include <linux/mm_types.h>
++#include <linux/sched/mm.h>
+ #include "mmap_unlock_work.h"
+ 
+ static const char * const iter_task_type_names[] = {
+@@ -825,6 +826,18 @@ __bpf_kfunc int bpf_iter_task_vma_new(struct bpf_iter_task_vma *it,
+ 	BUILD_BUG_ON(sizeof(struct bpf_iter_task_vma_kern) != sizeof(struct bpf_iter_task_vma));
+ 	BUILD_BUG_ON(__alignof__(struct bpf_iter_task_vma_kern) != __alignof__(struct bpf_iter_task_vma));
+ 
++	/*
++	 * Reject irqs-disabled contexts including NMI. Operations used
++	 * by _next() and _destroy() (mmap_read_unlock, mmput_async)
++	 * can take spinlocks with IRQs disabled (pi_lock, pool->lock).
++	 * Running from NMI or from a tracepoint that fires with those
++	 * locks held could deadlock.
++	 */
++	if (irqs_disabled()) {
++		kit->data = NULL;
++		return -EBUSY;
++	}
++
+ 	/* is_iter_reg_valid_uninit guarantees that kit hasn't been initialized
+ 	 * before, so non-NULL kit->data doesn't point to previously
+ 	 * bpf_mem_alloc'd bpf_iter_task_vma_kern_data
+@@ -842,17 +855,28 @@ __bpf_kfunc int bpf_iter_task_vma_new(struct bpf_iter_task_vma *it,
+ 
+ 	/* kit->data->work == NULL is valid after bpf_mmap_unlock_get_irq_work */
+ 	irq_work_busy = bpf_mmap_unlock_get_irq_work(&kit->data->work);
+-	if (irq_work_busy || !mmap_read_trylock(kit->data->mm)) {
++	if (irq_work_busy) {
+ 		err = -EBUSY;
+ 		goto err_cleanup_iter;
+ 	}
+ 
++	if (!mmget_not_zero(kit->data->mm)) {
++		err = -ENOENT;
++		goto err_cleanup_iter;
++	}
++
++	if (!mmap_read_trylock(kit->data->mm)) {
++		err = -EBUSY;
++		goto err_cleanup_mmget;
++	}
++
+ 	vma_iter_init(&kit->data->vmi, kit->data->mm, addr);
+ 	return 0;
+ 
++err_cleanup_mmget:
++	mmput_async(kit->data->mm);
+ err_cleanup_iter:
+-	if (kit->data->task)
+-		put_task_struct(kit->data->task);
++	put_task_struct(kit->data->task);
+ 	bpf_mem_free(&bpf_global_ma, kit->data);
+ 	/* NULL kit->data signals failed bpf_iter_task_vma initialization */
+ 	kit->data = NULL;
+@@ -875,6 +899,7 @@ __bpf_kfunc void bpf_iter_task_vma_destroy(struct bpf_iter_task_vma *it)
+ 	if (kit->data) {
+ 		bpf_mmap_unlock_mm(kit->data->work, kit->data->mm);
+ 		put_task_struct(kit->data->task);
++		mmput_async(kit->data->mm);
+ 		bpf_mem_free(&bpf_global_ma, kit->data);
+ 	}
+ }
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 65113a304518..d0411a63d4ab 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -1198,7 +1198,7 @@ void mmput(struct mm_struct *mm)
+ }
+ EXPORT_SYMBOL_GPL(mmput);
+ 
+-#if defined(CONFIG_MMU) || defined(CONFIG_FUTEX_PRIVATE_HASH)
++#if defined(CONFIG_MMU) || defined(CONFIG_FUTEX_PRIVATE_HASH) || defined(CONFIG_BPF_SYSCALL)
+ static void mmput_async_fn(struct work_struct *work)
+ {
+ 	struct mm_struct *mm = container_of(work, struct mm_struct,
 -- 
 2.52.0
 
