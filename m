@@ -1,107 +1,104 @@
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B88C35CB6C
-	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 20:57:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E30E363C4F
+	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 21:16:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773694637; cv=none; b=Dc/7UGXEzNLQr/wskEmcbOL8Dws+taBc1b6plxOCNgJjh29UOKc414J5AO5BQNTB6K3JECB3E2+Ujc3HV+6x6CCCVqIZ033kd57/ROKym72TTXdVqsSSwMmFCdwuyUqJKwKKeoTo64dOe3KpaMUkU6NWAg/9xt2rKIs/opZNuPE=
+	t=1773695771; cv=none; b=D5GJXeeonpuZseWc6j9GZNhPOJhNrhwSM/cYiyda+dB0zUi1Wdl/R+ME0d0Z1kiI+7eex/PKZuzSGDUXpf9/lwDzIL99wMfuD/ray8s7od/K1KFzUEviP+b1SLd6Q27w1+4n1pK2THKRZ8/a2H8mqmSS51+kHYN0jtzIMPTrnI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773694637; c=relaxed/simple;
-	bh=D7y7XQHaMsKBo0fZQqrBDSh9xP5an1NYpg26xhytOSU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CbFl1XChDLKPN1gJLsY8JCsOzdpWsXsblCr2MLIjmjaJIYZlDaabdJ947o+vatmuVS7LMHDbYb3eAeU+3zeNtUQ4/FK6O4dHzK9Ct/5raajoN7scZMKO+v88kENKERboGXpBt68S7OMhVzk95p+yjNKFvNLQfar3izcKUhL51Ao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kxKeZcfl; arc=none smtp.client-ip=74.125.82.180
+	s=arc-20240116; t=1773695771; c=relaxed/simple;
+	bh=W2AnyyzaVV5LaX7Nb+qLh90OipqRJZE0wUkUehV2F+Q=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t0AF7j8h609dlL5BgMOlTDfuWHzGt+vlBcUtgs5rdXZwpy2q/PYpuBoywbZj+Ya52/RkJlLiGq/wvFmd+FMyndlwBS/jt5T+CKX5fwWOkONazv8uJ+nGj3lT9TA5Fs7lgQznK1FJUS2o5trNiLthclYj0UnMOpZTsAoIJaorOGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RquvFETH; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kxKeZcfl"
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-2b4520f6b32so7123458eec.0
-        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 13:57:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RquvFETH"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4852f8ac7e9so60626435e9.1
+        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 14:16:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773694633; x=1774299433; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=D7y7XQHaMsKBo0fZQqrBDSh9xP5an1NYpg26xhytOSU=;
-        b=kxKeZcflp/SHR4lUssQjDuTWXRttu1+Poob7OSllmhM8+H/K72CSenYPxt2tYt9fVe
-         PTh35w2UXDXngRtpt47/tcz+HcIhjA61K/XCmyDvK6suYTVhl2CKCrLS7mGSnOegdAhO
-         iFM0PwYH6o97QoPtqG88GR+iwXqq8kRoAOQ2CFWVZyF+Eb9qLsxNJQHkWiagkggkZk3P
-         s21V0w0dXzdO5PBKaNXF6RWVW83myxiwax0FTNFI29wTNAUzzA49SqM2olsD+2X88SsF
-         LRnxr9LqVXmXCfuWNC8HGyPQDo5b03t7UuRvMDoRFU9w4L3H2E6/+XcDS/Y/u+H/2s4H
-         6xuQ==
+        d=gmail.com; s=20230601; t=1773695769; x=1774300569; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UySVxzfXOl+RhbhkqosIKwS0W/gUxRLNLq3WDoJufTY=;
+        b=RquvFETHNMngD0t+wniVYoiQZ6Cuz7a5U2t5DdpvtTQexrp7X+PB57u0iGs9xWynlb
+         supVO9eaB+k8jxVD5b4QkdOHrezpGWc5SHPvs9oDZSDUTEAKqU6JbP8W63e59arJupG4
+         C4JSaSSYkI5MqMtxqzg7xdic519P8JRt4hs3FMZLWTwmaUzBKhNuRIU4NNBVkdYRxXiM
+         LmhZsdbkHsm5J0uZFQDVs+HKxf4C51InxY1x9iCn9MkYPZ5WdPmbkRRvuEv2rciX1l3H
+         pwLkmlqEbsPwkUulELyHOHXYpiMIm61mkY0xbc/nJE9aijs6zUf5uigxr5lVoe8Zr2wB
+         gITQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773694633; x=1774299433;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D7y7XQHaMsKBo0fZQqrBDSh9xP5an1NYpg26xhytOSU=;
-        b=HuJd/DufS6jFnme85nEvS1WhiFzrqblyRIxmSO0wmQG+iiumnUiCQseS4rXIdtjm4m
-         joKWPaTshfSMomx/JAUysndTPUdviE6QDsAvo6xf2mOF2xr5kuRT4QGfWZEkLT7JEWcL
-         lwIAvnFb5N1PcWglf+hrq8y7y6b5TL0KKGPhX9OCqyV7CI6P3WwdLXeQ91lWxmlrYYnU
-         fFd9ceeBnHkVSIgq0uKnnAhItrdY4JoBVkuGHpU7YioxXCWGzMv6ENyil4RsjzDoBJuO
-         TsEodMaxEjgUsVWBdOtMsaehUmSOyH2Nw0EyJb9O+2AL9+MbqBNwSRk5VXYZ4dEE1Jvv
-         R+fQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXiPFGRzvNKKwlj3CP8DxwgKyvfDwjuANoRJO/PTUpdGX1BbOYMeE3VH1V4u2B4lCyDhjg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxq8j42GN1Pp9Rts7sA4DM0D6S6w/q+Lda7InOojJKSBadpuvs0
-	spK5TmKjX31nNNa9fAQyOjtuaKB5JBqnul5Iv44XlwENGkZw8cm9NihN
-X-Gm-Gg: ATEYQzwKQz7CZGgGCI3Q3VxHxcH7U/+wJVFD4eFhrB+T7oTiPlQydQj2Gx0eJxMzYml
-	Dq9vRwgEgeTbw/XgQRlM8e4fveBxZ/19f5z0N7syC0oSIEg5QaLbah6qudVJvxrWUvNATyj/lxk
-	lr/xxooRBkRUyHZ6OTGBlyxTHXsGVgsTdJ9fheG2K7/YMyICGxSFzbsJrN0KIKIdITzob1L3IK5
-	c3781yRpGZULNqGI9LxVO5tLfwVQh7ZSBGwIPur8hBoARb4cfj949h1jLTKZIY5uEO5WLYxsWg9
-	jdnEclyUHk4NlY0xnA8upmGSQRETbvrjRUjuhDZyxOM740WD6It2Z5SGVJMdg4/xDaq/UAZlE/D
-	amfk0VI5aGoKcSbr/MFy2ieuIqF1NOsp5oAKO1lcd1NDNjIlxqXkktcHNcedTgw4bI+HySkQJA3
-	kOeBXEcrs76VxOt0BzK2w6WfqEtstSokD3apLPRhiGLlj9OAXQsbyFwfHpok8=
-X-Received: by 2002:a05:7300:8b83:b0:2be:2964:44c3 with SMTP id 5a478bee46e88-2bea547ccb8mr6542994eec.10.1773694633132;
-        Mon, 16 Mar 2026 13:57:13 -0700 (PDT)
-Received: from ?IPv6:2620:10d:c096:14a::7bc? ([2620:10d:c090:600::76f6])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2beab3a0c34sm15964777eec.7.2026.03.16.13.57.11
+        d=1e100.net; s=20251104; t=1773695769; x=1774300569;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UySVxzfXOl+RhbhkqosIKwS0W/gUxRLNLq3WDoJufTY=;
+        b=BeW7ixLzmyTtH72N0KKcGbTo8zDCoemPQUmNcyvMqM4vuIsCZn4lYCe+V7rY630mnG
+         Tpl5WJooE96M0qb+0lJTXPfX1Do9+ubThbuBnvUmSDjJZ2ls3CdKn3HMqNJxYXj52Hw+
+         9Mku07HS0Wkyl6mMXKAtR3F1qDNC/MKPcKqrlVsVGRNXak7TzaWbq4ZyqOJRThPVBAdo
+         oWueKdUQ8YVdaG7dRajg/CYe+exryha/pd0k5rEEwgEuMn2n9DCNY/3LhgHPTzwBDKUJ
+         ii7evi4dxxWWbsDe7LELxRkWF1v8VpO7lGo0T+kR8njrtr9e+TXMOFu5tc2UgHG/wSf3
+         dtTw==
+X-Forwarded-Encrypted: i=1; AJvYcCXWUGm6F+H0Auk8AmLDHodKTmnTTMu1JCtCKiKD48xSvx1x1H7Fi93tTDjVoR6uUy1DS1M=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw0dz7k4qHLcugvQ7ITLQKsPodGjkilyjfervjsdY7F0rhS8yke
+	wOsTh3MJTnuvWopyskNAsBZHLVR6tkwL34HqNp1PETRb4LULjnyln79DrBJGGW7G
+X-Gm-Gg: ATEYQzwvlLp7RS8+8FETmCVeihj+OhfXH1GGDVG2nQH7rdONpDn1K1UcNWC5JC3dDha
+	bhR503lHJLkeKYn3t+NIxe6vVvJtiGvt2FZiSSsMmiRkbepGC1KJG0GvK8N+UACORSQA3WyMZ8L
+	MHl7Jnzx50nVnlyHtHE4a1/5yk14f3nYI3bjDrlcDiLD/Y8AToLYT7GqibMTQq69/N15Na7BMUP
+	JTvV+/KZwUT9Ak3xbK21YOEOPoxPnTCLUmPnb2Hy1XzEtzRVU6Graqao75TBO5BL+vB4OvMjtz0
+	UgUbE6sSJLGhTw1YyXEwTs4NdOiyAkwaskhMOQNWkeUPsVWKwU3KCWsY+pp4uRRtKsBoAHejV+a
+	DiMHx6em/0yJZpsKC8VDuWrtpdrab6KmJxMv3JE9TpWOZOy8QyVh8Aq8bgXoprybtoivBuDYnhk
+	auaMXkaIr0V+w=
+X-Received: by 2002:a05:600c:3b14:b0:485:3f1c:d8a4 with SMTP id 5b1f17b1804b1-485566d6e54mr258332965e9.9.1773695768633;
+        Mon, 16 Mar 2026 14:16:08 -0700 (PDT)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48557a73a75sm98824365e9.15.2026.03.16.14.16.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Mar 2026 13:57:12 -0700 (PDT)
-Message-ID: <29e5aa5fc5a9724d0c3737297fbecd3a3eae76cd.camel@gmail.com>
-Subject: Re: [RFC PATCH bpf-next v2 01/11] bpf: Set kfunc dynptr arg type
- flag based on prototype
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
- 	daniel@iogearbox.net, memxor@gmail.com, martin.lau@kernel.org, 
-	kernel-team@meta.com
-Date: Mon, 16 Mar 2026 13:57:10 -0700
-In-Reply-To: <20260307064439.3247440-2-ameryhung@gmail.com>
-References: <20260307064439.3247440-1-ameryhung@gmail.com>
-	 <20260307064439.3247440-2-ameryhung@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+        Mon, 16 Mar 2026 14:16:08 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 16 Mar 2026 22:16:05 +0100
+To: bot+bpf-ci@kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	kafai@fb.com, eddyz87@gmail.com, songliubraving@fb.com, yhs@fb.com,
+	menglong8.dong@gmail.com, rostedt@kernel.org, martin.lau@kernel.org,
+	yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
+Subject: Re: [PATCHv3 bpf-next 16/24] libbpf: Add support to create tracing
+ multi link
+Message-ID: <abhzFaNiuTJJhPqA@krava>
+References: <20260316075138.465430-17-jolsa@kernel.org>
+ <46d7ff451871969354eeff0215fec41d41f1587deb6b0944f8f38184b715e2f3@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <46d7ff451871969354eeff0215fec41d41f1587deb6b0944f8f38184b715e2f3@mail.kernel.org>
 
-On Fri, 2026-03-06 at 22:44 -0800, Amery Hung wrote:
-> The verifier should decide whether a dynptr argument is read-only
-> based on if the type is "const struct bpf_dynptr *", not the type of
-> the register passed to the kfunc. This currently does not cause issues
-> because existing kfuncs that mutate struct bpf_dynptr are constructors
-> (e.g., bpf_dynptr_from_xxx and bpf_dynptr_clone). These kfuncs have
-> additional check in process_dynptr_func() to make sure the stack slot
-> does not contain initialized dynptr. Nonetheless, this should still be
-> fixed to avoid future issues when there is a non-constructor dynptr
-> kfunc that can mutate dynptr. This is also a small step toward unifying
-> kfunc and helper handling in the verifier, where the first step is to
-> generate kfunc prototype similar to bpf_func_proto before the main
-> verification loop.
->=20
-> We also need to correctly mark some kfunc arguments as "const struct
-> bpf_dynptr *" to align with other kfuncs that take non-mutable dynptr
-> argument and to not break their usage. Adding const qualifier does
-> not break backward compatibility.
->=20
-> Signed-off-by: Amery Hung <ameryhung@gmail.com>
+On Mon, Mar 16, 2026 at 08:35:12AM +0000, bot+bpf-ci@kernel.org wrote:
+> > The provided <pattern> is used as 'pattern' argument in
+> > bpf_program__attach_kprobe_multi_opts function.
+> 
+> Should this say bpf_program__attach_tracing_multi instead of
+> bpf_program__attach_kprobe_multi_opts?  The auto-attach path in
+> attach_tracing_multi() calls bpf_program__attach_tracing_multi(),
+> not the kprobe variant.
+
+no, it's a refference to similar kprobe function
+
+jirka
+
+> 
+> 
 > ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23133791558
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-
-[...]
