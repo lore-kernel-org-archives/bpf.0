@@ -1,201 +1,158 @@
-Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A5EC34C806
-	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 19:03:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
+Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA4563E5EDE
+	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 19:26:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773687794; cv=none; b=Jllr46pFXO7JsHZFROQ/y4IdqRm3kBvRd9WYW0Vowx54GZsXcYNo8tdRoPFsAXU4llz7yFzdGqOpqh+u7SRprsOP9m7Zw8eIqpIzvIZgp4dHtjqzj/JdEeABBFv8KS8y9i6ypDl+pfOS3Uyc60/ARNsTHiV+cmu4r0u4UCPMbHY=
+	t=1773689164; cv=none; b=VbUd8vPktFfBaLqUI4Kn1wg9IW17Oh+w2CRDi8PS2CL6VOYdoBNdtApsECgmbG+b/TbfS5XAxSEBIM1BnjTXwCWpYo5sZn0VNtvY1FzJPRixetWdtrG+dcW8cIZE1Gs21qZ+PR0crhVxYZ7/1s7xUeFrxtubp3VJ4CkPnrsiLpU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773687794; c=relaxed/simple;
-	bh=arL+w32Z0q6sRaADnkBmFJXxdf+3gzfZIZZZRcz2uwY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sJzHMlJRbrgYXZKXafxTbTSEeB4smdwTGFfNldNgTA0zV8OdBV/HWNXYhL2OvNXLS9pXfNsnf4DBvitdgGlFRGQzE1+QUhm15EwUJtbE+FUavA7rILpzD48Bz+BhCAlGtbHuZoYqzdQjCB99ANBIAqSBjI1AiPpI5IEB0jwhGk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=162.243.161.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [10.162.192.132])
-	by mtasvr (Coremail) with SMTP id _____wD3SMjNU7hpVtgfAA--.11797S3;
-	Tue, 17 Mar 2026 03:02:37 +0800 (CST)
-Received: from wolframium.tail477849.ts.net (unknown [10.162.192.132])
-	by mail-app3 (Coremail) with SMTP id zS_KCgAnKWzNU7hpgfq4Bg--.6004S2;
-	Tue, 17 Mar 2026 03:02:37 +0800 (CST)
-From: Yazhou Tang <tangyazhou@zju.edu.cn>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	tangyazhou518@outlook.com,
-	shenghaoyuan0928@163.com,
-	ziye@zju.edu.cn
-Subject: [PATCH bpf 2/2] selftests/bpf: Add test for large offset bpf-to-bpf call
-Date: Tue, 17 Mar 2026 03:02:20 +0800
-Message-ID: <20260316190220.113417-3-tangyazhou@zju.edu.cn>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260316190220.113417-1-tangyazhou@zju.edu.cn>
-References: <20260316190220.113417-1-tangyazhou@zju.edu.cn>
+	s=arc-20240116; t=1773689164; c=relaxed/simple;
+	bh=VVODvYdVPAPnIMUtIejNvVcYb3+5h5t9au0lrAORh/o=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=BKOuZP6AAtEiwpmAVU7y26/EsGcg+jJdEu2jPze+Ks7j9uUeQhcQZJilhr/MLbKkPLfC7EpekTNxGtjbCb0Z6FpqljWO+gKvIQI6YQF+tyS1Uy6xK6OMt8n1vlHoyL6PGbRdEZTgLYGrdPTm/3X+TVzyJgQaeJ9boSMWAPtUA18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xkdrta7w; arc=none smtp.client-ip=74.125.82.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xkdrta7w"
+Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-1271195d2a7so610191c88.0
+        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 12:26:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773689162; x=1774293962; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=6cMzhf4VkTVYDmEHyBOjOEPI5+8JmDa90f9gmIiMY64=;
+        b=Xkdrta7w2/wGw0vEMzC8P8XFNgSo5H93Izh9TjzA2eFgYkinFQfoabvVoF32k9C41P
+         W0UqQgd/agzbeMsjBEYmpBE5ie/sQDw6xJIA9StZ9apLLrkdg7rriLgaa9UVRhwox5SG
+         jO48t4VetrVNy4cOUZ3H35eVBSaPH5j19+qVINMQnmJUbi/JfpziVKmhUcmzf0+iULBw
+         wnor3DNdq5sVkdoGH6fwBFnodUYT09vlEc6Iz0XGu3gtpZc57aNFO1MX/3Wk7aCG+Of+
+         FsEFYk+QjsPRPlNyfzl0EmIIAzxPppFEJ7/+aR2Oo7N9O/Oz50z4cBCsUNS4sz1+Ra8V
+         Fm/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773689162; x=1774293962;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6cMzhf4VkTVYDmEHyBOjOEPI5+8JmDa90f9gmIiMY64=;
+        b=Fc0VypVdIsEL2aRr0tlMzNiUyJPMMt5zSuBXWasAqBgeR5DuL5LtsgVYLGXqxYTgis
+         1NJt5iZnVzQfgr8AB4vlMIQEPEAsVxtGG9qhc5VHZT9G5FcslUcKV4ydSEYQ2xbMtqS9
+         zCmdNH3bYDi45TvWe3Qy9xhjWdORZ4EODCMu3BCzcU/6uKeSkeciLPdGJiW4QT0sjKJ+
+         8+QvA1WWrQimWjxYSnjRW+Fi2uxv8pxEEp2HoMkRRIvh9GHCEmlLwScGoxQ0ZQ+Bwpxk
+         gLvuhCByPsNoyq9z6KNuomfgBWm+5BbuzozWgONPuigFiNlJQE9UX8xbOrKFKgczf9R7
+         2lVg==
+X-Forwarded-Encrypted: i=1; AJvYcCUpUCKwNdi3axCyfD/D4fQeesJ4fP/eg8YtquMi41tT+nAJ3LMvMuzMfnBSxYazeeCb7tk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBehU39BAlkP5ewQYUbE1JyHTcWGAia1Ou2/QJ4jwo+8Cnt1FR
+	FKLpmunVKpQVqF/P4aU25Pyv4pz7MRxitCCshTTqcnPPUYlOmdyzx3kL
+X-Gm-Gg: ATEYQzyZ5s6zWA8W7d9pWPyuTGGxDflR4YUbJbogusOGstUZ4MCn6gSvFJqkJaLIzli
+	clA2BOdDWHpUDUg6SwkXQiZEi3GBX9Jkt+CCs7F3/HguJHJRZC87iiqiB++rjT+hGc8+lbDT9cE
+	AwAz2r93PhKg4bJwMh5KO0uEgyAL2rRBXit4aMMimApTfOk2bomxo1OY7SGLhN0+QEDiDCGXjje
+	eB+8EtLmR2FdJyYjIJRLoS/KJm/nHhIsh7wHHVx4lnLsLJaKHemfE3JBzjqLhptVcptyfDIK5bo
+	r/FX6pfS6tb+j2vcDh/ZRpKOa5rOIKGnSHLZIQXO7wymzVMhTcpEi1eIrYLwr6U8p86vMqCF/Le
+	FAgPq7LpSyg36vkoUI9ctWLqnsUQo4nyLaK1v5J1G/RziVQ/tVpg+d/OYnxmmqN9C19093mwnb3
+	e24pqkrWybS90Lgh+KcPkuGqIRIpo1hiuqyEVviy4xF+6TXtb6ltOASozMZM0=
+X-Received: by 2002:a05:7022:6b94:b0:11b:9386:a3be with SMTP id a92af1059eb24-128f3e2a387mr7005017c88.41.1773689161705;
+        Mon, 16 Mar 2026 12:26:01 -0700 (PDT)
+Received: from ?IPv6:2620:10d:c096:14a::7bc? ([2620:10d:c090:600::76f6])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2beab55541fsm19113857eec.24.2026.03.16.12.26.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Mar 2026 12:26:01 -0700 (PDT)
+Message-ID: <430af20f8bdeb4965e7367578e0795d4eb006504.camel@gmail.com>
+Subject: Re: [RFC PATCH bpf-next v2 09/11] selftests/bpf: Test using dynptr
+ after freeing the underlying object
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
+ 	daniel@iogearbox.net, memxor@gmail.com, martin.lau@kernel.org, 
+	kernel-team@meta.com
+Date: Mon, 16 Mar 2026 12:25:59 -0700
+In-Reply-To: <20260307064439.3247440-10-ameryhung@gmail.com>
+References: <20260307064439.3247440-1-ameryhung@gmail.com>
+	 <20260307064439.3247440-10-ameryhung@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zS_KCgAnKWzNU7hpgfq4Bg--.6004S2
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBhILCmm1ugoVzwAEsn
-X-CM-DELIVERINFO: =?B?8SNMEQXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9Ed38ain3iGL/cGOK3OqJ6bCKPGG2cR0q5WwyLJmE3hYK+MybqO+91RHEunANJutaert
-	C7p+Up2gyoS0Qq6VEVqOomPs4B6JxQySlHQ7zQs9q90M3g4RtDlplVgBbNM3NQ==
-X-Coremail-Antispam: 1Uk129KBj93XoWxZFyrGrW8XFWxWry3tw45CFX_yoWrWFWrpa
-	4kGFy5KF4fGay7Kw47AFW7ZF15KF4kZFyjyrWIqr90vr15Ar97Grs7Kr4UtFy3CrZ3Awn5
-	ZFZIyan3Wr48JFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUBjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r1j6r4UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
-	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE
-	14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjcxG0xvY0x
-	0EwIxGrVCF72vEw4AK0wACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwIxGrwCF
-	x2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14
-	v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY
-	67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2
-	IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07URlksUUUUU=
 
-From: Yazhou Tang <tangyazhou518@outlook.com>
+On Fri, 2026-03-06 at 22:44 -0800, Amery Hung wrote:
 
-The test utilizes an inline assembly block with `.rept 200000` to generate
-a massive dummy subprogram. By placing this padding between the main program
-and the target subprogram, it forces the verifier to process a bpf-to-bpf call
-with the `imm` field exceeding the s16 range.
+[...]
 
-The user-space test driver dynamically adapts to the host's JIT configuration:
-- When JIT is enabled, it asserts that the program is successfully loaded,
-  JIT-compiled, and executes correctly (returning the expected value).
-- When JIT is disabled, it asserts that the program is cleanly rejected by
-  the verifier with -EINVAL (or -ENOSPC if the verifier log buffer is truncated),
-  and strictly matches the expected error log.
+> @@ -223,6 +253,12 @@ void test_ns_bpf_qdisc(void)
+>  		test_qdisc_attach_to_non_root();
+>  	if (test__start_subtest("incompl_ops"))
+>  		test_incompl_ops();
+> +	if (test__start_subtest("invalid_dynptr"))
+> +		test_invalid_dynptr();
+> +	if (test__start_subtest("invalid_dynptr_slice"))
+> +		test_invalid_dynptr_slice();
+> +	if (test__start_subtest("invalid_dynptr_cross_frame"))
+> +		test_invalid_dynptr_cross_frame();
+>  }
 
-Co-developed-by: Tianci Cao <ziye@zju.edu.cn>
-Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
-Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
-Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
-Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
----
- .../selftests/bpf/prog_tests/call_large_imm.c | 49 +++++++++++++++++++
- .../selftests/bpf/progs/call_large_imm.c      | 38 ++++++++++++++
- 2 files changed, 87 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/call_large_imm.c
- create mode 100644 tools/testing/selftests/bpf/progs/call_large_imm.c
+Nit:
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/call_large_imm.c b/tools/testing/selftests/bpf/prog_tests/call_large_imm.c
-new file mode 100644
-index 000000000000..ba4a2e27fa5d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/call_large_imm.c
-@@ -0,0 +1,49 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include "call_large_imm.skel.h"
-+
-+void test_call_large_imm(void)
-+{
-+	struct call_large_imm *skel;
-+	int err, prog_fd;
-+	char log_buf[4096] = {};
-+	char dummy_data[64] = {};
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, opts,
-+		.data_in = dummy_data,
-+		.data_size_in = sizeof(dummy_data),
-+	);
-+
-+	skel = call_large_imm__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	if (!env.jit_enabled)
-+		bpf_program__set_log_buf(skel->progs.call_large_imm_test,
-+					 log_buf, sizeof(log_buf));
-+
-+	err = call_large_imm__load(skel);
-+
-+	if (env.jit_enabled) {
-+		if (!ASSERT_OK(err, "load_should_succeed_with_jit"))
-+			goto cleanup;
-+
-+		prog_fd = bpf_program__fd(skel->progs.call_large_imm_test);
-+		err = bpf_prog_test_run_opts(prog_fd, &opts);
-+
-+		if (ASSERT_OK(err, "prog_run_success"))
-+			ASSERT_EQ(opts.retval, 3, "prog_retval");
-+
-+	} else {
-+		ASSERT_ERR(err, "load_should_fail_in_interpreter");
-+		ASSERT_TRUE(err == -EINVAL || err == -ENOSPC, "err_should_be_einval_or_enospc");
-+
-+		if (!ASSERT_OK_PTR(strstr(log_buf, "bpf-to-bpf call offset out of range for interpreter"),
-+				   "check_verifier_log_msg")) {
-+			printf("Actual verifier log:\n%s\n", log_buf);
-+		}
-+	}
-+
-+cleanup:
-+	call_large_imm__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/call_large_imm.c b/tools/testing/selftests/bpf/progs/call_large_imm.c
-new file mode 100644
-index 000000000000..d0057f88b48b
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/call_large_imm.c
-@@ -0,0 +1,38 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+
-+struct __sk_buff;
-+
-+static __attribute__((noinline)) void padding_subprog(void)
-+{
-+	asm volatile ("					\
-+		r0 = 0;					\
-+		.rept 200000;				\
-+		r0 += 0;				\
-+		.endr;					\
-+	" ::: "r0");
-+}
-+
-+static __attribute__((noinline)) int target_subprog(struct __sk_buff *ctx)
-+{
-+	volatile int magic_ret = 3;
-+	return magic_ret;
-+}
-+
-+SEC("socket")
-+int call_large_imm_test(struct __sk_buff *ctx)
-+{
-+	int ret = 0;
-+
-+	if (ctx == (void *)0)
-+		padding_subprog();
-+
-+	ret = target_subprog(ctx);
-+
-+	bpf_printk("Target subprog returned: %d\n", ret);
-+
-+	return ret;
-+}
-+
-+char LICENSE[] SEC("license") = "GPL";
--- 
-2.53.0
+maybe consider using test_loader.c based infrastructure for failure tests?
+E.g. like below:
 
+    +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+    @@ -115,6 +115,7 @@
+     #include "verifier_lsm.skel.h"
+     #include "verifier_jit_inline.skel.h"
+     #include "irq.skel.h"
+    +#include "bpf_qdisc_fail__invalid_dynptr.skel.h"
+    =20
+     #define MAX_ENTRIES 11
+    =20
+    @@ -259,6 +260,7 @@ void test_verifier_lsm(void)                  { RUN=
+(verifier_lsm); }
+     void test_irq(void)			      { RUN(irq); }
+     void test_verifier_mtu(void)		      { RUN(verifier_mtu); }
+     void test_verifier_jit_inline(void)               { RUN(verifier_jit_i=
+nline); }
+    +void test_bpf_qdisc_fail__invalid_dynptr(void) { RUN(bpf_qdisc_fail__i=
+nvalid_dynptr); }
+    =20
+     static int init_test_val_map(struct bpf_object *obj, char *map_name)
+     {
+    diff --git a/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_=
+dynptr.c b/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr=
+.c
+    index 2e76470bc261..f085872c3900 100644
+    --- a/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr.=
+c
+    +++ b/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr.=
+c
+    @@ -3,12 +3,14 @@
+     #include <vmlinux.h>
+     #include "bpf_experimental.h"
+     #include "bpf_qdisc_common.h"
+    +#include "bpf_misc.h"
+    =20
+     char _license[] SEC("license") =3D "GPL";
+    =20
+     int proto;
+    =20
+     SEC("struct_ops")
+    +__failure
+     int BPF_PROG(bpf_qdisc_test_enqueue, struct sk_buff *skb, struct Qdisc=
+ *sch,
+     	     struct bpf_sk_buff_ptr *to_free)
+     {
+
+For tests that exercise verifier failure messages this has some
+benefits. E.g. the following command would reliably produce log
+output even if program load succeeds:
+
+  ./test_progs -vvv -a bpf_qdisc_fail__invalid_dynptr/bpf_qdisc_test_enqueu=
+e
+
+And __msg annotations can be used to force-check the failure reason.
+
+[...]
