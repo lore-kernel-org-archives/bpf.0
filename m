@@ -1,220 +1,487 @@
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013042.outbound.protection.outlook.com [40.107.159.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67786331A65
-	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 16:12:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773677555; cv=none; b=TlTA3YLaIHfvp4VhkHlqajPOdYCcOJvo7EdcbFwXZp+j2IzS+fHHQ9cdXOW8upXP5D3H89XQ+OyMGKHlXc+OZePdZ4e572LxK1u+girvDZEViDmhsiJko3FIDrAOTY8Dzm7j/vBxuit5SHXW0XKz4XgrDwiqBaQas5fwd/5IbwQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773677555; c=relaxed/simple;
-	bh=EdcMX6LDMJHLkL0SOJCcFEe14W7SxI5cIgagXIRrknE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dz8lwxYYgqL71MHrj8nMRE7fy7UURAGE/saEDjFhiBhFgM6Nf4uuaHIbdPp6TrdqA0ATmxGEq9f4ZXd9BWCBGIjAvYaaiKg4jes0GkbZkxdZRUYiRcfjmMJNxge/zKf+EyQ/N211GZzyF3UCPmiZMG8XmvHDiszLUArnpLbCdvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=0/vOw3Eo; arc=none smtp.client-ip=209.85.219.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56A2D330B30;
+	Mon, 16 Mar 2026 16:13:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.42
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773677591; cv=fail; b=CtvImY6FYi1vDdYISOHJmGUBvc7kD/p3sAky9vaZy+hP/4kl4EMrlBduoJgYAtRvo/HJxF1g90aYX5oDmZq7CTYBS0vZvjE1bRCLUmkJWPdcyJ9rhMo8A/+jVd1g1QSb+FZOtjas/bLDhbA21nRlTuZc1c9yxF549gbyayxBwpg=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773677591; c=relaxed/simple;
+	bh=rL47gJTN/O6SI/ALUqE6vd/g9aZjkYuOBgn8kDcfAOI=;
+	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=llXjWbar0PMVVmdMhkrYq6F6/bCED5E6gsjAe8YhLkkF1Myr00EBy/QpcozO/U+ZrLYd+4DXeYIwxaCZUP9hJy01EzNcImCiJvV8/e5oND7Py6dLdGygF93mE1tkDW34PUl+AG/FQ9yfaT4s22K95IGWpnAvH/tqR1l3q1SuP8U=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=CIt8yuHL; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=CIt8yuHL; arc=fail smtp.client-ip=40.107.159.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="0/vOw3Eo"
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-89a465bd7edso34130976d6.0
-        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 09:12:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1773677553; x=1774282353; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=joLfX04LGzhe8j6MVJQ7jWVTogjCHM16XxkJCT2hiOg=;
-        b=0/vOw3EowbfgIt71P1ZCjTf2qj7o3nPK9l6IJE9RO1Mp9Lk7To4vJKl8amPJJnM2Qb
-         qA8xEmKRsRAEgUINnVx34jPpZEsi4Uv9y0zrfKnDPJiUB7ziZz3KMGl3+JugstS31Cov
-         ZmGw8QzHXuNiXg7slhuXGJEbjhsWR5q2NK6zSBL5Vq5s1RHEFlTn8qTqox0QbPPehDu1
-         sU7wGdxjJ43uSEHpzOssS+tiiD9NmGv9o+jhrlI10CeZ/wiqYyEQBkJnyYRLOcS7EKxV
-         hLMaxvPS+AcBA2BSFlWpYt2n9s8RAeu/0ezTuIJdHByOPco8XQJTCCggY9l5IK7eVOFg
-         WcWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773677553; x=1774282353;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=joLfX04LGzhe8j6MVJQ7jWVTogjCHM16XxkJCT2hiOg=;
-        b=FSUpQ+bEbPy9dk0wNLzgppG+G/NjnxqjigUY+AISMOR/UAZl1bIdsSOarSEVORWcPi
-         LHGnNzxae3Tr4sqiUH8EjZ+QjP+r8uR+3q5becBsrsV62r0zPIMCi8SK+aAO70m8HueC
-         LclKhSiuv58rsrT7p3+pJvN8RN5MdT3FkkDNd/8rlElnr3dWts2ynWrdiPxbakM5E9V8
-         hPLFivbVviZU76g13WQFW7uqcTyrwmODox8JOPGIq4fE7VxIAmQFm5+vbBJT3Pi+DK4c
-         ivxRUQWVlocjwcDzWkqWrZRiQkpLEhhowNS7J++vN+9WQyhUKP9CDBPmWEY1O10OuJHe
-         SkqA==
-X-Gm-Message-State: AOJu0YzTuzLySoiJlw6XJWgFOe8zicGFmG2WkHJVPTyvd/TzKRbRhaHR
-	kmh7Glf0LhAZH7x+rwJDzcfLpiedzaTBqw4aNqdU9wg9sKkze6PE4ppMm4iAmdS0MLdyIS0RMHD
-	d03oIBgg=
-X-Gm-Gg: ATEYQzzwGh0nilogdqSfkU7lCiXgd3Ezv73eH0HikImRMDfH9Me6GY2QNNX80NurnF3
-	b5ittq6GW3vUFSDo3ERrBdprbI2+J2vGkWbdjpmV4MOA191hFbrf9XmrnIM9XlGKGFym6FURoow
-	axsF3MkcfXGTdD210ii09Gd+JpsHUQXnyx0re6Zh2bLi1T4aInZGhFYYBM/vRbfWyfOet8MvCEc
-	nY4PRxNJGOr6tcwheBtV4QTvTgzEZ4uTrSzoM8SAv5bC/ZTYJDbc5S9lR895UagTRLS5wkQZUMh
-	rQsZUCPHsGH3ARwB+a/KsSEBhW0sa7SzvxlJ1fRHj+CucmH0OqhSL6dU9t0utQFnUoYdWI058Y8
-	kaCvf+zgcbgl3EzBAfxtN2WIZii0zY8ZTt6i6dFRZy5BRVr9zERsOpYQVdwVKSf51pdTZSrsiWq
-	vAIE8XOxYOWsvjRogxWp+LQQ==
-X-Received: by 2002:a05:6214:27e5:b0:89a:ec6:1028 with SMTP id 6a1803df08f44-89a81dab8e5mr164642226d6.30.1773677553184;
-        Mon, 16 Mar 2026 09:12:33 -0700 (PDT)
-Received: from boreas.. ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89c463b0806sm54022626d6.49.2026.03.16.09.12.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Mar 2026 09:12:32 -0700 (PDT)
-From: Emil Tsalapatis <emil@etsalapatis.com>
-To: bpf@vger.kernel.org
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	martin.lau@kernel.org,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v6 2/2] selftests/bpf: Add deep call stack selftests
-Date: Mon, 16 Mar 2026 12:12:25 -0400
-Message-ID: <20260316161225.128011-3-emil@etsalapatis.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20260316161225.128011-1-emil@etsalapatis.com>
-References: <20260316161225.128011-1-emil@etsalapatis.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="CIt8yuHL";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="CIt8yuHL"
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=XrgoEM4tIoXDk+0k0rcyJ7ai80h8UIVVptyg8gixtkbku8YdIRRdU/uNZHJAVsff7Hq+8ITo0UTfxKrKPReHAWm7Ng51T5ca9owHgkJJwJ1eptEtBpEnMwO524O0Np/JTtdc9Qrxyar1xhXaBzOwjtU5tPWoDePNpTOREBL4uMoR6iaWaDbxCgJZx2XL8lYAvsjxn6GLImoj2g3mtfQluP7HCRNwGfrQfq5TWfwAkSuFTI5W7jmpfQoIFBOaeofAA9CepDCsrsi+6mmtNxso6GTu3mplQEfICccvyCjaXeyWImK8gYbgG78NOdwFC1LEVkWP2gQQFHSc4/DOLeEH1Q==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gbobtKf9LjBOwrz6b1xQM5v1ZNc/Vjtdj6go1Dm4bqM=;
+ b=TtRPOVic3gsj0/DnZinaaZ5Gp6G+sXL6KPRxriPUqkWv8VeI0oPY+FlbuPybQt9JSUu1pZ20+0Qb9PFC3ns84Q5CO1QC0+KMU5aybbAH4AACWbHh5N2OQyZ3RHR8z9FeLjzqOHQ5LERdL0w+tW0zeiOOxVqsUMO24VeEL1PME/ds43pOC5Bd75jvLCx5W0VG2C3M+sDRABGjzrXeWyk/s6CMZKOF47I+Ty7Bl8QED70zpgtpUeUL2wCrWblR1hepnv8L0HSjJUIbtRYbG0STi+Jv3ItZqAExJfhbMNIb1w0EvJ4qtx1T/FMSKmh3eTiApRInq4h88YeZUi+dF2W+/A==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 4.158.2.129) smtp.rcpttodomain=suse.cz smtp.mailfrom=arm.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
+ (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gbobtKf9LjBOwrz6b1xQM5v1ZNc/Vjtdj6go1Dm4bqM=;
+ b=CIt8yuHLPfSOgFszSHtZ230BINXkyiB5e+s1ml+i5alKjNqUkfCy5Flg5xnSnczeEBqH+DyvXTrbruS/Y8G+fgASxuYB8PuOQ1V3dmEQ2V2m17AO+Cz178fqNfaSFrqLz/r419OMikxcqMUm4ovv1Nu/DS4wonXmmzi7suTW4VE=
+Received: from DU6P191CA0036.EURP191.PROD.OUTLOOK.COM (2603:10a6:10:53f::23)
+ by AM0PR08MB5444.eurprd08.prod.outlook.com (2603:10a6:208:185::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9700.24; Mon, 16 Mar
+ 2026 16:13:01 +0000
+Received: from DU2PEPF00028CFF.eurprd03.prod.outlook.com
+ (2603:10a6:10:53f:cafe::bb) by DU6P191CA0036.outlook.office365.com
+ (2603:10a6:10:53f::23) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9700.25 via Frontend Transport; Mon,
+ 16 Mar 2026 16:12:59 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=arm.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
+ client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
+Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
+ DU2PEPF00028CFF.mail.protection.outlook.com (10.167.242.183) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9678.18
+ via Frontend Transport; Mon, 16 Mar 2026 16:13:00 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Uq3meWZ9xoP1i241PQlmZP1DSRnycvooBlvDG21wps2+zdkeiv1bZDxGC6p/rXx0BMtuTDBUqx+3G5KWKUqqoEKcVbUMCFnUOmS5vswV8KxhpW6lzi9jRblp7x6/YjNb/1Rd/5gTyO6mpk31zeoAJKgoSS1TXrPn17vnGoCinOD36OFgHW6K69UVmQimEqARfcNHmNIVvKakZe1Qfhcn9ozaNv1l9JACpnhNX4dp5R6YA9JGsA/iSv2vljrwSYDzn76mlgQIDhzQ9BjpTnF/sG2DLeg4z8j/JIq+6EGcqKzCOf4tnMoqhjsQbtLJVnDqfP5u+aovAbmECwBoRGM7KQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gbobtKf9LjBOwrz6b1xQM5v1ZNc/Vjtdj6go1Dm4bqM=;
+ b=Zn9cncczXhwVpmG6hfoi85ZLCYLzrrGlf57rtc+3WctUqIJUdBhinivWLadCkaHawQxfzyxbEQxM2HZAxo+hRjejo04uEtMKQ45I5UajBnt8aB0/MgTy559RzE4cyXHqRK+2Lfx7cpNdzcBaPwqeIXhPDaV3/1VEwGF2RROotXBwXSXTvIDjB6adKhHgrqhaHxMm0CCwJoNy+ed1kbuyjRFRfUX8E2QGBq11KBGAOSUsf1IuVdxoTRh8jmwHlITjrwnuHrD7XPrYmk211Hb8xet0mfyjAiXVdPq1InHfR/6iKOIRD3lRXVYBbheZKK8kzoS8PfTrQ5UnXFMO7kLZgA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gbobtKf9LjBOwrz6b1xQM5v1ZNc/Vjtdj6go1Dm4bqM=;
+ b=CIt8yuHLPfSOgFszSHtZ230BINXkyiB5e+s1ml+i5alKjNqUkfCy5Flg5xnSnczeEBqH+DyvXTrbruS/Y8G+fgASxuYB8PuOQ1V3dmEQ2V2m17AO+Cz178fqNfaSFrqLz/r419OMikxcqMUm4ovv1Nu/DS4wonXmmzi7suTW4VE=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from VI1PR08MB3421.eurprd08.prod.outlook.com (2603:10a6:803:80::16)
+ by GVXPR08MB11095.eurprd08.prod.outlook.com (2603:10a6:150:1fb::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9700.21; Mon, 16 Mar
+ 2026 16:11:52 +0000
+Received: from VI1PR08MB3421.eurprd08.prod.outlook.com
+ ([fe80::e079:6bd:fbe0:89b4]) by VI1PR08MB3421.eurprd08.prod.outlook.com
+ ([fe80::e079:6bd:fbe0:89b4%3]) with mapi id 15.20.9678.023; Mon, 16 Mar 2026
+ 16:11:51 +0000
+Message-ID: <0c01dd45-36d2-4299-930e-47851f396123@arm.com>
+Date: Mon, 16 Mar 2026 16:11:50 +0000
+User-Agent: Mozilla Thunderbird
+Cc: usama.anjum@arm.com
+Subject: Re: [PATCH v2 1/3] mm/page_alloc: Optimize free_contig_range()
+To: Vlastimil Babka <vbabka@suse.cz>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Mike Rapoport
+ <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Brendan Jackman <jackmanb@google.com>,
+ Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
+ Uladzislau Rezki <urezki@gmail.com>, Nick Terrell <terrelln@fb.com>,
+ David Sterba <dsterba@suse.com>,
+ "Vishal Moola (Oracle)" <vishal.moola@gmail.com>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, Ryan.Roberts@arm.com,
+ david.hildenbrand@arm.com
+References: <20260316113209.945853-1-usama.anjum@arm.com>
+ <20260316113209.945853-2-usama.anjum@arm.com>
+ <220e97f0-dc82-4f37-b833-7160aee46cea@suse.cz>
+From: Muhammad Usama Anjum <usama.anjum@arm.com>
+Content-Language: en-US
+In-Reply-To: <220e97f0-dc82-4f37-b833-7160aee46cea@suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PA7P264CA0523.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:102:3db::28) To VI1PR08MB3421.eurprd08.prod.outlook.com
+ (2603:10a6:803:80::16)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-TrafficTypeDiagnostic:
+	VI1PR08MB3421:EE_|GVXPR08MB11095:EE_|DU2PEPF00028CFF:EE_|AM0PR08MB5444:EE_
+X-MS-Office365-Filtering-Correlation-Id: c13c9f11-3ec4-4504-c7a6-08de8376e521
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|1800799024|7416014|376014|366016|921020|56012099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info-Original:
+ FBBQXoAZqmOL8plg0C/HblomtwIXHxNIVsOSuvMvFkWFZmd9seUGgi1xFNLSvYSXEqaaUPSd3geWjYTYy/hAH6FMvIJGb7BCItV/LWmTup1ZQbSF08EVcYLqMzxUPwe4mmhrz6ANiTOVEJqV86pjSbTJC0AbxzfLpMqy3Tiz08VWSGxfLw4d3m4jSL/c36xy2Yq1ycdcpxnxuHs7kHJgOc8mJUYj/UfN1PahpEucOi4UGHAme7VmSyXK+9MjNP/ztiPUV+TyG53YRPcjRXXEgj9dJIAyN28yOVAaXC+ppN6MRV9NKgG1v67h+MsbmGVKveQKxvbHtiVv2ZbHfERTto9Lbbc/Rn9wqH4g4qeJtFTNkvmcswxo5kLQICzaPLSxhDMJL0oNcEdmqdr1v1xtH3XIV8bgCQc4gw7GIQuRpf7XkkTCuYQu2+YQxHLZaE5YLSY41Uoe92rpHHK44Dsrz4PefsWdRcRnKuIDtEMcHLKdRupKYCM9IFUO8WLhpCBaTfXI7zgarzPuuUKSClj3gXlUEWksf6AsbL1Unn/zj/72gnu8E1X1OJfFhFSh/BApxrBVs0Q6l/5+6BXD2dfPmM+br6RXrM105jXMhd47r92md3zB1AFhRqCj/iziCgkWFDjTwVK24o4ErJtqhk6SqiR1IWBnoUmK91kdyXavIpRb+1Q0VdALBzAgwu5jl1fQCpdu5pRBlcU+pbtSFziDmKfm8FBkBj9knus/GucMmbIeXF7+SbDSB9oXu4ALGP25BDXQe9iWfonHe7WICpx7hQ==
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR08MB3421.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016)(921020)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-Exchange-RoutingPolicyChecked:
+ pYX/Rf/NrKK9iUAS5hNxXCunzs3YR3bq/bSa0zOdYnKoIrWvle2BhRwxD+MfWchvLoSixY0m1DmNTpLD3/43ZLh6fD2uE9maUUBcNW3r0mj9OZoUl/L8tLIpau3LXn5nLe3KlrMohOxcxftHcAKLL1mal4mELAh/LjDleAjghikKH1S2BdmxCAMSOSy0UzL7+Gqke2XZc7KBKyUb06fPGQNoAM6Ws+uoh9U54vX9LosPSCYohfP6F79OJ+Ez/OCXMDkDttZbczHWImxmAS1nnkpjcmkOw/elpEEFBKBpJ9VoUTQfCrrK4LT+Yz3j4xV/ADqin+028cAfq/vmVchjJA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR08MB11095
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DU2PEPF00028CFF.eurprd03.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	eccd6ddb-3f3b-4f34-e7f1-08de8376bbd2
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|35042699022|82310400026|1800799024|36860700016|7416014|376014|14060799003|921020|56012099003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	Pt10nfFGjONLybPDavSnFGBMdNc4t+8Mv+UA/eg0GAtQoCradnVETsIGng5f216SHIWZRVN0rnRS5IGivqdeRBojt1ywRTAvn4Qru4yGqr5YPeahtHVSbCX4XhJv2yV4AeWmK+s6Pp4D3yi1AMCwFQjLHwfRASlUYyUoZrKIsYa7uuAodIRjXDkrP0rL0nOcSzG8zO3+mrR0VU5lDb1S/Gt1Pv7ZY5zGN5sQSsDBnqobzWmypKjOdzQlthKGpmHz5QWXK1dKdK+wb6F97soN0YbXokt30uAnvoFOlwrSEjWrPsxo6v8Regsz+CYztt4uBms8MIcPlp1DH03LdFL7uBiZupbcEFef+5Rf8YEq4en1OtJNNKi4sOfBQxAAIvrlhmnHeOJ1Fo1yoheSfCd2we4q8mpa7mzklNpgxVyuLRMExv3PzngxD1do/ZiUBuYJio7aVNvwfRUioPkyBMsbKJtOnb5nmoagcp6licowhNUWjk5pKwAWXLIR5AIRqI4hQLDiwNfeuBW5bsO8WcE5nZVZTN9zhRqIVxT6BlsvODaGu4DhEVtcuF3qPa9DjAm/aQOe4Q4K6crD9SRrbRWN7CGSqQqax3finE3K6rcUh+GokRqU9AdLowE+aqjcxaoypXbZcdKMaIu+8eCzCcISZCFKM4/AV9duzZh4oTuO5x3e7k4qixhHcgpAX4zbzAW1JgIenJX3hXjvSWuDXWzC7Z4Rm5LAqc6qfKMapO3va+r6tP8LroL6yIwCZTBfcHFf+U3z33XxhrN7ppqvd9EJDBWQ1gsk43LKW4Ih9oZULoA+UlIkhJgooIxU+QrRuyEm
+X-Forefront-Antispam-Report:
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(35042699022)(82310400026)(1800799024)(36860700016)(7416014)(376014)(14060799003)(921020)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	X91AjrgVqbxOJ+0X2c3VbQWeAoP5rwWNkeJ2xBhs3ivM1EuqxlirgRmV1F9dk7jeouzu8PBEkB19Tqy28EmwzwUENeIPndzmrYOW7jrdEDpf8CIx0UBHO0kvGfSNo0aqZJcsjOX4nKHAez8PQS4C0G0FdH7jT8+m8ccKHy03jXrDNO6N5k5vfRch7iDt1iOZN1I5TVKD9saJ9QgDtWIB1OeUJ/iDfuxNE3IU4NQiyB1sWHrA8zMhAtrDG+Eh73F2VpNblDxHBqFLB9ylMhg7eAq1c07zesj04M35YkAXUbNv1BQft5XQytQd9Dd5d+dqvVYOqt/+MmgJqsIjuCoixt5RY8tknhvQUhiKYE6L2eUEhRX5MGAtLCKvplUaIWOsZsEOmCnMGHqdApg9oQjQgMVe0bmYQLZ4WcoMbVWvaPbTGep/PYRULgQlkU2VhBvJ
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2026 16:13:00.5683
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c13c9f11-3ec4-4504-c7a6-08de8376e521
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DU2PEPF00028CFF.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR08MB5444
 
-Add tests that demonstrate the verifier support for deep call stacks
-while still enforcing maximum stack size limits.
+On 16/03/2026 3:21 pm, Vlastimil Babka wrote:
+> On 3/16/26 12:31, Muhammad Usama Anjum wrote:
+>> From: Ryan Roberts <ryan.roberts@arm.com>
+>>
+>> Decompose the range of order-0 pages to be freed into the set of largest
+>> possible power-of-2 size and aligned chunks and free them to the pcp or
+>> buddy. This improves on the previous approach which freed each order-0
+>> page individually in a loop. Testing shows performance to be improved by
+>> more than 10x in some cases.
+>>
+>> Since each page is order-0, we must decrement each page's reference
+>> count individually and only consider the page for freeing as part of a
+>> high order chunk if the reference count goes to zero. Additionally
+>> free_pages_prepare() must be called for each individual order-0 page
+>> too, so that the struct page state and global accounting state can be
+>> appropriately managed. But once this is done, the resulting high order
+>> chunks can be freed as a unit to the pcp or buddy.
+>>
+>> This significantly speeds up the free operation but also has the side
+>> benefit that high order blocks are added to the pcp instead of each page
+>> ending up on the pcp order-0 list; memory remains more readily available
+>> in high orders.
+>>
+>> vmalloc will shortly become a user of this new optimized
+>> free_contig_range() since it aggressively allocates high order
+>> non-compound pages, but then calls split_page() to end up with
+>> contiguous order-0 pages. These can now be freed much more efficiently.
+>>
+>> The execution time of the following function was measured in a server
+>> class arm64 machine:
+>>
+>> static int page_alloc_high_order_test(void)
+>> {
+>> 	unsigned int order = HPAGE_PMD_ORDER;
+>> 	struct page *page;
+>> 	int i;
+>>
+>> 	for (i = 0; i < 100000; i++) {
+>> 		page = alloc_pages(GFP_KERNEL, order);
+>> 		if (!page)
+>> 			return -1;
+>> 		split_page(page, order);
+>> 		free_contig_range(page_to_pfn(page), 1UL << order);
+>> 	}
+>>
+>> 	return 0;
+>> }
+>>
+>> Execution time before: 4097358 usec
+>> Execution time after:   729831 usec
+>>
+>> Perf trace before:
+>>
+>>     99.63%     0.00%  kthreadd         [kernel.kallsyms]      [.] kthread
+>>             |
+>>             ---kthread
+>>                0xffffb33c12a26af8
+>>                |
+>>                |--98.13%--0xffffb33c12a26060
+>>                |          |
+>>                |          |--97.37%--free_contig_range
+>>                |          |          |
+>>                |          |          |--94.93%--___free_pages
+>>                |          |          |          |
+>>                |          |          |          |--55.42%--__free_frozen_pages
+>>                |          |          |          |          |
+>>                |          |          |          |           --43.20%--free_frozen_page_commit
+>>                |          |          |          |                     |
+>>                |          |          |          |                      --35.37%--_raw_spin_unlock_irqrestore
+>>                |          |          |          |
+>>                |          |          |          |--11.53%--_raw_spin_trylock
+>>                |          |          |          |
+>>                |          |          |          |--8.19%--__preempt_count_dec_and_test
+>>                |          |          |          |
+>>                |          |          |          |--5.64%--_raw_spin_unlock
+>>                |          |          |          |
+>>                |          |          |          |--2.37%--__get_pfnblock_flags_mask.isra.0
+>>                |          |          |          |
+>>                |          |          |           --1.07%--free_frozen_page_commit
+>>                |          |          |
+>>                |          |           --1.54%--__free_frozen_pages
+>>                |          |
+>>                |           --0.77%--___free_pages
+>>                |
+>>                 --0.98%--0xffffb33c12a26078
+>>                           alloc_pages_noprof
+>>
+>> Perf trace after:
+>>
+>>      8.42%     2.90%  kthreadd         [kernel.kallsyms]         [k] __free_contig_range
+>>             |
+>>             |--5.52%--__free_contig_range
+>>             |          |
+>>             |          |--5.00%--free_prepared_contig_range
+>>             |          |          |
+>>             |          |          |--1.43%--__free_frozen_pages
+>>             |          |          |          |
+>>             |          |          |           --0.51%--free_frozen_page_commit
+>>             |          |          |
+>>             |          |          |--1.08%--_raw_spin_trylock
+>>             |          |          |
+>>             |          |           --0.89%--_raw_spin_unlock
+>>             |          |
+>>             |           --0.52%--free_pages_prepare
+>>             |
+>>              --2.90%--ret_from_fork
+>>                        kthread
+>>                        0xffffae1c12abeaf8
+>>                        0xffffae1c12abe7a0
+>>                        |
+>>                         --2.69%--vfree
+>>                                   __free_contig_range
+>>
+>> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+>> Co-developed-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+>> ---
+>> Changes since v1:
+>> - Rebase on mm-new
+>> - Move FPI_PREPARED check inside __free_pages_prepare() now that
+>>   fpi_flags are already being passed.
+>> - Add todo (Zi Yan)
+>> - Rerun benchmarks
+>> - Convert VM_BUG_ON_PAGE() to VM_WARN_ON_ONCE()
+>> - Rework order calculation in free_prepared_contig_range() and use
+>>   MAX_PAGE_ORDER as high limit instead of pageblock_order as it must
+>>   be up to internal __free_frozen_pages() how it frees them
+>> ---
+>>  include/linux/gfp.h |   2 +
+>>  mm/page_alloc.c     | 110 ++++++++++++++++++++++++++++++++++++++++++--
+>>  2 files changed, 108 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/include/linux/gfp.h b/include/linux/gfp.h
+>> index f82d74a77cad8..96ac7aae370c4 100644
+>> --- a/include/linux/gfp.h
+>> +++ b/include/linux/gfp.h
+>> @@ -467,6 +467,8 @@ void free_contig_frozen_range(unsigned long pfn, unsigned long nr_pages);
+>>  void free_contig_range(unsigned long pfn, unsigned long nr_pages);
+>>  #endif
+>>  
+>> +unsigned long __free_contig_range(unsigned long pfn, unsigned long nr_pages);
+>> +
+>>  DEFINE_FREE(free_page, void *, free_page((unsigned long)_T))
+>>  
+>>  #endif /* __LINUX_GFP_H */
+>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+>> index 75ee81445640b..6a9430f720579 100644
+>> --- a/mm/page_alloc.c
+>> +++ b/mm/page_alloc.c
+>> @@ -91,6 +91,13 @@ typedef int __bitwise fpi_t;
+>>  /* Free the page without taking locks. Rely on trylock only. */
+>>  #define FPI_TRYLOCK		((__force fpi_t)BIT(2))
+>>  
+>> +/*
+>> + * free_pages_prepare() has already been called for page(s) being freed.
+>> + * TODO: Perform per-subpage free_pages_prepare() checks for order > 0 pages
+>> + * (HWPoison, PageNetpp, bad free page).
+>> + */
+> 
+> I'm confused, and reading the v1 thread didn't help either. Where would the
+> subpages to check come from? AFAICS we start from order-0 pages always.
+> __free_contig_range calls free_pages_prepare on every page with order 0
+> unconditionally, so we check every page as an order-0 page. If we then free
+> the bunch of individually checked pages as a high-order page, there's no
+> reason to check those subpages again, no? Am I missing something?
+Zi Yan replied in separate thread. Let's continue this discussion there.
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
----
- .../bpf/prog_tests/test_global_funcs.c        |  2 +
- .../bpf/progs/test_global_func_deep_stack.c   | 95 +++++++++++++++++++
- 2 files changed, 97 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/test_global_func_deep_stack.c
+> 
+>> +#define FPI_PREPARED		((__force fpi_t)BIT(3))
+>> +
+>>  /* prevent >1 _updater_ of zone percpu pageset ->high and ->batch fields */
+>>  static DEFINE_MUTEX(pcp_batch_high_lock);
+>>  #define MIN_PERCPU_PAGELIST_HIGH_FRACTION (8)
+>> @@ -1310,6 +1317,9 @@ __always_inline bool __free_pages_prepare(struct page *page,
+>>  	bool compound = PageCompound(page);
+>>  	struct folio *folio = page_folio(page);
+>>  
+>> +	if (fpi_flags & FPI_PREPARED)
+>> +		return true;
+>> +
+>>  	VM_BUG_ON_PAGE(PageTail(page), page);
+>>  
+>>  	trace_mm_page_free(page, order);
+>> @@ -1579,8 +1589,10 @@ static void __free_pages_ok(struct page *page, unsigned int order,
+>>  	unsigned long pfn = page_to_pfn(page);
+>>  	struct zone *zone = page_zone(page);
+>>  
+>> -	if (__free_pages_prepare(page, order, fpi_flags))
+>> -		free_one_page(zone, page, pfn, order, fpi_flags);
+>> +	if (!__free_pages_prepare(page, order, fpi_flags))
+>> +		return;
+>> +
+>> +	free_one_page(zone, page, pfn, order, fpi_flags);
+> 
+> This is not a functional change, can we drop it?
+Yes, I'll drop it in the next version.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_global_funcs.c b/tools/testing/selftests/bpf/prog_tests/test_global_funcs.c
-index e905cbaf6b3d..500446808908 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_global_funcs.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_global_funcs.c
-@@ -18,6 +18,7 @@
- #include "test_global_func15.skel.h"
- #include "test_global_func16.skel.h"
- #include "test_global_func17.skel.h"
-+#include "test_global_func_deep_stack.skel.h"
- #include "test_global_func_ctx_args.skel.h"
- 
- #include "bpf/libbpf_internal.h"
-@@ -155,6 +156,7 @@ void test_test_global_funcs(void)
- 	RUN_TESTS(test_global_func15);
- 	RUN_TESTS(test_global_func16);
- 	RUN_TESTS(test_global_func17);
-+	RUN_TESTS(test_global_func_deep_stack);
- 	RUN_TESTS(test_global_func_ctx_args);
- 
- 	if (test__start_subtest("ctx_arg_rewrite"))
-diff --git a/tools/testing/selftests/bpf/progs/test_global_func_deep_stack.c b/tools/testing/selftests/bpf/progs/test_global_func_deep_stack.c
-new file mode 100644
-index 000000000000..1b634b543b62
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_global_func_deep_stack.c
-@@ -0,0 +1,95 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2026 Meta Platforms, Inc and affiliates. */
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+/*
-+ * Macro tricks to tersely define for long non-recursive call chains. Add
-+ * computation to the functions prevent tail recursion from reducing the
-+ * stack size to 0.
-+ */
-+
-+#define CAT(a, b) a ## b
-+#define XCAT(a, b) CAT(a, b)
-+
-+#define F_0 \
-+__attribute__((noinline))         \
-+int f0(unsigned long a)           \
-+{                                 \
-+	volatile long b = a + 16; \
-+	if (a == 0)               \
-+		return 0;         \
-+	return b;                 \
-+}
-+
-+#define FN(n, prev) \
-+__attribute__((noinline))                        \
-+int XCAT(f, n)(unsigned long a)                  \
-+{                                                \
-+	volatile long b = XCAT(f, prev)(a - 1);  \
-+	if (!b)                                  \
-+		return 0;                        \
-+	return b + 1;                            \
-+}
-+
-+/* Call chain 33 levels deep. */
-+#define F_1 F_0         FN(1, 0)
-+#define F_2 F_1         FN(2, 1)
-+#define F_3 F_2         FN(3, 2)
-+#define F_4 F_3         FN(4, 3)
-+#define F_5 F_4         FN(5, 4)
-+#define F_6 F_5         FN(6, 5)
-+#define F_7 F_6         FN(7, 6)
-+#define F_8 F_7         FN(8, 7)
-+#define F_9 F_8         FN(9, 8)
-+#define F_10 F_9        FN(10, 9)
-+#define F_11 F_10       FN(11, 10)
-+#define F_12 F_11       FN(12, 11)
-+#define F_13 F_12       FN(13, 12)
-+#define F_14 F_13       FN(14, 13)
-+#define F_15 F_14       FN(15, 14)
-+#define F_16 F_15       FN(16, 15)
-+#define F_17 F_16       FN(17, 16)
-+#define F_18 F_17       FN(18, 17)
-+#define F_19 F_18       FN(19, 18)
-+#define F_20 F_19       FN(20, 19)
-+#define F_21 F_20       FN(21, 20)
-+#define F_22 F_21       FN(22, 21)
-+#define F_23 F_22       FN(23, 22)
-+#define F_24 F_23       FN(24, 23)
-+#define F_25 F_24       FN(25, 24)
-+#define F_26 F_25       FN(26, 25)
-+#define F_27 F_26       FN(27, 26)
-+#define F_28 F_27       FN(28, 27)
-+#define F_29 F_28       FN(29, 28)
-+#define F_30 F_29       FN(30, 29)
-+#define F_31 F_30       FN(31, 30)
-+#define F_32 F_31       FN(32, 31)
-+
-+#define CAT2(a, b) a ## b
-+#define XCAT2(a, b) CAT2(a, b)
-+
-+#define F(n) XCAT2(F_, n)
-+
-+F(32)
-+
-+/* Ensure that even 32 levels deep, the function verifies. */
-+SEC("syscall")
-+__success
-+int global_func_deep_stack_success(struct __sk_buff *skb)
-+{
-+	return f31(55);
-+}
-+
-+/*
-+ * Check we actually honor stack limits (33 * 16 = 528 > 512 = MAX_STACK_DEPTH).
-+ * The stack depth is 16 because the verifier calls round_up_stack_depth() on
-+ * the size.
-+ */
-+SEC("syscall")
-+__failure __msg("combined stack size of 34 calls")
-+int global_func_deep_stack_fail(struct __sk_buff *skb)
-+{
-+	return f32(123);
-+}
--- 
-2.49.0
+> 
+>>  }
+>>  
+>>  void __meminit __free_pages_core(struct page *page, unsigned int order,
+>> @@ -6784,6 +6796,93 @@ void __init page_alloc_sysctl_init(void)
+>>  	register_sysctl_init("vm", page_alloc_sysctl_table);
+>>  }
+>>  
+>> +static void free_prepared_contig_range(struct page *page,
+>> +				       unsigned long nr_pages)
+>> +{
+>> +	while (nr_pages) {
+>> +		unsigned int order;
+>> +		unsigned long pfn;
+>> +
+>> +		pfn = page_to_pfn(page);
+>> +		/* We are limited by the largest buddy order. */
+>> +		order = pfn ? __ffs(pfn) : MAX_PAGE_ORDER;
+>> +		/* Don't exceed the number of pages to free. */
+>> +		order = min(order, ilog2(nr_pages));
+>> +		order = min_t(unsigned int, order, MAX_PAGE_ORDER);
+>> +
+>> +		/*
+>> +		 * Free the chunk as a single block. Our caller has already
+>> +		 * called free_pages_prepare() for each order-0 page.
+>> +		 */
+>> +		__free_frozen_pages(page, order, FPI_PREPARED);
+>> +
+>> +		page += 1UL << order;
+>> +		nr_pages -= 1UL << order;
+>> +	}
+>> +}
+>> +
+>> +/**
+>> + * __free_contig_range - Free contiguous range of order-0 pages.
+>> + * @pfn: Page frame number of the first page in the range.
+>> + * @nr_pages: Number of pages to free.
+>> + *
+>> + * For each order-0 struct page in the physically contiguous range, put a
+>> + * reference. Free any page who's reference count falls to zero. The
+>> + * implementation is functionally equivalent to, but significantly faster than
+>> + * calling __free_page() for each struct page in a loop.
+>> + *
+>> + * Memory allocated with alloc_pages(order>=1) then subsequently split to
+>> + * order-0 with split_page() is an example of appropriate contiguous pages that
+>> + * can be freed with this API.
+>> + *
+>> + * Returns the number of pages which were not freed, because their reference
+>> + * count did not fall to zero.
+> 
+> We probably don't need this part.
+The only user of this return value is free_contig_range(). Your explanation
+below makes sense. I'll drop the the return value and clean free_contif_range()
+as well.
+
+> 
+>> + *
+>> + * Context: May be called in interrupt context or while holding a normal
+>> + * spinlock, but not in NMI context or while holding a raw spinlock.
+>> + */
+>> +unsigned long __free_contig_range(unsigned long pfn, unsigned long nr_pages)
+>> +{
+>> +	struct page *page = pfn_to_page(pfn);
+>> +	unsigned long not_freed = 0;
+>> +	struct page *start = NULL;
+>> +	unsigned long i;
+>> +	bool can_free;
+>> +
+>> +	/*
+>> +	 * Chunk the range into contiguous runs of pages for which the refcount
+>> +	 * went to zero and for which free_pages_prepare() succeeded. If
+>> +	 * free_pages_prepare() fails we consider the page to have been freed;
+>> +	 * deliberately leak it.
+>> +	 *
+>> +	 * Code assumes contiguous PFNs have contiguous struct pages, but not
+>> +	 * vice versa.
+>> +	 */
+>> +	for (i = 0; i < nr_pages; i++, page++) {
+>> +		VM_WARN_ON_ONCE(PageHead(page));
+>> +		VM_WARN_ON_ONCE(PageTail(page));
+>> +
+>> +		can_free = put_page_testzero(page);
+>> +		if (!can_free)
+>> +			not_freed++;
+>> +		else if (!free_pages_prepare(page, 0))
+>> +			can_free = false;
+>> +
+>> +		if (!can_free && start) {
+>> +			free_prepared_contig_range(start, page - start);
+>> +			start = NULL;
+>> +		} else if (can_free && !start) {
+>> +			start = page;
+>> +		}
+>> +	}
+>> +
+>> +	if (start)
+>> +		free_prepared_contig_range(start, page - start);
+>> +
+>> +	return not_freed;
+>> +}
+>> +EXPORT_SYMBOL(__free_contig_range);
+>> +
+>>  #ifdef CONFIG_CONTIG_ALLOC
+>>  /* Usage: See admin-guide/dynamic-debug-howto.rst */
+>>  static void alloc_contig_dump_pages(struct list_head *page_list)
+>> @@ -7327,11 +7426,14 @@ EXPORT_SYMBOL(free_contig_frozen_range);
+>>   */
+>>  void free_contig_range(unsigned long pfn, unsigned long nr_pages)
+>>  {
+>> +	unsigned long count;
+>> +
+>>  	if (WARN_ON_ONCE(PageHead(pfn_to_page(pfn))))
+>>  		return;
+>>  
+>> -	for (; nr_pages--; pfn++)
+>> -		__free_page(pfn_to_page(pfn));
+>> +	count = __free_contig_range(pfn, nr_pages);
+>> +	WARN(count != 0, "%lu pages are still in use!\n", count);
+> 
+> And we almost certainly don't want this warning. Spurious temporary page
+> refcount increases (get_page_unless_zero()) can happen e.g. due to memory
+> compaction pfn scanners. It just might mean that side will be then the last
+> one to drop the refcount and freeing the order-0 page. For us it means only
+> that we abort and restart the batching, so we get worse performance, but
+> functionally it's ok, and should be very rare anyway.
+> 
+>> +
+>>  }
+>>  EXPORT_SYMBOL(free_contig_range);
+>>  #endif /* CONFIG_CONTIG_ALLOC */
+> 
 
