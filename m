@@ -1,193 +1,164 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CA6039E166
-	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 15:05:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44D6539DBE4
+	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 15:09:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773673521; cv=none; b=YV+7/TlnN2gZkuzpBvVlS/NJYBwj7CsW0uPTAIIYJDziT6QPgLlqUSQMnfIx0liQdRLlG4SMrnb22mHGI8r5eegHS/1W6OrFVonaZdZKaZ3Df9jZsRhvf37Zt/g6gugPoDJSq8UfBX9HJSvL7jluapydgNYUt62CkwXhmk7d/vk=
+	t=1773673795; cv=none; b=M2CTT+un2ccIlglXegM7ecJWTmuGyUwXL4xV1OR9F38kqRMTu8cbOgh2egkijozMTyb9HY2qeH+jMhyLP5Zd6LpiHa91c2p2Nu5sL166J5QIGcd0fYzKWQgnLx39q5fJHZEv9nvEr7Yw5WiIMOXzN3osAZX2BryqBSVgTVQ6Pko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773673521; c=relaxed/simple;
-	bh=RnzelXQEhcmD1T1EIc3JYmO2mAx5i3ChXWZTRK+KT6E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PGAxh5WSI9JpRHZIlLMFRbQDrG2ancIEQD0abx0S4TXzD4ko98gtx0fmlyE5xqtdWOOvkyzVybE4c24O19haq4b4kUeXPg9Db5+r4Vnv50wZzm1ddAeE8V/Z8mepvBQxya8hdmhSvuocf3oJuLgOeCYAM3jD5mpYkNRlcOJBlwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hUS7nlHy; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773673795; c=relaxed/simple;
+	bh=HKHOkWhH6BU2/Kw6JDHK+1RukHquEOSZU3JErWjo5j4=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=H62DvyyXm++jKsaSqBQ/UkCrLYiwLxdgx5ky13LIC7NS2f9ngqC0Kds1YPNzL5PmrETbZ6gATZeVoOndZqoXmJeAUKS4h7u5q2owU+EEOPtxHdW/MQgWXtXDxAr00QJL0wTq3FeVzdVZYrat0YliykmDBaN14C+6SobsiuUfikE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=jFCqGnMv; arc=none smtp.client-ip=209.85.160.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hUS7nlHy"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4852ff06541so52844005e9.2
-        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 08:05:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="jFCqGnMv"
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-506a6cf8242so43304151cf.1
+        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 08:09:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773673518; x=1774278318; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gqco5SPEd6UaXLI10tvcOr9r7x/pSR9Rg9OAhUkP36s=;
-        b=hUS7nlHyle7WeHcHg7sagZtDpm3MfyYPIVSEJToV9Y7WU5ONqqxdP0ET829XxrhXKi
-         fppHrvTyudMI2SIhx+yAxkDsnHX3+YQTk0Uq0HuY03R1cTGXnxXhayTmCi2eXU9AjgW6
-         C+Ppjaeo0ZL7uh5U7LBowOvMm1NUOVqapaiJOC2Rp2pgQv4iOghEPddJRDY+nb7SPxNe
-         lXOSgiAWeYcjTxA9MN/nkV9lgoJTfO9nKLRi8C5w9VRL8Aseks/J+Uf3MOgLWn8DqCKY
-         V/n2Yu5bPhdTgMfCox0DE7tydzanNvR+OhY+/j/Q4PnjjMGUcsgrDHNxnNVtJ3069yPk
-         EbAw==
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1773673793; x=1774278593; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fCdM8x+1KXX/GsYpxXRz4pvAs7gwFa4GWzBiUtiGEw8=;
+        b=jFCqGnMvihSGTrM3O21kbrxE2UhrFe9wnfsr0RXMM0+PH75uww2llNK/XiMlIlYXrR
+         U5SL64wPuwFEuzsfDI8nAlnxuug1xImeEdmXbzXrhXr5TlKjohKV+qB2uN9WXllV3szg
+         NG8bHmwbb9zqKzmfWXWlCYreDmtviDhg1HHJf26occ7x1qPZX6SueZEW+k3UVnOEeOiR
+         +Ztx8Br4A91AlsNemsYe6PRha7G6UrHDzpxiLXHoykPGwgZhALhmj2dqrqnAXH/9cR71
+         8a+SsQ+so+J8mFl66+7PLlbu1m/Xl0vLKjFrCwjL+bmqF3EVMA2S19zUldUrJPw+HJj0
+         VyXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773673518; x=1774278318;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Gqco5SPEd6UaXLI10tvcOr9r7x/pSR9Rg9OAhUkP36s=;
-        b=gUgk7KT5vsPVUTiI2sm/OEg8eprt95s0slcoCcdgl7hS60XqjggJJERBYfWAWAS1oB
-         KJJ/KoyKfEURcOUdDTk2VTJEOOGH1UTLekxH33MT3cZDCYsRIRSRNfKb9V+Jp4M0qn31
-         0ZKDKueI5NCqEFaxwE9EoozMgnFznrS7njRq7bysPFWfkGfLLizWpKfia8V2I6wf+dli
-         1q+lMyACsmDX2FhFme1TQSMPFVW8Mdwtp2haJFFY+mYS7JEUCbD8AXssiWzmCoyDuUSo
-         jlcNl75CIiFBJGcRuL5m0P7M07SsO60v9R3KgU50V7MTckd5cTMmRfBQpXRgqKCh9RQF
-         QQ1g==
-X-Forwarded-Encrypted: i=1; AJvYcCUKwhX1RWtfQpvZQeQoY7hSp+1+rIJsjemsPvlcDbMWZKHVzUtErp9FXSoXcOP0e2vPdKI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxu7hfUR9s/D5vwRncEjSyJiwNI9sf3hqKRi5lGVRt3Z4mYYTBM
-	eZJhzRiWZtbvmGXh90ZUC66cchff66eJGpdoEJtHb5EOhN+VflCnOcj3
-X-Gm-Gg: ATEYQzysaZwcu7kWa7bsiRxOxz12fHV5ImqmH4j8MRuRtytnmo3uyGezmSWNIvmqJ+S
-	bDfNcDTTlwi+E+jNbP6JldwuhAySlWGv6MA07dJFkK0oscLxHwecWoEe8xkYVyhGAJyu0u6lrds
-	EExVr3KqveP/7YDp70F29eDbWJ1ysIp68y2Mmo2Yy5ONxH9GrY6/siujmCKSdhDvbokGRS6x7Xj
-	R4vMe284T6Am6q7yNQGuJIxYtzI1R3rBAyDF92eg3I30CiO8zGvHxcH/ucA7H3rDnFEDz9y0UGl
-	OmjpM1XQYpVzhJvILl6Rx8qPSqi2vsEI7C3F2cCVbXpzTd/8k422Q+fvBCCQFvWjuUYa6/dbxl5
-	YalsxRUcvgvTnP31GacrrF0I0s7u5K3ekFfpBeJJcUnq8b3fg8jIqpF8iXBytwJSEIK9ikp/mmz
-	1UfU/E6LaF60H+Xu0tLeJD++pkJ/AetO8gcUqG4ea19cInMkpVu+tzZHxeDB1XbPSZgsnDW13Y8
-	Sdp3qSyI1wrMU5ydhpxgbH7x9grmpaLEN5ZQa5tJR5hN8PNulSlB9E7DkUYxmDX/oN9T5WPbT1o
-	NPIRrXEVQN4=
-X-Received: by 2002:a05:600c:8b2c:b0:485:4bd1:4c7e with SMTP id 5b1f17b1804b1-485567148e8mr223653815e9.33.1773673517657;
-        Mon, 16 Mar 2026 08:05:17 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e0077fb9a9968087a66.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:77fb:9a99:6808:7a66])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4854b5f6c24sm398807025e9.5.2026.03.16.08.05.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Mar 2026 08:05:16 -0700 (PDT)
-Date: Mon, 16 Mar 2026 16:05:14 +0100
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: rsworktech@outlook.com
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Amery Hung <ameryhung@gmail.com>, linux-riscv@lists.infradead.org,
-	stable@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH bpf v3] bpf: do not use kmalloc_nolock when
- !HAVE_CMPXCHG_DOUBLE
-Message-ID: <abgcKvuSQc2ZYKw4@mail.gmail.com>
-References: <20260315-bpf-kmalloc-nolock-v3-1-91c72bf91902@outlook.com>
+        d=1e100.net; s=20251104; t=1773673793; x=1774278593;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fCdM8x+1KXX/GsYpxXRz4pvAs7gwFa4GWzBiUtiGEw8=;
+        b=UPpH5ELrte9H2DG/azuZ+Evkc5N8pmKYCUOGF5Tk0LguAKSEsJnPkMzNuCp3UW50wp
+         fbpPsPQeu2BqK16yLnYpkbycX08ZuWX9+4rCD4/5JLCy6phHYlR36Mx4kw093Cv3ZUIc
+         eE3F+73FsbjN6ipbpQ2bVfyl5sSjtbMre4A5jYNLTLf3C20H5Yq5wS3cNNBR9U22niKJ
+         hjeCDEXGUo0Swly3hSs0aH3r61tk0TOTuLEM4xQM98vmkctDtakdFnHhjLmXt+bVl94D
+         CjVe4NATfmKwqRz5k4in6gZu+jn7b0BRqQGLVkbErsXLoLdg2DJYqwibSjBmNY715ptT
+         KZeg==
+X-Gm-Message-State: AOJu0Yy22wHRZ3oOIp3DlqITjph6ehhZw6w0au877h9tYgZMhjCPe7Mh
+	5lzxLLcA8IeSVP3S/6ewbRfsj2qfSLfzzELVuYkWijhW0Yo4jL0YKRz7WTjT9LtZ3cA=
+X-Gm-Gg: ATEYQzxMOnMUmpbnIEuYETtssFr0i+1RXXXr9C4riA4jpkEUC+vAjHxHMasr8VlTX8U
+	5m0Q/NbsVT+py9kz4Awij1nC/3UpyiYtcbFDb9oRJVBi6/Z9TLRdoIrcg3SHj3cxGGR5QZvSOdp
+	+NL3K3UsedWZ+/fiOc+B89AIqobgah6yCmbaq4nBpPer44bYtKbhoEb1NzsFsZggUAFzN4bPwyg
+	EJICGjEITRg8kKzFzgyA+eLVNP7ydTDJhM66jQoS31dukFTYZmrXZHcydD2Ot2j/BKm7svmRghb
+	FmFYArh4p6kUdCj2459tsWJ27GYsHRk64bhGkJ/KCrJ0+pkuzIzPaVBSdNPRjg4qZkYB/mPRKj4
+	F135uI8IVxGDwRrP8L+clVIaFR9Ykb/UMHEwTUZrzhDbADrJtw3yv/ggCruBkZ273k0U5UWhv+h
+	m8AbvrADv1oGa8kXIQiHpciyE=
+X-Received: by 2002:ac8:5dc9:0:b0:509:1d45:f216 with SMTP id d75a77b69052e-50957dc7ee5mr176625441cf.45.1773673793006;
+        Mon, 16 Mar 2026 08:09:53 -0700 (PDT)
+Received: from localhost ([140.174.219.137])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5093a0ea230sm121181871cf.19.2026.03.16.08.09.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Mar 2026 08:09:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260315-bpf-kmalloc-nolock-v3-1-91c72bf91902@outlook.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 16 Mar 2026 11:09:50 -0400
+Message-Id: <DH4AVUUSLYT5.1WWVVAWM0D5AX@etsalapatis.com>
+Cc: "bpf" <bpf@vger.kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>,
+ "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Eduard" <eddyz87@gmail.com>, "Martin KaFai Lau"
+ <martin.lau@kernel.org>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+ "Song Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>,
+ "Mykyta Yatsenko" <yatsenko@meta.com>
+Subject: Re: [PATCH bpf-next v5 1/2] bpf: Only enforce 8 frame call stack
+ limit for all-static stacks
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+X-Mailer: aerc 0.20.1
+References: <20260311182831.91219-1-emil@etsalapatis.com>
+ <20260311182831.91219-2-emil@etsalapatis.com>
+ <CAADnVQJ7c-biuSzin6+-Jt=xDEP0+PdJPwR6xDPCQDYjf_9qvg@mail.gmail.com>
+In-Reply-To: <CAADnVQJ7c-biuSzin6+-Jt=xDEP0+PdJPwR6xDPCQDYjf_9qvg@mail.gmail.com>
 
-On Sun, Mar 15, 2026 at 12:02:48AM +0800, Levi Zim via B4 Relay wrote:
-> From: Levi Zim <rsworktech@outlook.com>
-> 
-> kmalloc_nolock always fails for architectures that lack cmpxchg16b.
-> For example, this causes bpf_task_storage_get with flag
-> BPF_LOCAL_STORAGE_GET_F_CREATE to fails on riscv64 6.19 kernel.
-> 
-> Fix it by enabling use_kmalloc_nolock only when HAVE_CMPXCHG_DOUBLE.
-> But leave the PREEMPT_RT case as is because it requires kmalloc_nolock
-> for correctness. Add a comment about this limitation that architecture's
-> lack of CMPXCHG_DOUBLE combined with PREEMPT_RT could make
-> bpf_local_storage_alloc always fail.
-> 
-> Fixes: f484f4a3e058 ("bpf: Replace bpf memory allocator with kmalloc_nolock() in local storage")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Levi Zim <rsworktech@outlook.com>
-> ---
+On Fri Mar 13, 2026 at 10:40 PM EDT, Alexei Starovoitov wrote:
+> On Wed, Mar 11, 2026 at 11:28=E2=80=AFAM Emil Tsalapatis <emil@etsalapati=
+s.com> wrote:
+>>
+>> The BPF verifier currently enforces a call stack depth of 8 frames,
+>> regardless of the actual stack space consumption of those frames. The
+>> limit is necessary for static call stacks, because the bookkeeping data
+>> structures used by the verifier when stepping into static functions
+>> during verification only support 8 stack frames. However, this
+>> limitation only matters for static stack frames: Global subprogs are
+>> verified by themselves and do not require limiting the call depth.
+>>
+>> Relax this limitation to only apply to static stack frames. Verification
+>> now only fails when there is a sequence of 8 calls to non-global
+>> subprogs. Calling into a global subprog resets the counter. This allows
+>> deeper call stacks, provided all frames still fit in the stack.
+>>
+>> The change does not increase the maximum size of the call stack, only
+>> the maximum number of frames we can place in it.
+>>
+>> Also change the progs/test_global_func3.c selftest to use static
+>> functions, since with the new patch it would otherwise unexpectedly
+>> pass verification.
+>>
+>> Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
+>> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+>> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+>> ---
+>>  include/linux/bpf_verifier.h                  |  9 +++
+>>  kernel/bpf/verifier.c                         | 62 +++++++++++++------
+>>  .../selftests/bpf/progs/test_global_func3.c   | 18 +++---
+>>  3 files changed, 61 insertions(+), 28 deletions(-)
+>>
+>> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+>> index 090aa26d1c98..f31194c2f0a8 100644
+>> --- a/include/linux/bpf_verifier.h
+>> +++ b/include/linux/bpf_verifier.h
+>> @@ -742,6 +742,12 @@ struct bpf_scc_info {
+>>
+>>  struct bpf_liveness;
+>>
+>> +struct bpf_subprog_call_depth_info {
+>> +       int ret_insn; /* caller instruction where we return to. */
+>> +       int caller; /* caller subprogram idx */
+>> +       int frame; /* # of consecutive static call stack frames on top o=
+f stack */
+>> +};
+>> +
+>>  /* single container for all structs
+>>   * one verifier_env per bpf_check() call
+>>   */
+>> @@ -851,6 +857,9 @@ struct bpf_verifier_env {
+>>         u32 scc_cnt;
+>>         struct bpf_iarray *succ;
+>>         struct bpf_iarray *gotox_tmp_buf;
+>> +
+>> +       /* temporary state used for call frame depth calculation */
+>> +       struct bpf_subprog_call_depth_info *dinfo;
+>
+> It doesn't have to be part of env, right?
+> Could you just pass it as another argument to check_max_stack_depth_subpr=
+og() ?
+>
+> 'env' is for things that need to be around for most of the verifier's
+> duration.
+> This one was added to 'env' just to avoid an extra argument
+> between check_max_stack_depth() and check_max_stack_depth_subprog().
+> Why?
+> Seems like a wrong tradeoff.
+>
+> and with that struct bpf_subprog_call_depth_info can be local
+> in verifier.c?
+>
 
-Note there may be something broken with your setup as lore is reporting
-that you sent this v3 email three times. Not sure if it could be an
-issue.
+Moving the struct out of env and into verifier.c is a strict improvement
+over the current version, I will adjust the patch and respin.
 
-[...]
+> pw-bot: cr
 
-> diff --git a/include/linux/bpf_local_storage.h b/include/linux/bpf_local_storage.h
-> index 8157e8da61d40..d8f2c5d63a80e 100644
-> --- a/include/linux/bpf_local_storage.h
-> +++ b/include/linux/bpf_local_storage.h
-> @@ -18,6 +18,7 @@
->  #include <asm/rqspinlock.h>
->  
->  #define BPF_LOCAL_STORAGE_CACHE_SIZE	16
-> +#define KMALLOC_NOLOCK_SUPPORTED IS_ENABLED(CONFIG_HAVE_CMPXCHG_DOUBLE)
->  
->  struct bpf_local_storage_map_bucket {
->  	struct hlist_head list;
-> diff --git a/kernel/bpf/bpf_cgrp_storage.c b/kernel/bpf/bpf_cgrp_storage.c
-> index c2a2ead1f466d..cd18193c44058 100644
-> --- a/kernel/bpf/bpf_cgrp_storage.c
-> +++ b/kernel/bpf/bpf_cgrp_storage.c
-> @@ -114,7 +114,8 @@ static int notsupp_get_next_key(struct bpf_map *map, void *key, void *next_key)
->  
->  static struct bpf_map *cgroup_storage_map_alloc(union bpf_attr *attr)
->  {
-> -	return bpf_local_storage_map_alloc(attr, &cgroup_cache, true);
-> +	return bpf_local_storage_map_alloc(attr, &cgroup_cache,
-> +					   KMALLOC_NOLOCK_SUPPORTED);
->  }
->  
->  static void cgroup_storage_map_free(struct bpf_map *map)
-> diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-> index 9c96a4477f81a..a6c240da87668 100644
-> --- a/kernel/bpf/bpf_local_storage.c
-> +++ b/kernel/bpf/bpf_local_storage.c
-> @@ -893,6 +893,10 @@ bpf_local_storage_map_alloc(union bpf_attr *attr,
->  	/* In PREEMPT_RT, kmalloc(GFP_ATOMIC) is still not safe in non
->  	 * preemptible context. Thus, enforce all storages to use
->  	 * kmalloc_nolock() when CONFIG_PREEMPT_RT is enabled.
-> +	 *
-> +	 * However, kmalloc_nolock would fail on architectures that do not
-> +	 * have CMPXCHG_DOUBLE. On such architectures with PREEMPT_RT,
-> +	 * bpf_local_storage_alloc would always fail.
->  	 */
->  	smap->use_kmalloc_nolock = IS_ENABLED(CONFIG_PREEMPT_RT) ? true : use_kmalloc_nolock;
->  
-> diff --git a/kernel/bpf/bpf_task_storage.c b/kernel/bpf/bpf_task_storage.c
-> index 605506792b5b4..6e8597edea314 100644
-> --- a/kernel/bpf/bpf_task_storage.c
-> +++ b/kernel/bpf/bpf_task_storage.c
-> @@ -212,7 +212,8 @@ static int notsupp_get_next_key(struct bpf_map *map, void *key, void *next_key)
->  
->  static struct bpf_map *task_storage_map_alloc(union bpf_attr *attr)
->  {
-> -	return bpf_local_storage_map_alloc(attr, &task_cache, true);
-> +	return bpf_local_storage_map_alloc(attr, &task_cache,
-> +					   KMALLOC_NOLOCK_SUPPORTED);
-
-I can confirm that this does fix one selftest using
-BPF_LOCAL_STORAGE_GET_F_CREATE on riscv64: test_ls_map_kptr_ref1 in
-map_kptr. Other tests using BPF_LOCAL_STORAGE_GET_F_CREATE are still
-failing so I guess they have other issues.
-
-Tested-by: Paul Chaignon <paul.chaignon@gmail.com>
-
->  }
->  
->  static void task_storage_map_free(struct bpf_map *map)
-> 
-> ---
-> base-commit: e06e6b8001233241eb5b2e2791162f0585f50f4b
-> change-id: 20260314-bpf-kmalloc-nolock-60da80e613de
-> 
-> Best regards,
-> -- 
-> Levi Zim <rsworktech@outlook.com>
-> 
-> 
-> 
