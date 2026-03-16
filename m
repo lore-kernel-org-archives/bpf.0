@@ -1,103 +1,170 @@
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECF9C288D2
-	for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 23:04:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6CC11922FD;
+	Mon, 16 Mar 2026 23:07:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773702280; cv=none; b=FNt+78FRTkhEcz/j8gMFkZuFp6b7D7XjjqUnhf90EG6cvXwXsd6rxCreQ8FWMIKAPMzwucHiK1D0YnPWgNtAL6cLZrpG6I6juZI0IDLE1RlYOyxezHAYd8OQivkxwnJonKueYqTBgBFrbO4SUI4nttVXTeA0qvTdymiR9Puo2F8=
+	t=1773702425; cv=none; b=RZyZXwzyzKXXq/pG2PXC5i8hpFAFQnlYHCSqsxyHzoblaEx8PUkNv8IVVaqXm36E25o70m8EkTaTY1/DWCoMJXHZn0En/g9nwtgcgVx+4CpPgCcduanyU9dPAmfFkyq4cnZWPlntd2RfGfM5kveHa7ulnDYZyC3wJyHjdfHdHmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773702280; c=relaxed/simple;
-	bh=e/UJdbtjfIAWPFAbM4sh8O6m1MaFL8Rs759mJkAnoxI=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=ZKLbFNOoPz4WhwJdgxMvV/AcR688DasvvmV738OJPS4XGz9gB+7hRsiDzA3swfjPDvUuXGmdTFdqRB5vdXG11VLtMsXbk8SlRvd9vC5SL8xJ4iR74+Tqogn2oBr3eubmyNdvNhMCiDdO6rwQic9xlIhzl9j/f//G5aEg9qAXMUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--joshwash.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GKIZGXPU; arc=none smtp.client-ip=209.85.210.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--joshwash.bounces.google.com
+	s=arc-20240116; t=1773702425; c=relaxed/simple;
+	bh=Xka1h8TMQNI7zUEdsjMYPgxiw84CKP5QZbK+OMaxUnQ=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=gwiKVa2sry26umGHnwetu2muCDHiz6Mz+fpJun5nE2VQVUXIUGMNej5yASmGOkRQEXmnACejRVm/LHpspCZVbEh8oEixgaMIBe3wsQI0hbg0LwKJLWokMfSbUj/Va2qt30nt1TppkMlAOPFQuyU8kHJSG2Pv2XbXJdQpaWkAU3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IzUYkEyZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GKIZGXPU"
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-8299c57642cso32018703b3a.3
-        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 16:04:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1773702278; x=1774307078; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=2YG2oO3UdAqZk7gaMfdq/iHM5U3MIRMYZTmSCx+DiOk=;
-        b=GKIZGXPUjqC06FjPmnrt+J5u20iAgL13bKOqowx9YAK3oqKHrdpBtm40cAgMOksH2N
-         6NspyaVAZLEQrJWhYIUaEOOBRfiWdILgwVryHUaSSfOMXJt1Fj/JjpR/yfSCculgcjOs
-         wTXpeHJzuJdeSrFV1SPNWpik2I4ZdY20jitwXQwsm43xywBGEpjnlcd0/w3Y/KMTVXnN
-         TziIEtKaTRpfc3PTCmghdacSY/Vdh+fMgSOpb8bV4MMkmKaOUIMWMwFwnLEvkUEM2vAy
-         PgeOpj4O8yeB4RHA8pnA0lt1MGYxFkN8BtDeUQdYddESi/7WIduumz+4arrdmKmS/Ig7
-         oQuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773702278; x=1774307078;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2YG2oO3UdAqZk7gaMfdq/iHM5U3MIRMYZTmSCx+DiOk=;
-        b=VwnPtx+AcT6jCabR1cT0ed15PLJ9Ku72S8KxIdUxGss26oPZJT1del08jPdW0D+sNh
-         zIxpC7piNPt7eJ2FPqp465BEmu6wWkj6HSiw9GysiHNpCi4uBAk+WzquXAZ+pxvnwecJ
-         ksZ1gVAdw5UNEKj+RMizgy8iFrF8riy9GjmS67HsVsAR1M10AcCyu/h3VNSWDN10398M
-         3OBDxkZBM7WvOUENmz11C9av4BWEi17gg5sbmneWvJMuNg/wMV0XnXbki6eud2rnOTly
-         NAXlh33dl3Cq4qlf3toB6+xI7lJHJ2Wn9WvM0IQeR7x/4Egoa2gWiLsuN5UdcVkI94+f
-         dJwA==
-X-Forwarded-Encrypted: i=1; AJvYcCVgJzxku5GJ4p7H7qHawqJF8AEOvFcYwksnz5kFNWaGm6nfHzsWix7fMRp2YyHyigbD1a0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdA1ALcJaoODrVYOJOKaN1e10w2ZGChHikvdfRwCLXIT+8Vyjd
-	ytnTfYaUcVSOALnAN4vlg1qS8vaTYEKjrfH+aR27nANPB/FydTHac8W0cGqdzVfaTAWbdPrb7xf
-	V/xtXl6/OCwiPwA==
-X-Received: from pfbhu32.prod.google.com ([2002:a05:6a00:69a0:b0:829:f706:70e1])
- (user=joshwash job=prod-delivery.src-stubby-dispatcher) by
- 2002:aa7:9062:0:b0:829:837b:9068 with SMTP id d2e1a72fcca58-82a1987bbc8mr13609230b3a.29.1773702278077;
- Mon, 16 Mar 2026 16:04:38 -0700 (PDT)
-Date: Mon, 16 Mar 2026 16:04:34 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IzUYkEyZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AE00C19421;
+	Mon, 16 Mar 2026 23:07:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773702424;
+	bh=Xka1h8TMQNI7zUEdsjMYPgxiw84CKP5QZbK+OMaxUnQ=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=IzUYkEyZpJpWfKtfJGjbWrj2dH/eMzV90oaN9BdaMIBhpSMkZXQioeiLAxuDeQgYu
+	 tlcgkjIAN9PFSW0PZIZwXeSc262OyyU7KzZ9yx5h4HBEMuxF9QghpxZxdCrfRynpav
+	 kpMHdUMH70ITKt1gEFoo5y2ERAuZFa5LXtVAAuUszL95GqP1+bZLecQrwQ2DXl7CMk
+	 FOKNZZjz6497mTYgAT6MMlVftdzlbWnx1psP9g2IITTUr8mYq+L7oytqFBEFgRXD/K
+	 UX6OyQMEWYEPZxzX3b7iDXbFMNqWDnBEuv7wNDlLxGnrxiuMiKhW4WAsJDdegT/1fM
+	 ao8A0UxEBklSA==
+Content-Type: multipart/mixed; boundary="===============3650128742180216657=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.53.0.851.ga537e3e6e9-goog
-Message-ID: <20260316230434.1398828-1-joshwash@google.com>
-Subject: [PATCH net-next] gve: add XDP metadata support for DQ RDA
-From: Joshua Washington <joshwash@google.com>
-To: netdev@vger.kernel.org
-Cc: Joshua Washington <joshwash@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Willem de Bruijn <willemb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>, Tim Hostetler <thostet@google.com>, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	Jordan Rhee <jordanrhee@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Message-Id: <f26b2e80adf36731785c913071bb4d86f2f1d73026c681395c07f2e5e5527d6a@mail.kernel.org>
+In-Reply-To: <20260316222758.1558463-1-arighi@nvidia.com>
+References: <20260316222758.1558463-1-arighi@nvidia.com>
+Subject: Re: [PATCH] bpf: Always defer local storage free
+From: bot+bpf-ci@kernel.org
+To: arighi@nvidia.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
+Cc: john.fastabend@gmail.com,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,ameryhung@gmail.com,tj@kernel.org,emil@etsalapatis.com,bpf@vger.kernel.org,sched-ext@lists.linux.dev,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 16 Mar 2026 23:07:04 +0000 (UTC)
 
-Commit daa7ff1e1269 ("gve: Add Rx HWTS metadata to AF_XDP ZC mode")
-exposes support for the XDP RX timestamping metadata operation in the DQ
-RDA mode. While the operation works on its own, the intent was to enable
-XDP metadata support for the queue format as a whole along with it.
-Currently bfp_xdp_adjust_meta fails because meta_valid is set to false.
-This change updates xdp_buff preparation to set meta_valid to true, so
-metadata can be fully used by XDP programs.
+--===============3650128742180216657==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Reviewed-by: Harshitha Ramamurthy <hramamurthy@google.com>
-Reviewed-by: Jordan Rhee <jordanrhee@google.com>
-Signed-off-by: Joshua Washington <joshwash@google.com>
+> diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
+> --- a/kernel/bpf/bpf_local_storage.c
+> +++ b/kernel/bpf/bpf_local_storage.c
+
+[ ... ]
+
+> +static void bpf_selem_unlink_defer_free(struct hlist_head *selem_free_list,
+> +					struct bpf_local_storage *local_storage,
+> +					bool free_local_storage)
+> +{
+> +	struct bpf_local_storage_elem *s;
+> +	struct hlist_node *n;
+> +	struct hlist_head *deferred_selem = this_cpu_ptr(&bpf_deferred_selem_free_list);
+> +	struct hlist_head *deferred_storage = this_cpu_ptr(&bpf_deferred_storage_free_list);
+> +	struct bpf_deferred_free_rcu *deferred_rcu = this_cpu_ptr(&bpf_deferred_free_rcu);
+> +
+> +	hlist_for_each_entry_safe(s, n, selem_free_list, free_node) {
+> +		hlist_del(&s->free_node);
+> +		hlist_add_head(&s->free_node, deferred_selem);
+> +	}
+> +
+> +	if (free_local_storage)
+> +		hlist_add_head(&local_storage->deferred_free_node, deferred_storage);
+
+Can these per-CPU lists be corrupted by concurrent access?
+
+This function is called from bpf_selem_unlink() after releasing
+local_storage->lock with raw_res_spin_unlock_irqrestore(), so IRQs
+are restored. The BPF program context provides migrate_disable()
+(keeping the CPU stable for this_cpu_ptr), but IRQs are not masked.
+
+A BPF tracing program (kprobe, perf_event) running at hardirq or
+NMI level can interrupt this function mid-hlist_add_head() and call
+bpf_selem_unlink() -> bpf_selem_unlink_defer_free() on the same
+CPU, modifying the same per-CPU list concurrently. hlist_add_head()
+is a multi-step, non-atomic operation, so this interleaving can
+lose list entries or corrupt the list pointers.
+
+The same race exists between bpf_deferred_free_work_fn() (running
+in process context on the workqueue) and
+bpf_selem_unlink_defer_free() called from any BPF program that
+interrupts it.
+
+Would something like an llist (lock-free linked list that is safe
+against concurrent producers) or local_irq_save/restore around
+the list operations be needed here?
+
+> +
+> +	if (atomic_cmpxchg(this_cpu_ptr(&bpf_deferred_free_pending), 0, 1) == 0) {
+> +		deferred_rcu->cpu = smp_processor_id();
+> +		call_rcu(&deferred_rcu->rcu, bpf_deferred_free_rcu_callback);
+> +	}
+> +}
+
+[ ... ]
+
+> +static void bpf_deferred_free_work_fn(struct work_struct *work)
+> +{
+> +	struct bpf_deferred_free_work *deferred_work =
+> +			container_of(work, struct bpf_deferred_free_work, work);
+> +	int cpu = deferred_work->cpu;
+> +	struct hlist_head *selem_list = per_cpu_ptr(&bpf_deferred_selem_free_list, cpu);
+> +	struct hlist_head *storage_list = per_cpu_ptr(&bpf_deferred_storage_free_list, cpu);
+> +	struct bpf_local_storage_elem *selem;
+> +	struct bpf_local_storage *local_storage;
+> +	struct hlist_node *n;
+> +
+> +	atomic_set(per_cpu_ptr(&bpf_deferred_free_pending, cpu), 0);
+> +
+> +	hlist_for_each_entry_safe(selem, n, selem_list, free_node) {
+> +		hlist_del_init(&selem->free_node);
+> +		bpf_selem_free(selem, true);
+> +	}
+> +
+> +	hlist_for_each_entry_safe(local_storage, n, storage_list, deferred_free_node) {
+> +		hlist_del_init(&local_storage->deferred_free_node);
+> +		bpf_local_storage_free(local_storage, true);
+> +	}
+> +}
+
+Does passing reuse_now=true here change the RCU synchronization
+domain?
+
+Previously, bpf_selem_unlink() called bpf_selem_free(selem, false),
+which for use_kmalloc_nolock elements used
+call_rcu_tasks_trace() to wait for a Tasks Trace RCU grace period
+before freeing. This is needed because sleepable BPF programs hold
+rcu_read_lock_trace() (see __bpf_prog_enter_sleepable()) and can
+retain pointers to sdata across sleep points.
+
+With this change, the work function calls bpf_selem_free(selem, true),
+which uses regular call_rcu() instead. The full chain becomes:
+
+  bpf_selem_unlink_defer_free()
+    -> call_rcu()        [regular RCU grace period]
+      -> queue_work_on()
+        -> bpf_selem_free(selem, true)
+          -> call_rcu()  [regular RCU grace period]
+            -> kfree_nolock()
+
+Two regular RCU grace periods do not substitute for one Tasks Trace
+RCU grace period -- they are different synchronization domains. A
+sleepable BPF program sleeping inside rcu_read_lock_trace() will
+not block regular call_rcu() callbacks.
+
+The reuse_now=true path (regular call_rcu) was previously only used
+from bpf_selem_unlink_nofail() in the map_free/destroy paths, where
+synchronize_rcu_mult(call_rcu, call_rcu_tasks_trace) had already been
+called to cover both domains. In this new usage, no Tasks Trace RCU
+synchronization occurs before the free.
+
+The same applies to bpf_local_storage_free(local_storage, true)
+which similarly changes from call_rcu_tasks_trace() to call_rcu().
+
+
 ---
- drivers/net/ethernet/google/gve/gve_rx_dqo.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/drivers/net/ethernet/google/gve/gve_rx_dqo.c b/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-index 7924dce719e2..48945b4b6766 100644
---- a/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-+++ b/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-@@ -877,7 +877,7 @@ static int gve_rx_dqo(struct napi_struct *napi, struct gve_rx_ring *rx,
- 				 buf_state->page_info.page_address +
- 				 buf_state->page_info.page_offset,
- 				 buf_state->page_info.pad,
--				 buf_len, false);
-+				 buf_len, true);
- 		gve_xdp.gve = priv;
- 		gve_xdp.compl_desc = compl_desc;
- 
--- 
-2.53.0.851.ga537e3e6e9-goog
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23169312812
+--===============3650128742180216657==--
