@@ -1,99 +1,84 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17EA02BCF68;
-	Tue, 17 Mar 2026 09:27:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E24483A0EB1
+	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 09:30:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773739634; cv=none; b=r45kKqMpKj2KERunRY0Ri53RcocJv+3b1bDBcaeZCoqqYC62O+qNolL/uMCcK/HiPtzeDPJU0oxmiGKQqblmktW7W+xqf49GPhtEvEaRbZnDeQ6RGmVLRbRo1eVAHRuNDTczYp4WwDMnNNtFkIq2oFVM9EtzH0OUg9hd55Gp4Vg=
+	t=1773739811; cv=none; b=fY08EzssCRgrLS8aO2y4vQC/6EzMlsI8HqGw1jl6Gi60/WkzahXselL1cHSqZtDHOIlBip5/VVkYcTMKoWIVfApW4hvGlWA9tyIDGvb32nIpdF8NaF8iBo15JYonjsCdUVg/6ZZyIPuYVsl/ERRakOwf9TtX5yCcFg3MjUCLxDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773739634; c=relaxed/simple;
-	bh=46E2SlrKDMjiwhogUjCXQSWTkXudOZYJWyeylVxGdzs=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Haz/EFn5j44g/vnoIs020y66ArhUdpiDAj2foihIbcjzLRLECS7Qjin0swJa99vsP60Z6PpcAWqOG0c0SCQIB3c9VnFx3Ycje4QfcGyQIkK9g6WITfxr0M9InIz3pnyoA84lZX0HU8y3sRzHfrEiCkkugG1pD2MdytDCv8YCFiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qsaTgQwK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773739811; c=relaxed/simple;
+	bh=cbnprwPaY7zwRJWHZYt6wVlZGxugerk6GPerK+WZ9EQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sZKm2E38MEC4fp0fY5TcrR+PuFvkBrKOS/NPYK65sLvhDwkyqyQhuAUAzh3QSyAW7RU2hZ0uUz4IxfbxY6pKW8JMjm9QKkcvrKFZqrKcx20zRTwuJqMI3m2UOuk2kiOWhd+5ITlmZVbH3GJep1KmwAffWUQ8qq1oD2WSWUhqbgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mK0EH5tg; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qsaTgQwK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41523C4CEF7;
-	Tue, 17 Mar 2026 09:27:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773739633;
-	bh=46E2SlrKDMjiwhogUjCXQSWTkXudOZYJWyeylVxGdzs=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=qsaTgQwKxteJBbOmGDC6tJd5agwejIg80OIKBYudI9qwW5FbG98DhwvxV2RnQbUgM
-	 L3y3zTQC6HIFBmd53i5VB+PAv36z5qI+7LqtxvajF/q9I+jyQkg1KlyaOspG2NBctW
-	 jpmTQV8TaN8gmhHnNOljwmzKnT4OJECzdOPq9cUVB0qdtf/TuyzXnedgVg3C3+pQ+1
-	 FacJ2h52az4Me/ogl5LZYh5BCiX73lFOa94oE1xqKSCYmgEohN8Xn9R9IPtVJnRXMg
-	 ei5mqurfEI94uqOapIBSSCm4OaVKwTsD04xnJiExBbm23VYpTsN1duSjvH02n+FBK8
-	 Sowq8ccshIavg==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>, netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org, magnus.karlsson@intel.com, stfomichev@gmail.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- larysa.zaremba@intel.com, aleksander.lobakin@intel.com, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>
-Subject: Re: [PATCH net 5/6] selftests: bpf: fix pkt grow tests
-In-Reply-To: <20260316174550.462177-6-maciej.fijalkowski@intel.com>
-References: <20260316174550.462177-1-maciej.fijalkowski@intel.com>
- <20260316174550.462177-6-maciej.fijalkowski@intel.com>
-Date: Tue, 17 Mar 2026 10:27:11 +0100
-Message-ID: <87v7euq00g.fsf@all.your.base.are.belong.to.us>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mK0EH5tg"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-c7393536e53so2139508a12.2
+        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 02:30:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773739809; x=1774344609; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cbnprwPaY7zwRJWHZYt6wVlZGxugerk6GPerK+WZ9EQ=;
+        b=mK0EH5tgAKl5r5efiuDVopFTYC3ikaLTdwToIh/QwN+cZvtvYxRXMZBpPW+t7UXsYz
+         vEOuzDG/uYu/5NIsgfUXAzZJuW/KLHzTDmszdo+nSYmakEloEYCrvdUSzIO/u8QX3Kj1
+         N6yKpuJMQn4eAu2uVkUlg8FHqjxt4FUK5+4PP0IqpYcrgmv/sGgPzTfCqoXLxV0jUc4c
+         wVT1nohWqLQXA+hE9nPXuYCHMLBX4hWtKPp2xlfOkPudG3xSi2KD72PCTohSqA9w7jHr
+         S6dR2WSzwPKGh1i4hS8LXvDx0DwOnpMIE0vJ/f3XtRTh+cXRxGuSA/HWitiLZwCIPE7E
+         tssQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773739809; x=1774344609;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cbnprwPaY7zwRJWHZYt6wVlZGxugerk6GPerK+WZ9EQ=;
+        b=CRMOCDwZbkz1VUufWVZUGScRzdMWcjNvh3TUHIn6CYgJ6XKWOtHc+RKuvWOOrVxs8u
+         HEFk5gnZP4jCLWGnF093npa5agQaENx4YZGJGtwZMiqMs22mxb2iiwAOPPcbzj82X4El
+         2Oj+Lhyc1IAx1FHKtfB8gtODnI3f/6MY2VKHbd/wvGpOefkQBAiqn0F5xBODXtWomQ3E
+         1l67osDPmifWvqv5m0C8PRhwj6lWSvBzxpMW2LyK1AdDdwuG1bqkqe5oeYa3zD/+eifl
+         LVDwrczjZHxeimAS2AxIoGoPx0JOEE8QmeFj2sWc0xBX+q4h7aWlavCHBXGOesBukvsi
+         z3Lw==
+X-Gm-Message-State: AOJu0Yz5OesZk5B83I29vypSgfBvl+2pfhmhuSJd1nYbAj4neRw6dgkJ
+	Ezb6amAHoRM9Oxkr8kx8ZFvK4BAd4Ps59d1gQmRECFjnFavM7xbgQM+q
+X-Gm-Gg: ATEYQzy7XaWMtAC8MJDdwgEfG5GlBKYS4fdH4pC86fip04YVFwzE1s+K70XZ4emKzqE
+	UYhKZoCPnXhvq+dWI1xAXXvqh+Kua9FDicenVmeXXlgMdwABPUzMaw9pLh9ZKtBlgcnjS14ObzQ
+	CbUCZq1tGl4hEVJV3Cisu/vcuqerNTYC40WG44nj/MvkJWdeaxrrXeHpxyHQw64G3/BQi8/XQAk
+	3lIiD/fbkuEUBMl6G9xknfV/TeUysryjyeV2Gvra5Isf5or2sRvATglln8XcfeQviCzO8ZoJ5hb
+	AGkDfX8Nfu3hqzVUkZjV2eY90DUBm27SELTYuqpH6fQSqyyEtHtL6r7eKDHl0okMGbrc1HDTBgU
+	epDRi5rkoWu5je0Wv9GNzFFRoY/AhaUogDSafwURv8KnCxx+ndnYaN4zZvotIIP/9cbLwABPLsb
+	dwZqq7ObBOcYMWxQH9IN9QXOysDCvoTHUvW9aASxTmqQ==
+X-Received: by 2002:a05:6300:228c:b0:398:9c94:2033 with SMTP id adf61e73a8af0-398eca2e828mr15592813637.11.1773739809032;
+        Tue, 17 Mar 2026 02:30:09 -0700 (PDT)
+Received: from computer ([2a09:bac5:40b2:1a96::2a6:3d])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c7400000532sm6814783a12.27.2026.03.17.02.30.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Mar 2026 02:30:08 -0700 (PDT)
+Date: Tue, 17 Mar 2026 15:00:00 +0530
+From: Varun R Mallya <varunrmallya@gmail.com>
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com,
+	eddyz87@gmail.com, memxor@gmail.com,
+	Mykyta Yatsenko <yatsenko@meta.com>
+Subject: Re: [PATCH bpf-next v2] bpf: Fix special fields mem leak for
+ non-prealloc maps
+Message-ID: <abkfGJw2F_Mwuuvf@computer>
+References: <20260216131341.1285427-1-mykyta.yatsenko5@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260216131341.1285427-1-mykyta.yatsenko5@gmail.com>
 
-Maciej Fijalkowski <maciej.fijalkowski@intel.com> writes:
+Hey Mykyta! I saw that you haven't really come back to this in a while.
+Is it alright if I try to continue with the patch ? Since it's mostly minor changes
+that are left, I'll try to get it to pass CI and implement the reviews
+Puranjay gave. Is it alright if I submit a v3 ?
 
-> Skip tail adjust tests in xskxceiver for SKB mode as it is not very
-> friendly for it. multi-buffer case does not work as xdp_rxq_info that is
-> registered for generic XDP does not report ::frag_size. The non-mbuf
-> path copies packet via skb_pp_cow_data() which only accounts for
-> headroom, leaving us with no tailroom and causing underlying XDP prog to
-> drop packets therefore.
->
-> For multi-buffer test on other modes, change the amount of bytes we use
-> for growth, assume worst-case scenario and take care of headroom and
-> tailroom.
->
-> Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-> ---
->  .../selftests/bpf/prog_tests/test_xsk.c       | 21 ++++++++++++++++---
->  1 file changed, 18 insertions(+), 3 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-> index 7e38ec6e656b..a496f1784b66 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-> @@ -2551,16 +2551,31 @@ int testapp_adjust_tail_shrink_mb(struct test_spec *test)
->  
->  int testapp_adjust_tail_grow(struct test_spec *test)
->  {
-> +	if (test->mode == TEST_MODE_SKB)
-> +		return TEST_SKIP;
-> +
->  	/* Grow by 4 bytes for testing purpose */
->  	return testapp_adjust_tail(test, 4, MIN_PKT_SIZE * 2);
->  }
->  
->  int testapp_adjust_tail_grow_mb(struct test_spec *test)
->  {
-> +	u32 grow_size;
-> +
-> +	if (test->mode == TEST_MODE_SKB)
-> +		return TEST_SKIP;
-> +
-> +	/* worst case scenario is when underlying setup will work on 3k
-> +	 * buffers, let us account for it; given that we will use 6k as
-> +	 * pkt_len, expect that it will be broken down to 2 descs each
-> +	 * with 3k payload;
-> +	 *
-> +	 * 4k is truesize, 3k payload, 256 HR, 320 TR;
-> +	 */
-> +	grow_size = XSK_UMEM__MAX_FRAME_SIZE - XSK_UMEM__LARGE_FRAME_SIZE - 256 - 320;
-
-nit: Use defines, XDP_PACKET_HEADROOM, and maybe
-SKB_DATA_ALIGN(sizeof(struct skb_shared_info))?
