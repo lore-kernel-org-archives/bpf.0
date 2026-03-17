@@ -1,134 +1,75 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07CC7392823
-	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 21:43:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 561C239B4A0;
+	Tue, 17 Mar 2026 22:20:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773783833; cv=none; b=SvzwLI5S1IA8SA4oICDVaAfuac4hxxMW7OVnPxeQSmwmFKBTsNGJ5XpTMwkpqrCGVYYPmf83n+0acjTLJgx9cdTddRuQA6vj6CV4Q+Scv8hboe81CJOQzURb2d2ItVSIZNSOVedaoAjdOMWyS2L9D/NG14qU887/KRezpD6wVps=
+	t=1773786047; cv=none; b=OPZCstjHowJ0u2TR2eOp5jKbl+rn1gHqxJDPqOm++6ZAJRS/+/gDD0XS6hIyZOM/9Cjo47pZGWnJvmVQAfsOYmnGLE45IuDXhKaEOAwPn5S8VYV5EuPhce2lbc2du6Didai8/5BO4I9kwgkPeRimb18rZb8bKfubqbQkv9bQy6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773783833; c=relaxed/simple;
-	bh=yisUaVMlLp61lh5yAzr/Bu85mTbkAy2RyPo2m46rB3M=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=h4nsyoHmLfNHclhy2BwR5NXE1ylOT+T0SjZeMJpufmVHxTBjyzdiu7vfc2elNFYC5EeThw3rFHFfd+P2FyarvI61odG5mL+NGDR4RfNSsPRiGaaV4QoNq611g+IoODCzqW//VKipQ6DWr3yTVvdjRAZfDdY6CwoI8p6WV+oeRLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GQ4hs2wm; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773786047; c=relaxed/simple;
+	bh=nzKsTNfCaWoKpLestak1KDClGw/UYRbka/YqvLVh9rs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Gs4SDEaC4aAtCkU9Vol8Bh/NOw/IFWmrPYcYnl9cp90sYIfUcgHj5uWWvS2LChacu0eWgnFXrDXvETqwXC7UO0lJtlkaXBwoA49bbl0FD6K6WgYKzw3PlpkFY5TpomqkKSkcDYrrOBMu4Burv/q7t7GBtNxjjs3GZmvJ1rx9C6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pAFNvBuS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GQ4hs2wm"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-486b9675d36so9267205e9.0
-        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 14:43:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773783830; x=1774388630; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3J6QL/sCxXmvI2aX8hIXwKbPG6y0wN/eNHB6NdqHKuk=;
-        b=GQ4hs2wmFyxvXHUV37pu8jxWbLRXgthBbdcb4iq2a0sm8BsWJX6WIEuK60AoDn30f2
-         r1pwNt4VH/4CT+mNlUlE4DI4+Lr/SEQBaZeKz8UjJDmbDhGiVdBr1NUVJvLeiCZwvYml
-         xtNKF/lxpNpSiFSbUGY/0kuxa3FUrkUy6tLf2n9n/I32OCG/laCzl3arRp1XYoGdHvkT
-         fAsdg58sv3OykS5Wz+AiuiM3TKsDfKW4JoKszKHCTa0Lc6oGEQyzMjbn4Bti/8+QgqW8
-         kRhxk02chPCDCeA3C9AhQalJXxcTl9P0ZCpJj5moioH0QdCqHU3jRFf7tZg7h9I9FwUS
-         Mjdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773783830; x=1774388630;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3J6QL/sCxXmvI2aX8hIXwKbPG6y0wN/eNHB6NdqHKuk=;
-        b=s52cGi9j3xGIOnY33tjn/efN8EnaTNAX70Cbvmyf+UQbb49TncH3mCN5cQ7NYGDIud
-         tpXXQPbPmKTfE86pV0b+YVgpeuyHQuB+cVZitzA3MHtjQkmB/5fNGDQkbEAksl8yNyNI
-         3vRr13fs0h/QlBaYamAWOdg2IP3ErXWaazeqrsEXFAiRNXg9y3Ras0eRAiy7fx0lUO9t
-         q2GalesC8XiPLnp9IMa2Rnkt9kiNU+Tjcv5gNqqrohE6Ev7NPC4b4ldnmqT2/yzNJBAa
-         9QWt5aQE9oiJ+m1xDF37HrCHvcHJNxCuHKs4jOkOpNoRWEeGeaT0+2gvLSc+V4ImmKmj
-         PVFQ==
-X-Gm-Message-State: AOJu0Yy8WeCez1xY+F+BaTk7WywnVRZTLLq7XWZXetKag7SiTUr6XYlW
-	ZNyXG6FfWhKxWXfYaROA3IIBfeYTHsXpURFRUdN5kldd7QaduEqPyXp7vwHHjl8=
-X-Gm-Gg: ATEYQzwqNI3w+gB6iiWv4NQiZEu5dEAYJzmsfqADIyVRFfWMXsI9IJyec/druXGli6x
-	wkKYUosviFRHNENNqgrY+1+bxphQFvK19/sUIdKDlChoyK+tzAZQPe99fTtMh5fEFip6uWG/G8X
-	6UVmXNlNYQPRr9Ot4Emy0fF7b9BShsLNmFKqalx677QSlSo/rNt04ujMNu93Z/JrCwPuLxJiCrN
-	APXGh9VZ+pDcouLf6jYS0TcoKgcVEqptY3j/Krzp9Q0oBHgrhPp05ccNZ79IP+tlDQmaPCbGFMB
-	DxxlDaJi9Vkj7XqM2xMiJsv4KkZy1ippJsqTtJUetuJEyedwSdZdC4ZcFbke5x1hODfk3WrtzEF
-	p9M1uqmFdLEl+soNOjsxRnolavLc0wm6y2hp2QOqvzJw36JLXiUJwo0relmZwHHY5189f8PVUNq
-	sMqaRo9Zq5MQV3Wg==
-X-Received: by 2002:a05:600c:46c5:b0:485:419c:4eba with SMTP id 5b1f17b1804b1-486f441fbfcmr19081925e9.1.1773783829766;
-        Tue, 17 Mar 2026 14:43:49 -0700 (PDT)
-Received: from jacks ([197.38.195.210])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486f4d10a20sm4057605e9.0.2026.03.17.14.43.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Mar 2026 14:43:49 -0700 (PDT)
-From: Ibrahim Zein <zeroxjacks@gmail.com>
-X-Google-Original-From: Ibrahim Zein <ZeroXJacks@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	gregkh@linuxfoundation.org,
-	Ibrahim Zein <ZeroXJacks@gmail.com>
-Subject: [PATCH bpf-next v2] bpf: verifier: fix integer wrap in regs_refine_cond_op() BPF_JNE case
-Date: Tue, 17 Mar 2026 17:43:41 -0400
-Message-ID: <20260317214342.1729449-1-ZeroXJacks@gmail.com>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pAFNvBuS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81BC8C2BC9E;
+	Tue, 17 Mar 2026 22:20:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773786046;
+	bh=nzKsTNfCaWoKpLestak1KDClGw/UYRbka/YqvLVh9rs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=pAFNvBuSHUZzsl/I9NLulqf6RdIC/v9VKemm6HlXkg9p1ZxHVjgHweNNAnYPq1nJ8
+	 bPR1AIZaki4A61+hMziTq8xuvcs7yGc2orGcg1ri4OYsAXOgWOGbHUJFSvJzLe8VjU
+	 Qumf69SE3iREr7UhHdD0Y0Rj8fzn5gHudz/x2gZzZzT4otQ8miYOMhMIEfew8MJh7d
+	 ahHbK+h1p/jcpFKGicWQ/EfyvKZ3ipRtdNxSQUDDyrdbD0hW+u+uTPiyBj/qaWowwk
+	 5T//8+b/frZkYgx0PfgF/ADicJDc8VrQmWCBxxkgXzCOWJFXnpEIWajdFry1zrmzvG
+	 oh9sKBCGIzrlw==
+Date: Tue, 17 Mar 2026 15:20:45 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, bpf <bpf@vger.kernel.org>, Network
+ Development <netdev@vger.kernel.org>, "Karlsson, Magnus"
+ <magnus.karlsson@intel.com>, Stanislav Fomichev <stfomichev@gmail.com>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>
+Subject: Re: [PATCH v2 bpf-next] xsk: use __xsk_rcv_zc_safe for ZC
+ multi-buffer Rx processing
+Message-ID: <20260317152045.58c719a7@kernel.org>
+In-Reply-To: <CAADnVQJ=nryHHb5A3r77H6dzg=vzC97eHe8mCeBA=BMxa=+P5Q@mail.gmail.com>
+References: <20260316140557.461288-1-maciej.fijalkowski@intel.com>
+	<20260316171200.4b8a96a0@kernel.org>
+	<CAADnVQJ=nryHHb5A3r77H6dzg=vzC97eHe8mCeBA=BMxa=+P5Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-In regs_refine_cond_op(), the BPF_JNE case narrows register bounds
-without guarding against wrap-around at type boundaries. When
-umin_value equals U64_MAX, incrementing it wraps to 0, producing
-an inconsistent bounds state (umin=0, umax=U64_MAX-1).
+On Tue, 17 Mar 2026 08:09:08 -0700 Alexei Starovoitov wrote:
+> On Mon, Mar 16, 2026 at 5:12=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> =
+wrote:
+> > On Mon, 16 Mar 2026 15:05:57 +0100 Maciej Fijalkowski wrote: =20
+> > > Commit f620af11c27b ("xsk: avoid double checking against rx queue bei=
+ng
+> > > full") addressed a case in copy mode, when working with multi-buffer
+> > > xdp_buff, where we were peeking onto XSK Rx queue twice, to find out =
+if
+> > > there is a space to produce descriptors.
+> > >
+> > > Adjust ZC path to follow the same principle. =20
+> >
+> > Acked-by: Jakub Kicinski <kuba@kernel.org> =20
+>=20
+> Do you guys need it in net-next in this merge window ?
+>=20
+> We have nothing in bpf-next/net so far, so should be fine
+> to take this patch into net-next directly?
 
-This can be triggered by constructing a register state where:
-  r1 = unknown_byte | 0xFFFFFFFFFFFFFFFE
-  -> var_off = (value=U64_MAX-1, mask=1)
-  -> constrain with JGE U64_MAX -> umin=umax=U64_MAX, tnum non-const
-  -> compare with BPF_JNE const=U64_MAX -> wrap occurs
-
-The same issue exists for all {u,s}{min,max}{32,64} variants.
-Add explicit boundary guards to prevent wrap-around in all cases.
-
-Reported-by: Ibrahim Zein <ZeroXJacks@gmail.com>
-Signed-off-by: Ibrahim Zein <ZeroXJacks@gmail.com>
----
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -17055,22 +17055,30 @@
- 			 * Same reasoning works for all {u,s}{min,max}{32,64} cases
- 			 * below.
- 			 */
--			if (reg1->u32_min_value == (u32)val)
-+			if (reg1->u32_min_value == (u32)val &&
-+			    reg1->u32_min_value != U32_MAX)
- 				reg1->u32_min_value++;
--			if (reg1->u32_max_value == (u32)val)
-+			if (reg1->u32_max_value == (u32)val &&
-+			    reg1->u32_max_value != 0)
- 				reg1->u32_max_value--;
--			if (reg1->s32_min_value == (s32)val)
-+			if (reg1->s32_min_value == (s32)val &&
-+			    reg1->s32_min_value != S32_MAX)
- 				reg1->s32_min_value++;
--			if (reg1->s32_max_value == (s32)val)
-+			if (reg1->s32_max_value == (s32)val &&
-+			    reg1->s32_max_value != S32_MIN)
- 				reg1->s32_max_value--;
- 		} else {
--			if (reg1->umin_value == (u64)val)
-+			if (reg1->umin_value == (u64)val &&
-+			    reg1->umin_value != U64_MAX)
- 				reg1->umin_value++;
--			if (reg1->umax_value == (u64)val)
-+			if (reg1->umax_value == (u64)val &&
-+			    reg1->umax_value != 0)
- 				reg1->umax_value--;
--			if (reg1->smin_value == (s64)val)
-+			if (reg1->smin_value == (s64)val &&
-+			    reg1->smin_value != S64_MAX)
- 				reg1->smin_value++;
--			if (reg1->smax_value == (s64)val)
-+			if (reg1->smax_value == (s64)val &&
-+			    reg1->smax_value != S64_MIN)
- 				reg1->smax_value--;
- 		}
- 		break;
+Somehow __xsk_rcv_zc_safe() landed in bpf-next/master f620af11c27b8ec9
+So I think we have limited number of possible moves now :)
