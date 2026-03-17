@@ -1,75 +1,96 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 561C239B4A0;
-	Tue, 17 Mar 2026 22:20:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B78A5371D06
+	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 22:26:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773786047; cv=none; b=OPZCstjHowJ0u2TR2eOp5jKbl+rn1gHqxJDPqOm++6ZAJRS/+/gDD0XS6hIyZOM/9Cjo47pZGWnJvmVQAfsOYmnGLE45IuDXhKaEOAwPn5S8VYV5EuPhce2lbc2du6Didai8/5BO4I9kwgkPeRimb18rZb8bKfubqbQkv9bQy6Q=
+	t=1773786416; cv=none; b=T+2Y3Nxz/9Wn9wRgJYpELlC20tN45RwJhfXO6DKuUw6p2Bl2Z8YqrKqt1YN32FCMAbwSMJEYp1JMPNe/v1GJClvXDkdr78K86tdqVFoznypURU27v2ittm4My6Yv/rNqhhGqlD5SXRNfAnKLe/kyQt0cEFcpRbsfS+P59Coyp24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773786047; c=relaxed/simple;
-	bh=nzKsTNfCaWoKpLestak1KDClGw/UYRbka/YqvLVh9rs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Gs4SDEaC4aAtCkU9Vol8Bh/NOw/IFWmrPYcYnl9cp90sYIfUcgHj5uWWvS2LChacu0eWgnFXrDXvETqwXC7UO0lJtlkaXBwoA49bbl0FD6K6WgYKzw3PlpkFY5TpomqkKSkcDYrrOBMu4Burv/q7t7GBtNxjjs3GZmvJ1rx9C6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pAFNvBuS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773786416; c=relaxed/simple;
+	bh=/p/8S7gY1VQhpIjTTMzWy5SuYGttx5AJ+PdKaznU648=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=PJPuc+z59J04tKZF3uecuDsx420wdSJlqY1aW3ViJV7SJ4NeYa/i4qBVcfm5il2yWoHfmYhXbIkdui8VP8PDbE3T2m5sFWczUp7H2AcAkN72YgLSsi74gBRCnzZf34KauB1QEmozEbSe38hhkjRjFhrdbhVJovn5T8uM2xEooR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SSOSmb9k; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pAFNvBuS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81BC8C2BC9E;
-	Tue, 17 Mar 2026 22:20:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SSOSmb9k"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D2A5C4CEF7;
+	Tue, 17 Mar 2026 22:26:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773786046;
-	bh=nzKsTNfCaWoKpLestak1KDClGw/UYRbka/YqvLVh9rs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=pAFNvBuSHUZzsl/I9NLulqf6RdIC/v9VKemm6HlXkg9p1ZxHVjgHweNNAnYPq1nJ8
-	 bPR1AIZaki4A61+hMziTq8xuvcs7yGc2orGcg1ri4OYsAXOgWOGbHUJFSvJzLe8VjU
-	 Qumf69SE3iREr7UhHdD0Y0Rj8fzn5gHudz/x2gZzZzT4otQ8miYOMhMIEfew8MJh7d
-	 ahHbK+h1p/jcpFKGicWQ/EfyvKZ3ipRtdNxSQUDDyrdbD0hW+u+uTPiyBj/qaWowwk
-	 5T//8+b/frZkYgx0PfgF/ADicJDc8VrQmWCBxxkgXzCOWJFXnpEIWajdFry1zrmzvG
-	 oh9sKBCGIzrlw==
-Date: Tue, 17 Mar 2026 15:20:45 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, bpf <bpf@vger.kernel.org>, Network
- Development <netdev@vger.kernel.org>, "Karlsson, Magnus"
- <magnus.karlsson@intel.com>, Stanislav Fomichev <stfomichev@gmail.com>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>
-Subject: Re: [PATCH v2 bpf-next] xsk: use __xsk_rcv_zc_safe for ZC
- multi-buffer Rx processing
-Message-ID: <20260317152045.58c719a7@kernel.org>
-In-Reply-To: <CAADnVQJ=nryHHb5A3r77H6dzg=vzC97eHe8mCeBA=BMxa=+P5Q@mail.gmail.com>
-References: <20260316140557.461288-1-maciej.fijalkowski@intel.com>
-	<20260316171200.4b8a96a0@kernel.org>
-	<CAADnVQJ=nryHHb5A3r77H6dzg=vzC97eHe8mCeBA=BMxa=+P5Q@mail.gmail.com>
+	s=k20201202; t=1773786416;
+	bh=/p/8S7gY1VQhpIjTTMzWy5SuYGttx5AJ+PdKaznU648=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=SSOSmb9kKJFCuvtqV7PnKw0uAVdFTVBZND/CmxeAZ+RcVWKs470lfk85b8rkdBm7T
+	 IWwJY7xEcCY9WJR4kQJgiLmV8IFXhWIDYAVXlRIllR3g/r+yo+SvmQXG7/hl+bDoN4
+	 C7XXcG6ShWL6DBPxseS4xN8MMQNJu5XKbI00Vqs/Lus1pGsNADd8JmbaTcsYEsx+C7
+	 7mnyaqrss9CqSeKxkIaPzgEPZNlXqEoHCSAFmFxxDYkQ6NO+4yJQkk5OUZvU/lsDs3
+	 C2ghoUrGrEfxM/LdrilE5sOnx5kequvPzeK6G4eb9j3CpCCFgM6p0SXeBy8JvMN6u7
+	 yBeSGS7JHPd4Q==
+Content-Type: multipart/mixed; boundary="===============1452827063329279768=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <f4d7dce5ba4106773e4c7bb165eab3ba668e13e618e7ed3b42e2c7181fd15bd6@mail.kernel.org>
+In-Reply-To: <20260317214342.1729449-1-ZeroXJacks@gmail.com>
+References: <20260317214342.1729449-1-ZeroXJacks@gmail.com>
+Subject: Re: [PATCH bpf-next v2] bpf: verifier: fix integer wrap in regs_refine_cond_op() BPF_JNE case
+From: bot+bpf-ci@kernel.org
+To: zeroxjacks@gmail.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,gregkh@linuxfoundation.org,ZeroXJacks@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 17 Mar 2026 22:26:56 +0000 (UTC)
 
-On Tue, 17 Mar 2026 08:09:08 -0700 Alexei Starovoitov wrote:
-> On Mon, Mar 16, 2026 at 5:12=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> =
-wrote:
-> > On Mon, 16 Mar 2026 15:05:57 +0100 Maciej Fijalkowski wrote: =20
-> > > Commit f620af11c27b ("xsk: avoid double checking against rx queue bei=
-ng
-> > > full") addressed a case in copy mode, when working with multi-buffer
-> > > xdp_buff, where we were peeking onto XSK Rx queue twice, to find out =
-if
-> > > there is a space to produce descriptors.
-> > >
-> > > Adjust ZC path to follow the same principle. =20
-> >
-> > Acked-by: Jakub Kicinski <kuba@kernel.org> =20
->=20
-> Do you guys need it in net-next in this merge window ?
->=20
-> We have nothing in bpf-next/net so far, so should be fine
-> to take this patch into net-next directly?
+--===============1452827063329279768==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Somehow __xsk_rcv_zc_safe() landed in bpf-next/master f620af11c27b8ec9
-So I think we have limited number of possible moves now :)
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 01c18f4268de..2f18cc3e1a78 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -17055,22 +17055,30 @@ static void regs_refine_cond_op(struct bpf_reg_state *reg1, struct bpf_reg_state
+>  			 * Same reasoning works for all {u,s}{min,max}{32,64} cases
+>  			 * below.
+>  			 */
+> -			if (reg1->u32_min_value == (u32)val)
+> +			if (reg1->u32_min_value == (u32)val &&
+> +			    reg1->u32_min_value != U32_MAX)
+>  				reg1->u32_min_value++;
+
+The comment above this code (not shown in the diff hunk) says:
+
+  /* u32_min_value is not equal to 0xffffffff at this point,
+   * because otherwise u32_max_value is 0xffffffff as well,
+   * in such a case both reg1 and reg2 would be constants,
+   * jump would be predicted and reg_set_min_max() won't
+   * be called.
+
+This reasoning assumes that umin == umax implies the register
+is constant, but is_reg_const() checks tnum_is_const() which
+requires mask == 0. As the commit message itself demonstrates,
+tnum can disagree with bounds (tnum non-const while
+umin == umax == U64_MAX), so the comment's claim is incorrect.
+
+Should this comment be updated or removed? As written, it says
+the boundary condition handled by the new guards is impossible,
+which directly contradicts the guards and could mislead a future
+reader into removing them.
+
+[ ... ]
+
+This commit appears to fix a verifier bounds tracking bug that
+could allow BPF programs to bypass safety checks. Should it
+carry a Fixes: tag? The wrap-around issue was introduced in:
+
+Fixes: d028f87517d6 ("bpf: make the verifier tracks the "not equal" for regs")
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23218241458
+--===============1452827063329279768==--
