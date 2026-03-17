@@ -1,121 +1,228 @@
 Received: from mail-oi1-f194.google.com (mail-oi1-f194.google.com [209.85.167.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0755288D2
-	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 11:18:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC73C288D2
+	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 11:18:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773746335; cv=none; b=X3k69HujFKNIZ3mF+6sglFHoCZs0jsdgAamvJvpmYIld/d0Bs953xpC2mJk2aol3bv8L2YCGGGtF4fvZ7LWpWdSp9BYO/jcfFWTZF4rirGS7LpT4M24c5mRJcNBQI90VSWUIU+toFmHcdmx61RJIOkSWopLADtScKrr3IFUM0B8=
+	t=1773746338; cv=none; b=fz4lxkDspuiAw+sa1JK0aFL1ymrXCWV+LbiDl24eTdGN0eLnxeT1gH6qpDCOH+hCESALM7TnQAm1w2OaIfr6sp3fdejtzSrOOFIo48ecCeArglyzOsEhuePAzwhftxUxT0VMszkJtOo1/BcnaLAAqX8lchoGd/JCqmGfIxgUJBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773746335; c=relaxed/simple;
-	bh=KFlFJ4ciiOxf/VtyvH918HFgXG4tkPSLar79PYdP5L8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gRqKisaRXSxLvNrqfEkSPuhkHuxB9z8aLzReZLreBqiqveNdSGU3Y4uCq2SQ6R1GfmDg3kzePtaZd3k2HQ5aVy3wEYbs88CyjvWzHwVuwQSuwvyII719K5TkRsTnKIx74ZFy8Uj61oCwGZ2okOPGlapIUh0xYluMCERRRs8qrT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iYmAz6kS; arc=none smtp.client-ip=209.85.167.194
+	s=arc-20240116; t=1773746338; c=relaxed/simple;
+	bh=3lr05iP953Tub+rVNpfe0in8GYu057tLq/v29aUGk6g=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fLC9wef91clgNzxqFvKGblV8kdYlg9Hpzoid+Mgd79b6U6aPUwAd4M15S85VJbLxXQtkL7f2MGVP/1d9GslBpJ51sMnlbxHUvI9kcFiI4si/hUnqNLh650DYHz7tSwdovJ84Gq6SVUFDsXcNCYKN+dQeDTtEc3YDK670jq4ODIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bREjkUfI; arc=none smtp.client-ip=209.85.167.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iYmAz6kS"
-Received: by mail-oi1-f194.google.com with SMTP id 5614622812f47-467166cb638so2008165b6e.2
-        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 04:18:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bREjkUfI"
+Received: by mail-oi1-f194.google.com with SMTP id 5614622812f47-4673790ab85so3690277b6e.3
+        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 04:18:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773746332; x=1774351132; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1PpB4nP+X1oBMB9xcDx+FfYzdaZ+sNKw9qKTlpfhFsI=;
-        b=iYmAz6kSQmU3SpSkKgFKVXX9jgZSw44o4FL5fscq2O4Y2cSnJds4zjwoWq8pbVtixY
-         1ToTD1o2riaaGEGVODoF71axGGlS+jQ9PWia6+vMIvJeh8U0TEv19FB5KbYDdD2m8deO
-         zeCe2+t83yDpDBCov2NE3Y1G83tRkvR9ftmgqe5OQhSnbUrmBlDLZfygiJm3SojVNnoA
-         NnD/ob2O3LYK6bO0DNoQhSNeird1t9wavTOHTDMduDm4rmYPweUTp3IMTZZuZ3+odN2d
-         0H35kxqZMmyc7OBk2QDlYvhvgS7YgqjSxlDZ7E34ZJoxcDCDP1ywJx7uXSa5Z8dVeUzA
-         SRZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773746332; x=1774351132;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1773746335; x=1774351135; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1PpB4nP+X1oBMB9xcDx+FfYzdaZ+sNKw9qKTlpfhFsI=;
-        b=AUb2DinhEkKUs8AwVKtQ4wzxm3XCuPtcxLdqR4DjYjAB0QsHV4417hizP28huSstdp
-         T1yENvpjbPTlE+Myy3a2PYOjA/wms6drX3ceVVWUUERA8z2Linti+PzJPPUKrykQl9E9
-         P/d3aLkWIInhITfGZjjKidAxBq3sJJd3xYxfjt64DLgpDrsjz8Nz7N5zkvXTUnM4CrxN
-         nI6xFVa9hrX0Df723T68ma+59H4rvCjn2GjVzM+1aR10EHxL88w/yoagwfTUNdkPUCdn
-         g75ibkebL7G8jR3CzSmTENeFQhmrtbdJZnp/Dl+WxVvSKip/dIM0bsjxSQomaJ/Q8G7z
-         EOWA==
-X-Gm-Message-State: AOJu0YwAyT3NcIKC3GwOHAT/n+Bq2LCjEzVw2J3vmAf94UXlk9OmQcSk
-	1wJlfMXgCtu85CkXg+YTwosc7B1JCL/rNs5AdTalAE1/bGEIPE2DT6QTYCMb2W1qw80=
-X-Gm-Gg: ATEYQzysL6KuOwNHHF5FHfcjNi0zoTBAI/Xy0uZHUrsK6eSJVT/UrkV8LT2jXuvigLj
-	ABPhoftP6wtCtbqY20eq2soezJJM7OkYVS6nV1QrDF/6MQnpiBPZfz5jyxtNjQcSHDnIpNtI9UJ
-	N64lpTFDoz5RtQPsvqhod8if8com7O4lhTVHuKyzlUj5HG2TApW3vgrEegnceBu6uQUddrXyFYC
-	m6mBntJPo0y5VaPLZqs6OReepXgRlnOXJGaSyfR9OZdZwCEorS/RTW/2MYDyJz0kRAH5vdtI8Di
-	JlDuQnbPcJ3Xk6GqHAnOxVxKh19iRl+81rDdwSEdeF7uKJedPKEU/Gm5jtoR1Gncx/P9B0eyk7U
-	vbypI6eN1VR/VkMRf78w6ujv+bkav6uUKcqfTaLfyn0PU3Jp8VCPjMzFc157mubuT+q1mbfsNWD
-	/5tuUn8C6wxgJjj4FL4AxnOf8hmjqxAj7jvXqWL9Xwq2L2
-X-Received: by 2002:a05:6808:4f4e:b0:450:471:b9ba with SMTP id 5614622812f47-4675707b853mr8671997b6e.14.1773746332037;
-        Tue, 17 Mar 2026 04:18:52 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:74::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4673415d291sm11065422b6e.6.2026.03.17.04.18.50
+        bh=RLzx1snc9ElKO0ogyztXLq6ujXWy6/pY2VcOjhW0dug=;
+        b=bREjkUfIBRjue3KYh/rUDIkxOi/eWJp2LvwV85XdSvhv4l/kaTsidf8gQGi5JEBd4o
+         ifvCaPdiAYqnJwU2t6M7fYQU8Pp3pZ3qMtVlwks67SX6Qgp7g3DnWnu6XAwGzc/vBtHk
+         PqC1JsizFfglP5QJQs3Rzgh521hu3z+gbHV+UKSOsW3txP48X+xPEjgx4jYHHTpOnEEq
+         MG/9aQdiEzK2Vp+N+OwWxibBS6Or2ougTQJ3mAcC7ezmNK9eY90ANF3U8Pjc374bUPmw
+         uVmCoEqNVfJ636EPJ5CWlyP5HnmAeaRfKEzz7vQ0BzvtmwBoxZfrKPJqsh3PaJlDyUih
+         n9KA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773746335; x=1774351135;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=RLzx1snc9ElKO0ogyztXLq6ujXWy6/pY2VcOjhW0dug=;
+        b=UNLGULdeDFJjPyRfedA/2O+fBnH3c3Li2Z5j1LZTNN3tsd6aWcYsJwzFou+LLj6Ypk
+         jTj2T+SKRRdkmAe/RHVTpKD31V2C0DkUIsljAcR6qHoLKMkQHXfDaTJLo0jYEwBzmMGX
+         9iPAUGJzO9xq+F/5SZS4LnOA9k/n3DiFudCbeuwBhjNl4IMKGDXuhoNsSm7mzlO9i8BJ
+         Fv1CT5SPi9bkMbpq1CrKp9z9JeGD5kXDk9zeggs0JstZD3nTTh8gIqI+4WN7msFXuoUG
+         wSXVA//T8tncLZ+z7P6R+gpCr4gp66dMLP8YI/jtIWBg8JBARDVIeuWquWbkFaoPat5F
+         O/3w==
+X-Gm-Message-State: AOJu0YzIzMag61lyBoekTuV8Ybh+EPay62CQUu4sFWevT2P9Fr1FtkUQ
+	zJkM8eZXOHVIfoiRr5y0WOf0KQFFf0YeYlJKkQZT19rQhIcNzinGroT/MqJxtpZL94M=
+X-Gm-Gg: ATEYQzyDNxoUx7sbc7T4xV0cO9CVMMIGyaayICIHh8g6ySaLcPqLHNgnFy1ZZNNRcUs
+	1lp2eQBP/0LDUybVHpVtQTwvfZQAm/hSkw6wPhaTq+1PUwWpVK6izajDG6CbCml/2YbhTGHDj4J
+	/N/9Rfr44Owr68oCu8ZA7P0JtGG6QoJ1mGUaqS8JX72IiDhswcxoGDd1Om+JD45/O1bkQEk3FQA
+	XIF1ytgS4WUbirGKLdJ/yx8RvYZ0IsMj3/p0Xl+BZkIcysJ8rBlsNWxoxcsJTAjnQiuz2IMiLML
+	q6IQaRxzI4B5W7Vyn3dnDcQVY/AKl5JChSMgYFfa9o+svtYugDZcOhBYxbP7RiO5fv97xu8byMm
+	pSfVDxWHHYAU8cVA/eO1m2TT3LqASE3izFAAE4EU/Ahx83HOxaOPVHy59ev6Hzaa63fEs6BcP6z
+	3oASIz0lIfc3Db8Jpkjr6pBJaWErrUNPMq9dDjiTSTpT4c
+X-Received: by 2002:a05:6870:75cf:b0:417:2524:2d76 with SMTP id 586e51a60fabf-417b91db604mr9804888fac.2.1773746334786;
+        Tue, 17 Mar 2026 04:18:54 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:55::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4177e2df1ddsm18980698fac.9.2026.03.17.04.18.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Mar 2026 04:18:50 -0700 (PDT)
+        Tue, 17 Mar 2026 04:18:53 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
+Cc: Tejun Heo <tj@kernel.org>,
+	Dan Schatzberg <dschatzberg@meta.com>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Martin KaFai Lau <martin.lau@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
-	Tejun Heo <tj@kernel.org>,
-	Dan Schatzberg <dschatzberg@meta.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 0/4] Allow variable offsets for syscall PTR_TO_CTX
-Date: Tue, 17 Mar 2026 04:18:45 -0700
-Message-ID: <20260317111850.2107846-1-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 1/4] bpf: Support variable offsets for syscall PTR_TO_CTX
+Date: Tue, 17 Mar 2026 04:18:46 -0700
+Message-ID: <20260317111850.2107846-2-memxor@gmail.com>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260317111850.2107846-1-memxor@gmail.com>
+References: <20260317111850.2107846-1-memxor@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1284; h=from:subject; bh=KFlFJ4ciiOxf/VtyvH918HFgXG4tkPSLar79PYdP5L8=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBpuTHi2k7z1x312OB2Y1la0qb+diqD7d/qZZnzhIkK KiWkNtaJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCabkx4gAKCRBM4MiGSL8RyqD3EA CPvv7HWj1tI2rkNw6BoDO4q1Nk6vLvEQSZ//1Lphf1eTR4MkR0le2RtxG9fOYNbL9BwB5hMe5xJuRT 8Hs3JMhUL5xAS455KJ2RzXxBkaR2qxdVmZXq8GnJKHTclg0phyOip7cgW72YOx9DWvmqYBUK3SrcdQ RxLx+7CSU/tH5Nm0QgqtiLmGfOvGTQHpi/jCawZkwLJl/B/DhW8f7+7abT58oogRBjTsIoHgI5ygxB dcJOtGP8SBDH3d7VA372SGRYAEERZfAhDS0mOUCnrvt4cr6GXr+fBCs+xre3K05R5vd0LeCJ8jrslD uXzh1hZF9WjLWs/SVWE8Kn9BmDg+TQeXl4f3gPYnSt9Vqqr678ByyZAmIXEbdh8vWWY72QWjCbSiM1 2KpfAMU0vaoOFPbyLRXT9jxJT6ZtBs7Yeqy6QdPsrKOy3Z3NGI5ErnspfpXMerj5eBIJMOTwYy5RTy cmJVWGyokheJqQI5v+N08v1INwVUA1v02vmiyPgumyQYUBH+9N2eRnSWlZKDpCPZE7ubP5mzBXM8fd RmQdwJq71WuymtC9OPXXRQD/K1VeTYj1mazw/aHtXJ84Vqgi8GhpvtEdeiR8s4ROvIWJpHutNpteY7 XQb+YdCSDQ0Vcnp7YbA7GnfXcrNncGO1K5h7VDPbPAxkqUtOgqVs1eQds35w==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5780; h=from:subject; bh=3lr05iP953Tub+rVNpfe0in8GYu057tLq/v29aUGk6g=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBpuTHin1vhMXw2TMMio4/li+5/+4RJISLNsqdRlIss 3k2KUxuJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCabkx4gAKCRBM4MiGSL8RyoKmD/ 0Z/Wp+XraL4OxkAhPuDx+IILh6UYMnaYy9GOLIkwZEGDFlk6f5kvoKH9N3zga14jnQpwG+XcWOAAcy NzNpqn4NDQFxj5/kjyEP0utr8pTsTRp7geDaRTqdwyYXGa7SqupHKhoILBQLgIOWk/DFtkAhgEfC1P lP6vFbZhF2dOsUaiSPv0J/yKqiWvGrq2RVZZFe9EWhEwe2U/ncZOD8U3hBkzd3gMxC0mCpELzVF6U6 ac7D+C1rNoJMEJ52sE07icd1irrpQPcmm7LbTbW68SqWZHfkoPEQMdt4YrYrdK/m5qs0I+RomYUhf4 F2+FeHVKvlqv2hezaZug8RKTefYjHUuPjv+fgimVbM5eD6/fWroEspTYzDwlMqjmHd0DaNGCnSKEME Jm0EW1OmZm3OQOGF1ZFt4mxg7ZkKLYao1gJppH3beDvoz0CSZ3p52cCP6ymnHSPfkq+4YNrFXyO+Mt mzdhi+yjdPpHWrmVIIS8xNQ/IBM4Pq9hlbtZx68v3vYvuGzW6PplFS/BdNUUdzNSPVavwQuzyRKAk2 NCeWoLRTv1lAurBQ0WR8U12vrk2o2rAheTJ87iiGrZD0b3TnLgV2I9NHb87RQmUrGbbcOxS47Qiqhv mohVqQGoDRDJ4uVDBvveaXomX1JC+GgCjK0jQ48r8s5gOOaN9OGkFgrntP/g==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 
-Enable pointer modification with variable offsets accumulated in the
-register for PTR_TO_CTX for syscall programs where it won't be
-rewritten, and the context is user-supplied and checked against the max
-offset. See patches for details. Fixed offset support landed in [0].
+Allow accessing PTR_TO_CTX with variable offsets in syscall programs.
+Fixed offsets are already enabled for all program types that do not
+convert their ctx accesses, since the changes we made in the commit
+de6c7d99f898 ("bpf: Relax fixed offset check for PTR_TO_CTX"). Note
+that we also lift the restriction on passing syscall context into
+helpers, which was not permitted before, and passing modified syscall
+context into kfuncs.
 
-By combining this set with [0], examples like the one below should
-succeed verification.
+The structure of check_mem_access can be mostly shared and preserved,
+but we must use check_mem_region_access to correctly verify access with
+variable offsets.
 
-  SEC("syscall")
-  int prog(void *ctx) {
-	int *arr = ctx;
-	int i;
+The check made in check_helper_mem_access is hardened to only allow
+PTR_TO_CTX for syscall programs to be passed in as helper memory. This
+was the original intention of the existing code anyway, and it makes
+little sense for other program types' context to be utilized as a memory
+buffer. In case a convincing example presents itself in the future, this
+check can be relaxed further.
 
-	bpf_for(i, 0, 100)
-		arr[i] *= i;
+We also no longer use the last-byte access to simulate helper memory
+access, but instead go through check_mem_region_access. Since this no
+longer updates our max_ctx_offset, we must do so manually, to keep track
+of the maximum offset at which the program ctx may be accessed.
 
-	return 0;
-  }
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Dan Schatzberg <dschatzberg@meta.com>
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ kernel/bpf/verifier.c                         | 51 +++++++++++--------
+ .../bpf/progs/verifier_global_subprogs.c      |  1 -
+ 2 files changed, 31 insertions(+), 21 deletions(-)
 
-  [0]: https://lore.kernel.org/bpf/20260227005725.1247305-1-memxor@gmail.com
-
-Kumar Kartikeya Dwivedi (4):
-  bpf: Support variable offsets for syscall PTR_TO_CTX
-  selftests/bpf: Adjust syscall ctx variable offset tests
-  bpf: Reject modified syscall PTR_TO_CTX for global subprogs
-  selftests/bpf: Test modified syscall ctx for global subprog
-
- kernel/bpf/verifier.c                         |  62 ++-
- .../selftests/bpf/prog_tests/verifier.c       |  34 +-
- .../selftests/bpf/progs/verifier_ctx.c        | 356 +++++++++++++++---
- .../bpf/progs/verifier_global_subprogs.c      |  43 ++-
- .../selftests/bpf/test_kmods/bpf_testmod.c    |   2 +-
- 5 files changed, 409 insertions(+), 88 deletions(-)
-
-
-base-commit: 2364959abecb052d7b798ae51d0626edec8b9288
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 01c18f4268de..50639bb69d91 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7843,6 +7843,7 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
+ 		 * Program types that don't rewrite ctx accesses can safely
+ 		 * dereference ctx pointers with fixed offsets.
+ 		 */
++		bool var_off_ok = resolve_prog_type(env->prog) == BPF_PROG_TYPE_SYSCALL;
+ 		bool fixed_off_ok = !env->ops->convert_ctx_access;
+ 		struct bpf_retval_range range;
+ 		struct bpf_insn_access_aux info = {
+@@ -7857,15 +7858,25 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
+ 			return -EACCES;
+ 		}
+ 
+-		err = __check_ptr_off_reg(env, reg, regno, fixed_off_ok);
+-		if (err < 0)
+-			return err;
++		if (var_off_ok) {
++			err = check_mem_region_access(env, regno, off, size, U16_MAX, false);
++			if (err)
++				return err;
++		} else {
++			err = __check_ptr_off_reg(env, reg, regno, fixed_off_ok);
++			if (err < 0)
++				return err;
++		}
+ 
+ 		/*
+ 		 * Fold the register's constant offset into the insn offset so
+-		 * that is_valid_access() sees the true effective offset.
++		 * that is_valid_access() sees the true effective offset. If the
++		 * register's offset is not constant, then the maximum possible
++		 * offset is simulated.
+ 		 */
+-		if (fixed_off_ok)
++		if (var_off_ok)
++			off += reg->umax_value;
++		else if (fixed_off_ok)
+ 			off += reg->var_off.value;
+ 		err = check_ctx_access(env, insn_idx, off, size, t, &info);
+ 		if (err)
+@@ -8442,22 +8453,16 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
+ 		return check_ptr_to_btf_access(env, regs, regno, 0,
+ 					       access_size, BPF_READ, -1);
+ 	case PTR_TO_CTX:
+-		/* in case the function doesn't know how to access the context,
+-		 * (because we are in a program of type SYSCALL for example), we
+-		 * can not statically check its size.
+-		 * Dynamically check it now.
+-		 */
+-		if (!env->ops->convert_ctx_access) {
+-			int offset = access_size - 1;
+-
+-			/* Allow zero-byte read from PTR_TO_CTX */
+-			if (access_size == 0)
+-				return zero_size_allowed ? 0 : -EACCES;
+-
+-			return check_mem_access(env, env->insn_idx, regno, offset, BPF_B,
+-						access_type, -1, false, false);
++		/* Only permit reading or writing syscall context using helper calls. */
++		if (resolve_prog_type(env->prog) == BPF_PROG_TYPE_SYSCALL) {
++			int err = check_mem_region_access(env, regno, 0, access_size, U16_MAX,
++							  zero_size_allowed);
++			if (err)
++				return err;
++			if (env->prog->aux->max_ctx_offset < reg->umax_value + access_size)
++				env->prog->aux->max_ctx_offset = reg->umax_value + access_size;
++			return 0;
+ 		}
+-
+ 		fallthrough;
+ 	default: /* scalar_value or invalid ptr */
+ 		/* Allow zero-byte read from NULL, regardless of pointer type */
+@@ -9401,6 +9406,7 @@ static const struct bpf_reg_types mem_types = {
+ 		PTR_TO_MEM | MEM_RINGBUF,
+ 		PTR_TO_BUF,
+ 		PTR_TO_BTF_ID | PTR_TRUSTED,
++		PTR_TO_CTX,
+ 	},
+ };
+ 
+@@ -9710,6 +9716,11 @@ static int check_func_arg_reg_off(struct bpf_verifier_env *env,
+ 		 * still need to do checks instead of returning.
+ 		 */
+ 		return __check_ptr_off_reg(env, reg, regno, true);
++	case PTR_TO_CTX:
++		/* Allow fixed and variable offsets for syscall context. */
++		if (resolve_prog_type(env->prog) == BPF_PROG_TYPE_SYSCALL)
++			return 0;
++		fallthrough;
+ 	default:
+ 		return __check_ptr_off_reg(env, reg, regno, false);
+ 	}
+diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
+index f02012a2fbaa..2250fc31574d 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
++++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
+@@ -134,7 +134,6 @@ __noinline __weak int subprog_user_anon_mem(user_struct_t *t)
+ 
+ SEC("?tracepoint")
+ __failure __log_level(2)
+-__msg("invalid bpf_context access")
+ __msg("Caller passes invalid args into func#1 ('subprog_user_anon_mem')")
+ int anon_user_mem_invalid(void *ctx)
+ {
 -- 
 2.52.0
 
