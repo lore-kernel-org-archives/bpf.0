@@ -1,79 +1,71 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30E6D390CB4;
-	Tue, 17 Mar 2026 21:19:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07CC7392823
+	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 21:43:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773782362; cv=none; b=isvZtIZG4J5c/gQKDyUdSK2Hynl6dOGBnbkNmxWWq8XGl6gOnFgOvNBxcwEE/Q0CCUBEQDZM5ffTOZexNY47q7G9hvF0mgPB/v6YP871j+roSf67DZBr4IjIUlmF5KDSekidbWsGDM42NwjlzInMeXWz+YShVY5dnLWdngomlj4=
+	t=1773783833; cv=none; b=SvzwLI5S1IA8SA4oICDVaAfuac4hxxMW7OVnPxeQSmwmFKBTsNGJ5XpTMwkpqrCGVYYPmf83n+0acjTLJgx9cdTddRuQA6vj6CV4Q+Scv8hboe81CJOQzURb2d2ItVSIZNSOVedaoAjdOMWyS2L9D/NG14qU887/KRezpD6wVps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773782362; c=relaxed/simple;
-	bh=f+FJcwrOdvkOEkkApAlxMOxDv1AXAodMR85dF14B5So=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GtdoFcYI9es801bUW6o15tbRUFKOvJRKDGxu/1Ec9Q+7W0w3Ab9xemt2FEGn59TCb16rlLjczXwWmeY0M8icg6GkPxlRarYeVwwbKk+HEQ8z5j2AYYMryF+kuYIyAPpUUOi+rs4eXuaXipV/9OYdS6GdYrYLB09wqArciYQw0Sk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PtlTidPc; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1773783833; c=relaxed/simple;
+	bh=yisUaVMlLp61lh5yAzr/Bu85mTbkAy2RyPo2m46rB3M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=h4nsyoHmLfNHclhy2BwR5NXE1ylOT+T0SjZeMJpufmVHxTBjyzdiu7vfc2elNFYC5EeThw3rFHFfd+P2FyarvI61odG5mL+NGDR4RfNSsPRiGaaV4QoNq611g+IoODCzqW//VKipQ6DWr3yTVvdjRAZfDdY6CwoI8p6WV+oeRLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GQ4hs2wm; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PtlTidPc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773782361; x=1805318361;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=f+FJcwrOdvkOEkkApAlxMOxDv1AXAodMR85dF14B5So=;
-  b=PtlTidPcub6tL/3x+issZJ+7QaVvQpk2wA818S5AyePiX9dackD5wdYr
-   FX0EkkhFiYJrtTVS+xt+dem6bmpolIwFnel+RX/kX0asVbCkCj6uzHs2k
-   jaFObzwfNft4s0XNBgCyIoF2mlf9187k/f+2CJVAvXdpA44hS0c+YpUyT
-   ClIPjBiKbnwrnYZYs9L6qYEdy2b8fJH79VYNBbqs9FZNzP9YPe6XA2gcm
-   hLo8KLedRMxOnskHg0YbK6qRI+lVpp/lgEe7tGdo+DLbID5lS8m1dGYBi
-   X7QdkFBCbQkd5g53bkJj/ks+3UQt3zo4srIYqzUNylUPYdBcvarzNKNWf
-   Q==;
-X-CSE-ConnectionGUID: 7+CgY3GlTE2ZcwIALzuhMw==
-X-CSE-MsgGUID: z76kDgzTRJ6kPAZyWi0X1Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11732"; a="85524779"
-X-IronPort-AV: E=Sophos;i="6.23,126,1770624000"; 
-   d="scan'208";a="85524779"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 14:19:13 -0700
-X-CSE-ConnectionGUID: gu528K3OQIqfSKljn7FBEA==
-X-CSE-MsgGUID: xCzh2DW8SDOGINn0eOuXBQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,126,1770624000"; 
-   d="scan'208";a="219477590"
-Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
-  by fmviesa007.fm.intel.com with ESMTP; 17 Mar 2026 14:19:12 -0700
-From: Tony Nguyen <anthony.l.nguyen@intel.com>
-To: davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	andrew+netdev@lunn.ch,
-	netdev@vger.kernel.org
-Cc: Zdenek Bouska <zdenek.bouska@siemens.com>,
-	anthony.l.nguyen@intel.com,
-	dima.ruinskiy@intel.com,
-	vinicius.gomes@intel.com,
-	yoong.siang.song@intel.com,
-	jun.ann.lai@intel.com,
-	richardcochran@gmail.com,
-	florian.bezdeka@siemens.com,
-	maciej.fijalkowski@intel.com,
-	magnus.karlsson@intel.com,
-	ast@kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GQ4hs2wm"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-486b9675d36so9267205e9.0
+        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 14:43:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773783830; x=1774388630; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3J6QL/sCxXmvI2aX8hIXwKbPG6y0wN/eNHB6NdqHKuk=;
+        b=GQ4hs2wmFyxvXHUV37pu8jxWbLRXgthBbdcb4iq2a0sm8BsWJX6WIEuK60AoDn30f2
+         r1pwNt4VH/4CT+mNlUlE4DI4+Lr/SEQBaZeKz8UjJDmbDhGiVdBr1NUVJvLeiCZwvYml
+         xtNKF/lxpNpSiFSbUGY/0kuxa3FUrkUy6tLf2n9n/I32OCG/laCzl3arRp1XYoGdHvkT
+         fAsdg58sv3OykS5Wz+AiuiM3TKsDfKW4JoKszKHCTa0Lc6oGEQyzMjbn4Bti/8+QgqW8
+         kRhxk02chPCDCeA3C9AhQalJXxcTl9P0ZCpJj5moioH0QdCqHU3jRFf7tZg7h9I9FwUS
+         Mjdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773783830; x=1774388630;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3J6QL/sCxXmvI2aX8hIXwKbPG6y0wN/eNHB6NdqHKuk=;
+        b=s52cGi9j3xGIOnY33tjn/efN8EnaTNAX70Cbvmyf+UQbb49TncH3mCN5cQ7NYGDIud
+         tpXXQPbPmKTfE86pV0b+YVgpeuyHQuB+cVZitzA3MHtjQkmB/5fNGDQkbEAksl8yNyNI
+         3vRr13fs0h/QlBaYamAWOdg2IP3ErXWaazeqrsEXFAiRNXg9y3Ras0eRAiy7fx0lUO9t
+         q2GalesC8XiPLnp9IMa2Rnkt9kiNU+Tjcv5gNqqrohE6Ev7NPC4b4ldnmqT2/yzNJBAa
+         9QWt5aQE9oiJ+m1xDF37HrCHvcHJNxCuHKs4jOkOpNoRWEeGeaT0+2gvLSc+V4ImmKmj
+         PVFQ==
+X-Gm-Message-State: AOJu0Yy8WeCez1xY+F+BaTk7WywnVRZTLLq7XWZXetKag7SiTUr6XYlW
+	ZNyXG6FfWhKxWXfYaROA3IIBfeYTHsXpURFRUdN5kldd7QaduEqPyXp7vwHHjl8=
+X-Gm-Gg: ATEYQzwqNI3w+gB6iiWv4NQiZEu5dEAYJzmsfqADIyVRFfWMXsI9IJyec/druXGli6x
+	wkKYUosviFRHNENNqgrY+1+bxphQFvK19/sUIdKDlChoyK+tzAZQPe99fTtMh5fEFip6uWG/G8X
+	6UVmXNlNYQPRr9Ot4Emy0fF7b9BShsLNmFKqalx677QSlSo/rNt04ujMNu93Z/JrCwPuLxJiCrN
+	APXGh9VZ+pDcouLf6jYS0TcoKgcVEqptY3j/Krzp9Q0oBHgrhPp05ccNZ79IP+tlDQmaPCbGFMB
+	DxxlDaJi9Vkj7XqM2xMiJsv4KkZy1ippJsqTtJUetuJEyedwSdZdC4ZcFbke5x1hODfk3WrtzEF
+	p9M1uqmFdLEl+soNOjsxRnolavLc0wm6y2hp2QOqvzJw36JLXiUJwo0relmZwHHY5189f8PVUNq
+	sMqaRo9Zq5MQV3Wg==
+X-Received: by 2002:a05:600c:46c5:b0:485:419c:4eba with SMTP id 5b1f17b1804b1-486f441fbfcmr19081925e9.1.1773783829766;
+        Tue, 17 Mar 2026 14:43:49 -0700 (PDT)
+Received: from jacks ([197.38.195.210])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486f4d10a20sm4057605e9.0.2026.03.17.14.43.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Mar 2026 14:43:49 -0700 (PDT)
+From: Ibrahim Zein <zeroxjacks@gmail.com>
+X-Google-Original-From: Ibrahim Zein <ZeroXJacks@gmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
 	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	bpf@vger.kernel.org,
-	Paul Menzel <pmenzel@molgen.mpg.de>,
-	Avigail Dahan <avigailx.dahan@intel.com>
-Subject: [PATCH net 2/4] igc: fix page fault in XDP TX timestamps handling
-Date: Tue, 17 Mar 2026 14:19:03 -0700
-Message-ID: <20260317211906.115505-3-anthony.l.nguyen@intel.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20260317211906.115505-1-anthony.l.nguyen@intel.com>
-References: <20260317211906.115505-1-anthony.l.nguyen@intel.com>
+	gregkh@linuxfoundation.org,
+	Ibrahim Zein <ZeroXJacks@gmail.com>
+Subject: [PATCH bpf-next v2] bpf: verifier: fix integer wrap in regs_refine_cond_op() BPF_JNE case
+Date: Tue, 17 Mar 2026 17:43:41 -0400
+Message-ID: <20260317214342.1729449-1-ZeroXJacks@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -82,113 +74,61 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Zdenek Bouska <zdenek.bouska@siemens.com>
+In regs_refine_cond_op(), the BPF_JNE case narrows register bounds
+without guarding against wrap-around at type boundaries. When
+umin_value equals U64_MAX, incrementing it wraps to 0, producing
+an inconsistent bounds state (umin=0, umax=U64_MAX-1).
 
-If an XDP application that requested TX timestamping is shutting down
-while the link of the interface in use is still up the following kernel
-splat is reported:
+This can be triggered by constructing a register state where:
+  r1 = unknown_byte | 0xFFFFFFFFFFFFFFFE
+  -> var_off = (value=U64_MAX-1, mask=1)
+  -> constrain with JGE U64_MAX -> umin=umax=U64_MAX, tnum non-const
+  -> compare with BPF_JNE const=U64_MAX -> wrap occurs
 
-[  883.803618] [   T1554] BUG: unable to handle page fault for address: ffffcfb6200fd008
-...
-[  883.803650] [   T1554] Call Trace:
-[  883.803652] [   T1554]  <TASK>
-[  883.803654] [   T1554]  igc_ptp_tx_tstamp_event+0xdf/0x160 [igc]
-[  883.803660] [   T1554]  igc_tsync_interrupt+0x2d5/0x300 [igc]
-...
+The same issue exists for all {u,s}{min,max}{32,64} variants.
+Add explicit boundary guards to prevent wrap-around in all cases.
 
-During shutdown of the TX ring the xsk_meta pointers are left behind, so
-that the IRQ handler is trying to touch them.
-
-This issue is now being fixed by cleaning up the stale xsk meta data on
-TX shutdown. TX timestamps on other queues remain unaffected.
-
-Fixes: 15fd021bc427 ("igc: Add Tx hardware timestamp request for AF_XDP zero-copy packet")
-Signed-off-by: Zdenek Bouska <zdenek.bouska@siemens.com>
-Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
-Reviewed-by: Florian Bezdeka <florian.bezdeka@siemens.com>
-Tested-by: Avigail Dahan <avigailx.dahan@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Reported-by: Ibrahim Zein <ZeroXJacks@gmail.com>
+Signed-off-by: Ibrahim Zein <ZeroXJacks@gmail.com>
 ---
- drivers/net/ethernet/intel/igc/igc.h      |  2 ++
- drivers/net/ethernet/intel/igc/igc_main.c |  7 +++++
- drivers/net/ethernet/intel/igc/igc_ptp.c  | 33 +++++++++++++++++++++++
- 3 files changed, 42 insertions(+)
-
-diff --git a/drivers/net/ethernet/intel/igc/igc.h b/drivers/net/ethernet/intel/igc/igc.h
-index a427f05814c1..17236813965d 100644
---- a/drivers/net/ethernet/intel/igc/igc.h
-+++ b/drivers/net/ethernet/intel/igc/igc.h
-@@ -781,6 +781,8 @@ int igc_ptp_hwtstamp_set(struct net_device *netdev,
- 			 struct kernel_hwtstamp_config *config,
- 			 struct netlink_ext_ack *extack);
- void igc_ptp_tx_hang(struct igc_adapter *adapter);
-+void igc_ptp_clear_xsk_tx_tstamp_queue(struct igc_adapter *adapter,
-+				       u16 queue_id);
- void igc_ptp_read(struct igc_adapter *adapter, struct timespec64 *ts);
- void igc_ptp_tx_tstamp_event(struct igc_adapter *adapter);
- 
-diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-index 1c5d7b23f225..72bc5128d8b8 100644
---- a/drivers/net/ethernet/intel/igc/igc_main.c
-+++ b/drivers/net/ethernet/intel/igc/igc_main.c
-@@ -264,6 +264,13 @@ static void igc_clean_tx_ring(struct igc_ring *tx_ring)
- 	/* reset next_to_use and next_to_clean */
- 	tx_ring->next_to_use = 0;
- 	tx_ring->next_to_clean = 0;
-+
-+	/* Clear any lingering XSK TX timestamp requests */
-+	if (test_bit(IGC_RING_FLAG_TX_HWTSTAMP, &tx_ring->flags)) {
-+		struct igc_adapter *adapter = netdev_priv(tx_ring->netdev);
-+
-+		igc_ptp_clear_xsk_tx_tstamp_queue(adapter, tx_ring->queue_index);
-+	}
- }
- 
- /**
-diff --git a/drivers/net/ethernet/intel/igc/igc_ptp.c b/drivers/net/ethernet/intel/igc/igc_ptp.c
-index 44ee19386766..3d6b2264164a 100644
---- a/drivers/net/ethernet/intel/igc/igc_ptp.c
-+++ b/drivers/net/ethernet/intel/igc/igc_ptp.c
-@@ -577,6 +577,39 @@ static void igc_ptp_clear_tx_tstamp(struct igc_adapter *adapter)
- 	spin_unlock_irqrestore(&adapter->ptp_tx_lock, flags);
- }
- 
-+/**
-+ * igc_ptp_clear_xsk_tx_tstamp_queue - Clear pending XSK TX timestamps for a queue
-+ * @adapter: Board private structure
-+ * @queue_id: TX queue index to clear timestamps for
-+ *
-+ * Iterates over all TX timestamp registers and releases any pending
-+ * timestamp requests associated with the given TX queue. This is
-+ * called when an XDP pool is being disabled to ensure no stale
-+ * timestamp references remain.
-+ */
-+void igc_ptp_clear_xsk_tx_tstamp_queue(struct igc_adapter *adapter, u16 queue_id)
-+{
-+	unsigned long flags;
-+	int i;
-+
-+	spin_lock_irqsave(&adapter->ptp_tx_lock, flags);
-+
-+	for (i = 0; i < IGC_MAX_TX_TSTAMP_REGS; i++) {
-+		struct igc_tx_timestamp_request *tstamp = &adapter->tx_tstamp[i];
-+
-+		if (tstamp->buffer_type != IGC_TX_BUFFER_TYPE_XSK)
-+			continue;
-+		if (tstamp->xsk_queue_index != queue_id)
-+			continue;
-+		if (!tstamp->xsk_tx_buffer)
-+			continue;
-+
-+		igc_ptp_free_tx_buffer(adapter, tstamp);
-+	}
-+
-+	spin_unlock_irqrestore(&adapter->ptp_tx_lock, flags);
-+}
-+
- static void igc_ptp_disable_tx_timestamp(struct igc_adapter *adapter)
- {
- 	struct igc_hw *hw = &adapter->hw;
--- 
-2.47.1
-
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -17055,22 +17055,30 @@
+ 			 * Same reasoning works for all {u,s}{min,max}{32,64} cases
+ 			 * below.
+ 			 */
+-			if (reg1->u32_min_value == (u32)val)
++			if (reg1->u32_min_value == (u32)val &&
++			    reg1->u32_min_value != U32_MAX)
+ 				reg1->u32_min_value++;
+-			if (reg1->u32_max_value == (u32)val)
++			if (reg1->u32_max_value == (u32)val &&
++			    reg1->u32_max_value != 0)
+ 				reg1->u32_max_value--;
+-			if (reg1->s32_min_value == (s32)val)
++			if (reg1->s32_min_value == (s32)val &&
++			    reg1->s32_min_value != S32_MAX)
+ 				reg1->s32_min_value++;
+-			if (reg1->s32_max_value == (s32)val)
++			if (reg1->s32_max_value == (s32)val &&
++			    reg1->s32_max_value != S32_MIN)
+ 				reg1->s32_max_value--;
+ 		} else {
+-			if (reg1->umin_value == (u64)val)
++			if (reg1->umin_value == (u64)val &&
++			    reg1->umin_value != U64_MAX)
+ 				reg1->umin_value++;
+-			if (reg1->umax_value == (u64)val)
++			if (reg1->umax_value == (u64)val &&
++			    reg1->umax_value != 0)
+ 				reg1->umax_value--;
+-			if (reg1->smin_value == (s64)val)
++			if (reg1->smin_value == (s64)val &&
++			    reg1->smin_value != S64_MAX)
+ 				reg1->smin_value++;
+-			if (reg1->smax_value == (s64)val)
++			if (reg1->smax_value == (s64)val &&
++			    reg1->smax_value != S64_MIN)
+ 				reg1->smax_value--;
+ 		}
+ 		break;
