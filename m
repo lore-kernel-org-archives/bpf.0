@@ -1,119 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A8B13C9448;
-	Tue, 17 Mar 2026 13:02:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F061375F6B
+	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 13:27:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773752553; cv=none; b=GSFv9lrncyB6mv3abJc0gi6rVBsbJMnL2J7aq1ZKiPdFZyF5ft5L08yzOAUxLXVJP7ye30jdAhlrC07yjvXv4oTbLyw0++/TwCq98OgJJl4/lhLaW81vUWXf7jkEa8k+Gb4jT/YGCVvht2d7FumNtasOOCfurfDAkdaOVS9FmM8=
+	t=1773754060; cv=none; b=uIPWIz3LMqNpy3996jIQo3HTvkQ6EODxSJEswsXqgnmfZpZSqo8zH6a959ZmpY7/lYI4dxDZrVn03YBleTxQEmyEhuB4EjXtiKRxq8F21+u5LxvbeEEsFQzCeEUMJJS/0bQ6TZ/+670Ty7WTbpEXLcjgL5Qi4M4E0LHOXszmyic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773752553; c=relaxed/simple;
-	bh=/uHQxDHPHgQxprBV7SzGlauRc015kU8Io/O5yS+8Qrc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=OqHmw0iF3FrE4j8JGFd+80Did5NyEOJvLt3GHRjghKTGAb53nFlQLcbKZlINzwVIFiTVvhW80yHSvcs92sQPYljyXnmP1EdnkNaom54zuRG/Lx44CyGtd5xJ02cPxVgDS+PQpa9plevrMb+bop+nPeVpokdB7JhA826q5DYYDqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oiSzEac8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773754060; c=relaxed/simple;
+	bh=ikDInS/569fx0TmBO5b0XgY/qVS6a9yIqKr7YcNt69M=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=cmBcPZjA36amnRZiYupE3JqwLqtT9tAdAjNxBJPsQdCY7dWuaqII2Jt6EMWz4RpKYLKdQq6uPcW/vbf7GwK6TYTGavRwlNmLgWmjslIVMJf/H2YsalAPM5cG/MDLeQK8DWXCgYRyrf+D6KeRJ5ooemr0TVnxdihgBNi4oA1T1gM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fykOq1YD; arc=none smtp.client-ip=209.85.128.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oiSzEac8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7861C19425;
-	Tue, 17 Mar 2026 13:02:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773752553;
-	bh=/uHQxDHPHgQxprBV7SzGlauRc015kU8Io/O5yS+8Qrc=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=oiSzEac83b+anOdvEOX/61ATix8eXjAtYVlh4bBHjVX8R32GO55VoPiWlwIbMyYR+
-	 QOKbMAUs/n7oP61QTvjQRzMw1l4PP2tz60QDxO6JmvrqVD3BamKLYKMYkH+XHS3aLX
-	 hnNBcjQnwwJHPqj+rcG9XipVuww289k0fNpO0qYpTe+MtXffXFlarCvgi++if/HBp+
-	 9j2ygIe8Fi7s5rbrNy9K5gi++43zzyorJu4UFW2uy6pQjrTMTeIU1h4+f2+UQcUrHL
-	 h/nHE0KcQXk6E1+oHN5C41UlX/9fpJMBBRn1G2eSBT9uOOfKYP9EOOdQthxPqHgQEm
-	 8KPd6BH1cjLSA==
-Content-Type: multipart/mixed; boundary="===============2343841723094614987=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fykOq1YD"
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-79a40fb9890so23845937b3.1
+        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 06:27:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773754058; x=1774358858; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fMzTHu1aP/+ryEaVbORN4NuS7FAdq73GkOmHjCB3Qz8=;
+        b=fykOq1YDsCuzQExBmRkeWYHLL/uMsCji1tf9a+zwioGt9b0OM0HkagM97OZvVHcfk7
+         QXLPpwjw1hEdyd28aSyiu5dszi3dvR9y2lC344HGjlrPU8tM7hkVxD6V1DHUqZFzMBz+
+         LHhIHn9JUKklJcI66cVaOhEVY1vzGGLapvbQb7pBdVErWIcN3LDA0PohhFthRnAb3Mg0
+         9PrtXMbQLwKDwlBDMbB3FBWb/JDgaB8SkqJsbpkFtNwody8FfD9Wi+HQ6IUc9XBnU/LN
+         2POBe7FY1fQwHxhq+A0bmUE0JesbmxzPT2uu0yjTBMLz6hHxe9dIJOgBTUxHBXLcrX5h
+         tTUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773754058; x=1774358858;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fMzTHu1aP/+ryEaVbORN4NuS7FAdq73GkOmHjCB3Qz8=;
+        b=M+ZPVprcGs1WumTRxaqmi8DO2sfKf1IYkK1YadnJwKAhZbnzSyTn/cy2odB72YvUVy
+         Nr5b69KkNGIDEkmMxOap9N7PguRGSUuFJz2tzItFivDSRS7D0q6TvPWPDtBEoEIhm5hs
+         t6CpnSac4wT7fNVjdxZxO7qIHtHlu94O2H2m2yy9Rs9NrrEwtVmbnEZnVb1YNomHSyQk
+         7+q12iTNkRmhfYZ09OCAr7BQEBxyXvwBJjsIUcoXEkinyYGD7B5GqOPjyWJVIeA2njFg
+         YvXNtzYQWeOb35PeviYcaGEi3vJ3Se/9RRC1hjErOquQYygk7rhZQczg3iNZQmFmVjoB
+         rLmw==
+X-Forwarded-Encrypted: i=1; AJvYcCWkW0+d94mOp7mamHRYzvcjl5trLub68fcUZHtpAjAR5pwW48F0tszUjhaccFvDYA9gjfc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzOPtj4O6LExteCccsueVDXxMhpCk2YpgjCHLB3vc6htdYKuv67
+	yHhVoqTCeZ5ufQ51saVjnAxwRuNE+zCiwfnYHZhQZJnxplC6OqjFXx66
+X-Gm-Gg: ATEYQzwSSh3lTat5HYI0jwL0vzxtR6LOPsaebRbvM6kDRv4XwC5foE//DYa16fjzJRy
+	zvG80FBtL3GO+7CnZ/4cgfj9nRQS4SfHTHv5xoAAOxXmKCQayHM7S8c0CkrfChGJRyt7DZfiYDc
+	odcZA1Tnjx4ItEgvvE1tQZZI+G9Va0axS9YY35b98QEiLED6R/s/DNJc/7x+BZXnLhfIo1aAMFG
+	8Un88y0A31Hvjg7SiiXBGdz1lNNMpkiscbJTUDlhV/XNypnIzmZv3sTiGIJk+0Z/X3r+i57JZgS
+	P6fZ7UIEPS1WRc9QDA4DXacZw5YIopThwLwrE0HhAibD3Qe/lhw4IJl4xf3+/es/0otWRCaViDR
+	EQG1hrV9YkgrXt9YM3Agn9G6MCa1P2S0S3kP7T5g3L0pKEWe1kCJ226d3sXEJDmFxJEfGsIVNH/
+	364+2D1/dc2yELQnP62JYvF0pAbIMRMzmWyFoKECeXp96W4nZRlk6yqY8r8K4e3zO8s9bXErCXu
+	Juo
+X-Received: by 2002:a05:690c:698f:b0:798:613a:2efa with SMTP id 00721157ae682-79a1c1a7074mr176740827b3.40.1773754058231;
+        Tue, 17 Mar 2026 06:27:38 -0700 (PDT)
+Received: from gmail.com (180.134.85.34.bc.googleusercontent.com. [34.85.134.180])
+        by smtp.gmail.com with UTF8SMTPSA id 00721157ae682-79a51b4676esm28742607b3.40.2026.03.17.06.27.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Mar 2026 06:27:37 -0700 (PDT)
+Date: Tue, 17 Mar 2026 09:27:36 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Nick Hudson <nhudson@akamai.com>, 
+ bpf@vger.kernel.org
+Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ Nick Hudson <nhudson@akamai.com>, 
+ Max Tottenham <mtottenh@akamai.com>, 
+ Anna Glasgall <aglasgal@akamai.com>, 
+ Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+Message-ID: <willemdebruijn.kernel.3102df56d5f64@gmail.com>
+In-Reply-To: <20260317121429.2399539-4-nhudson@akamai.com>
+References: <20260317121429.2399539-1-nhudson@akamai.com>
+ <20260317121429.2399539-4-nhudson@akamai.com>
+Subject: Re: [PATCH v1 3/5] bpf: add helper masks for ADJ_ROOM decap flags
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <a4350dcbdc7cf54739156a2cc70d3c6cdeb224bf1df09d996b5bbf409fd6827c@mail.kernel.org>
-In-Reply-To: <20260317121429.2399539-6-nhudson@akamai.com>
-References: <20260317121429.2399539-6-nhudson@akamai.com>
-Subject: Re: [PATCH v1 5/5] bpf: clear decap tunnel GSO state in skb_adjust_room
-From: bot+bpf-ci@kernel.org
-To: nhudson@akamai.com,bpf@vger.kernel.org
-Cc: willemdebruijn.kernel@gmail.com,nhudson@akamai.com,mtottenh@akamai.com,aglasgal@akamai.com,martin.lau@linux.dev,daniel@iogearbox.net,ast@kernel.org,andrii@kernel.org,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 17 Mar 2026 13:02:32 +0000 (UTC)
-
---===============2343841723094614987==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -3665,6 +3665,37 @@ static int bpf_skb_net_shrink(struct sk_buff *skb, u32 off, u32 len_diff,
->  		if (!(flags & BPF_F_ADJ_ROOM_FIXED_GSO))
->  			skb_increase_gso_size(shinfo, len_diff);
->
-> +		/* Selective GSO flag clearing based on decap type.
-> +		 * Only clear the flags for the tunnel layer being removed.
-> +		 */
-> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_UDP) &&
-> +		    (shinfo->gso_type & (SKB_GSO_UDP_TUNNEL |
-> +					 SKB_GSO_UDP_TUNNEL_CSUM)))
-> +			shinfo->gso_type &= ~(SKB_GSO_UDP_TUNNEL |
-> +					      SKB_GSO_UDP_TUNNEL_CSUM);
+Nick Hudson wrote:
+> Introduce helper masks for bpf_skb_adjust_room() decapsulation flags
+> to simplify validation and keep flag handling readable:
+> 
+> - BPF_F_ADJ_ROOM_DECAP_L4_MASK
+> - BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK
+> - BPF_F_ADJ_ROOM_ENCAP_MASK
+> - BPF_F_ADJ_ROOM_DECAP_MASK
+> 
+> Also fold these masks into BPF_F_ADJ_ROOM_MASK and per-path flag
+> validation checks.
+> 
+> This is a refactoring/plumbing change; functional decapsulation and
+> GSO behavior updates are handled in later patches.
+> 
+> Co-developed-by: Max Tottenham <mtottenh@akamai.com>
+> Signed-off-by: Max Tottenham <mtottenh@akamai.com>
+> Co-developed-by: Anna Glasgall <aglasgal@akamai.com>
+> Signed-off-by: Anna Glasgall <aglasgal@akamai.com>
+> Signed-off-by: Nick Hudson <nhudson@akamai.com>
 
-Should SKB_GSO_TUNNEL_REMCSUM also be cleared here when decapping
-a UDP tunnel?
+Only patches 3 through 5 were sent to the netdev list.
 
-VXLAN and Geneve set SKB_GSO_TUNNEL_REMCSUM alongside
-SKB_GSO_UDP_TUNNEL during encapsulation:
-
-net/ipv4/udp_offload.c:udp_gro_complete():
-    skb_shinfo(skb)->gso_type |= SKB_GSO_TUNNEL_REMCSUM;
-
-drivers/net/vxlan/vxlan_core.c:vxlan_build_skb():
-    type |= SKB_GSO_TUNNEL_REMCSUM;
-
-After clearing SKB_GSO_UDP_TUNNEL{,_CSUM} but not TUNNEL_REMCSUM,
-the gso_type has an orphaned tunnel flag with no associated tunnel
-type.
-
-> +
-> +		/* Clear encapsulation flag only when no tunnel GSO flags remain */
-> +		if (flags & BPF_F_ADJ_ROOM_DECAP_MASK) {
-> +			if (!(shinfo->gso_type & (SKB_GSO_UDP_TUNNEL |
-> +						  SKB_GSO_UDP_TUNNEL_CSUM |
-> +						  SKB_GSO_GRE |
-> +						  SKB_GSO_GRE_CSUM |
-> +						  SKB_GSO_IPXIP4 |
-> +						  SKB_GSO_IPXIP6)))
-
-This check does not include SKB_GSO_TUNNEL_REMCSUM. If a packet
-had both SKB_GSO_UDP_TUNNEL and SKB_GSO_TUNNEL_REMCSUM set, the
-L4_UDP clearing above removes UDP_TUNNEL but leaves REMCSUM. This
-check then concludes no tunnel GSO flags remain and clears
-skb->encapsulation, even though a tunnel-related GSO bit is still
-present.
-
-The kernel's own UDP tunnel segmentation in
-__skb_udp_tunnel_segment() explicitly handles TUNNEL_REMCSUM as
-part of tunnel processing:
-
-    remcsum = !!(skb_shinfo(skb)->gso_type &
-                 SKB_GSO_TUNNEL_REMCSUM);
-
-Would it make sense to include TUNNEL_REMCSUM in both the L4_UDP
-clearing and this encapsulation check?
-
-> +				if (skb->encapsulation)
-> +					skb->encapsulation = 0;
-> +		}
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23194329334
---===============2343841723094614987==--
+Please resubmit the entire series (after the customary 24 hr min) to
+the full list.
