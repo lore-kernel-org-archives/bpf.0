@@ -1,375 +1,402 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8A403E5596
-	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 14:04:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90C273E51C4
+	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 14:06:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773756246; cv=none; b=JKGSMfCmHeS6OnxH0VGjXKw2znN3EKyBPkpFpBYxxtuXBdUHMvwCKlODzkAJwRyYq3qDE3FsSw6iXVI53nuiE08PsRUNvkpPtl8+f8MdiA40w0TknBQO5uuP15NgYw2Ycx1D6DvW6sQCR30yCQrNyfotN2o9PgkOtUKma3/8Xho=
+	t=1773756367; cv=none; b=SPMAw103I05dWUSOs3Znmk+g/tqimtzA08OMp3fyYEHnhNy3gY890H7NstmY6iuPKhWFqAXSTATATWrL38KeGrdq497Qwc0z1sjLHP6Y/inlJo8kskFv4vrbv26TJ3cTrIJHATxPujMXUnJNZznAXtMW0LiSxEoos4xCZNM0ARc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773756246; c=relaxed/simple;
-	bh=3jvxW6pHxByhhZjqbzIAI4m52uwu49SVDXIOpG9CHI0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FNr8QkpBdH7NQq/og/d95UjbRV7ooOwtOoLGAJPq/uI4p4rAmArJ4WcIOiVlWY5FoE0M/tIB1ND8/v1NYainkcU4ukwsVo3mU6/I4IUIH8Pb3QyepSPDAB7TywWX4Ixe3B4PhegHiHQzeuCZaGNJoUdmr5GqfEqvs1Uf96lnYU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 7CE5B4D341;
-	Tue, 17 Mar 2026 14:04:03 +0000 (UTC)
-Authentication-Results: smtp-out1.suse.de;
-	none
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 1B26B4273C;
-	Tue, 17 Mar 2026 14:04:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id aMioA1JfuWmpYwAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Tue, 17 Mar 2026 14:04:02 +0000
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-To: netdev@vger.kernel.org
-Cc: Fernando Fernandez Mancera <fmancera@suse.de>,
-	=?UTF-8?q?Ricardo=20B=2E=20Marli=C3=A8re?= <rbm@suse.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Guillaume Nault <gnault@redhat.com>,
-	Ido Schimmel <idosch@nvidia.com>,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH 08/10 net-next v3] bpf: remove ipv6_bpf_stub completely and use direct function calls
-Date: Tue, 17 Mar 2026 15:01:04 +0100
-Message-ID: <20260317140141.5723-9-fmancera@suse.de>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260317140141.5723-1-fmancera@suse.de>
-References: <20260317140141.5723-1-fmancera@suse.de>
+	s=arc-20240116; t=1773756367; c=relaxed/simple;
+	bh=milEoDAe84pbhETMfJ8Wu4cAWSlfpj3+EZlXJypNriY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fGJJsbDyQUB77imzhFsaDr/ZcJ0QySSLCAe/+n0En7KUNi24x39tU8C1Ndldt/C6ogCWhuFfPxTJEccrlcUGlRaPWhAATWLMYDPwRbZJ1fydTxBUaOQCjP2w2eRQyxq7IP26UoT/AefaMGGuxB59aUAGgBOints4JECxjv+M6No=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aJeN+uXX; arc=none smtp.client-ip=209.85.128.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aJeN+uXX"
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-79495b1aaa7so53308147b3.1
+        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 07:06:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773756365; x=1774361165; darn=vger.kernel.org;
+        h=in-reply-to:autocrypt:from:content-language:references:cc:to
+         :subject:user-agent:mime-version:date:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=BWbLMWkbviOEZjIzBGitbdXzWoiSNuKyKzAWHN5mb/4=;
+        b=aJeN+uXX6A8RUODiBbKGCPXgs2sZLB41OeBs/R6qIXA8HSkFQMTUo4O9QkXit5FCOe
+         pQplf3A036OZ95lsCvbgwKruddSNwQp4yxElMbv4wHF1DzUNakqcKeQFAdkIL+l6hPGH
+         WlJJr9RRwHKZnO2uX80uQqP1NQRgpm5kyogxW7aQ7vQKTo8j+1oHdYED4Wiwbd9kxESa
+         NJ85I+vtSjJn3+6QO9XSPcfsSsHwvL1LkC4sPganA1qwBhNZPX6/SXyAW8m2UMKEj4Zp
+         7qgg9KjKoqhf7CANI2G8mD5NLBMKsFl70TQXr0He7QAPCREV+OVGcGV5TT3q5nQJXjwQ
+         7tcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773756365; x=1774361165;
+        h=in-reply-to:autocrypt:from:content-language:references:cc:to
+         :subject:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BWbLMWkbviOEZjIzBGitbdXzWoiSNuKyKzAWHN5mb/4=;
+        b=m8fPViSSxwmstB4Otslp0gzmSNyOzdIzy9SpgG9YNcSEjbqh4B5n281mjuEY6ZRl8c
+         461/Qn6gA8/8mYEyHcFPoWGcD4m7MC7QmgaJQljyh4eIw2pTl/wQzkn9FLsjidWbrfaT
+         E+rqa3Hx8DW8ldFWMh693koO3OpiCWQ3DUF/wxLwsEoA2qNz/YRdhxYziQiG8LF81X2n
+         k1yOuxIUXh1/c6Hfd6aclkfCqCARwHIRC+MOXggsdXjI7yZOjkm4JGlNDIMwbplxihm6
+         fbEaGpHBAqBHD/rkv5jQKWCV2nhO0wPwOpBPljPr5UCkWYajl15pyfw7gtgEidwQX6dq
+         fkDw==
+X-Forwarded-Encrypted: i=1; AJvYcCXc55DQNtkbkiuecrvT0KsK3SEqlQSgahtR4yYHFOaLRk+mu2teCxxLhAzYRUjNaCqMZQY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyflBf2RWCqBPUgOMQ/5Bql5Wy3X4UtCaaEigtDkBSVEk0115V2
+	JtMx7402EtOYQ7q01BpL8zEbfrTyjOmG13pr+Xmo7tmuixyZ1fyenGaG
+X-Gm-Gg: ATEYQzwcSK7EeCbrxus67MBJ29mz4yA7IU7yeS9yHklHD07x1HbW2Ql2X5sET/eD22c
+	ovyvTF2bFk25GJdSTZ4VHVWIWv6qqSOD46feW5Dct/onpO3QdaBYGmwxHxm0aIFrBQPlO4ayrT4
+	f/bZRFpAs4XqayIRiCbEyQ3yAyL3z/IyRSkfRg0laRMjEa9THCYCPw7lhTz5FXwOhDYsZKF6o/Y
+	ohkn3Ybz4iX15sYiUuBEu69lpDtnwr4mveHHKjYHVtPwqbs5Cvx9G/lIb0OHzRSr0nZwRGeS9iV
+	184T5k+6bKzCEn/nNXx+sHqV58N+3bWKq3aSvGYsVbLJ2kUyltNmv7Y3GCBgVGGTXVgIpam91Ki
+	rJr6jLnVF//tgyWKQS6Ak06N+ySpgIRb7OZKYZIlk8yUIPdfYwkg5ES/kgcPn7WUSCYtk0FMf/V
+	iZyU8ZPcynIS7ll/LLpKUi0NNqJPa49ctWN00q0k2gByPTWrljdCN4tY6Wwu5lS/Pa3YqM5UvY2
+	P/pQqo5xvQHtO2WIFutWTNogzu4jxvrb1km
+X-Received: by 2002:a05:690c:4b8e:b0:798:7821:8b63 with SMTP id 00721157ae682-79a1c21810cmr155242117b3.62.1773756365296;
+        Tue, 17 Mar 2026 07:06:05 -0700 (PDT)
+Received: from [10.138.34.110] (h96-60-250-27.cncrtn.broadband.dynamic.tds.net. [96.60.250.27])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7991a7041f3sm102554037b3.14.2026.03.17.07.06.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Mar 2026 07:06:04 -0700 (PDT)
+Message-ID: <8adf57a0-ee3f-4554-bb0d-cedcf6c51e47@gmail.com>
+Date: Tue, 17 Mar 2026 10:05:59 -0400
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCHBLIZZARD v7] fuse/libfuse/e2fsprogs: containerize ext4 for
+ safer operation
+To: Theodore Tso <tytso@mit.edu>
+Cc: "Darrick J. Wong" <djwong@kernel.org>,
+ Joanne Koong <joannelkoong@gmail.com>,
+ linux-fsdevel <linux-fsdevel@vger.kernel.org>, bpf@vger.kernel.org,
+ linux-ext4 <linux-ext4@vger.kernel.org>, Miklos Szeredi <miklos@szeredi.hu>,
+ Bernd Schubert <bernd@bsbernd.com>, Neal Gompa <neal@gompa.dev>,
+ Amir Goldstein <amir73il@gmail.com>, Christian Brauner <brauner@kernel.org>,
+ Jeff Layton <jlayton@kernel.org>, John@groves.net
+References: <20260223224617.GA2390314@frogsfrogsfrogs>
+ <CAJnrk1Yd1J60-Ek=O7jzZQg454pbr3O=b71yZHzYbrWfqJr__w@mail.gmail.com>
+ <20260316180408.GN6069@frogsfrogsfrogs>
+ <CAJnrk1bmJYMt27xedN2Xza0KPXfYEbh-9g=3fNWru-HRM9WFEw@mail.gmail.com>
+ <20260316234137.GJ1742010@frogsfrogsfrogs>
+ <208bfbd2-d671-462c-925f-4d51b7df1f18@gmail.com>
+ <20260317135921.GB53921@macsyma-wired.lan>
+Content-Language: en-US
+From: Demi Marie Obenour <demiobenour@gmail.com>
+Autocrypt: addr=demiobenour@gmail.com; keydata=
+ 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
+ +MYSfkEjBz0E8CLOcAw7JIwAaeBT
+In-Reply-To: <20260317135921.GB53921@macsyma-wired.lan>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------HiaJZqfIWY8l0w9mar899j0f"
+
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------HiaJZqfIWY8l0w9mar899j0f
+Content-Type: multipart/mixed; boundary="------------E4UiRLM1lFdVxvJBo01B33r3";
+ protected-headers="v1"
+Message-ID: <8adf57a0-ee3f-4554-bb0d-cedcf6c51e47@gmail.com>
+Date: Tue, 17 Mar 2026 10:05:59 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCHBLIZZARD v7] fuse/libfuse/e2fsprogs: containerize ext4 for
+ safer operation
+To: Theodore Tso <tytso@mit.edu>
+Cc: "Darrick J. Wong" <djwong@kernel.org>,
+ Joanne Koong <joannelkoong@gmail.com>,
+ linux-fsdevel <linux-fsdevel@vger.kernel.org>, bpf@vger.kernel.org,
+ linux-ext4 <linux-ext4@vger.kernel.org>, Miklos Szeredi <miklos@szeredi.hu>,
+ Bernd Schubert <bernd@bsbernd.com>, Neal Gompa <neal@gompa.dev>,
+ Amir Goldstein <amir73il@gmail.com>, Christian Brauner <brauner@kernel.org>,
+ Jeff Layton <jlayton@kernel.org>, John@groves.net
+References: <20260223224617.GA2390314@frogsfrogsfrogs>
+ <CAJnrk1Yd1J60-Ek=O7jzZQg454pbr3O=b71yZHzYbrWfqJr__w@mail.gmail.com>
+ <20260316180408.GN6069@frogsfrogsfrogs>
+ <CAJnrk1bmJYMt27xedN2Xza0KPXfYEbh-9g=3fNWru-HRM9WFEw@mail.gmail.com>
+ <20260316234137.GJ1742010@frogsfrogsfrogs>
+ <208bfbd2-d671-462c-925f-4d51b7df1f18@gmail.com>
+ <20260317135921.GB53921@macsyma-wired.lan>
+Content-Language: en-US
+From: Demi Marie Obenour <demiobenour@gmail.com>
+Autocrypt: addr=demiobenour@gmail.com; keydata=
+ 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
+ +MYSfkEjBz0E8CLOcAw7JIwAaeBT
+In-Reply-To: <20260317135921.GB53921@macsyma-wired.lan>
+
+--------------E4UiRLM1lFdVxvJBo01B33r3
+Content-Type: multipart/mixed; boundary="------------7WhuMDVQPMcPvp5UD19CHuKg"
+
+--------------7WhuMDVQPMcPvp5UD19CHuKg
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-4.00 / 50.00];
-	REPLY(-4.00)[];
-	TAGGED_RCPT(0.00)[];
-	ASN(0.00)[asn:32098, ipnet:2800::/6, country:US]
-X-Rspamd-Queue-Id: 7CE5B4D341
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Rspamd-Action: no action
-X-Spam-Flag: NO
-X-Spam-Score: -4.00
-X-Spam-Level: 
+Content-Transfer-Encoding: quoted-printable
 
-As IPv6 is built-in only, the ipv6_bpf_stub can be removed completely.
+On 3/17/26 09:59, Theodore Tso wrote:
+> On Mon, Mar 16, 2026 at 08:20:29PM -0400, Demi Marie Obenour wrote:
+>>
+>> It's worth noting that on ChromeOS and Android, the only trusted
+>> disk images are those that are read-only and protected by dm-verity.
+>> *Every* writable image is considered untrusted.
+>=20
+> So I can't speak for ChromeOS or Android, but given discussions that
+> I've had with folks in those teams when we were developing fscrypt and
+> fsverity, the writeable images which are soldered onto the mainboard,
+> where user data is stored, is protected by fscrypt, which provide
+> confidentiality but not integrity for user data.
+>=20
+> However, from a trust perspective, if there is an "evil maid attack"
+> (where someone leaves their device unattended in a hotel room, and the
+> housecleaning staff removes the device, and the flash is removed from
+> the mainboard and modified) is something which is considered an attack
+> which is realistically only going to be carried out by a nation state,
+> and the primary priority was protecting the privileged APK's (the
+> moral equivalent of setuid binaries), and that's where fsverity is
+> used to protect against that threat.
+>=20
+> Yes, the nation state attacker could potentially corrupt the metadata
+> of the writeable file system image, and but there are enough zero day
+> attacks that involve sending corrupted image files that trigger buffer
+> overflows, etc., that while it would be nice to protect against this
+> sort of thing, given that it requires a physical attack (and that
+> point, the nation state attacker could also enhance the device with
+> remotely denotated explosives, something which spies on the
+> touchscreen or microphone and ships the output over the network,
+> etc.), I don't believe this is considered a high priority threat that
+> is worth spending $$$ to mitigate.
 
-Convert all ipv6_bpf_stub usage to direct function calls instead. The
-fallback functions introduced previously will prevent linkage errors
-when CONFIG_IPV6 is disabled.
+This doesn't require a physical attack.  An attacker who has previously
+gained root access could use a metadata parsing attack to keep that
+access across reboots.
+--=20
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+--------------7WhuMDVQPMcPvp5UD19CHuKg
+Content-Type: application/pgp-keys; name="OpenPGP_0xB288B55FFF9C22C1.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB288B55FFF9C22C1.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
-Tested-by: Ricardo B. Marlière <rbm@suse.com>
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
----
- include/net/ipv6.h       |  2 ++
- include/net/ipv6_stubs.h | 21 ----------------
- net/core/filter.c        | 54 ++++++++++++++++------------------------
- net/core/lwt_bpf.c       | 10 +++++---
- net/ipv6/af_inet6.c      | 13 ++--------
- 5 files changed, 33 insertions(+), 67 deletions(-)
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-diff --git a/include/net/ipv6.h b/include/net/ipv6.h
-index f99f273341f0..d042afe7a245 100644
---- a/include/net/ipv6.h
-+++ b/include/net/ipv6.h
-@@ -1149,6 +1149,8 @@ void ipv6_local_rxpmtu(struct sock *sk, struct flowi6 *fl6, u32 mtu);
- void inet6_cleanup_sock(struct sock *sk);
- void inet6_sock_destruct(struct sock *sk);
- int inet6_release(struct socket *sock);
-+int __inet6_bind(struct sock *sk, struct sockaddr_unsized *uaddr, int addr_len,
-+		 u32 flags);
- int inet6_bind(struct socket *sock, struct sockaddr_unsized *uaddr, int addr_len);
- int inet6_bind_sk(struct sock *sk, struct sockaddr_unsized *uaddr, int addr_len);
- int inet6_getname(struct socket *sock, struct sockaddr *uaddr,
-diff --git a/include/net/ipv6_stubs.h b/include/net/ipv6_stubs.h
-index 907681cecde8..dc708d9eca7a 100644
---- a/include/net/ipv6_stubs.h
-+++ b/include/net/ipv6_stubs.h
-@@ -77,25 +77,4 @@ struct ipv6_stub {
- 			__u32 mark, struct ipv6_txoptions *opt, int tclass, u32 priority);
- };
- extern const struct ipv6_stub *ipv6_stub __read_mostly;
--
--/* A stub used by bpf helpers. Similarly ugly as ipv6_stub */
--struct ipv6_bpf_stub {
--	int (*inet6_bind)(struct sock *sk, struct sockaddr_unsized *uaddr, int addr_len,
--			  u32 flags);
--	struct sock *(*udp6_lib_lookup)(const struct net *net,
--					const struct in6_addr *saddr, __be16 sport,
--					const struct in6_addr *daddr, __be16 dport,
--					int dif, int sdif, struct sk_buff *skb);
--	int (*ipv6_setsockopt)(struct sock *sk, int level, int optname,
--			       sockptr_t optval, unsigned int optlen);
--	int (*ipv6_getsockopt)(struct sock *sk, int level, int optname,
--			       sockptr_t optval, sockptr_t optlen);
--	int (*ipv6_dev_get_saddr)(struct net *net,
--				  const struct net_device *dst_dev,
--				  const struct in6_addr *daddr,
--				  unsigned int prefs,
--				  struct in6_addr *saddr);
--};
--extern const struct ipv6_bpf_stub *ipv6_bpf_stub __read_mostly;
--
- #endif
-diff --git a/net/core/filter.c b/net/core/filter.c
-index c56821afaa0f..4b0c98f0d994 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -73,7 +73,6 @@
- #include <net/seg6.h>
- #include <net/seg6_local.h>
- #include <net/lwtunnel.h>
--#include <net/ipv6_stubs.h>
- #include <net/bpf_sk_storage.h>
- #include <net/transp_v6.h>
- #include <linux/btf_ids.h>
-@@ -2279,7 +2278,7 @@ static int __bpf_redirect_neigh_v6(struct sk_buff *skb, struct net_device *dev,
- 			.saddr	      = ip6h->saddr,
- 		};
- 
--		dst = ipv6_stub->ipv6_dst_lookup_flow(net, NULL, &fl6, NULL);
-+		dst = ip6_dst_lookup_flow(net, NULL, &fl6, NULL);
- 		if (IS_ERR(dst))
- 			goto out_drop;
- 
-@@ -5577,12 +5576,12 @@ static int sol_ipv6_sockopt(struct sock *sk, int optname,
- 	}
- 
- 	if (getopt)
--		return ipv6_bpf_stub->ipv6_getsockopt(sk, SOL_IPV6, optname,
--						      KERNEL_SOCKPTR(optval),
--						      KERNEL_SOCKPTR(optlen));
-+		return do_ipv6_getsockopt(sk, SOL_IPV6, optname,
-+					  KERNEL_SOCKPTR(optval),
-+					  KERNEL_SOCKPTR(optlen));
- 
--	return ipv6_bpf_stub->ipv6_setsockopt(sk, SOL_IPV6, optname,
--					      KERNEL_SOCKPTR(optval), *optlen);
-+	return do_ipv6_setsockopt(sk, SOL_IPV6, optname,
-+				  KERNEL_SOCKPTR(optval), *optlen);
- }
- 
- static int __bpf_setsockopt(struct sock *sk, int level, int optname,
-@@ -5981,9 +5980,6 @@ static const struct bpf_func_proto bpf_sock_ops_cb_flags_set_proto = {
- 	.arg2_type	= ARG_ANYTHING,
- };
- 
--const struct ipv6_bpf_stub *ipv6_bpf_stub __read_mostly;
--EXPORT_SYMBOL_GPL(ipv6_bpf_stub);
--
- BPF_CALL_3(bpf_bind, struct bpf_sock_addr_kern *, ctx, struct sockaddr *, addr,
- 	   int, addr_len)
- {
-@@ -6007,11 +6003,9 @@ BPF_CALL_3(bpf_bind, struct bpf_sock_addr_kern *, ctx, struct sockaddr *, addr,
- 			return err;
- 		if (((struct sockaddr_in6 *)addr)->sin6_port == htons(0))
- 			flags |= BIND_FORCE_ADDRESS_NO_PORT;
--		/* ipv6_bpf_stub cannot be NULL, since it's called from
--		 * bpf_cgroup_inet6_connect hook and ipv6 is already loaded
--		 */
--		return ipv6_bpf_stub->inet6_bind(sk, (struct sockaddr_unsized *)addr,
--						 addr_len, flags);
-+
-+		return __inet6_bind(sk, (struct sockaddr_unsized *)addr,
-+				    addr_len, flags);
- #endif /* CONFIG_IPV6 */
- 	}
- #endif /* CONFIG_INET */
-@@ -6222,7 +6216,7 @@ static int bpf_ipv4_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
- 		neigh = __ipv4_neigh_lookup_noref(dev,
- 						  (__force u32)params->ipv4_dst);
- 	else
--		neigh = __ipv6_neigh_lookup_noref_stub(dev, params->ipv6_dst);
-+		neigh = __ipv6_neigh_lookup_noref(dev, params->ipv6_dst);
- 
- 	if (!neigh || !(READ_ONCE(neigh->nud_state) & NUD_VALID))
- 		return BPF_FIB_LKUP_RET_NO_NEIGH;
-@@ -6290,12 +6284,11 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
- 			params->tbid = 0;
- 		}
- 
--		tb = ipv6_stub->fib6_get_table(net, tbid);
-+		tb = fib6_get_table(net, tbid);
- 		if (unlikely(!tb))
- 			return BPF_FIB_LKUP_RET_NOT_FWDED;
- 
--		err = ipv6_stub->fib6_table_lookup(net, tb, oif, &fl6, &res,
--						   strict);
-+		err = fib6_table_lookup(net, tb, oif, &fl6, &res, strict);
- 	} else {
- 		if (flags & BPF_FIB_LOOKUP_MARK)
- 			fl6.flowi6_mark = params->mark;
-@@ -6305,7 +6298,7 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
- 		fl6.flowi6_tun_key.tun_id = 0;
- 		fl6.flowi6_uid = sock_net_uid(net, NULL);
- 
--		err = ipv6_stub->fib6_lookup(net, oif, &fl6, &res, strict);
-+		err = fib6_lookup(net, oif, &fl6, &res, strict);
- 	}
- 
- 	if (unlikely(err || IS_ERR_OR_NULL(res.f6i) ||
-@@ -6326,11 +6319,11 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
- 		return BPF_FIB_LKUP_RET_NOT_FWDED;
- 	}
- 
--	ipv6_stub->fib6_select_path(net, &res, &fl6, fl6.flowi6_oif,
--				    fl6.flowi6_oif != 0, NULL, strict);
-+	fib6_select_path(net, &res, &fl6, fl6.flowi6_oif,
-+			 fl6.flowi6_oif != 0, NULL, strict);
- 
- 	if (check_mtu) {
--		mtu = ipv6_stub->ip6_mtu_from_fib6(&res, dst, src);
-+		mtu = ip6_mtu_from_fib6(&res, dst, src);
- 		if (params->tot_len > mtu) {
- 			params->mtu_result = mtu; /* union with tot_len */
- 			return BPF_FIB_LKUP_RET_FRAG_NEEDED;
-@@ -6351,9 +6344,7 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
- 		if (res.f6i->fib6_prefsrc.plen) {
- 			*src = res.f6i->fib6_prefsrc.addr;
- 		} else {
--			err = ipv6_bpf_stub->ipv6_dev_get_saddr(net, dev,
--								&fl6.daddr, 0,
--								src);
-+			err = ipv6_dev_get_saddr(net, dev, &fl6.daddr, 0, src);
- 			if (err)
- 				return BPF_FIB_LKUP_RET_NO_SRC_ADDR;
- 		}
-@@ -6365,7 +6356,7 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
- 	/* xdp and cls_bpf programs are run in RCU-bh so rcu_read_lock_bh is
- 	 * not needed here.
- 	 */
--	neigh = __ipv6_neigh_lookup_noref_stub(dev, dst);
-+	neigh = __ipv6_neigh_lookup_noref(dev, dst);
- 	if (!neigh || !(READ_ONCE(neigh->nud_state) & NUD_VALID))
- 		return BPF_FIB_LKUP_RET_NO_NEIGH;
- 	memcpy(params->dmac, neigh->ha, ETH_ALEN);
-@@ -6900,11 +6891,10 @@ static struct sock *sk_lookup(struct net *net, struct bpf_sock_tuple *tuple,
- 					    src6, tuple->ipv6.sport,
- 					    dst6, ntohs(tuple->ipv6.dport),
- 					    dif, sdif, &refcounted);
--		else if (likely(ipv6_bpf_stub))
--			sk = ipv6_bpf_stub->udp6_lib_lookup(net,
--							    src6, tuple->ipv6.sport,
--							    dst6, tuple->ipv6.dport,
--							    dif, sdif, NULL);
-+		else if (likely(ipv6_mod_enabled()))
-+			sk = __udp6_lib_lookup(net, src6, tuple->ipv6.sport,
-+					       dst6, tuple->ipv6.dport,
-+					       dif, sdif, NULL);
- #endif
- 	}
- 
-diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
-index 9f40be0c3e71..f71ef82a5f3d 100644
---- a/net/core/lwt_bpf.c
-+++ b/net/core/lwt_bpf.c
-@@ -13,7 +13,6 @@
- #include <net/gre.h>
- #include <net/ip.h>
- #include <net/ip6_route.h>
--#include <net/ipv6_stubs.h>
- 
- struct bpf_lwt_prog {
- 	struct bpf_prog *prog;
-@@ -103,7 +102,12 @@ static int bpf_lwt_input_reroute(struct sk_buff *skb)
- 		dev_put(dev);
- 	} else if (skb->protocol == htons(ETH_P_IPV6)) {
- 		skb_dst_drop(skb);
--		err = ipv6_stub->ipv6_route_input(skb);
-+		if (IS_ENABLED(CONFIG_IPV6)) {
-+			ip6_route_input(skb);
-+			err = skb_dst(skb)->error;
-+		} else {
-+			err = -EAFNOSUPPORT;
-+		}
- 	} else {
- 		err = -EAFNOSUPPORT;
- 	}
-@@ -233,7 +237,7 @@ static int bpf_lwt_xmit_reroute(struct sk_buff *skb)
- 		fl6.daddr = iph6->daddr;
- 		fl6.saddr = iph6->saddr;
- 
--		dst = ipv6_stub->ipv6_dst_lookup_flow(net, skb->sk, &fl6, NULL);
-+		dst = ip6_dst_lookup_flow(net, skb->sk, &fl6, NULL);
- 		if (IS_ERR(dst)) {
- 			err = PTR_ERR(dst);
- 			goto err;
-diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
-index bb29b29fdcfb..07ae6ea7743a 100644
---- a/net/ipv6/af_inet6.c
-+++ b/net/ipv6/af_inet6.c
-@@ -264,8 +264,8 @@ static int inet6_create(struct net *net, struct socket *sock, int protocol,
- 	goto out;
- }
- 
--static int __inet6_bind(struct sock *sk, struct sockaddr_unsized *uaddr, int addr_len,
--			u32 flags)
-+int __inet6_bind(struct sock *sk, struct sockaddr_unsized *uaddr, int addr_len,
-+		 u32 flags)
- {
- 	struct sockaddr_in6 *addr = (struct sockaddr_in6 *)uaddr;
- 	struct inet_sock *inet = inet_sk(sk);
-@@ -1032,14 +1032,6 @@ static const struct ipv6_stub ipv6_stub_impl = {
- 	.ip6_xmit = ip6_xmit,
- };
- 
--static const struct ipv6_bpf_stub ipv6_bpf_stub_impl = {
--	.inet6_bind = __inet6_bind,
--	.udp6_lib_lookup = __udp6_lib_lookup,
--	.ipv6_setsockopt = do_ipv6_setsockopt,
--	.ipv6_getsockopt = do_ipv6_getsockopt,
--	.ipv6_dev_get_saddr = ipv6_dev_get_saddr,
--};
--
- static int __init inet6_init(void)
- {
- 	struct list_head *r;
-@@ -1199,7 +1191,6 @@ static int __init inet6_init(void)
- 	/* ensure that ipv6 stubs are visible only after ipv6 is ready */
- 	wmb();
- 	ipv6_stub = &ipv6_stub_impl;
--	ipv6_bpf_stub = &ipv6_bpf_stub_impl;
- out:
- 	return err;
- 
--- 
-2.53.0
+xsFNBFp+A0oBEADffj6anl9/BHhUSxGTICeVl2tob7hPDdhHNgPR4C8xlYt5q49y
+B+l2nipdaq+4Gk6FZfqC825TKl7eRpUjMriwle4r3R0ydSIGcy4M6eb0IcxmuPYf
+bWpr/si88QKgyGSVZ7GeNW1UnzTdhYHuFlk8dBSmB1fzhEYEk0RcJqg4AKoq6/3/
+UorR+FaSuVwT7rqzGrTlscnTDlPWgRzrQ3jssesI7sZLm82E3pJSgaUoCdCOlL7M
+MPCJwI8JpPlBedRpe9tfVyfu3euTPLPxwcV3L/cfWPGSL4PofBtB8NUU6QwYiQ9H
+zx4xOyn67zW73/G0Q2vPPRst8LBDqlxLjbtx/WLR6h3nBc3eyuZ+q62HS1pJ5EvU
+T1vjyJ1ySrqtUXWQ4XlZyoEFUfpJxJoN0A9HCxmHGVckzTRl5FMWo8TCniHynNXs
+BtDQbabt7aNEOaAJdE7to0AH3T/Bvwzcp0ZJtBk0EM6YeMLtotUut7h2Bkg1b//r
+6bTBswMBXVJ5H44Qf0+eKeUg7whSC9qpYOzzrm7+0r9F5u3qF8ZTx55TJc2g656C
+9a1P1MYVysLvkLvS4H+crmxA/i08Tc1h+x9RRvqba4lSzZ6/Tmt60DPM5Sc4R0nS
+m9BBff0Nm0bSNRS8InXdO1Aq3362QKX2NOwcL5YaStwODNyZUqF7izjK4QARAQAB
+zTxEZW1pIE9iZW5vdXIgKElUTCBFbWFpbCBLZXkpIDxhdGhlbmFAaW52aXNpYmxl
+dGhpbmdzbGFiLmNvbT7CwY4EEwEIADgWIQR2h02fEza6IlkHHHGyiLVf/5wiwQUC
+X6YJvQIbAwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgAAKCRCyiLVf/5wiwWRhD/0Y
+R+YYC5Kduv/2LBgQJIygMsFiRHbR4+tWXuTFqgrxxFSlMktZ6gQrQCWe38WnOXkB
+oY6n/5lSJdfnuGd2UagZ/9dkaGMUkqt+5WshLFly4BnP7pSsWReKgMP7etRTwn3S
+zk1OwFx2lzY1EnnconPLfPBc6rWG2moA6l0WX+3WNR1B1ndqpl2hPSjT2jUCBWDV
+rGOUSX7r5f1WgtBeNYnEXPBCUUM51pFGESmfHIXQrqFDA7nBNiIVFDJTmQzuEqIy
+Jl67pKNgooij5mKzRhFKHfjLRAH4mmWZlB9UjDStAfFBAoDFHwd1HL5VQCNQdqEc
+/9lZDApqWuCPadZN+pGouqLysesIYsNxUhJ7dtWOWHl0vs7/3qkWmWun/2uOJMQh
+ra2u8nA9g91FbOobWqjrDd6x3ZJoGQf4zLqjmn/P514gb697788e573WN/MpQ5XI
+Fl7aM2d6/GJiq6LC9T2gSUW4rbPBiqOCeiUx7Kd/sVm41p9TOA7fEG4bYddCfDsN
+xaQJH6VRK3NOuBUGeL+iQEVF5Xs6Yp+U+jwvv2M5Lel3EqAYo5xXTx4ls0xaxDCu
+fudcAh8CMMqx3fguSb7Mi31WlnZpk0fDuWQVNKyDP7lYpwc4nCCGNKCj622ZSocH
+AcQmX28L8pJdLYacv9pU3jPy4fHcQYvmTavTqowGnM08RGVtaSBNYXJpZSBPYmVu
+b3VyIChsb3ZlciBvZiBjb2RpbmcpIDxkZW1pb2Jlbm91ckBnbWFpbC5jb20+wsF4
+BBMBAgAiBQJafgNKAhsDBgsJCAcDAgYVCAIJCgsEFgIDAQIeAQIXgAAKCRCyiLVf
+/5wiwYa/EACv8a2+MMou9cSCNoZBQaU+fTmyzft9hUE+0d5W2UY1RY3OsjFIzm9R
+/4SVccfsqOYLEo+S0vQMIIIqFEq3FCpXXwPzyimotps05VA8U3Bd7yseojFygOgK
+sAMOAee2RCaDDOnoJue01dfZMzzHPO/TVdp3OvnpWipfv5G1Xg96rwbhMLE3tg6N
+xwAHa31Bv4/Xq8CJOoIWvx6fcmZQpz01/lSvsYn0KrfEbTKkuUf0vM9JrCTCP2oz
+VNN5BYzqaq2M4r+jmSyeXLim922VOWqGkUEQ85BSEemqrRS06IU6NtEMsF8EWt/b
+hWjk/9GDKTcnpdJHTrMxTspExBiNrvpI2t+YPU5B/dJJAUxvmhFrbSIbdB8umBZs
+I3AMYrEmpAbh5x7jEjoskUC7uN3o9vpg1oCLS2ePDLtAtyBtbHnkA4xGD7ar8mem
+xpH9lY/i+sC6CyyIUWcUDnnagKyJP0m9ks0GLsTeOCA0bft2XA6rD6aaCnMUsndT
+ctrab42CV5XypjmC4U1rPJ8JQJUh1/3P48/8sMH+3krxpJ06KNWNFaUbaMTGiltZ
+7x9DngklSYrX0T+2G4kVXNmjaljwkoLahwLla2gUWwBSyofXdqyhQdwZsp01KXNQ
+UCyT/Pg+aDcm/E7OMV3d4lf7g/CSxiX2GSEe6BlhSz+Lmd7ZJ3g32M1ARGVtaSBN
+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
+EtJuZYM5blWncBOJCoWMnBEcTEo/viU3GgcVRw=3D=3D
+=3Dx94R
+-----END PGP PUBLIC KEY BLOCK-----
 
+--------------7WhuMDVQPMcPvp5UD19CHuKg--
+
+--------------E4UiRLM1lFdVxvJBo01B33r3--
+
+--------------HiaJZqfIWY8l0w9mar899j0f
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEopQtqVJW1aeuo9/sszaHOrMp8lMFAmm5X8gACgkQszaHOrMp
+8lM5/Q/+O0jk2GRPe0NJQvg37l1f4PsJUPZm4iReQjapt7vbdfGdkZ6K7SmpHO0B
+1JSw2J1QOel03NvBTjgoeukKJFQuVOL9D22YKz960T35XHaA1SVHVYhDLnDB4JjM
+UmONdsN3x3EmHkisB8/kV+SiI3zi0BGniUhaoXtGkCu6XJVzxLJ4xRhm0qYlD9JM
+vk1w+Xn07X6QAvD8eg/3PNj20Lijh2bGo06XYpXXidVChMeSregc3i3DBtqFJlq9
+U2oz3U0ohLomh43xHnNBD9Mk8M9K9zkuaaqzy8Mm9OiyFG6S68o1Jwjaoz5C5+HL
+izFX8LX6+O//Lmelh4REXYATUrvYNsfrWHkpftlBCvF4xwlApYoVG5UDNa1ldcYH
+heNJAQzMLbuZEeplAooI7o8ekd/IIKh3gFnLYrVI5+jXE2jj4CHL+IuMJaJxph2Z
+uHI1wKLhGQd8uPKmvWBRL7Eav+fFn9NopOMFy7Y8NnZKGsmFLotpcTQISuq7Eihx
++M7ksJ8fG2Yeypa7MyXC9Y6kdk0yDLm/ZTL3ugtAH5Kn6MZqqLJqdvPdjhrBSaiY
+0/nRU4C738NYZVO4kvNy1CCGEVzCxgO6uv2w+rF/KwGXcFDvzIkHs7ynDbPEIO5i
+sSfSOgpLfu2dhapvdxbhoTLSsPlNQhe8pWpDtMsT09v+iRBSxi4=
+=tCwz
+-----END PGP SIGNATURE-----
+
+--------------HiaJZqfIWY8l0w9mar899j0f--
