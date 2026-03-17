@@ -1,118 +1,122 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3E2C4C81
-	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 00:12:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6301F262BD
+	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 00:13:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773706326; cv=none; b=sYx3l30zfeVncmaVkhj5fYq33FGFocdQXNv1ogUdukB9YcgpTB0Z5QIeCZa4WowPojINtFmEcF5LeqEU9CIE2kimPlj/HjRT15DjoNFWhOLmt23kfDtFSZhkiGzoIW3sSrdsUHUE9JHh2ZYbGcoBZBCjHGELvsed7yFiG3nrEeQ=
+	t=1773706429; cv=none; b=p/Ou+DxfXggvhIqNG8XhPLjw5/liArYiIO992vJJoYHoJ0N904hJ+eXsFa4K5jkeDM++1LpXtOzwQu4IcluT08kVdbN3YtzmPIDAKvpxL9MHfDiUnRI0lnFlHSpUYlhpwU5hcZ0h/iM81kwSkPm+j5xEPUJeY2PCAQQALVPY1gw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773706326; c=relaxed/simple;
-	bh=KPk0VqEkgTKE5kcP47B9rj9VdP8a5q+dUAXz6Mokabo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tQ3/efqc5/5sVh/kdFHbrjKO4gfrVRY1TbXNLgQRiyporD8lHt6Q/Bd0dHICixQYZmQAHxYEz/ZCfNOSpIZyeodAEIFEFgyroKDI1pnbul202DtUl5WfsEkLD+hgOFIuUeLWcFrJURTUEC8j6ddMoS8GPsfn7NNHUQD6wG73RWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AZcl+v1e; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773706429; c=relaxed/simple;
+	bh=Z6kCAd3PZmTY34NZbXo7MOt/07SCQLy6Q1Jf80M6hPU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IhklWM/CUDJMo4Mgjo+tkp1sfkLwNm806gK7xdevUuPouuqn85eyAHbq0LIPHO/SrhgMJGJD9MSrNjWJc7Vc9VTWO7SFYKE2Jm6WwLE1xkfD7qOs9tGaKA4L5XOKF8GTX0RC2eELk3FIcLH+q42rYbxL+kbRF0fqWbtL2Q5gBfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=NIagJz+n; arc=none smtp.client-ip=91.218.175.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AZcl+v1e"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-43b3f91a7abso1180084f8f.1
-        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 17:12:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773706324; x=1774311124; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LM1H0TkGZQ4/8IPYzTH9t0b7D+QiEfzm8Bsq3kZE6YY=;
-        b=AZcl+v1eOBQDSRhJjEQjJm4Vmwca5tb8OCybg8IdO+qSxk20EWvzWsDyGCPYZYlax1
-         6jPTHcg2gRXsupyqby2zuODp/5OVc3gxg5jn++XYB61d55mvcdE3K60fH8Oy1xWaGLSx
-         KSh61ZrLbk4JWvAk6ldu/3w2VepDrjENRj9oLuiI08sYdoF5/fMHcJbugWyBooM7ee0L
-         tTQmFm5Kz0g7kwtOdYSMcuFI5a52xxd8axGfAXiJEiFHORaVMe45UaW9zWZaM9PQsdv7
-         CIpBsGxIVJ11OriYSbjHwhsX2gS4vT6WjzdiRsp/EGsHGvwE8B5EyS22RaZ38CRlTk8w
-         hAUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773706324; x=1774311124;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LM1H0TkGZQ4/8IPYzTH9t0b7D+QiEfzm8Bsq3kZE6YY=;
-        b=iP5EWaVcvEeY9jmTKwNjypqQkQtT6nG9MKTM8SIDgxAhyOM1uHpkCW3sesUzgb0A6b
-         txRKfWdxlyYFzzOKGhiaZImQpLrc/EzsUhOmeYHkr6r5v9JNTRFwot1qKqtrm9N8uYJm
-         UsifZuAT1buHUt7zm1ZCyZHaFTLu+Yx3PfJF/GxLC6Qo4Uf1snf9J1YA3x7TuEFFkTJ3
-         dHzQrRMZ7bTHG2I0OhQDfQYT3ThIIdR1v6Je8FXcKfyt3LdGEvDwz53aPo4pcG916DPU
-         NbGVS7lYWSro87TGaUQ5NN/YE3rQFRcSoMLGF2dz2/juGfE+RTqhMPeNSrZA06C8nSMA
-         iqvw==
-X-Forwarded-Encrypted: i=1; AJvYcCWtXQ/0g9OA4GMunzgd7ev7uPhxJ6OJGxvaZSobBWcH6VfbJ5AG7r/LHs43D2Iq2eokSA4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3kpxY/z/wEPAqNVjzfg49fTzcqC3+jtbiZuTAg1+VyQs6aCoM
-	S6Yvt1mGm+EXP0g/hhVzc27bdBkHpGzcXekZ6qa5INR72u7g2koZ90ex
-X-Gm-Gg: ATEYQzxp+c91vpLkomV0Xwi/BIWwUd5E76YZPgqBS+zMRy5y2N6n6Lq68WiwnQzBOhB
-	psAsOUo/hxBAdv2eJP4GnKIGfUtCk9vlx6zIDN/nWXjG/VYoJhYBIoCzBIRw4Hbike8z4T4sbf/
-	L291shgWWVIQAfJ3prT1sLQj2PdeIHGr3VaWrPAWFTNrR9Bkn4HKmMsFdwj0qdbPRL6r7zP3isB
-	mS51vLlbuZ9gF+RwvDYxvurk0XekiF7qu+D5lhF9K3yk9hYJug19Vn1qh+pQtugVQJZeALCbZ/I
-	M6q4v3ywGSh75uxvReAi1tSS50H9zJfOzimDb/7k5e1wgTYJ8qpPjFbNRLVCxpp684bY4xnAXkY
-	uHxkqwvJ2FF9XCaBq8I3XLesL9dGfoTeFqSy99x/TXEeXrfnvvTQNbNZAqbqrNQjWESbM962Rqr
-	ex/mpz+PAvx5pilfpagZ5GrDYu8L86UMcb0wPgb3tt4ySwfVfpSyypHk0y3nfjFzr3dZ0DMKIoX
-	yLHayLxnDlO9qhEC1SpuLIg6sOvpB2hvWwpMllRBV0QMBBx+oc36wkJaJoremgjsiaSI1UUbK00
-	mTFZHqYBvQ==
-X-Received: by 2002:a05:6000:4e9:b0:43a:4e5:73b0 with SMTP id ffacd0b85a97d-43a04e585b8mr21072634f8f.17.1773706323812;
-        Mon, 16 Mar 2026 17:12:03 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e00ceb2d69518440fd7.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:ceb2:d695:1844:fd7])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b416e3678sm17786534f8f.17.2026.03.16.17.12.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Mar 2026 17:12:02 -0700 (PDT)
-Date: Tue, 17 Mar 2026 01:12:00 +0100
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: Sun Jian <sun.jian.kdev@gmail.com>
-Cc: andrii@kernel.org, eddyz87@gmail.com, shuah@kernel.org, ast@kernel.org,
-	daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
-	yonghong.song@linux.dev, john.fastabend@gmail.com,
-	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
-	jolsa@kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/bpf: trampoline_count: use dedicated target
- function
-Message-ID: <abicUI4YQ5KkQ_Ro@mail.gmail.com>
-References: <20260315054227.118344-1-sun.jian.kdev@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="NIagJz+n"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773706425;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=8pYRSNxcrpNrMjXMnrg8L3bYz23unQuXWVI3qt6qhCw=;
+	b=NIagJz+nHdzZzPZb5h4OEy3ML3qq4W4mJFa6xWGyRrZqDGvoBFAFAEyAXVmO5jwL6AbCDx
+	OTByNdTt6tAcKD5JkEYxMAKGSdvL7TefG6Un6USm/oVn/NgVyCcii/zgFUN/Tubx3PQAhT
+	z5eEOPU0KkdAlaDikvKshY+y/9/Ia90=
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel-team@meta.com
+Subject: [PATCH bpf v1 1/2] bpf: Fix exception exit lock checking for subprogs
+Date: Mon, 16 Mar 2026 17:13:24 -0700
+Message-ID: <20260317001325.318004-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260315054227.118344-1-sun.jian.kdev@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Sun, Mar 15, 2026 at 01:42:27PM +0800, Sun Jian wrote:
-> trampoline_count fills all trampoline attachment slots for a single
-> target function and verifies that one extra attach fails with -E2BIG.
-> 
-> It currently targets bpf_modify_return_test, which is also used by
-> modify_return and get_func_ip_test. When those tests run in parallel,
-> they can contend for the same per-function trampoline quota and
-> cause unexpected attach failures. This issue is currently masked by
-> harness serialization.
-> 
-> Add a dedicated bpf_trampoline_count_test target and switch
-> trampoline_count to use it. This keeps the test semantics unchanged
-> while isolating it from other modify_return-based selftests, so it no
-> longer needs to run in serial mode. Remove the TODO comment as
-> well.
-> 
-> Tested:
->   ./test_progs -t trampoline_count -vv
->   ./test_progs -t modify_return -vv
->   ./test_progs -t get_func_ip_test -vv
->   ./test_progs -j$(nproc) -t trampoline_count -vv
->   ./test_progs -j$(nproc) -t
->     trampoline_count,modify_return,get_func_ip_test -vv
+process_bpf_exit_full() passes check_lock = !curframe to
+check_resource_leak(), which is false in cases when bpf_throw() is
+called from a static subprog. This makes check_resource_leak() to skip
+validation of active_rcu_locks, active_preempt_locks, and
+active_irq_id on exception exits from subprogs.
 
-I was able to reproduce the issue here then validate the fix. I however
-had to include several more tests that use bpf_modify_return_test
-(get_func_args_test, kprobe_multi_test, missed, and bpf_cookie) before
-I could reliably reproduce (in a loop that runs until it fails with
-an unexpected E2BIG).
+At runtime bpf_throw() unwinds the stack via ORC without releasing any
+user-acquired locks, which may cause various issues as the result.
 
-Tested-by: Paul Chaignon <paul.chaignon@gmail.com>
+Fix by setting check_lock = true for exception exits regardless of
+curframe, since exceptions bypass all intermediate frame
+cleanup. Update the error message prefix to "bpf_throw" for exception
+exits to distinguish them from normal BPF_EXIT. Update relevant
+existing selftests to match the new message.
 
-[...]
+The spin_lock case is not affected because they are already checked [1]
+at the call site in do_check_insn() before bpf_throw can run.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/bpf/verifier.c?h=v7.0-rc4#n21098
+
+Assisted-by: Claude:claude-opus-4-6
+Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+
+---
+
+This bug was discovered by an AI bot. You can find the original
+AI-generated investigation here:
+https://github.com/theihor/bpf/commits/ai-tinkering-20260310-0745/
+
+---
+ kernel/bpf/verifier.c                               | 3 ++-
+ tools/testing/selftests/bpf/progs/exceptions_fail.c | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index df22bfc572e2..5c0e6809024f 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -20911,7 +20911,8 @@ static int process_bpf_exit_full(struct bpf_verifier_env *env,
+ 	 * state when it exits.
+ 	 */
+ 	int err = check_resource_leak(env, exception_exit,
+-				      !env->cur_state->curframe,
++				      exception_exit || !env->cur_state->curframe,
++				      exception_exit ? "bpf_throw" :
+ 				      "BPF_EXIT instruction in main prog");
+ 	if (err)
+ 		return err;
+diff --git a/tools/testing/selftests/bpf/progs/exceptions_fail.c b/tools/testing/selftests/bpf/progs/exceptions_fail.c
+index 8a0fdff89927..1dd2703c7676 100644
+--- a/tools/testing/selftests/bpf/progs/exceptions_fail.c
++++ b/tools/testing/selftests/bpf/progs/exceptions_fail.c
+@@ -131,7 +131,7 @@ int reject_subprog_with_lock(void *ctx)
+ }
+ 
+ SEC("?tc")
+-__failure __msg("BPF_EXIT instruction in main prog cannot be used inside bpf_rcu_read_lock-ed region")
++__failure __msg("bpf_throw cannot be used inside bpf_rcu_read_lock-ed region")
+ int reject_with_rcu_read_lock(void *ctx)
+ {
+ 	bpf_rcu_read_lock();
+@@ -147,7 +147,7 @@ __noinline static int throwing_subprog(struct __sk_buff *ctx)
+ }
+ 
+ SEC("?tc")
+-__failure __msg("BPF_EXIT instruction in main prog cannot be used inside bpf_rcu_read_lock-ed region")
++__failure __msg("bpf_throw cannot be used inside bpf_rcu_read_lock-ed region")
+ int reject_subprog_with_rcu_read_lock(void *ctx)
+ {
+ 	bpf_rcu_read_lock();
+-- 
+2.53.0
 
