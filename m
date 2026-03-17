@@ -1,311 +1,121 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f194.google.com (mail-oi1-f194.google.com [209.85.167.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90F20345CA1;
-	Tue, 17 Mar 2026 11:08:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773745732; cv=fail; b=pkrmObpRfsw+N6tKbw6yO4nKlDwfyvKg2OpvP6zpV17YbN4QhV8DhUJnRTqY5hajOnuwppocmEwFO8aj5hEnu23van6i9y1LLryeLGoRlODv2RUf9uajya03LP9uK1JlmsIYG8iZI7Do4M4OnylEd3EpJ4xSbUGBc/barX55NI8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773745732; c=relaxed/simple;
-	bh=NHqxSzQDfXZUjMxd+oRBHSKbKMasWwJl/rmtJqMm+HA=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=bZ/NR4vNZtzDsoBnuXnfE1E1D6+BB+ki+LEcmkAtXsXcQo5Lxc4gRcgRQU6JtaUmFcxaqBr//L3m4pvyVHpk/vsHOs/NmEPhX053PUI9QFY0+ABj2qp7Z5mZWzokOYUUTG+MMLtLLrL0RX55l6KPufst8sAOhYIiRP+ry7u+Dl0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MoKF4uPT; arc=fail smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0755288D2
+	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 11:18:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.194
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773746335; cv=none; b=X3k69HujFKNIZ3mF+6sglFHoCZs0jsdgAamvJvpmYIld/d0Bs953xpC2mJk2aol3bv8L2YCGGGtF4fvZ7LWpWdSp9BYO/jcfFWTZF4rirGS7LpT4M24c5mRJcNBQI90VSWUIU+toFmHcdmx61RJIOkSWopLADtScKrr3IFUM0B8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773746335; c=relaxed/simple;
+	bh=KFlFJ4ciiOxf/VtyvH918HFgXG4tkPSLar79PYdP5L8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gRqKisaRXSxLvNrqfEkSPuhkHuxB9z8aLzReZLreBqiqveNdSGU3Y4uCq2SQ6R1GfmDg3kzePtaZd3k2HQ5aVy3wEYbs88CyjvWzHwVuwQSuwvyII719K5TkRsTnKIx74ZFy8Uj61oCwGZ2okOPGlapIUh0xYluMCERRRs8qrT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iYmAz6kS; arc=none smtp.client-ip=209.85.167.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MoKF4uPT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773745732; x=1805281732;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=NHqxSzQDfXZUjMxd+oRBHSKbKMasWwJl/rmtJqMm+HA=;
-  b=MoKF4uPT82iLQHmZeexl9JjIS/Dh5Z2qVA3q9zU8F/2qujcJdSlbtBr2
-   DNKos6uccOHYCVzPNXdloeumISEE/ZuCXZ3iX7n1ljUr6ZyM5Xa2mtKrS
-   56oYS08dLQHI8bQKfhuuE/ZbRG/nCxHAnPIbLqBv8RTBg1mIC75U/LWp2
-   2Gd1ZOVrVAagDpkEJnkSix4FjskLv2coTUPtJx4/sFkTDfjZW4yKVpBy0
-   lfW1j588eT40/vgTWpY6dU+tl4AJzk5QVPEMqWGh0Ly1a6enFn7A+8oE9
-   9tt4x3ogNKdE5K0MekWaRCxMKSzHu5vz6dYGEr/PVDIOoYSvsYTXiqVef
-   w==;
-X-CSE-ConnectionGUID: QsTX9Ak+Q2y6ltndO65P3Q==
-X-CSE-MsgGUID: Wyttif38QMG6nPK7Exw52g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11731"; a="73952884"
-X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="73952884"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 04:08:51 -0700
-X-CSE-ConnectionGUID: 14rJqbb/TcGiRZyv+PZXFg==
-X-CSE-MsgGUID: Fzg8z5UnTOiu9nAu3V5xIQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="224407784"
-Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
-  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 04:08:50 -0700
-Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Tue, 17 Mar 2026 04:08:50 -0700
-Received: from ORSEDG902.ED.cps.intel.com (10.7.248.12) by
- ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37 via Frontend Transport; Tue, 17 Mar 2026 04:08:50 -0700
-Received: from CY3PR05CU001.outbound.protection.outlook.com (40.93.201.16) by
- edgegateway.intel.com (134.134.137.112) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Tue, 17 Mar 2026 04:08:49 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=HrOXYIu903W1c9Cb03BCZbJFJPzK5TE1z3vCIlDElewKC2a01F2G0QKkJzpfnDTiCJYv7H/Ve0l4f/w6gCxKDcfnjm01WVpUvnv9XjAlLm5b5b0Jc+sVZZ4j4Myq+K5UYl7c+nU4TzAdOjZhtOLQSPJhkvjDBOH2WS8jfiXSzmypBMCcdT7CrLnCkHYBGSb/0tzbTc4WJtXKRFxEHCmQL5Fk6kY68x1Jld1YI7M3/iU7M2FhwS34SFA6iMpznNFgNHBIWfFBafygMlkkGfJIuNFLE9d8hj6lE3teSJliD4e7FMy7x6kg8rnpSTdnCmoTcZWWnATUsYZPWvQ9NPGnjQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ztcnk9nhFDjSuvykiDC93LN/p9gnsJi0oSNy9EwG8+A=;
- b=eggCWmhWJoqtQRUyWuNhr+gxfzQhu0EFd8MZafAGSs40viP9Wpt19OQoV8G1Uv09g/q8l4MMO5sunt5N71+cpq5f8QGPROtF4lp2friiWbjcU5DHtddj+SvGZjg0nua4QqShv4+hjMliiIVFQbXhTU8CXi+lTeZIAitvZjBbPs+mFwhO22DSdwxR99weYRMcPyPWeEP/WahjFrfNXC0WZ24SqyPCJS+MjCMo6vnf2pQ57uZGjXUdTPYf7LxKk5rHNSp7iBY1+7R4sily4o21bFBoG4t0D/zyd9OdO3HAtzuQnPETpqrYVeGbBPSNolu9YGuhGS3fU9ScaAZkz2wGgg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
- DS3PR11MB9669.namprd11.prod.outlook.com (2603:10b6:8:38c::21) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9723.19; Tue, 17 Mar 2026 11:08:47 +0000
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::d9b3:e942:2686:3cdd]) by DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::d9b3:e942:2686:3cdd%6]) with mapi id 15.20.9723.018; Tue, 17 Mar 2026
- 11:08:47 +0000
-Date: Tue, 17 Mar 2026 12:08:36 +0100
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
-CC: Stanislav Fomichev <stfomichev@gmail.com>, <netdev@vger.kernel.org>,
-	<bpf@vger.kernel.org>, <magnus.karlsson@intel.com>, <kuba@kernel.org>,
-	<pabeni@redhat.com>, <horms@kernel.org>, <larysa.zaremba@intel.com>,
-	<aleksander.lobakin@intel.com>
-Subject: Re: [PATCH net 1/6] xsk: respect tailroom for ZC setups
-Message-ID: <abk2NBesEnygstnP@boxer>
-References: <20260316174550.462177-1-maciej.fijalkowski@intel.com>
- <20260316174550.462177-2-maciej.fijalkowski@intel.com>
- <abiJ2C_q62bn7EC3@mini-arch>
- <878qbqrexu.fsf@all.your.base.are.belong.to.us>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <878qbqrexu.fsf@all.your.base.are.belong.to.us>
-X-ClientProxiedBy: BE1P281CA0132.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:7a::12) To DM4PR11MB6117.namprd11.prod.outlook.com
- (2603:10b6:8:b3::19)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iYmAz6kS"
+Received: by mail-oi1-f194.google.com with SMTP id 5614622812f47-467166cb638so2008165b6e.2
+        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 04:18:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773746332; x=1774351132; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1PpB4nP+X1oBMB9xcDx+FfYzdaZ+sNKw9qKTlpfhFsI=;
+        b=iYmAz6kSQmU3SpSkKgFKVXX9jgZSw44o4FL5fscq2O4Y2cSnJds4zjwoWq8pbVtixY
+         1ToTD1o2riaaGEGVODoF71axGGlS+jQ9PWia6+vMIvJeh8U0TEv19FB5KbYDdD2m8deO
+         zeCe2+t83yDpDBCov2NE3Y1G83tRkvR9ftmgqe5OQhSnbUrmBlDLZfygiJm3SojVNnoA
+         NnD/ob2O3LYK6bO0DNoQhSNeird1t9wavTOHTDMduDm4rmYPweUTp3IMTZZuZ3+odN2d
+         0H35kxqZMmyc7OBk2QDlYvhvgS7YgqjSxlDZ7E34ZJoxcDCDP1ywJx7uXSa5Z8dVeUzA
+         SRZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773746332; x=1774351132;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1PpB4nP+X1oBMB9xcDx+FfYzdaZ+sNKw9qKTlpfhFsI=;
+        b=AUb2DinhEkKUs8AwVKtQ4wzxm3XCuPtcxLdqR4DjYjAB0QsHV4417hizP28huSstdp
+         T1yENvpjbPTlE+Myy3a2PYOjA/wms6drX3ceVVWUUERA8z2Linti+PzJPPUKrykQl9E9
+         P/d3aLkWIInhITfGZjjKidAxBq3sJJd3xYxfjt64DLgpDrsjz8Nz7N5zkvXTUnM4CrxN
+         nI6xFVa9hrX0Df723T68ma+59H4rvCjn2GjVzM+1aR10EHxL88w/yoagwfTUNdkPUCdn
+         g75ibkebL7G8jR3CzSmTENeFQhmrtbdJZnp/Dl+WxVvSKip/dIM0bsjxSQomaJ/Q8G7z
+         EOWA==
+X-Gm-Message-State: AOJu0YwAyT3NcIKC3GwOHAT/n+Bq2LCjEzVw2J3vmAf94UXlk9OmQcSk
+	1wJlfMXgCtu85CkXg+YTwosc7B1JCL/rNs5AdTalAE1/bGEIPE2DT6QTYCMb2W1qw80=
+X-Gm-Gg: ATEYQzysL6KuOwNHHF5FHfcjNi0zoTBAI/Xy0uZHUrsK6eSJVT/UrkV8LT2jXuvigLj
+	ABPhoftP6wtCtbqY20eq2soezJJM7OkYVS6nV1QrDF/6MQnpiBPZfz5jyxtNjQcSHDnIpNtI9UJ
+	N64lpTFDoz5RtQPsvqhod8if8com7O4lhTVHuKyzlUj5HG2TApW3vgrEegnceBu6uQUddrXyFYC
+	m6mBntJPo0y5VaPLZqs6OReepXgRlnOXJGaSyfR9OZdZwCEorS/RTW/2MYDyJz0kRAH5vdtI8Di
+	JlDuQnbPcJ3Xk6GqHAnOxVxKh19iRl+81rDdwSEdeF7uKJedPKEU/Gm5jtoR1Gncx/P9B0eyk7U
+	vbypI6eN1VR/VkMRf78w6ujv+bkav6uUKcqfTaLfyn0PU3Jp8VCPjMzFc157mubuT+q1mbfsNWD
+	/5tuUn8C6wxgJjj4FL4AxnOf8hmjqxAj7jvXqWL9Xwq2L2
+X-Received: by 2002:a05:6808:4f4e:b0:450:471:b9ba with SMTP id 5614622812f47-4675707b853mr8671997b6e.14.1773746332037;
+        Tue, 17 Mar 2026 04:18:52 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:74::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4673415d291sm11065422b6e.6.2026.03.17.04.18.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Mar 2026 04:18:50 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Tejun Heo <tj@kernel.org>,
+	Dan Schatzberg <dschatzberg@meta.com>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v1 0/4] Allow variable offsets for syscall PTR_TO_CTX
+Date: Tue, 17 Mar 2026 04:18:45 -0700
+Message-ID: <20260317111850.2107846-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|DS3PR11MB9669:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0f2b94cd-0e8f-457e-5bfd-08de84158ff0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024|18002099003|22082099003|56012099003;
-X-Microsoft-Antispam-Message-Info: q01l4P2i8pspqTpylfZBitjXiyPMi9r+SbvdocSDZb8uiETJoI6Cyb7K2cQKeB8dZkgmQSQACWGdqCX1T0jqaAKRC9X6prnsTzCeJnvW3EZB1GImrnkYHUOavgxuU9XsXXfbsY9rxPG2XyuR6w/gl230RZS+70l/HxH2cup8ASDfJxFdbjtM3G3RX8h5uCVMtyrxH0u5528c3KnOEQC6Z6elDupe+afbbnG21ia4NrxTb0nsjDyIlvkO72UGiEsCTFFYg0fWPW7rLrNnidwF8ac269blfbPDfvMzWMFSNDrs07/oILfKXnBN1VDdNQSc062oG7TKp+8HkfDPC0wWCkhnVzHDXlTX1Gozi7Ood66MgeZFO3Uep74jPxx8265C5S+qOSJqMmmHPgHBdR1dBcmGZGcsIAaY8B0+Hn24xjI3noXGquh+6ytSk3L9/tvSoZXnUBDqUqYkXfDSn4yOTJ6fkh2wjen34VXr6VvP+r982kO4o33C8YfCXuhxIuvqQVt4UAupHL1ZohWRKXtLn8iYQXTp2bSq5Lz6Yar2Idi8bNp+UahRErQlH/nPDxmDAIPwEafMKpWBwI3lwTVjr4Q+AQ4+utZwgXypfVv5qECV2u6AnDLA2yPkLoKPU9SRxEaPBsdzdNkzNkDVqxxpzN+/Al2+nY1OtwJHfO3tDDj1+qzeuaO58UJ4MPeLUtIWaFaVkkwLC21zMbpP8IjzUsgDmprm0y7eqZf+MINwtqo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?7w+wvVIrfdZXEYTi+xkrLjjQeHaSB4uJ1phSK0YFhgRNblkSE/ZSYCcDGa?=
- =?iso-8859-1?Q?CshQv+kHCtLFdWsvj4DNXFlOLL6GkdFmS4+F0nROzhDzjdDyzBdkSmKlE6?=
- =?iso-8859-1?Q?1aNVGFrG5jWI+tfAoUKzCbdJLv9BEnkipV/dna1HeYfwSEzPu0R8yt36Ez?=
- =?iso-8859-1?Q?rFcgxbuCjGIP+hb8A9Sjx9TFnHY2o8ImmL/2uUPPCHrmqCwTKEcfhXXIkk?=
- =?iso-8859-1?Q?D4AUEdVLRbQecS1wUDwCdoKW9NzXJt4uvp7cRIU4ZquSqbBenQgZ3DvQAa?=
- =?iso-8859-1?Q?rXOoxxufizhyi/+UrCNI6WtnwxXlOIwlU9pwXnkLI+uuju+LtspLcN5oLU?=
- =?iso-8859-1?Q?bjgBpMUA5ydTAs/eUw73EaHPhvKiS2YLM1Fzhf8YeBuuh/G8tr07J/zYhn?=
- =?iso-8859-1?Q?v8NfjzZR7qdPWDK+yVhLCSbFl/Ofv2yzOHddduZNuOLq9HAH0tYOTKKXkl?=
- =?iso-8859-1?Q?Pk/gJ9NYp206xqqL2WtsFPQcB2e6X7PF+rSkIJnnkuSJ3XiqWTebjixZnM?=
- =?iso-8859-1?Q?YbQk89Eg/0+Q72gwRnQkjj6wJqQl96/ZgWb/6zbxtmySL7Wj50VrwxPagw?=
- =?iso-8859-1?Q?IBf2zAkWP9u8U/qLeiPdGNg1xJjdsF1nLaSIA9+3lahMdRGRgHPzMkurUi?=
- =?iso-8859-1?Q?Gx4svGnrnNotlrroUBiSf0KO0JX6sXF7Wpq2p7j2zKcIW2Ae7DQR/ri78I?=
- =?iso-8859-1?Q?+4Op+SoL65HzQ0a2OSocC26NbQ8cUjNqP1KKqruc6sj0gH62SO3phhdz5A?=
- =?iso-8859-1?Q?Su+9+pFAuxs1OgQrGDItwdmwSdDgQw48D72Or0nfss38VWj89jF+kUc0yL?=
- =?iso-8859-1?Q?crAyWEZGW8BKY65o0r+BAkvleg6oq55QV5NwYMl/JieCrrs/WLjH0/S4N7?=
- =?iso-8859-1?Q?zYaM0LuHRToIrEe8nIhyJr8fAqBFfOBF4XllTgIwq3aQ/73ox5sC2Iniqt?=
- =?iso-8859-1?Q?tnlNtCSrNpYLdjNrPvD0vrohWSaiRzuSXGvXnYvO8WztfsUEamotRw07cd?=
- =?iso-8859-1?Q?kDKfPln5TJwZLBFnPKkkQ3e8AuGO6nbwyBClYG1GXaUoC32qNRPolhnMrE?=
- =?iso-8859-1?Q?DYnOoa5XVX0jp9lJgSolu7n5m3+LWtqKBX+Dhh+5uE9YdaMA48Ac6RQ+6U?=
- =?iso-8859-1?Q?UInXkHg6U3w1w2IB9E7tUR4mOGI+Ut0yWwWfvO2qoGYfe58Ut/qJsY3seH?=
- =?iso-8859-1?Q?HLbIYCGB+Zd30H7bVkqp4Pf0Yd/Wv88VXfOjJEIWUdpHXh4tJhixLRjcfy?=
- =?iso-8859-1?Q?Q2Dr/mQIr5Rg2nXDpJopT5C5NgfrMhMPQMlK15sh4+vZ2Qkft7jE2oI7Cj?=
- =?iso-8859-1?Q?tELWKmtwTrt6Yx+zYx0G6owkjH0gm2gn8eUOHI8XlNQgwq6ns5WokxF66L?=
- =?iso-8859-1?Q?GUDMrVGi71wDYNtdM1rCwIQuHGt4t1BpyUlP9ai1Wq9s4AdxtvkHtVL5ZR?=
- =?iso-8859-1?Q?z/2xLy4uMRL+JEbVIOSFlY6mK8Xh6j3IMdnlJZ5nrUl/fnGTkXPSdH/rje?=
- =?iso-8859-1?Q?8U2GD7IsJ8hGLBpFBZYSLAXDQVn4KNOODFXCBIQHW6Zx5K6OLjAhbfkhAG?=
- =?iso-8859-1?Q?6SWv6Q4ng3kXmx0eDrW+2aZuB/5xvDNtgmtNMgNq+oQbDRYTM26QccjrGW?=
- =?iso-8859-1?Q?pH7e/V0mbwWbzeAj89d05lSFWLI3GVKdqKClC6bh+Tle2RWLvzMCsSjiU2?=
- =?iso-8859-1?Q?RH9iuWOjufw1Op+wOwZqDjdl36DLuEsYi29SAHMVFzneEF/fhjHmhlT2es?=
- =?iso-8859-1?Q?XM8VJ50/CbhcPnfa8uHYbhvJQeIeo8gTp8zaLwAtRhRQelTVC1oKUG48/x?=
- =?iso-8859-1?Q?KnS+YaK/EwjUzO54B8iL0aQrW8xRTrY=3D?=
-X-Exchange-RoutingPolicyChecked: kcDOxrdcs1Oemq0rKYnN0BD2Sk8qud1HzTjJr3HSyNGeq1cfOSgoE5s1NRZon24MIXhKRaVIB0ibCyaGd5kQaZwUpaAqt6FZ+BRedgwjIzoRzoAaN8AOLX5WMxoONJzmMZbAUdOlEA3o34o2eFxBcFmK4HOtTs41bxB5f3IQnwueWi1F3mJNCahxRj0ujjSEJ+cWtjHs16BvS1FCmk6llAhrCLE76Hmujcywfwnfw5hPXN49y92fbEMc46ApKjqbOozjzL/Ea5+GzKNDztXC0dDlh8Sjb2e/WwpbTUJgT+c07Xq9MVukIb/WBZMmG4GfQPANC11tdSQ20XbyM1RGgg==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0f2b94cd-0e8f-457e-5bfd-08de84158ff0
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2026 11:08:47.8067
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Zb9lsNG6ZE1+kKQpeC1NdGPNx2qYhVzzsvPAUWrBkCkpKSF4V3vc6LKvGJ87HtKAf4iFx3j1g5wQxB5vHSO1+LHtSsyHUc36Ld24JbcMYYA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS3PR11MB9669
-X-OriginatorOrg: intel.com
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1284; h=from:subject; bh=KFlFJ4ciiOxf/VtyvH918HFgXG4tkPSLar79PYdP5L8=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBpuTHi2k7z1x312OB2Y1la0qb+diqD7d/qZZnzhIkK KiWkNtaJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCabkx4gAKCRBM4MiGSL8RyqD3EA CPvv7HWj1tI2rkNw6BoDO4q1Nk6vLvEQSZ//1Lphf1eTR4MkR0le2RtxG9fOYNbL9BwB5hMe5xJuRT 8Hs3JMhUL5xAS455KJ2RzXxBkaR2qxdVmZXq8GnJKHTclg0phyOip7cgW72YOx9DWvmqYBUK3SrcdQ RxLx+7CSU/tH5Nm0QgqtiLmGfOvGTQHpi/jCawZkwLJl/B/DhW8f7+7abT58oogRBjTsIoHgI5ygxB dcJOtGP8SBDH3d7VA372SGRYAEERZfAhDS0mOUCnrvt4cr6GXr+fBCs+xre3K05R5vd0LeCJ8jrslD uXzh1hZF9WjLWs/SVWE8Kn9BmDg+TQeXl4f3gPYnSt9Vqqr678ByyZAmIXEbdh8vWWY72QWjCbSiM1 2KpfAMU0vaoOFPbyLRXT9jxJT6ZtBs7Yeqy6QdPsrKOy3Z3NGI5ErnspfpXMerj5eBIJMOTwYy5RTy cmJVWGyokheJqQI5v+N08v1INwVUA1v02vmiyPgumyQYUBH+9N2eRnSWlZKDpCPZE7ubP5mzBXM8fd RmQdwJq71WuymtC9OPXXRQD/K1VeTYj1mazw/aHtXJ84Vqgi8GhpvtEdeiR8s4ROvIWJpHutNpteY7 XQb+YdCSDQ0Vcnp7YbA7GnfXcrNncGO1K5h7VDPbPAxkqUtOgqVs1eQds35w==
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 17, 2026 at 10:19:25AM +0100, Björn Töpel wrote:
-> Stanislav Fomichev <stfomichev@gmail.com> writes:
-> 
-> > On 03/16, Maciej Fijalkowski wrote:
-> >> Multi-buffer XDP stores information about frags in skb_shared_info that
-> >> sits at the tailroom of a packet. The storage space is reserved via
-> >> xdp_data_hard_end():
-> >> 
-> >> 	((xdp)->data_hard_start + (xdp)->frame_sz -	\
-> >> 	 SKB_DATA_ALIGN(sizeof(struct skb_shared_info)))
-> >> 
-> >> and then we refer to it via macro below:
-> >> 
-> >> static inline struct skb_shared_info *
-> >> xdp_get_shared_info_from_buff(const struct xdp_buff *xdp)
-> >> {
-> >>         return (struct skb_shared_info *)xdp_data_hard_end(xdp);
-> >> }
-> >> 
-> >> Currently we do not respect this tailroom space in multi-buffer AF_XDP
-> >> ZC scenario. To address this, introduce xsk_pool_get_tailroom() and use
-> >> it within xsk_pool_get_rx_frame_size() which is used in ZC drivers to
-> >> configure length of HW Rx buffer.
-> >> 
-> >> xsk_pool_get_tailroom() is only reserving necessary space when pool is
-> >> zc and underlying netdev supports zc multi-buffer. Since this function
-> >> relies on pool->umem->zc setting, set it before ndo_bpf during zc
-> >> configuration, so that driver that actually calls
-> >> xsk_pool_get_rx_frame_size() inside ndo_bpf will get correct tailroom
-> >> value.
-> >> 
-> >> Fixes: 24ea50127ecf ("xsk: support mbuf on ZC RX")
-> >> Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-> >> ---
-> >>  include/net/xdp_sock_drv.h | 21 ++++++++++++++++++++-
-> >>  net/xdp/xsk_buff_pool.c    |  3 ++-
-> >>  2 files changed, 22 insertions(+), 2 deletions(-)
-> >> 
-> >> diff --git a/include/net/xdp_sock_drv.h b/include/net/xdp_sock_drv.h
-> >> index 6b9ebae2dc95..13b2aae00737 100644
-> >> --- a/include/net/xdp_sock_drv.h
-> >> +++ b/include/net/xdp_sock_drv.h
-> >> @@ -41,6 +41,19 @@ static inline u32 xsk_pool_get_headroom(struct xsk_buff_pool *pool)
-> >>  	return XDP_PACKET_HEADROOM + pool->headroom;
-> >>  }
-> >>  
-> >> +static inline u32 xsk_pool_get_tailroom(struct xsk_buff_pool *pool)
-> >> +{
-> >> +	struct xdp_umem *umem = pool->umem;
-> >> +
-> >> +	/* Reserve tailroom only for zero-copy pools that opted into
-> >> +	 * multi-buffer. The reserved area is used for skb_shared_info,
-> >> +	 * matching the XDP core's xdp_data_hard_end() layout.
-> >> +	 */
-> >> +	if (umem->zc && (umem->flags & XDP_UMEM_SG_FLAG))
-> >> +		return SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
-> >> +	return 0;
-> >> +}
-> >> +
-> >>  static inline u32 xsk_pool_get_chunk_size(struct xsk_buff_pool *pool)
-> >>  {
-> >>  	return pool->chunk_size;
-> >> @@ -48,7 +61,8 @@ static inline u32 xsk_pool_get_chunk_size(struct xsk_buff_pool *pool)
-> >>  
-> >>  static inline u32 xsk_pool_get_rx_frame_size(struct xsk_buff_pool *pool)
-> >>  {
-> >> -	return xsk_pool_get_chunk_size(pool) - xsk_pool_get_headroom(pool);
-> >> +	return xsk_pool_get_chunk_size(pool) - xsk_pool_get_headroom(pool) -
-> >> +	       xsk_pool_get_tailroom(pool);
-> >>  }
-> >>  
-> >>  static inline u32 xsk_pool_get_rx_frag_step(struct xsk_buff_pool *pool)
-> >> @@ -332,6 +346,11 @@ static inline u32 xsk_pool_get_headroom(struct xsk_buff_pool *pool)
-> >>  	return 0;
-> >>  }
-> >
-> > [..]
-> >  
-> >> +static inline u32 xsk_pool_get_tailroom(struct xsk_buff_pool *pool)
-> >> +{
-> >> +	return 0;
-> >> +}
-> >
-> > Not sure it's needed? xsk_pool_get_tailroom is only used by
-> > CONFIG_XDP_SOCKETS' version of xsk_pool_get_rx_frame_size.
+Enable pointer modification with variable offsets accumulated in the
+register for PTR_TO_CTX for syscall programs where it won't be
+rewritten, and the context is user-supplied and checked against the max
+offset. See patches for details. Fixed offset support landed in [0].
 
-To Stan - we probably could live without this, right.
+By combining this set with [0], examples like the one below should
+succeed verification.
 
-> >
-> >>  static inline u32 xsk_pool_get_chunk_size(struct xsk_buff_pool *pool)
-> >>  {
-> >>  	return 0;
-> >> diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-> >> index 37b7a68b89b3..2cfc19e363e3 100644
-> >> --- a/net/xdp/xsk_buff_pool.c
-> >> +++ b/net/xdp/xsk_buff_pool.c
-> >> @@ -213,6 +213,7 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
-> >>  	bpf.command = XDP_SETUP_XSK_POOL;
-> >>  	bpf.xsk.pool = pool;
-> >>  	bpf.xsk.queue_id = queue_id;
-> >> +	pool->umem->zc = true;
-> >>  
-> >>  	netdev_ops_assert_locked(netdev);
-> >>  	err = netdev->netdev_ops->ndo_bpf(netdev, &bpf);
-> >> @@ -224,13 +225,13 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
-> >>  		err = -EINVAL;
-> >>  		goto err_unreg_xsk;
-> >>  	}
-> >> -	pool->umem->zc = true;
-> >>  	pool->xdp_zc_max_segs = netdev->xdp_zc_max_segs;
-> >>  	return 0;
-> >>  
-> >>  err_unreg_xsk:
-> >>  	xp_disable_drv_zc(pool);
-> >>  err_unreg_pool:
-> >> +	pool->umem->zc = false;
-> >>  	if (!force_zc)
-> >>  		err = 0; /* fallback to copy mode */
-> >>  	if (err) {
-> >
-> > I'm not super familiar with the shared umem patch, but is it safe to
-> > unconditionally undo pool->umem->zc = false here? xp_assign_dev_shared
-> > looks at this umem->zc flag.. Presumably other places do as well on
-> > teardown?
-> 
-> Good catch!
-> 
-> I can elaborate a bit; the zero-copy property of umem is shared between
-> all users (sockets) of that umem. IOW, all sockets sharing an umem,
-> inherits whatever the first socket negotiated.
-> 
-> So, we could get into something like:
-> 
-> 1. Socket A binds queue 0, ndo_bpf OK (umem->zc = true)
-> 2. Socket B binds queue 1 via xp_assign_dev_shared()
->    reads umem->zc == true, so flags = XDP_ZEROCOPY
->    xp_assign_dev() sets umem->zc = true
->    ndo_bpf() NOK for queue 1 -> error path: umem->zc = false (oops)
-> 3. Socket A is still active on queue 0 in ZC mode, but umem->zc is now
->    false
-> 
-> ...and we'll have a bunch of checks on umem->zc that now has incorrect
-> state.
-> 
-> From this follows that the zc flag shouldn't be toggled on a shared
-> resource without checking if other consumers exist. I think a per-pool
-> zc flag is needed here or smth. :-(
+  SEC("syscall")
+  int prog(void *ctx) {
+	int *arr = ctx;
+	int i;
 
-Larysa suggested to use pool->dev ptr instead of touching umem->zc, let me
-see if that will be sufficient. Besides that is currently broken as you
-guys are saying!
+	bpf_for(i, 0, 100)
+		arr[i] *= i;
 
-> 
-> 
-> Björn
+	return 0;
+  }
+
+  [0]: https://lore.kernel.org/bpf/20260227005725.1247305-1-memxor@gmail.com
+
+Kumar Kartikeya Dwivedi (4):
+  bpf: Support variable offsets for syscall PTR_TO_CTX
+  selftests/bpf: Adjust syscall ctx variable offset tests
+  bpf: Reject modified syscall PTR_TO_CTX for global subprogs
+  selftests/bpf: Test modified syscall ctx for global subprog
+
+ kernel/bpf/verifier.c                         |  62 ++-
+ .../selftests/bpf/prog_tests/verifier.c       |  34 +-
+ .../selftests/bpf/progs/verifier_ctx.c        | 356 +++++++++++++++---
+ .../bpf/progs/verifier_global_subprogs.c      |  43 ++-
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |   2 +-
+ 5 files changed, 409 insertions(+), 88 deletions(-)
+
+
+base-commit: 2364959abecb052d7b798ae51d0626edec8b9288
+-- 
+2.52.0
+
