@@ -1,110 +1,147 @@
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6449D33986F;
-	Tue, 17 Mar 2026 04:46:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773722782; cv=pass; b=C5w11Xt287igygiXK0nLfbNHuYYDUzL4KXfafXXxst7NuP0jWC18HOFmo8dKBcS3YFhld8+CBkj2sga8pfOLQzVRD4Q69YAI96gJOTATxntIzWCOpBuXFYUb00vkkKCKgANinE6Jx1O/7tJ64HtkGNvYr/t6GHfZvJ0hkRfONvM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773722782; c=relaxed/simple;
-	bh=kVg/3qBxeC7RIRHRbkFU60OP6mqSFzjx+ICsDZMOv08=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KAJWZ1h4N2ObAYf9C8DVY6CcjJomskCYWvkiPUAs64k+VMFAzheZrDIC+FVEP4ARtSiXBv+PO4eDD/45Iyr+wBRhncHbSV8He61whfxd+udKaVxyKGGV+YXkW+OFYXlGvlSlVcxLHIrty5wIxK9b5rtD06iXLeka88uxrKYCHW4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ziyao.cc; spf=pass smtp.mailfrom=ziyao.cc; dkim=pass (1024-bit key) header.d=ziyao.cc header.i=me@ziyao.cc header.b=PyqfIhz2; arc=pass smtp.client-ip=136.143.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ziyao.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziyao.cc
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ziyao.cc header.i=me@ziyao.cc header.b="PyqfIhz2"
-ARC-Seal: i=1; a=rsa-sha256; t=1773722720; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=RvD/C0178NU1LwJEkSg2UFnPK19fryVEEEn4KH1SuSSNoKbCxy9CLexhK+PWYoMvqFtvy9AEretvZR5Q+W53mvYc1Q3uTjxfrcau3ZYo7nLcsF7qcFYdlx2zfl9e/bPy65olb/oW4z0lC/mFwSLlWj3M9F3HWdvPoCYgocBQfK4=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1773722720; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=MZtGcjgstCOwi90UqZfYqyQ9iZiBcfojTGxX5RIebuY=; 
-	b=JlP1Q9OoOBvGuVB4qdDtUbzeSCIQFGCsWGwfLhDcmeCWkQt8eIWr4mFE0T3kny7nqYzxJv6vYc77IN1iBxJyPrY8zwfoWS+c89X/KVhr6I4CoSthUJ32n4nhs+Ye0of2hteJ23YzAydUsXIatKAKhznE9CxUEtMWECvlvsnLuV4=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=ziyao.cc;
-	spf=pass  smtp.mailfrom=me@ziyao.cc;
-	dmarc=pass header.from=<me@ziyao.cc>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1773722720;
-	s=zmail; d=ziyao.cc; i=me@ziyao.cc;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=MZtGcjgstCOwi90UqZfYqyQ9iZiBcfojTGxX5RIebuY=;
-	b=PyqfIhz2A+D4PU3lO2lI8y/tSQIinoROefawYKrjEtzapgOROW0tQOakEFk2ZAcc
-	xAPFyKTDxclE6kiWf3fINMPhdWHqGErfmylRD+Bu8j27sSIwbTFEPaimumoXYZmbeXc
-	1EAZc0aPk0qLhwZU9sf4Jc4gTc3zECp4f/UPY6zw=
-Received: by mx.zohomail.com with SMTPS id 1773722718208506.92900941934556;
-	Mon, 16 Mar 2026 21:45:18 -0700 (PDT)
-Date: Tue, 17 Mar 2026 04:45:05 +0000
-From: Yao Zi <me@ziyao.cc>
-To: Paul Chaignon <paul.chaignon@gmail.com>, rsworktech@outlook.com
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Amery Hung <ameryhung@gmail.com>, linux-riscv@lists.infradead.org,
-	stable@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH bpf v3] bpf: do not use kmalloc_nolock when
- !HAVE_CMPXCHG_DOUBLE
-Message-ID: <abjcUSXWiShiuMvH@pie>
-References: <20260315-bpf-kmalloc-nolock-v3-1-91c72bf91902@outlook.com>
- <abgcKvuSQc2ZYKw4@mail.gmail.com>
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 607EB2FF17A
+	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 05:33:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773725601; cv=none; b=SuD7RSAOzT9QPYrRENOefPx4mNpqC15jvkS/a/K4bigYWhXQ2a/K+frWyep5sXTMq6aUEUceBzNIqdQdI1XQbnTuOIUiJirlFhZpDUHZnqAI9Vz592kHd8w1fkvCNgHGgmbtceJpsNog5YYiX4Pd5asX2lT212RyW/gFHlPk/EQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773725601; c=relaxed/simple;
+	bh=YC1rgBAajCCk8l/JLDgrMYW6Aksh2+JVhaIH6RadUyE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=E4Ycl+H/ktQBL0nhoXsLMGzOEXoplqAy1FgRdlMgRW0cAZpFO0eVJPAPJhjJbkSIH99VtYbpcZKVEH9oDZHpgygYT2mo+NxqfeEqSwctnqycg+1KtubCkhHD+k5FNnpVDPZ4Gglk/uqC0BGAZLApFGZ+IsTbe9DXjr9xGb5otVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=207.46.229.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
+Received: from zju.edu.cn (unknown [10.162.192.132])
+	by mtasvr (Coremail) with SMTP id _____wDXVe5o57hp_G4iAA--.1609S3;
+	Tue, 17 Mar 2026 13:32:25 +0800 (CST)
+Received: from [10.162.192.132] (unknown [10.162.192.132])
+	by mail-app2 (Coremail) with SMTP id zC_KCgCHVDZn57hpFc5RBg--.24133S3;
+	Tue, 17 Mar 2026 13:32:24 +0800 (CST)
+Message-ID: <a7001753-59bb-427b-a67b-e089008a732b@zju.edu.cn>
+Date: Tue, 17 Mar 2026 13:32:23 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <abgcKvuSQc2ZYKw4@mail.gmail.com>
-X-ZohoMailClient: External
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf 2/2] selftests/bpf: Add test for large offset
+ bpf-to-bpf call
+To: emil@etsalapatis.com, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, tangyazhou518@outlook.com,
+ shenghaoyuan0928@163.com, ziye@zju.edu.cn
+References: <20260316190220.113417-1-tangyazhou@zju.edu.cn>
+ <20260316190220.113417-3-tangyazhou@zju.edu.cn>
+ <DH4HGGKLQ2EG.33P3WH3OF05RX@etsalapatis.com>
+Content-Language: en-US
+From: Yazhou Tang <tangyazhou@zju.edu.cn>
+In-Reply-To: <DH4HGGKLQ2EG.33P3WH3OF05RX@etsalapatis.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:zC_KCgCHVDZn57hpFc5RBg--.24133S3
+X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBgsNCmm4XQoUBQAAsd
+X-CM-DELIVERINFO: =?B?Ub9cVAXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
+	9q9C4CHqQuqj3p+aV8+gK82UYaOmBlzhrGryjBmJU9tz+YOUp2SG+8TMww32AptghawTRe
+	tdbtG23cUC40tjgFw50dcxNKvRcUsAMjlKV5V/WnZk9Hw2T8u6Y5UODMnaRHrw==
+X-Coremail-Antispam: 1Uk129KBj93XoWxZw18Xw43tw15uF17XF18Zwc_yoW5GF1fpF
+	ZYg3yrtrWkJr1UKr12yayFqF1Skrs3Aa4xJrn3G3ykAas8Gry0gFyFgF4FvFWrCrn3XF12
+	vrWjq343X3Z8uFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
+	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
+	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAF
+	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8c
+	xan2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8C
+	rVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXw
+	CIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x02
+	67AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
+	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU13r
+	cDUUUUU==
 
-On Mon, Mar 16, 2026 at 04:05:14PM +0100, Paul Chaignon wrote:
-> On Sun, Mar 15, 2026 at 12:02:48AM +0800, Levi Zim via B4 Relay wrote:
-> > From: Levi Zim <rsworktech@outlook.com>
-> > 
-> > kmalloc_nolock always fails for architectures that lack cmpxchg16b.
-> > For example, this causes bpf_task_storage_get with flag
-> > BPF_LOCAL_STORAGE_GET_F_CREATE to fails on riscv64 6.19 kernel.
-> > 
-> > Fix it by enabling use_kmalloc_nolock only when HAVE_CMPXCHG_DOUBLE.
-> > But leave the PREEMPT_RT case as is because it requires kmalloc_nolock
-> > for correctness. Add a comment about this limitation that architecture's
-> > lack of CMPXCHG_DOUBLE combined with PREEMPT_RT could make
-> > bpf_local_storage_alloc always fail.
-> > 
-> > Fixes: f484f4a3e058 ("bpf: Replace bpf memory allocator with kmalloc_nolock() in local storage")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Levi Zim <rsworktech@outlook.com>
-> > ---
-> 
-> Note there may be something broken with your setup as lore is reporting
-> that you sent this v3 email three times. Not sure if it could be an
-> issue.
+Hi Emil,
 
-Once is because linux-riscv@lists.infradead.org adds a trailer when
-forwarding messages but keeps the Message-ID unchanged, so lore indexed
-one extra message with the same ID but different content, it was not
-Levi doing something wrong.
+Thanks a lot for the detailed review!
 
-The other message has the same content but a different From line, not
-sure what happened to it. Differences of the messages could be viewed
-here[1].
+ >> +	char dummy_data[64] = {};
+ >
+ > Nit: Why define dummy_data? You can make the function you're calling an
+ > int (void) syscall to avoid this.
+ > ......
+ >> +struct __sk_buff;
+ >
+ > Can be removed if you use a syscall prog instead of a socket.
+ > ......
+ >> +	if (ctx == (void *)0)
+ >
+ > Nit: Would if (!ctx) work? What is this condition's purpose in the first
+ > place? If it's deliberate, again can we add a comment?
 
-Regards,
-Yao Zi
+The reason for using a socket prog and the `dummy_data` was to guarantee 
+a non-null `ctx` parameter. Then, during the execution of this test 
+program (while JIT is enabled), the useless `padding_subprog()` will be 
+safely skipped.
 
-[1]: https://lore.kernel.org/all/20260315-bpf-kmalloc-nolock-v3-1-91c72bf91902@outlook.com/d/
+If we remove the condition and just call `padding_subprog()`, the 
+200,000 instructions in it will actually be executed, which not only 
+causes lower performance but also risks hitting the BPF execution 
+instruction limit.
+
+However, your suggestion is much better. I will switch to a syscall prog 
+to eliminate `dummy_data` and `struct __sk_buff`. And to safely skip the 
+padding execution without relying on `ctx`, I will use a volatile variable:
+
+	volatile int zero = 0;
+	if (zero)
+		padding_subprog();
+
+I will also add detailed comments explaining this workaround.
+
+ > So we only test one path at a time, correct? I understand there's no
+ > good way to turn JIT compilation on and off, but as it stands
+
+Yes, exactly. Actually the test dynamically adapts to the current 
+environment.
+
+- If JIT is enabled, the test case will successfully load and return the 
+expected value.
+- If JIT is disabled, it asserts that the verifier cleanly rejects the 
+program with -EINVAL (or -ENOSPC) and outputs the expected error log. 
+(Without our patch, the verifier would wrongly accept it).
+
+ >> +	volatile int magic_ret = 3;
+ >> +	return magic_ret;
+ >
+ >
+ > If we remove the printk below, we can just leave this empty or have it
+ > return 3 directly. Is there a reason to define the constant we're
+ > returning indirectly? If there is there should be a comment about it
+ > because right now it's not readily apparent.
+
+Yes, this is another deliberate trick to deceive the LLVM compiler. 
+Using `volatile` prevents LLVM from optimizing the whole 
+`target_subprog()` away. I will add comments here as well.
+
+ >> +	char log_buf[4096] = {};
+ >
+ > No need to init the log_buf, it will be NUL-terminated if load runs.
+ > ...
+ >> +	bpf_printk("Target subprog returned: %d\n", ret);
+ >
+ > Let's remove this, there's no reason to emit to the trace pipe even on
+ > success.
+
+I will also incorporate these two changes, and fold all these 
+improvements into v2.
+
+Best,
+
+Yazhou
+
