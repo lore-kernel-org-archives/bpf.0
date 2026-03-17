@@ -1,214 +1,222 @@
-Received: from mail-yx1-f49.google.com (mail-yx1-f49.google.com [74.125.224.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BC483A452A
-	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 10:04:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773741868; cv=pass; b=UWR0MxBeoT8uHIXyLxBOwXhIL7XYAwxeqwfjVUiF9O7Y5YG6kwxKK5+WHYsQrF85xUKQb2ygbv7UebOJLt4m6svBGpsSIHKJfSS81sCg57lMVFaWpaOmZhif2DCFSUO/omyjxH69unkiVMcCVLvcorGJFhDJ30WNdRlVBL0CSCw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773741868; c=relaxed/simple;
-	bh=VMcaJiK0n+Mh3FmYhue0PD5uIx7SxJhXZnJ+mVJvuvY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mcKTER1EJdZNT6YOwOXaHPQYvsch0HeJZOfj7OXLYUEWPi+BLnBbZ3PKncy+QOMZMhHLAx6vVPw+8Cwwbm/Cc+n/x/QFgu6IQ+xVU59EYx7K1trxICGq7ltfiVcFmH0Y6hIWxniUpusboiiuBZjVB/blmazBTZDjwEaNi8dv4HY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=p0Bg2Nmm; arc=pass smtp.client-ip=74.125.224.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 076F035F166;
+	Tue, 17 Mar 2026 10:04:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.130
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773741871; cv=none; b=LoOH+JSRUpAbpxNaLIgx8p2+DzAWkWqUXQGHY+F92pGbgZHkxqTuuYfOl6+EC/ScKDlhb5imvOaTCaZSkIanrT4nQxGZtD7sMZgqIbC41ZqBQ54tTiyGcyKRvc6a0NzG8btbIP9QhpiInKJ7X5K6ZFKIBzc+ncYg+1F/v6xkP7s=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773741871; c=relaxed/simple;
+	bh=vr98BifwCZR7ddPRugqbqnMKsjEEt47aZ8P/B5wnW4w=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=o6hmCsF3yEGaog839WPmiSAF26wiT0onV1sJtqvItu9YmL1zWE74TwqaXFSsdMybPCLG3MPAYO8kcbGvnZDkFma/gAcxatKYs0OmaW4WUpZRp09uPbPy249/gOZ6ENLJnjcdR+b/i5sgNf4O5Pn4UMfMHRTLdOFb33w6+invMIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=UKBoJsf8; arc=none smtp.client-ip=54.204.34.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="p0Bg2Nmm"
-Received: by mail-yx1-f49.google.com with SMTP id 956f58d0204a3-64ad9238d8fso6318901d50.3
-        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 03:04:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773741863; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Z11lhQ2tzYw8LrhcL8sdQFIip1GMjd6vlh8DFajP1macESmtvIa5Sgmv7H296URuNB
-         IEi3qG/nTF4fNUqvzo74U1NnRAqngrDrqPgp6x6BEBKMDmBoBrHO377QhNmXwmjmSnMy
-         iWcMAFnEu3/awzWzBJ1NvXtfiChy+S9lW0CTQfNHyiIcfCU9J6RsVFWGsn1i3Z46IIUC
-         hJG6xoQo9gh9aiixQGgFNKcfHTmRHsjZyOfZNT8O79AxncVMbXJCIORuRQxmQVYc+AW2
-         472eAfQq8FEiKUX9vuGHSsCQmaWaih4EiNkslmHTBYOlAMxUnTKNpq7yqtGCFYY0lBg2
-         ZXPA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=sJ1Pc/1QKu2lLSHomCR6iKHtySw3Kp4fd1PA2wd2pgs=;
-        fh=7z1N7yadSF2JiG63fnkhCzx7tGtRN1h0NKkZl29g3OA=;
-        b=RFLHKeLngxCG+jJBYdKi+/7e2a2suc9/Zj8tAx8haeRSXKrcXuKyMZi2ANqmt6Y94T
-         xM/KnEnrWoopF6o9ODRijcLMcQJ3suT29rdTLsZoYb9cR3QlTKuA+hvejcFxBmM6Y32T
-         EHmnqMaPkpTlEBewWjGLG9ktkk4/wvt2htDpnaO5DMlEYwmboUIBol2+YFYj7Ec+bK6q
-         iqtpq57JHu7Vv+3bRHEqhTawn0e4o8CNVnCvI7LIugtIr3gpMjgthxMBEUy8l74XfzmX
-         fGnYLtM6U3aPK9w0N6/JfJlDZ2XDH4uMCduT22wW9zTE19Fiyx5sDRA16QFijRElh6cj
-         T5sg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1773741863; x=1774346663; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sJ1Pc/1QKu2lLSHomCR6iKHtySw3Kp4fd1PA2wd2pgs=;
-        b=p0Bg2NmmIKyboHpUMRTohcqtKsgqmTRvZ6VESwm3wzUXCUZTLvpR4pW87SLwEVZAXO
-         a715hwTYDcQ66YJ5E6tCxRSczk0n8vIUf+XWJF99Dw0Ou63ItdoeBlBpZY0K+PSMqeuT
-         GzR92G1MbpDNpHNgsm2UAbxHCeLxx4Cxo8oiKu80ohZ2DTt38SO3zx4YzoW9OR3xksI7
-         wfFP74KJwfNquWCf2cF485aw5B6/Ex2p61WNpIjLwwoBDNyvmTYf29QePQQH5Kyrv1xN
-         vnGdCFk3u5Vu7dOuyf6cZtxL8AQOaDbDMpOq4/2KoD8pDV36foKhVoAo5kuh1OaCqZAC
-         +kAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773741863; x=1774346663;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sJ1Pc/1QKu2lLSHomCR6iKHtySw3Kp4fd1PA2wd2pgs=;
-        b=rr82BmWXeUEBzcIW4C2Ly1v6pVCbIAVGiigV0LsjeP5PNxuiTDf3+EDAwXUy8QQpyf
-         e0v6/7SW5JvJ3zdjL5EBliK7tOxipxCPmziPUrxNN/06dKJrF0xNO105fQpmo26hN11a
-         Vu3By0n3xuo43eQxQvHeTld+zSrm6Tewm018YI3FhCUszsRXcx++aSGTWl2xcJTPsw9z
-         1FugZL3dyKhK2vMj7IFLmXZGY4jsrzP9udl8UquFHMzwjh5GiLjwmi0rZSTfquPCU4xj
-         DxN+U8O3Wo/05D/h8oF1rA4TlyMy48XoqK1EpWjsdBCmMLx7C6dgTaCgBehwbGWB0mXu
-         k8sQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU1nFAqL0E3At6zthZiT/gcrDXpdoosyEmJQfobFsFR426gHm36NA/aIY7ZaP15hE+shg4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyIBwLP0R0uGsiejiLfq3frku6Nq+6bCslJWTWwzZx2X27t0TpY
-	UG5flS9uBxr5LBjXYOIYxsPKiLdqeSpE8jTUt9K/lMDNu81r0RKAU1mTryY+QcYJrnETIoSi4DL
-	HHLyZB010WmInzoVeb4cQeBvUDWQPVOs2a0nVRUAc9w==
-X-Gm-Gg: ATEYQzwhi5KbjanE6uYdeKmJO/PErnWZWRULdVExD8py9NF56dNKW661RAvU7Z77Jl/
-	AGmMvNu6DCqCuilJDtBhbkmJVUGk/AiQHe5o9g3m4psehV9u0LGb0ihs0UPRwqfhEDf1fDiCkUU
-	3oO2TENJL+hGnM5TO4ZQ5jAYSf62lUEc07P98rjPxNFgCV6rYr8n+j1iHbdm2aWI1esdq5kQtmj
-	R2HP2DYHy+IaZw8wAahhL2HjZHVsqPHImF3kjM3dUxYbPtqBtSWdYUaW8s2JA34yjSP3FG57WYS
-	7mJi2+EYuyn9ELREKrcWjH6W8QZOM6A2cLvqtGtJGCjEELpXtz3ub/VL9EqjNJ+hYFh+/YzZtSQ
-	cDaVaXjlU21E02Ao4AlHJ5Q5WJ0Y+1wFJM8eQMOGJ2b+DjUya71sQZEoE9HFxd2TAV4BSd+pgEC
-	PHGxEK9BfaRC939eLhaiI9TnPvbv47FTLHXxAxpr/xg8Z59li/sOYf6owod38Fk90NMJ9qGO6a3
-	yOVs8PqtCKeXpgZF1o1E8ileDzunNhHKY9s9U8sEpYw2ePM5xgoICM8hHqEPUYRLIahgAIAlFhP
-	FqTp1JSj/yVz28RfTvp1fQD+rvknBTlrgkYlo3aGl/1H
-X-Received: by 2002:a53:df4f:0:b0:64c:ea3d:a895 with SMTP id
- 956f58d0204a3-64e6306d33fmr11868511d50.61.1773741863199; Tue, 17 Mar 2026
- 03:04:23 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="UKBoJsf8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1773741826;
+	bh=3aGRFJphaUxd0Jn9c3ZHF1I5KiJsDbSpxhypActK2ow=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=UKBoJsf8dhiQ66bEuCuHWlN5CEf2IptJP4NoEg6iJvgAYhA8/NaJNhkaZ746M7UN/
+	 TDZcKjlF/OBqEvm3Np/StqbXtXyk5knG5+tGN2DGY1SZ+Gwu+cn5PxcLcXmKBr2jTV
+	 18MpOxyU3K67ZEbEZ5PwmULoozpiG3BEVt6zj3tk=
+X-QQ-mid: zesmtpip3t1773741819t95fa259e
+X-QQ-Originating-IP: A6VUEhOu+wrSwHz9/I3cIGC/kHEiAE4LQ5SWmwTqI7g=
+Received: from xulang-PC ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 17 Mar 2026 18:03:33 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 9406838548676382481
+EX-QQ-RecipientCnt: 20
+From: xulang <xulang@uniontech.com>
+To: martin.lau@linux.dev
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	dzm91@hust.edu.cn,
+	eddyz87@gmail.com,
+	haoluo@google.com,
+	ihor.solodrai@linux.dev,
+	john.fastabend@gmail.com,
+	jolsa@kernel.org,
+	kaiyanm@hust.edu.cn,
+	kernel@uniontech.com,
+	kpsingh@kernel.org,
+	linux-kernel@vger.kernel.org,
+	paul.chaignon@gmail.com,
+	sdf@fomichev.me,
+	song@kernel.org,
+	xulang@uniontech.com,
+	yonghong.song@linux.dev
+Subject: [PATCH bpf 2/2] selftests/bpf: Add test for cgroup storage OOB read
+Date: Tue, 17 Mar 2026 18:02:27 +0800
+Message-ID: <1113E44394EEEBC8+20260317100227.2157104-3-xulang@uniontech.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260317100227.2157104-1-xulang@uniontech.com>
+References: <82ee475b-034a-442c-b290-cc7905a7f33c@linux.dev>
+ <20260317100227.2157104-1-xulang@uniontech.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260316222901.GA59948@system.software.com> <20260316223113.20097-1-byungchul@sk.com>
- <ebd00055-d4aa-4612-8bf3-ef0a308512f8@kernel.org>
-In-Reply-To: <ebd00055-d4aa-4612-8bf3-ef0a308512f8@kernel.org>
-From: Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Date: Tue, 17 Mar 2026 12:03:47 +0200
-X-Gm-Features: AaiRm50_gMBZxX2vRtFxvpOCPSPD6sNew1gAwSuCX31B_IpupUaMwz2w2jjcEa0
-Message-ID: <CAC_iWjKXvfJuVn_uGgj4SsPsZnvMMepd7BesZcXgRYDPm9yUhg@mail.gmail.com>
-Subject: Re: [PATCH v5] mm: introduce a new page type for page pool in page type
-To: Jesper Dangaard Brouer <hawk@kernel.org>
-Cc: Byungchul Park <byungchul@sk.com>, linux-mm@kvack.org, akpm@linux-foundation.org, 
-	netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>, 
-	Mina Almasry <almasrymina@google.com>, Toke Hoiland Jorgensen <toke@redhat.com>, linux-kernel@vger.kernel.org, 
-	kernel_team@skhynix.com, harry.yoo@oracle.com, ast@kernel.org, 
-	daniel@iogearbox.net, davem@davemloft.net, john.fastabend@gmail.com, 
-	sdf@fomichev.me, saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com, 
-	mbloch@nvidia.com, andrew+netdev@lunn.ch, edumazet@google.com, 
-	pabeni@redhat.com, david@redhat.com, lorenzo.stoakes@oracle.com, 
-	Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org, surenb@google.com, 
-	mhocko@suse.com, horms@kernel.org, jackmanb@google.com, hannes@cmpxchg.org, 
-	ziy@nvidia.com, willy@infradead.org, brauner@kernel.org, kas@kernel.org, 
-	yuzhao@google.com, usamaarif642@gmail.com, baolin.wang@linux.alibaba.com, 
-	asml.silence@gmail.com, bpf@vger.kernel.org, linux-rdma@vger.kernel.org, 
-	sfr@canb.auug.org.au, dw@davidwei.uk, ap420073@gmail.com, dtatulea@nvidia.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3b-0
+X-QQ-XMAILINFO: Mlf3QM4hU4FNpROpSSPr7UAyqe6yni/v2pCAwSMTUooB7xmoz0xA7rF3
+	ZORl6HpOzHz36DTpz6it3stSAbfbBTddpLdu2JK68ysEpbN/YmBaAJ7tJxRzieH6QxGhC5L
+	+Me+NXw7BCfUF1JHejEqbCmBOAOJn1ZlGcvrq8a7HXjCiJvPpzlJpLTiokwwjwfe35ABIxv
+	vQ/X1NTJ7R+QMS4U2lPizNxVgu04J0AA1ef5YCMY9kSJLVT6Yr0LbIKMcrUh+A2NArFPbvY
+	hR2/CTWVAY8O5qw6dnZjr6zxuIXkwRy/BdsN2QsaVlJiGyxB0srxhSuwFgyFV+vO2rJKoro
+	Mbj8YuTnr1OSIurktSxIThMKE0Z5ZflvnQO8cTvsGRFRfs5a3hfU/VoN8XyZQ/7qpBT5tsR
+	EfRZ4+vzvERX9wO4tqGLaO/L+eQpWovu1puwDRT0l99kO5HHuNwbT7nP94wabWDb+7kEFhk
+	uowoD2TFRdYrwjDyD6Qem9D+udxaW/baIcMx4iIAcYaULbzNyFEqTfoAyPYwtu0jLx8C43R
+	gFsEML36gMuvICYTesuYkYL0DF7ljSiNmZ/dnXxx1rcSe0x9CBvdmz/X67QCUTaNZaTCrGT
+	PArzFf3n5miwxe5MgqB74uGrbkXD985dH7LVHxEkFr4r3SXM0aaNLrNEPdBadUoRqM7X0/v
+	9Uh8IBVUqSyboO3iTsNIhHvH2W9QH2ojZEaqGs2/nef83TUgqUkvMlAtzmMX1QsyfhIGdP+
+	ULwwtzDStgyd2/EhUa3ezi5lEVYLmmufiUMkcXEKHl2veXCch9ThQFPGkmVTgaKpDvSYVwo
+	WsllJ9xhDzWcqCU1jskiXO4TsuZ/jdr/uHg02h2QGVwjD0IbEFdWLi9jWoL1cuHVLZQ7KjH
+	XHsCJD4HhoY9lRaKczqP5FsqaYXS0vtTysKjkjviZClGebzWwdS2ZsfMZn1N/cfRQnLyRIT
+	P5XvOXs7ls3d44Q/YYrQVWqysaHR6y2LskH32MZW/jco3q5BJp49jSCQo0q6kUlawgn3jsx
+	4RCANA6cb97euV8e4rdGl4w/fqfCUt9eo8pboz392PApMFgpXsQe6fYtBKOaI=
+X-QQ-XMRINFO: MSVp+SPm3vtSI1QTLgDHQqIV1w2oNKDqfg==
+X-QQ-RECHKSPAM: 0
 
-Hi Jesper,
+From: Lang Xu <xulang@uniontech.com>
 
-On Tue, 17 Mar 2026 at 11:20, Jesper Dangaard Brouer <hawk@kernel.org> wrote:
->
->
->
->
-> On 16/03/2026 23.31, Byungchul Park wrote:
-> > Currently, the condition 'page->pp_magic == PP_SIGNATURE' is used to
-> > determine if a page belongs to a page pool.  However, with the planned
-> > removal of @pp_magic, we should instead leverage the page_type in struct
-> > page, such as PGTY_netpp, for this purpose.
-> >
-> > Introduce and use the page type APIs e.g. PageNetpp(), __SetPageNetpp(),
-> > and __ClearPageNetpp() instead, and remove the existing APIs accessing
-> > @pp_magic e.g. page_pool_page_is_pp(), netmem_or_pp_magic(), and
-> > netmem_clear_pp_magic().
-> >
-> > Plus, add @page_type to struct net_iov at the same offset as struct page
-> > so as to use the page_type APIs for struct net_iov as well.  While at it,
-> > reorder @type and @owner in struct net_iov to avoid a hole and
-> > increasing the struct size.
-> >
-> > This work was inspired by the following link:
-> >
-> >    https://lore.kernel.org/all/582f41c0-2742-4400-9c81-0d46bf4e8314@gmail.com/
-> >
-> > While at it, move the sanity check for page pool to on the free path.
-> >
-> [...]
-> see below
->
-> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > index 9f2fe46ff69a1..ee81f5c67c18f 100644
-> > --- a/mm/page_alloc.c
-> > +++ b/mm/page_alloc.c
-> > @@ -1044,7 +1044,6 @@ static inline bool page_expected_state(struct page *page,
-> >   #ifdef CONFIG_MEMCG
-> >                       page->memcg_data |
-> >   #endif
-> > -                     page_pool_page_is_pp(page) |
-> >                       (page->flags.f & check_flags)))
-> >               return false;
-> >
-> > @@ -1071,8 +1070,6 @@ static const char *page_bad_reason(struct page *page, unsigned long flags)
-> >       if (unlikely(page->memcg_data))
-> >               bad_reason = "page still charged to cgroup";
-> >   #endif
-> > -     if (unlikely(page_pool_page_is_pp(page)))
-> > -             bad_reason = "page_pool leak";
-> >       return bad_reason;
-> >   }
-> >
-> > @@ -1381,9 +1378,17 @@ __always_inline bool __free_pages_prepare(struct page *page,
-> >               mod_mthp_stat(order, MTHP_STAT_NR_ANON, -1);
-> >               folio->mapping = NULL;
-> >       }
-> > -     if (unlikely(page_has_type(page)))
-> > +     if (unlikely(page_has_type(page))) {
-> > +             /* networking expects to clear its page type before releasing */
-> > +             if (is_check_pages_enabled()) {
-> > +                     if (unlikely(PageNetpp(page))) {
-> > +                             bad_page(page, "page_pool leak");
-> > +                             return false;
-> > +                     }
-> > +             }
-> >               /* Reset the page_type (which overlays _mapcount) */
-> >               page->page_type = UINT_MAX;
-> > +     }
->
-> I need some opinions here.  When CONFIG_DEBUG_VM is enabled we get help
-> finding (hard to find) page_pool leaks and mark the page as bad.
->
+Add a test case to reproduce the out-of-bounds read issue when copying
+from cgroup storage maps with unaligned value_size.
 
-You mean we get debug messages about the leak right? Nothing is
-silently freed with that config enabled.
+The test creates:
+1. A CGROUP_STORAGE map with 4-byte value (not 8-byte aligned)
+2. A LRU_PERCPU_HASH map with 4-byte value (same size)
 
-> When CONFIG_DEBUG_VM is disabled we silently "allow" leaking.
-> Should we handle this more gracefully here? (release pp resources)
->
-> Allowing the page to be reused at this point, when a page_pool instance
-> is known to track life-time and (likely) have the page DMA mapped, seems
-> problematic to me.  Code only clears page->page_type, but IIRC Toke
-> added DMA tracking in other fields (plus xarray internally).
+When a socket is created in the cgroup, the BPF program triggers
+bpf_map_update_elem() which calls copy_map_value_long(). This function
+rounds up the copy size to 8 bytes, but the cgroup storage buffer is
+only 4 bytes, causing an OOB read (before the fix).
 
-If we can reliably track and release the pages, I think we should do
-this regardless of CONFIG_DEBUG_VM being enabled or not. But the
-question is how did that leak happen? Is it a misuse of the API from
-the driver?
+Link: https://lore.kernel.org/all/204030CBF30066BE+20260312052525.1254217-1-xulang@uniontech.com/
+Signed-off-by: Lang Xu <xulang@uniontech.com>
+---
+ .../selftests/bpf/prog_tests/cgroup_storage.c | 42 ++++++++++++++++++
+ .../selftests/bpf/progs/cgroup_storage.c      | 43 +++++++++++++++++++
+ 2 files changed, 85 insertions(+)
 
-Thanks
-/Ilias
->
-> I was going to suggest to simply re-export page_pool_release_page() that
-> was hidden by 535b9c61bdef ("net: page_pool: hide
-> page_pool_release_page()"), but that functionality was lost in
-> 07e0c7d3179d ("net: page_pool: merge page_pool_release_page() with
-> page_pool_return_page()"). (Cc Jakub/Kuba for that choice).
-> Simply page_pool_release_page(page->pp, page).
->
-> Opinions?
->
-> --Jesper
+diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c b/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c
+index cf395715ced4..5b56dc893e73 100644
+--- a/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c
++++ b/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c
+@@ -1,5 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ 
++#include <unistd.h>
++#include <sys/socket.h>
+ #include <test_progs.h>
+ #include "cgroup_helpers.h"
+ #include "network_helpers.h"
+@@ -94,3 +96,43 @@ void test_cgroup_storage(void)
+ 	close(cgroup_fd);
+ 	cleanup_cgroup_environment();
+ }
++
++void test_cgroup_storage_oob(void)
++{
++	struct cgroup_storage *skel;
++	int cgroup_fd, sock_fd;
++
++	cgroup_fd = cgroup_setup_and_join(TEST_CGROUP);
++	if (!ASSERT_OK_FD(cgroup_fd, "create cgroup"))
++		return;
++
++	/* Load and attach BPF program */
++	skel = cgroup_storage__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "cgroup_storage__open_and_load"))
++		goto cleanup_cgroup;
++
++	skel->links.trigger_oob = bpf_program__attach_cgroup(skel->progs.trigger_oob,
++							      cgroup_fd);
++	if (!ASSERT_OK_PTR(skel->links.trigger_oob, "attach_cgroup"))
++		goto cleanup_skel;
++
++	/* Create a socket to trigger cgroup/sock_create hook.
++	 * This will execute our BPF program and trigger the OOB read
++	 * if the bug is present (before the fix).
++	 */
++	sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
++	if (!ASSERT_OK_FD(sock_fd, "create socket"))
++		goto cleanup_skel;
++
++	close(sock_fd);
++
++	/* If we reach here without a kernel panic or KASAN report,
++	 * the test passes (the fix is working).
++	 */
++
++cleanup_skel:
++	cgroup_storage__destroy(skel);
++cleanup_cgroup:
++	close(cgroup_fd);
++	cleanup_cgroup_environment();
++}
+diff --git a/tools/testing/selftests/bpf/progs/cgroup_storage.c b/tools/testing/selftests/bpf/progs/cgroup_storage.c
+index db1e4d2d3281..59da1d95e5b9 100644
+--- a/tools/testing/selftests/bpf/progs/cgroup_storage.c
++++ b/tools/testing/selftests/bpf/progs/cgroup_storage.c
+@@ -21,4 +21,47 @@ int bpf_prog(struct __sk_buff *skb)
+ 	return (*counter & 1);
+ }
+ 
++/* Maps for OOB test */
++struct {
++	__uint(type, BPF_MAP_TYPE_CGROUP_STORAGE);
++	__type(key, struct bpf_cgroup_storage_key);
++	__type(value, __u32);  /* 4-byte value - not 8-byte aligned */
++} cgroup_storage_oob SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_LRU_PERCPU_HASH);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u32);  /* 4-byte value - same as cgroup storage */
++} lru_map SEC(".maps");
++
++SEC("cgroup/sock_create")
++int trigger_oob(struct bpf_sock *sk)
++{
++	__u32 key = 0;
++	__u32 *cgroup_val;
++	__u32 value = 0x12345678;
++
++	/* Get cgroup storage value */
++	cgroup_val = bpf_get_local_storage(&cgroup_storage_oob, 0);
++	if (!cgroup_val)
++		return 0;
++
++	/* Initialize cgroup storage */
++	*cgroup_val = value;
++
++	/* This triggers the OOB read:
++	 * bpf_map_update_elem() -> htab_map_update_elem() ->
++	 * pcpu_init_value() -> copy_map_value_long() ->
++	 * bpf_obj_memcpy(..., long_memcpy=true) ->
++	 * bpf_long_memcpy(dst, src, round_up(4, 8))
++	 *
++	 * The copy size is rounded up to 8 bytes, but cgroup_val
++	 * points to a 4-byte buffer, causing a 4-byte OOB read.
++	 */
++	bpf_map_update_elem(&lru_map, &key, cgroup_val, BPF_ANY);
++
++	return 1;
++}
++
+ char _license[] SEC("license") = "GPL";
+-- 
+2.51.0
+
