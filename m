@@ -1,65 +1,65 @@
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB2A02EF67A
-	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 17:18:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6732631E841
+	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 17:19:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773767928; cv=none; b=EnPfrQ1zjh+8uGRC63j8/S24wCT8eKQxtbqYVQT7t1DQIvpcsepKPvrxwkY3QaGgflR5FDxrykhdUTY/yg15fpz6DisZddjP/QlrVQCrxYdqLx/Vw6gxlX0yeAuaoTX4r6Hp/LshPrPM6iXuVQ+bVvEDnmhERh+tgApPzxooiEY=
+	t=1773767944; cv=none; b=A2L0B+gxGDgh1JXimeyvqm3wA8V7rg/7SwA6bXYquIwzQllatVpap8sqtXQGugN/tuHzN8yjS2jDgqIExLXE36H8Uk3sR8UN00Geukr+dZZtnvXW+ER5j7fHLd0i0QLEjmkAw69DssfVtxKJLBxMH1Z5w0TjMAyOfk2gQ4aLeVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773767928; c=relaxed/simple;
-	bh=jSTOBk0QchOGhgQ9fPNgvyzaWz53LGuahLTQNnHNAiw=;
+	s=arc-20240116; t=1773767944; c=relaxed/simple;
+	bh=YK3vJ4juRoBYROJ37OP8MfuqnoWisPryD3xrvOBo84Y=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=au0sUiDuEJtCuhWnR15+thUEVk8sNGZZ3IvSCHLHqq0MRYN3ZHyGf2WFCdQ0374LmcQuVKe+fbqeU187lvptyUNLrO4pp5VK5gb+kAvBHBmzjCtogtFX9bho7XrB7fTU+e5kQaLMXATBnTSZYRRQEOf7Bvy/bvCioaDtsLXgJoQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y1mnl9Rt; arc=none smtp.client-ip=209.85.219.49
+	 Content-Type:Content-Disposition:In-Reply-To; b=XMS34i+MXmNmdYVZELntKuP65PWQHSOi29Ch5Fq/VKmpSupG3a9NIY7c27QqQXluqkgX/J0Nq1sQn/j3PHkS5yCXERw6s0bfVFvAqJ0YOI9lrdHk6DckLTUf9JygD8e3TQNuUqU22xRXh18g7c/jLr3g+l0LjqKXGJHH/zjhINM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WT8y5yK4; arc=none smtp.client-ip=209.85.221.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y1mnl9Rt"
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-89c4bc36053so16606586d6.2
-        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 10:18:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WT8y5yK4"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-43b45bb7548so1759240f8f.1
+        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 10:19:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773767927; x=1774372727; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773767942; x=1774372742; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FaaFcjOrcgiRK0kqbKsrAvjcKayVzBLU1SPmKnUc9iU=;
-        b=Y1mnl9Rt86jddtZQKqyhespKO6Jbqe2GxUNUs57jaW7fBxuvLsq2Ps5WdUT6qHJ1hP
-         lnI77KCwW9hZ3Bj1zTI3Kz/6vBlHWGX37Ol90aGRHFX4qtHGeTtzvhYaSDbe/8M5sQ7o
-         hbmgMjSZg0d3VibGx6YvKAgK7kDszXUwpyxGZtbfgRan8a876tKPQBx4yVMzWwzGunT/
-         kwOuTsAJ/3ZroD0I/250IQYBoHS33h8MvqVavmXjqxwuQSEwbU87sQfBYMM+wuzTPuAz
-         9LaB+2t2qmULE5fVQtkg7THsbLkSXZf5QcgV12JAHi2Eukw/q1p1VAi+7dbs2T82lg6D
-         g+Wg==
+        bh=W3uAG3hNoBvu0rfKDECyv2wLgMaAu8pY7D5FJIL9fBA=;
+        b=WT8y5yK4qrkIohNkS/zWA/HRQ5eEdtX1F4cEyQxCDDNAjax82NjPP5pjFtEvZTSk5u
+         mB4OWA9EUQEHJIIiY5fW8q81fjGy/75TfvHFZef3iB5WA0+7UepSfwwa5cCnmDOik9cJ
+         7NJSNy537+qjWDnZRffZnWGN6R2dQJWsgl7d02a+vLE3HSQXvtWmyKbEBg+jmi/jEDkt
+         G4KLD+wRyEtbjM2sxfOM2np7I2cB8exURTs0vvAvcDL5eli8u2iBNPli/VzihRBJZYHb
+         u2kC2rDE2bIbmn8xAS4MiY82nDxZ+cr3QILHXqFeh/7+xCAhhyY+9OT7zFdULxV3sbQe
+         CYwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773767927; x=1774372727;
+        d=1e100.net; s=20251104; t=1773767942; x=1774372742;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FaaFcjOrcgiRK0kqbKsrAvjcKayVzBLU1SPmKnUc9iU=;
-        b=JAi9IRMmF6lHiy/EeMdU/XCRA2hCEnwgUc5XbyeyJUGG7nLKTic5QvBT2zvtuUIY7y
-         YPwzOI7DsCPfBmuLW2Z6xIkTsiQuSIHIfEdlFK+bWKeUflOA9GRN1BoMVjcUdaYedE8/
-         3dW60Y+TPNDby6Jrekg11hQR/Rmsl6T92W1jZ7s2bp9Noh3czmnzk7fOOwtBeHq/RHhK
-         HdApJBVg7stgxxrojCKnpCHsKiLxjeq5oFJYmjFnwAN9BocitZ1cdhTHFScS3I1sLEaZ
-         Zuilca1Mdv8OhUxLnVlLmg85tn9r9I82byfuHHYRzDj73SeYcx0poCPgctqpxOrM9N6O
-         dHUg==
-X-Forwarded-Encrypted: i=1; AJvYcCU524wzja9fXZm1l9U46L4QgJ2rcKF6XjPe4Li6ykVCxig1kPxXUs0Z8U7HfMXMwLjn++g=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9A12jHo3AH/Ga4x7QCcbD6woOcfx+3nGU/4JcEFv4PS6kqqfc
-	HXqG6TWRyj+UqZLfZUGJESEHVx5YDKu9gyT4r/+DPRSdx2m3H4JzQeGg
-X-Gm-Gg: ATEYQzwH4I+ygaGPhvE6Gx1OzXrYZrAF4ZZe9xszi+o/qb4mLgc9bMrUp8G4ZSimS4Z
-	GvX6gcNBBY7HRcOIz2j9qLsFjMougXVy+PfftJr1GZPIihEcSxbJrzbtTqYkEQGVQV1u3U07lmz
-	T/RY/w7zTyInq6X5eXiX+wuzI4nfgU3Ye8bE0NWbL83oAajtnfwFk8YS1y9mVaIop1AgOMLEBg8
-	Z+SG62ML0b4Kcjiz7e44dcx/lgIh/3R4Z/h2wYHAVf/3q6m9On3rV73Szp1243nk1uzgGz9QlSI
-	FcQ6ftWbf1lUPwsPDH4ML6tDoeJrJ4hYcjOklvb/tKvM5dSppOPai5LI2nUZKW9pkLVUoCdMxhc
-	g/Oybv7L1s9Jj71ZLVr2Pq5j5BQApTRbSRyfuzfAfIMb8rVDB4C4eV3/QYAI+5ftGR7ULajhDza
-	DZJ6fMqBVXoUc=
-X-Received: by 2002:a05:6214:6003:b0:89c:5385:3476 with SMTP id 6a1803df08f44-89c6b56f9e2mr4975846d6.39.1773767926377;
-        Tue, 17 Mar 2026 10:18:46 -0700 (PDT)
+        bh=W3uAG3hNoBvu0rfKDECyv2wLgMaAu8pY7D5FJIL9fBA=;
+        b=BHj/YKWCOQxJJBE6ASTzF2IcFgE0HrzbFDlO//tK+5TEdfH5xy5e9rQy94morDMiAE
+         8mLGK6P24L4twATRQ8Ko+2DoYQvj51cekUfxrhnp+bhqECHeoAdxZt6E8VXZfzkmFqKX
+         61cOGwAkw1CDKBU9Ym9IflqTo/ztP8p33iarjUAYQaV85O/V4E5INQYWxH5awC6kFQEO
+         Sy56/WkF2HTApA1YAKUnjyGao15WgMoelZEX1hcnlQzs6rVVkYLQYDcCa+olBTarR2ib
+         LUdSS96PigCgJ3cOmTFjDMK8dh1C6+XI5L7GZzYTJTm2FLkiWE/BRL8fIDx2rQIDU850
+         wZRA==
+X-Forwarded-Encrypted: i=1; AJvYcCUw8G9aPQwHEOPVaS5vktwgvvfsIb7rz0gKYsozgUb5hKdOzcUgezWRPH/n2i9kCF/eZsQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJ+b8xCDskRWmBT6OI/KA+frP7sL9/rsNuWEP5+kQoOaw8z9KT
+	8g92XgrFL+P+KMAgArYBYRw1tvY5noNLrcHAMv0xeERCQpBK4tdMoXvA
+X-Gm-Gg: ATEYQzy3i1wA37pRHgOXViRBwFz+UDCE3CQawz/00nNiJr3mJukR4NjAeATQB7jNM4h
+	5Z9poMvzmJcZm9ndwqhVLgt3+P/sIsu2FFYpj2fzxTPVPAcEzWcbZh+d1PEiMOJ+MF/y5wyxpoc
+	BCOkLut71ufxTHh55VEJlbazfhSQGo/Bm+2r8CeSpU6s4jxQ9xjFNUgCKcPg1eHaDXBP1pwTdrM
+	Jnzs80aR/UiDYPzLfi7ddjvIWiSxsc2YJMCD6csYU4pTqEpMPPSYW/glddRK/j9LQznVI0NaFyx
+	+MdAMwt9rN2nvcoYAqZ1b3HCwE3SOQyrpYPq9pYIXZQYDFjz5GLylEOTTNtuq3VhmozDslwjvO9
+	J0pp8RNL0L0tNrzwh7GZC5sHTzoopgDdE2yYPLAXV8c6rOMT0CioY6zxvkT+v9t8zbHRve1n5cM
+	K9r+GVuO112Qk=
+X-Received: by 2002:a5d:5885:0:b0:43b:4136:1e76 with SMTP id ffacd0b85a97d-43b527c4c70mr12482f8f.29.1773767941438;
+        Tue, 17 Mar 2026 10:19:01 -0700 (PDT)
 Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89c6b8e0275sm1329206d6.7.2026.03.17.10.18.44
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b518a3dedsm720056f8f.36.2026.03.17.10.19.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Mar 2026 10:18:45 -0700 (PDT)
+        Tue, 17 Mar 2026 10:19:01 -0700 (PDT)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 17 Mar 2026 18:18:41 +0100
+Date: Tue, 17 Mar 2026 18:18:59 +0100
 To: Leon Hwang <leon.hwang@linux.dev>
 Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -69,12 +69,12 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
 	Menglong Dong <menglong8.dong@gmail.com>,
 	Steven Rostedt <rostedt@kernel.org>
-Subject: Re: [PATCHv3 bpf-next 19/24] selftests/bpf: Add tracing multi
- intersect tests
-Message-ID: <abmM8XHYfhd9qiAz@krava>
+Subject: Re: [PATCHv3 bpf-next 20/24] selftests/bpf: Add tracing multi
+ cookies test
+Message-ID: <abmNA2wbZE8XpMrO@krava>
 References: <20260316075138.465430-1-jolsa@kernel.org>
- <20260316075138.465430-20-jolsa@kernel.org>
- <63fa6255-8682-495d-abe1-d30d72a7ece9@linux.dev>
+ <20260316075138.465430-21-jolsa@kernel.org>
+ <e01da3b0-ff72-403d-8f3f-4312d35e6ec7@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -83,88 +83,41 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <63fa6255-8682-495d-abe1-d30d72a7ece9@linux.dev>
+In-Reply-To: <e01da3b0-ff72-403d-8f3f-4312d35e6ec7@linux.dev>
 
-On Tue, Mar 17, 2026 at 11:05:29AM +0800, Leon Hwang wrote:
+On Tue, Mar 17, 2026 at 11:06:25AM +0800, Leon Hwang wrote:
 
 SNIP
 
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-> > index e9042d8d4760..b7818f438d6e 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-> > @@ -6,6 +6,7 @@
-> >  #include "bpf/libbpf_internal.h"
-> >  #include "tracing_multi.skel.h"
-> >  #include "tracing_multi_module.skel.h"
-> > +#include "tracing_multi_intersect.skel.h"
-> >  #include "trace_helpers.h"
+> > diff --git a/tools/testing/selftests/bpf/progs/tracing_multi_check.c b/tools/testing/selftests/bpf/progs/tracing_multi_check.c
+> > index 0e3248312dd5..e6047d5a078a 100644
+> > --- a/tools/testing/selftests/bpf/progs/tracing_multi_check.c
+> > +++ b/tools/testing/selftests/bpf/progs/tracing_multi_check.c
+> > @@ -7,6 +7,7 @@
+> >  char _license[] SEC("license") = "GPL";
 > >  
-> >  static const char * const bpf_fentry_test[] = {
-> > @@ -31,6 +32,20 @@ static const char * const bpf_testmod_fentry_test[] = {
+> >  int pid = 0;
+> > +bool test_cookies = false;
 > >  
-> >  #define FUNCS_CNT (ARRAY_SIZE(bpf_fentry_test))
-> >  
-> > +static int get_random_funcs(const char **funcs)
-> > +{
-> > +	int i, cnt = 0;
-> > +
-> > +	for (i = 0; i < FUNCS_CNT; i++) {
-> > +		if (rand() % 2)
->                     ^ srand() is missing for rand() ?
-
-it's in test_progs main
-
-> > +static void test_intersect(void)
-> > +{
-> > +	struct tracing_multi_intersect *skel;
-> > +	const struct bpf_program *progs[4];
-> > +	__u64 *test_results[4];
-> > +	__u32 i;
-> > +
-> > +	skel = tracing_multi_intersect__open_and_load();
-> > +	if (!ASSERT_OK_PTR(skel, "tracing_multi_intersect__open_and_load"))
-> > +		return;
-> > +
-> > +	skel->bss->pid = getpid();
-> > +
-> > +	progs[0] = skel->progs.fentry_1;
-> > +	progs[1] = skel->progs.fexit_1;
-> > +	progs[2] = skel->progs.fentry_2;
-> > +	progs[3] = skel->progs.fexit_2;
-> > +
-> > +	test_results[0] = &skel->bss->test_result_fentry_1;
-> > +	test_results[1] = &skel->bss->test_result_fexit_1;
-> > +	test_results[2] = &skel->bss->test_result_fentry_2;
-> > +	test_results[3] = &skel->bss->test_result_fexit_2;
-> > +
-> > +	for (i = 1; i < 16; i++)
-> > +		__test_intersect(i, progs, test_results);
-> > +
-> > +	tracing_multi_intersect__destroy(skel);
-> > +}
-> > +
-> >  void test_tracing_multi_test(void)
+> >  extern const void bpf_fentry_test1 __ksym;
+> >  extern const void bpf_fentry_test2 __ksym;
+> > @@ -28,7 +29,7 @@ extern const void bpf_testmod_fentry_test11 __ksym;
+> >  void tracing_multi_arg_check(__u64 *ctx, __u64 *test_result, bool is_return)
 > >  {
-> >  #ifndef __x86_64__
-> > @@ -347,4 +444,6 @@ void test_tracing_multi_test(void)
-> >  		test_module_link_api_pattern();
-> >  	if (test__start_subtest("module_link_api_ids"))
-> >  		test_module_link_api_ids();
-> > +	if (test__start_subtest("intersect"))
-> > +		test_intersect();
-> >  }
-> > diff --git a/tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c b/tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c
-> > new file mode 100644
-> > index 000000000000..b8aecbf44093
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c
-> > @@ -0,0 +1,42 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +#include <stdbool.h>
-> > +#include <linux/bpf.h>
-> NIT:         ^ vmlinux.h is better than stdbool.h + bpf.h.
+> >  	void *ip = (void *) bpf_get_func_ip(ctx);
+> > -	__u64 value = 0, ret = 0;
+> > +	__u64 value = 0, ret = 0, cookie = 0;
+> >  	long err = 0;
+> >  
+> >  	if (bpf_get_current_pid_tgid() >> 32 != pid)
+> > @@ -36,6 +37,8 @@ void tracing_multi_arg_check(__u64 *ctx, __u64 *test_result, bool is_return)
+> >  
+> >  	if (is_return)
+> >  		err |= bpf_get_func_ret(ctx, &ret);
+> > +	if (test_cookies)
+> > +		cookie = test_cookies ? bpf_get_attach_cookie(ctx) : 0;
+>                          ^ dup test_cookies check ? Can drop this one.
 
-ok, thanks
+heh nice, yea, thanks 
 
 jirka
