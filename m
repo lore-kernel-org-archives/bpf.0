@@ -1,106 +1,142 @@
-Received: from mail-wr1-f66.google.com (mail-wr1-f66.google.com [209.85.221.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E60F93328E3
-	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 09:46:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.66
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773740785; cv=pass; b=pyLKvInOGjGM9Gp4QiNWXv5UrLQyIop3xetgopj5OpfsjmIDcNvbAx1oaHL7QxWyM3J5Qz2XQ9zh/rbWJ592lgttiJ2Fpxgi1x2otwFCkDHh138woQHuHR52GaV5vasVWM30VR0xYC+gwFsp0PzPLEDZGZTiFBZ80sTN2qeczto=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773740785; c=relaxed/simple;
-	bh=6mPxwyxVMZjdq7e+56MNAvhtPr2vUXCzVpZTjP4gE3M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sb+eXrGfN2239oOymjkaEeldh9zXdr4Iux0TUbNkCib/HLTEngKEduMTBqTvzhtLeb5mkWMd0/QECiX3gmkU2SQl8YUtJe+6j0M6QTDQ0xnxKbkGjgt/0ODLYy/5mWOVmgMMDMzg2hgoOoBW7aF71MBAoWko2WJgq7iI2vLd75k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XGXN90BH; arc=pass smtp.client-ip=209.85.221.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0783439D6D9;
+	Tue, 17 Mar 2026 09:49:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773740994; cv=none; b=gh5LCLKKEYE3CmTu8CVhCSR1ac+hlMj+BxoNwINAyIOAhtc4nhvnv8Jxx0OunhCF9H5mzO68OyDMoH5a0n0Fr2/RAoC4CnXgXRa3duhMvckzOsYEjUZWyid/C+EtSFecTrtI0zerVozjyF2+jpZ3nkGKs3qsEUzt18NBzgzqr8o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773740994; c=relaxed/simple;
+	bh=Y37P4OdefzXCY9joMqOUrRnFRWZPXLodPfge2HEhFEU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EWw52LzJIt8b9prCbhkjLYoAYus66TOCYZ/xlZNjiEyan2fd7kt1xjbj4utwfeoZHntWnCAE5T4K2/nw2OwpSSUcUcOvbY3U2Tpvm2aXgBi2zTEUex/yL2C8Z5QXdhs9rjqkQUB4gLQky3CDS13v5i0y4a4X5KUC4aA7rNkcvFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mjAmoTJC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XGXN90BH"
-Received: by mail-wr1-f66.google.com with SMTP id ffacd0b85a97d-4327790c4e9so3992045f8f.2
-        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 02:46:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773740782; cv=none;
-        d=google.com; s=arc-20240605;
-        b=bXJO9aUQWYzWk5kpaRUNUdlBh29jIadWvslY3mA5rwOU8tZnV6IgPOcoMx/iAjfHda
-         AqYgWjxvSQEw2lQJONksKB25bXWcEZYpCCUdBBtupuZzkwV3408oR0Menxm+ybCHC7Sj
-         EZSwDgZ2b6S+h0MNqYBI18OI5FoF3zQfdwiyv6gy4apDFNPsnSXnctt+GcT72xq3hp/W
-         l8PsS7CERxS5Mh/lMTvKk6lLVce76qnz49VZjTp2uJ21/Xatz7wQpsOkw1rmA++MdgWf
-         H0SivSZt68M0QYspLC1PL6rvBbDYZoX19DAeyOXe6upifHgpKH+4ZMuRTTnA8jyQrpxr
-         dfMQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=6mPxwyxVMZjdq7e+56MNAvhtPr2vUXCzVpZTjP4gE3M=;
-        fh=1+ZZolzoiM1rhPmxWgWO7df9NAdABsYHuKG/kYzMHcc=;
-        b=ixmkz5GUu/B3vcRe27RMdTtcGuYlPKPBOVDoLLtDqoQjB9vd27GAxCP1In+gRTTGW8
-         YsaiYWJV+8KQfzkQdQIBz196qzkloveCHBnsHIEJJaUKUvErvOtt6mFBFxER3V/lxcJl
-         y8uxMaxR1//hNypqis92HEJy1+nocQ5/s9UEXFRruBYUMInAbKlrtwGEg235bB/nWY5e
-         0EsZl3Iv0gcHfvpPnyNN4OpHHNF6/iQX1xnP11W0LJE83EDErOwvq5XWxmymDIJJxLVy
-         N2KG5umbY98xT30gw0Pv+aJklSIlDu3OL7CA1umUictD8ZW1uExpx2syqoi5sB9KqeIp
-         6xeg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773740782; x=1774345582; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6mPxwyxVMZjdq7e+56MNAvhtPr2vUXCzVpZTjP4gE3M=;
-        b=XGXN90BHdgYxK7ETOgnfpztx86DBH98gY7skT1iDIzCcyDv6YbiN5kOnGJ6q6sJgK2
-         XO9ZoSedylJfkTxfakc6QepeguHeiF0I1oeYhMdEFcU/TN/i9NwqLvJ+jhkcEyNA4r89
-         hL51Gx0xxolHxgEWGOqbsIiTHUKME82zonLDsyXXfHK62aCfCs7FfagQeM35YOaZ0huN
-         gdnICuWQap6gx/rF6u/kyP7h/nJvpp5iFobaNyFQ7ouGNf+yffMtWCGosRcofTxw0Qbc
-         aKW583OCLA6Gz79+jbCl863NDeyjZFn+qYyrYeb/HRhDpv9d4LQoxLTZJXU35zgMyfXd
-         ONJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773740782; x=1774345582;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6mPxwyxVMZjdq7e+56MNAvhtPr2vUXCzVpZTjP4gE3M=;
-        b=MxzyXJdoJHx7wJQsUl4ysYw9U5LufiHfHLRiutiOhZp01SW1dgE7gThEm0ZzJgoe8z
-         JCZtWUhjExdJMJYG8vw3gPONf8hX3jPqGYPt4uZvzOxm+KsZKj1Vc32lQ/M/vpgG3wjm
-         vDK6EvsFafg3zjUB9uVO93VOhOW1NdcvJGvAY1BMLN6Z+uyywvUtx4lZcMKX+mktoP0a
-         XciF9s4FU3ftOFd5kpVC6ouBh3nPR9krpecFbS3Wb5haHWnlnbbbqvSQItUPfOh7bZIf
-         3Ews6EG17ufE6iAZ9JoAGw+mgN4zSixTgYaGZm5QJVUdWzGDznE20FG+xRPQi+iN0upc
-         FVtA==
-X-Forwarded-Encrypted: i=1; AJvYcCXeBHz3BtPYx8DEpjhbyZb3SdQkj1XKQ+bwzQyDKHoGYbUgypTJX+d2oz7ejLdlkxPzWxw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAJqYFQacd2LK1LBfOhmDPXWHurO3nMZ5Sp5rDzVH/KERBN0aT
-	PIAznvWcJQUPiw58MXLGPcZPpd3SKixy5p3azAHKQUWxPIIomHzFBeCj1kxkyGVIGpQPmzIuuvf
-	p/w7Pp/Nm5Hmij20M5YrLUUiDG+7SPUI=
-X-Gm-Gg: ATEYQzz1PwdamL0xE9IrFdXuxpLRcBk6240i4ytaqYBFm+GmTk6bBW4H3IVlI4aaQZQ
-	uuduNqjNEZ1QMWEZeJLYp8/eIj+llDVFFzubwsOe3NTV6A+3Vo8VFH+4o9z/kHmZUNLS+nAKbei
-	3/K62PHYeLYWdw9CNtLt85crLN0YJchpOd2Y8/1K5r0kE6MeTFnV+eQ18haJS5d1kUIaEY7EQzr
-	CLcAFIVfykxT7uMEdE35qPqnWQdPxxNh9xrUfqIXE8qDiEEibk2g8AC6GjJE67THyRxp+k6xeAx
-	LeiVfXfQ3YvVX7zU+60g095kniJPR/u7zUvFgkXi4fGXoD3XYdj7yaqCrIgRZo5Q8tKGLA==
-X-Received: by 2002:a05:6000:2901:b0:43b:47ee:4586 with SMTP id
- ffacd0b85a97d-43b47ee45a1mr8034418f8f.29.1773740781851; Tue, 17 Mar 2026
- 02:46:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mjAmoTJC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFEC9C4CEF7;
+	Tue, 17 Mar 2026 09:49:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773740993;
+	bh=Y37P4OdefzXCY9joMqOUrRnFRWZPXLodPfge2HEhFEU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=mjAmoTJC6USk8SekAtF8SLRTp1QiZRLQqpVDJaLpzUVOpG6VwUb+5ibGwtGB/x8lH
+	 N7OYw01V/jjNLgXWzhv1iWS19CoIxJ0XTaNuFmMzzmzR/cP8Wq9Ww2wrQLaFhpuqrO
+	 JJ0xmyDLdRip83l9ur+Ahi/o9Us1w/Zf/BxSlar1Xg6RhSIidUGcBsWiuee2N9VffB
+	 mY9hV92Fv9EBMfezkkdxwNp6brgFwvGNb790meJr1T/NRCz69CWNGuFQ3w8NAK+zqx
+	 i/TFwty4RI5wmBDq2iLpx1S6dM2vs04HSp+k/30oQfa/xpW9gbv70HYTfHGPMRLCqw
+	 O3+T5FJKNPYBw==
+Message-ID: <e8f25a5f-940b-4b89-8a88-ef984bd78238@kernel.org>
+Date: Tue, 17 Mar 2026 10:49:46 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260216131341.1285427-1-mykyta.yatsenko5@gmail.com> <abkfGJw2F_Mwuuvf@computer>
-In-Reply-To: <abkfGJw2F_Mwuuvf@computer>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Tue, 17 Mar 2026 10:45:45 +0100
-X-Gm-Features: AaiRm512-NcBGXksSJmh4jEmk0n-yPGuVDWaeH3X9j0hPVffBb8rPq_GSE01_g0
-Message-ID: <CAP01T772PgHtgHBVDmXqgEA+Cfu-TKs4vJXFMch7D8-n8pfQHg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpf: Fix special fields mem leak for
- non-prealloc maps
-To: Varun R Mallya <varunrmallya@gmail.com>
-Cc: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org, ast@kernel.org, 
-	andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
-	eddyz87@gmail.com, Mykyta Yatsenko <yatsenko@meta.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v4 6/6] selftests: drv-net: xdp: Add rss_hash
+ metadata tests
+To: Chris J Arges <carges@cloudflare.com>, Joe Damato <joe@dama.to>,
+ Jakub Kicinski <kuba@kernel.org>, Andy Gospodarek <gospo@broadcom.com>,
+ Michael Chan <michael.chan@broadcom.com>,
+ Pavan Chebbi <pavan.chebbi@broadcom.com>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>,
+ Simon Horman <horms@kernel.org>, Willem de Bruijn <willemb@google.com>,
+ Petr Machata <petrm@nvidia.com>, David Wei <dw@davidwei.uk>,
+ Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+ Carolina Jubran <cjubran@nvidia.com>, Nimrod Oren <noren@nvidia.com>,
+ Gal Pressman <gal@nvidia.com>,
+ Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>
+Cc: Bui Quang Minh <minhquangbui99@gmail.com>,
+ Daniel Zahka <daniel.zahka@gmail.com>, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-team <kernel-team@cloudflare.com>
+References: <20260313223029.454755-1-carges@cloudflare.com>
+ <20260313223029.454755-7-carges@cloudflare.com>
+Content-Language: en-US
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+In-Reply-To: <20260313223029.454755-7-carges@cloudflare.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, 17 Mar 2026 at 10:30, Varun R Mallya <varunrmallya@gmail.com> wrote:
->
-> Hey Mykyta! I saw that you haven't really come back to this in a while.
-> Is it alright if I try to continue with the patch ? Since it's mostly minor changes
-> that are left, I'll try to get it to pass CI and implement the reviews
-> Puranjay gave. Is it alright if I submit a v3 ?
->
 
-It was superseded by
-https://lore.kernel.org/bpf/20260227224806.646888-1-memxor@gmail.com.
+
+On 13/03/2026 23.27, Chris J Arges wrote:
+> diff --git a/tools/testing/selftests/net/lib/xdp_metadata.bpf.c b/tools/testing/selftests/net/lib/xdp_metadata.bpf.c
+> new file mode 100644
+> index 000000000000..f71f59215239
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/lib/xdp_metadata.bpf.c
+> @@ -0,0 +1,163 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <stddef.h>
+> +#include <linux/bpf.h>
+> +#include <linux/in.h>
+> +#include <linux/if_ether.h>
+> +#include <linux/ip.h>
+> +#include <linux/ipv6.h>
+> +#include <linux/udp.h>
+> +#include <linux/tcp.h>
+> +#include <bpf/bpf_endian.h>
+> +#include <bpf/bpf_helpers.h>
+> +
+> +enum {
+> +	XDP_PORT = 1,
+> +	XDP_PROTO = 4,
+> +} xdp_map_setup_keys;
+> +
+> +struct {
+> +	__uint(type, BPF_MAP_TYPE_ARRAY);
+> +	__uint(max_entries, 5);
+> +	__type(key, __u32);
+> +	__type(value, __s32);
+> +} map_xdp_setup SEC(".maps");
+> +
+> +/* RSS hash results: key 0 = hash, key 1 = hash type,
+> + * key 2 = packet count, key 3 = error count.
+> + */
+> +enum {
+> +	RSS_KEY_HASH = 0,
+> +	RSS_KEY_TYPE = 1,
+> +	RSS_KEY_PKT_CNT = 2,
+> +	RSS_KEY_ERR_CNT = 3,
+> +};
+> +
+> +struct {
+> +	__uint(type, BPF_MAP_TYPE_ARRAY);
+> +	__type(key, __u32);
+> +	__type(value, __u32);
+> +	__uint(max_entries, 4);
+> +} map_rss SEC(".maps");
+> +
+> +/* Mirror of enum xdp_rss_hash_type from include/net/xdp.h.
+> + * Needed because the enum is not part of UAPI headers.
+
+It is on purpose that enum is not part of UAPI headers, because BPF
+progs (like this) are suppose to handle this via CO-RE.
+
+Asking CO-RE experts (e.g. Cc Andrii), will below enum xdp_rss_hash_type
+usage automatically get relocated by libbpf, based on running kernel?
+(or do we need some explicit bpf_core_ calls?)
+
+> + */
+> +enum xdp_rss_hash_type {
+> +	XDP_RSS_L3_IPV4 = 1U << 0,
+> +	XDP_RSS_L3_IPV6 = 1U << 1,
+> +	XDP_RSS_L3_DYNHDR = 1U << 2,
+> +	XDP_RSS_L4 = 1U << 3,
+> +	XDP_RSS_L4_TCP = 1U << 4,
+> +	XDP_RSS_L4_UDP = 1U << 5,
+> +	XDP_RSS_L4_SCTP = 1U << 6,
+> +	XDP_RSS_L4_IPSEC = 1U << 7,
+> +	XDP_RSS_L4_ICMP = 1U << 8,
+> +};
+
+--Jesper
