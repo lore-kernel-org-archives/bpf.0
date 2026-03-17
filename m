@@ -1,199 +1,152 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDB6635F16A;
-	Tue, 17 Mar 2026 09:19:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD52355F47;
+	Tue, 17 Mar 2026 09:20:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773739170; cv=none; b=jno97LcHylOdTkUTSbb7CdwVShVwmvD1KGVcMIGOZdkvu+PFJnAvNgNuxWmT10wVDfkx6lJDa96o6c162poHR972fGj+WRtGH3+Pftut7hufxw0XJSzvHIV+Er/uFgxZ7VsKAfmon1IRcZ4pKX5c4qLG97PMUouUBdeo9CzpL6Y=
+	t=1773739221; cv=none; b=Ddbd9q5PbtBkB/ysZoih+Kq+cG0wKNHPQc2tiImppd7fy4F1dR33LP/CoEhPLE1tdNrx2mnZe2l6eWx36+QePcSZr258lomPIDZ+UfhcTdJWtfHMWujMzPBWXZLf7TFo7tv7LOKoWEsbtqn+54Ilwt/WMkCSwUvWQvk0p7niZRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773739170; c=relaxed/simple;
-	bh=DCURi86uRcFMWZ3j+SUJmdI96P+kkRuQLQRIMxxqF/Q=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=mal2IGSVqyXKoHc8xDs4QPcur88Ib9nquVxY4IztyiRsqTUJ+E5wV6oPLLn3qSFhikHECUMfb26Y+7M3kFidZxgGe8M0ksqAp1BMLGS2LlhrSfecrKbWxTuypC8dk+JujhEIBcsUfeJQfWZU3S0LRTvCvv9kA/jbIYfpL97WAt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LJWhNAj+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773739221; c=relaxed/simple;
+	bh=xP5eeh+0a9lPEEEUwZteoXw337RUHoxL4t15/sE4OyQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=k5bz8A1mUAXNsjcaUJmYP6jjsm/T6HFL+MhKNhIE9TTT5Um9Mo4z0cPzPGh0NF/+ixJEFfwxnV7ttbGPiREmFhPDAu6BgcobvjJ2fDuHfyctOJbrdNssfpFkctCMnxbC9Xlar+rc1OomdisyBIlPG2S95pLfJFxR6hfNtzbnPQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q3mMbdgS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LJWhNAj+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D2AEC2BCAF;
-	Tue, 17 Mar 2026 09:19:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q3mMbdgS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F197EC4CEF7;
+	Tue, 17 Mar 2026 09:20:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773739169;
-	bh=DCURi86uRcFMWZ3j+SUJmdI96P+kkRuQLQRIMxxqF/Q=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=LJWhNAj+KLnBF1VSVZ2Z6bhXbRuqCVntYP3bL0IN7gXmXMztNa81BlY9YdmTL/AIZ
-	 3AuRDWi60YgL9blUlNFktQ6isdWv3ayVTLFJ9BfIm/p1MJpIkRFkojp4DuXtgFgVNS
-	 B20vIgNll1r9ymWyYCehwUNTS4e7dxLFWwHRzrOTcCKEekY5QCjwVQfjZbg5o0uxti
-	 sXR35MAqCcBgxLV5cp34deoO3JZzoml1EbcvGMkva1L/ObEcSyy3/eYgt0IK51WqLh
-	 dY6qFvDrUIm7S6unJ2wquw1u0t1lC5KCdWPEyQDq9vHF2G4bpGLm75HxUH2Xji+kub
-	 6qvm6Whe+3zHw==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Stanislav Fomichev <stfomichev@gmail.com>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- larysa.zaremba@intel.com, aleksander.lobakin@intel.com
-Subject: Re: [PATCH net 1/6] xsk: respect tailroom for ZC setups
-In-Reply-To: <abiJ2C_q62bn7EC3@mini-arch>
-References: <20260316174550.462177-1-maciej.fijalkowski@intel.com>
- <20260316174550.462177-2-maciej.fijalkowski@intel.com>
- <abiJ2C_q62bn7EC3@mini-arch>
-Date: Tue, 17 Mar 2026 10:19:25 +0100
-Message-ID: <878qbqrexu.fsf@all.your.base.are.belong.to.us>
+	s=k20201202; t=1773739220;
+	bh=xP5eeh+0a9lPEEEUwZteoXw337RUHoxL4t15/sE4OyQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Q3mMbdgSSCoLb+Sp3+NLMDtSmduFKJ1HwBvWTNYqaZZrhOMgjV3NLCz+1Mo80CqlV
+	 mA2/HTSJXUeM6c/hGvrXdQO3BlsuYbjvXvPYPFXZB81glWCytcEIHBWi58Dk1yXGux
+	 wvBrH3ZVkhAo9fxbiWu7TKPHrUaPHgz5VRNHuNoESIhN5sBk4/itodd6tiWozDEb3f
+	 sJBxbSQ3etYNS/ptv4SVDIsmTKRDWs6MfUTieQcQVvLcWI71Fa/BZwrrzOJKTbqXhY
+	 XUbs8zOP7T+vpbfLLu/MbQ7V61SISUqGtsTc9IFXJKnoFMX+7YRldqFTvi5ou2J/Zm
+	 pON1rcXFZLIhA==
+Message-ID: <ebd00055-d4aa-4612-8bf3-ef0a308512f8@kernel.org>
+Date: Tue, 17 Mar 2026 10:20:08 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-Stanislav Fomichev <stfomichev@gmail.com> writes:
-
-> On 03/16, Maciej Fijalkowski wrote:
->> Multi-buffer XDP stores information about frags in skb_shared_info that
->> sits at the tailroom of a packet. The storage space is reserved via
->> xdp_data_hard_end():
->>=20
->> 	((xdp)->data_hard_start + (xdp)->frame_sz -	\
->> 	 SKB_DATA_ALIGN(sizeof(struct skb_shared_info)))
->>=20
->> and then we refer to it via macro below:
->>=20
->> static inline struct skb_shared_info *
->> xdp_get_shared_info_from_buff(const struct xdp_buff *xdp)
->> {
->>         return (struct skb_shared_info *)xdp_data_hard_end(xdp);
->> }
->>=20
->> Currently we do not respect this tailroom space in multi-buffer AF_XDP
->> ZC scenario. To address this, introduce xsk_pool_get_tailroom() and use
->> it within xsk_pool_get_rx_frame_size() which is used in ZC drivers to
->> configure length of HW Rx buffer.
->>=20
->> xsk_pool_get_tailroom() is only reserving necessary space when pool is
->> zc and underlying netdev supports zc multi-buffer. Since this function
->> relies on pool->umem->zc setting, set it before ndo_bpf during zc
->> configuration, so that driver that actually calls
->> xsk_pool_get_rx_frame_size() inside ndo_bpf will get correct tailroom
->> value.
->>=20
->> Fixes: 24ea50127ecf ("xsk: support mbuf on ZC RX")
->> Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
->> ---
->>  include/net/xdp_sock_drv.h | 21 ++++++++++++++++++++-
->>  net/xdp/xsk_buff_pool.c    |  3 ++-
->>  2 files changed, 22 insertions(+), 2 deletions(-)
->>=20
->> diff --git a/include/net/xdp_sock_drv.h b/include/net/xdp_sock_drv.h
->> index 6b9ebae2dc95..13b2aae00737 100644
->> --- a/include/net/xdp_sock_drv.h
->> +++ b/include/net/xdp_sock_drv.h
->> @@ -41,6 +41,19 @@ static inline u32 xsk_pool_get_headroom(struct xsk_bu=
-ff_pool *pool)
->>  	return XDP_PACKET_HEADROOM + pool->headroom;
->>  }
->>=20=20
->> +static inline u32 xsk_pool_get_tailroom(struct xsk_buff_pool *pool)
->> +{
->> +	struct xdp_umem *umem =3D pool->umem;
->> +
->> +	/* Reserve tailroom only for zero-copy pools that opted into
->> +	 * multi-buffer. The reserved area is used for skb_shared_info,
->> +	 * matching the XDP core's xdp_data_hard_end() layout.
->> +	 */
->> +	if (umem->zc && (umem->flags & XDP_UMEM_SG_FLAG))
->> +		return SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
->> +	return 0;
->> +}
->> +
->>  static inline u32 xsk_pool_get_chunk_size(struct xsk_buff_pool *pool)
->>  {
->>  	return pool->chunk_size;
->> @@ -48,7 +61,8 @@ static inline u32 xsk_pool_get_chunk_size(struct xsk_b=
-uff_pool *pool)
->>=20=20
->>  static inline u32 xsk_pool_get_rx_frame_size(struct xsk_buff_pool *pool)
->>  {
->> -	return xsk_pool_get_chunk_size(pool) - xsk_pool_get_headroom(pool);
->> +	return xsk_pool_get_chunk_size(pool) - xsk_pool_get_headroom(pool) -
->> +	       xsk_pool_get_tailroom(pool);
->>  }
->>=20=20
->>  static inline u32 xsk_pool_get_rx_frag_step(struct xsk_buff_pool *pool)
->> @@ -332,6 +346,11 @@ static inline u32 xsk_pool_get_headroom(struct xsk_=
-buff_pool *pool)
->>  	return 0;
->>  }
->
-> [..]
->=20=20
->> +static inline u32 xsk_pool_get_tailroom(struct xsk_buff_pool *pool)
->> +{
->> +	return 0;
->> +}
->
-> Not sure it's needed? xsk_pool_get_tailroom is only used by
-> CONFIG_XDP_SOCKETS' version of xsk_pool_get_rx_frame_size.
->
->>  static inline u32 xsk_pool_get_chunk_size(struct xsk_buff_pool *pool)
->>  {
->>  	return 0;
->> diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
->> index 37b7a68b89b3..2cfc19e363e3 100644
->> --- a/net/xdp/xsk_buff_pool.c
->> +++ b/net/xdp/xsk_buff_pool.c
->> @@ -213,6 +213,7 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
->>  	bpf.command =3D XDP_SETUP_XSK_POOL;
->>  	bpf.xsk.pool =3D pool;
->>  	bpf.xsk.queue_id =3D queue_id;
->> +	pool->umem->zc =3D true;
->>=20=20
->>  	netdev_ops_assert_locked(netdev);
->>  	err =3D netdev->netdev_ops->ndo_bpf(netdev, &bpf);
->> @@ -224,13 +225,13 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
->>  		err =3D -EINVAL;
->>  		goto err_unreg_xsk;
->>  	}
->> -	pool->umem->zc =3D true;
->>  	pool->xdp_zc_max_segs =3D netdev->xdp_zc_max_segs;
->>  	return 0;
->>=20=20
->>  err_unreg_xsk:
->>  	xp_disable_drv_zc(pool);
->>  err_unreg_pool:
->> +	pool->umem->zc =3D false;
->>  	if (!force_zc)
->>  		err =3D 0; /* fallback to copy mode */
->>  	if (err) {
->
-> I'm not super familiar with the shared umem patch, but is it safe to
-> unconditionally undo pool->umem->zc =3D false here? xp_assign_dev_shared
-> looks at this umem->zc flag.. Presumably other places do as well on
-> teardown?
-
-Good catch!
-
-I can elaborate a bit; the zero-copy property of umem is shared between
-all users (sockets) of that umem. IOW, all sockets sharing an umem,
-inherits whatever the first socket negotiated.
-
-So, we could get into something like:
-
-1. Socket A binds queue 0, ndo_bpf OK (umem->zc =3D true)
-2. Socket B binds queue 1 via xp_assign_dev_shared()
-   reads umem->zc =3D=3D true, so flags =3D XDP_ZEROCOPY
-   xp_assign_dev() sets umem->zc =3D true
-   ndo_bpf() NOK for queue 1 -> error path: umem->zc =3D false (oops)
-3. Socket A is still active on queue 0 in ZC mode, but umem->zc is now
-   false
-
-...and we'll have a bunch of checks on umem->zc that now has incorrect
-state.
-
-From this follows that the zc flag shouldn't be toggled on a shared
-resource without checking if other consumers exist. I think a per-pool
-zc flag is needed here or smth. :-(
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5] mm: introduce a new page type for page pool in page
+ type
+To: Byungchul Park <byungchul@sk.com>, linux-mm@kvack.org,
+ akpm@linux-foundation.org, netdev@vger.kernel.org,
+ Jakub Kicinski <kuba@kernel.org>, Mina Almasry <almasrymina@google.com>,
+ Toke Hoiland Jorgensen <toke@redhat.com>
+Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
+ harry.yoo@oracle.com, ast@kernel.org, daniel@iogearbox.net,
+ davem@davemloft.net, kuba@kernel.org, john.fastabend@gmail.com,
+ sdf@fomichev.me, saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com,
+ mbloch@nvidia.com, andrew+netdev@lunn.ch, edumazet@google.com,
+ pabeni@redhat.com, david@redhat.com, lorenzo.stoakes@oracle.com,
+ Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org, surenb@google.com,
+ mhocko@suse.com, horms@kernel.org, jackmanb@google.com, hannes@cmpxchg.org,
+ ziy@nvidia.com, ilias.apalodimas@linaro.org, willy@infradead.org,
+ brauner@kernel.org, kas@kernel.org, yuzhao@google.com,
+ usamaarif642@gmail.com, baolin.wang@linux.alibaba.com,
+ almasrymina@google.com, toke@redhat.com, asml.silence@gmail.com,
+ bpf@vger.kernel.org, linux-rdma@vger.kernel.org, sfr@canb.auug.org.au,
+ dw@davidwei.uk, ap420073@gmail.com, dtatulea@nvidia.com
+References: <20260316222901.GA59948@system.software.com>
+ <20260316223113.20097-1-byungchul@sk.com>
+Content-Language: en-US
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+In-Reply-To: <20260316223113.20097-1-byungchul@sk.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-Bj=C3=B6rn
+
+
+On 16/03/2026 23.31, Byungchul Park wrote:
+> Currently, the condition 'page->pp_magic == PP_SIGNATURE' is used to
+> determine if a page belongs to a page pool.  However, with the planned
+> removal of @pp_magic, we should instead leverage the page_type in struct
+> page, such as PGTY_netpp, for this purpose.
+> 
+> Introduce and use the page type APIs e.g. PageNetpp(), __SetPageNetpp(),
+> and __ClearPageNetpp() instead, and remove the existing APIs accessing
+> @pp_magic e.g. page_pool_page_is_pp(), netmem_or_pp_magic(), and
+> netmem_clear_pp_magic().
+> 
+> Plus, add @page_type to struct net_iov at the same offset as struct page
+> so as to use the page_type APIs for struct net_iov as well.  While at it,
+> reorder @type and @owner in struct net_iov to avoid a hole and
+> increasing the struct size.
+> 
+> This work was inspired by the following link:
+> 
+>    https://lore.kernel.org/all/582f41c0-2742-4400-9c81-0d46bf4e8314@gmail.com/
+> 
+> While at it, move the sanity check for page pool to on the free path.
+> 
+[...]
+see below
+
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 9f2fe46ff69a1..ee81f5c67c18f 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -1044,7 +1044,6 @@ static inline bool page_expected_state(struct page *page,
+>   #ifdef CONFIG_MEMCG
+>   			page->memcg_data |
+>   #endif
+> -			page_pool_page_is_pp(page) |
+>   			(page->flags.f & check_flags)))
+>   		return false;
+>   
+> @@ -1071,8 +1070,6 @@ static const char *page_bad_reason(struct page *page, unsigned long flags)
+>   	if (unlikely(page->memcg_data))
+>   		bad_reason = "page still charged to cgroup";
+>   #endif
+> -	if (unlikely(page_pool_page_is_pp(page)))
+> -		bad_reason = "page_pool leak";
+>   	return bad_reason;
+>   }
+>   
+> @@ -1381,9 +1378,17 @@ __always_inline bool __free_pages_prepare(struct page *page,
+>   		mod_mthp_stat(order, MTHP_STAT_NR_ANON, -1);
+>   		folio->mapping = NULL;
+>   	}
+> -	if (unlikely(page_has_type(page)))
+> +	if (unlikely(page_has_type(page))) {
+> +		/* networking expects to clear its page type before releasing */
+> +		if (is_check_pages_enabled()) {
+> +			if (unlikely(PageNetpp(page))) {
+> +				bad_page(page, "page_pool leak");
+> +				return false;
+> +			}
+> +		}
+>   		/* Reset the page_type (which overlays _mapcount) */
+>   		page->page_type = UINT_MAX;
+> +	}
+
+I need some opinions here.  When CONFIG_DEBUG_VM is enabled we get help
+finding (hard to find) page_pool leaks and mark the page as bad.
+
+When CONFIG_DEBUG_VM is disabled we silently "allow" leaking.
+Should we handle this more gracefully here? (release pp resources)
+
+Allowing the page to be reused at this point, when a page_pool instance
+is known to track life-time and (likely) have the page DMA mapped, seems
+problematic to me.  Code only clears page->page_type, but IIRC Toke
+added DMA tracking in other fields (plus xarray internally).
+
+I was going to suggest to simply re-export page_pool_release_page() that
+was hidden by 535b9c61bdef ("net: page_pool: hide
+page_pool_release_page()"), but that functionality was lost in
+07e0c7d3179d ("net: page_pool: merge page_pool_release_page() with
+page_pool_return_page()"). (Cc Jakub/Kuba for that choice).
+Simply page_pool_release_page(page->pp, page).
+
+Opinions?
+
+--Jesper
