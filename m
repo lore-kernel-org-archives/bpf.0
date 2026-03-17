@@ -1,122 +1,199 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E478735E946
-	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 09:17:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDB6635F16A;
+	Tue, 17 Mar 2026 09:19:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773739032; cv=none; b=rimge+W8ASjehYZ/ebBsQ8G0KCHZqmFMTCfoiXqOJq4YCjXVTKOxeShpdcx0GGZwSWzZ2GR0eL8so7e+jfkBvQNynQe2oH3ooPV27h0gRUYsRB3lkTWLnQrElH1aIrQJ8b3Sf886Fhe1ysTt+WMiykf6ZfUjRz6QqdOaeYLQBsY=
+	t=1773739170; cv=none; b=jno97LcHylOdTkUTSbb7CdwVShVwmvD1KGVcMIGOZdkvu+PFJnAvNgNuxWmT10wVDfkx6lJDa96o6c162poHR972fGj+WRtGH3+Pftut7hufxw0XJSzvHIV+Er/uFgxZ7VsKAfmon1IRcZ4pKX5c4qLG97PMUouUBdeo9CzpL6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773739032; c=relaxed/simple;
-	bh=dtTlCI41aozPTprXi9NLFL5XTO3EzPdQWfOwuMTboPk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oiBLPWsJe8gHkk6opHc/6XcAukgVYLzBheS0r7UcE+eB5fHNSDQYxdsrrfcAmnIvNMRWgYXzCTrg2gAWJIKR+tLQepR5BhIxiJvMdZoPBLiVC/WnNHeF77Ez4J0O4bOD9EcBQ3J04JgENODbeKLYHSIThB3idBJ4Dx2xmKiNv5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fG2q/vtu; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773739170; c=relaxed/simple;
+	bh=DCURi86uRcFMWZ3j+SUJmdI96P+kkRuQLQRIMxxqF/Q=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=mal2IGSVqyXKoHc8xDs4QPcur88Ib9nquVxY4IztyiRsqTUJ+E5wV6oPLLn3qSFhikHECUMfb26Y+7M3kFidZxgGe8M0ksqAp1BMLGS2LlhrSfecrKbWxTuypC8dk+JujhEIBcsUfeJQfWZU3S0LRTvCvv9kA/jbIYfpL97WAt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LJWhNAj+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fG2q/vtu"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-482f454be5bso5433125e9.0
-        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 02:17:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773739028; x=1774343828; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6M98aQTjWa8T+7ERPNFsSGl3sVEntJ3KUS4g5D7crqo=;
-        b=fG2q/vtuNbzuklQBCk2lkDj0WVbhIZEBgPNCSNifvBQFx+XepfFhvU3S6Hw+SMsd+T
-         ZvPleBcQ8goyWn52ywY8+Xn4wnaQ0aPqoJQbwSyChKxm30GW1zEAkFPRDUsSRjKemlIC
-         CiwrE3HNmyCiEOvqwjXybVFxYyDPkCP81Fpc6dM/mYhDUgRx8lmFyo3X+3F52mSro0/2
-         9QoivY6AcT1W6GtEugGJcPJHbOZkMH8dlotwx7lO9ZsPn/wh58IK1zRhuKDCcv10uQ+i
-         xswq97GzXF0Pb7+PCRlEoqcD46RDvTQ3vphxeN5U2YMCl1JR/qYquwNwrjj/mDl9TDKw
-         WJ0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773739028; x=1774343828;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=6M98aQTjWa8T+7ERPNFsSGl3sVEntJ3KUS4g5D7crqo=;
-        b=XibCm3kWYGo+OOrnhW+NXJt/L2Y+lmELdlZ0YkprwLQ5D9+FK3p/PbI5UeyQivespC
-         xhM6UyFywWbsQfulYdGnDZIiRNmUvYGeLNGXowUzLH3+OzSrHzv9BgZT8d7FMRf2Qt7o
-         1i5/CHx9bMPk4sWxg8bdc3RccE/JXvrwie81b70DvLqhhzZtPhIxL3YXIi+hM2lz1Byj
-         JAvN5H/hEugq88inrICqhSuVk4b0HEBP27JfCIoF+lE7JhGVvXGt3eSkin2d+ShK+hPg
-         OO4LrJAal+To3H90mRP2qMMs73AOiW4IOAYaspwEx/y0XyaP7HQ51XUwXj+2ESoq8bkD
-         XcNg==
-X-Forwarded-Encrypted: i=1; AJvYcCXbNqtbmhEMpnJmkWLG+GiGnDFjnyPVnqqaq1OeOGsQIrDNwAJRqKVXrcgImK4sagh00tk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJAEQcXQFgYAnh5Kz0tvq8rXn/62Pw+13CP9ISdcpdh6KoHjR9
-	pMAgBKZXDZEnKBqWMFGRLDOfaBpmxGglUOQOfq7x6rx6IEbxzE4G6Bzo
-X-Gm-Gg: ATEYQzyYPekcB5Sko01TDMMY16KM+A7Yo8oIbbQM4qwXjTzdlACqYx5Xf28GWXd0tHr
-	QzK2q+kk1A4apDT+Ap0q/e2w/3XLrANEqqKFXCeQ5h7eustXSsqYqdIIBBTgLzstKycY7yv234Q
-	8PBb8wLYSNS0/7FOg+ghKlPcaKPAoaxLBkhJMEse/NTtUwMV5tI0tgRGK7VlO+CaQ9/05sKqmhU
-	K3lDneR3zc4eTEt+EQwuxKhnbAaumifeFh4W1GBAl7TP9mPK0MImK4jY4YyUhDLqW8IqGVHBMxH
-	4TVQj6JLx6PYc4DLpHkAVWNkIR/+w88uhKd9BtTIbfl+9fo2l9x+GXjK3I5ILz4J8HhIc+MmveH
-	4rLKVRBq8snwuvxsU9HA4jxwW75uUCKYeB68lAy3dyvoxY0O1efFuxZsDlDp3d5kZIXmLCfWa07
-	2CVW8g/R+A2yxP1mEI5NRmrJPyiJNim9XBQmfDX1Z/wFL+yJ2q5sr3fygme1MsPbr0
-X-Received: by 2002:a05:600c:5249:b0:485:38f1:5cec with SMTP id 5b1f17b1804b1-4856eac2b35mr44375555e9.7.1773739027522;
-        Tue, 17 Mar 2026 02:17:07 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4856ea8fb0dsm99153105e9.3.2026.03.17.02.17.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Mar 2026 02:17:07 -0700 (PDT)
-Date: Tue, 17 Mar 2026 09:17:05 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-pm@vger.kernel.org, bpf@vger.kernel.org, arnd@arndb.de,
- catalin.marinas@arm.com, will@kernel.org, peterz@infradead.org,
- mark.rutland@arm.com, harisokn@amazon.com, cl@gentwo.org, ast@kernel.org,
- rafael@kernel.org, daniel.lezcano@linaro.org, memxor@gmail.com,
- zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com, rdunlap@infradead.org,
- joao.m.martins@oracle.com, boris.ostrovsky@oracle.com,
- konrad.wilk@oracle.com
-Subject: Re: [PATCH v10 00/12] barrier: Add
- smp_cond_load_{relaxed,acquire}_timeout()
-Message-ID: <20260317091705.5a64fc56@pumpkin>
-In-Reply-To: <87ms07rlp9.fsf@oracle.com>
-References: <20260316013651.3225328-1-ankur.a.arora@oracle.com>
-	<20260315184925.b6f93386e918ca79614843e3@linux-foundation.org>
-	<874imftol4.fsf@oracle.com>
-	<20260316233712.7cbfac27@pumpkin>
-	<87ms07rlp9.fsf@oracle.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LJWhNAj+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D2AEC2BCAF;
+	Tue, 17 Mar 2026 09:19:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773739169;
+	bh=DCURi86uRcFMWZ3j+SUJmdI96P+kkRuQLQRIMxxqF/Q=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=LJWhNAj+KLnBF1VSVZ2Z6bhXbRuqCVntYP3bL0IN7gXmXMztNa81BlY9YdmTL/AIZ
+	 3AuRDWi60YgL9blUlNFktQ6isdWv3ayVTLFJ9BfIm/p1MJpIkRFkojp4DuXtgFgVNS
+	 B20vIgNll1r9ymWyYCehwUNTS4e7dxLFWwHRzrOTcCKEekY5QCjwVQfjZbg5o0uxti
+	 sXR35MAqCcBgxLV5cp34deoO3JZzoml1EbcvGMkva1L/ObEcSyy3/eYgt0IK51WqLh
+	 dY6qFvDrUIm7S6unJ2wquw1u0t1lC5KCdWPEyQDq9vHF2G4bpGLm75HxUH2Xji+kub
+	 6qvm6Whe+3zHw==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Stanislav Fomichev <stfomichev@gmail.com>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ larysa.zaremba@intel.com, aleksander.lobakin@intel.com
+Subject: Re: [PATCH net 1/6] xsk: respect tailroom for ZC setups
+In-Reply-To: <abiJ2C_q62bn7EC3@mini-arch>
+References: <20260316174550.462177-1-maciej.fijalkowski@intel.com>
+ <20260316174550.462177-2-maciej.fijalkowski@intel.com>
+ <abiJ2C_q62bn7EC3@mini-arch>
+Date: Tue, 17 Mar 2026 10:19:25 +0100
+Message-ID: <878qbqrexu.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 16 Mar 2026 23:53:22 -0700
-Ankur Arora <ankur.a.arora@oracle.com> wrote:
+Stanislav Fomichev <stfomichev@gmail.com> writes:
 
-> David Laight <david.laight.linux@gmail.com> writes:
-...
-> > On arm64 I think you could use explicit sev and wfe - but that will wake all
-> > 'sleeping' cpu; and you may not want the 'thundering herd'.  
-> 
-> Wouldn't we still have the same narrow window where the CPU disregards the IPI?
+> On 03/16, Maciej Fijalkowski wrote:
+>> Multi-buffer XDP stores information about frags in skb_shared_info that
+>> sits at the tailroom of a packet. The storage space is reserved via
+>> xdp_data_hard_end():
+>>=20
+>> 	((xdp)->data_hard_start + (xdp)->frame_sz -	\
+>> 	 SKB_DATA_ALIGN(sizeof(struct skb_shared_info)))
+>>=20
+>> and then we refer to it via macro below:
+>>=20
+>> static inline struct skb_shared_info *
+>> xdp_get_shared_info_from_buff(const struct xdp_buff *xdp)
+>> {
+>>         return (struct skb_shared_info *)xdp_data_hard_end(xdp);
+>> }
+>>=20
+>> Currently we do not respect this tailroom space in multi-buffer AF_XDP
+>> ZC scenario. To address this, introduce xsk_pool_get_tailroom() and use
+>> it within xsk_pool_get_rx_frame_size() which is used in ZC drivers to
+>> configure length of HW Rx buffer.
+>>=20
+>> xsk_pool_get_tailroom() is only reserving necessary space when pool is
+>> zc and underlying netdev supports zc multi-buffer. Since this function
+>> relies on pool->umem->zc setting, set it before ndo_bpf during zc
+>> configuration, so that driver that actually calls
+>> xsk_pool_get_rx_frame_size() inside ndo_bpf will get correct tailroom
+>> value.
+>>=20
+>> Fixes: 24ea50127ecf ("xsk: support mbuf on ZC RX")
+>> Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+>> ---
+>>  include/net/xdp_sock_drv.h | 21 ++++++++++++++++++++-
+>>  net/xdp/xsk_buff_pool.c    |  3 ++-
+>>  2 files changed, 22 insertions(+), 2 deletions(-)
+>>=20
+>> diff --git a/include/net/xdp_sock_drv.h b/include/net/xdp_sock_drv.h
+>> index 6b9ebae2dc95..13b2aae00737 100644
+>> --- a/include/net/xdp_sock_drv.h
+>> +++ b/include/net/xdp_sock_drv.h
+>> @@ -41,6 +41,19 @@ static inline u32 xsk_pool_get_headroom(struct xsk_bu=
+ff_pool *pool)
+>>  	return XDP_PACKET_HEADROOM + pool->headroom;
+>>  }
+>>=20=20
+>> +static inline u32 xsk_pool_get_tailroom(struct xsk_buff_pool *pool)
+>> +{
+>> +	struct xdp_umem *umem =3D pool->umem;
+>> +
+>> +	/* Reserve tailroom only for zero-copy pools that opted into
+>> +	 * multi-buffer. The reserved area is used for skb_shared_info,
+>> +	 * matching the XDP core's xdp_data_hard_end() layout.
+>> +	 */
+>> +	if (umem->zc && (umem->flags & XDP_UMEM_SG_FLAG))
+>> +		return SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+>> +	return 0;
+>> +}
+>> +
+>>  static inline u32 xsk_pool_get_chunk_size(struct xsk_buff_pool *pool)
+>>  {
+>>  	return pool->chunk_size;
+>> @@ -48,7 +61,8 @@ static inline u32 xsk_pool_get_chunk_size(struct xsk_b=
+uff_pool *pool)
+>>=20=20
+>>  static inline u32 xsk_pool_get_rx_frame_size(struct xsk_buff_pool *pool)
+>>  {
+>> -	return xsk_pool_get_chunk_size(pool) - xsk_pool_get_headroom(pool);
+>> +	return xsk_pool_get_chunk_size(pool) - xsk_pool_get_headroom(pool) -
+>> +	       xsk_pool_get_tailroom(pool);
+>>  }
+>>=20=20
+>>  static inline u32 xsk_pool_get_rx_frag_step(struct xsk_buff_pool *pool)
+>> @@ -332,6 +346,11 @@ static inline u32 xsk_pool_get_headroom(struct xsk_=
+buff_pool *pool)
+>>  	return 0;
+>>  }
+>
+> [..]
+>=20=20
+>> +static inline u32 xsk_pool_get_tailroom(struct xsk_buff_pool *pool)
+>> +{
+>> +	return 0;
+>> +}
+>
+> Not sure it's needed? xsk_pool_get_tailroom is only used by
+> CONFIG_XDP_SOCKETS' version of xsk_pool_get_rx_frame_size.
+>
+>>  static inline u32 xsk_pool_get_chunk_size(struct xsk_buff_pool *pool)
+>>  {
+>>  	return 0;
+>> diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+>> index 37b7a68b89b3..2cfc19e363e3 100644
+>> --- a/net/xdp/xsk_buff_pool.c
+>> +++ b/net/xdp/xsk_buff_pool.c
+>> @@ -213,6 +213,7 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+>>  	bpf.command =3D XDP_SETUP_XSK_POOL;
+>>  	bpf.xsk.pool =3D pool;
+>>  	bpf.xsk.queue_id =3D queue_id;
+>> +	pool->umem->zc =3D true;
+>>=20=20
+>>  	netdev_ops_assert_locked(netdev);
+>>  	err =3D netdev->netdev_ops->ndo_bpf(netdev, &bpf);
+>> @@ -224,13 +225,13 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+>>  		err =3D -EINVAL;
+>>  		goto err_unreg_xsk;
+>>  	}
+>> -	pool->umem->zc =3D true;
+>>  	pool->xdp_zc_max_segs =3D netdev->xdp_zc_max_segs;
+>>  	return 0;
+>>=20=20
+>>  err_unreg_xsk:
+>>  	xp_disable_drv_zc(pool);
+>>  err_unreg_pool:
+>> +	pool->umem->zc =3D false;
+>>  	if (!force_zc)
+>>  		err =3D 0; /* fallback to copy mode */
+>>  	if (err) {
+>
+> I'm not super familiar with the shared umem patch, but is it safe to
+> unconditionally undo pool->umem->zc =3D false here? xp_assign_dev_shared
+> looks at this umem->zc flag.. Presumably other places do as well on
+> teardown?
 
-You need a 'sevl' in the interrupt exit path.
-(Or, more specifically, the ISR needs to exit with the flag set.)
-Actually I think you need one anyway, if the ISR clears the flag
-then the existing code will sleep until the following IRQ if an
-interrupt happens between the ldx and wfe.
-I've not looked at the ISR exit code.
+Good catch!
 
-Ignoring the vcu check (which is fairly broken anyway), I think osq_lock()
-would be ok if the 'osq node' were in the right cache line.
-I've some patches pending (I need to sort out lots of comments) that reduce
-the osq_node down to two cpu numbers; 8 bytes but possibly only 4
-although that is harder without 16bit atomics.
-That would work for arm32 (ldx uses a cache-line resolution) but I'm not
-sure about similar functionality on other cpu.
+I can elaborate a bit; the zero-copy property of umem is shared between
+all users (sockets) of that umem. IOW, all sockets sharing an umem,
+inherits whatever the first socket negotiated.
 
-	David
+So, we could get into something like:
 
-> 
-> --
-> ankur
+1. Socket A binds queue 0, ndo_bpf OK (umem->zc =3D true)
+2. Socket B binds queue 1 via xp_assign_dev_shared()
+   reads umem->zc =3D=3D true, so flags =3D XDP_ZEROCOPY
+   xp_assign_dev() sets umem->zc =3D true
+   ndo_bpf() NOK for queue 1 -> error path: umem->zc =3D false (oops)
+3. Socket A is still active on queue 0 in ZC mode, but umem->zc is now
+   false
 
+...and we'll have a bunch of checks on umem->zc that now has incorrect
+state.
+
+From this follows that the zc flag shouldn't be toggled on a shared
+resource without checking if other consumers exist. I think a per-pool
+zc flag is needed here or smth. :-(
+
+
+Bj=C3=B6rn
