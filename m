@@ -1,206 +1,634 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D36D31E841;
-	Tue, 17 Mar 2026 17:57:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.14
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773770271; cv=fail; b=dumFFb6d9nPdEkHX9RNR0cfgURHaTs2nTdJxrSFRuWjaq4tV7pXZGKhE4FpPCjm5lt699FgI5xDd/eIEcbxdJieITf7XAfhxEGfOP3YEzF7N0qzdfXelcRFjkIfu45CYpupeAxmZ5ipF1SnmPZz2seAi2dq8U/wLS6tiDIaijq0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773770271; c=relaxed/simple;
-	bh=dmwJted2M/aGa5qZ0ixeuquMtszGkN3lwCXNy41ke2Q=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=n09eKGoiOfzgorLEP9gngyXznMwdauiyzVxI8emTo0SMjuN9HZbVTCZc0sgHS2syOnG4fT8Sy9RPuV/Pf8xDqhYUmsBoprKBLcAhNYKM/UeLf7kJB9KQcRhqeLc/1gE1T+91H/wYA8eZQ1LIPDxjS8+IYvz2C4aApAznXnFvCk4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DVE1aMFF; arc=fail smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5577E37B036
+	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 18:24:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773771873; cv=none; b=AbkcAwpOqdSi4mwn1pmQ01YhBv+TTtSNbYBbpcDmt6SZIPIoJ2j4ce6oOBfnWZixptiULmGmE/7HdjMj6uJ9s/9YvJRCRB48hf4JIkexon6SVPqDqjsk8TkrY7gU+lT+CceXPuBV+YtWW+wI47qBRUfDK8uzhbmfMMyHiwr1QrM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773771873; c=relaxed/simple;
+	bh=Sn8dc4VAUbVHdeO6sX8S36ewqdpPzGJsoR0ZJSmzD7o=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=l/CHhHi+0XkKz0KypWHfigPE8R2OK5kjh3nMjZYsejNWV6eNgvImob4YkRSZpFrwWwl279YjZDLTTsd3snWvxmiIJVDC2JYzVKMf8J807vmNcynVO9rVY+Do1iY7eVIxwHUIDge9EQLGQK6yo5T8YcQ8aqViyzur/M650sDb+84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=Rkf7kpea; arc=none smtp.client-ip=209.85.160.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DVE1aMFF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773770268; x=1805306268;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=dmwJted2M/aGa5qZ0ixeuquMtszGkN3lwCXNy41ke2Q=;
-  b=DVE1aMFFABZZHNHGD1un52mwk8drQ7LVeL3vDMQinjbaaUSR0mzq4HtL
-   q0VUKVKxG2ybQBRHdQDL1r0S8Fv1Zut0Rqc1SI4Qavz05+t5fNAnB6ZNV
-   3iWzEmGXVZnjqBvOyo778DPhxde42UGjuZnZmv+7oqTE+grTQJZL95Juf
-   x4jCmYD9X1I94DXT9vvJJAAkgbnmPnqjvxnsLBxm6Cl2z5YBjIszlDyL+
-   II66CIGtN6uvnip4mE0SVxIl3DyBD0C/4sq/hRy8v2iYJ2aZOeCOTGmbT
-   51SBJg1E0rKm/otaCobKLwvuXfJnvzfERymjNLlFjsoiwogURgOL7MhQe
-   w==;
-X-CSE-ConnectionGUID: oCVZz+TOQt2/l00Mq53x0A==
-X-CSE-MsgGUID: Q/uGn0JpQvyzFQMT9z7afg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11732"; a="74891415"
-X-IronPort-AV: E=Sophos;i="6.23,126,1770624000"; 
-   d="scan'208";a="74891415"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 10:57:47 -0700
-X-CSE-ConnectionGUID: VVtq7woITLOtpasP4bxVAg==
-X-CSE-MsgGUID: k/0ZKhJVQfyYfOMni8FApg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,126,1770624000"; 
-   d="scan'208";a="227023820"
-Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
-  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 10:57:47 -0700
-Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
- ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Tue, 17 Mar 2026 10:57:46 -0700
-Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37 via Frontend Transport; Tue, 17 Mar 2026 10:57:46 -0700
-Received: from CH1PR05CU001.outbound.protection.outlook.com (52.101.193.69) by
- edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Tue, 17 Mar 2026 10:57:44 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=FFw9KUvMtCIkdm0AnzUKRu/K1e0qpywm0zmvbrH+9Xz0HIAD6p7bt3mOBgEw1d9Ntp/Dj9Zv4qapI6Y0Un97/pnevATVI8EP2WDFSOEdeFtTJbbg1yxyK5y8l0Ft3h47vC8hsQLXOUslDaQ6rpAV4E45VGQlizLvjIEAd6FsaWuPYJOzDO1XLKDJ4KW4ZuKb9GaD8401UJi4Ybrdu4tbnXRqB8fuBeDxGJl+ccHKd8ZzC+N/gWGwHBAg5x6U9AJ/7on+T9RUkjsorXTru7b5p7CFo9fHvIXvzaK+Dz3mzs4db7xB8aeUZC3cElRq6IRhchJKMSxVptHIXityT8VWTQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dHGg+KLS+kkoUq6KpVy387Z7kqh1MYfjTZqn8UrvGy0=;
- b=EzWUuPV6l86by0eyuTw6Dlpu6xyjkvcColc6NHwcmhy/+VPtjTjSaX7ctEtpGMPS5UStqykqAEQ4VJ2qxZMtf908CZ1sZC3zOyFVTKabiwuQodBRvFzJ3nyiTfyZxYR9QsZ2KQxBYVKXFWPNFFb+eyWJeFLG8kbnt692QtEfA03VTLc/h9x656XR8z6ifUUBlLN+y6rB0f8g8O13T0VpiBXUGUU3d0ZsnKWTYKoeQN0gQB3G1WloSfO8sZpYCHjUN0wQhs+lDj1zBDLUTeuUuj3ajVXcrGyaT8fVXzl9zj59vsxP0xYsN2mzpSsNwbF3sq81UUATbJpdNDUoIbtIkQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DS0PR11MB8230.namprd11.prod.outlook.com (2603:10b6:8:158::21)
- by CY8PR11MB7169.namprd11.prod.outlook.com (2603:10b6:930:90::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.19; Tue, 17 Mar
- 2026 17:57:41 +0000
-Received: from DS0PR11MB8230.namprd11.prod.outlook.com
- ([fe80::2592:f5a9:a751:be40]) by DS0PR11MB8230.namprd11.prod.outlook.com
- ([fe80::2592:f5a9:a751:be40%4]) with mapi id 15.20.9723.018; Tue, 17 Mar 2026
- 17:57:41 +0000
-Message-ID: <b616486f-f296-400e-ad12-e7d2bb8c9174@intel.com>
-Date: Tue, 17 Mar 2026 10:57:38 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [net-next,3/5] ice: migrate to netdev ops lock
-To: Jakub Kicinski <kuba@kernel.org>
-CC: Alexander Lobakin <aleksander.lobakin@intel.com>, <horms@kernel.org>,
-	<edumazet@google.com>, <sdf@fomichev.me>, <aleksandr.loktionov@intel.com>,
-	<ast@kernel.org>, <john.fastabend@gmail.com>, <bpf@vger.kernel.org>,
-	<netdev@vger.kernel.org>, <davem@davemloft.net>, <andrew+netdev@lunn.ch>,
-	<hawk@kernel.org>, <nxne.cnse.osdt.itp.upstreaming@intel.com>,
-	<magnus.karlsson@intel.com>, <pabeni@redhat.com>, <jacob.e.keller@intel.com>,
-	<daniel@iogearbox.net>, <maciej.fijalkowski@intel.com>
-References: <20260310220624.537917-4-anthony.l.nguyen@intel.com>
- <20260313014628.1509116-1-kuba@kernel.org>
- <4537e162-6610-4c3f-b8d5-e62415322282@intel.com>
- <20260316161630.2d9ac04e@kernel.org>
- <a95fa7f2-909e-4b1c-b25a-1ee88b292ecf@intel.com>
- <20260317085025.6459821c@kernel.org>
- <21a23b98-5014-4330-998f-53acfe705d67@intel.com>
- <20260317102917.14743543@kernel.org>
-Content-Language: en-US
-From: Tony Nguyen <anthony.l.nguyen@intel.com>
-In-Reply-To: <20260317102917.14743543@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MW4P221CA0025.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:303:8b::30) To DS0PR11MB8230.namprd11.prod.outlook.com
- (2603:10b6:8:158::21)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="Rkf7kpea"
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-509101189f1so55328541cf.2
+        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 11:24:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1773771870; x=1774376670; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Er+cBkoZIxH9IJuinMKMdfVcS8D6lweOcq/Usga4sI4=;
+        b=Rkf7kpealqtQdXDGupOrp02kkd+2ok0Ew+26LwOwnelxknpQW/VaG1lXtNBUWEuAXc
+         tEgdyVQOTJVmtRiYN0dzYZPhB8IunzTUXXJsVV6y8ltWw9JTn7rY/x+axNry6ZDAgMmK
+         YSRJwoUwgasR0feMCnuCW/RojNXDvOsNL31bEOUUvGo/OJbnAnJufRMgjPj2D5Vz0aqz
+         pFK0rCr5aAcus+kTwNZPEDS8FttY89nTc72WjAfbGY4kZEZQld8okxhJiK+5UF6hj+t7
+         MhC7gOZgkQx6/+rFf9jKfmOPRnzvTsPfPWDleFd08zUCITatzo1D1XClDpRuHUKk1q/f
+         58+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773771870; x=1774376670;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Er+cBkoZIxH9IJuinMKMdfVcS8D6lweOcq/Usga4sI4=;
+        b=REgXvD+FEU8JhobSB2qmSHRujUylhKmiIzhTrrqMQyfmUoZh9n8M6vEgRQi/D13aK+
+         0d3nX3XvZoZXn7zM3L9xcWQyLoqCMCg59ITn4XH+iRmTdIxvLEsGha10wh4KRNoA5PKF
+         uGWSXs86JTc0SNCYyyT6nJnFlQk6lZS8219vdZJ+YI4opN+spJp6T28uvgL+cf/nl58u
+         S3Ly6ACYnONe0K3Es1tehex8FP1ogNX6vZFZLNnK2+y07bW5+4RnoQTZP5+OF7e79hDV
+         hayeo8CSm8hE+kGGlIIKbZOVj22cP7fPCNCQWUaOtEP2Bt6mqOpxW8XJVbObZAuebFPe
+         ossA==
+X-Forwarded-Encrypted: i=1; AJvYcCVc28xJlREuKaMzBNwZUupONWI9JWDXTj2I6wHeocX2Zh364WPf2Lxo8cmZe8XwI7Zxbo8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMWyrSi5Uwvclbk8UFmbJk+8tawXWczl2dEG77H7VuYeb9K7xP
+	XRSmjDAeU9q6vgN3hipqNDOkhD7qXCBjAsDZ2NXxblb7LBArXopo0eFuX9ljCGx8P4g=
+X-Gm-Gg: ATEYQzwH+qilAgvDQcM44MnUN1yNuCcftVFQdPH3qEPv9N4A/uTRwILZyEVsCeVMNUY
+	aPWcsUjDUTrAGPlZBf+KEITa+gu1dH0Mjz2R6TEnKirmZ1lf62arAE9olUQM36W2/VOEBzd2cfb
+	SNPBm/TOoC0stAsXVU/QjrxUtw5w0LDPh8Rpmx4bDBZfB9wCc0R2xsQWtcZho2F3+fNzZvYB2tG
+	yHDnHYDbelZJq1WOWTDHi+v5BpW97IJHAFFkEPgg2FjYpXHxTbTZT+T/Qr/+hhmt3E7MA4XoOk5
+	i1BacfebtwaSXChwV9r3nlhloMdIM/87V0DWrtq4KzX6UOIJy6aQ/rWR26ILf40yjDem4PvyGN9
+	Pi3eQ6dfUkPrS7PmHjQPvDh4qB8nb4YI4F2fOuF1ZQqBD8bZWn9fLkuA63hcKW/ZQ5EWedxAKpT
+	1VziprgIynD6HO6pI1LaiELdk=
+X-Received: by 2002:ac8:5f84:0:b0:509:1009:e79d with SMTP id d75a77b69052e-50b148ba4fdmr3604901cf.55.1773771869884;
+        Tue, 17 Mar 2026 11:24:29 -0700 (PDT)
+Received: from localhost ([140.174.219.137])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50b13320817sm6983581cf.0.2026.03.17.11.24.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Mar 2026 11:24:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR11MB8230:EE_|CY8PR11MB7169:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9488935a-ee0d-4901-ee16-08de844eaf08
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016|18002099003|56012099003|22082099003;
-X-Microsoft-Antispam-Message-Info: 7jTwweNlFIEadYoipIc3A/+l7tL//srZGDEaBVEEWx+M1RUBOCWQPw6hNoWmZxCwQlcfuwVWCY6rI1LL3SenlESpMBGWhUtRA//ffK4Au62aCiYw8Fp1YvDh0/r9jpUQsP7QHjVMfRAuaAT1GmzSor1mbabdGsbHKsdXK/nFpX+yYWJPWaPswjJGj82IW/Y8Bsv08W9gWWTfw5gXbVbVcFhBzffvC95vCqsm4kjX3Tp3HtQ8N6yzbuckPlk5YwgHGRu0g3XRIEslSaPBCenN5clA3jnUHaiRhniNs7ulp5DVOX9SfOh/rIFJCEA1k0PoVI51YrxS24mIZP13l6l8eAIsFgccXnpyHrJQZWq1epRZ8hjGun1+13hP0BQQeL48kp3H6alyIItzYwGWcQw7V+Ks+lTgGn/ruFk09eb/I61KhXMANlSsgif3QCc9AKFQ/QOhwHJh64lznqXMz9gOxcJ64Dz/BcW3XXB3x7A+0eOG+s5zcMAX5DvSnWMSs79e1UZ2Kk3LczFLqkn4i34Kes8AkTd/qUKvwMnmBKHzQ9ol3Eluh84zP+X108u60tQF3q34pjrepF9ncu9qMFPuJlmOEywN143mDbFKcONbe91RzLeaW/zdSvWejXu+hTvqBRiPDLb9Ds/Fg0yIBbTRA9KV7q4UjqtaWajSZ0OEaQUPRRrRWG7u8aGsLqieIoKfdptatLCbblUIp9xWUXV6kuNbVXEZXINoVTVe801ciOcQRE4eTQgwNuCXBZd/oLwy
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB8230.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cjMySUcwQTJrSHFiREQ5Tlc3ZkE3Q1dyZ1oxSzBTaGJHZWd3UnVuUVY2d3RE?=
- =?utf-8?B?b0JvTFZybVJINlRJeGZEOWNnL01HcVgzalAxVmZPT3pWcTd6cFFlUHFnakth?=
- =?utf-8?B?UW9NZitoY3ZBK0o2TGhaSXoxN3N0MVAyakI2MTJkNEdSa2dsSUdTc1EwQ0Ew?=
- =?utf-8?B?elNkTnk3N1VNWG1PbTgrL0pxSi96ZWtiZVNIMk81Q1pJRHRURnJOOFdpOTRz?=
- =?utf-8?B?M2ZMbjJHVC96THcyNFFwTkpUVVRoSlNCbkNLZnVkSzdGTVFyNzZJSXpCeXl2?=
- =?utf-8?B?K1JDNFlpcUlEcGlndDNWcG16ekpGNEUzMHVGWlRPVUxGdk1HUTR3b3ZXSlZp?=
- =?utf-8?B?R29JQ1l6TkgyT0E2eXJMQmNMTDhuUEx6QW1hSDJCTy93L1JNdGZ0MkVxNStB?=
- =?utf-8?B?VHpyQUdNMk5zNVBxb1hoYTFHQ3NMTFoxZTZ1d3pDT2ozbDdPcDNVTlZEV1Aw?=
- =?utf-8?B?alBtRGx6RWFXV3dSYnZLODBlZzdjWExwaWNERUFMcmVocmpSNEd1UmFZOHAz?=
- =?utf-8?B?cENRY0lHMm9qZWcwZVRvMnZBSUVOcmYrR1NDaUF4TWFPTUNweVZGL1hhcXFB?=
- =?utf-8?B?WVlicWZERVFlZGVwVUJ2VEZlSkx6Y0VMRXRUbDVsOFBWSWVtZ1pHdWJLZVp6?=
- =?utf-8?B?aUtDZjNFVGlsRnA2WUllam5XajUraG5oOXQyYnFFT0JMcFFTMzN1SkttQ2xQ?=
- =?utf-8?B?bnBWOGFPSTZLMTM3clJKZ0V4bk9HU2NUVkNiWmtWbWRaYlFGb1RTZFFRVlI4?=
- =?utf-8?B?OWpHc1JzaXhWN3MzUmxzdE1rSVMxa0FtSXEwQmg1WUdxMHE0RzNXSDVSU2g2?=
- =?utf-8?B?YmpINFhjak1jQldmUnRmVEpTUTFvM2hqMmRHZGhvVGFXYU5PVCt5VkhKUkt6?=
- =?utf-8?B?RVV5bXZXOFJlcXZOa29ma0JEQTFZMUlXeUhVcmQwOS9EZEFRdUtSdGhxdnVV?=
- =?utf-8?B?dGpWOExON0pwV3FzV1JiQ2l6dGJEMEE0VHJNQ1grNU43YnJwaTJQUVluOHE0?=
- =?utf-8?B?QS9ISTJYbHdCVE1kZHMxaXMyMk1SQWN2VjVUQzQxRnBJb1NYWEZHSHRaOExY?=
- =?utf-8?B?YzQwWCtjVTZsUkR6VE1GMnBia3N1bDFGbEM2QUlvcEozNzBSZkVYaDIrMitW?=
- =?utf-8?B?YVZnWG1zZElBZStUcU4wVi85UjVTZkdqVVJMVnQrZFA0eU9LUzU2SGlLejJS?=
- =?utf-8?B?NEJxak5zZVc5dWQvMXh5NTBBa2thbnBiUko3VlZnRlpFaFA2VkJvQTFsM3ox?=
- =?utf-8?B?Snp6bEZ3NjJwWU12b2pXeGk5NXJvenord1BMWlloYWptOGVsYXdnSnFkYjBK?=
- =?utf-8?B?bEFzUzJ2SVUzWDYyQzNZTkFWRWtRY2F0Sk94d2F4Szh0RlRibFV1c2MyNUxW?=
- =?utf-8?B?SjZlSXREY2NxSi8zVjJLanIyMTFMQ3JGdXJEbk1Bd0doRnhCSDJoQkJLQ3Ev?=
- =?utf-8?B?ajdwRFlEeXBKQmNZV0ZmR3FWMlhaZjd1VDN1N3hDeWJvazZZNHpYTVMxelhS?=
- =?utf-8?B?TVFWc0xBRHJYVlBIcUZSOGFSWUk5MUJ4cXh3UWd4RkV3OUp2L3dDMS9hOHdo?=
- =?utf-8?B?QXV3aWwwdytkcGxjaDhqZitOeWxpenVSTUdlMUEzV01JMHk5dVoxWXlNQTNv?=
- =?utf-8?B?aWVBYVdpRHZSWjdoYWRGd1Q1UkdKeitTQWYwd0FQTDZ3bVRxYXp2SUNBSVRL?=
- =?utf-8?B?UW1mTitKalJWYUZMdkU0L09QYXk4QWpZZmNGS3lHd2kxb0ZUNFpoN2xKdXZD?=
- =?utf-8?B?RG8vd0s0UTRxYXRmRjZrV1FLdXpZU3M2WU40TzdlRDhxM2twWDY3SDI2RGVX?=
- =?utf-8?B?Z3JSMXJDdzdVczB5UzcwdEhhYXlBM2RKMVZmS3gzSjFBMDhuZW52c3ppeXdR?=
- =?utf-8?B?RzZVdjM4dEJldzcwRFJMSGw3Umd2OURlS3lTdkRpbUtXbVhMeDNrbURlSjBZ?=
- =?utf-8?B?bTR1MC9LWUpLaDROWTRKNGR1OFduYWZSNnBUcDJoSDdqQmw1TlFjMXIzbkVD?=
- =?utf-8?B?dWd5TWVsRzZ0QUkxemN4WFp1Y3VIMjE5elk0MjZNQUE5bE5wWGMwTXNwZmds?=
- =?utf-8?B?d2wzeDJtN2Y3ajhwRFhCOG1nZ2RaYVhyNlNyUjV4VkoyUjB2WGJ0SW5zK1FU?=
- =?utf-8?B?NWpxZTNjQ21YaEJ1ekhTcnhFR2FSV0lITUxBVzBtQVJURXhXZk1CV2k1aWZK?=
- =?utf-8?B?ZU04d2RjUEwxSno3V1BrdkFzb3RvclkydEdWWW0zTExSRkg4MFNYT3YyK25T?=
- =?utf-8?B?clRjM0txcmdlb2FZZnl4aC9wZHFtU1lnc2xHK2FRalJXTld3YnhkdTdQVmJL?=
- =?utf-8?B?UFdadDZCOVpPZFFrZTBQZ2NLTSt6bW5TQ3hBajMrL1ZHZXdyNmlQd29PSGRR?=
- =?utf-8?Q?OJ2bKpzZ2jj4AtbM=3D?=
-X-Exchange-RoutingPolicyChecked: QzN/lYlHe5lZ75nO8eujyq1RizfZY8/Q5qjZ+DtinBeLE1qDJwBZA5eCixGEPRahN3NmvKQIEn2AzrKq1v5gLQiTNAISOhwc1BPc2XU1RkHDCO79KG4Lt8c6ntCXZXtHRaSdYe9glDggv+UzhLvs3p5j9/4Esk5Q5Xlfj0ztfFNdhpq1sG3m9Vk6Kee6uqBG2Zi9q+pkiyRJRbnKBLE/bNc76vTRrAoPhjGfzEPhOoZJ0R7J6L2ux0Q5Wtz8VDJVKcBice/Tnnwz9iVcgSYWrrDoor+5oEYXDOJ6l8GzBzRRX2FG2TosQlhBRi7XeJiTkhqHpp0PwWO8lB4YvuGmAw==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9488935a-ee0d-4901-ee16-08de844eaf08
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB8230.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2026 17:57:41.3734
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0FcZPkizFZeuxCNi+pgk6bcKYrR49EEX0QcyzlnYHV4oxjf1DnmUE/YvLaP74cxoYpcJWrGy4wT+smCGw5fh0ZVzvEHEu9XFbnTuhGd6ksI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7169
-X-OriginatorOrg: intel.com
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 17 Mar 2026 14:24:28 -0400
+Message-Id: <DH59NF5G3WVN.1LKGNUUA3784J@etsalapatis.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Martin
+ KaFai Lau" <martin.lau@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Tejun Heo" <tj@kernel.org>, "Dan Schatzberg" <dschatzberg@meta.com>,
+ <kkd@meta.com>, <kernel-team@meta.com>
+Subject: Re: [PATCH bpf-next v1 2/4] selftests/bpf: Adjust syscall ctx
+ variable offset tests
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.20.1
+References: <20260317111850.2107846-1-memxor@gmail.com>
+ <20260317111850.2107846-3-memxor@gmail.com>
+In-Reply-To: <20260317111850.2107846-3-memxor@gmail.com>
 
+On Tue Mar 17, 2026 at 7:18 AM EDT, Kumar Kartikeya Dwivedi wrote:
+> Add various tests to exercise fixed and variable offsets on PTR_TO_CTX
+> for syscall programs, and cover disallowed cases for other program types
+> lacking convert_ctx_access callback. Load verifier_ctx with CAP_SYS_ADMIN
+> so that kfunc related logic can be tested. While at it, convert assembly
+> tests to C.
+>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-On 3/17/2026 10:29 AM, Jakub Kicinski wrote:
-> On Tue, 17 Mar 2026 09:15:46 -0700 Tony Nguyen wrote:
->> On 3/17/2026 8:50 AM, Jakub Kicinski wrote:
->>> On Tue, 17 Mar 2026 16:30:26 +0100 Alexander Lobakin wrote:
->>>> BTW, if it's not top secret, how do you run these AI reviews? Because
->>>> Tony used the same link as these reports provide to deploy a setup, but
->>>> we didn't manage to get as meaningful results as yours. That's why
->>>> several respins of this series only due to your AI reviews, sorry =\
->>>
->>> Nothing secret, I didn't push it to the main NIPA repo because it
->>> mostly vibecoded crap which is embarrassing. You can see it here:
->>>
->>> https://github.com/kuba-moo/nipa/tree/air
->>>
->>> It is just Chris's prompts + semcode. We run the prompts with
->>> sub-agents enabled (the "orc" prompt). Right now it runs on Claude,
->>> the subagents are supposed to pick the model by themselves depending
->>> on complexity.
->>>
->>> I don't think we do anything special, if anything it's probably the
->>> mode (orc mode thing) that makes a difference?
->>
->> That's possible. I'm still pursing it but, at least so far, I haven't
->> found a way to get orc mode working with my tooling.
-> 
-> I guess you have a different LLM? For Claude Code its enough to tell it
-> "do X in a subagent" and it just spawns one.
+> ---
+>  .../selftests/bpf/prog_tests/verifier.c       |  34 +-
+>  .../selftests/bpf/progs/verifier_ctx.c        | 356 +++++++++++++++---
+>  .../selftests/bpf/test_kmods/bpf_testmod.c    |   2 +-
+>  3 files changed, 325 insertions(+), 67 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
+sting/selftests/bpf/prog_tests/verifier.c
+> index 8cdfd74c95d7..04d5f46264a3 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+> @@ -126,29 +126,35 @@ struct test_val {
+>  __maybe_unused
+>  static void run_tests_aux(const char *skel_name,
+>  			  skel_elf_bytes_fn elf_bytes_factory,
+> -			  pre_execution_cb pre_execution_cb)
+> +			  pre_execution_cb pre_execution_cb,
+> +			  bool drop_sys_admin)
+>  {
+>  	struct test_loader tester =3D {};
+>  	__u64 old_caps;
+>  	int err;
+> =20
+> -	/* test_verifier tests are executed w/o CAP_SYS_ADMIN, do the same here=
+ */
+> -	err =3D cap_disable_effective(1ULL << CAP_SYS_ADMIN, &old_caps);
+> -	if (err) {
+> -		PRINT_FAIL("failed to drop CAP_SYS_ADMIN: %i, %s\n", err, strerror(-er=
+r));
+> -		return;
+> +	if (drop_sys_admin) {
+> +		/* test_verifier tests are executed w/o CAP_SYS_ADMIN, do the same her=
+e */
+> +		err =3D cap_disable_effective(1ULL << CAP_SYS_ADMIN, &old_caps);
+> +		if (err) {
+> +			PRINT_FAIL("failed to drop CAP_SYS_ADMIN: %i, %s\n", err, strerror(-e=
+rr));
+> +			return;
+> +		}
+>  	}
+> =20
+>  	test_loader__set_pre_execution_cb(&tester, pre_execution_cb);
+>  	test_loader__run_subtests(&tester, skel_name, elf_bytes_factory);
+>  	test_loader_fini(&tester);
+> =20
+> -	err =3D cap_enable_effective(old_caps, NULL);
+> -	if (err)
+> -		PRINT_FAIL("failed to restore CAP_SYS_ADMIN: %i, %s\n", err, strerror(=
+-err));
+> +	if (drop_sys_admin) {
+> +		err =3D cap_enable_effective(old_caps, NULL);
+> +		if (err)
+> +			PRINT_FAIL("failed to restore CAP_SYS_ADMIN: %i, %s\n", err, strerror=
+(-err));
+> +	}
+>  }
+> =20
+> -#define RUN(skel) run_tests_aux(#skel, skel##__elf_bytes, NULL)
+> +#define RUN(skel) run_tests_aux(#skel, skel##__elf_bytes, NULL, true)
+> +#define RUN_WITH_CAP_SYS_ADMIN(skel) run_tests_aux(#skel, skel##__elf_by=
+tes, NULL, false)
+> =20
+>  void test_verifier_align(void)                { RUN(verifier_align); }
+>  void test_verifier_and(void)                  { RUN(verifier_and); }
+> @@ -173,7 +179,7 @@ void test_verifier_cgroup_skb(void)           { RUN(v=
+erifier_cgroup_skb); }
+>  void test_verifier_cgroup_storage(void)       { RUN(verifier_cgroup_stor=
+age); }
+>  void test_verifier_const(void)                { RUN(verifier_const); }
+>  void test_verifier_const_or(void)             { RUN(verifier_const_or); =
+}
+> -void test_verifier_ctx(void)                  { RUN(verifier_ctx); }
+> +void test_verifier_ctx(void)                  { RUN_WITH_CAP_SYS_ADMIN(v=
+erifier_ctx); }
+>  void test_verifier_ctx_sk_msg(void)           { RUN(verifier_ctx_sk_msg)=
+; }
+>  void test_verifier_d_path(void)               { RUN(verifier_d_path); }
+>  void test_verifier_default_trusted_ptr(void)  { RUN_TESTS(verifier_defau=
+lt_trusted_ptr); }
+> @@ -293,7 +299,8 @@ void test_verifier_array_access(void)
+>  {
+>  	run_tests_aux("verifier_array_access",
+>  		      verifier_array_access__elf_bytes,
+> -		      init_array_access_maps);
+> +		      init_array_access_maps,
+> +		      true);
+>  }
+>  void test_verifier_async_cb_context(void)    { RUN(verifier_async_cb_con=
+text); }
+> =20
+> @@ -306,5 +313,6 @@ void test_verifier_value_ptr_arith(void)
+>  {
+>  	run_tests_aux("verifier_value_ptr_arith",
+>  		      verifier_value_ptr_arith__elf_bytes,
+> -		      init_value_ptr_arith_maps);
+> +		      init_value_ptr_arith_maps,
+> +		      true);
+>  }
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_ctx.c b/tools/tes=
+ting/selftests/bpf/progs/verifier_ctx.c
+> index 371780290c0d..c054c8cb7242 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_ctx.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_ctx.c
+> @@ -4,6 +4,10 @@
+>  #include "vmlinux.h"
+>  #include <bpf/bpf_helpers.h>
+>  #include "bpf_misc.h"
+> +#include "../test_kmods/bpf_testmod_kfunc.h"
+> +
+> +const char ctx_strncmp_target[] =3D "ctx";
+> +const char ctx_snprintf_fmt[] =3D "";
+> =20
+>  SEC("tc")
+>  __description("context stores via BPF_ATOMIC")
+> @@ -69,7 +73,6 @@ __naked void ctx_pointer_to_helper_1(void)
+>  SEC("socket")
+>  __description("pass modified ctx pointer to helper, 2")
+>  __failure __msg("negative offset ctx ptr R1 off=3D-612 disallowed")
+> -__failure_unpriv __msg_unpriv("negative offset ctx ptr R1 off=3D-612 dis=
+allowed")
+>  __naked void ctx_pointer_to_helper_2(void)
+>  {
+>  	asm volatile ("					\
+> @@ -295,77 +298,324 @@ padding_access("sk_reuseport", sk_reuseport_md, ha=
+sh, 4);
+>  SEC("syscall")
+>  __description("syscall: write to ctx with fixed offset")
+>  __success
+> -__naked void syscall_ctx_fixed_off_write(void)
+> +int syscall_ctx_fixed_off_write(void *ctx)
+>  {
+> -	asm volatile ("					\
+> -	r0 =3D 0;						\
+> -	*(u32*)(r1 + 0) =3D r0;				\
+> -	r1 +=3D 4;					\
+> -	*(u32*)(r1 + 0) =3D r0;				\
+> -	exit;						\
+> -"	::: __clobber_all);
+> +	char *p =3D ctx;
+> +
+> +	*(__u32 *)p =3D 0;
+> +	*(__u32 *)(p + 4) =3D 0;
+> +	return 0;
+> +}
+> +
+> +SEC("syscall")
+> +__description("syscall: read ctx with fixed offset")
+> +__success
+> +int syscall_ctx_fixed_off_read(void *ctx)
+> +{
+> +	char *p =3D ctx;
+> +	volatile __u32 val;
+> +
+> +	val =3D *(__u32 *)(p + 4);
+> +	(void)val;
+> +	return 0;
+> +}
+> +
+> +SEC("syscall")
+> +__description("syscall: read ctx with variable offset")
+> +__success
+> +int syscall_ctx_var_off_read(void *ctx)
+> +{
+> +	__u64 off =3D bpf_get_prandom_u32();
+> +	char *p =3D ctx;
+> +	volatile __u32 val;
+> +
+> +	off &=3D 0xfc;
+> +	p +=3D off;
+> +	val =3D *(__u32 *)p;
+> +	(void)val;
+> +	return 0;
+> +}
+> +
+> +SEC("syscall")
+> +__description("syscall: write ctx with variable offset")
+> +__success
+> +int syscall_ctx_var_off_write(void *ctx)
+> +{
+> +	__u64 off =3D bpf_get_prandom_u32();
+> +	char *p =3D ctx;
+> +
+> +	off &=3D 0xfc;
+> +	p +=3D off;
+> +	*(__u32 *)p =3D 0;
+> +	return 0;
+> +}
+> +
+> +SEC("syscall")
+> +__description("syscall: reject negative variable offset ctx access")
+> +__failure __msg("min value is negative")
+> +int syscall_ctx_neg_var_off(void *ctx)
+> +{
+> +	__u64 off =3D bpf_get_prandom_u32();
+> +	char *p =3D ctx;
+> +
+> +	off &=3D 4;
+> +	p -=3D off;
+> +	return *(__u32 *)p;
+> +}
+> +
+> +SEC("syscall")
+> +__description("syscall: reject unbounded variable offset ctx access")
+> +__failure __msg("unbounded memory access")
+> +int syscall_ctx_unbounded_var_off(void *ctx)
+> +{
+> +	__u64 off =3D (__u32)bpf_get_prandom_u32();
+> +	char *p =3D ctx;
+> +
+> +	off <<=3D 2;
 
-It does use the Claude models, but it's not Claude Code :(
+Unrelated to this patch: These kinds of shifts are pretty frequent in
+array arithmetic by the compiler, is it worth it/tractable to account=20
+for them during bounds calculation?
+
+> +	p +=3D off;
+> +	return *(__u32 *)p;
+> +}
+> +
+> +SEC("syscall")
+> +__description("syscall: helper read ctx with fixed offset")
+> +__success
+> +int syscall_ctx_helper_fixed_off_read(void *ctx)
+> +{
+> +	char *p =3D ctx;
+> +
+> +	p +=3D 4;
+> +	return bpf_strncmp(p, 4, ctx_strncmp_target);
+> +}
+> +
+> +SEC("syscall")
+> +__description("syscall: helper write ctx with fixed offset")
+> +__success
+> +int syscall_ctx_helper_fixed_off_write(void *ctx)
+> +{
+> +	char *p =3D ctx;
+> +
+> +	p +=3D 4;
+> +	return bpf_probe_read_kernel(p, 4, 0);
+> +}
+> +
+> +SEC("syscall")
+> +__description("syscall: helper read ctx with variable offset")
+> +__success
+> +int syscall_ctx_helper_var_off_read(void *ctx)
+> +{
+> +	__u64 off =3D bpf_get_prandom_u32();
+> +	char *p =3D ctx;
+> +
+> +	off &=3D 0xfc;
+> +	p +=3D off;
+> +	return bpf_strncmp(p, 4, ctx_strncmp_target);
+> +}
+> +
+> +SEC("syscall")
+> +__description("syscall: helper write ctx with variable offset")
+> +__success
+> +int syscall_ctx_helper_var_off_write(void *ctx)
+> +{
+> +	__u64 off =3D bpf_get_prandom_u32();
+> +	char *p =3D ctx;
+> +
+> +	off &=3D 0xfc;
+> +	p +=3D off;
+> +	return bpf_probe_read_kernel(p, 4, 0);
+> +}
+> +
+> +SEC("syscall")
+> +__description("syscall: helper read zero-sized ctx access")
+> +__success
+> +int syscall_ctx_helper_zero_sized_read(void *ctx)
+> +{
+> +	return bpf_snprintf(0, 0, ctx_snprintf_fmt, ctx, 0);
+> +}
+> +
+> +SEC("syscall")
+> +__description("syscall: helper write zero-sized ctx access")
+> +__success
+> +int syscall_ctx_helper_zero_sized_write(void *ctx)
+> +{
+> +	return bpf_probe_read_kernel(ctx, 0, 0);
+> +}
+> +
+> +SEC("syscall")
+> +__description("syscall: kfunc access ctx with fixed offset")
+> +__success
+> +int syscall_ctx_kfunc_fixed_off(void *ctx)
+> +{
+> +	char *p =3D ctx;
+> +
+> +	p +=3D 4;
+> +	bpf_kfunc_call_test_mem_len_pass1(p, 4);
+> +	return 0;
+> +}
+> +
+> +SEC("syscall")
+> +__description("syscall: kfunc access ctx with variable offset")
+> +__success
+> +int syscall_ctx_kfunc_var_off(void *ctx)
+> +{
+> +	__u64 off =3D bpf_get_prandom_u32();
+> +	char *p =3D ctx;
+> +
+> +	off &=3D 0xfc;
+> +	p +=3D off;
+> +	bpf_kfunc_call_test_mem_len_pass1(p, 4);
+> +	return 0;
+> +}
+> +
+> +SEC("syscall")
+> +__description("syscall: kfunc access zero-sized ctx")
+> +__success
+> +int syscall_ctx_kfunc_zero_sized(void *ctx)
+> +{
+> +	bpf_kfunc_call_test_mem_len_pass1(ctx, 0);
+> +	return 0;
+>  }
+> =20
+>  /*
+> - * Test that program types without convert_ctx_access can dereference
+> - * their ctx pointer after adding a fixed offset. Variable and negative
+> - * offsets should still be rejected.
+> + * For non-syscall program types without convert_ctx_access, direct ctx
+> + * dereference is still allowed after adding a fixed offset, while varia=
+ble
+> + * and negative direct accesses reject.
+> + *
+> + * Passing ctx as a helper or kfunc memory argument is only permitted fo=
+r
+> + * syscall programs, so the helper and kfunc cases below validate reject=
+ion
+> + * for non-syscall ctx pointers at fixed, variable, and zero-sized acces=
+ses.
+>   */
+> -#define no_rewrite_ctx_access(type, name, off, ld_op)			\
+> +#define no_rewrite_ctx_access(type, name, off, load_t)			\
+>  	SEC(type)							\
+>  	__description(type ": read ctx at fixed offset")		\
+>  	__success							\
+> -	__naked void no_rewrite_##name##_fixed(void)			\
+> +	int no_rewrite_##name##_fixed(void *ctx)			\
+>  	{								\
+> -		asm volatile ("						\
+> -		r1 +=3D %[__off];						\
+> -		r0 =3D *(" #ld_op " *)(r1 + 0);				\
+> -		r0 =3D 0;							\
+> -		exit;"							\
+> -		:							\
+> -		: __imm_const(__off, off)				\
+> -		: __clobber_all);					\
+> +		char *p =3D ctx;						\
+> +		volatile load_t val;					\
+> +									\
+> +		val =3D *(load_t *)(p + off);				\
+> +		(void)val;						\
+> +		return 0;						\
+>  	}								\
+>  	SEC(type)							\
+>  	__description(type ": reject variable offset ctx access")	\
+>  	__failure __msg("variable ctx access var_off=3D")			\
+> -	__naked void no_rewrite_##name##_var(void)			\
+> +	int no_rewrite_##name##_var(void *ctx)			\
+>  	{								\
+> -		asm volatile ("						\
+> -		r6 =3D r1;						\
+> -		call %[bpf_get_prandom_u32];				\
+> -		r1 =3D r6;						\
+> -		r0 &=3D 4;						\
+> -		r1 +=3D r0;						\
+> -		r0 =3D *(" #ld_op " *)(r1 + 0);				\
+> -		r0 =3D 0;							\
+> -		exit;"							\
+> -		:							\
+> -		: __imm(bpf_get_prandom_u32)				\
+> -		: __clobber_all);					\
+> +		__u64 off_var =3D bpf_get_prandom_u32();			\
+> +		char *p =3D ctx;						\
+> +									\
+> +		off_var &=3D 4;						\
+> +		p +=3D off_var;						\
+> +		return *(load_t *)p;					\
+>  	}								\
+>  	SEC(type)							\
+>  	__description(type ": reject negative offset ctx access")	\
+> -	__failure __msg("negative offset ctx ptr")			\
+> -	__naked void no_rewrite_##name##_neg(void)			\
+> +	__failure __msg("invalid bpf_context access")			\
+> +	int no_rewrite_##name##_neg(void *ctx)			\
+>  	{								\
+> -		asm volatile ("						\
+> -		r1 +=3D %[__neg_off];					\
+> -		r0 =3D *(" #ld_op " *)(r1 + 0);				\
+> -		r0 =3D 0;							\
+> -		exit;"							\
+> -		:							\
+> -		: __imm_const(__neg_off, -(off))			\
+> -		: __clobber_all);					\
+> +		char *p =3D ctx;						\
+> +									\
+> +		p -=3D 612;						\
+> +		return *(load_t *)p;					\
+> +	}								\
+> +	SEC(type)							\
+> +	__description(type ": reject helper read ctx at fixed offset")	\
+> +	__failure __msg("dereference of modified ctx ptr")		\
+> +	int no_rewrite_##name##_helper_read_fixed(void *ctx)		\
+> +	{								\
+> +		char *p =3D ctx;						\
+> +									\
+> +		p +=3D off;						\
+> +		return bpf_strncmp(p, 4, ctx_strncmp_target);		\
+> +	}								\
+> +	SEC(type)							\
+> +	__description(type ": reject helper write ctx at fixed offset")	\
+> +	__failure __msg("dereference of modified ctx ptr")		\
+> +	int no_rewrite_##name##_helper_write_fixed(void *ctx)		\
+> +	{								\
+> +		char *p =3D ctx;						\
+> +									\
+> +		p +=3D off;						\
+> +		return bpf_probe_read_kernel(p, 4, 0);			\
+> +	}								\
+> +	SEC(type)							\
+> +	__description(type ": reject helper read ctx with variable offset") \
+> +	__failure __msg("variable ctx access var_off=3D")			\
+> +	int no_rewrite_##name##_helper_read_var(void *ctx)		\
+> +	{								\
+> +		__u64 off_var =3D bpf_get_prandom_u32();			\
+> +		char *p =3D ctx;						\
+> +									\
+> +		off_var &=3D 4;						\
+> +		p +=3D off_var;						\
+> +		return bpf_strncmp(p, 4, ctx_strncmp_target);		\
+> +	}								\
+> +	SEC(type)							\
+> +	__description(type ": reject helper write ctx with variable offset") \
+> +	__failure __msg("variable ctx access var_off=3D")			\
+> +	int no_rewrite_##name##_helper_write_var(void *ctx)		\
+> +	{								\
+> +		__u64 off_var =3D bpf_get_prandom_u32();			\
+> +		char *p =3D ctx;						\
+> +									\
+> +		off_var &=3D 4;						\
+> +		p +=3D off_var;						\
+> +		return bpf_probe_read_kernel(p, 4, 0);			\
+> +	}								\
+> +	SEC(type)							\
+> +	__description(type ": reject helper read zero-sized ctx access") \
+> +	__failure __msg("R4 type=3Dctx expected=3Dfp")			\
+> +	int no_rewrite_##name##_helper_read_zero(void *ctx)		\
+> +	{								\
+> +		return bpf_snprintf(0, 0, ctx_snprintf_fmt, ctx, 0);	\
+> +	}								\
+> +	SEC(type)							\
+> +	__description(type ": reject helper write zero-sized ctx access") \
+> +	__failure __msg("R1 type=3Dctx expected=3Dfp")			\
+> +	int no_rewrite_##name##_helper_write_zero(void *ctx)		\
+> +	{								\
+> +		return bpf_probe_read_kernel(ctx, 0, 0);			\
+> +	}								\
+> +	SEC(type)							\
+> +	__description(type ": reject kfunc ctx at fixed offset")	\
+> +	__failure __msg("dereference of modified ctx ptr")		\
+> +	int no_rewrite_##name##_kfunc_fixed(void *ctx)		\
+> +	{								\
+> +		char *p =3D ctx;						\
+> +									\
+> +		p +=3D off;						\
+> +		bpf_kfunc_call_test_mem_len_pass1(p, 4);		\
+> +		return 0;						\
+> +	}								\
+> +	SEC(type)							\
+> +	__description(type ": reject kfunc ctx with variable offset")	\
+> +	__failure __msg("variable ctx access var_off=3D")			\
+> +	int no_rewrite_##name##_kfunc_var(void *ctx)			\
+> +	{								\
+> +		__u64 off_var =3D bpf_get_prandom_u32();			\
+> +		char *p =3D ctx;						\
+> +									\
+> +		off_var &=3D 4;						\
+> +		p +=3D off_var;						\
+> +		bpf_kfunc_call_test_mem_len_pass1(p, 4);		\
+> +		return 0;						\
+> +	}								\
+> +	SEC(type)							\
+> +	__description(type ": reject kfunc zero-sized ctx access")	\
+> +	__failure __msg("R1 type=3Dctx expected=3Dfp")			\
+> +	int no_rewrite_##name##_kfunc_zero(void *ctx)			\
+> +	{								\
+> +		bpf_kfunc_call_test_mem_len_pass1(ctx, 0);		\
+> +		return 0;						\
+>  	}
+> =20
+> -no_rewrite_ctx_access("syscall", syscall, 4, u32);
+> -no_rewrite_ctx_access("kprobe", kprobe, 8, u64);
+> -no_rewrite_ctx_access("tracepoint", tp, 8, u64);
+> -no_rewrite_ctx_access("raw_tp", raw_tp, 8, u64);
+> -no_rewrite_ctx_access("raw_tracepoint.w", raw_tp_w, 8, u64);
+> -no_rewrite_ctx_access("fentry/bpf_modify_return_test", fentry, 8, u64);
+> -no_rewrite_ctx_access("cgroup/dev", cgroup_dev, 4, u32);
+> -no_rewrite_ctx_access("netfilter", netfilter, offsetof(struct bpf_nf_ctx=
+, skb), u64);
+> +no_rewrite_ctx_access("kprobe", kprobe, 8, __u64);
+> +no_rewrite_ctx_access("tracepoint", tp, 8, __u64);
+> +no_rewrite_ctx_access("raw_tp", raw_tp, 8, __u64);
+> +no_rewrite_ctx_access("raw_tracepoint.w", raw_tp_w, 8, __u64);
+> +no_rewrite_ctx_access("fentry/bpf_modify_return_test", fentry, 8, __u64)=
+;
+> +no_rewrite_ctx_access("cgroup/dev", cgroup_dev, 4, __u32);
+> +no_rewrite_ctx_access("netfilter", netfilter, offsetof(struct bpf_nf_ctx=
+, skb), __u64);
+> =20
+>  char _license[] SEC("license") =3D "GPL";
+> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
+/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> index 94edbd2afa67..f91b484d80f2 100644
+> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> @@ -716,6 +716,7 @@ BTF_ID_FLAGS(func, bpf_iter_testmod_seq_next, KF_ITER=
+_NEXT | KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_iter_testmod_seq_destroy, KF_ITER_DESTROY)
+>  BTF_ID_FLAGS(func, bpf_iter_testmod_seq_value)
+>  BTF_ID_FLAGS(func, bpf_kfunc_common_test)
+> +BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_pass1)
+>  BTF_ID_FLAGS(func, bpf_kfunc_dynptr_test)
+>  BTF_ID_FLAGS(func, bpf_kfunc_nested_acquire_nonzero_offset_test, KF_ACQU=
+IRE)
+>  BTF_ID_FLAGS(func, bpf_kfunc_nested_acquire_zero_offset_test, KF_ACQUIRE=
+)
+> @@ -1280,7 +1281,6 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test2)
+>  BTF_ID_FLAGS(func, bpf_kfunc_call_test3)
+>  BTF_ID_FLAGS(func, bpf_kfunc_call_test4)
+>  BTF_ID_FLAGS(func, bpf_kfunc_call_test5)
+> -BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_pass1)
+>  BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_fail1)
+>  BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_fail2)
+>  BTF_ID_FLAGS(func, bpf_kfunc_call_test_acquire, KF_ACQUIRE | KF_RET_NULL=
+)
 
