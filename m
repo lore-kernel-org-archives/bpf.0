@@ -1,147 +1,140 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 607EB2FF17A
-	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 05:33:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80EB428314C
+	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 05:52:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773725601; cv=none; b=SuD7RSAOzT9QPYrRENOefPx4mNpqC15jvkS/a/K4bigYWhXQ2a/K+frWyep5sXTMq6aUEUceBzNIqdQdI1XQbnTuOIUiJirlFhZpDUHZnqAI9Vz592kHd8w1fkvCNgHGgmbtceJpsNog5YYiX4Pd5asX2lT212RyW/gFHlPk/EQ=
+	t=1773726772; cv=none; b=XsGCI70mqx2d1wwa0//4PEiehZq52DeD3KFemJ0hkAZG/5fepngFRvlwDBDdH/MxDDkutbigbYD1MRWANWMPH3nUY7Mh2xlTfSWpsi2u7w6MZlTu1L3wmzD0yU7mrRadGEMJHqTC22ajO50o9uwRy3zBbC043L3IWLeDkexAGNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773725601; c=relaxed/simple;
-	bh=YC1rgBAajCCk8l/JLDgrMYW6Aksh2+JVhaIH6RadUyE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E4Ycl+H/ktQBL0nhoXsLMGzOEXoplqAy1FgRdlMgRW0cAZpFO0eVJPAPJhjJbkSIH99VtYbpcZKVEH9oDZHpgygYT2mo+NxqfeEqSwctnqycg+1KtubCkhHD+k5FNnpVDPZ4Gglk/uqC0BGAZLApFGZ+IsTbe9DXjr9xGb5otVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=207.46.229.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [10.162.192.132])
-	by mtasvr (Coremail) with SMTP id _____wDXVe5o57hp_G4iAA--.1609S3;
-	Tue, 17 Mar 2026 13:32:25 +0800 (CST)
-Received: from [10.162.192.132] (unknown [10.162.192.132])
-	by mail-app2 (Coremail) with SMTP id zC_KCgCHVDZn57hpFc5RBg--.24133S3;
-	Tue, 17 Mar 2026 13:32:24 +0800 (CST)
-Message-ID: <a7001753-59bb-427b-a67b-e089008a732b@zju.edu.cn>
-Date: Tue, 17 Mar 2026 13:32:23 +0800
+	s=arc-20240116; t=1773726772; c=relaxed/simple;
+	bh=BYShKtIlZLoapNRrwjYyPl406/OxxJPd7cpKvPsyovw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QTglYeu9KnW82aoNPnLCmom/njfVgb+ms2cpyisTaSOZfqQCmZ7BZMgKm54JGwOLrw24ALnvPUxZOIt3wmwSavtpvgf100C6sTGiYvdlJW9O2GdGXG7ngxMVUkFfZKRJ8d2pJ4UqbSIV/gmrGj/3jxlky4CfnmJtyuBNLzwhmPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=clRd5OEU; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="clRd5OEU"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-482f454be5bso3608765e9.0
+        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 22:52:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1773726769; x=1774331569; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Z8cPk/MLLIQRjCnroNQPaQM0klL76NxXOB2Kjbl/arI=;
+        b=clRd5OEUt47Pclw+bn4zaGMGD2vj1bvQ+foSTpMbbnVtrtBFabxTegSZ47Te1MQrFA
+         cyFmNjjAGClVZgYeqBrn9/1OzQrLx7vVRxOrL9QamMQEQfqshuQc3yQHLZZ2+DQdSVfU
+         EZLVXrQXaxVPplUGdMsZQCFoVLsoyDPDoQ8sf9hEAPw37pwEhknaEYn2LBQLaqgypi8S
+         yieC2MgE1ICTDfhUOWxNRabJfT7Wb1aX7B6i5UXLMdKijc7/rI+KTDzMn8dikBDlVHr9
+         eWFubrhke73Uh5s9cXMHcJjWbb2FlgLkYT2IiLIhUncR+SNDWXmIn7ZIUDP4K+FUABbC
+         p7Dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773726769; x=1774331569;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z8cPk/MLLIQRjCnroNQPaQM0klL76NxXOB2Kjbl/arI=;
+        b=isdX8aJDM+MrV+6+jzNHOqj9EEUg74NZPuBAIek9SAxS34629ATNee7Y57TFw0O/Mm
+         PrRXsw3v/Rnv3Ky/Z2RHDm1nfYvLgnw/U/+R45MSusk4z6Ln+1+zTh86dpM2em10eI0p
+         zmohfhtoxaXVg9GHJ7MNCe8L17O1p0wZ4Qq0DtNP0T3NCPtitx02DFES2hPTXxVzOkly
+         t2G7yG2FxoUMC5F777EVsTZtD7bct1lpTt0N8jd7ZFaXaAZReC2HhOAGKuEw49iyiG/O
+         kcFG1FUheauOlObAUBbtYKW2SLJvecJ72VBGp4N273dtmTodSKe3ovokErRk46Bz3Xx7
+         Zkcw==
+X-Forwarded-Encrypted: i=1; AJvYcCUb6ttBtpWlsJbzJ1TDnab6NtRngGUy0bhSftTxSQZATYnmjf9eBXHt8MiA2zAZbSviGlg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyP9t6o2CiGcskozeyBmO/cx8Nb9uA4KWecBvTYhP53dON4qkmG
+	AWLpJij1go9n93fPE+smq4PPHcdZAcmEOd3e+K7fDukkOs0HHs0R9PPbVllsq4OPIOo=
+X-Gm-Gg: ATEYQzzRXmxuXTrJhjXqbEoSRPCR1N4EzgGX5aSUJNOI9I30U68CXpCjSSfzZI6CsdM
+	dWskqjjoI70WT6aiguTqSXH9HgkCitf2e6FXT4cGQ9v+hpdjwlGk+26lMNwX9tfCark3AbnxHh5
+	4WNT/qsalSiGJWhPJPTOvTD51Y54QjTrs+uUrASjF7QRgLUVw/ry8a6c6Tydsi4v1t0v1ZQQqbU
+	Sj/Ljxzws+ei1fFsPSJV52jjN9///aSRQgn9+SayLp7UZkVwye7rvpZY+rzcLjToNdKieOYFnlO
+	wd8sLTAOyb53pG8JklskvnNfM1ev0wK27X5NH4xCBOjRRjeXDq9oPr2jJCBMV9c4qFNgZzJlOdE
+	7a3mNCIT7+bW9/0bgniYqmodksq2Jd6vUme25bXVjGdKhyFAsRQHEq7zttL1a7DICDBR2iKcyux
+	T+WmZzNUZanJJ9Wb6zRJI=
+X-Received: by 2002:a05:600c:2250:b0:485:4f11:aabc with SMTP id 5b1f17b1804b1-4856eaebb24mr25122185e9.15.1773726768673;
+        Mon, 16 Mar 2026 22:52:48 -0700 (PDT)
+Received: from u94a ([2401:e180:8d6c:7ab0:11ab:2f6c:191f:b326])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b05d95796asm41580745ad.52.2026.03.16.22.52.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Mar 2026 22:52:47 -0700 (PDT)
+Date: Tue, 17 Mar 2026 13:52:36 +0800
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+Subject: Re: [PATCH v2 bpf-next 1/2] bpf: Avoid one round of bounds deduction
+Message-ID: <xnbo4affetx5z4e5apzwv4wnqcy4jskbky7oe4gw4rux3smz6q@44ruzrvfdfpm>
+References: <5b8fed05cc97cd3730bbdfbb452699b7edd16963.1772840030.git.paul.chaignon@gmail.com>
+ <621f8a301a3a29af041ea8384ab09498e3f20322.camel@gmail.com>
+ <d4f6ebe35ff98cf3aeabe132027d7a05ae4dda4f.camel@gmail.com>
+ <d6ed91eb3fc9783811ae9981728a5db57decbfe4.camel@gmail.com>
+ <xec3lnz6smkki57civu5z6hlr5vl6kqnec7f7zxza4vifs2qf7@g4o6gxqmcnlz>
+ <cc228139101e28d2bc76beb371a2c3f89eed75f3.camel@gmail.com>
+ <abMHY2sCSe6xEKR3@mail.gmail.com>
+ <wficveatl5cscfiaasqanow72ejlzifrcatj7z3r4dtu6nul77@bpfukkbrhml6>
+ <72d8c8ab082d67c75bfd3d47f3a57f4b25a837db.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf 2/2] selftests/bpf: Add test for large offset
- bpf-to-bpf call
-To: emil@etsalapatis.com, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, tangyazhou518@outlook.com,
- shenghaoyuan0928@163.com, ziye@zju.edu.cn
-References: <20260316190220.113417-1-tangyazhou@zju.edu.cn>
- <20260316190220.113417-3-tangyazhou@zju.edu.cn>
- <DH4HGGKLQ2EG.33P3WH3OF05RX@etsalapatis.com>
-Content-Language: en-US
-From: Yazhou Tang <tangyazhou@zju.edu.cn>
-In-Reply-To: <DH4HGGKLQ2EG.33P3WH3OF05RX@etsalapatis.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:zC_KCgCHVDZn57hpFc5RBg--.24133S3
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBgsNCmm4XQoUBQAAsd
-X-CM-DELIVERINFO: =?B?Ub9cVAXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9C4CHqQuqj3p+aV8+gK82UYaOmBlzhrGryjBmJU9tz+YOUp2SG+8TMww32AptghawTRe
-	tdbtG23cUC40tjgFw50dcxNKvRcUsAMjlKV5V/WnZk9Hw2T8u6Y5UODMnaRHrw==
-X-Coremail-Antispam: 1Uk129KBj93XoWxZw18Xw43tw15uF17XF18Zwc_yoW5GF1fpF
-	ZYg3yrtrWkJr1UKr12yayFqF1Skrs3Aa4xJrn3G3ykAas8Gry0gFyFgF4FvFWrCrn3XF12
-	vrWjq343X3Z8uFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
-	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAF
-	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8c
-	xan2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8C
-	rVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXw
-	CIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x02
-	67AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
-	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU13r
-	cDUUUUU==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <72d8c8ab082d67c75bfd3d47f3a57f4b25a837db.camel@gmail.com>
 
-Hi Emil,
+On Thu, Mar 12, 2026 at 09:54:19PM -0700, Eduard Zingerman wrote:
+> On Fri, 2026-03-13 at 10:17 +0800, Shung-Hsi Yu wrote:
+> 
+> [...]
+> 
+> > The problem is that I'm operating on a simplified assumption of "not
+> > being able to converage to a fix-point is bad because it could lead to
+> > bound invariant violation". So taking this chance to ask, does that all
+> > ties back to is_scalar_branch_taken and reg_set_min_max (or was it
+> > regs_refine_cond_op) difference?
+> > 
+> > Also, when we fail to reach a fix-point, it does not become a problem
+> > immediately, but only becomes a invariant violation some where down the
+> > line when we again do bound deduction?
+> > 
+> > I haven't actually look into an invariant violation myself, so details
+> > are rather hazy. 
+> 
+> I don't think failing to reach fixed point causes invariant violation.
+> The root cause for invariant violation is that decisions in
+> is_scalar_branch_taken() for e.g. >=, <= are taken based on ranges,
+> but additional information in tnum is not taken into account.
+> Later reg_set_min_max() will call reg_bounds_sync() and it might turn
+> out that updated ranges do not intersect with tnums.
+> The inverse might happen for tnum based decisions in
+> is_scalar_branch_taken().
+> 
+> So, if we don't reach fixed point in reg_bounds_sync() we just leave
+> some precision on the table w/o other negative consequences,
+> as far as I understand.
 
-Thanks a lot for the detailed review!
+Understood. Then my assumption was wrong.
 
- >> +	char dummy_data[64] = {};
- >
- > Nit: Why define dummy_data? You can make the function you're calling an
- > int (void) syscall to avoid this.
- > ......
- >> +struct __sk_buff;
- >
- > Can be removed if you use a syscall prog instead of a socket.
- > ......
- >> +	if (ctx == (void *)0)
- >
- > Nit: Would if (!ctx) work? What is this condition's purpose in the first
- > place? If it's deliberate, again can we add a comment?
+> One solution for invariants violation looks as follows:
+> - Adjust is_scalar_branch_taken():
+>   - Do not make predictions directly, instead apply range and tnum
+>     changes corresponding to the operation (e.g. for true branch of
+>     the `rX <= 0` operation intersect `rX` range with [-∞, 0]).
+>   - Call reg_set_min_max() and check if resulting registers are in a
+>     valid state. If they are for some branch but not another a
+>     prediction can be made.
+> - Adjust check_cond_jmp_op() to use registers computed by
+>   is_scalar_branch_taken() for true and false verifier states.
+> - Adjust reg_bounds_sync() to consistently bail out if invariants
+>   violation is encountered. I think it has a few places with implicit
+>   assumption that ranges/tnums must overlap.
 
-The reason for using a socket prog and the `dummy_data` was to guarantee 
-a non-null `ctx` parameter. Then, during the execution of this test 
-program (while JIT is enabled), the useless `padding_subprog()` will be 
-safely skipped.
+Thanks for the explanations! I did see Paul and Harishankar had a
+patchset that tackles, will look into that.
 
-If we remove the condition and just call `padding_subprog()`, the 
-200,000 instructions in it will actually be executed, which not only 
-causes lower performance but also risks hitting the BPF execution 
-instruction limit.
-
-However, your suggestion is much better. I will switch to a syscall prog 
-to eliminate `dummy_data` and `struct __sk_buff`. And to safely skip the 
-padding execution without relying on `ctx`, I will use a volatile variable:
-
-	volatile int zero = 0;
-	if (zero)
-		padding_subprog();
-
-I will also add detailed comments explaining this workaround.
-
- > So we only test one path at a time, correct? I understand there's no
- > good way to turn JIT compilation on and off, but as it stands
-
-Yes, exactly. Actually the test dynamically adapts to the current 
-environment.
-
-- If JIT is enabled, the test case will successfully load and return the 
-expected value.
-- If JIT is disabled, it asserts that the verifier cleanly rejects the 
-program with -EINVAL (or -ENOSPC) and outputs the expected error log. 
-(Without our patch, the verifier would wrongly accept it).
-
- >> +	volatile int magic_ret = 3;
- >> +	return magic_ret;
- >
- >
- > If we remove the printk below, we can just leave this empty or have it
- > return 3 directly. Is there a reason to define the constant we're
- > returning indirectly? If there is there should be a comment about it
- > because right now it's not readily apparent.
-
-Yes, this is another deliberate trick to deceive the LLVM compiler. 
-Using `volatile` prevents LLVM from optimizing the whole 
-`target_subprog()` away. I will add comments here as well.
-
- >> +	char log_buf[4096] = {};
- >
- > No need to init the log_buf, it will be NUL-terminated if load runs.
- > ...
- >> +	bpf_printk("Target subprog returned: %d\n", ret);
- >
- > Let's remove this, there's no reason to emit to the trace pipe even on
- > success.
-
-I will also incorporate these two changes, and fold all these 
-improvements into v2.
-
-Best,
-
-Yazhou
-
+> I have a stale branch with these changes, need to pull my act together
+> and finish with those changes.
