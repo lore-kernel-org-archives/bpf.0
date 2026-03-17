@@ -1,99 +1,282 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD2D91D6187;
-	Tue, 17 Mar 2026 02:05:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773713115; cv=none; b=KGmCoAhKVpC9MFVz4sFs4FOT3zX+A65S4JdxTBWLJLilzdASk/a3kPoj7+vjUn0R8cEX3HuSEEDu5ngxbElC2vaL4ZJt8JFVnrT5YAqmhfTVzJbxmZBz+voAyDj8N+i/+4yWwuL/wiecfR9Tv4QUBNHwk8XfRwkIFlzpy570dj0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773713115; c=relaxed/simple;
-	bh=tfwNf41ejK8KnD9NFWnuWxv4enrqedRikctxYHlNzwM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nAfcLv1LW/br1YfqBD4CTWR0YpDdxh23Mctd9vEuwBOxUEk6Racc0BoVL7xL90m/zNt8jOo1bDwLsjqUeRoLTdfhHfZIDQOHbeQ4LiW+DdhhDffPdl5cwNQmLxzvzTeXbs7IM4FWIiQByXeCofg5vsEMZw9XZHw2CxIw5nhMDos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8DxssDXtrhpEsobAA--.21330S3;
-	Tue, 17 Mar 2026 10:05:11 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJCxHOHTtrhpKcVWAA--.34870S2;
-	Tue, 17 Mar 2026 10:05:07 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Hengqi Chen <hengqi.chen@gmail.com>
-Cc: Emil Tsalapatis <emil@etsalapatis.com>,
-	Paul Chaignon <paul.chaignon@gmail.com>,
-	loongarch@lists.linux.dev,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2] selftests/bpf: Add alignment flag for test_verifier 190 testcase
-Date: Tue, 17 Mar 2026 10:05:06 +0800
-Message-ID: <20260317020506.27797-1-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
+Received: from mail-wr1-f68.google.com (mail-wr1-f68.google.com [209.85.221.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F8D426ED33
+	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 02:05:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.68
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773713130; cv=pass; b=TofInWzK9jewa9QXFLmNfGSbnrU6cK3xo3BJSjNVfLRgsPaeI3Ejj+CSV9VFL2dTFK+BaxeWdjkq5nERUNzBa5FqZIQCUWfMKMtZW54XjbqzXc/pAflPQEThOOdQAjgIgS6v1xtqo4W7UKOvQptLPaSBhMZkBf+qBzc5VoLnkHo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773713130; c=relaxed/simple;
+	bh=Pa15k/f7JCsKm8Ta1ZcAIc8csfcefiqxdQimuxdBxkQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Frj6bN8I/qEox3O9nl0R+jsUq31dO6tWTpvf889Hx8Z+z3no5XOlrQlR1F1zufES8iK/0Ar/K1u3lbdDM3Fsy9WS13HsZOcELRuTYtFShUoDzLiIEpQpcS307DnMS/c4C6QcgTbO0BEDvAVi8CjHMQ9a8H2nqbbWmH9qp5xXezY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jaf/7i6A; arc=pass smtp.client-ip=209.85.221.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jaf/7i6A"
+Received: by mail-wr1-f68.google.com with SMTP id ffacd0b85a97d-439cd6b0aedso4108980f8f.1
+        for <bpf@vger.kernel.org>; Mon, 16 Mar 2026 19:05:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773713128; cv=none;
+        d=google.com; s=arc-20240605;
+        b=TWtIKmy00OwDntujFljnEGCnJEYd1aD4bnxiY4LWDTHy+47ClmEv9LDjyo27oBpohf
+         PiPx+On81VYeJ95tu0nmPiAY/zLuGvmHQy5uSq0ohKIuHSHTu7fxxtzaflo48LJ7i7q9
+         FFXOashsRgA9wha7uXXzN59HGmV5Z3bgeMrkIsy5AoOr2ouKlgremlXrzdYEzNqRNZmr
+         +0LSRMxpQ83NPhHjJkHZEXsKzP1/dr4QSgMskI7XtIiVyG4EVwlAjra09YV0u7ysoduN
+         03893KzTzGjV1aRpQtNU700WQ3pigwXER/o/vfM6GGdvI6i/bP+PIA+FWFAX0Ar/xyJw
+         ADkQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=qM8PvAQjaxTMcJaMWaL4GPi/Stw1aNsHY3fxQVFtBvE=;
+        fh=ovg3JyHpMyfKlDQt2nQ7ZnbaY905jL7OULiNRN4+s/s=;
+        b=WznMxbil+WhzMPPcRwK/synOJonhKqUOJjbTyplAyJ5QdFxzU+nlpW7CMXjx/UO/Qx
+         +QzkU6pfxrv7aNixG7IOg9x1gcIsFoWn3kFdGuyq4TQUx1SZocTMlGa78Wr1GHYI1FGW
+         TySjSof7l5uOAwWJpaJH7KDqr5rTqLsSn35Lu63d2G7XkISzAgxRCC/3jB2eu8/Cz3xT
+         AvHyPwBGx5eZZ0VZFAjSOzpPk3vgQEd9cVnQeUytGPytrJ2lrUUTlR10YIqjpWC4XQos
+         437DWiIJOnFKT/Usbv9VhRtZB1cKScs1NI9SFWq/I/yBa+tFUtKqGQ4gFEo05x9+DfJf
+         XSRQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773713128; x=1774317928; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qM8PvAQjaxTMcJaMWaL4GPi/Stw1aNsHY3fxQVFtBvE=;
+        b=Jaf/7i6A4woP96PzeMnz+dwaCpSREdvPU7fIFv7Xs1A/+luFd6vbHeg9uXUt5h3298
+         8voONoliKchubNnp6nBPDxwoOQk5Hgm42KmOYX6ndHVs2E78ysCtmBPnm9VAGfbYiozG
+         NLYYUkspUIoReuRJASEJwGZCfcXxk3xDSqpSnXoxRWck9u5dMjmlK3k7DFmiS72a9jaZ
+         xFkna4lMTeWOeu2AShluhp0HXYW/0msQfN+CWvQSPqZcZaUqcRXuF/SAWPzaxAHceWNO
+         HUCurkWyT9M4DOW4W9XAGsho7qW4ZF5TLX6Xhxiz7wFVn5THDBHrPHXWlX0I4hjD46kc
+         zEVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773713128; x=1774317928;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qM8PvAQjaxTMcJaMWaL4GPi/Stw1aNsHY3fxQVFtBvE=;
+        b=EHgtPiC352WxkT1PhLlca4Ef3BEu8+PnqdFRqCisPrv5AgoQywg93TZxBEFrraGRR2
+         okzbSXA8BItIYvTbY9QOpFp2rFDDiAJ4Ri8ikEkEVSXTdgV623uwUQPR5YS0ekcWWdMJ
+         vdbF4+LmHeuX/szv6HCJAi5fKzRBueMnP4P2/D0d09IF2ooEexZvSzRi1o6qE+y/aEaL
+         ODS4UXMZiTxYtOKOMYASZy/FBR6F30ftYi9ekdSE7r7DspCk4y4cVnIBtSbiCS2Huo2I
+         bc8+JlDQOmhnN3CYMK+JQxjXZeE4ddnwYlOPw+6gXTH0E0KGsSx7oUpNvnuJNDVVLr2Y
+         QR0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWLcnSe5xvdQMQyVXkW6iSKGrmMf8vnlJl/dEUuZ0DWRjEyL1yIOjDjzVWqbkNHjD4cO+w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxwK36sCE0nrDm00WSoTq/5QyKBG7XTvTakThiNK4gaduachh7u
+	/mBt3Dds5vys+Cw1oeVWRklCQYv1Osok1JE8PtAKEJG6MwfdcyULle2nNkpwHCwngckgEFl4P7O
+	7lRaIjILDv4LNMK2g/51camkLnkjyO3w=
+X-Gm-Gg: ATEYQzyy2AcwoIzIFtAOdzdcbkL/yi3gKNrtb90yXsU94NarW8OGR1PVwZFaf7N0k20
+	vLeymKH+uEyvbXb9P8qA3NVVmsxhINql4RBZ8Nj293upAAwizAintr1VGxx/p2abGNmUOdSWozJ
+	c20o3AW/JeZBWeXCRxILIOL2b2Hj/fYmpZiCRkUjBooAexMOrK9vJYEKqxQLp9f/092loecM8Xx
+	pZRtiQeG7m0TdckipYIDErgLgES//CiFD9b7cad1RqB3TGce4xZl/+zAtv4T6YB3LEIA3af1eVv
+	+yHh10LsqGOIN0yTUSFNDFFCAEPt98NX1MJrp3RzeSJEHPAISPdqWzeQXRM=
+X-Received: by 2002:a05:6000:4011:b0:43b:4720:1102 with SMTP id
+ ffacd0b85a97d-43b472013fcmr6516708f8f.32.1773713127331; Mon, 16 Mar 2026
+ 19:05:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJCxHOHTtrhpKcVWAA--.34870S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7Cr4DAry7tryrCF4xAFyktFc_yoW8Wrykpw
-	1fAa90kFn5tF17CFy7A39ruFWrWFZ8XryfGF1jkryUZw10yry7JrWxKF17Xr9xZ395tw4S
-	yrySyFW2v3Z5ZagCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWr
-	XwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
-	8JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
-	6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
-	AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
-	0xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4
-	v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AK
-	xVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0epB3UUUUU==
+References: <20260311-bpf-auditd-send-message-v1-0-10a62db5c92f@cloudflare.com>
+ <20260311-bpf-auditd-send-message-v1-1-10a62db5c92f@cloudflare.com>
+In-Reply-To: <20260311-bpf-auditd-send-message-v1-1-10a62db5c92f@cloudflare.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Tue, 17 Mar 2026 03:04:51 +0100
+X-Gm-Features: AaiRm526aBgdvFmf4JzfVkPGCIcd_fq8FocVpkKM-YUNW1KDtzdIsycxc9Aw8gE
+Message-ID: <CAP01T77mRSxLN_nZdgd-qv-u7i5SEiSU5azohVcc_NZdqHnqOw@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next 1/4] audit: Implement bpf_audit_log_*() wrappers
+To: Frederick Lawler <fred@cloudflare.com>
+Cc: Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Eric Paris <eparis@redhat.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	audit@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kernel-team@cloudflare.com
+Content-Type: text/plain; charset="UTF-8"
 
-CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS is set unconditionally for the
-most archs such as x86_64, aarch64, ppc64el and s390x, but this config
-may be not set by users for riscv64 and loongarch64.
+On Wed, 11 Mar 2026 at 22:31, Frederick Lawler <fred@cloudflare.com> wrote:
+>
+> The primary use case is to provide LSM designers a direct API to report
+> access allow/denies through the audit subsystem similar to how LSM's
+> traditionally log their accesses.
+>
+> Left out from this API are functions that are potentially abuseable such as
+> audit_log_format() where users may fill any field=value pair. Instead, the
+> API mostly follows what is exposed through security/lsm_audit.c for
+> consistency with user space audit expectations. Further calls to functions
+> report once to avoid repeated-call abuse.
+>
+> Lastly, each audit record corresponds to the loaded BPF program's ID to
+> track which program reported the log entry. This helps remove
+> ambiguity in the event multiple programs are registered to the same
+> security hook.
+>
+> Exposed functions:
+>
+>         bpf_audit_log_start()
+>         bpf_audit_log_end()
+>         bpf_audit_log_cause()
+>         bpf_audit_log_cap()
+>         bpf_audit_log_path()
+>         bpf_audit_log_file()
+>         bpf_audit_log_ioctl_op()
+>         bpf_audit_log_dentry()
+>         bpf_audit_log_inode()
+>         bpf_audit_log_task()
+>         bpf_audit_log_net_sock()
+>         bpf_audit_log_net_sockaddr()
+>
+> Signed-off-by: Frederick Lawler <fred@cloudflare.com>
+> ---
+>  include/linux/lsm_audit.h   |   1 +
+>  include/uapi/linux/audit.h  |   1 +
+>  security/lsm_audit_kfuncs.c | 306 ++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 308 insertions(+)
+>
+> diff --git a/include/linux/lsm_audit.h b/include/linux/lsm_audit.h
+> index 382c56a97bba1d0e5efe082553338229d541e267..859f51590de417ac246309eb75a760b8632224be 100644
+> --- a/include/linux/lsm_audit.h
+> +++ b/include/linux/lsm_audit.h
+> @@ -78,6 +78,7 @@ struct common_audit_data {
+>  #define LSM_AUDIT_DATA_NOTIFICATION 16
+>  #define LSM_AUDIT_DATA_ANONINODE       17
+>  #define LSM_AUDIT_DATA_NLMSGTYPE       18
+> +#define LSM_AUDIT_DATA_CAUSE 19 /* unused */
+>         union   {
+>                 struct path path;
+>                 struct dentry *dentry;
+> diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
+> index 14a1c1fe013acecb12ea6bf81690965421baa7ff..7a22e214fe3e421decfc4109d2e6a3cee996fe51 100644
+> --- a/include/uapi/linux/audit.h
+> +++ b/include/uapi/linux/audit.h
+> @@ -150,6 +150,7 @@
+>  #define AUDIT_LANDLOCK_DOMAIN  1424    /* Landlock domain status */
+>  #define AUDIT_MAC_TASK_CONTEXTS        1425    /* Multiple LSM task contexts */
+>  #define AUDIT_MAC_OBJ_CONTEXTS 1426    /* Multiple LSM objext contexts */
+> +#define AUDIT_BPF_LSM_ACCESS           1427    /* LSM BPF MAC events */
+>
+>  #define AUDIT_FIRST_KERN_ANOM_MSG   1700
+>  #define AUDIT_LAST_KERN_ANOM_MSG    1799
+> diff --git a/security/lsm_audit_kfuncs.c b/security/lsm_audit_kfuncs.c
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..0d4fb20be34a61db29aa2c48d2aefc39131e73bf
+> --- /dev/null
+> +++ b/security/lsm_audit_kfuncs.c
+> @@ -0,0 +1,306 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/* Copyright (c) 2026 Cloudflare */
+> +
+> +#include <linux/audit.h>
+> +#include <linux/bpf_mem_alloc.h>
+> +#include <linux/gfp_types.h>
+> +#include <linux/in6.h>
+> +#include <linux/lsm_audit.h>
+> +#include <linux/socket.h>
+> +#include <linux/types.h>
+> +
+> +struct bpf_audit_context {
+> +       struct audit_buffer *ab;
+> +       u64 log_once_mask;
+> +};
+> +
+> +static struct bpf_mem_alloc bpf_audit_context_ma;
 
-There exists failure about misaligned access when executing the testcase
-"./test_verifier 190" when CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS is not
-set on LoongArch due to CONFIG_ARCH_STRICT_ALIGN is set by default.
+bpf_mem_alloc will be deprecated, please use kmalloc_nolock().
 
-It means that the program has unaligned accesses, but the kernel enables
-the compiler option -mstrict-align to prevent unaligned accesses, so add
-a flag F_NEEDS_EFFICIENT_UNALIGNED_ACCESS into the testcase to avoid the
-failure.
+> +
+> +static inline u64 log_once(struct bpf_audit_context *ac, u64 mask)
+> +{
+> +       u64 set = (ac->log_once_mask & mask);
+> +
+> +       ac->log_once_mask |= mask;
+> +       return set;
+> +}
+> +
+> + [...]
+> +
+> +__bpf_kfunc int
+> +bpf_audit_log_net_sockaddr(struct bpf_audit_context *ac, int netif,
+> +                          const struct sockaddr *saddr__nullable,
+> +                          const struct sockaddr *daddr__nullable, int addrlen)
+> +{
+> +       struct lsm_network_audit net;
+> +       struct common_audit_data ad;
+> +
+> +       net.netif = netif;
+> +
+> +       if (!saddr__nullable && !daddr__nullable)
+> +               return -EINVAL;
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-Acked-by: Paul Chaignon <paul.chaignon@gmail.com>
----
+Code look a lot cleaner if you just stashed these locally in a better
+named variable.
 
-v2: Update the commit message and collect R-b and A-b,
-    thanks Emil and Paul.
+> +
+> +       if (saddr__nullable && daddr__nullable &&
+> +           saddr__nullable->sa_family != daddr__nullable->sa_family)
+> +               return -EINVAL;
+> +
+> [...]
+> +
+> +/* The following have a recursion opportunity if a LSM is attached to any of
+> + * the following functions, and a bpf_audit_log_*() is called.
+> + *  security_current_getlsmprop_subj,
+> + *  security_lsmprop_to_secctx, or
+> + *  security_release_secctx
+> + */
+> +BTF_ID_FLAGS(func, bpf_audit_log_cause, KF_DESTRUCTIVE);
+> +BTF_ID_FLAGS(func, bpf_audit_log_cap, KF_DESTRUCTIVE);
+> +BTF_ID_FLAGS(func, bpf_audit_log_path, KF_DESTRUCTIVE);
+> +BTF_ID_FLAGS(func, bpf_audit_log_file, KF_DESTRUCTIVE);
+> +BTF_ID_FLAGS(func, bpf_audit_log_ioctl_op, KF_DESTRUCTIVE);
+> +BTF_ID_FLAGS(func, bpf_audit_log_dentry, KF_DESTRUCTIVE);
+> +BTF_ID_FLAGS(func, bpf_audit_log_inode, KF_DESTRUCTIVE);
+> +BTF_ID_FLAGS(func, bpf_audit_log_task, KF_DESTRUCTIVE);
+> +BTF_ID_FLAGS(func, bpf_audit_log_net_sock, KF_DESTRUCTIVE);
+> +BTF_ID_FLAGS(func, bpf_audit_log_net_sockaddr, KF_DESTRUCTIVE);
+> +
+> +BTF_KFUNCS_END(lsm_audit_set_ids)
+> +
+> +static int bpf_lsm_audit_kfuncs_filter(const struct bpf_prog *prog,
+> +                                      u32 kfunc_id)
+> +{
+> +       if (!btf_id_set8_contains(&lsm_audit_set_ids, kfunc_id))
+> +               return 0;
+> +
+> +       return prog->type != BPF_PROG_TYPE_LSM ? -EACCES : 0;
+> +}
+> +
+> +static const struct btf_kfunc_id_set bpf_lsm_audit_set = {
+> +       .owner = THIS_MODULE,
+> +       .set = &lsm_audit_set_ids,
+> +       .filter = bpf_lsm_audit_kfuncs_filter,
+> +};
+> +
+> +static int lsm_audit_init_bpf(void)
+> +{
+> +       int ret;
+> +
+> +       ret = bpf_mem_alloc_init(&bpf_audit_context_ma,
+> +                                sizeof(struct bpf_audit_context), false);
 
- tools/testing/selftests/bpf/verifier/calls.c | 1 +
- 1 file changed, 1 insertion(+)
+One you switch to kmalloc_nolock you can drop this too.
 
-diff --git a/tools/testing/selftests/bpf/verifier/calls.c b/tools/testing/selftests/bpf/verifier/calls.c
-index 86887130a0ef..29e57f0e56c3 100644
---- a/tools/testing/selftests/bpf/verifier/calls.c
-+++ b/tools/testing/selftests/bpf/verifier/calls.c
-@@ -1521,6 +1521,7 @@
- 	.errstr = "R0 invalid mem access 'scalar'",
- 	.result_unpriv = REJECT,
- 	.errstr_unpriv = "invalid read from stack R7 off=-16 size=8",
-+	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
- },
- {
- 	"calls: two calls that receive map_value via arg=ptr_stack_of_caller. test1",
--- 
-2.42.0
-
+> +       return ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_LSM,
+> +                                                &bpf_lsm_audit_set);
+> +}
+> +
+> +late_initcall(lsm_audit_init_bpf)
+>
+> --
+> 2.43.0
+>
+>
