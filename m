@@ -1,269 +1,150 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D4273E5ED3
-	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 14:03:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773756195; cv=none; b=Mc0KoBdeBvDdOjj41YnN5uLutBVb3sZ5kH2GdWuINVRTirIIt5lrXx61Fo6KwrzS1oIyqUYaZ+TFj8OtrAcMzd+7/jh8rvZxRB7eSGGHuSoOqWpfimHJoYqN92Lz7ayQ81OoCaB8NjrVZkj9wFCIqzCrZgYUTIo6YZrxZ1APKLo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773756195; c=relaxed/simple;
-	bh=cnIYmBGYEWbF5tAqmYCRoP38SuHi0wN8ncSK1NXKjts=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TJUScEOKPvVbGIY1jed8S4Z2H9xFJrXPH0ViBXXAf8BYcaWI2mC25lehMf5uJT546JxVOHcISEaG7dwERG+zzRvDh4hfzZPa+JO/xOcKsJCBLS3Dafq8uDnsyVKcE1+oTMCDqSexaFWPhU4G2uw5e1RQgRXgWqCWn+CZiRidARI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 043705BCC9;
-	Tue, 17 Mar 2026 14:03:12 +0000 (UTC)
-Authentication-Results: smtp-out2.suse.de;
-	none
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id AECE34273B;
-	Tue, 17 Mar 2026 14:03:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id aHGaJx5fuWmpYwAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Tue, 17 Mar 2026 14:03:10 +0000
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-To: netdev@vger.kernel.org
-Cc: Fernando Fernandez Mancera <fmancera@suse.de>,
-	=?UTF-8?q?Ricardo=20B=2E=20Marli=C3=A8re?= <rbm@suse.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	David Ahern <dsahern@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH 02/10 net-next v3] ipv6: replace IS_BUILTIN(CONFIG_IPV6) with IS_ENABLED(CONFIG_IPV6)
-Date: Tue, 17 Mar 2026 15:00:58 +0100
-Message-ID: <20260317140141.5723-3-fmancera@suse.de>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260317140141.5723-1-fmancera@suse.de>
-References: <20260317140141.5723-1-fmancera@suse.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73AD830C61F
+	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 14:03:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773756224; cv=pass; b=HSlMEdVO9+3rKIHu3rdw67UE9C3HcrrLikz8Xyxh0Dtmd+qVmkGLziTvFhTSl3WR6fLswBBzGWoN35Jjh7Uelx17Tt5GYDMbGsrVeftz4qNzjhCYnmW7P9JTfILj291AuWV4YssALnpqe4HNOWaDaxQbDo3AZAczAvXfFMyb3No=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773756224; c=relaxed/simple;
+	bh=bHqLLs/9sFWvIV0+VuBwONWdIQRlmR6TQ2B2OYKGYQY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YA4gSCv3fJmezzYTYRTOUfkVllLcK9JVTjF0XRTzFtnZyHrli07nryB4+fdIE/oCMtx6yy5FSVMrRVF+UhLXorjcEnvw2ac2gC2jRKopfc2h2G2HDhGfTXR2VR82hpgNIo0dTsccR4eQEotpdc6/tMi9fpskCBFKAblEnKuT/eI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KXlTXoT+; arc=pass smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KXlTXoT+"
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5a153f2dff1so926952e87.1
+        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 07:03:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773756221; cv=none;
+        d=google.com; s=arc-20240605;
+        b=h1btURWu7WnRh+g04eb6cXSFLhxal7zJNhFER2Ltq/LxNoQDjPSdzG9Niqi0r4yArr
+         vyEVaEPowXm6QyrMEsmwFMieLOuRToHNlN9EBuyA5lySF/h6UK0wGbZQp4NVF823QeO9
+         3+1350gRSZVwLrbNAAMioP2iF1QlFa8VIvAEOz+95gj3jDzUoXZUL2hTAXdUwajRqmCX
+         Gn0idsBxU3w3fvu7PIvvzuGd/rhO9l1nehc+KWiJXs89MMRpXEpA5lH89u0ntmg5XENm
+         nq7CbPwLJu4DaExg/8r8bqTO9IMqEPsHWYjdfTWBrMM+OfSjzrhGd8X+aoVjWc44iUZC
+         jlFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=7/3f58iu/+g/g9Goo1LOfp9JAw9bH8W31yo1xCwf7o0=;
+        fh=5s9lsWJsaExT7Sc1lVPCbQlTOQnqnFd/1k967eXnPok=;
+        b=iJZplyxr/uV0g5801L+5A7Gc2Loe9DrHFvhz7xtcxTdY9jL+R1fmi29GChRedSA9d3
+         roCBgNBOnuD0oMqxkxk8fZl2NbcJQKxjn0Hk5IegisiqJxd7nEBDPiRzweVQ1+kIN7kO
+         ZifVLM1SSD7vpVf+YDhAZobL7qi8Vg26tuCOF/+uJLODmNapxJz7bGfUedN2D1xkhlfQ
+         J04Sj1u6wzSW1/QQEprtyaC6LiGxlaM2qgi0maHrggGXPG6Ya72CDak1QdWMctAo7xGM
+         2qXKL0Mwy7exjq8xOOSCoFxgS6xUniBFt1n75MgAHYo17VckDk0rxukK3qlGU49bqYkL
+         t69A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1773756221; x=1774361021; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7/3f58iu/+g/g9Goo1LOfp9JAw9bH8W31yo1xCwf7o0=;
+        b=KXlTXoT+gjnAk/FMQ+yJ5GslHzTnuNE+0hOJ709cBfrx8uxhL+hZ4i+UgAZVUm1KcI
+         yhMh/Hp183ZFEwN0RlngbnLHw1oUaUTEw1FQDQY+xag+/8SDt+tgnyDBC0rmqenBT3Q9
+         bZCZJ1KO0T/wXCBOMnAiEVQ7ss59b2iXMtOTZUtLivwhxI6u2i5Aji5CiY7Fs6VD7MsR
+         DRdKN2AvIrxBiijSkQ/IUhF2y6PkxNKO2fQ+MhRAOIJlMlOJkWpgx8hrf7hlCdMov2wm
+         rDzocy4L0lWWUj2ZpFoS5N3wk+RmqssD7ZYCX2aCZbmMJRDchR/WdsTOmjaWXeHhz6xd
+         PO0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773756221; x=1774361021;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=7/3f58iu/+g/g9Goo1LOfp9JAw9bH8W31yo1xCwf7o0=;
+        b=mXOf2+rpA9ipHLXWFdb/32kpevnPq9OgKA/8xdxTLvqmF/N6J0w7eN9wlfoJfPMsqU
+         3spLmXp+GO0P85jExQHbL3/0khrttPPVVxCLRS+gxP+TQlg4TW2RmWnvzktgWf8WdUyv
+         vroOrBdPCYUrJvJ1yPujAuWTXWCviYu29+0OklG4dAR5fjc7kLG9SD1+GxUnUjtf7ewd
+         Ff7HeZsRBrTFlhFfaay03gf0wJXj+qs2/jdLJ4pA2jOl9TwosHVwO31A0qObi4rOX/z1
+         5kM5ZtZQ/vKhTfOU5RullI9G1tm0hrq5MQEO6fwexMIM1krmiaHpTB9cX9mOJRVImPjt
+         Qohw==
+X-Forwarded-Encrypted: i=1; AJvYcCXIFvhEAdheSiFFyLZvXMgbzD0eYAfmaqh4Q7XI4PS42qg8qVSczquiqMeGRIL3xvjDI9w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyeRIlsRXOxmXWCDM5XcHQp/I2bdWkTOPO/GG+3XoXx4wClFCn1
+	fKuSw2k/HDiXaOmp5+/aklOhEjY7hSqKmIxtfkoh9/WDKek5lS42+ZgsQrqRLIBADAuH8AmZdeM
+	c/6E6SbA96nW4EXHu1ObUCXLpN9ZEwoRV5ZrFRALE
+X-Gm-Gg: ATEYQzziNLHwZDvnNxy9dPLcq3OOkMOtpnfZ1jgWTwQKiJD+Bi8EEGzCHNsrqcrY1jQ
+	A/o+BurizIi3QtSClQxb+8S9mW8T1olAWuiKV+AXeLD8Kni6KaVFf1bXi6/9zWDFvRQpmT/Lnwe
+	dbSoUg6+YnpG1GBfJ4UoFZW9Fmt5kOm55TSMCSrGfT+3EkrxrZVvKjS6uZZxhFIBRd6Jw/In5Ir
+	YFlDGrPOmTOKtlEzPbnyrfwjRWQXImcb47BTww4cOqZlYnuk9imLM5j6aW/JkkPgVHy5fDE3gWa
+	dnhIj4N/QZdHYKiAaTC7d/bIMonTMIz8nZ3YUSUV5HMbm80oTWo=
+X-Received: by 2002:a05:6512:61c6:20b0:5a1:3deb:c073 with SMTP id
+ 2adb3069b0e04-5a173b9c0famr983817e87.1.1773756220885; Tue, 17 Mar 2026
+ 07:03:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-4.00 / 50.00];
-	REPLY(-4.00)[];
-	TAGGED_RCPT(0.00)[];
-	ASN(0.00)[asn:32098, ipnet:2800::/6, country:US]
-X-Rspamd-Queue-Id: 043705BCC9
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Rspamd-Action: no action
-X-Spam-Flag: NO
-X-Spam-Score: -4.00
-X-Spam-Level: 
+References: <20260316230434.1398828-1-joshwash@google.com>
+In-Reply-To: <20260316230434.1398828-1-joshwash@google.com>
+From: Joshua Washington <joshwash@google.com>
+Date: Tue, 17 Mar 2026 09:03:28 -0500
+X-Gm-Features: AaiRm53yfwWdQK9oY-u9T0Uwef3SLxbw8OQA83QC-nJ5xodPhrctAZuW02VZjwU
+Message-ID: <CALuQH+WVSVuan2WRtnugnWo0ZK7dG4Z6BWgHQVULb6m5TZ7vrA@mail.gmail.com>
+Subject: Re: [PATCH net-next] gve: add XDP metadata support for DQ RDA
+To: netdev@vger.kernel.org
+Cc: Harshitha Ramamurthy <hramamurthy@google.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Willem de Bruijn <willemb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
+	Tim Hostetler <thostet@google.com>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	Jordan Rhee <jordanrhee@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-As IPv6 is built-in only, it does not make sense to continue using
-IS_BUILTIN(CONFIG_IPV6). Therefore, replace it with IS_ENABLED() when
-necessary and drop it if it isn't valid anymore.
+Hello, the commit referenced here should have been
+1b42e07af1ee ("gve: Add Rx HWTS metadata to AF_XDP ZC mode"). I had
+mistakenly drawn the hash from a different repo. I can respin this
+change once others have reviewed it and left potential feedback.
 
-Notice that there is still one instance related to ICMPv6, as it
-requires more changes it will be handle separately.
 
-Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
-Tested-by: Ricardo B. Marlière <rbm@suse.com>
----
- include/linux/indirect_call_wrapper.h |  2 +-
- include/net/ip6_fib.h                 |  2 +-
- net/core/filter.c                     | 14 +++++++-------
- net/ipv6/ip6_fib.c                    |  2 +-
- net/ipv6/ip6_offload.c                |  4 ++--
- net/ipv6/route.c                      |  6 +++---
- 6 files changed, 15 insertions(+), 15 deletions(-)
+On Mon, Mar 16, 2026 at 6:04=E2=80=AFPM Joshua Washington <joshwash@google.=
+com> wrote:
+>
+> Commit daa7ff1e1269 ("gve: Add Rx HWTS metadata to AF_XDP ZC mode")
+> exposes support for the XDP RX timestamping metadata operation in the DQ
+> RDA mode. While the operation works on its own, the intent was to enable
+> XDP metadata support for the queue format as a whole along with it.
+> Currently bfp_xdp_adjust_meta fails because meta_valid is set to false.
+> This change updates xdp_buff preparation to set meta_valid to true, so
+> metadata can be fully used by XDP programs.
+>
+> Reviewed-by: Harshitha Ramamurthy <hramamurthy@google.com>
+> Reviewed-by: Jordan Rhee <jordanrhee@google.com>
+> Signed-off-by: Joshua Washington <joshwash@google.com>
+> ---
+>  drivers/net/ethernet/google/gve/gve_rx_dqo.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/ethernet/google/gve/gve_rx_dqo.c b/drivers/net/e=
+thernet/google/gve/gve_rx_dqo.c
+> index 7924dce719e2..48945b4b6766 100644
+> --- a/drivers/net/ethernet/google/gve/gve_rx_dqo.c
+> +++ b/drivers/net/ethernet/google/gve/gve_rx_dqo.c
+> @@ -877,7 +877,7 @@ static int gve_rx_dqo(struct napi_struct *napi, struc=
+t gve_rx_ring *rx,
+>                                  buf_state->page_info.page_address +
+>                                  buf_state->page_info.page_offset,
+>                                  buf_state->page_info.pad,
+> -                                buf_len, false);
+> +                                buf_len, true);
+>                 gve_xdp.gve =3D priv;
+>                 gve_xdp.compl_desc =3D compl_desc;
+>
+> --
+> 2.53.0.851.ga537e3e6e9-goog
+>
 
-diff --git a/include/linux/indirect_call_wrapper.h b/include/linux/indirect_call_wrapper.h
-index dc272b514a01..0e4340ecd857 100644
---- a/include/linux/indirect_call_wrapper.h
-+++ b/include/linux/indirect_call_wrapper.h
-@@ -57,7 +57,7 @@
-  * builtin, this macro simplify dealing with indirect calls with only ipv4/ipv6
-  * alternatives
-  */
--#if IS_BUILTIN(CONFIG_IPV6)
-+#if IS_ENABLED(CONFIG_IPV6)
- #define INDIRECT_CALL_INET(f, f2, f1, ...) \
- 	INDIRECT_CALL_2(f, f2, f1, __VA_ARGS__)
- #elif IS_ENABLED(CONFIG_INET)
-diff --git a/include/net/ip6_fib.h b/include/net/ip6_fib.h
-index 88b0dd4d8e09..39c98c3d8ac5 100644
---- a/include/net/ip6_fib.h
-+++ b/include/net/ip6_fib.h
-@@ -580,7 +580,7 @@ static inline bool fib6_metric_locked(struct fib6_info *f6i, int metric)
- void fib6_info_hw_flags_set(struct net *net, struct fib6_info *f6i,
- 			    bool offload, bool trap, bool offload_failed);
- 
--#if IS_BUILTIN(CONFIG_IPV6) && defined(CONFIG_BPF_SYSCALL)
-+#if IS_ENABLED(CONFIG_IPV6) && defined(CONFIG_BPF_SYSCALL)
- struct bpf_iter__ipv6_route {
- 	__bpf_md_ptr(struct bpf_iter_meta *, meta);
- 	__bpf_md_ptr(struct fib6_info *, rt);
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 2f023999f046..c56821afaa0f 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -7590,7 +7590,7 @@ BPF_CALL_5(bpf_tcp_check_syncookie, struct sock *, sk, void *, iph, u32, iph_len
- 		ret = __cookie_v4_check((struct iphdr *)iph, th);
- 		break;
- 
--#if IS_BUILTIN(CONFIG_IPV6)
-+#if IS_ENABLED(CONFIG_IPV6)
- 	case 6:
- 		if (unlikely(iph_len < sizeof(struct ipv6hdr)))
- 			return -EINVAL;
-@@ -7660,7 +7660,7 @@ BPF_CALL_5(bpf_tcp_gen_syncookie, struct sock *, sk, void *, iph, u32, iph_len,
- 		mss = tcp_v4_get_syncookie(sk, iph, th, &cookie);
- 		break;
- 
--#if IS_BUILTIN(CONFIG_IPV6)
-+#if IS_ENABLED(CONFIG_IPV6)
- 	case 6:
- 		if (unlikely(iph_len < sizeof(struct ipv6hdr)))
- 			return -EINVAL;
-@@ -8026,7 +8026,7 @@ static const struct bpf_func_proto bpf_tcp_raw_gen_syncookie_ipv4_proto = {
- BPF_CALL_3(bpf_tcp_raw_gen_syncookie_ipv6, struct ipv6hdr *, iph,
- 	   struct tcphdr *, th, u32, th_len)
- {
--#if IS_BUILTIN(CONFIG_IPV6)
-+#if IS_ENABLED(CONFIG_IPV6)
- 	const u16 mss_clamp = IPV6_MIN_MTU - sizeof(struct tcphdr) -
- 		sizeof(struct ipv6hdr);
- 	u32 cookie;
-@@ -8078,7 +8078,7 @@ static const struct bpf_func_proto bpf_tcp_raw_check_syncookie_ipv4_proto = {
- BPF_CALL_2(bpf_tcp_raw_check_syncookie_ipv6, struct ipv6hdr *, iph,
- 	   struct tcphdr *, th)
- {
--#if IS_BUILTIN(CONFIG_IPV6)
-+#if IS_ENABLED(CONFIG_IPV6)
- 	if (__cookie_v6_check(iph, th) > 0)
- 		return 0;
- 
-@@ -11964,7 +11964,7 @@ BPF_CALL_1(bpf_skc_to_tcp_timewait_sock, struct sock *, sk)
- 		return (unsigned long)sk;
- #endif
- 
--#if IS_BUILTIN(CONFIG_IPV6)
-+#if IS_ENABLED(CONFIG_IPV6)
- 	if (sk && sk->sk_prot == &tcpv6_prot && sk->sk_state == TCP_TIME_WAIT)
- 		return (unsigned long)sk;
- #endif
-@@ -11987,7 +11987,7 @@ BPF_CALL_1(bpf_skc_to_tcp_request_sock, struct sock *, sk)
- 		return (unsigned long)sk;
- #endif
- 
--#if IS_BUILTIN(CONFIG_IPV6)
-+#if IS_ENABLED(CONFIG_IPV6)
- 	if (sk && sk->sk_prot == &tcpv6_prot && sk->sk_state == TCP_NEW_SYN_RECV)
- 		return (unsigned long)sk;
- #endif
-@@ -12250,7 +12250,7 @@ __bpf_kfunc int bpf_sk_assign_tcp_reqsk(struct __sk_buff *s, struct sock *sk,
- 		ops = &tcp_request_sock_ops;
- 		min_mss = 536;
- 		break;
--#if IS_BUILTIN(CONFIG_IPV6)
-+#if IS_ENABLED(CONFIG_IPV6)
- 	case htons(ETH_P_IPV6):
- 		ops = &tcp6_request_sock_ops;
- 		min_mss = IPV6_MIN_MTU - 60;
-diff --git a/net/ipv6/ip6_fib.c b/net/ipv6/ip6_fib.c
-index a6e58a435735..0fc6ef4a48b1 100644
---- a/net/ipv6/ip6_fib.c
-+++ b/net/ipv6/ip6_fib.c
-@@ -2763,7 +2763,7 @@ static void ipv6_route_native_seq_stop(struct seq_file *seq, void *v)
- 	rcu_read_unlock();
- }
- 
--#if IS_BUILTIN(CONFIG_IPV6) && defined(CONFIG_BPF_SYSCALL)
-+#if IS_ENABLED(CONFIG_IPV6) && defined(CONFIG_BPF_SYSCALL)
- static int ipv6_route_prog_seq_show(struct bpf_prog *prog,
- 				    struct bpf_iter_meta *meta,
- 				    void *v)
-diff --git a/net/ipv6/ip6_offload.c b/net/ipv6/ip6_offload.c
-index bd7f780e37a5..d8072ad6b8c4 100644
---- a/net/ipv6/ip6_offload.c
-+++ b/net/ipv6/ip6_offload.c
-@@ -286,7 +286,7 @@ INDIRECT_CALLABLE_SCOPE struct sk_buff *ipv6_gro_receive(struct list_head *head,
- 
- 	if (likely(proto == IPPROTO_TCP))
- 		pp = tcp6_gro_receive(head, skb);
--#if IS_BUILTIN(CONFIG_IPV6)
-+#if IS_ENABLED(CONFIG_IPV6)
- 	else if (likely(proto == IPPROTO_UDP))
- 		pp = udp6_gro_receive(head, skb);
- #endif
-@@ -346,7 +346,7 @@ INDIRECT_CALLABLE_SCOPE int ipv6_gro_complete(struct sk_buff *skb, int nhoff)
- 
- 	if (likely(ops == &net_hotdata.tcpv6_offload))
- 		return tcp6_gro_complete(skb, nhoff);
--#if IS_BUILTIN(CONFIG_IPV6)
-+#if IS_ENABLED(CONFIG_IPV6)
- 	if (ops == &net_hotdata.udpv6_offload)
- 		return udp6_gro_complete(skb, nhoff);
- #endif
-diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-index 08cd86f49bf9..e206777785d4 100644
---- a/net/ipv6/route.c
-+++ b/net/ipv6/route.c
-@@ -6826,7 +6826,7 @@ void __init ip6_route_init_special_entries(void)
-   #endif
- }
- 
--#if IS_BUILTIN(CONFIG_IPV6)
-+#if IS_ENABLED(CONFIG_IPV6)
- #if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PROC_FS)
- DEFINE_BPF_ITER_FUNC(ipv6_route, struct bpf_iter_meta *meta, struct fib6_info *rt)
- 
-@@ -6921,7 +6921,7 @@ int __init ip6_route_init(void)
- 	if (ret)
- 		goto out_register_late_subsys;
- 
--#if IS_BUILTIN(CONFIG_IPV6)
-+#if IS_ENABLED(CONFIG_IPV6)
- #if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PROC_FS)
- 	ret = bpf_iter_register();
- 	if (ret)
-@@ -6961,7 +6961,7 @@ int __init ip6_route_init(void)
- 
- void ip6_route_cleanup(void)
- {
--#if IS_BUILTIN(CONFIG_IPV6)
-+#if IS_ENABLED(CONFIG_IPV6)
- #if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PROC_FS)
- 	bpf_iter_unregister();
- #endif
--- 
-2.53.0
 
+--
+
+Joshua Washington | Software Engineer | joshwash@google.com | (414) 366-442=
+3
