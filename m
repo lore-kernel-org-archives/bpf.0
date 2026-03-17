@@ -1,198 +1,248 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8246819006B;
-	Tue, 17 Mar 2026 16:15:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773764156; cv=fail; b=fXbA6mMzvZEpK/gJxbN9bUwXqs+YEovZ32LAuOGKv0z3Xj2zBzwRwmsM6epZzrYGvzh8jxUFgAUETKWywd6Aa8QOFU4nlx+AU9KejDm9+GSo05EnZQlDy4a5Kooi0bCTmsw5+TQ8biL0Jv4aSe1QNvMA7CBmd5iz7JhoWrGRy7Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773764156; c=relaxed/simple;
-	bh=CoSLtblAPrOoQ8Q1uunE72dYOt8d9G1hNMFL+Z7fFUI=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=rWF6uK/yUyw4TZ80S82GhBcK+9UbSlvv5yrwVMzKqA7tqdzw8k4YEFwVqSVttVMVXKPu6gFyi/mjjVBFyCriX4Badq8yJ9zOI+I88nuLRyBwf5p4BfdRG/z04YU4ZNIcsW0JuHrvEB7QN1pptnqWJjekgfokIxPqbZAFSOntNLE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E/Oi+9Uu; arc=fail smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93B913590B8
+	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 16:45:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773765938; cv=none; b=gsOTG6oLNeF2dQXtOVFgee0D39JSN/EfiGIGCMmwWlZl5eJDUqeFvJ7GU5zWbAj3FBt5xMI3dXLOaMchsiggBVrv7zvgeXYMbNGkcA8MAZgFpHcQ//jVB6tLganiaH15mTMNd0E9g6U67IVSNo+CF1ekFKf54s/0KixDiJQP/B8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773765938; c=relaxed/simple;
+	bh=Mn+rexhdWhnUsPTZb3Xo/DYOjuyGfhhdanLs9XvCdzo=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=Mh/vPmPNgtCUhGA03AlP8Jc8ZwR86gv5BCAht8VzaZfHF9X/WZe4ha7/BebA4J+JElOfT6jCHcAXoidj6REmP+qFwVoCygK4REI0BXwNtFnRltU6TyvkRLu8I+fqkEktTmTt+gDYWh5RmsB3/R7Z0/l6+LUVQHby2GOFScTKGnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=Y/CZZyJM; arc=none smtp.client-ip=209.85.222.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E/Oi+9Uu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773764154; x=1805300154;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=CoSLtblAPrOoQ8Q1uunE72dYOt8d9G1hNMFL+Z7fFUI=;
-  b=E/Oi+9Uuk9L58OwHb1y6F5X0QAMsk6YegPQD+C4uTIeaZVtXt3FgiU/p
-   CfLVnmo/nK2iNBDYmFmOpN0nPJls2c0bN22ZcHL/nZejJS6aH6t+okvdb
-   ji73odfAHsJonvAYkpuwcNGsHUvLDIj517QZ7/M2/bGzwQZgGKj1sF6Rr
-   TnTl8BsbMAwA/Xs4wFr64oUTYkrBhj0D07LkQK0pfbV0p9YvGEn6/QgNd
-   a0X5igO7Hby4bfukss0i+/AiGjS5nOfzF7DVL8X2vVTY0jHjSs0Os1ngN
-   FjXSJzx2BZmk4FHvV20JOwOUQuivtooiYhFtk8Cw9raJpJ/FOiw5I70CY
-   w==;
-X-CSE-ConnectionGUID: QWcR9fZ4Rn2vsFU65e9ydQ==
-X-CSE-MsgGUID: TGi1TpTcQJ2JzN0HnQhLxw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11732"; a="78697215"
-X-IronPort-AV: E=Sophos;i="6.23,126,1770624000"; 
-   d="scan'208";a="78697215"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 09:15:54 -0700
-X-CSE-ConnectionGUID: BysgnVqOSROUaKUnVk0eoA==
-X-CSE-MsgGUID: E/Kx0KzJQquYIwXtNIGOBA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,126,1770624000"; 
-   d="scan'208";a="222368025"
-Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
-  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 09:15:54 -0700
-Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Tue, 17 Mar 2026 09:15:53 -0700
-Received: from ORSEDG902.ED.cps.intel.com (10.7.248.12) by
- ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37 via Frontend Transport; Tue, 17 Mar 2026 09:15:53 -0700
-Received: from MW6PR02CU001.outbound.protection.outlook.com (52.101.48.53) by
- edgegateway.intel.com (134.134.137.112) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Tue, 17 Mar 2026 09:15:52 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=P9hzlTeiBGpUIEq0pbgP0+j9Clh4WQ6wqrF+ecxrB5zAv2ktoeBDEoLhS0gusoeta6xj0jzazyWfWjzbfMMWVNyEzcXBUx73aVzLWYHYMPL9c2RkiMQ/DRJmgM6RBkIl2UblVl0zAuDoa1ZWIhtBGmmTf6mCUR79bqrCXH7TzccQkotvLFzDta8kdE1e5437WcbWTLGe/LCNYT0dWofwor1k6qvV/19GPrkxgEloItpcVlzcoClegDGywBDfgAr7x7809coh5Fnr5l84o+6p6sKWKB6ySi5jZPYAFq+JabBv7zK6CxY91XOXe8Yz050jb0tkk/4W1v/x3Tj3HNgetQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EmKkdvh5JzpFxVjqrMvplcBm0yYhMm6dA+uhyffewgE=;
- b=g/uuqFcxk2QQoVqwTf5y6ywq5lqRuemHhOpXUvVz7yqdgGk27nHAULWCX52Gnecdwf8J36iLJwBdv2aw0ewodPuY4gAnUx2Ii6QMPjSAU3o+5mPsYjYtXNhztABpziP/hMwxgw9ljvNvtb2evR4DV5lGDF0CVcaH9gvHZlD5cmylhVBVFjkCXg7rE/LQc+NjBhQ2NxSbJuvq5wnZwSdK3gpcfJ7hMhV9detYoXwBjOJFjpJgzuLy0pgLAPrgKqYobB5N08uuM9A/mN4JjkfGoe6fni7BiTR2IUsvJg659vVO8nSJNpw+WOFtviu1YevgK1O63vEawvqCTdO5Ii00Fg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DS0PR11MB8230.namprd11.prod.outlook.com (2603:10b6:8:158::21)
- by SJ0PR11MB4816.namprd11.prod.outlook.com (2603:10b6:a03:2ad::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.19; Tue, 17 Mar
- 2026 16:15:49 +0000
-Received: from DS0PR11MB8230.namprd11.prod.outlook.com
- ([fe80::2592:f5a9:a751:be40]) by DS0PR11MB8230.namprd11.prod.outlook.com
- ([fe80::2592:f5a9:a751:be40%4]) with mapi id 15.20.9723.018; Tue, 17 Mar 2026
- 16:15:49 +0000
-Message-ID: <21a23b98-5014-4330-998f-53acfe705d67@intel.com>
-Date: Tue, 17 Mar 2026 09:15:46 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [net-next,3/5] ice: migrate to netdev ops lock
-To: Jakub Kicinski <kuba@kernel.org>, Alexander Lobakin
-	<aleksander.lobakin@intel.com>
-CC: <horms@kernel.org>, <edumazet@google.com>, <sdf@fomichev.me>,
-	<aleksandr.loktionov@intel.com>, <ast@kernel.org>,
-	<john.fastabend@gmail.com>, <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-	<davem@davemloft.net>, <andrew+netdev@lunn.ch>, <hawk@kernel.org>,
-	<nxne.cnse.osdt.itp.upstreaming@intel.com>, <magnus.karlsson@intel.com>,
-	<pabeni@redhat.com>, <jacob.e.keller@intel.com>, <daniel@iogearbox.net>,
-	<maciej.fijalkowski@intel.com>
-References: <20260310220624.537917-4-anthony.l.nguyen@intel.com>
- <20260313014628.1509116-1-kuba@kernel.org>
- <4537e162-6610-4c3f-b8d5-e62415322282@intel.com>
- <20260316161630.2d9ac04e@kernel.org>
- <a95fa7f2-909e-4b1c-b25a-1ee88b292ecf@intel.com>
- <20260317085025.6459821c@kernel.org>
-Content-Language: en-US
-From: Tony Nguyen <anthony.l.nguyen@intel.com>
-In-Reply-To: <20260317085025.6459821c@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MW4PR04CA0273.namprd04.prod.outlook.com
- (2603:10b6:303:89::8) To DS0PR11MB8230.namprd11.prod.outlook.com
- (2603:10b6:8:158::21)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="Y/CZZyJM"
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-8cd830404c2so618660285a.2
+        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 09:45:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1773765935; x=1774370735; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fS2IfjHCIqSWql8XDYi2AtAuzBRe9xR/tGX3Mm7Lt2U=;
+        b=Y/CZZyJMU2yp7Lo4iAfUGMSJeABPcX08rkhqIyzot9ePXa438Tjq4FrxXcykwPsVY2
+         RjTjzubvPKbKeZ4K/2Rq5GmD8+WPHHxK65QyqXRivER/vC34kfFrZqT3jI4ucRPwdcrZ
+         BOEajU/2zZaJkRJZpD9efOdxabu+YMBOvvLNird9W+H0xCemRgJUovQpQj9iDS/wDGYB
+         c5GjjlaqypCGy1UyPtox++MKJKShhdF9WgJtERyEooqSmnS45J/aNCIE+2oMi0oYDi+T
+         /8hvLxBtGJdCvveDJf6D2Sni0U4E8Rz1mj/CkF/qmDXdJOy1cXuSP44ahXLnczyckPAE
+         W4+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773765935; x=1774370735;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fS2IfjHCIqSWql8XDYi2AtAuzBRe9xR/tGX3Mm7Lt2U=;
+        b=LU/1095/0XEd8M283YU7kRo0X4GEgTdkEGyk8rB0/tCRp6akhXq2WnOZAsTXy/iolb
+         CgBmZn/HVDOQwqFW738vBWnM8L6sZRCseHpWeLrIhFlqzRcnQDDOHWUvRGVC1Ou1RtV0
+         HPYLggxmmGQX7zdel9pN75rNZTRIVEsiBmXe5GRl5PrV2NTxd2WT1ooqOQ7BOhBp/PP/
+         ZAG2ay/ZRArYABrzh9fdnS/uBo051n9ULOSeV4uOgPoa6GB0lzNsL11YDHWGX5F9fzWS
+         uhXzaPhUWMSOjM9k41dby5+YdRxgUOPFXLCr1VGvuzBbzdzocUWcw4CG8QIHPH+/thJa
+         Kojg==
+X-Forwarded-Encrypted: i=1; AJvYcCX1jatW8lD+pGRLxvDTbRzB5FPOul9bYePi8BNs9Bn73ousa4SgDnYJ05yY6iA6T3FGiWE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVLN2DcIDa2WM6jWuKadsrumJXP3nsCzY3mgMeNOq7DWdmKVLQ
+	qtXs2WYRFtraV3TycNAQhhBPM26VeI5uNOQZTcxpO5BZ3bQF0fndSASc617wh7/Zlug=
+X-Gm-Gg: ATEYQzxqvPrxu4Eex9oiKJy5OfeO2bED1UPAxg9BxLmva0xYSAbMvh7dxZMY5EmZNx5
+	ypxreNxS6q9s5WxwbInsFeS7O+ZbY4YC6fqCJEBbLiu/dx+ep3wu9ydJC7ra4DzA3cvnFJ9+Mbe
+	XLzwLKtfRB8lkbqpijv5eZqcA7wqM4cCisktrGs9LarLYdrsNumGoKTk649ifKW3c/NZ6yPlUTH
+	NFA+sJC11cMxMH91pIzl89x4fgLyWR+I3dgTwXd7zFzeHa0MGjfRf6kfcqFTSo4yZhblo39CJV2
+	RWyThHg8QRHvWTSIt8AoWHQ1zudmH6ohm8Lu1T3zhYt2/ZQ/0qzzgvC3UwTLfzmZ0cTaGUngJEC
+	iEE1SAECxzAO1Vf8JtnX2af/W1hYvnLIJNNqwFK8Ic+oAZT4pxlizE6AAvF11xnmSIN+Y5hxPyi
+	R7RtzKKFfkxccsuLmArA5jJqEhy1GFz20mww==
+X-Received: by 2002:a05:620a:444b:b0:8cb:5176:ee5 with SMTP id af79cd13be357-8cfad3734c6mr26519385a.62.1773765935102;
+        Tue, 17 Mar 2026 09:45:35 -0700 (PDT)
+Received: from localhost ([140.174.219.137])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cfacdacf9dsm20104285a.3.2026.03.17.09.45.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Mar 2026 09:45:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR11MB8230:EE_|SJ0PR11MB4816:EE_
-X-MS-Office365-Filtering-Correlation-Id: 94700fc1-90a2-4df3-2c80-08de844073dc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016|18002099003|56012099003|22082099003;
-X-Microsoft-Antispam-Message-Info: B0FmpdAoMmFVHeQS+E6ae/yQxDumMxEq6a/uPa1JlSl7soNORTfUtu9Qrecltm7y03AVllOJCBPiF/4E5drV6kPAeM5SToHwrDt8l5cAmQdAxZQaTHWZ2G8eQqm0KkfchxVb9FWn5Oiwb2fLbCIaQb5NH6/MYxIqMNwhrE6Wf1UFvsSO2LQbBudhx0bLuVpMRwD6lkIYsQ6L775U4XE3jhb08xTvCQMg8K5TUO9FhaCr98MfM4zqACpgCaSsIPAPtxb1+UtSELTSh1nGrI9dS/Q+UGFYVkrEuNaFX8CGN8ggVyh/aCmOMLBR1Hb5IGmTZmb9DiF5h4VlyM9mSs5N58hPum/QICOmm85X2W6FI+3aXzveAVfJbUJKH/vil5cG8cEGhq/nZkp3QJShR/t4Vx3CviOboPExAK9Sp5RIGPqYIiLnPH64/Kari1t7Abjx8e1waaLRa0RWsBKbe+Rh/XoW/FheXsUhDlV4W9syD7zMhmUob+F0B771Hr9XV8qWSarptTG/ahKGU/J77FQJhLglsvhB7Z4dG1tjhz/UWIsQ5to/AZR/qAX5vDCtpULaqMxG/JFNarcyAdK9Opvd5yel534ML/82lhe/FDwpCNq05fV6R/Q0myyZKOnmMvTG328Kp/3AHkDRpLVvlVMR2qhyZIoKIJRVZCcXM7YcLb3GouU1R7I6WJEZ9Pstt36sRguV0WHW2S9mg30zsvk8Eyw6lp9bngxUTUst4tPjhQsspcOY4cFaj/CYvvFOnoTN
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB8230.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eTY0M1JRampadXVoYUd6dnhnajhXMVFyeDRDdWhTTGd3U2RDbG9Pa1VYUldJ?=
- =?utf-8?B?elRZajBzRXBJeVhNUjk4ckVGWk5iSWVXWDBsK3gveVA1S2QvYm82emc3OGNx?=
- =?utf-8?B?VllMbDNPaG5Oak80SDZDRnFXRmhhQlFEN0lHNzl1eTluU0toVW1ZcG52RFB1?=
- =?utf-8?B?QjRZUVNjN0N5Qnh6RVFVbjRMQ0YzZGdGSHZuYTRSZytnbExtUThHb0kvZ25q?=
- =?utf-8?B?QkNvbHF6REttSEZmUFBDUlU2MFpDTy9RMnZ4SGE0SkZZQ2FnM2xHU0pJdVJm?=
- =?utf-8?B?SXR5YTVKaUFCWWhiRVhTNzY5UHc0cFg1bmlBQ1JOTTJHb0hnaWoyZFYzOE9B?=
- =?utf-8?B?N1VCWmRTeFhFZi9uUmJESWdIb00vRnlsMXFCMjlFWENCWG02MHZGU25wMUZK?=
- =?utf-8?B?aG1xczFlZGwxdEFtV3dwVHMzTERJUWFodk51bkJ5bjV0UTdlQi9GUnBLREhw?=
- =?utf-8?B?Q2poc0lucXJXcHFxdUNhNFhVZFphNjRSbEljaTE0cDIxaDFEREVGWGc5dlNl?=
- =?utf-8?B?MVF3WitZaWhYcnhuMUx2M29sUU5IVmFZSTZrdFhiWk1zMHRwTUJuOGFmbmZW?=
- =?utf-8?B?cElXYkNyKzg1MVk4SDBPOGlHQmZLTTN3ZTYrQXgvblFCdVFnZmhNTEFJWVZs?=
- =?utf-8?B?eXpqM2dEK2FqaUxFdW1lWHE0TVg3Zk1YTGFUNEhNUXovcVFYM2xIc28rZmdl?=
- =?utf-8?B?ZTIrTFZ5QWxaeEMrWU5Ud2t6NUNEdEJEcFBDTUtiZVJmY1drcXg2bmNPaGwz?=
- =?utf-8?B?UHU2WW9tZlIrckxDc0V4LzhVcURFTitkMDBncE5MSGgrMytpbTlySXlGUmNs?=
- =?utf-8?B?MVB3SkV3a0JRYnIxOXRhOWJ5VFBKWjdDWklzSWlQMzhRUnZRMlNrajdxeGt0?=
- =?utf-8?B?UWhJRWluR1BUQWVxb0djNXVaTjBlb3JoWW8vMDZDNDR0MTlCaHFjd3RwNnpv?=
- =?utf-8?B?UVR0dmVxNXNGTDQvMGptKysxTFQrb1hPZlUzT0xwbTNpWUNiTm8zczlYdWpJ?=
- =?utf-8?B?REduZEZCK2tKam1NUytpSVBQK2dEMEFzTmJ2d25GdW83OEt0cktqZE15Y2Va?=
- =?utf-8?B?VGFMeVRpV3ZzeXNZSlkxeW9sRW5Jd2x6bG8zZmFUY3dKN0w2cE82VEZhbUMr?=
- =?utf-8?B?bWpMNEJkYm5kd3o0WFlqbXRaeGw2Y25LMmtGRnl2ajJqeEdZb3FzY1RlQito?=
- =?utf-8?B?TFFENzdVRmlNT0FudTdsYTB4WDRjaE1rS3EzMnJySG4ydm1NZEY0aUM1dWxk?=
- =?utf-8?B?YjBSV3lvZXhDSGt4clBXdXordkdveHMwNTUwMjRXQmhQeGlXY2dZY3RoMG5q?=
- =?utf-8?B?eHcza2NuNVlNQWlHZFZvYitWYm1wVjkwWDZOMkE1VmJhdWtaSWNFcDBScS9w?=
- =?utf-8?B?NFVFWmxEeXZ4dW0wRWhOV0FTb2RTOUc0VDNPRklDY3IzaUIxV0lUR1dhOG9W?=
- =?utf-8?B?c1djaEVWTW5mWnAraEhJTVhScUh3LzUwV3VFcC9kMG9mbHhSdGVtWkg2YTV2?=
- =?utf-8?B?OTM4OWd5WWtHamNJSTh1ajZNUGlwc25UcEk4WjNiRjQ5dlhjelZYUGlaN2VS?=
- =?utf-8?B?bXdBUVl3OXZYcHY3TDNKYUhVL0I1QlFTL25wSVUyeFJpemVzbkcwQk9oWUx0?=
- =?utf-8?B?K1c3ZHljdzhkWjZPQTZZbE1EVjQvNFhaanl4Wk1OVzRzNjlTeEhuN3BUMHFj?=
- =?utf-8?B?M2dpd2VMWnNsczg2TTZqQW5nMkJQbFh5cTh1NEV3MmFJdEt2aWFQZEhZcU8z?=
- =?utf-8?B?QTJQZGJNL01CR3J3Kzh1NzlDajRUKytrbXJOcmRCOUdXcEQ2aUMzM0pyTFpO?=
- =?utf-8?B?eFVmT0dmYlVGS2ZRaUtTeGVJVHhibFFjamUrSi9jZExadUNNR1NPMDBPRGRC?=
- =?utf-8?B?MENNTXB4cEdycThxYmRLcWZacTI3ejdSUEUwVjlFaGpJWkhUa1Q1UDBrMW41?=
- =?utf-8?B?eXR3K2RxRVoxWkgwYjBsUEJpQjBReGxRSGJuOWN5K0lBeGVuL3M4Z2tVQnEy?=
- =?utf-8?B?VHdzWTY2SGtkcmdsRElWQ0IxV0tjbk42V1Q2QU9FNENQdWlpY29rWkdDSTZz?=
- =?utf-8?B?VzlIVkpFd0tJd0puV21oTnFoMlIzK1JuYmNCeVI3Q29XVW1vSGxKNDNKUWlV?=
- =?utf-8?B?REF4bU52SWRnOXYwUXNMeVpqN01vbERlZk5tVGQwNXFVVEJvMHlxNVRnQzRx?=
- =?utf-8?B?Q2FQU29MVmlUMytjVUtOcDcxMmkzenhjRlpmREhIMXMxRE52a3BEYmFoYjRY?=
- =?utf-8?B?eGc4cnJEV3RGcVN4aTF3L0hZY1NINDdCcnhMNkJMeGNocnJ3aU1VdkkvWUIv?=
- =?utf-8?B?UVhEUXd2UUdpcVZvTWpieVlQYlpucVdsT3dIeDBxQ0pOYThBcHhPSHI4a0Zk?=
- =?utf-8?Q?XuGuZuJBKlLtRVPQ=3D?=
-X-Exchange-RoutingPolicyChecked: WSYsFPPs0n97jrhBUNDjohlMxQPndUN6QcDsnpqaS0dVQbJAMqepXFGgM3690bVHY/pSIUSRVjZ4DkXre17v69KGFeVP/8GOfugAqucxFKjBa2Snbj6BlVuxO58iKv0CmWrHxj17fAhDpunBvwBRVfb/FM6cg+vANVc/BHQaDfhhr4PA5hz7ZepBzS2ZvVYnne/2Twh08T8nb9Zle7zjjsH1FdryQoz/kGUBFycCAlZoPcpsdcyvBnPLpmF0V0K8TXIiJ4z1q/746W2JGl+CKlC1nlwWzEX3L29W2c7wuP3+dJRrobvjQXwAgTvo7UTACxAHZKdPWizUrKO0cFjExA==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 94700fc1-90a2-4df3-2c80-08de844073dc
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB8230.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2026 16:15:49.1413
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ArLRoT4n0ExxNEDLNK+lZlqJRmroSbvE1Re05u9/UuRCH7MsZgF5qmJF0Oi+7J2FH7h3aiqRUUGfX/NhJUJ9PviYGQl0ibTf4v2QM8/npBE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB4816
-X-OriginatorOrg: intel.com
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 17 Mar 2026 12:45:32 -0400
+Message-Id: <DH57JO6V5L54.I3CL1UF0FKAE@etsalapatis.com>
+Cc: "Tejun Heo" <tj@kernel.org>, "Dan Schatzberg" <dschatzberg@meta.com>,
+ "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Martin
+ KaFai Lau" <martin.lau@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ <kkd@meta.com>, <kernel-team@meta.com>
+Subject: Re: [PATCH bpf-next v1 1/4] bpf: Support variable offsets for
+ syscall PTR_TO_CTX
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.20.1
+References: <20260317111850.2107846-1-memxor@gmail.com>
+ <20260317111850.2107846-2-memxor@gmail.com>
+In-Reply-To: <20260317111850.2107846-2-memxor@gmail.com>
 
-On 3/17/2026 8:50 AM, Jakub Kicinski wrote:
-> On Tue, 17 Mar 2026 16:30:26 +0100 Alexander Lobakin wrote:
->> BTW, if it's not top secret, how do you run these AI reviews? Because
->> Tony used the same link as these reports provide to deploy a setup, but
->> we didn't manage to get as meaningful results as yours. That's why
->> several respins of this series only due to your AI reviews, sorry =\
-> 
-> Nothing secret, I didn't push it to the main NIPA repo because it
-> mostly vibecoded crap which is embarrassing. You can see it here:
-> 
-> https://github.com/kuba-moo/nipa/tree/air
-> 
-> It is just Chris's prompts + semcode. We run the prompts with
-> sub-agents enabled (the "orc" prompt). Right now it runs on Claude,
-> the subagents are supposed to pick the model by themselves depending
-> on complexity.
-> 
-> I don't think we do anything special, if anything it's probably the
-> mode (orc mode thing) that makes a difference?
+On Tue Mar 17, 2026 at 7:18 AM EDT, Kumar Kartikeya Dwivedi wrote:
+> Allow accessing PTR_TO_CTX with variable offsets in syscall programs.
+> Fixed offsets are already enabled for all program types that do not
+> convert their ctx accesses, since the changes we made in the commit
+> de6c7d99f898 ("bpf: Relax fixed offset check for PTR_TO_CTX"). Note
+> that we also lift the restriction on passing syscall context into
+> helpers, which was not permitted before, and passing modified syscall
+> context into kfuncs.
+>
+> The structure of check_mem_access can be mostly shared and preserved,
+> but we must use check_mem_region_access to correctly verify access with
+> variable offsets.
+>
+> The check made in check_helper_mem_access is hardened to only allow
+> PTR_TO_CTX for syscall programs to be passed in as helper memory. This
+> was the original intention of the existing code anyway, and it makes
+> little sense for other program types' context to be utilized as a memory
+> buffer. In case a convincing example presents itself in the future, this
+> check can be relaxed further.
+>
+> We also no longer use the last-byte access to simulate helper memory
+> access, but instead go through check_mem_region_access. Since this no
+> longer updates our max_ctx_offset, we must do so manually, to keep track
+> of the maximum offset at which the program ctx may be accessed.
+>
+> Cc: Tejun Heo <tj@kernel.org>
+> Cc: Dan Schatzberg <dschatzberg@meta.com>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
 
-That's possible. I'm still pursing it but, at least so far, I haven't 
-found a way to get orc mode working with my tooling.
+One nit (along with the bot's point which seems correct, patch 3 can be rol=
+led
+into this one). Given those:
 
-Thanks,
-Tony
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+
+>  kernel/bpf/verifier.c                         | 51 +++++++++++--------
+>  .../bpf/progs/verifier_global_subprogs.c      |  1 -
+>  2 files changed, 31 insertions(+), 21 deletions(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 01c18f4268de..50639bb69d91 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -7843,6 +7843,7 @@ static int check_mem_access(struct bpf_verifier_env=
+ *env, int insn_idx, u32 regn
+>  		 * Program types that don't rewrite ctx accesses can safely
+>  		 * dereference ctx pointers with fixed offsets.
+>  		 */
+> +		bool var_off_ok =3D resolve_prog_type(env->prog) =3D=3D BPF_PROG_TYPE_=
+SYSCALL;
+>  		bool fixed_off_ok =3D !env->ops->convert_ctx_access;
+>  		struct bpf_retval_range range;
+>  		struct bpf_insn_access_aux info =3D {
+> @@ -7857,15 +7858,25 @@ static int check_mem_access(struct bpf_verifier_e=
+nv *env, int insn_idx, u32 regn
+>  			return -EACCES;
+>  		}
+> =20
+> -		err =3D __check_ptr_off_reg(env, reg, regno, fixed_off_ok);
+> -		if (err < 0)
+> -			return err;
+> +		if (var_off_ok) {
+> +			err =3D check_mem_region_access(env, regno, off, size, U16_MAX, false=
+);
+> +			if (err)
+> +				return err;
+> +		} else {
+> +			err =3D __check_ptr_off_reg(env, reg, regno, fixed_off_ok);
+> +			if (err < 0)
+> +				return err;
+> +		}
+> =20
+>  		/*
+>  		 * Fold the register's constant offset into the insn offset so
+> -		 * that is_valid_access() sees the true effective offset.
+> +		 * that is_valid_access() sees the true effective offset. If the
+> +		 * register's offset is not constant, then the maximum possible
+> +		 * offset is simulated.
+>  		 */
+> -		if (fixed_off_ok)
+> +		if (var_off_ok)
+> +			off +=3D reg->umax_value;
+> +		else if (fixed_off_ok)
+
+Nit: Can we move the offset adjustment into the if-else above? We're
+essentially repeating the if (var_off_ok) check twice.
+
+
+>  			off +=3D reg->var_off.value;
+>  		err =3D check_ctx_access(env, insn_idx, off, size, t, &info);
+>  		if (err)
+> @@ -8442,22 +8453,16 @@ static int check_helper_mem_access(struct bpf_ver=
+ifier_env *env, int regno,
+>  		return check_ptr_to_btf_access(env, regs, regno, 0,
+>  					       access_size, BPF_READ, -1);
+>  	case PTR_TO_CTX:
+> -		/* in case the function doesn't know how to access the context,
+> -		 * (because we are in a program of type SYSCALL for example), we
+> -		 * can not statically check its size.
+> -		 * Dynamically check it now.
+> -		 */
+> -		if (!env->ops->convert_ctx_access) {
+> -			int offset =3D access_size - 1;
+> -
+> -			/* Allow zero-byte read from PTR_TO_CTX */
+> -			if (access_size =3D=3D 0)
+> -				return zero_size_allowed ? 0 : -EACCES;
+> -
+> -			return check_mem_access(env, env->insn_idx, regno, offset, BPF_B,
+> -						access_type, -1, false, false);
+> +		/* Only permit reading or writing syscall context using helper calls. =
+*/
+> +		if (resolve_prog_type(env->prog) =3D=3D BPF_PROG_TYPE_SYSCALL) {
+> +			int err =3D check_mem_region_access(env, regno, 0, access_size, U16_M=
+AX,
+> +							  zero_size_allowed);
+> +			if (err)
+> +				return err;
+> +			if (env->prog->aux->max_ctx_offset < reg->umax_value + access_size)
+> +				env->prog->aux->max_ctx_offset =3D reg->umax_value + access_size;
+> +			return 0;
+>  		}
+> -
+>  		fallthrough;
+>  	default: /* scalar_value or invalid ptr */
+>  		/* Allow zero-byte read from NULL, regardless of pointer type */
+> @@ -9401,6 +9406,7 @@ static const struct bpf_reg_types mem_types =3D {
+>  		PTR_TO_MEM | MEM_RINGBUF,
+>  		PTR_TO_BUF,
+>  		PTR_TO_BTF_ID | PTR_TRUSTED,
+> +		PTR_TO_CTX,
+>  	},
+>  };
+> =20
+> @@ -9710,6 +9716,11 @@ static int check_func_arg_reg_off(struct bpf_verif=
+ier_env *env,
+>  		 * still need to do checks instead of returning.
+>  		 */
+>  		return __check_ptr_off_reg(env, reg, regno, true);
+> +	case PTR_TO_CTX:
+> +		/* Allow fixed and variable offsets for syscall context. */
+> +		if (resolve_prog_type(env->prog) =3D=3D BPF_PROG_TYPE_SYSCALL)
+> +			return 0;
+> +		fallthrough;
+>  	default:
+>  		return __check_ptr_off_reg(env, reg, regno, false);
+>  	}
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c=
+ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
+> index f02012a2fbaa..2250fc31574d 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
+> @@ -134,7 +134,6 @@ __noinline __weak int subprog_user_anon_mem(user_stru=
+ct_t *t)
+> =20
+>  SEC("?tracepoint")
+>  __failure __log_level(2)
+> -__msg("invalid bpf_context access")
+>  __msg("Caller passes invalid args into func#1 ('subprog_user_anon_mem')"=
+)
+>  int anon_user_mem_invalid(void *ctx)
+>  {
+
