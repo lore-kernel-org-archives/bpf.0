@@ -1,142 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0783439D6D9;
-	Tue, 17 Mar 2026 09:49:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 343B135F166;
+	Tue, 17 Mar 2026 10:04:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773740994; cv=none; b=gh5LCLKKEYE3CmTu8CVhCSR1ac+hlMj+BxoNwINAyIOAhtc4nhvnv8Jxx0OunhCF9H5mzO68OyDMoH5a0n0Fr2/RAoC4CnXgXRa3duhMvckzOsYEjUZWyid/C+EtSFecTrtI0zerVozjyF2+jpZ3nkGKs3qsEUzt18NBzgzqr8o=
+	t=1773741853; cv=none; b=n2glawSKGoNiknFQqTKlMYNoPxBAoY9fF1PnsUAWPbq04e1Fb1LXB/TiWQdWdTvmJWv6Jkb0u+2tVCzn5Y0bZvLNBJXxWd0NTJ1jTDSLUkFRbMBQpOnfscR5/vmoyVFtSJkwGvt9TOrZgrTr+9rxI4mrrmQT/ugEqsecARIyulE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773740994; c=relaxed/simple;
-	bh=Y37P4OdefzXCY9joMqOUrRnFRWZPXLodPfge2HEhFEU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EWw52LzJIt8b9prCbhkjLYoAYus66TOCYZ/xlZNjiEyan2fd7kt1xjbj4utwfeoZHntWnCAE5T4K2/nw2OwpSSUcUcOvbY3U2Tpvm2aXgBi2zTEUex/yL2C8Z5QXdhs9rjqkQUB4gLQky3CDS13v5i0y4a4X5KUC4aA7rNkcvFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mjAmoTJC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773741853; c=relaxed/simple;
+	bh=W6U5osNGJdMj8LvVlf86aq0XyoPI4WAiCnA1DzrX4kM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=gbKwrHFZXuA8eQ9xJjOA6D/V5gbU4oOoTzTdOsnB2c8LszUtP25EJ9KnT2I//Tui2gZteV/mpwyZkYurVQLi2ewBAwm0kP99phIhfteVFK0dtvEgcz/2+mwhGpQir2x9MSiq5YjGegS50R9Kuk+EE7E1WoVaUY9GCw2cf3B2UYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=m0V0Bp9O; arc=none smtp.client-ip=54.204.34.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mjAmoTJC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFEC9C4CEF7;
-	Tue, 17 Mar 2026 09:49:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773740993;
-	bh=Y37P4OdefzXCY9joMqOUrRnFRWZPXLodPfge2HEhFEU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=mjAmoTJC6USk8SekAtF8SLRTp1QiZRLQqpVDJaLpzUVOpG6VwUb+5ibGwtGB/x8lH
-	 N7OYw01V/jjNLgXWzhv1iWS19CoIxJ0XTaNuFmMzzmzR/cP8Wq9Ww2wrQLaFhpuqrO
-	 JJ0xmyDLdRip83l9ur+Ahi/o9Us1w/Zf/BxSlar1Xg6RhSIidUGcBsWiuee2N9VffB
-	 mY9hV92Fv9EBMfezkkdxwNp6brgFwvGNb790meJr1T/NRCz69CWNGuFQ3w8NAK+zqx
-	 i/TFwty4RI5wmBDq2iLpx1S6dM2vs04HSp+k/30oQfa/xpW9gbv70HYTfHGPMRLCqw
-	 O3+T5FJKNPYBw==
-Message-ID: <e8f25a5f-940b-4b89-8a88-ef984bd78238@kernel.org>
-Date: Tue, 17 Mar 2026 10:49:46 +0100
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="m0V0Bp9O"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1773741817;
+	bh=knhVkK/o5wutC2ZYGK/P64zxrAtK3BiS82ZZ/Wcikfs=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=m0V0Bp9Oh55pV14otT2MUhXMnmClYYkRVSn0OJACcY9DqO5vu5CdYHMfpV8Qfpq5k
+	 7+4+SPp8f+mZ6KoCTxd/guPdVQLv7SUUZcQ14i9rlm8zVWSiZ/CkQRGkrhHIgrnlEa
+	 /p8q41LafOXItT3q1hwwe5uaENty4OJAWeaC2zxA=
+X-QQ-mid: zesmtpip3t1773741811t9206c7e6
+X-QQ-Originating-IP: 8uLP95Gl8inFtF8o38RIhtDlTc0WewOkLWpsEjyPA78=
+Received: from xulang-PC ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 17 Mar 2026 18:02:58 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 6445063610275196397
+EX-QQ-RecipientCnt: 20
+From: xulang <xulang@uniontech.com>
+To: martin.lau@linux.dev
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	dzm91@hust.edu.cn,
+	eddyz87@gmail.com,
+	haoluo@google.com,
+	ihor.solodrai@linux.dev,
+	john.fastabend@gmail.com,
+	jolsa@kernel.org,
+	kaiyanm@hust.edu.cn,
+	kernel@uniontech.com,
+	kpsingh@kernel.org,
+	linux-kernel@vger.kernel.org,
+	paul.chaignon@gmail.com,
+	sdf@fomichev.me,
+	song@kernel.org,
+	xulang@uniontech.com,
+	yonghong.song@linux.dev
+Subject: [PATCH bpf 1/2] bpf: Fix OOB in bpf_obj_memcpy for cgroup storage
+Date: Tue, 17 Mar 2026 18:02:26 +0800
+Message-ID: <7A2B50421D98AFDF+20260317100227.2157104-2-xulang@uniontech.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260317100227.2157104-1-xulang@uniontech.com>
+References: <82ee475b-034a-442c-b290-cc7905a7f33c@linux.dev>
+ <20260317100227.2157104-1-xulang@uniontech.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v4 6/6] selftests: drv-net: xdp: Add rss_hash
- metadata tests
-To: Chris J Arges <carges@cloudflare.com>, Joe Damato <joe@dama.to>,
- Jakub Kicinski <kuba@kernel.org>, Andy Gospodarek <gospo@broadcom.com>,
- Michael Chan <michael.chan@broadcom.com>,
- Pavan Chebbi <pavan.chebbi@broadcom.com>, Andrew Lunn
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>,
- Simon Horman <horms@kernel.org>, Willem de Bruijn <willemb@google.com>,
- Petr Machata <petrm@nvidia.com>, David Wei <dw@davidwei.uk>,
- Vadim Fedorenko <vadim.fedorenko@linux.dev>,
- Carolina Jubran <cjubran@nvidia.com>, Nimrod Oren <noren@nvidia.com>,
- Gal Pressman <gal@nvidia.com>,
- Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>
-Cc: Bui Quang Minh <minhquangbui99@gmail.com>,
- Daniel Zahka <daniel.zahka@gmail.com>, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-team <kernel-team@cloudflare.com>
-References: <20260313223029.454755-1-carges@cloudflare.com>
- <20260313223029.454755-7-carges@cloudflare.com>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <20260313223029.454755-7-carges@cloudflare.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3b-0
+X-QQ-XMAILINFO: NOVhbBM8HVHMj5XXgbbgMfYYfYzuNgDQw1i8cdElwNunM5cFcyN4TpBI
+	grDZvLnxmsiNDbCmy6EImsiu3IuLAXS6Pw3Grw2ZzG454irtkOleM2U//kVq6EH5PGpOfOi
+	qMCU2OEM8+ctRLCx0iLwd60AEmPqZ4NJ4zS+sSotHu38fQzFAR+WM8hKmjqFGx+o/4PWA87
+	AIvCKxpTcXU5mHZ9QKBiFryezf1wQPRNAtsuZPpkAscMUPLetQmqIG0rNheHeu8d+bIeJAs
+	MOFdg9yI2Hf4uZR3/xL2Z2y81dWRWyI2GL2GiMlGkQxefr46KW4EStj+2jUhHORvFBNu0cs
+	Ay+X681qRQeo0pCwsbechG/soKTX8DOAvII/a+PpqZriMZ2Uk5Xb+GECRg7KT/WNbmnxIcY
+	rHOJQQFMBufASXl6XZAH0JJdFOaQeyb6gkKhCYPpuO1uR8445gPnC69SuZSHP1OqjsB+cSH
+	T74b23PlJrXUySgT4R55O0rx0dsRCKfILni4zMmMJEVL7EzRRy3osHjMT5l9YnxYNAumIbo
+	+Itr5607S7Hqvm1DmhcW7dv4IxxkiR4XAKFSwnpvFz14dSNnC/LhDRiUqD0R3RzSO14rCe1
+	21LZLU2iQNqV1tMPXmvEEH+m7fn4pOluCvZ97/Ni1qW1BMsUAjPnH2DcWaUpRqp5LahXEBW
+	PEsWTu/+ILpAnRtgBA9Q2y+OZQs1diqKx1R4lXRCOvxa8eEyPlu0iD/U1TfQGFKhX8D18PP
+	WOSdDItFiJ7U8EEIWchYuRrw5rcsTDMHz6ueJQ2ejBD4O9R3ZUF3QR0iScbWkrzRTpsNED9
+	DDSbgpucmOPpeG6uNFc29EGZnE2WSc1Q6mVwwHIKtBMwW2UhDpj4ukdiJn3j620KNkhgBen
+	JJqwoWzRcFUr1Iq6PWPlnB/7nRfnKxPNb+hxPfLsryHrITX2iSnG2DuBhimB02p0jDAU6AG
+	Sha3PaOS9KFSYeLYPc13oEN2y7tnRqwfnwYMOkNzFxxYrpCKcutvpsFAXtOwVdm5GB8MjwI
+	rwqj8E5zR+i0Hk/YQxW5wdrDUBnA86vvOyzFEi4mjn2hze/fQp
+X-QQ-XMRINFO: MSVp+SPm3vtSI1QTLgDHQqIV1w2oNKDqfg==
+X-QQ-RECHKSPAM: 0
 
+From: Lang Xu <xulang@uniontech.com>
 
+An out-of-bounds read occurs when copying element from a
+BPF_MAP_TYPE_CGROUP_STORAGE map to another map type with the same
+value_size that is not 8-byte aligned.
 
-On 13/03/2026 23.27, Chris J Arges wrote:
-> diff --git a/tools/testing/selftests/net/lib/xdp_metadata.bpf.c b/tools/testing/selftests/net/lib/xdp_metadata.bpf.c
-> new file mode 100644
-> index 000000000000..f71f59215239
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/lib/xdp_metadata.bpf.c
-> @@ -0,0 +1,163 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <stddef.h>
-> +#include <linux/bpf.h>
-> +#include <linux/in.h>
-> +#include <linux/if_ether.h>
-> +#include <linux/ip.h>
-> +#include <linux/ipv6.h>
-> +#include <linux/udp.h>
-> +#include <linux/tcp.h>
-> +#include <bpf/bpf_endian.h>
-> +#include <bpf/bpf_helpers.h>
-> +
-> +enum {
-> +	XDP_PORT = 1,
-> +	XDP_PROTO = 4,
-> +} xdp_map_setup_keys;
-> +
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_ARRAY);
-> +	__uint(max_entries, 5);
-> +	__type(key, __u32);
-> +	__type(value, __s32);
-> +} map_xdp_setup SEC(".maps");
-> +
-> +/* RSS hash results: key 0 = hash, key 1 = hash type,
-> + * key 2 = packet count, key 3 = error count.
-> + */
-> +enum {
-> +	RSS_KEY_HASH = 0,
-> +	RSS_KEY_TYPE = 1,
-> +	RSS_KEY_PKT_CNT = 2,
-> +	RSS_KEY_ERR_CNT = 3,
-> +};
-> +
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_ARRAY);
-> +	__type(key, __u32);
-> +	__type(value, __u32);
-> +	__uint(max_entries, 4);
-> +} map_rss SEC(".maps");
-> +
-> +/* Mirror of enum xdp_rss_hash_type from include/net/xdp.h.
-> + * Needed because the enum is not part of UAPI headers.
+The issue happens when:
+1. A CGROUP_STORAGE map is created with value_size not aligned to
+   8 bytes (e.g., 4 bytes)
+2. A HASH map is created with the same value_size (e.g., 4 bytes)
+3. Update element in 2 with data in 1
 
-It is on purpose that enum is not part of UAPI headers, because BPF
-progs (like this) are suppose to handle this via CO-RE.
+In the kernel, map elements are typically aligned to 8 bytes. However,
+bpf_cgroup_storage_calculate_size() allocates storage based on the exact
+value_size without alignment. When copy_map_value_long() is called, it
+assumes all map values are 8-byte aligned and rounds up the copy size,
+leading to a 4-byte out-of-bounds read from the cgroup storage buffer.
 
-Asking CO-RE experts (e.g. Cc Andrii), will below enum xdp_rss_hash_type
-usage automatically get relocated by libbpf, based on running kernel?
-(or do we need some explicit bpf_core_ calls?)
+This patch fixes the issue by ensuring cgroup storage allocates 8-byte
+aligned buffers, matching the assumptions in copy_map_value_long().
 
-> + */
-> +enum xdp_rss_hash_type {
-> +	XDP_RSS_L3_IPV4 = 1U << 0,
-> +	XDP_RSS_L3_IPV6 = 1U << 1,
-> +	XDP_RSS_L3_DYNHDR = 1U << 2,
-> +	XDP_RSS_L4 = 1U << 3,
-> +	XDP_RSS_L4_TCP = 1U << 4,
-> +	XDP_RSS_L4_UDP = 1U << 5,
-> +	XDP_RSS_L4_SCTP = 1U << 6,
-> +	XDP_RSS_L4_IPSEC = 1U << 7,
-> +	XDP_RSS_L4_ICMP = 1U << 8,
-> +};
+Fixes: b741f1630346 ("bpf: introduce per-cpu cgroup local storage")
+Reported-by: Kaiyan Mei <kaiyanm@hust.edu.cn>
+Closes: https://lore.kernel.org/all/14e6c70c.6c121.19c0399d948.Coremail.kaiyanm@hust.edu.cn/
+Signed-off-by: Lang Xu <xulang@uniontech.com>
+---
+ kernel/bpf/local_storage.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
---Jesper
+diff --git a/kernel/bpf/local_storage.c b/kernel/bpf/local_storage.c
+index 8fca0c64f7b1..54b32ba19194 100644
+--- a/kernel/bpf/local_storage.c
++++ b/kernel/bpf/local_storage.c
+@@ -487,14 +487,13 @@ static size_t bpf_cgroup_storage_calculate_size(struct bpf_map *map, u32 *pages)
+ {
+ 	size_t size;
+ 
++	size = round_up(map->value_size, 8);
+ 	if (cgroup_storage_type(map) == BPF_CGROUP_STORAGE_SHARED) {
+-		size = sizeof(struct bpf_storage_buffer) + map->value_size;
++		size += sizeof(struct bpf_storage_buffer);
+ 		*pages = round_up(sizeof(struct bpf_cgroup_storage) + size,
+ 				  PAGE_SIZE) >> PAGE_SHIFT;
+ 	} else {
+-		size = map->value_size;
+-		*pages = round_up(round_up(size, 8) * num_possible_cpus(),
+-				  PAGE_SIZE) >> PAGE_SHIFT;
++		*pages = round_up(size * num_possible_cpus(), PAGE_SIZE) >> PAGE_SHIFT;
+ 	}
+ 
+ 	return size;
+-- 
+2.51.0
+
