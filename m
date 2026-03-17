@@ -1,115 +1,156 @@
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD7963E1203
-	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 14:00:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.9.28.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DAAA3E1205
+	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 14:01:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773756060; cv=none; b=eaU/Vkygg3BKog47DQxHtxtiFH1Pt3dZg0X1h4s0cnZmNEkZ0e0cON9zpFFZzzAOnC+OoNZbRa/nwzHiy++yflEzkQ2+D9D5/Qd0hS1258eaIwQd96YR0TmHvwyu7fyg4oo3BV8fx+79pVgmZaXPxjWmgHh/oywfh66daJlVESk=
+	t=1773756092; cv=none; b=QyzreL5dCgk2m14BOKmxQXlszWdYC2/T4khTPckcBNDlO/hTBShQEdFqxSEipd4nY3w838OvT/G7JHm/18tf2OuuDXeW3pNrTECCChWjlEFso64HTUkMHwxc0fFWSJrvA+TVSYuzotD+LSrYgApC9GR7A6b/MHAxTeYf3KB8Wts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773756060; c=relaxed/simple;
-	bh=yhVL8QDOI/FFbAizMBorJLYfRMwc296FoGjhH73QP+I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QFff8rpMr+inQIqsclifeoDAlf02xGbzWS0KXdZBS0B5bCX7H6MsI4vasseMgmKDh8qtiIqZBMKdqBsL9/0Yh0GLV6VRFlShltemWI0Wu7WOPjIj/4NrCUdAjMCtLkhij2g+KrkT1ClFKF8fG0PW6SRKbz8EkBCUZOZTtTS2hFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mit.edu; spf=pass smtp.mailfrom=mit.edu; dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b=O34gw2CD; arc=none smtp.client-ip=18.9.28.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mit.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mit.edu
+	s=arc-20240116; t=1773756092; c=relaxed/simple;
+	bh=QNGzhaws/ILgJmwyVqWJT7BY2rbvZFUGhFYWXKg1dmA=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=r+qOrNfqFOKyCss/F8l2+RTC+8LA+bf7ON569jbVN3CW7knaBb7HxjpqDHLZbZDymwnEPLRMZNsLi6gNSNX/g3S3yXiGV+ljH3OMeB90HrAjC2uvYSTxmWlnLT10JHN0izmM9Ag4AkRlSVEw+dWgoXljBwP5iQe4afpCGvvUQ9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TDP2A/Ek; arc=none smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b="O34gw2CD"
-Received: from macsyma.thunk.org (pool-173-48-82-106.bstnma.fios.verizon.net [173.48.82.106])
-	(authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 62HE0LqH014273
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Mar 2026 10:00:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-	t=1773756024; bh=jPZ0GRsGQixJN9OLjYc4HU0xw7QwN6o0ICegT4jM4tY=;
-	h=Date:From:Subject:Message-ID:MIME-Version:Content-Type;
-	b=O34gw2CDG6Aq8qdbIztYiRALOaD9uCRKP5dsXsPYHK4XVrGQmgHOlfWyZtSbu47ey
-	 KrLGXP90Qn08vmXLIMMxXbM53lJfDNvNVj235c+VO01+AhkUiA/jSFRI1pNoVHjjlF
-	 Y298YkZoli+zUKeYawj6ipHekqbspsPx1DITHDS69eG4M3g8NlG65Nnq2BnMKBTb3R
-	 sphgeUtuXI5AZ8tCys+Bw7YLAJkK4e+si4utiqTMEzliRvacuYZCNk+GhZzaC0sWed
-	 abLMeBD32p2JBl+s2PcPA5Z553v+YaG+NPOHw86M2e3vPY2MHpzIm07Js3YwSP864j
-	 KqhYo0Y4dIE1Q==
-Received: by macsyma.thunk.org (Postfix, from userid 15806)
-	id 1A7CC5DF7D85; Tue, 17 Mar 2026 09:59:21 -0400 (EDT)
-Date: Tue, 17 Mar 2026 09:59:21 -0400
-From: "Theodore Tso" <tytso@mit.edu>
-To: Demi Marie Obenour <demiobenour@gmail.com>
-Cc: "Darrick J. Wong" <djwong@kernel.org>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>, bpf@vger.kernel.org,
-        linux-ext4 <linux-ext4@vger.kernel.org>,
-        Miklos Szeredi <miklos@szeredi.hu>, Bernd Schubert <bernd@bsbernd.com>,
-        Neal Gompa <neal@gompa.dev>, Amir Goldstein <amir73il@gmail.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Jeff Layton <jlayton@kernel.org>, John@groves.net
-Subject: Re: [PATCHBLIZZARD v7] fuse/libfuse/e2fsprogs: containerize ext4 for
- safer operation
-Message-ID: <20260317135921.GB53921@macsyma-wired.lan>
-References: <20260223224617.GA2390314@frogsfrogsfrogs>
- <CAJnrk1Yd1J60-Ek=O7jzZQg454pbr3O=b71yZHzYbrWfqJr__w@mail.gmail.com>
- <20260316180408.GN6069@frogsfrogsfrogs>
- <CAJnrk1bmJYMt27xedN2Xza0KPXfYEbh-9g=3fNWru-HRM9WFEw@mail.gmail.com>
- <20260316234137.GJ1742010@frogsfrogsfrogs>
- <208bfbd2-d671-462c-925f-4d51b7df1f18@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TDP2A/Ek"
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-794719afcd4so51547507b3.1
+        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 07:01:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773756090; x=1774360890; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9T+kHlqZbPOUk2QRRSgAwGxeEJRArRfLuYjXKmhB30w=;
+        b=TDP2A/Eki2fRNnAMltAlHKxXa46RYiCFrjcfkITUE4ZwJvdw+dDruJ2DLoByaRxGN5
+         P8SMtjD6D8d/eZYpxeeK69qNy6o5CSB4x6QSARlbotFgiM51MsystVyA13RtqtD6v5Ur
+         dXeyuFMabNwkZI1AbAf9QDNEL/iAYwmJb8wYd8GFLIOPH5kCdo7pJsgoTAigLTBarJEx
+         hMcnc9xzydLGHaWKnZDsUfg6+rcHx5Af1+qH1aL9LK1wDZz70UBK4NQr7OEXn6PYGMFP
+         5RcmRTGA64mlswcjpD5dN4M/6MrEMz/MdoILMP2wjTVRQYxcGIHogVpOzR6rcDf5yrc3
+         tmjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773756090; x=1774360890;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9T+kHlqZbPOUk2QRRSgAwGxeEJRArRfLuYjXKmhB30w=;
+        b=kZ1GnDNL7vGCgQyPEXhneEsroshQeQHiGfDlf6JSAlXSKV5vpkcuEsdzW/+tNfrSz2
+         WBxhEcEreKTdsXzj0W7SA35gzyS0Ke0S4SWGCuWH7Y3Gx/OiovGTCtufoHbPhNbegz9c
+         gS8OypBkj2dMKjS1GAvfhZjBtY6Mvpr9fh6RHdwrYiYm+8GXrulMmA9lP1R2DAvNBt+p
+         TmrS+y+P7yWhbJmW+Bm+Zs91hYVwhhRPP9Wal/38ENM1ShTtv9TO/Z4g29jbVXdKTpjr
+         zQNa1fQbQYxDkT4dUdS0v4N/ZyOqduXFQiartMtA21H+uJgOg5DdZfgYIJ3IajGxes7r
+         lHhw==
+X-Gm-Message-State: AOJu0Yw4r0I/H70wUHIF4bGrI/JAHn1+ekp/aazNYydFmZbk+PCnsj7+
+	bs56Rf7JbuurxVsLfvf4XTK013EMkhftSq4OHCYt5mMfsfaSaisKITKN
+X-Gm-Gg: ATEYQzzlJq4fZmDuUaDaP6T1CqvlDbNCNJ+t+aLD6zXixqiIL0NHJStbMS9SSbcU754
+	fb5TbCvzcb/xv7b/pXVMAAFcuAGJyrXYRBOse1rWFbh1FkccP7j565+TCCTLou/SW+GHoxme/u8
+	t64VWgZ1Xs4RqFbTr6eNHJ+Ea3Gs/VlcMeNQ4f9yzWuPSogAAKoD3sO1RjTL0EgfWdgYlB1m8JF
+	NG6saaWE3lJaCYt0lPnbtV/rJLRPL+Ov30P5LbNSHBw9qoN2x+cP3Awt5Fm7BrgAOfgbtySfx8h
+	9tP1PV0jjcjcZ+K2GZqyTyP7FTkX6bbRGyzsBDmH6r3ojWKMip7WI8Muvsi4+M9ADc/MHRdAGd2
+	KJDIQahKyREstCskC+XcRb1BQgCZcFB95zhCJfHD2uTNSrWrcm5zuBYAgzNlMHmgXCzBXnop9MI
+	Mbb2scA4mxu/QI1oOT1NI0tkx39o4x1zfc6RWlHRy2iW1YkA0s2RxS/ydE7rjrJXBl2PwHOEtYA
+	gQi
+X-Received: by 2002:a05:690c:38b:b0:79a:46eb:d1c9 with SMTP id 00721157ae682-79a46ebe0e3mr81263797b3.0.1773756089988;
+        Tue, 17 Mar 2026 07:01:29 -0700 (PDT)
+Received: from gmail.com (180.134.85.34.bc.googleusercontent.com. [34.85.134.180])
+        by smtp.gmail.com with UTF8SMTPSA id 00721157ae682-79a2de73263sm58179747b3.43.2026.03.17.07.01.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Mar 2026 07:01:29 -0700 (PDT)
+Date: Tue, 17 Mar 2026 10:01:28 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: "Hudson, Nick" <nhudson@akamai.com>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+ "Tottenham, Max" <mtottenh@akamai.com>, 
+ "Glasgall, Anna" <aglasgal@akamai.com>, 
+ Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>, 
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Message-ID: <willemdebruijn.kernel.1101cf7573cc9@gmail.com>
+In-Reply-To: <39BDB245-4486-4487-9985-0D4FDBCB382B@akamai.com>
+References: <20260317121429.2399539-1-nhudson@akamai.com>
+ <20260317121429.2399539-4-nhudson@akamai.com>
+ <willemdebruijn.kernel.3102df56d5f64@gmail.com>
+ <39BDB245-4486-4487-9985-0D4FDBCB382B@akamai.com>
+Subject: Re: [PATCH v1 3/5] bpf: add helper masks for ADJ_ROOM decap flags
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <208bfbd2-d671-462c-925f-4d51b7df1f18@gmail.com>
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 16, 2026 at 08:20:29PM -0400, Demi Marie Obenour wrote:
-> 
-> It's worth noting that on ChromeOS and Android, the only trusted
-> disk images are those that are read-only and protected by dm-verity.
-> *Every* writable image is considered untrusted.
+Hudson, Nick wrote:
+> =
 
-So I can't speak for ChromeOS or Android, but given discussions that
-I've had with folks in those teams when we were developing fscrypt and
-fsverity, the writeable images which are soldered onto the mainboard,
-where user data is stored, is protected by fscrypt, which provide
-confidentiality but not integrity for user data.
+> =
 
-However, from a trust perspective, if there is an "evil maid attack"
-(where someone leaves their device unattended in a hotel room, and the
-housecleaning staff removes the device, and the flash is removed from
-the mainboard and modified) is something which is considered an attack
-which is realistically only going to be carried out by a nation state,
-and the primary priority was protecting the privileged APK's (the
-moral equivalent of setuid binaries), and that's where fsverity is
-used to protect against that threat.
+> > On 17 Mar 2026, at 13:27, Willem de Bruijn <willemdebruijn.kernel@gma=
+il.com> wrote:
+> > =
 
-Yes, the nation state attacker could potentially corrupt the metadata
-of the writeable file system image, and but there are enough zero day
-attacks that involve sending corrupted image files that trigger buffer
-overflows, etc., that while it would be nice to protect against this
-sort of thing, given that it requires a physical attack (and that
-point, the nation state attacker could also enhance the device with
-remotely denotated explosives, something which spies on the
-touchscreen or microphone and ships the output over the network,
-etc.), I don't believe this is considered a high priority threat that
-is worth spending $$$ to mitigate.
+> > !-------------------------------------------------------------------|=
 
-The only other extrenal image, which is where something like using
-fuse would be interesting, is a USB thumb drive being connected to the
-ChromeOS or Android device.  In that case, performance is really not
-an issue, so running fsck before mounting would probably be considered
-acceptable.  The main issue here is that fsck for NTFS, FAT, etc.,
-probably isn't as good as the fsck for a file systems such as xfs or
-ext4.  So the primary protection that we have is that enterprise
-managed devices can simply prohibit mounting external USB thumb drives
-if the enterprise administrators elects to do so.  This doesn't help
-personal devices, but users have to take affirmative action to mount a
-device (simply inserting a device isn't enough, at least on Android),
-so people who are paranoid can simply not pick up a USB thumb drive
-they find in a parking lot and insert it into their phone.
+> >  This Message Is From an External Sender
+> >  This message came from outside your organization.
+> > |-------------------------------------------------------------------!=
 
-Cheers,
+> > =
 
-						- Ted
-					
+> > Nick Hudson wrote:
+> >> Introduce helper masks for bpf_skb_adjust_room() decapsulation flags=
+
+> >> to simplify validation and keep flag handling readable:
+> >> =
+
+> >> - BPF_F_ADJ_ROOM_DECAP_L4_MASK
+> >> - BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK
+> >> - BPF_F_ADJ_ROOM_ENCAP_MASK
+> >> - BPF_F_ADJ_ROOM_DECAP_MASK
+> >> =
+
+> >> Also fold these masks into BPF_F_ADJ_ROOM_MASK and per-path flag
+> >> validation checks.
+> >> =
+
+> >> This is a refactoring/plumbing change; functional decapsulation and
+> >> GSO behavior updates are handled in later patches.
+> >> =
+
+> >> Co-developed-by: Max Tottenham <mtottenh@akamai.com>
+> >> Signed-off-by: Max Tottenham <mtottenh@akamai.com>
+> >> Co-developed-by: Anna Glasgall <aglasgal@akamai.com>
+> >> Signed-off-by: Anna Glasgall <aglasgal@akamai.com>
+> >> Signed-off-by: Nick Hudson <nhudson@akamai.com>
+> > =
+
+> > Only patches 3 through 5 were sent to the netdev list.
+> =
+
+> oops.
+> =
+
+> > =
+
+> > Please resubmit the entire series (after the customary 24 hr min) to
+> > the full list.
+> =
+
+> Will do=E2=80=A6 as v2 with patch re-order you mentioned?
+ =
+
+Yes
+
+
