@@ -1,116 +1,110 @@
-Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5854A2DB790
-	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 03:27:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773718082; cv=none; b=fFR+kxlB/ZEXLZEQa03lmixGuBxXXjmLVDVimb/bHeh1aPdndLTg7QyDM1IdYDob1nECOnShzPGkC1BDtjQ67rq9aBDx7xKaDFfUgNcKjqQMCdx7iUlDKsdJv+HfTuyD0EDo4aPQsDDLwQfUlAkaEW1SHuKd4PDs/eGT4si5nyU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773718082; c=relaxed/simple;
-	bh=xmPnwGQlygcI4i49wKsfYuswq5avJjVPc09y+gMzRLQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uQsf+fAgbCe9IQssA2u5ztxNPCQr3/x9DH2eNerimR+2Qaz32fHVXiaCCFQT+9wy23s0HGvQTgIF/tIARxNm28bwvy0Ua9lZrr2OCIDQDnBG6vuMUzgdEQega5paEjwFYdyscnI1EP9nejqJZvON+Rsmfj3ez8NHzpAQ+f7+0IQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=209.97.182.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [10.162.192.132])
-	by mtasvr (Coremail) with SMTP id _____wCnoI8eyrhpb9UhAA--.10587S3;
-	Tue, 17 Mar 2026 11:27:26 +0800 (CST)
-Received: from [10.162.192.132] (unknown [10.162.192.132])
-	by mail-app1 (Coremail) with SMTP id yy_KCgCnsdseyrhpWkC1Bg--.29291S3;
-	Tue, 17 Mar 2026 11:27:26 +0800 (CST)
-Message-ID: <80feff2e-ae08-46db-b986-e8399e94f32d@zju.edu.cn>
-Date: Tue, 17 Mar 2026 11:27:27 +0800
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6449D33986F;
+	Tue, 17 Mar 2026 04:46:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773722782; cv=pass; b=C5w11Xt287igygiXK0nLfbNHuYYDUzL4KXfafXXxst7NuP0jWC18HOFmo8dKBcS3YFhld8+CBkj2sga8pfOLQzVRD4Q69YAI96gJOTATxntIzWCOpBuXFYUb00vkkKCKgANinE6Jx1O/7tJ64HtkGNvYr/t6GHfZvJ0hkRfONvM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773722782; c=relaxed/simple;
+	bh=kVg/3qBxeC7RIRHRbkFU60OP6mqSFzjx+ICsDZMOv08=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KAJWZ1h4N2ObAYf9C8DVY6CcjJomskCYWvkiPUAs64k+VMFAzheZrDIC+FVEP4ARtSiXBv+PO4eDD/45Iyr+wBRhncHbSV8He61whfxd+udKaVxyKGGV+YXkW+OFYXlGvlSlVcxLHIrty5wIxK9b5rtD06iXLeka88uxrKYCHW4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ziyao.cc; spf=pass smtp.mailfrom=ziyao.cc; dkim=pass (1024-bit key) header.d=ziyao.cc header.i=me@ziyao.cc header.b=PyqfIhz2; arc=pass smtp.client-ip=136.143.188.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ziyao.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziyao.cc
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ziyao.cc header.i=me@ziyao.cc header.b="PyqfIhz2"
+ARC-Seal: i=1; a=rsa-sha256; t=1773722720; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=RvD/C0178NU1LwJEkSg2UFnPK19fryVEEEn4KH1SuSSNoKbCxy9CLexhK+PWYoMvqFtvy9AEretvZR5Q+W53mvYc1Q3uTjxfrcau3ZYo7nLcsF7qcFYdlx2zfl9e/bPy65olb/oW4z0lC/mFwSLlWj3M9F3HWdvPoCYgocBQfK4=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1773722720; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=MZtGcjgstCOwi90UqZfYqyQ9iZiBcfojTGxX5RIebuY=; 
+	b=JlP1Q9OoOBvGuVB4qdDtUbzeSCIQFGCsWGwfLhDcmeCWkQt8eIWr4mFE0T3kny7nqYzxJv6vYc77IN1iBxJyPrY8zwfoWS+c89X/KVhr6I4CoSthUJ32n4nhs+Ye0of2hteJ23YzAydUsXIatKAKhznE9CxUEtMWECvlvsnLuV4=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=ziyao.cc;
+	spf=pass  smtp.mailfrom=me@ziyao.cc;
+	dmarc=pass header.from=<me@ziyao.cc>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1773722720;
+	s=zmail; d=ziyao.cc; i=me@ziyao.cc;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=MZtGcjgstCOwi90UqZfYqyQ9iZiBcfojTGxX5RIebuY=;
+	b=PyqfIhz2A+D4PU3lO2lI8y/tSQIinoROefawYKrjEtzapgOROW0tQOakEFk2ZAcc
+	xAPFyKTDxclE6kiWf3fINMPhdWHqGErfmylRD+Bu8j27sSIwbTFEPaimumoXYZmbeXc
+	1EAZc0aPk0qLhwZU9sf4Jc4gTc3zECp4f/UPY6zw=
+Received: by mx.zohomail.com with SMTPS id 1773722718208506.92900941934556;
+	Mon, 16 Mar 2026 21:45:18 -0700 (PDT)
+Date: Tue, 17 Mar 2026 04:45:05 +0000
+From: Yao Zi <me@ziyao.cc>
+To: Paul Chaignon <paul.chaignon@gmail.com>, rsworktech@outlook.com
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Amery Hung <ameryhung@gmail.com>, linux-riscv@lists.infradead.org,
+	stable@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH bpf v3] bpf: do not use kmalloc_nolock when
+ !HAVE_CMPXCHG_DOUBLE
+Message-ID: <abjcUSXWiShiuMvH@pie>
+References: <20260315-bpf-kmalloc-nolock-v3-1-91c72bf91902@outlook.com>
+ <abgcKvuSQc2ZYKw4@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf 1/2] bpf: reject bpf-to-bpf call with large offset in
- interpreter
-To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, tangyazhou518@outlook.com,
- shenghaoyuan0928@163.com, ziye@zju.edu.cn
-References: <20260316190220.113417-1-tangyazhou@zju.edu.cn>
- <20260316190220.113417-2-tangyazhou@zju.edu.cn> <m25x6vtsf1.fsf@kernel.org>
-Content-Language: en-US
-From: Yazhou Tang <tangyazhou@zju.edu.cn>
-In-Reply-To: <m25x6vtsf1.fsf@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:yy_KCgCnsdseyrhpWkC1Bg--.29291S3
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiAhINCmm4XQoOXwAAsA
-X-CM-DELIVERINFO: =?B?BOt65QXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9JsjacUve5r2CgQhy7orc7wtiGF1glIyil+q9MO9XvSZIVOnGfZs8hNegItNB2z4ms3F
-	BQt2OcAMTa4GMQmOXVWFw+hivQ+3dxk3muuN18dgyU4fOcZe22n6ClMkGtAGQA==
-X-Coremail-Antispam: 1Uk129KBj93XoW7tFWfJw13tr1xJryrXr1fAFc_yoW8Aw1Upa
-	yUXa1rJrnrJr42kwn7AFWjgw4akFs7Z3WUWa45W3sxuw1fXF9xCr18Kr4rWayDCr4kAFnF
-	qr42yFWfuw1DAagCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
-	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AK
-	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2
-	ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
-	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
-	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
-	14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
-	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUo0eH
-	DUUUU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <abgcKvuSQc2ZYKw4@mail.gmail.com>
+X-ZohoMailClient: External
 
-Hi Puranjay,
+On Mon, Mar 16, 2026 at 04:05:14PM +0100, Paul Chaignon wrote:
+> On Sun, Mar 15, 2026 at 12:02:48AM +0800, Levi Zim via B4 Relay wrote:
+> > From: Levi Zim <rsworktech@outlook.com>
+> > 
+> > kmalloc_nolock always fails for architectures that lack cmpxchg16b.
+> > For example, this causes bpf_task_storage_get with flag
+> > BPF_LOCAL_STORAGE_GET_F_CREATE to fails on riscv64 6.19 kernel.
+> > 
+> > Fix it by enabling use_kmalloc_nolock only when HAVE_CMPXCHG_DOUBLE.
+> > But leave the PREEMPT_RT case as is because it requires kmalloc_nolock
+> > for correctness. Add a comment about this limitation that architecture's
+> > lack of CMPXCHG_DOUBLE combined with PREEMPT_RT could make
+> > bpf_local_storage_alloc always fail.
+> > 
+> > Fixes: f484f4a3e058 ("bpf: Replace bpf memory allocator with kmalloc_nolock() in local storage")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Levi Zim <rsworktech@outlook.com>
+> > ---
+> 
+> Note there may be something broken with your setup as lore is reporting
+> that you sent this v3 email three times. Not sure if it could be an
+> issue.
 
-Thanks for the review and for catching this!
+Once is because linux-riscv@lists.infradead.org adds a trailer when
+forwarding messages but keeps the Message-ID unchanged, so lore indexed
+one extra message with the same ID but different content, it was not
+Levi doing something wrong.
 
-On 3/17/26 04:45, Puranjay Mohan wrote:
-> Thanks for the patch. The interpreter truncation fix looks correct, but there's
-> a similar truncation bug in the JIT success path that should be addressed as
-> well.
-> 
-> In jit_subprogs(), the "make interpreter insns consistent for dump" fixup at
-> the end has the same s16 truncation problem:
-> 
-> insn->off = env->insn_aux_data[i].call_imm;
-> subprog = find_subprog(env, i + insn->off + 1);
-> insn->imm = subprog;
-> 
-> When call_imm exceeds s16 range, insn->off truncates it, and find_subprog()
-> looks up the wrong instruction index. In my testing with your selftest,
-> find_subprog() returns -ENOENT (-2), so insn->imm = -2. This causes bpftool to
-> compute the call target as __bpf_call_base + (-2), which shows a bogus address
-> in the xlated dump instead of the actual subprog symbol:
-> 
->     1: (85) call pc+9#bpf_prog_115951674716e036_padding_subprog
->     2: (85) call pc+3402#0xffff80008026d276
-> 
-> The 0xffff80008026d276 is __bpf_call_base - 2, not target_subprog.  This also
-> leaks the address of __bpf_call_base to userspace.
-> 
-> The fix is to use call_imm directly for the find_subprog() lookup instead of
-> reading back from the truncated insn->off:
-> 
-> insn->off = env->insn_aux_data[i].call_imm;
-> subprog = find_subprog(env, i + env->insn_aux_data[i].call_imm + 1);
-> insn->imm = subprog;
-> 
-> this still leaves the ->off to be wrong, but that is fine in my opinion.
-> 
-> Could you fold this into the series as well?
+The other message has the same content but a different From line, not
+sure what happened to it. Differences of the messages could be viewed
+here[1].
 
-You are absolutely right. Using the truncated `insn->off` in the JIT 
-dump path is indeed a bug, and your proposed fix makes perfect sense.
+Regards,
+Yao Zi
 
-I will fold this fix into `jit_subprogs()` and add your `Suggested-by` 
-tag in v2.
-
-Best,
-
-Yazhou
-
+[1]: https://lore.kernel.org/all/20260315-bpf-kmalloc-nolock-v3-1-91c72bf91902@outlook.com/d/
