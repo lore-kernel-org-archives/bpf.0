@@ -1,76 +1,76 @@
-Received: from mail-oi1-f194.google.com (mail-oi1-f194.google.com [209.85.167.194])
+Received: from mail-oi1-f195.google.com (mail-oi1-f195.google.com [209.85.167.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC73C288D2
-	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 11:18:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69A6236F435
+	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 11:18:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773746338; cv=none; b=fz4lxkDspuiAw+sa1JK0aFL1ymrXCWV+LbiDl24eTdGN0eLnxeT1gH6qpDCOH+hCESALM7TnQAm1w2OaIfr6sp3fdejtzSrOOFIo48ecCeArglyzOsEhuePAzwhftxUxT0VMszkJtOo1/BcnaLAAqX8lchoGd/JCqmGfIxgUJBc=
+	t=1773746343; cv=none; b=Mzr5OuydpF5BU0xwzEx6nsUTx78MuLujYuHyW3V3nm4e2T5cPpPPbHoQq1c75lAS8S/yha3Z/3O+oTl8Yk5tKlS02B2o5JxPaZHhBfH+e7K8z9pYb/CO71TIg6gv4lbOzCl8B9+X/0x19kYh0EWui3SheJu/9DkAWIq/UMrDGDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773746338; c=relaxed/simple;
-	bh=3lr05iP953Tub+rVNpfe0in8GYu057tLq/v29aUGk6g=;
+	s=arc-20240116; t=1773746343; c=relaxed/simple;
+	bh=Uqwysqa4YQf17vCw7Ai0DC3ilNtmo/saShotUw4BYQ0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fLC9wef91clgNzxqFvKGblV8kdYlg9Hpzoid+Mgd79b6U6aPUwAd4M15S85VJbLxXQtkL7f2MGVP/1d9GslBpJ51sMnlbxHUvI9kcFiI4si/hUnqNLh650DYHz7tSwdovJ84Gq6SVUFDsXcNCYKN+dQeDTtEc3YDK670jq4ODIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bREjkUfI; arc=none smtp.client-ip=209.85.167.194
+	 MIME-Version; b=nOmD8gnpkkPw/mT+GEtpE5AyibzT0zLqal2zPX4YmeKIXqVsMU34/dxw6OW3sbIFBFIl9V32TVk/RtpTAzysQEshzDJZxsxG8sqj58R5FUulD9GVtupWez39aUXqN/8RwCFpdzlKF1u0dLy2aXxSjNGEM8odozhVPN3IEin2jAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HEiWc5nJ; arc=none smtp.client-ip=209.85.167.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bREjkUfI"
-Received: by mail-oi1-f194.google.com with SMTP id 5614622812f47-4673790ab85so3690277b6e.3
-        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 04:18:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HEiWc5nJ"
+Received: by mail-oi1-f195.google.com with SMTP id 5614622812f47-46702742c7dso1066214b6e.1
+        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 04:18:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773746335; x=1774351135; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773746337; x=1774351137; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RLzx1snc9ElKO0ogyztXLq6ujXWy6/pY2VcOjhW0dug=;
-        b=bREjkUfIBRjue3KYh/rUDIkxOi/eWJp2LvwV85XdSvhv4l/kaTsidf8gQGi5JEBd4o
-         ifvCaPdiAYqnJwU2t6M7fYQU8Pp3pZ3qMtVlwks67SX6Qgp7g3DnWnu6XAwGzc/vBtHk
-         PqC1JsizFfglP5QJQs3Rzgh521hu3z+gbHV+UKSOsW3txP48X+xPEjgx4jYHHTpOnEEq
-         MG/9aQdiEzK2Vp+N+OwWxibBS6Or2ougTQJ3mAcC7ezmNK9eY90ANF3U8Pjc374bUPmw
-         uVmCoEqNVfJ636EPJ5CWlyP5HnmAeaRfKEzz7vQ0BzvtmwBoxZfrKPJqsh3PaJlDyUih
-         n9KA==
+        bh=oNKG6sx5h75+rdXJg1xLXglDcj573DP+mDZmxlgvc6I=;
+        b=HEiWc5nJKDlwiK7Q7DTp5gkmE/i/nRuFGoBGyCC/wpieXGRN/mpyNS0BSkiFyfxU+1
+         Iz+BjhtoNLn4IeXgyzE1bT6xLloTHQdP9MYYPbyxNKUWw/omhZXwjzUX4o019nTNrPnQ
+         7G+gAX0mTle1hzYtHbJX3InHFa7fVx1QsNgEBwx7kV6aGJSw0HobFs+Jgtn2DmzITWSF
+         Yl+eku3PtKvHcFVQ5t3gVjfqc7pen33VL1XssgaEewwzv4/InBpVIKoN58Duj7KYTglf
+         ZQhoLgZ3bMRzLNzRAtezDRkA3cAfq4ACpAP1uDmdMA6QlwfLlXpMtL2k/M8+G/GoMkib
+         otHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773746335; x=1774351135;
+        d=1e100.net; s=20251104; t=1773746337; x=1774351137;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=RLzx1snc9ElKO0ogyztXLq6ujXWy6/pY2VcOjhW0dug=;
-        b=UNLGULdeDFJjPyRfedA/2O+fBnH3c3Li2Z5j1LZTNN3tsd6aWcYsJwzFou+LLj6Ypk
-         jTj2T+SKRRdkmAe/RHVTpKD31V2C0DkUIsljAcR6qHoLKMkQHXfDaTJLo0jYEwBzmMGX
-         9iPAUGJzO9xq+F/5SZS4LnOA9k/n3DiFudCbeuwBhjNl4IMKGDXuhoNsSm7mzlO9i8BJ
-         Fv1CT5SPi9bkMbpq1CrKp9z9JeGD5kXDk9zeggs0JstZD3nTTh8gIqI+4WN7msFXuoUG
-         wSXVA//T8tncLZ+z7P6R+gpCr4gp66dMLP8YI/jtIWBg8JBARDVIeuWquWbkFaoPat5F
-         O/3w==
-X-Gm-Message-State: AOJu0YzIzMag61lyBoekTuV8Ybh+EPay62CQUu4sFWevT2P9Fr1FtkUQ
-	zJkM8eZXOHVIfoiRr5y0WOf0KQFFf0YeYlJKkQZT19rQhIcNzinGroT/MqJxtpZL94M=
-X-Gm-Gg: ATEYQzyDNxoUx7sbc7T4xV0cO9CVMMIGyaayICIHh8g6ySaLcPqLHNgnFy1ZZNNRcUs
-	1lp2eQBP/0LDUybVHpVtQTwvfZQAm/hSkw6wPhaTq+1PUwWpVK6izajDG6CbCml/2YbhTGHDj4J
-	/N/9Rfr44Owr68oCu8ZA7P0JtGG6QoJ1mGUaqS8JX72IiDhswcxoGDd1Om+JD45/O1bkQEk3FQA
-	XIF1ytgS4WUbirGKLdJ/yx8RvYZ0IsMj3/p0Xl+BZkIcysJ8rBlsNWxoxcsJTAjnQiuz2IMiLML
-	q6IQaRxzI4B5W7Vyn3dnDcQVY/AKl5JChSMgYFfa9o+svtYugDZcOhBYxbP7RiO5fv97xu8byMm
-	pSfVDxWHHYAU8cVA/eO1m2TT3LqASE3izFAAE4EU/Ahx83HOxaOPVHy59ev6Hzaa63fEs6BcP6z
-	3oASIz0lIfc3Db8Jpkjr6pBJaWErrUNPMq9dDjiTSTpT4c
-X-Received: by 2002:a05:6870:75cf:b0:417:2524:2d76 with SMTP id 586e51a60fabf-417b91db604mr9804888fac.2.1773746334786;
-        Tue, 17 Mar 2026 04:18:54 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:55::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4177e2df1ddsm18980698fac.9.2026.03.17.04.18.52
+        bh=oNKG6sx5h75+rdXJg1xLXglDcj573DP+mDZmxlgvc6I=;
+        b=Q8YRB9q9/HBlCHRwOrYRXuqdhd9t5Q2Y6RMTFIx9SjxyakHFDIffaIcSn2iM7WWFRo
+         Yp8U2ZmFjdYBUbWMxQGnDXS6W8D/VKKH3Y982yCZYyr4DgQAHHynhYyAFert7ZIkU+yB
+         m0WiL1rlvqUuVPhhk1IP0AK9fv4iZslpy0a/voPcZ3MUdvCumZ055K86cM44L96NlyFI
+         qjwFhf/hCwJeHtiWkE/8aVoTDLHIRSiYOcITPQEFyVsi0YW5H0KOPyoTmOim8bNzSz8a
+         yn/WgaHx2XqE5goUKwcydq1Z8adzxzKeIHXs17pgN9rf7wQ6dK3gA5SMNaetvTEJGs6T
+         5xUA==
+X-Gm-Message-State: AOJu0YxDCjH22+4GJkI7eqCgyDeYwvoh7RFSRKEyruoWqNMVP04cdgmm
+	MmEtztwYiNBg4vJqBeMf2POfJYxQ3LXoRSnD2fo32eBiBrQserYAi7r4N1kFajt7Uf0=
+X-Gm-Gg: ATEYQzxcA2IlS6scfxt4gMOwVkqhoEdMvqlWajMIzWWr6rENYT2Yi0LL3Nw493TJXoZ
+	0nQbYWOxKDsSqviBgmPJdtc4PBW4ikiqD19r0q0FgjCgWshw7qKZQ3trnK5mTx34i0QsY5lkCiV
+	ujQ95vboOGtCQg6M50qWIHCIRz6LOze2VJxAaP3/xXayxim2ZBclZD//Riw6tYYc6M+N8cY2psT
+	iy3/cxwaYn8IaXSEBmvbF2NVv0FsPf5GjBU7k6L1BrJQrX55/lCyK+jXpmvV6V5dAUqcsttAj3c
+	yfcRAHveOaSyNy9pE2HeKs711n4HJgZf+9Xl+Eni8/dN9dugA6E8z6SBpT6igmwX1cyCsGdmhTb
+	R+LM5yuamZTp6e8YEvHuDivIGg9yX2OnjL2vrum+mC5CePLMD4/C4Bh+tqIOGr4cVzFBWxSZyzY
+	/pVVEW31CyZr8OEUuBwOpdgVMnePQsxwn5YLdLBg/I/2j5
+X-Received: by 2002:a05:6808:2e46:b0:450:839a:557 with SMTP id 5614622812f47-46757050889mr8765611b6e.9.1773746337493;
+        Tue, 17 Mar 2026 04:18:57 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:46::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-46734123939sm11190975b6e.3.2026.03.17.04.18.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Mar 2026 04:18:53 -0700 (PDT)
+        Tue, 17 Mar 2026 04:18:55 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Tejun Heo <tj@kernel.org>,
-	Dan Schatzberg <dschatzberg@meta.com>,
-	Alexei Starovoitov <ast@kernel.org>,
+Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Martin KaFai Lau <martin.lau@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
+	Tejun Heo <tj@kernel.org>,
+	Dan Schatzberg <dschatzberg@meta.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 1/4] bpf: Support variable offsets for syscall PTR_TO_CTX
-Date: Tue, 17 Mar 2026 04:18:46 -0700
-Message-ID: <20260317111850.2107846-2-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 2/4] selftests/bpf: Adjust syscall ctx variable offset tests
+Date: Tue, 17 Mar 2026 04:18:47 -0700
+Message-ID: <20260317111850.2107846-3-memxor@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260317111850.2107846-1-memxor@gmail.com>
 References: <20260317111850.2107846-1-memxor@gmail.com>
@@ -80,149 +80,520 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5780; h=from:subject; bh=3lr05iP953Tub+rVNpfe0in8GYu057tLq/v29aUGk6g=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBpuTHin1vhMXw2TMMio4/li+5/+4RJISLNsqdRlIss 3k2KUxuJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCabkx4gAKCRBM4MiGSL8RyoKmD/ 0Z/Wp+XraL4OxkAhPuDx+IILh6UYMnaYy9GOLIkwZEGDFlk6f5kvoKH9N3zga14jnQpwG+XcWOAAcy NzNpqn4NDQFxj5/kjyEP0utr8pTsTRp7geDaRTqdwyYXGa7SqupHKhoILBQLgIOWk/DFtkAhgEfC1P lP6vFbZhF2dOsUaiSPv0J/yKqiWvGrq2RVZZFe9EWhEwe2U/ncZOD8U3hBkzd3gMxC0mCpELzVF6U6 ac7D+C1rNoJMEJ52sE07icd1irrpQPcmm7LbTbW68SqWZHfkoPEQMdt4YrYrdK/m5qs0I+RomYUhf4 F2+FeHVKvlqv2hezaZug8RKTefYjHUuPjv+fgimVbM5eD6/fWroEspTYzDwlMqjmHd0DaNGCnSKEME Jm0EW1OmZm3OQOGF1ZFt4mxg7ZkKLYao1gJppH3beDvoz0CSZ3p52cCP6ymnHSPfkq+4YNrFXyO+Mt mzdhi+yjdPpHWrmVIIS8xNQ/IBM4Pq9hlbtZx68v3vYvuGzW6PplFS/BdNUUdzNSPVavwQuzyRKAk2 NCeWoLRTv1lAurBQ0WR8U12vrk2o2rAheTJ87iiGrZD0b3TnLgV2I9NHb87RQmUrGbbcOxS47Qiqhv mohVqQGoDRDJ4uVDBvveaXomX1JC+GgCjK0jQ48r8s5gOOaN9OGkFgrntP/g==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=17033; h=from:subject; bh=Uqwysqa4YQf17vCw7Ai0DC3ilNtmo/saShotUw4BYQ0=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBpuTHipysVkc4VhXHe5Njcy9FNPPTGZ8G0+qmmrJWO asMtTDCJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCabkx4gAKCRBM4MiGSL8RyiI4D/ 9jM8HcX8hKlkEz/ylWbJll68zqlEWFI4lbYWBhtqCdXxcd8pA87PeCzGqhUANwofzChvirYN+0PMX5 N2TNT9+dVVJIYhepAuZUjV7S8gZOyZX4PJWqTCsbjmDFIsNUHZavQDiELGW/5ny6BvxKOPnxyo/NEF 41G8T0J0n4lHZUaU/VrmhzOftefHqrG2qyJulDwpQb7KmwORgNTXywp2XyQwHeFtgYJ9tKO3WLOzib 9nQojx0PMqkR9grOLyWxq7L23QWmtDBZSdgfYjwRS3MijFrFsMgk9bBXDfbfjVPk/9Vy7YGmDmdhSi K2HTVs8/7yk5tA3RrWAHZFswf1qZHACSxSFQwGe91Mk2XWY2v4jhDpGYR/oFAre2YRUfmvoi6kqNIo +DJZwzniIlM2q1ObC1tv1GcbzgN2Qqnni6nowESpc/fOU5L84LCnKfQr8kv1Q42RtJIdStZBO02g6L t866B08dxJPV6ov9oNTZPc36lvndVU73BGUQ1zW7v6GfApGPqitPeK2E1JFk1MQWoJa+tAQ0wynT60 GwEzFmnloytMzyk7EyRtoRQfDHmZcraUmSu0bWk3q1G8FuDKfarJ/v+MCke1gemRPL7GP/2LZTAxs7 2llgv5kDOuJ9tJCjjgEdUBas/lcdwKxmNLhrd39MEwCxTdahxynAjuvn8anQ==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 
-Allow accessing PTR_TO_CTX with variable offsets in syscall programs.
-Fixed offsets are already enabled for all program types that do not
-convert their ctx accesses, since the changes we made in the commit
-de6c7d99f898 ("bpf: Relax fixed offset check for PTR_TO_CTX"). Note
-that we also lift the restriction on passing syscall context into
-helpers, which was not permitted before, and passing modified syscall
-context into kfuncs.
+Add various tests to exercise fixed and variable offsets on PTR_TO_CTX
+for syscall programs, and cover disallowed cases for other program types
+lacking convert_ctx_access callback. Load verifier_ctx with CAP_SYS_ADMIN
+so that kfunc related logic can be tested. While at it, convert assembly
+tests to C.
 
-The structure of check_mem_access can be mostly shared and preserved,
-but we must use check_mem_region_access to correctly verify access with
-variable offsets.
-
-The check made in check_helper_mem_access is hardened to only allow
-PTR_TO_CTX for syscall programs to be passed in as helper memory. This
-was the original intention of the existing code anyway, and it makes
-little sense for other program types' context to be utilized as a memory
-buffer. In case a convincing example presents itself in the future, this
-check can be relaxed further.
-
-We also no longer use the last-byte access to simulate helper memory
-access, but instead go through check_mem_region_access. Since this no
-longer updates our max_ctx_offset, we must do so manually, to keep track
-of the maximum offset at which the program ctx may be accessed.
-
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Dan Schatzberg <dschatzberg@meta.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/verifier.c                         | 51 +++++++++++--------
- .../bpf/progs/verifier_global_subprogs.c      |  1 -
- 2 files changed, 31 insertions(+), 21 deletions(-)
+ .../selftests/bpf/prog_tests/verifier.c       |  34 +-
+ .../selftests/bpf/progs/verifier_ctx.c        | 356 +++++++++++++++---
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |   2 +-
+ 3 files changed, 325 insertions(+), 67 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 01c18f4268de..50639bb69d91 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -7843,6 +7843,7 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
- 		 * Program types that don't rewrite ctx accesses can safely
- 		 * dereference ctx pointers with fixed offsets.
- 		 */
-+		bool var_off_ok = resolve_prog_type(env->prog) == BPF_PROG_TYPE_SYSCALL;
- 		bool fixed_off_ok = !env->ops->convert_ctx_access;
- 		struct bpf_retval_range range;
- 		struct bpf_insn_access_aux info = {
-@@ -7857,15 +7858,25 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
- 			return -EACCES;
- 		}
- 
--		err = __check_ptr_off_reg(env, reg, regno, fixed_off_ok);
--		if (err < 0)
--			return err;
-+		if (var_off_ok) {
-+			err = check_mem_region_access(env, regno, off, size, U16_MAX, false);
-+			if (err)
-+				return err;
-+		} else {
-+			err = __check_ptr_off_reg(env, reg, regno, fixed_off_ok);
-+			if (err < 0)
-+				return err;
-+		}
- 
- 		/*
- 		 * Fold the register's constant offset into the insn offset so
--		 * that is_valid_access() sees the true effective offset.
-+		 * that is_valid_access() sees the true effective offset. If the
-+		 * register's offset is not constant, then the maximum possible
-+		 * offset is simulated.
- 		 */
--		if (fixed_off_ok)
-+		if (var_off_ok)
-+			off += reg->umax_value;
-+		else if (fixed_off_ok)
- 			off += reg->var_off.value;
- 		err = check_ctx_access(env, insn_idx, off, size, t, &info);
- 		if (err)
-@@ -8442,22 +8453,16 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
- 		return check_ptr_to_btf_access(env, regs, regno, 0,
- 					       access_size, BPF_READ, -1);
- 	case PTR_TO_CTX:
--		/* in case the function doesn't know how to access the context,
--		 * (because we are in a program of type SYSCALL for example), we
--		 * can not statically check its size.
--		 * Dynamically check it now.
--		 */
--		if (!env->ops->convert_ctx_access) {
--			int offset = access_size - 1;
--
--			/* Allow zero-byte read from PTR_TO_CTX */
--			if (access_size == 0)
--				return zero_size_allowed ? 0 : -EACCES;
--
--			return check_mem_access(env, env->insn_idx, regno, offset, BPF_B,
--						access_type, -1, false, false);
-+		/* Only permit reading or writing syscall context using helper calls. */
-+		if (resolve_prog_type(env->prog) == BPF_PROG_TYPE_SYSCALL) {
-+			int err = check_mem_region_access(env, regno, 0, access_size, U16_MAX,
-+							  zero_size_allowed);
-+			if (err)
-+				return err;
-+			if (env->prog->aux->max_ctx_offset < reg->umax_value + access_size)
-+				env->prog->aux->max_ctx_offset = reg->umax_value + access_size;
-+			return 0;
- 		}
--
- 		fallthrough;
- 	default: /* scalar_value or invalid ptr */
- 		/* Allow zero-byte read from NULL, regardless of pointer type */
-@@ -9401,6 +9406,7 @@ static const struct bpf_reg_types mem_types = {
- 		PTR_TO_MEM | MEM_RINGBUF,
- 		PTR_TO_BUF,
- 		PTR_TO_BTF_ID | PTR_TRUSTED,
-+		PTR_TO_CTX,
- 	},
- };
- 
-@@ -9710,6 +9716,11 @@ static int check_func_arg_reg_off(struct bpf_verifier_env *env,
- 		 * still need to do checks instead of returning.
- 		 */
- 		return __check_ptr_off_reg(env, reg, regno, true);
-+	case PTR_TO_CTX:
-+		/* Allow fixed and variable offsets for syscall context. */
-+		if (resolve_prog_type(env->prog) == BPF_PROG_TYPE_SYSCALL)
-+			return 0;
-+		fallthrough;
- 	default:
- 		return __check_ptr_off_reg(env, reg, regno, false);
- 	}
-diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-index f02012a2fbaa..2250fc31574d 100644
---- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-@@ -134,7 +134,6 @@ __noinline __weak int subprog_user_anon_mem(user_struct_t *t)
- 
- SEC("?tracepoint")
- __failure __log_level(2)
--__msg("invalid bpf_context access")
- __msg("Caller passes invalid args into func#1 ('subprog_user_anon_mem')")
- int anon_user_mem_invalid(void *ctx)
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index 8cdfd74c95d7..04d5f46264a3 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -126,29 +126,35 @@ struct test_val {
+ __maybe_unused
+ static void run_tests_aux(const char *skel_name,
+ 			  skel_elf_bytes_fn elf_bytes_factory,
+-			  pre_execution_cb pre_execution_cb)
++			  pre_execution_cb pre_execution_cb,
++			  bool drop_sys_admin)
  {
+ 	struct test_loader tester = {};
+ 	__u64 old_caps;
+ 	int err;
+ 
+-	/* test_verifier tests are executed w/o CAP_SYS_ADMIN, do the same here */
+-	err = cap_disable_effective(1ULL << CAP_SYS_ADMIN, &old_caps);
+-	if (err) {
+-		PRINT_FAIL("failed to drop CAP_SYS_ADMIN: %i, %s\n", err, strerror(-err));
+-		return;
++	if (drop_sys_admin) {
++		/* test_verifier tests are executed w/o CAP_SYS_ADMIN, do the same here */
++		err = cap_disable_effective(1ULL << CAP_SYS_ADMIN, &old_caps);
++		if (err) {
++			PRINT_FAIL("failed to drop CAP_SYS_ADMIN: %i, %s\n", err, strerror(-err));
++			return;
++		}
+ 	}
+ 
+ 	test_loader__set_pre_execution_cb(&tester, pre_execution_cb);
+ 	test_loader__run_subtests(&tester, skel_name, elf_bytes_factory);
+ 	test_loader_fini(&tester);
+ 
+-	err = cap_enable_effective(old_caps, NULL);
+-	if (err)
+-		PRINT_FAIL("failed to restore CAP_SYS_ADMIN: %i, %s\n", err, strerror(-err));
++	if (drop_sys_admin) {
++		err = cap_enable_effective(old_caps, NULL);
++		if (err)
++			PRINT_FAIL("failed to restore CAP_SYS_ADMIN: %i, %s\n", err, strerror(-err));
++	}
+ }
+ 
+-#define RUN(skel) run_tests_aux(#skel, skel##__elf_bytes, NULL)
++#define RUN(skel) run_tests_aux(#skel, skel##__elf_bytes, NULL, true)
++#define RUN_WITH_CAP_SYS_ADMIN(skel) run_tests_aux(#skel, skel##__elf_bytes, NULL, false)
+ 
+ void test_verifier_align(void)                { RUN(verifier_align); }
+ void test_verifier_and(void)                  { RUN(verifier_and); }
+@@ -173,7 +179,7 @@ void test_verifier_cgroup_skb(void)           { RUN(verifier_cgroup_skb); }
+ void test_verifier_cgroup_storage(void)       { RUN(verifier_cgroup_storage); }
+ void test_verifier_const(void)                { RUN(verifier_const); }
+ void test_verifier_const_or(void)             { RUN(verifier_const_or); }
+-void test_verifier_ctx(void)                  { RUN(verifier_ctx); }
++void test_verifier_ctx(void)                  { RUN_WITH_CAP_SYS_ADMIN(verifier_ctx); }
+ void test_verifier_ctx_sk_msg(void)           { RUN(verifier_ctx_sk_msg); }
+ void test_verifier_d_path(void)               { RUN(verifier_d_path); }
+ void test_verifier_default_trusted_ptr(void)  { RUN_TESTS(verifier_default_trusted_ptr); }
+@@ -293,7 +299,8 @@ void test_verifier_array_access(void)
+ {
+ 	run_tests_aux("verifier_array_access",
+ 		      verifier_array_access__elf_bytes,
+-		      init_array_access_maps);
++		      init_array_access_maps,
++		      true);
+ }
+ void test_verifier_async_cb_context(void)    { RUN(verifier_async_cb_context); }
+ 
+@@ -306,5 +313,6 @@ void test_verifier_value_ptr_arith(void)
+ {
+ 	run_tests_aux("verifier_value_ptr_arith",
+ 		      verifier_value_ptr_arith__elf_bytes,
+-		      init_value_ptr_arith_maps);
++		      init_value_ptr_arith_maps,
++		      true);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_ctx.c b/tools/testing/selftests/bpf/progs/verifier_ctx.c
+index 371780290c0d..c054c8cb7242 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_ctx.c
++++ b/tools/testing/selftests/bpf/progs/verifier_ctx.c
+@@ -4,6 +4,10 @@
+ #include "vmlinux.h"
+ #include <bpf/bpf_helpers.h>
+ #include "bpf_misc.h"
++#include "../test_kmods/bpf_testmod_kfunc.h"
++
++const char ctx_strncmp_target[] = "ctx";
++const char ctx_snprintf_fmt[] = "";
+ 
+ SEC("tc")
+ __description("context stores via BPF_ATOMIC")
+@@ -69,7 +73,6 @@ __naked void ctx_pointer_to_helper_1(void)
+ SEC("socket")
+ __description("pass modified ctx pointer to helper, 2")
+ __failure __msg("negative offset ctx ptr R1 off=-612 disallowed")
+-__failure_unpriv __msg_unpriv("negative offset ctx ptr R1 off=-612 disallowed")
+ __naked void ctx_pointer_to_helper_2(void)
+ {
+ 	asm volatile ("					\
+@@ -295,77 +298,324 @@ padding_access("sk_reuseport", sk_reuseport_md, hash, 4);
+ SEC("syscall")
+ __description("syscall: write to ctx with fixed offset")
+ __success
+-__naked void syscall_ctx_fixed_off_write(void)
++int syscall_ctx_fixed_off_write(void *ctx)
+ {
+-	asm volatile ("					\
+-	r0 = 0;						\
+-	*(u32*)(r1 + 0) = r0;				\
+-	r1 += 4;					\
+-	*(u32*)(r1 + 0) = r0;				\
+-	exit;						\
+-"	::: __clobber_all);
++	char *p = ctx;
++
++	*(__u32 *)p = 0;
++	*(__u32 *)(p + 4) = 0;
++	return 0;
++}
++
++SEC("syscall")
++__description("syscall: read ctx with fixed offset")
++__success
++int syscall_ctx_fixed_off_read(void *ctx)
++{
++	char *p = ctx;
++	volatile __u32 val;
++
++	val = *(__u32 *)(p + 4);
++	(void)val;
++	return 0;
++}
++
++SEC("syscall")
++__description("syscall: read ctx with variable offset")
++__success
++int syscall_ctx_var_off_read(void *ctx)
++{
++	__u64 off = bpf_get_prandom_u32();
++	char *p = ctx;
++	volatile __u32 val;
++
++	off &= 0xfc;
++	p += off;
++	val = *(__u32 *)p;
++	(void)val;
++	return 0;
++}
++
++SEC("syscall")
++__description("syscall: write ctx with variable offset")
++__success
++int syscall_ctx_var_off_write(void *ctx)
++{
++	__u64 off = bpf_get_prandom_u32();
++	char *p = ctx;
++
++	off &= 0xfc;
++	p += off;
++	*(__u32 *)p = 0;
++	return 0;
++}
++
++SEC("syscall")
++__description("syscall: reject negative variable offset ctx access")
++__failure __msg("min value is negative")
++int syscall_ctx_neg_var_off(void *ctx)
++{
++	__u64 off = bpf_get_prandom_u32();
++	char *p = ctx;
++
++	off &= 4;
++	p -= off;
++	return *(__u32 *)p;
++}
++
++SEC("syscall")
++__description("syscall: reject unbounded variable offset ctx access")
++__failure __msg("unbounded memory access")
++int syscall_ctx_unbounded_var_off(void *ctx)
++{
++	__u64 off = (__u32)bpf_get_prandom_u32();
++	char *p = ctx;
++
++	off <<= 2;
++	p += off;
++	return *(__u32 *)p;
++}
++
++SEC("syscall")
++__description("syscall: helper read ctx with fixed offset")
++__success
++int syscall_ctx_helper_fixed_off_read(void *ctx)
++{
++	char *p = ctx;
++
++	p += 4;
++	return bpf_strncmp(p, 4, ctx_strncmp_target);
++}
++
++SEC("syscall")
++__description("syscall: helper write ctx with fixed offset")
++__success
++int syscall_ctx_helper_fixed_off_write(void *ctx)
++{
++	char *p = ctx;
++
++	p += 4;
++	return bpf_probe_read_kernel(p, 4, 0);
++}
++
++SEC("syscall")
++__description("syscall: helper read ctx with variable offset")
++__success
++int syscall_ctx_helper_var_off_read(void *ctx)
++{
++	__u64 off = bpf_get_prandom_u32();
++	char *p = ctx;
++
++	off &= 0xfc;
++	p += off;
++	return bpf_strncmp(p, 4, ctx_strncmp_target);
++}
++
++SEC("syscall")
++__description("syscall: helper write ctx with variable offset")
++__success
++int syscall_ctx_helper_var_off_write(void *ctx)
++{
++	__u64 off = bpf_get_prandom_u32();
++	char *p = ctx;
++
++	off &= 0xfc;
++	p += off;
++	return bpf_probe_read_kernel(p, 4, 0);
++}
++
++SEC("syscall")
++__description("syscall: helper read zero-sized ctx access")
++__success
++int syscall_ctx_helper_zero_sized_read(void *ctx)
++{
++	return bpf_snprintf(0, 0, ctx_snprintf_fmt, ctx, 0);
++}
++
++SEC("syscall")
++__description("syscall: helper write zero-sized ctx access")
++__success
++int syscall_ctx_helper_zero_sized_write(void *ctx)
++{
++	return bpf_probe_read_kernel(ctx, 0, 0);
++}
++
++SEC("syscall")
++__description("syscall: kfunc access ctx with fixed offset")
++__success
++int syscall_ctx_kfunc_fixed_off(void *ctx)
++{
++	char *p = ctx;
++
++	p += 4;
++	bpf_kfunc_call_test_mem_len_pass1(p, 4);
++	return 0;
++}
++
++SEC("syscall")
++__description("syscall: kfunc access ctx with variable offset")
++__success
++int syscall_ctx_kfunc_var_off(void *ctx)
++{
++	__u64 off = bpf_get_prandom_u32();
++	char *p = ctx;
++
++	off &= 0xfc;
++	p += off;
++	bpf_kfunc_call_test_mem_len_pass1(p, 4);
++	return 0;
++}
++
++SEC("syscall")
++__description("syscall: kfunc access zero-sized ctx")
++__success
++int syscall_ctx_kfunc_zero_sized(void *ctx)
++{
++	bpf_kfunc_call_test_mem_len_pass1(ctx, 0);
++	return 0;
+ }
+ 
+ /*
+- * Test that program types without convert_ctx_access can dereference
+- * their ctx pointer after adding a fixed offset. Variable and negative
+- * offsets should still be rejected.
++ * For non-syscall program types without convert_ctx_access, direct ctx
++ * dereference is still allowed after adding a fixed offset, while variable
++ * and negative direct accesses reject.
++ *
++ * Passing ctx as a helper or kfunc memory argument is only permitted for
++ * syscall programs, so the helper and kfunc cases below validate rejection
++ * for non-syscall ctx pointers at fixed, variable, and zero-sized accesses.
+  */
+-#define no_rewrite_ctx_access(type, name, off, ld_op)			\
++#define no_rewrite_ctx_access(type, name, off, load_t)			\
+ 	SEC(type)							\
+ 	__description(type ": read ctx at fixed offset")		\
+ 	__success							\
+-	__naked void no_rewrite_##name##_fixed(void)			\
++	int no_rewrite_##name##_fixed(void *ctx)			\
+ 	{								\
+-		asm volatile ("						\
+-		r1 += %[__off];						\
+-		r0 = *(" #ld_op " *)(r1 + 0);				\
+-		r0 = 0;							\
+-		exit;"							\
+-		:							\
+-		: __imm_const(__off, off)				\
+-		: __clobber_all);					\
++		char *p = ctx;						\
++		volatile load_t val;					\
++									\
++		val = *(load_t *)(p + off);				\
++		(void)val;						\
++		return 0;						\
+ 	}								\
+ 	SEC(type)							\
+ 	__description(type ": reject variable offset ctx access")	\
+ 	__failure __msg("variable ctx access var_off=")			\
+-	__naked void no_rewrite_##name##_var(void)			\
++	int no_rewrite_##name##_var(void *ctx)			\
+ 	{								\
+-		asm volatile ("						\
+-		r6 = r1;						\
+-		call %[bpf_get_prandom_u32];				\
+-		r1 = r6;						\
+-		r0 &= 4;						\
+-		r1 += r0;						\
+-		r0 = *(" #ld_op " *)(r1 + 0);				\
+-		r0 = 0;							\
+-		exit;"							\
+-		:							\
+-		: __imm(bpf_get_prandom_u32)				\
+-		: __clobber_all);					\
++		__u64 off_var = bpf_get_prandom_u32();			\
++		char *p = ctx;						\
++									\
++		off_var &= 4;						\
++		p += off_var;						\
++		return *(load_t *)p;					\
+ 	}								\
+ 	SEC(type)							\
+ 	__description(type ": reject negative offset ctx access")	\
+-	__failure __msg("negative offset ctx ptr")			\
+-	__naked void no_rewrite_##name##_neg(void)			\
++	__failure __msg("invalid bpf_context access")			\
++	int no_rewrite_##name##_neg(void *ctx)			\
+ 	{								\
+-		asm volatile ("						\
+-		r1 += %[__neg_off];					\
+-		r0 = *(" #ld_op " *)(r1 + 0);				\
+-		r0 = 0;							\
+-		exit;"							\
+-		:							\
+-		: __imm_const(__neg_off, -(off))			\
+-		: __clobber_all);					\
++		char *p = ctx;						\
++									\
++		p -= 612;						\
++		return *(load_t *)p;					\
++	}								\
++	SEC(type)							\
++	__description(type ": reject helper read ctx at fixed offset")	\
++	__failure __msg("dereference of modified ctx ptr")		\
++	int no_rewrite_##name##_helper_read_fixed(void *ctx)		\
++	{								\
++		char *p = ctx;						\
++									\
++		p += off;						\
++		return bpf_strncmp(p, 4, ctx_strncmp_target);		\
++	}								\
++	SEC(type)							\
++	__description(type ": reject helper write ctx at fixed offset")	\
++	__failure __msg("dereference of modified ctx ptr")		\
++	int no_rewrite_##name##_helper_write_fixed(void *ctx)		\
++	{								\
++		char *p = ctx;						\
++									\
++		p += off;						\
++		return bpf_probe_read_kernel(p, 4, 0);			\
++	}								\
++	SEC(type)							\
++	__description(type ": reject helper read ctx with variable offset") \
++	__failure __msg("variable ctx access var_off=")			\
++	int no_rewrite_##name##_helper_read_var(void *ctx)		\
++	{								\
++		__u64 off_var = bpf_get_prandom_u32();			\
++		char *p = ctx;						\
++									\
++		off_var &= 4;						\
++		p += off_var;						\
++		return bpf_strncmp(p, 4, ctx_strncmp_target);		\
++	}								\
++	SEC(type)							\
++	__description(type ": reject helper write ctx with variable offset") \
++	__failure __msg("variable ctx access var_off=")			\
++	int no_rewrite_##name##_helper_write_var(void *ctx)		\
++	{								\
++		__u64 off_var = bpf_get_prandom_u32();			\
++		char *p = ctx;						\
++									\
++		off_var &= 4;						\
++		p += off_var;						\
++		return bpf_probe_read_kernel(p, 4, 0);			\
++	}								\
++	SEC(type)							\
++	__description(type ": reject helper read zero-sized ctx access") \
++	__failure __msg("R4 type=ctx expected=fp")			\
++	int no_rewrite_##name##_helper_read_zero(void *ctx)		\
++	{								\
++		return bpf_snprintf(0, 0, ctx_snprintf_fmt, ctx, 0);	\
++	}								\
++	SEC(type)							\
++	__description(type ": reject helper write zero-sized ctx access") \
++	__failure __msg("R1 type=ctx expected=fp")			\
++	int no_rewrite_##name##_helper_write_zero(void *ctx)		\
++	{								\
++		return bpf_probe_read_kernel(ctx, 0, 0);			\
++	}								\
++	SEC(type)							\
++	__description(type ": reject kfunc ctx at fixed offset")	\
++	__failure __msg("dereference of modified ctx ptr")		\
++	int no_rewrite_##name##_kfunc_fixed(void *ctx)		\
++	{								\
++		char *p = ctx;						\
++									\
++		p += off;						\
++		bpf_kfunc_call_test_mem_len_pass1(p, 4);		\
++		return 0;						\
++	}								\
++	SEC(type)							\
++	__description(type ": reject kfunc ctx with variable offset")	\
++	__failure __msg("variable ctx access var_off=")			\
++	int no_rewrite_##name##_kfunc_var(void *ctx)			\
++	{								\
++		__u64 off_var = bpf_get_prandom_u32();			\
++		char *p = ctx;						\
++									\
++		off_var &= 4;						\
++		p += off_var;						\
++		bpf_kfunc_call_test_mem_len_pass1(p, 4);		\
++		return 0;						\
++	}								\
++	SEC(type)							\
++	__description(type ": reject kfunc zero-sized ctx access")	\
++	__failure __msg("R1 type=ctx expected=fp")			\
++	int no_rewrite_##name##_kfunc_zero(void *ctx)			\
++	{								\
++		bpf_kfunc_call_test_mem_len_pass1(ctx, 0);		\
++		return 0;						\
+ 	}
+ 
+-no_rewrite_ctx_access("syscall", syscall, 4, u32);
+-no_rewrite_ctx_access("kprobe", kprobe, 8, u64);
+-no_rewrite_ctx_access("tracepoint", tp, 8, u64);
+-no_rewrite_ctx_access("raw_tp", raw_tp, 8, u64);
+-no_rewrite_ctx_access("raw_tracepoint.w", raw_tp_w, 8, u64);
+-no_rewrite_ctx_access("fentry/bpf_modify_return_test", fentry, 8, u64);
+-no_rewrite_ctx_access("cgroup/dev", cgroup_dev, 4, u32);
+-no_rewrite_ctx_access("netfilter", netfilter, offsetof(struct bpf_nf_ctx, skb), u64);
++no_rewrite_ctx_access("kprobe", kprobe, 8, __u64);
++no_rewrite_ctx_access("tracepoint", tp, 8, __u64);
++no_rewrite_ctx_access("raw_tp", raw_tp, 8, __u64);
++no_rewrite_ctx_access("raw_tracepoint.w", raw_tp_w, 8, __u64);
++no_rewrite_ctx_access("fentry/bpf_modify_return_test", fentry, 8, __u64);
++no_rewrite_ctx_access("cgroup/dev", cgroup_dev, 4, __u32);
++no_rewrite_ctx_access("netfilter", netfilter, offsetof(struct bpf_nf_ctx, skb), __u64);
+ 
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+index 94edbd2afa67..f91b484d80f2 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -716,6 +716,7 @@ BTF_ID_FLAGS(func, bpf_iter_testmod_seq_next, KF_ITER_NEXT | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_iter_testmod_seq_destroy, KF_ITER_DESTROY)
+ BTF_ID_FLAGS(func, bpf_iter_testmod_seq_value)
+ BTF_ID_FLAGS(func, bpf_kfunc_common_test)
++BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_pass1)
+ BTF_ID_FLAGS(func, bpf_kfunc_dynptr_test)
+ BTF_ID_FLAGS(func, bpf_kfunc_nested_acquire_nonzero_offset_test, KF_ACQUIRE)
+ BTF_ID_FLAGS(func, bpf_kfunc_nested_acquire_zero_offset_test, KF_ACQUIRE)
+@@ -1280,7 +1281,6 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test2)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test3)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test4)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test5)
+-BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_pass1)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_fail1)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_fail2)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_acquire, KF_ACQUIRE | KF_RET_NULL)
 -- 
 2.52.0
 
