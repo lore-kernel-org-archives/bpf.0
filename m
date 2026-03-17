@@ -1,65 +1,65 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91FB2379EDC
-	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 17:39:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C678D337B81
+	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 17:39:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773769184; cv=none; b=usu+VLqNAIFPvbFevsQ0fD/yfH8P4uZ5SgMULXRyDTvHW0EBq8DiFBD2Ya61pb6gRVHOEX6cGiz4ZqUtJs43tFi53ru34enYUm0cpUPHCf4LLU7wDazfOvXBX2z7OnhoREvi4yZ6Geg6mebPNzzfuO1uYlEnPwI2lj/o4F//3pk=
+	t=1773769185; cv=none; b=PAtCuPlqMOSAuYCfqt6NFMtFP0Pcy+HdluxFV1ZfUfW1PnEPAYTM4JaLAY4to4UpwYzuHApENVu9TzFoKo4sz4Uj3TYptx32tduJ3iLJtXKu+vJZjrObCOLTHxVcCEU8poCHnvlP3LqW1QNZHy/+LrqZF556AC2DCYNaTqQIBa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773769184; c=relaxed/simple;
-	bh=LkF3qT5LXwe262USVq2sdWiqazLeZHvuIpS2bf38Gro=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=k/dd0v7ldOLAat/pc6LT5kJ84rMHeBQNhb3bP1omkrjooYnA5MAb2gCba4eYC6nGQ9/R3zjyW7UoJg582vT5XWRth15YZykhH6Z69RQkvGTgQpvJfukhgdb9kP7U4KHSLugnd8CcahMEjbiIaPVq3veRxlgQN7HGWorBWKFnaLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XDT3MPFd; arc=none smtp.client-ip=209.85.128.43
+	s=arc-20240116; t=1773769185; c=relaxed/simple;
+	bh=R+0IywjtBhWBmhzlyQIgI+PyYCOkxoGjdcE7Zn72U4w=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=cmxh56MCzYPz1LLQkEOe/N9wF5bvrfgQeSAymTJ0CCt2Dl1O8OucCXJnj6noMqpdo94OfHKhBSZw7rDNtFFp2OpD5Gz7bRb4oFzDupkhTIivsCuXAsEQqBQpSIPbCWTZG682h7NwO/Fs+BID3Nz49TisyavGFjFw3/LnBXvAUwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LeyvbxGE; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XDT3MPFd"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-48538c5956bso1247395e9.0
-        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 10:39:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LeyvbxGE"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-48538c5956bso1247645e9.0
+        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 10:39:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773769181; x=1774373981; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PIuNcplP5Fgpjz6bmiUn9/jjGndnbjG/Xx6/NlkBHIY=;
-        b=XDT3MPFdc2ocNaERC1Wl3JneMajuUntGN50/z2k6Dl4SP20hjz58QLilp6+Ki8QjuB
-         iehGEBdBWo8yqhI+8p1n9j36UKqK2RGlFzFi+6RG10C/ZJb14cwNVMxnFH/z52w8IoiG
-         O52UytB0ZKpf82A5IINZI+/eQhmVkLgmpEB1KR8Jjm/VxrHdbIaEQiQGCoeAgLZX22xr
-         fNrMTpt2xIgJrYxKlF+GeZTy9zM9xysSzZvXD1VovwxddBwU/RwyU3lhbWv8ec+QtgnE
-         EZqa+zBk0LS4yNZRu8eZeOS1obuDqK8spiNMwa5BWvJzuugOM7v2Bs5umsyhTaH/A9VM
-         C0+A==
+        d=gmail.com; s=20230601; t=1773769182; x=1774373982; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pOa0THwiOISyWRpaVdtklSJLjJnmfGR+A8nH9FsP7C8=;
+        b=LeyvbxGEQltnENB20dItCuoMFs/YjCRrpO9mPoqrzw9FA7gkObr22+Cpo07kKeqcqM
+         MOeQh18O4+ht4NQnhQu4jp78ZdaoLxIFzvLZL8efmtDEBDKtQHLjXx/lgy2uyA0ofomc
+         /byhc4vhxkjXWpqmDaKoqmxqU6KO4C54Zdk7GY9DvJ+6GW4DUOwd1eRtawtZuBDY6tLp
+         a5XWb7M0rK4YUug0yVTbPvXvcGKJhnNDquOGkOYeZOf4C77bhw6no0dx0p2kqg7GE27o
+         j1qxrVv8GVT+qt8Dz+4+hrbhINYBTW8e1yRTZUwjff9aoMRK//mqTMWH1dvB/75zbdfS
+         nYxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773769181; x=1774373981;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PIuNcplP5Fgpjz6bmiUn9/jjGndnbjG/Xx6/NlkBHIY=;
-        b=SYiKZ7mRpslUe+fdcb+mGzJYZUDvvMX3UvTar+w/sCLF/3xIsvUmWzwqnXQKbgoaA/
-         Tkh5yZa88kSD7du9aaGNRk7YTI4PHtwCUKgHM9tWH31GpZUl/R/9weSsHUr4+8iK8NjR
-         u/KSTKBs1knVqsunhE+HcfBlXNkZFOMSrpRxruo5sCgpcsoI2XZl/YyISsp80iX18OqE
-         FxOdbD52De/mcRJ0UEGl3iOspW1vUkJqfTePvI8iw/KZpAjv3VsT3XMJAi8E9g0SQ6gn
-         3UdVyCsTQUUI6SjeC1laCsIsTH85LOS3lbInVukcEoXM3nXYBjpHhEEQwMsKb1kP9mFw
-         9kOQ==
-X-Gm-Message-State: AOJu0YzmxI/Om7WFpEF2FEIcs6CiVrnavrQ05L+6wOuF/WgVPDgAufo2
-	JgZafVC9YliKysMZQLOzoyWCDBtBiCTZ7nDufLl/Gbc825PW/+8DRXUX
-X-Gm-Gg: ATEYQzxGKEDNfkRKRvjojvYpkGlM3G+axEWAMK2czX1jpeoyQdAjAioS+nVH57kfP1k
-	YzBxmlk4Oc1gxMlA3nLA61FSFbs0BvjNGWpLyo/m3jfF+6p1Yx5pjkE71DSbbk6e2j4YbMpMuJ1
-	gTWDY/FZAjpp1jAM0HW8MER8+uzR94P0gpNKGOHlICz2SobzuCsmqPkLJK4fNk2YaQU/+bkLtTw
-	KJalW4wi5+P95H66g3IZE4ip0FsLcQDNQnkvHPqUGJsLhBPw3JZoRoCmqGdaEp8kIWNs4cvAWjZ
-	B5R6q3448w0+79dtVXLuNLNcxX4UYemUbPGUHwBb50iFxaidSuTixeSBlwq2yHqxw/oaa3k+t6e
-	HayS7bYlesqB/huVZEid4T4TN5y0ADt7USH9w5W3QH1y+QlBRKDt7RHlMCfWtNKDiGR0PIazxL/
-	vHJbUea6bxQbeb
-X-Received: by 2002:a05:600c:8b18:b0:485:38f1:5cec with SMTP id 5b1f17b1804b1-486f40aca00mr8399665e9.7.1773769180600;
-        Tue, 17 Mar 2026 10:39:40 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1773769182; x=1774373982;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=pOa0THwiOISyWRpaVdtklSJLjJnmfGR+A8nH9FsP7C8=;
+        b=Lc1G8sHvye4jk4JNS0BGOykfeEz5lrt74Rvy7tcSAFaiBkTPQoxZ7BfoYKssb6KdRC
+         r2YhlFPQ6xNhR/vDW/I7xSTXPwCG5zG9ZWtx9EpcycIDEzdf8v4rfxuxS0ijzZd4pESj
+         Hbbtv2wv+HFTq4Q+fEpQH2p5UztgdYVjDszKajYvV+fXkNTywKQWLIlwDl2Q3oEHJfgV
+         nAWhBBaLmK089mJVvIMg1sTDsAyyuZ3cV5LGjdo4BKqL/Ex4Tytnzialex5GbPVHgIG1
+         v0d+wwCZ4kvR54IMW8qTB5RayXWGf4WkmkEBGvfcLtQwT7Y5M9whM/oWO+s0eO5ezxCl
+         AsvA==
+X-Gm-Message-State: AOJu0YxZb/8NBvFUAjN01l/iRR3Q6NHasFRMFuzHi+rIXih/mYP092zS
+	oC5/diBmiK6mJB+Ov4zPtXYr+riglTPwd93pvy9a+wRPasVEk3l7M0hC
+X-Gm-Gg: ATEYQzzVzkZDa2NaFcBTUsV7CioML4UOpaE7t4ZZ21SEMM+5XAOAcRe/4qU/iGdZc2B
+	3B9Bu3C+8qZHqzvNUSttR5F5w6otMQiVXMRbC8na0YCVQVBtkN2zwlrmqKKhL8z/53KS58EqLzc
+	288GvUoBSkHKmos74adhsidfqKx7lvkm2f1aw5jBrpVAHIpsHN6MW+pFfIHNzq1LJ4L+EPiR1em
+	f0ZYl5V4YriwsP67II1GeAJ0ADvogIUc+s19PRoL6lie3zEYcyrrp8bvFDQEO0Lk1g2CVjhw4KA
+	XlrWhOyQcToUnIbWX4zz0R8e+t/gIDGOkJ/qV91ifqFU5Ld486WpkbJME3izpupEF4cwAMrVND3
+	hwvXjFPx7HahC+UlDFPiNns9Nahxv/owLY1pW0praj+IlmL/efa18Sx1aAqvic3YXQx6Ascftaw
+	KhZ/R0rrrKQm8f
+X-Received: by 2002:a05:600c:c4a4:b0:485:3c11:de84 with SMTP id 5b1f17b1804b1-486f40c9015mr7655125e9.14.1773769181900;
+        Tue, 17 Mar 2026 10:39:41 -0700 (PDT)
 Received: from localhost ([2a03:2880:30ff:3::])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4857f224d5asm22250095e9.24.2026.03.17.10.39.39
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486f4214664sm5318155e9.4.2026.03.17.10.39.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Mar 2026 10:39:40 -0700 (PDT)
+        Tue, 17 Mar 2026 10:39:41 -0700 (PDT)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Subject: [PATCH bpf-next v4 0/3] libbpf: Add bpf_program__clone() for
- individual program loading
-Date: Tue, 17 Mar 2026 10:39:20 -0700
-Message-Id: <20260317-veristat_prepare-v4-0-74193d4cc9d9@meta.com>
+Date: Tue, 17 Mar 2026 10:39:21 -0700
+Subject: [PATCH bpf-next v4 1/3] libbpf: Introduce bpf_program__clone()
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,115 +67,172 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAMmRuWkC/22Nyw7CIBBFf6VhLWYYaKuu/A9jDCBYFn0EGlLT9
- N+d4KaJLu/ce86sLLkYXGKXamXR5ZDCOFBQh4rZTg8vx8OTMkPABhAanmmfZj0/pugmHR3XSoM
- Sp1baWjLC6O7DUpQ3ZibPB7fM7E5NR+AY3+VXFqX/agX+arPgwK2sBaD0Bp7m2rtZH+3YF1fGH
- Y/wh0fiRW28V2da6HbHb9v2AXqT6VH5AAAA
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260317-veristat_prepare-v4-1-74193d4cc9d9@meta.com>
+References: <20260317-veristat_prepare-v4-0-74193d4cc9d9@meta.com>
+In-Reply-To: <20260317-veristat_prepare-v4-0-74193d4cc9d9@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
  daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
  eddyz87@gmail.com
-Cc: Mykyta Yatsenko <yatsenko@meta.com>, 
- Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773769178; l=4340;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773769179; l=5803;
  i=yatsenko@meta.com; s=20260220; h=from:subject:message-id;
- bh=LkF3qT5LXwe262USVq2sdWiqazLeZHvuIpS2bf38Gro=;
- b=vEnJMAZ7EHEONzodarrWRkIuRn5WZrNXm4mnXbB0BUu0j1uD7XKkInwsMx1q+Hp3FNPwuvmtL
- LWk4e1GaHvgCb9y2VkFioGoVz40JAJimgnxcsy45SJ6dn+zDsS3UWa4
+ bh=WeMEdkO9RPxcL+x+s1xWrz7bf7w6r010yEwLQ1oocMk=;
+ b=fiU02Sb7J8UUHqut0rw/ZpuDzqxj/aDVjKzG/CtMPs0+0E8B9k+xIaxF2pc6wV796m7h/444o
+ jJLSN8ses/7DP+rM8me6+z/Q49vAsEMvN1ZQr1VF4bPD40rprvQqN8r
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=QUfct6THKRRhwIGGKcldE2w7zXPci1gMPcF7qij1gwA=
 
-This series adds bpf_program__clone() to libbpf and converts veristat to
-use it, replacing the costly per-program object re-opening pattern.
+From: Mykyta Yatsenko <yatsenko@meta.com>
 
-veristat needs to load each BPF program in isolation to collect
-per-program verification statistics. Previously it achieved this by
-opening a fresh bpf_object for every program, disabling autoload on all
-but the target, and loading the whole object. For object files with many
-programs this meant repeating ELF parsing and BTF processing N times.
+Add bpf_program__clone() API that loads a single BPF program from a
+prepared BPF object into the kernel, returning a file descriptor owned
+by the caller.
 
-Patch 1 introduces bpf_program__clone(), which loads a single program
-from a prepared object into the kernel and returns an fd owned by the
-caller. It populates load parameters from the prepared object and lets
-callers override any field via bpf_prog_load_opts. Fields written by the
-prog_prepare_load_fn callback (expected_attach_type, attach_btf_id,
-attach_btf_obj_fd) are seeded from prog/obj defaults before the
-callback, then overridden with caller opts after, so explicit values
-always win.
-
-Patch 2 converts veristat to prepare the object once and clone each
-program individually, eliminating redundant work.
-
-Patch 3 adds a selftest verifying that caller-provided attach_btf_id
-overrides are respected by bpf_program__clone().
-
-Performance
-Tested on selftests: 918 objects, ~4270 programs:
- - Wall time:   36.88s -> 23.18s (37% faster)
- - User time:   20.80s -> 16.07s (23% faster)
- - Kernel time: 12.07s ->  6.06s (50% faster)
-
-Per-program loading also improves coverage: 83 programs that previously
-failed now succeed.
-
-Known regression:
- - Program-containing maps (PROG_ARRAY, DEVMAP, CPUMAP) track owner
-   program type. Programs with incompatible attributes loaded against
-   a shared map will be rejected. This is expected kernel behavior.
+After bpf_object__prepare(), callers can use bpf_program__clone() to
+load individual programs with custom bpf_prog_load_opts, instead of
+loading all programs at once via bpf_object__load(). Non-zero fields in
+opts override the defaults derived from the program and object
+internals; passing NULL opts populates everything automatically.
 
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
-Changes in v5:
-- Fix overriding of the attach_btf_id, attach_btf_fd, etc: the override
-provided by the caller is applied after prog_prepare_load_fn().
-- Added selftest to verify attach_btf_id override works as expected.
-- Link to v4: https://lore.kernel.org/all/20260316-veristat_prepare-v3-0-94e5691e0494@meta.com/
+ tools/lib/bpf/libbpf.c   | 78 ++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/lib/bpf/libbpf.h   | 17 +++++++++++
+ tools/lib/bpf/libbpf.map |  1 +
+ 3 files changed, 96 insertions(+)
 
-Changes in v4:
-- Replace OPTS_SET() with direct struct assignment for local
-  bpf_prog_load_opts in bpf_program__clone() (libbpf.c)
-- Remove unnecessary pattr pointer indirection (libbpf.c)
-- Separate input and output fields in bpf_program__clone(): input
-  fields (prog_flags, fd_array, etc.) are merged from caller opts
-  before the callback; output fields (expected_attach_type,
-  attach_btf_id, attach_btf_obj_fd) are initialized from prog/obj
-  defaults for the callback, then overridden with caller opts after,
-  so explicit caller values always win (libbpf.c)
-- Add selftest for attach_btf_id override
-- Link to v3: https://lore.kernel.org/r/20260206-veristat_prepare-a4a041873c53-v3@meta.com
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 0662d72bad20..1eaa7527d4da 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -9802,6 +9802,84 @@ __u32 bpf_program__line_info_cnt(const struct bpf_program *prog)
+ 	return prog->line_info_cnt;
+ }
+ 
++int bpf_program__clone(struct bpf_program *prog, const struct bpf_prog_load_opts *opts)
++{
++	LIBBPF_OPTS(bpf_prog_load_opts, attr);
++	struct bpf_object *obj;
++	int err, fd;
++
++	if (!prog)
++		return libbpf_err(-EINVAL);
++
++	if (!OPTS_VALID(opts, bpf_prog_load_opts))
++		return libbpf_err(-EINVAL);
++
++	obj = prog->obj;
++	if (obj->state < OBJ_PREPARED)
++		return libbpf_err(-EINVAL);
++
++	/*
++	 * Caller-provided opts take priority; fall back to
++	 * prog/object defaults when the caller leaves them zero.
++	 */
++	attr.attach_prog_fd = OPTS_GET(opts, attach_prog_fd, 0) ?: prog->attach_prog_fd;
++	attr.prog_flags = OPTS_GET(opts, prog_flags, 0) ?: prog->prog_flags;
++	attr.prog_ifindex = OPTS_GET(opts, prog_ifindex, 0) ?: prog->prog_ifindex;
++	attr.kern_version = OPTS_GET(opts, kern_version, 0) ?: obj->kern_version;
++	attr.fd_array = OPTS_GET(opts, fd_array, NULL) ?: obj->fd_array;
++	attr.fd_array_cnt = OPTS_GET(opts, fd_array_cnt, 0) ?: obj->fd_array_cnt;
++	attr.token_fd = OPTS_GET(opts, token_fd, 0) ?: obj->token_fd;
++	if (attr.token_fd)
++		attr.prog_flags |= BPF_F_TOKEN_FD;
++
++	/* BTF func/line info */
++	if (obj->btf && btf__fd(obj->btf) >= 0) {
++		attr.prog_btf_fd = OPTS_GET(opts, prog_btf_fd, 0) ?: btf__fd(obj->btf);
++		attr.func_info = OPTS_GET(opts, func_info, NULL) ?: prog->func_info;
++		attr.func_info_cnt = OPTS_GET(opts, func_info_cnt, 0) ?: prog->func_info_cnt;
++		attr.func_info_rec_size =
++			OPTS_GET(opts, func_info_rec_size, 0) ?: prog->func_info_rec_size;
++		attr.line_info = OPTS_GET(opts, line_info, NULL) ?: prog->line_info;
++		attr.line_info_cnt = OPTS_GET(opts, line_info_cnt, 0) ?: prog->line_info_cnt;
++		attr.line_info_rec_size =
++			OPTS_GET(opts, line_info_rec_size, 0) ?: prog->line_info_rec_size;
++	}
++
++	attr.log_buf = OPTS_GET(opts, log_buf, NULL);
++	attr.log_size = OPTS_GET(opts, log_size, 0);
++	attr.log_level = OPTS_GET(opts, log_level, 0);
++
++	/*
++	 * Fields below may be mutated by prog_prepare_load_fn:
++	 * Seed them from prog/obj defaults here;
++	 * Later override with caller-provided opts.
++	 */
++	attr.expected_attach_type = prog->expected_attach_type;
++	attr.attach_btf_id = prog->attach_btf_id;
++	attr.attach_btf_obj_fd = prog->attach_btf_obj_fd;
++
++	if (prog->sec_def && prog->sec_def->prog_prepare_load_fn) {
++		err = prog->sec_def->prog_prepare_load_fn(prog, &attr, prog->sec_def->cookie);
++		if (err)
++			return libbpf_err(err);
++	}
++
++	/* Re-apply caller overrides for output fields */
++	if (OPTS_GET(opts, expected_attach_type, 0))
++		attr.expected_attach_type =
++			OPTS_GET(opts, expected_attach_type, 0);
++	if (OPTS_GET(opts, attach_btf_id, 0))
++		attr.attach_btf_id = OPTS_GET(opts, attach_btf_id, 0);
++	if (OPTS_GET(opts, attach_btf_obj_fd, 0))
++		attr.attach_btf_obj_fd =
++			OPTS_GET(opts, attach_btf_obj_fd, 0);
++
++	fd = bpf_prog_load(prog->type, prog->name, obj->license, prog->insns, prog->insns_cnt,
++			   &attr);
++
++	return libbpf_err(fd);
++}
++
+ #define SEC_DEF(sec_pfx, ptype, atype, flags, ...) {			    \
+ 	.sec = (char *)sec_pfx,						    \
+ 	.prog_type = BPF_PROG_TYPE_##ptype,				    \
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index dfc37a615578..0be34852350f 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -2021,6 +2021,23 @@ LIBBPF_API int libbpf_register_prog_handler(const char *sec,
+  */
+ LIBBPF_API int libbpf_unregister_prog_handler(int handler_id);
+ 
++/**
++ * @brief **bpf_program__clone()** loads a single BPF program from a prepared
++ * BPF object into the kernel, returning its file descriptor.
++ *
++ * The BPF object must have been previously prepared with
++ * **bpf_object__prepare()**. If @opts is provided, any non-zero field
++ * overrides the defaults derived from the program/object internals.
++ * If @opts is NULL, all fields are populated automatically.
++ *
++ * The returned FD is owned by the caller and must be closed with close().
++ *
++ * @param prog BPF program from a prepared object
++ * @param opts Optional load options; non-zero fields override defaults
++ * @return program FD (>= 0) on success; negative error code on failure
++ */
++LIBBPF_API int bpf_program__clone(struct bpf_program *prog, const struct bpf_prog_load_opts *opts);
++
+ #ifdef __cplusplus
+ } /* extern "C" */
+ #endif
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index d18fbcea7578..e727a54e373a 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -452,6 +452,7 @@ LIBBPF_1.7.0 {
+ 		bpf_map__set_exclusive_program;
+ 		bpf_map__exclusive_program;
+ 		bpf_prog_assoc_struct_ops;
++		bpf_program__clone;
+ 		bpf_program__assoc_struct_ops;
+ 		btf__permute;
+ } LIBBPF_1.6.0;
 
-Changes in v3:
-- Clone fd_array_cnt in bpf_object__clone()
-- In veristat do not fail if bpf_object__prepare() fails,
-continue per-program processing to produce per program output
-- Link to v2: https://lore.kernel.org/r/20260220-veristat_prepare-v2-0-15bff49022a7@meta.com
-
-Changes in v2:
- - Removed map cloning entirely (libbpf.c)
- - Renamed bpf_prog_clone() -> bpf_program__clone()
- - Removed unnecessary obj NULL check (libbpf.c)
- - Fixed opts handling — no longer mutates caller's opts (libbpf.c)
- - Link to v1: https://lore.kernel.org/all/20260212-veristat_prepare-v1-0-c351023fb0db@meta.com/
-
----
-Mykyta Yatsenko (3):
-      libbpf: Introduce bpf_program__clone()
-      selftests/bpf: Use bpf_program__clone() in veristat
-      selftests/bpf: Test bpf_program__clone() attach_btf_id override
-
- tools/lib/bpf/libbpf.c                             |  78 ++++++++++++++++
- tools/lib/bpf/libbpf.h                             |  17 ++++
- tools/lib/bpf/libbpf.map                           |   1 +
- .../selftests/bpf/prog_tests/clone_attach_btf_id.c |  78 ++++++++++++++++
- .../selftests/bpf/progs/clone_attach_btf_id.c      |  13 +++
- tools/testing/selftests/bpf/veristat.c             | 102 +++++++++------------
- 6 files changed, 229 insertions(+), 60 deletions(-)
----
-base-commit: 6c8e1a9eee0fec802b542dadf768c30c2a183b3c
-change-id: 20260206-veristat_prepare-a4a041873c53
-
-Best regards,
 -- 
-Mykyta Yatsenko <yatsenko@meta.com>
+2.52.0
 
