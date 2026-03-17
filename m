@@ -1,84 +1,105 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E24483A0EB1
-	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 09:30:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B877C314D1E;
+	Tue, 17 Mar 2026 09:30:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773739811; cv=none; b=fY08EzssCRgrLS8aO2y4vQC/6EzMlsI8HqGw1jl6Gi60/WkzahXselL1cHSqZtDHOIlBip5/VVkYcTMKoWIVfApW4hvGlWA9tyIDGvb32nIpdF8NaF8iBo15JYonjsCdUVg/6ZZyIPuYVsl/ERRakOwf9TtX5yCcFg3MjUCLxDs=
+	t=1773739849; cv=none; b=Nqc3J211zrojT2cY/fR0QYeurO6tUCFs8uo6TvDHcXALJl3X4kw5gZ1Yl8jO/2G/clrTrj4ojwbAJwyqMr7hSW7F98zHAM6LywXXRaannfLOKgHGv98YdxqfTE+cj42RISnf3kSY+meLBuz4NFJ/qSS6UZQnrhKds/mP+GSbO+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773739811; c=relaxed/simple;
-	bh=cbnprwPaY7zwRJWHZYt6wVlZGxugerk6GPerK+WZ9EQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sZKm2E38MEC4fp0fY5TcrR+PuFvkBrKOS/NPYK65sLvhDwkyqyQhuAUAzh3QSyAW7RU2hZ0uUz4IxfbxY6pKW8JMjm9QKkcvrKFZqrKcx20zRTwuJqMI3m2UOuk2kiOWhd+5ITlmZVbH3GJep1KmwAffWUQ8qq1oD2WSWUhqbgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mK0EH5tg; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773739849; c=relaxed/simple;
+	bh=Tw/rnTLYKS4Urzz+msvBuIWHlyg5TGSnKFRnFbTTRtk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=O9FO2YufYxHOk0FSJz862kAY+pH0nCBGPewhbtONmC2T0lYEc/Cu91YO09ufpbNW8fIQ3mgqHkzW3DKTLqlKtdhbfkmOZV/xbl3eGBEK7h+QygevmGI0Ysk96RC6H81I1b6OOeG3hCNcNTLSI97acXARv/KGjUPUo7hSxgeiUXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y0DB0rAa; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mK0EH5tg"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-c7393536e53so2139508a12.2
-        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 02:30:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773739809; x=1774344609; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cbnprwPaY7zwRJWHZYt6wVlZGxugerk6GPerK+WZ9EQ=;
-        b=mK0EH5tgAKl5r5efiuDVopFTYC3ikaLTdwToIh/QwN+cZvtvYxRXMZBpPW+t7UXsYz
-         vEOuzDG/uYu/5NIsgfUXAzZJuW/KLHzTDmszdo+nSYmakEloEYCrvdUSzIO/u8QX3Kj1
-         N6yKpuJMQn4eAu2uVkUlg8FHqjxt4FUK5+4PP0IqpYcrgmv/sGgPzTfCqoXLxV0jUc4c
-         wVT1nohWqLQXA+hE9nPXuYCHMLBX4hWtKPp2xlfOkPudG3xSi2KD72PCTohSqA9w7jHr
-         S6dR2WSzwPKGh1i4hS8LXvDx0DwOnpMIE0vJ/f3XtRTh+cXRxGuSA/HWitiLZwCIPE7E
-         tssQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773739809; x=1774344609;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cbnprwPaY7zwRJWHZYt6wVlZGxugerk6GPerK+WZ9EQ=;
-        b=CRMOCDwZbkz1VUufWVZUGScRzdMWcjNvh3TUHIn6CYgJ6XKWOtHc+RKuvWOOrVxs8u
-         HEFk5gnZP4jCLWGnF093npa5agQaENx4YZGJGtwZMiqMs22mxb2iiwAOPPcbzj82X4El
-         2Oj+Lhyc1IAx1FHKtfB8gtODnI3f/6MY2VKHbd/wvGpOefkQBAiqn0F5xBODXtWomQ3E
-         1l67osDPmifWvqv5m0C8PRhwj6lWSvBzxpMW2LyK1AdDdwuG1bqkqe5oeYa3zD/+eifl
-         LVDwrczjZHxeimAS2AxIoGoPx0JOEE8QmeFj2sWc0xBX+q4h7aWlavCHBXGOesBukvsi
-         z3Lw==
-X-Gm-Message-State: AOJu0Yz5OesZk5B83I29vypSgfBvl+2pfhmhuSJd1nYbAj4neRw6dgkJ
-	Ezb6amAHoRM9Oxkr8kx8ZFvK4BAd4Ps59d1gQmRECFjnFavM7xbgQM+q
-X-Gm-Gg: ATEYQzy7XaWMtAC8MJDdwgEfG5GlBKYS4fdH4pC86fip04YVFwzE1s+K70XZ4emKzqE
-	UYhKZoCPnXhvq+dWI1xAXXvqh+Kua9FDicenVmeXXlgMdwABPUzMaw9pLh9ZKtBlgcnjS14ObzQ
-	CbUCZq1tGl4hEVJV3Cisu/vcuqerNTYC40WG44nj/MvkJWdeaxrrXeHpxyHQw64G3/BQi8/XQAk
-	3lIiD/fbkuEUBMl6G9xknfV/TeUysryjyeV2Gvra5Isf5or2sRvATglln8XcfeQviCzO8ZoJ5hb
-	AGkDfX8Nfu3hqzVUkZjV2eY90DUBm27SELTYuqpH6fQSqyyEtHtL6r7eKDHl0okMGbrc1HDTBgU
-	epDRi5rkoWu5je0Wv9GNzFFRoY/AhaUogDSafwURv8KnCxx+ndnYaN4zZvotIIP/9cbLwABPLsb
-	dwZqq7ObBOcYMWxQH9IN9QXOysDCvoTHUvW9aASxTmqQ==
-X-Received: by 2002:a05:6300:228c:b0:398:9c94:2033 with SMTP id adf61e73a8af0-398eca2e828mr15592813637.11.1773739809032;
-        Tue, 17 Mar 2026 02:30:09 -0700 (PDT)
-Received: from computer ([2a09:bac5:40b2:1a96::2a6:3d])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c7400000532sm6814783a12.27.2026.03.17.02.30.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Mar 2026 02:30:08 -0700 (PDT)
-Date: Tue, 17 Mar 2026 15:00:00 +0530
-From: Varun R Mallya <varunrmallya@gmail.com>
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com,
-	eddyz87@gmail.com, memxor@gmail.com,
-	Mykyta Yatsenko <yatsenko@meta.com>
-Subject: Re: [PATCH bpf-next v2] bpf: Fix special fields mem leak for
- non-prealloc maps
-Message-ID: <abkfGJw2F_Mwuuvf@computer>
-References: <20260216131341.1285427-1-mykyta.yatsenko5@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y0DB0rAa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0FF0C2BC9E;
+	Tue, 17 Mar 2026 09:30:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773739849;
+	bh=Tw/rnTLYKS4Urzz+msvBuIWHlyg5TGSnKFRnFbTTRtk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=Y0DB0rAaK/nP2tGp/3BWOGWaGpnu1esqxrZ9Xmx2hDORUdO/zh7PYmlXU1Z8bac3a
+	 6GFZT1pHRrKkQ3rJ2ywlWidJKJKtvmBV/XmuUjQ7+tm/KPNzZHl32OkDYEd2GUeQ0H
+	 ej6os3egWujB1lD/9SG/g1tQdrumN92G+5SNjrb0wZ46ncnTLLNCDGyuTBmNKOF3/N
+	 BQHJWey5FUj0g0oRmad6FnhcmSipwv8d+h2YpI3fBfUIucS+DwnSC+A8/FO96kwvm0
+	 6dDHCSnEYilyjKaKtJiqtWH4m6NYlq9goHtA0I3Tf/DgMxJlC5Lx3x72e3PEc9u/G3
+	 tqk9tS7I2QkSA==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>, netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org, magnus.karlsson@intel.com, stfomichev@gmail.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ larysa.zaremba@intel.com, aleksander.lobakin@intel.com, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>
+Subject: Re: [PATCH net 4/6] xsk: validate MTU against usable frame size on
+ bind
+In-Reply-To: <20260316174550.462177-5-maciej.fijalkowski@intel.com>
+References: <20260316174550.462177-1-maciej.fijalkowski@intel.com>
+ <20260316174550.462177-5-maciej.fijalkowski@intel.com>
+Date: Tue, 17 Mar 2026 10:30:46 +0100
+Message-ID: <87qzpipzuh.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260216131341.1285427-1-mykyta.yatsenko5@gmail.com>
+Content-Type: text/plain
 
-Hey Mykyta! I saw that you haven't really come back to this in a while.
-Is it alright if I try to continue with the patch ? Since it's mostly minor changes
-that are left, I'll try to get it to pass CI and implement the reviews
-Puranjay gave. Is it alright if I submit a v3 ?
+Maciej Fijalkowski <maciej.fijalkowski@intel.com> writes:
 
+> AF_XDP bind currently accepts zero-copy pool configurations without
+> verifying that the device MTU fits into the usable frame space provided
+> by the UMEM chunk.
+>
+> This becomes a problem since we started to respect tailroom which is
+> subtracted from chunk_size (among with headroom). 2k chunk size might
+> not provide enough space for standard 1500 MTU, so let us catch such
+> settings at bind time.
+>
+> This prevents creating an already-invalid setup and complements the
+> MTU change restriction for devices with an attached XSK pool.
+>
+> Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> ---
+>  net/xdp/xsk_buff_pool.c | 13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
+>
+> diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+> index 2cfc19e363e3..0a6d76df97dc 100644
+> --- a/net/xdp/xsk_buff_pool.c
+> +++ b/net/xdp/xsk_buff_pool.c
+> @@ -157,6 +157,7 @@ static void xp_disable_drv_zc(struct xsk_buff_pool *pool)
+>  int xp_assign_dev(struct xsk_buff_pool *pool,
+>  		  struct net_device *netdev, u16 queue_id, u16 flags)
+>  {
+> +	bool mbuf = flags & XDP_USE_SG;
+>  	bool force_zc, force_copy;
+>  	struct netdev_bpf bpf;
+>  	int err = 0;
+> @@ -178,7 +179,7 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+>  	if (err)
+>  		return err;
+>  
+> -	if (flags & XDP_USE_SG)
+> +	if (mbuf)
+>  		pool->umem->flags |= XDP_UMEM_SG_FLAG;
+>  
+>  	if (flags & XDP_USE_NEED_WAKEUP)
+> @@ -200,11 +201,19 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+>  		goto err_unreg_pool;
+>  	}
+>  
+> -	if (netdev->xdp_zc_max_segs == 1 && (flags & XDP_USE_SG)) {
+> +	if (netdev->xdp_zc_max_segs == 1 && mbuf) {
+>  		err = -EOPNOTSUPP;
+>  		goto err_unreg_pool;
+>  	}
+>  
+> +	if (!mbuf) {
+> +		if (netdev->mtu + netdev->hard_header_len >
+> +				xsk_pool_get_rx_frame_size(pool)) {
+> +			err = -EOPNOTSUPP;
+
+Hmm, EINVAL?
