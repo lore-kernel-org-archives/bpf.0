@@ -1,154 +1,117 @@
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49D173101D8
-	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 17:34:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98F492D8768
+	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 17:34:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773855265; cv=none; b=HjiTjoWLgpAg8VHq/mxY39dWvmSZM8M4JwO2bjINGtcD5QirYbgfQJ41Nun+DRIjpbQxJT5/wwrgg4L3eEGEyxSR129LD4iohW3ztcATlcQD+uraDM27Uvi3lh871Qgv7LjRA7B1AXtVpDSTWPHZq/DQcf5onmBN/P1z1d6jTYE=
+	t=1773855300; cv=none; b=rL/YZNv9cATuhEmzE9biTjDwvVTcK3tgvfcL28emCyy7GTCYtONVSqUonkeosuVfu5ugnEUANAg9ZcDnHQrK5phGz/caGMrRDVNcrhRZDwvXd04Y0IOJ3WGEW/Ur6dtahZsw3jbYn8kCa50nV517tJO36Seezc12JR20XkYsUP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773855265; c=relaxed/simple;
-	bh=FZxvRu+85EWsxqRmuAs5TjqTbVp8lAzOjEKZsLeBTXM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BP9CwbKEmZBsGELCA6DK0R9yL9yLPb5pbuc6b0c310ehIZZmmAJnjDs0KCrwDdayDeEczJwP60lFLHFLdUQCvDPAzWWahqWqIzhvoLapeoQmu0Me+Dq0a/cWyL2hePxMkF5HIYs88HG17mLLMS0L9BrhgrpvHsSN3RfkR7DS4AI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=ZIQ8Y8q2; arc=none smtp.client-ip=209.85.210.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1773855300; c=relaxed/simple;
+	bh=Xv4i/v9f+MkYwg24utoarBBSpf+sV2FRrmSw/rGJIAk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=D5Vs5jFlAg///st2cf88cJk9bWMvv2qQu3XkzKOzJG30xV1Y5Mnr5V/oN8kRNfaN/vpJXIeFWxUb3to94xrXSkAZLw4t7pGzapFW5PqduYX+uIrPZsS1hNWqe9sYAOPnM25Bp4ePKos9EJPAgGbe9iL7oB41gn8nETdEfOWGSek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BgGVvVL0; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="ZIQ8Y8q2"
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-7d748ca8708so70964a34.0
-        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 10:34:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BgGVvVL0"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-829928e512aso119770b3a.2
+        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 10:34:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1773855261; x=1774460061; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eWeEa0ZafBH05FmgYmVQzG8J+24xX/BkM77vv1zD8SU=;
-        b=ZIQ8Y8q2up0WQADu+jzFDuMldHGgfqAA3c3j4H3T5Lcxfe4ftsyHELNmFik8FV8e8z
-         w1PLCvdfsEBJkEn9+5kO8ZW+eXOSQZD5rk6PLm+FEZYiu/nCEUpj2T/jmT60Dg/g1CIs
-         CrYOXi04XdvU2IBMEMVyxYjZNz1IMc6tE+G7rfzA6axZlhdnQWS6kgAp1mWQOmY+56i3
-         80Fmpv18cqRt8rAfjsHpSReittFy2zgwKQl8goe6sbUWMxzRopoUWXbESr+9XoJlvnJG
-         vgjo5oNJbpCubomqywdW8+KH14/Vri90Kw7Qu1EqhcZzuIKvEjXPcjOKGJ95WXD2AJvn
-         bXhQ==
+        d=gmail.com; s=20230601; t=1773855299; x=1774460099; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Xv4i/v9f+MkYwg24utoarBBSpf+sV2FRrmSw/rGJIAk=;
+        b=BgGVvVL0EQgskDfbID9eduB8VPE4Rh7Se1ofdNqHTEKWSQtsIb+bG2keT359rEy7mT
+         +PtM4KlvbpDkBGhqEUajfPFjSpQsdMzErrmilDJIceJfUBbFVpei8iSHeluFJhTts8e0
+         k+vhx5HXxnDV5wi2hI5DFcq7SkOXiTuBJHImHqAO55q9WEUDcWkuj4PeaigTLyyDoHRh
+         dCT90wuWd2YrGStm5uGP3SbKZvkpk5O5jS6d1ndo6IqcOcgzBaSHHODEGElFiKzqA1O6
+         ArehKUOIGWUXNtR0/jMAhwHH7o8NCBcErztulVytHfFYUozkO/uTdW5HrqlSCukGrogE
+         5R1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773855261; x=1774460061;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eWeEa0ZafBH05FmgYmVQzG8J+24xX/BkM77vv1zD8SU=;
-        b=eLh2P4vZv7WPtoDFzMq9Y9Bxb+C1p8R7y3H49z62xuMBsmtjOV3O/Z/30y7WAQfV15
-         Zj/bu3uk+KShJLThVmuvSfX4xQuiaRF4CvmR/zykrKp0bL6qGhoEfxCiW1jRFSrs5GVl
-         xO1Xx8fPJ1qkfFyCHNadsqpe/Vx3sFqpvFq5tjAjKwbr+qiwMFDvb7Ie4NXB0GskXn1q
-         Avgyg+JBKQmBFliuLl0heeeG9eY04rYG61mIiPkds5uZvyfYHQ5j+MBf3aQItr6XRL6e
-         2nqFbZzesmJVZLjAwn7iOHsdviCDbtVsW6L/QJfQbONcJU6Sk7V1ZtSQpp2a6fX6rnmA
-         XH8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXKphTYr+b4NAHeMlJ1D8/iHSGrIuQa3zgrd2VeVsPeFs1iOga5oJ0eQlzxXsKHV3QKGRA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzp8tT1H0T/JR26rd9WsjLDkihuH3IM2iOkNFpsL8ZyPguiRjeg
-	6gDsydluv2LG4NC6nsodoDMQtNAl/+AxZ8/kNdJejzwLe2cTloGPYRsdNV/sw+drN9584waW0Yo
-	bPryNuPrH0Q==
-X-Gm-Gg: ATEYQzznAFKwCdG7UdQerpgjZvhqb3zsnFxJ+zekNcyxR40UIDx0dVXJGDa2VwQp2h7
-	YfJO2AekSJtz4C6bv9e7uuZN1zC90Y6mw00Jm9xou+YDfNYBnzt335yqvVcgQi9IKmDq7vQ963Q
-	zkaYRofSib49f5+EgXHL3ZymilYfoKY2PkvwIQ3rTi2rd3K3pDiEAErrU8uL8TppOiQ3Ol6Sgus
-	R2LbeOoVja1CLTCUsyWHswkAEKGTU2FI77Vx2xXdF5L09b7fIVZOelEu67ub4SlkROKHTJwxxBE
-	lQr+ijVr/Fxac8ugLtSk0DIUBTkSht4kpHk+ssmQpZMJ8LrpgLMZPsb3kAKCbr40Bilgb5RkMKE
-	2zjUHCr8mv7jnYGKL9VCcs/xLK2rMlacBMH324Hubl8UP16QYOBWLFeXBL0MOQlHX7PyaBwWdPC
-	gofhlt
-X-Received: by 2002:a05:6830:64c8:b0:7d7:4d85:eb05 with SMTP id 46e09a7af769-7d7ca775284mr2522284a34.22.1773855260727;
-        Wed, 18 Mar 2026 10:34:20 -0700 (PDT)
-Received: from CMGLRV3 ([2a09:bac5:947d:1b37::2b6:4e])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7d7c9950ef9sm2751073a34.2.2026.03.18.10.34.19
+        d=1e100.net; s=20251104; t=1773855299; x=1774460099;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xv4i/v9f+MkYwg24utoarBBSpf+sV2FRrmSw/rGJIAk=;
+        b=jrY6BgEp6IV7NeIAjMQERe31hrPRh/v6IpAAmCQbP1e+kZe0NAmpC1o5/am8WgHUTO
+         wrRRwWIBiMhJt/NqProDhmhbJYBwB/3g+GUeUTIfQCOO7w1SpTV2pbBhu3X+LENiMY+d
+         kGREXUOvi+cJ9MKq1g7Jao6NdX7BhaF8AHy2Qjwu8RrB6euLvIjngdLyhvLdDMaxW1A2
+         mbMmpBl3VmRWql6jPVJVNRu6M7Z/1Aa7QJ1mQwvN79SIhHLAYgCxEBl6NqDtMlzhjAQ1
+         CGukdLFcRQysrH/KK1RTmgEzGAgR/k1AI8Vrcfd73j/6ZoBSNHvH2bTOxLPBLP7BhUKp
+         EPqA==
+X-Forwarded-Encrypted: i=1; AJvYcCXBDxjJPpVXZxEbMpJkIQzJ3mlCd82Uc5HDMhFkj5P10mUa40MdmbOY7x/3i2oCS/1/pAk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxnq/PIGrVnUe8w9Zg0Um4sJQGxD5w765L+aBNMEOgklQ0RnEDW
+	xvajdtNxIZliMxiWC/oVhELq2iyEXTizv0SJLAuPpRY+C3bQ46pA7cQe
+X-Gm-Gg: ATEYQzzAPKwklv+Q4CJkA2902wnsQ2OmnhhSshUhjjL2fF8RyjCkyAiwoB5PQf0d46j
+	/4tz4tiMwRfV/gUY4iPWCbgxG74jyU4ZNDzNdvKU3MFcY41vD/+5QPYBFYx7iHLwAhyEwz8sSv/
+	gfbTeKxWfXAZyuzLJlHC65J1ifYXWRYdGq44PArPqJZcAWNYY58liuColxffi39ictzNy1RtaRZ
+	0cz3NF2K95TdVqZ3OAMoDvf6IpBk3VTzm+WK4k9HcwEwMm6jknlvrRwyFypzF/ABXU+R3NW4JrX
+	9zlHRM+0uWIWw96aLuQXhZ3sXFMztf2ur7D5Gke+CQ5UvFTM3Hy502BeyyB2ED4y9GmEdXTXE+R
+	k+quj+fm6Dff9fkHjBcQr1Q/EoK0URke0mDu5uHjBqtWOr1ORiyjtGYVZmtAyeLRxRysskktTQZ
+	gRpypI9AFKVpHZf/gosLUQPQu9tl3N+z3RRitzdltrb5PdW2iMEDc=
+X-Received: by 2002:a05:6a00:71c2:b0:829:8aa3:2ec6 with SMTP id d2e1a72fcca58-82a6ac37b00mr3160033b3a.10.1773855298716;
+        Wed, 18 Mar 2026 10:34:58 -0700 (PDT)
+Received: from [192.168.0.56] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82a6bbe1869sm3930301b3a.40.2026.03.18.10.34.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2026 10:34:20 -0700 (PDT)
-Date: Wed, 18 Mar 2026 12:34:17 -0500
-From: Frederick Lawler <fred@cloudflare.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Eric Paris <eparis@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org,
-	audit@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kernel-team@cloudflare.com
-Subject: Re: [PATCH RFC bpf-next 0/4] audit: Expose audit subsystem to BPF
- LSM programs via BPF kfuncs
-Message-ID: <abriGVbtYY1zhupD@CMGLRV3>
-References: <20260311-bpf-auditd-send-message-v1-0-10a62db5c92f@cloudflare.com>
- <CAP01T77VyW=5SHDvM3HXPNHaxRdzs8H__MOh2zx1dQ6STeAUtg@mail.gmail.com>
+        Wed, 18 Mar 2026 10:34:58 -0700 (PDT)
+Message-ID: <b37c0ff9282c190cd789048ddc106f8462e4c97a.camel@gmail.com>
+Subject: Re: [PATCH RFC bpf-next v1 1/4] bpf: representation and basic
+ operations on circular numbers
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org
+Cc: andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, 
+	kernel-team@fb.com, yonghong.song@linux.dev, shung-hsi.yu@suse.com, 
+	paul.chaignon@gmail.com, harishankar.vishwanathan@gmail.com, 
+	martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
+Date: Wed, 18 Mar 2026 10:34:55 -0700
+In-Reply-To: <7fc04fca0467c59969f8658f6955ba7ec3b76b7317a1d17cfa64bde7e3e87249@mail.kernel.org>
+References: <20260318-cnum-sync-bounds-v1-1-1f2e455ea711@gmail.com>
+	 <7fc04fca0467c59969f8658f6955ba7ec3b76b7317a1d17cfa64bde7e3e87249@mail.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP01T77VyW=5SHDvM3HXPNHaxRdzs8H__MOh2zx1dQ6STeAUtg@mail.gmail.com>
 
-Hi Kumar,
+T24gV2VkLCAyMDI2LTAzLTE4IGF0IDE3OjExICswMDAwLCBib3QrYnBmLWNpQGtlcm5lbC5vcmcg
+d3JvdGU6Cj4gPiBkaWZmIC0tZ2l0IGEva2VybmVsL2JwZi9jbnVtLmMgYi9rZXJuZWwvYnBmL2Nu
+dW0uYwo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IDAwMDAwMDAwMDAwMC4uZGE1
+MGE0MGU3OWFjCj4gPiAtLS0gL2Rldi9udWxsCj4gPiArKysgYi9rZXJuZWwvYnBmL2NudW0uYwo+
+IAo+IFsgLi4uIF0KPiAKPiA+ICsvKgo+ID4gKyAqIFN1cHBvc2UgJ2EnIGFuZCAnYicgYXJlIGxh
+aWQgb3V0IGFzIGZvbGxvd3M6Cj4gPiArICoKPiA+ICsgKsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCA2NC1iaXQgbnVtYmVyIGF4aXMgLS0t
+Pgo+ID4gKyAqCj4gPiArICogTioyXjMywqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgIChOKzEpKjJeMzLCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKE4rMikqMl4zMsKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAoTiszKSoyXjMyCj4gPiArICogfHwtLS0tLS18
+LS0tfD09PT09fC0tLS0tLS18fC0tLS0tLS0tLS18PT09PT18LS0tLS0tLXx8LS0tLS0tLS0tLXw9
+PT09PXwtLS0tfC0tfHwKPiA+ICsgKsKgwqDCoMKgwqDCoMKgwqAgfMKgwqAgfDwgYiA+fMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8PCBiID58wqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgIHw8IGIgPnzCoMKgwqAgfAo+ID4gKyAqwqDCoMKgwqDCoMKgwqDC
+oCB8wqDCoCB8wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCB8wqDCoMKgIHwKPiA+ICsgKsKgwqDCoMKgwqDCoMKgwqAgfDwtLSstLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0gYSAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rLS0tPnwKPiA+
+ICsgKsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8Cj4gPiArICrCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqAgfDwtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSB0IC0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tPnwKPiA+ICsgKgo+ID4gKyAqIEluIHN1Y2ggYSBjYXNlIGl0IGlzIHBvc3NpYmxlIHRv
+IGluZmVyIGEgbW9yZSB0aWdodCByZXByZXNlbnRhdGlvbiB0Cj4gPiArICogc3VjaCB0aGF0IOKI
+gCB2IOKIiCBhLCAodTMyKWEg4oiIIGI6IHYg4oiIIHQuCj4gPiArICovCj4gCj4gU2hvdWxkICh1
+MzIpYSBiZSAodTMyKXYgaGVyZT/CoCBBcyB3cml0dGVuLCB0aGUgY29uZGl0aW9uICh1MzIpYSBk
+b2VzCj4gbm90IGRlcGVuZCBvbiB2LCB3aGljaCBtYWtlcyB0aGUgcXVhbnRpZmllciB0cml2aWFs
+LsKgIFRoZSBmdW5jdGlvbgo+IGNvbXB1dGVzIHRoZSB0aWdodGVzdCByYW5nZSB0IGNvbnRhaW5p
+bmcgYWxsIHYgaW4gYSB3aG9zZSBsb3cgMzIgYml0cwo+IGZhbGwgaW4gYiwgc28gdGhlIHNwZWNp
+ZmljYXRpb24gc2hvdWxkIHJlYWQ6Cj4gCj4gwqAgc3VjaCB0aGF0IOKIgCB2IOKIiCBhLCAodTMy
+KXYg4oiIIGI6IHYg4oiIIHQuCgpZZXMsIGl0IHNob3VsZCBoYXZlIGJlZW4gKHUzMil2IOKIiCBi
+IGFuZCB0aGF0J3Mgd2hhdCBjYm1jIHRlc3QgaXMKY2hlY2tpbmcuCg==
 
-On Tue, Mar 17, 2026 at 03:43:36AM +0100, Kumar Kartikeya Dwivedi wrote:
-> On Wed, 11 Mar 2026 at 22:31, Frederick Lawler <fred@cloudflare.com> wrote:
-> > 3. All bpf_audit_log_*() functions are destructive
-> >
-> > The audit subsystem allows for AUDIT_FAIL_PANIC to be set when the
-> > subsystem can detect that missing events. Further, some call paths may
-> > invoke a BUG_ON(). Therefore all the functions are marked destructive.
-> 
-> I think the first part makes sense (i.e., the policy simply configured
-> the system to panic on failure).
-> However, in the second case, if the program is somehow able to trigger
-> BUG_ON() relied upon for internal invariants, it would be considered
-> broken.
-> I tried grepping through and didn't find anything that would cause
-> this, hence the whole thing about BUG_ON() in the cover letter only
-> adds to confusion.
-> Please drop it or describe cases which you were concerned about.
-> 
-
-bpf_audit_log_cause()
- -> audit_log_untrustedstring()
-   -> audit_log_n_untrustedstring()
-     -> audit_log_n_hex()
-
-Was the primary call chain I was referring to, and yes this relies on
-internal invariant of the SKB existing. I can remove from cover.
-
-> >
-> > 4. Functions are callable once per bpf_audit_context
-> >
-> > The rationale for this was to prevent abuse. Logs with repeated fields
-> > are not helpful, and may not be handled by user space audit coherently.
-> >
-> 
-> This rationale feels weak. What abuse are we talking about?
-> The LSM program is already written by a trusted entity.
-> 
-
-I learned through off-list discussions that there's "undocumented" or
-"unspoken" rules of log formatting and how auditd expects logs. Without
-knowing exactly what these rules are, I can't provide any stronger
-arguments other than to reduce duplication of fields in messages, or
-exclude wrappers that supply unverified data.
-
-WRT to unverified data, the socket wrappers accepting a netinf int.
-In that case, the variable is at least verified via lookup to
-report the interface in which it belongs. I left out wrapping
-LSM_AUDIT_DATA_ANONINODE due to the passing of arbitrary string,
-LSM_AUDIT_DATA_IPC arbitrary int. Others like for infiniband,
-lockdown, nlmsgtype, were left out due to specificity, and not general
-purpose usage.
-
-Some of the rationale behind this is _not_ trusting BPF LSM authors as
-much due to BPF LSM flexibility and accommodating user space audit.
-
-Best,
-Fred
