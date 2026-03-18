@@ -1,131 +1,116 @@
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECC4F3DE431
-	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 14:59:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DEB13E3D9E;
+	Wed, 18 Mar 2026 15:09:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773846002; cv=none; b=YRZrRoWdhDodt6SwDhsP8rZJsHEFrm3yL0TkvckJZQc5szDQog2nJtskdHF6sKL1B2T0FYPfB22vl7ixb0gJDLcakMGI6r3Xb04XgcMsYvbuK/sOwJy67lojknCpmEmZbC49WBUo27tOiHutTFMJjFlhMpA9NaDRbFUqc2CHInk=
+	t=1773846553; cv=none; b=LnnH31T50MuBNzYLmBin8M/p6jZt/xS2+teBY3WpQhdQPWZFpSAKdsidfd0pZImInR5MJQy56lpHddXizSlPm/mPLqcJ0kgdTGWpCk1NDKHbydAg5ktFwVQuxGsW4O60Qlv1adYCXfqyf/EWyK9JOwu9qS+Hk3eRd853BTg8vIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773846002; c=relaxed/simple;
-	bh=bEBit3v/3EaAeXPIrEhvLJqSi6H/H8xXCeELyouAkUg=;
+	s=arc-20240116; t=1773846553; c=relaxed/simple;
+	bh=7AuzPR/hbu1GLj3uVnx/emzpJSB1Ww7j9Hgi3DwM1HY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cFnVfDEeHMZf9yD7+XVPKB536Ef7Qo4QX+/VklozIx7c0+fIOOt8PhCMXyoLTmZmkcIxA6+eYoGed77gmblgOR6QleH5/s/AxSCxOiBOqtedWUIGX4bx0g1dZomR00LebNGapZnU+1wOZNRCMrFHR7PRUbjjt7Rbx86hFCoNRLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L3+P9n0z; arc=none smtp.client-ip=74.125.82.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L3+P9n0z"
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-2b6b0500e06so8339243eec.1
-        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 07:59:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773845999; x=1774450799; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GnznBYtreFWiJHMzmWhLo1aMVcwsFyxP3+fWvwEHCV8=;
-        b=L3+P9n0zXI//cQ4O8pD4tXKfXA9JJZViwEaz858VcWyAtkmPOPJ1pqP2YR7Y0oZxJn
-         g4869r/W9sg9XydsDfbUKDrlgveO8J+xFVDR/w9vdh0p6Qs9vDV9LQItLKx5yPWKhR1K
-         cFcLLath8FwNc4Mlk22IJfXScbvW4ghiVIC8bn2Ii51mF3L1c5E2kUKgNrrCxIXMHRb9
-         Am7YnncgNsLNa0etUwOVxZSP4wpG+sDRmGX7p+aYo277p9qvCsa6YgpxoFv2+RQ/YJG6
-         UVWLQreP+I5Fv1Ma3x9J0YfV3oTzlI5cczqSZ4/GW9oIb7tYBTQWhtcb5A+C2vA/Wy4f
-         /cTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773845999; x=1774450799;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GnznBYtreFWiJHMzmWhLo1aMVcwsFyxP3+fWvwEHCV8=;
-        b=gXbIBDqR45UxdfGWIA2iPr2D19he4Kej9hUgKgIxEorzqgZW17xZGMbrf+Ug+aPtUA
-         y7DL5GPhbIDUfP6CQpEwkbGUgdH3rPnjJFK7ptsPPNxFgShSajRXo5+FMRShMSHMERH6
-         O+Sz5pOISbGKNZhiduSfplgWaeW09YhmYcMg133gA009bLy3W0YZVwOOIWzNzzX9/+Yx
-         Q2KwbTL7ChLJ0k1UlRy4ETQd+RqgQU5PYN2C6APrYngD4DJRV2NgFg6g6M8Vfb9MBtEq
-         x7NJk+ei2hdAOI2TtDc14QL530Rt5AZm5ZSnLTeGd4UAAujiAj3ocU8LLFEbNn3fiNyZ
-         QNGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV5YP2i28H1gOsf2LA4Jih6cOvh4TOUdWfK4Gojdz9b99IjUpLattZzggR5Wl4n2B+Oe+Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJZ1L1ofRuistsgbzqGko7Q01vrzgMWPfkpRf9442X8UCeypjv
-	oOCC2tAxxglRkhUATausYXpRHIGsMQDqWrPDuZo7tylYxOAre5XOZ58=
-X-Gm-Gg: ATEYQzxPZus3MGAT9/H0Hf8lTfM+904c58Urqgl9BwJwL092sa2Wb7SEsv7KWDbc8Li
-	RVCA9iEmoVQbf599pA7DGh4KOgf0lQx/u23Y0hTSz8iueZTZ7Nf9tx4AUsjvAD8r4b3Et9J9Eg+
-	FgMB5c57mzzpYkN/Mhof/Ex7v9Oic52Ytykjbwnfsf7ufdTOKSF1thv12ISkX90EHwYdrHKd3yS
-	LeglLcH9Cxn7SB0vLvEZFIpkLBq17XFq0I7uLvS4sToztVdNelJs9CdVoBrxH+C4xmnwVp6dYam
-	xa+9kDKHRzk3s5SMVWhAkbB85kn2ZzfpqOI71iU41IO1v/8na4yjucI5vDZRSkpgnlzrjX42S6k
-	Kk01Ppf93uJODWVJeVAaRb0lBLLg8euleyPOZeV4S9s2oSVp2u2ipzdRsJiuRN0ttJE36xDKXmN
-	K9KWL+e7kVwxMOz4Z6nwNHIRDFtbcc4G+bKFAoChHluXsV9YmytTf1rclZpzXyIoQi3LKEj/Sbz
-	G6zZ8cPTZ0tPhDUYg==
-X-Received: by 2002:a05:7300:ec18:b0:2c0:c415:cfd6 with SMTP id 5a478bee46e88-2c0e50a0a8dmr1648662eec.13.1773845998562;
-        Wed, 18 Mar 2026 07:59:58 -0700 (PDT)
-Received: from localhost (c-76-102-12-149.hsd1.ca.comcast.net. [76.102.12.149])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c0e55a489bsm4388531eec.23.2026.03.18.07.59.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2026 07:59:58 -0700 (PDT)
-Date: Wed, 18 Mar 2026 07:59:57 -0700
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Mina Almasry <almasrymina@google.com>, Wei Wang <weibunny@fb.com>,
-	David Wei <dw@davidwei.uk>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org, Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next 5/6] selftests: drv-net: add netkit devmem RX
- test
-Message-ID: <abq97UD7CHR7bdod@mini-arch>
-References: <20260316-scratch-bobbyeshleman-tcp-dm-netkit5-v1-0-b53c8cd72b23@meta.com>
- <20260316-scratch-bobbyeshleman-tcp-dm-netkit5-v1-5-b53c8cd72b23@meta.com>
- <abns9COj7WagFtZ8@mini-arch>
- <abn3rJGXXyDYSNzA@devvm11784.nha0.facebook.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=EcZT+OV+pvfcbTFn8PcyF0VUdIqVl92bNJBS+mrmjzDH9SRXD0YHb8gUtX/4mQcEmA9eK4h7Duer4+UyovPBk+mw7oLbOe30hcMX6sRF8HUNctFoqSnK3nDXG8bREBFioJiGfWt/cpOlr81vNDILrp6RNhvw1oWOF6jITKNmDSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C577E1C2B;
+	Wed, 18 Mar 2026 08:09:04 -0700 (PDT)
+Received: from localhost (e132581.arm.com [10.1.196.87])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7E85D3F73B;
+	Wed, 18 Mar 2026 08:09:10 -0700 (PDT)
+Date: Wed, 18 Mar 2026 15:09:08 +0000
+From: Leo Yan <leo.yan@arm.com>
+To: Quentin Monnet <qmo@kernel.org>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>,
+	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	William Breathitt Gray <wbg@kernel.org>,
+	Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Kent Gibson <warthog618@gmail.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Long Li <longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
+	Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, bpf@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Subject: Re: [PATCH v5 00/26] tools build: Append
+ -fzero-init-padding-bits=all option
+Message-ID: <20260318150908.GM8048@e132581.arm.com>
+References: <20260318-tools_build_fix_zero_init-v5-0-bbeffd8da199@arm.com>
+ <8590eea2-8278-4cff-a6f2-f5fa404508bb@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <abn3rJGXXyDYSNzA@devvm11784.nha0.facebook.com>
+In-Reply-To: <8590eea2-8278-4cff-a6f2-f5fa404508bb@kernel.org>
 
-On 03/17, Bobby Eshleman wrote:
-> On Tue, Mar 17, 2026 at 05:08:20PM -0700, Stanislav Fomichev wrote:
-> > On 03/16, Bobby Eshleman wrote:
-> > > From: Bobby Eshleman <bobbyeshleman@meta.com>
-> > > 
-> > > Add tests for devmem RX over a netkit device with a leased queue. This
-> > > is the same as the other devmem RX test except for ncdevmem executes in
-> > > a namespace, binds to a netkit, and skips the ethtool NIC configuration
-> > > steps (relying on the test runner for that setup).
-> > > 
-> > > The RX path is setup as the following:
-> > > 
-> > >  RX Path
-> > >  -------
-> > > 
-> > >  Remote            Physical NIC          Netkit Host        Netkit Guest (netns)
-> > >    |                    |                     |                    |
-> > >    |--- TCP send ------>|                     |                    |
-> > >                         |-------------------->|                    |
-> > >                       dmabuf                  |--- BPF redirect -->|
-> > > 
+On Wed, Mar 18, 2026 at 02:56:24PM +0000, Quentin Monnet wrote:
+> 2026-03-18 09:16 UTC+0000 ~ Leo Yan <leo.yan@arm.com>
+> > Thank you for reviewing and commenting on v4.
 > > 
-> > Is it too messy to parametrize the existing test to run both with and
-> > without the namespaces? Feels like should be somewhat doable in python?
-> 
-> IIUC, we could have main() do something like:
-> 
-> for env [NetDrvContEnv, NetDrvEpEnv]:
->     with env as cfg:
->         [...]
->         ksft_run(tests, args=(cfg,))
+> > For anyone new to the series, the reason for appending this compiler
+> > option is described in v3 (see "Link to v3" below).
+> > 
+> > In this version, the BPF related patches have been split out and will be
+> > sent separately (note that I have kept the bpftool patches in this
+> > series, as I have gathered Quentin's Acked-by tags).
 > 
 > 
-> And then the tests could call helpers that check cfg.netns to use the
-> nk_{guest,host}_ip6 addresses when true, otherwise use the regular
-> addresses?
-> 
-> It should be doable if I'm following your drift.
+> Hi Leo, if it's all the same to you, could bpftool patches go through
+> the bpf-next tree as well, please? (You can keep my tags, of course.)
 
-Yeah, yeah, this plus some small changes here and there (to pass your
-new -n in the netns mode for example).
+Sure!
+
+I need to look into BPF CI failures, seems the extra cflags causes
+regressions in eBPF selftest [1][2].  After make things clear, I will
+send patch series separately (a common one and a BPF one).
+
+Thanks,
+Leo
+
+[1] https://github.com/kernel-patches/bpf/actions/runs/23238743267/job/67551317220
+[2] https://github.com/kernel-patches/bpf/actions/runs/23238743267/job/67551683133
