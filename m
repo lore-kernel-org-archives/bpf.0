@@ -1,52 +1,44 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46A801F2B8D;
-	Wed, 18 Mar 2026 23:10:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBCB2345753;
+	Wed, 18 Mar 2026 23:12:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773875413; cv=none; b=f1xmjGJM6K6tWi4Zq0uwlwIaf4HPjteodz88QY+pUfr7KuAVH6DOw7WvaZKeUXoRWKVwUTCEawUYA/n6yn9T0tKLcRIQdsTnhLM2iWK0+FzeQuZpHXjFpLog+/dGS19l7XnJF0Gi7KJIOF5zki8Hxq0qZhNCdZ6+zLJ/PPufhcU=
+	t=1773875551; cv=none; b=rIkKLv+mglAiFYArbeOUvZfJ0j2595Ek/r4y8fNJakjJCrYVMHWU3uk17pyuD3XjfpZ7A3tBrjhccGFmdlRBqYqi+qkEhPS6J5p2x+nhNgKGClp9a5Eqepza2d6MrcoA5v7hl8cJO6uBQyA/rGlAEGKm9863AOQTzEFbFijsm3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773875413; c=relaxed/simple;
-	bh=zi48I0G/7a4ARouMrnL+S7iTsSegBnlrGL+TUTW0yW4=;
+	s=arc-20240116; t=1773875551; c=relaxed/simple;
+	bh=JCh4IeE/Cn60D/pNAmjztbTuiNBWjjTZpNihj1Tve9Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Bt8gc+lnDCD6BJ5Xxvnv/05H/KqV4IsZoIyCKGKS0VSR8a72L20F0hK1yfpJPPyFF0Ix6rE+xRcOQ33vaJtF+VdsCu+sCNccEIDZGgEnJf80ZyG5IxeI+rKY2Wak0UAE5q+jqg2fHXs7YG1wUwirxUsXSlJ2F7JIFZvuzwFONRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QTAk4c6e; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QTAk4c6e"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9828DC19421;
-	Wed, 18 Mar 2026 23:10:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773875412;
-	bh=zi48I0G/7a4ARouMrnL+S7iTsSegBnlrGL+TUTW0yW4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=QTAk4c6eBV4QS/aV+bCCmKBHBnJMRv8F0zwDWDc8T5BF352io/ANWzVgfxprEveY2
-	 +vBQd7P5DW+k07FBGf9uIvot7SX9eAphnjzzO8gawzJ2FpNXDzlwr9ksFAoU/ZTDHx
-	 /dRRj+5CNGNHk0YJRLuxnwww2lJtIRwoQvLeVD5IcCf8nZjOKveDf3R7UErmJ28Cqi
-	 pwUThmhUuEkVw4B86JbJA+wOfmWJOhvVLp4qUaDUla55hokbjws+JRTxyjqdapYGxD
-	 aJBrqAhorlO5KLR+nVEfD4BT1bWjkPp8cAKuga79ryyyqiFUUg533+YLIYzPljE2KO
-	 8UWYgJtXSSSbg==
-Date: Wed, 18 Mar 2026 16:10:10 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: Stanislav Fomichev <stfomichev@gmail.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Andrew Lunn
- <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>, Stanislav Fomichev
- <sdf@fomichev.me>, Mina Almasry <almasrymina@google.com>, Wei Wang
- <weibunny@fb.com>, David Wei <dw@davidwei.uk>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org, Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next 5/6] selftests: drv-net: add netkit devmem RX
- test
-Message-ID: <20260318161010.2d7338b5@kernel.org>
-In-Reply-To: <abrRDNi79H9ircl1@devvm11784.nha0.facebook.com>
-References: <20260316-scratch-bobbyeshleman-tcp-dm-netkit5-v1-0-b53c8cd72b23@meta.com>
-	<20260316-scratch-bobbyeshleman-tcp-dm-netkit5-v1-5-b53c8cd72b23@meta.com>
-	<abns9COj7WagFtZ8@mini-arch>
-	<abn3rJGXXyDYSNzA@devvm11784.nha0.facebook.com>
-	<abq97UD7CHR7bdod@mini-arch>
-	<abrRDNi79H9ircl1@devvm11784.nha0.facebook.com>
+	 MIME-Version:Content-Type; b=JCOffRpAytYhlGLwfkI40vvEG4iUXtUnpHJgkQoL5pmEPwghKbGvMoknLhkTGI5s6Ta3ZpugBMjZZJAeIbbujlmudptXkkjeQfyNcJN4rYms+bjHeOvV01LnL8trD2+hTutLEILizZQ+gAVE6rz2RF4y98sJs7vlbB3BPcLOzGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay04.hostedemail.com (Postfix) with ESMTP id 9F2241A01AB;
+	Wed, 18 Mar 2026 23:12:21 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf14.hostedemail.com (Postfix) with ESMTPA id 729DB2D;
+	Wed, 18 Mar 2026 23:12:17 +0000 (UTC)
+Date: Wed, 18 Mar 2026 19:12:46 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Christian Brauner <brauner@kernel.org>, Linus Torvalds
+ <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org,
+ linux-modules@vger.kernel.org, linux-nfs@vger.kernel.org,
+ bpf@vger.kernel.org, kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, netfs@lists.linux.dev,
+ io-uring@vger.kernel.org, audit@vger.kernel.org, rcu@vger.kernel.org,
+ kvm@vger.kernel.org, virtualization@lists.linux.dev,
+ netdev@vger.kernel.org, linux-mm@kvack.org,
+ linux-security-module@vger.kernel.org, Christian Loehle
+ <christian.loehle@arm.com>, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] kthread: remove kthread_exit()
+Message-ID: <20260318191246.21f5cae8@gandalf.local.home>
+In-Reply-To: <20260311104736.51b53405@pumpkin>
+References: <20260310-work-kernel-exit-v2-0-30711759d87b@kernel.org>
+	<20260310-work-kernel-exit-v2-1-30711759d87b@kernel.org>
+	<20260311104736.51b53405@pumpkin>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -55,26 +47,25 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 729DB2D
+X-Rspamd-Server: rspamout06
+X-Stat-Signature: k3okmar3gqwa3bym6uatb3yctgtgf59r
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX18ZAlHD7zRdqyhWTgVQ561leKpKdrlCUw4=
+X-HE-Tag: 1773875537-654795
+X-HE-Meta: U2FsdGVkX1+7MRZYfjkh8tY3o0PNQxfTCp9CNyhqYR5NFfoxVPCM5iPNukWLzQIvK353tkgDvhZEdUedgHQ5QAkLbovGV5fvwkWyav20iib+DYA0dDHoYUnOxRBuEyIUuWk0DzuG1lL8+oddkej4s1MPcpQDwUN5GqInEA4qcRZLkJpWWxd7t1PfzHXZfqpOcF7WAx+PlcQksO8TPjRtlBOpPJasveRV7LExQmrExj38ijzYTXM4IkABls4ZOZgZxz6jQwh3Jnl0QSJRHa6iPYc7cT5zoaTdKKIxa3A6zx0cZRoh9me2qihdhYWm4g9GrHKVoLJDzQiYMqh11BNCWgZQJ5CMSezB
 
-On Wed, 18 Mar 2026 09:21:32 -0700 Bobby Eshleman wrote:
-> > > IIUC, we could have main() do something like:
-> > > 
-> > > for env [NetDrvContEnv, NetDrvEpEnv]:
-> > >     with env as cfg:
-> > >         [...]
-> > >         ksft_run(tests, args=(cfg,))
-> > > 
-> > > 
-> > > And then the tests could call helpers that check cfg.netns to use the
-> > > nk_{guest,host}_ip6 addresses when true, otherwise use the regular
-> > > addresses?
-> > > 
-> > > It should be doable if I'm following your drift.  
-> > 
-> > Yeah, yeah, this plus some small changes here and there (to pass your
-> > new -n in the netns mode for example).  
+On Wed, 11 Mar 2026 10:47:36 +0000
+David Laight <david.laight.linux@gmail.com> wrote:
+
+> > -#define module_put_and_kthread_exit(code) kthread_exit(code)
+> > +#define module_put_and_kthread_exit(code) do_exit(code)  
 > 
-> Sounds good, I'll give it a look.
+> I'm intrigued...
+> How does that actually know to do the module_put()?
+> (I know it does one - otherwise my driver wouldn't unload.)
 
-I haven't actually looked but double check ksft_run can actually 
-be called multiple times. We may have some global state :S
+It's in the !CONFIG_MODULES section. No module_put() necessary. Only the
+kthread_exit (do_exit) is needed.
+
+-- Steve
