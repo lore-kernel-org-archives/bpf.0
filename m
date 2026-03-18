@@ -1,71 +1,130 @@
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBCB2345753;
-	Wed, 18 Mar 2026 23:12:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5845637D131
+	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 23:30:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773875551; cv=none; b=rIkKLv+mglAiFYArbeOUvZfJ0j2595Ek/r4y8fNJakjJCrYVMHWU3uk17pyuD3XjfpZ7A3tBrjhccGFmdlRBqYqi+qkEhPS6J5p2x+nhNgKGClp9a5Eqepza2d6MrcoA5v7hl8cJO6uBQyA/rGlAEGKm9863AOQTzEFbFijsm3A=
+	t=1773876601; cv=none; b=Q8kx0zZbjkHdFHjyf0Y0zdVFlyqwBChsnBnD0OQX8I1WyEj8OQJmDnL0hq5+ROL5ufFJ1T3DL3yIsTFSODvHvJpnV2bEUTdWzCFa0V3wnKtA1A0yAGglABms/NKUixkefhxAkUKrHYKjnjHbBzp7S9CQKSu3Nmpuz9Tz7SI23hk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773875551; c=relaxed/simple;
-	bh=JCh4IeE/Cn60D/pNAmjztbTuiNBWjjTZpNihj1Tve9Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JCOffRpAytYhlGLwfkI40vvEG4iUXtUnpHJgkQoL5pmEPwghKbGvMoknLhkTGI5s6Ta3ZpugBMjZZJAeIbbujlmudptXkkjeQfyNcJN4rYms+bjHeOvV01LnL8trD2+hTutLEILizZQ+gAVE6rz2RF4y98sJs7vlbB3BPcLOzGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay04.hostedemail.com (Postfix) with ESMTP id 9F2241A01AB;
-	Wed, 18 Mar 2026 23:12:21 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf14.hostedemail.com (Postfix) with ESMTPA id 729DB2D;
-	Wed, 18 Mar 2026 23:12:17 +0000 (UTC)
-Date: Wed, 18 Mar 2026 19:12:46 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Christian Brauner <brauner@kernel.org>, Linus Torvalds
- <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org,
- linux-modules@vger.kernel.org, linux-nfs@vger.kernel.org,
- bpf@vger.kernel.org, kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, netfs@lists.linux.dev,
- io-uring@vger.kernel.org, audit@vger.kernel.org, rcu@vger.kernel.org,
- kvm@vger.kernel.org, virtualization@lists.linux.dev,
- netdev@vger.kernel.org, linux-mm@kvack.org,
- linux-security-module@vger.kernel.org, Christian Loehle
- <christian.loehle@arm.com>, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] kthread: remove kthread_exit()
-Message-ID: <20260318191246.21f5cae8@gandalf.local.home>
-In-Reply-To: <20260311104736.51b53405@pumpkin>
-References: <20260310-work-kernel-exit-v2-0-30711759d87b@kernel.org>
-	<20260310-work-kernel-exit-v2-1-30711759d87b@kernel.org>
-	<20260311104736.51b53405@pumpkin>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1773876601; c=relaxed/simple;
+	bh=a3mdlRLM1/KxTpd/24HQrGXTTgWxW0cXMBzgoxkGiZo=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=bG3STjOYMCQ61eVvBZotzKK07eqmJjkdWchnOGnyvIbc+TK74NS4u0KYo1lQ02FNx6rGEINtTKlRTFixppUCv79PJbL0XqhYJs7wNoWjFYAmFsRBvWn7N633UNZdn9ARZpAXaXzdyv/eS6Nm7hVfoc7lEKnlDEQPMeJfmwRFYKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nm6raISZ; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nm6raISZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 978AFC19421;
+	Wed, 18 Mar 2026 23:30:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773876601;
+	bh=a3mdlRLM1/KxTpd/24HQrGXTTgWxW0cXMBzgoxkGiZo=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=nm6raISZHjmS0ITaB8NWW/EV8rVsZV8XHW0JFXgAGqqPtNFJkj4g+MSRF6a3KHHSI
+	 fi/cT9P2H9pJftOlDhLU+IW+7CPSKlndz36x/ruyUdiS1XxO4xRnZJr2bPTtr9zfZ1
+	 ZRoIUffQ1iapMFTBbZV4G9RzN61IsIImA6z00auS4qLphJvpYQGudt2hdi2tCPB1jT
+	 cl7SP2atd5xacLgRPb/80qBOUizq9WZGPhOIyHqJDevDDKtrbNTyj+HLrNl2ZoiQRq
+	 0Cc38oGrJ7EPnSMnjVhvrPUJ9IJlD23/PLcJc0fnMwLT6N1ETbEsNDt5TJ9fPxTmjJ
+	 WXgecsi+gm0tw==
+Content-Type: multipart/mixed; boundary="===============7191794096785814728=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Message-Id: <e144dcb6758dce4342c5ed5f28337b85335c2f5b93a63416569e216795decd7a@mail.kernel.org>
+In-Reply-To: <20260318223544.1789748-1-ihor.solodrai@linux.dev>
+References: <20260318223544.1789748-1-ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: Support struct btf_struct_meta via KF_IMPLICIT_ARGS
+From: bot+bpf-ci@kernel.org
+To: ihor.solodrai@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com
+Cc: bpf@vger.kernel.org,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 18 Mar 2026 23:30:00 +0000 (UTC)
+
+--===============7191794096785814728==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 729DB2D
-X-Rspamd-Server: rspamout06
-X-Stat-Signature: k3okmar3gqwa3bym6uatb3yctgtgf59r
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX18ZAlHD7zRdqyhWTgVQ561leKpKdrlCUw4=
-X-HE-Tag: 1773875537-654795
-X-HE-Meta: U2FsdGVkX1+7MRZYfjkh8tY3o0PNQxfTCp9CNyhqYR5NFfoxVPCM5iPNukWLzQIvK353tkgDvhZEdUedgHQ5QAkLbovGV5fvwkWyav20iib+DYA0dDHoYUnOxRBuEyIUuWk0DzuG1lL8+oddkej4s1MPcpQDwUN5GqInEA4qcRZLkJpWWxd7t1PfzHXZfqpOcF7WAx+PlcQksO8TPjRtlBOpPJasveRV7LExQmrExj38ijzYTXM4IkABls4ZOZgZxz6jQwh3Jnl0QSJRHa6iPYc7cT5zoaTdKKIxa3A6zx0cZRoh9me2qihdhYWm4g9GrHKVoLJDzQiYMqh11BNCWgZQJ5CMSezB
 
-On Wed, 11 Mar 2026 10:47:36 +0000
-David Laight <david.laight.linux@gmail.com> wrote:
+> BPF programs must pass a dummy NULL value when caling these kfuncs.
 
-> > -#define module_put_and_kthread_exit(code) kthread_exit(code)
-> > +#define module_put_and_kthread_exit(code) do_exit(code)  
-> 
-> I'm intrigued...
-> How does that actually know to do the module_put()?
-> (I know it does one - otherwise my driver wouldn't unload.)
+Typo: "caling" should be "calling".
 
-It's in the !CONFIG_MODULES section. No module_put() necessary. Only the
-kthread_exit (do_exit) is needed.
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index cb6d242bd093..e5c8fb6596e7 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
 
--- Steve
+[ ... ]
+
+> +__bpf_kfunc void *bpf_percpu_obj_new(u64 local_type_id__k, struct btf_struct_meta *meta)
+> +{
+> +	u64 size = local_type_id__k;
+> +
+> +	/* The verifier has ensured that meta__ign must be NULL */
+> +	return bpf_mem_alloc(&bpf_global_percpu_ma, size);
+> +}
+
+The parameter here is named "meta", not "meta__ign". Should the
+comment say "meta" instead?
+
+[ ... ]
+
+> +__bpf_kfunc void bpf_percpu_obj_drop(void *p__alloc, struct btf_struct_meta *meta)
+> +{
+> +	/* The verifier has ensured that meta__ign must be NULL */
+> +	bpf_mem_free_rcu(&bpf_global_percpu_ma, p__alloc);
+> +}
+
+Same here -- the comment references "meta__ign" but the parameter is
+"meta".
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 01c18f4268de..8dd6b3a50dae 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> 		case KF_ARG_PTR_TO_ALLOC_BTF_ID:
+> 			if (reg->type == (PTR_TO_BTF_ID | MEM_ALLOC)) {
+> -				if (meta->func_id != special_kfunc_list[KF_bpf_obj_drop_impl]) {
+> +				if (!is_bpf_obj_drop_kfunc(meta->func_id)) {
+> 					verbose(env, "arg#%d expected for bpf_obj_drop_impl()\n", i);
+> 					return -EINVAL;
+> 				}
+> 			} else if (reg->type == (PTR_TO_BTF_ID | MEM_ALLOC | MEM_PERCPU)) {
+> -				if (meta->func_id != special_kfunc_list[KF_bpf_percpu_obj_drop_impl]) {
+> +				if (!is_bpf_percpu_obj_drop_kfunc(meta->func_id)) {
+> 					verbose(env, "arg#%d expected for bpf_percpu_obj_drop_impl()\n", i);
+> 					return -EINVAL;
+> 				}
+
+The conditions now match both bpf_obj_drop and bpf_obj_drop_impl (and
+their percpu variants), but the error messages still reference only
+the _impl names. Would it make sense to update these to say
+"bpf_obj_drop" and "bpf_percpu_obj_drop" respectively, so that a
+developer calling the new variants sees the right function name in
+the error?
+
+Andrii Nakryiko also had two unaddressed review comments on this
+patch:
+
+https://lore.kernel.org/bpf/CAEf4BzbhBqrPxAtw2xE2aeO8nVaHggV2TVNrMrTJVQTg05X0tQ@mail.gmail.com/
+
+1) Whether the special-casing in the verifier could be generalized
+   by inspecting which implicit argument type is involved, rather than
+   adding per-function helpers like is_bpf_obj_new_kfunc() etc.
+
+2) Whether a typedef like bpf_implicit_offset_t should be added for
+   the u64 offset argument, so resolve_btfids can identify it as an
+   implicit arg by type rather than relying on positional ordering.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23271098456
+--===============7191794096785814728==--
