@@ -1,93 +1,111 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pg1-f195.google.com (mail-pg1-f195.google.com [209.85.215.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A32F36EA94
-	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 08:16:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CBF2379EFD
+	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 08:54:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773821770; cv=none; b=C7wnuAqidxqX9Z5cSOGZy6FwxLg/f7XdWETa5ddFMrHb4iOH9gK0MSBmpBxEt0V+aqXWv0kD5x5TMec2aNpG/hQVOVmFw37PuFr5Nrm1AH74if/hBMOWxmooYBWzxjG7ZWD7YKxEwA2UKZrJLyl2XIjaqBe3HX292Z0ELlll6TY=
+	t=1773824050; cv=none; b=bgo82Bq9ngaSZASKDo/g+iYNxBo/6c0S8VR11YIlSrc4mpFih0XZzrhfu+IcoKIeJcE9pRF2QcFi5G15zbKQx389CY4bXGyw73b9XUkPJFRn+SjY9vhApF8YvxRuNlNOGwxbONArynQAIWx/U0Ej8PfXvZovYopH9tRsPXK0O5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773821770; c=relaxed/simple;
-	bh=+sWnZTZI7tRDagieoGZ912iRmUTtk4dAhIpGp/Vjdr0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NiXFHCOMfQ/q197P2VCo82+YY0ej6eMhs6GFvcxn7xLgGAeDXPRzJClfc6744L2jXW5yeb99K8sulFipcL7uAqR+MzeA0IP/AylWjBt8mI858wXi315LWgsXvDRMpwZK11tHVIZWpdfbYc0GnNDjjzgoL8+041mc65Lt+F5E0v4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZSq2oyEJ; arc=none smtp.client-ip=209.85.210.175
+	s=arc-20240116; t=1773824050; c=relaxed/simple;
+	bh=772FT91vOzTy79kAR1e12rWztA2xnFttMlcdGMjdOJE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=L5RRZbIExMzlJES5ohJKnTGK8ETj3C0xFSBBFdfjgo6h0i82EwhvLkFxr3b+Z3jhBvyo0evlfqzjuFjMdlzm2sA5lYpfNAUCa1FW2ZUdAaQ3cCwrZPMtZNcxquNYfsrEFubi4F6h/y4w0sjyXJ2cxdXk1DMKobG7NkUzHlI9D2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FuGkTy4k; arc=none smtp.client-ip=209.85.215.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZSq2oyEJ"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-82a3d3235c9so2598153b3a.2
-        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 01:16:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FuGkTy4k"
+Received: by mail-pg1-f195.google.com with SMTP id 41be03b00d2f7-c737d3a51bdso2816093a12.3
+        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 01:54:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773821769; x=1774426569; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1TyRCY1PjbaXhBQLCPF3GQ7ptO1QobaJ5bFC82lbNs0=;
-        b=ZSq2oyEJ6bTBf+wU/OVe1+pnqcBqNrqcx6KgPDgij95lIqLNgvZyjDfPc1L8vrFCiN
-         qki4zNWh4A1odWdzDtR7ZOUiHhX9V8ePpEVUOjDPkU36wVSCuMG+PG8vUvU/bvUjCNnW
-         QHkYMAQNLGZI6nu6/yhsZU9tjxfhmVWPTjV1Qqy5RCaDQ6lPEYc2VO/I7Ai7MIce5FKq
-         rz2BmXipCd4dybhZv00FeLP42JQ9r0enewBgX1JZ6MiPOBfmxGByqoh0rUYWqtLoFQIS
-         WuJG1jNXBdJQkIepavlm+wfai2ttZGXyD6zZj4rLXuWLBv3t5ysH+7wPgs/mIlW6kWR9
-         lmFw==
+        d=gmail.com; s=20230601; t=1773824048; x=1774428848; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WDCiBlD0RMPPvZvuirG6UUNdN1vYcUIKgUuyd+p2/z0=;
+        b=FuGkTy4kU5xA5vdKsXwrbujE26QMozJXgLiVjiR9zIyy6sL4uBMEQRSzd8GkNmRjU5
+         iCcrSe8D+YsAjNQI8LEkN9VW7t0DnDov13wW4/BhMIdwTcLEFumCIkWj2KSMmmEXjE3r
+         FFbRzuh4ON9xGoopZN2a6vMpcY7HNZ4HwAnIG9g0RMu4BK7j5VwZq5srpYOY1z3yOD3e
+         VqknxP/wdxtmqSZGzsVdWnwcixpSV8icuyHHpuPRBG169WtEp3KJ7cZ3C7j+ckTlkzab
+         XTWiBrkkERJHt2qjGttl4c2dyBeCdqjE8E++4361q2jbc8ZNaXWQ5SMg11t2pE1S1ywE
+         24gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773821769; x=1774426569;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1TyRCY1PjbaXhBQLCPF3GQ7ptO1QobaJ5bFC82lbNs0=;
-        b=YSLzHUxEETPu9WuafY5At6Q7VW5oSdIQ4D47wG5P9HX+dp7bqskf6rNXQQ8nEhOCZD
-         9lWE2x9GmfzNJjbmm73li45Wq5ABzJeLwbBmHgA3O8kD95t4IYBv+IJH1bTa99wukTQW
-         giTDJxi9PI9F9/Z/G+h0ygrjQVb3GxIzjDHAQMeKP7dW52SxLbwGMhi7meC9emDu5ykA
-         DNYgkflYxf/CFznKpEpu7DmURKJCH6KPU3PdT6GJiI+/TA1F7hdKRmrIprMSixkcOyBe
-         Kfhf27Vnix/ijMsdYjeex8686STDwDy26NE99HIn8QAXiLewxuUVlHwkNYKH53Ej0c7i
-         MzDg==
-X-Forwarded-Encrypted: i=1; AJvYcCXpCn+qDzqudMVQvmrJxiuU+u//gSctXaRnDkOL2icYp69cO6K60XA0OEJduRww8j915mg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBDoluxHWpe4BlonM/aYB5YaLSETXJahKz29VmGDSNcIsTy2/F
-	lO5czJgZEfowVFK8kNyu36/Cu0LG4N5dv1azEx++SBAg/9BanJZvUBRr
-X-Gm-Gg: ATEYQzwk5+qtK23DwQUfhRlaYAqVWgvemVOdno1lOjh9qgdp35G99tRdtxlNnFDuptY
-	eSAeGK6iNIQXiIR1wJHaC3P3SGYOXuNrYlT0Le7VJsyLg4kgaM0/FEmm8YUv80vB/luU1HM6rnS
-	n0DQa6yF1Srio80ZnCp0FvaiwMuHuwHlO9UXK7isWNCvQ/lHJv/un0A5wlRXXtl1s4xzCmQi2rS
-	5UYZtNakzDKw8wVjF/b9pBTRDwUVYE5knn3opM8Yp0G+FnFrTXKw0xQxCFyoYehbnH6LIanwN7V
-	abnKLqxoB9COjn3aOTHRcWLV1i0RFTpG7w8CWQtAo+lM/oJIdY29UiELaVP0DlSad6yLHpPJtOV
-	E7D6pRUoVLaaVzFhEFgGRS1VnfnFYaiIgpancf+4GvaWG1uau0z3cJCZu0UvHliNCb4w7ce5EZT
-	WjTEtAJC/cViQdR0fBooU=
-X-Received: by 2002:a05:6a00:ab85:b0:827:2c46:bab5 with SMTP id d2e1a72fcca58-82a6accbdb2mr2518596b3a.9.1773821768522;
-        Wed, 18 Mar 2026 01:16:08 -0700 (PDT)
-Received: from eric-hp ([49.216.25.230])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82a6bddcd43sm1571348b3a.50.2026.03.18.01.16.05
+        d=1e100.net; s=20251104; t=1773824048; x=1774428848;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WDCiBlD0RMPPvZvuirG6UUNdN1vYcUIKgUuyd+p2/z0=;
+        b=JnCF/DH9v0Ftdy/DIWgCkApZkOI+UxjrtrFdoELVtV4ypI49jbUBararuN76ylDRJ8
+         e4ULiJC6b6jbdsc7cT2Y/TCLHDUHq7sbGTaboPx5coddQhpqb2xu8OFmivMAY+cAeYZ3
+         qU3qPaRBOWeXxmHcqTV3fm7S9A99Aqg1Wml7ePzyJp/o/Chuj1pgJTeY7FQkhHxpUGUM
+         B4yp/fK3aDV1aG1SBkr0LcjFCvdlZcdh3gwhxiMga5qWW1D537m5vJqwsz6SQ/2odBdN
+         NM5FsSAOjO5DncFzrmVxRulSZn8y49x97j4DGOBlDNcdSoyxW8iBzLn69nxM8PnstF5N
+         1DMA==
+X-Forwarded-Encrypted: i=1; AJvYcCXzK40JR4b4QDgN2d6LGJdYHgS39vz9FEzAXv/aNmdM7frq4wmywFvkGgymfHaY39f8CGc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyA+Yu3DiALHk0mlQ2Iok7K5bXE4DXv3AWcfxOskdX5t6KI8zLi
+	ha1/F2q0jYNWoVA5PoWipMKxRwg289GwVLqQTWVnOwWaz02h3AvNnDw9
+X-Gm-Gg: ATEYQzxWLZ1Fo9XXYnPtyFvGhmF2JQM10lmIhipmyI+GnGmoPngEUUcdMxwdZOD/xpH
+	yQZWPYpgHPiS9zZwcTZHpNleTC7A2ynMGYnWwZzTdmWqtkoescwwBzSR9i04isbNHZciH0+W/L1
+	6Dd/1pxzhUjZfev+ipnJHv5/x70gHaAr4aa/Fi7P+SLKa7W5RqOAQCYSprRkIXnBMqTzMS0ZzOp
+	yeoxZ3Z0bIUhC7wLYZvFImi06HKU32YWuv4st/ns9lEk4hKiMDNODBde09Tc+RAzpyJMq+LMT44
+	bD0DWOcoYeQuEfUYQVjwLCBs7P3/ZBg1S6jSJOIFaf8xq0LHxucsnellAPiaSKvhui18uqOYxBH
+	nnuLh1t7XqfAP5p7s2I6TTGB3mickTUFIvAksim6tksaYfKV+qgbKDch0WrsuZ7KiCgmPmJuNEa
+	Aqh5LXsCZJ3Qbv/42GcxfN0CIATBryjdm/VGi+bWhe
+X-Received: by 2002:a17:902:d545:b0:2b0:52f1:e343 with SMTP id d9443c01a7336-2b06e3bc795mr27113205ad.35.1773824047687;
+        Wed, 18 Mar 2026 01:54:07 -0700 (PDT)
+Received: from SH-PF5NDYD6.Hygon.cn ([112.64.138.194])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b06e61cacbsm18927455ad.72.2026.03.18.01.54.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2026 01:16:08 -0700 (PDT)
-Date: Wed, 18 Mar 2026 16:16:03 +0800
-From: Cheng-Yang Chou <yphbchou0911@gmail.com>
-To: Ke Zhao <ke.zhao.kernel@gmail.com>
-Cc: tj@kernel.org, void@manifault.com, arighi@nvidia.com, 
-	changwoo@igalia.com, sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, Ching-Chun Huang <jserv@ccns.ncku.edu.tw>, 
-	Chia-Ping Tsai <chia7712@gmail.com>
-Subject: Re: [PATCH v2] tools/sched_ext: Update stale scx_ops_error comment
- in fcg_cgroup_move
-Message-ID: <u72uqrur3f2jcskh3hjezx5wzj3nkhrdmniv3yba424oozb7oj@tx2b7vawmqmv>
-References: <20260318061457.49988-1-ke.zhao.kernel@gmail.com>
+        Wed, 18 Mar 2026 01:54:07 -0700 (PDT)
+From: Ke Zhao <ke.zhao.kernel@gmail.com>
+To: tj@kernel.org,
+	void@manifault.com,
+	arighi@nvidia.com,
+	changwoo@igalia.com
+Cc: sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	ke.zhao.kernel@gmail.com,
+	yphbchou0911@gmail.com
+Subject: [PATCH v3] tools/sched_ext: Update stale scx_ops_error() comment in fcg_cgroup_move()
+Date: Wed, 18 Mar 2026 16:53:49 +0800
+Message-ID: <20260318085349.78063-1-ke.zhao.kernel@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260318061457.49988-1-ke.zhao.kernel@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Ke,
+The function scx_ops_error() was dropped, but the
+comment here is left pointing to the old name.
+Update to be consistent with current API.
 
-On Wed, Mar 18, 2026 at 02:14:57PM +0800, Ke Zhao wrote:
-> The function scx_ops_error() was droped, but the
+Signed-off-by: Ke Zhao <ke.zhao.kernel@gmail.com>
+---
+v3:
+ - Fix commit message suggested by Cheng-yang Chou
 
-Nit:
-- s/droped/dropped/
-- Use scx_ops_error() and fcg_cgroup_move() (with parentheses) in the
-  subject to denote functions.
+v2:
+ - Corrected the new function name to scx_bpf_error instead of scx_error.
 
+ tools/sched_ext/scx_flatcg.bpf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/sched_ext/scx_flatcg.bpf.c b/tools/sched_ext/scx_flatcg.bpf.c
+index 0e785cff0f24..c0574ff416c7 100644
+--- a/tools/sched_ext/scx_flatcg.bpf.c
++++ b/tools/sched_ext/scx_flatcg.bpf.c
+@@ -919,7 +919,7 @@ void BPF_STRUCT_OPS(fcg_cgroup_move, struct task_struct *p,
+ 	struct fcg_cgrp_ctx *from_cgc, *to_cgc;
+ 	s64 delta;
+ 
+-	/* find_cgrp_ctx() triggers scx_ops_error() on lookup failures */
++	/* find_cgrp_ctx() triggers scx_bpf_error() on lookup failures */
+ 	if (!(from_cgc = find_cgrp_ctx(from)) || !(to_cgc = find_cgrp_ctx(to)))
+ 		return;
+ 
 -- 
-Thanks,
-Cheng-Yang
+2.43.0
+
