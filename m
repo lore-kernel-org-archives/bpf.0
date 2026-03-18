@@ -1,158 +1,110 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5588A18DF80
-	for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 23:45:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DC0BBE5E
+	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 00:08:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773791122; cv=none; b=JCcqrMFvI/pTVYTFi9XbNw0rJo1XcBHgRB3gO/Yr4qPsJlsMJvp4LJRmxh1/CxxxtCvXCANgzY0TIUiU//RKm/Ro/Gy/TWHVLSMN2XKhTon+Fo8JvTlopWptKSWIlodh2u9uKMcSKjbbRHLm0PQPD38ZEGna+rnNr/jt5vqBxV4=
+	t=1773792503; cv=none; b=kln4dAkZK799/7w+WzErt2BpKOM1M2ecy7jtXk7AGgvhRVdvWtIZzdj1yiT2pWk2VomHXeKs4/cu9heJ/cLqqaKEtfaDK588asAwZeobYAA1wgqavd5HmEn1fAypYx/3bHtcksDaX2f+LgUyAQBkiCG5ny5eQpdBFI4YlNH+eYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773791122; c=relaxed/simple;
-	bh=M2oILnMFRnCTXhv2of1N86xCWOBlK3ZFjdGz940AjQs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f7G80miV7FYQ9kHNFCUldbGRrC6tXt8EgYJk0VIeSu+l1eQdZgCP4UCvGx9DDGTkDm5nonfWzmBVDJEcRQ4+9Och7IWbtUIeNI1D+sjA+ceco85VqpQ+m6X7YNLOolkv1HGOmtrcUKxE0rw3sR7sj/vsnMDVOYCbpkmWF50vKJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GyZ1FH1c; arc=none smtp.client-ip=209.85.128.52
+	s=arc-20240116; t=1773792503; c=relaxed/simple;
+	bh=cb8vE5HSSq56kcm56PlKyEh4gwh0lYtwbgbWt/bAoqg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=avN85+EB1XoC0tcsQVNSVIMFsFZKKXPMQMQsw91UY8s2wPqYP4FtxdKGjYpjO2kuRfdFAUFieRF/gb032l3sJz9JGv4wPp2N/WjNl7wM/P8HR5u8RtSAGDmBkLJQAaSvY4Y3U2cX1Ga53eJPI75NLIvQPEAwTO81uHPF9NXSVsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VoikiAEb; arc=none smtp.client-ip=74.125.82.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GyZ1FH1c"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4852f8ac7e9so74299805e9.1
-        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 16:45:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VoikiAEb"
+Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-1273349c56bso9794047c88.0
+        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 17:08:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773791119; x=1774395919; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+jq7vMllbLituEwsxAiSeLrzSpUIncWET2crS5mchow=;
-        b=GyZ1FH1cOyN3hJ+oACh3p5RQYqKyH5/H0AsURGaZJDiKqF753iYM/duS4GajjsIgfV
-         sCbGLxXi/IRgg0TtN0yi+uCVzZfLqSjdcdIgfk185WGfJmV4tlwOIFFIAESOwjqOMOVU
-         GNdxWbDJTgT5oxqzvywDz+fUIrg+jMrfGSfuwmf0sTfcuDFZ6R3Q4euLN91pXYzw1odA
-         NO1HdqOgrb4BQrFsKFbD6/nrSiSWJ9gOAzv9Df/aXFyDht4Mq3/zNoudupyKujSwS6cg
-         OcOx/06wagHOj2dTgJexygy+LlXVPeHdZ67FK2Ya/h34AvjIGN9bj5b9K6pfvYWNOysy
-         gclA==
+        d=gmail.com; s=20230601; t=1773792501; x=1774397301; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=66d1uFpzzYCPdrNc8SA1GRs22SJbjq+tbh3FLYNMt+0=;
+        b=VoikiAEbYz7YDzEx9ZurrTlvtBsB5G3PggbpGOo2tVhI1Zls437fOikSRxq5+nJRW0
+         rkB/xgnpOo2N7uBVffghrmR7bBLZPXsi0pk1eXUUyrkGA58zmwk8R4Be1r8KN0t7gWjP
+         eDBhDJWfGzFcx7ck4XTK8pvryRpsGracfmKPxDUfA15WPu3N1ol1I132/BqI73QrTcvd
+         ZTmLQAjCF0pGpsA7HM4tuQ0NMQGSmg/+Ti2IRbOM66rodehJYfhlindkb0jExiPhuEBH
+         LxerTl0R5d8fpitcjfyDnZWuaN1xBe/V5u0TUk8DH4podPB5zMk4qYE4df9Rd7lGyvGP
+         O3xQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773791119; x=1774395919;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+jq7vMllbLituEwsxAiSeLrzSpUIncWET2crS5mchow=;
-        b=rW13ldxZg5UYeDfGJWg+gByHfkCz8BbdnEk+LxZzodTgmZN67//2ZsmE6JSZSkyc+x
-         aSHhPIIRzOsxKWGA+hHiBdHZ+rVptnRe/WhH0IB8hfVgdrxVzh6pYX0K+u8RuglIA3GL
-         2H0loqv7sPKoj/tzqh5sTaZ8z5CKAKyb1B+PWohT1q//UBtknEiQqAygEcrDcKNXtMh6
-         n64OS3e0pN685De0wGE/O5yA/cl5xjLs4J4rhEU5wHFbpGpT9miAiXyiB4I17p1fGg7r
-         7I+u0C5jslX32chRj0MHNp+xkDiQ9sLOu/fs2kr1FOO++LsljUt/c1VhyAw1spmEFVdz
-         IH8A==
-X-Gm-Message-State: AOJu0Yy02GsKwXWXZorrvWcsTGTJFJ3iyv3XIcjyc92URaVZzv0pYXTe
-	kaWh1AUjmErFpYP1z+0ckaJ7vINOp8Hn8IwZJmceqZdbRIW3UuGfah82bT/G4RA=
-X-Gm-Gg: ATEYQzzYmblNJTJcOWI/OYsl9AN8kRWSYr5lzbry41QF5KAqnKkAj7yGjUPPIE3XoCW
-	pZAL1jzo2kK0T2a2EviK3as2BTqJkL/1va1IH3+qzNCiDrUAzNEcHIQMuDHBLOrqO9XyjBYlhgu
-	C4y+GNiqcrJHNQ8NvgEMTqwtv1loKrzA0dfL5fZFUFm81//QiDmiNAriB5en8JzsubJYNb5opJc
-	aIbLbQNIUx7TGvZem5kz+n+YQKHBoiJi7ih+lyNx1apRZoTcSurGISpzez1hAzUs2F5Ld8fJa4S
-	sOd9Bx6hP2a76kb5zi1zctiHAfkbvQFPfwZZfFNH1y6DE5f6ZrH9mFmaosoOZFytcss95Ot1wAF
-	SKovdwVgvU82HuAO3Q+ugUoMDRTYIHoxDAfNAajdzHcjNg2c4ydkMKQ+YGMEGeeXNtE8dGL6tIV
-	QLVrdCLZ1zOrgO3idxm62SRj5C
-X-Received: by 2002:a05:600c:8b09:b0:485:3a27:a960 with SMTP id 5b1f17b1804b1-486f420c141mr25216475e9.0.1773791119353;
-        Tue, 17 Mar 2026 16:45:19 -0700 (PDT)
-Received: from jacks ([197.38.212.252])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4856ea8fb0dsm177814555e9.3.2026.03.17.16.45.16
+        d=1e100.net; s=20251104; t=1773792501; x=1774397301;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=66d1uFpzzYCPdrNc8SA1GRs22SJbjq+tbh3FLYNMt+0=;
+        b=BHMcwJUi6HpfPZ2WCnWbcUtQJJJB+UeSllKaxAAFkpYI4brb6ab74ax/tuyZQckYq5
+         4tUmNpZyjQZ8BesV2FLOePV36oi3mumX12zWtCIjgckSh+b1K49kVKbC16HGZ7gna2SE
+         inBMDSJkwmeLoHwYeioX1+z/Kvmg4pJDZ8w7YY1ORhIT3z+H99zEx/zLev+0RHzMJd+Z
+         zdy1tEQoUTnYEMFMWjpkIra9BPtaHoINR3NiTSV2OmmnWmCd13tUJBm59CP3K+NVtZIb
+         tJhzjW8ULBt+j+0xPeOEiLl7xXE+oJjOVOxPm2wzEmoGJ28yM0uTG89Mu79+7hyyWeit
+         pjnw==
+X-Forwarded-Encrypted: i=1; AJvYcCVNNFhNil/WD63Dxoir8nlHrHGLM0Jl0ndo0MT7Rxkv/RpSIlzGiu184fku31L19qnbmXI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxab4zSud7gpKdBLXdc9ERryFqKTTiVG77mXqGEYYOjPji4IlRs
+	UV+BwBAJvfAR3SsFQM2JrPibHwJ60n3YwJhqOa23wAYFIPE7B0SltCI=
+X-Gm-Gg: ATEYQzy594AveFsMpZDdkAIUVUevpX+jayf5PyvoXPzV38rHW6WQtcAqJWmk0jb7OzZ
+	RcgUXB/gLBx6oR7+yzy4SmaUL5nvSbztzq2lG2veTODIaTBVHWcWXEWZbz/YGstT9eMq/SbManv
+	5JM48wdvQxOTUp4ozOL5hhKeLu0dAL8iMxCs3zTiTZpySQbaytc3RIPlGbZbNpBbHRH520M102s
+	5DZfhX5e8XN/eS+K+JyoSRP/RBLX2C6Y+qh98UxAtC/X5y9VDmvtKtX5pcR3airrk5mZyrARHTw
+	odOieg4wdETyJIHGGvcPG5VAqLhuvl8/MTn56ZcszpopxRqmfHOu3J6Ov+Xy0QwWK+Q/VyTJt+J
+	EPKTXS+cG9q5lI9/BZqocR5a+IngYBQoJtFkQCgQRoMbaI6N6AA6OrkcPzeFun6eP6AZrVQ7QT5
+	I1a5RmSojqXfpfeKgQKtFDVJPIZkgtxEG4hxPjgldCGKp3S8reDflEcvsqimVlkq6nzgg7mhPNt
+	qq8Ca0MzeVpKoNd4g==
+X-Received: by 2002:a05:7022:6a5:b0:128:d471:8c1 with SMTP id a92af1059eb24-1299ba3e555mr676234c88.17.1773792501230;
+        Tue, 17 Mar 2026 17:08:21 -0700 (PDT)
+Received: from localhost (c-76-102-12-149.hsd1.ca.comcast.net. [76.102.12.149])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-129b4127b7esm2264454c88.9.2026.03.17.17.08.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Mar 2026 16:45:19 -0700 (PDT)
-From: Ibrahim Zein <zeroxjacks@gmail.com>
-X-Google-Original-From: Ibrahim Zein <ZeroXJacks@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	gregkh@linuxfoundation.org,
-	jolsa@kernel.org,
-	kpsingh@kernel.org,
-	haoluo@google.com,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	martin.lau@linux.dev,
-	andrii@kernel.org,
-	yonghong.song@linux.dev,
-	song@kernel.org,
-	eddyz87@gmail.com,
-	Ibrahim Zein <ZeroXJacks@gmail.com>
-Subject: [PATCH bpf-next v3] bpf: verifier: fix integer wrap in regs_refine_cond_op() BPF_JNE case
-Date: Tue, 17 Mar 2026 19:45:07 -0400
-Message-ID: <20260317234507.1753803-1-ZeroXJacks@gmail.com>
-X-Mailer: git-send-email 2.51.0
+        Tue, 17 Mar 2026 17:08:20 -0700 (PDT)
+Date: Tue, 17 Mar 2026 17:08:20 -0700
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Mina Almasry <almasrymina@google.com>, Wei Wang <weibunny@fb.com>,
+	David Wei <dw@davidwei.uk>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	bpf@vger.kernel.org, Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next 5/6] selftests: drv-net: add netkit devmem RX
+ test
+Message-ID: <abns9COj7WagFtZ8@mini-arch>
+References: <20260316-scratch-bobbyeshleman-tcp-dm-netkit5-v1-0-b53c8cd72b23@meta.com>
+ <20260316-scratch-bobbyeshleman-tcp-dm-netkit5-v1-5-b53c8cd72b23@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260316-scratch-bobbyeshleman-tcp-dm-netkit5-v1-5-b53c8cd72b23@meta.com>
 
-In regs_refine_cond_op(), the BPF_JNE case narrows register bounds
-without guarding against wrap-around at type boundaries. When
-umin_value equals U64_MAX, incrementing it wraps to 0, producing
-an inconsistent bounds state (umin=0, umax=U64_MAX-1).
+On 03/16, Bobby Eshleman wrote:
+> From: Bobby Eshleman <bobbyeshleman@meta.com>
+> 
+> Add tests for devmem RX over a netkit device with a leased queue. This
+> is the same as the other devmem RX test except for ncdevmem executes in
+> a namespace, binds to a netkit, and skips the ethtool NIC configuration
+> steps (relying on the test runner for that setup).
+> 
+> The RX path is setup as the following:
+> 
+>  RX Path
+>  -------
+> 
+>  Remote            Physical NIC          Netkit Host        Netkit Guest (netns)
+>    |                    |                     |                    |
+>    |--- TCP send ------>|                     |                    |
+>                         |-------------------->|                    |
+>                       dmabuf                  |--- BPF redirect -->|
+> 
 
-This can be triggered by constructing a register state where:
-  r1 = unknown_byte | 0xFFFFFFFFFFFFFFFE
-  -> var_off = (value=U64_MAX-1, mask=1)
-  -> constrain with JGE U64_MAX -> umin=umax=U64_MAX, tnum non-const
-  -> compare with BPF_JNE const=U64_MAX -> wrap occurs
-
-The comment above these checks incorrectly claims this boundary
-condition is impossible. However, is_reg_const() uses tnum_is_const()
-which requires mask == 0, so a register can have umin == umax while
-tnum is non-const (mask != 0). Remove the misleading comment and add
-explicit boundary guards to prevent wrap-around in all
-{u,s}{min,max}{32,64} variants.
-
-Fixes: d028f87517d6 ("bpf: make the verifier tracks the "not equal" for regs")
-Reported-by: Ibrahim Zein <ZeroXJacks@gmail.com>
-Signed-off-by: Ibrahim Zein <ZeroXJacks@gmail.com>
----
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -17046,31 +17046,30 @@
- 		 */
- 		val = reg_const_value(reg2, is_jmp32);
- 		if (is_jmp32) {
--			/* u32_min_value is not equal to 0xffffffff at this point,
--			 * because otherwise u32_max_value is 0xffffffff as well,
--			 * in such a case both reg1 and reg2 would be constants,
--			 * jump would be predicted and reg_set_min_max() won't
--			 * be called.
--			 *
--			 * Same reasoning works for all {u,s}{min,max}{32,64} cases
--			 * below.
--			 */
--			if (reg1->u32_min_value == (u32)val)
-+			if (reg1->u32_min_value == (u32)val &&
-+			    reg1->u32_min_value != U32_MAX)
- 				reg1->u32_min_value++;
--			if (reg1->u32_max_value == (u32)val)
-+			if (reg1->u32_max_value == (u32)val &&
-+			    reg1->u32_max_value != 0)
- 				reg1->u32_max_value--;
--			if (reg1->s32_min_value == (s32)val)
-+			if (reg1->s32_min_value == (s32)val &&
-+			    reg1->s32_min_value != S32_MAX)
- 				reg1->s32_min_value++;
--			if (reg1->s32_max_value == (s32)val)
-+			if (reg1->s32_max_value == (s32)val &&
-+			    reg1->s32_max_value != S32_MIN)
- 				reg1->s32_max_value--;
- 		} else {
--			if (reg1->umin_value == (u64)val)
-+			if (reg1->umin_value == (u64)val &&
-+			    reg1->umin_value != U64_MAX)
- 				reg1->umin_value++;
--			if (reg1->umax_value == (u64)val)
-+			if (reg1->umax_value == (u64)val &&
-+			    reg1->umax_value != 0)
- 				reg1->umax_value--;
--			if (reg1->smin_value == (s64)val)
-+			if (reg1->smin_value == (s64)val &&
-+			    reg1->smin_value != S64_MAX)
- 				reg1->smin_value++;
--			if (reg1->smax_value == (s64)val)
-+			if (reg1->smax_value == (s64)val &&
-+			    reg1->smax_value != S64_MIN)
- 				reg1->smax_value--;
- 		}
- 		break;
+Is it too messy to parametrize the existing test to run both with and
+without the namespaces? Feels like should be somewhat doable in python?
