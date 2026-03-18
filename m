@@ -1,341 +1,241 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5CCF3EF0C5
-	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 16:29:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773851374; cv=none; b=K+q3i1pFcNezqa5Nx0bx993rX9Mp5M0uAc8LwxY2Gi7RHYWAgxhPuKNhi/nmNWRZj7Xx9IqxRRnFrINGLxgqFys2F9bI+zzL/I84TMVGhwOMvFNzyXuuUmDYxpO4rjw9/o7TCPJK3UT1PrfakcR4eYVoVPMLz4LbFncLF9S8JAw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773851374; c=relaxed/simple;
-	bh=nBmq5DL/fX/QByUiNo9Ec6n7l1BgaPgv6zV0X/5hupE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pkhNWhhD/MOQrCBzjQHV+Vq1pHoWTWJzpiwWGVChtEzQ1nMW+WqM3Kxd2XmzsZlH6Fk5o7nA3z6IZlH1xys76F5JyRfca4fVduyfyKh/3iP+k2TAmrCM99BU8UQYnYcJ/TyYt+B98F4EmREG7NoEdsJOgBv2TGwtgK5SNe5GQZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GPPcCdNK; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CE5B3FB070
+	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 16:38:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.177
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773851939; cv=pass; b=uDoW+DKojsH+51cVKgl46prmtouXbbadz4Z1SDvxf7is8FaJJ2boOBtu7RGO4FYDRDuv8T7FrtjbJ8jbP9/ofIQ39WjN4wLTEsx2VcwcfjbRU+AN4yGeh4aaB9sC4m1YDcikIDHE4tihfIsEjMW5WOEx4CerJe9BAIYTKYhGjDo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773851939; c=relaxed/simple;
+	bh=pQRo/AIDHbWYmQiKbzY1fu0YoqvFJr3p4qbPZJOQBWw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AVz5TO6f06SXxztC+M/86hibzEsDhAVvx/cO6Wk1887iLZz2NmVSL2WfEuCiJ4dZgbTDxBMiV3eylSBc47ayaubumEt6Lc+qo7VqYZsPGZYxMPuepRi1uIDkeyxzRA+GmsoU2k9+sfWH3U5fzgeZ7+FhBDqulrmiWxwf14bXICU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sXoQMXd5; arc=pass smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GPPcCdNK"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-35bb7afdc38so119034a91.1
-        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 09:29:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sXoQMXd5"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2b052ec7176so94935ad.1
+        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 09:38:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773851936; cv=none;
+        d=google.com; s=arc-20240605;
+        b=R/vpFZcdb61mJvjwO68qA+Io8sBBgfy9Pt608aPLU7oWvnLLM50GO+iI2m0nOwHxXV
+         5upFPJxNCUBOWKo9zn6eotlt4BSz3Af+U8uTyvuO8Oce3niDyIIZ9wC53hhO9NzfWHV6
+         +ZgSvaM6uRukzJmcWsHMjkoJe/hyLXnzmwhHePbs20PAHkoQBL95jBd3u8cGvZUt9hnl
+         6Gv/nJqXjZawQz8bGhUsp0QJVjdESNYoSUhLuN0hqE12UakO8+pkz5/xRInyqlJ68vpw
+         ZmcRCbjm9N7Dkn7G1QgPWc5dKd6O+l4AxNJMPF6nYQV957Du+W8bo0Nxo/TTZCQypo2h
+         pqQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=hcjCxyCQZIThfXRlEgtWrMDq+8GZ2+bJDcg2rHRM0J0=;
+        fh=6+HA8yj5kUs9vquQM5JClwTCm1HBC5FkxEKC6yh7JbM=;
+        b=VwmIg6o33095kUDZnSrw81GaHJOUi2+Ajjmc8frtzlQ+ZI7mhNLHj0N1Zj6bOFWQYI
+         qGw3kRVgYHFGlRdcNz2Gl/XZLwsL3GGt8Uvf8w6LQ2ZRD6ERMm2dj84sLr7ixhMjwQAK
+         8OvynI2iY0ak4jHQbr248W9vpP7RdwdpxlQCLmnj0XUfLWgAwXGaKmkOAA5YrPK6Itu2
+         OD5wW+3elwhlpL5hfh8OL2oUrFsUj177s9BDmpjNvFS+De7qfoL4jx2HqzwBcy85THAA
+         gzMhYFca0DO0bUtbqRR0CulmcNBxrE8T6Wo1qVxrzSoXH9kEFlEm23mUqmmg/5ojVF5R
+         ZkLA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773851365; x=1774456165; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20251104; t=1773851936; x=1774456736; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=G8va4vNLgDOCIY8d64fq/drHmdO6UoUNpDG+ZxFL4Po=;
-        b=GPPcCdNKq/RHlKg+I6oz0rt0l+ii7QWM8A2+gb0LCKEc6BnkGjCjFJzANodL9xiC4b
-         6oQyMTDg5+QiQTAR0U6mQW57FBd0y5vcAZpP78VeuRWM3zJv4ZpqxyFUsJx7VWpI7Bo8
-         y5erCAimkYNLUx0ljvN4hvCzihQQvArxqzoHzc/kWanQHWm+GmqPRV4BEArgCpjTCYsE
-         P/r+dZrh6WKmSwdXtlUScGPfmWqV4Nnx/Bcr/A2dQbEodisTMeu0dI8sVhhL4m8jCYZz
-         T2pHhlr9+DvJP6ylyCVQ1B5PP3lFPcjD13Ve9ZesjdSqYlBZwUHTQDLC+MIRk4rcnT/x
-         wIZQ==
+        bh=hcjCxyCQZIThfXRlEgtWrMDq+8GZ2+bJDcg2rHRM0J0=;
+        b=sXoQMXd5ZK4ltkomyXip5wfycxB848TA6ndxmvZnfnfoLg0w56TKga3hCE+XmdIpZh
+         FiBQln4YgfTJQv+KbxpSj5SGwcJVU9hyK6Vc5HGZeCnYkGu2bBJ9E57e/lB4Au5xXkvs
+         knPpw6PcA0xCJ5lJ5wD7EhV57f6HNmz6+Dhyb6C2EieysCmF5ymXG3n/sldNGEzmXn4g
+         9SyqPr7w6c3+sxEDBH4+HtJXfk/eQ7hIRNc8Y44m1TZw1Uj+JcekXy139NwDrKYvkrJi
+         l9jrm45RauBkDS+4gFQwLJ6BcNOUfpHo6zY4m1llx7bwPK4Za3xxdKr76Qc8S9xntF/q
+         LwdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773851365; x=1774456165;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20251104; t=1773851936; x=1774456736;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=G8va4vNLgDOCIY8d64fq/drHmdO6UoUNpDG+ZxFL4Po=;
-        b=Vn9sQXST1Fc3fLuDMhsyWn3vKoKvQ7A6TecBhvh61cyMbbo1cYkrSAKsIelMb6RgTZ
-         8we0axJIreFM7GRyDc35HViAMQhvb8Qx16J4CcDb+4p28MPooqkqAlI2t+LZkip2mX7n
-         4xSPqSq7qd8BipEhE/nHHfxSjIyaiCDXjffsQjzHYThgD/XbfU1Jrcr6FjOC2HiALADF
-         MqJb+IttQwGJ7yavZsI8nJx1ofEP93Jpni6p/jMtAVhS699r+fLlRdCPpzjywjz8QVr9
-         2AgMFxdFZAgvlNmbJ2PIbgNgsWM49e1drJh4L99xCzwPK0lCoB8y1GFuiipZgGlqkdBn
-         AuOA==
-X-Gm-Message-State: AOJu0Yyj4TunYbEIUu6PPoZWBEgIOcgKn5/Li+iy0jjLM3l2dImv0qg6
-	zTX8T7uwYHDrMu9HSni9BBluipFtqSYe3gd2W5c7/qgYdShTZ6TZFT7zIMnnXg==
-X-Gm-Gg: ATEYQzwR39fDpoCLlbZLnRSeswoEzT/iIvAZMe7TGx4+//6kAzAY3o09MSProQeW8ov
-	JdnQjZJU2kRHSb5jhCFjiuDYp8MO4T8wZEO4bzk5fujjcyrU3Z2qE0+Y4VQv/UeHxRPE2Fb9cJy
-	98P3sUp4+RacWFJw6dR9Ha9/CfaSozsVC8TrZ0z7uQ/aPlZsYCnfSfONGfiH7JMt5y/qG24YjqI
-	d96BXULLLDJeKfcCv9R5bAo7svVPxM1s7/pMOCYSi75M9ya1PG10EeClDkhIVeqX4jt5td1Lpbv
-	dcl/qo58RePaG4PbV4iHPsi9/6kmblIgZvMUcaq+msGQJsYc6HNnDAklJ/HsYAy2ZkVRVYHvDtd
-	hgKF8iNZJotgGRKgwZQlqjpLcnqTtB/JuK+lXEdXVjdfUXTD9cIuik0Q33leehLVbNUfHPW7DIC
-	jAudmKceS9bX9JTjKamIZV7IN9qH6mBZdmTWlyKz0BoE3xHIAW
-X-Received: by 2002:a17:90b:3d86:b0:35b:a7be:ae6e with SMTP id 98e67ed59e1d1-35bb9f46b32mr3386187a91.33.1773851365309;
-        Wed, 18 Mar 2026 09:29:25 -0700 (PDT)
-Received: from honey-badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35bc610c1efsm89370a91.14.2026.03.18.09.29.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2026 09:29:24 -0700 (PDT)
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org
-Cc: andrii@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@linux.dev,
-	kernel-team@fb.com,
-	yonghong.song@linux.dev,
-	shung-hsi.yu@suse.com,
-	paul.chaignon@gmail.com,
-	harishankar.vishwanathan@gmail.com,
-	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH RFC bpf-next v1 3/4] bpf: cnum 32->64 deductions in reg_bounds_sync
-Date: Wed, 18 Mar 2026 09:29:00 -0700
-Message-ID: <20260318-cnum-sync-bounds-v1-3-1f2e455ea711@gmail.com>
-X-Mailer: git-send-email 2.51.1
-In-Reply-To: <20260318-cnum-sync-bounds-v1-0-1f2e455ea711@gmail.com>
-References: <20260318-cnum-sync-bounds-v1-0-1f2e455ea711@gmail.com>
+        bh=hcjCxyCQZIThfXRlEgtWrMDq+8GZ2+bJDcg2rHRM0J0=;
+        b=D0X/UjDx7zaZjbtJvkIysg04IItEYpkpYUpJQNvkeoC03aPZrPgdRqsOkjf4bdqVDd
+         dH+oUelb3YSDxguS/9Awco2MZPbhONAoX8hqzw5L1/2JoR1r+9MWkltXnsS5Un2bv81R
+         Y1PpUz+UfNxxPT/ysHrh9bgvGDk+e4lucfyookO6cO2LF34PaJM0OkWQ9iA/hZhBijGm
+         r1ygc2wnZSaIDmBxJN8gJn4Ay1vUJILPpkgn+ZzCLOtfzBRvBTVrcupu26+VW+otP0/X
+         CQhbo9oBa+Rg1b5ruK8wZXk4pWJzRGa/XO8oy7sWmQvjfKNZ91NlxAIjLCsDSlNHHIsq
+         rAhA==
+X-Forwarded-Encrypted: i=1; AJvYcCXWifY6Nj9ZuDR2bHuoOYqpE/CVQTzV4qFJwR+SpkBD99CTAOdbG2tz1rsZl3guaH9PIzI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKoGRgZ/gtx0mF4TzIFKwW7gDaDSBncHLiqdtAXzvAbmQTBSAE
+	JqhM/ZDevtq0Kez1XWTjR11KSwm2Fa1trp6E1UOnmYIGrQZVHizYMrnI5As6QCVChFeak2gCvKK
+	q4y/vkr2SKu19dhYNNr++7GOGuQeye5qqI8skjA/C
+X-Gm-Gg: ATEYQzzvzOkO+zZy656XLUJPRbnrH23EiUgKJIUVDdkg6d2WT6V/ER/XTDJtcH4NhAh
+	GHsFrg2JxytVi37bT5ONUr5SCdYSWWfyQoqlQHYimuqOF8qHwIjlWyisSbFAg5OHhApPVh+Eh/O
+	C7GdZLmixpFqcPpao2uMKbL2+Pj3T5+dZlkoD8yh/xKMSv0IpS4nGd7vUn1Ke6Gt94OWWc6BdIc
+	a6kMLZPREeeHMQsSrY07YyYyNutBqMHJZaaZYUdVT5EgrnlE8o4yONEkqBu6/EtWirCmMYKDA6E
+	BaMxRiEF
+X-Received: by 2002:a17:903:22c7:b0:2ae:c566:bd99 with SMTP id
+ d9443c01a7336-2b06e88a5f7mr4276635ad.22.1773851935141; Wed, 18 Mar 2026
+ 09:38:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+References: <20260318-tools_build_fix_zero_init-v5-0-bbeffd8da199@arm.com> <20260318-tools_build_fix_zero_init-v5-6-bbeffd8da199@arm.com>
+In-Reply-To: <20260318-tools_build_fix_zero_init-v5-6-bbeffd8da199@arm.com>
+From: Ian Rogers <irogers@google.com>
+Date: Wed, 18 Mar 2026 09:38:43 -0700
+X-Gm-Features: AaiRm50hpzLMMjzX6OI5eZpFyBk6BPkQvLc7onrrMNrR4VNp8m3oc-g1ki8itfQ
+Message-ID: <CAP-5=fV_ObgCokJ3bKAQBYn-DPrGadGVzqvrzbuy8aEcsfkp8w@mail.gmail.com>
+Subject: Re: [PATCH v5 06/26] tools build: Append -fzero-init-padding-bits=all
+ to extra cflags
+To: Leo Yan <leo.yan@arm.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, 
+	Quentin Monnet <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>, 
+	Bartosz Golaszewski <brgl@kernel.org>, Kent Gibson <warthog618@gmail.com>, 
+	"K. Y. Srinivasan" <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
+	Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>, 
+	Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, 
+	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
+	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
+	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>, 
+	Len Brown <lenb@kernel.org>, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, 
+	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, bpf@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Replace deduce_bounds_64_from_32() with cnum64_cnum32_intersect()
-based implementation. Assume:
-- a is a 64-bit range
-- b is a 32-bit range
-- t is a refined 64-bit range, such that ∀ v ∈ a, (u32)a ∈ b: v ∈ t.
+On Wed, Mar 18, 2026 at 2:18=E2=80=AFAM Leo Yan <leo.yan@arm.com> wrote:
+>
+> GCC-15 release claims [1]:
+>
+>   {0} initializer in C or C++ for unions no longer guarantees clearing
+>   of the whole union (except for static storage duration initialization),
+>   it just initializes the first union member to zero. If initialization
+>   of the whole union including padding bits is desirable, use {} (valid
+>   in C23 or C++) or use -fzero-init-padding-bits=3Dunions option to
+>   restore old GCC behavior.
+>
+> As a result, this new behaviour might cause unexpected data when we
+> initialize a union with using the '{ 0 }' initializer.
+>
+> Since commit dce4aab8441d ("kbuild: Use -fzero-init-padding-bits=3Dall"),
+> the kernel has enabled -fzero-init-padding-bits=3Dall to zero padding bit=
+s
+> in unions and structures.  This commit applies the same option for tools
+> building.
+>
+> The option is not supported by any version older than GCC 15, nor is it
+> supported by LLVM.  This patch adds the cc-option and host-cc-option
+> functions to dynamically detect compiler option and append it to the
+> EXTRA_CFLAGS and HOST_EXTRACFLAGS respectively.
+>
+> [1] https://gcc.gnu.org/gcc-15/changes.html
+>
+> Acked-by: Quentin Monnet <qmo@kernel.org>
+> Acked-by: Namhyung Kim <namhyung@kernel.org>
+> Signed-off-by: Leo Yan <leo.yan@arm.com>
+> ---
+>  tools/scripts/Makefile.include | 30 ++++++++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>
+> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.incl=
+ude
+> index b5ecf137febcae59f506e107a7f2e2ad72f4bef4..a2397ceae512c1bc54adb15cb=
+1a111ff34e28e43 100644
+> --- a/tools/scripts/Makefile.include
+> +++ b/tools/scripts/Makefile.include
+> @@ -137,6 +137,36 @@ else
+>  EXTRA_WARNINGS +=3D -Wshadow
+>  endif
+>
+> +# output directory for tests below
+> +TMPOUT =3D .tmp_$$$$
+> +
+> +# try-run
+> +# Usage: option =3D $(call try-run, $(CC)...-o "$$TMP",option-ok,otherwi=
+se)
+> +# Exit code chooses option. "$$TMP" serves as a temporary file and is
+> +# automatically cleaned up.
+> +try-run =3D $(shell set -e;              \
+> +       TMP=3D$(TMPOUT)/tmp;              \
+> +       trap "rm -rf $(TMPOUT)" EXIT;   \
+> +       mkdir -p $(TMPOUT);             \
+> +       if ($(1)) >/dev/null 2>&1;      \
+> +       then echo "$(2)";               \
+> +       else echo "$(3)";               \
+> +       fi)
+> +
+> +# cc-option
+> +# Usage: CFLAGS +=3D $(call cc-option,-march=3Dwinchip-c6,-march=3Di586)
+> +cc-option =3D $(call try-run, \
+> +       $(CC) -Werror $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
+> +
+> +host-cc-option =3D $(call try-run, \
+> +       $(HOSTCC) -Werror $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
+> +
+> +# Explicitly clear padding bits with the initializer '{ 0 }'
+> +FLAG_ZERO_INIT :=3D $(call cc-option,-fzero-init-padding-bits=3Dall)
+> +override EXTRA_CFLAGS +=3D $(FLAG_ZERO_INIT)
 
-New deduce_bounds_64_from_32() makes the following deductions:
+Sashiko [1] noted a possibly unintended consequence of this change for libb=
+pf:
 
-(A): 'b' is a sub-range of the first or the last 32-bit
-     sub-range of 'a':
+Does this override unintentionally drop the default compiler flags for libb=
+pf?
 
-                                                         64-bit number axis --->
+Looking at tools/lib/bpf/Makefile, the default compiler flags like -g and -=
+O2
+are only applied if EXTRA_CFLAGS is undefined:
 
- N*2^32                   (N+1)*2^32                (N+2)*2^32                (N+3)*2^32
- ||------|---|=====|-------||----------|=====|-------||----------|=====|----|--||
-         |   |< b >|                   |< b >|                   |< b >|    |
-         |   |                                                         |    |
-         |<--+--------------------------- a ---------------------------+--->|
-             |                                                         |
-             |<-------------------------- t -------------------------->|
+tools/lib/bpf/Makefile:
+ifndef EXTRA_CFLAGS
+EXTRA_CFLAGS :=3D -g -O2
+endif
 
-(B) 'b' does not intersect with the first of the last 32-bit
-    sub-range of 'a':
+Since tools/scripts/Makefile.include unconditionally appends to EXTRA_CFLAG=
+S
+here, the variable will be defined before tools/lib/bpf/Makefile evaluates =
+it.
 
-N*2^32                   (N+1)*2^32                (N+2)*2^32                (N+3)*2^32
-||--|=====|----|----------||--|=====|---------------||--|=====|------------|--||
-    |< b >|    |              |< b >|                   |< b >|            |
-               |              |                               |            |
-               |<-------------+--------- a -------------------|----------->|
-                              |                               |
-                              |<-------- t ------------------>|
+This causes libbpf to silently drop the default -g and -O2 flags.
 
-(C) 'b' crosses 0/U32_MAX boundary:
+While later commits in this series fix this exact issue for
+tools/lib/thermal/Makefile, it appears tools/lib/bpf/Makefile was missed.
 
-N*2^32                   (N+1)*2^32                (N+2)*2^32                (N+3)*2^32
-||===|---------|------|===||===|----------------|===||===|---------|------|===||
- |b >|         |      |< b||b >|                |< b||b >|         |      |< b|
-               |      |                                  |         |
-               |<-----+----------------- a --------------+-------->|
-                      |                                  |
-                      |<---------------- t ------------->|
+Thanks,
+Ian
 
-Current implementation of deduce_bounds_64_from_32() only handles
-case (A).
+[1] https://sashiko.dev/#/patchset/20260318-tools_build_fix_zero_init-v5-0-=
+bbeffd8da199%40arm.com
 
-reg_bounds.c is updated with similar logic to keep selftests passing.
-Instead of using cnums it inspects intersection between 'b' and
-first / last / next-after-first / previous-before-last sub-ranges
-of 'a'.
-
-The reg_bounds.c:range64_range32_intersect() function is verified
-using cbmc model checker, see [1].
-
-[1] https://github.com/eddyz87/cnum-verif
-
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
----
- kernel/bpf/verifier.c                              | 76 ++++----------------
- .../testing/selftests/bpf/prog_tests/reg_bounds.c  | 82 ++++++++++++++--------
- 2 files changed, 65 insertions(+), 93 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 45ee8711c50c5ef19d7a24333e55abcded93a8fb..745aef7d5467f92b0499b480987ef9daf940d52f 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2521,69 +2521,19 @@ static void deduce_bounds_64_from_64(struct bpf_reg_state *reg)
- 
- static void deduce_bounds_64_from_32(struct bpf_reg_state *reg)
- {
--	/* Try to tighten 64-bit bounds from 32-bit knowledge, using 32-bit
--	 * values on both sides of 64-bit range in hope to have tighter range.
--	 * E.g., if r1 is [0x1'00000000, 0x3'80000000], and we learn from
--	 * 32-bit signed > 0 operation that s32 bounds are now [1; 0x7fffffff].
--	 * With this, we can substitute 1 as low 32-bits of _low_ 64-bit bound
--	 * (0x100000000 -> 0x100000001) and 0x7fffffff as low 32-bits of
--	 * _high_ 64-bit bound (0x380000000 -> 0x37fffffff) and arrive at a
--	 * better overall bounds for r1 as [0x1'000000001; 0x3'7fffffff].
--	 * We just need to make sure that derived bounds we are intersecting
--	 * with are well-formed ranges in respective s64 or u64 domain, just
--	 * like we do with similar kinds of 32-to-64 or 64-to-32 adjustments.
--	 */
--	__u64 new_umin, new_umax;
--	__s64 new_smin, new_smax;
--
--	/* u32 -> u64 tightening, it's always well-formed */
--	new_umin = (reg->umin_value & ~0xffffffffULL) | reg->u32_min_value;
--	new_umax = (reg->umax_value & ~0xffffffffULL) | reg->u32_max_value;
--	reg->umin_value = max_t(u64, reg->umin_value, new_umin);
--	reg->umax_value = min_t(u64, reg->umax_value, new_umax);
--	/* u32 -> s64 tightening, u32 range embedded into s64 preserves range validity */
--	new_smin = (reg->smin_value & ~0xffffffffULL) | reg->u32_min_value;
--	new_smax = (reg->smax_value & ~0xffffffffULL) | reg->u32_max_value;
--	reg->smin_value = max_t(s64, reg->smin_value, new_smin);
--	reg->smax_value = min_t(s64, reg->smax_value, new_smax);
--
--	/* Here we would like to handle a special case after sign extending load,
--	 * when upper bits for a 64-bit range are all 1s or all 0s.
--	 *
--	 * Upper bits are all 1s when register is in a range:
--	 *   [0xffff_ffff_0000_0000, 0xffff_ffff_ffff_ffff]
--	 * Upper bits are all 0s when register is in a range:
--	 *   [0x0000_0000_0000_0000, 0x0000_0000_ffff_ffff]
--	 * Together this forms are continuous range:
--	 *   [0xffff_ffff_0000_0000, 0x0000_0000_ffff_ffff]
--	 *
--	 * Now, suppose that register range is in fact tighter:
--	 *   [0xffff_ffff_8000_0000, 0x0000_0000_ffff_ffff] (R)
--	 * Also suppose that it's 32-bit range is positive,
--	 * meaning that lower 32-bits of the full 64-bit register
--	 * are in the range:
--	 *   [0x0000_0000, 0x7fff_ffff] (W)
--	 *
--	 * If this happens, then any value in a range:
--	 *   [0xffff_ffff_0000_0000, 0xffff_ffff_7fff_ffff]
--	 * is smaller than a lowest bound of the range (R):
--	 *   0xffff_ffff_8000_0000
--	 * which means that upper bits of the full 64-bit register
--	 * can't be all 1s, when lower bits are in range (W).
--	 *
--	 * Note that:
--	 *  - 0xffff_ffff_8000_0000 == (s64)S32_MIN
--	 *  - 0x0000_0000_7fff_ffff == (s64)S32_MAX
--	 * These relations are used in the conditions below.
--	 */
--	if (reg->s32_min_value >= 0 && reg->smin_value >= S32_MIN && reg->smax_value <= S32_MAX) {
--		reg->smin_value = reg->s32_min_value;
--		reg->smax_value = reg->s32_max_value;
--		reg->umin_value = reg->s32_min_value;
--		reg->umax_value = reg->s32_max_value;
--		reg->var_off = tnum_intersect(reg->var_off,
--					      tnum_range(reg->smin_value, reg->smax_value));
--	}
-+	struct cnum32 s = cnum32_from_sreg(reg);
-+	struct cnum32 u = cnum32_from_ureg(reg);
-+	struct cnum64 t;
-+
-+	t = cnum64_from_ureg(reg);
-+	if (cnum64_cnum32_intersect(t, s, &t) &&
-+	    cnum64_cnum32_intersect(t, u, &t))
-+		cnum_update_reg64_bounds(reg, t);
-+
-+	t = cnum64_from_sreg(reg);
-+	if (cnum64_cnum32_intersect(t, s, &t) &&
-+	    cnum64_cnum32_intersect(t, u, &t))
-+		cnum_update_reg64_bounds(reg, t);
- }
- 
- static void __reg_deduce_bounds(struct bpf_reg_state *reg)
-diff --git a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-index cb8dd2f63296b826491c8a010f4ece4aa20c0560..b6f46608d5f18a60238898b406bdfb51aa0dd404 100644
---- a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-+++ b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-@@ -478,6 +478,52 @@ static struct range range_refine_in_halves(enum num_t x_t, struct range x,
- 
- }
- 
-+static __always_inline u64 next_u32_block(u64 x) { return x + (1ULL << 32); }
-+static __always_inline u64 prev_u32_block(u64 x) { return x - (1ULL << 32); }
-+
-+/* Is v within the circular u64 range [base, base + len]? */
-+static __always_inline bool u64_range_contains(u64 v, u64 base, u64 len)
-+{
-+	return v - base <= len;
-+}
-+
-+/* Is v within the circular u32 range [base, base + len]? */
-+static __always_inline bool u32_range_contains(u32 v, u32 base, u32 len)
-+{
-+	return v - base <= len;
-+}
-+
-+static bool range64_range32_intersect(enum num_t a_t,
-+				      struct range a /* 64 */,
-+				      struct range b /* 32 */,
-+				      struct range *out /* 64 */)
-+{
-+	u64 b_len = (u32)(b.b - b.a);
-+	u64 a_len = a.b - a.a;
-+	u64 lo, hi;
-+
-+	if (u32_range_contains((u32)a.a, (u32)b.a, b_len)) {
-+		lo = a.a;
-+	} else {
-+		lo = swap_low32(a.a, (u32)b.a);
-+		if (!u64_range_contains(lo, a.a, a_len))
-+			lo = next_u32_block(lo);
-+		if (!u64_range_contains(lo, a.a, a_len))
-+			return false;
-+	}
-+	if (u32_range_contains(a.b, (u32)b.a, b_len)) {
-+		hi = a.b;
-+	} else {
-+		hi = swap_low32(a.b, (u32)b.b);
-+		if (!u64_range_contains(hi, a.a, a_len))
-+			hi = prev_u32_block(hi);
-+		if (!u64_range_contains(hi, a.a, a_len))
-+			return false;
-+	}
-+	*out = range(a_t, lo, hi);
-+	return true;
-+}
-+
- static struct range range_refine(enum num_t x_t, struct range x, enum num_t y_t, struct range y)
- {
- 	struct range y_cast;
-@@ -485,40 +531,16 @@ static struct range range_refine(enum num_t x_t, struct range x, enum num_t y_t,
- 	if (t_is_32(x_t) == t_is_32(y_t))
- 		x = range_refine_in_halves(x_t, x, y_t, y);
- 
--	y_cast = range_cast(y_t, x_t, y);
--
--	/* If we know that
--	 *   - *x* is in the range of signed 32bit value, and
--	 *   - *y_cast* range is 32-bit signed non-negative
--	 * then *x* range can be improved with *y_cast* such that *x* range
--	 * is 32-bit signed non-negative. Otherwise, if the new range for *x*
--	 * allows upper 32-bit * 0xffffffff then the eventual new range for
--	 * *x* will be out of signed 32-bit range which violates the origin
--	 * *x* range.
--	 */
--	if (x_t == S64 && y_t == S32 && y_cast.a <= S32_MAX  && y_cast.b <= S32_MAX &&
--	    (s64)x.a >= S32_MIN && (s64)x.b <= S32_MAX)
--		return range_intersection(x_t, x, y_cast);
--
--	/* the case when new range knowledge, *y*, is a 32-bit subregister
--	 * range, while previous range knowledge, *x*, is a full register
--	 * 64-bit range, needs special treatment to take into account upper 32
--	 * bits of full register range
--	 */
- 	if (t_is_32(y_t) && !t_is_32(x_t)) {
--		struct range x_swap;
-+		struct range x1;
- 
--		/* some combinations of upper 32 bits and sign bit can lead to
--		 * invalid ranges, in such cases it's easier to detect them
--		 * after cast/swap than try to enumerate all the conditions
--		 * under which transformation and knowledge transfer is valid
--		 */
--		x_swap = range(x_t, swap_low32(x.a, y_cast.a), swap_low32(x.b, y_cast.b));
--		if (!is_valid_range(x_t, x_swap))
--			return x;
--		return range_intersection(x_t, x, x_swap);
-+		if (range64_range32_intersect(x_t, x, y, &x1))
-+			return x1;
-+		return x;
- 	}
- 
-+	y_cast = range_cast(y_t, x_t, y);
-+
- 	/* otherwise, plain range cast and intersection works */
- 	return range_intersection(x_t, x, y_cast);
- }
-
--- 
-2.51.1
+> +HOST_FLAG_ZERO_INIT :=3D $(call host-cc-option,-fzero-init-padding-bits=
+=3Dall)
+> +override HOST_EXTRACFLAGS +=3D $(HOST_FLAG_ZERO_INIT)
+> +
+>  ifneq ($(findstring $(MAKEFLAGS), w),w)
+>  PRINT_DIR =3D --no-print-directory
+>  else
+>
+> --
+> 2.34.1
+>
