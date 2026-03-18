@@ -1,107 +1,77 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6EB23DBD43
-	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 14:17:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83D183DBD4C
+	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 14:40:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773843451; cv=none; b=j0jW/Qzq+f7q/2Je0x6xY0ig0TVCh8h0abstr/JHAZklgC64U/MQ49hO+dEMIVAJS9E00+VMisa2/Bs0m+yh+ivS92cdLykwlXLBgsyTlLcXghnbLJRXL969IRLsrUH8mP8P8077226nUBAAm5SPK1QInSRZoXhcxVrAuG/ouuA=
+	t=1773844847; cv=none; b=jBxv7KGJ1a5IiUklMBdhjSRwIPcowAW4b5krl3qOPHx22CuA92KMfH4oclQzunliSX4VIcYbfRzhWUofB/39YZO58j1b9pcGMolMvUBfAQJ2BY/pL0m4Akkxq2wOOxH+RbeSS5m3gG4Aztc5ILsRm8JMiHSaNN0+d0OHT9FVnrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773843451; c=relaxed/simple;
-	bh=qPXI7YPTmUKpStE6fm8di0boystY87ZA0kTJF8QXJ6o=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dqQz6HQPrUuSRf0LnkZohVe1nuh7/l4ZwsWjtu8CZULSl8ZzoYmsyEvi/nTBRwzg4Ph9XunzxdUvZpJc3jeE4yl+Vb4OEvK3FtWqOeB/yW8jwwygTWkjrkyyKJTenJQ7g8DzFf33wDBVO7TB9buUk9ySJaG2ixr9D43wq4ECyw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UsSliIRe; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773844847; c=relaxed/simple;
+	bh=uOoIxUn3IxfMgiqqMkt9jZVMAOumnhYUoNTHGDeBOF8=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=QPnscy/xmebQ1T27I53/gpS/bmNYctFqvjlYn7GEQ+WtMwB0YNVl5bTCdq2q3GZQnxsldX0rUwSi6galgPCwSj3QYzjhCzfyq2Ktzgwu6RsusZskLIMTDQejUjMgivajEBQayuvHvo8phgcly0YPrA7opP2D2gFDqg/zejjsHa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RDogs8Jn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UsSliIRe"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-439b9cf8cb5so7866580f8f.0
-        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 07:17:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773843448; x=1774448248; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MGFXe0XrDXFVwHGvsgCIqTOlVVluXByUL6lncWYywBc=;
-        b=UsSliIRe+gvXOBkzrlQuSgRHbQBcTo9sMm0wvXejzUxbXlTKIl48oEok81ZrQczBUH
-         TI0xwNgb6ayHVz8/ahG4gK6gxoluDcJ+BXWb0/YlIejr+Qc6xcJD+s4xmh0217iLK2qx
-         tYv5q9SckDZUdIs47IK3WpKpXi7eHHVNeSrn+3DSRqjHBbO8Wjqcy0w1ovGpFTRClgz3
-         0ZpbUU12+BenipzUwlPadbQsaPGFgc692wQzN2fUhcFxq4Sr5KKrhDTJ5FZBMCxRWcxq
-         4kXtMkzr2sHi5ybQVUXIXKwfkcsFPx3qEVO3c0vhsUtShj/+6iQ6FOSzIVHSjMnxyULG
-         zGfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773843448; x=1774448248;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MGFXe0XrDXFVwHGvsgCIqTOlVVluXByUL6lncWYywBc=;
-        b=Jc9pdgbFIo5wtRvczAHntaHxXkNhcWjd2bWAw035vidRbeA55CnJbuWvWejy678+oj
-         13KnIa/I/BaH2P2SC1mCpddwwhnn+7DOz9pwQHX4M063u5kuzdNEk9sEBhyapq6QE42A
-         jxXcdaLL5SI6eFADFCqDLNwwarVUFGimp6O9G/T5WPDPDjJmQ1Va0+Nht0JIvsyjfc4S
-         RB3m6HblQbPNekovNoFbB5p3jpSZAJmDpK4NTBvuFxJCYp/4jKbI5bEZUDYEtcOxJeS3
-         yDv9MX0SvhFWg9faxKQnCtcnt2yH6SaWGLnYxewIPX3Puo2lMYOur439rmZd3wWc4h4O
-         wztg==
-X-Gm-Message-State: AOJu0Yw+/uPpmkT+KusU0BQxcyMXt0I2UwaeSJGZl4p+VuXjXPdpRjWg
-	JeLa5stvCxgMiM6Rl5yuATAX7nmDT/cS+GunFy3nhrbY1Mul22FrLBHYinZJ+GY=
-X-Gm-Gg: ATEYQzxcjZTWR196acRhcF5aRHSYMnT/12Lax68U+BpKkoIWs+apE/kroZNVFaugCxu
-	1YJUwsRhK98NisgRx2S30aI4W6dAQDmLbRqyPmmCqJ5h1FgITS2RaIOBwn9ewG0qNKPe8wmYp/i
-	VCfkwXIrTih6rjBHbGmu5v2GVUxqdNYtsSxngFkTH3F3n+P4lvc8/Q+Lr1wqyzKDTKYXCNIrV6n
-	SmhOOngd67WpxKZFppVHJeMT0p5J4RttXprv0apvR3KMSPBgeqNI8uEA0mihFD5NY0qQNMVVW5r
-	YhCoE5O1KxYzN3lap/Y8JxO2HpeDC7QDe36rdxfDurDFnJ97uQqPi49HHinxvPl6TDRIQkjp1EK
-	pQtCrD4qvWXBCFkYfi8YAI+f4xvhhFPQk2OrR4M5DRJGpqlCKnsD5r8ByhNamuGmXdbx3tiiiwe
-	Huw/ywCWJWl4bzdw==
-X-Received: by 2002:a05:6000:250e:b0:43b:3f2d:7d3c with SMTP id ffacd0b85a97d-43b527a4661mr6088368f8f.2.1773843447648;
-        Wed, 18 Mar 2026 07:17:27 -0700 (PDT)
-Received: from jacks ([197.38.173.144])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b51892290sm7734121f8f.20.2026.03.18.07.17.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2026 07:17:27 -0700 (PDT)
-From: Ibrahim Zein <zeroxjacks@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	Ibrahim Zein <zeroxjacks@gmail.com>
-Subject: [PATCH 1/2] bpf/btf: fix u32 subtraction overflow in btf_sec_info_cmp
-Date: Wed, 18 Mar 2026 10:17:19 -0400
-Message-ID: <20260318141720.1894502-1-zeroxjacks@gmail.com>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RDogs8Jn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1C37C19421;
+	Wed, 18 Mar 2026 14:40:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773844847;
+	bh=uOoIxUn3IxfMgiqqMkt9jZVMAOumnhYUoNTHGDeBOF8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=RDogs8JnvyBRgCWzWrYBfdr704kKnz0ULAf2uNClnY4o9+7pVHP2s59vo7k7Y5kTy
+	 JTSeu8Yy6gj+3Cx0prLG7E9Q6JaFpVEfv7P9ZUYD3HNNXb6tpMST53VUvSd8iCl7Hv
+	 Uhl1b75mkEgIg0eysy5ySDuTETx/IZGWjQ+SbXNKmYq0WQwRm7xNWcPKXuJ/x2n1s2
+	 CXqK0g5NuLOTiQV4WZLfCBvsMSdOCdmK60FyVERT6CZ1ct9k/o2oEHO/ULDzWYNGpg
+	 obORK9M00FkmfvJXM932gBE0SmNBHVVGAjKQefkdR7cN/bhduBUTuCvfiuWI8ubO6e
+	 EE/716rOYyjuw==
+Content-Type: multipart/mixed; boundary="===============2494579703070904862=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <a4381f729a7ceb3180f61f4450d07e6b446b14faa78de4337b8199915646fa8c@mail.kernel.org>
+In-Reply-To: <20260318141720.1894502-1-zeroxjacks@gmail.com>
+References: <20260318141720.1894502-1-zeroxjacks@gmail.com>
+Subject: Re: [PATCH 1/2] bpf/btf: fix u32 subtraction overflow in btf_sec_info_cmp
+From: bot+bpf-ci@kernel.org
+To: zeroxjacks@gmail.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,zeroxjacks@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 18 Mar 2026 14:40:46 +0000 (UTC)
 
-The comparison function btf_sec_info_cmp() uses direct subtraction
-of u32 values cast to int, which can produce incorrect results due
-to integer overflow when values exceed 0x7FFFFFFF.
+--===============2494579703070904862==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Replace with explicit comparisons to guarantee correct behavior
-across all u32 value ranges.
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -5548,7 +5548,11 @@ static int btf_sec_info_cmp(const void *a, const void *b)
+>  	const struct btf_sec_info *x = a;
+>  	const struct btf_sec_info *y = b;
+>
+> -	return (int)(x->off - y->off) ? : (int)(x->len - y->len);
+> +	if (x->off != y->off)
+> +		return x->off < y->off ? -1 : 1;
+> +	if (x->len != y->len)
+> +		return x->len < y->len ? -1 : 1;
+> +	return 0;
+>  }
 
-Reported-by: Ibrahim Zein <zeroxjacks@gmail.com>
-Signed-off-by: Ibrahim Zein <zeroxjacks@gmail.com>
+Daniel Borkmann asked for a BPF selftest demonstrating the overflow
+behavior being fixed here. The v2 patch does not appear to include
+one. Was this feedback addressed separately?
+
+https://lore.kernel.org/bpf/322777ed-ba0c-42a9-99b9-f567ba4f7282@iogearbox.net/
+
+
 ---
- kernel/bpf/btf.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 4872d2a..5b3e1af 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -5548,7 +5548,11 @@ static int btf_sec_info_cmp(const void *a, const void *b)
- 	const struct btf_sec_info *x = a;
- 	const struct btf_sec_info *y = b;
- 
--	return (int)(x->off - y->off) ? : (int)(x->len - y->len);
-+	if (x->off != y->off)
-+		return x->off < y->off ? -1 : 1;
-+	if (x->len != y->len)
-+		return x->len < y->len ? -1 : 1;
-+	return 0;
- }
- 
- static int btf_check_sec_info(struct btf_verifier_env *env,
--- 
-2.51.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23249633514
+--===============2494579703070904862==--
