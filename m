@@ -1,162 +1,128 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02ABF1A285
-	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 00:41:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F25991F63D9
+	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 00:54:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773794500; cv=none; b=oOMCvluI79AMalrH24Beq7xehvLVjSHdJRSWx5rk8r/1ApPj70PT7qsvByr26wmmJ+oojBlOe4XXQuh2sySHtjxVjC4ikEW31i2d8SKNkxhjqO1BDlHPWfwutXEbGSURkrjC5ZA/RCJaj0LMnHCAj3CD55Gg4W50NVazu52/h60=
+	t=1773795248; cv=none; b=DGDUPFnogslXSIIlGj8tDgujkspswmYGQL/BPk+ky+YsdW5K3eKo/e/EWFt8q208niYHy48u1p8Sz7wT18e1DBgCDVcqv4Z5ZBSwq6/cbDUZq6ItmvW12lRmREUMvbRaSX3VJ1j3Ifk4EjDbWMSg6DMnVv+3YJaCKIifcVRV4ts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773794500; c=relaxed/simple;
-	bh=w8Tq6Bc94AEMzOJYfUQvY+6Pun3Kffb3whTQ47bh5zk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sgSLstvPhrudkd7MI2zpROviIHwIJFE/nh6t6T3eDL4WPohxuPalQm5tgy7SoZkEXCvtfLH83EcR7l/I/dLbybW4DT6EIQLpPCLeGIPPhSB68tHB8UfxwtDy19Zwou7fUUiabib59Zsin8mSHKMXkAlzicu15cI989ohLDu2AHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DoTXArsU; arc=none smtp.client-ip=209.85.128.54
+	s=arc-20240116; t=1773795248; c=relaxed/simple;
+	bh=LEYmdWK7Kk552UX5ZZybeDPpxRvo8AVLuiMGGPj5UHQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=klTBh81/Jddbk2pnjQe5By7OfOmxFX7R34wRrbVTNmHmJIhIozmR+l5bRqrD8Fu5geWi03s76z6G1obxA2bhqtMmZKGB85EI/vau05n13nPtTWo0Pc1gjnKJ9sFcA5ovfn26+jzXD8c8l/LzpWkvUZow77r41wpIdjfPN4cEadE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BTBcZmcy; arc=none smtp.client-ip=74.125.224.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DoTXArsU"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-48538c5956bso3467175e9.0
-        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 17:41:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BTBcZmcy"
+Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-64ae222d87dso5890071d50.2
+        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 17:54:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773794497; x=1774399297; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iLDvbIYEy8LBmAkZqY7L30i1fR9uuX/8ehy3u8kgra8=;
-        b=DoTXArsU0td6fLixmfLF9J5EA3Ks06p0UYJAKnwjeXD2QPa0BRQEQJGyQ0fbUug6Cr
-         y+M4ViUyOoHmYTnLPBaQv6FQ9BRLPoGgmfUiRLvRzykZpeQxtd45lsCjhaZjIfF8I9ql
-         s7piKfel+IDLWhwLjwcIPy+61Zm7ntIJ8SM1eCnjYTJpwaec2Jaf2C9GOGGuSVs4F9BO
-         744fjNLDHQwDNTAOddidG+Ljo/6Xlz1aDZH6WbSHbAm7wnesZrozYC5Ri2ACfjGzft8D
-         x6NOo0unsLGLLv7l4hXkXK+n+/Ch6G2i8Z1FrJMjsOZI0yN3F3IE24pmR01D+IWmBIsd
-         ok4A==
+        d=gmail.com; s=20230601; t=1773795246; x=1774400046; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UAEC4LpUFt6nufrPf92R86ddLY16BiwOGudignGq+G0=;
+        b=BTBcZmcyZtxR4rtVUZQpSET3dHYGss21xAB6JfH2H/zrMsqGYHKcTDAkpnvvE0u+Tp
+         GVoy6LHccnwgnd+4wt/1IiZTRh/PhtdhBuszUFlddEvU/t3yDuQ1xL7MLq0BVXRbDVsO
+         5vFm/YJBgUdA5WiQrMRjVH18/asRNE01Igj8tzl40J5/sF27vWNIQZvql5DboAzQdAJY
+         t8wO0KKUbZ5b0zq3dPF9e3Hj7VEe7RaHOOPF2bdGW0oeMfYmAD4jePrEcswmuJroQxtv
+         +zPHY5zP2FELIyNEiUGv18OZaRpJhyIRjL26+1AcOLAiP2BoFsW18hvuYrMkCq2bDpaQ
+         kHcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773794497; x=1774399297;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iLDvbIYEy8LBmAkZqY7L30i1fR9uuX/8ehy3u8kgra8=;
-        b=I+Dp91Zt2EaCcOf6e9hWd7S5t9EW6kq8HhNsy8P41s1IIQZeSFw4HtorK54vVAJfsP
-         C5quckw9+hVimEz9t7Ek3GDEkLTHdAzK59spH+enjhXc7DjpRiDdSddNFHjQ6aYay6qB
-         hTeID925UJ0pnGjrCamRMJaZGalWCo36oWXUfdxaT+8m/+Jq4FGYvaC67PvU5z6YOM+v
-         zqXB5vzcciVGbI/e8Y9qOC4XqElBNmdqIHm3owMEfUzXTmJyCvLdQXN0D1P6SydwF9Et
-         YyjBGTAw0doWeZb7aCoR4TGWW0xhVkyyHxQOYn9SKLh0y1C1S6s89f8H7zLKm8z04Gvx
-         /0uw==
-X-Gm-Message-State: AOJu0Yx04KS9j1NwslF/3PyGDRXI3BtGgfg+zS77MFK4GRFyUiSzceM1
-	+eQGzgWvalv0Ki7iHlzxHSosATc6fheWQuoaHPMMi8fYBGIzcniZ0dut09QOjGQ=
-X-Gm-Gg: ATEYQzywGMDO3+APzwGTwLp6vRJSVQd6DkX5RQnrWqyLfs03odL+cMfrBg59sRIUr2M
-	WC3IFQbAIawVZEvcDV2g+WEzqZe6LR+383aNCOGQI2BieLMIojzOMNc6L5GdUgwWQ5Xo1lIOVuv
-	Ym1FvP1HGTBNmtQLr97thrcLDdC0Z+vdHY86SF4twMeuFiHO/NsEDU4ITh8PtQdobBjMQPoIlFJ
-	rg5gawL/vcthzraZk/vTDQdR50X0uH+/0Jru2Tgc98c5wYh6P20Lm/uHNbKTU8mqpsQYy3jncd9
-	A6DcHNGMYSSomB+HstAnUaqs3aa4gxsVje4xakVs2AHgchjaKRgCSy6OU+f/HWR+j2pxxRPPjjE
-	aH5J8FGsnhx0rAWvzY2rFNaaeRXOQlg5EXur4Sm+YuTbV9p1I9/f6/2TYs0+9NacupM/6uMctP/
-	WKUoOYmgRWXfxkqGMuHcce18b9
-X-Received: by 2002:a05:600c:a0d:b0:485:3e00:944a with SMTP id 5b1f17b1804b1-486f40c1975mr26795405e9.9.1773794496883;
-        Tue, 17 Mar 2026 17:41:36 -0700 (PDT)
-Received: from jacks ([197.38.212.252])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486f4b9beb0sm10465035e9.8.2026.03.17.17.41.28
+        d=1e100.net; s=20251104; t=1773795246; x=1774400046;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UAEC4LpUFt6nufrPf92R86ddLY16BiwOGudignGq+G0=;
+        b=adWpnNJEaq8o2zI/AItquJ1nwAJizOiiT5F41f+GFf2izrNRRRUMu1JHu1kR7CCK6F
+         +CvmTYeQ4kp2GscWD28K4vAO9g37ERMjhiREm8X2+RO5nZnRc0ow+AbYorDVsMhM7M5z
+         DlM55s5L2ZQXWMFRHXkkKiP3s3ivGEEOaa2ItQQTdHZ3VqUrgmEibUDqRtc9gHmVcMuK
+         kPmdw4cHKsz0B2TOpqemDC8jRMtJ5jmytur59LakVRJctrwqkbq0wJETzEZF1XPyW69a
+         pUtMzaHqFs6qt17TL9V/WYPs+7a9QGfDbRmgXByLr/9TYb1F3S6lX9tVoSJ5qSTzlO5W
+         iCBg==
+X-Forwarded-Encrypted: i=1; AJvYcCXbfgirNzj6GbnWT6kREbizvtRtXN4JZkgb0mWhtxLZALknR23SLsaytKnz/eogK2Vk1qQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw36ypDYnpc8waP1flyPJd1KxNXdzja6TO2Tj3X/VG7rLqx6iRW
+	zjKyOfL3dZ15ON/2XItLPSoTL2N2UO7sE2B8nsE3fEZhwwI0v4toRRbU
+X-Gm-Gg: ATEYQzy5XPwfuU94xwvEyO5ulSJ5KJNqH8wujrqLsiME90paKUEHwYzC+d0cVpJNs9Z
+	iv0BvDHZgN4p6/KywVf/whOC8LrglWevLHee4dl22eIS7F49+fAb4GNe5mKn4a2pGpA5kd8MU4V
+	WE1gyw1qggDf/gdM0OYzM6Mtjo/VS7/vapWrvNrHWATqQjBfGevSzGCT3lf/iw4xwGMgCXPlG5E
+	61b41Y9Bxb8Y+K8W6I7ODI9HSPSpYSL+VjKkFFwJWOnlG1m7NEkMd74QnnTzGhs0px6T94oG1cm
+	Ghf/ikk4haDaym8DAhmLQE3LCM8/A/dgDAstiYGAcj9UTeIrA3ioCLioFN8FuJFWLB5PyQ7AbO1
+	3ahNLEMBctPrEXAd+fPevYAOJoAO0n0OxVx+o1owRWVV/5wzFcy4+0ny8AjLW2YYQnMvj57ctYy
+	ljTDc2AxeJVBUHco3ZlI54J5jcwlSY833R/ZF8TFiFjKA9yyE=
+X-Received: by 2002:a53:ee53:0:b0:64a:db17:3ce6 with SMTP id 956f58d0204a3-64e912ebf63mr1522789d50.2.1773795245924;
+        Tue, 17 Mar 2026 17:54:05 -0700 (PDT)
+Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:73::])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-64e91c29074sm746207d50.20.2026.03.17.17.54.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Mar 2026 17:41:36 -0700 (PDT)
-From: Ibrahim Zein <zeroxjacks@gmail.com>
-X-Google-Original-From: Ibrahim Zein <ZeroXJacks@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	gregkh@linuxfoundation.org,
-	jolsa@kernel.org,
-	kpsingh@kernel.org,
-	haoluo@google.com,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	martin.lau@linux.dev,
-	andrii@kernel.org,
-	yonghong.song@linux.dev,
-	song@kernel.org,
-	eddyz87@gmail.com,
-	shung-hsi.yu@suse.com,
-	menglong8.dong@gmail.com,
-	Ibrahim Zein <zeroxjacks@gmail.com>
-Subject: [PATCH bpf-next v3] bpf: verifier: fix integer wrap in regs_refine_cond_op() BPF_JNE case
-Date: Tue, 17 Mar 2026 20:41:18 -0400
-Message-ID: <20260318004118.1780755-1-ZeroXJacks@gmail.com>
-X-Mailer: git-send-email 2.51.0
+        Tue, 17 Mar 2026 17:54:05 -0700 (PDT)
+Date: Tue, 17 Mar 2026 17:54:04 -0700
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Stanislav Fomichev <stfomichev@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Mina Almasry <almasrymina@google.com>, Wei Wang <weibunny@fb.com>,
+	David Wei <dw@davidwei.uk>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	bpf@vger.kernel.org, Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next 5/6] selftests: drv-net: add netkit devmem RX
+ test
+Message-ID: <abn3rJGXXyDYSNzA@devvm11784.nha0.facebook.com>
+References: <20260316-scratch-bobbyeshleman-tcp-dm-netkit5-v1-0-b53c8cd72b23@meta.com>
+ <20260316-scratch-bobbyeshleman-tcp-dm-netkit5-v1-5-b53c8cd72b23@meta.com>
+ <abns9COj7WagFtZ8@mini-arch>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <abns9COj7WagFtZ8@mini-arch>
 
-From: Ibrahim Zein <zeroxjacks@gmail.com>
+On Tue, Mar 17, 2026 at 05:08:20PM -0700, Stanislav Fomichev wrote:
+> On 03/16, Bobby Eshleman wrote:
+> > From: Bobby Eshleman <bobbyeshleman@meta.com>
+> > 
+> > Add tests for devmem RX over a netkit device with a leased queue. This
+> > is the same as the other devmem RX test except for ncdevmem executes in
+> > a namespace, binds to a netkit, and skips the ethtool NIC configuration
+> > steps (relying on the test runner for that setup).
+> > 
+> > The RX path is setup as the following:
+> > 
+> >  RX Path
+> >  -------
+> > 
+> >  Remote            Physical NIC          Netkit Host        Netkit Guest (netns)
+> >    |                    |                     |                    |
+> >    |--- TCP send ------>|                     |                    |
+> >                         |-------------------->|                    |
+> >                       dmabuf                  |--- BPF redirect -->|
+> > 
+> 
+> Is it too messy to parametrize the existing test to run both with and
+> without the namespaces? Feels like should be somewhat doable in python?
 
-In regs_refine_cond_op(), the BPF_JNE case narrows register bounds
-without guarding against wrap-around at type boundaries. When
-umin_value equals U64_MAX, incrementing it wraps to 0, producing
-an inconsistent bounds state (umin=0, umax=U64_MAX-1).
+IIUC, we could have main() do something like:
 
-This can be triggered by constructing a register state where:
-  r1 = unknown_byte | 0xFFFFFFFFFFFFFFFE
-  -> var_off = (value=U64_MAX-1, mask=1)
-  -> constrain with JGE U64_MAX -> umin=umax=U64_MAX, tnum non-const
-  -> compare with BPF_JNE const=U64_MAX -> wrap occurs
+for env [NetDrvContEnv, NetDrvEpEnv]:
+    with env as cfg:
+        [...]
+        ksft_run(tests, args=(cfg,))
 
-The comment above these checks incorrectly claims this boundary
-condition is impossible. However, is_reg_const() uses tnum_is_const()
-which requires mask == 0, so a register can have umin == umax while
-tnum is non-const (mask != 0). Remove the misleading comment and add
-explicit boundary guards to prevent wrap-around in all
-{u,s}{min,max}{32,64} variants.
 
-Fixes: d028f87517d6 ("bpf: make the verifier tracks the "not equal" for regs")
-Reported-by: Ibrahim Zein <zeroxjacks@gmail.com>
-Signed-off-by: Ibrahim Zein <zeroxjacks@gmail.com>
----
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -17046,31 +17046,30 @@
- 		 */
- 		val = reg_const_value(reg2, is_jmp32);
- 		if (is_jmp32) {
--			/* u32_min_value is not equal to 0xffffffff at this point,
--			 * because otherwise u32_max_value is 0xffffffff as well,
--			 * in such a case both reg1 and reg2 would be constants,
--			 * jump would be predicted and reg_set_min_max() won't
--			 * be called.
--			 *
--			 * Same reasoning works for all {u,s}{min,max}{32,64} cases
--			 * below.
--			 */
--			if (reg1->u32_min_value == (u32)val)
-+			if (reg1->u32_min_value == (u32)val &&
-+			    reg1->u32_min_value != U32_MAX)
- 				reg1->u32_min_value++;
--			if (reg1->u32_max_value == (u32)val)
-+			if (reg1->u32_max_value == (u32)val &&
-+			    reg1->u32_max_value != 0)
- 				reg1->u32_max_value--;
--			if (reg1->s32_min_value == (s32)val)
-+			if (reg1->s32_min_value == (s32)val &&
-+			    reg1->s32_min_value != S32_MAX)
- 				reg1->s32_min_value++;
--			if (reg1->s32_max_value == (s32)val)
-+			if (reg1->s32_max_value == (s32)val &&
-+			    reg1->s32_max_value != S32_MIN)
- 				reg1->s32_max_value--;
- 		} else {
--			if (reg1->umin_value == (u64)val)
-+			if (reg1->umin_value == (u64)val &&
-+			    reg1->umin_value != U64_MAX)
- 				reg1->umin_value++;
--			if (reg1->umax_value == (u64)val)
-+			if (reg1->umax_value == (u64)val &&
-+			    reg1->umax_value != 0)
- 				reg1->umax_value--;
--			if (reg1->smin_value == (s64)val)
-+			if (reg1->smin_value == (s64)val &&
-+			    reg1->smin_value != S64_MAX)
- 				reg1->smin_value++;
--			if (reg1->smax_value == (s64)val)
-+			if (reg1->smax_value == (s64)val &&
-+			    reg1->smax_value != S64_MIN)
- 				reg1->smax_value--;
- 		}
- 		break;
+And then the tests could call helpers that check cfg.netns to use the
+nk_{guest,host}_ip6 addresses when true, otherwise use the regular
+addresses?
+
+It should be doable if I'm following your drift.
+
+Best,
+Bobby
