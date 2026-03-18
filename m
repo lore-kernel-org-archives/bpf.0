@@ -1,92 +1,182 @@
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 362DB2356C6
-	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 01:53:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
+Received: from invmail4.hynix.com (exvmail4.skhynix.com [166.125.252.92])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 261DD23EA85;
+	Wed, 18 Mar 2026 02:02:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773798828; cv=none; b=FwUoghse/Ffq70PoJR2QQwLy04rDioK5uZfW3nGPFKhwLLS4dD370oHFLlwQY+9mAZAx/XQnKz/n1SyTfHZq16c5fd0gX53qN8leIH9GSvGrQXz0dN4TwpkCBSc4T91FWNSUcDhyLPRdNp8QmTkdRKG5DDZEQlWTac2jUBY5d/4=
+	t=1773799358; cv=none; b=LFcBZcWpa9LfSPmoqTuGUD7wqdRwYorAORyB6PBHw3EfMN2AhtUHRvtUZ1AfVq7VvOFA2NfyhD4oEPNTQ2L53Uv5bsi9dnfrUdiTA0Z1F+3DL4LiJDkuy8ELxywWSAN1awdJybrE9TA5K/9xSzcrM026tm+V5O2QYZfkkwXYh9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773798828; c=relaxed/simple;
-	bh=5pxaOMozqi+U1L9wQC+eh3K99tLwoa1nEZUEmGVk9j0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=t48DIwv3TvwSRnT0HNTedEydKzW0L9aML+iQfgsrbKXm7efzlxaGXf/Xt9PeUMpYxCPMRecauCN7ESQLXmeIRXZ7J2+7HGxZx8ydNlFnD4xM+CygBLJnE0gY9KDyRC4mNqxQVzRC86KTrnx/iTjebzpTCpqtsbUJ1oNsudbSz/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=WkMSzFdb; arc=none smtp.client-ip=209.85.210.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="WkMSzFdb"
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7d7412cfb9eso172675a34.1
-        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 18:53:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1773798826; x=1774403626; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Sgb5BhT3xmKc+VcLKBubloVcdYOT6b+LpfgZfEBHMG4=;
-        b=WkMSzFdbF9G8qFmp7JZMOkSyD8rAArZpj3qMcYFYdrqqtitop90bwfyTU06AdcQkVT
-         rvTUeH0jDrOMwRKVudDGLYU2tFmUQ5z64/jXMYhFPvgnv3UP2LtZLGj3vUS99Ki7oQbm
-         0eg4GWeHaCWCASvea3Hc4W1TbEikeioSZyA2S3f1kybjfwasVp2ZI4ORs7agBilPSC94
-         X3my9fBqhAKa9KTtGIaNTlZObc/c+xWhQQivwCG+UKWw6e8YIFjIAQ5qzGbfp0HsqUKP
-         Z4T7eyfup8iApiKiYhVeO9JiFHCgDlAF2J7No6pjswe+4Cgno9iiN3R9SOZen6xqEWao
-         hKug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773798826; x=1774403626;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Sgb5BhT3xmKc+VcLKBubloVcdYOT6b+LpfgZfEBHMG4=;
-        b=hk08EH2ypbT9ilPrq2F4Qf9SulVrYwBXOxAlTo5a+EOFhhDG1h1cUaDFmAWJkOaz3K
-         y0/i4yIbj6wJ+nH6OXPOvDZGQjYmxnHHSIUIZ0y2FoqyTY+GC2rj1yT7ajhjSd6cNzTj
-         W1LlsnZmEtKTpM0NBJckqI1P1ySWAGa+ZARkdsDn12XDvGhGaoNM6IbBBhHzY8QlnxNO
-         N8BXuCKPQ++v8MgK8B0+WYl+JDLojfJapBEPJ3yYv2VQZtmi/giLOCNf5WGAvDNFjXs3
-         J9NX+wCZPkNHDO2beWBCTfL48L3vURMe5ECmpO/WM6iwomBpEhISAsBHgy8K37aoLI0t
-         i20Q==
-X-Gm-Message-State: AOJu0YzBeWSgp85yZecEZgqMXgMHhccqSEuGisuMkYDsUajfgp13n6Z1
-	hYuZCBjh+cKvxtcISm65Q3IpjLWeJ/SIdzjFEeFyfFys00KBcpjXvIr+giDEAV5siOM=
-X-Gm-Gg: ATEYQzw7tgqkUUkYzirBdGjJpdJ4PTmPRHTqnjYTbNvPbWQKz1M+SlpUwDkF/97f9D5
-	LRKR5eyje0kMwznv+Q/q3FaD/fOCS0fsebXajUhCv5ophmXOzJTcO9GSogPrCl8usbpRM/CIGBD
-	9EML1YsDBXc6AhJnHuAP4G7Wduw+Z79x7KFzo1ySUgShV8g1aYKqMTPBcQJAGm+jRM1BXDKav6Y
-	udnRR9OZ1JeDvtIKdSF0rIGYAc5ZMDBOgfM+nLwoO+ZMbOuks5wdSKumFN+OpfbkYD57XooMyFy
-	JZWw4GInIc7Z5l1WErOgqabJo2/noJl7kAXtr/A63/xhJQZYFrdKk17feADe0Om+kE9jGcUcOll
-	CyKVaRD67PLi7k9nrw+uR8AFI3hw5tvCFARSdlJBVzet+odN4DBW8tFDlNABg34m/kJqEusr+0p
-	aM3pQ3ETBCQnRV2uSlwEU2wVbUtvMWcCzAWr/BjlAByjlWr2zvyt/kFyEdlE58zM7+N4u3g5YU6
-	Mgfagv/ng==
-X-Received: by 2002:a05:6830:498b:b0:7d4:96c3:3f97 with SMTP id 46e09a7af769-7d7ca566cf8mr1223594a34.2.1773798825772;
-        Tue, 17 Mar 2026 18:53:45 -0700 (PDT)
-Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7d7c9b3696asm1102397a34.16.2026.03.17.18.53.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Mar 2026 18:53:45 -0700 (PDT)
-Message-ID: <9f08ade1-ca61-4ba3-9d1e-744ea5e8c004@kernel.dk>
-Date: Tue, 17 Mar 2026 19:53:44 -0600
+	s=arc-20240116; t=1773799358; c=relaxed/simple;
+	bh=jQ5AlW6g6zCQ5DGPrjSgNUV1KpT/RV9U8JolB5OGRyk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AUc42YvCD+4RMsvEgFSxOnN2SxAM+R1OqX9k8Ori9Yru1l4HER4D2wbWq0F4byU8V6HXmtU20TWDPnY3LG4NHimJ2EwULdqV7RySdqB5MrHAfq49t6UNLgD2YGK0Syb6buDTgfTPlkr4Ur0Awro2Wz9V5Nhfm5V9XWrkaKj+aLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
+X-AuditID: a67dfc5b-c45ff70000001609-95-69ba07b464b0
+Date: Wed, 18 Mar 2026 11:02:23 +0900
+From: Byungchul Park <byungchul@sk.com>
+To: Jesper Dangaard Brouer <hawk@kernel.org>
+Cc: linux-mm@kvack.org, akpm@linux-foundation.org, netdev@vger.kernel.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	Mina Almasry <almasrymina@google.com>,
+	Toke Hoiland Jorgensen <toke@redhat.com>,
+	linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
+	harry.yoo@oracle.com, ast@kernel.org, daniel@iogearbox.net,
+	davem@davemloft.net, john.fastabend@gmail.com, sdf@fomichev.me,
+	saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com,
+	mbloch@nvidia.com, andrew+netdev@lunn.ch, edumazet@google.com,
+	pabeni@redhat.com, david@redhat.com, lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org,
+	surenb@google.com, mhocko@suse.com, horms@kernel.org,
+	jackmanb@google.com, hannes@cmpxchg.org, ziy@nvidia.com,
+	ilias.apalodimas@linaro.org, willy@infradead.org,
+	brauner@kernel.org, kas@kernel.org, yuzhao@google.com,
+	usamaarif642@gmail.com, baolin.wang@linux.alibaba.com,
+	asml.silence@gmail.com, bpf@vger.kernel.org,
+	linux-rdma@vger.kernel.org, sfr@canb.auug.org.au, dw@davidwei.uk,
+	ap420073@gmail.com, dtatulea@nvidia.com
+Subject: Re: [PATCH v5] mm: introduce a new page type for page pool in page
+ type
+Message-ID: <20260318020223.GA69943@system.software.com>
+References: <20260316222901.GA59948@system.software.com>
+ <20260316223113.20097-1-byungchul@sk.com>
+ <ebd00055-d4aa-4612-8bf3-ef0a308512f8@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH liburing v2 1/1] tests: test io_uring bpf ops
-To: Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <alexei.starovoitov@gmail.com>
-References: <818dcda223b3288c764367cb0ab8d57c83722d78.1772109275.git.asml.silence@gmail.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <818dcda223b3288c764367cb0ab8d57c83722d78.1772109275.git.asml.silence@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ebd00055-d4aa-4612-8bf3-ef0a308512f8@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sf0yMcRzHfZ/nued5unXb0wlf/CFnZmskxvbxY/kxP76bMfNjmQw3PfTM
+	FS5Sja1oSVOd/Nh1xQolFTcX3V3UciVXbDjuPH5UhGt+heTWqeGuMf577fPj9Xn/8eFp9T3F
+	OF5K2ivqk7Q6DatklJ9Cz027ztVL0W53GJSYa1ioHkiFiy9tCvDX9FBQUlWHoN//nINfDa0I
+	vrXcYeFDcx+C82U+GkruZzHw3fyDBnt9D4L3xsssvG3t5qDashK6KrwM3DxipaG7wMlCXtYg
+	DQ3+Xg4O2SoD4toMDh7U5Svg5I9yGqwZLzl4VF/CQmfNLwV4HXkMtJkuMfDlVAsNXfkLobV0
+	NPjufkTQYrZS4Dt2hgV3UT0F1xvcHJxwlbLwOqsLgau5m4FTQzksFGfmIxgcCCh7Df0KKL7d
+	yS2MIpmyzJLmj59pcu3SU4p4jMcZIje2U8Ru6uBIqWUfqa2MJLmyiyaWqqMssfQVcuSF5yZL
+	nMZBhthfzSF22zeK5B3uZVeP2qicHy/qpBRRPz1mqzKh7KGX2u2PSPWeP8tkoAaci0J4LMzC
+	Oe/ecn/Zn/0MBZkRJuNK85AiyKwwBcuynw5yuDAV98guKhcpeVqo5nHTwIXh5ZHCGiwXWNgg
+	qwTAXk87FxxSC0aEi09m/mmE4baiN0yQaSESyz/fBUx8gMfjiz/5YDlEiMEeZ/lwiFHCJNxU
+	d2f4GBb6edzY/ehP0rH4VqXMGJBg+k9r+k9r+qctRXQVUktJKYlaSTcrKiEtSUqN2rYr0YIC
+	P1ZxcCjOhvoerHUggUeaUNWGWLukVmhTktMSHQjztCZcVdFSJ6lV8dq0dFG/a4t+n05MdqDx
+	PKMZo5rp2x+vFnZo94o7RXG3qP/bpfiQcRlowteJ6e372wYLnLH9udYiU9+qrNkRhgXl5oOb
+	l3jT4jalO2q3XF53eLrC99T8eETM9kVz9Tl7FnW4zhijY+JCIzqlwsVNmwqUtuwT2UvbG29c
+	JcamlFU9T1ZXn+YTPOHLnMtnGJYaJsIVONBhvWqMnVf4SQi7Z5t3TRXt5ldErNdpmOQE7YxI
+	Wp+s/Q1eK7MLXwMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0hTYRjHec85O+e4WhyX2aGgbCGBZCVZPN0kqPA16K5YfamRJ3dIZ2wm
+	WhSzxMq8VoJNC+3idTac5pxkmZrT/FAZyuniJauNTCwviVO7bFHktx/P//n/eD48LKm8L1vE
+	itp4QadVx6hoOSXfvelCYA1TL66ZqgqGArOJhorJRCjpr5OBy+QkoKC8FsG46y0DvxpaEYy1
+	2Gn40jyK4E7RBAkFz1Mo+G6eIsFW70QwmFdJw6fWAQYqLLugr9hBwcOLVhIGstpoyEiZJqHB
+	NczA+bpSt7jawEDzzXYZvKjNlMH1qXskWA39DLyqL6Ch1/RLBo6mDArajWUUfMttIaEvcyu0
+	FvrCRMcQghazlYCJ9Js0dN2oJ+BBQxcD1zoLafiQ0oegs3mAgtyZSzTkJ2cimJ50K4ezx2WQ
+	/7SX2boaJ0sSjZuHvpK4puw1gbvzcigsPXpGYJuxh8GFllO4ujQAp0mdJLaUX6axZfQqg991
+	P6RxW940hW3vN2Bb3RiBMy4M03t9D8s3RwkxYoKgWx1yVK4peukgTrr8Eh13blEG1MCnIS+W
+	54J5V+ob5GGK8+dLzTMyD9PcCl6SXKSHfbiVvFPqJNKQnCW5CpZvnLzLeIL53H5eyrLQHlZw
+	wDu6nzGeJSWXh/j868l/A2++/cZHysMkF8BLPz+7TaybF/MlP1nP2IsL4bvb7v05YgG3nG+s
+	tRPZSGGc1TbOahv/twsRWY58RG1CrFqMWbdKf0KTpBUTVx2Li7Ug9xcVn53JqUPjr0KbEMci
+	1VzFwUibqJSpE/RJsU2IZ0mVj6K4pVZUKqLUSacFXdwR3akYQd+EFrOUaqFiZ6RwVMlFq+OF
+	E4JwUtD9SwnWa5EBVVYZgtIHd9VYic+3xxojsG5l1SFF9fYtPXPCuny3KSP0S9d2jIRrR3I3
+	muLlYY+DRVOWMHjAvuNMyKgjcO21qfvZVjLuisaZtLRsaOzyXv/14akHRpy+P0LO5Ry37V/i
+	bU/F0T2BoX5no/yLXct8zAv2dYxvFm5p9sz7/gT76e0qSq9RBwWQOr36NwpIYiRBAwAA
+X-CFilter-Loop: Reflected
 
-On 2/26/26 5:49 AM, Pavel Begunkov wrote:
-> Add some BPF struct ops io_uring tests/examples, one is issuing nops in
-> a loop, the other copies a file. It needs appropriate tools for bpf and
-> hence is gated on a BPF_TESTS make flag for now.
+On Tue, Mar 17, 2026 at 10:20:08AM +0100, Jesper Dangaard Brouer wrote:
+> On 16/03/2026 23.31, Byungchul Park wrote:
+> > Currently, the condition 'page->pp_magic == PP_SIGNATURE' is used to
+> > determine if a page belongs to a page pool.  However, with the planned
+> > removal of @pp_magic, we should instead leverage the page_type in struct
+> > page, such as PGTY_netpp, for this purpose.
+> > 
+> > Introduce and use the page type APIs e.g. PageNetpp(), __SetPageNetpp(),
+> > and __ClearPageNetpp() instead, and remove the existing APIs accessing
+> > @pp_magic e.g. page_pool_page_is_pp(), netmem_or_pp_magic(), and
+> > netmem_clear_pp_magic().
+> > 
+> > Plus, add @page_type to struct net_iov at the same offset as struct page
+> > so as to use the page_type APIs for struct net_iov as well.  While at it,
+> > reorder @type and @owner in struct net_iov to avoid a hole and
+> > increasing the struct size.
+> > 
+> > This work was inspired by the following link:
+> > 
+> >    https://lore.kernel.org/all/582f41c0-2742-4400-9c81-0d46bf4e8314@gmail.com/
+> > 
+> > While at it, move the sanity check for page pool to on the free path.
+> > 
+> [...]
+> see below
+> 
+> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > index 9f2fe46ff69a1..ee81f5c67c18f 100644
+> > --- a/mm/page_alloc.c
+> > +++ b/mm/page_alloc.c
+> > @@ -1044,7 +1044,6 @@ static inline bool page_expected_state(struct page *page,
+> >   #ifdef CONFIG_MEMCG
+> >                       page->memcg_data |
+> >   #endif
+> > -                     page_pool_page_is_pp(page) |
+> >                       (page->flags.f & check_flags)))
+> >               return false;
+> > 
+> > @@ -1071,8 +1070,6 @@ static const char *page_bad_reason(struct page *page, unsigned long flags)
+> >       if (unlikely(page->memcg_data))
+> >               bad_reason = "page still charged to cgroup";
+> >   #endif
+> > -     if (unlikely(page_pool_page_is_pp(page)))
+> > -             bad_reason = "page_pool leak";
+> >       return bad_reason;
+> >   }
+> > 
+> > @@ -1381,9 +1378,17 @@ __always_inline bool __free_pages_prepare(struct page *page,
+> >               mod_mthp_stat(order, MTHP_STAT_NR_ANON, -1);
+> >               folio->mapping = NULL;
+> >       }
+> > -     if (unlikely(page_has_type(page)))
+> > +     if (unlikely(page_has_type(page))) {
+> > +             /* networking expects to clear its page type before releasing */
+> > +             if (is_check_pages_enabled()) {
+> > +                     if (unlikely(PageNetpp(page))) {
+> > +                             bad_page(page, "page_pool leak");
+> > +                             return false;
+> > +                     }
+> > +             }
+> >               /* Reset the page_type (which overlays _mapcount) */
+> >               page->page_type = UINT_MAX;
+> > +     }
+> 
+> I need some opinions here.  When CONFIG_DEBUG_VM is enabled we get help
+> finding (hard to find) page_pool leaks and mark the page as bad.
+> 
+> When CONFIG_DEBUG_VM is disabled we silently "allow" leaking.
+> Should we handle this more gracefully here? (release pp resources)
+> 
+> Allowing the page to be reused at this point, when a page_pool instance
+> is known to track life-time and (likely) have the page DMA mapped, seems
+> problematic to me.  Code only clears page->page_type, but IIRC Toke
+> added DMA tracking in other fields (plus xarray internally).
+> 
+> I was going to suggest to simply re-export page_pool_release_page() that
+> was hidden by 535b9c61bdef ("net: page_pool: hide
+> page_pool_release_page()"), but that functionality was lost in
+> 07e0c7d3179d ("net: page_pool: merge page_pool_release_page() with
+> page_pool_return_page()"). (Cc Jakub/Kuba for that choice).
+> Simply page_pool_release_page(page->pp, page).
+> 
+> Opinions?
 
-None of this ends up getting compiled... Can we add a configure test for
-this too, I suspect most of it should be there already in terms of
-liburing supporting the cbpf filters.
+This is not an issue related to this patch but it's worth discussing. :)
 
--- 
-Jens Axboe
+Not only page pool state but any bad states checks are also skipped with
+is_check_pages_enabled() off, which means they are going to be
+suppressed with the off.
 
+It is necessary to first clarify whether the action was intentional or
+not.  According to the answer, we can discuss what to do better. :)
+
+	Byungchul
+> 
+> --Jesper
