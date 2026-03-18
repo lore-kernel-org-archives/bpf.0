@@ -1,210 +1,165 @@
-Received: from mail-oi1-f195.google.com (mail-oi1-f195.google.com [209.85.167.195])
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB996364EB7
-	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 10:35:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.195
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773830139; cv=none; b=AhEvSwkTbqTJP8HqUTD1K2id/kOaxwsetKZLwQMHnRG+pGemlbt/6pmvn8tKH7YHuZ1zA1h8sRT8I8bK49TxVOFewl6ER0rh9qtF2e2trRStD/hSD9+HNW7MlrCfdxGCZ8aylNp9O7z9EF4Ze9WmxGFHr+8nO5aQQq3LjPYreII=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773830139; c=relaxed/simple;
-	bh=wQYkThJNpe1Fw+ggWVkXwUeWhxnbOaJZUxgaR/LTBuo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UOqUDkOh7/aBq4NYdQfIVXMQ3VJPx2F2fzseGYpd3tIrYzDNuNQavUXJmxEAhuhnNXU+k/j4Nrkwb908J7J942I9J2HzX2e0eBYwNYe0AkYvyKTptSUzb276yAx6UgXoudps5AiQw/N1Pofr/TT/jvlos/hTfEJJ2ir5b+HCX4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MFT6+Kxx; arc=none smtp.client-ip=209.85.167.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D30263BADA1
+	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 10:58:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773831542; cv=pass; b=Nsp9H48lKDVMl0mTnKJ8odWLwDk1YW23KVb5eWmuE+nLgBJjKotvYQzqpbwkC7HYVuiDySeU5JlmRAdR2VwPYLQSib8Ep2UuB1xba4z3qbIbUJFWPfbkpafVnVHNFugdP/abNrr5DLUN7luF2QuNpwquLzpMeDjAnKeOesyI+rs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773831542; c=relaxed/simple;
+	bh=LVVELEXkmiKTU/p+oy+of4jebFSUmNrxF9w9nex4moo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BdZ0gO+QHRYIH9GdMkC+tSWxZ/OZTaYnzgTHpWBosYgpGF4iDsjueqvsp03B7QD+g6BVJR1qaZa77eEz2Zy21FaimEz1gQNu2ZiOwL4wdc6o04HSqMkRmWt9E/Tj2mDxDN/IqUX2z4LAS5+FdcVW7rwmZSfqJ0hq/tbbcbwbO4M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bitbyteword.org; spf=pass smtp.mailfrom=bitbyteword.org; dkim=pass (2048-bit key) header.d=bitbyteword.org header.i=@bitbyteword.org header.b=Y+F4gIrC; arc=pass smtp.client-ip=209.85.128.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bitbyteword.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bitbyteword.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MFT6+Kxx"
-Received: by mail-oi1-f195.google.com with SMTP id 5614622812f47-46703fb602fso2394402b6e.0
-        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 03:35:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bitbyteword.org header.i=@bitbyteword.org header.b="Y+F4gIrC"
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-79a5a37113aso28012357b3.2
+        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 03:58:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773831537; cv=none;
+        d=google.com; s=arc-20240605;
+        b=FiuHDkjtOy6zRT0eW9m5sOfr4CsUroNXD0tLnak0ZODo8HhMqDIuhrc5KoIPSbKGXq
+         GNPROJseA9AvFf6sMrQ1dioQUeeRMZnJxDeQy9lapczs9cIHlTA3OgvVfUQeGfxA9F6A
+         8fRqAa6StITJo772qIsW14B+3N0o90qOWwG7Rs+F22WW79VnEMLmWKxh3MxSIx4mmHZ1
+         uoETgfj2y03B22mWFGjiTwjcbvmBPz2G9dVFvoj8R9ka0aS7CPIolbQyYiN4OHvpTgJi
+         dJxNs1y2XzveVGru4+8u79Y2MiMosnVzY/iZ+hg0ejeOsRtscNtLT0RF6mPJYFN0OF4l
+         UiTg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=LVVELEXkmiKTU/p+oy+of4jebFSUmNrxF9w9nex4moo=;
+        fh=WQAZTSKFY4iZIU96nsHxVjVktqTj14C6EhHctrtjXTw=;
+        b=UJow6AYinJXBFSp7KAEaRghcFMscPi78HdG8ta0OJ/+qPedAucEEMadzvIYTDsEqe+
+         XWPEvqVbyzoBFGiC6HAYbjspUWqfpZ9Yk/sSvwNUpAYGGo/zISkmi0MUO8Ii8McHTC3G
+         XtXwmEg+K33I+b/rNxPowJLMmcBqDK2bM64sqUEqUjkZ4JujsuNfulC9diKuhB9hNvSe
+         9t93pTj76kmlsOVm5xnm28OYHlAWsAq2AJDBWW6bCq16lY+q8emk+c0yz2wn0Z4tNjT5
+         6ZbcZFUklh8b7nR/Le8pi6xhZEJOMU3/Vl4Mh6XsmUmf0wRw8fNX0PszRwJdCyF9Nbg7
+         zoAQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773830136; x=1774434936; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=bitbyteword.org; s=google; t=1773831537; x=1774436337; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eXtcYZ+wA7k8W3RhwLgDRXtYdHuUNRulmFcIOgrevZA=;
-        b=MFT6+Kxx4zWML4RfQRPeFkRTBPTXA8KLudE1r7Z5QmYh4MPvErv/bq5VsgTaFuDELh
-         uSxU+qKuZlXd0VYNK3k81PI4fbiIm4M9ugUk30Wir2Lbe+uFrwXS6H3LQV0uoYt5eGZ6
-         qAv4n69ehk3BPKcjz1FKP48c283Zvw+NZ7pJ13n1Si1CR4xG2t6VdiX/XfHM2VLwxHjY
-         P4I1r0xOut07VDetoFG9hj4t60bwFFfyZSgEH+O1ctJ43rQN7vnf6LtqohSY+WD0QiuF
-         8weDYN+u6c+x4uFxLiadifP1U3DsRENbSVYV/h2Z6VOl7wxJl8pOLsKVOSCCQ9CLR8Ya
-         Aeaw==
+        bh=LVVELEXkmiKTU/p+oy+of4jebFSUmNrxF9w9nex4moo=;
+        b=Y+F4gIrCy3AlMDM7CSYzAY8MdpN5nfDAenVYSS8jF8/QGMe0BtbaqtvpoNu4HHsdwI
+         eCHGz033wV+iu7o9yHNzl8ab1W8iVYNVNBYMUrCHRQLI9DZgf1n+KJ5WGJM874ZC8E1f
+         V8AfDwxwo6eY0vCZpRljMsNdbb7jgkZbz3BUBCDiRZdtki+wXyJ231XN2e5CQzBOtHl2
+         RNzehobgF8tA59rhsLrK604RjKLDzwzujNWXDWsClMTvJ5qFhXeMw/pwvPnR1XkeD7qu
+         tmTv/A7/XayQthiGv4k2dz99RPffdzi9GNohb9QPIB0xHVtAoLzYczErYFx/GTFFdjmi
+         QFOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773830136; x=1774434936;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20251104; t=1773831537; x=1774436337;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=eXtcYZ+wA7k8W3RhwLgDRXtYdHuUNRulmFcIOgrevZA=;
-        b=A+wgOdFaZAzf8YPu2PTxutJSXSOa0RFO3OVKfYLTz2GhlEQZa5YLAmqFh5hsS3uRhw
-         3oup62i0F73S+aWlVIz2CMf3vd+iPaJ9gE+yXFCsammmtETQQAKZFQtxu+AKHapEgeeD
-         mdvjiArRPviM7t4JWMOhZJwF7KaOUuYw6PrxBxIpvhqhe3IsbCJj08QdbUtSy4ZxQSDQ
-         oOEUzUp4u5npdie5+/ZQm7WwFtpTUVwdlvA0xGVQjA2bhAYTWWQQm7ULVUNQxJaIv2df
-         MEr/o1P3qSIXeYQptxdSjw3Cm0BPcjeCQmJsLRj/b7Gcs82vrhP6BqppjVThHl0aSJt8
-         2RgQ==
-X-Gm-Message-State: AOJu0YzT7z55sfova9GhyxTJ1d2Y0hcslpMnF+EhcIPkS3ndRrvftfSs
-	1oNGReEB2mhzT23kmiAdoJ/UKkd4Jp752kRBqmE/CZbC9jKlVIlqckJHE+dy45txe7I=
-X-Gm-Gg: ATEYQzzbeBqwi2yG4rPb8ePTkhKuBbYL1Lz3WYMkzWqUq+FDirreVFETOzTHfJyQWLm
-	OV3F35iZlq4Oo29VCFjcdeCPXZoG0zjRpDjfEJN4VT/GcWfQ5Z5I0H6HpNsh3GNw3xubmOHBWWs
-	NLh5mp1fKTOi6nVUP5KEa+CmUk4Onafr7BnOA2esTfhWlVSAsf1TJ0pTxq85fzHH1mBsaBRJXQ+
-	M2SzYMfmLLFGH9ss41KqTQb3IJiMsETNGAkmKz1E5/8BDxfNlP7QUVwOsFQ7loP+EhgcWxldzDR
-	x7UeJF5MiCld6l2CRIctfiDv4LDwmCatgvNKBnk2KvCMG3yX7JgQz/JjYnQ2b8kQhPTojbYJypt
-	eh8YWquEXyXbz9x70dG9OfawBEL5TOrDbClv/9EIDkGHXNdHFPUwEx+jbr5/m9MG0oC7mB36WJO
-	d+qzy5JQdI4+IXisVQC8f2bCWq/z3RGaX9DNMqpqlKzodq
-X-Received: by 2002:a05:6808:1395:b0:45f:481c:e258 with SMTP id 5614622812f47-467ba10a8famr1482166b6e.16.1773830136195;
-        Wed, 18 Mar 2026 03:35:36 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:74::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-41bd2c30b0fsm2245820fac.10.2026.03.18.03.35.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2026 03:35:35 -0700 (PDT)
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Emil Tsalapatis <emil@etsalapatis.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Tejun Heo <tj@kernel.org>,
-	Dan Schatzberg <dschatzberg@meta.com>,
-	kkd@meta.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v3 3/3] selftests/bpf: Test modified syscall ctx for ARG_PTR_TO_CTX
-Date: Wed, 18 Mar 2026 03:35:26 -0700
-Message-ID: <20260318103526.2590079-4-memxor@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260318103526.2590079-1-memxor@gmail.com>
-References: <20260318103526.2590079-1-memxor@gmail.com>
+        bh=LVVELEXkmiKTU/p+oy+of4jebFSUmNrxF9w9nex4moo=;
+        b=pqTDeGTwGyYADlePgnZBdprX2m49IwawxQAs95kFv2sQolxl61S1qoCt2fg3d3MEYt
+         cVKFg4nOfJJiDQ5dB9cSC8D85+zhgel3dSPii3aMjjeXs+GtsgPaC0S9H/s4zJMjRq+k
+         EdxDGdekvWC98uuS4GzqNdgaWHzo00QdhiTmjCOqqsnDYY53xETBuzFDhXrkuxS21Bjv
+         DC/c9sS3kI0FGRZjKHUGzjLzVSSKaSvHHsrVrK8BfOjqzKFubip8HViBaDTfB5dJLy9E
+         AP40OMNpbqXkI2nycjW64Muka7D64ago4PFPCkVuWW8RV97UJBR0NxJ97tK81bqMfvjt
+         KgxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXvhcYNs9ltCHm8BPp1wN0y1f7QQjxqQM9H98jKuf+9MLh9UQEHDN3oPzfm1MbEARgvjik=@vger.kernel.org
+X-Gm-Message-State: AOJu0YydeTP6tj3EmijKNuR/T1Fs2dzizyDSQV+wflUX2IsZpSo6Tcep
+	sQutu5O+x3ccpihdSy1Gm9iOmTVlgtKW7nK0Sdq0943/6h6eOlrwa1ka85Mb+S7asxlTLptb+yO
+	jNfF7hP214IKQvn/Eaec/XN+MED4IFADQ+bZTXe9j9w==
+X-Gm-Gg: ATEYQzwc9wI/30G3djkD+h+pEbbyQyggSVcwKKY1TFMXpyr2DxQ81yg6fkwQtLc5EGz
+	zIv/+SiQlpn4vgaIbSWNMz68QmfNcGiTQCkx2CvjpRH3YAuWr1GSAHU6iO5+pvWwzS2X8rbeP8t
+	Vc/Fet885qqymEjo8HY+mow5M3UAoF5oSjUfpaAHA0Wp3hxZ+1e07IuyiJMgVx10NEFmc+YLWa7
+	nqKQM6kGPCSLPW1yGBYWsSX+tZqozNqfmDxxzknrjrM/E17hbxJXOdVj5GxY1QLSPIWA0FO4GCL
+	kqAn7Vw=
+X-Received: by 2002:a05:690c:c50e:b0:79a:3a33:933 with SMTP id
+ 00721157ae682-79a71ad413dmr29714557b3.31.1773831537485; Wed, 18 Mar 2026
+ 03:58:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3130; h=from:subject; bh=wQYkThJNpe1Fw+ggWVkXwUeWhxnbOaJZUxgaR/LTBuo=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBpun/lSxFojVLTIcpgh0mTgwpij5Of03/hYvQ7rCJw 9K/+YOaJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCabp/5QAKCRBM4MiGSL8RyiDkEA Cz1EUduK1QS2e7MezKzUE3nKOjb/UBHFmkNxqhjADuN1FN6bqHbw0zGWaX6fBaqQugcmikBpJvTFGa mJqC2uYWj+04b2Nh7AKCVP+FA4/HO3HdSrOqIPN1d9XkNt/nWhZwmADE2JqGrNMioYMwsTAZi0vq6b 17Hv0YsIuBHJOpJw8WcO0S3YNoso/Dpt9aKevRb/xhH5VZjEwoWqQnxuVMW073z1pUWlUZHKCGqma5 Fnr4iPLau5k/nEVVRzENTutzx3jwIfkqVJtYtzsZNVi87ozra34yt4B1aX17UTFmv0RLh1VbxGvZWV 0CpYRpN2+zMRvc9YNQVDQRuqeBMiAyiioilMfMl5TE+wRVhSQDGVhQhBFfGnuJJr2D6UAc94xi68uk +LonZ7vSbpScXz5vdclRnij8WwauzyZa8Q/+dxgNmPG9Q8HnhJXDhBYGGX+BTGT6ezupihLjx3AzmA KqRt/cqn9eMuD8T5o5LoVfShuoRZbaEPJGyFqx1IeB6fjpP4OrjBVtHm7IXqIRg9igqKkRcbJJbzco rQI0cpb2t+F6zeasL4SNiicRDyti1cifFywpD7+3V6shcsDVt+3tq21N4tgD9JtEIeoP8nQiCMq3mh auCSmztBQ5pL0wHItnfwoKRfRznXbA65qTmzEEHbrntb0ih0uo0OgTKrKD6w==
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
-Content-Transfer-Encoding: 8bit
+References: <20260312150523.2054552-1-vineeth@bitbyteword.org>
+ <1e3c2830-765e-4271-89f7-0b6784b37597@efficios.com> <20260312112354.3dd99e36@gandalf.local.home>
+ <219d015d-076b-4c80-8f63-88569115fdad@efficios.com> <20260312114041.5193c729@gandalf.local.home>
+ <1becdbce-2c01-468a-bbab-42b5dea9fdf8@efficios.com> <CAO7JXPjnnruhM5oC6xMgnYaQ9efzYFqMCFiJLNM3HCQ+ZeCiJw@mail.gmail.com>
+ <CAEf4BzbnfyhCqp0ne=2gRnVxp-mdGmuZwDeFRyhRYH+eDcz2-w@mail.gmail.com>
+ <20260312130255.6476e560@gandalf.local.home> <CAO7JXPgHYZ9zF1HFahb2447X85YRZCQQBHB6ihOwKSDtiZi8kQ@mail.gmail.com>
+ <20260317120049.6a60fa88@gandalf.local.home> <6ca9f884-9566-4a82-9995-4c802a0bf8a0@efficios.com>
+In-Reply-To: <6ca9f884-9566-4a82-9995-4c802a0bf8a0@efficios.com>
+From: Vineeth Remanan Pillai <vineeth@bitbyteword.org>
+Date: Wed, 18 Mar 2026 06:58:46 -0400
+X-Gm-Features: AaiRm52iP799baA3h48fwfLjW02Pe87nEMlmDoXLIPKYRV2LFYQQkuww_KlSUU0
+Message-ID: <CAO7JXPgbERfc_P+aPFB1+nR5ua3mZGbhdkbxCr0TFR4Cr6Khuw@mail.gmail.com>
+Subject: Re: [PATCH 00/15] tracepoint: Avoid double static_branch evaluation
+ at guarded call sites
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Dmitry Ilvokhin <d@ilvokhin.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>, 
+	io-uring@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, 
+	Jon Maloy <jmaloy@redhat.com>, Aaron Conole <aconole@redhat.com>, 
+	Eelco Chaudron <echaudro@redhat.com>, Ilya Maximets <i.maximets@ovn.org>, netdev@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-sctp@vger.kernel.org, 
+	tipc-discussion@lists.sourceforge.net, dev@openvswitch.org, 
+	Oded Gabbay <ogabbay@kernel.org>, Koby Elbaz <koby.elbaz@intel.com>, 
+	dri-devel@lists.freedesktop.org, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, "Gautham R. Shenoy" <gautham.shenoy@amd.com>, 
+	Huang Rui <ray.huang@amd.com>, Mario Limonciello <mario.limonciello@amd.com>, 
+	Len Brown <lenb@kernel.org>, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	linux-pm@vger.kernel.org, MyungJoo Ham <myungjoo.ham@samsung.com>, 
+	Kyungmin Park <kyungmin.park@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, linaro-mm-sig@lists.linaro.org, 
+	Eddie James <eajames@linux.ibm.com>, Andrew Jeffery <andrew@codeconstruct.com.au>, 
+	Joel Stanley <joel@jms.id.au>, linux-fsi@lists.ozlabs.org, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Alex Deucher <alexander.deucher@amd.com>, Danilo Krummrich <dakr@kernel.org>, 
+	Matthew Brost <matthew.brost@intel.com>, Philipp Stanner <phasta@kernel.org>, 
+	Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, 
+	amd-gfx@lists.freedesktop.org, Jiri Kosina <jikos@kernel.org>, 
+	Benjamin Tissoires <bentiss@kernel.org>, linux-input@vger.kernel.org, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-i2c@vger.kernel.org, 
+	Mark Brown <broonie@kernel.org>, Michael Hennerich <michael.hennerich@analog.com>, 
+	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, linux-spi@vger.kernel.org, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	"Martin K. Petersen" <martin.petersen@oracle.com>, linux-scsi@vger.kernel.org, 
+	Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Ensure that global subprogs and tail calls can only accept an unmodified
-PTR_TO_CTX for syscall programs. For all other program types, fixed or
-variable offsets on PTR_TO_CTX is rejected when passed into an argument
-of any call instruction type, through the unified logic of
-check_func_arg_reg_off.
+On Tue, Mar 17, 2026 at 12:02=E2=80=AFPM Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+>
+> On 2026-03-17 12:00, Steven Rostedt wrote:
+> > On Fri, 13 Mar 2026 10:02:32 -0400
+> > Vineeth Remanan Pillai <vineeth@bitbyteword.org> wrote:
+> >
+> >>>
+> >>> Perhaps: call_trace_foo() ?
+> >>>
+> >> call_trace_foo has one collision with the tracepoint
+> >> sched_update_nr_running and a function
+> >> call_trace_sched_update_nr_running. I had considered this and later
+> >> moved to trace_invoke_foo() because of the collision. But I can rename
+> >> call_trace_sched_update_nr_running to something else if call_trace_foo
+> >> is the general consensus.
+> >
+> > OK, then lets go with: trace_call__foo()
+> >
+> > The double underscore should prevent any name collisions.
+> >
+> > Does anyone have an objections?
+> I'm OK with it.
+>
+Great thanks! I shall send a v2 with s/trace_invoke_foo/trace_call__foo/ so=
+on.
 
-Finally, add a positive example of a case that should succeed with all
-our previous changes.
-
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- .../bpf/progs/verifier_global_subprogs.c      | 94 +++++++++++++++++++
- 1 file changed, 94 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-index 2250fc31574d..1e08aff7532e 100644
---- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-@@ -357,6 +357,100 @@ int arg_tag_ctx_syscall(void *ctx)
- 	return tracing_subprog_void(ctx) + tracing_subprog_u64(ctx) + tp_whatever(ctx);
- }
- 
-+__weak int syscall_array_bpf_for(void *ctx __arg_ctx)
-+{
-+	int *arr = ctx;
-+	int i;
-+
-+	bpf_for(i, 0, 100)
-+		arr[i] *= i;
-+
-+	return 0;
-+}
-+
-+SEC("?syscall")
-+__success __log_level(2)
-+int arg_tag_ctx_syscall_bpf_for(void *ctx)
-+{
-+	return syscall_array_bpf_for(ctx);
-+}
-+
-+SEC("syscall")
-+__auxiliary
-+int syscall_tailcall_target(void *ctx)
-+{
-+	return syscall_array_bpf_for(ctx);
-+}
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 1);
-+	__uint(key_size, sizeof(__u32));
-+	__array(values, int (void *));
-+} syscall_prog_array SEC(".maps") = {
-+	.values = {
-+		[0] = (void *)&syscall_tailcall_target,
-+	},
-+};
-+
-+SEC("?syscall")
-+__success __log_level(2)
-+int arg_tag_ctx_syscall_tailcall(void *ctx)
-+{
-+	bpf_tail_call(ctx, &syscall_prog_array, 0);
-+	return 0;
-+}
-+
-+SEC("?syscall")
-+__failure __log_level(2)
-+__msg("dereference of modified ctx ptr R1 off=8 disallowed")
-+int arg_tag_ctx_syscall_tailcall_fixed_off_bad(void *ctx)
-+{
-+	char *p = ctx;
-+
-+	p += 8;
-+	bpf_tail_call(p, &syscall_prog_array, 0);
-+	return 0;
-+}
-+
-+SEC("?syscall")
-+__failure __log_level(2)
-+__msg("variable ctx access var_off=(0x0; 0x4) disallowed")
-+int arg_tag_ctx_syscall_tailcall_var_off_bad(void *ctx)
-+{
-+	__u64 off = bpf_get_prandom_u32();
-+	char *p = ctx;
-+
-+	off &= 4;
-+	p += off;
-+	bpf_tail_call(p, &syscall_prog_array, 0);
-+	return 0;
-+}
-+
-+SEC("?syscall")
-+__failure __log_level(2)
-+__msg("dereference of modified ctx ptr R1 off=8 disallowed")
-+int arg_tag_ctx_syscall_fixed_off_bad(void *ctx)
-+{
-+	char *p = ctx;
-+
-+	p += 8;
-+	return subprog_ctx_tag(p);
-+}
-+
-+SEC("?syscall")
-+__failure __log_level(2)
-+__msg("variable ctx access var_off=(0x0; 0x4) disallowed")
-+int arg_tag_ctx_syscall_var_off_bad(void *ctx)
-+{
-+	__u64 off = bpf_get_prandom_u32();
-+	char *p = ctx;
-+
-+	off &= 4;
-+	p += off;
-+	return subprog_ctx_tag(p);
-+}
-+
- __weak int subprog_dynptr(struct bpf_dynptr *dptr)
- {
- 	long *d, t, buf[1] = {};
--- 
-2.52.0
-
+Thanks,
+Vineeth
