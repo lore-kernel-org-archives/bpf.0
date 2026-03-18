@@ -1,168 +1,146 @@
-Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4283344052
-	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 20:09:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773864571; cv=none; b=Th5HAQSgrtzyfL9H8QYlxY3BhkkR7ZNC6du/0qMDsX1EAYaoIE5QIVvblrIFiYEj48C4PMijwKYZQcBf0gGx9tucHLzegHzlt+6fl6+Gx0nhS1gVPchd6rK1DsI4HAUNqfo1AkQL10PDy8p/Fq9+AFwL42Hv9cW+C5tbDbaWnzA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773864571; c=relaxed/simple;
-	bh=G/CSiwUSEOqLczHCD6ZmlD84NXvI596h7Wx0J+y9n9k=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=J8DSbdc7vBtAmLBPJvYCjEUmv1fwmQ3e1u7lFZjAg7WtjK4Tnc3MVPiNeIip3ouw9XBBQ04p2/i93Lfe0PVjtWbuIGuo8cbvKOPsgN3zOsI0dkdN7VsgMoY5gtYdvccT25tkCqG524m2AvUTjzltxYX+RChYGEPvmKPw/PaQr/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MZMYXdmD; arc=none smtp.client-ip=74.125.224.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2819D36F438
+	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 20:55:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773867326; cv=pass; b=Ompcl72HhkbTmgZs8Bq8r7aJ7396WYh2yS1LHR5BDvv6iACxGEs0gvmI57alFMuta9pMw77frcsHDdX+hx7OuCv56z8/Cgi2k6sho7h9//EovkzY+DHm7HjxOnzdiXOEmtUSlMyDB0ANDWDCeTwpEqlDMmodcSFLa8cY4TAncug=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773867326; c=relaxed/simple;
+	bh=0J3SkYkL8InsjHVxmNLBnTxY8cGVPE4s4gsacj7fW+Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EQBbTO8JDqudi+8EJX84lE77AxO0tnAPfxl6lsEFP4Fiz4lToEODWdrW7jZHECXqioyN6ATL43OSBwI8QfZ0TnPlbb4wZ5237+wGy9h1p6zU7vgQp382d2YlugifwUopti+QTrK+GHj4RZ1k93r41mD65Csj8gpuoKtf6Q2Yl7A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j8LJKVM7; arc=pass smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MZMYXdmD"
-Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-64e87a81639so423630d50.0
-        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 13:09:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j8LJKVM7"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-48539d21b76so2170165e9.1
+        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 13:55:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773867323; cv=none;
+        d=google.com; s=arc-20240605;
+        b=kgeYV8sH0Sk03ERYudGPIz/eaS1giwPxcuR/lkAfVflLH/KhqR/br47L9rCLnojnNR
+         vpM+w7vEp3LLR9QWctI5YFV/BGO+th+xkJXQzgnRLGX0Vec/WV+8LpSWyDbkTvrmpc5w
+         h2DWimGcfwryZFsJv0MrYUGiZmXQV4qw0JFMlSBAOL5IP7xPhTQxwy14QQ2bDpvgZE76
+         zmCJP1TfztvoJJ5PN9BG60SaYXfMLn5uyB9mPlJC3nDHm6eoPp+3hPsr/mPALbiSilza
+         fkxVvoEutxCRJBJw/qlu5x89tZ+4F3XuwMFCF0CFQ6/NWpQU7ClM+VlECib7qezf1v49
+         HAcg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=0J3SkYkL8InsjHVxmNLBnTxY8cGVPE4s4gsacj7fW+Y=;
+        fh=QKPEgaeCO8R7EPKmb5lNrOA0ODqH5Aak7C8A145Nyps=;
+        b=X8mvXFRwHRIt9dH3iu5uwDrOufcNf9j6KsApk9RUwUuhxlIFHuM4cL+UcSGBo4Ogdt
+         yLACzl83QgFvQL+seT32Yt3RfbBJkXKFUCVG3PZSEyZNtVWCsFu7YxsxexXeCqAVNKj0
+         QG0FlRx3hXJsACC5PMnimm/BR+bQi1Z9XKW5+sxII+ccSSQtXIzAXDTjYUgRpnDLRPo1
+         0kiPGEM0oT8BPv5/hIUgdSVboKnXIbLnIV8MMEjaeApMA875EcGck4ueWi1OMk0VxR1r
+         G15TUTg+RMbEGFDeQQDh05OF55db+wgmpjkEODgSkR4UolC7VFMMV/BJBluvhMz6AVN6
+         geuw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773864570; x=1774469370; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1773867323; x=1774472123; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=o8FFlAehcFfcN+ZVaCQWmsQGGFzkurvOjaypfavq2lg=;
-        b=MZMYXdmDVzHZa5p6P7mAka8KD060PRXBRA1yAuCtDEkKGNO3oh17HBS9U1Ym6oboEr
-         Fc7buwL31S0vjxP6Vcz0yG2yw8SNf2VykEOqSfB6vHkpzQE6Hzqg1uE1f6GuYc/bcJLD
-         WLsNbFssjONpqsSZfrab5oPVlRuQ/XgK3k9FLzmHpRx2OBJ0ZIyn+4VLd3BkApZTHdlM
-         ZmGoK+NO5DQXX/ezXG1p6bod9EsghRQkhdup+ZuZce62SQVJAgZisDI/rdO+pRyciahx
-         2bgv/OSR5DR/0EGRzx8CJRyXUZOSQX6031uikbsfnt+bxz8X0rGwVG8IOFEdSHqPbkht
-         IHAQ==
+        bh=0J3SkYkL8InsjHVxmNLBnTxY8cGVPE4s4gsacj7fW+Y=;
+        b=j8LJKVM7f+xyj0bLAmUHN3o6UGd5S76QQBs1GbDzIh3gzq7u3wNKaijkLom30QqaRa
+         t8bzygh40P/SS2d3EYc63SL3W7yYcLbgEHTRFNPcnQ7/KcKonBguxs8ru8Yy2QAfk4Le
+         GwNbvNbOMrk+qbkIKadQMr9dQIIAAF/vhqQQOZ+SHQztR1Ubl9VnKWbiUKNVQqxnwUkR
+         bSblbLaZ24hT0toaeSW9sWgStYF7mjaI2u9+933c/fdnSQGjBHI7Uw2wK/Vk73L3HL40
+         Dv2QT25gY18aDrNu26ZyHOBp/aoc8wf9CT7bdRJxIq416XysNt07Gk4r60GO9jViz0Sl
+         hyTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773864570; x=1774469370;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=o8FFlAehcFfcN+ZVaCQWmsQGGFzkurvOjaypfavq2lg=;
-        b=a7weXyS+BMb/hBxJYbuI3GUyDZnqcdEaXQdsgJeJhuqzWZqFiAP6l6RbWZG7i454lK
-         5cPgdXlk5eeRBvBi/fP5S/v4JZXuAi/yTrJY8+PykcOFPNQ6dtUzgeLzWHTFq1Ytd6DZ
-         3jJuS26WOaUOEEl7v+LKqg9p/JiAW5yU7HV2/KB/NKoU2rl3ZQ5raB6TyhoUFy6iSqr5
-         6ELtnr1pO1vWaXMmqPqbUjZn5s6Mggktp7XHwHOpeyGmz6yo6IvGREOrZDQ+49562d6c
-         hgE7nNvzCpN0LOcJJHAvOLDamUpL3Uwl6Qs/e+TEf0Mj8NHc3cw1hGHtwCcIs7h0dDT0
-         GEOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWwzPoQ6OXL7MXd9T1nsuqhi1l+rR5ql0fI8T7E1e6egmyqXVUwCtajb2w0Qm1PZU0tJSw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9rp5DEAvr+2LWUtbzhAKll1d+IHEqM9AFR8/nmpJSLo2RQMen
-	L5xodUBnC4Y8n6G6FpYn0LkI2mdZHQBbbYixqqind9TkindSxf9JBXdF
-X-Gm-Gg: ATEYQzxOSRI6kZDQoz2BN2HGN6JyV+lwTQbwsIJIfzhGRc8WyHBTGAA8dq3glZgtUdj
-	F874xw3H+bYpz9wvrHaNaYS2L/F9s362nvVxvAkZkBns7VF5rByxpIqqk68M1BtQ0PZX+QrJgbq
-	X1PQuEZQ/bUyu/amKfo4tZYFElvNbhHolLaxNrAcNDjQ7SKMV7gxRBqdA+wrHUctBQG9Pbcd8PK
-	VM8wTaAXzJixDWPGYIe192tYPMhxUvR+JaQT4qnyaGEmti+q5FEuY0fHP6rLzTOyenppuOlc6hM
-	HDGt6ZS5Pyxq9nsNjGkCZJtbU2fOARn6af+C9tNls8OMARHm06ZBtIARj8gJ8SAx5LWEXbJYkdF
-	44j5izMHlHuUxhwaoTs4CqlA5ZwDmc1bpU+VEMQHcQrXmE/TqtX2ALBKVsv8qA3utEWOjNGtxhS
-	56EvbTRbdYCkg0qPrt/iKt1dyU6W9u2dNd1vkbwDwtvmuGtvIyikemC91n5vdhxtKFhu1cfSElB
-	sUi
-X-Received: by 2002:a53:ca02:0:b0:64c:a49b:ed78 with SMTP id 956f58d0204a3-64e915bd965mr3283791d50.38.1773864569681;
-        Wed, 18 Mar 2026 13:09:29 -0700 (PDT)
-Received: from gmail.com (180.134.85.34.bc.googleusercontent.com. [34.85.134.180])
-        by smtp.gmail.com with UTF8SMTPSA id 956f58d0204a3-64e91bb9344sm2236439d50.12.2026.03.18.13.09.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2026 13:09:29 -0700 (PDT)
-Date: Wed, 18 Mar 2026 16:09:28 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Nick Hudson <nhudson@akamai.com>, 
- bpf@vger.kernel.org, 
- netdev@vger.kernel.org
-Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- Nick Hudson <nhudson@akamai.com>, 
- Max Tottenham <mtottenh@akamai.com>, 
- Anna Glasgall <aglasgal@akamai.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Alexei Starovoitov <ast@kernel.org>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- linux-kernel@vger.kernel.org
-Message-ID: <willemdebruijn.kernel.2e095812836bb@gmail.com>
-In-Reply-To: <20260318134242.2725749-6-nhudson@akamai.com>
-References: <20260318134242.2725749-1-nhudson@akamai.com>
- <20260318134242.2725749-6-nhudson@akamai.com>
-Subject: Re: [PATCH v2 5/5] bpf: clear decap tunnel GSO state in
- skb_adjust_room
+        d=1e100.net; s=20251104; t=1773867323; x=1774472123;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=0J3SkYkL8InsjHVxmNLBnTxY8cGVPE4s4gsacj7fW+Y=;
+        b=E1i2F/9bJTJxcb/FClKYlN/vuoQ0a88S6GSVTW/0HKyr2/pjUTX9eUC9XgV7vM8I5n
+         jZEn0uWk7jipkGpyCxw9HM6AYHxcjZjh+5DUPoh+N28do3Y2R++ezg5LCOeZTbJrMJIY
+         nSZlTGf9MCX8BWRAqATXSfgR7krjC1AAJ0M5pJNVxZ/ExedxkoBwNKg41weYSlH+EvVz
+         pUC/cwJLtA+TrI5d4G+yiLmIhwpBxxiHgGxJK1zIEN68ruN3jPeWgQrlO9y/dGscFxix
+         zNUoAwm1SCSQ4zrb6IC5eFFuopmIspf0COiMDLFddcMEzUO2xTJcc0t2OcvJ9TjexSz2
+         TBPA==
+X-Forwarded-Encrypted: i=1; AJvYcCWB0Yl2I/cn5wDA38FjZp0XIe8SxWq8nLPoYA7rcoIm6ggNl1ETmjELhZtURlZJWK7yb6Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbisXob3MIwg6jAOsmiuyqLC9WPF9D54oJ9y34jeHoS3bDvojR
+	FmSqOivxJ6iY+widVTGL179nnkym0eh34w4pA2dPjyb60uwRuWebi/7B3n9Jas7aVvYLtqn5Ixc
+	rJ9D+8QiiVWhGr+YkMwoveav/hcGcgVs=
+X-Gm-Gg: ATEYQzze639kwyRZX/vxpFbX3fd3068euoccY5Ql++WzVLS7OmpiGzXY8fY3zbcKGcb
+	f0u9rMYLiKz6N03D3/htzZ/pFlR/2bGLIdbSSXhFGrDEANYRjNW/zQaBLCFV7Ag1pTJCdkhDLN/
+	c4UmWWeGuVOlQpm2/ulQLd5LBA5iHqlC+kYOmKXlnlTGgkQDB/3l91a2COfPY3dVeNzRgSusfN7
+	Uig+QperVfDFjhljP5yHqwnQgvNeVVMnxcUodVG2lP3SwPwqRCoHtEK14rKjykVzFWJbaX/3xkR
+	8Th7CDljHZguqsmgTH+LWpE+vskOJjFOzypdy2WALtAoUF5ZtVdt5Iwb4rlmqyQoB75Y+5hc7Se
+	4MKWBG17KK3AAl56aTm0Cf8jsqz8BeOI48gTb
+X-Received: by 2002:a05:6000:2204:b0:439:b62d:be86 with SMTP id
+ ffacd0b85a97d-43b527d2d87mr8541610f8f.47.1773867323192; Wed, 18 Mar 2026
+ 13:55:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+References: <20260311-bpf-auditd-send-message-v1-0-10a62db5c92f@cloudflare.com>
+ <CAP01T77VyW=5SHDvM3HXPNHaxRdzs8H__MOh2zx1dQ6STeAUtg@mail.gmail.com>
+ <CAADnVQJCJaLjGCwjCX9VtT615c4kn7v5bxviUmGFVj=uTtUHMg@mail.gmail.com> <abrlvEjQKUdAOcw5@CMGLRV3>
+In-Reply-To: <abrlvEjQKUdAOcw5@CMGLRV3>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 18 Mar 2026 13:55:12 -0700
+X-Gm-Features: AaiRm51tc55ib07MZtLJnTRuXxmrfDK1FJuMhF5fp5fXwEvfz5MooV7eUnvCNQI
+Message-ID: <CAADnVQ+hNWY2Xd85xHySLN1gJD2paxPne3fAzeXx=De9tA5JNQ@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next 0/4] audit: Expose audit subsystem to BPF LSM
+ programs via BPF kfuncs
+To: Frederick Lawler <fred@cloudflare.com>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Eric Paris <eparis@redhat.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	LSM List <linux-security-module@vger.kernel.org>, audit@vger.kernel.org, 
+	bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, kernel-team <kernel-team@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Nick Hudson wrote:
-> On shrink in bpf_skb_adjust_room(), clear tunnel-specific GSO flags
-> according to the decapsulation flags:
-> 
-> - BPF_F_ADJ_ROOM_DECAP_L4_UDP clears SKB_GSO_UDP_TUNNEL{,_CSUM}
-> - BPF_F_ADJ_ROOM_DECAP_L4_GRE clears SKB_GSO_GRE{,_CSUM}
-> - BPF_F_ADJ_ROOM_DECAP_IPXIP4 clears SKB_GSO_IPXIP4
-> - BPF_F_ADJ_ROOM_DECAP_IPXIP6 clears SKB_GSO_IPXIP6
-> 
-> When all tunnel-related GSO bits are cleared, also clear
-> skb->encapsulation.
-> 
-> Co-developed-by: Max Tottenham <mtottenh@akamai.com>
-> Signed-off-by: Max Tottenham <mtottenh@akamai.com>
-> Co-developed-by: Anna Glasgall <aglasgal@akamai.com>
-> Signed-off-by: Anna Glasgall <aglasgal@akamai.com>
-> Signed-off-by: Nick Hudson <nhudson@akamai.com>
-> ---
->  net/core/filter.c | 31 +++++++++++++++++++++++++++++++
->  1 file changed, 31 insertions(+)
-> 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 47aec44a9cd3..35af1199ab97 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -3665,6 +3665,37 @@ static int bpf_skb_net_shrink(struct sk_buff *skb, u32 off, u32 len_diff,
->  		if (!(flags & BPF_F_ADJ_ROOM_FIXED_GSO))
->  			skb_increase_gso_size(shinfo, len_diff);
->  
-> +		/* Selective GSO flag clearing based on decap type.
-> +		 * Only clear the flags for the tunnel layer being removed.
-> +		 */
-> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_UDP) &&
-> +		    (shinfo->gso_type & (SKB_GSO_UDP_TUNNEL |
-> +					 SKB_GSO_UDP_TUNNEL_CSUM)))
-> +			shinfo->gso_type &= ~(SKB_GSO_UDP_TUNNEL |
-> +					      SKB_GSO_UDP_TUNNEL_CSUM);
-> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_GRE) &&
-> +		    (shinfo->gso_type & (SKB_GSO_GRE | SKB_GSO_GRE_CSUM)))
-> +			shinfo->gso_type &= ~(SKB_GSO_GRE |
-> +					      SKB_GSO_GRE_CSUM);
-> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP4) &&
-> +		    (shinfo->gso_type & SKB_GSO_IPXIP4))
-> +			shinfo->gso_type &= ~SKB_GSO_IPXIP4;
-> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP6) &&
-> +		    (shinfo->gso_type & SKB_GSO_IPXIP6))
-> +			shinfo->gso_type &= ~SKB_GSO_IPXIP6;
-> +
-> +		/* Clear encapsulation flag only when no tunnel GSO flags remain */
-> +		if (flags & BPF_F_ADJ_ROOM_DECAP_MASK) {
-> +			if (!(shinfo->gso_type & (SKB_GSO_UDP_TUNNEL |
-> +						  SKB_GSO_UDP_TUNNEL_CSUM |
-> +						  SKB_GSO_GRE |
-> +						  SKB_GSO_GRE_CSUM |
-> +						  SKB_GSO_IPXIP4 |
-> +						  SKB_GSO_IPXIP6)))
-> +				if (skb->encapsulation)
-> +					skb->encapsulation = 0;
+On Wed, Mar 18, 2026 at 10:49=E2=80=AFAM Frederick Lawler <fred@cloudflare.=
+com> wrote:
+>
+> Hi Alexei,
+>
+> On Tue, Mar 17, 2026 at 06:15:59PM -0700, Alexei Starovoitov wrote:
+> > On Mon, Mar 16, 2026 at 7:44=E2=80=AFPM Kumar Kartikeya Dwivedi
+> > <memxor@gmail.com> wrote:
+> > >
+> > > On Wed, 11 Mar 2026 at 22:31, Frederick Lawler <fred@cloudflare.com> =
+wrote:
+> > > >
+> > > > The motivation behind the change is to give BPF LSM developers the
+> > > > ability to report accesses via the audit subsystem much like how LS=
+Ms
+> > > > operate today.
+> >
+> > Sure, but bpf lsm-s don't need to follow such conventions.
+> > audit is nothing but a message passing from kernel to user space
+> > and done in a very inefficient way by wrapping strings into skb/netlink=
+.
+> > bpf progs can do this message passing already via various ways:
+> > perfbuf, ringbuf, streams.
+> > Teach your user space to consume one of them.
+>
+> Audit provides additional functionality by keeping messages close to the
+> syscall, and in-line with other messages for that syscall. Aside from
+> that, BPF is arguably too flexible. I'm sure it's already understood,
+> but the idea here is to reduce bespoke logging implementations and reduce
+> attack surface for violation reporting. Audit is already provided by the
+> kernel and a well leveraged pipeline.
 
-Is there any chance that this might clear it while some other tunnel
-is still active? From a quick grep on skb->encapsulation the only
-possible hit I see is SKB_GSO_ESP.
-
-> +		}
-> +
->  		/* Header must be checked, and gso_segs recomputed. */
->  		shinfo->gso_type |= SKB_GSO_DODGY;
->  		shinfo->gso_segs = 0;
-> -- 
-> 2.34.1
-> 
-
-
+Sorry, I don't buy any of these arguments.
+Nack.
