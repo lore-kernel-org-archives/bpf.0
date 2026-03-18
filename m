@@ -1,130 +1,93 @@
-Received: from mail-qt1-f194.google.com (mail-qt1-f194.google.com [209.85.160.194])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16B4636CE0E
-	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 07:58:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A32F36EA94
+	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 08:16:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773820688; cv=none; b=p7CocvxiNOqLDegiQ2apH7nmC/pWOHNCpaCeyAAOONm2RerGcDAdk0JteegTaIVgMiuBUR++rtStvC042Z/vYmVsHe9zibjz0cVFi0ujKlNndcTNdzG4mAPrZhLkV0OuJbLa9Gly7PoeO7GpLLfvCjm+drmEHwCrC+n+0aZ1ps4=
+	t=1773821770; cv=none; b=C7wnuAqidxqX9Z5cSOGZy6FwxLg/f7XdWETa5ddFMrHb4iOH9gK0MSBmpBxEt0V+aqXWv0kD5x5TMec2aNpG/hQVOVmFw37PuFr5Nrm1AH74if/hBMOWxmooYBWzxjG7ZWD7YKxEwA2UKZrJLyl2XIjaqBe3HX292Z0ELlll6TY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773820688; c=relaxed/simple;
-	bh=L40p2zbxr4VueGCnfIGVazxQUq3AFtuir7VMyKKcUw0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OBlFGjpad/IXM45MJCymlTi0sGxb2vhSxnS0VYoehkORSPdIGLStIKEGZwF3tHOVir+QBRt/2IRFqUL1g1ycx3nkKiDjRbzvZ1xHa/TRIVZ9eXY0eb/mYEklAg8Er5BUPJJmR7PavHc4n5Mp0XF8CzcPnGIfwY8qQkQskt9QpOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HHXX3tNp; arc=none smtp.client-ip=209.85.160.194
+	s=arc-20240116; t=1773821770; c=relaxed/simple;
+	bh=+sWnZTZI7tRDagieoGZ912iRmUTtk4dAhIpGp/Vjdr0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NiXFHCOMfQ/q197P2VCo82+YY0ej6eMhs6GFvcxn7xLgGAeDXPRzJClfc6744L2jXW5yeb99K8sulFipcL7uAqR+MzeA0IP/AylWjBt8mI858wXi315LWgsXvDRMpwZK11tHVIZWpdfbYc0GnNDjjzgoL8+041mc65Lt+F5E0v4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZSq2oyEJ; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HHXX3tNp"
-Received: by mail-qt1-f194.google.com with SMTP id d75a77b69052e-50902b1006cso58322401cf.3
-        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 00:58:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZSq2oyEJ"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-82a3d3235c9so2598153b3a.2
+        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 01:16:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773820686; x=1774425486; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=p3iD2EV2JfPkM0yEJ8uFlk8skpvYqLJ1rlFNkhcwt78=;
-        b=HHXX3tNpvg024/S/5ekLdWetNUVz8HxQH4NLlCKK8E774ax62mlZsJv9Hj6WkGUKbd
-         swF0/DlxI+XwG3gc6krKa8AIwo5uAjOVleQC6XhWpBCkBFIlIZ0U+lgwBJAn4O2bmC3A
-         PU/2eIkO9mOEj676aF1FKgaDz6S566BNqKC6Ky9lIaLRVhmXZuvwXcdzc0qgA1wtr562
-         tLfKQgB5LKvIamZcfmflhMaSnjvyxgIg9ehXW+2+3JrnkQ6lc/TV+nBbXfdP0DDlbxhx
-         5EHbnDwc6Rhixcp4M5xgDo0dqSxWw6pKs20DVTv+qm1V+Jxgj4Fd/opJmqWlI4Abc5A6
-         fXbA==
+        d=gmail.com; s=20230601; t=1773821769; x=1774426569; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1TyRCY1PjbaXhBQLCPF3GQ7ptO1QobaJ5bFC82lbNs0=;
+        b=ZSq2oyEJ6bTBf+wU/OVe1+pnqcBqNrqcx6KgPDgij95lIqLNgvZyjDfPc1L8vrFCiN
+         qki4zNWh4A1odWdzDtR7ZOUiHhX9V8ePpEVUOjDPkU36wVSCuMG+PG8vUvU/bvUjCNnW
+         QHkYMAQNLGZI6nu6/yhsZU9tjxfhmVWPTjV1Qqy5RCaDQ6lPEYc2VO/I7Ai7MIce5FKq
+         rz2BmXipCd4dybhZv00FeLP42JQ9r0enewBgX1JZ6MiPOBfmxGByqoh0rUYWqtLoFQIS
+         WuJG1jNXBdJQkIepavlm+wfai2ttZGXyD6zZj4rLXuWLBv3t5ysH+7wPgs/mIlW6kWR9
+         lmFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773820686; x=1774425486;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p3iD2EV2JfPkM0yEJ8uFlk8skpvYqLJ1rlFNkhcwt78=;
-        b=atErhmmlFv9fukW7IZvpPm539TqVLN7MW6nBfibNHsLavGK/4YBQTnunJ1EmjCVasx
-         Hyo2K8sH6T/34XHS20rtFjorM/D2v9Eo++Xs9EXUPVhOzNLgCXA0iaz5zBushK+BOMDs
-         UyWq7Azumufrp2Q24IKemQUHTeMCQwiJagoBuUFNJBSnAe+OUoESLNqIOTeDhUydCvHw
-         +a0F8rw2sXQ88uU+ZtD3Y3x7JQcIcuMS6hOQmP1MHET+ef4NmkyWDi/f0014wSeQLFAS
-         m+M2/BaJvG2MpwpxPg+IVoxv1M3/xc4Bcl8CFD2D5NKoeTeW4fzHYxVNLauP93w47isj
-         PKBw==
-X-Gm-Message-State: AOJu0YzBxn3bkWhYG0bt/5eqcWAlYD1n7eX44EYVups/F5WrCHIhOB88
-	zL76heNQpO2rnNjALKggumNKXUjU+eFIT7w/fgBsFfzOLyIBLfRztXCPFyzSySoNIKc=
-X-Gm-Gg: ATEYQzwqnuKDAUVD+Pgs5cNK4BbEoCVNb+9XwLROWX0PW57ZKOrWzVVA+pqDE8URRr3
-	UvfqDEWPR5vsvEgpmMv+FYeJaZSP0jn6MeqFXzIIHnvRy4Zo+Kkh8DPbtZQkBbmdPX+WfwaFgxs
-	egWJh5RIYrNrYAceUxnJjxFu8dfI1/PZuHv12lN+WyBvIitcUr/iixCHnWWK9MDi7oHKuRM1FS+
-	Til6prDYVIFwxdUDKVpkCfG6yoqR6nHcSFaeM85BfKXd92Jgrd67aqRoI5wwnTkZ5xIaHOHfERt
-	6YptJH4VO9V7SJlEWwPW9WKiM2xFXW+Tk/3p+mEGyHGn4jPQQallH6aMmXIaV7RYUuYNLu8jITN
-	4byUIIi7ON+Ne9GtKdYGIBgiS7cmmQfdDDs0yjvRpPduijFCz3YWeMGA2X/gjJ16WmyNljc+cwa
-	nVpTgm3sXv+RAPMY/aNoU66q3U5Dm20fLCBhLUdg+cA/gW
-X-Received: by 2002:a9d:66d8:0:b0:7d7:cc43:9727 with SMTP id 46e09a7af769-7d7cc439c8dmr872425a34.27.1773820295640;
-        Wed, 18 Mar 2026 00:51:35 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:70::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7d7c9985c1dsm1710306a34.11.2026.03.18.00.51.34
+        d=1e100.net; s=20251104; t=1773821769; x=1774426569;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1TyRCY1PjbaXhBQLCPF3GQ7ptO1QobaJ5bFC82lbNs0=;
+        b=YSLzHUxEETPu9WuafY5At6Q7VW5oSdIQ4D47wG5P9HX+dp7bqskf6rNXQQ8nEhOCZD
+         9lWE2x9GmfzNJjbmm73li45Wq5ABzJeLwbBmHgA3O8kD95t4IYBv+IJH1bTa99wukTQW
+         giTDJxi9PI9F9/Z/G+h0ygrjQVb3GxIzjDHAQMeKP7dW52SxLbwGMhi7meC9emDu5ykA
+         DNYgkflYxf/CFznKpEpu7DmURKJCH6KPU3PdT6GJiI+/TA1F7hdKRmrIprMSixkcOyBe
+         Kfhf27Vnix/ijMsdYjeex8686STDwDy26NE99HIn8QAXiLewxuUVlHwkNYKH53Ej0c7i
+         MzDg==
+X-Forwarded-Encrypted: i=1; AJvYcCXpCn+qDzqudMVQvmrJxiuU+u//gSctXaRnDkOL2icYp69cO6K60XA0OEJduRww8j915mg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBDoluxHWpe4BlonM/aYB5YaLSETXJahKz29VmGDSNcIsTy2/F
+	lO5czJgZEfowVFK8kNyu36/Cu0LG4N5dv1azEx++SBAg/9BanJZvUBRr
+X-Gm-Gg: ATEYQzwk5+qtK23DwQUfhRlaYAqVWgvemVOdno1lOjh9qgdp35G99tRdtxlNnFDuptY
+	eSAeGK6iNIQXiIR1wJHaC3P3SGYOXuNrYlT0Le7VJsyLg4kgaM0/FEmm8YUv80vB/luU1HM6rnS
+	n0DQa6yF1Srio80ZnCp0FvaiwMuHuwHlO9UXK7isWNCvQ/lHJv/un0A5wlRXXtl1s4xzCmQi2rS
+	5UYZtNakzDKw8wVjF/b9pBTRDwUVYE5knn3opM8Yp0G+FnFrTXKw0xQxCFyoYehbnH6LIanwN7V
+	abnKLqxoB9COjn3aOTHRcWLV1i0RFTpG7w8CWQtAo+lM/oJIdY29UiELaVP0DlSad6yLHpPJtOV
+	E7D6pRUoVLaaVzFhEFgGRS1VnfnFYaiIgpancf+4GvaWG1uau0z3cJCZu0UvHliNCb4w7ce5EZT
+	WjTEtAJC/cViQdR0fBooU=
+X-Received: by 2002:a05:6a00:ab85:b0:827:2c46:bab5 with SMTP id d2e1a72fcca58-82a6accbdb2mr2518596b3a.9.1773821768522;
+        Wed, 18 Mar 2026 01:16:08 -0700 (PDT)
+Received: from eric-hp ([49.216.25.230])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82a6bddcd43sm1571348b3a.50.2026.03.18.01.16.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2026 00:51:34 -0700 (PDT)
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Tejun Heo <tj@kernel.org>,
-	Dan Schatzberg <dschatzberg@meta.com>,
-	kkd@meta.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 0/3] Allow variable offsets for syscall PTR_TO_CTX
-Date: Wed, 18 Mar 2026 00:51:30 -0700
-Message-ID: <20260318075133.1031781-1-memxor@gmail.com>
-X-Mailer: git-send-email 2.52.0
+        Wed, 18 Mar 2026 01:16:08 -0700 (PDT)
+Date: Wed, 18 Mar 2026 16:16:03 +0800
+From: Cheng-Yang Chou <yphbchou0911@gmail.com>
+To: Ke Zhao <ke.zhao.kernel@gmail.com>
+Cc: tj@kernel.org, void@manifault.com, arighi@nvidia.com, 
+	changwoo@igalia.com, sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, Ching-Chun Huang <jserv@ccns.ncku.edu.tw>, 
+	Chia-Ping Tsai <chia7712@gmail.com>
+Subject: Re: [PATCH v2] tools/sched_ext: Update stale scx_ops_error comment
+ in fcg_cgroup_move
+Message-ID: <u72uqrur3f2jcskh3hjezx5wzj3nkhrdmniv3yba424oozb7oj@tx2b7vawmqmv>
+References: <20260318061457.49988-1-ke.zhao.kernel@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1533; h=from:subject; bh=L40p2zbxr4VueGCnfIGVazxQUq3AFtuir7VMyKKcUw0=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBpullsMB193+FsgKQgFaaHbX8oz4l0Uq6yg53HcjT6 PdsuNROJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCabpZbAAKCRBM4MiGSL8RyjFnD/ 9dtRL3vozh5uMfQJiniHcheQJotpl0kUrJjTxuM/X2/7pvXumtl6KwYy+nFpqm13AZYZjRBGpxXX+j ywM0AN+fSb2iNNTcq0S9kINvaFG5SPYsBJ3iEy80Z/9ry0jhSZT4brAeBkY3cpdYCfqRO1ZLNcTuXE rOHFy+h7xX+3jyi0+ta9QPq8ShUM8/g441iAoCkDEeMSofuLyYYTTBR4aalmFM5laPD5xCc3cKtjlo sNhGieQFo/lXrtIZ09xb/9HFuOyzysQlk8rZviBa8vGFGc8lEgQgQBve4wlJH93ILDAQKOYyy2dbEy wWwmTKC2wjFyN+m+N1WyELCXJoLjmc0rzDGx0zcuU7meHPqGecIx5/y/jACabHB6aMbT0p0YFFRwzZ 5sK4BW8oaH5RHqfX3zf5xzKE9lEYRdh+82uoEbSTGYGAGYmzGaUGF70wmmsoe9/p8SwvaY9ixNDu3L TgEgpYQJuibqjHg0nJeVwtxfvMck3F6f1RKiA/7nWNhnosxjL/vQQL3vkvBKtmjO4S0m9X7KdoixSq zsfd3QUU9Z2b9x+UP5L8I1mZJpMgbDwsRpLXksBx2KRMeSR9dkB0kUhvjRju6rtyIvujjKp2IaV+o4 oAc63XPXfRm7s7a2jRvogahLgFewCLhd/5ZOERhh+u5SA1S0sXlbaNE7kKnQ==
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260318061457.49988-1-ke.zhao.kernel@gmail.com>
 
-Enable pointer modification with variable offsets accumulated in the
-register for PTR_TO_CTX for syscall programs where it won't be
-rewritten, and the context is user-supplied and checked against the max
-offset. See patches for details. Fixed offset support landed in [0].
+Hi Ke,
 
-By combining this set with [0], examples like the one below should
-succeed verification now.
+On Wed, Mar 18, 2026 at 02:14:57PM +0800, Ke Zhao wrote:
+> The function scx_ops_error() was droped, but the
 
-  SEC("syscall")
-  int prog(void *ctx) {
-	int *arr = ctx;
-	int i;
+Nit:
+- s/droped/dropped/
+- Use scx_ops_error() and fcg_cgroup_move() (with parentheses) in the
+  subject to denote functions.
 
-	bpf_for(i, 0, 100)
-		arr[i] *= i;
-
-	return 0;
-  }
-
-  [0]: https://lore.kernel.org/bpf/20260227005725.1247305-1-memxor@gmail.com
-
-Changelog:
-----------
-v1 -> v2
-v1: https://lore.kernel.org/bpf/20260317111850.2107846-2-memxor@gmail.com
-
- * Harden check_func_arg_reg_off check with ARG_PTR_TO_CTX.
- * Add tests for unmodified ctx into tail calls.
- * Squash unmodified ctx change into base commit.
- * Add Reviewed-by's from Emil.
-
-Kumar Kartikeya Dwivedi (3):
-  bpf: Support variable offsets for syscall PTR_TO_CTX
-  selftests/bpf: Add syscall ctx variable offset tests
-  selftests/bpf: Test modified syscall ctx for ARG_PTR_TO_CTX
-
- kernel/bpf/verifier.c                         |  65 ++--
- .../selftests/bpf/prog_tests/verifier.c       |  34 +-
- .../selftests/bpf/progs/verifier_ctx.c        | 356 +++++++++++++++---
- .../bpf/progs/verifier_global_subprogs.c      |  95 ++++-
- .../selftests/bpf/test_kmods/bpf_testmod.c    |   2 +-
- 5 files changed, 461 insertions(+), 91 deletions(-)
-
-
-base-commit: 77378dabb50f593c756d393d8eacb0b91b758863
 -- 
-2.52.0
-
+Thanks,
+Cheng-Yang
