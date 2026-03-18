@@ -1,209 +1,105 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 672A23E3C56
-	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 15:13:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 847933EBF06;
+	Wed, 18 Mar 2026 15:13:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773846788; cv=none; b=eNUWBMppxgLFdhTs9rwgqHYZ/EXvyUlNWKKe5uFBischd9LFEpnLVB3CusKn+tFAsox2hpyW+oh7myPkK5reqY3ATAc+N5q9MuCKZzR1p/oWwc7wvd/6jN1Zl5k2WvCRicU15B7rwpbYnWCuAg0GPFoIqtgCszLkemUe73Hn+bU=
+	t=1773846802; cv=none; b=gmz/pN52zjRYnFlGJzKioxo2K2MMVrSBgRSm3A/M8F5Hv7y/IDWRTyGLej3Qk2GuOnPnV8IOaCx+kluZ7T30UJtDjvbALtqhBgdQF8d3fp1hjZqKcO0TKBWzZbMYki2PRngmE+q+ykG9HUm0A2CWERMcrhCetrYHzHwiR24tv1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773846788; c=relaxed/simple;
-	bh=0rK5t7o7XZcW8rDEyeqeNAEm3GwDSgP3maLLdMbe0NA=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=D7MDZuPUy0B/m1Zy65mdodl1EAJVe0Aad5bLzpe19ZOAM9c+qYFviMQX2P43KEmayvvyYwl2GqhLsenqzy+2Vq0QzF+catiWnrEf193Iqc5nVXMNY8AXT90DKZWWQkZ2C/tEVxLQLkIhBQU1EoNV+nr8wqHbU5VPEmk1fenGmwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hi7M6Yhq; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hi7M6Yhq"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-43b47b95a77so2518147f8f.0
-        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 08:13:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773846783; x=1774451583; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qN5ci2rCYIxTdPvL1PJMLihjsz36M4qZI3QGvy1fsXQ=;
-        b=hi7M6Yhq5/PiqUJubDgFIyuyjROqcFv/Z2LKtgEl9NACgyxQzjlSi8P3ZboLVUAk+a
-         avv3UjCfgVsG03ub+RJeVf/3U0KkWIl+Bn0dmJMarmEe/2sJgAeCfz1pF/sRPo9FADEw
-         qdyUdcsF/ZXzUfjp+fbjRrHCM+7EjMvb/fLzq+OADAoSdAfY7H5QUBs/XdGEUYdarhqJ
-         yXcL4zPCbZWIUhZ15K537bXkHPSHgntTkM+PsRruIh2j7DL3JJnHOTe678pTyxi8LfV6
-         mLSVTp+lSewu/q6fZsYo0S+DV/lcTof21U6QOksdKEArWYu6JVdOVdN7TzTLnAEPkcRF
-         bASg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773846783; x=1774451583;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qN5ci2rCYIxTdPvL1PJMLihjsz36M4qZI3QGvy1fsXQ=;
-        b=LdZ4vfvF6/UE/moS+myKUpoNdYSG45KIpLV2wXZedrBqkGNEVf9bbhwDyw1Gin3YC5
-         7eWTt7XsrQYZ45hfHv+ru8G7fV7Wcl811K+3asKRqgZAJGSxLg3V4SiWX/gvOLuOj6JT
-         uN1439K4ooDQoyb6qZft9aWjElPf7uk+G6+UsRH7e0jcV0XKKp+gmvs5cxRiJUO2Q95R
-         n1Co25qiKG+o5GWbZMjoCPBIg+XSnRO3zxzjGJ0S1FAzyc4ttB2dBiYdwyaUt8MPM0o7
-         Vpk1SVn3FD4NEiB4WsQ7ID03QQRlMH+OadrrcjAB6JeTJX1kFHgO6uHvefLtg2Fx92GC
-         e8Ig==
-X-Forwarded-Encrypted: i=1; AJvYcCXVSHdUDiqcxz40e+z/HRrEi/zFWjNQilo9jJzoONXYLBiVWm5jqm/eraa3GeFeupyLmws=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbVbrNAZz+JZX/PIXXR8ABt5dY/hw/o/uCzTSUvaK8GfQazHuD
-	PD/Xbpu0B8ugQ7JcEtSDUNG+hwe+uKIo2oFe9QKfTNQQY90EppB1u37v
-X-Gm-Gg: ATEYQzyaiNhTEekoAeAK7HfCQHbht5c9LWBI++zO55dMU6vfd4OcLZLpdEEaJiO7O/a
-	dc9gFh7tB8dRBC3P8urJLHn1NrWjpyhezqekJMsCVy5k01JL0eEp7XiwwaGnkV4WiibERkEikx4
-	99ABP4BdXQj4j2lnsJ8HcZ4bJ9ZxnW6yQL8ut0kDySm8EyAuswJ0kCH3qdvdN/Zq+ZYOBE3saEK
-	tTSF9DU9GIhFv6lJZCXDJVSUVv+dg1XMLjhQekiPgHej6Yx+/qvWx7qiOFRgJxI/O+yFFIOyj00
-	XwNv8MGz1u2WA6Tsb/B6Go/D5j0QXe/1TU8LrndpPvJs3gPFl/u7uvIc5NTYSXUEN/heyH9EZ/m
-	lHkfbJkpjLm7v5wslYOVShJ0mE1qezjdIB5QHxVkCIo3hQ5Z+8QVC1nZCLs2gz17/q/r5JjtrNE
-	2qGrNvniJoBXc00mv4eCAC3GAPB5Yk1PyiAeAibH41tnHH
-X-Received: by 2002:a05:600c:1e88:b0:485:4278:2558 with SMTP id 5b1f17b1804b1-486f441bc30mr66826945e9.6.1773846783409;
-        Wed, 18 Mar 2026 08:13:03 -0700 (PDT)
-Received: from localhost ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4856eaffbbdsm146448875e9.15.2026.03.18.08.13.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2026 08:13:02 -0700 (PDT)
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Emil Tsalapatis <emil@etsalapatis.com>, Alexei Starovoitov
- <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, Eduard
- Zingerman <eddyz87@gmail.com>, Tejun Heo <tj@kernel.org>, Dan Schatzberg
- <dschatzberg@meta.com>, kkd@meta.com, kernel-team@meta.com
-Subject: Re: [PATCH bpf-next v3 3/3] selftests/bpf: Test modified syscall
- ctx for ARG_PTR_TO_CTX
-In-Reply-To: <20260318103526.2590079-4-memxor@gmail.com>
-References: <20260318103526.2590079-1-memxor@gmail.com>
- <20260318103526.2590079-4-memxor@gmail.com>
-Date: Wed, 18 Mar 2026 15:13:02 +0000
-Message-ID: <875x6tkw75.fsf@gmail.com>
+	s=arc-20240116; t=1773846802; c=relaxed/simple;
+	bh=mcByvHAC12ZJE2Ee6LT24Yp29yRr5rwa469/SF7LLN8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MyAMLy1HkB1x3qKJW4fFnhS0U9Q663gQahuGerS0NRh2Sz3Pxf2xim1HHn8gj6JMzYfGc8v34A3ycSKwySS6JUF46Eg6cBbjDUzwEHspSMcPyg8VXapDs0erGypw11pwYKhnGHe3AlgSbIGz/1+7SV1X+nZsH0Dx8Fpuur7nANY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 88D451E2F;
+	Wed, 18 Mar 2026 08:13:12 -0700 (PDT)
+Received: from localhost (e132581.arm.com [10.1.196.87])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4F1533F73B;
+	Wed, 18 Mar 2026 08:13:18 -0700 (PDT)
+Date: Wed, 18 Mar 2026 15:13:16 +0000
+From: Leo Yan <leo.yan@arm.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>,
+	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
+	Quentin Monnet <qmo@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	William Breathitt Gray <wbg@kernel.org>,
+	Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Kent Gibson <warthog618@gmail.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Long Li <longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
+	Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, bpf@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Subject: Re: [PATCH v5 00/26] tools build: Append
+ -fzero-init-padding-bits=all option
+Message-ID: <20260318151316.GN8048@e132581.arm.com>
+References: <20260318-tools_build_fix_zero_init-v5-0-bbeffd8da199@arm.com>
+ <20260318115325.GB3738786@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260318115325.GB3738786@noisy.programming.kicks-ass.net>
 
-Kumar Kartikeya Dwivedi <memxor@gmail.com> writes:
+On Wed, Mar 18, 2026 at 12:53:25PM +0100, Peter Zijlstra wrote:
+> On Wed, Mar 18, 2026 at 09:16:44AM +0000, Leo Yan wrote:
+> > Thank you for reviewing and commenting on v4.
+> > 
+> > For anyone new to the series, the reason for appending this compiler
+> > option is described in v3 (see "Link to v3" below).
+> 
+> So why can't you just copy-paste that yourself, and save me from having
+> to go find a browser and copy/paste the stupid link, just to find
+> something that should have been here to begin with?!
 
-> Ensure that global subprogs and tail calls can only accept an unmodified
-> PTR_TO_CTX for syscall programs. For all other program types, fixed or
-> variable offsets on PTR_TO_CTX is rejected when passed into an argument
-> of any call instruction type, through the unified logic of
-> check_func_arg_reg_off.
->
-> Finally, add a positive example of a case that should succeed with all
-> our previous changes.
->
-> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
->  .../bpf/progs/verifier_global_subprogs.c      | 94 +++++++++++++++++++
->  1 file changed, 94 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-> index 2250fc31574d..1e08aff7532e 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-> @@ -357,6 +357,100 @@ int arg_tag_ctx_syscall(void *ctx)
->  	return tracing_subprog_void(ctx) + tracing_subprog_u64(ctx) + tp_whatever(ctx);
->  }
->  
-> +__weak int syscall_array_bpf_for(void *ctx __arg_ctx)
-> +{
-> +	int *arr = ctx;
-> +	int i;
-> +
-> +	bpf_for(i, 0, 100)
-> +		arr[i] *= i;
-> +
-> +	return 0;
-> +}
-> +
-> +SEC("?syscall")
-> +__success __log_level(2)
-> +int arg_tag_ctx_syscall_bpf_for(void *ctx)
-> +{
-> +	return syscall_array_bpf_for(ctx);
-> +}
-> +
-> +SEC("syscall")
-> +__auxiliary
-> +int syscall_tailcall_target(void *ctx)
-> +{
-> +	return syscall_array_bpf_for(ctx);
-> +}
-> +
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-> +	__uint(max_entries, 1);
-> +	__uint(key_size, sizeof(__u32));
-> +	__array(values, int (void *));
-> +} syscall_prog_array SEC(".maps") = {
-> +	.values = {
-> +		[0] = (void *)&syscall_tailcall_target,
-> +	},
-> +};
-> +
-> +SEC("?syscall")
-> +__success __log_level(2)
-> +int arg_tag_ctx_syscall_tailcall(void *ctx)
-> +{
-> +	bpf_tail_call(ctx, &syscall_prog_array, 0);
-> +	return 0;
-> +}
-> +
-> +SEC("?syscall")
-> +__failure __log_level(2)
-> +__msg("dereference of modified ctx ptr R1 off=8 disallowed")
-> +int arg_tag_ctx_syscall_tailcall_fixed_off_bad(void *ctx)
-> +{
-> +	char *p = ctx;
-> +
-> +	p += 8;
-> +	bpf_tail_call(p, &syscall_prog_array, 0);
-> +	return 0;
-> +}
-> +
-> +SEC("?syscall")
-> +__failure __log_level(2)
-> +__msg("variable ctx access var_off=(0x0; 0x4) disallowed")
-> +int arg_tag_ctx_syscall_tailcall_var_off_bad(void *ctx)
-> +{
-> +	__u64 off = bpf_get_prandom_u32();
-> +	char *p = ctx;
-> +
-> +	off &= 4;
-> +	p += off;
-> +	bpf_tail_call(p, &syscall_prog_array, 0);
-> +	return 0;
-> +}
-> +
-> +SEC("?syscall")
-> +__failure __log_level(2)
-> +__msg("dereference of modified ctx ptr R1 off=8 disallowed")
-> +int arg_tag_ctx_syscall_fixed_off_bad(void *ctx)
-> +{
-> +	char *p = ctx;
-> +
-> +	p += 8;
-> +	return subprog_ctx_tag(p);
-> +}
-> +
-> +SEC("?syscall")
-> +__failure __log_level(2)
-> +__msg("variable ctx access var_off=(0x0; 0x4) disallowed")
-> +int arg_tag_ctx_syscall_var_off_bad(void *ctx)
-Test cases for subprog_ctx_tag() and bpf_tail_call() are duplicated,
-even verifier error messages are the same. I don't see a better way to
-avoid it though (macros as in prev patch look worse).
-Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
-> +{
-> +	__u64 off = bpf_get_prandom_u32();
-> +	char *p = ctx;
-> +
-> +	off &= 4;
-> +	p += off;
-> +	return subprog_ctx_tag(p);
-> +}
-> +
->  __weak int subprog_dynptr(struct bpf_dynptr *dptr)
->  {
->  	long *d, t, buf[1] = {};
-> -- 
-> 2.52.0
+Sorry about that!
+
+I didn't expect a link to cause trouble.  I'll include the information
+instead later.
