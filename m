@@ -1,279 +1,173 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 941E731352B;
-	Wed, 18 Mar 2026 21:31:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D424337F018
+	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 21:41:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773869490; cv=none; b=TTEdbU8PJHOgx+lBRAjx7sgHoWuvtTSJnYyZSQgslrxBmd1E/8nL5fHRGApYcfNPYjQRXZECHzDxLsQZOG265Y42UywV6RuYyFV7hE4ihnmCd/X7ZCC16ANu2LlxtTTCKp30Wzco6o/MwtYXVVED0zExfg1jc5Bx4p2GhXEV/+s=
+	t=1773870099; cv=none; b=iKt0MdfyjR3BnAJVO2H1cz355SB/c4bprQV+L67NyZklBPaHjQMvRoTlTZPlqccdr+Ag+dKh44CwgkN6uasb0Z6NXWU5ptMhY8QMv6mTwOaHtyvCvhwVTQkqkAfSc3Jx1223RQ465mSNBKVgfRWeNsOTpGCekeug9TPLSGY/yGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773869490; c=relaxed/simple;
-	bh=Pqv4I5FbBJ/MlcgzLlPq5uvpJ6sthsdJeEJbMt2kdP0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cs9ajY+QcY8I1vBqC1VC2BZify31LxJoWTBQUhHka0u49uPWIALtu5Vww4YXnqT6fpH70F9fce+wdbmkg4XbC2/0AmMT5dEmTc9z69ySX11BzVFSiCCDAvGRkZM1GFN1CpiicWf25IcyC4QHApwuNjJ/VCVOkiHXrCT53ya/+f0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tYHSgBFi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773870099; c=relaxed/simple;
+	bh=W5XDU8uL1Bn2bDAi52vyOjsq733scXtfkIqoBIVJ0pQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=gwp49z+3Zt5Ju+R/t+JvPKOtckENiXb5GDGlxADp0Y/mTTah76hfobdwyvY2lSoT3qlIpB+7G4dueih/h64AgXqpczKQKgp+sHXuBmu6oyNmyQ5fM+jEOxsF31eg0AVDmmcmWv7Utv3K67n+zIQOsQx4eIZ/iU6k/HtHe6wqGog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WExSn+TN; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tYHSgBFi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3803CC19421;
-	Wed, 18 Mar 2026 21:31:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773869490;
-	bh=Pqv4I5FbBJ/MlcgzLlPq5uvpJ6sthsdJeEJbMt2kdP0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tYHSgBFiLn1JVge9zL6GKX67yohEjLSVnhckGcYk02rCc3RhbXUmMsUmO5Iy4tocZ
-	 9g5rdh3PqAKaqLwalMARv1ru40gvsJV4J77c5ispRUimwlsrauNvDIMflp2GgD37Cc
-	 XqzPI/V7TmTcNTpqSDgJKUKpjawFR3vAAUiBHVr/MI8uwKmbK/yWuMMaSu7237zDlO
-	 6GEB1th/ntuGyJknAMNnlIfgqbp88VJyHO7jGfzdIUYQ1kmE474+emnxaY7yF4bMyo
-	 riJDd4+8XeJRRHFJvV/NXJWnq0bKt80SYg/8XB/UWmCFPrzcQZPZLGx6BiO4zxWLkg
-	 o6MfBUs6ujqNQ==
-Date: Wed, 18 Mar 2026 14:31:29 -0700
-From: "Darrick J. Wong" <djwong@kernel.org>
-To: Demi Marie Obenour <demiobenour@gmail.com>
-Cc: Joanne Koong <joannelkoong@gmail.com>,
-	linux-fsdevel <linux-fsdevel@vger.kernel.org>, bpf@vger.kernel.org,
-	linux-ext4 <linux-ext4@vger.kernel.org>,
-	Miklos Szeredi <miklos@szeredi.hu>,
-	Bernd Schubert <bernd@bsbernd.com>, Theodore Ts'o <tytso@mit.edu>,
-	Neal Gompa <neal@gompa.dev>, Amir Goldstein <amir73il@gmail.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Jeff Layton <jlayton@kernel.org>, John@groves.net
-Subject: Re: [PATCHBLIZZARD v7] fuse/libfuse/e2fsprogs: containerize ext4 for
- safer operation
-Message-ID: <20260318213129.GB6004@frogsfrogsfrogs>
-References: <20260223224617.GA2390314@frogsfrogsfrogs>
- <CAJnrk1Yd1J60-Ek=O7jzZQg454pbr3O=b71yZHzYbrWfqJr__w@mail.gmail.com>
- <20260316180408.GN6069@frogsfrogsfrogs>
- <CAJnrk1bmJYMt27xedN2Xza0KPXfYEbh-9g=3fNWru-HRM9WFEw@mail.gmail.com>
- <20260316234137.GJ1742010@frogsfrogsfrogs>
- <208bfbd2-d671-462c-925f-4d51b7df1f18@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WExSn+TN"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2aae146b604so50955ad.3
+        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 14:41:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773870097; x=1774474897; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=pycndCnpLOVCoo8IopI4wWPEypE0bpdF7U5VLPW80J4=;
+        b=WExSn+TNqZHGNbp8s1pgvnsJQFhwsanXpzS6oYIj0GZk41VXVuyo2tMj4df5nIwJgo
+         IdjnqdpJioHgMGF0wvPslJR01iqoZHFK+sH5frtvCbNnbXJUDSHFi31Ea/oFz6P8tqEJ
+         3jekLg9xfveb6MBiUtnzqQPfvMiUk60rlQ2TOEhxL+75N9J2mXf5wv/H7Q8XFRnTFTMT
+         t54szAeLbYUibTfVOKFohH0DP+4GAFhWQL24jhk5CHflP+85171clW2zUOz0yU5aJ8s1
+         4MZ3zvIideAMg3F1VzyHb/C+/Jsvwn8gBm/K5jbSiCUPnW4R1wXyPYp1gQ+VSFPuhqwy
+         kVVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773870097; x=1774474897;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pycndCnpLOVCoo8IopI4wWPEypE0bpdF7U5VLPW80J4=;
+        b=Hp16mVl1ktPVWsFoI9DBcOpoKYXntkCltxbNggf+XEC0JwsjJ9Rb+u1jfqyYtNOqF3
+         mAZqH/oJvMmQTTRS3D57tBT8vZzbFiYwRjFGSfX7oZdFSofOW0VC7MXF0VxSExCQ7xlY
+         0xckhhezqHHgLXQcKav3YFnSQ+sYxHL9JBUCzLaaJqoPJjeaVRmjrdJpCvA0YiANOQbE
+         zK2WTL81xaCxV3QJcTZaKUd3o99UURiX4ifNL/cvFfF47amhJMYDRjAx+iRns/ZcL0Ut
+         w51weRM3Yd2InOv4O4YL49aIFVnYl1Np4jY1ROJCRDjtWZeUsM7Jmtr4oHK1gMWHOSIL
+         0pWg==
+X-Forwarded-Encrypted: i=1; AJvYcCV65jIl12NnBDPOTtNtECmRbbAcPCmh6XaBU1B8lk3zrDZkHPIB/ujgkFuS30ctgs4au8I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEm3xRuN+VWZ0qMs6KDoshKuhod9+eFzFLlVQ6SA3OVYrPevQ/
+	xBOcOoApQ33Ry0YYvPfPle2urBxZkmROSBf04/iaFzJneareMXvhwmvr
+X-Gm-Gg: ATEYQzx1dE1KRqolxJ7yzHTzBnKLnhQGBCqJDZH6D98Cxoi99k31sC3BrhGLZtveOBQ
+	LWqIxjblIKjB+nKOwWLys61mnJ+7U5w9bdssdpWQuTgmFpKqfYCZlRDWzAB5g2TmCsDtTVU6mjn
+	tmRSKbi7BOAZO/Jb6fDvXlODPQC13GCwTZ+0Oa+Kk5LkiwY16n3Klv6wMYjfa6/T7tWM1d8gFEU
+	gCbqx/75WpOCM6b0hqLV2+SDZ683RSTwocr5dqPUht9/i4g1f39ZE3KUYzSSuO+jiA+GxWAVbBE
+	V7ihRJYDgQf5TLy+M3vl6u8OH+ZelJLjWGFMs6lRx7lnR/0xHIzzaMwTbGznUmSLPwd9cCVnR92
+	GICuWs8x/ipaq9i3ATZ749cVWKF/RiZtxiTJ4fEQrW/O4LmsIEnIrjLcUi7+WvOswrcRIRiJ11j
+	IvbYEY5IpMg9purxUL3fG9CU5cisA0XFC4eUV1uUQD1nACb1goUrvnOPRI1hCaVQ==
+X-Received: by 2002:a17:903:1666:b0:2b0:6475:73d0 with SMTP id d9443c01a7336-2b06e33a0d3mr44095135ad.12.1773870097211;
+        Wed, 18 Mar 2026 14:41:37 -0700 (PDT)
+Received: from [192.168.0.56] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b06e63a971sm64219175ad.83.2026.03.18.14.41.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Mar 2026 14:41:36 -0700 (PDT)
+Message-ID: <e04886a885e3fef31cd2cb4487a93e3b76deb153.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 2/3] selftests/bpf: Add syscall ctx variable
+ offset tests
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, Kumar Kartikeya Dwivedi
+	 <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Emil Tsalapatis <emil@etsalapatis.com>, Alexei Starovoitov
+ <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Martin KaFai Lau	 <martin.lau@kernel.org>, Tejun
+ Heo <tj@kernel.org>, Dan Schatzberg	 <dschatzberg@meta.com>, kkd@meta.com,
+ kernel-team@meta.com
+Date: Wed, 18 Mar 2026 14:41:33 -0700
+In-Reply-To: <878qbpkxh9.fsf@gmail.com>
+References: <20260318103526.2590079-1-memxor@gmail.com>
+	 <20260318103526.2590079-3-memxor@gmail.com> <878qbpkxh9.fsf@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <208bfbd2-d671-462c-925f-4d51b7df1f18@gmail.com>
 
-On Mon, Mar 16, 2026 at 08:20:29PM -0400, Demi Marie Obenour wrote:
-> On 3/16/26 19:41, Darrick J. Wong wrote:
-> > On Mon, Mar 16, 2026 at 04:08:55PM -0700, Joanne Koong wrote:
-> >> On Mon, Mar 16, 2026 at 11:04 AM Darrick J. Wong <djwong@kernel.org> wrote:
-> >>>
-> >>> On Mon, Mar 16, 2026 at 10:56:21AM -0700, Joanne Koong wrote:
-> >>>> On Mon, Feb 23, 2026 at 2:46 PM Darrick J. Wong <djwong@kernel.org> wrote:
-> >>>>>
-> >>>>> There are some warts remaining:
-> >>>>>
-> >>>>> a. I would like to continue the discussion about how the design review
-> >>>>>    of this code should be structured, and how might I go about creating
-> >>>>>    new userspace filesystem servers -- lightweight new ones based off
-> >>>>>    the existing userspace tools?  Or by merging lklfuse?
-> >>>>
-> >>>> What do you mean by "merging lklfuse"?
-> >>>
-> >>> Merging the lklfuse project into upstream Linux, which involves running
-> >>> the whole kit and caboodle through our review process, and then fixing
-> >>
-> >> Gotcha, so it would basically be having to port this arch/lkl
-> >> directory [1] into the linux tree
-> > 
-> > Right.
-> > 
-> >>> user-mode-linux to work anywhere other than x86.
-> >>
-> >> Are lklfuse and user-mode-linux (UML) two separate things or is
-> >> lklfuse dependent on user-mode-linux?
-> > 
-> > I was under the impression that lklfuse uses UML.  Given the weird
-> > things in arch/lkl/Kconfig:
-> > 
-> > config 64BIT
-> > 	bool "64bit kernel"
-> > 	default y if OUTPUT_FORMAT = "pe-x86-64"
-> > 	default $(success,$(srctree)/arch/lkl/scripts/cc-objdump-file-format.sh|grep -q '^elf64-') if OUTPUT_FORMAT != "pe-x86-64"
-> > 
-> > I was kinda guessing x86_64 was the primary target of the developers?
-> > 
-> > /me notes that he's now looked into libguestfs per Demi Marie's comments
-> > and some curiosity on the part of ngompa and i>
-> > 
-> > Whatever it is that libguestfs does to stand up unprivileged fs mounts
-> > also could fit this bill.  It's *really* slow to start because it takes
-> > the booted kernel, creates a largeish initramfs, boots that combo via
-> > libvirt, and then fires up a fuse server to talk to the vm kernel.
-> > 
-> > I think all you'd have to do is change libguestfs to start the VM and
-> > run the fuse server inside a systemd container instead of directly from
-> > the CLI.
-> 
-> The feedback I have gotten from ngompa is that libguestfs is just
-> too slow for distros to use it to mount stuff.
+On Wed, 2026-03-18 at 14:45 +0000, Mykyta Yatsenko wrote:
+> Kumar Kartikeya Dwivedi <memxor@gmail.com> writes:
+>=20
+> > Add various tests to exercise fixed and variable offsets on PTR_TO_CTX
+> > for syscall programs, and cover disallowed cases for other program type=
+s
+> > lacking convert_ctx_access callback. Load verifier_ctx with CAP_SYS_ADM=
+IN
+> > so that kfunc related logic can be tested. While at it, convert assembl=
+y
+> > tests to C.
 
-Yes, libguestfs is /verrrry/ slow to start up.
+Nit: I'd move the conversion to a separate patch in the set.
 
-> >>>> Could you explain what the limitations of lklfuse are compared to the
-> >>>> fuse iomap approach in this patchset?
-> >>>
-> >>> The ones I know about are:
-> >>>
-> >>> 1> There's no support for vmapped kernel memory in UML mode, so anyone
-> >>> who requires a large contiguous memory buffer cannot assemble them out
-> >>> of "physical" pages.  This has been a stumbling block for XFS in the
-> >>> past.
-> >>>
-> >>> 2> LKLFUSE still uses the classic fuse IO paths, which means that at
-> >>> best you can directio the IO through the lklfuse kernel.  At worst you
-> >>> have to use the pagecache inside the lklfuse kernel, which is very
-> >>> wasteful.
-> >>
-> >> For the security / isolation use cases you've described, is
-> >> near-native performance a hard requirement?
-> > 
-> > Not a hard requirement, just a means to convince people that they can
-> > choose containment without completely collapsing performance.
-> > 
-> >> As I understand it, the main use cases of this will be for mounting
-> >> untrusted disk images and CI/filesystem testing, or are there broader
-> >> use cases beyond this?
-> > 
-> > That covers nearly all of it.
-> 
-> It's worth noting that on ChromeOS and Android, the only trusted
-> disk images are those that are read-only and protected by dm-verity.
-> *Every* writable image is considered untrusted.
-> 
-> I don't know if doing a full fsck at each boot is considered
-> acceptable, but I suspect it would slow boot far too much.
+[...]
 
-Not to mention that an attacker who gained control of the boot process
-could inject malicious filesystem metadata after fsck completes
-successfully but before the kernel mount occurs.
+> > @@ -173,7 +179,7 @@ void test_verifier_cgroup_skb(void)=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 { RUN(verifier_cgroup_skb); }
+> > =C2=A0void test_verifier_cgroup_storage(void)=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 { RUN(verifier_cgroup_storage); }
+> > =C2=A0void test_verifier_const(void)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 { RUN(verifier_co=
+nst); }
+> > =C2=A0void test_verifier_const_or(void)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 { RUN(verifier_const_or); }
+> > -void test_verifier_ctx(void)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 { RUN(verifier=
+_ctx); }
+> > +void test_verifier_ctx(void)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 { RUN_WITH_CAP=
+_SYS_ADMIN(verifier_ctx); }
 
-> Yes, Google ought to be paying for the kernel changes to fix this mess.
-> 
-> >>> 3> lklfuse hasn't been updated since 6.6.
-> >>
-> >> Gotcha. So if I'm understanding it correctly, the pros/cons come down to:
-> >> lklfuse pros:
-> >> - (arguably) easier setup cost. once it's setup (assuming it's
-> >> possible to add support for the vmapped kernel memory thing you
-> >> mentioned above), it'll automatically work for every filesystem vs.
-> >> having to implement a fuse-iomap server for every filesystem
-> > 
-> > Or even a good non-iomap fuse server for every filesystem.  Admittedly
-> > the weak part of fuse4fs is that libext2fs is not as robust as the
-> > kernel is.
-> > 
-> >> - easier to maintain vs. having to maintain each filesystem's
-> >> userspace server implementation
-> > 
-> > Yeah.
-> > 
-> >> lklfuse cons:
-> >> - worse (not sure by how much) performance
-> > 
-> > Probably a lot, because now you have to run a full IO stack all the way
-> > through lklfuse.
-> 
-> How much is "a lot"?  Is it "this is only useful for non-interactive
-> overnight backups", "you will notice this in benchmarks but it's okay
-> for normal use", or somewhere in between?
+Wouldn't this be the same as to use RUN_TESTS(), like a few lines below?
+Also, tjos changes the semantics by always running verifier_ctx tests
+with CAP_SYS_ADMIN, is that important?
 
-Startup is painfully slow.  Normal operation isn't noticeably bad, but I
-didn't bother doing any performance comparisons.
+> > =C2=A0void test_verifier_ctx_sk_msg(void)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 { RUN(verifier_ctx_sk_msg); }
+> > =C2=A0void test_verifier_d_path(void)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 { RUN(verifier_d_path);=
+ }
+> > =C2=A0void test_verifier_default_trusted_ptr(void)=C2=A0 { RUN_TESTS(ve=
+rifier_default_trusted_ptr); }
 
-> Could lklfuse and iomap be combined?
+[...]
 
-Probably, though you'd have to find a way to route the FUSE_IOMAP_*
-requests to a filesystem driver.  That's upside-down of the current
-iomap model where filesystems have to opt into using iomap on a
-per-IO-path basis, and then iomap calls the filesystem to find mappings.
+> > diff --git a/tools/testing/selftests/bpf/progs/verifier_ctx.c
+> > b/tools/testing/selftests/bpf/progs/verifier_ctx.c
 
-> >> - once it's merged into the kernel, we can't choose to not
-> >> maintain/support it in the future
-> > 
-> > Correct.
-> > 
-> >> Am I understanding this correctly?
-> >>
-> >> In my opinion, if near-native performance is not a hard requirement,
-> >> it seems like less pain overall to go with lklfuse. lklfuse seems a
-> >> lot easier to maintain and I'm not sure if some complexities like
-> >> btrfs's copy-on-write could be handled properly with fuse-iomap.
-> > 
-> > btrfs cow can be done with iomap, at least on the directio end.  It's
-> > the other features like fsverity/fscrypt/data checksumming that aren't
-> > currently supported by iomap.
-> 
-> Pretty much everyone on btrfs uses data checksumming.
-> 
-> >> What are your thoughts on this?
-> > 
-> > "Gee, what if I could simplify most of my own work out of existence?"
-> 
-> What is that work?
+[...]
 
-Everything I've put out since the end of online fsck for xfs.
+> > +	SEC(type)							\
+> > +	__description(type ": reject kfunc zero-sized ctx access")	\
+> > +	__failure __msg("R1 type=3Dctx expected=3Dfp")			\
+> > +	int no_rewrite_##name##_kfunc_zero(void *ctx)			\
+> > +	{								\
+> > +		bpf_kfunc_call_test_mem_len_pass1(ctx, 0);		\
+> > +		return 0;						\
+> > =C2=A0	}
+> > =C2=A0
+> > -no_rewrite_ctx_access("syscall", syscall, 4, u32);
 
---D
+--- 8< ----------------------------------------------
 
-> 
-> > --D
-> > 
-> >> Thanks,
-> >> Joanne
-> >>
-> >> [1] https://github.com/lkl/linux/tree/master/arch/lkl
-> >>
-> >>>
-> >>> --D
-> >>>
-> >>>> Thanks,
-> >>>> Joanne
-> >>>>
-> >>>>>
-> >>>>> b. ext4 doesn't support out of place writes so I don't know if that
-> >>>>>    actually works correctly.
-> >>>>>
-> >>>>> c. fuse2fs doesn't support the ext4 journal.  Urk.
-> >>>>>
-> >>>>> d. There's a VERY large quantity of fuse2fs improvements that need to be
-> >>>>>    applied before we get to the fuse-iomap parts.  I'm not sending these
-> >>>>>    (or the fstests changes) to keep the size of the patchbomb at
-> >>>>>    "unreasonably large". :P  As a result, the fstests and e2fsprogs
-> >>>>>    postings are very targeted.
-> >>>>>
-> >>>>> e. I've dropped the fstests part of the patchbomb because v6 was just
-> >>>>>    way too long.
-> >>>>>
-> >>>>> I would like to get the main parts of this submission reviewed for 7.1
-> >>>>> now that this has been collecting comments and tweaks in non-rfc status
-> >>>>> for 3.5 months.
-> >>>>>
-> >>>>> Kernel:
-> >>>>> https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/log/?h=fuse-iomap-bpf
-> >>>>>
-> >>>>> libfuse:
-> >>>>> https://git.kernel.org/pub/scm/linux/kernel/git/djwong/libfuse.git/log/?h=fuse-iomap-bpf
-> >>>>>
-> >>>>> e2fsprogs:
-> >>>>> https://git.kernel.org/pub/scm/linux/kernel/git/djwong/e2fsprogs.git/log/?h=fuse-iomap-bpf
-> >>>>>
-> >>>>> fstests:
-> >>>>> https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfstests-dev.git/log/?h=fuse2fs
-> >>>>>
-> >>>>> --Darrick
-> >>
-> 
-> 
-> -- 
-> Sincerely,
-> Demi Marie Obenour (she/her/hers)
+> > -no_rewrite_ctx_access("kprobe", kprobe, 8, u64);
+> > -no_rewrite_ctx_access("tracepoint", tp, 8, u64);
+> > -no_rewrite_ctx_access("raw_tp", raw_tp, 8, u64);
+> > -no_rewrite_ctx_access("raw_tracepoint.w", raw_tp_w, 8, u64);
+> > -no_rewrite_ctx_access("fentry/bpf_modify_return_test", fentry, 8, u64)=
+;
+> > -no_rewrite_ctx_access("cgroup/dev", cgroup_dev, 4, u32);
+> > -no_rewrite_ctx_access("netfilter", netfilter, offsetof(struct bpf_nf_c=
+tx, skb), u64);
+> > +no_rewrite_ctx_access("kprobe", kprobe, 8, __u64);
+> > +no_rewrite_ctx_access("tracepoint", tp, 8, __u64);
+> > +no_rewrite_ctx_access("raw_tp", raw_tp, 8, __u64);
+> > +no_rewrite_ctx_access("raw_tracepoint.w", raw_tp_w, 8, __u64);
+> > +no_rewrite_ctx_access("fentry/bpf_modify_return_test", fentry, 8, __u6=
+4);
+> > +no_rewrite_ctx_access("cgroup/dev", cgroup_dev, 4, __u32);
+> > +no_rewrite_ctx_access("netfilter", netfilter, offsetof(struct bpf_nf_c=
+tx, skb), __u64);
 
+---------------------------------------------- >8 ---
 
+The chunks above differ only in '__' prefix for u32/u64.
 
-
-
+[...]
