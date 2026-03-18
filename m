@@ -1,117 +1,122 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77091184540
-	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 22:42:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 921A221B918
+	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 22:48:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773873742; cv=none; b=GzBjd8L0r3zw8lbU/KVmlgqFouyDT0CKjhssaDjy+q5n/a5z3tkkSJplgokRTdAvqKy7VC42KYbQ5dDT9m+d/tuFDFtHf0rmTLqCBOQJpnuotRQgeUJHdF2d5YWAbbk0XrwfZ0B6rq44teaFaPXn+kNZkrSjAWTxib3fe6ZDyvY=
+	t=1773874096; cv=none; b=JUoLGx3wD1N4qrq/fdZfxsPoNCEsnkSDfa+vjsFxJ7u3DFipA3px+G9/yKfHnbAggkjYgLK0hX+ICSUpSpwrkiX85A8SrHE7zeFpxopAwfd1woRKdoWVNg36B2sOHxrfdGQCU1YerIn8XxEyDmKtMHTpYXseGU+ktjVyvonXeHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773873742; c=relaxed/simple;
-	bh=L2rQ+O/AoNuvDfz1gJU4cLOXY6ZPgKG0R/QW6UlVd0k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TQ8AZtmASJ0LIewC+Bh7rBpV2rPFY6oTQpnGL/0Ew8PfYIUX2HuZEMpaIA/HYNww0YCq6zYmYgLngMes8fJMN3fdrzC0rh35sjXNvFLJln+NxN4W+d3STQqxoPSXHfg/JQz30GQS3G1Xdg/mVXhpISCKbqf52iMvupIoAxz5dr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=acKQT5B1; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773874096; c=relaxed/simple;
+	bh=KTYO6QJ2XCdTF3KE7niKsbgYb2hEO+DiUoPhlTXrJYY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZhfhLFmDGR2/CFXlGrI+sw/3e7qW23s3xknkH6HCO7CQgJ5ZzrEABnLw2bSdYTdSbQYCs4QG3iayBFJE+9F4YUBU7QO1IaKAfKMLkc+m6Vs9l4vvLNhEaPNWI1HPpBLU7d5jqKWhTuzl7OVWfZua5wFAVOYAUJujI5XKA7lqRQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eQtCFKHL; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="acKQT5B1"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-35b97ed057cso252999a91.1
-        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 15:42:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773873741; x=1774478541; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gNeehd/vlj5muEeFxvciWt3NrS8MhX6lts7hne2yrOg=;
-        b=acKQT5B1AsFMfvIBo7Tya0bKyfhHe5XaQtEWYaws9YGYOSBGuzVrKoyULRPBeVSMsh
-         IokS36h0QvrxVupPLhsvPUyDclNZMEftdQ6Qudga0Vj40nCv0/tCmf0RpBhzLjrRYmqR
-         Ab3Lv2S2i2h7S+/+EjfpIJcBlADFWTsC2Us50eEEx7dHrMgjjVeawAEEUxxAnNPTMcry
-         aELJMU15aTe9I5ME/jD69n6KV6xs184UAZTa0RlJANL3ksCYggIQH7SeRTe4WVNQmT9r
-         Ezq8tn5dLNqJo8ffgRFvBHDo73QdbE8VAvyB5KN3NfmjlJc6k8DR4qMVllIUD2dafinF
-         vyyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773873741; x=1774478541;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gNeehd/vlj5muEeFxvciWt3NrS8MhX6lts7hne2yrOg=;
-        b=V/kD6g2G2gYncQ9nCupCq1rtwQl4cDWW/CbWabQNCn5ZW+asggJ3/J42Ngo2pLUxwz
-         k/ot9QTyua0O04wRtx0QqcfMFI/U0n8fo83OtqV3h1TOyyBg55yo1B9dNe569j/cxI5K
-         /K4nFJAru5kxkgMR10cK7HnH6CpYbO1LjrBKFT0ytOCMOh8eVr9xUGEg7CvE1Sf62Qc9
-         rXoIH58cIvYJrdFiiXvEhLBR3jK2ycPmpTWkEKjviCEV6o6eqZAqVgoclqpVUaW8x2VQ
-         aeLgBkQoeo5vL8g26wcNwup1vU2jZjFBDHf70arVBVm3dvQ0fjwQMjF79CwkCasqhbvu
-         gpvw==
-X-Gm-Message-State: AOJu0YyNd1zp0a7VwFMRSMkbiqQnzYQSAy5ySN6xS//zFAEKaKkd/6u+
-	TtPh/crdrL9EI8BH2l1o0nvkljN4u+ZAvmJKXX4JVlMoLX96zkrpvJW7jYMToQ==
-X-Gm-Gg: ATEYQzxedMMlBnaNLzz31ybZdYtKzBE+NrQ6/cFD90iYibImJhuoe/WdCrBjI1nccqH
-	TLt9kgPnI56ghIojGX1//eV7fCl+CtzpO19ls2AqncPdlgtO1AO5DkU7iZHrqERajf3SXJ6Qg/I
-	QECJbOo5x4fccGwra8yI2EkygwdjGK6enDgNg/Oty+dP24KAHIPIrvDeZA01FXhWR3DpJoi/Hpq
-	kBggpHMRMeO2qlphZ3UPihEAdDSy62RMRIUyYOVIS0Z/D/EGr82qM9BOstYa6LKvnt33kpqK1aL
-	788ha9+yAXogWQp1wFogMR1DqNT07Q5+UHBp8X97QBBNiSZnrN0rUFJBrgXjKB1dxMmPBOOh7yB
-	44S1O8qHKllyIVnfyImFDSHh9Xvq1idtsxz1xvU2I7efCjJ2swHUPRqVtAcibd/GgaoTTKtBTxB
-	QE09BW/YJ39GF/aQ==
-X-Received: by 2002:a17:90b:3909:b0:35b:97e8:904d with SMTP id 98e67ed59e1d1-35bb9e55db1mr4479199a91.13.1773873740604;
-        Wed, 18 Mar 2026 15:42:20 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:5c::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35bc60ecb30sm662722a91.12.2026.03.18.15.42.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2026 15:42:20 -0700 (PDT)
-From: Amery Hung <ameryhung@gmail.com>
-To: bpf@vger.kernel.org
-Cc: alexei.starovoitov@gmail.com,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	memxor@gmail.com,
-	martin.lau@kernel.org,
-	ameryhung@gmail.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 1/1] bpf: Add warning to detect memory leak in bpf_selem_unlink_nofail()
-Date: Wed, 18 Mar 2026 15:42:19 -0700
-Message-ID: <20260318224219.615105-1-ameryhung@gmail.com>
-X-Mailer: git-send-email 2.52.0
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eQtCFKHL"
+Message-ID: <1f87fb02-ba86-4615-9f64-d5146a133881@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773874092;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=K2N52NtB8Aa5JR/g0YCTIiTjaY6Eg2PZM0pyIkFgnEE=;
+	b=eQtCFKHLzQZiwRAUoXE9Nrb985ZSsB6J8Wf7oOQbB1JPMj0e/u05lGrJSuLxojeOzy5jIB
+	UGDLZAeWKzzQPU0NmXkcRaD6wvYd6yZSU4YkhWTAgjLjbPdG1QWwpBk545WUNvogknIEL9
+	mfobBjmyU0DnsuFHHVVKU6PxyqjBMwE=
+Date: Wed, 18 Mar 2026 15:48:05 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v1 1/2] bpf: Support struct btf_struct_meta via
+ KF_IMPLICIT_ARGS
+To: bot+bpf-ci@kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, eddyz87@gmail.com
+Cc: alexis.lothore@bootlin.com, bpf@vger.kernel.org, kernel-team@meta.com,
+ martin.lau@kernel.org, yonghong.song@linux.dev, clm@meta.com
+References: <20260312193546.192786-1-ihor.solodrai@linux.dev>
+ <4641dd98f7a3a4f162c24c53e0b246ec5017d79b67cdf93486db2583039f24b2@mail.kernel.org>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <4641dd98f7a3a4f162c24c53e0b246ec5017d79b67cdf93486db2583039f24b2@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-While very unlikely, local storage theoretically may leak memory of the
-size of "struct bpf_local_storage" when destroy() fails to grab
-local_storage->lock and initializes selem->local_storage before other
-racing map_free() see it. Warn the user to allow debugging the issue
-instead of leaking the memory silently.
+On 3/12/26 1:05 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+>> index cb6d242bd093..e5c8fb6596e7 100644
+>> --- a/kernel/bpf/helpers.c
+>> +++ b/kernel/bpf/helpers.c
+> 
+> [ ... ]
+> 
+>> +__bpf_kfunc void *bpf_percpu_obj_new(u64 local_type_id__k, struct btf_struct_meta *meta)
+>> +{
+>> +	u64 size = local_type_id__k;
+>> +
+>> +	/* The verifier has ensured that meta__ign must be NULL */
+>> +	return bpf_mem_alloc(&bpf_global_percpu_ma, size);
+>> +}
+> 
+> The parameter here is named "meta", not "meta__ign". Should this
+> comment say "meta" instead?
+> 
+> [ ... ]
+> 
+>> +__bpf_kfunc void bpf_percpu_obj_drop(void *p__alloc, struct btf_struct_meta *meta)
+>> +{
+>> +	/* The verifier has ensured that meta__ign must be NULL */
+>> +	bpf_mem_free_rcu(&bpf_global_percpu_ma, p__alloc);
+>> +}
+> 
+> Same here -- the comment references "meta__ign" but the parameter is
+> "meta".
+> 
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 4fbacd2149cd..2e4f1e9b1d37 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+> 
+> [ ... ]
+> 
+>> @@ -13575,12 +13658,12 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+>>  		case KF_ARG_PTR_TO_ALLOC_BTF_ID:
+>>  			if (reg->type == (PTR_TO_BTF_ID | MEM_ALLOC)) {
+>> -				if (meta->func_id != special_kfunc_list[KF_bpf_obj_drop_impl]) {
+>> +				if (!is_bpf_obj_drop_kfunc(meta->func_id)) {
+>>  					verbose(env, "arg#%d expected for bpf_obj_drop_impl()\n", i);
+>>  					return -EINVAL;
+>>  				}
+>>  			} else if (reg->type == (PTR_TO_BTF_ID | MEM_ALLOC | MEM_PERCPU)) {
+>> -				if (meta->func_id != special_kfunc_list[KF_bpf_percpu_obj_drop_impl]) {
+>> +				if (!is_bpf_percpu_obj_drop_kfunc(meta->func_id)) {
+>>  					verbose(env, "arg#%d expected for bpf_percpu_obj_drop_impl()\n", i);
+>>  					return -EINVAL;
+>>  				}
+> 
+> The conditions now match both bpf_obj_drop and bpf_obj_drop_impl (and
+> their percpu variants), but the error messages still reference only
+> the _impl names. Would it make sense to update these to say
+> "bpf_obj_drop" and "bpf_percpu_obj_drop" respectively, so that a
+> developer calling the new variants sees the right function name in
+> the error?
 
-Note that test_maps in bpf selftests already stress tested
-bpf_selem_unlink_nofail() by creating 4096 sockets and then immediately
-destroying them in multiple threads. With 64 threads, 64 x 4096 socket
-local storages were created and destroyed during the test and no warning
-in the function were triggered.
+All valid nits. Lost this in my inbox before sending v2.
+Will send a v3 soon.
 
-Signed-off-by: Amery Hung <ameryhung@gmail.com>
----
- kernel/bpf/bpf_local_storage.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-index 9c96a4477f81..69bb2a7a71bc 100644
---- a/kernel/bpf/bpf_local_storage.c
-+++ b/kernel/bpf/bpf_local_storage.c
-@@ -494,6 +494,14 @@ static void bpf_selem_unlink_nofail(struct bpf_local_storage_elem *selem,
- 			}
- 			raw_res_spin_unlock_irqrestore(&local_storage->lock, flags);
- 		}
-+		/*
-+		 * Highly unlikely scenario: memory leak
-+		 *
-+		 * When destroy() fails to acqurire local_storage->lock and initializes
-+		 * selem->local_storage to NULL before any racing map_free() sees the same
-+		 * selem, no one will free the local storage.
-+		 */
-+		WARN_ON_ONCE(err && !in_map_free);
- 		if (!err || !in_map_free)
- 			RCU_INIT_POINTER(selem->local_storage, NULL);
- 	}
--- 
-2.52.0
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23020502189
 
