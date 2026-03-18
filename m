@@ -1,64 +1,69 @@
-Received: from mx0a-00190b01.pphosted.com (mx0a-00190b01.pphosted.com [67.231.149.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41EC3D8917;
-	Wed, 18 Mar 2026 13:43:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC199481B1
+	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 14:02:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773841409; cv=none; b=moG2kQn5dRb2B44ZNKnMWZKUFchSOrGN26JUwZsIDqsPQLyEJUCg6I8h9VZk3z3/A2lqG9DAxuK9w/oY8Qy3R8g73Ab5ANojy070Swpa/7pJzhzZEfH06Yh2QWh3SzvzI0UPGgOt2zAyxKPPEfF/k6MvRYKV01CpzyTZf33Saj8=
+	t=1773842537; cv=none; b=czGOo4fi+CtNpbyCzPAf2sSxZzFHQuwJ8JfDmPRfO27cCmU1EcBDdWof8Nm0wayCEXJuprxCaKsXKICzTpKQ/0CnTn63lwxu4CoEHbR3Lz4CpZQyXOj8hHz+iBVCNT2SaED5bRPD6/8NhdAJjpmMRamf865BbpXJSLln6keVFBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773841409; c=relaxed/simple;
-	bh=+2FhGu4bv5TPwZmq8KPd4Yzg432t12XwMMlgwv2ZJpA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=SoWvUdhXDvXuKGQIvq/qJfkHqqpUiGE1/F0JIaqYZw3LlkmTmwjGwqKXSIkMKjqgWLZu+4ovgf7Z84oomRV61iNGGXa+9W2rQ2+M+bEMtrH6AelLEEsQTvNVz7IPzsCy9R8fpbox57BCcL6/OYpjXch1nL7y5qROIgYS8/1R12Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=akamai.com; spf=pass smtp.mailfrom=akamai.com; dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b=ZR3hDlBt; arc=none smtp.client-ip=67.231.149.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=akamai.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=akamai.com
+	s=arc-20240116; t=1773842537; c=relaxed/simple;
+	bh=iz0ZAbwEawvgCtvmXc2W5cJSFXLskeT3GkIN2rECp4c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=o65mx/B8K3366KkE2Z8vQTVYjMx+D29nRiKRo0Tp9cj1H59pmEBNuk35HOBbOn6g450tXiJNGpQJVWm6pIby1xU6eoSKDrrAjIe9zD+NkZ1+LMFwv93r5rupwOaXmvqC09JpzNURxjXJ9Zx9eG5C6GlSRru0g3Dl4tnkGS5cTQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WpFMIWT1; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b="ZR3hDlBt"
-Received: from pps.filterd (m0122332.ppops.net [127.0.0.1])
-	by mx0a-00190b01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62IADinF957995;
-	Wed, 18 Mar 2026 13:42:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=jan2016.eng; bh=ce3qw5wRH
-	2Snv48qPdphagY8RIiQ3mMLnOEfc+YtVdg=; b=ZR3hDlBtTAF0cItKGZYielcmm
-	NCIlpHFj8RVar6RUU3jRyC1miDY/GmMcX6cd0MACD+ck3PaQcI3B42JXe45Zg97z
-	vkndo+LAbblKnUGsPTTyM3SIdj8s77ReKNKiYmXeqHElR2GWUIMQTj6CbR7N4LyF
-	Q+ex0YwfZBQK+SV6ocAtaTLg7YVy9cFjeF5sw7WnSCypG/tlFLrJOOw4m2EghwMe
-	26kNQlW63cWRInQ+S9Rq16V/VhrbL5wUUqtRUypN38U86uinD5upvGBQhvfV+XLM
-	CjYPA2/w/MCCPAml+ial1uIcNZjSpDk+pej3cxlWEZR7C5GgfV17OvQRkHv+g==
-Received: from prod-mail-ppoint5 (prod-mail-ppoint5.akamai.com [184.51.33.60])
-	by mx0a-00190b01.pphosted.com (PPS) with ESMTPS id 4cw0kmrkbm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 18 Mar 2026 13:42:52 +0000 (GMT)
-Received: from pps.filterd (prod-mail-ppoint5.akamai.com [127.0.0.1])
-	by prod-mail-ppoint5.akamai.com (8.18.1.7/8.18.1.7) with ESMTP id 62IDZ06g006365;
-	Wed, 18 Mar 2026 06:42:51 -0700
-Received: from prod-mail-relay02.akamai.com ([172.27.118.35])
-	by prod-mail-ppoint5.akamai.com (PPS) with ESMTP id 4cw5n9fs2s-1;
-	Wed, 18 Mar 2026 06:42:51 -0700 (PDT)
-Received: from muc-lhvdhd.munich.corp.akamai.com (muc-lhvdhd.munich.corp.akamai.com [172.29.0.147])
-	by prod-mail-relay02.akamai.com (Postfix) with ESMTP id 062F79A;
-	Wed, 18 Mar 2026 13:42:49 +0000 (UTC)
-From: Nick Hudson <nhudson@akamai.com>
-To: bpf@vger.kernel.org, netdev@vger.kernel.org
-Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Nick Hudson <nhudson@akamai.com>, Max Tottenham <mtottenh@akamai.com>,
-        Anna Glasgall <aglasgal@akamai.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/5] bpf: allow new DECAP flags and add guard rails
-Date: Wed, 18 Mar 2026 13:42:41 +0000
-Message-Id: <20260318134242.2725749-5-nhudson@akamai.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260318134242.2725749-1-nhudson@akamai.com>
-References: <20260318134242.2725749-1-nhudson@akamai.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WpFMIWT1"
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b97b333673eso487712566b.2
+        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 07:02:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773842535; x=1774447335; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=c7btX0GGFPxC/r84KvfOxADOP7miAAaMIh16jG6yz5E=;
+        b=WpFMIWT1k38qR6GHxpwxq/QkJRCWQdeStmx6S8gQkQi9YECJp1eeoVQMsL0mwVmo6V
+         BBZR32Fz5z1mqJ/JQ4NgMsbisoReSozuMeicFzV9lDlW0FxLpI0KvoS1T1+tC4j8HXRm
+         56+KgGxw0/Jb2G9w3WckMyDS+yDrOPn9x9FeueRhYjyu2DHId1jDIteqXLOdp9t0op9I
+         xQ+VWY6GavEyWyAGngANELLXKVR8Az3d8bmwUNwiKbnADvhnrLrLwwsRgXZvfGH2hqdr
+         JMTx9kD+dU5y8ERTMjOAtv981LwEedMkopC3mINf9V2Hy36CIgR/YkroPCUPnesMaXWa
+         ueKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773842535; x=1774447335;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c7btX0GGFPxC/r84KvfOxADOP7miAAaMIh16jG6yz5E=;
+        b=SBp7GraIP1W/3X8Rn0XCL7pv7fzwr6aeJnTPyrxoTqGK18XN0KN9oGZzQSvIdnt0GN
+         Mftzvj+Kap6A9ggKQBPdib0JUtdNar081608TtWu1RG68BANXGRP6TknPqVAI9/0H2UZ
+         qjDppnzP3sKbL/0+ovs5PCWQvtW4S8v0mHDuMSPrxypuVmlZBMJCwqnSlkS5wJKaav4r
+         EYTkKpRv4hrjZP05MBjSkt6OvSZsnVILxEJD6ITsRD5pAwFB3bWDMwuElyy5bZ9pRt6v
+         jEddl0fXCIUfe+UcFBYbwsALIkV+pth2wOSXdb49N6aQOPi+mkS8op4UDX80uKiATSRh
+         BoTw==
+X-Gm-Message-State: AOJu0Yx7s//DMNAilWkF+Mz/UFIYqmKpgrXYDSQlhHPOYLgZ+5kZ1H1h
+	fB3M255niNq3x4icI4L0SWk9RLFvyTAzskhFnZ254BosZhoUUZar672Z1A3PIIc=
+X-Gm-Gg: ATEYQzyWFZS12+SEvqyklFaT2rY9wJNhHOrTpXIrCoCpahwt2hjadREJ/OPfs+QrNE6
+	98OZsjqM9DthCKBQOKLLx0Hnx5wfEtgqe/f5MUyGl5idiHhwraSr4NNyuOwVd3kA/rYzrtgr6BX
+	ngjKpSF6qhNV6REgYl3Q0vLDI373w7wnRI/mbFESEM6pELCy5rKjdX8rN54EA9rR8O7Xjf+oJoe
+	SZ4UX8jkwJP94kIJK24pQScJTEZt8aHomG321m97N3T+J61DjPFq9OShh8bdynAFCWrQ6xdGV2Z
+	QQheMSOPtw2XXUps1j1TDiHEiFEkvC70hXqdgcpuzKQKtLXVtfpSRoBtzRrJ4Hup3rjMM/PsFx5
+	n0iovaMYZSMovzcmvKokz15V2LXvY+gIw6iA1r+2z5NtycXGtTKRYH9/LSFDJrevbnJrSJ8Ii+n
+	ZwkHnUqpJQLvbKtg==
+X-Received: by 2002:a17:906:8314:b0:b97:99e3:ecd7 with SMTP id a640c23a62f3a-b97f4909431mr169814566b.24.1773842534459;
+        Wed, 18 Mar 2026 07:02:14 -0700 (PDT)
+Received: from jacks ([197.38.173.144])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b51892244sm8683606f8f.22.2026.03.18.07.02.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Mar 2026 07:02:14 -0700 (PDT)
+From: ibrahim zein <zeroxjacks@gmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	ibrahim zein <zeroxjacks@gmail.com>
+Subject: [PATCH] bpf/btf: fix u32 subtraction overflow in btf_sec_info_cmp
+Date: Wed, 18 Mar 2026 10:02:04 -0400
+Message-ID: <20260318140205.1887113-1-zeroxjacks@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,127 +71,37 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-18_01,2026-03-17_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0
- lowpriorityscore=0 spamscore=0 mlxscore=0 adultscore=0 phishscore=0
- suspectscore=0 malwarescore=0 mlxlogscore=999 bulkscore=0 classifier=spam
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2603050001
- definitions=main-2603180115
-X-Proofpoint-GUID: A5toxlEtRJ0dK0Pct_l6c06thpxZpyHo
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzE4MDExNiBTYWx0ZWRfX00bnBkFPMqSA
- buwAU3or0FN5PHhHoOaDPweMH9P8PxxmSIbqFnebywoz5dZCLovkRxLTJXyonmQJEa9RIBKYatV
- 82XH8k5KYj5Old4sIdEhb/Qtm3yrcysaVIB/EeALI9U+eLkQc/ai3+suHa7r+Z+MuPLi4mCYepO
- Y+BkUliF5Sqimk7BKORj0pnseXn1PkOMmigXhYlGjeI7XseHk1Xhy5JQuRsnvn3TOga9hTVAJls
- ZUKUiflJPgAs50DLtEXgLLrwedEj92r2Gda48VdY7lXLueRjdizg8c5PKyJlEwkZwxEL7qSsZTf
- zqEtmK9GHukDblM7QiyAKAzqEWqrilyztfTihbjyIT9mwsja0LttCnR0358CxPwGOPKQWG081lk
- gnTTOKZTF7hhkTRqZ4/t4BDrkNwhlIxf06kdRSusKYiuBzm5CspDxge+UZeU7BskqtxpU8NFv9m
- f4HsdPWoCUEcLEWtvOg==
-X-Proofpoint-ORIG-GUID: A5toxlEtRJ0dK0Pct_l6c06thpxZpyHo
-X-Authority-Analysis: v=2.4 cv=ZMznX37b c=1 sm=1 tr=0 ts=69baabdd cx=c_pps
- a=NpDlK6FjLPvvy7XAFEyJFw==:117 a=NpDlK6FjLPvvy7XAFEyJFw==:17
- a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=Ifg-1AOnLHOf1gn6spyb:22
- a=4OENtXgxWbduB0e82o7S:22 a=X7Ea-ya5AAAA:8 a=AKn1LIXN5h1LY4S_jUMA:9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-18_01,2026-03-17_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0
- malwarescore=0 bulkscore=0 impostorscore=0 adultscore=0 clxscore=1015
- priorityscore=1501 spamscore=0 phishscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2603130000 definitions=main-2603180116
 
-Add checks to require shrink-only decap, reject conflicting decap flag
-combinations, and verify removed length is sufficient for claimed header
-decapsulation.
+The comparison function btf_sec_info_cmp() uses direct subtraction
+of u32 values cast to int, which can produce incorrect results due
+to integer overflow when values exceed 0x7FFFFFFF.
 
-Co-developed-by: Max Tottenham <mtottenh@akamai.com>
-Signed-off-by: Max Tottenham <mtottenh@akamai.com>
-Co-developed-by: Anna Glasgall <aglasgal@akamai.com>
-Signed-off-by: Anna Glasgall <aglasgal@akamai.com>
-Signed-off-by: Nick Hudson <nhudson@akamai.com>
+Replace with explicit comparisons to guarantee correct behavior
+across all u32 value ranges.
+
+Reported-by: Ibrahim Zein <zeroxjacks@gmail.com>
+Signed-off-by: Ibrahim Zein <zeroxjacks@gmail.com>
 ---
- net/core/filter.c | 47 +++++++++++++++++++++++++++++++++++++----------
- 1 file changed, 37 insertions(+), 10 deletions(-)
+ btf.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 7c2871b40fe4..47aec44a9cd3 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -56,6 +56,7 @@
- #include <net/sock_reuseport.h>
- #include <net/busy_poll.h>
- #include <net/tcp.h>
-+#include <net/gre.h>
- #include <net/xfrm.h>
- #include <net/udp.h>
- #include <linux/bpf_trace.h>
-@@ -3496,7 +3497,9 @@ static u32 bpf_skb_net_base_len(const struct sk_buff *skb)
- 					 BPF_F_ADJ_ROOM_ENCAP_L2( \
- 					  BPF_ADJ_ROOM_ENCAP_L2_MASK))
+diff --git a/btf.c b/btf.c
+index 4872d2a..5b3e1af 100644
+--- a/btf.c
++++ b/btf.c
+@@ -5548,7 +5548,11 @@ static int btf_sec_info_cmp(const void *a, const void *b)
+ 	const struct btf_sec_info *x = a;
+ 	const struct btf_sec_info *y = b;
  
--#define BPF_F_ADJ_ROOM_DECAP_MASK	(BPF_F_ADJ_ROOM_DECAP_L3_MASK)
-+#define BPF_F_ADJ_ROOM_DECAP_MASK	(BPF_F_ADJ_ROOM_DECAP_L3_MASK | \
-+					 BPF_F_ADJ_ROOM_DECAP_L4_MASK | \
-+					 BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)
+-	return (int)(x->off - y->off) ? : (int)(x->len - y->len);
++	if (x->off != y->off)
++		return x->off < y->off ? -1 : 1;
++	if (x->len != y->len)
++		return x->len < y->len ? -1 : 1;
++	return 0;
+ }
  
- #define BPF_F_ADJ_ROOM_MASK		(BPF_F_ADJ_ROOM_FIXED_GSO | \
- 					 BPF_F_ADJ_ROOM_ENCAP_MASK | \
-@@ -3743,20 +3746,44 @@ BPF_CALL_4(bpf_skb_adjust_room, struct sk_buff *, skb, s32, len_diff,
- 		return -ENOTSUPP;
- 	}
- 
--	if (flags & BPF_F_ADJ_ROOM_DECAP_L3_MASK) {
-+	if (flags & BPF_F_ADJ_ROOM_DECAP_MASK) {
-+		u32 len_decap_min = 0;
-+
- 		if (!shrink)
- 			return -EINVAL;
- 
--		switch (flags & BPF_F_ADJ_ROOM_DECAP_L3_MASK) {
--		case BPF_F_ADJ_ROOM_DECAP_L3_IPV4:
-+		/* Reject mutually exclusive decap flag pairs. */
-+		if ((flags & BPF_F_ADJ_ROOM_DECAP_L3_MASK) ==
-+		    BPF_F_ADJ_ROOM_DECAP_L3_MASK)
-+			return -EINVAL;
-+
-+		if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_MASK) ==
-+		    BPF_F_ADJ_ROOM_DECAP_L4_MASK)
-+			return -EINVAL;
-+
-+		if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK) ==
-+		    BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)
-+			return -EINVAL;
-+
-+		/* Reject mutually exclusive decap tunnel type flags. */
-+		if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_MASK) &&
-+		    (flags & BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK))
-+			return -EINVAL;
-+
-+		if (flags & BPF_F_ADJ_ROOM_DECAP_L4_UDP)
-+			len_decap_min += sizeof(struct udphdr);
-+
-+		if (flags & BPF_F_ADJ_ROOM_DECAP_L4_GRE)
-+			len_decap_min += sizeof(struct gre_base_hdr);
-+
-+		if (len_diff_abs < len_decap_min)
-+			return -EINVAL;
-+
-+		if (flags & BPF_F_ADJ_ROOM_DECAP_L3_IPV4)
- 			len_min = sizeof(struct iphdr);
--			break;
--		case BPF_F_ADJ_ROOM_DECAP_L3_IPV6:
-+
-+		if (flags & BPF_F_ADJ_ROOM_DECAP_L3_IPV6)
- 			len_min = sizeof(struct ipv6hdr);
--			break;
--		default:
--			return -EINVAL;
--		}
- 	}
- 
- 	len_cur = skb->len - skb_network_offset(skb);
+ static int btf_check_sec_info(struct btf_verifier_env *env,
 -- 
-2.34.1
+2.51.0
 
