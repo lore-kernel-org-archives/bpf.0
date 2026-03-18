@@ -1,283 +1,193 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 743CF2459DC
-	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 22:35:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D5D5184540
+	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 22:37:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773873360; cv=none; b=mRK/PrgaW5O4e2pw9GNv5mrn40MXZZXGqGqCQN5xd6opjemD+O/bI1YsMhBos6h0hhJpmVzkCD2EetVUfYxc5esr2cIri9Q9NFkvFn3M/1GOENV6E8IIbXTEW698tg+6e3JUxHV9xxwVesHgGui9W7hfFtnHXTaSuDO6zK7aIn8=
+	t=1773873464; cv=none; b=N10w/sPv/mlTVG7oLvzWaMFla8QtkKBjdsYUZVzUi4aIgyyByxZtHt9Yyv81O5Due4oGwxhfY3xgDPe0XYYQHGPU6/aKWQmOf/VTi6q3w4iH/RSSbz0mq44662yih83ckGnX5AbuZ9l8CFR4QCpdUBOHPQD+S2XCSLqFIUtWBwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773873360; c=relaxed/simple;
-	bh=pvCCQ5cUkbzM5fKhBrksMxs5XkwCUZycI4V1AMTbLys=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LnWbmNXvNZpV4SoYckeS32TJVxqmoxujvUVpCoUmY7Pd4gQDt3UKivzI1SDZXBDQNI19sa7eg/Ws9Y3PhxXW3iZLjdh48q60vu/xiUX5ijUvYFtEdxiebiCGVInnOX1pGaiCYX6Kgr8DUnJ1JGQr00Vu/C+yLwtA6i8AssewFZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZX+BacfN; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1773873464; c=relaxed/simple;
+	bh=0Ou/Q/tWDuBb33ptj/fOXFWZzecf9sSDecyLofzY9IE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ofny8CpGKVfiz2w1VZFmKXccqwnPgDA+KLQP+1PFXHUyQd1ykkPG41ehCvPLq4Ie7LGC9ZEDwxcw98rX7bGGchykDHDsWs488GUGL7W8LlugNu5P3HaczCwD2sUm8yAGVVtqHVHkUVGv+BjTyf6b9FTZaD9WNPVCXBGcpl4s6nE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=joTjjKh+; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZX+BacfN"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773873356;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zBvT/aX2dXlVCk9gLLBEZrwDSjzZDtuBFwnY27x85Q0=;
-	b=ZX+BacfNN7g8jfJzvJWhP91eXWHtPYk9oCz78DooV0fIK5hqB+gjBkNr5uZtd4GOaDYkZ5
-	lYOOhC7yZw+j0UuR619iLgk9Dgm4ST1yS4E96wYNpHxonH4tw128I7D+5frSFOeDRbjTqp
-	Y6pETB7fd48VKse/bTkLsgEQGW7RJUo=
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Update kfuncs using btf_struct_meta to new variants
-Date: Wed, 18 Mar 2026 15:35:44 -0700
-Message-ID: <20260318223544.1789748-2-ihor.solodrai@linux.dev>
-In-Reply-To: <20260318223544.1789748-1-ihor.solodrai@linux.dev>
-References: <20260318223544.1789748-1-ihor.solodrai@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="joTjjKh+"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2b07069e2efso1627125ad.3
+        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 15:37:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773873463; x=1774478263; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=0Ou/Q/tWDuBb33ptj/fOXFWZzecf9sSDecyLofzY9IE=;
+        b=joTjjKh+JcEnFEKU1D3JaYYoYoLFn3AI7qu85zz8tCEwtKy5Yqk3u/nnWxPmfkbrfH
+         0RlC5X6XZft+4eowXwiuqE7LzQ/ZXb57+QOi+YQFXEs0q8H/xIAkL9J4fVCqza1PWHoN
+         LWsoGJxM4X7TwFsUKYR8oWlUL3EuCPdBnXHe6InV3Fi6C9Ve40ad2EH9oQ7jT/gBVROY
+         FhMzvoceazjnm5U+m+EFOVa6z4XmmykphyPpUYyAtDqSin/RKnpqlayd0XHp4QqHwBFC
+         2CIDTwCGA+HrZhDM3J8VnIQdGqPkmVkCqJWlssxdcDyQVrWW0rYKTbD8KsSo7ugP/kQ4
+         SB6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773873463; x=1774478263;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0Ou/Q/tWDuBb33ptj/fOXFWZzecf9sSDecyLofzY9IE=;
+        b=HBnYjedgfPfQvcBoM+X/QEyGSoMVim2YxCqtbFqmfNPeAVVDi2ZRxTwulZIfovZdoh
+         FYmhzYkIJ5bFJGv9wmh8RYLI7cAq6LHB6/rrAwxadD6QaF8jkkdrRbedTllJOoh9exDQ
+         y+TDucnS36lbqJBAZvewBUVN9luA0cAhaCCYiZ58tVUyXn7MGkjtCAWl5snjB7mihLSX
+         veb8eosUvJ4SAfXMuzbI4NVYWaa17MD6L2dW/UcyOwngqegAd6XsSWKba0DdkSONOf6m
+         qoeh21DG65x0sBnEqlh2rrdf/OpfhcsOlUL4l7l3QCv5KjmXSCd4ZUDlvCndmIgPXZ+k
+         +oag==
+X-Gm-Message-State: AOJu0YwpG5TAr237Egg+mRlSJXx7but7HQz4wThbFHnPSbBmbww0EKsC
+	ILZ47GndAiJO1Xol55uaZpOMI/3AACUz1d77aEYk12Zlfoi/jBDi5TpM
+X-Gm-Gg: ATEYQzzS4s/fGEE3VLmqivHiMHGZy1ua7p7DlWwnaSQNWyR+OM3WNerGVcqIcJACriS
+	XSW3EFozgZaphOm8HBlHUnmdXBAx/CUBRdCGZXNkIVvDz5z5Xv7/ZLhb/b8ZKf3kmBufs7Lnynr
+	mtCnd97v4xT/Mycl1I0abNlhSKiBSJprEvuHkjDqzVFmHskLm/Q5gbDoGGh57Xk7wboYvodMNaQ
+	TznuOvwK1YeUZ5Eb7RCfemycY8x2yNwtFm5xAyrUKtFgOHrP4Tv9Krc1xY6yJs9HBh0F35iRYBK
+	EnQgV0w0ORHoXMc/kaIMYRoQd21yyTWhZSh3TjQbbqm2z9HTHcb6MP0cm8590gC1ISJ9AE9LluR
+	Byh5UW240XSyDJT9Kwx5Zy9p9ARNm38vg74JFhcqfvedFpLv4V/fsdCjf2jxCubeyJkyfGH0qIq
+	O5VBQCB9CBZVvb1UuZY5+6l+bg/VQlMCZ04P+TxxCzDVuy54Pbsms=
+X-Received: by 2002:a17:903:2391:b0:2b0:5a4c:726b with SMTP id d9443c01a7336-2b06e40645amr52247375ad.40.1773873462675;
+        Wed, 18 Mar 2026 15:37:42 -0700 (PDT)
+Received: from [192.168.0.56] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b06e608a66sm36758735ad.61.2026.03.18.15.37.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Mar 2026 15:37:42 -0700 (PDT)
+Message-ID: <d6a552009f2f7cafbef5047a2ea8f6428845b755.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/3] bpf: Support variable offsets for
+ syscall PTR_TO_CTX
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, Tejun Heo <tj@kernel.org>, Dan Schatzberg	
+ <dschatzberg@meta.com>, Emil Tsalapatis <emil@etsalapatis.com>, Alexei
+ Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>,  Martin KaFai Lau <martin.lau@kernel.org>,
+ kkd@meta.com, kernel-team@meta.com
+Date: Wed, 18 Mar 2026 15:37:39 -0700
+In-Reply-To: <CAP01T74km+A-CU9J4n2S+ZkhD+XmgpekU=2_7jF=TTU-T30+Fw@mail.gmail.com>
+References: <20260318103526.2590079-1-memxor@gmail.com>
+	 <20260318103526.2590079-2-memxor@gmail.com>
+	 <e05e441f4b071a33c71f28d6668f2e580952c7da.camel@gmail.com>
+	 <CAP01T74km+A-CU9J4n2S+ZkhD+XmgpekU=2_7jF=TTU-T30+Fw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-Update selftests to use the new non-_impl kfuncs marked with
-KF_IMPLICIT_ARGS by removing redundant declarations and macros from
-bpf_experimental.h (the new kfuncs are present in the vmlinux.h) and
-updating relevant callsites.
-
-Fix spin_lock verifier-log matching for lock_id_kptr_preserve by
-accepting variable instruction numbers. The calls to kfuncs with
-implicit arguments do not have register moves (e.g. r5 = 0)
-corresponding to dummy arguments anymore, so the order of instructions
-has shifted.
-
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
----
- .../testing/selftests/bpf/bpf_experimental.h  | 156 +-----------------
- .../selftests/bpf/prog_tests/spin_lock.c      |   5 +-
- .../selftests/bpf/progs/kptr_xchg_inline.c    |   4 +-
- 3 files changed, 9 insertions(+), 156 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-index 44466acf8083..2234bd6bc9d3 100644
---- a/tools/testing/selftests/bpf/bpf_experimental.h
-+++ b/tools/testing/selftests/bpf/bpf_experimental.h
-@@ -8,156 +8,11 @@
- 
- #define __contains(name, node) __attribute__((btf_decl_tag("contains:" #name ":" #node)))
- 
--/* Description
-- *	Allocates an object of the type represented by 'local_type_id' in
-- *	program BTF. User may use the bpf_core_type_id_local macro to pass the
-- *	type ID of a struct in program BTF.
-- *
-- *	The 'local_type_id' parameter must be a known constant.
-- *	The 'meta' parameter is rewritten by the verifier, no need for BPF
-- *	program to set it.
-- * Returns
-- *	A pointer to an object of the type corresponding to the passed in
-- *	'local_type_id', or NULL on failure.
-- */
--extern void *bpf_obj_new_impl(__u64 local_type_id, void *meta) __ksym;
--
--/* Convenience macro to wrap over bpf_obj_new_impl */
--#define bpf_obj_new(type) ((type *)bpf_obj_new_impl(bpf_core_type_id_local(type), NULL))
--
--/* Description
-- *	Free an allocated object. All fields of the object that require
-- *	destruction will be destructed before the storage is freed.
-- *
-- *	The 'meta' parameter is rewritten by the verifier, no need for BPF
-- *	program to set it.
-- * Returns
-- *	Void.
-- */
--extern void bpf_obj_drop_impl(void *kptr, void *meta) __ksym;
--
--/* Convenience macro to wrap over bpf_obj_drop_impl */
--#define bpf_obj_drop(kptr) bpf_obj_drop_impl(kptr, NULL)
--
--/* Description
-- *	Increment the refcount on a refcounted local kptr, turning the
-- *	non-owning reference input into an owning reference in the process.
-- *
-- *	The 'meta' parameter is rewritten by the verifier, no need for BPF
-- *	program to set it.
-- * Returns
-- *	An owning reference to the object pointed to by 'kptr'
-- */
--extern void *bpf_refcount_acquire_impl(void *kptr, void *meta) __ksym;
--
--/* Convenience macro to wrap over bpf_refcount_acquire_impl */
--#define bpf_refcount_acquire(kptr) bpf_refcount_acquire_impl(kptr, NULL)
--
--/* Description
-- *	Add a new entry to the beginning of the BPF linked list.
-- *
-- *	The 'meta' and 'off' parameters are rewritten by the verifier, no need
-- *	for BPF programs to set them
-- * Returns
-- *	0 if the node was successfully added
-- *	-EINVAL if the node wasn't added because it's already in a list
-- */
--extern int bpf_list_push_front_impl(struct bpf_list_head *head,
--				    struct bpf_list_node *node,
--				    void *meta, __u64 off) __ksym;
--
--/* Convenience macro to wrap over bpf_list_push_front_impl */
--#define bpf_list_push_front(head, node) bpf_list_push_front_impl(head, node, NULL, 0)
--
--/* Description
-- *	Add a new entry to the end of the BPF linked list.
-- *
-- *	The 'meta' and 'off' parameters are rewritten by the verifier, no need
-- *	for BPF programs to set them
-- * Returns
-- *	0 if the node was successfully added
-- *	-EINVAL if the node wasn't added because it's already in a list
-- */
--extern int bpf_list_push_back_impl(struct bpf_list_head *head,
--				   struct bpf_list_node *node,
--				   void *meta, __u64 off) __ksym;
--
--/* Convenience macro to wrap over bpf_list_push_back_impl */
--#define bpf_list_push_back(head, node) bpf_list_push_back_impl(head, node, NULL, 0)
--
--/* Description
-- *	Remove the entry at the beginning of the BPF linked list.
-- * Returns
-- *	Pointer to bpf_list_node of deleted entry, or NULL if list is empty.
-- */
--extern struct bpf_list_node *bpf_list_pop_front(struct bpf_list_head *head) __ksym;
--
--/* Description
-- *	Remove the entry at the end of the BPF linked list.
-- * Returns
-- *	Pointer to bpf_list_node of deleted entry, or NULL if list is empty.
-- */
--extern struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *head) __ksym;
--
--/* Description
-- *	Remove 'node' from rbtree with root 'root'
-- * Returns
-- * 	Pointer to the removed node, or NULL if 'root' didn't contain 'node'
-- */
--extern struct bpf_rb_node *bpf_rbtree_remove(struct bpf_rb_root *root,
--					     struct bpf_rb_node *node) __ksym;
--
--/* Description
-- *	Add 'node' to rbtree with root 'root' using comparator 'less'
-- *
-- *	The 'meta' and 'off' parameters are rewritten by the verifier, no need
-- *	for BPF programs to set them
-- * Returns
-- *	0 if the node was successfully added
-- *	-EINVAL if the node wasn't added because it's already in a tree
-- */
--extern int bpf_rbtree_add_impl(struct bpf_rb_root *root, struct bpf_rb_node *node,
--			       bool (less)(struct bpf_rb_node *a, const struct bpf_rb_node *b),
--			       void *meta, __u64 off) __ksym;
--
--/* Convenience macro to wrap over bpf_rbtree_add_impl */
--#define bpf_rbtree_add(head, node, less) bpf_rbtree_add_impl(head, node, less, NULL, 0)
-+/* Convenience macro to wrap over bpf_obj_new */
-+#define bpf_obj_new(type) ((type *)bpf_obj_new(bpf_core_type_id_local(type)))
- 
--/* Description
-- *	Return the first (leftmost) node in input tree
-- * Returns
-- *	Pointer to the node, which is _not_ removed from the tree. If the tree
-- *	contains no nodes, returns NULL.
-- */
--extern struct bpf_rb_node *bpf_rbtree_first(struct bpf_rb_root *root) __ksym;
--
--/* Description
-- *	Allocates a percpu object of the type represented by 'local_type_id' in
-- *	program BTF. User may use the bpf_core_type_id_local macro to pass the
-- *	type ID of a struct in program BTF.
-- *
-- *	The 'local_type_id' parameter must be a known constant.
-- *	The 'meta' parameter is rewritten by the verifier, no need for BPF
-- *	program to set it.
-- * Returns
-- *	A pointer to a percpu object of the type corresponding to the passed in
-- *	'local_type_id', or NULL on failure.
-- */
--extern void *bpf_percpu_obj_new_impl(__u64 local_type_id, void *meta) __ksym;
--
--/* Convenience macro to wrap over bpf_percpu_obj_new_impl */
--#define bpf_percpu_obj_new(type) ((type __percpu_kptr *)bpf_percpu_obj_new_impl(bpf_core_type_id_local(type), NULL))
--
--/* Description
-- *	Free an allocated percpu object. All fields of the object that require
-- *	destruction will be destructed before the storage is freed.
-- *
-- *	The 'meta' parameter is rewritten by the verifier, no need for BPF
-- *	program to set it.
-- * Returns
-- *	Void.
-- */
--extern void bpf_percpu_obj_drop_impl(void *kptr, void *meta) __ksym;
-+/* Convenience macro to wrap over bpf_percpu_obj_new */
-+#define bpf_percpu_obj_new(type) ((type __percpu_kptr *)bpf_percpu_obj_new(bpf_core_type_id_local(type)))
- 
- struct bpf_iter_task_vma;
- 
-@@ -167,9 +22,6 @@ extern int bpf_iter_task_vma_new(struct bpf_iter_task_vma *it,
- extern struct vm_area_struct *bpf_iter_task_vma_next(struct bpf_iter_task_vma *it) __ksym;
- extern void bpf_iter_task_vma_destroy(struct bpf_iter_task_vma *it) __ksym;
- 
--/* Convenience macro to wrap over bpf_obj_drop_impl */
--#define bpf_percpu_obj_drop(kptr) bpf_percpu_obj_drop_impl(kptr, NULL)
--
- /* Description
-  *	Throw a BPF exception from the program, immediately terminating its
-  *	execution and unwinding the stack. The supplied 'cookie' parameter
-diff --git a/tools/testing/selftests/bpf/prog_tests/spin_lock.c b/tools/testing/selftests/bpf/prog_tests/spin_lock.c
-index 254fbfeab06a..bbe476f4c47d 100644
---- a/tools/testing/selftests/bpf/prog_tests/spin_lock.c
-+++ b/tools/testing/selftests/bpf/prog_tests/spin_lock.c
-@@ -13,8 +13,9 @@ static struct {
- 	const char *err_msg;
- } spin_lock_fail_tests[] = {
- 	{ "lock_id_kptr_preserve",
--	  "5: (bf) r1 = r0                       ; R0=ptr_foo(id=2,ref_obj_id=2) "
--	  "R1=ptr_foo(id=2,ref_obj_id=2) refs=2\n6: (85) call bpf_this_cpu_ptr#154\n"
-+	  "[0-9]\\+: (bf) r1 = r0                       ; R0=ptr_foo(id=2,ref_obj_id=2)"
-+	  " R1=ptr_foo(id=2,ref_obj_id=2) refs=2\n"
-+	  "[0-9]\\+: (85) call bpf_this_cpu_ptr#154\n"
- 	  "R1 type=ptr_ expected=percpu_ptr_" },
- 	{ "lock_id_global_zero",
- 	  "; R1=map_value(map=.data.A,ks=4,vs=4)\n2: (85) call bpf_this_cpu_ptr#154\n"
-diff --git a/tools/testing/selftests/bpf/progs/kptr_xchg_inline.c b/tools/testing/selftests/bpf/progs/kptr_xchg_inline.c
-index 2414ac20b6d5..ca5943166057 100644
---- a/tools/testing/selftests/bpf/progs/kptr_xchg_inline.c
-+++ b/tools/testing/selftests/bpf/progs/kptr_xchg_inline.c
-@@ -25,14 +25,14 @@ __naked int kptr_xchg_inline(void)
- 		"if r0 == 0 goto 1f;"
- 		"r1 = r0;"
- 		"r2 = 0;"
--		"call %[bpf_obj_drop_impl];"
-+		"call %[bpf_obj_drop];"
- 	"1:"
- 		"r0 = 0;"
- 		"exit;"
- 		:
- 		: __imm_addr(ptr),
- 		  __imm(bpf_kptr_xchg),
--		  __imm(bpf_obj_drop_impl)
-+		  __imm(bpf_obj_drop)
- 		: __clobber_all
- 	);
- }
--- 
-2.53.0
+T24gV2VkLCAyMDI2LTAzLTE4IGF0IDIyOjU3ICswMTAwLCBLdW1hciBLYXJ0aWtleWEgRHdpdmVk
+aSB3cm90ZToKClsuLi5dCgo+ID4gTGV0J3Mgc2ltcGxpZnkgdGhpcyBhczoKPiA+IAo+ID4gwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGlmICh2YXJfb2ZmX29rKQo+ID4gwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBlcnIgPSBjaGVja19tZW1fcmVn
+aW9uX2FjY2VzcyhlbnYsIHJlZ25vLCBvZmYsIHNpemUsIFUxNl9NQVgsIGZhbHNlKTsKPiA+IMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBlbHNlCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGVyciA9IF9fY2hlY2tfcHRyX29mZl9yZWcoZW52
+LCByZWcsIHJlZ25vLCBmaXhlZF9vZmZfb2spOwo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIGlmIChlcnIgPCAwKQo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCByZXR1cm4gZXJyOwo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgIG9mZiArPSByZWctPnVtYXhfdmFsdWU7Cj4gCj4gQWNrLgo+IAo+ID4gCj4gPiBUYmgsIHRo
+ZSBhYm92ZSBsb29rcyBhIGJpdCBhZC1ob2MsIG9uZSBtaWdodCBhcmd1ZSB0aGF0IGEgYmV0dGVy
+IHdheSBpbgo+ID4gdGVybXMgb2YgYWJzdHJhY3Rpb24gd291bGQgYmUgdG8gYWRqdXN0IGJwZl92
+ZXJpZmllcl9vcHMtPmlzX3ZhbGlkX2FjY2VzcygpCj4gPiB0byBhY2NlcHQgb3IgcmVqZWN0IHZh
+cnlpbmcgb2Zmc2V0IGFjY2Vzcy4KPiAKPiBJIHRoaW5rIGZvciBhbGwgY3VycmVudCBjYXNlcywg
+dGhlIGNhbGxiYWNrIGlzIHN1cHBsaWVkIHRvIG1ha2Ugc3VyZQo+IHRoZSBmaXhlZCBvZmZzZXQg
+aXMgd2VsbCBmb3JtZWQuCj4gVGhlcmUgaXNuJ3QgcmVhbGx5ICJ2YWxpZCBvciBpbnZhbGlkIiBh
+Y2Nlc3Mgb3RoZXJ3aXNlLCBlc3AuIGZvcgo+IHN5c2NhbGwgcHJvZ3JhbXMuCj4gV2UgY2FuIHBy
+b2JhYmx5IGFsc28gZHJvcCB0aGlzIGZyb20gc3lzY2FsbF9wcm9nX2lzX3ZhbGlkX2FjY2Vzcy4K
+PiA+IGlmIChvZmYgJSBzaXplICE9IDApCj4gVW5hbGlnbmVkIGFjY2Vzc2VzIHNob3VsZCBiZSBm
+aW5lLgoKWW91IG1lYW4gZXhjZXB0aW9uIGhhbmRsZXIgd291bGQgY2F0Y2ggaXQ/Cgo+IElmIHdl
+IG1vdmVkIGl0IGluc2lkZSB3ZSdkIGhhdmUgdG8gcmVwZWF0IHRoaXMgcHRyIG9mZnNldCB0aGlu
+ZyBmb3IKPiBtb3N0IG9mIHRoZW0gZXhjZXB0IHN5c2NhbGwuCj4gU2Vjb25kLCBpdCBkb2VzIG5v
+dCBoYXZlIGFjY2VzcyB0byBlaXRoZXIgZW52IG9yIHJlZyB0byBkbyB0aGUKPiBjaGVja19tZW1f
+cmVnaW9uX2FjY2Vzcy4KClllcywgdGhpcyB3aWxsIGluY2x1ZGUgc29tZSBtZWNoYW5pY2FsIGNo
+YW5nZXMuCk9rLCBsZXQncyBzdGljayB3aXRoIHNwZWNpYWwgY2FzZSBmb3Igbm93LgoKPiA+IAo+
+ID4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBlcnIgPSBjaGVja19jdHhfYWNjZXNzKGVu
+diwgaW5zbl9pZHgsIG9mZiwgc2l6ZSwgdCwgJmluZm8pOwo+ID4gPiDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoCBpZiAoZXJyKQo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgdmVyYm9zZV9saW5mbyhlbnYsIGluc25faWR4LCAiOyAiKTsKPiA+ID4gQEAg
+LTg0NDIsMjIgKzg0NTMsMTYgQEAgc3RhdGljIGludCBjaGVja19oZWxwZXJfbWVtX2FjY2Vzcyhz
+dHJ1Y3QgYnBmX3ZlcmlmaWVyX2VudiAqZW52LCBpbnQKPiA+ID4gcmVnbm8sCj4gPiA+IMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJldHVybiBjaGVja19wdHJfdG9fYnRmX2FjY2VzcyhlbnYs
+IHJlZ3MsIHJlZ25vLCAwLAo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGFj
+Y2Vzc19zaXplLCBCUEZfUkVBRCwgLTEpOwo+ID4gPiDCoMKgwqDCoMKgIGNhc2UgUFRSX1RPX0NU
+WDoKPiA+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAvKiBpbiBjYXNlIHRoZSBmdW5jdGlv
+biBkb2Vzbid0IGtub3cgaG93IHRvIGFjY2VzcyB0aGUgY29udGV4dCwKPiA+ID4gLcKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgICogKGJlY2F1c2Ugd2UgYXJlIGluIGEgcHJvZ3JhbSBvZiB0eXBl
+IFNZU0NBTEwgZm9yIGV4YW1wbGUpLCB3ZQo+ID4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAgKiBjYW4gbm90IHN0YXRpY2FsbHkgY2hlY2sgaXRzIHNpemUuCj4gPiA+IC3CoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoCAqIER5bmFtaWNhbGx5IGNoZWNrIGl0IG5vdy4KPiA+ID4gLcKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgICovCj4gPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+aWYgKCFlbnYtPm9wcy0+Y29udmVydF9jdHhfYWNjZXNzKSB7Cj4gPiA+IC3CoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGludCBvZmZzZXQgPSBhY2Nlc3Nfc2l6ZSAtIDE7
+Cj4gPiA+IC0KPiA+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+LyogQWxsb3cgemVyby1ieXRlIHJlYWQgZnJvbSBQVFJfVE9fQ1RYICovCj4gPiA+IC3CoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGlmIChhY2Nlc3Nfc2l6ZSA9PSAwKQo+
+ID4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqAgcmV0dXJuIHplcm9fc2l6ZV9hbGxvd2VkID8gMCA6IC1FQUNDRVM7Cj4gPiA+IC0KPiA+
+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0dXJuIGNoZWNr
+X21lbV9hY2Nlc3MoZW52LCBlbnYtPmluc25faWR4LCByZWdubywgb2Zmc2V0LCBCUEZfQiwKPiA+
+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgYWNjZXNzX3R5cGUsIC0xLCBmYWxz
+ZSwgZmFsc2UpOwo+ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIC8qIE9ubHkgcGVybWl0
+IHJlYWRpbmcgb3Igd3JpdGluZyBzeXNjYWxsIGNvbnRleHQgdXNpbmcgaGVscGVyIGNhbGxzLiAq
+Lwo+ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGlmIChyZXNvbHZlX3Byb2dfdHlwZShl
+bnYtPnByb2cpID09IEJQRl9QUk9HX1RZUEVfU1lTQ0FMTCkgewo+ID4gCj4gPiBOaXQ6IHRoaXMg
+aXMgYSBzZWNvbmQgcGxhY2Ugd2hlcmUgdGhpcyBjaGVjayBpcyBoYXJkLWNvZGVkLgo+IAo+IEFu
+eSBiZXR0ZXIgaWRlYXM/IFRoaXMgcHJvZ3JhbSB0eXBlIGlzIHNvcnQgb2Ygc3BlY2lhbCB3cnQg
+c2VtYW50aWNzIG9mIGN0eC4KPiBVbmxpa2UgYWxsIG90aGVycywgY3R4IGhlcmUgaXMgdXNlciBz
+dXBwbGllZCwgYW5kIHJ3LCBhbmQgY2FycmllcyBubwo+IGtlcm5lbCBkYXRhLgoKV2UgdXN1YWxs
+eSBoaWRlIHN1Y2ggdGhpbmdzIGJlaGluZCBhIHV0aWxpdHkgZnVuY3Rpb24sCmUuZy4gaXNfdmFy
+eWluZ19jb250ZXh0X29mZnNldF9hbGxvd2VkKGVudikuCgo+IAo+ID4gCj4gPiA+ICvCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGludCBlcnIgPSBjaGVja19tZW1fcmVn
+aW9uX2FjY2VzcyhlbnYsIHJlZ25vLCAwLCBhY2Nlc3Nfc2l6ZSwgVTE2X01BWCwKPiA+ID4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB6ZXJvX3Np
+emVfYWxsb3dlZCk7Cj4gPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgIGlmIChlcnIpCj4gPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoCByZXR1cm4gZXJyOwo+ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpZiAoZW52LT5wcm9nLT5hdXgtPm1heF9jdHhfb2Zmc2V0
+IDwgcmVnLT51bWF4X3ZhbHVlICsgYWNjZXNzX3NpemUpCj4gPiA+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBlbnYtPnByb2ctPmF1eC0+
+bWF4X2N0eF9vZmZzZXQgPSByZWctPnVtYXhfdmFsdWUgKyBhY2Nlc3Nfc2l6ZTsKPiA+ID4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0dXJuIDA7Cj4gPiAKPiA+
+IFdoeSBpcyB0aGlzIGNoYW5nZSBuZWNlc3NhcnkgYXQgYWxsPyBXb3VsZG4ndCBvbGQgY29kZSBo
+YW5kbGUgYWxsCj4gPiByZWxldmFudCBjYXNlcywgbm93IHRoYXQgY2hlY2tfbWVtX2FjY2Vzcygp
+IGlzIHVwZGF0ZWQ/Cj4gCj4gSSB0aGluayB3ZSBjYW5ub3QgcGFzcyB0aGUgYWNjZXNzX3NpemUg
+dGhyb3VnaCwgY2hlY2tfbWVtX2FjY2VzcyBpcwo+IG1lYW50IHRvIHNpbXVsYXRlIGFuIGluc3Ry
+dWN0aW9uIGFjY2Vzcy4KPiBFYXJsaWVyIGl0IHdhcyBkb2luZyBhY2Nlc3Mgb24gdGhlIGZpbmFs
+IGJ5dGUgc2luY2UgcG9pbnRlcgo+IG1vZGlmaWNhdGlvbiB3YXMgbm90IHBlcm1pdHRlZCwgc28g
+cmVhbCByZWdpc3RlciBvZmZzZXQgd2FzIGFsd2F5cwo+IHplcm8uCj4gQWxsIHdlIG5lZWRlZCB0
+byBjaGVjayB3YXMgd2hldGhlciBhY2Nlc3Nfc2l6ZSAtIDEgZmVsbCB3aXRoaW4gYm91bmRzLAo+
+IG1vcmUgaW1wb3J0YW50bHkganVzdCByZWNvcmQgdGhlIG1heF9jdHhfb2Zmc2V0IHNpbmNlIHRo
+ZXJlJ3Mgbm8KPiBib3VuZHMgZXhjZXB0IFUxNl9NQVguCj4gTm93LCB0aGUgcmVnaXN0ZXIgaXMg
+bW9kaWZpZWQsIGFuZCB3ZSBjYW4gYWNjZXNzIGxlbmd0aHMgd2lkZXIgdGhhbgo+IHRob3NlIHdl
+IGdldCBmcm9tIGJwZl9zaXplX3RvX2J5dGVzLgoKT2gsIEkgc2VlLiBXb3VsZCBpdCBiZSBwb3Nz
+aWJsZSB0byBleHRyYWN0IGEgdXRpbGl0eSBmdW5jdGlvbiBzdWNoCnRoYXQgaXQgaXMgdXNlZCBi
+b3RoIGZyb20gaGVyZSBhbmQgZnJvbSBjaGVja19tZW1fYWNjZXNzPwoKPiA+IAo+ID4gPiDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB9Cj4gPiA+IC0KPiA+ID4gwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqAgZmFsbHRocm91Z2g7Cj4gPiA+IMKgwqDCoMKgwqAgZGVmYXVsdDogLyogc2NhbGFy
+X3ZhbHVlIG9yIGludmFsaWQgcHRyICovCj4gPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+IC8qIEFsbG93IHplcm8tYnl0ZSByZWFkIGZyb20gTlVMTCwgcmVnYXJkbGVzcyBvZiBwb2ludGVy
+IHR5cGUgKi8KPiA+IAo+ID4gWy4uLl0KPiA+IAo+ID4gPiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVz
+dGluZy9zZWxmdGVzdHMvYnBmL3Byb2dzL3ZlcmlmaWVyX2dsb2JhbF9zdWJwcm9ncy5jCj4gPiA+
+IGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dzL3ZlcmlmaWVyX2dsb2JhbF9zdWJw
+cm9ncy5jCj4gPiA+IGluZGV4IGYwMjAxMmEyZmJhYS4uMjI1MGZjMzE1NzRkIDEwMDY0NAo+ID4g
+PiAtLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ3MvdmVyaWZpZXJfZ2xvYmFs
+X3N1YnByb2dzLmMKPiA+ID4gKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dz
+L3ZlcmlmaWVyX2dsb2JhbF9zdWJwcm9ncy5jCj4gPiA+IEBAIC0xMzQsNyArMTM0LDYgQEAgX19u
+b2lubGluZSBfX3dlYWsgaW50IHN1YnByb2dfdXNlcl9hbm9uX21lbSh1c2VyX3N0cnVjdF90ICp0
+KQo+ID4gPiAKPiA+ID4gwqBTRUMoIj90cmFjZXBvaW50IikKPiA+ID4gwqBfX2ZhaWx1cmUgX19s
+b2dfbGV2ZWwoMikKPiA+ID4gLV9fbXNnKCJpbnZhbGlkIGJwZl9jb250ZXh0IGFjY2VzcyIpCj4g
+PiAKPiA+IE5pdDogc2hvdWxkIHRoaXMgdGVzdCBjYXNlIGJlIGZvcmtlZCBhcyB0cmFjZXBvaW50
+IGFuZCBub24tdHJhY2Vwb2ludCB2ZXJzaW9ucz8KPiAKPiBJbiB0ZXJtcyBvZiBjb3ZlcmFnZT8g
+SSBoYXZlIHRob3NlIGluIHRoZSBuZXh0IHBhdGNoIGFscmVhZHkuCgpBY2suCg==
 
