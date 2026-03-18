@@ -1,117 +1,270 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B67A63D8114;
-	Wed, 18 Mar 2026 13:30:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773840648; cv=none; b=HMiUvdZv8lkHCrMDXBv7b1a5Enj7s80j43XKmjSo7Git7k5luq3kfaPFx+uGyhNMJ2vdt8WPeZ6lpBMT9NFUrTsn+hPtmVzQRmG0TfC6hBkCjXjwZ2f+qYr8PWNl5pYjAFOU0aRunOfDHiCww8vPMzoT2MRCYj5cuJnq1lik9tc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773840648; c=relaxed/simple;
-	bh=Vl8d+1lloIOpJRAoS12Cp0A3vK8mnBKYu4DEwbR+X4o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=C+zUHDPz6KzN8OKzMYj8fIwVT0S3Nozm72MiKm6mCFacougN8ISALOzCoUVsSjRBIocfLofsfLAvJlKV+vzprJ7zokOBHH+SYzs9klOLj9+Lsvko6uQ8iY6x9QSVWoZynjsSYRlPXdtLgPTrxi/XbZJxeHTrVQQBQDSbKQ3qZB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=URh7bpjS; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4134A3D7D78
+	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 13:36:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773841020; cv=pass; b=Yyi5ftJsiae+QUTnjlZH7GlixOmX62zVqPzTkhiFaoOkAtNCRCKdLfTDbdoW11jtMDUucJSmcz4UHY2pz3dAeGe1cuuylOEmVXplukMErmC06LsxnHvpcuJkcFA/QAmmjR2DPm4MAPAAP/1+r76gM6x48VxpeAZd132VEXPF5fY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773841020; c=relaxed/simple;
+	bh=Lg+/TTx8BbBptFQfj20nBYIWu4lmvyGbKjwVgHlwojk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UJSEmgpw22qnW+YJm0qaUkwWTt2ncPhVtsCKPYojdS0S5KyNyKfPD2Gh/W/DELS2xFqxuu+613PkHRVaEwCBJaK++vUXy+5+lCeayEsOX5uKZzoJd39gxDMe2eN8AReEWqTgvIZhuOP8QJrBhJ7zhXSXA5hz160AWAqzfv56TVc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vm4En3ff; arc=pass smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="URh7bpjS"
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62I2Mv3r2167105;
-	Wed, 18 Mar 2026 13:30:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=xrbpE
-	90Tswxkx7Bq0apvQT9aEigEF/KUczrfJPjSyfs=; b=URh7bpjSio+kCup/Bg3q8
-	ixaHJkqTMvLZCYkeWghUvN4tbyqjrk31vPXFjfEZTadSnVMyHvnK7QVVbO0dhVRD
-	Caw9+KlTURjq3XzKMCBUM4U8vf8nwB9gpCQMWoRsVAQZjvnIJS3O3DbS4k2e99pA
-	Xi/hBvL9gWgG9d8IjNtXvnRyw9c/fxvOjmjXM44aHNSR782bD5MKMsRS4P/xXJB9
-	GwCpMBm6kAQkHCv5eF66dXChJnVFemA0dK90ZTFwKtdbg1hm4B/TqrAL8Ahjd+TM
-	mqVVDyeuQNovGBk/GZmP9OSV3t/+8g1AZJy9bZqAtNn4MuNzV8oRU/p+rrULAwx4
-	g==
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4cvx3b5xpa-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 18 Mar 2026 13:30:13 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 62ICewS2031300;
-	Wed, 18 Mar 2026 13:30:12 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4cvx4bmtqj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 18 Mar 2026 13:30:12 +0000
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 62IDTVfS009174;
-	Wed, 18 Mar 2026 13:30:11 GMT
-Received: from bpf.uk.oracle.com (dhcp-10-154-52-75.vpn.oracle.com [10.154.52.75])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4cvx4bmsqg-11;
-	Wed, 18 Mar 2026 13:30:11 +0000
-From: Alan Maguire <alan.maguire@oracle.com>
-To: andrii@kernel.org, ast@kernel.org
-Cc: daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
-        song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
-        jolsa@kernel.org, qmo@kernel.org, ihor.solodrai@linux.dev,
-        mykyta.yatsenko5@gmail.com, dwarves@vger.kernel.org,
-        bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v14 bpf-next 10/10] kbuild, bpf: Specify "layout" optional feature
-Date: Wed, 18 Mar 2026 13:29:27 +0000
-Message-ID: <20260318132927.1142388-11-alan.maguire@oracle.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20260318132927.1142388-1-alan.maguire@oracle.com>
-References: <20260318132927.1142388-1-alan.maguire@oracle.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vm4En3ff"
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b8d7f22d405so916454166b.0
+        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 06:36:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773841016; cv=none;
+        d=google.com; s=arc-20240605;
+        b=X9WFcXyRUj37wI4wuA87q8lnLlPz/5Xy5malRrz/4rWhanOujAp+aCkFqWxxPd0F8S
+         pfKXrtHpXb3agQvdr2oLyD//VHcvMi4G2g3Fzj4H4Zn/iSe6j0dWUr/p6agRt6/yHfKu
+         5rpFFzUjCdXCL9JvWc66lPRsqmnimcpRRmP1E0R9YHncNyEphnGAM3SiGsZ1bHZouSWo
+         suh4T/2MbS6owOEOgbxNh5FqwPug9maR9B9pJi5+mMMV/cnbcs9nNzRB8uPnpAedD1bq
+         SuvuFWzy7ajWF7xi5ljpOMWQkTmHJm8CSeK0N+OiEEbyl8iKYf+aM/bJqGvVtW1hD6OH
+         TYmg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=D6/bqSpW5+Oi9AxGrrozyndN6Q4jPcmDt6bbbs+htOc=;
+        fh=24TcYdoMgfjV8b7K2YQf9RFVnKqSAbSHlpFqL1rD9cw=;
+        b=NZyB6ZfEQ+AUC3Ie2A7ZO1omaMnyRwIthsTf014Iflmu/ngM+L/GxhMU0K6IibDakb
+         B+I7tKNbQ5l3G5V927QXIdOaX0eJRaYUzIO4bMZrYN9O9qiZjkNPGXzw+m77XL/vpSvm
+         02w3xhCuYV1xXLjKqT3TQpMrWuita2A4iAaevR//z6urNnSP0LO1SLNRWwWvJYCMtcA8
+         Tj3uG7fFpH7xy1IekINKNS9L2ZzX3bKjg8xz8Wn9eYPERE1nFXjn0SPfYfK+EF2HIAxE
+         zsKPQBAmBTu8KYfRHVWe80ykUjvdgskY7bL8ONnAlN/QFe1QqhXVDl1oupH/r8GrgOpf
+         ZrqA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773841016; x=1774445816; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D6/bqSpW5+Oi9AxGrrozyndN6Q4jPcmDt6bbbs+htOc=;
+        b=Vm4En3ffq61qLYqPd+VJ7/UpnQXy+fB5oP4WdzFA38DHdwBYQhL57BmQ+dLJGjd7ae
+         Z2ExfYAz+/NwUIyDmREY/vxRpFQdc0A4KluTH3JNpCWi0DjSeKXEmlBz1HMMazxkO1lT
+         P8CikPQOW0GcpxVQBKuvSS9Taz61pqvY+KL8sSvFjOWBWRvJawlm/7EovBOjLENQQzLn
+         vbccolkJjmuGLRJTN/yXgFUesodZFImjxl5weP6u2X99d7zhF92tM5qEkHgISAKHKDb6
+         rdGk09DWA2MjVtoCY/Oy+/myn351kWTp8GpJQyqQ7UISnYEaxHH9IrPLnIieb2VP9MJa
+         vOzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773841016; x=1774445816;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=D6/bqSpW5+Oi9AxGrrozyndN6Q4jPcmDt6bbbs+htOc=;
+        b=AlOUS4Z3Uz4Sgi6z+NYvE+wNWEAgaAhQk6NMFKJtfrZK0vhfC/eDkKyGI8UARQYQaB
+         CuPwRYk2D78ZVUURvbRBZjB89e3aeJPY9PdBUbXyMoSwsTnC3CjWzdLKRT/F5x9wcqE7
+         t4u5a2NZX6bAsH2FBz4eLHdRLbeLceS4yhIm/P7sr3nYMNNWy7JpGuvqLHYCHV8gjk5r
+         59tjWc33EIETclWF7fX3BdpfSBrTDcK2xmDzNCW5v1TDa7XLtoy9EttaW7qM1/L2cEgO
+         Xm86hC6+S7p9lVXt1jjF4vXoAn0pnC9G7pQMXXZ0Tav3EEmCPt1A1SksnkBeLAcTe9yj
+         uhrQ==
+X-Gm-Message-State: AOJu0YxSeotTN4COqCOHPBf8f4U37vH9mskaHGuZLjCvYquggdR5hrVk
+	UR1i8vnHLpuu7h8u80DE1xVjQLkeLzO3BbhshxepPToz5TWasuPGYu6xym/sv15JhvXp9+u7QII
+	WuifMb9L4Jd56ZQ33W8sUyPoke0cM7x7SXwdmlW4=
+X-Gm-Gg: ATEYQzwg6vLOB0JCAwJ79TPV4S4d+uvnbwO/B7T8z4YlSPGQnVcUOIzgSHR3moN2hUX
+	F/mggG/ZfUmCHUDBY8OdC0RWqdPbtjQFpMiC+pALjx3jLHm1gARMH+dEisuH6yFfXz3C5yppQL3
+	iyGUgu6JG77fP5k3DUQ7nn4EJRTOagErpW5byD6ICsilO3UIe2L5Wo36maL9r60tUOfxG+pXzC3
+	ttowgl5hYMSPb6Yo591cSwx+XDivPm5Jnja/MIOivBk/ICgqEv0t74gVOmGBOH6twGlFZx99t+r
+	vJN1ByB4i5MQatHrulHzx6M=
+X-Received: by 2002:a17:907:3f19:b0:b98:5d8:4fcb with SMTP id
+ a640c23a62f3a-b9805d85532mr115473766b.33.1773841015811; Wed, 18 Mar 2026
+ 06:36:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-18_01,2026-03-17_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999 phishscore=0
- suspectscore=0 spamscore=0 adultscore=0 malwarescore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2603050001
- definitions=main-2603180114
-X-Proofpoint-GUID: TgUulkartxZuZlikg2gpdrZAwinPbYk4
-X-Proofpoint-ORIG-GUID: TgUulkartxZuZlikg2gpdrZAwinPbYk4
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzE4MDExNCBTYWx0ZWRfXz0I82tpPFdGZ
- i+4wkCHSA3mGa67TGVPY9evHy7i2G1ugSiej8aZQLuxclCoDEZ69wYabqes96xgs+6T5H2869pe
- jKmURdVTFQdg6suBk60qQnNleSElgyjpL5SDlldyWBvMlOTXpupLEyf1vRYmWbv/+o8uW77j1WR
- uiewYFQ9cH/K189dgYYyG9bvLxje9HybiT2xI4ciK3ZKAHJqYW9OVoWwrtGNPfv730dL7zIhgOF
- UXPmTJfSZMDgVTSmFcZ+8tZtZnbqpXF3z+/K/wlQ1Cv82iqiYZUmUrLAi16mHBdClwLYYnothWl
- c+6pwviOO+0slx0R05vvRJsjlQpRmymY8zjLxfZkaYu+z0fQsV+KyE6QV2zbWdVgPxyXU1FDkrK
- 8aNbFXjvX3F71qBYuFhFv91s+IE/SlKDxd+B3ZmPo4bXBRnxtR2d0FuFahIT3zoc9oHf91nEq+o
- RNqFBOLCvch8D+9VMqQ==
-X-Authority-Analysis: v=2.4 cv=IN4PywvG c=1 sm=1 tr=0 ts=69baa8e5 b=1 cx=c_pps
- a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17
- a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=x4eqshVgHu-cdnggieHk:22 a=yPCof4ZbAAAA:8 a=J4qZCyyk7QvxA2XVlwcA:9
+References: <20260313180352.3800358-1-puranjay@kernel.org>
+In-Reply-To: <20260313180352.3800358-1-puranjay@kernel.org>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Wed, 18 Mar 2026 13:36:44 +0000
+X-Gm-Features: AaiRm500ICMe5FjGPFHKAmejEpH_zDzyFcFIWkH-r90t0VjGj-E8ZcJxEcK1X7c
+Message-ID: <CANk7y0jmnraKP7k4Rzapq5jio4GGZwFadT0X12bTc-LoKBkzCg@mail.gmail.com>
+Subject: Re: [PATCH bpf 0/3] arm64: Add BRBE support for bpf_get_branch_snapshot()
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Leo Yan <leo.yan@arm.com>, Rob Herring <robh@kernel.org>, Breno Leitao <leitao@debian.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-perf-users@vger.kernel.org, 
+	kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The "layout" feature will add metadata about BTF kinds to the
-generated BTF; its absence in pahole will not trigger an error so it
-is safe to add unconditionally as it will simply be ignored if pahole
-does not support it.
+I will send v2 of this patch with minor changes that I discovered are
+needed, will remove the bpf tag and send it based off the arm64 tree
+as that is the correct place for this set to go.
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- scripts/Makefile.btf | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
-index 562a04b40e06..e66e13e79653 100644
---- a/scripts/Makefile.btf
-+++ b/scripts/Makefile.btf
-@@ -18,6 +18,8 @@ pahole-flags-$(call test-ge, $(pahole-ver), 126)  = -j$(JOBS) --btf_features=enc
- 
- pahole-flags-$(call test-ge, $(pahole-ver), 130) += --btf_features=attributes
- 
-+pahole-flags-$(call test-ge, $(pahole-ver), 131) += --btf_features=layout
-+
- endif
- 
- pahole-flags-$(CONFIG_PAHOLE_HAS_LANG_EXCLUDE)		+= --lang_exclude=rust
--- 
-2.39.3
-
+On Fri, Mar 13, 2026 at 6:04=E2=80=AFPM Puranjay Mohan <puranjay@kernel.org=
+> wrote:
+>
+> RFC: https://lore.kernel.org/all/20260102214043.1410242-1-puranjay@kernel=
+.org/
+> Changes from RFC:
+>  - Fix pre-existing NULL pointer dereference in armv8pmu_sched_task()
+>    found by Leo Yan during testing (patch 1)
+>  - Pause BRBE before local_daif_save() to avoid branch pollution from
+>    trace_hardirqs_off()
+>  - Use local_daif_save() to prevent pNMI race from counter overflow
+>    (Mark Rutland)
+>  - Reuse perf_entry_from_brbe_regset() instead of duplicating register
+>    read logic, by making it accept NULL event (Mark Rutland)
+>  - Invalidate BRBE after reading to maintain record contiguity for
+>    other consumers (Mark Rutland)
+>  - Adjust selftest wasted_entries threshold for ARM64 (patch 3)
+>  - Tested on ARM FVP with BRBE enabled
+>
+> This series enables the bpf_get_branch_snapshot() BPF helper on ARM64
+> by implementing the perf_snapshot_branch_stack static call for ARM's
+> Branch Record Buffer Extension (BRBE).
+>
+> bpf_get_branch_snapshot() [1] allows BPF programs to capture hardware
+> branch records on-demand from any BPF tracing context. This was
+> previously only available on x86 (Intel LBR) since v5.16. With BRBE
+> available on ARMv9, this series closes the gap for ARM64.
+>
+> Usage model
+> -----------
+>
+> The helper works in conjunction with perf events. The userspace
+> component of the BPF application opens a perf event with
+> PERF_SAMPLE_BRANCH_STACK on each CPU, which configures the hardware
+> to continuously record branches into BRBE (on ARM64) or LBR (on x86).
+> A BPF program attached to a tracepoint, kprobe, or fentry hook can
+> then call bpf_get_branch_snapshot() to snapshot the branch buffer at
+> any point. Without an active perf event, BRBE is not recording and
+> the buffer is empty.
+>
+> On-demand branch snapshots from BPF are useful for diagnosing which
+> specific code path was taken inside a function. Stack traces only show
+> function boundaries, but branch records reveal the exact sequence of
+> jumps, calls, and returns within a function -- making it possible to
+> identify which specific error check triggered a failure, or which
+> callback implementation was invoked through a function pointer.
+>
+> For example, retsnoop [2] is a BPF-based tool for non-intrusive
+> mass-tracing of kernel internals. Its LBR mode (--lbr) creates per-CPU
+> perf events with PERF_SAMPLE_BRANCH_STACK and then uses
+> bpf_get_branch_snapshot() in its fentry/fexit BPF programs to capture
+> branch records whenever a traced function returns an error.
+>
+> Consider debugging a bpf() syscall that returns -EINVAL when creating
+> a BPF map with invalid parameters. Running retsnoop on an ARM64 FVP
+> with BRBE to trace the bpf() syscall and array_map_alloc_check():
+>
+>   $ retsnoop -e '*sys_bpf' -a 'array_map_alloc_check' --lbr=3Dany \
+>              -F -k vmlinux --debug full-lbr
+>   $ simfail bpf-bad-map-max-entries-array  # in another terminal
+>
+> Output of retsnoop:
+>
+>   --- fentry BPF program (entries #63-#17) ---
+>
+>   [#63-#59] __htab_map_lookup_elem: hash table walk with memcmp        (h=
+ashtab.c)
+>   [#58] __htab_map_lookup_elem+0x98  -> dump_bpf_prog+0xc850           (h=
+ashtab.c:750)
+>   [#57-#55] ... dump_bpf_prog internal branches ...
+>   [#54] dump_bpf_prog+0xcab8        -> bpf_get_current_pid_tgid+0x0    (h=
+elpers.c:225)
+>   [#53] bpf_get_current_pid_tgid+0x1c -> dump_bpf_prog+0xcabc          (h=
+elpers.c:225)
+>   [#52-#51] ... dump_bpf_prog -> __htab_map_lookup_elem ...
+>   [#50-#47] __htab_map_lookup_elem: htab_map_hash (jhash2), select_bucket
+>   [#46-#42] lookup_nulls_elem_raw: hash chain walk with memcmp         (h=
+ashtab.c:717)
+>   [#41] __htab_map_lookup_elem+0x98  -> dump_bpf_prog+0xcaf8           (h=
+ashtab.c:750)
+>   [#40-#37] ... dump_bpf_prog -> bpf_ktime_get_ns ...
+>   [#36] bpf_ktime_get_ns+0x10       -> ktime_get_mono_fast_ns+0x0      (h=
+elpers.c:178)
+>   [#35-#32] ktime_get_mono_fast_ns: tk_clock_read -> arch_counter_get_cnt=
+pct
+>   [#31] ktime_get_mono_fast_ns+0x9c -> bpf_ktime_get_ns+0x14           (t=
+imekeeping.c:493)
+>   [#30] bpf_ktime_get_ns+0x18       -> dump_bpf_prog+0xcd50            (h=
+elpers.c:178)
+>   [#29-#25] ... dump_bpf_prog internal branches ...
+>   [#24] dump_bpf_prog+0x11b28       -> __bpf_prog_exit_recur+0x0       (t=
+rampoline.c:1190)
+>   [#23-#17] __bpf_prog_exit_recur: rcu_read_unlock, migrate_enable     (t=
+rampoline.c:1195)
+>
+>   --- array_map_alloc_check (entries #16-#12) ---
+>
+>   [#16] dump_bpf_prog+0x11b38       -> array_map_alloc_check+0x8       (a=
+rraymap.c:55)
+>   [#15] array_map_alloc_check+0x18  -> array_map_alloc_check+0xb8      (a=
+rraymap.c:56)
+>         . bpf_map_attr_numa_node       . bpf_map_attr_numa_node
+>   [#14] array_map_alloc_check+0xbc  -> array_map_alloc_check+0x20      (a=
+rraymap.c:59)
+>         . bpf_map_attr_numa_node
+>   [#13] array_map_alloc_check+0x24  -> array_map_alloc_check+0x94      (a=
+rraymap.c:64)
+>   [#12] array_map_alloc_check+0x98  -> dump_bpf_prog+0x11b3c           (a=
+rraymap.c:82)
+>
+>   --- fexit trampoline overhead (entries #11-#00) ---
+>
+>   [#11] dump_bpf_prog+0x11b5c       -> __bpf_prog_enter_recur+0x0      (t=
+rampoline.c:1145)
+>   [#10-#03] __bpf_prog_enter_recur: rcu_read_lock, migrate_disable     (t=
+rampoline.c:1146)
+>   [#02] __bpf_prog_enter_recur+0x114 -> dump_bpf_prog+0x11b60          (t=
+rampoline.c:1157)
+>   [#01] dump_bpf_prog+0x11b6c       -> dump_bpf_prog+0xd230
+>   [#00] dump_bpf_prog+0xd340        -> arm_brbe_snapshot_branch_stack+0x0=
+ (arm_brbe.c:814)
+>
+>                    el0t_64_sync+0x168
+>                    el0t_64_sync_handler+0x98
+>                    el0_svc+0x28
+>                    do_el0_svc+0x4c
+>                    invoke_syscall.constprop.0+0x54
+>     373us [-EINVAL] __arm64_sys_bpf+0x8
+>                     __sys_bpf+0x87c
+>                     map_create+0x120
+>      95us [-EINVAL] array_map_alloc_check+0x8
+>
+> The FVP's BRBE buffer has 64 entries (BRBE supports 8, 16, 32, or
+> 64). Of these, entries #63-#17 (47) are consumed by the fentry BPF
+> trampoline that ran before the function, and entries #11-#00 (12)
+> are consumed by the fexit trampoline that runs after. Entry #00
+> shows the very last branch recorded before BRBE is paused: the call
+> into arm_brbe_snapshot_branch_stack().
+>
+> The 5 useful entries (#16-#12) show the exact path taken inside
+> array_map_alloc_check(). Record #14 shows a jump from line 56
+> (bpf_map_attr_numa_node) to line 59 (the if-condition), and #13
+> shows an immediate jump from line 59 (attr->max_entries =3D=3D 0) to
+> line 64 (return -EINVAL), skipping lines 60-63. This pinpoints
+> max_entries=3D=3D0 as the cause -- a diagnosis impossible with stack
+> traces alone.
+>
+> [1] 856c02dbce4f ("bpf: Introduce helper bpf_get_branch_snapshot")
+> [2] https://github.com/anakryiko/retsnoop
+>
+> Puranjay Mohan (3):
+>   perf/arm_pmuv3: Fix NULL pointer dereference in armv8pmu_sched_task()
+>   perf/arm64: Add BRBE support for bpf_get_branch_snapshot()
+>   selftests/bpf: Adjust wasted entries threshold for ARM64 BRBE
+>
+>  drivers/perf/arm_brbe.c                       | 70 ++++++++++++++++++-
+>  drivers/perf/arm_brbe.h                       |  9 +++
+>  drivers/perf/arm_pmuv3.c                      | 16 ++++-
+>  .../bpf/prog_tests/get_branch_snapshot.c      |  9 +--
+>  4 files changed, 95 insertions(+), 9 deletions(-)
+>
+>
+> base-commit: ca0f39a369c5f927c3d004e63a5a778b08a9df94
+> --
+> 2.52.0
+>
