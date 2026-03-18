@@ -1,123 +1,213 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E96DB3DA7C9
-	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 14:11:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773843087; cv=none; b=hVdluh2JOkzcFT2O42aJfbcb15E+9XvhwLqUbfGx0iVoBmrn8i+dKcqd+OguKgp9/O2itYve1FGcHmg0E3TcBYaLnuBU1HyMWP630NFKyD0snQ5juh6tp87qz5y/Ejynsc7HaHwzk+HKlXmPTuuPUabyzOqObjDgd7Ay3a+hqBQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773843087; c=relaxed/simple;
-	bh=TOLPDkHE1gvYS3GQYuQlFU1Lm6HdXY8vveMlPkZE9KE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JouUDOxj48AooeGtchPu//Dhym8a9RYi93nwDqtW1YYjXq4NB5NSRU/6WRaUPwd7+iZQyZvpoIWeE5R7TRDLPIHktoNX3L97OvwQ0YZi2RFsZsCz5GLhBUDJ04AmfhXpwAPCzq7JSqXH+I3glPgin9IlwuN6E8FyecQMAExozR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=bLFf401P; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 607D73D8108
+	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 14:13:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773843217; cv=pass; b=c86JaQg87+LK6kmGWgESegbctwtcS0xzEZH9FrLmpmgntgmZZ+MArk+cLUXQ3yJBQj9TBCc9kOWjv6pjsWgEF8/483JP0t6oX+pL1hc6J02ue1yLABYz7M9FYls7FZHs/BNaMRtldtJ+7kJNhNvPrihHhPQU6bDeyKjJyeO1kt4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773843217; c=relaxed/simple;
+	bh=z/89pA0UO58ZBkQTFOgdhyZuqhcSfbmElffwmdziG+Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hWNgGcNRBIoYezMRNh7reb7DLjJQzrPV6zWGFpn+AnR8I2EbrdC6Csaj9ZzhRCXyN/VCvU7qXTJeP7WjpUr3yhjaT40z7crjvdiEpuRb3Y7/8/eIYIbh3IeMJ4839+sJUeXVTkb23wM44Qwm1KQllHfHjrCYlVqgjyQmV13PETQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bitbyteword.org; spf=pass smtp.mailfrom=bitbyteword.org; dkim=pass (2048-bit key) header.d=bitbyteword.org header.i=@bitbyteword.org header.b=iLv8Kcr6; arc=pass smtp.client-ip=209.85.219.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bitbyteword.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bitbyteword.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="bLFf401P"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=KdcB1PvtTjrjGb7GHtGZ+wZO27ZaT6qNXPdPFtrSz6A=; b=bLFf401Ps6QSYT88nAMC5uNHEP
-	cEOcGDK6gbyhIVqR5Qn6Y9APqpSCg30/FdPjrAux1+Og8RfacVI/C7LZb2c4MKd09FclXhRGwV4MJ
-	+GRquZ5qmopTemqreCOy5MhkSFq0JgwOnEPMmchrbqzqE9HyHNLe30H2oHFfgwDZgBLwlOPEdPfMl
-	SSo9vKKUR3Zpxel3MBCtMUB60QTJqbUfbv1qEPp800qSur+yN5H1tVO5vrKNcAoNn6B7gbsfm/bbo
-	xXmu49Tq81JzeQOc2mowsSDJR+sYg7vH7C41YMo+/YLJfwc+6Q4T7xzHMeFawrDqXFs+EAjCM407C
-	VMfPmH6A==;
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1w2rcD-000MIz-1S;
-	Wed, 18 Mar 2026 15:11:17 +0100
-Received: from localhost ([127.0.0.1])
-	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1w2rcC-000Ng7-37;
-	Wed, 18 Mar 2026 15:11:17 +0100
-Message-ID: <322777ed-ba0c-42a9-99b9-f567ba4f7282@iogearbox.net>
-Date: Wed, 18 Mar 2026 15:11:16 +0100
+	dkim=pass (2048-bit key) header.d=bitbyteword.org header.i=@bitbyteword.org header.b="iLv8Kcr6"
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-899e87b04d8so100202876d6.3
+        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 07:13:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773843213; cv=none;
+        d=google.com; s=arc-20240605;
+        b=FZfoWIYvyDQtvUPzriQC5mrvr36SxKEOwe/pQENN8Ihrw0304Qa7nABHAW/FT0uFYd
+         qqpcSESWhvZOFfav5rrZxfbxF7eCy9dVtuOXaRBVkbHuWrptPrKTH04TWMXyviITy51J
+         meZ6fQvsvEgWHnrS+0548YC3luA2xjJ+79kt5LQKBLZocTK5khrPfB4plU7j8CNVEjrU
+         c6l0fPmF+ZUaczK/GbpexLRPtmeXXMir85fQVZxhbKboic2TqMae3R2nC3SIgX5ngXSZ
+         AHMOGSPtGxmKz+mmunRYTnUrisYLg1OQ4Ob/t8kSo49DoEKXLlKa9u3JiHzVZ1e9RmeF
+         ZHIw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=doH9jKyIV2pcWr9QqHgYapLUvNmJgzZV6s5pft4p5hM=;
+        fh=BJknILWXeNbOv8ceXs92/R2vWp+4JetLHPvjXtV4KRI=;
+        b=Mo3OX5Xc0AxGpaLu2xVJqptcjsiEPaGT6N5TSYCn6EXf1/ONAKmrzgyvZPeszizzEy
+         BgszSuyOJRrLR2prPkCOYmblWGjSj0aDOlhl+8JX6cHb3hNnaGxu+AMvPVWQJw2GFu8e
+         5SNlUxixJ7kobfzgdVWNa4aDzlaf1jNObdgBPoDQiEoQWF07o+/i76gMwY/agvd0hIFE
+         G7cWnxJdoj30kzWrHnvA55TZn4Zx5pjDSDYHtF4XpcuXReYHAZFuxa3HyO3u86wUYCQi
+         +T0YzCwF+mCrL05Vnp+itj7QsGayMPsKSafsvPRZJ9vXg4Xxd+qInr9Ke2Da4sqLyRwO
+         Se9Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bitbyteword.org; s=google; t=1773843213; x=1774448013; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=doH9jKyIV2pcWr9QqHgYapLUvNmJgzZV6s5pft4p5hM=;
+        b=iLv8Kcr6ga2PE/qEE7gatlTbBuKuabs1y16ZU02HWWuD2F8/SlRbYD+MiJWlt2c2k2
+         dduToabSVGSFcR3YzXAZivojolCfyFq8mmgx+i8+nMzfCVMkvmzgOhaHyHJ+GW5PKCux
+         y4LrDFzCZ9GUaBfw7b/v/VPzts3OrrzNDJm5Orsva+cV3IuaLj8awNAPzB3LEy1AStu7
+         M3P6XzAaHLQ1uullDaiNWw/xpwfx7tRGkwpdMmNeujw02McXPZfPeKTvafM8x9Ig1crv
+         CyUXQV1PUOOqeUP+J6++WbBD6wJO0ngS50NoDJCoCVThx5tVRIS65X5U7WMQ0ChpvW8n
+         TqPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773843213; x=1774448013;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=doH9jKyIV2pcWr9QqHgYapLUvNmJgzZV6s5pft4p5hM=;
+        b=HJ0ad2ff8/KfJVUlYcAMmZWzOWvJUObS97HP1ZkdibR1Ag1y4m+ZMVeLqC230UCKiE
+         6pZibSqzwpEUXgctEbRPlBYsNf9h70HnoQrSTxabCWDwN+UmCXB1ekztGmWcvrnm0v2T
+         cWPTG1HYjA3kcoZa2s9xZe+4h8MdO1gRUhR1IjesmE4khp/RRWCjI/kUQe1+XrMjmEYJ
+         yqO/dk35TIpKVuzPXW3O5s+v0bZVjAl6WDvUyfiNDFhnnGs7RTP5Kc0MJBUqGNaKxqCV
+         +Mq8CUlC5OOm2B6sho8zEJbH5JejBrsEQfv3NCgIr3of0Bh7ulI9Dp7uuPC5WWP3tfdu
+         jGkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWCy7UO6qPwPK0A5mGf0nV7qxNiybX9mh7OIaWSjlsPsD2MH0bu3dPlqojADX4266mzxHc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZoAoy2ad+Hzi5nLq2AZebxmwNND6W8bQ4pfE2YniGFFhOZ2GZ
+	Otnm8E8iLRoOsHYr1GVa8I7BGA1MFHWZTXBBxWXTdUzwSD4DdAcKyG2PUcqp/b8K75m/6YahIfm
+	WYVCKpCcqBd7+FZ1B0OUNbloW1lfgpEn5tuSp643stg==
+X-Gm-Gg: ATEYQzyzEQZE8nI/Txmm56uWvnLVckHE2Y+foUEjB0Zk0oQxNXKXuQGgJpGiHZ9yiDr
+	WfhxZgMFHljytu/OGTDCPx670QhOmQQqGhovbwLCaijx0DAwQ3+m+kVOIT1lsu8SrOY9MvMRkeS
+	n9yLuABjGl2J4r/wWdkA3/IsqndtwLNZaVAisuoE3XhrfmfcA4oNiEv62mbLb1soU+3cJEdIECY
+	MzCxVez9YGJt4u8wB8W6vkhhlaGoSU+eq4yMId4AnMRtfylaqe+LdJknxJDyUoTxYJ8y0Hf1H2l
+	HK76P5M=
+X-Received: by 2002:a05:6214:2466:b0:89c:4cb3:4ea1 with SMTP id
+ 6a1803df08f44-89c6b50cda1mr53811646d6.20.1773843213183; Wed, 18 Mar 2026
+ 07:13:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] bpf/btf: fix u32 subtraction overflow in btf_sec_info_cmp
-To: ibrahim zein <zeroxjacks@gmail.com>, bpf@vger.kernel.org
-Cc: ast@kernel.org
-References: <20260318140205.1887113-1-zeroxjacks@gmail.com>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- xsFNBGNAkI0BEADiPFmKwpD3+vG5nsOznvJgrxUPJhFE46hARXWYbCxLxpbf2nehmtgnYpAN
- 2HY+OJmdspBntWzGX8lnXF6eFUYLOoQpugoJHbehn9c0Dcictj8tc28MGMzxh4aK02H99KA8
- VaRBIDhmR7NJxLWAg9PgneTFzl2lRnycv8vSzj35L+W6XT7wDKoV4KtMr3Szu3g68OBbp1TV
- HbJH8qe2rl2QKOkysTFRXgpu/haWGs1BPpzKH/ua59+lVQt3ZupePpmzBEkevJK3iwR95TYF
- 06Ltpw9ArW/g3KF0kFUQkGXYXe/icyzHrH1Yxqar/hsJhYImqoGRSKs1VLA5WkRI6KebfpJ+
- RK7Jxrt02AxZkivjAdIifFvarPPu0ydxxDAmgCq5mYJ5I/+BY0DdCAaZezKQvKw+RUEvXmbL
- 94IfAwTFA1RAAuZw3Rz5SNVz7p4FzD54G4pWr3mUv7l6dV7W5DnnuohG1x6qCp+/3O619R26
- 1a7Zh2HlrcNZfUmUUcpaRPP7sPkBBLhJfqjUzc2oHRNpK/1mQ/+mD9CjVFNz9OAGD0xFzNUo
- yOFu/N8EQfYD9lwntxM0dl+QPjYsH81H6zw6ofq+jVKcEMI/JAgFMU0EnxrtQKH7WXxhO4hx
- 3DFM7Ui90hbExlFrXELyl/ahlll8gfrXY2cevtQsoJDvQLbv7QARAQABzSZEYW5pZWwgQm9y
- a21hbm4gPGRhbmllbEBpb2dlYXJib3gubmV0PsLBkQQTAQoAOxYhBCrUdtCTcZyapV2h+93z
- cY/jfzlXBQJjQJCNAhsDBQkHhM4ACAsJCAcNDAsKBRUKCQgLAh4BAheAAAoJEN3zcY/jfzlX
- dkUQAIFayRgjML1jnwKs7kvfbRxf11VI57EAG8a0IvxDlNKDcz74mH66HMyhMhPqCPBqphB5
- ZUjN4N5I7iMYB/oWUeohbuudH4+v6ebzzmgx/EO+jWksP3gBPmBeeaPv7xOvN/pPDSe/0Ywp
- dHpl3Np2dS6uVOMnyIsvmUGyclqWpJgPoVaXrVGgyuer5RpE/a3HJWlCBvFUnk19pwDMMZ8t
- 0fk9O47HmGh9Ts3O8pGibfdREcPYeGGqRKRbaXvcRO1g5n5x8cmTm0sQYr2xhB01RJqWrgcj
- ve1TxcBG/eVMmBJefgCCkSs1suriihfjjLmJDCp9XI/FpXGiVoDS54TTQiKQinqtzP0jv+TH
- 1Ku+6x7EjLoLH24ISGyHRmtXJrR/1Ou22t0qhCbtcT1gKmDbTj5TcqbnNMGWhRRTxgOCYvG0
- 0P2U6+wNj3HFZ7DePRNQ08bM38t8MUpQw4Z2SkM+jdqrPC4f/5S8JzodCu4x80YHfcYSt+Jj
- ipu1Ve5/ftGlrSECvy80ZTKinwxj6lC3tei1bkI8RgWZClRnr06pirlvimJ4R0IghnvifGQb
- M1HwVbht8oyUEkOtUR0i0DMjk3M2NoZ0A3tTWAlAH8Y3y2H8yzRrKOsIuiyKye9pWZQbCDu4
- ZDKELR2+8LUh+ja1RVLMvtFxfh07w9Ha46LmRhpCzsFNBGNAkI0BEADJh65bNBGNPLM7cFVS
- nYG8tqT+hIxtR4Z8HQEGseAbqNDjCpKA8wsxQIp0dpaLyvrx4TAb/vWIlLCxNu8Wv4W1JOST
- wI+PIUCbO/UFxRy3hTNlb3zzmeKpd0detH49bP/Ag6F7iHTwQQRwEOECKKaOH52tiJeNvvyJ
- pPKSKRhmUuFKMhyRVK57ryUDgowlG/SPgxK9/Jto1SHS1VfQYKhzMn4pWFu0ILEQ5x8a0RoX
- k9p9XkwmXRYcENhC1P3nW4q1xHHlCkiqvrjmWSbSVFYRHHkbeUbh6GYuCuhqLe6SEJtqJW2l
- EVhf5AOp7eguba23h82M8PC4cYFl5moLAaNcPHsdBaQZznZ6NndTtmUENPiQc2EHjHrrZI5l
- kRx9hvDcV3Xnk7ie0eAZDmDEbMLvI13AvjqoabONZxra5YcPqxV2Biv0OYp+OiqavBwmk48Z
- P63kTxLddd7qSWbAArBoOd0wxZGZ6mV8Ci/ob8tV4rLSR/UOUi+9QnkxnJor14OfYkJKxot5
- hWdJ3MYXjmcHjImBWplOyRiB81JbVf567MQlanforHd1r0ITzMHYONmRghrQvzlaMQrs0V0H
- 5/sIufaiDh7rLeZSimeVyoFvwvQPx5sXhjViaHa+zHZExP9jhS/WWfFE881fNK9qqV8pi+li
- 2uov8g5yD6hh+EPH6wARAQABwsF8BBgBCgAmFiEEKtR20JNxnJqlXaH73fNxj+N/OVcFAmNA
- kI0CGwwFCQeEzgAACgkQ3fNxj+N/OVfFMhAA2zXBUzMLWgTm6iHKAPfz3xEmjtwCF2Qv/TT3
- KqNUfU3/0VN2HjMABNZR+q3apm+jq76y0iWroTun8Lxo7g89/VDPLSCT0Nb7+VSuVR/nXfk8
- R+OoXQgXFRimYMqtP+LmyYM5V0VsuSsJTSnLbJTyCJVu8lvk3T9B0BywVmSFddumv3/pLZGn
- 17EoKEWg4lraXjPXnV/zaaLdV5c3Olmnj8vh+14HnU5Cnw/dLS8/e8DHozkhcEftOf+puCIl
- Awo8txxtLq3H7KtA0c9kbSDpS+z/oT2S+WtRfucI+WN9XhvKmHkDV6+zNSH1FrZbP9FbLtoE
- T8qBdyk//d0GrGnOrPA3Yyka8epd/bXA0js9EuNknyNsHwaFrW4jpGAaIl62iYgb0jCtmoK/
- rCsv2dqS6Hi8w0s23IGjz51cdhdHzkFwuc8/WxI1ewacNNtfGnorXMh6N0g7E/r21pPeMDFs
- rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
- DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
- owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
-In-Reply-To: <20260318140205.1887113-1-zeroxjacks@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/27944/Wed Mar 18 07:24:13 2026)
+References: <20260312150523.2054552-1-vineeth@bitbyteword.org>
+ <20260312150523.2054552-5-vineeth@bitbyteword.org> <f7to6ktnjxi.fsf@redhat.com>
+ <CAO7JXPhfpUb1VM_=mwSUqHPQrLvBW=wurz_apWQkMXssPAQPJA@mail.gmail.com>
+In-Reply-To: <CAO7JXPhfpUb1VM_=mwSUqHPQrLvBW=wurz_apWQkMXssPAQPJA@mail.gmail.com>
+From: Vineeth Remanan Pillai <vineeth@bitbyteword.org>
+Date: Wed, 18 Mar 2026 10:13:22 -0400
+X-Gm-Features: AaiRm51A0epLogiUfwoUvX3H17X7FM-N_YItWsuNQqgGdOd0yFIoTXs_t_Yz52g
+Message-ID: <CAO7JXPgiM12_KcM+-Kxw2A9yC7-G1wwXCmbyVqpAcckojfRrTw@mail.gmail.com>
+Subject: Re: [PATCH 04/15] net: Use trace_invoke_##name() at guarded
+ tracepoint call sites
+To: Aaron Conole <aconole@redhat.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Peter Zijlstra <peterz@infradead.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Eelco Chaudron <echaudro@redhat.com>, 
+	Ilya Maximets <i.maximets@ovn.org>, Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, 
+	Xin Long <lucien.xin@gmail.com>, Jon Maloy <jmaloy@redhat.com>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, Samiullah Khawaja <skhawaja@google.com>, 
+	Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, dev@openvswitch.org, linux-sctp@vger.kernel.org, 
+	tipc-discussion@lists.sourceforge.net, linux-trace-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/18/26 3:02 PM, ibrahim zein wrote:
-> The comparison function btf_sec_info_cmp() uses direct subtraction
-> of u32 values cast to int, which can produce incorrect results due
-> to integer overflow when values exceed 0x7FFFFFFF.
-> 
-> Replace with explicit comparisons to guarantee correct behavior
-> across all u32 value ranges.
-> 
-> Reported-by: Ibrahim Zein <zeroxjacks@gmail.com>
-> Signed-off-by: Ibrahim Zein <zeroxjacks@gmail.com>
-
-Ibrahim, you've been asked previously to only send patches with a related
-BPF selftest which demonstrate/exercise the problematic behavior that is
-being fixed. Recent example of a fix with accompanying BPF selftest:
-
-   https://lore.kernel.org/all/20260304083228.142016-1-tangyazhou@zju.edu.cn/
+On Wed, Mar 18, 2026 at 9:40=E2=80=AFAM Vineeth Remanan Pillai
+<vineeth@bitbyteword.org> wrote:
+>
+> On Thu, Mar 12, 2026 at 11:31=E2=80=AFAM Aaron Conole <aconole@redhat.com=
+> wrote:
+> >
+> > "Vineeth Pillai (Google)" <vineeth@bitbyteword.org> writes:
+> >
+> > > Replace trace_foo() with the new trace_invoke_foo() at sites already
+> > > guarded by trace_foo_enabled(), avoiding a redundant
+> > > static_branch_unlikely() re-evaluation inside the tracepoint.
+> > > trace_invoke_foo() calls the tracepoint callbacks directly without
+> > > utilizing the static branch again.
+> > >
+> > > Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> > > Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> > > Signed-off-by: Vineeth Pillai (Google) <vineeth@bitbyteword.org>
+> > > Assisted-by: Claude:claude-sonnet-4-6
+> > > ---
+> > >  net/core/dev.c             | 2 +-
+> > >  net/core/xdp.c             | 2 +-
+> > >  net/openvswitch/actions.c  | 2 +-
+> > >  net/openvswitch/datapath.c | 2 +-
+> > >  net/sctp/outqueue.c        | 2 +-
+> > >  net/tipc/node.c            | 2 +-
+> > >  6 files changed, 6 insertions(+), 6 deletions(-)
+> > >
+> > > diff --git a/net/core/dev.c b/net/core/dev.c
+> > > index 14a83f2035b93..a48fae2bbf57e 100644
+> > > --- a/net/core/dev.c
+> > > +++ b/net/core/dev.c
+> > > @@ -6444,7 +6444,7 @@ void netif_receive_skb_list(struct list_head *h=
+ead)
+> > >               return;
+> > >       if (trace_netif_receive_skb_list_entry_enabled()) {
+> > >               list_for_each_entry(skb, head, list)
+> > > -                     trace_netif_receive_skb_list_entry(skb);
+> > > +                     trace_invoke_netif_receive_skb_list_entry(skb);
+> > >       }
+> > >       netif_receive_skb_list_internal(head);
+> > >       trace_netif_receive_skb_list_exit(0);
+> > > diff --git a/net/core/xdp.c b/net/core/xdp.c
+> > > index 9890a30584ba7..53acc887c3434 100644
+> > > --- a/net/core/xdp.c
+> > > +++ b/net/core/xdp.c
+> > > @@ -362,7 +362,7 @@ int xdp_rxq_info_reg_mem_model(struct xdp_rxq_inf=
+o *xdp_rxq,
+> > >               xsk_pool_set_rxq_info(allocator, xdp_rxq);
+> > >
+> > >       if (trace_mem_connect_enabled() && xdp_alloc)
+> > > -             trace_mem_connect(xdp_alloc, xdp_rxq);
+> > > +             trace_invoke_mem_connect(xdp_alloc, xdp_rxq);
+> > >       return 0;
+> > >  }
+> > >
+> > > diff --git a/net/openvswitch/actions.c b/net/openvswitch/actions.c
+> > > index 792ca44a461da..420eb19322e85 100644
+> > > --- a/net/openvswitch/actions.c
+> > > +++ b/net/openvswitch/actions.c
+> > > @@ -1259,7 +1259,7 @@ static int do_execute_actions(struct datapath *=
+dp, struct sk_buff *skb,
+> > >               int err =3D 0;
+> > >
+> > >               if (trace_ovs_do_execute_action_enabled())
+> > > -                     trace_ovs_do_execute_action(dp, skb, key, a, re=
+m);
+> > > +                     trace_invoke_ovs_do_execute_action(dp, skb, key=
+, a, rem);
+> >
+> > Maybe we should just remove the guard here instead of calling the
+> > invoke.  That seems better to me.  It wouldn't need to belong to this
+> > series.
+> >
+> > >               /* Actions that rightfully have to consume the skb shou=
+ld do it
+> > >                * and return directly.
+> > > diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
+> > > index e209099218b41..02451629e888e 100644
+> > > --- a/net/openvswitch/datapath.c
+> > > +++ b/net/openvswitch/datapath.c
+> > > @@ -335,7 +335,7 @@ int ovs_dp_upcall(struct datapath *dp, struct sk_=
+buff *skb,
+> > >       int err;
+> > >
+> > >       if (trace_ovs_dp_upcall_enabled())
+> > > -             trace_ovs_dp_upcall(dp, skb, key, upcall_info);
+> > > +             trace_invoke_ovs_dp_upcall(dp, skb, key, upcall_info);
+> >
+> > Same as above.  Seems OVS tracepoints are the only ones that include
+> > the guard without any real reason.
+> >
+>
+> Makes sense. Its simple enough that I think I will include it as a
+> separate patch in v2 and remove these changes from this patch. Thanks
+> for pointing it out.
+>
+On a second look, I'm not sure if this was for performance reasons.
+The discussion in the io_uring patch in this series points out that
+the check made there was deliberate and for performance reasons to
+avoid 6 mov instruction in the hot path. Just wanted to double check
+if that was the case here, before I remove the check?
 
 Thanks,
-Daniel
+Vineeth
