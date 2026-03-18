@@ -1,171 +1,127 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6413175A6F;
-	Wed, 18 Mar 2026 01:15:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773796541; cv=none; b=FaqBvfTbLbLQsVs7JWx1YO9dp7TzcESSYYdJxjGglTc4AoeKzYxT2TJYFcxjbNOQMGuUcd5CTnuubUZvE09dMzgH3ywuALFs7hXLUiVgYM1U+VNEHt3snSPoc+kfh/TusNgdrTnV7NDws3JWEuSIAD7uluo3OHzWNkgkIhelWg8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773796541; c=relaxed/simple;
-	bh=em6SO/ENzXNvRZ3dWi95voyC+ziv/4ohmr3+F+lO8SI=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=pk/kqB2z/92i+kAyaGQiEHSA5fHzWbeH8T1ejnIOotHlFbMgdkrTyaRT+b/ih2TVSUye3TWCAv6k8u5v5zxd2QIa5mhXAfYwPWj28KgubfGA1zpqWpKfOwsQyCfmakzXokTHydthbVthG9sn+44/iOyVmjjFIAnN41v1TWUC+tM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g1erzp2z; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D2F019F135
+	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 01:16:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773796573; cv=pass; b=QZksMFqcIHUzo844OoRNcfjjy89/pWldFX/zARNTVtbzG5biwRc4FMCR+l3vEb9pD09PpvkN3phgpX3GFphWAjhrujV1R9S47NX9xeGXHxUw4ROsfycLYDsXtvoa7zQLYoKxCCtVURuWkA6H7mNPpg5ChN/PKN815piRilhYdvA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773796573; c=relaxed/simple;
+	bh=3w2OBXZSRP6xgeoDfIzydCPozvN6W2306MSC+T9kb58=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tE+58aaWGIlP2b6BURleueyqv+Yz6PHo1noE9JSbxa3SPf2V0pBd/x/KEJxXp1rKUy6GAsSY97ki0kuR2RKIAk/A7GhhW8XafPOBr6uv1U6xNFSRmBus5s7p3OAUe647E3BoGu4gfraV8yTFaFm7oT79KUF/fddYEKNGIweL6Ks=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gwNbXNsF; arc=pass smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g1erzp2z"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773796540; x=1805332540;
-  h=from:to:cc:subject:date:message-id;
-  bh=em6SO/ENzXNvRZ3dWi95voyC+ziv/4ohmr3+F+lO8SI=;
-  b=g1erzp2zSjULYSuaJO+Cg7RJzU3i0BbXeN8ZP/BCXHgyhtuL+41AXoFe
-   CMIOLTyyHE0yE+/npOS/j9ZURNjv/QLL46aDvkZUbLvtyiLVEUVrkNsoq
-   +inJmKpLsHi5UEsr/jxUp/8gWDZTkmdHzaFSue6/yQy/NaDjzAugMXvFm
-   XAW6DQwV9lhkevxyXYX8+uNCjAU/3Gblw8S2eVhFs/YlqoUGWRejLotfZ
-   Xp0+L3DWiWI8vDPUjo3KqSK+rOF9RBysNT2AhmqBkmHhnXPO79HoZz01p
-   fCTzWy/Wk7X2MI7A2RbglsgPesUzwm0OaLk7iKMuaGK/9MTUxPPRsebVw
-   Q==;
-X-CSE-ConnectionGUID: BEg10WviT/6pYt2l1SOQ6Q==
-X-CSE-MsgGUID: jjOx2lq6SjG35bZGB6IjQw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11732"; a="77454303"
-X-IronPort-AV: E=Sophos;i="6.23,126,1770624000"; 
-   d="scan'208";a="77454303"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 18:15:38 -0700
-X-CSE-ConnectionGUID: R0w3j8ZNTka8JCKtuJP+ow==
-X-CSE-MsgGUID: DPDHn4CoT3i6kMZ+2jRzFg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,126,1770624000"; 
-   d="scan'208";a="227399796"
-Received: from estantil-desk.jf.intel.com ([10.166.241.24])
-  by orviesa005.jf.intel.com with ESMTP; 17 Mar 2026 18:15:36 -0700
-From: Emil Tantilov <emil.s.tantilov@intel.com>
-To: intel-wired-lan@lists.osuosl.org
-Cc: netdev@vger.kernel.org,
-	anthony.l.nguyen@intel.com,
-	aleksandr.loktionov@intel.com,
-	przemyslaw.kitszel@intel.com,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	bpf@vger.kernel.org,
-	aleksander.lobakin@intel.com,
-	decot@google.com,
-	willemb@google.com
-Subject: [PATCH iwl-net] idpf: fix xdp crash in soft reset error path
-Date: Tue, 17 Mar 2026 18:15:45 -0700
-Message-Id: <20260318011545.12874-1-emil.s.tantilov@intel.com>
-X-Mailer: git-send-email 2.17.2
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gwNbXNsF"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-48628ce9ab5so18232265e9.2
+        for <bpf@vger.kernel.org>; Tue, 17 Mar 2026 18:16:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773796570; cv=none;
+        d=google.com; s=arc-20240605;
+        b=SbXs5KXtEY+35DEM+cJZxxSVAlPdNYNFt/rNK7CRY8alTcli2RWZWPATaO91Z+ox8R
+         IPXD2p71fhhP8A4hPnX2bGFZfAfcPqqCWQulJpjfjHyjpNdla7DNPCy7SmTRGKEWY3qt
+         4UJJ9LLiGWIcmwExX9EeYT5jof6ZYMsVEo7gDfDZOPTmLJtA3aD9Ccm8iFM586CHn9JF
+         pcIq/zOeFXuJDX64Qr6JpPKwfp/ZML6E5O194xd1HDwB7nxWkoPJqwxF7G25tyhxw/x1
+         bIzpCfEU2mBBVxv3PPAruRaZ0BYKsZe+Swra48emusEIRK8tgL/C2kfbf2C9Gx5s/ngp
+         uTtA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=3w2OBXZSRP6xgeoDfIzydCPozvN6W2306MSC+T9kb58=;
+        fh=8GTjlGmSogMfBHduoIHHGPB9q9b2LKbDS+dRTbAGgrU=;
+        b=dEo6Moh5/91ySzp+j5bdeWSyQtFQM55q88ja4BRkf0jXfBSw5phRE+28fm1268nzy+
+         rFkQd4Xc3Gc+wkhcBL2eWpGcZbKeIPtmiRZXcE7w+u853Px08dEv2xG9NJJFI3Umbq7U
+         4vZ8TT3vSQXiMLRr0tX7uE6hrb2EI2cnu2Yx2DuRbgvN+p0Mzqa3uyNeIfnwumwnUFHu
+         cd+nOZ7gEEsPI8TDLXqD6Jb8WTAcmHCtziQpWnlZtNXYeXwsW8VYdTFbDo+9JRAwgGyQ
+         ABt961e+Xkqpv3HxuS2tLw2c4k3mNlJtXEm/jklMv/NHHCp6zAW83UZ/Aq4bTLlruh3G
+         3INQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773796570; x=1774401370; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3w2OBXZSRP6xgeoDfIzydCPozvN6W2306MSC+T9kb58=;
+        b=gwNbXNsFjJ5I/rKMUtQV0RcE8uzPvaeiGNXV9yRrfF3jsU2WqReVgITC+rdJf4VWId
+         2Q3Wqy/4mb4oFtqwNXgTNf7ZTX0ty08lzY2QTNj9GK/iIt66kbgevofTQrx5LqnOnkUF
+         xtfRftDGYI3Gg1HBpFa7CDJNx61668vS20asflQgQydFp8SGyRylv6mASjCoxy8RqG4T
+         cFRESowjz2A+czTkSOlFp/Z2hFQ5LEQoRrBwq6oP7W8iHZY6AnCybUmUCY4uS3N3mUzQ
+         rg7nSjsC+DpBj5jWYS+4EENc7UWuqQPT+Xqxn0jJF8r6mqjyRoLCS1SaWpIAEc49hKCA
+         AQaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773796570; x=1774401370;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=3w2OBXZSRP6xgeoDfIzydCPozvN6W2306MSC+T9kb58=;
+        b=Qva4m7u7q69kjcPUd45hy1IIPMlndfy88AbksVItE4YwchBTiY8m6wyiDMnRpAJRcQ
+         U+PecFwGHCSndoAwKpgY6DBOzYkW8+TX0Ggz6+dQWnZsHJGI2mmG4h0Tl4JKR/FChACa
+         QjSwZfU7FtQe1y16CZzxgy8L2R9P2mvvysboiMdkk8C63mE/4au+DbgVa2pJGHPC3Oto
+         mBA3P/sLXdXGG11+HzzDFofW0rmN8fG1Qj4DDavzqSRQA6weoAhSJbP7MrTnKN1J/qdK
+         jXrR++ZjbMYtml+qAXUTiV19qcHHBWxMshD/y6/VzJDwWMo6VOsmWzjQR0JHEgz++JoE
+         DBfw==
+X-Forwarded-Encrypted: i=1; AJvYcCUWdSQLSBkFLhvPkjsj2cu4ABJEd7E6IJPRqcPpHIChQY8BZCclyVvaisa3S6cq+a6tXTU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyR5uwmyIgCFHxtpQCSJ9YVdcyw5DdTf9YEmJS9bPPIF9BOaBTg
+	uCfuxbzZsk33Do9IQU5isXT7gqXTrIyq0gdGNK78U6hpRwK+DzhkAp/vjvNnG0IPSkH0GwBnn+0
+	zuFvMySSpdZQ4POIrURK2Pz1nlgZ1S3Y=
+X-Gm-Gg: ATEYQzyD8VOKJRIHmRP+TxJySsN1U2EOQCoGpYG9EeVz51qd4btBMtWnNmIXVBz+m25
+	JLxz8BCYsdsjFYvIA/KfvAdwToA7OgaOEL/FqiN/gOyoCIAoHwhwvBc8IgShayk19IRd3U5V4hu
+	UM3pvKu/QXDpCTr3jXexw5rwoBtP+mnTTX85LkOM5if0amdc3JkCAu6jnQuj+JpQg/NWgkKj31x
+	QCY8rExsT8vMJmFU1Sj5lMh5MbpvR6R1OqWI0ADRpUxpOwm57Pvbf+VVPUdDDqTi53NjCZNuYLU
+	54GhDD8Aj5SteNg+S2R6uZn9LP5ucD2TZeqObayNRkud5m2hoKwC8G/1Qi+S2M6zy/Ry1dUDwUR
+	JQdykf8F+mCYGU4igoCGm/loYGw==
+X-Received: by 2002:a05:600c:8683:b0:485:f1d1:8f3d with SMTP id
+ 5b1f17b1804b1-486f442e6e5mr18435595e9.6.1773796570321; Tue, 17 Mar 2026
+ 18:16:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260311-bpf-auditd-send-message-v1-0-10a62db5c92f@cloudflare.com>
+ <CAP01T77VyW=5SHDvM3HXPNHaxRdzs8H__MOh2zx1dQ6STeAUtg@mail.gmail.com>
+In-Reply-To: <CAP01T77VyW=5SHDvM3HXPNHaxRdzs8H__MOh2zx1dQ6STeAUtg@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 17 Mar 2026 18:15:59 -0700
+X-Gm-Features: AaiRm52ZhrulSIFyNHNiIzRvMopWhhEYRIriCdPJwA716TKmoKnUrKQyqpBcyns
+Message-ID: <CAADnVQJCJaLjGCwjCX9VtT615c4kn7v5bxviUmGFVj=uTtUHMg@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next 0/4] audit: Expose audit subsystem to BPF LSM
+ programs via BPF kfuncs
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Frederick Lawler <fred@cloudflare.com>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Eric Paris <eparis@redhat.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	LSM List <linux-security-module@vger.kernel.org>, audit@vger.kernel.org, 
+	bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, kernel-team <kernel-team@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-NULL pointer dereference is reported in cases where idpf_vport_open()
-fails during soft reset:
+On Mon, Mar 16, 2026 at 7:44=E2=80=AFPM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
+>
+> On Wed, 11 Mar 2026 at 22:31, Frederick Lawler <fred@cloudflare.com> wrot=
+e:
+> >
+> > The motivation behind the change is to give BPF LSM developers the
+> > ability to report accesses via the audit subsystem much like how LSMs
+> > operate today.
 
-./xdpsock -i <inf> -q -r -N
-
-[ 3179.186687] idpf 0000:83:00.0: Failed to initialize queue ids for vport 0: -12
-[ 3179.276739] BUG: kernel NULL pointer dereference, address: 0000000000000010
-[ 3179.277636] #PF: supervisor read access in kernel mode
-[ 3179.278470] #PF: error_code(0x0000) - not-present page
-[ 3179.279285] PGD 0
-[ 3179.280083] Oops: Oops: 0000 [#1] SMP NOPTI
-...
-[ 3179.283997] Workqueue: events xp_release_deferred
-[ 3179.284770] RIP: 0010:idpf_find_rxq_vec+0x17/0x30 [idpf]
-...
-[ 3179.291937] Call Trace:
-[ 3179.292392]  <TASK>
-[ 3179.292843]  idpf_qp_switch+0x25/0x820 [idpf]
-[ 3179.293325]  idpf_xsk_pool_setup+0x7c/0x520 [idpf]
-[ 3179.293803]  idpf_xdp+0x59/0x240 [idpf]
-[ 3179.294275]  xp_disable_drv_zc+0x62/0xb0
-[ 3179.294743]  xp_clear_dev+0x40/0xb0
-[ 3179.295198]  xp_release_deferred+0x1f/0xa0
-[ 3179.295648]  process_one_work+0x226/0x730
-[ 3179.296106]  worker_thread+0x19e/0x340
-[ 3179.296557]  ? __pfx_worker_thread+0x10/0x10
-[ 3179.297009]  kthread+0xf4/0x130
-[ 3179.297459]  ? __pfx_kthread+0x10/0x10
-[ 3179.297910]  ret_from_fork+0x32c/0x410
-[ 3179.298361]  ? __pfx_kthread+0x10/0x10
-[ 3179.298702]  ret_from_fork_asm+0x1a/0x30
-
-Fix the error handling of the soft reset in idpf_xdp_setup_prog() by
-restoring the vport->xdp_prog to the old value. This avoids referencing
-the orphaned prog that was copied to vport->xdp_prog in the soft reset
-and prevents subsequent false positive by idpf_xdp_enabled().
-
-Update the restart check in idpf_xsk_pool_setup() to use IDPF_VPORT_UP bit
-instead of netif_running(). The idpf_vport_stop/start() calls will not
-update the __LINK_STATE_START bit, making this test a false positive
-should the soft reset fail.
-
-Fixes: 3d57b2c00f09 ("idpf: add XSk pool initialization")
-Signed-off-by: Emil Tantilov <emil.s.tantilov@intel.com>
-Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
----
- drivers/net/ethernet/intel/idpf/xdp.c | 7 ++++++-
- drivers/net/ethernet/intel/idpf/xsk.c | 4 +++-
- 2 files changed, 9 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/ethernet/intel/idpf/xdp.c b/drivers/net/ethernet/intel/idpf/xdp.c
-index cbccd4546768..b670f0ea20b3 100644
---- a/drivers/net/ethernet/intel/idpf/xdp.c
-+++ b/drivers/net/ethernet/intel/idpf/xdp.c
-@@ -488,12 +488,17 @@ static int idpf_xdp_setup_prog(struct idpf_vport *vport,
- 				   "Could not reopen the vport after XDP setup");
- 
- 		cfg->user_config.xdp_prog = old;
--		old = prog;
-+		vport->xdp_prog = old;
-+		if (prog)
-+			bpf_prog_put(prog);
-+
-+		goto out;
- 	}
- 
- 	if (old)
- 		bpf_prog_put(old);
- 
-+out:
- 	libeth_xdp_set_redirect(vport->netdev, vport->xdp_prog);
- 
- 	return ret;
-diff --git a/drivers/net/ethernet/intel/idpf/xsk.c b/drivers/net/ethernet/intel/idpf/xsk.c
-index d95d3efdfd36..b601b6c298c7 100644
---- a/drivers/net/ethernet/intel/idpf/xsk.c
-+++ b/drivers/net/ethernet/intel/idpf/xsk.c
-@@ -553,6 +553,7 @@ int idpf_xskrq_poll(struct idpf_rx_queue *rxq, u32 budget)
- 
- int idpf_xsk_pool_setup(struct idpf_vport *vport, struct netdev_bpf *bpf)
- {
-+	const struct idpf_netdev_priv *np = netdev_priv(vport->netdev);
- 	struct xsk_buff_pool *pool = bpf->xsk.pool;
- 	u32 qid = bpf->xsk.queue_id;
- 	bool restart;
-@@ -568,7 +569,8 @@ int idpf_xsk_pool_setup(struct idpf_vport *vport, struct netdev_bpf *bpf)
- 		return -EINVAL;
- 	}
- 
--	restart = idpf_xdp_enabled(vport) && netif_running(vport->netdev);
-+	restart = idpf_xdp_enabled(vport) &&
-+	       test_bit(IDPF_VPORT_UP, np->state);
- 	if (!restart)
- 		goto pool;
- 
--- 
-2.37.3
-
+Sure, but bpf lsm-s don't need to follow such conventions.
+audit is nothing but a message passing from kernel to user space
+and done in a very inefficient way by wrapping strings into skb/netlink.
+bpf progs can do this message passing already via various ways:
+perfbuf, ringbuf, streams.
+Teach your user space to consume one of them.
