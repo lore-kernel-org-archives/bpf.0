@@ -1,134 +1,122 @@
-Received: from mail-yx1-f51.google.com (mail-yx1-f51.google.com [74.125.224.51])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86EF63FF8AA
-	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 16:21:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 909222EBDD0
+	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 16:29:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773850901; cv=none; b=kvDsrXqkKJPI/0GTsrXbLoCu2M01I3GPsdd7f2cKnywO5WeOOYb1kUB5koWaNVdX6Fj7oW/+ko95SNPuGBWu5EP6FEn3wor7BIZI0Tt2QsyKVlvFC9CjOgpF2wJq/WAdH5PcpgdnQeUZw+tbqvoQBFyZDV++EbZTy6VrfxOHXiU=
+	t=1773851367; cv=none; b=YaWLgbEna+qlpO9QXWb1QGyhPYz/QAHFo8mH0MbSJ3ruM30YPyzdMU9+FAP19jjumlU1TGoNQb8R2XmU0c8lBg525tgpyrfqBiflbXkSWKh2E1BD7mi+Wuc0t7PieQDifhzKqwss/NG+66sz17thff1pcTDvS6d78XM+zk2LbpM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773850901; c=relaxed/simple;
-	bh=Xais5AlC7gPN/jeDsX8Mvz9zOloreO5rETe4qgoEMv0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J4v0NfLwlX08+NNT/T35c6QTb8yGsa0qBbAqwxCG3Um+MxePab5rceSiAYJTxN8hg0u7JdzDM2PP9IJMz9kbdgRRj6asAXeys7RSITpQbhqF9Pp+yJ62dIfE8C6MRUI4gNjTY4uzHhw11hVfsXROF+Z+obt4qw9sFcJ00zxzOHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ghQjv1fp; arc=none smtp.client-ip=74.125.224.51
+	s=arc-20240116; t=1773851367; c=relaxed/simple;
+	bh=80ZQAStVbojxCRFQFhxunxTUaGvTgjPz60GUonfVHh8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Y9pBdTfdGFDMBWIfBZRbGBQ2911Vu9hkp2No2uyNHnsp73SpTYmVkBcfcTUPPOFDaWmON85NWXfz8JfgbtaGhLJITRTISqJhY71On7THEW4Lt1XPwFMUualD9sknOJAlTCvwyMJV6UuYmFpepjWyFo7AkoAPHXr83RioWWUzX9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LGQgb72R; arc=none smtp.client-ip=209.85.216.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ghQjv1fp"
-Received: by mail-yx1-f51.google.com with SMTP id 956f58d0204a3-64e87a81639so167235d50.0
-        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 09:21:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LGQgb72R"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-358d80f60ccso69997a91.3
+        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 09:29:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773850897; x=1774455697; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aU3ZUegYeNO/2K6RsfKemLkoDaSg+c0LeYfQDENeDh8=;
-        b=ghQjv1fpKGyjAGY79ZcebNubMwKey2UMAJ+vXMYM6mENNEt2d1R6+094CRB6n9HS9S
-         TtXiUaRH9zeze9hhcBD4cIARmC6nni/zibKmo2VAKQCv/0oZCbspsWvBaf3HIf17uCSa
-         w1kyqUmlxwH0XvJ2hYOIZE9JpbJwY/CNUc37YJ5C+A21Zz+JyDLX17kpcpXi0kpCosF7
-         jQ8S/5SU9DYPRClxCFgCgujLt7Q6yEw44BqQDJN/zKVml+y709iUUhRrHHpok4Tnit2o
-         nTtXZKN73Rf1eGqei2dkTBNBcB6U1Fmt7S1bbBdkTYQTKKBdIE8gxr5w+LJXISzdCVne
-         ox1w==
+        d=gmail.com; s=20230601; t=1773851362; x=1774456162; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2Gtl+TrBTxXTKZJobnZxuGXdKTvi1eDtvZCMWVOn4Zo=;
+        b=LGQgb72R0X5z2i/lQfxKWFKA1kxOBZlVpGcwsXrP2m12e1UAVtkUjuewEYBLrv5qyA
+         kyc09MGThbnnnBIP1xvTKWTVK8sw14Q6XXgopmqKttDZVrG65ZuT+94gnAET8iYAodLU
+         RLk2uNFCtrI42HI1AQwXfidVp4fBGjiWTQYwERMhWu06t5yryeJKd+yIST5t04ly40E4
+         XlkaYmkUqw8dC0dWLOqWMK71/vtF8PbhePofpxmikWEcHqbXX7URT6VVXgtYk9a+yrWl
+         VLe36bGI9LnR/E6umiX+wXtMcmiV0iqFcbnnYDUdsf2k7WvBPmQssTaLOQp0nYqtYLqk
+         b+NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773850897; x=1774455697;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aU3ZUegYeNO/2K6RsfKemLkoDaSg+c0LeYfQDENeDh8=;
-        b=cVcHvmAgj+I5ZGhFcgWSeQpHtpOsbmBCn32FvXkX5DazvRi7FHfebCy6Z2pEj24ldJ
-         bkBIxBRZcYuGBrDGYejWhBbOgr77BZJ2hUOiMVlAY/YGPHanwXz+1cTfY94sl7H/DY2y
-         dMPF2oScL8Rurmmp7Jtt6h2xzx3NMG5TUBw0cNQ1C3JDpW6fmJM8b5pS6RIwTlXbfZiN
-         6y/5fUgBgNNdbR/4DxEOlpqmqkX+2dB8RwlxkRt3EcwgaT3+APQZa8g45YASwCpytYlq
-         HNqljIni79xgWsT/blY/fassWTUaEliKlJm5vF8Pikb0+p8leertQqVg/08FYO9lt3kj
-         pEyg==
-X-Forwarded-Encrypted: i=1; AJvYcCV0YR33HMAEVb/CEIUIhJUfiG7gBoctfilRjdOwg+4TWrIzjfDI4IqJtE9rQC3ruU/11aY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZCxa3pqecKaY4nLCUgkFb0BkEfIkhqITh/AuChRBlVNpau8Qg
-	yr7jM/9ryVLdVdUpGN2XlhGHLdqfZSifKgMnHF9gC0K2C72TqI3+EPyi
-X-Gm-Gg: ATEYQzwV33jP6taKLvzxf8c0VDNzd/bp8Z24B4tRWhBqzSi/YsbPa7kbX0tAlerQ334
-	VKsYgpBKqNKLvYYLnOX2Zi33ITsBjcRwpIut7LY7wOXbK6pPGTklXZJeMdm9Z44fBptnklUNonO
-	Nsh07Wljzk/BCdLhUaflma878mTGAbIqUJ6ryT7kuhkM5xguJHU3tWQNdI/Xjq5HXriM0Gr3HEU
-	LJWKlHVmjBqqRK0lukcbXRm1V8nb4OiCDJiIqSDtEG6oUo26Mb4cZUn5UNnnEI+ZMrQo8uJsh3j
-	MYYHZRAusiO4Lt5NMVSKwb7NZJdwDcRM6lY8l5ulcoQqs0vFDQS066TPlHMZFzc2HtIbzbWf8sh
-	yHDoG1/MMz/9R7UnOyfFutdSd2UWJ5ySLdQ6PjDgAJZM8XJ8qx1c2W/qLh77hFRg0wDL80LjGYA
-	dI29dBCie/QrQ6cnD/5nwUDgYCyhBPqo4cgs7GNUcPifkqwgo=
-X-Received: by 2002:a53:b20d:0:b0:64a:df24:813a with SMTP id 956f58d0204a3-64e91351a08mr3367724d50.29.1773850897139;
-        Wed, 18 Mar 2026 09:21:37 -0700 (PDT)
-Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:59::])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-64e91c06df7sm1882816d50.17.2026.03.18.09.21.36
+        d=1e100.net; s=20251104; t=1773851362; x=1774456162;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2Gtl+TrBTxXTKZJobnZxuGXdKTvi1eDtvZCMWVOn4Zo=;
+        b=W6gh1jLR62aERZBjX41w93CGxTYBrmNqMP/VJhWWGLO1oYx9DCU9QrcSQfuUP/dHuJ
+         jLcJfIE/iDNhvVnB2bfXu/yy3H8GUwrR3vud2qy7hkCzPNKbfa/EqpvGrGK4yMVJPSGg
+         88xAy9j8iwNyaw3Dqec/ylFw76P5kvIGzUIB1FOEpKIDwzWSjcbPkI/6WrNNKk3rTLvo
+         VZDjn/RAMGdxgRjBH5SdyD3nht7TSVQHrc6ibp0tgYpVGz7842j/7XdLRvYC24nSo88m
+         Nyi+N3wagySG7F5LZHGq9179dW4HHqHylMHnyVqwpW6t4Te++/oCJVmtHTz6a6k8kS1Q
+         5IYg==
+X-Gm-Message-State: AOJu0YwaX70NE/VlchpDXn0PAdy7GaK133mVYXVsxvYs/zdZe9YuMNhK
+	qEbU0euEfnLF+jR6heFb1i0RxdIVYy2wZ+gyZkL+f5Zkyb7yARkts74gm9G2Sw==
+X-Gm-Gg: ATEYQzykhTmWj8YFaHWPGO/AAfKrgHxxHqBtIM85Ha5B+fdDa9hv6HML5xgZyVSY8ZZ
+	19Cd+NyfJuuGJ65smk07299k0iQmExUJ3OvYcOLvjb/HV8LkXQroYmh2xQZeKMSIgrYkCu6Z3Ov
+	TNBreHi7fzBWZrNczu6xGbYiBJAXzO0qEevfW1FlDItanaV+4kUt8bdlDraA+VwAxuXgWsOcJ9k
+	d1ZPjp8EZH5oBNmwLF+EyN8t/6biW/KetD/e877AgbsOCQpSfPWPDGRJqHXE1UuUJe8hFCfo5Xc
+	iRY6fcJjmJdg2Wv0Xypo9UotwWA2CBLOES4SnSWPe/tyelXY34dcFqkxpuv+ftZEBDUjleZIweB
+	oY2+tYwenac0Alv/Fz8qvVdPyYfxo7FEsq/7LmMRzYvEU9Kad0I2AOput27ZKYp3xv62AqojWPG
+	O+Ly/0cO7uIc6uEkwhYY4vhKePcIDn4JtLKI6TMcdNIlRiGlGl
+X-Received: by 2002:a17:90b:2244:b0:356:2fc5:30f5 with SMTP id 98e67ed59e1d1-35bb9e7d2acmr3350909a91.13.1773851362374;
+        Wed, 18 Mar 2026 09:29:22 -0700 (PDT)
+Received: from honey-badger ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35bc610c1efsm89370a91.14.2026.03.18.09.29.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2026 09:21:36 -0700 (PDT)
-Date: Wed, 18 Mar 2026 09:21:32 -0700
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Stanislav Fomichev <stfomichev@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Mina Almasry <almasrymina@google.com>, Wei Wang <weibunny@fb.com>,
-	David Wei <dw@davidwei.uk>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org, Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next 5/6] selftests: drv-net: add netkit devmem RX
- test
-Message-ID: <abrRDNi79H9ircl1@devvm11784.nha0.facebook.com>
-References: <20260316-scratch-bobbyeshleman-tcp-dm-netkit5-v1-0-b53c8cd72b23@meta.com>
- <20260316-scratch-bobbyeshleman-tcp-dm-netkit5-v1-5-b53c8cd72b23@meta.com>
- <abns9COj7WagFtZ8@mini-arch>
- <abn3rJGXXyDYSNzA@devvm11784.nha0.facebook.com>
- <abq97UD7CHR7bdod@mini-arch>
+        Wed, 18 Mar 2026 09:29:21 -0700 (PDT)
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: bpf@vger.kernel.org,
+	ast@kernel.org
+Cc: andrii@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	kernel-team@fb.com,
+	yonghong.song@linux.dev,
+	shung-hsi.yu@suse.com,
+	paul.chaignon@gmail.com,
+	harishankar.vishwanathan@gmail.com,
+	Eduard Zingerman <eddyz87@gmail.com>
+Subject: [PATCH RFC bpf-next 0/4] bpf: implement __reg_deduce_bounds() using wrapped intervals
+Date: Wed, 18 Mar 2026 09:28:57 -0700
+Message-ID: <20260318-cnum-sync-bounds-v1-0-1f2e455ea711@gmail.com>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <abq97UD7CHR7bdod@mini-arch>
+Content-Type: text/plain; charset="utf-8"
+X-Change-ID: 20260318-cnum-sync-bounds-8b6732710fd7
+Content-Transfer-Encoding: 8bit
 
-On Wed, Mar 18, 2026 at 07:59:57AM -0700, Stanislav Fomichev wrote:
-> On 03/17, Bobby Eshleman wrote:
-> > On Tue, Mar 17, 2026 at 05:08:20PM -0700, Stanislav Fomichev wrote:
-> > > On 03/16, Bobby Eshleman wrote:
-> > > > From: Bobby Eshleman <bobbyeshleman@meta.com>
-> > > > 
-> > > > Add tests for devmem RX over a netkit device with a leased queue. This
-> > > > is the same as the other devmem RX test except for ncdevmem executes in
-> > > > a namespace, binds to a netkit, and skips the ethtool NIC configuration
-> > > > steps (relying on the test runner for that setup).
-> > > > 
-> > > > The RX path is setup as the following:
-> > > > 
-> > > >  RX Path
-> > > >  -------
-> > > > 
-> > > >  Remote            Physical NIC          Netkit Host        Netkit Guest (netns)
-> > > >    |                    |                     |                    |
-> > > >    |--- TCP send ------>|                     |                    |
-> > > >                         |-------------------->|                    |
-> > > >                       dmabuf                  |--- BPF redirect -->|
-> > > > 
-> > > 
-> > > Is it too messy to parametrize the existing test to run both with and
-> > > without the namespaces? Feels like should be somewhat doable in python?
-> > 
-> > IIUC, we could have main() do something like:
-> > 
-> > for env [NetDrvContEnv, NetDrvEpEnv]:
-> >     with env as cfg:
-> >         [...]
-> >         ksft_run(tests, args=(cfg,))
-> > 
-> > 
-> > And then the tests could call helpers that check cfg.netns to use the
-> > nk_{guest,host}_ip6 addresses when true, otherwise use the regular
-> > addresses?
-> > 
-> > It should be doable if I'm following your drift.
-> 
-> Yeah, yeah, this plus some small changes here and there (to pass your
-> new -n in the netns mode for example).
+Use wrapped intervals representation [1] to express range-based
+deductions. Such representation allows to express these deductions in
+a more mathematically rigorous way:
+- {32,64}-bit signed -> unsigned, unsigned -> signed deduction infers
+  improved bounds from an intersection of signed and unsigned arcs.
+- 32-bit -> 64-bit and 32-bit -> 64 bit deduction infer improved
+  bounds from projections of 32-bit arcs onto 64-bit space and
+  vice-versa.
 
-Sounds good, I'll give it a look.
+Reformulating 32-bit -> 64-bit deduction in such terms allowed to find
+two cases currently not handled by deduce_bounds_64_from_32().
+See patch #3 for details.
+
+This RFC argues that wrapped interval based implementation for
+__reg_deduce_bounds() is easier to understand and maintain.
+An alternative to this RFC would be to update
+deduce_bounds_64_from_32() in a same way patch #3 modifies
+reg_bounds.c selftest, in order to handle newly identified cases.
+
+[1] https://jorgenavas.github.io/papers/ACM-TOPLAS-wrapped.pdf
+
+---
+Eduard Zingerman (4):
+      bpf: representation and basic operations on circular numbers
+      bpf: cnum for 32->32, 64->64, 64->32 deductions in reg_bounds_sync
+      bpf: cnum 32->64 deductions in reg_bounds_sync
+      selftests/bpf: new cases handled by 32->64 range refinements
+
+ include/linux/cnum.h                               |  60 ++++
+ kernel/bpf/Makefile                                |   2 +-
+ kernel/bpf/cnum.c                                  | 115 +++++++
+ kernel/bpf/cnum_defs.h                             | 176 ++++++++++
+ kernel/bpf/verifier.c                              | 373 ++++-----------------
+ .../testing/selftests/bpf/prog_tests/reg_bounds.c  |  82 +++--
+ .../testing/selftests/bpf/progs/verifier_bounds.c  |  80 +++++
+ 7 files changed, 556 insertions(+), 332 deletions(-)
+---
+base-commit: 77378dabb50f593c756d393d8eacb0b91b758863
+change-id: 20260318-cnum-sync-bounds-8b6732710fd7
