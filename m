@@ -1,96 +1,129 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 555C533EC
-	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 11:00:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F36FC3C276A
+	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 11:32:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773831636; cv=none; b=UEZg61+elPhFmQdPt7S3xaLRIzCeawIvD5Bok49eN0TQXxqjllPev9WAsefM5KGsKV5EZVPFFGP7pwjGVOC4fi1SYuLnAm/kRwaj33OWP1VLJ88+R1+vNA6BR6/vl5oSrK/5RNa+xyi7ZWuA2Z/uC8qKTHlzTNw4PeuWXdlSelA=
+	t=1773833555; cv=none; b=iG+xJryiJBaJZQvHXFJ91R8TYnprM/LaNK2QFPbMK1/RV7atXUekvnNCZD6+6MYsHFsUs/yNKxZGCt84MS2R9yONE32QvTX3e64WyZF+GlGmHc4ZbHXyChqxq1PHJQzB59QYZQnKY1HF3LKrec1CqmkZJ7wX9TrTaY3Y2AmII60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773831636; c=relaxed/simple;
-	bh=NAzQvZljCxN8j9k4fUxGKFciilFjDg69mpMO3HdUlWI=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=ODxc48vboEATPUbgN9hTLewy5+Rj6RtpCJVYtdOQ3BzFWqNagM9slVZ3at6/J8zzmJsLtI/cpvgoT9ihwODGUGIuBcUxCC0hDoQwd+OVvRoqmoAEDxCOyWlRfJgSOxcKuOqt3Yrw43RVDQzKIZ119XbQvLnr9HQ01tSAjdG65Qw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KiyPGfjM; arc=none smtp.client-ip=209.85.208.45
+	s=arc-20240116; t=1773833555; c=relaxed/simple;
+	bh=GAVO22yDoGw0SBaEj0BSp0p2E/UvxCnP6A22HFTCZGs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=G7LCPN/MxQ2EEbfq0POlVKCSWNimCqjxmv7hY54Tjty7FjcfT+64fkIv8al+Y7ERtwnMsnRT6jgemzOxv/VgSkZOQG7M+ji6V8RlcU9q5pggdfBJQWDXjEmr5hqsp2bc9YHx2JckunKFsZ+grGFrhYbWytG7pIay37XtyvzL/mQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P+zE9srx; arc=none smtp.client-ip=74.125.82.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KiyPGfjM"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-667df358d78so588332a12.2
-        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 04:00:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P+zE9srx"
+Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-1271257ae53so9470606c88.1
+        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 04:32:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773831629; x=1774436429; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ABvSCbQVr4b83qEOAzrT2E+z9+rprhgoQ15uDUwWsmY=;
-        b=KiyPGfjM2mceQF3qPCQmaf1/kd1H9DPABTcXwPDrLkcY6TAbeg+/7gITetN9qYWuSG
-         EzpAxMJedbm6ZfnwK2iyfBC0gT7O+FoQgdEBaW/5KYqZsjD7UO7j4k1RNCruZt6wYOxb
-         wo3/IJQEhQ//lIhEabeVI0dwqdjjVLlS20pE0e6D5EefHZoKEMVxOQtIz8IdRsCVi11w
-         6lyn+VDDVul7Kk+tiNru2/lbz7alQqUfyJJ8VD1Edh2KvB6tfFBQ57BcLbyvheDvMQnt
-         2cQLQ8b+f/4xs806Wztwq2XGtfuoCNH1PKDy1mry9bhEerohNJqTNTroAFQMkyxhLWxp
-         FJOA==
+        d=gmail.com; s=20230601; t=1773833552; x=1774438352; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ngahEQYPHkZNv+yZVK/PCN/gTdSgCME8Ml08zDKTYuU=;
+        b=P+zE9srxoTrXqSAXOWNzRT5zTPSTeQq0gxfjFFW2O0NEqXdTl+gQogrEZ78MsHFZE8
+         ESKK7augDSYHCHe6TZ+VivZnUrHSQUGrsZV9S/uC44CUKNqAuMtH5S4IWOZN3gxdYmOa
+         t4mfcrfkf/NDjfSb1BXxhGeBkNBYZMZWV4/bpPD1u44suiKvOSnUqm+JyEooux9B8b5t
+         n7gAfkJbjzQWD4vm1eSKnMMVsJpcXsjG3gSCOozSAoqRCE/pOwLIqEFndGX3nkSyhsO/
+         wy5QCVhcefTzyA1q4tNGd0dE6eJtMJlpVfPHKdYm0nkP6W/vQSWZNmSXdyO/a5tddAId
+         eMxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773831629; x=1774436429;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ABvSCbQVr4b83qEOAzrT2E+z9+rprhgoQ15uDUwWsmY=;
-        b=r29kCNhyXHREckzaVRSqKlzAdQ4r2IxIyPf74u5+ej4rJqHAouNHHYW2RKyFnzbVlR
-         Wyy7eoDJjQVx+Xxkq3K9q3xwGtwkG2LBqBs0G9rg1Ix3Qefvjv1Ci5AfJBBzxe8VSyP5
-         5ONmCBqBzijgGDX0sa9R7cDSjOaQ46REc1kT1IDVh5bzskVzkpRHP2kdWC54k5glpVeA
-         IMNhHd9yiOR7LIAnKivsXUWnZAsBHTTYkppIyJgdwkl7wmoHmDNiE9m7WgWU1uckdlYJ
-         XW4eJWrNHSTEEo6CLWyP119Y0/SUeuwpkcBzTx4YEl4LKD9uWUXoH7FF4VqT9LCbIbvY
-         +RmA==
-X-Gm-Message-State: AOJu0YxreiVjyd0TsSqw+hBBPB7I3l2jawj7RQlSKO9ij+5xslueR7lG
-	/c6t3HOHBz5ztpa/lbSogWuj7ypmelvi+dIFl+0m5Mml+iN/r5ADGR46HFY3Mw==
-X-Gm-Gg: ATEYQzzvd3IEiilNXbEAhMEfQBgV4uEm4M11pGi4BWEWs8iLjSpSi9bzWEGWvTByCs9
-	LTa/9oN6TQjrKXh5bGJB7U9/2QtSaXBXKrEqTceDb9fZJ6+swaJ0i61JEMWFLSUD4Ri1V3v7znm
-	Q9EGo+Lcc9xH0x+LCWwqMTE1rrIcj0XB6MT0NcFcuvUfrGILLyKa6inHWJJPPqcRv76SoyTpSi2
-	1CfHjnGYG1vKyLmYzYfX2hVKRMMkGc9IjSe68yqdZhtl5jvst64PmmozcpNf9wwDy5LxoBOWwAf
-	EOPuZznXuImTKah3DSFW3WSwj35L8OwiZZOM34vTw0X0+MKCqyqxAfdbh4L1rxCX6kCn+/Fxo1/
-	jnGPsVQqNjJ7HWq/gQnDBbvAcW4ruwQda6P0LHt4VNrBWCc03FXIE9XBnVmHpAU005sWNk+6eCo
-	jv5uPU3IIbBzgvCGVYfK+fentiFv29Gc9/bKqPGUg0ECNZTE37+VT4G6mzM9HNY8dE+WX7CjcWH
-	8V7jkyt+nd4fjdzWjfx4wD4dutAPVoD2ef72K1bawXHGwALFMpvvUi9qpE=
-X-Received: by 2002:a05:6402:398a:b0:658:3972:3a3d with SMTP id 4fb4d7f45d1cf-667b2ffc300mr1369682a12.15.1773831629293;
-        Wed, 18 Mar 2026 04:00:29 -0700 (PDT)
-Received: from ?IPV6:2620:10d:c096:325:77fd:1068:74c8:af87? ([2620:10d:c092:600::1:e45c])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-667b129c63fsm1553510a12.20.2026.03.18.04.00.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Mar 2026 04:00:28 -0700 (PDT)
-Message-ID: <f7f9f2bd-10d7-494c-888e-0de5b91e4fec@gmail.com>
-Date: Wed, 18 Mar 2026 11:00:27 +0000
+        d=1e100.net; s=20251104; t=1773833552; x=1774438352;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ngahEQYPHkZNv+yZVK/PCN/gTdSgCME8Ml08zDKTYuU=;
+        b=qya4W7vngdSfhni5PUK/7QfxguCxkVLSNnqsUzg54tp0Nie8l6Dmi93FY7EoKM8S2R
+         CSqcZd+SBjgU3FvXmwCkLncYpJTNcy1acX0SZewda4hfvNiKSPrdm48dV9ZioNG1ftjR
+         2MPCg6HMPNQEov4HPN3WUA5TUMdfvjiZg6fFTpKcM4TGyBOqGEfALhAm1HAa8tXbubv/
+         c7llRw18GHu//onJFtMDNvDpgTAm+9zvm4ym8gjmvzjsXl3PpIB72hfevYz83iC9JnJE
+         g3WD6jPi5IDYQZdsG3yhq+y6DKkp4pZVO9c2PX5RsOnl5Zn5R3ZyFzByxi/XtzsbqAwm
+         /zsA==
+X-Gm-Message-State: AOJu0Yx1zPf4N9IUERHh9WjTdlsqNQZAJNuHh2RZQNqJhqAeZhehCNEh
+	rcYn/LPC9NmINksswOjD1e7u/S+pJdczRfLCVF4dGhIASZC1FULu5b4tGWRV4GGxGKw=
+X-Gm-Gg: ATEYQzwBZViU0I8YiTWUGs+gZM1Ak82p84JowWBQd5kmI2PwnSyS50eJuzD+cp+ql2N
+	PvhUSkoj3iwEqP59S+LW0SRTN8NsOmKNKL3KMsoiTdf9I5Sih6IQPuk6zwX8qi6Xhw9i6zpL1C5
+	dn9Kp18CRPHWVMs0zOhDAtFbF2yjOPm1l77UV5VjVZR9plq7NZiQYcDVvVgsJ52V56xu/MLLYsz
+	LSxw6+DvADGm568WggcACD2MwMkYnWUlFUIG5utfiiuH4ECIjp1WV54L2YABeH1E+41KfUNwHTv
+	E/AiKi1YVq4snTX6LUgh5Ybp2DmNcvQPb/eL4P/C14cZ6XzTvclkZ3vnSl0WEXt0qinLXb8WOGA
+	M7D1QIzMVlzjOLR7Su5VTJB3Q46JHpDh+ZD2KmVUK641lxSxKVbJikqE2dMuUkT1HKIlGt9tcFX
+	cEiPGtlYVswMP2WfyEfkZ99RvsMVB7p7dHn66rmId9e/Nm9XLeGGLCVJRvftSNtJ1v/h5zSHgs+
+	jDYsv/IplUKxHWZd3GAkT5HKiM=
+X-Received: by 2002:a05:7022:4581:b0:11b:9386:a386 with SMTP id a92af1059eb24-129a718ddcemr1365887c88.41.1773833551785;
+        Wed, 18 Mar 2026 04:32:31 -0700 (PDT)
+Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-129b3e8dc1fsm4140623c88.8.2026.03.18.04.32.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Mar 2026 04:32:31 -0700 (PDT)
+From: Sun Jian <sun.jian.kdev@gmail.com>
+To: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	paul.chaignon@gmail.com,
+	shuah@kernel.org,
+	linux-kernel@vger.kernel.org,
+	Sun Jian <sun.jian.kdev@gmail.com>
+Subject: [PATCH] selftests/bpf: add a 32-bit bounds deduction case
+Date: Wed, 18 Mar 2026 19:32:00 +0800
+Message-ID: <20260318113200.303824-1-sun.jian.kdev@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Pavel Begunkov <asml.silence@gmail.com>
-Subject: Re: [PATCH liburing v2 1/1] tests: test io_uring bpf ops
-To: Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <alexei.starovoitov@gmail.com>
-References: <818dcda223b3288c764367cb0ab8d57c83722d78.1772109275.git.asml.silence@gmail.com>
- <9f08ade1-ca61-4ba3-9d1e-744ea5e8c004@kernel.dk>
-Content-Language: en-US
-In-Reply-To: <9f08ade1-ca61-4ba3-9d1e-744ea5e8c004@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 3/18/26 01:53, Jens Axboe wrote:
-> On 2/26/26 5:49 AM, Pavel Begunkov wrote:
->> Add some BPF struct ops io_uring tests/examples, one is issuing nops in
->> a loop, the other copies a file. It needs appropriate tools for bpf and
->> hence is gated on a BPF_TESTS make flag for now.
-> 
-> None of this ends up getting compiled... Can we add a configure test for
-> this too, I suspect most of it should be there already in terms of
-> liburing supporting the cbpf filters.
+verifier_bounds.c already has 64-bit cross-sign-boundary bounds
+deduction coverage.
 
-Assuming you mean it's not compiled by default, I can take a look
-at getting rid of the make flag.
+Recent 32-bit signed/unsigned intersection tests extended the refinement
+coverage, but a corresponding negative case is still missing.
 
+Add a 32-bit selftest for that case and assert that the program is
+rejected, confirming that verifier remains conservative there.
+
+Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+---
+ .../selftests/bpf/progs/verifier_bounds.c     | 20 +++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+index e526315c718a..242c3d6d23b1 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
++++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+@@ -2037,4 +2037,24 @@ __naked void signed_unsigned_intersection32_case2(void *ctx)
+ 	: __clobber_all);
+ }
+ 
++SEC("socket")
++__description("32-bit bounds deduction cross sign boundary, two overlaps")
++__failure
++__flag(BPF_F_TEST_REG_INVARIANTS)
++__msg("frame pointer is read only")
++__naked void bounds_deduct_two_overlaps_32(void)
++{
++	asm volatile("				\
++	call %[bpf_get_prandom_u32];		\
++	r0 = (s8)r0;				\
++	w1 = 0xffffff80;			\
++	if w0 > w1 goto l0_%=;			\
++	if w0 < 128 goto l0_%=;			\
++	r10 = 0;				\
++l0_%=:	exit;					\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
+
+base-commit: a989fde763f4f24209e4702f50a45be572340e68
 -- 
-Pavel Begunkov
+2.43.0
 
