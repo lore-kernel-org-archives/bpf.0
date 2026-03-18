@@ -1,231 +1,279 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40CE0279DC9
-	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 21:13:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 941E731352B;
+	Wed, 18 Mar 2026 21:31:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773868389; cv=none; b=ggt5B+sfluyZcgQna3DWXaDIaJMniQrQWWZ0rN/bAsE2UPfAK1+WCzmH/l4HeyLTxDOgDeVf2Pwgpthk5aftNje5HSVs5Yt510APjSjjWUKUIpTkSayC17+CyvT5N7Nd+guLwezk162rAJpHCPYLgvw0efQXfRNW3b+9CKFdhAE=
+	t=1773869490; cv=none; b=TTEdbU8PJHOgx+lBRAjx7sgHoWuvtTSJnYyZSQgslrxBmd1E/8nL5fHRGApYcfNPYjQRXZECHzDxLsQZOG265Y42UywV6RuYyFV7hE4ihnmCd/X7ZCC16ANu2LlxtTTCKp30Wzco6o/MwtYXVVED0zExfg1jc5Bx4p2GhXEV/+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773868389; c=relaxed/simple;
-	bh=rUYZycwwVw92iF8E4/cVL1FoQFyqobduCxrM+9nEffw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=s0RhitzbhphjfBNZxAS/CoTm5TsIBJ0TgvyTfm8YAXg8e+yQHJAhRcfpob/aVBCLzqmflB7DguO4b1LqbLLVE7O9+BNy/9IY5ntROHNlc8FJMza/eC8z90HcgDUtMHR8Y9Ks2CbxXrnEJB/Rzhpj//iq2hYjTMuQySoJchT4Ams=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R4l0twIV; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773869490; c=relaxed/simple;
+	bh=Pqv4I5FbBJ/MlcgzLlPq5uvpJ6sthsdJeEJbMt2kdP0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cs9ajY+QcY8I1vBqC1VC2BZify31LxJoWTBQUhHka0u49uPWIALtu5Vww4YXnqT6fpH70F9fce+wdbmkg4XbC2/0AmMT5dEmTc9z69ySX11BzVFSiCCDAvGRkZM1GFN1CpiicWf25IcyC4QHApwuNjJ/VCVOkiHXrCT53ya/+f0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tYHSgBFi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R4l0twIV"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2aae4816912so1552355ad.2
-        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 14:13:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773868387; x=1774473187; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=rTkeg0Bgvtr2r3RprCxUT7LbI+9oycLCobJe06WryTA=;
-        b=R4l0twIVMX/oRH0vfqRxt+s/+9yHOxWjJxRLUBl2VaIXQkxl4w7gHcI7+j25OjwNRl
-         xeEWyygvWZ39Vj+RcMiXp9WFlaIfWiEj4OFL5JSOnpTDGN9S69ZdorJShdy2xUK6RW5z
-         6UcYJfIVolItnIUuuwjC5a0HDUiukFNrGuEoiijj1ZnJNz26On34sbr+m/zE2CmyRODM
-         l/TW5iQxnJQU/c6kKipC2xoNy/xIcpK41kVnR8e6EQhyWM8uwN2+5TiPfeaxZLI+uxQV
-         y6NBrzbg846+a7dbd7Si0L+onlINBDcKv/gjXa9lJZRr/4kzq5sjhOhY49l6PMLQoUht
-         sixw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773868387; x=1774473187;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rTkeg0Bgvtr2r3RprCxUT7LbI+9oycLCobJe06WryTA=;
-        b=WGpAfMSsqsf0bQqVHePvU/JSpoV2CYa98m4QIYfsbZUyIbNbP60tqveC3WQhK4HQfp
-         nY0BYCiVdWmc+lfpFKZEGK2h5U+SCSxP13PmBveBsj5zRqtCTGsPZ8FoOc1jULZHoIzC
-         IoFnW3Tfo0A0rqQCdl1Diyz6tHM5iuJgXmu6TA9A9U+U+IKiGBzCCMupc2wM4yH73rwL
-         55W3AsyTeQZ7xHXbwUgziSUgs9S5LNjuvI/2wZRQx9RxJFkTgbvNUijh8wHOyVJ2FFt0
-         O+s6kx7VSlN8FjP0leC8mjY1At/OEhqwtA9j3q70OXne3rSFIvAtA7Ppis8gqI/sBW8H
-         RwEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU2/Scu+W+QerJrZDA/BXk1kVwSy1F7R1mwdUcyxJey5epnRyYrMe0tatpbP/HtRcHphoU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzxPS9kfj4YlB6fyW9XySppHZKxv7Yk780PjYWfSaB/VUNxaGxx
-	3FfP1QUq45IzpfG05WQSxGUJ5TUy8I9qWQWRjpDBn7FkWJwbdY/nlwOD
-X-Gm-Gg: ATEYQzw8hEGqE5vBxcWYJ8wW4NrXFI8VTI73lsEOoplehlx4ykHedPmR+W0ygkYpMyy
-	CoQ3V1WFH0Z9TqG6l2jdz9vzjLFI/YsCwHWdVUN4r6XdeWG1s8NSgv6AiNBSMzwbxu+N649c7t/
-	VVcLPJgGQ/HQC4juwICN6ytHP5wDD8/4MgyHcNuJ16HVNojq4dA3Wkv8bTgw334JeLFV8vXbL9m
-	tlGs1h4VWQQSXM3TADLo7KCI9mrGr/aEj5QJUp+ekIvHgn68h297+KOiltfXSec+osnpxlDOToG
-	sMpCljf8wSXvwoCJhm3P8i/Xvx+5BUDSBrEfEiaGUQvy4ZcqYfjbc5+99kWjnr+i1TCkENbdLjh
-	LVJFgQv2NFxkLwVK9V+r40fRxybSXjFEPc4i5iTjMPeX51xsQjDpIVKB8ERlZtGxperQBmYyH8F
-	bjpknHn8ygyKXSIS7cQtnFHqbzRzOMU1X0UW7etZv2vO8bUegQtqU=
-X-Received: by 2002:a17:902:d506:b0:2b0:5fbe:130b with SMTP id d9443c01a7336-2b06e34aee0mr51454505ad.19.1773868387463;
-        Wed, 18 Mar 2026 14:13:07 -0700 (PDT)
-Received: from [192.168.0.56] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b06e6216c5sm46886755ad.73.2026.03.18.14.13.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2026 14:13:07 -0700 (PDT)
-Message-ID: <e05e441f4b071a33c71f28d6668f2e580952c7da.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/3] bpf: Support variable offsets for
- syscall PTR_TO_CTX
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Tejun Heo <tj@kernel.org>, Dan Schatzberg <dschatzberg@meta.com>, Emil
- Tsalapatis <emil@etsalapatis.com>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko	 <andrii@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Martin KaFai Lau	 <martin.lau@kernel.org>,
- kkd@meta.com, kernel-team@meta.com
-Date: Wed, 18 Mar 2026 14:13:04 -0700
-In-Reply-To: <20260318103526.2590079-2-memxor@gmail.com>
-References: <20260318103526.2590079-1-memxor@gmail.com>
-	 <20260318103526.2590079-2-memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tYHSgBFi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3803CC19421;
+	Wed, 18 Mar 2026 21:31:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773869490;
+	bh=Pqv4I5FbBJ/MlcgzLlPq5uvpJ6sthsdJeEJbMt2kdP0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tYHSgBFiLn1JVge9zL6GKX67yohEjLSVnhckGcYk02rCc3RhbXUmMsUmO5Iy4tocZ
+	 9g5rdh3PqAKaqLwalMARv1ru40gvsJV4J77c5ispRUimwlsrauNvDIMflp2GgD37Cc
+	 XqzPI/V7TmTcNTpqSDgJKUKpjawFR3vAAUiBHVr/MI8uwKmbK/yWuMMaSu7237zDlO
+	 6GEB1th/ntuGyJknAMNnlIfgqbp88VJyHO7jGfzdIUYQ1kmE474+emnxaY7yF4bMyo
+	 riJDd4+8XeJRRHFJvV/NXJWnq0bKt80SYg/8XB/UWmCFPrzcQZPZLGx6BiO4zxWLkg
+	 o6MfBUs6ujqNQ==
+Date: Wed, 18 Mar 2026 14:31:29 -0700
+From: "Darrick J. Wong" <djwong@kernel.org>
+To: Demi Marie Obenour <demiobenour@gmail.com>
+Cc: Joanne Koong <joannelkoong@gmail.com>,
+	linux-fsdevel <linux-fsdevel@vger.kernel.org>, bpf@vger.kernel.org,
+	linux-ext4 <linux-ext4@vger.kernel.org>,
+	Miklos Szeredi <miklos@szeredi.hu>,
+	Bernd Schubert <bernd@bsbernd.com>, Theodore Ts'o <tytso@mit.edu>,
+	Neal Gompa <neal@gompa.dev>, Amir Goldstein <amir73il@gmail.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Jeff Layton <jlayton@kernel.org>, John@groves.net
+Subject: Re: [PATCHBLIZZARD v7] fuse/libfuse/e2fsprogs: containerize ext4 for
+ safer operation
+Message-ID: <20260318213129.GB6004@frogsfrogsfrogs>
+References: <20260223224617.GA2390314@frogsfrogsfrogs>
+ <CAJnrk1Yd1J60-Ek=O7jzZQg454pbr3O=b71yZHzYbrWfqJr__w@mail.gmail.com>
+ <20260316180408.GN6069@frogsfrogsfrogs>
+ <CAJnrk1bmJYMt27xedN2Xza0KPXfYEbh-9g=3fNWru-HRM9WFEw@mail.gmail.com>
+ <20260316234137.GJ1742010@frogsfrogsfrogs>
+ <208bfbd2-d671-462c-925f-4d51b7df1f18@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <208bfbd2-d671-462c-925f-4d51b7df1f18@gmail.com>
 
-On Wed, 2026-03-18 at 03:35 -0700, Kumar Kartikeya Dwivedi wrote:
+On Mon, Mar 16, 2026 at 08:20:29PM -0400, Demi Marie Obenour wrote:
+> On 3/16/26 19:41, Darrick J. Wong wrote:
+> > On Mon, Mar 16, 2026 at 04:08:55PM -0700, Joanne Koong wrote:
+> >> On Mon, Mar 16, 2026 at 11:04 AM Darrick J. Wong <djwong@kernel.org> wrote:
+> >>>
+> >>> On Mon, Mar 16, 2026 at 10:56:21AM -0700, Joanne Koong wrote:
+> >>>> On Mon, Feb 23, 2026 at 2:46 PM Darrick J. Wong <djwong@kernel.org> wrote:
+> >>>>>
+> >>>>> There are some warts remaining:
+> >>>>>
+> >>>>> a. I would like to continue the discussion about how the design review
+> >>>>>    of this code should be structured, and how might I go about creating
+> >>>>>    new userspace filesystem servers -- lightweight new ones based off
+> >>>>>    the existing userspace tools?  Or by merging lklfuse?
+> >>>>
+> >>>> What do you mean by "merging lklfuse"?
+> >>>
+> >>> Merging the lklfuse project into upstream Linux, which involves running
+> >>> the whole kit and caboodle through our review process, and then fixing
+> >>
+> >> Gotcha, so it would basically be having to port this arch/lkl
+> >> directory [1] into the linux tree
+> > 
+> > Right.
+> > 
+> >>> user-mode-linux to work anywhere other than x86.
+> >>
+> >> Are lklfuse and user-mode-linux (UML) two separate things or is
+> >> lklfuse dependent on user-mode-linux?
+> > 
+> > I was under the impression that lklfuse uses UML.  Given the weird
+> > things in arch/lkl/Kconfig:
+> > 
+> > config 64BIT
+> > 	bool "64bit kernel"
+> > 	default y if OUTPUT_FORMAT = "pe-x86-64"
+> > 	default $(success,$(srctree)/arch/lkl/scripts/cc-objdump-file-format.sh|grep -q '^elf64-') if OUTPUT_FORMAT != "pe-x86-64"
+> > 
+> > I was kinda guessing x86_64 was the primary target of the developers?
+> > 
+> > /me notes that he's now looked into libguestfs per Demi Marie's comments
+> > and some curiosity on the part of ngompa and i>
+> > 
+> > Whatever it is that libguestfs does to stand up unprivileged fs mounts
+> > also could fit this bill.  It's *really* slow to start because it takes
+> > the booted kernel, creates a largeish initramfs, boots that combo via
+> > libvirt, and then fires up a fuse server to talk to the vm kernel.
+> > 
+> > I think all you'd have to do is change libguestfs to start the VM and
+> > run the fuse server inside a systemd container instead of directly from
+> > the CLI.
+> 
+> The feedback I have gotten from ngompa is that libguestfs is just
+> too slow for distros to use it to mount stuff.
 
-[...]
+Yes, libguestfs is /verrrry/ slow to start up.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 01c18f4268de..14bf64e0c600 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -7843,6 +7843,7 @@ static int check_mem_access(struct bpf_verifier_env=
- *env, int insn_idx, u32
-> regn
-> =C2=A0		 * Program types that don't rewrite ctx accesses can safely
-> =C2=A0		 * dereference ctx pointers with fixed offsets.
-> =C2=A0		 */
-> +		bool var_off_ok =3D resolve_prog_type(env->prog) =3D=3D BPF_PROG_TYPE_=
-SYSCALL;
-> =C2=A0		bool fixed_off_ok =3D !env->ops->convert_ctx_access;
-> =C2=A0		struct bpf_retval_range range;
-> =C2=A0		struct bpf_insn_access_aux info =3D {
-> @@ -7857,16 +7858,26 @@ static int check_mem_access(struct bpf_verifier_e=
-nv *env, int insn_idx, u32
-> regn
-> =C2=A0			return -EACCES;
-> =C2=A0		}
-> =C2=A0
-> -		err =3D __check_ptr_off_reg(env, reg, regno, fixed_off_ok);
-> -		if (err < 0)
-> -			return err;
-> -
-> =C2=A0		/*
-> =C2=A0		 * Fold the register's constant offset into the insn offset so
-> -		 * that is_valid_access() sees the true effective offset.
-> +		 * that is_valid_access() sees the true effective offset. If the
-> +		 * register's offset is allowed to be variable, then the maximum
-> +		 * possible offset is simulated (which is equal to var_off.value
-> +		 * when var_off is constant).
-> =C2=A0		 */
+> >>>> Could you explain what the limitations of lklfuse are compared to the
+> >>>> fuse iomap approach in this patchset?
+> >>>
+> >>> The ones I know about are:
+> >>>
+> >>> 1> There's no support for vmapped kernel memory in UML mode, so anyone
+> >>> who requires a large contiguous memory buffer cannot assemble them out
+> >>> of "physical" pages.  This has been a stumbling block for XFS in the
+> >>> past.
+> >>>
+> >>> 2> LKLFUSE still uses the classic fuse IO paths, which means that at
+> >>> best you can directio the IO through the lklfuse kernel.  At worst you
+> >>> have to use the pagecache inside the lklfuse kernel, which is very
+> >>> wasteful.
+> >>
+> >> For the security / isolation use cases you've described, is
+> >> near-native performance a hard requirement?
+> > 
+> > Not a hard requirement, just a means to convince people that they can
+> > choose containment without completely collapsing performance.
+> > 
+> >> As I understand it, the main use cases of this will be for mounting
+> >> untrusted disk images and CI/filesystem testing, or are there broader
+> >> use cases beyond this?
+> > 
+> > That covers nearly all of it.
+> 
+> It's worth noting that on ChromeOS and Android, the only trusted
+> disk images are those that are read-only and protected by dm-verity.
+> *Every* writable image is considered untrusted.
+> 
+> I don't know if doing a full fsck at each boot is considered
+> acceptable, but I suspect it would slow boot far too much.
 
-Nit: I'm not sure this comment adds much value, I'd drop it altogether.
+Not to mention that an attacker who gained control of the boot process
+could inject malicious filesystem metadata after fsck completes
+successfully but before the kernel mount occurs.
 
-> -		if (fixed_off_ok)
-> -			off +=3D reg->var_off.value;
-> +		if (var_off_ok) {
-> +			err =3D check_mem_region_access(env, regno, off, size, U16_MAX, false=
-);
-                                                                           =
-  ^^^^^^^^
-                 Nit: Maybe leave a comment here saying that the following =
-check_ctx_access()
-                      ensures proper maximal bound?
-                 Nit: check_mem_region_access() which calls __check_mem_acc=
-ess(), maybe add
-                     `case PTR_TO_CTX` there for error reporting?
+> Yes, Google ought to be paying for the kernel changes to fix this mess.
+> 
+> >>> 3> lklfuse hasn't been updated since 6.6.
+> >>
+> >> Gotcha. So if I'm understanding it correctly, the pros/cons come down to:
+> >> lklfuse pros:
+> >> - (arguably) easier setup cost. once it's setup (assuming it's
+> >> possible to add support for the vmapped kernel memory thing you
+> >> mentioned above), it'll automatically work for every filesystem vs.
+> >> having to implement a fuse-iomap server for every filesystem
+> > 
+> > Or even a good non-iomap fuse server for every filesystem.  Admittedly
+> > the weak part of fuse4fs is that libext2fs is not as robust as the
+> > kernel is.
+> > 
+> >> - easier to maintain vs. having to maintain each filesystem's
+> >> userspace server implementation
+> > 
+> > Yeah.
+> > 
+> >> lklfuse cons:
+> >> - worse (not sure by how much) performance
+> > 
+> > Probably a lot, because now you have to run a full IO stack all the way
+> > through lklfuse.
+> 
+> How much is "a lot"?  Is it "this is only useful for non-interactive
+> overnight backups", "you will notice this in benchmarks but it's okay
+> for normal use", or somewhere in between?
 
-> +			if (err)
-> +				return err;
-> +			off +=3D reg->umax_value;
-> +		} else {
-> +			err =3D __check_ptr_off_reg(env, reg, regno, fixed_off_ok);
-> +			if (err < 0)
-> +				return err;
-> +			if (fixed_off_ok)
-> +				off +=3D reg->var_off.value;
-> +		}
+Startup is painfully slow.  Normal operation isn't noticeably bad, but I
+didn't bother doing any performance comparisons.
 
-Let's simplify this as:
+> Could lklfuse and iomap be combined?
 
-		if (var_off_ok)
-			err =3D check_mem_region_access(env, regno, off, size, U16_MAX, false);
-		else
-			err =3D __check_ptr_off_reg(env, reg, regno, fixed_off_ok);
-		if (err < 0)
-			return err;
-		off +=3D reg->umax_value;
+Probably, though you'd have to find a way to route the FUSE_IOMAP_*
+requests to a filesystem driver.  That's upside-down of the current
+iomap model where filesystems have to opt into using iomap on a
+per-IO-path basis, and then iomap calls the filesystem to find mappings.
 
-Tbh, the above looks a bit ad-hoc, one might argue that a better way in
-terms of abstraction would be to adjust bpf_verifier_ops->is_valid_access()
-to accept or reject varying offset access.
+> >> - once it's merged into the kernel, we can't choose to not
+> >> maintain/support it in the future
+> > 
+> > Correct.
+> > 
+> >> Am I understanding this correctly?
+> >>
+> >> In my opinion, if near-native performance is not a hard requirement,
+> >> it seems like less pain overall to go with lklfuse. lklfuse seems a
+> >> lot easier to maintain and I'm not sure if some complexities like
+> >> btrfs's copy-on-write could be handled properly with fuse-iomap.
+> > 
+> > btrfs cow can be done with iomap, at least on the directio end.  It's
+> > the other features like fsverity/fscrypt/data checksumming that aren't
+> > currently supported by iomap.
+> 
+> Pretty much everyone on btrfs uses data checksumming.
+> 
+> >> What are your thoughts on this?
+> > 
+> > "Gee, what if I could simplify most of my own work out of existence?"
+> 
+> What is that work?
 
-> =C2=A0		err =3D check_ctx_access(env, insn_idx, off, size, t, &info);
-> =C2=A0		if (err)
-> =C2=A0			verbose_linfo(env, insn_idx, "; ");
-> @@ -8442,22 +8453,16 @@ static int check_helper_mem_access(struct bpf_ver=
-ifier_env *env, int regno,
-> =C2=A0		return check_ptr_to_btf_access(env, regs, regno, 0,
-> =C2=A0					=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 access_size, BPF_READ, -1=
-);
-> =C2=A0	case PTR_TO_CTX:
-> -		/* in case the function doesn't know how to access the context,
-> -		 * (because we are in a program of type SYSCALL for example), we
-> -		 * can not statically check its size.
-> -		 * Dynamically check it now.
-> -		 */
-> -		if (!env->ops->convert_ctx_access) {
-> -			int offset =3D access_size - 1;
-> -
-> -			/* Allow zero-byte read from PTR_TO_CTX */
-> -			if (access_size =3D=3D 0)
-> -				return zero_size_allowed ? 0 : -EACCES;
-> -
-> -			return check_mem_access(env, env->insn_idx, regno, offset, BPF_B,
-> -						access_type, -1, false, false);
-> +		/* Only permit reading or writing syscall context using helper calls. =
-*/
-> +		if (resolve_prog_type(env->prog) =3D=3D BPF_PROG_TYPE_SYSCALL) {
+Everything I've put out since the end of online fsck for xfs.
 
-Nit: this is a second place where this check is hard-coded.
+--D
 
-> +			int err =3D check_mem_region_access(env, regno, 0, access_size, U16_M=
-AX,
-> +							=C2=A0 zero_size_allowed);
-> +			if (err)
-> +				return err;
-> +			if (env->prog->aux->max_ctx_offset < reg->umax_value + access_size)
-> +				env->prog->aux->max_ctx_offset =3D reg->umax_value + access_size;
-> +			return 0;
+> 
+> > --D
+> > 
+> >> Thanks,
+> >> Joanne
+> >>
+> >> [1] https://github.com/lkl/linux/tree/master/arch/lkl
+> >>
+> >>>
+> >>> --D
+> >>>
+> >>>> Thanks,
+> >>>> Joanne
+> >>>>
+> >>>>>
+> >>>>> b. ext4 doesn't support out of place writes so I don't know if that
+> >>>>>    actually works correctly.
+> >>>>>
+> >>>>> c. fuse2fs doesn't support the ext4 journal.  Urk.
+> >>>>>
+> >>>>> d. There's a VERY large quantity of fuse2fs improvements that need to be
+> >>>>>    applied before we get to the fuse-iomap parts.  I'm not sending these
+> >>>>>    (or the fstests changes) to keep the size of the patchbomb at
+> >>>>>    "unreasonably large". :P  As a result, the fstests and e2fsprogs
+> >>>>>    postings are very targeted.
+> >>>>>
+> >>>>> e. I've dropped the fstests part of the patchbomb because v6 was just
+> >>>>>    way too long.
+> >>>>>
+> >>>>> I would like to get the main parts of this submission reviewed for 7.1
+> >>>>> now that this has been collecting comments and tweaks in non-rfc status
+> >>>>> for 3.5 months.
+> >>>>>
+> >>>>> Kernel:
+> >>>>> https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/log/?h=fuse-iomap-bpf
+> >>>>>
+> >>>>> libfuse:
+> >>>>> https://git.kernel.org/pub/scm/linux/kernel/git/djwong/libfuse.git/log/?h=fuse-iomap-bpf
+> >>>>>
+> >>>>> e2fsprogs:
+> >>>>> https://git.kernel.org/pub/scm/linux/kernel/git/djwong/e2fsprogs.git/log/?h=fuse-iomap-bpf
+> >>>>>
+> >>>>> fstests:
+> >>>>> https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfstests-dev.git/log/?h=fuse2fs
+> >>>>>
+> >>>>> --Darrick
+> >>
+> 
+> 
+> -- 
+> Sincerely,
+> Demi Marie Obenour (she/her/hers)
 
-Why is this change necessary at all? Wouldn't old code handle all
-relevant cases, now that check_mem_access() is updated?
 
-> =C2=A0		}
-> -
-> =C2=A0		fallthrough;
-> =C2=A0	default: /* scalar_value or invalid ptr */
-> =C2=A0		/* Allow zero-byte read from NULL, regardless of pointer type */
 
-[...]
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-> b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-> index f02012a2fbaa..2250fc31574d 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-> @@ -134,7 +134,6 @@ __noinline __weak int subprog_user_anon_mem(user_stru=
-ct_t *t)
-> =C2=A0
-> =C2=A0SEC("?tracepoint")
-> =C2=A0__failure __log_level(2)
-> -__msg("invalid bpf_context access")
 
-Nit: should this test case be forked as tracepoint and non-tracepoint versi=
-ons?
-
-> =C2=A0__msg("Caller passes invalid args into func#1 ('subprog_user_anon_m=
-em')")
-> =C2=A0int anon_user_mem_invalid(void *ctx)
-> =C2=A0{
