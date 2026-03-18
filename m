@@ -1,163 +1,135 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A34533FE00
-	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 17:43:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9EC031F9B3
+	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 17:49:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773855828; cv=none; b=U1ZL9HoQWTosyi42zrxZktpNQhQV/l1/Su3vXDMn72mkFTRYbOvPgIqOjanjon6ejySYnrR15SpeEBaWYOaOiDSw2bVTwqP/tJ8uZkVL4QGl7AYxUJDPAWVK4+T0TFMLI5q5fSCzNOuHWFkLgto5DSlZMYDqWm97GFXOtVysDt0=
+	t=1773856194; cv=none; b=oZXxinFkh8Mbz95k5XPqyoTzknqGJ1ZdwVnvz4+IJ5qQSwhuKuYWBydQX5i69X1dsKC+0/U6E4ItKHOdMN0LcHYD0/3JTVM5ETmCv/RAxWuxXwrHpx6oCU73fyjCagaUOj3ed539x4j+UnYWbiumIGsfky7iFbcXC8V77PCW0CI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773855828; c=relaxed/simple;
-	bh=4Tm/P9F8U9z3pFlt6ZkguvlhBqSk1lguEdFgjCLZksM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RvtmYEXCruM6uLknF4buBgWzp2/WdMUjdOpDrd6szfCBKIVWic1y6+XrfNfLW1oOlL8oIpR7VYHq6Cm/QD9cqHL9d4NZlepPXI2UZCTpxGVS5ViISsXWHeyiLC36kzyUluCicMtwYrKdNub27em5knLdHelKFrg4OJrzP5z839Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BEKEp4UY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773856194; c=relaxed/simple;
+	bh=HGCegGKd/wL01yykR6BtOd16uHaQDYMxuA7939bT0Ac=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fZQBY9XqsfyXZljLOUsZi0iisdsekyUpF2Pqur79lHqAXqjMMdZW6xovmb0RsNBZWKxOS5grK8CIVsSkmLF6iCmxpZsMqXmt1yGzMsKjhqhBxPxpiRXC2tIP+j5YjVNVmUTUsFHzdccBdHUdv6oDA0EmagDe1Y5qyjh61LJeW2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=CUvwReGQ; arc=none smtp.client-ip=209.85.210.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BEKEp4UY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E955C19421;
-	Wed, 18 Mar 2026 17:43:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773855827;
-	bh=4Tm/P9F8U9z3pFlt6ZkguvlhBqSk1lguEdFgjCLZksM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BEKEp4UYr9WN8k0hiPn4yIXjfNI56eG4uXyvOsWsjImiiRDm8LUsfRSXhPqWPgfnd
-	 VE30MNQ633yJYPg/JOb0b9it9q2BXzoMbT0IAAe1flX0ApuUyz1pGoTeSE8HFe9Me9
-	 jopo1pGR6IVw3nxTmu4aRO4RfuMdDUGeu42uAfLywdAeivbnnRz6ZhpGgNCcSwnMVn
-	 Wr3/et13NkbQ8FInuIuRcEQgbRcxc8+HfRCIcd1veKRYc9OLBR396FyHD8hNRLYCwy
-	 Bu1BOdHilko54lMBNTf6zL3wtV+LuAe3hjy6bIfhARgMATBtk9+htl2TS1I/GaUcTm
-	 N/SPvUJOcZOZQ==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: bpf@vger.kernel.org
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	Puranjay Mohan <puranjay12@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="CUvwReGQ"
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7d75d698ee6so56098a34.3
+        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 10:49:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1773856192; x=1774460992; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=DwZzEUBvZTlA64oHuhM8Cu6PFpv3s+PziJS94hKbClM=;
+        b=CUvwReGQONVpYZsnOprkScrRcNCgbCu+nCgzLBt1zlng+nXeh8HWMFnX0FiDkfdFAt
+         zMPzDSRqAez68f4L5nKycu9km5fvjHTyzdYEDFKWpTg1KbQ2tsf19LNoiKnfue0l3cZ8
+         rdSel2wcFNrvEARgczNTw7Mu6f0gUz7w55BPqz/4TRBDzZSKlGwGEX0wlDQuc/D2TGeU
+         1+RqrKZGMyoSweO2/HpG/QDicGASfKopbkS6YkyyjBPAJjhhyWNJ2laSY0jLa/kZdQeb
+         Zf28KP6sGPtixBR5yWg2aV0Dp6/06Ap6yUePYsYyb63SwSbkebWRHdAW2mBWrD+fF8MA
+         xLTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773856192; x=1774460992;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DwZzEUBvZTlA64oHuhM8Cu6PFpv3s+PziJS94hKbClM=;
+        b=ThGZq05tXaWkBLAtIkjQQlx8cCGL4ZwmTJ9gWjILjNNuD6vxZeEBESH2Jg1zexNR1n
+         3ulmJplUy4OC+IKx6KYTCwq4PQ/ADB7GoVApRJ5MUx9kRsuLMxp4YltQ6IRKrOGbb2zV
+         +A6Tsixgr9a/6Tybrl9DU24tAyTcKc8gO4gELd4cYMBPdV/beVfJ5qMEo8xa5BYYdIAv
+         LZBDAiH+EvR82s84ftvypAVjp3RZ+z8T86EGfUry3K6qn5mljqipzE/G9DdDR+x3duHC
+         lJ2QrCm4eCoDHXxG7jFZ+dRh+GU6KXxUwJFFbDtRE//KMU242yI2LJraJp9ApAsF4lj3
+         H//A==
+X-Forwarded-Encrypted: i=1; AJvYcCXOqfZwQeqM+ArKy7JtKgWIX8P2Md0t7FuhWJxBLViA29CVDMFHEMD0B125bPosBZWN/kk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAoT+pnJORhVZklJOag7mr2S51nl1TU+QxVfjWCmuU1BU0dHk4
+	fa/mZDGtjt1B34qIvCk/1bZQ9scZRvnB/udbz6lNUphFxt07was1MH5Arelzcnh+3vw=
+X-Gm-Gg: ATEYQzz42UsNrD5Lz23oF6wkBRgYa6cV8vb1ZFtXIdJ+YysCZIAT4ou0BNcGp1Fa6uB
+	0lFMDqKKJZHG1itfV5KZU61rw6/0bMRiM8kNRJ0naH96koM94bAA2oIKwQLKuuqnW1agu2PTvlo
+	05GTrS5ZEUgvPnVlmhG4PjjAe+2fbAG2lAHd9yNdNoEmwqTlndcqLIa2OTNCkFs1wHAykvUvFQW
+	ijJpQKGhJAwMonXQWRjp4/9f7+moQf7uJIjOTLudhTHTIzz6xM99HYHWm7GXzjLftnMENznJwQp
+	7npX02ETU+m38SWH1u8m//NE8AsypAMaSQDsJthgSHKZ03FqmVn/0PyHYGvpkmDe6CxiF8IcHJf
+	1PPy3URDgMOcs4TyF34CP96VnghqAMSBozqdRrozFyboF0QUa23EdhxJcoR4KX4dpw7B0cn99J+
+	9lLVBC
+X-Received: by 2002:a05:6830:82bd:b0:7d7:d216:2b26 with SMTP id 46e09a7af769-7d7d2163d29mr1417083a34.4.1773856191557;
+        Wed, 18 Mar 2026 10:49:51 -0700 (PDT)
+Received: from CMGLRV3 ([2a09:bac5:947d:1b37::2b6:4e])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7d7c9b3696asm2632316a34.16.2026.03.18.10.49.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Mar 2026 10:49:51 -0700 (PDT)
+Date: Wed, 18 Mar 2026 12:49:48 -0500
+From: Frederick Lawler <fred@cloudflare.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Eric Paris <eparis@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next 3/3] bpf: Consolidate sleepable checks in check_func_call()
-Date: Wed, 18 Mar 2026 10:43:26 -0700
-Message-ID: <20260318174327.3151925-4-puranjay@kernel.org>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260318174327.3151925-1-puranjay@kernel.org>
-References: <20260318174327.3151925-1-puranjay@kernel.org>
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	LKML <linux-kernel@vger.kernel.org>,
+	LSM List <linux-security-module@vger.kernel.org>,
+	audit@vger.kernel.org, bpf <bpf@vger.kernel.org>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+	kernel-team <kernel-team@cloudflare.com>
+Subject: Re: [PATCH RFC bpf-next 0/4] audit: Expose audit subsystem to BPF
+ LSM programs via BPF kfuncs
+Message-ID: <abrlvEjQKUdAOcw5@CMGLRV3>
+References: <20260311-bpf-auditd-send-message-v1-0-10a62db5c92f@cloudflare.com>
+ <CAP01T77VyW=5SHDvM3HXPNHaxRdzs8H__MOh2zx1dQ6STeAUtg@mail.gmail.com>
+ <CAADnVQJCJaLjGCwjCX9VtT615c4kn7v5bxviUmGFVj=uTtUHMg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQJCJaLjGCwjCX9VtT615c4kn7v5bxviUmGFVj=uTtUHMg@mail.gmail.com>
 
-The sleepable context check for global function calls in
-check_func_call() open-codes the same checks that in_sleepable_context()
-already performs. Replace the open-coded check with a call to
-in_sleepable_context() and use non_sleepable_context_description() for
-the error message, consistent with check_helper_call() and
-check_kfunc_call().
+Hi Alexei,
 
-Note that in_sleepable_context() also checks active_locks, which
-overlaps with the existing active_locks check above it. However, the two
-checks serve different purposes: the active_locks check rejects all
-global function calls while holding a lock (not just sleepable ones), so
-it must remain as a separate guard.
+On Tue, Mar 17, 2026 at 06:15:59PM -0700, Alexei Starovoitov wrote:
+> On Mon, Mar 16, 2026 at 7:44 PM Kumar Kartikeya Dwivedi
+> <memxor@gmail.com> wrote:
+> >
+> > On Wed, 11 Mar 2026 at 22:31, Frederick Lawler <fred@cloudflare.com> wrote:
+> > >
+> > > The motivation behind the change is to give BPF LSM developers the
+> > > ability to report accesses via the audit subsystem much like how LSMs
+> > > operate today.
+> 
+> Sure, but bpf lsm-s don't need to follow such conventions.
+> audit is nothing but a message passing from kernel to user space
+> and done in a very inefficient way by wrapping strings into skb/netlink.
+> bpf progs can do this message passing already via various ways:
+> perfbuf, ringbuf, streams.
+> Teach your user space to consume one of them.
 
-Update the expected error messages in the irq and preempt_lock selftests
-to match.
+Audit provides additional functionality by keeping messages close to the
+syscall, and in-line with other messages for that syscall. Aside from
+that, BPF is arguably too flexible. I'm sure it's already understood,
+but the idea here is to reduce bespoke logging implementations and reduce
+attack surface for violation reporting. Audit is already provided by the
+kernel and a well leveraged pipeline.
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
----
- kernel/bpf/verifier.c                            | 11 +++++------
- tools/testing/selftests/bpf/progs/irq.c          |  4 ++--
- tools/testing/selftests/bpf/progs/preempt_lock.c |  6 +++---
- 3 files changed, 10 insertions(+), 11 deletions(-)
+WRT to performance characteristics, would you rather see this
+implementation leverage those maps in a way to reduce that, background
+workers, or something else? This is something we've considered, but left out
+of RFC to collect more opinion on perf considerations.
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index a9130c4888f7..80a9eab79cac 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -210,6 +210,8 @@ static bool in_rbtree_lock_required_cb(struct bpf_verifier_env *env);
- static int ref_set_non_owning(struct bpf_verifier_env *env,
- 			      struct bpf_reg_state *reg);
- static bool is_trusted_reg(const struct bpf_reg_state *reg);
-+static inline bool in_sleepable_context(struct bpf_verifier_env *env);
-+static const char *non_sleepable_context_description(struct bpf_verifier_env *env);
- 
- static bool bpf_map_ptr_poisoned(const struct bpf_insn_aux_data *aux)
- {
-@@ -10948,12 +10950,9 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 			return -EINVAL;
- 		}
- 
--		if (env->subprog_info[subprog].might_sleep &&
--		    (env->cur_state->active_rcu_locks || env->cur_state->active_preempt_locks ||
--		     env->cur_state->active_irq_id || !in_sleepable(env))) {
--			verbose(env, "global functions that may sleep are not allowed in non-sleepable context,\n"
--				     "i.e., in a RCU/IRQ/preempt-disabled section, or in\n"
--				     "a non-sleepable BPF program context\n");
-+		if (env->subprog_info[subprog].might_sleep && !in_sleepable_context(env)) {
-+			verbose(env, "sleepable global function %s() called in %s\n",
-+				sub_name, non_sleepable_context_description(env));
- 			return -EINVAL;
- 		}
- 
-diff --git a/tools/testing/selftests/bpf/progs/irq.c b/tools/testing/selftests/bpf/progs/irq.c
-index 74d912b22de9..e11e82d98904 100644
---- a/tools/testing/selftests/bpf/progs/irq.c
-+++ b/tools/testing/selftests/bpf/progs/irq.c
-@@ -490,7 +490,7 @@ int irq_non_sleepable_global_subprog(void *ctx)
- }
- 
- SEC("?syscall")
--__failure __msg("global functions that may sleep are not allowed in non-sleepable context")
-+__failure __msg("sleepable global function")
- int irq_sleepable_helper_global_subprog(void *ctx)
- {
- 	unsigned long flags;
-@@ -502,7 +502,7 @@ int irq_sleepable_helper_global_subprog(void *ctx)
- }
- 
- SEC("?syscall")
--__failure __msg("global functions that may sleep are not allowed in non-sleepable context")
-+__failure __msg("sleepable global function")
- int irq_sleepable_global_subprog_indirect(void *ctx)
- {
- 	unsigned long flags;
-diff --git a/tools/testing/selftests/bpf/progs/preempt_lock.c b/tools/testing/selftests/bpf/progs/preempt_lock.c
-index 7d04254e61f1..6d5fce7e6ffc 100644
---- a/tools/testing/selftests/bpf/progs/preempt_lock.c
-+++ b/tools/testing/selftests/bpf/progs/preempt_lock.c
-@@ -177,7 +177,7 @@ global_subprog_calling_sleepable_global(int i)
- }
- 
- SEC("?syscall")
--__failure __msg("global functions that may sleep are not allowed in non-sleepable context")
-+__failure __msg("sleepable global function")
- int preempt_global_sleepable_helper_subprog(struct __sk_buff *ctx)
- {
- 	preempt_disable();
-@@ -188,7 +188,7 @@ int preempt_global_sleepable_helper_subprog(struct __sk_buff *ctx)
- }
- 
- SEC("?syscall")
--__failure __msg("global functions that may sleep are not allowed in non-sleepable context")
-+__failure __msg("sleepable global function")
- int preempt_global_sleepable_kfunc_subprog(struct __sk_buff *ctx)
- {
- 	preempt_disable();
-@@ -199,7 +199,7 @@ int preempt_global_sleepable_kfunc_subprog(struct __sk_buff *ctx)
- }
- 
- SEC("?syscall")
--__failure __msg("global functions that may sleep are not allowed in non-sleepable context")
-+__failure __msg("sleepable global function")
- int preempt_global_sleepable_subprog_indirect(struct __sk_buff *ctx)
- {
- 	preempt_disable();
--- 
-2.52.0
+Thanks for bring this up. I forgot to include that in the RFC cover, sorry.
 
+Best,
+Fred
