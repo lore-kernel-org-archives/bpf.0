@@ -1,109 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A17733D6D8
-	for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 11:45:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69B33378D93;
+	Wed, 18 Mar 2026 11:53:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773834349; cv=none; b=RbCTohi4yk6JyxKiEHkOPnNlHbaJeDlZZ2WefJX1f7L7QwqNITpyXNdgRwPoFRmztWVofqWH6Y+dAZH9RI7/kLp3VNSNWQndzR4bFoKppA6z5UbWfQ7GD6Z91Lc2S2tpjW+DPQlWjXnWVuBB3NSe32iDKup6fQLk/5NSRN8zArk=
+	t=1773834813; cv=none; b=eM8KPSyBho0gZv4ND8fCZQTzqSTbqBImK2s93VDIDngzBKJB1r2hTQSMuDULWNgiH5TEOw/7e1SoJppaWB5ngUuYqRHTEjNWAVVpIv6pZ4UYd5hbCXlSAvMV6aYrGzkiD+ETBTSoH+SJOozoP3nLyGR+Y9aklJTfWprMWIGMggk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773834349; c=relaxed/simple;
-	bh=cIluydrtyEjaIeM9IwO/I9477yuicTaZiy8Y6g4noCU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=LgNOsBi+DamL9cb82mKVMKIVsKLOa/FP/K0DBkQAOxjpjxvdJxcqyFF4PvROxvphnMmNDGFGTsk+QQ880AqwDdgkMBbM9gSswjGaGsMfQ4ZvoWxwrwU3l3K1LkynwHdvG5l5QKhBkWDzbejXMpvMRMkTaLCWGiGLeuTLqLaYKTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J5ofoITu; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773834813; c=relaxed/simple;
+	bh=LgC1lm6hsOkZxUbM1GobRu3j7ie7NTm1bfCs+thsDHE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mLOc99VtExSoEDFv6Gr0NrujbiFCeZ41IPB0TA2hGL50ERTHgplDz6NJ42vFfRxz13PIoMbo+pCrCPFWG+nl556JfrlYPM2MuAcVux8Pw18K4tyLGn3N+c2h+8oOJAoz7Bm/ip9Q1Vj+PH1ggyW1t6UTJz9+l8x/W5L+qewPeFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=uDWpoOs5; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J5ofoITu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E647C19421;
-	Wed, 18 Mar 2026 11:45:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773834348;
-	bh=cIluydrtyEjaIeM9IwO/I9477yuicTaZiy8Y6g4noCU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=J5ofoITuSkNn3JqDapPqmqfzKeHWHMVjXLtVqOylDdKpnkTZ0TKUgGdWXWrsSmFcG
-	 fixPAzXhql0KFpgrvxO8xwj63NZr59eHpveUsGHB0qargwSJGL5bWj5ZpXXwne95dx
-	 NM5mF6hrDPp6PmoCSzxZt9Zu3rdJxx71Zc41IxERUpLVR9kIWj9XSG/3rYVHz4Bx2x
-	 MzTI9Fv1NYYScYFDDEiUTXegvwB3OaEniW/O3dmQaib3B0phQslfiZ1jnQYx5cl5cy
-	 Mo6nV37y9JoEJaYXsVr8CSKSFlu45kQZQIyevdjNHhhrmzVc5TOzNPDHSn09HqVGZe
-	 0X5MaaydN9MJA==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai
- Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Tejun
- Heo <tj@kernel.org>, Dan Schatzberg <dschatzberg@meta.com>, kkd@meta.com,
- kernel-team@meta.com
-Subject: Re: [PATCH bpf-next v3 0/3] Allow variable offsets for syscall
- PTR_TO_CTX
-In-Reply-To: <20260318103526.2590079-1-memxor@gmail.com>
-References: <20260318103526.2590079-1-memxor@gmail.com>
-Date: Wed, 18 Mar 2026 11:45:28 +0000
-Message-ID: <m25x6t744n.fsf@kernel.org>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="uDWpoOs5"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=l4U6xtTGON0fwyeUHCFIqavhiLt6G9bjL//jtiBQXJc=; b=uDWpoOs5vmgqPk34kKfBRvHpZP
+	WpmPEPAdcdMIkCB16i8NaoU0ijQIvJjpa/SadRlfdWry68QAO4R0MQbS7aese3JcC+B/6adqK9e/5
+	eBMym68AULUlUH0HbeMpAryVrYR7HhwWgruR/2uKCV/XZMN02Qvnv5yEQKEQtGvlUkrDhuZfLEyQ6
+	KEMwDZwgtFbesfb5o6z9TyjvfEihPIl53NY1YrOcymEQrNW5vwhcWZrMYIC0D9rxM7JM1wL5Q13RY
+	yIOhJkR9V+Xt8NsC1fIeZknUVaAgc/SoRJk67+b/p7Ncl9O/nMpiykrK1ucljhD9NvsnXiXM+SG9q
+	0mC846OQ==;
+Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1w2pSo-00000004L4y-1JMI;
+	Wed, 18 Mar 2026 11:53:26 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 22CD5301BDE; Wed, 18 Mar 2026 12:53:25 +0100 (CET)
+Date: Wed, 18 Mar 2026 12:53:25 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Leo Yan <leo.yan@arm.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>,
+	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
+	Quentin Monnet <qmo@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	William Breathitt Gray <wbg@kernel.org>,
+	Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Kent Gibson <warthog618@gmail.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Long Li <longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
+	Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, bpf@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Subject: Re: [PATCH v5 00/26] tools build: Append
+ -fzero-init-padding-bits=all option
+Message-ID: <20260318115325.GB3738786@noisy.programming.kicks-ass.net>
+References: <20260318-tools_build_fix_zero_init-v5-0-bbeffd8da199@arm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260318-tools_build_fix_zero_init-v5-0-bbeffd8da199@arm.com>
 
-Kumar Kartikeya Dwivedi <memxor@gmail.com> writes:
+On Wed, Mar 18, 2026 at 09:16:44AM +0000, Leo Yan wrote:
+> Thank you for reviewing and commenting on v4.
+> 
+> For anyone new to the series, the reason for appending this compiler
+> option is described in v3 (see "Link to v3" below).
 
-> Enable pointer modification with variable offsets accumulated in the
-> register for PTR_TO_CTX for syscall programs where it won't be
-> rewritten, and the context is user-supplied and checked against the max
-> offset. See patches for details. Fixed offset support landed in [0].
->
-> By combining this set with [0], examples like the one below should
-> succeed verification now.
->
->   SEC("syscall")
->   int prog(void *ctx) {
-> 	int *arr = ctx;
-> 	int i;
->
-> 	bpf_for(i, 0, 100)
-> 		arr[i] *= i;
->
-> 	return 0;
->   }
->
->   [0]: https://lore.kernel.org/bpf/20260227005725.1247305-1-memxor@gmail.com
->
-> Changelog:
-> ----------
-> v2 -> v3
-> v2: https://lore.kernel.org/bpf/20260318075133.1031781-1-memxor@gmail.com
->
->  * Prevent arg_type for KF_ARG_PTR_TO_CTX from applying to other cases
->    due to preceding fallthrough. (Gemini/Sashiko)
->
-> v1 -> v2
-> v1: https://lore.kernel.org/bpf/20260317111850.2107846-2-memxor@gmail.com
->
->  * Harden check_func_arg_reg_off check with ARG_PTR_TO_CTX.
->  * Add tests for unmodified ctx into tail calls.
->  * Squash unmodified ctx change into base commit.
->  * Add Reviewed-by's from Emil.
->
-> Kumar Kartikeya Dwivedi (3):
->   bpf: Support variable offsets for syscall PTR_TO_CTX
->   selftests/bpf: Add syscall ctx variable offset tests
->   selftests/bpf: Test modified syscall ctx for ARG_PTR_TO_CTX
->
->  kernel/bpf/verifier.c                         |  67 ++--
->  .../selftests/bpf/prog_tests/verifier.c       |  34 +-
->  .../selftests/bpf/progs/verifier_ctx.c        | 356 +++++++++++++++---
->  .../bpf/progs/verifier_global_subprogs.c      |  95 ++++-
->  .../selftests/bpf/test_kmods/bpf_testmod.c    |   2 +-
->  5 files changed, 462 insertions(+), 92 deletions(-)
->
->
-> base-commit: 77378dabb50f593c756d393d8eacb0b91b758863
-> -- 
-> 2.52.0
-
-Acked-by: Puranjay Mohan <puranjay@kernel.org>
-
-Thanks,
-Puranjay
+So why can't you just copy-paste that yourself, and save me from having
+to go find a browser and copy/paste the stupid link, just to find
+something that should have been here to begin with?!
