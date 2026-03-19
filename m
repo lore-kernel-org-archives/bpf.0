@@ -1,104 +1,180 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ABAF347BC9;
-	Thu, 19 Mar 2026 20:58:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 347AD40243D
+	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 21:15:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773953912; cv=none; b=mOweINr9/EbQzOjZs37IPoXI28S/Nz99kITK3Q4SLQyQupnx2853vOXYYR0n5svfyInuqNPBQqXps+if1+L6ca3KcDRaIHILBg3dxMpRa0EZHTiwZln4wdZRgvp5CFTxUhU6z0+PtvkDbt8lsiXm5LwqtBdJGWwgLdCdAnvew1E=
+	t=1773954919; cv=none; b=aAaCGFwk1gd59Kv2H9PRcFg7qK5/uPolt4EJ6o4eGsa26mXvQ3RjDgeDDKHj7AXU3t5V4LjEIv361MYneo+8XXIE4mwgifQ8rTgfZz7KunCNIl75J8bonjrvzR1ISOhk2ti15aMYt633KCBOfYi3nOJdTr0ELoeyQdPG7ubzxMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773953912; c=relaxed/simple;
-	bh=iqBXral7BgXV4bBHSPIa7H+kMBPsRpoDN2FgeDnqQcQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hd0PLhrV0EYW8AZLCqAtqixGa2EwtLOZsJHFpn+8clYpwnzYqavtmIYk1yJ10NlMMrwM/xmjHXLcNQmPVkpl9QGLSIG+CkUn14QO84h+weg/sQ7Gz+zQEnJODGeiBkdjkYJ1of568QA0wnZqSWb4oCgpacnzgBP2m9a8ULWJ0QM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=cFf520aw; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1773954919; c=relaxed/simple;
+	bh=dbvPdm3CpyYpcGW0VHsk3JS7Ic9Sz5Q6osgs1WjzDSA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=J9k3LYPONUTtHd01KB28tBOdeWirA+A72vrFAuHTk2CQ3wSptGat5xmuWpE/BcRqgMFO75fcNPWzwGOm6PNCiLAAJb8IscPjCNNcEoyMcaAENwsIg46C1+4lYrbYHHxPMgQjw1tMnoYmDhBGiywpcb4zbwnxUxYA2J5O1O1mP5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=f5H4KjAH; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="cFf520aw"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="f5H4KjAH"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=NGmSOgNeB1FXvQIqQTKt2rVV6pmaYTvcJ3vAUAdSCiE=; b=cFf520awxaoPx1Q5SlxcIAq7xt
-	zMFTIJKJa8EAX3CoWJ55y8kCHtyWYNYfA4fcs/m375os/ifexTPOHUV59O39qRiTr3aYCXdeIu3gS
-	M+lf0jguGwg2klBH04X5aa8PqwhLqWcKZF+lDHFHASDZkWNLF+0YkIWKLSlIhYGWzf121jQj8G4P0
-	K5WvInIwfHuQTF3+1/LbA5BUadpbHo4H0xCYWuiUdSMwiew0CR6nIBzIXT7QUb+R6pFRB1KWmRdF2
-	uHmMd8WhZsc0mWpLf4o+b1cL9VxoYGG5wfy34SwIS3bPuCkxYlvJ2a1uKc5zkgfz3J+OkzOA/SZXQ
-	GLk6Cd1w==;
-Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1w3KRQ-00000006hEr-37ql;
-	Thu, 19 Mar 2026 20:58:04 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id D39FD3004F8; Thu, 19 Mar 2026 21:58:02 +0100 (CET)
-Date: Thu, 19 Mar 2026 21:58:02 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc: x86@kernel.org, Nikolay Borisov <nik.borisov@suse.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	David Kaplan <david.kaplan@amd.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Laight <david.laight.linux@gmail.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	David Ahern <dsahern@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org, Asit Mallick <asit.k.mallick@intel.com>,
-	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v7 07/10] x86/vmscape: Use static_call() for predictor
- flush
-Message-ID: <20260319205802.GJ3738786@noisy.programming.kicks-ass.net>
-References: <20260319-vmscape-bhb-v7-0-b76a777a98af@linux.intel.com>
- <20260319-vmscape-bhb-v7-7-b76a777a98af@linux.intel.com>
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=LYGFkg9Wf8fY4xWjTQ3WZeodKksSz2vCmUEma6JR8gk=; b=f5H4KjAH1pMlrpgyzXdotj32Np
+	FcnTFgiDQY0XeqYSNXV/yHaOKcxee9yNd7+Hy9Z539Hemoha3Pw8L1tNOylkjpm8hHCSdB6XiFOEg
+	Esm/YTo/ZX6X8SkS+x/lZW6Hs1wDBUzsI0JekZyxogD7qTKT/1962SM5F2SB60qaDxVxq9HItTMi2
+	4jJWa8ocswd5w3pSeKQfSNmZIN4XhstUkrHBONjJ83FBwhggSUXW4S/VTdJwJ/Cg3sBR5noOwFEZ/
+	ermBmQ4zoGgDCECXSbyC3rdQ+mE8vzy+XoOhTjI8L/No/aOu1kxXKGRX3XSVZjOj3lcOCdAo100LF
+	ebAhRSqg==;
+Received: from localhost ([127.0.0.1])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1w3Khw-0000CA-1f;
+	Thu, 19 Mar 2026 22:15:08 +0100
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: bpf@vger.kernel.org
+Cc: eddyz87@gmail.com,
+	puranjay12@gmail.com,
+	qguanni@gmail.com,
+	ast@kernel.org,
+	Puranjay Mohan <puranjay@kernel.org>
+Subject: [PATCH bpf 1/2] bpf: Fix sync_linked_regs regarding BPF_ADD_CONST32 zext propagation
+Date: Thu, 19 Mar 2026 22:15:06 +0100
+Message-ID: <20260319211507.213816-1-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260319-vmscape-bhb-v7-7-b76a777a98af@linux.intel.com>
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/27945/Thu Mar 19 07:24:38 2026)
 
-On Thu, Mar 19, 2026 at 08:41:54AM -0700, Pawan Gupta wrote:
-> diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-> index 68e2df3e3bf5..b75eda114503 100644
-> --- a/arch/x86/kernel/cpu/bugs.c
-> +++ b/arch/x86/kernel/cpu/bugs.c
-> @@ -144,6 +144,17 @@ EXPORT_SYMBOL_GPL(cpu_buf_idle_clear);
->   */
->  DEFINE_STATIC_KEY_FALSE(switch_mm_cond_l1d_flush);
->  
-> +/*
-> + * Controls CPU Fill buffer clear before VMenter. This is a subset of
-> + * X86_FEATURE_CLEAR_CPU_BUF, and should only be enabled when KVM-only
-> + * mitigation is required.
-> + */
-> +DEFINE_STATIC_KEY_FALSE(cpu_buf_vm_clear);
-> +EXPORT_SYMBOL_GPL(cpu_buf_vm_clear);
-> +
-> +DEFINE_STATIC_CALL_NULL(vmscape_predictor_flush, write_ibpb);
-> +EXPORT_STATIC_CALL_GPL(vmscape_predictor_flush);
+Jenny reported that in sync_linked_regs() the BPF_ADD_CONST32 flag is
+checked on known_reg (the register narrowed by a conditional branch)
+instead of reg (the linked target register created by an alu32 operation).
 
-Does that want to be:
+Example case with reg:
 
-EXPORT_STATIC_CALL_TRAMP_GPL(vmscape_predictor_flush);
+  1. r6 = bpf_get_prandom_u32()
+  2. r7 = r6 (linked, same id)
+  3. w7 += 5 (alu32 -- r7 gets BPF_ADD_CONST32, zero-extended by CPU)
+  4. if w6 < 0xFFFFFFFC goto safe (narrows r6 to [0xFFFFFFFC, 0xFFFFFFFF])
+  5. sync_linked_regs() propagates to r7 but does NOT call zext_32_to_64()
+  6. Verifier thinks r7 is [0x100000001, 0x100000004] instead of [1, 4]
 
-The distinction being that if you only export the trampoline, modules
-can do the static_call() thing, but cannot do static_call_update().
+Since known_reg above does not have BPF_ADD_CONST32 set above, zext_32_to_64()
+is never called on alu32-derived linked registers. This causes the verifier
+to track incorrect 64-bit bounds, while the CPU correctly zero-extends the
+32-bit result.
+
+The code checking known_reg->id was correct however (see scalars_alu32_wrap
+selftest case), but the real fix needs to handle both directions - zext
+propagation should be done when either register has BPF_ADD_CONST32, since
+the linked relationship involves a 32-bit operation regardless of which
+side has the flag.
+
+Example case with known_reg (exercised also by scalars_alu32_wrap):
+
+  1. r1 = r0; w1 += 0x100 (alu32 -- r1 gets BPF_ADD_CONST32)
+  2. if r1 > 0x80 - known_reg = r1 (has BPF_ADD_CONST32), reg = r0 (doesn't)
+
+Hence, fix it by checking for (reg->id | known_reg->id) & BPF_ADD_CONST32.
+
+Moreover, sync_linked_regs() also has a soundness issue when two linked
+registers used different ALU widths: one with BPF_ADD_CONST32 and the
+other with BPF_ADD_CONST64. The delta relationship between linked registers
+assumes the same arithmetic width though. When one register went through
+alu32 (CPU zero-extends the 32-bit result) and the other went through
+alu64 (no zero-extension), the propagation produces incorrect bounds.
+
+Example:
+
+  r6 = bpf_get_prandom_u32()     // fully unknown
+  if r6 >= 0x100000000 goto out  // constrain r6 to [0, U32_MAX]
+  r7 = r6
+  w7 += 1                        // alu32: r7.id = N | BPF_ADD_CONST32
+  r8 = r6
+  r8 += 2                        // alu64: r8.id = N | BPF_ADD_CONST64
+  if r7 < 0xFFFFFFFF goto out    // narrows r7 to [0xFFFFFFFF, 0xFFFFFFFF]
+
+At the branch on r7, sync_linked_regs() runs with known_reg=r7
+(BPF_ADD_CONST32) and reg=r8 (BPF_ADD_CONST64). The delta path
+computes:
+
+  r8 = r7 + (delta_r8 - delta_r7) = 0xFFFFFFFF + (2 - 1) = 0x100000000
+
+Then, because known_reg->id has BPF_ADD_CONST32, zext_32_to_64(r8) is
+called, truncating r8 to [0, 0]. But r8 used a 64-bit ALU op -- the
+CPU does NOT zero-extend it. The actual CPU value of r8 is
+0xFFFFFFFE + 2 = 0x100000000, not 0. The verifier now underestimates
+r8's 64-bit bounds, which is a soundness violation.
+
+Fix sync_linked_regs() by skipping propagation when the two registers
+have mixed ALU widths (one BPF_ADD_CONST32, the other BPF_ADD_CONST64).
+
+Lastly, fix regsafe() used for path pruning: the existing checks used
+"& BPF_ADD_CONST" to test for offset linkage, which treated
+BPF_ADD_CONST32 and BPF_ADD_CONST64 as equivalent.
+
+Fixes: 7a433e519364 ("bpf: Support negative offsets, BPF_SUB, and alu32 for linked register tracking")
+Reported-by: Jenny Guanni Qu <qguanni@gmail.com>
+Co-developed-by: Puranjay Mohan <puranjay@kernel.org>
+Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+---
+ kernel/bpf/verifier.c | 21 +++++++++++++++------
+ 1 file changed, 15 insertions(+), 6 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index df22bfc572e2..770b2f4eb781 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -17415,6 +17415,12 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
+ 			continue;
+ 		if ((reg->id & ~BPF_ADD_CONST) != (known_reg->id & ~BPF_ADD_CONST))
+ 			continue;
++		/*
++		 * Skip mixed 32/64-bit links: the delta relationship doesn't
++		 * hold across different ALU widths.
++		 */
++		if (((reg->id ^ known_reg->id) & BPF_ADD_CONST) == BPF_ADD_CONST)
++			continue;
+ 		if ((!(reg->id & BPF_ADD_CONST) && !(known_reg->id & BPF_ADD_CONST)) ||
+ 		    reg->off == known_reg->off) {
+ 			s32 saved_subreg_def = reg->subreg_def;
+@@ -17442,7 +17448,7 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
+ 			scalar32_min_max_add(reg, &fake_reg);
+ 			scalar_min_max_add(reg, &fake_reg);
+ 			reg->var_off = tnum_add(reg->var_off, fake_reg.var_off);
+-			if (known_reg->id & BPF_ADD_CONST32)
++			if ((reg->id | known_reg->id) & BPF_ADD_CONST32)
+ 				zext_32_to_64(reg);
+ 			reg_bounds_sync(reg);
+ 		}
+@@ -19870,11 +19876,14 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
+ 		 * Also verify that new value satisfies old value range knowledge.
+ 		 */
+ 
+-		/* ADD_CONST mismatch: different linking semantics */
+-		if ((rold->id & BPF_ADD_CONST) && !(rcur->id & BPF_ADD_CONST))
+-			return false;
+-
+-		if (rold->id && !(rold->id & BPF_ADD_CONST) && (rcur->id & BPF_ADD_CONST))
++		/*
++		 * ADD_CONST flags must match exactly: BPF_ADD_CONST32 and
++		 * BPF_ADD_CONST64 have different linking semantics in
++		 * sync_linked_regs() (alu32 zero-extends, alu64 does not),
++		 * so pruning across different flag types is unsafe.
++		 */
++		if (rold->id &&
++		    (rold->id & BPF_ADD_CONST) != (rcur->id & BPF_ADD_CONST))
+ 			return false;
+ 
+ 		/* Both have offset linkage: offsets must match */
+-- 
+2.43.0
+
