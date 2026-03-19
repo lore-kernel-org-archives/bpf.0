@@ -1,263 +1,242 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD22A3E3D84
-	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 15:23:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0282A36C0D1
+	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 15:39:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773933787; cv=none; b=svfl7bZ3HtULncZIgiY5wQrLq+TwC1QOwmUeF3ARl3pXUuXQlL9DAYeT/18SWmK2I9C+BvmSnbqnmHb1He55p1/7Eg5clWYXRto4d+IqCkfJLBAkYA3Ku/a004yJq5+u2rlagq33VYPAjGI7hgT6TAh5Wst0OFnsYtuqZtSgJ7c=
+	t=1773934779; cv=none; b=oMaFrWolrJVfCQcgcs/Mv7HGzJ3+yzY5TD70yVL8B3qLWgmtfug6qmOH6fEXhH8aB9UYB2OEUFTVxoXqqZMDTzxsy4A+15xwFgMKwRJlfdLdXnkF7PWEZDXtMgWAJTyZVk8mGP4XSs4wfWKIueWk0kLgVY9kw0d9xAKLxFOxsJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773933787; c=relaxed/simple;
-	bh=TI8QoQWvL9nJWRkyfRutiVn0vo3hVS3/ZsOIKo7VsCQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=pfxvtXG3cNwD+sQI/rF6F0MFsi/vizHWBhp4MWbzueinE5gzF1UHugIepPv5q90H6BT8FxZ7/ZerudspbA/9GKEBCqADSr+9xfH8pnpPZGuhJXWOJGQXE/ioxqSE/3FedKT6eYMOCJI26KCzLMKpDyYy8/5lUBZXG1WKjVhXVf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RaA39XFn; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773934779; c=relaxed/simple;
+	bh=x//o4bWkdTa7UjZoqWBDqdBqMxSW98X7OQ5Mn059qxs=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=dGnYNlkwYWd2FhZStktcB1By7mM92w6sUwKPyAKmSWjm0XNsr2iLBg0vQ104jNPGxmDoKvUOe2lIB5KQ4NJf4w2Q8pRkg7ojWX3aFNRr3M9u6rv29nz1RAy6ASWZzP38QSep65iqfKJYlpII2dhJp9FEF7nzJavQ7Ew1/rbdskg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=QbBSLqt/; arc=none smtp.client-ip=209.85.219.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RaA39XFn"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-486fda2a389so2594415e9.1
-        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 08:23:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="QbBSLqt/"
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-89c5446f3caso13251076d6.2
+        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 08:39:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773933782; x=1774538582; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KoC3MEeE9a06VfxukdKMfULwtBT7iGo7LMQs4bVX0h0=;
-        b=RaA39XFn9bZQOrhVJDrOXm5nD+M4/uMdtvGRIqtrkuyFY56tleWaYtIK+txca2NFtH
-         lhOOyWOPVw0A3hhUqDx+K5zqDsLk2QhnD1x1os40z89BhIdsr8ELx3Vjz4AtvFdDbt7f
-         JIOG25gZcBRDerNXFgmrJr322/AD+0fYThFqCm8Ul4w+++/r4k1J1j8/+o2Q0wOnJPoe
-         EU9ZwXftQ1ZngD/Fex6ENbOpzLMyGOO0qzR25B0qxpzqwmIQGGlhKNhsyqOGlhWn5chl
-         VZHjf71CnLTIQ1PJnld81r9nhg3v2jPWJSqeulSoJqwDKkBg8bVQamsOVx7YSeMuH5lC
-         f9PA==
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1773934776; x=1774539576; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9f+nxQqpbmkQKG1AStGiZRyAzlhJyR4x4hzFywy9Ago=;
+        b=QbBSLqt/a46IQeKhCnmfhXuvfzQ71UUU/ir9ucua7JBrMQ5AJ58dWuXrKFc6CmAaB4
+         uSq7kxkbMpcxAzdSHs45yyv9FxsInnIoURGn4uwWRqS725tUzbkxyb693cPtcAL+hP2u
+         UqQMEP1edtW8/r9UnTAtQjnxIAX2ML7vvA2pYyEoZ+sy1extujt04qgcoZjniIU/wQRm
+         PIXC2rNRmQCQlIsb08ZMmrbBBd06LqmClJHOX+cuZg7Mt1Vv0SGrkFfaYNCD9LLhhAHG
+         1YST7blvwdFGXt2BHxWiEoU33Zf3MInEDzSJJzy75SCHckZjnRL5lQP078gofnmmsHsC
+         4C5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773933782; x=1774538582;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KoC3MEeE9a06VfxukdKMfULwtBT7iGo7LMQs4bVX0h0=;
-        b=AnbZtlofhhrMFWyHFu+lClWOpdrCT7mhTudW97sGRsgOjHbuQg9R6McNaPa1RmGOO0
-         4c4rdSt+sraq/Z29HHqCXtlo6OpkhSP05PccgbNTJhzcw+fXs7SxB5WAs5Gqjlh5gms8
-         NPKeF+t0XaTuQbBgd5JtFPqCyuCHbvGMLj9+SdVDwDX1r208Cc2ckpqYfbX7JlaO+1LW
-         iCJKhWOxizFkYAKzpKnwBNr8G7+wEMpyEz6wteO3sg+dSuTS5bhaX6XRYYY34YEhVTLo
-         evniRASMvlYpg2f6dbUJcd2Tvkd699z/xDZATDx/UDN3kn4panOQ9krRa74fZRFLMsyC
-         1SWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXf7cjp3sNRboyYaluhCIzhbb2SciFRuZYEx5wslps7UiXqE0wd9i3To1v7M/9SdCpCgPQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzH/ooX/U7CJmdMA1utuitYbL6+zzqG8wAbh4NBPSDoF/rz3lcs
-	LrJPrDqBY07cSl3vFvtyVZb8yLi88FkEigH3RCvD0Ux9oaWMWwLu3gVw
-X-Gm-Gg: ATEYQzxypYnLmXUZvcHXkkYzwMd7D86ddkMEFJQYjIlcB9HwOp3lIHkymceovXew2NX
-	yM18Dd6ZyNZ7+2XssK6YFwXG0pE0NvR+QaGt3N1ENI5TN0oS3xnSfax3Jxg+NqzOy9uR23Gz19y
-	kAWRh/eu+jFsan/2ULUdtVEzNAwu4SerL55i3C7cORheu/aHb5enS/svhI2c4snDEeKH/8DyE26
-	KW9scB+Q+GncuH4bd7hzbnbmC9vZlq7AsZxsx6h6v27hyS/nMyIjygqKRyCBuuAWZ84OouwS9sp
-	LJ1rCP0SoZ2r7rB30jQQ0uPvT1ac1xBUPuZvXs8O/Uk8XUEsnHXm63meIKhdmm98BWzBahsgqDz
-	4hYncQ4nEPX9fCcajkGVJ4C/nHIwWSF7mBdLw9ELOB2xnzU27S6aTraxokMoUEN1mUH0LX7T5Ze
-	jaZfn32b3mQGQZFeBiGb0kNVX4JQLXphmfIA==
-X-Received: by 2002:a05:600c:1d0c:b0:485:2ce2:4c8a with SMTP id 5b1f17b1804b1-486f442df40mr129862875e9.1.1773933781586;
-        Thu, 19 Mar 2026 08:23:01 -0700 (PDT)
-Received: from localhost ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486f5e162e2sm40063325e9.34.2026.03.19.08.23.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2026 08:23:01 -0700 (PDT)
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-To: Ibrahim Zein <zeroxjacks@gmail.com>, ast@kernel.org
-Cc: daniel@iogearbox.net, martin.lau@linux.dev, andrii@kernel.org,
- bpf@vger.kernel.org, Ibrahim Zein <zeroxjacks@gmail.com>
-Subject: Re: [PATCH] bpf: fix out-of-bounds write in bpf_bprintf_prepare
- with %pI4/%pI6
-In-Reply-To: <20260319043029.3067-1-zeroxjacks@gmail.com>
-References: <20260319043029.3067-1-zeroxjacks@gmail.com>
-Date: Thu, 19 Mar 2026 15:23:00 +0000
-Message-ID: <87341vlu7f.fsf@gmail.com>
+        d=1e100.net; s=20251104; t=1773934776; x=1774539576;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9f+nxQqpbmkQKG1AStGiZRyAzlhJyR4x4hzFywy9Ago=;
+        b=p2jytlt+MnUlsT/UlJ+pHk51gN3LgEa/Z3DOQvVuIZrehk1UjJznw5X0V8olLS+oTL
+         cw2FzRIU9+S40HILjXAlkB4DyQ6mNp1LiScwaoXmpLFtlQmFTl6Mh7J7IzkyjdaiKW+9
+         WiaKoUFteX5WlGib0Lg0xBrK6HbekL7QzFGI0du03OJiqxrieGvNJ47k7t4bvUyDVevk
+         xWkKljVsjYYZ62ydOTj1yzGqc6zPtgWF9ttV0+oAYpUUEHfN4gFwFZ6qOSq31sMADOY+
+         xt8Due8qXeya6Q0A/BH+nbT4aJJXl/aPpPst1umZUFhKevcblWofmH+0/KzfUEO1FNkF
+         7mFw==
+X-Gm-Message-State: AOJu0Yyeqazxbg/zky38QE7Q8BTlWoCVuENrVogKdaG4psWea2hGK49J
+	VxGZWB/9vmdqAJdEZJWVdonobz5MlwNhT4l2ANtFiQ3R4P8sDpvEXJVXgs3Q/Drl31I=
+X-Gm-Gg: ATEYQzyEzgZwdHQq+2OxZriAkfhKW10gBmpxb6w/R2mIwam1YNNqobQwg03Ia52bfsg
+	v+FezcbBzq1Q2pG5/SmqYVt/LdFAlymDbad0V7PIyhkWmWKYrWE+wkkuMAMoRKpzVEZVBerlVyE
+	mL3ajw3kUEsW3grWhd90YV1UnZxEWMX357C6BAFWxfPQADZAZD/JtX7L+pVRS1Z+gaMQ0cIET5G
+	VCFLxcVU/G9dzYQOoWz4h5yQbGpTEmSTrD03wQC4UbpvzDCY5vn2SsFuorAf/uB/cFF6jjBjRvN
+	9Yzhr25000mGwVfidv4yZTYGggm5Mak5fUGLFagO4yraQLIaaJku0ZOctDqNhMDdwm2bRfICWBQ
+	R2fGDTNf3qF4I2jzT08Qubnqde5Kzf0lczl2khZs7rtszLNwypVJVgtISsi9XeU9CUZp2uKNXBX
+	dhhUZo0RM0yI7VNO/VocVMYcI=
+X-Received: by 2002:a05:6214:3003:b0:89c:6252:4a4a with SMTP id 6a1803df08f44-89c6b5a797emr112213066d6.49.1773934775593;
+        Thu, 19 Mar 2026 08:39:35 -0700 (PDT)
+Received: from localhost ([140.174.219.137])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89c6b90d1a8sm63300886d6.18.2026.03.19.08.39.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Mar 2026 08:39:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 19 Mar 2026 11:39:34 -0400
+Message-Id: <DH6VE8XMH4H8.ETICJE2QVEA5@etsalapatis.com>
+To: "Chengkaitao" <pilgrimtao@gmail.com>, <martin.lau@linux.dev>,
+ <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+ <eddyz87@gmail.com>, <song@kernel.org>, <yonghong.song@linux.dev>,
+ <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@fomichev.me>,
+ <haoluo@google.com>, <jolsa@kernel.org>, <shuah@kernel.org>,
+ <chengkaitao@kylinos.cn>, <linux-kselftest@vger.kernel.org>
+Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v8 1/8] bpf: refactor kfunc checks using
+ table-driven approach in verifier
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+X-Mailer: aerc 0.20.1
+References: <20260316112843.78657-1-pilgrimtao@gmail.com>
+ <20260316112843.78657-2-pilgrimtao@gmail.com>
+In-Reply-To: <20260316112843.78657-2-pilgrimtao@gmail.com>
 
-Ibrahim Zein <zeroxjacks@gmail.com> writes:
+On Mon Mar 16, 2026 at 7:28 AM EDT, Chengkaitao wrote:
+> From: Kaitao Cheng <chengkaitao@kylinos.cn>
+>
+> Replace per-kfunc btf_id chains in list/rbtree/res_lock and graph node
+> checks with btf_id_in_kfunc_table() and static kfunc tables for easier
+> maintenance.
+>
+> Prepare for future extensions to the bpf_list API family.
+>
+> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
 
-> In bpf_bprintf_prepare(), the bounds check for %pI4 and %pI6 format
-> specifiers uses sizeof_cur_ip (4 for IPv4, 16 for IPv6), which is the
-> raw byte count of the IP address. However, snprintf() returns the
-> length of the formatted string, not the raw bytes. For IPv4 this can
-> be up to 15 characters (255.255.255.255) and for IPv6 up to 39.
->
-> tmp_buf is then advanced by (err + 1) using the full string length,
-> which can push tmp_buf past tmp_buf_end. The next iteration's bounds
-> check underflows due to unsigned arithmetic and passes, allowing a
-> write past the end of the per-CPU bin_args buffer.
->
-> Fix this by checking against the maximum formatted string size:
-> 16 bytes for IPv4 and 40 bytes for IPv6.
->
-> Signed-off-by: Ibrahim Zein <zeroxjacks@gmail.com>
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+
+The change is valid, can you see if you can remove some of the
+is_bpf_*api_kfunc calls areound line 13000 and replace them with=20
+btf_id_in_kfunc_table calls?=20
+
+And can you also do this refactoring for the other kfunc families? That
+way we replace all functions that match on the btf_id into a single call
+that takes in the array we are scanning for a match.
+
 > ---
->  kernel/bpf/helpers.c                          |  2 +-
->  .../bpf/prog_tests/test_snprintf_ip.c         | 54 +++++++++++++
->  .../selftests/bpf/progs/test_snprintf_ip.c    | 77 +++++++++++++++++++
->  3 files changed, 132 insertions(+), 1 deletion(-)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/test_snprintf_ip.c
->  create mode 100644 tools/testing/selftests/bpf/progs/test_snprintf_ip.c
+>  kernel/bpf/verifier.c | 79 +++++++++++++++++++++++++++++++------------
+>  1 file changed, 57 insertions(+), 22 deletions(-)
 >
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index cb6d242bd..dcaa822ba 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -930,7 +930,7 @@ int bpf_bprintf_prepare(const char *fmt, u32 fmt_size, const u64 *raw_args,
->  				goto nocopy_fmt;
->  
->  			sizeof_cur_ip = (fmt[i] == '4') ? 4 : 16;
-> -			if (tmp_buf_end - tmp_buf < sizeof_cur_ip) {
-> +			if (tmp_buf_end - tmp_buf < (size_t)((fmt[i] == '4') ? 16 : 40)) {
-not sure if casting to size_it is needed here.
->  				err = -ENOSPC;
->  				goto out;
->  			}
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_snprintf_ip.c b/tools/testing/selftests/bpf/prog_tests/test_snprintf_ip.c
-> new file mode 100644
-> index 000000000..5b000d6d1
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_snprintf_ip.c
-> @@ -0,0 +1,54 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026 Ibrahim Zein <zeroxjacks@gmail.com> */
-> +#include <test_progs.h>
-> +#include "test_snprintf_ip.skel.h"
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 4fbacd2149cd..64c1f8343dfa 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -12639,6 +12639,53 @@ BTF_ID(func, bpf_session_is_return)
+>  BTF_ID(func, bpf_stream_vprintk)
+>  BTF_ID(func, bpf_stream_print_stack)
+> =20
+> +static const enum special_kfunc_type bpf_list_api_kfuncs[] =3D {
+> +	KF_bpf_list_push_front_impl,
+> +	KF_bpf_list_push_back_impl,
+> +	KF_bpf_list_pop_front,
+> +	KF_bpf_list_pop_back,
+> +	KF_bpf_list_front,
+> +	KF_bpf_list_back,
+> +};
 > +
-> +#define EXP_IP4_OUT  "192.168.1.1"
-> +#define EXP_IP4_RET  sizeof(EXP_IP4_OUT)
+> +/* Kfuncs that take a list node argument (bpf_list_node *). */
+Nit: Why add a description on just this and bpf_rbtree_node_api_kfuncs?
+I think a small comment on top of each if fine if a bit wordy because
+it's easy to spot when scanning for a specific kfunc family.
+> +static const enum special_kfunc_type bpf_list_node_api_kfuncs[] =3D {
+> +	KF_bpf_list_push_front_impl,
+> +	KF_bpf_list_push_back_impl,
+> +};
 > +
-> +#define EXP_WORST_IP4_OUT  "255.255.255.255"
-> +#define EXP_WORST_IP4_RET  sizeof(EXP_WORST_IP4_OUT)
+> +/* Kfuncs that take an rbtree node argument (bpf_rb_node *). */
+> +static const enum special_kfunc_type bpf_rbtree_node_api_kfuncs[] =3D {
+> +	KF_bpf_rbtree_remove,
+> +	KF_bpf_rbtree_add_impl,
+> +	KF_bpf_rbtree_left,
+> +	KF_bpf_rbtree_right,
+> +};
 > +
-> +#define EXP_IP6_OUT  "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"
-> +#define EXP_IP6_RET  sizeof(EXP_IP6_OUT)
+> +static const enum special_kfunc_type bpf_rbtree_api_kfuncs[] =3D {
+> +	KF_bpf_rbtree_add_impl,
+> +	KF_bpf_rbtree_remove,
+> +	KF_bpf_rbtree_first,
+> +	KF_bpf_rbtree_root,
+> +	KF_bpf_rbtree_left,
+> +	KF_bpf_rbtree_right,
+> +};
 > +
-> +void test_snprintf_ip(void)
-The test passes with or without the fix, I suggest to rewrite it to fail
-on the base revision, otherwise it is not very useful.
+> +static const enum special_kfunc_type bpf_res_spin_lock_kfuncs[] =3D {
+> +	KF_bpf_res_spin_lock,
+> +	KF_bpf_res_spin_unlock,
+> +	KF_bpf_res_spin_lock_irqsave,
+> +	KF_bpf_res_spin_unlock_irqrestore,
+> +};
+> +
+> +static bool btf_id_in_kfunc_table(u32 btf_id, const enum special_kfunc_t=
+ype *kfuncs, int n)
 > +{
-> +	struct test_snprintf_ip *skel;
-> +
-> +	skel = test_snprintf_ip__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "skel_open"))
-> +		return;
-> +
-> +	skel->bss->pid = getpid();
-> +
-> +	if (!ASSERT_OK(test_snprintf_ip__attach(skel), "skel_attach"))
-> +		goto cleanup;
-> +
-> +	/* trigger tracepoint */
-> +	usleep(1);
-> +
-> +	/* Test 1: normal IPv4 */
-> +	ASSERT_STREQ(skel->bss->ip4_out, EXP_IP4_OUT, "ip4_out");
-> +	ASSERT_EQ(skel->bss->ip4_ret, EXP_IP4_RET, "ip4_ret");
-> +
-> +	/* Test 2: normal IPv6 */
-> +	ASSERT_STREQ(skel->bss->ip6_out, EXP_IP6_OUT, "ip6_out");
-> +	ASSERT_EQ(skel->bss->ip6_ret, EXP_IP6_RET, "ip6_ret");
-> +
-> +	/* Test 3: worst-case IPv4 "255.255.255.255" */
-> +	ASSERT_STREQ(skel->bss->worst_ip4_out, EXP_WORST_IP4_OUT,
-> +		     "worst_ip4_out");
-> +	ASSERT_EQ(skel->bss->worst_ip4_ret, EXP_WORST_IP4_RET,
-> +		  "worst_ip4_ret");
-> +
-> +	/*
-> +	 * Test 4: near-overflow scenario.
-> +	 * Before fix: tmp_buf overflows, kernel may crash or corrupt memory.
-> +	 * After fix: returns valid length without overflow.
-> +	 */
-> +	ASSERT_GE(skel->bss->near_overflow_ret, 0, "near_overflow_ret");
-> +
-> +cleanup:
-> +	test_snprintf_ip__destroy(skel);
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/test_snprintf_ip.c b/tools/testing/selftests/bpf/progs/test_snprintf_ip.c
-> new file mode 100644
-> index 000000000..5471a2b8b
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/test_snprintf_ip.c
-> @@ -0,0 +1,77 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026 Ibrahim Zein <zeroxjacks@gmail.com> */
-> +#include <linux/bpf.h>
-> +#include <bpf/bpf_helpers.h>
-> +
-> +/*
-> + * Test that bpf_snprintf() with %pI4/%pI6 does not overflow the
-> + * internal bin_args buffer when the buffer is nearly full.
-> + *
-> + * The bug: sizeof_cur_ip (4 for IPv4) was used for the bounds check,
-> + * but snprintf() returns the full formatted string length (up to 15
-> + * for "255.255.255.255"), pushing tmp_buf past tmp_buf_end.
-> + */
-> +
-> +/* Output buffers */
-> +char ip4_out[64] = {};
-> +long ip4_ret = 0;
-> +
-> +char ip6_out[128] = {};
-> +long ip6_ret = 0;
-> +
-> +/* Test %pI4 with worst-case IP (255.255.255.255) */
-> +char worst_ip4_out[64] = {};
-> +long worst_ip4_ret = 0;
-> +
-> +/* Return value for the near-overflow test */
-> +long near_overflow_ret = 0;
-> +
-> +__u32 pid = 0;
-> +
-> +SEC("raw_tp/sys_enter")
-> +int handler(const void *ctx)
-> +{
-> +	/* Worst-case IPv4: "255.255.255.255" = 15 chars */
-> +	const __u8 ip4_worst[] = {255, 255, 255, 255};
-> +	/* Normal IPv4 */
-> +	const __u8 ip4_normal[] = {192, 168, 1, 1};
-> +	/* IPv6 worst-case */
-> +	const __u8 ip6_worst[] = {0xff, 0xff, 0xff, 0xff,
-> +				   0xff, 0xff, 0xff, 0xff,
-> +				   0xff, 0xff, 0xff, 0xff,
-> +				   0xff, 0xff, 0xff, 0xff};
-> +
-> +	if ((int)bpf_get_current_pid_tgid() != pid)
-> +		return 0;
-> +
-> +	/* Test 1: normal %pI4 usage */
-> +	ip4_ret = BPF_SNPRINTF(ip4_out, sizeof(ip4_out),
-> +			       "%pI4", &ip4_normal);
-> +
-> +	/* Test 2: normal %pI6 usage */
-> +	ip6_ret = BPF_SNPRINTF(ip6_out, sizeof(ip6_out),
-> +			       "%pI6", &ip6_worst);
-> +
-> +	/* Test 3: worst-case %pI4 "255.255.255.255" */
-> +	worst_ip4_ret = BPF_SNPRINTF(worst_ip4_out, sizeof(worst_ip4_out),
-> +				     "%pI4", &ip4_worst);
-> +
-> +	/*
-> +	 * Test 4: near-overflow scenario.
-> +	 * Fill bin_args with scalar args (%d), then use %pI4.
-> +	 * Before the fix: tmp_buf overflows by 8 bytes.
-> +	 * After the fix: correctly returns -ENOSPC or fits exactly.
-> +	 *
-> +	 * We use fewer args here since BPF_SNPRINTF macro has a limit,
-> +	 * but this validates the format string parsing path.
-> +	 */
-> +	/* 11 x %d + 1 x %pI4 = 12 args (BPF_SNPRINTF max) */
-> +	near_overflow_ret = BPF_SNPRINTF(NULL, 0,
-> +		"%d %d %d %d %d %d %d %d %d %d %d %pI4",
-> +		1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
-> +		&ip4_worst);
-> +
-> +	return 0;
+> +	for (int i =3D 0; i < n; i++)
+> +		if (btf_id =3D=3D special_kfunc_list[kfuncs[i]])
+> +			return true;
+> +	return false;
 > +}
 > +
-> +char _license[] SEC("license") = "GPL";
-> -- 
-> 2.52.0
+>  static bool is_task_work_add_kfunc(u32 func_id)
+>  {
+>  	return func_id =3D=3D special_kfunc_list[KF_bpf_task_work_schedule_sign=
+al] ||
+> @@ -13038,22 +13085,14 @@ static int check_reg_allocation_locked(struct b=
+pf_verifier_env *env, struct bpf_
+> =20
+>  static bool is_bpf_list_api_kfunc(u32 btf_id)
+>  {
+> -	return btf_id =3D=3D special_kfunc_list[KF_bpf_list_push_front_impl] ||
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_list_push_back_impl] ||
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_list_pop_front] ||
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_list_pop_back] ||
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_list_front] ||
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_list_back];
+> +	return btf_id_in_kfunc_table(btf_id, bpf_list_api_kfuncs,
+> +				     ARRAY_SIZE(bpf_list_api_kfuncs));
+>  }
+> =20
+>  static bool is_bpf_rbtree_api_kfunc(u32 btf_id)
+>  {
+> -	return btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_add_impl] ||
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_remove] ||
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_first] ||
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_root] ||
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_left] ||
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_right];
+> +	return btf_id_in_kfunc_table(btf_id, bpf_rbtree_api_kfuncs,
+> +				     ARRAY_SIZE(bpf_rbtree_api_kfuncs));
+>  }
+> =20
+>  static bool is_bpf_iter_num_api_kfunc(u32 btf_id)
+> @@ -13071,10 +13110,8 @@ static bool is_bpf_graph_api_kfunc(u32 btf_id)
+> =20
+>  static bool is_bpf_res_spin_lock_kfunc(u32 btf_id)
+>  {
+> -	return btf_id =3D=3D special_kfunc_list[KF_bpf_res_spin_lock] ||
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_res_spin_unlock] ||
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_res_spin_lock_irqsave] |=
+|
+> -	       btf_id =3D=3D special_kfunc_list[KF_bpf_res_spin_unlock_irqresto=
+re];
+> +	return btf_id_in_kfunc_table(btf_id, bpf_res_spin_lock_kfuncs,
+> +				     ARRAY_SIZE(bpf_res_spin_lock_kfuncs));
+>  }
+> =20
+>  static bool is_bpf_arena_kfunc(u32 btf_id)
+> @@ -13163,14 +13200,12 @@ static bool check_kfunc_is_graph_node_api(struc=
+t bpf_verifier_env *env,
+> =20
+>  	switch (node_field_type) {
+>  	case BPF_LIST_NODE:
+> -		ret =3D (kfunc_btf_id =3D=3D special_kfunc_list[KF_bpf_list_push_front=
+_impl] ||
+> -		       kfunc_btf_id =3D=3D special_kfunc_list[KF_bpf_list_push_back_im=
+pl]);
+> +		ret =3D btf_id_in_kfunc_table(kfunc_btf_id, bpf_list_node_api_kfuncs,
+> +					    ARRAY_SIZE(bpf_list_node_api_kfuncs));
+>  		break;
+>  	case BPF_RB_NODE:
+> -		ret =3D (kfunc_btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_remove] =
+||
+> -		       kfunc_btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_add_impl] =
+||
+> -		       kfunc_btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_left] ||
+> -		       kfunc_btf_id =3D=3D special_kfunc_list[KF_bpf_rbtree_right]);
+> +		ret =3D btf_id_in_kfunc_table(kfunc_btf_id, bpf_rbtree_node_api_kfuncs=
+,
+> +					    ARRAY_SIZE(bpf_rbtree_node_api_kfuncs));
+>  		break;
+>  	default:
+>  		verbose(env, "verifier internal error: unexpected graph node argument =
+type %s\n",
+
