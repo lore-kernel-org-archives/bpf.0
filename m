@@ -1,109 +1,178 @@
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F413239DBF4
-	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 07:10:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.182
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773904239; cv=pass; b=BRxKRW9W2yeO1qB2e1611Dh4cJPAug/ve45Q2gVMWRgsRbRf1tdwAj3pwlgRg4fFivj1WmnGrtZRsFz/fXyw1t9AF0aPQ22EZDVmBwCOfWKLOJZ6w0XFoX9iEvKcTZi8Xb83eSyrwMhYkL03unn/YDdphaGUo/gDPAOHsTdTY8A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773904239; c=relaxed/simple;
-	bh=zWvhRKm9Tcl1X1tv6vaA458EdhxRENwhSAcKjNT7vl4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Gl5ViPw2KnvwbGo1Xbp2fHhXtq0yJP515xfOEtUPQGrCnG4qildKYRVfn3tBp2MtZJeCYbJd/Iibv5p2Bbu3gGGhmt0DafaWjt45I0URx2hkezBbyY5RKnOkQvD8R+LvZ/pimwbihH8MBgiJsYBz5h9b7fSXzUJ7KU9HOfFu1X8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B6byNfin; arc=pass smtp.client-ip=209.85.128.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56AC5368951
+	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 07:24:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773905097; cv=none; b=jtSR1BAsGVYuNgo+g6EVLlres9hmqOZeHcWaMj8kEta14UVQdMk1zUC6TWra9Qft1CZRS+Hq0sr/828yZq0xTpVswcBhUK2jEuBV8qeBaUqPiASrSWJQfcyr9RG9Rq8X44pTuFpXen+7RGv0n29UsUaaJLGGckKjSvgeqoutdlg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773905097; c=relaxed/simple;
+	bh=PDKYlk7HuKHwiEwYgFUVdtDrZ6lneCyWxO0pHbY/gZg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=qvc9dPDWyA8Mal3Jhuu6iGZoTEbK1pYJFWDfZWpZzSFEsQF6RaBnNx8QJ0sdT4T9CMv3C/ClWoeStC1jryTGONvJ4suix9lMTCNtqWVIKRbBRWI6feejrTH7ygfsxvbm5YXAqXHsZ5w+8bkBZ8PUdQJE1eymNvfEUIrH9sIdJBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xo+Zqvfe; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B6byNfin"
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-79628fb5c05so2898887b3.2
-        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 00:10:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773904237; cv=none;
-        d=google.com; s=arc-20240605;
-        b=MZh2sBNmp3xDeGEjGQDzt3T15bjP8wPXxiM/fA8BAxL8LklX5UD6tFFk5ZoTiw8Unt
-         Y9pAic5EjHF6uKjjqLPlKCrpfq+ATCP8ngN7QPMNjnQRJbj8YTs+tO/j2sXb2S/Ku7ku
-         ywkTFFWZffwxcrUgBDvBPB7CBTQ7fWU+sm1OOpDDaKArRmafgE97E7mryU5O/h/5IGXB
-         L6uuu+pQnnv5ggx2y9brg2pDkf4AQuU54jok9r3Dy5G7tJQYeMHG7yLWZK/gCWNingr8
-         45VYO98+LlyXpinNpzek5DY3sKeU8wtOO1tJhT49kPq5zQ10rfKy6ByMMpr/lKkVmzpM
-         js8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=zWvhRKm9Tcl1X1tv6vaA458EdhxRENwhSAcKjNT7vl4=;
-        fh=RHmfy/fR7YphbOFkm22w7WoUyt1a0kp5gMK/lJRF3IY=;
-        b=luZra2fNPtRsnbi/+6xnp85d4Va1yCRqTNElcI4X/ZEzM+M/0Dfrq9mzCAHmJbmAnx
-         jSyPV/skusUovi7ch0rZ+d9QmhYjgK+evqnn28dIEUczWJp2N0ssdzv8aQJ0IKP1kova
-         LymGkNca1qZai4eFFoAZC9PQNepzm8HwRmIB+TL2ttp0ydsOQeE54qlG8lsNdcRMvOqe
-         VeQ6jWdYpSDXCS4K3QGD0OFDSiLhoT1O99rCWZvgdyNLA9UZrkoK5mZm5d9K3sKwNXZT
-         8/oaC3hi/e0coIW1dXNpJ1FB18G0lpkbBRcYP/G+3QUqbqAMwWuMG2wD79wT2d69XfAk
-         JG6g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xo+Zqvfe"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2b04e6a989eso4446785ad.3
+        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 00:24:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773904237; x=1774509037; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zWvhRKm9Tcl1X1tv6vaA458EdhxRENwhSAcKjNT7vl4=;
-        b=B6byNfinnOT5Y0KIw7VscQIYRJhQqXkOIbkmFxW4eWVAElgUgH3i54SZHJryEbzaUm
-         msP0lrPF3us4aMYhjDwE7TKdJUUxPUNAj3IsD5q5esd9FxV4y6YfqstmxW/29w/WBoty
-         xvplINXFuNq+rMViv60SVutsOTW+5QULkcPYwl8WXDoN/U/MzoJsolTBWj4SB3nJSAIA
-         pZQaqLG4jlBQVJ18Sp6ANnA8dO+GbC4Kr8rhFgYRvJGgZ3hDsbx2Osl1Ea4u00N/yV60
-         jOHQ9OfJsk7eFVXkHJjxyXHgmkkl9TgTLQbd8FCPZMy+eJoCLPAq0n8ijPh8mgKC1OZA
-         n7ag==
+        d=gmail.com; s=20230601; t=1773905095; x=1774509895; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=PDKYlk7HuKHwiEwYgFUVdtDrZ6lneCyWxO0pHbY/gZg=;
+        b=Xo+ZqvfeKS0FMMJCQ17NcbO411uBfzwZkOXQ9URh65emazpCbqZi7QAv5NIEMPhWTE
+         KOdBZvNQhIAHNUTEeTrewhRoisSRC2NfNpdDjBPrFaqWnb5mcqWR23rJ+h57BlQjPKOc
+         TzhXQrrlvYwA23WkT+DHDcEr/HzYOxRnyTQnTJDQ4mkeZ0hv4z2PSYKkaady0QzmdsOK
+         Yhpnfmo5STsrU5G//uAr5B/MntvlL3sIFfTKEPlPhKynQ9dY5oVbk9+xNKUPKDfRa5JI
+         Ni727de1Boa81YC2xxaUea08+Jr0uZSijNCpJeLTI6PW6Q6gu1R+e4A41GL7ebXuLDxc
+         p8lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773904237; x=1774509037;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=zWvhRKm9Tcl1X1tv6vaA458EdhxRENwhSAcKjNT7vl4=;
-        b=H2RFWrirt9Cw6JX76gB7cUFok8AsqC5/5+fRjj4JzbadaeKY02a+V2CREGzwCtIyGI
-         /P/TpyGOPVLvRvrKQMesOvyjzl+YrvxM5UXHuy5U7q5xxdE1LUMAMYfC2fXRy6z1gKPU
-         d7bEJxJwv8trsB0p7BE216CTuB9EdKe4/rLSEn7My37Sa2C8Mj4Wpjjr/soahAZTNRI0
-         1Km1sVnX131CsqMGhdX69QKvpjgtH3QWoVOQeXJufDjIggwPMX+vcRqRXFIyczeShB4D
-         37Xn2F9Uwm3szngZUV5ecKXSHmCma/qOcRzzFUhrrYOVfmTEiZVfflA+fRyr5Gv49m/b
-         YaEw==
-X-Gm-Message-State: AOJu0Yz1DFglQ8fg8Q8E+NH7Rfe8vpddZA6PAbUWYBoEvd6N+gjf9hou
-	grMQ5V5uH74C2UVgjp34y8Q6ovsAU1waE7NfIjwJz1QGzcNMiIbv7hobU47dMWMiQWwRl2oXBT4
-	g/yO4/KR847qEF5bFewJgtfy6TiK7hbI=
-X-Gm-Gg: ATEYQzyTCHNWqRNsZpGKhn1bZlkxAbVQiXHk8ZgvOrdT2jvIZzS6cTNBTuIVjWYVNEf
-	CP2D3+kXdd1/H914oZWI3AFsu99hzR38wSLbqZ5zIE6+LkLkVdqnYFXJYY0GZGbHIrlg4wlMNrK
-	i2qo1GpmPhQdY0gCeTh51DjUXXIfFBloPZ8DJUzObP+mDwLLobE15V3090+W4j7E4tCJEjkQ3In
-	QgGCefziI8gzZ83wlXVDvlLeujdnpODDaYbc9HxE7aE7iWS4JKrmkbyExLPC11A/0bzQUrv4xOf
-	WnOxvOo=
-X-Received: by 2002:a05:690c:a00a:b0:799:1d0a:aca8 with SMTP id
- 00721157ae682-79a718b1697mr52989017b3.19.1773904237044; Thu, 19 Mar 2026
- 00:10:37 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1773905095; x=1774509895;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PDKYlk7HuKHwiEwYgFUVdtDrZ6lneCyWxO0pHbY/gZg=;
+        b=DdYzR78I7chv3x69b03UoG41cbx2UE2lonEO1EDDKLzMuReTWRNaqK3PqstBpo81LH
+         KzdDeNa/5PSR8cRwxW8d3U6isAa6PzC9K9NrRoqVYCXzdvE3Vhh8OzQ0HAzY3TcFU3/Q
+         kJVQAm3IfjHlEkUkO2s7CjXX957JKELeywV2k5K2bVWsN1kzDbdpnJPAp39wU8PwdbF2
+         6bw8Ny9vohcHR6taPbu65/oh016PBVAT/eUvVfAO0T46XIm/mq50tDoLyaE+10bhU+WW
+         NYqm4jFumNAdS4GJmwYmi4wGkjWcZzYddiQKf5JtHjcYm/pa5M3jGIV4x/KbL3TJD8uq
+         vP8g==
+X-Forwarded-Encrypted: i=1; AJvYcCVyEX8hYASzXn8+UlmB9FNAAPWyLxXgFNxZEPOEORaEAFwKHkRI6XYiMQ8tfusBCg/9+Q4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxI8xQsQjbWVQBo/bIkc/uW+8C/D+6sfz1TCazUQGrU9NLvsYEF
+	xR/ueK6IQcjoECXU6wXOub+AsShqfNZPMA8DVxsi+j5aqLSjkuGjYeff
+X-Gm-Gg: ATEYQzwS/IEXr5OtSvLoAs1Xooqlm2lHxJEHCrmqE/aHU7GZLcnXZjjeyyo+TiCTOCm
+	MnBRRrniZTrlD5gquGKbnat9Y0eKqBTEQMKEQwrz1L0roQI35+GvslFYe2zGeHna4vJyZbncih5
+	UPw1vclvatmlGMgsyIbiufwggd/0zIa6n28UgAbquvzxkIxaStyCs01uJ3wCx1kLMcBl6ibNEvc
+	X2ePHScDATGFU2/XsAoSCJ/FCzfuMhnuj1/95wB32tHrD2/2yLkXeTiaV63oDeINN5/KVb7qwN1
+	FA8+Hyyh2x73kQlAY2ppORf95nnWFoBjQ15lCVLYkfGs4/xQcYvLAf2ODOTtGAViQhcOVgjrfJV
+	qjioffvkpVRbtVuNI1XtaWezZbCmoFBlnfyohEi2Kl+R3Sr+VMyYQvICdza27yPQvx0Qi/VYm1+
+	EwStKh05Eip2cen/i8BToAEDhRTXIxB0C8djykunBoXpMhw43O8a4=
+X-Received: by 2002:a17:903:984:b0:2b0:55cf:5e9c with SMTP id d9443c01a7336-2b06e394ab3mr60315105ad.30.1773905094624;
+        Thu, 19 Mar 2026 00:24:54 -0700 (PDT)
+Received: from [192.168.0.56] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b06e437ed8sm48478105ad.27.2026.03.19.00.24.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Mar 2026 00:24:53 -0700 (PDT)
+Message-ID: <9a6dd99e31bae75da12eaa18ddc7424534d13621.camel@gmail.com>
+Subject: Re: [PATCH] bpf: Simplify tnum_step()
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Hao Sun <sunhao.th@gmail.com>, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	john.fastabend@gmail.com, martin.lau@linux.dev, linux-kernel@vger.kernel.org
+Date: Thu, 19 Mar 2026 00:24:50 -0700
+In-Reply-To: <20260318171906.53174-1-hao.sun@inf.ethz.ch>
+References: <20260318171906.53174-1-hao.sun@inf.ethz.ch>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260318113200.303824-1-sun.jian.kdev@gmail.com> <m2fr5xnwkx.fsf@kernel.org>
-In-Reply-To: <m2fr5xnwkx.fsf@kernel.org>
-From: sun jian <sun.jian.kdev@gmail.com>
-Date: Thu, 19 Mar 2026 15:10:28 +0800
-X-Gm-Features: AaiRm51Nw-GNS-Z4EKRdhonvG0llaMuqhIP8-0ju-hgfMR5TkAvsi7GUwTF_LjM
-Message-ID: <CABFUUZEfGWqL97=_yyJEcRNfLRzQeVvRvvXXQN4gcw_htHvm5w@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: add a 32-bit bounds deduction case
-To: Puranjay Mohan <puranjay@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	paul.chaignon@gmail.com, shuah@kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 18, 2026 at 8:36=E2=80=AFPM Puranjay Mohan <puranjay@kernel.org=
-> wrote:
->
->
-> No new coverage is added.
-Agreed.
-I'll drop this patch and revisit it later if I come up with a real
-two-overlap case.
+On Wed, 2026-03-18 at 18:19 +0100, Hao Sun wrote:
+> Simplify tnum_step() from a 10-variable algorithm into a straight
+> line sequence of bitwise operations.
+>=20
+> tnum_step(): Given a tnum `(tval, tmask)` where `tval & tmask =3D=3D 0`,
+> and a value `z` with `tval =E2=89=A4 z < (tval | tmask)`, find the smalle=
+st
+> `r > z`, a tnum-satisfying value, i.e., `r & ~tmask =3D=3D tval`.
+>=20
+> Every tnum-satisfying value has the form tval | s where s is a subset
+> of tmask bits (s & ~tmask =3D=3D 0).=C2=A0 Since tval and tmask are disjo=
+int:
+>=20
+> =C2=A0=C2=A0=C2=A0 tval | s=C2=A0 =3D=C2=A0 tval + s
+>=20
+> Similarly z =3D tval + d where d =3D z - tval, so r > z becomes:
+>=20
+> =C2=A0=C2=A0=C2=A0 tval + s=C2=A0 >=C2=A0 tval + d
+> =C2=A0=C2=A0=C2=A0 s > d
+>=20
+> The problem reduces to: find the smallest s, a subset of tmask, such
+> that s > d.
+>=20
+> Notice that `s` must be a subset of tmask, the problem now is simplified.
+>=20
+> The mask bits of `d` form a "counter" that we want to increment by one,
+> but the counter has gaps at the fixed-bit positions.=C2=A0 A normal +1 wo=
+uld
+> stop at the first 0-bit it meets; we need it to skip over fixed-bit
+> gaps and land on the next mask bit.
+>=20
+> Step 1 -- plug the gaps:
+>=20
+> =C2=A0=C2=A0=C2=A0 d | carry_mask | ~tmask
+>=20
+> =C2=A0 - ~tmask fills all fixed-bit positions with 1.
+> =C2=A0 - carry_mask =3D (1 << fls64(d & ~tmask)) - 1 fills all positions
+> =C2=A0=C2=A0=C2=A0 (including mask positions) below the highest non-mask =
+bit of d.
+>=20
+> After this, the only remaining 0s are mask bits above the highest
+> non-mask bit of d where d is also 0 -- exactly the positions where
+> the carry can validly land.
+>=20
+> Step 2 -- increment:
+>=20
+> =C2=A0=C2=A0=C2=A0 (d | carry_mask | ~tmask) + 1
+>=20
+> Adding 1 flips all trailing 1s to 0 and sets the first 0 to 1.=C2=A0 Sinc=
+e
+> every gap has been plugged, that first 0 is guaranteed to be a mask bit
+> above all non-mask bits of d.
+>=20
+> Step 3 -- mask:
+>=20
+> =C2=A0=C2=A0=C2=A0 ((d | carry_mask | ~tmask) + 1) & tmask
+>=20
+> Strip the scaffolding, keeping only mask bits.=C2=A0 Call the result inc.
+>=20
+> Step 4 -- result:
+>=20
+> =C2=A0=C2=A0=C2=A0 tval | inc
+>=20
+> Reattach the fixed bits.
+>=20
+> A simple 8-bit example:
+> =C2=A0=C2=A0=C2=A0 tmask:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 1=C2=
+=A0 1=C2=A0 0=C2=A0 1=C2=A0 0=C2=A0 1=C2=A0 1=C2=A0 0
+> =C2=A0=C2=A0=C2=A0 d:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 1=C2=A0 0=C2=A0 1=C2=A0 0=C2=A0 0=C2=A0 0=C2=A0 1=C2=A0 0=
+=C2=A0=C2=A0=C2=A0=C2=A0 (d =3D 162)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 non-mask=
+ 1 at bit 5
+>=20
+> With carry_mask =3D 0b00111111 (smeared from bit 5):
+>=20
+> =C2=A0=C2=A0=C2=A0 d|carry|~tm=C2=A0=C2=A0 1=C2=A0 0=C2=A0 1=C2=A0 1=C2=
+=A0 1=C2=A0 1=C2=A0 1=C2=A0 1
+> =C2=A0=C2=A0=C2=A0 + 1=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 1=C2=A0 1=C2=A0 0=C2=A0 0=C2=A0 0=C2=A0 0=C2=A0 0=C2=A0 0
+> =C2=A0=C2=A0=C2=A0 & tmask=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 1=C2=A0 1=
+=C2=A0 0=C2=A0 0=C2=A0 0=C2=A0 0=C2=A0 0=C2=A0 0
+>=20
+> The patch passes my local test: test_verifier, test_prog for
+> `-t verifier` and `-t reg_bounds`.
+>=20
+> Signed-off-by: Hao Sun <hao.sun@inf.ethz.ch>
 
-Thanks for your review.
+I hacked a cbmc test in [1] and the checker says that the new function
+performs according to specification (and identically to old function).
 
-Regards,
-Sun Jian
+[1] https://github.com/eddyz87/tnum-step-verif/blob/master/main.c
+
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+
+[...]
