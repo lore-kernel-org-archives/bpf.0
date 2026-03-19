@@ -1,120 +1,155 @@
-Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AE2D382296
-	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 09:58:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.67
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773914302; cv=pass; b=ufXJSD+fXqjixyVgsAof73B8KsD5Prge+/FWJat1qHCwOk/JW1aUL2tC494zxxZe1tf3iIFaj4n+5POEaM3+EtKHzLZvxU/JB+iYUKjJ7byO+SE8ajfoVv2LAKpg9zy3QNQnvmG2MiVg5cSv/0b9K8oIZIfvX2Tn0U0xHjqP7jk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773914302; c=relaxed/simple;
-	bh=RdcyDwFedRwGBiSQz876ReW4rzxY/yJG8zzpS6teUUs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IE/JXFAWuuiKfDo/CtdSC/guysqJMh5w4AYdA2P0DYEO4EV1kN4u6eQf3yzXSSPhwpwjvapxRt7FrQ7J6QMw/d8F1U7YZb+h0SY2xqnH6Qobk7Pbf3hIk/zTcTGpTebXRsMFVinfhQofsnBkFR1CWS9rNyIEgU4UTIbWT4KLQ6c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jCew88sS; arc=pass smtp.client-ip=209.85.221.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F71133F8C4
+	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 10:21:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773915675; cv=none; b=GuhgRdPBOu0N77LeFV9oMXGfA3e5bPByTvF2cr4x0+7MtkayePJUwiPywI+bTa09cmFbz2lUFNmVnBmqPY+nitanBYzA+U+bEo7TkNDpkWn4YzxwsDwrpIzvKDkhE9luNkiiQoRxGwoirsbcW8MeAdPEXxg6Z8tT96L0lq4A+6k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773915675; c=relaxed/simple;
+	bh=o2PYO+2b60S/GjJl+yXYHFr03aIZxeFIp6+uBk3T+Uw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GFZn69kDrvrO+kSBUyEgRht5pQFzTyHaQIga9A7sYXRX//f9iIDuqLdqEfwsGQENwU8BkCHZQxkECSsQgUaQg9fA9BOkHIJcV41/aT8ICbp+uVvlkIMcWr8GNFCIT/FFhMCMUSgeSHu9KDirJfIePG+rkttrcet1SKkFPRYJNd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kN9glXIu; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jCew88sS"
-Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-439d8df7620so315767f8f.0
-        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 02:58:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773914294; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Ohe3rHVUdfnECkZf/ZuEDfNfaywXBL6ocJHBLnDTPtZnvGdrj40itUs4ZKd7rmMwDG
-         E9JSjkjdX5dTjMjq+b6eec8Z7sScYZDDGWAFI9dS+HuCwe4cRl8BRxpYlUnBrJXFBDbJ
-         Yf8W+5ElYPOp0zVDiKd6Jtb0gHAutcOPaAJqHUUKYd5Pu7wmPpsxOX3wtoPBGupc3dUW
-         w6NHnml37nz1NX3wNg2Kp98VN9Jbe2mtYGcOjrzixQlhgEPdDnMAjSQxbzystl42eGXk
-         o7oQpS5HBYc6Tib3SVj8WS0U7kzeQtC4Oc6WjmbtLyCAwJwlJ+3/V6e7E2qZ1AMHL2re
-         V3KA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=RdcyDwFedRwGBiSQz876ReW4rzxY/yJG8zzpS6teUUs=;
-        fh=9rZEFXSj+Sx7COWuTKX+eSx5GFGRjzIRjZ8kA+rKfks=;
-        b=MgfVcyP7ucVPHzX6roWvKXmBgzhOuzHnCCOa7ByvUDQmx+FSbuqJeBwrxb+H0cwgwJ
-         wwt5fDupJeKjQcdie48fAKN88PD9FXJWfQlt3+EdYYjy80g2hSDXx8PLHGPg/xHhXLte
-         VR2Yqgyyn3eLIQlY1df+zKXnWZnXlHJVdqCdqHcyt4cS5Wver+6off5IAH+2O3pmWGFR
-         HUo8pVi7IwU4tjgUQj4VhAxhgmpI81TqBKYCXGrzA/9Kfvj2/ahrhyvu/fdAWkLeiCoB
-         KUfS24+OMtTZD/VRrT9hhNx+vXeF0+Y0MFQvn2hjKiqWTT6lvrbPrg6ssC/kZaK1guQ7
-         LF/A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kN9glXIu"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-48557c8ad47so6065135e9.0
+        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 03:21:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773914294; x=1774519094; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RdcyDwFedRwGBiSQz876ReW4rzxY/yJG8zzpS6teUUs=;
-        b=jCew88sSrcSmBsu3PfIP0bdggYYRYzeMD7fDFScZAGJomMCT7kWIiNbuMMHxnNLQnF
-         MsbyRGz/NXty4eb4BQ9lRmtPYUrOSHZD0ZqDnjAckAgJR5M+/tEMNmBkOz50W0Mdw60R
-         yAfeQDvywiYwW7960YTVLtjy9oUVcHFNHyJ5hkslRmsc09Dj3E+NJibIhao61J1f4SWf
-         bXkUN5jq/RKJUEmY4oh4xPgveruHcfI/LcRm8DvNCNe6H2/5oLE2jSaPzkmud4INm4h0
-         rNN4fqzAlyYTQiWjBR0WS5wzwkO4STmjk0qfqmqY4e14kfVOM7MuoW9msYqn3n7nSjEn
-         fxRg==
+        d=gmail.com; s=20230601; t=1773915669; x=1774520469; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vg22zT0Bx/qgk/yPL7dpvN4/kLV2NojO5WEGyzmt93E=;
+        b=kN9glXIuhnH9RlVtxodAu4iCBZembYmbr3/bDI/oWFvA3uUYODE7s/mjg25iLu/rcE
+         KRJWAR8VyZ1eXq4rpCPEy/mSof8GRlaV09uwOBJYIwE7NpG0ripK+MwynM5Wq2AQqpZK
+         0ukBqZBmG3RrfuCJ2l2um1i81tyioUjWRv2fscAOAPQd2CO3jS2fnHmta2dOXIwdz/yF
+         u+Ha+PCL9A+QgVepya49l06j5CDPEej3vGkZHZSGBlgHKFGNUc/H2W5MX5htzyQTogKF
+         Mw0iJpvdQRQGj1Ijzp2dqkz38EgIYfDBn139DLBHouSJGuukV/5WmB+rhgxfqipIpb9G
+         Mosg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773914294; x=1774519094;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RdcyDwFedRwGBiSQz876ReW4rzxY/yJG8zzpS6teUUs=;
-        b=IZSytduFjy6FpD3QFblBCXrU8qk4QxeMrtcLwHvM1pC9HUeOYPeQEMzOUamqPxmzgv
-         bUfjv5RPDMDmUnisL3VNZvFPaWXv7PDaujqLa+xKVnk5gZc5+j5Qgch0BR+asHCw0/2+
-         AAVaCU8UowwveH7MaFTcfhSfeCMKC9u6l7PNplf4h4pqEDvsmfD4Okw3o4u0OP6huhat
-         pIAvGYV/oQiUNFiPD8CB/xudW8xR2cELCsI8G/kxBfqULY6UYPuaYVWQXNtbaQiaJngC
-         N9rxAGwNht2262WkRp4cJznpI3GaRibe1VXFQnMdABGbKpEVEUteD4i/vqpv8niahMBI
-         kYrQ==
-X-Gm-Message-State: AOJu0YzEqb2tKspjmniQMwTsoGv/MxvXslo5MYrQs3M7UnRu4xUndrRE
-	eVP3UMByK1Yv4SoXIxowdX3XmGlXgJ7arZkq8ZZqr1wR4YOgLUNL2sZp38RgV1LowOqbpwwYQGf
-	Ft9vUc5OkMpek5MaFlKTkpLZMjyE7RN4=
-X-Gm-Gg: ATEYQzxq/p3dCo9BImI6nnamyUzOsc8mq+Pw+WSRJ6pycO1qflhIFf8+wofIZEbzIFR
-	n2oC1Hv6ui90p7s5vUiu7JRwWWcjuf4/PuPZu+z6fFNSYpGLzUnEwBOkWCEGpGZ3WRIbRdwo8bG
-	9mq3HoZ2hJnC81jI2Fres/ZQtZ9GUxBQRtZmUicAOBLhZZ7jSjZc4p2J9eH9K/xr+NgvMf9A3L2
-	nM+xZ0UsUMF1lofKKt3MZMmOJlhZEg3EaTS95d1VUfi+vkDtp6dG2Qe1r0EdwquFxddIgVXNIlz
-	LKBC743ju5lRZUswrsI98OeNg5Iz+J/Hk6MTgJPo1C9lQFjCn9GBoAtRnlM=
-X-Received: by 2002:a05:6000:22c8:b0:439:ac98:751a with SMTP id
- ffacd0b85a97d-43b527c1fbdmr10800081f8f.34.1773914293266; Thu, 19 Mar 2026
- 02:58:13 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1773915669; x=1774520469;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vg22zT0Bx/qgk/yPL7dpvN4/kLV2NojO5WEGyzmt93E=;
+        b=LyIN4SOXYOnPB+FWcY+gf3ddNaoBnQNybN9Cltr+zFHINkRQmMBrV4ZfLPtAL6LTPs
+         oOT7fZfdHYw3mhYilKvbK7abzFNxbjJ4D6cMj7psGowlFvrYtcAxGIxZCZkphGipAcqM
+         qIY5UpskxPCyR1PX3TcbMEj+5Zzjg/ZiSGTB7ODzotquoNx4pWhcOJM/UnCU/yWFpVhe
+         EFvbxHie5ZXa0FTCRWIck/Oxji4xkvTfNI9WXZwJOrosGUs0xfOFEKLbwc0Nc6dxv8vr
+         USRVqwkAFVdCsC9L+2ASk5cCLs3lMKzT4ELN4EXZWwUkSt0lHHRQMYEAhV5z7lU4220J
+         hj8A==
+X-Forwarded-Encrypted: i=1; AJvYcCU/f+bVCJRV/ddQ4mCX8180OsCsLaIP3PkLT8UtLHFFXdvmOryDAt4Z4lp9fuhqlF67ZhM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzh6ujfmjRYE/JR3S5q4pV8n6jJwJ7xeVACgWDfvW4jm87A0c5T
+	SbbVUY9BIm09n6K7yOdqj/okfhDtPlq/WCFjM8J2Xphkckc8KamGcZlP
+X-Gm-Gg: ATEYQzyMv8nDfS/JIw+WFnB1tNd5CYmNqe0Cd5Qb2KAeM78PNWIHdnHsMjbYBsHci2R
+	DF2J7Yx0Fk2yVpT9Kyvr5CE9znitGm1YWdiLmaP/HOSFBYPjOdSjnZJrRpKCkwfOtUib75muez8
+	1ukKyN7In3GE6lzfWmEWv/VjcnHXNb4g/01VQs4ntowvlPHbuF90Kjmr6WHBLAX8flpNPAaP7Bw
+	TZrfmO+ibxl0d0+d9nsL8v39DvpAS3jnHziYPqH8NcCJgj1aSonQmuUl6i5irikQzAXAHnJTA3V
+	kTvKRtGmDZO+bi9waTN7dtOdPy+IC7QcDuRBm+FKt42ndmh46wDYICXMzy4xdwwTSDd98QrwGD2
+	1dt+mbUU4DjdqKmemWeTu4hP2tCHb/oKwVGofK5osOisTkLRt/EAWdS17lPTbcDFn8cJfDIUg1o
+	tTM/k86TYExqY6ZdPdMFuRIL7oi5OrqiR36upJKfSTDyqFx/hQitaig6jGj9iw0bhL2kExuMl79
+	FNY7Xt7IM6v8i+zF4l4894Amn0f4ail+DmwRgakHliedUljJ860DDt6qc4cK/A=
+X-Received: by 2002:a05:600c:3551:b0:485:9a50:3369 with SMTP id 5b1f17b1804b1-486f456fe98mr114147895e9.29.1773915669043;
+        Thu, 19 Mar 2026 03:21:09 -0700 (PDT)
+Received: from mail.gmail.com (lfbn-ren-1-685-61.w81-53.abo.wanadoo.fr. [81.53.253.61])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486f4b74abdsm65073905e9.5.2026.03.19.03.21.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Mar 2026 03:21:08 -0700 (PDT)
+Date: Thu, 19 Mar 2026 11:21:06 +0100
+From: Paul Chaignon <paul.chaignon@gmail.com>
+To: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Cc: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
+	ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+	martin.lau@linux.dev, kernel-team@fb.com, yonghong.song@linux.dev,
+	emil@etsalapatis.com, arighi@nvidia.com
+Subject: Re: [PATCH bpf v2 1/2] bpf: refine u32/s32 bounds when ranges cross
+ min/max boundary
+Message-ID: <abvOEmcYyEcxl4O-@mail.gmail.com>
+References: <20260305-bpf-32-bit-range-overflow-v2-0-7169206a3041@gmail.com>
+ <20260305-bpf-32-bit-range-overflow-v2-1-7169206a3041@gmail.com>
+ <aaocJ3gJr7019urU@Tunnel>
+ <fd6a7d7fc0eee70b0b3053b1db34e9e986b2a067.camel@gmail.com>
+ <aaoevIcblUpMyN3U@Tunnel>
+ <bnw5mn5vwgezvhvzotrqcxfq5xixczjgzc2gj42565vnod5aai@rbwkdbuz5t3d>
+ <abl1V9B56HSCKh3H@mail.gmail.com>
+ <vnpbticzhrf4ke7xo6dklqipfstg5p62ccouurkxb66maotip2@3aexbucdvrr7>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260318174327.3151925-1-puranjay@kernel.org> <20260318174327.3151925-4-puranjay@kernel.org>
-In-Reply-To: <20260318174327.3151925-4-puranjay@kernel.org>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Thu, 19 Mar 2026 10:57:37 +0100
-X-Gm-Features: AaiRm52If6jbfzqmAHRnualZj2AHDEeCFUimm4kZYQBNwP2aTm9rqDosE11jDq4
-Message-ID: <CAP01T74mcBrzusT-RtzFQdhrbkw+k=es4MCF6aS14mBux37_vA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 3/3] bpf: Consolidate sleepable checks in check_func_call()
-To: Puranjay Mohan <puranjay@kernel.org>
-Cc: bpf@vger.kernel.org, Puranjay Mohan <puranjay12@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <vnpbticzhrf4ke7xo6dklqipfstg5p62ccouurkxb66maotip2@3aexbucdvrr7>
 
-On Wed, 18 Mar 2026 at 18:43, Puranjay Mohan <puranjay@kernel.org> wrote:
->
-> The sleepable context check for global function calls in
-> check_func_call() open-codes the same checks that in_sleepable_context()
-> already performs. Replace the open-coded check with a call to
-> in_sleepable_context() and use non_sleepable_context_description() for
-> the error message, consistent with check_helper_call() and
-> check_kfunc_call().
->
-> Note that in_sleepable_context() also checks active_locks, which
-> overlaps with the existing active_locks check above it. However, the two
-> checks serve different purposes: the active_locks check rejects all
-> global function calls while holding a lock (not just sleepable ones), so
-> it must remain as a separate guard.
->
-> Update the expected error messages in the irq and preempt_lock selftests
-> to match.
->
-> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-> ---
+On Thu, Mar 19, 2026 at 03:03:07PM +0800, Shung-Hsi Yu wrote:
+> On Tue, Mar 17, 2026 at 04:37:59PM +0100, Paul Chaignon wrote:
+> > On Thu, Mar 12, 2026 at 02:45:47PM +0800, Shung-Hsi Yu wrote:
+> > > On Fri, Mar 06, 2026 at 01:24:28AM +0100, Paul Chaignon wrote:
+> > > > On Thu, Mar 05, 2026 at 04:18:42PM -0800, Eduard Zingerman wrote:
+> > > > > On Fri, 2026-03-06 at 01:13 +0100, Paul Chaignon wrote:
+> > > > > > On Thu, Mar 05, 2026 at 11:48:22AM -0800, Eduard Zingerman wrote:
+> > > > 
+> > > > [...]
+> > > > 
+> > > > > > > diff --git a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
+> > > > > > > index 0322f817d07be5d003c17dd7cedfa3aa4197678e..04938d0d431b38e086b50fe28b99e4ad2682742e 100644
+> > > > > > > --- a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
+> > > > > > > +++ b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
+> > > > > > > @@ -422,15 +422,69 @@ static bool is_valid_range(enum num_t t, struct range x)
+> > > > 
+> > > > [...]
+> > > > 
+> > > > > > Don't we usually put changes to this file in a separate commit, as for
+> > > > > > test changes in general?
+> > > > > 
+> > > > > W/o this change the reg_bounds.c tests would fail.
+> > > > > So far we tried to keep selftests passing for every commit,
+> > > > > to help with any potential bisecting.
+> > > 
+> > > Similarly we have stable AUTOSEL tends to just pick up kernel/bpf/
+> > > changes and not the selftests ones. e.g. both 76e954155b45 ("bpf:
+> > > Introduce tnum_step to step through tnum's members") and efc11a667878
+> > > ("bpf: Improve bounds when tnum has a single possible value") got picked
+> > > for 6.18.17-rc1, but not 024cea2d647e "selftests/bpf: Avoid
+> > > simplification of crafted bounds test".
+> > 
+> > I can send the selftest backports to the stable ml (unless you already
+> > are on it?)
+> 
+> Requested in https://lore.kernel.org/all/xbjybmha7fdnnm5gn6p6jyppf4ud2r72rfabvej6egg545ozsu@a4qj43d3iu36/
+> 
+> We should be good now.
 
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Thanks!
 
-> [...]
+> 
+> > Do you know if there's anything I could have done differently to have
+> > the selftests picked up? ...
+> 
+> In this specific case above it would to be have the selftest change
+> along with the kernel/bpf/verifier.c changes, all in one commit, like
+> Eduard has reasoned.
+
+I realized after sending that I was probably unclear. I meant anything I
+could have done to have the *new* selftests picked up. From your answer
+below, it sounds like no.
+
+> 
+> > Or maybe something we could change in AUTOSEL?
+> 
+> We can argue that the selftest was dependency that should go together,
+> and that AUTOSEL should pick it up, but IIRC it is design to only pick
+> up dependencies that comes before a commit. OTOH it would be nice to
+> have it try picking up selftests in the same series whenever it picks a
+> commit from there, but that sounds like a bigger ask.
+
+Agree it would be nice but probably too much load for stable, even
+assuming we have a fully-working stable BPF CI :(
+
+> 
+> ...
