@@ -1,102 +1,76 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD3C230FC23
-	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 14:13:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4105030C356
+	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 14:48:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773929637; cv=none; b=j3A59BMqfr7stXvquk5R2Izp5dj2p7YSh6ggwNVcDB7ewfuKaG6TJke3XlHZ32fl0aT0RX6keBUzsEzdmTopNbIawZ9xOKP5qNRc5/tA+DWcm5LSBYMSt6uJj45zSF4Rz0vpGNnur/1MPti0QstwlCOT9jXT+5tmuwyaxFm1gmY=
+	t=1773931684; cv=none; b=s+HW10Ff0rf2HFKRBKrNMGYGaQzUmZgh22Jt8uEq4z9KXbiOyABxETMFYTg1qkdGpK6slPHOLz8nTbgshl50nfnzW6yeAUfmuN1Zto9lVlLYGmCa6kTWodzT1ZBOhMtrdJEgmgRJSNl3MjkRpNNyhE8/R+Vhd1fQODXV5ukene8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773929637; c=relaxed/simple;
-	bh=4zAon2/wL1xkF183JwLxXVvEK05OvlwLI29zwOFhq2E=;
+	s=arc-20240116; t=1773931684; c=relaxed/simple;
+	bh=TQ6tZAv1X/MiSG/35LnRm1f4p+urmkd1+tRCg1aX+AA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rzTwE6LyBzmA6JQ1f06So+hoMrdkt48sNg6riCh6W+6KzBufQYD0xJjTgTsJ8hSZYg/MbJdXOXmU50ugi2orATp/TR5wkjj+p7GrIYdV83Lcp9PjRjRmoAKu/J1eVZyxJcVso9xTv8y/z43hDuA1wrTa/Y83jgFg43ENMwX7/W4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=qJFdgiFw; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=4jpB79yc; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=OrcSAEzL; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=HXVk5/yP; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	 Content-Type:Content-Disposition:In-Reply-To; b=mVvFdswNEu1RWdDVWALaz/v4RRbFxLa6xqe5SgbcOeE8o0AckHanQuaSGyYiwn6pSMXOSNQoOQKjQ4uj8e4J2wXsmmB3EWkvjJapOqVbL2I2RnjuRyXbAJ26pCIn6xjW1e7GRBPwJDVvqHsNeGtyFcB3kNGZ2OjCXGwCNNUgYSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dnZDrRgy; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="qJFdgiFw";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="4jpB79yc";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="OrcSAEzL";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="HXVk5/yP"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 233AB5BD4B;
-	Thu, 19 Mar 2026 14:13:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1773929632; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4fUFXPph0d+U/6GDmGbgLZ/FXBjYuxpYsgD69WTKZEc=;
-	b=qJFdgiFwZof840urwELAyJUPmqr5R5KSb1T4rwYuc7bb8XNbCm/kv+M5FkrKSBEOM1bZiu
-	/MGyuwm/OFnFKmJm/t/Uz/+GbEcAEAQCMtEWioCbgwKOh4DWZ0qNVZOg9g66xDY+m4U+fD
-	w9Xqoe30eNI+goFz62hSwZMzWorThdA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1773929632;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4fUFXPph0d+U/6GDmGbgLZ/FXBjYuxpYsgD69WTKZEc=;
-	b=4jpB79ycXSQsxOkgtV3HKUa6Dm/vQ/wRir8pmFsiYnB6qgK3LbPe12RtulXb4tol7/E3ij
-	faYPra8B4GTfZjDQ==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1773929631; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4fUFXPph0d+U/6GDmGbgLZ/FXBjYuxpYsgD69WTKZEc=;
-	b=OrcSAEzL/6c4UDB40dZmtUkHL2UKN/t418W/3/WLfRE3VUYtttdOTA1LBRs2LexriSZBXr
-	IUCLAcO9QxQoLCNXA0PSitgNb7BC5cuH9t+EXroQLbXGhfbC1mTChSWj64vc6V41FfYy8R
-	mio6pb/J12e+5TPnOnmBoDRex83ce1A=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1773929631;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4fUFXPph0d+U/6GDmGbgLZ/FXBjYuxpYsgD69WTKZEc=;
-	b=HXVk5/yPJtxIjyky0dtujMNvVHE9KONXRU8D1O6wb4LBxoqwDaKPYOnkGEkCrYDJmYyVOA
-	klxEA++oJw6AsaAw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 14B714273B;
-	Thu, 19 Mar 2026 14:13:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id TmUEBZ8EvGlPZwAAD6G6ig
-	(envelope-from <jack@suse.cz>); Thu, 19 Mar 2026 14:13:51 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id C850FA0B32; Thu, 19 Mar 2026 15:13:46 +0100 (CET)
-Date: Thu, 19 Mar 2026 15:13:46 +0100
-From: Jan Kara <jack@suse.cz>
-To: Philipp Hahn <phahn-oss@avm.de>
-Cc: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com, 
-	bpf@vger.kernel.org, ceph-devel@vger.kernel.org, cocci@inria.fr, 
-	dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org, gfs2@lists.linux.dev, 
-	intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev, 
-	kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org, linux-btrfs@vger.kernel.org, 
-	linux-cifs@vger.kernel.org, linux-clk@vger.kernel.org, linux-erofs@lists.ozlabs.org, 
-	linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-hyperv@vger.kernel.org, linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-leds@vger.kernel.org, linux-media@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-mm@kvack.org, linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org, 
-	linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org, linux-phy@lists.infradead.org, 
-	linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org, linux-sound@vger.kernel.org, 
-	linux-stm32@st-md-mailman.stormreply.com, linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org, ntfs3@lists.linux.dev, 
-	samba-technical@lists.samba.org, sched-ext@lists.linux.dev, target-devel@vger.kernel.org, 
-	tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev, Jan Kara <jack@suse.com>
-Subject: Re: [PATCH 12/61] quota: Prefer IS_ERR_OR_NULL over manual NULL check
-Message-ID: <ol2d7c5z7yfyuwo5tyfxurgqedruhr6bzmuv37bx5phhrmmoyh@4zjspbtexid3>
-References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
- <20260310-b4-is_err_or_null-v1-12-bd63b656022d@avm.de>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dnZDrRgy"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-48628ce9ab5so13624135e9.2
+        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 07:48:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773931681; x=1774536481; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3194ASGyEgYHpaXFn0Ug3zQCPiBCKFdTtdy3JOZVwi8=;
+        b=dnZDrRgyX2+JxmALePqhzr2/7SgJtiQzpUZUkUMFfRputLBtSIKS7EMMp06Sq9MO9d
+         5iHwiwYSeZVgjh33sUZAfC75twJw4VVCY0E9X9K5fk4R6CO9tojhKuhczz9PcQ5IhR24
+         kAjCUJBQStdQKbEU6Bn1TF8TkaDrFr1XrSbBIOoR3l9jfxkBNBtCe5r2PxJjNeLTz6EV
+         sNE9LH8kiggPti+QzH0VnruaVn52XyQe0aRnw2Gm6quv0VRR7JEP1tU9XAkzGg8h1Gdq
+         Iy3XGWJzAqv5bYG1PRczDZe0skwvVebj1fp5aBzxh6GR/1vCsEs5dK4cjAys2kaF/ZO3
+         7xWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773931681; x=1774536481;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3194ASGyEgYHpaXFn0Ug3zQCPiBCKFdTtdy3JOZVwi8=;
+        b=VZOOXZxHEUpTMrb8aubs+JbkFc40OkTzYtEeJVOyoHYQGdMeXKk3XBdo4Q6N5UR/Wp
+         XVi/MjfrJ4dHz1QzKlj5teRDF+N/ISYGfnM/Gr09lenGRaMkh2PSONVYznfw87/EPlCh
+         IiLQBXmgZoYSNglFcqIOOG8xYReTnvuw1b+VngSN296CSdpr+4S0iiYGb9Qse793uwJc
+         ysq/YG5GoEjjqhfcb3uGFRJtFXp5uwB7gtj/qgybqu7+DsgNtJ/KbK4LyyDitmMnsQQZ
+         xZjfua3k6tbvUS0ixs1yJDzvVEbfewDyuWu690pSKilw3xVzINB5KL3G+XXoCjaGVRHK
+         97rg==
+X-Forwarded-Encrypted: i=1; AJvYcCWcGUTUKjbs6GTtFDgYb3FGkiSxOYJPt9U+y3Dv39eV7+EsqESw1B3TA0BaIQPulecCh38=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyW7eIsohNpivWHDrIWwAaVY0xtTJU1PTskBu4315aTJZOJilob
+	I9ZgLVlQaq/j3JdkjK+LaXGpwA9hfcP6rkqvkINJwyoCJKV+kd9kt2BD
+X-Gm-Gg: ATEYQzyq9hzwWp09znghWWZwJZjjUlAOQjElzhOvR4F1VeGXVGqTKEuGWxJtxszCEo0
+	HbR1BEdc72Y7O9YeqviPPO55p9JEEpBCgdUgbe4Utu2MQaElqoa6RST/gPQjl6RU9+pvQTQrkTy
+	Pe7zg0XkBB+ifde8uucSFV2aP78rOPuBwsU/2UoCJAy9nT5DJUqE/dM+R+QWMFj3pl3oWuxpgF8
+	0BZVSLjT2M5Lu+ghO6o5XVCr4ieJ1DztTOx7nmBDgs99oo8BE6GyGOZSO8ueCyDDVwg0Ge7qTJf
+	nAkb1WuStQSIDHYXzWlvQgjSxeVxsQY/SpmqezKAf9WEEI01NgQJgl+oagQI5fr8YW4PUpe5xOb
+	lH1gqKZGT+RWBe7TtBSuxf2OLrDV6HiTWwKjO6vVTEMartMjnedDXxY7FuPabnF0wYVPzmy6+/1
+	DqtabyiiVPJcfhX36WRWvGWZT7LWYYGPsvDDJm4QFUBw4baIY0JQImC0eXtq1yj9CScYGWNMv58
+	OD3ydDBcejYg2Tz7aR9tIc0NUmWv7Iry4KsqxGKW7Pss7PHZ7t+HzrIIjv5rFo=
+X-Received: by 2002:a05:600c:1d0c:b0:485:3d00:efd with SMTP id 5b1f17b1804b1-486f442df4bmr118060715e9.7.1773931681208;
+        Thu, 19 Mar 2026 07:48:01 -0700 (PDT)
+Received: from mail.gmail.com (lfbn-ren-1-685-61.w81-53.abo.wanadoo.fr. [81.53.253.61])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b5184962bsm16644574f8f.7.2026.03.19.07.47.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Mar 2026 07:48:00 -0700 (PDT)
+Date: Thu, 19 Mar 2026 15:47:58 +0100
+From: Paul Chaignon <paul.chaignon@gmail.com>
+To: Ibrahim Zein <zeroxjacks@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+	andrii@kernel.org, bpf@vger.kernel.org, jolsa@kernel.org,
+	kpsingh@kernel.org, linux-kselftest@vger.kernel.org,
+	haoluo@google.com, revest@chromium.org, john.fastabend@gmail.com,
+	shuah@kernel.org, sdf@fomichev.me, yonghong.song@linux.dev,
+	song@kernel.org, eddyz87@gmail.com
+Subject: Re: [PATCH bpf-next v3] bpf: fix out-of-bounds write in
+ bpf_bprintf_prepare with %pI4/%pI6
+Message-ID: <abwMniHt2AZcPBas@mail.gmail.com>
+References: <20260319124901.9207-1-zeroxjacks@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -105,69 +79,65 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260310-b4-is_err_or_null-v1-12-bd63b656022d@avm.de>
-X-Spam-Score: -2.30
-X-Spam-Level: 
-X-Spamd-Result: default: False [-2.30 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	ARC_NA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	MISSING_XM_UA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	TO_MATCH_ENVRCPT_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	R_RATELIMIT(0.00)[to_ip_from(RLck44p98ib5bmd95s13xxw3gp)];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RCPT_COUNT_GT_50(0.00)[55];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email]
-X-Spam-Flag: NO
+In-Reply-To: <20260319124901.9207-1-zeroxjacks@gmail.com>
 
-On Tue 10-03-26 12:48:38, Philipp Hahn wrote:
-> Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
-> check.
+On Thu, Mar 19, 2026 at 12:49:00PM +0000, Ibrahim Zein wrote:
+> In bpf_bprintf_prepare(), the bounds check for %pI4 and %pI6 format
+> specifiers uses sizeof_cur_ip (4 for IPv4, 16 for IPv6), which is the
+> raw byte count of the IP address. However, snprintf() returns the
+> length of the formatted string, not the raw bytes. For IPv4 this can
+> be up to 15 characters (255.255.255.255) and for IPv6 up to 39.
 > 
-> Change generated with coccinelle.
+> tmp_buf is then advanced by (err + 1) using the full string length,
+> which can push tmp_buf past tmp_buf_end. The next iteration's bounds
+> check underflows due to unsigned arithmetic and passes, allowing a
+> write past the end of the per-CPU bin_args buffer.
 > 
-> To: Jan Kara <jack@suse.com>
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
-
-Thanks for the patch but frankly I find the original variant clearer wrt
-what is going on. So I prefer to keep the code as is.
-
-								Honza
-
+> Fix this by checking against the maximum formatted string size:
+> 16 bytes for IPv4 and 40 bytes for IPv6.
+> 
+> Fixes: 48cac3f4a96d ("bpf: Implement formatted output helpers with bstr_printf")
+> Signed-off-by: Ibrahim Zein <zeroxjacks@gmail.com>
 > ---
->  fs/quota/quota.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Please include a changelog whenever sending a new version. That's
+typically the first thing I look at, to get an idea of the current
+state.
+
+>  kernel/bpf/helpers.c                          |  2 +-
+>  .../bpf/prog_tests/test_snprintf_ip.c         | 54 +++++++++++++
+>  .../selftests/bpf/progs/test_snprintf_ip.c    | 78 +++++++++++++++++++
+>  3 files changed, 133 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/test_snprintf_ip.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_snprintf_ip.c
 > 
-> diff --git a/fs/quota/quota.c b/fs/quota/quota.c
-> index 33bacd70758007129e0375bab44d7431195ec441..2e09fc247d0cf45b9e83a4f8a0be7ea694c8c2a1 100644
-> --- a/fs/quota/quota.c
-> +++ b/fs/quota/quota.c
-> @@ -965,7 +965,7 @@ SYSCALL_DEFINE4(quotactl, unsigned int, cmd, const char __user *, special,
->  	else
->  		drop_super_exclusive(sb);
->  out:
-> -	if (pathp && !IS_ERR(pathp))
-> +	if (!IS_ERR_OR_NULL(pathp))
->  		path_put(pathp);
->  	return ret;
->  }
-> 
-> -- 
-> 2.43.0
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index cb6d242bd..dcaa822ba 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -930,7 +930,7 @@ int bpf_bprintf_prepare(const char *fmt, u32 fmt_size, const u64 *raw_args,
+>  				goto nocopy_fmt;
+>  
+>  			sizeof_cur_ip = (fmt[i] == '4') ? 4 : 16;
+> -			if (tmp_buf_end - tmp_buf < sizeof_cur_ip) {
+> +			if (tmp_buf_end - tmp_buf < (size_t)((fmt[i] == '4') ? 16 : 40)) {
+
+Maybe this code could be improved, but I don't think it's going to cause
+an out-of-bounds write as the write into tmp_buf is done with snprintf.
+
+>  				err = -ENOSPC;
+>  				goto out;
+>  			}
+> diff --git a/tools/testing/selftests/bpf/prog_tests/test_snprintf_ip.c b/tools/testing/selftests/bpf/prog_tests/test_snprintf_ip.c
+> new file mode 100644
+> index 000000000..5b000d6d1
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/test_snprintf_ip.c
+
+This new test is always passing.
+
+In addition, when adding selftests that cover your changes, it's
+preferred to introduce them in a new patch.
+
+[...]
+
