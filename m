@@ -1,233 +1,203 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f225.google.com (mail-pg1-f225.google.com [209.85.215.225])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3471530B50C
-	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 21:15:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B48C36492B
+	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 21:18:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.225
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773954920; cv=none; b=D8GlW1K0embDu9apDZZM+Su3lIX3Uozm9tn09aOIeaOnpytZmeoPNiDDqWv2qv2FlTJousYovkD4arNV0hxKKmbnfS/owc/eL2X46hOQyk0QVkNdrWXqu9RTOL1Euvh2PyI8AY/DBMyWlfD8DnL6Bv5M0k/fpHAFXAFag7UH4H4=
+	t=1773955131; cv=none; b=dtGRXbRh6SppzQJ7k66w/cyNwboMN2Mp3sNOCm5qXP2VM0oDN3UYKyb4C2TpF4CNQl7HMXZFn+v+BepogoDRmyB2Qdr+ee1blxBLreSlBBT+x+ONWrgOuVBgRhsdxys1dy42QZRgUnC50tzhmUuqAvulZxDhJptE5mqpY64Y4cc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773954920; c=relaxed/simple;
-	bh=wV155CRw38A/cQWhx0erfIduYazlPesJm/boBeLViRU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZPNWF6G9Jr39KN1SkGTpS7FpE/TEgxzskovsRaELF033x70obME6ywIm2wTJPyAIGesZJUI/F/zoi856tzwdJyrls+NgZNdmz6/TGGHenE72QQpBoGs1NFSQXPIZ3SP/eMcjZI9AAvsncxKtcPI00MZvOZ2eZgnzPMxdnXa12x8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=XvnVY8ZI; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1773955131; c=relaxed/simple;
+	bh=JMzLFbl/OhviIhCtefUkTX8+jfOgmHMWoaLX2EUjHmY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=X+12TraFlhd5X1epgwCEJtT49oafSj99ZQ+b2re2IFkX4hCq5nRTm1L/fEiATHzKZdwANPCTZdQmOGj9OobB9Scsz95rfPlm7buljKYUwWZ87ElyWdTHw3iwDn6h7bV/YJIrDVxFD49vfi0HoCuvlsBNB0LP427eKoSnRTfPlbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=OCyZFqkm; arc=none smtp.client-ip=209.85.215.225
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="XvnVY8ZI"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=w6qOsEsJpgWFuvt0lKQW8/JL+DlrA4GT/zz3vb3Qo/g=; b=XvnVY8ZIsitcVXhLj6QhthYCvT
-	TSQt5xwm43fu+Y8GiB1dmEFH0rW+bS5kT8+6UPyTOAkyNW22ZLXxmvcWbHUAkuACN90lS48EoZC+/
-	p7r/Z5YK8dWY2+qo9OcDW+zqzo9GgUWysQt6TZAH12unKrWVOvsbwKsO5xEyfDAGxELsp1AXxW2CA
-	fDFQj6U/SIkIHZ+AWhpp/AupV/DSrdSIImkgqoqXKuVwbuSf0ib0ufhrTR8vgNPA6zsCAFbfoeoXg
-	jHFge2xleN7954CS49neG1O3Akn8S91fcEwYL3Vo9qQSVRYgJwHZrV8G1LxubYWO6+vdPWIVAqCNC
-	TqD6Ab4g==;
-Received: from localhost ([127.0.0.1])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1w3Khx-0000CE-0f;
-	Thu, 19 Mar 2026 22:15:09 +0100
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: bpf@vger.kernel.org
-Cc: eddyz87@gmail.com,
-	puranjay12@gmail.com,
-	qguanni@gmail.com,
-	ast@kernel.org,
-	Puranjay Mohan <puranjay@kernel.org>
-Subject: [PATCH bpf 2/2] selftests/bpf: Add a test cases for sync_linked_regs regarding zext propagation
-Date: Thu, 19 Mar 2026 22:15:07 +0100
-Message-ID: <20260319211507.213816-2-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260319211507.213816-1-daniel@iogearbox.net>
-References: <20260319211507.213816-1-daniel@iogearbox.net>
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="OCyZFqkm"
+Received: by mail-pg1-f225.google.com with SMTP id 41be03b00d2f7-c70f91776fcso613936a12.0
+        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 14:18:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773955130; x=1774559930;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wh4ELn+KVUmnhuFnvz3rcSxyHtgDapB59qby14b5LnI=;
+        b=OYUc6Sz+adyzGA9rzCKICJiO1/S+TIi4Rqkh9aPMwxLPs/Uk/30FsEd16IMDolJhGF
+         krM3A6FB594D/z9Mmy7MqJkcExPiC3Xgaigmfp9bfL47E7xAPynxZrf2W6HhzkIMJ74Y
+         OP6756MZhW5KzzZaEmAZlmSgZ3rRyrZenAGNeQTujn7m89wI5SNkhhrYmF4OS7kH49Ti
+         JcGrVF2Jm/wljJhQO2FC2f24IqQoDa7GukiwlNnryx8los/Sjxost0aqT4HMzdA8qwyU
+         oac8J9licakEaNY5/Jthc55hdZHbqO9BbOXv3XZcqGG5aPx2+oyf3Y6lAijwUvSIPkOj
+         V1og==
+X-Forwarded-Encrypted: i=1; AJvYcCWTAyr6khAXHCdH3dyKYDRXkGE1LOI+ij8UTpeUOwpmq84XuhjW1yKJYseIad3cQBjxl2k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwY1FB/mmmROax3aoNeD5AMULkeonHs0IDOryTU9fngdCKXefur
+	Y/usdcBKSMNML/vzXSjPWdg/6+Psg1am0HEBhIqb61h0D68JRe/2dLj3eBQFaxEfkOfZ5uhF3OX
+	mqJiG0MPMAa5ccDzi8q3C2pl/6SizCznVnKhl7RerVW2Vf1X5u0u7CRbFHxGJ7qejjwABWKdCqU
+	LqHTpf2r/OeO28Q7f7SFIOXPuK83qWA8qT8lPZAxvilx/I6GjAjA1u7yKoSMjSw03epaKVRbRPk
+	NMXPg==
+X-Gm-Gg: ATEYQzzBbkQibbmyBBpSHpKaLTBTWSfCM4LeGA1DKWAU3Q6dvu5KQUFQ3FnjvnOxUfP
+	a0MUrJeGVUcPcHfjN9LaDO8gR49li/rLFyqxi/cJ1v758QUkIT+JloFHS6JbJYh7O5SBIrE72Uz
+	L8Ywhr/5cZU6FW9YuLgEZofNVOtZT7cYfBT5X0QOVy+QYNqkGJOXY4gZz2uZ5ftbVwBvr3jBw6N
+	j2df+QiFtOWWiiQVvKggsEa9lkWrDcQ6gBdNrUcwt6SdBfRoxttJefDrJ93rceb6ERI5ZY5ISW6
+	DlNmLgmfASUT1xYqKlWGwroqTh1QVPsc6D1+qzIYjGwgLotkzZoEf6qmhKQxNNKFdDRAuOmpSm9
+	gIjFSrI8npfEBCNMSZG3YFwhXecADKipEUsH7u5j/9gmwQJvLQl2S0AW6XpJzM9UHPy8BCi4E4B
+	eti7/o5NBuFGVngIjYuXpKODpDxF9IS1wextK4VYALw9YrHUeSBsdKzJy1sQ==
+X-Received: by 2002:a17:903:44c9:b0:2b0:59c4:e9e2 with SMTP id d9443c01a7336-2b0826c3842mr3609575ad.2.1773955129562;
+        Thu, 19 Mar 2026 14:18:49 -0700 (PDT)
+Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-117.dlp.protect.broadcom.com. [144.49.247.117])
+        by smtp-relay.gmail.com with ESMTPS id d9443c01a7336-2b083617795sm284815ad.48.2026.03.19.14.18.49
+        for <bpf@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 19 Mar 2026 14:18:49 -0700 (PDT)
+X-Relaying-Domain: broadcom.com
+X-CFilter-Loop: Reflected
+Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-2ba8013a9e3so1225795eec.0
+        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 14:18:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1773955128; x=1774559928; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Wh4ELn+KVUmnhuFnvz3rcSxyHtgDapB59qby14b5LnI=;
+        b=OCyZFqkmoHoWuLKiWhRC1et6cYf0UdgcJKjabEOek1+WvYdA/1K1lgKQMPM5UzcMKy
+         pILUjgzuStiTmAcnpA2JQNzDXDrqxdsCgr9cj2z7DsEK+LL5fUkFTWFtPS8jBQTbdtFO
+         4+TxVUAb38zUnZ+YIzd32d8ITwEoTL7cfBnCo=
+X-Forwarded-Encrypted: i=1; AJvYcCVWCLApYaruygDBPdtoUizpgnxTHRBmwXZmmbvjjljmwivNinDV8TY81C4weR1KXWDTz4g=@vger.kernel.org
+X-Received: by 2002:a05:7300:50e:b0:2c0:ffe7:318d with SMTP id 5a478bee46e88-2c1097d7856mr381823eec.30.1773955128011;
+        Thu, 19 Mar 2026 14:18:48 -0700 (PDT)
+X-Received: by 2002:a05:7300:50e:b0:2c0:ffe7:318d with SMTP id 5a478bee46e88-2c1097d7856mr381809eec.30.1773955127301;
+        Thu, 19 Mar 2026 14:18:47 -0700 (PDT)
+Received: from [10.14.5.69] ([192.19.161.248])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b1a88e5sm537846eec.13.2026.03.19.14.18.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Mar 2026 14:18:46 -0700 (PDT)
+Message-ID: <2ccfaa48-7aad-49e8-bdfa-82ca9b6ebcc6@broadcom.com>
+Date: Thu, 19 Mar 2026 14:18:45 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/27945/Thu Mar 19 07:24:38 2026)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v3 2/6] net: bcmgenet: register xdp_rxq_info for
+ each RX ring
+To: Nicolai Buchwitz <nb@tipi-net.de>, netdev@vger.kernel.org
+Cc: Doug Berger <opendmb@gmail.com>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+References: <20260319115402.353509-1-nb@tipi-net.de>
+ <20260319115402.353509-3-nb@tipi-net.de>
+Content-Language: en-US
+From: Justin Chen <justin.chen@broadcom.com>
+In-Reply-To: <20260319115402.353509-3-nb@tipi-net.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
 
-Add multiple test cases for linked register tracking with alu32 ops:
 
-  - Add a test that checks sync_linked_regs() regarding reg->id (the linked
-    target register) for BPF_ADD_CONST32 rather than known_reg->id (the
-    branch register).
 
-  - Add a test case for linked register tracking that exposes the cross-type
-    sync_linked_regs() bug. One register uses alu32 (w7 += 1, BPF_ADD_CONST32)
-    and another uses alu64 (r8 += 2, BPF_ADD_CONST64), both linked to the
-    same base register.
+On 3/19/26 4:53 AM, Nicolai Buchwitz wrote:
+> Register an xdp_rxq_info per RX ring and associate it with the ring's
+> page_pool via MEM_TYPE_PAGE_POOL. This is required infrastructure for
+> XDP program execution: the XDP framework needs to know the memory model
+> backing each RX queue for correct page lifecycle management.
+> 
+> No functional change - XDP programs are not yet attached or executed.
+> 
+> Signed-off-by: Nicolai Buchwitz <nb@tipi-net.de>
+> ---
+>   .../net/ethernet/broadcom/genet/bcmgenet.c    | 22 +++++++++++++++++--
+>   .../net/ethernet/broadcom/genet/bcmgenet.h    |  2 ++
+>   2 files changed, 22 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> index 7410034d9bdc..6e610e73e12f 100644
+> --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> @@ -2771,16 +2771,32 @@ static int bcmgenet_rx_ring_create_pool(struct bcmgenet_priv *priv,
+>   		.offset = GENET_XDP_HEADROOM,
+>   		.max_len = RX_BUF_LENGTH,
+>   	};
+> +	int err;
+>   
+>   	ring->page_pool = page_pool_create(&pp_params);
+>   	if (IS_ERR(ring->page_pool)) {
+> -		int err = PTR_ERR(ring->page_pool);
+> -
+> +		err = PTR_ERR(ring->page_pool);
 
-  - Add a test case that exercises regsafe() path pruning when two execution
-    paths reach the same program point with linked registers carrying
-    different ADD_CONST flags (BPF_ADD_CONST32 from alu32 vs BPF_ADD_CONST64
-    from alu64). This particular test passes with and without the fix since
-    the pruning will fail due to different ranges, but it would still be
-    useful to carry this one as a regression test for the unreachable div
-    by zero.
+This should go in the patch before this.
 
-With the fix applied all the tests pass:
-
-  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t verifier_linked_scalars
-  [...]
-  ./test_progs -t verifier_linked_scalars
-  #602/1   verifier_linked_scalars/scalars: find linked scalars:OK
-  #602/2   verifier_linked_scalars/sync_linked_regs_preserves_id:OK
-  #602/3   verifier_linked_scalars/scalars_neg:OK
-  #602/4   verifier_linked_scalars/scalars_neg_sub:OK
-  #602/5   verifier_linked_scalars/scalars_neg_alu32_add:OK
-  #602/6   verifier_linked_scalars/scalars_neg_alu32_sub:OK
-  #602/7   verifier_linked_scalars/scalars_pos:OK
-  #602/8   verifier_linked_scalars/scalars_sub_neg_imm:OK
-  #602/9   verifier_linked_scalars/scalars_double_add:OK
-  #602/10  verifier_linked_scalars/scalars_sync_delta_overflow:OK
-  #602/11  verifier_linked_scalars/scalars_sync_delta_overflow_large_range:OK
-  #602/12  verifier_linked_scalars/scalars_alu32_big_offset:OK
-  #602/13  verifier_linked_scalars/scalars_alu32_basic:OK
-  #602/14  verifier_linked_scalars/scalars_alu32_wrap:OK
-  #602/15  verifier_linked_scalars/scalars_alu32_zext_linked_reg:OK
-  #602/16  verifier_linked_scalars/scalars_alu32_alu64_cross_type:OK
-  #602/17  verifier_linked_scalars/scalars_alu32_alu64_regsafe_pruning:OK
-  #602/18  verifier_linked_scalars/alu32_negative_offset:OK
-  #602/19  verifier_linked_scalars/spurious_precision_marks:OK
-  #602     verifier_linked_scalars:OK
-  Summary: 1/19 PASSED, 0 SKIPPED, 0 FAILED
-
-Co-developed-by: Puranjay Mohan <puranjay@kernel.org>
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
----
- .../bpf/progs/verifier_linked_scalars.c       | 108 ++++++++++++++++++
- 1 file changed, 108 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-index 7bf7dbfd237d..f4f8a055af8a 100644
---- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-@@ -348,6 +348,114 @@ l0_%=:							\
- 	: __clobber_all);
- }
- 
-+/*
-+ * Test that sync_linked_regs() checks reg->id (the linked target register)
-+ * for BPF_ADD_CONST32 rather than known_reg->id (the branch register).
-+ */
-+SEC("socket")
-+__success
-+__naked void scalars_alu32_zext_linked_reg(void)
-+{
-+	asm volatile ("						\
-+	call %[bpf_get_prandom_u32];				\
-+	w6 = w0;		/* r6 in [0, 0xFFFFFFFF] */	\
-+	r7 = r6;		/* linked: same id as r6 */	\
-+	w7 += 1;		/* alu32: r7.id |= BPF_ADD_CONST32 */ \
-+	r8 = 0xFFFFffff ll;					\
-+	if r6 < r8 goto l0_%=;					\
-+	/* r6 in [0xFFFFFFFF, 0xFFFFFFFF] */			\
-+	/* sync_linked_regs: known_reg=r6, reg=r7 */		\
-+	/* CPU: w7 = (u32)(0xFFFFFFFF + 1) = 0, zext -> r7 = 0 */ \
-+	/* With fix: r7 64-bit = [0, 0] (zext applied) */	\
-+	/* Without fix: r7 64-bit = [0x100000000] (no zext) */	\
-+	r7 >>= 32;						\
-+	if r7 == 0 goto l0_%=;					\
-+	r0 /= 0;		/* unreachable with fix */	\
-+l0_%=:								\
-+	r0 = 0;							\
-+	exit;							\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * Test that sync_linked_regs() skips propagation when one register used
-+ * alu32 (BPF_ADD_CONST32) and the other used alu64 (BPF_ADD_CONST64).
-+ * The delta relationship doesn't hold across different ALU widths.
-+ */
-+SEC("socket")
-+__failure __msg("div by zero")
-+__naked void scalars_alu32_alu64_cross_type(void)
-+{
-+	asm volatile ("						\
-+	call %[bpf_get_prandom_u32];				\
-+	w6 = w0;		/* r6 in [0, 0xFFFFFFFF] */	\
-+	r7 = r6;		/* linked: same id as r6 */	\
-+	w7 += 1;		/* alu32: BPF_ADD_CONST32, delta = 1 */ \
-+	r8 = r6;		/* linked: same id as r6 */	\
-+	r8 += 2;		/* alu64: BPF_ADD_CONST64, delta = 2 */ \
-+	r9 = 0xFFFFffff ll;					\
-+	if r7 < r9 goto l0_%=;					\
-+	/* r7 = 0xFFFFFFFF */					\
-+	/* sync: known_reg=r7 (ADD_CONST32), reg=r8 (ADD_CONST64) */ \
-+	/* Without fix: r8 = zext(0xFFFFFFFF + 1) = 0 */	\
-+	/* With fix: r8 stays [2, 0x100000001] (r8 >= 2) */	\
-+	if r8 > 0 goto l1_%=;					\
-+	goto l0_%=;						\
-+l1_%=:								\
-+	r0 /= 0;		/* div by zero */		\
-+l0_%=:								\
-+	r0 = 0;						\
-+	exit;							\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * Test that regsafe() prevents pruning when two paths reach the same program
-+ * point with linked registers carrying different ADD_CONST flags (one
-+ * BPF_ADD_CONST32 from alu32, another BPF_ADD_CONST64 from alu64).
-+ */
-+SEC("socket")
-+__failure __msg("div by zero")
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__naked void scalars_alu32_alu64_regsafe_pruning(void)
-+{
-+	asm volatile ("						\
-+	call %[bpf_get_prandom_u32];				\
-+	w6 = w0;		/* r6 in [0, 0xFFFFFFFF] */	\
-+	r7 = r6;		/* linked: same id as r6 */	\
-+	/* Get another random value for the path branch */	\
-+	call %[bpf_get_prandom_u32];				\
-+	if r0 > 0 goto l_pathb_%=;				\
-+	/* Path A: alu32 */					\
-+	w7 += 1;		/* BPF_ADD_CONST32, delta = 1 */\
-+	goto l_merge_%=;					\
-+l_pathb_%=:							\
-+	/* Path B: alu64 */					\
-+	r7 += 1;		/* BPF_ADD_CONST64, delta = 1 */\
-+l_merge_%=:							\
-+	/* Merge point: regsafe() compares path B against cached path A. */ \
-+	/* Narrow r6 to trigger sync_linked_regs for r7 */	\
-+	r9 = 0xFFFFffff ll;					\
-+	if r6 < r9 goto l0_%=;					\
-+	/* r6 = 0xFFFFFFFF */					\
-+	/* sync: r7 = 0xFFFFFFFF + 1 = 0x100000000 */		\
-+	/* Path A: zext -> r7 = 0 */				\
-+	/* Path B: no zext -> r7 = 0x100000000 */		\
-+	r7 >>= 32;						\
-+	if r7 == 0 goto l0_%=;					\
-+	r0 /= 0;		/* div by zero on path B */	\
-+l0_%=:								\
-+	r0 = 0;						\
-+	exit;							\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
- SEC("socket")
- __success
- void alu32_negative_offset(void)
--- 
-2.43.0
+>   		ring->page_pool = NULL;
+>   		return err;
+>   	}
+>   
+> +	err = xdp_rxq_info_reg(&ring->xdp_rxq, priv->dev, ring->index, 0);
+> +	if (err)
+> +		goto err_free_pp;
+> +
+> +	err = xdp_rxq_info_reg_mem_model(&ring->xdp_rxq, MEM_TYPE_PAGE_POOL,
+> +					 ring->page_pool);
+> +	if (err)
+> +		goto err_unreg_rxq;
+> +
+>   	return 0;
+> +
+> +err_unreg_rxq:
+> +	xdp_rxq_info_unreg(&ring->xdp_rxq);
+> +err_free_pp:
+> +	page_pool_destroy(ring->page_pool);
+> +	ring->page_pool = NULL;
+> +	return err;
+>   }
+>   
+>   /* Initialize a RDMA ring */
+> @@ -2807,6 +2823,7 @@ static int bcmgenet_init_rx_ring(struct bcmgenet_priv *priv,
+>   
+>   	ret = bcmgenet_alloc_rx_buffers(priv, ring);
+>   	if (ret) {
+> +		xdp_rxq_info_unreg(&ring->xdp_rxq);
+>   		page_pool_destroy(ring->page_pool);
+>   		ring->page_pool = NULL;
+>   		return ret;
+> @@ -3012,6 +3029,7 @@ static void bcmgenet_destroy_rx_page_pools(struct bcmgenet_priv *priv)
+>   	for (i = 0; i <= priv->hw_params->rx_queues; ++i) {
+>   		ring = &priv->rx_rings[i];
+>   		if (ring->page_pool) {
+> +			xdp_rxq_info_unreg(&ring->xdp_rxq);
+>   			page_pool_destroy(ring->page_pool);
+>   			ring->page_pool = NULL;
+>   		}
+> diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.h b/drivers/net/ethernet/broadcom/genet/bcmgenet.h
+> index 11a0ec563a89..82a6d29f481d 100644
+> --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.h
+> +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.h
+> @@ -16,6 +16,7 @@
+>   #include <linux/dim.h>
+>   #include <linux/ethtool.h>
+>   #include <net/page_pool/helpers.h>
+> +#include <net/xdp.h>
+>   
+>   #include "../unimac.h"
+>   
+> @@ -579,6 +580,7 @@ struct bcmgenet_rx_ring {
+>   	u32		rx_max_coalesced_frames;
+>   	u32		rx_coalesce_usecs;
+>   	struct page_pool *page_pool;
+> +	struct xdp_rxq_info xdp_rxq;
+>   	struct bcmgenet_priv *priv;
+>   };
+>   
 
