@@ -1,136 +1,128 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBFBA3CCA19
-	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 13:13:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773925990; cv=pass; b=cEDlqiua80anr9d2VMHCX5thn5+kXHNf0u6WM93r6mZ+pFGusc7hQlpUzIGi13YbZV4RBUAmIZQoomy3kkdsG9f5H2W0pzCl+OkK5R9YW69+80bYTQ2vx37CgzGHee3UqXoXPswEX+Z7T+I3tO0nE93+2FBvfXAa81OcFCsyT9c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773925990; c=relaxed/simple;
-	bh=KSwrrlbSCc3vBNCfUUU4wIh6+oeD4vylWNPrVV4BjNU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rjnxbsz/6WQRBbdFoEiTFGtp/NTaIa/a5szv/QA5bkloo2wYEeMFn56YG3EcGmzGmGqMQhIHk2qS7SJEhUFfjUrb1pECz/1ez97sYQFeMroGoecUaQgPlE0iq6zkYzo+G9lDMLnwg5GBWxSZpOM0Ps699gmbjDHMyDP8hdyrNxs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RZMWM5Fx; arc=pass smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 409B93D523D
+	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 13:24:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773926660; cv=none; b=PM1yT39swR5Lt3d9OFxVMqjPDBhtTdNLFf1u4PfVJrBErCFyTXKFLHrtY2Dfs7Quei8mrp6VuxfYB2jh2c7bpjlY9mq0cGXBZ/DzB7vRcjRuOHyXko3JlD4XeppYCXnko2XJR71Kdqyni3e2qHzjXaCumNMHW0crSuIbV/F+qGY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773926660; c=relaxed/simple;
+	bh=1JjXQZ0Ix6V11YRCybUcCwN3aK889ehs17fGHxeZu6o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dlXfd0rMDygkis+Q6ooNTtFosG89ISYw+eBRwWXhnzzUz/fKAdHzkF6CZqKxmgpdK2zsVXiftfsH4uMaRX+75wSOA86GwlPkSaztqZuFC8ZD1kLeL/9PNh9ZfyHC4nVwjzhiPBkV5BgpageHozw96FlCiksW8ecJYO/zZr3nezw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z1SySbQt; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RZMWM5Fx"
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b97d5b790cbso105489466b.0
-        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 06:13:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773925987; cv=none;
-        d=google.com; s=arc-20240605;
-        b=P+y4cKEiP2hvOwyltrGYXoY8neB7DqtiohKz/l8AFRaeHxfyERHZkXYQ7lolkJrUs8
-         YsJGEbMZn6fFI569tRVXSdiVWzpzIq61K6kt2eS6IxhfMT9KJoCqtDIneQlls4wKvHVm
-         XbEhUE0svVl9VzQEVP3zUUV7G5k1C8FxBwD7VaNWdbnIwforKKdOpW8xVGE82I/uv6Yf
-         NVkREW7FbxPMGtylaT+4p7xT9wpXQbhEzCn31HzyKas8EIrv9sAi9ZRX85JIjmNsMLVv
-         CzTsR0D6ZtcENhB+Rc3N4hwwy+c/b6a7Q/IIW7mGCcPXyDENBunI0Mjmuan5ncMNrCp7
-         c9Tg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=JNPtCCQ4aaYYGicK4HCq7Xnks7DOM5LxwGdCWeAtZh8=;
-        fh=VxGtFywnrGVzo4z2F3k9IJbwbUIsA8G4zSNUfTjG8mc=;
-        b=kyL/31bC6HEiMn/40IoB8AZOdnEo+JlGz1u9wGZ6O41754jC/xeOj4iiVDk/Sfo1LH
-         TYd+KwUAtdylgo9Wo2v+/Cqr7aCOUqMAJDCU9rwQ4flY/GFi/BksqLg9usijRqlU5tse
-         5fTP4EvvWmHSHoskurmLrm9W64oEnVXNd/GZxWD6mbWVrKahoI0HUUcfjQtB7hxWTI7U
-         Mjr28N9oqSds62Gia7eQ9tYBw+4eAAVxtvM4Dg1WjZi9R1TsbGojZ9nw8XK4ba9WbeVe
-         pHO5pr+kmEyOur3cytonAS4PqY5wn9xs4+NB3Bym6kC022t89wEBBHH0DZw0IhSOQn3+
-         DPmg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z1SySbQt"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4856cd3f1ffso9833865e9.3
+        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 06:24:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773925987; x=1774530787; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JNPtCCQ4aaYYGicK4HCq7Xnks7DOM5LxwGdCWeAtZh8=;
-        b=RZMWM5FxjefHoowu7p4XoaC/kluagqF0bsEYyUAlzeowmb7qNdEpaG99B4XGRTYgWx
-         a3TAuomn0JKGNzK6eaddHUHA7pMNEvp1D8Jq4r48EPNJpnXvVIA0yefE/PUa3zcJdAki
-         8mK1lxpQDLnPPPToeZjRYLljC3FMrm3C3UYLIv85dcVKgL+6d5SUx/3SaCn9DcrDXxgL
-         Id4h8G30Nu+0/L490gSkGoG60zl2yNEUf5fN3W0iHi+lxU95Qq8jcsHD8CK9thW/bNgb
-         oY40TKpxhnEZnIQA1UShU42kNpBIrgvHsUUXqHwCtF6IX+SuNAko8LfYNaKFkLyqYOdD
-         amWw==
+        d=gmail.com; s=20230601; t=1773926657; x=1774531457; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=d9SdmRpsBlveThR1KIVVShCqfmaw8QF26GnYrjY2FxE=;
+        b=Z1SySbQt/w4psYJ085Wf9vCiDpbpKJnjftytDOVksQ+hbHhztK9igtRs+uAOQlT9u2
+         YvI0xyDKBBL4O2cqR7Z/EmgDfrgdJGAqk6eRYyk4827SsfM5w0+9mqa77ue8M/XD2oSt
+         Cc6JV7UmtaSiTGaPZd06tVBpsWMimnFppiw8ovHfSVEPCWkL/Zy1LbFVZsTwyIjm90hc
+         Wyuj5V45Dcu7+HZW8fFfmCxZi2S1WDHUjE+V9Umf017z+onfw5zv5QlSJNXaGq/Ns+zB
+         1o4u3UGhpnaCMHSwbJkisoIOK0SIyalU9dG3uyFOMpHX5y6W2Yi7eiEc4GX1UxpJsRs3
+         XJjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773925987; x=1774530787;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=JNPtCCQ4aaYYGicK4HCq7Xnks7DOM5LxwGdCWeAtZh8=;
-        b=HLDUBY1aPAuQ62pN546KYTSqUCRwWr6WPjqiT5x2oCw8pl18jHsS58IGqJ+7unQrro
-         3lGlbBT4vPlnazD9OV2Xl/fMgUTvL9yl8/u0OQsCLeicgDNKj0io6dfAcUMbwofuc+Bn
-         ve2pQQAUlL8vDroVp46j0/Ycc5qsAyBsmVX4ERnV9JwGTUQwVPuBevBZSmViOMvYT7rQ
-         cQH1KkICEP8KoMbWxYT7ltVyCbiEABZ/zTKeLFRQRdrbYaEn/mhz6cxc4baHTswRwKBw
-         p4+oekfI3+BnoXJw3eEw28XFSGEnFI7SctumcxcgVdw+H93Xj3K32+d/mkFDiRSdNs5h
-         iLfA==
-X-Forwarded-Encrypted: i=1; AJvYcCULLwYRqgqYjGwP45OrrIoaT6k81oRdBboHlnENxl/OjIdEAZlxDAe2WfazS4i0WQulzJU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQf/dffhIBirbYS3B5pRVW4zfcszS0jk6t5CDO7jg38DdUkTZB
-	zlwH4jxO/j03eYH5kdRgGCTOvjpbCV/TXutxeSZzALWdPI4TQMo9cxe69Jn+AMZzXAiG9xhQVa5
-	VYZBtv16oc97laO2w++1fbbJBRmQWfw==
-X-Gm-Gg: ATEYQzzIyRRIKlI0qaPrAN1CzPt+8P9sJNG/Ff/zDEJKq/K+kMpGWj+t+Wa+WU24seM
-	Aw0/xN03M80hZVy1auo3Evm3x3WPx4H9CNeflh6CVHrpk2deFQiZB4NVFT5vZNKcv/6zlcoUr+/
-	VsToJeA6x3s3yz8zwd7PLARy4HKVMwtOEodF9HKTVpU+BcL4XK2ogDcpHJBLb/cmekzMbnACEq2
-	0xFaNyFAtJpfXFiyvR5ATNhtgLNf3vbtLmjJlt637znD9hHlqoQAzNRwR2yWYALebB0RqHf4sHe
-	xidygwMHBGGk4uuclCCb2lpn1A==
-X-Received: by 2002:a17:907:c02:b0:b96:edcd:cd04 with SMTP id
- a640c23a62f3a-b97f4b16f67mr440043866b.49.1773925986823; Thu, 19 Mar 2026
- 06:13:06 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1773926657; x=1774531457;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=d9SdmRpsBlveThR1KIVVShCqfmaw8QF26GnYrjY2FxE=;
+        b=qb1A0OvjE+jq/J5ia5JQn9f2m24tKZVZLIgeRjJOJX/2BkF17roYdVOrn87DrkpWfP
+         XY9kVtiR/vjk1S7XXJJGJJ8YsjaQjla7VuK2lmbS9lGKTq0kHctCDAYjc3j0pSOylNqy
+         /6Q9mgDea4nWtEQdjZ9Y3QAiBW2TykOEL6T4lYxZb8RKTQFind9QN8DnybOkBgQNQT/D
+         nrzbfSjezVZg3oR7pBlFspnUxPsSXXF69M2VuD3F+gg2L194+k1z9NvJvCRhULuI/QZM
+         oMJQXx19FYpYlTXCZ34e8qAa21wVEEKKXs4z+FKgt+KNoNopcBP9NjugkKJL3EAyb7SA
+         /wcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVfZE24lQ5ezLWHa/IObn9OemWYu7+JUTuRYF1/RjOATCDT0jTWzGbGMgVTPk3g+2aKtlg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhLoI1EWCjAexC8l7Zk0LwcBLzlC6ZOxhP6FAxUIM/xNBa2S/T
+	GuGKUPyT5Qy3bJEzs/STkqcmGpZvnTc9pGejCSAxizeBQehMBcOcAhE8
+X-Gm-Gg: ATEYQzwycvr+ewNfHp5mM89/zQqHxn04JIP+1IFZgVpJv43DfxnGQ2+6uj2FD6N4SKp
+	+DEJ3TVlq0k2NmztcJCkGFtZH2yAQ1Vm6ho9w1LGMoBNZ43Glq6aCRIq2RjtQw2/AMIvKge9HlW
+	hWUKiIvIMRXc0KPfWjf9EiDJWKD5x2JC5t+RnFgnOF1vNBdiDPj3vepkyJBndAAojsCdaNCE3fy
+	4F3drNQE3XJ0JN4ziixLMbJxJzqySjw9ibc100bYS/Hj96BYYU6gV7nUDEodxB5L5bz3YktNOOG
+	A5znEqMraAmnPTWpNE98fiud+5v7EgwJc7UytRd6H2ukJKW07DQ5cUQ3IfLr/Fazw/a6OGk9PNM
+	49tkV+ynXPntc4sGQx+IPNomS+/dexNeKnz9hgVg1YLYxTowy9JvCLq516R49OHdRtsFUZ+BXWM
+	N6t8jI+VeDHWxOpaxTGiLqMWseCNikX16DyzqU8rpirBxie4zB/Wtm/6LtBwA81AjVDmt0XPSrn
+	N93ZSQSWtSBwu01O+RapkFjYxkalIdfjM+XiDkvvXQwGy32soGywYJ6oCwNrSA=
+X-Received: by 2002:a05:600c:1d10:b0:47e:e2eb:bc22 with SMTP id 5b1f17b1804b1-486f4421c84mr109885025e9.5.1773926657303;
+        Thu, 19 Mar 2026 06:24:17 -0700 (PDT)
+Received: from mail.gmail.com (lfbn-ren-1-685-61.w81-53.abo.wanadoo.fr. [81.53.253.61])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486f8bd5f7csm69524715e9.0.2026.03.19.06.24.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Mar 2026 06:24:16 -0700 (PDT)
+Date: Thu, 19 Mar 2026 14:24:14 +0100
+From: Paul Chaignon <paul.chaignon@gmail.com>
+To: Hao Sun <sunhao.th@gmail.com>
+Cc: Shung-Hsi Yu <shung-hsi.yu@suse.com>,
+	Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>,
+	bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+	andrii@kernel.org, eddyz87@gmail.com, john.fastabend@gmail.com,
+	martin.lau@linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] bpf: Simplify tnum_step()
+Message-ID: <abv4_pz96HWU804z@mail.gmail.com>
+References: <20260318171906.53174-1-hao.sun@inf.ethz.ch>
+ <atwy3evusj7cjafp3fnrzgimj3dimcyuxasohegjc2enplb3cb@4l7i5hoe2ify>
+ <CACkBjsbcv4woDZZ0_BA4idBwfLPXNTX7BzJMXTH54zq_8F0BuA@mail.gmail.com>
+ <abvDSjl633b_Hb1O@mail.gmail.com>
+ <CACkBjsZBiQdA-yKCAt0Ng_PRyQBkXFK5ymN0RXx2xG+uJ6P7PQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260318171906.53174-1-hao.sun@inf.ethz.ch> <atwy3evusj7cjafp3fnrzgimj3dimcyuxasohegjc2enplb3cb@4l7i5hoe2ify>
- <CACkBjsbcv4woDZZ0_BA4idBwfLPXNTX7BzJMXTH54zq_8F0BuA@mail.gmail.com> <abvDSjl633b_Hb1O@mail.gmail.com>
-In-Reply-To: <abvDSjl633b_Hb1O@mail.gmail.com>
-From: Hao Sun <sunhao.th@gmail.com>
-Date: Thu, 19 Mar 2026 14:12:54 +0100
-X-Gm-Features: AaiRm52KxxUpa2prxfBFArVN5tvWg21UeJAD-yx8r0tO1jmFptcgKNiy-_Ya4mU
-Message-ID: <CACkBjsZBiQdA-yKCAt0Ng_PRyQBkXFK5ymN0RXx2xG+uJ6P7PQ@mail.gmail.com>
-Subject: Re: [PATCH] bpf: Simplify tnum_step()
-To: Paul Chaignon <paul.chaignon@gmail.com>
-Cc: Shung-Hsi Yu <shung-hsi.yu@suse.com>, 
-	Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>, bpf@vger.kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	john.fastabend@gmail.com, martin.lau@linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACkBjsZBiQdA-yKCAt0Ng_PRyQBkXFK5ymN0RXx2xG+uJ6P7PQ@mail.gmail.com>
 
-On Thu, Mar 19, 2026 at 10:35=E2=80=AFAM Paul Chaignon <paul.chaignon@gmail=
-.com> wrote:
->
-> On Thu, Mar 19, 2026 at 10:01:31AM +0100, Hao Sun wrote:
->
-> Thanks for the cc Shung-Hsi. We were discussing it with Hari who's
-> planning to double check soundness.
-
-Great, let me know the result when the verification is done; I will then
-send the v2.
-
->
-> > [...]
-> > > > -             res =3D w;
-> > > > -     }
-> > > > -     return res;
-> > > > +     d =3D z - t.value;
-> > >
-> > > A bit of comment explaining would be nice.
-> > >
+On Thu, Mar 19, 2026 at 02:12:54PM +0100, Hao Sun wrote:
+> On Thu, Mar 19, 2026 at 10:35 AM Paul Chaignon <paul.chaignon@gmail.com> wrote:
 > >
-> > The commit message is self-contained; anyone interested can git blame.
-> > But I am unsure. If a detailed description is preferred, I can add a
-> > comment to v2.
->
-> Not disagreeing about the role of git blame, but it's not a replacement
-> for code comments either. Having just the intuition in comments can help
-> a lot; as you mention below, it's one less indirection ;)
->
-> In its current form, I find the proof harder to follow than the
-> previous, very verbose version. Maybe there's a good middle ground?
->
+> > On Thu, Mar 19, 2026 at 10:01:31AM +0100, Hao Sun wrote:
+> >
+> > Thanks for the cc Shung-Hsi. We were discussing it with Hari who's
+> > planning to double check soundness.
+> 
+> Great, let me know the result when the verification is done; I will then
+> send the v2.
+> 
+> >
+> > > [...]
+> > > > > -             res = w;
+> > > > > -     }
+> > > > > -     return res;
+> > > > > +     d = z - t.value;
+> > > >
+> > > > A bit of comment explaining would be nice.
+> > > >
+> > >
+> > > The commit message is self-contained; anyone interested can git blame.
+> > > But I am unsure. If a detailed description is preferred, I can add a
+> > > comment to v2.
+> >
+> > Not disagreeing about the role of git blame, but it's not a replacement
+> > for code comments either. Having just the intuition in comments can help
+> > a lot; as you mention below, it's one less indirection ;)
+> >
+> > In its current form, I find the proof harder to follow than the
+> > previous, very verbose version. Maybe there's a good middle ground?
+> >
+> 
+> By `proof`, you are referring to the description/commit message,  not
+> the Lean4 proof, right? I was a bit confused here.
 
-By `proof`, you are referring to the description/commit message,  not
-the Lean4 proof, right? I was a bit confused here.
+Seems I thought one word and wrote another :/ I meant the code, the
+tnum_step function.
 
-[...]
+> 
+> [...]
