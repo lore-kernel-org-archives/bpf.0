@@ -1,170 +1,85 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 250B32D1907
-	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 19:41:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773949287; cv=pass; b=VX6+M1HQP3zWZF9uUBpsDJv7S5fxqFvOj/pIed6dSf2YUVbuCJeytp/SmS/JlhCDOl9lgUVdpssPdz3Lzw3Ic2ZkeyG6LSie/rkYWL86VKpy4lufD8vB8MIeW+7R2YTQ4fQkN/BQJYXvw+u2ZkvLHy6G9NLuSA5svXtMMZlbaDs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773949287; c=relaxed/simple;
-	bh=6RkfNooWQ3RtbmOJISriZuXy5CNbl2A+bN9OqOlIT90=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Y/kgOX3NbMJFVRuciQtxYuI2rGQf46e54Vy+ekuY/lstQKDusWsiZNAHzPoRQTEceATB/JDc3x6/soTF3D1Y5QBPdWDUDMqseVCWOXEnGRbOFvH6iV/vXcgHoXwR4ySNeuErTkFaMPZkr5br5rak42AnXOjUwtVO04NHsqbcJTg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D24MuoVk; arc=pass smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAAC42E62D1;
+	Thu, 19 Mar 2026 20:02:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773950569; cv=none; b=dunN+u0iTRweRPsfRuWvXCVMXmug3g+0Nf6b/28YTrDvaj8Vv9+HBIa7c04SOzP+KFdJ166v1Ud7Ssmu3c1P0jNM9hNrY6UHZV5s7D+b7gigj/sfzT7xLXyEK39nUrAxudAcsVs48PjsTxlazyo3mJaQ6wtSMpXEcD7ttNSFyiE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773950569; c=relaxed/simple;
+	bh=w1ldj/8KOcFljXet43ZpLfzZtm1Cmavg2oBXxuBG9/g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ojHVY5dX1onXY7CV+5qgDHEazXxrB8RfSMg2bCbjDFMTMlAS+Zp0fI1aWEVUuOzaFkAP8QOED7pkUTVFFt4EyuxUvB3SgHnDpQVeRv9I871Lc8qpaAL9XeRg2/FTMgcx7nk+oHqb7thvz4Z/SUpYpmqNA56bFtjLC7fPrnsk2cA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p+SIy43b; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D24MuoVk"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-66132b22182so1909624a12.2
-        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 12:41:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773949284; cv=none;
-        d=google.com; s=arc-20240605;
-        b=MsPFa90Wubiz9fJFZrjlGrGKHdTrbTF9EbfpSrNik42kzHxp3Hks5QYmetiX5+HOZp
-         0H7/imlfBtBjVwcrBj4jwAmK3+EJAwkPekaX6lC8I8DkaM/ZWS8AwA6nK90Hpn4FmoG3
-         216SImRyzI9XZzgzg2lhvPNVRF4I6/mjF0/wfCDzVkcwghC4/fstf5Z0aWMtAarMGiD4
-         l2Ehv0ALmDa+16Pe8SqYxTNXKENw9b1wXQGpHkzJmzrorbAVVJD3fSr6d8D8xc9gOFB+
-         U+LqJ1toAmX6GPLNU8dkc5ON6OnMnElz6GRaAMLmgr3NEmi/i6HRvkwTJ/xkYzOSBzyv
-         /Iug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=MjA0DcEZGbQ0Ai653Ac4hiBqqXAUZ7Eel5EV5vCTd4M=;
-        fh=KkDgA9XQlbYUyitv/GsxKZ32SasDjJpVoxOzyT0nJvE=;
-        b=B1oiwIOKVTzjDqdE+qf6rd9Izd+YXzCaUxn9+fIbymq1s7eVWXt8LnsRtRsnIoD6H1
-         IxYELsydHLHfZnz2GtQavUfst0bFq5ahih4ncW7r1BZAmkk6Y+ZrXdMuTSarOSwNteUA
-         HdghlvzMItpUYFlKckB37FC2wGox8RawzoAsDCdCKKddKo4xGaehd3SklWbTZKDmOFi7
-         hGPNLp+PMyTuFpkezc8J2wv+bM3T/EnsMzzQzdBNaDI66AoU025yDaXYIoHMIB18BJch
-         SXIwa+N7vY5RyMk7RaZnYKtQGrSanXxLRg/5HqH1TIoVtKDipI0TKPXfIXfr2EHPRRri
-         OAwQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773949284; x=1774554084; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MjA0DcEZGbQ0Ai653Ac4hiBqqXAUZ7Eel5EV5vCTd4M=;
-        b=D24MuoVkiBhnBoMcNZlYCFJ5e9zEyxA82oJLg8c+dpfSAPUvvCAfT7mvCyJJro51HK
-         krazZD34npSSirEEn5GOlEBrMfitPd4mk6fyMATw8vtvv3G+8MvqhaqHvKLuGl3HLBif
-         4uR8IsXhTuFCNBWkgP9Y241ougu/9QQKQHw0fWBVTFpfCYn+v1MceXiB95RMQgvRcVJ3
-         sX9hNvCM6xHCaekjwmbUQya+lqIpyWR2hqmzhpO2331wk7zrJgSXpEMrmTFDE4M6WzK5
-         hHfVxski/i5igf0mGPa0hwymtgSuOhtd8k/2WRCcfE9F2utpwRV5kWaJyyFgq4MSXqr0
-         UYWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773949284; x=1774554084;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=MjA0DcEZGbQ0Ai653Ac4hiBqqXAUZ7Eel5EV5vCTd4M=;
-        b=oEzppUBKGLZEobmzrKNbKWLcvUUymBOKY1mKj3zm66Xf3ScKW5ZHl5MKOmFzQld9zX
-         l2RU/jsGybUibHcA4HOE+KRjnnZC9l1SD5zJqJAqWzZh7o0TJkhSMFiRAJq5TnocARD3
-         BS8X8OZm33FrOaZBJBDT1Zhurpi6atnsk8Eud0r428Pz5NZuXZO5Hz9yau1qbLvd/inG
-         uU6RtBAONJwtO5fWqix4WZ2PlDynoRmpsVIn8rh1CULPw23nS7NYwKBK4g3GCXGPRIIQ
-         A0ERU2+TJm+dXg+aBohOuxySPC5Y/VgAael/P0OGlgAoMlly3ATBERJXRakFYMfpS6fc
-         js1w==
-X-Forwarded-Encrypted: i=1; AJvYcCVUI2wc/7nA75r1Fl5HCqautQECRHjnvcwdH/VxtWiVN4iXx+Zbjw6Kd2wZTGuQK8Bhsnw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXLqbX2UzNuFckg0h4Ac2GRcdXaPRVMCVoZI5ZQBc5TXi5x7Iw
-	qbfSiDSFlWleYt3r109Svj5QhuFDi0/SJBVGd/atpGlDEDLI8apDQ4bdIgzP64+FEkh83g3ClLI
-	0n9Qi7hhRb39RKt4a8lrKDzbbdjONwg==
-X-Gm-Gg: ATEYQzwQQcfpXZ4ElY/2sSkXs6lZNIWCiqDYhvFZZt+MwX6cikFktqSsEOelEU/j78t
-	2/k7lvBAR0ksSUDO4bwV4OwKWx+hnmiqNUqYP6QOmz9ERR0xZ3Bborwxv2f6tKCuAxE38WhpTFX
-	H9b2Ls6CtlR0+sR6N2w3zstkFDNtGU3++bGnp52zFHemdWpyysktkh6MGkcpc8dnbAA9TvZJsU+
-	l3iYf5sdVKhuZ6Z2zvyPN9i6AiNfQb4yAfZNy+VfcasmXDyB+B0ndXjXRfDjM/Gjsi30hkGvGq2
-	Nqjp
-X-Received: by 2002:a05:6402:4492:b0:665:f31:3197 with SMTP id
- 4fb4d7f45d1cf-668c9100c9dmr618168a12.1.1773949284205; Thu, 19 Mar 2026
- 12:41:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p+SIy43b"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB413C19424;
+	Thu, 19 Mar 2026 20:02:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773950569;
+	bh=w1ldj/8KOcFljXet43ZpLfzZtm1Cmavg2oBXxuBG9/g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=p+SIy43bYXvanb436yLIo1g/eV+j4uYKwB1M+qhi07KdbtxLGOTtyLd+kQ1IDPXDM
+	 1I0YVtMep1cxV+Y2a+r3m66lpeZitFADef6xZPYtuYqrvf/b8zJw49194Yxhuj2e/R
+	 hDZVQHyOs20sC9unZhTKSp7VNWIdLDSepAvIY00yuIH/4qYTfxSjHWMfUmh35Gdsg5
+	 Civ6+/8oqEhoz+XYnnIobGab/cAzpyB1LIVqzaKI4z0EfzV6oYmg71d2jG+6yFLkah
+	 Q31ESYN9z69zhP7k0umgFUhLeqoT0grW3BjRzMl1VoRHs5aFvLEhXO7p32KOBhUba+
+	 OZENJo+Nl45cw==
+Date: Thu, 19 Mar 2026 20:02:43 +0000
+From: Simon Horman <horms@kernel.org>
+To: Joshua Washington <joshwash@google.com>
+Cc: netdev@vger.kernel.org, Harshitha Ramamurthy <hramamurthy@google.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Willem de Bruijn <willemb@google.com>,
+	Praveen Kaligineedi <pkaligineedi@google.com>,
+	Tim Hostetler <thostet@google.com>, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, Jordan Rhee <jordanrhee@google.com>
+Subject: Re: [PATCH net-next] gve: add XDP metadata support for DQ RDA
+Message-ID: <20260319200243.GU1753385@horms.kernel.org>
+References: <20260316230434.1398828-1-joshwash@google.com>
+ <CALuQH+WVSVuan2WRtnugnWo0ZK7dG4Z6BWgHQVULb6m5TZ7vrA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260318171906.53174-1-hao.sun@inf.ethz.ch> <CAP01T76ZazpBriekA+82aAFHKSoa+XvnvOOnQRz3XBTvBErygg@mail.gmail.com>
- <CACkBjsb4tNgiVKR02R=dkqd6kNWfnyHyFgPMuNwx5f2EUL7tJw@mail.gmail.com> <432750df75b5ce808f6b9ae9cd7ab3288a653b13.camel@gmail.com>
-In-Reply-To: <432750df75b5ce808f6b9ae9cd7ab3288a653b13.camel@gmail.com>
-From: Hao Sun <sunhao.th@gmail.com>
-Date: Thu, 19 Mar 2026 20:41:13 +0100
-X-Gm-Features: AaiRm51aVzAkQUOpChRSrFkHoVqR9Twu0NWTbc78kpbKw3vLxNRpFNxydJ5uxtM
-Message-ID: <CACkBjsb3p3LcusEiQNccA=tzNv7bc0LYvH8ogy6rVrt3PZthnw@mail.gmail.com>
-Subject: Re: [PATCH] bpf: Simplify tnum_step()
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, john.fastabend@gmail.com, 
-	martin.lau@linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALuQH+WVSVuan2WRtnugnWo0ZK7dG4Z6BWgHQVULb6m5TZ7vrA@mail.gmail.com>
 
-On Thu, Mar 19, 2026 at 6:38=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
->
-> On Thu, 2026-03-19 at 10:06 +0100, Hao Sun wrote:
-> > On Thu, Mar 19, 2026 at 9:18=E2=80=AFAM Kumar Kartikeya Dwivedi
-> > <memxor@gmail.com> wrote:
-> > >
-> > > On Wed, 18 Mar 2026 at 19:21, Hao Sun <sunhao.th@gmail.com> wrote:
-> > > > [...]
-> > > > in case anyone is interested:
-> > > >         [1] https://pastebin.com/raw/czHKiyY0
-> > >
-> > > IMO it is worth it to include this proof inline in the commit log,
-> > > since links are fragile.
-> > > It's not that big, and I think it's more useful to have it inline tha=
-n not.
-> > >
+On Tue, Mar 17, 2026 at 09:03:28AM -0500, Joshua Washington wrote:
+> Hello, the commit referenced here should have been
+> 1b42e07af1ee ("gve: Add Rx HWTS metadata to AF_XDP ZC mode"). I had
+> mistakenly drawn the hash from a different repo. I can respin this
+> change once others have reviewed it and left potential feedback.
+> 
+> 
+> On Mon, Mar 16, 2026 at 6:04 PM Joshua Washington <joshwash@google.com> wrote:
 > >
-> > The only concern is that the proof mainly uses `bv_decide`, which does =
-not
-> > provide much insight. But it's not big, I will inline it.
->
-> I agree with you, not sure it would provide much signal, tbh.
-> As far as I understand `bv_decide` means: SAT-solver, please do the magic=
- :)
->
-> A more interesting discussion would be to have some model-checker
-> based tests in the selftests, but Alexei was not excited last time we
-> talked about that.
->
-> If we have enough interested people, we can pick a checker and
-> maintain a "shadow copy" of relevant functions and data structures in
-> some repo e.g. on github + current proofs/tests. To have a starting
-> point for future changes.
+> > Commit daa7ff1e1269 ("gve: Add Rx HWTS metadata to AF_XDP ZC mode")
+> > exposes support for the XDP RX timestamping metadata operation in the DQ
+> > RDA mode. While the operation works on its own, the intent was to enable
+> > XDP metadata support for the queue format as a whole along with it.
+> > Currently bfp_xdp_adjust_meta fails because meta_valid is set to false.
 
-I actually have an early prototype for this (developed a few months ago):
-https://github.com/SunHao-0/eBPF_verification
+If you respin, then s/bfp/bpf as suggested by AI generated code review.
 
-The tool extracts the **unmodified** functions relevant to range analysis f=
-rom
-`verifier.c` and `tnum.c` into a self-contained `range_analysis.c`
-file (no kernel
-dependencies). The extraction is done with a simple approach: maintaining
-a list of functions of interest, then extracting by lines. The
-extracted code can
-then be verified independently.
+> > This change updates xdp_buff preparation to set meta_valid to true, so
+> > metadata can be fully used by XDP programs.
+> >
+> > Reviewed-by: Harshitha Ramamurthy <hramamurthy@google.com>
+> > Reviewed-by: Jordan Rhee <jordanrhee@google.com>
+> > Signed-off-by: Joshua Washington <joshwash@google.com>
 
-The specification is defined in `verifier_spec.c` linked with
-`range_analysis.c`,
-cmbc and bitwuzla are used for bounded model checking. The workflow is
-simple enough for the original goal.
-
-But the solver later became a bottleneck as the target function grows large=
-r.
-This required more modular verification, breaking down the verification
-granularity. Nevertheless, it's a practical setup.
-
-I am recently more interested in a Lean4-based solution: we can embed a
-very small subset of C (large enough for the verifier's algorithm) as DSL
-into Lean4, so that we can still use the same code. Then we can define
-the spec for the function (similar to the theorem provided in the link), an=
-d
-prove the soundness (even other interesting properties) using Lean4
-tractic mode, which is more powerful (and becomes necessary once
-the property is nontrivial). AI can certainly help with writing the proof:)=
-.
-Future changes can then go through the proof; one interesting point
-is that we only need to review the spec, Lean4 checks the proof, and
-the trust here is Lean4's kernel, relatively small and robust.
-
-If either of the above is of interest, we can certainly develop and maintai=
-n.
+...
