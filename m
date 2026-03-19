@@ -1,121 +1,154 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0F29F4FA
-	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 00:13:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773879217; cv=none; b=EaEY1Tn86mNdwy2VNk+mcLiCvRl9EZ6qQ8FZ+NI+XbaCf9G/qfICDh8O9c4a0i2oEivkzj5ouxiQD8RTY9VVEfMs+frEaINm4WnL0o1mNaM2cMyOvDc3IZnfK12snjZSFrBwa4mCJUKxUfd+hgS06lHv7kFxJiZf78HPiSjpBNs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773879217; c=relaxed/simple;
-	bh=5g0VK6kme5wwsUqScUl8PiZ0gV3dvNzHnThH+4tbnxA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pc7Wq7G3bO5KNVYga0awjSkGOcmgDxyeEwgBtmqC3RqwOlSd1p4jHR7nhjFMQEktC0AiGO3uw1ppqpiTTDo6JC+2ClvFRZOV+AgUbsIi0iqM3/m+83GciU2e5X1CARvspkeCq30tWnSDCk5CuHfAyhKByXbOUi3COAlk6AVt6xA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T2aSrFWs; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC2C1386C9
+	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 00:15:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773879315; cv=pass; b=JyhvJs33hvuCEkKI5DulJUqP5rxVJW3FntNlLNaHdaB02Bh6MHZHxt3bBToQ3X4Yw54dvGj7oLVAsuZDsZtzkQ7mpp/+t/eTo6bxNJ6vI2LEjrMzQVFyVkBY5P0dPOFUdIb/czIMO+za3NDZlX8UzkY1kwwkOZ250E4L3opYWr8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773879315; c=relaxed/simple;
+	bh=epYQYqmeoxnhnwHsy24c76hvYzkY8TlUlbKYfVRPK/c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WshiQpsI35y71aDhfgq9KsIFZ1tGTEBzeJcGhpae9ENMkOaC61tyMapK45HeWidqod6NWX/CBvwMuF2OlqOtr454ZoehZGZIdtU2C7ulEDGs2zhWy82TQUxdohBTr7H1hH5JUj+CPxPksV1u3TKy+SYrejA0ZFmEOL25BZ7ag1s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AGAO19Lm; arc=pass smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T2aSrFWs"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-48557c8ad47so2848685e9.0
-        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 17:13:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AGAO19Lm"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-486fb439299so431945e9.0
+        for <bpf@vger.kernel.org>; Wed, 18 Mar 2026 17:15:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773879311; cv=none;
+        d=google.com; s=arc-20240605;
+        b=aHp86jyXh623DLhI4yqvN8l6R2DstDapvmTOyQl/gxr398/twuecWKYj/TX2oV0O2K
+         4MG9r/hdF3pA8AHeMrhoQ+uK+stQUzIZCPus0V/wlZM6LI8IieszIGoUXzA1VaPH2zJQ
+         0kYeQmgtihvg+5UXgKldu7hf6wxyl/OUtehI4Any2OpaZB5OTjCizfHbBY9lrDAIaOkY
+         K90QSEIoGOs1ch3MuQBCGNWo34222w8i9fy2LJktrEKtaT++zMXmbq4xjKrMJipAaeLV
+         ozmw0SFFhgwcg4SWB52W2fPpzjVca+05YmZMjH7wiYMMaQHEMfVlvTmeRh5/Q6cfGTXE
+         LZqw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=fNm3pnF8KBRqftmVyJUTYbKuGaX4295I9FrzXBtq16o=;
+        fh=639JwA1h6t73wmE5mooeN6NShKnvGE/JOC78cfYJDgE=;
+        b=bPhSOYIMUCeoLDB5als0EH/Ms+p7aQmUQiqwe5zaoXExx5IXuDYnSpwUsE5tztWXFZ
+         aps0Q1zgiGl8cfeMGXC7hdd5PSreFBR4OgPwVpSrdSpsqKYEkhdP4x1V4u69D69PFHRu
+         Qdl3DcnzT9vjpUeWdzIKCofhiB/HE8CSgO89cX6bun9yL1ThRJGA5I51Fm+7xqpaMVT/
+         Z3TIyKJr13quUv7yNo8W0jwNUSSU2v4UM2PWGWrb2bdL1IN97XZlCdv4hSTXHeydacBl
+         KwKKW5nn52KyB06Or/naRWtPiIf5VUyyAWIKQJZiapsTFzw4uEVmzRgOgnGIo0XxMWyF
+         w9Iw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773879214; x=1774484014; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NmDHJ5jHSbWD6gmyIdRsWl5EzP5w1MjcT+q6BrRMB/g=;
-        b=T2aSrFWs+0pSapLJXzDE7GMXhnWZPyDpGJpJhywWjXggkTuQB3ODJadwbjusUoY209
-         eWWyDu6O7ODmmfSG8eUqCuYFplyrjuD7k/npwujPy1xm7VnXW80uCgXmQKVRrEct7/8x
-         RSMTjmq3vNYRcruRg56NM4mclLn7yHnQgBfTNwFkCB+6q+1YlqxHfzAeEwgtR8JP68Id
-         qEY1gMLaU6xxM66ma5m8mCbyRKX8QONq7Chh4ufKtt2Aqx8JG/0yi8U0OZlOjtYch8C9
-         5LtSn7FHDlyJ5J/i2NYjJU6TRsMgVAV7bCz43p5PegQsfE0flA92HGVXHUAZ+ayWwzW5
-         dQpg==
+        d=gmail.com; s=20230601; t=1773879311; x=1774484111; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fNm3pnF8KBRqftmVyJUTYbKuGaX4295I9FrzXBtq16o=;
+        b=AGAO19LmCF/7aGXPG4tQesf0ArmFcLADinZIqretbvI5erEL2FHVwCTfZq2qQRLx41
+         xOXR7iRf73ojAn6g+XcXL53uTFTc8VVsw3DBkgyMt2JyHvOwRQ6jxTFW+dsdbFJL0zK8
+         K/PM0kYIUP8BoKCaZ8nT15GLl+QJnLGkUpdndW9tIQS4RjPca+99UKU1yzOZL9kWA0QR
+         Hh0jIRQUfthxOxVzySkc5NaMvnSuzcx5JUkpeFxD44yGIT+iKEAo4PbKqeG1f22IcuQz
+         T1BiZ2cf01QNz7q5Tu7IRBRgXvLcyFYlnXJhqyd2bU+c+6Xgm58lmP+NNWZfG1Ru40QN
+         y7JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773879214; x=1774484014;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NmDHJ5jHSbWD6gmyIdRsWl5EzP5w1MjcT+q6BrRMB/g=;
-        b=J7nHC5hXOGF+U7wLQnRLkcs4fQ6hJBRYEcUEydyZl+zh5cYevYUcnqwxOR6r3yztp0
-         jSCJyn//I7OeFHeb87HrZRPspJcOrWs6dD2390EUSth1nKYcXb62cV3+Hw/unzoidBuA
-         je0tvMFPcE9T0QF/OMCvV1wEglKG9176Lz5aKqVE+3FuD29Ng9J3qTmh37GgXrr8UoGj
-         sRxeVid6fJPdy1yC7TaerLfM8DHAD+zmXN7SEc34vfpk3LARcJTEKKDYdUbyhEBIJqlN
-         T0oLQskCdxKQwc8R4EGqXM9T8xnS6Viw6+Rb87Eeg7S8kv0LRk677y5BgKcpt6/gIMnl
-         MymA==
-X-Forwarded-Encrypted: i=1; AJvYcCUrjqTMRteoT7nAqqy+gptZzOYPO8rVlcvWNzc19gdzJvCDirVgADG91jRnf59mGEFhsQk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw7FIEXqZNbKr9Xbb1xZD8wLhlMgrzJ8yHoXxhvIDlU5AZ64FeP
-	uOmtcu6tq+E0cYNDjwS5PbEFNWNCSKjg248Kidq3MA5KYocaN/AIYjMf
-X-Gm-Gg: ATEYQzxShGXMXh+jGldlf8zK8hfg2x8Joy378Yazz20xHlKoJy8B4NbbGPKzW+/Ob65
-	rYx1x2QhVRvcyR400o7fK1Xf/J2d4I+jAJs88+3yg5pY0I0xa72VR4x0Sz84fs/g7gEhtv2Ezpf
-	TcD/pJ9XNXNVv2p/CPvNZUpYTICOkgG1g86QF06Xqy5onw01htxZLRgQ8rGW/b5WGokTNr4yQ9N
-	AgNKFQB7uW/GCaN4NfDKaovB/Fnww2boOnPWtcj7/f9JsnBHw8CMie9J+4YTbOXxkYyNLsQ+Whi
-	HFw8N8m+diagQ9gLOSXFtK9NEQke9Xa5qO0qzLqrfxBEU5lzvuVSC5+Djs2xmPhLq1OX58z65kA
-	P5bqIvGu4YlZrZpNM3ym0TozS96xEkR7Wm3B7pV+vIgBvyOFQbdYkjFykRu9zsWFmltYpPNMlKT
-	t7wd+zryBiSKWBxhR87Ck9n4wjDTd6i9m8BUIi50mrNRRO32kWXfPtnAy/aeXKfCKfSOjeOvhCk
-	rzh9z9dNh74H/R/wKq23UF60CfThQ2dg0ENYmBlBKKbBEMxyc8nio+qEeTSk0qXjHK36r3joXK+
-	NYLjR+xS3HI=
-X-Received: by 2002:a05:600c:828e:b0:485:4533:9c47 with SMTP id 5b1f17b1804b1-486f4475401mr89414965e9.22.1773879214215;
-        Wed, 18 Mar 2026 17:13:34 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e008f10c8feee10c16e.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:8f10:c8fe:ee10:c16e])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486f8c53153sm28149255e9.13.2026.03.18.17.13.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2026 17:13:33 -0700 (PDT)
-Date: Thu, 19 Mar 2026 01:13:31 +0100
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>,
-	bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
-	Srinivas Narayana <srinivas.narayana@rutgers.edu>,
-	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
-Subject: Re: [PATCH bpf-next 2/4] bpf: Simulate branches to prune based on
- range violations
-Message-ID: <abs_q7hZf_7vYJDL@mail.gmail.com>
-References: <cover.1773441432.git.paul.chaignon@gmail.com>
- <aacec3599b3965e022be1b9792f29e88a1780a78.1773441432.git.paul.chaignon@gmail.com>
- <a41262218c37af754dda48811b3a165341c92028.camel@gmail.com>
- <CAM=Ch06pLOWKx4D=sVJ5oqCCy6R_N9Lxv7t-UV_yQCjFhBtO+Q@mail.gmail.com>
- <7a9255803fdfef52d86c257ccb00d3b1d37de5cc.camel@gmail.com>
+        d=1e100.net; s=20251104; t=1773879311; x=1774484111;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=fNm3pnF8KBRqftmVyJUTYbKuGaX4295I9FrzXBtq16o=;
+        b=TXNL/+Q3crPV6ddCkXpQXUR8xDWz6qpbiZiFmp5uTpwq7E1cpfN5CDzNcaM1Q9lTWK
+         Au85ZMNT6tp3uLqvMcvv//6Xa9j9mem7MPdkULBehLJzQrUHKFmC5r5tCmSs7wN5TYDI
+         KGNi62sKhfWjPNVWWvO6RMZu9ddrIki0z9+u7jjkjR0C0lbaSHse19Nn0qXb1sOoA7u5
+         jU8Ry4RE4Gnhk59ERAMpHCOCNgIRw7DAYqvbPLeCDI4hOYn1drnTbL8r5tqXXZx/CAht
+         KVltpJPSVc+/5LsakhsHUu3Ijz4gTYkSq6DS/HN5W3cjsYEAIkcWR7df0HS1e6iXUfy1
+         53bg==
+X-Forwarded-Encrypted: i=1; AJvYcCUWba03jyzto0HUkp+lWBX+1m8H12eEXLwORbwQA7ZbfAStmXwx3oSzhODnr2vcbiHk0+Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4vpQIHZ8AVFdRTAWXqzsGdiI+qK5mJIx+3cSl/bxuNdjGc1Oe
+	Ze/UHKVYC9+0j4/cGoV8GhFSwEhQM3KZ9ynTuU7XtxuLDsPbyWJCvyXo3VxzTxY5UluQ8rMCqhc
+	wXmM04sKDaHdxYnYuy3HvS7lJErJ++K4=
+X-Gm-Gg: ATEYQzycIqqAgcAe2LWghSdaIOeP94UCPr3SIIDrR5kpVOiTbm7h+KFj7a3AN2zVs3g
+	dhbbhy0WcdxMHQi/b6AerX6nW8q6T7d54s0vOArTqNivA5Xkbg0N9hfJ7g78sMvYO2qnq5RWl8D
+	eCYvLTHlDX5baNq2Ufgu+FZo5s9Jpbz4exv2mgf/eodrqM3ynX9d0diAdoAyWLJ9TtRxq3s6hxs
+	iR0CBtug0o15CHyOq5H456r8wiq8GQZdxOs/mr1wxT4nCY5Ig/SINWTB0hYT+ETRke9GFxiJRk3
+	0y4pNAgKxG8t0NStfYPrqgnccmzK9JmjIbnKeh7emyGpffuY3tBXbUhIAmIJSPqyhe+f/VuLBBD
+	+WwCye3zoZ4dKmcVGMGJBxlpT1bNysFUABXTA
+X-Received: by 2002:a05:6000:40dd:b0:439:c510:f97a with SMTP id
+ ffacd0b85a97d-43b527cc57fmr9256013f8f.48.1773879311405; Wed, 18 Mar 2026
+ 17:15:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7a9255803fdfef52d86c257ccb00d3b1d37de5cc.camel@gmail.com>
+References: <20260315054227.118344-1-sun.jian.kdev@gmail.com>
+In-Reply-To: <20260315054227.118344-1-sun.jian.kdev@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 18 Mar 2026 17:14:59 -0700
+X-Gm-Features: AaiRm53LivEh_n___lgFy1oE-qeJGpxxOazJpETBsIzh61TvvbR0AF2zOXtjtSs
+Message-ID: <CAADnVQ+j3BWFoTaQHDXxkp3ORTc0biQLf06uOYEX7tyhpc+tbA@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: trampoline_count: use dedicated target function
+To: Sun Jian <sun.jian.kdev@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 16, 2026 at 10:09:07AM -0700, Eduard Zingerman wrote:
-> On Sat, 2026-03-14 at 01:01 -0400, Harishankar Vishwanathan wrote:
-> 
-> [...]
-> 
-> > > > +     /* Fallthrough (FALSE) branch */
-> > > > +     regs_refine_cond_op(&false_reg1_c, &false_reg2_c, rev_opcode(opcode), is_jmp32);
-> > > > +     /* If there is a range bounds violation in *any* of the abstract values in either
-> > > > +      * reg_states in the FALSE branch (i.e. false_reg1, false_reg2), the FALSE branch must be
-> > > > +      * dead. Only TRUE branch will be taken.
-> > > > +      */
-> > > > +     if (range_bounds_violation(&false_reg1_c) || range_bounds_violation(&false_reg2_c))
-> > > > +             return 1;
-> > > 
-> > > How hard would it be to modify reg_bounds_sync() such that it
-> > > preserves invariant violation? Thus avoiding the first round of
-> > > range_bounds_violation() checks.
-> > 
-> > We can exit early in reg_bounds_sync by detecting ill-formed inputs
-> > (using reg_bounds_violation itself), and have reg_bounds_sync preserve
-> > the invalid bounds.
-> > Unsure if preserving invalid inputs is a good idea for
-> > reg_bounds_sync. Or if we should be
-> > calling __mark_reg_unbounded on invalid inputs.
-> 
-> Agree, early exit is a good option.
+On Sat, Mar 14, 2026 at 10:42=E2=80=AFPM Sun Jian <sun.jian.kdev@gmail.com>=
+ wrote:
+>
+> trampoline_count fills all trampoline attachment slots for a single
+> target function and verifies that one extra attach fails with -E2BIG.
+>
+> It currently targets bpf_modify_return_test, which is also used by
+> modify_return and get_func_ip_test. When those tests run in parallel,
+> they can contend for the same per-function trampoline quota and
+> cause unexpected attach failures. This issue is currently masked by
+> harness serialization.
+>
+> Add a dedicated bpf_trampoline_count_test target and switch
+> trampoline_count to use it. This keeps the test semantics unchanged
+> while isolating it from other modify_return-based selftests, so it no
+> longer needs to run in serial mode. Remove the TODO comment as
+> well.
+>
+> Tested:
+>   ./test_progs -t trampoline_count -vv
+>   ./test_progs -t modify_return -vv
+>   ./test_progs -t get_func_ip_test -vv
+>   ./test_progs -j$(nproc) -t trampoline_count -vv
+>   ./test_progs -j$(nproc) -t
+>     trampoline_count,modify_return,get_func_ip_test -vv
+>
+> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+> ---
+>  net/bpf/test_run.c                                        | 7 +++++++
+>  tools/testing/selftests/bpf/prog_tests/trampoline_count.c | 3 +--
+>  tools/testing/selftests/bpf/progs/test_trampoline_count.c | 6 +++---
+>  3 files changed, 11 insertions(+), 5 deletions(-)
+>
+> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> index 178c4738e63b..b41147a29f16 100644
+> --- a/net/bpf/test_run.c
+> +++ b/net/bpf/test_run.c
+> @@ -580,6 +580,12 @@ __bpf_kfunc int bpf_modify_return_test2(int a, int *=
+b, short c, int d,
+>         return a + *b + c + d + (long)e + f + g;
+>  }
+>
+> +__bpf_kfunc int bpf_trampoline_count_test(int a, int *b)
+> +{
+> +       *b +=3D 1;
+> +       return a + *b;
+> +}
 
-Thanks for the review!
+No. We're not adding test code to the kernel anymore.
+That's what test_kmod is for.
 
-We're preparing a v2 with this change and the temporary registers inside
-bpf_verifier_env.
-
+pw-bot: cr
