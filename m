@@ -1,200 +1,273 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 753EAD27E
-	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 12:32:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23E92202F71
+	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 12:49:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773923572; cv=none; b=iK34ogyDBAqchKzn3KST8mjrrKOFw2wvbAdkOTSLnEabDnqCpTyIAXCL7MhDzfNudLV2R3eQcKPJYMYLWsBXQvMuRcyJt+QmMMJuE8/T7JMslPp0EqzhHfUIxZlVTYi5NdexnjKql/wzfSRQc+5Toe105sTEMq4XSgZSXewZk30=
+	t=1773924551; cv=none; b=QpXrXqTgcq6Z0zdbg9c6QT2bjFJqeb4JxF+GkTg2EHf1oVCXrS3+4nQIYqbvYDqKqUfWSwSHLH5WTBUS+LOwI6Ykp6IcQkLr6mfUQXVrfP5PvVrwjIhkfYdAzY89G2CwW1GQ7wV0Cz/Kv9W0MGtY9shxyMBfPv/iNSjib0oVYq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773923572; c=relaxed/simple;
-	bh=3tSeU2elXrSfQBDhzpF61FpQoIkFwTQZ4Rxl6OHwvRM=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Aj1OWD1KJlgJHZUPtSYNZ9SyoHAlQdDYGid/kdYIzKTJhQWDrk1r9G0Entnpif5W7rBLCMmrl7c+1YJIAFeAktiBT0+PXYfDRlur+tZWQrvLt8Igx7MPkETunByJ5jNpU5m3k8YWL7tHQuHQzZott1z2+opvcvZLL+jC9Jc0bnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aLaH+zjg; arc=none smtp.client-ip=209.85.128.44
+	s=arc-20240116; t=1773924551; c=relaxed/simple;
+	bh=ynQBMSRXQm7aPAjLKgXfqgaJLoAvfb9D/ictZQSt4f4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZgUu9AHowlU8YjFJRxyp66BH/ZUKGSK0lLqYR/XgAKtGNKgEPtOuuEa8+QUPihYwewEc7x7nWMNND2nZkZigjW3stCHfePQetQpDN3YnyPX5RYMMm3ibzTtw9YV0SbGQM//E30qTPp8CX6LoS8CTFN10gZIjR7ma2PxEnXjSmGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bkbKAOIO; arc=none smtp.client-ip=209.85.208.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aLaH+zjg"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-485345e1013so14408205e9.1
-        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 05:32:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bkbKAOIO"
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-66873d8cc9dso537282a12.1
+        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 05:49:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773923570; x=1774528370; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vT9pqEBN+Zh7lgVxExgn69+vb/2G4ujk+G3nQUYqiX0=;
-        b=aLaH+zjg8RTzNICMhdmejQG+NJ1xC6uSYUwCwouBbyHawmZLr3ZsB7O2CCHUbbEQXd
-         0eQ1K+dItOcIW85WkV2iH8QjW7Qepxhp3/2FXfQdVSFzReprCLFb++rB0yVJCIXzd4m7
-         p98K9WkeHruynzTU2DG67UYkOrpTnxIL9J+2NtrNO416fn+GhITwepKd9TCARkzwn0fp
-         c32iqZcSNQyvCLOMoJnhczGvvAWM6YYQomvo2fhh9C8DPrEsBNxnfPRB2XTmJ/HSalq0
-         L10DRiPU+RlRLQBnOPm72IMq90k+K1ccczIz9hGLatG5PeTvpxBTkhgZxXJ2p7eO24/i
-         l+ZQ==
+        d=gmail.com; s=20230601; t=1773924548; x=1774529348; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hp70Q1L+cat8b+0lFNo0m7Hp9q8eqDxwQih/uHUWYr4=;
+        b=bkbKAOIOjlqs8eOFbmtw4InFT3IIuBlo0pZsej0n9sVrvtn+PITZg+JIHivP1WbZl8
+         JfpLk1/lJ4X1gi9UADqHPTZdJFjwRRO7YApPh5hH6lCdXhnSKu+JULcoUzWANDcLZr1F
+         V42m+JGmGgrFXwUXY0SLSRAX1ijge8gkX6P5qFpRowWRvPKu8+wCVVmFz8fmUkQ0vVVl
+         kH7oQArzPCxtx88nM3GQN+0oebIuH2412CABkLXs+PXYrXmJDWpBLl5x2sO7Vi6iFYqd
+         XjyFZvMq9/m55peubkELekQf0kmmVjh1iIzHKHwyTCPN4TFe4bpas4MSooQUCrxnfP0V
+         6r5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773923570; x=1774528370;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vT9pqEBN+Zh7lgVxExgn69+vb/2G4ujk+G3nQUYqiX0=;
-        b=kKTj2I5+D20XZc24o4Pt49uvpkCFZc/tgLOxQHWv15ezJshjHKfg5mYSSZBuV9pM0X
-         rodCpZjgKs6xPRkRZtZb7rtGOyVQDm2REx/J97+BTy4W8Ekxr7y0R3Ig3mx0Zt5xWsKu
-         /ihVUD/iMkeacYUk8tB/Io4NetjEaRb7RPCJGM5JLR7jzZC4Ffg9KIlLvFfbnC8PqIlI
-         i8B72l3pUhvPJuJi5cYjQJX1eWmRVyU+R2ZVSmWomVCEervjTW8NT4eBHMtqhgzNgEXi
-         8fO0JSC+PGdvqIwZ+9devlzjdifGYkIFAsIiIERM3TPm7Ge4L0Yz3QAAMCe4YnIOCg4G
-         aIDw==
-X-Forwarded-Encrypted: i=1; AJvYcCXlVYKtkXgziE1xqJOWv3a3bsBNVcmvENzQGb6MzgSDUu413gBPaAyS4PGUAXCj72uX+Qo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw7T/5x9tMOZpziKa0OLnf50+VhWymA5H7+nvlJmkpiLOfaYoo7
-	8LPR6rI5SwL6HRomBAsO1j18i4byhPEahuCQfSqAkrG2KmGRUwGWRZeN
-X-Gm-Gg: ATEYQzy65F230VYKqQt4iOr2X85G62YSHs7JLTN9pGNsg8YaofRz2iN9dXXzZpest+k
-	BDOtDYAfq48ss7xyIQfMmKqmZDBYTK9ff5SWQONQ2C9tx+u8GF9tw7c+IOU+lmL7LQEjK2PwBRq
-	Qc0YRf+LR8mtXTvAUzIyyKWHETKJw+voTvBj4P0B33MtzNYCOQM6tU9HG/p3td9u9EEyZBsN76s
-	y4ADRkzSWqJuQ/XJZdSFrTlo2AZyp5HFvc+/o/YPKRtaF+7yZY0lQzRSUDcI9Z6BcD819nduqIG
-	FHjiFLdeSzQK7vZftxB6s28FptprxD2ni548FNthOtppwdcZ9o70U/13haB7x5GZ3ll/0rP6UE9
-	03FTmTqDH/5Yb2UaUH1sEPgup0YXZgIhoecLKL6MIpj/U2n9zhS20osrGb/BQt3gxt7S2LGTe
-X-Received: by 2002:a05:600c:800f:b0:485:3cef:d6ea with SMTP id 5b1f17b1804b1-486f8b593f0mr46729685e9.13.1773923569628;
-        Thu, 19 Mar 2026 05:32:49 -0700 (PDT)
-Received: from krava ([2a02:8308:a00c:e200::d99c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486f4e5495csm76149195e9.2.2026.03.19.05.32.48
+        d=1e100.net; s=20251104; t=1773924548; x=1774529348;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Hp70Q1L+cat8b+0lFNo0m7Hp9q8eqDxwQih/uHUWYr4=;
+        b=W+Nlj0iAcMcAmpt+JBsk9FHWRKNCKSUFRQmVKmzKfK7f1sq0rXW1Faf2EsdxmbOjV1
+         lMsCoIP7aTf07TgtFq6GU2cN3fxSchTW+nLSQ6jEPGo0lje6aeOEoZ5+RQMayf4ZKVUv
+         +9336GdpoAK3EWtdm3r/+Qo3DQ8HzSCjp4/guZuMJ1zekp9FkmGKcyy5xQFXxxdUmulM
+         Jti6B1xkGewbf5qGBlC7SciACH3xalun+qs1UVI0K5eQPe3czmj7EAdrBXCSUO4x+zHZ
+         d7OJEF2auQlAiVcoSp8SOVkS+0Z7pZs6Fq1Gzo2HJx4SirhnKROWTmkJfuFmkhtJ27P6
+         tusw==
+X-Forwarded-Encrypted: i=1; AJvYcCVJX+Axl3K/Zx2XsBbWPIuXGFWXm0hZ+XnBFeUr1wFGOtIi7BBPfyh+MECCJTmVH70T24E=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4E6vAAYd7G9Mx7CqXK7l01jsJpKOLgr90lN80zwn2s7p4F6XE
+	7kVFtcgkkLVcghPCBUXf/1Gzsx5gyDuNuvOEBv2CL4wzcEeZOsdb/c8=
+X-Gm-Gg: ATEYQzx9VR0AOd3FfQedodRV0H3UHs/jJzgkqI4Y07OrIL/4YKrwQtz9WlUwSW+gN70
+	VcFckYe9+qcr5eNjFo2cNwPpeVvW2PsRLQRafx8Ie033icFNPIy3f2O9mGtKVuaTx9ROs5EVd4b
+	NWwKeXfQrbsSoEffwF4HbK/FKj/TXQldHdPyDY/hcZj1SWG5fectJ4mQbYEVU1YvWHspnw2HDM+
+	UDcSSJGN7genjZqYlb394p4N1Pal2XOOboAFow2AIBVWnqT/B6pROy6nOgcJTMdhbiYIYpeTYyO
+	m2FKgBLW24D609dUX/QwjdNnAXCFd2mqGL0S7GfRjyOQMuZTH7BbdiG7FsTH6BNHPDpZkCU1lKY
+	ppXR7Zats9bD0cE8cVm+zgDNR6rS97xcwMFOcRjCDzgFqvi2SjERlA9T28/CHcWfQV4b1n9tgXQ
+	mF5NMAM1qym/agm1hyKP3YPxpCVJjo+J6MsI9F4v2l338M7iLjlXLqnOKNClu46LPSGkJnGvyjv
+	NDvTkcOw11Afn2gds2wXMPcdA==
+X-Received: by 2002:a17:907:c905:b0:b98:2493:4770 with SMTP id a640c23a62f3a-b9824934c60mr60103766b.21.1773924548195;
+        Thu, 19 Mar 2026 05:49:08 -0700 (PDT)
+Received: from codespaces-35910c.m1k4x3cq3poebda54cltipn05g.ax.internal.cloudapp.net ([4.210.177.134])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b97f1751cfesm432990166b.63.2026.03.19.05.49.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2026 05:32:49 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 19 Mar 2026 13:32:47 +0100
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: Alan Maguire <alan.maguire@oracle.com>,
-	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-	dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	kernel-team@fb.com
-Subject: Re: [PATCH dwarves 1/9] dwarf_loader: Reduce parameter checking with
- clang DW_AT_calling_convention attr
-Message-ID: <abvs73VjXf_1byN6@krava>
-References: <20260305225455.1151066-1-yonghong.song@linux.dev>
- <20260305225500.1151338-1-yonghong.song@linux.dev>
+        Thu, 19 Mar 2026 05:49:07 -0700 (PDT)
+From: Ibrahim Zein <zeroxjacks@gmail.com>
+To: ast@kernel.org
+Cc: daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	andrii@kernel.org,
+	bpf@vger.kernel.org,
+	jolsa@kernel.org,
+	kpsingh@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	haoluo@google.com,
+	revest@chromium.org,
+	john.fastabend@gmail.com,
+	shuah@kernel.org,
+	sdf@fomichev.me,
+	yonghong.song@linux.dev,
+	song@kernel.org,
+	eddyz87@gmail.com,
+	Ibrahim Zein <zeroxjacks@gmail.com>
+Subject: [PATCH bpf-next v3] bpf: fix out-of-bounds write in bpf_bprintf_prepare with %pI4/%pI6
+Date: Thu, 19 Mar 2026 12:49:00 +0000
+Message-ID: <20260319124901.9207-1-zeroxjacks@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260305225500.1151338-1-yonghong.song@linux.dev>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Mar 05, 2026 at 02:55:00PM -0800, Yonghong Song wrote:
+In bpf_bprintf_prepare(), the bounds check for %pI4 and %pI6 format
+specifiers uses sizeof_cur_ip (4 for IPv4, 16 for IPv6), which is the
+raw byte count of the IP address. However, snprintf() returns the
+length of the formatted string, not the raw bytes. For IPv4 this can
+be up to 15 characters (255.255.255.255) and for IPv6 up to 39.
 
-SNIP
+tmp_buf is then advanced by (err + 1) using the full string length,
+which can push tmp_buf past tmp_buf_end. The next iteration's bounds
+check underflows due to unsigned arithmetic and passes, allowing a
+write past the end of the per-CPU bin_args buffer.
 
-> ---
->  dwarf_loader.c | 71 +++++++++++++++++++++++++++++++++++++++++++-------
->  dwarves.h      |  2 ++
->  2 files changed, 63 insertions(+), 10 deletions(-)
-> 
-> diff --git a/dwarf_loader.c b/dwarf_loader.c
-> index 16fb7be..610b69e 100644
-> --- a/dwarf_loader.c
-> +++ b/dwarf_loader.c
-> @@ -1190,6 +1190,10 @@ static ptrdiff_t __dwarf_getlocations(Dwarf_Attribute *attr,
->  	return ret;
->  }
->  
-> +struct func_info {
-> +	bool signature_changed;
-> +};
-> +
->  /* For DW_AT_location 'attr':
->   * - if first location is DW_OP_regXX with expected number, return the register;
->   *   otherwise save the register for later return
-> @@ -1252,7 +1256,8 @@ out:
->  }
->  
->  static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
-> -					struct conf_load *conf, int param_idx)
-> +					struct conf_load *conf, int param_idx,
-> +					struct func_info *info)
->  {
->  	struct parameter *parm = tag__alloc(cu, sizeof(*parm));
->  
-> @@ -1265,6 +1270,8 @@ static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
->  		parm->idx = param_idx;
->  		if (param_idx >= cu->nr_register_params || param_idx < 0)
->  			return parm;
-> +		if (cu->producer_clang && !info->signature_changed)
-> +			return parm;
+Fix this by checking against the maximum formatted string size:
+16 bytes for IPv4 and 40 bytes for IPv6.
 
-should you check for info != NULL?
+Fixes: 48cac3f4a96d ("bpf: Implement formatted output helpers with bstr_printf")
+Signed-off-by: Ibrahim Zein <zeroxjacks@gmail.com>
+---
+ kernel/bpf/helpers.c                          |  2 +-
+ .../bpf/prog_tests/test_snprintf_ip.c         | 54 +++++++++++++
+ .../selftests/bpf/progs/test_snprintf_ip.c    | 78 +++++++++++++++++++
+ 3 files changed, 133 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/test_snprintf_ip.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_snprintf_ip.c
 
->  		/* Parameters which use DW_AT_abstract_origin to point at
->  		 * the original parameter definition (with no name in the DIE)
->  		 * are the result of later DWARF generation during compilation
-> @@ -1337,7 +1344,7 @@ static int formal_parameter_pack__load_params(struct formal_parameter_pack *pack
->  			continue;
->  		}
->  
-> -		struct parameter *param = parameter__new(die, cu, conf, -1);
-> +		struct parameter *param = parameter__new(die, cu, conf, -1, NULL);
->  
->  		if (param == NULL)
->  			return -1;
-> @@ -1502,6 +1509,29 @@ static struct ftype *ftype__new(Dwarf_Die *die, struct cu *cu)
->  	return ftype;
->  }
->  
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index cb6d242bd..dcaa822ba 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -930,7 +930,7 @@ int bpf_bprintf_prepare(const char *fmt, u32 fmt_size, const u64 *raw_args,
+ 				goto nocopy_fmt;
+ 
+ 			sizeof_cur_ip = (fmt[i] == '4') ? 4 : 16;
+-			if (tmp_buf_end - tmp_buf < sizeof_cur_ip) {
++			if (tmp_buf_end - tmp_buf < (size_t)((fmt[i] == '4') ? 16 : 40)) {
+ 				err = -ENOSPC;
+ 				goto out;
+ 			}
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_snprintf_ip.c b/tools/testing/selftests/bpf/prog_tests/test_snprintf_ip.c
+new file mode 100644
+index 000000000..5b000d6d1
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/test_snprintf_ip.c
+@@ -0,0 +1,54 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Ibrahim Zein <zeroxjacks@gmail.com> */
++#include <test_progs.h>
++#include "test_snprintf_ip.skel.h"
++
++#define EXP_IP4_OUT  "192.168.1.1"
++#define EXP_IP4_RET  sizeof(EXP_IP4_OUT)
++
++#define EXP_WORST_IP4_OUT  "255.255.255.255"
++#define EXP_WORST_IP4_RET  sizeof(EXP_WORST_IP4_OUT)
++
++#define EXP_IP6_OUT  "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"
++#define EXP_IP6_RET  sizeof(EXP_IP6_OUT)
++
++void test_snprintf_ip(void)
++{
++	struct test_snprintf_ip *skel;
++
++	skel = test_snprintf_ip__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		return;
++
++	skel->bss->pid = getpid();
++
++	if (!ASSERT_OK(test_snprintf_ip__attach(skel), "skel_attach"))
++		goto cleanup;
++
++	/* trigger tracepoint */
++	usleep(1);
++
++	/* Test 1: normal IPv4 */
++	ASSERT_STREQ(skel->bss->ip4_out, EXP_IP4_OUT, "ip4_out");
++	ASSERT_EQ(skel->bss->ip4_ret, EXP_IP4_RET, "ip4_ret");
++
++	/* Test 2: normal IPv6 */
++	ASSERT_STREQ(skel->bss->ip6_out, EXP_IP6_OUT, "ip6_out");
++	ASSERT_EQ(skel->bss->ip6_ret, EXP_IP6_RET, "ip6_ret");
++
++	/* Test 3: worst-case IPv4 "255.255.255.255" */
++	ASSERT_STREQ(skel->bss->worst_ip4_out, EXP_WORST_IP4_OUT,
++		     "worst_ip4_out");
++	ASSERT_EQ(skel->bss->worst_ip4_ret, EXP_WORST_IP4_RET,
++		  "worst_ip4_ret");
++
++	/*
++	 * Test 4: near-overflow scenario.
++	 * Before fix: tmp_buf overflows, kernel may crash or corrupt memory.
++	 * After fix: returns valid length without overflow.
++	 */
++	ASSERT_GE(skel->bss->near_overflow_ret, 0, "near_overflow_ret");
++
++cleanup:
++	test_snprintf_ip__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_snprintf_ip.c b/tools/testing/selftests/bpf/progs/test_snprintf_ip.c
+new file mode 100644
+index 000000000..a372b35c3
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_snprintf_ip.c
+@@ -0,0 +1,78 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Ibrahim Zein <zeroxjacks@gmail.com> */
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++/*
++ * Test that bpf_snprintf() with %pI4/%pI6 does not overflow the
++ * internal bin_args buffer when the buffer is nearly full.
++ *
++ * The bug: sizeof_cur_ip (4 for IPv4) was used for the bounds check,
++ * but snprintf() returns the full formatted string length (up to 15
++ * for "255.255.255.255"), pushing tmp_buf past tmp_buf_end.
++ */
++
++/* Output buffers */
++char ip4_out[64] = {};
++long ip4_ret = 0;
++
++char ip6_out[128] = {};
++long ip6_ret = 0;
++
++/* Test %pI4 with worst-case IP (255.255.255.255) */
++char worst_ip4_out[64] = {};
++long worst_ip4_ret = 0;
++
++/* Return value for the near-overflow test */
++long near_overflow_ret = 0;
++
++__u32 pid = 0;
++
++SEC("raw_tp/sys_enter")
++int handler(const void *ctx)
++{
++	/* Worst-case IPv4: "255.255.255.255" = 15 chars */
++	const __u8 ip4_worst[] = {255, 255, 255, 255};
++	/* Normal IPv4 */
++	const __u8 ip4_normal[] = {192, 168, 1, 1};
++	/* IPv6 worst-case */
++	const __u8 ip6_worst[] = {0xff, 0xff, 0xff, 0xff,
++				   0xff, 0xff, 0xff, 0xff,
++				   0xff, 0xff, 0xff, 0xff,
++				   0xff, 0xff, 0xff, 0xff};
++
++	if ((int)bpf_get_current_pid_tgid() != pid)
++		return 0;
++
++	/* Test 1: normal %pI4 usage */
++	ip4_ret = BPF_SNPRINTF(ip4_out, sizeof(ip4_out),
++			       "%pI4", &ip4_normal);
++
++	/* Test 2: normal %pI6 usage */
++	ip6_ret = BPF_SNPRINTF(ip6_out, sizeof(ip6_out),
++			       "%pI6", &ip6_worst);
++
++	/* Test 3: worst-case %pI4 "255.255.255.255" */
++	worst_ip4_ret = BPF_SNPRINTF(worst_ip4_out,
++				     sizeof(worst_ip4_out),
++				     "%pI4", &ip4_worst);
++
++	/*
++	 * Test 4: near-overflow scenario.
++	 * Fill bin_args with scalar args (%d), then use %pI4.
++	 * Before the fix: tmp_buf overflows by 8 bytes.
++	 * After the fix: correctly returns -ENOSPC or fits exactly.
++	 *
++	 * We use fewer args here since BPF_SNPRINTF macro has a limit,
++	 * but this validates the format string parsing path.
++	 */
++	/* 11 x %d + 1 x %pI4 = 12 args (BPF_SNPRINTF max) */
++	near_overflow_ret = BPF_SNPRINTF(NULL, 0,
++					  "%d %d %d %d %d %d %d %d %d %d %d %pI4",
++					  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
++					  &ip4_worst);
++
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
+-- 
+2.52.0
 
-SNIP
-
->  	int param_idx = 0;
->  	Dwarf_Die child;
-> @@ -2320,7 +2353,7 @@ static int die__process_function(Dwarf_Die *die, struct ftype *ftype,
->  			continue;
->  		}
->  		case DW_TAG_formal_parameter:
-> -			tag = die__create_new_parameter(die, ftype, lexblock, cu, conf, param_idx++);
-> +			tag = die__create_new_parameter(die, ftype, lexblock, cu, conf, param_idx++, info);
->  			break;
->  		case DW_TAG_variable:
->  			tag = die__create_new_variable(die, cu, conf, 0);
-> @@ -2391,9 +2424,10 @@ out_enomem:
->  static struct tag *die__create_new_function(Dwarf_Die *die, struct cu *cu, struct conf_load *conf)
->  {
->  	struct function *function = function__new(die, cu, conf);
-> +	struct func_info info = { function->signature_changed };
-
-would it be easier to add signature_changed to struct ftype or pass
-function pointer directly to die__process_function ?
-
-(after reading the rest of the patches, seems like func_info is needed
-anyway, so maybe not worth it)
-
->  
->  	if (function != NULL &&
-> -	    die__process_function(die, &function->proto, &function->lexblock, cu, conf) != 0) {
-> +	    die__process_function(die, &function->proto, &function->lexblock, cu, conf, &info) != 0) {
->  		function__delete(function, cu);
->  		function = NULL;
->  	}
-> @@ -3045,6 +3079,21 @@ static unsigned long long dwarf_tag__orig_id(const struct tag *tag,
->  	return cu->extra_dbg_info ? dtag->id : 0;
->  }
->  
-> +static bool attr_producer_clang(Dwarf_Die *die)
-> +{
-> +	Dwarf_Attribute attr;
-> +	const char *producer;
-> +
-> +	if (dwarf_attr(die, DW_AT_producer, &attr) == NULL)
-> +		return false;
-> +
-> +	producer = dwarf_formstring(&attr);
-> +	if (!producer)
-> +		return false;
-> +
-
-nit you could call attr_string(die, DW_AT_producer, NULL) to get the string
-
-jirka
-
-> +	return !!strstr(producer, "clang");
-> +}
-> +
-
-SNIP
