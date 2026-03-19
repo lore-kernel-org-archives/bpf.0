@@ -1,78 +1,75 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4145B2D46A1
-	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 07:03:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CECF39C003
+	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 07:09:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773903803; cv=none; b=LT/2nVKNfV4e6e7Fh0Ow2SQhg8WQA6RVrs1EGiaXx0NPwefDvSX4A/r2hlzQfPULN0W9KlOHVO/uSlh4EQkWW6zC9leVNLsO5m6cwBfhsCJ/zlMZEE7/MxfmP8R8/hHE2KSt6Ka10dm7zWpjfIYehSrRRed9vdgGiTtzmaUaTns=
+	t=1773904161; cv=none; b=go6YbUWG3cxwbTsRC8ZTN7A4QgJ5cHwIP0bIFwcEOR+xkC+4XlipQvmca03qD6DQFmyfwRMs6x/jbuX7p1ZOHaN935A4+gNG4Q1eXIsIEU7g/3/UumzWeuhnqn6Zo1iAzTIwqngjSmW9c7ph4+t5pf9fHnGWGomzCrU38BDeJj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773903803; c=relaxed/simple;
-	bh=Y5R3aP9kAVCdTdn6XC2JbDbaR6UIDegxxHsQJsIPjtQ=;
+	s=arc-20240116; t=1773904161; c=relaxed/simple;
+	bh=zxQQre6DhyOyD2TwfBFUNdRrcbCFjDRv0wewoObm8WA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j4l2/jQ9defTYBMU2jJypgrfwy7zURNC6XeGAu01y7d9Etfu9a0hGoiIh1Zu9NPyRheXY27SFEhP+Gqmiu4f9Fhw8SHwBYzDvkoe/r+DB22gf0hmVPeReVFZB4BXdIezNUJQ92D5p6y1XaoYtSRy/yBrXk/NvlBj6U/1tfkVQsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=YjtRt/g1; arc=none smtp.client-ip=209.85.218.42
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z2cWupuKXAlHmWWIt+2pljhq8p9m/E/1rn+raAIbgGzrAAuNGnWX8oYPu7NK20clIZnn7qjP4jiPrWDB5Q1orop2hG0drO5DI2hDHi1do5vKod/AcpK3GmdaUcoLWr1yE8YniFneLk0Zw8Ro6vv/P7wt3Ar4MzGt8c6xBdj53aU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=RLdLxl7e; arc=none smtp.client-ip=209.85.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="YjtRt/g1"
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b97ed4ad579so95655066b.3
-        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 00:03:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="RLdLxl7e"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-485345e1013so12407575e9.1
+        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 00:09:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1773903801; x=1774508601; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1773904158; x=1774508958; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=asqVUVrkKsvwpjPuxD8dnEos+4P3Vr0D7SOwZp53oCQ=;
-        b=YjtRt/g14WkPFCUdeTFXfx7+ypTBkh5zGlOZn67qkU8sppbk381sM0/2vqPUuu0228
-         kyYVm7MFZAwK6JoIauVt7xfFjOkrztmW4YnvezAwQ7ej8VFc0kQZiOxcHQZXWD9kRJ2j
-         M7fwG+19P4ojHJh4RYJezBb+AdkETqL9QmJLpGr8yEj5iYscy08VGq6DQOI2OfC+3w+F
-         ys7Xhex860R4HGmLNH1nJbaOl9xoD8Dkd7PjhmAS/m557pyTy6o0ASad2+6Q8yvnsNNd
-         YHnYW//RObZRgVUy3IpC7VkgtvHuR2JMbwhpQBX4Go9t1PG5rEl3yiP2h1G4n+o8dX/s
-         w1MA==
+        bh=p0ZseOfw6JRowQR2hVprKt8+YKHSsyyodPX65S19uw4=;
+        b=RLdLxl7erhPTWxH+CxWwwrbl0aSaXJXlACEiCQJp/VQjlMYAG/8k41okdVQfhc9qqG
+         5zSYRIJNBaWlgpZCymHqriAqFQ6IA7XGGcCs+UJmFIwc9Xgxtw5cCk+Bpj57+bgg2eMS
+         Cde9/sXpg5bdMekPb8f7wZiXC8QNGD0Rv+7Bzk5yLwPBuJ1QW8gNNCwILbiwSEuNAlId
+         AI6D5OqU8QrjqtDKEQS2V3hRs0kUVJs2/PsRNyYipF3+QIPYl6srZirGG84Qq9i2h5QI
+         sXvS6FrX8drl7eAnz4Prv6oegqaU4gLMo8ehmoC+CIGNxk/LlrIMnfuEPiqyiqSryAiV
+         HCUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773903801; x=1774508601;
+        d=1e100.net; s=20251104; t=1773904158; x=1774508958;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=asqVUVrkKsvwpjPuxD8dnEos+4P3Vr0D7SOwZp53oCQ=;
-        b=UWZP6Cj3mSxh2hu2zVBhEqHJK6+85QWkMdWYSqFJu7V07pVfFJEGbj791oYMlrvzRF
-         IQs1YTelufsCdCIyzvs1qFGgNCfF7jROobYOKNqK9Gk/e6Oa3LUl0Cs7ZHi9gSZr/fN5
-         Lul7pgAdp2o7mwQpMAwwyhbV/0xmtq73zYHnf5gq/NLTrQ/L5N15kDpkcjupVebT7ghY
-         tWJUdHI9IctCzWlRCNxTBdI/qyYeCpyG0DN0hJIFIWIvfYyhItZ7hVJeRRNFNonnYifI
-         LTxHeSD4012upCYCO4N8m3/nifCzLKSigXXXIkdWQd0BkdwkZocl3PcCCIlk9Qy6WgPm
-         6BEw==
-X-Forwarded-Encrypted: i=1; AJvYcCXPqU4fWDiT5u6WMgiLkJ5ND5ztJv4Z9Oq/Hz76w4R1eDUpYCgYvTBvacGhKoobJYKRQso=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyRhzUkjbIcOJ2k1YKCwB/fCSS2itXmAxsqnKrqcD5YpkbkZmG7
-	MUai0X2UcFH9LQ0wKS0IHASgHiH+M9sRjXUROZ+vlxOPUqJmVd+udZK230macRv5+Kk=
-X-Gm-Gg: ATEYQzxoTaQQTRByCeA9UlGEOW42wRnuHHo6OMT2aoYqSomDQaBv2mWs+h1GQ9P5GRr
-	/Ev4KUQFl7aBoxiTSx03QRigpWrOavX0b/yRG1zGs5kabr+sYhhMtMaDtPx3/3GUMV2Ez4YDFCS
-	O57J7XcaIlzQYoRTtuXtiOB9mwgMd3NE3geU7RDXM/B5m5VVQ0B8UxTuGQOYWfIY5WthHhAzzdG
-	xPOVFVwF3SNqiLwhY6y1hoPnfRds1L9kDxY4iU0wpFnDCvGpTZrFUcRffNox89oUac6gK+azqh8
-	S+0Il//qjG+PU497cseWYH2ey0bOCRFQguRRsEEmc5A8kNAxsOVwsYiKrNeZbWBr2QgDDtqCqGC
-	Qb5/W/jwUJurMlrdqCUISmZWsihCPdJTADkIG6wp61gt4vbqxUoo6G2PTSWMZZH9CxcpfJDwF6m
-	O1jRnhiEj81NcabI3x2Q==
-X-Received: by 2002:a17:907:c1f:b0:b97:b566:f15f with SMTP id a640c23a62f3a-b97f4a5decdmr368847066b.38.1773903800503;
-        Thu, 19 Mar 2026 00:03:20 -0700 (PDT)
+        bh=p0ZseOfw6JRowQR2hVprKt8+YKHSsyyodPX65S19uw4=;
+        b=fxQAJCy6OY/aOKBs+gklOEHms7+pOme8cCKSDtMgeNp0yAwrUL8lNNJsQGba20efuv
+         8W2dg19K8sn8s6Gb2sTA2TN9jcmdJdNprJsLq/Bd9D/Uort2ys2xp8D9+BlzHLt5k1rl
+         d4mc1Nb/vCdfcSpRwqtLazbZE4c9Zndcv6xq2cr1r6nWwS9xw2hD7xO3ooFPZSAEsTtP
+         5Jbm2mpfW9RRloE2Y4d+bTMRpo4NxeVdaHt0bwEFPdEzjeqXiyrHzKqE607XaPt3GAOh
+         YDUg5AfjzIJ3pPO0ybNPZD9maU0psujn+P19Nyy4bPs9xrytFArgKUEWFVM0Bu1ws4+f
+         zNBg==
+X-Gm-Message-State: AOJu0YwDPP/fiEfndUdzG8eSWCuxYJ0cHR/n0U/j7asnOAzq6Oaf8ZKv
+	MsMYp5s6fHnLwjqsr1pLB8j5Ffm5BLKQ/+2ZWVYTvBlw9jzD2MAiqvxHcbFW1VkGv4Q=
+X-Gm-Gg: ATEYQzydxY4XXP2r577jq7GWsPhSKaWZdJD632VvRuYhFnK7yyybhCIZ59wNY0KPYVt
+	VaoziZ3MQVwhQP6mUngSwA8kdtAsWq22+Rg2A42d7iv25EghzsQv1qAil18ggIbdtxcuZuIbbpj
+	iWNxfikIIRcQEPz+pR41b72ikpt6AnrKQtrI8fL9x7+cQ5AfCSObqgSTR6QH2REnifuzkRitGi2
+	5b518+uLjPcW20qyaa1oHvio4wEl+u29GAHH5hR+BM1WUaqkKW5I0VePa19vOzrfQBl3aKdIqXW
+	+GBrK6P314kOg9PFqUTuwuo0cHTEae06BWPDZRoWgh2nK+i2GxWLDlLqmR1h+qDPdNArRZMg6IN
+	wEb1ruEnK5y7RLl3Di3JFIa2humLRlyOW/ECuKx95u4/F8ULx1OhkelqgzGRU5l7m7vlWrgnAeC
+	RgI2VMrPIQkoBcsq18ew==
+X-Received: by 2002:a05:600c:3556:b0:485:3038:72c2 with SMTP id 5b1f17b1804b1-486f8b91f3fmr41235265e9.17.1773904157715;
+        Thu, 19 Mar 2026 00:09:17 -0700 (PDT)
 Received: from u94a ([2401:e180:8dfc:66a:a219:10d5:f609:370a])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35bc60ebdcasm1777307a91.9.2026.03.19.00.03.16
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82a6b58377dsm4692649b3a.22.2026.03.19.00.09.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2026 00:03:19 -0700 (PDT)
-Date: Thu, 19 Mar 2026 15:03:07 +0800
+        Thu, 19 Mar 2026 00:09:16 -0700 (PDT)
+Date: Thu, 19 Mar 2026 15:09:10 +0800
 From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
 To: Paul Chaignon <paul.chaignon@gmail.com>
-Cc: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org, 
-	ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, 
-	kernel-team@fb.com, yonghong.song@linux.dev, emil@etsalapatis.com, arighi@nvidia.com
-Subject: Re: [PATCH bpf v2 1/2] bpf: refine u32/s32 bounds when ranges cross
- min/max boundary
-Message-ID: <vnpbticzhrf4ke7xo6dklqipfstg5p62ccouurkxb66maotip2@3aexbucdvrr7>
-References: <20260305-bpf-32-bit-range-overflow-v2-0-7169206a3041@gmail.com>
- <20260305-bpf-32-bit-range-overflow-v2-1-7169206a3041@gmail.com>
- <aaocJ3gJr7019urU@Tunnel>
- <fd6a7d7fc0eee70b0b3053b1db34e9e986b2a067.camel@gmail.com>
- <aaoevIcblUpMyN3U@Tunnel>
- <bnw5mn5vwgezvhvzotrqcxfq5xixczjgzc2gj42565vnod5aai@rbwkdbuz5t3d>
- <abl1V9B56HSCKh3H@mail.gmail.com>
+Cc: bpf@vger.kernel.org, 
+	Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>
+Subject: Re: [PATCH bpf-next 2/4] bpf: Simulate branches to prune based on
+ range violations
+Message-ID: <rqymt2p6ypkk7wv3jzhm4zkbyfg2b5fyvia6bdfp6mdbzzqcmz@qvt2rb4ul2p5>
+References: <cover.1773441432.git.paul.chaignon@gmail.com>
+ <aacec3599b3965e022be1b9792f29e88a1780a78.1773441432.git.paul.chaignon@gmail.com>
+ <swmeukekw55emiwcduoq4jpjk6hwqk7nzxbcs4xgw4mir5ldd7@mqyinrubwmlo>
+ <abs6SmlOId9IVidk@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,59 +78,66 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <abl1V9B56HSCKh3H@mail.gmail.com>
+In-Reply-To: <abs6SmlOId9IVidk@mail.gmail.com>
 
-On Tue, Mar 17, 2026 at 04:37:59PM +0100, Paul Chaignon wrote:
-> On Thu, Mar 12, 2026 at 02:45:47PM +0800, Shung-Hsi Yu wrote:
-> > On Fri, Mar 06, 2026 at 01:24:28AM +0100, Paul Chaignon wrote:
-> > > On Thu, Mar 05, 2026 at 04:18:42PM -0800, Eduard Zingerman wrote:
-> > > > On Fri, 2026-03-06 at 01:13 +0100, Paul Chaignon wrote:
-> > > > > On Thu, Mar 05, 2026 at 11:48:22AM -0800, Eduard Zingerman wrote:
+On Thu, Mar 19, 2026 at 12:50:34AM +0100, Paul Chaignon wrote:
+> On Tue, Mar 17, 2026 at 02:14:48PM +0800, Shung-Hsi Yu wrote:
+> > On Fri, Mar 13, 2026 at 11:54:43PM +0100, Paul Chaignon wrote:
+> > > From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
 > > > 
-> > > [...]
-> > > 
-> > > > > > diff --git a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-> > > > > > index 0322f817d07be5d003c17dd7cedfa3aa4197678e..04938d0d431b38e086b50fe28b99e4ad2682742e 100644
-> > > > > > --- a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-> > > > > > +++ b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-> > > > > > @@ -422,15 +422,69 @@ static bool is_valid_range(enum num_t t, struct range x)
-> > > 
-> > > [...]
-> > > 
-> > > > > Don't we usually put changes to this file in a separate commit, as for
-> > > > > test changes in general?
-> > > > 
-> > > > W/o this change the reg_bounds.c tests would fail.
-> > > > So far we tried to keep selftests passing for every commit,
-> > > > to help with any potential bisecting.
+> > > This patch fixes the invariant violation warnings. These warnings
 > > 
-> > Similarly we have stable AUTOSEL tends to just pick up kernel/bpf/
-> > changes and not the selftests ones. e.g. both 76e954155b45 ("bpf:
-> > Introduce tnum_step to step through tnum's members") and efc11a667878
-> > ("bpf: Improve bounds when tnum has a single possible value") got picked
-> > for 6.18.17-rc1, but not 024cea2d647e "selftests/bpf: Avoid
-> > simplification of crafted bounds test".
+> > Nit: I would say this patch fix the invariant violation (minus the
+> > warning part), warning are gone after this, but that because we have
+> > fixed the caused of the warning.
 > 
-> I can send the selftest backports to the stable ml (unless you already
-> are on it?)
+> I wondered about the same when writing this :) I thought it best to not
+> claim too much and be specific to the invariant violation we currently
+> warn about as technically there could be others.
 
-Requested in https://lore.kernel.org/all/xbjybmha7fdnnm5gn6p6jyppf4ud2r72rfabvej6egg545ozsu@a4qj43d3iu36/
+That is true. Then maybe just "this patch fixes the invariant violation that
+happens after we refine ranges & tnum based on an incorrectly-detected"?
 
-We should be good now.
+> > > happen after we refine ranges & tnum based on an incorrectly-detected
+> > > branch condition. For example, the branch is always true, but we miss
+> > > it in is_branch_taken; we then refine based on the branch being false
+> > > and end up with incoherent ranges (e.g. umax < umin).
+> > ...
+> > > Fixes: 5f99f312bd3b ("bpf: add register bounds sanity checks and sanitization")
+> > 
+> > Following the thought above, I am uncertain about the fixes tag here.
+> > Commit 5f99f312bd3b surface the invariant violation as warning, but
+> > invariant violation still happens before that, we just don't catch it.
+> > That actual root cause would probably go even further back, but probably
+> > would be too much of a hassle to figure out. Maybe drop the tag?
+> 
+> Yep, that has been a question even for the previous invariant violation
+> fixes I've sent. On one hand, what is usually being reported as the bug
+> is the unecessary warning. But on the other hand, as you say, the
+> warning just surfaces an existing bug which we are fixing.
+> 
+> > Put it in another way. If a tool uses this fixes tag to determine where
+> > this fix needs to be applied in stable, it would determine it is only
+> > needed for anything v6.8+, when 5f99f312bd3b is merged. But this patch
+> > probably should was be applied to stable kernel before v6.8, because
+> > IIUC invariant violation likely also happens there.
+> 
+> Yes, that's definitely a good point. We probably don't even want to
+> backport this to stable kernels (at least not until we've built more
+> confidence via syzbot). We'll drop the tag.
 
-> Do you know if there's anything I could have done differently to have
-> the selftests picked up? ...
+I was actually hoping to get it into stable as soon as it merged, heh,
+but make sense.
 
-In this specific case above it would to be have the selftest change
-along with the kernel/bpf/verifier.c changes, all in one commit, like
-Eduard has reasoned.
+You would have to actively reply the AUTOSEL selection email sent to you
+once this merged though, even without the fixes tag it would still
+likely bit picked up; I'm not sure the exact AUTOSEL criteria and it
+seem LLM-based right now, but given this says "fix" and "syzbot" I doubt
+it will overlook this.
 
-> Or maybe something we could change in AUTOSEL?
-
-We can argue that the selftest was dependency that should go together,
-and that AUTOSEL should pick it up, but IIRC it is design to only pick
-up dependencies that comes before a commit. OTOH it would be nice to
-have it try picking up selftests in the same series whenever it picks a
-commit from there, but that sounds like a bigger ask.
-
-...
+> > > Reported-by: syzbot+c950cc277150935cc0b5@syzkaller.appspotmail.com
+> > > Closes: https://syzkaller.appspot.com/bug?extid=c950cc277150935cc0b5
+> > > Co-developed-by: Paul Chaignon <paul.chaignon@gmail.com>
+> > > Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
+> > > Signed-off-by: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+> > ...
