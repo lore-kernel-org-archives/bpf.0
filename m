@@ -1,134 +1,107 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E06D2356BE
-	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 09:01:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2187C37268A
+	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 09:02:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.47
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773910905; cv=pass; b=j8PLE+ppAF/C9aQEXcZ5ZKFo/HcCza3jO0jqVoPJusBl1saKfCXPkU/jul/NfLXZBD+jVzJfRH8Lk0Iezb+qzFVe51XdvKYihR7U+dIPeJkHhLl4/MxiJPPksv4i9X2S86GqT5qCBAaT9UPNWUu2TUQiTNlmGI12joXkyIb+ZBo=
+	t=1773910963; cv=pass; b=t39d+kjy88kGKs3uAB3d8c3AZX48d7XOGl/dwy1OD5TW2SLUfh3J7nDWV07yKDr/YvvsFCE9fT0fPfFuMEYSg80mP7AhcQ4DmpzTCyJ0Sw2x0uauyk7dlxTpxvv0dShZfWta3Zr4VPFayHGgs8BDhmf4uY5cZZd8bsOa1zl3MrM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773910905; c=relaxed/simple;
-	bh=y4XzTkHyZwwKq7Lc4dfD2MgvHa8YwVeUUN4EYX7J9aE=;
+	s=arc-20240116; t=1773910963; c=relaxed/simple;
+	bh=TIXB+xHcbufjB5Q6aRGyMOs0E4bJORdAbn3Vn2HA2wM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=duoXgrc+WyYvzZtLNNLgiHh8z0gnmZzxb2T2Q2Js1LgL+ZJgMikeYQ4Mg7DbFRyT2DPIHyjnIBplhk1bTSayNKbqBUlpW1C2oV+MYnnRblmVu2aJpOFscR7spHzkoTQL+bBxGrgKXsSvfgvXa4u9RYXYlm7LUo8ExyzfPB3arGo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e+n1SmQB; arc=pass smtp.client-ip=209.85.208.46
+	 To:Cc:Content-Type; b=qQQ7ZhE02/wwlMa9sSizvDLOBOleMHJMUwZU9nuLQ9bs8HnbcKaDL8+cOi/Ank2qXNytyRx2u9HdtSpa7dps3hlhIvDsI9T+cOhq78EtC1HAjCXdfMj3QQ/gpE/okIU6TlC7BkeRSck8E0SbY5X70pntBesmMX1NQRoM3E85gzk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d9R9oJ9U; arc=pass smtp.client-ip=209.85.208.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e+n1SmQB"
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-66174cf4549so1275826a12.0
-        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 02:01:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773910903; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d9R9oJ9U"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-6687c29d39fso225790a12.2
+        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 02:02:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773910959; cv=none;
         d=google.com; s=arc-20240605;
-        b=ZdQ62d3ZUuPxqqwrEfH1Cq4YBroV7YX9pogCAHUBu7M7yOm7rJ+pYnalxEo1RM7F4r
-         ovRLDMt7ghKLR21yhiFrql/HrP37iksvOEXkryk2cjzjlBOftDv7HN75JGxO4rmRVxbL
-         9YZiYuRT4DK+dSB5Gq7Y5fsYn18WCMPw2HSpupuIpwgMkn6S7lIW8AypteNj8qNzEaaX
-         /iR1v2liI6TLyfPTkRqL+TElTX1Cg7KBvq7BGkG0j7ZuuEG1C7hmWZne/egGHcG/NPNy
-         JJXBoBNurzeUrazyLil24MmOz0B5oDOhkvAmpGVwmwWBiadP7CwO1MqqPzlO5uI7xf8z
-         Wssg==
+        b=Gb2INiLRSOpwkvzcpGuRIEI9B0IXBC4z/MosyTSqoJETUPffotCMzPG1cL3oLiogLO
+         x8SWBFYMK4kID9bJXImbTrIK1PU+fxMqHl/rLu8t4+cRp4iP3LeAROKfitGHEJlFGivp
+         pIa6E0JcqTWjBMskAgRoDQXbg7bwFuw6Jq+9NUGG9Y3bqgAiuirjmFlZjrlAYCEk4uW+
+         LSqA5CXt+K2qlbVRWy8nsvtYpqNV7hkWsSj6BkVPRVryyopXwqWx7Wdwb+8IY1u7wswp
+         thApE0v793ex8JkHkfDvXasos0h8MW9QufxAWvZTqgk1RFKcaFxwZ/jB+O/x/eH1y/yN
+         vbDA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:dkim-signature;
-        bh=aHp8QIilO6dMcb8Fbui8Z54MxNDCB8m/GYOx+Vb5b94=;
-        fh=jceCy6P6m1yZ9uGLZftEQG+7T7lmmhCoVdcKqlvADKg=;
-        b=N+WeJefJpeo7jL7PQrUYQWRezd2vQDHQbQq+q0KFVXIB0UB5Rh/hqIdkbjwAkZdwWT
-         QhCSQOg0711K40QvYOerP0oepU/rm6WVTcEHfh4BVClJ6XogYW5a1HtyQM2fmlpV01KF
-         mcH35s7ptHx3abXAfssBJ/w1p4GVNMO6eJx0Dh1gFo973j0juB+MOX6scT6lilgkKVJz
-         w6nGNxuFS4s7/G4Lr+CmSmRL3ZlfQdfeIN+0Cf2edKIbl8PkDxh4PQtylORUWthD/GL3
-         ZPZpfcMtpVNivzFDdxhEnAi9xUXTr5rKCHOuWFNXHtwHLLC8MXe6pxwz/TytaB+0JyG+
-         lKcw==;
+        bh=TIXB+xHcbufjB5Q6aRGyMOs0E4bJORdAbn3Vn2HA2wM=;
+        fh=LdIW5EYzfOG612DMnc6tLskYZ2znxMYohpYpmBQpvhk=;
+        b=VKC8aWTMLedXU+OvCI0LvA0AF6R7pWi9ECHAObxUJ8hbA6CaWVnE5hfIVnsyifaunx
+         xJCRdncng0b1ciJ5LYSBDRvVcQRIELOF/h7jXgJdcXyRgyiuIuzQ35RzS4sELXbuAQ73
+         MJSQc5/C2LX9VQe7hXZz0ziu/0vvCmHndp2EXGZOEfDpgyr+2XkYZT8n9B1QlBV9d1qH
+         0Q3MmNSXsWXhvQUguD8VOxNmMyG+5yuR9nFCasEXwgAmQL2aYEbe56oZWsC2hydItMyR
+         mX+ZjJVxQ9OR/iAHEYTjvHGOsocTnFpBj3ZjqGzO/4DV0foPDUDkDBP5kTiDCO6Dbgbw
+         BPEg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773910903; x=1774515703; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773910959; x=1774515759; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aHp8QIilO6dMcb8Fbui8Z54MxNDCB8m/GYOx+Vb5b94=;
-        b=e+n1SmQBPFgPH2s73GjcObpK7BZF0dkEQcBKNAStms8hFEHbxZs6Q09RM9nfA4KMeG
-         5sIdJYEhgEHxWDw6DCnjuQBC4VHG8cnlFcUvmTWmC7GZp4bEoarKD0EkuogsAsPr6VB7
-         GN6akheBsWS8MM+ebTzdZkTF4uZJEaLsTUwvbrScGEfFxaJ7NgzkdpER1ARDAY4ZwfZD
-         4nWkk8ldQBc6e/deG2rfp8xIXUbKb2qdUEHA9LXNqfhuj0/3AmSUzws8NaiQD901rB2a
-         UvZCOQrA/Ge90Au2ov69Y+9GzKooPOAg+1Q48s02Yhra08PKtG4cYYEFyepGX42bGHaf
-         vyPQ==
+        bh=TIXB+xHcbufjB5Q6aRGyMOs0E4bJORdAbn3Vn2HA2wM=;
+        b=d9R9oJ9UeUay9ejYV2UboWmXnUIgBG9T4U4GGDCSAVCUD4dKm1tOSxPM42QxfI6WZ1
+         HgcO1NFUFX4mvQd/JUhtmA8qVt4pDCz9+MEDDcIeuUcYw1q1Epsrwq2hf4EOhaazfgH1
+         KtfupgqUxlzXg8nfaDRUgqpKhhmz4X91nodLoRjz2ViVT/FlwRRhL3RjT2yqETXyUZz2
+         UvSth43f8Mf7at4hIT8B7ojZy5CvK/LNsyIBDAoU41lzo6kBenunXhsDkiAQ+vlxrevk
+         G49WSxnJhYnAun5CA33XYEQJCFREAHY8HFoQBN7uZQ/LEMIshpJod8ig4q19VYrw5aQH
+         LKcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773910903; x=1774515703;
+        d=1e100.net; s=20251104; t=1773910959; x=1774515759;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aHp8QIilO6dMcb8Fbui8Z54MxNDCB8m/GYOx+Vb5b94=;
-        b=j3dSvgM/OlnWFaeTVVwMw7EmFHJDsbtWl/iBzAAhOESRVmaGyx2EhGcVpXYBk45enm
-         Ns/lwSSqa199LHf3JBgm1YLeYEzvLqx/nmEMv0d2Gj8wajq1LYO55vynZVi+SOCx4f/T
-         /JwAQXLE96ZOnkZTulEgGR3u03ix3jra5sH/xJTpx2LF+ePAjbIvWvdtZoCXeDnDKxrd
-         UuTFVgPbTxcFSAUPr+RooG1j71TrIQevPUVB+Y4uH2gcyVT81XUBtwmVU+VxQx1e8bc3
-         PO/WQTcKMRxFrS6Vt/gDS3QZrCxr+AwlB+3yaT4Xo0CJlTBDFj73lyAzpBMMqzsY7OTm
-         oR1g==
-X-Forwarded-Encrypted: i=1; AJvYcCXRZ6silUwm7weL8YTBsSWH+kbUAhuyo9hwGtQLAw7UUMPeBuyjJjRENlsa8JLQcREU/oA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YywP62xh9xaotAkIcQgvEGfJvq1D0+6o0u2AGxuvtxWSIGOBLoV
-	ceDGU2kZNekbufov43+aB7O9gvisuVSelGLTkeAr3n5Ol3ki+wEfkASUEMhFMZNQKr+I11nzJXO
-	EAoDFzJS17PqhkxgP/0p92GkD+CvFjQ==
-X-Gm-Gg: ATEYQzzKzIFWZufOu0OEadSWbKRc11dYmjaWXdCaph1RzMJlEIWDZgHDzHeqQ2p8T6o
-	Y6XKd3EYkZ0jkxK8N20wVdn6T0a7Ipu168/NFARxpSHnLov4+Uq5hbW5Y/STJ41ftAMqwZp9OhD
-	NpyTV6nRwniimUVErIayDC1bBDyYeumq/fwtz0p25YuY9pt3onm/d7D8oydfTAwD20RlALPBXVW
-	T8szQQ0HVkqlNiNWJ4p8DHqw4svXEn7oYF92VWqR43tN3yvBIK0XT23DQKmbmDS2Omzh9C1iiiT
-	CNLSl5n5wvbrX/WJkDgAzR/2mg==
-X-Received: by 2002:a05:6402:911:b0:65f:a47f:6e9c with SMTP id
- 4fb4d7f45d1cf-66850ba83c1mr1589316a12.3.1773910902425; Thu, 19 Mar 2026
- 02:01:42 -0700 (PDT)
+        bh=TIXB+xHcbufjB5Q6aRGyMOs0E4bJORdAbn3Vn2HA2wM=;
+        b=EIpzyPqvupjASSpIuNRYU1OvpumJKr/Y7s8RMzynVN/3Rr8JhldOI/uH3d9nG7A5mX
+         pwMo+sA5y5+EY/KJwKIR+vXU2183f9f/uuzWwqCjzXTdjAoJym5CY5Q9QTzv9T5NLN0M
+         6P9q6jUoES6L/hzPw6xh09U1WhFYCg1YBikSc/81VLff/vuWKN9yjyXFw11GSnzzdesi
+         TXmIE5CTzv50RfmgBXd5W2ELz+pqB92AguPZjcFqLDIWRqugC7b7/sIHHofyDVCARino
+         3O2IUERvl6uDMu8Rig6pTMDD8nhKHV3zBQ8jfie1rYpFUyofGnvb3Oqk1NfAaZoeU2By
+         3Hqg==
+X-Gm-Message-State: AOJu0YyvA8/NfvuqIdnCIjiZgrvh9s/72Ccn9sWFONVWnq+nWHPrRv74
+	xmAvqZfDkP5NN6ZatA6i2wS4brzrqgVTzxWBLqFxFY2wT2/bCgyuVzo5lTn+qbeNHJXuqBboDKC
+	XOEHyQFmGByeZevmWu4rNFOjwDq2z8A==
+X-Gm-Gg: ATEYQzyKCtkYrNET3bmnmogeY0Dviqh/F6u6qahVcZb/Z9yYtALlQZ/umDOq3O/NstO
+	7TJcL1SnarIxxYJjZ9lpv3ed/YRu/XaPopr65e33kJ6JYfYRuxIKrxfx847K3Qz1EbI9u2AfmAI
+	AFUUr4ljf+S0mMyOs4KXX3/6pMhquWBtZc43xMFyug+1htBHhJ9CL9b8uu7W7Nj6OVMHnBXXvpP
+	ZZ3afopLKsMB9lSodYXHeb0IIP499mVBnbZxb8O0R7f9uWAPKQN3EwGTSmKzN3l4LUnSQ1bQosb
+	O39xub+t6QfCpY2VEGaI2u8P4w==
+X-Received: by 2002:a05:6402:f16:b0:663:5d12:23e9 with SMTP id
+ 4fb4d7f45d1cf-667b38c8ac3mr3112955a12.26.1773910959051; Thu, 19 Mar 2026
+ 02:02:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260318171906.53174-1-hao.sun@inf.ethz.ch> <atwy3evusj7cjafp3fnrzgimj3dimcyuxasohegjc2enplb3cb@4l7i5hoe2ify>
-In-Reply-To: <atwy3evusj7cjafp3fnrzgimj3dimcyuxasohegjc2enplb3cb@4l7i5hoe2ify>
+References: <20260318171906.53174-1-hao.sun@inf.ethz.ch> <9a6dd99e31bae75da12eaa18ddc7424534d13621.camel@gmail.com>
+In-Reply-To: <9a6dd99e31bae75da12eaa18ddc7424534d13621.camel@gmail.com>
 From: Hao Sun <sunhao.th@gmail.com>
-Date: Thu, 19 Mar 2026 10:01:31 +0100
-X-Gm-Features: AaiRm50sUZ3nPlehxdSztd6N8B4R00eav7AAKbRMfviwDRmtIfQzGm7qaGS2w2w
-Message-ID: <CACkBjsbcv4woDZZ0_BA4idBwfLPXNTX7BzJMXTH54zq_8F0BuA@mail.gmail.com>
+Date: Thu, 19 Mar 2026 10:02:27 +0100
+X-Gm-Features: AaiRm52KQDulQVTc5Lt2RFJYYFuvSdx7m4P8k9cLivemyM5S5-kahlyasWk8Sbs
+Message-ID: <CACkBjsaqSDfZXR4ZVUZaRfkHYKbgc4cGsnA77QwhHe6G7wBHsA@mail.gmail.com>
 Subject: Re: [PATCH] bpf: Simplify tnum_step()
-To: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Cc: Paul Chaignon <paul.chaignon@gmail.com>, 
-	Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>, bpf@vger.kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	john.fastabend@gmail.com, martin.lau@linux.dev, linux-kernel@vger.kernel.org
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, john.fastabend@gmail.com, martin.lau@linux.dev, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
 [...]
-> > -             res = w;
-> > -     }
-> > -     return res;
-> > +     d = z - t.value;
 >
-> A bit of comment explaining would be nice.
+> I hacked a cbmc test in [1] and the checker says that the new function
+> performs according to specification (and identically to old function).
 >
-
-The commit message is self-contained; anyone interested can git blame.
-But I am unsure. If a detailed description is preferred, I can add a
-comment to v2.
-
-> > +     carry_mask = (1ULL << fls64(d & ~t.mask)) - 1;
-> > +     inc = ((d | carry_mask | ~t.mask) + 1) & t.mask;
->
-> Maybe break out the calculation of inc, give it a name (next_submask?),
-
-Maybe we can break this down as:
-
-d = z - t.value;
-carry_mask = (1ULL << fls64(d & ~t.mask)) - 1;
-filled = d | carry_mask | ~t.mask;
-inc = (filled + 1) & t.mask;
-
-`next_submask` is not precise, as we ored `~t.mask` into it.
-It's always hard to name the intermediate result :)
-
-> and have it as preceding patch? It seems generic enough that I thought
-> would have been implemented already, but bitmap_scatter() was the
-> closest I could find.
->
-> Perhaps could be submitted to include/linux/bitops.h in the future.
+> [1] https://github.com/eddyz87/tnum-step-verif/blob/master/main.c
 >
 
-The calculation above is direct, adding a bitmap helper intros an indirection.
-For me, it means I would have to check out the meaning of the helper
-and then get back to understanding the algorithm.
+Thanks, great to know this additional confirmation!
+
+> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+>
+> [...]
