@@ -1,228 +1,161 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5677A330641
-	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 08:09:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E538E3A3835;
+	Thu, 19 Mar 2026 08:15:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773907762; cv=none; b=r75U8/+elFzRPTv9NTQdiN4H2XhJadarnPQkG56LiVGzMMO/PoK1/UVJfbqhisk0rr+/d0tCJl80oMsTKHvlxnCv626HSMHALgTouV8LKuigmgQuHufCScCKjSs/QG0AiFOMzciibIt0WiGrRXerqOdVnLDopQMRRshZ13dY0rY=
+	t=1773908110; cv=none; b=RqsDuQ7Cr3/X64WxX4qcjCjNZTOqe+6TT8t5tkVpcKZ170D8A9NmP7SdRkpegL8C99TLTeXmrgvbyO7nsRL15CfFJqK5MT5YkHsbOF8mSwnRFfyFnLt1mzYtxruA6HU3yVCSxQj+QyUYdurxBe4Plx692k1+91pL5YqU09lo1jg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773907762; c=relaxed/simple;
-	bh=9HCjcz1ZaBKpGqOlxhy2gEzigHWfwfIbgjPAOTBjU40=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gv7oF5XxJ+sBGJbQzSqL+fabSCkiOIPFnIdxQT1BJGVnuymV4d/KSd2bFA+iPGn0NvX9jelXiOqrpxrZnvh0UmieLj85nIiHa0Styl/cxVonEt0b4F9NbK/fEQW3kVEsVj/Zf7D+c4jgi4l7gWxzB7vHdJbHvUumOHzC3kKI9sQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BmicJZwQ; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773908110; c=relaxed/simple;
+	bh=/46lHL5quM09lZSvVpaCiNabWUsqlrPWGranUcc3cpw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pF03p5xWe4t25h7p3exLTSL3e9NEK75neZA/A6eO8kicrsbFIuFoOaQZS0H7greyHO1C5kcUFsqrV9XJrnIefuZeD4LdKECGA5a4l9/RtaIJT18uLTU59Px3Q57KSyAJ2tUu+EFJo3pGcU/BaQzO4hvhBLi+vrUgwHj7VRrH2No=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=N8U5LMwO; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BmicJZwQ"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4852f8ac7e9so3738505e9.1
-        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 01:09:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773907760; x=1774512560; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=i5/KWZ2KC3mOSlZnSNWNvP91BfBBZR4N9DqaTZXz5O0=;
-        b=BmicJZwQWGQ37KgDjl7YkM2JNwUt43L/QNeKoY2bXWRxZtVb91qX0wVmcJSE2G/F++
-         aXfkOeXceusVE0PR+rHoFpVkUo4+hKzb7URLrVzQ3zLutyDenM79c0iDu0mW4ZqsFzT+
-         Dj6qSYkNeieHBkVetEVjkNaMcKlLlP8W410/MKd09OFLqkCEY/YZ8K5uc6FJAKSxJfoy
-         fqbI6dyJSKNInPKjqU5axbxwjmhNrhHQ6P20QqGkw+q0VdEsCaN7fsvvYqVeNnLv87J8
-         vrN/8+mYt9c2U5+y8EFQU/Ns5gRQUedeoWh8o46jf0a8xJzgG/w7UMJ2p4E1W5lLtUkQ
-         v/LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773907760; x=1774512560;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=i5/KWZ2KC3mOSlZnSNWNvP91BfBBZR4N9DqaTZXz5O0=;
-        b=VWR7gZqDEZ75z7BrL0Z+lXEqtQFGt4ykdY8a0scaeK6Ww5+i62ZOkdmVP+jJDgZ8Lt
-         i7A5FFJqZa1JqXS4zKFG5fQDLgdhXCrEYNlsfzIFP1auebT/vVWDduvtkumAuPBq8+RB
-         yAEMC4cUTKr8L4Ec1Na+R+CwXDLmYmx8s9UqjTkX/xv6uguBw3iJ5ppNis2jho2jqsPp
-         A0MaEFPTyRpr2VSsihK6HJ+binft3zElBX8WFIqdtbB/pA5YijfSSJjWP9LsC2NmcZ9h
-         U5Cme0Wyu0tCXHfwA4/0qHXelr4/iUnlgPMLA27cpcS6tOi1m6VOmuyWtWNruMvWJ6FD
-         f2fg==
-X-Forwarded-Encrypted: i=1; AJvYcCVWgzlq/ykyRH/7btEmI8lMv5TPmEktfUDniWB2KCioEPGr3J5iGMggP+7Z/frrFV9Jh/o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydXLVpCnMEfbBzCq+UeGSbcCJboSHxL9Wgb3wB7CVwLwSgBw4S
-	60EUIr6oyy9UBoGk1ad7S0IdlBwTi9V2GjekQLdMVv9PHhGoQdkCoF6i
-X-Gm-Gg: ATEYQzxHd1IxdIgESrRcXuSFSO9WI5ED+GvbrCoK+oXN5/nt0MonsVRq8Nn47muyb/A
-	CqRdOEUYWTR5krKeHo8qrgsvvbRmU4C6gYTflWvEXTstPHfpmcLKLh/WPplULlZ8s+XjxaOQNcr
-	wjGdSgo2KunAag7RaKojnYDYuoLW5emPfqzFRBkwT751MeLg8DkvCv/ULGhdLmkToTHfAqTZINR
-	mwOW+6rYAEj+vNSinYFoQpl8+FFjrK+Uq5SJSRk35RSq9fyNga31py8ED/fwDftal1wjIZT29Wt
-	rpp1UAmx6CU6/vzv+LISNGMHI174F59vnGW0RxLggsmUXowJ2N1tgn3E2Bmg2NnNfKOd1ubkXMw
-	d0IQZW4gvfw5YQmbPn9iyxzTqbLhh8i1dx4t49EBxgJv5WWI9SDII4zaXY31v5UvHk3Ri52vd
-X-Received: by 2002:a05:600c:4585:b0:483:709e:f238 with SMTP id 5b1f17b1804b1-486f4479926mr106286935e9.29.1773907759363;
-        Thu, 19 Mar 2026 01:09:19 -0700 (PDT)
-Received: from krava ([2a02:8308:a00c:e200::d99c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486f462caf0sm56441725e9.2.2026.03.19.01.09.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2026 01:09:18 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 19 Mar 2026 09:09:16 +0100
-To: Sun Jian <sun.jian.kdev@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	shuah@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
-	song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
-	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
-	paul.chaignon@gmail.com, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests/bpf: move trampoline_count to dedicated
- bpf_testmod target
-Message-ID: <abuvLDBz2GJ6cx_X@krava>
-References: <20260319031227.330505-1-sun.jian.kdev@gmail.com>
- <20260319040337.366375-1-sun.jian.kdev@gmail.com>
+	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="N8U5LMwO"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=Ay74TMh014iR7nkSfjsS4NxcUBQqZWrWwmUFvdZ+uTc=; b=N8U5LMwOvrosPl6nOVMMteuKVW
+	sTe7HQrBy06spxIvUzVkz3BHiznipoV4TylXKQYaLjUGrXcqsJV6zFjMqADDLaBTU/l1Jx2fnM92R
+	JqNXoaJTFHHkd9ibx2CqvxaH+R6STvuSBF8c81fGugte8jjRpjqYFxptpFfKdUJXC/42DnXYObj6H
+	UkOO6fUS5YTkP+SbcbBfqrqGQdQ4e+pgTe107Mr3yS/Pi0wMVk3wzI7fBu/JZK48rYbo35sh29dZE
+	FQlyzRoj/XXnTzBCuqgYkunW0rilS/w0qDqpk7ErNsUr4KtuGJ3GYtEG+85jmcVLDJX8PAkK93F4n
+	04y9qy3w==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:45380)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1w38Wt-000000004SZ-48nU;
+	Thu, 19 Mar 2026 08:14:56 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.98.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1w38Wf-000000007z5-1pDU;
+	Thu, 19 Mar 2026 08:14:41 +0000
+Date: Thu, 19 Mar 2026 08:14:41 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Jitendra Vegiraju <jitendra.vegiraju@broadcom.com>
+Cc: netdev@vger.kernel.org, alexandre.torgue@foss.st.com,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, mcoquelin.stm32@gmail.com,
+	bcm-kernel-feedback-list@broadcom.com, richardcochran@gmail.com,
+	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+	john.fastabend@gmail.com, rohan.g.thomas@altera.com,
+	linux-kernel@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
+	andrew+netdev@lunn.ch, horms@kernel.org, sdf@fomichev.me,
+	siyanteng@cqsoftware.com.cn,
+	prabhakar.mahadev-lad.rj@bp.renesas.com,
+	weishangjuan@eswincomputing.com, wens@kernel.org,
+	vladimir.oltean@nxp.com, lizhi2@eswincomputing.com,
+	boon.khai.ng@altera.com, maxime.chevallier@bootlin.com,
+	chenchuangyu@xiaomi.com, yangtiezhu@loongson.cn,
+	ovidiu.panait.rb@renesas.com, chenhuacai@kernel.org,
+	florian.fainelli@broadcom.com, quic_abchauha@quicinc.com
+Subject: Re: [PATCH net-next v7 4/5] net: stmmac: Add PCI driver support for
+ BCM8958x
+Message-ID: <abuwcYH791D_oJp_@shell.armlinux.org.uk>
+References: <20260313222206.778760-1-jitendra.vegiraju@broadcom.com>
+ <20260313222206.778760-5-jitendra.vegiraju@broadcom.com>
+ <abSXP3gMFQEiC5Lm@shell.armlinux.org.uk>
+ <CAMdnO-LYAPfyvM4vgmGcZgy-aagHSkP+VDmpRskNU-414j3gnQ@mail.gmail.com>
+ <CAMdnO-+YWowCDh4iB9EZ=eqUidE6Mu4TOqjwyoMgyEaG=pBLBg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260319040337.366375-1-sun.jian.kdev@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMdnO-+YWowCDh4iB9EZ=eqUidE6Mu4TOqjwyoMgyEaG=pBLBg@mail.gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Thu, Mar 19, 2026 at 12:03:37PM +0800, Sun Jian wrote:
-> trampoline_count fills all trampoline attachment slots for a single
-> target function and verifies that one extra attach fails with -E2BIG.
-> 
-> It currently targets bpf_modify_return_test, which is also used by
-> other selftests such as modify_return, get_func_ip_test, and
-> get_func_args_test. When such tests run in parallel, they can contend
-> for the same per-function trampoline quota and cause unexpected attach
-> failures. This issue is currently masked by harness serialization.
-> 
-> Move trampoline_count to a dedicated bpf_testmod target and register it
-> for fmod_ret attachment. This keeps the test semantics unchanged while
-> isolating it from other selftests, so it no longer needs to run in
-> serial mode. Remove the TODO comment as well.
-> 
-> Tested:
->   ./test_progs -t trampoline_count -vv
->   ./test_progs -t modify_return -vv
->   ./test_progs -t get_func_ip_test -vv
->   ./test_progs -t get_func_args_test -vv
->   ./test_progs -j$(nproc) -t trampoline_count -vv
->   ./test_progs -j$(nproc) -t
->     trampoline_count,modify_return,get_func_ip_test,get_func_args_test,\
-> kprobe_multi_test -vv
->   20 runs of:
->     ./test_progs -j$(nproc) -t
->     trampoline_count,modify_return,get_func_ip_test,get_func_args_test,\
-> kprobe_multi_test
-> 
-> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
-> ---
-> 
-> v2:
-> - rewrite the subject to describe the change
-> - resend with the correct patch content
-> - resend as a reply to v1
-> 
->  .../selftests/bpf/prog_tests/trampoline_count.c |  3 +--
->  .../selftests/bpf/progs/test_trampoline_count.c |  6 +++---
->  .../selftests/bpf/test_kmods/bpf_testmod.c      | 17 +++++++++++++++++
->  3 files changed, 21 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-> index 6cd7349d4a2b..b19358aed126 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-> @@ -30,8 +30,7 @@ static struct bpf_program *load_prog(char *file, char *name, struct inst *inst)
->  	return prog;
->  }
->  
-> -/* TODO: use different target function to run in concurrent mode */
-> -void serial_test_trampoline_count(void)
-> +void test_trampoline_count(void)
->  {
->  	char *file = "test_trampoline_count.bpf.o";
->  	char *const progs[] = { "fentry_test", "fmod_ret_test", "fexit_test" };
-> diff --git a/tools/testing/selftests/bpf/progs/test_trampoline_count.c b/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-> index 7765720da7d5..14ad2f53cf33 100644
-> --- a/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-> +++ b/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-> @@ -3,19 +3,19 @@
->  #include <bpf/bpf_helpers.h>
->  #include <bpf/bpf_tracing.h>
->  
-> -SEC("fentry/bpf_modify_return_test")
-> +SEC("fentry/bpf_testmod_trampoline_count_test")
->  int BPF_PROG(fentry_test, int a, int *b)
->  {
->  	return 0;
->  }
->  
-> -SEC("fmod_ret/bpf_modify_return_test")
-> +SEC("fmod_ret/bpf_testmod_trampoline_count_test")
->  int BPF_PROG(fmod_ret_test, int a, int *b, int ret)
->  {
->  	return 0;
->  }
->  
-> -SEC("fexit/bpf_modify_return_test")
-> +SEC("fexit/bpf_testmod_trampoline_count_test")
->  int BPF_PROG(fexit_test, int a, int *b, int ret)
+On Wed, Mar 18, 2026 at 11:12:23PM -0700, Jitendra Vegiraju wrote:
+> Hi Russell,
+> On Mon, Mar 16, 2026 at 1:34 PM Jitendra Vegiraju
+> <jitendra.vegiraju@broadcom.com> wrote:
+> >
+> > On Fri, Mar 13, 2026 at 4:01 PM Russell King (Oracle)
+> > <linux@armlinux.org.uk> wrote:
+> > >
+> > > > +
+> > > > +     plat->suspend           = stmmac_pci_plat_suspend;
+> > > > +     plat->resume            = brcm_pci_resume;
+> > > > +     plat->bsp_priv = brcm_priv;
+> > >
+> > > Populating suspend/resume means that plat->init and plat->exit
+> > > will only be called on driver probe (former), probe failure (latter)
+> > > or remove (latter). Please consider using these to ensure that
+> > > all appropriate resources are properly cleaned up in all cases.
+> > >
+> >
+> > Thanks for pointing this out. I will check resource cleanup more closely.
+> After reviewing the need for  plat->init and plat-exit, I don't think we need
+> these handlers as this driver with fixed-link doesn't need to restore any device
+> specific state such as clocks.
 
-last part of the trampoline_count test executes the probe through the
-kernel's test_run which executes bpf_modify_return_test
+Huh?
 
-I don't think it changes much because the programs are doing nothing
-I guess it's there just to make sure the link failure did not screw
-up anything
+plat->init and plat->exit have nothing to do with "restoring" anything.
 
-we could call bpf_testmod_trampoline_count_test from
-bpf_testmod_test_read and have the test to call
-trigger_module_test_read
+plat->init is for platform specific initialisation.
 
-jirka
+plat->exit is for reversing the effects of plat->init once plat->init
+has suceeded, and will be called should the probe fail or on device
+removal.
 
+So, where you have:
 
->  {
->  	return 0;
-> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> index e62c6b78657f..6eaceb4dfbec 100644
-> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> @@ -581,6 +581,12 @@ noinline int bpf_fentry_shadow_test(int a)
->  }
->  EXPORT_SYMBOL_GPL(bpf_fentry_shadow_test);
->  
-> +noinline int bpf_testmod_trampoline_count_test(int a, int *b)
-> +{
-> +	*b += 1;
-> +	return a + *b;
-> +}
-> +
->  __bpf_hook_end();
->  
->  static struct bin_attribute bin_attr_bpf_testmod_file __ro_after_init = {
-> @@ -1843,6 +1849,16 @@ struct bpf_struct_ops testmod_multi_st_ops = {
->  
->  extern int bpf_fentry_test1(int a);
->  
-> +BTF_KFUNCS_START(bpf_testmod_trampoline_count_ids)
-> +BTF_ID_FLAGS(func, bpf_testmod_trampoline_count_test)
-> +BTF_KFUNCS_END(bpf_testmod_trampoline_count_ids)
-> +
-> +static const struct
-> +btf_kfunc_id_set bpf_testmod_trampoline_count_fmodret_set = {
-> +	.owner = THIS_MODULE,
-> +	.set = &bpf_testmod_trampoline_count_ids,
-> +};
-> +
->  static int bpf_testmod_init(void)
->  {
->  	const struct btf_id_dtor_kfunc bpf_testmod_dtors[] = {
-> @@ -1859,6 +1875,7 @@ static int bpf_testmod_init(void)
->  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &bpf_testmod_kfunc_set);
->  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &bpf_testmod_kfunc_set);
->  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &bpf_testmod_kfunc_set);
-> +	ret = ret ?: register_btf_fmodret_id_set(&bpf_testmod_trampoline_count_fmodret_set);
->  	ret = ret ?: register_bpf_struct_ops(&bpf_bpf_testmod_ops, bpf_testmod_ops);
->  	ret = ret ?: register_bpf_struct_ops(&bpf_testmod_ops2, bpf_testmod_ops2);
->  	ret = ret ?: register_bpf_struct_ops(&bpf_testmod_ops3, bpf_testmod_ops3);
-> 
-> base-commit: 8a30aeb0d1b4e4aaf7f7bae72f20f2ae75385ccb
-> -- 
-> 2.43.0
-> 
+static int foo_probe()
+{
+	do init stuff();
+
+	ret = stmmac_dvr_probe();
+	if (ret)
+		goto cleanup;
+
+	return 0;
+
+cleanup:
+	do cleanup stuff();
+
+	return ret;
+}
+
+static void foo_remove()
+{
+	stmmac_dvr_remove();
+	do cleanup stuff();
+}
+
+Using ->init for "do init stuff()" and ->exit for "do cleanup stuff()"
+will simplify the code, and actually make things more correct.
+
+Currently, you have this in your remove path:
+
++       pci_free_irq_vectors(pdev);
++       device_set_node(&pdev->dev, NULL);
++       software_node_unregister_node_group(brcm_swnodes);
+
+but in your probe error path, you have failure paths that leave
+the swnode connected to the device, and you don't call
+software_node_unregister_node_group(). Thus, it seems to me that
+your cleanup path is buggy.
+
+My suggestion of using ->init and ->exit means you have slightly
+less to think about when stmmac_dvr_probe() fails - although if
+you still have to do appropriate cleanup within ->init if it
+partially fails.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
