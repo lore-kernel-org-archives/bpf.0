@@ -1,128 +1,191 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 409B93D523D
-	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 13:24:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C4FF3D34B7
+	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 13:24:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773926660; cv=none; b=PM1yT39swR5Lt3d9OFxVMqjPDBhtTdNLFf1u4PfVJrBErCFyTXKFLHrtY2Dfs7Quei8mrp6VuxfYB2jh2c7bpjlY9mq0cGXBZ/DzB7vRcjRuOHyXko3JlD4XeppYCXnko2XJR71Kdqyni3e2qHzjXaCumNMHW0crSuIbV/F+qGY=
+	t=1773926682; cv=none; b=QlQykycJNxnMDoiKgYnncoh/EnE50a6fvWhTVaxLEAmhUjkjiseDxC0aAIYWwmykaWiUCDGrQ94vEqAsPRvsP8yDDTWPzwMSXWqI6OvK7R0tVE92zQLB9/5VK0J+8cFOdW/KFOhGk5PhLTwMtYxIkcv+y7TyHBHGbwem0CRy6zo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773926660; c=relaxed/simple;
-	bh=1JjXQZ0Ix6V11YRCybUcCwN3aK889ehs17fGHxeZu6o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dlXfd0rMDygkis+Q6ooNTtFosG89ISYw+eBRwWXhnzzUz/fKAdHzkF6CZqKxmgpdK2zsVXiftfsH4uMaRX+75wSOA86GwlPkSaztqZuFC8ZD1kLeL/9PNh9ZfyHC4nVwjzhiPBkV5BgpageHozw96FlCiksW8ecJYO/zZr3nezw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z1SySbQt; arc=none smtp.client-ip=209.85.128.53
+	s=arc-20240116; t=1773926682; c=relaxed/simple;
+	bh=SkpLpeOLfCj2GU76XmFx4ghYmRIZ+1PVqfByjE+H/pU=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=ipVYNjp1tB+qt6DHBlUCpGWPuENoRFhyXRBA5ed+259s0l7gb3PPSEEI/WmPIHhp4vGmd3SnJRrtFN0abdMFT/rtywNy5KY9mZ4/wIv1hx91/6iVMVnELZQBaGCa956dqQnKjGYoBTEnyAPTJcmsD+XtifhM4lxY8EtTxz1wRto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gEeQUDwl; arc=none smtp.client-ip=209.85.128.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z1SySbQt"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4856cd3f1ffso9833865e9.3
-        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 06:24:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gEeQUDwl"
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-79860421382so5416237b3.0
+        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 06:24:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773926657; x=1774531457; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=d9SdmRpsBlveThR1KIVVShCqfmaw8QF26GnYrjY2FxE=;
-        b=Z1SySbQt/w4psYJ085Wf9vCiDpbpKJnjftytDOVksQ+hbHhztK9igtRs+uAOQlT9u2
-         YvI0xyDKBBL4O2cqR7Z/EmgDfrgdJGAqk6eRYyk4827SsfM5w0+9mqa77ue8M/XD2oSt
-         Cc6JV7UmtaSiTGaPZd06tVBpsWMimnFppiw8ovHfSVEPCWkL/Zy1LbFVZsTwyIjm90hc
-         Wyuj5V45Dcu7+HZW8fFfmCxZi2S1WDHUjE+V9Umf017z+onfw5zv5QlSJNXaGq/Ns+zB
-         1o4u3UGhpnaCMHSwbJkisoIOK0SIyalU9dG3uyFOMpHX5y6W2Yi7eiEc4GX1UxpJsRs3
-         XJjQ==
+        d=gmail.com; s=20230601; t=1773926680; x=1774531480; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H9RQ6JRYqSbn2WRhZy8MD11g0JCaQRZZDGdfPYjhOb8=;
+        b=gEeQUDwleBLzngzsiQuqZFuVmGf1MLghWw7ruAE9MqnuU2rnDLZ8doLjWYGamvLQuV
+         QGwptRjAN7J+6ILObk2Vg6GOVRcz12rLbbQWorjxV8NbHYN/PIX1jhj8J6t/RhOErR/9
+         AR/QIHapdRS16PtdQ1gcmRvrHZu78sYgFk4G+lwfA2l3iK8c/mWhohzlaJCbisa3oa25
+         vPinHDo/bxAS6Id+bGBdZIfIMPpqX7zfX+idDrg0rftKyNP4joGN+35WbbfWy8fsPnCD
+         hjWQbpCnpDDNh/PysgzYfBr84zVmK4F3AtM4PcW8dxnm0HtNsW94tpckLQjB+UtaAdD8
+         TfeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773926657; x=1774531457;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d9SdmRpsBlveThR1KIVVShCqfmaw8QF26GnYrjY2FxE=;
-        b=qb1A0OvjE+jq/J5ia5JQn9f2m24tKZVZLIgeRjJOJX/2BkF17roYdVOrn87DrkpWfP
-         XY9kVtiR/vjk1S7XXJJGJJ8YsjaQjla7VuK2lmbS9lGKTq0kHctCDAYjc3j0pSOylNqy
-         /6Q9mgDea4nWtEQdjZ9Y3QAiBW2TykOEL6T4lYxZb8RKTQFind9QN8DnybOkBgQNQT/D
-         nrzbfSjezVZg3oR7pBlFspnUxPsSXXF69M2VuD3F+gg2L194+k1z9NvJvCRhULuI/QZM
-         oMJQXx19FYpYlTXCZ34e8qAa21wVEEKKXs4z+FKgt+KNoNopcBP9NjugkKJL3EAyb7SA
-         /wcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVfZE24lQ5ezLWHa/IObn9OemWYu7+JUTuRYF1/RjOATCDT0jTWzGbGMgVTPk3g+2aKtlg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwhLoI1EWCjAexC8l7Zk0LwcBLzlC6ZOxhP6FAxUIM/xNBa2S/T
-	GuGKUPyT5Qy3bJEzs/STkqcmGpZvnTc9pGejCSAxizeBQehMBcOcAhE8
-X-Gm-Gg: ATEYQzwycvr+ewNfHp5mM89/zQqHxn04JIP+1IFZgVpJv43DfxnGQ2+6uj2FD6N4SKp
-	+DEJ3TVlq0k2NmztcJCkGFtZH2yAQ1Vm6ho9w1LGMoBNZ43Glq6aCRIq2RjtQw2/AMIvKge9HlW
-	hWUKiIvIMRXc0KPfWjf9EiDJWKD5x2JC5t+RnFgnOF1vNBdiDPj3vepkyJBndAAojsCdaNCE3fy
-	4F3drNQE3XJ0JN4ziixLMbJxJzqySjw9ibc100bYS/Hj96BYYU6gV7nUDEodxB5L5bz3YktNOOG
-	A5znEqMraAmnPTWpNE98fiud+5v7EgwJc7UytRd6H2ukJKW07DQ5cUQ3IfLr/Fazw/a6OGk9PNM
-	49tkV+ynXPntc4sGQx+IPNomS+/dexNeKnz9hgVg1YLYxTowy9JvCLq516R49OHdRtsFUZ+BXWM
-	N6t8jI+VeDHWxOpaxTGiLqMWseCNikX16DyzqU8rpirBxie4zB/Wtm/6LtBwA81AjVDmt0XPSrn
-	N93ZSQSWtSBwu01O+RapkFjYxkalIdfjM+XiDkvvXQwGy32soGywYJ6oCwNrSA=
-X-Received: by 2002:a05:600c:1d10:b0:47e:e2eb:bc22 with SMTP id 5b1f17b1804b1-486f4421c84mr109885025e9.5.1773926657303;
-        Thu, 19 Mar 2026 06:24:17 -0700 (PDT)
-Received: from mail.gmail.com (lfbn-ren-1-685-61.w81-53.abo.wanadoo.fr. [81.53.253.61])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486f8bd5f7csm69524715e9.0.2026.03.19.06.24.16
+        d=1e100.net; s=20251104; t=1773926680; x=1774531480;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=H9RQ6JRYqSbn2WRhZy8MD11g0JCaQRZZDGdfPYjhOb8=;
+        b=PRwWZWc7BoKTfbSU10PqVNP8q8OUWGyp/LCe8QkSe5Lk+zV1erd7ZcSg2aGsflFBzV
+         tFyEc2ZVzaqWiY1KsBSYRTnAMctg1iEAGFdiHZArCmTDWhg1ddxPugTXuxLPJ+reF71N
+         wWKUSW8oiZE4LhHA+nyxn+FmyrnqjJ0zyYj0d/WH2/V94ndG04NAozq+ofreBM041UAG
+         WqsDPpVptUG9lWFLhH71c84ZYnR6ud9LPzoIca82CLHIK3R6EcvVTAif8QFFB2Of9nBd
+         H70Rmu5anc+Kb0XGjjkxujrZAFfDuQkwxzcHRpU7peKbvQAeEIy3TpP7eKiK8fDJygPX
+         dP0A==
+X-Gm-Message-State: AOJu0Yy/RxW5dsSxukGdt3rqC41o9QUFHchM9eUejIkR7FhmB+0knRZj
+	Snl4s0Wpa74ZT3o8XPtcDiL6HKF25tk/zg7v0hYk/E1OtXpzPIdbSW1n
+X-Gm-Gg: ATEYQzxfEtyNc1X/xWdKinovMenedryxeOQ3qjWYrQxCWO612aHMsQJPKlCFuGX0iwE
+	gd6sfyGZcylUNKA6LscSE0h1GiqasCD31N7bgp8PrAYN7EGeXa7tgOYnx/CmKBmRwzgOakMOC/8
+	rs5KWW0Ee2TOiHdsH12jIWjQ79D793Py4kEi+SRVhMkL9wu+UXQA06PfDi6E4BUwlqtJNrgPPmf
+	R9FFN61uuPuB/viJbsOjbik3zA3o36q8DCgW/JKdvFNHKOvEftwGO15daNh+rKDb8gpQdFgKLtC
+	kajc06UBhOZqBEgVXcGOm9iCHszBXY7X7/cSPFy7GNqhi2ZwS7ydS2mO8tr23OBZB+u9VN55W7M
+	n15LzaW4raXnL4bHPRCcJ/B+3BoZpdSGDIfcotPx050vOPxi+4sLEsygB72cqJ/f7CoTl0xlt8S
+	UDOy8WSsP2zQ3MBJsCjOYUmA+buW/jz7JppbNZ6zy9XhqrWAMfGfe2YZ0whyLJFxRxT8YkQ4KiY
+	wbWoV6dKEJcsZs=
+X-Received: by 2002:a05:690c:358a:b0:798:7907:5cf with SMTP id 00721157ae682-79a71ed56b6mr75059467b3.54.1773926680000;
+        Thu, 19 Mar 2026 06:24:40 -0700 (PDT)
+Received: from gmail.com (180.134.85.34.bc.googleusercontent.com. [34.85.134.180])
+        by smtp.gmail.com with UTF8SMTPSA id 00721157ae682-79a715d6acfsm37639657b3.40.2026.03.19.06.24.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2026 06:24:16 -0700 (PDT)
-Date: Thu, 19 Mar 2026 14:24:14 +0100
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: Hao Sun <sunhao.th@gmail.com>
-Cc: Shung-Hsi Yu <shung-hsi.yu@suse.com>,
-	Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>,
-	bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, eddyz87@gmail.com, john.fastabend@gmail.com,
-	martin.lau@linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] bpf: Simplify tnum_step()
-Message-ID: <abv4_pz96HWU804z@mail.gmail.com>
-References: <20260318171906.53174-1-hao.sun@inf.ethz.ch>
- <atwy3evusj7cjafp3fnrzgimj3dimcyuxasohegjc2enplb3cb@4l7i5hoe2ify>
- <CACkBjsbcv4woDZZ0_BA4idBwfLPXNTX7BzJMXTH54zq_8F0BuA@mail.gmail.com>
- <abvDSjl633b_Hb1O@mail.gmail.com>
- <CACkBjsZBiQdA-yKCAt0Ng_PRyQBkXFK5ymN0RXx2xG+uJ6P7PQ@mail.gmail.com>
+        Thu, 19 Mar 2026 06:24:39 -0700 (PDT)
+Date: Thu, 19 Mar 2026 09:24:39 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: "Hudson, Nick" <nhudson@akamai.com>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>, 
+ "Tottenham, Max" <mtottenh@akamai.com>, 
+ "Glasgall, Anna" <aglasgal@akamai.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Alexei Starovoitov <ast@kernel.org>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Message-ID: <willemdebruijn.kernel.18a884569c72@gmail.com>
+In-Reply-To: <03A3369E-0F7B-4708-92B9-B335A6F86976@akamai.com>
+References: <20260318134242.2725749-1-nhudson@akamai.com>
+ <20260318134242.2725749-5-nhudson@akamai.com>
+ <willemdebruijn.kernel.26b750d5f8926@gmail.com>
+ <03A3369E-0F7B-4708-92B9-B335A6F86976@akamai.com>
+Subject: Re: [PATCH v2 4/5] bpf: allow new DECAP flags and add guard rails
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACkBjsZBiQdA-yKCAt0Ng_PRyQBkXFK5ymN0RXx2xG+uJ6P7PQ@mail.gmail.com>
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Mar 19, 2026 at 02:12:54PM +0100, Hao Sun wrote:
-> On Thu, Mar 19, 2026 at 10:35 AM Paul Chaignon <paul.chaignon@gmail.com> wrote:
-> >
-> > On Thu, Mar 19, 2026 at 10:01:31AM +0100, Hao Sun wrote:
-> >
-> > Thanks for the cc Shung-Hsi. We were discussing it with Hari who's
-> > planning to double check soundness.
+Hudson, Nick wrote:
 > 
-> Great, let me know the result when the verification is done; I will then
-> send the v2.
 > 
-> >
-> > > [...]
-> > > > > -             res = w;
-> > > > > -     }
-> > > > > -     return res;
-> > > > > +     d = z - t.value;
-> > > >
-> > > > A bit of comment explaining would be nice.
-> > > >
-> > >
-> > > The commit message is self-contained; anyone interested can git blame.
-> > > But I am unsure. If a detailed description is preferred, I can add a
-> > > comment to v2.
-> >
-> > Not disagreeing about the role of git blame, but it's not a replacement
-> > for code comments either. Having just the intuition in comments can help
-> > a lot; as you mention below, it's one less indirection ;)
-> >
-> > In its current form, I find the proof harder to follow than the
-> > previous, very verbose version. Maybe there's a good middle ground?
-> >
+> > On 18 Mar 2026, at 20:02, Willem de Bruijn <willemdebruijn.kernel@gmail.com> wrote:
+> > 
+> > !-------------------------------------------------------------------|
+> >  This Message Is From an External Sender
+> >  This message came from outside your organization.
+> > |-------------------------------------------------------------------!
+> > 
+> > Nick Hudson wrote:
+> >> Add checks to require shrink-only decap, reject conflicting decap flag
+> >> combinations, and verify removed length is sufficient for claimed header
+> >> decapsulation.
+> >> 
+> >> Co-developed-by: Max Tottenham <mtottenh@akamai.com>
+> >> Signed-off-by: Max Tottenham <mtottenh@akamai.com>
+> >> Co-developed-by: Anna Glasgall <aglasgal@akamai.com>
+> >> Signed-off-by: Anna Glasgall <aglasgal@akamai.com>
+> >> Signed-off-by: Nick Hudson <nhudson@akamai.com>
+> >> ---
+> >> net/core/filter.c | 47 +++++++++++++++++++++++++++++++++++++----------
+> >> 1 file changed, 37 insertions(+), 10 deletions(-)
+> >> 
+> >> diff --git a/net/core/filter.c b/net/core/filter.c
+> >> index 7c2871b40fe4..47aec44a9cd3 100644
+> >> --- a/net/core/filter.c
+> >> +++ b/net/core/filter.c
+> >> @@ -56,6 +56,7 @@
+> >> #include <net/sock_reuseport.h>
+> >> #include <net/busy_poll.h>
+> >> #include <net/tcp.h>
+> >> +#include <net/gre.h>
+> >> #include <net/xfrm.h>
+> >> #include <net/udp.h>
+> >> #include <linux/bpf_trace.h>
+> >> @@ -3496,7 +3497,9 @@ static u32 bpf_skb_net_base_len(const struct sk_buff *skb)
+> >> BPF_F_ADJ_ROOM_ENCAP_L2( \
+> >>  BPF_ADJ_ROOM_ENCAP_L2_MASK))
+> >> 
+> >> -#define BPF_F_ADJ_ROOM_DECAP_MASK (BPF_F_ADJ_ROOM_DECAP_L3_MASK)
+> >> +#define BPF_F_ADJ_ROOM_DECAP_MASK (BPF_F_ADJ_ROOM_DECAP_L3_MASK | \
+> >> + BPF_F_ADJ_ROOM_DECAP_L4_MASK | \
+> >> + BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)
+> >> 
+> >> #define BPF_F_ADJ_ROOM_MASK (BPF_F_ADJ_ROOM_FIXED_GSO | \
+> >> BPF_F_ADJ_ROOM_ENCAP_MASK | \
+> >> @@ -3743,20 +3746,44 @@ BPF_CALL_4(bpf_skb_adjust_room, struct sk_buff *, skb, s32, len_diff,
+> >> return -ENOTSUPP;
+> >> }
+> >> 
+> >> - if (flags & BPF_F_ADJ_ROOM_DECAP_L3_MASK) {
+> >> + if (flags & BPF_F_ADJ_ROOM_DECAP_MASK) {
+> >> + u32 len_decap_min = 0;
+> >> +
+> >> if (!shrink)
+> >> return -EINVAL;
+> >> 
+> >> - switch (flags & BPF_F_ADJ_ROOM_DECAP_L3_MASK) {
+> >> - case BPF_F_ADJ_ROOM_DECAP_L3_IPV4:
+> >> + /* Reject mutually exclusive decap flag pairs. */
+> >> + if ((flags & BPF_F_ADJ_ROOM_DECAP_L3_MASK) ==
+> >> +    BPF_F_ADJ_ROOM_DECAP_L3_MASK)
+> >> + return -EINVAL;
+> >> +
+> >> + if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_MASK) ==
+> >> +    BPF_F_ADJ_ROOM_DECAP_L4_MASK)
+> >> + return -EINVAL;
+> >> +
+> >> + if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK) ==
+> >> +    BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)
+> >> + return -EINVAL;
+> >> +
+> >> + /* Reject mutually exclusive decap tunnel type flags. */
+> >> + if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_MASK) &&
+> >> +    (flags & BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK))
+> >> + return -EINVAL;
+> >> +
+> >> + if (flags & BPF_F_ADJ_ROOM_DECAP_L4_UDP)
+> >> + len_decap_min += sizeof(struct udphdr);
+> >> +
+> >> + if (flags & BPF_F_ADJ_ROOM_DECAP_L4_GRE)
+> >> + len_decap_min += sizeof(struct gre_base_hdr);
+> >> +
+> >> + if (len_diff_abs < len_decap_min)
+> >> + return -EINVAL;
+> > 
+> > Should this test come after the below IP flags?
 > 
-> By `proof`, you are referring to the description/commit message,  not
-> the Lean4 proof, right? I was a bit confused here.
+> Should it?
+> 
+> Seems to me it can bail early without having to check the IP flags. len_decap_min vs len_min.
+> 
+> What am I missing?
 
-Seems I thought one word and wrote another :/ I meant the code, the
-tnum_step function.
-
-> 
-> [...]
+I would think it common that UDP decap also includes an L3 decap, in
+which case the len_decap_min should include both header lengths.
