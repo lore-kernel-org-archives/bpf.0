@@ -1,143 +1,113 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4105030C356
-	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 14:48:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773931684; cv=none; b=s+HW10Ff0rf2HFKRBKrNMGYGaQzUmZgh22Jt8uEq4z9KXbiOyABxETMFYTg1qkdGpK6slPHOLz8nTbgshl50nfnzW6yeAUfmuN1Zto9lVlLYGmCa6kTWodzT1ZBOhMtrdJEgmgRJSNl3MjkRpNNyhE8/R+Vhd1fQODXV5ukene8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773931684; c=relaxed/simple;
-	bh=TQ6tZAv1X/MiSG/35LnRm1f4p+urmkd1+tRCg1aX+AA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mVvFdswNEu1RWdDVWALaz/v4RRbFxLa6xqe5SgbcOeE8o0AckHanQuaSGyYiwn6pSMXOSNQoOQKjQ4uj8e4J2wXsmmB3EWkvjJapOqVbL2I2RnjuRyXbAJ26pCIn6xjW1e7GRBPwJDVvqHsNeGtyFcB3kNGZ2OjCXGwCNNUgYSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dnZDrRgy; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 491123DD503
+	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 15:01:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.177
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773932495; cv=pass; b=Wq0BSnAxk5JcV9l0sm5lmiG00YicgsSwZQYzAF9jRDMIJNh7c6OmY/YWLNioMawhMHUYllO5hMLTN/11+PGhnIAbGp8fqMFZt5RBLhk7+jfk9+KM5jGfWJG3X/OQI8QSSCm0eR5g2pKFIcDuubLk2bZOl/ToHt+IR8M6GXeQ3Mw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773932495; c=relaxed/simple;
+	bh=JM0nLN4VC3fM/jo/n5vvKQclmHQR9MzZPkOXF3LfwLU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oohw5R/silb7+rAWzfcDb8wcvvwsp+WjlF6ellS+ySeQfvzee/hkwxpYCmVYlVSQOenTyypwTnMRxOgJ5Zw8DlyMfXJFDE4sSSg6cYxos5QJ2S8N4FkVKVituzvEyt4a+0kv6gd5OKB4WXKrCIaK9yotF9mzDSSC7ICRx51Bny8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fc07dkVk; arc=pass smtp.client-ip=209.85.128.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dnZDrRgy"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-48628ce9ab5so13624135e9.2
-        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 07:48:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fc07dkVk"
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-78fc4425b6bso10659057b3.1
+        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 08:01:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773932492; cv=none;
+        d=google.com; s=arc-20240605;
+        b=eH1ucyNN0NXhck9CpsqSLI64SS0Kb/24s3onnwEzZ9yIMc4wI9EcRdTS7UN4ctWTEA
+         EHV/V8kwRPtVAyk79ck3aV42Dly+HxOknevWHFMMD4JBGo5HicIMPGJwE/+4UVQdeM71
+         ER84nX3mtEGgucneJQqp1+rbYUbR/i47Yk/mTua5i1VVAvBk+U07nVvZQlPRyCBhgOjq
+         2e9OGVOTMUmcl/fSA8HO50M2dFy9xiCBYbvBVb9NDJE/51qWzCfaWH+zMBLgcxO0KIKz
+         9Eu5OXyzQ03F7+0/+UE4puaFJQ6mnrTluzaRWLWI80/t1XWxcpmeoRyEWVIgwJfhoihi
+         jGMw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=kNOzaniBhKwab2/cDV0vRovKevUI10ARwl0nTO4/vVs=;
+        fh=qBi5thozEGOvYrw2iEbXXAc0F9+OmrWtI9IUJNxrs+c=;
+        b=GrTCUjbSy5bXFir6TFr1edPxp8/zu3X+9NEQB32dzoms40dkhjlb2Cq2YzHlUPucyo
+         nXy4d1Kir6PzGdAttpjc5Oe5QU7N2Xa/0iZWti3P+1mXQHwJQNQvJjPWK9g4oDMlAcLc
+         IeWCXVqhm7MZC1QxHCN7xTRbTkCDKWkStieF5OlGiifEKEA6J6DJGU6IZYz2yLOKcWdO
+         uw+Lj7ax4mDsom6q9aQ0aiyAFwaP7tqL75TvXEak9LpUbWkAGARjFVbf9OzUY5H+LNtR
+         4COWBU3ZpZl5uIDQp86F9IjtPkmwfRl/5hWZf+u3lPS9AklHQTQuWblGO8ouXjf5qpao
+         w7XQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773931681; x=1774536481; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3194ASGyEgYHpaXFn0Ug3zQCPiBCKFdTtdy3JOZVwi8=;
-        b=dnZDrRgyX2+JxmALePqhzr2/7SgJtiQzpUZUkUMFfRputLBtSIKS7EMMp06Sq9MO9d
-         5iHwiwYSeZVgjh33sUZAfC75twJw4VVCY0E9X9K5fk4R6CO9tojhKuhczz9PcQ5IhR24
-         kAjCUJBQStdQKbEU6Bn1TF8TkaDrFr1XrSbBIOoR3l9jfxkBNBtCe5r2PxJjNeLTz6EV
-         sNE9LH8kiggPti+QzH0VnruaVn52XyQe0aRnw2Gm6quv0VRR7JEP1tU9XAkzGg8h1Gdq
-         Iy3XGWJzAqv5bYG1PRczDZe0skwvVebj1fp5aBzxh6GR/1vCsEs5dK4cjAys2kaF/ZO3
-         7xWg==
+        d=gmail.com; s=20230601; t=1773932492; x=1774537292; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kNOzaniBhKwab2/cDV0vRovKevUI10ARwl0nTO4/vVs=;
+        b=fc07dkVkcG3Gri8TXYY2aMZZ2g7Zb+8DzCuqjXeiFf3nx0AztfD+JP/nbHWmziqrwS
+         jP2kEXoEjB/aWtd7SlV0ogzPGc/XW9++indmNrPukNtC88SjL6alZij6ts4OE2xdaWJe
+         1epQms7zHsU0ozHkIrYXbMr1WAy0ZN8gAJuVDUA4MrrwxVb9hBz1RFCLi9lff3gmHqcE
+         Hu07xuJjtizOGdc1mjyYrUChcHdY+VWL3th1mSFsVpPkETSic2o4wEM3iihQT1G+9JZk
+         cyIADwwXtNXtU/s6tQTXBzOMlS6ICsyRmng0meMDZa49OkQjxB4EmwtFsRyg5a+1L20E
+         LTuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773931681; x=1774536481;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3194ASGyEgYHpaXFn0Ug3zQCPiBCKFdTtdy3JOZVwi8=;
-        b=VZOOXZxHEUpTMrb8aubs+JbkFc40OkTzYtEeJVOyoHYQGdMeXKk3XBdo4Q6N5UR/Wp
-         XVi/MjfrJ4dHz1QzKlj5teRDF+N/ISYGfnM/Gr09lenGRaMkh2PSONVYznfw87/EPlCh
-         IiLQBXmgZoYSNglFcqIOOG8xYReTnvuw1b+VngSN296CSdpr+4S0iiYGb9Qse793uwJc
-         ysq/YG5GoEjjqhfcb3uGFRJtFXp5uwB7gtj/qgybqu7+DsgNtJ/KbK4LyyDitmMnsQQZ
-         xZjfua3k6tbvUS0ixs1yJDzvVEbfewDyuWu690pSKilw3xVzINB5KL3G+XXoCjaGVRHK
-         97rg==
-X-Forwarded-Encrypted: i=1; AJvYcCWcGUTUKjbs6GTtFDgYb3FGkiSxOYJPt9U+y3Dv39eV7+EsqESw1B3TA0BaIQPulecCh38=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyW7eIsohNpivWHDrIWwAaVY0xtTJU1PTskBu4315aTJZOJilob
-	I9ZgLVlQaq/j3JdkjK+LaXGpwA9hfcP6rkqvkINJwyoCJKV+kd9kt2BD
-X-Gm-Gg: ATEYQzyq9hzwWp09znghWWZwJZjjUlAOQjElzhOvR4F1VeGXVGqTKEuGWxJtxszCEo0
-	HbR1BEdc72Y7O9YeqviPPO55p9JEEpBCgdUgbe4Utu2MQaElqoa6RST/gPQjl6RU9+pvQTQrkTy
-	Pe7zg0XkBB+ifde8uucSFV2aP78rOPuBwsU/2UoCJAy9nT5DJUqE/dM+R+QWMFj3pl3oWuxpgF8
-	0BZVSLjT2M5Lu+ghO6o5XVCr4ieJ1DztTOx7nmBDgs99oo8BE6GyGOZSO8ueCyDDVwg0Ge7qTJf
-	nAkb1WuStQSIDHYXzWlvQgjSxeVxsQY/SpmqezKAf9WEEI01NgQJgl+oagQI5fr8YW4PUpe5xOb
-	lH1gqKZGT+RWBe7TtBSuxf2OLrDV6HiTWwKjO6vVTEMartMjnedDXxY7FuPabnF0wYVPzmy6+/1
-	DqtabyiiVPJcfhX36WRWvGWZT7LWYYGPsvDDJm4QFUBw4baIY0JQImC0eXtq1yj9CScYGWNMv58
-	OD3ydDBcejYg2Tz7aR9tIc0NUmWv7Iry4KsqxGKW7Pss7PHZ7t+HzrIIjv5rFo=
-X-Received: by 2002:a05:600c:1d0c:b0:485:3d00:efd with SMTP id 5b1f17b1804b1-486f442df4bmr118060715e9.7.1773931681208;
-        Thu, 19 Mar 2026 07:48:01 -0700 (PDT)
-Received: from mail.gmail.com (lfbn-ren-1-685-61.w81-53.abo.wanadoo.fr. [81.53.253.61])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b5184962bsm16644574f8f.7.2026.03.19.07.47.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2026 07:48:00 -0700 (PDT)
-Date: Thu, 19 Mar 2026 15:47:58 +0100
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: Ibrahim Zein <zeroxjacks@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
-	andrii@kernel.org, bpf@vger.kernel.org, jolsa@kernel.org,
-	kpsingh@kernel.org, linux-kselftest@vger.kernel.org,
-	haoluo@google.com, revest@chromium.org, john.fastabend@gmail.com,
-	shuah@kernel.org, sdf@fomichev.me, yonghong.song@linux.dev,
-	song@kernel.org, eddyz87@gmail.com
-Subject: Re: [PATCH bpf-next v3] bpf: fix out-of-bounds write in
- bpf_bprintf_prepare with %pI4/%pI6
-Message-ID: <abwMniHt2AZcPBas@mail.gmail.com>
-References: <20260319124901.9207-1-zeroxjacks@gmail.com>
+        d=1e100.net; s=20251104; t=1773932492; x=1774537292;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=kNOzaniBhKwab2/cDV0vRovKevUI10ARwl0nTO4/vVs=;
+        b=FPFnj6fuTOuhXbISI1bGuldMEs0Z8hf8fXgCiPrg/vyiof873+F9J3UWa7flXQvAD1
+         k+I8SdIxko3J21a87I/bRL3rCKTGSaqR53QtX1td9x253uCWv/gRJQzqzX03Ck3Hz2tR
+         uCmHHa2bdIyh0f2va4dpOuSNMS+Z38UFKC24mnAYVBQX8gUWcfIYyJvEt7OHnDQCt6jo
+         LKnMlna8yqRy26uGyl361v7j5QjaRde5NZd57MMuuTNUDxce2+w6vOTbQIAxsosKQwiP
+         d5WBWeqOC333H7NY1hplu4rWOPwDUMnSKjOtf7n9zNJ2eH6+GCBb6AZoEM1U/4Smq8jR
+         6IAA==
+X-Forwarded-Encrypted: i=1; AJvYcCU4thNCUZRxzrTr8qAsv/gnOJ2Q6wuD42FLnDMkk5sv4kw28ZgPnhdUs6ZCyf4tMc6mY4c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEztSPsJYH/17/7cGpNUGdNHEmRssw2Terus1IKtUEsZlcHgXp
+	BiUXAgiE6A4xHWoYaCawa53dg4xdblesuufKSocuNhPGGoW7zpz9D3yXjpO2ARqnwx8J2eb3yJy
+	IqjKCi0aLaA28RN3NtQ/RSDO52LPx99o=
+X-Gm-Gg: ATEYQzwH9Ok6k/Gy/PtwmfPKjWx4nql2S70YVPveW5AfMERo/WP/VnvmtfxLd/9tcgE
+	1MkWQ+aKtsAosD0bpMnt4AfUg3l4tTrChzEvGa+meH6bMRozjhJ02/9HOdIV8fzRGExrxCOye8n
+	9vLQBAdcB28V0f3ZduIhIvRRTgi4vZoBUO7p/ikKQRVxTfbzXJZ/O3YAvA9w7Y6Hpkm/AHMblU+
+	19kIfDOxmK8f5FJAzcfpvkfMrCi90lLB9JbZaB5OcIZlrSu/qkU/dVspk3m81DAFx3/vY1xA+cj
+	kVrPV5s07BVdNv01bV7j
+X-Received: by 2002:a05:690c:e3ce:b0:798:6042:12f8 with SMTP id
+ 00721157ae682-79a71cb3425mr67781757b3.55.1773932491706; Thu, 19 Mar 2026
+ 08:01:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260319124901.9207-1-zeroxjacks@gmail.com>
+References: <20260319031227.330505-1-sun.jian.kdev@gmail.com>
+ <20260319040337.366375-1-sun.jian.kdev@gmail.com> <CAADnVQJAg1hYmsbVaHcR0jYZY2v3A4iNOiPaMAWRVGpf0qPN_w@mail.gmail.com>
+In-Reply-To: <CAADnVQJAg1hYmsbVaHcR0jYZY2v3A4iNOiPaMAWRVGpf0qPN_w@mail.gmail.com>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Thu, 19 Mar 2026 23:01:19 +0800
+X-Gm-Features: AaiRm51jQOs-wRpxQuIRzEtqS4hO4WyoZmuNflEiqt1alJyaQ1dOm0ZSn9Ilbw8
+Message-ID: <CABFUUZG8ALyYEH=QbeM0kd9eAjmRPBPDfaYHYek8T4-=+X+8_g@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests/bpf: move trampoline_count to dedicated
+ bpf_testmod target
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Paul Chaignon <paul.chaignon@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 19, 2026 at 12:49:00PM +0000, Ibrahim Zein wrote:
-> In bpf_bprintf_prepare(), the bounds check for %pI4 and %pI6 format
-> specifiers uses sizeof_cur_ip (4 for IPv4, 16 for IPv6), which is the
-> raw byte count of the IP address. However, snprintf() returns the
-> length of the formatted string, not the raw bytes. For IPv4 this can
-> be up to 15 characters (255.255.255.255) and for IPv6 up to 39.
-> 
-> tmp_buf is then advanced by (err + 1) using the full string length,
-> which can push tmp_buf past tmp_buf_end. The next iteration's bounds
-> check underflows due to unsigned arithmetic and passes, allowing a
-> write past the end of the per-CPU bin_args buffer.
-> 
-> Fix this by checking against the maximum formatted string size:
-> 16 bytes for IPv4 and 40 bytes for IPv6.
-> 
-> Fixes: 48cac3f4a96d ("bpf: Implement formatted output helpers with bstr_printf")
-> Signed-off-by: Ibrahim Zein <zeroxjacks@gmail.com>
-> ---
+On Thu, Mar 19, 2026 at 2:14=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> if you want to land these patches please participate in code reviews:
+> https://lore.kernel.org/bpf/CAADnVQ+TKKptnNB25V3=3Dbcdybh5G6c2DyW2sYtXvyR=
+aVnPN8MA@mail.gmail.com/
 
-Please include a changelog whenever sending a new version. That's
-typically the first thing I look at, to get an idea of the current
-state.
+Understood.  Will participate in reviews as well.
 
->  kernel/bpf/helpers.c                          |  2 +-
->  .../bpf/prog_tests/test_snprintf_ip.c         | 54 +++++++++++++
->  .../selftests/bpf/progs/test_snprintf_ip.c    | 78 +++++++++++++++++++
->  3 files changed, 133 insertions(+), 1 deletion(-)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/test_snprintf_ip.c
->  create mode 100644 tools/testing/selftests/bpf/progs/test_snprintf_ip.c
-> 
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index cb6d242bd..dcaa822ba 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -930,7 +930,7 @@ int bpf_bprintf_prepare(const char *fmt, u32 fmt_size, const u64 *raw_args,
->  				goto nocopy_fmt;
->  
->  			sizeof_cur_ip = (fmt[i] == '4') ? 4 : 16;
-> -			if (tmp_buf_end - tmp_buf < sizeof_cur_ip) {
-> +			if (tmp_buf_end - tmp_buf < (size_t)((fmt[i] == '4') ? 16 : 40)) {
-
-Maybe this code could be improved, but I don't think it's going to cause
-an out-of-bounds write as the write into tmp_buf is done with snprintf.
-
->  				err = -ENOSPC;
->  				goto out;
->  			}
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_snprintf_ip.c b/tools/testing/selftests/bpf/prog_tests/test_snprintf_ip.c
-> new file mode 100644
-> index 000000000..5b000d6d1
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_snprintf_ip.c
-
-This new test is always passing.
-
-In addition, when adding selftests that cover your changes, it's
-preferred to introduce them in a new patch.
-
-[...]
-
+Sun Jian
