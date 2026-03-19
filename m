@@ -1,178 +1,238 @@
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB6843ECBDC
-	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 16:19:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8254D3D3009;
+	Thu, 19 Mar 2026 16:23:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773937147; cv=none; b=ucetiI7ejumR3Kf66lE/7ZHaUOXOXaOheIbToYSYUa2TwDrNNY7udQYvzPRgL5jzw3UtKLqxhFRd6RA0kS91RcY1TP8qBa1QpOlodblgNInYcPGj7Wy5AvcRamXiR9Mqwi2sNUGJi01wiQfCgNEx5AoYiaVSrBFJy7iRDq8XMyI=
+	t=1773937399; cv=none; b=ow+aF75MyCxy6LulYjpzbRPQOJ+gXlNqDcTBKqgRlEqi/kIvgjzCKJ9x5rtSIZaQm5/v47VPqYKjE5KmjwPb88Xi2KiX6GSqhJXkAk00aKxS8GfkaYAjWgMtFtny+SasXTcF7OIcGS7DbV4BqR8w53pisVzQrKXNPxMGgdzgb7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773937147; c=relaxed/simple;
-	bh=9IupZK1aSPF3j6Is7WHGatau6bo9ijtXvxM6V0JcIOk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=DwvS8HJlsLI1c0DcdObZmcrzrEW0iva+RxbFlEntOfi99LuXqnTN6LpSPxJ1A7W9h438t2aFxy+HGjseev8YCgLGLTICOVRzNauNZRpkolSVvWsMTy/L/HkTyWImXbJ/lTKT2SrcSIalwlREUZrbThUGcsGYwDQIYmINvYN459I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=bR/3FVE3; arc=none smtp.client-ip=209.85.219.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1773937399; c=relaxed/simple;
+	bh=70bUYwbaaJ9p6utY8MdZKgKx7ImSoxmOzTovx8XajVY=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=F6otgrUl4nDU+rRfL4Hi5Oe2DjotBJ/LSAiG3+maTRwBHiS+RJYjxxpZQvMEj2ZPX5Zn9B2ce/jkDEMkl63a5sOGQCovgrC4jMslIv95WIeVBC/RJgB45Tj6xvIPNQZDjrw+kTQ9bqsDrxFbtl5bwgCpCbeka+8YT/bSf0OaorA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cmmrMF2n; arc=none smtp.client-ip=91.218.175.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="bR/3FVE3"
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-89a0ecbc713so12432876d6.1
-        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 09:19:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1773937140; x=1774541940; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rXVPxAJl22yrm0f6eePf2hpwyjNEEoD/G0yxYr/XfRU=;
-        b=bR/3FVE3hvjM1meBd6Ue3Tq6n4VepIh9HyrYYEB1GRCWtrF3SNC/f6ZrTNbBug5shz
-         dddLhvnxRS59scTFQ2lrA+9/ENBLik35rsHZYpcQRwIunNtjwBddLCAy7G2JXgzl3jII
-         gAE8exQPec1Vryidqww/JWvwmeUH10Jcjx43g7rdXAeZlz3hFuGYmG52XRL3PWU1oUcW
-         N2GhmCY28miORq0Fj2sxoR0WqieibfgjVi/2yqBqDNGtNLOSy+HMRMAAW48iSZY3s0cZ
-         LpOpV8X/4QKZLAEYBRxMv5epTLf7CX8MF7C8fPDoepn8vKALGZIwlKeUiuQVXQSlSpM2
-         KEQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773937140; x=1774541940;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rXVPxAJl22yrm0f6eePf2hpwyjNEEoD/G0yxYr/XfRU=;
-        b=oH0P5f97gfskFpsjGdqBiKaUh7R1+e4G04avmAnqgkHFcwpzSH5MSYrn58XPd7BJB8
-         RZo/VU/VPJOV5R+Zx9jFP1Hrqa6ZEZooBUSESwdgyXrBb1P4HQH+ViGHXPrduMw7JO6C
-         JwBIA00bSvHXnvMvJaUwX4tjtsDwBWI3uwQxbnGlukrChQcAAUU9YEXwzprRQLdPQN42
-         rrTpAY1mGZp6ljRxNZ4H683FgZtiDsvNupoiYDOWHqKvxdn4ECo9buaU3/jFTXkYkX1e
-         YFDSnRYzy48CEv8C+JaGSJGOovFaaoNY5eRVNMFECslgeVW2/zItViV6O7u/fVA7ynto
-         eeGA==
-X-Gm-Message-State: AOJu0Ywxc+IFsp+MhUASmRw3mybaUgYFB19HknkMRKHPF9ga2BVBnEPL
-	QH1FJnC8/I9IK02ntOOYsJ1vRG49jynMdnKeWKjhvtG57TNZ8wtqWYf10UJmCng9tMA=
-X-Gm-Gg: ATEYQzxGXr5VsZQdGyF3qKUmUxYNq0GT6hb2WXBmP+4NEh/sqcIBUP2sq9LpYo4aMeN
-	vRc98apFPGW7anI7CQnaMFWzwMPzLWbVACOuMJJCptkQ60RJzyASouCFLc46YRoAIb4tq+5PQCQ
-	8FfNFclqyBtb84KgHwkM4rXoxJzwKG+s6Fzl85+Y4EwV3+Aw+ouliEVPN5Qg2dPNDEVefaIlPdr
-	bS4Kt1JY8jq5g+pHUhJLmbrLHyLqqfH+ky1ExaclwYMCo9eEbFIy76LltT35HkOYen7hgYrTSOJ
-	oqGDvSuiVks+U6+rgCzbLz8O5xyxpXO9QglgHftKOsQSy68KaEQfyq+dmTBZDp+oFO7rWZwTXup
-	rKXbLiY8edkP6QgeEhb4WfZuhXkxHZ7oe6bYGJ+J8fKQ8GgO1A4Tr1e6gFZWBjcSd+LO5JoLt2p
-	3WDKRLJ3wkx/umwO5FB80pRau7f/ewFzR2sg==
-X-Received: by 2002:a05:6214:5a08:b0:894:5d38:2e38 with SMTP id 6a1803df08f44-89c7744cebfmr62010866d6.18.1773937140278;
-        Thu, 19 Mar 2026 09:19:00 -0700 (PDT)
-Received: from localhost ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89c6b9ce2f2sm56059786d6.32.2026.03.19.09.18.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Mar 2026 09:18:59 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cmmrMF2n"
+Message-ID: <c7abb3d6-d1d0-4970-88c8-4b6afa2dc399@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773937395;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nn/s8BUc2tFo9k2gjZqMpf6WdJVGJ+Vpz/+b+ulpCpE=;
+	b=cmmrMF2nu8UYjnHxKrJlBMgIlundraRFQH52WTguulc050voelTYTbj/8tT0Dy71RUDSz8
+	mqKOoHrBMBx6qToeYJHWgqREo0q4W8papHCJN9g7EAFZaoYRhhS4rkSow+Hf6xBrq2aAIn
+	dLJ92+DdF6uiMT2zHQX88O1y4DTn1QA=
+Date: Thu, 19 Mar 2026 09:23:11 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 19 Mar 2026 12:18:58 -0400
-Message-Id: <DH6W8F4R7DD1.2P3M0PKI1V5BM@etsalapatis.com>
-Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v8 0/8] bpf: Extend the bpf_list family of APIs
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Chengkaitao" <pilgrimtao@gmail.com>, <martin.lau@linux.dev>,
- <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
- <eddyz87@gmail.com>, <song@kernel.org>, <yonghong.song@linux.dev>,
- <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@fomichev.me>,
- <haoluo@google.com>, <jolsa@kernel.org>, <shuah@kernel.org>,
- <chengkaitao@kylinos.cn>, <linux-kselftest@vger.kernel.org>
-X-Mailer: aerc 0.20.1
-References: <20260316112843.78657-1-pilgrimtao@gmail.com>
-In-Reply-To: <20260316112843.78657-1-pilgrimtao@gmail.com>
+MIME-Version: 1.0
+Subject: Re: [PATCH dwarves v2 0/9] pahole: Encode true signatures in kernel
+ BTF
+Content-Language: en-GB
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+To: Alan Maguire <alan.maguire@oracle.com>,
+ Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ bpf@vger.kernel.org, kernel-team@fb.com
+References: <20260309153215.1917033-1-yonghong.song@linux.dev>
+ <976a9e56-a221-4f63-8f10-caf2a3c8fa4f@oracle.com>
+ <caa6ac68-9702-43fb-87cc-7393fb44c176@linux.dev>
+In-Reply-To: <caa6ac68-9702-43fb-87cc-7393fb44c176@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon Mar 16, 2026 at 7:28 AM EDT, Chengkaitao wrote:
-> From: Kaitao Cheng <chengkaitao@kylinos.cn>
->
-> In BPF, a list can only be used to implement a stack structure.
-> Due to an incomplete API set, only FIFO or LIFO operations are
-> supported. The patches enhance the BPF list API, making it more
-> list-like.
->
-> Five new kfuncs have been added:
-> bpf_list_del: remove a node from the list
-> bpf_list_add_impl: insert a node after a given list node
-> bpf_list_is_first: check if a node is the first in the list
-> bpf_list_is_last: check if a node is the last in the list
-> bpf_list_empty: check if the list is empty
->
-> refactor kfunc checks to table-driven approach, and add test cases for
-> the aforementioned kfuncs.
->
 
-By the way,=20
-https://sashiko.dev/#/message/20260316112843.78657-1-pilgrimtao%40gmail.com
-has some additional feedback apart from those of the list bot.
-
-> Changes in v8:
-> - Use [patch v7 5/5] as the start of the patch series
-> - Introduce double pointer prev_ptr in __bpf_list_del
-> - Extract refactored __bpf_list_del/add into separate patches
-> - Allow bpf_list_front/back result as the prev argument of bpf_list_add
-> - Split test cases
+On 3/9/26 12:25 PM, Yonghong Song wrote:
 >
-> Changes in v7:
-> - Replace bpf_list_node_is_edge with bpf_list_is_first/is_last
-> - Reimplement __bpf_list_del and __bpf_list_add
-> - Simplify test cases
 >
-> Changes in v6:
-> - Merge [patch v5 (2,4,6)/6] into [patch v6 4/5]
-> - If list_head was 0-initialized, init it
-> - refactor kfunc checks to table-driven approach
+> On 3/9/26 11:39 AM, Alan Maguire wrote:
+>> On 09/03/2026 15:32, Yonghong Song wrote:
+>>> Current vmlinux BTF encoding is based on the source level signatures.
+>>> But the compiler may do some optimization and changed the signature.
+>>> If the user tried with source level signature, their initial 
+>>> implementation
+>>> may have wrong results and then the user need to check what is the
+>>> problem and work around it, e.g. through kprobe since kprobe does not
+>>> need vmlinux BTF.
+>>>
+>>> Majority of changed signatures are due to dead argument elimination.
+>>> The following is a more complex one. The original source signature:
+>>>    typedef struct {
+>>>          union {
+>>>                  void            *kernel;
+>>>                  void __user     *user;
+>>>          };
+>>>          bool            is_kernel : 1;
+>>>    } sockptr_t;
+>>>    typedef sockptr_t bpfptr_t;
+>>>    static int map_create(union bpf_attr *attr, bpfptr_t uattr) { ... }
+>>> After compiler optimization, the signature becomes:
+>>>    static int map_create(union bpf_attr *attr, bool 
+>>> uattr__is_kernel) { ... }
+>>> In the above, uattr__is_kernel corresponds to 'is_kernel' field in 
+>>> sockptr_t.
+>>> This makes it easier for developers to understand what changed.
+>>>
+>>> The new signature needs to properly follow ABI specification based on
+>>> locations. Otherwise, that signature should be discarded. For example,
+>>>
+>>>      0x0242f1f7:   DW_TAG_subprogram
+>>>                      DW_AT_name ("memblock_find_in_range")
+>>>                      DW_AT_calling_convention (DW_CC_nocall)
+>>>                      DW_AT_type      (0x0242decc "phys_addr_t")
+>>>                      ...
+>>>      0x0242f22e:     DW_TAG_formal_parameter
+>>>                        DW_AT_location        (indexed (0x14a) 
+>>> loclist = 0x005595bc:
+>>>                           [0xffffffff87a000f9, 0xffffffff87a00178): 
+>>> DW_OP_reg5 RDI
+>>>                           [0xffffffff87a00178, 0xffffffff87a001be): 
+>>> DW_OP_reg14 R14
+>>>                           [0xffffffff87a001be, 0xffffffff87a001c7): 
+>>> DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
+>>>                           [0xffffffff87a001c7, 0xffffffff87a00214): 
+>>> DW_OP_reg14 R14)
+>>>                        DW_AT_name    ("start")
+>>>                        DW_AT_type    (0x0242decc "phys_addr_t")
+>>>                        ...
+>>>      0x0242f239:     DW_TAG_formal_parameter
+>>>                        DW_AT_location        (indexed (0x14b) 
+>>> loclist = 0x005595e6:
+>>>                           [0xffffffff87a000f9, 0xffffffff87a00175): 
+>>> DW_OP_reg4 RSI
+>>>                           [0xffffffff87a00175, 0xffffffff87a001b8): 
+>>> DW_OP_reg3 RBX
+>>>                           [0xffffffff87a001b8, 0xffffffff87a001c7): 
+>>> DW_OP_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
+>>>                           [0xffffffff87a001c7, 0xffffffff87a00214): 
+>>> DW_OP_reg3 RBX)
+>>>                        DW_AT_name    ("end")
+>>>                        DW_AT_type    (0x0242decc "phys_addr_t")
+>>>                        ...
+>>>      0x0242f245:     DW_TAG_formal_parameter
+>>>                        DW_AT_location        (indexed (0x14c) 
+>>> loclist = 0x00559610:
+>>>                           [0xffffffff87a001e3, 0xffffffff87a001ef): 
+>>> DW_OP_breg4 RSI+0)
+>>>                        DW_AT_name    ("size")
+>>>                        DW_AT_type    (0x0242decc "phys_addr_t")
+>>>                        ...
+>>>      0x0242f250:     DW_TAG_formal_parameter
+>>>                        DW_AT_const_value     (4096)
+>>>                        DW_AT_name    ("align")
+>>>                        DW_AT_type    (0x0242decc "phys_addr_t")
+>>>                        ...
+>>>
+>>> The third argument should correspond to RDX for x86_64. But the 
+>>> location suggests that
+>>> the parameter value is stored in the address with 'RSI + 0'. It is 
+>>> not clear whether
+>>> the parameter value is stored in RDX or not. So we have to discard 
+>>> this funciton in
+>>> vmlinux BTF to avoid incorrect true signatures.
+>>>
+>>> For llvm, any function having
+>>>    DW_AT_calling_convention        (DW_CC_nocall)
+>>> in dwarf DW_TAG_subprogram will indicate that this function has 
+>>> signature changed.
+>>> I did experiment with latest bpf-next. For x86_64, there are 69103 
+>>> kernel functions
+>>> and 875 kernel functions having signature changed. A series of 
+>>> patches are intended
+>>> to ensure true signatures are properly represented. Eventually, only 
+>>> 17 functions
+>>> cannot have true signatures due to locations.
+>>>
+>> hi Yonghong, one high-level question before I start digging into this 
+>> further.
+>> Are there any minimum requirements on LLVM/clang version for this 
+>> support? Thanks!
 >
-> Changes in v5:
-> - Fix bpf_obj leak on bpf_list_add_impl error
+> This featureDW_AT_calling_convention is introduced into llvm on June 
+> 2022: https://reviews.llvm.org/D127134
+> The release is llvm15. From Documentation/process/changes.rst, we have
+>     Clang/LLVM (optional)  15.0.0           clang --version
+> So we should be okay.
 >
-> Changes in v4:
-> - [patch v3 1/6] Revert to version v1
-> - Change the parameters of bpf_list_add_impl to (head, new, prev, ...)
+> But if the kernel is built with -O3 or FullLTO, there will be some
+> additional signature changed functions and they will be checked
+> only available at >= llvm23 (see 
+> https://github.com/llvm/llvm-project/pull/178973).
+> But the number of those additional signature changed functions should 
+> not be that many.
+> Also typical kernel build is -O2 so we are not missing signature changed
+> functions in most cases.
 >
-> Changes in v3:
-> - Add a new lock_rec member to struct bpf_reference_state for lock
->   holding detection.
-> - Add test cases to verify that the verifier correctly restricts calls
->   to bpf_list_del when the spin_lock is not held.
->
-> Changes in v2:
-> - Remove the head parameter from bpf_list_del
-> - Add bpf_list_add/is_first/is_last/empty to API and test cases
->
-> Link to v7:
-> https://lore.kernel.org/all/20260308134614.29711-1-pilgrimtao@gmail.com/
->
-> Link to v6:
-> https://lore.kernel.org/all/20260304143459.78059-1-pilgrimtao@gmail.com/
->
-> Link to v5:
-> https://lore.kernel.org/all/20260304031606.43884-1-pilgrimtao@gmail.com/
->
-> Link to v4:
-> https://lore.kernel.org/all/20260303135219.33726-1-pilgrimtao@gmail.com/
->
-> Link to v3:
-> https://lore.kernel.org/all/20260302124028.82420-1-pilgrimtao@gmail.com/
->
-> Link to v2:
-> https://lore.kernel.org/all/20260225092651.94689-1-pilgrimtao@gmail.com/
->
-> Link to v1:
-> https://lore.kernel.org/all/20260209025250.55750-1-pilgrimtao@gmail.com/
->
-> Kaitao Cheng (8):
->   bpf: refactor kfunc checks using table-driven approach in verifier
->   bpf: refactor __bpf_list_del to take list node pointer
->   bpf: Introduce the bpf_list_del kfunc.
->   bpf: refactor __bpf_list_add to take insertion point via **prev_ptr
->   bpf: Add bpf_list_add_impl to insert node after a given list node
->   bpf: allow bpf_list_front/back result as the prev argument of
->     bpf_list_add_impl
->   bpf: add bpf_list_is_first/last/empty kfuncs
->   selftests/bpf: Add test cases for
->     bpf_list_del/add/is_first/is_last/empty
->
->  kernel/bpf/helpers.c                          | 121 +++++--
->  kernel/bpf/verifier.c                         | 116 +++++--
->  .../testing/selftests/bpf/bpf_experimental.h  |  16 +
->  .../selftests/bpf/progs/refcounted_kptr.c     | 311 ++++++++++++++++++
->  4 files changed, 519 insertions(+), 45 deletions(-)
+>>
+>> Alan
+>>> For arm64, there are 863 kernel functions having signature changed, and
+>>> 79 functions cannot have true signatures due to locations. I checked 
+>>> those
+>>> functions and look like llvm arm64 backend more relaxed to compute 
+>>> parameter
+>>> values.
+>>>
+>>> For the patch set, Patch 1 introduced usage of 
+>>> DW_AT_calling_convention, which
+>>> can precisely identify which function has signature changed. This 
+>>> can filter
+>>> majority of functions where their signature won't change.
+>>> Patches 2 to 7 tried to find functions with true signature.
+>>> Patch 8 enables to btf encoder to properly generate BTF.
+>>> Patch 9 includes a few tests.
+>>>
+>>> Changelog:
+>>>    v1 -> v2:
+>>>      - v1: 
+>>> https://lore.kernel.org/bpf/20260305225455.1151066-1-yonghong.song@linux.dev/
+>>>      - Added producer_clang guarding in btf_encoder. Otherwise, gcc 
+>>> kernel build
+>>>        will crash pahole.
+>>>      - Fix an early return in parameter__reg() which didn't do 
+>>> pthread_mutex_unlock()
+>>>        which caused the deadlock for arm64.
+>>>      - Add a few more places to guard with producer_clang and 
+>>> conf->true_signature
+>>>        to maintain the previous behavior if not clang or 
+>>> conf->true_signature is false.
+>>>
+>>> Yonghong Song (9):
+>>>    dwarf_loader: Reduce parameter checking with clang
+>>>      DW_AT_calling_convention attr
+>>>    dwarf_loader: Handle signatures with dead arguments
+>>>    dwarf_loader: Refactor initial ret -1 to be macro PARM_DEFAULT_FAIL
+>>>    dwarf_laoder: Handle locations with DW_OP_fbreg
+>>>    dwarf_loader: Change exprlen checking condition in parameter__reg()
+>>>    dwarf_loader: Detect optimized parameters with locations having
+>>>      constant values
+>>>    dwarf_loader: Handle expression lists
+>>>    btf_encoder: Handle optimized parameter properly
+>>>    tests: Add a few clang true signature tests
+>>>
+>>>   btf_encoder.c                                 |  13 +-
+>>>   dwarf_loader.c                                | 397 
+>>> +++++++++++++++++-
+>>>   dwarves.h                                     |   3 +
+>>>   tests/true_signatures/clang_parm_aggregate.sh |  83 ++++
+>>>   tests/true_signatures/clang_parm_optimized.sh |  95 +++++
+>>>   .../clang_parm_optimized_stack.sh             |  95 +++++
+>>>   .../gcc_true_signatures.sh                    |   0
+>>>   7 files changed, 662 insertions(+), 24 deletions(-)
+>>>   create mode 100755 tests/true_signatures/clang_parm_aggregate.sh
+>>>   create mode 100755 tests/true_signatures/clang_parm_optimized.sh
+>>>   create mode 100755 
+>>> tests/true_signatures/clang_parm_optimized_stack.sh
+>>>   rename tests/{ => true_signatures}/gcc_true_signatures.sh (100%)
+>>>
+Ping. Alan, have you got some chances to review this patch set?
 
