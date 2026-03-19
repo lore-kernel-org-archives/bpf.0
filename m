@@ -1,75 +1,89 @@
-Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012045.outbound.protection.outlook.com [52.101.48.45])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BA233148DC;
-	Thu, 19 Mar 2026 18:43:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 444622F8BD3;
+	Thu, 19 Mar 2026 18:48:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773945787; cv=fail; b=CV9T/1NNW4OM25PsPjfMGVa+n5acRk6rsH35bGIHBisdEtLyCsb8yEMb93k5EmZg0bpytHv3G3WEHizrPD1hwqbURl/1pcs5VWlermhFv5JuTPKJOWkckzqjQEokKu7EIV2B4zKnZUVbdaLfB/qbEPziiet/+6jWKDbDX7WckXk=
+	t=1773946133; cv=fail; b=jjoSg0CzOe8Md3Y9FQpeV9Ghrc8Qvonj0Ce1wRb7thbcvKClS3fELHRqZukzr0j9fKlT2KtHuGQC0ADIuLuWUV6TyDMqsHFd/JfyT/MGYeACtk9ObCeAvF6f82UGLcAMdOYKCB7UVn3DhmS0EQpH43kq4z5Izf8nNfSLyWSEP/4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773945787; c=relaxed/simple;
-	bh=9eSwPg0XQkWPeHOvCUExM9pKNl5hS017n2gqi8tU+Vg=;
+	s=arc-20240116; t=1773946133; c=relaxed/simple;
+	bh=sDiMdcYRpOdSYgAaoTW+gj69mEN0oljNyiauzwwL1gg=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Dz5UICWQcWn2lnnXN+3knPsN/dVNJnSjrZrJYv+94JZyyDXIsWyQ/T7Kox8PcJb7to+ZNiAbX+qrqd0Z09VmTqU1Vt9FT8gCm0oK+Bp9/38zaJt5OLaDeKVsZ3BFvcReUxQKgECCVXTb3E/AJ4DW3msWzJxRc+po+lgiVFNUw4s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=RGem1yyT; arc=fail smtp.client-ip=52.101.48.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	 Content-Type:MIME-Version; b=mNEKiuX5IDFdNseMG7pTLq2GuU12+nj7PqXV22C8L/xBzyUOMJu3MqpUIrCTPuTWuPu9Y10qI4B25OyC1+7Gu48ALwqyENp6J1D220iaWJi9F+Zy/GTfqTTAUTmF2nM8CXUoEl5pD1IQ0OnwwA3HSNvmxaeJ2baqzj8FC4tHSpI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=V7DsKDeQ; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=somIbsWf; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="RGem1yyT"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="V7DsKDeQ";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="somIbsWf"
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62JHUGZO2707460;
+	Thu, 19 Mar 2026 18:48:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=/V3ZSYJXwCidiIBZPO9naz+6/G7dhH/UkbtTqDZsO0E=; b=
+	V7DsKDeQN2DHzg5kgyS3uWKIGUR5XHCKed2EYKAfVMefr5maY9lvlDTNXgo4Fgdh
+	lrZKOrdWHGyejwKVhqLnMI2zwF4LP0X82/jbWCtCvHe65zPOlCBoOJr3M3GnFavM
+	DALIyimtd5vHDLIUEoOP7q3FCzY9zHJmaLi45zubCx46We5Olq7CAMU45j3hQYVB
+	NxeZDYbUAmMZgfcJHayXqcMbxsyy+Ro7CuP7ijgdD8I1BjqqQdc7vfEi8+mm1uLw
+	MWg5DDhCodqhYRhLxYRSGBjYp/3mLuFs4ribrQlvdy+djvpJS5JhSVJ1L2wzz6uZ
+	QcWBhLOInFay0bnAwgZe4g==
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4cvxf48d5d-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 19 Mar 2026 18:48:45 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 62JHNKNJ003617;
+	Thu, 19 Mar 2026 18:48:44 GMT
+Received: from ph0pr06cu001.outbound.protection.outlook.com (mail-westus3azon11011056.outbound.protection.outlook.com [40.107.208.56])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4cvx4d9sx9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 19 Mar 2026 18:48:44 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=kaedeH8B0lTxX6h6IxjxtaJ1Z5JaYg1Uf2U7igdcwGi/E064NXfdWuBtjnRaq355zjw9PsmwPw5db2kZSNyNZtvR2e1XfefvlyGZPM8P3hgtaev629DphREzCZbzrs2Zi9/qJnRaRhN57KlFSfP2W5CLs6NXNIai19WidqgHp7L9IFr7S4KUXhMFjswsmfPIh1zOfZYhh6AHCaq4leTq8i8XxoA80V8Boa1rOv7bPZE4DvuDFdSucwistAty2yNT6+6Nw2tqqlSuqrbKC7yfHLKcnaL8E+9cMclZd70+0uGtbbYfhPom34+F1KtO68kyz9aOBnE+AuNwLTIRKzVpTA==
+ b=Ie6G0YnqtPfOZeulFe2aoJJAuOgRYhN8Fbasg0uiOwdZ4sLj9DrwpU+JAx1jshivuyjyRYvMYCHk6v3iMdNEjCBWMGB0Nxsqv9Y+wzLkeXK3HsVKuXNt8DByb+qTUlwH5FxCfYV+M7y1LBLap/Mxq/cKa9CsiPQc2JyUBkS0B4Tm2NMYlFcsXDR2vxzvyxnW/WwGW9bx156/sG1/+pZVCeEqt1gk9dBqAtYwqiYhQ6TowQdASRjJ/bD1vdgAOH/GjW0D487djWjLJAifw096OIIDKvPFciKK8cqo7nHEIbJWeykI5mu6sQzpAjTXEVHQXbABEsrpAFanldR/qXA/6A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AjE1KingJSUrkeMA3oAxTx1a6xGi03FGvHrMZbeTe78=;
- b=mrx6LwOgk3Y4n/tieWFDP+MgxdNTrGZOSStaP1xedMsUMatBLXqmKQff0DsRYcZJNXUsJI1FaPs//DlGDPU4jcdcgEC8QrvFa0RDBr0vzVhV7BZm9Fv+Vf8vhsCtaZP1QRSIa8DSeB8fhzgvHC0h7GxeAO5CQWXuwHzpq6Q8Ub0SY+PFuOXCI/1/OgcAUkJsQf1014AmPqPDv04ArSbPPZlhTd0bcrCVr+qjIPAPSEaEi7hcuKJkawgLog+clWxW8f23p94tkI9PCBx8iGQYPu4D2THfebvenB/Xku2VdjCCOoUcLkHHPf+ByV+OGJq9rHFoKO55lEh21nKi5G2k3A==
+ bh=/V3ZSYJXwCidiIBZPO9naz+6/G7dhH/UkbtTqDZsO0E=;
+ b=KZhGXPzT7gcrbw/SXBopuFL3vCt9rpPSqF8pyzfylln9ruKvNqvgiej6XidIVbZeyfYmquQoBIa3Wb+Q/Mpeg645wh7vISwJinGqlPD8SO2mYK+hjUfxn4r9+tUwzkxNuSaNe8DWfoHOXZdsLLNkhzkxOFFUHGeGOjwKdQLl4wpwo46+hIrvmL5INHBpVbOqhV5QFV3zBRMzkSp8VNIACgTbhMdkeHEEYP4ceVJty9UBhR/3ZvYqcTxWtG2NtjxMnU0iG1H4fDZIkRyIX+aNo0kuRWh/oWKLY+at8qfkYc+RxQ0NnUfHJFPBaoQkLKiC+0egYEhNqJCaLr8Ir7Yl2Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AjE1KingJSUrkeMA3oAxTx1a6xGi03FGvHrMZbeTe78=;
- b=RGem1yyT6Fmowm6XwVDH6hjjMWLRtsTBwP6AIKjrm0tC3Gcqalk9WzfZiwwS9kKA3wy9hsinXxF4oT69JlfCyrUhSfQG/b1fYACCaVgjMnXXfsTIlRFoY+U3f89jSFt2lq2mQdSqv2Z24QGjw84ljBFC5XnGNjvmmK5Mtxn/eyfgyOowXVuUN4IsTow88kluuGkChOEBA+LkD01OBagKu6btHcjAn2nmu7Nw3H73gKpkIYHbxSKQHOjBNOwu5tjQycLLhwy03QP4/BVPWvM4RmnLoxQA0f2huYPxoLs8wfHlQ3fJx7Ze0ycFzWohqT4YVbquCh4hgjyCGmpB49GegA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS0PR12MB6486.namprd12.prod.outlook.com (2603:10b6:8:c5::21) by
- IA0PR12MB7698.namprd12.prod.outlook.com (2603:10b6:208:432::19) with
+ bh=/V3ZSYJXwCidiIBZPO9naz+6/G7dhH/UkbtTqDZsO0E=;
+ b=somIbsWfeKJ5IIrEWq8lvJbgrPIdeH2d5bh67mL0H52m7HWOwRtYfw7NnaE3WGpfJduT+hHlXTKZQ+2Jo4K+G7AqtWemRhy0xqPCMg/nuRpB5UbbS/GmBp2cyq+E8PjCdKMIdvCRBqbv+6X0UwST6P2mkxuQQV0peX9jNDPSDeY=
+Received: from DS0PR10MB6271.namprd10.prod.outlook.com (2603:10b6:8:d1::15) by
+ BLAPR10MB5092.namprd10.prod.outlook.com (2603:10b6:208:326::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.8; Thu, 19 Mar
- 2026 18:42:59 +0000
-Received: from DS0PR12MB6486.namprd12.prod.outlook.com
- ([fe80::88a9:f314:c95f:8b33]) by DS0PR12MB6486.namprd12.prod.outlook.com
- ([fe80::88a9:f314:c95f:8b33%4]) with mapi id 15.20.9723.016; Thu, 19 Mar 2026
- 18:42:58 +0000
-Message-ID: <c520958e-78e1-41ce-b675-4a560305a206@nvidia.com>
-Date: Thu, 19 Mar 2026 14:42:56 -0400
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.20; Thu, 19 Mar
+ 2026 18:48:41 +0000
+Received: from DS0PR10MB6271.namprd10.prod.outlook.com
+ ([fe80::3292:21a0:97be:4836]) by DS0PR10MB6271.namprd10.prod.outlook.com
+ ([fe80::3292:21a0:97be:4836%4]) with mapi id 15.20.9723.019; Thu, 19 Mar 2026
+ 18:48:40 +0000
+Message-ID: <e2096d0a-5c78-496e-a269-1daf2a3784b5@oracle.com>
+Date: Thu, 19 Mar 2026 18:48:34 +0000
 User-Agent: Mozilla Thunderbird
-Subject: Re: Next-level bug in SRCU implementation of RCU Tasks Trace +
- PREEMPT_RT
-To: Boqun Feng <boqun@kernel.org>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: paulmck@kernel.org, frederic@kernel.org, neeraj.iitr10@gmail.com,
- urezki@gmail.com, boqun.feng@gmail.com, rcu@vger.kernel.org,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Tejun Heo <tj@kernel.org>,
- bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Steven Rostedt <rostedt@goodmis.org>, Andrea Righi <arighi@nvidia.com>
-References: <absfZGD3en9TUA1U@tardis.local> <absj6rZbyLZY8PPz@tardis.local>
- <da4313b1-9ff5-46e9-b3b7-206dbcb72602@nvidia.com>
- <abs026TUV9oAg_Xy@tardis.local> <abtMhd_LVp3uL_pA@tardis.local>
- <20260319090315.Ec_eXAg4@linutronix.de> <abwkD0mOdAbD9ENJ@tardis.local>
- <20260319163350.c7WuYOM9@linutronix.de> <abwo0I_mu94t5Ews@tardis.local>
- <20260319170244.jqndSwct@linutronix.de> <abw2ECYirX1tTwV9@tardis.local>
-Content-Language: en-US
-From: Joel Fernandes <joelagnelf@nvidia.com>
-In-Reply-To: <abw2ECYirX1tTwV9@tardis.local>
+Subject: Re: [PATCH dwarves 9/9] tests: Add a few clang true signature tests
+To: Yonghong Song <yonghong.song@linux.dev>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        dwarves@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+        bpf@vger.kernel.org, kernel-team@fb.com
+References: <20260305225455.1151066-1-yonghong.song@linux.dev>
+ <20260305225542.1158464-1-yonghong.song@linux.dev>
+Content-Language: en-GB
+From: Alan Maguire <alan.maguire@oracle.com>
+In-Reply-To: <20260305225542.1158464-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR22CA0029.namprd22.prod.outlook.com
- (2603:10b6:208:238::34) To DS0PR12MB6486.namprd12.prod.outlook.com
- (2603:10b6:8:c5::21)
+X-ClientProxiedBy: FR4P281CA0404.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:cf::6) To DS0PR10MB6271.namprd10.prod.outlook.com
+ (2603:10b6:8:d1::15)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -77,148 +91,434 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR12MB6486:EE_|IA0PR12MB7698:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8a6a1f5e-b470-49c0-40eb-08de85e75783
+X-MS-TrafficTypeDiagnostic: DS0PR10MB6271:EE_|BLAPR10MB5092:EE_
+X-MS-Office365-Filtering-Correlation-Id: ed71af0b-3b1e-4175-465d-08de85e8233a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|7416014|366016|56012099003|18002099003|22082099003;
+	BCL:0;ARA:13230040|1800799024|376014|366016|7053199007|56012099003|18002099003|22082099003;
 X-Microsoft-Antispam-Message-Info:
-	9GV4vNRw4JjW01JPgFedIjfv6fGIURfYm9vHlJIa4a+dAPkOZkKlJs2ogI10SSR2YkWdi0G1l+nA5T0HxSN0SS40C4Qb+sJVPJks9peBm6EjLWmbGCXN4bsIqyn0E1wLtmX/Zp8DXHsIfIXjZWoBvplSl8+L56SBO9L3oCJO+2Q4VZsOeyoS/HGpEdS6DpB82K9MdgkFYx4Ux3xtXkP6lyBVm5W7RUPB1VtFDIBT4t9n8HEGAbFiqTCMGBZ4571wZjoHYwc4wqK9jGAikrwr5OT8m3+5pU1QEGkAip4OEF1SxvxQGQL2SQ9xA9B2OuIj1OJXqF4mR1xAGAwCjpRLKUjx9xmzaK5lAArNfxxZe9eCVvBky0KCd7xNQGd+sxKOLC2irgNoTD0c1+379BM25Y/KFhtm/NH3T/xSlw58msIBGpuXdvC9H7e6MgTfjjmFbKRtQuRjd9CHeoGGf0YKvGJKNpe4EZjObFNk5sc1KownjMBA3OBmshLDqJIpf4GbOD0bkm2VtUUdUh87Fg2cuqEYmlyYl1fAJbdmvn/OJif4WpK/NbI2BIOnj3PMfVMQHFjeP7v/0Ykd4cR7cY7CODrLlykjQIjSeVgb58v507l25XhGQwXSdGRt3VpOqxlnX3PfGX1OEunP0TdFDjS1qQdKTX3v1DqmetmfhvAwcKW/0k/wQDrkm7sYdaLAKRKtWgM0H91nLdNrNbGuau/ROY26J4iSE+mNF++9R4H1DkFT2ku2Z4Una9r59A5zUaRS
+	x8xzU//KVw3D5W7/wq1GrMTH2L+YvUmqzDAUcebEYCJ4+Qed4Yrda2n0oAsMC9SMxwZSo70PMb7W1J2QbWOzUvgaNBATUr7/DFa15J320E4GnpMuMLwYK31eff5hLhND8RBpt/2h5eV4MDSL9HHU0aWnt92029o1TApNWe9Sz9n4EBGdg5Hl1sZ4v37qzs8IBQqpgX3WkQoN8jsDoYLNIL6WQoHcnE0n5aJPGb9Yla1C+0noO6Lgp2BtqdB6EPr8Q7mnnmPwCQ3lUQ/uRlSOOpsRwzlNmJypBW1bHgeMXBYIFJ8eLTpL0D1Rm41momfYwF0ep7XQH7q7QcJgxWWCpgLDeflmsBH+gurgEjo50f3dX9jWYR8omTPZ4RYYn8HnAx/2MKgIjlVcbs08KnLAfFUAlE1cl2W2X3OQav1ZOfbipy+LQ9WeqiMraa2h1IQzfxfeoEJZilon9NCHdtLJEa9k0y55YS39Iw9Z82ki/8yTh2zcEroMWK1XntUOx9p5zrQc05+h4MQQzhiqrR/ywAdGuCL/2cZgIQfjI78ntPsfDVNILfUnfx8nGkz9B414Tk3FWlD8nwYoFF0p+6dLPfYJtaA/QRM0/BzHmUDR7nczT54KOQZmWi1Z9/rW5c4TjRkzYHNc/fTajCJaftj10nNheCTgYwnTywuTAsE9UeO8x//wRXX4RxUwe05Edaxv1Bw1GNtiDSE4yAuXYSEiKjr58wT3sd8tKamVrs3cp7E=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB6486.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6271.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(7053199007)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?UTJEeHdUYmZDbm9mN2VZTDJWV1ZCNGw1L0R2L1JXWHFGWDJRWUpmTEI2czNC?=
- =?utf-8?B?VHhPSEhGM2hDSGF1Um5wVzhSaDNMSEpUODY2RzZ3Z2ZBRHFMaHZNR1lLK0lE?=
- =?utf-8?B?R2RiMjVJa0dPVDV1QS9KaGVxYUNYY3g3ZEhGM2JIUnRmTVQ4Z3FBZDlwbXpa?=
- =?utf-8?B?UjV3bjdQM1UxNXByMmxjWjgrckdWTUIydmUrY0tJQzY2dFhMR3BGSEhZYW9W?=
- =?utf-8?B?MGJGcjd3aFpMS0FNb1IrN24vOGJLSW0zcHM2U0dtQ0ZaaTZZV3RSTDJBNDJn?=
- =?utf-8?B?clJQYWIyTVNQZ2k1R0YxL0FWQTVIR3dwSkJpaGZiUEZGRWNZc0xldHBuSGNI?=
- =?utf-8?B?MkZlV1MzQ21GY0JpYk9MbFlZWXBKdnBrcWdXMEQrWGRFN3FTTFFMVHptQlRv?=
- =?utf-8?B?YVZWNDVYTXJXQlZhZXNBVFB4c2JQWXFhR3NwUURrNS82ajJFM1g0dWlXa2Zh?=
- =?utf-8?B?Um5HeXJ3WnNxRHdPVUU4NUp3MDJJSERHUzZUMHdaMUtwOXpqUVlWS2craGNu?=
- =?utf-8?B?dmdQMTZyZGIvM01ZcDJkb3ZLTDQ1MkcvbnlTTzRMczFUZDNtQ0crWTRhb09a?=
- =?utf-8?B?QXZvN2lXbDYyL1V0TjJwSzk3RkZjYUp0c05EQ2FkaEc5Z2hTMzhpcE1ISVRT?=
- =?utf-8?B?d00zQ21rZXRIa0ovb0o4NlNNMVMrNzlGMWhiVWtmUHQ5V1kycGdXWGNZRDhG?=
- =?utf-8?B?cUxTUU5NenhsbEtwMG94WEVZUEVSYU9Bem9SQWliRWxyMmtOdlFkOEtjQWJX?=
- =?utf-8?B?WHlVRldibjBFUHN1QnhZU1FzZWlTVjl3ek5aYm00dE5xUTlUQ1dKWnNiWXVP?=
- =?utf-8?B?YVVGUmxlY2s3Z1VOc3NrdjFaU2MrWUNPRVhGS3pjTGNhM3FaR1grUGFyWUI4?=
- =?utf-8?B?U0RZZ3BhYVdtNFJFMGtLU3JBMW1EMW1Bc0JKck02WEFNbXZrUUpwU0RxcldJ?=
- =?utf-8?B?V0ZoemsvSSs3RXVoT2NkT1Zsd0xOclR5aTJ5dmo5aGpBd3JOaWVIMTZ0aGpz?=
- =?utf-8?B?TkV0R25OYzBvQUE3Sys1MFUwQmRoazRNcGRGYjlHak5JUDM0ZHdOQWFVL2VZ?=
- =?utf-8?B?Y24vZmIvTExuN3E0a0RiUWdudTRsNkY1WHVac3pFZmNvWTdRSGNMYk5xSEF4?=
- =?utf-8?B?R1pGbnVFZFpzWmdvQnFCdS9sWWdPSDNLYzFyY0MxZTlFWEExZ3B3b2RTQjUv?=
- =?utf-8?B?R1RFOGlpakw2QjFxWUU0ak44d2lVdjhFMHE0RDk2Nlp2RzJBVm1mSkY3NE02?=
- =?utf-8?B?M3hUdXZwWWlZeWRyVVhGcHJmWTZZMU5WUHl4d3ViMFd4WklBV0orbW1jRk9B?=
- =?utf-8?B?dGFBWldVVkcydnJNMTg4dG9xS2hZU2xMN1dIaTJ6R05IeGR1YUJCMEFKdzhD?=
- =?utf-8?B?cWJMWFh1aHQ4UTB0TGdRUGZMTFFUQkJSRHpYTDVhNTdxZzNnbzlDV3c3Y0Fu?=
- =?utf-8?B?dlpPb0ZPcDA4aE5XdGgwQTFxVUVLQk9DcDFJZWlVUHZVNlZTLzBUYXB2Y1FD?=
- =?utf-8?B?aXJRVVpiZmhVeFVrb0VuSmc5aXhZYXdQQnJ4bXVHQTZnWGhVZEdsYzNwaDY0?=
- =?utf-8?B?eEdSbWNNMTlNUUlXOWlFZzRkdzFZU0RZdnZHbGxMYlI4Y1JERGhYSUcwOUw2?=
- =?utf-8?B?NThVSGI3dkdIZnJDb0UvTkEyL2hKdVNxR3AySTdvWFZybDJDd0JsNi93enRZ?=
- =?utf-8?B?Z2E4WVNxb1BHZWxrS1pqRFd3T3hPeGVzNXptM09HUGx1NVIwNExkdXpFVDcv?=
- =?utf-8?B?THJaMFRkaytORlVkQ29zbmNNd29yeTd5bkp6OEVQOVkreUdwTXRXd1lzeUsr?=
- =?utf-8?B?ZVRFa1hqOEVUd08wcnVvRUduQnE1dSsrQ3FUcjBDV0JGeEtQc0xoN09EWHJt?=
- =?utf-8?B?WG0rSmxyTytmeFdYMDJhZjQwbHJVbm1nT21mUG5BQ1o0MHp0T0MzdnlSMjRm?=
- =?utf-8?B?U09VTVFuWVlnZlMrL2c0cDBLRDFDaHhzM2wralIyOHdWNmFiSmpTbGRtNmt6?=
- =?utf-8?B?NGdjR3lOREtKWWhxdWI1YUVqS25BNnFzREhPWjVHVVQzVjVTQ3h1Tkw5RGJX?=
- =?utf-8?B?YXpnOXQwZFNHaEsvVU1WNEU1Y0UvM0xPYzBDMWtZd0FLY1BrMmFiUGducEU0?=
- =?utf-8?B?QmdySTgrWkp1NnRPNjZvRTJFa0lUelFYa0gwVldpUXNSWG50TDlyc0RvRnE3?=
- =?utf-8?B?TU03NFBadTYwMHYvUTZlcko3K21ib1NVS2hiU0NKbDR3aFhhbno4b2xZY0J1?=
- =?utf-8?B?WGhCYVlHOFQ5TFRJREp1QzdiWFBLUnU2SEhLcHZ4TWZBb3ZsRGpkTXFYaXJY?=
- =?utf-8?B?STJENGZueDQrUXdPdkZ1Ukp3V1cyNGhpKzgwSEhjdFFKK0hpSlRUZz09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8a6a1f5e-b470-49c0-40eb-08de85e75783
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB6486.namprd12.prod.outlook.com
+	=?utf-8?B?RFUxeXZ3SUNqK1JsZnJaSG80NkUvVWZaKzk5YWZrMzRaaHRERS9RSDdKVFRN?=
+ =?utf-8?B?UjErMGc3azEwSmkyTzZRc2Y1MlA1dkdtWEU0d0hwNlhrVjF0ZzEwVEt0a2RE?=
+ =?utf-8?B?c1hRQnZIVTlkaVpxTVpndWhLNlVHQ2h1SGlqcVoxdTVYWWdaN1VjZWptcjZ5?=
+ =?utf-8?B?dDZRRStVVzFDK3VYeFhUVVRlei92cml3WDNOZEwxTUZXbWpIRkovY0pidVFl?=
+ =?utf-8?B?dERMc1hpR1RjS29Zakxad0JKNWZPWjJKVmJzcVpLU2ZuejliNkNPMXN1VnNU?=
+ =?utf-8?B?Z25UQXg3YUV3SWk3VDRSdG5lVm1mTk9zUUI1UElYQURvdmdrNnMyYWtyN1Q5?=
+ =?utf-8?B?RHA1V00yTXFaSkNFaU9kUkN2OUFvYVdaaWpPTkszMHZHRlhsYWx2SUdLYVE2?=
+ =?utf-8?B?TlBndGxkelNkNkNDTHpIYURYSDAyZlRKOTZkRFJjN2x2M0hyVnBjZExWUHgw?=
+ =?utf-8?B?QUZ3UE1WV0xTclJ5Y0F0TXFRbmlOVWNIMG8zelRmTlhvYnp2SVJITkwxM1Bt?=
+ =?utf-8?B?UWs4Y1lJVlQ4cTFHcHJuNmx6MElTZm9UVUpWNG4vaXltSXdleGxrYm84MWth?=
+ =?utf-8?B?K0VxMXNqYkxid2JITHp3a0krd2liaUZTejlGVlEyUFU3WUl0cXVJRENoUVJq?=
+ =?utf-8?B?UW9pZ1RhODVVeWFBUytwb1BQWUswYUZHMzA0UkgraDViNDBpcVV2VDIvcks2?=
+ =?utf-8?B?Uk1yVkRwYlJlQWpwVFFQTiticXVjY3BScmhaUm1COVhTRU9QaG5DRjdUWW5n?=
+ =?utf-8?B?cVlRdzZIbGhNSmlSdm13UFRwT3JtUUJNUjRJYWg1bHl5UXRyK0VwQ1haNEFF?=
+ =?utf-8?B?a21WWnlaOEJ2elBNWDRMdHRNMFRla0FSaFgxMlZySW84RnZyVEg4a0Jlaksz?=
+ =?utf-8?B?cUQrcm5lL0IrbVN0dFMzaGVsRGlPZGdjbWRpVFFVc2lXYTc2WWlGSUhaMlBx?=
+ =?utf-8?B?Q1ZIWW1rNnVydkVTQ3dubFZHR2lZR2FsOWtkbHZXdEsyaFRmS0gxemkrMk0v?=
+ =?utf-8?B?USs1RzhHYXZ1NTdIczRqSGEyZGNHN3ZxcnF2VlJFRjlXU05BL3VSU2RQbFJM?=
+ =?utf-8?B?ejg1bkJXK3JoT25IWUdWY2dncVJvTXZyTnpySnBEUEkvMlRlVXdnUDdEeVU5?=
+ =?utf-8?B?WkF1WnhjWEhlZ2p3d09DYjFVODNqSUNWaGIvalNzc1N1blZTbEhCQm8rdzRX?=
+ =?utf-8?B?c3FFMFA2SFduVkttd2xVZFRvYnBNYlFaT3cxYlhxOFk4YkZTcjBKWGlVdFFp?=
+ =?utf-8?B?N3NxVVBjcE1FNzBlUStxbXhDRFY0VzdQKzZ2U3Q3OWFwMnV4SzRHSVRGT3Rk?=
+ =?utf-8?B?UWxwd0paS2s4OWozZ0UrcXJTVy84MkRGYlNpTzA3bVhocGMyV0JMYVBjRVl2?=
+ =?utf-8?B?N3A0anphNTB0L1JqQlhaOTVqZDlaVkVWclYxMGVmMWVteiszUSsreFpGUWdL?=
+ =?utf-8?B?U3BodUhPQ3VBWnJSNUV6OTlINm1xZ29nQzNmV3kvTnpsMi9HdkdBNXJMa3lU?=
+ =?utf-8?B?VXNjVVVPdkNVek95ZnZxNW9vd292RUpGMzBqS3Z2UFc1c0l3ZlUyRk1DUXIv?=
+ =?utf-8?B?WnZ5NWRYTSsrdGh0SmR0blp6VmwySGFjcU5obmQwSC9ueWNwZzhzRWdxdmVj?=
+ =?utf-8?B?RHYvVXlwTm40Nnc2REVhZ09KQ1BESDZPTENrZzFLYXYzeUh5eGtBUWFyY3dq?=
+ =?utf-8?B?cDFhMk5HczVjMDJRWFhxcUtOQWIxOHhKMEdERFdVRzRYb2JQcXorS3FtU3c5?=
+ =?utf-8?B?c1BHSUZGNkJSTXNtVlJBYThpN1l3aW1qeGZ5WUdOSnVHcmhJTWJhVytWM1g5?=
+ =?utf-8?B?ZS9YeUJJSlU0bUM0VkFiWGQ5RWNEK0ViYW94WTViMjBCMWJLUlZSQ0p3Ulpl?=
+ =?utf-8?B?Y1JTdC80WXdXNndqQzR6czNvSXh4ZWNVelRTUG44SzRrNWRTMktkNkgwZ1BH?=
+ =?utf-8?B?Q2FlY0VvTlRvU1NhNFJ1eTgyUWdGL2lGTHZON0tqQmRnSldRbDlkYjhBaXdl?=
+ =?utf-8?B?L2NQeTV0cmtpR0FTaDhkakR2THd3d1ZNc0hqQTdKanlhSnYwdWhaemtyU1Br?=
+ =?utf-8?B?K3hBenRVdTJGTVduVEpiWTE5R0NuWW96Vmp4aGh2Wm5LMmVNSi9FN0tFK2Z1?=
+ =?utf-8?B?d3RGZm1DVjBib1h1MmRQeUJjUENyMGFLK3Z5VnFOR1NkS0hPbzBHV2QzYTRX?=
+ =?utf-8?B?TDRlYSsvRXhOQjBTcmNWRUNXN05CeGNYZE44c2ZSVytuVFZGSFhVMDIvU2pq?=
+ =?utf-8?B?NHFOd25QSEU3MEFSZGpzOEI0SVNOVXF4OWRJYXYwTHluWENTbmE2RXphTXM4?=
+ =?utf-8?B?RFg3RTZHaTJWeHZ2UmV1TkhVeklWZld1dHhLNWtKQXF5c3lzR055T2JKLytL?=
+ =?utf-8?Q?ujyCy6EPx+ybneEc=3D?=
+X-Exchange-RoutingPolicyChecked:
+	DiSyhvvrB2M5NjM/OVsnw6Xa7SRWfjFJmRaSplDI1+qBHRfY/EW50eLv+3AT8hz5+kcylyJ4z5sVeHeJVFDDcZMtRFvGZm1anrz0xleSfsBlelHfy8etwtRNT2mO27svSdh6juB9M+pQZl422oQ+1ALjeUsoN3FUzkKN+XOwFfhOWoa2hmr6Bv9ZOYLsr8p2jzFKcKUWyrPrI6rD1CRKm1QbqdrUoCMtK8wpRskIocvvsMPkaKA3OqfMxHYDrqgWzW0Z5OLwJcKEtJJ/i8uCwto8+nkPpm3A2ohnPx8kdnbqBH1xv06nzVw2XMazhmbqDeBlmIxaVYFoFSG2/DxobA==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	gnLhtp6uxN3BX9c7PSh8KcDm6EEwaZIwHQ0q0TiBMb7OZdrQotYNejnj5H8x1apeK2Dg+bKrKE+S/9AOHTLaYFeSyqLAFQGTwiUba8JrU5Vv6gBvpKnCaNLvRl3goncohoCe1MYNIrre7UYY6JKjBex+BwiPnFmj6QewqPa68o3ocvoZID4hPqU2jiqz1NgmjligPCyF3WAn4pLyaP/WLHxCoDxWHkJQlalOF6kpBMcS7tVCa0SMggAsgn0hveIKoEOG1AXqRWsQSwHgmAarmPNvy3eaai2dage9XFhM3UDDh6BsWGszKL5ziqXduBG4nWLE60QIr3WZToy3eIq2uTVcvIOqSqeGVv20Q6FthEqT7iJnlDANYa5UokGKAvV73+DVRJM3i21es/0c9hIESu39wADvE0un1yscA6NSEP6M5HtoQuhN+Y0p+Dn13kyvAb4SYj+YE0EdUENsArjr0pIqEIkz9NbRwKBz039kJ4d75j6f84nFXVPuSm3G1fP6iqaSJLNmi+ql6SZxtE8tYAHAM5zQg0aHgXu8USQAO55gCFr7bZOqiKxjGb/FReMyljiYBjE7iocCBEI7OBYOcXBleNnCQywKAs5BaLVG+c4=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ed71af0b-3b1e-4175-465d-08de85e8233a
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6271.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Mar 2026 18:42:58.8233
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Mar 2026 18:48:40.7333
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FC5KG+TfOrhbA5QhHv7pkm5gM4EbggzO2EWztYyKDamwVS0GdPMZfLqvA6iqv2LlOoBzM1ZfuAu1fY/jGY4F4Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7698
+X-MS-Exchange-CrossTenant-UserPrincipalName: OqT1y4VT55whAiqU8mar6gt9EDZCH74950c/KajLTzEjllJysqtjhJ2iq29A3Y1zYlOge9w11W0yZMb5UlAocw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5092
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-19_03,2026-03-19_05,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999
+ adultscore=0 phishscore=0 malwarescore=0 suspectscore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2603050001 definitions=main-2603190150
+X-Authority-Analysis: v=2.4 cv=ftrRpV4f c=1 sm=1 tr=0 ts=69bc450d cx=c_pps
+ a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=Yq5XynenixoA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=o5oIOnhZENCTenyL_yNV:22 a=VwQbUJbxAAAA:8
+ a=yPCof4ZbAAAA:8 a=cYklClEZ4PKKequIaEMA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: Ph9NuYwLUkljZ6nXtCR0CiCN5BCyOWPZ
+X-Proofpoint-ORIG-GUID: Ph9NuYwLUkljZ6nXtCR0CiCN5BCyOWPZ
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzE5MDE1MCBTYWx0ZWRfX4QvHwulDXB/9
+ EIK0RQAb1vcE4UbCyGeboYEJ7vHv4FAL5Hj638zn1IOxKqP+Hfp0DJhTxGYf379ctpy19POeFIu
+ V2Solot5mLjgr+54uIDIq5OGtEOUFApEIe2ltgIHz/SELprflFphH4PSnV2a7wZPZd/5NvQCDdj
+ jHTa6q9qrt0+fjWIvY+BVRFFCSo4tc+nMQrT30tbBSa1+x1G1jVS2T22lGd0qVnxPHt9HcSYNuz
+ DtlYSzimf+xAMpd6FDah3LcZvEt8BT8CUF5t7XAvnvoUPE1AUbYzUba7WqnXpEbEOVrAPkUi+qn
+ kO52RS1e/hksj+ipE65GfP9y1orl2SlkCXAUPzFBQfplCr2nciuBsP2NzX0hZmll2tNJs9GK77J
+ kfmviAsl+QjITZ2r1V5xzSqW4jnWpilhQ3PZcdvJd26z/jb5t6UZf5Z3spqAFtEoU7ESL5zoddo
+ cEcAV9wavaf3lVEvNQw==
 
-On 3/19/2026 1:44 PM, Boqun Feng wrote:
-> On Thu, Mar 19, 2026 at 06:02:44PM +0100, Sebastian Andrzej Siewior wrote:
->> On 2026-03-19 09:48:16 [-0700], Boqun Feng wrote:
->>> I agree it's not RCU's fault ;-)
->>
->> I never claimed it is anyone's fault. I just see that BPF should be able
->> to do things which kgdb would not be allowed to.
->>
->>> I guess it'll be difficult to restrict BPF, however maybe BPF can call
->>> call_srcu() in irq_work instead? Or a more systematic defer mechanism
->>> that allows BPF to defer any lock holding functions to a different
->>> context. (We have a similar issue that BPF cannot call kfree_rcu() in
->>> some cases IIRC).
->>>
->>> But we need to fix this in v7.0, so this short-term fix is still needed.
->>
->> I would prefer something substantial before we rush to get a quick fix
->> and move on.
->>
+On 05/03/2026 22:55, Yonghong Song wrote:
+> Three tests are added.
 > 
-> The quick fix here is really "restore the previous behavior of
-> call_rcu_tasks_trace() in call_srcu()", and the future work will
-
-Unfortunately reverting c27cea4416a3 ("rcu: Re-implement RCU Tasks Trace in
-terms of SRCU-fast") is tricky since the original body of RCU Tasks Trace code
-is deleted. Perhaps we should have added an easier escape-hatch, lesson learnt:)
-
-> naturally happen: if the extra irq_work layer turns out calling issues
-> to other SRCU users, then we need to fix them as well. Otherwise, there
-> is no real need to avoid the extra irq_work hop. So I *think* it's OK
-> ;-)
+> Test 1: clang_parm_optimized.sh
+>   BTF:   char * foo(struct t * a, struct t * d);
+>   DWARF: char * foo(struct t * a, int b, struct t * d);
+> where parameber 'b' is unused.
 > 
-> Cleaning up all the ad-hoc irq_work usages in BPF is another thing,
-> which can happen if we learn about all the cases and have a good design.
+> Test 2: clang_parm_optimized_stack.sh
+>   BTF:   char * foo(struct t * a, struct t * d);
+>   DWARF: char * foo(struct t * a, int b1, int b2, int b3, int b4, int b5, int b6, struct t * d);
+> where parameters 'b1' to 'b6' are unused.
 > 
->> If we could get that irq_work() part only for BPF where it is required
->> then it would be already a step forward.
->>
+> Test 3: clang_parm_aggregate.sh
+>   BTF:   long foo(long a__f1, struct t b, int i);
+>   DWARF: long foo(struct t a, struct t b, int i);
+> where the 'struct t' definition is 'struct t { long f1; long f2; };', and
+> a.f2 is not used in the function.
 > 
-> I'm happy to include that (i.e. using Qiang's suggestion) if Joel also
-> agrees.
+> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 
-Sure, I am Ok with sort of short-term fix, but I worry that it still does not
-the issues due to the tasks-trace conversion. In particular, it doesn't fix the
-issue Andrea reported AFAICS, because there is a dependency on pool->lock? see:
-https://lore.kernel.org/all/abjzvz_tL_siV17s@gpd4/
+tests look good but we need to ensure they are run by the ./tests script
+so that they will be run in CI. also take a look at Bruce's work to
+add common test functions [1], will probably simplify aspects of the tests.
 
-That happens precisely because of the queue_delayed_work() happening from the
-SRCU tasks-trace specific BPF right?
+Thanks!
 
-This looks something like this, due to combination of SRCU, scheduler and WQ:
+Alan
 
-srcu_usage.lock -> pool->lock -> pi_lock -> rq->__lock
-       ^                                       |
-       |                                       |
-       +----------- DEADLOCK CYCLE ------------+
+[1] https://lore.kernel.org/dwarves/20260309205643.1985134-2-bruce.mcculloch@oracle.com/
 
->> Long term it would be nice if we could avoid calling this while locks
->> are held. I think call_rcu() can't be used under rq/pi lock, but timers
->> should be fine.
->>
->> Is this rq/pi locking originating from "regular" BPF code or sched_ext?
->>
+> ---
+>  tests/true_signatures/clang_parm_aggregate.sh | 83 ++++++++++++++++
+>  tests/true_signatures/clang_parm_optimized.sh | 95 +++++++++++++++++++
+>  .../clang_parm_optimized_stack.sh             | 95 +++++++++++++++++++
+>  .../gcc_true_signatures.sh                    |  0
+>  4 files changed, 273 insertions(+)
+>  create mode 100755 tests/true_signatures/clang_parm_aggregate.sh
+>  create mode 100755 tests/true_signatures/clang_parm_optimized.sh
+>  create mode 100755 tests/true_signatures/clang_parm_optimized_stack.sh
+>  rename tests/{ => true_signatures}/gcc_true_signatures.sh (100%)
 > 
-> I think if you have any tracepoint (include traceable functions) under
-> rq/pi locking, then potentially BPF can call call_srcu() there.
-
-> 
-> The root cause of the issues is that BPF is actually like a NMI unless
-> the code is noinstr (There is a rabit hole about BPF calling
-> call_srcu() while it's instrumenting call_srcu() itself). And the right
-> way to solve all the issues is to have a general defer mechanism for
-> BPF.
-Will that really solve the above mentioned issue though that Andrea reported?
-
-+Andrea, +Steve as well.
-
-thanks,
-
---
-Joel Fernandes
+> diff --git a/tests/true_signatures/clang_parm_aggregate.sh b/tests/true_signatures/clang_parm_aggregate.sh
+> new file mode 100755
+> index 0000000..6d92701
+> --- /dev/null
+> +++ b/tests/true_signatures/clang_parm_aggregate.sh
+> @@ -0,0 +1,83 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +
+> +outdir=
+> +
+> +fail()
+> +{
+> +	# Do not remove test dir; might be useful for analysis
+> +	trap - EXIT
+> +	if [[ -d "$outdir" ]]; then
+> +		echo "Test data is in $outdir"
+> +	fi
+> +	exit 1
+> +}
+> +
+> +cleanup()
+> +{
+> +	rm ${outdir}/*
+> +	rmdir $outdir
+> +}
+> +
+> +outdir=$(mktemp -d /tmp/clang_true.sh.XXXXXX)
+> +
+> +trap cleanup EXIT
+> +
+> +echo -n "Validation of BTF encoding of true_signatures: "
+> +
+> +clang_true="${outdir}/clang_true"
+> +CC=$(which clang 2>/dev/null)
+> +
+> +if [[ -z "$CC" ]]; then
+> +	echo "skip: clang not available"
+> +	exit 2
+> +fi
+> +
+> +cat > ${clang_true}.c << EOF
+> +struct t { long f1; long f2; };
+> +__attribute__((noinline)) static long foo(struct t a, struct t b, int i)
+> +{
+> +        return a.f1 + b.f1 + b.f2 + i;
+> +}
+> +
+> +struct t p1, p2;
+> +int i;
+> +int main()
+> +{
+> +        return (int)foo(p1, p2, i);
+> +}
+> +EOF
+> +
+> +CFLAGS="$CFLAGS -g -O2"
+> +${CC} ${CFLAGS} -o $clang_true ${clang_true}.c
+> +if [[ $? -ne 0 ]]; then
+> +	echo "Could not compile ${clang_true}.c" >& 2
+> +	exit 1
+> +fi
+> +LLVM_OBJCOPY=objcopy pahole -J --btf_features=+true_signature $clang_true
+> +if [[ $? -ne 0 ]]; then
+> +	echo "Could not encode BTF for $clang_true"
+> +	exit 1
+> +fi
+> +
+> +btf_optimized=$(pfunct --all --format_path=btf $clang_true |grep "foo")
+> +if [[ -z "$btf_optimized" ]]; then
+> +	echo "skip: no optimizations applied."
+> +	exit 2
+> +fi
+> +
+> +btf_cmp=$btf_optimized
+> +dwarf=$(pfunct --all $clang_true |grep "foo")
+> +
+> +test -n "$VERBOSE" && printf "\nBTF: $btf_optimized  DWARF: $dwarf \n"
+> +
+> +if [[ "$btf_cmp" == "$dwarf" ]]; then
+> +	echo "BTF and DWARF signatures should be different and they are not: BTF: $btf_optimized ; DWARF $dwarf"
+> +	exit 1
+> +else
+> +        echo ""
+> +        echo "  BTF:   $btf_optimized"
+> +        echo "  DWARF: $dwarf"
+> +fi
+> +echo "Ok"
+> +exit 0
+> diff --git a/tests/true_signatures/clang_parm_optimized.sh b/tests/true_signatures/clang_parm_optimized.sh
+> new file mode 100755
+> index 0000000..3022e2b
+> --- /dev/null
+> +++ b/tests/true_signatures/clang_parm_optimized.sh
+> @@ -0,0 +1,95 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +
+> +outdir=
+> +
+> +fail()
+> +{
+> +	# Do not remove test dir; might be useful for analysis
+> +	trap - EXIT
+> +	if [[ -d "$outdir" ]]; then
+> +		echo "Test data is in $outdir"
+> +	fi
+> +	exit 1
+> +}
+> +
+> +cleanup()
+> +{
+> +	rm ${outdir}/*
+> +	rmdir $outdir
+> +}
+> +
+> +outdir=$(mktemp -d /tmp/clang_true.sh.XXXXXX)
+> +
+> +trap cleanup EXIT
+> +
+> +echo -n "Validation of BTF encoding of true_signatures: "
+> +
+> +clang_true="${outdir}/clang_true"
+> +CC=$(which clang 2>/dev/null)
+> +
+> +if [[ -z "$CC" ]]; then
+> +	echo "skip: clang not available"
+> +	exit 2
+> +fi
+> +
+> +cat > ${clang_true}.c << EOF
+> +struct t { int a; };
+> +__attribute__((noinline)) char *tar(struct t *a, struct t *d)
+> +{
+> +	if (a->a == d->a)
+> +		return (char *)10;
+> +	else
+> +		return (char *)0;
+> +}
+> +
+> +__attribute__((noinline)) static char * foo(struct t *a, int b, struct t *d)
+> +{
+> +	return tar(a, d);
+> +}
+> +
+> +__attribute__((noinline)) char *bar(struct t *a, struct t *d)
+> +{
+> +	return foo(a, 1, d);
+> +}
+> +
+> +struct t p1, p2;
+> +int main()
+> +{
+> +	return !!bar(&p1, &p2);
+> +}
+> +EOF
+> +
+> +CFLAGS="$CFLAGS -g -O2"
+> +${CC} ${CFLAGS} -o $clang_true ${clang_true}.c
+> +if [[ $? -ne 0 ]]; then
+> +	echo "Could not compile ${clang_true}.c" >& 2
+> +	exit 1
+> +fi
+> +LLVM_OBJCOPY=objcopy pahole -J --btf_features=+true_signature $clang_true
+> +if [[ $? -ne 0 ]]; then
+> +	echo "Could not encode BTF for $clang_true"
+> +	exit 1
+> +fi
+> +
+> +btf_optimized=$(pfunct --all --format_path=btf $clang_true |grep "foo")
+> +if [[ -z "$btf_optimized" ]]; then
+> +	echo "skip: no optimizations applied."
+> +	exit 2
+> +fi
+> +
+> +btf_cmp=$btf_optimized
+> +dwarf=$(pfunct --all $clang_true |grep "foo")
+> +
+> +test -n "$VERBOSE" && printf "\nBTF: $btf_optimized  DWARF: $dwarf \n"
+> +
+> +if [[ "$btf_cmp" == "$dwarf" ]]; then
+> +	echo "BTF and DWARF signatures should be different and they are not: BTF: $btf_optimized ; DWARF $dwarf"
+> +	exit 1
+> +else
+> +        echo ""
+> +        echo "  BTF:   $btf_optimized"
+> +        echo "  DWARF: $dwarf"
+> +fi
+> +echo "Ok"
+> +exit 0
+> diff --git a/tests/true_signatures/clang_parm_optimized_stack.sh b/tests/true_signatures/clang_parm_optimized_stack.sh
+> new file mode 100755
+> index 0000000..1abb96d
+> --- /dev/null
+> +++ b/tests/true_signatures/clang_parm_optimized_stack.sh
+> @@ -0,0 +1,95 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +
+> +outdir=
+> +
+> +fail()
+> +{
+> +	# Do not remove test dir; might be useful for analysis
+> +	trap - EXIT
+> +	if [[ -d "$outdir" ]]; then
+> +		echo "Test data is in $outdir"
+> +	fi
+> +	exit 1
+> +}
+> +
+> +cleanup()
+> +{
+> +	rm ${outdir}/*
+> +	rmdir $outdir
+> +}
+> +
+> +outdir=$(mktemp -d /tmp/clang_true.sh.XXXXXX)
+> +
+> +trap cleanup EXIT
+> +
+> +echo -n "Validation of BTF encoding of true_signatures: "
+> +
+> +clang_true="${outdir}/clang_true"
+> +CC=$(which clang 2>/dev/null)
+> +
+> +if [[ -z "$CC" ]]; then
+> +	echo "skip: clang not available"
+> +	exit 2
+> +fi
+> +
+> +cat > ${clang_true}.c << EOF
+> +struct t { int a; };
+> +__attribute__((noinline)) char *tar(struct t *a, struct t *d)
+> +{
+> +        if (a->a == d->a)
+> +                return (char *)10;
+> +        else
+> +                return (char *)0;
+> +}
+> +
+> +__attribute__((noinline)) static char * foo(struct t *a, int b1, int b2, int b3, int b4, int b5, int b6, struct t *d)
+> +{
+> +        return tar(a, d);
+> +}
+> +
+> +__attribute__((noinline)) char *bar(struct t *a, struct t *d)
+> +{
+> +        return foo(a, 1, 2, 3, 4, 5, 6, d);
+> +}
+> +
+> +struct t p1, p2;
+> +int main()
+> +{
+> +        return !!bar(&p1, &p2);
+> +}
+> +EOF
+> +
+> +CFLAGS="$CFLAGS -g -O2"
+> +${CC} ${CFLAGS} -o $clang_true ${clang_true}.c
+> +if [[ $? -ne 0 ]]; then
+> +	echo "Could not compile ${clang_true}.c" >& 2
+> +	exit 1
+> +fi
+> +LLVM_OBJCOPY=objcopy pahole -J --btf_features=+true_signature $clang_true
+> +if [[ $? -ne 0 ]]; then
+> +	echo "Could not encode BTF for $clang_true"
+> +	exit 1
+> +fi
+> +
+> +btf_optimized=$(pfunct --all --format_path=btf $clang_true |grep "foo")
+> +if [[ -z "$btf_optimized" ]]; then
+> +	echo "skip: no optimizations applied."
+> +	exit 2
+> +fi
+> +
+> +btf_cmp=$btf_optimized
+> +dwarf=$(pfunct --all $clang_true |grep "foo")
+> +
+> +test -n "$VERBOSE" && printf "\nBTF: $btf_optimized  DWARF: $dwarf \n"
+> +
+> +if [[ "$btf_cmp" == "$dwarf" ]]; then
+> +	echo "BTF and DWARF signatures should be different and they are not: BTF: $btf_optimized ; DWARF $dwarf"
+> +	exit 1
+> +else
+> +        echo ""
+> +        echo "  BTF:   $btf_optimized"
+> +        echo "  DWARF: $dwarf"
+> +fi
+> +echo "Ok"
+> +exit 0
+> diff --git a/tests/gcc_true_signatures.sh b/tests/true_signatures/gcc_true_signatures.sh
+> similarity index 100%
+> rename from tests/gcc_true_signatures.sh
+> rename to tests/true_signatures/gcc_true_signatures.sh
 
