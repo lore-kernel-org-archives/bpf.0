@@ -1,51 +1,54 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67F9E2D8DBB
-	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 23:45:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E927C35BDBF;
+	Thu, 19 Mar 2026 23:45:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773963948; cv=none; b=NwvlYvtiF98AXHep7YT7hcodliKGo2ZEAJtxN5ieOqmErEy1tHtqIgDqINaAhGwYLV9i6AiuMWsWnxCLORtphXNKBr65+IDcNt9Qyf7gX1rp1hdwzynJYyf4q4VHYiWxCMHKAV0WLq6jfSgfNsRlxZ/KxjwqzS3vkl97rSppYlw=
+	t=1773963949; cv=none; b=pTRe0WSz0Yvr+Qz2s6aHZoQyoz/QrmRE64b3GVAuTpdfMD3sextx65Pk4IpbKRF6Ru81d+VJyJWyrwehiA42V3Pl2ChHly7Ko9YaywwkAXKHvyE1xnPfb7JMmWzF0x0R0zt/tUswbQT4sVw2Bh1I2SPwWgdB0pEAmSZncwKfqhE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773963948; c=relaxed/simple;
-	bh=we0dHfCoCw2kmkfJPJLdtBskAlc698b2IiWRrCJR4Bc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iprbzx0lLukX7BW4GQ6afSFLSh2FL5uVrHPXhVzfWcDMtrEtRqa4gvPDDC5UaU4XQ7JhCD09xGa6rflW7CWNoisbnK4ER74o8afSa5gBXog7Lc1OOUb5MtHcHh/VgrbMr0su9kk4/YT7bHopWpGgiTXF48bhtf45TvEDCdDPCCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LsNVjKSK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773963949; c=relaxed/simple;
+	bh=RQmJSTgeYlHzTm6YHQv+LZXZKDSGYerO9dS13cpXStY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=hi/NZSuq1DNiMijqYYLGO+B3J22z1PPTgbPSCA1QqG3RTiCmy0nlGcgXYpyT9UIlC/WaVn1PKqCcc+IwZjizNsslzTIidsRa3/41dx3IiAm+GJ8U+TEdqv234GHcv45MQ/1I878luYGECGTXBM6jaeRUxNYDbwmhHCn+uPEQIZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TxhQIg6t; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LsNVjKSK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42FE7C19424;
-	Thu, 19 Mar 2026 23:45:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TxhQIg6t"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24A03C2BCB3;
+	Thu, 19 Mar 2026 23:45:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1773963948;
-	bh=we0dHfCoCw2kmkfJPJLdtBskAlc698b2IiWRrCJR4Bc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=LsNVjKSK1LOX482f4y6OnsPFZEp9GEn6S241DU0GqINMc6sd80kTph5RQzaonCIHw
-	 HcDg7lQuf2DAGbkjBukUuWae9h2YoiUUbGUnTfH6h1EZNcDuopENRA6dmmDD9Jrt5L
-	 eJ3DLRHc/oFcGaCfxBsyPbY6n5ojvsZo26b/7CD+59sqrM1MP+9dzhI0TFYoVcdufR
-	 faEk6t8bTzYpFP/qVjKGzO52h1zMXKdTxLyhVntrBuj/A+s53/a0SXYdxJjGbmHUZT
-	 2wigI8bICxVPN1E5olix4dk9GL9AUY9Qppw3I3i43nC1NmR3WdkxD1N8aNw609iJA/
-	 7+14dOLKKqq9A==
+	bh=RQmJSTgeYlHzTm6YHQv+LZXZKDSGYerO9dS13cpXStY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=TxhQIg6tNKmhiL1B9/Gw+ixDRVPUVJvBzrsCA0z/wEZ8og1rWWNXJYbG5x4/bmDIv
+	 qPalhPBdimNQShZO4GV2UHW0eSor13TkO1KMNpl+J6uBqPAxAghqEL0X9xLSg4bfCb
+	 DIBmt/BZzVddToXDikdUCHlS/20+1DCpbkbA+eyCh1M+agBztfWNJX6A8qsOpqfIWP
+	 J+XJ+GG9knObVor0YphOpkTExnSPtgF9fuDq5Q3t4XwOLy9Rn2XVJCSd5RvIzc0ntR
+	 u6mFyym3X/lpoBppCc1Fp4Fg0Mx5cE1NnMIoOBQIhukNgYBcFUYISH6mhsprgACk9B
+	 d1F12jQATSQug==
 From: Jakub Kicinski <kuba@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Jakub Kicinski <kuba@kernel.org>,
-	maze@google.com,
-	willemdebruijn.kernel@gmail.com,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
 	ast@kernel.org,
 	daniel@iogearbox.net,
-	andrii@kernel.org,
 	martin.lau@linux.dev,
-	eddyz87@gmail.com,
 	song@kernel.org,
 	yonghong.song@linux.dev,
 	john.fastabend@gmail.com,
 	kpsingh@kernel.org,
 	sdf@fomichev.me,
 	haoluo@google.com,
-	jolsa@kernel.org
-Subject: [PATCH bpf-next 1/2] net: clear the dst when performing encap / decap
-Date: Thu, 19 Mar 2026 16:45:30 -0700
-Message-ID: <20260319234531.3022634-1-kuba@kernel.org>
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next 2/2] selftests/bpf: test that dst is cleared on same-protocol encap
+Date: Thu, 19 Mar 2026 16:45:31 -0700
+Message-ID: <20260319234531.3022634-2-kuba@kernel.org>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260319234531.3022634-1-kuba@kernel.org>
+References: <20260319234531.3022634-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,29 +57,18 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Commit ba9db6f907ac ("net: clear the dst when changing skb protocol")
-added dst clearing when a BPF program changes the skb protocol
-(e.g. IPv4 to IPv6). Since that was a fix we only cleared the dst when
-the L3 protocol actually changes to keep it minimal. As suggested during
-the discussion (see Link) encap or decap operation which wraps or unwraps
-a same-protocol header may also render the existing dst incorrect - even
-if that doesn't result in a crash, just the wrong route for the now-outermost
-IP dst.
+Verify that bpf_skb_adjust_room() clears the routing dst even when
+the encap L3 protocol matches the original packet (e.g. IPIP).
+The dst selected for the inner packet is not valid for the
+encapsulated result; a stale dst could lead to misrouting.
 
-Make dropping dst unconditional for bpf_skb_change_proto() and all
-L3 encap / decap ops.
-
-Link: https://lore.kernel.org/CANP3RGfRaYwve_xgxH6Tp2zenzKn2-DjZ9tg023WVzfdJF3p_w@mail.gmail.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
-CC: maze@google.com
-CC: willemdebruijn.kernel@gmail.com
-
+CC: andrii@kernel.org
+CC: eddyz87@gmail.com
 CC: ast@kernel.org
 CC: daniel@iogearbox.net
-CC: andrii@kernel.org
 CC: martin.lau@linux.dev
-CC: eddyz87@gmail.com
 CC: song@kernel.org
 CC: yonghong.song@linux.dev
 CC: john.fastabend@gmail.com
@@ -84,115 +76,160 @@ CC: kpsingh@kernel.org
 CC: sdf@fomichev.me
 CC: haoluo@google.com
 CC: jolsa@kernel.org
+CC: shuah@kernel.org
 CC: bpf@vger.kernel.org
+CC: linux-kselftest@vger.kernel.org
 ---
- net/core/filter.c | 50 +++++++++++++++++++++++++----------------------
- 1 file changed, 27 insertions(+), 23 deletions(-)
+ .../selftests/bpf/prog_tests/test_dst_clear.c | 75 +++++++++++++++++++
+ .../selftests/bpf/progs/test_dst_clear.c      | 57 ++++++++++++++
+ 2 files changed, 132 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/test_dst_clear.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_dst_clear.c
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 2f023999f046..0f8c508c5f8b 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -3257,13 +3257,6 @@ static const struct bpf_func_proto bpf_skb_vlan_pop_proto = {
- 	.arg1_type      = ARG_PTR_TO_CTX,
- };
- 
--static void bpf_skb_change_protocol(struct sk_buff *skb, u16 proto)
--{
--	skb->protocol = htons(proto);
--	if (skb_valid_dst(skb))
--		skb_dst_drop(skb);
--}
--
- static int bpf_skb_generic_push(struct sk_buff *skb, u32 off, u32 len)
- {
- 	/* Caller already did skb_cow() with meta_len+len as headroom,
-@@ -3362,7 +3355,7 @@ static int bpf_skb_proto_4_to_6(struct sk_buff *skb)
- 		shinfo->gso_type |=  SKB_GSO_DODGY;
- 	}
- 
--	bpf_skb_change_protocol(skb, ETH_P_IPV6);
-+	skb->protocol = htons(ETH_P_IPV6);
- 	skb_clear_hash(skb);
- 
- 	return 0;
-@@ -3393,7 +3386,7 @@ static int bpf_skb_proto_6_to_4(struct sk_buff *skb)
- 		shinfo->gso_type |=  SKB_GSO_DODGY;
- 	}
- 
--	bpf_skb_change_protocol(skb, ETH_P_IP);
-+	skb->protocol = htons(ETH_P_IP);
- 	skb_clear_hash(skb);
- 
- 	return 0;
-@@ -3440,8 +3433,14 @@ BPF_CALL_3(bpf_skb_change_proto, struct sk_buff *, skb, __be16, proto,
- 	 * need to be verified first.
- 	 */
- 	ret = bpf_skb_proto_xlat(skb, proto);
-+	if (ret)
-+		return ret;
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_dst_clear.c b/tools/testing/selftests/bpf/prog_tests/test_dst_clear.c
+new file mode 100644
+index 000000000000..8190c56556fb
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/test_dst_clear.c
+@@ -0,0 +1,75 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
 +
- 	bpf_compute_data_pointers(skb);
--	return ret;
-+	if (skb_valid_dst(skb))
-+		skb_dst_drop(skb);
++#include <sys/types.h>
++#include <sys/socket.h>
++#include <net/if.h>
 +
-+	return 0;
- }
- 
- static const struct bpf_func_proto bpf_skb_change_proto_proto = {
-@@ -3583,12 +3582,13 @@ static int bpf_skb_net_grow(struct sk_buff *skb, u32 off, u32 len_diff,
- 		}
- 
- 		/* Match skb->protocol to new outer l3 protocol */
--		if (skb->protocol == htons(ETH_P_IP) &&
--		    flags & BPF_F_ADJ_ROOM_ENCAP_L3_IPV6)
--			bpf_skb_change_protocol(skb, ETH_P_IPV6);
--		else if (skb->protocol == htons(ETH_P_IPV6) &&
--			 flags & BPF_F_ADJ_ROOM_ENCAP_L3_IPV4)
--			bpf_skb_change_protocol(skb, ETH_P_IP);
-+		if (flags & BPF_F_ADJ_ROOM_ENCAP_L3_IPV6)
-+			skb->protocol = htons(ETH_P_IPV6);
-+		else if (flags & BPF_F_ADJ_ROOM_ENCAP_L3_IPV4)
-+			skb->protocol = htons(ETH_P_IP);
++#include "test_progs.h"
++#include "network_helpers.h"
++#include "test_dst_clear.skel.h"
 +
-+		if (skb_valid_dst(skb))
-+			skb_dst_drop(skb);
- 	}
- 
- 	if (skb_is_gso(skb)) {
-@@ -3616,6 +3616,7 @@ static int bpf_skb_net_grow(struct sk_buff *skb, u32 off, u32 len_diff,
- static int bpf_skb_net_shrink(struct sk_buff *skb, u32 off, u32 len_diff,
- 			      u64 flags)
- {
-+	bool decap = flags & BPF_F_ADJ_ROOM_DECAP_L3_MASK;
- 	int ret;
- 
- 	if (unlikely(flags & ~(BPF_F_ADJ_ROOM_FIXED_GSO |
-@@ -3638,13 +3639,16 @@ static int bpf_skb_net_shrink(struct sk_buff *skb, u32 off, u32 len_diff,
- 	if (unlikely(ret < 0))
- 		return ret;
- 
--	/* Match skb->protocol to new outer l3 protocol */
--	if (skb->protocol == htons(ETH_P_IP) &&
--	    flags & BPF_F_ADJ_ROOM_DECAP_L3_IPV6)
--		bpf_skb_change_protocol(skb, ETH_P_IPV6);
--	else if (skb->protocol == htons(ETH_P_IPV6) &&
--		 flags & BPF_F_ADJ_ROOM_DECAP_L3_IPV4)
--		bpf_skb_change_protocol(skb, ETH_P_IP);
-+	if (decap) {
-+		/* Match skb->protocol to new outer l3 protocol */
-+		if (flags & BPF_F_ADJ_ROOM_DECAP_L3_IPV6)
-+			skb->protocol = htons(ETH_P_IPV6);
-+		else if (flags & BPF_F_ADJ_ROOM_DECAP_L3_IPV4)
-+			skb->protocol = htons(ETH_P_IP);
++#define NS_TEST "dst_clear_ns"
++#define IPV4_IFACE_ADDR "1.0.0.1"
++#define UDP_TEST_PORT 7777
 +
-+		if (skb_valid_dst(skb))
-+			skb_dst_drop(skb);
++void test_dst_clear(void)
++{
++	LIBBPF_OPTS(bpf_tc_hook, qdisc_hook, .attach_point = BPF_TC_EGRESS);
++	LIBBPF_OPTS(bpf_tc_opts, tc_attach);
++	struct nstoken *nstoken = NULL;
++	struct test_dst_clear *skel;
++	struct sockaddr_in addr;
++	socklen_t addrlen;
++	char buf[128] = {};
++	int sockfd, err;
++
++	skel = test_dst_clear__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel open_and_load"))
++		return;
++
++	SYS(fail, "ip netns add %s", NS_TEST);
++	SYS(fail, "ip -net %s addr add %s/8 dev lo", NS_TEST, IPV4_IFACE_ADDR);
++	SYS(fail, "ip -net %s link set dev lo up", NS_TEST);
++
++	nstoken = open_netns(NS_TEST);
++	if (!ASSERT_OK_PTR(nstoken, "open_netns"))
++		goto fail;
++
++	qdisc_hook.ifindex = if_nametoindex("lo");
++	if (!ASSERT_GT(qdisc_hook.ifindex, 0, "if_nametoindex lo"))
++		goto fail;
++
++	err = bpf_tc_hook_create(&qdisc_hook);
++	if (!ASSERT_OK(err, "create qdisc hook"))
++		goto fail;
++
++	tc_attach.prog_fd = bpf_program__fd(skel->progs.dst_clear);
++	err = bpf_tc_attach(&qdisc_hook, &tc_attach);
++	if (!ASSERT_OK(err, "attach filter"))
++		goto fail;
++
++	addrlen = sizeof(addr);
++	err = make_sockaddr(AF_INET, IPV4_IFACE_ADDR, UDP_TEST_PORT,
++			    (void *)&addr, &addrlen);
++	if (!ASSERT_OK(err, "make_sockaddr"))
++		goto fail;
++	sockfd = socket(AF_INET, SOCK_DGRAM, 0);
++	if (!ASSERT_NEQ(sockfd, -1, "socket"))
++		goto fail;
++	err = sendto(sockfd, buf, sizeof(buf), 0, (void *)&addr, addrlen);
++	close(sockfd);
++	if (!ASSERT_EQ(err, sizeof(buf), "send"))
++		goto fail;
++
++	ASSERT_TRUE(skel->bss->had_dst, "had_dst");
++	ASSERT_TRUE(skel->bss->dst_cleared, "dst_cleared");
++
++fail:
++	if (nstoken) {
++		bpf_tc_hook_destroy(&qdisc_hook);
++		close_netns(nstoken);
 +	}
- 
- 	if (skb_is_gso(skb)) {
- 		struct skb_shared_info *shinfo = skb_shinfo(skb);
++	SYS_NOFAIL("ip netns del " NS_TEST);
++	test_dst_clear__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_dst_clear.c b/tools/testing/selftests/bpf/progs/test_dst_clear.c
+new file mode 100644
+index 000000000000..7ac9604fd99c
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_dst_clear.c
+@@ -0,0 +1,57 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++
++#include "vmlinux.h"
++#include "bpf_tracing_net.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_endian.h>
++
++#define UDP_TEST_PORT 7777
++
++void *bpf_cast_to_kern_ctx(void *) __ksym;
++
++bool had_dst = false;
++bool dst_cleared = false;
++
++SEC("tc")
++int dst_clear(struct __sk_buff *skb)
++{
++	struct sk_buff *kskb;
++	struct iphdr iph;
++	struct udphdr udph;
++	int err;
++
++	if (skb->protocol != __bpf_constant_htons(ETH_P_IP))
++		return TC_ACT_OK;
++
++	if (bpf_skb_load_bytes(skb, ETH_HLEN, &iph, sizeof(iph)))
++		return TC_ACT_OK;
++
++	if (iph.protocol != IPPROTO_UDP)
++		return TC_ACT_OK;
++
++	if (bpf_skb_load_bytes(skb, ETH_HLEN + sizeof(iph), &udph, sizeof(udph)))
++		return TC_ACT_OK;
++
++	if (udph.dest != __bpf_constant_htons(UDP_TEST_PORT))
++		return TC_ACT_OK;
++
++	kskb = bpf_cast_to_kern_ctx(skb);
++	had_dst = (kskb->_skb_refdst != 0);
++
++	/* Same-protocol encap (IPIP): protocol stays IPv4, but the dst
++	 * from the original routing is no longer valid for the outer hdr.
++	 */
++	err = bpf_skb_adjust_room(skb, (s32)sizeof(struct iphdr),
++				  BPF_ADJ_ROOM_MAC,
++				  BPF_F_ADJ_ROOM_FIXED_GSO |
++				  BPF_F_ADJ_ROOM_ENCAP_L3_IPV4);
++	if (err)
++		return TC_ACT_SHOT;
++
++	dst_cleared = (kskb->_skb_refdst == 0);
++
++	return TC_ACT_SHOT;
++}
++
++char __license[] SEC("license") = "GPL";
 -- 
 2.53.0
 
