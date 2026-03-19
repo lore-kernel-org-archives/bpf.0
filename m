@@ -1,137 +1,172 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81E5D3AEF57;
-	Thu, 19 Mar 2026 22:07:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9A3F40628E;
+	Thu, 19 Mar 2026 22:41:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773958047; cv=none; b=Ty+9b2vFpZyG5/56TGH/9Shk3dFAwz0Nm4drShLQ/5vP4lZAlKvdRu883cfTQYXHCZtjIz0qRzk4l5ggjdtmLDEY2cjeu45965Rs2TnQS8r4yGY9MxMCfZYNFpfvqLe2J2hULA1PCU/O9JAshKKVJoOxz6hIkfT16yrQe9iZvoA=
+	t=1773960117; cv=none; b=hXk+ltdqagSvh8kueKH01S9I+R+glYrfRJnUIFAlhabwvk8MwOv01nVb29H8BkG9HCkHRVqbMEEh/IxqqCO4oCi8mwjI4xxC7xMiv27O6MjNzlZTW6613Go6kFi550LHnTZANwUYtwyYMM4402sy4YBQCCodHFs+JYPwSPTqMEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773958047; c=relaxed/simple;
-	bh=VLpw6vvbor7XAeOFDdqvHgoXswBR5eeaW49UmB+ssYM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VGm4ECt5PWSEmqWznTo+gku+t7OLbhZ5yak7LnhVnjrgienTWlS6TS36RRKkPTOn59X6NFZCeGzqb/M3fQ4K3xsFSllT6dIDd6DSzBDCcVIci67/973OdqUlvtvS26FmvDPWsnLb/+hlSgZ5o+Kmr6PJMUj/wjGvb90NV/bgtQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CQdW4wyt; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773960117; c=relaxed/simple;
+	bh=w42GVYaBOiENOnZTs/bf+y6P5cN1lu44uYlM0XIDM0A=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=sPyPadO0PfGBiru/NTPN5bmWWC6/j0MIY7Eq7GBtHI7d8QxYmEAFmbsAGwQaRS47dfRXqNoK10REOfMu5CwRrme0Xs8KFPGHFlyenjWmmFvt0JRFWxCHANrgmfzxp9U8oxOcoHGhGnVnQh+HiExtTXath8Cf7ZcQQuzvcryL5Gc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I1JwJQpl; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CQdW4wyt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FF18C19424;
-	Thu, 19 Mar 2026 22:07:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773958047;
-	bh=VLpw6vvbor7XAeOFDdqvHgoXswBR5eeaW49UmB+ssYM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=CQdW4wytk+lGyn8N9QzpKaN9ySpRGKvktM8wkV+MXqZOeg5E/YRIXYlzvdNHfo4vU
-	 xvtC/mwcPwkPlMwZU7vd0aIcSsZ8PO8LgNMSLunwLJu9JlKHiX8nB2H4+mn1bCA5CK
-	 wNnrA8uVrTKrEOvk1+G8daOfHzfce1cv9jtEPr463w0zNT+pg9wJpkoJ4OAij+mkPN
-	 I/Hlth1o6Vf+sJ4tRFnJbHtYmLkaUFAmqXrBY7N8u6nTAS9BCOvPMJdXZ7Dy9pwbOw
-	 +iBpWwPJm03250dl1+qexxykxNIkRJg/yr9RgoTD6mKPfW6a4iPirQBsXBJWXl+8mz
-	 P1omaz+K2cb1g==
-Message-ID: <54364b65-ffeb-4d91-918a-c1e4b0c92816@kernel.org>
-Date: Thu, 19 Mar 2026 23:07:20 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I1JwJQpl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773960116; x=1805496116;
+  h=from:to:cc:subject:date:message-id;
+  bh=w42GVYaBOiENOnZTs/bf+y6P5cN1lu44uYlM0XIDM0A=;
+  b=I1JwJQpl7aVXUiWUETz/DQ8gBTrzfMNVvVk9L939LkakZ+T9jC5KR0IL
+   Xt9RapGN4mCQBNaGqNMMJYRbT4Q1dhj7ke9BA0X3TRBIMK2LO5WxJqL9m
+   ZJNaSj+iF6Cnwi5+ijtWaI916gDBRO3k5+nMU2Wxn+CUii0eVqT03A1uP
+   4gOXMVgVkvY3URPgzZ1s+Lm/nji3aWeR9ifzx3cG07yhzgsb1IlRadKSJ
+   ks7SXBGwMjxASPQxDdOLnA0rxjzKprH4EPDtN1jbze3v5yU+RMRqdE3da
+   ltli5vT7cofA9R3c9rxhPfGn5z2vvB6Va25a9F/Z4u5LCjESbDHzSnZYc
+   g==;
+X-CSE-ConnectionGUID: tNSJR+tGTuegwFpGc6PR7Q==
+X-CSE-MsgGUID: QbDVCmhBTU6/wkZtI8isAQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11734"; a="74060139"
+X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
+   d="scan'208";a="74060139"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2026 15:41:54 -0700
+X-CSE-ConnectionGUID: cjgj4rPqS52u0ucCRTXghw==
+X-CSE-MsgGUID: 7P+ErQc7SHKpge4J3R2xDA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
+   d="scan'208";a="223326020"
+Received: from estantil-desk.jf.intel.com ([10.166.241.24])
+  by orviesa007.jf.intel.com with ESMTP; 19 Mar 2026 15:41:53 -0700
+From: Emil Tantilov <emil.s.tantilov@intel.com>
+To: intel-wired-lan@lists.osuosl.org
+Cc: netdev@vger.kernel.org,
+	anthony.l.nguyen@intel.com,
+	aleksandr.loktionov@intel.com,
+	przemyslaw.kitszel@intel.com,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	bpf@vger.kernel.org,
+	aleksander.lobakin@intel.com,
+	decot@google.com,
+	willemb@google.com,
+	Emil Tantilov <emil.s.tantilov@intel.com>,
+	stable@vger.kernel.org
+Subject: [PATCH iwl-net v2] idpf: fix xdp crash in soft reset error path
+Date: Thu, 19 Mar 2026 15:41:59 -0700
+Message-Id: <20260319224159.23885-1-emil.s.tantilov@intel.com>
+X-Mailer: git-send-email 2.17.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/3] mm/page_alloc: Optimize free_contig_range()
-To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>
-Cc: Muhammad Usama Anjum <usama.anjum@arm.com>, Ryan.Roberts@arm.com,
- Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Mike Rapoport
- <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Brendan Jackman <jackmanb@google.com>,
- Johannes Weiner <hannes@cmpxchg.org>, Uladzislau Rezki <urezki@gmail.com>,
- Nick Terrell <terrelln@fb.com>, David Sterba <dsterba@suse.com>,
- "Vishal Moola (Oracle)" <vishal.moola@gmail.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, david.hildenbrand@arm.com
-References: <20260316113209.945853-1-usama.anjum@arm.com>
- <20260316113209.945853-2-usama.anjum@arm.com>
- <220e97f0-dc82-4f37-b833-7160aee46cea@suse.cz>
- <703BB8CD-23D9-4012-8333-366837D7E95A@nvidia.com>
- <fde63978-d632-4196-b032-4cc20041fd90@kernel.org>
- <2AE5B748-C57B-4BC1-BF9E-6299CCBF295B@nvidia.com>
- <3883abcd-426d-4211-ae76-b5601ee728de@kernel.org>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <3883abcd-426d-4211-ae76-b5601ee728de@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
->> the allocation of non-compound order>0, like you suggested in 3, we basically
-> 
-> I suggested we'd take it away in the sense of not producing order>0 where
-> head is refcounted, tails are not, and it's not a compound page. I'd rather
-> have an API that applies split_page() before and returns it as order-0
-> refcounted pages, but not the intermediate order>0 non-compound anymore.
+NULL pointer dereference is reported in cases where idpf_vport_open()
+fails during soft reset:
 
-Are you talking about external API or internal API?
+./xdpsock -i <inf> -q -r -N
 
-Regarding external interface: I think the crucial part is that an
-external interface (free_contig_range) should always get a range of
-individual order-0 pages: neither compound nor non-compound order > 0.
+[ 3179.186687] idpf 0000:83:00.0: Failed to initialize queue ids for vport 0: -12
+[ 3179.276739] BUG: kernel NULL pointer dereference, address: 0000000000000010
+[ 3179.277636] #PF: supervisor read access in kernel mode
+[ 3179.278470] #PF: error_code(0x0000) - not-present page
+[ 3179.279285] PGD 0
+[ 3179.280083] Oops: Oops: 0000 [#1] SMP NOPTI
+...
+[ 3179.283997] Workqueue: events xp_release_deferred
+[ 3179.284770] RIP: 0010:idpf_find_rxq_vec+0x17/0x30 [idpf]
+...
+[ 3179.291937] Call Trace:
+[ 3179.292392]  <TASK>
+[ 3179.292843]  idpf_qp_switch+0x25/0x820 [idpf]
+[ 3179.293325]  idpf_xsk_pool_setup+0x7c/0x520 [idpf]
+[ 3179.293803]  idpf_xdp+0x59/0x240 [idpf]
+[ 3179.294275]  xp_disable_drv_zc+0x62/0xb0
+[ 3179.294743]  xp_clear_dev+0x40/0xb0
+[ 3179.295198]  xp_release_deferred+0x1f/0xa0
+[ 3179.295648]  process_one_work+0x226/0x730
+[ 3179.296106]  worker_thread+0x19e/0x340
+[ 3179.296557]  ? __pfx_worker_thread+0x10/0x10
+[ 3179.297009]  kthread+0xf4/0x130
+[ 3179.297459]  ? __pfx_kthread+0x10/0x10
+[ 3179.297910]  ret_from_fork+0x32c/0x410
+[ 3179.298361]  ? __pfx_kthread+0x10/0x10
+[ 3179.298702]  ret_from_fork_asm+0x1a/0x30
 
-The individual order-0 pages can either be frozen or refcounted
-(depending on the interface).
+Fix the error handling of the soft reset in idpf_xdp_setup_prog() by
+restoring the vport->xdp_prog to the old value. This avoids referencing
+the orphaned prog that was copied to vport->xdp_prog in the soft reset
+and prevents subsequent false positive by idpf_xdp_enabled().
 
+Update the restart check in idpf_xsk_pool_setup() to use IDPF_VPORT_UP bit
+instead of netif_running(). The idpf_vport_stop/start() calls will not
+update the __LINK_STATE_START bit, making this test a false positive
+should the soft reset fail.
 
-Regarding internal interface: To me that implies that FPI_PREPARED will
-never ever have to do any kind of "subpage" (page) free_pages_prepare()
-checks. It must already have been performed on all order-0 pages.
+Fixes: 3d57b2c00f09 ("idpf: add XSk pool initialization")
+Cc: stable@vger.kernel.org
+Signed-off-by: Emil Tantilov <emil.s.tantilov@intel.com>
+Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+---
+Changelog:
+v1->v2:
+- Cleaned up the error handling in idpf_xdp_setup_prog() to avoid extra
+  check and bpf_prog_put() call in the error path and fixed indentation
+  at the assignment of restart. Caught in review by Alexander Lobakin.
 
-So the TODO should indeed be dropped.
+v1:
+https://lore.kernel.org/netdev/20260318011545.12874-1-emil.s.tantilov@intel.com/
+---
+ drivers/net/ethernet/intel/idpf/xdp.c | 1 +
+ drivers/net/ethernet/intel/idpf/xsk.c | 4 +++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-I'm not sure I understood whether you think using the
-__free_frozen_pages() with order > 0 is okay, or whether we need a
-different (internal) interface.
-
-
+diff --git a/drivers/net/ethernet/intel/idpf/xdp.c b/drivers/net/ethernet/intel/idpf/xdp.c
+index cbccd4546768..18a6e7062863 100644
+--- a/drivers/net/ethernet/intel/idpf/xdp.c
++++ b/drivers/net/ethernet/intel/idpf/xdp.c
+@@ -488,6 +488,7 @@ static int idpf_xdp_setup_prog(struct idpf_vport *vport,
+ 				   "Could not reopen the vport after XDP setup");
+ 
+ 		cfg->user_config.xdp_prog = old;
++		vport->xdp_prog = old;
+ 		old = prog;
+ 	}
+ 
+diff --git a/drivers/net/ethernet/intel/idpf/xsk.c b/drivers/net/ethernet/intel/idpf/xsk.c
+index d95d3efdfd36..3d8c430efd2b 100644
+--- a/drivers/net/ethernet/intel/idpf/xsk.c
++++ b/drivers/net/ethernet/intel/idpf/xsk.c
+@@ -553,6 +553,7 @@ int idpf_xskrq_poll(struct idpf_rx_queue *rxq, u32 budget)
+ 
+ int idpf_xsk_pool_setup(struct idpf_vport *vport, struct netdev_bpf *bpf)
+ {
++	const struct idpf_netdev_priv *np = netdev_priv(vport->netdev);
+ 	struct xsk_buff_pool *pool = bpf->xsk.pool;
+ 	u32 qid = bpf->xsk.queue_id;
+ 	bool restart;
+@@ -568,7 +569,8 @@ int idpf_xsk_pool_setup(struct idpf_vport *vport, struct netdev_bpf *bpf)
+ 		return -EINVAL;
+ 	}
+ 
+-	restart = idpf_xdp_enabled(vport) && netif_running(vport->netdev);
++	restart = idpf_xdp_enabled(vport) &&
++		  test_bit(IDPF_VPORT_UP, np->state);
+ 	if (!restart)
+ 		goto pool;
+ 
 -- 
-Cheers,
+2.37.3
 
-David
