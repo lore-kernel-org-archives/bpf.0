@@ -1,93 +1,130 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 901F43EF0AC;
-	Thu, 19 Mar 2026 16:40:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD883603F3
+	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 16:48:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773938422; cv=none; b=uAQJSzosJj18jL0B+S4p8YS7nV+WAjQ2TH+N4Sgu8oqLsICilD9N4+A4n6HdQYxWahDYoq+ylGAJTD6bqwaB9k4rNXUiw6tXtfgVYwGCX48JhSd7fIUrcqmvwjFV/8xYZ6wjpMQ3dz4uz22GFvL5iGx/vWML/9EvSUE3E5bQhf8=
+	t=1773938900; cv=none; b=G8ijO9xi4t1Ehr2QiKkJPKscxrRFfi8YrGVZSnrtzTBkSA2evO5ZZkV7nKpdWq6VKj+bb5M+G1OQk0ZzJ8iwNwwbhjR0S8YjQUMADm4aF0bD3Ymu4bQ0IikhUA1DR/OnM0VlR/4bc1s95LWxfMPnn6YXo5Q2ovvaE6I6VgPMgqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773938422; c=relaxed/simple;
-	bh=qdSHlS15YIrrYlKFILuH3C5YTTS41s9xNZ21/Pbj60E=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=c7zTWYGSZW3C/kj3HduppvLmh416tbEhTOnOpBMBaadjD+M1G1V4em936YqITDBLLArApBmsr7abAbUxH/Qji99u+x1a0jMxygIA2CodPmdK3IJCUBUEl1dSbxkp8YbsM64NA0mzv1w5UP7WP85PfarvIHyMRgXHQaJndFFc5v0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g80do7cc; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773938900; c=relaxed/simple;
+	bh=BW+s1tfvjSzvorY/ZLwBEykUFgF+GdVyXuLp1ysnz7k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XUS5guS5zg1eEjYMoMHuP9mNtDhlr0+xEVIgkGt9gxC6v0A4LZf0qjJws6DXo+fACBL8PTNjIMGhg7hvNPYVilh+P9UgkXOWZFQ6gczy92huMKA1uwpWlt0NONBUahGw5oaUcEYw8ZQ5/kLcg99Vu8zriAEIPId86tR++lefVKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XTd73k7C; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g80do7cc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F1E6C19425;
-	Thu, 19 Mar 2026 16:40:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XTd73k7C"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60587C19425;
+	Thu, 19 Mar 2026 16:48:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773938422;
-	bh=qdSHlS15YIrrYlKFILuH3C5YTTS41s9xNZ21/Pbj60E=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=g80do7cc2w63gJseXEe4T/85gebLSO3Hmp2yZL3egt+lTDYqfUNU4qlI0WQd6QHSQ
-	 FHcHAbbxB9ruLGC3eFqZAnxUwBMzLdtZRCW6JEdLa8Skf+mVY+MgsUul0gYkVOMvot
-	 rGG2XoMQuysCJjJvmyQjTLje+aCdIB64HSQ4BCQjZ7QoDEhZfaZcQV03WZkWdy7hkG
-	 Lq108TcTKenwqaHzgfIIf+olkLDOHPbqT2p4xViRoUVWrv7keNgn/x1bp/qENWXxBv
-	 trb31M2KyfzqdAvpd29rJZ8E7TmX4vQWINb3KG1u05pJVRSbI0knydA+0DW+feHNje
-	 bxAlgKm5Dh9jg==
-Content-Type: multipart/mixed; boundary="===============8015506610791822796=="
+	s=k20201202; t=1773938899;
+	bh=BW+s1tfvjSzvorY/ZLwBEykUFgF+GdVyXuLp1ysnz7k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XTd73k7CC2TC9+hCO20TKx5ri7q8reYnpoMwn84Tk8ae/+6WopRDjGO2DIpUfBcaC
+	 mXv3ymUIjomMkCZJo+boauIPFKHJXbzTXDwfWQLkKbLq5j3OWufHbtOwEZ0+mI5MHb
+	 to+U054TMagF7gQBneAS8ZJYLguMFaeO3WhnymG/QdCfUwHobNUeQtG7YTRS/ZuXxb
+	 IYxN52pDAUXP9HM2+yE2U9Gi625XjGeh3gIw/ml7emhkVK5uXrzd0aW6hYNDnxpQ7P
+	 uGlsOAfW5S+DA0S9Eb8rOTUkZHN6IHh+MTK33rLUI3yp0L7DrUTtsyFaJuevgm4J5q
+	 QfxwC1qZcysjg==
+Received: from phl-compute-12.internal (phl-compute-12.internal [10.202.2.52])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 1C889F40073;
+	Thu, 19 Mar 2026 12:48:18 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-12.internal (MEProxy); Thu, 19 Mar 2026 12:48:18 -0400
+X-ME-Sender: <xms:0ii8af4qtLUBqFla_35wBurD4IJfxeJLdEnxHmQPU_dpDPX_TSkevA>
+    <xme:0ii8afSWs6mqniQlsBm5HnZ3jNvm_ZVcw7AROlCi2wUz5HXT_k1OFmOxRrS_dqfOQ
+    KHXHAsQ5XCiCFXUtOpelULc-FJoT6nLPfjDg7if5jGhLPpt2p7POg>
+X-ME-Received: <xmr:0ii8ackdzQgcCTJ0x-9qv3RNylAK8KEX_WixbmFxbg5P3tHPZf9-GnLag6sGD1EzglK8gq4GNQ0_HfPxawf1vYnR0je17772>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdeftdejheefucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
+    hfgvnhhguceosghoqhhunheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpe
+    ekgffhhfeuheelhfekteeuffejveetjeefffettedtteegfefftdduteduudfgleenucev
+    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnod
+    hmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduieejtdelkeegjeduqddujeej
+    keehheehvddqsghoqhhunheppehkvghrnhgvlhdrohhrghesfhhigihmvgdrnhgrmhgvpd
+    hnsggprhgtphhtthhopeduhedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsghi
+    ghgvrghshieslhhinhhuthhrohhnihigrdguvgdprhgtphhtthhopehjohgvlhgrghhnvg
+    hlfhesnhhvihguihgrrdgtohhmpdhrtghpthhtohepphgruhhlmhgtkheskhgvrhhnvghl
+    rdhorhhgpdhrtghpthhtohepfhhrvgguvghrihgtsehkvghrnhgvlhdrohhrghdprhgtph
+    htthhopehnvggvrhgrjhdrihhithhruddtsehgmhgrihhlrdgtohhmpdhrtghpthhtohep
+    uhhrvgiikhhisehgmhgrihhlrdgtohhmpdhrtghpthhtohepsghoqhhunhdrfhgvnhhgse
+    hgmhgrihhlrdgtohhmpdhrtghpthhtoheprhgtuhesvhhgvghrrdhkvghrnhgvlhdrohhr
+    ghdprhgtphhtthhopehmvghmgihorhesghhmrghilhdrtghomh
+X-ME-Proxy: <xmx:0ii8abRoy-YiMLexhYV2s85vPWkTVAHTaOL7X7cP2T6tWFrNrs2wdA>
+    <xmx:0ii8abtRyDYGxbz1Dpq3ztAnS9clEQjW0UWTMA43Gxm_TLcoT4hcEA>
+    <xmx:0ii8ac5BxwK5TvAMQqgKpVdXfSWokgDqWahCAJNEAzIuxEjP0LnLKQ>
+    <xmx:0ii8aeiIweIOTObvuQ08d4gaHh5IeCiMUYy1CUMa30acBRWQGQsM3A>
+    <xmx:0ii8aWmK2SmcGziRtlzedc1f4FJ5UhkBqaw2O-QHowHNxr_YEfLVSA6z>
+Feedback-ID: i8dbe485b:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 19 Mar 2026 12:48:17 -0400 (EDT)
+Date: Thu, 19 Mar 2026 09:48:16 -0700
+From: Boqun Feng <boqun@kernel.org>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Joel Fernandes <joelagnelf@nvidia.com>, paulmck@kernel.org,
+	frederic@kernel.org, neeraj.iitr10@gmail.com, urezki@gmail.com,
+	boqun.feng@gmail.com, rcu@vger.kernel.org,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>
+Subject: Re: Next-level bug in SRCU implementation of RCU Tasks Trace +
+ PREEMPT_RT
+Message-ID: <abwo0I_mu94t5Ews@tardis.local>
+References: <3c4c5a29-24ea-492d-aeee-e0d9605b4183@nvidia.com>
+ <absesPf-10awctq9@tardis.local>
+ <absfZGD3en9TUA1U@tardis.local>
+ <absj6rZbyLZY8PPz@tardis.local>
+ <da4313b1-9ff5-46e9-b3b7-206dbcb72602@nvidia.com>
+ <abs026TUV9oAg_Xy@tardis.local>
+ <abtMhd_LVp3uL_pA@tardis.local>
+ <20260319090315.Ec_eXAg4@linutronix.de>
+ <abwkD0mOdAbD9ENJ@tardis.local>
+ <20260319163350.c7WuYOM9@linutronix.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <a0134d85926936821c00147b9602b4f977519556e163ebd59dee2307c7618fb1@mail.kernel.org>
-In-Reply-To: <20260319-vmscape-bhb-v7-10-b76a777a98af@linux.intel.com>
-References: <20260319-vmscape-bhb-v7-10-b76a777a98af@linux.intel.com>
-Subject: Re: [PATCH v7 10/10] x86/vmscape: Add cmdline vmscape=on to override attack vector controls
-From: bot+bpf-ci@kernel.org
-To: pawan.kumar.gupta@linux.intel.com,x86@kernel.org,nik.borisov@suse.com,hpa@zytor.com,jpoimboe@kernel.org,david.kaplan@amd.com,seanjc@google.com,bp@alien8.de,dave.hansen@linux.intel.com,peterz@infradead.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,kpsingh@kernel.org,jolsa@kernel.org,davem@davemloft.net,david.laight.linux@gmail.com,luto@kernel.org,tglx@kernel.org,mingo@redhat.com,dsahern@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,sdf@fomichev.me,haoluo@google.com,pbonzini@redhat.com,corbet@lwn.net
-Cc: linux-kernel@vger.kernel.org,kvm@vger.kernel.org,asit.k.mallick@intel.com,tao1.zhang@intel.com,bpf@vger.kernel.org,netdev@vger.kernel.org,linux-doc@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 19 Mar 2026 16:40:21 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260319163350.c7WuYOM9@linutronix.de>
 
---===============8015506610791822796==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Thu, Mar 19, 2026 at 05:33:50PM +0100, Sebastian Andrzej Siewior wrote:
+> On 2026-03-19 09:27:59 [-0700], Boqun Feng wrote:
+> > On Thu, Mar 19, 2026 at 10:03:15AM +0100, Sebastian Andrzej Siewior wrote:
+> > > Please just use the queue_delayed_work() with a delay >0.
+> > > 
+> > 
+> > That doesn't work since queue_delayed_work() with a positive delay will
+> > still acquire timer base lock, and we can have BPF instrument with timer
+> > base lock held i.e. calling call_srcu() with timer base lock.
+> > 
+> > irq_work on the other hand doesn't use any locking.
+> 
+> Could we please restrict BPF somehow so it does roam free? It is
+> absolutely awful to have irq_work() in call_srcu() just because it
+> might acquire locks.
+> 
 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -8375,9 +8375,11 @@
->
->  			off		- disable the mitigation
->  			ibpb		- use Indirect Branch Prediction Barrier
-> -					  (IBPB) mitigation (default)
-> +					  (IBPB) mitigation
->  			force		- force vulnerability detection even on
->  					  unaffected processors
-> +			on		- (default) selects IBPB or BHB clear
-> +					  mitigation based on CPU
+I agree it's not RCU's fault ;-)
 
-Is the "(default)" label accurate here?  The code default is
-VMSCAPE_MITIGATION_AUTO, not VMSCAPE_MITIGATION_ON:
+I guess it'll be difficult to restrict BPF, however maybe BPF can call
+call_srcu() in irq_work instead? Or a more systematic defer mechanism
+that allows BPF to defer any lock holding functions to a different
+context. (We have a similar issue that BPF cannot call kfree_rcu() in
+some cases IIRC).
 
-    static enum vmscape_mitigations vmscape_mitigation __ro_after_init =
-        IS_ENABLED(CONFIG_MITIGATION_VMSCAPE) ?
-            VMSCAPE_MITIGATION_AUTO : VMSCAPE_MITIGATION_NONE;
+But we need to fix this in v7.0, so this short-term fix is still needed.
 
-In vmscape_select_mitigation(), AUTO and ON take the same switch
-path for selecting between BHB clear and IBPB.  But AUTO goes
-through this check first:
+Regars,
+Boqun
 
-    if ((vmscape_mitigation == VMSCAPE_MITIGATION_AUTO) &&
-        !should_mitigate_vuln(X86_BUG_VMSCAPE))
-        vmscape_mitigation = VMSCAPE_MITIGATION_NONE;
-
-ON skips that check, which is the whole point of this commit per
-the subject line ("override attack vector controls").
-
-A sysadmin reading "on (default)" would conclude that not passing
-any option gives the same behavior as vmscape=on, but the actual
-default respects attack vector controls while vmscape=on overrides
-them.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23303796353
---===============8015506610791822796==--
+> > Regards,
+> > Boqun
+> > 
+> Sebastian
