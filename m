@@ -1,113 +1,158 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A102034C80D
-	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 17:38:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B35390C99;
+	Thu, 19 Mar 2026 17:44:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773941900; cv=none; b=F5oNkz949H/6JhuAZMtvvSq5ss9LO+m+PWrdp81/3vHz7TYGIFoPWtUWDRGaXdSYBLfe1Mi5kCfUvOqSRle1q1hgzzP+3Zp+l8V5LE1yCqVHLEzH1PIM6VjC/S3gpK5PsVg93KX7wpVAzm/t0HwNj9tqm9N6WnZvcWCCJnYZSaE=
+	t=1773942293; cv=none; b=OBI2WmQV1DPNlLqPFxnMMvU68FIXngkxmBJVyryoyYniKEtNs0vW/5GTp8BBw2m5yXX58M6O15b82myDWN57X8oHuEkVJDk2byyXnVW7o7S0Y+raZJIPzrNsfdgS5hXNZih1je8n4u2W4GDX6Y/OIpc6HyeVlqZ89wOWKcti2pU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773941900; c=relaxed/simple;
-	bh=iOKQxxTaVePDDINtdEVNa2vXNsDA0MBl/13v1fipV+c=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Y6YdPKhDw18UKQy2bbfvkiCK2TSSNHwqQ0RS+vjWJAdGkGz4xvEZzRQyLhbWKxISxsZqBumAKA2hCP+/BD1h6/cLorX1u/5ZIvdKGsxGPfo6ZSl8GSsa8gPZdTtA1yr3GSoHKa9vtz9llQD4zTBPD5Baiu+9hx4WyY4jDSgWVw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nkq7stBO; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773942293; c=relaxed/simple;
+	bh=onhOVTK80AMxZZ+yDhLTOQmbuzy0nPaHawf945+s19A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IQo5i+TkHhvGyuCAIkkAcYtQ5/u9eQyaQcejOc3sKYZjfYCtvyPTp4/Zq0V8uWo4YOp39fWMnP/wa/z9gTbfxDZQd6aoIm7F7B8Pwf0zwmHcQyGkIo0aK75d540yLXQJhX//CH6AVlYmePawQVFen6J3vdTgjVHjzdYfCI7dJKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uxz6m2FJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nkq7stBO"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-c742bc88d87so455278a12.1
-        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 10:38:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773941896; x=1774546696; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=iOKQxxTaVePDDINtdEVNa2vXNsDA0MBl/13v1fipV+c=;
-        b=nkq7stBOxp1p+dwZZROvJpWlDyx+lYxGZkzaZ9GBZQDfUAZ8ekfJwgvh+MHYKPucG4
-         vTR16Ur1oOJpFgnxlyxIlc0d8ojeklkfHgjV55bvvAeJQDRNje7w4nVcUwYudtptffYc
-         7nIzcDwLEvMqEVOcJjaG6FMSirjsMWGNACE7/qZrjWrGMoH92E6h8db6NwVQiLenuXXn
-         lkL0c9HUAYnO7cdhMeMesd4pOqQJCb7jQwfcREOCRs1sgNovLng5W7s5otewjorYyRpV
-         UpTFytwDBIU3VO5Ai/x7N15R2xccQQ9q6JZyDr3/Nq2sUdFpiQdL1h7vDyD5mMM6rAaH
-         vFnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773941896; x=1774546696;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iOKQxxTaVePDDINtdEVNa2vXNsDA0MBl/13v1fipV+c=;
-        b=NTC0a29N89xMAE4q0GfCb0CUOhRYD5SdG6jL8vMc5pA9OA6ByEnGmHztDCAIZmHyuy
-         D/vYauqHEsrLnxgy0uubLRYJhI3g6fOepAohLnrxnXWLp+L03YEZkv7aTEPENQasBPN1
-         MUqKdobY+airtG8panzkUFxb1WBBcgcrzcymAKl91m+xXnKlVOyHYVDKykNwHjJOoeq+
-         RevWhLG/TL2JCr6uj3eHDOOmoRV5dSbu3tIYGcqbBe9Pdvgwe1fmoYuAs+arBKNrS5A7
-         /kJThJasc0rjLrhBE5jG34UCUfnr+S3tWmCMDcHogRz+uy/9SQc73wGw5kDIFlcY8Y1e
-         P8zw==
-X-Gm-Message-State: AOJu0YxBeACKklothJz8pM6PXCcnzKyXweayoDnUE0oAjNQmyF7dLgv2
-	S8em4i6WFvWIsyBx5prpa7arfiKiyVLOS3vEBO7tQCsWeY+hZBU429SAj9IdRQ==
-X-Gm-Gg: ATEYQzyR+io+mmPaDbFSGXwmiciXoMNVZnt6GQkRxHLUd2t3pSXUgNcfjQ0tCQpZKxg
-	8LiMiRSxCiR8O5uzdvgyTJQ7jEw7kstqaoIEveyAUSGlPY0oiOlhcycX1HutdA5FnKPIuUPrT7a
-	86sYo58RSaH4D4xb9ZtLgYcgehAVP6T5fwll/jx89jcc5Y0Gh8+ZQTjue5QTlYeyhxUGoXUszVm
-	I/DmgUmFrfOhsBfpTfjrT7l+1XZkriwuhtUJY9X44OgyOhDrHci7uwvjdckjj6J7dKfhwwLqJOd
-	9i8/cmf8aOfAauSvi9+5izxHYo+X3IkIsljboGDc/w5LiJZClA6ambybU6GIVLKUfNlNiBvh76Y
-	SHx7fAt71BPd+jIf9Xm7MzwPgzGcOLKl4++PdqZ3MyAtLYCe4eVLnpaNLY3qLiCIjjlHcLuNltb
-	Hn/jK0sqn1Q4A4ttxG1cZQ+omASE84r+1ssBGnBM5FcAPv3X03Py8yarTXCQQSTw==
-X-Received: by 2002:a05:6a20:d6c8:b0:398:79dc:eb59 with SMTP id adf61e73a8af0-39bcec302b7mr155374637.67.1773941895717;
-        Thu, 19 Mar 2026 10:38:15 -0700 (PDT)
-Received: from [192.168.0.56] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c74453295a8sm33852a12.28.2026.03.19.10.38.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2026 10:38:15 -0700 (PDT)
-Message-ID: <432750df75b5ce808f6b9ae9cd7ab3288a653b13.camel@gmail.com>
-Subject: Re: [PATCH] bpf: Simplify tnum_step()
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Hao Sun <sunhao.th@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, 	john.fastabend@gmail.com, martin.lau@linux.dev,
- linux-kernel@vger.kernel.org
-Date: Thu, 19 Mar 2026 10:38:12 -0700
-In-Reply-To: <CACkBjsb4tNgiVKR02R=dkqd6kNWfnyHyFgPMuNwx5f2EUL7tJw@mail.gmail.com>
-References: <20260318171906.53174-1-hao.sun@inf.ethz.ch>
-	 <CAP01T76ZazpBriekA+82aAFHKSoa+XvnvOOnQRz3XBTvBErygg@mail.gmail.com>
-	 <CACkBjsb4tNgiVKR02R=dkqd6kNWfnyHyFgPMuNwx5f2EUL7tJw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uxz6m2FJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2CABC2BCB0;
+	Thu, 19 Mar 2026 17:44:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773942292;
+	bh=onhOVTK80AMxZZ+yDhLTOQmbuzy0nPaHawf945+s19A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uxz6m2FJYSvPHNYrkRkh/hCYxK/ULePCA3G+e62PbOrsvGPFWu6X8cdScDIUVCBxz
+	 C/7u00vp+0lpML8PbX7dKUqAIuZH+70di4UG9Wkt1D3Yu8ln9fwnA66TbCHeRM67kK
+	 elZWSfxpI6Ea/XpF8aYdL6+ttQF/ZnBpBWaq0zVWg4rQKq87itaENRapENQa4DCJZb
+	 30SRMHHrFmYMuasev3qM+3MCI/Wk/2c/4KIHjCwlP/9nCTnDzSN+uEICq75F3/rtDz
+	 TjHfXudOONTeOR2LxdF1+0OZRALqyq8wDh+L/sOFNh2hxoFkFstqacPK5gOHQ0OCyy
+	 CkYs8NNn+1KzA==
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 75D34F40081;
+	Thu, 19 Mar 2026 13:44:50 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Thu, 19 Mar 2026 13:44:50 -0400
+X-ME-Sender: <xms:Eja8aQ__TtKA8F8o-QSwD07MWbwpO3BjDRS6f650i2_3gwS6rdU5dA>
+    <xme:Eja8aTEo0y9kTriL_DrarySYZ5jQ0jCls8-nK1wc2v6SW4eE_8rLIWy3VNNXwkyZW
+    jvceQUtvEZOCTaB7d23wlC4YxjdlhFpTh_OxhKREB2HAzixpwN2tA>
+X-ME-Received: <xmr:Eja8acLC9koI4Bo2MV3DujuxMwmDIEvOa3WCC5kX4o0A95tgW2mwHqjr109K5UVu9RE8lSjHhokbXzAla0ARib_EP3eZdLgO>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdeftdejieegucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
+    hfgvnhhguceosghoqhhunheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpe
+    ekgffhhfeuheelhfekteeuffejveetjeefffettedtteegfefftdduteduudfgleenucev
+    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnod
+    hmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduieejtdelkeegjeduqddujeej
+    keehheehvddqsghoqhhunheppehkvghrnhgvlhdrohhrghesfhhigihmvgdrnhgrmhgvpd
+    hnsggprhgtphhtthhopeduhedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsghi
+    ghgvrghshieslhhinhhuthhrohhnihigrdguvgdprhgtphhtthhopehjohgvlhgrghhnvg
+    hlfhesnhhvihguihgrrdgtohhmpdhrtghpthhtohepphgruhhlmhgtkheskhgvrhhnvghl
+    rdhorhhgpdhrtghpthhtohepfhhrvgguvghrihgtsehkvghrnhgvlhdrohhrghdprhgtph
+    htthhopehnvggvrhgrjhdrihhithhruddtsehgmhgrihhlrdgtohhmpdhrtghpthhtohep
+    uhhrvgiikhhisehgmhgrihhlrdgtohhmpdhrtghpthhtohepsghoqhhunhdrfhgvnhhgse
+    hgmhgrihhlrdgtohhmpdhrtghpthhtoheprhgtuhesvhhgvghrrdhkvghrnhgvlhdrohhr
+    ghdprhgtphhtthhopehmvghmgihorhesghhmrghilhdrtghomh
+X-ME-Proxy: <xmx:Eja8ablcSoBs1dJR13v6RKTDyTwpQWjhGhd-yCV2TaytMnZqMdxtBg>
+    <xmx:Eja8ady1ruuu9JVdbUfJD1ZaawROIMPydANOGw0jqYynd8-ErYwtlA>
+    <xmx:Eja8aduJQfOo_-on0RQU60e0__HKYLQDW6fcAaTJC25o31hGmv7TZQ>
+    <xmx:Eja8aXHkidULyYImpBGCpkSFgHY3rRr6fZfkogeYmleqg_NzYEvL8Q>
+    <xmx:Eja8ab6Zsbu1iC8YT14gUNxMBne_UEMYo75twZLISZEBSxk3m4GHn6Zn>
+Feedback-ID: i8dbe485b:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 19 Mar 2026 13:44:49 -0400 (EDT)
+Date: Thu, 19 Mar 2026 10:44:48 -0700
+From: Boqun Feng <boqun@kernel.org>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Joel Fernandes <joelagnelf@nvidia.com>, paulmck@kernel.org,
+	frederic@kernel.org, neeraj.iitr10@gmail.com, urezki@gmail.com,
+	boqun.feng@gmail.com, rcu@vger.kernel.org,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>
+Subject: Re: Next-level bug in SRCU implementation of RCU Tasks Trace +
+ PREEMPT_RT
+Message-ID: <abw2ECYirX1tTwV9@tardis.local>
+References: <absfZGD3en9TUA1U@tardis.local>
+ <absj6rZbyLZY8PPz@tardis.local>
+ <da4313b1-9ff5-46e9-b3b7-206dbcb72602@nvidia.com>
+ <abs026TUV9oAg_Xy@tardis.local>
+ <abtMhd_LVp3uL_pA@tardis.local>
+ <20260319090315.Ec_eXAg4@linutronix.de>
+ <abwkD0mOdAbD9ENJ@tardis.local>
+ <20260319163350.c7WuYOM9@linutronix.de>
+ <abwo0I_mu94t5Ews@tardis.local>
+ <20260319170244.jqndSwct@linutronix.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260319170244.jqndSwct@linutronix.de>
 
-On Thu, 2026-03-19 at 10:06 +0100, Hao Sun wrote:
-> On Thu, Mar 19, 2026 at 9:18=E2=80=AFAM Kumar Kartikeya Dwivedi
-> <memxor@gmail.com> wrote:
-> >=20
-> > On Wed, 18 Mar 2026 at 19:21, Hao Sun <sunhao.th@gmail.com> wrote:
-> > > [...]
-> > > in case anyone is interested:
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 [1] https://pastebin.com/r=
-aw/czHKiyY0
-> >=20
-> > IMO it is worth it to include this proof inline in the commit log,
-> > since links are fragile.
-> > It's not that big, and I think it's more useful to have it inline than =
-not.
-> >=20
->=20
-> The only concern is that the proof mainly uses `bv_decide`, which does no=
-t
-> provide much insight. But it's not big, I will inline it.
+On Thu, Mar 19, 2026 at 06:02:44PM +0100, Sebastian Andrzej Siewior wrote:
+> On 2026-03-19 09:48:16 [-0700], Boqun Feng wrote:
+> > I agree it's not RCU's fault ;-)
+> 
+> I never claimed it is anyone's fault. I just see that BPF should be able
+> to do things which kgdb would not be allowed to.
+> 
+> > I guess it'll be difficult to restrict BPF, however maybe BPF can call
+> > call_srcu() in irq_work instead? Or a more systematic defer mechanism
+> > that allows BPF to defer any lock holding functions to a different
+> > context. (We have a similar issue that BPF cannot call kfree_rcu() in
+> > some cases IIRC).
+> > 
+> > But we need to fix this in v7.0, so this short-term fix is still needed.
+> 
+> I would prefer something substantial before we rush to get a quick fix
+> and move on.
+> 
 
-I agree with you, not sure it would provide much signal, tbh.
-As far as I understand `bv_decide` means: SAT-solver, please do the magic :=
-)
+The quick fix here is really "restore the previous behavior of
+call_rcu_tasks_trace() in call_srcu()", and the future work will
+naturally happen: if the extra irq_work layer turns out calling issues
+to other SRCU users, then we need to fix them as well. Otherwise, there
+is no real need to avoid the extra irq_work hop. So I *think* it's OK
+;-)
 
-A more interesting discussion would be to have some model-checker
-based tests in the selftests, but Alexei was not excited last time we
-talked about that.
+Cleaning up all the ad-hoc irq_work usages in BPF is another thing,
+which can happen if we learn about all the cases and have a good design.
 
-If we have enough interested people, we can pick a checker and
-maintain a "shadow copy" of relevant functions and data structures in
-some repo e.g. on github + current proofs/tests. To have a starting
-point for future changes.
+> If we could get that irq_work() part only for BPF where it is required
+> then it would be already a step forward.
+> 
+
+I'm happy to include that (i.e. using Qiang's suggestion) if Joel also
+agrees.
+
+> Long term it would be nice if we could avoid calling this while locks
+> are held. I think call_rcu() can't be used under rq/pi lock, but timers
+> should be fine.
+> 
+> Is this rq/pi locking originating from "regular" BPF code or sched_ext?
+> 
+
+I think if you have any tracepoint (include traceable functions) under
+rq/pi locking, then potentially BPF can call call_srcu() there.
+
+The root cause of the issues is that BPF is actually like a NMI unless
+the code is noinstr (There is a rabit hole about BPF calling
+call_srcu() while it's instrumenting call_srcu() itself). And the right
+way to solve all the issues is to have a general defer mechanism for
+BPF.
+
+Regards,
+Boqun
+
+> > Regars,
+> > Boqun
+> > 
+> > > > Regards,
+> > > > Boqun
+> 
+> Sebastian
