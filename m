@@ -1,125 +1,263 @@
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 142C13DBD4C
-	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 15:09:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.174
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773932948; cv=pass; b=acNBf57/VveJC6lj7JML4wUP1x7Q0UreboUMxxF2jQ0D1WhmTyQoMb1LuzKjA6AG6F3WmoaZNMY6xmhSAtFlFjOgFzHGNuaoXC1LxEaG+lB83cGVWT8fSgRgM9Qh0OT+NcEmO1hshj7zsUGcLC/dxsDnVhxzDwsvzOuoIoOkABU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773932948; c=relaxed/simple;
-	bh=DqybgczmthZBh+KRCCZ7NVFiFkkZovfdbMNP1BBxjxk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u3nHq6F76zn0O0qmNns3QfZPxc9II0aDKG0o+aKyD1Eb7mF42a5L8Kutm9qyE61d6ym+IhElWxwu32snXYrUq2T5WWzkugn/mYxTX551SA+m7k+6AMdDHED614YmJiX0QoZ6jRqItmDN1kZFTsBeU/osTzVvZyGxcySNFwTmRhM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NZReFeBY; arc=pass smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD22A3E3D84
+	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 15:23:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773933787; cv=none; b=svfl7bZ3HtULncZIgiY5wQrLq+TwC1QOwmUeF3ARl3pXUuXQlL9DAYeT/18SWmK2I9C+BvmSnbqnmHb1He55p1/7Eg5clWYXRto4d+IqCkfJLBAkYA3Ku/a004yJq5+u2rlagq33VYPAjGI7hgT6TAh5Wst0OFnsYtuqZtSgJ7c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773933787; c=relaxed/simple;
+	bh=TI8QoQWvL9nJWRkyfRutiVn0vo3hVS3/ZsOIKo7VsCQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=pfxvtXG3cNwD+sQI/rF6F0MFsi/vizHWBhp4MWbzueinE5gzF1UHugIepPv5q90H6BT8FxZ7/ZerudspbA/9GKEBCqADSr+9xfH8pnpPZGuhJXWOJGQXE/ioxqSE/3FedKT6eYMOCJI26KCzLMKpDyYy8/5lUBZXG1WKjVhXVf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RaA39XFn; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NZReFeBY"
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-79a75818937so11211427b3.2
-        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 08:09:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773932946; cv=none;
-        d=google.com; s=arc-20240605;
-        b=emUny3/fhz87nte+LBiVjCOtepzwiv+R2ZwdjacIHM7e1mW6cyS0jwFQG3ifgHPlbs
-         OZIxRgNZRAAV9mssIZ//N21+U/P195Bzce0grB8Cs+eJtyuiPlLPzdQYAMAFF5iCqPJz
-         XKYle4M8/ig2c0uI70YT2YCb+V8Jjynuh2TaIUUTjCN7zybUtakKBVM9xi/4YzpZiLUA
-         fwBkCURdStwj4avP194lFVFDUMwDD9SEOVvm6G16NJUS63yPPEkYozn4AmfgwhIW7sfR
-         hcgHJqT/MclOQBhViej32cxDa50DkJpW+tbVIslh+n4+j3BYqDxYU1lba4FcF17m2QP0
-         7xuA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=DqybgczmthZBh+KRCCZ7NVFiFkkZovfdbMNP1BBxjxk=;
-        fh=bCLoGHAml3R5Dc3K0gIM1ZToJHGxDFUEdtnpLxgh8kk=;
-        b=M3Qz1UVftH30MnropYn3lqjsahkZNO5l/eAjunoa1/9E6GyVVbiB66I1gr8rZG72Az
-         TFSVLcA8x4580aSA30XfOUfUn2KVQ3z8EC6UKaY51Z5Y2Jabbd8LhAPsT4RR8NloSPjn
-         YKKi5GPnvAW3JhJhcRpQMkjJl4H7xrev2/faCLRBmZFSpieRnIU/QvQybYJy56lMFVYR
-         W7A8V9Al+eHvXH0tcpSfDdlU6aweL63a//wC/A5dfJWTvLuHaYIQbaExQaxbsH7rBXdw
-         aKZ+mnv88nIZQ7872iVhMjwIKams1y67aBPMspgH0pig0+9NEAdT5zIcs8iqDPudgBhl
-         8tJg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RaA39XFn"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-486fda2a389so2594415e9.1
+        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 08:23:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773932946; x=1774537746; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DqybgczmthZBh+KRCCZ7NVFiFkkZovfdbMNP1BBxjxk=;
-        b=NZReFeBYyGB3h/uD0Cei/eQTmzD1BNGWKgNQGeSaJg4sAAqrwe9Z5t4U1r5GBsY5Rd
-         w7DU7IrelQPfaKyyD3Uf/Vznqzqx4OJh0KrFdkEULAyKNb+SuOONxl0uyk6GHRl4xqpf
-         1T46w0O1U+36IJr8Dh0EuMYTea9N3feu9gI5RWqtUT927WrPuSCJuEQC/i1cQ1XH+EaL
-         JOpI2Anc09eFc7pHPssJ0EQC9BZ6hTjxLHXYkkzSBYnrFM3HAQpNYX3A/xB7zJAiwoyx
-         iKeiIQZy/XjFMsdMQd8UyZ0dcM7yXT0x7fyZlqpi5BiFfk22hHbX7SVqQaxE8eso/1jg
-         l9jQ==
+        d=gmail.com; s=20230601; t=1773933782; x=1774538582; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KoC3MEeE9a06VfxukdKMfULwtBT7iGo7LMQs4bVX0h0=;
+        b=RaA39XFn9bZQOrhVJDrOXm5nD+M4/uMdtvGRIqtrkuyFY56tleWaYtIK+txca2NFtH
+         lhOOyWOPVw0A3hhUqDx+K5zqDsLk2QhnD1x1os40z89BhIdsr8ELx3Vjz4AtvFdDbt7f
+         JIOG25gZcBRDerNXFgmrJr322/AD+0fYThFqCm8Ul4w+++/r4k1J1j8/+o2Q0wOnJPoe
+         EU9ZwXftQ1ZngD/Fex6ENbOpzLMyGOO0qzR25B0qxpzqwmIQGGlhKNhsyqOGlhWn5chl
+         VZHjf71CnLTIQ1PJnld81r9nhg3v2jPWJSqeulSoJqwDKkBg8bVQamsOVx7YSeMuH5lC
+         f9PA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773932946; x=1774537746;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=DqybgczmthZBh+KRCCZ7NVFiFkkZovfdbMNP1BBxjxk=;
-        b=REWV0FpXZQ1aTelU9zBT32nmoZRuTWC6WUWh+CTw/uQS7PLuexV91M/VOB9ybfa4bH
-         CSKdKUQa8oyuNgw+Uo1A19TZab98S/rnZNw6AQO/d2j6mjmLEfIavzZgbN3mz/OyLR9p
-         fcDluW3Gm8zu9neUWgIGxQtiw7OwE3w2Z8dGOqk07qXgUBlUu1rFUs/4UCRrnxvnhKC4
-         MMbTK4a9ISgvEA89Hv3S869gO+1eCPHTT34r3Bz5fIaaFksm9ztfk9iSHHc04Y2vUtIS
-         BfiPGfjsgmjyg6mD8c7VER/+9YrZ0tG5ErYYvRTi+tfkRme83giKaU3mbmbP6FZoZAZh
-         Imfw==
-X-Forwarded-Encrypted: i=1; AJvYcCUQLZZdi3K0iBEHvCfu2Mp+Wjb+nyRBVbgF+7ZU/42A6g+D37FkSuDbQuJNe4Ez4pYyqkg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCIEEwhWvcyli24hj1QUJY9OsqmVt1nGjoan5o4HKu0f6E3amQ
-	2LUORAPysfNhQNI+acgR4tDFY34+SNyPIuUtJ4dUokJ3rXKD+C5bl6eeK8B4Z7ltBPd666vEiKL
-	BZ2Y71LzNiCSse0z+orMlcgLgDgJzEpQ=
-X-Gm-Gg: ATEYQzwiigTeEg2lOS4KH03a+7+6dB9BuKhMOV3l1g05+V2kpFQsS9/OsMOjKgRICEu
-	Y+Mo1byPvN2mYmBv4KpCCoTHS0D+wfG/cCVqkVeXmATomGfkwmY1hJNGoQC2rP0bbPQeUuPDDpq
-	IdfcWbFyp64AW0xtzjwq7BN/sNEeuxAY5SGGMZ41OgNzznfCJnP0E17+/Tf/B7jQwByaSLR2aWD
-	kS7s7WHjgoGOb99u6c9OOEdpHKdquM8YRR6wDoCaOqgH0MLLvTdsj9fCcBIARFejosBoXnEIh3O
-	sW0EWDTq0Q==
-X-Received: by 2002:a05:690c:260f:b0:79a:2e6a:1baf with SMTP id
- 00721157ae682-79a7182d7acmr73759477b3.8.1773932946013; Thu, 19 Mar 2026
- 08:09:06 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1773933782; x=1774538582;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KoC3MEeE9a06VfxukdKMfULwtBT7iGo7LMQs4bVX0h0=;
+        b=AnbZtlofhhrMFWyHFu+lClWOpdrCT7mhTudW97sGRsgOjHbuQg9R6McNaPa1RmGOO0
+         4c4rdSt+sraq/Z29HHqCXtlo6OpkhSP05PccgbNTJhzcw+fXs7SxB5WAs5Gqjlh5gms8
+         NPKeF+t0XaTuQbBgd5JtFPqCyuCHbvGMLj9+SdVDwDX1r208Cc2ckpqYfbX7JlaO+1LW
+         iCJKhWOxizFkYAKzpKnwBNr8G7+wEMpyEz6wteO3sg+dSuTS5bhaX6XRYYY34YEhVTLo
+         evniRASMvlYpg2f6dbUJcd2Tvkd699z/xDZATDx/UDN3kn4panOQ9krRa74fZRFLMsyC
+         1SWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXf7cjp3sNRboyYaluhCIzhbb2SciFRuZYEx5wslps7UiXqE0wd9i3To1v7M/9SdCpCgPQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzH/ooX/U7CJmdMA1utuitYbL6+zzqG8wAbh4NBPSDoF/rz3lcs
+	LrJPrDqBY07cSl3vFvtyVZb8yLi88FkEigH3RCvD0Ux9oaWMWwLu3gVw
+X-Gm-Gg: ATEYQzxypYnLmXUZvcHXkkYzwMd7D86ddkMEFJQYjIlcB9HwOp3lIHkymceovXew2NX
+	yM18Dd6ZyNZ7+2XssK6YFwXG0pE0NvR+QaGt3N1ENI5TN0oS3xnSfax3Jxg+NqzOy9uR23Gz19y
+	kAWRh/eu+jFsan/2ULUdtVEzNAwu4SerL55i3C7cORheu/aHb5enS/svhI2c4snDEeKH/8DyE26
+	KW9scB+Q+GncuH4bd7hzbnbmC9vZlq7AsZxsx6h6v27hyS/nMyIjygqKRyCBuuAWZ84OouwS9sp
+	LJ1rCP0SoZ2r7rB30jQQ0uPvT1ac1xBUPuZvXs8O/Uk8XUEsnHXm63meIKhdmm98BWzBahsgqDz
+	4hYncQ4nEPX9fCcajkGVJ4C/nHIwWSF7mBdLw9ELOB2xnzU27S6aTraxokMoUEN1mUH0LX7T5Ze
+	jaZfn32b3mQGQZFeBiGb0kNVX4JQLXphmfIA==
+X-Received: by 2002:a05:600c:1d0c:b0:485:2ce2:4c8a with SMTP id 5b1f17b1804b1-486f442df40mr129862875e9.1.1773933781586;
+        Thu, 19 Mar 2026 08:23:01 -0700 (PDT)
+Received: from localhost ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486f5e162e2sm40063325e9.34.2026.03.19.08.23.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Mar 2026 08:23:01 -0700 (PDT)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+To: Ibrahim Zein <zeroxjacks@gmail.com>, ast@kernel.org
+Cc: daniel@iogearbox.net, martin.lau@linux.dev, andrii@kernel.org,
+ bpf@vger.kernel.org, Ibrahim Zein <zeroxjacks@gmail.com>
+Subject: Re: [PATCH] bpf: fix out-of-bounds write in bpf_bprintf_prepare
+ with %pI4/%pI6
+In-Reply-To: <20260319043029.3067-1-zeroxjacks@gmail.com>
+References: <20260319043029.3067-1-zeroxjacks@gmail.com>
+Date: Thu, 19 Mar 2026 15:23:00 +0000
+Message-ID: <87341vlu7f.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260319031227.330505-1-sun.jian.kdev@gmail.com>
- <20260319040337.366375-1-sun.jian.kdev@gmail.com> <abvYVE-CJcmRypCR@mail.gmail.com>
-In-Reply-To: <abvYVE-CJcmRypCR@mail.gmail.com>
-From: sun jian <sun.jian.kdev@gmail.com>
-Date: Thu, 19 Mar 2026 23:08:54 +0800
-X-Gm-Features: AaiRm53c6WBVfRJxLyF_a6aefA5Vc_KadnMdXrpCiaXRnUOmZ5z1Z9oEeTwJeRY
-Message-ID: <CABFUUZFprcMMwoR0fY94EePRPM-DF4-=iVBPdwjv0r3WtrYQhQ@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests/bpf: move trampoline_count to dedicated
- bpf_testmod target
-To: Paul Chaignon <paul.chaignon@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, shuah@kernel.org, 
-	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Thu, Mar 19, 2026 at 7:04=E2=80=AFPM Paul Chaignon <paul.chaignon@gmail.=
-com> wrote:
->
-> > v2:
-> > - rewrite the subject to describe the change
-> > - resend with the correct patch content
->
-> Please increment the version number when making these changes. Otherwise
-> it can be quite confusing to everyone. I believe this is the third
-> variant of your v2 on the mailing list.
->
-> > - resend as a reply to v1
->
-> That can also be a bit confusing as it will fold the email into existing
-> conversations. You can instead link to the previous version from the
-> changelogs.
+Ibrahim Zein <zeroxjacks@gmail.com> writes:
 
-Hi Paul,
-Thanks for the note.
-
-Will bump the version for the next revision and send it as a new thread.
-
-Regards,
-Sun Jian
+> In bpf_bprintf_prepare(), the bounds check for %pI4 and %pI6 format
+> specifiers uses sizeof_cur_ip (4 for IPv4, 16 for IPv6), which is the
+> raw byte count of the IP address. However, snprintf() returns the
+> length of the formatted string, not the raw bytes. For IPv4 this can
+> be up to 15 characters (255.255.255.255) and for IPv6 up to 39.
+>
+> tmp_buf is then advanced by (err + 1) using the full string length,
+> which can push tmp_buf past tmp_buf_end. The next iteration's bounds
+> check underflows due to unsigned arithmetic and passes, allowing a
+> write past the end of the per-CPU bin_args buffer.
+>
+> Fix this by checking against the maximum formatted string size:
+> 16 bytes for IPv4 and 40 bytes for IPv6.
+>
+> Signed-off-by: Ibrahim Zein <zeroxjacks@gmail.com>
+> ---
+>  kernel/bpf/helpers.c                          |  2 +-
+>  .../bpf/prog_tests/test_snprintf_ip.c         | 54 +++++++++++++
+>  .../selftests/bpf/progs/test_snprintf_ip.c    | 77 +++++++++++++++++++
+>  3 files changed, 132 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/test_snprintf_ip.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_snprintf_ip.c
+>
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index cb6d242bd..dcaa822ba 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -930,7 +930,7 @@ int bpf_bprintf_prepare(const char *fmt, u32 fmt_size, const u64 *raw_args,
+>  				goto nocopy_fmt;
+>  
+>  			sizeof_cur_ip = (fmt[i] == '4') ? 4 : 16;
+> -			if (tmp_buf_end - tmp_buf < sizeof_cur_ip) {
+> +			if (tmp_buf_end - tmp_buf < (size_t)((fmt[i] == '4') ? 16 : 40)) {
+not sure if casting to size_it is needed here.
+>  				err = -ENOSPC;
+>  				goto out;
+>  			}
+> diff --git a/tools/testing/selftests/bpf/prog_tests/test_snprintf_ip.c b/tools/testing/selftests/bpf/prog_tests/test_snprintf_ip.c
+> new file mode 100644
+> index 000000000..5b000d6d1
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/test_snprintf_ip.c
+> @@ -0,0 +1,54 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2026 Ibrahim Zein <zeroxjacks@gmail.com> */
+> +#include <test_progs.h>
+> +#include "test_snprintf_ip.skel.h"
+> +
+> +#define EXP_IP4_OUT  "192.168.1.1"
+> +#define EXP_IP4_RET  sizeof(EXP_IP4_OUT)
+> +
+> +#define EXP_WORST_IP4_OUT  "255.255.255.255"
+> +#define EXP_WORST_IP4_RET  sizeof(EXP_WORST_IP4_OUT)
+> +
+> +#define EXP_IP6_OUT  "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"
+> +#define EXP_IP6_RET  sizeof(EXP_IP6_OUT)
+> +
+> +void test_snprintf_ip(void)
+The test passes with or without the fix, I suggest to rewrite it to fail
+on the base revision, otherwise it is not very useful.
+> +{
+> +	struct test_snprintf_ip *skel;
+> +
+> +	skel = test_snprintf_ip__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "skel_open"))
+> +		return;
+> +
+> +	skel->bss->pid = getpid();
+> +
+> +	if (!ASSERT_OK(test_snprintf_ip__attach(skel), "skel_attach"))
+> +		goto cleanup;
+> +
+> +	/* trigger tracepoint */
+> +	usleep(1);
+> +
+> +	/* Test 1: normal IPv4 */
+> +	ASSERT_STREQ(skel->bss->ip4_out, EXP_IP4_OUT, "ip4_out");
+> +	ASSERT_EQ(skel->bss->ip4_ret, EXP_IP4_RET, "ip4_ret");
+> +
+> +	/* Test 2: normal IPv6 */
+> +	ASSERT_STREQ(skel->bss->ip6_out, EXP_IP6_OUT, "ip6_out");
+> +	ASSERT_EQ(skel->bss->ip6_ret, EXP_IP6_RET, "ip6_ret");
+> +
+> +	/* Test 3: worst-case IPv4 "255.255.255.255" */
+> +	ASSERT_STREQ(skel->bss->worst_ip4_out, EXP_WORST_IP4_OUT,
+> +		     "worst_ip4_out");
+> +	ASSERT_EQ(skel->bss->worst_ip4_ret, EXP_WORST_IP4_RET,
+> +		  "worst_ip4_ret");
+> +
+> +	/*
+> +	 * Test 4: near-overflow scenario.
+> +	 * Before fix: tmp_buf overflows, kernel may crash or corrupt memory.
+> +	 * After fix: returns valid length without overflow.
+> +	 */
+> +	ASSERT_GE(skel->bss->near_overflow_ret, 0, "near_overflow_ret");
+> +
+> +cleanup:
+> +	test_snprintf_ip__destroy(skel);
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/test_snprintf_ip.c b/tools/testing/selftests/bpf/progs/test_snprintf_ip.c
+> new file mode 100644
+> index 000000000..5471a2b8b
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/test_snprintf_ip.c
+> @@ -0,0 +1,77 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2026 Ibrahim Zein <zeroxjacks@gmail.com> */
+> +#include <linux/bpf.h>
+> +#include <bpf/bpf_helpers.h>
+> +
+> +/*
+> + * Test that bpf_snprintf() with %pI4/%pI6 does not overflow the
+> + * internal bin_args buffer when the buffer is nearly full.
+> + *
+> + * The bug: sizeof_cur_ip (4 for IPv4) was used for the bounds check,
+> + * but snprintf() returns the full formatted string length (up to 15
+> + * for "255.255.255.255"), pushing tmp_buf past tmp_buf_end.
+> + */
+> +
+> +/* Output buffers */
+> +char ip4_out[64] = {};
+> +long ip4_ret = 0;
+> +
+> +char ip6_out[128] = {};
+> +long ip6_ret = 0;
+> +
+> +/* Test %pI4 with worst-case IP (255.255.255.255) */
+> +char worst_ip4_out[64] = {};
+> +long worst_ip4_ret = 0;
+> +
+> +/* Return value for the near-overflow test */
+> +long near_overflow_ret = 0;
+> +
+> +__u32 pid = 0;
+> +
+> +SEC("raw_tp/sys_enter")
+> +int handler(const void *ctx)
+> +{
+> +	/* Worst-case IPv4: "255.255.255.255" = 15 chars */
+> +	const __u8 ip4_worst[] = {255, 255, 255, 255};
+> +	/* Normal IPv4 */
+> +	const __u8 ip4_normal[] = {192, 168, 1, 1};
+> +	/* IPv6 worst-case */
+> +	const __u8 ip6_worst[] = {0xff, 0xff, 0xff, 0xff,
+> +				   0xff, 0xff, 0xff, 0xff,
+> +				   0xff, 0xff, 0xff, 0xff,
+> +				   0xff, 0xff, 0xff, 0xff};
+> +
+> +	if ((int)bpf_get_current_pid_tgid() != pid)
+> +		return 0;
+> +
+> +	/* Test 1: normal %pI4 usage */
+> +	ip4_ret = BPF_SNPRINTF(ip4_out, sizeof(ip4_out),
+> +			       "%pI4", &ip4_normal);
+> +
+> +	/* Test 2: normal %pI6 usage */
+> +	ip6_ret = BPF_SNPRINTF(ip6_out, sizeof(ip6_out),
+> +			       "%pI6", &ip6_worst);
+> +
+> +	/* Test 3: worst-case %pI4 "255.255.255.255" */
+> +	worst_ip4_ret = BPF_SNPRINTF(worst_ip4_out, sizeof(worst_ip4_out),
+> +				     "%pI4", &ip4_worst);
+> +
+> +	/*
+> +	 * Test 4: near-overflow scenario.
+> +	 * Fill bin_args with scalar args (%d), then use %pI4.
+> +	 * Before the fix: tmp_buf overflows by 8 bytes.
+> +	 * After the fix: correctly returns -ENOSPC or fits exactly.
+> +	 *
+> +	 * We use fewer args here since BPF_SNPRINTF macro has a limit,
+> +	 * but this validates the format string parsing path.
+> +	 */
+> +	/* 11 x %d + 1 x %pI4 = 12 args (BPF_SNPRINTF max) */
+> +	near_overflow_ret = BPF_SNPRINTF(NULL, 0,
+> +		"%d %d %d %d %d %d %d %d %d %d %d %pI4",
+> +		1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
+> +		&ip4_worst);
+> +
+> +	return 0;
+> +}
+> +
+> +char _license[] SEC("license") = "GPL";
+> -- 
+> 2.52.0
