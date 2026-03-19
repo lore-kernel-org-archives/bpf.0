@@ -1,155 +1,180 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94B2E3CF67A
-	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 17:27:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1620A32F757
+	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 17:32:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773941277; cv=none; b=dQRvzDlaKp2NjArlfClq1QQpbMBhpr9vqybgfryvNObl9ugyb6bHCss7InVXZt0ovsEkkE3WsHWpf9LNSI7gO1YLxvIBcX4piTkDgfLr1VU87XVpzW55D3iQtvbxUlUnFdWEFmsX+k5Zeah/pzZ6d5vSuBQ+vC8jMnJGU2uvQCQ=
+	t=1773941553; cv=none; b=AK8uOd22OjL2mF6b3FXbgG/UzL4FMTPXrENSC0gBFiIrHMP5EE3lSXv/KWLO5bGGKXpPd3QPxi3naniHD/9AQH3TT6rx/fkmV1jw7Fc9YNbi0CFBEXIz6zTNRABGrESrI4hPuH4zNkn024EV1FE1ULjThP3WAgYZ2MR07zyIpNg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773941277; c=relaxed/simple;
-	bh=p7RCR7vOn6YNBq6N5xnO6UDE2e8KWYL3tUjB20fWW68=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ebGdbTNzJ8tP7ZplX4FA5awZ2V+cAhoqqR3n7UcTX0AHVGF9zgjRL1z28kpoj7E979uTr+qSDCT2kUMFodRhuQMGfxSCtZmy9ia4lqQrrZGCRDeHY2kgXZB4hkA+x6plJtHAAwxkeaeEgkZSj1fDbo4OWyAzi7zNpGLWXmINepU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f9XK7cUJ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773941553; c=relaxed/simple;
+	bh=bpqvR8J6/QG/+CtU1wW/hVktCz6ZD7fFdAxHTYrBc2Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GveQ5e1fWYkj5O2phlKqJKwx5dUJj1f/6OICBKzi6Q2o2Xh1boEO9PV4/nDBcSZXqtL1tIUU5uOveUddYpVTrg1whxrLMUdfb5ia7gWKfONFLOTEzhhXxmSympcfMG1d2azn4Fm7zz6dmE6ZNxQAGz6tw2p+nQAdrPuW96T8IxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GYOCa+MO; arc=none smtp.client-ip=95.215.58.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f9XK7cUJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A9A6C19425;
-	Thu, 19 Mar 2026 17:27:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773941277;
-	bh=p7RCR7vOn6YNBq6N5xnO6UDE2e8KWYL3tUjB20fWW68=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=f9XK7cUJK0JL2czsOGZqI1GaoE7VqxqIDs1p+ADHJ9+KRkqVm6piKDRXl8WMtEcZn
-	 Clu09PXywb7r577AjzWNUi0qLCaeM5LDbzmexoDsrsycMVRWngSa8KWo6fYpeLRdAp
-	 sK91SGm9gAq3UoM4WOaTJ/TWb278jNfUmF9awGrg434yUZJU2gF75c3BSK+CdkJJfJ
-	 5S4TJ1Yw84rJWprlEjWafsaIbsUticHwS5NzAJINqOHcDABqbU2Qr/PFh8Um9zW1kd
-	 H6b9vGEW74AEDJ7JGM3rWLLRWKEk8MZldzO4EhkC9fKRXUuzJNFTd8fh+8NbS5StJg
-	 ejy3G5W9KrP2Q==
-Received: from phl-compute-12.internal (phl-compute-12.internal [10.202.2.52])
-	by mailfauth.phl.internal (Postfix) with ESMTP id EDFB2F4006C;
-	Thu, 19 Mar 2026 13:27:55 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-12.internal (MEProxy); Thu, 19 Mar 2026 13:27:55 -0400
-X-ME-Sender: <xms:GzK8aVGxOK8gz6M6TzCpNTaBO8xpA1ujQoGhRZ2qM3Gf6psY6boGSw>
-    <xme:GzK8aUtaU8asbLcu4jnafgHu6PrKOIXlgm9OUV7LWq19wtGQ16qkPX560Hcv9Fjn7
-    fMjEtSLNJOecV1QBYMSvsNytdTbp9ZDi5e6NL8dKq1-qEV2_8mBL40>
-X-ME-Received: <xmr:GzK8adRzh0jpmlOtt4uL1hLwSiX76FwNxA6VAOklMc7oMRlLy9FpYFxX5c2OnTZbWGGcJVCGYvmo3kukqiax1mzr2qfiYB-0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdeftdejieduucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
-    hfgvnhhguceosghoqhhunheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpe
-    ekgffhhfeuheelhfekteeuffejveetjeefffettedtteegfefftdduteduudfgleenucev
-    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnod
-    hmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduieejtdelkeegjeduqddujeej
-    keehheehvddqsghoqhhunheppehkvghrnhgvlhdrohhrghesfhhigihmvgdrnhgrmhgvpd
-    hnsggprhgtphhtthhopeduhedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepmhgv
-    mhigohhrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepsghighgvrghshieslhhinhhuth
-    hrohhnihigrdguvgdprhgtphhtthhopehjohgvlhgrghhnvghlfhesnhhvihguihgrrdgt
-    ohhmpdhrtghpthhtohepphgruhhlmhgtkheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoh
-    epfhhrvgguvghrihgtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnvggvrhgrjhdr
-    ihhithhruddtsehgmhgrihhlrdgtohhmpdhrtghpthhtohepuhhrvgiikhhisehgmhgrih
-    hlrdgtohhmpdhrtghpthhtohepsghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmpdhr
-    tghpthhtoheprhgtuhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:GzK8aWPtk04HE-5TonvUhMnyQ07Xp3wPz6bUoua9ZpSH9uTUoj33nA>
-    <xmx:GzK8aT4KsqEO1_SjeglPyePHZwsjqQCMf3WslgN8TvhbppFXckZqNw>
-    <xmx:GzK8aZWD1Darms_1nnD_Xc4Py1VEd_IrbqZ3MCusPYI_rugMpYxYUA>
-    <xmx:GzK8aaNU8yrCt6DMkQAgH0cR1pLmW1RKQFEc7AsA7FBm1r66nnQCOQ>
-    <xmx:GzK8aQhLe55JJvTo3p_5I0QaEUnyJEzu_2XxZMldaQi9CGDSMAytYYGP>
-Feedback-ID: i8dbe485b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 19 Mar 2026 13:27:55 -0400 (EDT)
-Date: Thu, 19 Mar 2026 10:27:54 -0700
-From: Boqun Feng <boqun@kernel.org>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Joel Fernandes <joelagnelf@nvidia.com>, paulmck@kernel.org,
-	frederic@kernel.org, neeraj.iitr10@gmail.com, urezki@gmail.com,
-	boqun.feng@gmail.com, rcu@vger.kernel.org,
-	Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>
-Subject: Re: Next-level bug in SRCU implementation of RCU Tasks Trace +
- PREEMPT_RT
-Message-ID: <abwyGtG7hDpd8vBN@tardis.local>
-References: <absfZGD3en9TUA1U@tardis.local>
- <absj6rZbyLZY8PPz@tardis.local>
- <da4313b1-9ff5-46e9-b3b7-206dbcb72602@nvidia.com>
- <abs026TUV9oAg_Xy@tardis.local>
- <abtMhd_LVp3uL_pA@tardis.local>
- <20260319090315.Ec_eXAg4@linutronix.de>
- <abwkD0mOdAbD9ENJ@tardis.local>
- <20260319163350.c7WuYOM9@linutronix.de>
- <abwo0I_mu94t5Ews@tardis.local>
- <CAP01T75J4EXu8MFD2WEQ71Ou-bapqS=_wXFFQJ6Ed62X28HO2A@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GYOCa+MO"
+Message-ID: <4e6b366f-eaea-4cc1-b9c2-629c8089967e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773941527;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YWDwFX7RDlzg//VzZrJ7A37vtyfA4VbBikusGF6Mh3g=;
+	b=GYOCa+MOdBygqHs9YnzKQS3lZcPIU+5RffiahGa5mBZ575dVQ01BYVI9zf1/OUBFmmQOD6
+	YzNlIDo9XT8cc0g6guzmNkL+dDoJ95SnIHoJdRFL8yX90qB5iNkC3LxhGZ++LIBur5H56L
+	UUBwGYqzv5slx3iyUEZyMSs/kXwXe6M=
+Date: Thu, 19 Mar 2026 10:31:41 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP01T75J4EXu8MFD2WEQ71Ou-bapqS=_wXFFQJ6Ed62X28HO2A@mail.gmail.com>
+Subject: Re: [PATCH dwarves 1/9] dwarf_loader: Reduce parameter checking with
+ clang DW_AT_calling_convention attr
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Alan Maguire <alan.maguire@oracle.com>,
+ Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ bpf@vger.kernel.org, kernel-team@fb.com
+References: <20260305225455.1151066-1-yonghong.song@linux.dev>
+ <20260305225500.1151338-1-yonghong.song@linux.dev> <abvs73VjXf_1byN6@krava>
+Content-Language: en-GB
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <abvs73VjXf_1byN6@krava>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Mar 19, 2026 at 05:59:40PM +0100, Kumar Kartikeya Dwivedi wrote:
-> On Thu, 19 Mar 2026 at 17:48, Boqun Feng <boqun@kernel.org> wrote:
-> >
-> > On Thu, Mar 19, 2026 at 05:33:50PM +0100, Sebastian Andrzej Siewior wrote:
-> > > On 2026-03-19 09:27:59 [-0700], Boqun Feng wrote:
-> > > > On Thu, Mar 19, 2026 at 10:03:15AM +0100, Sebastian Andrzej Siewior wrote:
-> > > > > Please just use the queue_delayed_work() with a delay >0.
-> > > > >
-> > > >
-> > > > That doesn't work since queue_delayed_work() with a positive delay will
-> > > > still acquire timer base lock, and we can have BPF instrument with timer
-> > > > base lock held i.e. calling call_srcu() with timer base lock.
-> > > >
-> > > > irq_work on the other hand doesn't use any locking.
-> > >
-> > > Could we please restrict BPF somehow so it does roam free? It is
-> > > absolutely awful to have irq_work() in call_srcu() just because it
-> > > might acquire locks.
-> > >
-> >
-> > I agree it's not RCU's fault ;-)
-> >
-> > I guess it'll be difficult to restrict BPF, however maybe BPF can call
-> > call_srcu() in irq_work instead? Or a more systematic defer mechanism
-> > that allows BPF to defer any lock holding functions to a different
-> > context. (We have a similar issue that BPF cannot call kfree_rcu() in
-> > some cases IIRC).
-> >
-> > But we need to fix this in v7.0, so this short-term fix is still needed.
-> >
-> 
-> I don't think this is an option, even longer term. We already do it
-> when it's incorrect to invoke call_rcu() or any other API in a
-> specific context (e.g., NMI, where we punt it using irq_work).
-> However, the case reported in this thread is different. It was an
-> existing user which worked fine before but got broken now. We were
-> using call_rcu_tasks_trace() just fine in scx callbacks where rq->lock
-> is held before, so the conversion underneath to call_srcu() should
-> continue to remain transparent in this respect.
-> 
 
-I'm not sure that's a real argument here, kernel doesn't have a stable
-internal API, which allows developers to refactor the code into a saner
-way. There are currently multiple issues that suggest we may need a
-defer mechanism for BPF core, and if it makes the code more easier to
-reason about then why not? Think about it like a process that we learn
-about all the defer patterns that BPF currently needs and wrap them in a
-nice and maintainable way.
 
-Regards,
-Boqun
+On 3/19/26 5:32 AM, Jiri Olsa wrote:
+> On Thu, Mar 05, 2026 at 02:55:00PM -0800, Yonghong Song wrote:
+>
+> SNIP
+>
+>> ---
+>>   dwarf_loader.c | 71 +++++++++++++++++++++++++++++++++++++++++++-------
+>>   dwarves.h      |  2 ++
+>>   2 files changed, 63 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/dwarf_loader.c b/dwarf_loader.c
+>> index 16fb7be..610b69e 100644
+>> --- a/dwarf_loader.c
+>> +++ b/dwarf_loader.c
+>> @@ -1190,6 +1190,10 @@ static ptrdiff_t __dwarf_getlocations(Dwarf_Attribute *attr,
+>>   	return ret;
+>>   }
+>>   
+>> +struct func_info {
+>> +	bool signature_changed;
+>> +};
+>> +
+>>   /* For DW_AT_location 'attr':
+>>    * - if first location is DW_OP_regXX with expected number, return the register;
+>>    *   otherwise save the register for later return
+>> @@ -1252,7 +1256,8 @@ out:
+>>   }
+>>   
+>>   static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
+>> -					struct conf_load *conf, int param_idx)
+>> +					struct conf_load *conf, int param_idx,
+>> +					struct func_info *info)
+>>   {
+>>   	struct parameter *parm = tag__alloc(cu, sizeof(*parm));
+>>   
+>> @@ -1265,6 +1270,8 @@ static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
+>>   		parm->idx = param_idx;
+>>   		if (param_idx >= cu->nr_register_params || param_idx < 0)
+>>   			return parm;
+>> +		if (cu->producer_clang && !info->signature_changed)
+>> +			return parm;
+> should you check for info != NULL?
 
-> > Regars,
-> > Boqun
-> >
-> > > > Regards,
-> > > > Boqun
-> > > >
-> > > Sebastian
+We should be okay. I audited that if info is NULL, then param_idx must be < 0.
+
+>
+>>   		/* Parameters which use DW_AT_abstract_origin to point at
+>>   		 * the original parameter definition (with no name in the DIE)
+>>   		 * are the result of later DWARF generation during compilation
+>> @@ -1337,7 +1344,7 @@ static int formal_parameter_pack__load_params(struct formal_parameter_pack *pack
+>>   			continue;
+>>   		}
+>>   
+>> -		struct parameter *param = parameter__new(die, cu, conf, -1);
+>> +		struct parameter *param = parameter__new(die, cu, conf, -1, NULL);
+>>   
+>>   		if (param == NULL)
+>>   			return -1;
+>> @@ -1502,6 +1509,29 @@ static struct ftype *ftype__new(Dwarf_Die *die, struct cu *cu)
+>>   	return ftype;
+>>   }
+>>   
+> SNIP
+>
+>>   	int param_idx = 0;
+>>   	Dwarf_Die child;
+>> @@ -2320,7 +2353,7 @@ static int die__process_function(Dwarf_Die *die, struct ftype *ftype,
+>>   			continue;
+>>   		}
+>>   		case DW_TAG_formal_parameter:
+>> -			tag = die__create_new_parameter(die, ftype, lexblock, cu, conf, param_idx++);
+>> +			tag = die__create_new_parameter(die, ftype, lexblock, cu, conf, param_idx++, info);
+>>   			break;
+>>   		case DW_TAG_variable:
+>>   			tag = die__create_new_variable(die, cu, conf, 0);
+>> @@ -2391,9 +2424,10 @@ out_enomem:
+>>   static struct tag *die__create_new_function(Dwarf_Die *die, struct cu *cu, struct conf_load *conf)
+>>   {
+>>   	struct function *function = function__new(die, cu, conf);
+>> +	struct func_info info = { function->signature_changed };
+> would it be easier to add signature_changed to struct ftype or pass
+> function pointer directly to die__process_function ?
+>
+> (after reading the rest of the patches, seems like func_info is needed
+> anyway, so maybe not worth it)
+
+Right, there are additional fields in func_info struct.
+
+>
+>>   
+>>   	if (function != NULL &&
+>> -	    die__process_function(die, &function->proto, &function->lexblock, cu, conf) != 0) {
+>> +	    die__process_function(die, &function->proto, &function->lexblock, cu, conf, &info) != 0) {
+>>   		function__delete(function, cu);
+>>   		function = NULL;
+>>   	}
+>> @@ -3045,6 +3079,21 @@ static unsigned long long dwarf_tag__orig_id(const struct tag *tag,
+>>   	return cu->extra_dbg_info ? dtag->id : 0;
+>>   }
+>>   
+>> +static bool attr_producer_clang(Dwarf_Die *die)
+>> +{
+>> +	Dwarf_Attribute attr;
+>> +	const char *producer;
+>> +
+>> +	if (dwarf_attr(die, DW_AT_producer, &attr) == NULL)
+>> +		return false;
+>> +
+>> +	producer = dwarf_formstring(&attr);
+>> +	if (!producer)
+>> +		return false;
+>> +
+> nit you could call attr_string(die, DW_AT_producer, NULL) to get the string
+
+Good point. Will fix it in the next revision.
+
+>
+> jirka
+>
+>> +	return !!strstr(producer, "clang");
+>> +}
+>> +
+> SNIP
+>
+
