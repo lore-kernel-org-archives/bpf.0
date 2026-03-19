@@ -1,130 +1,87 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD883603F3
-	for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 16:48:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A1613EE1C5;
+	Thu, 19 Mar 2026 16:56:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773938900; cv=none; b=G8ijO9xi4t1Ehr2QiKkJPKscxrRFfi8YrGVZSnrtzTBkSA2evO5ZZkV7nKpdWq6VKj+bb5M+G1OQk0ZzJ8iwNwwbhjR0S8YjQUMADm4aF0bD3Ymu4bQ0IikhUA1DR/OnM0VlR/4bc1s95LWxfMPnn6YXo5Q2ovvaE6I6VgPMgqI=
+	t=1773939414; cv=none; b=YgyIldxTNXY/E+vKA+PSYT93510HssQ1Fty7lO+VC/c0gGynn39AbQjW/HDQ4VfVU4ypdO28+syuML9EQdhVaayIvTUGXYSMxmkN2JzWxE3clR6coIBtgm5lX/1zA/IUV7u19Pb8tLT4Zrq8yb4rtVK1f6IH/kJe5+bkE35cerk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773938900; c=relaxed/simple;
-	bh=BW+s1tfvjSzvorY/ZLwBEykUFgF+GdVyXuLp1ysnz7k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XUS5guS5zg1eEjYMoMHuP9mNtDhlr0+xEVIgkGt9gxC6v0A4LZf0qjJws6DXo+fACBL8PTNjIMGhg7hvNPYVilh+P9UgkXOWZFQ6gczy92huMKA1uwpWlt0NONBUahGw5oaUcEYw8ZQ5/kLcg99Vu8zriAEIPId86tR++lefVKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XTd73k7C; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773939414; c=relaxed/simple;
+	bh=oQ+Jh+vCTFs9cVLDvDiEzq/xMAEFTVzQ/NgiP3kT8A4=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=SwPFfQbH3zhOodYP7VcU355E0HpATeBVJEdnbw8PEGfFfZITbZF6qYc3lBZZfsgpsMYmqoxNorB/j9DNknxHcQoZa8VBR9SpdofaiHoQPJOSAVfXV8eSNMtbhyM89CS+KvC+rUb56ao92tkLGLhcnCQOEQj60AvqD5UKp3mT3f0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cqyw1/zO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XTd73k7C"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60587C19425;
-	Thu, 19 Mar 2026 16:48:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cqyw1/zO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1583C19424;
+	Thu, 19 Mar 2026 16:56:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773938899;
-	bh=BW+s1tfvjSzvorY/ZLwBEykUFgF+GdVyXuLp1ysnz7k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XTd73k7CC2TC9+hCO20TKx5ri7q8reYnpoMwn84Tk8ae/+6WopRDjGO2DIpUfBcaC
-	 mXv3ymUIjomMkCZJo+boauIPFKHJXbzTXDwfWQLkKbLq5j3OWufHbtOwEZ0+mI5MHb
-	 to+U054TMagF7gQBneAS8ZJYLguMFaeO3WhnymG/QdCfUwHobNUeQtG7YTRS/ZuXxb
-	 IYxN52pDAUXP9HM2+yE2U9Gi625XjGeh3gIw/ml7emhkVK5uXrzd0aW6hYNDnxpQ7P
-	 uGlsOAfW5S+DA0S9Eb8rOTUkZHN6IHh+MTK33rLUI3yp0L7DrUTtsyFaJuevgm4J5q
-	 QfxwC1qZcysjg==
-Received: from phl-compute-12.internal (phl-compute-12.internal [10.202.2.52])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 1C889F40073;
-	Thu, 19 Mar 2026 12:48:18 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-12.internal (MEProxy); Thu, 19 Mar 2026 12:48:18 -0400
-X-ME-Sender: <xms:0ii8af4qtLUBqFla_35wBurD4IJfxeJLdEnxHmQPU_dpDPX_TSkevA>
-    <xme:0ii8afSWs6mqniQlsBm5HnZ3jNvm_ZVcw7AROlCi2wUz5HXT_k1OFmOxRrS_dqfOQ
-    KHXHAsQ5XCiCFXUtOpelULc-FJoT6nLPfjDg7if5jGhLPpt2p7POg>
-X-ME-Received: <xmr:0ii8ackdzQgcCTJ0x-9qv3RNylAK8KEX_WixbmFxbg5P3tHPZf9-GnLag6sGD1EzglK8gq4GNQ0_HfPxawf1vYnR0je17772>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdeftdejheefucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
-    hfgvnhhguceosghoqhhunheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpe
-    ekgffhhfeuheelhfekteeuffejveetjeefffettedtteegfefftdduteduudfgleenucev
-    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnod
-    hmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduieejtdelkeegjeduqddujeej
-    keehheehvddqsghoqhhunheppehkvghrnhgvlhdrohhrghesfhhigihmvgdrnhgrmhgvpd
-    hnsggprhgtphhtthhopeduhedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsghi
-    ghgvrghshieslhhinhhuthhrohhnihigrdguvgdprhgtphhtthhopehjohgvlhgrghhnvg
-    hlfhesnhhvihguihgrrdgtohhmpdhrtghpthhtohepphgruhhlmhgtkheskhgvrhhnvghl
-    rdhorhhgpdhrtghpthhtohepfhhrvgguvghrihgtsehkvghrnhgvlhdrohhrghdprhgtph
-    htthhopehnvggvrhgrjhdrihhithhruddtsehgmhgrihhlrdgtohhmpdhrtghpthhtohep
-    uhhrvgiikhhisehgmhgrihhlrdgtohhmpdhrtghpthhtohepsghoqhhunhdrfhgvnhhgse
-    hgmhgrihhlrdgtohhmpdhrtghpthhtoheprhgtuhesvhhgvghrrdhkvghrnhgvlhdrohhr
-    ghdprhgtphhtthhopehmvghmgihorhesghhmrghilhdrtghomh
-X-ME-Proxy: <xmx:0ii8abRoy-YiMLexhYV2s85vPWkTVAHTaOL7X7cP2T6tWFrNrs2wdA>
-    <xmx:0ii8abtRyDYGxbz1Dpq3ztAnS9clEQjW0UWTMA43Gxm_TLcoT4hcEA>
-    <xmx:0ii8ac5BxwK5TvAMQqgKpVdXfSWokgDqWahCAJNEAzIuxEjP0LnLKQ>
-    <xmx:0ii8aeiIweIOTObvuQ08d4gaHh5IeCiMUYy1CUMa30acBRWQGQsM3A>
-    <xmx:0ii8aWmK2SmcGziRtlzedc1f4FJ5UhkBqaw2O-QHowHNxr_YEfLVSA6z>
-Feedback-ID: i8dbe485b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 19 Mar 2026 12:48:17 -0400 (EDT)
-Date: Thu, 19 Mar 2026 09:48:16 -0700
-From: Boqun Feng <boqun@kernel.org>
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Joel Fernandes <joelagnelf@nvidia.com>, paulmck@kernel.org,
-	frederic@kernel.org, neeraj.iitr10@gmail.com, urezki@gmail.com,
-	boqun.feng@gmail.com, rcu@vger.kernel.org,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>
-Subject: Re: Next-level bug in SRCU implementation of RCU Tasks Trace +
- PREEMPT_RT
-Message-ID: <abwo0I_mu94t5Ews@tardis.local>
-References: <3c4c5a29-24ea-492d-aeee-e0d9605b4183@nvidia.com>
- <absesPf-10awctq9@tardis.local>
- <absfZGD3en9TUA1U@tardis.local>
- <absj6rZbyLZY8PPz@tardis.local>
- <da4313b1-9ff5-46e9-b3b7-206dbcb72602@nvidia.com>
- <abs026TUV9oAg_Xy@tardis.local>
- <abtMhd_LVp3uL_pA@tardis.local>
- <20260319090315.Ec_eXAg4@linutronix.de>
- <abwkD0mOdAbD9ENJ@tardis.local>
- <20260319163350.c7WuYOM9@linutronix.de>
+	s=k20201202; t=1773939413;
+	bh=oQ+Jh+vCTFs9cVLDvDiEzq/xMAEFTVzQ/NgiP3kT8A4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=cqyw1/zOzJTa/8Q7yDX+a6eNmUK176csXCEVCSg5AikQ+YSs6rlP1re+tc+mGOEpd
+	 FSuPVDirjPJyTiZqfjBbLJ3lOn6TpqochRo/Q02ywDuIQEnVTzm75le1drHtq5b3eE
+	 6pItstVO/nLELiULryOiTq/bSVLvsEX+puA5LlCXbRrF30rST5/+hJV3GlUNn2RIPB
+	 AG7Nkvn8SjnlLUlgFNDXbUWZ2SCk8BQBsrNvttv9zLj3EnC5uAAoAvqfOx6hMAFyjn
+	 AtUJhxooVtkp/PQiBu2v2zZRvEDWBr+WlfEl/7ihUjq5kik3qQ0pwrGd19sCreQEi4
+	 WIQ2TSVYapbfQ==
+Content-Type: multipart/mixed; boundary="===============8422952437576566334=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260319163350.c7WuYOM9@linutronix.de>
+Message-Id: <dfba37ee6cd5de8954bbc57d18af3e4865e35cdda8535d890ae6380e4a1cc0af@mail.kernel.org>
+In-Reply-To: <20260319-vmscape-bhb-v7-7-b76a777a98af@linux.intel.com>
+References: <20260319-vmscape-bhb-v7-7-b76a777a98af@linux.intel.com>
+Subject: Re: [PATCH v7 07/10] x86/vmscape: Use static_call() for predictor flush
+From: bot+bpf-ci@kernel.org
+To: pawan.kumar.gupta@linux.intel.com,x86@kernel.org,nik.borisov@suse.com,hpa@zytor.com,jpoimboe@kernel.org,david.kaplan@amd.com,seanjc@google.com,bp@alien8.de,dave.hansen@linux.intel.com,peterz@infradead.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,kpsingh@kernel.org,jolsa@kernel.org,davem@davemloft.net,david.laight.linux@gmail.com,luto@kernel.org,tglx@kernel.org,mingo@redhat.com,dsahern@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,sdf@fomichev.me,haoluo@google.com,pbonzini@redhat.com,corbet@lwn.net
+Cc: linux-kernel@vger.kernel.org,kvm@vger.kernel.org,asit.k.mallick@intel.com,tao1.zhang@intel.com,bpf@vger.kernel.org,netdev@vger.kernel.org,linux-doc@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 19 Mar 2026 16:56:52 +0000 (UTC)
 
-On Thu, Mar 19, 2026 at 05:33:50PM +0100, Sebastian Andrzej Siewior wrote:
-> On 2026-03-19 09:27:59 [-0700], Boqun Feng wrote:
-> > On Thu, Mar 19, 2026 at 10:03:15AM +0100, Sebastian Andrzej Siewior wrote:
-> > > Please just use the queue_delayed_work() with a delay >0.
-> > > 
-> > 
-> > That doesn't work since queue_delayed_work() with a positive delay will
-> > still acquire timer base lock, and we can have BPF instrument with timer
-> > base lock held i.e. calling call_srcu() with timer base lock.
-> > 
-> > irq_work on the other hand doesn't use any locking.
-> 
-> Could we please restrict BPF somehow so it does roam free? It is
-> absolutely awful to have irq_work() in call_srcu() just because it
-> might acquire locks.
-> 
+--===============8422952437576566334==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-I agree it's not RCU's fault ;-)
+> diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+> index 68e2df3e3bf58..b75eda114503a 100644
+> --- a/arch/x86/kernel/cpu/bugs.c
+> +++ b/arch/x86/kernel/cpu/bugs.c
+> @@ -144,6 +144,17 @@ EXPORT_SYMBOL_GPL(cpu_buf_idle_clear);
+>   */
+>  DEFINE_STATIC_KEY_FALSE(switch_mm_cond_l1d_flush);
+>
+> +/*
+> + * Controls CPU Fill buffer clear before VMenter. This is a subset of
+> + * X86_FEATURE_CLEAR_CPU_BUF, and should only be enabled when KVM-only
+> + * mitigation is required.
+> + */
+> +DEFINE_STATIC_KEY_FALSE(cpu_buf_vm_clear);
+> +EXPORT_SYMBOL_GPL(cpu_buf_vm_clear);
 
-I guess it'll be difficult to restrict BPF, however maybe BPF can call
-call_srcu() in irq_work instead? Or a more systematic defer mechanism
-that allows BPF to defer any lock holding functions to a different
-context. (We have a similar issue that BPF cannot call kfree_rcu() in
-some cases IIRC).
+cpu_buf_vm_clear is defined and exported here but appears to have no
+users. There is no declaration in any header, and nothing in this
+patch series references it.
 
-But we need to fix this in v7.0, so this short-term fix is still needed.
+The comment describes CPU fill buffer clearing before VMenter, which
+seems unrelated to the predictor flush static_call conversion that
+this patch is doing. Was this included by mistake, or is it intended
+for a follow-up series?
 
-Regars,
-Boqun
+> +
+> +DEFINE_STATIC_CALL_NULL(vmscape_predictor_flush, write_ibpb);
+> +EXPORT_STATIC_CALL_GPL(vmscape_predictor_flush);
 
-> > Regards,
-> > Boqun
-> > 
-> Sebastian
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23303796353
+--===============8422952437576566334==--
