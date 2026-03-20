@@ -1,226 +1,202 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 020493BC68F;
-	Fri, 20 Mar 2026 15:02:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D045280CF6;
+	Fri, 20 Mar 2026 15:34:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774018941; cv=none; b=FNK5mfi0Rv5PrGoB+eRpfYDGux8vkgi/baRy/K9K2KuUqBI+kyVh5qi2CCm6n0bjWdB1ErKUIhUYIGfEV7gj+VaZmgFh/hP1m4OR7qiihcjn1+gWds3k1uSQrA14oPGwlGS9Wki2xpTMumiSx9lLOBH6pP0fq8QonJhPEMUuPQQ=
+	t=1774020884; cv=none; b=EvWnrYNRAUYKgoPR9BBmX7RfrGVs+wNABcGxUt/Rv4x/XoGLFngIqTzoIHFWzHuGk37gkZalfTXYf9JjxVet9hXgh26hOtXxKKklW81xdN1DOs+oIEyrI6EkqVzQn4ubR3Gti1ATpoZz7QNOgKG1nItouDrhEkc4ruJ0hLgMj4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774018941; c=relaxed/simple;
-	bh=pWnlyVxQ/Qq6MdzK6zaFgmlS11HHGn0FriRfY0ImOJk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=L9z33vythgh3yYUTvfrI+GfkVG4MstH7WH3YvpQYo3gNlE8vTqEYrN5xOMHaG8Sb3aiFW8LNYeh694fcFP0BaardT8LJ0+0CTfSbtP5bK72U88BaR7Km0lOxTgK0EdqGTHToIRh3qLWt0RkXtY9mTzxJFza5nD5NgrSLJ5aW+3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=aSC3hFMg; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1774020884; c=relaxed/simple;
+	bh=BGR90TxaFfh35mjid8awLcSL9PInaJIHsDS56WE7KzM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F7MAQhMGXTKubHYjE1MA7wO7xyXMNvpbWkj1Q9nS5OQcDuG19zkCXI91V11m0+68YwZiMoH3W5G9gmlh0OvPrsM/+rqTsMQDzEriubWtXG2ZRHOjV7xSkL/8UQz5vPafVeqLFdeYfD2DZ83Tv1X8W8EYxSsahoSTFuOnaMKKIXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ij1rbYzn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="aSC3hFMg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1774018940; x=1805554940;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:references:in-reply-to:to:cc;
-  bh=pWnlyVxQ/Qq6MdzK6zaFgmlS11HHGn0FriRfY0ImOJk=;
-  b=aSC3hFMg/f+hNfzbTYXWxhFVLtY5Pw0+Swg6LwA/W+YMakG++5grlrPD
-   poYCXFZxSZn3H3ZfaHZziZBLtbFIcFHZ6x4xwRWXMvqJKKsAMQe3X8TDp
-   BIj4ZztJeZ82m46XZ+1/WDj7fl9ZxGRTnmxz376Qdd0mttDkwUiqoup+P
-   20oBehAY2f+vsGp0uO8TgsDJbBXxpcXSCVaPQzhLK07N5ks2gCUp5nWo/
-   dFNvwbOKjt0YEitdyFjnP1H0P8rKLz3/IpVHVgjmt4aAZcNqvOHEGQPxG
-   vomTm43Vk5i+LKsUrZwuWQ1ogfMXUoWWATLPbs+ts0NDLvGK1zRTungi+
-   A==;
-X-CSE-ConnectionGUID: Pv4RbQ7sShqou4Z9GlxWPw==
-X-CSE-MsgGUID: YCGkhLDkSk66jgKdKHZdhQ==
-X-IronPort-AV: E=Sophos;i="6.23,130,1770620400"; 
-   d="scan'208";a="62637230"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Mar 2026 08:02:18 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Fri, 20 Mar 2026 08:01:40 -0700
-Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Fri, 20 Mar 2026 08:01:37 -0700
-From: Daniel Machon <daniel.machon@microchip.com>
-Date: Fri, 20 Mar 2026 16:01:03 +0100
-Subject: [PATCH net-next 07/10] net: lan966x: add PCIe FDMA MTU change
- support
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ij1rbYzn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 432FFC4CEF7;
+	Fri, 20 Mar 2026 15:34:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774020883;
+	bh=BGR90TxaFfh35mjid8awLcSL9PInaJIHsDS56WE7KzM=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=Ij1rbYznVFoArmhfr4Lac4UNrYYuE1FKNMkot7rvbDCts7XNhIpy61ihnR0+vKQAD
+	 YWL5SgfLTDHQxUnXsVvB+1LnFrI/SHML0eSfc3lPK70b/C6IODgnBMGbgA6LzWO8fz
+	 /cDOrszPTaCnNaiM8hrzO4AYugPHSRJjSlm9u4YZMuVBa8w4SXA5zrNyeM/k6/r6YB
+	 1IDj2uwXLyfgVUoNYCZ8r4/2qdv596Ewkc0NnUp8+2Wfi9ur1egpZcF/R+vmyUbTjR
+	 ogO7+wIYStEAqTvEDQwi1DguhpR4WQJYJ8o4gSLRpORCSlCq1NqtmFq/anGViUIXMT
+	 zu8OnBykhK1AQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 71CE0CE09C2; Fri, 20 Mar 2026 08:34:41 -0700 (PDT)
+Date: Fri, 20 Mar 2026 08:34:41 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Boqun Feng <boqun@kernel.org>
+Cc: Joel Fernandes <joelagnelf@nvidia.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	frederic@kernel.org, neeraj.iitr10@gmail.com, urezki@gmail.com,
+	boqun.feng@gmail.com, rcu@vger.kernel.org,
+	Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>
+Subject: Re: Next-level bug in SRCU implementation of RCU Tasks Trace +
+ PREEMPT_RT
+Message-ID: <c391f8b9-a168-4235-aa7b-6902b4f07002@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20260319090315.Ec_eXAg4@linutronix.de>
+ <abwkD0mOdAbD9ENJ@tardis.local>
+ <20260319163350.c7WuYOM9@linutronix.de>
+ <abwo0I_mu94t5Ews@tardis.local>
+ <CAP01T75J4EXu8MFD2WEQ71Ou-bapqS=_wXFFQJ6Ed62X28HO2A@mail.gmail.com>
+ <abwyGtG7hDpd8vBN@tardis.local>
+ <CAP01T75S-NMgB=s_0jqq52xRwe1cQ29DzD33eeqUZHM3cSb=oA@mail.gmail.com>
+ <abxZEE4SAMkNEleq@tardis.local>
+ <89763fcd-3710-49a0-91ca-cd923b47fc1e@nvidia.com>
+ <abxfBZ89wIJILuom@tardis.local>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20260320-lan966x-pci-fdma-v1-7-ef54cb9b0c4b@microchip.com>
-References: <20260320-lan966x-pci-fdma-v1-0-ef54cb9b0c4b@microchip.com>
-In-Reply-To: <20260320-lan966x-pci-fdma-v1-0-ef54cb9b0c4b@microchip.com>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Horatiu Vultur
-	<horatiu.vultur@microchip.com>, Steen Hegelund
-	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>, "Alexei
- Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
-	"Jesper Dangaard Brouer" <hawk@kernel.org>, John Fastabend
-	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Herve
- Codina <herve.codina@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<bpf@vger.kernel.org>
-X-Mailer: b4 0.14.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <abxfBZ89wIJILuom@tardis.local>
 
-Add MTU change support for the PCIe FDMA path. When the MTU changes,
-the contiguous ATU-mapped RX and TX buffers are reallocated with the
-new size. On allocation failure, the old buffers are restored.
+On Thu, Mar 19, 2026 at 01:39:33PM -0700, Boqun Feng wrote:
+> On Thu, Mar 19, 2026 at 04:21:45PM -0400, Joel Fernandes wrote:
+> > On 3/19/2026 4:14 PM, Boqun Feng wrote:
+> > > On Thu, Mar 19, 2026 at 07:41:06PM +0100, Kumar Kartikeya Dwivedi wrote:
+> > >> On Thu, 19 Mar 2026 at 18:27, Boqun Feng <boqun@kernel.org> wrote:
+> > >>>
+> > >>> On Thu, Mar 19, 2026 at 05:59:40PM +0100, Kumar Kartikeya Dwivedi wrote:
+> > >>>> On Thu, 19 Mar 2026 at 17:48, Boqun Feng <boqun@kernel.org> wrote:
+> > >>>>>
+> > >>>>> On Thu, Mar 19, 2026 at 05:33:50PM +0100, Sebastian Andrzej Siewior wrote:
+> > >>>>>> On 2026-03-19 09:27:59 [-0700], Boqun Feng wrote:
+> > >>>>>>> On Thu, Mar 19, 2026 at 10:03:15AM +0100, Sebastian Andrzej Siewior wrote:
+> > >>>>>>>> Please just use the queue_delayed_work() with a delay >0.
+> > >>>>>>>>
+> > >>>>>>>
+> > >>>>>>> That doesn't work since queue_delayed_work() with a positive delay will
+> > >>>>>>> still acquire timer base lock, and we can have BPF instrument with timer
+> > >>>>>>> base lock held i.e. calling call_srcu() with timer base lock.
+> > >>>>>>>
+> > >>>>>>> irq_work on the other hand doesn't use any locking.
+> > >>>>>>
+> > >>>>>> Could we please restrict BPF somehow so it does roam free? It is
+> > >>>>>> absolutely awful to have irq_work() in call_srcu() just because it
+> > >>>>>> might acquire locks.
+> > >>>>>>
+> > >>>>>
+> > >>>>> I agree it's not RCU's fault ;-)
+> > >>>>>
+> > >>>>> I guess it'll be difficult to restrict BPF, however maybe BPF can call
+> > >>>>> call_srcu() in irq_work instead? Or a more systematic defer mechanism
+> > >>>>> that allows BPF to defer any lock holding functions to a different
+> > >>>>> context. (We have a similar issue that BPF cannot call kfree_rcu() in
+> > >>>>> some cases IIRC).
+> > >>>>>
+> > >>>>> But we need to fix this in v7.0, so this short-term fix is still needed.
+> > >>>>>
+> > >>>>
+> > >>>> I don't think this is an option, even longer term. We already do it
+> > >>>> when it's incorrect to invoke call_rcu() or any other API in a
+> > >>>> specific context (e.g., NMI, where we punt it using irq_work).
+> > >>>> However, the case reported in this thread is different. It was an
+> > >>>> existing user which worked fine before but got broken now. We were
+> > >>>> using call_rcu_tasks_trace() just fine in scx callbacks where rq->lock
+> > >>>> is held before, so the conversion underneath to call_srcu() should
+> > >>>> continue to remain transparent in this respect.
+> > >>>>
+> > >>>
+> > >>> I'm not sure that's a real argument here, kernel doesn't have a stable
+> > >>> internal API, which allows developers to refactor the code into a saner
+> > >>> way. There are currently multiple issues that suggest we may need a
+> > >>> defer mechanism for BPF core, and if it makes the code more easier to
+> > >>> reason about then why not? Think about it like a process that we learn
+> > >>> about all the defer patterns that BPF currently needs and wrap them in a
+> > >>> nice and maintainable way.
+> > >>
+> > >> This is all right in theory, but I don't understand how your
+> > >> theoretical deferral mechanism for BPF will help here in the case
+> > >> we're discussing, or is even appealing.
+> > >>
+> > >> How do we decide when to defer? Will we annotate all locks that can be
+> > >> held by RCU internals to be able to check if they are held (on the
+> > >> current cpu, which is non-trivial except by maintaining a held lock
+> > >> table, testing the locked bit is too conservative), and then deferring
+> > >> the call_srcu() from the caller in BPF? What if you gain new locks? It
+> > >> doesn't seem practical to me. Plus it pushes the burden of detection
+> > >> and deferral to the caller, making everything more complicated and
+> > >> error-prone.
+> > >>
+> > > 
+> > > My suggestion would be: deferring all call_srcu()s that in BPF
+> > > core. [...]
+> > 
+> > isn't one of the issues is that BPF is using call_rcu_tasks_trace() which is now
+> > internally using call_srcu? So whether other parts of BPF use call_srcu() or
+> 
+> I was talking about the long term solution in that thread ;-)
+> 
+> Short-term, yes the switching from call_rcu_tasks_trace() to call_srcu()
+> is the cause the issue, and we have the lockdep report to prove that. So
+> in order to continue the process of switching to SRCU for BPF, we need
+> to restore the behavior of call_rcu_tasks_trace() in call_srcu().
+> 
+> > not, the issue still stands AFAICS.
+> > 
+> 
+> In an alternative universe, BPF has a defer mechanism, and BPF core
+> would just call (for example):
+> 
+>     bpf_defer(call_srcu, ...); // <- a lockless defer
+> 
+> so the issue won't happen.
 
-Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
----
- .../ethernet/microchip/lan966x/lan966x_fdma_pci.c  | 126 ++++++++++++++++++++-
- 1 file changed, 125 insertions(+), 1 deletion(-)
+In theory, this is quite true.
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-index a92862b386ab..4d69beb41c0c 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-@@ -300,9 +300,133 @@ static int lan966x_fdma_pci_init(struct lan966x *lan966x)
- 	return 0;
- }
- 
-+/* Reset existing rx and tx buffers. */
-+static void lan966x_fdma_pci_reset_mem(struct lan966x *lan966x)
-+{
-+	struct lan966x_rx *rx = &lan966x->rx;
-+	struct lan966x_tx *tx = &lan966x->tx;
-+
-+	memset(rx->fdma.dcbs, 0, rx->fdma.size);
-+	memset(tx->fdma.dcbs, 0, tx->fdma.size);
-+
-+	fdma_dcbs_init(&rx->fdma,
-+		       FDMA_DCB_INFO_DATAL(rx->fdma.db_size),
-+		       FDMA_DCB_STATUS_INTR);
-+
-+	fdma_dcbs_init(&tx->fdma,
-+		       FDMA_DCB_INFO_DATAL(tx->fdma.db_size),
-+		       FDMA_DCB_STATUS_DONE);
-+
-+	lan966x_fdma_llp_configure(lan966x,
-+				   tx->fdma.atu_region->base_addr,
-+				   tx->fdma.channel_id);
-+	lan966x_fdma_llp_configure(lan966x,
-+				   rx->fdma.atu_region->base_addr,
-+				   rx->fdma.channel_id);
-+}
-+
-+static int lan966x_fdma_pci_reload(struct lan966x *lan966x, int new_mtu)
-+{
-+	struct fdma tx_fdma_old = lan966x->tx.fdma;
-+	struct fdma rx_fdma_old = lan966x->rx.fdma;
-+	u32 old_mtu = lan966x->rx.max_mtu;
-+	int err;
-+
-+	napi_synchronize(&lan966x->napi);
-+	napi_disable(&lan966x->napi);
-+	lan966x_fdma_stop_netdev(lan966x);
-+	lan966x_fdma_rx_disable(&lan966x->rx);
-+	lan966x_fdma_tx_disable(&lan966x->tx);
-+	lan966x->tx.activated = false;
-+
-+	lan966x->rx.max_mtu = new_mtu;
-+
-+	lan966x->tx.fdma.db_size = FDMA_PCI_DB_SIZE(lan966x->rx.max_mtu);
-+	lan966x->tx.fdma.size = fdma_get_size_contiguous(&lan966x->tx.fdma);
-+	lan966x->rx.fdma.db_size = FDMA_PCI_DB_SIZE(lan966x->rx.max_mtu);
-+	lan966x->rx.fdma.size = fdma_get_size_contiguous(&lan966x->rx.fdma);
-+
-+	err = lan966x_fdma_pci_rx_alloc(&lan966x->rx);
-+	if (err)
-+		goto restore;
-+
-+	err = lan966x_fdma_pci_tx_alloc(&lan966x->tx);
-+	if (err) {
-+		fdma_free_coherent_and_unmap(lan966x->dev, &lan966x->rx.fdma);
-+		goto restore;
-+	}
-+
-+	lan966x_fdma_rx_start(&lan966x->rx);
-+
-+	/* Free and unmap old memory. */
-+	fdma_free_coherent_and_unmap(lan966x->dev, &rx_fdma_old);
-+	fdma_free_coherent_and_unmap(lan966x->dev, &tx_fdma_old);
-+
-+	lan966x_fdma_wakeup_netdev(lan966x);
-+	napi_enable(&lan966x->napi);
-+
-+	return err;
-+restore:
-+
-+	/* No new buffers are allocated at this point. Use the old buffers,
-+	 * but reset them before starting the FDMA again.
-+	 */
-+
-+	memcpy(&lan966x->tx.fdma, &tx_fdma_old, sizeof(struct fdma));
-+	memcpy(&lan966x->rx.fdma, &rx_fdma_old, sizeof(struct fdma));
-+
-+	lan966x->rx.max_mtu = old_mtu;
-+
-+	lan966x_fdma_pci_reset_mem(lan966x);
-+
-+	lan966x_fdma_rx_start(&lan966x->rx);
-+	lan966x_fdma_wakeup_netdev(lan966x);
-+	napi_enable(&lan966x->napi);
-+
-+	return err;
-+}
-+
-+static int __lan966x_fdma_pci_reload(struct lan966x *lan966x, int max_mtu)
-+{
-+	int err;
-+	u32 val;
-+
-+	/* Disable the CPU port. */
-+	lan_rmw(QSYS_SW_PORT_MODE_PORT_ENA_SET(0),
-+		QSYS_SW_PORT_MODE_PORT_ENA,
-+		lan966x, QSYS_SW_PORT_MODE(CPU_PORT));
-+
-+	/* Flush the CPU queues. */
-+	readx_poll_timeout(lan966x_qsys_sw_status,
-+			   lan966x,
-+			   val,
-+			   !(QSYS_SW_STATUS_EQ_AVAIL_GET(val)),
-+			   READL_SLEEP_US, READL_TIMEOUT_US);
-+
-+	/* Add a sleep in case there are frames between the queues and the CPU
-+	 * port
-+	 */
-+	usleep_range(USEC_PER_MSEC, 2 * USEC_PER_MSEC);
-+
-+	err = lan966x_fdma_pci_reload(lan966x, max_mtu);
-+
-+	/* Enable back the CPU port. */
-+	lan_rmw(QSYS_SW_PORT_MODE_PORT_ENA_SET(1),
-+		QSYS_SW_PORT_MODE_PORT_ENA,
-+		lan966x, QSYS_SW_PORT_MODE(CPU_PORT));
-+
-+	return err;
-+}
-+
- static int lan966x_fdma_pci_resize(struct lan966x *lan966x)
- {
--	return -EOPNOTSUPP;
-+	int max_mtu;
-+
-+	max_mtu = lan966x_fdma_get_max_frame(lan966x);
-+	if (max_mtu == lan966x->rx.max_mtu)
-+		return 0;
-+
-+	return __lan966x_fdma_pci_reload(lan966x, max_mtu);
- }
- 
- static void lan966x_fdma_pci_deinit(struct lan966x *lan966x)
+In practice, unfortunately for keeping this part of RCU as simple as
+we might wish, when a BPF program gets attached to some function in
+the kernel, it does not know whether or not that function holds a given
+scheduler lock.  For example, there are any number of utility functions
+that can be (and are) called both with and without those scheduler
+locks held.  Worse yet, it might be attached to a function that is
+*never* invoked with a scheduler lock held -- until some out-of-tree
+module is loaded.  Which means that this module might well be loaded
+after BPF has JIT-ed the BPF program.
 
--- 
-2.34.1
+So we really do need to make some variant of call_srcu() that deals
+with this.
 
+We do have some options.  First, we could make call_srcu() deal with it
+directly, or second, we could create something like call_srcu_lockless()
+or call_srcu_nolock() or whatever that can safely be invoked from any
+context, including NMI handlers, and that invokes call_srcu() directly
+when it determines that it is safe to do so.  The advantage of the second
+approach is that it avoids incurring the overhead of checking in the
+common case.
+
+Thoughts?
+
+						Thanx, Paul
+
+> > I think we have to fix RCU tasks trace, one way or the other.
+> > 
+> > Or did I miss something?
+> > 
+> 
+> No I don't think so ;-)
+> 
+> Regards,
+> Boqun
+> 
+> > thanks,
+> > 
+> > --
+> > Joel Fernandes
+> > 
+> > 
+> > 
