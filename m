@@ -1,170 +1,227 @@
-Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011005.outbound.protection.outlook.com [52.101.57.5])
+Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A6801DE4E0;
-	Fri, 20 Mar 2026 19:19:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.57.5
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774034345; cv=fail; b=L4KPrHpw2UYSE6FNteLU7tcIuJFmFrY88zsxrH6sje9Ko4n5+BZ52FzhgkQSDB42zwBYDfgsAYd9d9Fj71XdAeO0tbV+uLC4pfevVlAUGAP39IhS5UJ6exRKC2bCU+6FVPWoIMCmyGH3WLiVug5aV4T8eItzR7HZmmjtBoDHm3I=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774034345; c=relaxed/simple;
-	bh=QVGOscjTI9U6kOf85nDf6KUHPzezXIUCgp4Ael6kblo=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Pjli2irL92cNWO0Ss4hbKAFLAvVGnjspS27YWVEa3hr3OvZu7T18WT5U/qiibcskkJ5yQZrtKbH6mz0lCPisWT/A8SNDWzkFfosDEovCoPfTM3lwI3jkYwv+GhiwzX2L86E2i114XBIYzvKVTCfEYAnVEX6FHidFu+Nu3mnKllc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=qXReC1V8; arc=fail smtp.client-ip=52.101.57.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95C4534B197
+	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 19:21:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774034473; cv=none; b=MZhTltxdLzgy2nRkozNsySfOvryrMvqjMicC8EC1zhVe7Erzc7zyvW26+a8iyEEP9JWGAGvfbD9z+Qy3Zo6Wv5i6TzNChRa4mRW4+BAtFfJMYVBfsaJKlBz8zEQKVFtWSllFyzdKPTX/APEixvK++WpZ/Y5aRsTURWA9l73jLKU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774034473; c=relaxed/simple;
+	bh=6lbdnYhKaJrIPRRybFLguCxpkqoV5KLS8rqotxuKGEc=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=FmatKH/qHcxBb7z7gLNUi/Qv7ucJj0kD/SB0335h/gYwH2FOnn8PwUfmRDQq+LH8tec+XEkOHU5/6ToSYBi2HOTbKLBeeWecyO7Vc69XbDZchln0eA7cqSPACs3YPUDc9QT6FfuU3VGjPGzXbA4kZMLZvocizQKTJwNb7l0mOHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MBc4BpSh; arc=none smtp.client-ip=95.215.58.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="qXReC1V8"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=twW1i8Z9uVqDex4Bm6cuJT6np5Las7AxXtevwRTHUMvU4g2Lsg0P/Xx9Ofzpqmb/600jnXfRV5pL6pbiKh0OhyUE4jXo3uOkmXEpND6fbInAi7H7rq1iBwUjui8WCDVB3HLQIBKEA0REl8sXn+TVGEf6R6P7d8lhgdIaCDc46o8dRf11vLvjB/gsm1rnF8S1wFsYeTDxYyH2vJrCKCiOf/G1BC21X+ElguYPgqAU4PHvMlryQ0p7qBEiERGdvkxhNuipT7ksUKtIbuHY79SS7kNZykLXK2AvTZuFzKlOUBM4NYqHl2K4G1K11OJeNyN25If8VO5vCdH/Y57EEQIR4w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zIw/cv1U220WnhssXnF9dYk4vm/DdkiGnAo9+IC4kkA=;
- b=dkzUwFviXNgUgagyU59ro/2Lrg20Y6T4jTgrFv7/+ZOG+CkcTSKwzc/vf3+TtvZIa8e7vFIXv0FzLXmGbLTKIVcLmI8bASBgFvdBMwdYsKJGA7y539DTGwZSlz2gt/1PXoDDr9uT8BNrXVOYV7qTapknNt/f10EDtr0rxFbDh25TwxP2a0HvwLbfj9WbuThOOgYnuHlcXIsH/HcACClYDQZqHwClu0gnQfEWeLyjfjk+ciNi+7X3oAdpbUANihwyqE4MX1a7DczA+U8tWz0An/So6wgGfU6kVZY6nN6Yb3hO1iBmqdvCwtY5lcDo92+2lDNOaDkXTVOkgeWPPF5LbQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zIw/cv1U220WnhssXnF9dYk4vm/DdkiGnAo9+IC4kkA=;
- b=qXReC1V8GUuqIorNlZs+uHnQQeMchBQ11F5rlEGruVd+f78/DuHi5ftFo3NBsiCvg7vLIKMoM8ocPh1xztdrO991awFRkzSTa4I3vEQO1Nexu0IO26e5xODpa6fwaMfE2v4ovw7tymSEV6gPL9OG6T6HbJAvaO2RFrMra60thg3/AwTQRPq+cQqm2IHlS6Ulb/9o/FsAu6c0IkTiOzjgOoWNyylFPKFjUQMTYruo/Jkt/l4NCdWyV5zOBtZJ6lxcJBCZPYH9pNWhFD5+at15TFRYZ0P/HT1iUiijzwA6xQrCjkPd5S6d4trM1R/QdaA6WxaltGNreH4Vop3ZlTqIcA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS0PR12MB6486.namprd12.prod.outlook.com (2603:10b6:8:c5::21) by
- PH7PR12MB9176.namprd12.prod.outlook.com (2603:10b6:510:2e9::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9745.9; Fri, 20 Mar 2026 19:18:59 +0000
-Received: from DS0PR12MB6486.namprd12.prod.outlook.com
- ([fe80::88a9:f314:c95f:8b33]) by DS0PR12MB6486.namprd12.prod.outlook.com
- ([fe80::88a9:f314:c95f:8b33%4]) with mapi id 15.20.9745.007; Fri, 20 Mar 2026
- 19:18:59 +0000
-Message-ID: <59f24a92-a738-4af0-beb3-c3ebb31c41bd@nvidia.com>
-Date: Fri, 20 Mar 2026 15:18:56 -0400
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] rcu: Use an intermediate irq_work to start process_srcu()
-To: Boqun Feng <boqun@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>, frederic@kernel.org,
- neeraj.iitr10@gmail.com, urezki@gmail.com, boqun.feng@gmail.com,
- rcu@vger.kernel.org, Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>, Andrea Righi <arighi@nvidia.com>,
- Zqiang <qiang.zhang@linux.dev>
-References: <2d9e7e42-8667-4880-9708-b81a82443809@nvidia.com>
- <20260320181400.15909-1-boqun@kernel.org>
-Content-Language: en-US
-From: Joel Fernandes <joelagnelf@nvidia.com>
-In-Reply-To: <20260320181400.15909-1-boqun@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN0PR03CA0026.namprd03.prod.outlook.com
- (2603:10b6:208:52f::23) To DS0PR12MB6486.namprd12.prod.outlook.com
- (2603:10b6:8:c5::21)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MBc4BpSh"
+Message-ID: <a212e256-234d-4320-be8d-3ddfcc2aa2e3@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774034459;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dfuH1OveVlpiqTGy/rrT1hG/JG7Ua/DjJ9BpDAgo8C0=;
+	b=MBc4BpShTZmq4mPtjDKoyD48xUC85lTfU5qLpKau7nazLrBsEvS6d8MUXE/FTpGAsVBQsO
+	hjI3MefnkJcPX8xOAP7PMAGsF17DpL1ETNpVp8PHnQiiN0J+XB59REsDRgZTK4o/ClMfoD
+	zoP+8AOF3XuN5doI3nyOz1bCANiAIOQ=
+Date: Fri, 20 Mar 2026 12:20:47 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR12MB6486:EE_|PH7PR12MB9176:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9977c3bc-1a48-48da-1b74-08de86b589bc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|1800799024|366016|18002099003|7053199007|56012099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	26C5FLWT8m64ax6NVmlfw70GZdwhDtLSGcgVvAxC4I9xCgUHCr/sRdWQJXKbihkXWRKAU0/Zto1oZ2WnFdJ/4phIzBB6itL0gr2OBQ/WnvO9t8+6fb3g1yysCUG1F4iGmyVwP3H/MWRPYRL4yV78mAj2qj6+72z9b8qgyuXgDZ1HaSu4qDFdzoJ78/jo6WKFDxI098n2BdTXZhZH+4xRb5nm+12NRUNqswco1OkIHexgMgLWF0a+7C5wNCfof1ckgca+2LY/dPIZhSiuHlBAGC3de9gHbv2aDNmImeq37EWHztsSPhsVD47gbv94qpJyaLDxMa/apB9Y1d9VcDF3EeLe7PH6YB6oBlFkXRa61tlk2RJVIASRHQulhjIgKbYsmj/8ppHyx9D0lFpvesKPx4D41n8Q1uTV6+usv1TGUQTYmbEuz4hz5n7NxXyqsF3ykCvsUNyVVOe+xp9UQIDPuFxY3BVBY1onvSv5kB4l3dE+dJjue2KzvMnQ5ApdHHKAy+jvdYlYHLt4fqQyp8eDnNE7byE0AmkgVKK2/YEPwwu3POKothx7mnF0yk4Wsnm34hwwA+qO4JnUbYf/oKRYR2qlMZilof1QVu6StVtfNdIJrcbi4TlhI2s13dcZb5D0MeBZ+8ko/FaDNLlQVBxKv2OJHeyE3zDecbbCG5k27pk6503OKK2W35q8Xj6uF3DZk++z5gSuY2QCwt7sbd2ur97w0l5QhSX4qQPKunm60B0rZilt+Uhf06C3hLN7ErM7
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB6486.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(18002099003)(7053199007)(56012099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?QkUxMSt0eUI0Q2hkR0tIQzFVWCs2ZThZZnRUNnRxVzJHbzMwVVBmeDM1Nkw4?=
- =?utf-8?B?SjBlTDlNQi9vUDBRZDVxYWgzOHRvT3JsQ3pOWXBSMmhxTHpYcmszOVhXVS81?=
- =?utf-8?B?TGszaVg4RWpsMmtDMzhlT1RwUUEwNDBhcDNLQ0NVekYwd20zMHFCaHhNMW9v?=
- =?utf-8?B?d0ZJcmhzWndMc1RHUlJ2bVhPVFVibWoyL2dZMXU5U2R0TldpOWZtR09RWU5n?=
- =?utf-8?B?RGd6NVYyQlBVRmtya2xNbVZGbTNLMUthY3FZclUrVGVpMVJxTWVCL0FJYkJj?=
- =?utf-8?B?OU85WE5nVWdmSzFLQS9KZTN5eUVEM0d2UWM1ZDNQK0MrS1BNRTBxMUxjaXpH?=
- =?utf-8?B?WEY3eHI2MVU3TmxDMVBwN20wcnNnQXpIa2RIMXNIdjNRQ0xzN3pPTGNNVGth?=
- =?utf-8?B?L2ZjZ3diYk5CTFZqQ2phYXMxOGp6RVRDZUI0aGsrL1BmazlQbFYzQ0xNK0Ir?=
- =?utf-8?B?eWFxTDMwMTAzWGFENmNZZjF6ZFNNZ2NmSGV1WG41cnkxYzhHUSt1a0pzVStz?=
- =?utf-8?B?WFhtWmJ5d1ZDV1VNcWlBb2pURkdjWjd1eEJSYkpxTFNsb2ZUQm1STlgvM1N5?=
- =?utf-8?B?Y2huaS9RREZDOUtBUEVSYituY2ZMVGwyNFRQbHNjK2FhSlJ1RjArVkkrdkxq?=
- =?utf-8?B?TFZpRjhOWWg5M1NabWIycTJLVisxQXRPVTFhWG16S0lKVmpvUmRPYnhLYWtx?=
- =?utf-8?B?R1dtZzFYN3dRMjc5UjUzaW84eEhPL2VIc3Y0bnFnVzlhT1F5Z1lNZDA1bExr?=
- =?utf-8?B?RTNwL1A2d2ZuNklYeW9WQVNBamczekRVS1g4VFRSb1VDeGVpcU5MRVlHSWd2?=
- =?utf-8?B?MFFEa0JQR2Y3UVF3SVB3amlQOXdYL0xUajZZMjhlZ3F2aVBENHFmaGpUVzBV?=
- =?utf-8?B?UEt3eVVtcUVnTVYxa0cwVlArRXN3ZnhvQ2NiNDdhNDRvbXRMY24yQXQwUzRp?=
- =?utf-8?B?MVJBUlcyb0thQ2RrM1dzNVpJeU9CbjJrczB4QVdPT2g2amZUY3o4V2ZJbjVM?=
- =?utf-8?B?aTZGWUJlTGJBT1J4T3pUUFRIbm9CeFpLSGN4RWVCbEpQdERHVXQ0ei9vMW14?=
- =?utf-8?B?R0psbmtTVktFOWk1bW1SbHhmWkFWdmxGcmlqTk9NT1ZlT1NZSUtUNDlCT0I1?=
- =?utf-8?B?d2hJVldkY1JaYndXZ1p2cHpRTzQ1UWZMYTZZZXJvL3BJZXl3MWZoT2QyajRm?=
- =?utf-8?B?RWxWY3BUdmZtanhNVnU1RDFkOG1XNjc2Tmo2bEZibU5tMWc4c3BMZ0lxQWdq?=
- =?utf-8?B?Zi9lODFzUTkvMUw3bkdUcHVvNXNlVTZxbkowWG5UTVlFRlMxV3FtMU03NHV3?=
- =?utf-8?B?UXhrQVFNekF0ZHdGQXo3VDJaU3doOHlreHBOeS9Nb3dQcjBDWHVRdkNJMmtq?=
- =?utf-8?B?ZVB4TDdCY000SDVsY2daRldYMTM4VWljUmtENFBjKy85QUtSOExDWUJrUUoy?=
- =?utf-8?B?N1haNm9taHRFYlNac0hkOWVUMk5LNDkycm5RTkhZRVB0ODQzdDNLWmE3Uk5M?=
- =?utf-8?B?WkY3UU5ma3BLR1EycVNZS1Y4MEF6ekZnbVB4Yjg1bW8vdVB6SjEwd2RldFdW?=
- =?utf-8?B?VlNkTFRCL0tJOWUxcVBQQ0hVSjRmRlB0NnFVdW9qZ2lPR1dSNlVtWm5uUm1a?=
- =?utf-8?B?NFQyOWlUcmxmUWNxaDZ1eDlSWHFzTVdNYVB5ZElVTHloa2JWN080dTlML3BQ?=
- =?utf-8?B?WUNsY1pVSzZWdEUwUEtzMFBINnVyZldJWWUxcWp1eE9SS0pJb1JmNW91K2Mz?=
- =?utf-8?B?YzBMN2haRVAyYXdCaTNBdjR1RnlOOHRVc3g4TUMwc0NlR0tuck1pVFNqaFh5?=
- =?utf-8?B?MVo5VFhjSXZrNWtHM0RDeXNtWnlUVThOTHB3SVdDL3lnc3hHUmVPSTExMEFz?=
- =?utf-8?B?cktUWDFQcnllcWExU21SV2xRbFJLcEEwaEp6VEI1QzJoKzAzQmJwNENiS1Bt?=
- =?utf-8?B?cjdrN0JZWmV4dnpLeWhWaDhYK3NvamRMMVoybWF5VThlbWg1WjY5UUdBOXE5?=
- =?utf-8?B?REJFbDdTWlJ4eEZidm9hMkFHK2lGNEtiOHlHREMyNSt5SmVUY25ReVdsVXBu?=
- =?utf-8?B?TzVGd0dKZ1RCd0dtMGxYWFRuRFQ0UFZacW9Sc2dlRThTS0ljaGNHWEZrSUor?=
- =?utf-8?B?aUR0VGV4SVdVYkNpUjFsYUdQZUVYY0dtcXpTMnhGUS9Dak9LUVg2TTN0dVJS?=
- =?utf-8?B?YXFhREpFUDJiQUxkM01RVDUxU3kzQjVGV3IyOWxSbE1pZENXQjNNeXZTZDJZ?=
- =?utf-8?B?c1dqUllCWkd3c3pGZzlBZDhtQk1MUjloSDJNYi8xYUtWMFNkMkxxVGQ3cTNN?=
- =?utf-8?B?WFpRenc3dnJkVEEzTng0Nmk1STBndkhyTWU5OWh2cm9mdkZLRlhmQT09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9977c3bc-1a48-48da-1b74-08de86b589bc
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB6486.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2026 19:18:59.3174
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zg0BiN+eWZvigKu5q6oNPLR9yqdrBgFaLJeEF6kQC6h0Npbp9HzMb174Pvt1vPafhQcoJ5r/C8sD1aUMSDG9PQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB9176
+Subject: Re: [PATCH dwarves 2/9] dwarf_loader: Handle signatures with dead
+ arguments
+Content-Language: en-GB
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+To: Alan Maguire <alan.maguire@oracle.com>,
+ Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ bpf@vger.kernel.org, kernel-team@fb.com
+References: <20260305225455.1151066-1-yonghong.song@linux.dev>
+ <20260305225506.1153181-1-yonghong.song@linux.dev>
+ <b20663a4-957d-4bb0-bf2c-4921da446514@oracle.com>
+ <cc592002-b65b-4ec2-bc99-8a53ca221bbd@linux.dev>
+In-Reply-To: <cc592002-b65b-4ec2-bc99-8a53ca221bbd@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
 
 
-On 3/20/2026 2:14 PM, Boqun Feng wrote:
-> Since commit c27cea4416a3 ("rcu: Re-implement RCU Tasks Trace in terms
-> of SRCU-fast") we switched to SRCU in BPF. However as BPF instrument can
-> happen basically everywhere (including where a scheduler lock is held),
-> call_srcu() now needs to avoid acquiring scheduler lock because
-> otherwise it could cause deadlock [1]. Fix this by following what the
-> previous RCU Tasks Trace did: using an irq_work to delay the queuing of
-> the work to start process_srcu().
-> 
-> [boqun: Apply Joel's feedback]
-> 
-> Reported-by: Andrea Righi <arighi@nvidia.com>
-> Closes: https://lore.kernel.org/all/abjzvz_tL_siV17s@gpd4/
-> Fixes: commit c27cea4416a3 ("rcu: Re-implement RCU Tasks Trace in terms of SRCU-fast")
-> Link: https://lore.kernel.org/rcu/3c4c5a29-24ea-492d-aeee-e0d9605b4183@nvidia.com/ [1]
-> Suggested-by: Zqiang <qiang.zhang@linux.dev>
-> Signed-off-by: Boqun Feng <boqun@kernel.org>
-> ---
-> @Zqiang, I put your name as Suggested-by because you proposed the same
-> idea, let me know if you rather not have it.
-> 
-> @Joel, I did two updates (including your test feedback, other one is
-> call irq_work_sync() when we clean the srcu_struct), please give it a
-> try.
+On 3/19/26 10:00 PM, Yonghong Song wrote:
+>
+>
+> On 3/19/26 11:55 AM, Alan Maguire wrote:
+>> On 05/03/2026 22:55, Yonghong Song wrote:
+>>> For llvm dwarf, the dead argument may be in the middle of
+>>> DW_TAG_subprogram. So we introduce skip_idx in order to
+>>> match expected registers properly.
+>>>
+>>> For example:
+>>>    0x00042897:   DW_TAG_subprogram
+>>>                    DW_AT_name      ("create_dev")
+>>>                    DW_AT_calling_convention (DW_CC_nocall)
+>>>                    DW_AT_type      (0x0002429a "int")
+>>>                    ...
+>>>
+>>>    0x000428ab:     DW_TAG_formal_parameter
+>>>                      DW_AT_name    ("name")
+>>>                      DW_AT_type    (0x000242ed "char *")
+>>>                      ...
+>>>
+>>>    0x000428b5:     DW_TAG_formal_parameter
+>>>                      DW_AT_location        (indexed (0x3f) loclist = 
+>>> 0x000027f8:
+>>>                         [0xffffffff87681370, 0xffffffff8768137a): 
+>>> DW_OP_reg5 RDI
+>>>                         [0xffffffff8768137a, 0xffffffff87681392): 
+>>> DW_OP_reg3 RBX
+>>>                         [0xffffffff87681392, 0xffffffff876813ae): 
+>>> DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value)
+>>>                      DW_AT_name    ("dev")
+>>>                      DW_AT_type    (0x00026859 "dev_t")
+>>>                      ...
+>>>
+>>> With skip_idx, we can identify that the second original argument
+>>> 'dev' becomes the first one after optimization.
+>>>
+>>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+>>> ---
+>>>   dwarf_loader.c | 27 +++++++++++++++++++++++----
+>>>   1 file changed, 23 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/dwarf_loader.c b/dwarf_loader.c
+>>> index 610b69e..1ced5e2 100644
+>>> --- a/dwarf_loader.c
+>>> +++ b/dwarf_loader.c
+>>> @@ -1192,6 +1192,7 @@ static ptrdiff_t 
+>>> __dwarf_getlocations(Dwarf_Attribute *attr,
+>>>     struct func_info {
+>>>       bool signature_changed;
+>>> +    int skip_idx;
+>>>   };
+>>>     /* For DW_AT_location 'attr':
+>>> @@ -1264,13 +1265,28 @@ static struct parameter 
+>>> *parameter__new(Dwarf_Die *die, struct cu *cu,
+>>>       if (parm != NULL) {
+>>>           bool has_const_value;
+>>>           Dwarf_Attribute attr;
+>>> +        int reg_idx;
+>>>             tag__init(&parm->tag, cu, die);
+>>>           parm->name = attr_string(die, DW_AT_name, conf);
+>>>           parm->idx = param_idx;
+>>> -        if (param_idx >= cu->nr_register_params || param_idx < 0)
+>>> +        if (param_idx < 0)
+>>>               return parm;
+>>> -        if (cu->producer_clang && !info->signature_changed)
+>>> +        if (!cu->producer_clang && param_idx >= 
+>>> cu->nr_register_params)
+>>> +            return parm;
+>>> +        if (cu->producer_clang) {
+>>> +            if (!info->signature_changed)
+>>> +                return parm;
+>>> +            /* if true_signature is not enabled, mark parameter as
+>>> +             * unexpected_reg since there is a skipped parameter 
+>>> before.
+>>> +             */
+>>> +            if (!conf->true_signature && info->skip_idx) {
+>>> +                parm->unexpected_reg = 1;
+>>> +                return parm;
+>>> +            }
+>>> +        }
+>>> +        reg_idx = param_idx - info->skip_idx;
+>>> +        if (reg_idx >= cu->nr_register_params)
+>>>               return parm;
+>>>           /* Parameters which use DW_AT_abstract_origin to point at
+>>>            * the original parameter definition (with no name in the 
+>>> DIE)
+>>> @@ -1309,7 +1325,7 @@ static struct parameter 
+>>> *parameter__new(Dwarf_Die *die, struct cu *cu,
+>>>           parm->has_loc = dwarf_attr(die, DW_AT_location, &attr) != 
+>>> NULL;
+>>>             if (parm->has_loc) {
+>>> -            int expected_reg = cu->register_params[param_idx];
+>>> +            int expected_reg = cu->register_params[reg_idx];
+>>>               int actual_reg = parameter__reg(&attr, expected_reg);
+>>>                 if (actual_reg < 0)
+>>> @@ -1322,8 +1338,11 @@ static struct parameter 
+>>> *parameter__new(Dwarf_Die *die, struct cu *cu,
+>>>                    * contents.
+>>>                    */
+>>>                   parm->unexpected_reg = 1;
+>>> -        } else if (has_const_value) {
+>>> +        } else if (!cu->producer_clang && has_const_value) {
+>>> +            parm->optimized = 1;
+>>> +        } else if (cu->producer_clang) {
+>>>               parm->optimized = 1;
+>>> +            info->skip_idx++;
+>>>           }
+>>>       }
+>> In [1]  (dwarf_loader/btf_encoder: Detect reordered parameters)
+>>
+>> we detect reordered/missing parameters for gcc by comparing abstract 
+>> origin to concrete representation
+>> and mark any such functions by setting the reordered_parm bitfield in 
+>> the encoder func state. In this
+>> approach reordered encompasses both missing and actual reordering; in 
+>> practice it's always the former, but
+>> the DWARF representation was confusing because it had the 
+>> actually-used parameters (with location info)
+>> followed by the unused ones (without location info). Before the above 
+>> commit we were treating these
+>> function signatures incorrectly as valid leading to wrong functions 
+>> signatures.
+>>
+>> All of this is to say: should we mark with reordered_parm instead? 
+>> The reason I suggest this is that
+>> btf_encoder__save_func() has handling for skipping functions without 
+>> locations with reordered_parm set;
+>> maybe we could find a way to unify that across clang/gcc cases?
+>
+> For v2, I focused on clang side. I have not studied such unification 
+> yet. I think it is possible
+> since ultimately both clang and gcc tries to skip some parameters.
+>
+>>
+>> Now in the clang case, I guess reordered is a poor description; for 
+>> gcc it really means "reordered as
+>> compared to abstract origin". If we could find a better way to 
+>> describe/encompass both cases that would
+>> be ideal I think. The terminology used in the gcc true signature code 
+>> isn't great today.
+>
+> Agree that we want *common* names to represent both gcc and clang for 
+> skipped parameters.
+> BTW, please review v2 instead:
+> https://lore.kernel.org/bpf/20260309153215.1917033-1-yonghong.song@linux.dev/ 
+>
 
-Thanks Boqun, I applied it for testing further. It would be good if Andrea and
-Kumar can try this patch as well to confirm that the BPF issues are gone.
+Jiri, Alan,
 
-thanks,
+Thanks for the previous review. I just updated with v3:
 
---
-Joel Fernandes
+   https://lore.kernel.org/bpf/20260320190917.1970524-1-yonghong.song@linux.dev/
+
+which addressed the issue to simplify getting cu->producer_clang, rewrite tests
+based on latest convention, and try to use info->signature_changed instead of cu->producer_clang
+to avoid clear separation between gcc and clang.
+
+Please review v3.
+
+Thanks!
+
+>
+> Thanks!
+>
+>>
+>> [1] 
+>> https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?id=109e5e4554f663e5f12fb634bc54cceb710aec61
+>
+>
 
