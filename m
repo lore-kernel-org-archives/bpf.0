@@ -1,102 +1,103 @@
-Received: from mail-wm1-f68.google.com (mail-wm1-f68.google.com [209.85.128.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8465727B32C
-	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 02:41:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 767632DC76D
+	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 03:27:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773974492; cv=none; b=ByrNm2ynV9O5wuNtpPjdoaz8gzQVx08LSyHTilAlG+Yhr11NMvMZgdn601BXqwbVmiXIimWWLbHBOvMw9izGnvs3UmCjuj5Pd9OGzsRC2FY1PEafVLIeKxz0a459fdUUaqxxM9xS1n8IwRoce2rhMPpLm+tu3cHQhASd7cky45M=
+	t=1773977262; cv=none; b=mUYRWaGM2i4y/obIPqleoGiDgFhZS0HttMmi1WkFFErNX9q266k3Qg0/444Rvqi0EDiFeBjYoRzXVo/O8p9xB19JUPLkb737o9J4Wx6AoFWDydf4778O6iGW5dNVvV8jG+wcdD1njN5ZUhblew+0WkPOoluLcEYDuT09EI1+PWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773974492; c=relaxed/simple;
-	bh=gx39cXvKf6XMjyeYPfkYwFWnZEfzQCZYY5Fl2/L3sR4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=eFFNlAcf6pzQg4VEw+0xSQNkXL1r41E1Op36d1nUvcvUDlvpT2u3j/Dy8vfv5dqV7LBrwV8zjJQb6QmcozxgNygmYzMVIZfvRbOwcEwi9ePIwtkf/wAnG8qFtfctlC7bYEx8noF9/kuP4JQNQcxX2zukxLGPU0FFjl6BfEZsyfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B0pXYUYZ; arc=none smtp.client-ip=209.85.128.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773977262; c=relaxed/simple;
+	bh=qXz0Pgas60ZAPaaRyDGLcOVaC/mBvadZ7GzHjeKYWKo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lAwuuQE26vAG0Nn6mkLfvH4O/ku8u2WIQV2dlMcoczqFex6k2hwqOuhmA06nmA4h7WukbZigVNsdM++7u9BRt5ZvGCQnUHj/LYf3p630D+yAwI5zmWXIpmOHYf+QW0eZFgULXirklVfItqYk3mA5GXqMRwCPzLOu5SE9HcTWPv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m6Vr6nZs; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B0pXYUYZ"
-Received: by mail-wm1-f68.google.com with SMTP id 5b1f17b1804b1-486fd3a577eso1013505e9.1
-        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 19:41:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773974490; x=1774579290; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hA380pCFY/heFJYh+oChUrDKsjPjqMAgTd7ssSWj/lA=;
-        b=B0pXYUYZHn2lpMNyMxrr98KJgzTLZ1lrdrurpNXLcDpA61uOScy5TbfFlwAq7cEmtG
-         3NrASE/i1i2VATLZN5Tw/aAcnVUxwVtasg3PNKHGgllDacoEwiSMGabsypcMjbuIAFoM
-         vXw4WB+7TFjMZZ9JAwvvNrNO7Lnq/Vo/YSijzoNfg2zwm6RDVrWbLs0w7kyGy02G2wUl
-         vfH2f1yiEYlTVyuXxeuaYd5o8hJ325auK3PlqZfZvKb+XeL20UuT85OX0O4S/ypAi+Uq
-         ybJA0+dOzYw+Cd5hCWwZ0VEo0dPF/6EJL0DxeX1PXQ1BCWCzWgFvlBm3tTRVcT55eZ7f
-         DsDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773974490; x=1774579290;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=hA380pCFY/heFJYh+oChUrDKsjPjqMAgTd7ssSWj/lA=;
-        b=k6GuN0sUlmL862zRV0vjQKi2u6PFtw6AmhD4A7ptG8J0PPcacGBbqdHUQA+FMcPbuy
-         k0s+R9N/SPVn3wQdidDR0lYXWaF0Mzk+kN/0t8+TC2g02oRC9nx0mG1Fo2tWQ7k3uAUc
-         uXnLnqPZNEL/FYiyBVSC7O1gENEQYzkB7wWalARFkhVt78iP8sufuuF6Ryoui+N0qaZH
-         f2RHubWpoQXHeRc5I9ekAYT61xKYtcJQpSjFCuF94Sl4VMw+a0zcWagvn3hnJBCczIZ4
-         jUBXkSfxmjoLeUEMuNy4b/cJoyDY/j2T6mTGCIlu56Zjwb14G7zL6DPf97fAbZmckcGo
-         9X1w==
-X-Gm-Message-State: AOJu0YzUguNhiHxGuXofcbDBFFh03FIWaoDJA8i+MVzV+J409eYSRdIJ
-	aIOwz6LHDef3d++NdHQpqXeZVkSxfArlNu8kCOgQuK8W5S1zclvmJFP1
-X-Gm-Gg: ATEYQzxAK2TBMUbbRWbV1i7CSWenRuQlZYyfgUkOIo/Md4JVy6F5eFla6JYMTCLIYgl
-	6N/vN67DLwobFDl2uV/lea6wu6eztAsfNuupvYDoPWL7mJu4i6Tnw8NwITx7tOoX1e5Mr+1Rrni
-	9lRMHzAxi4hlkS3b8ro/nrXyfm8gVG/UZQUTPsNS8aKUj/hXWoGiEqp4mumq3Ug0B8g99lL9sGL
-	XwUKbyS9QTYKtSBDEPs66jFAWWIz/AnymUYx12/7r013TTpin9wvciFcAOscVtyflzzFfyI5lAS
-	VdPs9GmszScd4N05PGrbOES7mJ3Ck3pbWdM/pKvGs09T50M28ffgV8CVo8YEbW4I0nDef2EHiNK
-	aWHozUy1bfQVNveKix/AlOUUHjIii1wyd45buwK7ToIHO2FyTVtqXErFj0CVFXNPlavjeJkXmAA
-	KCXFQ+EBjpu7bvcworPn0A7LvSU6Hx8dJLR1rgNSkbD6JtUwF6nA==
-X-Received: by 2002:a05:600c:c111:b0:485:35ee:f836 with SMTP id 5b1f17b1804b1-486febbc310mr13756255e9.2.1773974489489;
-        Thu, 19 Mar 2026 19:41:29 -0700 (PDT)
-Received: from lima-ubuntu.hz.ali.com ([47.246.98.210])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b644ae016sm2416039f8f.4.2026.03.19.19.41.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2026 19:41:28 -0700 (PDT)
-From: Qing Wang <wangqing7171@gmail.com>
-To: syzbot+ca51b6e7e751edd6bbfd@syzkaller.appspotmail.com,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	syzkaller-bugs@googlegroups.com
-Subject: [syzbot] [bpf?] [trace?] KASAN: slab-use-after-free Read in bpf_trace_run4 (2)
-Date: Fri, 20 Mar 2026 10:41:16 +0800
-Message-Id: <20260320024116.3421185-1-wangqing7171@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <69bc31f8.050a0220.18f14c.0051.GAE@google.com>
-References: <69bc31f8.050a0220.18f14c.0051.GAE@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m6Vr6nZs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35E8EC19425
+	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 03:27:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773977262;
+	bh=qXz0Pgas60ZAPaaRyDGLcOVaC/mBvadZ7GzHjeKYWKo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=m6Vr6nZsRp1eUogdXgBW71G65aHLYPs7abrHqhk77GT+LU5gbD4HM8b0uTZzzbnUC
+	 Cd46hG9ap/OacRpS7hxyX8z00NrorbXXiXjQ4qW4DgmqQtNsyZN7mX4ASxDs8U/PwM
+	 Ylo8FRtna/AHfV4sZcK1XxaVb9H6xWRGn2qCvoa/UkTCI0CMNnZIOdj7qFatO7RYD9
+	 AsZTKgj3aZtV8CjEHun++ubo8GDnKCI5Bkn1KOk3g/BYNYCQ+y1/Iwkcpdkq7JRF0z
+	 2P8t+jKRHcvv9h+wv0IxZ6o/ekphFExL51G0Vhw8YhKG24WeWVfE7+KFiv3d/+4Hn6
+	 eqaGvTkUJnDww==
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b97e6e48b24so32329866b.2
+        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 20:27:42 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWFmTRwq6dZ+EO//cWdUopDpPFUVDmAsNtKQSiZmmfUgzWjLO940XhoF3wOr5PWM1GKkgc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxO2BYDxfFuPpvwTz32sgWdiDwJecJVsLkzFbPwXPfkQSKtK5+1
+	r2A90pZ+evDh7SOdeTw6FUaY8eZRJG5KsjJGssTVzkdGe8PdgEF/kvuRu4Y2VUOprIuAD/WnklW
+	YUdDNIFyfIYNvlD04pqP8BQkWo9dvjbk=
+X-Received: by 2002:a17:906:2554:b0:b98:1e:6642 with SMTP id
+ a640c23a62f3a-b982f3e2c7cmr82421266b.45.1773977260691; Thu, 19 Mar 2026
+ 20:27:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260310064706.4985-1-yangtiezhu@loongson.cn> <177395545307.1805592.472462208613814092.git-patchwork-notify@kernel.org>
+In-Reply-To: <177395545307.1805592.472462208613814092.git-patchwork-notify@kernel.org>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Fri, 20 Mar 2026 11:27:34 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6m4959xs9tYw7MhZFtarvpAFk8xRub7D9W5eycJ+67hg@mail.gmail.com>
+X-Gm-Features: AaiRm5391JWnSRNoPmaJO6MbrAe8WXd12FKAPPaVO21zvfiu8HcpMI2r9nwJAkQ
+Message-ID: <CAAhV-H6m4959xs9tYw7MhZFtarvpAFk8xRub7D9W5eycJ+67hg@mail.gmail.com>
+Subject: Re: [PATCH v1] LoongArch: BPF: Make arch_protect_bpf_trampoline()
+ return 0
+To: patchwork-bot+netdevbpf@kernel.org
+Cc: Tiezhu Yang <yangtiezhu@loongson.cn>, hengqi.chen@gmail.com, 
+	loongarch@lists.linux.dev, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-There was a fix patch [1] for this issue, and it is the same as syz-AI's
-analysis.
- [1] https://lore.kernel.org/all/20260304092345.233522-1-wangqing7171@gmail.com/T/
+On Fri, Mar 20, 2026 at 5:24=E2=80=AFAM <patchwork-bot+netdevbpf@kernel.org=
+> wrote:
+>
+> Hello:
+>
+> This patch was applied to netdev/net.git (main)
+> by Huacai Chen <chenhuacai@loongson.cn>:
+Emmm, this patch has already been upstream...
 
-Some similar issues which have syz reproducer:
-  https://syzkaller.appspot.com/bug?extid=9ea7c90be2b24e189592
-  https://syzkaller.appspot.com/bug?extid=b4c5ad098c821bf8d8bc
+Huacai
 
-Welcome to review and comment this patch.
---
-Qing
+>
+> On Tue, 10 Mar 2026 14:47:06 +0800 you wrote:
+> > Occasionally, there exists "text_copy_cb: operation failed" when execut=
+ing
+> > bpf selftests, the reason is copy_to_kernel_nofault() failed and the ec=
+ode
+> > of estat register is 0x4 (PME: Page Modification Exception) due to the =
+pte
+> > is not writeable, the root cause is that there is another place to set =
+pte
+> > readonly which is in the generic weak arch_protect_bpf_trampoline().
+> >
+> > There are two ways to fix this race condition issue, the direct way is =
+to
+> > modify the generic weak arch_protect_bpf_trampoline() to add a mutex lo=
+ck
+> > for set_memory_rox(), but the other simple and proper way is to just ma=
+ke
+> > arch_protect_bpf_trampoline() return 0 in the arch-specific code becaus=
+e
+> > LoongArch already uses BPF prog pack allocator for trampoline.
+> >
+> > [...]
+>
+> Here is the summary with links:
+>   - [v1] LoongArch: BPF: Make arch_protect_bpf_trampoline() return 0
+>     https://git.kernel.org/netdev/net/c/b254c629a963
+>
+> You are awesome, thank you!
+> --
+> Deet-doot-dot, I am a bot.
+> https://korg.docs.kernel.org/patchwork/pwbot.html
+>
+>
