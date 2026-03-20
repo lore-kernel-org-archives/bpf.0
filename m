@@ -1,119 +1,141 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1197B35DA7F
-	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 08:37:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F56C35DA7F;
+	Fri, 20 Mar 2026 08:38:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773995830; cv=none; b=q3q+nk8QMkpXNNWBbg/i1JhGjybERnKcD2MjLetqXnQ2m2NxftJCu8h9Wxgj7jjFArMdWs9yAZuZCNlwtTnZQXdb6gbn945aHY7Hk38bT5p3Dxo+VVVvVDovD8GvogD6lUcZnpAsovpLu2F1utsRAqOW8brTaVCOCvsybTXC4b0=
+	t=1773995884; cv=none; b=S6nZjicf21+wROFZcttsMTsTWe9/+PJW00wC7v3kclog7D8wAwUL9OHAdUXzE193aL1diScONIWaVQAYUaIGemf9RHRNPMSitjgKqQfTiZpbnnLcEmqPn/PP2I/XUw+DdSBDX2VJ2QNBA3SmOfoHmIeb2RRuVOhbEXO5+xSZTw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773995830; c=relaxed/simple;
-	bh=aubSRWOk/G5nMShy731v1i3p/4qj70+D9lPp6TThzE0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=fMBC4kaRbcv7jD1b08DhILw2LV1Jc5nPLiwI8m2upCuZ8C1zVBNe/GVV0fhub+FN2JY0OltlXdS5Bl9ez9mp1WFla8LdvXEJBWKlrN+BbqCIe4FcK+IszAwKjwuN3+WAtpsiImKHpw/QNPtwhrCwaVMlqN+uSo9jif0ddEsuD5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JLH5jDLZ; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1773995884; c=relaxed/simple;
+	bh=2ma3ORZNACZft+/pI7EGr8Q5I+T4PcVGkvNkEW4hRXg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=KP2m44gZvBa9pXwEy4nERU+QQpFqhq7DwFWqRwfhHXJbxhUWkQByG7xDzKFOL4Ux7fuM2jow7zF3nkb8SA+47Yc7n3/V6Rkugg3QRcXKOKXnTybpRZUdXI23awvcwFZMD4r2dvkZ7ok64fyZ2qbEznV1Bs/HSrkDV5W2JnEp9EE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=onR4zv/j; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JLH5jDLZ"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-439cd6b0aedso1089467f8f.1
-        for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 01:37:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1773995827; x=1774600627; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=751vzObume+CAZzdt7A8eq8P7pep03Yg0q+zRI38A24=;
-        b=JLH5jDLZ1IRjybWQaJ1FB9umfbpD6PKT4jijWjby3PjDjnJAkBHONXxgaK1oW14zsQ
-         aEQbTqfI0qUijWEuPYDxTtAZCimznOW6bE5y2gZpuLnSCSkfxTdI8SJRxumhGUxdxqTv
-         RDb4fULJs+URRWn1Zm7rb/HK9MWX/paD2x4k04sbrVCZcXP4gV/VwBPbNSIAnJiN5sWW
-         MBTCq7EGEd/i6CWk3R7wOvB38bKtozFvrwIeljf7esY5e7tcFZu9u3OVe7+WxgmKuu9F
-         EWHfJlP4siIJoCUrzKnUG7sEBool3gGpbO8sRTFo8Z/K8zsUUtRZVMqjg6qd/gVT4oEF
-         Mu1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773995827; x=1774600627;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=751vzObume+CAZzdt7A8eq8P7pep03Yg0q+zRI38A24=;
-        b=SZ00e1YYKrqZktbwR/MwWDqvzHdPbaEe7a6tqo2fRiqHKX3IqGHvF9sI7UczeWVdo+
-         W1qE7ZR9o2I5uPZUjLwqt4b7Qj82fzJV93MIOsHVspvCP1cvhELpkDDjKeq99bQ2aDia
-         v/2/xjFwTO5mei1t9aVunT2kKCsMdjznuEnyrTdmVmvNownyV6t0jzy5I5LTbqhnn9DZ
-         /N76/u+gbZmYKnYz1ajFHmvt50tUy95kgvPMXsNisE27VS+0UxESZ4fSnqahh9kaCVEw
-         r7JXpQVqqHSVA2+FYHbGBuL8AeaKQKEQoZdhIgFqxhTppbRQjQUJBWzA8pTb/gswY3kG
-         95Cg==
-X-Forwarded-Encrypted: i=1; AJvYcCU1Yt6m8F3gee+ckGxSSxzKGsLaHogwH0GWCNzDHv24JdLE5nDpOTLn020S/t6PFThNh2Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxZt6fHcno2L4h9MTArZ60+5JmX3Nm6KI+JGYNjuNbT4EvamoR
-	DFFFaq45gw7SuV3YFz9baIH3vFzQTIdbHzD7LLa11vvk6GRIWUn6ju5TPWjwrAfA6mk=
-X-Gm-Gg: ATEYQzx8Txg1fnWVd6NF78Asf1cKauslXzuXs1HAHAAllfeu/Ijb87rl8QfO7RaQ1EU
-	0NkuEgLivu4xK2pNnDfOOAXIggKtiQ9t84prnPejs2kHWdrslIx7mbLkgMgvwlNruh+SenVgWRW
-	OXwH7ZNVHDZLX6RvlgpEv04sflL+MCCIU1u2k1nQI3e2Qf3HtMwhG+lZZ4NAczaxO4O8LI6y0/g
-	nh4pw786vk+ehJ+QAEanvxM5vb+buOXj5Hp9uMXAqrzi4YTOFtBh8hYTj5onLEjiQ7M9MADFbPK
-	xfdCXAj/YtPGyRsGC/8VXihuQPzY+oAwkDYXnRv3RCZDx+H6DPHG1V5Z+qBfV5vMeIOlJDghSts
-	bVATChfvlP1fZDGcRWVH95NQClm2MW/3nUQXzm/as0YKlOO9nsZ4OFrM83dVH2K+ZKkPn2cf8YA
-	s635W3S67HPFyY0Lm7Rz22TKlRnBvZ
-X-Received: by 2002:a5d:5f53:0:b0:439:be04:13c4 with SMTP id ffacd0b85a97d-43b6423d85bmr3740008f8f.4.1773995827294;
-        Fri, 20 Mar 2026 01:37:07 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b64703343sm4288450f8f.19.2026.03.20.01.37.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Mar 2026 01:37:06 -0700 (PDT)
-Date: Fri, 20 Mar 2026 11:37:03 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: oe-kbuild@lists.linux.dev, Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>
-Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev, bpf@vger.kernel.org,
-	kernel-team@meta.com
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: Support struct btf_struct_meta via
- KF_IMPLICIT_ARGS
-Message-ID: <202603200410.ZnghNupo-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="onR4zv/j"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FFC2C4CEF7;
+	Fri, 20 Mar 2026 08:38:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773995883;
+	bh=2ma3ORZNACZft+/pI7EGr8Q5I+T4PcVGkvNkEW4hRXg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=onR4zv/jlEkOo72QUmh7HlHNwkkAfBJLaM6sgfT68ojLHLPIewZNNa0bVKZqpNXpP
+	 9VSI9opeu57kTsIN0231DCTbM6uHB3eVBdz7ZB64O5v+Tac5ytD//ZZUGGuHnZjxv2
+	 Hd87EGRwytNHo1S9p546n1Ode8vfbgWH8DV7L1VxzvcVziZlSR6yd0ky8+3DS7Q3d6
+	 q66U4r/DZ+CnGrUMwhrE+izhxZlCmGM54lzbRZyZulhlrnoG740Rvl7ZengNiq4ifE
+	 B10FjXRaitvEAzvNa0ha6hk96Y5YFNPAYesITercRG6s0U/toqot/CrAsw0VwPObnZ
+	 iS8FcYuPUqgBQ==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>, netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org, magnus.karlsson@intel.com, stfomichev@gmail.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ larysa.zaremba@intel.com, aleksander.lobakin@intel.com, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>
+Subject: Re: [PATCH v2 net 5/8] xsk: validate MTU against usable frame size
+ on bind
+In-Reply-To: <20260319175538.479139-6-maciej.fijalkowski@intel.com>
+References: <20260319175538.479139-1-maciej.fijalkowski@intel.com>
+ <20260319175538.479139-6-maciej.fijalkowski@intel.com>
+Date: Fri, 20 Mar 2026 09:38:00 +0100
+Message-ID: <87qzpeopzr.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260318223544.1789748-1-ihor.solodrai@linux.dev>
+Content-Type: text/plain
 
-Hi Ihor,
+Maciej Fijalkowski <maciej.fijalkowski@intel.com> writes:
 
-kernel test robot noticed the following build warnings:
+> AF_XDP bind currently accepts zero-copy pool configurations without
+> verifying that the device MTU fits into the usable frame space provided
+> by the UMEM chunk.
+>
+> This becomes a problem since we started to respect tailroom which is
+> subtracted from chunk_size (among with headroom). 2k chunk size might
+> not provide enough space for standard 1500 MTU, so let us catch such
+> settings at bind time.
+>
+> This prevents creating an already-invalid setup and complements the
+> MTU change restriction for devices with an attached XSK pool.
+>
+> Currently xp_assign_dev_shared() is missing XDP_USE_SG being propagated
+> to flags so set it in order to preserve mtu check that is supposed to be
+> done only when no multi-buffer setup is in picture.
+>
+> Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ihor-Solodrai/selftests-bpf-Update-kfuncs-using-btf_struct_meta-to-new-variants/20260319-070652
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20260318223544.1789748-1-ihor.solodrai%40linux.dev
-patch subject: [PATCH bpf-next v2 1/2] bpf: Support struct btf_struct_meta via KF_IMPLICIT_ARGS
-config: x86_64-randconfig-161-20260319 (https://download.01.org/0day-ci/archive/20260320/202603200410.ZnghNupo-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-smatch: v0.5.0-9004-gb810ac53
+Fixes tag?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-| Closes: https://lore.kernel.org/r/202603200410.ZnghNupo-lkp@intel.com/
+This got me thinking; Nothing in the xsk core prevents MTU from being
+changes while xsk is runing? Some drivers do! Not for this patch, but
+maybe xsk should listen to MTU notifiers?
 
-smatch warnings:
-kernel/bpf/verifier.c:12760 is_bpf_rbtree_add_kfunc() error: buffer overflow 'special_kfunc_list' 64 <= 64
+Seems like we're in a bind-time TOCTOU gap...
 
-vim +/special_kfunc_list +12760 kernel/bpf/verifier.c
+> ---
+>  net/xdp/xsk_buff_pool.c | 16 ++++++++++++++--
+>  1 file changed, 14 insertions(+), 2 deletions(-)
+>
+> diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+> index 37b7a68b89b3..e9377b05118b 100644
+> --- a/net/xdp/xsk_buff_pool.c
+> +++ b/net/xdp/xsk_buff_pool.c
+> @@ -157,6 +157,7 @@ static void xp_disable_drv_zc(struct xsk_buff_pool *pool)
+>  int xp_assign_dev(struct xsk_buff_pool *pool,
+>  		  struct net_device *netdev, u16 queue_id, u16 flags)
+>  {
+> +	bool mbuf = flags & XDP_USE_SG;
+>  	bool force_zc, force_copy;
+>  	struct netdev_bpf bpf;
+>  	int err = 0;
+> @@ -178,7 +179,7 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+>  	if (err)
+>  		return err;
+>  
+> -	if (flags & XDP_USE_SG)
+> +	if (mbuf)
+>  		pool->umem->flags |= XDP_UMEM_SG_FLAG;
+>  
+>  	if (flags & XDP_USE_NEED_WAKEUP)
+> @@ -200,10 +201,18 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+>  		goto err_unreg_pool;
+>  	}
+>  
+> -	if (netdev->xdp_zc_max_segs == 1 && (flags & XDP_USE_SG)) {
+> +	if (netdev->xdp_zc_max_segs == 1 && mbuf) {
+>  		err = -EOPNOTSUPP;
+>  		goto err_unreg_pool;
+>  	}
+> +#define ETH_PAD_LEN (ETH_HLEN + 2 * VLAN_HLEN  + ETH_FCS_LEN)
 
-3700d7c829341d Ihor Solodrai   2026-03-18  12758  static bool is_bpf_rbtree_add_kfunc(u32 func_id)
-3700d7c829341d Ihor Solodrai   2026-03-18  12759  {
-3700d7c829341d Ihor Solodrai   2026-03-18 @12760  	return func_id == special_kfunc_list[KF_bpf_rbtree_add] ||
-                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Out of bounds. We need to make the special_kfunc_list[] bigger if we're
-going to keep adding new special_kfunc_type values.
+Yuk! Move this somewhere else.
 
-3700d7c829341d Ihor Solodrai   2026-03-18  12761  	       func_id == special_kfunc_list[KF_bpf_rbtree_add_impl];
-3700d7c829341d Ihor Solodrai   2026-03-18  12762  }
+> +	if (!mbuf) {
+> +		if (READ_ONCE(netdev->mtu) +  ETH_PAD_LEN >
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I think READ_ONCE sends wrong signal to readers. We're in an
+ASSERT_RTNL() region.
 
+> +		    xsk_pool_get_rx_frame_size(pool)) {
+> +			err = -EINVAL;
+> +			goto err_unreg_pool;
+> +		}
+> +	}
+>  
+>  	if (dev_get_min_mp_channel_count(netdev)) {
+>  		err = -EBUSY;
+> @@ -247,6 +256,9 @@ int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_sock *umem_xs,
+>  	struct xdp_umem *umem = umem_xs->umem;
+>  
+>  	flags = umem->zc ? XDP_ZEROCOPY : XDP_COPY;
+> +	if (umem->flags & XDP_UMEM_SG_FLAG)
+> +		flags |= XDP_USE_SG;
+> +
+>  	if (umem_xs->pool->uses_need_wakeup)
+>  		flags |= XDP_USE_NEED_WAKEUP;
+>  
+> -- 
+> 2.43.0
