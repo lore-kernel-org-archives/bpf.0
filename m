@@ -1,155 +1,133 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30EF43CF03A
-	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 16:09:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF10C3CF693
+	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 16:15:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774022965; cv=none; b=BEuiRQ5JODm90BRnh4HrIje76X/r/IwTL9JMhZtm8MNNqoMaP4kGOnzPQvzuIcZDjRiP0En9rNAiopUn0QsQtNF0fHTbGMLpwYgsjd3C0Tm9lusP2dvmgWX4larVd4XQCC1pDJlqJEPAbMMPEZs2fUKrohonOX3I4ZdnMlUyYQY=
+	t=1774023345; cv=none; b=UU9RPHYB8O5e4Gsw3Lrg2mcfTmiwGstRg5ZQ3rnnmi+6AbqSOhq0rS8zXte6w6mYmTRRL0HbVdrIa+8uV1Ffld3ArnzXiGSwrEsQo5BnJrpaCXaqK56AGAFmI4R3pDMjMC4ZGF+vK7lRSJODxE0VQ6wEryCuAdk087Mb35uc73I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774022965; c=relaxed/simple;
-	bh=SEU/UjZ+nkAG8Bbjx3hJ4C/a4/A54UKeu2BYio2jCAk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VV7Jzy8eQqtzS8Ho5pfX9rSWCu9LqRDXEQZZ4UEM4wWILna5QsAZdts/jU9zcSm5fnbcal5w6j7wnK5wGfxSizkOyE++cx45sjCufQsCaMNrSgLEk8hACtILGZKjLN1QM/oahSi5DFvOf6KXvxmNa3UQ+y7ph/iPwAmrxwKQaG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OScXJxeb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774023345; c=relaxed/simple;
+	bh=Qc4So4ZdFq75/8echA0G/oL58X0JIklmFSXlRFRE0Fo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u7WYDjr9a9xkrNrkxwa8LgqH+hZ9Go7dfLLbcJk1K0DpmXiBNx6vKrB5wPQmuQmPwunCA4m2J34BQUfRGSRmbplS8I7cmxCyxNzu0372srOsC/33UCDN0K3flZ2R42WkMEZpBDRUuKLMzWSfvXD5UD7G+2RF17pZCohBo+4H/8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qjo/2XTY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OScXJxeb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9FA9C2BC87
-	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 16:09:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qjo/2XTY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 306A7C4AF09;
+	Fri, 20 Mar 2026 16:15:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774022964;
-	bh=SEU/UjZ+nkAG8Bbjx3hJ4C/a4/A54UKeu2BYio2jCAk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=OScXJxebvvPuZjXOKj1kY5KbnT7pW9IYWtuQztbU44NSMJaQShiZAz/qRTgTbQXcx
-	 /lnDwFKrHBfDLqkpD0SrrfKhOT1KcbdlrfAQOgiOJc3xLGO71mPmtmNAFpsvZmGLjD
-	 +3JA7PTjwIDhgR+d6Y6M6RMjR+ZpZS84N4dKgXofUNVM7kpVPlZCJUQvURSNryenLr
-	 VCvUI/fOTQbDu42RKWUfHiWyk0wG+B+aXS+V27cpyZAs6pBpjNYIYzMA63xfrm9E7i
-	 nrePhvjJZIdz5KxKYumpenoI/E8i58Pz4/oomdpzHN2RmDzRR3HYClBJBAoyVuI7e3
-	 3wCy8Qr9C43pw==
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-67bb04151dcso972671eaf.0
-        for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 09:09:24 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU324Cga4HSYC5uGATFtrRfWSOzPD4WP4W2J4ONGeIQATtiEQ7Yly3y9Eih5nexmvAzKaY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxD95F5fIHClMxRi03uqtJddASB+p5vccL1raWdTrFLhTS7kIaC
-	hfq7qqyzt2ifwpc0QUhYz4eHdpnQJsm7HZmX5kUbZg+9e6Da7QsFtqerCj8UiT0d6UqS/LUWwDM
-	j7+GC03ZqtUewKpw1Ufnj6/E8iFo79yo=
-X-Received: by 2002:a05:6820:8ca:b0:67b:aca0:3d96 with SMTP id
- 006d021491bc7-67c22fc295bmr2297374eaf.65.1774022963547; Fri, 20 Mar 2026
- 09:09:23 -0700 (PDT)
+	s=k20201202; t=1774023345;
+	bh=Qc4So4ZdFq75/8echA0G/oL58X0JIklmFSXlRFRE0Fo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qjo/2XTYq3XyccbjiTmvP07KSRS5StPDqnMko4s1qs9DuVOsahsJjBfoFhrooYBhV
+	 aGXVNpUZM3eYBUyBcr/PwNWdXccHVeTXG+a5WmwoOEEA1i0Q1BeK2/sIUjt9hJusMa
+	 7sV7ub7Hssj+fn5PQpadcGt6lGizpjjwf0iVdoqWukNkjTcVpaMTjOISIRHiPrZeB2
+	 sKecMas4mNN6J4pkPT2EkbHhrkh7Dz4XEkr2o6tqET/TipaGERkmrzgJt/gdXTETVx
+	 xGtjbeR2cQvKsJz4eyVsTznEyHBSdhmQuDaQKEKhcvk2r+eWrFQKI67EWJvtcW3ncC
+	 VQHba1ISTtADg==
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 1B272F4006E;
+	Fri, 20 Mar 2026 12:15:44 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-05.internal (MEProxy); Fri, 20 Mar 2026 12:15:44 -0400
+X-ME-Sender: <xms:sHK9aQ8w3XmPo1KdU9G8WEHX5XLMeTSyfqe0YsX5o5ARn_tI2gyB6Q>
+    <xme:sHK9aTEFZHPZ65DX-IS714Am5KCYsHYmE2L-4gBN33ckG0WMWPohYtFDxzACGk1gc
+    XrgXXXL5UwMumsmQNscm9Ft3-bd_QD08H1-T7zplFc4SBKH1cstNgA>
+X-ME-Received: <xmr:sHK9acLbMvKrwCoPyrQEo2XhGrBMTY_NRPPUgD_Emn82cx9m8mngG-R_6yK7o4FXecUUPcHkjuOJ_Q4vuu0AR7hjtDFEtBnR>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefuddtfeejucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
+    hfgvnhhguceosghoqhhunheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpe
+    ekgffhhfeuheelhfekteeuffejveetjeefffettedtteegfefftdduteduudfgleenucev
+    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnod
+    hmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduieejtdelkeegjeduqddujeej
+    keehheehvddqsghoqhhunheppehkvghrnhgvlhdrohhrghesfhhigihmvgdrnhgrmhgvpd
+    hnsggprhgtphhtthhopeduhedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepmhgv
+    mhigohhrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepsghighgvrghshieslhhinhhuth
+    hrohhnihigrdguvgdprhgtphhtthhopehjohgvlhgrghhnvghlfhesnhhvihguihgrrdgt
+    ohhmpdhrtghpthhtohepphgruhhlmhgtkheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoh
+    epfhhrvgguvghrihgtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnvggvrhgrjhdr
+    ihhithhruddtsehgmhgrihhlrdgtohhmpdhrtghpthhtohepuhhrvgiikhhisehgmhgrih
+    hlrdgtohhmpdhrtghpthhtohepsghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmpdhr
+    tghpthhtoheprhgtuhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:sHK9abkBV7877GuozC8vuNYDHexOwDbY1-GbuxRftrpajA59p_t2ZQ>
+    <xmx:sHK9adz2TjzgmsagBsiTseXpAewLntgt8fbBVGNlQMLwj86nuspZbQ>
+    <xmx:sHK9ads24y11X4-MpCLcX8hzTCpuXlm0A67zVT4h4Eft_JKMLliGqA>
+    <xmx:sHK9aXGNzolSIN62AVXNQtndKjaousuScnurfQHN9IKFv6qV50CotA>
+    <xmx:sHK9ab6Ow_gZm9OyOeOEn4GH7JfQ92i7jqxpjd5AB2_sNo_BUhJmFrs_>
+Feedback-ID: i8dbe485b:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 20 Mar 2026 12:15:43 -0400 (EDT)
+Date: Fri, 20 Mar 2026 09:15:42 -0700
+From: Boqun Feng <boqun@kernel.org>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Joel Fernandes <joelagnelf@nvidia.com>, paulmck@kernel.org,
+	frederic@kernel.org, neeraj.iitr10@gmail.com, urezki@gmail.com,
+	boqun.feng@gmail.com, rcu@vger.kernel.org,
+	Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>
+Subject: Re: Next-level bug in SRCU implementation of RCU Tasks Trace +
+ PREEMPT_RT
+Message-ID: <ab1yrtsiEdyqN4pY@tardis.local>
+References: <abs026TUV9oAg_Xy@tardis.local>
+ <abtMhd_LVp3uL_pA@tardis.local>
+ <20260319090315.Ec_eXAg4@linutronix.de>
+ <abwkD0mOdAbD9ENJ@tardis.local>
+ <20260319163350.c7WuYOM9@linutronix.de>
+ <abwo0I_mu94t5Ews@tardis.local>
+ <CAP01T75J4EXu8MFD2WEQ71Ou-bapqS=_wXFFQJ6Ed62X28HO2A@mail.gmail.com>
+ <abwyGtG7hDpd8vBN@tardis.local>
+ <CAP01T75S-NMgB=s_0jqq52xRwe1cQ29DzD33eeqUZHM3cSb=oA@mail.gmail.com>
+ <abxZEE4SAMkNEleq@tardis.local>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260320160055.4114055-1-wusamuel@google.com> <20260320160055.4114055-3-wusamuel@google.com>
-In-Reply-To: <20260320160055.4114055-3-wusamuel@google.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 20 Mar 2026 17:09:12 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0j-DWOe63meNY0eOCuT3US7Oqd+0M_hStmBO_nPnkA-FA@mail.gmail.com>
-X-Gm-Features: AaiRm50AEprUgIK3iT3QOKbvgy93OormYGBDrWBZRvwVCWIakO760AddFJJC6mA
-Message-ID: <CAJZ5v0j-DWOe63meNY0eOCuT3US7Oqd+0M_hStmBO_nPnkA-FA@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] PM: Add config flag to gate sysfs wakeup_sources
-To: Samuel Wu <wusamuel@google.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, andrii@kernel.org, 
-	memxor@gmail.com, bpf@vger.kernel.org, kernel-team@android.com, 
-	linux-pm@vger.kernel.org, driver-core@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <abxZEE4SAMkNEleq@tardis.local>
 
-On Fri, Mar 20, 2026 at 5:01=E2=80=AFPM Samuel Wu <wusamuel@google.com> wro=
-te:
->
-> Add a config flag that gates the creation of
-> /sys/class/wakeup_sources/*. This has the benefit of eliminating the
-> work needed to create the nodes and corresponding attributes; and
-> between kernfs, dentry, and malloc, there are some memory savings
-> depending on the number of wakeup sources.
->
-> Signed-off-by: Samuel Wu <wusamuel@google.com>
-> ---
->  drivers/base/power/Makefile |  3 ++-
->  drivers/base/power/power.h  | 14 ++++++++++++++
->  kernel/power/Kconfig        | 13 +++++++++++++
->  3 files changed, 29 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/base/power/Makefile b/drivers/base/power/Makefile
-> index 2989e42d0161..5933dadc0dd9 100644
-> --- a/drivers/base/power/Makefile
-> +++ b/drivers/base/power/Makefile
-> @@ -1,6 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0
->  obj-$(CONFIG_PM)       +=3D sysfs.o generic_ops.o common.o qos.o runtime=
-.o wakeirq.o
-> -obj-$(CONFIG_PM_SLEEP) +=3D main.o wakeup.o wakeup_stats.o
-> +obj-$(CONFIG_PM_SLEEP) +=3D main.o wakeup.o
-> +obj-$(CONFIG_PM_WAKEUP_STATS_SYSFS)    +=3D wakeup_stats.o
->  obj-$(CONFIG_PM_TRACE_RTC)     +=3D trace.o
->  obj-$(CONFIG_HAVE_CLK) +=3D clock_ops.o
->  obj-$(CONFIG_PM_QOS_KUNIT_TEST) +=3D qos-test.o
-> diff --git a/drivers/base/power/power.h b/drivers/base/power/power.h
-> index 922ed457db19..364ca5512b4f 100644
-> --- a/drivers/base/power/power.h
-> +++ b/drivers/base/power/power.h
-> @@ -125,11 +125,25 @@ static inline bool device_pm_initialized(struct dev=
-ice *dev)
->  }
->
->  /* drivers/base/power/wakeup_stats.c */
-> +#ifdef CONFIG_PM_WAKEUP_STATS_SYSFS
->  extern int wakeup_source_sysfs_add(struct device *parent,
->                                    struct wakeup_source *ws);
->  extern void wakeup_source_sysfs_remove(struct wakeup_source *ws);
->
->  extern int pm_wakeup_source_sysfs_add(struct device *parent);
-> +#else /* !CONFIG_PM_WAKEUP_STATS_SYSFS */
-> +static inline int wakeup_source_sysfs_add(struct device *parent,
-> +                                         struct wakeup_source *ws)
-> +{
-> +       return 0;
-> +}
-> +static inline void wakeup_source_sysfs_remove(struct wakeup_source *ws) =
-{}
-> +
-> +static inline int pm_wakeup_source_sysfs_add(struct device *parent)
-> +{
-> +       return 0;
-> +}
-> +#endif /* !CONFIG_PM_WAKEUP_STATS_SYSFS */
->
->  #else /* !CONFIG_PM_SLEEP */
->
-> diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
-> index 05337f437cca..6945083ab053 100644
-> --- a/kernel/power/Kconfig
-> +++ b/kernel/power/Kconfig
-> @@ -202,6 +202,19 @@ config PM_WAKELOCKS_GC
->         depends on PM_WAKELOCKS
->         default y
->
-> +config PM_WAKEUP_STATS_SYSFS
-> +       bool "Sysfs wakeup statistics"
-> +       depends on PM_SLEEP
-> +       default y
-> +       help
-> +         Enable this for wakeup statistics in sysfs under /sys/class/wak=
-eup/
-> +
-> +         Disabling this option eliminates the work of creating the wakeu=
-p
-> +         sources and each of their attributes in sysfs. Depending on the
-> +         number of wakeup sources, this can also have a non-negligible m=
-emory
-> +         impact. Regardless of this config option's value, wakeup statis=
-tics
-> +         are still available via debugfs and BPF.
+On Thu, Mar 19, 2026 at 01:14:08PM -0700, Boqun Feng wrote:
+[...]
+> > Also, any unconditional deferral in the caller for APIs that can "hold
+> > locks" to avoid all this is not without its cost.
+> > 
+> > The implementation of RCU knows and can stay in sync with those
+> > conditions for when deferral is needed, and hide all that complexity
+> > from the caller. The cost should definitely be paid by the caller if
+> > we would break the API's broad contract, e.g., by trying to invoke it
+> 
+> The thing is, lots of the synchronization primitives existed before BPF,
+> and they were not designed or implemented with "BPF safe" in mind, and
+> they could be dragged into BPF core code path if we begin to use them.
+> For example, irq_work may be just "happen-to-work" here, or there is a
 
-Well, except that otherwise it may be hard to figure out which device
-the given wakeup source belongs to, so I'd rather not do that.
+Correction: irq_work is designed to be NMI safe (at least when queueing
+on the local CPU), so it's potential the bpf_defer() I proposed.
 
-> +
->  config PM_QOS_CPU_SYSTEM_WAKEUP
->         bool "User space interface for CPU system wakeup QoS"
->         depends on CPU_IDLE
-> --
+Regards,
+Boqun
+
+> bug that we are missing. It would be rather easier or clearer if we
+> design a dedicate defer mechanism with BPF core in mind, and then we use
+> that for all the deferrable operations.
+> 
+> Regards,
+> Boqun
+> 
+> > in NMI which it is not supposed to run in yet, in that case we already
+> > handle things using irq_work. Anything more complicated than that is
+> > hard to scale. All of this may also change in the future where we
+> > support call_rcu_nolock() to make it work everywhere, and only defer
+> > when we detect reentrancy (in the same or different context).
+> > 
+> > 
+> > 
+[..]
