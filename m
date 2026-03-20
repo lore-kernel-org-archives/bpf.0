@@ -1,775 +1,325 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC1DF396B8E
-	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 15:49:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774021806; cv=none; b=odr9VIdtBHFusHQ8g8egC/Xp9GLftkq83snh1Tg+XdVz3Mh1H7OZVeLAM4pV/vLiyo4I4c3zK5EpGnctJ6lT25VVuIrTxqzJxduJTsms0h8NuBdhjwAzSnoFjwhe4KGq4VOBhxHBaY6aqk4SoRxxFotwgjge3tX6EmDl8uWBdDc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774021806; c=relaxed/simple;
-	bh=GJJAZaccMxFqWk4+9B/WieZEP6Qsyl3qpv7qd5zbElE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=hu34FlqLpMc/hmavAKKC3GeSIkWlVtmAIGvyJjphwZ42G8TWk0KUsi94BnLXTP/AoH8+wCLbrHJRxsSm27juPYWMyAUAcK3XabHFsqW2pXV2H+S5UZcjHfH0WP7w7i5TF8k9CzmQgXvRzkzZ7x9P4z6SJcHAA1c8Rxz+X8md42s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C9rNd31q; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B93F3B3887;
+	Fri, 20 Mar 2026 15:51:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.7
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774021889; cv=fail; b=d6b2dpIuwpmbzAv9vntValSjO6Q6c4FF/wTOmb+V7a6sOzeBNwLfsWJqK/rGwd5VrlSNu75vbg8UVvAXYRmWdw0qPFzSy23fs1pgVK6eFjJdZTTX0kVS6Ens5vpn5xw0osTZwU0kVmbriFJujvb1WubzkWbiG+beYx6fPfJmEPQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774021889; c=relaxed/simple;
+	bh=AXIsr8hqZI7tzSUvLwqnAJOX2nFLVoY9xRzTUdkbrR4=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=PrX6V+hLQ0nUIKk3Kwpdcyzgw+4EEMG/beqxhesSy8mi+6Bq/aMeNPR+yC0odYVnLKoLptMrGM0VXDxXBeaRvWQQtwmyzYUVhUapoJhirkr8rFkV+6OInmISd2VgMltLoecTdeAl3lVk2qkhYgaejQDwdSqA0h3MDl53bUP4gWw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jeurXLQA; arc=fail smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C9rNd31q"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-486fe655187so12133325e9.2
-        for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 08:49:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774021798; x=1774626598; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=u+JS7skj1nhDusKY9cOdC+c8Nv6/VDUPm9hS7rR7Zys=;
-        b=C9rNd31qYew+ZDaKK0O7hY8yWV6Zm0o3kZMSQ2GZKfzJaUViGI5v79fIe+5GfYJM1p
-         m6qRJQXeRpOLFOl4b7bHPrOYWD8lHu14U8mg5s0kMgG2NW422TU23qW3+1+vdhzAhfPK
-         wbIo5yBLmE793O2jt5cu69AsNkc5929qdYfcdPLAHL00n/pJ6sE9Egh3MSzAWSGDCkc4
-         g4+4whJgWuQthbySE1NfD8ze/yBltXljQlS9bvYOqSkbUtu70lfQfQo8SR4yw90nlo5C
-         Eh0KOUVBfkps7itMVfOGvu/1QL0Za51g3ktYihH8v4pUgxpFpHMTmxVLY17renyB6Cqs
-         Y5pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774021798; x=1774626598;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=u+JS7skj1nhDusKY9cOdC+c8Nv6/VDUPm9hS7rR7Zys=;
-        b=Da/3dpLXKH7qraG86H085YYaYL3MhKFkOaE5czQ0ip3/aHT6yAIbUPDb4TKv2XEoW6
-         WFfh5K3aD/6GWlaPSH4IHB0iaTKG+Ofm7Nn18CTGSbw24/iosydHHrDenqnEKzG10NaV
-         Cb2PAkZmXbXUilPxNRqqMncD9zWa2/WEmiPiuCgYaSrDcuNq4WTbge1SQfaCzHhMv+Pu
-         hSLUhtJK9fr9/7Van5T/gWHmlD8sELyB/ZWZ/Z30+IR7XhiUHJLpFFTTizHp1lP1TyLP
-         bCPrtalq4JWohkZmckyycponqmiJHKW4IfFAkCTJOpzDtKalUyEO6OcOQfz0TJyvWb4G
-         wKSQ==
-X-Gm-Message-State: AOJu0YzoNV8qvl1U8bvYQqmnhiyvdVGHSkAQVwoK+IjwqXi/2wchBdMp
-	4joZTuxLot2qssTzLkLOAkpDTIsoyjbTJR5DpIMPyzJhG2n/3blSRGKM
-X-Gm-Gg: ATEYQzx2tn0rj8i8UL6iBWkM474gwuSvB2JYCjNSvTt6EaOnqTNRGQZyf41DcRt8RlB
-	Xvr8hecjaGyOjr1UM0MnhkIQ4tMj44TqIqPNj3oc48NgzbyzlNk1uVPGIyg/EB8BB8SM8E9p5BM
-	Y8ab7icKVX96n0q/vgaQFtB0au4Skc2kvgbSeNBwX6rdkGZGFD1TxleprLXEC7PNUqotMpAb8gw
-	QxK2BacQMgAi35SWvgOWP63jyEEGKOIpugmrhvywUK79ms1UGwm3uFeV4Z03HulJEQtcEY6DUtM
-	V0rYc63xo2rumz0+/5ISsBuhVSIVaJ40DPR45aGada+5O2HtngD+q7QNYs0NHjGTLTtzSplUoZv
-	/t16HeHHwLznfWTyUxkeK319p98bGko2DC6h3bM/j+S2lyyhe/lRrTKnB+zaXs06H8rXZfPqRcN
-	kgxFj8w+lzCeUWqxLVSu5u19Zb
-X-Received: by 2002:a05:600c:3b1e:b0:483:8062:b43 with SMTP id 5b1f17b1804b1-486fee05925mr50491485e9.19.1774021797358;
-        Fri, 20 Mar 2026 08:49:57 -0700 (PDT)
-Received: from localhost ([2620:10d:c092:400::5:f9f5])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486fe836784sm63151945e9.13.2026.03.20.08.49.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Mar 2026 08:49:56 -0700 (PDT)
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
- <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH bpf-next v3 1/2] bpf: Support struct btf_struct_meta via
- KF_IMPLICIT_ARGS
-In-Reply-To: <20260318234210.1840295-1-ihor.solodrai@linux.dev>
-References: <20260318234210.1840295-1-ihor.solodrai@linux.dev>
-Date: Fri, 20 Mar 2026 15:49:55 +0000
-Message-ID: <87tsuajyak.fsf@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jeurXLQA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774021887; x=1805557887;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=AXIsr8hqZI7tzSUvLwqnAJOX2nFLVoY9xRzTUdkbrR4=;
+  b=jeurXLQAVs1HKvlA6fqSFXHb3mjJxYI3Ty1WoTgsO+sybxfFWsfZZvGA
+   sltlML+A5XsK/14WeqPP2UGHnvHsHkJESEz0rONYaaUvQTae4zP5bsb+E
+   yQKT6PAZtXAwXlIkGRRsRG5cDl6ki5rXv0CHNR5vfKckONCj+zM3x5Lo2
+   PgQPnSSnqOkCGyt2YaLf09p8XLBJ5Pj8bZNcOieR/YSwQw8YDSK+NAaXd
+   VWQwl3H7/zX6Z6SweyJheJLoXCARcF8aW9K9W/vqqr9VzgUnD3zo6v5lJ
+   3F45fXFmhIepTXOOb+l5X8hupyl6nFH1s6jG26YuaFDRDn68+TU1yiR7r
+   A==;
+X-CSE-ConnectionGUID: 4ALNg2GOTxW3ht8vj3o+1w==
+X-CSE-MsgGUID: +0YFv1OMRm6Vujq4TFVtKg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11735"; a="100563565"
+X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
+   d="scan'208";a="100563565"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2026 08:51:27 -0700
+X-CSE-ConnectionGUID: zrltfJxiTDiT7PSDKT6rTA==
+X-CSE-MsgGUID: r8FqTpInQ5SXa3qEYH7Djw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
+   d="scan'208";a="220655879"
+Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
+  by fmviesa008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2026 08:51:26 -0700
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Fri, 20 Mar 2026 08:51:26 -0700
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37 via Frontend Transport; Fri, 20 Mar 2026 08:51:26 -0700
+Received: from SA9PR02CU001.outbound.protection.outlook.com (40.93.196.25) by
+ edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Fri, 20 Mar 2026 08:51:25 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=lk4DT7vLNqHWP4mIXF1UJQQpaaJ3rL4OX50JCP1OyW9+IvVFcR4zrbYvj73Qh/zoXuPB+1wuiXUZtdA1mnVdpOvJvBxYTq1qpNqY/OCohYlBphySBA6dPu9Qlu2ofvs9/tpsLbN2aNE/439MSVj7scoPRGjhADJ3c0rwTCg+AJp0Nvu/wyuKd9mQveXz122AJFVC1/UGfug5bv3/SKoLH8GCBcd2ZnAE8oTQtmKXbtXCMfD6HPehZMGocrQ0+X6AWK1pgn5So0XwxkyaUsi+JsA5EpCsbIR3pXdTpW1U8khEEP21/XPfRaF0G0q1Ia1g4u/rJZTNKS8vcv+o7O3YZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1B9PsoROfvkoWwhC+tzP+ToyjGSeNh65u7yfu8bR8Og=;
+ b=HL01LZ0+uTnNiNL+VEDTkOFQZgxyJHVggvVn4iRE14dAmXtFdLzSW4v0pdQCNJqvgXF6UXTd04ZBBanxZF8ws1XHMlCz+mmOQmNLZteuM9XeOFTEyNnRbVdjMFz0rIwrEi5VW0zHGab3Ai2VsHtBH4SEIYQIL2e9Mf3TC34phGkMHKg/eyhaZBlB1FBoVwpro6kFizxuK4rsnpKtd/kYrRqQvfrSJg1VI6mVxBomBWro+lAd76h8lIQehMDfE88lOW+r2LvouCfiY0KBBgrB3wfNGsgpmp25738Fhdf1LHXF+6fSHcYe2hby6lHneaZMZ0dDI+fxxWb1xB2UyD6nqA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
+ SA1PR11MB6920.namprd11.prod.outlook.com (2603:10b6:806:2bb::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9745.10; Fri, 20 Mar 2026 15:51:23 +0000
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd]) by DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd%6]) with mapi id 15.20.9745.012; Fri, 20 Mar 2026
+ 15:51:22 +0000
+Date: Fri, 20 Mar 2026 16:51:16 +0100
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
+CC: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<magnus.karlsson@intel.com>, <stfomichev@gmail.com>, <kuba@kernel.org>,
+	<pabeni@redhat.com>, <horms@kernel.org>, <larysa.zaremba@intel.com>,
+	<aleksander.lobakin@intel.com>
+Subject: Re: [PATCH v2 net 5/8] xsk: validate MTU against usable frame size
+ on bind
+Message-ID: <ab1s9J5yGxCbqB28@boxer>
+References: <20260319175538.479139-1-maciej.fijalkowski@intel.com>
+ <20260319175538.479139-6-maciej.fijalkowski@intel.com>
+ <87qzpeopzr.fsf@all.your.base.are.belong.to.us>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87qzpeopzr.fsf@all.your.base.are.belong.to.us>
+X-ClientProxiedBy: VI1PR07CA0212.eurprd07.prod.outlook.com
+ (2603:10a6:802:58::15) To DM4PR11MB6117.namprd11.prod.outlook.com
+ (2603:10b6:8:b3::19)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|SA1PR11MB6920:EE_
+X-MS-Office365-Filtering-Correlation-Id: 109968e5-13e4-4b44-31ca-08de86988922
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024|56012099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info: EB2sJYZkdk6kxHdglz/z7tRgbkstrzh4Wl0sfCm5JgKwhszXSB4gZSP/qF4me/d7RkDPSVYMo2v0eS01zyAjvxVnIOoCqYqtJcPIOxDy7lDm6KwmgxX2PsYKHHaIZHJ9Tsk1fanAIY6/P8uUNO9DrVC7wmcWWj0CBp/2kEfN2DBbdGNzwhcFSlQXGFThPh1yjnfsWtvhSIrfRxE/gdPcLFwHrprkJmj6rk7vjymwJM4mAYreTCvWR97BodltGrl34S3GpBv0B9cr2pGe80WGqD7HNY2eo31i/BmJ2HRgRFM2crAXHYFisIv7t3OBKewcyOtJnGQD0eJGlOX/YK4qZvUguNZOvVV/FxZ3Lx/XBbtY9iS4g493cAz1X1F9ngCV/d9XoLmrh0HtM6uHFatvV2kUl0dg9iPK4Ns2wctil1XF7JEMiN0FxsmyxU/hp3BE2bld3G45YGmoiDn3OOlqZTbGCHKqpmRyoBbFnTMtMm1bWpW2oNFPClMr9r9LXows/gYoAWLx8WxkS5ljsnPnEXxrZ5x1y4Bw1IbFXYJ3USyUgiCOClmKV25qI4XvpEHzrj4rDoDA15SdIm7PU0VqFT5GZ/NoL06EQAllqyoiDih6DRyVBOI71TXdUJXsOejuQTu2A96OYUzeVdLAY4oSZ45IM6daNwO+wiKDp+XddReu+NrYyDBSLabr0I43TUVWPOUqfGyJzeF4Fim+XkvZlRf9KVbcyg1MzkDoSLcEVck=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?EL91fIrYu+0o6jP3I6bx2tjRM0qQ44gD//oQpNXP4Jzfcie9d3vnIL7gsu?=
+ =?iso-8859-1?Q?JmXOY7SjxGQgjKpzSDMcIWwdOOpe5hjaCazCORee+7HdkrBkvfyu1WgBS8?=
+ =?iso-8859-1?Q?bCGPvTLBAmEu8blPhj6/cOvBI/69deS2AJqNyrTmMDIeB4mdVqu9KLEadK?=
+ =?iso-8859-1?Q?SuwTEtWyRwzrJap8szxFfdX3wf2x0lNb7im66juNAly6k9Mzl8LtT5Tjkb?=
+ =?iso-8859-1?Q?gIMNzORhiLVUqfqgYmL2n9YZuHt+5Z1w1WTVli6EAvpuJQUlD1+UeiwUGu?=
+ =?iso-8859-1?Q?UHvKcHMsYrgc1vQN+VxD+vNxBkhv+GQqsWX8lsY3jKOyJr8mDtgVzJXwTu?=
+ =?iso-8859-1?Q?IblLGYI5QkFa0IhziEGEJ0CFbmviuC7/m06/50HnJPA+T04Fa3N39oDSoy?=
+ =?iso-8859-1?Q?3hPM5Ymp5jAbVCM498lBRP/NAejVbOBk/t9rGVe/Nv3WJldlfjVopR+jch?=
+ =?iso-8859-1?Q?/6o7PGnHI3l4tV9pc27yIoA/Bsh+sElX2YWGin/j7Q09MytMcq1zi45rQ6?=
+ =?iso-8859-1?Q?v2BYISOhdgwm61hirDVXurwT+E+KMJgWZsABbfsVK5sgUu/1Govv1Avgb6?=
+ =?iso-8859-1?Q?ulVBk+V3wudHKhtkg5mj1QZXM81ckP6afYZmFQrR6AHu1K7qm2+fIVNvRu?=
+ =?iso-8859-1?Q?3B5yGSC82b2omYGe0t3EGoVdRySrvYwvxnrZ3tHeAsY3uDTIdof+58ev/z?=
+ =?iso-8859-1?Q?XoS/kLul3ctd/fAv6AE2/fg8O7CQOYgH4NawhHCuoUtlIh1XMcVpgVVN5W?=
+ =?iso-8859-1?Q?DpPhtFpzfefcpP5Lmei59AcVf6rm5btwEcHLgXfvkYf1coxGOXKQjbXOxG?=
+ =?iso-8859-1?Q?JFVl6RgObnjFsy7RIgW3hzvjcIor75gK9AHt+I29mrrk7NHKCD4dz9/Vhk?=
+ =?iso-8859-1?Q?iokeX7T49UymgcI1p7rRAq58BxR4I82a4BVSoAn+7qRVeDL15afPfJvX+e?=
+ =?iso-8859-1?Q?ctmRys4XQ7wa032TF13tdeffeBB6YnO5WIPy/JPg2U+UGh28/229s57K1K?=
+ =?iso-8859-1?Q?J1/H3erKssOxO7JtELwd6iGrE0fysUinpQdv6BW3y+ZvwOS8oN8ERXMpZP?=
+ =?iso-8859-1?Q?UuWUgriitun00Fs06sIMiyyzJpGGRyhA4cY8jX0IAq7vyC6ZxfkdaWljDR?=
+ =?iso-8859-1?Q?vNiA34PYb1k8VxVy2JMOc0Kqv2u/3KrmKmgrVshZxUt4GIiOQ3gTsEIoRc?=
+ =?iso-8859-1?Q?dH9hvLc88eHaNTNWfokn/xDHjMdr7ngkTBNgsdDSDez3bdRbtbQyledF0B?=
+ =?iso-8859-1?Q?3+AeNEd46fqqJn20P8N9PZ0OSG9kKzQKJ3Ll7jScrGHusAemmt1JMDOf9A?=
+ =?iso-8859-1?Q?dPL8g3W4TS4x2FfW/mL5ITIgMqDmOTlG/i2dB9Ies/5pVaKNyWYRtDIItA?=
+ =?iso-8859-1?Q?yWll6sI2uEP0EJlyBVwD8sJxxuEEbSwXbjdASdeQG0CeDeK2Be1miwXFG/?=
+ =?iso-8859-1?Q?gGHJewkyya3PU2lwZQz3Mzmji3Wq4rw433LHrsZvYVwiFYsWenJvxH45jt?=
+ =?iso-8859-1?Q?4LyeoluzL9mltd+pUCcb7+aBtQ7uPzU8Oie7xFXg/x82hZz9Pd79zIl8F5?=
+ =?iso-8859-1?Q?LEQb/Zbw1doxa43eMJcAq+QU/EMMFXiqW1m7RMJXe710mD1gmUWYLnDmgU?=
+ =?iso-8859-1?Q?r9WC+U1kQ0QDsPQYsDqa+uGAAUMUfVfRqs+4PhK+G3ii7Ds+UkwMXV/PYb?=
+ =?iso-8859-1?Q?vAdR6fyVkh3vmr4J1SQCq0IltHYSfcsYopCsB4y1BS3Yi6U4OgLEs/d9qL?=
+ =?iso-8859-1?Q?cBMhbtZYF39nktciUfd9YEL3ivFA8YhIRHbcUghGe+aL2gvXorMNSB4tlW?=
+ =?iso-8859-1?Q?1pOZp8ffMADa8qBRMvY1xJxYcEvd4ro=3D?=
+X-Exchange-RoutingPolicyChecked: thus2S28bH1/lpfu+3ojZ8G6/b1CUWn4P0sC6t/QcpewrOxTnxo1dlC99cJ4Y8xogFoIB9wVmzDorNlHSps0BI6eUjCrJ9X4zOl37kWMda2s9wnKY/vX9rsgBw9K1eR2Rc7r/IUeNlXf2wyLxx1yH107ZIyr6Tjua/hQDdptulJVjk1cSDKJ7eBPnUoobqvWfEEjbHhUQutcFXP1i/Dz5B4otF4l+oDorVO6v/QBx8cD35LTpbQW6ZOIyxxlgIgC92GDy3qTlCkijbvJgQXJGz46JkV4rm1num1Bw70FTVXkUemZCng1uDzxO5EMPFsTgZmv/r07xifn+9+qZ61txg==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 109968e5-13e4-4b44-31ca-08de86988922
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2026 15:51:22.8444
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lhDaKhAE0icCQzUUCdbrOuWxr3OUwpR00PS9SUlz6y+jyq/DDeOoD8R+KjtpVkxCIl+SxZwWu9DC+I8z6YQuzmeUzugwaE8xuGmpIVBP/yc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB6920
+X-OriginatorOrg: intel.com
 
-Ihor Solodrai <ihor.solodrai@linux.dev> writes:
+On Fri, Mar 20, 2026 at 09:38:00AM +0100, Björn Töpel wrote:
+> Maciej Fijalkowski <maciej.fijalkowski@intel.com> writes:
+> 
+> > AF_XDP bind currently accepts zero-copy pool configurations without
+> > verifying that the device MTU fits into the usable frame space provided
+> > by the UMEM chunk.
+> >
+> > This becomes a problem since we started to respect tailroom which is
+> > subtracted from chunk_size (among with headroom). 2k chunk size might
+> > not provide enough space for standard 1500 MTU, so let us catch such
+> > settings at bind time.
+> >
+> > This prevents creating an already-invalid setup and complements the
+> > MTU change restriction for devices with an attached XSK pool.
+> >
+> > Currently xp_assign_dev_shared() is missing XDP_USE_SG being propagated
+> > to flags so set it in order to preserve mtu check that is supposed to be
+> > done only when no multi-buffer setup is in picture.
+> >
+> > Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> 
+> Fixes tag?
 
-> The following kfuncs currently accept void *meta__ign argument:
->   * bpf_obj_new_impl
->   * bpf_obj_drop_impl
->   * bpf_percpu_obj_new_impl
->   * bpf_percpu_obj_drop_impl
->   * bpf_refcount_acquire_impl
->   * bpf_list_push_front_impl
->   * bpf_rbtree_add_impl
->
-> The __ign suffix is an indicator for the verifier to skip the argument
-> in check_kfunc_args(). Then, in fixup_kfunc_call() the verifier may
-> set the value of this argument to struct btf_struct_meta *
-> kptr_struct_meta from insn_aux_data.
->
-> BPF programs must pass a dummy NULL value when caling these kfuncs.
->
-> Additionally, the list and rbtree _impl kfuncs also accept an implicit
-> u64 argument, which doesn't require __ign suffix because it's a
-> scalar, and BPF programs explicitly pass 0.
->
-> Add new kfuncs with KF_IMPLICIT_ARGS [1], that correspond to each
-> _impl kfunc accepting meta__ign. The existing _impl kfuncs remain
-> unchanged for backwards compatibility.
->
-> To support this, add "btf_struct_meta" to the list of recognized
-> implicit argument types in resolve_btfids.
->
-> Implement is_kfunc_arg_implicit() in the verifier, that determines
-> implicit args by inspecting both (_impl and non-_impl) BTF prototypes
-> of the kfunc.
->
-> Update the special_kfunc_list in the verifier and relevant checks to
-> support both the old _impl and the new KF_IMPLICIT_ARGS variants of
-> btf_struct_meta users.
->
-> [1] https://lore.kernel.org/bpf/20260120222638.3976562-1-ihor.solodrai@linux.dev/
->
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
->
-> ---
->
-> v1->v3: Nits suggested by AI
->
-> v1: https://lore.kernel.org/bpf/20260312193546.192786-1-ihor.solodrai@linux.dev/
->
-> ---
->  kernel/bpf/helpers.c                          |  93 +++++++--
->  kernel/bpf/verifier.c                         | 184 +++++++++++++-----
->  tools/bpf/resolve_btfids/main.c               |   1 +
->  .../selftests/bpf/progs/percpu_alloc_fail.c   |   4 +-
->  4 files changed, 206 insertions(+), 76 deletions(-)
->
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index cb6d242bd093..fc4d537c0b15 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -2302,9 +2302,8 @@ void bpf_rb_root_free(const struct btf_field *field, void *rb_root,
->  
->  __bpf_kfunc_start_defs();
->  
-> -__bpf_kfunc void *bpf_obj_new_impl(u64 local_type_id__k, void *meta__ign)
-> +__bpf_kfunc void *bpf_obj_new(u64 local_type_id__k, struct btf_struct_meta *meta)
->  {
-> -	struct btf_struct_meta *meta = meta__ign;
->  	u64 size = local_type_id__k;
->  	void *p;
->  
-> @@ -2313,17 +2312,28 @@ __bpf_kfunc void *bpf_obj_new_impl(u64 local_type_id__k, void *meta__ign)
->  		return NULL;
->  	if (meta)
->  		bpf_obj_init(meta->record, p);
-> +
->  	return p;
->  }
->  
-> -__bpf_kfunc void *bpf_percpu_obj_new_impl(u64 local_type_id__k, void *meta__ign)
-> +__bpf_kfunc void *bpf_obj_new_impl(u64 local_type_id__k, void *meta__ign)
-> +{
-> +	return bpf_obj_new(local_type_id__k, meta__ign);
-> +}
-> +
-> +__bpf_kfunc void *bpf_percpu_obj_new(u64 local_type_id__k, struct btf_struct_meta *meta)
->  {
->  	u64 size = local_type_id__k;
->  
-> -	/* The verifier has ensured that meta__ign must be NULL */
-> +	/* The verifier has ensured that meta must be NULL */
->  	return bpf_mem_alloc(&bpf_global_percpu_ma, size);
->  }
->  
-> +__bpf_kfunc void *bpf_percpu_obj_new_impl(u64 local_type_id__k, void *meta__ign)
-> +{
-> +	return bpf_percpu_obj_new(local_type_id__k, meta__ign);
-> +}
-> +
->  /* Must be called under migrate_disable(), as required by bpf_mem_free */
->  void __bpf_obj_drop_impl(void *p, const struct btf_record *rec, bool percpu)
->  {
-> @@ -2347,23 +2357,31 @@ void __bpf_obj_drop_impl(void *p, const struct btf_record *rec, bool percpu)
->  	bpf_mem_free_rcu(ma, p);
->  }
->  
-> -__bpf_kfunc void bpf_obj_drop_impl(void *p__alloc, void *meta__ign)
-> +__bpf_kfunc void bpf_obj_drop(void *p__alloc, struct btf_struct_meta *meta)
->  {
-> -	struct btf_struct_meta *meta = meta__ign;
->  	void *p = p__alloc;
->  
->  	__bpf_obj_drop_impl(p, meta ? meta->record : NULL, false);
->  }
->  
-> -__bpf_kfunc void bpf_percpu_obj_drop_impl(void *p__alloc, void *meta__ign)
-> +__bpf_kfunc void bpf_obj_drop_impl(void *p__alloc, void *meta__ign)
-> +{
-> +	return bpf_obj_drop(p__alloc, meta__ign);
-> +}
-> +
-> +__bpf_kfunc void bpf_percpu_obj_drop(void *p__alloc, struct btf_struct_meta *meta)
->  {
-> -	/* The verifier has ensured that meta__ign must be NULL */
-> +	/* The verifier has ensured that meta must be NULL */
->  	bpf_mem_free_rcu(&bpf_global_percpu_ma, p__alloc);
->  }
->  
-> -__bpf_kfunc void *bpf_refcount_acquire_impl(void *p__refcounted_kptr, void *meta__ign)
-> +__bpf_kfunc void bpf_percpu_obj_drop_impl(void *p__alloc, void *meta__ign)
-> +{
-> +	bpf_percpu_obj_drop(p__alloc, meta__ign);
-> +}
-> +
-> +__bpf_kfunc void *bpf_refcount_acquire(void *p__refcounted_kptr, struct btf_struct_meta *meta)
->  {
-> -	struct btf_struct_meta *meta = meta__ign;
->  	struct bpf_refcount *ref;
->  
->  	/* Could just cast directly to refcount_t *, but need some code using
-> @@ -2379,6 +2397,11 @@ __bpf_kfunc void *bpf_refcount_acquire_impl(void *p__refcounted_kptr, void *meta
->  	return (void *)p__refcounted_kptr;
->  }
->  
-> +__bpf_kfunc void *bpf_refcount_acquire_impl(void *p__refcounted_kptr, void *meta__ign)
-> +{
-> +	return bpf_refcount_acquire(p__refcounted_kptr, meta__ign);
-> +}
-> +
->  static int __bpf_list_add(struct bpf_list_node_kern *node,
->  			  struct bpf_list_head *head,
->  			  bool tail, struct btf_record *rec, u64 off)
-> @@ -2406,24 +2429,38 @@ static int __bpf_list_add(struct bpf_list_node_kern *node,
->  	return 0;
->  }
->  
-> +__bpf_kfunc int bpf_list_push_front(struct bpf_list_head *head,
-> +				    struct bpf_list_node *node,
-> +				    struct btf_struct_meta *meta,
-> +				    u64 off)
-> +{
-> +	struct bpf_list_node_kern *n = (void *)node;
-> +
-> +	return __bpf_list_add(n, head, false, meta ? meta->record : NULL, off);
-> +}
-> +
->  __bpf_kfunc int bpf_list_push_front_impl(struct bpf_list_head *head,
->  					 struct bpf_list_node *node,
->  					 void *meta__ign, u64 off)
-> +{
-> +	return bpf_list_push_front(head, node, meta__ign, off);
-> +}
-> +
-> +__bpf_kfunc int bpf_list_push_back(struct bpf_list_head *head,
-> +				   struct bpf_list_node *node,
-> +				   struct btf_struct_meta *meta,
-> +				   u64 off)
->  {
->  	struct bpf_list_node_kern *n = (void *)node;
-> -	struct btf_struct_meta *meta = meta__ign;
->  
-> -	return __bpf_list_add(n, head, false, meta ? meta->record : NULL, off);
-> +	return __bpf_list_add(n, head, true, meta ? meta->record : NULL, off);
->  }
->  
->  __bpf_kfunc int bpf_list_push_back_impl(struct bpf_list_head *head,
->  					struct bpf_list_node *node,
->  					void *meta__ign, u64 off)
->  {
-> -	struct bpf_list_node_kern *n = (void *)node;
-> -	struct btf_struct_meta *meta = meta__ign;
-> -
-> -	return __bpf_list_add(n, head, true, meta ? meta->record : NULL, off);
-> +	return bpf_list_push_back(head, node, meta__ign, off);
->  }
->  
->  static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head, bool tail)
-> @@ -2535,16 +2572,24 @@ static int __bpf_rbtree_add(struct bpf_rb_root *root,
->  	return 0;
->  }
->  
-> -__bpf_kfunc int bpf_rbtree_add_impl(struct bpf_rb_root *root, struct bpf_rb_node *node,
-> -				    bool (less)(struct bpf_rb_node *a, const struct bpf_rb_node *b),
-> -				    void *meta__ign, u64 off)
-> +__bpf_kfunc int bpf_rbtree_add(struct bpf_rb_root *root,
-> +			       struct bpf_rb_node *node,
-> +			       bool (less)(struct bpf_rb_node *a, const struct bpf_rb_node *b),
-> +			       struct btf_struct_meta *meta,
-> +			       u64 off)
->  {
-> -	struct btf_struct_meta *meta = meta__ign;
->  	struct bpf_rb_node_kern *n = (void *)node;
->  
->  	return __bpf_rbtree_add(root, n, (void *)less, meta ? meta->record : NULL, off);
->  }
->  
-> +__bpf_kfunc int bpf_rbtree_add_impl(struct bpf_rb_root *root, struct bpf_rb_node *node,
-> +				    bool (less)(struct bpf_rb_node *a, const struct bpf_rb_node *b),
-> +				    void *meta__ign, u64 off)
-> +{
-> +	return bpf_rbtree_add(root, node, less, meta__ign, off);
-> +}
-> +
->  __bpf_kfunc struct bpf_rb_node *bpf_rbtree_first(struct bpf_rb_root *root)
->  {
->  	struct rb_root_cached *r = (struct rb_root_cached *)root;
-> @@ -4536,12 +4581,19 @@ BTF_KFUNCS_START(generic_btf_ids)
->  #ifdef CONFIG_CRASH_DUMP
->  BTF_ID_FLAGS(func, crash_kexec, KF_DESTRUCTIVE)
->  #endif
-> +BTF_ID_FLAGS(func, bpf_obj_new, KF_ACQUIRE | KF_RET_NULL | KF_IMPLICIT_ARGS)
->  BTF_ID_FLAGS(func, bpf_obj_new_impl, KF_ACQUIRE | KF_RET_NULL)
-> +BTF_ID_FLAGS(func, bpf_percpu_obj_new, KF_ACQUIRE | KF_RET_NULL | KF_IMPLICIT_ARGS)
->  BTF_ID_FLAGS(func, bpf_percpu_obj_new_impl, KF_ACQUIRE | KF_RET_NULL)
-> +BTF_ID_FLAGS(func, bpf_obj_drop, KF_RELEASE | KF_IMPLICIT_ARGS)
->  BTF_ID_FLAGS(func, bpf_obj_drop_impl, KF_RELEASE)
-> +BTF_ID_FLAGS(func, bpf_percpu_obj_drop, KF_RELEASE | KF_IMPLICIT_ARGS)
->  BTF_ID_FLAGS(func, bpf_percpu_obj_drop_impl, KF_RELEASE)
-> +BTF_ID_FLAGS(func, bpf_refcount_acquire, KF_ACQUIRE | KF_RET_NULL | KF_RCU | KF_IMPLICIT_ARGS)
->  BTF_ID_FLAGS(func, bpf_refcount_acquire_impl, KF_ACQUIRE | KF_RET_NULL | KF_RCU)
-> +BTF_ID_FLAGS(func, bpf_list_push_front, KF_IMPLICIT_ARGS)
->  BTF_ID_FLAGS(func, bpf_list_push_front_impl)
-> +BTF_ID_FLAGS(func, bpf_list_push_back, KF_IMPLICIT_ARGS)
->  BTF_ID_FLAGS(func, bpf_list_push_back_impl)
->  BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL)
->  BTF_ID_FLAGS(func, bpf_list_pop_back, KF_ACQUIRE | KF_RET_NULL)
-> @@ -4550,6 +4602,7 @@ BTF_ID_FLAGS(func, bpf_list_back, KF_RET_NULL)
->  BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
->  BTF_ID_FLAGS(func, bpf_task_release, KF_RELEASE)
->  BTF_ID_FLAGS(func, bpf_rbtree_remove, KF_ACQUIRE | KF_RET_NULL)
-> +BTF_ID_FLAGS(func, bpf_rbtree_add, KF_IMPLICIT_ARGS)
->  BTF_ID_FLAGS(func, bpf_rbtree_add_impl)
->  BTF_ID_FLAGS(func, bpf_rbtree_first, KF_RET_NULL)
->  BTF_ID_FLAGS(func, bpf_rbtree_root, KF_RET_NULL)
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 01c18f4268de..25d0564de6bc 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -12368,7 +12368,8 @@ enum {
->  	KF_ARG_RES_SPIN_LOCK_ID,
->  	KF_ARG_TASK_WORK_ID,
->  	KF_ARG_PROG_AUX_ID,
-> -	KF_ARG_TIMER_ID
-> +	KF_ARG_TIMER_ID,
-> +	KF_ARG_BTF_STRUCT_META,
->  };
->  
->  BTF_ID_LIST(kf_arg_btf_ids)
-> @@ -12382,6 +12383,7 @@ BTF_ID(struct, bpf_res_spin_lock)
->  BTF_ID(struct, bpf_task_work)
->  BTF_ID(struct, bpf_prog_aux)
->  BTF_ID(struct, bpf_timer)
-> +BTF_ID(struct, btf_struct_meta)
->  
->  static bool __is_kfunc_ptr_arg_type(const struct btf *btf,
->  				    const struct btf_param *arg, int type)
-> @@ -12472,6 +12474,30 @@ static bool is_kfunc_arg_prog_aux(const struct btf *btf, const struct btf_param
->  	return __is_kfunc_ptr_arg_type(btf, arg, KF_ARG_PROG_AUX_ID);
->  }
->  
-> +/*
-> + * A kfunc with KF_IMPLICIT_ARGS has two prototypes in BTF:
-> + *   - the _impl prototype with full arg list (this is meta->func_proto)
-> + *   - the BPF API prototype w/o implicit args (func->type in BTF)
-> + * To determine whether an argument is implicit, we compare its position
-> + * against the number of arguments of both prototypes.
-> + */
-> +static bool is_kfunc_arg_implicit(const struct bpf_kfunc_call_arg_meta *meta, u32 arg_idx)
-> +{
-> +	const struct btf_type *func, *func_proto;
-> +	u32 argn, full_argn;
-> +
-> +	if (!(meta->kfunc_flags & KF_IMPLICIT_ARGS))
-> +		return false;
-> +
-> +	full_argn = btf_type_vlen(meta->func_proto);
-> +
-> +	func = btf_type_by_id(meta->btf, meta->func_id);
-> +	func_proto = btf_type_by_id(meta->btf, func->type);
-> +	argn = btf_type_vlen(func_proto);
-> +
-> +	return argn <= arg_idx && arg_idx < full_argn;
-The `arg_idx < full_argn` condition is not necessary, is it?
-arg_idx is always less than full_argn because full_argn is the number of
-arguments in the _impl variant of the function, which is supposed to be
-greater than non-_impl variant that arg_idx tracks.
-arg_idx >= full_argn is an invariant violation, not the implicit
-argument condition, if I understand this right.
+My reasoning was that since this came up due to respecting tailroom I went
+with no fixes tag, but missing mbuf flag setting for shared umem was an
+existing bug, so we could pick something now.
 
-The rest of the refactoring looks good to me.
-> +}
-> +
->  /* Returns true if struct is composed of scalars, 4 levels of nesting allowed */
->  static bool __btf_type_is_scalar_struct(struct bpf_verifier_env *env,
->  					const struct btf *btf,
-> @@ -12594,6 +12620,14 @@ enum special_kfunc_type {
->  	KF_bpf_session_is_return,
->  	KF_bpf_stream_vprintk,
->  	KF_bpf_stream_print_stack,
-> +	KF_bpf_obj_new,
-> +	KF_bpf_percpu_obj_new,
-> +	KF_bpf_obj_drop,
-> +	KF_bpf_percpu_obj_drop,
-> +	KF_bpf_refcount_acquire,
-> +	KF_bpf_list_push_front,
-> +	KF_bpf_list_push_back,
-> +	KF_bpf_rbtree_add,
->  };
->  
->  BTF_ID_LIST(special_kfunc_list)
-> @@ -12674,6 +12708,58 @@ BTF_ID(func, bpf_arena_reserve_pages)
->  BTF_ID(func, bpf_session_is_return)
->  BTF_ID(func, bpf_stream_vprintk)
->  BTF_ID(func, bpf_stream_print_stack)
-> +BTF_ID(func, bpf_obj_new)
-> +BTF_ID(func, bpf_percpu_obj_new)
-> +BTF_ID(func, bpf_obj_drop)
-> +BTF_ID(func, bpf_percpu_obj_drop)
-> +BTF_ID(func, bpf_refcount_acquire)
-> +BTF_ID(func, bpf_list_push_front)
-> +BTF_ID(func, bpf_list_push_back)
-> +BTF_ID(func, bpf_rbtree_add)
-> +
-> +static bool is_bpf_obj_new_kfunc(u32 func_id)
-> +{
-> +	return func_id == special_kfunc_list[KF_bpf_obj_new] ||
-> +	       func_id == special_kfunc_list[KF_bpf_obj_new_impl];
-> +}
-> +
-> +static bool is_bpf_percpu_obj_new_kfunc(u32 func_id)
-> +{
-> +	return func_id == special_kfunc_list[KF_bpf_percpu_obj_new] ||
-> +	       func_id == special_kfunc_list[KF_bpf_percpu_obj_new_impl];
-> +}
-> +
-> +static bool is_bpf_obj_drop_kfunc(u32 func_id)
-> +{
-> +	return func_id == special_kfunc_list[KF_bpf_obj_drop] ||
-> +	       func_id == special_kfunc_list[KF_bpf_obj_drop_impl];
-> +}
-> +
-> +static bool is_bpf_percpu_obj_drop_kfunc(u32 func_id)
-> +{
-> +	return func_id == special_kfunc_list[KF_bpf_percpu_obj_drop] ||
-> +	       func_id == special_kfunc_list[KF_bpf_percpu_obj_drop_impl];
-> +}
-> +
-> +static bool is_bpf_refcount_acquire_kfunc(u32 func_id)
-> +{
-> +	return func_id == special_kfunc_list[KF_bpf_refcount_acquire] ||
-> +	       func_id == special_kfunc_list[KF_bpf_refcount_acquire_impl];
-> +}
-> +
-> +static bool is_bpf_list_push_kfunc(u32 func_id)
-> +{
-> +	return func_id == special_kfunc_list[KF_bpf_list_push_front] ||
-> +	       func_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
-> +	       func_id == special_kfunc_list[KF_bpf_list_push_back] ||
-> +	       func_id == special_kfunc_list[KF_bpf_list_push_back_impl];
-> +}
-> +
-> +static bool is_bpf_rbtree_add_kfunc(u32 func_id)
-> +{
-> +	return func_id == special_kfunc_list[KF_bpf_rbtree_add] ||
-> +	       func_id == special_kfunc_list[KF_bpf_rbtree_add_impl];
-> +}
->  
->  static bool is_task_work_add_kfunc(u32 func_id)
->  {
-> @@ -12683,10 +12769,8 @@ static bool is_task_work_add_kfunc(u32 func_id)
->  
->  static bool is_kfunc_ret_null(struct bpf_kfunc_call_arg_meta *meta)
->  {
-> -	if (meta->func_id == special_kfunc_list[KF_bpf_refcount_acquire_impl] &&
-> -	    meta->arg_owning_ref) {
-> +	if (is_bpf_refcount_acquire_kfunc(meta->func_id) && meta->arg_owning_ref)
->  		return false;
-> -	}
->  
->  	return meta->kfunc_flags & KF_RET_NULL;
->  }
-> @@ -13074,8 +13158,7 @@ static int check_reg_allocation_locked(struct bpf_verifier_env *env, struct bpf_
->  
->  static bool is_bpf_list_api_kfunc(u32 btf_id)
->  {
-> -	return btf_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
-> +	return is_bpf_list_push_kfunc(btf_id) ||
->  	       btf_id == special_kfunc_list[KF_bpf_list_pop_front] ||
->  	       btf_id == special_kfunc_list[KF_bpf_list_pop_back] ||
->  	       btf_id == special_kfunc_list[KF_bpf_list_front] ||
-> @@ -13084,7 +13167,7 @@ static bool is_bpf_list_api_kfunc(u32 btf_id)
->  
->  static bool is_bpf_rbtree_api_kfunc(u32 btf_id)
->  {
-> -	return btf_id == special_kfunc_list[KF_bpf_rbtree_add_impl] ||
-> +	return is_bpf_rbtree_add_kfunc(btf_id) ||
->  	       btf_id == special_kfunc_list[KF_bpf_rbtree_remove] ||
->  	       btf_id == special_kfunc_list[KF_bpf_rbtree_first] ||
->  	       btf_id == special_kfunc_list[KF_bpf_rbtree_root] ||
-> @@ -13101,8 +13184,9 @@ static bool is_bpf_iter_num_api_kfunc(u32 btf_id)
->  
->  static bool is_bpf_graph_api_kfunc(u32 btf_id)
->  {
-> -	return is_bpf_list_api_kfunc(btf_id) || is_bpf_rbtree_api_kfunc(btf_id) ||
-> -	       btf_id == special_kfunc_list[KF_bpf_refcount_acquire_impl];
-> +	return is_bpf_list_api_kfunc(btf_id) ||
-> +	       is_bpf_rbtree_api_kfunc(btf_id) ||
-> +	       is_bpf_refcount_acquire_kfunc(btf_id);
->  }
->  
->  static bool is_bpf_res_spin_lock_kfunc(u32 btf_id)
-> @@ -13135,7 +13219,7 @@ static bool kfunc_spin_allowed(u32 btf_id)
->  
->  static bool is_sync_callback_calling_kfunc(u32 btf_id)
->  {
-> -	return btf_id == special_kfunc_list[KF_bpf_rbtree_add_impl];
-> +	return is_bpf_rbtree_add_kfunc(btf_id);
->  }
->  
->  static bool is_async_callback_calling_kfunc(u32 btf_id)
-> @@ -13199,12 +13283,11 @@ static bool check_kfunc_is_graph_node_api(struct bpf_verifier_env *env,
->  
->  	switch (node_field_type) {
->  	case BPF_LIST_NODE:
-> -		ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
-> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_back_impl]);
-> +		ret = is_bpf_list_push_kfunc(kfunc_btf_id);
->  		break;
->  	case BPF_RB_NODE:
-> -		ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_remove] ||
-> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_add_impl] ||
-> +		ret = (is_bpf_rbtree_add_kfunc(kfunc_btf_id) ||
-> +		       kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_remove] ||
->  		       kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_left] ||
->  		       kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_right]);
->  		break;
-> @@ -13421,11 +13504,6 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
->  		bool is_ret_buf_sz = false;
->  		int kf_arg_type;
->  
-> -		t = btf_type_skip_modifiers(btf, args[i].type, NULL);
-> -
-> -		if (is_kfunc_arg_ignore(btf, &args[i]))
-> -			continue;
-> -
->  		if (is_kfunc_arg_prog_aux(btf, &args[i])) {
->  			/* Reject repeated use bpf_prog_aux */
->  			if (meta->arg_prog) {
-> @@ -13437,6 +13515,11 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
->  			continue;
->  		}
->  
-> +		if (is_kfunc_arg_ignore(btf, &args[i]) || is_kfunc_arg_implicit(meta, i))
-> +			continue;
-> +
-> +		t = btf_type_skip_modifiers(btf, args[i].type, NULL);
-> +
->  		if (btf_type_is_scalar(t)) {
->  			if (reg->type != SCALAR_VALUE) {
->  				verbose(env, "R%d is not a scalar\n", regno);
-> @@ -13611,13 +13694,13 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
->  			break;
->  		case KF_ARG_PTR_TO_ALLOC_BTF_ID:
->  			if (reg->type == (PTR_TO_BTF_ID | MEM_ALLOC)) {
-> -				if (meta->func_id != special_kfunc_list[KF_bpf_obj_drop_impl]) {
-> -					verbose(env, "arg#%d expected for bpf_obj_drop_impl()\n", i);
-> +				if (!is_bpf_obj_drop_kfunc(meta->func_id)) {
-> +					verbose(env, "arg#%d expected for bpf_obj_drop()\n", i);
->  					return -EINVAL;
->  				}
->  			} else if (reg->type == (PTR_TO_BTF_ID | MEM_ALLOC | MEM_PERCPU)) {
-> -				if (meta->func_id != special_kfunc_list[KF_bpf_percpu_obj_drop_impl]) {
-> -					verbose(env, "arg#%d expected for bpf_percpu_obj_drop_impl()\n", i);
-> +				if (!is_bpf_percpu_obj_drop_kfunc(meta->func_id)) {
-> +					verbose(env, "arg#%d expected for bpf_percpu_obj_drop()\n", i);
->  					return -EINVAL;
->  				}
->  			} else {
-> @@ -13743,7 +13826,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
->  				return ret;
->  			break;
->  		case KF_ARG_PTR_TO_RB_NODE:
-> -			if (meta->func_id == special_kfunc_list[KF_bpf_rbtree_add_impl]) {
-> +			if (is_bpf_rbtree_add_kfunc(meta->func_id)) {
->  				if (reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
->  					verbose(env, "arg#%d expected pointer to allocated object\n", i);
->  					return -EINVAL;
-> @@ -13980,13 +14063,12 @@ static int check_special_kfunc(struct bpf_verifier_env *env, struct bpf_kfunc_ca
->  	if (meta->btf != btf_vmlinux)
->  		return 0;
->  
-> -	if (meta->func_id == special_kfunc_list[KF_bpf_obj_new_impl] ||
-> -	    meta->func_id == special_kfunc_list[KF_bpf_percpu_obj_new_impl]) {
-> +	if (is_bpf_obj_new_kfunc(meta->func_id) || is_bpf_percpu_obj_new_kfunc(meta->func_id)) {
->  		struct btf_struct_meta *struct_meta;
->  		struct btf *ret_btf;
->  		u32 ret_btf_id;
->  
-> -		if (meta->func_id == special_kfunc_list[KF_bpf_obj_new_impl] && !bpf_global_ma_set)
-> +		if (is_bpf_obj_new_kfunc(meta->func_id) && !bpf_global_ma_set)
->  			return -ENOMEM;
->  
->  		if (((u64)(u32)meta->arg_constant.value) != meta->arg_constant.value) {
-> @@ -14009,7 +14091,7 @@ static int check_special_kfunc(struct bpf_verifier_env *env, struct bpf_kfunc_ca
->  			return -EINVAL;
->  		}
->  
-> -		if (meta->func_id == special_kfunc_list[KF_bpf_percpu_obj_new_impl]) {
-> +		if (is_bpf_percpu_obj_new_kfunc(meta->func_id)) {
->  			if (ret_t->size > BPF_GLOBAL_PERCPU_MA_MAX_SIZE) {
->  				verbose(env, "bpf_percpu_obj_new type size (%d) is greater than %d\n",
->  					ret_t->size, BPF_GLOBAL_PERCPU_MA_MAX_SIZE);
-> @@ -14039,7 +14121,7 @@ static int check_special_kfunc(struct bpf_verifier_env *env, struct bpf_kfunc_ca
->  		}
->  
->  		struct_meta = btf_find_struct_meta(ret_btf, ret_btf_id);
-> -		if (meta->func_id == special_kfunc_list[KF_bpf_percpu_obj_new_impl]) {
-> +		if (is_bpf_percpu_obj_new_kfunc(meta->func_id)) {
->  			if (!__btf_type_is_scalar_struct(env, ret_btf, ret_t, 0)) {
->  				verbose(env, "bpf_percpu_obj_new type ID argument must be of a struct of scalars\n");
->  				return -EINVAL;
-> @@ -14055,12 +14137,12 @@ static int check_special_kfunc(struct bpf_verifier_env *env, struct bpf_kfunc_ca
->  		regs[BPF_REG_0].type = PTR_TO_BTF_ID | MEM_ALLOC;
->  		regs[BPF_REG_0].btf = ret_btf;
->  		regs[BPF_REG_0].btf_id = ret_btf_id;
-> -		if (meta->func_id == special_kfunc_list[KF_bpf_percpu_obj_new_impl])
-> +		if (is_bpf_percpu_obj_new_kfunc(meta->func_id))
->  			regs[BPF_REG_0].type |= MEM_PERCPU;
->  
->  		insn_aux->obj_new_size = ret_t->size;
->  		insn_aux->kptr_struct_meta = struct_meta;
-> -	} else if (meta->func_id == special_kfunc_list[KF_bpf_refcount_acquire_impl]) {
-> +	} else if (is_bpf_refcount_acquire_kfunc(meta->func_id)) {
->  		mark_reg_known_zero(env, regs, BPF_REG_0);
->  		regs[BPF_REG_0].type = PTR_TO_BTF_ID | MEM_ALLOC;
->  		regs[BPF_REG_0].btf = meta->arg_btf;
-> @@ -14226,7 +14308,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->  	if (err < 0)
->  		return err;
->  
-> -	if (meta.func_id == special_kfunc_list[KF_bpf_rbtree_add_impl]) {
-> +	if (is_bpf_rbtree_add_kfunc(meta.func_id)) {
->  		err = push_callback_call(env, insn, insn_idx, meta.subprogno,
->  					 set_rbtree_add_callback_state);
->  		if (err) {
-> @@ -14340,9 +14422,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->  			return err;
->  	}
->  
-> -	if (meta.func_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
-> -	    meta.func_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
-> -	    meta.func_id == special_kfunc_list[KF_bpf_rbtree_add_impl]) {
-> +	if (is_bpf_list_push_kfunc(meta.func_id) || is_bpf_rbtree_add_kfunc(meta.func_id)) {
->  		release_ref_obj_id = regs[BPF_REG_2].ref_obj_id;
->  		insn_aux->insert_off = regs[BPF_REG_2].var_off.value;
->  		insn_aux->kptr_struct_meta = btf_find_struct_meta(meta.arg_btf, meta.arg_btf_id);
-> @@ -14390,11 +14470,10 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->  	t = btf_type_skip_modifiers(desc_btf, meta.func_proto->type, NULL);
->  
->  	if (is_kfunc_acquire(&meta) && !btf_type_is_struct_ptr(meta.btf, t)) {
-> -		/* Only exception is bpf_obj_new_impl */
->  		if (meta.btf != btf_vmlinux ||
-> -		    (meta.func_id != special_kfunc_list[KF_bpf_obj_new_impl] &&
-> -		     meta.func_id != special_kfunc_list[KF_bpf_percpu_obj_new_impl] &&
-> -		     meta.func_id != special_kfunc_list[KF_bpf_refcount_acquire_impl])) {
-> +		    (!is_bpf_obj_new_kfunc(meta.func_id) &&
-> +		     !is_bpf_percpu_obj_new_kfunc(meta.func_id) &&
-> +		     !is_bpf_refcount_acquire_kfunc(meta.func_id))) {
->  			verbose(env, "acquire kernel function does not return PTR_TO_BTF_ID\n");
->  			return -EINVAL;
->  		}
-> @@ -14505,8 +14584,8 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->  			regs[BPF_REG_0].id = ++env->id_gen;
->  	} else if (btf_type_is_void(t)) {
->  		if (meta.btf == btf_vmlinux) {
-> -			if (meta.func_id == special_kfunc_list[KF_bpf_obj_drop_impl] ||
-> -			    meta.func_id == special_kfunc_list[KF_bpf_percpu_obj_drop_impl]) {
-> +			if (is_bpf_obj_drop_kfunc(meta.func_id) ||
-> +			    is_bpf_percpu_obj_drop_kfunc(meta.func_id)) {
->  				insn_aux->kptr_struct_meta =
->  					btf_find_struct_meta(meta.arg_btf,
->  							     meta.arg_btf_id);
-> @@ -23312,13 +23391,12 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->  	if (!bpf_jit_supports_far_kfunc_call())
->  		insn->imm = BPF_CALL_IMM(desc->addr);
->  
-> -	if (desc->func_id == special_kfunc_list[KF_bpf_obj_new_impl] ||
-> -	    desc->func_id == special_kfunc_list[KF_bpf_percpu_obj_new_impl]) {
-> +	if (is_bpf_obj_new_kfunc(desc->func_id) || is_bpf_percpu_obj_new_kfunc(desc->func_id)) {
->  		struct btf_struct_meta *kptr_struct_meta = env->insn_aux_data[insn_idx].kptr_struct_meta;
->  		struct bpf_insn addr[2] = { BPF_LD_IMM64(BPF_REG_2, (long)kptr_struct_meta) };
->  		u64 obj_new_size = env->insn_aux_data[insn_idx].obj_new_size;
->  
-> -		if (desc->func_id == special_kfunc_list[KF_bpf_percpu_obj_new_impl] && kptr_struct_meta) {
-> +		if (is_bpf_percpu_obj_new_kfunc(desc->func_id) && kptr_struct_meta) {
->  			verifier_bug(env, "NULL kptr_struct_meta expected at insn_idx %d",
->  				     insn_idx);
->  			return -EFAULT;
-> @@ -23329,20 +23407,19 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->  		insn_buf[2] = addr[1];
->  		insn_buf[3] = *insn;
->  		*cnt = 4;
-> -	} else if (desc->func_id == special_kfunc_list[KF_bpf_obj_drop_impl] ||
-> -		   desc->func_id == special_kfunc_list[KF_bpf_percpu_obj_drop_impl] ||
-> -		   desc->func_id == special_kfunc_list[KF_bpf_refcount_acquire_impl]) {
-> +	} else if (is_bpf_obj_drop_kfunc(desc->func_id) ||
-> +		   is_bpf_percpu_obj_drop_kfunc(desc->func_id) ||
-> +		   is_bpf_refcount_acquire_kfunc(desc->func_id)) {
->  		struct btf_struct_meta *kptr_struct_meta = env->insn_aux_data[insn_idx].kptr_struct_meta;
->  		struct bpf_insn addr[2] = { BPF_LD_IMM64(BPF_REG_2, (long)kptr_struct_meta) };
->  
-> -		if (desc->func_id == special_kfunc_list[KF_bpf_percpu_obj_drop_impl] && kptr_struct_meta) {
-> +		if (is_bpf_percpu_obj_drop_kfunc(desc->func_id) && kptr_struct_meta) {
->  			verifier_bug(env, "NULL kptr_struct_meta expected at insn_idx %d",
->  				     insn_idx);
->  			return -EFAULT;
->  		}
->  
-> -		if (desc->func_id == special_kfunc_list[KF_bpf_refcount_acquire_impl] &&
-> -		    !kptr_struct_meta) {
-> +		if (is_bpf_refcount_acquire_kfunc(desc->func_id) && !kptr_struct_meta) {
->  			verifier_bug(env, "kptr_struct_meta expected at insn_idx %d",
->  				     insn_idx);
->  			return -EFAULT;
-> @@ -23352,15 +23429,14 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->  		insn_buf[1] = addr[1];
->  		insn_buf[2] = *insn;
->  		*cnt = 3;
-> -	} else if (desc->func_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
-> -		   desc->func_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
-> -		   desc->func_id == special_kfunc_list[KF_bpf_rbtree_add_impl]) {
-> +	} else if (is_bpf_list_push_kfunc(desc->func_id) ||
-> +		   is_bpf_rbtree_add_kfunc(desc->func_id)) {
->  		struct btf_struct_meta *kptr_struct_meta = env->insn_aux_data[insn_idx].kptr_struct_meta;
->  		int struct_meta_reg = BPF_REG_3;
->  		int node_offset_reg = BPF_REG_4;
->  
->  		/* rbtree_add has extra 'less' arg, so args-to-fixup are in diff regs */
-> -		if (desc->func_id == special_kfunc_list[KF_bpf_rbtree_add_impl]) {
-> +		if (is_bpf_rbtree_add_kfunc(desc->func_id)) {
->  			struct_meta_reg = BPF_REG_4;
->  			node_offset_reg = BPF_REG_5;
->  		}
-> diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
-> index 5208f650080f..f8a91fa7584f 100644
-> --- a/tools/bpf/resolve_btfids/main.c
-> +++ b/tools/bpf/resolve_btfids/main.c
-> @@ -1065,6 +1065,7 @@ static bool is_kf_implicit_arg(const struct btf *btf, const struct btf_param *p)
->  {
->  	static const char *const kf_implicit_arg_types[] = {
->  		"bpf_prog_aux",
-> +		"btf_struct_meta",
->  	};
->  	const struct btf_type *t;
->  	const char *name;
-> diff --git a/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c b/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c
-> index f2b8eb2ff76f..81813c724fa9 100644
-> --- a/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c
-> +++ b/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c
-> @@ -110,7 +110,7 @@ int BPF_PROG(test_array_map_3)
->  }
->  
->  SEC("?fentry.s/bpf_fentry_test1")
-> -__failure __msg("arg#0 expected for bpf_percpu_obj_drop_impl()")
-> +__failure __msg("arg#0 expected for bpf_percpu_obj_drop()")
->  int BPF_PROG(test_array_map_4)
->  {
->  	struct val_t __percpu_kptr *p;
-> @@ -124,7 +124,7 @@ int BPF_PROG(test_array_map_4)
->  }
->  
->  SEC("?fentry.s/bpf_fentry_test1")
-> -__failure __msg("arg#0 expected for bpf_obj_drop_impl()")
-> +__failure __msg("arg#0 expected for bpf_obj_drop()")
->  int BPF_PROG(test_array_map_5)
->  {
->  	struct val_t *p;
-> -- 
-> 2.53.0
+> 
+> This got me thinking; Nothing in the xsk core prevents MTU from being
+> changes while xsk is runing? Some drivers do! Not for this patch, but
+> maybe xsk should listen to MTU notifiers?
+
+Nice, I had exact patch locally, attaching at the bottom [0].
+However I withdrew it as this would yield a rework on xskxceiver - test
+suite actually changes MTU while keeping XSK resources alive.
+
+We can get back to this idea but I didn't want to stir up the pot too much
+in this set.
+
+> 
+> Seems like we're in a bind-time TOCTOU gap...
+> 
+> > ---
+> >  net/xdp/xsk_buff_pool.c | 16 ++++++++++++++--
+> >  1 file changed, 14 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+> > index 37b7a68b89b3..e9377b05118b 100644
+> > --- a/net/xdp/xsk_buff_pool.c
+> > +++ b/net/xdp/xsk_buff_pool.c
+> > @@ -157,6 +157,7 @@ static void xp_disable_drv_zc(struct xsk_buff_pool *pool)
+> >  int xp_assign_dev(struct xsk_buff_pool *pool,
+> >  		  struct net_device *netdev, u16 queue_id, u16 flags)
+> >  {
+> > +	bool mbuf = flags & XDP_USE_SG;
+> >  	bool force_zc, force_copy;
+> >  	struct netdev_bpf bpf;
+> >  	int err = 0;
+> > @@ -178,7 +179,7 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+> >  	if (err)
+> >  		return err;
+> >  
+> > -	if (flags & XDP_USE_SG)
+> > +	if (mbuf)
+> >  		pool->umem->flags |= XDP_UMEM_SG_FLAG;
+> >  
+> >  	if (flags & XDP_USE_NEED_WAKEUP)
+> > @@ -200,10 +201,18 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+> >  		goto err_unreg_pool;
+> >  	}
+> >  
+> > -	if (netdev->xdp_zc_max_segs == 1 && (flags & XDP_USE_SG)) {
+> > +	if (netdev->xdp_zc_max_segs == 1 && mbuf) {
+> >  		err = -EOPNOTSUPP;
+> >  		goto err_unreg_pool;
+> >  	}
+> > +#define ETH_PAD_LEN (ETH_HLEN + 2 * VLAN_HLEN  + ETH_FCS_LEN)
+> 
+> Yuk! Move this somewhere else.
+> 
+> > +	if (!mbuf) {
+> > +		if (READ_ONCE(netdev->mtu) +  ETH_PAD_LEN >
+> 
+> I think READ_ONCE sends wrong signal to readers. We're in an
+> ASSERT_RTNL() region.
+
+Good point!
+
+> 
+> > +		    xsk_pool_get_rx_frame_size(pool)) {
+> > +			err = -EINVAL;
+> > +			goto err_unreg_pool;
+> > +		}
+> > +	}
+> >  
+> >  	if (dev_get_min_mp_channel_count(netdev)) {
+> >  		err = -EBUSY;
+> > @@ -247,6 +256,9 @@ int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_sock *umem_xs,
+> >  	struct xdp_umem *umem = umem_xs->umem;
+> >  
+> >  	flags = umem->zc ? XDP_ZEROCOPY : XDP_COPY;
+> > +	if (umem->flags & XDP_UMEM_SG_FLAG)
+> > +		flags |= XDP_USE_SG;
+> > +
+> >  	if (umem_xs->pool->uses_need_wakeup)
+> >  		flags |= XDP_USE_NEED_WAKEUP;
+> >  
+> > -- 
+> > 2.43.0
+
+[0]:
+Subject: [PATCH net 4/5] xsk: forbid MTU changes while an XSK pool is attached
+
+AF_XDP pool setup depends on the netdev configuration that is in effect
+at bind time.
+
+In particular, the usable frame size seen by zero-copy drivers is
+derived from the UMEM chunk layout. Changing MTU after a pool has been
+attached can invalidate that setup and leave the device and pool with
+incompatible packet geometry.
+
+Reject NETDEV_PRECHANGEMTU when an XSK pool is attached to the device.
+This keeps the policy in the AF_XDP code, avoids touching individual
+ndo_change_mtu() implementations, and stops the MTU change before the
+driver callback is reached.
+
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+---
+ net/xdp/xsk.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index e6530996053b..73cbd5774031 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -1790,6 +1790,18 @@ static int xsk_mmap(struct file *file, struct socket *sock,
+ 	return remap_vmalloc_range(vma, q->ring, 0);
+ }
+ 
++static bool xsk_dev_has_pool(struct net_device *dev)
++{
++	u32 i, n;
++
++	n = max_t(u32, dev->real_num_rx_queues, dev->real_num_tx_queues);
++	for (i = 0; i < n; i++)
++		if (xsk_get_pool_from_qid(dev, i))
++			return true;
++
++	return false;
++}
++
+ static int xsk_notifier(struct notifier_block *this,
+ 			unsigned long msg, void *ptr)
+ {
+@@ -1798,6 +1810,11 @@ static int xsk_notifier(struct notifier_block *this,
+ 	struct sock *sk;
+ 
+ 	switch (msg) {
++	case NETDEV_PRECHANGEMTU:
++		if (xsk_dev_has_pool(dev))
++			return notifier_from_errno(-EBUSY);
++		break;
++
+ 	case NETDEV_UNREGISTER:
+ 		mutex_lock(&net->xdp.lock);
+ 		sk_for_each(sk, &net->xdp.list) {
+-- 
+2.43.0
+
