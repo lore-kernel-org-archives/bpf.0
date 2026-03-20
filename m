@@ -1,142 +1,223 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69E0929DB8F;
-	Fri, 20 Mar 2026 14:33:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F91C3CAE7A
+	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 14:42:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774017232; cv=none; b=BSfC1SNaiZH7tL0e4zZ4ZJ+EzYffNPoiDhWjf7nsDLwb9gVK5dOafdC50e3IMSkLXiwGYZHjHW/47sk8RV6nqCS09wdQoTMw/CzL1ErBZ1UT6zVj96Kv5egyx9ZZ3SVW0qt7GnmjAJ73DmsHi1e+FxZQBZM/tOl9bl1ENV0Lk9E=
+	t=1774017725; cv=none; b=T1FvHA6WvtEL9KO9wnaRlAdzZeNVx1gwMs1VfqQ1DMqxQMTamWDrvM8Q7aBpzClLDrhX4SPB4iIEvqwA6y5Lq/am+Lf4INQqjuTlVnLbn8gDT8S+Jfn0uz9cw3PGpMJ7ciPr0s7kGkF2FmeULYMGwuvkMFI2zaQgMJNx6hcwX1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774017232; c=relaxed/simple;
-	bh=woNciVcFPVPKMQT5S/73G3cJUwtRkApIxOo1qnPR/fA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=AqCXJqNwCurgBKx2HapHq9PvBJojQPgV1R+d+17GM5JNSRZzG8yCyJREDCEAxu73H1Pq35dHLOl6xyCjOxaBU5JjCz3RRtQT2YG7LOutlgoSZC/5gfqo8v/GM7gmCV1+IatJnzqaxb5U5OmELUi576rqsb9Jxv5/GCgnK/bXqjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m040ISdA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774017725; c=relaxed/simple;
+	bh=e96EXxfLihKuO05dFmuztcwCzRpZVtLutKKCC6HBE8c=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=o3lVA0pR8M/lEoHMzO3ytkxrpZ2ybuYf7l/Tdg6a4cy6e59+zO7x74r6u3D7bybOZm0ZTkUZi7gSCmDTz6E7tdJWSlerwwgS1LzW/AMB7E+cLPjX7jzNSEPecSH8WVMnchQ1E+1QII0WiZzJ8tTNQtdWDOH8+yiGLanLlCzu24o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b=KEuw/nq0; arc=none smtp.client-ip=209.85.215.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m040ISdA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56BC8C4CEF7;
-	Fri, 20 Mar 2026 14:33:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774017232;
-	bh=woNciVcFPVPKMQT5S/73G3cJUwtRkApIxOo1qnPR/fA=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=m040ISdArhiK15Wt+g2CXOlAvu3bmHrRHpsjRNyEr+5iQN0VHvwWEumgevnywYjgK
-	 7RWgfS9f7qIpRldtep2k0MvPI0QGqwKqCkowgyPujUSov0ZTUfaNdgWzIENX/xaDfl
-	 7KwtQ6jZ/xdWEyJiuF0eTiDqfIjbOAFNn46yoa/BTGzlgCGZrV/+ZgYsk39dWsQjPN
-	 FVFgBH4utS0kC2+I0NUEdiK2vL204Cde0ej3BOxGLMSKBAewmL8+8P4xEz3Pjq2opg
-	 e9UWBA1ff3zHWLPMxoUWuPcHIvLstFIWFd76R/3VL243g31wdj13Plvlj75qRli5Jk
-	 7cC+vmQ/cIGEA==
-Message-ID: <38379a16-d596-4266-ac3b-1dbee5356add@kernel.org>
-Date: Fri, 20 Mar 2026 15:33:46 +0100
+	dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b="KEuw/nq0"
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-c7393c6832bso795651a12.2
+        for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 07:42:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dama-to.20230601.gappssmtp.com; s=20230601; t=1774017724; x=1774622524; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LU0lxc3eKqf92oDepH/UmC/x9vwxuAnsiBKDevCcH+I=;
+        b=KEuw/nq0UxFJEN94nRSwwQWNasWOGQAm8/mjC4bDR1u6SRbMirnO1JZXZZHGoIv5hT
+         Lw2+fXOnNjgUEo9LCUYC0KY5XVYP5ZrqcmLZ6n7tsX/UcFO9t2eDzVpCxVcCHWAZCywv
+         U5AMgk0thL5wvEKRF94+W2s8DPvywhTPPMXh5oH0cIl7llC6pJvcmDCc7aVMvuaLfU2U
+         HsRaqls+Zf8aR8T/bmzxhQcozo61CvAFG1E8l/I76GofLD0m6OPFpKPEOfxe/nq55Lg+
+         7eJhJIsp9nQepQNkIaNDIEsyjQ3wXfSZbFDoG2/Qn6vYJ2IMaJUx0VagcsKEDR1T/BjX
+         5jQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774017724; x=1774622524;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=LU0lxc3eKqf92oDepH/UmC/x9vwxuAnsiBKDevCcH+I=;
+        b=egF6yqfV2LGQ1MtGwjRJvPPaiW2tvpCH9CcxPEMx/WK7uhk9Dmv29hQpE8IZUK0xHe
+         /G43rMQExZh7+VHSSPfMbc6vL73Km/leopudzgsiQq8l6/FZ/LaAG2b8fTrCIAhD1NWD
+         CdIfBo2FMtDIko8a7K1FVawSfD4qCFE7mORtVk1oI29oI12SCoWnxFo0qC7vYnv2mCLY
+         2BsomX6eTjGqv9MuLG900Cyr+bZC1iHqripALQJpp0SJzAO02t0qw4UFry5D2ZGPeQVN
+         JRyh6ZoPQkiGR0FE6BIVaYuLQuWrvUgh8qotc6cDLTugnJDZ3Z+HMspCW0AzfAXYvbBR
+         ugYg==
+X-Forwarded-Encrypted: i=1; AJvYcCWbji2aEWFNNojqrKcwWup4057dJu/IIr+NB0/4RpNjefTgAsjgXpPpGdfctgBBOSXdpyQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVOSHo0xXJH4q26G+mKRFRr0kz8wAdB3riqSwzaVhuIrBzW4VH
+	+qkOzzFc+zDau4rWWgFnOAt/Uv/+l/fd90NHwCwhGpJ077ZD4meeibqtWsymzrMtgaI=
+X-Gm-Gg: ATEYQzwuMJGWQZLFLXuT/y40JMc6/OT0qAQRCbwyIdW4evgc1J1xYZLFvFHhsUCdbLh
+	bwXrRBp6fHQB1oLN9XH+z189+WWiBJ3GC0JcZpRtL7zdzBo96SQucdGxN0rlPgmqYeu6g2ZK8f7
+	KhONgo1IHypgixFqvhY0yOtmQnKWBprRSj4Czuk1CRs+nQdmUJsuhpaSRbKcVb65ghtbn4eIp+X
+	YPPDWczdXbsn8WiYrrsWFGyQYbAZRqKFBhBEN7gl3ndWsXKRStZYuCsM166bizBjncq0gJG8SmI
+	ONiawo4VLtiM03XSkj6Mxv714OHLRMK3rcARpRxHa04GSVGp5GTDB+OVMbrAOA8o2ZfAvMH1D/e
+	diC3o/jp3kItcEg3Yuogy5dXONRaUFsQuTsJpsURwfjRAPlHqLjvOhk8+wfeiex0/mq+ipp2MuW
+	Log7g=
+X-Received: by 2002:a17:903:3c2d:b0:2ae:3afc:eb42 with SMTP id d9443c01a7336-2b0827de54amr34730085ad.38.1774017723548;
+        Fri, 20 Mar 2026 07:42:03 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:1::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b0835604cdsm23482005ad.37.2026.03.20.07.42.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Mar 2026 07:42:03 -0700 (PDT)
+From: Joe Damato <joe@dama.to>
+To: netdev@vger.kernel.org,
+	Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Richard Cochran <richardcochran@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>
+Cc: horms@kernel.org,
+	linux-kernel@vger.kernel.org,
+	leon@kernel.org,
+	Joe Damato <joe@dama.to>,
+	bpf@vger.kernel.org
+Subject: [net-next v4 07/12] net: bnxt: Add boilerplate GSO code
+Date: Fri, 20 Mar 2026 07:41:28 -0700
+Message-ID: <20260320144141.260246-8-joe@dama.to>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260320144141.260246-1-joe@dama.to>
+References: <20260320144141.260246-1-joe@dama.to>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] vmalloc: Optimize vfree
-Content-Language: en-US
-To: "David Hildenbrand (Arm)" <david@kernel.org>,
- Muhammad Usama Anjum <usama.anjum@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Mike Rapoport
- <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Brendan Jackman <jackmanb@google.com>,
- Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
- Uladzislau Rezki <urezki@gmail.com>, Nick Terrell <terrelln@fb.com>,
- David Sterba <dsterba@suse.com>,
- "Vishal Moola (Oracle)" <vishal.moola@gmail.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, Ryan.Roberts@arm.com,
- david.hildenbrand@arm.com
-References: <20260316113209.945853-1-usama.anjum@arm.com>
- <20260316113209.945853-3-usama.anjum@arm.com>
- <e59ab258-7331-412c-b490-657e32ec1fe0@kernel.org>
- <b7959d34-6e7d-45c2-a674-f32afd057068@kernel.org>
-From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-In-Reply-To: <b7959d34-6e7d-45c2-a674-f32afd057068@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 3/20/26 09:39, David Hildenbrand (Arm) wrote:
-> On 3/16/26 16:49, Vlastimil Babka wrote:
->>>  mm/vmalloc.c | 34 +++++++++++++++++++++++++---------
->>>  1 file changed, 25 insertions(+), 9 deletions(-)
->>>
->>> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
->>> index c607307c657a6..8b935395fb068 100644
->>> --- a/mm/vmalloc.c
->>> +++ b/mm/vmalloc.c
->>> @@ -3459,18 +3459,34 @@ void vfree(const void *addr)
->>>  
->>>  	if (unlikely(vm->flags & VM_FLUSH_RESET_PERMS))
->>>  		vm_reset_perms(vm);
->>> -	for (i = 0; i < vm->nr_pages; i++) {
->>> -		struct page *page = vm->pages[i];
->>> +
->>> +	if (vm->nr_pages) {
->>> +		bool account = !(vm->flags & VM_MAP_PUT_PAGES);
->>> +		unsigned long start_pfn, pfn;
->>> +		struct page *page = vm->pages[0];
->>> +		int nr = 1;
->>>  
->>>  		BUG_ON(!page);
->>> -		/*
->>> -		 * High-order allocs for huge vmallocs are split, so
->>> -		 * can be freed as an array of order-0 allocations
->>> -		 */
->>> -		if (!(vm->flags & VM_MAP_PUT_PAGES))
->>> +		start_pfn = page_to_pfn(page);
->>> +		if (account)
->>>  			mod_lruvec_page_state(page, NR_VMALLOC, -1);
->>> -		__free_page(page);
->>> -		cond_resched();
->>> +
->>> +		for (i = 1; i < vm->nr_pages; i++) {
->>> +			page = vm->pages[i];
->>> +			BUG_ON(!page);
->> 
->> We shouldn't be adding BUG_ON()'s. Rather demote also the pre-existing one
->> to VM_WARN_ON_ONCE() and skip gracefully.
->> 
->>> +			if (account)
->>> +				mod_lruvec_page_state(page, NR_VMALLOC, -1);
->> 
->> I think we should be able to batch this too to use "nr"?
-> 
-> Are we sure that pages cannot cross nodes etc? It could happen that we
-> have a contig range that spans zones/nodes/etc ...
+Add bnxt_gso.c and bnxt_gso.h with a stub bnxt_sw_udp_gso_xmit()
+function, SW USO constants (BNXT_SW_USO_MAX_SEGS,
+BNXT_SW_USO_MAX_DESCS), and the is_sw_gso field in bnxt_sw_tx_bd
+with BNXT_SW_GSO_MID/LAST markers.
 
-Hmm single order-3 allocation can't but we could be unlucky and get the last
-order-3 from zone X and first order-3 from adjacent zone Y.
-In that case the loop would need to also check same zone/node.
+The full SW USO implementation will be added in a future commit.
 
-> Anyhow, should we try to decouple both things, providing a
-> core-mm function to do the page freeing?
-> 
-> We do have something similar, optimized unpinning of large folios,
-> in unpin_user_pages_dirty_lock(). This here is a bit different.
-> 
-> 
-> So what I am thinking about for this code here to do:
-> 
-> 	if (!(vm->flags & VM_MAP_PUT_PAGES)) {
-> 		for (i = 0; i < vm->nr_pages; i++)
-> 			mod_lruvec_page_state(vm->pages[i], NR_VMALLOC, -1);
-> 	}
-> 	free_pages_bulk(vm->pages, vm->nr_pages);
-> 
-> 
-> We could optimize the first loop to do batching where possible as well.
-> 
-> 
-> free_pages_bulk() would match alloc_pages_bulk()
-> 
-> 	void free_pages_bulk(struct page **page_array, unsigned long nr_pages)
-> 
-> Internally we'd do the contig handling.
-> 
-> Was that already discussed?
+Suggested-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Joe Damato <joe@dama.to>
+---
+ drivers/net/ethernet/broadcom/bnxt/Makefile   |  2 +-
+ drivers/net/ethernet/broadcom/bnxt/bnxt.h     |  4 +++
+ drivers/net/ethernet/broadcom/bnxt/bnxt_gso.c | 30 ++++++++++++++++++
+ drivers/net/ethernet/broadcom/bnxt/bnxt_gso.h | 31 +++++++++++++++++++
+ 4 files changed, 66 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/net/ethernet/broadcom/bnxt/bnxt_gso.c
+ create mode 100644 drivers/net/ethernet/broadcom/bnxt/bnxt_gso.h
 
-AFAIU some of Zi's replies hinted at this direction. It would make sense, yeah.
+diff --git a/drivers/net/ethernet/broadcom/bnxt/Makefile b/drivers/net/ethernet/broadcom/bnxt/Makefile
+index ba6c239d52fa..debef78c8b6d 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/Makefile
++++ b/drivers/net/ethernet/broadcom/bnxt/Makefile
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ obj-$(CONFIG_BNXT) += bnxt_en.o
+ 
+-bnxt_en-y := bnxt.o bnxt_hwrm.o bnxt_sriov.o bnxt_ethtool.o bnxt_dcb.o bnxt_ulp.o bnxt_xdp.o bnxt_ptp.o bnxt_vfr.o bnxt_devlink.o bnxt_dim.o bnxt_coredump.o
++bnxt_en-y := bnxt.o bnxt_hwrm.o bnxt_sriov.o bnxt_ethtool.o bnxt_dcb.o bnxt_ulp.o bnxt_xdp.o bnxt_ptp.o bnxt_vfr.o bnxt_devlink.o bnxt_dim.o bnxt_coredump.o bnxt_gso.o
+ bnxt_en-$(CONFIG_BNXT_FLOWER_OFFLOAD) += bnxt_tc.o
+ bnxt_en-$(CONFIG_DEBUG_FS) += bnxt_debugfs.o
+ bnxt_en-$(CONFIG_BNXT_HWMON) += bnxt_hwmon.o
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.h b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
+index d9543d6048d8..593b78672be8 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt.h
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
+@@ -891,6 +891,7 @@ struct bnxt_sw_tx_bd {
+ 	u8			is_ts_pkt;
+ 	u8			is_push;
+ 	u8			action;
++	u8			is_sw_gso;
+ 	unsigned short		nr_frags;
+ 	union {
+ 		u16			rx_prod;
+@@ -898,6 +899,9 @@ struct bnxt_sw_tx_bd {
+ 	};
+ };
+ 
++#define BNXT_SW_GSO_MID		1
++#define BNXT_SW_GSO_LAST	2
++
+ struct bnxt_sw_rx_bd {
+ 	void			*data;
+ 	u8			*data_ptr;
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_gso.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_gso.c
+new file mode 100644
+index 000000000000..b296769ee4fe
+--- /dev/null
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_gso.c
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/* Broadcom NetXtreme-C/E network driver.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation.
++ */
++
++#include <linux/pci.h>
++#include <linux/netdevice.h>
++#include <linux/skbuff.h>
++#include <net/netdev_queues.h>
++#include <net/ip.h>
++#include <net/ipv6.h>
++#include <net/udp.h>
++#include <net/tso.h>
++#include <linux/bnxt/hsi.h>
++
++#include "bnxt.h"
++#include "bnxt_gso.h"
++
++netdev_tx_t bnxt_sw_udp_gso_xmit(struct bnxt *bp,
++				 struct bnxt_tx_ring_info *txr,
++				 struct netdev_queue *txq,
++				 struct sk_buff *skb)
++{
++	dev_kfree_skb_any(skb);
++	dev_core_stats_tx_dropped_inc(bp->dev);
++	return NETDEV_TX_OK;
++}
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_gso.h b/drivers/net/ethernet/broadcom/bnxt/bnxt_gso.h
+new file mode 100644
+index 000000000000..f01e8102dcd7
+--- /dev/null
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_gso.h
+@@ -0,0 +1,31 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/*
++ * Broadcom NetXtreme-C/E network driver.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation.
++ */
++
++#ifndef BNXT_GSO_H
++#define BNXT_GSO_H
++
++/* Maximum segments the stack may send in a single SW USO skb.
++ * This caps gso_max_segs for NICs without HW USO support.
++ */
++#define BNXT_SW_USO_MAX_SEGS	64
++
++/* Worst-case TX descriptors consumed by one SW USO packet:
++ * Each segment: 1 long BD + 1 ext BD + payload BDs.
++ * Total payload BDs across all segs <= num_segs + nr_frags (each frag
++ * boundary crossing adds at most 1 extra BD).
++ * So: 3 * max_segs + MAX_SKB_FRAGS + 1 = 3 * 64 + 17 + 1 = 210.
++ */
++#define BNXT_SW_USO_MAX_DESCS	(3 * BNXT_SW_USO_MAX_SEGS + MAX_SKB_FRAGS + 1)
++
++netdev_tx_t bnxt_sw_udp_gso_xmit(struct bnxt *bp,
++				 struct bnxt_tx_ring_info *txr,
++				 struct netdev_queue *txq,
++				 struct sk_buff *skb);
++
++#endif
+-- 
+2.52.0
 
