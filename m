@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9D0C372B4D;
-	Fri, 20 Mar 2026 08:41:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9539B330315;
+	Fri, 20 Mar 2026 08:42:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773996078; cv=none; b=PnL2nQ8/iUcc3UvARC1ApG/u5yC0A9De/h4ESjCGT/UhtuTjGjW3EA2Y5cOsnqRM/aoo77L0fJj1q9UoxFl3CmyLciDbwSmNd+173UjNuAAAA1+/kkyO3ZcyEiaan2p8AVhmDvGyJJH5sbujlDDJvkOuDcjJK21cghh3dAU4NJE=
+	t=1773996126; cv=none; b=TYt8Y8p3+8wxXi+9+fFByWNLGEB95ibqrayj2r8n5V9SK0pAUf9pRw50vd/FPOzpRoK9kPYElXtgIbXgBX9DL+zcJuxaDMPqNl0k5/w0z8D8y0uIV4M/npBXJLnr4DCGFBHlOWWgtiI2pbUcXeg6Jt0eIAsSPiKFOgrjowh2yUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773996078; c=relaxed/simple;
-	bh=g90O7nn50XsDORolSKBsWrsdvCLSXXNC55dyYlhTatI=;
+	s=arc-20240116; t=1773996126; c=relaxed/simple;
+	bh=zO+mvqsTq/FqjQ/HTVX0MRBmWd8ADYf0Gqg71xQZ7uw=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=uOCPMPE5K15zg3oO6+qfLxqSjbe1iyADfNbRdU86LTPFgi03gdXRUgp53+MCFsdtR8dKgwi3YIpQZaQDoR8GcTnb2pBuoztEXIGK7StK+q+Kz4W2bcs0nk3qWtfZ7joQsJbeYFbNjeH9iFUC7FlgAAMpYIZgmfFnpVAsdlMx+rU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=INsX3Raa; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=WrXDm1kxu7aonzXTh9VaGn98gRpceSzugaUTw3MiIB2E4iG7xgQG2B4pda2+G3Bq/7VzZblwe8eV3eXs8Cr39gmPv19VaVjF4cBM1YaBkDwTUkDxEpEpD7ahkySpozS5YrFRIqiKn6YJAhgAfvyE4lMuhp0goiahHP6VFAp2q8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=py0xTpPH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="INsX3Raa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B11DC4CEF7;
-	Fri, 20 Mar 2026 08:41:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="py0xTpPH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEB67C4CEF7;
+	Fri, 20 Mar 2026 08:42:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773996078;
-	bh=g90O7nn50XsDORolSKBsWrsdvCLSXXNC55dyYlhTatI=;
+	s=k20201202; t=1773996126;
+	bh=zO+mvqsTq/FqjQ/HTVX0MRBmWd8ADYf0Gqg71xQZ7uw=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=INsX3Raa6UuQBdkSKJPPW5RhopKsv3LU7PGRZr50uMqaj2nHfxcWdIUvjLhtMpYpX
-	 3e/Taz5O9lc0pWNpHoNh/MZWXASooUaX8As4f/PCe8uWk22rJQ6R/L/B8TRWIpEhJU
-	 zmuOffFTB4OHEbaKzQMbxxCeiv+G0s/eTPLjEfGOIPw4ASf8C/R7xFSNBKEPnaEu7C
-	 2B9VNCvzJvlPLH8DKNuRm5clGTBqup1CVUnFag76gKdMrKoXdQJTgzVXKEDl0f6C1D
-	 z77zj14HY4ZwuN6DzrRCsNZReM64LEjTmTtMLu4e5A8uZ3ATXF65vFugt2Vopzkv+i
-	 3XJ1rPiWNcvwA==
+	b=py0xTpPHS8fN339WVJA2dgI+xAHOnqod23eKmMzT373n8mUPjOYNbKqmBgcsBPPLr
+	 Ci1rbCBIcFaLswarXeyJPZXt4UR+84ejGbnrnigu16/6drZn1A9dv9Kkm7eXhisGYO
+	 DAShZAk57xa1ZFX5BBgtynGiBgIpQAgn2kALEXJN/j8U5DfGF9LK0EtJrCDlQubIBD
+	 ZGWS2pn2oac+isGvi+cCUkO1x+NfG/meanGy9mpdUKpc9A9cfrzee/jmpmD2yp/f61
+	 fgwuVt60U4lrOHtJznt5DsBdkrMvYFZ3sACzJO5xTjn/MQK3tToMac+doRtacAzEmS
+	 IVg/GAmxpX+qQ==
 From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
 To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>, netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org, magnus.karlsson@intel.com, stfomichev@gmail.com,
  kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
  larysa.zaremba@intel.com, aleksander.lobakin@intel.com, Maciej Fijalkowski
  <maciej.fijalkowski@intel.com>
-Subject: Re: [PATCH v2 net 7/8] selftests: bpf: have a separate variable for
- drop test
-In-Reply-To: <20260319175538.479139-8-maciej.fijalkowski@intel.com>
+Subject: Re: [PATCH v2 net 8/8] selftests: bpf: adjust rx_dropped
+ xskxceiver's test to respect tailroom
+In-Reply-To: <20260319175538.479139-9-maciej.fijalkowski@intel.com>
 References: <20260319175538.479139-1-maciej.fijalkowski@intel.com>
- <20260319175538.479139-8-maciej.fijalkowski@intel.com>
-Date: Fri, 20 Mar 2026 09:41:15 +0100
-Message-ID: <87ikaqopuc.fsf@all.your.base.are.belong.to.us>
+ <20260319175538.479139-9-maciej.fijalkowski@intel.com>
+Date: Fri, 20 Mar 2026 09:42:03 +0100
+Message-ID: <87ecleopt0.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,14 +50,14 @@ Content-Transfer-Encoding: quoted-printable
 
 Maciej Fijalkowski <maciej.fijalkowski@intel.com> writes:
 
-> Currently two different XDP programs share a static variable for
-> different purposes (picking where to redirect on shared umem test &
-> whether to drop a packet). This can be a problem when running full test
-> suite - idx can be written by shared umem test and this value can cause
-> a false behavior within XDP drop half test.
+> Since we have changed how big user defined headroom in umem can be,
+> change the logic in testapp_stats_rx_dropped() so we pass updated
+> headroom validation in xdp_umem_reg() and still drop half of frames.
 >
-> Introduce a dedicated variable for drop half test so that these two
-> don't step on each other toes.
+> Test works on non-mbuf setup so xsk_pool_get_rx_frame_size() that is
+> called on xsk_rcv_check() will not account skb_shared_info size. Taking
+> the tailroom size into account in test being fixed is needed as
+> xdp_umem_reg() defaults to respect it.
 >
 > Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
