@@ -1,148 +1,89 @@
-Received: from mail-pg1-f194.google.com (mail-pg1-f194.google.com [209.85.215.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DBC61A0728
-	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 08:42:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71BE31E98E3;
+	Fri, 20 Mar 2026 09:04:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773996136; cv=none; b=q6t/xJHOYmnopmXYbOE90Srq+Kf+zo/i6XQfWVRD/gnEP4cUVw0VMZ5vyp8xA33M0/NGNtbhxNrD7N2sXJeWZ7wUTOcIrn2Gxc/KSHLoTvAHWgsS6smVsRGOXCpgxxrpB+NMon2OvqD2A2vVSLdHznbgjqMUn+4yBZfxlr7LCg8=
+	t=1773997445; cv=none; b=udmEJxiMrMLJAcPd+T2Hp/8R8ORf6cSpXzOF6ZpCPFnKwdmx49u9I234I/YLEkB9KsCjw3QqhnIy2/Ag/T1Rp4oeR0IwrK7bzj5oFg2878XNh/S6UDRoQWp01AtNgrSsVUxQGOobWDAa1nlnL5ytriB+TzM51S1mE2u+M3CAZfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773996136; c=relaxed/simple;
-	bh=5Q7aLuxOVdADzoU0uivwq0xD+2sqiuHUFUnRzhh3DKo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ohTj3IpS/so1hPs+wPsw6FK5bMUXP855noOReHMjBQtNvEg2gMmjh+nkMODto/QYbpbwI4VgjgwwTIG0BMGjx1RspKtG0SekqFfnC2ukRPjJcMEXh2JeewaIR1cb0pRx0pnd0EidwG6Ge/GHojpRYmAoxxe3bngjJMQ87rDzeoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mV1ujL4F; arc=none smtp.client-ip=209.85.215.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773997445; c=relaxed/simple;
+	bh=tLRV6GWt0nIH04h46cD5fAI/puIETbeyPGCSNjkPhWM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kL7hvZbt292QRRLw7vgnsI7i26Wq/vQqFiGacL/KmriXThMJmoSwZlVyTJXbeimF2ciHGmqqSzR9X29D3xhSdLni2HV7KN5EDu0olS2skY9K1NTaDwit/VocaIhXlTX53+XpPqnZwRa5S5YteoIFFi+ktYbSRwkJGt53DDbdnJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=RX25+PQ/; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mV1ujL4F"
-Received: by mail-pg1-f194.google.com with SMTP id 41be03b00d2f7-c7393c6832bso683032a12.2
-        for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 01:42:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773996135; x=1774600935; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TVhVfvEdh8PGLTq9OCpKCKnbK78t+8gkIfnExz2ct6g=;
-        b=mV1ujL4F+PLg4+Qoce68BOLDq4TYZ3R+sRDJ8w83pAVFNL697z1QfO9niV0bw53m2d
-         qZ39IAmJCnS1OC0ts9Tegd2l+E9DeQuiK1vWBpY5NzZUs7VFxxprNQwZbd/liQKckaDY
-         i7SI2lryLhX57J8gRIYwDbwVN19q2awvVcgHjUKlNVGJdrOSwGqV8YIKsVqslvViI6xA
-         NrjqSuMOPNbiuvq7Qq8x/EtcXYwgVxGGKuo7RoNFwaQYaR/BxZ4JTsUPaT6ba4BupZXo
-         u7YvN3qz3wvWQLsZpb6VZ2XlnkA/2AfvWXd0MK4a6iuzs6U0W7SWCyG+z9euY1HfopGR
-         YyUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773996135; x=1774600935;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TVhVfvEdh8PGLTq9OCpKCKnbK78t+8gkIfnExz2ct6g=;
-        b=RKt8ky140gi6WY2/uJzZD1UhNyg+vZjJG6ClXaDQlXzc9Y4kMbKI7oAjO+AJ959Ikx
-         DrIV/U0Y1jQzZi65fdjUINwE8qcfmvPEwT4MuGoTtoSct+SeckeU/mkOwnM/HNIiy95j
-         BsFWQtjYhpWR6ha9irrJcSKNOauiKmbF3C8vqJLae1Azl4ILBEpXt3vFJQfI0hsleLLb
-         z3eaPkBAho+xKnNPtBzX78V5DpgsGAhIhlPVjCDQdTiQXrwkn6LZlzhbil9b0XKzscZd
-         +bBSlg3HQu1O0lLhBcV4q6EBTmANEEdzLaZ35pr41Vh/AsffyyVHddy5E4S/sHUBqg6n
-         d3OQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUT/1BJySfUiKHThIAUeXIQ8cdI7/II2weRS7r5RurWGrLDINO1ejK4dnGOKPLqfs3Fv6c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAeH8S01RuLvyUJxRf4vSDstOWW1Zm+4038PQ+71EU96SmOsf0
-	4xnFoyaE+bMFVJT9eyYS/UYRcZPsVvPnTYxbrxc1qmQ/DPCLTtcBOSnP
-X-Gm-Gg: ATEYQzzcUJQe0Y1FHjC6Vf8pq+tZsvu4zd6IDxMqp7RafBhMoCQmzEa1DPhwAdnKeaf
-	UVj+FYORnPyGJSkAX02d2EPiadsSAaDvxN9+qm4DWD/KuqRXomvIM6tDm+pdd6+BIu+ih4znQ4A
-	da8MG/T4SvJTxgJRplpP9SDvn9Ue/+y2NOtfPJHptbIYzb40Oz6mUvOtFCLIOgjJscjLvqRIx01
-	tlZnhscprydDdj0cnmt7PetARwuOHERETNGPS3cXasPhsbJ13ILfOSQ7KLYN3Mw01ZdDKjtsemJ
-	KqQXGfbWNDI6PC+PazOhPG23LGMGY7x0MlMRzEet9yKj0SX4/QB6Y+qRqUXdISgCqCTKamk/bR5
-	cGX1C8lnBrQo/WNxuUHyCQbmmIARS05E+aDH77rG2F7u0yNiOFjyI51Pb8YZ+d301nK6DfDxVlZ
-	prlGtb+PuRqD46X3R38inA
-X-Received: by 2002:a05:6a20:3c8e:b0:38e:99a0:105b with SMTP id adf61e73a8af0-39bceb7edb0mr2140353637.51.1773996134580;
-        Fri, 20 Mar 2026 01:42:14 -0700 (PDT)
-Received: from 7940hx ([103.173.155.241])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c743a7ff47csm1288665a12.6.2026.03.20.01.42.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Mar 2026 01:42:14 -0700 (PDT)
-From: Menglong Dong <menglong8.dong@gmail.com>
-X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
-To: ast@kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next] selftests/bpf: test access to ringbuf position with map pointer
-Date: Fri, 20 Mar 2026 16:41:55 +0800
-Message-ID: <20260320084155.288417-1-dongml2@chinatelecom.cn>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="RX25+PQ/"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=tLRV6GWt0nIH04h46cD5fAI/puIETbeyPGCSNjkPhWM=; b=RX25+PQ//oLNIUwog0UzVIbDEP
+	uQEotUlu63UWGNG7lcvdJFT2beO1gYq+/Qvr896xR5OnHaQCLVudBWoF2v6l+hrS0/RzZzRpdcccu
+	fm+eBa7b22mZBFL5XFMn2S6+/vGbJH8Q3lo1DyYzBasF+rZOv79yMWc32W1tj00eTIe9ixzYixqEb
+	A5Zz7rQV5VAIMb7pf698D6LwS4Kk864K0cRZvtlLWLhke52kWXWI3DcS0gJ2QF2r38g8/4iXZ9NNP
+	zcvek9+l0a5HnoqZlql5Ciaxl+ISS/w7OAYXgmUA5Z2CpPGv/zfSLYJiJjaGv1NUEArV+zSnPukln
+	2DyVOwwg==;
+Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1w3Vld-0000000FCA7-0OpM;
+	Fri, 20 Mar 2026 09:03:41 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 37587301150; Fri, 20 Mar 2026 10:03:40 +0100 (CET)
+Date: Fri, 20 Mar 2026 10:03:40 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc: x86@kernel.org, Nikolay Borisov <nik.borisov@suse.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	David Kaplan <david.kaplan@amd.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Laight <david.laight.linux@gmail.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	David Ahern <dsahern@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, Asit Mallick <asit.k.mallick@intel.com>,
+	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
+	netdev@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v7 07/10] x86/vmscape: Use static_call() for predictor
+ flush
+Message-ID: <20260320090340.GN3738786@noisy.programming.kicks-ass.net>
+References: <20260319-vmscape-bhb-v7-0-b76a777a98af@linux.intel.com>
+ <20260319-vmscape-bhb-v7-7-b76a777a98af@linux.intel.com>
+ <20260319205802.GJ3738786@noisy.programming.kicks-ass.net>
+ <20260319213421.br6na4dulrjm6eke@desk>
+ <20260319214409.GL3738786@noisy.programming.kicks-ass.net>
+ <20260320062206.bdrnmnvho6lhmejw@desk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260320062206.bdrnmnvho6lhmejw@desk>
 
-Add the testing to access the bpf_ringbuf with the map pointer.
-"consumer_pos" and "producer_pos" is accessed in this testing. We reserve
-128 bytes in the ringbuf to test the producer_pos, which should be
-"128 + 8", and the "8" is BPF_RINGBUF_HDR_SZ.
+On Thu, Mar 19, 2026 at 11:22:06PM -0700, Pawan Gupta wrote:
 
-It will be helpful if we want to evaluate the usage of the ringbuf in bpf
-prog with the consumer and producer position.
+> This plus extending it to support EXPORT_STATIC_CALL_FOR_KVM() is probably
+> a better solution. Please let me know which one you prefer.
 
-Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
----
- .../testing/selftests/bpf/progs/map_ptr_kern.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-index efaf622c28dd..c3fa57ec430b 100644
---- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-+++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-@@ -647,21 +647,39 @@ static inline int check_devmap_hash(void)
- 	return 1;
- }
- 
-+struct bpf_ringbuf {
-+	unsigned long consumer_pos;
-+	unsigned long producer_pos;
-+} __attribute__((preserve_access_index));
-+
- struct bpf_ringbuf_map {
- 	struct bpf_map map;
-+	struct bpf_ringbuf *rb;
- } __attribute__((preserve_access_index));
- 
- struct {
- 	__uint(type, BPF_MAP_TYPE_RINGBUF);
-+	__uint(max_entries, 1 << 10);
- } m_ringbuf SEC(".maps");
- 
- static inline int check_ringbuf(void)
- {
- 	struct bpf_ringbuf_map *ringbuf = (struct bpf_ringbuf_map *)&m_ringbuf;
- 	struct bpf_map *map = (struct bpf_map *)&m_ringbuf;
-+	struct bpf_ringbuf *rb;
-+	void *ptr;
- 
- 	VERIFY(check(&ringbuf->map, map, 0, 0, page_size));
- 
-+	ptr = bpf_ringbuf_reserve(&m_ringbuf, 128, 0);
-+	VERIFY(ptr);
-+
-+	bpf_ringbuf_discard(ptr, 0);
-+	rb = ringbuf->rb;
-+	VERIFY(rb);
-+	VERIFY(rb->consumer_pos == 0);
-+	VERIFY(rb->producer_pos == 128 + 8);
-+
- 	return 1;
- }
- 
--- 
-2.53.0
-
+The EXPORT twiddling will do I suppose. I'll try and not forget looking
+at doing the RO static_call thing some time.
