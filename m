@@ -1,75 +1,68 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71BE31E98E3;
-	Fri, 20 Mar 2026 09:04:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9612E38D6A8;
+	Fri, 20 Mar 2026 10:18:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773997445; cv=none; b=udmEJxiMrMLJAcPd+T2Hp/8R8ORf6cSpXzOF6ZpCPFnKwdmx49u9I234I/YLEkB9KsCjw3QqhnIy2/Ag/T1Rp4oeR0IwrK7bzj5oFg2878XNh/S6UDRoQWp01AtNgrSsVUxQGOobWDAa1nlnL5ytriB+TzM51S1mE2u+M3CAZfs=
+	t=1774001947; cv=none; b=VV1mbrh+XPbNi4PE2sjZfLkKK9pCjYfoeUzewKQpyGzDJXBAa4dymsBErK/hPJLgl8rO+TclxXAYe5RTZfB7VMdf1W+CKRwJETGQ1R717W/5V3ozsD6TiNeTx1KUbMgDwv/eqyJfEOJxVhJGKcW4JyaH0jLKqSj5oe6DbcX1j+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773997445; c=relaxed/simple;
-	bh=tLRV6GWt0nIH04h46cD5fAI/puIETbeyPGCSNjkPhWM=;
+	s=arc-20240116; t=1774001947; c=relaxed/simple;
+	bh=9xUNeMBUbv50TFhTrU7GhOJSxZ6PPhrSR/Qj7v/5NWQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kL7hvZbt292QRRLw7vgnsI7i26Wq/vQqFiGacL/KmriXThMJmoSwZlVyTJXbeimF2ciHGmqqSzR9X29D3xhSdLni2HV7KN5EDu0olS2skY9K1NTaDwit/VocaIhXlTX53+XpPqnZwRa5S5YteoIFFi+ktYbSRwkJGt53DDbdnJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=RX25+PQ/; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=A8e1yjPFc5mnHEaweCQ5Jc+JvHd2z+Jh+UqDPjtDCQMwlz4O8eZ1ZJ04ckQA3v568CHg8LWAMxHkLw9n6IYuTI0ywWYYMI2AzMqGgQ8cjZhSYOi4Do6+Cget3gTJuXLJFoiOiRVKvfFa3gdBNJI+eS+/fSV7OQ8/8VaiRqPHKVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I3FGcLQz; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="RX25+PQ/"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=tLRV6GWt0nIH04h46cD5fAI/puIETbeyPGCSNjkPhWM=; b=RX25+PQ//oLNIUwog0UzVIbDEP
-	uQEotUlu63UWGNG7lcvdJFT2beO1gYq+/Qvr896xR5OnHaQCLVudBWoF2v6l+hrS0/RzZzRpdcccu
-	fm+eBa7b22mZBFL5XFMn2S6+/vGbJH8Q3lo1DyYzBasF+rZOv79yMWc32W1tj00eTIe9ixzYixqEb
-	A5Zz7rQV5VAIMb7pf698D6LwS4Kk864K0cRZvtlLWLhke52kWXWI3DcS0gJ2QF2r38g8/4iXZ9NNP
-	zcvek9+l0a5HnoqZlql5Ciaxl+ISS/w7OAYXgmUA5Z2CpPGv/zfSLYJiJjaGv1NUEArV+zSnPukln
-	2DyVOwwg==;
-Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1w3Vld-0000000FCA7-0OpM;
-	Fri, 20 Mar 2026 09:03:41 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 37587301150; Fri, 20 Mar 2026 10:03:40 +0100 (CET)
-Date: Fri, 20 Mar 2026 10:03:40 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc: x86@kernel.org, Nikolay Borisov <nik.borisov@suse.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	David Kaplan <david.kaplan@amd.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Alexei Starovoitov <ast@kernel.org>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I3FGcLQz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774001938; x=1805537938;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9xUNeMBUbv50TFhTrU7GhOJSxZ6PPhrSR/Qj7v/5NWQ=;
+  b=I3FGcLQzeRTfk76HnulvH+h0zeBVDPzhLDdQKHnFqpABJUjdbGNEZ+C2
+   oIbWtmrhL7yotqGX8SLAdxp1kqfejXPHNjqDNkYww4GXWBLKjfHk68Jwx
+   mPug6e4B5sIMXOUjVOol7OCYEYFDK8Sj+TiFzJnaxH+/SmeJCwYyZDaRl
+   hXZzzO4g8AKm8I/UJAF6Lc6cyNURlD8seF1DUSBW2jOLUn4HukJ8QruMo
+   QMzzNT3NM29DjM9CULiYH/OXvp63/78WTYR6GPPyu5tx/pVB/D+zsxI1u
+   2lzN2flpvCNh70uV3KWnVZVgCt7k0A4nJJxWXvTxDZITacZfKCeLe7CpD
+   g==;
+X-CSE-ConnectionGUID: ihfi/Hy3TvmpFw/rjZqqVw==
+X-CSE-MsgGUID: cRN7TxXZSouGn57h2W3j5g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11734"; a="92658889"
+X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
+   d="scan'208";a="92658889"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2026 03:18:57 -0700
+X-CSE-ConnectionGUID: zLehAkZ/Qu6Cfa49jA9rEA==
+X-CSE-MsgGUID: HEHwKXlOS/6q0uNEFA0sYQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
+   d="scan'208";a="218615516"
+Received: from lkp-server02.sh.intel.com (HELO a51c2a36b9df) ([10.239.97.151])
+  by fmviesa006.fm.intel.com with ESMTP; 20 Mar 2026 03:18:53 -0700
+Received: from kbuild by a51c2a36b9df with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w3WwM-000000002G5-2cL7;
+	Fri, 20 Mar 2026 10:18:50 +0000
+Date: Fri, 20 Mar 2026 18:18:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Laight <david.laight.linux@gmail.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	David Ahern <dsahern@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org, Asit Mallick <asit.k.mallick@intel.com>,
-	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v7 07/10] x86/vmscape: Use static_call() for predictor
- flush
-Message-ID: <20260320090340.GN3738786@noisy.programming.kicks-ass.net>
-References: <20260319-vmscape-bhb-v7-0-b76a777a98af@linux.intel.com>
- <20260319-vmscape-bhb-v7-7-b76a777a98af@linux.intel.com>
- <20260319205802.GJ3738786@noisy.programming.kicks-ass.net>
- <20260319213421.br6na4dulrjm6eke@desk>
- <20260319214409.GL3738786@noisy.programming.kicks-ass.net>
- <20260320062206.bdrnmnvho6lhmejw@desk>
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	Martin KaFai Lau <kafai@fb.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCHv3 bpf-next 08/24] bpf: Add
+ bpf_trampoline_multi_attach/detach functions
+Message-ID: <202603201820.zsM5FRDS-lkp@intel.com>
+References: <20260316075138.465430-9-jolsa@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -78,12 +71,78 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260320062206.bdrnmnvho6lhmejw@desk>
+In-Reply-To: <20260316075138.465430-9-jolsa@kernel.org>
 
-On Thu, Mar 19, 2026 at 11:22:06PM -0700, Pawan Gupta wrote:
+Hi Jiri,
 
-> This plus extending it to support EXPORT_STATIC_CALL_FOR_KVM() is probably
-> a better solution. Please let me know which one you prefer.
+kernel test robot noticed the following build errors:
 
-The EXPORT twiddling will do I suppose. I'll try and not forget looking
-at doing the RO static_call thing some time.
+[auto build test ERROR on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jiri-Olsa/ftrace-Add-ftrace_hash_count-function/20260316-160117
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20260316075138.465430-9-jolsa%40kernel.org
+patch subject: [PATCHv3 bpf-next 08/24] bpf: Add bpf_trampoline_multi_attach/detach functions
+config: x86_64-randconfig-075-20260320 (https://download.01.org/0day-ci/archive/20260320/202603201820.zsM5FRDS-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260320/202603201820.zsM5FRDS-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603201820.zsM5FRDS-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> kernel/bpf/trampoline.c:1520:8: error: call to undeclared function 'btf_distill_func_proto'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1520 |         err = btf_distill_func_proto(NULL, btf, t, tname, &tgt_info->fmodel);
+         |               ^
+   1 error generated.
+
+
+vim +/btf_distill_func_proto +1520 kernel/bpf/trampoline.c
+
+  1498	
+  1499	static int bpf_get_btf_id_target(struct btf *btf, struct bpf_prog *prog, u32 btf_id,
+  1500					 struct bpf_attach_target_info *tgt_info)
+  1501	{
+  1502		const struct btf_type *t;
+  1503		unsigned long addr;
+  1504		const char *tname;
+  1505		int err;
+  1506	
+  1507		if (!btf_id || !btf)
+  1508			return -EINVAL;
+  1509		t = btf_type_by_id(btf, btf_id);
+  1510		if (!t)
+  1511			return -EINVAL;
+  1512		tname = btf_name_by_offset(btf, t->name_off);
+  1513		if (!tname)
+  1514			return -EINVAL;
+  1515		if (!btf_type_is_func(t))
+  1516			return -EINVAL;
+  1517		t = btf_type_by_id(btf, t->type);
+  1518		if (!btf_type_is_func_proto(t))
+  1519			return -EINVAL;
+> 1520		err = btf_distill_func_proto(NULL, btf, t, tname, &tgt_info->fmodel);
+  1521		if (err < 0)
+  1522			return err;
+  1523		if (btf_is_module(btf)) {
+  1524			/* The bpf program already holds refference to module. */
+  1525			if (WARN_ON_ONCE(!prog->aux->mod))
+  1526				return -EINVAL;
+  1527			addr = find_kallsyms_symbol_value(prog->aux->mod, tname);
+  1528		} else {
+  1529			addr = kallsyms_lookup_name(tname);
+  1530		}
+  1531		if (!addr || !ftrace_location(addr))
+  1532			return -ENOENT;
+  1533		tgt_info->tgt_addr = addr;
+  1534		return 0;
+  1535	}
+  1536	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
