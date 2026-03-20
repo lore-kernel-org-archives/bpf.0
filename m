@@ -1,340 +1,324 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-dy1-f227.google.com (mail-dy1-f227.google.com [74.125.82.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 404D0387347
-	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 17:04:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0617E284881
+	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 17:40:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.227
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774026285; cv=pass; b=bsF5xLGjN1XUj2rMukrxwSaz5EITFX86p72FcB+AqSVrKsm8SI5PLopXeKEoLAF/4v/DWB6VRzTnwgXnhgfGzVkS8cgen/j3ez4gxO8+y5P+fi/6GY0Dfyn2x3N57yiOiqvf0JVeGX5CDFMojTvdMh4/A1WwFYxF9JsCOMDGjrg=
+	t=1774028417; cv=pass; b=lRI5KBen89ksBAZj1N5S9s/wimzZ0fad36YGsHo2+HfyIjv/g8MfGQpBpKFkps2IWdA3bd5ea3Ys+P9PJYAhAmuPcYrBGd3Iouu+Se65NzjK9+8AomNUmvpIrkkCtKC+6aoGTArkl5y+bD2MBdQMK/svcEYp0hBAJkGTxj1r3+k=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774026285; c=relaxed/simple;
-	bh=+bl/uBIhPNqydKIdxjAkvggAJ7Krl++MR0iJh/EZ/d0=;
+	s=arc-20240116; t=1774028417; c=relaxed/simple;
+	bh=BVPeLPps3vMvNbuHTF/MRFDdPj9aEtI0kijCU1BoYjY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=t70VTKvJuVz4vClxGbLcrzZOUdGKoIEi5Tb+4y/bnGi2ZgE0AOvWp37dYHIJB22TX/5rfBgGhn5ncpfH7p8Matx3Cvn70t/McP8VLQy4dfWgjemN1GMiR3eiVUGLjgF+fGTjWm2oR0M4P8+lkwIZ4a/BcZb9b8fvEB1cYe/3jdY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RgIAkprp; arc=pass smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=L3Tu6BOw+fRmELvwD+o6E541cYRCnL30AMm0Dfh6hP/8du4cu2L1a6u8otanyigcSH2gQVBRjjGiJzt3oYlIDq1EvZIluoYyPEfo7kPXdw0leakWDwhiW6k/QB8e4WdBzx8bsjxc9J05jJwZzUMYEuVVlMtvhgGPaGH+C/5KzJQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=eUN7izrI; arc=pass smtp.client-ip=74.125.82.227
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RgIAkprp"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4838c15e3cbso18054015e9.3
-        for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 10:04:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774026281; cv=none;
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="eUN7izrI"
+Received: by mail-dy1-f227.google.com with SMTP id 5a478bee46e88-2bd9a485bd6so350279eec.1
+        for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 10:40:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774028415; x=1774633215;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=W/cZvMoDCv/f+YyEgoq0gpN2oWIvRq/EE9l8J4/P9Ak=;
+        b=Mh7yKCaY0IPB7r79kVVEb0Lzy5vEgMmI0nLX5DzKdYNVGSH1gu1BMrhG3HoYBYrPbr
+         +gK6PVqY+40eUmGi+sumw9YyLUMxBHVO0ZWizOiDdJGYaMRERRWdsMFybvCSsFX/JeFx
+         GIcK/cFeq5WIbCs9hHngXDw9sARuXcUaI5kydlB2NltK24nUmmWW3CXDptRttYCV59X/
+         IdQmK+S09xwJWqeMPvAqGaNQtaj7LFgapxquJ9pPu7IO5yjbjZ5IAXrDdtVRoVABFVsv
+         ILXKovFJ8GSiMR5JwuGfZp+/Zzxpzs4sg2iUrJVlduMciW0nZ4V5wi0FvkyENkJzozzU
+         HSTg==
+X-Forwarded-Encrypted: i=2; AJvYcCUTnc8UUP3Cg1TDsuHnHn4qn5j4108fFE1M4OXadN7HWwBlTB5/IJkGn6cW3HKntXRZn/o=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7xW3bMtHlIxEz5pBx79f2XW1kxgrl40yWEJqI8NUjVzjwPrT3
+	8zUJU7xadGn2p5uRKKuhTIqLOjbJioWjvNFhZWF8efgZOmDnZ3945O86IadzSsuUthogut2RWbg
+	0FYdE6OSsfzO4ImydWHB/12zl8ifvXchj3uIhlExUG1A1dqY+5RMtiJTDUxEw2RQT7KH9k/nmrh
+	KBmY4n61sr5cWGHBhJ7V75GbhzkB3fL9fOjI4750Djd65cYkYPDH5H5UpOhkaG52G1JbOEUUmYL
+	OmWgmJoeIDc0g==
+X-Gm-Gg: ATEYQzwtNDqfE8WDzfmUzi1dl3muSwinrsy/jRkDVyqrue8R30+qElZYgo5+Q++ccrF
+	qaudAyVXAB2avbW39guuYKe/4dn10Qj74NjvRsLgC3bJXojpqwhN04P4z7YijWDp7wjPBBpDl1u
+	JdLhk+LuWcsMhtJ4ZruuBxgaKJuScFX1/2nyzcu8JbvyCn5iBRslsTtGXwRC0nTKC2/LyGgc90u
+	Gl+9viBq1njK+zQg8JFsx/YvFkSrQ7mvtWdKY7xkSL+bHZ2zxTQzZGGT3WHQJaYnGYI3qjf9Cnf
+	fNMb4pLet+rsYEbDentj8DP1UmV6gmkW7NySYKAuHo8sbvr7IVOuN29yapjhTJLHt2j1QdodLUa
+	U1aaCLooVn7AzZKms3pPridLpu8vz8h7VmMovsSn+eoLkA9bP4MDXilqbVuL2CbxhKJk2MVKXSX
+	G7oJn9wjnzjXfKKhbiuNAxqV5eBw1Mi0bojz9tmIh19DJsAwYaHEtqB8i9olBHW+8=
+X-Received: by 2002:a05:7301:4342:b0:2b8:711:ae5c with SMTP id 5a478bee46e88-2c1095d7bcamr1992725eec.7.1774028414736;
+        Fri, 20 Mar 2026 10:40:14 -0700 (PDT)
+Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-20.dlp.protect.broadcom.com. [144.49.247.20])
+        by smtp-relay.gmail.com with ESMTPS id 5a478bee46e88-2c10b293092sm231070eec.7.2026.03.20.10.40.14
+        for <bpf@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 20 Mar 2026 10:40:14 -0700 (PDT)
+X-Relaying-Domain: broadcom.com
+X-CFilter-Loop: Reflected
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-485397788b3so17099885e9.2
+        for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 10:40:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774028412; cv=none;
         d=google.com; s=arc-20240605;
-        b=biNxyzHzcIOKGJGL3/KCA6Fbb5+OCqKedLgHEO/pt2b29cofREep3nW2/QwwPORbbT
-         oQ55aIeNpd41fvYnY5IxHuDkKNrpAwPMvd+8/X8f3HnhXKlrdCattdVFxCjnoaDUaVdc
-         /24aruOKQxT/WMUOgFFbeO/Jpk8z+Ajec8lPwvldOnxDFMbsUfOBWdVA9ewuL3ikNCFA
-         6IFI9D0BQI/vpcKCFwRtmOebr5AbCferkMewDkkK9rS9nLO31PgBdfOtnTVi5M4vaNTi
-         ONE5YlFud2Lpi/eJYTDXKDCQuXNJqgYRhD0uL0THtUONHcmC6x4CtRjVP+1IKylskFZf
-         fDAw==
+        b=LfNsabtbZpZHxVT3hTFy3N0qC5pxB/nqNVoYzJTyGJyxA3eNgRuocVwCABiijXJVpl
+         3CQAC6Dz/rSi4nDGBjmHooYd9QgIZu2emO1vNuqYMLUNnWfYDsQMISLO4Zas+SCfJOcA
+         3rOfF1B24CdXFvfVPw/0ypif2XZmaJlEtAfUEYo8gLrkrl923Xi0f2LWkS1mF7UevmME
+         LfYq3RLam6WeAvFTxR1HzK3H8gcTp8yXtLcZI/+5L8X8cpH8HClxN5Jqtr5f4R1OIQ+M
+         vj7YbP0Su8aAJ5PX83lLUpzN7bOZiIwLNPOTaQe5Kd1tDvZ84n2zRJ9y/fdjT7VAuLcz
+         Vtiw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=I9IRcCyUSKVtsIJtcaSlKi8SABJOeRMy8z1xpU+5O18=;
-        fh=C0WLaaCXKGeh/vyFX80RUhue9ehfZ3Zab3MRjKhKV7U=;
-        b=h3fAEVCRlK2EVJDN5CRMbbqDZgOIZJZvhZBz+IUyhjDhZFuM3AJyUvh6ZLdVv3rXKN
-         uQF0xczsgdhnASuRb4ZCYQhhG4r/+vqYLCIez7uyrQ/lb6RzL/jTcc6QJ2WsONQN0QtT
-         ZeIwgNHBv/uZtjEBQZQ5oV6+kp2JNvw47c00uLjHWaWDY5mWdlgqmlAPxfNL1PiBndlP
-         zmpoqUy2II5/PErxmh7SpR18NV0DndfLjEy2qSrllMd3SD6tNKKOKmvRK9DD/HcpeC+N
-         vcp4x+MgoPDF+zFgBw6h4K+IL70B4tNIWQ82tWXWRY2ix3PfXoBWiaVmzbvJ2mgtHGJC
-         OBOg==;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=W/cZvMoDCv/f+YyEgoq0gpN2oWIvRq/EE9l8J4/P9Ak=;
+        fh=WEb6hGQ5qBj2XvLtDs858H2Wk45Q5hrLmaT8AGja9NY=;
+        b=PmqVZSNL+qGAT801rjIVQ0WRSqC7WWLnyvI8aDgIqXvg5A0gy8ckXpSfqnS7RPwRWA
+         df3aYlLAg7bUAvhP4z0YqafKAlFGfbJ5fMLsshNyGEAHVM1uMcvfrs6ixkinLyRYwuml
+         aUakoMqXEPpjjIn/K6KGP9pUKfVBGZcL3o9GTW3efEI2lTz+KAkQw5DQYBBdf1f7AIfz
+         2gn6HApO3zckqRRfrA3BEkYcC23vilny18WyzLa5j64x41GRGJauRMqh8JUWP+5sUiGp
+         L/ZdPSzi4307yeoNrEVQl+EytwHHunxc1FG1V1pXexPzcKQAtdkvHiDjUFLOzbNjCkfM
+         +PPA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774026281; x=1774631081; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I9IRcCyUSKVtsIJtcaSlKi8SABJOeRMy8z1xpU+5O18=;
-        b=RgIAkprpZ1iZ6gM9mY4c4hCczKoTjJp2v+qQp4SB2V6+ltVels7ljFKYS8g9lp3BtI
-         NWtUA7aOcQqo6eZIGAmGujlsliUbdvVWlroIkQF1Hg/4BphDnypa6cxiP5uUzHy1zZ2i
-         D0motFDdpeWGG8gWpvchJV/YKgZXpVI2K+8tcfz/HpGMXpv5eDE1wV+WsHyh8nEnZcxT
-         2U+aDmcfQ5TIAqx2LmcCL0ii5dHH7bRTXPwST4sN+KXFUuJrpC7q6m45cXCPylzsjA19
-         raDP1Y6fEueuaMs/rWyHVQhYINg4Dh6ItBVQDhUO/giyqUqABUXVxn3vTSfhCQDhUXPy
-         yHzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774026281; x=1774631081;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=I9IRcCyUSKVtsIJtcaSlKi8SABJOeRMy8z1xpU+5O18=;
-        b=IIIYVloyyDuDG2sDya0wa0WvIA3wlrpZG/l4EvVmzO8gHEyp4IiSYYOSWKC9YEgRel
-         1rSFi7tINbaZud4BCIHOEGm9aOss133tFjSA96HvJAiz66G8uw0yc8WWEDxH/HqfCXSb
-         RGDbj+gRZMY9ZMCodKCijOimwGOil2xdd3AOnx37DP6pVRGFLd5bnh2weqgfZEIFErWf
-         5QeZMNTHxcIpRQT3GT9LPJVwfw4qLSj93FDLEVl/WFJM2ITxderbgf56in01K/lNoZOA
-         XhLun4Mf26QhWiCr36uoeTyLgU97QMh8BnLmbqauMCyPFxR8Bmt+fv9vjyzxsnWhB/y1
-         hg6g==
-X-Forwarded-Encrypted: i=1; AJvYcCWoMUFDhUnz3npol/spyikiWJ+NrJm8Lu/sUqeOzk+/S3LMVzL9K3L3kQR2YsS1F53Y4uc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YybxAJT/q0puG+pSedFjHsDUAI2TxSD7YVuMJmYK9fhiIBWds/z
-	Mv4vC6R/5DOhryfXFO4cj9t07d4vuHizqF6aHGShMXZKxjtBVBJFfJQlT8ykMf+PEk1t26Mh38R
-	8qI2+O2HgtdKN4ULu5mqDu8rCq1s+MwQ=
-X-Gm-Gg: ATEYQzx9DKhQwJSylYPn+2YKl/wJf3jbdshJ2NuASlRtUaUkVI2RoknndcU0tCg/Ic3
-	MOe/JfaWPVqZQjEGyxxUHHASy/l092Ge7v8+I3sWb6f7tD+nrVasd3p6L82tQXIpniT2nSOOTWO
-	gIZeSATZLh8Kw/nkzKAdzQwFMULTUO7mfODiTlvMQismhojt8OFMIw699JWRn5Zzp00MNq9dAbZ
-	L1KSTW3LY0i3BbOa1N34iDDTy7Q8dcpq/vFpiN3ELf63yF3j9GObrMjjNLcrcPhxFNyytWLrF7l
-	Os36JA==
-X-Received: by 2002:a05:600c:4e8e:b0:483:c35d:3659 with SMTP id
- 5b1f17b1804b1-486fee04a48mr53945845e9.18.1774026281186; Fri, 20 Mar 2026
- 10:04:41 -0700 (PDT)
+        d=broadcom.com; s=google; t=1774028412; x=1774633212; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=W/cZvMoDCv/f+YyEgoq0gpN2oWIvRq/EE9l8J4/P9Ak=;
+        b=eUN7izrIln0+u2Vb4AS5kqrNdOIlsHkweIFiEsLI+b2MsKrSnqomMvUO3LRvYHff2r
+         239xU4hqBieJA1mU12UZVH0UJODHNIkj4YUZOhjpGlMIzbKSJO9UuV+FDh/Q1Ub0PQT4
+         TaxbZn85t7Ux7RYc4Pn/IGmOjKUff1AtzEVQo=
+X-Forwarded-Encrypted: i=1; AJvYcCVEGrhFKHwBlm+bZ5M6UxaCmhdqyVmm/NTVocmLIPLS7TKNZydNFuvbj28/DiBPU0FxW2A=@vger.kernel.org
+X-Received: by 2002:a05:600c:608c:b0:485:4135:5c92 with SMTP id 5b1f17b1804b1-486feb5a653mr57923365e9.0.1774028412512;
+        Fri, 20 Mar 2026 10:40:12 -0700 (PDT)
+X-Received: by 2002:a05:600c:608c:b0:485:4135:5c92 with SMTP id
+ 5b1f17b1804b1-486feb5a653mr57922905e9.0.1774028411896; Fri, 20 Mar 2026
+ 10:40:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260223224617.GA2390314@frogsfrogsfrogs> <CAJnrk1Yd1J60-Ek=O7jzZQg454pbr3O=b71yZHzYbrWfqJr__w@mail.gmail.com>
- <20260316180408.GN6069@frogsfrogsfrogs> <CAJnrk1bmJYMt27xedN2Xza0KPXfYEbh-9g=3fNWru-HRM9WFEw@mail.gmail.com>
- <20260316234137.GJ1742010@frogsfrogsfrogs> <208bfbd2-d671-462c-925f-4d51b7df1f18@gmail.com>
- <20260318213129.GB6004@frogsfrogsfrogs> <c7866006-bd17-4fd8-a603-bd3016fdfeb0@gmail.com>
- <20260319160836.GC6004@frogsfrogsfrogs>
-In-Reply-To: <20260319160836.GC6004@frogsfrogsfrogs>
-From: Joanne Koong <joannelkoong@gmail.com>
-Date: Fri, 20 Mar 2026 10:04:29 -0700
-X-Gm-Features: AaiRm50xHe4ukUSm2hvSegIf78mKkgxNJHj63lsspClyd3AiJBMTgrgezTnWrb0
-Message-ID: <CAJnrk1Zpxv1CyUn2sbN2j73M57F8r4foyDQQ0Df_g0Ev+yx-Qg@mail.gmail.com>
-Subject: Re: [PATCHBLIZZARD v7] fuse/libfuse/e2fsprogs: containerize ext4 for
- safer operation
-To: "Darrick J. Wong" <djwong@kernel.org>
-Cc: Demi Marie Obenour <demiobenour@gmail.com>, linux-fsdevel <linux-fsdevel@vger.kernel.org>, 
-	bpf@vger.kernel.org, linux-ext4 <linux-ext4@vger.kernel.org>, 
-	Miklos Szeredi <miklos@szeredi.hu>, Bernd Schubert <bernd@bsbernd.com>, "Theodore Ts'o" <tytso@mit.edu>, 
-	Neal Gompa <neal@gompa.dev>, Amir Goldstein <amir73il@gmail.com>, 
-	Christian Brauner <brauner@kernel.org>, Jeff Layton <jlayton@kernel.org>, John@groves.net
+References: <20260313222206.778760-1-jitendra.vegiraju@broadcom.com>
+ <20260313222206.778760-5-jitendra.vegiraju@broadcom.com> <abSXP3gMFQEiC5Lm@shell.armlinux.org.uk>
+ <CAMdnO-LYAPfyvM4vgmGcZgy-aagHSkP+VDmpRskNU-414j3gnQ@mail.gmail.com>
+ <CAMdnO-+YWowCDh4iB9EZ=eqUidE6Mu4TOqjwyoMgyEaG=pBLBg@mail.gmail.com> <abuwcYH791D_oJp_@shell.armlinux.org.uk>
+In-Reply-To: <abuwcYH791D_oJp_@shell.armlinux.org.uk>
+From: Jitendra Vegiraju <jitendra.vegiraju@broadcom.com>
+Date: Fri, 20 Mar 2026 10:39:59 -0700
+X-Gm-Features: AaiRm51daUnGzokEEKCgv3bQbjbYDVOMLsocPZLljrnpxo0gYhLkY9qweCsnxyA
+Message-ID: <CAMdnO-Jx+z7ZVFyuS-MhcaPr+jDEJ6sLiAL15Q2pYsphaXcEFg@mail.gmail.com>
+Subject: Re: [PATCH net-next v7 4/5] net: stmmac: Add PCI driver support for BCM8958x
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc: netdev@vger.kernel.org, alexandre.torgue@foss.st.com, davem@davemloft.net, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	mcoquelin.stm32@gmail.com, bcm-kernel-feedback-list@broadcom.com, 
+	richardcochran@gmail.com, ast@kernel.org, daniel@iogearbox.net, 
+	hawk@kernel.org, john.fastabend@gmail.com, rohan.g.thomas@altera.com, 
+	linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
+	andrew+netdev@lunn.ch, horms@kernel.org, sdf@fomichev.me, 
+	siyanteng@cqsoftware.com.cn, prabhakar.mahadev-lad.rj@bp.renesas.com, 
+	weishangjuan@eswincomputing.com, wens@kernel.org, vladimir.oltean@nxp.com, 
+	lizhi2@eswincomputing.com, boon.khai.ng@altera.com, 
+	maxime.chevallier@bootlin.com, chenchuangyu@xiaomi.com, 
+	yangtiezhu@loongson.cn, ovidiu.panait.rb@renesas.com, chenhuacai@kernel.org, 
+	florian.fainelli@broadcom.com, quic_abchauha@quicinc.com
+X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="0000000000005fca6e064d782da0"
+
+--0000000000005fca6e064d782da0
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 19, 2026 at 9:08=E2=80=AFAM Darrick J. Wong <djwong@kernel.org>=
- wrote:
+On Thu, Mar 19, 2026 at 1:15=E2=80=AFAM Russell King (Oracle)
+<linux@armlinux.org.uk> wrote:
 >
-> On Thu, Mar 19, 2026 at 03:28:21AM -0400, Demi Marie Obenour wrote:
-> > On 3/18/26 17:31, Darrick J. Wong wrote:
-> > > On Mon, Mar 16, 2026 at 08:20:29PM -0400, Demi Marie Obenour wrote:
-> > >> On 3/16/26 19:41, Darrick J. Wong wrote:
-> > >>> On Mon, Mar 16, 2026 at 04:08:55PM -0700, Joanne Koong wrote:
-> > >>>> On Mon, Mar 16, 2026 at 11:04=E2=80=AFAM Darrick J. Wong <djwong@k=
-ernel.org> wrote:
-> > >>>>>
-> > >>>>> On Mon, Mar 16, 2026 at 10:56:21AM -0700, Joanne Koong wrote:
-> > >>>>>> On Mon, Feb 23, 2026 at 2:46=E2=80=AFPM Darrick J. Wong <djwong@=
-kernel.org> wrote:
-> > >>>>>>>
-> > >>>>>>> There are some warts remaining:
-> > >>>>>>>
-> > >>>>>>> a. I would like to continue the discussion about how the design=
- review
-> > >>>>>>>    of this code should be structured, and how might I go about =
-creating
-> > >>>>>>>    new userspace filesystem servers -- lightweight new ones bas=
-ed off
-> > >>>>>>>    the existing userspace tools?  Or by merging lklfuse?
-> > >>>>>>
-> > >>>>>> What do you mean by "merging lklfuse"?
-> > >>>>>
-> > >>>>> Merging the lklfuse project into upstream Linux, which involves r=
-unning
-> > >>>>> the whole kit and caboodle through our review process, and then f=
-ixing
-> > >>>>
-> > >>>> Gotcha, so it would basically be having to port this arch/lkl
-> > >>>> directory [1] into the linux tree
-> > >>>
-> > >>> Right.
-> > >>>
-> > >>>>> user-mode-linux to work anywhere other than x86.
-> > >>>>
-> > >>>> Are lklfuse and user-mode-linux (UML) two separate things or is
-> > >>>> lklfuse dependent on user-mode-linux?
-> > >>>
-> > >>> I was under the impression that lklfuse uses UML.  Given the weird
-> > >>> things in arch/lkl/Kconfig:
-> > >>>
-> > >>> config 64BIT
-> > >>>   bool "64bit kernel"
-> > >>>   default y if OUTPUT_FORMAT =3D "pe-x86-64"
-> > >>>   default $(success,$(srctree)/arch/lkl/scripts/cc-objdump-file-for=
-mat.sh|grep -q '^elf64-') if OUTPUT_FORMAT !=3D "pe-x86-64"
-> > >>>
-> > >>> I was kinda guessing x86_64 was the primary target of the developer=
-s?
-> > >>>
-> > >>> /me notes that he's now looked into libguestfs per Demi Marie's com=
-ments
-> > >>> and some curiosity on the part of ngompa and i>
-> > >>>
-> > >>> Whatever it is that libguestfs does to stand up unprivileged fs mou=
-nts
-> > >>> also could fit this bill.  It's *really* slow to start because it t=
-akes
-> > >>> the booted kernel, creates a largeish initramfs, boots that combo v=
-ia
-> > >>> libvirt, and then fires up a fuse server to talk to the vm kernel.
-> > >>>
-> > >>> I think all you'd have to do is change libguestfs to start the VM a=
-nd
-> > >>> run the fuse server inside a systemd container instead of directly =
-from
-> > >>> the CLI.
-> > >>
-> > >> The feedback I have gotten from ngompa is that libguestfs is just
-> > >> too slow for distros to use it to mount stuff.
+> On Wed, Mar 18, 2026 at 11:12:23PM -0700, Jitendra Vegiraju wrote:
+> > Hi Russell,
+> > On Mon, Mar 16, 2026 at 1:34=E2=80=AFPM Jitendra Vegiraju
+> > <jitendra.vegiraju@broadcom.com> wrote:
 > > >
-> > > Yes, libguestfs is /verrrry/ slow to start up.
+> > > On Fri, Mar 13, 2026 at 4:01=E2=80=AFPM Russell King (Oracle)
+> > > <linux@armlinux.org.uk> wrote:
+> > > >
+> > > > > +
+> > > > > +     plat->suspend           =3D stmmac_pci_plat_suspend;
+> > > > > +     plat->resume            =3D brcm_pci_resume;
+> > > > > +     plat->bsp_priv =3D brcm_priv;
+> > > >
+> > > > Populating suspend/resume means that plat->init and plat->exit
+> > > > will only be called on driver probe (former), probe failure (latter=
+)
+> > > > or remove (latter). Please consider using these to ensure that
+> > > > all appropriate resources are properly cleaned up in all cases.
+> > > >
 > > >
-> > >>>>>> Could you explain what the limitations of lklfuse are compared t=
-o the
-> > >>>>>> fuse iomap approach in this patchset?
-> > >>>>>
-> > >>>>> The ones I know about are:
-> > >>>>>
-> > >>>>> 1> There's no support for vmapped kernel memory in UML mode, so a=
-nyone
-> > >>>>> who requires a large contiguous memory buffer cannot assemble the=
-m out
-> > >>>>> of "physical" pages.  This has been a stumbling block for XFS in =
-the
-> > >>>>> past.
-> > >>>>>
-> > >>>>> 2> LKLFUSE still uses the classic fuse IO paths, which means that=
- at
-> > >>>>> best you can directio the IO through the lklfuse kernel.  At wors=
-t you
-> > >>>>> have to use the pagecache inside the lklfuse kernel, which is ver=
-y
-> > >>>>> wasteful.
-> > >>>>
-> > >>>> For the security / isolation use cases you've described, is
-> > >>>> near-native performance a hard requirement?
-> > >>>
-> > >>> Not a hard requirement, just a means to convince people that they c=
-an
-> > >>> choose containment without completely collapsing performance.
-> > >>>
-> > >>>> As I understand it, the main use cases of this will be for mountin=
-g
-> > >>>> untrusted disk images and CI/filesystem testing, or are there broa=
-der
-> > >>>> use cases beyond this?
-> > >>>
-> > >>> That covers nearly all of it.
-> > >>
-> > >> It's worth noting that on ChromeOS and Android, the only trusted
-> > >> disk images are those that are read-only and protected by dm-verity.
-> > >> *Every* writable image is considered untrusted.
-> > >>
-> > >> I don't know if doing a full fsck at each boot is considered
-> > >> acceptable, but I suspect it would slow boot far too much.
-> > >
-> > > Not to mention that an attacker who gained control of the boot proces=
-s
-> > > could inject malicious filesystem metadata after fsck completes
-> > > successfully but before the kernel mount occurs.
-> > >
-> > >> Yes, Google ought to be paying for the kernel changes to fix this me=
-ss.
-> > >>
-> > >>>>> 3> lklfuse hasn't been updated since 6.6.
-> > >>>>
-> > >>>> Gotcha. So if I'm understanding it correctly, the pros/cons come d=
-own to:
-> > >>>> lklfuse pros:
-> > >>>> - (arguably) easier setup cost. once it's setup (assuming it's
-> > >>>> possible to add support for the vmapped kernel memory thing you
-> > >>>> mentioned above), it'll automatically work for every filesystem vs=
-.
-> > >>>> having to implement a fuse-iomap server for every filesystem
-> > >>>
-> > >>> Or even a good non-iomap fuse server for every filesystem.  Admitte=
-dly
-> > >>> the weak part of fuse4fs is that libext2fs is not as robust as the
-> > >>> kernel is.
-> > >>>
-> > >>>> - easier to maintain vs. having to maintain each filesystem's
-> > >>>> userspace server implementation
-> > >>>
-> > >>> Yeah.
-> > >>>
-> > >>>> lklfuse cons:
-> > >>>> - worse (not sure by how much) performance
-> > >>>
-> > >>> Probably a lot, because now you have to run a full IO stack all the=
- way
-> > >>> through lklfuse.
-> > >>
-> > >> How much is "a lot"?  Is it "this is only useful for non-interactive
-> > >> overnight backups", "you will notice this in benchmarks but it's oka=
-y
-> > >> for normal use", or somewhere in between?
-> > >
-> > > Startup is painfully slow.  Normal operation isn't noticeably bad, bu=
-t I
-> > > didn't bother doing any performance comparisons.
-
-For the CI/filesystem testing use case, could fork() help amortize
-lklfuse's slow startup time? eg start lklfuse + pay LKL initialization
-cost once, fork for each test, and each child mounts its own test
-image?
-
-> > >
-> > >> Could lklfuse and iomap be combined?
-> > >
-> > > Probably, though you'd have to find a way to route the FUSE_IOMAP_*
-> > > requests to a filesystem driver.  That's upside-down of the current
-> > > iomap model where filesystems have to opt into using iomap on a
-> > > per-IO-path basis, and then iomap calls the filesystem to find mappin=
-gs.
-> >
-> > If it does get done it would be awesome.  I don't think I'll be able to
-> > contribute, though.
+> > > Thanks for pointing this out. I will check resource cleanup more clos=
+ely.
+> > After reviewing the need for  plat->init and plat-exit, I don't think w=
+e need
+> > these handlers as this driver with fixed-link doesn't need to restore a=
+ny device
+> > specific state such as clocks.
 >
-> I wonder if one could export a (pnfs) layout from the lklfuse kernel to
-> the real one, that's <cough> where struct iomap came from.  A huge
-> downside to that solution is that layouts don't support out of place
-> writes because pnfs doesn't support out of place writes.
+> Huh?
 >
-> > >>>> - once it's merged into the kernel, we can't choose to not
-> > >>>> maintain/support it in the future
-> > >>>
-> > >>> Correct.
-> > >>>
-> > >>>> Am I understanding this correctly?
-> > >>>>
-> > >>>> In my opinion, if near-native performance is not a hard requiremen=
-t,
-> > >>>> it seems like less pain overall to go with lklfuse. lklfuse seems =
-a
-> > >>>> lot easier to maintain and I'm not sure if some complexities like
-> > >>>> btrfs's copy-on-write could be handled properly with fuse-iomap.
-> > >>>
-> > >>> btrfs cow can be done with iomap, at least on the directio end.  It=
-'s
-> > >>> the other features like fsverity/fscrypt/data checksumming that are=
-n't
-> > >>> currently supported by iomap.
-> > >>
-> > >> Pretty much everyone on btrfs uses data checksumming.
-> > >>
-> > >>>> What are your thoughts on this?
-> > >>>
-> > >>> "Gee, what if I could simplify most of my own work out of existence=
-?"
-> > >>
-> > >> What is that work?
-> > >
-> > > Everything I've put out since the end of online fsck for xfs.
-> >
-> > Is pretty much all of that work either on better FUSE performance or
-> > fixes for problems found by fuzzers?
+> plat->init and plat->exit have nothing to do with "restoring" anything.
 >
-> Mostly the iomap parts of fuse-iomap.  It's a huge complication to add
-> to the already confusing fuse codebase.
-
-imo if you did end up going the lklfuse route, I think it'd still be
-useful to have the generic iomap infrastructure pieces of your
-fuse-iomap patchblizzard added, for future new filesystem
-implementations that can provide extent mappings to get near-native IO
-performance.
-
-Thanks,
-Joanne
-
+> plat->init is for platform specific initialisation.
 >
-> --D
+> plat->exit is for reversing the effects of plat->init once plat->init
+> has suceeded, and will be called should the probe fail or on device
+> removal.
+>
+> So, where you have:
+>
+> static int foo_probe()
+> {
+>         do init stuff();
+>
+>         ret =3D stmmac_dvr_probe();
+>         if (ret)
+>                 goto cleanup;
+>
+>         return 0;
+>
+> cleanup:
+>         do cleanup stuff();
+>
+>         return ret;
+> }
+>
+> static void foo_remove()
+> {
+>         stmmac_dvr_remove();
+>         do cleanup stuff();
+> }
+>
+> Using ->init for "do init stuff()" and ->exit for "do cleanup stuff()"
+> will simplify the code, and actually make things more correct.
+>
+> Currently, you have this in your remove path:
+>
+> +       pci_free_irq_vectors(pdev);
+> +       device_set_node(&pdev->dev, NULL);
+> +       software_node_unregister_node_group(brcm_swnodes);
+>
+> but in your probe error path, you have failure paths that leave
+> the swnode connected to the device, and you don't call
+> software_node_unregister_node_group(). Thus, it seems to me that
+> your cleanup path is buggy.
+>
+> My suggestion of using ->init and ->exit means you have slightly
+> less to think about when stmmac_dvr_probe() fails - although if
+> you still have to do appropriate cleanup within ->init if it
+> partially fails.
+>
+Sorry, I missed the resource leak with software node on probe error path.
+Your suggestion to use make use of ->init, ->exit makes the code
+look cleaner. I will make the changes in v8.
+> --
+> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+> FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+
+--0000000000005fca6e064d782da0
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+tJVewHuOmXgWQxNWV7Oiszu1d9xAcqyj65s1PrEIIaHnxEM3eTK+teecLEy8QymZjjDTrCHg4x36
+2AczdlQAIiq5TSAucGja5VP8g1zTnfL/RAxEZvLS471GABptArolXY2hMVHdVEYcTduZlu8aHARc
+phXveOB5/l3bPqpMVf2aFalv4ab733Aw6cPuQkbtwpMFifp9Y3s/0HGBfADomK4OeDTDJfuvCp8g
+a907E48SjOJBGkh6c6B3ace2XH+CyB7+WBsoK6hsrV5twAXSe7frgP4lN/4Cm2isQl3D7vXM3PBQ
+ddI2aZzmewTfbgZptt4KCUhZh+t7FGB6ZKppQ++Rx0zsGN1s71MtjJnhXvJyPs9UyL1n7KQPTEX/
+07kwIwdMjxC/hpbZmVq0mVccpMy7FYlTuiwFD+TEnhmxGDTVTJ267fcfrySVBHioA7vugeXaX3yL
+SqGQdCWnsz5LyCxWvcfI7zjiXJLwefechLp0LWEBIH5+0fJPB1lfiy1DUutGDJTh9WZHeXfVVFsf
+rSQ3y0VaTqBESMjYsJnFFYQJ9tZJScBluOYacW6gqPGC6EU+bNYC1wpngwVayaQQMIIGbTCCBFWg
+AwIBAgIMGHX6KxYK3WW2YyprMA0GCSqGSIb3DQEBCwUAMFIxCzAJBgNVBAYTAkJFMRkwFwYDVQQK
+ExBHbG9iYWxTaWduIG52LXNhMSgwJgYDVQQDEx9HbG9iYWxTaWduIEdDQyBSNiBTTUlNRSBDQSAy
+MDIzMB4XDTI0MDkyNTEzNTAzMVoXDTI2MDkyNjEzNTAzMVowgbMxCzAJBgNVBAYTAlVTMRMwEQYD
+VQQIEwpDYWxpZm9ybmlhMREwDwYDVQQHEwhTYW4gSm9zZTEZMBcGA1UEYRMQTlRSVVMrREUtNjYx
+MDExNzEWMBQGA1UEChMNQlJPQURDT00gSU5DLjEaMBgGA1UEAxMRSml0ZW5kcmEgVmVnaXJhanUx
+LTArBgkqhkiG9w0BCQEWHmppdGVuZHJhLnZlZ2lyYWp1QGJyb2FkY29tLmNvbTCCASIwDQYJKoZI
+hvcNAQEBBQADggEPADCCAQoCggEBAKWV+9PYvG4njqRsbQas79f8Q46VL7b1ZxvWT6ik6VMbdRZx
+tfpfZalVXksqcb02/N1H7UA9V04cV2q97FkSr/KxeFLMetPb3cVJZICg23IRO2NTPdmgPFzwkPTo
+35h9h/OYLgh3/9a1nTsC2xqJa8GtohD5+42rsskGcI57U4n1r1L4R5IL9ypSqDxX/xVEAdGI5FTj
+VgvoZC6iuEbnez+yO8TT3wun9b/PQowOB5P0CwIFv7ERW0S1s6B8yrbsoaTrz0vQaEA786k1pZkg
+ykC1+zXq/iTyZuPP4B4RkzFd43Pw+GAH0Tt2nx5V4rNisJHeAVNU92Gj01cEg0I+FnsCAwEAAaOC
+Ad8wggHbMA4GA1UdDwEB/wQEAwIFoDCBkwYIKwYBBQUHAQEEgYYwgYMwRgYIKwYBBQUHMAKGOmh0
+dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjZzbWltZWNhMjAyMy5jcnQw
+OQYIKwYBBQUHMAGGLWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjZzbWltZWNhMjAy
+MzBlBgNVHSAEXjBcMAkGB2eBDAEFAwEwCwYJKwYBBAGgMgEoMEIGCisGAQQBoDIKAwIwNDAyBggr
+BgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIw
+ADBBBgNVHR8EOjA4MDagNKAyhjBodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjZzbWlt
+ZWNhMjAyMy5jcmwwKQYDVR0RBCIwIIEeaml0ZW5kcmEudmVnaXJhanVAYnJvYWRjb20uY29tMBMG
+A1UdJQQMMAoGCCsGAQUFBwMEMB8GA1UdIwQYMBaAFAApNp5ceroPry1QLdugI4UYsKCSMB0GA1Ud
+DgQWBBRq5Jlxz3MqC+zEgUxK566xEc2g3DANBgkqhkiG9w0BAQsFAAOCAgEARXrmeeWA31pp9Tr0
+M6mOlMv+Pr2raES4GzPSyftvxf6tBQCBNaqi6LSbyusDYOj3mG9bp6VeVn+68OxNY9iNAk+ujtId
+f3+30BlZOQ1v8z9u2peUOUtWI60y2MxhdH0X0n2H+BCGvUOFqs5z440jqqy1HsscZTXHB7FEZmVP
+fyD+0Z6cxyh7WNC6+BgLiFwf8iqmAbu7Yb1sGTUGyS5gfYEjJbF2PJfwNUcJDd7eS4w5Ju5mK5y7
+spgjH2/JmDgbkpSk9JyuWfjGZIg4ah/q2nb6UMd1XJb6gLQZuzPOI3SgXPvd8MHGjKZrX2BHOBSC
+bJJ8rp4w4a9QMS6dde2MFObusxkZAft4tUnwo+ProchHs7iA85sL7sWEZhAmjmKKCpECpEfZm0+/
+hpvKQV3AZp5vBstb4IVL8QmLj8beDVHYnNhEicsSiG1wW7zSYyBnmGbFRrFQIJnJDWPjTZOlVEyp
+T1ShrXRCtqJpOt6rgg+rFEY3D8j6/bAkJXnmKnE2LZ0YyrrKk7eC6UfNNimx38w3NWchtcGY8zJn
+Y/1/C9Jv/mWm/2lK8nvusOFxhKmbG83Hx8toQdZ5F1kYk6zAWjfB7lwXr/En9mCmLieJ18hen9EK
+qbYyUkmCmuoLi5GXFMJy+iQv6DgMVQ7CACagybU6FUrmL9lVa+A6caBEEh4xggJXMIICUwIBATBi
+MFIxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSgwJgYDVQQDEx9HbG9i
+YWxTaWduIEdDQyBSNiBTTUlNRSBDQSAyMDIzAgwYdforFgrdZbZjKmswDQYJYIZIAWUDBAIBBQCg
+gccwLwYJKoZIhvcNAQkEMSIEIOjDrFYUtizxQa+Umj9q17p/hPIJ1PoQph346uqBvFJGMBgGCSqG
+SIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI2MDMyMDE3NDAxMlowXAYJKoZI
+hvcNAQkPMU8wTTALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG
+9w0DBzALBgkqhkiG9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBADRewii5RHsf
+ibILKSz9PSvvaZkgQJUIMEAg/gXysZSPaCCYgeWGc1Puh9bQiW5ol29xIwwW50CJbNtRR6CBF6Gm
+qS92udIowQxTHsZX327AE1fGVpUbLFiTQwUxZ8t00+wT36OYnfw9q2Mhg2dsJ7iu+KDNZ9hoQXi/
+Fa9QrpPoVQ8YQH4uOwyT4y9vCSK3zHp/HZpm2bleu6982evMw9zz1CcjP6OlP0SbNjtts3yFG0Xh
+nAQ8ETe5ekOvXqIYA3TtA/pVDwCoGXPt+yLCmzc33271cBHmcFCqu101U8aoTeR1D8PJViJ9+C+N
+0TzMVdmSHKgJrO/BYI+ZRokmfhk=
+--0000000000005fca6e064d782da0--
