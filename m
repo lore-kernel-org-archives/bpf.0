@@ -1,269 +1,270 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0955D3C344D
-	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 16:23:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8083CE4B2;
+	Fri, 20 Mar 2026 16:24:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774023821; cv=none; b=n/LDA1G4pJhcKzhleKkmm4kpgm2lvMy6c4xoxRwa++InyVA7nHo2srPldLgAxo0KbhEb3+oC7FbjGe8Cq3LBTZW0W/RTxxeGGEG/8Yn4qLmlHDWUh0WEoRs6/LU5ezI5FHCsj/UXcoijXdyBtJC2OlZGL4HEvIJSR/ZoPyH9eSM=
+	t=1774023858; cv=none; b=nNdM75Dm8DftAFApQbVcpBVaTEbhhDOByJsAu5IlEY8iP6d/xqDEAZUtK42Cd0G9oz5NdwBGAYZsLrr1MDULQ+idfJf+dA6dJp9vZRigNsK+D7Aei4o6IePOCb8JUjZjEM+LAwSga/sAah5FFNsQ5z3jb7S9bjxM6jfuGz9k5k4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774023821; c=relaxed/simple;
-	bh=FhY4pkFZ5IWpYfCnyqoA1Rh+ws54D8JIe1Ujk42BhZI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=DTfrzW7PCFRBtmLT50DM6cezJbvPYJCMhkMaSevn8kF0qK+uMfGzo8djBSoHhIacCP5CdZbEb3M/ND/RR+LThPm5srXbKI6kaRy1ecOMD/FwHmZy+53QLgjfInU8kMKsqv6dPA5LENX9KV2as7apbea2S7p/rPxR1Izv44dPhdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WzoOqhG7; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774023858; c=relaxed/simple;
+	bh=xTQpLyzCAkJZRC8+OntsveR6/ELNDN5I/HxbHJR//TY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QNREI1Ocb83GzUKExPoH/NNSXmjGM7JNGPxASdiA8KhSgdL/j2rSjJdXaX+kHLLI5gyzNU3p/kFUlBDCMA5UsbORHcosXuHPdRCfrCevnCNcqDZDHTAv9noKyZdC05Z5vbJl/HAlbVN9/pQbGtzdnlMs3NWmC2wav0ptDTSKNiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p5VMgBN0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WzoOqhG7"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-43b5bded412so1188407f8f.0
-        for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 09:23:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774023818; x=1774628618; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hOQ9dUHW8BuX7G28HmAPUp4J7EDZbgVaRT2VSkocffY=;
-        b=WzoOqhG7Ci+TwP7ijnTJuv6sHq9TUWu7eeNyEvmUxgUeb/yPvcPotcLCp1IHJRjIs6
-         Z56x/i4FgytoBpzT3Y3YuL95ttPkyfcbIMl+/lS3vGP7gqAeaHEUpJjGE7kxNDHaoBFQ
-         6Vw+lKDTIZYOtn7QbIdPJliLYt/bUIGh3UQASNU8QulSThLg+aiKds0db/X71rXIblUq
-         K45uAueA2HMEkd5k65Zmoa3X1pUcYKVVdXREyieXrswa1L6DQ7ew6dzdSkxvoGpOc0YD
-         VcI0ms1gX6O6B/sTjiS9HrngWL5MOKGxWLQAjaIdX/KsriWV7OajGYikJylwIGZ+9CpR
-         v9iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774023818; x=1774628618;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hOQ9dUHW8BuX7G28HmAPUp4J7EDZbgVaRT2VSkocffY=;
-        b=Gups1ly+ctwehteMmTs7VJeaqiPdU3ijjlH53ks2p0Lj22EyG3Kw2n8Xh4LG8kQ8OR
-         Bzyk1HB0YiZoekGK3Ysf6DDUNKqdomvJe2cTFmGMRJcXZrW+UjwQA0DJKOkI2cu8MQ6h
-         KOIn93a1bOY+8B5FRTe3a7hzBxxVfz5sQNXxvcvpBUJQtToJuLqBnpWPwMB1R3qPVppr
-         QNWf/bidcgKmoC4wBYWhrE9mO5tLRIWI939bGeEQkzj3ZG2oOPtqHfBJISV9+lFharne
-         Y4hxdCScH9ITbKE0wCUQ6wUSRaJ6u2jns+8JfjCHEtATlzHpNIYiTDiy3cwvK/TCjNWO
-         9AMg==
-X-Gm-Message-State: AOJu0Yweqz4EweWDj5Z6kYiadnKFv5ZH8orSFbHQP/GFngMDjm+ETys1
-	I4OshL1wYq0+e4ild8mOI2kOoJxexChgzIw7bMtu+Q0bI+dsCaJkyiS8TFm9
-X-Gm-Gg: ATEYQzw+O1y8R+QbZGW5I5wZbUL9MCjJu6HCiRnKsOA0AQvkwB/MPOtOdkmSAGi6V5N
-	LhQdcz1N3++raJeo1d9KtC0q11cs3yfXrlJW3cwhQydo1eupKyo411BUtZqnGdesaWzVgHaGxKQ
-	asut87Z8sLryytOSwCZrqDxkIN5R9/OVXK+kFcoc2HndRgzl+9jHeVU9GMJ8vTr3HoDVB6QliYX
-	qbgB0ayZ9DRFmMORskC01MnBfVns9TAc0IqvedKd0q1o3lOywoyf3JlpQfEcuMEnz6GNJlRqpMJ
-	h+GlnJvmej/AyDshMZ+CTq9LkbDXsdbMth27iGwztC/JtinUxhKy3oLwvzzeywsAPmJB6gQ+rIK
-	Q4ihmnXgyeLb1dvYPahDHL7r4p+3m41W1DmswFTLJc840gZQu/Z4uuJTrg/+GPIJcYNMdgLoKOZ
-	RVvlNRFoVCM33hpRVG9pbJvhi1+WwuKMicGY5vYwq3uCDZZElVXkNl4+pFP6fZPfJUTFED5DSP6
-	+Vvxg==
-X-Received: by 2002:a05:6000:24c4:b0:43b:45d1:f449 with SMTP id ffacd0b85a97d-43b6427cde9mr6394315f8f.51.1774023817766;
-        Fri, 20 Mar 2026 09:23:37 -0700 (PDT)
-Received: from ast-epyc5.inf.ethz.ch (ast-epyc5.inf.ethz.ch. [129.132.161.180])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b644acb52sm8152704f8f.7.2026.03.20.09.23.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Mar 2026 09:23:37 -0700 (PDT)
-From: Hao Sun <sunhao.th@gmail.com>
-X-Google-Original-From: Hao Sun <hao.sun@inf.ethz.ch>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	paul.chaignon@gmail.com,
-	harishankar.vishwanathan@gmail.com,
-	shung-hsi.yu@suse.com,
-	john.fastabend@gmail.com,
-	martin.lau@linux.dev,
-	linux-kernel@vger.kernel.org,
-	sunhao.th@gmail.com
-Subject: [PATCH bpf-next v2] bpf: Simplify tnum_step()
-Date: Fri, 20 Mar 2026 17:23:36 +0100
-Message-Id: <20260320162336.166542-1-hao.sun@inf.ethz.ch>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p5VMgBN0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D52AC19425;
+	Fri, 20 Mar 2026 16:24:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774023857;
+	bh=xTQpLyzCAkJZRC8+OntsveR6/ELNDN5I/HxbHJR//TY=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=p5VMgBN0kAzCcpTL+kQjRLeuxYlvGrKvXvu+CGKwGc56HvLtyyFR//gOGJP29hTO5
+	 8lSdbV7P/y7MTuDqcfQTimfhEpw4n7t4inQ7+k+y70Hv4JD3/W5U185N0Fk92J8gwz
+	 OVxVqwXH2ga+UtVdGWE46lZGrf9Vn4uniF0ODSNwuk9v10cH4Y0TCt9zppfnoj/gd+
+	 UVYvTXQ6oSbVxZG1JlXZFuRHdBQEXOO/bmGTVsEVP+B0DTLuiHnllO7npWnyiAqHXH
+	 0TYhVGyRPW1Gx/WkScw/WgknQTpiEGguaFo5+sTOmJImjuMpW6ISghaFJFct9ZzBH8
+	 rCmhkIehZgAeg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 2C376CE0AB1; Fri, 20 Mar 2026 09:24:15 -0700 (PDT)
+Date: Fri, 20 Mar 2026 09:24:15 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Boqun Feng <boqun@kernel.org>
+Cc: Joel Fernandes <joelagnelf@nvidia.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	frederic@kernel.org, neeraj.iitr10@gmail.com, urezki@gmail.com,
+	boqun.feng@gmail.com, rcu@vger.kernel.org,
+	Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>
+Subject: Re: Next-level bug in SRCU implementation of RCU Tasks Trace +
+ PREEMPT_RT
+Message-ID: <2b3848e9-3b11-41b8-8c44-5de28d4a4433@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20260319163350.c7WuYOM9@linutronix.de>
+ <abwo0I_mu94t5Ews@tardis.local>
+ <CAP01T75J4EXu8MFD2WEQ71Ou-bapqS=_wXFFQJ6Ed62X28HO2A@mail.gmail.com>
+ <abwyGtG7hDpd8vBN@tardis.local>
+ <CAP01T75S-NMgB=s_0jqq52xRwe1cQ29DzD33eeqUZHM3cSb=oA@mail.gmail.com>
+ <abxZEE4SAMkNEleq@tardis.local>
+ <89763fcd-3710-49a0-91ca-cd923b47fc1e@nvidia.com>
+ <abxfBZ89wIJILuom@tardis.local>
+ <c391f8b9-a168-4235-aa7b-6902b4f07002@paulmck-laptop>
+ <ab1u-AuqIbJakUYW@tardis.local>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ab1u-AuqIbJakUYW@tardis.local>
 
-Simplify tnum_step() from a 10-variable algorithm into a straight
-line sequence of bitwise operations.
+On Fri, Mar 20, 2026 at 08:59:52AM -0700, Boqun Feng wrote:
+> On Fri, Mar 20, 2026 at 08:34:41AM -0700, Paul E. McKenney wrote:
+> > On Thu, Mar 19, 2026 at 01:39:33PM -0700, Boqun Feng wrote:
+> > > On Thu, Mar 19, 2026 at 04:21:45PM -0400, Joel Fernandes wrote:
+> > > > On 3/19/2026 4:14 PM, Boqun Feng wrote:
+> > > > > On Thu, Mar 19, 2026 at 07:41:06PM +0100, Kumar Kartikeya Dwivedi wrote:
+> > > > >> On Thu, 19 Mar 2026 at 18:27, Boqun Feng <boqun@kernel.org> wrote:
+> > > > >>>
+> > > > >>> On Thu, Mar 19, 2026 at 05:59:40PM +0100, Kumar Kartikeya Dwivedi wrote:
+> > > > >>>> On Thu, 19 Mar 2026 at 17:48, Boqun Feng <boqun@kernel.org> wrote:
+> > > > >>>>>
+> > > > >>>>> On Thu, Mar 19, 2026 at 05:33:50PM +0100, Sebastian Andrzej Siewior wrote:
+> > > > >>>>>> On 2026-03-19 09:27:59 [-0700], Boqun Feng wrote:
+> > > > >>>>>>> On Thu, Mar 19, 2026 at 10:03:15AM +0100, Sebastian Andrzej Siewior wrote:
+> > > > >>>>>>>> Please just use the queue_delayed_work() with a delay >0.
+> > > > >>>>>>>>
+> > > > >>>>>>>
+> > > > >>>>>>> That doesn't work since queue_delayed_work() with a positive delay will
+> > > > >>>>>>> still acquire timer base lock, and we can have BPF instrument with timer
+> > > > >>>>>>> base lock held i.e. calling call_srcu() with timer base lock.
+> > > > >>>>>>>
+> > > > >>>>>>> irq_work on the other hand doesn't use any locking.
+> > > > >>>>>>
+> > > > >>>>>> Could we please restrict BPF somehow so it does roam free? It is
+> > > > >>>>>> absolutely awful to have irq_work() in call_srcu() just because it
+> > > > >>>>>> might acquire locks.
+> > > > >>>>>>
+> > > > >>>>>
+> > > > >>>>> I agree it's not RCU's fault ;-)
+> > > > >>>>>
+> > > > >>>>> I guess it'll be difficult to restrict BPF, however maybe BPF can call
+> > > > >>>>> call_srcu() in irq_work instead? Or a more systematic defer mechanism
+> > > > >>>>> that allows BPF to defer any lock holding functions to a different
+> > > > >>>>> context. (We have a similar issue that BPF cannot call kfree_rcu() in
+> > > > >>>>> some cases IIRC).
+> > > > >>>>>
+> > > > >>>>> But we need to fix this in v7.0, so this short-term fix is still needed.
+> > > > >>>>>
+> > > > >>>>
+> > > > >>>> I don't think this is an option, even longer term. We already do it
+> > > > >>>> when it's incorrect to invoke call_rcu() or any other API in a
+> > > > >>>> specific context (e.g., NMI, where we punt it using irq_work).
+> > > > >>>> However, the case reported in this thread is different. It was an
+> > > > >>>> existing user which worked fine before but got broken now. We were
+> > > > >>>> using call_rcu_tasks_trace() just fine in scx callbacks where rq->lock
+> > > > >>>> is held before, so the conversion underneath to call_srcu() should
+> > > > >>>> continue to remain transparent in this respect.
+> > > > >>>>
+> > > > >>>
+> > > > >>> I'm not sure that's a real argument here, kernel doesn't have a stable
+> > > > >>> internal API, which allows developers to refactor the code into a saner
+> > > > >>> way. There are currently multiple issues that suggest we may need a
+> > > > >>> defer mechanism for BPF core, and if it makes the code more easier to
+> > > > >>> reason about then why not? Think about it like a process that we learn
+> > > > >>> about all the defer patterns that BPF currently needs and wrap them in a
+> > > > >>> nice and maintainable way.
+> > > > >>
+> > > > >> This is all right in theory, but I don't understand how your
+> > > > >> theoretical deferral mechanism for BPF will help here in the case
+> > > > >> we're discussing, or is even appealing.
+> > > > >>
+> > > > >> How do we decide when to defer? Will we annotate all locks that can be
+> > > > >> held by RCU internals to be able to check if they are held (on the
+> > > > >> current cpu, which is non-trivial except by maintaining a held lock
+> > > > >> table, testing the locked bit is too conservative), and then deferring
+> > > > >> the call_srcu() from the caller in BPF? What if you gain new locks? It
+> > > > >> doesn't seem practical to me. Plus it pushes the burden of detection
+> > > > >> and deferral to the caller, making everything more complicated and
+> > > > >> error-prone.
+> > > > >>
+> > > > > 
+> > > > > My suggestion would be: deferring all call_srcu()s that in BPF
+> > > > > core. [...]
+> > > > 
+> > > > isn't one of the issues is that BPF is using call_rcu_tasks_trace() which is now
+> > > > internally using call_srcu? So whether other parts of BPF use call_srcu() or
+> > > 
+> > > I was talking about the long term solution in that thread ;-)
+> > > 
+> > > Short-term, yes the switching from call_rcu_tasks_trace() to call_srcu()
+> > > is the cause the issue, and we have the lockdep report to prove that. So
+> > > in order to continue the process of switching to SRCU for BPF, we need
+> > > to restore the behavior of call_rcu_tasks_trace() in call_srcu().
+> > > 
+> > > > not, the issue still stands AFAICS.
+> > > > 
+> > > 
+> > > In an alternative universe, BPF has a defer mechanism, and BPF core
+> > > would just call (for example):
+> > > 
+> > >     bpf_defer(call_srcu, ...); // <- a lockless defer
+> > > 
+> > > so the issue won't happen.
+> > 
+> > In theory, this is quite true.
+> > 
+> > In practice, unfortunately for keeping this part of RCU as simple as
+> > we might wish, when a BPF program gets attached to some function in
+> > the kernel, it does not know whether or not that function holds a given
+> > scheduler lock.  For example, there are any number of utility functions
+> > that can be (and are) called both with and without those scheduler
+> > locks held.  Worse yet, it might be attached to a function that is
+> > *never* invoked with a scheduler lock held -- until some out-of-tree
+> > module is loaded.  Which means that this module might well be loaded
+> > after BPF has JIT-ed the BPF program.
+> > 
+> 
+> Hmm.. maybe I failed to make myself more clear. I was suggesting we
+> treat BPF as a special context, and you cannot do everything, if there
+> is any call_srcu() needed, switch it to bpf_defer(). We should have the
+> same result as either 1) call_srcu() locklessly defer itself or 2) a
+> call_srcu_lockless().
+> 
+> Certainly we can call_srcu() do locklessly defer, but if it's only for
+> BPF, that looks like a whack-a-mole approach to me. Say later on we want
+> to use call_hazptr() in BPF for some reason (there is hoping!), then we
+> need to make it locklessly defer as well. Now we have two lockless logic
+> in both call_srcu() and call_hazptr(), if there is a third one, we need
+> to do that as well. So where's the end?
 
-Problem Reduction:
+Except that by the same line of reasoning, how do the BPF guys figure out
+exactly which function calls they need to defer and under what conditions
+they need to defer them?  Keeping in mind that the list of functions and
+corresponding conditions is subject to change as the kernel continues
+to change.
 
-tnum_step(): Given a tnum `(tval, tmask)` where `tval & tmask == 0`,
-and a value `z` with `tval ≤ z < (tval | tmask)`, find the smallest
-`r > z`, a tnum-satisfying value, i.e., `r & ~tmask == tval`.
+> The lockless defer request comes from BPF being special, a proper way to
+> deal with it IMO would be BPF has a general defer mechanism. Whether
+> call_srcu() or call_srcu_lockless() can do lockless defer is
+> orthogonal.
 
-Every tnum-satisfying value has the form tval | s where s is a subset
-of tmask bits (s & ~tmask == 0).  Since tval and tmask are disjoint:
+Fair point, and for the general defer mechanism, I hereby nominate
+the irq_work_queue() function.  We can use this both for RCU and
+for hazard pointers.  The code to make a call_srcu_lockless() and
+call_hazptr_lockless() that includes the relevant checks and that does
+the deferral will not be large, complex, or slow.  Especially assuming
+that we consolidate common checks.
 
-    tval | s  =  tval + s
+> BTW, an example to my point, I think we have a deadlock even with the
+> old call_rcu_tasks_trace(), because at:
+> 
+> https://elixir.bootlin.com/linux/v6.19.8/source/kernel/rcu/tasks.h#L384
+> 
+> We do a:
+> 
+> 	mod_timer(&rtpcp->lazy_timer, rcu_tasks_lazy_time(rtp));
+> 
+> which means call_rcu_tasks_trace() may acquire timer base lock, and that
+> means if BPF was to trace a point where timer base lock is held, then we
+> may have a deadlock. So Now I wonder whether you had any magic to avoid
+> the deadlock pre-7.0 or we are just lucky ;-)
 
-Similarly z = tval + d where d = z - tval, so r > z becomes:
+Test it and see!  ;-)
 
-    tval + s  >  tval + d
-    s > d
+> See, without a general defer mechanism, we will have a lot of fun
+> auditing all the primitives that BPF may use.
 
-The problem reduces to: find the smallest s, a subset of tmask, such
-that s > d.
+No, *we* only audit the primitives in our subsystem that BPF actually
+uses when BPF starts using them.  We let the *other* subsystems worry
+about *their* interactions with BPF.
 
-Notice that `s` must be a subset of tmask, the problem now is simplified.
+> > So we really do need to make some variant of call_srcu() that deals
+> > with this.
+> > 
+> > We do have some options.  First, we could make call_srcu() deal with it
+> > directly, or second, we could create something like call_srcu_lockless()
+> > or call_srcu_nolock() or whatever that can safely be invoked from any
+> > context, including NMI handlers, and that invokes call_srcu() directly
+> > when it determines that it is safe to do so.  The advantage of the second
+> > approach is that it avoids incurring the overhead of checking in the
+> > common case.
+> 
+> Within the RCU scope, I prefer the second option.
 
-Algorithm:
+Works for me!
 
-The mask bits of `d` form a "counter" that we want to increment by one,
-but the counter has gaps at the fixed-bit positions.  A normal +1 would
-stop at the first 0-bit it meets; we need it to skip over fixed-bit
-gaps and land on the next mask bit.
+Would you guys like to implement this, or would you prefer that I do so?
 
-Step 1 -- plug the gaps:
+							Thanx, Paul
 
-    d | carry_mask | ~tmask
-
-  - ~tmask fills all fixed-bit positions with 1.
-  - carry_mask = (1 << fls64(d & ~tmask)) - 1 fills all positions
-    (including mask positions) below the highest non-mask bit of d.
-
-After this, the only remaining 0s are mask bits above the highest
-non-mask bit of d where d is also 0 -- exactly the positions where
-the carry can validly land.
-
-Step 2 -- increment:
-
-    (d | carry_mask | ~tmask) + 1
-
-Adding 1 flips all trailing 1s to 0 and sets the first 0 to 1.  Since
-every gap has been plugged, that first 0 is guaranteed to be a mask bit
-above all non-mask bits of d.
-
-Step 3 -- mask:
-
-    ((d | carry_mask | ~tmask) + 1) & tmask
-
-Strip the scaffolding, keeping only mask bits.  Call the result inc.
-
-Step 4 -- result:
-
-    tval | inc
-
-Reattach the fixed bits.
-
-A simple 8-bit example:
-    tmask:        1  1  0  1  0  1  1  0
-    d:            1  0  1  0  0  0  1  0     (d = 162)
-                        ^
-                        non-mask 1 at bit 5
-
-With carry_mask = 0b00111111 (smeared from bit 5):
-
-    d|carry|~tm   1  0  1  1  1  1  1  1
-    + 1           1  1  0  0  0  0  0  0
-    & tmask       1  1  0  0  0  0  0  0
-
-The patch passes my local test: test_verifier, test_progs for
-`-t verifier` and `-t reg_bounds`.
-
-CBMC shows the new code is equiv to original one[1], and
-a lean4 proof of correctness is available[2]:
-
-theorem tnumStep_correct (tval tmask z : BitVec 64)
-    -- Precondition: valid tnum and input z
-    (h_consistent : (tval &&& tmask) = 0)
-    (h_lo : tval ≤ z)
-    (h_hi : z < (tval ||| tmask)) :
-    -- Postcondition: r must be:
-    --    (1) tnum member
-    --    (2) z < r
-    --    (3) for any other member w > z, r <= w
-    let r := tnumStep tval tmask z
-    satisfiesTnum64 r tval tmask ∧
-    tval ≤ r ∧ r ≤ (tval ||| tmask) ∧
-    z < r ∧
-    ∀ w, satisfiesTnum64 w tval tmask → z < w → r ≤ w := by
-  -- unfold definition
-  unfold tnumStep satisfiesTnum64
-  simp only []
-  refine ⟨?_, ?_, ?_, ?_, ?_⟩
-  -- the solver proves each conjunct
-  · bv_decide
-  · bv_decide
-  · bv_decide
-  · bv_decide
-  · intro w hw1 hw2; bv_decide
-
-[1] https://github.com/eddyz87/tnum-step-verif/blob/master/main.c
-[2] https://pastebin.com/raw/czHKiyY0
-
-Signed-off-by: Hao Sun <hao.sun@inf.ethz.ch>
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-
----
-v1 -> v2: inline proof, add code comments, add a variable `filled`.
-
- kernel/bpf/tnum.c | 46 +++++++++++++++++++---------------------------
- 1 file changed, 19 insertions(+), 27 deletions(-)
-
-diff --git a/kernel/bpf/tnum.c b/kernel/bpf/tnum.c
-index 4abc359b3db0..ec9c310cf5d7 100644
---- a/kernel/bpf/tnum.c
-+++ b/kernel/bpf/tnum.c
-@@ -286,8 +286,7 @@ struct tnum tnum_bswap64(struct tnum a)
-  */
- u64 tnum_step(struct tnum t, u64 z)
- {
--	u64 tmax, j, p, q, r, s, v, u, w, res;
--	u8 k;
-+	u64 tmax, d, carry_mask, filled, inc;
- 
- 	tmax = t.value | t.mask;
- 
-@@ -299,29 +298,22 @@ u64 tnum_step(struct tnum t, u64 z)
- 	if (z < t.value)
- 		return t.value;
- 
--	/* keep t's known bits, and match all unknown bits to z */
--	j = t.value | (z & t.mask);
--
--	if (j > z) {
--		p = ~z & t.value & ~t.mask;
--		k = fls64(p); /* k is the most-significant 0-to-1 flip */
--		q = U64_MAX << k;
--		r = q & z; /* positions > k matched to z */
--		s = ~q & t.value; /* positions <= k matched to t.value */
--		v = r | s;
--		res = v;
--	} else {
--		p = z & ~t.value & ~t.mask;
--		k = fls64(p); /* k is the most-significant 1-to-0 flip */
--		q = U64_MAX << k;
--		r = q & t.mask & z; /* unknown positions > k, matched to z */
--		s = q & ~t.mask; /* known positions > k, set to 1 */
--		v = r | s;
--		/* add 1 to unknown positions > k to make value greater than z */
--		u = v + (1ULL << k);
--		/* extract bits in unknown positions > k from u, rest from t.value */
--		w = (u & t.mask) | t.value;
--		res = w;
--	}
--	return res;
-+	/*
-+	 * Let r be the result tnum member, z = t.value + d.
-+	 * Every tnum member is t.value | s for some submask s of t.mask,
-+	 * and since t.value & t.mask == 0, t.value | s == t.value + s.
-+	 * So r > z becomes s > d where d = z - t.value.
-+	 *
-+	 * Find the smallest submask s of t.mask greater than d by
-+	 * "incrementing d within the mask": fill every non-mask
-+	 * position with 1 (`filled`) so +1 ripples through the gaps,
-+	 * then keep only mask bits. `carry_mask` additionally fills
-+	 * positions below the highest non-mask 1 in d, preventing
-+	 * it from trapping the carry.
-+	 */
-+	d = z - t.value;
-+	carry_mask = (1ULL << fls64(d & ~t.mask)) - 1;
-+	filled = d | carry_mask | ~t.mask;
-+	inc = (filled + 1) & t.mask;
-+	return t.value | inc;
- }
--- 
-2.34.1
-
+> Regards,
+> Boqun
+> 
+> > Thoughts?
+> > 
+> > 						Thanx, Paul
+> > 
+> > > > I think we have to fix RCU tasks trace, one way or the other.
+> > > > 
+> > > > Or did I miss something?
+> > > > 
+> > > 
+> > > No I don't think so ;-)
+> > > 
+> > > Regards,
+> > > Boqun
+> > > 
+> > > > thanks,
+> > > > 
+> > > > --
+> > > > Joel Fernandes
+> > > > 
+> > > > 
+> > > > 
