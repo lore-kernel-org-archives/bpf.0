@@ -1,63 +1,63 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67F7D346E43
-	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 13:24:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30F522FF669
+	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 13:24:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774013061; cv=none; b=GOkG14iQcY/J84MPh3kqsA9xfUHv3cnNjdt5kxoFyVwgPJ6ip4hRTjpUEtNLBftqYsyQujW9TOB4KSFv48aajmtg3ebTvRKQvzc8iDkittnyWrvGOXCzE2BL1mYOQxBtUv/kmQ8TCEfQ36FVOuZlC14OU4YCZAp2kSG/Ck22EnY=
+	t=1774013071; cv=none; b=e4C32PvmqCaUpZmaUj62q6X4j2FJL2AbT113kimqKW89tK9se0r+yowUmyxdjvTGHAb6gT60ZfUC9X2kaonYFzIj3rrIEQtCtHWfLxoTbH10Vb874ZKf3DqXItlbVZJUqtH3piRWpCN+1D5rnRG7einHG97brj5SNOCoDOny9WM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774013061; c=relaxed/simple;
-	bh=a+oxLfq9RSHfY77rEjVTDuomCaQ8FCSspwATl6wnFYE=;
+	s=arc-20240116; t=1774013071; c=relaxed/simple;
+	bh=PD9juSUsML20xVTwE8RCFOWj95oRmvJZgs05+pTq+Qk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BU1YDFuPaCiShFGHsycQtZGoGjKPcETWub93fJHyoVxdnoFKDVnXTH1SrZHHszPnJ3GRiuiayjvCZXgStKlZscyj3ZNfKFwDZdL3B7y5XMM8dc4yS+G5TmXaAqbd9ghR6XDaqXMD9CGN7UH/ZaRODQx3G1mF5oqHnsOExV29Ljg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hdMK9rX2; arc=none smtp.client-ip=209.85.128.48
+	 MIME-Version; b=d+a6JuOWALflzr9cUSU4L4buZMtZzzIXVmad5twgAgjLAyaax2IvBI8CKp6mqUv9TGxN6DRZ5GrzaD0e7dygOHD9Lbd6PdqmSKfcN1l7xeOlqfsBD2S76pkazY7E6Y2PGE2yYXMr/nemM6yJB8fZl94kQL51JrIQHkIbmfn5NR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cmn/wP1j; arc=none smtp.client-ip=209.85.128.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hdMK9rX2"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-486fd5360d4so15814005e9.1
-        for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 06:24:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cmn/wP1j"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-48374014a77so18341505e9.3
+        for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 06:24:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774013056; x=1774617856; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1774013068; x=1774617868; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xiMQwHGnLD5/XsfLBlV7SvVEPFXNa0BlQRc1VZzGUCs=;
-        b=hdMK9rX2Y2cI8mv4YEeCHyeL/C1+gxAe6rJXLxHJOym1wm7L6JeXHq2yq6ubPmtbMM
-         Zj7WqSPeHvupzwraOaJkTZa4dAAFKrDGO+6XlsAVCg+SA07jt8/InGc0RBBqJaI1IXZ4
-         A/b+87YjKgw1bPi3NbrfGr5sWzRM5DKSsUyKmQVRjbpa7SUHGm4FOiRv7+ZCQERu82JX
-         gPN2sX3+rj7IN2mHMFaw6wENxQZkmHL6JXfgqWSsje028uKrlk9gd4FOxBHbmijF4+4y
-         8egFRKh7kQs0T0IAJyXj2cDOfp7kWwjWE3WFoNWucLT9sZbHuUtxwo3XSQbFzT56s7H3
-         KNQw==
+        bh=aLTuTnfwehV2L1dYdqxcXAxrjOVio+7F/VaVFTc7JYo=;
+        b=Cmn/wP1jHQs7GgyundFrM00/EXxqNZfib9Jb1SRRIE7kmcsbd/9wG3YnssN0CoFegl
+         Ea8nt6GXvErSqFHINtpMR3qUepQWlG2XAilwTgaWHKYFZOimEAy1y2hf4Rib1WyIrYUr
+         BlS4M8bOZjf/1E/nDWUN7UJj2qJg2B4jIOcjsS6WEDhQsOzXYt5+TtFX9RT/+mOI9DrM
+         2OQxEt2rtEXtBrHogUCBtOCJ1dVIiCKBEk7NGiWKdlqAkjG/0idlETfeFsGRQZXEw1er
+         7BuN87uZTJJf6UAQE6JVpoBBiJJj15X9fbvQUOfbwvVOI7YniKmy1rEYPDPrJHR247dt
+         RApg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774013056; x=1774617856;
+        d=1e100.net; s=20251104; t=1774013069; x=1774617869;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=xiMQwHGnLD5/XsfLBlV7SvVEPFXNa0BlQRc1VZzGUCs=;
-        b=aBWT6IhB1DZOp6iuJtvp+nBjvcE7+C6OJZjoNa7Ym6/NPDZkqK0508emFAFkVVzXxE
-         aE+Uiq4nmxyayG8sB3cmMdHczTPmt+Ul+AlXY1lRzZmL1v28EmLIV/iELiKRYWIHDsDI
-         zBGKny4UBb4Yq+lf30+GJRlVMnlPyG9f8II5hg63cubEcQkjMIilr2WCXPK7JhdAhUiE
-         Smpm6V1ikvJxddg/o3YLS6YZuxJ42InqDmDeficvjlnbXlMCeu86yXAXF1kyrc5t0l2g
-         atrcD4ancBpPXhm8XOPRYceS6Li7QUff54yohKZpobzJ1/Wiq7SzSR2GpxZl6KbIrXfT
-         GFWg==
-X-Forwarded-Encrypted: i=1; AJvYcCVToAZs17LHxyVBi0SxgZcZjCzkosAQkiCh0RTjZmeZVqaciN/6GU5/5gZ3P8zQsVStIFo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTS1hO5T/RjYfrKtTL7zHHg2LLNuVd6gKX42pGOGYdJXBs+aZ8
-	rAUmz/Cgr++C/kEdlPcWNTa3q1AtSp1u7qDlspLQguwu95pQPBdYh5S7
-X-Gm-Gg: ATEYQzyCs9xK1cyKQ/UQMI2G1jINgtdHZ0HBwhqaIiiUxV/qSWB+zdRBOmx2RKRJr9S
-	zjH2FQGMgjR3CTFbwsKk6yN3hB+2ou1IwxgFE3FnKHqZcO6phYTGMyrF8l2NZQbUD5cCH6uQidT
-	2iwCZ2tVihGHns9y1WN44+jRZjH84yqJ/5+4fEadNv8SJBjMEfoBqJGv3PdLqDWn4kofDllCAVx
-	U5r/tYhL3PUPm0P0yciioL4DcX0PXQMOIkEoPplZcPkeTyio5cN65v4It8zCvHa0PGbBLVspUzD
-	lPm3ETx6C61tgZFLpKLntAbkWZ0jucT2Kko7hHdnFjlUDaz43anyLATF2lwf1QGLczBSJHTcqOQ
-	kXi0SUuK4XOZBQ/NoKdfCYGx3fRSEWTcz0i04gJCBtTc+rtP9te50DFAbI944+f3Jmv66lXNFzY
-	j/AhvBcPKEYK2NhxfZO31WAIPK3MNFjVsI9VwVtSi484V3ZyVU4O+st6eR80db76v6cKMkyKUW
-X-Received: by 2002:a05:600c:8b61:b0:485:3471:cffb with SMTP id 5b1f17b1804b1-486fedd8164mr44729825e9.15.1774013055363;
-        Fri, 20 Mar 2026 06:24:15 -0700 (PDT)
+        bh=aLTuTnfwehV2L1dYdqxcXAxrjOVio+7F/VaVFTc7JYo=;
+        b=fmcTTC9zIr0MSArjIGDry4cnOO8lR6+T5syTORvzwiDHTDpwpQHyxDkmekLGPaAmao
+         zTKseTrWeIeRjNWLcScDlOjvUOXGLXBaad3MslNs7NTf6Akx/Pvf591s0xAAvtsGLVGV
+         81ggPavYNNly2YsmiuxON9MylERrCPg9iB9PibFd/yGtSP+6sW1+UmhXY4zjJsrdCIR1
+         7I3TeqeEFS6ZBFwE8rNtVCOfztiiX/Kf9zkcGHR8Q0sPMqoy9oFbDUASfjgo25oenOkY
+         ukEvOn+egRwi6NJUiEaDXmWJNYT+nmdGBx2smexJRXW+o6/3o7ZbjtwteiSrc3+o0AYN
+         jsEw==
+X-Forwarded-Encrypted: i=1; AJvYcCUAf+3ls0+A68I7a3ZuyBWi1vGPgg+yJWxxon8Kk6Gw2V0t63D5ro2qy2RULxLNzb4VuJI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzl9vXBiG0PoCYIpEPrachhOakmIXO0B8F/ZJX1rjW0SjxFIIZ8
+	JRJHtRcY9VFfr6Up8ZJihC2vEuP9263Y6pPl3ULs12tNkDvBYvr/nsP6
+X-Gm-Gg: ATEYQzy0rI9iv72FQ6OBh4gQnGuokj5S/wYZakkZRYiMD4qnAaB0iD1rdflCy4xdn/s
+	DdaEoaxV0Ia31xpq5SRgiQH0I6x/dAFwgxEHT1H6lThi7mULFj5A7fwNRmhk0/LjcdkwpW6RWek
+	6C/ZVT+8NDUZRsuQEQ4w8MPqeGteTioKw8sDblnqTZgamlG6DLd/l7TVuAWmTREZ0h83p40Jgrc
+	sB53BVraJn41bhUge1055h6gu3DrT91eJ3zb8H+HOrhc59IGNnrgzeLkeFUB+rnjXIFWN+X/i3o
+	88O+Ow0TAhd7PW0k0CmyJ/GUVnmFL4efrRvi89TuMy+ngpBM25PAOAbPmij2EIoDoaKQ2CInULz
+	9//uln+JWv3VL5+78NDgcvE26L8ekKzNOgh524hpVhs90r5XjZaXxDSOqXJVE7MBbYRnTdS+Kis
+	/8YTLLYtf24V9LoWWtCf9DUVZx6MghYUD8XBe7HjUfsueC5elGZfy1r9VEXLJGzv92o8jkT9Ub
+X-Received: by 2002:a05:600c:1d1b:b0:485:3cf3:1010 with SMTP id 5b1f17b1804b1-486febb5fefmr49625065e9.2.1774013068226;
+        Fri, 20 Mar 2026 06:24:28 -0700 (PDT)
 Received: from turbo.teknoraver.net (net-5-95-156-124.cust.vodafonedsl.it. [5.95.156.124])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-487004e7bc4sm16427095e9.2.2026.03.20.06.24.14
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-487004e7bc4sm16427095e9.2.2026.03.20.06.24.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Mar 2026 06:24:14 -0700 (PDT)
+        Fri, 20 Mar 2026 06:24:27 -0700 (PDT)
 From: Matteo Croce <technoboy85@gmail.com>
 X-Google-Original-From: Matteo Croce <teknoraver@meta.com>
 To: Tony Nguyen <anthony.l.nguyen@intel.com>,
@@ -75,9 +75,9 @@ Cc: netdev@vger.kernel.org,
 	bpf@vger.kernel.org,
 	intel-wired-lan@lists.osuosl.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v3 1/2] e1000e: add basic XDP support
-Date: Fri, 20 Mar 2026 14:23:55 +0100
-Message-ID: <20260320132356.63194-2-teknoraver@meta.com>
+Subject: [PATCH net-next v3 2/2] e1000e: add XDP_REDIRECT support
+Date: Fri, 20 Mar 2026 14:23:56 +0100
+Message-ID: <20260320132356.63194-3-teknoraver@meta.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260320132356.63194-1-teknoraver@meta.com>
 References: <20260320132356.63194-1-teknoraver@meta.com>
@@ -89,221 +89,146 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add XDP support to the e1000e driver covering the actions defined by
-NETDEV_XDP_ACT_BASIC: XDP_DROP, XDP_PASS, XDP_TX and XDP_ABORTED.
+Add the ability to redirect packets to other devices via XDP_REDIRECT
+and to receive redirected frames from other devices via ndo_xdp_xmit.
 
-Infrastructure:
-- e1000_xdp_setup() / e1000_xdp() for program attach/detach with
-  MTU validation and close/open cycle
-- ndo_bpf support in net_device_ops
-- xdp_rxq_info registration in setup/free_rx_resources
-
-Receive path:
-- e1000_alloc_rx_buffers_xdp() for page-based Rx buffer allocation
-  with XDP_PACKET_HEADROOM
-- e1000_clean_rx_irq_xdp() as the XDP receive handler
-- e1000_run_xdp() to execute the XDP program on received packets
-- SKB building via napi_build_skb() for XDP_PASS with metadata,
-  checksum offload and RSS hash support
-
-Transmit path:
-- e1000_xdp_xmit_ring() to DMA-map and enqueue an XDP frame
-- e1000_xdp_xmit_back() to convert an xdp_buff to a frame and send it
-- e1000_finalize_xdp() to flush the TX ring after XDP processing
-- TX completion via xdp_return_frame() with buffer type tracking
+New functionality:
+- XDP_REDIRECT case in e1000_run_xdp() using xdp_do_redirect()
+- e1000_xdp_xmit() as the ndo_xdp_xmit callback for receiving
+  redirected frames from other devices
+- xdp_do_flush() in e1000_finalize_xdp() for REDIR completions
+- xdp_features_set/clear_redirect_target() in e1000_xdp_setup()
+- NETDEV_XDP_ACT_REDIRECT and NETDEV_XDP_ACT_NDO_XMIT advertised
 
 Assisted-by: claude-opus-4-6
 Signed-off-by: Matteo Croce <teknoraver@meta.com>
 ---
- drivers/net/ethernet/intel/Kconfig         |   1 +
- drivers/net/ethernet/intel/e1000e/e1000.h  |  18 +-
- drivers/net/ethernet/intel/e1000e/netdev.c | 523 ++++++++++++++++++++-
- 3 files changed, 530 insertions(+), 12 deletions(-)
+ drivers/net/ethernet/intel/e1000e/netdev.c | 85 +++++++++++++++++++++-
+ 1 file changed, 81 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/Kconfig b/drivers/net/ethernet/intel/Kconfig
-index 288fa8ce53af..46e37cb68e70 100644
---- a/drivers/net/ethernet/intel/Kconfig
-+++ b/drivers/net/ethernet/intel/Kconfig
-@@ -63,6 +63,7 @@ config E1000E
- 	depends on PCI && (!SPARC32 || BROKEN)
- 	depends on PTP_1588_CLOCK_OPTIONAL
- 	select CRC32
-+	select PAGE_POOL
- 	help
- 	  This driver supports the PCI-Express Intel(R) PRO/1000 gigabit
- 	  ethernet family of adapters. For PCI or PCI-X e1000 adapters,
-diff --git a/drivers/net/ethernet/intel/e1000e/e1000.h b/drivers/net/ethernet/intel/e1000e/e1000.h
-index 63ebe00376f5..4c1175d4e5cb 100644
---- a/drivers/net/ethernet/intel/e1000e/e1000.h
-+++ b/drivers/net/ethernet/intel/e1000e/e1000.h
-@@ -19,10 +19,13 @@
- #include <linux/net_tstamp.h>
- #include <linux/ptp_clock_kernel.h>
- #include <linux/ptp_classify.h>
-+#include <linux/bpf.h>
- #include <linux/mii.h>
- #include <linux/mdio.h>
- #include <linux/mutex.h>
- #include <linux/pm_qos.h>
-+#include <net/page_pool/helpers.h>
-+#include <net/xdp.h>
- #include "hw.h"
- 
- struct e1000_info;
-@@ -126,12 +129,21 @@ struct e1000_ps_page {
- 	u64 dma; /* must be u64 - written to hw */
- };
- 
-+enum e1000_tx_buf_type {
-+	E1000_TX_BUF_SKB = 0,
-+	E1000_TX_BUF_XDP,
-+};
-+
- /* wrappers around a pointer to a socket buffer,
-  * so a DMA handle can be stored along with the buffer
-  */
- struct e1000_buffer {
- 	dma_addr_t dma;
--	struct sk_buff *skb;
-+	union {
-+		struct sk_buff *skb;
-+		struct xdp_frame *xdpf;
-+	};
-+	enum e1000_tx_buf_type type;
- 	union {
- 		/* Tx */
- 		struct {
-@@ -259,6 +271,10 @@ struct e1000_adapter {
- 			     gfp_t gfp);
- 	struct e1000_ring *rx_ring;
- 
-+	struct bpf_prog *xdp_prog;
-+	struct xdp_rxq_info xdp_rxq;
-+	struct page_pool *page_pool;
-+
- 	u32 rx_int_delay;
- 	u32 rx_abs_int_delay;
- 
 diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/ethernet/intel/e1000e/netdev.c
-index 9befdacd6730..3ee5246f0b84 100644
+index 3ee5246f0b84..83f188f9b510 100644
 --- a/drivers/net/ethernet/intel/e1000e/netdev.c
 +++ b/drivers/net/ethernet/intel/e1000e/netdev.c
-@@ -25,6 +25,10 @@
- #include <linux/pm_runtime.h>
- #include <linux/prefetch.h>
- #include <linux/suspend.h>
-+#include <linux/bpf.h>
-+#include <linux/bpf_trace.h>
-+#include <net/page_pool/helpers.h>
-+#include <net/xdp.h>
+@@ -41,6 +41,7 @@ char e1000e_driver_name[] = "e1000e";
+ #define E1000_XDP_PASS		0
+ #define E1000_XDP_CONSUMED	BIT(0)
+ #define E1000_XDP_TX		BIT(1)
++#define E1000_XDP_REDIR		BIT(2)
  
- #include "e1000.h"
- #define CREATE_TRACE_POINTS
-@@ -33,6 +37,11 @@
- char e1000e_driver_name[] = "e1000e";
- 
- #define DEFAULT_MSG_ENABLE (NETIF_MSG_DRV|NETIF_MSG_PROBE|NETIF_MSG_LINK)
-+
-+#define E1000_XDP_PASS		0
-+#define E1000_XDP_CONSUMED	BIT(0)
-+#define E1000_XDP_TX		BIT(1)
-+
  static int debug = -1;
  module_param(debug, int, 0);
- MODULE_PARM_DESC(debug, "Debug level (0=none,...,16=all)");
-@@ -708,6 +717,369 @@ static void e1000_alloc_rx_buffers(struct e1000_ring *rx_ring,
- 	rx_ring->next_to_use = i;
+@@ -805,6 +806,9 @@ static void e1000_finalize_xdp(struct e1000_adapter *adapter,
+ {
+ 	struct e1000_ring *tx_ring = adapter->tx_ring;
+ 
++	if (xdp_xmit & E1000_XDP_REDIR)
++		xdp_do_flush();
++
+ 	if (xdp_xmit & E1000_XDP_TX) {
+ 		/* Force memory writes to complete before letting h/w
+ 		 * know there are new descriptors to fetch.
+@@ -823,13 +827,14 @@ static void e1000_finalize_xdp(struct e1000_adapter *adapter,
+  * @adapter: board private structure
+  * @xdp: XDP buffer containing packet data
+  *
+- * Returns E1000_XDP_PASS, E1000_XDP_TX, or E1000_XDP_CONSUMED
++ * Returns E1000_XDP_PASS, E1000_XDP_TX, E1000_XDP_REDIR, or E1000_XDP_CONSUMED
+  **/
+ static int e1000_run_xdp(struct e1000_adapter *adapter, struct xdp_buff *xdp)
+ {
+ 	struct bpf_prog *xdp_prog = READ_ONCE(adapter->xdp_prog);
+ 	struct net_device *netdev = adapter->netdev;
+ 	int result = E1000_XDP_PASS;
++	int err;
+ 	u32 act;
+ 
+ 	if (!xdp_prog)
+@@ -846,6 +851,12 @@ static int e1000_run_xdp(struct e1000_adapter *adapter, struct xdp_buff *xdp)
+ 		if (result == E1000_XDP_CONSUMED)
+ 			goto out_failure;
+ 		break;
++	case XDP_REDIRECT:
++		err = xdp_do_redirect(netdev, xdp, xdp_prog);
++		if (err)
++			goto out_failure;
++		result = E1000_XDP_REDIR;
++		break;
+ 	default:
+ 		bpf_warn_invalid_xdp_action(netdev, xdp_prog, act);
+ 		fallthrough;
+@@ -1040,11 +1051,11 @@ static bool e1000_clean_rx_irq_xdp(struct e1000_ring *rx_ring, int *work_done,
+ 
+ 			/* page consumed by skb */
+ 			buffer_info->page = NULL;
+-		} else if (xdp_res & E1000_XDP_TX) {
++		} else if (xdp_res & (E1000_XDP_TX | E1000_XDP_REDIR)) {
+ 			xdp_xmit |= xdp_res;
+ 			total_rx_bytes += length;
+ 			total_rx_packets++;
+-			/* page consumed by XDP TX */
++			/* page consumed by XDP TX/redirect */
+ 			buffer_info->page = NULL;
+ 		} else {
+ 			/* XDP_DROP / XDP_ABORTED - recycle page */
+@@ -7811,6 +7822,11 @@ static int e1000_xdp_setup(struct net_device *netdev, struct netdev_bpf *bpf)
+ 	if (!need_reset)
+ 		return 0;
+ 
++	if (prog)
++		xdp_features_set_redirect_target(netdev, true);
++	else
++		xdp_features_clear_redirect_target(netdev);
++
+ 	if (running)
+ 		e1000e_open(netdev);
+ 
+@@ -7827,6 +7843,64 @@ static int e1000_xdp(struct net_device *netdev, struct netdev_bpf *xdp)
+ 	}
  }
  
-+static inline void e1000_rx_hash(struct net_device *netdev, __le32 rss,
-+				 struct sk_buff *skb)
-+{
-+	if (netdev->features & NETIF_F_RXHASH)
-+		skb_set_hash(skb, le32_to_cpu(rss), PKT_HASH_TYPE_L3);
-+}
-+
 +/**
-+ * e1000_xdp_xmit_ring - transmit an XDP frame on the TX ring
-+ * @adapter: board private structure
-+ * @tx_ring: Tx descriptor ring
-+ * @xdpf: XDP frame to transmit
++ * e1000_xdp_xmit - transmit XDP frames from another device
++ * @netdev: network interface device structure
++ * @n: number of frames to transmit
++ * @frames: array of XDP frame pointers
++ * @flags: XDP transmit flags
 + *
-+ * Returns E1000_XDP_TX on success, E1000_XDP_CONSUMED on failure
++ * This is the ndo_xdp_xmit callback, called when other devices redirect
++ * frames to this device.
 + **/
-+static int e1000_xdp_xmit_ring(struct e1000_adapter *adapter,
-+			       struct e1000_ring *tx_ring,
-+				struct xdp_frame *xdpf)
++static int e1000_xdp_xmit(struct net_device *netdev, int n,
++			  struct xdp_frame **frames, u32 flags)
 +{
-+	struct e1000_buffer *buffer_info;
-+	struct e1000_tx_desc *tx_desc;
-+	dma_addr_t dma;
-+	u16 i;
-+
-+	if (e1000_desc_unused(tx_ring) < 1)
-+		return E1000_XDP_CONSUMED;
-+
-+	i = tx_ring->next_to_use;
-+	buffer_info = &tx_ring->buffer_info[i];
-+
-+	dma = dma_map_single(&adapter->pdev->dev, xdpf->data, xdpf->len,
-+			     DMA_TO_DEVICE);
-+	if (dma_mapping_error(&adapter->pdev->dev, dma))
-+		return E1000_XDP_CONSUMED;
-+
-+	buffer_info->xdpf = xdpf;
-+	buffer_info->type = E1000_TX_BUF_XDP;
-+	buffer_info->dma = dma;
-+	buffer_info->length = xdpf->len;
-+	buffer_info->time_stamp = jiffies;
-+	buffer_info->next_to_watch = i;
-+	buffer_info->segs = 1;
-+	buffer_info->bytecount = xdpf->len;
-+	buffer_info->mapped_as_page = 0;
-+
-+	tx_desc = E1000_TX_DESC(*tx_ring, i);
-+	tx_desc->buffer_addr = cpu_to_le64(dma);
-+	tx_desc->lower.data = cpu_to_le32(adapter->txd_cmd |
-+					   E1000_TXD_CMD_IFCS |
-+					   xdpf->len);
-+	tx_desc->upper.data = 0;
-+
-+	i++;
-+	if (i == tx_ring->count)
-+		i = 0;
-+	tx_ring->next_to_use = i;
-+
-+	return E1000_XDP_TX;
-+}
-+
-+/**
-+ * e1000_xdp_xmit_back - transmit an XDP buffer back on the same device
-+ * @adapter: board private structure
-+ * @xdp: XDP buffer to transmit
-+ *
-+ * Returns E1000_XDP_TX on success, E1000_XDP_CONSUMED on failure
-+ **/
-+static int e1000_xdp_xmit_back(struct e1000_adapter *adapter,
-+			       struct xdp_buff *xdp)
-+{
-+	struct xdp_frame *xdpf = xdp_convert_buff_to_frame(xdp);
-+
-+	if (unlikely(!xdpf))
-+		return E1000_XDP_CONSUMED;
-+
-+	return e1000_xdp_xmit_ring(adapter, adapter->tx_ring, xdpf);
-+}
-+
-+/**
-+ * e1000_finalize_xdp - flush XDP operations after NAPI Rx loop
-+ * @adapter: board private structure
-+ * @xdp_xmit: bitmask of XDP actions taken during Rx processing
-+ **/
-+static void e1000_finalize_xdp(struct e1000_adapter *adapter,
-+			       unsigned int xdp_xmit)
-+{
++	struct e1000_adapter *adapter = netdev_priv(netdev);
 +	struct e1000_ring *tx_ring = adapter->tx_ring;
++	struct netdev_queue *nq = netdev_get_tx_queue(netdev, 0);
++	int cpu = smp_processor_id();
++	int nxmit = 0;
++	int i;
 +
-+	if (xdp_xmit & E1000_XDP_TX) {
++	if (unlikely(test_bit(__E1000_DOWN, &adapter->state)))
++		return -ENETDOWN;
++
++	if (unlikely(flags & ~XDP_XMIT_FLAGS_MASK))
++		return -EINVAL;
++
++	if (!adapter->xdp_prog)
++		return -ENXIO;
++
++	__netif_tx_lock(nq, cpu);
++	txq_trans_cond_update(nq);
++
++	for (i = 0; i < n; i++) {
++		int err;
++
++		err = e1000_xdp_xmit_ring(adapter, tx_ring, frames[i]);
++		if (err != E1000_XDP_TX)
++			break;
++		nxmit++;
++	}
++
++	if (unlikely(flags & XDP_XMIT_FLUSH)) {
 +		/* Force memory writes to complete before letting h/w
 +		 * know there are new descriptors to fetch.
 +		 */
@@ -314,523 +239,34 @@ index 9befdacd6730..3ee5246f0b84 100644
 +		else
 +			writel(tx_ring->next_to_use, tx_ring->tail);
 +	}
-+}
 +
-+/**
-+ * e1000_run_xdp - run an XDP program on a received packet
-+ * @adapter: board private structure
-+ * @xdp: XDP buffer containing packet data
-+ *
-+ * Returns E1000_XDP_PASS, E1000_XDP_TX, or E1000_XDP_CONSUMED
-+ **/
-+static int e1000_run_xdp(struct e1000_adapter *adapter, struct xdp_buff *xdp)
-+{
-+	struct bpf_prog *xdp_prog = READ_ONCE(adapter->xdp_prog);
-+	struct net_device *netdev = adapter->netdev;
-+	int result = E1000_XDP_PASS;
-+	u32 act;
++	__netif_tx_unlock(nq);
 +
-+	if (!xdp_prog)
-+		return E1000_XDP_PASS;
-+
-+	prefetchw(xdp->data_hard_start);
-+
-+	act = bpf_prog_run_xdp(xdp_prog, xdp);
-+	switch (act) {
-+	case XDP_PASS:
-+		break;
-+	case XDP_TX:
-+		result = e1000_xdp_xmit_back(adapter, xdp);
-+		if (result == E1000_XDP_CONSUMED)
-+			goto out_failure;
-+		break;
-+	default:
-+		bpf_warn_invalid_xdp_action(netdev, xdp_prog, act);
-+		fallthrough;
-+	case XDP_ABORTED:
-+out_failure:
-+		trace_xdp_exception(netdev, xdp_prog, act);
-+		fallthrough;
-+	case XDP_DROP:
-+		result = E1000_XDP_CONSUMED;
-+		break;
-+	}
-+
-+	return result;
-+}
-+
-+/**
-+ * e1000_alloc_rx_buffers_xdp - Replace used receive buffers for XDP
-+ * @rx_ring: Rx descriptor ring
-+ * @cleaned_count: number to reallocate
-+ * @gfp: flags for allocation
-+ *
-+ * Allocates page-based Rx buffers with XDP_PACKET_HEADROOM headroom.
-+ **/
-+static void e1000_alloc_rx_buffers_xdp(struct e1000_ring *rx_ring,
-+				       int cleaned_count, gfp_t gfp)
-+{
-+	struct e1000_adapter *adapter = rx_ring->adapter;
-+	union e1000_rx_desc_extended *rx_desc;
-+	struct e1000_buffer *buffer_info;
-+	unsigned int i;
-+
-+	i = rx_ring->next_to_use;
-+	buffer_info = &rx_ring->buffer_info[i];
-+
-+	while (cleaned_count--) {
-+		if (!buffer_info->page) {
-+			buffer_info->page = page_pool_alloc_pages(adapter->page_pool,
-+								  gfp);
-+			if (!buffer_info->page) {
-+				adapter->alloc_rx_buff_failed++;
-+				break;
-+			}
-+		}
-+
-+		if (!buffer_info->dma) {
-+			buffer_info->dma = page_pool_get_dma_addr(buffer_info->page) +
-+					   XDP_PACKET_HEADROOM;
-+		}
-+
-+		rx_desc = E1000_RX_DESC_EXT(*rx_ring, i);
-+		rx_desc->read.buffer_addr = cpu_to_le64(buffer_info->dma);
-+
-+		if (unlikely(!(i & (E1000_RX_BUFFER_WRITE - 1)))) {
-+			/* Force memory writes to complete before letting
-+			 * h/w know there are new descriptors to fetch.
-+			 */
-+			wmb();
-+			if (adapter->flags2 & FLAG2_PCIM2PCI_ARBITER_WA)
-+				e1000e_update_rdt_wa(rx_ring, i);
-+			else
-+				writel(i, rx_ring->tail);
-+		}
-+		i++;
-+		if (i == rx_ring->count)
-+			i = 0;
-+		buffer_info = &rx_ring->buffer_info[i];
-+	}
-+
-+	rx_ring->next_to_use = i;
-+}
-+
-+/**
-+ * e1000_clean_rx_irq_xdp - Receive with XDP processing
-+ * @rx_ring: Rx descriptor ring
-+ * @work_done: output parameter for indicating completed work
-+ * @work_to_do: how many packets we can clean
-+ *
-+ * Page-based receive path that runs an XDP program on each packet.
-+ **/
-+static bool e1000_clean_rx_irq_xdp(struct e1000_ring *rx_ring, int *work_done,
-+				   int work_to_do)
-+{
-+	struct e1000_adapter *adapter = rx_ring->adapter;
-+	struct net_device *netdev = adapter->netdev;
-+	struct pci_dev *pdev = adapter->pdev;
-+	union e1000_rx_desc_extended *rx_desc, *next_rxd;
-+	struct e1000_buffer *buffer_info, *next_buffer;
-+	struct xdp_buff xdp;
-+	u32 length, staterr;
-+	unsigned int i;
-+	int cleaned_count = 0;
-+	bool cleaned = false;
-+	unsigned int total_rx_bytes = 0, total_rx_packets = 0;
-+	unsigned int xdp_xmit = 0;
-+
-+	xdp_init_buff(&xdp, PAGE_SIZE, &adapter->xdp_rxq);
-+
-+	i = rx_ring->next_to_clean;
-+	rx_desc = E1000_RX_DESC_EXT(*rx_ring, i);
-+	staterr = le32_to_cpu(rx_desc->wb.upper.status_error);
-+	buffer_info = &rx_ring->buffer_info[i];
-+
-+	while (staterr & E1000_RXD_STAT_DD) {
-+		struct sk_buff *skb;
-+		int xdp_res;
-+
-+		if (*work_done >= work_to_do)
-+			break;
-+		(*work_done)++;
-+		dma_rmb();
-+
-+		i++;
-+		if (i == rx_ring->count)
-+			i = 0;
-+		next_rxd = E1000_RX_DESC_EXT(*rx_ring, i);
-+		prefetch(next_rxd);
-+
-+		next_buffer = &rx_ring->buffer_info[i];
-+
-+		cleaned = true;
-+		cleaned_count++;
-+
-+		dma_sync_single_for_cpu(&pdev->dev, buffer_info->dma,
-+					adapter->rx_buffer_len,
-+				       DMA_FROM_DEVICE);
-+		buffer_info->dma = 0;
-+
-+		length = le16_to_cpu(rx_desc->wb.upper.length);
-+
-+		/* Multi-descriptor packets not supported with XDP */
-+		if (unlikely(!(staterr & E1000_RXD_STAT_EOP)))
-+			adapter->flags2 |= FLAG2_IS_DISCARDING;
-+
-+		if (adapter->flags2 & FLAG2_IS_DISCARDING) {
-+			if (staterr & E1000_RXD_STAT_EOP)
-+				adapter->flags2 &= ~FLAG2_IS_DISCARDING;
-+			page_pool_put_full_page(adapter->page_pool,
-+						buffer_info->page, true);
-+			buffer_info->page = NULL;
-+			goto next_desc;
-+		}
-+
-+		if (unlikely((staterr & E1000_RXDEXT_ERR_FRAME_ERR_MASK) &&
-+			     !(netdev->features & NETIF_F_RXALL))) {
-+			page_pool_put_full_page(adapter->page_pool,
-+						buffer_info->page, true);
-+			buffer_info->page = NULL;
-+			goto next_desc;
-+		}
-+
-+		/* adjust length to remove Ethernet CRC */
-+		if (!(adapter->flags2 & FLAG2_CRC_STRIPPING)) {
-+			if (netdev->features & NETIF_F_RXFCS)
-+				total_rx_bytes -= 4;
-+			else
-+				length -= 4;
-+		}
-+
-+		/* Setup xdp_buff pointing at the page data */
-+		xdp_prepare_buff(&xdp, page_address(buffer_info->page),
-+				 XDP_PACKET_HEADROOM, length, true);
-+		xdp_buff_clear_frags_flag(&xdp);
-+
-+		xdp_res = e1000_run_xdp(adapter, &xdp);
-+
-+		if (xdp_res == E1000_XDP_PASS) {
-+			total_rx_bytes += length;
-+			total_rx_packets++;
-+
-+			skb = napi_build_skb(xdp.data_hard_start, PAGE_SIZE);
-+			if (unlikely(!skb)) {
-+				page_pool_put_full_page(adapter->page_pool,
-+							buffer_info->page,
-+							true);
-+				buffer_info->page = NULL;
-+				goto next_desc;
-+			}
-+
-+			skb_mark_for_recycle(skb);
-+			skb_reserve(skb,
-+				    xdp.data - xdp.data_hard_start);
-+			skb_put(skb, xdp.data_end - xdp.data);
-+
-+			if (xdp.data_meta != xdp.data)
-+				skb_metadata_set(skb, xdp.data - xdp.data_meta);
-+
-+			e1000_rx_checksum(adapter, staterr, skb);
-+			e1000_rx_hash(netdev,
-+				      rx_desc->wb.lower.hi_dword.rss, skb);
-+			e1000_receive_skb(adapter, netdev, skb, staterr,
-+					  rx_desc->wb.upper.vlan);
-+
-+			/* page consumed by skb */
-+			buffer_info->page = NULL;
-+		} else if (xdp_res & E1000_XDP_TX) {
-+			xdp_xmit |= xdp_res;
-+			total_rx_bytes += length;
-+			total_rx_packets++;
-+			/* page consumed by XDP TX */
-+			buffer_info->page = NULL;
-+		} else {
-+			/* XDP_DROP / XDP_ABORTED - recycle page */
-+			page_pool_put_full_page(adapter->page_pool,
-+						buffer_info->page, true);
-+			buffer_info->page = NULL;
-+		}
-+
-+next_desc:
-+		rx_desc->wb.upper.status_error &= cpu_to_le32(~0xFF);
-+
-+		if (cleaned_count >= E1000_RX_BUFFER_WRITE) {
-+			adapter->alloc_rx_buf(rx_ring, cleaned_count,
-+					      GFP_ATOMIC);
-+			cleaned_count = 0;
-+		}
-+
-+		rx_desc = next_rxd;
-+		buffer_info = next_buffer;
-+		staterr = le32_to_cpu(rx_desc->wb.upper.status_error);
-+	}
-+	rx_ring->next_to_clean = i;
-+
-+	if (xdp_xmit)
-+		e1000_finalize_xdp(adapter, xdp_xmit);
-+
-+	cleaned_count = e1000_desc_unused(rx_ring);
-+	if (cleaned_count)
-+		adapter->alloc_rx_buf(rx_ring, cleaned_count, GFP_ATOMIC);
-+
-+	adapter->total_rx_bytes += total_rx_bytes;
-+	adapter->total_rx_packets += total_rx_packets;
-+	return cleaned;
-+}
-+
- /**
-  * e1000_alloc_rx_buffers_ps - Replace used receive buffers; packet split
-  * @rx_ring: Rx descriptor ring
-@@ -896,13 +1268,6 @@ static void e1000_alloc_jumbo_rx_buffers(struct e1000_ring *rx_ring,
- 	}
- }
- 
--static inline void e1000_rx_hash(struct net_device *netdev, __le32 rss,
--				 struct sk_buff *skb)
--{
--	if (netdev->features & NETIF_F_RXHASH)
--		skb_set_hash(skb, le32_to_cpu(rss), PKT_HASH_TYPE_L3);
--}
--
- /**
-  * e1000_clean_rx_irq - Send received data up the network stack
-  * @rx_ring: Rx descriptor ring
-@@ -1075,13 +1440,17 @@ static void e1000_put_txbuf(struct e1000_ring *tx_ring,
- 					 buffer_info->length, DMA_TO_DEVICE);
- 		buffer_info->dma = 0;
- 	}
--	if (buffer_info->skb) {
-+	if (buffer_info->type == E1000_TX_BUF_XDP) {
-+		xdp_return_frame(buffer_info->xdpf);
-+		buffer_info->xdpf = NULL;
-+	} else if (buffer_info->skb) {
- 		if (drop)
- 			dev_kfree_skb_any(buffer_info->skb);
- 		else
- 			dev_consume_skb_any(buffer_info->skb);
- 		buffer_info->skb = NULL;
- 	}
-+	buffer_info->type = E1000_TX_BUF_SKB;
- 	buffer_info->time_stamp = 0;
- }
- 
-@@ -1242,7 +1611,8 @@ static bool e1000_clean_tx_irq(struct e1000_ring *tx_ring)
- 			if (cleaned) {
- 				total_tx_packets += buffer_info->segs;
- 				total_tx_bytes += buffer_info->bytecount;
--				if (buffer_info->skb) {
-+				if (buffer_info->type == E1000_TX_BUF_SKB &&
-+				    buffer_info->skb) {
- 					bytes_compl += buffer_info->skb->len;
- 					pkts_compl++;
- 				}
-@@ -1696,7 +2066,12 @@ static void e1000_clean_rx_ring(struct e1000_ring *rx_ring)
- 		}
- 
- 		if (buffer_info->page) {
--			put_page(buffer_info->page);
-+			if (adapter->page_pool)
-+				page_pool_put_full_page(adapter->page_pool,
-+							buffer_info->page,
-+							false);
-+			else
-+				put_page(buffer_info->page);
- 			buffer_info->page = NULL;
- 		}
- 
-@@ -2350,6 +2725,30 @@ int e1000e_setup_tx_resources(struct e1000_ring *tx_ring)
- 	return err;
- }
- 
-+static int e1000_create_page_pool(struct e1000_adapter *adapter)
-+{
-+	struct page_pool_params pp_params = {
-+		.flags = PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV,
-+		.pool_size = adapter->rx_ring->count,
-+		.nid = NUMA_NO_NODE,
-+		.dev = &adapter->pdev->dev,
-+		.napi = &adapter->napi,
-+		.dma_dir = DMA_FROM_DEVICE,
-+		.offset = XDP_PACKET_HEADROOM,
-+		.max_len = adapter->rx_buffer_len,
-+	};
-+
-+	adapter->page_pool = page_pool_create(&pp_params);
-+	if (IS_ERR(adapter->page_pool)) {
-+		int err = PTR_ERR(adapter->page_pool);
-+
-+		adapter->page_pool = NULL;
-+		return err;
-+	}
-+
-+	return 0;
-+}
-+
- /**
-  * e1000e_setup_rx_resources - allocate Rx resources (Descriptors)
-  * @rx_ring: Rx descriptor ring
-@@ -2389,8 +2788,31 @@ int e1000e_setup_rx_resources(struct e1000_ring *rx_ring)
- 	rx_ring->next_to_use = 0;
- 	rx_ring->rx_skb_top = NULL;
- 
-+	/* XDP RX-queue info */
-+	if (xdp_rxq_info_is_reg(&adapter->xdp_rxq))
-+		xdp_rxq_info_unreg(&adapter->xdp_rxq);
-+
-+	err = e1000_create_page_pool(adapter);
-+	if (err)
-+		goto err_pages;
-+
-+	err = xdp_rxq_info_reg(&adapter->xdp_rxq, adapter->netdev, 0,
-+			       adapter->napi.napi_id);
-+	if (err)
-+		goto err_page_pool;
-+	err = xdp_rxq_info_reg_mem_model(&adapter->xdp_rxq,
-+					 MEM_TYPE_PAGE_POOL,
-+					  adapter->page_pool);
-+	if (err) {
-+		xdp_rxq_info_unreg(&adapter->xdp_rxq);
-+		goto err_page_pool;
-+	}
-+
- 	return 0;
- 
-+err_page_pool:
-+	page_pool_destroy(adapter->page_pool);
-+	adapter->page_pool = NULL;
- err_pages:
- 	for (i = 0; i < rx_ring->count; i++) {
- 		buffer_info = &rx_ring->buffer_info[i];
-@@ -2463,6 +2885,14 @@ void e1000e_free_rx_resources(struct e1000_ring *rx_ring)
- 
- 	e1000_clean_rx_ring(rx_ring);
- 
-+	if (xdp_rxq_info_is_reg(&adapter->xdp_rxq))
-+		xdp_rxq_info_unreg(&adapter->xdp_rxq);
-+
-+	if (adapter->page_pool) {
-+		page_pool_destroy(adapter->page_pool);
-+		adapter->page_pool = NULL;
-+	}
-+
- 	for (i = 0; i < rx_ring->count; i++)
- 		kfree(rx_ring->buffer_info[i].ps_pages);
- 
-@@ -3185,7 +3615,11 @@ static void e1000_configure_rx(struct e1000_adapter *adapter)
- 	u64 rdba;
- 	u32 rdlen, rctl, rxcsum, ctrl_ext;
- 
--	if (adapter->rx_ps_pages) {
-+	if (adapter->xdp_prog) {
-+		rdlen = rx_ring->count * sizeof(union e1000_rx_desc_extended);
-+		adapter->clean_rx = e1000_clean_rx_irq_xdp;
-+		adapter->alloc_rx_buf = e1000_alloc_rx_buffers_xdp;
-+	} else if (adapter->rx_ps_pages) {
- 		/* this is a 32 byte descriptor */
- 		rdlen = rx_ring->count *
- 		    sizeof(union e1000_rx_desc_packet_split);
-@@ -6049,6 +6483,12 @@ static int e1000_change_mtu(struct net_device *netdev, int new_mtu)
- 		return -EINVAL;
- 	}
- 
-+	/* XDP requires standard MTU */
-+	if (adapter->xdp_prog && new_mtu > ETH_DATA_LEN) {
-+		e_err("Jumbo Frames not supported while XDP program is active.\n");
-+		return -EINVAL;
-+	}
-+
- 	/* Jumbo frame workaround on 82579 and newer requires CRC be stripped */
- 	if ((adapter->hw.mac.type >= e1000_pch2lan) &&
- 	    !(adapter->flags2 & FLAG2_CRC_STRIPPING) &&
-@@ -7331,6 +7771,62 @@ static int e1000_set_features(struct net_device *netdev,
- 	return 1;
- }
- 
-+/**
-+ * e1000_xdp_setup - add/remove an XDP program
-+ * @netdev: network interface device structure
-+ * @bpf: XDP program setup structure
-+ **/
-+static int e1000_xdp_setup(struct net_device *netdev, struct netdev_bpf *bpf)
-+{
-+	struct e1000_adapter *adapter = netdev_priv(netdev);
-+	struct bpf_prog *prog = bpf->prog, *old_prog;
-+	bool running = netif_running(netdev);
-+	bool need_reset;
-+
-+	/* XDP is incompatible with jumbo frames */
-+	if (prog && netdev->mtu > ETH_DATA_LEN) {
-+		NL_SET_ERR_MSG_MOD(bpf->extack,
-+				   "XDP is not supported with jumbo frames");
-+		return -EINVAL;
-+	}
-+
-+	/* Validate frame fits in a single page with XDP headroom */
-+	if (prog && netdev->mtu + VLAN_ETH_HLEN + ETH_FCS_LEN +
-+	    XDP_PACKET_HEADROOM > PAGE_SIZE) {
-+		NL_SET_ERR_MSG_MOD(bpf->extack,
-+				   "Frame size too large for XDP");
-+		return -EINVAL;
-+	}
-+
-+	old_prog = xchg(&adapter->xdp_prog, prog);
-+	need_reset = (!!prog != !!old_prog);
-+
-+	/* Transition between XDP and non-XDP requires ring reconfiguration */
-+	if (need_reset && running)
-+		e1000e_close(netdev);
-+
-+	if (old_prog)
-+		bpf_prog_put(old_prog);
-+
-+	if (!need_reset)
-+		return 0;
-+
-+	if (running)
-+		e1000e_open(netdev);
-+
-+	return 0;
-+}
-+
-+static int e1000_xdp(struct net_device *netdev, struct netdev_bpf *xdp)
-+{
-+	switch (xdp->command) {
-+	case XDP_SETUP_PROG:
-+		return e1000_xdp_setup(netdev, xdp);
-+	default:
-+		return -EINVAL;
-+	}
++	return nxmit;
 +}
 +
  static const struct net_device_ops e1000e_netdev_ops = {
  	.ndo_open		= e1000e_open,
  	.ndo_stop		= e1000e_close,
-@@ -7353,6 +7849,7 @@ static const struct net_device_ops e1000e_netdev_ops = {
- 	.ndo_features_check	= passthru_features_check,
+@@ -7850,6 +7924,7 @@ static const struct net_device_ops e1000e_netdev_ops = {
  	.ndo_hwtstamp_get	= e1000e_hwtstamp_get,
  	.ndo_hwtstamp_set	= e1000e_hwtstamp_set,
-+	.ndo_bpf		= e1000_xdp,
+ 	.ndo_bpf		= e1000_xdp,
++	.ndo_xdp_xmit		= e1000_xdp_xmit,
  };
  
  /**
-@@ -7563,6 +8060,8 @@ static int e1000_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+@@ -8060,7 +8135,9 @@ static int e1000_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
  	netdev->max_mtu = adapter->max_hw_frame_size -
  			  (VLAN_ETH_HLEN + ETH_FCS_LEN);
  
-+	netdev->xdp_features = NETDEV_XDP_ACT_BASIC;
-+
+-	netdev->xdp_features = NETDEV_XDP_ACT_BASIC;
++	netdev->xdp_features = NETDEV_XDP_ACT_BASIC |
++			       NETDEV_XDP_ACT_REDIRECT |
++			       NETDEV_XDP_ACT_NDO_XMIT;
+ 
  	if (e1000e_enable_mng_pass_thru(&adapter->hw))
  		adapter->flags |= FLAG_MNG_PT_ENABLED;
- 
-@@ -7776,6 +8275,8 @@ static void e1000_remove(struct pci_dev *pdev)
- 	e1000e_release_hw_control(adapter);
- 
- 	e1000e_reset_interrupt_capability(adapter);
-+	if (adapter->xdp_prog)
-+		bpf_prog_put(adapter->xdp_prog);
- 	kfree(adapter->tx_ring);
- 	kfree(adapter->rx_ring);
- 
 -- 
 2.53.0
 
