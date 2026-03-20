@@ -1,260 +1,194 @@
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35C1F271476
-	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 06:00:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.171
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773986431; cv=pass; b=gb4OkAtQoKvwMeFRg4zuwMl/WRauc1uY5J+l82JbuXKzK6R/HnO45Ztoemod7OGeS+fj68O2k0UTP6ubMtpELIQVMxB+tldcvucBVVX4eTdMWf2MDeAmqtTi5qNo19MemI9uZf5c0eDRL1Pz6wym//q8YKU3RiXTRLdw8AhhptQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773986431; c=relaxed/simple;
-	bh=gohU0oHrqyfC2YvEsI3bsCd8kFWaPia1W/kE1EJeMTI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PVFYVAJm9jHuCcKBGDdx2uSusM/ZFU9xUlP62qeDCJ0Y8KqG2fcjsP0yE+AMwraCCX/SRFHxDi/JQeYrW0nWdhnaWuYeyXmQkyAu6f07d7K0awx7NbbRNWWlV/yom9CshVjbiVNmhIEKkzVAabU7pisloiMifRnkxdbNBDAAzyM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gYS4ejna; arc=pass smtp.client-ip=209.85.160.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28E8C28468E;
+	Fri, 20 Mar 2026 06:22:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773987743; cv=none; b=Ltrfd4mLLWR1HiPufPZqeAv2FAMeDr/MMg4xfLS3bKCPXu72MbhIe0lh3nwo/c/5hkeXcNGM2BMWWoIas8N9+YqtSwXalQP53zucFElMVYvzQ5okr8/vCEspGIVOeuOikQGkH0n0vDzTR4txgV6D8HGv9hU3PCXuC89iGhQzI/g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773987743; c=relaxed/simple;
+	bh=Y8KK2D24mfTh3VP389qPc6aHnaY65d5tmzYY9bbkot0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oeK1XEF/YOkH23I9LPEOcLFzqOjP0ipmaqg1Vw1WYaly89Xuz0Q51UX/593HXVju6ac8kMlvZrkPabux8+STUcJzqT4H1aPCA1FeSO2qmKOnuVromqxvlLamLOfrx3l2RsLwQnS+ABm460pBkO1a99jOlYIod6DEkW0/7Otqjbw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h4EfhusW; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gYS4ejna"
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-509062d829dso247811cf.1
-        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 23:00:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773986414; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Zh6HlGR+OY/dWoIfevJ4pM24nypaEx2aeO6Z2KVleRS+hnYKexDjmyyrIIYxvat+Lo
-         2kbtP2+JiTua6/AO6tMtIGhNsqPbjtJRnrLPv6yw8LxsKJPQ5yzXxeKBrO58amfnEYb+
-         dTXcMOMSItWNH8lI/cZT8DNGr0CW7g1Is6y8Yd7tiS3U08OCOmFYeex3ATcVf1h3mLYs
-         Img+LOYbx4KYMCG3VyG/sRyvtxze7b4aRcasWGbNh9lI6CW2vd3/IFIFl6RyZbeZYxXy
-         I8eP3nPPCKVDR3SvSafuKePmrZeZ5lOEOWJnr55ifjFI5xLucGlJfOw7gjguvSI0I1aw
-         n4qQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=3AnVHiBXZex/xrLVAMzeCF2kXP3o0tCzeT0IjBMeI3M=;
-        fh=6OsT/aQ5TQHU1ur2pQAhS+f8iM9kq3NmNXGnwcNcfSs=;
-        b=ekvDOht8SD4fabD7r9RoSEi8GAz3K1pSaq1SWlBhAKDbGgwF+lwIrHUxPXcImZ431T
-         FfOF3vwrjbDbQCGmP7YMUtDo5JhIOMY7j3FSaY++Zzgp7yaYF9lmWsieHuw/HP6lil1e
-         Nylyn6R9Wrw/MqM9LYmZmL4XSy7Mzu7/bXYHcrp+vhdaR5XvHlYd2aKDiuvGTo56zVW3
-         VxKKdJPuzeFuSicq6GTpXKXkVC4xdZLz6sHuyIOLkklAiS3XxFTJ0x6dX15zMoIIUdsx
-         Nc4nuRZ8w71o/o2tfmVfCFBogsqzsiRQV/fTdlzWpADmZPGgRH4lvS12Lt9YfSlZcK3L
-         zQXg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1773986414; x=1774591214; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3AnVHiBXZex/xrLVAMzeCF2kXP3o0tCzeT0IjBMeI3M=;
-        b=gYS4ejnaQ0M/5yCpw4phkKEAKekO0s0XWGDgtb1yArfG6+hgX82qvuyjO3RwFtOVZi
-         lESFou6RN8t5Yd6xySTWUjTgi52nNtTqlswT4DJREjJIKzUYynyuktNd3yHoEyaI33if
-         Sx+0bx5Z53ARfdCvTfy5z1mOeYpuDaWJCtme/c2NC9m3n97BB0DUHjNdZrdcEPKda45H
-         XnzHRWuLXUpRIYb1Ajd+1sixau5uXtoosw/Jz/HGeg1WK5M9wm4P76+gL4OAXfDedYHY
-         sl8aCCbrVWhvaA3hPZXp5brnkH2AAACILXDrivJWBy0TShRK/JnayiTuIY1oEZ/I7AEG
-         5zxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773986414; x=1774591214;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=3AnVHiBXZex/xrLVAMzeCF2kXP3o0tCzeT0IjBMeI3M=;
-        b=dorjlbI+v3DFnsZdA4vGp59XcmprV6bmdg/U6ZHdr71LOygGxwkBeppLDnkSAfk8zS
-         BgzExeou2QVN8TFidMrbnwCpjaYUb5jgUng/eI9QzwN7du+YBQb3TVuuSUGyeJKUR08B
-         r0Ka1kQyP8zPJDQzLfkW31ACHuwUaAuFqZybMITIlo/xHYeYuyUs88Vfp1TBZDq7n7+Y
-         Djd2nQSKHixsleYCKLbOUnrF/H7ioWzmrZJDUWa9BHhou6X/B5kR+T0NdKGtyMZ8/G4A
-         BVBMNks0V5LfkNl38V/Od0n7Ez7xR2HnWq6/fNwPLP4npO5it7A/Pez8vy+9W6z+YfQU
-         k5lA==
-X-Gm-Message-State: AOJu0Yzm4o7iOMWqrX77NoEdKN7GQPEDUwB8M1PscJq2fwXhDpvUqej2
-	PzhlEJIzKnXiR6ASiiV65JOhjtixBtGFH79skHDDyeIWFqprN0X31bnNAg6mnrj2LKa4F0QWArc
-	QhkszF0NGEAMF2LOZ05ICAfhAjABaAustaGEIFrz0
-X-Gm-Gg: ATEYQzxEinhyCsJsCF6cKwj4nwZ9BUh8ZjyRjE4ji38OSOg4z2mFT7NWRpeaBiBYbUh
-	31M34qxQjhhISg7GJoVxzOCXAlUvABtbrAgFx86KoOZHpXFlQStJS8fx6kkPags1vdRGx1CmEvW
-	WyMsU25rV44kRCRG5OIcVDJXNdfbJhY+vMT6VAcaOA7JYpc3chFbf+kEBQQIYsy83mpr/7Ap1t3
-	2CFZBzwOYRKBfUKpe6/o+tmCQ3nw5uCV6oTJ9tl8yk63mKEkcOPjwuNUeU0N35Zn6CLt2vkVIKu
-	GAKZc7A9RIorftVOKLnHL18Gm0T2tiBSDVJIdj7Ascffl2vPVw==
-X-Received: by 2002:a05:622a:5c87:b0:4e8:aa24:80ec with SMTP id
- d75a77b69052e-50b3737a259mr9929901cf.14.1773986413752; Thu, 19 Mar 2026
- 23:00:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h4EfhusW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773987741; x=1805523741;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Y8KK2D24mfTh3VP389qPc6aHnaY65d5tmzYY9bbkot0=;
+  b=h4EfhusWG7Xv5n5jNGAfLkHsFTHf2c7uDvDcZxTt9ny9wd/0F7vwXL3e
+   DYS5nGUaVsov7XYXMmbCw1cX9xblmbqQ5kCWhbgLcqTS5WOOfU3uMVYye
+   So2n28/S9yafKo0lpurjuDV33zF+zRpp2x2D07r7FB91g37VmBRpB55/p
+   FoaywztCp98Jwo+JEDC4zDlrl0rHPxlKwPIxurI1R6xuj0gWZJe7ZVyp1
+   h4Bnk+VSe2niCekwubKP50VwtpBOBUaOEM4acEHh50AjZnLxRcSjsczSV
+   rnpMi5XxhW2oiDDQdbt/rHtEPgSFq+vqkFQhe4TPWBijWtDfRlmDRd4Fk
+   Q==;
+X-CSE-ConnectionGUID: 6usCPMfqTsmFWAotCy6zPg==
+X-CSE-MsgGUID: 1q2oHitgQgqjwXnQ5VmalA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11734"; a="77676620"
+X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
+   d="scan'208";a="77676620"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2026 23:22:20 -0700
+X-CSE-ConnectionGUID: 3ZKtYmxhQTCMSaPmGSYtPw==
+X-CSE-MsgGUID: UvuJIwaHSy2DE3wUa67I/Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
+   d="scan'208";a="218576883"
+Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2026 23:22:19 -0700
+Date: Thu, 19 Mar 2026 23:22:06 -0700
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: x86@kernel.org, Nikolay Borisov <nik.borisov@suse.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	David Kaplan <david.kaplan@amd.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Laight <david.laight.linux@gmail.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	David Ahern <dsahern@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, Asit Mallick <asit.k.mallick@intel.com>,
+	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
+	netdev@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v7 07/10] x86/vmscape: Use static_call() for predictor
+ flush
+Message-ID: <20260320062206.bdrnmnvho6lhmejw@desk>
+References: <20260319-vmscape-bhb-v7-0-b76a777a98af@linux.intel.com>
+ <20260319-vmscape-bhb-v7-7-b76a777a98af@linux.intel.com>
+ <20260319205802.GJ3738786@noisy.programming.kicks-ass.net>
+ <20260319213421.br6na4dulrjm6eke@desk>
+ <20260319214409.GL3738786@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260319234531.3022634-1-kuba@kernel.org>
-In-Reply-To: <20260319234531.3022634-1-kuba@kernel.org>
-From: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
-Date: Thu, 19 Mar 2026 23:00:01 -0700
-X-Gm-Features: AaiRm52lbfeoU9mjP6ESSPBEuFpRfOFcTEV2rgm_CDvZ4gM8LWz8VbS2CfUboCI
-Message-ID: <CANP3RGd0BpEicWGxuktjhMDy8qEaE=HwBbS=Lx42PpXcbPYCkQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] net: clear the dst when performing encap / decap
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: bpf@vger.kernel.org, willemdebruijn.kernel@gmail.com, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
-	eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
-	haoluo@google.com, jolsa@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260319214409.GL3738786@noisy.programming.kicks-ass.net>
 
-Yup, makes sense.
+On Thu, Mar 19, 2026 at 10:44:09PM +0100, Peter Zijlstra wrote:
+...
+> > With _TRAMP, KVM complains:
+> > 
+> >  ERROR: modpost: "__SCK__vmscape_predictor_flush" [arch/x86/kvm/kvm.ko] undefined!
+> 
+> Ah, tricky. Yeah, this would need to be solved differenlty. Perhaps wrap
+> this in a helper and export that?
 
-Reviewed-by: Maciej =C5=BBenczykowski <maze@google.com>
+bool vmscape_mitigation_enabled(void)
+{
+       return unlikely(static_call_query(vmscape_predictor_flush));
+}
+EXPORT_SYMBOL_FOR_KVM(vmscape_mitigation_enabled);
 
-On Thu, Mar 19, 2026 at 4:45=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
->
-> Commit ba9db6f907ac ("net: clear the dst when changing skb protocol")
-> added dst clearing when a BPF program changes the skb protocol
-> (e.g. IPv4 to IPv6). Since that was a fix we only cleared the dst when
-> the L3 protocol actually changes to keep it minimal. As suggested during
-> the discussion (see Link) encap or decap operation which wraps or unwraps
-> a same-protocol header may also render the existing dst incorrect - even
-> if that doesn't result in a crash, just the wrong route for the now-outer=
-most
-> IP dst.
->
-> Make dropping dst unconditional for bpf_skb_change_proto() and all
-> L3 encap / decap ops.
->
-> Link: https://lore.kernel.org/CANP3RGfRaYwve_xgxH6Tp2zenzKn2-DjZ9tg023WVz=
-fdJF3p_w@mail.gmail.com
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+This is definitely simpler option, but adds an exported function and an
+unnecessary call to it.
+
+> Or use the below little thing and change it to
+> EXPORT_STATIC_CALL_FOR_MODULES(foo, "kvm"); or whatnot.
+> 
+> > Probably one option is to somehow make sure that the key can be set to
+> > __ro_after_init? I don't see a use case for modifying the static_call() after
+> > boot.
+> 
+> So we have __ro_after_init for static_branch, but we'd not done
+> it for static_call yet. It shouldn't be terribly difficult, just hasn't
+> been done. Not sure this is the moment to do so.
+> 
+> 
 > ---
-> CC: maze@google.com
-> CC: willemdebruijn.kernel@gmail.com
->
-> CC: ast@kernel.org
-> CC: daniel@iogearbox.net
-> CC: andrii@kernel.org
-> CC: martin.lau@linux.dev
-> CC: eddyz87@gmail.com
-> CC: song@kernel.org
-> CC: yonghong.song@linux.dev
-> CC: john.fastabend@gmail.com
-> CC: kpsingh@kernel.org
-> CC: sdf@fomichev.me
-> CC: haoluo@google.com
-> CC: jolsa@kernel.org
-> CC: bpf@vger.kernel.org
-> ---
->  net/core/filter.c | 50 +++++++++++++++++++++++++----------------------
->  1 file changed, 27 insertions(+), 23 deletions(-)
->
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 2f023999f046..0f8c508c5f8b 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -3257,13 +3257,6 @@ static const struct bpf_func_proto bpf_skb_vlan_po=
-p_proto =3D {
->         .arg1_type      =3D ARG_PTR_TO_CTX,
->  };
->
-> -static void bpf_skb_change_protocol(struct sk_buff *skb, u16 proto)
-> -{
-> -       skb->protocol =3D htons(proto);
-> -       if (skb_valid_dst(skb))
-> -               skb_dst_drop(skb);
-> -}
-> -
->  static int bpf_skb_generic_push(struct sk_buff *skb, u32 off, u32 len)
->  {
->         /* Caller already did skb_cow() with meta_len+len as headroom,
-> @@ -3362,7 +3355,7 @@ static int bpf_skb_proto_4_to_6(struct sk_buff *skb=
-)
->                 shinfo->gso_type |=3D  SKB_GSO_DODGY;
->         }
->
-> -       bpf_skb_change_protocol(skb, ETH_P_IPV6);
-> +       skb->protocol =3D htons(ETH_P_IPV6);
->         skb_clear_hash(skb);
->
->         return 0;
-> @@ -3393,7 +3386,7 @@ static int bpf_skb_proto_6_to_4(struct sk_buff *skb=
-)
->                 shinfo->gso_type |=3D  SKB_GSO_DODGY;
->         }
->
-> -       bpf_skb_change_protocol(skb, ETH_P_IP);
-> +       skb->protocol =3D htons(ETH_P_IP);
->         skb_clear_hash(skb);
->
->         return 0;
-> @@ -3440,8 +3433,14 @@ BPF_CALL_3(bpf_skb_change_proto, struct sk_buff *,=
- skb, __be16, proto,
->          * need to be verified first.
->          */
->         ret =3D bpf_skb_proto_xlat(skb, proto);
-> +       if (ret)
-> +               return ret;
-> +
->         bpf_compute_data_pointers(skb);
-> -       return ret;
-> +       if (skb_valid_dst(skb))
-> +               skb_dst_drop(skb);
-> +
-> +       return 0;
->  }
->
->  static const struct bpf_func_proto bpf_skb_change_proto_proto =3D {
-> @@ -3583,12 +3582,13 @@ static int bpf_skb_net_grow(struct sk_buff *skb, =
-u32 off, u32 len_diff,
->                 }
->
->                 /* Match skb->protocol to new outer l3 protocol */
-> -               if (skb->protocol =3D=3D htons(ETH_P_IP) &&
-> -                   flags & BPF_F_ADJ_ROOM_ENCAP_L3_IPV6)
-> -                       bpf_skb_change_protocol(skb, ETH_P_IPV6);
-> -               else if (skb->protocol =3D=3D htons(ETH_P_IPV6) &&
-> -                        flags & BPF_F_ADJ_ROOM_ENCAP_L3_IPV4)
-> -                       bpf_skb_change_protocol(skb, ETH_P_IP);
-> +               if (flags & BPF_F_ADJ_ROOM_ENCAP_L3_IPV6)
-> +                       skb->protocol =3D htons(ETH_P_IPV6);
-> +               else if (flags & BPF_F_ADJ_ROOM_ENCAP_L3_IPV4)
-> +                       skb->protocol =3D htons(ETH_P_IP);
-> +
-> +               if (skb_valid_dst(skb))
-> +                       skb_dst_drop(skb);
->         }
->
->         if (skb_is_gso(skb)) {
-> @@ -3616,6 +3616,7 @@ static int bpf_skb_net_grow(struct sk_buff *skb, u3=
-2 off, u32 len_diff,
->  static int bpf_skb_net_shrink(struct sk_buff *skb, u32 off, u32 len_diff=
-,
->                               u64 flags)
->  {
-> +       bool decap =3D flags & BPF_F_ADJ_ROOM_DECAP_L3_MASK;
->         int ret;
->
->         if (unlikely(flags & ~(BPF_F_ADJ_ROOM_FIXED_GSO |
-> @@ -3638,13 +3639,16 @@ static int bpf_skb_net_shrink(struct sk_buff *skb=
-, u32 off, u32 len_diff,
->         if (unlikely(ret < 0))
->                 return ret;
->
-> -       /* Match skb->protocol to new outer l3 protocol */
-> -       if (skb->protocol =3D=3D htons(ETH_P_IP) &&
-> -           flags & BPF_F_ADJ_ROOM_DECAP_L3_IPV6)
-> -               bpf_skb_change_protocol(skb, ETH_P_IPV6);
-> -       else if (skb->protocol =3D=3D htons(ETH_P_IPV6) &&
-> -                flags & BPF_F_ADJ_ROOM_DECAP_L3_IPV4)
-> -               bpf_skb_change_protocol(skb, ETH_P_IP);
-> +       if (decap) {
-> +               /* Match skb->protocol to new outer l3 protocol */
-> +               if (flags & BPF_F_ADJ_ROOM_DECAP_L3_IPV6)
-> +                       skb->protocol =3D htons(ETH_P_IPV6);
-> +               else if (flags & BPF_F_ADJ_ROOM_DECAP_L3_IPV4)
-> +                       skb->protocol =3D htons(ETH_P_IP);
-> +
-> +               if (skb_valid_dst(skb))
-> +                       skb_dst_drop(skb);
-> +       }
->
->         if (skb_is_gso(skb)) {
->                 struct skb_shared_info *shinfo =3D skb_shinfo(skb);
-> --
-> 2.53.0
->
+> diff --git a/include/linux/static_call.h b/include/linux/static_call.h
+> index 78a77a4ae0ea..b610afd1ed55 100644
+> --- a/include/linux/static_call.h
+> +++ b/include/linux/static_call.h
+> @@ -216,6 +216,9 @@ extern long __static_call_return0(void);
+>  #define EXPORT_STATIC_CALL_GPL(name)					\
+>  	EXPORT_SYMBOL_GPL(STATIC_CALL_KEY(name));			\
+>  	EXPORT_SYMBOL_GPL(STATIC_CALL_TRAMP(name))
+> +#define EXPORT_STATIC_CALL_FOR_MODULES(name, mods)			\
+> +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_KEY(name), mods);		\
+> +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_TRAMP(name), mods)
+>  
+>  /* Leave the key unexported, so modules can't change static call targets: */
+>  #define EXPORT_STATIC_CALL_TRAMP(name)					\
+> @@ -276,6 +279,9 @@ extern long __static_call_return0(void);
+>  #define EXPORT_STATIC_CALL_GPL(name)					\
+>  	EXPORT_SYMBOL_GPL(STATIC_CALL_KEY(name));			\
+>  	EXPORT_SYMBOL_GPL(STATIC_CALL_TRAMP(name))
+> +#define EXPORT_STATIC_CALL_FOR_MODULES(name, mods)			\
+> +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_KEY(name), mods);		\
+> +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_TRAMP(name), mods)
+>  
+>  /* Leave the key unexported, so modules can't change static call targets: */
+>  #define EXPORT_STATIC_CALL_TRAMP(name)					\
+> @@ -346,6 +352,8 @@ static inline int static_call_text_reserved(void *start, void *end)
+>  
+>  #define EXPORT_STATIC_CALL(name)	EXPORT_SYMBOL(STATIC_CALL_KEY(name))
+>  #define EXPORT_STATIC_CALL_GPL(name)	EXPORT_SYMBOL_GPL(STATIC_CALL_KEY(name))
+> +#define EXPORT_STATIC_CALL_FOR_MODULES(name, mods)			\
+> +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_KEY(name), mods)
+>  
+>  #endif /* CONFIG_HAVE_STATIC_CALL */
 
---
-Maciej =C5=BBenczykowski, Kernel Networking Developer @ Google
+This plus extending it to support EXPORT_STATIC_CALL_FOR_KVM() is probably
+a better solution. Please let me know which one you prefer.
+
+diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
+index a568d8e6f4e8..89c4964c8560 100644
+--- a/include/linux/kvm_types.h
++++ b/include/linux/kvm_types.h
+@@ -13,6 +13,9 @@
+ 	EXPORT_SYMBOL_FOR_MODULES(symbol, __stringify(KVM_SUB_MODULES))
+ #define EXPORT_SYMBOL_FOR_KVM(symbol) \
+ 	EXPORT_SYMBOL_FOR_MODULES(symbol, "kvm," __stringify(KVM_SUB_MODULES))
++#define EXPORT_STATIC_CALL_FOR_KVM(symbol) \
++	EXPORT_STATIC_CALL_FOR_MODULES(symbol ,"kvm," __stringify(KVM_SUB_MODULES))
++
+ #else
+ #define EXPORT_SYMBOL_FOR_KVM_INTERNAL(symbol)
+ /*
+@@ -23,6 +26,7 @@
+ #ifndef EXPORT_SYMBOL_FOR_KVM
+ #if IS_MODULE(CONFIG_KVM)
+ #define EXPORT_SYMBOL_FOR_KVM(symbol) EXPORT_SYMBOL_FOR_MODULES(symbol, "kvm")
++#define EXPORT_STATIC_CALL_FOR_KVM(symbol) EXPORT_STATIC_CALL_FOR_MODULES(symbol ,"kvm")
+ #else
+ #define EXPORT_SYMBOL_FOR_KVM(symbol)
+ #endif /* IS_MODULE(CONFIG_KVM) */
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index 5f102af4921f..0abdb54f7510 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -145,7 +145,7 @@ EXPORT_SYMBOL_GPL(cpu_buf_idle_clear);
+ DEFINE_STATIC_KEY_FALSE(switch_mm_cond_l1d_flush);
+ 
+ DEFINE_STATIC_CALL_NULL(vmscape_predictor_flush, write_ibpb);
+-EXPORT_STATIC_CALL_GPL(vmscape_predictor_flush);
++EXPORT_STATIC_CALL_FOR_KVM(vmscape_predictor_flush);
+ 
+ #undef pr_fmt
+ #define pr_fmt(fmt)	"mitigations: " fmt
