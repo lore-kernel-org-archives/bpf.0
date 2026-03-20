@@ -1,68 +1,77 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9612E38D6A8;
-	Fri, 20 Mar 2026 10:18:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75371399375
+	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 11:06:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774001947; cv=none; b=VV1mbrh+XPbNi4PE2sjZfLkKK9pCjYfoeUzewKQpyGzDJXBAa4dymsBErK/hPJLgl8rO+TclxXAYe5RTZfB7VMdf1W+CKRwJETGQ1R717W/5V3ozsD6TiNeTx1KUbMgDwv/eqyJfEOJxVhJGKcW4JyaH0jLKqSj5oe6DbcX1j+8=
+	t=1774004797; cv=none; b=GxHeAeLMsY/3tdhxPPtjxVaBIrIOjzxSzJuKkuxP3nHXk2OjQfrkMz5o23tAa+7WGY1KjsmCQRKBwwNGmsTPJGyWNQZ9teSjhuKpjbq2jt5qqCJlsf8IJ6VvQ5swRzuSu91oxGYBypghcHDlus6uEYF9UtHBPlLqoYX9JkjImiU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774001947; c=relaxed/simple;
-	bh=9xUNeMBUbv50TFhTrU7GhOJSxZ6PPhrSR/Qj7v/5NWQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A8e1yjPFc5mnHEaweCQ5Jc+JvHd2z+Jh+UqDPjtDCQMwlz4O8eZ1ZJ04ckQA3v568CHg8LWAMxHkLw9n6IYuTI0ywWYYMI2AzMqGgQ8cjZhSYOi4Do6+Cget3gTJuXLJFoiOiRVKvfFa3gdBNJI+eS+/fSV7OQ8/8VaiRqPHKVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I3FGcLQz; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1774004797; c=relaxed/simple;
+	bh=f9/n6cLEsjoaDhDm067RUOXoWsDdnnF9fRjPSNmpaoM=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W7DQ7yhXSdGrIqqkjaP5z+6tL7PX7Pv5DY58YxJKWlW29GhKDs91DzCytgjyPmhlBcsP67pKlDqmP1dfagJGE11n3gzsSu4uPqM4xRWrBeT6jn2ZcNpypvfse+XW4VVcVApKXKF1ac5BkArZYmpKql5Z502HHsCONErG7Q5W1GI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cxD4Skkn; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I3FGcLQz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774001938; x=1805537938;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9xUNeMBUbv50TFhTrU7GhOJSxZ6PPhrSR/Qj7v/5NWQ=;
-  b=I3FGcLQzeRTfk76HnulvH+h0zeBVDPzhLDdQKHnFqpABJUjdbGNEZ+C2
-   oIbWtmrhL7yotqGX8SLAdxp1kqfejXPHNjqDNkYww4GXWBLKjfHk68Jwx
-   mPug6e4B5sIMXOUjVOol7OCYEYFDK8Sj+TiFzJnaxH+/SmeJCwYyZDaRl
-   hXZzzO4g8AKm8I/UJAF6Lc6cyNURlD8seF1DUSBW2jOLUn4HukJ8QruMo
-   QMzzNT3NM29DjM9CULiYH/OXvp63/78WTYR6GPPyu5tx/pVB/D+zsxI1u
-   2lzN2flpvCNh70uV3KWnVZVgCt7k0A4nJJxWXvTxDZITacZfKCeLe7CpD
-   g==;
-X-CSE-ConnectionGUID: ihfi/Hy3TvmpFw/rjZqqVw==
-X-CSE-MsgGUID: cRN7TxXZSouGn57h2W3j5g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11734"; a="92658889"
-X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
-   d="scan'208";a="92658889"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2026 03:18:57 -0700
-X-CSE-ConnectionGUID: zLehAkZ/Qu6Cfa49jA9rEA==
-X-CSE-MsgGUID: HEHwKXlOS/6q0uNEFA0sYQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
-   d="scan'208";a="218615516"
-Received: from lkp-server02.sh.intel.com (HELO a51c2a36b9df) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 20 Mar 2026 03:18:53 -0700
-Received: from kbuild by a51c2a36b9df with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w3WwM-000000002G5-2cL7;
-	Fri, 20 Mar 2026 10:18:50 +0000
-Date: Fri, 20 Mar 2026 18:18:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cxD4Skkn"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-43b4121c40aso1281607f8f.0
+        for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 04:06:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1774004795; x=1774609595; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6sobtb7fPQzocLfNNaSVQw7ztnRNZHDWJCHUAvwDiOM=;
+        b=cxD4Skknuj5zNFOtLL/jrNU5cy/7yId8fddrgvv1s2reDd1/JIwTifv+HxvYe4XA0O
+         EQidf9PW8T+sS859BctxRj0oiRSXVbQTWli3/9LoBwHLE6j86XzE0/IgiXp+9prvEOC/
+         WzYDA4X6MBqeEnYoBYKkcGJ5JJmyATHfg7LCWGaZmxGgsHWxT7Ft7j67TW1xVTwD4Nwm
+         vrL/JGx+cys+BJwxlZJd9FIcvQjX7elg1pzG0FO6+JCTQqUDSDuXmBAKIWjIOgp7KyJ9
+         /PbSjvWN3f8xLcdE3aMLq9VBcK91zdQOisKaVkZilyNfqYb0D8H6Cl2wOwfBiOZ4U33Y
+         sKnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774004795; x=1774609595;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6sobtb7fPQzocLfNNaSVQw7ztnRNZHDWJCHUAvwDiOM=;
+        b=dt49pUAqyobJ3xFlYLbufY/lh7jXVc+zN3RqkfY7FkeyZ5eQhPj2/YMlDEdFZ1Vz7W
+         3fu/tKGj/uprjZIM3jEBdp4vyUdagUYPJ2u3z/bwtncz7AEn2RmyDj+EzxiO1qb/6JLR
+         lpPcbKtIQB2BjkDnxYIlHRP2wYMwTlbas3Imts0b17Dfv+fu4yjRGGfNzb2qQOEr4DHZ
+         bgaVuoCB87T8N1wW4I1VvxkgHW7w3mj+Lh4kerxTSq5+tW3KyhWjDsaheK78NDhZ43UJ
+         kvVJi65FKCyVW9MAMSafTbE3mXoq5xxmFWrpv8u/za3pofqg3x8LPFW3Qxwb+EgZDa25
+         w1lQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW097NwkvjiD+pvsUGD92TFpWbnLvuyZBcfl/PIevtFf+Xb65MOdulbDFKN48f2mCHQY3M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxC0RpLSjLsJ+vBgXCvVg5+tLu9kL5aMgACKzU56ApEV8/KmJxL
+	NQyGHR+rACQ2zcmygt27pFlq/8hWLJfEswGhC7gj9op4HEPDFAOYUoI6
+X-Gm-Gg: ATEYQzxOIhaEd1zjFFvJZ3tzXpuAsikDRwU+knCj09TIe7n0ttish/ubVrKCewEfCpR
+	y6PnESbJSMSldkaoDmENAiZnVetixIjq3yI5J1OCzscI0SWJk37GN+TebyAbxTnseMgr8D7wkbS
+	Oc0/BqG5rnXBI9W8ZWiJmbFVwCMKKvyvbhLBcCgaHwVUY1mwgij8v2j2jeqOa506TlPOAEOgMSF
+	mlbyQMIc17pKJ8Aoqem9mTm2C4sV0fh8It8/0+Y+pFjQZ2xHmtUB90Pk5g53Rj0xllHL7uerwyk
+	cINWP9luH2Vzl19i0rpqkxXMjYgylejIp6op12Y/n5Hra9wrlfvaI3ifJ9lAmwGmZw2t2OwH0v8
+	7v2Y1lIr+PIa6lKazPYeRDxBQrz8K+V6a2QtCBjOBE2eux1oKC8ojPvKNpZ5tZEN/6+5kO7Ch
+X-Received: by 2002:a05:6000:184d:b0:439:b203:7711 with SMTP id ffacd0b85a97d-43b642405cfmr4735292f8f.3.1774004794712;
+        Fri, 20 Mar 2026 04:06:34 -0700 (PDT)
+Received: from krava ([2a02:8308:a00c:e200::d99c])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b646b0b0csm5232732f8f.15.2026.03.20.04.06.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Mar 2026 04:06:34 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Fri, 20 Mar 2026 12:06:32 +0100
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	Martin KaFai Lau <kafai@fb.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-	Menglong Dong <menglong8.dong@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCHv3 bpf-next 08/24] bpf: Add
- bpf_trampoline_multi_attach/detach functions
-Message-ID: <202603201820.zsM5FRDS-lkp@intel.com>
-References: <20260316075138.465430-9-jolsa@kernel.org>
+	Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
+	kernel-team@meta.com
+Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Update kfuncs using
+ btf_struct_meta to new variants
+Message-ID: <ab0qONLv7TCHsqPJ@krava>
+References: <20260318234210.1840295-1-ihor.solodrai@linux.dev>
+ <20260318234210.1840295-2-ihor.solodrai@linux.dev>
+ <abvscsnSAiLLWBTZ@krava>
+ <2d654809-e57f-4316-9d09-31c6cfd25508@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -71,78 +80,59 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260316075138.465430-9-jolsa@kernel.org>
+In-Reply-To: <2d654809-e57f-4316-9d09-31c6cfd25508@linux.dev>
 
-Hi Jiri,
+On Thu, Mar 19, 2026 at 01:43:35PM -0700, Ihor Solodrai wrote:
+> On 3/19/26 5:30 AM, Jiri Olsa wrote:
+> > On Wed, Mar 18, 2026 at 04:42:10PM -0700, Ihor Solodrai wrote:
+> >> Update selftests to use the new non-_impl kfuncs marked with
+> >> KF_IMPLICIT_ARGS by removing redundant declarations and macros from
+> >> bpf_experimental.h (the new kfuncs are present in the vmlinux.h) and
+> >> updating relevant callsites.
+> >>
+> >> Fix spin_lock verifier-log matching for lock_id_kptr_preserve by
+> >> accepting variable instruction numbers. The calls to kfuncs with
+> >> implicit arguments do not have register moves (e.g. r5 = 0)
+> >> corresponding to dummy arguments anymore, so the order of instructions
+> >> has shifted.
+> >>
+> >> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> >> ---
+> >>  .../testing/selftests/bpf/bpf_experimental.h  | 156 +-----------------
+> >>  .../selftests/bpf/prog_tests/spin_lock.c      |   5 +-
+> >>  .../selftests/bpf/progs/kptr_xchg_inline.c    |   4 +-
+> >>  3 files changed, 9 insertions(+), 156 deletions(-)
+> >>
+> >> diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
+> >> index 44466acf8083..2234bd6bc9d3 100644
+> >> --- a/tools/testing/selftests/bpf/bpf_experimental.h
+> >> +++ b/tools/testing/selftests/bpf/bpf_experimental.h
+> >> @@ -8,156 +8,11 @@
+> >>  
+> >>  [...]
+> >> -
+> >> -/* Description
+> >> - *	Free an allocated percpu object. All fields of the object that require
+> >> - *	destruction will be destructed before the storage is freed.
+> >> - *
+> >> - *	The 'meta' parameter is rewritten by the verifier, no need for BPF
+> >> - *	program to set it.
+> >> - * Returns
+> >> - *	Void.
+> >> - */
+> >> -extern void bpf_percpu_obj_drop_impl(void *kptr, void *meta) __ksym;
+> >> +/* Convenience macro to wrap over bpf_percpu_obj_new */
+> >> +#define bpf_percpu_obj_new(type) ((type __percpu_kptr *)bpf_percpu_obj_new(bpf_core_type_id_local(type)))
+> > 
+> > nit, seems like a shame to remove all the comments which are still
+> > valid, maybe we could leave those externs with comments and just
+> > drop the _impl suffix
+> 
+> I assumed they were copy-pasted from somewhere, but apparently no.
+> 
+> How about we move the useful comments to kernel/helpers.c, where
+> the kfuncs are defined?
 
-kernel test robot noticed the following build errors:
+sounds good, thanks
 
-[auto build test ERROR on bpf-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiri-Olsa/ftrace-Add-ftrace_hash_count-function/20260316-160117
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20260316075138.465430-9-jolsa%40kernel.org
-patch subject: [PATCHv3 bpf-next 08/24] bpf: Add bpf_trampoline_multi_attach/detach functions
-config: x86_64-randconfig-075-20260320 (https://download.01.org/0day-ci/archive/20260320/202603201820.zsM5FRDS-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260320/202603201820.zsM5FRDS-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603201820.zsM5FRDS-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> kernel/bpf/trampoline.c:1520:8: error: call to undeclared function 'btf_distill_func_proto'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1520 |         err = btf_distill_func_proto(NULL, btf, t, tname, &tgt_info->fmodel);
-         |               ^
-   1 error generated.
-
-
-vim +/btf_distill_func_proto +1520 kernel/bpf/trampoline.c
-
-  1498	
-  1499	static int bpf_get_btf_id_target(struct btf *btf, struct bpf_prog *prog, u32 btf_id,
-  1500					 struct bpf_attach_target_info *tgt_info)
-  1501	{
-  1502		const struct btf_type *t;
-  1503		unsigned long addr;
-  1504		const char *tname;
-  1505		int err;
-  1506	
-  1507		if (!btf_id || !btf)
-  1508			return -EINVAL;
-  1509		t = btf_type_by_id(btf, btf_id);
-  1510		if (!t)
-  1511			return -EINVAL;
-  1512		tname = btf_name_by_offset(btf, t->name_off);
-  1513		if (!tname)
-  1514			return -EINVAL;
-  1515		if (!btf_type_is_func(t))
-  1516			return -EINVAL;
-  1517		t = btf_type_by_id(btf, t->type);
-  1518		if (!btf_type_is_func_proto(t))
-  1519			return -EINVAL;
-> 1520		err = btf_distill_func_proto(NULL, btf, t, tname, &tgt_info->fmodel);
-  1521		if (err < 0)
-  1522			return err;
-  1523		if (btf_is_module(btf)) {
-  1524			/* The bpf program already holds refference to module. */
-  1525			if (WARN_ON_ONCE(!prog->aux->mod))
-  1526				return -EINVAL;
-  1527			addr = find_kallsyms_symbol_value(prog->aux->mod, tname);
-  1528		} else {
-  1529			addr = kallsyms_lookup_name(tname);
-  1530		}
-  1531		if (!addr || !ftrace_location(addr))
-  1532			return -ENOENT;
-  1533		tgt_info->tgt_addr = addr;
-  1534		return 0;
-  1535	}
-  1536	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+jirka
