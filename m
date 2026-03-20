@@ -1,113 +1,164 @@
-Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E5603C1408
-	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 15:01:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BC233C873A;
+	Fri, 20 Mar 2026 15:01:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774018898; cv=none; b=Fdd7BiLsy5S3petnTGS52RdvJ+onO286rMsUAL6+Z1igOSKTHmE5/ewPdA8GN0HViKEvnKLwPUeydjEBw5Dym1PeZ0SQN4H7573VsKPgF4lEvIWXaUu3krSd7qFe3kr2qZfhtu2gXFfKzsDdAK96oz46/fNC2jsh2l7o2hrE1pY=
+	t=1774018909; cv=none; b=Lsl7MJhY7V2R53/Yz1puWaz1maPW2uF4wSpN27RnuBWsNu8Zj+U73VZixacstUU+IvIspfiDcm4RiNFNQpSX8bYttQ67TOVpVvWC/itP+r7KPAkQEibFABrc2qp1Id5kCu87iaVoaPhlGC71d1prGRvk2Mfjx7jxpV1O+joBbp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774018898; c=relaxed/simple;
-	bh=dKsUpyn2NKtJ5jpa/F4mcLLgTHirnEROKNm+qzVDoXI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U5CEfZDScpCVxUP78YYEEhomsUbTefMCoQJqwSd3Q123ITNZkRhrClOUDu1nrBrd9zG680LIokEzJRkG/aNggNt1eEn7uFYrhWku8u+Db6IhfXj86wGrMFbuqqZtHoOhjuyB693gg3GzIY+uMPR35oUYV/ReYpndGfjq8a+AdaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MA1PoHio; arc=none smtp.client-ip=74.125.82.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774018909; c=relaxed/simple;
+	bh=jbnrcWLoBn3dGdV/EgPjDBdGByhNdGn4Lcus/kv5WsU=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=IUPNA64pIx4VUbWjAm2vhkh2VV/HIrXJ1fx4Dec/MEa7lmjngp7ZQdMNzEvz22tov7aSs7ORQ8mJ3t3AXVDYWByve4m+DwAtbGy94jDUnbgYcD10GFzhBDSiqxLbo5DUkuc1TfLr27McZHzpSR86cnMAT7Dw8v+mO3aUSA7//+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=Pmb4yejz; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MA1PoHio"
-Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-2c0c955a481so617673eec.1
-        for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 08:01:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774018896; x=1774623696; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=U1+t74PZ37mjpgg0u6P8TqTzSJ8uiHRKeT0bk1Kj7kQ=;
-        b=MA1PoHiovgoiWvr3jzVDwkQKKbfMTUlu41m9od8hIOYXclPkKR1JrT1crWlJpeOBg3
-         ju7sYxDgGFmlVOzWRoCpw9XigjLy8po4V3vuFO8NAVOc0ReghHNNT8Mpk000Xt2LRXID
-         VmCuzd2xd5R4yKhgMf7Azl2nZELbfziPcAJbZF5E3gakiEW1TKSKfti8W8BbnNJIQhOP
-         EC8udA1UTTr3cdVerSUf0CT5N1ITk0NB4GXAtbPBVmrEnPErumg2IjmD/LTAgijuBIBu
-         U7iwu9QbD4NYoB+7Q4NsJhuGwqG9/NIGOGKzcuysANky1wQDjwVGMVSnsA9OygHbzogr
-         AiUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774018896; x=1774623696;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U1+t74PZ37mjpgg0u6P8TqTzSJ8uiHRKeT0bk1Kj7kQ=;
-        b=Q8wzSSKTAnLWOcUP4+92h7JV55LXkaz3q3E3jhFYa6GNTsQUUiLIXX6bIrh3Do0VOA
-         8n8/KxFZ/pWUksTNW0ASMnPj9EZqZECUFMXnSNxI7kYr5OHzZZLIFg6x1fcNL35H79BF
-         62+fVJ0p1JMhP4AgJWvk+o88hg+60z94jEANPr7Yruaau0n+RfCSEU5z5Sa0MdnyeeFq
-         XD0a/viamHbetVbSHoPSB7sYb2dhj7f3Ghh2gTILgXMp318k5yJMNzKGyaCVgW5RZ9Rx
-         XhA8VG0AwKLZzMX0E44fGNTgazfbiM7KHe38AL540a9U7KIZjpPnsYHWOu6ZVLVekS8/
-         0u0g==
-X-Forwarded-Encrypted: i=1; AJvYcCVmyBFzpf76qXy+ev50WFEX4/KGQVW7SsKCoCMhP4aSYSiOUGo4dyY78e6q0KLNUtv/bd8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6kO0FJqFitCiduQVePmQScxlt8xLTkAoGYFm3gP2mWKvw8Avx
-	a9fK73aEDWyNw/yuewKYbc8I21foLQjKIwttVHi2gCAxQIwPccTaTxGLxSG4
-X-Gm-Gg: ATEYQzzzvojnddw1pn4vmS9X2ryAojgsN4c2FIAyHZ6ZrdHYyW7fJ5RNtijScEj0WOE
-	nW+GE7r6+Zf4y3UakgK5yfMPbBDIxw6t6mAeHNOD8c1E9LpGRk4eHFKvv5dmCISLAeHoeOFliOG
-	7Uf5Na0INV+7T7tt0enuDWl0a8NpnUvTfNQdWO881YATQosaXm0nxgz5ACiodaXJH/KciTzi3aX
-	g36O+7uAqidCWWXWFshiWnO2G86F44kstyoqiu4zNYidh52Fz6vBUn1Nm1jkoIlMvujRQswjy4s
-	MR4Cu4EmmrDuhp+i7U4/EL8z5/uOWNIEB+VCX7k8krjeCzlU3MehkqIheTkqm0EteLQx1m95gjq
-	fLTeQUB0QcB3jbfMatmeU4AtDkH8RStqYZ5RyNubKrJpt8841MsHf3o8Jj9WmD5S8f/h2+DjtzL
-	LiGaJEH9lUlqVmie2rzjEHI+bovxAKG9rapx0eh0XLK8p5Xloz6ET9Es2KVQz2g4N0w7RbNx/Y4
-	4BQfhz1kwCjkMqwzg==
-X-Received: by 2002:a05:7301:3886:b0:2ba:a1f1:2879 with SMTP id 5a478bee46e88-2c1095fec8fmr1786912eec.13.1774018895508;
-        Fri, 20 Mar 2026 08:01:35 -0700 (PDT)
-Received: from localhost (c-76-102-12-149.hsd1.ca.comcast.net. [76.102.12.149])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b2e6c30sm3345405eec.25.2026.03.20.08.01.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Mar 2026 08:01:34 -0700 (PDT)
-Date: Fri, 20 Mar 2026 08:01:33 -0700
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com,
-	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
-	larysa.zaremba@intel.com, aleksander.lobakin@intel.com,
-	bjorn@kernel.org
-Subject: Re: [PATCH v2 net 2/8] xsk: respect tailroom for ZC setups
-Message-ID: <ab1hTRsbqS5dQ07P@mini-arch>
-References: <20260319175538.479139-1-maciej.fijalkowski@intel.com>
- <20260319175538.479139-3-maciej.fijalkowski@intel.com>
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="Pmb4yejz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1774018908; x=1805554908;
+  h=from:subject:date:message-id:mime-version:
+   content-transfer-encoding:to:cc;
+  bh=jbnrcWLoBn3dGdV/EgPjDBdGByhNdGn4Lcus/kv5WsU=;
+  b=Pmb4yejzlclhOgqFYpOFCd1OuUYvv3ImHq7WuLZkXT/re1XFcW2HtpT1
+   CJ82n5AoMbSoYQK0P0ELXAne8l9VNAR4bAMhv6+BD71++PMqbiZJH+dk3
+   r2YSLkergkAQZuywxf+/8e/DAscux10LjJ7mbuuOR88lLFzXsRj5LVzVC
+   aXTOTAsSP8+AQ4GlW3HJdgIH8+l3FKYrdcCVNHDzuYvF0D9peaOcEuUAg
+   mdshzdH0D/wPPfyEKxoDU10xG+C98Zz93Bz+j8viyIkzRPCUWYTu8yetU
+   9JL5KO+zphE80pNc1wPj4RjyQJZ/Q69v8P2ZoqbaqDxpwmhDG1JY9xCI+
+   g==;
+X-CSE-ConnectionGUID: uoQg81OiQ1aIAKaIXuNqaA==
+X-CSE-MsgGUID: qsVcPzyQSBmHUJUdcLsjWw==
+X-IronPort-AV: E=Sophos;i="6.23,130,1770620400"; 
+   d="scan'208";a="54967825"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Mar 2026 08:01:47 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Fri, 20 Mar 2026 08:01:16 -0700
+Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.58 via Frontend Transport; Fri, 20 Mar 2026 08:01:13 -0700
+From: Daniel Machon <daniel.machon@microchip.com>
+Subject: [PATCH net-next 00/10] net: lan966x: add support for PCIe FDMA
+Date: Fri, 20 Mar 2026 16:00:56 +0100
+Message-ID: <20260320-lan966x-pci-fdma-v1-0-ef54cb9b0c4b@microchip.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260319175538.479139-3-maciej.fijalkowski@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAChhvWkC/x3MQQqAIBBA0avErBsoLamuEi0kxxqoKTRCiO6et
+ HyL/x+IFJgiDMUDgW6OfEhGXRYwr1YWQnbZoCplKl1r3Kz0xiQ8Z0bvdot9Q67pWqe0t5CzM5D
+ n9C9HELpQKF0wve8HPKHrymwAAAA=
+X-Change-ID: 20260313-lan966x-pci-fdma-94ed485d23fa
+To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Horatiu Vultur
+	<horatiu.vultur@microchip.com>, Steen Hegelund
+	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+	"Jesper Dangaard Brouer" <hawk@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Herve
+ Codina <herve.codina@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<bpf@vger.kernel.org>
+X-Mailer: b4 0.14.3
 
-On 03/19, Maciej Fijalkowski wrote:
-> Multi-buffer XDP stores information about frags in skb_shared_info that
-> sits at the tailroom of a packet. The storage space is reserved via
-> xdp_data_hard_end():
-> 
-> 	((xdp)->data_hard_start + (xdp)->frame_sz -	\
-> 	 SKB_DATA_ALIGN(sizeof(struct skb_shared_info)))
-> 
-> and then we refer to it via macro below:
-> 
-> static inline struct skb_shared_info *
-> xdp_get_shared_info_from_buff(const struct xdp_buff *xdp)
-> {
->         return (struct skb_shared_info *)xdp_data_hard_end(xdp);
-> }
-> 
-> Currently we do not respect this tailroom space in multi-buffer AF_XDP
-> ZC scenario. To address this, introduce xsk_pool_get_tailroom() and use
-> it within xsk_pool_get_rx_frame_size() which is used in ZC drivers to
-> configure length of HW Rx buffer.
-> 
-> xsk_pool_get_tailroom() is only reserving necessary space when pool is
-> zc and underlying netdev supports zc multi-buffer. Rely on pool->dev
-> state when configuring tailroom. xsk_pool_get_rx_frame_size() inside
-> ndo_bpf is usually called when bringing up queues and before xsk's dma
-> mappings have been configured, which makes it valid to rely on
-> pool->dev.
-> 
-> Fixes: 24ea50127ecf ("xsk: support mbuf on ZC RX")
-> Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+When lan966x operates as a PCIe endpoint, the driver currently uses
+register-based I/O for frame injection and extraction. This approach is
+functional but slow, topping out at around 33 Mbps on an Intel x86 host
+with a lan966x PCIe card.
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+This series adds FDMA (Frame DMA) support for the PCIe path. When
+operating as a PCIe endpoint, the internal FDMA engine on lan966x cannot
+directly access host memory, so DMA buffers are allocated as contiguous
+coherent memory and mapped through the PCIe Address Translation Unit
+(ATU). The ATU provides outbound windows that translate internal FDMA
+addresses to PCIe bus addresses, allowing the FDMA engine to read and
+write host memory. Because the ATU requires contiguous address regions,
+page_pool and normal per-page DMA mappings cannot be used. Instead,
+frames are transferred using memcpy between the ATU-mapped buffers and
+the network stack. With this, throughput increases from ~33 Mbps to ~620
+Mbps for default MTU.
+
+Patches 1-2 prepare the shared FDMA library: patch 1 renames the
+contiguous dataptr helpers for clarity, and patch 2 adds PCIe ATU region
+management and coherent DMA allocation with ATU mapping.
+
+Patches 3-5 refactor the lan966x FDMA code to support both platform and
+PCIe paths: extracting the LLP register write into a helper, exporting
+shared functions, and introducing an ops dispatch table selected at
+probe time.
+
+Patch 6 adds the core PCIe FDMA implementation with RX/TX using
+contiguous ATU-mapped buffers. Patches 7 and 8 extend it with MTU
+change and XDP support respectively.
+
+Patches 9-10 update the lan966x PCI device tree overlay to extend the
+cpu register mapping to cover the ATU register space and add the FDMA
+interrupt.
+
+To: Andrew Lunn <andrew+netdev@lunn.ch>
+To: David S. Miller <davem@davemloft.net>
+To: Eric Dumazet <edumazet@google.com>
+To: Jakub Kicinski <kuba@kernel.org>
+To: Paolo Abeni <pabeni@redhat.com>
+To: Horatiu Vultur <horatiu.vultur@microchip.com>
+To: Steen Hegelund <steen.hegelund@microchip.com>
+To: UNGLinuxDriver@microchip.com
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Jesper Dangaard Brouer <hawk@kernel.org>
+To: John Fastabend <john.fastabend@gmail.com>
+To: Stanislav Fomichev <sdf@fomichev.me>
+To: Herve Codina <herve.codina@bootlin.com>
+To: Arnd Bergmann <arnd@arndb.de>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: bpf@vger.kernel.org
+
+Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
+---
+Daniel Machon (10):
+      net: microchip: fdma: rename contiguous dataptr helpers
+      net: microchip: fdma: add PCIe ATU support
+      net: lan966x: add FDMA LLP register write helper
+      net: lan966x: export FDMA helpers for reuse
+      net: lan966x: add FDMA ops dispatch for PCIe support
+      net: lan966x: add PCIe FDMA support
+      net: lan966x: add PCIe FDMA MTU change support
+      net: lan966x: add PCIe FDMA XDP support
+      misc: lan966x-pci: dts: extend cpu reg to cover PCIE DBI space
+      misc: lan966x-pci: dts: add fdma interrupt to overlay
+
+ drivers/misc/lan966x_pci.dtso                      |   5 +-
+ drivers/net/ethernet/microchip/fdma/Makefile       |   4 +
+ drivers/net/ethernet/microchip/fdma/fdma_api.c     |  33 ++
+ drivers/net/ethernet/microchip/fdma/fdma_api.h     |  25 +-
+ drivers/net/ethernet/microchip/fdma/fdma_pci.c     | 177 +++++++
+ drivers/net/ethernet/microchip/fdma/fdma_pci.h     |  41 ++
+ drivers/net/ethernet/microchip/lan966x/Makefile    |   4 +
+ .../net/ethernet/microchip/lan966x/lan966x_fdma.c  |  51 +-
+ .../ethernet/microchip/lan966x/lan966x_fdma_pci.c  | 551 +++++++++++++++++++++
+ .../net/ethernet/microchip/lan966x/lan966x_main.c  |  47 +-
+ .../net/ethernet/microchip/lan966x/lan966x_main.h  |  46 ++
+ .../net/ethernet/microchip/lan966x/lan966x_regs.h  |   1 +
+ .../net/ethernet/microchip/lan966x/lan966x_xdp.c   |   6 +
+ 13 files changed, 949 insertions(+), 42 deletions(-)
+---
+base-commit: 9ac76f3d0bb2940db3a9684d596b9c8f301ef315
+change-id: 20260313-lan966x-pci-fdma-94ed485d23fa
+
+Best regards,
+-- 
+Daniel Machon <daniel.machon@microchip.com>
+
