@@ -1,38 +1,38 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B38136605E;
-	Fri, 20 Mar 2026 22:18:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA816326D55;
+	Fri, 20 Mar 2026 22:18:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774045130; cv=none; b=l8C44iVe/IWP4rnIgd4LQt2JBVIDELjdn5iQAYIF+Re1y+ZVWVCqptA/34m3lptR90UenG+YDwU0mPvM1KGP/vok3g6mwLvJnMkECaobhTNQOLWDsRWbjpRcJZ3VPKORjrBIAWWkvJ/TL/0U5y262aEws7DDrRoPsjg0LD1U3Ws=
+	t=1774045130; cv=none; b=GpAfuu0TKWNSZNyMSe6e7cH6qv7CklV8AxUu20LnsqfQ3hyv5cuJgMV8Tuz/Sc0nE5/qiz561QK84zXsW2jzsiPYJAwojAQOIAOUGD03/gG/I5TJo0ZCZ2CmqCb620gbKIxqujXYMuSUwUkp59UJu2kJ/aVyRnvm2AlkH93PidI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1774045130; c=relaxed/simple;
-	bh=zIkLBIJxSVUB2QcotN954M58sx5dX3PVrb0IDncWgCk=;
+	bh=5DscfbIutIjtx7crXF5BjeF/wS3xYQOMrXttMfzEJyM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oUUSy9nlOgbhf321qcI0fvpzy5CGjx79glf8DdRpSZBB+MqcX6JauUKnleyisKw671cQN/UIsYDdW8VA+mBTbNz86zN+BdEXcNnkcVY+nd9WTnn7QxyxJ+x+v0qhP0UcJEqNfj3TamWJOH90W0+Lckgx396wOzP6mEv3nN3PwYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=mb6DcdD0; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=u6dbzM695ym42UPj4H+txJ83QWkwfueidseFBCyM2nzbkbQtMZnToRa6QJv/gk6flmkzkHLeCPon/iEfU7gqiG+d6dcPvmg2Zi+JB1aRjT2l2j7Hs4TmKlxRNosm0/sUzsGnx7vkpnBWYzczv9bGHJ0s4Y/rlBFaU5n2MC9iFN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=RnN6SoE6; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="mb6DcdD0"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="RnN6SoE6"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=lxP0LiDg8QqkRnaIrc7++u33pc+kT/kWmPqkzVVTXvQ=; b=mb6DcdD0MBYJxDYBSnE3ZlVu9B
-	BtLNyfv5UtV/X8bSMzhSHDj8ZiHONaGt5XZTq09RZJ/wvy3qRDhhk02Dx1zwpcpYeWePsrdXKiLuA
-	Hv9iqzQ8uKTFNUug11HoxtS7rsjCnsm5zglXO5iG3WW7OpJeq/d+Mh+qKP6HylSumTVA5Yb7VqAFW
-	qy2sDNAkunwzEwwNVt04lERqJsA2yL6fcSARSjslo5+NSgkPaTDBoU6VIc4nvxhyqklRyWpiz9VBU
-	bobxI3C+niZbEXnyF0bdM7vjnQVvHQDrKmM1Vqbnj51m0qqFD0BtjzZk/UBIS5Sx1ZWP1MYSuVeW6
-	bjx0Rktw==;
+	bh=kVzXYiQrwrj4PhOsX5uDlZduKVNzHZ0nrNQwRljZG5g=; b=RnN6SoE6gSRXOd2RXlTn0Ok+sL
+	0sANcSdtAojlf4TMbmqcCOJQZVR/BwrgrHAdfXtHf3QYatR7seBdENbaleH54/+tKyNpdMLj60Jqk
+	8YKsOtWLK7nwfk3JAJOYWemoK+cPVmyVeYD5kPg7aflid89C4FJvNlZgX5jWoi386IsK+CZCQ8sch
+	GxXIaRHe7JrAJyjc1DPC/NAj2jGHwQ4rDRYNmlDzijidlQOfhTpThnQGb2JHkx7wigcsSp3Fks7cX
+	huSunmxGDigFdGulxIglvUjzHx9yZcF+VhpHKo6X511WvOgwZVojejRYpOnm1/NZ33F/IZjKpKI2k
+	ezyyzcGA==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1w3iAo-000H0k-1k;
-	Fri, 20 Mar 2026 23:18:30 +0100
+	id 1w3iAe-000Gyz-02;
+	Fri, 20 Mar 2026 23:18:20 +0100
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -51,9 +51,9 @@ Cc: bpf@vger.kernel.org,
 	toke@redhat.com,
 	yangzhenze@bytedance.com,
 	wangdongdong.6@bytedance.com
-Subject: [PATCH net-next v9 12/14] netkit: Add netkit notifier to check for unregistering devices
-Date: Fri, 20 Mar 2026 23:18:12 +0100
-Message-ID: <20260320221814.236775-13-daniel@iogearbox.net>
+Subject: [PATCH net-next v9 03/14] net: Add lease info to queue-get response
+Date: Fri, 20 Mar 2026 23:18:03 +0100
+Message-ID: <20260320221814.236775-4-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260320221814.236775-1-daniel@iogearbox.net>
 References: <20260320221814.236775-1-daniel@iogearbox.net>
@@ -66,178 +66,265 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/27946/Fri Mar 20 07:24:31 2026)
 
-Add a netdevice notifier in netkit to watch for NETDEV_UNREGISTER events.
-If the target device is indeed NETREG_UNREGISTERING and previously leased
-a queue to a netkit device, then collect the related netkit devices and
-batch-unregister_netdevice_many() them.
+Populate nested lease info to the queue-get response that returns the
+ifindex, queue id with type and optionally netns id if the device
+resides in a different netns.
 
-If this were not done, then the netkit device would hold a reference on
-the physical device preventing it from going away. However, in case of
-both io_uring zero-copy as well as AF_XDP this situation is handled
-gracefully and the allocated resources are torn down.
-
-In the case where mentioned infra is used through netkit, the applications
-have a reference on netkit, and netkit in turn holds a reference on the
-physical device. In order to have netkit release the reference on the
-physical device, we need such watcher to then unregister the netkit ones.
-
-This is generally quite similar to the dependency handling in case of
-tunnels (e.g. vxlan bound to a underlying netdev) where the tunnel device
-gets removed along with the physical device.
+Example with ynl client when using AF_XDP via queue leasing:
 
   # ip a
   [...]
-  4: enp10s0f0np0: <BROADCAST,MULTICAST> mtu 1500 qdisc mq state DOWN group default qlen 1000
-      link/ether e8:eb:d3:a3:43:f6 brd ff:ff:ff:ff:ff:ff
-      inet 10.0.0.2/24 scope global enp10s0f0np0
+  4: enp10s0f0np0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 xdp/id:24 qdisc mq state UP group default qlen 1000
+    link/ether e8:eb:d3:a3:43:f6 brd ff:ff:ff:ff:ff:ff
+    inet 10.0.0.2/24 scope global enp10s0f0np0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::eaeb:d3ff:fea3:43f6/64 scope link proto kernel_ll
+       valid_lft forever preferred_lft forever
+  [...]
+
+  # ethtool -i enp10s0f0np0
+  driver: mlx5_core
+  [...]
+
+  # ynl --family netdev --output-json --do queue-get \
+        --json '{"ifindex": 4, "id": 15, "type": "rx"}'
+  {'id': 15,
+   'ifindex': 4,
+   'lease': {'ifindex': 8, 'netns-id': 0, 'queue': {'id': 1, 'type': 'rx'}},
+   'napi-id': 8227,
+   'type': 'rx',
+   'xsk': {}}
+
+  # ip netns list
+  foo (id: 0)
+
+  # ip netns exec foo ip a
+  [...]
+  8: nk@NONE: <BROADCAST,MULTICAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+      link/ether 00:00:00:00:00:00 brd ff:ff:ff:ff:ff:ff
+      inet6 fe80::200:ff:fe00:0/64 scope link proto kernel_ll
          valid_lft forever preferred_lft forever
   [...]
-  8: nk@NONE: <BROADCAST,MULTICAST,NOARP> mtu 1500 qdisc noop state DOWN group default qlen 1000
-      link/ether 00:00:00:00:00:00 brd ff:ff:ff:ff:ff:ff
+
+  # ip netns exec foo ethtool -i nk
+  driver: netkit
   [...]
 
-  # rmmod mlx5_ib
-  # rmmod mlx5_core
-  [...]
-  [  309.261822] mlx5_core 0000:0a:00.0 mlx5_0: Port: 1 Link DOWN
-  [  344.235236] mlx5_core 0000:0a:00.1: E-Switch: Unload vfs: mode(LEGACY), nvfs(0), necvfs(0), active vports(0)
-  [  344.246948] mlx5_core 0000:0a:00.1: E-Switch: Disable: mode(LEGACY), nvfs(0), necvfs(0), active vports(0)
-  [  344.463754] mlx5_core 0000:0a:00.1: E-Switch: Disable: mode(LEGACY), nvfs(0), necvfs(0), active vports(0)
-  [  344.770155] mlx5_core 0000:0a:00.1: E-Switch: cleanup
-  [...]
+  # ip netns exec foo ls /sys/class/net/nk/queues/
+  rx-0  rx-1  tx-0
 
-  # ip a
-  [...]
-  [ both enp10s0f0np0 and nk gone ]
-  [...]
+  # ip netns exec foo ynl --family netdev --output-json --do queue-get \
+        --json '{"ifindex": 8, "id": 1, "type": "rx"}'
+  {"id": 1, "type": "rx", "ifindex": 8, "xsk": {}}
+
+Note that the caller of netdev_nl_queue_fill_one() holds the netdevice
+lock. For the queue-get we do not lock both devices. When queues get
+{un,}leased, both devices are locked, thus if __netif_get_rx_queue_lease()
+returns a lease pointer, it points to a valid device. The netns-id is
+fetched via peernet2id_alloc() similarly as done in OVS.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Co-developed-by: David Wei <dw@davidwei.uk>
 Signed-off-by: David Wei <dw@davidwei.uk>
-Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
 ---
- drivers/net/netkit.c      | 59 ++++++++++++++++++++++++++++++++++++++-
- include/linux/netdevice.h |  2 ++
- net/core/dev.c            |  6 ++++
- 3 files changed, 66 insertions(+), 1 deletion(-)
+ include/net/netdev_rx_queue.h | 14 ++++++++
+ net/core/netdev-genl.c        | 66 ++++++++++++++++++++++++++++++++---
+ net/core/netdev_rx_queue.c    | 54 ++++++++++++++++++++++++++++
+ 3 files changed, 130 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
-index ed0d56bfb60c..018734c9897b 100644
---- a/drivers/net/netkit.c
-+++ b/drivers/net/netkit.c
-@@ -1048,6 +1048,50 @@ static int netkit_change_link(struct net_device *dev, struct nlattr *tb[],
+diff --git a/include/net/netdev_rx_queue.h b/include/net/netdev_rx_queue.h
+index 1d41c253f0a3..7e98c679ea84 100644
+--- a/include/net/netdev_rx_queue.h
++++ b/include/net/netdev_rx_queue.h
+@@ -67,6 +67,20 @@ get_netdev_rx_queue_index(struct netdev_rx_queue *queue)
+ 	return index;
+ }
+ 
++enum netif_lease_dir {
++	NETIF_VIRT_TO_PHYS,
++	NETIF_PHYS_TO_VIRT,
++};
++
++struct netdev_rx_queue *
++__netif_get_rx_queue_lease(struct net_device **dev, unsigned int *rxq,
++			   enum netif_lease_dir dir);
++
++struct netdev_rx_queue *
++netif_get_rx_queue_lease_locked(struct net_device **dev, unsigned int *rxq);
++void netif_put_rx_queue_lease_locked(struct net_device *orig_dev,
++				     struct net_device *dev);
++
+ int netdev_rx_queue_restart(struct net_device *dev, unsigned int rxq);
+ void netdev_rx_queue_lease(struct netdev_rx_queue *rxq_dst,
+ 			   struct netdev_rx_queue *rxq_src);
+diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
+index 7cfa479689f1..6ec48e212a24 100644
+--- a/net/core/netdev-genl.c
++++ b/net/core/netdev-genl.c
+@@ -386,12 +386,63 @@ static int nla_put_napi_id(struct sk_buff *skb, const struct napi_struct *napi)
  	return 0;
  }
  
-+static void netkit_check_lease_unregister(struct net_device *dev)
++static int
++netdev_nl_queue_fill_lease(struct sk_buff *rsp, struct net_device *netdev,
++			   u32 q_idx, u32 q_type)
 +{
-+	LIST_HEAD(list_kill);
-+	u32 q_idx;
++	struct net_device *orig_netdev = netdev;
++	struct nlattr *nest_lease, *nest_queue;
++	struct netdev_rx_queue *rxq;
++	struct net *net, *peer_net;
 +
-+	if (READ_ONCE(dev->reg_state) != NETREG_UNREGISTERING ||
-+	    !dev->dev.parent)
-+		return;
++	rxq = __netif_get_rx_queue_lease(&netdev, &q_idx,
++					 NETIF_PHYS_TO_VIRT);
++	if (!rxq || orig_netdev == netdev)
++		return 0;
 +
-+	netdev_lock_ops(dev);
-+	for (q_idx = 0; q_idx < dev->real_num_rx_queues; q_idx++) {
-+		struct net_device *tmp = dev;
-+		struct netdev_rx_queue *rxq;
-+		u32 tmp_q_idx = q_idx;
++	nest_lease = nla_nest_start(rsp, NETDEV_A_QUEUE_LEASE);
++	if (!nest_lease)
++		goto nla_put_failure;
 +
-+		rxq = __netif_get_rx_queue_lease(&tmp, &tmp_q_idx,
-+						 NETIF_PHYS_TO_VIRT);
-+		if (rxq && tmp != dev &&
-+		    tmp->netdev_ops == &netkit_netdev_ops) {
-+			/* A single phys device can have multiple queues leased
-+			 * to one netkit device. We can only queue that netkit
-+			 * device once to the list_kill. Queues of that phys
-+			 * device can be leased with different individual netkit
-+			 * devices, hence we batch via list_kill.
-+			 */
-+			if (unregister_netdevice_queued(tmp))
-+				continue;
-+			netkit_del_link(tmp, &list_kill);
-+		}
++	nest_queue = nla_nest_start(rsp, NETDEV_A_LEASE_QUEUE);
++	if (!nest_queue)
++		goto nla_put_failure;
++	if (nla_put_u32(rsp, NETDEV_A_QUEUE_ID, q_idx))
++		goto nla_put_failure;
++	if (nla_put_u32(rsp, NETDEV_A_QUEUE_TYPE, q_type))
++		goto nla_put_failure;
++	nla_nest_end(rsp, nest_queue);
++
++	if (nla_put_u32(rsp, NETDEV_A_LEASE_IFINDEX,
++			READ_ONCE(netdev->ifindex)))
++		goto nla_put_failure;
++
++	rcu_read_lock();
++	peer_net = dev_net_rcu(netdev);
++	net = dev_net_rcu(orig_netdev);
++	if (!net_eq(net, peer_net)) {
++		s32 id = peernet2id_alloc(net, peer_net, GFP_ATOMIC);
++
++		if (nla_put_s32(rsp, NETDEV_A_LEASE_NETNS_ID, id))
++			goto nla_put_failure_unlock;
 +	}
-+	netdev_unlock_ops(dev);
-+	unregister_netdevice_many(&list_kill);
++	rcu_read_unlock();
++	nla_nest_end(rsp, nest_lease);
++	return 0;
++
++nla_put_failure_unlock:
++	rcu_read_unlock();
++nla_put_failure:
++	return -ENOMEM;
 +}
 +
-+static int netkit_notifier(struct notifier_block *this,
-+			   unsigned long event, void *ptr)
-+{
-+	struct net_device *dev = netdev_notifier_info_to_dev(ptr);
-+
-+	if (event == NETDEV_UNREGISTER)
-+		netkit_check_lease_unregister(dev);
-+	return NOTIFY_DONE;
-+}
-+
- static size_t netkit_get_size(const struct net_device *dev)
+ static int
+ netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
+ 			 u32 q_idx, u32 q_type, const struct genl_info *info)
  {
- 	return nla_total_size(sizeof(u32)) + /* IFLA_NETKIT_POLICY */
-@@ -1124,18 +1168,31 @@ static struct rtnl_link_ops netkit_link_ops = {
- 	.maxtype	= IFLA_NETKIT_MAX,
- };
+ 	struct pp_memory_provider_params *params;
+-	struct netdev_rx_queue *rxq;
++	struct net_device *orig_netdev = netdev;
++	struct netdev_rx_queue *rxq, *rxq_lease;
+ 	struct netdev_queue *txq;
+ 	void *hdr;
  
-+static struct notifier_block netkit_netdev_notifier = {
-+	.notifier_call	= netkit_notifier,
-+};
-+
- static __init int netkit_mod_init(void)
- {
-+	int ret;
-+
- 	BUILD_BUG_ON((int)NETKIT_NEXT != (int)TCX_NEXT ||
- 		     (int)NETKIT_PASS != (int)TCX_PASS ||
- 		     (int)NETKIT_DROP != (int)TCX_DROP ||
- 		     (int)NETKIT_REDIRECT != (int)TCX_REDIRECT);
+@@ -409,17 +460,22 @@ netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
+ 		rxq = __netif_get_rx_queue(netdev, q_idx);
+ 		if (nla_put_napi_id(rsp, rxq->napi))
+ 			goto nla_put_failure;
++		if (netdev_nl_queue_fill_lease(rsp, netdev, q_idx, q_type))
++			goto nla_put_failure;
  
--	return rtnl_link_register(&netkit_link_ops);
-+	ret = rtnl_link_register(&netkit_link_ops);
-+	if (ret)
-+		return ret;
-+	ret = register_netdevice_notifier(&netkit_netdev_notifier);
-+	if (ret)
-+		rtnl_link_unregister(&netkit_link_ops);
-+	return ret;
- }
- 
- static __exit void netkit_mod_exit(void)
- {
-+	unregister_netdevice_notifier(&netkit_netdev_notifier);
- 	rtnl_link_unregister(&netkit_link_ops);
- }
- 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 35b194e57c3f..0b26b27a3d92 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -3411,6 +3411,8 @@ static inline int dev_direct_xmit(struct sk_buff *skb, u16 queue_id)
- int register_netdevice(struct net_device *dev);
- void unregister_netdevice_queue(struct net_device *dev, struct list_head *head);
- void unregister_netdevice_many(struct list_head *head);
-+bool unregister_netdevice_queued(const struct net_device *dev);
-+
- static inline void unregister_netdevice(struct net_device *dev)
- {
- 	unregister_netdevice_queue(dev, NULL);
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 763a2c6c3bf1..60d23a49c929 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -12360,6 +12360,12 @@ static void netif_close_many_and_unlock_cond(struct list_head *close_head)
++		rxq_lease = netif_get_rx_queue_lease_locked(&netdev, &q_idx);
++		if (rxq_lease)
++			rxq = rxq_lease;
+ 		params = &rxq->mp_params;
+ 		if (params->mp_ops &&
+ 		    params->mp_ops->nl_fill(params->mp_priv, rsp, rxq))
+-			goto nla_put_failure;
++			goto nla_put_failure_lease;
+ #ifdef CONFIG_XDP_SOCKETS
+ 		if (rxq->pool)
+ 			if (nla_put_empty_nest(rsp, NETDEV_A_QUEUE_XSK))
+-				goto nla_put_failure;
++				goto nla_put_failure_lease;
  #endif
+-
++		netif_put_rx_queue_lease_locked(orig_netdev, netdev);
+ 		break;
+ 	case NETDEV_QUEUE_TYPE_TX:
+ 		txq = netdev_get_tx_queue(netdev, q_idx);
+@@ -437,6 +493,8 @@ netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
+ 
+ 	return 0;
+ 
++nla_put_failure_lease:
++	netif_put_rx_queue_lease_locked(orig_netdev, netdev);
+ nla_put_failure:
+ 	genlmsg_cancel(rsp, hdr);
+ 	return -EMSGSIZE;
+diff --git a/net/core/netdev_rx_queue.c b/net/core/netdev_rx_queue.c
+index a1f23c2c96d4..a4d8cad6db74 100644
+--- a/net/core/netdev_rx_queue.c
++++ b/net/core/netdev_rx_queue.c
+@@ -41,6 +41,60 @@ bool netif_rxq_is_leased(struct net_device *dev, unsigned int rxq_idx)
+ 	return false;
  }
  
-+bool unregister_netdevice_queued(const struct net_device *dev)
++/* Virtual devices eligible for leasing have no dev->dev.parent, while
++ * physical devices always have one. Use this to enforce the correct
++ * lease traversal direction.
++ */
++static bool netif_lease_dir_ok(const struct net_device *dev,
++			       enum netif_lease_dir dir)
 +{
-+	ASSERT_RTNL();
-+	return !list_empty(&dev->unreg_list);
++	if (dir == NETIF_VIRT_TO_PHYS && !dev->dev.parent)
++		return true;
++	if (dir == NETIF_PHYS_TO_VIRT && dev->dev.parent)
++		return true;
++	return false;
 +}
 +
- void unregister_netdevice_many_notify(struct list_head *head,
- 				      u32 portid, const struct nlmsghdr *nlh)
++struct netdev_rx_queue *
++__netif_get_rx_queue_lease(struct net_device **dev, unsigned int *rxq_idx,
++			   enum netif_lease_dir dir)
++{
++	struct net_device *orig_dev = *dev;
++	struct netdev_rx_queue *rxq = __netif_get_rx_queue(orig_dev, *rxq_idx);
++
++	if (rxq->lease) {
++		if (!netif_lease_dir_ok(orig_dev, dir))
++			return NULL;
++		rxq = rxq->lease;
++		*rxq_idx = get_netdev_rx_queue_index(rxq);
++		*dev = rxq->dev;
++	}
++	return rxq;
++}
++
++struct netdev_rx_queue *
++netif_get_rx_queue_lease_locked(struct net_device **dev, unsigned int *rxq_idx)
++{
++	struct net_device *orig_dev = *dev;
++	struct netdev_rx_queue *rxq;
++
++	/* Locking order is always from the virtual to the physical device
++	 * see netdev_nl_queue_create_doit().
++	 */
++	netdev_ops_assert_locked(orig_dev);
++	rxq = __netif_get_rx_queue_lease(dev, rxq_idx, NETIF_VIRT_TO_PHYS);
++	if (rxq && orig_dev != *dev)
++		netdev_lock(*dev);
++	return rxq;
++}
++
++void netif_put_rx_queue_lease_locked(struct net_device *orig_dev,
++				     struct net_device *dev)
++{
++	if (orig_dev != dev)
++		netdev_unlock(dev);
++}
++
+ /* See also page_pool_is_unreadable() */
+ bool netif_rxq_has_unreadable_mp(struct net_device *dev, unsigned int rxq_idx)
  {
 -- 
 2.43.0
