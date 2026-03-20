@@ -1,54 +1,43 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E927C35BDBF;
-	Thu, 19 Mar 2026 23:45:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A68C13777E
+	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 00:08:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773963949; cv=none; b=pTRe0WSz0Yvr+Qz2s6aHZoQyoz/QrmRE64b3GVAuTpdfMD3sextx65Pk4IpbKRF6Ru81d+VJyJWyrwehiA42V3Pl2ChHly7Ko9YaywwkAXKHvyE1xnPfb7JMmWzF0x0R0zt/tUswbQT4sVw2Bh1I2SPwWgdB0pEAmSZncwKfqhE=
+	t=1773965306; cv=none; b=iePNRT9O6Ig3s+0hNaz6ccA1PbQQ1QUK9kzDH6kY5UWO8Q/a1lx5BlUEcFuZjeYW/5bqGrZIZ3pNwcwinhkk4BGESOSLMPUTEQhgU89XMltdg0s42sf5iSueXXVwsCVXsNHMragE2c2h7DFbq3Eq2sTNBaTkSeOPq0I5VKGOv2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773963949; c=relaxed/simple;
-	bh=RQmJSTgeYlHzTm6YHQv+LZXZKDSGYerO9dS13cpXStY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hi/NZSuq1DNiMijqYYLGO+B3J22z1PPTgbPSCA1QqG3RTiCmy0nlGcgXYpyT9UIlC/WaVn1PKqCcc+IwZjizNsslzTIidsRa3/41dx3IiAm+GJ8U+TEdqv234GHcv45MQ/1I878luYGECGTXBM6jaeRUxNYDbwmhHCn+uPEQIZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TxhQIg6t; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773965306; c=relaxed/simple;
+	bh=2jJhJS/gsetzKR5TGbZCcvesZkAnpC8v+8gpyRP1CB8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oXdQxMqBnTfqGTJeDVyJz6cgkYppEe/Uz1LoDRhU43Yf4UPb0pF33630kra5v/5AsboMu/PM0W8H9UfhQLxeovcm2Nc8azo6b+PujI+SnArHZln8yzHKaqhUqWwNb54x4aSp7hzcVPs7fYw2dSxwx8/K0saUdeoRTSbwoNW3aqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DK2bafAe; arc=none smtp.client-ip=95.215.58.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TxhQIg6t"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24A03C2BCB3;
-	Thu, 19 Mar 2026 23:45:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773963948;
-	bh=RQmJSTgeYlHzTm6YHQv+LZXZKDSGYerO9dS13cpXStY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TxhQIg6tNKmhiL1B9/Gw+ixDRVPUVJvBzrsCA0z/wEZ8og1rWWNXJYbG5x4/bmDIv
-	 qPalhPBdimNQShZO4GV2UHW0eSor13TkO1KMNpl+J6uBqPAxAghqEL0X9xLSg4bfCb
-	 DIBmt/BZzVddToXDikdUCHlS/20+1DCpbkbA+eyCh1M+agBztfWNJX6A8qsOpqfIWP
-	 J+XJ+GG9knObVor0YphOpkTExnSPtgF9fuDq5Q3t4XwOLy9Rn2XVJCSd5RvIzc0ntR
-	 u6mFyym3X/lpoBppCc1Fp4Fg0Mx5cE1NnMIoOBQIhukNgYBcFUYISH6mhsprgACk9B
-	 d1F12jQATSQug==
-From: Jakub Kicinski <kuba@kernel.org>
-To: bpf@vger.kernel.org
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 2/2] selftests/bpf: test that dst is cleared on same-protocol encap
-Date: Thu, 19 Mar 2026 16:45:31 -0700
-Message-ID: <20260319234531.3022634-2-kuba@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260319234531.3022634-1-kuba@kernel.org>
-References: <20260319234531.3022634-1-kuba@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DK2bafAe"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773965302;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=wefqSMns5islEg+vDsdqLdu9OcNzZoGGKIEOglSKT1w=;
+	b=DK2bafAe1qlGlFiTzdyNwXLL7jTIqnJqpAJJzsT2iYbBtDP/nlq2fVMBahfO9JCkincg1X
+	pIrHk1vigm3vgQ89b2ANkb7nIhGAmk8asTVGkz/xKOkoC8+KVzQrY88nEUkvTlGZDvyuCJ
+	/9o/Ah2dDdBG0UK1q4HGBlBUKrIxAn4=
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel-team@meta.com
+Subject: [PATCH bpf v2 1/2] bpf: Fix exception exit lock checking for subprogs
+Date: Thu, 19 Mar 2026 17:08:08 -0700
+Message-ID: <20260320000809.643798-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -56,180 +45,108 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Verify that bpf_skb_adjust_room() clears the routing dst even when
-the encap L3 protocol matches the original packet (e.g. IPIP).
-The dst selected for the inner packet is not valid for the
-encapsulated result; a stale dst could lead to misrouting.
+process_bpf_exit_full() passes check_lock = !curframe to
+check_resource_leak(), which is false in cases when bpf_throw() is
+called from a static subprog. This makes check_resource_leak() to skip
+validation of active_rcu_locks, active_preempt_locks, and
+active_irq_id on exception exits from subprogs.
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+At runtime bpf_throw() unwinds the stack via ORC without releasing any
+user-acquired locks, which may cause various issues as the result.
+
+Fix by setting check_lock = true for exception exits regardless of
+curframe, since exceptions bypass all intermediate frame
+cleanup. Update the error message prefix to "bpf_throw" for exception
+exits to distinguish them from normal BPF_EXIT.
+
+Fix reject_subprog_with_rcu_read_lock test which was previously
+passing for the wrong reason. Test program returned directly from the
+subprog call without closing the RCU section, so the error was
+triggered by the unclosed RCU lock on normal exit, not by
+bpf_throw. Update __msg annotations for affected tests to match the
+new "bpf_throw" error prefix.
+
+The spin_lock case is not affected because they are already checked [1]
+at the call site in do_check_insn() before bpf_throw can run.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/bpf/verifier.c?h=v7.0-rc4#n21098
+
+Assisted-by: Claude:claude-opus-4-6
+Fixes: f18b03fabaa9 ("bpf: Implement BPF exceptions")
+Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+
 ---
-CC: andrii@kernel.org
-CC: eddyz87@gmail.com
-CC: ast@kernel.org
-CC: daniel@iogearbox.net
-CC: martin.lau@linux.dev
-CC: song@kernel.org
-CC: yonghong.song@linux.dev
-CC: john.fastabend@gmail.com
-CC: kpsingh@kernel.org
-CC: sdf@fomichev.me
-CC: haoluo@google.com
-CC: jolsa@kernel.org
-CC: shuah@kernel.org
-CC: bpf@vger.kernel.org
-CC: linux-kselftest@vger.kernel.org
----
- .../selftests/bpf/prog_tests/test_dst_clear.c | 75 +++++++++++++++++++
- .../selftests/bpf/progs/test_dst_clear.c      | 57 ++++++++++++++
- 2 files changed, 132 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/test_dst_clear.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_dst_clear.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_dst_clear.c b/tools/testing/selftests/bpf/prog_tests/test_dst_clear.c
-new file mode 100644
-index 000000000000..8190c56556fb
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/test_dst_clear.c
-@@ -0,0 +1,75 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <sys/types.h>
-+#include <sys/socket.h>
-+#include <net/if.h>
-+
-+#include "test_progs.h"
-+#include "network_helpers.h"
-+#include "test_dst_clear.skel.h"
-+
-+#define NS_TEST "dst_clear_ns"
-+#define IPV4_IFACE_ADDR "1.0.0.1"
-+#define UDP_TEST_PORT 7777
-+
-+void test_dst_clear(void)
-+{
-+	LIBBPF_OPTS(bpf_tc_hook, qdisc_hook, .attach_point = BPF_TC_EGRESS);
-+	LIBBPF_OPTS(bpf_tc_opts, tc_attach);
-+	struct nstoken *nstoken = NULL;
-+	struct test_dst_clear *skel;
-+	struct sockaddr_in addr;
-+	socklen_t addrlen;
-+	char buf[128] = {};
-+	int sockfd, err;
-+
-+	skel = test_dst_clear__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel open_and_load"))
-+		return;
-+
-+	SYS(fail, "ip netns add %s", NS_TEST);
-+	SYS(fail, "ip -net %s addr add %s/8 dev lo", NS_TEST, IPV4_IFACE_ADDR);
-+	SYS(fail, "ip -net %s link set dev lo up", NS_TEST);
-+
-+	nstoken = open_netns(NS_TEST);
-+	if (!ASSERT_OK_PTR(nstoken, "open_netns"))
-+		goto fail;
-+
-+	qdisc_hook.ifindex = if_nametoindex("lo");
-+	if (!ASSERT_GT(qdisc_hook.ifindex, 0, "if_nametoindex lo"))
-+		goto fail;
-+
-+	err = bpf_tc_hook_create(&qdisc_hook);
-+	if (!ASSERT_OK(err, "create qdisc hook"))
-+		goto fail;
-+
-+	tc_attach.prog_fd = bpf_program__fd(skel->progs.dst_clear);
-+	err = bpf_tc_attach(&qdisc_hook, &tc_attach);
-+	if (!ASSERT_OK(err, "attach filter"))
-+		goto fail;
-+
-+	addrlen = sizeof(addr);
-+	err = make_sockaddr(AF_INET, IPV4_IFACE_ADDR, UDP_TEST_PORT,
-+			    (void *)&addr, &addrlen);
-+	if (!ASSERT_OK(err, "make_sockaddr"))
-+		goto fail;
-+	sockfd = socket(AF_INET, SOCK_DGRAM, 0);
-+	if (!ASSERT_NEQ(sockfd, -1, "socket"))
-+		goto fail;
-+	err = sendto(sockfd, buf, sizeof(buf), 0, (void *)&addr, addrlen);
-+	close(sockfd);
-+	if (!ASSERT_EQ(err, sizeof(buf), "send"))
-+		goto fail;
-+
-+	ASSERT_TRUE(skel->bss->had_dst, "had_dst");
-+	ASSERT_TRUE(skel->bss->dst_cleared, "dst_cleared");
-+
-+fail:
-+	if (nstoken) {
-+		bpf_tc_hook_destroy(&qdisc_hook);
-+		close_netns(nstoken);
-+	}
-+	SYS_NOFAIL("ip netns del " NS_TEST);
-+	test_dst_clear__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_dst_clear.c b/tools/testing/selftests/bpf/progs/test_dst_clear.c
-new file mode 100644
-index 000000000000..7ac9604fd99c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_dst_clear.c
-@@ -0,0 +1,57 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include "vmlinux.h"
-+#include "bpf_tracing_net.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_endian.h>
-+
-+#define UDP_TEST_PORT 7777
-+
-+void *bpf_cast_to_kern_ctx(void *) __ksym;
-+
-+bool had_dst = false;
-+bool dst_cleared = false;
-+
-+SEC("tc")
-+int dst_clear(struct __sk_buff *skb)
-+{
-+	struct sk_buff *kskb;
-+	struct iphdr iph;
-+	struct udphdr udph;
-+	int err;
-+
-+	if (skb->protocol != __bpf_constant_htons(ETH_P_IP))
-+		return TC_ACT_OK;
-+
-+	if (bpf_skb_load_bytes(skb, ETH_HLEN, &iph, sizeof(iph)))
-+		return TC_ACT_OK;
-+
-+	if (iph.protocol != IPPROTO_UDP)
-+		return TC_ACT_OK;
-+
-+	if (bpf_skb_load_bytes(skb, ETH_HLEN + sizeof(iph), &udph, sizeof(udph)))
-+		return TC_ACT_OK;
-+
-+	if (udph.dest != __bpf_constant_htons(UDP_TEST_PORT))
-+		return TC_ACT_OK;
-+
-+	kskb = bpf_cast_to_kern_ctx(skb);
-+	had_dst = (kskb->_skb_refdst != 0);
-+
-+	/* Same-protocol encap (IPIP): protocol stays IPv4, but the dst
-+	 * from the original routing is no longer valid for the outer hdr.
-+	 */
-+	err = bpf_skb_adjust_room(skb, (s32)sizeof(struct iphdr),
-+				  BPF_ADJ_ROOM_MAC,
-+				  BPF_F_ADJ_ROOM_FIXED_GSO |
-+				  BPF_F_ADJ_ROOM_ENCAP_L3_IPV4);
-+	if (err)
-+		return TC_ACT_SHOT;
-+
-+	dst_cleared = (kskb->_skb_refdst == 0);
-+
-+	return TC_ACT_SHOT;
-+}
-+
-+char __license[] SEC("license") = "GPL";
+v1->v2:
+  * fix reject_subprog_with_rcu_read_lock test (Kumar)
+  * add test case with irq lock (Kumar)
+  * remove reject_subprog_throw_rcu_lock test from patch #2, since
+    it's essentially a duplicate now
+
+v1: https://lore.kernel.org/bpf/20260317001325.318004-1-ihor.solodrai@linux.dev/
+
+This bug was discovered by an AI bot. You can find the original
+AI-generated investigation here:
+https://github.com/theihor/bpf/commits/ai-tinkering-20260310-0745/
+
+---
+ kernel/bpf/verifier.c                               | 3 ++-
+ tools/testing/selftests/bpf/progs/exceptions_fail.c | 9 ++++++---
+ 2 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index df22bfc572e2..5c0e6809024f 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -20911,7 +20911,8 @@ static int process_bpf_exit_full(struct bpf_verifier_env *env,
+ 	 * state when it exits.
+ 	 */
+ 	int err = check_resource_leak(env, exception_exit,
+-				      !env->cur_state->curframe,
++				      exception_exit || !env->cur_state->curframe,
++				      exception_exit ? "bpf_throw" :
+ 				      "BPF_EXIT instruction in main prog");
+ 	if (err)
+ 		return err;
+diff --git a/tools/testing/selftests/bpf/progs/exceptions_fail.c b/tools/testing/selftests/bpf/progs/exceptions_fail.c
+index 8a0fdff89927..d7f1c492e3dd 100644
+--- a/tools/testing/selftests/bpf/progs/exceptions_fail.c
++++ b/tools/testing/selftests/bpf/progs/exceptions_fail.c
+@@ -8,6 +8,7 @@
+ #include "bpf_experimental.h"
+ 
+ extern void bpf_rcu_read_lock(void) __ksym;
++extern void bpf_rcu_read_unlock(void) __ksym;
+ 
+ #define private(name) SEC(".bss." #name) __hidden __attribute__((aligned(8)))
+ 
+@@ -131,7 +132,7 @@ int reject_subprog_with_lock(void *ctx)
+ }
+ 
+ SEC("?tc")
+-__failure __msg("BPF_EXIT instruction in main prog cannot be used inside bpf_rcu_read_lock-ed region")
++__failure __msg("bpf_throw cannot be used inside bpf_rcu_read_lock-ed region")
+ int reject_with_rcu_read_lock(void *ctx)
+ {
+ 	bpf_rcu_read_lock();
+@@ -147,11 +148,13 @@ __noinline static int throwing_subprog(struct __sk_buff *ctx)
+ }
+ 
+ SEC("?tc")
+-__failure __msg("BPF_EXIT instruction in main prog cannot be used inside bpf_rcu_read_lock-ed region")
++__failure __msg("bpf_throw cannot be used inside bpf_rcu_read_lock-ed region")
+ int reject_subprog_with_rcu_read_lock(void *ctx)
+ {
+ 	bpf_rcu_read_lock();
+-	return throwing_subprog(ctx);
++	throwing_subprog(ctx);
++	bpf_rcu_read_unlock();
++	return 0;
+ }
+ 
+ static bool rbless(struct bpf_rb_node *n1, const struct bpf_rb_node *n2)
 -- 
 2.53.0
 
