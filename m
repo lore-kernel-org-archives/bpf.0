@@ -1,63 +1,63 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46B413D1719
-	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 16:49:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BF8B3D2FF7
+	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 16:49:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774025357; cv=none; b=AW3EQpt2F+pI1qIlkgvKprbx64dPup8YY8XobKQkC9M+YwAfnsZB6yivFfdZOVBgnZb5+SIZm2HRfXuman73tc12NMzMqskqF6hLFR++KGaAgkcNdg8rCiP33yEXrM+vW358fabAGBMEdwU68kg5WfBcilJzCesgjxA+mMaJArI=
+	t=1774025377; cv=none; b=ntu2271rKyTvn+IW0E81Rfi0NchpvxYEJGhsP+wpEGtz0pw1K8noMjQp1jHqEKRAXNQZPF8qhw7VEqRVOw71MOnhSGk2Y6NVgxPDIdaIHjScCcZU6DMfUZddbcyvlFgAK6WcbLNNjQbUrKxo5AsivjZkwrZvrSTH5Dw+JD7yT68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774025357; c=relaxed/simple;
-	bh=jHw3El0uIyIpwSx6+3Ng2dGwgPF6ERjPqZ1KgR/RLHQ=;
+	s=arc-20240116; t=1774025377; c=relaxed/simple;
+	bh=HaOcImiUpDuTf+6s2yavtbu/XQEbtv7A0F3QvK7PEjQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tMtBvI5EPl7EaiE1IExQHaysriXMa7L5sWnrNPVTnBTASAcWeRSPZcRMFbRfj5adHNmgAkJHMsFNNuRBDLDZFUD82vWCEdQajxW2C1edDxROQvUyl7RCwBBvbf/AvZwM2QE5CA2Q/d44E36SxAYKKwMGf7pr7mIGy4nhTHgPYqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KqBemTQ0; arc=none smtp.client-ip=209.85.128.48
+	 Content-Type:Content-Disposition:In-Reply-To; b=kJJcXwecuCKWp7ZNEdFwwJv+W4ubUZXMc5xsPiSecB818Je1NU/Hno/SjuiVPAJyfFu79CxGhEc9qcAovV1GnuxMkjExP+snCrpEvcFOjsu0yJHsfpgVDn6+vbbmGE8yPVUIQ2EPPbrwlx4/Sc4w3n2esIo8V5bXEjqtBphD0Qg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V/UqgV5A; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KqBemTQ0"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-48700b1ba53so7114665e9.1
-        for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 09:49:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V/UqgV5A"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4852f8ac7e9so21191995e9.1
+        for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 09:49:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774025354; x=1774630154; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1774025374; x=1774630174; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hWS72DfN+hsMC4uD/Y7JIWFTLSim7vaKbXxSaKM0Z3s=;
-        b=KqBemTQ0+1AZtvvmJKzecpN1eHnSd2oSapZNryHaHJXjhA0vKN0eiUeMgoXmKCyPZG
-         vZ9cY9NLbuP2h/jy6eRHtuJhFjUnaR7UbsJaIYv+8AHlgtqvxOpeEM1/ShLP02YyEUv6
-         sBXklT4TZ3EmjcTtHGL32xEr0rNnOug0oSs6PwKBpsF++0lYQZO9zjTdRj8GhV7NsXJU
-         nnCY8H4WKsbYospTBV4MEZfMJiDHAQO/Lzs0p4/IyTF7po3Bqpq/Z9T3z6XinGq3M9Fy
-         8dKjA07ZJu2mKsNlhKa87M9lF/tn18M1dxHeOs50AthtCnRZMjAVScequqPDk/w5pAe6
-         HeLQ==
+        bh=vCaUKvFka89f2EF/UYr9+j4/cQA/WcpyeA5YLIl53aE=;
+        b=V/UqgV5AHMTtb+HumG8Yn4jr8Jgdz8dFjCMGD8mgqGlkOWw7OvtpMOzbqZW8jIeZsQ
+         ycXW+eH3YTHROY1o7Yk0ztBKJCq6STKXbYrD2XxYte5zN2FT6puE6MWaUuQcIYKOxb/9
+         kbt4liwZZPJ4ZhfV5l0+jtOefo84kYeV8BvpHRC9TbnrciJroTYyggJWHADFQkXQlfJD
+         9VieezXFInbANsnaypUVxoHqhVdC7rjrzKzSk/+rezeU0v+5c5wtV2Ez6gkLqzbpsaqT
+         mdq3XwJLGavyv+LXSIPdmFLuaOx3WuGyBouW2WAQQHKtpDMlMpot6UjDf8dEt4CvzfwJ
+         8few==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774025354; x=1774630154;
+        d=1e100.net; s=20251104; t=1774025374; x=1774630174;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hWS72DfN+hsMC4uD/Y7JIWFTLSim7vaKbXxSaKM0Z3s=;
-        b=jdwjWRke5bFfzvOCQFqDgaR3wvaLDMatJGhAgeLiOdX8XnOHzIzeoQ7X4TOa7Zp6Pc
-         lsNhk1T+wfEPIfFt8E+OlovUwr6ZvDd1cMg/a+gPd7NVHrf8jt3Wpx2rfHNEJU4Eymmh
-         EL9iI+zpePb9n0rSFad10E1nC30Gr2Pc4UWQnSFa34pA41zKNYGelYqKurB0ccObLMJT
-         hg/HEvLnWfXOpddZvHel42Fr/pYwdLqkXA9y2UUajQ1T/Uaog8kQA8+tZpFgva1SIN2z
-         qZ8pWnjgrIBtPsn520xoBWBsZkkx0Jez0U+BvDjt8M9zxP6ArfPknX5hNf9Akvjo6dLw
-         Hdrw==
-X-Gm-Message-State: AOJu0YzGIFwYce752dE4mEOqdKVG0xchoy/Bn4wsQsQwJKmRcdjkxBVg
-	zVfFtnZeBiuK/acT5chzg3ILuCzMxQRdie4UnDBJYcqc7+b4aXIVhwumKMSJc+rg
-X-Gm-Gg: ATEYQzwkFjdh24MueXGzqL7ZIh5n7NkOkYrJUpaoVr5FUXkraibC/irJ/fr2Gczm+9+
-	OflD2/WK7cjeg4Fl2STx36yX2hjXFYDjHYJtJFdOdSAfuhuvkCpW1ehqzQX1+hy9h0CSOzlC5pg
-	N1JLqw8wDkZNPIL17lOExuPUhwSkW3Fa2z7UGF2e3K3wZA7JKHttqsMmZyei2kuz7Gyyqt0wyxr
-	v4/KUvZVtWmDfrh+zLlJRfhAd1EDHUNWq9Nx1cZsbAEm7HdpFMjev2yGzKue6eUSiKdjkU7QE7I
-	vnL93lxbiYFSloWy0zopspIdEFlbPWwK5urkISR4KlDitaAkJ5BGiAT6ctLXDryTcdgpAxqUSC5
-	HXeq/1UI5c+kjQ/pH63dwBvnSiJ8sXtOKPhU8Ujy1jeTqspg9C+6w7N6MMqc2QLIn/RVvRH4jey
-	9wNl9MjJsibAykb6xQxz3Mxvd93UlslpWQ8jfmW+GZFzJ5RX/aJ0+xe27Knu7pDuOaUUZvP2lYw
-	lzCBvAkdnwwg5VaB3wic7vSptzVt4RHBZCwl9qdbpAx1Rb0M4xtkWmwLaXJB9Au03rL2DC1VGeS
-X-Received: by 2002:a05:600c:4705:b0:486:f8d6:5dea with SMTP id 5b1f17b1804b1-486fee0b743mr52938645e9.19.1774025354417;
-        Fri, 20 Mar 2026 09:49:14 -0700 (PDT)
+        bh=vCaUKvFka89f2EF/UYr9+j4/cQA/WcpyeA5YLIl53aE=;
+        b=GKz9QTmZuG3YlxCkhCSrpVgb7Bn7cdalxU9oeI81rDxk+ggbEUNUtf3UCECD6a3N43
+         dRz09XPTmNL3MN8dCeIn/Bd+DhQB/u6uRDTz3VHn1iaqx0lkAQdN7dHj8Ls15QsMxihI
+         hn9S38O+sFUyfxbSdaHhGPloDW6aUGw8FY82o/iia3u0hX12qBCiuMYGFTrKsGrgo+ca
+         MtbwCPUUkRzLGnE1N7xomXpHvNcXbEJ6wOJv5Rtp7Y7rVPeyeHvXdvFM6Y1ITe2V3EDX
+         pi04DhsmlpA/tr0IKhhiNAr5JJGoT/om7IA28U1U4F2wOlEDhCWn33TOceWIJfpfIDHC
+         6K1Q==
+X-Gm-Message-State: AOJu0Ywq+9Xua6bNQlV1a8KtB3aS5Vu4nJ2z7O1/h0CVCF6+J//78Tav
+	1gsUtjFItTvC18X41a5s8tB+pKRetsQpOe1Vp5LBAowUl7SxbrgoQSX+1P6cMtAP
+X-Gm-Gg: ATEYQzzehQD5pcNSoaVwzcVhCdB+VCYjSEu7lVquXPDWWipXITJy0RAvIz6mhHwYq/E
+	qPwlu45xFBv0+Qo2ME0t0dhQHoVIrXrI5D+h+rEoUXqURadpZZma+/fPk1b0FyWyMr86P/JFsjc
+	dJOs+snZh9IZJKyWN1oVXNubS5knQ2pAE45/kcf4AT8WVu86B/acN9P/Oj7kVngi93F0y3jJAT+
+	C1RUcBhWyR5ZxigsyDGxbbk+mYAFVTrBuZYkwybXx3qVz8IRF1h+zU6vauNrGO70/iw147nkS3B
+	6D9vloM9J1myXKu0/MgPfi8KvQlHF4I0ElBh4XAljOAsAqR42KprLSuxQJFEw20P/CTyjcv9MUu
+	+n/4MzQCib90BVZ0cmjDc2WuV0KcnhViHNLSo0pEQgc70nAiVkpJXpe6EuGZE/OTDywco8SiOQg
+	2J1IB6AeTjfPFCCzsqujxALJWvCMe9n9FzsVaYpJewapFiPn4qHGKUpI3qafExe20pvgo7/4fTS
+	u/Cq6IpluM/Koh3Pw6votBLL6kwLQYtAEhjnTLBLyZK/sWpeL5cUDp0gVDPm6hnUuEEGG8wWNGj
+X-Received: by 2002:a05:600c:468b:b0:485:3a27:a960 with SMTP id 5b1f17b1804b1-486feb5a4f8mr62741195e9.0.1774025373844;
+        Fri, 20 Mar 2026 09:49:33 -0700 (PDT)
 Received: from Tunnel (2a01cb09b013a2c6b23e8799d065d8e3.ipv6.abo.wanadoo.fr. [2a01:cb09:b013:a2c6:b23e:8799:d065:d8e3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486fe7e2665sm85467395e9.6.2026.03.20.09.49.11
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486ff1b4491sm19400815e9.24.2026.03.20.09.49.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Mar 2026 09:49:13 -0700 (PDT)
-Date: Fri, 20 Mar 2026 17:49:09 +0100
+        Fri, 20 Mar 2026 09:49:33 -0700 (PDT)
+Date: Fri, 20 Mar 2026 17:49:30 +0100
 From: Paul Chaignon <paul.chaignon@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -68,9 +68,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
 	Srinivas Narayana <srinivas.narayana@rutgers.edu>,
 	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
-Subject: [PATCH v2 bpf-next 2/6] bpf: Use bpf_verifier_env buffers for
- reg_set_min_max
-Message-ID: <9fdf9830803fe3a5c4059341c84a03836105f5bf.1774025082.git.paul.chaignon@gmail.com>
+Subject: [PATCH v2 bpf-next 3/6] bpf: Exit early if reg_bounds_sync gets
+ invalid inputs
+Message-ID: <704bf39f66a98877f66a4982c77cddb42f14fc82.1774025082.git.paul.chaignon@gmail.com>
 References: <cover.1774025082.git.paul.chaignon@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -82,155 +82,49 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <cover.1774025082.git.paul.chaignon@gmail.com>
 
-In a subsequent patch, the regs_refine_cond_op and reg_bounds_sync
-functions will be called in is_branch_taken instead of reg_set_min_max,
-to simulate each branch's outcome. Since they will run before we branch
-out, these two functions will need to work on temporary registers for
-the two branches.
+From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
 
-This refactoring patch prepares for that change, by introducing the
-temporary registers on bpf_verifier_env and using them in
-reg_set_min_max.
+In the subsequent commit, to prune dead branches we will rely on
+detecting ill-formed ranges using range_bounds_violations()
+(e.g., umin > umax) after refining register bounds using
+regs_refine_cond_op().
 
-This change also allows us to save one fake_reg slot as we don't need to
-allocate an additional temporary buffer in case of a BPF_K condition.
+However, reg_bounds_sync() can sometimes "repair" ill-formed bounds,
+potentially masking a violation that was produced by
+regs_refine_cond_op().
 
-Finally, you may notice that this patch removes the check for
-"false_reg1 == false_reg2" in reg_set_min_max. That check was introduced
-in commit d43ad9da8052 ("bpf: Skip bounds adjustment for conditional
-jumps on same scalar register") to avoid an invariant violation. Given
-that "env->false_reg1 == env->false_reg2" doesn't make sense and
-invariant violations are addressed in a subsequent commit, this patch
-just removes the check.
+This commit modifies reg_bounds_sync() to exit early if an invariant
+violation is already present in the input.
+
+This ensures ill-formed reg_states remain ill-formed after
+reg_bounds_sync(), allowing simulate_both_branches_taken() to correctly
+identify dead branches with a single check to range_bounds_violation().
 
 Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
-Co-developed-by: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
 Signed-off-by: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
 Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
 ---
- include/linux/bpf_verifier.h |  4 ++-
- kernel/bpf/verifier.c        | 64 +++++++++++++-----------------------
- 2 files changed, 26 insertions(+), 42 deletions(-)
+ kernel/bpf/verifier.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 090aa26d1c98..b129e0aaee20 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -837,7 +837,9 @@ struct bpf_verifier_env {
- 	u64 scratched_stack_slots;
- 	u64 prev_log_pos, prev_insn_print_pos;
- 	/* buffer used to temporary hold constants as scalar registers */
--	struct bpf_reg_state fake_reg[2];
-+	struct bpf_reg_state fake_reg[1];
-+	/* buffers used to save updated reg states while simulating branches */
-+	struct bpf_reg_state true_reg1, true_reg2, false_reg1, false_reg2;
- 	/* buffer used to generate temporary string representations,
- 	 * e.g., in reg_type_str() to generate reg_type string
- 	 */
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index b638ab841c10..fbc29fb96a60 100644
+index fbc29fb96a60..8d7ad5f21ed6 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -17184,10 +17184,6 @@ static void regs_refine_cond_op(struct bpf_reg_state *reg1, struct bpf_reg_state
-  * but we don't support that right now.
-  */
- static int reg_set_min_max(struct bpf_verifier_env *env,
--			   struct bpf_reg_state *true_reg1,
--			   struct bpf_reg_state *true_reg2,
--			   struct bpf_reg_state *false_reg1,
--			   struct bpf_reg_state *false_reg2,
- 			   u8 opcode, bool is_jmp32)
- {
- 	int err;
-@@ -17196,30 +17192,23 @@ static int reg_set_min_max(struct bpf_verifier_env *env,
- 	 * variable offset from the compare (unless they were a pointer into
- 	 * the same object, but we don't bother with that).
- 	 */
--	if (false_reg1->type != SCALAR_VALUE || false_reg2->type != SCALAR_VALUE)
--		return 0;
--
--	/* We compute branch direction for same SCALAR_VALUE registers in
--	 * is_scalar_branch_taken(). For unknown branch directions (e.g., BPF_JSET)
--	 * on the same registers, we don't need to adjust the min/max values.
--	 */
--	if (false_reg1 == false_reg2)
-+	if (env->false_reg1.type != SCALAR_VALUE || env->false_reg2.type != SCALAR_VALUE)
- 		return 0;
- 
- 	/* fallthrough (FALSE) branch */
--	regs_refine_cond_op(false_reg1, false_reg2, rev_opcode(opcode), is_jmp32);
--	reg_bounds_sync(false_reg1);
--	reg_bounds_sync(false_reg2);
-+	regs_refine_cond_op(&env->false_reg1, &env->false_reg2, rev_opcode(opcode), is_jmp32);
-+	reg_bounds_sync(&env->false_reg1);
-+	reg_bounds_sync(&env->false_reg2);
- 
- 	/* jump (TRUE) branch */
--	regs_refine_cond_op(true_reg1, true_reg2, opcode, is_jmp32);
--	reg_bounds_sync(true_reg1);
--	reg_bounds_sync(true_reg2);
--
--	err = reg_bounds_sanity_check(env, true_reg1, "true_reg1");
--	err = err ?: reg_bounds_sanity_check(env, true_reg2, "true_reg2");
--	err = err ?: reg_bounds_sanity_check(env, false_reg1, "false_reg1");
--	err = err ?: reg_bounds_sanity_check(env, false_reg2, "false_reg2");
-+	regs_refine_cond_op(&env->true_reg1, &env->true_reg2, opcode, is_jmp32);
-+	reg_bounds_sync(&env->true_reg1);
-+	reg_bounds_sync(&env->true_reg2);
-+
-+	err = reg_bounds_sanity_check(env, &env->true_reg1, "true_reg1");
-+	err = err ?: reg_bounds_sanity_check(env, &env->true_reg2, "true_reg2");
-+	err = err ?: reg_bounds_sanity_check(env, &env->false_reg1, "false_reg1");
-+	err = err ?: reg_bounds_sanity_check(env, &env->false_reg2, "false_reg2");
- 	return err;
+@@ -2786,8 +2786,13 @@ static void __reg_bound_offset(struct bpf_reg_state *reg)
+ 	reg->var_off = tnum_or(tnum_clear_subreg(var64_off), var32_off);
  }
  
-@@ -17597,6 +17586,10 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 	}
- 
- 	is_jmp32 = BPF_CLASS(insn->code) == BPF_JMP32;
-+	copy_register_state(&env->false_reg1, dst_reg);
-+	copy_register_state(&env->false_reg2, src_reg);
-+	copy_register_state(&env->true_reg1, dst_reg);
-+	copy_register_state(&env->true_reg2, src_reg);
- 	pred = is_branch_taken(dst_reg, src_reg, opcode, is_jmp32);
- 	if (pred >= 0) {
- 		/* If we get here with a dst_reg pointer type it is because
-@@ -17661,27 +17654,16 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 		return PTR_ERR(other_branch);
- 	other_branch_regs = other_branch->frame[other_branch->curframe]->regs;
- 
--	if (BPF_SRC(insn->code) == BPF_X) {
--		err = reg_set_min_max(env,
--				      &other_branch_regs[insn->dst_reg],
--				      &other_branch_regs[insn->src_reg],
--				      dst_reg, src_reg, opcode, is_jmp32);
--	} else /* BPF_SRC(insn->code) == BPF_K */ {
--		/* reg_set_min_max() can mangle the fake_reg. Make a copy
--		 * so that these are two different memory locations. The
--		 * src_reg is not used beyond here in context of K.
--		 */
--		memcpy(&env->fake_reg[1], &env->fake_reg[0],
--		       sizeof(env->fake_reg[0]));
--		err = reg_set_min_max(env,
--				      &other_branch_regs[insn->dst_reg],
--				      &env->fake_reg[0],
--				      dst_reg, &env->fake_reg[1],
--				      opcode, is_jmp32);
--	}
-+	err = reg_set_min_max(env, opcode, is_jmp32);
- 	if (err)
- 		return err;
- 
-+	copy_register_state(dst_reg, &env->false_reg1);
-+	copy_register_state(src_reg, &env->false_reg2);
-+	copy_register_state(&other_branch_regs[insn->dst_reg], &env->true_reg1);
-+	if (BPF_SRC(insn->code) == BPF_X)
-+		copy_register_state(&other_branch_regs[insn->src_reg], &env->true_reg2);
++static bool range_bounds_violation(struct bpf_reg_state *reg);
 +
- 	if (BPF_SRC(insn->code) == BPF_X &&
- 	    src_reg->type == SCALAR_VALUE && src_reg->id &&
- 	    !WARN_ON_ONCE(src_reg->id != other_branch_regs[insn->src_reg].id)) {
+ static void reg_bounds_sync(struct bpf_reg_state *reg)
+ {
++	/* If the input reg_state is invalid, we can exit early */
++	if (range_bounds_violation(reg))
++		return;
+ 	/* We might have learned new bounds from the var_off. */
+ 	__update_reg_bounds(reg);
+ 	/* We might have learned something about the sign bit. */
 -- 
 2.43.0
 
