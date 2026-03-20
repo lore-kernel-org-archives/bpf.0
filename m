@@ -1,54 +1,54 @@
-Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
+Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7EA23CEB8F
-	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 16:01:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92B6E3CE4B7
+	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 16:01:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774022480; cv=none; b=XMa0++Kg3+7aVWU4AWRPIOJS2q0fF8yq6NBiFtjljmsb3sDQEQ5j0jenTBgUKr5bvXZP9GGF3QuXiOgwcCMUI+7qmMFnoPY4cP3xSAf1AtpjfSWHa9/K48Tb4sRFuTkzvf2bKFMiWBjBHFshtrWLaZ5Gc1GJd7eKYVPBdrU9qdc=
+	t=1774022483; cv=none; b=WLMY0X4BjRrE5wRL6+V2747nhywaKUroLirpTtonQRlvCCYJLXoeD2ddVtQF6PVYO/iRMH2fXkY54BhPnEubgGQL5B/lsPVPvnV0Cp9RpbCaFabLOv65ng8YAC5GV/0EOG/6KLwB5diEZK1z6yuTnaEybiPe2RgSrWhDytTc+54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774022480; c=relaxed/simple;
-	bh=npCuQr8NSn+KqZ3wXFU+9qx8xDptk1bFwIoSkHgUiRI=;
+	s=arc-20240116; t=1774022483; c=relaxed/simple;
+	bh=qvip7xD8lU2nv93aISHdb0Yy+GWL3ZEGT+t4OwzRpps=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Lk9FHOTUkYuDDGOys1hOInGxg3dxg4KRsrQm0HQGzcOr/YOf5uKetFeechSAxRqIWhKqqKABKuww7scV/XPuZX425rJye+JrKcCYICEynassOxa8Fmg8dM/uUCACwXX70rOTb5r6rcZvQnRH/ZqJtN6FCREr8CHRWdpLhakHPio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DDxQN51j; arc=none smtp.client-ip=74.125.82.202
+	 To:Cc:Content-Type; b=WSu4rnpzMoYySI3EcMhorLZEJoUq/dr9DPnEc2AEgmP/3XFZXCRVc3Lyg2Vm9nxA3deBJmF+iTGPc6J31JACTYLVsLKgpSE8tlJpZyLB58/LxY3xrAfdk7Su74ncDLeb+a/C+wLMFjiTaY5oWTAldEDT9lTzRpR4w3+0wDlksiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lZ1j+rnf; arc=none smtp.client-ip=74.125.82.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DDxQN51j"
-Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2c0c85c38acso1121924eec.1
-        for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 09:01:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lZ1j+rnf"
+Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2c0ec884bffso640380eec.1
+        for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 09:01:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774022478; x=1774627278; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1774022482; x=1774627282; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SyOziUDRkFpvVzGnSUQxGo0qW7loZJVELoAjOyVArzc=;
-        b=DDxQN51jfDCyHl+YeFzhP68f+C/58v+OWKgUxmyeyza9uIecSVt203qZL4PTU45/0W
-         F8Kt7fJPtgfT+D8ERRDJmDPEGQ/yLeQfHJw72cTDzVqOIN6HbaH9q0utPGJvW4zRAe8g
-         SFnUSC9NIdHnliS6kO8IqSbb8eY6owWE+02n5zMitdfhaDeVMvhLTfTdQ79Qq5ix40Qs
-         xVZXe7LVIMR9aM4Co+mlMrSnQU1wn8gBqf2XkVH7H1O+2bm6tJZYo0Ws1slaxdu6846U
-         YnzKKrOh4HUEv8E9S9c1TmFWV2ZL8jBc/YwTSybcQt6urlGa5+ZAdo2y19s6rUbFmR6W
-         me3g==
+        bh=+yNIjEjBGn9q2o52lVHe2be8XDbIZIbZnOMsnfNZO68=;
+        b=lZ1j+rnffCaCdFSXunUhynIfkw65gVCTJulV8QuGHVxz08TdqEkdvjLwE2lgHJzh0M
+         IDbKzNYT9vMiis+ftSXvghE02S6VNWZIvKEgAHFYbNa5QBGa14E4ThTKEsKO9Axcx49r
+         ovsn+eAjsfXCCjwNkIE1hrhW0zAqX/XubM3GAiK5xZG9Kn39wCK9Zfmr2n1lolJ+2cSZ
+         61ARa+ZogUrWd17+tuJbNfd86ldHSeBCgTTw7B8x6NOk4p19YUE6yCBzSlseSRSoOV4e
+         ebUVmcopEkQOArtR6aW2nTX597jVx3nefT6yB7/dM2i3BB4+N6CBT49rNigNx1DCIu4Y
+         SMTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774022478; x=1774627278;
+        d=1e100.net; s=20251104; t=1774022482; x=1774627282;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SyOziUDRkFpvVzGnSUQxGo0qW7loZJVELoAjOyVArzc=;
-        b=DRaqe5mWIHge3sw6SQtWbArrOb/GsgFfPxDUeNJRXrRGZZ4bo95XohZCQP5IPoOUPn
-         Gt0N2AMZlLF46rcC7T5NKWkuhYTySWtca6zePI3RMs5Ltn/fHKk9wEWrU8o4R8E2JazE
-         dAIzaGHbDgv+tZsFk1ePofFjqCMSTN+i97COkP2WzJqL74AvuSGY9CPJQkPrLdn5uwoX
-         gwzZa8PvCtb4n6+syqhGFS+wySWGHI/zbPgFMdjBpOPgLKVljO8x3Q5piEsnhhY7C8uG
-         UABkfPpIBMxxvbtmW25Cs86BFV2YptkAVKrbz15g14QDuXiXMy8JqpIMZ+vDfpXcPDDS
-         9m8w==
-X-Forwarded-Encrypted: i=1; AJvYcCU0zejRMowTriTqsDhmUXRjQ0LI4ubNtI+hku+AzY1S2798qRNNO/EyAobDXGG4X2JkNX4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAk1FUU8g9MIPcVXBq++s4UIhkD0tPi1kk092J5+FaKqaQzejS
-	sPavPwzej4dnOcEDHhKRT9x1frtehfp9COIAGTL100o7k7ryhxs5gZZwIeiBp5MDbxMYZlDgN9Z
-	n5oNZ19ZPwoTcmA==
-X-Received: from dycpg9.prod.google.com ([2002:a05:7300:dd09:b0:2c0:f659:16d0])
+        bh=+yNIjEjBGn9q2o52lVHe2be8XDbIZIbZnOMsnfNZO68=;
+        b=DfHCkm+oNQxL78kNOPJgnfBch68HhGNUUfrwpFGCiwDc3h8qEnGPXwxdExAdm/Pfn1
+         o+IptX/0shiNKb+SObxg1mYUXBmHT+7/5poRuPe1F7YOfaaCj1384mKsQwMcM/I+AKQk
+         d64hVUsktVIU8jDXwvAIwtBWnTli5CHAVJ62mmKsHrXAmrqto5p2SBvrzih0Y6e7/qIw
+         6RbK/lrCnARLNJZqUYdfXDwKbG6/7zq7FSnFgleWvDtJuhNHReG2Kur190tEPmydXcVc
+         GgXHEH/F6jpBqiQJsDDb3srcyKDTpkVRPjMGxvHbJjoLvyR/uUdrCSyraAU8fl/zp1x0
+         8ZfQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXcDKi8SOmEhJJUUQGwpu3g6DWNirOAtv5wyQwSJi3VM6Yhp+7yCVey0HzXRnApdrGMakY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6i/W684C5bXixoEpwA3FRoig1UZUi37Gvoxprk5OrrfLPEZMa
+	rq8hEtRa7AcXv4dfVh8L4Z/Ar8KzwgrjO2aQhhJLzTeECA4ixkmKwAc2vZqwIXJAfgtOkJEPZkF
+	m3Dt61+om7NKdSQ==
+X-Received: from dybfx32.prod.google.com ([2002:a05:7300:c3a0:b0:2c0:fdbd:f0ce])
  (user=wusamuel job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:693c:2c13:b0:2c1:23d:c732 with SMTP id 5a478bee46e88-2c1096265c1mr2153248eec.14.1774022477845;
- Fri, 20 Mar 2026 09:01:17 -0700 (PDT)
-Date: Fri, 20 Mar 2026 09:00:53 -0700
+ 2002:a05:7301:eab:b0:2c1:564:712a with SMTP id 5a478bee46e88-2c1097b7ab2mr1482908eec.26.1774022481485;
+ Fri, 20 Mar 2026 09:01:21 -0700 (PDT)
+Date: Fri, 20 Mar 2026 09:00:54 -0700
 In-Reply-To: <20260320160055.4114055-1-wusamuel@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -58,116 +58,96 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260320160055.4114055-1-wusamuel@google.com>
 X-Mailer: git-send-email 2.53.0.959.g497ff81fa9-goog
-Message-ID: <20260320160055.4114055-2-wusamuel@google.com>
-Subject: [PATCH v1 1/2] PM: wakeup: Add kfuncs to lock/unlock wakeup_sources
+Message-ID: <20260320160055.4114055-3-wusamuel@google.com>
+Subject: [PATCH v1 2/2] PM: Add config flag to gate sysfs wakeup_sources
 From: Samuel Wu <wusamuel@google.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>
 Cc: andrii@kernel.org, memxor@gmail.com, bpf@vger.kernel.org, 
 	Samuel Wu <wusamuel@google.com>, kernel-team@android.com, linux-pm@vger.kernel.org, 
 	driver-core@lists.linux.dev, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Add kfuncs to lock/unlock for safe traversal of wakeup sources.
-
-Currently, a traversal of wakeup sources require going through
-/sys/class/wakeup/* or /d/wakeup_sources/*. The repeated syscalls to
-query sysfs is inefficient, as there can be hundreds of wakeup_sources,
-with each wakeup source also having multiple attributes. debugfs is
-unstable and insecure.
-
-Adding kfuncs to lock/unlock wakeup sources allows BPF program to safely
-traverse the wakeup sources list. A new structure, bpf_ws_lock, acts as
-an opaque wrapper for the SRCU index. The head address of wakeup_sources
-can be safely resolved through BPF helper functions or variable
-attributes.
-
-Doing the traversal in BPF is significantly more performant, and has an
-output in a format that the user specifies; this solves all the
-drawbacks of current interfaces.
+Add a config flag that gates the creation of
+/sys/class/wakeup_sources/*. This has the benefit of eliminating the
+work needed to create the nodes and corresponding attributes; and
+between kernfs, dentry, and malloc, there are some memory savings
+depending on the number of wakeup sources.
 
 Signed-off-by: Samuel Wu <wusamuel@google.com>
 ---
- drivers/base/power/wakeup.c | 63 +++++++++++++++++++++++++++++++++++--
- 1 file changed, 61 insertions(+), 2 deletions(-)
+ drivers/base/power/Makefile |  3 ++-
+ drivers/base/power/power.h  | 14 ++++++++++++++
+ kernel/power/Kconfig        | 13 +++++++++++++
+ 3 files changed, 29 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-index b8e48a023bf0..7fc12ce125bc 100644
---- a/drivers/base/power/wakeup.c
-+++ b/drivers/base/power/wakeup.c
-@@ -1168,11 +1168,70 @@ static const struct file_operations wakeup_sources_stats_fops = {
- 	.release = seq_release_private,
- };
- 
--static int __init wakeup_sources_debugfs_init(void)
-+#ifdef CONFIG_BPF_SYSCALL
-+#include <linux/btf.h>
-+
-+struct bpf_ws_lock { };
-+
-+__bpf_kfunc_start_defs();
-+
-+/**
-+ * bpf_wakeup_sources_read_lock - Acquire the SRCU lock for wakeup sources
-+ *
-+ * The underlying SRCU lock returns an integer index. However, the BPF verifier
-+ * requires a pointer (PTR_TO_BTF_ID) to strictly track the state of acquired
-+ * resources using KF_ACQUIRE and KF_RELEASE semantics. We use an opaque
-+ * structure pointer (struct bpf_ws_lock *) to satisfy the verifier while
-+ * safely encoding the integer index within the pointer address itself.
-+ *
-+ * Return: An opaque pointer encoding the SRCU lock index + 1 (to avoid NULL).
-+ */
-+__bpf_kfunc struct bpf_ws_lock *bpf_wakeup_sources_read_lock(void)
-+{
-+	return (struct bpf_ws_lock *)(long)(wakeup_sources_read_lock() + 1);
-+}
-+
-+/**
-+ * bpf_wakeup_sources_read_unlock - Release the SRCU lock for wakeup sources
-+ * @lock: The opaque pointer returned by bpf_wakeup_sources_read_lock()
-+ *
-+ * The BPF verifier guarantees that @lock is a valid, unreleased pointer from
-+ * the acquire function. We decode the pointer back into the integer SRCU index
-+ * by subtracting 1 and release the lock.
-+ */
-+__bpf_kfunc void bpf_wakeup_sources_read_unlock(struct bpf_ws_lock *lock)
-+{
-+	wakeup_sources_read_unlock((int)(long)lock - 1);
-+}
-+
-+__bpf_kfunc_end_defs();
-+
-+BTF_KFUNCS_START(wakeup_source_kfunc_ids)
-+BTF_ID_FLAGS(func, bpf_wakeup_sources_read_lock, KF_ACQUIRE)
-+BTF_ID_FLAGS(func, bpf_wakeup_sources_read_unlock, KF_RELEASE)
-+BTF_KFUNCS_END(wakeup_source_kfunc_ids)
-+
-+static const struct btf_kfunc_id_set wakeup_source_kfunc_set = {
-+	.owner = THIS_MODULE,
-+	.set   = &wakeup_source_kfunc_ids,
-+};
-+
-+static void __init wakeup_sources_bpf_init(void)
-+{
-+	if (register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &wakeup_source_kfunc_set))
-+		pm_pr_dbg("Wakeup: failed to register BTF kfuncs\n");
-+}
-+#else
-+static inline void wakeup_sources_bpf_init(void) {}
-+#endif /* CONFIG_BPF_SYSCALL */
-+
-+static int __init wakeup_sources_init(void)
- {
- 	debugfs_create_file("wakeup_sources", 0444, NULL, NULL,
- 			    &wakeup_sources_stats_fops);
-+	wakeup_sources_bpf_init();
-+
- 	return 0;
+diff --git a/drivers/base/power/Makefile b/drivers/base/power/Makefile
+index 2989e42d0161..5933dadc0dd9 100644
+--- a/drivers/base/power/Makefile
++++ b/drivers/base/power/Makefile
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ obj-$(CONFIG_PM)	+= sysfs.o generic_ops.o common.o qos.o runtime.o wakeirq.o
+-obj-$(CONFIG_PM_SLEEP)	+= main.o wakeup.o wakeup_stats.o
++obj-$(CONFIG_PM_SLEEP)	+= main.o wakeup.o
++obj-$(CONFIG_PM_WAKEUP_STATS_SYSFS)	+= wakeup_stats.o
+ obj-$(CONFIG_PM_TRACE_RTC)	+= trace.o
+ obj-$(CONFIG_HAVE_CLK)	+= clock_ops.o
+ obj-$(CONFIG_PM_QOS_KUNIT_TEST) += qos-test.o
+diff --git a/drivers/base/power/power.h b/drivers/base/power/power.h
+index 922ed457db19..364ca5512b4f 100644
+--- a/drivers/base/power/power.h
++++ b/drivers/base/power/power.h
+@@ -125,11 +125,25 @@ static inline bool device_pm_initialized(struct device *dev)
  }
  
--postcore_initcall(wakeup_sources_debugfs_init);
-+postcore_initcall(wakeup_sources_init);
+ /* drivers/base/power/wakeup_stats.c */
++#ifdef CONFIG_PM_WAKEUP_STATS_SYSFS
+ extern int wakeup_source_sysfs_add(struct device *parent,
+ 				   struct wakeup_source *ws);
+ extern void wakeup_source_sysfs_remove(struct wakeup_source *ws);
+ 
+ extern int pm_wakeup_source_sysfs_add(struct device *parent);
++#else /* !CONFIG_PM_WAKEUP_STATS_SYSFS */
++static inline int wakeup_source_sysfs_add(struct device *parent,
++					  struct wakeup_source *ws)
++{
++	return 0;
++}
++static inline void wakeup_source_sysfs_remove(struct wakeup_source *ws) {}
++
++static inline int pm_wakeup_source_sysfs_add(struct device *parent)
++{
++	return 0;
++}
++#endif /* !CONFIG_PM_WAKEUP_STATS_SYSFS */
+ 
+ #else /* !CONFIG_PM_SLEEP */
+ 
+diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
+index 05337f437cca..6945083ab053 100644
+--- a/kernel/power/Kconfig
++++ b/kernel/power/Kconfig
+@@ -202,6 +202,19 @@ config PM_WAKELOCKS_GC
+ 	depends on PM_WAKELOCKS
+ 	default y
+ 
++config PM_WAKEUP_STATS_SYSFS
++	bool "Sysfs wakeup statistics"
++	depends on PM_SLEEP
++	default y
++	help
++	  Enable this for wakeup statistics in sysfs under /sys/class/wakeup/
++
++	  Disabling this option eliminates the work of creating the wakeup
++	  sources and each of their attributes in sysfs. Depending on the
++	  number of wakeup sources, this can also have a non-negligible memory
++	  impact. Regardless of this config option's value, wakeup statistics
++	  are still available via debugfs and BPF.
++
+ config PM_QOS_CPU_SYSTEM_WAKEUP
+ 	bool "User space interface for CPU system wakeup QoS"
+ 	depends on CPU_IDLE
 -- 
 2.53.0.959.g497ff81fa9-goog
 
