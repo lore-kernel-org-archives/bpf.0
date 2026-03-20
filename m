@@ -1,194 +1,138 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28E8C28468E;
-	Fri, 20 Mar 2026 06:22:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BA5D355F5C
+	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 07:26:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773987743; cv=none; b=Ltrfd4mLLWR1HiPufPZqeAv2FAMeDr/MMg4xfLS3bKCPXu72MbhIe0lh3nwo/c/5hkeXcNGM2BMWWoIas8N9+YqtSwXalQP53zucFElMVYvzQ5okr8/vCEspGIVOeuOikQGkH0n0vDzTR4txgV6D8HGv9hU3PCXuC89iGhQzI/g=
+	t=1773991613; cv=none; b=WsYKBdHleadUmNO/SFvTlspeOjNbaMHOoSQ+cZv6NlQFGCAHn1aGSEuPVcs5hVTcMmW+NFf/yAWP4YjKo5tERx/9i0anJr7nF59vaOxbxmZ9jr8s5glyDuOeRrYg3Ql2B8mZNbWPzWmhfm6/9MeePr+moseFhEoFY8Pj7tT0xoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773987743; c=relaxed/simple;
-	bh=Y8KK2D24mfTh3VP389qPc6aHnaY65d5tmzYY9bbkot0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oeK1XEF/YOkH23I9LPEOcLFzqOjP0ipmaqg1Vw1WYaly89Xuz0Q51UX/593HXVju6ac8kMlvZrkPabux8+STUcJzqT4H1aPCA1FeSO2qmKOnuVromqxvlLamLOfrx3l2RsLwQnS+ABm460pBkO1a99jOlYIod6DEkW0/7Otqjbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h4EfhusW; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1773991613; c=relaxed/simple;
+	bh=vMQdNvrRme6yVeAJXlE2gsl4gWcmXQsoRwYJ3tDkr/8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mR/sFwPVUnSDmIu0NbsR10nVh5uJNig/XnTfclW4ghka9TvH9oBm+FG6nhN5LzgeGI9sjN0UtuYV5oVzMBlB5750eDfaCsdu5ZbcChvT1KC71SG75PqaxgCQEYfMJG5/s/8fvnkExBwDioXetID5FJSIfw6bAYtA132lmq3PhQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lo8JvIkh; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h4EfhusW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773987741; x=1805523741;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Y8KK2D24mfTh3VP389qPc6aHnaY65d5tmzYY9bbkot0=;
-  b=h4EfhusWG7Xv5n5jNGAfLkHsFTHf2c7uDvDcZxTt9ny9wd/0F7vwXL3e
-   DYS5nGUaVsov7XYXMmbCw1cX9xblmbqQ5kCWhbgLcqTS5WOOfU3uMVYye
-   So2n28/S9yafKo0lpurjuDV33zF+zRpp2x2D07r7FB91g37VmBRpB55/p
-   FoaywztCp98Jwo+JEDC4zDlrl0rHPxlKwPIxurI1R6xuj0gWZJe7ZVyp1
-   h4Bnk+VSe2niCekwubKP50VwtpBOBUaOEM4acEHh50AjZnLxRcSjsczSV
-   rnpMi5XxhW2oiDDQdbt/rHtEPgSFq+vqkFQhe4TPWBijWtDfRlmDRd4Fk
-   Q==;
-X-CSE-ConnectionGUID: 6usCPMfqTsmFWAotCy6zPg==
-X-CSE-MsgGUID: 1q2oHitgQgqjwXnQ5VmalA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11734"; a="77676620"
-X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
-   d="scan'208";a="77676620"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2026 23:22:20 -0700
-X-CSE-ConnectionGUID: 3ZKtYmxhQTCMSaPmGSYtPw==
-X-CSE-MsgGUID: UvuJIwaHSy2DE3wUa67I/Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
-   d="scan'208";a="218576883"
-Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2026 23:22:19 -0700
-Date: Thu, 19 Mar 2026 23:22:06 -0700
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: x86@kernel.org, Nikolay Borisov <nik.borisov@suse.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	David Kaplan <david.kaplan@amd.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Alexei Starovoitov <ast@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lo8JvIkh"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-48700b1ba53so1523295e9.1
+        for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 00:26:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773991608; x=1774596408; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=n3KJVSi9z2Jj/Hmyk1wzxgMI7Rqoa0UBGy/TFgOK0dk=;
+        b=lo8JvIkh99/vtEmaRv0YbTHuIgkZXzP2yjuZfYhhyA8bQjWfIObyvcVgyOWT3e2BqS
+         iFwoPn89scvSGd8fW3/1C6xb9i5XdwvraO40t3xYawzlrmm4aApfyoG4Jl+cJrJWgH08
+         nFwp1JbvdLiGn8KZVQ6VSYH+tuQTHZGXyEaj+eQCbStSKkuMDS/ZFIUErKLOLkWM9St1
+         2WwPjA4RzzlrTzJ1dnNLU6Zjdb4QuMF7crm3IwF1xY0UrOYfqRWuW7LsPhOtlkN/N5ry
+         zNTLTM3nMNGojr5044DICXF0xu+yMAkHU3sjoJ0ib24j1MoYK/tYbR10JJP2GSu0vWiG
+         PPBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773991608; x=1774596408;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n3KJVSi9z2Jj/Hmyk1wzxgMI7Rqoa0UBGy/TFgOK0dk=;
+        b=ipgsEIqLxGI7BIfeLYnDzlBiujDVn71guQmFD7Mj8evQZGWdCbXkLJv6nvM1QBH0Jo
+         2y7Khn93EOtl1J0EOApNNVozZW0cRs/LDadoN0aaFU27FZWqf4z/EXu2PgbJpVbI+D+T
+         S3C5EkKg5xl9hVSIGMGV63AFFRWITwqoFrRBAkQ6YIGhwkyOYdug6USXyONIWw7NXLn6
+         Ngl0+Y9tf5gFTaUpLAR99EAv1xcsCFWp20g9E4mGNqgoHH67jZZYbXiQYsF0zi7qxTJs
+         8v/+bNzxws6kWHdnShxKkT0TKL7bioLQopBEovH6VsPN/p++fhDQo9wfpeigiZ+DWEYW
+         HPxg==
+X-Forwarded-Encrypted: i=1; AJvYcCWSub5v4PRpAoq0II2VurpxO869wh73TcrCpaT+6bKnNsjrAayodOLhasYt7gFzt0gTUxc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBzUR7S5T6KOWp1N4glR6oNewgCxrlOLYTWq/BSp7B04iFopmJ
+	K9ue7hsKJAC2bG6ha/crt9pmfxeISdT6muACoPnpjDantt8oMW/OkndkAzS41HBE
+X-Gm-Gg: ATEYQzxNcBfheuUIdPEynHcn/2Rj9BXOCpBSovMpxKyxUUpe/cjVJIvZz27vJOsk9+s
+	TrkMU3okLXxWETwmKBtX2ywX4mIWEMOdwZ5ojTc3B0PT6maxHz9vBBQaCg9go0FG6mPV5focfl4
+	qu4yNr9l8iXhQr6czSVYTv/y8zEpkboXa8N185fDyo2i99UCXChZXk1UehE9wNZY0Adt0aejoqZ
+	Rd2c59Val2AEe7oRbHQnqVF9JhLYcLNIYmlj10bVTRiG9YyyfRRyOM1jYXwdGO1fa1V4usWyr4C
+	acaRIPPn375vunuEFEKo7ZG0Bk/SVT3FhaYB9aYBNHmkSPVzoaRnXQCkt9rXxSRGRhWPYbXOgq+
+	gj6ZPbDjSYyMZpfiLMGG8aqp4OBvN35l/l+jZ6r3vcku6hoDVRXDqO/m0WJEwwU/nphwqYNjB92
+	x/ZpjlEp1jOUU//HSdgtRKWjiJGGmkVFITFdm4e3q5yt7K1kfSkeE9D8DdoEoyqERhmPIK2lZDq
+	RVNyF8jj0Wt
+X-Received: by 2002:a05:600c:698e:b0:480:3ad0:93bf with SMTP id 5b1f17b1804b1-486fee1af00mr24751375e9.24.1773991608143;
+        Fri, 20 Mar 2026 00:26:48 -0700 (PDT)
+Received: from dohko.chello.ie (188-141-5-72.dynamic.upc.ie. [188.141.5.72])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486fe879d37sm14871185e9.1.2026.03.20.00.26.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Mar 2026 00:26:47 -0700 (PDT)
+From: David Carlier <devnexen@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Laight <david.laight.linux@gmail.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	David Ahern <dsahern@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org, Asit Mallick <asit.k.mallick@intel.com>,
-	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v7 07/10] x86/vmscape: Use static_call() for predictor
- flush
-Message-ID: <20260320062206.bdrnmnvho6lhmejw@desk>
-References: <20260319-vmscape-bhb-v7-0-b76a777a98af@linux.intel.com>
- <20260319-vmscape-bhb-v7-7-b76a777a98af@linux.intel.com>
- <20260319205802.GJ3738786@noisy.programming.kicks-ass.net>
- <20260319213421.br6na4dulrjm6eke@desk>
- <20260319214409.GL3738786@noisy.programming.kicks-ass.net>
+	davem@davemloft.net,
+	Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org,
+	bpf <bpf@vger.kernel.org>,
+	David Carlier <devnexen@gmail.com>
+Subject: [PATCH bpf-next] bpf: use RCU-safe iteration in dev_map_redirect_multi() SKB path
+Date: Fri, 20 Mar 2026 07:26:45 +0000
+Message-ID: <20260320072645.16731-1-devnexen@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260319214409.GL3738786@noisy.programming.kicks-ass.net>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Mar 19, 2026 at 10:44:09PM +0100, Peter Zijlstra wrote:
-...
-> > With _TRAMP, KVM complains:
-> > 
-> >  ERROR: modpost: "__SCK__vmscape_predictor_flush" [arch/x86/kvm/kvm.ko] undefined!
-> 
-> Ah, tricky. Yeah, this would need to be solved differenlty. Perhaps wrap
-> this in a helper and export that?
+The DEVMAP_HASH branch in dev_map_redirect_multi() uses
+hlist_for_each_entry_safe() to iterate hash buckets, but this function
+runs under RCU protection (called from xdp_do_generic_redirect_map()
+in softirq context). Concurrent writers (__dev_map_hash_update_elem,
+dev_map_hash_delete_elem) modify the list using RCU primitives
+(hlist_add_head_rcu, hlist_del_rcu).
 
-bool vmscape_mitigation_enabled(void)
-{
-       return unlikely(static_call_query(vmscape_predictor_flush));
-}
-EXPORT_SYMBOL_FOR_KVM(vmscape_mitigation_enabled);
+hlist_for_each_entry_safe() performs plain pointer dereferences without
+rcu_dereference(), missing the acquire barrier needed to pair with
+writers' rcu_assign_pointer(). On weakly-ordered architectures (ARM64,
+POWER), a reader can observe a partially-constructed node. It also
+defeats CONFIG_PROVE_RCU lockdep validation and KCSAN data-race
+detection.
 
-This is definitely simpler option, but adds an exported function and an
-unnecessary call to it.
+Replace with hlist_for_each_entry_rcu() using rcu_read_lock_bh_held()
+as the lockdep condition, consistent with the rcu_dereference_check()
+used in the DEVMAP (non-hash) branch of the same functions. Also fix
+the same incorrect lockdep_is_held(&dtab->index_lock) condition in
+dev_map_enqueue_multi(), where the lock is not held either.
 
-> Or use the below little thing and change it to
-> EXPORT_STATIC_CALL_FOR_MODULES(foo, "kvm"); or whatnot.
-> 
-> > Probably one option is to somehow make sure that the key can be set to
-> > __ro_after_init? I don't see a use case for modifying the static_call() after
-> > boot.
-> 
-> So we have __ro_after_init for static_branch, but we'd not done
-> it for static_call yet. It shouldn't be terribly difficult, just hasn't
-> been done. Not sure this is the moment to do so.
-> 
-> 
-> ---
-> diff --git a/include/linux/static_call.h b/include/linux/static_call.h
-> index 78a77a4ae0ea..b610afd1ed55 100644
-> --- a/include/linux/static_call.h
-> +++ b/include/linux/static_call.h
-> @@ -216,6 +216,9 @@ extern long __static_call_return0(void);
->  #define EXPORT_STATIC_CALL_GPL(name)					\
->  	EXPORT_SYMBOL_GPL(STATIC_CALL_KEY(name));			\
->  	EXPORT_SYMBOL_GPL(STATIC_CALL_TRAMP(name))
-> +#define EXPORT_STATIC_CALL_FOR_MODULES(name, mods)			\
-> +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_KEY(name), mods);		\
-> +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_TRAMP(name), mods)
->  
->  /* Leave the key unexported, so modules can't change static call targets: */
->  #define EXPORT_STATIC_CALL_TRAMP(name)					\
-> @@ -276,6 +279,9 @@ extern long __static_call_return0(void);
->  #define EXPORT_STATIC_CALL_GPL(name)					\
->  	EXPORT_SYMBOL_GPL(STATIC_CALL_KEY(name));			\
->  	EXPORT_SYMBOL_GPL(STATIC_CALL_TRAMP(name))
-> +#define EXPORT_STATIC_CALL_FOR_MODULES(name, mods)			\
-> +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_KEY(name), mods);		\
-> +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_TRAMP(name), mods)
->  
->  /* Leave the key unexported, so modules can't change static call targets: */
->  #define EXPORT_STATIC_CALL_TRAMP(name)					\
-> @@ -346,6 +352,8 @@ static inline int static_call_text_reserved(void *start, void *end)
->  
->  #define EXPORT_STATIC_CALL(name)	EXPORT_SYMBOL(STATIC_CALL_KEY(name))
->  #define EXPORT_STATIC_CALL_GPL(name)	EXPORT_SYMBOL_GPL(STATIC_CALL_KEY(name))
-> +#define EXPORT_STATIC_CALL_FOR_MODULES(name, mods)			\
-> +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_KEY(name), mods)
->  
->  #endif /* CONFIG_HAVE_STATIC_CALL */
+Fixes: e624d4ed4aa8 ("xdp: Extend xdp_redirect_map with broadcast support")
+Signed-off-by: David Carlier <devnexen@gmail.com>
+---
+ kernel/bpf/devmap.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-This plus extending it to support EXPORT_STATIC_CALL_FOR_KVM() is probably
-a better solution. Please let me know which one you prefer.
-
-diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
-index a568d8e6f4e8..89c4964c8560 100644
---- a/include/linux/kvm_types.h
-+++ b/include/linux/kvm_types.h
-@@ -13,6 +13,9 @@
- 	EXPORT_SYMBOL_FOR_MODULES(symbol, __stringify(KVM_SUB_MODULES))
- #define EXPORT_SYMBOL_FOR_KVM(symbol) \
- 	EXPORT_SYMBOL_FOR_MODULES(symbol, "kvm," __stringify(KVM_SUB_MODULES))
-+#define EXPORT_STATIC_CALL_FOR_KVM(symbol) \
-+	EXPORT_STATIC_CALL_FOR_MODULES(symbol ,"kvm," __stringify(KVM_SUB_MODULES))
-+
- #else
- #define EXPORT_SYMBOL_FOR_KVM_INTERNAL(symbol)
- /*
-@@ -23,6 +26,7 @@
- #ifndef EXPORT_SYMBOL_FOR_KVM
- #if IS_MODULE(CONFIG_KVM)
- #define EXPORT_SYMBOL_FOR_KVM(symbol) EXPORT_SYMBOL_FOR_MODULES(symbol, "kvm")
-+#define EXPORT_STATIC_CALL_FOR_KVM(symbol) EXPORT_STATIC_CALL_FOR_MODULES(symbol ,"kvm")
- #else
- #define EXPORT_SYMBOL_FOR_KVM(symbol)
- #endif /* IS_MODULE(CONFIG_KVM) */
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index 5f102af4921f..0abdb54f7510 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -145,7 +145,7 @@ EXPORT_SYMBOL_GPL(cpu_buf_idle_clear);
- DEFINE_STATIC_KEY_FALSE(switch_mm_cond_l1d_flush);
+diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
+index 3d619d01088e..cc0a43ebab6b 100644
+--- a/kernel/bpf/devmap.c
++++ b/kernel/bpf/devmap.c
+@@ -665,7 +665,7 @@ int dev_map_enqueue_multi(struct xdp_frame *xdpf, struct net_device *dev_rx,
+ 		for (i = 0; i < dtab->n_buckets; i++) {
+ 			head = dev_map_index_hash(dtab, i);
+ 			hlist_for_each_entry_rcu(dst, head, index_hlist,
+-						 lockdep_is_held(&dtab->index_lock)) {
++						rcu_read_lock_bh_held()) {
+ 				if (!is_valid_dst(dst, xdpf))
+ 					continue;
  
- DEFINE_STATIC_CALL_NULL(vmscape_predictor_flush, write_ibpb);
--EXPORT_STATIC_CALL_GPL(vmscape_predictor_flush);
-+EXPORT_STATIC_CALL_FOR_KVM(vmscape_predictor_flush);
- 
- #undef pr_fmt
- #define pr_fmt(fmt)	"mitigations: " fmt
+@@ -747,7 +747,6 @@ int dev_map_redirect_multi(struct net_device *dev, struct sk_buff *skb,
+ 	struct bpf_dtab_netdev *dst, *last_dst = NULL;
+ 	int excluded_devices[1+MAX_NEST_DEV];
+ 	struct hlist_head *head;
+-	struct hlist_node *next;
+ 	int num_excluded = 0;
+ 	unsigned int i;
+ 	int err;
+@@ -787,7 +786,7 @@ int dev_map_redirect_multi(struct net_device *dev, struct sk_buff *skb,
+ 	} else { /* BPF_MAP_TYPE_DEVMAP_HASH */
+ 		for (i = 0; i < dtab->n_buckets; i++) {
+ 			head = dev_map_index_hash(dtab, i);
+-			hlist_for_each_entry_safe(dst, next, head, index_hlist) {
++			hlist_for_each_entry_rcu(dst, head, index_hlist, rcu_read_lock_bh_held()) {
+ 				if (is_ifindex_excluded(excluded_devices, num_excluded,
+ 							dst->dev->ifindex))
+ 					continue;
+-- 
+2.53.0
+
