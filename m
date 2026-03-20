@@ -1,143 +1,102 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-wm1-f68.google.com (mail-wm1-f68.google.com [209.85.128.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DF4F2E3397
-	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 02:05:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8465727B32C
+	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 02:41:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773972317; cv=none; b=ju+dgUomh2xJuMRNFMOb/E8XATyZRYE0C9iGsUJkF/53foQT+CysIqeKB93EBhYImYKIEfLbpLuEpe8nVOLQZV5P8rHlUHY/4agmXgDJwI1YrNYtBjm1tXnk5UmykDzLMS5JNCnHn6xvznSM3TmeF+RFYKsTO2+U280+M2ackFg=
+	t=1773974492; cv=none; b=ByrNm2ynV9O5wuNtpPjdoaz8gzQVx08LSyHTilAlG+Yhr11NMvMZgdn601BXqwbVmiXIimWWLbHBOvMw9izGnvs3UmCjuj5Pd9OGzsRC2FY1PEafVLIeKxz0a459fdUUaqxxM9xS1n8IwRoce2rhMPpLm+tu3cHQhASd7cky45M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773972317; c=relaxed/simple;
-	bh=XWg5CsmKsYQWUJpjwNp2BHTXKxRKAFJiDshrXDs7TKM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jleMvF3+7w05uaInUTwtBuSySRmIdafu1V7HaoIV+tPlpTZksMOW9ndVtndvlmrpLBgzV9TRWU8T+OU+ki0xX3aUvIAOaoPAUXyGU3e+hrPx9MjzxTHY6+7kdPIURb38uZS/V/lKuweLWC5hwwHLrn+S6wpwjHeQV3Mwx1Y1mOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=QdpMWkqH; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1773974492; c=relaxed/simple;
+	bh=gx39cXvKf6XMjyeYPfkYwFWnZEfzQCZYY5Fl2/L3sR4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=eFFNlAcf6pzQg4VEw+0xSQNkXL1r41E1Op36d1nUvcvUDlvpT2u3j/Dy8vfv5dqV7LBrwV8zjJQb6QmcozxgNygmYzMVIZfvRbOwcEwi9ePIwtkf/wAnG8qFtfctlC7bYEx8noF9/kuP4JQNQcxX2zukxLGPU0FFjl6BfEZsyfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B0pXYUYZ; arc=none smtp.client-ip=209.85.128.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="QdpMWkqH"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4852b81c73aso922815e9.3
-        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 19:05:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B0pXYUYZ"
+Received: by mail-wm1-f68.google.com with SMTP id 5b1f17b1804b1-486fd3a577eso1013505e9.1
+        for <bpf@vger.kernel.org>; Thu, 19 Mar 2026 19:41:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1773972309; x=1774577109; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HoYH+bYRf8uzbuAoVDkiQBQxTKCdXno8PRObyskaQJo=;
-        b=QdpMWkqHyZX7XVF6hicMYvNGIubYo1SEVP+9qcrcx1Oa9p50uZhcYlo+LGeQJueL+K
-         TGbQFBzoay7rxciaYySXV2z4ycyo7e5udfm3SeC4XwWRD/zDuHwfTRpk0cJU/3rPyZdX
-         /FPr3pqF+So6uzXRozPGbfA8+jTBzTzdNi9nlufjYcl6Os0X4QJhQVcryKcjrUVjzT5K
-         2xhBRKnlSuvJ2RRIiPmejYn8ksMxpE0zwokP7CvUyS23IEnF0C5Qthnqle8tHVm/b4n6
-         D6er4TdTpoYNcDZWfECPSUtQt8d4bH49PcTtc0kdGuhvfsvMJr4haadNfTZlEBQ4yuVd
-         8qLQ==
+        d=gmail.com; s=20230601; t=1773974490; x=1774579290; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hA380pCFY/heFJYh+oChUrDKsjPjqMAgTd7ssSWj/lA=;
+        b=B0pXYUYZHn2lpMNyMxrr98KJgzTLZ1lrdrurpNXLcDpA61uOScy5TbfFlwAq7cEmtG
+         3NrASE/i1i2VATLZN5Tw/aAcnVUxwVtasg3PNKHGgllDacoEwiSMGabsypcMjbuIAFoM
+         vXw4WB+7TFjMZZ9JAwvvNrNO7Lnq/Vo/YSijzoNfg2zwm6RDVrWbLs0w7kyGy02G2wUl
+         vfH2f1yiEYlTVyuXxeuaYd5o8hJ325auK3PlqZfZvKb+XeL20UuT85OX0O4S/ypAi+Uq
+         ybJA0+dOzYw+Cd5hCWwZ0VEo0dPF/6EJL0DxeX1PXQ1BCWCzWgFvlBm3tTRVcT55eZ7f
+         DsDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773972309; x=1774577109;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HoYH+bYRf8uzbuAoVDkiQBQxTKCdXno8PRObyskaQJo=;
-        b=UXnrnK1sIYMhKzlvyH7q9ehtnYxW3ld9FR8flHVO0t5T0ZdbqH4aUub51ImdCSUhS2
-         KEcRZXoiefUTBJSGwjKzh1mAFSJEue+Rhg9MhrI1NZgyli+Yfw1Q323oII7JI2mf3S1k
-         QgNi1tlfvJ6ULwt+SvmRR7myVMKg0uxBLHMYsFAsHrtZj8/8QYHpGPhiKxc+skFWigSi
-         btcai+70otBVHrCITpn1QoYYtXUQSCWgp4dXpX2r0XV3CDZ7/qQWT8gXiUZSBKciSHq6
-         9PDp9J5rk5H/IkDwn3XqNe/Zfhosv0DaClwEuc/FV2tQVn4cxcIFHbd3Nc/oUgIIJi11
-         J9OA==
-X-Forwarded-Encrypted: i=1; AJvYcCXhVlsfaj5qKVUTO1h8QIysQcU0cUJ9H1btUtHHxOcVXQzPuPeRAKUisaZsY1iRNGUe4ms=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxaSsjBiE95hG2afqU1Em8+8NKiCxoOK+eNXl9NafREGK2dOtv4
-	szMmj0sAqoglXjxF6FVKgITWbwkdHXLzX3eQTgQNfS1KNV2pGT8lAeKtO2nWziWRrB0=
-X-Gm-Gg: ATEYQzwBV4F6UnE8KCDqaY2sm4E0us0CE9JcWqW+a6YA/O00zIo41Gha8uJnVyLySN/
-	d1L8xzOu+qFkjQE6Yfz3ZdAkpIt5M8s2SvgXB03BQBypXywOEJXurwlb7QHeqlmyAHPZryOFYyL
-	bV8d0Kx/ISL3nbHn65bY0lG+tiOSaaygutyFuhfuL/Psb9YLkGE9bG7nP7lzBg1JhUkTxj/sDVC
-	9Vjv+7lMS+/Bmy2KB/SJnpGIjs9wMv5HorwLkhquTOZO8UFH65WWBvoksZYZKbnvz2e82qOqi0w
-	oOziEIhs9y+F7cDd5ad9ZkgFnN+ZcnzgU9nWgO3zuR2AHwGYAfZABnNvh/fVQbSmKY4fVe/r12j
-	WOKN716V+wFUenMld21ZuNKvCZSTUz8Z2oz9O5FE8xcHWw7lOZPTGEKNF5pmChDbr6+AFErOWEo
-	CKeLAM89ExrkQpd+RLIw==
-X-Received: by 2002:a05:600c:3b07:b0:485:419c:4eab with SMTP id 5b1f17b1804b1-486fedab40emr16095735e9.6.1773972309228;
-        Thu, 19 Mar 2026 19:05:09 -0700 (PDT)
-Received: from u94a ([2401:e180:8dfc:66a:a219:10d5:f609:370a])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b083516ae1sm5227305ad.13.2026.03.19.19.05.05
+        d=1e100.net; s=20251104; t=1773974490; x=1774579290;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=hA380pCFY/heFJYh+oChUrDKsjPjqMAgTd7ssSWj/lA=;
+        b=k6GuN0sUlmL862zRV0vjQKi2u6PFtw6AmhD4A7ptG8J0PPcacGBbqdHUQA+FMcPbuy
+         k0s+R9N/SPVn3wQdidDR0lYXWaF0Mzk+kN/0t8+TC2g02oRC9nx0mG1Fo2tWQ7k3uAUc
+         uXnLnqPZNEL/FYiyBVSC7O1gENEQYzkB7wWalARFkhVt78iP8sufuuF6Ryoui+N0qaZH
+         f2RHubWpoQXHeRc5I9ekAYT61xKYtcJQpSjFCuF94Sl4VMw+a0zcWagvn3hnJBCczIZ4
+         jUBXkSfxmjoLeUEMuNy4b/cJoyDY/j2T6mTGCIlu56Zjwb14G7zL6DPf97fAbZmckcGo
+         9X1w==
+X-Gm-Message-State: AOJu0YzUguNhiHxGuXofcbDBFFh03FIWaoDJA8i+MVzV+J409eYSRdIJ
+	aIOwz6LHDef3d++NdHQpqXeZVkSxfArlNu8kCOgQuK8W5S1zclvmJFP1
+X-Gm-Gg: ATEYQzxAK2TBMUbbRWbV1i7CSWenRuQlZYyfgUkOIo/Md4JVy6F5eFla6JYMTCLIYgl
+	6N/vN67DLwobFDl2uV/lea6wu6eztAsfNuupvYDoPWL7mJu4i6Tnw8NwITx7tOoX1e5Mr+1Rrni
+	9lRMHzAxi4hlkS3b8ro/nrXyfm8gVG/UZQUTPsNS8aKUj/hXWoGiEqp4mumq3Ug0B8g99lL9sGL
+	XwUKbyS9QTYKtSBDEPs66jFAWWIz/AnymUYx12/7r013TTpin9wvciFcAOscVtyflzzFfyI5lAS
+	VdPs9GmszScd4N05PGrbOES7mJ3Ck3pbWdM/pKvGs09T50M28ffgV8CVo8YEbW4I0nDef2EHiNK
+	aWHozUy1bfQVNveKix/AlOUUHjIii1wyd45buwK7ToIHO2FyTVtqXErFj0CVFXNPlavjeJkXmAA
+	KCXFQ+EBjpu7bvcworPn0A7LvSU6Hx8dJLR1rgNSkbD6JtUwF6nA==
+X-Received: by 2002:a05:600c:c111:b0:485:35ee:f836 with SMTP id 5b1f17b1804b1-486febbc310mr13756255e9.2.1773974489489;
+        Thu, 19 Mar 2026 19:41:29 -0700 (PDT)
+Received: from lima-ubuntu.hz.ali.com ([47.246.98.210])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b644ae016sm2416039f8f.4.2026.03.19.19.41.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2026 19:05:08 -0700 (PDT)
-Date: Fri, 20 Mar 2026 10:04:55 +0800
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: Hao Sun <sunhao.th@gmail.com>
-Cc: Paul Chaignon <paul.chaignon@gmail.com>, 
-	Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>, bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, eddyz87@gmail.com, john.fastabend@gmail.com, 
-	martin.lau@linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] bpf: Simplify tnum_step()
-Message-ID: <q7i6qgoth3735r5duljfnrg2tvh4kuz3fdsjxdlxdkkeanpmgk@egmiv35lh4p6>
-References: <20260318171906.53174-1-hao.sun@inf.ethz.ch>
- <atwy3evusj7cjafp3fnrzgimj3dimcyuxasohegjc2enplb3cb@4l7i5hoe2ify>
- <CACkBjsbcv4woDZZ0_BA4idBwfLPXNTX7BzJMXTH54zq_8F0BuA@mail.gmail.com>
- <abvDSjl633b_Hb1O@mail.gmail.com>
+        Thu, 19 Mar 2026 19:41:28 -0700 (PDT)
+From: Qing Wang <wangqing7171@gmail.com>
+To: syzbot+ca51b6e7e751edd6bbfd@syzkaller.appspotmail.com,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	syzkaller-bugs@googlegroups.com
+Subject: [syzbot] [bpf?] [trace?] KASAN: slab-use-after-free Read in bpf_trace_run4 (2)
+Date: Fri, 20 Mar 2026 10:41:16 +0800
+Message-Id: <20260320024116.3421185-1-wangqing7171@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <69bc31f8.050a0220.18f14c.0051.GAE@google.com>
+References: <69bc31f8.050a0220.18f14c.0051.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <abvDSjl633b_Hb1O@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Mar 19, 2026 at 10:35:06AM +0100, Paul Chaignon wrote:
-> On Thu, Mar 19, 2026 at 10:01:31AM +0100, Hao Sun wrote:
-...
-> > > > +     carry_mask = (1ULL << fls64(d & ~t.mask)) - 1;
-> > > > +     inc = ((d | carry_mask | ~t.mask) + 1) & t.mask;
-> > >
-> > > Maybe break out the calculation of inc, give it a name (next_submask?),
-> > 
-> > Maybe we can break this down as:
-> > 
-> > d = z - t.value;
-> > carry_mask = (1ULL << fls64(d & ~t.mask)) - 1;
-> > filled = d | carry_mask | ~t.mask;
-> > inc = (filled + 1) & t.mask;
-> > 
-> > `next_submask` is not precise, as we ored `~t.mask` into it.
+There was a fix patch [1] for this issue, and it is the same as syz-AI's
+analysis.
+ [1] https://lore.kernel.org/all/20260304092345.233522-1-wangqing7171@gmail.com/T/
 
-I was thinking of something like this: 
+Some similar issues which have syz reproducer:
+  https://syzkaller.appspot.com/bug?extid=9ea7c90be2b24e189592
+  https://syzkaller.appspot.com/bug?extid=b4c5ad098c821bf8d8bc
 
-	static inline u64 refactored(u64 mask, u64 d)
-	{
-		u64 carry_mask;
-	
-		carry_mask = (1ULL << fls64(d & ~mask)) - 1;
-		return ((d | carry_mask | ~mask) + 1) & mask;
-	}
-
-	u64 tnum_step(struct tnum t, u64 z)
-	{
-		...
-		d = z - t.value;
-		inc = refactored(t.mask, d);
-		return t.value | inc;
-	}
-
-For me I find having to grapple 1) new way to calculate tnum_step and 2)
-finding a submask of tmask > d, both at the same time rather difficult.
-Hence the suggestion for separation.
-
-> > It's always hard to name the intermediate result :)
-
-Indeed, and let me not even try to name the function here.
-
-> > > and have it as preceding patch? It seems generic enough that I thought
-> > > would have been implemented already, but bitmap_scatter() was the
-> > > closest I could find.
-> > >
-> > > Perhaps could be submitted to include/linux/bitops.h in the future.
-> > 
-> > The calculation above is direct, adding a bitmap helper intros an indirection.
-> > For me, it means I would have to check out the meaning of the helper
-> > and then get back to understanding the algorithm.
-> 
-> I think I agree with Hao in this case. If we can reuse existing helpers,
-> great, but otherwise it's short enough that it's probably easier to keep
-> inlined here.
-
-Okay, I can now slightly see that it does introducing indirection, make
-sense to keep as-is.
-
-Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Welcome to review and comment this patch.
+--
+Qing
