@@ -1,207 +1,279 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB31E3C3447;
-	Fri, 20 Mar 2026 15:57:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.10
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774022264; cv=fail; b=MYFZeF0Z0j6h58DzfPwWj7AgBMe9fZNgYP+jEXxLrIv/buwlVwzaoJT+eJCE/+JxnL1lBi/z608JbENhPx1/Dlgs/Zmp66Gdzu5TB23eru4q3ruWv2XHv3M/mQKC63fDCZqU2ciDG53GQbwvTpDS9DoeQPV1xtQnJ/9sc7921og=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774022264; c=relaxed/simple;
-	bh=VxsDSwobM1P2hkPNe409EUTi3EtM5ImGN8bPIBlKWBE=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=lIv1l9ZHkCwksbucSJi8trX9wlBUotINJpHNcllmMl/bO0z4auDZpl9mGYVql1i8SWJ9Th+4EqE6ylXO3Lze6nLF+iGkssTIew1pHlxpuQkIPzZb6thrwtlQF3kEmdFGzED/zmEE+wMpHduhzTf0/3ygwRwdgjlsGoEZGRB567Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S1pOgfGH; arc=fail smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 840473CD8C3
+	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 15:59:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774022396; cv=none; b=tCblCVNTuIlsyRS0Yq2CMSbYBp1KpC4vuzDYAOA/lcWfvCui5GFMmJ5ejIQR/0L+UNJVOQrPH+zQjcfhfat5zJYb9vnt8IN2FTPUrEpANRSeZHOA0Vh/WymLhyqy7RXSdCjjUrJK+ewr80DgOcG+8IvjDg+ppd9looPpTumtV80=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774022396; c=relaxed/simple;
+	bh=SZQDr54yVRfV4wwz6bNgifDNdW6PQuYG77hQb2kbP8Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L/QMjhtCH3nG6idMml/4pOBGSJaiWd6g4P4RFt8PoxyIBAtHtHQUI5MmLeXXCMWHZVab6e+5mr5qzu9Z3Tcefztg9ActJVtGOebYUNreaKU9KYtQjbE3jdApizMrdMo6xgNjjZZCxn8tVVhYKofTZJOSK/TKKUGqeDwwcMIhcyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oXg8jkgR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S1pOgfGH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774022263; x=1805558263;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=VxsDSwobM1P2hkPNe409EUTi3EtM5ImGN8bPIBlKWBE=;
-  b=S1pOgfGHPK7Ls0gG34NpChQsfJeUyDk/rav19IVPusnJRJiFtnTJgu9B
-   SMbNqveDXr6E3AUJ0UBVavITHttMzqnn1JhZT66n2eTCgcdIJDam8paWy
-   fII4felVWENS+flgZbOkqqHpD9epmeXrYe6ceUI5skORMBo25Qun7BeDG
-   ZbC4dGMwPF0UCfV/Jj+wzv9lzOxc9BnEccTljbqpRtehabji4/8ChY0O5
-   0/QX06gwmY1AC8ywGywUqjQ8RgOOYSa8s3mXnJFnErkoZQupP2/gOIM+I
-   KFtyApE5cn8VldbM22DFKcm3nhIzgPw2b5vvGl2znSHi7EbtcPAUiC6xF
-   w==;
-X-CSE-ConnectionGUID: qAOhyUA1Q2+cUOSrQVjh/A==
-X-CSE-MsgGUID: BAC25lZhSCaalUKPUM4+0w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11735"; a="92494876"
-X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
-   d="scan'208";a="92494876"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2026 08:57:42 -0700
-X-CSE-ConnectionGUID: E/sdFPzHRXy4TeIpYgX4ww==
-X-CSE-MsgGUID: HT4umgjiTo6BFes8xyw+LQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
-   d="scan'208";a="261227795"
-Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
-  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2026 08:57:41 -0700
-Received: from FMSMSX901.amr.corp.intel.com (10.18.126.90) by
- fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Fri, 20 Mar 2026 08:57:41 -0700
-Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
- FMSMSX901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37 via Frontend Transport; Fri, 20 Mar 2026 08:57:41 -0700
-Received: from CH1PR05CU001.outbound.protection.outlook.com (52.101.193.30) by
- edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Fri, 20 Mar 2026 08:57:39 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=cOd5RsErrU/BEyPC6hNedjqZdZaFNdE1G43IBv5rLfoG18UX5z9tVy9euKpS0jgINfkufjApNOQT5/Od2lOBVBNUEk75PYi+Ndi6BNa/CD+yHj9gByr9z/3XKXjnWxedMUxRbnpyz5OKldrv5yGxDTsQ0veT/hosg0hQCMpJTUCebe4FyBKqF4p5LTLKhN0uaHkd1yNtLEGhoAeP1uXj97Zo7IeVNTunUnVvV1W62lidx8UqsR3DUw+GL24nFaxmMdpOh0/yT/mKy086zB4D/3dF7gTW17cDJD9gP0G3WhdvI3GmzeuSHvNpxhbDgfR6vancWABAS1OdD5rBW7jJag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SzztiCRvD29Ea4TtKFGMx5LLb9UR1fyoMcP5fKUvr3E=;
- b=Ab+bi63v07CD4gY8nI/AX28vSkhWgAc1KBGDUiflaqS6qe/4AEljOaOFjSUP28gdHcQkTj+tnNfojLvB2pffdRZYLtH6cnyxxEAYJrVUdNB3Ax5th/Hj9H2PW/f4itZlz/Hm3IIP4KCCWlgR3ujPGQujwG/MCPjv199eyZhK1+GqQ2/8t9yhzMCt+1O0VnpxuD/9djQ7Q8L10G8O8140Yh9Fb6QZspZfRxOgn4sIa+Wa3N+3w1Tz9x22XAynpFlhThxvVwSAxOMdpXd1U+ZMs6hkdYT5QXs3m7JpYUDSOmA+UkXpC1lpXFJqjrHPmQkXiIEWRJO/dx7uK0H0h6rpng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
- SA0PR11MB4672.namprd11.prod.outlook.com (2603:10b6:806:96::24) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9745.13; Fri, 20 Mar 2026 15:57:37 +0000
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::d9b3:e942:2686:3cdd]) by DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::d9b3:e942:2686:3cdd%6]) with mapi id 15.20.9745.012; Fri, 20 Mar 2026
- 15:57:36 +0000
-Date: Fri, 20 Mar 2026 16:57:29 +0100
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
-CC: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<magnus.karlsson@intel.com>, <stfomichev@gmail.com>, <kuba@kernel.org>,
-	<pabeni@redhat.com>, <horms@kernel.org>, <larysa.zaremba@intel.com>,
-	<aleksander.lobakin@intel.com>
-Subject: Re: [PATCH v2 net 3/8] ice: do not round up result of dbuf
- calculation for xsk pool
-Message-ID: <ab1uaeVELU9FLPXJ@boxer>
-References: <20260319175538.479139-1-maciej.fijalkowski@intel.com>
- <20260319175538.479139-4-maciej.fijalkowski@intel.com>
- <87y0jmoqwk.fsf@all.your.base.are.belong.to.us>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87y0jmoqwk.fsf@all.your.base.are.belong.to.us>
-X-ClientProxiedBy: VI1PR10CA0110.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:803:28::39) To DM4PR11MB6117.namprd11.prod.outlook.com
- (2603:10b6:8:b3::19)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oXg8jkgR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26619C4CEF7;
+	Fri, 20 Mar 2026 15:59:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774022396;
+	bh=SZQDr54yVRfV4wwz6bNgifDNdW6PQuYG77hQb2kbP8Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oXg8jkgRdXGbQweqGgibtk08wfHzFTwOBN9HQp5nheUoA5e/AgpNXSrh8xBfkDu/D
+	 dacEhBs4Oud+/O8RVyUrrZ5AvNxxGiMzSXHcLvV7N2hAd49hU8qAWW8kzniZ9i8FGp
+	 8zJFxp0Acq+lW1f/CrIgBxBciVw/9UEy9Jg72uja7CNiZKg7iJ7yVlYufTQ/+/j9iS
+	 0mmeg+Uby1MjUccNjynWLNN+zri8ogB8ijQBp6sW5dM4aQgLXfNu5wbE2eAn0k7fHr
+	 r2VlauXlMlfplYSEsnOCFKUSpSjTQ2lwytIfZ/o2YMGJUAByPsDevRSfwqDHDjIO0y
+	 7OdnpXE02SRpw==
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 1C703F4008D;
+	Fri, 20 Mar 2026 11:59:55 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-01.internal (MEProxy); Fri, 20 Mar 2026 11:59:55 -0400
+X-ME-Sender: <xms:-269aY6IRyzbR8kxGFkpvYeIO-pxGi1CiZx8VDRywKH2R_bwl-z5zA>
+    <xme:-269aUTNQa24figJ8qTNMVMaGckA6X0CltHE8hokyRjQNPANeSszVIlxeEdFFCRAb
+    dX08X9qum0VGXKnW7YXd8W15HP8EZ4y4vOJaroNCCgov0a6w_vCQg>
+X-ME-Received: <xmr:-269adkd5sKxqMBFIfAKcy9TZpbb48JSJaPKRzfr6VAqBwp9XX6KMg--7hTOfDCH7JyAhPCclPWN_Fxr7wAklGfkKdVpexVj>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefuddtfeefucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
+    hfgvnhhguceosghoqhhunheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpe
+    euieeileeffeeuhfelgeevjeeltdejveethffhteffvdekuefhgfffhfeugefhudenucff
+    ohhmrghinhepsghoohhtlhhinhdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshho
+    nhgrlhhithihqdduieejtdelkeegjeduqddujeejkeehheehvddqsghoqhhunheppehkvg
+    hrnhgvlhdrohhrghesfhhigihmvgdrnhgrmhgvpdhnsggprhgtphhtthhopeduhedpmhho
+    uggvpehsmhhtphhouhhtpdhrtghpthhtohepphgruhhlmhgtkheskhgvrhhnvghlrdhorh
+    hgpdhrtghpthhtohepjhhovghlrghgnhgvlhhfsehnvhhiughirgdrtghomhdprhgtphht
+    thhopehmvghmgihorhesghhmrghilhdrtghomhdprhgtphhtthhopegsihhgvggrshihse
+    hlihhnuhhtrhhonhhigidruggvpdhrtghpthhtohepfhhrvgguvghrihgtsehkvghrnhgv
+    lhdrohhrghdprhgtphhtthhopehnvggvrhgrjhdrihhithhruddtsehgmhgrihhlrdgtoh
+    hmpdhrtghpthhtohepuhhrvgiikhhisehgmhgrihhlrdgtohhmpdhrtghpthhtohepsgho
+    qhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmpdhrtghpthhtoheprhgtuhesvhhgvghrrd
+    hkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:-269aYTPPojXexj_ywjZlX18buIf4vvuzNIj-Drga_p0jX7Nw8XHlg>
+    <xmx:-269aUv4Cct6qa_OmdkLm9Y317Ot_lrHqbQ-haivqw4Jd-MxS71Y-g>
+    <xmx:-269aR6NIIstW6XCEsKbgOKdTL6KqmvpmtN-GpMwZ1EvinAnzc9d7w>
+    <xmx:-269afh5MPh_XfDh7_Lad8ZfTTNk0Esy1dORHCEBe86QfYpPbUlyYQ>
+    <xmx:-269aTmOahFyN4dKqSFOYIZB6G3ZPWDfbn3xqeoLSFXa8_F4SGPnbdTh>
+Feedback-ID: i8dbe485b:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 20 Mar 2026 11:59:53 -0400 (EDT)
+Date: Fri, 20 Mar 2026 08:59:52 -0700
+From: Boqun Feng <boqun@kernel.org>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Joel Fernandes <joelagnelf@nvidia.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	frederic@kernel.org, neeraj.iitr10@gmail.com, urezki@gmail.com,
+	boqun.feng@gmail.com, rcu@vger.kernel.org,
+	Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>
+Subject: Re: Next-level bug in SRCU implementation of RCU Tasks Trace +
+ PREEMPT_RT
+Message-ID: <ab1u-AuqIbJakUYW@tardis.local>
+References: <abwkD0mOdAbD9ENJ@tardis.local>
+ <20260319163350.c7WuYOM9@linutronix.de>
+ <abwo0I_mu94t5Ews@tardis.local>
+ <CAP01T75J4EXu8MFD2WEQ71Ou-bapqS=_wXFFQJ6Ed62X28HO2A@mail.gmail.com>
+ <abwyGtG7hDpd8vBN@tardis.local>
+ <CAP01T75S-NMgB=s_0jqq52xRwe1cQ29DzD33eeqUZHM3cSb=oA@mail.gmail.com>
+ <abxZEE4SAMkNEleq@tardis.local>
+ <89763fcd-3710-49a0-91ca-cd923b47fc1e@nvidia.com>
+ <abxfBZ89wIJILuom@tardis.local>
+ <c391f8b9-a168-4235-aa7b-6902b4f07002@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|SA0PR11MB4672:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4f6074f4-a59c-43ab-3dc6-08de869967af
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|56012099003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info: /L+9krLAgXkhjR7qBr1bAFUY70DTxoRq/01gY0V0Q6HLxWTNbC8ReCa5NXjeuZtkeCX772pfXOGAA+j/SdFpB9ZhuBhmw+sBQG62a+PDj3zpxPllDACIzJzvhg4gjCaxkBNg01diEtxhlmU1NQ16T6KuhgaXIiWR4D7ZODM4H+Txfsp/gfyYkwjhoU6a3+3jF6xiAYrW8vs/NX0F/NQgzRLnn3/oKqIwi1oM6A30AMo4gvesBhFBl549+k0/0GxM2uAJ7o3f77TRVTLRyOelR3MpGnIJ9Lp/3e1oH1vjswhKZROfzKwUGP8FNWyOovP5AylRXKPZCNnZkwKIHOATYllfPonYpcLYtNCFqRHZwdX5euq+nwtqNum9p+gf0lYHxp3qTDzeKY5DVD3LhlYwPWRoZrRCyPhKOcuvgVeQfMQbuWVS6YLZKUxZqq4xIZiTUFm2HMpltz+hXh+/4PUwXxroL+MSw0Q1jkSRbU1+LCGIj+pGIbox7/QfvozDD4fVjs4QO0OLj6dBictmWer/ZsFpNUK6QlRQUpevG20UXb00iqALwYV72P8UrxgDTiXUy+Gdp7WqA94GvuKMzLZt1XsJYpSYGmcTqi2UJHjKLgMkSw+rjaSiP9jN682PGTRYfauHkJepetbpbpU++BAutqWcYUqExLEkk8q/BeVb4gty3l9hoqpqhlUezY+UEZS5fcZsxCisqlR3wr0ZTYU21uGFiD2a8jI8MiZXmT32FSI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?MV9YYKVpY6CmMpWVeA8YKfdTKZV9ykAVsy0OhSHvyddOQAwF2WgDw35Vnz?=
- =?iso-8859-1?Q?DqI763w+hWyKcM2W1NrDTSV5YUmeMbkVZvwJA/Q7MFEgd2o3lgY/ze5iwc?=
- =?iso-8859-1?Q?GTxgP1j4HUnU3iphcQWQQSHIvbNEQverODJ5N4Vo0TMEqrZDBpIZBYYb1I?=
- =?iso-8859-1?Q?mDXNmpC/+EJxb8p/PNSwTc79SAIoDl6yYGhz9c44QhwUDSpx5aiOnyE7Ol?=
- =?iso-8859-1?Q?kbYwMU6LtZmD87qFfyDk4GPh0me/ez/eC38vtJXgE/Gfb4KdP9jcwpKcrO?=
- =?iso-8859-1?Q?iLVMPcARQ34k+rHSGZK/37VxDxKhogwock0Yp3cfFkwN7Z6uPkfsvqtM4Q?=
- =?iso-8859-1?Q?4cakvFpyAcQMvYqYFbeUCIk76MwQhX+NcBfH8pbj9echGlPOfFJ7SjG6m0?=
- =?iso-8859-1?Q?HDotwiqpnAiotohswbyKD7kLacqT3UPtVJ0jUb9lqxtrJkZWaDcZP/77nL?=
- =?iso-8859-1?Q?+Uwez439Xb3mKdA6Xk+hiufuJgnMouHI0EFFusNcDb4OcdXPHCLoHIuWkv?=
- =?iso-8859-1?Q?gXDQSs/Z7ywVHQpfYGRWShhSEU8uS1awa8Ad6412l90/Uh98WvLH8Sh4Qk?=
- =?iso-8859-1?Q?k6Ap/I2fD6gl11AFQPRFMbZ5ibgArueVlx75oZCHuZ6iv0FaUm4gB50SOh?=
- =?iso-8859-1?Q?EMkcKZ8HuUNwjGQ4O2kkq3dNSkr0HeRNHkgLsUndA3MhGLdMYT5uLt6Tf5?=
- =?iso-8859-1?Q?KYwjgRxFKIi9ssDdDooviKTPu09P8Bgcr+AYQnPBAxCFV8/gn/Jx5oKHXv?=
- =?iso-8859-1?Q?AO37wW3tWZEOqjuNrURNFrHdsdHAp3F3SXaxreTwIB6ZHwL+K11PrBHnLC?=
- =?iso-8859-1?Q?quKd+uhyFAAcBCONI9Au1m1YxH103/rpyin9U7f1OsR3G7VxNVImqoXMmE?=
- =?iso-8859-1?Q?HOEyzqXYI6abRcRkCu+bDzBMqAESCdQkdIQIhzBHh8vLzVSu/dF29STqZp?=
- =?iso-8859-1?Q?OOK2xJimZKcLWmAUEHQb03RDRQr8pC7Fn8Wx0TMZa7nhvKZZLyql8HwFVN?=
- =?iso-8859-1?Q?U4zd6njKTZq6xc19ZrOXOZ0of82o4vEu1878hAZuDJZM1iY8R2S2vyeHgA?=
- =?iso-8859-1?Q?/JkSTz+08Gpz72w1ni/Oca6wEEbD79FDQVtI1puQXCRz3/8dEJ/Q7DUzDi?=
- =?iso-8859-1?Q?GUcEYJz1uLItrV81CrFQdNcK1ZbSCTgyDAhVtKYb5+RNELfv5pqVmgFXu3?=
- =?iso-8859-1?Q?IR34VePFoofNfxxvRWo1y1KlemPjW4hg8n4/uhEUNpAu51m42jv6fN14q5?=
- =?iso-8859-1?Q?awYNjBSKPFZUjV0mj4+dgPCfNXAvtEbNeZ8gJMMP7igMFPPrgSPsCl/nOA?=
- =?iso-8859-1?Q?SJZwzu2fJLEbSIWmX7lkl4tqK5manNOoESrePVs81KvVY8vLkGK0VVDgKV?=
- =?iso-8859-1?Q?8KMxQo1ue1BbIwpF6MNBLTLhU26amOdYbmihyPXbjIlCNE/gydbK7/NkCG?=
- =?iso-8859-1?Q?Wmloy+yl2K/acCylmyzAwi4jVR/dFmKmGiCyZkiBRxqj6sVDOQbRuLbGOA?=
- =?iso-8859-1?Q?G0dZNTV4wq3SrCCl8omn2BSoYpO1/dCR1Aw1EiatOwydNhL+KbJcN1YYTN?=
- =?iso-8859-1?Q?dqJMDR05LlPpYzBCP4iefl2/diau19cseAvkxqVTYKMYfh2KNwK2t7i6cC?=
- =?iso-8859-1?Q?vz2Wbk95zwkinj0NZr1tFVzKT+fADuc4A5p/t7HEoUKBQ3J4Q/1PiYm6Yc?=
- =?iso-8859-1?Q?4ROezeqOqkAN0jVV/tGW+hxeb/ISbNzpLBB07EldUBa7CgU9mWTPq+7MRM?=
- =?iso-8859-1?Q?JtlPA7pYfBhMzEujp6Qy8ltsRfMOGiQAAb3XJOytVREi/IJma2Ut7JSm+g?=
- =?iso-8859-1?Q?EeADdQiT0THrtnbPLUpoB5XED9185g0=3D?=
-X-Exchange-RoutingPolicyChecked: oyiYOrnVJVtKiGm2gMXwwXoo4zNn8n3PKf1ByeV07kv6I9ScDaoN9i6BSW9clNytewaIRKYbOd7i7M2Pu+/HHwhflJez/MdqQ6AkEHlPzklFKx7+XJPLA13Ipbgi/laizrjxuEBTLmF0AwtsZZ/HrpdTyOlObt/Y+ZEkS0+GlDIGUkwiN9MIxTLqU+K7quDls6VKMws6JHwcyo86DZVtOhnQisFOd1iovMdXP9murRnbIMmtMes06/XBZJR4cs5lpvk5uAiWA3+C4k1PXy6E61tQcYdXREXnoGDJS/KAj4R+oTOocCFkpzSy66mNo6tP20tjzt+EycygcXZ031IvaQ==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4f6074f4-a59c-43ab-3dc6-08de869967af
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2026 15:57:36.6523
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0R7gSwuRjcOi8QXZQfACaNGDvxH6ct8SoRSUdDC+WP1E5cd/vxZLJmLquwYblIkK580HsZGf+jDpDWITZdn8HqUPKrvYSU7+5PK8ZTJOCm4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4672
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c391f8b9-a168-4235-aa7b-6902b4f07002@paulmck-laptop>
 
-On Fri, Mar 20, 2026 at 09:18:19AM +0100, Björn Töpel wrote:
-> Maciej Fijalkowski <maciej.fijalkowski@intel.com> writes:
+On Fri, Mar 20, 2026 at 08:34:41AM -0700, Paul E. McKenney wrote:
+> On Thu, Mar 19, 2026 at 01:39:33PM -0700, Boqun Feng wrote:
+> > On Thu, Mar 19, 2026 at 04:21:45PM -0400, Joel Fernandes wrote:
+> > > On 3/19/2026 4:14 PM, Boqun Feng wrote:
+> > > > On Thu, Mar 19, 2026 at 07:41:06PM +0100, Kumar Kartikeya Dwivedi wrote:
+> > > >> On Thu, 19 Mar 2026 at 18:27, Boqun Feng <boqun@kernel.org> wrote:
+> > > >>>
+> > > >>> On Thu, Mar 19, 2026 at 05:59:40PM +0100, Kumar Kartikeya Dwivedi wrote:
+> > > >>>> On Thu, 19 Mar 2026 at 17:48, Boqun Feng <boqun@kernel.org> wrote:
+> > > >>>>>
+> > > >>>>> On Thu, Mar 19, 2026 at 05:33:50PM +0100, Sebastian Andrzej Siewior wrote:
+> > > >>>>>> On 2026-03-19 09:27:59 [-0700], Boqun Feng wrote:
+> > > >>>>>>> On Thu, Mar 19, 2026 at 10:03:15AM +0100, Sebastian Andrzej Siewior wrote:
+> > > >>>>>>>> Please just use the queue_delayed_work() with a delay >0.
+> > > >>>>>>>>
+> > > >>>>>>>
+> > > >>>>>>> That doesn't work since queue_delayed_work() with a positive delay will
+> > > >>>>>>> still acquire timer base lock, and we can have BPF instrument with timer
+> > > >>>>>>> base lock held i.e. calling call_srcu() with timer base lock.
+> > > >>>>>>>
+> > > >>>>>>> irq_work on the other hand doesn't use any locking.
+> > > >>>>>>
+> > > >>>>>> Could we please restrict BPF somehow so it does roam free? It is
+> > > >>>>>> absolutely awful to have irq_work() in call_srcu() just because it
+> > > >>>>>> might acquire locks.
+> > > >>>>>>
+> > > >>>>>
+> > > >>>>> I agree it's not RCU's fault ;-)
+> > > >>>>>
+> > > >>>>> I guess it'll be difficult to restrict BPF, however maybe BPF can call
+> > > >>>>> call_srcu() in irq_work instead? Or a more systematic defer mechanism
+> > > >>>>> that allows BPF to defer any lock holding functions to a different
+> > > >>>>> context. (We have a similar issue that BPF cannot call kfree_rcu() in
+> > > >>>>> some cases IIRC).
+> > > >>>>>
+> > > >>>>> But we need to fix this in v7.0, so this short-term fix is still needed.
+> > > >>>>>
+> > > >>>>
+> > > >>>> I don't think this is an option, even longer term. We already do it
+> > > >>>> when it's incorrect to invoke call_rcu() or any other API in a
+> > > >>>> specific context (e.g., NMI, where we punt it using irq_work).
+> > > >>>> However, the case reported in this thread is different. It was an
+> > > >>>> existing user which worked fine before but got broken now. We were
+> > > >>>> using call_rcu_tasks_trace() just fine in scx callbacks where rq->lock
+> > > >>>> is held before, so the conversion underneath to call_srcu() should
+> > > >>>> continue to remain transparent in this respect.
+> > > >>>>
+> > > >>>
+> > > >>> I'm not sure that's a real argument here, kernel doesn't have a stable
+> > > >>> internal API, which allows developers to refactor the code into a saner
+> > > >>> way. There are currently multiple issues that suggest we may need a
+> > > >>> defer mechanism for BPF core, and if it makes the code more easier to
+> > > >>> reason about then why not? Think about it like a process that we learn
+> > > >>> about all the defer patterns that BPF currently needs and wrap them in a
+> > > >>> nice and maintainable way.
+> > > >>
+> > > >> This is all right in theory, but I don't understand how your
+> > > >> theoretical deferral mechanism for BPF will help here in the case
+> > > >> we're discussing, or is even appealing.
+> > > >>
+> > > >> How do we decide when to defer? Will we annotate all locks that can be
+> > > >> held by RCU internals to be able to check if they are held (on the
+> > > >> current cpu, which is non-trivial except by maintaining a held lock
+> > > >> table, testing the locked bit is too conservative), and then deferring
+> > > >> the call_srcu() from the caller in BPF? What if you gain new locks? It
+> > > >> doesn't seem practical to me. Plus it pushes the burden of detection
+> > > >> and deferral to the caller, making everything more complicated and
+> > > >> error-prone.
+> > > >>
+> > > > 
+> > > > My suggestion would be: deferring all call_srcu()s that in BPF
+> > > > core. [...]
+> > > 
+> > > isn't one of the issues is that BPF is using call_rcu_tasks_trace() which is now
+> > > internally using call_srcu? So whether other parts of BPF use call_srcu() or
+> > 
+> > I was talking about the long term solution in that thread ;-)
+> > 
+> > Short-term, yes the switching from call_rcu_tasks_trace() to call_srcu()
+> > is the cause the issue, and we have the lockdep report to prove that. So
+> > in order to continue the process of switching to SRCU for BPF, we need
+> > to restore the behavior of call_rcu_tasks_trace() in call_srcu().
+> > 
+> > > not, the issue still stands AFAICS.
+> > > 
+> > 
+> > In an alternative universe, BPF has a defer mechanism, and BPF core
+> > would just call (for example):
+> > 
+> >     bpf_defer(call_srcu, ...); // <- a lockless defer
+> > 
+> > so the issue won't happen.
 > 
-> > When programming dbuf on rx queue context, avoid division round up as
-> > it causes to actually corrupt the tailroom for AF_XDP ZC. Below is an
-> > example based on 4k chunk size when xsk pool pointer is valid on given
-> > rx ring:
-> >
-> > chunk_size = 4096
-> > headroom = 256
-> > tailroom = 320
-> >
-> > ring->rx_buf_len = 4096 - 256 - 320 = 3520
-> >
-> > rx_ctx.dbuf = DIV_ROUND_UP(3520, 128) ->
-> > 3520 / 128 = 27.5 -> round up results in 28
-> >
-> > dbuf programming unit is 128. If we give 128 * 28 = 3584. So HW will
-> > corrupt 64 bytes from tailroom. Decrement dbuf by 1 when xsk_pool is
-> > present on given ice_rx_ring.
-> >
-> > Also, restore ::rx_buf_len setting via xsk_pool_get_rx_frame_size() as
-> > of now it respects the tailroom.
-> >
-> > Fixes: 1bbc04de607b ("ice: xsk: add RX multi-buffer support")
-> > Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-> > ---
-> >  drivers/net/ethernet/intel/ice/ice_base.c | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >
-> > diff --git a/drivers/net/ethernet/intel/ice/ice_base.c b/drivers/net/ethernet/intel/ice/ice_base.c
-> > index 1667f686ff75..f9514d7bb83c 100644
-> > --- a/drivers/net/ethernet/intel/ice/ice_base.c
-> > +++ b/drivers/net/ethernet/intel/ice/ice_base.c
-> > @@ -500,6 +500,8 @@ static int ice_setup_rx_ctx(struct ice_rx_ring *ring)
-> >  	 */
-> >  	rlan_ctx.dbuf = DIV_ROUND_UP(ring->rx_buf_len,
-> >  				     BIT_ULL(ICE_RLAN_CTX_DBUF_S));
-> > +	if (ring->xsk_pool)
-> > +		rlan_ctx.dbuf--;
+> In theory, this is quite true.
 > 
-> Hmm, wont this be overly pessimistic? Smth like
+> In practice, unfortunately for keeping this part of RCU as simple as
+> we might wish, when a BPF program gets attached to some function in
+> the kernel, it does not know whether or not that function holds a given
+> scheduler lock.  For example, there are any number of utility functions
+> that can be (and are) called both with and without those scheduler
+> locks held.  Worse yet, it might be attached to a function that is
+> *never* invoked with a scheduler lock held -- until some out-of-tree
+> module is loaded.  Which means that this module might well be loaded
+> after BPF has JIT-ed the BPF program.
 > 
->   if (ring->xsk_pool)
->     rlan_ctx.dbuf = ring->rx_buf_len >> ICE_RLAN_CTX_DBUF_S;
->   // else round up?
 
-Ok!
+Hmm.. maybe I failed to make myself more clear. I was suggesting we
+treat BPF as a special context, and you cannot do everything, if there
+is any call_srcu() needed, switch it to bpf_defer(). We should have the
+same result as either 1) call_srcu() locklessly defer itself or 2) a
+call_srcu_lockless().
 
+Certainly we can call_srcu() do locklessly defer, but if it's only for
+BPF, that looks like a whack-a-mole approach to me. Say later on we want
+to use call_hazptr() in BPF for some reason (there is hoping!), then we
+need to make it locklessly defer as well. Now we have two lockless logic
+in both call_srcu() and call_hazptr(), if there is a third one, we need
+to do that as well. So where's the end?
+
+The lockless defer request comes from BPF being special, a proper way to
+deal with it IMO would be BPF has a general defer mechanism. Whether
+call_srcu() or call_srcu_lockless() can do lockless defer is
+orthogonal.
+
+
+BTW, an example to my point, I think we have a deadlock even with the
+old call_rcu_tasks_trace(), because at:
+
+https://elixir.bootlin.com/linux/v6.19.8/source/kernel/rcu/tasks.h#L384
+
+We do a:
+
+	mod_timer(&rtpcp->lazy_timer, rcu_tasks_lazy_time(rtp));
+
+which means call_rcu_tasks_trace() may acquire timer base lock, and that
+means if BPF was to trace a point where timer base lock is held, then we
+may have a deadlock. So Now I wonder whether you had any magic to avoid
+the deadlock pre-7.0 or we are just lucky ;-)
+
+
+See, without a general defer mechanism, we will have a lot of fun
+auditing all the primitives that BPF may use.
+
+> So we really do need to make some variant of call_srcu() that deals
+> with this.
 > 
+> We do have some options.  First, we could make call_srcu() deal with it
+> directly, or second, we could create something like call_srcu_lockless()
+> or call_srcu_nolock() or whatever that can safely be invoked from any
+> context, including NMI handlers, and that invokes call_srcu() directly
+> when it determines that it is safe to do so.  The advantage of the second
+> approach is that it avoids incurring the overhead of checking in the
+> common case.
 > 
+
+Within the RCU scope, I prefer the second option.
+
+Regards,
+Boqun
+
+> Thoughts?
+> 
+> 						Thanx, Paul
+> 
+> > > I think we have to fix RCU tasks trace, one way or the other.
+> > > 
+> > > Or did I miss something?
+> > > 
+> > 
+> > No I don't think so ;-)
+> > 
+> > Regards,
+> > Boqun
+> > 
+> > > thanks,
+> > > 
+> > > --
+> > > Joel Fernandes
+> > > 
+> > > 
+> > > 
