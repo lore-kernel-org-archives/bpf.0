@@ -1,223 +1,135 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E731282F32
-	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 16:57:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774025844; cv=none; b=uwS4/Oe6myCZ/YM2PDZlh9gFRilrzYV0f5+6QspzGqTvnj32WzWUhBwJO1P7S63JEdWjaC9/2LC2Ci2ucF1eKXFMf5bnMeMc5beNKz4CxbJ9FOP1Xb7r1Q+f6cwtmuGNgdAJxpFvasY+rS8mL8ZyNo49xUx7hCJujCjiv1JtcQg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774025844; c=relaxed/simple;
-	bh=LySU7ge2y1wNx3ACPnF021ssd8zn8roMZ8T14nCKIRo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sQNg84awpbjFYJXIgOtSpg2S+xFRTcXsaPvh68Dt+uqY9CREYq5g1Dl+2jR634mUUVEu7BPUQUXNgIRSOgIKQnIOTYf7TXknI2jQDfMimw+5pBviOFSVAHkgG6qidQb1OkEzyINDVLpm8W/C1FZQsTcvD/TWP3U2zJmMBYl34/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ShN2/QI4; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B6482EBBB2
+	for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 16:57:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.178
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774025862; cv=pass; b=XgcClWOxQHVQQxnOkFnvfBJ9+/3bjI2vl8gwnWdLe93ckXVyorFwUu4RCXcOxB6zd8O0EUSvH7vlPqwpRZnn+Clj+9xi24zF4jcg6HLVIFrjRycIznzHES/ejMC5/FFYzE2i1iiKOvAe4jLIltCN92PRAkDQGmMGmOXwnnsiTKk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774025862; c=relaxed/simple;
+	bh=YjTO5Q3z0EClm6azl1u2wWsKT9tZLVln21IL46od4AQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=llNGLENA4tDAoJll7Zq/BxClILA/LQbvMN7f3ma0DR6W25uiYxa68huQf0vHrGD25mz/FI0GNinUCxUM4q/7bNZaG7ozF8v83s4d/YQorM3ZGKqRbfHE2Avieo3xZ8vFReBK3Fq0etbLaMRZUq0PQ31Zk+k2JIVr5U7r6HIYYn0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SWOcoS02; arc=pass smtp.client-ip=209.85.128.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ShN2/QI4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4FB3C4CEF7;
-	Fri, 20 Mar 2026 16:57:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774025844;
-	bh=LySU7ge2y1wNx3ACPnF021ssd8zn8roMZ8T14nCKIRo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ShN2/QI4WiU8vhvR0i0KuHZfDZI+tQskxnNFRV95mB9y2coNgULfQMYwJ0m1+b3Pe
-	 M6qQbY6hak6IJF7q+MQgHOCSMV8oVvafUQpBfQbGdDTcyNKRQibN7plVSO46YDkswI
-	 qY58vyubtkAd37309xmIkrOzKRVYZpkiVx3VvFMNGJXQqisPAJbQJBibo8pXsmfS4S
-	 AJ/ovYP9O0eBSKb+vfFgzIZJKPqOtSOsSm935xHTm3ObH9h+bFFRJEwVyhhYftHJY4
-	 2/d4ahqWwWodJxswVL1UHhVnAC70bnumCet+4OyO3Ovuljn2L6/ZZrfkiqWMZ7aoQ8
-	 V4qMFUmICiPdA==
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfauth.phl.internal (Postfix) with ESMTP id C88B9F40069;
-	Fri, 20 Mar 2026 12:57:22 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-06.internal (MEProxy); Fri, 20 Mar 2026 12:57:22 -0400
-X-ME-Sender: <xms:cny9aZxDKdARRZb5--LG7xW8TccR3LCNXT9LflVbgY871-EiXc9Lvw>
-    <xme:cny9aToGVdf-ak4Kqq8P1u3skkxTXIoFtUY-awC1neQncFcQjZwY8B2Dyi32-G4t-
-    IVN5rCfpkbDs5WUvjK4EEBv2MhIK_m_3A_hbxH5y5milKusynaP>
-X-ME-Received: <xmr:cny9aZdiCsnMnuPhX-f9OTxU6i8uBZGrrrHNsOfgrMt7ffcLHIZ6K_jYs7Dnv98M9jgbGPtM-3F5rGk0No4FmFfIBDSt2vfH>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefuddtgeehucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
-    hfgvnhhguceosghoqhhunheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpe
-    euieeileeffeeuhfelgeevjeeltdejveethffhteffvdekuefhgfffhfeugefhudenucff
-    ohhmrghinhepsghoohhtlhhinhdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshho
-    nhgrlhhithihqdduieejtdelkeegjeduqddujeejkeehheehvddqsghoqhhunheppehkvg
-    hrnhgvlhdrohhrghesfhhigihmvgdrnhgrmhgvpdhnsggprhgtphhtthhopeduhedpmhho
-    uggvpehsmhhtphhouhhtpdhrtghpthhtohepphgruhhlmhgtkheskhgvrhhnvghlrdhorh
-    hgpdhrtghpthhtohepjhhovghlrghgnhgvlhhfsehnvhhiughirgdrtghomhdprhgtphht
-    thhopehmvghmgihorhesghhmrghilhdrtghomhdprhgtphhtthhopegsihhgvggrshihse
-    hlihhnuhhtrhhonhhigidruggvpdhrtghpthhtohepfhhrvgguvghrihgtsehkvghrnhgv
-    lhdrohhrghdprhgtphhtthhopehnvggvrhgrjhdrihhithhruddtsehgmhgrihhlrdgtoh
-    hmpdhrtghpthhtohepuhhrvgiikhhisehgmhgrihhlrdgtohhmpdhrtghpthhtohepsgho
-    qhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmpdhrtghpthhtoheprhgtuhesvhhgvghrrd
-    hkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:cny9aWrImt4bEpJxAibTkA1_hQ2JPwzedwg-ZqEHcq3NaKzXczmzfw>
-    <xmx:cny9aTmW2RnKbTl3LYMp6-tZQcvTqOqLJZDWcB__MDbPBh1ta3U8eg>
-    <xmx:cny9aXSf0pxNEFeyYhQE2M4QuBdpN443dfX3oUtAIHua0p9Soljw3w>
-    <xmx:cny9aZaMw_hgbYrdGwcjFMPDq_AuKHqIa1KR0whuKslF7uentytzlg>
-    <xmx:cny9aX9va6BcamvcAm58vQpN8p48K2DFPRD-9eJOjpM5x6TzEYVuzNE5>
-Feedback-ID: i8dbe485b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 20 Mar 2026 12:57:22 -0400 (EDT)
-Date: Fri, 20 Mar 2026 09:57:21 -0700
-From: Boqun Feng <boqun@kernel.org>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Joel Fernandes <joelagnelf@nvidia.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	frederic@kernel.org, neeraj.iitr10@gmail.com, urezki@gmail.com,
-	boqun.feng@gmail.com, rcu@vger.kernel.org,
-	Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>
-Subject: Re: Next-level bug in SRCU implementation of RCU Tasks Trace +
- PREEMPT_RT
-Message-ID: <ab18cUI_4jKA8wcA@tardis.local>
-References: <abwo0I_mu94t5Ews@tardis.local>
- <CAP01T75J4EXu8MFD2WEQ71Ou-bapqS=_wXFFQJ6Ed62X28HO2A@mail.gmail.com>
- <abwyGtG7hDpd8vBN@tardis.local>
- <CAP01T75S-NMgB=s_0jqq52xRwe1cQ29DzD33eeqUZHM3cSb=oA@mail.gmail.com>
- <abxZEE4SAMkNEleq@tardis.local>
- <89763fcd-3710-49a0-91ca-cd923b47fc1e@nvidia.com>
- <abxfBZ89wIJILuom@tardis.local>
- <c391f8b9-a168-4235-aa7b-6902b4f07002@paulmck-laptop>
- <ab1u-AuqIbJakUYW@tardis.local>
- <2b3848e9-3b11-41b8-8c44-5de28d4a4433@paulmck-laptop>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SWOcoS02"
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-79a5fb98316so20537367b3.3
+        for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 09:57:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774025860; cv=none;
+        d=google.com; s=arc-20240605;
+        b=hVQAt1HZYcwuHbpmLazzg967VnO32l7jLDvHInzN3Z/MdPI3Zg3svCTLIu6GacgzPN
+         raXoQJW6IUHS5udzy2WTg8JiTJCuc8+yzg0RBxQPIT2tyk8Gf0p34q1CqilZqLaJpNQS
+         Lex+vZXNXZB+RWiSvNnh4LFcJOtMCQdKInNnN5+HTzRIbRaAPWn8nzeZk8TnLtWEIjk9
+         TW3brfMDKmJMLArdEQ1s04rVuAqMIfQOw78jmNoYjxUxjGdXYF6b+TitTpn4hwM4xg6S
+         7QPyLd5Ij09IuWu/1AanzRXCJgHxj05QjRHpL9buungghpas1wNY8TxJOPpHreMRGZ2W
+         RuBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=VFs5pg+EOoBonRDSGJWl01bvRPjx/A7Fl/2yDgn/cVM=;
+        fh=czn8edMbHfajPZz82YWRUbaAzaYA2SgTN7wqc6OUQfE=;
+        b=ZRs2h5EndVNzVaCq02y87jSg6CqJdAhaed6cI5Zer/ElgO/qJgvkYkuN+3uYVBLs+x
+         t8M6o0J6TVT96+6C+5GA42MnKyhilsDEF1yrHPvH70Ihn6ZWDvVkBwwUrbjaaVdY1jno
+         eE0hsvy7o7mZlTL4ROLtxDUQDTZG+o47vJI+9eCxohPVSsp8xIu+o8FUFVdr8YTMRqYl
+         fsekeUKDAHwZE6pdwRjRxbIajSDZKng43H3TIpZ/y7IMHpaomHiibkKCUsZSEmwSVqmc
+         zp6wjq6lSMz/VtIXjmb5jQlvqtS87Lkxwaoc4mGsDLxyXyvQ0RBJ0YuyEbRFneE5mOFf
+         dswA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1774025860; x=1774630660; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VFs5pg+EOoBonRDSGJWl01bvRPjx/A7Fl/2yDgn/cVM=;
+        b=SWOcoS02olL8ordX0SAYfuwguGsVRLImK1oDF/eqnerI156wy2dF5hsfQeaIX/soTf
+         t/FI9HYnxD5TwLGtXOP6ehYsIAAf6ZNy2mTSt1k1pXdVuVlHShR/yoDBE9V5IEDoAXq5
+         sx90sHv6VHSCuDkjzs86g/1TEDSRtCOmOthWPFpMkImIz/1krzVGQm9U6NN7rBXDbllz
+         8Z9BhKxQjcTBJdO9jD7irNpHEaivEgvc/Li669Mun/avDHR5CSmjlFc2+6ujEv6Tw7BM
+         oxXTpOEiybR1HxCOjVn+wB/j6mX/Ai4kga1dP8ZDzQvfRzXIW2XCVO8Wp/vqQt+oTp6d
+         FscA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774025860; x=1774630660;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=VFs5pg+EOoBonRDSGJWl01bvRPjx/A7Fl/2yDgn/cVM=;
+        b=NeqevtjsMuIbRLjitrnVbvtKKf6AsHa+5meNsOrIQftB3wsLsteRuylntr4yWZYeTX
+         cRvaOUH0xj33F1l3VcThTbD/inGNst0ZdW0ahEXts00/wMtqhqAz4GHi7zgv3u7bfXAS
+         /KaqJS0ZA1y0kotiET2OQpI0smVsNXVdnp6uASw8juvEYtlB0vxgMMCbEXTJdIgdOvbB
+         zk0xe0Nhl9++KadDobAcUiK6vD1uO+0UMnjvdTX0ESdmC6cwPHJO95zwFJaINX0JrBGW
+         +sPD39USF1sW7ECeNstWAr03+xndQ/prSG04T8oC3w3nWvu2n5n7slm4nUvahLLPCp2F
+         Hmow==
+X-Forwarded-Encrypted: i=1; AJvYcCUYgkQvZ3ZvXEb3pD7M8GiRSEDv8F5jOLOHz2N+zB3KCXRlTq4PfBAISHgB3E+GCymlcvA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdwnxYZmO9Tk4KLUg1MJEZJRFLYHS/LsMyyPqUxe+6UU9grXEP
+	8J5MTattQUColfv1NM/pTLWGkEnLj7je43Txy171IWTPeVzP88dw8GudWwlEQYd6VbGTKoybNw3
+	fj9kUxhtcn47us3RPixnyTah+W6RZGPM=
+X-Gm-Gg: ATEYQzwzFUVpZXNJDBnqYjdmCjuc1vwR9ajF1aSgQCe7xHDsJPRZy7YRwoZFub1tKqj
+	kg3gflL3VI1bQSSvIzcRZrR6BS2833VwwdoFHiMe0ZM5IcQvZ7dqnS3tcwE81y5Rlmf1YqJ1Q0d
+	g/caw/pqbemk+Loj/NH/ANk6c4zlI2laRz9ktZHN1WpH8o89HZ7KVKjdm/0Jhfot/mF9iMePlfw
+	RTqIuOKhS+N4Fqve4f74CPmVsP9t7JBRhJCU/y/maCsVmAiUTYKQeRT5CuKcdX2xR0OCdrAQT48
+	4HNabT/WDWAZdA==
+X-Received: by 2002:a05:690c:c4e8:b0:79a:440c:fbed with SMTP id
+ 00721157ae682-79a90a92a80mr42119077b3.13.1774025860240; Fri, 20 Mar 2026
+ 09:57:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2b3848e9-3b11-41b8-8c44-5de28d4a4433@paulmck-laptop>
+References: <20260320130219.63711-1-keisuke.nishimura@inria.fr>
+In-Reply-To: <20260320130219.63711-1-keisuke.nishimura@inria.fr>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Sat, 21 Mar 2026 00:57:28 +0800
+X-Gm-Features: AaiRm50wHG5v401T5wFU6vTWOPHcfFg7b7vBLgm1IIrE_MSH_kL532Ybic8u-Xs
+Message-ID: <CABFUUZEH1SNJ+TOc=6N9+BNnPi0rH4ZQoHEdwLtj9fkDJSnsjw@mail.gmail.com>
+Subject: Re: [PATCH] bpf: Fix refcount check in check_struct_ops_btf_id()
+To: Keisuke Nishimura <keisuke.nishimura@inria.fr>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 20, 2026 at 09:24:15AM -0700, Paul E. McKenney wrote:
-[...]
-> > > > In an alternative universe, BPF has a defer mechanism, and BPF core
-> > > > would just call (for example):
-> > > > 
-> > > >     bpf_defer(call_srcu, ...); // <- a lockless defer
-> > > > 
-> > > > so the issue won't happen.
-> > > 
-> > > In theory, this is quite true.
-> > > 
-> > > In practice, unfortunately for keeping this part of RCU as simple as
-> > > we might wish, when a BPF program gets attached to some function in
-> > > the kernel, it does not know whether or not that function holds a given
-> > > scheduler lock.  For example, there are any number of utility functions
-> > > that can be (and are) called both with and without those scheduler
-> > > locks held.  Worse yet, it might be attached to a function that is
-> > > *never* invoked with a scheduler lock held -- until some out-of-tree
-> > > module is loaded.  Which means that this module might well be loaded
-> > > after BPF has JIT-ed the BPF program.
-> > > 
-> > 
-> > Hmm.. maybe I failed to make myself more clear. I was suggesting we
-> > treat BPF as a special context, and you cannot do everything, if there
-> > is any call_srcu() needed, switch it to bpf_defer(). We should have the
-> > same result as either 1) call_srcu() locklessly defer itself or 2) a
-> > call_srcu_lockless().
-> > 
-> > Certainly we can call_srcu() do locklessly defer, but if it's only for
-> > BPF, that looks like a whack-a-mole approach to me. Say later on we want
-> > to use call_hazptr() in BPF for some reason (there is hoping!), then we
-> > need to make it locklessly defer as well. Now we have two lockless logic
-> > in both call_srcu() and call_hazptr(), if there is a third one, we need
-> > to do that as well. So where's the end?
-> 
-> Except that by the same line of reasoning, how do the BPF guys figure out
-> exactly which function calls they need to defer and under what conditions
-> they need to defer them?  Keeping in mind that the list of functions and
+On Fri, Mar 20, 2026 at 11:47=E2=80=AFPM Keisuke Nishimura
+<keisuke.nishimura@inria.fr> wrote:
+>
+> The current implementation only checks whether the first argument is
+> refcounted. Fix this by iterating over all arguments.
+>
+> Signed-off-by: Keisuke Nishimura <keisuke.nishimura@inria.fr>
+> Fixes: 38f1e66abd184 ("bpf: Do not allow tail call in strcut_ops program =
+with __ref argument")
+> ---
+>  kernel/bpf/verifier.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 159b25f8269d..278443118a23 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -24853,7 +24853,7 @@ static int check_struct_ops_btf_id(struct bpf_ver=
+ifier_env *env)
+>         }
+>
+>         for (i =3D 0; i < st_ops_desc->arg_info[member_idx].cnt; i++) {
+> -               if (st_ops_desc->arg_info[member_idx].info->refcounted) {
+> +               if (st_ops_desc->arg_info[member_idx].info[i].refcounted)=
+ {
+>                         has_refcounted_arg =3D true;
+>                         break;
+>                 }
+The fix looks correct to me.
 
-Can't they just defer anything that is deferrable? If it's deferrable,
-then what's the actual cost for BPF to defer it?
+Maybe it's better to add a verifier test for the case where info[0] is
+non-refcounted,
+while __ref is stored in a later entry.
 
-> corresponding conditions is subject to change as the kernel continues
-> to change.
-> 
-> > The lockless defer request comes from BPF being special, a proper way to
-> > deal with it IMO would be BPF has a general defer mechanism. Whether
-> > call_srcu() or call_srcu_lockless() can do lockless defer is
-> > orthogonal.
-> 
-> Fair point, and for the general defer mechanism, I hereby nominate
-> the irq_work_queue() function.  We can use this both for RCU and
-> for hazard pointers.  The code to make a call_srcu_lockless() and
-> call_hazptr_lockless() that includes the relevant checks and that does
-> the deferral will not be large, complex, or slow.  Especially assuming
-> that we consolidate common checks.
-> 
-> > BTW, an example to my point, I think we have a deadlock even with the
-> > old call_rcu_tasks_trace(), because at:
-> > 
-> > https://elixir.bootlin.com/linux/v6.19.8/source/kernel/rcu/tasks.h#L384
-> > 
-> > We do a:
-> > 
-> > 	mod_timer(&rtpcp->lazy_timer, rcu_tasks_lazy_time(rtp));
-> > 
-> > which means call_rcu_tasks_trace() may acquire timer base lock, and that
-> > means if BPF was to trace a point where timer base lock is held, then we
-> > may have a deadlock. So Now I wonder whether you had any magic to avoid
-> > the deadlock pre-7.0 or we are just lucky ;-)
-> 
-> Test it and see!  ;-)
-> 
-
-"Program testing can be used to show the presence of bugs, but never to
-show their absence!" ;-)
-
-> > See, without a general defer mechanism, we will have a lot of fun
-> > auditing all the primitives that BPF may use.
-> 
-> No, *we* only audit the primitives in our subsystem that BPF actually
-> uses when BPF starts using them.  We let the *other* subsystems worry
-> about *their* interactions with BPF.
-> 
-
-As an RCU mainatainer: fine
-
-As a LOCKING maintainer: shake my head, because for every primitive that
-BPF uses, now there could be a normal version and a _bpf/lockless()
-version. That could create more maintenance issues, but only time can
-tell.
-
-> > > So we really do need to make some variant of call_srcu() that deals
-> > > with this.
-> > > 
-> > > We do have some options.  First, we could make call_srcu() deal with it
-> > > directly, or second, we could create something like call_srcu_lockless()
-> > > or call_srcu_nolock() or whatever that can safely be invoked from any
-> > > context, including NMI handlers, and that invokes call_srcu() directly
-> > > when it determines that it is safe to do so.  The advantage of the second
-> > > approach is that it avoids incurring the overhead of checking in the
-> > > common case.
-> > 
-> > Within the RCU scope, I prefer the second option.
-> 
-> Works for me!
-> 
-> Would you guys like to implement this, or would you prefer that I do so?
-> 
-
-I feel I don't have cycles for it soon, I have a big backlog (including
-making preempt_count 64bit on 64bit x86). But I will send the fix in the
-current call_srcu() for v7.0 and work with Joel to get into Linus' tree.
-
-I will definitely review it if you beat me to it ;-)
-
-Regards,
-Boqun
-
-> 							Thanx, Paul
-> 
-> > Regards,
-> > Boqun
-> > 
-[..]
+Reviewed-by Sun Jian sun.jian.kdev@gmail.com
