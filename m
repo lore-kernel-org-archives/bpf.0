@@ -1,236 +1,201 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A70092C15A9
-	for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 23:10:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774134634; cv=none; b=aUuK1NG0TwkPX8SnnDqELTkhvJ05Mn3NvM+IvJzx8BpdFsUrJhiZCDWYjMgljzW3GkJDI2QdOWiW7tkKGDlrsYAHgpoGbqgYl8qsQE3E7Fpzz91GcqNIhSGoTwBmGnqmcyBjVHne3LlxXF3Va9SWOtZk8W9FJuND0WjKlUyde78=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774134634; c=relaxed/simple;
-	bh=hfJzD2JlmYnPFsyg2Ej61GkvqvKsECIxyN2aYzydLiQ=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hv9rjXUgiWn9mK6Ibj1XrxmtueDbNdv3IWzPipuxu5vSu/l69+/EyuK8xoCDVhqSUP6gn+4QtqYqiQF2Gxztc0j2XHjglBA+W+vSFtdshfdyVgISdGlb8GAwlCuqCGg04mUkejyYcbToeaLGp7ewJXruceCOrWFjBX+ni7jhsTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lVesIdCb; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF41C2FDC3C
+	for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 23:10:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774134643; cv=pass; b=alNnandMomy1skTHiH87aULtK12WT1zXcGTDzcGlcu+TbV5sl4uYm6riulDIwXwbpk7OKZZsQ8P/Fr65MAg7JzoTbIXrx9YPC43lZGnJAL3cEETlUZISpSEDul9RM+fci3ZpQV64WK0iYeAYlcTEwpnSvO6zzHc2Yt1KEUTsLxs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774134643; c=relaxed/simple;
+	bh=DKhBnYuFq7B+Ka2fMjz8uQe4g1obMrfJOQUL6QN6XG4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=c5L9hTowRgRvAASyovDzcr1ItDwGB1sEG8/6sf/ys1YDXDe+O0P2U3OC7Xy3vojeQAdzrlkHzv5kBRj/68OBPe9/y6U8cFuwtL0k29IlttKokZaAKKulAKuDm2RAzVGw+Si2rd+HE5ZhygT8Ndc2ZraJNFZgLjFak/iSzbTawVE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MYfgPIas; arc=pass smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lVesIdCb"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-439c9bdc1eeso3012681f8f.3
-        for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 16:10:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MYfgPIas"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2aeab6ff148so80285ad.1
+        for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 16:10:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774134641; cv=none;
+        d=google.com; s=arc-20240605;
+        b=EemabU0Fu8Q+oKXuWevRTUVTnzImZm4wrBN0ju1A1+Rqy2HSHWTqqntWeDij8BRM4s
+         HmxMPKz00+JgBI4WVViokzGimjQIIRkwZGsLKcgXtSQMqRsDXKo5SgCVN0yEcgcQRxx9
+         qOse4gJN5ngYs9fRJSp54QST9Z5WjtnvGlhjkF5A7C6Dxkb6JzFHCvWHb4FPhKka8yMf
+         7bx6IH06kdyPRe07Ab6Piore1xwFeMC/hUqAna0td4Mo0hhulgrHRyiXDKxmXgv0CvsS
+         s5cQKoN1Mg6IenMUADWkpgPlF7KvNh8OtuYLNXR7g8l8deIS2v5vKlyLjg4i4VXjYDWc
+         JVpQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=gskRpbF7e3HZE20lexLZJJLsX9C51g5JYA8B2ClPVts=;
+        fh=u54d2bQEeF+IWdM1aGLp9OmQkSkRFKQ6vR+0iR+JGjc=;
+        b=TQh3N1XFe2Dt5cXe1kGaP/k0JCM9tjYbMaymUmrrRissGGvhsR1XRa6uf+NXRwNLRr
+         vxcN3xjYq05fdrbY696J63Mi+VDDHnVYDnQu9mOxNSsyAVk/EWZxBb3tW7IEyUtVgTDs
+         3WmjKtNeU+UUyvBNj9Epch+qDG2gSfew4skT9fBKMWNII+Lo698Xm44DhtYFEn7iuZGx
+         gwr5q8Q4Ln7+1RsEaYpRDW8OwqQCObgb5Bcp0ZKp/1tJGeeRep/woF4duQKl8OMI/8FB
+         fRAaDgvR+Gjbqt3uPJnaim4KTsMSaRwhARL2AlW50eQwknJmkfQwcB9NiLmQveFPlPO7
+         e/cg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774134631; x=1774739431; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yP8SXZwcE/V/cT9XIusmisooInFGfddf9R1Afv0fWwk=;
-        b=lVesIdCb558qXmKXp9Uusy5aQ1tgS1x2ds1/rxLyEAIOSjPwYI5fk5+oiC2DwjOQfV
-         +Bxq//Sn34p3MIjtuBxVVM/sr6+A0yGqv3C4pHZyM3xG/SmrthspThQ4DiUiOI715tk2
-         YeoZbAfznRiKBu/M0yhdcdpn+zixGqpwWK0gW5ZjdUYGFLSnNsGbPXXeiH2wD8dncQ46
-         QprxnXU2EF3mk8RwBHx1AE/6v5sO1GdhJ5UyI50707t7J6tywSU2mVCQS9EOelQCug0E
-         Apj0DSI4TIhQFcRng99dHl01Lc/v6Kp/oZnw8qnM6WO/DZ6Co9AHS/Nr3zc7P56fv+8/
-         jDEw==
+        d=google.com; s=20251104; t=1774134641; x=1774739441; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gskRpbF7e3HZE20lexLZJJLsX9C51g5JYA8B2ClPVts=;
+        b=MYfgPIascI1phgtGwZG98lanVj51czVbubvnoiQ7JpDg5qlcYhw1h7HiTVOSCAt02a
+         0CpGwD+AyltGAUB1ycpGwm7KmchyDdC7tFe/oZFO4nOGahVxYQAvcqFLdxjpsU7my/JO
+         GmkI+aJTaZhByORflSgYuX7UH9756XF3g+lEadGixKWP7h+APXrx73Dc+mjEdYQcvbtE
+         dXjuLJzqAU26dPoFJFVJaolUbMJiX8+8DS1JhvTkbRft05vjn/gPNz4Ib6lY8KibeyoP
+         vJCbPLuyp3nay+iGoZ6eLZ0C8pAT+yxWwxWS4AcZPIBWJm56FniCb4GEBWEfw/OFnaJD
+         zySA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774134631; x=1774739431;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yP8SXZwcE/V/cT9XIusmisooInFGfddf9R1Afv0fWwk=;
-        b=Aau0lpXOAItUGIUck0eAHXGwrIFPBmW2/LLFniI/BLQnkdMlci1+Pk3PqcwedQq0x6
-         vlr44YyDg25f4RsD3nS+oUDy5Z15xiJx0FLSomsp8BuRcebW6hEhSRbI5C3DUroGt0Oh
-         T/1GKfaAPTwUgG50fWVzYcVpYU+eANnKHlE4V8sPvtSvZkk4NrontUrURF4roQts44FO
-         n2/eNac3fPRRVcKV5/3GDf/DEVkEPcj14rkkSAzMC4ldoDsoZcwSEe4/etOkjSEym/uU
-         RvR9J+kJdg2RVmiNR64R7GEw2ES/xOwIoQOt24kCYuMX5aYPpQaNF7NcAtUFO1cwIy6v
-         n3ZA==
-X-Forwarded-Encrypted: i=1; AJvYcCXsaXmrXn+ZW1NLPZuxLBqxQlRA8iJqYqFWDiV6CNHDG83z7Zt/78qKnJMcBM4KcGZvvwg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YypE4ysJx5JQwViEB2VFBjsUrE0yARjG4e2B3e6oRpFNXhWIEM3
-	U/Px/GlbGPvfBKRYxsoIigW2z8bMxJDn+YX5DFa+J1zhlXNfJ+wjKSOR
-X-Gm-Gg: ATEYQzwue0wiRA+SEhIuZM+EOPjH+hcxEDb75YvlyGyPMm7GjtCbHhJAXsJ2Pmj1hy7
-	pfPMxQo/fyAzXx7EyTacCsvIRnTpxab+9fVnVVhM/LRr3GvECPrH+1Cf7MsQyUxvj7PFlT7CDzF
-	HsgEIcCeDLOgyl4+XCAYhccDt4dOmW0nTwuPkdqN9NL5FW+DgW/1MSTp2nnGtSue2SZtnfLx9VA
-	9oeKLaw+AV9or6fmpam2UCvGpfsEOOZvOxETYIGhGT0ifCrIGvpQhoN1ZThLRC5JxRJEVUipsAh
-	sX8B5okclMwk469S0n8IZfq2oxDJRFqMUDaGFMpXf8lOcNgnaXt8QsEg5Grj7RlrUcufWQExYJJ
-	XCCeU+MOrbIV9rqwUlhCDnXjkfnOOU371knkTe9vzJpMZaph9YtCQ5pxr4NJOnZwHuD6ypYMuwX
-	owadAao005FmY=
-X-Received: by 2002:a5d:588e:0:b0:43b:5767:8f2a with SMTP id ffacd0b85a97d-43b6423a596mr12110449f8f.22.1774134631017;
-        Sat, 21 Mar 2026 16:10:31 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b647120a1sm17818122f8f.30.2026.03.21.16.10.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Mar 2026 16:10:30 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Sun, 22 Mar 2026 00:10:28 +0100
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: Alan Maguire <alan.maguire@oracle.com>,
-	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-	dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	kernel-team@fb.com
-Subject: Re: [PATCH dwarves v3 2/9] dwarf_loader: Handle signatures with dead
- arguments
-Message-ID: <ab8lZBk2Z_1sPkZL@krava>
-References: <20260320190917.1970524-1-yonghong.song@linux.dev>
- <20260320190927.1970829-1-yonghong.song@linux.dev>
+        d=1e100.net; s=20251104; t=1774134641; x=1774739441;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=gskRpbF7e3HZE20lexLZJJLsX9C51g5JYA8B2ClPVts=;
+        b=qRQX02hpulfDw+4arhz27o6hzhBgeIdRsZJhHCqSZdjtf/XIe2tT7S5J1FdF6Do+rX
+         FRLB1HiqSIgysz5AwTtWieSnc8dpU8Ugr4uKfX0mecXntWEf5JqrT3opf5y3liKhz8Xj
+         N59zgRqKiQSSqa7d4A6R7+fU1MLQCie3LF0YNF4DS3PPDUHVSaxAFyPtMG0pMwekHEhY
+         WxB/2N94iN3pynQY1W9cYmd1BhM2QnLqtE8UphOAUDFbz0VsHxQz6+U1ij3ctJyH8Gyx
+         tRmjzameX7XueZ2cSev/6zucl1HQkQzJ5KBMf44kgmyn6WB/mh1sVEciCDJWV7h82b45
+         EyCA==
+X-Forwarded-Encrypted: i=1; AJvYcCV/uPoar6xHN3EPpYG9IX56+YJaIuf8SG2/JnfArd0sUdYRRuXRbqSQwJxC1q25HnDJKCY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwKcVkxDadlQH9KOU3tIdG6+BCmLfXihiBPixk8+ZyMRsLw85rT
+	HddwViN2SqAXu0guERjYgckUFa3qGN0bfUHEO+Pkw+byrs6J6RpWtcUSBFjtdVIoHHa+dLAdd/j
+	UHB1Aj/mg64dEDeXrascSEzZtBbk/e+HMH0QhtQ/a
+X-Gm-Gg: ATEYQzykb7EEHfmvmdbN487MkpggSs3aq4Mirn+A7pm5W6AG+5JEX2XxbvolV7Wmda7
+	lNK1WtMyH0z0rY4YrqiMkKbHvGVWwJFN+78fFw1RZHvKugekQHElN1D/qvhgNeXCqLZBjCzGCHN
+	XEDiz0UG9YmEA5XiZKnP2DUrNxc61tgHWN8rtg63CoLdueCu+tSX6YTPzB3vjCOpsG2xphHeD4Q
+	dEARRG2B4ULha7ZKbPcVqpCjbl4CyXi/usjY6QN18ERlwlz17745AAbDWh8z17fmRz4SAh2dPW0
+	5NGS11Hb
+X-Received: by 2002:a17:903:17cc:b0:2a7:87c2:fcde with SMTP id
+ d9443c01a7336-2b08c4e8ebbmr1788085ad.15.1774134640638; Sat, 21 Mar 2026
+ 16:10:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260320190927.1970829-1-yonghong.song@linux.dev>
+References: <20260321024446.692008-1-irogers@google.com> <20d77c80-6538-4dec-804c-156402c26534@linux.dev>
+ <CAP01T76kB8BHSQXp_1+tScrHhQayVm+BhAiDqnq4NeNOS_cMQg@mail.gmail.com>
+ <CAADnVQLKv6LOQw5=8_ZagRXdU7dRPYA+fxJsXiGncqJjZ2hK1w@mail.gmail.com>
+ <CAP-5=fXhuLE5R_t1A=+WLve3Wu9N999gXcG0KjEFGVBBh4+1=Q@mail.gmail.com> <CAADnVQJNt0Xmcm0L7u87fX3xFeVGyLnTxUGjPsnYcNSX4Zv5rQ@mail.gmail.com>
+In-Reply-To: <CAADnVQJNt0Xmcm0L7u87fX3xFeVGyLnTxUGjPsnYcNSX4Zv5rQ@mail.gmail.com>
+From: Ian Rogers <irogers@google.com>
+Date: Sat, 21 Mar 2026 16:10:29 -0700
+X-Gm-Features: AaiRm52CSCEKDzXzsvi00SkOJjBGfxApqGPpCOtGJuq_kvVV8r02qX7BNyoTiF4
+Message-ID: <CAP-5=fUsaORbZuCtUxFgzMT-Cn2jVDLYfcYGSkXC7TdtyfnatQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] libbpf: Fix strict aliasing violations in hashmap
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
+	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	"linux-perf-use." <linux-perf-users@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 20, 2026 at 12:09:27PM -0700, Yonghong Song wrote:
-> For llvm dwarf, the dead argument may be in the middle of
-> DW_TAG_subprogram. So we introduce skip_idx in order to
-> match expected registers properly.
-> 
-> For example:
->   0x00042897:   DW_TAG_subprogram
->                   DW_AT_name      ("create_dev")
->                   DW_AT_calling_convention        (DW_CC_nocall)
->                   DW_AT_type      (0x0002429a "int")
->                   ...
-> 
->   0x000428ab:     DW_TAG_formal_parameter
->                     DW_AT_name    ("name")
->                     DW_AT_type    (0x000242ed "char *")
->                     ...
-> 
->   0x000428b5:     DW_TAG_formal_parameter
->                     DW_AT_location        (indexed (0x3f) loclist = 0x000027f8:
->                        [0xffffffff87681370, 0xffffffff8768137a): DW_OP_reg5 RDI
->                        [0xffffffff8768137a, 0xffffffff87681392): DW_OP_reg3 RBX
->                        [0xffffffff87681392, 0xffffffff876813ae): DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value)
->                     DW_AT_name    ("dev")
->                     DW_AT_type    (0x00026859 "dev_t")
->                     ...
-> 
-> With skip_idx, we can identify that the second original argument
-> 'dev' becomes the first one after optimization.
+On Sat, Mar 21, 2026 at 4:08=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Sat, Mar 21, 2026 at 4:05=E2=80=AFPM Ian Rogers <irogers@google.com> w=
+rote:
+> >
+> > On Sat, Mar 21, 2026 at 12:49=E2=80=AFPM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > On Sat, Mar 21, 2026 at 10:37=E2=80=AFAM Kumar Kartikeya Dwivedi
+> > > <memxor@gmail.com> wrote:
+> > > >
+> > > > On Sat, 21 Mar 2026 at 16:42, Yonghong Song <yonghong.song@linux.de=
+v> wrote:
+> > > > >
+> > > > >
+> > > > >
+> > > > > On 3/20/26 7:44 PM, Ian Rogers wrote:
+> > > > > > The hashmap implementation contained strict aliasing violations=
+.
+> > > > > > Specifically, the hashmap_cast_ptr(p) macro was casting pointer=
+s (such
+> > > > > > as void **) to long *, and these were subsequently dereferenced=
+ in
+> > > > > > functions like hashmap_insert(), hashmap_find(), and hashmap_de=
+lete().
+> > > > > >
+> > > > > > C's strict aliasing rules (C11 6.5/7) prohibit accessing an obj=
+ect
+> > > > > > through an lvalue of an incompatible type. Dereferencing a long=
+ * to
+> > > > > > write to a void * object is a violation, even if they share the=
+ same
+> > > > > > size, as they are not compatible types. This can lead to undefi=
+ned
+> > > > > > behavior, especially with aggressive compiler optimizations.
+> > > > >
+> > > > > Potentially this could be a concern. Did you actually find an iss=
+ue
+> > > > > with it?
+> > > > >
+> > > > > The linux kernel build has
+> > > > >     KBUILD_CFLAGS +=3D -fno-strict-aliasing
+> > > > >
+> > > > > The libbpf does not have this flag. Maybe we should add '-fno-str=
+ict-aliasing'
+> > > > > for libbpf as well? This way, we can avoid any future potential
+> > > > > 'strict aliasing' issues.
+> > > > >
+> > > > > Note that bpf program (tools/testing/selftests/bpf/Makefile)
+> > > > > also has '-fno-strict-alaising' flag.
+> > > > >
+> > > >
+> > > > The change itself looks correct to me, fwiw, but as Yonghong said, =
+we
+> > > > can add -fno-strict-aliasing to CFLAGS and move on. I also doubt th=
+e
+> > > > compiler can cause issues here, since the usage happens in hashmap.=
+c
+> > > > which wouldn't be visible in other CUs where the call is made and
+> > > > pointers are passed in (unless compilers also do aliasing-based opt=
+s
+> > > > during LTO). I guess libbpf maintainers can decide what they prefer=
+.
+> > >
+> > > Agree. I don't think compilers can misoptimize things here.
+> > > It's safe to ignore this.
+> >
+> > There's LTO support in the Linux tree for tools/perf with the LTO=3D1
+> > option [1]. My experience is that it works best with clang and ldd.
+> > libbpf is statically built into perf by default.
+> >
+> > A sashiko review raised the issue when perf was reverting the addition
+> > of -fno-strict-aliasing, the sashiko review is posted to LKML here:
+> > https://lore.kernel.org/lkml/CAP-5=3DfVro6E6fowmmJ7gmKX-5SN8bFU7-5KJk_w=
+FG-bQuVnMHw@mail.gmail.com/
+> >
+> > -fno-strict-aliasing was added because some crypto code (copied from
+> > the kernel) requires it for get/put_unaligned. The fix was to use
+> > memcpy in the unaligned functions, which they now do [2].
+> >
+> > I'd prefer not to hamstring the compiler with -fno-strict-aliasing, we
+> > have sanitizers that can capture aliasing issues.
+>
+> We're not going to hack libbpf source or add -fno-strict-aliasing
+> to Makefile because gemini found a "bug".
 
-hi,
-this change removes for me functions below and some of them (ata_dev_select,
-dmi_save_type, perhaps more) seem to be removed because their last 2 arguments
-are constants IIUC, which does not seem to be what the changelog suggests,
-but I guess it's still correct (it's without +true_signature)
+No worries, I think the best approach is to fork the hashmap copy in
+tools/perf/util and apply the fixes there.
 
-jirka
-
-
-ata_dev_select
-__cgroup1_procs_write
-check_buffer_access
-dax_disassociate_entry
-devlink_nl_sb_port_pool_fill
-dmi_format_ids
-dmi_save_type
-dmi_save_uuid
-get_buffer
-get_net_track
-gue_remcsum
-icmpv4_xrlim_allow
-insert_vmap_area_augment
-__intel_pmu_enable_all
-ip6addrlbl_fill
-ip6_dst_store
-kernelmode_fixup_or_oops
-merge_note_headers_elf32
-merge_note_headers_elf64
-mt_destroy_walk
-__mutex_lock
-__netdev_walk_all_lower_dev
-pci_create_device_link
-populate_kprobe_blacklist
-proc_get_long
-rt_mutex_adjust_prio_chain
-rt_set_nexthop
-run_lwt_bpf
-simple_attr_write_xsigned
-__skb_gro_checksum_validate_needed
-tclass_notify
-tg_set_conf
-toggle_bp_slot
-trace_event_get_offsets_aer_event
-trace_event_get_offsets_br_fdb_external_learn_add
-trace_event_get_offsets_br_fdb_update
-trace_event_get_offsets_cache_tag_flush
-trace_event_get_offsets_devlink_health_recover_aborted
-trace_event_get_offsets_iommu_error
-trace_event_get_offsets_prq_report
-virtio_net_hdr_from_skb
-writeback_inodes_wb
-xfs_file_dio_write_aligned
-
-
-> 
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
->  dwarf_loader.c | 19 +++++++++++++++++--
->  1 file changed, 17 insertions(+), 2 deletions(-)
-> 
-> diff --git a/dwarf_loader.c b/dwarf_loader.c
-> index 21f8bf1..a6e6587 100644
-> --- a/dwarf_loader.c
-> +++ b/dwarf_loader.c
-> @@ -1192,6 +1192,7 @@ static ptrdiff_t __dwarf_getlocations(Dwarf_Attribute *attr,
->  
->  struct func_info {
->  	bool signature_changed;
-> +	int skip_idx;
->  };
->  
->  /* For DW_AT_location 'attr':
-> @@ -1264,6 +1265,7 @@ static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
->  	if (parm != NULL) {
->  		bool has_const_value;
->  		Dwarf_Attribute attr;
-> +		int reg_idx;
->  
->  		tag__init(&parm->tag, cu, die);
->  		parm->name = attr_string(die, DW_AT_name, conf);
-> @@ -1273,7 +1275,18 @@ static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
->  		if (!info->signature_changed) {
->  			if (cu->producer_clang || param_idx >= cu->nr_register_params)
->  				return parm;
-> +		} else {
-> +			/* if true_signature is not enabled, mark parameter as
-> +			 * unexpected_reg since there is a skipped parameter before.
-> +			 */
-> +			if (!conf->true_signature && info->skip_idx) {
-> +				parm->unexpected_reg = 1;
-> +				return parm;
-> +			}
->  		}
-> +		reg_idx = param_idx - info->skip_idx;
-> +		if (reg_idx >= cu->nr_register_params)
-> +			return parm;
->  		/* Parameters which use DW_AT_abstract_origin to point at
->  		 * the original parameter definition (with no name in the DIE)
->  		 * are the result of later DWARF generation during compilation
-> @@ -1311,7 +1324,7 @@ static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
->  		parm->has_loc = dwarf_attr(die, DW_AT_location, &attr) != NULL;
->  
->  		if (parm->has_loc) {
-> -			int expected_reg = cu->register_params[param_idx];
-> +			int expected_reg = cu->register_params[reg_idx];
->  			int actual_reg = parameter__reg(&attr, expected_reg);
->  
->  			if (actual_reg < 0)
-> @@ -1324,8 +1337,10 @@ static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
->  				 * contents.
->  				 */
->  				parm->unexpected_reg = 1;
-> -		} else if (has_const_value) {
-> +		} else if (has_const_value || info->signature_changed) {
->  			parm->optimized = 1;
-> +			if (info->signature_changed)
-> +				info->skip_idx++;
->  		}
->  	}
->  
-> -- 
-> 2.52.0
-> 
-> 
+Thanks for being as useful as ever,
+Ian
