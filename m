@@ -1,230 +1,127 @@
-Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B45FD27FB25
-	for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 02:45:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6524120D4E9;
+	Sat, 21 Mar 2026 03:29:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774061112; cv=none; b=b6Wgn3JxmzOsNziJ6y2arJ/SrID25ARgO5cDMdsIGcKkVbljERFe/VPadlDlZJ52ijttP8g2vtLuS++ZwNmfnYDtBYbIiAf/GCtmnHzgTEnkQGjt9jPgKdU3+NaFAfZ2jtYlg7Xq4kxLd1GKTNUGLnxoHwu5KjcjQpoKupw5HsI=
+	t=1774063763; cv=none; b=WTm5dTM01tOrqA9i/SkP+4REU3/McYSQ4d84pQ7zdMulR1CuEdaYFpmEv8/+5165WLUCApOMN935nhDZ2wUSGsM+hCf7jsHFlnfNBSzymC7i6NaRAoPHOuF1u03ZrNmAXmIO3GAMdqWpk5Ty8pkLyTNavEK9d7KxUUMdFNqAAl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774061112; c=relaxed/simple;
-	bh=Sx2qZsR0FBH05/ug8h+y2r7OwlFfZZ6aM69pnIg1Usw=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=sdTFc6RnXAgXJ1x8b3CuQT/ouFN/rH0EQUp330+bfPcFM5fJWdKBreT6XZQU/T7ISX1tupmSBUfMMnxpRzgceN2ZFZMDnHAK4zIjqip6HLnl2LI4ShcnlgrsKuHt5J4EBCjey12kaZe6E2ioMu/kDlvO52GylxQeX+7xhAlakVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nOkK7vbz; arc=none smtp.client-ip=74.125.82.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+	s=arc-20240116; t=1774063763; c=relaxed/simple;
+	bh=mh6p76DcuMKvsZVq+jRH8JjO2UHkvmtIWgcrxKLwLzk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tgM06gz2B6Tma4IFYYZ5wFiSKa7tRAyonLpAM32uJze9RZ6zu4coQH0BAM7+MBbnNkmaezs5KNrDqJx76IivpowOWh+4WKr01ipNimx9/PASzcL7M1ofZq2ccnFjDr9phTyIk35UgTItI5XtwSLSxlSvVsBm3RJqbOUZJzzUtbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cAnZ7DQI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nOkK7vbz"
-Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2ba8013a9e3so2135723eec.0
-        for <bpf@vger.kernel.org>; Fri, 20 Mar 2026 19:45:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774061110; x=1774665910; darn=vger.kernel.org;
-        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dvU3YbyuJOPN8EpBkqDof0/+6s57Kb8/NNZCwnw6CbA=;
-        b=nOkK7vbzx190CnlmPeQXX4xgQvI5d+BFGIvtm8jBco+J3YqDeGkKH36ZvfF27cbs9T
-         cANaiLCpiIO0xgCVFx0tu2uPVEUNiVHUoqiWGWxM/kBoArjFB6TVB7CD4TaW/yhLWHb5
-         UaYLEMoZp1AuMJYnLlhzNqxyKQhysT7W6T95T/ZNcH7alg6fzJ9fAcZGKjplotCY7nl0
-         uhUWsSa1TFXsmWIWoRB7TAaIK3x8uet91bOZ9UQr3NN9xlSYzqMpFUvsni0cdKSbJCCG
-         5grjYRAZr3rYWrvRg9abTrDIQtge/NZRU/2v4by/dAif5gA3bMTi85GmCg56DJg7FKee
-         hetg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774061110; x=1774665910;
-        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dvU3YbyuJOPN8EpBkqDof0/+6s57Kb8/NNZCwnw6CbA=;
-        b=GHwwRl46RNmS/ICUqdO68YVTLVF+UhJaCEU7H15lIhy0/HVh0yaBbQNg6UGiJ/7DVm
-         5pXEii2l72GMCwBXELO0Ar+G6oxtF5EybLLtdR+KsCmqZ4J30wrMJIeiz/9xLC8i0OBa
-         /5HjAB1cjrsQHU9ggrD6UBGycfmZ9AYA2CFRuRx8oN6Bp0NhjJpvzaR22pnNyYYI2tJ0
-         gphpdeY7sOAUFpH5E9T4qbGpz2W5m32dp40mwggO+V8yg2XEjqKSyDOvSkPIpH5RUTs5
-         G/EA1hwMTh0h1itos/X26AjERlGbyiYuSX0+Wcqy6JuXG0etdU6tnd0ivEcGZUspH4QN
-         iKjg==
-X-Forwarded-Encrypted: i=1; AJvYcCVrtu1WK9kLnz9gvZgelzYGIIlVrV6LRAlqL+Ky+c3xpW+ySDSqHxGc7YGrNfmLAyrNnIM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzETB9YsktOpdxRY0WbvYwMq8tcVMLLSi1TauRyumDyPcxJ3xVs
-	ri8RAkivx9ZOumgZ1NukrUw2w2PDwSKZI2OHMViTL4zUfkZRLwYnHs6PTXx0xQpLEnU5dj2xIDT
-	UeYeXHqtmXQ==
-X-Received: from dlec8-n1.prod.google.com ([2002:a05:701b:4288:10b0:128:cffb:50d7])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:327:b0:128:d494:a1ab
- with SMTP id a92af1059eb24-12a72652be2mr2192729c88.15.1774061109555; Fri, 20
- Mar 2026 19:45:09 -0700 (PDT)
-Date: Fri, 20 Mar 2026 19:44:46 -0700
-In-Reply-To: <20260321024446.692008-1-irogers@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cAnZ7DQI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C116AC4CEF7;
+	Sat, 21 Mar 2026 03:29:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774063762;
+	bh=mh6p76DcuMKvsZVq+jRH8JjO2UHkvmtIWgcrxKLwLzk=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=cAnZ7DQIOmuadhoZlwtekTPxX/lgNr2V9s1dyb2lOFWasMPTw1MmUpMqZKSVAercX
+	 cqP9wLO97qCHmw48DsVr24ceI3CL1ay6/2ionKEMKCD+i/wy8ppi9zLBefAXVxruCY
+	 APOXHE2Jyde6RecU/+QZ/4eJfb0XedToXcLdXJOILRQvXBlO12rJByvrg0HyORa0UE
+	 tvaWGoMu4NefF7K57AFsp10j8UhWnGBtSWUIhUtNqsGXf48TyFCWBYz+Cy0RJGU07d
+	 I9mjrqmcCnoQM+Ap8OXseNuxnj7RUnmilNp5FuAe+cfBreXtV4FF7gBloCyZIe7Puc
+	 9z2LP8xXeGq5A==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 1FD53CE0AB1; Fri, 20 Mar 2026 20:29:20 -0700 (PDT)
+Date: Fri, 20 Mar 2026 20:29:20 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Boqun Feng <boqun@kernel.org>
+Cc: Joel Fernandes <joelagnelf@nvidia.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	frederic@kernel.org, neeraj.iitr10@gmail.com, urezki@gmail.com,
+	boqun.feng@gmail.com, rcu@vger.kernel.org,
+	Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>
+Subject: Re: Next-level bug in SRCU implementation of RCU Tasks Trace +
+ PREEMPT_RT
+Message-ID: <ad67e723-7f7d-4350-b886-c04e56c0b78d@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <abwyGtG7hDpd8vBN@tardis.local>
+ <CAP01T75S-NMgB=s_0jqq52xRwe1cQ29DzD33eeqUZHM3cSb=oA@mail.gmail.com>
+ <abxZEE4SAMkNEleq@tardis.local>
+ <89763fcd-3710-49a0-91ca-cd923b47fc1e@nvidia.com>
+ <abxfBZ89wIJILuom@tardis.local>
+ <c391f8b9-a168-4235-aa7b-6902b4f07002@paulmck-laptop>
+ <ab1u-AuqIbJakUYW@tardis.local>
+ <2b3848e9-3b11-41b8-8c44-5de28d4a4433@paulmck-laptop>
+ <ab18cUI_4jKA8wcA@tardis.local>
+ <64a29c44-395a-4199-b580-5bfca715a816@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260321024446.692008-1-irogers@google.com>
-X-Mailer: git-send-email 2.53.0.959.g497ff81fa9-goog
-Message-ID: <20260321024446.692008-2-irogers@google.com>
-Subject: [PATCH v1 2/2] perf tools: Fix strict aliasing violations in hashmap
-From: Ian Rogers <irogers@google.com>
-To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Ian Rogers <irogers@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <64a29c44-395a-4199-b580-5bfca715a816@paulmck-laptop>
 
-The hashmap in perf util (copied from libbpf) contained strict
-aliasing violations.  Specifically, the hashmap_cast_ptr(p) macro was
-casting pointers (such as void **) to long *, and these were
-subsequently dereferenced in functions like hashmap_insert(),
-hashmap_find(), and hashmap_delete().
+On Fri, Mar 20, 2026 at 04:11:26PM -0700, Paul E. McKenney wrote:
+> On Fri, Mar 20, 2026 at 09:57:21AM -0700, Boqun Feng wrote:
+> > On Fri, Mar 20, 2026 at 09:24:15AM -0700, Paul E. McKenney wrote:
 
-C's strict aliasing rules (C11 6.5/7) prohibit accessing an object
-through an lvalue of an incompatible type. Dereferencing a long * to
-write to a void * object is a violation, even if they share the same
-size, as they are not compatible types. This can lead to undefined
-behavior, especially with aggressive compiler optimizations.
+[ . . . ]
 
-Fix this by:
-1. Updating hashmap_insert(), hashmap_find(), and hashmap_delete() to
-   take void * for their output parameters (old_key, old_value, and
-   value).
-2. Modifying the implementation to use memcpy() and memset() for
-   accessing these output parameters. Accessing an object as an array of
-   characters (as done by memcpy) is a permitted exception to the
-   strict aliasing rules.
-3. Updating the hashmap_cast_ptr(p) macro to return void *, ensuring
-   compatibility with the new function signatures while preserving the
-   static assertion that ensures the pointed-to type matches the size of
-   a long.
+> > I will definitely review it if you beat me to it ;-)
+> 
+> I am sure that further adjustments will be required.  ;-)
 
-Input parameters (key and value) remain as long, as they involve value
-conversion rather than incompatible pointer dereferencing, which is safe
-under strict aliasing rules.
+And speaking of further adjustments, heavier rcutorture testing found
+the bug allegedly fixed by the following.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/hashmap.c | 21 +++++++++++----------
- tools/perf/util/hashmap.h |  8 ++++----
- 2 files changed, 15 insertions(+), 14 deletions(-)
+I will be testing the stack over the weekend.
 
-diff --git a/tools/perf/util/hashmap.c b/tools/perf/util/hashmap.c
-index 140ee4055676..ef50d262a126 100644
---- a/tools/perf/util/hashmap.c
-+++ b/tools/perf/util/hashmap.c
-@@ -8,6 +8,7 @@
- #include <stdint.h>
- #include <stdlib.h>
- #include <stdio.h>
-+#include <string.h>
- #include <errno.h>
- #include <linux/err.h>
- #include "hashmap.h"
-@@ -153,24 +154,24 @@ static bool hashmap_find_entry(const struct hashmap *map,
- 
- int hashmap_insert(struct hashmap *map, long key, long value,
- 		   enum hashmap_insert_strategy strategy,
--		   long *old_key, long *old_value)
-+		   void *old_key, void *old_value)
- {
- 	struct hashmap_entry *entry;
- 	size_t h;
- 	int err;
- 
- 	if (old_key)
--		*old_key = 0;
-+		memset(old_key, 0, sizeof(long));
- 	if (old_value)
--		*old_value = 0;
-+		memset(old_value, 0, sizeof(long));
- 
- 	h = hash_bits(map->hash_fn(key, map->ctx), map->cap_bits);
- 	if (strategy != HASHMAP_APPEND &&
- 	    hashmap_find_entry(map, key, h, NULL, &entry)) {
- 		if (old_key)
--			*old_key = entry->key;
-+			memcpy(old_key, &entry->key, sizeof(long));
- 		if (old_value)
--			*old_value = entry->value;
-+			memcpy(old_value, &entry->value, sizeof(long));
- 
- 		if (strategy == HASHMAP_SET || strategy == HASHMAP_UPDATE) {
- 			entry->key = key;
-@@ -203,7 +204,7 @@ int hashmap_insert(struct hashmap *map, long key, long value,
- 	return 0;
- }
- 
--bool hashmap_find(const struct hashmap *map, long key, long *value)
-+bool hashmap_find(const struct hashmap *map, long key, void *value)
- {
- 	struct hashmap_entry *entry;
- 	size_t h;
-@@ -213,12 +214,12 @@ bool hashmap_find(const struct hashmap *map, long key, long *value)
- 		return false;
- 
- 	if (value)
--		*value = entry->value;
-+		memcpy(value, &entry->value, sizeof(long));
- 	return true;
- }
- 
- bool hashmap_delete(struct hashmap *map, long key,
--		    long *old_key, long *old_value)
-+		    void *old_key, void *old_value)
- {
- 	struct hashmap_entry **pprev, *entry;
- 	size_t h;
-@@ -228,9 +229,9 @@ bool hashmap_delete(struct hashmap *map, long key,
- 		return false;
- 
- 	if (old_key)
--		*old_key = entry->key;
-+		memcpy(old_key, &entry->key, sizeof(long));
- 	if (old_value)
--		*old_value = entry->value;
-+		memcpy(old_value, &entry->value, sizeof(long));
- 
- 	hashmap_del_entry(pprev, entry);
- 	free(entry);
-diff --git a/tools/perf/util/hashmap.h b/tools/perf/util/hashmap.h
-index 0c4f155e8eb7..a888bf8c05de 100644
---- a/tools/perf/util/hashmap.h
-+++ b/tools/perf/util/hashmap.h
-@@ -116,7 +116,7 @@ enum hashmap_insert_strategy {
- 	_Static_assert((__builtin_constant_p((p)) ? (p) == NULL : 0) ||			\
- 				sizeof(*(p)) == sizeof(long),				\
- 		       #p " pointee should be a long-sized integer or a pointer");	\
--	(long *)(p);									\
-+	(void *)(p);									\
- })
- 
- /*
-@@ -128,7 +128,7 @@ enum hashmap_insert_strategy {
-  */
- int hashmap_insert(struct hashmap *map, long key, long value,
- 		   enum hashmap_insert_strategy strategy,
--		   long *old_key, long *old_value);
-+		   void *old_key, void *old_value);
- 
- #define hashmap__insert(map, key, value, strategy, old_key, old_value) \
- 	hashmap_insert((map), (long)(key), (long)(value), (strategy),  \
-@@ -147,14 +147,14 @@ int hashmap_insert(struct hashmap *map, long key, long value,
- #define hashmap__append(map, key, value) \
- 	hashmap__insert((map), (key), (value), HASHMAP_APPEND, NULL, NULL)
- 
--bool hashmap_delete(struct hashmap *map, long key, long *old_key, long *old_value);
-+bool hashmap_delete(struct hashmap *map, long key, void *old_key, void *old_value);
- 
- #define hashmap__delete(map, key, old_key, old_value)		       \
- 	hashmap_delete((map), (long)(key),			       \
- 		       hashmap_cast_ptr(old_key),		       \
- 		       hashmap_cast_ptr(old_value))
- 
--bool hashmap_find(const struct hashmap *map, long key, long *value);
-+bool hashmap_find(const struct hashmap *map, long key, void *value);
- 
- #define hashmap__find(map, key, value) \
- 	hashmap_find((map), (long)(key), hashmap_cast_ptr(value))
--- 
-2.53.0.959.g497ff81fa9-goog
+							Thanx, Paul
 
+------------------------------------------------------------------------
+
+commit a717ba6b919d1be6d13e3ce13ca70e2afd3c24d0
+Author: Paul E. McKenney <paulmck@kernel.org>
+Date:   Fri Mar 20 20:06:22 2026 -0700
+
+    srcu: Push srcu_node allocation to GP when non-preemptible
+    
+    When the srcutree.convert_to_big and srcutree.big_cpu_lim kernel boot
+    parameters specify initialization-time allocation of the srcu_node
+    tree for statically allocated srcu_struct structures (for example, in
+    DEFINE_SRCU() at build time instead of init_srcu_struct() at runtime),
+    init_srcu_struct_nodes() will attempt to dynamically allocate this tree
+    at the first run-time update-side use of this srcu_struct structure,
+    but while holding a raw spinlock.  Because the memory allocator can
+    acquire non-raw spinlocks, this can result in lockdep splats.
+    
+    This commit therefore uses the same SRCU_SIZE_ALLOC trick that is used
+    when the first run-time update-side use of this srcu_struct structure
+    happens before srcu_init() is called.  The actual allocation then takes
+    place from workqueue context at the ends of upcoming SRCU grace periods.
+    
+    Fixes: ce2e65b01ad1 ("srcu: Use raw spinlocks so call_srcu() can be used under preempt_disable()")
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+index 2328827f8775c..678bd9a73875b 100644
+--- a/kernel/rcu/srcutree.c
++++ b/kernel/rcu/srcutree.c
+@@ -227,9 +227,12 @@ static int init_srcu_struct_fields(struct srcu_struct *ssp, bool is_static)
+ 	ssp->srcu_sup->srcu_gp_seq_needed_exp = SRCU_GP_SEQ_INITIAL_VAL;
+ 	ssp->srcu_sup->srcu_last_gp_end = ktime_get_mono_fast_ns();
+ 	if (READ_ONCE(ssp->srcu_sup->srcu_size_state) == SRCU_SIZE_SMALL && SRCU_SIZING_IS_INIT()) {
+-		if (!init_srcu_struct_nodes(ssp, is_static ? GFP_ATOMIC : GFP_KERNEL))
++		if (!preemptible())
++			WRITE_ONCE(ssp->srcu_sup->srcu_size_state, SRCU_SIZE_ALLOC);
++		else if (init_srcu_struct_nodes(ssp, GFP_KERNEL))
++			WRITE_ONCE(ssp->srcu_sup->srcu_size_state, SRCU_SIZE_BIG);
++		else
+ 			goto err_free_sda;
+-		WRITE_ONCE(ssp->srcu_sup->srcu_size_state, SRCU_SIZE_BIG);
+ 	}
+ 	ssp->srcu_sup->srcu_ssp = ssp;
+ 	smp_store_release(&ssp->srcu_sup->srcu_gp_seq_needed,
