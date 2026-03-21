@@ -1,158 +1,88 @@
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6DF018E025
-	for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 15:40:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10E0028002B
+	for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 16:35:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774107631; cv=none; b=I206jMxrfLMiuH9ZG3ri3+o8FtxTx7G+EvL6+9pch2ghc9MrrIgqhZ3tcLFu+hj+dcGc5FF1rsA/pue00tUdn5H6YT+4hapPGbO0PZaAcouZRm4pIcM2COoDdB3A48D4/wwlEk5wrlY6dKB8Ep7sLRZBWfGFz+sqsaFAedtMowE=
+	t=1774110905; cv=none; b=Vr6SlDfs6BnTfi8CgTpqsijipE/Tn4SpQfJm1RZ+6LEjR2CndJ5ibM9yf0hlQF4rPhqupLsCwZa0av8JUSGp5ZEZxk2bdWndfP6hZaG9K+/EIaudxV6FvBafNeORLBuW8MGIwOsUX8OTIVH1wI1F7cKXAKJgvA1gG+0INhDo5Sk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774107631; c=relaxed/simple;
-	bh=xeifeO8z3MuDy4wz8FY0AraYOOq9oBCxeUZOl9PPdGo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=YrYmpz6ZbYNnuxEwagObeGUKC4HAXr6Noa3tIE/avwU0WvlZO3b6rQVyNNxPRISQtpfB+LWXSCG/E9FS+Q2bhJOxGNPfxrxOdon4xotWtmQk+0wxqU1ofz/n2FadrIayA1UGvzB4Iqv0NginG4uN6bBo3B8ypj0TqC3E59rszdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FOZ7wN5j; arc=none smtp.client-ip=95.215.58.183
+	s=arc-20240116; t=1774110905; c=relaxed/simple;
+	bh=WG5XCLq40qZgpZXoZQoQzh1JTe8VNQCWfKKkdjx3lWk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HuQRIaEi78JpeQ8Vgv6wUuLQ1AccAOfI/vZ4vfZgnzJnnMBdBQ7F19Sqm+dCqpDJX1f+52MXWk/eHLL0r29hCWtDg4Tbg+AAbowGeSqyVqMlJpeZ3qWm32AqYvSMz7DdTo+yunAPqgJ/HKOSLWmRxl3WK4CldF/lqX2yGQGoEZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Eh0DOGRe; arc=none smtp.client-ip=95.215.58.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FOZ7wN5j"
-Message-ID: <20d77c80-6538-4dec-804c-156402c26534@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Eh0DOGRe"
+Message-ID: <b2b92bc4-1921-4fb2-8038-d547b6dd468b@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774107617;
+	t=1774110892;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=R1xbV5lFfC6JBplJ0yW6J+xSG/V2oZ+k7p4c0Lgblks=;
-	b=FOZ7wN5jzEjmcPeHEMEzRELlraaK56uAqnRB4wDB+FTkkMN0PvWbe832ZM0t9+yudAWslS
-	6qfvEjP9ys/Nn5dqYa/bgWtIRiB8cSmyD7uTD0uVykscneE5z8rSUruBpAoznQRrv2Erry
-	SV9qvXNXF743EF154iYCQ/0chrxGKOI=
-Date: Sat, 21 Mar 2026 08:40:05 -0700
+	bh=WG5XCLq40qZgpZXoZQoQzh1JTe8VNQCWfKKkdjx3lWk=;
+	b=Eh0DOGRe2vT+tB58d3W3j29+ohL9d3Es5GZg3SXahlxzgBAJBOk7OXI2Fhy+XDAUcSy4DS
+	kFE43E1F4mSvItOfFRDlelbtM90JrsY5u2cmW3bNKzoO6xnvgoFlo7r5qJ/VpFISdd7mKf
+	atjrIW5xg/Xv43vHxgWdpVt1KB4J13E=
+Date: Sat, 21 Mar 2026 09:34:42 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v1 1/2] libbpf: Fix strict aliasing violations in hashmap
+Subject: Re: [PATCH bpf v2 1/2] bpf: Fix exception exit lock checking for
+ subprogs
 Content-Language: en-GB
-To: Ian Rogers <irogers@google.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Adrian Hunter <adrian.hunter@intel.com>, James Clark
- <james.clark@linaro.org>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-perf-users@vger.kernel.org
-References: <20260321024446.692008-1-irogers@google.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel-team@meta.com
+References: <20260320000809.643798-1-ihor.solodrai@linux.dev>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260321024446.692008-1-irogers@google.com>
+In-Reply-To: <20260320000809.643798-1-ihor.solodrai@linux.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
 
 
-On 3/20/26 7:44 PM, Ian Rogers wrote:
-> The hashmap implementation contained strict aliasing violations.
-> Specifically, the hashmap_cast_ptr(p) macro was casting pointers (such
-> as void **) to long *, and these were subsequently dereferenced in
-> functions like hashmap_insert(), hashmap_find(), and hashmap_delete().
+On 3/19/26 5:08 PM, Ihor Solodrai wrote:
+> process_bpf_exit_full() passes check_lock = !curframe to
+> check_resource_leak(), which is false in cases when bpf_throw() is
+> called from a static subprog. This makes check_resource_leak() to skip
+> validation of active_rcu_locks, active_preempt_locks, and
+> active_irq_id on exception exits from subprogs.
 >
-> C's strict aliasing rules (C11 6.5/7) prohibit accessing an object
-> through an lvalue of an incompatible type. Dereferencing a long * to
-> write to a void * object is a violation, even if they share the same
-> size, as they are not compatible types. This can lead to undefined
-> behavior, especially with aggressive compiler optimizations.
-
-Potentially this could be a concern. Did you actually find an issue
-with it?
-
-The linux kernel build has
-    KBUILD_CFLAGS += -fno-strict-aliasing
-
-The libbpf does not have this flag. Maybe we should add '-fno-strict-aliasing'
-for libbpf as well? This way, we can avoid any future potential
-'strict aliasing' issues.
-
-Note that bpf program (tools/testing/selftests/bpf/Makefile)
-also has '-fno-strict-alaising' flag.
-
+> At runtime bpf_throw() unwinds the stack via ORC without releasing any
+> user-acquired locks, which may cause various issues as the result.
 >
-> Fix this by:
-> 1. Updating hashmap_insert(), hashmap_find(), and hashmap_delete() to
->     take void * for their output parameters (old_key, old_value, and
->     value).
-> 2. Modifying the implementation to use memcpy() and memset() for
->     accessing these output parameters. Accessing an object as an array of
->     characters (as done by memcpy) is a permitted exception to the
->     strict aliasing rules.
-> 3. Updating the hashmap_cast_ptr(p) macro to return void *, ensuring
->     compatibility with the new function signatures while preserving the
->     static assertion that ensures the pointed-to type matches the size of
->     a long.
+> Fix by setting check_lock = true for exception exits regardless of
+> curframe, since exceptions bypass all intermediate frame
+> cleanup. Update the error message prefix to "bpf_throw" for exception
+> exits to distinguish them from normal BPF_EXIT.
 >
-> Input parameters (key and value) remain as long, as they involve value
-> conversion rather than incompatible pointer dereferencing, which is safe
-> under strict aliasing rules.
+> Fix reject_subprog_with_rcu_read_lock test which was previously
+> passing for the wrong reason. Test program returned directly from the
+> subprog call without closing the RCU section, so the error was
+> triggered by the unclosed RCU lock on normal exit, not by
+> bpf_throw. Update __msg annotations for affected tests to match the
+> new "bpf_throw" error prefix.
 >
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->   tools/lib/bpf/hashmap.c | 21 +++++++++++----------
->   tools/lib/bpf/hashmap.h |  8 ++++----
->   2 files changed, 15 insertions(+), 14 deletions(-)
+> The spin_lock case is not affected because they are already checked [1]
+> at the call site in do_check_insn() before bpf_throw can run.
 >
-> diff --git a/tools/lib/bpf/hashmap.c b/tools/lib/bpf/hashmap.c
-> index 140ee4055676..ef50d262a126 100644
-> --- a/tools/lib/bpf/hashmap.c
-> +++ b/tools/lib/bpf/hashmap.c
-> @@ -8,6 +8,7 @@
->   #include <stdint.h>
->   #include <stdlib.h>
->   #include <stdio.h>
-> +#include <string.h>
->   #include <errno.h>
->   #include <linux/err.h>
->   #include "hashmap.h"
-> @@ -153,24 +154,24 @@ static bool hashmap_find_entry(const struct hashmap *map,
->   
->   int hashmap_insert(struct hashmap *map, long key, long value,
->   		   enum hashmap_insert_strategy strategy,
-> -		   long *old_key, long *old_value)
-> +		   void *old_key, void *old_value)
->   {
->   	struct hashmap_entry *entry;
->   	size_t h;
->   	int err;
->   
->   	if (old_key)
-> -		*old_key = 0;
-> +		memset(old_key, 0, sizeof(long));
->   	if (old_value)
-> -		*old_value = 0;
-> +		memset(old_value, 0, sizeof(long));
->   
->   	h = hash_bits(map->hash_fn(key, map->ctx), map->cap_bits);
->   	if (strategy != HASHMAP_APPEND &&
->   	    hashmap_find_entry(map, key, h, NULL, &entry)) {
->   		if (old_key)
-> -			*old_key = entry->key;
-> +			memcpy(old_key, &entry->key, sizeof(long));
->   		if (old_value)
-> -			*old_value = entry->value;
-> +			memcpy(old_value, &entry->value, sizeof(long));
->   
->   		if (strategy == HASHMAP_SET || strategy == HASHMAP_UPDATE) {
->   			entry->key = key;
-> @@ -203,7 +204,7 @@ int hashmap_insert(struct hashmap *map, long key, long value,
->   	return 0;
->   }
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/bpf/verifier.c?h=v7.0-rc4#n21098
+>
+> Assisted-by: Claude:claude-opus-4-6
+> Fixes: f18b03fabaa9 ("bpf: Implement BPF exceptions")
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
-[...]
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
 
