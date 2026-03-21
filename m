@@ -1,279 +1,139 @@
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E7230B51A
-	for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 12:37:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E87E946A
+	for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 15:15:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.54
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774096668; cv=pass; b=ge2CG9zK8I/A62gMv6kgoQ5GOOgbnpht9DKrjTyrvSWpNdcTUbhWep3VO766/c5Bpnwd77skYyF8J1LL5ow+yQKGDtsOz/mqPCp233tMNJJK8LuwO1ivbeqXByIwNa09+iEM78tIcR9mbPwPUZo5I/0YQcqSWbHcsT5SJSghH2w=
+	t=1774106115; cv=pass; b=syHkWgqnXeWXxpQa16jCxzJ1UE/EvEetp8W7Y1J4u2vupfB+TtlnAQqIftUfFcskzMPnhQC78JYMG20BNxM353/7cyH2r+NjdFXLqDFPhI5QCU9NaZfDXh+HkA6XelMRyJX2Ny5p7lXpWGr7L8SV9Xv/dsyz8i5r4yecHqP6j6w=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774096668; c=relaxed/simple;
-	bh=ldYXzSM0a4a6oZo8VSiYbhjlglQ/I/gBNkLRtQjLpAU=;
+	s=arc-20240116; t=1774106115; c=relaxed/simple;
+	bh=5mGL6JLmgZWYyU/qPf6tAQJtZcST/RrT21ppm/U7itk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uxe0f+Y2CzqPApvPhWz57QJgoOyhA9ZbdqGGcmhkn4H0Qm7eME3R8mjIeoFc5qY/vjVSDdk83cUf0p032b5CAwH4PXDfEeAosb6am575GmJ3wIz5shh9786k0w1oJRalOuaVIQPWNHZxG17X2u340o9gEViGP+82HP1me32Z7cE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P6qWHIEc; arc=pass smtp.client-ip=209.85.128.172
+	 To:Cc:Content-Type; b=IgTYn4/xlJ9PNBwgFIsbarh99EMEEfGQMDA2yDAcpuBxvNhHLIh2ozq8aW/E8aabvxW8fed1wNqL7PGaAwV+bSZUnhqhc9uoOxro4bobwhUDiBy1WOmilbTZSyJ7AZlTxCYn+z+n73Kqzq1YW962qE9eTdYzOgARSoM1OMxzbK8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kmWDOwwx; arc=pass smtp.client-ip=74.125.224.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P6qWHIEc"
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-79a2ee65171so14243337b3.2
-        for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 05:37:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774096666; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kmWDOwwx"
+Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-64ad46a44easo2599266d50.0
+        for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 08:15:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774106113; cv=none;
         d=google.com; s=arc-20240605;
-        b=PNpzmohWZUdh9NwFPFv1s5rMwQJa11ThOv3VbMeS/ge1mAt8Wp6mjIYKwPHcBnO2+e
-         lk+1iHytiyergSbt2W9DtBfHMEIu619LD2lsYlTpSDzaV76A7afE+RoCxDhP3Xf0U7lR
-         WHBTg96dlDQ5xwOem/9XzqRiwU2hlhAhPMadlVsxHk4vvfBeOJds0NBIThhleCWHLjcx
-         V+p94FH2hh09jwiu9d+DueYv+R4SZ9zWqcCqJim7LH5eIWQlaIUt8FejEtqTKw1aw3tM
-         exkgvKhVrApT4zqbvP61yoZGlASqX2AMrqC/Us8Mls1bcVR1GQUhdHOUmFC6VtDmVE83
-         vQsg==
+        b=BGkhnt17DRk2KWR9a6JVkhrwrgnVK9ZVkw/bvT+FCr1I+QSq20W/zFQVTFtoN8Ippi
+         eHJlffaFs8Ncds9sgo/M0M7rQOWe4RfSAVs2YayvI/Ra34lr68WAj9Jjj55KFLkAxNNA
+         FiikajCCKjZt1+RnlGuHYydP6enIp1IJQBe4W1xwTLa+YDjf3tUbbeT56ivDji9TPvjG
+         GwIyhkvxUkJM74C6Y+cdWJMzofX2E3WBRzgPE0Z6Ir0hJ7GC6vB2XOMxo0IJlxVChxaS
+         5adLQyc+ijxDxMjEedlgC6Z3hhSedt101zRJ6UMQ+uI8AS3sK7H6mm98+tACtc/uCmXZ
+         QCAA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=dpFgoUOdRN5iYXgRsH3KmveUpjhuVCY3dYwmKgUMeiU=;
-        fh=vIEityhx54bHkEtbC9HwFahNah0rhatAPpNbbI3JcsI=;
-        b=c2JTMNkk8uObgegroCYCdYh25A+Am2qcshSzxxqjJTlUJeicrz+dBfWCNgNP1eKOfT
-         fIm8cmWHLa5hM7aftQ7KFAJxmfeqZ1QngeXSAi2yl3YOCFMcttTIYqsgM+nUHyRX0O1w
-         8kP6qQr9HCOAHi88H+r9Kp88E09tFEiQjshsXlrWI5VRIfK5At49/DwmWt4NIUX6RDQ6
-         hQqBCIcGNcdyRtFgJozYANLy0IFMPGE2IxgYGhHyvKtto5BiILJzmPUHLq+IteYQXwdF
-         QSFIpcg/25lGz4cJ3pXkfJVBS7QwMvmoI/NkMF01NNEVGPedwTP3FxDxH/q6k58r58bb
-         n99g==;
+        bh=UssSeiCRIOH5UnxRZFcsTlvlkmDNNOvfP0OrvrwVLmM=;
+        fh=GNCVTFOGbDeZMVxymcUpItqckfGv2r2aR9FC+xxka+c=;
+        b=LfeIYvGTWAr7KmIcOXEXBmSt/mqdZSApxFQNl+Da8KG4yBqM3oDyX7uZkstl6RvCxZ
+         w+OwecGKK29egoSo/ytm0r+jfAtEb297WIAQGeDaVI9vhKVpfgrX3i0mFP+6GD/hBdfT
+         /quIQINlqdr49BZQpeJb9fcii6+4Ivz+4HzISyacxQRPBUS9zX6NtScWjTjy0vn3BAoB
+         umosy/8JA9zCLKYKg9L0riarrT9cMI4WAEI5BcxQVIEKZLFUR5CamFYU0yt2Spc4l6yj
+         UNpKLEUHdNgG+ZbwwRv8Xj0JIppAtH6m6wEz0e6WXRI3dQIA2VfuZNFmcxVKvIBDV6OW
+         6R0A==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774096666; x=1774701466; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1774106113; x=1774710913; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dpFgoUOdRN5iYXgRsH3KmveUpjhuVCY3dYwmKgUMeiU=;
-        b=P6qWHIEcB2q+BwKJTwQiy0R7Lrn0RPBuQPUfAfAbadxtRU+8LGn/B/ZLrMtwAc4Pki
-         nnGiv9oRPepfCcxusE7aOWprFyDon/94dMJvG4rYiAG8+WBmUK+Bi1dw1N2B4k1bYxxq
-         oZS4llV4730IsuHZZrVrS0ueCL49Ywv3XRRGYHQOSQ2DdNHXAkj5uN0HuUmYfk4s6O95
-         lED8tss/lPyVR4jjFfBU8bpcy0QF18RqqBJ/nUi5ua5c7IEWDnIWE/fDUIxgcEHaFmt4
-         vdu23Ivwd2XmS0HDQdJrPxhxJR5R3kq5Yw7tBmQ7xw4MPqx32eL0ge5CwvQ6mkIbgjEJ
-         PMkg==
+        bh=UssSeiCRIOH5UnxRZFcsTlvlkmDNNOvfP0OrvrwVLmM=;
+        b=kmWDOwwxtZAVXPqj3U7nhNyQTo9cs1FvJIIqBwngV7GsC4Gz0eAnFGLtmOwCyVLOx0
+         j1o4eld92KcdEMCR7qqosEX3CZUnGVFsIJYXvmgH/29YdrhQw8eaOnP1p5Lb+7GJEY06
+         +QNib6YPBm5XfgkCCdO2hDunrdxiXmI+o7E1hm59uH0D5tKC/HCp+S4Acx/5TyVjMsAH
+         d4rSP1H2zW9IW+Lj/5ttRNpa9fKN4/DITCazai9mmFtY5d1x8Jwc9eIkMk5gvA+wdTr9
+         58xqLmMTMPnaoH7lS4r7Mynd/0QUszH9FIlgtkJvqxlxxjuVXcMD6ZlnRoPYtPyyt2AY
+         7T9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774096666; x=1774701466;
+        d=1e100.net; s=20251104; t=1774106113; x=1774710913;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=dpFgoUOdRN5iYXgRsH3KmveUpjhuVCY3dYwmKgUMeiU=;
-        b=eafcZfFFrj0nLGboQS3GP/ieSKWBmgeuf6rnfEyX+xUnODoHt/NKkikdcrseGFq6f/
-         utOUenlTmUjRE9/ozbFJPY6GCRrZhLsFEM+DgkJcpzmmWI9IFMiArBBLrrF1KIWE1i7D
-         T7Eb9ZA5fqtWouAmNo8SPhinvWW+n4BXNQFrtUVbrWQxFjexHSDsWyhlIWMeKC6a81EF
-         fpWhEzRSHx8Rm+llqS5jtiZ4mmwqmAhXAVXDoEr8VpClIT1+G2Hn/cR5ZAcSW1LaUPVw
-         0QabC7CEaDRFEzlb8c4wA9PRwYG2It6DhfEuCff3D+0nu1+3Vu7pCl2VfBTYMY4fcpsz
-         vpaA==
-X-Forwarded-Encrypted: i=1; AJvYcCX6IbpoVHtBRoL1bVTyFvKx+Pijez/Df06KrrxkULIs7AFK37mw8aUMf9gPZIP2RxU86XA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy4intfceShZXIC5RdyOt/oyvjdzJMIX9sDpAdkst/kw0MoqnO3
-	EWGBB05PQoxsrIYzNMO7sL2EGIdIbCPY+6i9EdJGXBKbc9nxxcxBZnlY9cGh7zeGnmyui8SmwZG
-	q9bAj/86nCY13ssHkIWMwUkIYdUPZmTI=
-X-Gm-Gg: ATEYQzypijR0AAp5bsQTvzML4YzJgyGfVqYnoE0Otc/dAAbER/7h5Iv16y+txTKOqrQ
-	S2cAotf+dKcN4TO9OhIVkDa+lmGhLqDCmU8gJDCsz4bo09BmkI4mcmkDKTxFEeqPlmzoMxWP0kI
-	0fHtdb8hhQv+Q8YI4YDj4Fbm+n/GxI0kH5P1vDGdqoXXF1sZiUhC5n1sZ3IX4wrOXcCEnUBp2rb
-	JW2p9eV1k46M76tFQMehS9Yyw9lXNxXzpQxHKqjOPDMOOQEYxmN2ZgHm1nUQxptxX9BhGcHtN4Q
-	qBh1Wfk=
-X-Received: by 2002:a05:690c:c50f:b0:79a:67a0:adf1 with SMTP id
- 00721157ae682-79a90c0fe7amr63690597b3.45.1774096666368; Sat, 21 Mar 2026
- 05:37:46 -0700 (PDT)
+        bh=UssSeiCRIOH5UnxRZFcsTlvlkmDNNOvfP0OrvrwVLmM=;
+        b=RgZ1O1AFYm2MMIDVadGmaeM8eSC1ixOPfZ1gZ8rSLCYFnmIsmTnaiVAJIkyuGkustP
+         P+AT++LPt59gJqwyOZ4UJSf5lNTLHCT/xORxUqgN70tyj7euTSpnOhqh5KLkMo+OUR9X
+         /teKluZ7QvZ1hi8FeBSU50P47NTNIhcZtM7G9INjMx21X+SEf+N25P+QER41zbDx0k7V
+         SrOrRBDerD+zM58VBVtMoWlgITMf3tdRN6zYhehhElztGgceO23uUdsDPB+3/yZqRioC
+         wY6mdcjUEAsLl7fRe6zbqJcy76WQxsiA+paOcnn5xxHt5RgRIoL5000nGvDm+m1MJB7x
+         uPcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXX/1HFp8k2I9P9QtyB53W/fRIrlRymzQElB/OL+TUGzY3Idk+Xoi+8kSzuO2y0EFxL5yE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQ8cr/AE6w7WTIraWgAT4miw2HBl5TUkrz0235i7Gea2pCDtHp
+	wmA6f9R/fhjwf8UV46aiPIHIQylAUh01Ywp6BcavYwDSY9QwjefEOEOJVlICZ2Tqg4Iz8DQc1GF
+	otoIiH4zv/cU8qw0v8ESrKdbrRlmwVbw=
+X-Gm-Gg: ATEYQzw4w0kVwpAxNlk9uYG+HitD2CThafv1tvr3Rhlmg8NKc+eGGZPMbk0iqEYJC0y
+	fEL9ZN4PiJfB1Mxl38me6OvACU0753ODK2wwQkqrwkZdXsAgl2GgipyD0BMTjfAr8aB5miyNOtc
+	ljSp8HVf7NgpjNdAxzr+obsrUkJwbJLsGTVyrCf9FCxn6+/53fJz3QBtY+oxCCEbMgQS5vxJwrM
+	ST0TnbMA3cv3jeVmAI4sL++2HesDJ6o01PWb7CxdGzJok43bV+PBCxM3LEATpLV0WqTaE2/JM31
+	vz1C0gw=
+X-Received: by 2002:a05:690e:2148:b0:64c:9d01:aa66 with SMTP id
+ 956f58d0204a3-64eaa7f8629mr4933310d50.68.1774106112934; Sat, 21 Mar 2026
+ 08:15:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260321024446.692008-1-irogers@google.com>
-In-Reply-To: <20260321024446.692008-1-irogers@google.com>
-From: sun jian <sun.jian.kdev@gmail.com>
-Date: Sat, 21 Mar 2026 20:37:33 +0800
-X-Gm-Features: AaiRm53HFbDIUrKe-Rb86baRpuN3IFWOmDLCJEUpczYt3PQeQaZg_ARK_0C0sVY
-Message-ID: <CABFUUZHL=kzBKZTkrCADyxkMp3BHXMhMKAuBFqYvNpqST4v3fg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] libbpf: Fix strict aliasing violations in hashmap
-To: Ian Rogers <irogers@google.com>
+References: <20260320130219.63711-1-keisuke.nishimura@inria.fr>
+In-Reply-To: <20260320130219.63711-1-keisuke.nishimura@inria.fr>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Sat, 21 Mar 2026 08:15:02 -0700
+X-Gm-Features: AaiRm524IURUaLU_ZZAK1W4WFYkEMnn8cpPmIw4xpR-I_AUQgoo6W0C4j2gA9nU
+Message-ID: <CAMB2axOSUF9MnYnKZiBNpGMi_Ay81Ph3T6L83yG3g9A=2grNCQ@mail.gmail.com>
+Subject: Re: [PATCH] bpf: Fix refcount check in check_struct_ops_btf_id()
+To: Keisuke Nishimura <keisuke.nishimura@inria.fr>
 Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Mar 21, 2026 at 10:45=E2=80=AFAM Ian Rogers <irogers@google.com> wr=
-ote:
+On Fri, Mar 20, 2026 at 8:45=E2=80=AFAM Keisuke Nishimura
+<keisuke.nishimura@inria.fr> wrote:
 >
-> The hashmap implementation contained strict aliasing violations.
-> Specifically, the hashmap_cast_ptr(p) macro was casting pointers (such
-> as void **) to long *, and these were subsequently dereferenced in
-> functions like hashmap_insert(), hashmap_find(), and hashmap_delete().
+> The current implementation only checks whether the first argument is
+> refcounted. Fix this by iterating over all arguments.
 >
-> C's strict aliasing rules (C11 6.5/7) prohibit accessing an object
-> through an lvalue of an incompatible type. Dereferencing a long * to
-> write to a void * object is a violation, even if they share the same
-> size, as they are not compatible types. This can lead to undefined
-> behavior, especially with aggressive compiler optimizations.
->
-> Fix this by:
-> 1. Updating hashmap_insert(), hashmap_find(), and hashmap_delete() to
->    take void * for their output parameters (old_key, old_value, and
->    value).
-> 2. Modifying the implementation to use memcpy() and memset() for
->    accessing these output parameters. Accessing an object as an array of
->    characters (as done by memcpy) is a permitted exception to the
->    strict aliasing rules.
-> 3. Updating the hashmap_cast_ptr(p) macro to return void *, ensuring
->    compatibility with the new function signatures while preserving the
->    static assertion that ensures the pointed-to type matches the size of
->    a long.
->
-> Input parameters (key and value) remain as long, as they involve value
-> conversion rather than incompatible pointer dereferencing, which is safe
-> under strict aliasing rules.
->
-> Signed-off-by: Ian Rogers <irogers@google.com>
+> Signed-off-by: Keisuke Nishimura <keisuke.nishimura@inria.fr>
+> Fixes: 38f1e66abd184 ("bpf: Do not allow tail call in strcut_ops program =
+with __ref argument")
+
+Thanks for fixing this. If there is a respin, it will be good to
+include what problem it could cause in the commit message. For
+example, a reference acquiring struct_ops op could tail call if __ref
+is used to annotate arguments other than the first one.
+
+Acked-by: Amery Hung <ameryhung@gmail.com>
+
 > ---
->  tools/lib/bpf/hashmap.c | 21 +++++++++++----------
->  tools/lib/bpf/hashmap.h |  8 ++++----
->  2 files changed, 15 insertions(+), 14 deletions(-)
+>  kernel/bpf/verifier.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/tools/lib/bpf/hashmap.c b/tools/lib/bpf/hashmap.c
-> index 140ee4055676..ef50d262a126 100644
-> --- a/tools/lib/bpf/hashmap.c
-> +++ b/tools/lib/bpf/hashmap.c
-> @@ -8,6 +8,7 @@
->  #include <stdint.h>
->  #include <stdlib.h>
->  #include <stdio.h>
-> +#include <string.h>
->  #include <errno.h>
->  #include <linux/err.h>
->  #include "hashmap.h"
-> @@ -153,24 +154,24 @@ static bool hashmap_find_entry(const struct hashmap=
- *map,
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 159b25f8269d..278443118a23 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -24853,7 +24853,7 @@ static int check_struct_ops_btf_id(struct bpf_ver=
+ifier_env *env)
+>         }
 >
->  int hashmap_insert(struct hashmap *map, long key, long value,
->                    enum hashmap_insert_strategy strategy,
-> -                  long *old_key, long *old_value)
-> +                  void *old_key, void *old_value)
-Maybe we should be more cautious about changing the API definition.
-It weakens the interface for no clear benefit.
->  {
->         struct hashmap_entry *entry;
->         size_t h;
->         int err;
->
->         if (old_key)
-> -               *old_key =3D 0;
-> +               memset(old_key, 0, sizeof(long));
->         if (old_value)
-> -               *old_value =3D 0;
-> +               memset(old_value, 0, sizeof(long));
-Using memset() here and memcpy() below make sense for addressing
-the strict alias issue, but I don't think that requires changing the API.
->
->         h =3D hash_bits(map->hash_fn(key, map->ctx), map->cap_bits);
->         if (strategy !=3D HASHMAP_APPEND &&
->             hashmap_find_entry(map, key, h, NULL, &entry)) {
->                 if (old_key)
-> -                       *old_key =3D entry->key;
-> +                       memcpy(old_key, &entry->key, sizeof(long));
->                 if (old_value)
-> -                       *old_value =3D entry->value;
-> +                       memcpy(old_value, &entry->value, sizeof(long));
->
->                 if (strategy =3D=3D HASHMAP_SET || strategy =3D=3D HASHMA=
-P_UPDATE) {
->                         entry->key =3D key;
-> @@ -203,7 +204,7 @@ int hashmap_insert(struct hashmap *map, long key, lon=
-g value,
->         return 0;
->  }
->
-> -bool hashmap_find(const struct hashmap *map, long key, long *value)
-> +bool hashmap_find(const struct hashmap *map, long key, void *value)
->  {
->         struct hashmap_entry *entry;
->         size_t h;
-> @@ -213,12 +214,12 @@ bool hashmap_find(const struct hashmap *map, long k=
-ey, long *value)
->                 return false;
->
->         if (value)
-> -               *value =3D entry->value;
-> +               memcpy(value, &entry->value, sizeof(long));
->         return true;
->  }
->
->  bool hashmap_delete(struct hashmap *map, long key,
-> -                   long *old_key, long *old_value)
-> +                   void *old_key, void *old_value)
->  {
->         struct hashmap_entry **pprev, *entry;
->         size_t h;
-> @@ -228,9 +229,9 @@ bool hashmap_delete(struct hashmap *map, long key,
->                 return false;
->
->         if (old_key)
-> -               *old_key =3D entry->key;
-> +               memcpy(old_key, &entry->key, sizeof(long));
->         if (old_value)
-> -               *old_value =3D entry->value;
-> +               memcpy(old_value, &entry->value, sizeof(long));
->
->         hashmap_del_entry(pprev, entry);
->         free(entry);
-> diff --git a/tools/lib/bpf/hashmap.h b/tools/lib/bpf/hashmap.h
-> index 0c4f155e8eb7..a888bf8c05de 100644
-> --- a/tools/lib/bpf/hashmap.h
-> +++ b/tools/lib/bpf/hashmap.h
-> @@ -116,7 +116,7 @@ enum hashmap_insert_strategy {
->         _Static_assert((__builtin_constant_p((p)) ? (p) =3D=3D NULL : 0) =
-||                 \
->                                 sizeof(*(p)) =3D=3D sizeof(long),        =
-                   \
->                        #p " pointee should be a long-sized integer or a p=
-ointer");      \
-> -       (long *)(p);                                                     =
-               \
-> +       (void *)(p);                                                     =
-               \
->  })
->
->  /*
-> @@ -128,7 +128,7 @@ enum hashmap_insert_strategy {
->   */
->  int hashmap_insert(struct hashmap *map, long key, long value,
->                    enum hashmap_insert_strategy strategy,
-> -                  long *old_key, long *old_value);
-> +                  void *old_key, void *old_value);
->
->  #define hashmap__insert(map, key, value, strategy, old_key, old_value) \
->         hashmap_insert((map), (long)(key), (long)(value), (strategy),  \
-> @@ -147,14 +147,14 @@ int hashmap_insert(struct hashmap *map, long key, l=
-ong value,
->  #define hashmap__append(map, key, value) \
->         hashmap__insert((map), (key), (value), HASHMAP_APPEND, NULL, NULL=
-)
->
-> -bool hashmap_delete(struct hashmap *map, long key, long *old_key, long *=
-old_value);
-> +bool hashmap_delete(struct hashmap *map, long key, void *old_key, void *=
-old_value);
->
->  #define hashmap__delete(map, key, old_key, old_value)                 \
->         hashmap_delete((map), (long)(key),                             \
->                        hashmap_cast_ptr(old_key),                      \
->                        hashmap_cast_ptr(old_value))
->
-> -bool hashmap_find(const struct hashmap *map, long key, long *value);
-> +bool hashmap_find(const struct hashmap *map, long key, void *value);
->
->  #define hashmap__find(map, key, value) \
->         hashmap_find((map), (long)(key), hashmap_cast_ptr(value))
+>         for (i =3D 0; i < st_ops_desc->arg_info[member_idx].cnt; i++) {
+> -               if (st_ops_desc->arg_info[member_idx].info->refcounted) {
+> +               if (st_ops_desc->arg_info[member_idx].info[i].refcounted)=
+ {
+>                         has_refcounted_arg =3D true;
+>                         break;
+>                 }
 > --
-> 2.53.0.959.g497ff81fa9-goog
->
+> 2.34.1
 >
