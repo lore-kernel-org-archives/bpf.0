@@ -1,80 +1,81 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D530214AD20
-	for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 23:05:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5677A2D781E
+	for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 23:08:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.48
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774134311; cv=pass; b=llzWqmWl1hAX6gyP6/PUDyb4hOfDHz9FVAuoJFrRdwQhXBnUbc7vwSTOVdBIT13k+jv4g0jSWSIX2T9k4caHHfY6JboXyR6gGL6HaavooxmDmigjoR6ZewzIPcGflLbFpRRfewNhSuHKDhM7/2bL7MZD3k2lwaUE59X6+2haBLQ=
+	t=1774134512; cv=pass; b=Ko4ywWtaybZqzxJyo55m81UyPcRgFXGCdjJ8X5lKaEsQbnvqv71XICbXeMHLp1K2WJra2BqEJF+SJ42jTLrPlVCwYGdFrS4R8GLI6vs0tOPnngT9A/13A715p/ONOc12QnhtJV1utKXEPmaGtyxoxvWEY0lRa3DoP7OC0b8ZVJQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774134311; c=relaxed/simple;
-	bh=UwRWY8WlifEVB4rrea8H3F15CcDnFu3ImTqOUY9A174=;
+	s=arc-20240116; t=1774134512; c=relaxed/simple;
+	bh=wY8joydHrVweqs3ydVoiOLXyf6nSrUpvPCnt16XcKGA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZVPXqLdbuR2S0ernmmNHA+6M8W8QPJz+RODalGHl1cP6XXpDQELOdqMyEdVibWheeruvFXsCBVyKNo4eTjRTcgsnCB/AA2pDvBMu+s8sVd1MB7Wfv3ww8r9rHhChLsZTtcqEIYxOTwXNGxjQtE1ujsTeOAhy4mB31ams28oZTZg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CmjlahDr; arc=pass smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=qgaUElwFr3QrMrJXRBLWPW9JNpHSpmU8M7f3lnUV0tugcjnPlQt+JxTDR85afpABbCngj8eEdlwTo87z+FFXTimdopRXasWalxd/n6qRuXk2yRMRqzS9zz7t80LbxpTqbV4S+OWsQYq3pD2AeZvBuxMxxtBGZx8qAH+y5BdN5ks=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fs8WCnv/; arc=pass smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CmjlahDr"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2aeab6ff148so80065ad.1
-        for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 16:05:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774134309; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fs8WCnv/"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-43b45bb7548so2145465f8f.1
+        for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 16:08:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774134510; cv=none;
         d=google.com; s=arc-20240605;
-        b=LCWYbCblQ8Y+J3bzB9tH9tu/h5OJ8pKHN7/oCQsUkR3O95OC1OPD83nYQOBLbbGPsZ
-         XAN/zkJIx7iuArKTP7JlxeMA+5qubPdyubx5SgngkmY57BMCzd2TV6NS+dVsnRmtLpgN
-         8czeTflD3Pyhsljefi/R25wvXPaDiqUHFj6Vrx2UV1pAXuRHMlMoSOjKm7qDiav/p5m8
-         46CmqdlYUGj5G8r5ZHGmZGbc4/4kaA0pGIds+lXbcDUWacRKXEpUegeS07lXf8sJbYok
-         aWwcFoAs08+1VlUrgOolcPSCrbjfznFKPsMgnytUfcDCyMTENzjvzHo8Pi6c2ppVarGv
-         zUNg==
+        b=hjJgBCkNm71xn1i4+Y32q9JopoiS7hWjJ4HabQjoQYuq/7wu1oRjln0JKGjlPlYy2R
+         pHR0JeVCFlhqaEhRowj3EOkOItaDfzU/UNf7XnvoABMZBH5yc4Cz9sZoJj0RS2g5vFzZ
+         GTDwSnvFVaP9r1EDqwMb/sJ7GyWcpgLO7oCLQVffJQ6odXzoYpD/gfL7Ckq6/cZ5kCEa
+         N7I/CJ5JKmjqQZJ2I3DQ1RYXdcOyT4RXiGDO6nK4HFlJ6xplL+JGs1NmRlZn0ydnWprr
+         dAUbZzRsLPl3er5uUgjmsdRKcJkLPKQd0LkdkiW0ElL8wJsC92t/hDpF52O6Dopqradu
+         fILw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=pvXWNOEW/i6yBRC1SF4eHSDHKNtrEtqOBOAA5J40AbQ=;
-        fh=U2fBpcz6PHDY/ZF0HJE3ccHYF5cQvOKlJAAlmEJdEzs=;
-        b=e24x7xkGlQfcp+OlGb02nf2F0VWs9Sy+dTLR8ZBiGlV3r4wFkI1hQI/Su+n874nRS0
-         OGrwdj2BGNAjlPB08QNBoUMyxL2khnksoytkjVtnTWdDScazSv1O2TaaHbnSuoV3HoVR
-         McZ8Tjsl71Vu0sA4aJVi783SLBfoNDQDlVfmDQvaoG3II7hffU+FSWi1uUae/8vqkLEJ
-         2sbRC88mE3MEnEG5E+3vRT7aV3dWTKXg6JBgJwvPeQwnh779vh5JF7tIoQq5t4UktULE
-         cXB0ygt1cGxyFqWdUcJPJ3t8s62p+nddqpeswlgoyw08gNoamaE2AZYRkVEiE9+EA6G3
-         vTmw==;
+        bh=DTzWZEx2kpq/j4/EmeTJxrRzdEyN9FStqQMJ6aPQhfk=;
+        fh=pQh/Lf/SfdI13MIZKIlcxNgajG4r3nTG0uyVOSyLfvI=;
+        b=PQ+W9wgC9xFAJRXgReftuIBefGbNpTkDDCzjMnlvm0fc4WRp66aDZ1dNEtf89VBJjx
+         O+8yuO6xzEV/MhR0+Bg6pUChM7xQ5d6RH8fzliIRCkczYKnCaNAbtnHkUsUlREVcKBK9
+         zfyWQtQ2f1rIyrXbzsJ8A08EeDAql/LySjVjQSsGTnNM+viQWRYg8moksLapfZaoXkDa
+         lZ48u8jGSOst4tU3iSD7XflS65p3JugSQYetyFF7f9RLkpEMUaTYe8zC2L5zUke3TrA9
+         TRlA/v89ZoCSgNWt2sfzfhyPcW3+BYOa7Mn0lIK3ZI0QD+dSOP9yWrE8W+UNGEHpuzs0
+         KKMQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774134309; x=1774739109; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1774134510; x=1774739310; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pvXWNOEW/i6yBRC1SF4eHSDHKNtrEtqOBOAA5J40AbQ=;
-        b=CmjlahDrCFsU3NOH9W2oiWTjrlRrRBirhNZ9b3wZsrNVSq0r+7ATDjc69IgLaGIWUK
-         hTzlJk0rHc6THh0quw/ITeTZZqOAQ7zkft2PhMZ9jVul9F8TN7h/kBy/Ospa9HR6V43j
-         pzifm3dx4m0l/d+WyS755bqVAoJZ8en1MlWt7JGp0H4RLTYH2cTt4UmrqfiHy7b69YRy
-         ALZ9I26HPHS2SoF9xNaBwH1jrPyPbr32dGkYiWfCb9vwRA49L5IqXv4EBrw5LykU8Y33
-         FGlX0C64CJeE5aGJOslrD94lFnCBPp+lllTJEORFODd8QsQg22X5C62cPUnviaYuS2tF
-         +Ekg==
+        bh=DTzWZEx2kpq/j4/EmeTJxrRzdEyN9FStqQMJ6aPQhfk=;
+        b=fs8WCnv/cZEGn7y7tadhdNr1n40WH7rpywbgt7+6W0eqUzENemMO6YpSu6cteoK4of
+         n5CeLXOkYYSqWzwrkG99FK7W5MafyECNO6sfzxQbwgBnWc6OgESqLRRnpFqJUZ/ZclM+
+         V7ITBtyesbhxycnR1jPSluRnqBQB96O1A0vJLhqh1+MZCiZX80sf7tigVhNNKGTYrJ+p
+         hPB407rqPKqtwQHxneU5tiYVWd89/Vju5k/I/gRU/FrjxEUDhTBH18FQgclSuvtn5YJQ
+         V4hJGDOqvZn6+ayQWNqj9zLKQWNq7SjenPdOl22byOuuuw9yBne79APfUZwVRQ6hjYlw
+         Qpng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774134309; x=1774739109;
+        d=1e100.net; s=20251104; t=1774134510; x=1774739310;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=pvXWNOEW/i6yBRC1SF4eHSDHKNtrEtqOBOAA5J40AbQ=;
-        b=R8HMGAH4KdZ2mc8ng0ZurBCvJ2oT8v0P1eUkY4QKRI6GfgEJOG6rzzPGaGbqbhJ7we
-         1v6OeJqaWakF5CQo55JeoalEn89myzHTMnU20tkZuT+jpRwuHA8P5enXMF9qM9JckjUO
-         pWtw48mYN8PuNPFuqAtQFrhw3Aej9LJMOkQ/owKE/Z0vRde2mLmv5QU7DN7/6WdxzeIe
-         p+CaRRZmCgQ/2KDjCwnvtUegy9TvG/ZlbFejFmIEpBNLyuhRlHxmZpXrZCq14enUQwSt
-         f5YmRcmpQ7Yj62TfRoyQgY+NcACqpmzy5S0I1L7iYZ4oDtjZx7kdcAjsdsjEHuFYK+AN
-         0L2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXJii6hitI6Az/MTmnpsnOE8KKcOoHg3ZyFsD8L01ziK+nIAsfjuN7vlZw4+X6NOeQMjHE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAyMmltFLnQfaCV5DC7WkxcSEcQc6KqjW+UUhpwkV4RKiZmpAr
-	qYbjFiSd5k7KVQUhycXuY+gHxmDtJa7IRy4oi0mJ3Qpn+qXaJL9qN1ortX0kA8d3g5hQBzGMTpJ
-	UMljgp0StTHUQhPK2ym4tiZEjUAgYefAVUAQswSLX
-X-Gm-Gg: ATEYQzzDxy9gQ/WN6AL4QAVDPLB8AhIBJvmJ/toj+jWypNndCw8HKIUUsg184Ak/FWM
-	3JX+fzFk2nJIu9gEHQ0FwPAEO6rZWWhLn1cIPF76w7RHC3+sigoI7+ojdX/6jtOIf74QR+Fp0xL
-	UTyGk5Uu1njRgxRBHNthUB7zIJ7Q6HcWeyebOB5Vj4VyfHwUQhdkii0GRl9eiIqXj1DaxSM4hty
-	/Qfj6V8J7386pu5d9XSdVR5TdWjChfqtCbBs6XIFtQNgAK8bOa0hVz2m/Hv3SGZaHya/CHzNnGk
-	1rUu6cnW
-X-Received: by 2002:a17:903:1a27:b0:2ae:575b:2345 with SMTP id
- d9443c01a7336-2b08c4990f3mr1638895ad.9.1774134308521; Sat, 21 Mar 2026
- 16:05:08 -0700 (PDT)
+        bh=DTzWZEx2kpq/j4/EmeTJxrRzdEyN9FStqQMJ6aPQhfk=;
+        b=Gy5QzCcOwAfCd2/V288qmjNT/k8mTMowQ9SEWqEBoCORSxQec068C4swcYrb1Oat6v
+         suKRGkI3KYbqhIAbaj4/BcncWlDxANZo1M3vc9yD68artSH//T7pUS3W9zFe1DmXgCWq
+         dDxQSZ7hWJGwkdUJKzfhi3Iz/aw6NMUn8GUSSVZy/IwFggX2F+g67yBvY0JobJ6ASP9O
+         f8WxH9reGIjZLX3dr4a0WYNqfj01xgIpYpGdIGW/JGx32JwZl4RUaT2oRqYUwpzIyPpe
+         8v8tnE7rpYloaJCiIsfp1lIjc1yLMYeX3uzLNGZl/VbAYK4/yVgkzXY/FOX4F5v3aIrc
+         Ftxg==
+X-Forwarded-Encrypted: i=1; AJvYcCXd8KACU4lLaqE7HgMez2wCHKqMcaq238F9Tppf2otg6I3PZh+lVzAyyAUFjULhNhfi0qg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCL/sHwiJSGCk80NDVtVwX4m/3U1VvQaf0J3skzA15GCpjTudr
+	R9rcxiiLvWbeVKbtXW2ra9FSN3K003ZRKVdHKkAQojQv83lMNNR/pjK2tVb571yq1dflmUB0EzG
+	8zOCc7Ergli0/95n1379Qsnex4QjIzws=
+X-Gm-Gg: ATEYQzzhBqKn2YuHjVxhbK+0ELSpcFVLBIO3MGUIuE9WbK8yM8UL/jGTcj0HpTJEZac
+	Ar5RW/lBEHi/6NlccRb8J6WjtQDiW724tiQCYO4KL6fIFQh5j12S4j9PgSABd0sJpCRozHB2pPw
+	TAkxQRGlCvFJI6UEBCGDEuvIN6xTPRLi3K+75968+0Wb8gdYPYCtu+s5/GCwVoF4bcwN92nNKgV
+	uHxHpX12RVz10ff2QuIpDjvs3VTG5YPi4a1RrXYKFU9+dypj88R6NkUzyoA4hgGCJQY0jTNfCuP
+	bbo/p3xnlrgS/psHERW51wkb36oypARiLoyfinXNOMuHahgfrkfWsJn3ls4PnWnSI1c5hzOQPh9
+	Pun6w3FSKdS+yJc9piFN/NPlvMGW/Y0WeIIs9
+X-Received: by 2002:a5d:5f86:0:b0:43b:4921:8743 with SMTP id
+ ffacd0b85a97d-43b6428168dmr11888566f8f.42.1774134509454; Sat, 21 Mar 2026
+ 16:08:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -82,14 +83,15 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260321024446.692008-1-irogers@google.com> <20d77c80-6538-4dec-804c-156402c26534@linux.dev>
- <CAP01T76kB8BHSQXp_1+tScrHhQayVm+BhAiDqnq4NeNOS_cMQg@mail.gmail.com> <CAADnVQLKv6LOQw5=8_ZagRXdU7dRPYA+fxJsXiGncqJjZ2hK1w@mail.gmail.com>
-In-Reply-To: <CAADnVQLKv6LOQw5=8_ZagRXdU7dRPYA+fxJsXiGncqJjZ2hK1w@mail.gmail.com>
-From: Ian Rogers <irogers@google.com>
-Date: Sat, 21 Mar 2026 16:04:57 -0700
-X-Gm-Features: AaiRm52gbnQBWVlIQ5v4tgMEcNJKjU4ML7pBfqsVkt1j7XPP2DScTpH8oTgsPvU
-Message-ID: <CAP-5=fXhuLE5R_t1A=+WLve3Wu9N999gXcG0KjEFGVBBh4+1=Q@mail.gmail.com>
+ <CAP01T76kB8BHSQXp_1+tScrHhQayVm+BhAiDqnq4NeNOS_cMQg@mail.gmail.com>
+ <CAADnVQLKv6LOQw5=8_ZagRXdU7dRPYA+fxJsXiGncqJjZ2hK1w@mail.gmail.com> <CAP-5=fXhuLE5R_t1A=+WLve3Wu9N999gXcG0KjEFGVBBh4+1=Q@mail.gmail.com>
+In-Reply-To: <CAP-5=fXhuLE5R_t1A=+WLve3Wu9N999gXcG0KjEFGVBBh4+1=Q@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sat, 21 Mar 2026 16:08:18 -0700
+X-Gm-Features: AaiRm50YejLEeFdLghBznogBMbsouYJT2jK4XNYtxycz3X_8HKLbkyv9F9l35dk
+Message-ID: <CAADnVQJNt0Xmcm0L7u87fX3xFeVGyLnTxUGjPsnYcNSX4Zv5rQ@mail.gmail.com>
 Subject: Re: [PATCH v1 1/2] libbpf: Fix strict aliasing violations in hashmap
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: Ian Rogers <irogers@google.com>
 Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
 	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
 	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -105,81 +107,79 @@ Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Yonghong Song <yonghong.song@lin
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Mar 21, 2026 at 12:49=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Sat, Mar 21, 2026 at 4:05=E2=80=AFPM Ian Rogers <irogers@google.com> wro=
+te:
 >
-> On Sat, Mar 21, 2026 at 10:37=E2=80=AFAM Kumar Kartikeya Dwivedi
-> <memxor@gmail.com> wrote:
+> On Sat, Mar 21, 2026 at 12:49=E2=80=AFPM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
 > >
-> > On Sat, 21 Mar 2026 at 16:42, Yonghong Song <yonghong.song@linux.dev> w=
-rote:
+> > On Sat, Mar 21, 2026 at 10:37=E2=80=AFAM Kumar Kartikeya Dwivedi
+> > <memxor@gmail.com> wrote:
 > > >
-> > >
-> > >
-> > > On 3/20/26 7:44 PM, Ian Rogers wrote:
-> > > > The hashmap implementation contained strict aliasing violations.
-> > > > Specifically, the hashmap_cast_ptr(p) macro was casting pointers (s=
-uch
-> > > > as void **) to long *, and these were subsequently dereferenced in
-> > > > functions like hashmap_insert(), hashmap_find(), and hashmap_delete=
-().
+> > > On Sat, 21 Mar 2026 at 16:42, Yonghong Song <yonghong.song@linux.dev>=
+ wrote:
 > > > >
-> > > > C's strict aliasing rules (C11 6.5/7) prohibit accessing an object
-> > > > through an lvalue of an incompatible type. Dereferencing a long * t=
-o
-> > > > write to a void * object is a violation, even if they share the sam=
-e
-> > > > size, as they are not compatible types. This can lead to undefined
-> > > > behavior, especially with aggressive compiler optimizations.
+> > > >
+> > > >
+> > > > On 3/20/26 7:44 PM, Ian Rogers wrote:
+> > > > > The hashmap implementation contained strict aliasing violations.
+> > > > > Specifically, the hashmap_cast_ptr(p) macro was casting pointers =
+(such
+> > > > > as void **) to long *, and these were subsequently dereferenced i=
+n
+> > > > > functions like hashmap_insert(), hashmap_find(), and hashmap_dele=
+te().
+> > > > >
+> > > > > C's strict aliasing rules (C11 6.5/7) prohibit accessing an objec=
+t
+> > > > > through an lvalue of an incompatible type. Dereferencing a long *=
+ to
+> > > > > write to a void * object is a violation, even if they share the s=
+ame
+> > > > > size, as they are not compatible types. This can lead to undefine=
+d
+> > > > > behavior, especially with aggressive compiler optimizations.
+> > > >
+> > > > Potentially this could be a concern. Did you actually find an issue
+> > > > with it?
+> > > >
+> > > > The linux kernel build has
+> > > >     KBUILD_CFLAGS +=3D -fno-strict-aliasing
+> > > >
+> > > > The libbpf does not have this flag. Maybe we should add '-fno-stric=
+t-aliasing'
+> > > > for libbpf as well? This way, we can avoid any future potential
+> > > > 'strict aliasing' issues.
+> > > >
+> > > > Note that bpf program (tools/testing/selftests/bpf/Makefile)
+> > > > also has '-fno-strict-alaising' flag.
+> > > >
 > > >
-> > > Potentially this could be a concern. Did you actually find an issue
-> > > with it?
-> > >
-> > > The linux kernel build has
-> > >     KBUILD_CFLAGS +=3D -fno-strict-aliasing
-> > >
-> > > The libbpf does not have this flag. Maybe we should add '-fno-strict-=
-aliasing'
-> > > for libbpf as well? This way, we can avoid any future potential
-> > > 'strict aliasing' issues.
-> > >
-> > > Note that bpf program (tools/testing/selftests/bpf/Makefile)
-> > > also has '-fno-strict-alaising' flag.
-> > >
+> > > The change itself looks correct to me, fwiw, but as Yonghong said, we
+> > > can add -fno-strict-aliasing to CFLAGS and move on. I also doubt the
+> > > compiler can cause issues here, since the usage happens in hashmap.c
+> > > which wouldn't be visible in other CUs where the call is made and
+> > > pointers are passed in (unless compilers also do aliasing-based opts
+> > > during LTO). I guess libbpf maintainers can decide what they prefer.
 > >
-> > The change itself looks correct to me, fwiw, but as Yonghong said, we
-> > can add -fno-strict-aliasing to CFLAGS and move on. I also doubt the
-> > compiler can cause issues here, since the usage happens in hashmap.c
-> > which wouldn't be visible in other CUs where the call is made and
-> > pointers are passed in (unless compilers also do aliasing-based opts
-> > during LTO). I guess libbpf maintainers can decide what they prefer.
+> > Agree. I don't think compilers can misoptimize things here.
+> > It's safe to ignore this.
 >
-> Agree. I don't think compilers can misoptimize things here.
-> It's safe to ignore this.
+> There's LTO support in the Linux tree for tools/perf with the LTO=3D1
+> option [1]. My experience is that it works best with clang and ldd.
+> libbpf is statically built into perf by default.
+>
+> A sashiko review raised the issue when perf was reverting the addition
+> of -fno-strict-aliasing, the sashiko review is posted to LKML here:
+> https://lore.kernel.org/lkml/CAP-5=3DfVro6E6fowmmJ7gmKX-5SN8bFU7-5KJk_wFG=
+-bQuVnMHw@mail.gmail.com/
+>
+> -fno-strict-aliasing was added because some crypto code (copied from
+> the kernel) requires it for get/put_unaligned. The fix was to use
+> memcpy in the unaligned functions, which they now do [2].
+>
+> I'd prefer not to hamstring the compiler with -fno-strict-aliasing, we
+> have sanitizers that can capture aliasing issues.
 
-There's LTO support in the Linux tree for tools/perf with the LTO=3D1
-option [1]. My experience is that it works best with clang and ldd.
-libbpf is statically built into perf by default.
-
-A sashiko review raised the issue when perf was reverting the addition
-of -fno-strict-aliasing, the sashiko review is posted to LKML here:
-https://lore.kernel.org/lkml/CAP-5=3DfVro6E6fowmmJ7gmKX-5SN8bFU7-5KJk_wFG-b=
-QuVnMHw@mail.gmail.com/
-
--fno-strict-aliasing was added because some crypto code (copied from
-the kernel) requires it for get/put_unaligned. The fix was to use
-memcpy in the unaligned functions, which they now do [2].
-
-I'd prefer not to hamstring the compiler with -fno-strict-aliasing, we
-have sanitizers that can capture aliasing issues.
-
-Thanks,
-Ian
-
-[1] https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-nex=
-t.git/tree/tools/perf/Makefile.config?h=3Dperf-tools-next#n279
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/include/vdso/unaligned.h
-
-
-> pw-bot: cr
+We're not going to hack libbpf source or add -fno-strict-aliasing
+to Makefile because gemini found a "bug".
