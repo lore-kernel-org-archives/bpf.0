@@ -1,158 +1,140 @@
-Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B003191A5
-	for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 17:52:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.67
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774115548; cv=pass; b=OXIOE3uT1BkoJLMTXUodVHKr7CjX+sd1Z9ffjFIa/uw5/80Rv2QXMuNiHfINQn5Z7aUs7EBNNvizxekGyecxAiJawOm3h/FKl4mqd8UCk8gFSZ+nyetMr6LlkSEad/UG1kL6WlOPnY5NZXJoejqNmxWD3ofunRSyDC7fd6zIAEA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774115548; c=relaxed/simple;
-	bh=xOtivuzC1u7qs0tccX4nAuXpb2S4sLdDIsBXc16+/kM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gcVYLVD3PQ1Reyl3VGRiNdlD0bDUslOry4wuRPT5jdlrDE9ydrS8B1y8bd+UlP/ErvVh3JBq5y1h6LEcOACgYI7zZrn50d3Cxs1dbe9MST4DAErsrXzOqFdeTy3TdOaDdh/Vi0MD9j0wy5cT1ldhsS8RMpdmkfi28FRKVe+BPV8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SdKFXyc3; arc=pass smtp.client-ip=209.85.128.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D61BE175A74
+	for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 18:07:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774116422; cv=none; b=MuIFxFr9LY2rR44XNtGJXtrkL5vgdLdq0fk+djAxyavEJOAvS91m7Uutr1RgE0kd+s2Clq28B8qa8qZJLF78C4aPk4Hoc/tMDb8EINAx5+CjLon88sPdp7uUZixbrTDJVw/OmgfWCQROjSr/5YFQgCMzQZ70AWbR6uAM8QVTwtg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774116422; c=relaxed/simple;
+	bh=9SI804+dfgP3coyKqaFN4HwiKt+xbISR1utGkPjaJeo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A4+56+vmxypfTHG4Z3hwOag/MgnXb8Uy3Vojw2onTN51llckKKG/0qHuMQ7m27qiFk86zQaQcAc3NiF7yn5plWGuD4Bo2MpybUj4tXF/Pvv8TJs37d8i2y6gk3JYihLED8CeiN0mA2HlnchPxOBHxh/qYmZJP/nRrqlMUWedG4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sD05TbfX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SdKFXyc3"
-Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-486fe655187so21708295e9.2
-        for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 10:52:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774115545; cv=none;
-        d=google.com; s=arc-20240605;
-        b=NZ9lbfc8V0dApbnrJZWThgnhDJlecaXvB/JsA6AX8MDCAhBBrV6u+HZ1Ac0QG453bC
-         p71PINh67x6hxUa0CUjL9JkT88J1C6v4mnr6cUSV1Mkl/L8r2KLDZ63lyHHIub0dgnbN
-         rmfq3PRZid8JGf6G2LTno6pGsT/jKN0EfFqD9hONdk/E4Ixi0imaMHH7pgPQIwiJE5t7
-         dpq3okldDlLLDGrpeX/7v42syzBPgYH+VXtVI45LmmJi6snYrEXhNlAt6W3hD0eHS5hw
-         2E+wrFlAujdYaLYH3Or665ljVz/+Yli7+QnFzFohiRN2bCf/Rmzk7YcK7plclpKthftM
-         KoPg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=VjWmKaEpPmua1A5mJ4thcxD9fgMtwaI7wu9hm2FvvIA=;
-        fh=kuelB+lDFwGqT000Zb+8fiQTlSBtz/KdWBXIXsBINvE=;
-        b=iqSWIvqhNkfm61caOivjJoDk9n1pK6w2baxWdIIGnSFvp7dm0KBGc9ZzzACLLnQzEm
-         uA58kqmGFdjEXxVomQK4xfqJrJB+baWAt7rslWLEB5ha5JYjeMD7x/ZNErufuvfv0cki
-         zT6pcEi5RfGR4Js5khwqkV9oWQQBIWraeRybxTor0C/Q8eSl3rup8FGEHGOSCzb7VAgd
-         bYkAOTtEk6bQYpl+YE0WVyitxZkS32e1J8q/W5i14Z+TnSillVoetlz8i03M6n4NbcYE
-         LkQ2UjWQAEttOjmL68KZs3+kYyFoj/fqfVD70e/O54upeoHwBv9Gr3uFdFeUwTYIThBD
-         SPJw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774115545; x=1774720345; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VjWmKaEpPmua1A5mJ4thcxD9fgMtwaI7wu9hm2FvvIA=;
-        b=SdKFXyc3QQYFe6tSK8qFbcrZuwUxPRnpmaYHH7aTvJ5wHCa2UoUM77uvUPHMNjlw6o
-         02W4ju7nV+RwIMmVqUE/AFYnYSiJKjmMdfMuURdV9SEg/Vjm6dkNgTL4bb02uzB8BNzC
-         LcNS/mkYH9eBIOrFMmp4V1R7y61yn+jgwkdnoPZ6761nd0PBAxk0/W35tNsuuVOCFnxZ
-         e/mJtkeFvS/XpR12SrGSAHxynIgxuDErASbtOqzzFRAk/dV8ZfAwPxiTvp3wzx0/zWTT
-         pyuQQnkYJ/9Cb0iyEd6hh2NLQuTQtZxR4FlF6bKWADI1Vleo8RstJCt3OvTLuQgrMgla
-         c7fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774115545; x=1774720345;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VjWmKaEpPmua1A5mJ4thcxD9fgMtwaI7wu9hm2FvvIA=;
-        b=c5eJ3ACefaWl+Ca0zdgNJ4GuxrCWo6yo6JaGq6EhDoiQY4fIAxJhAd1mA1VrGzpDH1
-         x+F820tw/lToXfmqWmoKogLB/tz2rwTCeLp8qTU/Z99o33rS/8Hi2EBMrZvd4OxdG6NC
-         rBjJ5EV1qUa5XuPpgq5+QuvvLW5DVv1nc6exO7VWEayNv/2GsVSb+dQI70TTHai130DI
-         HTASGQ1K1Fclr/vuhM08SUAXJYUTYnUFnhgo2ZsQObU4bMtPaXJK5N4Z/NZt2qna2hJZ
-         CFrcb2adiHXoTbwIjQ8HVRwuDEWwrOqZFfiVm/jFcZeRJBQoZho3YOp3EStGvMcidPBq
-         7flw==
-X-Forwarded-Encrypted: i=1; AJvYcCVKRAqA3ojt7ZiUydNFAuRBQ/a8ffif8anGjjGZHik/O3T61tXTkLdXqd78KtzMTfj7A+w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyGKq6znvEU/2eyFeD8xtsQ5Yk49lts5MLWitsaGkoQZPspwj+y
-	lDBoMwof30R0/CZzorfPweM8KRzcHtQSc0Nteb9/f+W0yu695+oi+H/1RTL/GAJu/HS5nuS5+v9
-	kP/mE2ouDptxwdIS6ZqX+yK40gdkuZ9s=
-X-Gm-Gg: ATEYQzybAlE2sT6kM8Tlkwwuz4PBJMjxIy/j4eiNGsNHexOAvIlenqTUnPuOdilKCP3
-	LoEh38ETvNdoPqdgXFdEFwe+gdc93H1RnT8bfC/yHKoyzOg+pnN0DmIA3m9rP9t1dqfOed9RTP4
-	iRmrDE8dkDE5ZeOn0YgeIvxMtTC8iG8KFO6k/upm8Sujta4JbOEVzpqm/44k4EYSX5ApbBBDAm4
-	O2INr11QLR/hqi77jotAlY/fOWH1qmdZUXWWF93jEuIMvFucE3BdTLc596FaljhKMCZH7r5T70d
-	mCl0gwHuFQcfYwqnxUi/Z80E0n56JHfy4HAYBaLp8ttKX37vhiASdUVYkRg=
-X-Received: by 2002:a05:600c:8483:b0:485:531d:28b9 with SMTP id
- 5b1f17b1804b1-486fedc0070mr99667325e9.14.1774115544902; Sat, 21 Mar 2026
- 10:52:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sD05TbfX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64B17C19421;
+	Sat, 21 Mar 2026 18:07:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774116422;
+	bh=9SI804+dfgP3coyKqaFN4HwiKt+xbISR1utGkPjaJeo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sD05TbfXfpi4NxgLvSJxKR3p/5Mvx7v1U7Rzn3bFUT46K1x4bWYQx1lSQi6gfovi5
+	 oZxcq8sYo4hwWkkdDOUAMxpAK0k2ip66S2gMv3KI/N0tnC0L9pis4LK+pSR9/Gqj2K
+	 gWtGSUYH5CJdmbbXeLMHsCDdkLLVLbv/K6pallm2k1VBZbgROx90GzauarklweBpi1
+	 P906rYMuHi8HRmBHZQD8gUXs1EG1PN7pO9ykN1QydW2kY+iq+lv8Hqlw7SurOM/F9W
+	 Srus68HL3DvKCckAxbyR47wan8Jew7anp0f1p0vOTYSa4WvBNpB06IJ0FqDglgr0gS
+	 nsEgCRJEY3LkA==
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 53683F4006B;
+	Sat, 21 Mar 2026 14:07:01 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Sat, 21 Mar 2026 14:07:01 -0400
+X-ME-Sender: <xms:Rd6-aXWUpJFVVNnuB-V61RctUwmrOiozEyoraGLm5eLo5kTVUZvZMQ>
+    <xme:Rd6-aY-ftgPT4Fc0fdAPU8_HGDghgj2WtRUwI04prYvkw3BTaQMqO_5H7HNEsSTTS
+    DQH-XcFVenRxxrztCcsNg8yKYt-4y3KKwW-xkPedSKoagGxyg5tbw>
+X-ME-Received: <xmr:Rd6-ab6n75HiH8_ILfoHHPCH3X-dL7rtZE5FAVsiDDteTrdANoBAbmpPcuxWN_aCYvNxHLv-HTt5wVnpbuSQGE9OdZ1IW4L8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefudefheegucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
+    hfgvnhhguceosghoqhhunheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpe
+    elueehtefhtddtgfejvdejueehhfekteevueeuueekgeetieeggeehvdffhefhhfenucff
+    ohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhn
+    rghlihhthidqudeijedtleekgeejuddqudejjeekheehhedvqdgsohhquhhnpeepkhgvrh
+    hnvghlrdhorhhgsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohepudejpdhmohgu
+    vgepshhmthhpohhuthdprhgtphhtthhopehprghulhhmtghksehkvghrnhgvlhdrohhrgh
+    dprhgtphhtthhopehjohgvlhgrghhnvghlfhesnhhvihguihgrrdgtohhmpdhrtghpthht
+    ohepmhgvmhigohhrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepsghighgvrghshieslh
+    hinhhuthhrohhnihigrdguvgdprhgtphhtthhopehfrhgvuggvrhhitgeskhgvrhhnvghl
+    rdhorhhgpdhrtghpthhtohepnhgvvghrrghjrdhiihhtrhdutdesghhmrghilhdrtghomh
+    dprhgtphhtthhopehurhgviihkihesghhmrghilhdrtghomhdprhgtphhtthhopegsohhq
+    uhhnrdhfvghnghesghhmrghilhdrtghomhdprhgtphhtthhopehrtghusehvghgvrhdrkh
+    gvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:Rd6-aR2eHxdt2k9RTHyq5j6tv_RfJQ71UBh87yuoTdtg05SkEv4LWQ>
+    <xmx:Rd6-aSxm7Qdm5ZWaxEliby2P7rJv4By7e7A9huA5JavidCSXrngf-g>
+    <xmx:Rd6-aanS8a-6-u0lvEe9ol9-KnSuHUF_441iv0rELexzPXJl4WNcYA>
+    <xmx:Rd6-aV8q_KjkaqWxBbnxiO5ZXNq9yANuk1wNyhfww4m3Cvfvhskutg>
+    <xmx:Rd6-aVojSDzpS66_ps_Xt3nIBqNDnqa_IibVQ0le_O-V8BO9pvYqz1zn>
+Feedback-ID: i8dbe485b:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 21 Mar 2026 14:07:00 -0400 (EDT)
+Date: Sat, 21 Mar 2026 11:06:59 -0700
+From: Boqun Feng <boqun@kernel.org>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Joel Fernandes <joelagnelf@nvidia.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	frederic@kernel.org, neeraj.iitr10@gmail.com, urezki@gmail.com,
+	boqun.feng@gmail.com, rcu@vger.kernel.org,
+	Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrea Righi <arighi@nvidia.com>, Zqiang <qiang.zhang@linux.dev>
+Subject: Re: [PATCH] rcu: Use an intermediate irq_work to start process_srcu()
+Message-ID: <ab7eQ0QDNV9ZjQMN@tardis.local>
+References: <2d9e7e42-8667-4880-9708-b81a82443809@nvidia.com>
+ <20260320181400.15909-1-boqun@kernel.org>
+ <b4857e4f-5a8d-4ccc-9e8b-df57718e4aee@paulmck-laptop>
+ <ab7SQ3L1F-ap7mNl@tardis.local>
+ <492ba226-79c7-4345-b691-eb775082b799@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260320160055.4114055-1-wusamuel@google.com>
-In-Reply-To: <20260320160055.4114055-1-wusamuel@google.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Sat, 21 Mar 2026 18:51:48 +0100
-X-Gm-Features: AaiRm53hX-S7iTWxzgANdr9Lu-L4x_TBCFGlJa3VypmZ-mBcKZAol4lCVpxhFIo
-Message-ID: <CAP01T77hy3j5BZMBcYdadLfPe7dYb3zEGDF9daUxJHYy=+fcgA@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] *** Support BPF traversal of wakeup sources ***
-To: Samuel Wu <wusamuel@google.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, andrii@kernel.org, 
-	bpf@vger.kernel.org, kernel-team@android.com, linux-pm@vger.kernel.org, 
-	driver-core@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <492ba226-79c7-4345-b691-eb775082b799@paulmck-laptop>
 
-On Fri, 20 Mar 2026 at 17:01, Samuel Wu <wusamuel@google.com> wrote:
->
-> This patchset adds requisite kfuncs for BPF programs to safely traverse
-> wakeup_sources, and puts a config flag around the sysfs interface.
->
-> Currently, a traversal of wakeup sources require going through
-> /sys/class/wakeup/* or /d/wakeup_sources/*. The repeated syscalls to query
-> sysfs is inefficient, as there can be hundreds of wakeup_sources, with each
-> wakeup source also having multiple attributes. debugfs is unstable and
-> insecure.
->
-> Adding kfuncs to lock/unlock wakeup sources allows BPF program to safely
-> traverse the wakeup sources list. The head address of wakeup_sources can
-> safely be resolved through BPF helper functions or variable attributes.
->
-> On a quiescent Pixel 6 traversing 150 wakeup_sources, I am seeing ~34x
-> speedup (sampled 75 times in table below). For a device under load, the
-> speedup is greater.
-> +-------+----+----------+----------+
-> |       | n  | AVG (ms) | STD (ms) |
-> +-------+----+----------+----------+
-> | sysfs | 75 | 44.9     | 12.6     |
-> +-------+----+----------+----------+
-> | BPF   | 75 | 1.3      | 0.7      |
-> +-------+----+----------+----------+
->
-> On the memory side, between kernfs, dentry, and kmalloc, each wakeup source
-> removed from sysfs saves at least 10kB.
->
-> The initial attempts for BPF traversal of wakeup_sources was with BPF
-> iterators [1]. However, BPF already allows for traversing of a simple list
-> with bpf_for(), and this current patchset has the added benefit of being
-> ~2-3x more performant than BPF iterators.
+On Sat, Mar 21, 2026 at 10:41:47AM -0700, Paul E. McKenney wrote:
+[...]
+> > > +	raw_spin_lock_rcu_node(ssp->srcu_sup);
+> > > +	delay = srcu_get_delay(ssp);
+> > > +	raw_spin_unlock_rcu_node(ssp->srcu_sup);
+> > > 
+> > 
+> > It was fixed differently in v2:
+> > 
+> > 	https://lore.kernel.org/rcu/20260320222916.19987-1-boqun@kernel.org/
+> > 
+> > I used _irqsave/_irqrestore just in case. Given it's an urgent fix,
+> > overly careful code is probably fine ;-)
+> > 
+> > Thanks for the testing and feedback.
+> 
+> OK, I will try that one, thank you!
+> 
+> FYI, with my change on your earlier version, SRCU-T got deadlocks between
+> the pi-lock and the workqueue pool lock.  Which might or might not be
+> particularly urgent.
+> 
 
-See, it ended up being faster ;-).
+I just checked my run yesterday, I also hit it. It's probably what
+Zqiang has found:
 
-That said, I didn't understand why you dropped the test. We still need
-unit tests that ensure the verifier causes the bpf_ws_lock to be
-released before exit, and an example program (like the one you
-benchmarked with) to demonstrate usage. Both are mandatory. See
-various *_fail.c files in progs/ and RUN_TESTS() macro for running
-negative tests easily. I doubt we will have any wakeup_sources in the
-CI environment, but the example has value nonetheless.
+	https://lore.kernel.org/rcu/4c23c66f86a2aff8f2d7b759f9dd257b82147a17@linux.dev/
 
-pw-bot: cr
+We have a queue_work_on() in srcu_schedule_cbs_sdp(), so
 
->
-> [1]: https://lore.kernel.org/all/20260225210820.177674-1-wusamuel@google.com/
->
-> Samuel Wu (2):
->   PM: wakeup: Add kfuncs to lock/unlock wakeup_sources
->   PM: Add config flag to gate sysfs wakeup_sources
->
->  drivers/base/power/Makefile |  3 +-
->  drivers/base/power/power.h  | 14 +++++++++
->  drivers/base/power/wakeup.c | 63 +++++++++++++++++++++++++++++++++++--
->  kernel/power/Kconfig        | 13 ++++++++
->  4 files changed, 90 insertions(+), 3 deletions(-)
->
-> --
-> 2.53.0.959.g497ff81fa9-goog
->
+    srcu_torture_deferred_free():
+      raw_spin_lock_irqsave(->pi_lock,...);
+      call_srcu():
+        if (snp == snp_leaf && snp_seq != s) {
+           srcu_schedule_cbs_sdp(sdp, do_norm ? SRCU_INTERVAL : 0):
+	     if (!delay)
+               queue_work_on(...)
+
+I was about to reply to Zqiang, fixing that could be a touch design
+decision. Since it's a per srcu_data work ;-) NR_CPUS x irq_work
+incoming.
+
+Regards,
+Boqun
+
+> 							Thanx, Paul
+> 
