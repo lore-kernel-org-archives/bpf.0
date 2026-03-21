@@ -1,152 +1,156 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 771712DCF6C
-	for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 19:45:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774122331; cv=none; b=rNJlfcoA7D+TfMxHeCkslkGcqdBiO50nYUgeChGC8P/695eVctQIa3ZPmDpj27tThXqWkuzmIuGdO7bApp0nexGDAu4NzWt8rkVnNg7pKUQ/ZD2YOYYHM0qPh7IWqmd6BrB//n2LYt7Qst1Os0EZTYB79T2rEXFj9Xowk65dGew=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774122331; c=relaxed/simple;
-	bh=UZaHZ43UtKwYrDvozF15j133cHdPTpTHKvJWSIom670=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NiJmgtoQCebAiBNZBW0xzUVgOpZiPpOfmOUxkBb3ttqbWcAeKgiUjo6wwg11TROzVLZxqYbAAGFQg8v8aV3PfpPSyYtY/rn5IWw6M3Ad3WI0z3OOb9fa+I5/Yy6THrOhwFCtnxyBJJXCSgfc2pNY4M8dGlbMhuvt8EBcTCZbUas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wpx9t5Wq; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF5562D5937
+	for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 19:49:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774122596; cv=pass; b=MZeHTQhI0rfBC/AenxAKc7b//bsDYiCX7ijYIizlw6jqmbl0sSqNUh8SOlBLL2OvvrN8MdoT+z/oTSID0GhO5271UYDSfWu0TcRUqilDUaqenPX2xBS85MR7iRqvcpzC6WgGH1V5p4clzsmkPJagdGI96RTUNmNWHOJC6TbpxJo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774122596; c=relaxed/simple;
+	bh=uMl+exZ3dp/41SG+vPFN+zEUkSBKBxqDQ5zP3dLg82w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Nc6n4g3ZDnG+6j9sMcio8/5AorIvgiYKa/CDD0rvMIY2pafLg9/2Gatd489MJYRLoyj3i73PBnUh1n1c4AN68AKQ1Zyainlec5e5tWgRk3tJ7pB/UrwAn6lakE+FK4Eu9OSMBZUCnwRjD6IZvUIzzmfixlUj/iaLTTdN9J5kNyo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QRN9RjQe; arc=pass smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wpx9t5Wq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 700A2C4AF09;
-	Sat, 21 Mar 2026 19:45:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774122331;
-	bh=UZaHZ43UtKwYrDvozF15j133cHdPTpTHKvJWSIom670=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Wpx9t5Wq8S2rzp2C3GZey2B0/nX5wxj1fnCKodVNdqcG4kXEe2+2/aLLcB+StNRN2
-	 bFBPzgpLzwTNK9YfVO19lG9gfgrJHZ1uxjVFZvJMYzpjdstEqSTg6H5uEcG2ul7s7i
-	 RLYPCIjvnTaO8yUDG6JNnbg5mzwA91ZTXQrCKw1fcAIyLNiPACUmH8iqS/hvIshln8
-	 5qmv3Oq6NjVIb7qOQNsVS+zQ5g5EHBPQyORs6gkpF6ItebAFT+F2+98V4TPizElHmj
-	 hkYwwny8dJcOVMm2Gc/hUbXzOZ15GKAmeop+nyklOuwgTq85K0lZiw7KTZoBlPBWqX
-	 Vr+o4d4PEV7DQ==
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 5C773F4007F;
-	Sat, 21 Mar 2026 15:45:29 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-06.internal (MEProxy); Sat, 21 Mar 2026 15:45:29 -0400
-X-ME-Sender: <xms:WfW-aX8ft7fYP5XvsSQhbOwfCSG6wRGbOaFr58igiGwbzbgL3jGHkA>
-    <xme:WfW-adHOvrtGz3LuxMrL4rOcVs62VC8i8yA9R5DvYeI7FJKE4cRo_yKEHGlEAdGlM
-    A2GdQL_n5OqHpRS2pOSP2DYw967N5FlS9g123J631NZq31KpbCtMg>
-X-ME-Received: <xmr:WfW-adgSuRTO9bEI8O_tkcBh1X3MR8oIb1ZvD70tkHxT2ZnpJ4h3f1Tt1E_CTgNX1P__q3ahOT2sE-oBUijb9wgclzZZ3rgd>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefudefjeegucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
-    hfgvnhhguceosghoqhhunheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpe
-    elueehtefhtddtgfejvdejueehhfekteevueeuueekgeetieeggeehvdffhefhhfenucff
-    ohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
-    hrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhn
-    rghlihhthidqudeijedtleekgeejuddqudejjeekheehhedvqdgsohhquhhnpeepkhgvrh
-    hnvghlrdhorhhgsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohepudejpdhmohgu
-    vgepshhmthhpohhuthdprhgtphhtthhopehprghulhhmtghksehkvghrnhgvlhdrohhrgh
-    dprhgtphhtthhopehjohgvlhgrghhnvghlfhesnhhvihguihgrrdgtohhmpdhrtghpthht
-    ohepmhgvmhigohhrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepsghighgvrghshieslh
-    hinhhuthhrohhnihigrdguvgdprhgtphhtthhopehfrhgvuggvrhhitgeskhgvrhhnvghl
-    rdhorhhgpdhrtghpthhtohepnhgvvghrrghjrdhiihhtrhdutdesghhmrghilhdrtghomh
-    dprhgtphhtthhopehurhgviihkihesghhmrghilhdrtghomhdprhgtphhtthhopegsohhq
-    uhhnrdhfvghnghesghhmrghilhdrtghomhdprhgtphhtthhopehrtghusehvghgvrhdrkh
-    gvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:WfW-aS-UEwUaCWUk9ymOi3QrOQ3mo-7DPu1zkhVnw4Cn12hsZ2cv1A>
-    <xmx:WfW-adZXefzTlAtn3ozu_77d6aqEpFtB6oA2Bgfsq5i-XZXMqvqz_A>
-    <xmx:WfW-aQt0Xr_WgUvtY8J0QsyxGrPSDApnsJzxLZ_ksYY084Ew_VthGw>
-    <xmx:WfW-aRntkpU8Cb11lp54hEvxkkOu-NRk19Madc3-o-vesMW2D37agA>
-    <xmx:WfW-aYwo5DroKtbNQEw2iCn_Kne6f6peD-lkScsS14-coWl4Kd_kAIow>
-Feedback-ID: i8dbe485b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 21 Mar 2026 15:45:28 -0400 (EDT)
-Date: Sat, 21 Mar 2026 12:45:27 -0700
-From: Boqun Feng <boqun@kernel.org>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Joel Fernandes <joelagnelf@nvidia.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	frederic@kernel.org, neeraj.iitr10@gmail.com, urezki@gmail.com,
-	boqun.feng@gmail.com, rcu@vger.kernel.org,
-	Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrea Righi <arighi@nvidia.com>, Zqiang <qiang.zhang@linux.dev>
-Subject: Re: [PATCH] rcu: Use an intermediate irq_work to start process_srcu()
-Message-ID: <ab71Vz9zmlVywWQT@tardis.local>
-References: <2d9e7e42-8667-4880-9708-b81a82443809@nvidia.com>
- <20260320181400.15909-1-boqun@kernel.org>
- <b4857e4f-5a8d-4ccc-9e8b-df57718e4aee@paulmck-laptop>
- <ab7SQ3L1F-ap7mNl@tardis.local>
- <492ba226-79c7-4345-b691-eb775082b799@paulmck-laptop>
- <ab7eQ0QDNV9ZjQMN@tardis.local>
- <609b5df1-aa06-46a9-8e93-0bf9eb8b7738@paulmck-laptop>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QRN9RjQe"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-43b527ac5d0so769977f8f.2
+        for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 12:49:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774122593; cv=none;
+        d=google.com; s=arc-20240605;
+        b=iL11EO6VFB1wTxyC0E0xJj0ICXaWKPpUk0gMQGA7/16rnY7osxjvlTYReLIkBAz8/1
+         7CVE8yeroqk0nHyyxkvjHEvdll1sfhKE1r5XNz7AKeTaaN84NnsVVs/ooxWrrsE5XSne
+         SKYJeualdMDZPmsbAOZU+y/CSlbGUFDCO/HbaOa+cPDR4mJqLhqV1TyYXi0cAt47xw1J
+         JlMimZ8VuEWXSdx+6JkVVrZ4GuBKVPtqaCp5asqyiwDkHSvKfUb7lkr7CRdr3B3KCzlM
+         bIbeO/nihd7R/AbfBiydWivLcrfz6y9sgTgb2HKzUPlyaap6WfmoTfkMox5of8Jfj3Jr
+         U1Gw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=DgQxcMvImid4gbeybu26AJE3Y3wBjv+/iITImgADi10=;
+        fh=HMy25yxcoruThWnGRQeDVie2+bzAxy8q9V6ze63rows=;
+        b=iKSXbtHRqYda6B6+VOwKzyQVLMCU7tE+Oc9UJMLZf1G2zkKyaZjcuXX2fBKL1Vg6mj
+         IpEWpmgRkS8N/Ew0QjaFxgihA+svb1pP7wBLJqxngOt4T0vNRxnA8pEqz7+sgZH1S+/z
+         lH91jXfMBPMKHxOJ9C5LE6ongMGCcTMgLRpO4WavVZtYHwE62ASf0jMOcePM4qu7O4Ld
+         8MzghTfvuf7Vgw+my3gIjr0nKq6Aqfbpl34BkAO8zPvKSN71t8cfsU80Jgq0ugrb23JR
+         PPF5QfqjjAY+s7bn5tMs1Iy/fwKyAK12YV3ZFjx36T6dFA/3FtUCcVafNaVNH5pr9Jkk
+         j0fQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1774122593; x=1774727393; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DgQxcMvImid4gbeybu26AJE3Y3wBjv+/iITImgADi10=;
+        b=QRN9RjQeQo308gn/OdZJyYZwjgSjvmjGlQmTEdz5l6ht6GOFYr15WoedaKmr8TVQY9
+         WryYIzUwZeMrA2doSKvrGvMI0MMi2/jWAsUTwAHHQ4mVVpkjrHtADlNluCSy5MVEIh1N
+         Sn6lKOurLkFfV/L5e/Q0aVzpmEnTF/rdSNvrSRfE+bEHjgHEmHFqi6sDfAhkUwAt24By
+         9e6YB3dme4mRWxNUB3YO8VHenEG43wsc8RlwhzpHDjUxQtq0359+PlUlzwSbZv4eLceu
+         NZHElS0VIqj1yvBQhVTeiSHgoY9RfnmozTpA5/8qQWSCvIfIbOiGxAb/yNIOxdxvNs7V
+         aWKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774122593; x=1774727393;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=DgQxcMvImid4gbeybu26AJE3Y3wBjv+/iITImgADi10=;
+        b=C7YSu0hY5sRrLxTUOcYoooM8ZxjHbZN1RgIQnwuUIhUGZ8noJmbo5aGvDTN2kqO7co
+         0Fa70q2yOXm1/tksXUMebW51wzh2y9GbhZwaf7DBAN/CqBJeOKdLKxrHfYK4OtnVvnc0
+         c+M/+vy1z4OkjM9xmAK5N5dNRzJ0r5tfNlsC506JmXC6xHGgaExSLJTo4sylpt9UnqrS
+         ZJZNi2BYKC7HZxT4nXquS36p6zXevFcLHhLbjcJSpvKnr9/F0QQJ053A3Zh0TaxK9SGp
+         6uoS9SM4BNEIKsTwavJ2DZOg8lCeq1YH/dg52uBU0tdM+CbgBrzI2r3gGzjNfo2AVy/r
+         6xvg==
+X-Forwarded-Encrypted: i=1; AJvYcCUnfIjFwqr/fTMdQN/cedl8VBGlYuRHsB28MSNaXDiavcN+cjKDMUw/SSDAiZFdt8uyM74=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFddkWoabPS9KLvpzOkPUxPm2+4c9epdIA3+2WPdOcHLEPfP5T
+	pGF0k/3+6NJuhXg7vcqwN0dA14qnyRL6biAJ1F3nTl3wpDfrCdOGtc3icgOiIodakx2rWsdBG7u
+	FrvCuw/59EKWVgLUQsY4Gre2+EFI8aQU=
+X-Gm-Gg: ATEYQzzXedqPrbOUUSaNWtW1TDn3GmCaQB/hyialP2cL9XG3TFFS/xssQAx49kG6m3F
+	EIC5IR0/E4090AkhHXVcqGOpdK+REOTwBHwPH0zysfznehcCS4g6xREBPUkUDxVl/k7KMYpIrkK
+	v+YcXyzKHdixDiF0gyGlj8WuPO/AMA0th7sO1usFaeeaAGbpdQ1/8LVsnKQjTbsad9lpz3RO8m4
+	7vWfgjt187yR9l70ZSKKtbQz3c9UeutFad/vwo+NIJg4LTOVpaPtH+ZaQNTKhdZ7cueZozKveMi
+	1ZzgUTwgnKTTddskY7OyCdd466wLPluk7xt5D7gRXyVGbWgQxYwZ/D16MdL1FltfhB/JgXiGMfe
+	bEOqt1gNh0pPbiStv1wPrlZGZtw==
+X-Received: by 2002:a5d:5f55:0:b0:43b:45f5:eec with SMTP id
+ ffacd0b85a97d-43b6423fc34mr11863264f8f.4.1774122593057; Sat, 21 Mar 2026
+ 12:49:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <609b5df1-aa06-46a9-8e93-0bf9eb8b7738@paulmck-laptop>
+References: <20260321024446.692008-1-irogers@google.com> <20d77c80-6538-4dec-804c-156402c26534@linux.dev>
+ <CAP01T76kB8BHSQXp_1+tScrHhQayVm+BhAiDqnq4NeNOS_cMQg@mail.gmail.com>
+In-Reply-To: <CAP01T76kB8BHSQXp_1+tScrHhQayVm+BhAiDqnq4NeNOS_cMQg@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sat, 21 Mar 2026 12:49:42 -0700
+X-Gm-Features: AaiRm527zj-86HKDU9TQg7EH9Yp0FEKxz_hD38hZCMjiPqjfidjcm-ljYcza0LM
+Message-ID: <CAADnVQLKv6LOQw5=8_ZagRXdU7dRPYA+fxJsXiGncqJjZ2hK1w@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] libbpf: Fix strict aliasing violations in hashmap
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Yonghong Song <yonghong.song@linux.dev>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Ian Rogers <irogers@google.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
+	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	"linux-perf-use." <linux-perf-users@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Mar 21, 2026 at 12:31:04PM -0700, Paul E. McKenney wrote:
-> On Sat, Mar 21, 2026 at 11:06:59AM -0700, Boqun Feng wrote:
-> > On Sat, Mar 21, 2026 at 10:41:47AM -0700, Paul E. McKenney wrote:
-> > [...]
-> > > > > +	raw_spin_lock_rcu_node(ssp->srcu_sup);
-> > > > > +	delay = srcu_get_delay(ssp);
-> > > > > +	raw_spin_unlock_rcu_node(ssp->srcu_sup);
-> > > > > 
-> > > > 
-> > > > It was fixed differently in v2:
-> > > > 
-> > > > 	https://lore.kernel.org/rcu/20260320222916.19987-1-boqun@kernel.org/
-> > > > 
-> > > > I used _irqsave/_irqrestore just in case. Given it's an urgent fix,
-> > > > overly careful code is probably fine ;-)
-> > > > 
-> > > > Thanks for the testing and feedback.
-> > > 
-> > > OK, I will try that one, thank you!
-> > > 
-> > > FYI, with my change on your earlier version, SRCU-T got deadlocks between
-> > > the pi-lock and the workqueue pool lock.  Which might or might not be
-> > > particularly urgent.
-> > > 
-> > 
-> > I just checked my run yesterday, I also hit it. It's probably what
-> > Zqiang has found:
-> > 
-> > 	https://lore.kernel.org/rcu/4c23c66f86a2aff8f2d7b759f9dd257b82147a17@linux.dev/
-> > 
-> > We have a queue_work_on() in srcu_schedule_cbs_sdp(), so
-> > 
-> >     srcu_torture_deferred_free():
-> >       raw_spin_lock_irqsave(->pi_lock,...);
-> >       call_srcu():
-> >         if (snp == snp_leaf && snp_seq != s) {
-> >            srcu_schedule_cbs_sdp(sdp, do_norm ? SRCU_INTERVAL : 0):
-> > 	     if (!delay)
-> >                queue_work_on(...)
-> > 
-> > I was about to reply to Zqiang, fixing that could be a touch design
-> > decision. Since it's a per srcu_data work ;-) NR_CPUS x irq_work
-> > incoming.
-> 
-> Just to be clear, SRCU-T is Tiny SRCU rather than Tree SRCU.  So perhaps
-> lower priority, though perhaps not lower irritation.  ;-)
-> 
+On Sat, Mar 21, 2026 at 10:37=E2=80=AFAM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
+>
+> On Sat, 21 Mar 2026 at 16:42, Yonghong Song <yonghong.song@linux.dev> wro=
+te:
+> >
+> >
+> >
+> > On 3/20/26 7:44 PM, Ian Rogers wrote:
+> > > The hashmap implementation contained strict aliasing violations.
+> > > Specifically, the hashmap_cast_ptr(p) macro was casting pointers (suc=
+h
+> > > as void **) to long *, and these were subsequently dereferenced in
+> > > functions like hashmap_insert(), hashmap_find(), and hashmap_delete()=
+.
+> > >
+> > > C's strict aliasing rules (C11 6.5/7) prohibit accessing an object
+> > > through an lvalue of an incompatible type. Dereferencing a long * to
+> > > write to a void * object is a violation, even if they share the same
+> > > size, as they are not compatible types. This can lead to undefined
+> > > behavior, especially with aggressive compiler optimizations.
+> >
+> > Potentially this could be a concern. Did you actually find an issue
+> > with it?
+> >
+> > The linux kernel build has
+> >     KBUILD_CFLAGS +=3D -fno-strict-aliasing
+> >
+> > The libbpf does not have this flag. Maybe we should add '-fno-strict-al=
+iasing'
+> > for libbpf as well? This way, we can avoid any future potential
+> > 'strict aliasing' issues.
+> >
+> > Note that bpf program (tools/testing/selftests/bpf/Makefile)
+> > also has '-fno-strict-alaising' flag.
+> >
+>
+> The change itself looks correct to me, fwiw, but as Yonghong said, we
+> can add -fno-strict-aliasing to CFLAGS and move on. I also doubt the
+> compiler can cause issues here, since the usage happens in hashmap.c
+> which wouldn't be visible in other CUs where the call is made and
+> pointers are passed in (unless compilers also do aliasing-based opts
+> during LTO). I guess libbpf maintainers can decide what they prefer.
 
-I see, there is a schedule_work() in srcutiny's
-srcu_gp_start_if_needed(). But it couldn't cause deadlock on UP since
-locks are (almost) no-op. Maybe we can make RCU torture only test it on
-SMP?
+Agree. I don't think compilers can misoptimize things here.
+It's safe to ignore this.
 
-Regards,
-Boqun
-
-> 							Thanx, Paul
+pw-bot: cr
