@@ -1,176 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DD0D2F2607
-	for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 20:09:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BCE6225417
+	for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 20:20:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774123743; cv=none; b=Dzm9kEGgSk3qs7Yc52P0M+baBoCtkjKk/1pys3QFfa44BmY3ya+wS6Jgh4xl4XLPKjwk1Co+rX/DE185Jparj/zk+THDiRyTrACz5PZRy2Rj42V/CJyOqC+X4T/oKoiePDg9u1rdM//veDzdU04xiK7cDh9ZSlfXxJcEXTp9ba8=
+	t=1774124422; cv=none; b=ePdCNqbJ5b05MCPCBBDbfvmKdeK18yFM4rbf2mH0xL+mNi3/e0wUQn5ybOs4fdRjHdIlSA74QdFD2B/i6O7p4cgq2YxcPtkSbDdYzJwAC1NsMyKgZkbp0t4r9EDivfeUvj2TIOx1oJ4k1llReGKJX9E24qcqoqszXZaFEC9QCuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774123743; c=relaxed/simple;
-	bh=Na5uV7GMFd98q0d31tyJbIZ813Y+idgZCEKmjaCHFKM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W5Z09UnpombIW2MZEBC612NQoVLhwYP+SZGSaFb+O1tp+z2HtaenobUVV6AJHPnVeBTvLTTFEYlWL/61mzXVKyijjrKuAaU9QMHeoNL9B21uag8q9lAALUVBAFDbwS+b2YFBRPIC8y3Zfy9naP7vJ2mq9+Kg+nWP6utOaR1X9AY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iahfY3b9; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774124422; c=relaxed/simple;
+	bh=74MnQGS2ysRDtX4Pq6BqEyFwckDC17L6kX9cNohcVuo=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=iRNGjprsQ3sdn2TmVoBjaLkYCEVPrqwcMONQz6kTB0fy5qLqnyeY7cIAO50zd3Y38jsNxPouFFeUwroJ76TO3riFF62IQP/eJJeGoODwM1vNFLUto1viJ43x2URSlczozMlsPDin5PPXX0EkFhA4Klk1L9gNdxFt3LHfU58RZ20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UkE9uUoz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iahfY3b9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F0EAC4AF09;
-	Sat, 21 Mar 2026 20:09:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UkE9uUoz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0E7BC19421;
+	Sat, 21 Mar 2026 20:20:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774123742;
-	bh=Na5uV7GMFd98q0d31tyJbIZ813Y+idgZCEKmjaCHFKM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iahfY3b9NCDvEW58pg15CJFGZOGc+0FSHcCqmOTLIZk+/JBxNuPkkWr08WTND2rKw
-	 mPsEXo0eHdrAidhtGP3VNEax8yR+pxSpkI1loFVbqoslljcUbMvFujmhpdWq7pyoxt
-	 qcxxiYOJjtwBZJJl1C1cr/MnjIR7+rBA4kqytH6BElRJ7DnU8HyeMi5Y8JKo72bpVv
-	 kAUETCl4HaEj/bXBpf/zUGI/rOs1s7O68L6Ez2/VroXn91TfALSw+3ru42MWM0lblC
-	 F//0I3tN3IJDu6khdTnJUbJep+jLS/hgN11JpHuC98qzFEf1GnEuj8DchO9y6n+WgO
-	 wxOW3b2NlwwLg==
-Received: from phl-compute-09.internal (phl-compute-09.internal [10.202.2.49])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 81357F40068;
-	Sat, 21 Mar 2026 16:09:01 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-09.internal (MEProxy); Sat, 21 Mar 2026 16:09:01 -0400
-X-ME-Sender: <xms:3fq-aSmOjZ8YwZ6e9ldW96mDx8oC-5nPn8iMEuKNKZW6qCafw_HPvw>
-    <xme:3fq-aTOpMIrneGXWEJLQi-R-qm71sNL4mS7kx6CMAtd90j4HJhntLZOUKYkaLR-Pa
-    PaLs1TUWk_r2-YjMadqLNSlWTxzNwPTLdCWH_2xpPp--B17re-3sw>
-X-ME-Received: <xmr:3fq-aZIav5OybE6ZJ7wSh4EvD1WTUAPmfDWdRbn3rKx7eok1HDRZs8_pyH3Z_4jV3whvh2TChpG-LeQc1WX6LXav4hRfeYqQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefudefjeelucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
-    hfgvnhhguceosghoqhhunheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpe
-    elueehtefhtddtgfejvdejueehhfekteevueeuueekgeetieeggeehvdffhefhhfenucff
-    ohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
-    hrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhn
-    rghlihhthidqudeijedtleekgeejuddqudejjeekheehhedvqdgsohhquhhnpeepkhgvrh
-    hnvghlrdhorhhgsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohepudejpdhmohgu
-    vgepshhmthhpohhuthdprhgtphhtthhopehprghulhhmtghksehkvghrnhgvlhdrohhrgh
-    dprhgtphhtthhopehjohgvlhgrghhnvghlfhesnhhvihguihgrrdgtohhmpdhrtghpthht
-    ohepmhgvmhigohhrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepsghighgvrghshieslh
-    hinhhuthhrohhnihigrdguvgdprhgtphhtthhopehfrhgvuggvrhhitgeskhgvrhhnvghl
-    rdhorhhgpdhrtghpthhtohepnhgvvghrrghjrdhiihhtrhdutdesghhmrghilhdrtghomh
-    dprhgtphhtthhopehurhgviihkihesghhmrghilhdrtghomhdprhgtphhtthhopegsohhq
-    uhhnrdhfvghnghesghhmrghilhdrtghomhdprhgtphhtthhopehrtghusehvghgvrhdrkh
-    gvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:3fq-aWH6DfE2mnsLcOf0HMZpYQDuAjy2vcMbcUUicQOZ5yHiDM3W4w>
-    <xmx:3fq-aSDH___ZdJcZtxInI10f5atdGQP929-oV11qxd4JsaxN1XkyAg>
-    <xmx:3fq-aY1S0MsRAzvtj6NZtd5LeeEutmB38cWvB2cBCuao_OvMdd327Q>
-    <xmx:3fq-aXN2zwvldbsmq32ACW86cPjuaHGfPSMv8Et8bMdN42PC-pF9IA>
-    <xmx:3fq-ad5_CaHe7wvoBe6E3pk4Wo0qIWlNBJbAlzjDzgxwlqDPsa9YzYfN>
-Feedback-ID: i8dbe485b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 21 Mar 2026 16:09:00 -0400 (EDT)
-Date: Sat, 21 Mar 2026 13:08:59 -0700
-From: Boqun Feng <boqun@kernel.org>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Joel Fernandes <joelagnelf@nvidia.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	frederic@kernel.org, neeraj.iitr10@gmail.com, urezki@gmail.com,
-	boqun.feng@gmail.com, rcu@vger.kernel.org,
-	Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrea Righi <arighi@nvidia.com>, Zqiang <qiang.zhang@linux.dev>
-Subject: Re: [PATCH] rcu: Use an intermediate irq_work to start process_srcu()
-Message-ID: <ab7623FFsiUOocHP@tardis.local>
-References: <2d9e7e42-8667-4880-9708-b81a82443809@nvidia.com>
- <20260320181400.15909-1-boqun@kernel.org>
- <b4857e4f-5a8d-4ccc-9e8b-df57718e4aee@paulmck-laptop>
- <ab7SQ3L1F-ap7mNl@tardis.local>
- <492ba226-79c7-4345-b691-eb775082b799@paulmck-laptop>
- <ab7eQ0QDNV9ZjQMN@tardis.local>
- <609b5df1-aa06-46a9-8e93-0bf9eb8b7738@paulmck-laptop>
- <ab71Vz9zmlVywWQT@tardis.local>
- <4d2b07a9-e3fd-4a95-8924-0839bdfc28b3@paulmck-laptop>
+	s=k20201202; t=1774124421;
+	bh=74MnQGS2ysRDtX4Pq6BqEyFwckDC17L6kX9cNohcVuo=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=UkE9uUoz5gPfcWcLXn1G73K2/ida8T4xXGY/6KnRwi8WkNjBPD+26DuoLMrz05hgW
+	 UmZ3rks84Fu5GmvOwlArmPkVNs3aycbOQC1du1x7TI9EdnCPU/Nt+lLw8IL7oBN/TP
+	 IriLrG+85Q2YiA8WZirslhXIltWIAK8Ud7L9erk3mS5IKXHAgUy4I573JSoUCQDyo8
+	 WaEdYuqyhsrrrjh0s00v8ZSoufG2IXyUlc07HKFO8R1IPJnosbIM4ZrlBz5x5pwMWv
+	 sozxVldGd+NulpWgST2kxYjsXYCL22nsQmb74/enhXyK5ezUMBtOhSUmwZIx5Zcfar
+	 75q7nd3R5LpjQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CEB53808200;
+	Sat, 21 Mar 2026 20:20:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4d2b07a9-e3fd-4a95-8924-0839bdfc28b3@paulmck-laptop>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v5 0/2] bpf: Fix abs(INT_MIN) undefined behavior in
+ interpreter sdiv/smod
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177412441129.2951219.8888701346937198649.git-patchwork-notify@kernel.org>
+Date: Sat, 21 Mar 2026 20:20:11 +0000
+References: <20260311011116.2108005-1-qguanni@gmail.com>
+In-Reply-To: <20260311011116.2108005-1-qguanni@gmail.com>
+To: Guanni Qu <qguanni@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org,
+ andrii@kernel.org, mykyta.yatsenko5@gmail.com, yonghong.song@linux.dev,
+ jiayuan.chen@linux.dev, lkp@intel.com
 
-On Sat, Mar 21, 2026 at 01:07:45PM -0700, Paul E. McKenney wrote:
-> On Sat, Mar 21, 2026 at 12:45:27PM -0700, Boqun Feng wrote:
-> > On Sat, Mar 21, 2026 at 12:31:04PM -0700, Paul E. McKenney wrote:
-> > > On Sat, Mar 21, 2026 at 11:06:59AM -0700, Boqun Feng wrote:
-> > > > On Sat, Mar 21, 2026 at 10:41:47AM -0700, Paul E. McKenney wrote:
-> > > > [...]
-> > > > > > > +	raw_spin_lock_rcu_node(ssp->srcu_sup);
-> > > > > > > +	delay = srcu_get_delay(ssp);
-> > > > > > > +	raw_spin_unlock_rcu_node(ssp->srcu_sup);
-> > > > > > > 
-> > > > > > 
-> > > > > > It was fixed differently in v2:
-> > > > > > 
-> > > > > > 	https://lore.kernel.org/rcu/20260320222916.19987-1-boqun@kernel.org/
-> > > > > > 
-> > > > > > I used _irqsave/_irqrestore just in case. Given it's an urgent fix,
-> > > > > > overly careful code is probably fine ;-)
-> > > > > > 
-> > > > > > Thanks for the testing and feedback.
-> > > > > 
-> > > > > OK, I will try that one, thank you!
-> > > > > 
-> > > > > FYI, with my change on your earlier version, SRCU-T got deadlocks between
-> > > > > the pi-lock and the workqueue pool lock.  Which might or might not be
-> > > > > particularly urgent.
-> > > > > 
-> > > > 
-> > > > I just checked my run yesterday, I also hit it. It's probably what
-> > > > Zqiang has found:
-> > > > 
-> > > > 	https://lore.kernel.org/rcu/4c23c66f86a2aff8f2d7b759f9dd257b82147a17@linux.dev/
-> > > > 
-> > > > We have a queue_work_on() in srcu_schedule_cbs_sdp(), so
-> > > > 
-> > > >     srcu_torture_deferred_free():
-> > > >       raw_spin_lock_irqsave(->pi_lock,...);
-> > > >       call_srcu():
-> > > >         if (snp == snp_leaf && snp_seq != s) {
-> > > >            srcu_schedule_cbs_sdp(sdp, do_norm ? SRCU_INTERVAL : 0):
-> > > > 	     if (!delay)
-> > > >                queue_work_on(...)
-> > > > 
-> > > > I was about to reply to Zqiang, fixing that could be a touch design
-> > > > decision. Since it's a per srcu_data work ;-) NR_CPUS x irq_work
-> > > > incoming.
-> > > 
-> > > Just to be clear, SRCU-T is Tiny SRCU rather than Tree SRCU.  So perhaps
-> > > lower priority, though perhaps not lower irritation.  ;-)
-> > 
-> > I see, there is a schedule_work() in srcutiny's
-> > srcu_gp_start_if_needed(). But it couldn't cause deadlock on UP since
-> > locks are (almost) no-op. Maybe we can make RCU torture only test it on
-> > SMP?
-> 
-> Like this, you mean?  I will give it a shot tomorrow.
-> 
+Hello:
 
-Yes, thanks!
+This series was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-Regards,
-Boqun
+On Wed, 11 Mar 2026 01:11:14 +0000 you wrote:
+> The BPF interpreter's signed 32-bit division and modulo handlers use
+> abs() on s32 operands, which is undefined for S32_MIN. This causes
+> the interpreter to compute wrong results, creating a mismatch with
+> the verifier's range tracking.
+> 
+> For example, INT_MIN / 2 returns 0x40000000 instead of the correct
+> 0xC0000000. The verifier tracks the correct range, so a crafted BPF
+> program can exploit the mismatch for out-of-bounds map value access
+> (confirmed by KASAN).
+> 
+> [...]
 
-> 							Thanx, Paul
-> 
-> ------------------------------------------------------------------------
-> 
-> diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-> index 3c8e4cd5b83e6..afef343eb8a19 100644
-> --- a/kernel/rcu/rcutorture.c
-> +++ b/kernel/rcu/rcutorture.c
-> @@ -843,7 +843,7 @@ static unsigned long srcu_torture_completed(void)
->  static void srcu_torture_deferred_free(struct rcu_torture *rp)
->  {
->  	unsigned long flags;
-> -	bool lockit = jiffies & 0x1;
-> +	bool lockit = IS_ENABLED(CONFIG_SMP) && (jiffies & 0x1);
->  
->  	if (lockit)
->  		raw_spin_lock_irqsave(&current->pi_lock, flags);
+Here is the summary with links:
+  - [v5,1/2] bpf: Fix undefined behavior in interpreter sdiv/smod for INT_MIN
+    https://git.kernel.org/bpf/bpf/c/c77b30bd1dcb
+  - [v5,2/2] selftests/bpf: Add tests for sdiv32/smod32 with INT_MIN dividend
+    https://git.kernel.org/bpf/bpf/c/4ac95c65efea
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
