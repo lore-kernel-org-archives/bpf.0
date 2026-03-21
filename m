@@ -1,41 +1,41 @@
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10E0028002B
-	for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 16:35:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7249530F7FB
+	for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 16:55:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774110905; cv=none; b=Vr6SlDfs6BnTfi8CgTpqsijipE/Tn4SpQfJm1RZ+6LEjR2CndJ5ibM9yf0hlQF4rPhqupLsCwZa0av8JUSGp5ZEZxk2bdWndfP6hZaG9K+/EIaudxV6FvBafNeORLBuW8MGIwOsUX8OTIVH1wI1F7cKXAKJgvA1gG+0INhDo5Sk=
+	t=1774112139; cv=none; b=Chd5gJDYcXxldd9DdCZpaZk1tu7uJ0Sdb/jBG/GMSDwfizSphod80S2Hy/6s70qFhlVbGdUR+CMHavkNfHDbAg4kyplNmtkFNhxY75HMeqi6Hd0CKM6BflmvZ4Ce4s6S6OCkGGFN0j+jCG7X7tXr/cMYlTCQukD/mWnNOs4dK8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774110905; c=relaxed/simple;
-	bh=WG5XCLq40qZgpZXoZQoQzh1JTe8VNQCWfKKkdjx3lWk=;
+	s=arc-20240116; t=1774112139; c=relaxed/simple;
+	bh=MKn/1LL70V0yuCTc9ZKa5/QA2zU32c+fbOYMAks8u4g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HuQRIaEi78JpeQ8Vgv6wUuLQ1AccAOfI/vZ4vfZgnzJnnMBdBQ7F19Sqm+dCqpDJX1f+52MXWk/eHLL0r29hCWtDg4Tbg+AAbowGeSqyVqMlJpeZ3qWm32AqYvSMz7DdTo+yunAPqgJ/HKOSLWmRxl3WK4CldF/lqX2yGQGoEZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Eh0DOGRe; arc=none smtp.client-ip=95.215.58.173
+	 In-Reply-To:Content-Type; b=fn3HMSIjP+tmNWlwdH1e/jVdVKWu9LwDw/B5GYwlZ8xmlKWj6GFDKFg8FsDtp0zwy9WKAS6F3COdMeL2nFvrQHFbibSwM4M9h8/y3n7zJwsCN3lOEIQeSU46rVxhvLedZUWc1QvGkmgy0UWi4IXTHYRh26mdZGYIM2hSg9Qc0dw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=g/rXUFhk; arc=none smtp.client-ip=95.215.58.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Eh0DOGRe"
-Message-ID: <b2b92bc4-1921-4fb2-8038-d547b6dd468b@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="g/rXUFhk"
+Message-ID: <98688c8e-9f10-4b8c-96a6-a692bb9c4e24@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774110892;
+	t=1774112126;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=WG5XCLq40qZgpZXoZQoQzh1JTe8VNQCWfKKkdjx3lWk=;
-	b=Eh0DOGRe2vT+tB58d3W3j29+ohL9d3Es5GZg3SXahlxzgBAJBOk7OXI2Fhy+XDAUcSy4DS
-	kFE43E1F4mSvItOfFRDlelbtM90JrsY5u2cmW3bNKzoO6xnvgoFlo7r5qJ/VpFISdd7mKf
-	atjrIW5xg/Xv43vHxgWdpVt1KB4J13E=
-Date: Sat, 21 Mar 2026 09:34:42 -0700
+	bh=tCl0T88JvDdkpY9oIKdf6SD9Jh/555wS+PDgvRNEt8o=;
+	b=g/rXUFhkV0sRpBBS+k8oRTvdEUURRjIm0khQoRTQMytKzWcbNSbnL4E4dPyEfCxqaPJ+vl
+	0j9BhUgd1FoLmoJ6b2gVveSbaq/yqxhbVnXnQ0XI+EpsKeUJ4uO/i/0ZWp1yvbX00XHCXa
+	1jwuWZRbevAes0uE8D6gpQLIEhavybY=
+Date: Sat, 21 Mar 2026 09:55:14 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v2 1/2] bpf: Fix exception exit lock checking for
- subprogs
+Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Add tests for bpf_throw lock
+ leak from subprogs
 Content-Language: en-GB
 To: Ihor Solodrai <ihor.solodrai@linux.dev>,
  Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
@@ -44,9 +44,10 @@ To: Ihor Solodrai <ihor.solodrai@linux.dev>,
 Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org,
  linux-kernel@vger.kernel.org, kernel-team@meta.com
 References: <20260320000809.643798-1-ihor.solodrai@linux.dev>
+ <20260320000809.643798-2-ihor.solodrai@linux.dev>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260320000809.643798-1-ihor.solodrai@linux.dev>
+In-Reply-To: <20260320000809.643798-2-ihor.solodrai@linux.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
@@ -54,34 +55,17 @@ X-Migadu-Flow: FLOW_OUT
 
 
 On 3/19/26 5:08 PM, Ihor Solodrai wrote:
-> process_bpf_exit_full() passes check_lock = !curframe to
-> check_resource_leak(), which is false in cases when bpf_throw() is
-> called from a static subprog. This makes check_resource_leak() to skip
-> validation of active_rcu_locks, active_preempt_locks, and
-> active_irq_id on exception exits from subprogs.
+> Add test cases to ensure the verifier correctly rejects bpf_throw from
+> subprogs when RCU, preempt, or IRQ locks are held:
 >
-> At runtime bpf_throw() unwinds the stack via ORC without releasing any
-> user-acquired locks, which may cause various issues as the result.
->
-> Fix by setting check_lock = true for exception exits regardless of
-> curframe, since exceptions bypass all intermediate frame
-> cleanup. Update the error message prefix to "bpf_throw" for exception
-> exits to distinguish them from normal BPF_EXIT.
->
-> Fix reject_subprog_with_rcu_read_lock test which was previously
-> passing for the wrong reason. Test program returned directly from the
-> subprog call without closing the RCU section, so the error was
-> triggered by the unclosed RCU lock on normal exit, not by
-> bpf_throw. Update __msg annotations for affected tests to match the
-> new "bpf_throw" error prefix.
->
-> The spin_lock case is not affected because they are already checked [1]
-> at the call site in do_check_insn() before bpf_throw can run.
->
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/bpf/verifier.c?h=v7.0-rc4#n21098
+>    * reject_subprog_rcu_lock_throw: subprog acquires bpf_rcu_read_lock and
+>      then calls bpf_throw
+>    * reject_subprog_throw_preempt_lock: always-throwing subprog called while
+>      caller holds bpf_preempt_disable
+>    * reject_subprog_throw_irq_lock: always-throwing subprog called while
+>      caller holds bpf_local_irq_save
 >
 > Assisted-by: Claude:claude-opus-4-6
-> Fixes: f18b03fabaa9 ("bpf: Implement BPF exceptions")
 > Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
 Acked-by: Yonghong Song <yonghong.song@linux.dev>
