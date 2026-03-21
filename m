@@ -1,216 +1,185 @@
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C142929DB9A
-	for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 22:25:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774131916; cv=none; b=Had1Krdk/KH+PulnvJFsirUnDuuYJ6ie/R+SFturAQ8SwZDPoU1tC4A7p4V9QR8yF7btCnw5HvMYy06IEuWAwLhrQkeI53b2lOELCSpXxRIPEk8z1wOjSp6zGK5lm2UsM2jiTcPxBFSTZdOwJzpgKZrz6L36M7XE1zwPDJITXb0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774131916; c=relaxed/simple;
-	bh=sInpjiLLZTOzCcfhSuqf3JokDHCs2JpOjeu9J1hYlRA=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=s6GvS1RgCxD2Lz4GDjvToQ7o6uuFDo3OdZ0N9fHHRL2R9JfKf58lRmiaFEK7DcD3pNArofugyg6BaAmbH2KD1YxVP1hcbCZYvambbuLtxF4vPTHN8ycjzoh7K1161otUoHIvTWswsBrVozJOAdykuwQcXl+J0LkWY88rviZ9sv8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=VRV7MFfJ; arc=none smtp.client-ip=209.85.219.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D530214AD20
+	for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 23:05:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774134311; cv=pass; b=llzWqmWl1hAX6gyP6/PUDyb4hOfDHz9FVAuoJFrRdwQhXBnUbc7vwSTOVdBIT13k+jv4g0jSWSIX2T9k4caHHfY6JboXyR6gGL6HaavooxmDmigjoR6ZewzIPcGflLbFpRRfewNhSuHKDhM7/2bL7MZD3k2lwaUE59X6+2haBLQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774134311; c=relaxed/simple;
+	bh=UwRWY8WlifEVB4rrea8H3F15CcDnFu3ImTqOUY9A174=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZVPXqLdbuR2S0ernmmNHA+6M8W8QPJz+RODalGHl1cP6XXpDQELOdqMyEdVibWheeruvFXsCBVyKNo4eTjRTcgsnCB/AA2pDvBMu+s8sVd1MB7Wfv3ww8r9rHhChLsZTtcqEIYxOTwXNGxjQtE1ujsTeOAhy4mB31ams28oZTZg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CmjlahDr; arc=pass smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="VRV7MFfJ"
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-89c5340fed0so32598936d6.0
-        for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 15:25:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CmjlahDr"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2aeab6ff148so80065ad.1
+        for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 16:05:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774134309; cv=none;
+        d=google.com; s=arc-20240605;
+        b=LCWYbCblQ8Y+J3bzB9tH9tu/h5OJ8pKHN7/oCQsUkR3O95OC1OPD83nYQOBLbbGPsZ
+         XAN/zkJIx7iuArKTP7JlxeMA+5qubPdyubx5SgngkmY57BMCzd2TV6NS+dVsnRmtLpgN
+         8czeTflD3Pyhsljefi/R25wvXPaDiqUHFj6Vrx2UV1pAXuRHMlMoSOjKm7qDiav/p5m8
+         46CmqdlYUGj5G8r5ZHGmZGbc4/4kaA0pGIds+lXbcDUWacRKXEpUegeS07lXf8sJbYok
+         aWwcFoAs08+1VlUrgOolcPSCrbjfznFKPsMgnytUfcDCyMTENzjvzHo8Pi6c2ppVarGv
+         zUNg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=pvXWNOEW/i6yBRC1SF4eHSDHKNtrEtqOBOAA5J40AbQ=;
+        fh=U2fBpcz6PHDY/ZF0HJE3ccHYF5cQvOKlJAAlmEJdEzs=;
+        b=e24x7xkGlQfcp+OlGb02nf2F0VWs9Sy+dTLR8ZBiGlV3r4wFkI1hQI/Su+n874nRS0
+         OGrwdj2BGNAjlPB08QNBoUMyxL2khnksoytkjVtnTWdDScazSv1O2TaaHbnSuoV3HoVR
+         McZ8Tjsl71Vu0sA4aJVi783SLBfoNDQDlVfmDQvaoG3II7hffU+FSWi1uUae/8vqkLEJ
+         2sbRC88mE3MEnEG5E+3vRT7aV3dWTKXg6JBgJwvPeQwnh779vh5JF7tIoQq5t4UktULE
+         cXB0ygt1cGxyFqWdUcJPJ3t8s62p+nddqpeswlgoyw08gNoamaE2AZYRkVEiE9+EA6G3
+         vTmw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1774131914; x=1774736714; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=google.com; s=20251104; t=1774134309; x=1774739109; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FOHeDiWZc+Ts5dDNWiNBJ6LXTX+EzKNXWWZfywhcOxo=;
-        b=VRV7MFfJ/pou4ZYAwoKrETQSjz+c2tJAUvlFKleBIFi34mQ8JXbexAAe6NSJ63Mkru
-         OJM09cPZ0K5fJcCtQuEUqbEPZ0d3uKhpuEopXbyl8JreccBYFFVreqFKO8JtsLcRUOzK
-         Fr7dyMw0hto/QZMyhX1UXRGFI3ia5N+ikLHuGHmnaeZujO5gwQqHRnNYQbFzyh2KCRhm
-         1SUnBpkvAcASfCko1V97upNR3Vpk/mZtP9okBzg7M1uSmVsGqJSD2ijHGm/LiQJtKkjJ
-         mN/X1FoSWLYcIG/dyOl6+3I6KrtkJ3RQuQg+cQSLwnwSG4Zv+KS8mZGPsAUNioJW97ld
-         UL7w==
+        bh=pvXWNOEW/i6yBRC1SF4eHSDHKNtrEtqOBOAA5J40AbQ=;
+        b=CmjlahDrCFsU3NOH9W2oiWTjrlRrRBirhNZ9b3wZsrNVSq0r+7ATDjc69IgLaGIWUK
+         hTzlJk0rHc6THh0quw/ITeTZZqOAQ7zkft2PhMZ9jVul9F8TN7h/kBy/Ospa9HR6V43j
+         pzifm3dx4m0l/d+WyS755bqVAoJZ8en1MlWt7JGp0H4RLTYH2cTt4UmrqfiHy7b69YRy
+         ALZ9I26HPHS2SoF9xNaBwH1jrPyPbr32dGkYiWfCb9vwRA49L5IqXv4EBrw5LykU8Y33
+         FGlX0C64CJeE5aGJOslrD94lFnCBPp+lllTJEORFODd8QsQg22X5C62cPUnviaYuS2tF
+         +Ekg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774131914; x=1774736714;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FOHeDiWZc+Ts5dDNWiNBJ6LXTX+EzKNXWWZfywhcOxo=;
-        b=otSwbB4qtj7UkDU69HroGBUVv7VqttHa1a6rM1Xn5tBvm/0oJ6C1tXBuMBVO3ni8Ck
-         MsFEOwnfj1/eBnizoXI/IUPBUmgZ2VMmRRUdw6K+X4EA1mafCdzkOOqs2Mml3rYPJzyB
-         NeOXz/XFBTgqdZI9L0jf0QBaEjaA/6NId57MCaNMkSCmhtQIc4w+pv8ly9seqXIL8qsD
-         BwGwck5YYW4zIHKlj8NaLhscJHJGxI+yjIpDIpmm0XLvQCAECtC/N5QYlZ6vQbrnMo7/
-         9ZUG5A2wPaWwj8CeMihoG7/E3TMFIkPVQH5Yiw+DFyTtaaC0wAw6thts912S9JkrflWo
-         grhg==
-X-Forwarded-Encrypted: i=1; AJvYcCUs76AVSwbPwXbzYudliZOswzMlCDLjceb5uYPg8fN+oB2m6z/dP3/gXg3x19J5nR9c2qU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvjvM8D0bAIiCor3JZS+3m6c3x/dVHlMe5r+IwaI189Fh6rfEz
-	4z90+/N/EtJEnvcs4yUk5ujQkIwjrjowoprZXBy7cA9uP65RNYUXfYDlIG9p002lO1c=
-X-Gm-Gg: ATEYQzyjdhkktve2xNxayHJPnj8Ys2gvbnSr91ofVopd1OSAh57++y7tX5raFITZyJl
-	GjjMUYM7j6/HzDtRnaLi8YZhjCNrV6s8G79nHR1X3iz2A28yLYkV5XCLCMrAJKNq9tmSINAXFRG
-	62UYMB0xeOa7gp4ug1uqb66A+oIkbp1v8fDsDx3bGp1XEKV72+WZSQmxqzu26CZH4OwUZRU8StO
-	M1hm0P1pMKb0p9xnQzpCzEgeGKURTHshCLSbft4YIMao0wE+1rxbw74d7rIJ4Rsvm2R+XHEap5K
-	P5eO6gAFfdr1e5yxfqS5KfErkHuce0n6rhZVHqLB93SXsArF4ukYAOPTJHHHYFJeHE1kKA0dpJ9
-	CDyzrCj3bC6B8IC6xo+HJSpVFS+B4faBmRJNZTya2huwkrtDnWvcCjSrAL5YX9/p1GeKvEkm9z6
-	NnHCPTAZ6tmLO45ZL6zols8SY=
-X-Received: by 2002:ad4:5ccd:0:b0:89c:7ba7:c081 with SMTP id 6a1803df08f44-89c854f13e0mr117238946d6.25.1774131913538;
-        Sat, 21 Mar 2026 15:25:13 -0700 (PDT)
-Received: from localhost ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89c85251e32sm52455116d6.16.2026.03.21.15.25.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 Mar 2026 15:25:13 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774134309; x=1774739109;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=pvXWNOEW/i6yBRC1SF4eHSDHKNtrEtqOBOAA5J40AbQ=;
+        b=R8HMGAH4KdZ2mc8ng0ZurBCvJ2oT8v0P1eUkY4QKRI6GfgEJOG6rzzPGaGbqbhJ7we
+         1v6OeJqaWakF5CQo55JeoalEn89myzHTMnU20tkZuT+jpRwuHA8P5enXMF9qM9JckjUO
+         pWtw48mYN8PuNPFuqAtQFrhw3Aej9LJMOkQ/owKE/Z0vRde2mLmv5QU7DN7/6WdxzeIe
+         p+CaRRZmCgQ/2KDjCwnvtUegy9TvG/ZlbFejFmIEpBNLyuhRlHxmZpXrZCq14enUQwSt
+         f5YmRcmpQ7Yj62TfRoyQgY+NcACqpmzy5S0I1L7iYZ4oDtjZx7kdcAjsdsjEHuFYK+AN
+         0L2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXJii6hitI6Az/MTmnpsnOE8KKcOoHg3ZyFsD8L01ziK+nIAsfjuN7vlZw4+X6NOeQMjHE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAyMmltFLnQfaCV5DC7WkxcSEcQc6KqjW+UUhpwkV4RKiZmpAr
+	qYbjFiSd5k7KVQUhycXuY+gHxmDtJa7IRy4oi0mJ3Qpn+qXaJL9qN1ortX0kA8d3g5hQBzGMTpJ
+	UMljgp0StTHUQhPK2ym4tiZEjUAgYefAVUAQswSLX
+X-Gm-Gg: ATEYQzzDxy9gQ/WN6AL4QAVDPLB8AhIBJvmJ/toj+jWypNndCw8HKIUUsg184Ak/FWM
+	3JX+fzFk2nJIu9gEHQ0FwPAEO6rZWWhLn1cIPF76w7RHC3+sigoI7+ojdX/6jtOIf74QR+Fp0xL
+	UTyGk5Uu1njRgxRBHNthUB7zIJ7Q6HcWeyebOB5Vj4VyfHwUQhdkii0GRl9eiIqXj1DaxSM4hty
+	/Qfj6V8J7386pu5d9XSdVR5TdWjChfqtCbBs6XIFtQNgAK8bOa0hVz2m/Hv3SGZaHya/CHzNnGk
+	1rUu6cnW
+X-Received: by 2002:a17:903:1a27:b0:2ae:575b:2345 with SMTP id
+ d9443c01a7336-2b08c4990f3mr1638895ad.9.1774134308521; Sat, 21 Mar 2026
+ 16:05:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260321024446.692008-1-irogers@google.com> <20d77c80-6538-4dec-804c-156402c26534@linux.dev>
+ <CAP01T76kB8BHSQXp_1+tScrHhQayVm+BhAiDqnq4NeNOS_cMQg@mail.gmail.com> <CAADnVQLKv6LOQw5=8_ZagRXdU7dRPYA+fxJsXiGncqJjZ2hK1w@mail.gmail.com>
+In-Reply-To: <CAADnVQLKv6LOQw5=8_ZagRXdU7dRPYA+fxJsXiGncqJjZ2hK1w@mail.gmail.com>
+From: Ian Rogers <irogers@google.com>
+Date: Sat, 21 Mar 2026 16:04:57 -0700
+X-Gm-Features: AaiRm52gbnQBWVlIQ5v4tgMEcNJKjU4ML7pBfqsVkt1j7XPP2DScTpH8oTgsPvU
+Message-ID: <CAP-5=fXhuLE5R_t1A=+WLve3Wu9N999gXcG0KjEFGVBBh4+1=Q@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] libbpf: Fix strict aliasing violations in hashmap
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
+	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	"linux-perf-use." <linux-perf-users@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 21 Mar 2026 18:25:11 -0400
-Message-Id: <DH8T9WRPSRPY.264HCXDHAQT23@etsalapatis.com>
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Puranjay Mohan" <puranjay@kernel.org>, <bpf@vger.kernel.org>
-Cc: "Puranjay Mohan" <puranjay12@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Martin KaFai Lau" <martin.lau@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>,
- "Quentin Monnet" <qmo@kernel.org>, <kernel-team@meta.com>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Leon Hwang" <leon.hwang@linux.dev>
-Subject: Re: [PATCH bpf-next v4] bpftool: Enable aarch64 ISA extensions for
- JIT disassembly
-X-Mailer: aerc 0.20.1
-References: <20260318172259.2882792-1-puranjay@kernel.org>
-In-Reply-To: <20260318172259.2882792-1-puranjay@kernel.org>
 
-On Wed Mar 18, 2026 at 1:22 PM EDT, Puranjay Mohan wrote:
-> The LLVM disassembler needs ISA extension features enabled to correctly
-> decode instructions from those extensions. On aarch64, without these
-> features, instructions like LSE atomics (e.g. ldaddal) are silently
-> decoded as incorrect instructions and disassembly is truncated.
+On Sat, Mar 21, 2026 at 12:49=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> Use LLVMCreateDisasmCPUFeatures() with "+all" features for aarch64
-> targets so that the disassembler can handle any instruction the kernel
-> JIT might emit.
+> On Sat, Mar 21, 2026 at 10:37=E2=80=AFAM Kumar Kartikeya Dwivedi
+> <memxor@gmail.com> wrote:
+> >
+> > On Sat, 21 Mar 2026 at 16:42, Yonghong Song <yonghong.song@linux.dev> w=
+rote:
+> > >
+> > >
+> > >
+> > > On 3/20/26 7:44 PM, Ian Rogers wrote:
+> > > > The hashmap implementation contained strict aliasing violations.
+> > > > Specifically, the hashmap_cast_ptr(p) macro was casting pointers (s=
+uch
+> > > > as void **) to long *, and these were subsequently dereferenced in
+> > > > functions like hashmap_insert(), hashmap_find(), and hashmap_delete=
+().
+> > > >
+> > > > C's strict aliasing rules (C11 6.5/7) prohibit accessing an object
+> > > > through an lvalue of an incompatible type. Dereferencing a long * t=
+o
+> > > > write to a void * object is a violation, even if they share the sam=
+e
+> > > > size, as they are not compatible types. This can lead to undefined
+> > > > behavior, especially with aggressive compiler optimizations.
+> > >
+> > > Potentially this could be a concern. Did you actually find an issue
+> > > with it?
+> > >
+> > > The linux kernel build has
+> > >     KBUILD_CFLAGS +=3D -fno-strict-aliasing
+> > >
+> > > The libbpf does not have this flag. Maybe we should add '-fno-strict-=
+aliasing'
+> > > for libbpf as well? This way, we can avoid any future potential
+> > > 'strict aliasing' issues.
+> > >
+> > > Note that bpf program (tools/testing/selftests/bpf/Makefile)
+> > > also has '-fno-strict-alaising' flag.
+> > >
+> >
+> > The change itself looks correct to me, fwiw, but as Yonghong said, we
+> > can add -fno-strict-aliasing to CFLAGS and move on. I also doubt the
+> > compiler can cause issues here, since the usage happens in hashmap.c
+> > which wouldn't be visible in other CUs where the call is made and
+> > pointers are passed in (unless compilers also do aliasing-based opts
+> > during LTO). I guess libbpf maintainers can decide what they prefer.
 >
-> Before:
->
-> int bench_trigger_uprobe(void * ctx):
-> bpf_prog_538c6a43d1c6b84c_bench_trigger_uprobe:
-> ; int cpu =3D bpf_get_smp_processor_id();
->    0:   mov     x9, x30
->    4:   nop
->    8:   stp     x29, x30, [sp, #-16]!
->    c:   mov     x29, sp
->   10:   stp     xzr, x26, [sp, #-16]!
->   14:   mov     x26, sp
->   18:   mrs     x10, SP_EL0
->   1c:   ldr     w7, [x10, #16]
-> ; __sync_add_and_fetch(&hits[cpu & CPU_MASK].value, 1);
->   20:   and     w7, w7, #0xff
-> ; __sync_add_and_fetch(&hits[cpu & CPU_MASK].value, 1);
->   24:   lsl     x7, x7, #7
->   28:   mov     x0, #-281474976710656
->   2c:   movk    x0, #32768, lsl #32
->   30:   movk    x0, #35407, lsl #16
->   34:   add     x0, x0, x7
->   38:   mov     x1, #1
-> ; __sync_add_and_fetch(&hits[cpu & CPU_MASK].value, 1);
->   3c:   mov     x1, #1
->
-> After:
->
-> int bench_trigger_uprobe(void * ctx):
-> bpf_prog_538c6a43d1c6b84c_bench_trigger_uprobe:
-> ; int cpu =3D bpf_get_smp_processor_id();
->    0:   mov     x9, x30
->    4:   nop
->    8:   stp     x29, x30, [sp, #-16]!
->    c:   mov     x29, sp
->   10:   stp     xzr, x26, [sp, #-16]!
->   14:   mov     x26, sp
->   18:   mrs     x10, SP_EL0
->   1c:   ldr     w7, [x10, #16]
-> ; __sync_add_and_fetch(&hits[cpu & CPU_MASK].value, 1);
->   20:   and     w7, w7, #0xff
-> ; __sync_add_and_fetch(&hits[cpu & CPU_MASK].value, 1);
->   24:   lsl     x7, x7, #7
->   28:   mov     x0, #-281474976710656
->   2c:   movk    x0, #32768, lsl #32
->   30:   movk    x0, #35407, lsl #16
->   34:   add     x0, x0, x7
->   38:   mov     x1, #1
-> ; __sync_add_and_fetch(&hits[cpu & CPU_MASK].value, 1);
->   3c:   ldaddal x1, x1, [x0]
-> ; return 0;
->   40:   mov     w7, #0
->   44:   ldp     xzr, x26, [sp], #16
->   48:   ldp     x29, x30, [sp], #16
->   4c:   mov     x0, x7
->   50:   ret
->   54:   nop
->   58:   ldr     x10, #8
->   5c:   br      x10
->
-> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-> Acked-by: Yonghong Song <yonghong.song@linux.dev>
-> Acked-by: Leon Hwang <leon.hwang@linux.dev>
-> Acked-by: Quentin Monnet <qmo@kernel.org>
+> Agree. I don't think compilers can misoptimize things here.
+> It's safe to ignore this.
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+There's LTO support in the Linux tree for tools/perf with the LTO=3D1
+option [1]. My experience is that it works best with clang and ldd.
+libbpf is statically built into perf by default.
 
-> ---
-> Changelog:
-> v3: https://lore.kernel.org/all/20260311222608.521549-1-puranjay@kernel.o=
-rg/
-> Changes in v4:
-> - Add acked by Quentin
-> - Rebased on bpf-next/master
-> v2: https://lore.kernel.org/all/20260310223456.1706712-1-puranjay@kernel.=
-org/
-> Chnages in v3:
-> - Fix bug in usage of strncmp() (AI)
-> v1: https://lore.kernel.org/all/20260306163906.2870529-1-puranjay@kernel.=
-org/
-> Changes in v2:
-> - Fix coding style issue (Quentin)
-> - Use strncmp() in place of strstr() for detecting aarch64 in triple. (Qu=
-entin)
-> ---
->  tools/bpf/bpftool/jit_disasm.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/bpf/bpftool/jit_disasm.c b/tools/bpf/bpftool/jit_disas=
-m.c
-> index 8895b4e1f690..04541155e9cc 100644
-> --- a/tools/bpf/bpftool/jit_disasm.c
-> +++ b/tools/bpf/bpftool/jit_disasm.c
-> @@ -93,7 +93,16 @@ init_context(disasm_ctx_t *ctx, const char *arch,
->  		p_err("Failed to retrieve triple");
->  		return -1;
->  	}
-> -	*ctx =3D LLVMCreateDisasm(triple, NULL, 0, NULL, symbol_lookup_callback=
-);
-> +
-> +	/*
-> +	 * Enable all aarch64 ISA extensions so the disassembler can handle any
-> +	 * instruction the kernel JIT might emit (e.g. ARM64 LSE atomics).
-> +	 */
-> +	if (!strncmp(triple, "aarch64", 7))
-> +		*ctx =3D LLVMCreateDisasmCPUFeatures(triple, "", "+all", NULL, 0, NULL=
-,
-> +						   symbol_lookup_callback);
-> +	else
-> +		*ctx =3D LLVMCreateDisasm(triple, NULL, 0, NULL, symbol_lookup_callbac=
-k);
+A sashiko review raised the issue when perf was reverting the addition
+of -fno-strict-aliasing, the sashiko review is posted to LKML here:
+https://lore.kernel.org/lkml/CAP-5=3DfVro6E6fowmmJ7gmKX-5SN8bFU7-5KJk_wFG-b=
+QuVnMHw@mail.gmail.com/
 
-Question: Are there advantages to special casing aarch64? Shouldn't this
-be a no-op for other architectures where it seems the JIT doesn't emit any
-feature-dependent instructions?
+-fno-strict-aliasing was added because some crypto code (copied from
+the kernel) requires it for get/put_unaligned. The fix was to use
+memcpy in the unaligned functions, which they now do [2].
 
->  	LLVMDisposeMessage(triple);
-> =20
->  	if (!*ctx) {
->
-> base-commit: 77378dabb50f593c756d393d8eacb0b91b758863
+I'd prefer not to hamstring the compiler with -fno-strict-aliasing, we
+have sanitizers that can capture aliasing issues.
 
+Thanks,
+Ian
+
+[1] https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-nex=
+t.git/tree/tools/perf/Makefile.config?h=3Dperf-tools-next#n279
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/include/vdso/unaligned.h
+
+
+> pw-bot: cr
