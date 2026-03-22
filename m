@@ -1,136 +1,157 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2363137C10E;
-	Sun, 22 Mar 2026 02:14:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0EFB37D10F;
+	Sun, 22 Mar 2026 02:14:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774145668; cv=none; b=im/Npdz9jySMSLxy273W3OaeTRJdKpC0B79DtUiCGzPXER70bIcfqte36rZxH+B+kRoeibu8clY1Gw9kRtYf7uReOz6WnxmrjXtUs3ICdO8W0lbSRAT5laW55xeD3RYmyD7B8fWekZPKuJij9jEn7KFlevM5GwF6XuJJ9+/2Yhs=
+	t=1774145670; cv=none; b=rYveBQuF+Treat7tAKRJ+n2aGyGb6GnaVE6BkBwyU2LuDg/pqn6IWrflSaHeVDjsajybQdIyyH/UzYSmSg1byULp/HbJHbw/9TQ2ZcuXLmcre1vOsC+8WkXPPb9h9xlqDINIfsJmcufQKbA3iyjfsywkk5j+J+V+Q6JfsWCeVc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774145668; c=relaxed/simple;
-	bh=JFi23hDPzBAJJbr+GBVnnI+oU8bt2iNkSB+GWSbbTmI=;
+	s=arc-20240116; t=1774145670; c=relaxed/simple;
+	bh=KM27ZStv54d4ev0F7eUGi5mKasxRcuFt8w61iI2z5fg=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=SJhrucciduWB7g2RkNYMImo11SXUl8hzE3uMZv8IcmJmiRmGP6PuCysVRiNCfYHJdkrdAQMSQKVlB2FJhqsbL0sRwwE+6RbLNqqR4DL8v9rncI/YVmU5TB+H2bjz/x1f2xCrhYY7muzJnqcqySje0xur6DqG/Js7qi25Xhh6F88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V2FXJrS6; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=Wd6yyIRFA4ep7EhFeetkl+RAGPGJtFewzIPrq4hvyf9TFbhm1YmrFT6lZyhCF4XH7YivqxZy4xMPW9rg/MJWWd2ougvw33aQcPHmFjYVbFUmLPSCJXIujeq/Acs7WmGRK7j1xuW5RLn0wkDauAl2y/hripCo3sKkyrlVVylQQqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oxUq1vhp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V2FXJrS6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83CCBC2BCAF;
-	Sun, 22 Mar 2026 02:14:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oxUq1vhp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06289C19421;
+	Sun, 22 Mar 2026 02:14:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774145668;
-	bh=JFi23hDPzBAJJbr+GBVnnI+oU8bt2iNkSB+GWSbbTmI=;
+	s=k20201202; t=1774145669;
+	bh=KM27ZStv54d4ev0F7eUGi5mKasxRcuFt8w61iI2z5fg=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=V2FXJrS6V2Xv2NrLnWV0ierikbDUejhRcYKkiM3QUauGUMhYVIOqhJSXSPWk+nPfG
-	 gOfoIWMZPpHVxR9QU4roFa5m3EGdnU7VbQKjC1pSaSg/066c326Hz+mdXAFcSm7Wh4
-	 UbU08zQ1JRmFth8QuZ5CjSY8EEnnHPOpzDXRGpc+FLy0jAa5Ynn7TKdjOJzRR/mYw5
-	 b9Xnbra7T8FrYXmQZLYu+/d0RWKw0pa/tv5mgNxy6BzL49/hIV6jOlg+CcNkIdM2Mr
-	 c1P+bu4IzSDVjGaEQ4BYgRcjx6Jvbidl7vqrVKpXjfDe4VSpRpb01a5vWyXLgvdFnI
-	 3eAFIu/txDrVA==
-Content-Type: multipart/mixed; boundary="===============6720247887629249689=="
+	b=oxUq1vhpeCZwtX+7Kq7V3QSY/lojQ+xfQP0pcoqot5QvXw7dV/4rDeQc4Fmrmz261
+	 bTZRS/mvj5oQHnT1L/FgCE9DX2A6ylnaoFZyYsiDjfmbgFI++GWJJSx0li5dtrXa5X
+	 f0jRGsbVhjksG7iR8ZJ5iQ/zXJFt54xyL9EPHQ8vBKj0YCKmycjTCIHilcxZgai7+2
+	 lPD9Ojg6dtgDhgW+9MiZnpR8YqmnhoYSyM12LtNBNchwxx9hOLrbge4ALx9VWZnKrZ
+	 pCfOGXtBQiPGyUYRLbuTQsK2Fs44b/oZRUcxkKk0JdHwZhVoK8nqoF68AHgYNQj68b
+	 rrPtttxnisexQ==
+Content-Type: multipart/mixed; boundary="===============8611594194516260872=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <e6a5b9f1a0eb1f4874d1a426dc17ccaad603065e8e6cebd8e0cc4ac8d014a2f9@mail.kernel.org>
-In-Reply-To: <20260322014402.8815-10-piliu@redhat.com>
-References: <20260322014402.8815-10-piliu@redhat.com>
-Subject: Re: [PATCHv7 09/13] kexec_file: Integrate bpf light skeleton to load image with bpf-prog
+Message-Id: <08c0a3bb712e08a8889996a1e4e8c4539eb02a393e237d67e3179364c054fddc@mail.kernel.org>
+In-Reply-To: <20260322014402.8815-3-piliu@redhat.com>
+References: <20260322014402.8815-3-piliu@redhat.com>
+Subject: Re: [PATCHv7 02/13] kexec_file: Use bpf-prog to decompose image
 From: bot+bpf-ci@kernel.org
 To: piliu@redhat.com,kexec@lists.infradead.org
 Cc: piliu@redhat.com,davem@davemloft.net,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,jeremy.linton@arm.com,catalin.marinas@arm.com,will@kernel.org,ardb@kernel.org,horms@kernel.org,kraxel@redhat.com,vkuznets@redhat.com,prudo@redhat.com,vmalik@redhat.com,kernel@jfarr.cc,bhe@redhat.com,dyoung@redhat.com,akpm@linux-foundation.org,bpf@vger.kernel.org,systemd-devel@lists.freedesktop.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sun, 22 Mar 2026 02:14:27 +0000 (UTC)
+Date: Sun, 22 Mar 2026 02:14:29 +0000 (UTC)
 
---===============6720247887629249689==
+--===============8611594194516260872==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
 > diff --git a/kernel/kexec_bpf_loader.c b/kernel/kexec_bpf_loader.c
-> index 7f7884411e2c..430f6c3970b6 100644
-> --- a/kernel/kexec_bpf_loader.c
+> new file mode 100644
+> index 000000000000..bd1800a76782
+> --- /dev/null
 > +++ b/kernel/kexec_bpf_loader.c
 
 [ ... ]
 
-> +static void *get_symbol_from_elf(const char *elf_data, size_t elf_size,
-> +				 const char *symbol_name,
-> +				 unsigned int *symbol_size)
+> +#include <linux/bpf.h>
+> +#include <linux/filter.h>
+> +#include <asm/byteorder.h>
+> +#include <asm/image.h>
+> +#include <asm/memory.h>
+> +#include "kexec_internal.h"
+
+Are asm/image.h and asm/memory.h needed here?  I could not find any
+symbols from either header used in this file.  asm/image.h only exists
+for arm64, loongarch, and riscv, and asm/memory.h only for arm, arm64,
+and csky.
+
+Since CONFIG_KEXEC_BPF has no architecture dependency, enabling it on
+x86 would cause a build failure from these missing headers.
+
+[ ... ]
+
+> +static int process_bpf_parsers_container(const char *elf_buf, size_t elf_sz,
+> +				   struct kexec_context *context, int depth)
 > +{
 
 [ ... ]
 
-> +	/* Check section data bounds */
-> +	if (dst_shdr->sh_offset > elf_size ||
-> +	    dst_shdr->sh_offset + dst_shdr->sh_size > elf_size ||
-> +	    sym->st_value > dst_shdr->sh_size) {
-> +		pr_err("Symbol data out of bounds\n");
-> +		return NULL;
-> +	}
+> +		/*
+> +		 * Give the BPF prog a clean slate so context->parsed reliably
+> +		 * reflects whether *this* invocation succeeded.
+> +		 */
+> +		context->parsed = false;
+> +		/* This is the hook point for bpf-prog */
+> +		kexec_image_parser_anchor(context, (unsigned long)bpf);
+> +		disarm_bpf_prog();
 > +
-> +	symbol_data = (void *)(elf_data + dst_shdr->sh_offset + sym->st_value);
-> +
-> +	if (symbol_size)
-> +		*symbol_size = sym->st_size;
-> +
-> +	return symbol_data;
-> +}
+> +		/* Free the old parsing context, and reload the new */
+> +		for (int i = 0; i < MAX_PARSING_BUF_NUM; i++) {
+> +			if (!!context->parsing_buf[i])
+> +				break;
+> +			vfree(context->parsing_buf[i]);
+> +			context->parsing_buf[i] = NULL;
+> +			context->parsing_buf_sz[i] = 0;
+> +		}
 
-The bounds check validates that sym->st_value falls within the section,
-but it does not validate that sym->st_value + sym->st_size also fits
-within the section (or the ELF buffer).
+The comment says "free the old parsing context" but the condition
+appears inverted.  !!context->parsing_buf[i] is true when the pointer
+is non-NULL, so the loop breaks at the first populated entry and only
+calls vfree() on NULL pointers (which is a no-op).
 
-The caller arm_bpf_prog() passes the returned sym->st_size through to
-bpf_load_and_run() as opts.data_sz / opts.insns_sz, which controls how
-many bytes are copied from the pointer:
-
-    arm_bpf_prog()
-      opts_data = get_symbol_from_elf(..., &opts_data_sz);
-        -> *symbol_size = sym->st_size;
-      ...
-      kexec_pe_parser_bpf__open_and_load()
-        kexec_pe_parser_bpf__load()
-          opts.data_sz = opts_data_sz;
-          bpf_load_and_run(&opts);
-            skel_map_update_elem(map_fd, &key, opts->data, 0);
-
-Since the ELF comes from userspace via the PE .bpf section, could a
-crafted ELF with a valid st_value but an oversized st_size cause a
-read beyond the buffer here? Something like:
-
-    if (sym->st_value + sym->st_size > dst_shdr->sh_size) ...
-
-might be needed alongside the existing st_value check.
-
-> + /* Load a ELF */
->  static int arm_bpf_prog(char *bpf_elf, unsigned long sz)
->  {
+Should this be if (!context->parsing_buf[i]) instead?
 
 [ ... ]
 
-> +	pe_parser = kexec_pe_parser_bpf__open_and_load();
-> +	if (!pe_parser) {
-> +		pr_info("Can not open and load bpf parser\n");
-> +		return -1;
-> +	}
-> +	kexec_pe_parser_bpf__attach(pe_parser);
+> +int decompose_kexec_image(struct kimage *image, int extended_fd)
+> +{
+> +	struct kexec_context ctx = { 0 };
+> +	unsigned long parser_sz;
+> +	char *parser_start;
+> +	int ret = -EINVAL;
+
+[ ... ]
+
+> +	if (!validate_elf_bpf_sections(parser_start, parser_sz)) {
 > +
-> +	return 0;
->  }
+> +		ret = kernel_read_file_from_fd(extended_fd,
+> +						0,
+> +						(void **)&ctx.parsing_buf[0],
+> +						KEXEC_FILE_SIZE_MAX,
+> +						NULL,
+> +						0);
+> +		if (ret < 0) {
+> +			pr_err("Fail to read image container\n");
+> +			return -EINVAL;
+> +		}
+> +		ctx.parsing_buf_sz[0] = ret;
+> +		ret = process_bpf_parsers_container(parser_start, parser_sz, &ctx, 0);
+> +		if (!ret) {
+> +			char *p;
+> +
+> +			/* Envelop should hold valid kernel, initrd, cmdline sections */
+> +			if (!ctx.kernel || !ctx.initrd || !ctx.cmdline) {
+> +				vfree(ctx.kernel);
+> +				vfree(ctx.initrd);
+> +				vfree(ctx.cmdline);
+> +				return -EINVAL;
+> +			}
 
-kexec_pe_parser_bpf__attach() returns an error code, but its return
-value is not checked here. If attach fails (e.g.
-skel_raw_tracepoint_open() returns an error), arm_bpf_prog() still
-returns 0.
+[ ... ]
 
-The caller process_bpf_parsers_container() then proceeds to call
-kexec_image_parser_anchor(), which is a no-op without the fentry
-hook. context->parsed stays false, and every section appears to fail
-with "no BPF section succeeded" -- hiding the real cause.
+> +		}
+> +		return ret;
+> +	}
+> +
+> +	return -EINVAL;
+> +}
 
-Should the return value of kexec_pe_parser_bpf__attach() be checked,
-with the parser destroyed and an error returned on failure?
+When process_bpf_parsers_container() fails, or when the
+!ctx.kernel || !ctx.initrd || !ctx.cmdline check triggers,
+ctx.parsing_buf[0] was allocated by kernel_read_file_from_fd() but
+is never freed before returning.  Does this leak the buffer?
 
 
 ---
@@ -138,4 +159,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23393379437
---===============6720247887629249689==--
+--===============8611594194516260872==--
