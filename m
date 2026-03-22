@@ -1,196 +1,135 @@
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64486364EB2;
-	Sun, 22 Mar 2026 00:49:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.134.164.104
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75756230BDB
+	for <bpf@vger.kernel.org>; Sun, 22 Mar 2026 00:58:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774140587; cv=none; b=uOWPosZ0m+EQ+wlI+1eoc2jPEU075fzL174Q47edohZsdBziM4eHQug585SUSi6XHvWVlcP41Nyj0RpiliFl5KUwvyAEn/EHf56xFrbqRYFjAv5Au9Aq9NVqqTnNRGfP7OdGeLGpX7Q9ZZnXbuVadWnkd1dgZ9xMvBZpARgHIRI=
+	t=1774141115; cv=none; b=HW1TR3aPEdIggs7HhVcEyFen5QaLsvanlsZ0Y7K6P/wgBK3WS+38j7IAafRyTQ2A1yDEadm6U8N7rREqXZAr15LSOVkTC5aXhHH6MSoaZXUw/mhj12pa0aTJIpCOcK1poLDzfDd/64JJWXL5Sav+qUAp4lSV5t9Byaq7nMh9CMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774140587; c=relaxed/simple;
-	bh=3P+FHVNfbK+La3bD6MuS2D4z0TSvWKFHyTDdjVBd30Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iuakDeVxGqzm8CPh9O5AgAVuaDkvMkcffHA5SvHlPHjtEX22+N4/1F7VrKrVyPEk4/QNiUCo8F7F5XhF1agaPef0XRSuW/gKAWlf3kfMz6jkpvJgl6Dyzi0c76MotKglF3sQ6Q4P+NO/vRm41YVnF47cfQ8URKX3XbbR5cMyxzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inria.fr; spf=pass smtp.mailfrom=inria.fr; dkim=pass (1024-bit key) header.d=inria.fr header.i=@inria.fr header.b=JUJHUDtE; arc=none smtp.client-ip=192.134.164.104
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inria.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inria.fr
+	s=arc-20240116; t=1774141115; c=relaxed/simple;
+	bh=w94Z4ht1ngE2NEfC3k9zIcS3AmVkMhwClW/z8reEnSE=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=LgvdfrFh/2ydQTWO6swoKktF1hSN3Udp0FOAinHmNk9iDcAIEYaydVqUxDVgNGl7YsuSf3BaicIE7DODlIx3iOVZZPbSMm7hCyE11uhrVahtmww4GuSCr2sKopZpu25RFcL6bprAjHBU9NP8T8R6xdYj5ChnMwkUH+mBzfWpRyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=T18WgsEE; arc=none smtp.client-ip=74.125.82.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=inria.fr header.i=@inria.fr header.b="JUJHUDtE"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="T18WgsEE"
+Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-12711ec96fbso2329958c88.0
+        for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 17:58:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Ecx+NdtNHs/E9Y80PcAg4AM7G5D3SMKPl991bj4N5QQ=;
-  b=JUJHUDtELWTUj4h3pCn9JQ6dp84wbwhQA0zM+YTcdKykr9XTs9vvYIOB
-   5OK+XWGo7GSW45DyUHKNMDAjEeHwXycW0g1V3UvCeMdnS8dfOLStek2kV
-   zOePlbCNAV2zqXpyuVVvH1RZydQ8JgN/Mk4flsqwgOOHnx2lv7bkfOlNW
-   s=;
-X-CSE-ConnectionGUID: wrH9vzEfRVSBv262jZ6SYQ==
-X-CSE-MsgGUID: /Ex2Z2tYQYivu/BNe8Gcmw==
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=keisuke.nishimura@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="6.23,134,1770591600"; 
-   d="scan'208";a="141978277"
-Received: from unknown (HELO [10.31.64.140]) ([193.52.24.41])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2026 01:49:35 +0100
-Message-ID: <9f8cc4f1-a603-4cbf-9c99-1f5bca341ca5@inria.fr>
-Date: Sun, 22 Mar 2026 01:49:33 +0100
+        d=google.com; s=20251104; t=1774141113; x=1774745913; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JYyPAR1RPCplqnKawfHVIkwnGNEWNEIIYR+bHhpQ178=;
+        b=T18WgsEEIXlBHVzMQoxTinFEKz5zIksJ1YZL9E0mfJ1EHxzGh5gmRbBP/b5datuqXB
+         J5UTJttrZo47h3MUOB1ROwz9OLEITgLORJSmaWsDg6BFEC/alfcHzZlI51zVxB/gzzdB
+         rjbBQn5J0l2uNn9phtx74mVxQykN5HQ33i+S2hXL6yLDTiyaY66Z6ceXLyC/NbRikOuI
+         fm97w16AAghZk3kowCDAR8XPpwkF0hxXC+naKwzbtZcaU2fM09eG0yQvdzu8HG06Twqg
+         rGvJ5NVQPVGKT4/HNj32IfBey36Ew1dz24Hfb06cPUf/Y4EFni12nACO/v5Hxm6JRfGr
+         p4dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774141113; x=1774745913;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JYyPAR1RPCplqnKawfHVIkwnGNEWNEIIYR+bHhpQ178=;
+        b=Jbva8pd35+CzK0dWj8BOqrehvrdh708VHWlXFsLpzejHZhwHbNeairmyzeLkEEezIb
+         A3hGRqgC0jgALjj6vG/kdb+dpv57ETY4E637fwNqkF9Etka+eM3KIKc55y8tAD+gCipZ
+         Tl6sdTNj4rUC3IqIax/K4PNznzavkQ2DqvXXN9bBJZWkAc31/4P79i+JNM4ALctSTHjR
+         DDBnWej2MyVap+v5OGwDDzt2SeAbwEafXGwWxIQADhOR9RqaebWorDIluVytO2OtV9tL
+         /5pn4YYQ42vVhXGTxrBgWG2WKzmbcVOfd2finWlXEg+nGHXH8LEb7Kuj+AiwP4XtczWN
+         34Sg==
+X-Forwarded-Encrypted: i=1; AJvYcCUsTCm0t7lxsFO1Mq2jT6c9q4UO4LD9TSVydu6TjYEo1x2ERBCpI7PQ/G3PEokZYY6xYSs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyREnBTHWtJoUe0kgy9enb4+BK1ymVh/Fm9ryTUO1IGTP1Fufx7
+	p1LlPbHeBtWEYvl7GNTu0lOM7uXgwOCN9Vo8yeH7oYlF83qucW2bE9zWiITWoLcsAoBMNj3gtHI
+	I8pmWNvfLHA==
+X-Received: from dlbts23-n1.prod.google.com ([2002:a05:7022:b057:10b0:12a:796d:c7e4])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:2507:b0:128:bac0:2edf
+ with SMTP id a92af1059eb24-12a726cfa29mr4106254c88.34.1774141113098; Sat, 21
+ Mar 2026 17:58:33 -0700 (PDT)
+Date: Sat, 21 Mar 2026 17:58:19 -0700
+In-Reply-To: <CAP-5=fUsaORbZuCtUxFgzMT-Cn2jVDLYfcYGSkXC7TdtyfnatQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next] selftests/bpf: Add test for struct_ops __ref
- argument in any position
-To: Varun R Mallya <varunrmallya@gmail.com>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Amery Hung <ameryhung@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>,
- sun jian <sun.jian.kdev@gmail.com>, ameryhung@gmail.com, andrii@kernel.org,
- ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
- eddyz87@gmail.com, haoluo@google.com, john.fastabend@gmail.com,
- jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
- martin.lau@linux.dev, sdf@fomichev.me, song@kernel.org,
- yonghong.song@linux.dev
-References: <20260320130219.63711-1-keisuke.nishimura@inria.fr>
- <20260321214038.80479-1-varunrmallya@gmail.com>
-Content-Language: en-US
-From: Keisuke Nishimura <keisuke.nishimura@inria.fr>
-In-Reply-To: <20260321214038.80479-1-varunrmallya@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <CAP-5=fUsaORbZuCtUxFgzMT-Cn2jVDLYfcYGSkXC7TdtyfnatQ@mail.gmail.com>
+X-Mailer: git-send-email 2.53.0.959.g497ff81fa9-goog
+Message-ID: <20260322005823.981079-1-irogers@google.com>
+Subject: [PATCH v2 0/4] perf hashmap: Separate perf's hashmap code from libbpf
+From: Ian Rogers <irogers@google.com>
+To: irogers@google.com, acme@kernel.org, adrian.hunter@intel.com, 
+	james.clark@linaro.org, jolsa@kernel.org, mingo@redhat.com, 
+	namhyung@kernel.org, peterz@infradead.org
+Cc: alexander.shishkin@linux.intel.com, alexei.starovoitov@gmail.com, 
+	andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net, 
+	eddyz87@gmail.com, haoluo@google.com, john.fastabend@gmail.com, 
+	kpsingh@kernel.org, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, martin.lau@linux.dev, memxor@gmail.com, 
+	sdf@fomichev.me, song@kernel.org, yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hello,
+The hashmap code as-is violates the C specification meaning
+ -fno-strict-aliasing is required or fixes sent in:
+https://lore.kernel.org/lkml/20260321024446.692008-1-irogers@google.com/
+    
+We're looking to not build perf with -fno-strict-aliasing:
+https://lore.kernel.org/lkml/20260320224248.536449-1-irogers@google.com/
+    
+There is also the continual problem with hashmap using errptrs rather
+than errno introducing subtle bugs as shown in commits,
+  d05073adda0f perf trace: Avoid an ERR_PTR in syscall_stats
+  96f202eab813 perf trace: Fix IS_ERR() vs NULL check bug
+  9f3c16a430e8 perf expr: Fix return value of ids__new()
+but there are additional fixes on the mailing list.
+https://lore.kernel.org/lkml/20250805063209.3678359-1-linmq006@gmail.com/
+    
+Allow the perf version of hashmap diverge from libbpf's so that we can
+fix its issues. This means that perf has a dependency on libbpf that
+has strict aliasing violations, no -fno-strict-alias or the fixes, but
+you can bring a horse to water, you can't make it drink.
 
-Thank you for adding the test. If there is nothing further for me to 
-address, I think we can proceed as-is without a v2? Let me know if 
-anything still needs fixing.
+v1: https://lore.kernel.org/lkml/20260321024446.692008-1-irogers@google.com/
 
-Thanks,
-Keisuke
+Ian Rogers (4):
+  perf build: Don't check difference of perf and libbpf hashmap
+  perf hashmap: Rename hashmap to perf_hashmap to avoid libbpf conflict
+  perf hashmap: Fix strict aliasing violations in hashmap
+  perf hashmap: Remove errptr usage from hashmap
 
-On 2026/03/21 22:40, Varun R Mallya wrote:
-> Add a selftest to verify that the verifier correctly identifies refcounted
-> arguments in struct_ops programs, even when they are not the first
-> argument. This ensures that the restriction on tail calls for programs
-> with __ref arguments is properly enforced regardless of which argument
-> they appear in.
-> 
-> This test verifies the fix for check_struct_ops_btf_id() proposed by
-> Keisuke Nishimura [0], which corrected a bug where only the first
-> argument was checked for the refcounted flag.
-> The test includes:
-> - An update to bpf_testmod to add 'test_refcounted_multi', an operator with
->    three arguments where the third is tagged with "__ref".
-> - A BPF program 'test_refcounted_multi' that attempts a tail call.
-> - A test runner that asserts the verifier rejects the program with
->    "program with __ref argument cannot tail call".
-> 
-> [0]: https://lore.kernel.org/bpf/20260320130219.63711-1-keisuke.nishimura@inria.fr/
-> 
-> Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
-> ---
->   .../prog_tests/test_struct_ops_multi_args.c   |  9 +++++
->   .../bpf/progs/struct_ops_multi_args.c         | 35 +++++++++++++++++++
->   .../selftests/bpf/test_kmods/bpf_testmod.c    |  7 ++++
->   .../selftests/bpf/test_kmods/bpf_testmod.h    |  3 ++
->   4 files changed, 54 insertions(+)
->   create mode 100644 tools/testing/selftests/bpf/prog_tests/test_struct_ops_multi_args.c
->   create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_multi_args.c
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_multi_args.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_multi_args.c
-> new file mode 100644
-> index 000000000000..0f321e889862
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_multi_args.c
-> @@ -0,0 +1,9 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <test_progs.h>
-> +#include "struct_ops_multi_args.skel.h"
-> +
-> +void test_struct_ops_multi_args(void)
-> +{
-> +	RUN_TESTS(struct_ops_multi_args);
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/struct_ops_multi_args.c b/tools/testing/selftests/bpf/progs/struct_ops_multi_args.c
-> new file mode 100644
-> index 000000000000..c62be15757f0
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/struct_ops_multi_args.c
-> @@ -0,0 +1,35 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026 Varun R Mallya */
-> +
-> +#include <vmlinux.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_tracing.h>
-> +#include "../test_kmods/bpf_testmod.h"
-> +#include "bpf_misc.h"
-> +
-> +char _license[] SEC("license") = "GPL";
-> +
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-> +	__uint(max_entries, 1);
-> +	__uint(key_size, sizeof(__u32));
-> +	__uint(value_size, sizeof(__u32));
-> +} prog_array SEC(".maps");
-> +
-> +SEC("struct_ops/test_refcounted_multi")
-> +__failure __msg("program with __ref argument cannot tail call")
-> +int test_refcounted_multi(unsigned long long *ctx)
-> +{
-> +	/* ctx[2] is used because the refcounted variable is the third argument */
-> +	struct task_struct *refcounted_task = (struct task_struct *)ctx[2];
-> +
-> +	bpf_task_release(refcounted_task);
-> +	bpf_tail_call(ctx, &prog_array, 0);
-> +
-> +	return 0;
-> +}
-> +
-> +SEC(".struct_ops.link")
-> +struct bpf_testmod_ops testmod_ref_acquire = {
-> +	.test_refcounted_multi = (void *)test_refcounted_multi,
-> +};
-> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> index 94edbd2afa67..297b02372fa6 100644
-> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> @@ -1411,6 +1411,12 @@ static int bpf_testmod_ops__test_refcounted(int dummy,
->   	return 0;
->   }
->   
-> +static int bpf_testmod_ops__test_refcounted_multi(int dummy, struct task_struct *task__nullable,
-> +						  struct task_struct *task__ref)
-> +{
-> +	return 0;
-> +}
-> +
->   static struct task_struct *
->   bpf_testmod_ops__test_return_ref_kptr(int dummy, struct task_struct *task__ref,
->   				      struct cgroup *cgrp)
-> @@ -1423,6 +1429,7 @@ static struct bpf_testmod_ops __bpf_testmod_ops = {
->   	.test_2 = bpf_testmod_test_2,
->   	.test_maybe_null = bpf_testmod_ops__test_maybe_null,
->   	.test_refcounted = bpf_testmod_ops__test_refcounted,
-> +	.test_refcounted_multi = bpf_testmod_ops__test_refcounted_multi,
->   	.test_return_ref_kptr = bpf_testmod_ops__test_return_ref_kptr,
->   };
->   
-> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
-> index f6e492f9d042..863fd10f1619 100644
-> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
-> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
-> @@ -39,6 +39,9 @@ struct bpf_testmod_ops {
->   	int (*unsupported_ops)(void);
->   	/* Used to test ref_acquired arguments. */
->   	int (*test_refcounted)(int dummy, struct task_struct *task);
-> +	/* Used to test checking of __ref arguments when it not the first argument. */
-> +	int (*test_refcounted_multi)(int dummy, struct task_struct *task,
-> +				     struct task_struct *task2);
->   	/* Used to test returning referenced kptr. */
->   	struct task_struct *(*test_return_ref_kptr)(int dummy, struct task_struct *task,
->   						    struct cgroup *cgrp);
+ tools/perf/builtin-ftrace.c           |  20 ++--
+ tools/perf/builtin-trace.c            |  32 +++---
+ tools/perf/check-headers.sh           |   4 -
+ tools/perf/tests/expr.c               |  68 ++++++-------
+ tools/perf/tests/pmu-events.c         |   8 +-
+ tools/perf/ui/browsers/annotate.c     |  16 +--
+ tools/perf/util/Build                 |   9 --
+ tools/perf/util/annotate.c            |  18 ++--
+ tools/perf/util/annotate.h            |   6 +-
+ tools/perf/util/bpf-trace-summary.c   |  30 +++---
+ tools/perf/util/bpf_lock_contention.c |  14 +--
+ tools/perf/util/evsel.c               |   8 +-
+ tools/perf/util/evsel.h               |   4 +-
+ tools/perf/util/expr.c                |  68 ++++++-------
+ tools/perf/util/expr.h                |  12 +--
+ tools/perf/util/expr.y                |   2 +-
+ tools/perf/util/fncache.c             |  16 +--
+ tools/perf/util/ftrace.h              |   2 +-
+ tools/perf/util/hashmap.c             | 126 +++++++++++------------
+ tools/perf/util/hashmap.h             | 138 +++++++++++++-------------
+ tools/perf/util/hwmon_pmu.c           |  44 ++++----
+ tools/perf/util/metricgroup.c         |  30 +++---
+ tools/perf/util/pmu.c                 |  30 +++---
+ tools/perf/util/pmu.h                 |   4 +-
+ tools/perf/util/s390-sample-raw.c     |  14 +--
+ tools/perf/util/stat.c                |  10 +-
+ tools/perf/util/threads.c             |  24 ++---
+ tools/perf/util/threads.h             |   2 +-
+ 28 files changed, 379 insertions(+), 380 deletions(-)
+
+-- 
+2.53.0.959.g497ff81fa9-goog
 
