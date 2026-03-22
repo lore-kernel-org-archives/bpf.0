@@ -1,47 +1,47 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 977522D5A19
-	for <bpf@vger.kernel.org>; Sun, 22 Mar 2026 01:47:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9CE37C926
+	for <bpf@vger.kernel.org>; Sun, 22 Mar 2026 01:47:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774144043; cv=none; b=F2Apd7oM1EqssLnpkjMXb5/j2mULFNfiEBr4uQIkyvY8PgshF1pmtgPZy1RJj9C4KtTLF7rS97WXeTwIHSyxlW+hq/axbrW8NJHcRS8CAG9Vn22p/yRwSFleGb7hJHrSE8edJ1zjmRP5xBXcxl6oBB9k8d3JnudSQ4BOz1/hwJ0=
+	t=1774144058; cv=none; b=BVs3xdYeX2phtrqsrWTXCzZFVbA9nJgznyJh0cusf7ohHAMTpJU6Wt9jOeLQEKaMqAXhG6VU0RFlMMJYcOXbScEI9FOdYghhp/fHvlj3AOTbyq1pcYlm6te4J1TaO6iX4VJopYTJCCxDI7aup54dGlYal3OexI4zpgV/kzogtgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774144043; c=relaxed/simple;
-	bh=STlGzMGeEeiUitGF7IFp6nDs8a4NZLF8OIdOxzt6Los=;
+	s=arc-20240116; t=1774144058; c=relaxed/simple;
+	bh=h861BgEA28NVQYovTVGYsXvwnS2jXgU3AxLU+H1tVoE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MqhJ8UanzPgOYfl6RP/p9w27oQhfo4cnsF8XGOSRT8j88IRncIdIVxuN+R9OEJxI+PdAHHscTu/XUcnukKeXXNfXW+Nm5RA2p2oXggkh0ubcKrbPyF5X1w4IDaOXhtKh/g38vKl1wwmXOjDcqc6Dvfd8ecrdn1rjMzkmbJyjaCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SSLJ4bHC; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=Obu1R5f0hrHtXwatsD9eO9goPxV/h8o4CWdWD/xDWvkEw+2oZ9dVZjU6OZyLTdTB6XzzBSXKSF/yTcJtaZYWTE+oerx91T4tpdHjoQ/yv4GbUkDDBAcbx/VAApO8s6KWcpi0C/CFsuNR+RE/MkRhIg5isbqNJACWmfOtPNStVdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OWMDXfk5; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SSLJ4bHC"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OWMDXfk5"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774144040;
+	s=mimecast20190719; t=1774144054;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=fSe22gQ7YSBoSx0BRUyY4Y8cXier6OyQlbQMTQ/OwNI=;
-	b=SSLJ4bHCuhNF4HQw104wOrOZnC7wV4TYDCH2GWqpCnw/uu9e+rIQg5Tef2tkwoV/I3tUDY
-	3ssYFHaSSfr07Sj0flX6jAdXEB9/mQJenp91GnwcdozDz3meCH/YTXRmAVyz2O/RD7vWbE
-	gapUB5eiLE6EeXNYjoaGrlBos/ManUk=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	bh=WhbO8v48EvSUcQMKHFPvmGE+SqNO4MFfc9uap8rjv+I=;
+	b=OWMDXfk5m+zRCLL+gmn7D1UtlLrYEmwJ8Y4wjvS41RE1jF1dmaPOFxXDTx3pzY1ZAjWUTx
+	B7iA9U9u/jXSxqgdczc2ZNjoXRZToDRp8mBShx+vNLgoA/OlMOexviEaVwdaVL1bE/yz1u
+	pYT1XjTLh4y1T4QlyUVgSMzw4pM1ozc=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-687-SdzToAr3PPGCkDDcyaTQFQ-1; Sat,
- 21 Mar 2026 21:47:17 -0400
-X-MC-Unique: SdzToAr3PPGCkDDcyaTQFQ-1
-X-Mimecast-MFC-AGG-ID: SdzToAr3PPGCkDDcyaTQFQ_1774144034
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-512-4pqY6ZvGNDOOBMaq2YxDqg-1; Sat,
+ 21 Mar 2026 21:47:30 -0400
+X-MC-Unique: 4pqY6ZvGNDOOBMaq2YxDqg-1
+X-Mimecast-MFC-AGG-ID: 4pqY6ZvGNDOOBMaq2YxDqg_1774144048
 Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 93B8B19560A6;
-	Sun, 22 Mar 2026 01:47:14 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5D4AB1800359;
+	Sun, 22 Mar 2026 01:47:28 +0000 (UTC)
 Received: from fedora.redhat.com (unknown [10.72.112.22])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2ECFE300019F;
-	Sun, 22 Mar 2026 01:47:01 +0000 (UTC)
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4BCFE300019F;
+	Sun, 22 Mar 2026 01:47:14 +0000 (UTC)
 From: Pingfan Liu <piliu@redhat.com>
 To: kexec@lists.infradead.org
 Cc: Pingfan Liu <piliu@redhat.com>,
@@ -70,9 +70,9 @@ Cc: Pingfan Liu <piliu@redhat.com>,
 	bpf@vger.kernel.org,
 	systemd-devel@lists.freedesktop.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCHv7 12/13] tools/kexec: Introduce a bpf-prog to handle UKI image
-Date: Sun, 22 Mar 2026 09:44:01 +0800
-Message-ID: <20260322014402.8815-13-piliu@redhat.com>
+Subject: [PATCHv7 13/13] tools/kexec: Introduce a tool to build zboot envelop
+Date: Sun, 22 Mar 2026 09:44:02 +0800
+Message-ID: <20260322014402.8815-14-piliu@redhat.com>
 In-Reply-To: <20260322014402.8815-1-piliu@redhat.com>
 References: <20260322014402.8815-1-piliu@redhat.com>
 Precedence: bulk
@@ -84,6 +84,10 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
+The new tool builds a ELF container around zboot image. It contains
+three key sections: .kernel, .initrd, .cmdline. Later zboot_bpf_parser
+will parse this container format.
+
 Signed-off-by: Pingfan Liu <piliu@redhat.com>
 Cc: Baoquan He <bhe@redhat.com>
 Cc: Dave Young <dyoung@redhat.com>
@@ -92,303 +96,479 @@ Cc: Philipp Rudo <prudo@redhat.com>
 Cc: bpf@vger.kernel.org
 To: kexec@lists.infradead.org
 ---
- tools/kexec/Makefile         |  18 ++-
- tools/kexec/uki_parser_bpf.c | 235 +++++++++++++++++++++++++++++++++++
- 2 files changed, 252 insertions(+), 1 deletion(-)
- create mode 100644 tools/kexec/uki_parser_bpf.c
+ tools/kexec/Makefile              |  31 ++-
+ tools/kexec/build_zboot_envelop.c | 362 ++++++++++++++++++++++++++++++
+ tools/kexec/zboot_envelop.h       |   7 +
+ tools/kexec/zboot_parser_bpf.c    |   7 +-
+ 4 files changed, 401 insertions(+), 6 deletions(-)
+ create mode 100644 tools/kexec/build_zboot_envelop.c
+ create mode 100644 tools/kexec/zboot_envelop.h
 
 diff --git a/tools/kexec/Makefile b/tools/kexec/Makefile
-index a404a1453c888..c0e2ad44658e3 100644
+index c0e2ad44658e3..c168a6eeea09d 100644
 --- a/tools/kexec/Makefile
 +++ b/tools/kexec/Makefile
-@@ -43,6 +43,7 @@ HEADERS = vmlinux.h bpf_helper_defs.h image_size.h
- #   <P>.bpf                - final ELF wrapper with .bpf.1 section
- # ---------------------------------------------------------------------------
- BPF_TARGETS = zboot
-+BPF_TARGETS += uki
+@@ -21,9 +21,21 @@ endif
  
- define BPF_ARTIFACTS
- $(1)_parser_bpf.o $(1)_parser_bpf.lskel.h $(1)_bytecode.c $(1)_bytecode.o $(1).bpf
-@@ -54,8 +55,13 @@ ALL_BPF_ARTIFACTS = $(foreach t,$(BPF_TARGETS),$(call BPF_ARTIFACTS,$(t)))
+ CC = clang
+ CFLAGS = -O2
+-BPF_PROG_CFLAGS = -g -fno-merge-all-constants -O2 -target bpf -Wall -I $(BPFDIR) -I .
++BPF_PROG_CFLAGS = -g -O2 -target bpf -Wall -I $(BPFDIR) -I .
+ BPFTOOL = bpftool
+ 
++# Host compiler for native tools (must not be the BPF clang cross-compiler)
++HOSTCC ?= gcc
++HOSTCFLAGS = -std=c11 -O2 -Wall -Wextra
++
++# ---------------------------------------------------------------------------
++# zboot ELF image parameters
++# INITRAMFS: path to the initramfs image (required)
++# CMDLINE:   kernel command line string (optional, defaults to empty)
++# ---------------------------------------------------------------------------
++INITRAMFS ?=
++CMDLINE   ?=
++
+ # ---------------------------------------------------------------------------
+ # Shared generated headers (common to all targets)
+ # ---------------------------------------------------------------------------
+@@ -54,7 +66,7 @@ ALL_BPF_ARTIFACTS = $(foreach t,$(BPF_TARGETS),$(call BPF_ARTIFACTS,$(t)))
+ # ---------------------------------------------------------------------------
  # Top-level phony targets
  # ---------------------------------------------------------------------------
- zboot: $(HEADERS) $(call BPF_ARTIFACTS,zboot) build_zboot_image
-+ifeq ($(ARCH),$(filter $(ARCH),arm64 riscv loongarch))
-+uki: $(HEADERS) zboot.bpf $(call BPF_ARTIFACTS,uki)
-+else
-+uki: $(HEADERS) $(call BPF_ARTIFACTS,uki)
-+endif
- 
--.PHONY: zboot clean
-+.PHONY: zboot uki clean
- 
- # ---------------------------------------------------------------------------
- # Shared header rules
-@@ -123,6 +129,15 @@ image_size.h: $(KERNEL_IMAGE)
- # ---------------------------------------------------------------------------
- ZBOOT_BPF_MAPS := .bpf.1:zboot_bytecode.o
- 
-+# uki.bpf sections depend on architecture:
-+#   arm64/riscv/loongarch: .bpf.1 (uki bytecode) + .bpf.nested (zboot.bpf ELF)
-+#   x86: .bpf.1 only.  zboot format does not exist on x86
-+ifeq ($(ARCH),$(filter $(ARCH),arm64 riscv loongarch))
-+UKI_BPF_MAPS   := .bpf.1:uki_bytecode.o .bpf.nested:zboot.bpf
-+else
-+UKI_BPF_MAPS   := .bpf.1:uki_bytecode.o
-+endif
-+
- # ---------------------------------------------------------------------------
- # Helpers to build objcopy flags from a BPF_MAPS list
- # ---------------------------------------------------------------------------
-@@ -154,6 +169,7 @@ $(1).bpf: $(foreach m,$($(2)_BPF_MAPS),$(call source_file,$(m)))
- endef
- 
+-zboot: $(HEADERS) $(call BPF_ARTIFACTS,zboot) build_zboot_image
++zboot: $(HEADERS) $(call BPF_ARTIFACTS,zboot) build_zboot_envelop
+ ifeq ($(ARCH),$(filter $(ARCH),arm64 riscv loongarch))
+ uki: $(HEADERS) zboot.bpf $(call BPF_ARTIFACTS,uki)
+ else
+@@ -171,8 +183,21 @@ endef
  $(eval $(call BPF_WRAPPER_RULE,zboot,ZBOOT))
-+$(eval $(call BPF_WRAPPER_RULE,uki,UKI))
+ $(eval $(call BPF_WRAPPER_RULE,uki,UKI))
  
++# ---------------------------------------------------------------------------
++# Host tool: build_zboot_envelop
++# Packs EFI_IMAGE (.kernel), INITRAMFS (.initrd) and CMDLINE (.cmdline)
++# into a single ELF file consumed by the kexec loader.
++# ---------------------------------------------------------------------------
++build_zboot_envelop: build_zboot_envelop.c
++	@$(HOSTCC) $(HOSTCFLAGS) -o $@ $<
++
++zboot_image.elf: build_zboot_envelop $(EFI_IMAGE) $(INITRAMFS)
++	$(if $(INITRAMFS),,$(error INITRAMFS is not set. Usage: make INITRAMFS=<path> [CMDLINE="..."]))
++	@./build_zboot_envelop $(EFI_IMAGE) $(INITRAMFS) "$(CMDLINE)"
++
  # ---------------------------------------------------------------------------
  # Clean
-diff --git a/tools/kexec/uki_parser_bpf.c b/tools/kexec/uki_parser_bpf.c
+ # ---------------------------------------------------------------------------
+ clean:
+-	@rm -f $(HEADERS) $(ALL_BPF_ARTIFACTS) *.base.o
++	@rm -f $(HEADERS) $(ALL_BPF_ARTIFACTS) *.base.o \
++		build_zboot_envelop zboot_image.elf
+diff --git a/tools/kexec/build_zboot_envelop.c b/tools/kexec/build_zboot_envelop.c
 new file mode 100644
-index 0000000000000..1eb542d8acd4c
+index 0000000000000..d2d9ffc11fdc1
 --- /dev/null
-+++ b/tools/kexec/uki_parser_bpf.c
-@@ -0,0 +1,235 @@
++++ b/tools/kexec/build_zboot_envelop.c
+@@ -0,0 +1,362 @@
 +// SPDX-License-Identifier: GPL-2.0
-+//
-+// Copyright (C) 2025, 2026 Red Hat, Inc
-+//
-+#include "vmlinux.h"
-+#include <bpf_helpers.h>
-+#include <bpf_tracing.h>
-+#include "image_size.h"
++/*
++ * build_zboot_envelop.c - Pack zboot image, initramfs and cmdline into an ELF file.
++ *
++ * Usage: build_zboot_envelop <zboot_image> <initramfs> <cmdline> [output.elf]
++ *
++ * Output ELF sections:
++ *   .kernel     - zboot image (PE signature preserved, no padding)
++ *   .initrd     - initramfs image
++ *   .cmdline    - kernel command line string (NUL-terminated)
++ */
 +
-+/* ringbuf 2,3,4 are useless */
-+#define MIN_BUF_SIZE 1
-+#define MAX_RECORD_SIZE (IMAGE_SIZE + 40960)
-+#define RINGBUF1_SIZE IMAGE_SIZE_POWER2_ALIGN
-+#define RINGBUF2_SIZE MIN_BUF_SIZE
-+#define RINGBUF3_SIZE MIN_BUF_SIZE
-+#define RINGBUF4_SIZE MIN_BUF_SIZE
++#include <elf.h>
++#include <errno.h>
++#include <fcntl.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/mman.h>
++#include <sys/stat.h>
++#include <unistd.h>
++#include "zboot_envelop.h"
 +
-+#include "template.c"
++#define DEFAULT_OUTPUT "zboot_image.elf"
 +
-+#define MAX_PARSING_BUFS 16
-+#define PE_SCAN_MAX      16
-+#define ELF_SCAN_MAX     16
++/*
++ * Section indices into the section header table.
++ */
++enum {
++	SHN_UNDEF_IDX = 0,
++	SHN_KERNEL_IDX = 1,
++	SHN_INITRD_IDX = 2,
++	SHN_CMDLINE_IDX = 3,
++	SHN_SHSTRTAB_IDX = 4,
++	SHN_NUM = 5,
++};
 +
-+/* SHN_UNDEF is a uapi macro not exported via BTF/vmlinux.h */
-+#ifndef SHN_UNDEF
-+#define SHN_UNDEF 0
-+#endif
++/*
++ * String table layout (offsets are fixed at compile time):
++ *
++ *   off 0  : '\0'           (mandatory empty string)
++ *   off 1  : ".kernel\0"
++ *   off 9  : ".initrd\0"
++ *   off 17 : ".cmdline\0"
++ *   off 26 : ".shstrtab\0"
++ */
++#define SHSTR_OFF_KERNEL 1
++#define SHSTR_OFF_INITRD 9
++#define SHSTR_OFF_CMDLINE 17
++#define SHSTR_OFF_SHSTRTAB 26
 +
-+#ifndef EIO
-+#define EIO 5
-+#endif
-+#ifndef EINVAL
-+#define EINVAL 22
-+#endif
++#define SHSTRTAB_CONTENT \
++    "\0" KERNEL_SECT_NAME \
++    "\0" INITRD_SECT_NAME \
++    "\0" CMDLINE_SECT_NAME \
++    "\0.shstrtab"
 +
-+static const char linux_sect_name[]   = ".linux";
-+static const char initrd_sect_name[]   = ".initrd";
-+static const char cmdline_sect_name[]   = ".cmdline";
++/* sizeof() includes the final NUL from the string literal. */
++#define SHSTRTAB_SIZE (sizeof(SHSTRTAB_CONTENT))
 +
++/*
++ * struct input_file - holds a memory-mapped input file together with its size.
++ * @data:	pointer to the mapped region (or NULL if not mmap'd)
++ * @size:	exact byte size of the file
++ * @fd:		open file descriptor (-1 when closed)
++ */
++struct input_file {
++	const void *data;
++	size_t size;
++	int fd;
++};
 +
-+#define MAKE_CMD(cmd, subcmd)  ((__u32)(cmd) | ((__u32)(subcmd) << 16))
-+
-+static int fill_cmd(char *buf, __u32 cmd_word, __u32 pipeline_flag,
-+			const char *src, __u32 data_len)
++/*
++ * align8 - round @off up to the next multiple of 8.
++ */
++static inline size_t align8(size_t off)
 +{
-+	struct cmd_hdr *hdr;
-+	char *payload;
-+
-+	__u16 cmd = (__u16)(cmd_word & 0xffff);
-+	__u16 subcmd = (__u16)(cmd_word >> 16);
-+
-+	hdr = (struct cmd_hdr *)buf;
-+	hdr->cmd = cmd;
-+	hdr->subcmd = subcmd;
-+	hdr->pipeline_flag = pipeline_flag;
-+	hdr->payload_len = data_len;
-+	hdr->num_chunks = 0;
-+
-+	payload = (char *)(hdr + 1);
-+	/* Only cmd, no payload */
-+	if (!src || !data_len)
-+		return sizeof(*hdr);
-+	if (data_len > MAX_RECORD_SIZE - sizeof(struct cmd_hdr))
-+		return -EINVAL;
-+	bpf_probe_read_kernel(payload, data_len, src);
-+
-+	return sizeof(*hdr) + data_len;
++	return (off + 7) & ~(size_t)7;
 +}
 +
-+static int process_uki_pe(const char *pe_buf, __u32 pe_sz, char *scratch,
-+			  struct bpf_parser_context *bpf_ctx)
++/*
++ * open_and_map - open @path read-only and mmap its entire content.
++ *
++ * Returns 0 on success, -1 on error (errno is set by the failing syscall and
++ * a diagnostic is printed to stderr).
++ */
++static int open_and_map(const char *path, struct input_file *f)
 +{
-+	__u32 pe_offset, pe_sig, section_table_off;
-+	__u16 dos_magic, num_sections, opt_hdr_sz;
-+	__u16 pipeline_flag = 0;
-+	int i, ret;
++	struct stat st;
 +
-+	if (pe_sz < 64)
-+		return -EINVAL;
-+	if (pe_sz > MAX_RECORD_SIZE)
-+		return -EINVAL;
++	f->fd = open(path, O_RDONLY);
++	if (f->fd < 0) {
++		fprintf(stderr, "build_zboot_envelop: cannot open '%s': %s\n", path,
++			strerror(errno));
++		return -1;
++	}
 +
-+	if (bpf_probe_read_kernel(&dos_magic, sizeof(dos_magic), pe_buf) < 0)
-+		return -EIO;
-+	if (dos_magic != 0x5A4D)
-+		return -EINVAL;
++	if (fstat(f->fd, &st) < 0) {
++		fprintf(stderr, "build_zboot_envelop: cannot stat '%s': %s\n", path,
++			strerror(errno));
++		goto err_close;
++	}
 +
-+	if (bpf_probe_read_kernel(&pe_offset, sizeof(pe_offset),
-+				  pe_buf + 0x3c) < 0)
-+		return -EIO;
-+	if (pe_offset + 24 > pe_sz)
-+		return -EINVAL;
-+
-+	if (bpf_probe_read_kernel(&pe_sig, sizeof(pe_sig),
-+				  pe_buf + pe_offset) < 0)
-+		return -EIO;
-+	if (pe_sig != 0x00004550)
-+		return -EINVAL;
-+
-+	if (bpf_probe_read_kernel(&num_sections, sizeof(num_sections),
-+				  pe_buf + pe_offset + 6) < 0)
-+		return -EIO;
-+	if (bpf_probe_read_kernel(&opt_hdr_sz, sizeof(opt_hdr_sz),
-+				  pe_buf + pe_offset + 20) < 0)
-+		return -EIO;
-+
-+	section_table_off = pe_offset + 4 + 20 + opt_hdr_sz;
-+	if (section_table_off >= pe_sz)
-+		return -EINVAL;
-+
-+	for (i = 0; i < PE_SCAN_MAX; i++) {
-+		__u32 raw_size, raw_off, shdr_off;
-+		char sec_name[8];
-+		__u16 subcmd;
-+
-+		if (i >= num_sections)
-+			break;
-+
-+		shdr_off = section_table_off + i * 40;
-+		if (shdr_off + 40 > pe_sz)
-+			break;
-+
-+		if (bpf_probe_read_kernel(sec_name, sizeof(sec_name),
-+					  pe_buf + shdr_off) < 0)
-+			continue;
-+
-+		pipeline_flag = 0;
-+		if (__builtin_memcmp(sec_name, linux_sect_name, sizeof(linux_sect_name)) == 0) {
-+			subcmd = KEXEC_BPF_SUBCMD_KERNEL;
-+			/*
-+			 * .linux section may contain different format kernel, which should be
-+			 * passed to the next stage to handle
-+			 */
-+			pipeline_flag = KEXEC_BPF_PIPELINE_FILL;
-+		}
-+		else if (__builtin_memcmp(sec_name, initrd_sect_name, sizeof(initrd_sect_name)) == 0)
-+			subcmd = KEXEC_BPF_SUBCMD_INITRD;
-+		else if (__builtin_memcmp(sec_name, cmdline_sect_name, sizeof(cmdline_sect_name)) == 0)
-+			subcmd = KEXEC_BPF_SUBCMD_CMDLINE;
-+		else
-+			continue;
-+
-+		if (bpf_probe_read_kernel(&raw_size, sizeof(raw_size),
-+					  pe_buf + shdr_off + 16) < 0)
-+			continue;
-+		if (bpf_probe_read_kernel(&raw_off, sizeof(raw_off),
-+					  pe_buf + shdr_off + 20) < 0)
-+			continue;
-+
-+		if (!raw_size || raw_off + raw_size > pe_sz)
-+			continue;
-+
-+		ret = fill_cmd(scratch,
-+				MAKE_CMD(KEXEC_BPF_CMD_COPY, subcmd),
-+				pipeline_flag,
-+				pe_buf + raw_off,
-+				raw_size);
-+		ret = bpf_buffer_parser(scratch, ret, bpf_ctx);
-+		if (ret)
-+			return ret;
++	f->size = (size_t)st.st_size;
++	f->data = mmap(NULL, f->size, PROT_READ, MAP_PRIVATE, f->fd, 0);
++	if (f->data == MAP_FAILED) {
++		fprintf(stderr, "build_zboot_envelop: cannot mmap '%s': %s\n", path,
++			strerror(errno));
++		goto err_close;
 +	}
 +
 +	return 0;
++
++err_close:
++	close(f->fd);
++	f->fd = -1;
++	return -1;
 +}
 +
-+SEC("fentry.s/kexec_image_parser_anchor")
-+int BPF_PROG(parse_uki, struct kexec_context *context, unsigned long parser_id)
++static void close_and_unmap(struct input_file *f)
 +{
-+	struct bpf_parser_context *bpf_ctx;
-+	char *buf0, *buf1, *scratch;
-+	__u8 magic[4];
-+	int ret;
++	if (f->data && f->data != MAP_FAILED)
++		munmap((void *)f->data, f->size);
++	if (f->fd >= 0)
++		close(f->fd);
++}
 +
-+	bpf_printk("parse_uki: start\n");
-+	buf0 = BPF_CORE_READ(context, parsing_buf[0]);
-+	if (!buf0)
-+		return 0;
++static int write_all(int fd, const void *buf, size_t len)
++{
++	const uint8_t *p = buf;
++	ssize_t n;
 +
-+	bpf_ctx = bpf_get_parser_context(parser_id);
-+	if (!bpf_ctx) {
-+		bpf_printk("parse_uki: no parser context for id %lu\n",
-+			   parser_id);
-+		return 0;
++	while (len > 0) {
++		n = write(fd, p, len);
++		if (n < 0) {
++			if (errno == EINTR)
++				continue;
++			return -1;
++		}
++		p += n;
++		len -= n;
 +	}
++	return 0;
++}
 +
-+	buf1 = BPF_CORE_READ(context, parsing_buf[1]);
++/*
++ * write_padding - write @len zero bytes to @fd.
++ *
++ * Returns 0 on success, -1 on error.
++ */
++static int write_padding(int fd, size_t len)
++{
++	static const uint8_t zero[8];
++	size_t chunk;
++	ssize_t n;
++
++	while (len > 0) {
++		chunk = (len < sizeof(zero)) ? len : sizeof(zero);
++		n = write(fd, zero, chunk);
++		if (n < 0) {
++			if (errno == EINTR)
++				continue;
++			return -1;
++		}
++		len -= n;
++	}
++	return 0;
++}
++
++/*
++ * fill_shdr - populate a Elf64_Shdr for a SHT_PROGBITS section.
++ *
++ * @shdr:	section header to fill
++ * @name_off:	offset of the section name inside .shstrtab
++ * @offset:	file offset at which the section data begins
++ * @size:	exact byte count of the section data (no padding included)
++ * @flags:	section flags (e.g. SHF_ALLOC)
++ */
++static void fill_shdr(Elf64_Shdr *shdr, uint32_t name_off, uint64_t offset,
++		      uint64_t size, uint64_t flags)
++{
++	memset(shdr, 0, sizeof(*shdr));
++	shdr->sh_name = name_off;
++	shdr->sh_type = SHT_PROGBITS;
++	shdr->sh_flags = flags;
++	shdr->sh_offset = offset;
++	shdr->sh_size = size;
++	shdr->sh_addralign = 1;
++}
++
++int main(int argc, char *argv[])
++{
++	const char *kernel_path, *initrd_path, *cmdline, *output_path;
++	struct input_file kernel = { NULL, 0, -1 };
++	struct input_file initrd = { NULL, 0, -1 };
++	Elf64_Ehdr ehdr;
++	Elf64_Shdr shdrs[SHN_NUM];
++	size_t cmdline_size; /* includes terminating NUL */
 +
 +	/*
-+	 * Single-buffer path: original parse_uki behaviour.
-+	 * parsing_buf[0] is either a plain PE UKI or an ELF container
-+	 * with embedded .uki / .addon sections.
++	 * File layout (all section-data offsets are 8-byte aligned except
++	 * .kernel which must start directly after the headers to guarantee
++	 * that no byte is inserted before the PE signature):
++	 *
++	 *   [ELF header]          64 B
++	 *   [Section headers]     SHN_NUM * sizeof(Elf64_Shdr)
++	 *   [.kernel data]        kernel.size bytes  (NO internal padding)
++	 *   <pad to 8B>
++	 *   [.initrd data]        initrd.size bytes
++	 *   <pad to 8B>
++	 *   [.cmdline data]       cmdline_size bytes
++	 *   <pad to 8B>
++	 *   [.shstrtab data]      SHSTRTAB_SIZE bytes
 +	 */
-+	if (!buf1) {
-+		unsigned long sz = BPF_CORE_READ(context, parsing_buf_sz[0]);
++	size_t off_shdrs, off_kernel, off_initrd, off_cmdline, off_shstrtab;
++	size_t pad_after_kernel, pad_after_initrd, pad_after_cmdline;
++	int outfd;
++	int ret = EXIT_FAILURE;
 +
-+		if (sz < 4)
-+			goto out;
++	if (argc < 4 || argc > 5) {
++		fprintf(stderr,
++			"Usage: %s <zboot_image> <initramfs> <cmdline> "
++			"[output.elf]\n",
++			argv[0]);
++		return EXIT_FAILURE;
++	}
 +
-+		if (bpf_probe_read_kernel(magic, sizeof(magic), buf0) < 0)
-+			goto out;
++	kernel_path = argv[1];
++	initrd_path = argv[2];
++	cmdline = argv[3];
++	output_path = (argc == 5) ? argv[4] : DEFAULT_OUTPUT;
++	cmdline_size = strlen(cmdline) + 1; /* +1 for NUL terminator */
 +
-+		scratch = bpf_ringbuf_reserve(&ringbuf_1, MAX_RECORD_SIZE, 0);
-+		if (!scratch) {
-+			bpf_printk("ringbuf reserve failed\n");
-+			goto out;
-+		}
++	/* ------------------------------------------------------------------ */
++	/* 1. Map input files                                                  */
++	/* ------------------------------------------------------------------ */
++	if (open_and_map(kernel_path, &kernel) < 0)
++		goto out;
 +
-+		if (magic[0] == 'M' && magic[1] == 'Z') {
-+			bpf_printk("call process_uki_pe\n");
-+			ret = process_uki_pe(buf0, (__u32)sz, scratch, bpf_ctx);
-+			if (ret) {
-+				bpf_printk("parse_uki: PE path failed: %d\n",
-+					   ret);
-+			}
-+			else {
-+				bpf_printk("fill KEXEC_BPF_CMD_DONE \n");
-+				ret = fill_cmd(scratch, MAKE_CMD(KEXEC_BPF_CMD_DONE, 0),
-+						0, NULL, 0);
-+				ret = bpf_buffer_parser(scratch, ret, bpf_ctx);
-+				if (ret)
-+					bpf_printk("parse_uki: inject KEXEC_BPF_CMD_DONE failed: %d\n",
-+					   ret);
-+			}
-+		} else {
-+			bpf_printk("parse_uki: unrecognized format\n");
-+		}
++	if (open_and_map(initrd_path, &initrd) < 0)
++		goto out;
 +
-+		bpf_ringbuf_discard(scratch, BPF_RB_NO_WAKEUP);
++	/* Compute file layout */
++	off_shdrs = sizeof(Elf64_Ehdr);
++	off_kernel = off_shdrs + SHN_NUM * sizeof(Elf64_Shdr);
++
++	/*
++	 * .kernel must not contain any padding - its sh_size equals the
++	 * exact file size so that any PE authenticode signature is intact.
++	 * Alignment padding goes *after* the raw bytes, between sections.
++	 */
++	pad_after_kernel = 0;
++	off_initrd = off_kernel + kernel.size + pad_after_kernel;
++
++	pad_after_initrd =
++		align8(off_initrd + initrd.size) - (off_initrd + initrd.size);
++	off_cmdline = off_initrd + initrd.size + pad_after_initrd;
++
++	pad_after_cmdline = align8(off_cmdline + cmdline_size) -
++			    (off_cmdline + cmdline_size);
++	off_shstrtab = off_cmdline + cmdline_size + pad_after_cmdline;
++
++	memset(&ehdr, 0, sizeof(ehdr));
++
++	ehdr.e_ident[EI_MAG0] = ELFMAG0;
++	ehdr.e_ident[EI_MAG1] = ELFMAG1;
++	ehdr.e_ident[EI_MAG2] = ELFMAG2;
++	ehdr.e_ident[EI_MAG3] = ELFMAG3;
++	ehdr.e_ident[EI_CLASS] = ELFCLASS64;
++	ehdr.e_ident[EI_DATA] = ELFDATA2LSB;
++	ehdr.e_ident[EI_VERSION] = EV_CURRENT;
++	ehdr.e_ident[EI_OSABI] = ELFOSABI_NONE;
++
++	ehdr.e_type = ET_EXEC;
++	ehdr.e_machine = EM_AARCH64;
++	ehdr.e_version = EV_CURRENT;
++	ehdr.e_ehsize = sizeof(Elf64_Ehdr);
++	ehdr.e_shentsize = sizeof(Elf64_Shdr);
++	ehdr.e_shnum = SHN_NUM;
++	ehdr.e_shoff = (Elf64_Off)off_shdrs;
++	ehdr.e_shstrndx = SHN_SHSTRTAB_IDX;
++
++	/* Build section headers */
++	memset(shdrs, 0, sizeof(shdrs));
++
++	/* [0] SHN_UNDEF - mandatory null entry */
++
++	/* [1] .kernel */
++	fill_shdr(&shdrs[SHN_KERNEL_IDX], SHSTR_OFF_KERNEL,
++		  (uint64_t)off_kernel, (uint64_t)kernel.size, SHF_ALLOC);
++
++	/* [2] .initrd */
++	fill_shdr(&shdrs[SHN_INITRD_IDX], SHSTR_OFF_INITRD,
++		  (uint64_t)off_initrd, (uint64_t)initrd.size, SHF_ALLOC);
++
++	/* [3] .cmdline */
++	fill_shdr(&shdrs[SHN_CMDLINE_IDX], SHSTR_OFF_CMDLINE,
++		  (uint64_t)off_cmdline, (uint64_t)cmdline_size, SHF_ALLOC);
++
++	/* [4] .shstrtab */
++	memset(&shdrs[SHN_SHSTRTAB_IDX], 0, sizeof(Elf64_Shdr));
++	shdrs[SHN_SHSTRTAB_IDX].sh_name = SHSTR_OFF_SHSTRTAB;
++	shdrs[SHN_SHSTRTAB_IDX].sh_type = SHT_STRTAB;
++	shdrs[SHN_SHSTRTAB_IDX].sh_offset = (Elf64_Off)off_shstrtab;
++	shdrs[SHN_SHSTRTAB_IDX].sh_size = (uint64_t)SHSTRTAB_SIZE;
++	shdrs[SHN_SHSTRTAB_IDX].sh_addralign = 1;
++
++	outfd = open(output_path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
++	if (outfd < 0) {
++		fprintf(stderr, "build_zboot_envelop: cannot create '%s': %s\n", output_path,
++			strerror(errno));
 +		goto out;
 +	}
 +
++	if (write_all(outfd, &ehdr, sizeof(ehdr)) < 0)
++		goto err_write;
++
++	if (write_all(outfd, shdrs, sizeof(shdrs)) < 0)
++		goto err_write;
++
++	/* .kernel - raw bytes, no padding inside the section */
++	if (write_all(outfd, kernel.data, kernel.size) < 0)
++		goto err_write;
++	if (write_padding(outfd, pad_after_kernel) < 0)
++		goto err_write;
++
++	/* .initrd */
++	if (write_all(outfd, initrd.data, initrd.size) < 0)
++		goto err_write;
++	if (write_padding(outfd, pad_after_initrd) < 0)
++		goto err_write;
++
++	/* .cmdline - NUL-terminated string */
++	if (write_all(outfd, cmdline, cmdline_size) < 0)
++		goto err_write;
++	if (write_padding(outfd, pad_after_cmdline) < 0)
++		goto err_write;
++
++	/* .shstrtab */
++	if (write_all(outfd, SHSTRTAB_CONTENT, SHSTRTAB_SIZE) < 0)
++		goto err_write;
++
++	printf("build_zboot_envelop: wrote '%s'  (.kernel=%zuB  .initrd=%zuB  "
++	       ".cmdline=%zuB)\n",
++	       output_path, kernel.size, initrd.size, cmdline_size - 1);
++
++	close(outfd);
++	ret = EXIT_SUCCESS;
++	goto out;
++
++err_write:
++	fprintf(stderr, "build_zboot_envelop: write error on '%s': %s\n", output_path,
++		strerror(errno));
++	close(outfd);
++	unlink(output_path);
++
 +out:
-+	bpf_put_parser_context(bpf_ctx);
-+	return 0;
++	close_and_unmap(&kernel);
++	close_and_unmap(&initrd);
++	return ret;
 +}
+diff --git a/tools/kexec/zboot_envelop.h b/tools/kexec/zboot_envelop.h
+new file mode 100644
+index 0000000000000..813723c64ecf3
+--- /dev/null
++++ b/tools/kexec/zboot_envelop.h
+@@ -0,0 +1,7 @@
++#ifndef ZBOOT_ENVELOP_H
++#define ZBOOT_ENVELOP_H
++
++#define KERNEL_SECT_NAME ".kernel"
++#define INITRD_SECT_NAME ".initrd"
++#define CMDLINE_SECT_NAME ".cmdline"
++#endif
+diff --git a/tools/kexec/zboot_parser_bpf.c b/tools/kexec/zboot_parser_bpf.c
+index 10098dca2a27a..16fbad83a9bde 100644
+--- a/tools/kexec/zboot_parser_bpf.c
++++ b/tools/kexec/zboot_parser_bpf.c
+@@ -16,6 +16,7 @@
+ #define RINGBUF4_SIZE   MIN_BUF_SIZE
+ 
+ #include "template.c"
++#include "zboot_envelop.h"
+ 
+ #define ELF_SCAN_MAX 8
+ 
+@@ -43,9 +44,9 @@ struct linux_pe_zboot_header {
+ 	unsigned int pe_header_offset;
+ } __attribute__((packed));
+ 
+-static const char linux_sect_name[]   = ".kernel";
+-static const char initrd_sect_name[]   = ".initrd";
+-static const char cmdline_sect_name[]   = ".cmdline";
++static const char linux_sect_name[] = KERNEL_SECT_NAME;
++static const char initrd_sect_name[] = INITRD_SECT_NAME;
++static const char cmdline_sect_name[] = CMDLINE_SECT_NAME;
+ 
+ /*
+  * fill_cmd - overwrite the cmd_hdr at the start of @buf and copy @data_len
 -- 
 2.49.0
 
