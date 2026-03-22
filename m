@@ -1,76 +1,151 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1753C35F162
-	for <bpf@vger.kernel.org>; Sun, 22 Mar 2026 18:59:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6FB61A6815;
+	Sun, 22 Mar 2026 19:47:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774205985; cv=none; b=Hi1u7eNd7qJaitWsMGok5Egl8w769MFWva9jO/saFsbVxPFAB2towrAJ5eJ8RccKxCaTFnJasPIjfKn01nikhlla+b9lxZ2Tb/gC6kMa3CTKqLcZZxXjfwNzp08qEsmO6+jf/BJNrxqmvE+PkVfnZo7qhUW48sRkpsJ/Hg1+OmQ=
+	t=1774208863; cv=none; b=Yi//15588sJEORwwMjrRWkl923Ss28+ungWevIBpfh8S30H0QeTCTNwRzK8gvaZvT6apa705dffyJygWmNvB+0VExPj2Nre4ejLDrQ+oWpRMxrc1qDt4zqtBQhs9vHGGfMEgQ08A22f7GQbAMqo7P2p+gQDD9gl1Cxh4zwowQU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774205985; c=relaxed/simple;
-	bh=hv6aBGaAfYZGtqtBfKeXPsbliq4KpOlXusphHtKrXz4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=eNqM+x4hKtqhi+Owk4xKYUaJ+Hpr10LG6AFXK2bLjtiFP8BX2a1s8RRjgqHYs4Fg2OHzhORqqgv5Ciu6hCVgnMgisqjRtdel+gKAKDLLxSeQVhoXO5j7LyWtrrA/kKlLZSDCNRG6Dg1J4FlEM8OgEDjCbP1zuRLidypjxyhmzM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sT4xWIwU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774208863; c=relaxed/simple;
+	bh=3XAtgmML0t27NSYTmxu6FxdFaFLAF5B5MHR1oWmTwjM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZpumtDbk8g/snDsZjZJAzRrtiZAdaO31AhmYM4IQG4eF4Sj2kwaIzrkBH7pmlS3EWCvxRlrvxoLNAH4Wckhqc/PzbYDLWa/QWvDS6MNBs7PMOPn6zthQqMAlE2Mh6SlJ6A9lp45Z3FhgU5yFzzQ8qsj7h7FXEMb7VAumlXEOqNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FvY40wXP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sT4xWIwU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B85D7C19424;
-	Sun, 22 Mar 2026 18:59:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FvY40wXP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BA8AC19424;
+	Sun, 22 Mar 2026 19:47:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774205984;
-	bh=hv6aBGaAfYZGtqtBfKeXPsbliq4KpOlXusphHtKrXz4=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=sT4xWIwUgRC5W3CM9jWeINRchH2NKziRcnlGNMeki0E+qNWXN8LA/Z9P0MjxXFOLJ
-	 NtyEJMTDWdzj9oAAmIoMFHKyn0TOmB7iZe+Z5U1EQhiuExZuCbqVzsqxyRsm908uHg
-	 Cj8prSuLud+n1lUzG5zKzybV61fkMB2Z0bEeiM/dQ8IEKv4TzoKXUHr2/Kf/MljK6A
-	 hpvw0qNV07AcsCZoxGZZU4nPCoOKyxg311Hta+Zxz5zY95U7U22OBQOsddbw+ZXKRq
-	 +mfe28O7UqW6ghQ/8dE4JR/7zSy7U7RveHgP0Si1XB+9Iu0oEbjVHvA3gDor6U83Ul
-	 aJKfp1KiX7BaQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02F0C3808200;
-	Sun, 22 Mar 2026 18:59:35 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1774208863;
+	bh=3XAtgmML0t27NSYTmxu6FxdFaFLAF5B5MHR1oWmTwjM=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=FvY40wXPaxVX+70k9O7EK4o6SCazMJKZyt4rC++EXDBYt5imTDS4AahS2xB3nWpX1
+	 r6zg/gBGtEH2hhqvAiLB9Br633v5CZcQoS69316jFjthZOds5UOrrOx7fffWXt9vkJ
+	 SIM1CM1FYClzJmyci/F0B+B4dsYSa5GDH2/H5QgQb47Ae97DaEtOPiCfEQOYYB3nl5
+	 2jRJuVETM/v+qyubePmO7kKLWMNpprdjyLhBv3rc+NVpDjb5038cwFoNFlelSoo/qg
+	 NLPH9olBL8y4NP5hje0piRBDNrl25XS8zlpMtO8GNAp8AgZt2xpQ/WCXo74lJtbF7l
+	 /5QE8M/z2ybBA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 2B079CE0FFC; Sun, 22 Mar 2026 12:47:41 -0700 (PDT)
+Date: Sun, 22 Mar 2026 12:47:41 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Boqun Feng <boqun@kernel.org>
+Cc: Joel Fernandes <joelagnelf@nvidia.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	frederic@kernel.org, neeraj.iitr10@gmail.com, urezki@gmail.com,
+	boqun.feng@gmail.com, rcu@vger.kernel.org,
+	Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrea Righi <arighi@nvidia.com>, Zqiang <qiang.zhang@linux.dev>
+Subject: Re: [PATCH] rcu: Use an intermediate irq_work to start process_srcu()
+Message-ID: <f5764f69-2fe1-4d9c-88ca-3838059c95ea@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <609b5df1-aa06-46a9-8e93-0bf9eb8b7738@paulmck-laptop>
+ <ab71Vz9zmlVywWQT@tardis.local>
+ <4d2b07a9-e3fd-4a95-8924-0839bdfc28b3@paulmck-laptop>
+ <ab7623FFsiUOocHP@tardis.local>
+ <3486c7a2-73e6-46f2-a030-c9349ce964dd@paulmck-laptop>
+ <acAV-16pYQvy06aw@tardis.local>
+ <902d80c5-02a9-46d0-9d6a-06e8cd94cd37@paulmck-laptop>
+ <acAnYrlkkUvbNkGG@tardis.local>
+ <e5fdd5db-4897-4975-a2db-ddb951385e89@paulmck-laptop>
+ <acAyN0gMvOPfdP8H@tardis.local>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] BPF fixes for 7.0-rc5
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177420597379.3170431.15998372373306005026.git-patchwork-notify@kernel.org>
-Date: Sun, 22 Mar 2026 18:59:33 +0000
-References: <20260322164633.4165-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20260322164633.4165-1-alexei.starovoitov@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: torvalds@linux-foundation.org, bpf@vger.kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <acAyN0gMvOPfdP8H@tardis.local>
 
-Hello:
-
-This pull request was applied to bpf/bpf.git (master)
-by Linus Torvalds <torvalds@linux-foundation.org>:
-
-On Sun, 22 Mar 2026 09:46:33 -0700 you wrote:
-> Hi Linus,
-> 
-> The following changes since commit 1f318b96cc84d7c2ab792fcc0bfd42a7ca890681:
-> 
->   Linux 7.0-rc3 (2026-03-08 16:56:54 -0700)
-> 
-> are available in the Git repository at:
-> 
+On Sun, Mar 22, 2026 at 11:17:27AM -0700, Boqun Feng wrote:
+> On Sun, Mar 22, 2026 at 10:44:58AM -0700, Paul E. McKenney wrote:
 > [...]
+> > > > > > Longer term, shouldn't lockdep take into account the fact that on !SMP,
+> > > > > > the disabling of preemption (or interrupts or...) is essentially the same
+> > > > > > as acquiring a global lock?  This means that only one task at a time can
+> > > > > > be acquiring a raw spinlock on !SMP, so that the order of acquisition
+> > > > > > of raw spinlocks on !SMP is irrelevant?  (Aside from self-deadlocking
+> > > > > > double acquisitions, perhaps.)  In other words, shouldn't lockdep leave
+> > > > > > raw spinlocks out of lockdep's cycle-detection data structure?
+> > > > > 
+> > > > > Lockdep doesn't know whether a code path is UP-only, so it'll apply the
+> > > > > general locking rule to check. Similar as lockdep still detect
+> > > > > PREEMPT_RT locking issue for !PREEMPT_RT kernel. Maybe we can add a
+> > > > > separate kconfig to narrow down lockdep detection for UP-only if UP=y.
+> > > > 
+> > > > But lockdep *does* know when it is running in a CONFIG_SMP=n kernel,
+> > > > correct?  In which case all the code paths are UP-only.
+> > > 
+> > > Why? UP and SMP can share the same code path, no? Just because lockdep
+> > > is running in UP and see a code path, doesn't mean that code path is
+> > > UP-only, right? What I was trying to say is Lockdep detects generel
+> > > locking rule violation, so even when it's running in UP kernel, it'll
+> > > use rules that SMP uses.
+> > 
+> > I know that this is what lockdep is doing.  I am instead saying that
+> > what lockdep is doing is not a good thing.  ;-)
+> 
+> I see.
+> 
+> > > > The situation with CONFIG_PREEMPT_RT=y is quite different: The motivation
+> > > > was for people running lockdep on CONFIG_PREEMPT_RT=n kernels to
+> > > > detect and fix locking issues that would otherwise only show up in
+> > > > CONFIG_PREEMPT_RT=y kernels.
+> > > 
+> > > I'm not sure how it's different than people wanted to detect SMP=y
+> > > locking issues when running UP kernel. Of course, I didn't know whether
+> > > that's the intention because I wasn't there ;-)
+> > 
+> > It is very different.
+> > 
+> > There were very few people developing and running PREEMPT_RT, so it
+> > was quite difficult for them to clean up the lock-context issues that
+> > everyone else was creating.  Making lockdep check for PREEMPT_RT issues
+> > in !PREEMPT_RT kernels was therefore very helpful, at least to the
+> > PREEMPT_RT guys.
+> > 
+> > In contrast (and unlike 20 years ago), almost everyone runs SMP, so there
+> 
+> (It also means the people who cares UP is almost none ;-))
 
-Here is the summary with links:
-  - [GIT,PULL] BPF fixes for 7.0-rc5
-    https://git.kernel.org/bpf/bpf/c/d5273fd3ca0b
+I don't know about that, given that the sets of people who run SMP and
+who care about UP are not necessarily disjoint.  But those who care *only*
+about UP definitely are no longer the vast majority.  ;-)
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> > is no harm in !SMP lockdep ignoring things that would be deadlocks in
+> > SMP kernels.  The ample SMP lockdep testing will catch those issues,
+> > so there is no need for extra help from UP lockdep testing.
+> 
+> Fair point. If anyone cares UP enough to submit a patch in lockdep, I'm
+> happy to take a look.
 
+Fair enough.
 
+In other news, the SMP-check hack to rcutorture does suppress this lockdep
+issue, at least in my testing.  But I applied that change to my -rcu tree,
+which reverted me back to v1 of your patch and re-introduced the earlier
+lockdep issue.
+
+So I am restarting the tests.
+
+							Thanx, Paul
+
+> Regards,
+> Boqun
+> 
+> > 							Thanx, Paul
+> > 
+> > > Regards,
+> > > Boqun
+> > > 
+> > > > And of course, CONFIG_SMP=n kernels still need deadlock detection for
+> > > > mutexes and the like.
+> > > > 
+> > > > 							Thanx, Paul
