@@ -1,196 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F13B83161A2;
-	Sun, 22 Mar 2026 20:26:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16EAB23EAB2;
+	Sun, 22 Mar 2026 20:31:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774211166; cv=none; b=uOLW/Ql83y8LdBboZuku5x1obPQJAcLjiJtCAGAn1ML1fKYvlvKUDXAN0FxHYJA0QDyyXPRLWWEzjmnCPl31cmpeFJIJZCkOKGwzgoeUCXUY8Dx7abnch4zFPEp8qMA3Uco/CXKL6WoEgKcAT6fvy/XUpPD9acSZ28DS0AR6NsE=
+	t=1774211490; cv=none; b=dHzx+gAkfpzlRvOQ4o9rdknnBAOEHSXLmanXXZ2UM9QKv/oMln14RFHNFYxNfMitPKN2rxOzT/5u7/8sW2Zf0o9SLMnILzYUFh8Wwy4WLWOrOdOOUW3qwwpiXH9CZ63qImPU8imV0Pe4ctTCj6mW+/z2VPxAZ64tOhCclBzYhUI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774211166; c=relaxed/simple;
-	bh=bVWNm2dKsCls0a7N1Tug0d6sE21E0P7jq1I7qZa5TzQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z+Z0WtyUGmx8PXAXDO+5Z4PbMjKpTYeR9gKcGtILCEPZ+zbc9MRkf2Nd7IO/Co4LKq+hNt8Yht8qkdhzBideatHO+n+HYeq56Cl61PozCHE9fBMxSt7Wq/HeaupiD9pA2o+qJjIbHiqGh2TxtTJ6pYCZ6nsDNztgvAwL80LI05M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O3abxCiZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774211490; c=relaxed/simple;
+	bh=IUa9QJoeD37qm9+5BKx5RW2zaamGwL+qcG6z/rFL3Bw=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VeC70iFvfN4CG0xW01lCJ7mT5ksiL2/+nCofJkSFIUuZDB13+kemYetYos1okf326PLwCi3P47Ky3vpx4oMym0FDDsDCk8mWeMQcu3vfaUP+qYIWI7nsYFYYuTCQrazEseunbJy1BQHN82TBkv752n/I0osQ9LKqIqyo/Z6adNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=f+SlOw/Y; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O3abxCiZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1193DC19424;
-	Sun, 22 Mar 2026 20:26:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774211165;
-	bh=bVWNm2dKsCls0a7N1Tug0d6sE21E0P7jq1I7qZa5TzQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=O3abxCiZ4GX47CIT7uw0MW8ZtBo0C5J8+E/AL6/PCNmSrD2MApxW9FzBesS2Zqyzl
-	 EeqclfxGZ+rr9fTxQQ2RKxkO3o6qBZPBYJi4EtXuPvooWxSyP7IZLy7QGLu2PR3key
-	 IyiUuNiY8v9lhFQXjgPMw/MMAhy2Z4Xq679kylTE0i9KQWENC7LuHxGR24GuHX7+12
-	 omKZFSOHA/5Zbn1dgF8QnxI7Nw6AyZavTYTPNjZzckpVKNqoy/U/FhmcXmxJ5gRUsh
-	 nmhV8ePRLYDWJ7SnA1iCLx3Yaf6atedsUSwfo/QxYnOjC83rilgXp6X3XPOpYvCuDM
-	 ZVfbNfep8mb9g==
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 04A63F40082;
-	Sun, 22 Mar 2026 16:26:04 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-06.internal (MEProxy); Sun, 22 Mar 2026 16:26:04 -0400
-X-ME-Sender: <xms:W1DAac4h_4R7D8XaFARrsuYWYiZjHK07AJu6f2idjcbOBcIniUkEEg>
-    <xme:W1DAaXTETnjhYkJQWaWAkLvWMfYQLi-S3FusVYG5zwOv98magVvNWNZlhvIeTGUXr
-    lhiSjoJjJAcoeHUoaODNp2LlqZ20xOgYgsnKWjA6nYNcDrfkWtb_g>
-X-ME-Received: <xmr:W1DAaT8b-YBNW9LKKrjWR4r3CVlLF4WWlSKGxMAg7Kqyl1Dnfj2N4g8XaERQjny0ynqm9jRLuCCgii2eH5nmWTuTmLWKatnj>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefudeijeejucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
-    hfgvnhhguceosghoqhhunheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpe
-    ekgffhhfeuheelhfekteeuffejveetjeefffettedtteegfefftdduteduudfgleenucev
-    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnod
-    hmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduieejtdelkeegjeduqddujeej
-    keehheehvddqsghoqhhunheppehkvghrnhgvlhdrohhrghesfhhigihmvgdrnhgrmhgvpd
-    hnsggprhgtphhtthhopedujedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepphgr
-    uhhlmhgtkheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhhovghlrghgnhgvlhhfse
-    hnvhhiughirgdrtghomhdprhgtphhtthhopehmvghmgihorhesghhmrghilhdrtghomhdp
-    rhgtphhtthhopegsihhgvggrshihsehlihhnuhhtrhhonhhigidruggvpdhrtghpthhtoh
-    epfhhrvgguvghrihgtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnvggvrhgrjhdr
-    ihhithhruddtsehgmhgrihhlrdgtohhmpdhrtghpthhtohepuhhrvgiikhhisehgmhgrih
-    hlrdgtohhmpdhrtghpthhtohepsghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmpdhr
-    tghpthhtoheprhgtuhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:W1DAaQqy17SVytuIuDM5a3_AY_0EWzo4XbwDefVupEYLDIRpYOpYyQ>
-    <xmx:W1DAaRXQsHVZu2pw3OYV0wd1hDfTsRtgoztFmO28bXa2sC2kpNrBow>
-    <xmx:W1DAad5AGa6GvQ6dfMB2yMFaqIkOvqExD-asPRhvrGqqq2H1pZUryA>
-    <xmx:W1DAafC0pdtAEbOGoNG3WSsKq2kN0-5vQNGj4Q-SloNaYtjve6O2Gw>
-    <xmx:W1DAaRdpopwZPT8cwBwsfXTuQDNXD09SLLJijG0pdaM75QUTdbACXpW_>
-Feedback-ID: i8dbe485b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 22 Mar 2026 16:26:03 -0400 (EDT)
-Date: Sun, 22 Mar 2026 13:26:02 -0700
-From: Boqun Feng <boqun@kernel.org>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Joel Fernandes <joelagnelf@nvidia.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	frederic@kernel.org, neeraj.iitr10@gmail.com, urezki@gmail.com,
-	boqun.feng@gmail.com, rcu@vger.kernel.org,
-	Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrea Righi <arighi@nvidia.com>, Zqiang <qiang.zhang@linux.dev>
-Subject: Re: [PATCH] rcu: Use an intermediate irq_work to start process_srcu()
-Message-ID: <acBQWioQYgaJxG4Y@tardis.local>
-References: <ab71Vz9zmlVywWQT@tardis.local>
- <4d2b07a9-e3fd-4a95-8924-0839bdfc28b3@paulmck-laptop>
- <ab7623FFsiUOocHP@tardis.local>
- <3486c7a2-73e6-46f2-a030-c9349ce964dd@paulmck-laptop>
- <acAV-16pYQvy06aw@tardis.local>
- <902d80c5-02a9-46d0-9d6a-06e8cd94cd37@paulmck-laptop>
- <acAnYrlkkUvbNkGG@tardis.local>
- <e5fdd5db-4897-4975-a2db-ddb951385e89@paulmck-laptop>
- <acAyN0gMvOPfdP8H@tardis.local>
- <f5764f69-2fe1-4d9c-88ca-3838059c95ea@paulmck-laptop>
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="f+SlOw/Y"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1774211489; x=1805747489;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IUa9QJoeD37qm9+5BKx5RW2zaamGwL+qcG6z/rFL3Bw=;
+  b=f+SlOw/YqtKAWTjz979uoqojbEb06yN1RV3eRkPE/6LQdEVQRT1IaRCq
+   262DdTLi2XuSlod5ceQJ7intZqlyYVFRh5uTKHbTy8u6r+ZaQdjwZo/XV
+   Pl2LEvjS3ONnVZqQZnpBUlBKsDhJeND1WhtNFn0tyaDYsoJkSgEu679n6
+   ZCtuEKkuD7E6T1TCz9AALdtVl30qaDBeG2PuztM0rjYpboIXFzl14QaMY
+   cjwIZHSK7PGrvivyKgYBLgpvMiWC+5e1VqKsuUotVJndNtTiJT/ZYquB1
+   uzJ70snh/8OkyHFfP00g9j6FVZiF42lvVEZc2nkOCXfBOkduzhdr/UpNC
+   A==;
+X-CSE-ConnectionGUID: pMzjF3TCSwOumwaJoiDn0w==
+X-CSE-MsgGUID: mnaZ3p4xTru3HVT3Nommyg==
+X-IronPort-AV: E=Sophos;i="6.23,135,1770620400"; 
+   d="scan'208";a="54282255"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2026 13:31:21 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.87.152) by
+ chn-vm-ex2.mchp-main.com (10.10.87.31) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.35; Sun, 22 Mar 2026 13:30:51 -0700
+Received: from DEN-DL-M70577 (10.10.85.11) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
+ Transport; Sun, 22 Mar 2026 13:30:48 -0700
+Date: Sun, 22 Mar 2026 21:30:47 +0100
+From: Daniel Machon <daniel.machon@microchip.com>
+To: Mohsin Bashir <mohsin.bashr@gmail.com>
+CC: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Horatiu Vultur
+	<horatiu.vultur@microchip.com>, Steen Hegelund
+	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+	"Jesper Dangaard Brouer" <hawk@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Herve
+ Codina <herve.codina@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+Subject: Re: [PATCH net-next 08/10] net: lan966x: add PCIe FDMA XDP support
+Message-ID: <20260322203047.4neqananv66unpsp@DEN-DL-M70577>
+References: <20260320-lan966x-pci-fdma-v1-0-ef54cb9b0c4b@microchip.com>
+ <20260320-lan966x-pci-fdma-v1-8-ef54cb9b0c4b@microchip.com>
+ <ab2f788b-7214-4aa6-bfca-b33d3ab37321@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <f5764f69-2fe1-4d9c-88ca-3838059c95ea@paulmck-laptop>
+In-Reply-To: <ab2f788b-7214-4aa6-bfca-b33d3ab37321@gmail.com>
 
-On Sun, Mar 22, 2026 at 12:47:41PM -0700, Paul E. McKenney wrote:
-> On Sun, Mar 22, 2026 at 11:17:27AM -0700, Boqun Feng wrote:
-> > On Sun, Mar 22, 2026 at 10:44:58AM -0700, Paul E. McKenney wrote:
-> > [...]
-> > > > > > > Longer term, shouldn't lockdep take into account the fact that on !SMP,
-> > > > > > > the disabling of preemption (or interrupts or...) is essentially the same
-> > > > > > > as acquiring a global lock?  This means that only one task at a time can
-> > > > > > > be acquiring a raw spinlock on !SMP, so that the order of acquisition
-> > > > > > > of raw spinlocks on !SMP is irrelevant?  (Aside from self-deadlocking
-> > > > > > > double acquisitions, perhaps.)  In other words, shouldn't lockdep leave
-> > > > > > > raw spinlocks out of lockdep's cycle-detection data structure?
-> > > > > > 
-> > > > > > Lockdep doesn't know whether a code path is UP-only, so it'll apply the
-> > > > > > general locking rule to check. Similar as lockdep still detect
-> > > > > > PREEMPT_RT locking issue for !PREEMPT_RT kernel. Maybe we can add a
-> > > > > > separate kconfig to narrow down lockdep detection for UP-only if UP=y.
-> > > > > 
-> > > > > But lockdep *does* know when it is running in a CONFIG_SMP=n kernel,
-> > > > > correct?  In which case all the code paths are UP-only.
-> > > > 
-> > > > Why? UP and SMP can share the same code path, no? Just because lockdep
-> > > > is running in UP and see a code path, doesn't mean that code path is
-> > > > UP-only, right? What I was trying to say is Lockdep detects generel
-> > > > locking rule violation, so even when it's running in UP kernel, it'll
-> > > > use rules that SMP uses.
-> > > 
-> > > I know that this is what lockdep is doing.  I am instead saying that
-> > > what lockdep is doing is not a good thing.  ;-)
-> > 
-> > I see.
-> > 
-> > > > > The situation with CONFIG_PREEMPT_RT=y is quite different: The motivation
-> > > > > was for people running lockdep on CONFIG_PREEMPT_RT=n kernels to
-> > > > > detect and fix locking issues that would otherwise only show up in
-> > > > > CONFIG_PREEMPT_RT=y kernels.
-> > > > 
-> > > > I'm not sure how it's different than people wanted to detect SMP=y
-> > > > locking issues when running UP kernel. Of course, I didn't know whether
-> > > > that's the intention because I wasn't there ;-)
-> > > 
-> > > It is very different.
-> > > 
-> > > There were very few people developing and running PREEMPT_RT, so it
-> > > was quite difficult for them to clean up the lock-context issues that
-> > > everyone else was creating.  Making lockdep check for PREEMPT_RT issues
-> > > in !PREEMPT_RT kernels was therefore very helpful, at least to the
-> > > PREEMPT_RT guys.
-> > > 
-> > > In contrast (and unlike 20 years ago), almost everyone runs SMP, so there
-> > 
-> > (It also means the people who cares UP is almost none ;-))
-> 
-> I don't know about that, given that the sets of people who run SMP and
-> who care about UP are not necessarily disjoint.  But those who care *only*
-> about UP definitely are no longer the vast majority.  ;-)
-> 
+Hi Mohsin,
 
-You're right, I should have said "UP-only". And I *think* the reality is
-that most of the sub-systems share the code path between UP and SMP, and
-it works fine for them, because UP tests help them find SMP deadlock as
-well. That's probably why lockdep has been doing this "not a good thing"
-for a while.
+> > +static int lan966x_xdp_pci_run(struct lan966x_port *port, void *data,
+> > +                            u32 data_len)
+> > +{
+> > +     struct bpf_prog *xdp_prog = port->xdp_prog;
+> > +     struct lan966x *lan966x = port->lan966x;
+> > +     struct xdp_buff xdp;
+> > +     u32 act;
+> > +
+> > +     xdp_init_buff(&xdp, lan966x->rx.max_mtu, &port->xdp_rxq);
+> > +
+> > +     xdp_prepare_buff(&xdp,
+> > +                      data - XDP_PACKET_HEADROOM,
+> > +                      IFH_LEN_BYTES + XDP_PACKET_HEADROOM,
+> > +                      data_len - IFH_LEN_BYTES,
+> > +                      false);
+> > +
+> > +     act = bpf_prog_run_xdp(xdp_prog, &xdp);
+> > +     switch (act) {
+> > +     case XDP_PASS:
+> > +             return FDMA_PASS;
+> > +     case XDP_TX:
+> > +             return lan966x_fdma_pci_xmit_xdpf(port, data, data_len) ?
+> > +                    FDMA_DROP : FDMA_TX;
+> 
+> What if the BPF program modifies packet boundaries (e.g.,
+> headroom/tailroom adjustment)? After bpf_prog_run_xdp(), xdp.data and
+> xdp.data_end may differ from the original data and data_len, but
+> lan966x_fdma_pci_xmit_xdpf() is called with the original values.
+> Wouldn't any adjustments made by the XDP program be silently lost?
+>
 
-> > > is no harm in !SMP lockdep ignoring things that would be deadlocks in
-> > > SMP kernels.  The ample SMP lockdep testing will catch those issues,
-> > > so there is no need for extra help from UP lockdep testing.
-> > 
-> > Fair point. If anyone cares UP enough to submit a patch in lockdep, I'm
-> > happy to take a look.
-> 
-> Fair enough.
-> 
-> In other news, the SMP-check hack to rcutorture does suppress this lockdep
-> issue, at least in my testing.  But I applied that change to my -rcu tree,
-> which reverted me back to v1 of your patch and re-introduced the earlier
-> lockdep issue.
-> 
-> So I am restarting the tests.
-> 
+I think you are absolutely right. Thanks for catching this. Actually, we might
+have the same issue in the platform XDP path also.
 
-Thank you!
+I will fix this in v2.
 
-Regards,
-Boqun
+> > +     default:
+> > +             bpf_warn_invalid_xdp_action(port->dev, xdp_prog, act);
+> > +             fallthrough;
+> > +     case XDP_ABORTED:
+> > +             trace_xdp_exception(port->dev, xdp_prog, act);
+> > +             fallthrough;
+> > +     case XDP_DROP:
+> > +             return FDMA_DROP;
+> > +     }
+> > +}
+> > +
 
-> 							Thanx, Paul
-> 
-> > Regards,
-> > Boqun
-> > 
-> > > 							Thanx, Paul
-> > > 
-> > > > Regards,
-> > > > Boqun
-> > > > 
-> > > > > And of course, CONFIG_SMP=n kernels still need deadlock detection for
-> > > > > mutexes and the like.
-> > > > > 
-> > > > > 							Thanx, Paul
+/Daniel
