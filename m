@@ -1,213 +1,168 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D4323A9B3
-	for <bpf@vger.kernel.org>; Sun, 22 Mar 2026 18:03:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89A1C2DEA86
+	for <bpf@vger.kernel.org>; Sun, 22 Mar 2026 18:17:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774202610; cv=none; b=Sz4w6itBMxjO0Ga8H6vAVWTC02VDjYWN39eB1snkzh2PQGXYVIDeU8oHrFITUiT81vaHxh0IgFVgtZoLaMaFZFcIGyKDkcxWnruE9L/QFZzpFmdSGUkrITPS0aoTbpwYnw2yPR/KDguUNETA44qwUUnObGadKVQ4iC4rum2J1EM=
+	t=1774203450; cv=none; b=AqTk49/koqMPrIfKaMH3pyIblkqAYJIS2Bn8vg3GfOW1WzNiSEoNk1fL9LhKGnxi/mHemEbnYQh3Jhfvc4lI8IR1jS/N+zDWpZReRyhNQterrrs6/usIWFEXQq+fNIS4JnRnWvPa4K1Ed40Ic0CDbozm62hJcietfuo6+DPnA90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774202610; c=relaxed/simple;
-	bh=hG0D0Y135bKPI0Dc6+MTMqeit29o7a6IWoFll3S9kio=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Zw8yamZVcgQq4szx1fKKGv2bqhu/3LRK1DYX3qO400sJcjbbtW/yx9OuA7jYDyFYLDyHg3uzvhsaWT8PlsdInHn4GunlFmqP2mceX4J3Mim9J3KOtwK3M+d4QzTzGqsv2gfhKtpxgxAil5ze7hWRPU/xhgiBlNmdhzGe9/pTd88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pN9XwPFU; arc=none smtp.client-ip=91.218.175.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1774203450; c=relaxed/simple;
+	bh=hFIbevRwe6C0ZcRuRyNGomzHYKZkodjdpNAwhM8y4Y0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JsJDlxTb0xEGArhCa+tuCQzt2jOwgQnB2aqBPbhLvf9m7MXN39+x+9kd8KKe1qa1KcjfGs1TBfKgbVrwl8rWx6eab9TK10YpaztF9Jw76KLEQZphtfB0M/1TTpCZ3m5/iQVQAlPd5FRYkL0F8fag4S60mEgNcmDKyxWj7ow7uvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AFxOIegr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pN9XwPFU"
-Message-ID: <97086279-4796-4753-b718-3206cf524d04@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774202606;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rNkRtlTdSJ11bqq+Scf3vzZi1dpTafX0a7JsAC0gyyw=;
-	b=pN9XwPFUYwWpBFYd6jwnnIatEK6LiW0JaIlmLhIdJx/xKl+H3VRmZT0SO32pCESKyyfVb9
-	mFOUoaYAFX1rjh/MrdtFi+3ugTPCU5GMaOOkZJXVdgUkiNfurLTOW44OpgixIwtSl6NA8o
-	6pJOqpwR6IGGArL3P1CC81p6vXo+Wu8=
-Date: Sun, 22 Mar 2026 11:03:19 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AFxOIegr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AC1AC4AF09;
+	Sun, 22 Mar 2026 18:17:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774203450;
+	bh=hFIbevRwe6C0ZcRuRyNGomzHYKZkodjdpNAwhM8y4Y0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AFxOIegrOk7e331twVTSrUuaoK8nGwyVtlVBP5KUOl4rkXEG2uqMyS8vyQXcD91Ns
+	 y8SM3Eyu4vgzz/QdKn1+KvQEhhTe2v9os3NVMf5VgDBVImXpY/xl6Vl4wTO6vwNlvx
+	 QLAJcVJFuuGSnEuOSAV5Bd6snUes01mc1+VcZGuA5CtKbbK+TUGa5wB8xWXEM5/z6y
+	 hHIPp1OyTPGtOUTmgQPmMllxqhnZ6N51gRYhvwoEOytiYeRFnMhTpFz9E7BzCFUZtI
+	 xszlMjuqDszSth7e/oWbPvcsY3Jkz8JNw75bT7JFWdfnhbwM4Fcz9bzAXwxU3EFaaR
+	 oQKoGVtB1AHtg==
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfauth.phl.internal (Postfix) with ESMTP id A5777F4006F;
+	Sun, 22 Mar 2026 14:17:28 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-01.internal (MEProxy); Sun, 22 Mar 2026 14:17:28 -0400
+X-ME-Sender: <xms:ODLAaZieqognUrzfZpw-XahU3Ll8i0z6IZ1-GM7lRfR2cMjyB1wU6g>
+    <xme:ODLAaXZiqFANHqd1gNA0XhHkR3EY6I5WQA9yMitzPLwPoJq5NQiIyIp5XEMoeFh6e
+    pVWt1gLHd50gMPVHZbX68K6xr0CpsNRD9T3GD8a009nxZDzMqO9Sg>
+X-ME-Received: <xmr:ODLAaRku74hjHK40dLTtVJZRnpBzXJHHBqaeBfTxBWkR461_zSIzPf5mHqgUi44D1PbCLe3isGTPQqXQi2aQntBJR2s2jZOc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefudeihedtucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
+    hfgvnhhguceosghoqhhunheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpe
+    ekgffhhfeuheelhfekteeuffejveetjeefffettedtteegfefftdduteduudfgleenucev
+    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnod
+    hmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduieejtdelkeegjeduqddujeej
+    keehheehvddqsghoqhhunheppehkvghrnhgvlhdrohhrghesfhhigihmvgdrnhgrmhgvpd
+    hnsggprhgtphhtthhopedujedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepphgr
+    uhhlmhgtkheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhhovghlrghgnhgvlhhfse
+    hnvhhiughirgdrtghomhdprhgtphhtthhopehmvghmgihorhesghhmrghilhdrtghomhdp
+    rhgtphhtthhopegsihhgvggrshihsehlihhnuhhtrhhonhhigidruggvpdhrtghpthhtoh
+    epfhhrvgguvghrihgtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnvggvrhgrjhdr
+    ihhithhruddtsehgmhgrihhlrdgtohhmpdhrtghpthhtohepuhhrvgiikhhisehgmhgrih
+    hlrdgtohhmpdhrtghpthhtohepsghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmpdhr
+    tghpthhtoheprhgtuhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:ODLAadyUhZq2oaWYMQJoCC5L9A3Q6vp6E66uKuxNsdJNpuWX4iQt8Q>
+    <xmx:ODLAaX8PG7BThnkYeuHEMkGHGR15p5JlesvjEgr6PuCKP5TdyBGRqQ>
+    <xmx:ODLAaQB9B2QfMfsT7oJP2oBXMFI7APwm3UYT41hqMJLQxNnPmIUq3Q>
+    <xmx:ODLAaWrbc0d1PK08fjp2tvXwDLYEbw7GkPuOMHGP4VGOT8MF8tx9lg>
+    <xmx:ODLAaQlncv5g3O3Zpbcv8g3Znuf0rVP3dnhsyEQnw904FItssw7SL_tv>
+Feedback-ID: i8dbe485b:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 22 Mar 2026 14:17:28 -0400 (EDT)
+Date: Sun, 22 Mar 2026 11:17:27 -0700
+From: Boqun Feng <boqun@kernel.org>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Joel Fernandes <joelagnelf@nvidia.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	frederic@kernel.org, neeraj.iitr10@gmail.com, urezki@gmail.com,
+	boqun.feng@gmail.com, rcu@vger.kernel.org,
+	Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrea Righi <arighi@nvidia.com>, Zqiang <qiang.zhang@linux.dev>
+Subject: Re: [PATCH] rcu: Use an intermediate irq_work to start process_srcu()
+Message-ID: <acAyN0gMvOPfdP8H@tardis.local>
+References: <ab7eQ0QDNV9ZjQMN@tardis.local>
+ <609b5df1-aa06-46a9-8e93-0bf9eb8b7738@paulmck-laptop>
+ <ab71Vz9zmlVywWQT@tardis.local>
+ <4d2b07a9-e3fd-4a95-8924-0839bdfc28b3@paulmck-laptop>
+ <ab7623FFsiUOocHP@tardis.local>
+ <3486c7a2-73e6-46f2-a030-c9349ce964dd@paulmck-laptop>
+ <acAV-16pYQvy06aw@tardis.local>
+ <902d80c5-02a9-46d0-9d6a-06e8cd94cd37@paulmck-laptop>
+ <acAnYrlkkUvbNkGG@tardis.local>
+ <e5fdd5db-4897-4975-a2db-ddb951385e89@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH dwarves v3 2/9] dwarf_loader: Handle signatures with dead
- arguments
-Content-Language: en-GB
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>,
- Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- bpf@vger.kernel.org, kernel-team@fb.com
-References: <20260320190917.1970524-1-yonghong.song@linux.dev>
- <20260320190927.1970829-1-yonghong.song@linux.dev> <ab8lZBk2Z_1sPkZL@krava>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <ab8lZBk2Z_1sPkZL@krava>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e5fdd5db-4897-4975-a2db-ddb951385e89@paulmck-laptop>
 
+On Sun, Mar 22, 2026 at 10:44:58AM -0700, Paul E. McKenney wrote:
+[...]
+> > > > > Longer term, shouldn't lockdep take into account the fact that on !SMP,
+> > > > > the disabling of preemption (or interrupts or...) is essentially the same
+> > > > > as acquiring a global lock?  This means that only one task at a time can
+> > > > > be acquiring a raw spinlock on !SMP, so that the order of acquisition
+> > > > > of raw spinlocks on !SMP is irrelevant?  (Aside from self-deadlocking
+> > > > > double acquisitions, perhaps.)  In other words, shouldn't lockdep leave
+> > > > > raw spinlocks out of lockdep's cycle-detection data structure?
+> > > > 
+> > > > Lockdep doesn't know whether a code path is UP-only, so it'll apply the
+> > > > general locking rule to check. Similar as lockdep still detect
+> > > > PREEMPT_RT locking issue for !PREEMPT_RT kernel. Maybe we can add a
+> > > > separate kconfig to narrow down lockdep detection for UP-only if UP=y.
+> > > 
+> > > But lockdep *does* know when it is running in a CONFIG_SMP=n kernel,
+> > > correct?  In which case all the code paths are UP-only.
+> > 
+> > Why? UP and SMP can share the same code path, no? Just because lockdep
+> > is running in UP and see a code path, doesn't mean that code path is
+> > UP-only, right? What I was trying to say is Lockdep detects generel
+> > locking rule violation, so even when it's running in UP kernel, it'll
+> > use rules that SMP uses.
+> 
+> I know that this is what lockdep is doing.  I am instead saying that
+> what lockdep is doing is not a good thing.  ;-)
+> 
 
+I see.
 
-On 3/21/26 4:10 PM, Jiri Olsa wrote:
-> On Fri, Mar 20, 2026 at 12:09:27PM -0700, Yonghong Song wrote:
->> For llvm dwarf, the dead argument may be in the middle of
->> DW_TAG_subprogram. So we introduce skip_idx in order to
->> match expected registers properly.
->>
->> For example:
->>    0x00042897:   DW_TAG_subprogram
->>                    DW_AT_name      ("create_dev")
->>                    DW_AT_calling_convention        (DW_CC_nocall)
->>                    DW_AT_type      (0x0002429a "int")
->>                    ...
->>
->>    0x000428ab:     DW_TAG_formal_parameter
->>                      DW_AT_name    ("name")
->>                      DW_AT_type    (0x000242ed "char *")
->>                      ...
->>
->>    0x000428b5:     DW_TAG_formal_parameter
->>                      DW_AT_location        (indexed (0x3f) loclist = 0x000027f8:
->>                         [0xffffffff87681370, 0xffffffff8768137a): DW_OP_reg5 RDI
->>                         [0xffffffff8768137a, 0xffffffff87681392): DW_OP_reg3 RBX
->>                         [0xffffffff87681392, 0xffffffff876813ae): DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value)
->>                      DW_AT_name    ("dev")
->>                      DW_AT_type    (0x00026859 "dev_t")
->>                      ...
->>
->> With skip_idx, we can identify that the second original argument
->> 'dev' becomes the first one after optimization.
-> hi,
-> this change removes for me functions below and some of them (ata_dev_select,
-> dmi_save_type, perhaps more) seem to be removed because their last 2 arguments
-> are constants IIUC, which does not seem to be what the changelog suggests,
-> but I guess it's still correct (it's without +true_signature)
+> > > The situation with CONFIG_PREEMPT_RT=y is quite different: The motivation
+> > > was for people running lockdep on CONFIG_PREEMPT_RT=n kernels to
+> > > detect and fix locking issues that would otherwise only show up in
+> > > CONFIG_PREEMPT_RT=y kernels.
+> > 
+> > I'm not sure how it's different than people wanted to detect SMP=y
+> > locking issues when running UP kernel. Of course, I didn't know whether
+> > that's the intention because I wasn't there ;-)
+> 
+> It is very different.
+> 
+> There were very few people developing and running PREEMPT_RT, so it
+> was quite difficult for them to clean up the lock-context issues that
+> everyone else was creating.  Making lockdep check for PREEMPT_RT issues
+> in !PREEMPT_RT kernels was therefore very helpful, at least to the
+> PREEMPT_RT guys.
+> 
+> In contrast (and unlike 20 years ago), almost everyone runs SMP, so there
 
-For this patch, without +true_signature, it can only get true signatures
-when the dead arguments at the end of argument list. With +true_signature,
-it allows dead arguments before non-dead arguments.
+(It also means the people who cares UP is almost none ;-))
 
->
-> jirka
->
->
-> ata_dev_select
-> __cgroup1_procs_write
-> check_buffer_access
-> dax_disassociate_entry
-> devlink_nl_sb_port_pool_fill
-> dmi_format_ids
-> dmi_save_type
-> dmi_save_uuid
-> get_buffer
-> get_net_track
-> gue_remcsum
-> icmpv4_xrlim_allow
-> insert_vmap_area_augment
-> __intel_pmu_enable_all
-> ip6addrlbl_fill
-> ip6_dst_store
-> kernelmode_fixup_or_oops
-> merge_note_headers_elf32
-> merge_note_headers_elf64
-> mt_destroy_walk
-> __mutex_lock
-> __netdev_walk_all_lower_dev
-> pci_create_device_link
-> populate_kprobe_blacklist
-> proc_get_long
-> rt_mutex_adjust_prio_chain
-> rt_set_nexthop
-> run_lwt_bpf
-> simple_attr_write_xsigned
-> __skb_gro_checksum_validate_needed
-> tclass_notify
-> tg_set_conf
-> toggle_bp_slot
-> trace_event_get_offsets_aer_event
-> trace_event_get_offsets_br_fdb_external_learn_add
-> trace_event_get_offsets_br_fdb_update
-> trace_event_get_offsets_cache_tag_flush
-> trace_event_get_offsets_devlink_health_recover_aborted
-> trace_event_get_offsets_iommu_error
-> trace_event_get_offsets_prq_report
-> virtio_net_hdr_from_skb
-> writeback_inodes_wb
-> xfs_file_dio_write_aligned
->
->
->> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
->> ---
->>   dwarf_loader.c | 19 +++++++++++++++++--
->>   1 file changed, 17 insertions(+), 2 deletions(-)
->>
->> diff --git a/dwarf_loader.c b/dwarf_loader.c
->> index 21f8bf1..a6e6587 100644
->> --- a/dwarf_loader.c
->> +++ b/dwarf_loader.c
->> @@ -1192,6 +1192,7 @@ static ptrdiff_t __dwarf_getlocations(Dwarf_Attribute *attr,
->>   
->>   struct func_info {
->>   	bool signature_changed;
->> +	int skip_idx;
->>   };
->>   
->>   /* For DW_AT_location 'attr':
->> @@ -1264,6 +1265,7 @@ static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
->>   	if (parm != NULL) {
->>   		bool has_const_value;
->>   		Dwarf_Attribute attr;
->> +		int reg_idx;
->>   
->>   		tag__init(&parm->tag, cu, die);
->>   		parm->name = attr_string(die, DW_AT_name, conf);
->> @@ -1273,7 +1275,18 @@ static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
->>   		if (!info->signature_changed) {
->>   			if (cu->producer_clang || param_idx >= cu->nr_register_params)
->>   				return parm;
->> +		} else {
->> +			/* if true_signature is not enabled, mark parameter as
->> +			 * unexpected_reg since there is a skipped parameter before.
->> +			 */
->> +			if (!conf->true_signature && info->skip_idx) {
->> +				parm->unexpected_reg = 1;
->> +				return parm;
->> +			}
->>   		}
->> +		reg_idx = param_idx - info->skip_idx;
->> +		if (reg_idx >= cu->nr_register_params)
->> +			return parm;
->>   		/* Parameters which use DW_AT_abstract_origin to point at
->>   		 * the original parameter definition (with no name in the DIE)
->>   		 * are the result of later DWARF generation during compilation
->> @@ -1311,7 +1324,7 @@ static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
->>   		parm->has_loc = dwarf_attr(die, DW_AT_location, &attr) != NULL;
->>   
->>   		if (parm->has_loc) {
->> -			int expected_reg = cu->register_params[param_idx];
->> +			int expected_reg = cu->register_params[reg_idx];
->>   			int actual_reg = parameter__reg(&attr, expected_reg);
->>   
->>   			if (actual_reg < 0)
->> @@ -1324,8 +1337,10 @@ static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
->>   				 * contents.
->>   				 */
->>   				parm->unexpected_reg = 1;
->> -		} else if (has_const_value) {
->> +		} else if (has_const_value || info->signature_changed) {
->>   			parm->optimized = 1;
->> +			if (info->signature_changed)
->> +				info->skip_idx++;
->>   		}
->>   	}
->>   
->> -- 
->> 2.52.0
->>
->>
+> is no harm in !SMP lockdep ignoring things that would be deadlocks in
+> SMP kernels.  The ample SMP lockdep testing will catch those issues,
+> so there is no need for extra help from UP lockdep testing.
+> 
 
+Fair point. If anyone cares UP enough to submit a patch in lockdep, I'm
+happy to take a look.
+
+Regards,
+Boqun
+
+> 							Thanx, Paul
+> 
+> > Regards,
+> > Boqun
+> > 
+> > > And of course, CONFIG_SMP=n kernels still need deadlock detection for
+> > > mutexes and the like.
+> > > 
+> > > 							Thanx, Paul
