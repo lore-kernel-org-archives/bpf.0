@@ -1,230 +1,264 @@
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EFFC2773EE
-	for <bpf@vger.kernel.org>; Sun, 22 Mar 2026 01:20:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D6131F30AD
+	for <bpf@vger.kernel.org>; Sun, 22 Mar 2026 01:44:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774142442; cv=none; b=ZJk+rJ8Uo+dd3IZ/gaG0RGtp5RuxZ7J5Crb2GiSi2lQeIOJPIBjtCB3vIuzVGY4HdLpzIbG58KIQ0Jg0tSf57GwLkfC4WHEuobMD4Wp4x7ernHHrUQbRVfndZNlZmIib2ol+WOLljiLbcf77X6pZBerYejE0HXwYta97R0QFyGI=
+	t=1774143880; cv=none; b=qFv4jH21tm7FrN6Qh3fsjCrmlrUC8tZp3KCbkZiyJctXdyDxkbXVudk2ANrdQHVbpbDZZ4BBImXlFmQwnCmtZF7mLuu135f5w1c123oj3DnSQUiAq26zzS9O0nyWadrFq9eJwSZ9YyuUrDdq2qNAzrzuIWZA0OFUHjYlB8KR7Dc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774142442; c=relaxed/simple;
-	bh=YC7qUvr1E4ECRZ6uECeSY381mj4OkAUb+a4ih53vA8A=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=SlD4alZFV9/xstQUA6cRHBTZ5raxYDpNj3xM09E7SwpD2AGFV55Q5RtnpZqwdgleTPVZzc/hd6BmXq2HQVgDtZ6f/2UiZqsbK+ybUhOar5NrjFzhE7pnZOZk5al+76f+r9le+ij3Vfr1S9Ex5oIH85QvPqxqEMxuKRRv0NSz2W4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=11DtnhF1; arc=none smtp.client-ip=209.85.160.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1774143880; c=relaxed/simple;
+	bh=XsSYI89rUMikfIU38WCflwY6jMBv+3Fj9LlzuWjcOxM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cRe2oZXQ6PHLUW4zmCdGIzXVisNv+itZK4vFYmjpBMyt3rYT+hG4vDrJl7j3DiMoj9bMMq/hikrelnnglusYNXIHKdFgtCK0Un9I9Bphm+OWWS3S4F+IvOKZg1jnNZPIJMethMT79N6N5bM2HZFqBuwWEEAJrENfw0L1Nb4R8gY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RSaK5eeC; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="11DtnhF1"
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-506251815a3so26896131cf.0
-        for <bpf@vger.kernel.org>; Sat, 21 Mar 2026 18:20:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1774142440; x=1774747240; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D2lYegb3d1WlAShOCbB85z2jt2u6c/ceLqqA07OncCc=;
-        b=11DtnhF1ixQ+H7b/48zMaeNtR4DqdGo4QkLQ3T45oZ3RVV7C0Gusx4Chz7+uX+eKvj
-         PAwb8qY0exECiYEEcGieYuwD8StM5QJckeBUkzf89irj71vHi1uQG/LGT7IMZe0AZOkB
-         40B87I+WsQe7MfJPQUxSJJEyargUkfPMlrA/l53TlyXiv4X4JF1IhuWun9MI+oX0jliq
-         VtTCZYmN19VOzFkG0x31gLNeJ0sHrrA5izJ1vErk/jvyp20Z46AgfGBAyTO5umSzaoaN
-         qVEeKsQ7ihDpJccs4riY2vABEKU8dzzaC85CKygSRfAFeLrC+gSqcxwojUJy/3Pzvff9
-         i9yQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774142440; x=1774747240;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=D2lYegb3d1WlAShOCbB85z2jt2u6c/ceLqqA07OncCc=;
-        b=Vdi1YcEdcqFalZB03/LabzVmuZFBUOfKhAxn6mA6gdjsCwEM4QMIVRCWOKhYGgKpBw
-         HNlUvkiMoCOz4gRs7JIgl0nM/9sSDGpsbGB/YbsRz+lcA9fMcGf+OMvBme63Qzq9EMJz
-         aZo94VC4bmhEM+CSIQpV/6yMczmc1smP75aEHszXdpHMHJAXiix5sJdl1Y3ZaCrOWU3V
-         L+IctnXCCwWWjlAD+52R3rFpxyEVAAc+Pp4ikbZoLG/8fUqrPPPsJWbxSII6ZRAKBuGt
-         UeJ3gXpFDI00geEkE02Q9Prh9CiWZaHsO4OlwAeo+wlwmun1Kozi9QIYWiFDg+J/Cm3H
-         MTYA==
-X-Gm-Message-State: AOJu0YxVKIrBFNkKFl8i3qoFRhrfc2eoqQcPjoTrUed0LDkQVweve6ml
-	UrHcR4W6803A4zwqnDWwnnk2dR5DFKIoXUPc+ii1ve02Xf/OD/uMGYFMr6LelEKQhn4=
-X-Gm-Gg: ATEYQzwdl5GMAqSHrHfWTN8xedySClkFYsHKBSENN0F7L7oopjybhNZabWA2XfKzzFJ
-	uNi9+TFGqO/PYRmRMIKnY68LcS/ug7os+AoI/Gp9/qAxAP/nOaMchQfPH69V7ZQTVP5V30PwxnE
-	YVYf6HRFkEKYe1ZqSkg9rpFFf21oFGU7Pi1pDfI5gkgZi78H3Tk2RdEJ2H6ceOmwk2wtSUJpp6U
-	1b8uwBsCzlROs8hP6NXq7Lv5uOrbWCeTHdmxMv/9lxo+fNC2EBm+7AoWjDO7zJ7y+Fh468eWwNz
-	sAa827IuXxHuJUwjti7lzR3xW8Fg6TNzcEEzqMO2wwk6LDb/yOaR3bXQB+hmA+Z+4XWXIzZj/li
-	Hb+zO0rjo9TNFGO+FWezAtj7bBRNVZvNbty0S90ziSRuiIf4SkXKb5g1n/GEEQoolfcqmy3BeKf
-	lyAf/AmpfHZtmTXMKpM0lfOd9OFuSxLVv9sQ==
-X-Received: by 2002:a05:622a:6097:b0:509:1ee2:69e4 with SMTP id d75a77b69052e-50b3739fe9fmr124931621cf.11.1774142439962;
-        Sat, 21 Mar 2026 18:20:39 -0700 (PDT)
-Received: from localhost ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50b36eb54cfsm53223781cf.30.2026.03.21.18.20.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 Mar 2026 18:20:39 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RSaK5eeC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774143877;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=AqEEL25LD51u+oJXMo+RBoLHenSW9n6bAMMAPGybk7E=;
+	b=RSaK5eeCeueRS7iOsIxCh8gnTrxVI2tzmQJY8Gw5jQCuQH6IkJLzlFdbly5K2MOE16YYQ0
+	tLiDH6C78CGr428PB35tA3Jtb9dbM+xo3u023ylBvM0V+VDVhRKAh6GzOAb1Q02I0UQJ7D
+	rGc/tAwknM2TUIdGBMsSZCjsaTK/uuk=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-403-BKqg7uL7MCytRdzsKJ4GAA-1; Sat,
+ 21 Mar 2026 21:44:35 -0400
+X-MC-Unique: BKqg7uL7MCytRdzsKJ4GAA-1
+X-Mimecast-MFC-AGG-ID: BKqg7uL7MCytRdzsKJ4GAA_1774143873
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 35CEC180044D;
+	Sun, 22 Mar 2026 01:44:32 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.72.112.22])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id AE2BD300019F;
+	Sun, 22 Mar 2026 01:44:18 +0000 (UTC)
+From: Pingfan Liu <piliu@redhat.com>
+To: 
+Cc: Pingfan Liu <piliu@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jeremy Linton <jeremy.linton@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Gerd Hoffmann <kraxel@redhat.com>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Philipp Rudo <prudo@redhat.com>,
+	Viktor Malik <vmalik@redhat.com>,
+	Jan Hendrik Farr <kernel@jfarr.cc>,
+	Baoquan He <bhe@redhat.com>,
+	Dave Young <dyoung@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	kexec@lists.infradead.org,
+	bpf@vger.kernel.org,
+	systemd-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCHv7 00/13] kexec: Use BPF lskel to enable kexec to load PE format boot image
+Date: Sun, 22 Mar 2026 09:43:49 +0800
+Message-ID: <20260322014402.8815-1-piliu@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 21 Mar 2026 21:20:37 -0400
-Message-Id: <DH8X08EB6T7J.2IA6WKFSZ8XGF@etsalapatis.com>
-Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v8 7/8] bpf: add bpf_list_is_first/last/empty
- kfuncs
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Emil Tsalapatis" <emil@etsalapatis.com>, "Chengkaitao"
- <pilgrimtao@gmail.com>, <martin.lau@linux.dev>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <song@kernel.org>, <yonghong.song@linux.dev>, <john.fastabend@gmail.com>,
- <kpsingh@kernel.org>, <sdf@fomichev.me>, <haoluo@google.com>,
- <jolsa@kernel.org>, <shuah@kernel.org>, <chengkaitao@kylinos.cn>,
- <linux-kselftest@vger.kernel.org>
-X-Mailer: aerc 0.20.1
-References: <20260316112843.78657-1-pilgrimtao@gmail.com>
- <20260316112843.78657-8-pilgrimtao@gmail.com>
- <DH8WLC5587BJ.30X22578QBN3C@etsalapatis.com>
-In-Reply-To: <DH8WLC5587BJ.30X22578QBN3C@etsalapatis.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On Sat Mar 21, 2026 at 9:01 PM EDT, Emil Tsalapatis wrote:
-> On Mon Mar 16, 2026 at 7:28 AM EDT, Chengkaitao wrote:
->> From: Kaitao Cheng <chengkaitao@kylinos.cn>
->>
->> Add three kfuncs for BPF linked list queries:
->> - bpf_list_is_first(head, node): true if node is the first in the list.
->> - bpf_list_is_last(head, node): true if node is the last in the list.
->> - bpf_list_empty(head): true if the list has no entries.
->>
->> Currently, without these kfuncs, to implement the above functionality
->> it is necessary to first call bpf_list_pop_front/back to retrieve the
->> first or last node before checking whether the passed-in node was the
->> first or last one. After the check, the node had to be pushed back into
->> the list using bpf_list_push_front/back, which was very inefficient.
->>
->> Now, with the bpf_list_is_first/last/empty kfuncs, we can directly
->> check whether a node is the first, last, or whether the list is empty,
->> without having to first retrieve the node.
->
-> Do you need to expand the exceptions you added in patch 5 for non-owning
-> reference arguments to also hold for this? Checking the selftests, we
-> don't have one where either bpf_list_is_last or bpf_list_is_first
-> return true, can you add one?
->
+*** The history ***
 
-I misread the selftests, my bad. The tests pass fine, and we just have
-to keep an owning reference of the nodes around to pass to the helpers.
+Nowadays, UEFI PE bootable images are becoming increasingly popular
+among distributions. Currently, we have several kinds of image format
+parsers in user space (kexec-tools). However, this approach breaks the
+integrity protection of the images. To address this integrity protection
+concern, several approaches have been proposed to resolve this issue,
+but none of them have been accepted upstream yet.
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+The summary of those approaches:
+  -1. UEFI service emulator for UEFI stub
+  -2. PE format parser in kernel
+  -3. Signing the arm64/boot/Image
 
->>
->> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
->> ---
->>  kernel/bpf/helpers.c  | 38 ++++++++++++++++++++++++++++++++++++++
->>  kernel/bpf/verifier.c | 11 +++++++++++
->>  2 files changed, 49 insertions(+)
->>
->> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
->> index dc4f8b4eec01..da70dcff4ba8 100644
->> --- a/kernel/bpf/helpers.c
->> +++ b/kernel/bpf/helpers.c
->> @@ -2518,6 +2518,41 @@ __bpf_kfunc struct bpf_list_node *bpf_list_back(s=
-truct bpf_list_head *head)
->>  	return (struct bpf_list_node *)h->prev;
->>  }
->> =20
->> +__bpf_kfunc bool bpf_list_is_first(struct bpf_list_head *head, struct b=
-pf_list_node *node)
->> +{
->> +	struct list_head *h =3D (struct list_head *)head;
->> +	struct bpf_list_node_kern *kn =3D (struct bpf_list_node_kern *)node;
->> +
->> +	if (READ_ONCE(kn->owner) !=3D head)
->> +		return false;
->> +
->> +	return list_is_first(&kn->list_head, h);
->> +}
->> +
->> +__bpf_kfunc bool bpf_list_is_last(struct bpf_list_head *head, struct bp=
-f_list_node *node)
->> +{
->> +	struct list_head *h =3D (struct list_head *)head;
->> +	struct bpf_list_node_kern *kn =3D (struct bpf_list_node_kern *)node;
->> +
->> +	if (READ_ONCE(kn->owner) !=3D head)
->> +		return false;
->> +
->> +	return list_is_last(&kn->list_head, h);
->> +}
->> +
->> +__bpf_kfunc bool bpf_list_empty(struct bpf_list_head *head)
->> +{
->> +	struct list_head *h =3D (struct list_head *)head;
->> +
->> +	/* If list_head was 0-initialized by map, bpf_obj_init_field wasn't
->> +	 * called on its fields, so init here
->> +	 */
->> +	if (unlikely(!h->next))
->> +		INIT_LIST_HEAD(h);
->> +
->> +	return list_empty(h);
->> +}
->> +
->>  __bpf_kfunc struct bpf_rb_node *bpf_rbtree_remove(struct bpf_rb_root *r=
-oot,
->>  						  struct bpf_rb_node *node)
->>  {
->> @@ -4588,6 +4623,9 @@ BTF_ID_FLAGS(func, bpf_list_del, KF_ACQUIRE | KF_R=
-ET_NULL)
->>  BTF_ID_FLAGS(func, bpf_list_front, KF_RET_NULL)
->>  BTF_ID_FLAGS(func, bpf_list_back, KF_RET_NULL)
->>  BTF_ID_FLAGS(func, bpf_list_add_impl)
->> +BTF_ID_FLAGS(func, bpf_list_is_first)
->> +BTF_ID_FLAGS(func, bpf_list_is_last)
->> +BTF_ID_FLAGS(func, bpf_list_empty)
->>  BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
->>  BTF_ID_FLAGS(func, bpf_task_release, KF_RELEASE)
->>  BTF_ID_FLAGS(func, bpf_rbtree_remove, KF_ACQUIRE | KF_RET_NULL)
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 0a6f2e6a5d28..c2cc622bb3a1 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -12512,6 +12512,9 @@ enum special_kfunc_type {
->>  	KF_bpf_list_del,
->>  	KF_bpf_list_front,
->>  	KF_bpf_list_back,
->> +	KF_bpf_list_is_first,
->> +	KF_bpf_list_is_last,
->> +	KF_bpf_list_empty,
->>  	KF_bpf_cast_to_kern_ctx,
->>  	KF_bpf_rdonly_cast,
->>  	KF_bpf_rcu_read_lock,
->> @@ -12574,6 +12577,9 @@ BTF_ID(func, bpf_list_pop_back)
->>  BTF_ID(func, bpf_list_del)
->>  BTF_ID(func, bpf_list_front)
->>  BTF_ID(func, bpf_list_back)
->> +BTF_ID(func, bpf_list_is_first)
->> +BTF_ID(func, bpf_list_is_last)
->> +BTF_ID(func, bpf_list_empty)
->>  BTF_ID(func, bpf_cast_to_kern_ctx)
->>  BTF_ID(func, bpf_rdonly_cast)
->>  BTF_ID(func, bpf_rcu_read_lock)
->> @@ -12652,6 +12658,9 @@ static const enum special_kfunc_type bpf_list_ap=
-i_kfuncs[] =3D {
->>  	KF_bpf_list_del,
->>  	KF_bpf_list_front,
->>  	KF_bpf_list_back,
->> +	KF_bpf_list_is_first,
->> +	KF_bpf_list_is_last,
->> +	KF_bpf_list_empty,
->>  };
->> =20
->>  /* Kfuncs that take a list node argument (bpf_list_node *). */
->> @@ -12660,6 +12669,8 @@ static const enum special_kfunc_type bpf_list_no=
-de_api_kfuncs[] =3D {
->>  	KF_bpf_list_push_back_impl,
->>  	KF_bpf_list_add_impl,
->>  	KF_bpf_list_del,
->> +	KF_bpf_list_is_first,
->> +	KF_bpf_list_is_last,
->>  };
->> =20
->>  /* Kfuncs that take an rbtree node argument (bpf_rb_node *). */
+
+For the first approach, I tried a purgatory-style emulator [1], but it
+encounters hardware scaling issues. For the second approach, both
+zboot-format [2] and UKI-format [3] parsers were rejected due to
+concerns that variant format parsers would bloat the kernel code.
+Additionally, for example in arm64, both UKI and zboot format parsers
+would need to be introduced and chained together to handle image
+loading. For the third approach, I attempted [4], but since zboot or UKI
+images already have signatures, upstream maintainers dislike the
+additional signature on the Image. Moreover, for secure boot UKI, this
+method cannot use signatures to protect the initramfs.
+
+
+*** The approach in this series ***
+
+This series introduces an approach that allows image formats to be
+parsed by BPF programs. Through BPF, two main functions, collecting
+kernel boot protocol data and decompression, are exposed to BPF programs
+via the commands KEXEC_BPF_CMD_DECOMPRESS and KEXEC_BPF_CMD_COPY.
+As a result, the kexec kernel code can remain relatively stable without
+requiring new parsers for different architectures.
+
+Beside above, this approach redesigns kexec_file_load(): kernel_fd is
+used to pass the BPF parser, while initrd_fd can be used to carry
+everything else, the kernel image, initrd, and cmdline data. So we can
+avoid changing the kexe_file_load() protocol. 
+
+
+The main purpose of this series is to provide format flexibility. This
+is demonstrated by the patch 'tools/kexec: Introduce a bpf-prog to
+handle zboot image', where the BPF program works in conjunction with a
+private format defined in 'tools/kexec: Introduce a tool to build zboot
+envelope'.
+
+
+*** Outlook for the security support (the next step) ***
+
+The remaining issue in this series is the security support.
+The isolated bpf-prog can be signed as what is done on kernel module,
+and verified as the trusted root later.
+Each signed PE can be asked to be verified by the trusted bpf-prog.
+
+For IMA, an out-most bpf-parser will be introduced to read each file by
+kernel_read_file_from_path(..., READING_KEXEC_IMAGE).
+
+
+*** Thanks ***
+I would like to thank Philipp Rudo, whose insights inspired this
+approach and who dedicated significant time to evaluating its
+practicality. I am also grateful to Viktor Malik for his guidance on
+using BPF light skeleton to prevent malicious attacks from user space.
+
+
+*** Test approach ***
+-1. compile kexec-tools from https://github.com/pfliu/kexec-tools/tree/bpf_loader
+-2. compile kernel
+-3. For UKI, get the UKI parser bpf-prog by 'make -C tools/kexec uki',
+    there will be uki.bpf.
+    Load it by:
+        kexec -s -l uki.bpf image.uki
+
+    For zboot, get the zboot parser by 'make -C tools/kexec zboot'
+    create the zboot envelop (packing vmlinuz.efi, initrd, cmdline) by:
+        tools/kexec/build_zboot_envelop vmlinuz.efi initrd "cmdline"
+    The default envelop image is named "zboot_image.elf"
+    Load it by:
+        kexec -s -l zboot.bpf zboot_image.elf
+
+
+[1]: https://lore.kernel.org/lkml/20240819145417.23367-1-piliu@redhat.com/T/
+[2]: https://lore.kernel.org/kexec/20230306030305.15595-1-kernelfans@gmail.com/
+[3]: https://lore.kernel.org/lkml/20230911052535.335770-1-kernel@jfarr.cc/
+[4]: https://lore.kernel.org/linux-efi/20230921133703.39042-1-kernelfans@gmail.com/
+
+
+*** Changes ***
+v6 -> v7:
+  - Redesign the kexec_file_load interface to prevent BPF section injection
+    into UKI or zboot images. The kernel_fd now carries the BPF parser,
+    while initrd_fd carries the UKI image.
+  - Introduce a UKI image parser.
+  - Enhance the zboot parser to support both UKI and direct zboot images.
+  - Fix the bug reported by bot+bpf-ci
+
+
+v5 -> v6
+  - Re-organize the layers in kexec_file_load into two layers: format-parsing and kernel boot protocol handling.
+  - Simplify the bpf kfunc interface.
+  - rebased onto Linux 6.19-rc2
+
+v4 -> v5
+  - rebased onto Linux 6.17-rc2
+  - [1/12], use a separate CONFIG_KEEP_COMPRESSOR to decide the section
+    of decompressor method
+  - [10/12], add Catalin's acked-by (Thanks Catalin!)
+
+v3 -> v4
+  - Use dynamic allocator in decompression ([4/12])
+  - Fix issue caused by Identical Code Folding ([5/12])
+  - Integrate the image generator tool in the kernel tree ([11,12/12])
+  - Address the issue according to Philipp's comments in v3 reviewing.
+    Thanks Philipp!
+
+RFCv2 -> v3
+  - move the introduced bpf kfuncs to kernel/bpf/* and mark them sleepable
+  - use listener and publisher model to implement bpf_copy_to_kernel()
+  - keep each introduced kfunc under the control of memcg
+
+RFCv1 -> RFCv2
+  - Use bpf kfunc instead of helper
+  - Use C source code to generate the light skeleton file
+
+
+Pingfan Liu (13):
+  bpf: Introduce kfuncs to parser buffer content
+  kexec_file: Use bpf-prog to decompose image
+  lib/decompress: Keep decompressor when CONFIG_KEEP_DECOMPRESSOR
+  kexec_file: Implement decompress method for parser
+  kexec_file: Implement copy method for parser
+  kexec_file: Chain the stages into a pipeline
+  kexec_file: Introduce a bpf-prog lskel to run a format parser
+  kexec_file: Factor out routine to find a symbol in ELF
+  kexec_file: Integrate bpf light skeleton to load image with bpf-prog
+  arm64/kexec: Select KEXEC_BPF to support UEFI-style kernel image
+  tools/kexec: Introduce a bpf-prog to handle zboot image
+  tools/kexec: Introduce a bpf-prog to handle UKI image
+  tools/kexec: Introduce a tool to build zboot envelop
+
+ arch/arm64/Kconfig                           |   1 +
+ include/linux/bpf.h                          |  20 +
+ include/linux/decompress/mm.h                |   8 +
+ kernel/Kconfig.kexec                         |   8 +
+ kernel/Makefile                              |   2 +
+ kernel/bpf/Makefile                          |   3 +
+ kernel/bpf/bpf_buffer_parser.c               | 186 ++++
+ kernel/kexec_bpf/Makefile                    |  70 ++
+ kernel/kexec_bpf/kexec_pe_parser_bpf.c       |  12 +
+ kernel/kexec_bpf/kexec_pe_parser_bpf.lskel.h | 130 +++
+ kernel/kexec_bpf/template.c                  |  72 ++
+ kernel/kexec_bpf_loader.c                    | 873 +++++++++++++++++++
+ kernel/kexec_file.c                          | 104 ++-
+ kernel/kexec_internal.h                      |   5 +
+ lib/Kconfig                                  |   6 +
+ lib/decompress.c                             |   6 +-
+ tools/kexec/Makefile                         | 203 +++++
+ tools/kexec/build_zboot_envelop.c            | 362 ++++++++
+ tools/kexec/template.c                       |  72 ++
+ tools/kexec/uki_parser_bpf.c                 | 235 +++++
+ tools/kexec/zboot_envelop.h                  |   7 +
+ tools/kexec/zboot_parser_bpf.c               | 348 ++++++++
+ 22 files changed, 2719 insertions(+), 14 deletions(-)
+ create mode 100644 kernel/bpf/bpf_buffer_parser.c
+ create mode 100644 kernel/kexec_bpf/Makefile
+ create mode 100644 kernel/kexec_bpf/kexec_pe_parser_bpf.c
+ create mode 100644 kernel/kexec_bpf/kexec_pe_parser_bpf.lskel.h
+ create mode 100644 kernel/kexec_bpf/template.c
+ create mode 100644 kernel/kexec_bpf_loader.c
+ create mode 100644 tools/kexec/Makefile
+ create mode 100644 tools/kexec/build_zboot_envelop.c
+ create mode 100644 tools/kexec/template.c
+ create mode 100644 tools/kexec/uki_parser_bpf.c
+ create mode 100644 tools/kexec/zboot_envelop.h
+ create mode 100644 tools/kexec/zboot_parser_bpf.c
+
+-- 
+2.49.0
 
