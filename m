@@ -1,174 +1,188 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD6936BCF5
-	for <bpf@vger.kernel.org>; Sun, 22 Mar 2026 17:36:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3540036B06D;
+	Sun, 22 Mar 2026 17:45:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774200990; cv=none; b=oMHJ652W2M33rH8cnHrGwzfzIW988NZqYuCGdZFutlU9wuRoxdxT8q0ZMdsLH0KmxlsMWrt/VrGRImirdoKc1JsjYkozy1IgJ+ZjgdTGpWsv7IIS6KxtGC9kmMtUEAjpR+PHqVKL8xYsjf4oWC3jNfiwxQw6iO+Q4CBPQd6gTVM=
+	t=1774201501; cv=none; b=XPbHrT6OyFZczb17/LwlBWuKmpVuxziPwiDf4XxKaUkROiWDiQD3MBm/xDT0eJdlYi5577wkAFqed7EWWyf57D8t3GYwqCYBXO1ZKtaG+foKgmnQCdW1X7MEL0yTwePTEHandlFAQcOQ2QXQPubrWjG7yC3vHcAZUT4UIYHVAWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774200990; c=relaxed/simple;
-	bh=82ZxUAZcmNBU6wZ1Lb/CNq5PgzsWJD14mGWVWneVuwM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Px8up5ldaETtPOGcM0/j6h8+M2FHJpQQXx3dTrm3EuQlBTIA+yKel8uLHZek9ZLYCjjhRjQLNmPLE18/Rvq0nN8Wo5UZau2nfXQ+Kc0ohSg9RmuK2rUGMNGQ8XJ3IPD1rRS4JLc5hnp+jx5scS3tEB5fr1PuuDNhdzVQdRf6X3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uazEQU4G; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1774201501; c=relaxed/simple;
+	bh=BT8IhkdAWfYzEDoQbAvWuKvKNyooGyPeniqD6UgiJEY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eFn4h1YNxM1b283iItK57WjMeajsQC+yN90qltXOLr+nL3JaPE5bIYmkVL6TBzsuIovRssBejaLBOom/er38xPycmyr02LPx5oYdCxntw4yh9VQsAuLSdXrPAk1z6bpOzkyFVzD9//WX5gTv6QYlb3F9Bm0mPnlk9f/SyntNj3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MiCs4bvD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uazEQU4G"
-Message-ID: <2c9260b9-0eb3-416b-a75f-f33f37be6b63@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774200973;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Yxe5CWU+eDGkL6k5XfqteyqTp3illiA3mbY2G0EXX54=;
-	b=uazEQU4GtdsszsUjy8Z8QJy/Kl/5+IMHKMLlkj6oJRKqgfxp3n7YIxpPtphr5e3xCbbNgL
-	2S8OUqOGG4jae3WSsO09mJox60QTsU7/j4BpVUJacbm8oHwND6hg7SnkajkaIwmTkJ4AyB
-	xKP5g5rmwJXeZVlvs3ebxDXC+awCQ7w=
-Date: Sun, 22 Mar 2026 10:36:01 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MiCs4bvD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDADCC19424;
+	Sun, 22 Mar 2026 17:45:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774201500;
+	bh=BT8IhkdAWfYzEDoQbAvWuKvKNyooGyPeniqD6UgiJEY=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=MiCs4bvDv1RRdd2GW3m7tdJzWIKLTVx7Kv/haPfDd9hC+dfXY3M0YoS8OO2y3hsGz
+	 4Eu0MvzNDSZUx0ndbQEdn9569foUAKGpKP0YmzGgv59EFF6ypKD1ArZmt0TppqtBNv
+	 +USm6SpziuhGv6W6Svo1kzHgOD1YuJP8e5fL2u//I7exr/pQupTBatpmmEowKgo2yD
+	 ceHWR771QNk5pylKU15iEezbCHChOBuoOSIZuCKCKazv91znHDcf6MujeOnKZwALdf
+	 0hRN3bsNCJDjgM1LF3h0WAd34AjCqRNXvCCrztKx2ms+368+AebJJarUm85KDnE/OM
+	 QZPaKUeYE3HaQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 9FE4DCE04A3; Sun, 22 Mar 2026 10:44:58 -0700 (PDT)
+Date: Sun, 22 Mar 2026 10:44:58 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Boqun Feng <boqun@kernel.org>
+Cc: Joel Fernandes <joelagnelf@nvidia.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	frederic@kernel.org, neeraj.iitr10@gmail.com, urezki@gmail.com,
+	boqun.feng@gmail.com, rcu@vger.kernel.org,
+	Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrea Righi <arighi@nvidia.com>, Zqiang <qiang.zhang@linux.dev>
+Subject: Re: [PATCH] rcu: Use an intermediate irq_work to start process_srcu()
+Message-ID: <e5fdd5db-4897-4975-a2db-ddb951385e89@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <492ba226-79c7-4345-b691-eb775082b799@paulmck-laptop>
+ <ab7eQ0QDNV9ZjQMN@tardis.local>
+ <609b5df1-aa06-46a9-8e93-0bf9eb8b7738@paulmck-laptop>
+ <ab71Vz9zmlVywWQT@tardis.local>
+ <4d2b07a9-e3fd-4a95-8924-0839bdfc28b3@paulmck-laptop>
+ <ab7623FFsiUOocHP@tardis.local>
+ <3486c7a2-73e6-46f2-a030-c9349ce964dd@paulmck-laptop>
+ <acAV-16pYQvy06aw@tardis.local>
+ <902d80c5-02a9-46d0-9d6a-06e8cd94cd37@paulmck-laptop>
+ <acAnYrlkkUvbNkGG@tardis.local>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH dwarves v3 1/9] dwarf_loader: Reduce parameter checking
- with clang DW_AT_calling_convention attr
-Content-Language: en-GB
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>,
- Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- bpf@vger.kernel.org, kernel-team@fb.com
-References: <20260320190917.1970524-1-yonghong.song@linux.dev>
- <20260320190922.1970709-1-yonghong.song@linux.dev> <ab8lWhTT8LZGbtQs@krava>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <ab8lWhTT8LZGbtQs@krava>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <acAnYrlkkUvbNkGG@tardis.local>
 
+On Sun, Mar 22, 2026 at 10:31:14AM -0700, Boqun Feng wrote:
+> On Sun, Mar 22, 2026 at 10:09:53AM -0700, Paul E. McKenney wrote:
+> > On Sun, Mar 22, 2026 at 09:16:59AM -0700, Boqun Feng wrote:
+> > > On Sun, Mar 22, 2026 at 03:09:19AM -0700, Paul E. McKenney wrote:
+> > > > On Sat, Mar 21, 2026 at 01:08:59PM -0700, Boqun Feng wrote:
+> > > > > On Sat, Mar 21, 2026 at 01:07:45PM -0700, Paul E. McKenney wrote:
+> > > > > > On Sat, Mar 21, 2026 at 12:45:27PM -0700, Boqun Feng wrote:
+> > > > > > > On Sat, Mar 21, 2026 at 12:31:04PM -0700, Paul E. McKenney wrote:
+> > > > > > > > On Sat, Mar 21, 2026 at 11:06:59AM -0700, Boqun Feng wrote:
+> > > > > > > > > On Sat, Mar 21, 2026 at 10:41:47AM -0700, Paul E. McKenney wrote:
+> > > > > > > > > [...]
+> > > > > > > > > > > > +	raw_spin_lock_rcu_node(ssp->srcu_sup);
+> > > > > > > > > > > > +	delay = srcu_get_delay(ssp);
+> > > > > > > > > > > > +	raw_spin_unlock_rcu_node(ssp->srcu_sup);
+> > > > > > > > > > > > 
+> > > > > > > > > > > 
+> > > > > > > > > > > It was fixed differently in v2:
+> > > > > > > > > > > 
+> > > > > > > > > > > 	https://lore.kernel.org/rcu/20260320222916.19987-1-boqun@kernel.org/
+> > > > > > > > > > > 
+> > > > > > > > > > > I used _irqsave/_irqrestore just in case. Given it's an urgent fix,
+> > > > > > > > > > > overly careful code is probably fine ;-)
+> > > > > > > > > > > 
+> > > > > > > > > > > Thanks for the testing and feedback.
+> > > > > > > > > > 
+> > > > > > > > > > OK, I will try that one, thank you!
+> > > > > > > > > > 
+> > > > > > > > > > FYI, with my change on your earlier version, SRCU-T got deadlocks between
+> > > > > > > > > > the pi-lock and the workqueue pool lock.  Which might or might not be
+> > > > > > > > > > particularly urgent.
+> > > > > > > > > > 
+> > > > > > > > > 
+> > > > > > > > > I just checked my run yesterday, I also hit it. It's probably what
+> > > > > > > > > Zqiang has found:
+> > > > > > > > > 
+> > > > > > > > > 	https://lore.kernel.org/rcu/4c23c66f86a2aff8f2d7b759f9dd257b82147a17@linux.dev/
+> > > > > > > > > 
+> > > > > > > > > We have a queue_work_on() in srcu_schedule_cbs_sdp(), so
+> > > > > > > > > 
+> > > > > > > > >     srcu_torture_deferred_free():
+> > > > > > > > >       raw_spin_lock_irqsave(->pi_lock,...);
+> > > > > > > > >       call_srcu():
+> > > > > > > > >         if (snp == snp_leaf && snp_seq != s) {
+> > > > > > > > >            srcu_schedule_cbs_sdp(sdp, do_norm ? SRCU_INTERVAL : 0):
+> > > > > > > > > 	     if (!delay)
+> > > > > > > > >                queue_work_on(...)
+> > > > > > > > > 
+> > > > > > > > > I was about to reply to Zqiang, fixing that could be a touch design
+> > > > > > > > > decision. Since it's a per srcu_data work ;-) NR_CPUS x irq_work
+> > > > > > > > > incoming.
+> > > > > > > > 
+> > > > > > > > Just to be clear, SRCU-T is Tiny SRCU rather than Tree SRCU.  So perhaps
+> > > > > > > > lower priority, though perhaps not lower irritation.  ;-)
+> > > > > > > 
+> > > > > > > I see, there is a schedule_work() in srcutiny's
+> > > > > > > srcu_gp_start_if_needed(). But it couldn't cause deadlock on UP since
+> > > > > > > locks are (almost) no-op. Maybe we can make RCU torture only test it on
+> > > > > > > SMP?
+> > > > > > 
+> > > > > > Like this, you mean?  I will give it a shot tomorrow.
+> > > > > 
+> > > > > Yes, thanks!
+> > > > 
+> > > > OK, the previous patch did fine on short rcutorture testing aside from
+> > > > the !SMP lockdep splat, so I have started the test without pi_lock.
+> > > > 
+> > > > Longer term, shouldn't lockdep take into account the fact that on !SMP,
+> > > > the disabling of preemption (or interrupts or...) is essentially the same
+> > > > as acquiring a global lock?  This means that only one task at a time can
+> > > > be acquiring a raw spinlock on !SMP, so that the order of acquisition
+> > > > of raw spinlocks on !SMP is irrelevant?  (Aside from self-deadlocking
+> > > > double acquisitions, perhaps.)  In other words, shouldn't lockdep leave
+> > > > raw spinlocks out of lockdep's cycle-detection data structure?
+> > > 
+> > > Lockdep doesn't know whether a code path is UP-only, so it'll apply the
+> > > general locking rule to check. Similar as lockdep still detect
+> > > PREEMPT_RT locking issue for !PREEMPT_RT kernel. Maybe we can add a
+> > > separate kconfig to narrow down lockdep detection for UP-only if UP=y.
+> > 
+> > But lockdep *does* know when it is running in a CONFIG_SMP=n kernel,
+> > correct?  In which case all the code paths are UP-only.
+> 
+> Why? UP and SMP can share the same code path, no? Just because lockdep
+> is running in UP and see a code path, doesn't mean that code path is
+> UP-only, right? What I was trying to say is Lockdep detects generel
+> locking rule violation, so even when it's running in UP kernel, it'll
+> use rules that SMP uses.
 
+I know that this is what lockdep is doing.  I am instead saying that
+what lockdep is doing is not a good thing.  ;-)
 
-On 3/21/26 4:10 PM, Jiri Olsa wrote:
-> On Fri, Mar 20, 2026 at 12:09:22PM -0700, Yonghong Song wrote:
->> Currently every function is checked for its parameters to identify whether
->> the signature changed or not. If signature indeed changed, pahole may do
->> some adjustment for parameters for true signatures.
->>
->> In clang, any function with the following attribute
->>        DW_AT_calling_convention        (DW_CC_nocall)
->> indicates this function having signature changed.
->> pahole can take advantage of this to avoid parameter checking if
->> DW_AT_calling_convention is not DW_CC_nocall.
->>
->> But more importantly, DW_CC_nocall can identify signature-changed functions
->> and parameters can be checked one-after-another to create the true
->> signatures. Otherwise, it takes more effort to identify whether a
->> function has signature changed or not. For example, for funciton
->>    __bpf_kfunc static void bbr_main(struct sock *sk, u32 ack, int flag,
->>       const struct rate_sample *rs) { ... }
->> and bbr_main() is a callback function in
->>    .cong_control   = bbr_main
->> in 'struct tcp_congestion_ops tcp_bbr_cong_ops'.
->> In the above bbr_main(...), parameter 'ack' and 'flag' are not used.
->> The following are some details:
->>
->> 0x0a713b8d:     DW_TAG_formal_parameter
->>                    DW_AT_location        (indexed (0x28) loclist = 0x0166d452:
->>                       [0xffffffff83e77fd9, 0xffffffff83e78016): DW_OP_reg5 RDI
->>                       ...
->>                    DW_AT_name    ("sk")
->>                    DW_AT_type    (0x0a6f5b2b "sock *")
->>                    ...
->>
->> 0x0a713b98:     DW_TAG_formal_parameter
->>                    DW_AT_name    ("ack")
->>                    DW_AT_type    (0x0a6f58fd "u32")
->>                    ...
->>
->> 0x0a713ba2:     DW_TAG_formal_parameter
->>                    DW_AT_name    ("flag")
->>                    DW_AT_type    (0x0a6f57d1 "int")
->>                    ...
->>
->> 0x0a713bac:     DW_TAG_formal_parameter
->>                    DW_AT_location        (indexed (0x29) loclist = 0x0166d4a8:
->>                       [0xffffffff83e77fd9, 0xffffffff83e78016): DW_OP_reg2 RCX
->>                       ...
->>                    DW_AT_name    ("rs")
->>                    DW_AT_type    (0x0a710da5 "const rate_sample *")
->>                    DW_AT_decl_line       (1027)
->>
->> Some analysis for the above dwarf can conclude that the 'ark' and 'flag'
->> may be related to RSI and RDX, considering the last one is RCX. Basically this
->> requires all parameters are available to collectively decide whether the
->> true signature can be found or not. In such case, DW_CC_nocall can make things
->> easier as parameter can be checked one after another.
->>
->> For a clang built bpf-next kernel, in non-LTO setup, the number of kernel functions
->> is 69103 and the number of signature changed functions is 875, based on
->>        DW_AT_calling_convention        (DW_CC_nocall)
->> indication.
-> we don't display these stats, right? would be great and probably easy
-> to count different flags and aggregate them
+> > The situation with CONFIG_PREEMPT_RT=y is quite different: The motivation
+> > was for people running lockdep on CONFIG_PREEMPT_RT=n kernels to
+> > detect and fix locking issues that would otherwise only show up in
+> > CONFIG_PREEMPT_RT=y kernels.
+> 
+> I'm not sure how it's different than people wanted to detect SMP=y
+> locking issues when running UP kernel. Of course, I didn't know whether
+> that's the intention because I wasn't there ;-)
 
-The actual stats will be different depending on kernel code and compiler optimization.
-But I think I can still count them for each commit so people will know
-which change caused how much true signature.
+It is very different.
 
->
->> Among 875 signature changed functions, after this patch, 495 functions
->> can have proper true signatures, mostly due to simple dead argument
->> elimination. The number of remaining functions, which cannot get the
->> true signature, is 379. They will be addressed in the subsequent commits.
-> after this change I have more functions added (below) and I checked
-> few and they seem ok (w/o DW_CC_nocall)
+There were very few people developing and running PREEMPT_RT, so it
+was quite difficult for them to clean up the lock-context issues that
+everyone else was creating.  Making lockdep check for PREEMPT_RT issues
+in !PREEMPT_RT kernels was therefore very helpful, at least to the
+PREEMPT_RT guys.
 
-Most global functions should be okay. But some global functions
-esp. if argument is more than 8 byte (struct type), they may be
-considered as signature change with the current implementation.
+In contrast (and unlike 20 years ago), almost everyone runs SMP, so there
+is no harm in !SMP lockdep ignoring things that would be deadlocks in
+SMP kernels.  The ample SMP lockdep testing will catch those issues,
+so there is no need for extra help from UP lockdep testing.
 
->
-> jirka
->
->
-> acpi_ex_do_debug_object
-> add_bits
-> amd_pstate_get_mode_string
-> dma_alloc_from_contiguous
-> do_set_pmd
-> dst_destroy
-> find_cpio_data
-> find_microcode_in_initrd
-> ima_write_policy
-> insn_init
-> io_tx_ubuf_complete
-> ip6_protocol_deliver_rcu
-> kvm_tdp_mmu_unmap_gfn_range
-> net_dim_get_def_rx_moderation
-> net_dim_get_def_tx_moderation
-> pinctrl_commit_state
-> string_unescape
-> syscall_copy_user_array
-> tdp_mmu_zap_leafs
-> usb_speed_string
-> __vlan_find_dev_deep_rcu
-> __vxlan_fdb_delete
-> xfs_bmbt_maxrecs
-> xfs_inobt_maxrecs
-> ZSTD_buildSequencesStatistics
-> ZSTD_copyCCtx
-> ZSTD_findFrameSizeInfo
-> ZSTD_get1BlockSummary
-> zstd_get_cparams
-> ZSTD_getCParams
-> ZSTD_getCParamsFromCCtxParams
-> ZSTD_getCParamsFromCDict
-> ZSTD_getCParams_internal
-> zstd_get_params
-> ZSTD_getParams
+							Thanx, Paul
 
+> Regards,
+> Boqun
+> 
+> > And of course, CONFIG_SMP=n kernels still need deadlock detection for
+> > mutexes and the like.
+> > 
+> > 							Thanx, Paul
