@@ -1,272 +1,275 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAE26BA45
-	for <bpf@vger.kernel.org>; Sun, 22 Mar 2026 20:48:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2540F1DED4C
+	for <bpf@vger.kernel.org>; Sun, 22 Mar 2026 22:51:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774212487; cv=none; b=lZhDqiNj5OtF7NUA+wETQlZFjtIhBuwZ3b1nJO9W3Et+lYeDJzFGtn29A1y0c6kTvjP1uQWad2VqMk6GDBqPFSQ8mD4oBJO16WoxqJUDoRA0AZ6WFWiFPbvowlS+u/k6RsO300I2jauBdArc5Cvd2AIAwjJglqEiKxjBhWyJii0=
+	t=1774219890; cv=none; b=oSotqnzmD7LUHdSxes8H6gkY1U3pPGYd1EJsuiynnxeXap8+OlVGS7O69UJWSJtnPoAVa7W4/sgFpyMmmguIMcglXIf+Y6Z7zZbIINDPgF8ZZHcY/aB4S6v0qRc+u+dOKtK6TX0ti0O9ABYPMUTRiUV99YvQRb17lsrrRMcaYrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774212487; c=relaxed/simple;
-	bh=/7UI/IV+pjr/LE9yHZGHid1IfJvwA2LmWAcQ+CXtDDY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=E/eF4cyCLAqOelOQPhA1EhqTScHS3uLylknx2RqhOijLFccr7CAv0IEvIE+erN4nhyuY+sXGLoaJeo2WJyqItD8OIJ+kcIYYRvH5BHcDVgNkKRl27/tFN8b1s0ajP8m+ve8JOABGmf7w5yB/DJSw+8qBH0iEaQRYjgLS2+x5qRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PVKKWvG/; arc=none smtp.client-ip=209.85.214.177
+	s=arc-20240116; t=1774219890; c=relaxed/simple;
+	bh=Nk24/+XY1Uw0qgE34QzSE1T6WGjBIdeRUh7HSaI1RHo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=M3wsURx0HsEEqrG8TLNq9nKYNOP3XCkKaa7sTcWrGA9V3JXP5uC+dP+RRZ/0fqUSMwWZZEmSajme6+QCzs3Le5llNEOf0JvROC01BEculUT1ChsK8/2LvPeCTXkXkhWlLtO+NU50Dsn9EC0ot4mN3iQh4ZvFyBTwutJAeIQEvmE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mSZM1Yxu; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PVKKWvG/"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2a7a9b8ed69so45155385ad.2
-        for <bpf@vger.kernel.org>; Sun, 22 Mar 2026 13:48:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mSZM1Yxu"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2adff872068so9503365ad.1
+        for <bpf@vger.kernel.org>; Sun, 22 Mar 2026 15:51:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774212485; x=1774817285; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1774219888; x=1774824688; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oXecQQbnSy+QJzdL0ooJsCPBFQ1mm8juok1pSaE3uRg=;
-        b=PVKKWvG/yR3Xf7wCFIRyEyiB1YHNohEUOnGVu3+Qtu3DmkLMW4sRZuji/wedA66Y20
-         EPXQaBlDRtd0vtmIUvo5nJ2f0Atsumr49JLg8KOIn4bh7JiEkREKY4J65UgigzDN/vGy
-         MnfbB6IQUHvWSuyujLRLHF2iuOsDOvSwE64GZlmxKtkQjsKmw3tUenZ1oin96pJRSmHZ
-         FrNTNC3iHL/J/LuTYz4d1QF4olXd/AK8/Cw6T5G5IHFovqOFV/pCtOzWz37PAHDKPPJW
-         HGksXe7Tu2yrs72FpRg0nbqO3fCh9+VegHvtILGFeDvJk4GIZBAOc8a8GKnQ8ei/v7Ox
-         93tA==
+        bh=8v2ujU/F9KxqY3vS2zqr6XZ5Ew9ZzTNiBaCQEZuuxpw=;
+        b=mSZM1YxuSLRhmXgD7uex2Ss8rlbsD/aNRar43oRjWhHMFCdAQmAzm+IcA8RnHl5n5n
+         rBHZ/cYWpSX4MtKEgylFT3gnuKGsVxscEwUHOYocML0+wfdB+DkUw1+ZHDfHmvRZVsmE
+         OeGamo5IPVYtHhy7fl5SROvecVlsWlt5OKWC5peCYc/czyeQFMyOuRsMvdgN5ZDYYmR+
+         nJBXIV5huQZkExWbXKNoVARsMDoQWQHp85hsXwWJkOemWbPcBaetm1HnZNprnfcbTdDl
+         zcDShbnr/3tCnfgnP1465v2Wx9wmNISOaYuL2of3EZo3Xdi0s9GwHby3NWQoJhteUxRw
+         AwzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774212485; x=1774817285;
+        d=1e100.net; s=20251104; t=1774219888; x=1774824688;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oXecQQbnSy+QJzdL0ooJsCPBFQ1mm8juok1pSaE3uRg=;
-        b=DuZK/h2vBCzRJJOTwLJmWPlXFKGskSDKq9qvqxCVnwk2B/4fHhKMzKc0MyySR0+txa
-         29u13dRx7+4u3eK1fh3BNx+91rZNcgfbLE/NEuxVg+dsaa5zT6YmhE+2xocz/4Ws7r8V
-         weS175qdOhyfNQRnXI4m9pkNXuh3HnDXP54fkFwaORAvn4U62YfTaTx2OW6rKHBeV2el
-         TIb0n+eWKQmdZiVITHYrXOmzpdA67Q4l2oQtTjrak0XKPH1DN3fnBvZ92kRsRi+8L1ui
-         xvd58ST0WjPvXmDHIrhjxzfKct415m3utCl2YoIxDKl+HDSUkaQCnq9gtEVQ6+1GCAyl
-         FHBw==
-X-Forwarded-Encrypted: i=1; AJvYcCUWemA+ELEi9K9Uot7NFkuqGgdyuCncAActrl0krEkmDljF6Si4XRJ9YI5//1Whxx5Y9/8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxr0K//JB2exXUiRdMJRMgv41MmvTMDkKHcPoNec8g3EnEibLpq
-	OYiGfDYMfSPMOuN9t6XFHEuWwryXjagkw6ENBaJYDmLCmR9mYRMaKsit
-X-Gm-Gg: ATEYQzxM+9o5jRYV5LjrxD6LKpZ254t2w7SwRIO+tW0aeaqbGrgUhNqccZULBMjeeJg
-	dkSd9v4xkrwUylnrva1zrh8Je6a04rITC9GiOVjreU7oZ3x3mluWpFxaCnFvbNGQY0FJuAvHF8j
-	Gfhjyw8R2ot4RYCDIVfW2hiGDTnOAh/rqFYfli/oadxPvjOzr0FeXfcs9Wekch58Qp6Pg5DUbro
-	ZuiTKo3HdT0zJtkpUVlVcL/YZPlMyE82ASTbUoIBbb6v0Vc2V4sGCNgIymP2DQgLjEirXpWlQe1
-	5UNb55hyoFn7ARu3vrXTniDHXpUua8xUcZ/NMjqhb/bm58Vori+7NyHJpDchuvblV/LW7PPWxrY
-	qgG8PjXgFaW3gt2BMY0kNiCY9cf2mh5zcBWtgMo5+R7QzCqGHgPMRxwf4t2DlaWf3sys81rrM3q
-	GXz+I3XslrTDbDKCTDr3c4FHiXY6K/X597tI9xCqN2VMEf/YwBBiSxBgkucZWnJa9mPK6K
-X-Received: by 2002:a17:902:ef52:b0:2b0:663f:6b4b with SMTP id d9443c01a7336-2b0827054d4mr88071225ad.18.1774212485129;
-        Sun, 22 Mar 2026 13:48:05 -0700 (PDT)
-Received: from computer.goose-salary.ts.net ([2a09:bac5:40b2:1aaa::2a8:1f])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b0836b15fbsm109202725ad.81.2026.03.22.13.47.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Mar 2026 13:48:04 -0700 (PDT)
-From: Varun R Mallya <varunrmallya@gmail.com>
-To: jiayuan.chen@linux.dev,
-	yonghong.song@linux.dev,
-	bpf@vger.kernel.org
-Cc: varunrmallya@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
+        bh=8v2ujU/F9KxqY3vS2zqr6XZ5Ew9ZzTNiBaCQEZuuxpw=;
+        b=pOKIPPcWjXm7UKa1BHwSROg8vDDF7Z/iy0pIiZ/u0P/me1ud1UcaJxOJoGKBDfN+Rk
+         nFY/3EJY/F74HAfqAcSHhXpYZRm/vxdNKhTEqNF2rkP64pgYPyuS0BP7+Wei9Sgh4ax1
+         feRjlu44la+5OkClpPjGVMQwjeuZSNFeu+W3pmUSgvA3KtlTVRzzvX+n6D0OBTSgnxRa
+         eadBYLG9f96lkFbTvyd6N9hU4U707GPimQs0WXri+XbvAEZ2oktGabM0vofXuLlKsiFy
+         8UGJZVHTP+Hj6JULYwc1xdO5wgm7IxBPcCNdwdnWEXO3J/TREBBToyD0SseskUjNvk87
+         smfw==
+X-Gm-Message-State: AOJu0YwYoUt4pGazaejRhaXkFZ+A/+Dyzig9wAUKEGjwdT45lWnS1z2Q
+	ehQ1icVqGzPxbI6u8HKURwrE/r/DAE8spNWo0BFkngMSGJIYo73Ju4SRsaoQdw==
+X-Gm-Gg: ATEYQzxGzKxgmOCgdhKS8nLHzcolwSjFy8J4JhNuXIksTqArxVbOT31hqwodBOzDnFm
+	FUD08BgxGOLC4JScN+l299/2jJngGjDA6vIjHmuGufssVpS56gP8llDiKGyN/kE75/ao1WcQSiT
+	QQGwC7ZW28BvPZBEKtQpthGqp9UeHlITqRMOQC9ohPVJvOGzl/e8f029+WKn1xJXQOSMw3MQOu4
+	YLZLsvOZdtQ5odWx4GdxB8OGjYZY4L0CHuFD0Y9xoChpUkARZcsSSoGSj8YrVrAZLukVSf5Mb0k
+	P7ZjVjivSDNSlNi8TgXAhTD9HCz8/C1DPonRsm7kFxLgz/zHJuJMzV2/NLiX4BXpXri0Td0NXuO
+	2npF2yFbJfYEqug/ZLrZf/2JmtwgtJaGssV7FtoPBtDX6ptBqJ48zco7XztoysmS8xxK/gSIXuA
+	LhbkSB2OSbyLHXkNZoGFf3TYCfb8YVlHL0R5WuAbXQjTKLYws8QaENAt1XA5gSKhvA4cy+SZhm/
+	pk+7MWWVi2azTnfZGYjj+LEZ5KWIDV2OdR0OnJljiQamyQ2UiHTrcYqCXnGpA==
+X-Received: by 2002:a17:902:dad1:b0:2ae:cb0e:fd5e with SMTP id d9443c01a7336-2b08275878cmr102773475ad.23.1774219887968;
+        Sun, 22 Mar 2026 15:51:27 -0700 (PDT)
+Received: from localhost.localdomain ([2601:600:837f:c470:1879:8422:922b:e5d3])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b08354b109sm112777415ad.31.2026.03.22.15.51.26
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 22 Mar 2026 15:51:27 -0700 (PDT)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org
-Subject: [PATCH bpf-next v2] selftests/bpf: Improve connect_force_port test reliability
-Date: Mon, 23 Mar 2026 02:17:55 +0530
-Message-ID: <20260322204755.39783-1-varunrmallya@gmail.com>
-X-Mailer: git-send-email 2.53.0
+	martin.lau@kernel.org,
+	memxor@gmail.com,
+	eddyz87@gmail.com
+Subject: [PATCH bpf-next 1/2] bpf: Support 32-bit scalar spills in stacksafe()
+Date: Sun, 22 Mar 2026 15:51:23 -0700
+Message-ID: <20260322225124.14005-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The connect_force_port test fails intermittently in CI because the
-hardcoded server ports (60123/60124) may already be in use by other
-tests or processes [1].
+From: Alexei Starovoitov <ast@kernel.org>
 
-Fix this by passing port 0 to start_server(), letting the kernel assign
-a free port dynamically. The actual assigned port is then propagated to
-the BPF programs by writing it into the .bss map's initial value (via
-bpf_map__initial_value()) before loading, so the BPF programs use the
-correct backend port at runtime.
+The commit 6efbde200bf3 ("bpf: Handle scalar spill vs all MISC in stacksafe()")
+in stacksafe() only recognized full 64-bit scalar spills when
+comparing stack states for equivalence during state pruning and
+missed 32-bit scalar spill. When 32-bit scalar is spilled the
+check_stack_write_fixed_off() -> save_register_state() populates
+slot[0-3] = STACK_MISC, slot[4-7] = STACK_SPILL and updates spilled_ptr.
 
-[1] https://github.com/kernel-patches/bpf/actions/runs/22697676317/job/65808536038
+The im=4 path is only reached when im=0 fails: The loop at im=0 already
+attempts the 64-bit scalar-spill/all-MISC check. If it matches, i advances
+by 7, skipping the entire 8-byte slot. So im=4 is only reached when bytes
+0-3 are neither a scalar spill nor all-MISC — they must pass individual
+byte-by-byte comparison first. Then bytes 4-7 get the scalar-unit
+treatment.
 
-Suggested-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
+is_spilled_scalar_after(stack, 4): slot_type[4] == STACK_SPILL from a
+64-bit spill would have been caught at im=0 (unless it's a pointer spill,
+in which case spilled_ptr.type != SCALAR_VALUE -> returns false at im=4
+too). A partial overwrite of a 64-bit spill invalidates the entire slot in
+check_stack_write_fixed_off().
+
+is_stack_misc_after(stack, 4): Only checks bytes 4-7 are MISC/INVALID,
+returns &unbound_reg. Comparing two unbound regs via regsafe() is safe.
+
+Changes to cilium programs:
+File             Program                            Insns (A)  Insns (B)  Insns     (DIFF)
+_______________  _________________________________  _________  _________  ________________
+bpf_host.o       cil_host_policy                        49351      45811    -3540 (-7.17%)
+bpf_host.o       cil_to_host                             2384       2270     -114 (-4.78%)
+bpf_host.o       cil_to_netdev                         112051     100269  -11782 (-10.51%)
+bpf_host.o       tail_handle_ipv4_cont_from_host        61175      60910     -265 (-0.43%)
+bpf_host.o       tail_handle_ipv4_cont_from_netdev       9381       8873     -508 (-5.42%)
+bpf_host.o       tail_handle_ipv4_from_host             12994       7066   -5928 (-45.62%)
+bpf_host.o       tail_handle_ipv4_from_netdev           85015      59875  -25140 (-29.57%)
+bpf_host.o       tail_handle_ipv6_cont_from_host        24732      23527    -1205 (-4.87%)
+bpf_host.o       tail_handle_ipv6_cont_from_netdev       9463       8953     -510 (-5.39%)
+bpf_host.o       tail_handle_ipv6_from_host             12477      11787     -690 (-5.53%)
+bpf_host.o       tail_handle_ipv6_from_netdev           30814      30017     -797 (-2.59%)
+bpf_host.o       tail_handle_nat_fwd_ipv4                8943       8860      -83 (-0.93%)
+bpf_host.o       tail_handle_snat_fwd_ipv4              64716      61625    -3091 (-4.78%)
+bpf_host.o       tail_handle_snat_fwd_ipv6              48299      30797  -17502 (-36.24%)
+bpf_host.o       tail_ipv4_host_policy_ingress          21591      20017    -1574 (-7.29%)
+bpf_host.o       tail_ipv6_host_policy_ingress          21177      20693     -484 (-2.29%)
+bpf_host.o       tail_nodeport_nat_egress_ipv4          16588      16543      -45 (-0.27%)
+bpf_host.o       tail_nodeport_nat_ingress_ipv4         39200      36116    -3084 (-7.87%)
+bpf_host.o       tail_nodeport_nat_ingress_ipv6         50102      48003    -2099 (-4.19%)
+bpf_lxc.o        tail_handle_ipv4_cont                 113092      96891  -16201 (-14.33%)
+bpf_lxc.o        tail_handle_ipv6                        6727       6701      -26 (-0.39%)
+bpf_lxc.o        tail_handle_ipv6_cont                  25567      21805   -3762 (-14.71%)
+bpf_lxc.o        tail_ipv4_ct_egress                    28843      15970  -12873 (-44.63%)
+bpf_lxc.o        tail_ipv4_ct_ingress                   16691      10213   -6478 (-38.81%)
+bpf_lxc.o        tail_ipv4_ct_ingress_policy_only       16691      10213   -6478 (-38.81%)
+bpf_lxc.o        tail_ipv4_policy                        6776       6622     -154 (-2.27%)
+bpf_lxc.o        tail_ipv4_to_endpoint                   7523       7219     -304 (-4.04%)
+bpf_lxc.o        tail_ipv6_ct_egress                    10275       9999     -276 (-2.69%)
+bpf_lxc.o        tail_ipv6_ct_ingress                    6466       6438      -28 (-0.43%)
+bpf_lxc.o        tail_ipv6_ct_ingress_policy_only        6466       6438      -28 (-0.43%)
+bpf_lxc.o        tail_ipv6_policy                        6859       5159   -1700 (-24.78%)
+bpf_lxc.o        tail_ipv6_to_endpoint                   7039       4427   -2612 (-37.11%)
+bpf_lxc.o        tail_nodeport_ipv6_dsr                  1175       1033    -142 (-12.09%)
+bpf_lxc.o        tail_nodeport_nat_egress_ipv4          16318      16292      -26 (-0.16%)
+bpf_lxc.o        tail_nodeport_nat_ingress_ipv4         18907      18490     -417 (-2.21%)
+bpf_lxc.o        tail_nodeport_nat_ingress_ipv6         14624      14556      -68 (-0.46%)
+bpf_lxc.o        tail_nodeport_rev_dnat_ipv4             4776       4588     -188 (-3.94%)
+bpf_overlay.o    tail_handle_inter_cluster_revsnat      15733      15498     -235 (-1.49%)
+bpf_overlay.o    tail_handle_ipv4                      124682     105717  -18965 (-15.21%)
+bpf_overlay.o    tail_handle_ipv6                       16201      15801     -400 (-2.47%)
+bpf_overlay.o    tail_handle_snat_fwd_ipv4              21280      19323    -1957 (-9.20%)
+bpf_overlay.o    tail_handle_snat_fwd_ipv6              20824      20822       -2 (-0.01%)
+bpf_overlay.o    tail_nodeport_ipv6_dsr                  1175       1033    -142 (-12.09%)
+bpf_overlay.o    tail_nodeport_nat_egress_ipv4          16293      16267      -26 (-0.16%)
+bpf_overlay.o    tail_nodeport_nat_ingress_ipv4         20841      20737     -104 (-0.50%)
+bpf_overlay.o    tail_nodeport_nat_ingress_ipv6         14678      14629      -49 (-0.33%)
+bpf_sock.o       cil_sock4_connect                       1678       1623      -55 (-3.28%)
+bpf_sock.o       cil_sock4_sendmsg                       1791       1736      -55 (-3.07%)
+bpf_sock.o       cil_sock6_connect                       3641       3600      -41 (-1.13%)
+bpf_sock.o       cil_sock6_recvmsg                       2048       1899     -149 (-7.28%)
+bpf_sock.o       cil_sock6_sendmsg                       3755       3721      -34 (-0.91%)
+bpf_wireguard.o  tail_handle_ipv4                       31180      27484   -3696 (-11.85%)
+bpf_wireguard.o  tail_handle_ipv6                       12095      11760     -335 (-2.77%)
+bpf_wireguard.o  tail_nodeport_ipv6_dsr                  1232       1094    -138 (-11.20%)
+bpf_wireguard.o  tail_nodeport_nat_egress_ipv4          16071      16061      -10 (-0.06%)
+bpf_wireguard.o  tail_nodeport_nat_ingress_ipv4         20804      20565     -239 (-1.15%)
+bpf_wireguard.o  tail_nodeport_nat_ingress_ipv6         13490      12224    -1266 (-9.38%)
+bpf_xdp.o        tail_lb_ipv4                           49695      42673   -7022 (-14.13%)
+bpf_xdp.o        tail_lb_ipv6                          122683      87896  -34787 (-28.36%)
+bpf_xdp.o        tail_nodeport_ipv6_dsr                  1833       1862      +29 (+1.58%)
+bpf_xdp.o        tail_nodeport_nat_egress_ipv4           6999       6990       -9 (-0.13%)
+bpf_xdp.o        tail_nodeport_nat_ingress_ipv4         28903      28780     -123 (-0.43%)
+bpf_xdp.o        tail_nodeport_nat_ingress_ipv6        200361     197771    -2590 (-1.29%)
+bpf_xdp.o        tail_nodeport_rev_dnat_ipv4             4606       4454     -152 (-3.30%)
+
+Changes to sched-ext:
+File                       Program           Insns (A)  Insns (B)  Insns    (DIFF)
+_________________________  ________________  _________  _________  _______________
+scx_arena_selftests.bpf.o  arena_selftest       236305     236251     -54 (-0.02%)
+scx_chaos.bpf.o            chaos_dispatch        12282       8013  -4269 (-34.76%)
+scx_chaos.bpf.o            chaos_enqueue         11398       7126  -4272 (-37.48%)
+scx_chaos.bpf.o            chaos_init             3854       3828     -26 (-0.67%)
+scx_flash.bpf.o            flash_init             1015        979     -36 (-3.55%)
+scx_flatcg.bpf.o           fcg_dispatch           1143       1100     -43 (-3.76%)
+scx_lavd.bpf.o             lavd_enqueue          35487      35472     -15 (-0.04%)
+scx_lavd.bpf.o             lavd_init             21127      21107     -20 (-0.09%)
+scx_p2dq.bpf.o             p2dq_enqueue          10210       7854  -2356 (-23.08%)
+scx_p2dq.bpf.o             p2dq_init              3233       3207     -26 (-0.80%)
+scx_qmap.bpf.o             qmap_init             20285      20230     -55 (-0.27%)
+scx_rusty.bpf.o            rusty_select_cpu       1165       1148     -17 (-1.46%)
+scxtop.bpf.o               on_sched_switch        2369       2355     -14 (-0.59%)
+
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
-This patch implements the approach suggested by Yonghong Song in his
-review of Jiayuan's v1 patch [2]: fix only the hardcoded port issue
-while keeping the existing bpf_object__*() loading model, skipping
-the optional skeleton refactor.
+ kernel/bpf/verifier.c | 33 ++++++++++++++++++---------------
+ 1 file changed, 18 insertions(+), 15 deletions(-)
 
-[2] https://lore.kernel.org/bpf/6555dc32-b651-4c45-adaf-e3aecb013904@linux.dev/
-
- .../bpf/prog_tests/connect_force_port.c       | 19 +++++++++++++++----
- .../selftests/bpf/progs/connect_force_port4.c | 10 ++++++----
- .../selftests/bpf/progs/connect_force_port6.c | 10 ++++++----
- 3 files changed, 27 insertions(+), 12 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/connect_force_port.c b/tools/testing/selftests/bpf/prog_tests/connect_force_port.c
-index 24d553109f8d..f2729211147f 100644
---- a/tools/testing/selftests/bpf/prog_tests/connect_force_port.c
-+++ b/tools/testing/selftests/bpf/prog_tests/connect_force_port.c
-@@ -53,6 +53,9 @@ static int run_test(int cgroup_fd, int server_fd, int family, int type)
- 	__u16 expected_peer_port = 60000;
- 	struct bpf_program *prog;
- 	struct bpf_object *obj;
-+	struct bpf_map *map;
-+	unsigned short *port_ptr;
-+	size_t port_size;
- 	const char *obj_file = v4 ? "connect_force_port4.bpf.o" : "connect_force_port6.bpf.o";
- 	int fd, err;
- 	__u32 duration = 0;
-@@ -61,6 +64,14 @@ static int run_test(int cgroup_fd, int server_fd, int family, int type)
- 	if (!ASSERT_OK_PTR(obj, "bpf_obj_open"))
- 		return -1;
- 
-+	/* Auto assigns the port according to availability */
-+	map = bpf_object__find_map_by_name(obj, ".bss");
-+	if (ASSERT_OK_PTR(map, "find bss map")) {
-+		port_ptr = bpf_map__initial_value(map, &port_size);
-+		if (ASSERT_OK_PTR(port_ptr, "get bss initial value"))
-+			*port_ptr = ntohs(get_socket_local_port(server_fd));
-+	}
-+
- 	err = bpf_object__load(obj);
- 	if (!ASSERT_OK(err, "bpf_obj_load")) {
- 		err = -EIO;
-@@ -138,25 +149,25 @@ void test_connect_force_port(void)
- 	if (CHECK_FAIL(cgroup_fd < 0))
- 		return;
- 
--	server_fd = start_server(AF_INET, SOCK_STREAM, NULL, 60123, 0);
-+	server_fd = start_server(AF_INET, SOCK_STREAM, NULL, 0, 0);
- 	if (CHECK_FAIL(server_fd < 0))
- 		goto close_cgroup_fd;
- 	CHECK_FAIL(run_test(cgroup_fd, server_fd, AF_INET, SOCK_STREAM));
- 	close(server_fd);
- 
--	server_fd = start_server(AF_INET6, SOCK_STREAM, NULL, 60124, 0);
-+	server_fd = start_server(AF_INET6, SOCK_STREAM, NULL, 0, 0);
- 	if (CHECK_FAIL(server_fd < 0))
- 		goto close_cgroup_fd;
- 	CHECK_FAIL(run_test(cgroup_fd, server_fd, AF_INET6, SOCK_STREAM));
- 	close(server_fd);
- 
--	server_fd = start_server(AF_INET, SOCK_DGRAM, NULL, 60123, 0);
-+	server_fd = start_server(AF_INET, SOCK_DGRAM, NULL, 0, 0);
- 	if (CHECK_FAIL(server_fd < 0))
- 		goto close_cgroup_fd;
- 	CHECK_FAIL(run_test(cgroup_fd, server_fd, AF_INET, SOCK_DGRAM));
- 	close(server_fd);
- 
--	server_fd = start_server(AF_INET6, SOCK_DGRAM, NULL, 60124, 0);
-+	server_fd = start_server(AF_INET6, SOCK_DGRAM, NULL, 0, 0);
- 	if (CHECK_FAIL(server_fd < 0))
- 		goto close_cgroup_fd;
- 	CHECK_FAIL(run_test(cgroup_fd, server_fd, AF_INET6, SOCK_DGRAM));
-diff --git a/tools/testing/selftests/bpf/progs/connect_force_port4.c b/tools/testing/selftests/bpf/progs/connect_force_port4.c
-index 27a632dd382e..d2beff466902 100644
---- a/tools/testing/selftests/bpf/progs/connect_force_port4.c
-+++ b/tools/testing/selftests/bpf/progs/connect_force_port4.c
-@@ -14,6 +14,8 @@
- 
- char _license[] SEC("license") = "GPL";
- 
-+unsigned short port = 0;
-+
- struct svc_addr {
- 	__be32 addr;
- 	__be16 port;
-@@ -40,7 +42,7 @@ int connect4(struct bpf_sock_addr *ctx)
- 	if (bpf_bind(ctx, (struct sockaddr *)&sa, sizeof(sa)) != 0)
- 		return 0;
- 
--	/* Rewire service 1.2.3.4:60000 to backend 127.0.0.1:60123. */
-+	/* Rewire service 1.2.3.4:60000 to backend 127.0.0.1:port. */
- 	if (ctx->user_port == bpf_htons(60000)) {
- 		orig = bpf_sk_storage_get(&service_mapping, ctx->sk, 0,
- 					  BPF_SK_STORAGE_GET_F_CREATE);
-@@ -51,7 +53,7 @@ int connect4(struct bpf_sock_addr *ctx)
- 		orig->port = ctx->user_port;
- 
- 		ctx->user_ip4 = bpf_htonl(0x7f000001);
--		ctx->user_port = bpf_htons(60123);
-+		ctx->user_port = bpf_htons(port);
- 	}
- 	return 1;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 80a9eab79cac..186c912cf72b 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1372,9 +1372,9 @@ static bool is_spilled_scalar_reg(const struct bpf_stack_state *stack)
+ 	       stack->spilled_ptr.type == SCALAR_VALUE;
  }
-@@ -63,7 +65,7 @@ int getsockname4(struct bpf_sock_addr *ctx)
- 		return 1;
  
- 	/* Expose local server as 1.2.3.4:60000 to client. */
--	if (ctx->user_port == bpf_htons(60123)) {
-+	if (ctx->user_port == bpf_htons(port)) {
- 		ctx->user_ip4 = bpf_htonl(0x01020304);
- 		ctx->user_port = bpf_htons(60000);
- 	}
-@@ -79,7 +81,7 @@ int getpeername4(struct bpf_sock_addr *ctx)
- 		return 1;
- 
- 	/* Expose service 1.2.3.4:60000 as peer instead of backend. */
--	if (ctx->user_port == bpf_htons(60123)) {
-+	if (ctx->user_port == bpf_htons(port)) {
- 		orig = bpf_sk_storage_get(&service_mapping, ctx->sk, 0, 0);
- 		if (orig) {
- 			ctx->user_ip4 = orig->addr;
-diff --git a/tools/testing/selftests/bpf/progs/connect_force_port6.c b/tools/testing/selftests/bpf/progs/connect_force_port6.c
-index 19cad93e612f..7b5f3c6040cc 100644
---- a/tools/testing/selftests/bpf/progs/connect_force_port6.c
-+++ b/tools/testing/selftests/bpf/progs/connect_force_port6.c
-@@ -13,6 +13,8 @@
- 
- char _license[] SEC("license") = "GPL";
- 
-+unsigned short port = 0;
-+
- struct svc_addr {
- 	__be32 addr[4];
- 	__be16 port;
-@@ -39,7 +41,7 @@ int connect6(struct bpf_sock_addr *ctx)
- 	if (bpf_bind(ctx, (struct sockaddr *)&sa, sizeof(sa)) != 0)
- 		return 0;
- 
--	/* Rewire service [fc00::1]:60000 to backend [::1]:60124. */
-+	/* Rewire service [fc00::1]:60000 to backend [::1]:port. */
- 	if (ctx->user_port == bpf_htons(60000)) {
- 		orig = bpf_sk_storage_get(&service_mapping, ctx->sk, 0,
- 					  BPF_SK_STORAGE_GET_F_CREATE);
-@@ -56,7 +58,7 @@ int connect6(struct bpf_sock_addr *ctx)
- 		ctx->user_ip6[1] = 0;
- 		ctx->user_ip6[2] = 0;
- 		ctx->user_ip6[3] = bpf_htonl(1);
--		ctx->user_port = bpf_htons(60124);
-+		ctx->user_port = bpf_htons(port);
- 	}
- 	return 1;
+-static bool is_spilled_scalar_reg64(const struct bpf_stack_state *stack)
++static bool is_spilled_scalar_after(const struct bpf_stack_state *stack, int im)
+ {
+-	return stack->slot_type[0] == STACK_SPILL &&
++	return stack->slot_type[im] == STACK_SPILL &&
+ 	       stack->spilled_ptr.type == SCALAR_VALUE;
  }
-@@ -68,7 +70,7 @@ int getsockname6(struct bpf_sock_addr *ctx)
- 		return 1;
  
- 	/* Expose local server as [fc00::1]:60000 to client. */
--	if (ctx->user_port == bpf_htons(60124)) {
-+	if (ctx->user_port == bpf_htons(port)) {
- 		ctx->user_ip6[0] = bpf_htonl(0xfc000000);
- 		ctx->user_ip6[1] = 0;
- 		ctx->user_ip6[2] = 0;
-@@ -87,7 +89,7 @@ int getpeername6(struct bpf_sock_addr *ctx)
- 		return 1;
+@@ -20004,12 +20004,12 @@ static __init int unbound_reg_init(void)
+ }
+ late_initcall(unbound_reg_init);
  
- 	/* Expose service [fc00::1]:60000 as peer instead of backend. */
--	if (ctx->user_port == bpf_htons(60124)) {
-+	if (ctx->user_port == bpf_htons(port)) {
- 		orig = bpf_sk_storage_get(&service_mapping, ctx->sk, 0, 0);
- 		if (orig) {
- 			ctx->user_ip6[0] = orig->addr[0];
+-static bool is_stack_all_misc(struct bpf_verifier_env *env,
+-			      struct bpf_stack_state *stack)
++static bool is_stack_misc_after(struct bpf_verifier_env *env,
++				struct bpf_stack_state *stack, int im)
+ {
+ 	u32 i;
+ 
+-	for (i = 0; i < ARRAY_SIZE(stack->slot_type); ++i) {
++	for (i = im; i < ARRAY_SIZE(stack->slot_type); ++i) {
+ 		if ((stack->slot_type[i] == STACK_MISC) ||
+ 		    (stack->slot_type[i] == STACK_INVALID && env->allow_uninit_stack))
+ 			continue;
+@@ -20020,12 +20020,12 @@ static bool is_stack_all_misc(struct bpf_verifier_env *env,
+ }
+ 
+ static struct bpf_reg_state *scalar_reg_for_stack(struct bpf_verifier_env *env,
+-						  struct bpf_stack_state *stack)
++						  struct bpf_stack_state *stack, int im)
+ {
+-	if (is_spilled_scalar_reg64(stack))
++	if (is_spilled_scalar_after(stack, im))
+ 		return &stack->spilled_ptr;
+ 
+-	if (is_stack_all_misc(env, stack))
++	if (is_stack_misc_after(env, stack, im))
+ 		return &unbound_reg;
+ 
+ 	return NULL;
+@@ -20043,6 +20043,7 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+ 	 */
+ 	for (i = 0; i < old->allocated_stack; i++) {
+ 		struct bpf_reg_state *old_reg, *cur_reg;
++		int im = i % BPF_REG_SIZE;
+ 
+ 		spi = i / BPF_REG_SIZE;
+ 
+@@ -20070,13 +20071,15 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+ 		 * Construct a fake register for such stack and call
+ 		 * regsafe() to ensure scalar ids are compared.
+ 		 */
+-		old_reg = scalar_reg_for_stack(env, &old->stack[spi]);
+-		cur_reg = scalar_reg_for_stack(env, &cur->stack[spi]);
+-		if (old_reg && cur_reg) {
+-			if (!regsafe(env, old_reg, cur_reg, idmap, exact))
+-				return false;
+-			i += BPF_REG_SIZE - 1;
+-			continue;
++		if (im == 0 || im == 4) {
++			old_reg = scalar_reg_for_stack(env, &old->stack[spi], im);
++			cur_reg = scalar_reg_for_stack(env, &cur->stack[spi], im);
++			if (old_reg && cur_reg) {
++				if (!regsafe(env, old_reg, cur_reg, idmap, exact))
++					return false;
++				i += (im == 0 ? BPF_REG_SIZE - 1 : 3);
++				continue;
++			}
+ 		}
+ 
+ 		/* if old state was safe with misc data in the stack
 -- 
-2.53.0
+2.52.0
 
