@@ -1,154 +1,155 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F501365A08
-	for <bpf@vger.kernel.org>; Sun, 22 Mar 2026 16:46:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FB362D2496;
+	Sun, 22 Mar 2026 17:09:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774197997; cv=none; b=LfCmz3vIk++T48DNJO3hUlh6o+es+af+YY3gqW4De5iMx+AKfwoSGkTwXWr43qKt7htd9bjQKvIiAf/GE3zNvRCwytF5IFW1NxxuaAGSUIQP4EUaF/SFQgwuIKMpeYyi6gYeFwh0NVe76XuaBqtHmR55eRI6kB4bgLY8jNMvsg8=
+	t=1774199396; cv=none; b=QiPPjQnNOfg0KvjXTd5aismcCDtZS8NaP5KDm+hZ79VnRaK9vBX+1pB6how2vyQe93Fm0FtL9quIq4e97S1m/oGeovxGkq3SCVU69Y1pnP070i3LsUrAz8QjxISRSZGUq3I1gByjzCW2SZY/KxvOvtYhuT2zd6wszu9BDn51D0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774197997; c=relaxed/simple;
-	bh=heJXcVGbao+l4xu98TgSVGUkyWOmRwmmQFDnmM0vEN8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZzDZjRWpA+bbhU2HOvCdUpHytrTwnI7BNtpfpULQHjAw829R+VoOt/6sirNE/ydk3NxCBgbdM2Jl5cFljK2m57KxqMnGagzzIYU9dIrRTerkRnC+zKG7tJxci2Ne02Tm0wqeLf89x7xYETg4X+X4nmUUcLMkKIz81ZGVGCo92Ss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RyW5+/cj; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774199396; c=relaxed/simple;
+	bh=tSu7aABFW5bmb4o6ixU5ljhUjmqsSkMUjKnIQidBwmI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ahey/vLwWNEazsR+wZajEXRT5aOGi9LjoY1Q+tAr/2imUPL9Dj0e/oWniyhmK6sa1ySFNi92SjUxlP4e3FPY2AlzYb5Wv3dlPxkLIFP97c6Nh3Alq9mVG64urKM/hjLMibIhh4bqW0omoTXYteTxix7WbAfj5HDs8pJ5k7ZZsZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QZSa6eU7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RyW5+/cj"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-35b98def50bso2456249a91.0
-        for <bpf@vger.kernel.org>; Sun, 22 Mar 2026 09:46:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774197996; x=1774802796; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JAhWS23yo1BXeCK8GNy0gtQ1Q0zUM2QRvdrgWHtUcys=;
-        b=RyW5+/cj4WFzuqQ+xhrKJ2LdDnCAHwthQaV4n4yqRE0+x1/kxKKmhR3F3TnQ6gKjgL
-         03VibN3uKAP8DxLT5a3dzizj01Dr/rfv3o+ozosHl/zu6H/U6KBnRy+wbHZUgM1DQanp
-         X3EFsbiHyeKeh89Iw7WPw3JrGwZK4+iZ7gcFy/lAzHxAowZ8mP6IqmGbv7i3ljsfmeDe
-         qqvaVDOOp86DS2nvvbeX3Yk7leZ6xCd662RWTxrslMkHvwIni3nBKFlxPpk+YPMEviu8
-         /yk99oPiY+DTpJstudqw2+VHn6xGnODuyQ9ssLhqI1QCz1BWjUmAAkmserwzH5vR+nJ3
-         K8nQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774197996; x=1774802796;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JAhWS23yo1BXeCK8GNy0gtQ1Q0zUM2QRvdrgWHtUcys=;
-        b=UhKCUtSPyK6f1iumB0ErAN1Pcn1zBaqxLnq0anFvm38GadPWwpHyg3Nf6rsfREFGaQ
-         Y/j9u0bkDLn3CVctwcyEFM68O3o/gnwmrWvPWb44yDlkO4fX8iYGiPwv95RY4C3axnzz
-         tWI5BDUNbNQHfKstLqBqgwwW3CH5bF8VapIoW24/AZ0hIuEeQDmcU7rGkVa6m3RqIQm/
-         vTpl9f9kVaIh2JBHSdVM4XeEIj5Sb/44b63yiaWGDrL3CTxFbjihrjYf9OCTZRvAXjCl
-         UpSn81m1U2B0J+LLGsIZ4977l9KBMewko9QTf+V90rMzNOiAFIdneWMIyO9bmDGWzglM
-         GQXA==
-X-Gm-Message-State: AOJu0YxiGmGD6JILqSHJ50iRdHZdwQ+NUKi6+J2acXDoA3nmJBOu9Frg
-	PJJUSHaDpoPQj7Q0eU976yrwHJwWX6+u5bY7muXO8tpZfHT5eBgTp3aGD8sC0A==
-X-Gm-Gg: ATEYQzytVJ6sXwqAKhfWOPVFRl2Yrwi4HloeQ0oYj/St1owyn79Nd6GNpTVI0Zmrwya
-	rI4CVoJoj2tm4fzs3iHwcHD1EUznK/R6WEP18hX+8EPmAfQhkchqCYtAUpXqHOH//tzwlJa39XG
-	cQ5MQu4XYN8FOgl7Pqdi8OasFEdheOyD1bTmaY0ExOqP1+6ZL90HSf8POfurnBPh76FRed5cJDr
-	KKuqIF3++//m54JYl7pSJ88mdvGLJgCmEN60+uGGRbusxjni+TtthLP82xzMReOQ4X5wYazKN7t
-	kXoHxvm0duzR6pmSRiWOLKt0sgG5tPUdjWo8P2ibQiGu5++W+sIFqSuoMn39wqIY6QKfdufhDvL
-	qV8GiuZp7NHQmSltd/ZgfNwvd9keJ2kyw+IvucYLaedILlbWllNMpnNF5UqfdQ6P6bxwVJrN4mx
-	OCbX1FT1mMOoqaeenH7CAs12AIQg3jpciv8hDZ3XUqBUu4ywJSyYfQKCfv8WrtZO0wfynQJmdL5
-	NJDYtWsExrmfb9VJ/euIIZf7TqlnlVORANko/y/h9E3Uo1wo9Lqsfnqapvxig==
-X-Received: by 2002:a17:90b:528b:b0:35b:929f:7e92 with SMTP id 98e67ed59e1d1-35bd2cf802fmr7777971a91.18.1774197995789;
-        Sun, 22 Mar 2026 09:46:35 -0700 (PDT)
-Received: from localhost.localdomain ([2601:600:837f:c470:1879:8422:922b:e5d3])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c743a939af0sm5279274a12.16.2026.03.22.09.46.34
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 22 Mar 2026 09:46:35 -0700 (PDT)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: torvalds@linux-foundation.org
-Cc: bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@kernel.org
-Subject: [GIT PULL] BPF fixes for 7.0-rc5
-Date: Sun, 22 Mar 2026 09:46:33 -0700
-Message-ID: <20260322164633.4165-1-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QZSa6eU7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB3F8C19424;
+	Sun, 22 Mar 2026 17:09:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774199396;
+	bh=tSu7aABFW5bmb4o6ixU5ljhUjmqsSkMUjKnIQidBwmI=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=QZSa6eU71TORwghkenQy9Yi0CgJJ/MpO0T8QuvY/I4ifweOMXLWNrLi+jisS6Fr0q
+	 kAVHfu3oe6x0LPlDeXg645Rzde/rLO66DHuuJEkk74UgFiu3ClU6jMwnJ1QR+xAlFn
+	 Xg03LSf00GNIcrD3QVdIPJ/WX4R63oNUV2SeSgYjT2wsbOQyzRwdd6c9kbrYHXCcCQ
+	 226D9NredPVhvBn8oMeg+LF8BSNN8ktTvQmeJP7dT2uZX2xmokH2q0xDpyudZSS+4i
+	 Ky73BhJVpX+mMhTy9BA9Z89AoN4B+PX36jwVSfOjr2YtXROzqvy7xuOdZi3VMSwwv4
+	 p9arPHdptv8aw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id E0953CE0FFC; Sun, 22 Mar 2026 10:09:53 -0700 (PDT)
+Date: Sun, 22 Mar 2026 10:09:53 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Boqun Feng <boqun@kernel.org>
+Cc: Joel Fernandes <joelagnelf@nvidia.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	frederic@kernel.org, neeraj.iitr10@gmail.com, urezki@gmail.com,
+	boqun.feng@gmail.com, rcu@vger.kernel.org,
+	Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrea Righi <arighi@nvidia.com>, Zqiang <qiang.zhang@linux.dev>
+Subject: Re: [PATCH] rcu: Use an intermediate irq_work to start process_srcu()
+Message-ID: <902d80c5-02a9-46d0-9d6a-06e8cd94cd37@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <b4857e4f-5a8d-4ccc-9e8b-df57718e4aee@paulmck-laptop>
+ <ab7SQ3L1F-ap7mNl@tardis.local>
+ <492ba226-79c7-4345-b691-eb775082b799@paulmck-laptop>
+ <ab7eQ0QDNV9ZjQMN@tardis.local>
+ <609b5df1-aa06-46a9-8e93-0bf9eb8b7738@paulmck-laptop>
+ <ab71Vz9zmlVywWQT@tardis.local>
+ <4d2b07a9-e3fd-4a95-8924-0839bdfc28b3@paulmck-laptop>
+ <ab7623FFsiUOocHP@tardis.local>
+ <3486c7a2-73e6-46f2-a030-c9349ce964dd@paulmck-laptop>
+ <acAV-16pYQvy06aw@tardis.local>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <acAV-16pYQvy06aw@tardis.local>
 
-Hi Linus,
+On Sun, Mar 22, 2026 at 09:16:59AM -0700, Boqun Feng wrote:
+> On Sun, Mar 22, 2026 at 03:09:19AM -0700, Paul E. McKenney wrote:
+> > On Sat, Mar 21, 2026 at 01:08:59PM -0700, Boqun Feng wrote:
+> > > On Sat, Mar 21, 2026 at 01:07:45PM -0700, Paul E. McKenney wrote:
+> > > > On Sat, Mar 21, 2026 at 12:45:27PM -0700, Boqun Feng wrote:
+> > > > > On Sat, Mar 21, 2026 at 12:31:04PM -0700, Paul E. McKenney wrote:
+> > > > > > On Sat, Mar 21, 2026 at 11:06:59AM -0700, Boqun Feng wrote:
+> > > > > > > On Sat, Mar 21, 2026 at 10:41:47AM -0700, Paul E. McKenney wrote:
+> > > > > > > [...]
+> > > > > > > > > > +	raw_spin_lock_rcu_node(ssp->srcu_sup);
+> > > > > > > > > > +	delay = srcu_get_delay(ssp);
+> > > > > > > > > > +	raw_spin_unlock_rcu_node(ssp->srcu_sup);
+> > > > > > > > > > 
+> > > > > > > > > 
+> > > > > > > > > It was fixed differently in v2:
+> > > > > > > > > 
+> > > > > > > > > 	https://lore.kernel.org/rcu/20260320222916.19987-1-boqun@kernel.org/
+> > > > > > > > > 
+> > > > > > > > > I used _irqsave/_irqrestore just in case. Given it's an urgent fix,
+> > > > > > > > > overly careful code is probably fine ;-)
+> > > > > > > > > 
+> > > > > > > > > Thanks for the testing and feedback.
+> > > > > > > > 
+> > > > > > > > OK, I will try that one, thank you!
+> > > > > > > > 
+> > > > > > > > FYI, with my change on your earlier version, SRCU-T got deadlocks between
+> > > > > > > > the pi-lock and the workqueue pool lock.  Which might or might not be
+> > > > > > > > particularly urgent.
+> > > > > > > > 
+> > > > > > > 
+> > > > > > > I just checked my run yesterday, I also hit it. It's probably what
+> > > > > > > Zqiang has found:
+> > > > > > > 
+> > > > > > > 	https://lore.kernel.org/rcu/4c23c66f86a2aff8f2d7b759f9dd257b82147a17@linux.dev/
+> > > > > > > 
+> > > > > > > We have a queue_work_on() in srcu_schedule_cbs_sdp(), so
+> > > > > > > 
+> > > > > > >     srcu_torture_deferred_free():
+> > > > > > >       raw_spin_lock_irqsave(->pi_lock,...);
+> > > > > > >       call_srcu():
+> > > > > > >         if (snp == snp_leaf && snp_seq != s) {
+> > > > > > >            srcu_schedule_cbs_sdp(sdp, do_norm ? SRCU_INTERVAL : 0):
+> > > > > > > 	     if (!delay)
+> > > > > > >                queue_work_on(...)
+> > > > > > > 
+> > > > > > > I was about to reply to Zqiang, fixing that could be a touch design
+> > > > > > > decision. Since it's a per srcu_data work ;-) NR_CPUS x irq_work
+> > > > > > > incoming.
+> > > > > > 
+> > > > > > Just to be clear, SRCU-T is Tiny SRCU rather than Tree SRCU.  So perhaps
+> > > > > > lower priority, though perhaps not lower irritation.  ;-)
+> > > > > 
+> > > > > I see, there is a schedule_work() in srcutiny's
+> > > > > srcu_gp_start_if_needed(). But it couldn't cause deadlock on UP since
+> > > > > locks are (almost) no-op. Maybe we can make RCU torture only test it on
+> > > > > SMP?
+> > > > 
+> > > > Like this, you mean?  I will give it a shot tomorrow.
+> > > 
+> > > Yes, thanks!
+> > 
+> > OK, the previous patch did fine on short rcutorture testing aside from
+> > the !SMP lockdep splat, so I have started the test without pi_lock.
+> > 
+> > Longer term, shouldn't lockdep take into account the fact that on !SMP,
+> > the disabling of preemption (or interrupts or...) is essentially the same
+> > as acquiring a global lock?  This means that only one task at a time can
+> > be acquiring a raw spinlock on !SMP, so that the order of acquisition
+> > of raw spinlocks on !SMP is irrelevant?  (Aside from self-deadlocking
+> > double acquisitions, perhaps.)  In other words, shouldn't lockdep leave
+> > raw spinlocks out of lockdep's cycle-detection data structure?
+> 
+> Lockdep doesn't know whether a code path is UP-only, so it'll apply the
+> general locking rule to check. Similar as lockdep still detect
+> PREEMPT_RT locking issue for !PREEMPT_RT kernel. Maybe we can add a
+> separate kconfig to narrow down lockdep detection for UP-only if UP=y.
 
-The following changes since commit 1f318b96cc84d7c2ab792fcc0bfd42a7ca890681:
+But lockdep *does* know when it is running in a CONFIG_SMP=n kernel,
+correct?  In which case all the code paths are UP-only.
 
-  Linux 7.0-rc3 (2026-03-08 16:56:54 -0700)
+The situation with CONFIG_PREEMPT_RT=y is quite different: The motivation
+was for people running lockdep on CONFIG_PREEMPT_RT=n kernels to
+detect and fix locking issues that would otherwise only show up in
+CONFIG_PREEMPT_RT=y kernels.
 
-are available in the Git repository at:
+And of course, CONFIG_SMP=n kernels still need deadlock detection for
+mutexes and the like.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/bpf-fixes
-
-for you to fetch changes up to 4a04d13576fd69149b91672b5f1dc62eca272fa5:
-
-  selftests/bpf: Add a test cases for sync_linked_regs regarding zext propagation (2026-03-21 13:19:40 -0700)
-
-----------------------------------------------------------------
-- Fix how linked registers track zero extension of subregisters
-  (Daniel Borkmann)
-
-- Fix unsound scalar fork for OR instructions (Daniel Wade)
-
-- Fix exception exit lock check for subprogs (Ihor Solodrai)
-
-- Fix undefined behavior in interpreter for SDIV/SMOD instructions
-  (Jenny Guanni Qu)
-
-- Release module's BTF when module is unloaded (Kumar Kartikeya Dwivedi)
-
-- Fix constant blinding for PROBE_MEM32 instructions (Sachin Kumar)
-
-- Reset register ID for END instructions to prevent incorrect value
-  tracking (Yazhou Tang)
-
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-----------------------------------------------------------------
-Alexei Starovoitov (3):
-      Merge branch 'bpf-reset-register-id-for-bpf_end-value-tracking'
-      Merge branch 'bpf-fix-abs-int_min-undefined-behavior-in-interpreter-sdiv-smod'
-      Merge branch 'bpf-fix-unsound-scalar-forking-for-bpf_or'
-
-Daniel Borkmann (2):
-      bpf: Fix sync_linked_regs regarding BPF_ADD_CONST32 zext propagation
-      selftests/bpf: Add a test cases for sync_linked_regs regarding zext propagation
-
-Daniel Wade (2):
-      bpf: Fix unsound scalar forking in maybe_fork_scalars() for BPF_OR
-      selftests/bpf: Add tests for maybe_fork_scalars() OR vs AND handling
-
-Ihor Solodrai (2):
-      bpf: Fix exception exit lock checking for subprogs
-      selftests/bpf: Add tests for bpf_throw lock leak from subprogs
-
-Jenny Guanni Qu (2):
-      bpf: Fix undefined behavior in interpreter sdiv/smod for INT_MIN
-      selftests/bpf: Add tests for sdiv32/smod32 with INT_MIN dividend
-
-Kumar Kartikeya Dwivedi (1):
-      bpf: Release module BTF IDR before module unload
-
-Paul Chaignon (1):
-      selftests/bpf: Fix pkg-config call on static builds
-
-Sachin Kumar (1):
-      bpf: Fix constant blinding for PROBE_MEM32 stores
-
-Yazhou Tang (2):
-      bpf: Reset register ID for BPF_END value tracking
-      selftests/bpf: Add test for BPF_END register ID reset
-
- kernel/bpf/btf.c                                   |  24 ++++-
- kernel/bpf/core.c                                  |  43 ++++++--
- kernel/bpf/verifier.c                              |  33 +++++--
- tools/testing/selftests/bpf/Makefile               |   2 +-
- .../testing/selftests/bpf/progs/exceptions_fail.c  |  56 ++++++++++-
- .../testing/selftests/bpf/progs/verifier_bounds.c  |  94 ++++++++++++++++++
- tools/testing/selftests/bpf/progs/verifier_bswap.c |  22 +++++
- .../selftests/bpf/progs/verifier_linked_scalars.c  | 108 +++++++++++++++++++++
- tools/testing/selftests/bpf/progs/verifier_sdiv.c  |  58 +++++++++++
- 9 files changed, 416 insertions(+), 24 deletions(-)
+							Thanx, Paul
