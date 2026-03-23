@@ -1,207 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 844A33C9ED1;
-	Mon, 23 Mar 2026 17:44:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A1FD3CAE7B
+	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 17:46:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774287892; cv=none; b=u5jTreEZW/M/chc6oCxcD10J/FW9nSMCM9kqSk/LnRrbl8cFNYt1owPSob65qRcTlv1sMPAidAuTnyxvDiPtOFdZV8vMZVA4aXk74EuGozEM0Cpf1jk6ryzpoEbD8zzg71xm8fuj68ALBzGild9b6FY4w1I2OGCDFwLfa42xkmE=
+	t=1774288005; cv=none; b=GYjBgdObzr3KVLxkzuBs9J0sIncqIAZ8OWA9Hz1R376tZlsvPNc/NmFQtVhMSu1JDbteLpWCBx0I1EOIYNiFbG/7RpQg7uSwFiouLpy8JRrG9o34P3NF1RfgFr/ZuzU60fWJsPnk5qjBMRR2vz2ygmEx3ZMPRujN4f+LzD4Xh1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774287892; c=relaxed/simple;
-	bh=u/Khsl17x6Xmd5n0KKQ+7kJjdPlgeFr5Ltj5SWPXjok=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DeCSBU/Qlqz5n041KpLv+U49ngysm9eM4BRXM34T/3/WqSB4o25gtpShtYPTx3xSdPfRgVYpuyJKvZCc+MZ/qCbWQqS6eaLLOkBvYsUFaTHEsntrysFLCbccUhUoQVQOtNg8TqQwLZbdF8MP3COpag2cNSTuT3xIwpcD4O5/328=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QS+RqqJp; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774288005; c=relaxed/simple;
+	bh=u+IaULLqloKLkPKUNfwuuhLUl6obrLbG1y1vPmdRmh0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Ky2Ctcq5z1D5OcDomUSMLJZbormdSqfJAd9LUN1C7gB8rQ2Pq9/NWZhu+EF/jh9zf48trcS4IqQNgIcKeRWBt8D8HwLCJiQ03T5xe2NuxRFvVScg9lFNgvvnkVejNYrJyLLnJcuPS/fFc6LVxMF755+fRokYwCfwOtBaAn8SyvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AdcCVaZi; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QS+RqqJp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B7C1C4CEF7;
-	Mon, 23 Mar 2026 17:44:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774287892;
-	bh=u/Khsl17x6Xmd5n0KKQ+7kJjdPlgeFr5Ltj5SWPXjok=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=QS+RqqJp4xFBciwjIpM8IvOrkwSEkDs/o/d0JaHh1Zu2Ht7JZeqvqawy+CpTT0ETA
-	 oVPRtWyov7cBBH7RkabLeSHcwZoMSVe6xjGQ/uXZC6deBrAaksnEQGDqPDUjEL5FE1
-	 lT6DK0zBbh9fQvIKuUqR1oEjor8vCZyM2e4+KsdeIoP+rv5dOej6uBljW2d9yUV+7t
-	 +H6JjU4tavbT5GlVpYm2P1fBIyhO6J7qK8A3SYn3bepGyWPu1IdEMCjr3drKq7oKEN
-	 pQZheTC5Or9j0dY4jAg35xY1QBb042TYWEw9+b5H3Qy6GP7i2kyU2ABR1kq4I+AXk3
-	 GKfkufUC224mQ==
-Message-ID: <7b785e34-4d49-48d2-b438-afa1def3ec0f@kernel.org>
-Date: Mon, 23 Mar 2026 18:44:28 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AdcCVaZi"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-439bcec8613so2094118f8f.3
+        for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 10:46:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774288002; x=1774892802; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=g6ofWU/RGuBDRp7u1lmeiL07G9nwE/mejSfwBc/pmLQ=;
+        b=AdcCVaZikhoQ/5+g3TI4+IJCLZDgBUFGnifys8Da3yq0uQE73PWV+whPWXcpWs9BbV
+         d+I59ec8GbYyUiCVF6t0retVOIqYd196ddMnaFkO7XzYNPkFtuTuMQtSE7Q7ytgWOLLw
+         6QLW3sHHdVp0Gp8xcQ48oN+jPrBUDAR1yRHMAcLiN0vu5lp5aBwxVfk4VAj3SYafRNIh
+         mUVYKex754wrdfr2cWBD3PXQF46gM+ov15Lkc7TzhHU9dk3sA+n+oq2Pty6oYIubAHJw
+         SkDEJeLvKIVFs6tBqXCbXGBl4YS1go3uc9uvigttHmFAcw1QFEo+xZbg6+IoVXeVpd2b
+         0cnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774288002; x=1774892802;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g6ofWU/RGuBDRp7u1lmeiL07G9nwE/mejSfwBc/pmLQ=;
+        b=gOUP/fJxhN7409Ozep/3WNQr3vBT5os/wz0UQ9qDcgzszpuQgGoiZiSD3QeuDAkXX0
+         NV7h9V/GKbsl4p+vJK03jxVhSkZiXGUYogm5ekpax1BNhe2yvZ9zBtrOmrHgWPSt7gEO
+         0vN2GLTDuB5J+AyXFtdX/eWj0ePmV2fKK8p6FbZhmKYTOWn/7T9RCM/ipHlLPrUXwcS4
+         kGD5nAbskci0fd5kHdE0zam+ptNF3nRFjukzGxlpuge5hTdPOQuCu3shLjnavbzkVHjn
+         JD5AfH6+BJFaMZUABYAbnYqxoqHkq3VRmHoOWAupGyirDcCgIBD8Ua75c/S0qbw1uY8h
+         qqQw==
+X-Forwarded-Encrypted: i=1; AJvYcCU5eN1+DTp4UUK/f1lY6zG5eqBNN/q2SZgvMWwHk5QuzMulIlwIzPfBmjtgyY7g8c4JqEQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzt6z80UpIwp1ITmaOlsRyv+jLgTjqDnQmRybvPcnBvwta4ajM+
+	4y8W/Oa5ML3JaamigmIu5fbn2foo9FUUQSYtsC4SSEDdxOZzgaIp3Pnu
+X-Gm-Gg: ATEYQzyATxMD7yr2zxkWJC+OrXenfPD2WuGVQzx3bKnlLH4h8GMKDvRWjASwzt98Ier
+	q/Nm4hEb3dlVIS12N3dszi0tMJ0ha97wS856BtUoRaSgHlRdhHmkXIqhY6DyQoxmBYvxGLQC2wh
+	NV2hsu+y1R8LZQLG7Ay+wZffrKdl7HX0tXNVEPsiRgxyoFDNpiofnmDDMxBWlrLNpI1iLJZ0qiD
+	1GLF29aWvdZtg5BNsJma7jV9Hn/hSU+CoYJpiY4WpdYbZoAz/WeQkDLpSoGvJIW1iQ1Kc0idlsC
+	5NGielTAJ8s9757ZQXEeg8G3aqMUs82pNbLhHjgUgt0BqrFN2wousS/s2Ij0SFj+n16THkbDJWZ
+	K57JTeYIQEmb5el8lS1wFyBkEAVR/9WQym64n064c3gMfErFQYQMzv+LLkt/ut9jsDUKb7tNjqS
+	8GyLDJee9BdjCh5FY=
+X-Received: by 2002:a05:6000:4382:b0:43b:3f2d:7d43 with SMTP id ffacd0b85a97d-43b64242a62mr20427573f8f.8.1774288002374;
+        Mon, 23 Mar 2026 10:46:42 -0700 (PDT)
+Received: from localhost ([2620:10d:c092:500::5:a228])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b64717e97sm33027390f8f.35.2026.03.23.10.46.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Mar 2026 10:46:42 -0700 (PDT)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+To: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard
+ Zingerman <eddyz87@gmail.com>, Harishankar Vishwanathan
+ <harishankar.vishwanathan@gmail.com>, Shung-Hsi Yu
+ <shung-hsi.yu@suse.com>, Srinivas Narayana
+ <srinivas.narayana@rutgers.edu>, Santosh Nagarakatte
+ <santosh.nagarakatte@rutgers.edu>
+Subject: Re: [PATCH v2 bpf-next 5/6] selftests/bpf: Cover invariant
+ violation cases from syzbot
+In-Reply-To: <b82e9240f62200aae173a1c69c782f56ed7f8f21.1774025082.git.paul.chaignon@gmail.com>
+References: <cover.1774025082.git.paul.chaignon@gmail.com>
+ <b82e9240f62200aae173a1c69c782f56ed7f8f21.1774025082.git.paul.chaignon@gmail.com>
+Date: Mon, 23 Mar 2026 17:46:41 +0000
+Message-ID: <87ikamjv5q.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 01/16] set_memory: set_direct_map_* to take address
-To: "Kalyazin, Nikita" <kalyazin@amazon.co.uk>,
- "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
- "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
- "linux-mm@kvack.org" <linux-mm@kvack.org>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- "kernel@xen0n.name" <kernel@xen0n.name>,
- "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
- "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
- "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Cc: "pbonzini@redhat.com" <pbonzini@redhat.com>,
- "corbet@lwn.net" <corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>,
- "oupton@kernel.org" <oupton@kernel.org>,
- "joey.gouly@arm.com" <joey.gouly@arm.com>,
- "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
- "yuzenghui@huawei.com" <yuzenghui@huawei.com>,
- "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
- "will@kernel.org" <will@kernel.org>, "seanjc@google.com"
- <seanjc@google.com>, "tglx@kernel.org" <tglx@kernel.org>,
- "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
- "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
- "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
- "luto@kernel.org" <luto@kernel.org>,
- "peterz@infradead.org" <peterz@infradead.org>,
- "willy@infradead.org" <willy@infradead.org>,
- "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
- "lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
- "vbabka@kernel.org" <vbabka@kernel.org>, "rppt@kernel.org"
- <rppt@kernel.org>, "surenb@google.com" <surenb@google.com>,
- "mhocko@suse.com" <mhocko@suse.com>, "ast@kernel.org" <ast@kernel.org>,
- "daniel@iogearbox.net" <daniel@iogearbox.net>,
- "andrii@kernel.org" <andrii@kernel.org>,
- "martin.lau@linux.dev" <martin.lau@linux.dev>,
- "eddyz87@gmail.com" <eddyz87@gmail.com>, "song@kernel.org"
- <song@kernel.org>, "yonghong.song@linux.dev" <yonghong.song@linux.dev>,
- "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
- "kpsingh@kernel.org" <kpsingh@kernel.org>, "sdf@fomichev.me"
- <sdf@fomichev.me>, "haoluo@google.com" <haoluo@google.com>,
- "jolsa@kernel.org" <jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>,
- "jhubbard@nvidia.com" <jhubbard@nvidia.com>,
- "peterx@redhat.com" <peterx@redhat.com>, "jannh@google.com"
- <jannh@google.com>, "pfalcato@suse.de" <pfalcato@suse.de>,
- "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
- "riel@surriel.com" <riel@surriel.com>,
- "ryan.roberts@arm.com" <ryan.roberts@arm.com>,
- "jgross@suse.com" <jgross@suse.com>,
- "yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>,
- "kas@kernel.org" <kas@kernel.org>, "coxu@redhat.com" <coxu@redhat.com>,
- "kevin.brodsky@arm.com" <kevin.brodsky@arm.com>,
- "ackerleytng@google.com" <ackerleytng@google.com>,
- "yosry@kernel.org" <yosry@kernel.org>,
- "ajones@ventanamicro.com" <ajones@ventanamicro.com>,
- "maobibo@loongson.cn" <maobibo@loongson.cn>,
- "tabba@google.com" <tabba@google.com>, "prsampat@amd.com"
- <prsampat@amd.com>, "wu.fei9@sanechips.com.cn" <wu.fei9@sanechips.com.cn>,
- "mlevitsk@redhat.com" <mlevitsk@redhat.com>,
- "jmattson@google.com" <jmattson@google.com>,
- "jthoughton@google.com" <jthoughton@google.com>,
- "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
- "alex@ghiti.fr" <alex@ghiti.fr>,
- "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
- "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
- "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
- "dev.jain@arm.com" <dev.jain@arm.com>, "gor@linux.ibm.com"
- <gor@linux.ibm.com>, "hca@linux.ibm.com" <hca@linux.ibm.com>,
- "palmer@dabbelt.com" <palmer@dabbelt.com>, "pjw@kernel.org"
- <pjw@kernel.org>,
- "shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>,
- "svens@linux.ibm.com" <svens@linux.ibm.com>,
- "thuth@redhat.com" <thuth@redhat.com>, "wyihan@google.com"
- <wyihan@google.com>,
- "yang@os.amperecomputing.com" <yang@os.amperecomputing.com>,
- "Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
- "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
- "urezki@gmail.com" <urezki@gmail.com>,
- "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
- "gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>,
- "jiayuan.chen@shopee.com" <jiayuan.chen@shopee.com>,
- "lenb@kernel.org" <lenb@kernel.org>, "osalvador@suse.de"
- <osalvador@suse.de>, "pavel@kernel.org" <pavel@kernel.org>,
- "rafael@kernel.org" <rafael@kernel.org>,
- "vannapurve@google.com" <vannapurve@google.com>,
- "jackmanb@google.com" <jackmanb@google.com>,
- "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>,
- "patrick.roy@linux.dev" <patrick.roy@linux.dev>,
- "Thomson, Jack" <jackabt@amazon.co.uk>,
- "Itazuri, Takahiro" <itazur@amazon.co.uk>,
- "Manwaring, Derek" <derekmn@amazon.com>
-References: <20260317141031.514-1-kalyazin@amazon.com>
- <20260317141031.514-2-kalyazin@amazon.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260317141031.514-2-kalyazin@amazon.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-On 3/17/26 15:10, Kalyazin, Nikita wrote:
-> From: Nikita Kalyazin <kalyazin@amazon.com>
-> 
+Paul Chaignon <paul.chaignon@gmail.com> writes:
 
-Just a nit while reading over it once more: restate what the patch
-subject says.
-
-Like "Let's convert set_direct_map_*() to take an address instead of a
-page to prepare for adding helpers that operate on folios; it will be
-more efficient to convert from a folio directly to an address without
-going through a page first."
-
-> This is to avoid excessive conversions folio->page->address when adding
-> helpers on top of set_direct_map_valid_noflush() in the next patch.
-> 
-> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-> Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
+> This patch adds a selftest for the change in the previous patch. The
+> selftest is derived from a syzbot reproducer from [1] (among the 22
+> reproducers on that page, only 4 still reproduced on latest bpf tree,
+> all being small variants of the same invariant violation).
+>
+> The test case failure without the previous patch is shown below.
+>
+>   0: R1=ctx() R10=fp0
+>   0: (85) call bpf_get_prandom_u32#7    ; R0=scalar()
+>   1: (bf) r5 = r0                       ; R0=scalar(id=1) R5=scalar(id=1)
+>   2: (57) r5 &= -4                      ; R5=scalar(smax=0x7ffffffffffffffc,umax=0xfffffffffffffffc,smax32=0x7ffffffc,umax32=0xfffffffc,var_off=(0x0; 0xfffffffffffffffc))
+>   3: (bf) r7 = r0                       ; R0=scalar(id=1) R7=scalar(id=1)
+>   4: (57) r7 &= 1                       ; R7=scalar(smin=smin32=0,smax=umax=smax32=umax32=1,var_off=(0x0; 0x1))
+>   5: (07) r7 += -43                     ; R7=scalar(smin=smin32=-43,smax=smax32=-42,umin=0xffffffffffffffd5,umax=0xffffffffffffffd6,umin32=0xffffffd5,umax32=0xffffffd6,var_off=(0xffffffffffffffd4; 0x3))
+>   6: (5e) if w5 != w7 goto pc+1
+>   verifier bug: REG INVARIANTS VIOLATION (false_reg1): range bounds violation u64=[0xffffffd5, 0xffffffffffffffd4] s64=[0x80000000ffffffd5, 0x7fffffffffffffd4] u32=[0xffffffd5, 0xffffffd4] s32=[0xffffffd5, 0xffffffd4] var_off=(0xffffffd4, 0xffffffff00000000)
+>
+> R5 and R7 are prepared such that their tnums intersection results in a
+> known constant but that constant isn't within R7's u32 bounds.
+> is_branch_taken isn't able to detect this case today, so the verifier
+> walks the impossible fallthrough branch. After regs_refine_cond_op and
+> reg_bounds_sync refine R5 on the assumption that the branch is taken,
+> the impossibility becomes apparent and results in an invariant violation
+> for R5: umin32 is greater than umax32.
+>
+> The previous patch fixes this by using regs_refine_cond_op and
+> reg_bounds_sync in is_branch_taken to detect the impossible branch. The
+> fallthrough branch is therefore correctly detected as dead code.
+>
+> Link: https://syzkaller.appspot.com/bug?extid=c950cc277150935cc0b5 [1]
+> Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
 > ---
-
--- 
-Cheers,
-
-David
+>  .../selftests/bpf/progs/verifier_bounds.c     | 24 +++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+> index 3724d5e5bcb3..818efa08404d 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+> @@ -2070,4 +2070,28 @@ __naked void refinement_32bounds_not_overwriting_64bounds(void *ctx)
+>  	: __clobber_all);
+>  }
+>  
+> +/* Last jump can be detected as always taken because the intersection of R5 and
+> + * R7 32bit tnums produces a constant that isn't within R7's s32 bounds.
+> + */
+> +SEC("socket")
+> +__description("dead branch: tnums give impossible constant if equal")
+> +__success
+> +__flag(BPF_F_TEST_REG_INVARIANTS)
+> +__naked void tnums_equal_impossible_constant(void *ctx)
+> +{
+> +	asm volatile("										\
+> +	call %[bpf_get_prandom_u32];								\
+> +	r5 = r0;										\
+> +	r5 &= 0xfffffffffffffffc;	/* var_off32=(0; 0xfffffffc) */				\
+> +	r7 = r0;										\
+> +	r7 &= 0x1;			/* var_off32=(0x0; 0x1) */				\
+> +	r7 += -43;			/* s32=[-43; -42] & var_off32=(0xffffffd4; 0x3) */	\
+> +	if w5 != w7 goto +1;		/* on fallthrough var_off32=-44, not in s32 */		\
+w5 has bits 0,1 zero, rest unknown
+w7 has top bits known as 0xffffffd4, and bits 0,1 unknown
+If w5 == w7, their tnums must intersect to a single
+value = 0xffffffd4(-44). Which is outside of w7's range [-43; 42]. So
+the r10 = 0 branch should be unreachable.
+I guess the comment should be updated to the kernel style as well.
+Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
+> +	r10 = 0;										\
+> +	exit;											\
+> +"	:
+> +	: __imm(bpf_get_prandom_u32)
+> +	: __clobber_all);
+> +}
+> +
+>  char _license[] SEC("license") = "GPL";
+> -- 
+> 2.43.0
