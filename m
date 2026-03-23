@@ -1,158 +1,164 @@
-Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C9C93CCFB8
-	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 19:36:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B212B332EA0;
+	Mon, 23 Mar 2026 19:41:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774294618; cv=none; b=RcHWjNUfSuCuGQH4CEQQzMVyjdIqJhy639T00tcUa8L8eUhqkihMc8VUej40uRpm2CKdnk/4MzUwxqzdcIBl1FhieWiWf5c8EJVaH1EYcczMz7Is5yzvsF8e8BQB8ofiXsr1TjMbNsffVpjbFxBbEtQLny8N7gXebSvDglARnlc=
+	t=1774294902; cv=none; b=G0XQjFvpMxtOEgfQ5QpqiEGyxH5DwmP+MqlIzMeUYBdozhUhLdV3HPynNM+CQfVZX38LMShd/LFFIZUuE0mbZH2WFtkjZl4pddWMI2pnhqDFXL8PHDpfmWfWFFir30uHQY5ThGTIBdhZ+BjPjYVtFBjl5XhSJB0SgapQNNZWVTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774294618; c=relaxed/simple;
-	bh=G9OO2Kv5QeLkbjheI2I74LKjq3DWmT6aVPr5ajNjM4Q=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=H3cQjwBms+7oc/P/K5v+71ST3SoK8OEKE+7pVluq5kQ05hMSsbGGFcsBn6km6ByYZByLgydk1EZ5boUNoZPks4z9Nb8e/hoX3yVgPGcNneuvTmunQDMyuhx48Fc29itkCrgv2FIFODbuJK4cLrZjAWjI0KUHKR//zuQe1IGWsPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lZfyGPR9; arc=none smtp.client-ip=74.125.82.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774294902; c=relaxed/simple;
+	bh=s4uUGp0kBXZ5BdEk3ZqS7Hjj3JAwls9olQ6CAplQT8A=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UaGHN38H8N/GUsHOAgk9tnutvAKZkiNzhaIGmtXnMckXtX4dcYkTPWL39TqnCacoLbiOdXyHAVFgjdSy3bO87Q4J42nVjn+tp+MSmFZGBVLE7pVI8vZLrVcCdz5WO6zAgMqgZhSwR4D9+y8PiMT7U9w/ty/al1kiCSdKMfxeAjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=kjnVPtb/; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lZfyGPR9"
-Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-2c0bb213b16so8003772eec.0
-        for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 12:36:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774294613; x=1774899413; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=8XUe9Giyn2Aiul2sBA28hAN4F2Oj8/z3sjfV/nhvfRY=;
-        b=lZfyGPR9PiMm5w0twKXxcFywSgWuPAMSM+Lmod5iLh515BNFEG2b6x17/OKvZJTTDT
-         qA0mfOeOEZc6tmrkoyp25jqECntmTuz1FktJjhRDOiJGlUVHLN34LkNHYiduLxx5TE8J
-         ltygGcZdXN2YfSiXfK0fxwcdNL5tOuJVkKYp8FgiTu/wcmXoYKClMPLKvixdSkQpoLIN
-         6qp1q4xGumJyMSZJlugUOYTpCK9VTCGFq7PyW5BdcnYf4vjteR6O8Xke3S7xNzuuoKhF
-         Owc5PdDyU5EI7oS2n+Ga+lZJHZKwrBmcAta9I8Dtz1+PsJBCSRpxGZEPr0TE/lLkEeB+
-         Ye0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774294613; x=1774899413;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8XUe9Giyn2Aiul2sBA28hAN4F2Oj8/z3sjfV/nhvfRY=;
-        b=JopA5dKG0qZ4ZGn1vfLkqlmQZb+zP8FPhku+q9K0gTJ7eyiSmrqg+3M8roBcLzcr7j
-         vm68MnB4DWyM8EKi8lWDlkKH/N/z4XD4zLD27rrZqbejdSwtcRM2pdjOyXdP/ae+n3nn
-         ZXvF5zfEWg1ihI8riCla19/U1SgOUnr5X7P3457BIIbnjt/rl3jC/9ocVcLB5c0ZuqCy
-         ts3KVvWXvvs5mSLgBOm9QATJqK6q7nBF6cSQkxXkfQCAfrWc5qH5eXJ7u1258rS8JqWI
-         89C9e1PctYoomKIVsOzmx37VF4QMNgOomBY/X2qxYOQNVMWx0n/n2mojACgkxkmY3cXd
-         xJZA==
-X-Forwarded-Encrypted: i=1; AJvYcCUGcweguhS4l1ItbNU1HZfepdlyKDpQvirUO1tepuw+1KPuqhhK7lOTFB2EnfI7dcz//dk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwiiLTf5S5mqNDF1RxgR8BFduPf5AIL0lra0lklN2E9gfKjaTj
-	Q6oAw5iQI2vZDtb+gSyogVehyd1o4LWtsjGR97AyC+VtaQMS9ULF9Wqw
-X-Gm-Gg: ATEYQzz9Bk7hu9JXLn0W3c65VijNE5jL3Wr2sNEmUL74V+EX0kjqsYP+xmyRAs2eAxh
-	W9jhTW560+YIoawIKu89eWno7bURlfkUVfOkpk6UZMmkQZKDm5oVkvi2iXyCfLxVyXPSBUzPb+H
-	SBDbjlJUV9svbP2/6E5mac2XgF3IEBL92SXv/b1en7KzC7xZCAzC8/ISwz8u9ODI/HmoNMCjgvJ
-	U3ApFXtQ3xbLzFB5GyzFTw1LU+8W4uN8yvAXe2DJxKC3Ic3bhdqIylAA5KAZ3/I4eajqUsabVdh
-	O7GyivRvv2bbJcBYZ95o9vJY4T0LYkG9HrgGEonb6oE9cLgFFW4nghbdSGHrE0jTu4sfSdBM4KI
-	sxP6bMOyUFGCvVfYzyy9Sw6ocG0M4L25etTOrf12Eu517WGveKPitMbUIa61PGDLKOTWjybvZtR
-	XvqnNJArqb01BCdmLcM/84p0x6zzVWVPcpRcMD4S6Idda80OSU6Wl81oKQlLtR9BwyyE9GJ30UM
-	iqO4Pc=
-X-Received: by 2002:a05:7300:a287:b0:2be:617:2dec with SMTP id 5a478bee46e88-2c109710f75mr5178066eec.17.1774294613439;
-        Mon, 23 Mar 2026 12:36:53 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:45ca:895c:22d:457a? ([2620:10d:c090:500::2:8b17])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b14c99bsm13255302eec.1.2026.03.23.12.36.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Mar 2026 12:36:51 -0700 (PDT)
-Message-ID: <ada028bf2621bd489a09aa41cdd449cb160fbad6.camel@gmail.com>
-Subject: Re: [PATCH v2 bpf-next 1/2] bpf: Support 32-bit scalar spills in
- stacksafe()
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org, 
-	memxor@gmail.com
-Date: Mon, 23 Mar 2026 12:36:50 -0700
-In-Reply-To: <20260323022410.75444-1-alexei.starovoitov@gmail.com>
-References: <20260323022410.75444-1-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="kjnVPtb/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1774294899; x=1805830899;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=s4uUGp0kBXZ5BdEk3ZqS7Hjj3JAwls9olQ6CAplQT8A=;
+  b=kjnVPtb/z34aNKvWWYidZGxl3Fa5dVQO9Gl+Dh2Ezo/Q5NciJ/USavwa
+   gQFgMA/jjBAiW5lWdnRoLJBMO6/cEePhBUVE6ppuNFF3voEd865A3I/y1
+   UfEf4HkeHJzjLWmoyRGg0RNT1M3IfV/+lNsxIq3zUOtKvpig7He8mj4Xk
+   coxQW2Taoy6vuhTzDWXCR9NbhGZ4S6GYygInlUp8Hend50QLtwg2T/h76
+   JpeJgG4psL8MSbpiJw0yl4B+JQIfBsArmol58PDhurT/UUZaeDdJKqksM
+   WcW80f9cFRODh0yd9ra4SSc9UofjGRTCKRLL4i9VSpEXNn9iBow/Thybu
+   A==;
+X-CSE-ConnectionGUID: REjIOP+jQaOQoOcJQ3g0WQ==
+X-CSE-MsgGUID: dxpgqMxRRfme9NUsjRLe7g==
+X-IronPort-AV: E=Sophos;i="6.23,137,1770620400"; 
+   d="scan'208";a="62762544"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Mar 2026 12:41:37 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Mon, 23 Mar 2026 12:41:03 -0700
+Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.58 via Frontend Transport; Mon, 23 Mar 2026 12:41:00 -0700
+Date: Mon, 23 Mar 2026 20:40:59 +0100
+From: Daniel Machon <daniel.machon@microchip.com>
+To: Herve Codina <herve.codina@bootlin.com>
+CC: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Horatiu Vultur
+	<horatiu.vultur@microchip.com>, Steen Hegelund
+	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+	"Jesper Dangaard Brouer" <hawk@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Arnd
+ Bergmann <arnd@arndb.de>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+	<netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<bpf@vger.kernel.org>
+Subject: Re: [PATCH net-next 00/10] net: lan966x: add support for PCIe FDMA
+Message-ID: <20260323194059.jjphkep4teq5rzbc@DEN-DL-M70577.microsemi.net>
+References: <20260320-lan966x-pci-fdma-v1-0-ef54cb9b0c4b@microchip.com>
+ <20260323155204.0321db13@bootlin.com>
+ <20260323172640.2669232d@bootlin.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260323172640.2669232d@bootlin.com>
 
-On Sun, 2026-03-22 at 19:24 -0700, Alexei Starovoitov wrote:
+Hi Hervé,
 
-[...]
+> Hi Daniel,
+> 
+> On Mon, 23 Mar 2026 15:52:04 +0100
+> Herve Codina <herve.codina@bootlin.com> wrote:
+> 
+> > Hi Daniel,
+> >
+> > On Fri, 20 Mar 2026 16:00:56 +0100
+> > Daniel Machon <daniel.machon@microchip.com> wrote:
+> >
+> > > When lan966x operates as a PCIe endpoint, the driver currently uses
+> > > register-based I/O for frame injection and extraction. This approach is
+> > > functional but slow, topping out at around 33 Mbps on an Intel x86 host
+> > > with a lan966x PCIe card.
+> > >
+> > > This series adds FDMA (Frame DMA) support for the PCIe path. When
+> > > operating as a PCIe endpoint, the internal FDMA engine on lan966x cannot
+> > > directly access host memory, so DMA buffers are allocated as contiguous
+> > > coherent memory and mapped through the PCIe Address Translation Unit
+> > > (ATU). The ATU provides outbound windows that translate internal FDMA
+> > > addresses to PCIe bus addresses, allowing the FDMA engine to read and
+> > > write host memory. Because the ATU requires contiguous address regions,
+> > > page_pool and normal per-page DMA mappings cannot be used. Instead,
+> > > frames are transferred using memcpy between the ATU-mapped buffers and
+> > > the network stack. With this, throughput increases from ~33 Mbps to ~620
+> > > Mbps for default MTU.
+> > >
+> > > Patches 1-2 prepare the shared FDMA library: patch 1 renames the
+> > > contiguous dataptr helpers for clarity, and patch 2 adds PCIe ATU region
+> > > management and coherent DMA allocation with ATU mapping.
+> > >
+> > > Patches 3-5 refactor the lan966x FDMA code to support both platform and
+> > > PCIe paths: extracting the LLP register write into a helper, exporting
+> > > shared functions, and introducing an ops dispatch table selected at
+> > > probe time.
+> > >
+> > > Patch 6 adds the core PCIe FDMA implementation with RX/TX using
+> > > contiguous ATU-mapped buffers. Patches 7 and 8 extend it with MTU
+> > > change and XDP support respectively.
+> > >
+> > > Patches 9-10 update the lan966x PCI device tree overlay to extend the
+> > > cpu register mapping to cover the ATU register space and add the FDMA
+> > > interrupt.
+> > >
+> >
+> > Thanks a lot for the series taking care of DMA and ATU in PCIe variants.
+> >
+> > I have tested the whole series on both my ARM and x86 systems.
+> >
+> > Doing a simple wget on my x86 system, I moved from 3.8MB/s to 11.2MB/s and
+> > so the improvement is obvious.
+> >
+> > Tested-by: Herve Codina <herve.codina@bootlin.com>
+> >
+> 
+> Hum, I think I found an issue.
+> 
+> If I remove the lan966x_pci module (modprobe -r lan966x_pci), and reload
+> it (modprobe lan966x_pci), the board is not working.
+> 
+> The system performs DHCP requests. Those requests are served by my PC (observed
+> with Wireshark) but the system doesn't see those answers. Indeed, he continues
+> to perform DHCP requests.
+> 
+> Looks like the lan966x_pci module removal leaves the board in a bad state.
+> 
+> Without the series applied, DHCP request answers from my PC are seen by the
+> system after any module unloading / reloading.
+> 
+> Do you have any ideas of what could be wrong?
+> 
+> Best regards,
+> Hervé
 
-> @@ -20020,12 +20020,12 @@ static bool is_stack_all_misc(struct bpf_verifi=
-er_env *env,
->  }
-> =20
->  static struct bpf_reg_state *scalar_reg_for_stack(struct bpf_verifier_en=
-v *env,
-> -						  struct bpf_stack_state *stack)
-> +						  struct bpf_stack_state *stack, int im)
->  {
-> -	if (is_spilled_scalar_reg64(stack))
-> +	if (is_spilled_scalar_after(stack, im))
->  		return &stack->spilled_ptr;
-> =20
-> -	if (is_stack_all_misc(env, stack))
-> +	if (is_stack_misc_after(env, stack, im))
->  		return &unbound_reg;
+Thanks for testing this!
 
-unbound_reg has 64-bit bounds set to corresponding 64-bit min/max values.
-For a 32-bit spill, suppose that old state has a SPILL and MISC in the slot=
-,
-while new state has all MISC. This would lead to a
-regsafe(old_reg_with_32bit_bounds, &unbound_reg),
-which should return false. This is safe but conservative,
-maybe add a notion of unbound_reg32 to cover this case?
-Idk if this would have final veristat impact.
+As part of my testing I did unload/load the lan966x_switch module to ensure the
+ATU was properly reset and reconfigured, and that seemed to work fine. I must
+admit, I did not try with the lan966x_pci module.
 
-> =20
->  	return NULL;
-> @@ -20043,6 +20043,7 @@ static bool stacksafe(struct bpf_verifier_env *en=
-v, struct bpf_func_state *old,
->  	 */
->  	for (i =3D 0; i < old->allocated_stack; i++) {
->  		struct bpf_reg_state *old_reg, *cur_reg;
-> +		int im =3D i % BPF_REG_SIZE;
-> =20
->  		spi =3D i / BPF_REG_SIZE;
-> =20
-> @@ -20065,18 +20066,21 @@ static bool stacksafe(struct bpf_verifier_env *=
-env, struct bpf_func_state *old,
->  		if (i >=3D cur->allocated_stack)
->  			return false;
-> =20
-> -		/* 64-bit scalar spill vs all slots MISC and vice versa.
-> -		 * Load from all slots MISC produces unbound scalar.
-> +		/*
-> +		 * 64 and 32-bit scalar spills vs MISC/INVALID slots and vice versa.
-> +		 * Load from MISC/INVALID slots produces unbound scalar.
->  		 * Construct a fake register for such stack and call
->  		 * regsafe() to ensure scalar ids are compared.
->  		 */
-> -		old_reg =3D scalar_reg_for_stack(env, &old->stack[spi]);
-> -		cur_reg =3D scalar_reg_for_stack(env, &cur->stack[spi]);
-> -		if (old_reg && cur_reg) {
-> -			if (!regsafe(env, old_reg, cur_reg, idmap, exact))
-> -				return false;
-> -			i +=3D BPF_REG_SIZE - 1;
-> -			continue;
-> +		if (im =3D=3D 0 || im =3D=3D 4) {
-> +			old_reg =3D scalar_reg_for_stack(env, &old->stack[spi], im);
-> +			cur_reg =3D scalar_reg_for_stack(env, &cur->stack[spi], im);
-> +			if (old_reg && cur_reg) {
-> +				if (!regsafe(env, old_reg, cur_reg, idmap, exact))
-> +					return false;
-> +				i +=3D (im =3D=3D 0 ? BPF_REG_SIZE - 1 : 3);
-> +				continue;
-> +			}
+From what I hear, when you are in the bad state, TX is still working, so it's an
+RX issue. Could be the interrupt is not firing, so the napi poll is not
+scheduled.
 
-Did you try generalizing this to 8 and 16-bit cases, is there any veristat =
-impact?
+Anyway, I will have a look at it during the week. Will let you know.
 
->  		}
-> =20
->  		/* if old state was safe with misc data in the stack
+/Daniel
