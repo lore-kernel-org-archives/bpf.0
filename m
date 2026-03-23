@@ -1,140 +1,91 @@
-Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B534836E48E;
-	Mon, 23 Mar 2026 12:14:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.13.80.246
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 097BE36E48E;
+	Mon, 23 Mar 2026 12:16:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774268071; cv=none; b=G5RGcHfaCWLDCmXIPu9ngY18ImiKuoyDJiZSF/7XOEUAnPDBnXPxoO81/u/5cUI1N6ro9CibvaHDC1nTlAtt31tbfhHlPMtdu9SDINO3KC37G/wVnHsCaDPR5aRctSFCzuVXTdbUXHRfvlXR1bRdPCciHI/qyFWHyRewq9YMoEg=
+	t=1774268189; cv=none; b=hvwA7q39Tk/+5PzQtv199VdzomhNxc1DWKHbON1FWjk556aAbbU1yEUGKRwLG6N35SOucPnfvQOuqe44BCAS5d00kcVg5mWzMy7b6szja9tEa4Pn9Z60Zl3z0qjyPGJu05G1AhYw7CdIXLAxSgEbwj91wBGVuA6JKK0RxwwWDGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774268071; c=relaxed/simple;
-	bh=JDFJOo3C4ieqf6b9J66qmEMkcCJGi7ypWSdMFqBQqNM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TKBCoWTBIveg8cNSP3IcuGy+elfL7gCngtt4uXtJmCN7VfE3HfTlen9Ir2oW+Bnp+AE38565i1wBAf/R6RS/smUBHDsuEh/JTRfslrgwLEVWCMShEJb3MEMV8FeWPC4lUXAj8KU2YGX/dl8oeuMtZqGp9FTwkh946Q+44tJwtLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de; spf=pass smtp.mailfrom=tipi-net.de; dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b=SOPtgRK9; arc=none smtp.client-ip=194.13.80.246
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
+	s=arc-20240116; t=1774268189; c=relaxed/simple;
+	bh=l6YKKTvE+0HDQgg2kNS/cbXFbgNZUW8vt3hb7Nlybwg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YsDsvCZfSvkEP4qdmQlDRcdSD6XgZ1tLLgAWM9WWhRMVOWOdSztGbcxdOHn1Mvwg4MT0LZrolmgO9W9vPhe1T7KEk0eqo+35z/qbd6nx1Ab9kK/eWwcOHRBjV0VGiO2MW9nXw/a8BKSXVzVrh77e2Rlx5xn5OYi5w1yKPpTi0ZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HsPh/cIf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b="SOPtgRK9"
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 1DC1EA584B;
-	Mon, 23 Mar 2026 13:06:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
-	t=1774267595; h=from:subject:date:message-id:to:cc:mime-version:
-	 content-transfer-encoding; bh=mn7OQUIOIiAVazzzDqPYh2NpQEekYRXxeGu72cFxopI=;
-	b=SOPtgRK9trbTnhsPzQ8KGQChTirMhB3Cszfpk6Ewz3+0rDR9EUSWNUYRZc17jqwhelmIiu
-	x7sUdDNK+qPoXJZ/vMnkTzcEWH2JIQwJKoCf6F8J5Q3LZT/uKoGdynJAaBpVNN6meGz5A2
-	lET6/n3dtCxv8eGWdF+Dy9UE36t8V+p3THi/8UC5Nqh/O2nKCHhre7QNGQ2mPfuUCJu4en
-	QQgIAvClX0ExHVmFTeFdEy4fZeeZrNrcdptDSqO24nOFh8rmje7hdF14eQTQgEOPuMCPzX
-	+z5cN2Y42nxs8sjhhTyBH2e7WigyA0zwMl/oMPrIUIe/p2HwWsLKn7o4TIs7+A==
-From: Nicolai Buchwitz <nb@tipi-net.de>
-To: netdev@vger.kernel.org
-Cc: Justin Chen <justin.chen@broadcom.com>,
-	Simon Horman <horms@kernel.org>,
-	Nicolai Buchwitz <nb@tipi-net.de>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	bpf@vger.kernel.org
-Subject: [PATCH net-next v4 0/6] net: bcmgenet: add XDP support
-Date: Mon, 23 Mar 2026 13:05:29 +0100
-Message-ID: <20260323120539.136029-1-nb@tipi-net.de>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HsPh/cIf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEBD8C4CEF7;
+	Mon, 23 Mar 2026 12:16:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774268188;
+	bh=l6YKKTvE+0HDQgg2kNS/cbXFbgNZUW8vt3hb7Nlybwg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=HsPh/cIfbREWFdj+dQv07qgUnsqcrgTy0/lxb3mlBjdgLBZ/atlx9frBlYoqicPUT
+	 QLk7bcvu5Wp2epUmLE0FccYZDIR+xc9Oxqg+Y8iIzcpuwrhXCDpTstIX7kxtaFf90/
+	 geJ56gAIbRjSiPvTH4GwiUghWXunlaHG8Rjx7PDTS+xE2WmhHbYjf35lMS/SOc5J4L
+	 fkHA5uvW94DbBwjaAcEfg6iusrx673336OXukN3ewm1Hfisi4Gd0z753JGmeBy6EOC
+	 pSscCtgBXj0v9BkynspUZWsNujZ5tvVN0QsLjxKOvyvfAQhK1bBQSDyuXz9XzCBFqw
+	 WIuRItSPDUpAg==
+From: Christian Brauner <brauner@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Christian Brauner <brauner@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Jan Kara <jack@suse.cz>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	kernel-team@meta.com,
+	song@kernel.org,
+	Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: [PATCH v2] coredump: add tracepoint for coredump events
+Date: Mon, 23 Mar 2026 13:16:12 +0100
+Message-ID: <20260323-unbrauchbar-bandbreite-7122cb48ecd9@brauner>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260323-coredump_tracepoint-v2-1-afced083b38d@debian.org>
+References: <20260323-coredump_tracepoint-v2-1-afced083b38d@debian.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1405; i=brauner@kernel.org; h=from:subject:message-id; bh=l6YKKTvE+0HDQgg2kNS/cbXFbgNZUW8vt3hb7Nlybwg=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQe1Bfz6U5emy5jvLLx+7zmao7QK42l9v90kpuD39mZd B5cmWzQUcrCIMbFICumyOLQbhIut5ynYrNRpgbMHFYmkCEMXJwCMJHfQYwM6zNfeW2sVd0W/zgy 9op9w2KOuOlah0One02cwKHxu9buOMNf+ZkljWxZS1MLw9fuv3a26sUf+2kRS8Pm3Zt0L/jqzpS jvAA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
 
-Add XDP support to the bcmgenet driver, covering XDP_PASS, XDP_DROP,
-XDP_TX, XDP_REDIRECT, and ndo_xdp_xmit.
+On Mon, 23 Mar 2026 04:46:27 -0700, Breno Leitao wrote:
+> Coredump is a generally useful and interesting event in the lifetime
+> of a process. Add a tracepoint so it can be monitored through the
+> standard kernel tracing infrastructure.
+> 
+> BPF-based crash monitoring is an advanced approach that
+> allows real-time crash interception: by attaching a BPF program at
+> this point, tools can use bpf_get_stack() with BPF_F_USER_STACK to
+> capture the user-space stack trace at the exact moment of the crash,
+> before the process is fully terminated, without waiting for a
+> coredump file to be written and parsed.
+> 
+> [...]
 
-The first patch converts the RX path from the existing kmalloc-based
-allocation to page_pool, which is a prerequisite for XDP. The remaining
-patches incrementally add XDP functionality and per-action statistics.
+Applied to the vfs-7.1.misc branch of the vfs/vfs.git tree.
+Patches in the vfs-7.1.misc branch should appear in linux-next soon.
 
-Tested on Raspberry Pi CM4 (BCM2711, bcmgenet, 1Gbps link):
-- XDP_PASS: 943 Mbit/s TX, 935 Mbit/s RX (no regression vs baseline)
-- XDP_PASS latency: 0.164ms avg, 0% packet loss
-- XDP_DROP: all inbound traffic blocked as expected
-- XDP_TX: TX counter increments (packet reflection working)
-- Link flap with XDP attached: no errors
-- Program swap under iperf3 load: no errors
-- Upstream XDP selftests (xdp.py): pass_sb, drop_sb, tx_sb passing
-- XDP-based EtherCAT master (~37 kHz cycle rate, all packet processing
-  in BPF/XDP), stable over multiple days
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
 
-Changes since v3:
-  - Fixed page leak on partial bcmgenet_alloc_rx_buffers() failure:
-    free already-allocated rx_cbs before destroying page pool.
-    (Simon Horman)
-  - Fixed GENET_Q16_TX_BD_CNT defined as 64 instead of 32, matching
-    the documented and intended BD allocation. (Simon Horman)
-  - Moved XDP TX ring to a separate struct member (xdp_tx_ring)
-    instead of expanding tx_rings[] to DESC_INDEX+1. (Justin Chen)
-  - Added synchronize_net() before bpf_prog_put() in XDP prog swap
-    to ensure NAPI is not still running the old program.
-  - Removed goto drop_page inside switch; inlined page_pool_put
-    calls in each failure path. (Justin Chen)
-  - Removed unnecessary curly braces around case XDP_TX. (Justin Chen)
-  - Moved int err hoisting from patch 2 to patch 1 where it belongs.
-    (Justin Chen)
-  - Kept return type on same line as function name throughout, to
-    match existing driver style. (Justin Chen)
-    Note: checkpatch flags one alignment CHECK on bcmgenet_xdp_xmit_frame
-    as a result; keeping per Justin's preference.
-  - Fixed XDP_TX xmit failure path: use xdp_return_frame_rx_napi()
-    instead of page_pool_put_full_page() after xdp_convert_buff_to_frame
-    to avoid double-free of the backing page.
-  - Count XDP TX packets/bytes in TX reclaim so XDP traffic is visible
-    in standard network stats (ip -s link show).
-  - Added headroom check before TSB prepend in XDP_TX to prevent
-    out-of-bounds write when bpf_xdp_adjust_head consumed headroom.
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
 
-Changes since v2:
-  - Fixed xdp_prepare_buff() called with meta_valid=false, causing
-    bcmgenet_xdp_build_skb() to compute metasize=UINT_MAX and corrupt
-    skb meta_len. Now passes true. (Simon Horman)
-  - Removed bcmgenet_dump_tx_queue() for ring 16 in bcmgenet_timeout().
-    Ring 16 has no netdev TX queue, so netdev_get_tx_queue(dev, 16)
-    accessed beyond the allocated _tx array. (Simon Horman)
-  - Fixed checkpatch alignment warnings in patches 4 and 5.
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
 
-Changes since v1:
-  - Fixed tx_rings[DESC_INDEX] out-of-bounds access. Expanded array
-    to DESC_INDEX+1 and initialized ring 16 with dedicated BDs.
-  - Use ring 16 (hardware default descriptor ring) for XDP TX,
-    isolating from normal SKB TX queues.
-  - Piggyback ring 16 TX completion on RX NAPI poll (INTRL2_1 bit
-    collision with RX ring 0).
-  - Fixed ring 16 TX reclaim: skip INTRL2_1 clear, skip BQL
-    completion, use non-destructive reclaim in RX poll path.
-  - Prepend zeroed TSB before XDP TX frame data (TBUF_64B_EN requires
-    64-byte struct status_64 prefix on all TX buffers).
-  - Tested with upstream XDP selftests (xdp.py): pass_sb, drop_sb,
-    tx_sb all passing. The multi-buffer tests (pass_mb, drop_mb,
-    tx_mb) fail because bcmgenet does not support jumbo frames /
-    MTU changes; I plan to add ndo_change_mtu support in a follow-up
-    series.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs-7.1.misc
 
-Nicolai Buchwitz (6):
-  net: bcmgenet: convert RX path to page_pool
-  net: bcmgenet: register xdp_rxq_info for each RX ring
-  net: bcmgenet: add basic XDP support (PASS/DROP)
-  net: bcmgenet: add XDP_TX support
-  net: bcmgenet: add XDP_REDIRECT and ndo_xdp_xmit support
-  net: bcmgenet: add XDP statistics counters
-
- drivers/net/ethernet/broadcom/Kconfig         |   1 +
- .../net/ethernet/broadcom/genet/bcmgenet.c    | 641 +++++++++++++++---
- .../net/ethernet/broadcom/genet/bcmgenet.h    |  19 +
- 3 files changed, 564 insertions(+), 97 deletions(-)
-
---
-2.51.0
-
+[1/1] coredump: add tracepoint for coredump events
+      https://git.kernel.org/vfs/vfs/c/f30186b0c782
