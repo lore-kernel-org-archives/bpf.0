@@ -1,63 +1,63 @@
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4717D235C01
-	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 14:59:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDEA4282F3A
+	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 15:02:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774277945; cv=none; b=Pe9yUo+B83fA0L9XIZF30zuZ0hhrzV6YbxdlpYFWhYX9T3g+3Hd7zG/YSQ3JsOQSd3GZDpm8b50VXPaITDbnJFgStRs1XRCkHkuDtPThL61ag1lOwjgFv8hcjc4y7HBY2wZgwOoVe2qPTWQK2N9YEzXTepYERRs629X9GPeWq94=
+	t=1774278154; cv=none; b=QU8/48cdVxk8dQtDLQ09CgBGcxFbfNOfCwev0uLI1x7hoV7QcOburEmXpULL9SwZ5Bc2k40+xeRNaes3TDgYhOy2wqfn8wuR2A/jLPB5tsp1lDHb3CzA2lgVxRXwRNpfsx4JSl6yGX2VDqVuPbxJM1fBwlx7B/ZZOwehIE9IMlc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774277945; c=relaxed/simple;
-	bh=hZMa9/rXp/MLbEXo8hvit7Hb+0FLFCNzpG3ElI9yPZw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=IjTG2fNKFHMeNxD0r9SpUexbsGkU8oRMwZO71ORAVtDBUdbaeuH+9KMl6JgzBkhgN3F6iIHhXT/Zv71Kxy43kLUVU2iDVDvzTPBhSVn8LhJDjv/IABx+dguTxkPbfqpNg2gyNSPtCxzmOYiA1qjCRoYdrKSTE4OHfI89HIKrEzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=nYfowV2w; arc=none smtp.client-ip=209.85.222.169
+	s=arc-20240116; t=1774278154; c=relaxed/simple;
+	bh=gXfhl9lhcywYBxJG6LkAkyEKbR9RIj3HLf5+6lrBui4=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=FT+AoQ3L/+17t87ub7dhecwo7aa0Ei+hvyvmeppooo39PCerUIpgblc60xUAD50CTYpscyiBlVeizvaSxZ7SzMHf2bCTGSAcmzXtW4e1sFcmPCabmIw8n3sghLxXkW2+DDxrLGNikjGWcx3I7Lx0ammKiXYs8AlJKGqMa9JBjQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=iaDBMesQ; arc=none smtp.client-ip=74.125.82.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="nYfowV2w"
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-8cfbbdbaf3cso415996685a.0
-        for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 07:59:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="iaDBMesQ"
+Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-128b9b7e3edso6787443c88.0
+        for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 08:02:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1774277942; x=1774882742; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1774278152; x=1774882952; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=e3EqbF6NlwfEFVyEMMoJ9bGfig815fUbu/Fe0QXPdxA=;
-        b=nYfowV2wM3W8ufUg65rhTmeEEpQnBIcDlRIKzYLS3wKZsJFV+yG6Chbo8T+HFuSDub
-         lypcq7xGl4ftXqPozQmqWTz0lokwtN0H34mBx+I5AFC1uLB9VGxdAnWEQdoDRj95P/46
-         pEays4TWmmWucYzpV04W8jgVWca8/L1new6FpeGyxXqPNZqTpG7M54pTE34YhXpa9XJJ
-         iltew8n1qdVSgxcZhdxm7Joks48a7ZpWMF7y1chBFS9q/0ASqlZ6sFfZrE/mhy8fUzRV
-         kZQMRTXUGNXufvlgCVsdjLxLpI82QLjTt/B3UT9rxiO1Y1WKwbAoKiQXIMydOkgdcbhS
-         KxLQ==
+        bh=CEZSFroYeSHdlmwBQGznjgmllYZ0IeUu7fbFA/yec+E=;
+        b=iaDBMesQuyiarGSQE2enbpfk+QNnfT1Hnyz0D6aEsSPWsz+CJgdd7H9ruacN7KKV3t
+         fylUVyzcqBm+/OKGNXJkYer8AEMoGwiNKGsw8T0swGAMbtVueS7U2PxCfxMuOVKlMeS4
+         k/usxRDFqVNT1QEZxWq7lrooZOoH6aw3w7jTRlgkCRwqlmt8a/OED8yJ5oXrGaTaL4+R
+         +eDaO8ygDy6SKHjbQt+L+uDbbrjPRA/CDPqaak84h6AIEtbo58bR+iVcwzz02IlEmCUo
+         RyNSCwCYY/k6A5WmEIdb77oWGsBUhkqypp3eijGhzBXJ7jZt7gMkzwe3OoWXt4S+/FBl
+         jfpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774277942; x=1774882742;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
+        d=1e100.net; s=20251104; t=1774278152; x=1774882952;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=e3EqbF6NlwfEFVyEMMoJ9bGfig815fUbu/Fe0QXPdxA=;
-        b=PtFBLuAUl4Xw1pefPKiFDErb5YGwPWez3gaB23BFZUmJh1GmFVPKS1X3zYURwOp9ew
-         MUfaI2Z5RxtQTUjiPIkmqmdgbnBp6EkmRzGv3QIkFJYp4dxYtiuYLebUzfdm0E0rJ6jp
-         yXHyGmMG5b8SYETZP2ebqL0G7gCk+h1cWnY+wkaiUhkn1UXrtbBfISl7BrG2I3udvbDt
-         /VxoyVxjEd2NZFMfJO2LQ/BUC2F8yd0fVt0+P35d2e1h95KuKskboMGx23ID/MMeGzml
-         xcs1KDsAU56PKhtXZ27sq3BgXDHhvCw7f+QEAYb+6HmrJ/atsODXNUepFvp6SGwbrbe2
-         zxHw==
-X-Forwarded-Encrypted: i=1; AJvYcCUClC9EsjAE3R0l/PvsakNFL5Oo1u6hRr36l7UoH5MdFs0yKdj+B3rDDWns1J+GpvSDWzo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQvv3rmNqhpzNbP/9NFqnGem+RTFivwEkU7R4XhBlz5E25JkzO
-	xYI65XtoC/wWFW253Qoq8VFq4RkQH16ohJYuRmhVETYLp0nncUmHZoqvU3zVKbc5vG4=
-X-Gm-Gg: ATEYQzwMQyiuVD6l3ap1PMb2WfMnNzMfT0EObZJhI/sCc9S3G9Zs20A0rnwXVb7bmMi
-	J110xIy7uNKRPT4sRK0cjxCBHQoApvhQvA6+LnudEH9aiSpAL07MTSvLGXL3vHgh+FkbWIGe/j/
-	tzrLa0/S7GPMQwYCpJ7C/WDv6DmelSirCF0rjkq6DeG/aWKvB7qc0hOiY9hR0Kzop2LAFsKtusy
-	4TNO3bA1dGuLnjDs2EIYGiyvtzw+7YnSt+I4tBRLK/SiHrbxlutnIs7U6mTPeFUTPaGJsXcqApO
-	oG48E9DzrxO9yyU6RKI+TGkOlaOOj2SB88ZOUcllaDVaVVrpDQszJeFs692O7mTDc6UIFM4oSth
-	05B5eGmPhVi1IfTgY7FdqhhH3hpa4cw8uLSW8g4/GevcCObZa4/FBxazVzKEZZ7/5TcGOzFLMjp
-	we0OKAwlD2NMn2VJqkhehRhbw=
-X-Received: by 2002:a05:620a:198b:b0:8cf:cfbd:d1d5 with SMTP id af79cd13be357-8cfcfbdd9efmr1485631685a.23.1774277941785;
-        Mon, 23 Mar 2026 07:59:01 -0700 (PDT)
+        bh=CEZSFroYeSHdlmwBQGznjgmllYZ0IeUu7fbFA/yec+E=;
+        b=Qav0LIzlu7wvT/pCP4Egk57Y3OfrZH5kwX47+wspJHiUBz8qkjQUzAbFz4tacKKNwE
+         KYqRxW3iQDQZXt8V+s4Hh7/g8cTracsVw+o9gPt6XRD5+uq/DSfRX5oAt3YGN0/mmGeL
+         fu8bSEZLJFj9nFJ3w77UcEPhI+uOeUHcBF6idwABBs8Pv4/++avm9G1oEqTOO9VmKEvh
+         1JP0GGxn9z9vzUwkm5N8ZLzOqlhvF/BFqeT/yEGoC8M+QqSZDT6RuRfunnkKJva26tq3
+         IRmriN3nhylEsQB+dmVB7KmijznuDqKthz0oUAiHwo/CUyD7b8d95CN692xC/h2WnMjF
+         Q6RQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVDDVodE+uKRZAxvU9kMm5ZxyPynk01huKe7pgYPCfz7quyXvmg5fzlbdAX8oOvU6fIzBY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2iHn44J22A7ahAmrnJ+uPvEtFaB0ggTW+anlUumxi99X8fkg6
+	qroqcxq191hRqILU5Er/CtHr2i1pGhYAmw8QX2/DaoX/NKwF/aN+f9Pbm90fLviygV0=
+X-Gm-Gg: ATEYQzysJwu0s7lVu9gphyIrkjdZm/fFKrDBYhAvNXDyBi/UYKY+4HM4rhPpdWMjN7w
+	YPvwPqMyFpRcYnZa/r+2joIW2sR7EH5nnkdEVE1/X3gUODQrGhvsoQEZBnFf/NffBdOIKAag4DL
+	JPAMSWYMQoxZ33qqTFIbIWS30fz7r9rwya/F5zygNmKp6OQM75b/j+EoMv1fqwSB+D6yTn44cLK
+	sfx/8THrVCF8KjC9e6NvwlPO6a1M9cvmjclTCdVA3svBxEX4DWZf/JB2Moz9t2RSSglMJu0wXwW
+	apCcVRcTaj+0lP1trT8dhMVMqwdyuOqTzKyIYDdtIHqGf38FhQgF7lSoW41dpErFK4yaqOoyZ2x
+	mdfqsD+U9DMrjz9yq1s7txbCAhKFpgjYH3n7IG6nf8hroNDulsY7mMnw4vCVEplhJxoRo/ZVtVF
+	Q5jRXKFjqSbxlSGPSp12xEa70=
+X-Received: by 2002:a05:7022:20f:b0:119:e569:fbb4 with SMTP id a92af1059eb24-12a726e6b10mr6084355c88.35.1774278151492;
+        Mon, 23 Mar 2026 08:02:31 -0700 (PDT)
 Received: from localhost ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cfc9088df1sm829411485a.25.2026.03.23.07.59.01
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89c85247071sm86622826d6.15.2026.03.23.08.02.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Mar 2026 07:59:01 -0700 (PDT)
+        Mon, 23 Mar 2026 08:02:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,198 +66,103 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 23 Mar 2026 10:59:00 -0400
-Message-Id: <DHA91D8WS7HK.2N4F9P08CTI55@etsalapatis.com>
-To: "Yazhou Tang" <tangyazhou@zju.edu.cn>, <bpf@vger.kernel.org>
+Date: Mon, 23 Mar 2026 11:02:29 -0400
+Message-Id: <DHA941F6HVW3.RNGBXB3DVTC6@etsalapatis.com>
 Cc: <ast@kernel.org>, <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
  <andrii@kernel.org>, <martin.lau@linux.dev>, <eddyz87@gmail.com>,
  <song@kernel.org>, <yonghong.song@linux.dev>, <kpsingh@kernel.org>,
  <sdf@fomichev.me>, <haoluo@google.com>, <jolsa@kernel.org>,
- <tangyazhou518@outlook.com>, <shenghaoyuan0928@163.com>, <ziye@zju.edu.cn>
-Subject: Re: [PATCH bpf v3 2/3] selftests/bpf: Add test for large offset
- bpf-to-bpf call
+ <tangyazhou518@outlook.com>, <shenghaoyuan0928@163.com>, <ziye@zju.edu.cn>,
+ "Puranjay Mohan" <puranjay@kernel.org>
+Subject: Re: [PATCH bpf v3 3/3] bpf: Fix incorrect subprog ID in dumped
+ bpf_pseudo_call instructions
 From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Yazhou Tang" <tangyazhou@zju.edu.cn>, <bpf@vger.kernel.org>
 X-Mailer: aerc 0.20.1
 References: <20260323122254.98540-1-tangyazhou@zju.edu.cn>
- <20260323122254.98540-3-tangyazhou@zju.edu.cn>
-In-Reply-To: <20260323122254.98540-3-tangyazhou@zju.edu.cn>
+ <20260323122254.98540-4-tangyazhou@zju.edu.cn>
+In-Reply-To: <20260323122254.98540-4-tangyazhou@zju.edu.cn>
 
 On Mon Mar 23, 2026 at 8:22 AM EDT, Yazhou Tang wrote:
 > From: Yazhou Tang <tangyazhou518@outlook.com>
 >
+> In jit_subprogs(), restoring bpf_pseudo_call instructions truncates
+> the 32-bit call_imm into the 16-bit insn->off. For large BPF programs
+> (e.g., offsets > 32767), this silent truncation causes find_subprog()
+> to return an incorrect subprog ID, which is then stored in insn->imm.
+>
+> Consequently, "bpftool prog dump xlated" reads the corrupted insn->imm,
+> fails to resolve the subprogram name, and incorrectly displays a raw
+> kernel pointer.
+>
+> For example, dumping the xlated bytecode of the JIT-loaded selftest
+> introduced in patch 2/3 shows:
+>
+> Before this patch (with call_imm > 32767):
+>   4: (85) call pc+2#bpf_prog_115951674716e036_padding_subprog
+>   5: (85) call pc+3395#0xffffffff814aed4e
+>
+> After this patch:
+>   4: (85) call pc+2#bpf_prog_115951674716e036_padding_subprog
+>   5: (85) call pc+3395#bpf_prog_5dccd3f669bbe4e4_target_subprog
+>
+> This patch fixes the issue by passing the un-truncated 32-bit
+> env->insn_aux_data[i].call_imm directly to find_subprog().
+>
+> Note that the assignment to insn->off is retained. Although it still
+> truncates for large jumps, it remains correct for the vast majority
+> of BPF programs where the offset fits within s16 bounds. Keeping it
+> ensures backward compatibility for existing user-space tools that rely
+> on insn->off to display the relative offset. A comment is added to
+> explicitly clarify this truncation behavior.
+>
 
 Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-> Add a selftest to verify the verifier and JIT behavior when handling
-> bpf-to-bpf calls with relative jump offsets exceeding the s16 boundary.
->
-> The test utilizes an inline assembly block with ".rept 200000" to generat=
-e
-> a massive dummy subprogram. By placing this padding between the main prog=
-ram
-> and the target subprogram, it forces the verifier to process a bpf-to-bpf=
- call
-> with the imm field exceeding the s16 range.
->
-> The user-space test driver dynamically adapts to the host's configuration=
-:
-> - When JIT is enabled, it asserts that the program is successfully loaded=
-,
->   JIT-compiled, and executes correctly to return the expected value.
-> - When JIT is disabled, it asserts that the verifier cleanly rejects the
->   program with -EINVAL (or -ENOSPC if the log buffer is truncated), match=
-ing
->   the expected "offset out of range" error log.
->
-> Note: To ensure the test is both effective at load time and efficient at
-> runtime, two specific tricks are employed:
-> 1. Prevent Compiler Optimization: A volatile variable (magic_ret) is used
->    inside target_subprog(). This prevents the compiler from optimizing
->    the function away or aggressively inlining it, ensuring the subprogram
->    and the call instruction are strictly retained in the final BPF byteco=
-de.
-> 2. Prevent Execution Degradation: The massive padding subprogram is
->    conditionally called using a global volatile variable ("int zero", who=
-se
->    value is actually 0). This forces the verifier to statically analyze t=
-he
->    branch and calculate the giant jump offset, but allows the runtime to
->    completely bypass the 200,000 dummy instructions, preventing performan=
-ce
->    degradation during test execution.
-
-Nit: You can remove these notes imo, they are way too specific for the
-commit description and are relatively frequently used programming idioms
-for BPF.
-
-Another nit below.
-
+> Suggested-by: Puranjay Mohan <puranjay@kernel.org>
+> Fixes: 7105e828c087 ("bpf: allow for correlation of maps and helpers in d=
+ump")
 > Co-developed-by: Tianci Cao <ziye@zju.edu.cn>
 > Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
 > Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
 > Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
 > Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
 > ---
->  .../selftests/bpf/prog_tests/call_large_imm.c | 54 +++++++++++++++++++
->  .../selftests/bpf/progs/call_large_imm.c      | 37 +++++++++++++
->  2 files changed, 91 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/call_large_imm=
-.c
->  create mode 100644 tools/testing/selftests/bpf/progs/call_large_imm.c
+> Hi Puranjay,
 >
-> diff --git a/tools/testing/selftests/bpf/prog_tests/call_large_imm.c b/to=
-ols/testing/selftests/bpf/prog_tests/call_large_imm.c
-> new file mode 100644
-> index 000000000000..8968b3c3263f
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/call_large_imm.c
-> @@ -0,0 +1,54 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <test_progs.h>
-> +#include "call_large_imm.skel.h"
-> +
-> +/*
-> + * This test dynamically adapts to the current environment, and will suc=
-ceed
-> + * whether JIT is enabled or not.
-> + * 1. If JIT is enabled: The test case will successfully load and return
-> + *    the expected value.
-> + * 2. If JIT is disabled: It asserts that the verifier cleanly rejects t=
-he
-> + *    program with -EINVAL (or -ENOSPC) and outputs the expected error l=
-og.
-> + */
-> +
-> +void test_call_large_imm(void)
-> +{
-> +	struct call_large_imm *skel;
-> +	int err, prog_fd;
-> +	char log_buf[4096];
-> +
-> +	LIBBPF_OPTS(bpf_test_run_opts, opts);
-> +
-> +	skel =3D call_large_imm__open();
-> +	if (!ASSERT_OK_PTR(skel, "skel_open"))
-> +		return;
-> +
-> +	if (!env.jit_enabled)
-> +		bpf_program__set_log_buf(skel->progs.call_large_imm_test,
-> +					 log_buf, sizeof(log_buf));
-> +
-> +	err =3D call_large_imm__load(skel);
-> +
-> +	if (env.jit_enabled) {
-> +		if (!ASSERT_OK(err, "load_should_succeed_with_jit"))
-> +			goto cleanup;
-> +
-> +		prog_fd =3D bpf_program__fd(skel->progs.call_large_imm_test);
-> +		err =3D bpf_prog_test_run_opts(prog_fd, &opts);
-> +
-> +		if (ASSERT_OK(err, "prog_run_success"))
-> +			ASSERT_EQ(opts.retval, 3, "prog_retval");
-> +
-> +	} else {
-> +		ASSERT_ERR(err, "load_should_fail_in_interpreter");
-> +		ASSERT_TRUE(err =3D=3D -EINVAL || err =3D=3D -ENOSPC, "err_should_be_e=
-inval_or_enospc");
-> +
-> +		if (!ASSERT_OK_PTR(strstr(log_buf, "bpf-to-bpf call offset out of rang=
-e for interpreter"),
-> +				   "check_verifier_log_msg")) {
-> +			printf("Actual verifier log:\n%s\n", log_buf);
-> +		}
-> +	}
-> +
-> +cleanup:
-> +	call_large_imm__destroy(skel);
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/call_large_imm.c b/tools/t=
-esting/selftests/bpf/progs/call_large_imm.c
-> new file mode 100644
-> index 000000000000..5c59141cb474
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/call_large_imm.c
-> @@ -0,0 +1,37 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <linux/bpf.h>
-> +#include <bpf/bpf_helpers.h>
-> +
-> +/*
-> + * A volatile global variable is used here, so that padding_subprog()
-> + * will not be optimized, and it will not be really executed even if
-> + * it is successfully loaded (when JIT is enabled).
-> + */
-> +volatile int zero =3D 0;
-> +
-> +static __attribute__((noinline)) void padding_subprog(void)
-> +{
-> +	asm volatile ("					\
-> +		r0 =3D 0;					\
-
-Nit: Is it possible to make this value exactly as large as it needs to
-be to trigger the verifier failure? Along with an explanation as to why
-it is that exact size that triggers it.
-
-> +		.rept 200000;				\
-> +		r0 +=3D 0;				\
-> +		.endr;					\
-> +	" ::: "r0");
-> +}
-> +
-> +static __attribute__((noinline)) int target_subprog(void)
-> +{
-> +	/* A volatile variable is used here to prevent optimization. */
-> +	volatile int magic_ret =3D 3;
-> +	return magic_ret;
-> +}
-> +
-> +SEC("syscall")
-> +int call_large_imm_test(void *ctx)
-> +{
-> +	if (zero)
-> +		padding_subprog();
-> +	return target_subprog();
-> +}
-> +
-> +char LICENSE[] SEC("license") =3D "GPL";
+> As you mentioned in the last iteration, this still leaves insn->off wrong
+> but is generally fine. To clarify this for future readers, I have added
+> an inline comment explaining the truncation.
+>
+> I also debated whether to add a warning log when the truncation actually =
+occurs.
+> However, since the program will load and run perfectly fine after this fi=
+x,
+> I held off on adding it to avoid unnecessary log spam.
+>
+> Do you think a warning log is worth adding here, or is the code comment s=
+ufficient?
+>
+>  kernel/bpf/verifier.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 809ac2325dcb..a45a393365b4 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -23027,8 +23027,12 @@ static int jit_subprogs(struct bpf_verifier_env =
+*env)
+>  		}
+>  		if (!bpf_pseudo_call(insn))
+>  			continue;
+> +		/*
+> +		 * Note: If the original insn->imm is out of s16 bounds,
+> +		 * insn->off here will be a truncated value.
+> +		 */
+>  		insn->off =3D env->insn_aux_data[i].call_imm;
+> -		subprog =3D find_subprog(env, i + insn->off + 1);
+> +		subprog =3D find_subprog(env, i + env->insn_aux_data[i].call_imm + 1);
+>  		insn->imm =3D subprog;
+>  	}
+> =20
 
