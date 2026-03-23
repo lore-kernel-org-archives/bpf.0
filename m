@@ -1,281 +1,161 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD5E73E0243
-	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 19:58:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774295939; cv=none; b=HihZd8wN3anthw2ESsNxwlLgCcVU/1qE2hMxzaeyHseSjswgoitYpxqT+mD7+9fy3lPLIek/V3IHNgBVHJ+gPjr59PbMnZpMauEXDmeEN63xMxnNH3C5CAja2RM8+tQwYfACDys1qEL9tN4lljO08m3hKHWe9Ky+uamPy+7Y/54=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774295939; c=relaxed/simple;
-	bh=M4yO6TjBA0OEENXwXwdCe/SCclIYODB4pFdtXgeAVi8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FnySnVOqIHbL1tnCv41LISidksl9xG7UMQqevBaN9fsQwlt6C/2aBcjKb+o/I7rNwuLSG0styXfp9Bp3uIIIMg92Rq5MoFhWoFljGnO0etMEI1sEvxBsCQfzcZx3FggJAykhq2u4VtWLV2oCH69tBqfDC3n0NRDkmy0Bxa1tc54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pSVhEbdF; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4108136B076
+	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 20:01:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.175
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774296119; cv=pass; b=acXQcA9eAKXNimiQ2jof20fZe1ostFhbPycP0iPuXwpUy6LaMsjRXLOlU6dcNtJmzi5ECQ9FrMqeCn13GrN1M7xZTe9bAtdXNBAU8FJaMgWwC/S12aNEoG4KMdYSOQYXePKc0+CKHhYjQxg0sOTdJuR1d9SMbg/yuooHnpshw9I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774296119; c=relaxed/simple;
+	bh=Tlp+lJfyp95vJQs35m1dmjtFUmnMeO401FStvstIVLE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XcExQgFYwPOXoVJ/gy557bQJMS4L/owYLs8eX18dnZgpQTzXsgwd+68tKdTsuGYwDMWns8axlUL70hBPcvCRmo1IQdtUbppvgl3tK4T76p73ZqOWZVf5/zXrAFw2NQ9fzK9ge0R53ZlxVGHnmzVZCYQ52+eoztjWxFzzc+j4s2I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FfwJxvy3; arc=pass smtp.client-ip=209.85.208.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pSVhEbdF"
-Message-ID: <f9ae52c7-af13-4c94-8ca1-0cef5ce280e8@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774295935;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/kVdlw+YtDSJgKAX/XVHjl6DgM0SLzF4jkLh1QN/52Y=;
-	b=pSVhEbdFKVqchw4BPEE8GQEgakTQ6e1zXujeiPB2pQiJ94CpppC7T6WjJgOUh1xymsE0Rn
-	SHCWHztZCByZoxARNzw/dCc77oG934JGMqm7bTNx21V7cUMapzinKiZw7KJ5HnliF8W9u9
-	8JubAtf1oltEg8xhdkZx1BWRvslhTUE=
-Date: Mon, 23 Mar 2026 12:58:40 -0700
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FfwJxvy3"
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-38a27d39067so4002421fa.1
+        for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 13:01:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774296116; cv=none;
+        d=google.com; s=arc-20240605;
+        b=aT959i9LY7Z6LLywR7j7v3qrnWopcNnPh+K2HB7ZgWFL13oihLU+H68OFLFJgrqSQf
+         a+em7mR6uwpx0rC5dGMLfAxrGZcgMqBaRfOWLnI+UNYtRsSAGw+v7sUi12dkK0G+WiX2
+         AxrGg56fmn28XVAJqc/P/LpjE7Tfnf2Y5n+21LV6Xp0RnmROss1xFawNbzEKZE2Qg2uR
+         5Y/Fv8GXXrJiu9drSx74qsp0G9MevTzPoTT6SfHrh/ZM4JuDQ+12lqshMKn0SgBHrIaW
+         1Sq99Lo7m9LmWSLjLH1kqJevYAebYCwekAK/9HRDaU1ynaCIiNGyGTk7nQmwQ/faS2B0
+         nNEQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=wc4FZh89TF5QoyDdncx8+R5TP1/bGV0DGvKJ7mX0G2s=;
+        fh=A1ss7rxvEO0XpT/s0b1s9H4+sNz1aJGdrTnLwtDZ2lM=;
+        b=QwqBpoqbM8GO/5YyCNFAkNfnPZfn3ssG3M1BGqT/dBbs8kg203+ByAbBgaronMOZtc
+         wrgXjP+J12NFN37I9MB20zgviAqWHGSvHY86lAcwKhLyafVWXrpWOC5f+IJH7YS8UyCu
+         qYGO3HJGwGxjhOqmupwtHsUrUz2EYRr48i6X4K+7XD4zy8knrjZbdaUbCXwpXgaF7JRF
+         FGd7cy6DsS+TfDdJ3P5WrU6Pwufg4Dv4uGAjQvcIWIMkO5vKxmziFqx9WeONf1lCZqHS
+         BR0+TBJHSwjDqwl4diRQq6UGL7rR5aBQLhAG0+MdPDR9oETFU6KJtSyWQKqBtl3YLwX+
+         nL9Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1774296116; x=1774900916; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wc4FZh89TF5QoyDdncx8+R5TP1/bGV0DGvKJ7mX0G2s=;
+        b=FfwJxvy3o6ZSWo99rpdjavXxAmxrl6y1Li5eD4RweQTM3KWsaSplrQJhQ/W6lQW/lN
+         0trlHS0Jdn9xmIHFs4krURcXC3Sr1UTg7d30hv+ZVp45XinWJRcxcPh85qLo0pYbmxP2
+         RvUecojNXDUbbYxvNg0CDJF3ZRSGP5GCIolg5Xk2HmFQbvle7s+jk578jMi/pFUMsrDI
+         hMS40/B4VATfOUBr8dM1bl8S6onCPmiWyDATnShlZTG3/+OqUMPCv5HYrdZ/WNNcxCSt
+         VIRhDlove7cjpRDk0V1PPhn54Q2E4ahGw6O5oDFRa5BRxEYtmT8nEfdUvcrFaJYS/AAH
+         TOCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774296116; x=1774900916;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=wc4FZh89TF5QoyDdncx8+R5TP1/bGV0DGvKJ7mX0G2s=;
+        b=SSultz+wlE/qLUz3AX4KcJmTNCow53Ht8P7oGbhOgLBFPEFllZOAGXukJIwLgSMaIz
+         SEUai4J13JP5QGy38+Dq9t5FZM1L1vveHxUE5IbK2+198uKEOEwQtT2k6w7spHSKsz55
+         AppEQRMhdG6WJouJaeKXEyPcMcNdNlJEZCJJAIBnk9JCrBYlEpRHl9aSN1X8GVVHAWyg
+         zntXnFgqN5Wmkt25g88edD7f5htCBhsFIvyfBtT47TdBqIOBOS2KhTqFbajdc6HWyBjV
+         qcMONraze5PVcfRMsH/x6fD09sE/l28/LAXqPvlsTWImlzyR1XIsvQ/iArhOANDIy1jz
+         maLg==
+X-Forwarded-Encrypted: i=1; AJvYcCW90WI96ES1UfDJb8XCaDXpkak/I3x7AZEz29/9U9+WyU6oLCcRoF2KbfmA+Dwqdt26m6A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwsVm4hVXfEPtzOeywepbQU9zicZsXjvf8GhQXFE2hEyhafcSQM
+	wM8/zVya8CSGqlE7LHTxL/e6/4vZ7aa+N9QRk9Gpyypbw/lC+Sa8sYVTUQclQrurDWl2AJlpszD
+	22w8lkNy+vxvgm3ajxtVWRwPcgL0PhkAP8M/BAxVN
+X-Gm-Gg: ATEYQzxX3m2LhBTSlKPFiFKl9CFmkW9/eAbCwqtsvJfsfGrCKNzRWHR+jExnSMG0PUQ
+	LlYPyN8pH2nUWvnn78FK4i0NhT1OMtl0XmYqRgJOCfzWRWhjvbScFTMXRYDQU1yXrFYjxGYbrcE
+	Ac4VLze4PknxA+nzjnnacFkBwGOhg7/TljboaUhSep8U+DNCH8+jmamvi9mp8QzbyDOUW27goEc
+	lNSCEuFipJITbOXh67J5RxP1b0I+xQ1Ww9FZy/9prDxzVPwZ8D5SLi/s20t3iPN2hS2FWUrAwus
+	LbymXgTxhyUkXZZITSRcps68FJj83DsV004h
+X-Received: by 2002:a2e:bc83:0:b0:389:e6d4:e7cb with SMTP id
+ 38308e7fff4ca-38bf96d4978mr44138121fa.22.1774296115882; Mon, 23 Mar 2026
+ 13:01:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH dwarves v3 9/9] tests: Add a few clang true signature
- tests
-Content-Language: en-GB
-To: Alan Maguire <alan.maguire@oracle.com>,
- Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- bpf@vger.kernel.org, kernel-team@fb.com
-References: <20260320190917.1970524-1-yonghong.song@linux.dev>
- <20260320191003.1975752-1-yonghong.song@linux.dev>
- <0ee4bc7a-692f-46a1-9373-2f405e5305d1@oracle.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <0ee4bc7a-692f-46a1-9373-2f405e5305d1@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260318192450.3400774-1-joshwash@google.com> <20260320185546.6f7e95c0@kernel.org>
+In-Reply-To: <20260320185546.6f7e95c0@kernel.org>
+From: Joshua Washington <joshwash@google.com>
+Date: Mon, 23 Mar 2026 13:01:43 -0700
+X-Gm-Features: AaiRm52ue7c-WC307Fjz_fnNrmCK4W9Lk9Y6g6yN01Wq9hoWYtCeBnkluHofDOA
+Message-ID: <CALuQH+VpVpWq6yvRSCpyOSkWBEOXsKF05=fz67J8zWB8gcbzfw@mail.gmail.com>
+Subject: Re: [PATCH net-next v2] gve: add XDP metadata support for DQ RDA
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Willem de Bruijn <willemb@google.com>, Tim Hostetler <thostet@google.com>, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	Jordan Rhee <jordanrhee@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-
-On 3/23/26 8:41 AM, Alan Maguire wrote:
-> On 20/03/2026 19:10, Yonghong Song wrote:
->> Three tests are added.
->>
->> Test 1: VERBOSE=1 ./clang_parm_optimized.sh
->>    BTF:   char * foo(struct t * a, struct t * d);
->>    DWARF: char * foo(struct t * a, int b, struct t * d);
->> where parameber 'b' is unused.
->>
->> Test 2: VERBOSE=1 ./clang_parm_optimized_stack.sh
->>    BTF:   char * foo(struct t * a, struct t * d);
->>    DWARF: char * foo(struct t * a, int b1, int b2, int b3, int b4, int b5, int b6, struct t * d);
->> where parameters 'b1' to 'b6' are unused.
->>
->> Test 3: VERBOSE=1 ./clang_parm_aggregate.sh
->>    BTF:   long foo(long a__f1, struct t b, int i);
->>    DWARF: long foo(struct t a, struct t b, int i);
->> where the 'struct t' definition is 'struct t { long f1; long f2; };', and
->> a.f2 is not used in the function.
->>
->> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> thanks for the tests! Ran this through CI [1] and got a failure on aarch64:
+On Fri, Mar 20, 2026 at 6:55=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
+ote:
 >
-> 2: clang_parm_aggregate.sh
-> Validation of BTF encoding of true_signatures.
->     BTF and DWARF signatures should be different and they are not: BTF: long foo(struct t a, struct t b, int i); ; DWARF long foo(struct t a, struct t b, int i);
-> Test ./clang_parm_aggregate.sh failed
-> Test data is in /tmp/clang_parm_aggregate.sh.YC44qj
-
-Thanks for spotting this. I forgot to verify it on aarch64.
-For x86, we have:
-
-0x00000041:   DW_TAG_subprogram
-                 DW_AT_low_pc    (0x0000000000000020)
-                 DW_AT_high_pc   (0x000000000000002d)
-                 DW_AT_frame_base        (DW_OP_reg7 RSP)
-                 DW_AT_call_all_calls    (true)
-                 DW_AT_name      ("foo")
-                 DW_AT_decl_file ("/home/yhs/tmp/tmp4/t.c")
-                 DW_AT_decl_line (2)
-                 DW_AT_prototyped        (true)
-                 DW_AT_calling_convention        (DW_CC_nocall)
-                 DW_AT_type      (0x00000094 "long")
-                                  
-0x00000051:     DW_TAG_formal_parameter
-                   DW_AT_location        (DW_OP_reg5 RDI, DW_OP_piece 0x8)
-                   DW_AT_name    ("a")
-                   DW_AT_decl_file       ("/home/yhs/tmp/tmp4/t.c")
-                   DW_AT_decl_line       (2)
-                   DW_AT_type    (0x0000007c "t")
-                                  
-0x0000005d:     DW_TAG_formal_parameter
-                   DW_AT_location        (indexed (0x0) loclist = 0x00000010:
-                      [0x0000000000000020, 0x0000000000000023): DW_OP_reg4 RSI, DW_OP_piece 0x8, DW_OP_reg1 RDX, DW_OP_piece 0x8
-                      [0x0000000000000023, 0x000000000000002d): DW_OP_piece 0x8, DW_OP_reg1 RDX, DW_OP_piece 0x8)
-                   DW_AT_name    ("b")
-                   DW_AT_decl_file       ("/home/yhs/tmp/tmp4/t.c")
-                   DW_AT_decl_line       (2)
-                   DW_AT_type    (0x0000007c "t")
-                                                                   
-0x00000066:     DW_TAG_formal_parameter
-                   DW_AT_location        (DW_OP_reg2 RCX)
-                   DW_AT_name    ("i")
-                   DW_AT_decl_file       ("/home/yhs/tmp/tmp4/t.c")
-                   DW_AT_decl_line       (2)
-                   DW_AT_type    (0x00000027 "int")
-                                                                   
-0x00000070:     NULL
-
-So for x84, we can find true signature.
-
-For aarch64:
-
-0x00000041:   DW_TAG_subprogram
-                 DW_AT_low_pc    (0x0000000000000034)
-                 DW_AT_high_pc   (0x0000000000000044)
-                 DW_AT_frame_base        (DW_OP_reg31 WSP)
-                 DW_AT_call_all_calls    (true)
-                 DW_AT_name      ("foo")
-                 DW_AT_decl_file ("/home/yhs/tmp/t.c")
-                 DW_AT_decl_line (2)
-                 DW_AT_prototyped        (true)
-                 DW_AT_type      (0x00000090 "long")
-                                                                          
-0x00000050:     DW_TAG_formal_parameter
-                   DW_AT_location        (indexed (0x0) loclist = 0x00000014:
-                      [0x0000000000000034, 0x0000000000000040): DW_OP_reg0 W0, DW_OP_piece 0x8)
-                   DW_AT_name    ("a")
-                   DW_AT_decl_file       ("/home/yhs/tmp/t.c")
-                   DW_AT_decl_line       (2)
-                   DW_AT_type    (0x00000078 "t")
-                                                                          
-0x00000059:     DW_TAG_formal_parameter
-                   DW_AT_location        (indexed (0x1) loclist = 0x0000001c:
-                      [0x0000000000000034, 0x0000000000000044): DW_OP_reg2 W2, DW_OP_piece 0x8, DW_OP_reg3 W3, DW_OP_piece 0x8)
-                   DW_AT_name    ("b")
-                   DW_AT_decl_file       ("/home/yhs/tmp/t.c")
-                   DW_AT_decl_line       (2)
-                   DW_AT_type    (0x00000078 "t")
-                                                                          
-0x00000062:     DW_TAG_formal_parameter
-                   DW_AT_location        (DW_OP_reg4 W4)
-                   DW_AT_name    ("i")
-                   DW_AT_decl_file       ("/home/yhs/tmp/t.c")
-                   DW_AT_decl_line       (2)
-                   DW_AT_type    (0x00000027 "int")
-                                     
-0x0000006c:     NULL
-
-In this case, the parameter 'a' only uses the first 8 byte which encoded into W0. The argument 'b'
-uses W2/W3. For this particular case, the original signature should be used. I will try to find a
-way to resolve this.
-
-> ---
+> On Wed, 18 Mar 2026 12:24:50 -0700 Joshua Washington wrote:
+> > Commit 1b42e07af1ee ("gve: Add Rx HWTS metadata to AF_XDP ZC mode")
+> > exposes support for the XDP RX timestamping metadata operation in the D=
+Q
+> > RDA mode. While the operation works on its own, the intent was to enabl=
+e
+> > XDP metadata support for the queue format as a whole along with it.
+> > Currently bfp_xdp_adjust_meta fails because meta_valid is set to false.
 >
-> And for a kernel LLVM build (enabled with [2]) we also see:
->
-> 1: btf_functions.sh
-> Validation of BTF encoding of functions.
->     This may take some time.
->     ERROR: mismatch : BTF 'bool __scm_recv_common(struct sock *, struct msghdr *, struct scm_cookie *);' not found; DWARF ''
-> Test ./btf_functions.sh failed
-> Test data is in /tmp/btf_functions.sh.P23ipZ
->
-> This test compares BTF and DWARF representations, trying to ensure we see matches
-> between DWARF function signatures reported by pfunct for both BTF and DWARF. It might
-> be worth looking to see if we can refine the test here to handle functions with changed
-> signatures in DWARF, skipping those that have DW_CC_nocall say.
->
-> In the above case pfunct is reporting a signature with the flags field omitted. The
-> original signature looks like this:
->
-> static bool __scm_recv_common(struct sock *sk, struct msghdr *msg, struct scm_cookie *scm, int flags);
->
-> ...so we don't find an equivalent match in DWARF as a result.
+> bfp -> bpf
 
-Currently, without +true_signature flag, clang may still generate true signatures
-by filtering the dead arguments which are at the end of function parameters.
-I think we should require +true_signagure flag to do this.
-I will fix this. Thanks for spotting.
+Will make this change in V3.
 
 >
-> [1] https://github.com/alan-maguire/dwarves/actions/runs/23443008554/job/68198951034
-> [2] https://lore.kernel.org/dwarves/20260323130503.857217-1-alan.maguire@oracle.com/
+> > This change updates xdp_buff preparation to set meta_valid to true, so
+> > metadata can be fully used by XDP programs.
+> >
+> > Reviewed-by: Harshitha Ramamurthy <hramamurthy@google.com>
+> > Reviewed-by: Jordan Rhee <jordanrhee@google.com>
+> > Signed-off-by: Joshua Washington <joshwash@google.com>
+> > ---
+> >  drivers/net/ethernet/google/gve/gve_rx_dqo.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/net/ethernet/google/gve/gve_rx_dqo.c b/drivers/net=
+/ethernet/google/gve/gve_rx_dqo.c
+> > index 7924dce719e2..48945b4b6766 100644
+> > --- a/drivers/net/ethernet/google/gve/gve_rx_dqo.c
+> > +++ b/drivers/net/ethernet/google/gve/gve_rx_dqo.c
+> > @@ -877,7 +877,7 @@ static int gve_rx_dqo(struct napi_struct *napi, str=
+uct gve_rx_ring *rx,
+> >                                buf_state->page_info.page_address +
+> >                                buf_state->page_info.page_offset,
+> >                                buf_state->page_info.pad,
+> > -                              buf_len, false);
+> > +                              buf_len, true);
+> >               gve_xdp.gve =3D priv;
+> >               gve_xdp.compl_desc =3D compl_desc;
+> >
 >
->> ---
->>   tests/clang_parm_aggregate.sh       | 63 +++++++++++++++++++++++
->>   tests/clang_parm_optimized.sh       | 77 +++++++++++++++++++++++++++++
->>   tests/clang_parm_optimized_stack.sh | 77 +++++++++++++++++++++++++++++
->>   3 files changed, 217 insertions(+)
->>   create mode 100755 tests/clang_parm_aggregate.sh
->>   create mode 100755 tests/clang_parm_optimized.sh
->>   create mode 100755 tests/clang_parm_optimized_stack.sh
->>
->> diff --git a/tests/clang_parm_aggregate.sh b/tests/clang_parm_aggregate.sh
->> new file mode 100755
->> index 0000000..bf47c8c
->> --- /dev/null
->> +++ b/tests/clang_parm_aggregate.sh
->> @@ -0,0 +1,63 @@
->> +#!/bin/bash
->> +# SPDX-License-Identifier: GPL-2.0-only
->> +
->> +source test_lib.sh
->> +
->> +outdir=$(make_tmpdir)
->> +
->> +# Comment this out to save test data.
->> +trap cleanup EXIT
->> +
->> +title_log "Validation of BTF encoding of true_signatures."
->> +
->> +clang_true="${outdir}/clang_true"
->> +CC=$(which clang 2>/dev/null)
->> +
->> +if [[ -z "$CC" ]]; then
->> +	info_log "skip: clang not available"
->> +	test_skip
->> +fi
->> +
->> +cat > ${clang_true}.c << EOF
->> +struct t { long f1; long f2; };
->> +__attribute__((noinline)) static long foo(struct t a, struct t b, int i)
->> +{
->> +        return a.f1 + b.f1 + b.f2 + i;
->> +}
->> +
->> +struct t p1, p2;
->> +int i;
->> +int main()
->> +{
->> +        return (int)foo(p1, p2, i);
->> +}
->> +EOF
->> +
->> +CFLAGS="$CFLAGS -g -O2"
->> +${CC} ${CFLAGS} -o $clang_true ${clang_true}.c
->> +if [[ $? -ne 0 ]]; then
->> +	error_log "Could not compile ${clang_true}.c"
->> +	test_fail
->> +fi
->> +LLVM_OBJCOPY=objcopy pahole -J --btf_features=+true_signature $clang_true
->> +if [[ $? -ne 0 ]]; then
->> +	error_log "Could not encode BTF for $clang_true"
->> +	test_fail
->> +fi
->> +
->> +btf_optimized=$(pfunct --all --format_path=btf $clang_true |grep "foo")
->> +if [[ -z "$btf_optimized" ]]; then
->> +	info_log "skip: no optimizations applied."
->> +	test_skip
->> +fi
->> +
->> +btf_cmp=$btf_optimized
->> +dwarf=$(pfunct --all $clang_true |grep "foo")
->> +
->> +verbose_log "BTF: $btf_optimized  DWARF: $dwarf"
->> +
->> +if [[ "$btf_cmp" == "$dwarf" ]]; then
->> +	error_log "BTF and DWARF signatures should be different and they are not: BTF: $btf_optimized ; DWARF $dwarf"
->> +	test_fail
->> +fi
->> +test_pass
+> AI says:
+>
+> While this allows XDP programs to write custom metadata via
+> bpf_xdp_adjust_meta(), does the driver correctly propagate this metadata
+> to the SKB after XDP_PASS?
+>
+> https://sashiko.dev/#/patchset/20260318192450.3400774-1-joshwash%40google=
+.com
+> --
+> pw-bot: cr
 
-[...]
-
+Thanks for bringing this to my attention. I'll introduce a new patch
+updating the XDP_PASS paths to make use of `xdp_build_skb` kernel
+methods, which should handle metadata implicitly. Besides
+commonization, this also removes an extra copy in the XDP_PASS case
+for copy mode XDP.
