@@ -1,95 +1,96 @@
-Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD7A0383C64
-	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 22:53:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 960EF3112BC;
+	Mon, 23 Mar 2026 22:58:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774306384; cv=none; b=bNIOJ9vc/REA7Ge8/RkqjyU2B8Kyo6TLlrARagk3fxVAolH4fDfj9FFPyXlqeL/UU+hjFvdKb2l8d5as8KniYp4W05RE2EBdxWD0ldPnZ0SytzdKjonj3lbmwHEsvSiYqapzFvHUjJstLBrgBYht19IRSVDpr5CZodhT1hZiKZY=
+	t=1774306683; cv=none; b=ltN0xOo8wmOkekaF6lobGAYt7IkzwZDgAxsVnZkaFE47AiG+BadNqJJrAl570Npjgm3QIAi494WLltqT2T3AdfOOLTaPwU0F+5DL7m9x3T1kCeQcRBN82cu6Z1rkiJhS7LYGOw3IbuzTDI0yCkHdqisWz0vSlHhrCRjpphQthuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774306384; c=relaxed/simple;
-	bh=9hwFuFeafiCxNX2rf9FhnT9pc7zjaDB2weIabKgX7OU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AQffHwNTB58IurDb0KYhuFKZa+431km50kNl1hl20le4yoerrAFL2Qa+TOVsr8iEQgRQSCtJYK5eyzuE4kA4+hX5bmkiAJcdGhRjKWSbvWm/aTEW5CGYIhlvWi35AXnBjcT0gYLpj4ggpIc28KV1rxvXqnCkTIQ8YSvYvTzDAsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=olggVphl; arc=none smtp.client-ip=91.218.175.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1774306683; c=relaxed/simple;
+	bh=EiNat42VuczjsdffLBCVZQ9x3qS9l3P6OlVBuRMXo54=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=s5kBgT1kB1zgBbMUgGC/L3FXtLw6ixgBZFce9umz+9j1yynM0zE7rT8BSacjQq6tldRh0hAoumKhDvaSVeKPwiGmvA9zVwsCQZroyc3ZgwIMneoiGDbkQbEH8oO07fHdieuzpTM3vPjNfrw3ud2do8Qf6FuFFB4P7sf3ZHgZ3Lg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WV9CkoFD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="olggVphl"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774306380;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Awp8ntv1wXoCvwDEiN8wvX8nlownd7HDMmXlQU0i9yw=;
-	b=olggVphlIokpcHuBYoGKv7Q7UZn4g3UFDrxK0/sYODAwmF4/JG9yk4fcoGk6vDfXvKX11+
-	5EVAlo+G72nrmE3Rhv09qAwILSr9iQs2NzmfhQAeCLbHQxVSQxq4bs2Tub42BLlRNaarCw
-	TZMoZmav/8Hkegopqr5SavnwxRGBGyU=
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: bpf@vger.kernel.org
-Cc: 'Alexei Starovoitov ' <ast@kernel.org>,
-	'Andrii Nakryiko ' <andrii@kernel.org>,
-	'Daniel Borkmann ' <daniel@iogearbox.net>,
-	netdev@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	Fernando Fernandez Mancera <fmancera@suse.de>
-Subject: [PATCH bpf-next] bpf: test_run: Remove ipv6_bpf_stub usage
-Date: Mon, 23 Mar 2026 15:52:50 -0700
-Message-ID: <20260323225250.1623542-1-martin.lau@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WV9CkoFD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6A7AC4CEF7;
+	Mon, 23 Mar 2026 22:58:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774306683;
+	bh=EiNat42VuczjsdffLBCVZQ9x3qS9l3P6OlVBuRMXo54=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WV9CkoFDBmBIU6xtzEagghBdFHHY+EtZfn9qhuFP6Xufv2DTDU2/nu4VLTGSukXLw
+	 lQK7Skxq+8G/QLkY/NmSNRdmYoNLUw4OO3XcKER1sKYtutpIrH1s0EHnPPUAr9/LBL
+	 t+4+jkF1QIOjUlUMkKjxT2ieEGx2f8nxRLQm/GHFlsYBFLUodmJBFwO9GCuUpe0rn0
+	 rLe3WMYsTOs2bqTz1bP224rxJNrmAm7S6vHDlQWP2y5v1nSJQtz8hsDmYKQdKNQ3kg
+	 b/ez1GLrwyd0j7q06Pu2Ca9DrdwW5QEj3tawZlMXArqwlwE9yxsaryb9KUyTbUuL/U
+	 BBCJeNlNQFbuA==
+Date: Mon, 23 Mar 2026 18:58:01 -0400
+From: Sasha Levin <sashal@kernel.org>
+To: Alexey Dobriyan <adobriyan@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Petr Mladek <pmladek@suse.com>, Alexei Starovoitov <ast@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, David Gow <davidgow@google.com>,
+	Kees Cook <kees@kernel.org>, Greg KH <gregkh@linuxfoundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>, Helge Deller <deller@gmx.de>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Juergen Gross <jgross@suse.com>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Petr Pavlu <petr.pavlu@suse.com>, x86@kernel.org,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-modules@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH 0/2] kallsyms: show typed function parameters in
+ oops/WARN dumps
+Message-ID: <acHFeaE8QRV2NJzB@laps>
+References: <20260323164858.1939248-1-sashal@kernel.org>
+ <cdd61497-8d50-4fc5-aec8-47286e23d537@p183>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <cdd61497-8d50-4fc5-aec8-47286e23d537@p183>
 
-From: Martin KaFai Lau <martin.lau@kernel.org>
+On Mon, Mar 23, 2026 at 09:43:59PM +0300, Alexey Dobriyan wrote:
+>On Mon, Mar 23, 2026 at 12:48:55PM -0400, Sasha Levin wrote:
+>>  Function parameters (paraminfo_demo_crash):
+>>   uts      (struct new_utsname *) = 0xffffffffb8ca8d00
+>>    .sysname = "Linux"                        .nodename = "localhost"
+>>    .release = "7.0.0-rc2-00006-g3190..."     .version = "#45 SMP PRE"
+>>   file     (struct file *       ) = 0xffffa0a3c250acc0
+>>    .f_mode = (fmode_t)67993630               .f_op = (struct file_operations *)0xffffffffb7237620
+>>    .f_flags = (unsigned int)32769            .f_cred = (struct cred *)0xffffa0a3c2e06a80
+>>    .dentry = (struct dentry *)0xffffa0a3c0978cc0
+>
+>Should this be in crash's format?
+>
+>	struct dentry ffffffffffff0000
 
-bpf_prog_test_run_skb() uses net->ipv6.ip6_null_entry for
-BPF_PROG_TYPE_LWT_XMIT test runs.
+The format currently used comes from the kernel's own BTF show infrastructure.
+                                                                                                                                                                           
+crash's struct dentry ffffffffffff0000 syntax is specific to crash. drgn, GDB,
+bpftool, and the kernel's own BTF rendering all use the (struct type *)0xaddr
+notation we're already using. Adopting crash's format would make this output
+inconsistent with all other BTF-based output in the kernel, and would also lose
+the member name context (.dentry).
 
-It currently checks ipv6_bpf_stub before using ip6_null_entry.
-ipv6_bpf_stub will be removed by the CONFIG_IPV6=m support removal
-series posted at [1], so switch this check to ipv6_mod_enabled()
-instead.
-
-This change depends on that series [1]. Without it, CONFIG_IPV6=m is
-still possible, and net->ipv6.ip6_null_entry remains NULL until
-the IPv6 module is loaded.
-
-[1] https://lore.kernel.org/netdev/20260320185649.5411-1-fmancera@suse.de/
-
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Fernando Fernandez Mancera <fmancera@suse.de>
-Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
----
- net/bpf/test_run.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
-
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 56bc8dc1e281..fb25184ed03b 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -1157,15 +1157,12 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 	}
- 
- 	if (prog->type == BPF_PROG_TYPE_LWT_XMIT) {
--		if (!ipv6_bpf_stub) {
--			pr_warn_once("Please test this program with the IPv6 module loaded\n");
-+		if (!ipv6_mod_enabled()) {
-+			pr_warn_once("Please test this program with IPv6 enabled kernel\n");
- 			ret = -EOPNOTSUPP;
- 			goto out;
- 		}
- #if IS_ENABLED(CONFIG_IPV6)
--		/* For CONFIG_IPV6=n, ipv6_bpf_stub is NULL which is
--		 * handled by the above if statement.
--		 */
- 		dst_hold(&net->ipv6.ip6_null_entry->dst);
- 		skb_dst_set(skb, &net->ipv6.ip6_null_entry->dst);
- #endif
 -- 
-2.52.0
-
+Thanks,
+Sasha
