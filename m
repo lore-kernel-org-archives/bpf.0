@@ -1,78 +1,117 @@
-Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603F82FE056
-	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 10:40:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A100039182F;
+	Mon, 23 Mar 2026 10:55:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774262428; cv=none; b=pQa030B6TkofhKi8ODwGQTsWTpCt92gHVudr2xMcX/IMLx/nfWSelyRsGPHNeAc1GBkBYOm3W1PVUuDhETIdKLFgpfWy+KDKYI/HiSatRaYyh6ndcBkBjeTy7dkH89WBV8pSNH8WyayuXzMOfEWJnY1EEdrxbxLBCuy6XIWrBUY=
+	t=1774263339; cv=none; b=CtPbieN/987L4Xwhc5zYtxe5QLPwQ4aWMfOZSNKj4Be25AdBuZPxHRRRwx55ClEImvoFqJB9eIrpg8SGmAgrTOiYP9W+VGpdgqfWmBboBKG0anbpLevHB3rS4MV0vyYqGatw1YoJAPEQkl68XsecgVFRBPyTYYBfHjAoOLe9k50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774262428; c=relaxed/simple;
-	bh=7sQpMd6cWDtHl3KE2xX+Gv2NpKwFh5uJ6r1XDA4NJHo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=B4sqRiZH6BikZmKrJlLPFAQEmeLh0GX3XYve34DYdcYjVqfjlG1PkcTxLo4iSeK87cNO+KgcpgVCJvOzsD5vxI3kFKyIJtxqBCX6L54nPP1VG17F6kEAGalUCf7bky/DfjFgJGf9+C98aMq5pQLioOsRt+RdlO9JuIR2qrx1aS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Yfuusypf; arc=none smtp.client-ip=95.215.58.187
+	s=arc-20240116; t=1774263339; c=relaxed/simple;
+	bh=/XQ3gQewKAq/bs2UQvFI3h7XhIQ4cISZq9qWqCUznKM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=izJ87ezXbD916EIt0D7B2jpG/8UUQuM1FEtfl3VLyJrIGBB2ACO2yu8NfzqoQhQU0M1aWJeEHxkwUbi7p1Lk0JP6noLAiKCYCR5UqXwNtb9CurAM3+wxm5l+S+9aj2ITi/EBAg/zClrG37edTcsT9rSXZzsxLxKVdW8JqogPuMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hqmxpqRi; arc=none smtp.client-ip=95.215.58.183
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Yfuusypf"
-Message-ID: <a97a0392-bf2a-4b8d-8e0a-10388de6d408@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hqmxpqRi"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774262421;
+	t=1774263335;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7sQpMd6cWDtHl3KE2xX+Gv2NpKwFh5uJ6r1XDA4NJHo=;
-	b=YfuusypfF2Hpq73eWNaSK0VJ0fyQYB/T5wXF3HVN4aw2t7XAYQy+7ht+x2xCrgJBTODOXZ
-	537LhyxaUvnPTTFCY2+RjKHq1rfU2UeS9UVVcUNH1nDy4xU/uDMTfX3Kc7UemlGlHHF+pm
-	OOVvYin2ZDHxNLhO+KjPSljyZLL16Sc=
-Date: Mon, 23 Mar 2026 18:40:08 +0800
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=q5Ak7dvXPyrqvzoauNuH0igJ3NbYOWFBjuwz0qglwpw=;
+	b=hqmxpqRinKHE+jwRFu9AKTDDJSupH1UuWbIdMGoDYsi5Ful0cZYNTNyFGSATrILvwDe4aY
+	6BhkLsz6iRr9Yk0ul+219Kc4aS1PXL7002Q+95nD1d7VLCZhDTCP7wFIcODC+oCrImStNk
+	xyO5cDBzXseJJL6yR2bsGbL2oE/6014=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: netdev@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf v1 0/2] bpf: tcp: Fix null-ptr-deref in arbitrary SYN Cookie
+Date: Mon, 23 Mar 2026 18:54:48 +0800
+Message-ID: <20260323105510.51990-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v3] selftests/bpf: Improve connect_force_port
- test reliability
-To: Varun R Mallya <varunrmallya@gmail.com>, jiayuan.chen@linux.dev,
- yonghong.song@linux.dev, bpf@vger.kernel.org, sun.jian.kdev@gmail.com
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org
-References: <20260323081131.65604-1-varunrmallya@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20260323081131.65604-1-varunrmallya@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
+From: Jiayuan Chen <jiayuan.chen@shopee.com>
 
-On 3/23/26 4:11 PM, Varun R Mallya wrote:
-> The connect_force_port test fails intermittently in CI because the
-> hardcoded server ports (60123/60124) may already be in use by other
-> tests or processes [1].
->
-> Fix this by passing port 0 to start_server(), letting the kernel assign
-> a free port dynamically. The actual assigned port is then propagated to
-> the BPF programs by writing it into the .bss map's initial value (via
-> bpf_map__initial_value()) before loading, so the BPF programs use the
-> correct backend port at runtime.
->
-> [1] https://github.com/kernel-patches/bpf/actions/runs/22697676317/job/65808536038
->
-> Suggested-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
-> Reviewed-by: Sun Jian <sun.jian.kdev@gmail.com>
-> ---
-> This patch implements the approach suggested by Yonghong Song in his
-> review of Jiayuan's v1 patch [2]: fix only the hardcoded port issue
-> while keeping the existing bpf_object__*() loading model, skipping
-> the optional skeleton refactor.
->
-> [2] https://lore.kernel.org/bpf/6555dc32-b651-4c45-adaf-e3aecb013904@linux.dev/
-Thanks for picking this up.
+bpf_sk_assign_tcp_reqsk() does not validate the L4 protocol of the skb,
+only checking skb->protocol (L3). A BPF program that calls this kfunc on
+a non-TCP skb (e.g. UDP) will succeed, attaching a TCP reqsk to the skb.
 
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+When the skb enters the UDP receive path, skb_steal_sock() returns the
+TCP listener socket from the reqsk. The UDP code then casts this TCP
+socket to udp_sock and accesses UDP-specific fields at invalid offsets,
+causing a null pointer dereference:
+
+  BUG: KASAN: null-ptr-deref in __udp_enqueue_schedule_skb+0x19d/0x1df0
+  Read of size 4 at addr 0000000000000008 by task test_progs/537
+
+  CPU: 1 UID: 0 PID: 537 Comm: test_progs Not tainted 7.0.0-rc4+ #46 PREEMPT
+  Call Trace:
+   <IRQ>
+   dump_stack_lvl (lib/dump_stack.c:123)
+   print_report (mm/kasan/report.c:487)
+   kasan_report (mm/kasan/report.c:597)
+   __kasan_check_read (mm/kasan/shadow.c:32)
+   __udp_enqueue_schedule_skb (net/ipv4/udp.c:1719)
+   udp_queue_rcv_one_skb (net/ipv4/udp.c:2370 net/ipv4/udp.c:2500)
+   udp_queue_rcv_skb (net/ipv4/udp.c:2532)
+   udp_unicast_rcv_skb (net/ipv4/udp.c:2684)
+   __udp4_lib_rcv (net/ipv4/udp.c:2742)
+   udp_rcv (net/ipv4/udp.c:2937)
+   ip_protocol_deliver_rcu (net/ipv4/ip_input.c:209)
+   ip_local_deliver_finish (./include/linux/rcupdate.h:879 net/ipv4/ip_input.c:242)
+   ip_local_deliver (net/ipv4/ip_input.c:265)
+   __netif_receive_skb_one_core (net/core/dev.c:6164 (discriminator 4))
+   __netif_receive_skb (net/core/dev.c:6280)
+
+Solution
+
+Patch 1: Add L4 protocol validation in bpf_sk_assign_tcp_reqsk(). Check
+ip_hdr(skb)->protocol (IPv4) and ipv6_hdr(skb)->nexthdr (IPv6) against
+IPPROTO_TCP, returning -EINVAL for non-TCP skbs.
+Patch 2: Add selftest that calls bpf_sk_assign_tcp_reqsk() on a UDP skb
+and verifies the kfunc rejects it.
+
+Jiayuan Chen (2):
+  bpf: tcp: Reject non-TCP skb in bpf_sk_assign_tcp_reqsk()
+  selftests/bpf: Add protocol check test for bpf_sk_assign_tcp_reqsk()
+
+ net/core/filter.c                             |  6 ++
+ .../bpf/prog_tests/tcp_custom_syncookie.c     | 81 ++++++++++++++++++-
+ .../bpf/progs/test_tcp_custom_syncookie.c     | 79 ++++++++++++++++++
+ 3 files changed, 162 insertions(+), 4 deletions(-)
+
+-- 
+2.43.0
+
