@@ -1,274 +1,261 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C7F03D34B9
-	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 18:28:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064E02E2665;
+	Mon, 23 Mar 2026 18:32:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774290536; cv=none; b=fFlf4KrqYqUvrwuBd+DN0U820ys1KovTJid+3L0HDLlg2Xb6DPB9rh5oN0sGJErJAlziiftn2l4UiHgBK2U69wsyvhruWJrNxayG9WNNNbvHUkv4g9So0roJp8Dgn9DDbbDAbYTUmi8rHfHMYaKrtGl1zDptDvqScI1rOqwxW58=
+	t=1774290731; cv=none; b=T/CU2yIOCismrWQApPVZBSYFr50BkhvFWnh5v5O9XGl4e+HQYOoUs9oWSu8QI7EvCx25PFzdFB0d41Y5AienWPdnYl1MIp0oXMFr57KW8UX37IrXatl0yH/qYlj1RMzRe0kbfh09WxXg44Q4k7WHHRJzx45/bALGR7Ot4Iq7EKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774290536; c=relaxed/simple;
-	bh=UR0wxAJljmGCXJ+jOK6daMXItb/fhYUqkOWlYcn0dBg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=n5CqB8JcRE2M00c4K882pPONYD2nBjodbgz5FvlNZweo30eG0Q9ClvynRKnxzXlK4OFlXMsJtnoJF/NXIPWw3vt3CCuQJ8J3oKGiaLjRQpVX5JaL/c2tFsyT6zSYfXNFsA3i/IECXhARrXMLd20tvii17Ul/3tZoR27e6ikC4+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h4yPnwc6; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774290731; c=relaxed/simple;
+	bh=sotfvo0nesaSqmF8KoCTyd8MGYvSoQDCsni9TVbHztU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tdErb1C+AGel0gVFHqGr3m3BnfavdY+7UINS3FH+o6Pxukmpj9U7pi08FrxQW57LHevg9SmvP4NVvK0sqQVag+xnq1+eDtiCerydtglSTVfGIMIQyKT7+zLSv0KJMt2652fzFg+lXwUFcA9zA7If8iNpJ6FBARJrbcjcUVNeBRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vRRWBHBL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h4yPnwc6"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-439c56e822eso455055f8f.2
-        for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 11:28:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774290532; x=1774895332; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kaHp2/FUvMOtomlFmeSVzxYjb6RSDeBp4ispDMEXgtk=;
-        b=h4yPnwc6oAOg7qIjdmRodCa4OOKjuVrCmao4it7X4RrXzjrYRoe/eXkvwvq6FfvI7V
-         fv3ueLwiBdvzLNmCDhxvlZUw+gzkjibLQNGPjjnfUl/WYErlzM7jFDgGoZm7Fdl2Vd6s
-         XsRqRI60Dz6/q3CHVNlAPiT3cjtZMMo1SX/aLyeDddBcepEvJ6UGNP5wU1b8uvdbt1WB
-         /S6kZfiseZKU7ek4VI4EWz8r+mi+kHl/YVHI1y4bGni6zptV9uArOwYZyfBDYRZGpiiA
-         08ZdW5Ne8E1QdtOmrZhydyDyff99T/14iWT5jJJ+Zfo2gp2QpP7n77SCrHS8axnJ5cUY
-         9VEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774290532; x=1774895332;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=kaHp2/FUvMOtomlFmeSVzxYjb6RSDeBp4ispDMEXgtk=;
-        b=aayGB0ot9h8Kk9QYoKG8xerGNgXi4VCMg9Hl3CbXkXfNXwKmcAJU72tF9P9SyRMGv0
-         xIriiKXXegaRR3nMYdb+tY09gF4XLbSmwk93Dj0Mwn/dncbfKLWvQ70epz+H2NkGmqiI
-         +KmR5URPKtEpbMyfZXf39tLW4hn5RBEIUHMBR3guI9Akmt163xGTdBETmvrKTE6hCHdM
-         apB1jM1RIHSksPrrsllIH81ln5nq2I7zF2Zhkhj4ZIFaftOVzUu3KL+tnq4DPN9mjanJ
-         NNJauPJO8ES9CetBHTt+Dw1q6wVJmDiv9tniQLAi/VNoEuv3i9+uSfh9d4LZBSlXW8Zv
-         +rkw==
-X-Forwarded-Encrypted: i=1; AJvYcCUjSYVMi62NW3is+QJESFIw5iqs6BD9JggM0sdg5ZQzfqNmKGMrzGLbA4bp4A+XmSmxAcM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxfmPKfWUWubracjlgkFJjBCDRqBtkpND2FsG/kfOxShp2nrDPu
-	m0H1jsM4vQHsiqvhkvGDnDj4wE7p278CKo5+AWrsfxdmTEi7IUXGWl+N
-X-Gm-Gg: ATEYQzxy8xTddyomFE6T+ejsaSDgrznyoWMac1WeAtTzr4hopSQN/WbI7cbrhvDDcfs
-	qK0qNx0wxHdhhGEoMxWVVXYxWe42XCi5VR9UyXXSD9gF1NP6mriOVKhyTWeEcf15sYWxnRU2wI4
-	5gfK/THoxFEvEveiTehzHzbvMoILMjoZLwIzKJPgaoj7QXA+QieqBIxMNwv1OtMmfBJ9CDnT2QY
-	t3ePwjHlmdiy2cjKLHtJsFSp0lA1FGWWy2wckpWQYYWrfyJhLKKJbcQHTVkvfLQNnD/NFDNqUl8
-	M/fZXZvpo798DerXMQVRcI2q9PEBN1JA2gTnBfV/QQ/aKMWlLXLXEaRvCWj8ga2exCTy5FOeaYx
-	R16k4N69UpbdhdpLlWIJc4a06/BioSs6xigaKhlP2jjrh/W/Yy/9swAey4QucEwWMMHQWPmiFvU
-	0rzM4/CqHrBOIfQr8ari/QjZZ6NwjpxoJFLQt0ya35p3I6QBnWVx6Hcau/ixQQXRoYSjJgqOB3O
-	wE=
-X-Received: by 2002:a05:6000:1883:b0:43b:4440:9c28 with SMTP id ffacd0b85a97d-43b63fe235fmr20398332f8f.0.1774290531496;
-        Mon, 23 Mar 2026 11:28:51 -0700 (PDT)
-Received: from turbo.teknoraver.net (net-37-119-137-97.cust.vodafonedsl.it. [37.119.137.97])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b64714decsm28448751f8f.31.2026.03.23.11.28.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Mar 2026 11:28:51 -0700 (PDT)
-From: Matteo Croce <technoboy85@gmail.com>
-X-Google-Original-From: Matteo Croce <teknoraver@meta.com>
-To: Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Mohsin Bashir <mohsin.bashr@gmail.com>
-Cc: netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v4 2/2] e1000e: add XDP_REDIRECT support
-Date: Mon, 23 Mar 2026 19:28:23 +0100
-Message-ID: <20260323182823.5813-3-teknoraver@meta.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260323182823.5813-1-teknoraver@meta.com>
-References: <20260323182823.5813-1-teknoraver@meta.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vRRWBHBL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 103D0C4CEF7;
+	Mon, 23 Mar 2026 18:31:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774290730;
+	bh=sotfvo0nesaSqmF8KoCTyd8MGYvSoQDCsni9TVbHztU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=vRRWBHBLoOcTBUkF+rhoE7Rq4ConSk0Rgcrmkzw4YpeHsu7GHVxSU+9xzFXPbOY5i
+	 u0bAdR1IYL2lSje2Hro7d5AOekw2HXFGZ5LaJSQpGRh2R/vbkvzdqgL+J47uDWMz/+
+	 KFn7D0EB1cQxfFTDPfXur1Gjb858d3o0L8cWM3fNwCDKgzKWrqC0rplNwEmksAbSPu
+	 ZS/lz7HhEE979x/coOh2lXPJitq0izgvM2ECa5Pxhd4/XspzBs6aGxUsjVWxPxxi5n
+	 PNI8xSolmqCXpQMOQFSD2aRJO2mcLziuJFRjSC8Ugh6XmqXhU8DPyrveb+XFeCxWhL
+	 VUfOOfL58/8fg==
+Message-ID: <76f14d3e-c8fb-4380-9d12-2375f199b53f@kernel.org>
+Date: Mon, 23 Mar 2026 19:31:36 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v11 04/16] mm/gup: drop secretmem optimization from
+ gup_fast_folio_allowed
+To: "Kalyazin, Nikita" <kalyazin@amazon.co.uk>,
+ "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+ "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+ "linux-mm@kvack.org" <linux-mm@kvack.org>,
+ "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ "kernel@xen0n.name" <kernel@xen0n.name>,
+ "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+ "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+ "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Cc: "pbonzini@redhat.com" <pbonzini@redhat.com>,
+ "corbet@lwn.net" <corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>,
+ "oupton@kernel.org" <oupton@kernel.org>,
+ "joey.gouly@arm.com" <joey.gouly@arm.com>,
+ "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+ "yuzenghui@huawei.com" <yuzenghui@huawei.com>,
+ "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+ "will@kernel.org" <will@kernel.org>, "seanjc@google.com"
+ <seanjc@google.com>, "tglx@kernel.org" <tglx@kernel.org>,
+ "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
+ "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+ "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+ "luto@kernel.org" <luto@kernel.org>,
+ "peterz@infradead.org" <peterz@infradead.org>,
+ "willy@infradead.org" <willy@infradead.org>,
+ "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+ "lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
+ "vbabka@kernel.org" <vbabka@kernel.org>, "rppt@kernel.org"
+ <rppt@kernel.org>, "surenb@google.com" <surenb@google.com>,
+ "mhocko@suse.com" <mhocko@suse.com>, "ast@kernel.org" <ast@kernel.org>,
+ "daniel@iogearbox.net" <daniel@iogearbox.net>,
+ "andrii@kernel.org" <andrii@kernel.org>,
+ "martin.lau@linux.dev" <martin.lau@linux.dev>,
+ "eddyz87@gmail.com" <eddyz87@gmail.com>, "song@kernel.org"
+ <song@kernel.org>, "yonghong.song@linux.dev" <yonghong.song@linux.dev>,
+ "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+ "kpsingh@kernel.org" <kpsingh@kernel.org>, "sdf@fomichev.me"
+ <sdf@fomichev.me>, "haoluo@google.com" <haoluo@google.com>,
+ "jolsa@kernel.org" <jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>,
+ "jhubbard@nvidia.com" <jhubbard@nvidia.com>,
+ "peterx@redhat.com" <peterx@redhat.com>, "jannh@google.com"
+ <jannh@google.com>, "pfalcato@suse.de" <pfalcato@suse.de>,
+ "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+ "riel@surriel.com" <riel@surriel.com>,
+ "ryan.roberts@arm.com" <ryan.roberts@arm.com>,
+ "jgross@suse.com" <jgross@suse.com>,
+ "yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>,
+ "kas@kernel.org" <kas@kernel.org>, "coxu@redhat.com" <coxu@redhat.com>,
+ "kevin.brodsky@arm.com" <kevin.brodsky@arm.com>,
+ "ackerleytng@google.com" <ackerleytng@google.com>,
+ "yosry@kernel.org" <yosry@kernel.org>,
+ "ajones@ventanamicro.com" <ajones@ventanamicro.com>,
+ "maobibo@loongson.cn" <maobibo@loongson.cn>,
+ "tabba@google.com" <tabba@google.com>, "prsampat@amd.com"
+ <prsampat@amd.com>, "wu.fei9@sanechips.com.cn" <wu.fei9@sanechips.com.cn>,
+ "mlevitsk@redhat.com" <mlevitsk@redhat.com>,
+ "jmattson@google.com" <jmattson@google.com>,
+ "jthoughton@google.com" <jthoughton@google.com>,
+ "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+ "alex@ghiti.fr" <alex@ghiti.fr>,
+ "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+ "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+ "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+ "dev.jain@arm.com" <dev.jain@arm.com>, "gor@linux.ibm.com"
+ <gor@linux.ibm.com>, "hca@linux.ibm.com" <hca@linux.ibm.com>,
+ "palmer@dabbelt.com" <palmer@dabbelt.com>, "pjw@kernel.org"
+ <pjw@kernel.org>,
+ "shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>,
+ "svens@linux.ibm.com" <svens@linux.ibm.com>,
+ "thuth@redhat.com" <thuth@redhat.com>, "wyihan@google.com"
+ <wyihan@google.com>,
+ "yang@os.amperecomputing.com" <yang@os.amperecomputing.com>,
+ "Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
+ "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
+ "urezki@gmail.com" <urezki@gmail.com>,
+ "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
+ "gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>,
+ "jiayuan.chen@shopee.com" <jiayuan.chen@shopee.com>,
+ "lenb@kernel.org" <lenb@kernel.org>, "osalvador@suse.de"
+ <osalvador@suse.de>, "pavel@kernel.org" <pavel@kernel.org>,
+ "rafael@kernel.org" <rafael@kernel.org>,
+ "vannapurve@google.com" <vannapurve@google.com>,
+ "jackmanb@google.com" <jackmanb@google.com>,
+ "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>,
+ "patrick.roy@linux.dev" <patrick.roy@linux.dev>,
+ "Thomson, Jack" <jackabt@amazon.co.uk>,
+ "Itazuri, Takahiro" <itazur@amazon.co.uk>,
+ "Manwaring, Derek" <derekmn@amazon.com>, Vlastimil Babka <vbabka@suse.cz>,
+ Dan Williams <dan.j.williams@intel.com>, Alistair Popple <apopple@nvidia.com>
+References: <20260317141031.514-1-kalyazin@amazon.com>
+ <20260317141031.514-5-kalyazin@amazon.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260317141031.514-5-kalyazin@amazon.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add the ability to redirect packets to other devices via XDP_REDIRECT
-and to receive redirected frames from other devices via ndo_xdp_xmit.
+On 3/17/26 15:11, Kalyazin, Nikita wrote:
+> From: Patrick Roy <patrick.roy@linux.dev>
+> 
+> This drops an optimization in gup_fast_folio_allowed() where
+> secretmem_mapping() was only called if CONFIG_SECRETMEM=y. secretmem is
+> enabled by default since commit b758fe6df50d ("mm/secretmem: make it on
+> by default"), so the secretmem check did not actually end up elided in
+> most cases anymore anyway.
+> 
+> This is in preparation of the generalization of handling mappings where
+> direct map entries of folios are set to not present.  Currently,
+> mappings that match this description are secretmem mappings
+> (memfd_secret()).  Later, some guest_memfd configurations will also fall
+> into this category.
+> 
+> Signed-off-by: Patrick Roy <patrick.roy@linux.dev>
+> Acked-by: Vlastimil Babka <vbabka@suse.cz>
+> Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
+> Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
+> ---
+>  mm/gup.c | 11 +----------
+>  1 file changed, 1 insertion(+), 10 deletions(-)
+> 
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 8e7dc2c6ee73..5856d35be385 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -2739,7 +2739,6 @@ static bool gup_fast_folio_allowed(struct folio *folio, unsigned int flags)
+>  {
+>  	bool reject_file_backed = false;
+>  	struct address_space *mapping;
+> -	bool check_secretmem = false;
+>  	unsigned long mapping_flags;
+>  
+>  	/*
+> @@ -2751,14 +2750,6 @@ static bool gup_fast_folio_allowed(struct folio *folio, unsigned int flags)
+>  		reject_file_backed = true;
+>  
+>  	/* We hold a folio reference, so we can safely access folio fields. */
+> -
+> -	/* secretmem folios are always order-0 folios. */
+> -	if (IS_ENABLED(CONFIG_SECRETMEM) && !folio_test_large(folio))
+> -		check_secretmem = true;
+> -
+> -	if (!reject_file_backed && !check_secretmem)
+> -		return true;
+> -
 
-New functionality:
-- XDP_REDIRECT case in e1000_run_xdp() using xdp_do_redirect()
-- e1000_xdp_xmit() as the ndo_xdp_xmit callback for receiving
-  redirected frames from other devices
-- xdp_do_flush() in e1000_finalize_xdp() for REDIR completions
-- xdp_features_set/clear_redirect_target() in e1000_xdp_setup()
-- NETDEV_XDP_ACT_REDIRECT and NETDEV_XDP_ACT_NDO_XMIT advertised
+The AI review says that this will force all small folios through the
+mapping check (which we obviously need later :) ).
 
-Assisted-by: claude-opus-4-6
-Signed-off-by: Matteo Croce <teknoraver@meta.com>
----
- drivers/net/ethernet/intel/e1000e/netdev.c | 85 +++++++++++++++++++++-
- 1 file changed, 81 insertions(+), 4 deletions(-)
+It brings up two cases where page->mapping is not set up:
 
-diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/ethernet/intel/e1000e/netdev.c
-index d77f208f00cc..01661e1a74e5 100644
---- a/drivers/net/ethernet/intel/e1000e/netdev.c
-+++ b/drivers/net/ethernet/intel/e1000e/netdev.c
-@@ -41,6 +41,7 @@ char e1000e_driver_name[] = "e1000e";
- #define E1000_XDP_PASS		0
- #define E1000_XDP_CONSUMED	BIT(0)
- #define E1000_XDP_TX		BIT(1)
-+#define E1000_XDP_REDIR		BIT(2)
- 
- static int debug = -1;
- module_param(debug, int, 0);
-@@ -805,6 +806,9 @@ static void e1000_finalize_xdp(struct e1000_adapter *adapter,
- {
- 	struct e1000_ring *tx_ring = adapter->tx_ring;
- 
-+	if (xdp_xmit & E1000_XDP_REDIR)
-+		xdp_do_flush();
-+
- 	if (xdp_xmit & E1000_XDP_TX) {
- 		/* Force memory writes to complete before letting h/w
- 		 * know there are new descriptors to fetch.
-@@ -823,13 +827,14 @@ static void e1000_finalize_xdp(struct e1000_adapter *adapter,
-  * @adapter: board private structure
-  * @xdp: XDP buffer containing packet data
-  *
-- * Returns E1000_XDP_PASS, E1000_XDP_TX, or E1000_XDP_CONSUMED
-+ * Returns E1000_XDP_PASS, E1000_XDP_TX, E1000_XDP_REDIR, or E1000_XDP_CONSUMED
-  **/
- static int e1000_run_xdp(struct e1000_adapter *adapter, struct xdp_buff *xdp)
- {
- 	struct bpf_prog *xdp_prog = READ_ONCE(adapter->xdp_prog);
- 	struct net_device *netdev = adapter->netdev;
- 	int result = E1000_XDP_PASS;
-+	int err;
- 	u32 act;
- 
- 	if (!xdp_prog)
-@@ -846,6 +851,12 @@ static int e1000_run_xdp(struct e1000_adapter *adapter, struct xdp_buff *xdp)
- 		if (result == E1000_XDP_CONSUMED)
- 			goto out_failure;
- 		break;
-+	case XDP_REDIRECT:
-+		err = xdp_do_redirect(netdev, xdp, xdp_prog);
-+		if (err)
-+			goto out_failure;
-+		result = E1000_XDP_REDIR;
-+		break;
- 	default:
- 		bpf_warn_invalid_xdp_action(netdev, xdp_prog, act);
- 		fallthrough;
-@@ -1041,11 +1052,11 @@ static bool e1000_clean_rx_irq_xdp(struct e1000_ring *rx_ring, int *work_done,
- 
- 			/* page consumed by skb */
- 			buffer_info->page = NULL;
--		} else if (xdp_res & E1000_XDP_TX) {
-+		} else if (xdp_res & (E1000_XDP_TX | E1000_XDP_REDIR)) {
- 			xdp_xmit |= xdp_res;
- 			total_rx_bytes += length - crc_len;
- 			total_rx_packets++;
--			/* page consumed by XDP TX */
-+			/* page consumed by XDP TX/redirect */
- 			buffer_info->page = NULL;
- 		} else {
- 			/* XDP_DROP / XDP_ABORTED - recycle page */
-@@ -7812,6 +7823,11 @@ static int e1000_xdp_setup(struct net_device *netdev, struct netdev_bpf *bpf)
- 	if (!need_reset)
- 		return 0;
- 
-+	if (prog)
-+		xdp_features_set_redirect_target(netdev, true);
-+	else
-+		xdp_features_clear_redirect_target(netdev);
-+
- 	if (running) {
- 		int err = e1000e_open(netdev);
- 
-@@ -7837,6 +7853,64 @@ static int e1000_xdp(struct net_device *netdev, struct netdev_bpf *xdp)
- 	}
- }
- 
-+/**
-+ * e1000_xdp_xmit - transmit XDP frames from another device
-+ * @netdev: network interface device structure
-+ * @n: number of frames to transmit
-+ * @frames: array of XDP frame pointers
-+ * @flags: XDP transmit flags
-+ *
-+ * This is the ndo_xdp_xmit callback, called when other devices redirect
-+ * frames to this device.
-+ **/
-+static int e1000_xdp_xmit(struct net_device *netdev, int n,
-+			  struct xdp_frame **frames, u32 flags)
-+{
-+	struct e1000_adapter *adapter = netdev_priv(netdev);
-+	struct e1000_ring *tx_ring = adapter->tx_ring;
-+	struct netdev_queue *nq = netdev_get_tx_queue(netdev, 0);
-+	int cpu = smp_processor_id();
-+	int nxmit = 0;
-+	int i;
-+
-+	if (unlikely(test_bit(__E1000_DOWN, &adapter->state)))
-+		return -ENETDOWN;
-+
-+	if (unlikely(flags & ~XDP_XMIT_FLAGS_MASK))
-+		return -EINVAL;
-+
-+	if (!adapter->xdp_prog)
-+		return -ENXIO;
-+
-+	__netif_tx_lock(nq, cpu);
-+	txq_trans_cond_update(nq);
-+
-+	for (i = 0; i < n; i++) {
-+		int err;
-+
-+		err = e1000_xdp_xmit_ring(adapter, tx_ring, frames[i]);
-+		if (err != E1000_XDP_TX)
-+			break;
-+		nxmit++;
-+	}
-+
-+	if (unlikely(flags & XDP_XMIT_FLUSH)) {
-+		/* Force memory writes to complete before letting h/w
-+		 * know there are new descriptors to fetch.
-+		 */
-+		wmb();
-+		if (adapter->flags2 & FLAG2_PCIM2PCI_ARBITER_WA)
-+			e1000e_update_tdt_wa(tx_ring,
-+					     tx_ring->next_to_use);
-+		else
-+			writel(tx_ring->next_to_use, tx_ring->tail);
-+	}
-+
-+	__netif_tx_unlock(nq);
-+
-+	return nxmit;
-+}
-+
- static const struct net_device_ops e1000e_netdev_ops = {
- 	.ndo_open		= e1000e_open,
- 	.ndo_stop		= e1000e_close,
-@@ -7860,6 +7934,7 @@ static const struct net_device_ops e1000e_netdev_ops = {
- 	.ndo_hwtstamp_get	= e1000e_hwtstamp_get,
- 	.ndo_hwtstamp_set	= e1000e_hwtstamp_set,
- 	.ndo_bpf		= e1000_xdp,
-+	.ndo_xdp_xmit		= e1000_xdp_xmit,
- };
- 
- /**
-@@ -8070,7 +8145,9 @@ static int e1000_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	netdev->max_mtu = adapter->max_hw_frame_size -
- 			  (VLAN_ETH_HLEN + ETH_FCS_LEN);
- 
--	netdev->xdp_features = NETDEV_XDP_ACT_BASIC;
-+	netdev->xdp_features = NETDEV_XDP_ACT_BASIC |
-+			       NETDEV_XDP_ACT_REDIRECT |
-+			       NETDEV_XDP_ACT_NDO_XMIT;
- 
- 	if (e1000e_enable_mng_pass_thru(&adapter->hw))
- 		adapter->flags |= FLAG_MNG_PT_ENABLED;
+1) ZONE_DEVICE pages (like Device DAX and PCI P2PDMA)
+
+2) large shmem folios in the swap cache
+
+
+2) doesn't make sense, because the folio cannot be mapped in user space
+when that happens.
+
+I am also skeptical about 1), especially as large folios are also
+supported for device dax and would be problematic here.
+__dev_dax_pte_fault() clearly sets folio->mapping through dax_set_mapping().
+
+
+If 1) is ever a case we could allow them by checking for
+folio_is_zone_device(). But I am not sure if that is really required.
+Sounds weird.
+
+
 -- 
-2.53.0
+Cheers,
 
+David
