@@ -1,169 +1,123 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.229.168.213])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C15EC317148
-	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 12:23:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.229.168.213
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB57439D6EF
+	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 12:23:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774268619; cv=none; b=AU8Mxrqv/nsX7eCiAFY8/eUodpIeKg8zcLyMpyFRXhdMcZeTi6QL5CIkXNCK/LBwGGF2Pqz54DorE+GMumghHlqSW79FdGBoea+mH7qIG72ypTFCvwOt4vbb1eyc7768Rys7/yXpX1hbCJT3dfEdey078YlsTZxV05X7/6CzWA4=
+	t=1774268620; cv=none; b=Bi27WmuZtP1M0Q2aTOOTJ90CZMJIEsBMGs8teLh5arbZV40Q+GiVmX4QsowMxlvrUm3HsymJrzWMMIJDirNVCcz2SmUGNee5Qu8P+EC0Gj7dHXNHYbEJU4cFJDZ1rufTsIFSivxyIE23RVm4ZsSIvVmrHdzBKnR8gI4vxrRJoiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774268619; c=relaxed/simple;
-	bh=hlMBfzH1rlAmMpqPEEgvVWl5IVpXRRp/d2WkEDDOSJ0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JpS3Li66Ajbw0vw5gGqDMxO7QRQe3z8h+eOxLKILj7BmykUVNqS/zAfFHx4FfAiX53u+r6xL9q/s5UbBYC0taZlKJP/+X7vw1GwuIH57rmWZXyCGKYvtoTROXg8ynjcqX8CoYM57/ghRPYJTxCsp9R2InC9THLcK/VqGn9EWAfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=52.229.168.213
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [10.162.82.142])
-	by mtasvr (Coremail) with SMTP id _____wCXFaSpMMFptyFIAA--.3913S3;
-	Mon, 23 Mar 2026 20:23:05 +0800 (CST)
-Received: from wolframium.tail477849.ts.net (unknown [10.162.82.142])
-	by mail-app3 (Coremail) with SMTP id zS_KCgBXcHKpMMFpxCYOAA--.3266S2;
-	Mon, 23 Mar 2026 20:23:05 +0800 (CST)
-From: Yazhou Tang <tangyazhou@zju.edu.cn>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	tangyazhou518@outlook.com,
-	shenghaoyuan0928@163.com,
-	ziye@zju.edu.cn,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf v3 1/3] bpf: Reject bpf-to-bpf call with large offset in interpreter
-Date: Mon, 23 Mar 2026 20:22:52 +0800
-Message-ID: <20260323122254.98540-2-tangyazhou@zju.edu.cn>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260323122254.98540-1-tangyazhou@zju.edu.cn>
-References: <20260323122254.98540-1-tangyazhou@zju.edu.cn>
+	s=arc-20240116; t=1774268620; c=relaxed/simple;
+	bh=/lPaptTa9ONYDdCs6aw41RYxuMTuNeNfa5YxRQxWn84=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WQ0XNAhadkG+8nIN0jjAAWBwSrypPK7+fUpl/DOmOrNYeHOQihU3/KymaJvwLeXA1aDfQcT73GBRk+6aBbG+PuxCswvoEQGotVh9ehqhPWb3SHLzWLurll0LZGRi8SYlH6vYGbTNxGFtIE1T7t7d9czscMfGwOXpwW1XoxwIRqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Gt/ynNZA; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Gt/ynNZA"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-486fe655187so36736205e9.2
+        for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 05:23:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1774268617; x=1774873417; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hgUhPID1XKvwITGkjGuOtdzgN4lB7YpI6bOfIoig5DA=;
+        b=Gt/ynNZAgu1TiABFixD25gJFBoqgtRXPzLucvEMChngfL3EoQ4vOy3tR1nOjJbFJkt
+         xZ3y0OAoKlIT/GLgwP2T6Ie0sv00QXYrpwVTu53lfJEhjlf7HbnK6i0Yt67TdUKfCNVC
+         gIqtm7GYCYkuYUHSa/1WE5F5jYFCQ7QySluGzCEdd7GCsmtglPqwUU3AsqiZ3VcSmdNM
+         ViGMth1BZQMJ4MDGzhHACJ8BmvBlsvKG7vxlSi/oWKjPssxMiEnmLB4cJJBNySvWeNpE
+         Lnf+p0DgStwODybY2T5/rsNe0+ftoNpYwZSAV5BPPj0TlqfV5r0h2OAygWw7BPaqMChH
+         NXkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774268617; x=1774873417;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hgUhPID1XKvwITGkjGuOtdzgN4lB7YpI6bOfIoig5DA=;
+        b=fNKwa8xMPg19kSflVEi+bZyzv6L1Z9KS2WhvldFffzMMawFNd1Ap0sRrS1c3b/g5gA
+         NA7i9RehNE6E+X97jK3DkjuDVuU9auS2l3VxGnYP/ozu/8g7r8kXlKQnzAv3BYOE6SHh
+         mxjefixmvIOB98qyxa7PvVXEDNs1e3lg9z5K6XFAqWlWzvNVHuZ78vdpnmVDcgciG9OY
+         lDfJqVqYluMUuRpevSTe9hxofNKrACHJFJJd4U8buIZ8hNHe3b82eH4AsvbPdAEeyngk
+         9wyqDf2mI5fIMqtcbDTTaBn5Wgbs+nG/LraNjam3MYd+GvDVWbf9d1uo3VcAcBXLzUth
+         BDSQ==
+X-Gm-Message-State: AOJu0YzLZx+9wwyUqdF7GL74kS8Uu+StEfaHX8ZOSYYo9iEV8KdszbjW
+	DEsqHOYOt0xbWY7UV/yw+brzzHTIgfaOGIpVk/Z2iq/09lIivE7mLE/JpxELE+vfFQo=
+X-Gm-Gg: ATEYQzzGSH+shUtlpkyDcjbGGmnnYHdUqh0jAb+Gv9qYtPpnsS1TrjgL17zzcYejqQX
+	AmN+bD9wSj0ZHS7dxV4BmYrqVniUG8aZBqVIHpii+9sXKLrUnZm2jkBCQoeZq9OOO/VekzOy4Jo
+	532WNYVULTDU4qaiE2RC6ErJuwr1ywKGdd+Wsz9OWmBtkrAssuqa6eTF3Ap3yB+P8k354Sg6PT/
+	QBcg8uc1Ex38AGw/DXuA8/IxWkZNHbo+abH+IZ1SAa27kDe5jyXjV6RXTNFN7QaUQFp+SI7ulYi
+	RlgVA/guCokVQsszENur8fi1DINWpZTkIR8enN8s/HGHZdHAx2nRROr5a6FlE3tBtdWsKrrs0PT
+	/NNvpCQUbaDt6ZXg7PP07NZ2/iv2QjKB8Rxm4GDtVLzqPdkd+8NAKPXT0dtAjxmCeZ5D0Hr140e
+	5rGugjUDB+uy7oKuSDm/sc1CSeHj6oJJ82XViG6zbOyGRduaI/iFoe3Kfuz873XN2jzNtroku/v
+	Bz7l2D3Tb0LWwouYEb5
+X-Received: by 2002:a05:600c:4ecd:b0:485:3f58:d84 with SMTP id 5b1f17b1804b1-486fee30199mr156710435e9.32.1774268617057;
+        Mon, 23 Mar 2026 05:23:37 -0700 (PDT)
+Received: from u94a (2001-b011-fa04-7ee6-b2dc-efff-fee8-7e7a.dynamic-ip6.hinet.net. [2001:b011:fa04:7ee6:b2dc:efff:fee8:7e7a])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b083516ab1sm147082645ad.5.2026.03.23.05.23.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Mar 2026 05:23:35 -0700 (PDT)
+Date: Mon, 23 Mar 2026 20:23:28 +0800
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: Paul Chaignon <paul.chaignon@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>, 
+	Srinivas Narayana <srinivas.narayana@rutgers.edu>, Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
+Subject: Re: [PATCH v2 bpf-next 4/6] bpf: Simulate branches to prune based on
+ range violations
+Message-ID: <7vwyzvy7cwy2n4c52fcurg4dnv4bqijtovmkeh3zgu6ey266vc@dtt3r5usvev5>
+References: <cover.1774025082.git.paul.chaignon@gmail.com>
+ <d4fe45f8bd5c6a48efd2ba3b66932bf7eb5aa020.1774025082.git.paul.chaignon@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zS_KCgBXcHKpMMFpxCYOAA--.3266S2
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBgUTCmnARgsoRgAAsQ
-X-CM-DELIVERINFO: =?B?NmyamwXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9FTBy7QYTsCPUa/Qus8L73AEAxz9t1pIbfYhpkqDX8lGwzIhrogwdm5Um0wQSj1NVBRZ
-	QFVQRor4Z7cixmp6l/+gpyAf8u0IbW9ln938OBdLgnqU7Ug/GZaklAunEA3y6w==
-X-Coremail-Antispam: 1Uk129KBj93XoWxur1xuw48KF1UJrWrZF47trc_yoW5KF13pF
-	1kKa4xtF48tw40k343Cr47Zry3JFs5Z347KFyrA34Fkr4jqan7J3s8KFsrZFyfGrn3Cw4x
-	tFsF9rWIy348WagCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUU9Eb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
-	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAF
-	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0Y48IcxkI7V
-	AKI48G6xCjnVAKz4kxM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC2
-	0s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI
-	0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE
-	14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20x
-	vaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8
-	JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8FoGPUUUUU==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d4fe45f8bd5c6a48efd2ba3b66932bf7eb5aa020.1774025082.git.paul.chaignon@gmail.com>
 
-From: Yazhou Tang <tangyazhou518@outlook.com>
+On Fri, Mar 20, 2026 at 05:49:44PM +0100, Paul Chaignon wrote:
+> From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+> 
+> This patch fixes the invariant violations that can happen after we
+> refine ranges & tnum based on an incorrectly-detected branch condition.
+> For example, the branch is always true, but we miss it in
+> is_branch_taken; we then refine based on the branch being false and end
+> up with incoherent ranges (e.g. umax < umin).
+> 
+> To avoid this, we can simulate the refinement on both branches. More
+> specifically, this patch simulates both branches taken using
+> regs_refine_cond_op and reg_bounds_sync. If the resulting register
+> states are ill-formed on one of the branches, is_branch_taken can mark
+> that branch as "never taken".
+> 
+> On a more formal note, we can deduce a branch is not taken when
+> regs_refine_cond_op or reg_bounds_sync returns an ill-formed state
+> because the branch operators are sound (formally verified). Soundness
 
-Currently, the BPF instruction set allows bpf-to-bpf call (or internal call,
-pseudo call) to use a 32-bit imm field to represent the relative jump offset.
+Nit1: would be nice to get a link or at least mentioning of Agni,
+otherwise it is not obvious where this claim comes from. And that seems
+like a healthy dose of project promotion, too.
 
-However, when JIT is disabled or falls back to interpreter, the verifier
-invokes bpf_patch_call_args() to rewrite the call instruction. In this
-function, the 32-bit imm is downcasted to s16 and stored in the `off` field.
+Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
 
-    void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
-    {
-        stack_depth = max_t(u32, stack_depth, 1);
-        insn->off = (s16) insn->imm;
-        insn->imm = interpreters_args[(round_up(stack_depth, 32) / 32) - 1] -
-            __bpf_call_base_args;
-        insn->code = BPF_JMP | BPF_CALL_ARGS;
-    }
+...
+> +/* Learn more information about live branches by simulating both branches being
+> + * taken using regs_refine_cond_op. Because regs_refine_cond_op is sound when
 
-If the original imm exceeds the s16 range (i.e., jump offset > 32KB),
-this downcast silently truncates the offset, resulting in an incorrect
-call target.
+Nit2: while this statement is very specific, "sound" is a rather
+uncommon vocabulary in current codebase, I see no such usage.
 
-Fix this by explicitly checking the offset boundary in bpf_patch_call_args().
-If the offset is out of range, reject the program with -EINVAL and emit
-a clear verifier log message.
+  $ git grep -A1 -ie sound -- kernel/bpf/ Documentation/bpf/
+  Documentation/bpf/kfuncs.rst:   no warning will not be a common occurrence or take place without sound
+  Documentation/bpf/kfuncs.rst-   justification, but it is a possibility that must be accepted if one is to
 
-Fixes: 1ea47e01ad6e ("bpf: add support for bpf_call to interpreter")
-Co-developed-by: Tianci Cao <ziye@zju.edu.cn>
-Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
-Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
-Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
-Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
----
- include/linux/bpf.h   | 2 +-
- kernel/bpf/core.c     | 7 +++++--
- kernel/bpf/verifier.c | 6 +++++-
- 3 files changed, 11 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 05b34a6355b0..5daea9f82b80 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2916,7 +2916,7 @@ int bpf_check_uarg_tail_zero(bpfptr_t uaddr, size_t expected_size,
- int bpf_check(struct bpf_prog **fp, union bpf_attr *attr, bpfptr_t uattr, u32 uattr_size);
- 
- #ifndef CONFIG_BPF_JIT_ALWAYS_ON
--void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth);
-+int bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth);
- #endif
- 
- struct btf *bpf_get_btf_vmlinux(void);
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 9de5e69607c6..108c5d7b86f9 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2402,13 +2402,16 @@ EVAL4(PROG_NAME_LIST, 416, 448, 480, 512)
- #undef PROG_NAME_LIST
- 
- #ifdef CONFIG_BPF_SYSCALL
--void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
-+int bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
- {
--	stack_depth = max_t(u32, stack_depth, 1);
-+	if (insn->imm < S16_MIN || insn->imm > S16_MAX)
-+		return -EINVAL;
- 	insn->off = (s16) insn->imm;
-+	stack_depth = max_t(u32, stack_depth, 1);
- 	insn->imm = interpreters_args[(round_up(stack_depth, 32) / 32) - 1] -
- 		__bpf_call_base_args;
- 	insn->code = BPF_JMP | BPF_CALL_ARGS;
-+	return 0;
- }
- #endif
- #endif
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index f108c01ff6d0..809ac2325dcb 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -23122,7 +23122,11 @@ static int fixup_call_args(struct bpf_verifier_env *env)
- 		depth = get_callee_stack_depth(env, insn, i);
- 		if (depth < 0)
- 			return depth;
--		bpf_patch_call_args(insn, depth);
-+		err = bpf_patch_call_args(insn, depth);
-+		if (err) {
-+			verbose(env, "bpf-to-bpf call offset out of range for interpreter\n");
-+			return err;
-+		}
- 	}
- 	err = 0;
- #endif
--- 
-2.53.0
-
+> + * the branch is taken, if it produces ill-formed register bounds, it must mean
+> + * that the branch is dead.
+> + */
+> +static int simulate_both_branches_taken(struct bpf_verifier_env *env, u8 opcode, bool is_jmp32)
+> +{
+...
