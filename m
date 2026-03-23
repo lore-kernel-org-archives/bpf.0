@@ -1,230 +1,322 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CE9F3BC69E
-	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 16:01:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C9393B95FD
+	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 16:19:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774281683; cv=none; b=jPkBafEKzD0Aqpug/zAML4bMQLtqjqG8A/tCckS3Y9LI8VCU3WDNuvkPEBemOQ4vZy4bbvABNXPV/BUF7W38E7+99mdXyeivZzcxcz3BWxYcchQeoR2OO13DyEW0g4s92jpLkIkv+3I9fOvhB06WPLV5jTol6jwoHgCJOf18ZBc=
+	t=1774282753; cv=none; b=BBqnwtUZgAsg75cWUGcXHHZH+tjYlyMZW5feMhKowZ/B4Yo+pZmos/AlEGuNlSzA71beFOqGATCEvejhOJR4RJ9IZ2J0wjwEMX2yfRTu79v+zoFA/6Fiq26TwNmnN/oLaAINUaTQIa/ZaiJUAa4FpFFqg34hXeZ9Re3RxsZKNOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774281683; c=relaxed/simple;
-	bh=0DPJh0DJ3iDimFvMQsoeZlDl8P4qbc82fRy/khoEFVk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UIGHoAs2VNf7HE46uMIdFM9nF/nbClQPK7dcdbK+l4LkXFToeUf7S0p/YRxS4gwLWQYLMwk5BIryV7IgpxXar9OZCN+DIVwVebAnoK47iZCjsqhFLciIYIip3TwIXynfo0FbpGWtlXbbO5tesNYFPvRTBHIfTI0x+kJJiE7VnyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bitbyteword.org; spf=pass smtp.mailfrom=bitbyteword.org; dkim=pass (2048-bit key) header.d=bitbyteword.org header.i=@bitbyteword.org header.b=eXYheOu+; arc=none smtp.client-ip=209.85.215.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bitbyteword.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bitbyteword.org
+	s=arc-20240116; t=1774282753; c=relaxed/simple;
+	bh=jLnxELhczPU3kpwV/4VR/Q5eokjhSBoDv188DTKxGX8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=SKqQKJYunVwFB5VNFq8eQNXjda6BqDNCr5UmK/m2hMsgV0d8Z0I0g9og6dydNtAZOt82OWQLssYk/zjbBYcSpiGPK+nzUZHMEuLI5RWxXDReiHOHhUiGACJHO70QzlV+ELc5QhwUQFdfWbWF+2ovqSuIv669sFSDGg4tudoJLTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d+tHiKL+; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bitbyteword.org header.i=@bitbyteword.org header.b="eXYheOu+"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c648bc907ebso3052083a12.3
-        for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 09:01:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d+tHiKL+"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-43b45bb7548so3175538f8f.1
+        for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 09:19:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bitbyteword.org; s=google; t=1774281681; x=1774886481; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eViZzzv8Sc/M5QSGBQX9CwMHZ/34uumJnzvDlBpaGpc=;
-        b=eXYheOu+D0OT+Q8vs06kyy5MMRp1gLVxHh22oWfojhSo6d60zQyitdxX7Yo7HhgKE+
-         /0roFXfNXloX/veakhuqrWnv1GNdd064sbhS9dCVENk9G9C9fe3QSGH7U4qrCHkxjKSh
-         VjFrPZMMs1n5/r1SmpQCW4y4sqepgzdS3qxpfKRS/0GLyEgjdeKERGNGLTrNmyqyhAPw
-         OgLTxs6U9dqnOhQWM/A9oIoxC2Wrw839ZofSBVKX1d7XQ37ygQh6MkuOyGBAJptQkJEo
-         AakLrqqRu2awDpTf30T/hb/B3oePe88KizAyeA+xAPdsGgcJoJkRE52xQ7veXbsc2711
-         UEmA==
+        d=gmail.com; s=20230601; t=1774282750; x=1774887550; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XStIfK6rvudApTpSwAYEHbi+WTGfDg3J4EJR2CvHhDM=;
+        b=d+tHiKL+2Jtvf3Xu3bFsPBasgq7pGtKCw6ZiqDF/u0h+07/+2b0HDi/Q1iaQ5KRVUG
+         LLW6n2PtxyVUl6Pogoz9igsknCi7Xfv5H20SYUYUZo4Nl3MuyGfCw1DHfBHGwmh9uEVB
+         4Aan8k+zqaGobDHKY2gQ0Orxkh6D1UoRhhitopWDF4vVXcdcrhHi0iOMaFbzSyV7q2pa
+         1MjyW+QTK7i407HNUArWmx0v1s+eGtZ5Mtvy3P+nMctgxUzRtjinT+TMUtVsHyusa1Sb
+         a7YPf4iIr190hOtmH0oFuz8E6ixN4bjti6JdBSOvmAUny4+CN7eiisXZouQkssnLy+YC
+         hOvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774281681; x=1774886481;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=eViZzzv8Sc/M5QSGBQX9CwMHZ/34uumJnzvDlBpaGpc=;
-        b=DJ7g9nJnXBcr/W7cOOp7Sf1U5Y9AEmq3/t7aPsRNppGMHFtA8CUGUWkv2229qGaFXu
-         /0WB8T1Yy2iG5VSvbh4hxsOpO6RgMIdrhpgy5B63S5zpgl9vuDyySOdSJyJX7j1EFTeU
-         MuioWNCEFov4U38WG8yKzjktRiYsuMBJgAnnygY6GgO9/uR2FohMlEkA6gO2Yu2bCziM
-         MXfYub23TV1WIEEnUoKlZ+K/UB9rUxzFgqLq4kcU0PqL73ZwO4KgidNALZ7xQYUkZWOM
-         sUQWaMGFOEAWhruPPHK6/2U9gyT+Hmlx0bG594ecktSy2oWCidk0QENDVCscAEITpp7n
-         4Vow==
-X-Forwarded-Encrypted: i=1; AJvYcCVLvbfIeQr0SXeAx19emDFNWTFEH0uZk+d8KIV22HCkUZscVj47LD4aabK8MkUh0q0PbSE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5qW2YJDsDclLw2EHY5tke0LodEH3fYE3x9jHcA4gCP/fYsDjF
-	sBR3s5QXarc+bSkXwnNxJNFPV/YzH85VPt5HJrH8sDZEYbZFeC40Vcw5fnb1q/l8I0E=
-X-Gm-Gg: ATEYQzzR0OC9629RaSWBe5UvUF+/vGowXKDKscciKGEiZOSemgjWB2mO+h/RcNORoSf
-	v1d/Uig8xNOHlObQxfyvk+gBytQg+khyrpJNmQQ8I8tVByFZ7yhCWDcwJ7rs0vwdg4gbVIjcTPA
-	YFnTpWWsNm2wl8aiEnUaMc5rWmirb7jsxXmYY/6m4XaUQMI+Qo7skO5evlc2MSQXd4T7MSkLQjA
-	IgrAAtaDAK1dS1jGtFi77bTZRDGrTz6YLFgs+a3C4piHdVQNEoNFgDDIsmDkSn2h0NEvwNRi5Eg
-	2v+ug4F1mSdT4lXqKIV/uCxmVibw1L4SZJSVwO+gyEYjxdbPgSDus5doZZVIrBhvusiq8b1gz/m
-	qQkCEExx6Yy00es1qSYCwgH6ISIIEHcNyWbLDZl6k2T2WCflY5QExJZXJH/Z3NsDjPZeiipFfaI
-	C95zs82tiLqfYszhOQ0m5I387CmS4n1ndgVgDxqZW8jaaKEuquCAfCbWef1/7xn/Fhj7HbTSYlV
-	SuY
-X-Received: by 2002:a05:620a:198a:b0:8cd:8d4c:aa0c with SMTP id af79cd13be357-8cfc7a796e7mr1828317285a.0.1774281661473;
-        Mon, 23 Mar 2026 09:01:01 -0700 (PDT)
-Received: from vinmini.lan (c-73-143-21-186.hsd1.vt.comcast.net. [73.143.21.186])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cfc9088df1sm843364185a.25.2026.03.23.09.00.57
+        d=1e100.net; s=20251104; t=1774282750; x=1774887550;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XStIfK6rvudApTpSwAYEHbi+WTGfDg3J4EJR2CvHhDM=;
+        b=jQo/7O/93W5f5BVZHkmIHE6rZXCnW5gTstnfWhmIqjvycdI2D35T6pTnQnDJR29aID
+         q1DZ3awoy1RF2sZInXqJ3PzxOC3NoQhGYtlCSizy9oVQJyMzt6UFIkAc/aCyJc8SpXSy
+         37MP6E6taN/ev9rSEOcylkm3cSyEWZNOZ1SENLgBwAQ2/cADcXDwbfBikH+TCYOI7bZ9
+         Lk1vgOLetKFQLR4tAriQCiZYv5PjlOMytfHnyX093vS7s51YAG3Niwtw4KzoGDuPgpYb
+         0cV4VKnpQ9Dx6BeiqjabRKb675utnCFoc4WNiHb/HbUybnuzI6mDcOJMD2hb+YTL+QpC
+         Fdnw==
+X-Forwarded-Encrypted: i=1; AJvYcCVneNnV/qlD6Wf9zBwR3IOLD7fZRJ7SS2srG//nv1EEuq9/AQpPN1jj0oOGgc/tZvVQAeM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxssiAqqMeBbiTsbvdd0PBTSA/ebcnfgw7GHUuszNSchDIvV0IN
+	OI9eIvszmQ35vtfWthjM53Z2KayT7HxUUhKMW1IxJpxwFmgmplMz7AsH
+X-Gm-Gg: ATEYQzwDEMK0VPOuuOPNjCxIanDz/pySuOkjb1KYXOQLCdpyottPK5frheCC4xLqD0D
+	u1cN+YSd4hVN9EueBUEuIvVHQjIsIOjIeDO9djcJGcwrSfXjBNxS+Nmrl7zqwHK0gmwV0TZfHG9
+	BupsMmud9jN/0TFGqM3XzWY6t5SFIKQ0bPMbNmPjFV22tWaECV9GZdG0iVhxrTlRJ99RGdDAJlW
+	03EPitiNVj91GjgdKsBpNFkbz8X+46qwxeWQskwDlSGP079yrxFbRpnbpYwT4vhxN1/TrMcKEC4
+	hsRtEk4Q3JB/SIrh7vpywzWwN6SR5cCGe6D5zQtc0rUdUVJJxZffahv10DRtgk0C+R/QTPQaVVP
+	CQUe9HTE4kuaK8wPLsKJYnIe7XtxOo8dOZS6ShySZQSVy4zXbQu7vLtTnIgueaEUJ1sJxE5EwXM
+	/jKsqfhbSppqkszYQClZKB3+nTWw==
+X-Received: by 2002:a05:6000:2007:b0:43b:5356:a7f9 with SMTP id ffacd0b85a97d-43b6428b369mr19698235f8f.52.1774282749299;
+        Mon, 23 Mar 2026 09:19:09 -0700 (PDT)
+Received: from localhost ([2620:10d:c092:500::5:a228])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b647036e0sm31051937f8f.21.2026.03.23.09.19.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Mar 2026 09:01:00 -0700 (PDT)
-From: "Vineeth Pillai (Google)" <vineeth@bitbyteword.org>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Dmitry Ilvokhin <d@ilvokhin.com>
-Cc: "Vineeth Pillai (Google)" <vineeth@bitbyteword.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Jens Axboe <axboe@kernel.dk>,
-	io-uring@vger.kernel.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-	Xin Long <lucien.xin@gmail.com>,
-	Jon Maloy <jmaloy@redhat.com>,
-	Aaron Conole <aconole@redhat.com>,
-	Eelco Chaudron <echaudro@redhat.com>,
-	Ilya Maximets <i.maximets@ovn.org>,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-sctp@vger.kernel.org,
-	tipc-discussion@lists.sourceforge.net,
-	dev@openvswitch.org,
-	Jiri Pirko <jiri@resnulli.us>,
-	Oded Gabbay <ogabbay@kernel.org>,
-	Koby Elbaz <koby.elbaz@intel.com>,
-	dri-devel@lists.freedesktop.org,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	"Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-	Huang Rui <ray.huang@amd.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Len Brown <lenb@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	linux-pm@vger.kernel.org,
-	MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Kyungmin Park <kyungmin.park@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	linaro-mm-sig@lists.linaro.org,
-	Eddie James <eajames@linux.ibm.com>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Joel Stanley <joel@jms.id.au>,
-	linux-fsi@lists.ozlabs.org,
-	David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Philipp Stanner <phasta@kernel.org>,
-	Harry Wentland <harry.wentland@amd.com>,
-	Leo Li <sunpeng.li@amd.com>,
-	amd-gfx@lists.freedesktop.org,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	linux-input@vger.kernel.org,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	linux-i2c@vger.kernel.org,
-	Mark Brown <broonie@kernel.org>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
-	linux-spi@vger.kernel.org,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	linux-scsi@vger.kernel.org,
-	Chris Mason <clm@fb.com>,
-	David Sterba <dsterba@suse.com>,
-	linux-btrfs@vger.kernel.org,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	SeongJae Park <sj@kernel.org>,
-	linux-mm@kvack.org,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 01/19] tracepoint: Add trace_call__##name() API
-Date: Mon, 23 Mar 2026 12:00:20 -0400
-Message-ID: <20260323160052.17528-2-vineeth@bitbyteword.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260323160052.17528-1-vineeth@bitbyteword.org>
-References: <20260323160052.17528-1-vineeth@bitbyteword.org>
+        Mon, 23 Mar 2026 09:19:08 -0700 (PDT)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+To: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard
+ Zingerman <eddyz87@gmail.com>, Harishankar Vishwanathan
+ <harishankar.vishwanathan@gmail.com>, Shung-Hsi Yu
+ <shung-hsi.yu@suse.com>, Srinivas Narayana
+ <srinivas.narayana@rutgers.edu>, Santosh Nagarakatte
+ <santosh.nagarakatte@rutgers.edu>
+Subject: Re: [PATCH v2 bpf-next 4/6] bpf: Simulate branches to prune based
+ on range violations
+In-Reply-To: <d4fe45f8bd5c6a48efd2ba3b66932bf7eb5aa020.1774025082.git.paul.chaignon@gmail.com>
+References: <cover.1774025082.git.paul.chaignon@gmail.com>
+ <d4fe45f8bd5c6a48efd2ba3b66932bf7eb5aa020.1774025082.git.paul.chaignon@gmail.com>
+Date: Mon, 23 Mar 2026 16:19:08 +0000
+Message-ID: <87ldfijz7n.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Add trace_call__##name() as a companion to trace_##name().  When a
-caller already guards a tracepoint with an explicit enabled check:
+Paul Chaignon <paul.chaignon@gmail.com> writes:
 
-  if (trace_foo_enabled() && cond)
-      trace_foo(args);
+> From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+>
+> This patch fixes the invariant violations that can happen after we
+> refine ranges & tnum based on an incorrectly-detected branch condition.
+> For example, the branch is always true, but we miss it in
+> is_branch_taken; we then refine based on the branch being false and end
+> up with incoherent ranges (e.g. umax < umin).
+>
+> To avoid this, we can simulate the refinement on both branches. More
+> specifically, this patch simulates both branches taken using
+> regs_refine_cond_op and reg_bounds_sync. If the resulting register
+> states are ill-formed on one of the branches, is_branch_taken can mark
+> that branch as "never taken".
+>
+> On a more formal note, we can deduce a branch is not taken when
+> regs_refine_cond_op or reg_bounds_sync returns an ill-formed state
+> because the branch operators are sound (formally verified). Soundness
+> means that the verifier is guaranteed to produce sound outputs on the
+> taken branches. On the non-taken branch (explored because of
+> imprecision in the bounds), the verifier is free to produce any output.
+> We use ill-formedness as a signal that the branch is dead and prune
+> that branch.
+>
+> This patch moves the refinement logic for both branches from
+> reg_set_min_max to their own function, simulate_both_branches_taken,
+> which is called from is_scalar_branch_taken. As a result,
+> reg_set_min_max now only runs sanity checks and has been renamed to
+> reg_bounds_sanity_check_branches to reflect that.
+>
+> We have had five patches fixing specific cases of invariant violations
+> in the past, all added with selftests:
+> - commit fbc7aef517d8 ("bpf: Fix u32/s32 bounds when ranges cross
+>   min/max boundary")
+> - commit efc11a667878 ("bpf: Improve bounds when tnum has a single
+>   possible value")
+> - commit f41345f47fb2 ("bpf: Use tnums for JEQ/JNE is_branch_taken
+>   logic")
+> - commit 00bf8d0c6c9b ("bpf: Improve bounds when s64 crosses sign
+>   boundary")
+> - commit 6279846b9b25 ("bpf: Forget ranges when refining tnum after
+>   JSET")
+>
+> To confirm that this patch addresses all invariant violations, we have
+> also reverted those five commits and verified that their related
+> selftests don't cause any invariant violation warnings anymore. Those
+> selftests still fail but only because of mis-detected branches or
+> less-precise bounds than expected. This demonstrates that the current
+> patch is enough to avoid the invariant violation warning AND that the
+> previous five patches are still useful to improve branch detection.
+>
+> In addition to the selftests, this change was also tested with the
+> Cilium complexity test suite: all programs were successfully loaded and
+> it didn't change the number of processed instructions.
+>
+> Reported-by: syzbot+c950cc277150935cc0b5@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=c950cc277150935cc0b5
+> Co-developed-by: Paul Chaignon <paul.chaignon@gmail.com>
+> Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
+> Co-developed-by: Srinivas Narayana <srinivas.narayana@rutgers.edu>
+> Signed-off-by: Srinivas Narayana <srinivas.narayana@rutgers.edu>
+> Co-developed-by: Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
+> Signed-off-by: Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
+> Signed-off-by: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+> ---
+>  kernel/bpf/verifier.c | 84 +++++++++++++++++++++++++------------------
+>  1 file changed, 49 insertions(+), 35 deletions(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 8d7ad5f21ed6..0b4f622efec1 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -16717,11 +16717,48 @@ static void find_good_pkt_pointers(struct bpf_verifier_state *vstate,
+>  	}));
+>  }
+>  
+> +static void regs_refine_cond_op(struct bpf_reg_state *reg1, struct bpf_reg_state *reg2,
+> +				u8 opcode, bool is_jmp32);
+> +static u8 rev_opcode(u8 opcode);
+> +
+> +/* Learn more information about live branches by simulating both branches being
+> + * taken using regs_refine_cond_op. Because regs_refine_cond_op is sound when
+> + * the branch is taken, if it produces ill-formed register bounds, it must mean
+> + * that the branch is dead.
+> + */
+Sorry for being nit-picky, could you please use kernel style comment style +
+maybe reword it a little bit, instead of:
 
-trace_foo() internally repeats the static_branch_unlikely() test, which
-the compiler cannot fold since static branches are patched binary
-instructions.  This results in two static-branch evaluations for every
-guarded call site.
+/*
+ * Because regs_refine_cond_op is sound when
+ * the branch is taken, if it produces ill-formed register bounds, it must mean
+ * that the branch is dead.
+ */
+Something like:
+/*
+ * regs_refine_cond_op() is sound, so producing ill-formed register
+ * bounds for the branch means that branch is dead.
+ */
 
-trace_call__##name() calls __do_trace_##name() directly, skipping the
-redundant static-branch re-check.  This avoids leaking the internal
-__do_trace_##name() symbol into call sites while still eliminating the
-double evaluation:
-
-  if (trace_foo_enabled() && cond)
-      trace_invoke_foo(args);   /* calls __do_trace_foo() directly */
-
-Three locations are updated:
-- __DECLARE_TRACE: invoke form omits static_branch_unlikely, retains
-  the LOCKDEP RCU-watching assertion.
-- __DECLARE_TRACE_SYSCALL: same, plus retains might_fault().
-- !TRACEPOINTS_ENABLED stub: empty no-op so callers compile cleanly
-  when tracepoints are compiled out.
-
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Vineeth Pillai (Google) <vineeth@bitbyteword.org>
-Assisted-by: Claude:claude-sonnet-4-6
----
- include/linux/tracepoint.h | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
-index 22ca1c8b54f32..ed969705341f1 100644
---- a/include/linux/tracepoint.h
-+++ b/include/linux/tracepoint.h
-@@ -294,6 +294,10 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
- 			WARN_ONCE(!rcu_is_watching(),			\
- 				  "RCU not watching for tracepoint");	\
- 		}							\
-+	}								\
-+	static inline void trace_call__##name(proto)			\
-+	{								\
-+		__do_trace_##name(args);				\
- 	}
- 
- #define __DECLARE_TRACE_SYSCALL(name, proto, args, data_proto)		\
-@@ -313,6 +317,11 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
- 			WARN_ONCE(!rcu_is_watching(),			\
- 				  "RCU not watching for tracepoint");	\
- 		}							\
-+	}								\
-+	static inline void trace_call__##name(proto)			\
-+	{								\
-+		might_fault();						\
-+		__do_trace_##name(args);				\
- 	}
- 
- /*
-@@ -398,6 +407,8 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
- #define __DECLARE_TRACE_COMMON(name, proto, args, data_proto)		\
- 	static inline void trace_##name(proto)				\
- 	{ }								\
-+	static inline void trace_call__##name(proto)			\
-+	{ }								\
- 	static inline int						\
- 	register_trace_##name(void (*probe)(data_proto),		\
- 			      void *data)				\
--- 
-2.53.0
-
+> +static int simulate_both_branches_taken(struct bpf_verifier_env *env, u8 opcode, bool is_jmp32)
+> +{
+> +	/* Fallthrough (FALSE) branch */
+> +	regs_refine_cond_op(&env->false_reg1, &env->false_reg2, rev_opcode(opcode), is_jmp32);
+> +	reg_bounds_sync(&env->false_reg1);
+> +	reg_bounds_sync(&env->false_reg2);
+This is probably more related to patch 2: is it necessary to have both
+true/false_reg1/2 pairs, it looks like we process false branch before
+the true branch and they never intersect, don't they? So it worth
+removing a pair of bpf_reg_states from env?
+> +	/* If there is a range bounds violation in *any* of the abstract values in
+> +	 * either reg_states in the FALSE branch (i.e. reg1, reg2), the
+> +	 * FALSE branch must be dead. Only TRUE branch will be taken.
+> +	 */
+> +	if (range_bounds_violation(&env->false_reg1) || range_bounds_violation(&env->false_reg2))
+> +		return 1;
+> +
+> +	/* Jump (TRUE) branch */
+> +	regs_refine_cond_op(&env->true_reg1, &env->true_reg2, opcode, is_jmp32);
+> +	reg_bounds_sync(&env->true_reg1);
+> +	reg_bounds_sync(&env->true_reg2);
+> +	/* If there is a range bounds violation in *any* of the abstract values in
+> +	 * either reg_states in the TRUE branch (i.e. true_reg1, true_reg2), the
+> +	 * TRUE branch must be dead. Only FALSE branch will be taken.
+> +	 */
+> +	if (range_bounds_violation(&env->true_reg1) || range_bounds_violation(&env->true_reg2))
+> +		return 0;
+> +
+> +	/* Both branches are possible, we can't determine which one will be taken. */
+> +	return -1;
+> +}
+> +
+>  /*
+>   * <reg1> <op> <reg2>, currently assuming reg2 is a constant
+>   */
+> -static int is_scalar_branch_taken(struct bpf_reg_state *reg1, struct bpf_reg_state *reg2,
+> -				  u8 opcode, bool is_jmp32)
+> +static int is_scalar_branch_taken(struct bpf_verifier_env *env, struct bpf_reg_state *reg1,
+> +				  struct bpf_reg_state *reg2, u8 opcode, bool is_jmp32)
+>  {
+>  	struct tnum t1 = is_jmp32 ? tnum_subreg(reg1->var_off) : reg1->var_off;
+>  	struct tnum t2 = is_jmp32 ? tnum_subreg(reg2->var_off) : reg2->var_off;
+> @@ -16873,7 +16910,7 @@ static int is_scalar_branch_taken(struct bpf_reg_state *reg1, struct bpf_reg_sta
+>  		break;
+>  	}
+>  
+> -	return -1;
+> +	return simulate_both_branches_taken(env, opcode, is_jmp32);
+>  }
+>  
+>  static int flip_opcode(u32 opcode)
+> @@ -16944,8 +16981,8 @@ static int is_pkt_ptr_branch_taken(struct bpf_reg_state *dst_reg,
+>   * -1 - unknown. Example: "if (reg1 < 5)" is unknown when register value
+>   *      range [0,10]
+>   */
+> -static int is_branch_taken(struct bpf_reg_state *reg1, struct bpf_reg_state *reg2,
+> -			   u8 opcode, bool is_jmp32)
+> +static int is_branch_taken(struct bpf_verifier_env *env, struct bpf_reg_state *reg1,
+> +			   struct bpf_reg_state *reg2, u8 opcode, bool is_jmp32)
+>  {
+>  	if (reg_is_pkt_pointer_any(reg1) && reg_is_pkt_pointer_any(reg2) && !is_jmp32)
+>  		return is_pkt_ptr_branch_taken(reg1, reg2, opcode);
+> @@ -16983,7 +17020,7 @@ static int is_branch_taken(struct bpf_reg_state *reg1, struct bpf_reg_state *reg
+>  	}
+>  
+>  	/* now deal with two scalars, but not necessarily constants */
+> -	return is_scalar_branch_taken(reg1, reg2, opcode, is_jmp32);
+> +	return is_scalar_branch_taken(env, reg1, reg2, opcode, is_jmp32);
+>  }
+>  
+>  /* Opcode that corresponds to a *false* branch condition.
+> @@ -17074,8 +17111,8 @@ static void regs_refine_cond_op(struct bpf_reg_state *reg1, struct bpf_reg_state
+>  			/* u32_min_value is not equal to 0xffffffff at this point,
+>  			 * because otherwise u32_max_value is 0xffffffff as well,
+>  			 * in such a case both reg1 and reg2 would be constants,
+> -			 * jump would be predicted and reg_set_min_max() won't
+> -			 * be called.
+> +			 * jump would be predicted and regs_refine_cond_op()
+> +			 * wouldn't be called.
+>  			 *
+>  			 * Same reasoning works for all {u,s}{min,max}{32,64} cases
+>  			 * below.
+> @@ -17182,34 +17219,11 @@ static void regs_refine_cond_op(struct bpf_reg_state *reg1, struct bpf_reg_state
+>  	}
+>  }
+>  
+> -/* Adjusts the register min/max values in the case that the dst_reg and
+> - * src_reg are both SCALAR_VALUE registers (or we are simply doing a BPF_K
+> - * check, in which case we have a fake SCALAR_VALUE representing insn->imm).
+> - * Technically we can do similar adjustments for pointers to the same object,
+> - * but we don't support that right now.
+> - */
+> -static int reg_set_min_max(struct bpf_verifier_env *env,
+> -			   u8 opcode, bool is_jmp32)
+> +/* Check for invariant violations on the registers for both branches of a condition */
+> +static int regs_bounds_sanity_check_branches(struct bpf_verifier_env *env)
+>  {
+>  	int err;
+>  
+> -	/* If either register is a pointer, we can't learn anything about its
+> -	 * variable offset from the compare (unless they were a pointer into
+> -	 * the same object, but we don't bother with that).
+> -	 */
+> -	if (env->false_reg1.type != SCALAR_VALUE || env->false_reg2.type != SCALAR_VALUE)
+> -		return 0;
+> -
+> -	/* fallthrough (FALSE) branch */
+> -	regs_refine_cond_op(&env->false_reg1, &env->false_reg2, rev_opcode(opcode), is_jmp32);
+> -	reg_bounds_sync(&env->false_reg1);
+> -	reg_bounds_sync(&env->false_reg2);
+> -
+> -	/* jump (TRUE) branch */
+> -	regs_refine_cond_op(&env->true_reg1, &env->true_reg2, opcode, is_jmp32);
+> -	reg_bounds_sync(&env->true_reg1);
+> -	reg_bounds_sync(&env->true_reg2);
+> -
+>  	err = reg_bounds_sanity_check(env, &env->true_reg1, "true_reg1");
+>  	err = err ?: reg_bounds_sanity_check(env, &env->true_reg2, "true_reg2");
+>  	err = err ?: reg_bounds_sanity_check(env, &env->false_reg1, "false_reg1");
+> @@ -17595,7 +17609,7 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
+>  	copy_register_state(&env->false_reg2, src_reg);
+>  	copy_register_state(&env->true_reg1, dst_reg);
+>  	copy_register_state(&env->true_reg2, src_reg);
+> -	pred = is_branch_taken(dst_reg, src_reg, opcode, is_jmp32);
+> +	pred = is_branch_taken(env, dst_reg, src_reg, opcode, is_jmp32);
+>  	if (pred >= 0) {
+>  		/* If we get here with a dst_reg pointer type it is because
+>  		 * above is_branch_taken() special cased the 0 comparison.
+> @@ -17659,7 +17673,7 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
+>  		return PTR_ERR(other_branch);
+>  	other_branch_regs = other_branch->frame[other_branch->curframe]->regs;
+>  
+> -	err = reg_set_min_max(env, opcode, is_jmp32);
+> +	err = regs_bounds_sanity_check_branches(env);
+>  	if (err)
+>  		return err;
+>  
+> -- 
+> 2.43.0
