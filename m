@@ -1,175 +1,144 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.76.78.106])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 814FC38654A
-	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 12:02:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.76.78.106
+Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE7637BE79;
+	Mon, 23 Mar 2026 12:06:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.13.80.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774267339; cv=none; b=ntyV1wRM2eAMc1myiIBy/mPhmSBORJQ2WkD/zBPvKgF0+BJ6V1NEmqaxRrdtPMXGgvWoqV5+WigyUBiQ0jSnxb8fwcFf/sEksgqOK+wbmQIAwuMUPq5MiFS9MQCND98H4xGWnUSPDFPnozvpNR68DNp6oHNMWBI1JF7z5CltLGw=
+	t=1774267616; cv=none; b=SlPf7rN7NGDi2YWAGJBDMygDNuZhut7ji40Xvn+phegLINhMToUt9ap+g6A4C5khQkLd7n9dJ4S/iIrqzblLzRQaAmEH6D/2U7eYCr2mN2OLE5HMWsnlVk6sZYUcLt8p0ItclAuIcM5+WMc7/sEKtZSU1lmGv05r6aCHb7aUu1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774267339; c=relaxed/simple;
-	bh=EV0sxZWGCcfXcXPtN1zDH+yk93BZuABTHXIKy22YpOs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=NCUx3HvgjFzFqdTi1sVDqhJRgIzMKOpSNQuGNAoxJQ6Nio5bHfjG617iVFFgaQeF+ywjTf+enX/ozz/BXKp9kOlTvWaSRSyqcPKOecxw6QkLlKuBy8LSMWBGWauZNBtaugMwA6ETOwhVsyj2YAelOj0Axw+eR1nTyk4J2migOi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=13.76.78.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [10.162.82.142])
-	by mtasvr (Coremail) with SMTP id _____wBHTUWfK8FpUwRIAA--.3624S3;
-	Mon, 23 Mar 2026 20:01:36 +0800 (CST)
-Received: from tangyazhou$zju.edu.cn ( [10.162.82.142] ) by
- ajax-webmail-mail-app3 (Coremail) ; Mon, 23 Mar 2026 20:01:34 +0800
- (GMT+08:00)
-Date: Mon, 23 Mar 2026 20:01:34 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: "Yazhou Tang" <tangyazhou@zju.edu.cn>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
-	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
-	song@kernel.org, yonghong.song@linux.dev, kpsingh@kernel.org,
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
-	tangyazhou518@outlook.com, shenghaoyuan0928@163.com, ziye@zju.edu.cn
-Subject: Re: [PATCH bpf v2 2/3] selftests/bpf: Add test for large offset
- bpf-to-bpf call
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.3-cmXT6 build
- 20250620(94335109) Copyright (c) 2002-2026 www.mailtech.cn zju.edu.cn
-In-Reply-To: <20260323081748.106603-3-tangyazhou@zju.edu.cn>
-References: <20260323081748.106603-1-tangyazhou@zju.edu.cn>
- <20260323081748.106603-3-tangyazhou@zju.edu.cn>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	s=arc-20240116; t=1774267616; c=relaxed/simple;
+	bh=AtZ3moN5ceTrzdk9n7Rb62LsXZK7LaYDrg+YYNVYmog=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=LE+F6DvgdNpy89nbztjO3UCwKPdTEhbuu4AJN4zBAbFl59Vr55mJ6UkPq88yoWY0pPNJTmxdXQRfrT6jj4rAgaecvWfM+rf1Nh47leQwBR7DomGHdHtqgI5hapsjgr0YGEcFjD+SWhJtOmwLHY0IaqV2ktITzDTyKs0aA33V83k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de; spf=pass smtp.mailfrom=tipi-net.de; dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b=X+WY7x2y; arc=none smtp.client-ip=194.13.80.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b="X+WY7x2y"
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 752F8A5857;
+	Mon, 23 Mar 2026 13:06:42 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
+	t=1774267604; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=SLHKU2FK8FdfRAdN14XZV1JwdlFHMY42usYjkOK4Hc4=;
+	b=X+WY7x2y3Te7HT5OojrQ8Wt0hBE0TDonMzODI4ltkAGwd14e4Hz/edE1vVpIUaLYUTubzK
+	PAKsUJgrZHNfdPxPRQcIxsIeW0mx74mLunX/+L8yjb0hkWJ4Ug9TFHqpSTIGCKP85vCj/u
+	+W/DkIGWNshkrg8lb/uEFhPsh/0Vwg3yIDd7l8+pEVl0QLXL81rPTAMs07C2FMZvT+f8Dv
+	jztxDFoUJfV3wNagjNyTSz0A6M/yx1IquEuuhgtAS6C65Yx5tnJi+McWLVauTzrmzp308V
+	4zR2GZicvHwnji4v2CpjRlrua7NWtqA/IzQFEGDL61Cp44b++AVxP4f/F5dcoA==
+From: Nicolai Buchwitz <nb@tipi-net.de>
+To: netdev@vger.kernel.org
+Cc: Justin Chen <justin.chen@broadcom.com>,
+	Simon Horman <horms@kernel.org>,
+	Nicolai Buchwitz <nb@tipi-net.de>,
+	Doug Berger <opendmb@gmail.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH net-next v4 2/6] net: bcmgenet: register xdp_rxq_info for each RX ring
+Date: Mon, 23 Mar 2026 13:05:31 +0100
+Message-ID: <20260323120539.136029-3-nb@tipi-net.de>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260323120539.136029-1-nb@tipi-net.de>
+References: <20260323120539.136029-1-nb@tipi-net.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <4297c262.8c061.19d1a926470.Coremail.tangyazhou@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:zS_KCgDnsXWeK8Fp3w4OAA--.4684W
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBg8TCmnARgsnSwAAsY
-X-CM-DELIVERINFO: =?B?8NLvCwXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9AwFXKNkNfr5mqoaitlIXN/XyvetGOtaRU99dy7Js7Xvt0aAV4r8a9zrK3m9GgW0FCII
-	mnCAs6acvtWb/uc1dcvlbO8N2ZlZZGQGdSgU3Y/xTmdny9Xim8UzrKmnbvVLRg==
-X-Coremail-Antispam: 1Uk129KBj93XoW3GF4xGryfKrWkZF4xXw17XFc_yoW7tw1rpa
-	4kWFy3KF1xGFW2kr1xAFZrZFn8GF4kZFyjvrWIqr98Arn8Ar97Grs7KrWYqa43CrZ5ZwnY
-	vFZI9an3Cr48JFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUQYb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
-	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAF
-	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0Y48IcxkI7V
-	AKI48G6xCjnVAKz4kxM4xvF2IEb7IF0Fy264kE64k0F24lFcxC0VAYjxAxZF0Ex2IqxwAC
-	I402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
-	W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
-	1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
-	IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
-	x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UMVCEFcxC0VAYjx
-	AxZFUvcSsGvfC2KfnxnUUI43ZEXa7IU8rcTJUUUUU==
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-SGkgZXZlcnlvbmUsCgpQbGVhc2UgaWdub3JlIHRoaXMgdjIgc2VyaWVzLiBJIGp1c3QgcmVhbGl6
-ZWQgdGhhdCBJIGFjY2lkZW50YWxseSBkcm9wcGVkCmEgcGFyZW50aGVzaXMgaW4gcGF0Y2ggMi8z
-IHJpZ2h0IGJlZm9yZSBzZW5kaW5nIGl0IG91dCwgd2hpY2ggYnJlYWtzIHRoZQpidWlsZCBhbmQg
-Y2F1c2VzIHRoZSBDSSB0byBmYWlsLgoKSSB3aWxsIGZpeCB0aGlzIHR5cG8gYW5kIHNlbmQgYSB2
-MyBzaG9ydGx5LiBTb3JyeSBmb3IgdGhlIG5vaXNlLgoKQmVzdCwKCllhemhvdQoKT24gMy8yMy8y
-NiAxNjoxNywgWWF6aG91IFRhbmcgd3JvdGU6Cj4gRnJvbTogWWF6aG91IFRhbmcgPHRhbmd5YXpo
-b3U1MThAb3V0bG9vay5jb20+Cj4gCj4gQWRkIGEgc2VsZnRlc3QgdG8gdmVyaWZ5IHRoZSB2ZXJp
-ZmllciBhbmQgSklUIGJlaGF2aW9yIHdoZW4gaGFuZGxpbmcKPiBicGYtdG8tYnBmIGNhbGxzIHdp
-dGggcmVsYXRpdmUganVtcCBvZmZzZXRzIGV4Y2VlZGluZyB0aGUgczE2IGJvdW5kYXJ5Lgo+IAo+
-IFRoZSB0ZXN0IHV0aWxpemVzIGFuIGlubGluZSBhc3NlbWJseSBibG9jayB3aXRoICIucmVwdCAy
-MDAwMDAiIHRvIGdlbmVyYXRlCj4gYSBtYXNzaXZlIGR1bW15IHN1YnByb2dyYW0uIEJ5IHBsYWNp
-bmcgdGhpcyBwYWRkaW5nIGJldHdlZW4gdGhlIG1haW4gcHJvZ3JhbQo+IGFuZCB0aGUgdGFyZ2V0
-IHN1YnByb2dyYW0sIGl0IGZvcmNlcyB0aGUgdmVyaWZpZXIgdG8gcHJvY2VzcyBhIGJwZi10by1i
-cGYgY2FsbAo+IHdpdGggdGhlIGltbSBmaWVsZCBleGNlZWRpbmcgdGhlIHMxNiByYW5nZS4KPiAK
-PiBUaGUgdXNlci1zcGFjZSB0ZXN0IGRyaXZlciBkeW5hbWljYWxseSBhZGFwdHMgdG8gdGhlIGhv
-c3QncyBjb25maWd1cmF0aW9uOgo+IC0gV2hlbiBKSVQgaXMgZW5hYmxlZCwgaXQgYXNzZXJ0cyB0
-aGF0IHRoZSBwcm9ncmFtIGlzIHN1Y2Nlc3NmdWxseSBsb2FkZWQsCj4gICBKSVQtY29tcGlsZWQs
-IGFuZCBleGVjdXRlcyBjb3JyZWN0bHkgdG8gcmV0dXJuIHRoZSBleHBlY3RlZCB2YWx1ZS4KPiAt
-IFdoZW4gSklUIGlzIGRpc2FibGVkLCBpdCBhc3NlcnRzIHRoYXQgdGhlIHZlcmlmaWVyIGNsZWFu
-bHkgcmVqZWN0cyB0aGUKPiAgIHByb2dyYW0gd2l0aCAtRUlOVkFMIChvciAtRU5PU1BDIGlmIHRo
-ZSBsb2cgYnVmZmVyIGlzIHRydW5jYXRlZCksIG1hdGNoaW5nCj4gICB0aGUgZXhwZWN0ZWQgIm9m
-ZnNldCBvdXQgb2YgcmFuZ2UiIGVycm9yIGxvZy4KPiAKPiBOb3RlOiBUbyBlbnN1cmUgdGhlIHRl
-c3QgaXMgYm90aCBlZmZlY3RpdmUgYXQgbG9hZCB0aW1lIGFuZCBlZmZpY2llbnQgYXQKPiBydW50
-aW1lLCB0d28gc3BlY2lmaWMgdHJpY2tzIGFyZSBlbXBsb3llZDoKPiAxLiBQcmV2ZW50IENvbXBp
-bGVyIE9wdGltaXphdGlvbjogQSB2b2xhdGlsZSB2YXJpYWJsZSAobWFnaWNfcmV0KSBpcyB1c2Vk
-Cj4gICAgaW5zaWRlIHRhcmdldF9zdWJwcm9nKCkuIFRoaXMgcHJldmVudHMgdGhlIGNvbXBpbGVy
-IGZyb20gb3B0aW1pemluZwo+ICAgIHRoZSBmdW5jdGlvbiBhd2F5IG9yIGFnZ3Jlc3NpdmVseSBp
-bmxpbmluZyBpdCwgZW5zdXJpbmcgdGhlIHN1YnByb2dyYW0KPiAgICBhbmQgdGhlIGNhbGwgaW5z
-dHJ1Y3Rpb24gYXJlIHN0cmljdGx5IHJldGFpbmVkIGluIHRoZSBmaW5hbCBCUEYgYnl0ZWNvZGUu
-Cj4gMi4gUHJldmVudCBFeGVjdXRpb24gRGVncmFkYXRpb246IFRoZSBtYXNzaXZlIHBhZGRpbmcg
-c3VicHJvZ3JhbSBpcwo+ICAgIGNvbmRpdGlvbmFsbHkgY2FsbGVkIHVzaW5nIGEgZ2xvYmFsIHZv
-bGF0aWxlIHZhcmlhYmxlICgiaW50IHplcm8iLCB3aG9zZQo+ICAgIHZhbHVlIGlzIGFjdHVhbGx5
-IDApLiBUaGlzIGZvcmNlcyB0aGUgdmVyaWZpZXIgdG8gc3RhdGljYWxseSBhbmFseXplIHRoZQo+
-ICAgIGJyYW5jaCBhbmQgY2FsY3VsYXRlIHRoZSBnaWFudCBqdW1wIG9mZnNldCwgYnV0IGFsbG93
-cyB0aGUgcnVudGltZSB0bwo+ICAgIGNvbXBsZXRlbHkgYnlwYXNzIHRoZSAyMDAsMDAwIGR1bW15
-IGluc3RydWN0aW9ucywgcHJldmVudGluZyBwZXJmb3JtYW5jZQo+ICAgIGRlZ3JhZGF0aW9uIGR1
-cmluZyB0ZXN0IGV4ZWN1dGlvbi4KPiAKPiBDby1kZXZlbG9wZWQtYnk6IFRpYW5jaSBDYW8gPHpp
-eWVAemp1LmVkdS5jbj4KPiBTaWduZWQtb2ZmLWJ5OiBUaWFuY2kgQ2FvIDx6aXllQHpqdS5lZHUu
-Y24+Cj4gQ28tZGV2ZWxvcGVkLWJ5OiBTaGVuZ2hhbyBZdWFuIDxzaGVuZ2hhb3l1YW4wOTI4QDE2
-My5jb20+Cj4gU2lnbmVkLW9mZi1ieTogU2hlbmdoYW8gWXVhbiA8c2hlbmdoYW95dWFuMDkyOEAx
-NjMuY29tPgo+IFNpZ25lZC1vZmYtYnk6IFlhemhvdSBUYW5nIDx0YW5neWF6aG91NTE4QG91dGxv
-b2suY29tPgo+IC0tLQo+ICAuLi4vc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL2NhbGxfbGFyZ2Vf
-aW1tLmMgfCA1MyArKysrKysrKysrKysrKysrKysrCj4gIC4uLi9zZWxmdGVzdHMvYnBmL3Byb2dz
-L2NhbGxfbGFyZ2VfaW1tLmMgICAgICB8IDM3ICsrKysrKysrKysrKysKPiAgMiBmaWxlcyBjaGFu
-Z2VkLCA5MCBpbnNlcnRpb25zKCspCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCB0b29scy90ZXN0aW5n
-L3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy9jYWxsX2xhcmdlX2ltbS5jCj4gIGNyZWF0ZSBtb2Rl
-IDEwMDY0NCB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ3MvY2FsbF9sYXJnZV9pbW0u
-Ywo+IAo+IGRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0
-cy9jYWxsX2xhcmdlX2ltbS5jIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVz
-dHMvY2FsbF9sYXJnZV9pbW0uYwo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAw
-MDAwMDAwLi45NWQ1MWIzY2M2YjYKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvdG9vbHMvdGVzdGlu
-Zy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvY2FsbF9sYXJnZV9pbW0uYwo+IEBAIC0wLDAgKzEs
-NTMgQEAKPiArLy8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjAKPiArI2luY2x1ZGUg
-PHRlc3RfcHJvZ3MuaD4KPiArI2luY2x1ZGUgImNhbGxfbGFyZ2VfaW1tLnNrZWwuaCIKPiArCj4g
-Ky8qCj4gKyAqIFRoaXMgdGVzdCBkeW5hbWljYWxseSBhZGFwdHMgdG8gdGhlIGN1cnJlbnQgZW52
-aXJvbm1lbnQsIGFuZCB3aWxsIHN1Y2NlZWQKPiArICogd2hldGhlciBKSVQgaXMgZW5hYmxlZCBv
-ciBub3QuCj4gKyAqIDEuIElmIEpJVCBpcyBlbmFibGVkOiBUaGUgdGVzdCBjYXNlIHdpbGwgc3Vj
-Y2Vzc2Z1bGx5IGxvYWQgYW5kIHJldHVybgo+ICsgKiAgICB0aGUgZXhwZWN0ZWQgdmFsdWUuCj4g
-KyAqIDIuIElmIEpJVCBpcyBkaXNhYmxlZDogSXQgYXNzZXJ0cyB0aGF0IHRoZSB2ZXJpZmllciBj
-bGVhbmx5IHJlamVjdHMgdGhlCj4gKyAqICAgIHByb2dyYW0gd2l0aCAtRUlOVkFMIChvciAtRU5P
-U1BDKSBhbmQgb3V0cHV0cyB0aGUgZXhwZWN0ZWQgZXJyb3IgbG9nLgo+ICsgKi8KPiArCj4gK3Zv
-aWQgdGVzdF9jYWxsX2xhcmdlX2ltbSh2b2lkKQo+ICt7Cj4gKwlzdHJ1Y3QgY2FsbF9sYXJnZV9p
-bW0gKnNrZWw7Cj4gKwlpbnQgZXJyLCBwcm9nX2ZkOwo+ICsJY2hhciBsb2dfYnVmWzQwOTZdOwo+
-ICsKPiArCUxJQkJQRl9PUFRTKGJwZl90ZXN0X3J1bl9vcHRzLCBvcHRzKTsKPiArCj4gKwlza2Vs
-ID0gY2FsbF9sYXJnZV9pbW1fX29wZW4oKTsKPiArCWlmICghQVNTRVJUX09LX1BUUihza2VsLCAi
-c2tlbF9vcGVuIikpCj4gKwkJcmV0dXJuOwo+ICsKPiArCWlmICghZW52LmppdF9lbmFibGVkKQo+
-ICsJCWJwZl9wcm9ncmFtX19zZXRfbG9nX2J1Zihza2VsLT5wcm9ncy5jYWxsX2xhcmdlX2ltbV90
-ZXN0LAo+ICsJCQkJCSBsb2dfYnVmLCBzaXplb2YobG9nX2J1ZikpOwo+ICsKPiArCWVyciA9IGNh
-bGxfbGFyZ2VfaW1tX19sb2FkKHNrZWwpOwo+ICsKPiArCWlmIChlbnYuaml0X2VuYWJsZWQpIHsK
-PiArCQlpZiAoIUFTU0VSVF9PSyhlcnIsICJsb2FkX3Nob3VsZF9zdWNjZWVkX3dpdGhfaml0Iikp
-Cj4gKwkJCWdvdG8gY2xlYW51cDsKPiArCj4gKwkJcHJvZ19mZCA9IGJwZl9wcm9ncmFtX19mZChz
-a2VsLT5wcm9ncy5jYWxsX2xhcmdlX2ltbV90ZXN0KTsKPiArCQllcnIgPSBicGZfcHJvZ190ZXN0
-X3J1bl9vcHRzKHByb2dfZmQsICZvcHRzKTsKPiArCj4gKwkJaWYgKEFTU0VSVF9PSyhlcnIsICJw
-cm9nX3J1bl9zdWNjZXNzIikpCj4gKwkJCUFTU0VSVF9FUShvcHRzLnJldHZhbCwgMywgInByb2df
-cmV0dmFsIik7Cj4gKwo+ICsJfSBlbHNlIHsKPiArCQlBU1NFUlRfRVJSKGVyciwgImxvYWRfc2hv
-dWxkX2ZhaWxfaW5faW50ZXJwcmV0ZXIiKTsKPiArCQlBU1NFUlRfVFJVRShlcnIgPT0gLUVJTlZB
-TCB8fCBlcnIgPT0gLUVOT1NQQywgImVycl9zaG91bGRfYmVfZWludmFsX29yX2Vub3NwYyIpOwo+
-ICsKPiArCQlpZiAoIUFTU0VSVF9PS19QVFIoc3Ryc3RyKGxvZ19idWYsICJicGYtdG8tYnBmIGNh
-bGwgb2Zmc2V0IG91dCBvZiByYW5nZSBmb3IgaW50ZXJwcmV0ZXIiKSwKPiArCQkJCSAgICJjaGVj
-a192ZXJpZmllcl9sb2dfbXNnIikpIHsKPiArCQkJcHJpbnRmKCJBY3R1YWwgdmVyaWZpZXIgbG9n
-OlxuJXNcbiIsIGxvZ19idWYpOwo+ICsJCX0KPiArCX0KPiArCj4gK2NsZWFudXA6Cj4gKwljYWxs
-X2xhcmdlX2ltbV9fZGVzdHJveShza2VsKTsKPiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9z
-ZWxmdGVzdHMvYnBmL3Byb2dzL2NhbGxfbGFyZ2VfaW1tLmMgYi90b29scy90ZXN0aW5nL3NlbGZ0
-ZXN0cy9icGYvcHJvZ3MvY2FsbF9sYXJnZV9pbW0uYwo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4g
-aW5kZXggMDAwMDAwMDAwMDAwLi5iYTZjZDQwNzM4YjcKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIv
-dG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dzL2NhbGxfbGFyZ2VfaW1tLmMKPiBAQCAt
-MCwwICsxLDM3IEBACj4gKy8vIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wCj4gKyNp
-bmNsdWRlIDxsaW51eC9icGYuaD4KPiArI2luY2x1ZGUgPGJwZi9icGZfaGVscGVycy5oPgo+ICsK
-PiArLyoKPiArICogQSB2b2xhdGlsZSBnbG9iYWwgdmFyaWFibGUgaXMgdXNlZCBoZXJlLCBzbyB0
-aGF0IHBhZGRpbmdfc3VicHJvZygpCj4gKyAqIHdpbGwgbm90IGJlIG9wdGltaXplZCwgYW5kIGl0
-IHdpbGwgbm90IGJlIHJlYWxseSBleGVjdXRlZCBldmVuIGlmCj4gKyAqIGl0IGlzIHN1Y2Nlc3Nm
-dWxseSBsb2FkZWQgKHdoZW4gSklUIGlzIGVuYWJsZWQpLgo+ICsgKi8KPiArdm9sYXRpbGUgaW50
-IHplcm8gPSAwOwo+ICsKPiArc3RhdGljIF9fYXR0cmlidXRlX18oKG5vaW5saW5lKSkgdm9pZCBw
-YWRkaW5nX3N1YnByb2codm9pZCkKPiArewo+ICsJYXNtIHZvbGF0aWxlICgiCQkJCQlcCj4gKwkJ
-cjAgPSAwOwkJCQkJXAo+ICsJCS5yZXB0IDIwMDAwMDsJCQkJXAo+ICsJCXIwICs9IDA7CQkJCVwK
-PiArCQkuZW5kcjsJCQkJCVwKPiArCSIgOjo6ICJyMCIpOwo+ICt9Cj4gKwo+ICtzdGF0aWMgX19h
-dHRyaWJ1dGVfXygobm9pbmxpbmUpKSBpbnQgdGFyZ2V0X3N1YnByb2codm9pZCkKPiArewo+ICsJ
-LyogQSB2b2xhdGlsZSB2YXJpYWJsZSBpcyB1c2VkIGhlcmUgdG8gcHJldmVudCBvcHRpbWl6YXRp
-b24uICovCj4gKwl2b2xhdGlsZSBpbnQgbWFnaWNfcmV0ID0gMzsKPiArCXJldHVybiBtYWdpY19y
-ZXQ7Cj4gK30KPiArCj4gK1NFQygic3lzY2FsbCIpCj4gK2ludCBjYWxsX2xhcmdlX2ltbV90ZXN0
-KHZvaWQgKmN0eCkKPiArewo+ICsJaWYgKHplcm8pCj4gKwkJcGFkZGluZ19zdWJwcm9nKCk7Cj4g
-KwlyZXR1cm4gdGFyZ2V0X3N1YnByb2coKTsKPiArfQo+ICsKPiArY2hhciBMSUNFTlNFW10gU0VD
-KCJsaWNlbnNlIikgPSAiR1BMIjsKPiAtLSAKPiAyLjUzLjAK
+Register an xdp_rxq_info per RX ring and associate it with the ring's
+page_pool via MEM_TYPE_PAGE_POOL. This is required infrastructure for
+XDP program execution: the XDP framework needs to know the memory model
+backing each RX queue for correct page lifecycle management.
+
+No functional change - XDP programs are not yet attached or executed.
+
+Signed-off-by: Nicolai Buchwitz <nb@tipi-net.de>
+---
+ drivers/net/ethernet/broadcom/genet/bcmgenet.c | 18 ++++++++++++++++++
+ drivers/net/ethernet/broadcom/genet/bcmgenet.h |  2 ++
+ 2 files changed, 20 insertions(+)
+
+diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+index f32acacadcf0..9f81192d9e31 100644
+--- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
++++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+@@ -2780,7 +2780,23 @@ static int bcmgenet_rx_ring_create_pool(struct bcmgenet_priv *priv,
+ 		return err;
+ 	}
+ 
++	err = xdp_rxq_info_reg(&ring->xdp_rxq, priv->dev, ring->index, 0);
++	if (err)
++		goto err_free_pp;
++
++	err = xdp_rxq_info_reg_mem_model(&ring->xdp_rxq, MEM_TYPE_PAGE_POOL,
++					 ring->page_pool);
++	if (err)
++		goto err_unreg_rxq;
++
+ 	return 0;
++
++err_unreg_rxq:
++	xdp_rxq_info_unreg(&ring->xdp_rxq);
++err_free_pp:
++	page_pool_destroy(ring->page_pool);
++	ring->page_pool = NULL;
++	return err;
+ }
+ 
+ /* Initialize a RDMA ring */
+@@ -2809,6 +2825,7 @@ static int bcmgenet_init_rx_ring(struct bcmgenet_priv *priv,
+ 	if (ret) {
+ 		for (i = 0; i < ring->size; i++)
+ 			bcmgenet_free_rx_cb(ring->cbs + i, ring->page_pool);
++		xdp_rxq_info_unreg(&ring->xdp_rxq);
+ 		page_pool_destroy(ring->page_pool);
+ 		ring->page_pool = NULL;
+ 		return ret;
+@@ -3014,6 +3031,7 @@ static void bcmgenet_destroy_rx_page_pools(struct bcmgenet_priv *priv)
+ 	for (i = 0; i <= priv->hw_params->rx_queues; ++i) {
+ 		ring = &priv->rx_rings[i];
+ 		if (ring->page_pool) {
++			xdp_rxq_info_unreg(&ring->xdp_rxq);
+ 			page_pool_destroy(ring->page_pool);
+ 			ring->page_pool = NULL;
+ 		}
+diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.h b/drivers/net/ethernet/broadcom/genet/bcmgenet.h
+index 11a0ec563a89..82a6d29f481d 100644
+--- a/drivers/net/ethernet/broadcom/genet/bcmgenet.h
++++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.h
+@@ -16,6 +16,7 @@
+ #include <linux/dim.h>
+ #include <linux/ethtool.h>
+ #include <net/page_pool/helpers.h>
++#include <net/xdp.h>
+ 
+ #include "../unimac.h"
+ 
+@@ -579,6 +580,7 @@ struct bcmgenet_rx_ring {
+ 	u32		rx_max_coalesced_frames;
+ 	u32		rx_coalesce_usecs;
+ 	struct page_pool *page_pool;
++	struct xdp_rxq_info xdp_rxq;
+ 	struct bcmgenet_priv *priv;
+ };
+ 
+-- 
+2.51.0
 
