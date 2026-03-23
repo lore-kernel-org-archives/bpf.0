@@ -1,228 +1,301 @@
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azon11012014.outbound.protection.outlook.com [40.107.209.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 177E33DE433
-	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 20:22:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 968042FE582;
+	Mon, 23 Mar 2026 20:37:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.209.14
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774297368; cv=pass; b=gz4AR46U+vSPSB9Vy2ZP9LTbDnxgDL2WqMAAt+WHvl1d9eDW2cMn47QI/fcsV3LqZ6QKJc920XVB3NYJ0/6CHJwVKxpfHTaqiRRt/i7yNsNjs6NMu94h2DL4BLTlC+hstYQ5VHBZIqTeo6lyoVAxn6/TPryEFs/x0yFiwdqYxA4=
+	t=1774298257; cv=fail; b=WzBTOKCis95jQ0pwAnCB965BJAAZl7cDbZPBum+f49gq0GipBX0Uj7GkVEw9VMDnu4hFo6hYCCzRSUtFVuI/VGUrmsQelpVDYO+LoGH4S+eKSdOqEmLQn6nYOL1R7FJ7ldAbzKwmYdgOGkyGflO32NO8zETe2yvXBgPsVmK9k4Y=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774297368; c=relaxed/simple;
-	bh=+Ww3YVEwz3akOCPkGfwPOz5g/SjxY63PNjUlqwWXbGQ=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iOCnpz3qWXhd/uqmWk3nCmkvZOEWQFWpRLEUMnW6IKEgmbPHSCYl+1SNSv3SaX23jePu/kV2OipJ3U431PyzfYGX/UOJzpa51cls/3OSXjQXmTSjWoEUwNIYKnODX9+dkWVfEmd/E8AMLHKNwdu669GyXmWDxSRKr+WtLCjZIgw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ibwuzlau; arc=pass smtp.client-ip=209.85.217.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1774298257; c=relaxed/simple;
+	bh=IhYsZ0Rol1GJPQaJmdLFfX8WvDgvmIVZyn1yalYyFJs=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=VJYq2OYqBwCK/DqWAhv2soIvN3zg8yutBsCfdu2d13G5yoCBtgMNtxbTO6vR2EChlSiatiXlzwRwc1P6+/yUB5e+QsGPc31eh8lWXL8dY9tKZ1UzG6ER0QduK+H9vM81IBmuHHDnMeKzTfLyYaMiFSZWM/NDL31V/6evR/DE5hU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Q/RaUzDW; arc=fail smtp.client-ip=40.107.209.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ibwuzlau"
-Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-5fff13d5a19so3578420137.0
-        for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 13:22:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774297365; cv=none;
-        d=google.com; s=arc-20240605;
-        b=e5Ecer6/xpql7PogjXmDuy7R1Xl+JOtpgxnYa6VXqs6z8Nvccy6wqSTtBqccstU4ce
-         SO/Q6N4SVwYN1jKS5qCOU8vGCALIYn9yPLwo6wM83R+GihRZovJVxNzD+tLZ6EamSJqT
-         GGfRYHGH40sRrdIo3Pq9h+TXc+D5DxntILqn4oEQczmXy+k0DXLmiOHlLyTW2A2Gl6Ut
-         4I5Lq4MNxX0RlmPvDuEiaE6FQVA7jtS7ogFnzMjRtH4Kfm6bXvKjw390jw1ZCAjhG+rm
-         4fQxjnk3bfXsvucrTzgH9mY81ZE2q7h4wVFtUmTOGUDRmGsVnS/xwd0zrEXsKIdlpe6Z
-         aKKw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=DfIEo8yQ3CK3TKTvqaXVb6LUrtHQE6Lxe6QzmQiMk8w=;
-        fh=vkp5yT2oQYwIQjwSsln2U3sz82TDyyP+qSiDAodFLSI=;
-        b=c/TKKEhlJcKlbWhp6BlLIGycApKTPiIKgWa2opAFcDDWNyC6Noz5dEofcz58aEg1a9
-         JNTJ5I0u3LVGm6MR/RVT2YfKOULz2ErXE7y18zp4eSwmk34G2Wgq+ePczNf0opwzf9i3
-         6HUw15BRVHP0168/rmiAwnqsoJwEB/B7WQPkAyTcjVED+qGIFvKJ9ZI2PuOCt3dT49r3
-         /cHdv6QONptUucTPo1pNfw4SYB7bz+aEno1wtIcKkWcP1NRQpihlDar/LPhBkksfAQ7q
-         whkMIP0JNuzc0yhQrrxZsHtRc/QBrfg1t374AInOdo3iEiZoKXjIsDON4akkWMzowWTz
-         3vkg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774297365; x=1774902165; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DfIEo8yQ3CK3TKTvqaXVb6LUrtHQE6Lxe6QzmQiMk8w=;
-        b=Ibwuzlauj5c8iKXxG1nK0hN4JyHV1Mv3KfKVQuiM0E+dlMSGVRwp8PfoYFyP1KyuxP
-         TV8eM6VPHDio+E5Cn8SvvUl81aCB1scyZpRBpQDqfaLDZ/2fcpxRSgfNro+mQ6DrusbP
-         Z/a96ziy/AhJVi5KNvSFNb0PJC3qVLwpHNJIPJ+i2XhBM9b547uqZ6kBX5VfuKRPpGll
-         zvvg4ItxeGu1cu1UCqpMsS5/wsgfWhO4cfLEXuCTkRTZm/O8BRjqXxrk7D84ejUoBBku
-         ZfHITQWeg4EzxLmcIyXpuaZa2R++4mxy+6mdQVDjSpf0LTRgOhE1fJU0yDfXDeikC89Y
-         vkow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774297365; x=1774902165;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DfIEo8yQ3CK3TKTvqaXVb6LUrtHQE6Lxe6QzmQiMk8w=;
-        b=c6bo0FpsyumpDjibl5TZNKXYZJ0SGjlW9jegVdBMgzV3/0v7JehfUF3F2tpt5aPrfm
-         Pfoazbb1GyWhJ8RwlxehDMK8SHeou0gXXAnDtcJEBSBwwtG+JGQa+9mmvre9BCd8NbwN
-         ufERXepAN/hw2glQgaqsTGUPAoRsMDAlovesqVfm06TdT2ukuXpi9JpHSYTOJSZbUoC7
-         NebGyBcEA1ZMPAKPfd7WpaAfz7Bh5TqjsXfoLIB/+c+NH4SAckCR+dL6SatMsZ008gOp
-         5ap2zu3TWwzlKUa4lwtUvvynwxUw4YGtGhTuKvPKEEVIunNbDRSVyvcE9TRYb4sm4Cjs
-         QaWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXEZ5mZWSIUU6Kp6iwUTXuKp6ir3hgJE+0L6SRlJH1nrqyHNlMqXp942F8gB895BXcLTzg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfXFgyB8T2GIcrPYwH7Xd668WTBM3mXAcEmCIlxMjjhPdaD0xx
-	dwwscWA+cFBRzWzvwV7a2cMDlPLRN/13OS4hSqZ1heZyxk0V9N4VG8VsCH5/RkxN7c4YmOOEATm
-	xQiKVE8/T0HJtjepx2riFipeHPm7EtCmpAir6Uiut
-X-Gm-Gg: ATEYQzxwvUPKqEuKl9nPUlvLokY1J0cKRf5feFkgxOnSyeZGIDB/shyNy3I3n6F4eWS
-	eyhbM7/CeZlmzSr8q6VWiuWcWkWvsFKI1XTbMhZc7VGJJB1VrIq8jmt8PgBXakCWgJUfTulDSwB
-	t4Kff2Inj1pOFjR8rHWMOGMiO6U/lBXjkuvjeBbfkyEZJlU+2harNe7w9ZnoANJsBb5d773hAnD
-	VO8yQsvVxhIF9/V6xy0vyq3bngjG6Wm9KT5X4PmkykR9JqIrZmK1aWb6Q3VjLUEdCDKAF73hVJm
-	FqAxmu+gD5CLtPtCIjESxafGcKWzSlwyBi66oNA5/QIBHW8qOfhhYP1NuA4e2NK5VbGk5A==
-X-Received: by 2002:a05:6102:3a06:b0:602:8742:1fa with SMTP id
- ada2fe7eead31-60316013f44mr514571137.9.1774297364023; Mon, 23 Mar 2026
- 13:22:44 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 23 Mar 2026 13:22:43 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 23 Mar 2026 13:22:43 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <0a14c10d-0dab-4b9c-85ec-e0ee25cd0db8@kernel.org>
-References: <20260317141031.514-1-kalyazin@amazon.com> <20260317141031.514-6-kalyazin@amazon.com>
- <0a14c10d-0dab-4b9c-85ec-e0ee25cd0db8@kernel.org>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Q/RaUzDW"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=kybdohM5Q8q0SHYP+HOYY/Pk1RrjRWuUiyfhdoi98zRyxhu3JJMwEC6njK6tXWBmlR2efm7p8XRiOFHaHE39VCghPybcq2CgPwgcN4lkFPbS/+dSyCrB6RFAuvFIzwOx0XnbBARvaOR/xKBd9n7zvBlxnIgu9lRtcW166C+6Ua2TyDGsMjyGe3CATwNekxU3JfPouXxkDrvq8WF72cz1SJUO57gFHUqY056Msl1/CquENkQ6Zl1hOse2mVHhUUP5QRHWma8YoaPt941BnKQoW5yGlhruL8heDuTimfu55jr3cuf7Huw86UxuoEVZJ+ARffoPc6GxXFdH2sg2mJsrcg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2UrMDiChlBkoSTSnazMsEzNnl6hACvaLH5E+GSjF6Gc=;
+ b=J0lQr9wNACAOgRPVAU5nAccLQPFsG+yAIfLRU5iNMKvu9FvROis/eZUtpuHgRACE1tbctJ/cKtFRK1yds4puPDSIlIxzsGQEPjU7KUOKkKQhYfx31yt6eqsME8jOurC5N1HQKFkhA9dEPALz8Z5JOpqeDGXiO6fsTG9pYg/1RG//rbTjUoFnpm+PHUMW2RAxO6LzTxLoQAePqMuDlZ18l8oXZmpw+2fdI/ugg0iu35pMJ0pzRhhjyBVU3Ju5qrfKpteqcqVYhWYU/+ja8TlROOqgpfhSlSp8ipriyEN7vewQjoRI9a4fyTUgrKsTVWhn69gkldUyR5yMx+GiXsYZ6g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2UrMDiChlBkoSTSnazMsEzNnl6hACvaLH5E+GSjF6Gc=;
+ b=Q/RaUzDWFQkD8C04CTNWgPOg+0g2mGfWvUaOfCf6+hTezfejOU/Z1CN3ldL7hS7nf42/G6y+aJboPEynfnBaRLs2PbBn5TPDSso0k0HKzDgSN+chisjyuqTjljSIoHtAU9ZenwvXrt0oWfKO2yLVTfgBdgiDu1DjW7m5MM+nBXL+8ZiJwXXcARezR8BerlOjGu1cwROz/WM6nBrfRgL1+zng7+RqtUgN94J9nNNrUUpPXNI0MIob+cK4fMvy2/aZIfv9lQZ5rrUM4LfcFTWRhfpEOw2ZKb0HOj9ZMlVGytHLeWkwb4ojoJvBdxSsYnRs9A/gCBMnuQ9aaPsWu8V3Zw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS0PR12MB6486.namprd12.prod.outlook.com (2603:10b6:8:c5::21) by
+ DM4PR12MB6011.namprd12.prod.outlook.com (2603:10b6:8:6b::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9745.20; Mon, 23 Mar 2026 20:37:26 +0000
+Received: from DS0PR12MB6486.namprd12.prod.outlook.com
+ ([fe80::88a9:f314:c95f:8b33]) by DS0PR12MB6486.namprd12.prod.outlook.com
+ ([fe80::88a9:f314:c95f:8b33%4]) with mapi id 15.20.9745.019; Mon, 23 Mar 2026
+ 20:37:25 +0000
+Message-ID: <6b3d151f-3d21-4382-9ab8-386bfc9d47fb@nvidia.com>
+Date: Mon, 23 Mar 2026 16:37:22 -0400
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH] rcu-tasks: Avoid using mod_timer() in
+ call_rcu_tasks_generic()
+To: Boqun Feng <boqun@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>, frederic@kernel.org,
+ neeraj.iitr10@gmail.com, urezki@gmail.com, boqun.feng@gmail.com,
+ rcu@vger.kernel.org, Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>, Song Liu <song@kernel.org>,
+ stable@kernel.org
+References: <2b3848e9-3b11-41b8-8c44-5de28d4a4433@paulmck-laptop>
+ <20260321170321.32257-1-boqun@kernel.org> <acFZem9MNHRXin2h@tardis.local>
+Content-Language: en-US
+From: Joel Fernandes <joelagnelf@nvidia.com>
+In-Reply-To: <acFZem9MNHRXin2h@tardis.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR16CA0050.namprd16.prod.outlook.com
+ (2603:10b6:208:234::19) To DS0PR12MB6486.namprd12.prod.outlook.com
+ (2603:10b6:8:c5::21)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Mon, 23 Mar 2026 13:22:43 -0700
-X-Gm-Features: AQROBzAJTtmZ8_CHcmYDgt7IaYmvr2Pi4WE03drdmWTq3AGR3rA_vEwuIGtsbTw
-Message-ID: <CAEvNRgHqJGwmAfS8TuGBbUoQehpqY9GdtjUS=+Hc1ViK79RL4w@mail.gmail.com>
-Subject: Re: [PATCH v11 05/16] mm/gup: drop local variable in gup_fast_folio_allowed
-To: "David Hildenbrand (Arm)" <david@kernel.org>, "Kalyazin, Nikita" <kalyazin@amazon.co.uk>, 
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
-	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>, 
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>, 
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "kernel@xen0n.name" <kernel@xen0n.name>, 
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>, 
-	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>, 
-	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>, 
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Cc: "pbonzini@redhat.com" <pbonzini@redhat.com>, "corbet@lwn.net" <corbet@lwn.net>, 
-	"maz@kernel.org" <maz@kernel.org>, "oupton@kernel.org" <oupton@kernel.org>, 
-	"joey.gouly@arm.com" <joey.gouly@arm.com>, "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, 
-	"yuzenghui@huawei.com" <yuzenghui@huawei.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>, 
-	"will@kernel.org" <will@kernel.org>, "seanjc@google.com" <seanjc@google.com>, "tglx@kernel.org" <tglx@kernel.org>, 
-	"mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>, 
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>, 
-	"hpa@zytor.com" <hpa@zytor.com>, "luto@kernel.org" <luto@kernel.org>, 
-	"peterz@infradead.org" <peterz@infradead.org>, "willy@infradead.org" <willy@infradead.org>, 
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>, 
-	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>, "vbabka@kernel.org" <vbabka@kernel.org>, 
-	"rppt@kernel.org" <rppt@kernel.org>, "surenb@google.com" <surenb@google.com>, "mhocko@suse.com" <mhocko@suse.com>, 
-	"ast@kernel.org" <ast@kernel.org>, "daniel@iogearbox.net" <daniel@iogearbox.net>, 
-	"andrii@kernel.org" <andrii@kernel.org>, "martin.lau@linux.dev" <martin.lau@linux.dev>, 
-	"eddyz87@gmail.com" <eddyz87@gmail.com>, "song@kernel.org" <song@kernel.org>, 
-	"yonghong.song@linux.dev" <yonghong.song@linux.dev>, 
-	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "kpsingh@kernel.org" <kpsingh@kernel.org>, 
-	"sdf@fomichev.me" <sdf@fomichev.me>, "haoluo@google.com" <haoluo@google.com>, 
-	"jolsa@kernel.org" <jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>, 
-	"jhubbard@nvidia.com" <jhubbard@nvidia.com>, "peterx@redhat.com" <peterx@redhat.com>, 
-	"jannh@google.com" <jannh@google.com>, "pfalcato@suse.de" <pfalcato@suse.de>, 
-	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>, "riel@surriel.com" <riel@surriel.com>, 
-	"ryan.roberts@arm.com" <ryan.roberts@arm.com>, "jgross@suse.com" <jgross@suse.com>, 
-	"yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>, "kas@kernel.org" <kas@kernel.org>, 
-	"coxu@redhat.com" <coxu@redhat.com>, "kevin.brodsky@arm.com" <kevin.brodsky@arm.com>, 
-	"yosry@kernel.org" <yosry@kernel.org>, "ajones@ventanamicro.com" <ajones@ventanamicro.com>, 
-	"maobibo@loongson.cn" <maobibo@loongson.cn>, "tabba@google.com" <tabba@google.com>, 
-	"prsampat@amd.com" <prsampat@amd.com>, "wu.fei9@sanechips.com.cn" <wu.fei9@sanechips.com.cn>, 
-	"mlevitsk@redhat.com" <mlevitsk@redhat.com>, "jmattson@google.com" <jmattson@google.com>, 
-	"jthoughton@google.com" <jthoughton@google.com>, "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>, 
-	"alex@ghiti.fr" <alex@ghiti.fr>, "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>, 
-	"borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>, "chenhuacai@kernel.org" <chenhuacai@kernel.org>, 
-	"dev.jain@arm.com" <dev.jain@arm.com>, "gor@linux.ibm.com" <gor@linux.ibm.com>, 
-	"hca@linux.ibm.com" <hca@linux.ibm.com>, "palmer@dabbelt.com" <palmer@dabbelt.com>, 
-	"pjw@kernel.org" <pjw@kernel.org>, 
-	"shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>, "svens@linux.ibm.com" <svens@linux.ibm.com>, 
-	"thuth@redhat.com" <thuth@redhat.com>, "wyihan@google.com" <wyihan@google.com>, 
-	"yang@os.amperecomputing.com" <yang@os.amperecomputing.com>, 
-	"Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>, 
-	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "urezki@gmail.com" <urezki@gmail.com>, 
-	"zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>, 
-	"gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>, 
-	"jiayuan.chen@shopee.com" <jiayuan.chen@shopee.com>, "lenb@kernel.org" <lenb@kernel.org>, 
-	"osalvador@suse.de" <osalvador@suse.de>, "pavel@kernel.org" <pavel@kernel.org>, 
-	"rafael@kernel.org" <rafael@kernel.org>, "vannapurve@google.com" <vannapurve@google.com>, 
-	"jackmanb@google.com" <jackmanb@google.com>, "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>, 
-	"patrick.roy@linux.dev" <patrick.roy@linux.dev>, "Thomson, Jack" <jackabt@amazon.co.uk>, 
-	"Itazuri, Takahiro" <itazur@amazon.co.uk>, "Manwaring, Derek" <derekmn@amazon.com>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR12MB6486:EE_|DM4PR12MB6011:EE_
+X-MS-Office365-Filtering-Correlation-Id: face7d29-7c2c-4a46-2194-08de891bfe2f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|18002099003|22082099003|56012099003|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	08k5W6/PckwJkP+clCkIRE9lmbnlVtnuDZcyxdc0AKfkbOaKfBXejmWwGHR1CQK73VknrqCrTIBedJPKwQmdQUyP8mpcSlRHTqdj10pqgNVPk+/mLHPGPZWt4cpUx14KJ+gmTT4X2wXBcDGteO0qfFE4l0M7r0Gw+GuYs1Zh9EAVwsv5fqG7IZvLU4/52rXBMGfr1JzGYzlxEU8HIQqY834qmkh8lhemcFgN9XIAB+ewuI1dKF+WCd2OZPRijytohpPkUu8Ydj6OTs5Z5pXZ4ybdPgL52CDk/d6gNly0jQq/gGTHbH/L/mG0+BXGFbF8iS2cQYt0ZkzERA/dZSGkm546X2Zl0ISilZECPQzuzY929Tm5SwYSB5q8HZs17KByZxybkDI5WXjN4BBuNpWRFzCrlRwdYpZKMZ3M560lXQLdeuj6liRqMTk2ss1OGfWrlLoFxsZ+kEMmu0sy/o57K58CEQipiL7zO/QiwZRKY2zeiEdXXYLLDGiNXNW7ryfGI117fgko8xF7ppzi5ZC06DGk3u4Dj+JYNUljJQMdS86RQNSHBrslaWE6dF3giMZyDOdBK7kGnQvEt4IWtV6yHwGHkA2Jqki6sSE4I3c7JvoBH/I9y41qsw//uXyzvjhUQCG7pB174Z0Fo3s3Xaw4JimjUKJrFc0o2iGVwdI/cFL33NjYLz1vammzcASplP4XDJtIU+ZYjNyF+EybohC81ZfxFY9h3ajqSwBSt33CSLk=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB6486.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(18002099003)(22082099003)(56012099003)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?dmdUalpJR3diUVUyNjNGQ1pMWHJ2d2JrV2ZrRXJDSDBFUWFDd0lLOHFpT3lG?=
+ =?utf-8?B?T2NmSUFrK2xQWlhOTml6cFMyL09vT2w3Mk5veXQxaE5aN1lNOXJaOEd1Z21U?=
+ =?utf-8?B?Qk9uNlZFd0tmTVZXeEtLbld2aWhYdTdhdXhuTUpoV2lPY1I2cmhzMTVPR3Ri?=
+ =?utf-8?B?cW9EcFZLanNRRzYxVElZVmpyOGlnU2JnU24zWXI0SkJaOHJWbVRybytYR3Rx?=
+ =?utf-8?B?MmxCYkQ3L1VaRWIyanpSM0VpSGtLVDFoenB1ai9wSERWRXJmci90NGhYSTkx?=
+ =?utf-8?B?WU1lL2JIelR5SEZCcVRkd3RrSnNkeEUvV2p3WlJwRFhNNjd2dDJSNVc4VUI3?=
+ =?utf-8?B?eDhDQXVmOFpTbWlBVVRwdXpOY1NNMXp3MnR0bmJZN0RLd05UZzE2d0FoMGxO?=
+ =?utf-8?B?dSsxdUFwT2EzdmpuQzhCTlhsSGJiRk9Lc3ZJY1R5aXA2emRML3Z1cFF5eWZx?=
+ =?utf-8?B?VHdGbkRXdWJsQkNlSFIraVNoeE85MUtPODRuUVFUVUZ2RFFmY09DTHV2ZXJh?=
+ =?utf-8?B?MEFTT2FGSDBEK1JkSHRkVzNsR0dsOWUwSFByTnJWaU5RbU1BbDhIdHp3Wity?=
+ =?utf-8?B?dC8xTnlCaUo0WU5uaWYvdVJhMkhTZTlGbDMxMnAxN1RobFJQaU1iUDdrVUE2?=
+ =?utf-8?B?UHJQRlYzR0FBUmlneHdybG5Ra2c5anpIS01iUFhrQUR4Y2FNQXpBSVdzMlZV?=
+ =?utf-8?B?TUQrTTFBanhnQW52bEl5ZGsrZ0JNMXNuT2h0dHNYWVY1bkRTOTMxZlJaZDM1?=
+ =?utf-8?B?THlMNUxHL2ZKcHlXaWtNT0RrTkdpaVZrSHVWYkRESCsvY3oyR0NNNG5ZSnZG?=
+ =?utf-8?B?ZTh3UEFpRzVZWHFqSlBBZnV4RUtkbUlnZmhWSmZaZk1DZmJhSGhxZDlWZy9L?=
+ =?utf-8?B?Nnp2ZUdNb1NJWnEzVTVMVWZER1JpaG84bWdkSTBRQ0JjUDU3dURyWllVamtj?=
+ =?utf-8?B?aDJPZkFQcDZqblJBWVl2TFFKNHlObWw2RmY5c1NyNytSSHNOSjQxQjRiWFJH?=
+ =?utf-8?B?N0gvQ2tUbVAzMmZPaXNNanVxckRYN2NSSEVHT25xM3N4UlZxbTNUa0VKWmxD?=
+ =?utf-8?B?dVJuK0VUUU40c1VkejVYMWFPczJZSHRMUTJHYXlveTNkOWdPdTZjbVFzNnRm?=
+ =?utf-8?B?Z1I5ZDNlVFlWOVlTc0pRbGtYQTR3MEhGcGJDVFZBVm5wYjI3eHRsdFJPRk43?=
+ =?utf-8?B?bXVrYjNZNWxhVG9IOEVpRUJLRDZsek5hSjd1YzF3Z21EL1dwQmg1Tllxc3Rq?=
+ =?utf-8?B?YUVuelY1d2F5WTAvY1ZhbmVZdTdWRmR5cWZBdVF3Z1VrQU5Zb1UraFdQSzA0?=
+ =?utf-8?B?eGdwbG4vemtpZjhHdFpNbUVVZ3h2Y0dDeU91V1J2TDhLeHN1dWxxRVVYRjI0?=
+ =?utf-8?B?TUI4dmFJSmQxUGE4Nit4NlNvNnBaTHU5MHhwT0dBbUpiSXp0ZXJkbmxvVEpI?=
+ =?utf-8?B?L1NwZ1dWV1IyK0FMZkRFaEc3OVE4WHEvVzRtRVBXSk5yRFN6VGpTckNBN0RX?=
+ =?utf-8?B?SVZvNTF4RGtpM0tnQ2s3R3oxampwamdnQ3dJc00xSVZCSnN2UUpORG5od2VE?=
+ =?utf-8?B?TTEvOGdKSm9UMStNR0ZvWGFRUGVuMXVQajlYSjVmWFY3Tmk3WXpXaGs0OTk1?=
+ =?utf-8?B?akVoRXUzUjFzTFd3KzE0aFZkdGlIRnF1WWZVVlpaV3UrNnMyRHQvT29pVjlO?=
+ =?utf-8?B?SDM4RUFpR21YdWNQdnBESDBPRmdacFJ3aDFtdVhGRzZWdVF2Tm1SMUR5N25k?=
+ =?utf-8?B?T1BFVVh5VkhkMkM5KzkrdWdka2Q0a1ArQStpRnByY2pEc2QxME92UW9yUWh0?=
+ =?utf-8?B?T0M5U2ZWekpJTXpqMmNrMWVXVnprUGZGZHFZdjgxdUVRdmM2cFBnT3RZUTB1?=
+ =?utf-8?B?RUZSWDBjZzd0dUtJTlBlZjAvdnJDeUlPZmlDWm4zd2h2K2E1WVYzbkRRSU9n?=
+ =?utf-8?B?NHZZM1RPM0FFOGF6OUt2ZXd0Y2FQODVPVUN2YzZpeVd2YU1CQTFZQUNnQlNI?=
+ =?utf-8?B?NkswaDZmd3NkcjJRdnFBd1lvS1lremc3QjZYaENKb3V5dVpsbTZSUndQRlh5?=
+ =?utf-8?B?SE55THIxanpuamdleVc4SEMxNmowNHNJTXExSE51dFlUejBhckhLRzVMbEVw?=
+ =?utf-8?B?LzYzS04zczR4Ti85OVJVUURBRG9odUt3WW5OeGFPUmRFZ0dFZjFMWENFR25R?=
+ =?utf-8?B?dm9wMFBqTHgxZlNKUzlMdXZVTlhuN1FpVWJjTzF3dlI3YWxmVjFvOGlyUWlY?=
+ =?utf-8?B?d2ExWmcwaE9jU3ZTaTZIV2ZZOWllNUVOeHpNVVQxVjFmbml0bGdwNFg3a2g0?=
+ =?utf-8?B?ZkxKWmhFWUhkZWZ4TjhIN0IwR3Y0T2VzTEJoVzNhb2hkemJDWThvdz09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: face7d29-7c2c-4a46-2194-08de891bfe2f
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB6486.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2026 20:37:25.6622
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LCpxDHXjsvluIf5zcyrG8e/7r/1p7xCOJh2N57KQaUtO+KgnbFWhlpPh4DwUqPtrbM6I95FvdquoyP8OaBVCNA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6011
 
-"David Hildenbrand (Arm)" <david@kernel.org> writes:
 
-> On 3/17/26 15:11, Kalyazin, Nikita wrote:
->> From: Nikita Kalyazin <kalyazin@amazon.com>
+
+On 3/23/2026 11:17 AM, Boqun Feng wrote:
+> On Sat, Mar 21, 2026 at 10:03:21AM -0700, Boqun Feng wrote:
+>> The following deadlock is possible:
 >>
->> Move the check for pinning closer to where the result is used.
->> No functional changes.
+>> __mod_timer()
+>>   lock_timer_base()
+>>     raw_spin_lock_irqsave(&base->lock)   <- base->lock ACQUIRED
+>>   trace_timer_start()                    <- tp_btf/timer_start fires here
+>>     [probe_timer_start BPF program]
+>>       bpf_task_storage_delete()
+>>         bpf_selem_unlink(selem, false)   <- reuse_now=false
+>>           bpf_selem_free(false)
+>>             call_rcu_tasks_trace()
+>>               call_rcu_tasks_generic()
+>>                 raw_spin_trylock(rtpcp)  <- succeeds (different lock)
+>>                 mod_timer(lazy_timer)    <- lazy_timer is on this CPU's base
+>>                   lock_timer_base()
+>>                     raw_spin_lock_irqsave(&base->lock) <- SAME LOCK -> DEADLOCK
 >>
->> Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
+>> because BPF can instrument a place while the timer base lock is held.
+>> Fix it by using an intermediate irq_work.
+>>
+>> Further, because a "timer base->lock" to a "rtpcp lock" lock dependency
+>> can be establish in this way, we cannot mod_timer() with a rtpcp lock
+>> held. Fix that as well.
+>>
+>> Fixes: d119357d0743 ("rcu-tasks: Treat only synchronous grace periods urgently")
+>> Cc: stable@kernel.org
+>> Signed-off-by: Boqun Feng <boqun@kernel.org>
 >> ---
->>  mm/gup.c | 23 ++++++++++++-----------
->>  1 file changed, 12 insertions(+), 11 deletions(-)
+>> This is a follow-up of [1], and yes we can trigger a whole system
+>> deadlock freeze easily with (even non-recursively) tracing the
+>> timer_start tracepoint. I have a reproduce at:
 >>
->> diff --git a/mm/gup.c b/mm/gup.c
->> index 5856d35be385..869d79c8daa4 100644
->> --- a/mm/gup.c
->> +++ b/mm/gup.c
->> @@ -2737,18 +2737,9 @@ EXPORT_SYMBOL(get_user_pages_unlocked);
->>   */
->>  static bool gup_fast_folio_allowed(struct folio *folio, unsigned int flags)
->>  {
->> -	bool reject_file_backed = false;
->>  	struct address_space *mapping;
->>  	unsigned long mapping_flags;
+>> 	https://github.com/fbq/rcu_tasks_deadlock
 >>
->> -	/*
->> -	 * If we aren't pinning then no problematic write can occur. A long term
->> -	 * pin is the most egregious case so this is the one we disallow.
->> -	 */
->> -	if ((flags & (FOLL_PIN | FOLL_LONGTERM | FOLL_WRITE)) ==
->> -	    (FOLL_PIN | FOLL_LONGTERM | FOLL_WRITE))
->> -		reject_file_backed = true;
->> -
->>  	/* We hold a folio reference, so we can safely access folio fields. */
->>  	if (WARN_ON_ONCE(folio_test_slab(folio)))
->>  		return false;
->> @@ -2793,8 +2784,18 @@ static bool gup_fast_folio_allowed(struct folio *folio, unsigned int flags)
->>  	 */
->>  	if (secretmem_mapping(mapping))
->>  		return false;
->> -	/* The only remaining allowed file system is shmem. */
->> -	return !reject_file_backed || shmem_mapping(mapping);
->> +
->> +	/*
->> +	 * If we aren't pinning then no problematic write can occur. A writable
->> +	 * long term pin is the most egregious case, so this is the one we
->> +	 * allow only for ...
->> +	 */
->> +	if ((flags & (FOLL_PIN | FOLL_LONGTERM | FOLL_WRITE)) !=
->> +	    (FOLL_PIN | FOLL_LONGTERM | FOLL_WRITE))
->> +		return true;
->> +
->> +	/* ... hugetlb (which we allowed above already) and shared memory. */
->> +	return shmem_mapping(mapping);
->
-> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
->
-> I'm wondering if it would be a good idea to check for a hugetlb mapping
-> here instead of having the folio_test_hugetlb() check above.
->
+>> Be very careful, since it'll freeze your system when run it.
+>>
+>> I've tested it on 6.17 and 6.19 and can confirm the deadlock could be
+>> triggered. So this is an old bug if it's a bug.
+>>
+>> It's up to BPF whether this is a bug or not, because it has existed for
+>> a while and nobody seems to get hurt(?).
+>>
+> 
+> Ping BPF ;-) I know this was sent in a Saturday and only 2 days have
+> passed, but we are at the decision point about how hard/urgent we should
+> fix these "BPF deadlocks": As this patch shows, the deadlocks existed
+> before v7.0 (i.e. before SRCU switches). And yes, ideally we should fix
+> all of them, but given we are close to v7.0 release, I would like to
+> focus the new issue that SRCU introduces, because that one would likely
+> affect SCHED_EXT. Thoughts?
 
-I think it's nice that hugetlb folios are determined immediately to be
-eligible for GUP-fast regardless of whether the folio is file-backed or
-not.
+Yeah I think this deadlock is "lower priority" in the sense, I believe it
+existed even before 7.0. But the new SRCU ones are related to 7.0 where the RCU
+tasks trace implementation was switched to SRCU. So in that sense, yes I think
+the SRCU fix has to go in for 7.0 itself ideally, with the potential timer fix
+above moved to a later time.
 
-> Something to ponder about :)
->
-> --
-> Cheers,
->
-> David
+I wonder also, could we (programmatically as a startup self-test) add a BPF
+tracepoint program to every trace point possible and see what blows up? I am
+pretty sure there are dragons in there too other than timers and workqueues.
+That would also make for a nice-selftest, where a test BPF program is hooked to
+all tracepoints and then busy-loop somework load is run. I'd brace for some
+fireworks but..;-)
+
+Btw, I am testing the v2 of the irq_work srcu fix, so far so good. :-)
+
+thanks,
+
+--
+Joel Fernandes
+
+
+
+
+
+
+
+> 
+> Regards,
+> Boqun
+> 
+>> [1]: https://lore.kernel.org/rcu/2b3848e9-3b11-41b8-8c44-5de28d4a4433@paulmck-laptop/
+>>
+>>  kernel/rcu/tasks.h | 26 +++++++++++++++++++++++---
+>>  1 file changed, 23 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+>> index 2b55e6acf3c1..d9d5b7d5944e 100644
+>> --- a/kernel/rcu/tasks.h
+>> +++ b/kernel/rcu/tasks.h
+>> @@ -46,6 +46,7 @@ struct rcu_tasks_percpu {
+>>  	unsigned int urgent_gp;
+>>  	struct work_struct rtp_work;
+>>  	struct irq_work rtp_irq_work;
+>> +	struct irq_work timer_irq_work;
+>>  	struct rcu_head barrier_q_head;
+>>  	struct list_head rtp_blkd_tasks;
+>>  	struct list_head rtp_exit_list;
+>> @@ -134,6 +135,7 @@ static void call_rcu_tasks_iw_wakeup(struct irq_work *iwp);
+>>  static DEFINE_PER_CPU(struct rcu_tasks_percpu, rt_name ## __percpu) = {			\
+>>  	.lock = __RAW_SPIN_LOCK_UNLOCKED(rt_name ## __percpu.cbs_pcpu_lock),		\
+>>  	.rtp_irq_work = IRQ_WORK_INIT_HARD(call_rcu_tasks_iw_wakeup),			\
+>> +	.timer_irq_work = IRQ_WORK_INIT(call_rcu_tasks_mod_timer_lazy),			\
+>>  };											\
+>>  static struct rcu_tasks rt_name =							\
+>>  {											\
+>> @@ -321,11 +323,19 @@ static void call_rcu_tasks_generic_timer(struct timer_list *tlp)
+>>  		if (!rtpcp->urgent_gp)
+>>  			rtpcp->urgent_gp = 1;
+>>  		needwake = true;
+>> -		mod_timer(&rtpcp->lazy_timer, rcu_tasks_lazy_time(rtp));
+>> +		/*
+>> +		 * We cannot mod_timer() here because "timer base lock ->
+>> +		 * rcu_node lock" lock dependencies can be establish by having
+>> +		 * a BPF instrument at timer_start(), and that means deadlock
+>> +		 * if we mod_timer() here. So delay the mod_timer() when we are
+>> +		 * out of the lock critical section.
+>> +		 */
+>>  	}
+>>  	raw_spin_unlock_irqrestore_rcu_node(rtpcp, flags);
+>> -	if (needwake)
+>> +	if (needwake) {
+>> +		mod_timer(&rtpcp->lazy_timer, rcu_tasks_lazy_time(rtp));
+>>  		rcuwait_wake_up(&rtp->cbs_wait);
+>> +	}
+>>  }
+>>  
+>>  // IRQ-work handler that does deferred wakeup for call_rcu_tasks_generic().
+>> @@ -338,6 +348,16 @@ static void call_rcu_tasks_iw_wakeup(struct irq_work *iwp)
+>>  	rcuwait_wake_up(&rtp->cbs_wait);
+>>  }
+>>  
+>> +static void call_rcu_tasks_mod_timer_lazy(struct irq_work *iwp)
+>> +{
+>> +	struct rcu_tasks *rtp;
+>> +	struct rcu_tasks_percpu *rtpcp = container_of(iwp, struct rcu_tasks_percpu, timer_irq_work);
+>> +	rtp = rtpcp->rtpp;
+>> +
+>> +	if (!timer_pending(&rtpcp->lazy_timer))
+>> +		mod_timer(&rtpcp->lazy_timer, rcu_tasks_lazy_time(rtp));
+>> +}
+>> +
+>>  // Enqueue a callback for the specified flavor of Tasks RCU.
+>>  static void call_rcu_tasks_generic(struct rcu_head *rhp, rcu_callback_t func,
+>>  				   struct rcu_tasks *rtp)
+>> @@ -377,7 +397,7 @@ static void call_rcu_tasks_generic(struct rcu_head *rhp, rcu_callback_t func,
+>>  		   (rcu_segcblist_n_cbs(&rtpcp->cblist) == rcu_task_lazy_lim);
+>>  	if (havekthread && !needwake && !timer_pending(&rtpcp->lazy_timer)) {
+>>  		if (rtp->lazy_jiffies)
+>> -			mod_timer(&rtpcp->lazy_timer, rcu_tasks_lazy_time(rtp));
+>> +			irq_work_queue(&rtpcp->timer_irq_work);
+>>  		else
+>>  			needwake = rcu_segcblist_empty(&rtpcp->cblist);
+>>  	}
+>> -- 
+>> 2.50.1 (Apple Git-155)
+>>
+
+-- 
+Joel Fernandes
+
