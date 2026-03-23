@@ -1,113 +1,275 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com [209.85.221.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DCAB3090CD
-	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 18:42:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774291341; cv=none; b=KAabpnmuMeMA2P4+t2Tw6aD01adgNl0dJzNz35KA2faCn1pz0Y+ia70vrghFlSnchfeCw6uxC1M57gfom8sNGh9xwIXAYTCN2uhmNpf2V+NxNMKztavqYaOPS0R0m1GqMfATXSbinzStpg871A+cFn0+22V//zOZcJz61CvKCh8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774291341; c=relaxed/simple;
-	bh=HaY7bKz1vH12gbhp1PtTn4vwQY93r9ABoNwuu9whDoQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gUBObV/GShFaFuSgj62YHC4LOYBdrqbIMaAV4ntUOz/2TiyCmGnVRdmOiZ9c7vqnxsdAmQcpu/WbomVobhK15WBP2R0Mgyhmdq6RGdzlUy/BrBUEEh/gzrLcCF68u02kaMk6n03LDFvukHsSoq5CUb8PXvlvYqNIBiNc6+xFYH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZoiSn7UK; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E94C3033EC
+	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 18:43:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774291416; cv=pass; b=uJH02yhzm7WdPJXfn+w2yDMLkSEcWuwI5bGwiDz8dN0WPytRsYnCR2ORR56ZPVp2YVV9XYm50ioXKUInDxvEWTrdnT3A3fbSoP3XBixzCq+X+aYqHd83ZHjannaifLff9UAn5QTijgELkXWlOpZexcvdGsKf5HmPyvfC9r1cCNk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774291416; c=relaxed/simple;
+	bh=8iR09lTQ4Edfh1UQkmolcFNIjMuLzSLKVF5JEj/9nwQ=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XkYUhvRKChiCZzaAvBqKA3Ka05geBJgnCZGGvmIbxer6y3qOxbmjfOEuyC108Ha8NlprujmYBPjtt0G6NvGWXBA05ysF/GTuK/yDXr2xphVOAPco3C3UFJASza14Nm2ZPnHuPSwb9T59/r2+muVjDpzXG2Z67q4dhY66k9jVSzw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BFE/MqnH; arc=pass smtp.client-ip=209.85.221.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZoiSn7UK"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-439cd6b0aedso3038357f8f.1
-        for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 11:42:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BFE/MqnH"
+Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-56cde28a9b6so1282323e0c.3
+        for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 11:43:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774291413; cv=none;
+        d=google.com; s=arc-20240605;
+        b=S9KY5kt6tJVZkW7cfeZgBm8zeYZ47nyO2gFCiPbBufLevxj9mzmJDz+91iFYT3OQjx
+         F6C4DABGJL19oyLK1PBzp5PYPFH95ENuF/d1HE9ojAmIx/KF+R+Kq8sTBOLXSftHQeo8
+         xeDuFAQIwpzJMxE0685gq6Ms8XTzkoFMcC1+GYEcOne1CdEgxh2QXfpu+EQlAIaBq+9V
+         CY2/qyg0+x0DGNuIXeAXQnOFVDtSMP0DBdZOZjV+khmJtvW1f3uwDcX8WiLcGo11RYSB
+         /CEA5CDONjoxj9ZVBYiHuWA3EZghQ8eVaibc9pLeAU3h3IFw58cBSim0a5iz2XoNLqQ2
+         4DRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=jJ1uKbr2A9AcnUKDcibCUYQIsuprIaoAVD4N5Jh2tIQ=;
+        fh=xv+uv4saWjJEMs9oDE9RPAgH5yM7MHCTachVoQtxoK8=;
+        b=TOxQxaUAQOqqsCYhT0Fzoajo86Jpq42uZa7ExeQFe8lJqvw+sxLbDbW/ORwMjf22m1
+         QY2NPCslJ9uEWxwITqBnCYQ3Wk2IjszfNcTlRSASlwgcQ3svM08/F5BEinyOlEmxZoCS
+         YRHYlLQj9juat6ODtOrsSQ3cE+yGKDgMM8j5LSyPSW0hVo6Fdt+TYVTHRIf1RpnWpDo7
+         IN4wo4GM+CNTf+BSpJlxSrP6IvrXQFI9ZPWtakwaEYTQJ4PwMu9O5hKJ3QJPJmntos8s
+         U+oHgL9oZmhs1jfgiwH48zkIJplBsJzYituH757gI4rZXySIEKV+0T6zM3nIWWAGYrx2
+         HTYw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774291339; x=1774896139; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9dxdEUh4IB/1SO39Kw7tCUT3zJPN5Zqv8A5orXaxobs=;
-        b=ZoiSn7UKh45Xs8DemRyGQkX6wg1wi/xB/mh0Nk2gb3C0VptpGXBRR0BljC4CxB3Uf4
-         S1vWhmeInbmq+8TJAK8UBffc9uqtwCHdi/Mv7cuxYgVBxOcWqb8+N092P53um60emiOa
-         EEr4Ioz8w1WW7Axoq7gIyfT/99VI8c8JUIFhFALos/DLk0YK57w38IuU6tC9uJevpLfo
-         f2x/i6OetBO63uhtqt6pY4r07kuz92kUgVVbBh0iIL7kXy4ygg0Pukdjw9Uz03C+Xl6F
-         Uj4feDBujI8Gr6TKnUoE+x6IT8oxhb1mS2SAx0ac3B1xt4TQDlcQn8TF9+hLAu81qyWW
-         KVVQ==
+        d=google.com; s=20251104; t=1774291413; x=1774896213; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jJ1uKbr2A9AcnUKDcibCUYQIsuprIaoAVD4N5Jh2tIQ=;
+        b=BFE/MqnHyJEb2bXhOAAC42up0lIIBMrfoEaUX8sgL/fCQ+OsWy9jEUrxjg9bcJmPoy
+         fFh8bXLK5ID3vOGVhKEVc7GAF51PL1t9OKV3RWP9X5s8vEosDUsRJlD3uvkHsm8gQJq2
+         yLHP8cRadcr3bXcEbThsxn/zkicUhrGIYaE6OdJ72LqX74hGBAw25CKruf7r9f4qNORH
+         sjBANVlN4x99JT3IOFRxsfjxUDwhL7j/ysJO/DTg5EQHHCWh0q2njy/Tk2gB0a9h0PTK
+         0OzzbUqBAFPI16UIfWf3j6fxHMwr0c5rjIDHEfL9KU6Ipera8Z+VPiV3ARshGnuLrl83
+         3Plw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774291339; x=1774896139;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9dxdEUh4IB/1SO39Kw7tCUT3zJPN5Zqv8A5orXaxobs=;
-        b=qlJtzDvytQO6QdNA0tS0v9jUalnEAaNxtNWRR8kf85ZIc2F3mVlp8rGV5NNGoJ+eGT
-         v20sc09j+1kfrGSl27qDTqnZPwnZzogei0ygkqi+61gOG02rUoj3kuUL1ZP9ytAsasuI
-         79uY1UJqGzTledOSdD3rhT58OXcDOFA+vqJ6VKjHXKOHGvSDqusDm9+MvdbTlQJzGwNq
-         yq5KMpBb4BaG8nUGrmBFioq+sE09lgubAdxdNdZk+xNU7gTjjuOxf71SBzAnOzrALCp5
-         l93W2obPDqasFySgSDgP6q5iARc8VVFJ8djmgiFALkW2cmHOlZcydzx6FV9sOEY8xpN8
-         Z90w==
-X-Forwarded-Encrypted: i=1; AJvYcCXqByzp8SwARBLU7gSf4DRig/bafCQ7xcNYsJ78hWRNtySrITMYyivhOZ6s4t/rTc28b1Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOeMyxIgzkol78Luc4y9Wwbam0xcOt3PXplvrAtcGVIXQKNvFK
-	30necinei+8VYousdNtGIZ6D8Mi1V0gmms194lSsNXE077OqYQat/gI=
-X-Gm-Gg: ATEYQzw5uXcDjKceLeNvuNz9Jg30NxlD1nYvXNskcwyKRvg0PZ2B00B7PzSer6NBm0h
-	so3efnYVlSiOLcir82OcFSaYhRl9A2QqXxHXURbGaNnt+OBmdhfh01lx14QEA/GoWdRl7sSt23P
-	ri/Xkeyubdyfd+1yPh+ODDvzM77UKHFf/9BTgzX7+CpBwWXUzOg7+nXxxPPXfzPyCQgR17OosZQ
-	wfBuNrFoaVyhGAU5Uac8QLPEITUn83plTo6n1tw1fhuRteHVjp18U5VzI/I6yuaIGQqLB2DVOR+
-	6pmQlPPet+cTtrkVGNgLqT3xIaM/ATVDzQfabQMcLo5eaTQMzNX61swYArGKrU+5WiyzTwXf7Hh
-	AB1DC9mfYmY1xbGfyVKFxOkVUbLmCmNa0tOzPPPiAgW4q8oXvSSRoHp4wUGAE9gd8V4QPgk19ep
-	Ex3gPXPN500xVs58kgZ6qjNg8780BghwZ4VbcKwyg/KxbvRX0fnppwuX/L2P463qkA0nU=
-X-Received: by 2002:a05:6000:290b:b0:43b:576b:5dca with SMTP id ffacd0b85a97d-43b642442f9mr20708049f8f.16.1774291338529;
-        Mon, 23 Mar 2026 11:42:18 -0700 (PDT)
-Received: from p183 (dynamic-vpdn-brest-46-53-134-188.brest.telecom.by. [46.53.134.188])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b6470b243sm32081677f8f.26.2026.03.23.11.42.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Mar 2026 11:42:17 -0700 (PDT)
-Date: Mon, 23 Mar 2026 21:43:59 +0300
-From: Alexey Dobriyan <adobriyan@gmail.com>
-To: Sasha Levin <sashal@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Petr Mladek <pmladek@suse.com>, Alexei Starovoitov <ast@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, David Gow <davidgow@google.com>,
-	Kees Cook <kees@kernel.org>, Greg KH <gregkh@linuxfoundation.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>, Helge Deller <deller@gmx.de>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Juergen Gross <jgross@suse.com>,
-	James Bottomley <James.Bottomley@HansenPartnership.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Petr Pavlu <petr.pavlu@suse.com>, x86@kernel.org,
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-modules@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH 0/2] kallsyms: show typed function parameters in
- oops/WARN dumps
-Message-ID: <cdd61497-8d50-4fc5-aec8-47286e23d537@p183>
-References: <20260323164858.1939248-1-sashal@kernel.org>
+        d=1e100.net; s=20251104; t=1774291413; x=1774896213;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jJ1uKbr2A9AcnUKDcibCUYQIsuprIaoAVD4N5Jh2tIQ=;
+        b=p/xFY83HVscb/I5wxOe8/snSzNG/ETp2Tp1soT8vzhzVgXjUfd20MN7yms3+jUNmmb
+         YE2Tq7mbuPSMEoGjyo3JQ9tRpIFwPmyMcATV1UNNRSnKfNTGfx0CXKoLoQ+PdxUinY/B
+         psdre4bK+DbLTQgrlZUg0HpnvLBkw+QWO/uox5qAGYiV4JlJEsepKO3X6fT58nQ0GULB
+         9+7GsVFG4y1oWLBO62DttgSJVK2IeLJEaETRKPdGMVA5nj/fPf5Lln5p622WlzaJyX8M
+         cnsZxAmjvMeR1Re12fP2sdUKyDvJno7oo3YMVI0jNUcKlq2xdFd6pfj0zCsqcXKfr7Kq
+         BSOw==
+X-Forwarded-Encrypted: i=1; AJvYcCXIkfTWQFwc3i+eQ8zZy3wWjqYrki49BIF7atWRk9hJy2D67jTss+rgtCxUwrEaTLbYRpM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUJyTCbSXs4HcJYDIbjFq438mEFQplGzT8ib6IPDX8cDETlVDq
+	vAnmZefwOZGsvtKPTbEYnSrLjgIScz9dXtsra5EP/w3qE4M4TBRDuh6m/5MRKKiYDAyp6ndvib8
+	fUcE4s3AyjNpkdIDRSWH/EeqUnd1equuo1LPZkm6S
+X-Gm-Gg: ATEYQzxtAQ+dWclX9SoS5SDaAjv3xS5SI5g05yzE1umqkFnjydjyxpW0k4zjbjX43iO
+	njl8BnwJtMFydW7ImmgPtPSBwlKbwTfPMtahNHUJ9gaK+Q+v4JxLojlfLqcOrozXuI4jM4pLNIj
+	wN1IriU1eC3yB+PSzRsCcaGiAysez5aMGm+J1fGP09Z1vcsQWRVNsGK7bNPrpBnuz5YdKNHoJbW
+	olbEeMan+t/Dl1ZnICvdcJKD6oynMVJO5nDJR8N0qIOMUcsW7vP7ePKh7L+jQ+KRTM17y7a+lTu
+	0klc2PReEgSIQjrHkpJcoJUiPI3cOXvz2ID7PzcUD+gHJ6Kxu+rmEamJfnaqKjpPz7u/6Q==
+X-Received: by 2002:a05:6122:3c54:b0:566:2711:d8ab with SMTP id
+ 71dfb90a1353d-56cde344094mr6273796e0c.6.1774291412097; Mon, 23 Mar 2026
+ 11:43:32 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 23 Mar 2026 11:43:31 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 23 Mar 2026 11:43:31 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <20260317141031.514-3-kalyazin@amazon.com>
+References: <20260317141031.514-1-kalyazin@amazon.com> <20260317141031.514-3-kalyazin@amazon.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260323164858.1939248-1-sashal@kernel.org>
+Date: Mon, 23 Mar 2026 11:43:31 -0700
+X-Gm-Features: AQROBzAKG1Xpk4hVDWY3sqqSXNvIKws3qrAExzeSImrnNlU_ii0wYSbiIV_SQDw
+Message-ID: <CAEvNRgEFBexkZCjOMFHJRQFHOpiUezD2jbfDVFrGhYXODdpMjg@mail.gmail.com>
+Subject: Re: [PATCH v11 02/16] set_memory: add folio_{zap,restore}_direct_map helpers
+To: "Kalyazin, Nikita" <kalyazin@amazon.co.uk>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>, 
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>, 
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "kernel@xen0n.name" <kernel@xen0n.name>, 
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>, 
+	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>, 
+	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>, 
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Cc: "pbonzini@redhat.com" <pbonzini@redhat.com>, "corbet@lwn.net" <corbet@lwn.net>, 
+	"maz@kernel.org" <maz@kernel.org>, "oupton@kernel.org" <oupton@kernel.org>, 
+	"joey.gouly@arm.com" <joey.gouly@arm.com>, "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, 
+	"yuzenghui@huawei.com" <yuzenghui@huawei.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>, 
+	"will@kernel.org" <will@kernel.org>, "seanjc@google.com" <seanjc@google.com>, "tglx@kernel.org" <tglx@kernel.org>, 
+	"mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>, 
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>, 
+	"hpa@zytor.com" <hpa@zytor.com>, "luto@kernel.org" <luto@kernel.org>, 
+	"peterz@infradead.org" <peterz@infradead.org>, "willy@infradead.org" <willy@infradead.org>, 
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>, "david@kernel.org" <david@kernel.org>, 
+	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>, "vbabka@kernel.org" <vbabka@kernel.org>, 
+	"rppt@kernel.org" <rppt@kernel.org>, "surenb@google.com" <surenb@google.com>, "mhocko@suse.com" <mhocko@suse.com>, 
+	"ast@kernel.org" <ast@kernel.org>, "daniel@iogearbox.net" <daniel@iogearbox.net>, 
+	"andrii@kernel.org" <andrii@kernel.org>, "martin.lau@linux.dev" <martin.lau@linux.dev>, 
+	"eddyz87@gmail.com" <eddyz87@gmail.com>, "song@kernel.org" <song@kernel.org>, 
+	"yonghong.song@linux.dev" <yonghong.song@linux.dev>, 
+	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "kpsingh@kernel.org" <kpsingh@kernel.org>, 
+	"sdf@fomichev.me" <sdf@fomichev.me>, "haoluo@google.com" <haoluo@google.com>, 
+	"jolsa@kernel.org" <jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>, 
+	"jhubbard@nvidia.com" <jhubbard@nvidia.com>, "peterx@redhat.com" <peterx@redhat.com>, 
+	"jannh@google.com" <jannh@google.com>, "pfalcato@suse.de" <pfalcato@suse.de>, 
+	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>, "riel@surriel.com" <riel@surriel.com>, 
+	"ryan.roberts@arm.com" <ryan.roberts@arm.com>, "jgross@suse.com" <jgross@suse.com>, 
+	"yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>, "kas@kernel.org" <kas@kernel.org>, 
+	"coxu@redhat.com" <coxu@redhat.com>, "kevin.brodsky@arm.com" <kevin.brodsky@arm.com>, 
+	"yosry@kernel.org" <yosry@kernel.org>, "ajones@ventanamicro.com" <ajones@ventanamicro.com>, 
+	"maobibo@loongson.cn" <maobibo@loongson.cn>, "tabba@google.com" <tabba@google.com>, 
+	"prsampat@amd.com" <prsampat@amd.com>, "wu.fei9@sanechips.com.cn" <wu.fei9@sanechips.com.cn>, 
+	"mlevitsk@redhat.com" <mlevitsk@redhat.com>, "jmattson@google.com" <jmattson@google.com>, 
+	"jthoughton@google.com" <jthoughton@google.com>, "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>, 
+	"alex@ghiti.fr" <alex@ghiti.fr>, "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>, 
+	"borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>, "chenhuacai@kernel.org" <chenhuacai@kernel.org>, 
+	"dev.jain@arm.com" <dev.jain@arm.com>, "gor@linux.ibm.com" <gor@linux.ibm.com>, 
+	"hca@linux.ibm.com" <hca@linux.ibm.com>, "palmer@dabbelt.com" <palmer@dabbelt.com>, 
+	"pjw@kernel.org" <pjw@kernel.org>, 
+	"shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>, "svens@linux.ibm.com" <svens@linux.ibm.com>, 
+	"thuth@redhat.com" <thuth@redhat.com>, "wyihan@google.com" <wyihan@google.com>, 
+	"yang@os.amperecomputing.com" <yang@os.amperecomputing.com>, 
+	"Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>, 
+	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "urezki@gmail.com" <urezki@gmail.com>, 
+	"zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>, 
+	"gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>, 
+	"jiayuan.chen@shopee.com" <jiayuan.chen@shopee.com>, "lenb@kernel.org" <lenb@kernel.org>, 
+	"osalvador@suse.de" <osalvador@suse.de>, "pavel@kernel.org" <pavel@kernel.org>, 
+	"rafael@kernel.org" <rafael@kernel.org>, "vannapurve@google.com" <vannapurve@google.com>, 
+	"jackmanb@google.com" <jackmanb@google.com>, "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>, 
+	"patrick.roy@linux.dev" <patrick.roy@linux.dev>, "Thomson, Jack" <jackabt@amazon.co.uk>, 
+	"Itazuri, Takahiro" <itazur@amazon.co.uk>, "Manwaring, Derek" <derekmn@amazon.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Mar 23, 2026 at 12:48:55PM -0400, Sasha Levin wrote:
->  Function parameters (paraminfo_demo_crash):
->   uts      (struct new_utsname *) = 0xffffffffb8ca8d00
->    .sysname = "Linux"                        .nodename = "localhost"
->    .release = "7.0.0-rc2-00006-g3190..."     .version = "#45 SMP PRE"
->   file     (struct file *       ) = 0xffffa0a3c250acc0
->    .f_mode = (fmode_t)67993630               .f_op = (struct file_operations *)0xffffffffb7237620
->    .f_flags = (unsigned int)32769            .f_cred = (struct cred *)0xffffa0a3c2e06a80
->    .dentry = (struct dentry *)0xffffa0a3c0978cc0
+"Kalyazin, Nikita" <kalyazin@amazon.co.uk> writes:
 
-Should this be in crash's format?
+> From: Nikita Kalyazin <kalyazin@amazon.com>
+>
+> Let's provide folio_{zap,restore}_direct_map helpers as preparation for
+> supporting removal of the direct map for guest_memfd folios.
+> In folio_zap_direct_map(), flush TLB to make sure the data is not
+> accessible.
+>
+> The new helpers need to be accessible to KVM on architectures that
+> support guest_memfd (x86 and arm64).
+>
+> Direct map removal gives guest_memfd the same protection that
+> memfd_secret does, such as hardening against Spectre-like attacks
+> through in-kernel gadgets.
+>
+> Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
+> ---
+>  include/linux/set_memory.h | 13 ++++++++++++
+>  mm/memory.c                | 42 ++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 55 insertions(+)
+>
+> diff --git a/include/linux/set_memory.h b/include/linux/set_memory.h
+> index 1a2563f525fc..24caea2931f9 100644
+> --- a/include/linux/set_memory.h
+> +++ b/include/linux/set_memory.h
+> @@ -41,6 +41,15 @@ static inline int set_direct_map_valid_noflush(const void *addr,
+>  	return 0;
+>  }
+>
+> +static inline int folio_zap_direct_map(struct folio *folio)
+> +{
+> +	return 0;
+> +}
+> +
+> +static inline void folio_restore_direct_map(struct folio *folio)
+> +{
+> +}
+> +
+>  static inline bool kernel_page_present(struct page *page)
+>  {
+>  	return true;
+> @@ -57,6 +66,10 @@ static inline bool can_set_direct_map(void)
+>  }
+>  #define can_set_direct_map can_set_direct_map
+>  #endif
+> +
+> +int folio_zap_direct_map(struct folio *folio);
+> +void folio_restore_direct_map(struct folio *folio);
+> +
+>  #endif /* CONFIG_ARCH_HAS_SET_DIRECT_MAP */
+>
+>  #ifdef CONFIG_X86_64
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 07778814b4a8..cab6bb237fc0 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -78,6 +78,7 @@
+>  #include <linux/sched/sysctl.h>
+>  #include <linux/pgalloc.h>
+>  #include <linux/uaccess.h>
+> +#include <linux/set_memory.h>
+>
+>  #include <trace/events/kmem.h>
+>
+> @@ -7478,3 +7479,44 @@ void vma_pgtable_walk_end(struct vm_area_struct *vma)
+>  	if (is_vm_hugetlb_page(vma))
+>  		hugetlb_vma_unlock_read(vma);
+>  }
+> +
+> +#ifdef CONFIG_ARCH_HAS_SET_DIRECT_MAP
+> +/**
+> + * folio_zap_direct_map - remove a folio from the kernel direct map
+> + * @folio: folio to remove from the direct map
+> + *
+> + * Removes the folio from the kernel direct map and flushes the TLB.  This may
+> + * require splitting huge pages in the direct map, which can fail due to memory
+> + * allocation.
+> + *
+> + * Return: 0 on success, or a negative error code on failure.
+> + */
+> +int folio_zap_direct_map(struct folio *folio)
+> +{
+> +	const void *addr = folio_address(folio);
+> +	int ret;
+> +
+> +	ret = set_direct_map_valid_noflush(addr, folio_nr_pages(folio), false);
+> +	flush_tlb_kernel_range((unsigned long)addr,
+> +			       (unsigned long)addr + folio_size(folio));
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_FOR_MODULES(folio_zap_direct_map, "kvm");
+> +
+> +/**
+> + * folio_restore_direct_map - restore the kernel direct map entry for a folio
+> + * @folio: folio whose direct map entry is to be restored
+> + *
+> + * This may only be called after a prior successful folio_zap_direct_map() on
+> + * the same folio.  Because the zap will have already split any huge pages in
+> + * the direct map, restoration here only updates protection bits and cannot
+> + * fail.
+> + */
+> +void folio_restore_direct_map(struct folio *folio)
+> +{
+> +	WARN_ON_ONCE(set_direct_map_valid_noflush(folio_address(folio),
+> +						  folio_nr_pages(folio), true));
+> +}
+> +EXPORT_SYMBOL_FOR_MODULES(folio_restore_direct_map, "kvm");
+> +#endif /* CONFIG_ARCH_HAS_SET_DIRECT_MAP */
+> --
+> 2.50.1
 
-	struct dentry ffffffffffff0000
+Reviewed-by: Ackerley Tng <ackerleytng@google.com>
+
+I also took a look at Sashiko's [1] comments and I think that the
+highmem folio issues should be the responsibility of the caller to
+check.
+
+[1] https://sashiko.dev/#/patchset/20260317141031.514-1-kalyazin%40amazon.com
