@@ -1,94 +1,95 @@
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63FA130BB9B
-	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 22:52:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD7A0383C64
+	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 22:53:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774306373; cv=none; b=jTF5sAvfqapzm9IdHvwjT2yagG74hU6NiEvWz7MOkToMzTnhr9vMTGvV6FLLfcnnxzkn8TIQLUZdjkWDHrNbmOxjVl9oHaWYOj4UhgM73q8esnI1D9c0WSRweQolduaBqZU4fkOJWF3ELTBtPnhmOJgD+9Biv6dehaYIIcJpuN8=
+	t=1774306384; cv=none; b=bNIOJ9vc/REA7Ge8/RkqjyU2B8Kyo6TLlrARagk3fxVAolH4fDfj9FFPyXlqeL/UU+hjFvdKb2l8d5as8KniYp4W05RE2EBdxWD0ldPnZ0SytzdKjonj3lbmwHEsvSiYqapzFvHUjJstLBrgBYht19IRSVDpr5CZodhT1hZiKZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774306373; c=relaxed/simple;
-	bh=aZo4CfPz64jb8YX9fZTkSmpIjaX3+9pLmtrcV93cUbM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Aq8FNW/pj7L1JeCztoBNWn9gzHPB+E/m2PfNzcqNYo9UvbPL4DTyElSdRWb2GW8HYl9hk1wRL7ePgP9H8gaKpZiGqR60YYajFXxtnVb4JPmyiISLI1W779/wg6jyxQGcEKeAyKLUooSeVd5YYlJT74uEYO1EIpdP9zbB5vMLoSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Z3e8DwsW; arc=none smtp.client-ip=95.215.58.181
+	s=arc-20240116; t=1774306384; c=relaxed/simple;
+	bh=9hwFuFeafiCxNX2rf9FhnT9pc7zjaDB2weIabKgX7OU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AQffHwNTB58IurDb0KYhuFKZa+431km50kNl1hl20le4yoerrAFL2Qa+TOVsr8iEQgRQSCtJYK5eyzuE4kA4+hX5bmkiAJcdGhRjKWSbvWm/aTEW5CGYIhlvWi35AXnBjcT0gYLpj4ggpIc28KV1rxvXqnCkTIQ8YSvYvTzDAsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=olggVphl; arc=none smtp.client-ip=91.218.175.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Z3e8DwsW"
-Message-ID: <31243215-918a-4f03-917b-de869b7b7bf1@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="olggVphl"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774306370;
+	t=1774306380;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=J8Ka4SY63TMkmYUtleL7Ko7Nb4LY2LzQW7pxbDpjBzY=;
-	b=Z3e8DwsWLTCq8255/3q/VJFN7cEE632K47hwxkWvDUOUDI6C2DAJb1cLGc1aF6uzI0dGaY
-	Jsrh/h9oCbB8mtHMjqLC0VZj7NaraKxZWBLj3/q4fYDuXhSD2M60NDulFMAo4FkrtCV5YP
-	/UwiUvmtdy88TGhkLUPe/Tgcm8zmzv8=
-Date: Mon, 23 Mar 2026 15:52:38 -0700
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Awp8ntv1wXoCvwDEiN8wvX8nlownd7HDMmXlQU0i9yw=;
+	b=olggVphlIokpcHuBYoGKv7Q7UZn4g3UFDrxK0/sYODAwmF4/JG9yk4fcoGk6vDfXvKX11+
+	5EVAlo+G72nrmE3Rhv09qAwILSr9iQs2NzmfhQAeCLbHQxVSQxq4bs2Tub42BLlRNaarCw
+	TZMoZmav/8Hkegopqr5SavnwxRGBGyU=
+From: Martin KaFai Lau <martin.lau@linux.dev>
+To: bpf@vger.kernel.org
+Cc: 'Alexei Starovoitov ' <ast@kernel.org>,
+	'Andrii Nakryiko ' <andrii@kernel.org>,
+	'Daniel Borkmann ' <daniel@iogearbox.net>,
+	netdev@vger.kernel.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	Fernando Fernandez Mancera <fmancera@suse.de>
+Subject: [PATCH bpf-next] bpf: test_run: Remove ipv6_bpf_stub usage
+Date: Mon, 23 Mar 2026 15:52:50 -0700
+Message-ID: <20260323225250.1623542-1-martin.lau@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 5/6] selftests/bpf: Initialize operation name before use
-To: Leo Yan <leo.yan@arm.com>, Quentin Monnet <qmo@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Lorenz Bauer <lmb@isovalent.com>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
- James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-References: <20260323-tools_build_fix_zero_init_bpf_only-v1-0-d1cfad2f4cd1@arm.com>
- <20260323-tools_build_fix_zero_init_bpf_only-v1-5-d1cfad2f4cd1@arm.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260323-tools_build_fix_zero_init_bpf_only-v1-5-d1cfad2f4cd1@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-On 3/23/26 8:40 AM, Leo Yan wrote:
-> ASAN reports stack-buffer-overflow due to the uninitialized op_name.
-> 
-> Initialize it to fix the issue.
-> 
-> Fixes: 054b6c7866c7 ("selftests/bpf: Add verifier log tests for BPF_BTF_LOAD command")
-> Signed-off-by: Leo Yan <leo.yan@arm.com>
-> ---
->  tools/testing/selftests/bpf/prog_tests/verifier_log.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/verifier_log.c b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
-> index aaa2854974c0a91cbbb9fc13ae0f966de1bcc818..dcbe2ef995c5b211c2b86b9555c02144e11ee7d6 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/verifier_log.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
-> @@ -317,6 +317,7 @@ static void verif_btf_log_subtest(bool bad_btf)
->  	res = load_btf(&opts, true);
->  	ASSERT_EQ(res, -ENOSPC, "half_log_fd");
->  	ASSERT_EQ(strlen(logs.buf), 24, "log_fixed_25");
-> +	snprintf(op_name, sizeof(op_name), "log_fixed");
+From: Martin KaFai Lau <martin.lau@kernel.org>
 
-You should use strscpy() here.
+bpf_prog_test_run_skb() uses net->ipv6.ip6_null_entry for
+BPF_PROG_TYPE_LWT_XMIT test runs.
 
-This patch looks very unrelated.
-Did this surface only after the changes in the makefiles?
+It currently checks ipv6_bpf_stub before using ip6_null_entry.
+ipv6_bpf_stub will be removed by the CONFIG_IPV6=m support removal
+series posted at [1], so switch this check to ipv6_mod_enabled()
+instead.
 
->  	ASSERT_STRNEQ(logs.buf, logs.reference, 24, op_name);
->  
->  	/* validate rolling verifier log logic: try all variations of log buf
-> 
+This change depends on that series [1]. Without it, CONFIG_IPV6=m is
+still possible, and net->ipv6.ip6_null_entry remains NULL until
+the IPv6 module is loaded.
+
+[1] https://lore.kernel.org/netdev/20260320185649.5411-1-fmancera@suse.de/
+
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Fernando Fernandez Mancera <fmancera@suse.de>
+Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
+---
+ net/bpf/test_run.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 56bc8dc1e281..fb25184ed03b 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -1157,15 +1157,12 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 	}
+ 
+ 	if (prog->type == BPF_PROG_TYPE_LWT_XMIT) {
+-		if (!ipv6_bpf_stub) {
+-			pr_warn_once("Please test this program with the IPv6 module loaded\n");
++		if (!ipv6_mod_enabled()) {
++			pr_warn_once("Please test this program with IPv6 enabled kernel\n");
+ 			ret = -EOPNOTSUPP;
+ 			goto out;
+ 		}
+ #if IS_ENABLED(CONFIG_IPV6)
+-		/* For CONFIG_IPV6=n, ipv6_bpf_stub is NULL which is
+-		 * handled by the above if statement.
+-		 */
+ 		dst_hold(&net->ipv6.ip6_null_entry->dst);
+ 		skb_dst_set(skb, &net->ipv6.ip6_null_entry->dst);
+ #endif
+-- 
+2.52.0
 
