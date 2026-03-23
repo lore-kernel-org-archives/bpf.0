@@ -1,87 +1,115 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 375293ACEF0
-	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 13:38:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33B593AC0E6;
+	Mon, 23 Mar 2026 13:39:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774273136; cv=none; b=h8JU0i1TgM8fD0YGWhiegQabvhb3D4rHYGX5tOGtYYaSyj9wIIG52kbtR2rC45rUPMyu0WkxUoLtBTXXzcjE+Y/9b6SWUHN+XKpj3Rnudqx3Tu6putlXocWwLbz4iOLquPEo6syTHPfrG1yJ79WA6sXvmbGm8pJquwH1vgzeuvE=
+	t=1774273162; cv=none; b=FvIjFdBiItcaqnSTEJSGpI14RPj6ArZ+8UR6RnyTCIifXzeE1TthAA6EiO971XvotYjTQu9GXsusUulFokmUX11gvbLWLvK0olMcMAeApP3DtWOH/o4OWaLtpvrcm+mFGma17+Z+X4sd/buAe20+DzAnSCr5WfrAQs6m4Rvblg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774273136; c=relaxed/simple;
-	bh=RtGdyxz9KesPN0h/Of/nGln3tyT9YfaKIch2p59wNcI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NLFxQ3BCcc0hGZzSjJxYK21tHTqyAGhxaPDI1ap60XvJN1MFtu/DZMrbIjJrBNC63fc9+6wfLiIG7q5nCLxik6K7eaFfUde1WnOSAi/OAdZuwmtvsCUBe+qtmE9xz+t+azb88CCZhQWuEXpct9F2at90BfLEiuw1zYe/K/MHwxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e59BvWz9; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e59BvWz9"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-35b88a4f123so2018450a91.1
-        for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 06:38:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774273134; x=1774877934; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RtGdyxz9KesPN0h/Of/nGln3tyT9YfaKIch2p59wNcI=;
-        b=e59BvWz9iqpWEby3U9KeRb+7+ddgq02Sn8xL7JQjecclRDF1TM6LkWzt8fM//sJUj0
-         9Z1ZJAVN1YguNyWBa3vA/oL1EYw+93y+R/g4t+XTCQO4FifQpb8fejGykLzp+4UwGC0H
-         4l/p2GW10o05qbhUyEPxpOHZK+6H9YSNZf/I35+cBf0zdqel45b1mg6weubbVJk3yb2U
-         ngxQ3JOq9MeYUeoFxq6Qfd0GOIQr9r4UNR1KoLm4dbHi+Mq9tJAKTTBQyC6XZ+lAuKK0
-         99KI8m6ZQwIFPpa76T+L0qJfwTHJbceBDftcg3a6HFRjnScYoFuaaHsqjvJFY0O7urb7
-         x3+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774273134; x=1774877934;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RtGdyxz9KesPN0h/Of/nGln3tyT9YfaKIch2p59wNcI=;
-        b=pGz7CAjlpH4RVYhmZjnqJE1+O1KpgMBY9ZVuEEY2+NBuOFrHi51zA2gRuOWBGysjq5
-         zUsrifoH6jCt9mgHEHuI5cINYgueEeSIRwzpv2mlXYcbD7MuM4aFf+zCuVmhxD0O+IsM
-         6i5yPYqohbrZzn3dppi0yeSjXQrV+BvAs32J1T+mQNDUuPirBxUT2vpPOleg5//22yA/
-         9kx1t/zSxsLfWndIjdhbDGmU/lwfvpXVkNrrmAtu0HU1vXE9PFE5g1C7pFpAoBeHuIng
-         Jzdmao3/MacLjB+Ts3Eqs/GOX0yPYbq29L2uX6g4n5CBWMsVzhEruayIG+j7isWH1jl8
-         P5Bw==
-X-Forwarded-Encrypted: i=1; AJvYcCXs47glp/WxKD9uOU2Dko3qrjGSgvtwcGnSTRssGVgsopnaSr7iBu4G3xHjPPqabwG8OVM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJFRfx9+SxzEAzqPAPz3izLe00TklsW/cK5uyGqzHlwEBM0PYl
-	wPe5du4EzD4/6Dh5LCVFou9aeTKCeD9ZDp/gMxjQKAC5ntX8yf+zIy+E
-X-Gm-Gg: ATEYQzwn5SZvoqd5Q0rWzU1vV28aYU61NFwwfXRs3Njb+aExFUBxb1sXmm2+oYYSS7s
-	zoQwTgy4GpixW/kReUnqzMDTiUsQTtQlZcIqdwc/P9ROTNH55K5ieLYH3yERxguaTZhusgIIT1i
-	bSe0k45E3cVpU2d0QTqX4SnlpZoTtqy95EEWzBXsGcZNwJI+ErnU6hMwxxyy9h/Cbu9uf/B9qg3
-	Y/iTOpKpXiwmP6TT7nDI1xb2Lpy9DNWQtyz9Dx44ShpwWJDTRfx9M8+Ldj1UcbhWjAtDSyNq0sf
-	Vyg4axCJ2teS3Q0WKcZe193eeBNeTceO9w5ceG0Gg+JGUGlepJKOUIljaZpmkEexbVH+W/0Q+sB
-	HhRa1szj8oan7+KXI/2yYCb40rN2kCjRL5+SgI252Qh5j51KD0r73p/RM3PbYk6i68VjmFPrNQi
-	d54LpBRqpQKK1QDEygU7201igaNQJB97tOQ+EcmIk+5Q==
-X-Received: by 2002:a17:90b:530d:b0:35b:e4f8:a0b9 with SMTP id 98e67ed59e1d1-35be4f98f17mr5587671a91.7.1774273134405;
-        Mon, 23 Mar 2026 06:38:54 -0700 (PDT)
-Received: from computer ([2a09:bac5:40b2:277d::3ef:5a])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35bd4130765sm9543544a91.16.2026.03.23.06.38.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Mar 2026 06:38:54 -0700 (PDT)
-Date: Mon, 23 Mar 2026 19:08:42 +0530
-From: Varun R Mallya <varunrmallya@gmail.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: yonghong.song@linux.dev, bpf@vger.kernel.org, sun.jian.kdev@gmail.com,
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	martin.lau@linux.dev, eddyz87@gmail.com, john.fastabend@gmail.com,
-	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
-	jolsa@kernel.org
-Subject: Re: [PATCH bpf-next v3] selftests/bpf: Improve connect_force_port
- test reliability
-Message-ID: <acFCYrInXMUfffyp@computer>
-References: <20260323081131.65604-1-varunrmallya@gmail.com>
- <a97a0392-bf2a-4b8d-8e0a-10388de6d408@linux.dev>
+	s=arc-20240116; t=1774273162; c=relaxed/simple;
+	bh=18qlEzJSCR/J43+q2kbQxEU183F+Aik3etyCBZt0rLU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DObfY83nT1z+JaszXLyPEmbu1uc9Gvh8Vvvr/FuR3SI3rKh0ur6EwXH9pdZVHpA1fmfD4Vz0AKjZyyvpN1xo/0dihpNszF+2kKmsiegjmPzJSRB5+uzSq39SjLGtJUtuVQ5KBpxQyAn9jbdgcDB/nNheilouAL/Fz+cHE5R2OLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4ffZ5S1ldhzYQv3W;
+	Mon, 23 Mar 2026 21:39:08 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 4434240591;
+	Mon, 23 Mar 2026 21:39:15 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP1 (Coremail) with SMTP id cCh0CgAnKtp+QsFpxAzJBw--.59330S2;
+	Mon, 23 Mar 2026 21:39:11 +0800 (CST)
+Message-ID: <36162ee3-c05e-4bb1-b673-dc672139e925@huaweicloud.com>
+Date: Mon, 23 Mar 2026 21:39:10 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a97a0392-bf2a-4b8d-8e0a-10388de6d408@linux.dev>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v9 4/5] bpf, x86: Emit ENDBR for indirect jump
+ targets
+Content-Language: en-US
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: a.s.protopopov@gmail.com, alexis.lothore@bootlin.com, andrii@kernel.org,
+ ast@kernel.org, bjorn@kernel.org, bpf@vger.kernel.org, chleroy@kernel.org,
+ daniel@iogearbox.net, davem@davemloft.net, eddyz87@gmail.com,
+ gor@linux.ibm.com, hbathini@linux.ibm.com, hca@linux.ibm.com,
+ hengqi.chen@gmail.com, iii@linux.ibm.com, johan.almbladh@anyfinetworks.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux@armlinux.org.uk, list+bpf@vahedi.org, luke.r.nels@gmail.com,
+ martin.lau@linux.dev, naveen@kernel.org, paulburton@kernel.org,
+ pulehui@huawei.com, puranjay@kernel.org, udknight@gmail.com,
+ xi.wang@gmail.com, yangtiezhu@loongson.cn, yonghong.song@linux.dev
+References: <20260312170255.3427799-5-xukuohai@huaweicloud.com>
+ <20260313101505.104686-1-leon.hwang@linux.dev>
+ <f384599a-75b8-4387-80db-b20429a0bafd@huaweicloud.com>
+ <9ddae3d2-173d-460d-b283-12c983164a69@linux.dev>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <9ddae3d2-173d-460d-b283-12c983164a69@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:cCh0CgAnKtp+QsFpxAzJBw--.59330S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7JF4DWr4rCw1fZr18tr1kKrg_yoW8Jr1DpF
+	y8WayYyay8KFZ3G34Fqrn8KF9Fyr1Dtw13Xr18XF4DAr98Kr10gryjgFsagFyFvr48G34I
+	gFs8Xr93Zr15J37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	4xRDUUUUU==
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On Mon, Mar 23, 2026 at 06:40:08PM +0800, Jiayuan Chen wrote:
-> Thanks for picking this up.
-You're welcome :) Would love to pick up any other thing put on the backburner
-as well.
-> Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+On 3/14/2026 9:35 PM, Leon Hwang wrote:
+> On 2026/3/14 14:48, Xu Kuohai wrote:
+>> On 3/13/2026 6:15 PM, Leon Hwang wrote:
+>>>> +#ifdef CONFIG_X86_KERNEL_IBT
+>>>> +        if (bpf_insn_is_indirect_target(env, bpf_prog, i - 1))
+>>>> +            EMIT_ENDBR();
+>>>> +#endif
+>>> NIT: is this CONFIG check necessary?
+>>>
+>>> EMIT_ENDBR already checks it.
+>>>
+>>> #ifdef CONFIG_X86_KERNEL_IBT
+>>> #define EMIT_ENDBR()        EMIT(gen_endbr(), 4)
+>>> #define EMIT_ENDBR_POISON()    EMIT(gen_endbr_poison(), 4)
+>>> #else
+>>> #define EMIT_ENDBR()
+>>> #define EMIT_ENDBR_POISON()
+>>> #endif
+>>
+>> Well, the code was originally written exactly without the #ifdef, but it
+>> triggered
+>> -Wempty-body warning: https://lore.kernel.org/bpf/202603051414.AAMjmOHv-
+>> lkp@intel.com/.
+>>
+> 
+> Let's update the macros instead, which can avoid the build warning and
+> get rid of the CONFIG check as well.
+> 
+> #define EMIT_ENDBR() do { } while (0)
+> #define EMIT_ENDBR_POISON() do { } while (0)
+> 
+> The way of "do { } while (0)" is commonly used in kernel.
+>
+
+Sorry for the delay. This makes sense to me. The code looks much cleaner
+without the #ifdef, thanks!
+
+> Thanks,
+> Leon
+
