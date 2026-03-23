@@ -1,185 +1,137 @@
-Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A70631618C
-	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 19:05:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0171617A2FC;
+	Mon, 23 Mar 2026 19:25:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774292717; cv=none; b=BOHpAMCxAvFY2nK2YsjwTJYHSIIdRO67T+LzpbXFSjxDh4USOM5etcp9D3qZXr+tIYBxEJ+BC9sEyNJE1AZU40LH5QC8A3qaqj4sGWN660PgMYobMPRBXpgJ2t6vSfjaCHDX5qfgUcB3NwaoRbeOyeF1yfj7OAryKtccsbDEXVE=
+	t=1774293912; cv=none; b=ZPE9LcGDr54Pm3LhgIFfXdmSbjAUTnGwD1L0OV4O+wWqoGNqJms+6Xrxxyx2v/fa+gnH4DV0kW5yHv2m5/3g6idiRI7Wijd9xcvFb5Gr4VgHpJLEmjRzYKq5Dt0CTu+GRcQ0ZeHH+k5NwJmMUZJQw3ykCfEO57vDuY1R9Tj2LLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774292717; c=relaxed/simple;
-	bh=C51bjNjSsp7oBymVcEAF6ZNb3f7+dyevHj7/0Btif5Y=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CCY94QbUEqoQoMuNdU4rSQyamBg2+AK2lAddrp6iQ5Rvo4scsDA7zJKCw4//769kENYG+663n+Zb/3VxXSHCqK9TFC8OniPLR4OJHd6FvScl1wm+rt+jV2OeFf0dZZZKcjPWvCF6M1IAoD4J3GBZ60iO6klC2r3BxqKdOiI2wNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cDfs1wjT; arc=none smtp.client-ip=74.125.82.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774293912; c=relaxed/simple;
+	bh=fYoFOC4iFo/HEGkk4RjExLhAphUZF4h7JJzt6fyyd9A=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=lKVy0JA1sbtaWz8sO0n8DMlH4alM5ttA84HTHePxm+XQFT6LBTZIe3p//WCx7mxx5p+BDY4OTYpBFHnealDJ+BxQLS/nlQGEk0iVYxXScyd4gF5p8HqQzjE9jlE8y2ZoaiNaKssUXFT46XMZ2H2yY/pjnGP5m3fBYvql1Odq1H4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IzGbp5Wf; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cDfs1wjT"
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-2c0ecaae7dfso7520090eec.1
-        for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 12:05:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774292715; x=1774897515; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=rBt9E7S2wk1HCEDuzQF5CZmgHmzLw5dnz/U6mEQWakc=;
-        b=cDfs1wjTfSZw1OUfbs/j5wZEEwmtvLzAITPqTS5cmZbRQO4006dLcGfw7/HRH0L2qQ
-         L5yG5vNgOLt5Hyo6lKuwdKfBTbOatDjzjCQYQJz+PN2vScvENeW4ilhFDAz6u+0j/XER
-         qGhgQ3rAkkCwcs3TJZpn2A1aYeHoCYV3NR+rbLDDZbvMENvzuwAZdUuEwSSVPUfF2V/a
-         V6etNUo7EdcQxSH/om27JRsvLawng7W5yTIGGNePHnf5hz8dopd3n+8XZKXyCbAC1ytt
-         6d2aLgbeTtp36QV51jhJ+UwrsXPj7Y+Qm63b4c64GH6EwI1XTDnwypQlEkdHfincChKE
-         pX/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774292715; x=1774897515;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rBt9E7S2wk1HCEDuzQF5CZmgHmzLw5dnz/U6mEQWakc=;
-        b=BiZjdpmO5QN5u7qQVTKJ3nFXcoLEdMrcPg1Mk2gqITaj2G6YehNE4oPAM7qmTc/j0Y
-         JtUvbkdk8YFLFuBPRoA/lnTJlTa+Lgq7ga0Lu4+6zyXVmxYIs+1oL7MoudQi1DhY6hm1
-         7ANAjTWzVehbd3AH4EZrZquc//EUnIL8xVmixg41i4ocLLKpwYvgVL8QT8mNa4znrWAL
-         YPMUMBeTOjk2cI+NSMRR9o3a3Pb7sZKLaCDPz6JRgGDwtD5yNw/KnU5jVf6SpcaQ6BRP
-         Ufu1ZL6qfOSDeeK7Y24RW0UzGeVVsQ32dSUYUFIW/1pnkio4UGmailWIUdXXjOXWV6vy
-         PfOA==
-X-Forwarded-Encrypted: i=1; AJvYcCU0bQtcKGJHdc+eBEvS5cNbjlGLKExSuplvaupRdKxF8B4aPHpHx4Y1YyiQFu5+I3BQ2NU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMpEM+464/BMKALm6bNQOH8eTElU6rHtJWeDtIwbrbPjDpbH/C
-	Z3U9glnZ8ZCdoETZ6Ak3yLUY2xRdfO+mrMqNViycytDlc25fh0QIWNW1
-X-Gm-Gg: ATEYQzyWRMgL3C9D12Hs79n9jPJpPgVb3+wevhimJHa1Xy0iwns1J+/ueF0ZlBM6heO
-	w04c7hpGTSRngdrsTUeiLAxS1ihNn5MTVn+pbceX8kUxbm9sGCT1o8W/MIoBQlmAMvTDRqxFOnR
-	aRIo0aapXmpgfvQEXZzpQrJTMicYW2egbL5LngMEefwc2vgADz3y6Hm844UwqLc0diXkHVwR57r
-	mxmqzXFI8tpenkxM/hnJE7CrfkY4QYwsfmdAywO4V4jLfYGH9Jg4uSSEGf9MkZWTKjXIDNAVazF
-	WdhKZV3zCWcbkN99xPJJweB7XoW4wfhfADMYsow//N7d9yz717hk/mYO9n7QX/fiOi79MZ+SEUt
-	uXPsrm7Q8TYiKaeaJI+GNnOxkggLxKoIHDqyYJ30rYGHYcTHEZOobN1bitocjSZjKKUbnMbgBwS
-	5EpYoK8c+4RsMjt/ZCUo043Iz29L5IAdypOzDyEl5lgdXHFxviBnByny9y9dlIephmkc0pBoxlE
-	UM8AUN8iPuoXbn0ew==
-X-Received: by 2002:a05:693c:2b06:b0:2be:1544:5c40 with SMTP id 5a478bee46e88-2c1097b06b1mr6860861eec.31.1774292715199;
-        Mon, 23 Mar 2026 12:05:15 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:45ca:895c:22d:457a? ([2620:10d:c090:500::2:8b17])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b17a7c1sm13201729eec.7.2026.03.23.12.05.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Mar 2026 12:05:14 -0700 (PDT)
-Message-ID: <847173114a13630e1512ad05375c6b407720a916.camel@gmail.com>
-Subject: Re: [PATCH v2 bpf-next 4/6] bpf: Simulate branches to prune based
- on range violations
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Harishankar
- Vishwanathan <harishankar.vishwanathan@gmail.com>, Shung-Hsi Yu	
- <shung-hsi.yu@suse.com>, Srinivas Narayana <srinivas.narayana@rutgers.edu>,
-  Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
-Date: Mon, 23 Mar 2026 12:05:12 -0700
-In-Reply-To: <d4fe45f8bd5c6a48efd2ba3b66932bf7eb5aa020.1774025082.git.paul.chaignon@gmail.com>
-References: <cover.1774025082.git.paul.chaignon@gmail.com>
-	 <d4fe45f8bd5c6a48efd2ba3b66932bf7eb5aa020.1774025082.git.paul.chaignon@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IzGbp5Wf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774293910; x=1805829910;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=fYoFOC4iFo/HEGkk4RjExLhAphUZF4h7JJzt6fyyd9A=;
+  b=IzGbp5WfnfY+YEX5dBchcfLV1CpRklm5qzkbzwqClvOkGdIR0vFiGCJv
+   gEmJrURM2pdemczonYqiaSU7b4HYLVI8u0OPD+y9y9+ay5Ryc52XlaIn5
+   UjigahMAck3Zy31FQScopyfRSv4ilVh8RYCbk6xxc4Xs8s0r7w4vZeoZj
+   JfNzHQEXcs3wqP/xfftYPIg+lAZN2xzRVM1AGZPo9dGKj9IY1SqvYGXdW
+   PTCKHmLyrjKfo/UUUu+laKXW2fG4X+GTMhfSeFXB+3w7zgG7o2uQ1alfE
+   oJhq+/AJvDVkQg/Y0ak2hKB1QctbIH5nxyopEhObm7xA0dSpBe8rvzvYJ
+   A==;
+X-CSE-ConnectionGUID: p54DRIftQ9mo6id4gyWMsQ==
+X-CSE-MsgGUID: 3lzsLP/wTe6HJ0NxRTD/6g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11738"; a="75013298"
+X-IronPort-AV: E=Sophos;i="6.23,137,1770624000"; 
+   d="scan'208";a="75013298"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2026 12:25:10 -0700
+X-CSE-ConnectionGUID: Elgxh4dCSjWTNHfjIIRJaQ==
+X-CSE-MsgGUID: hQBqPiMQRMaWHLqGH2lQhQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,137,1770624000"; 
+   d="scan'208";a="228187860"
+Received: from boxer.igk.intel.com ([10.102.20.173])
+  by orviesa003.jf.intel.com with ESMTP; 23 Mar 2026 12:25:07 -0700
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org,
+	magnus.karlsson@intel.com,
+	stfomichev@gmail.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	larysa.zaremba@intel.com,
+	aleksander.lobakin@intel.com,
+	bjorn@kernel.org,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: [PATCH v3 net 0/8] xsk: tailroom reservation and MTU validation
+Date: Mon, 23 Mar 2026 20:24:49 +0100
+Message-Id: <20260323192457.504631-1-maciej.fijalkowski@intel.com>
+X-Mailer: git-send-email 2.38.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, 2026-03-20 at 17:49 +0100, Paul Chaignon wrote:
+v2->v3:
+- add tags from Bjorn/Stan
+- provide at least 128 bytes instead ETH_ZLEN when validating frame
+  headroom
+  * this way we can get rid of i40e/ice changes
+  * make sure xsk_pool_get_rx_frame_size() returns value 128b-aligned
+  * and remove pre-check from idpf
+- separate XDP_UMEM_SG_FLAG fixes from MTU validation in xsk_bind()
+- make drop_idx a local variable in xsk's xdp drop prog
+- adjust rx_dropped to new 128b related values
+- move ugly placed define (Bjorn)
+- remove READ_ONCE when fetching netdev->mtu (Bjorn)
 
-[...]
+v1->v2:
+- remove xsk_pool_get_tailroom() definition for !CONFIG_XDP_SOCKETS
+  (Stan)
+- do not rely on pool->umem->zc when configuring tailroom (Stan, Bjorn)
+- simplify dbuff setting in ZC drivers (Bjorn)
+- use defines for {head,tail}room in tests (Bjorn)
+- return EINVAL instead of EOPNOTSUPP when mtu setting is wrong (Bjorn)
+- include vlan headers and fcs length when validating mtu (Olek)
+- tighten umem headroom validation when registering umem (Sashiko AI)
+- set XDP_USE_SG in xp_assign_dev_shared() (Sashiko AI)
+- adjust rx dropped xskxceiver test
 
-> @@ -16717,11 +16717,48 @@ static void find_good_pkt_pointers(struct bpf_v=
-erifier_state *vstate,
->  	}));
->  }
-> =20
-> +static void regs_refine_cond_op(struct bpf_reg_state *reg1, struct bpf_r=
-eg_state *reg2,
-> +				u8 opcode, bool is_jmp32);
-> +static u8 rev_opcode(u8 opcode);
-> +
-> +/* Learn more information about live branches by simulating both branche=
-s being
-> + * taken using regs_refine_cond_op. Because regs_refine_cond_op is sound=
- when
-> + * the branch is taken, if it produces ill-formed register bounds, it mu=
-st mean
-> + * that the branch is dead.
-> + */
-> +static int simulate_both_branches_taken(struct bpf_verifier_env *env, u8=
- opcode, bool is_jmp32)
-> +{
-> +	/* Fallthrough (FALSE) branch */
-> +	regs_refine_cond_op(&env->false_reg1, &env->false_reg2, rev_opcode(opco=
-de), is_jmp32);
-> +	reg_bounds_sync(&env->false_reg1);
-> +	reg_bounds_sync(&env->false_reg2);
-> +	/* If there is a range bounds violation in *any* of the abstract values=
- in
-> +	 * either reg_states in the FALSE branch (i.e. reg1, reg2), the
-> +	 * FALSE branch must be dead. Only TRUE branch will be taken.
-> +	 */
-> +	if (range_bounds_violation(&env->false_reg1) || range_bounds_violation(=
-&env->false_reg2))
-> +		return 1;
-> +
-> +	/* Jump (TRUE) branch */
-> +	regs_refine_cond_op(&env->true_reg1, &env->true_reg2, opcode, is_jmp32)=
-;
-> +	reg_bounds_sync(&env->true_reg1);
-> +	reg_bounds_sync(&env->true_reg2);
-> +	/* If there is a range bounds violation in *any* of the abstract values=
- in
-> +	 * either reg_states in the TRUE branch (i.e. true_reg1, true_reg2), th=
-e
-> +	 * TRUE branch must be dead. Only FALSE branch will be taken.
-> +	 */
-> +	if (range_bounds_violation(&env->true_reg1) || range_bounds_violation(&=
-env->true_reg2))
-> +		return 0;
+Hi,
 
-Why did you chose to limit these checks to range_bounds_violation(),
-excluding const_{subreg_,}tnum_out_of_sync_with_range_bounds()?
+here we fix a long-standing issue regarding multi-buffer scenario in ZC
+mode - we have not been providing space at the end of the buffer where
+multi-buffer XDP works on skb_shared_info. This has been brought to our
+attention via [0].
 
-Also, it appears that tnum bounds checking functions are unnecessarily
-restricted and should be implemented as follows:
+Unaligned mode does not get any specific treatment, it is user's
+responsibility to properly handle XSK addresses in queues.
 
-  static bool const_tnum_out_of_sync_with_range_bounds(struct bpf_reg_state=
- *reg)
-  {
+With adjustments included here in this set against xskxceiver I have
+been able to pass the full test suite on ice.
 
-        u64 tnum_umin =3D reg->var_off.value;
-        u64 tnum_umax =3D reg->var_off.value | reg->var_off.mask;
-        s64 tnum_smin =3D (s64)tnum_umin;
-        s64 tnum_smax =3D (s64)tnum_smax;
+Thanks,
+Maciej
 
-	// check that [tnum_umin, tnum_umax] and [reg->umin_value, reg->umax_value=
-] intersect
-	// check that [tnum_smin, tnum_smax] and [reg->smin_value, reg->smax_value=
-] intersect
-        return ...;
-  }
+[0]: https://community.intel.com/t5/Ethernet-Products/X710-XDP-Packet-Corruption-Issue-DRV-MODE-Zero-Copy-Multi-Buffer/m-p/1724208
 
-Wdyt?
 
-> +
-> +	/* Both branches are possible, we can't determine which one will be tak=
-en. */
-> +	return -1;
-> +}
-> +
->  /*
->   * <reg1> <op> <reg2>, currently assuming reg2 is a constant
->   */
-> -static int is_scalar_branch_taken(struct bpf_reg_state *reg1, struct bpf=
-_reg_state *reg2,
-> -				  u8 opcode, bool is_jmp32)
-> +static int is_scalar_branch_taken(struct bpf_verifier_env *env, struct b=
-pf_reg_state *reg1,
-> +				  struct bpf_reg_state *reg2, u8 opcode, bool is_jmp32)
->  {
->  	struct tnum t1 =3D is_jmp32 ? tnum_subreg(reg1->var_off) : reg1->var_of=
-f;
->  	struct tnum t2 =3D is_jmp32 ? tnum_subreg(reg2->var_off) : reg2->var_of=
-f;
+Maciej Fijalkowski (8):
+  xsk: tighten UMEM headroom validation to account for tailroom and min
+    frame
+  xsk: respect tailroom for ZC setups
+  xsk: fix XDP_UMEM_SG_FLAG issues
+  xsk: validate MTU against usable frame size on bind
+  selftests: bpf: fix pkt grow tests
+  selftests: bpf: have a separate variable for drop test
+  selftests: bpf: adjust rx_dropped xskxceiver's test to respect
+    tailroom
+  idpf: remove xsk frame size check against alignment
 
-[...]
+ drivers/net/ethernet/intel/idpf/xsk.c         | 10 -------
+ include/net/xdp_sock.h                        |  2 +-
+ include/net/xdp_sock_drv.h                    | 17 ++++++++++-
+ net/xdp/xdp_umem.c                            |  3 +-
+ net/xdp/xsk_buff_pool.c                       | 18 ++++++++++--
+ .../selftests/bpf/prog_tests/test_xsk.c       | 29 +++++++++++++++----
+ .../selftests/bpf/progs/xsk_xdp_progs.c       |  4 ++-
+ 7 files changed, 62 insertions(+), 21 deletions(-)
+
+-- 
+2.43.0
+
