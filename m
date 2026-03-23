@@ -1,140 +1,142 @@
-Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 440DE1C84D0;
-	Mon, 23 Mar 2026 09:05:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 039C038B154;
+	Mon, 23 Mar 2026 10:20:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774256746; cv=none; b=m9yLKxdmudBb1dSLd2ATPOoErYvsxj5lMIR2GKEo6445Mylm+fiTCIlO7BLHI0gYKYoj57pU/SN3FBojSSZdBFtjDLpJajuTWUzvIBV3c8cmG26X11HzyrEhh5uFTlse75DJyhm6Ts4p6AykkBVmPmb9nWu5/s7ZA/AJ8qrKilc=
+	t=1774261210; cv=none; b=L/deagztaqpdPMsQZ5mJeIDurtH6UX8dWGFF1KkY9/124ZAQoCVJKNcw3erZOQ1OG9J6si7Jy19tkcuocg+gDfsIsEL2ObteEZxbZ1abC7Q2tgHP7LppmL2kQv/rzbw1pKo+fKxGulo2R4kuW2m11j18f2b3UZOH6++VMfKW1Go=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774256746; c=relaxed/simple;
-	bh=ySQT3VAd4GrzZ/qxZpEQCJLETt9VD7VMobrWDjrekX0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=XP9xYl8yh1rkGg/omY8N1qlhj9ASmPi5OrMTPS81pWW3lz8Q6y4RVvyjO1vXFnmaN9o6kqipS5/0oP7Ps3ykgNhFmxDhAhtU1uwxH51qU4VqLRIdrhTORzC1501p8p0Zc2ZEz+209js/oxNesfRMKHK3h1hEBkayIdfO8ClaIzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=209.97.182.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [183.157.163.122])
-	by mtasvr (Coremail) with SMTP id _____wDX36dNAsFp7Q5HAA--.1593S3;
-	Mon, 23 Mar 2026 17:05:18 +0800 (CST)
-Received: from localhost.localdomain (unknown [183.157.163.122])
-	by mail-app3 (Coremail) with SMTP id zS_KCgDnYnhMAsFpPmANAA--.52582S2;
-	Mon, 23 Mar 2026 17:05:16 +0800 (CST)
-From: Tianci Cao <ziye@zju.edu.cn>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	bpf@vger.kernel.org
-Cc: john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	linux-kernel@vger.kernel.org,
-	tangyazhou518@outlook.com,
-	shenghaoyuan0928@163.com,
-	Tianci Cao <ziye@zju.edu.cn>
-Subject: [PATCH bpf-next] bpf: Drop redundant CONT_JMP alias
-Date: Mon, 23 Mar 2026 17:05:08 +0800
-Message-Id: <20260323090508.18986-1-ziye@zju.edu.cn>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1774261210; c=relaxed/simple;
+	bh=yXatQ4JO8B9DvDgSV+G8n5ZDZn06+ptILBIxSJt93bs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O7X/f7J/fLTItq0pUVxK7x3gBWRJKb6LbqySYx7nyFKUKy8zqD0Fwr294eQbrZn5QTSnzPyN4vPPdbz9kal4zPNoR9GQoEIHS1m43Ps4ld6oUIvGLcJCaFNYUQLqsAwxQ9nGQo7q4+YwbPZkMX0zFlczP2ePDndqOtLidNU6ngE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SG+YvpF5; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SG+YvpF5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774261208; x=1805797208;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yXatQ4JO8B9DvDgSV+G8n5ZDZn06+ptILBIxSJt93bs=;
+  b=SG+YvpF5S9ycHR19ld9cXh3Zk6PYlOuwW1A6Fdbj29hJxOJkbBuCu1pX
+   OjstibpTnvMoZIGT4UjcsT8Ighl6POOqiceFwbzM8PCe9jBepnTyKKATR
+   +CPMNvYeooROevJ7uSFHAzeRadodkRo/8IyPK1sMTSM224U+fv1Sz2MFR
+   5pWMdrfZ87eed6lpmQg69fL93yMkRqrXB8GLy9ltbb5BAwiweepJeNk5R
+   KAbxdOq/JW/geca6fPC6rdPXTh4TaoBeiuLIKzW6ZQEAq280QVTG7pQQT
+   iy1TGXUt+jcuWt15kQBnwFX95zGpACr0NKQPRcAeBiukz6X0+6Il7dlT5
+   A==;
+X-CSE-ConnectionGUID: NYddu8LLSSW/GlBAYophpg==
+X-CSE-MsgGUID: 2GI84B6XR+GWSsZIf+0uqw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11737"; a="74433430"
+X-IronPort-AV: E=Sophos;i="6.23,137,1770624000"; 
+   d="scan'208";a="74433430"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2026 03:20:07 -0700
+X-CSE-ConnectionGUID: sdWJRHdHQlOkec0YBpFIgQ==
+X-CSE-MsgGUID: nHQx2jjIRzyJoC4IQ2Koiw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,137,1770624000"; 
+   d="scan'208";a="228707869"
+Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 23 Mar 2026 03:20:01 -0700
+Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w4cO6-000000000LJ-0Inl;
+	Mon, 23 Mar 2026 10:19:58 +0000
+Date: Mon, 23 Mar 2026 18:19:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pingfan Liu <piliu@redhat.com>, kexec@lists.infradead.org
+Cc: oe-kbuild-all@lists.linux.dev, Pingfan Liu <piliu@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jeremy Linton <jeremy.linton@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Simon Horman <horms@kernel.org>, Gerd Hoffmann <kraxel@redhat.com>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Philipp Rudo <prudo@redhat.com>, Viktor Malik <vmalik@redhat.com>,
+	Jan Hendrik Farr <kernel@jfarr.cc>, Baoquan He <bhe@redhat.com>,
+	Dave Young <dyoung@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	bpf@vger.kernel.org, systemd-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv7 08/13] kexec_file: Factor out routine to find a symbol
+ in ELF
+Message-ID: <202603231812.ZGRRlzPe-lkp@intel.com>
+References: <20260322014402.8815-9-piliu@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zS_KCgDnYnhMAsFpPmANAA--.52582S2
-X-CM-SenderInfo: qtstiiaquyiko62m3hxhgxhubq/
-X-CM-DELIVERINFO: =?B?1RWa0AXKKxbFmtjJiESix3B1w3tzYfmPt4q7bPP17nv9Zvsme7sPvU0377+RBBKdO8
-	083jO/wNhIP+pglnkLd0BnOseIfBBxyRSDqjPjmxamLaW9G05G95BHjzxGP+S8SpmV3VmT
-	I5RpmYpxt4LJp3yeaBcZxzycEOt/T1pzLTdgCNOH
-X-Coremail-Antispam: 1Uk129KBj93XoW7CFyrKFW5KF48ZryfuFy3trc_yoW8ZFW3p3
-	Z5Ww1jya1Sgr47ZFZ8JrZ7Ar15JFZrXFyxG3ykC34ftF45Ka4fK34jgFn0qFWfXw1IkFW3
-	Jr9I9r1jk3WUZFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUU9Eb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
-	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAF
-	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0Y48IcxkI7V
-	AKI48G6xCjnVAKz4kxM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC2
-	0s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI
-	0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE
-	14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20x
-	vaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8
-	JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8YFAJUUUUU==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260322014402.8815-9-piliu@redhat.com>
 
-Historically, the classic BPF interpreter distinguished between taken
-conditional branches and fall-through paths by using CONT_JMP and CONT,
-respectively.
+Hi Pingfan,
 
-After the interpreter was migrated from net/core/filter.c to
-kernel/bpf/core.c, this naming split remained as a historical artifact.
-However, both macros have long expanded to the exact same sequence:
-"{ insn++; goto select_insn; }".
+kernel test robot noticed the following build errors:
 
-To simplify the code and remove unnecessary abstractions, replace all
-remaining CONT_JMP with CONT, and drop the redundant CONT_JMP definition
-entirely.
+[auto build test ERROR on bpf-next/net]
+[also build test ERROR on bpf-next/master bpf/master akpm-mm/mm-nonmm-unstable linus/master v7.0-rc5 next-20260320]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-No functional change intended.
+url:    https://github.com/intel-lab-lkp/linux/commits/Pingfan-Liu/bpf-Introduce-kfuncs-to-parser-buffer-content/20260323-084500
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git net
+patch link:    https://lore.kernel.org/r/20260322014402.8815-9-piliu%40redhat.com
+patch subject: [PATCHv7 08/13] kexec_file: Factor out routine to find a symbol in ELF
+config: x86_64-randconfig-002-20260323 (https://download.01.org/0day-ci/archive/20260323/202603231812.ZGRRlzPe-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260323/202603231812.ZGRRlzPe-lkp@intel.com/reproduce)
 
-Co-developed-by: Yazhou Tang <tangyazhou518@outlook.com>
-Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
-Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
-Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
-Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
----
- kernel/bpf/core.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603231812.ZGRRlzPe-lkp@intel.com/
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 229c74f3d6ae..040ce44ba0dd 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1770,7 +1770,6 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
- 	u32 tail_call_cnt = 0;
- 
- #define CONT	 ({ insn++; goto select_insn; })
--#define CONT_JMP ({ insn++; goto select_insn; })
- 
- select_insn:
- 	goto *jumptable[insn->code];
-@@ -2089,25 +2088,25 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
- 	JMP_##OPCODE##_X:					\
- 		if ((SIGN##64) DST CMP_OP (SIGN##64) SRC) {	\
- 			insn += insn->off;			\
--			CONT_JMP;				\
-+			CONT;					\
- 		}						\
- 		CONT;						\
- 	JMP32_##OPCODE##_X:					\
- 		if ((SIGN##32) DST CMP_OP (SIGN##32) SRC) {	\
- 			insn += insn->off;			\
--			CONT_JMP;				\
-+			CONT;					\
- 		}						\
- 		CONT;						\
- 	JMP_##OPCODE##_K:					\
- 		if ((SIGN##64) DST CMP_OP (SIGN##64) IMM) {	\
- 			insn += insn->off;			\
--			CONT_JMP;				\
-+			CONT;					\
- 		}						\
- 		CONT;						\
- 	JMP32_##OPCODE##_K:					\
- 		if ((SIGN##32) DST CMP_OP (SIGN##32) IMM) {	\
- 			insn += insn->off;			\
--			CONT_JMP;				\
-+			CONT;					\
- 		}						\
- 		CONT;
- 	COND_JMP(u, JEQ, ==)
+All errors (new ones prefixed by >>):
+
+>> kernel/kexec_file.c:1276:23: error: redefinition of 'kexec_purgatory_find_symbol'
+    1276 | static const Elf_Sym *kexec_purgatory_find_symbol(struct purgatory_info *pi,
+         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/kexec_file.c:958:23: note: previous definition of 'kexec_purgatory_find_symbol' with type 'const Elf64_Sym *(struct purgatory_info *, const char *)' {aka 'const struct elf64_sym *(struct purgatory_info *, const char *)'}
+     958 | static const Elf_Sym *kexec_purgatory_find_symbol(struct purgatory_info *pi,
+         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/kexec_purgatory_find_symbol +1276 kernel/kexec_file.c
+
+  1268	
+  1269	/*
+  1270	 * kexec_purgatory_find_symbol - find a symbol in the purgatory
+  1271	 * @pi:		Purgatory to search in.
+  1272	 * @name:	Name of the symbol.
+  1273	 *
+  1274	 * Return: pointer to symbol in read-only symtab on success, NULL on error.
+  1275	 */
+> 1276	static const Elf_Sym *kexec_purgatory_find_symbol(struct purgatory_info *pi,
+  1277							  const char *name)
+  1278	{
+  1279		if (!pi->ehdr)
+  1280			return NULL;
+  1281	
+  1282		return elf_find_symbol(pi->ehdr, name);
+  1283	}
+  1284	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
