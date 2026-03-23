@@ -1,26 +1,26 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82EBF3B584A;
-	Mon, 23 Mar 2026 15:40:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 745B53BADB5;
+	Mon, 23 Mar 2026 15:40:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774280447; cv=none; b=mFPUSZocDXulAydtUMMzJw1U/0B/vP9dtntxW3w/+aENPzhp23v6VC9QkEHaShH6gnnyRyZOhDZB8DUkGY2M6ciyccJ78Bc0ulqjLyFieiLbj71SUZfG0U2KN9dVLQ9U5zrTqguWGmQ1QKAkmcoO8nuXGjG4JywiMbgNy1TE+NE=
+	t=1774280453; cv=none; b=FYTJ1ti4CkYlhRVyswlGJUY9dAAj+0I/QtWYx9wEb/SvUipADDfRJjb+Uz9lkYLRDQpcy0vwGDTnLMZt/Jd4nGsdLckmsvr2gTARSJZaJKfssqecLQ8VdLocVSg0c++iFEkV6tRMeT5GHw58itP/eljcHrIGdQijUQ6icQVMxeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774280447; c=relaxed/simple;
-	bh=rYNo8XPHR13NOfEGctHALckOR9FuoNu5duTDbJBWXzY=;
+	s=arc-20240116; t=1774280453; c=relaxed/simple;
+	bh=K3wdiOIPmKzJb3V7P58ebfdxfQJMWLNeh3ipytoXWwU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=kdCBRr38+78mmjGTt4A9JYjl+nTriA0v7XTbQeTnC6b6jLMw7HVmPpeXxV4Y1MT7SdvBcz/io1AiGmbJW+K54UTop/tuAkuAY8SlGASSrRCjkJNuI6X+kroqC0ZV7xnilEHcpMXHJAOi9DIjJRWx8kgxOfI2dAb/C7hfkC4S7Y4=
+	 In-Reply-To:To:Cc; b=PPKIa0tsLNxxwjvFSkoPp8lwmx/4Z4JFnx7ZaRg4rstz66uHIRsIQpfDp5FIGe0ccy4gMOADHeyZMLgWso8zLk/lhNqt6sFG4lIlkSg2/7RasC1lwAGxkwuyZqMsvH5ZfYJF2ElbpeE7RgvxCOE6FSvP/wUfnIP2H82i2k7Kq/s=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F13DB16F8;
-	Mon, 23 Mar 2026 08:40:39 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0931714BF;
+	Mon, 23 Mar 2026 08:40:44 -0700 (PDT)
 Received: from e132581.arm.com (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 351473F694;
-	Mon, 23 Mar 2026 08:40:42 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 40ADC3F694;
+	Mon, 23 Mar 2026 08:40:46 -0700 (PDT)
 From: Leo Yan <leo.yan@arm.com>
-Date: Mon, 23 Mar 2026 15:40:06 +0000
-Subject: [PATCH 5/6] selftests/bpf: Initialize operation name before use
+Date: Mon, 23 Mar 2026 15:40:07 +0000
+Subject: [PATCH 6/6] selftests/bpf: Append extra cflags
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -29,7 +29,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260323-tools_build_fix_zero_init_bpf_only-v1-5-d1cfad2f4cd1@arm.com>
+Message-Id: <20260323-tools_build_fix_zero_init_bpf_only-v1-6-d1cfad2f4cd1@arm.com>
 References: <20260323-tools_build_fix_zero_init_bpf_only-v1-0-d1cfad2f4cd1@arm.com>
 In-Reply-To: <20260323-tools_build_fix_zero_init_bpf_only-v1-0-d1cfad2f4cd1@arm.com>
 To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
@@ -50,36 +50,64 @@ Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
  linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, 
  Leo Yan <leo.yan@arm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1774280421; l=1078;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1774280421; l=2317;
  i=leo.yan@arm.com; s=20250604; h=from:subject:message-id;
- bh=rYNo8XPHR13NOfEGctHALckOR9FuoNu5duTDbJBWXzY=;
- b=yD0flLirzs1eHaIrDMPcyYaiJjUVV25J9vWKzOg/3Ot0P4YbsVRXrDEoGpUiQiNtyENh/BQD8
- o5FmdwFXyQlCk24+/h2G5xasRczDEk9jppae7kn11853DvY2kQ41vND
+ bh=K3wdiOIPmKzJb3V7P58ebfdxfQJMWLNeh3ipytoXWwU=;
+ b=6rkoiMv1f9bl/ohzee85t44Ww5uAMM1mVQPtXsR9tqgP/7amWpwxTqBrHN/Sm9C5YY0DfdRcn
+ PAbEu+V1cv9CyO6twxqNxlpkHJyGSV2el40z9N3Tuk0qMa4QKtChMcg
 X-Developer-Key: i=leo.yan@arm.com; a=ed25519;
  pk=k4BaDbvkCXzBFA7Nw184KHGP5thju8lKqJYIrOWxDhI=
 
-ASAN reports stack-buffer-overflow due to the uninitialized op_name.
+Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
+the compiler.
 
-Initialize it to fix the issue.
+urandom_read is built with clang.  Introduce URANDOM_READ_CFLAGS to copy
+the compiler flags without appending EXTRA_CFLAGS, which may contain
+incompatible options with clang.
 
-Fixes: 054b6c7866c7 ("selftests/bpf: Add verifier log tests for BPF_BTF_LOAD command")
+Since lib.mk appends options to CFLAGS, ensure that CFLAGS is inherited
+after including lib.mk.
+
 Signed-off-by: Leo Yan <leo.yan@arm.com>
 ---
- tools/testing/selftests/bpf/prog_tests/verifier_log.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/bpf/Makefile | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier_log.c b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
-index aaa2854974c0a91cbbb9fc13ae0f966de1bcc818..dcbe2ef995c5b211c2b86b9555c02144e11ee7d6 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier_log.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
-@@ -317,6 +317,7 @@ static void verif_btf_log_subtest(bool bad_btf)
- 	res = load_btf(&opts, true);
- 	ASSERT_EQ(res, -ENOSPC, "half_log_fd");
- 	ASSERT_EQ(strlen(logs.buf), 24, "log_fixed_25");
-+	snprintf(op_name, sizeof(op_name), "log_fixed");
- 	ASSERT_STRNEQ(logs.buf, logs.reference, 24, op_name);
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index f75c4f52c02842541f385bc8cbaeab32d8195ed3..50bcf4c386ba52e6cceef4c15f999d9eec6efd6e 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -158,6 +158,12 @@ endef
  
- 	/* validate rolling verifier log logic: try all variations of log buf
+ include ../lib.mk
+ 
++# urandom_read is built with clang. Copy $(CFLAGS) before EXTRA_CFLAGS are
++# appended so that it does not inherit potentially incompatible options.
++URANDOM_READ_CFLAGS := $(CFLAGS)
++
++CFLAGS += $(EXTRA_CFLAGS)
++
+ NON_CHECK_FEAT_TARGETS := clean docs-clean
+ CHECK_FEAT := $(filter-out $(NON_CHECK_FEAT_TARGETS),$(or $(MAKECMDGOALS), "none"))
+ ifneq ($(CHECK_FEAT),)
+@@ -255,7 +261,7 @@ endif
+ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c liburandom_read.map
+ 	$(call msg,LIB,,$@)
+ 	$(Q)$(CLANG) $(CLANG_TARGET_ARCH) \
+-		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) \
++		     $(filter-out -static,$(URANDOM_READ_CFLAGS) $(LDFLAGS)) \
+ 		     $(filter %.c,$^) $(filter-out -static,$(LDLIBS)) \
+ 		     -Wno-unused-command-line-argument \
+ 		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
+@@ -265,7 +271,7 @@ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c liburandom
+ $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_read.so
+ 	$(call msg,BINARY,,$@)
+ 	$(Q)$(CLANG) $(CLANG_TARGET_ARCH) \
+-		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $(filter %.c,$^) \
++		     $(filter-out -static,$(URANDOM_READ_CFLAGS) $(LDFLAGS)) $(filter %.c,$^) \
+ 		     -Wno-unused-command-line-argument \
+ 		     -lurandom_read $(filter-out -static,$(LDLIBS)) -L$(OUTPUT) \
+ 		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
 
 -- 
 2.34.1
