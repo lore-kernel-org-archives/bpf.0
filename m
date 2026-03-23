@@ -1,115 +1,191 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33B593AC0E6;
-	Mon, 23 Mar 2026 13:39:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C85232470A
+	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 14:16:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774273162; cv=none; b=FvIjFdBiItcaqnSTEJSGpI14RPj6ArZ+8UR6RnyTCIifXzeE1TthAA6EiO971XvotYjTQu9GXsusUulFokmUX11gvbLWLvK0olMcMAeApP3DtWOH/o4OWaLtpvrcm+mFGma17+Z+X4sd/buAe20+DzAnSCr5WfrAQs6m4Rvblg8=
+	t=1774275384; cv=none; b=YR26mNrB8gZ2PFYq/H9pY/QesMrM8j7RboWCaRyk72QbCTv5gamstfryibBfheUf50qMFP9dhURVph3iZCFo/H/alKtDJUGxqL8r2ghr7ZdcYrAEjdPc+BSru1psPksw0v8a86Jn7XjZu38QW4+UBrZwRjqEfNP3Kyn54Wma4Qc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774273162; c=relaxed/simple;
-	bh=18qlEzJSCR/J43+q2kbQxEU183F+Aik3etyCBZt0rLU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DObfY83nT1z+JaszXLyPEmbu1uc9Gvh8Vvvr/FuR3SI3rKh0ur6EwXH9pdZVHpA1fmfD4Vz0AKjZyyvpN1xo/0dihpNszF+2kKmsiegjmPzJSRB5+uzSq39SjLGtJUtuVQ5KBpxQyAn9jbdgcDB/nNheilouAL/Fz+cHE5R2OLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4ffZ5S1ldhzYQv3W;
-	Mon, 23 Mar 2026 21:39:08 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 4434240591;
-	Mon, 23 Mar 2026 21:39:15 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP1 (Coremail) with SMTP id cCh0CgAnKtp+QsFpxAzJBw--.59330S2;
-	Mon, 23 Mar 2026 21:39:11 +0800 (CST)
-Message-ID: <36162ee3-c05e-4bb1-b673-dc672139e925@huaweicloud.com>
-Date: Mon, 23 Mar 2026 21:39:10 +0800
+	s=arc-20240116; t=1774275384; c=relaxed/simple;
+	bh=30GgcY6UW+M9qOh+90q1PY6I7u9QtU+KWstA8AMAoSg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=hTNlbIa9MdmR4ZxNxbBInBDUwhSV9c179PQG/kxvU5dsSXElocn2q5s59UKJ1/VRSk5T0ImwNfOBtLTx1GzoH3dolLjxeTYtWtz4NK5BlGJ1aYvVNHykKJ+6CD079CGcdSbzfao1vP2FaTpBwcihss5sXOTqZM3XgY3fW/NwxPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U9VUoraL; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U9VUoraL"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-486fb14227cso1810515e9.3
+        for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 07:16:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1774275382; x=1774880182; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1lM3zxBG4jnlTh9eoP4afFD1w/5HJMGWcFKGiqosUU0=;
+        b=U9VUoraLV0xkVUtwVavhVIi1XwpJqHTeqGnJ2epl3zDpSd+vvjVEAxlB0HNQjEmJRO
+         GfB9TyuOKkCumdotwKuHiHiUM5s8m+FciEVfrh2ddlTPlJO5HKSSqlBVmpEdfdTEdLXP
+         ps8T5qzEm7j76rcAFnNSQhvkVnWeYuj2PZYFM5LwGAOxoZARs/CHd8T4eu0i8sx9XLxs
+         t8zycZnEStiyctJy8V/tyiZsxqv2gAO+LQUxToMvq8AW6Y+839md0d+AcRcNnsrg5jci
+         OkOcphwP5bE6oeaKpVflyje7F4Jd7yQPkCFghC7XOV+sFaEdHNZzX2mFubtNIZ7R2o6T
+         v+PA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774275382; x=1774880182;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1lM3zxBG4jnlTh9eoP4afFD1w/5HJMGWcFKGiqosUU0=;
+        b=sVZvThjXYN1wHx5enHJ+xsSXC+W+ZOZHTu3BFtPUL0tnVVEynY8WJ9x3O6qarizm9y
+         nHOTvERcLacm0h49nnCO5Q/saueO4OpxX1IfjD5BZFvIjRqv8L1bqlE1YE/EKmosG1tv
+         CKzRczhwaVtHJKm3lkNRoClLcXDYb67YEZS8uA27eJ6YUp6G2sRxY6xPgY1EuUxZ5McP
+         J68eHYOnrir0EovCP1CuvpKtxOUeaIYc0Ohd3V0+V5xiKNZ4tDJR16qsnHOWyv2MWvQ/
+         w6z5+ZT3jxLc/LLtiPgEuvTNBuBGbv6Dxgkoqyq+OWqpdg/XvrI47DxfeyHn4U0YHFti
+         3Icw==
+X-Forwarded-Encrypted: i=1; AJvYcCU58qxGqpp2aZNilXaLJTlcSmJ1ejiy0s3r3kTJkty7aa9I8O3ozubVoRiwDRaCm2MEVF8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywd2/LH8d2dEaW9DELe4KrPN8baUFbfRlAIXEjI/qYZUfurDr28
+	YnK+2y+bfgkrxa6fuj/oJ0e1Kngps79iHB/jZOJRyaK45uVkmoJMsEbm
+X-Gm-Gg: ATEYQzxBmcBQWbbHvlqIpvpAwUMZPdngPht9F/CDkRj4p++LO5QLDPE5CFVHJWf35OE
+	9kKHolhwolP/FhcOC2vBTnTPIaYVEMKY/prWSCLoGABTy7S9jh5Cfm/CAQvLlnPTDy4D2Y+m8gO
+	DKDEhguFIl701NCt5f8TA53gyj9AofTmWCOCprEMQRje7+tiIW2dgltbMdct5Fnj97s4IF5sTOn
+	pFK15lf/H9GdPdahKZFkPU+iEMAwCfLX4fbzBeb40OIQAvH0KzBLoFdFYAApBnuKwLKL2h8c8YG
+	x+mzVWu9YKy900wtZhpi673C1dKhp0oN14xhAfIGCDW8LZRzYvBqMZQYFO9wqZKj/tgRT9pAJiX
+	WyDATo8TYeeqmTY5p1r8NX1yvK8IeKvp1ngElV1aH91ysDtx1VA6SDPOMz9KBqJM1KU/aWaQ3yy
+	teUbDEAGOOvii6cSQ=
+X-Received: by 2002:a05:600c:4707:b0:480:20f1:7aa6 with SMTP id 5b1f17b1804b1-486fee231cdmr166151375e9.21.1774275381047;
+        Mon, 23 Mar 2026 07:16:21 -0700 (PDT)
+Received: from localhost ([2620:10d:c092:500::5:a228])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486fc4d90f4sm391476075e9.1.2026.03.23.07.16.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Mar 2026 07:16:20 -0700 (PDT)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+To: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard
+ Zingerman <eddyz87@gmail.com>, Harishankar Vishwanathan
+ <harishankar.vishwanathan@gmail.com>, Shung-Hsi Yu
+ <shung-hsi.yu@suse.com>, Srinivas Narayana
+ <srinivas.narayana@rutgers.edu>, Santosh Nagarakatte
+ <santosh.nagarakatte@rutgers.edu>
+Subject: Re: [PATCH v2 bpf-next 1/6] bpf: Refactor reg_bounds_sanity_check
+In-Reply-To: <d328e04c67b520973e295d0f1c2fd88715a6390e.1774025082.git.paul.chaignon@gmail.com>
+References: <cover.1774025082.git.paul.chaignon@gmail.com>
+ <d328e04c67b520973e295d0f1c2fd88715a6390e.1774025082.git.paul.chaignon@gmail.com>
+Date: Mon, 23 Mar 2026 14:16:19 +0000
+Message-ID: <87qzpak4wc.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v9 4/5] bpf, x86: Emit ENDBR for indirect jump
- targets
-Content-Language: en-US
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: a.s.protopopov@gmail.com, alexis.lothore@bootlin.com, andrii@kernel.org,
- ast@kernel.org, bjorn@kernel.org, bpf@vger.kernel.org, chleroy@kernel.org,
- daniel@iogearbox.net, davem@davemloft.net, eddyz87@gmail.com,
- gor@linux.ibm.com, hbathini@linux.ibm.com, hca@linux.ibm.com,
- hengqi.chen@gmail.com, iii@linux.ibm.com, johan.almbladh@anyfinetworks.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux@armlinux.org.uk, list+bpf@vahedi.org, luke.r.nels@gmail.com,
- martin.lau@linux.dev, naveen@kernel.org, paulburton@kernel.org,
- pulehui@huawei.com, puranjay@kernel.org, udknight@gmail.com,
- xi.wang@gmail.com, yangtiezhu@loongson.cn, yonghong.song@linux.dev
-References: <20260312170255.3427799-5-xukuohai@huaweicloud.com>
- <20260313101505.104686-1-leon.hwang@linux.dev>
- <f384599a-75b8-4387-80db-b20429a0bafd@huaweicloud.com>
- <9ddae3d2-173d-460d-b283-12c983164a69@linux.dev>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <9ddae3d2-173d-460d-b283-12c983164a69@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgAnKtp+QsFpxAzJBw--.59330S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7JF4DWr4rCw1fZr18tr1kKrg_yoW8Jr1DpF
-	y8WayYyay8KFZ3G34Fqrn8KF9Fyr1Dtw13Xr18XF4DAr98Kr10gryjgFsagFyFvr48G34I
-	gFs8Xr93Zr15J37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
-	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
-	4xRDUUUUU==
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+Content-Type: text/plain
 
-On 3/14/2026 9:35 PM, Leon Hwang wrote:
-> On 2026/3/14 14:48, Xu Kuohai wrote:
->> On 3/13/2026 6:15 PM, Leon Hwang wrote:
->>>> +#ifdef CONFIG_X86_KERNEL_IBT
->>>> +        if (bpf_insn_is_indirect_target(env, bpf_prog, i - 1))
->>>> +            EMIT_ENDBR();
->>>> +#endif
->>> NIT: is this CONFIG check necessary?
->>>
->>> EMIT_ENDBR already checks it.
->>>
->>> #ifdef CONFIG_X86_KERNEL_IBT
->>> #define EMIT_ENDBR()        EMIT(gen_endbr(), 4)
->>> #define EMIT_ENDBR_POISON()    EMIT(gen_endbr_poison(), 4)
->>> #else
->>> #define EMIT_ENDBR()
->>> #define EMIT_ENDBR_POISON()
->>> #endif
->>
->> Well, the code was originally written exactly without the #ifdef, but it
->> triggered
->> -Wempty-body warning: https://lore.kernel.org/bpf/202603051414.AAMjmOHv-
->> lkp@intel.com/.
->>
-> 
-> Let's update the macros instead, which can avoid the build warning and
-> get rid of the CONFIG check as well.
-> 
-> #define EMIT_ENDBR() do { } while (0)
-> #define EMIT_ENDBR_POISON() do { } while (0)
-> 
-> The way of "do { } while (0)" is commonly used in kernel.
+Paul Chaignon <paul.chaignon@gmail.com> writes:
+
+> From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
 >
+> This commit refactors reg_bounds_sanity_check to factor out the logic
+> that performs the sanity check from the logic that does the reporting.
+>
+> Signed-off-by: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+> Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
+> ---
+>  kernel/bpf/verifier.c | 50 ++++++++++++++++++++++++++++++-------------
+>  1 file changed, 35 insertions(+), 15 deletions(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 01c18f4268de..b638ab841c10 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -2802,40 +2802,60 @@ static void reg_bounds_sync(struct bpf_reg_state *reg)
+>  	__update_reg_bounds(reg);
+>  }
+>  
+> -static int reg_bounds_sanity_check(struct bpf_verifier_env *env,
+> -				   struct bpf_reg_state *reg, const char *ctx)
+> +static bool range_bounds_violation(struct bpf_reg_state *reg)
+>  {
+> -	const char *msg;
+> -
+> -	if (reg->umin_value > reg->umax_value ||
+> -	    reg->smin_value > reg->smax_value ||
+> -	    reg->u32_min_value > reg->u32_max_value ||
+> -	    reg->s32_min_value > reg->s32_max_value) {
+> -		    msg = "range bounds violation";
+> -		    goto out;
+> -	}
+> +	return (reg->umin_value > reg->umax_value || reg->smin_value > reg->smax_value ||
+> +		reg->u32_min_value > reg->u32_max_value ||
+> +		reg->s32_min_value > reg->s32_max_value);
+> +}
+>  
+> +static bool const_tnum_out_of_sync_with_range_bounds(struct bpf_reg_state *reg)
+> +{
+>  	if (tnum_is_const(reg->var_off)) {
+>  		u64 uval = reg->var_off.value;
+>  		s64 sval = (s64)uval;
+>  
+>  		if (reg->umin_value != uval || reg->umax_value != uval ||
+>  		    reg->smin_value != sval || reg->smax_value != sval) {
+> -			msg = "const tnum out of sync with range bounds";
+> -			goto out;
+> +			return true;
+nit: maybe it's going to look simpler if you rewrite it with early return?
+static bool const_tnum_out_of_sync_with_range_bounds(struct bpf_reg_state *reg)
+{
+	u64 uval = reg->var_off.value;
+	s64 sval = (s64)uval;
 
-Sorry for the delay. This makes sense to me. The code looks much cleaner
-without the #ifdef, thanks!
+  	if (!tnum_is_const(reg->var_off))
+                return false;
 
-> Thanks,
-> Leon
+        return reg->umin_value != uval || reg->umax_value != uval ||
+               reg->smin_value != sval || reg->smax_value != sval;
+}
 
+same principle can be applied to
+const_subreg_tnum_out_of_sync_with_range_bounds(), which looks like a
+very long function name, will something like
+subreg_tnum_range_mismatch() capture the idea?
+>  
+> +static bool const_subreg_tnum_out_of_sync_with_range_bounds(struct bpf_reg_state *reg)
+> +{
+>  	if (tnum_subreg_is_const(reg->var_off)) {
+>  		u32 uval32 = tnum_subreg(reg->var_off).value;
+>  		s32 sval32 = (s32)uval32;
+>  
+>  		if (reg->u32_min_value != uval32 || reg->u32_max_value != uval32 ||
+>  		    reg->s32_min_value != sval32 || reg->s32_max_value != sval32) {
+> -			msg = "const subreg tnum out of sync with range bounds";
+> -			goto out;
+> +			return true;
+>  		}
+>  	}
+> +	return false;
+> +}
+> +
+> +static int reg_bounds_sanity_check(struct bpf_verifier_env *env,
+> +				   struct bpf_reg_state *reg, const char *ctx)
+> +{
+> +	const char *msg;
+> +
+> +	if (range_bounds_violation(reg)) {
+> +		msg = "range bounds violation";
+> +		goto out;
+> +	}
+> +
+> +	if (const_tnum_out_of_sync_with_range_bounds(reg)) {
+> +		msg = "const tnum out of sync with range bounds";
+> +		goto out;
+> +	}
+> +
+> +	if (const_subreg_tnum_out_of_sync_with_range_bounds(reg)) {
+> +		msg = "const subreg tnum out of sync with range bounds";
+> +		goto out;
+> +	}
+Other than those few nits, the change looks good.
+>  
+>  	return 0;
+>  out:
+> -- 
+> 2.43.0
