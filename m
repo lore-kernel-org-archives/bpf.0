@@ -1,314 +1,155 @@
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1618D3914E0;
-	Mon, 23 Mar 2026 10:56:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8C12377000
+	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 10:59:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774263366; cv=none; b=F0ZIkkoBEpeOpRphM5Y/satNAQsjTGSpBNK2JEIAdDmzlL5QcRPC/kbl7ufWwgrgtcR2jdbWKA7/c7IMp2ItiZrAXpml1emtxrd2eezD+Z1sFbXUHPuLR0/OzLdC7owsp52DCFrQw0MEUi4IwRlT53z3wQ0Uw6TbQL3Tnwe8G0E=
+	t=1774263580; cv=none; b=Yp8Er9zdD1jAabiA//PK6WjtmvK3a9HqbuEhjCckZ7rjYs5nuiPS4ED2X9X87iPz3Q5ZbSwIE+/VhbRmzuwHVMl/vs6MzigPh3VrDrtuA+vZbr4VoYgUoRvRXi/F1vRKkvU6rP633gu9wD+m2xpK4y7WIW8btfLVJGKqmXPfbYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774263366; c=relaxed/simple;
-	bh=wYod2bsCx5XUAR8HjcZO0gY0sArDllNyLKMEev8bpt0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=d3zGuKkIKC18eHmlEU1dMPVRlwO2KBoUPzc3cUqqRAKSK8qsqx3sTZxf1spPsrTuV5aklQydygd3zflNHDsOXcBAyvdUyJI0IC62IsBRbtCk9lkqniSnLiS++cOD+tVczpJ1ojwbXb/lWdaeJhId22pwaIjWpq0m6d8vDeymQxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ehtOKZ3e; arc=none smtp.client-ip=95.215.58.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1774263580; c=relaxed/simple;
+	bh=V3qIVBeIYZc6o6LUFDbfme/F0QW48dL8M3JlrifxMCo=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ssqQEyiJ62Oga7qPrQD0SqrfzF672AputQwEWHZNSU3H8RJzE1MLEfHYXS/c3JqhdqCp9vIg+4e8wPl7vi70bcToxAK3lbTgflOimLsW1wDJAi/pwaC3bEzRXN5+ZcPaGSssEGQGgIkBLIN8oFdZZTI4MiIoGXXimK3QdBVhGHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LWseFFTw; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ehtOKZ3e"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774263362;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pGEQT91QO2Vr6HyhTsMYXno0TG9SvzxdFJGArBdL6wE=;
-	b=ehtOKZ3ePc9JIUtNdvUNcr5fhe/qrNJFGwnfck/1+GVLByY/vRMwU4DTwll4pt3UuSFra5
-	VNeOpV1lq3t4qGdmjfDq2LowgLskaSB7NUV6NgqKyOF7JJIfFLT5kmZV/ozhRdHfdpgJQh
-	wvzrEILOINhGSCy/xZsSSJ3UHklXioQ=
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: netdev@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v1 2/2] selftests/bpf: Add protocol check test for bpf_sk_assign_tcp_reqsk()
-Date: Mon, 23 Mar 2026 18:54:50 +0800
-Message-ID: <20260323105510.51990-3-jiayuan.chen@linux.dev>
-In-Reply-To: <20260323105510.51990-1-jiayuan.chen@linux.dev>
-References: <20260323105510.51990-1-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LWseFFTw"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-43b3d9d0695so3742727f8f.0
+        for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 03:59:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1774263577; x=1774868377; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PdHGJawNgmz3Mnxlo8DQZ2ezVhQNMuS/IKfPtN1AcXY=;
+        b=LWseFFTwOjloZ2wNHPfiGJwDkZNrtVdTGAqR9geD3yoY6TrT/zQMTS03ZAqLle6Jvy
+         w5vwEwYIsfXWlPqDk9B56vTZJBhvGnd7baMAICJ+zY7R1rWBBz44AZ/crpRkaVyA0zZY
+         UE8Lp4LuH5X0QRKPxkfRBrg/2dnK9pvd96T6ICX2P3aNQehcOI29ElPVhpPYPHAwlXFy
+         Klv9wRuCR64bS52jwkhT8hH3SA5SBIoZdVDAlt945MHloUYyQ1A3qu2vzHpLs7XrcWBs
+         mq0Kqlzy7tXgR8gk9s62mZ6Qc0ZyFufoffOvF2u868pNmh9Sj548IM6Rhw7/4pNjPP4h
+         yygQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774263577; x=1774868377;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PdHGJawNgmz3Mnxlo8DQZ2ezVhQNMuS/IKfPtN1AcXY=;
+        b=g61Je6U70g5me0ECcqnhHKbNuZ2UDUEdr55u68B3VaGX/17Nc2JBrVaURgf+leXdAw
+         JWWQi8xLOtuHHhSF0+CoG2rPbIic0Bavwa/ElXMQ7Dit54U3crAOORQJZzMNS12EN8XE
+         KU7j7z9ajylX3cT+Unk03JzDaLla29LOcmyqXCg1J90OA+Yw4UAnkYbm1f7abg6y5EyC
+         LwhDJI9BXpufRlSc6IM9YRsz21BQGaXkDE59LIVzByrDaXsAbOXSd7qncpKZ5ahVYFKF
+         JznL6s3JI6grIIXKb2VWn2HUKFvS/zWm3WxMc3NVBUOG6X3Z0fsGKx9c3P3yCskamKdI
+         +lbA==
+X-Forwarded-Encrypted: i=1; AJvYcCXQTnjy3OjrjIiGnHHmIFZROLlptUXzBkkB3IVECBIwv5JtsxOIl0FgClhgNqvrRn5Udf8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwU0rMz6wFjkATlr5XWUTON5nWn0p0nQJ43XL49UScUX0X1n+hH
+	02fcsmh6gc85fKaF4UqA+aNHcF24bdX7h+9M9VrZyhhFJOYGOBB46MqV
+X-Gm-Gg: ATEYQzw49b4zla+QH0Yv7y1SgXgOY+oq2i7/nl6cbN0v7T0g9WwTdGj+q0pelRU/eQx
+	shKuDyXqaPpclAYi+50qepcwgBmoC2hsP7cy6EWFnlYrqjHx/Vxbf7H6nB1xHCPgw3M5EaCiLcM
+	DCshqmht9XFs/Mo416AGQtNRDRfDyG04856lonpcszpw1qBoaig+qitTx27JQ/7zKLGC486kgB4
+	fFX7+0SOz9NX46JBHpY3MAL2HjH6EmbPGWkcLdYaVZfD0BCEyzzT8ra3ecOp6pzY0uzhsUnr5Aw
+	CJDxvTxg+hyCA0OCwuXPJT5eFKMuvgKAiVTW0yoaKoNZJqxTBaUV+HN+VxrrNrRQmGIHY3VxiBW
+	EWBWIWI4XZt+HSCpkd3Lup0hLTwwEzR/NF99B05dAjofjeR+1QWBN/JCqmLKwQwtY6RE/1riXe6
+	PyNwTOkRf5IqNu4dx71MbWoRGT8Vo=
+X-Received: by 2002:a05:6000:220f:b0:43b:7481:f899 with SMTP id ffacd0b85a97d-43b7481fabfmr6744251f8f.7.1774263577027;
+        Mon, 23 Mar 2026 03:59:37 -0700 (PDT)
+Received: from krava ([2a00:102a:502b:faa8:f878:ffa9:3b65:76be])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b646b0b0csm27307584f8f.15.2026.03.23.03.59.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Mar 2026 03:59:36 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 23 Mar 2026 11:59:34 +0100
+To: Menglong Dong <menglong8.dong@gmail.com>
+Cc: ast@kernel.org, olsajiri@gmail.com, daniel@iogearbox.net,
+	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+	song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
+	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
+	shuah@kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: test access to ringbuf
+ position with map pointer
+Message-ID: <acEdFlYd4UHmknEU@krava>
+References: <20260323021839.101316-1-dongml2@chinatelecom.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260323021839.101316-1-dongml2@chinatelecom.cn>
 
-From: Jiayuan Chen <jiayuan.chen@shopee.com>
+On Mon, Mar 23, 2026 at 10:18:39AM +0800, Menglong Dong wrote:
+> Add the testing to access the bpf_ringbuf with the map pointer.
+> "consumer_pos" and "producer_pos" is accessed in this testing. We reserve
+> 128 bytes in the ringbuf to test the producer_pos, which should be
+> "128 + 8", and the "8" is BPF_RINGBUF_HDR_SZ.
+> 
+> It will be helpful if we want to evaluate the usage of the ringbuf in bpf
+> prog with the consumer and producer position.
 
-Add test_tcp_custom_syncookie_protocol_check to verify that
-bpf_sk_assign_tcp_reqsk() rejects non-TCP skbs. The test sends a UDP
-packet through a BPF program that calls bpf_sk_assign_tcp_reqsk() on it
-and checks that the kfunc returns an error.
+lgtm, question though.. is this related to some kernel change or
+some ongoing work? looks like basic operation that's already
+tested indirectly by existing tests
 
-Without the fix in bpf_sk_assign_tcp_reqsk(), the kfunc succeeds and
-attaches a TCP reqsk to the UDP skb, which causes a null pointer
-dereference panic when the kernel processes it through the UDP receive
-path.
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-Test result:
+jirka
 
-  ./test_progs -a tcp_custom_syncookie_protocol_check -v
-  setup_netns:PASS:create netns 0 nsec
-  setup_netns:PASS:ip 0 nsec
-  write_sysctl:PASS:open sysctl 0 nsec
-  write_sysctl:PASS:write sysctl 0 nsec
-  setup_netns:PASS:write_sysctl 0 nsec
-  test_tcp_custom_syncookie_protocol_check:PASS:open_and_load 0 nsec
-  test_tcp_custom_syncookie_protocol_check:PASS:start tcp_server 0 nsec
-  test_tcp_custom_syncookie_protocol_check:PASS:getsockname 0 nsec
-  setup_tc:PASS:qdisc add dev lo clsact 0 nsec
-  setup_tc:PASS:filter add dev lo ingress 0 nsec
-  test_tcp_custom_syncookie_protocol_check:PASS:udp socket 0 nsec
-  test_tcp_custom_syncookie_protocol_check:PASS:sendto udp 0 nsec
-  test_tcp_custom_syncookie_protocol_check:PASS:udp_intercepted 0 nsec
-  test_tcp_custom_syncookie_protocol_check:PASS:assign_ret 0 nsec
-  #471     tcp_custom_syncookie_protocol_check:OK
-  Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>
-Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
----
- .../bpf/prog_tests/tcp_custom_syncookie.c     | 81 ++++++++++++++++++-
- .../bpf/progs/test_tcp_custom_syncookie.c     | 79 ++++++++++++++++++
- 2 files changed, 156 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c b/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
-index eaf441dc7e79..e622c5befa70 100644
---- a/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
-@@ -5,6 +5,7 @@
- #include <sched.h>
- #include <stdlib.h>
- #include <net/if.h>
-+#include <netinet/in.h>
- 
- #include "test_progs.h"
- #include "cgroup_helpers.h"
-@@ -47,11 +48,10 @@ static int setup_netns(void)
- 	return -1;
- }
- 
--static int setup_tc(struct test_tcp_custom_syncookie *skel)
-+static int setup_tc(int prog_fd)
- {
- 	LIBBPF_OPTS(bpf_tc_hook, qdisc_lo, .attach_point = BPF_TC_INGRESS);
--	LIBBPF_OPTS(bpf_tc_opts, tc_attach,
--		    .prog_fd = bpf_program__fd(skel->progs.tcp_custom_syncookie));
-+	LIBBPF_OPTS(bpf_tc_opts, tc_attach, .prog_fd = prog_fd);
- 
- 	qdisc_lo.ifindex = if_nametoindex("lo");
- 	if (!ASSERT_OK(bpf_tc_hook_create(&qdisc_lo), "qdisc add dev lo clsact"))
-@@ -127,7 +127,7 @@ void test_tcp_custom_syncookie(void)
- 	if (!ASSERT_OK_PTR(skel, "open_and_load"))
- 		return;
- 
--	if (setup_tc(skel))
-+	if (setup_tc(bpf_program__fd(skel->progs.tcp_custom_syncookie)))
- 		goto destroy_skel;
- 
- 	for (i = 0; i < ARRAY_SIZE(test_cases); i++) {
-@@ -145,6 +145,79 @@ void test_tcp_custom_syncookie(void)
- 
- destroy_skel:
- 	system("tc qdisc del dev lo clsact");
-+	test_tcp_custom_syncookie__destroy(skel);
-+}
-+
-+/* Test: bpf_sk_assign_tcp_reqsk() should reject non-TCP skb.
-+ *
-+ * Send a UDP packet through a BPF program that calls
-+ * bpf_sk_assign_tcp_reqsk() on it. The kfunc should return -EINVAL
-+ * because the skb carries UDP, not TCP.
-+ *
-+ * Currently the kfunc lacks L4 protocol check, so assign_ret == 0
-+ * indicates the bug is present.
-+ */
-+void test_tcp_custom_syncookie_protocol_check(void)
-+{
-+	struct test_tcp_custom_syncookie *skel;
-+	struct sockaddr_in tcp_addr, udp_addr;
-+	socklen_t addr_len = sizeof(tcp_addr);
-+	int tcp_server = -1, udp_client = -1;
-+	char buf[32] = "test";
-+	int ret;
-+
-+	if (setup_netns())
-+		return;
-+
-+	skel = test_tcp_custom_syncookie__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
- 
-+	/* Create a TCP listener so the BPF can find a LISTEN socket */
-+	tcp_server = start_server(AF_INET, SOCK_STREAM, "127.0.0.1", 0, 0);
-+	if (!ASSERT_NEQ(tcp_server, -1, "start tcp_server"))
-+		goto destroy_skel;
-+
-+	ret = getsockname(tcp_server, (struct sockaddr *)&tcp_addr, &addr_len);
-+	if (!ASSERT_OK(ret, "getsockname"))
-+		goto close_tcp;
-+
-+	skel->bss->tcp_listener_port = ntohs(tcp_addr.sin_port);
-+	skel->bss->udp_test_port = 9999;
-+
-+	ret = bpf_program__fd(skel->progs.tcp_custom_syncookie_badproto);
-+	if (setup_tc(ret))
-+		goto close_tcp;
-+
-+	udp_client = socket(AF_INET, SOCK_DGRAM, 0);
-+	if (!ASSERT_NEQ(udp_client, -1, "udp socket"))
-+		goto cleanup_tc;
-+
-+	memset(&udp_addr, 0, sizeof(udp_addr));
-+	udp_addr.sin_family = AF_INET;
-+	udp_addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-+	udp_addr.sin_port = htons(9999);
-+
-+	ret = sendto(udp_client, buf, sizeof(buf), 0,
-+		     (struct sockaddr *)&udp_addr, sizeof(udp_addr));
-+	ASSERT_EQ(ret, sizeof(buf), "sendto udp");
-+
-+	/* Wait for TC ingress BPF to process the skb. */
-+	kern_sync_rcu();
-+
-+	ASSERT_EQ(skel->bss->udp_intercepted, true, "udp_intercepted");
-+
-+	/* assign_ret == 0 means kfunc accepted UDP skb (bug).
-+	 * assign_ret < 0 means kfunc correctly rejected it (fixed).
-+	 */
-+	ASSERT_NEQ(skel->data->assign_ret, 0, "assign_ret");
-+
-+cleanup_tc:
-+	system("tc qdisc del dev lo clsact");
-+	if (udp_client >= 0)
-+		close(udp_client);
-+close_tcp:
-+	close(tcp_server);
-+destroy_skel:
- 	test_tcp_custom_syncookie__destroy(skel);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.c b/tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.c
-index 7d5293de1952..386705b6c9f2 100644
---- a/tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.c
-+++ b/tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.c
-@@ -588,4 +588,83 @@ int tcp_custom_syncookie(struct __sk_buff *skb)
- 	return tcp_handle_ack(&ctx);
- }
- 
-+/* Test: call bpf_sk_assign_tcp_reqsk() on a UDP skb.
-+ * The kfunc should reject it, but currently it doesn't check L4 protocol.
-+ */
-+__u16 tcp_listener_port = 0;
-+__u16 udp_test_port = 0;
-+int assign_ret = -1;
-+bool udp_intercepted = false;
-+
-+SEC("tc")
-+int tcp_custom_syncookie_badproto(struct __sk_buff *skb)
-+{
-+	void *data = (void *)(long)skb->data;
-+	void *data_end = (void *)(long)skb->data_end;
-+	struct bpf_sock_tuple tuple = {};
-+	struct bpf_tcp_req_attrs attrs = {};
-+	struct ethhdr *eth;
-+	struct iphdr *iph;
-+	struct udphdr *udp;
-+	struct bpf_sock *skc;
-+	struct sock *sk;
-+
-+	eth = (struct ethhdr *)data;
-+	if (eth + 1 > data_end)
-+		return TC_ACT_OK;
-+
-+	if (bpf_ntohs(eth->h_proto) != ETH_P_IP)
-+		return TC_ACT_OK;
-+
-+	iph = (struct iphdr *)(eth + 1);
-+	if (iph + 1 > data_end)
-+		return TC_ACT_OK;
-+
-+	if (iph->protocol != IPPROTO_UDP)
-+		return TC_ACT_OK;
-+
-+	udp = (struct udphdr *)(iph + 1);
-+	if (udp + 1 > data_end)
-+		return TC_ACT_OK;
-+
-+	if (bpf_ntohs(udp->dest) != udp_test_port)
-+		return TC_ACT_OK;
-+
-+	udp_intercepted = true;
-+
-+	tuple.ipv4.saddr = iph->saddr;
-+	tuple.ipv4.daddr = iph->daddr;
-+	tuple.ipv4.sport = udp->source;
-+	tuple.ipv4.dport = bpf_htons(tcp_listener_port);
-+
-+	skc = bpf_skc_lookup_tcp(skb, &tuple, sizeof(tuple.ipv4), -1, 0);
-+	if (!skc)
-+		return TC_ACT_OK;
-+
-+	if (skc->state != TCP_LISTEN) {
-+		bpf_sk_release(skc);
-+		return TC_ACT_OK;
-+	}
-+
-+	sk = (struct sock *)bpf_skc_to_tcp_sock(skc);
-+	if (!sk) {
-+		bpf_sk_release(skc);
-+		return TC_ACT_OK;
-+	}
-+
-+	attrs.mss = 1460;
-+	attrs.wscale_ok = 1;
-+	attrs.snd_wscale = 7;
-+	attrs.rcv_wscale = 7;
-+	attrs.sack_ok = 1;
-+
-+	/* Call bpf_sk_assign_tcp_reqsk on a UDP skb. */
-+	assign_ret = bpf_sk_assign_tcp_reqsk(skb, sk, &attrs, sizeof(attrs));
-+
-+	bpf_sk_release(skc);
-+
-+	/* Let the packet continue into the kernel */
-+	return TC_ACT_OK;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.43.0
-
+> 
+> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+> ---
+> v2:
+> - don't set the max_entries for the ringbuf map
+> - add comment for the producer_pos
+> ---
+>  .../testing/selftests/bpf/progs/map_ptr_kern.c | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+> index efaf622c28dd..d7611e7018ca 100644
+> --- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+> +++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+> @@ -647,8 +647,14 @@ static inline int check_devmap_hash(void)
+>  	return 1;
+>  }
+>  
+> +struct bpf_ringbuf {
+> +	unsigned long consumer_pos;
+> +	unsigned long producer_pos;
+> +} __attribute__((preserve_access_index));
+> +
+>  struct bpf_ringbuf_map {
+>  	struct bpf_map map;
+> +	struct bpf_ringbuf *rb;
+>  } __attribute__((preserve_access_index));
+>  
+>  struct {
+> @@ -659,9 +665,21 @@ static inline int check_ringbuf(void)
+>  {
+>  	struct bpf_ringbuf_map *ringbuf = (struct bpf_ringbuf_map *)&m_ringbuf;
+>  	struct bpf_map *map = (struct bpf_map *)&m_ringbuf;
+> +	struct bpf_ringbuf *rb;
+> +	void *ptr;
+>  
+>  	VERIFY(check(&ringbuf->map, map, 0, 0, page_size));
+>  
+> +	ptr = bpf_ringbuf_reserve(&m_ringbuf, 128, 0);
+> +	VERIFY(ptr);
+> +
+> +	bpf_ringbuf_discard(ptr, 0);
+> +	rb = ringbuf->rb;
+> +	VERIFY(rb);
+> +	VERIFY(rb->consumer_pos == 0);
+> +	/* The "8" here is BPF_RINGBUF_HDR_SZ */
+> +	VERIFY(rb->producer_pos == 128 + 8);
+> +
+>  	return 1;
+>  }
+>  
+> -- 
+> 2.53.0
+> 
