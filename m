@@ -1,168 +1,222 @@
-Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDEA4282F3A
-	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 15:02:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B06A4250BEC
+	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 15:17:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774278154; cv=none; b=QU8/48cdVxk8dQtDLQ09CgBGcxFbfNOfCwev0uLI1x7hoV7QcOburEmXpULL9SwZ5Bc2k40+xeRNaes3TDgYhOy2wqfn8wuR2A/jLPB5tsp1lDHb3CzA2lgVxRXwRNpfsx4JSl6yGX2VDqVuPbxJM1fBwlx7B/ZZOwehIE9IMlc=
+	t=1774279037; cv=none; b=lYvGBA5JZVhUFr6oK6LiOYJQVskco6SJuPIEWTWbUOEjfkZ9LV8fAJ+ofWkSn8x6Cyjw6xIaHdJXT6q/OdyuHsNOUxYE8wOK5GJZma0wlMad/826/g9i2dWf9iEiE3ujpsx28akJkagdfRVgkIzfrVFeGWWWzNubdGxZtP/L0mo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774278154; c=relaxed/simple;
-	bh=gXfhl9lhcywYBxJG6LkAkyEKbR9RIj3HLf5+6lrBui4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=FT+AoQ3L/+17t87ub7dhecwo7aa0Ei+hvyvmeppooo39PCerUIpgblc60xUAD50CTYpscyiBlVeizvaSxZ7SzMHf2bCTGSAcmzXtW4e1sFcmPCabmIw8n3sghLxXkW2+DDxrLGNikjGWcx3I7Lx0ammKiXYs8AlJKGqMa9JBjQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=iaDBMesQ; arc=none smtp.client-ip=74.125.82.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1774279037; c=relaxed/simple;
+	bh=RTqk01LdlqaOR6mFUfqyz5FAgC/MGiNByQyB0szsxH4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VvMcQDdnwVD7v9F7aLSOzTJWp1Yvb2571f0W5S89oza2O7ugS4fxFPy/Kh5GpGLoNL1YDfPJRygIJB1k7O9gTc6KdNzdTaigT09fjwXNY3yHGi4ANRQaowneG8seu3n5DL5SfIk4XFhGM6lTTICihUj38qGbmtDwntZPnwH1n4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NtrPDj08; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="iaDBMesQ"
-Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-128b9b7e3edso6787443c88.0
-        for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 08:02:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1774278152; x=1774882952; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CEZSFroYeSHdlmwBQGznjgmllYZ0IeUu7fbFA/yec+E=;
-        b=iaDBMesQuyiarGSQE2enbpfk+QNnfT1Hnyz0D6aEsSPWsz+CJgdd7H9ruacN7KKV3t
-         fylUVyzcqBm+/OKGNXJkYer8AEMoGwiNKGsw8T0swGAMbtVueS7U2PxCfxMuOVKlMeS4
-         k/usxRDFqVNT1QEZxWq7lrooZOoH6aw3w7jTRlgkCRwqlmt8a/OED8yJ5oXrGaTaL4+R
-         +eDaO8ygDy6SKHjbQt+L+uDbbrjPRA/CDPqaak84h6AIEtbo58bR+iVcwzz02IlEmCUo
-         RyNSCwCYY/k6A5WmEIdb77oWGsBUhkqypp3eijGhzBXJ7jZt7gMkzwe3OoWXt4S+/FBl
-         jfpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774278152; x=1774882952;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CEZSFroYeSHdlmwBQGznjgmllYZ0IeUu7fbFA/yec+E=;
-        b=Qav0LIzlu7wvT/pCP4Egk57Y3OfrZH5kwX47+wspJHiUBz8qkjQUzAbFz4tacKKNwE
-         KYqRxW3iQDQZXt8V+s4Hh7/g8cTracsVw+o9gPt6XRD5+uq/DSfRX5oAt3YGN0/mmGeL
-         fu8bSEZLJFj9nFJ3w77UcEPhI+uOeUHcBF6idwABBs8Pv4/++avm9G1oEqTOO9VmKEvh
-         1JP0GGxn9z9vzUwkm5N8ZLzOqlhvF/BFqeT/yEGoC8M+QqSZDT6RuRfunnkKJva26tq3
-         IRmriN3nhylEsQB+dmVB7KmijznuDqKthz0oUAiHwo/CUyD7b8d95CN692xC/h2WnMjF
-         Q6RQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVDDVodE+uKRZAxvU9kMm5ZxyPynk01huKe7pgYPCfz7quyXvmg5fzlbdAX8oOvU6fIzBY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2iHn44J22A7ahAmrnJ+uPvEtFaB0ggTW+anlUumxi99X8fkg6
-	qroqcxq191hRqILU5Er/CtHr2i1pGhYAmw8QX2/DaoX/NKwF/aN+f9Pbm90fLviygV0=
-X-Gm-Gg: ATEYQzysJwu0s7lVu9gphyIrkjdZm/fFKrDBYhAvNXDyBi/UYKY+4HM4rhPpdWMjN7w
-	YPvwPqMyFpRcYnZa/r+2joIW2sR7EH5nnkdEVE1/X3gUODQrGhvsoQEZBnFf/NffBdOIKAag4DL
-	JPAMSWYMQoxZ33qqTFIbIWS30fz7r9rwya/F5zygNmKp6OQM75b/j+EoMv1fqwSB+D6yTn44cLK
-	sfx/8THrVCF8KjC9e6NvwlPO6a1M9cvmjclTCdVA3svBxEX4DWZf/JB2Moz9t2RSSglMJu0wXwW
-	apCcVRcTaj+0lP1trT8dhMVMqwdyuOqTzKyIYDdtIHqGf38FhQgF7lSoW41dpErFK4yaqOoyZ2x
-	mdfqsD+U9DMrjz9yq1s7txbCAhKFpgjYH3n7IG6nf8hroNDulsY7mMnw4vCVEplhJxoRo/ZVtVF
-	Q5jRXKFjqSbxlSGPSp12xEa70=
-X-Received: by 2002:a05:7022:20f:b0:119:e569:fbb4 with SMTP id a92af1059eb24-12a726e6b10mr6084355c88.35.1774278151492;
-        Mon, 23 Mar 2026 08:02:31 -0700 (PDT)
-Received: from localhost ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89c85247071sm86622826d6.15.2026.03.23.08.02.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Mar 2026 08:02:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NtrPDj08"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35F33C4CEF7;
+	Mon, 23 Mar 2026 15:17:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774279037;
+	bh=RTqk01LdlqaOR6mFUfqyz5FAgC/MGiNByQyB0szsxH4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NtrPDj08n5+18nXNSAeYVnqZvsuCBndBPvIUEzPG4ycUovu4dQ7pOdtCrr/2BOWbA
+	 aW0wLZkcBH/64LJj9WKTvyaKDKKbgFEeinKDxpv90vm61qYYUU9smRBU8LLtH+JiJM
+	 8BqhSmsuJRz83F1UDDu9kF7mEdqXiD4C7GJArGTwZ+A/5kYuPqBTTNTcUq/bVAwFZh
+	 DJuuc+GPWgAcKEZM/BuDMi0GoCdxiNqhOc3zUhTp5kd16Mwhu+OzpmlvvpXviSjGda
+	 vj93Upf5qLsWYl2AQWMpfoErW9KN0+dc/cqgTE6rsefYTGJz1dKlULlPfKUxZMsib+
+	 dl84UWGWhTV5Q==
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 4FDFAF40074;
+	Mon, 23 Mar 2026 11:17:16 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-05.internal (MEProxy); Mon, 23 Mar 2026 11:17:16 -0400
+X-ME-Sender: <xms:fFnBaYGcuFgjT9GgX9TpZELDBpOsJQeVNha687FyTRiR7l8Dfpj05Q>
+    <xme:fFnBaavUiJk6-7wqtyuIjCYeTW1oUsCoWoPQRS0ZtPS8jPftqgqppF0KTGXvlMSj3
+    _1aIkC0bU0yL16hbJ1h90K5QVumrjmR2ysOc1xB34m8pFG2aInyCoY>
+X-ME-Received: <xmr:fFnBaaps93WnrpYIUXJI74psubn3TbfqrLDbulu1Kqt94-b6O_A5wPRBGPLuw8tu2Nbzi7-5-1--4OrqN1wNhzL2Qkz8ursi>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefudeltdehucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
+    hfgvnhhguceosghoqhhunheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpe
+    fhveeuvdfggfefuedtgeefvedtteekveeitefffffgfefhvddvhfeijedvudeggeenucff
+    ohhmrghinhepghhithhhuhgsrdgtohhmpdhkvghrnhgvlhdrohhrghenucevlhhushhtvg
+    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhht
+    phgruhhthhhpvghrshhonhgrlhhithihqdduieejtdelkeegjeduqddujeejkeehheehvd
+    dqsghoqhhunheppehkvghrnhgvlhdrohhrghesfhhigihmvgdrnhgrmhgvpdhnsggprhgt
+    phhtthhopedujedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepjhhovghlrghgnh
+    gvlhhfsehnvhhiughirgdrtghomhdprhgtphhtthhopehprghulhhmtghksehkvghrnhgv
+    lhdrohhrghdprhgtphhtthhopehmvghmgihorhesghhmrghilhdrtghomhdprhgtphhtth
+    hopegsihhgvggrshihsehlihhnuhhtrhhonhhigidruggvpdhrtghpthhtohepfhhrvggu
+    vghrihgtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnvggvrhgrjhdrihhithhrud
+    dtsehgmhgrihhlrdgtohhmpdhrtghpthhtohepuhhrvgiikhhisehgmhgrihhlrdgtohhm
+    pdhrtghpthhtohepsghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmpdhrtghpthhtoh
+    eprhgtuhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:fFnBaZl-6lofMcOCoiTxFGalW4aPjGfoWS72VRPLeCPVGgFhY9kqrg>
+    <xmx:fFnBafhiTqVfKiIiKTlioDFamEwSpHbb-DzMZoKSyZkjZ49gAa2n_Q>
+    <xmx:fFnBaYW9bMmGNG6eGVIXEMb6vKMkuKccOBm844HXzGnUhjgRvcSitg>
+    <xmx:fFnBaQvSIzyQ69PlcSIqpjpkvaP5eLr0gfkz0-rTiv2NYN8lb68fXA>
+    <xmx:fFnBaZYPXz8oEtlvAQ_r-5l4JRguqDSC-MH7vC2YOLoIsZ-j1-0J-NNK>
+Feedback-ID: i8dbe485b:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 23 Mar 2026 11:17:15 -0400 (EDT)
+Date: Mon, 23 Mar 2026 08:17:14 -0700
+From: Boqun Feng <boqun@kernel.org>
+To: Joel Fernandes <joelagnelf@nvidia.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	frederic@kernel.org, neeraj.iitr10@gmail.com, urezki@gmail.com,
+	boqun.feng@gmail.com, rcu@vger.kernel.org,
+	Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Song Liu <song@kernel.org>, stable@kernel.org
+Subject: Re: [RFC PATCH] rcu-tasks: Avoid using mod_timer() in
+ call_rcu_tasks_generic()
+Message-ID: <acFZem9MNHRXin2h@tardis.local>
+References: <2b3848e9-3b11-41b8-8c44-5de28d4a4433@paulmck-laptop>
+ <20260321170321.32257-1-boqun@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 23 Mar 2026 11:02:29 -0400
-Message-Id: <DHA941F6HVW3.RNGBXB3DVTC6@etsalapatis.com>
-Cc: <ast@kernel.org>, <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
- <andrii@kernel.org>, <martin.lau@linux.dev>, <eddyz87@gmail.com>,
- <song@kernel.org>, <yonghong.song@linux.dev>, <kpsingh@kernel.org>,
- <sdf@fomichev.me>, <haoluo@google.com>, <jolsa@kernel.org>,
- <tangyazhou518@outlook.com>, <shenghaoyuan0928@163.com>, <ziye@zju.edu.cn>,
- "Puranjay Mohan" <puranjay@kernel.org>
-Subject: Re: [PATCH bpf v3 3/3] bpf: Fix incorrect subprog ID in dumped
- bpf_pseudo_call instructions
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Yazhou Tang" <tangyazhou@zju.edu.cn>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.20.1
-References: <20260323122254.98540-1-tangyazhou@zju.edu.cn>
- <20260323122254.98540-4-tangyazhou@zju.edu.cn>
-In-Reply-To: <20260323122254.98540-4-tangyazhou@zju.edu.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260321170321.32257-1-boqun@kernel.org>
 
-On Mon Mar 23, 2026 at 8:22 AM EDT, Yazhou Tang wrote:
-> From: Yazhou Tang <tangyazhou518@outlook.com>
->
-> In jit_subprogs(), restoring bpf_pseudo_call instructions truncates
-> the 32-bit call_imm into the 16-bit insn->off. For large BPF programs
-> (e.g., offsets > 32767), this silent truncation causes find_subprog()
-> to return an incorrect subprog ID, which is then stored in insn->imm.
->
-> Consequently, "bpftool prog dump xlated" reads the corrupted insn->imm,
-> fails to resolve the subprogram name, and incorrectly displays a raw
-> kernel pointer.
->
-> For example, dumping the xlated bytecode of the JIT-loaded selftest
-> introduced in patch 2/3 shows:
->
-> Before this patch (with call_imm > 32767):
->   4: (85) call pc+2#bpf_prog_115951674716e036_padding_subprog
->   5: (85) call pc+3395#0xffffffff814aed4e
->
-> After this patch:
->   4: (85) call pc+2#bpf_prog_115951674716e036_padding_subprog
->   5: (85) call pc+3395#bpf_prog_5dccd3f669bbe4e4_target_subprog
->
-> This patch fixes the issue by passing the un-truncated 32-bit
-> env->insn_aux_data[i].call_imm directly to find_subprog().
->
-> Note that the assignment to insn->off is retained. Although it still
-> truncates for large jumps, it remains correct for the vast majority
-> of BPF programs where the offset fits within s16 bounds. Keeping it
-> ensures backward compatibility for existing user-space tools that rely
-> on insn->off to display the relative offset. A comment is added to
-> explicitly clarify this truncation behavior.
->
-
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-
-> Suggested-by: Puranjay Mohan <puranjay@kernel.org>
-> Fixes: 7105e828c087 ("bpf: allow for correlation of maps and helpers in d=
-ump")
-> Co-developed-by: Tianci Cao <ziye@zju.edu.cn>
-> Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
-> Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
-> Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
-> Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
+On Sat, Mar 21, 2026 at 10:03:21AM -0700, Boqun Feng wrote:
+> The following deadlock is possible:
+> 
+> __mod_timer()
+>   lock_timer_base()
+>     raw_spin_lock_irqsave(&base->lock)   <- base->lock ACQUIRED
+>   trace_timer_start()                    <- tp_btf/timer_start fires here
+>     [probe_timer_start BPF program]
+>       bpf_task_storage_delete()
+>         bpf_selem_unlink(selem, false)   <- reuse_now=false
+>           bpf_selem_free(false)
+>             call_rcu_tasks_trace()
+>               call_rcu_tasks_generic()
+>                 raw_spin_trylock(rtpcp)  <- succeeds (different lock)
+>                 mod_timer(lazy_timer)    <- lazy_timer is on this CPU's base
+>                   lock_timer_base()
+>                     raw_spin_lock_irqsave(&base->lock) <- SAME LOCK -> DEADLOCK
+> 
+> because BPF can instrument a place while the timer base lock is held.
+> Fix it by using an intermediate irq_work.
+> 
+> Further, because a "timer base->lock" to a "rtpcp lock" lock dependency
+> can be establish in this way, we cannot mod_timer() with a rtpcp lock
+> held. Fix that as well.
+> 
+> Fixes: d119357d0743 ("rcu-tasks: Treat only synchronous grace periods urgently")
+> Cc: stable@kernel.org
+> Signed-off-by: Boqun Feng <boqun@kernel.org>
 > ---
-> Hi Puranjay,
->
-> As you mentioned in the last iteration, this still leaves insn->off wrong
-> but is generally fine. To clarify this for future readers, I have added
-> an inline comment explaining the truncation.
->
-> I also debated whether to add a warning log when the truncation actually =
-occurs.
-> However, since the program will load and run perfectly fine after this fi=
-x,
-> I held off on adding it to avoid unnecessary log spam.
->
-> Do you think a warning log is worth adding here, or is the code comment s=
-ufficient?
->
->  kernel/bpf/verifier.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 809ac2325dcb..a45a393365b4 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -23027,8 +23027,12 @@ static int jit_subprogs(struct bpf_verifier_env =
-*env)
->  		}
->  		if (!bpf_pseudo_call(insn))
->  			continue;
-> +		/*
-> +		 * Note: If the original insn->imm is out of s16 bounds,
-> +		 * insn->off here will be a truncated value.
-> +		 */
->  		insn->off =3D env->insn_aux_data[i].call_imm;
-> -		subprog =3D find_subprog(env, i + insn->off + 1);
-> +		subprog =3D find_subprog(env, i + env->insn_aux_data[i].call_imm + 1);
->  		insn->imm =3D subprog;
->  	}
-> =20
+> This is a follow-up of [1], and yes we can trigger a whole system
+> deadlock freeze easily with (even non-recursively) tracing the
+> timer_start tracepoint. I have a reproduce at:
+> 
+> 	https://github.com/fbq/rcu_tasks_deadlock
+> 
+> Be very careful, since it'll freeze your system when run it.
+> 
+> I've tested it on 6.17 and 6.19 and can confirm the deadlock could be
+> triggered. So this is an old bug if it's a bug.
+> 
+> It's up to BPF whether this is a bug or not, because it has existed for
+> a while and nobody seems to get hurt(?).
+> 
 
+Ping BPF ;-) I know this was sent in a Saturday and only 2 days have
+passed, but we are at the decision point about how hard/urgent we should
+fix these "BPF deadlocks": As this patch shows, the deadlocks existed
+before v7.0 (i.e. before SRCU switches). And yes, ideally we should fix
+all of them, but given we are close to v7.0 release, I would like to
+focus the new issue that SRCU introduces, because that one would likely
+affect SCHED_EXT. Thoughts?
+
+Regards,
+Boqun
+
+> [1]: https://lore.kernel.org/rcu/2b3848e9-3b11-41b8-8c44-5de28d4a4433@paulmck-laptop/
+> 
+>  kernel/rcu/tasks.h | 26 +++++++++++++++++++++++---
+>  1 file changed, 23 insertions(+), 3 deletions(-)
+> 
+> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+> index 2b55e6acf3c1..d9d5b7d5944e 100644
+> --- a/kernel/rcu/tasks.h
+> +++ b/kernel/rcu/tasks.h
+> @@ -46,6 +46,7 @@ struct rcu_tasks_percpu {
+>  	unsigned int urgent_gp;
+>  	struct work_struct rtp_work;
+>  	struct irq_work rtp_irq_work;
+> +	struct irq_work timer_irq_work;
+>  	struct rcu_head barrier_q_head;
+>  	struct list_head rtp_blkd_tasks;
+>  	struct list_head rtp_exit_list;
+> @@ -134,6 +135,7 @@ static void call_rcu_tasks_iw_wakeup(struct irq_work *iwp);
+>  static DEFINE_PER_CPU(struct rcu_tasks_percpu, rt_name ## __percpu) = {			\
+>  	.lock = __RAW_SPIN_LOCK_UNLOCKED(rt_name ## __percpu.cbs_pcpu_lock),		\
+>  	.rtp_irq_work = IRQ_WORK_INIT_HARD(call_rcu_tasks_iw_wakeup),			\
+> +	.timer_irq_work = IRQ_WORK_INIT(call_rcu_tasks_mod_timer_lazy),			\
+>  };											\
+>  static struct rcu_tasks rt_name =							\
+>  {											\
+> @@ -321,11 +323,19 @@ static void call_rcu_tasks_generic_timer(struct timer_list *tlp)
+>  		if (!rtpcp->urgent_gp)
+>  			rtpcp->urgent_gp = 1;
+>  		needwake = true;
+> -		mod_timer(&rtpcp->lazy_timer, rcu_tasks_lazy_time(rtp));
+> +		/*
+> +		 * We cannot mod_timer() here because "timer base lock ->
+> +		 * rcu_node lock" lock dependencies can be establish by having
+> +		 * a BPF instrument at timer_start(), and that means deadlock
+> +		 * if we mod_timer() here. So delay the mod_timer() when we are
+> +		 * out of the lock critical section.
+> +		 */
+>  	}
+>  	raw_spin_unlock_irqrestore_rcu_node(rtpcp, flags);
+> -	if (needwake)
+> +	if (needwake) {
+> +		mod_timer(&rtpcp->lazy_timer, rcu_tasks_lazy_time(rtp));
+>  		rcuwait_wake_up(&rtp->cbs_wait);
+> +	}
+>  }
+>  
+>  // IRQ-work handler that does deferred wakeup for call_rcu_tasks_generic().
+> @@ -338,6 +348,16 @@ static void call_rcu_tasks_iw_wakeup(struct irq_work *iwp)
+>  	rcuwait_wake_up(&rtp->cbs_wait);
+>  }
+>  
+> +static void call_rcu_tasks_mod_timer_lazy(struct irq_work *iwp)
+> +{
+> +	struct rcu_tasks *rtp;
+> +	struct rcu_tasks_percpu *rtpcp = container_of(iwp, struct rcu_tasks_percpu, timer_irq_work);
+> +	rtp = rtpcp->rtpp;
+> +
+> +	if (!timer_pending(&rtpcp->lazy_timer))
+> +		mod_timer(&rtpcp->lazy_timer, rcu_tasks_lazy_time(rtp));
+> +}
+> +
+>  // Enqueue a callback for the specified flavor of Tasks RCU.
+>  static void call_rcu_tasks_generic(struct rcu_head *rhp, rcu_callback_t func,
+>  				   struct rcu_tasks *rtp)
+> @@ -377,7 +397,7 @@ static void call_rcu_tasks_generic(struct rcu_head *rhp, rcu_callback_t func,
+>  		   (rcu_segcblist_n_cbs(&rtpcp->cblist) == rcu_task_lazy_lim);
+>  	if (havekthread && !needwake && !timer_pending(&rtpcp->lazy_timer)) {
+>  		if (rtp->lazy_jiffies)
+> -			mod_timer(&rtpcp->lazy_timer, rcu_tasks_lazy_time(rtp));
+> +			irq_work_queue(&rtpcp->timer_irq_work);
+>  		else
+>  			needwake = rcu_segcblist_empty(&rtpcp->cblist);
+>  	}
+> -- 
+> 2.50.1 (Apple Git-155)
+> 
