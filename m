@@ -1,136 +1,140 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C418939A047
-	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 12:12:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B534836E48E;
+	Mon, 23 Mar 2026 12:14:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.13.80.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774267965; cv=none; b=XiUtDwiCIQpNTeGO8Rjihdb2eN9U0wlHTyiibdS7dXBMIWFqgu4AJjtn7JhfIaHEF0d+F1pFho8hdUJKEiRnWnu+3SPrikqXjh9qfnU7JmNXfLtNDZt9tipUCy0wYX/Ci1kEm2MGGpEbDf4m0/8xK3FNSxxbQRlki5kcq8Ha9NQ=
+	t=1774268071; cv=none; b=G5RGcHfaCWLDCmXIPu9ngY18ImiKuoyDJiZSF/7XOEUAnPDBnXPxoO81/u/5cUI1N6ro9CibvaHDC1nTlAtt31tbfhHlPMtdu9SDINO3KC37G/wVnHsCaDPR5aRctSFCzuVXTdbUXHRfvlXR1bRdPCciHI/qyFWHyRewq9YMoEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774267965; c=relaxed/simple;
-	bh=G9ixPhvBqPPIlQcDw6zmx1J6a3IMqhxyWG9gf7DETi0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oB5wqWE86ep2XtTr+7vj+OA8P2ejGnlQtnCkTvMfEU0u2CH+Fmkc4D5rxWCCQixnOOZVO9s3/heWwZ4DKcTnRbxNb0KJ4xcaKosySynZE8lpsvRCE6Oge+PvANC1P6HnshvHFyPKsTJBAZmTHW8vfvyS+XrAMoEPJMQvCoNTqmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ZCPpt4bm; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1774268071; c=relaxed/simple;
+	bh=JDFJOo3C4ieqf6b9J66qmEMkcCJGi7ypWSdMFqBQqNM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TKBCoWTBIveg8cNSP3IcuGy+elfL7gCngtt4uXtJmCN7VfE3HfTlen9Ir2oW+Bnp+AE38565i1wBAf/R6RS/smUBHDsuEh/JTRfslrgwLEVWCMShEJb3MEMV8FeWPC4lUXAj8KU2YGX/dl8oeuMtZqGp9FTwkh946Q+44tJwtLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de; spf=pass smtp.mailfrom=tipi-net.de; dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b=SOPtgRK9; arc=none smtp.client-ip=194.13.80.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ZCPpt4bm"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-482f454be5bso47643335e9.0
-        for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 05:12:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1774267962; x=1774872762; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tJv2VaNVmDYHoN0i0HOacz1PHY0sr9ffrSaK1baeJaQ=;
-        b=ZCPpt4bmFAGWRYN4SYnZvmURvoUV294do18s/k1nv8drD4zSIf4SafRvJjlQGvOCLq
-         Wxo0A4pzloeiWGEmy7tfXgWgYqlDk3Df+od45p0eEgakhUga1fMbxYWOAdidT/btG/u1
-         XZRxAGNgK6+m9Wa00jbJXedGsywP5w+4wtG+WZfD8vTBCz5cHj8iHue9amL4q0YMQ9vt
-         Z/I0ksN63YdgwX7eaIQqa3krlJrtT/AZ2GZKbYWNlNXKN5T/caedSC3ptaLxIMupbgFR
-         heG9h7an2djmYv5yEcL6mwhpd54ZNzmjxL/qGM8AIOF++TIMdhAaR9NLPYNgJa2a0j3F
-         pQGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774267962; x=1774872762;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tJv2VaNVmDYHoN0i0HOacz1PHY0sr9ffrSaK1baeJaQ=;
-        b=FUT4+Bm/LiCyNCVsBvSIIB4Al+E+QLs44XLHU1MxRHozXcPmzs094onzV16IJm9EcP
-         3yMJwVeGBx8yHFk9ZW5MHBTUchUhKWEbl1ple63KmAB4Yixzqm6/JDAMs2H0qzPVwX3+
-         Y4annt6N48RBEH7+yD1huSHhF3oiPptlYfOEJdzIw1C9NhhF6yYHlrD9RUg0buDgxCOL
-         Ti3Ynv9T/DvdeROFoCaFqRhuX5vB/vg8HJSpoWYck7/4BKTtf5rFyV7nUw/q0IrU1UQs
-         kTSUCnzoDh+bvlmdO+xgOsoWbW+rcqW5AxYlYI1wUh3f26GPy9W4+5bia6a0ReUrXHYY
-         Qh9w==
-X-Gm-Message-State: AOJu0YxHHSSPPgsezgq6+w073jxlhhT+KDFLkYzmt/dzbu7FKuaf5i3w
-	5wujrwoZA9gmovWWL6uEGbpSDDguzH+IZq6Ux0aGJ33sc5TSFX7uf+YEtEtwyFuGNKo=
-X-Gm-Gg: ATEYQzyMY4hD0M+xzPNegZtiAbY/B5GIdcIPNi9RlOiqpC6AaVS88qhbE/SpJkd8SAx
-	5hSgHndvCONmLp82BGD8tS4yBJ4ZMNsmBsPhVrPjpGFHTdt4+i6G3XYmdvi/w7IKgbTJFlD4Jl+
-	G1YfyYflHDPzxXMEHWSBgI0JwkYlOiY5MMi+zkYhauWMfaF2EL+Jn6SNeKm7dRXM4Kjs4Wh3VS1
-	ddGo4vqiFs0E5hRh70pTFRmG3NCR84zmD4wxv5FBf065vmQk2Q9WHBFN2cutK6dSUOeNq9BO/9T
-	1bGMBiV3zTj5tAoHg8azH6qPnyOzg2Yngrn87YtTH74AvrHqisSM/vUavhYW2bEEU98gjURd4X5
-	N5dry27k176sNQbKHgMA3jl70kqHSNxc/I5SDR5hiPaNtpJNNoH1Xh7XziGGOzUWT1wfcSX0fLM
-	nW5KNQUuUEEs2qMSu7XEcTkdTs4eAodr+u6eZdwJe2/yzSqE9lBg47nUh0kwdowilx5aXGqtI4C
-	U5X0Wt7aB3AZBWa6Fl4
-X-Received: by 2002:a05:600c:ad1:b0:483:6fe3:bb49 with SMTP id 5b1f17b1804b1-486f8a9eda0mr182748215e9.0.1774267962026;
-        Mon, 23 Mar 2026 05:12:42 -0700 (PDT)
-Received: from u94a (2001-b011-fa04-7ee6-b2dc-efff-fee8-7e7a.dynamic-ip6.hinet.net. [2001:b011:fa04:7ee6:b2dc:efff:fee8:7e7a])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b0836b8b95sm110748985ad.83.2026.03.23.05.12.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Mar 2026 05:12:40 -0700 (PDT)
-Date: Mon, 23 Mar 2026 20:12:33 +0800
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: Paul Chaignon <paul.chaignon@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>, 
-	Srinivas Narayana <srinivas.narayana@rutgers.edu>, Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
-Subject: Re: [PATCH v2 bpf-next 3/6] bpf: Exit early if reg_bounds_sync gets
- invalid inputs
-Message-ID: <tg73xy4pml4rvriysppziwm6nxzgmfih2mqkvla5wl2coqbqut@ioj7ltsfrslm>
-References: <cover.1774025082.git.paul.chaignon@gmail.com>
- <704bf39f66a98877f66a4982c77cddb42f14fc82.1774025082.git.paul.chaignon@gmail.com>
+	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b="SOPtgRK9"
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 1DC1EA584B;
+	Mon, 23 Mar 2026 13:06:30 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
+	t=1774267595; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding; bh=mn7OQUIOIiAVazzzDqPYh2NpQEekYRXxeGu72cFxopI=;
+	b=SOPtgRK9trbTnhsPzQ8KGQChTirMhB3Cszfpk6Ewz3+0rDR9EUSWNUYRZc17jqwhelmIiu
+	x7sUdDNK+qPoXJZ/vMnkTzcEWH2JIQwJKoCf6F8J5Q3LZT/uKoGdynJAaBpVNN6meGz5A2
+	lET6/n3dtCxv8eGWdF+Dy9UE36t8V+p3THi/8UC5Nqh/O2nKCHhre7QNGQ2mPfuUCJu4en
+	QQgIAvClX0ExHVmFTeFdEy4fZeeZrNrcdptDSqO24nOFh8rmje7hdF14eQTQgEOPuMCPzX
+	+z5cN2Y42nxs8sjhhTyBH2e7WigyA0zwMl/oMPrIUIe/p2HwWsLKn7o4TIs7+A==
+From: Nicolai Buchwitz <nb@tipi-net.de>
+To: netdev@vger.kernel.org
+Cc: Justin Chen <justin.chen@broadcom.com>,
+	Simon Horman <horms@kernel.org>,
+	Nicolai Buchwitz <nb@tipi-net.de>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	bpf@vger.kernel.org
+Subject: [PATCH net-next v4 0/6] net: bcmgenet: add XDP support
+Date: Mon, 23 Mar 2026 13:05:29 +0100
+Message-ID: <20260323120539.136029-1-nb@tipi-net.de>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <704bf39f66a98877f66a4982c77cddb42f14fc82.1774025082.git.paul.chaignon@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Fri, Mar 20, 2026 at 05:49:30PM +0100, Paul Chaignon wrote:
-> From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
-> 
-> In the subsequent commit, to prune dead branches we will rely on
-> detecting ill-formed ranges using range_bounds_violations()
-> (e.g., umin > umax) after refining register bounds using
-> regs_refine_cond_op().
-> 
-> However, reg_bounds_sync() can sometimes "repair" ill-formed bounds,
-> potentially masking a violation that was produced by
-> regs_refine_cond_op().
-> 
-> This commit modifies reg_bounds_sync() to exit early if an invariant
-> violation is already present in the input.
-> 
-> This ensures ill-formed reg_states remain ill-formed after
-> reg_bounds_sync(), allowing simulate_both_branches_taken() to correctly
-> identify dead branches with a single check to range_bounds_violation().
-> 
-> Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
-> Signed-off-by: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
-> Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
+Add XDP support to the bcmgenet driver, covering XDP_PASS, XDP_DROP,
+XDP_TX, XDP_REDIRECT, and ndo_xdp_xmit.
 
-Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+The first patch converts the RX path from the existing kmalloc-based
+allocation to page_pool, which is a prerequisite for XDP. The remaining
+patches incrementally add XDP functionality and per-action statistics.
 
-Thought given reg_bounds_sync() is used if various different places, I
-wonder how this will affect current syzbot reporting. In comparison the
-rest of the patchset seems to try to preserve current behavior.
+Tested on Raspberry Pi CM4 (BCM2711, bcmgenet, 1Gbps link):
+- XDP_PASS: 943 Mbit/s TX, 935 Mbit/s RX (no regression vs baseline)
+- XDP_PASS latency: 0.164ms avg, 0% packet loss
+- XDP_DROP: all inbound traffic blocked as expected
+- XDP_TX: TX counter increments (packet reflection working)
+- Link flap with XDP attached: no errors
+- Program swap under iperf3 load: no errors
+- Upstream XDP selftests (xdp.py): pass_sb, drop_sb, tx_sb passing
+- XDP-based EtherCAT master (~37 kHz cycle rate, all packet processing
+  in BPF/XDP), stable over multiple days
 
-Being nosey, I also look at the Sashiko review[1], which gave the
-following review:
+Changes since v3:
+  - Fixed page leak on partial bcmgenet_alloc_rx_buffers() failure:
+    free already-allocated rx_cbs before destroying page pool.
+    (Simon Horman)
+  - Fixed GENET_Q16_TX_BD_CNT defined as 64 instead of 32, matching
+    the documented and intended BD allocation. (Simon Horman)
+  - Moved XDP TX ring to a separate struct member (xdp_tx_ring)
+    instead of expanding tx_rings[] to DESC_INDEX+1. (Justin Chen)
+  - Added synchronize_net() before bpf_prog_put() in XDP prog swap
+    to ensure NAPI is not still running the old program.
+  - Removed goto drop_page inside switch; inlined page_pool_put
+    calls in each failure path. (Justin Chen)
+  - Removed unnecessary curly braces around case XDP_TX. (Justin Chen)
+  - Moved int err hoisting from patch 2 to patch 1 where it belongs.
+    (Justin Chen)
+  - Kept return type on same line as function name throughout, to
+    match existing driver style. (Justin Chen)
+    Note: checkpatch flags one alignment CHECK on bcmgenet_xdp_xmit_frame
+    as a result; keeping per Justin's preference.
+  - Fixed XDP_TX xmit failure path: use xdp_return_frame_rx_napi()
+    instead of page_pool_put_full_page() after xdp_convert_buff_to_frame
+    to avoid double-free of the backing page.
+  - Count XDP TX packets/bytes in TX reclaim so XDP traffic is visible
+    in standard network stats (ip -s link show).
+  - Added headroom check before TSB prepend in XDP_TX to prevent
+    out-of-bounds write when bpf_xdp_adjust_head consumed headroom.
 
-  Does returning early here expose invalid bounds to
-  reg_bounds_sanity_check()?
-  When regs_refine_cond_op() produces overlapping bounds for logically dead
-  branches (e.g., umin > umax), reg_bounds_sync() previously repaired them.
-  With this early exit, the invalid bounds remain.
-  Will the subsequent call to reg_bounds_sanity_check() detect this violation
-  and trigger a kernel warning via verifier_bug() and BPF_WARN_ONCE?
-  Additionally, since reg_bounds_sanity_check() handles failures by marking
-  the register as unbounded, could this cause the verifier to explore dead
-  branches with unconstrained registers and falsely reject valid programs?
-  While this is resolved in the subsequent commit "bpf: Simulate branches to
-  prune based on range violations", could this intermediate state break
-  git bisectability?
+Changes since v2:
+  - Fixed xdp_prepare_buff() called with meta_valid=false, causing
+    bcmgenet_xdp_build_skb() to compute metasize=UINT_MAX and corrupt
+    skb meta_len. Now passes true. (Simon Horman)
+  - Removed bcmgenet_dump_tx_queue() for ring 16 in bcmgenet_timeout().
+    Ring 16 has no netdev TX queue, so netdev_get_tx_queue(dev, 16)
+    accessed beyond the allocated _tx array. (Simon Horman)
+  - Fixed checkpatch alignment warnings in patches 4 and 5.
 
-Given if we get invalid bounds in reg_bounds_sync() to begin with, then
-there is no guarantee that what the BPF verifier ended up with can be
-trusted at all, so returning early shouldn't introduce new safety issue,
-and the rest about falsely rejecting valid program doesn't seem like a
-concern, too, for similar reason.
+Changes since v1:
+  - Fixed tx_rings[DESC_INDEX] out-of-bounds access. Expanded array
+    to DESC_INDEX+1 and initialized ring 16 with dedicated BDs.
+  - Use ring 16 (hardware default descriptor ring) for XDP TX,
+    isolating from normal SKB TX queues.
+  - Piggyback ring 16 TX completion on RX NAPI poll (INTRL2_1 bit
+    collision with RX ring 0).
+  - Fixed ring 16 TX reclaim: skip INTRL2_1 clear, skip BQL
+    completion, use non-destructive reclaim in RX poll path.
+  - Prepend zeroed TSB before XDP TX frame data (TBUF_64B_EN requires
+    64-byte struct status_64 prefix on all TX buffers).
+  - Tested with upstream XDP selftests (xdp.py): pass_sb, drop_sb,
+    tx_sb all passing. The multi-buffer tests (pass_mb, drop_mb,
+    tx_mb) fail because bcmgenet does not support jumbo frames /
+    MTU changes; I plan to add ndo_change_mtu support in a follow-up
+    series.
 
-1: https://sashiko.dev/#/patchset/cover.1774025082.git.paul.chaignon%40gmail.com
+Nicolai Buchwitz (6):
+  net: bcmgenet: convert RX path to page_pool
+  net: bcmgenet: register xdp_rxq_info for each RX ring
+  net: bcmgenet: add basic XDP support (PASS/DROP)
+  net: bcmgenet: add XDP_TX support
+  net: bcmgenet: add XDP_REDIRECT and ndo_xdp_xmit support
+  net: bcmgenet: add XDP statistics counters
 
-...
+ drivers/net/ethernet/broadcom/Kconfig         |   1 +
+ .../net/ethernet/broadcom/genet/bcmgenet.c    | 641 +++++++++++++++---
+ .../net/ethernet/broadcom/genet/bcmgenet.h    |  19 +
+ 3 files changed, 564 insertions(+), 97 deletions(-)
+
+--
+2.51.0
+
