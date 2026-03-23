@@ -1,131 +1,139 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3FFD3B388C
-	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 16:20:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774282848; cv=pass; b=ETOhVkJsFMcdPdbALUJjBLFofmb4bg4g97nvLd+9hcIfGMz/9eGIhHrmn1JsKJp2reFLUm0D0q8MMW+m/g6CFQx4GIi9k0OBNck/40SQhr3WVTazpe1z6e44cERvN/oQpyHLfeQ99OgA6ana9tg1hCJZhDC3XedYFlA8yh+6EMc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774282848; c=relaxed/simple;
-	bh=V94g1pzKL5dHi5fv8nGsDMXp1c7cNO9ZtyC0nibAyPA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Fm3tvphOHUplsEeDSBZgS0pDHyydb328NXmcgE2L7RWxl2GHoJP+XwIp2xWNy49qaTS2zUkqJbDMD/2IkWOMLyrTUQnb0yXp8qxenVZ7O2ID3/khpZffby2OqLq47sbhMMftTqKzVZgAhvepKl/d2nT3r+OuaXsu5UNSpk9M7R8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tAhw6w9G; arc=pass smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24CE23BD63E;
+	Mon, 23 Mar 2026 16:26:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774283218; cv=none; b=lgwYZ89MWoORkevQrVwlxa5iVzx+nhOQJt7FsJE08quZtCCh1FQAee/eA972POsMLfxf6vWqDu04+wK3Io5m+EfHJWYcjgalBbA/ODjJYjCU08AqtdQ33bfBQQaas+THW2N1J5mtfFjMnRKu4cxm6+pWjBrHs12MxbndtsFqsLk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774283218; c=relaxed/simple;
+	bh=ty/hlROjAFutjxKPtIH8wLEeJtfnPct//1rXrPvOkHY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZQ+GQT5OHYJgiFv+kcw1Rmi6gaR07mukYVhvagFAaMaonQFIz+Y6nl0wFoajSInakYS5nGgXlUc8LoGtyqMBsGDAD+m1yEDPOvSUvy0XsYhjEY+kB54AYSiRJv6tUQDbIsJ+l/M4reMxxfWXdX9GxpTkt7gn0HnLkvk6llbs89s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=fCZcTjk/; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tAhw6w9G"
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-65c0891f4e9so921779a12.1
-        for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 09:20:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774282845; cv=none;
-        d=google.com; s=arc-20240605;
-        b=FKJqkOqYJRU4aykt7kg4IPAmY+yZzsbvSyZgNTlLZVFrvRaboiPOwJotcN0wyD5xZf
-         8QbT0Dy5IrZT2awKZJcMSi1a6jqY3bO4T2rR0P64zVZRg2t1vv5+gcG0KwnhKFQunr0s
-         hLbwU9/ktX2LKl0trrtRqgnuDX5ak5ifksLUk8A0GZ4HJronxRQUTT6Hbsy0cbg+neJf
-         ZlfvsSHMq6yRzEPceJZ/j+YHzFWivL+/pl0HUFOYojMB4mP2DzzhZCfJvSF+yhJbr+wR
-         yNPreYV+KLcqKW3Saq0XA1EXcou0JTuruWcS7uGHIqWwFWw6gAmAB5HPawcEZe1p1k2Z
-         E1dA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=V94g1pzKL5dHi5fv8nGsDMXp1c7cNO9ZtyC0nibAyPA=;
-        fh=k0JbapEB5kCeESxzGRIgINDZW/JO92xvtNuEfzs03G4=;
-        b=ZrcfxR6NpXZDOv6IWXtEzuLraKc1L5pwzWn1j0ahyA0sCM2wLfZ6vBa1MhX5ZjWIbu
-         +Q4Fi0HbIMQTj1lwS/JPWHweOzus38evuxWPPI13tsPxU4fRxSn42J+AShCVdVKiMGAV
-         pt56jntCfOdEsyYcWoyqipQLyxzQQ0hNaNqon0qcgr8oDjUzO3r2FmBQAGJBJjVyv/tz
-         hLoiunNZ8Gz3dZ/VS1T7Opxd8cWTjY7/CuuDbGdssmJ0J31keWp9DTBdZu2siIozCgJT
-         tvbR8dOVJOxjTVIYOsw8g8avLHmB4XSiazZ2yMXc5GNkSCxVQUUQWBwsPIzjznGuzUAj
-         JTpA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774282845; x=1774887645; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V94g1pzKL5dHi5fv8nGsDMXp1c7cNO9ZtyC0nibAyPA=;
-        b=tAhw6w9GKdc3xo2aP/R1zmF2Bg6DHmgYENELQvZe5GZj7w+UyBENW0Z5anZHMfMh24
-         RMxu1/frYTMQOLQG5jHMBFLRKL4TiK7nEcQuN8yjEJlurVUiLFmrFmyq58eXxFj7Rfz/
-         zQzmqAt/pQfPrkmHiHaTw7NAI6czwsYBFMdWL7EadWwMHMoXGcaJheEJYX+cHn/nzkeM
-         uhaIKUYdA6x8t9InJb7gIKXEJzoPSqkDVqsbYEUNF4OSzDb+j9k5yKZ10fol8gCu6ilI
-         jFHokAKCJPcB89wn126XOjLiNFV86nNWpd4M+n0PdIRyYFBLsBujuAGUxnRC9c102arW
-         uKCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774282845; x=1774887645;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=V94g1pzKL5dHi5fv8nGsDMXp1c7cNO9ZtyC0nibAyPA=;
-        b=oU975n5fdi8fdmd9Mw0QbwAwyCDDQiyL35YLrvRNXdqQ2B5mHQdv7R10wAS6kaAl16
-         2VNwzkKv4fCD600CC7DckkXn2N6q7u6vOQ3KTUmrw/RqS+/cDoNpZ2OzDCIayUNba0HL
-         eVovyJg3Wbo7qt5v/UioewYBDI37uYkBt4GIYlTN23Qf+yavcSeVodqn+uo9KFcwBvTB
-         9S63YPPOvXUCemu0Etd3KFu6O+S4yHgPczNOzYdZsHaWjjGIYkNAJoDMRVjpQmOb0eZJ
-         L+8OoEKgxrcHOcPcYYEd0p5j2djmqVA06d2jC13I1CUllg1aS7O/XZzzKHDrd7eTO2gM
-         Ub6A==
-X-Forwarded-Encrypted: i=1; AJvYcCXxfL4EB88eEJN6KYqMNU9WbLJKeJ2uBEZOPsfMfsF5M5JcLrl1s7WgdA+qIaYipd6BxT8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6z2TcfdOxlKHf3tAyjLrR27szpdbLpmeSEDCUW/XcCnzp6ThI
-	vnqtNTjBcRVA8CBvAonIUUIsEvQ0jctmxoh3tJpI+luU3mqMJjewspwodrohP/h6EX7AJX+2BZ/
-	8vILqsy0x7Fqgx8OeyDt5xo7MpO5b+iFTytTgKUAi
-X-Gm-Gg: ATEYQzz9EoXgLc9sci1OT1m+K4l4qxS+dkiBEqFIP4G7ZNjs2C/AZigCtw7RYvNXo9X
-	ENesY/N2RVihM44yYDy97NP/pwfuKhW0XT9RUSEQnOk1XaQfu68fgQSDJ3HD7A0ZBuQ58bfsmlV
-	BCLMfdLogNxpUXzozX/dcvTMOya1uNK2mnzIzDRHXXLS3dmy5xDBZnwJ6LMmr5PNsBJlp9NZD/m
-	ugho/cMR7J7oqwQTXjQGNqkz/UPIBPzjPftGKMjFFF1KD2ikCl6pzR7TzOJxZIefnILGIDkTSKJ
-	hN5uEKHchGTx0owwPr2nrmne0YNHR1ncQnk3+AyERq5xYGGQVHEt
-X-Received: by 2002:a17:906:919:b0:b83:e7e:3732 with SMTP id
- a640c23a62f3a-b982f3630e7mr720689166b.30.1774282844692; Mon, 23 Mar 2026
- 09:20:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="fCZcTjk/"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 742544E42392;
+	Mon, 23 Mar 2026 16:26:53 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 453105FEF6;
+	Mon, 23 Mar 2026 16:26:53 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C9B0810450EAD;
+	Mon, 23 Mar 2026 17:26:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1774283211; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=+stKljmHE6dTCgbX5k2UqpPQqX57Vm+pSnMuyZYlZpQ=;
+	b=fCZcTjk/wuSjmpjaNM1oTCFWL+V/PJbmAIvnbbWg8WmDdUVcGY7EW76MJfu9kVb8wd+d0C
+	r6PUNYYghl1s8sFwGHzhRin6rrd8acmae02+75H8g6vJB20DQf9gNQEBXy+n4iYiX3Ppsc
+	15jJm5EkzsGOlcU1pjDrLJ007l4nt/+2eGlJDVN0HCfRCvo6/7Yvxyh5/V0xWIp/+gQ4Ce
+	RlwbJ3tR6ua93cV0mqVgbAibqUYslYVhsvuAG3bkD4DlOFTdo6azidZIAAEb7BNnUk5HUV
+	urDp2yMNxHZJEIlwMavBSn+9pmktK/oV9V9rGdT35v3lVX675FY77nrlSsri3A==
+Date: Mon, 23 Mar 2026 17:26:40 +0100
+From: Herve Codina <herve.codina@bootlin.com>
+To: Daniel Machon <daniel.machon@microchip.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+ <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Horatiu Vultur
+ <horatiu.vultur@microchip.com>, Steen Hegelund
+ <steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ "Jesper Dangaard Brouer" <hawk@kernel.org>, John Fastabend
+ <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Arnd
+ Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <bpf@vger.kernel.org>
+Subject: Re: [PATCH net-next 00/10] net: lan966x: add support for PCIe FDMA
+Message-ID: <20260323172640.2669232d@bootlin.com>
+In-Reply-To: <20260323155204.0321db13@bootlin.com>
+References: <20260320-lan966x-pci-fdma-v1-0-ef54cb9b0c4b@microchip.com>
+	<20260323155204.0321db13@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260320160055.4114055-1-wusamuel@google.com> <CAP01T77hy3j5BZMBcYdadLfPe7dYb3zEGDF9daUxJHYy=+fcgA@mail.gmail.com>
-In-Reply-To: <CAP01T77hy3j5BZMBcYdadLfPe7dYb3zEGDF9daUxJHYy=+fcgA@mail.gmail.com>
-From: Samuel Wu <wusamuel@google.com>
-Date: Mon, 23 Mar 2026 09:20:35 -0700
-X-Gm-Features: AaiRm52TW1-EKDTCZ2bTgcJapMDIKftRA_vvryAeSsRy_n7c_tkgZmk8jNhLUuc
-Message-ID: <CAG2Kctooz+1ywStvHv=wg0p6ZTbHGm4nf5nGUfcrOnDi6H6KSw@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] *** Support BPF traversal of wakeup sources ***
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, andrii@kernel.org, 
-	bpf@vger.kernel.org, kernel-team@android.com, linux-pm@vger.kernel.org, 
-	driver-core@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Sat, Mar 21, 2026 at 10:52=E2=80=AFAM Kumar Kartikeya Dwivedi
-<memxor@gmail.com> wrote:
->
+Hi Daniel,
 
-[ ... ]
+On Mon, 23 Mar 2026 15:52:04 +0100
+Herve Codina <herve.codina@bootlin.com> wrote:
 
-> >
-> > The initial attempts for BPF traversal of wakeup_sources was with BPF
-> > iterators [1]. However, BPF already allows for traversing of a simple l=
-ist
-> > with bpf_for(), and this current patchset has the added benefit of bein=
-g
-> > ~2-3x more performant than BPF iterators.
->
-> See, it ended up being faster ;-).
+> Hi Daniel,
+> 
+> On Fri, 20 Mar 2026 16:00:56 +0100
+> Daniel Machon <daniel.machon@microchip.com> wrote:
+> 
+> > When lan966x operates as a PCIe endpoint, the driver currently uses
+> > register-based I/O for frame injection and extraction. This approach is
+> > functional but slow, topping out at around 33 Mbps on an Intel x86 host
+> > with a lan966x PCIe card.
+> > 
+> > This series adds FDMA (Frame DMA) support for the PCIe path. When
+> > operating as a PCIe endpoint, the internal FDMA engine on lan966x cannot
+> > directly access host memory, so DMA buffers are allocated as contiguous
+> > coherent memory and mapped through the PCIe Address Translation Unit
+> > (ATU). The ATU provides outbound windows that translate internal FDMA
+> > addresses to PCIe bus addresses, allowing the FDMA engine to read and
+> > write host memory. Because the ATU requires contiguous address regions,
+> > page_pool and normal per-page DMA mappings cannot be used. Instead,
+> > frames are transferred using memcpy between the ATU-mapped buffers and
+> > the network stack. With this, throughput increases from ~33 Mbps to ~620
+> > Mbps for default MTU.
+> > 
+> > Patches 1-2 prepare the shared FDMA library: patch 1 renames the
+> > contiguous dataptr helpers for clarity, and patch 2 adds PCIe ATU region
+> > management and coherent DMA allocation with ATU mapping.
+> > 
+> > Patches 3-5 refactor the lan966x FDMA code to support both platform and
+> > PCIe paths: extracting the LLP register write into a helper, exporting
+> > shared functions, and introducing an ops dispatch table selected at
+> > probe time.
+> > 
+> > Patch 6 adds the core PCIe FDMA implementation with RX/TX using
+> > contiguous ATU-mapped buffers. Patches 7 and 8 extend it with MTU
+> > change and XDP support respectively.
+> > 
+> > Patches 9-10 update the lan966x PCI device tree overlay to extend the
+> > cpu register mapping to cover the ATU register space and add the FDMA
+> > interrupt.
+> >   
+> 
+> Thanks a lot for the series taking care of DMA and ATU in PCIe variants.
+> 
+> I have tested the whole series on both my ARM and x86 systems.
+> 
+> Doing a simple wget on my x86 system, I moved from 3.8MB/s to 11.2MB/s and
+> so the improvement is obvious.
+> 
+> Tested-by: Herve Codina <herve.codina@bootlin.com>
+> 
 
-Yup, thanks for the suggestion!
+Hum, I think I found an issue.
 
->
-> That said, I didn't understand why you dropped the test. We still need
-> unit tests that ensure the verifier causes the bpf_ws_lock to be
-> released before exit, and an example program (like the one you
-> benchmarked with) to demonstrate usage. Both are mandatory. See
-> various *_fail.c files in progs/ and RUN_TESTS() macro for running
-> negative tests easily. I doubt we will have any wakeup_sources in the
-> CI environment, but the example has value nonetheless.
->
-> pw-bot: cr
->
+If I remove the lan966x_pci module (modprobe -r lan966x_pci), and reload
+it (modprobe lan966x_pci), the board is not working.
 
-Sounds good, in v2 I can add a test for the lock/unlock kfunc. And
-thanks for the thorough feedback, let me take a look at the *_fail.c
-files and test macros.
+The system performs DHCP requests. Those requests are served by my PC (observed
+with Wireshark) but the system doesn't see those answers. Indeed, he continues
+to perform DHCP requests.
+
+Looks like the lan966x_pci module removal leaves the board in a bad state.
+
+Without the series applied, DHCP request answers from my PC are seen by the
+system after any module unloading / reloading.
+
+Do you have any ideas of what could be wrong?
+
+Best regards,
+Hervé
