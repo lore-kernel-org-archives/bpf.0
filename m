@@ -1,261 +1,189 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064E02E2665;
-	Mon, 23 Mar 2026 18:32:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2CB62DA759
+	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 18:32:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774290731; cv=none; b=T/CU2yIOCismrWQApPVZBSYFr50BkhvFWnh5v5O9XGl4e+HQYOoUs9oWSu8QI7EvCx25PFzdFB0d41Y5AienWPdnYl1MIp0oXMFr57KW8UX37IrXatl0yH/qYlj1RMzRe0kbfh09WxXg44Q4k7WHHRJzx45/bALGR7Ot4Iq7EKk=
+	t=1774290742; cv=none; b=ViDF2SbErZ7/U9m7o86YA0NVHefq4e9YNMlWFsgvJca6PzmOIGHhbtdgJbCiF+crjlsgp0ulZ+y2axVsXD2PRIy1OnIrPU6OazjwSuy5Jct4/4zpbL7U6dAYSUlVStN5QVoGM/EK9l8apRdiBN/QNIea0w6qlDuChu7cTeUNKIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774290731; c=relaxed/simple;
-	bh=sotfvo0nesaSqmF8KoCTyd8MGYvSoQDCsni9TVbHztU=;
+	s=arc-20240116; t=1774290742; c=relaxed/simple;
+	bh=5+/9UJZZcGnXSnSrkJDoIgCusiUug5JVNzY0BGMDxms=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tdErb1C+AGel0gVFHqGr3m3BnfavdY+7UINS3FH+o6Pxukmpj9U7pi08FrxQW57LHevg9SmvP4NVvK0sqQVag+xnq1+eDtiCerydtglSTVfGIMIQyKT7+zLSv0KJMt2652fzFg+lXwUFcA9zA7If8iNpJ6FBARJrbcjcUVNeBRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vRRWBHBL; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=nJzHBfZ85TANCtUqPjSWyW0mKRK5W0MrkuxFUr7VhyptVzjyTu5y8TeGtryecIV4p5B3CxTP6VVQNJj986KekPRrEFg0Y7kcZru4pDFvziScO0gS8cZ5nn/ERC+EBbu/eUeHn4das9twcD3/Rl8TyzxxL/O4ZlmILxuCU65oqLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VhVD4kfx; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vRRWBHBL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 103D0C4CEF7;
-	Mon, 23 Mar 2026 18:31:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774290730;
-	bh=sotfvo0nesaSqmF8KoCTyd8MGYvSoQDCsni9TVbHztU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=vRRWBHBLoOcTBUkF+rhoE7Rq4ConSk0Rgcrmkzw4YpeHsu7GHVxSU+9xzFXPbOY5i
-	 u0bAdR1IYL2lSje2Hro7d5AOekw2HXFGZ5LaJSQpGRh2R/vbkvzdqgL+J47uDWMz/+
-	 KFn7D0EB1cQxfFTDPfXur1Gjb858d3o0L8cWM3fNwCDKgzKWrqC0rplNwEmksAbSPu
-	 ZS/lz7HhEE979x/coOh2lXPJitq0izgvM2ECa5Pxhd4/XspzBs6aGxUsjVWxPxxi5n
-	 PNI8xSolmqCXpQMOQFSD2aRJO2mcLziuJFRjSC8Ugh6XmqXhU8DPyrveb+XFeCxWhL
-	 VUfOOfL58/8fg==
-Message-ID: <76f14d3e-c8fb-4380-9d12-2375f199b53f@kernel.org>
-Date: Mon, 23 Mar 2026 19:31:36 +0100
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VhVD4kfx"
+Message-ID: <5b57839f-e5e9-4511-aba7-7bea933e9f32@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774290728;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=X3oSwdEs6yiloV++YuSZcO+H5uG9ZKt1bcN62EHLNZI=;
+	b=VhVD4kfx0As7Mq++xzW9EoIl9Fm6trJhdH3ETE0szjfy7RBFQQp8pq9AKiE9n+l3EEcFpB
+	eQP7Ppz5SW2967R94WLx2QbCdYva67zDWKh5vsYq8OEUw7am+dAo0odgSylIFkgqzXQ+wA
+	2NbsPJEKARLpp8hAVZRdTzbboOaYCFw=
+Date: Mon, 23 Mar 2026 11:32:00 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 04/16] mm/gup: drop secretmem optimization from
- gup_fast_folio_allowed
-To: "Kalyazin, Nikita" <kalyazin@amazon.co.uk>,
- "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
- "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
- "linux-mm@kvack.org" <linux-mm@kvack.org>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- "kernel@xen0n.name" <kernel@xen0n.name>,
- "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
- "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
- "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Cc: "pbonzini@redhat.com" <pbonzini@redhat.com>,
- "corbet@lwn.net" <corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>,
- "oupton@kernel.org" <oupton@kernel.org>,
- "joey.gouly@arm.com" <joey.gouly@arm.com>,
- "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
- "yuzenghui@huawei.com" <yuzenghui@huawei.com>,
- "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
- "will@kernel.org" <will@kernel.org>, "seanjc@google.com"
- <seanjc@google.com>, "tglx@kernel.org" <tglx@kernel.org>,
- "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
- "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
- "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
- "luto@kernel.org" <luto@kernel.org>,
- "peterz@infradead.org" <peterz@infradead.org>,
- "willy@infradead.org" <willy@infradead.org>,
- "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
- "lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
- "vbabka@kernel.org" <vbabka@kernel.org>, "rppt@kernel.org"
- <rppt@kernel.org>, "surenb@google.com" <surenb@google.com>,
- "mhocko@suse.com" <mhocko@suse.com>, "ast@kernel.org" <ast@kernel.org>,
- "daniel@iogearbox.net" <daniel@iogearbox.net>,
- "andrii@kernel.org" <andrii@kernel.org>,
- "martin.lau@linux.dev" <martin.lau@linux.dev>,
- "eddyz87@gmail.com" <eddyz87@gmail.com>, "song@kernel.org"
- <song@kernel.org>, "yonghong.song@linux.dev" <yonghong.song@linux.dev>,
- "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
- "kpsingh@kernel.org" <kpsingh@kernel.org>, "sdf@fomichev.me"
- <sdf@fomichev.me>, "haoluo@google.com" <haoluo@google.com>,
- "jolsa@kernel.org" <jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>,
- "jhubbard@nvidia.com" <jhubbard@nvidia.com>,
- "peterx@redhat.com" <peterx@redhat.com>, "jannh@google.com"
- <jannh@google.com>, "pfalcato@suse.de" <pfalcato@suse.de>,
- "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
- "riel@surriel.com" <riel@surriel.com>,
- "ryan.roberts@arm.com" <ryan.roberts@arm.com>,
- "jgross@suse.com" <jgross@suse.com>,
- "yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>,
- "kas@kernel.org" <kas@kernel.org>, "coxu@redhat.com" <coxu@redhat.com>,
- "kevin.brodsky@arm.com" <kevin.brodsky@arm.com>,
- "ackerleytng@google.com" <ackerleytng@google.com>,
- "yosry@kernel.org" <yosry@kernel.org>,
- "ajones@ventanamicro.com" <ajones@ventanamicro.com>,
- "maobibo@loongson.cn" <maobibo@loongson.cn>,
- "tabba@google.com" <tabba@google.com>, "prsampat@amd.com"
- <prsampat@amd.com>, "wu.fei9@sanechips.com.cn" <wu.fei9@sanechips.com.cn>,
- "mlevitsk@redhat.com" <mlevitsk@redhat.com>,
- "jmattson@google.com" <jmattson@google.com>,
- "jthoughton@google.com" <jthoughton@google.com>,
- "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
- "alex@ghiti.fr" <alex@ghiti.fr>,
- "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
- "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
- "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
- "dev.jain@arm.com" <dev.jain@arm.com>, "gor@linux.ibm.com"
- <gor@linux.ibm.com>, "hca@linux.ibm.com" <hca@linux.ibm.com>,
- "palmer@dabbelt.com" <palmer@dabbelt.com>, "pjw@kernel.org"
- <pjw@kernel.org>,
- "shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>,
- "svens@linux.ibm.com" <svens@linux.ibm.com>,
- "thuth@redhat.com" <thuth@redhat.com>, "wyihan@google.com"
- <wyihan@google.com>,
- "yang@os.amperecomputing.com" <yang@os.amperecomputing.com>,
- "Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
- "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
- "urezki@gmail.com" <urezki@gmail.com>,
- "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
- "gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>,
- "jiayuan.chen@shopee.com" <jiayuan.chen@shopee.com>,
- "lenb@kernel.org" <lenb@kernel.org>, "osalvador@suse.de"
- <osalvador@suse.de>, "pavel@kernel.org" <pavel@kernel.org>,
- "rafael@kernel.org" <rafael@kernel.org>,
- "vannapurve@google.com" <vannapurve@google.com>,
- "jackmanb@google.com" <jackmanb@google.com>,
- "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>,
- "patrick.roy@linux.dev" <patrick.roy@linux.dev>,
- "Thomson, Jack" <jackabt@amazon.co.uk>,
- "Itazuri, Takahiro" <itazur@amazon.co.uk>,
- "Manwaring, Derek" <derekmn@amazon.com>, Vlastimil Babka <vbabka@suse.cz>,
- Dan Williams <dan.j.williams@intel.com>, Alistair Popple <apopple@nvidia.com>
-References: <20260317141031.514-1-kalyazin@amazon.com>
- <20260317141031.514-5-kalyazin@amazon.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260317141031.514-5-kalyazin@amazon.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-On 3/17/26 15:11, Kalyazin, Nikita wrote:
-> From: Patrick Roy <patrick.roy@linux.dev>
-> 
-> This drops an optimization in gup_fast_folio_allowed() where
-> secretmem_mapping() was only called if CONFIG_SECRETMEM=y. secretmem is
-> enabled by default since commit b758fe6df50d ("mm/secretmem: make it on
-> by default"), so the secretmem check did not actually end up elided in
-> most cases anymore anyway.
-> 
-> This is in preparation of the generalization of handling mappings where
-> direct map entries of folios are set to not present.  Currently,
-> mappings that match this description are secretmem mappings
-> (memfd_secret()).  Later, some guest_memfd configurations will also fall
-> into this category.
-> 
-> Signed-off-by: Patrick Roy <patrick.roy@linux.dev>
-> Acked-by: Vlastimil Babka <vbabka@suse.cz>
-> Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
-> Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
-> ---
->  mm/gup.c | 11 +----------
->  1 file changed, 1 insertion(+), 10 deletions(-)
-> 
-> diff --git a/mm/gup.c b/mm/gup.c
-> index 8e7dc2c6ee73..5856d35be385 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -2739,7 +2739,6 @@ static bool gup_fast_folio_allowed(struct folio *folio, unsigned int flags)
->  {
->  	bool reject_file_backed = false;
->  	struct address_space *mapping;
-> -	bool check_secretmem = false;
->  	unsigned long mapping_flags;
->  
->  	/*
-> @@ -2751,14 +2750,6 @@ static bool gup_fast_folio_allowed(struct folio *folio, unsigned int flags)
->  		reject_file_backed = true;
->  
->  	/* We hold a folio reference, so we can safely access folio fields. */
-> -
-> -	/* secretmem folios are always order-0 folios. */
-> -	if (IS_ENABLED(CONFIG_SECRETMEM) && !folio_test_large(folio))
-> -		check_secretmem = true;
-> -
-> -	if (!reject_file_backed && !check_secretmem)
-> -		return true;
-> -
-
-The AI review says that this will force all small folios through the
-mapping check (which we obviously need later :) ).
-
-It brings up two cases where page->mapping is not set up:
-
-1) ZONE_DEVICE pages (like Device DAX and PCI P2PDMA)
-
-2) large shmem folios in the swap cache
+Subject: Re: [PATCH dwarves v3 1/9] dwarf_loader: Reduce parameter checking
+ with clang DW_AT_calling_convention attr
+Content-Language: en-GB
+To: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <olsajiri@gmail.com>
+Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+ dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, kernel-team@fb.com
+References: <20260320190917.1970524-1-yonghong.song@linux.dev>
+ <20260320190922.1970709-1-yonghong.song@linux.dev> <ab8lWhTT8LZGbtQs@krava>
+ <2c9260b9-0eb3-416b-a75f-f33f37be6b63@linux.dev>
+ <0ae2db28-d300-4dd0-ad37-abdb46b96de1@oracle.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <0ae2db28-d300-4dd0-ad37-abdb46b96de1@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
 
-2) doesn't make sense, because the folio cannot be mapped in user space
-when that happens.
 
-I am also skeptical about 1), especially as large folios are also
-supported for device dax and would be problematic here.
-__dev_dax_pte_fault() clearly sets folio->mapping through dax_set_mapping().
+On 3/23/26 5:56 AM, Alan Maguire wrote:
+> On 22/03/2026 17:36, Yonghong Song wrote:
+>>
+>> On 3/21/26 4:10 PM, Jiri Olsa wrote:
+>>> On Fri, Mar 20, 2026 at 12:09:22PM -0700, Yonghong Song wrote:
+>>>> Currently every function is checked for its parameters to identify whether
+>>>> the signature changed or not. If signature indeed changed, pahole may do
+>>>> some adjustment for parameters for true signatures.
+>>>>
+>>>> In clang, any function with the following attribute
+>>>>         DW_AT_calling_convention        (DW_CC_nocall)
+>>>> indicates this function having signature changed.
+>>>> pahole can take advantage of this to avoid parameter checking if
+>>>> DW_AT_calling_convention is not DW_CC_nocall.
+>>>>
+>>>> But more importantly, DW_CC_nocall can identify signature-changed functions
+>>>> and parameters can be checked one-after-another to create the true
+>>>> signatures. Otherwise, it takes more effort to identify whether a
+>>>> function has signature changed or not. For example, for funciton
+>>>>     __bpf_kfunc static void bbr_main(struct sock *sk, u32 ack, int flag,
+>>>>        const struct rate_sample *rs) { ... }
+>>>> and bbr_main() is a callback function in
+>>>>     .cong_control   = bbr_main
+>>>> in 'struct tcp_congestion_ops tcp_bbr_cong_ops'.
+>>>> In the above bbr_main(...), parameter 'ack' and 'flag' are not used.
+>>>> The following are some details:
+>>>>
+>>>> 0x0a713b8d:     DW_TAG_formal_parameter
+>>>>                     DW_AT_location        (indexed (0x28) loclist = 0x0166d452:
+>>>>                        [0xffffffff83e77fd9, 0xffffffff83e78016): DW_OP_reg5 RDI
+>>>>                        ...
+>>>>                     DW_AT_name    ("sk")
+>>>>                     DW_AT_type    (0x0a6f5b2b "sock *")
+>>>>                     ...
+>>>>
+>>>> 0x0a713b98:     DW_TAG_formal_parameter
+>>>>                     DW_AT_name    ("ack")
+>>>>                     DW_AT_type    (0x0a6f58fd "u32")
+>>>>                     ...
+>>>>
+>>>> 0x0a713ba2:     DW_TAG_formal_parameter
+>>>>                     DW_AT_name    ("flag")
+>>>>                     DW_AT_type    (0x0a6f57d1 "int")
+>>>>                     ...
+>>>>
+>>>> 0x0a713bac:     DW_TAG_formal_parameter
+>>>>                     DW_AT_location        (indexed (0x29) loclist = 0x0166d4a8:
+>>>>                        [0xffffffff83e77fd9, 0xffffffff83e78016): DW_OP_reg2 RCX
+>>>>                        ...
+>>>>                     DW_AT_name    ("rs")
+>>>>                     DW_AT_type    (0x0a710da5 "const rate_sample *")
+>>>>                     DW_AT_decl_line       (1027)
+>>>>
+>>>> Some analysis for the above dwarf can conclude that the 'ark' and 'flag'
+>>>> may be related to RSI and RDX, considering the last one is RCX. Basically this
+>>>> requires all parameters are available to collectively decide whether the
+>>>> true signature can be found or not. In such case, DW_CC_nocall can make things
+>>>> easier as parameter can be checked one after another.
+>>>>
+>>>> For a clang built bpf-next kernel, in non-LTO setup, the number of kernel functions
+>>>> is 69103 and the number of signature changed functions is 875, based on
+>>>>         DW_AT_calling_convention        (DW_CC_nocall)
+>>>> indication.
+>>> we don't display these stats, right? would be great and probably easy
+>>> to count different flags and aggregate them
+>> The actual stats will be different depending on kernel code and compiler optimization.
+>> But I think I can still count them for each commit so people will know
+>> which change caused how much true signature.
+>>
+> I'll send a patch shortly that does kernel build/compare functions for LLVM/clang [1];
+> currently our pahole CI only covers gcc kernel builds. That will show differences
+> between pahole next and the current changes in github; that workflow has been handy for
+> seeing the effects of pahole changes on the set of vmlinux functions.
+>
+> We should also look at extending pfunct to do more stats; I've got a few patches which
+> get it to support split BTF and add a manual page. It has some basic stats if I
+> remember correctly, but it would be nice to extend those at some stage.
+>
+> [1] https://github.com/alan-maguire/dwarves/actions/runs/23435796365/job/68173414313
 
+Thanks for adding llvm test support in github. This definitely helpful.
+I will try to have a few more coverages from llvm side.
 
-If 1) is ever a case we could allow them by checking for
-folio_is_zone_device(). But I am not sure if that is really required.
-Sounds weird.
+>   
+>>>> Among 875 signature changed functions, after this patch, 495 functions
+>>>> can have proper true signatures, mostly due to simple dead argument
+>>>> elimination. The number of remaining functions, which cannot get the
+>>>> true signature, is 379. They will be addressed in the subsequent commits.
+>>> after this change I have more functions added (below) and I checked
+>>> few and they seem ok (w/o DW_CC_nocall)
+>> Most global functions should be okay. But some global functions
+>> esp. if argument is more than 8 byte (struct type), they may be
+>> considered as signature change with the current implementation.
+>>
+>>> jirka
+>>>
+>>>
+>>> acpi_ex_do_debug_object
+>>> add_bits
+>>> amd_pstate_get_mode_string
+>>> dma_alloc_from_contiguous
+>>> do_set_pmd
+>>> dst_destroy
+>>> find_cpio_data
+>>> find_microcode_in_initrd
+>>> ima_write_policy
+>>> insn_init
+>>> io_tx_ubuf_complete
+>>> ip6_protocol_deliver_rcu
+>>> kvm_tdp_mmu_unmap_gfn_range
+>>> net_dim_get_def_rx_moderation
+>>> net_dim_get_def_tx_moderation
+>>> pinctrl_commit_state
+>>> string_unescape
+>>> syscall_copy_user_array
+>>> tdp_mmu_zap_leafs
+>>> usb_speed_string
+>>> __vlan_find_dev_deep_rcu
+>>> __vxlan_fdb_delete
+>>> xfs_bmbt_maxrecs
+>>> xfs_inobt_maxrecs
+>>> ZSTD_buildSequencesStatistics
+>>> ZSTD_copyCCtx
+>>> ZSTD_findFrameSizeInfo
+>>> ZSTD_get1BlockSummary
+>>> zstd_get_cparams
+>>> ZSTD_getCParams
+>>> ZSTD_getCParamsFromCCtxParams
+>>> ZSTD_getCParamsFromCDict
+>>> ZSTD_getCParams_internal
+>>> zstd_get_params
+>>> ZSTD_getParams
 
-
--- 
-Cheers,
-
-David
