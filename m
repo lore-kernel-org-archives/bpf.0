@@ -1,301 +1,236 @@
-Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azon11012014.outbound.protection.outlook.com [40.107.209.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 968042FE582;
-	Mon, 23 Mar 2026 20:37:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.209.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C0C23DB63D
+	for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 20:39:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.67
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774298257; cv=fail; b=WzBTOKCis95jQ0pwAnCB965BJAAZl7cDbZPBum+f49gq0GipBX0Uj7GkVEw9VMDnu4hFo6hYCCzRSUtFVuI/VGUrmsQelpVDYO+LoGH4S+eKSdOqEmLQn6nYOL1R7FJ7ldAbzKwmYdgOGkyGflO32NO8zETe2yvXBgPsVmK9k4Y=
+	t=1774298342; cv=pass; b=usY1t8ml77UEZlEz9wbOC4FB3p8ezQJTmhFvATuj0Snk0+VLddV74N1qaS1p+JzboWy4cH6EosvVLxeMUDNcqPizqkTovkGBaBnTkOLeUKegDJHj0B4VcfLllkdcKaHQMfypn8IA9+DKz6XUmem/pkbYilc1moOjCUcb2RzXRdk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774298257; c=relaxed/simple;
-	bh=IhYsZ0Rol1GJPQaJmdLFfX8WvDgvmIVZyn1yalYyFJs=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=VJYq2OYqBwCK/DqWAhv2soIvN3zg8yutBsCfdu2d13G5yoCBtgMNtxbTO6vR2EChlSiatiXlzwRwc1P6+/yUB5e+QsGPc31eh8lWXL8dY9tKZ1UzG6ER0QduK+H9vM81IBmuHHDnMeKzTfLyYaMiFSZWM/NDL31V/6evR/DE5hU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Q/RaUzDW; arc=fail smtp.client-ip=40.107.209.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1774298342; c=relaxed/simple;
+	bh=ENXpiazFrpwFv6KenmptNlfnYUVc9xxq26irvUl5Cik=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OTbF7IIbHOKpx2WAcZP3LK+71zxXdzY6SrCS42AU1udloUZ4HjdgVncJzqJVhSxAuOj/SiMRWchEjLJDCuZopSBbFEDNVac104Gs99lVgom4NkEy3OkzoNMu0LQ2wzdkkL3QkVo6sKZr0x0PKDyxmFHBfNfuTJg9J24BX8QvzJg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kLIfI9ue; arc=pass smtp.client-ip=209.85.128.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Q/RaUzDW"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=kybdohM5Q8q0SHYP+HOYY/Pk1RrjRWuUiyfhdoi98zRyxhu3JJMwEC6njK6tXWBmlR2efm7p8XRiOFHaHE39VCghPybcq2CgPwgcN4lkFPbS/+dSyCrB6RFAuvFIzwOx0XnbBARvaOR/xKBd9n7zvBlxnIgu9lRtcW166C+6Ua2TyDGsMjyGe3CATwNekxU3JfPouXxkDrvq8WF72cz1SJUO57gFHUqY056Msl1/CquENkQ6Zl1hOse2mVHhUUP5QRHWma8YoaPt941BnKQoW5yGlhruL8heDuTimfu55jr3cuf7Huw86UxuoEVZJ+ARffoPc6GxXFdH2sg2mJsrcg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2UrMDiChlBkoSTSnazMsEzNnl6hACvaLH5E+GSjF6Gc=;
- b=J0lQr9wNACAOgRPVAU5nAccLQPFsG+yAIfLRU5iNMKvu9FvROis/eZUtpuHgRACE1tbctJ/cKtFRK1yds4puPDSIlIxzsGQEPjU7KUOKkKQhYfx31yt6eqsME8jOurC5N1HQKFkhA9dEPALz8Z5JOpqeDGXiO6fsTG9pYg/1RG//rbTjUoFnpm+PHUMW2RAxO6LzTxLoQAePqMuDlZ18l8oXZmpw+2fdI/ugg0iu35pMJ0pzRhhjyBVU3Ju5qrfKpteqcqVYhWYU/+ja8TlROOqgpfhSlSp8ipriyEN7vewQjoRI9a4fyTUgrKsTVWhn69gkldUyR5yMx+GiXsYZ6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2UrMDiChlBkoSTSnazMsEzNnl6hACvaLH5E+GSjF6Gc=;
- b=Q/RaUzDWFQkD8C04CTNWgPOg+0g2mGfWvUaOfCf6+hTezfejOU/Z1CN3ldL7hS7nf42/G6y+aJboPEynfnBaRLs2PbBn5TPDSso0k0HKzDgSN+chisjyuqTjljSIoHtAU9ZenwvXrt0oWfKO2yLVTfgBdgiDu1DjW7m5MM+nBXL+8ZiJwXXcARezR8BerlOjGu1cwROz/WM6nBrfRgL1+zng7+RqtUgN94J9nNNrUUpPXNI0MIob+cK4fMvy2/aZIfv9lQZ5rrUM4LfcFTWRhfpEOw2ZKb0HOj9ZMlVGytHLeWkwb4ojoJvBdxSsYnRs9A/gCBMnuQ9aaPsWu8V3Zw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS0PR12MB6486.namprd12.prod.outlook.com (2603:10b6:8:c5::21) by
- DM4PR12MB6011.namprd12.prod.outlook.com (2603:10b6:8:6b::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9745.20; Mon, 23 Mar 2026 20:37:26 +0000
-Received: from DS0PR12MB6486.namprd12.prod.outlook.com
- ([fe80::88a9:f314:c95f:8b33]) by DS0PR12MB6486.namprd12.prod.outlook.com
- ([fe80::88a9:f314:c95f:8b33%4]) with mapi id 15.20.9745.019; Mon, 23 Mar 2026
- 20:37:25 +0000
-Message-ID: <6b3d151f-3d21-4382-9ab8-386bfc9d47fb@nvidia.com>
-Date: Mon, 23 Mar 2026 16:37:22 -0400
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] rcu-tasks: Avoid using mod_timer() in
- call_rcu_tasks_generic()
-To: Boqun Feng <boqun@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>, frederic@kernel.org,
- neeraj.iitr10@gmail.com, urezki@gmail.com, boqun.feng@gmail.com,
- rcu@vger.kernel.org, Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>, Song Liu <song@kernel.org>,
- stable@kernel.org
-References: <2b3848e9-3b11-41b8-8c44-5de28d4a4433@paulmck-laptop>
- <20260321170321.32257-1-boqun@kernel.org> <acFZem9MNHRXin2h@tardis.local>
-Content-Language: en-US
-From: Joel Fernandes <joelagnelf@nvidia.com>
-In-Reply-To: <acFZem9MNHRXin2h@tardis.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR16CA0050.namprd16.prod.outlook.com
- (2603:10b6:208:234::19) To DS0PR12MB6486.namprd12.prod.outlook.com
- (2603:10b6:8:c5::21)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kLIfI9ue"
+Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-48538c5956bso42790825e9.0
+        for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 13:39:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774298340; cv=none;
+        d=google.com; s=arc-20240605;
+        b=TpTCdPyZzIy54zj0DgxYH3HAc6/QshAVSNui/IciNewv41ZKLf5fA5zNq7FFpMNjRE
+         /J28camSoQRBCvncOiAdq4UMtj1scQ9wHHcPc8ru18mBvxFtjclVlFXRNsYqop9HUuwk
+         EMw/KkCG0xgfPFpio4y2qA5K/OVOQLh7qResnjjM0ulD/gS1YuOqIguk8KsJwPCyg9j3
+         VmFC5xsu/TeE0L6cym/cC9fnn6keqgRp2bOHLnD+DoKWMeDM87kDpWfWsFoJId1jGQ+D
+         aUJACutOwyppLm19H6jD7qeYj0//buK8H3eYFjweIjuZ0FXrFkJ3lcUGyXo7RoUqyTQ2
+         vuEQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=dn8G8qPr5DtbD0azvIFGzPUcfi+UopZ/sj044tMrstA=;
+        fh=mV8Uwy03aTQpEc71kkKqimIDFbwq2oIhKiU5zAUO9K0=;
+        b=De66FgdUqOE2nv/8CRJB9eXnyAK06DQbmQZyJgJs9rsjxDNtSz2/UqZgTMWN50L4y3
+         JK1MTEvxGNo5+MIB8rLhGbLfO/QU3LSyANK7AOLByvvxV3y6czDYazRseg0hIBnHRM6v
+         EDVAh0NmG6MJVwzYJx4bSw4FvCzAgzsF3aeXdJIEuBWpEGxvpyAzX6haZBXIAFXdtXv5
+         IVC5KxaDD4chWjtZnDwxF/55Q7cFlwKt2ysaSU+TkKPnZzWfozp9t24IrJkQsVit4eHH
+         3r4Ytxhc63KxIJMoknUnxVHcNB1OWir3ZQH5rE6Ia4Z7DVVZ786jK5To/vb3rYppb4oI
+         cUxQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774298340; x=1774903140; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dn8G8qPr5DtbD0azvIFGzPUcfi+UopZ/sj044tMrstA=;
+        b=kLIfI9ueKhsSmng2PDaNOdhESi3z4ES1ofs8wjRm97wZtHNHwQMRqV+nBOX6st5Ka/
+         o9rHjI8haOx0YWUXWB6VcAiVWE9KCD0cXip4KaSweLOS0XYgD0VH2nsklRizXeZ6ROFO
+         1HYup9aaICFbi9sJs5KoeW+ZSD1UqU89EWO1XVFQNJQE9J8t1FgyMAlhULovXjIm+af7
+         8VubKZrHcn1TxiMRHJm60LWKVJXWqGHEqWZgdEGjGXJXCT0WJZSE4Id8ug1ZZ2YiO8Fx
+         k/sHlb9GilmhyxIFLWGj/CdByY281q2Hb9dvYSZHCQ9v8vT86JOPsLMtZ5vzwnTThuED
+         yS+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774298340; x=1774903140;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dn8G8qPr5DtbD0azvIFGzPUcfi+UopZ/sj044tMrstA=;
+        b=H01L/zmyA1ATWRTAFAVQifzldN7Zk8Eo41VhiD2JxzgcvsV2PKW06GgJLA/udYtszO
+         Kt8JD7qHKR35pbMih2Y8YMSV9ybnO/FOa02ze12Yc/Zq5zoDtUg/vY92kO6LRfQOqiDz
+         AVooU7AGHeR8ufB+yqC6+UCSYAXp4ZM2HpToCE9K1YephHqoww9BzJpM0vtg+xCCZWJt
+         dM3OKYybQ6hv2T/B48DcGhq7crIsz8vgDSbwvA8+Bz8TaCDK9uMsp2spBVdrs/xqWgji
+         QiJDbLcM3TqD+rbNxLQrETlh43vtOO94BZWH2KYmz2vFgFpgDSUTqVebfeDamNckyQjQ
+         jWmQ==
+X-Gm-Message-State: AOJu0YxBmps1EKp2ayaalpPzIVoO3cp+BtZoo9xZec/G3THvbpgezBwU
+	y8FLp3t201Take3r8hdAiLDZJOGLUmi/UY1AxJnxQKhKVlM/J3AqIT/sloPmwe0NVTFIJSG+EN1
+	M7gxPo0ioL+lzu7r2H/icCZA5aaimT+g=
+X-Gm-Gg: ATEYQzyEGQLoDaSCEea4CfBXpMgAatgJE3oRbZr9VAqcnq5aKqQiR5xP13fMtQOiAZA
+	N197w0l/6as6zk8yCsi0tP75lT9raIpkPHQ0BQJnuUjTq5dU5gGewHNhywTn64L1ac+9vjnPVjT
+	DAL5zLCxGz3p9Sfa7s9ghumtCxCQaWRWMzQOHYrjJG7t0/Fi5vpo3hBrwEqy+e5KBAcDfyHZNYI
+	H3E8uwhug4J6WjN6heK9WrPIKiHHDL9kKM/saGtxECYxmWaltjXhmHLvm7L8uqtbEXS6HSCmRnb
+	TfvtmzDfWH6G8tK3jqM407Lmpr2fLCqSUxQvx/aBIpsSPh4ALx6HNWOWUIA=
+X-Received: by 2002:a05:600c:2904:b0:486:fdef:c3e0 with SMTP id
+ 5b1f17b1804b1-4870f1f205bmr12015425e9.6.1774298339235; Mon, 23 Mar 2026
+ 13:38:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR12MB6486:EE_|DM4PR12MB6011:EE_
-X-MS-Office365-Filtering-Correlation-Id: face7d29-7c2c-4a46-2194-08de891bfe2f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|18002099003|22082099003|56012099003|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	08k5W6/PckwJkP+clCkIRE9lmbnlVtnuDZcyxdc0AKfkbOaKfBXejmWwGHR1CQK73VknrqCrTIBedJPKwQmdQUyP8mpcSlRHTqdj10pqgNVPk+/mLHPGPZWt4cpUx14KJ+gmTT4X2wXBcDGteO0qfFE4l0M7r0Gw+GuYs1Zh9EAVwsv5fqG7IZvLU4/52rXBMGfr1JzGYzlxEU8HIQqY834qmkh8lhemcFgN9XIAB+ewuI1dKF+WCd2OZPRijytohpPkUu8Ydj6OTs5Z5pXZ4ybdPgL52CDk/d6gNly0jQq/gGTHbH/L/mG0+BXGFbF8iS2cQYt0ZkzERA/dZSGkm546X2Zl0ISilZECPQzuzY929Tm5SwYSB5q8HZs17KByZxybkDI5WXjN4BBuNpWRFzCrlRwdYpZKMZ3M560lXQLdeuj6liRqMTk2ss1OGfWrlLoFxsZ+kEMmu0sy/o57K58CEQipiL7zO/QiwZRKY2zeiEdXXYLLDGiNXNW7ryfGI117fgko8xF7ppzi5ZC06DGk3u4Dj+JYNUljJQMdS86RQNSHBrslaWE6dF3giMZyDOdBK7kGnQvEt4IWtV6yHwGHkA2Jqki6sSE4I3c7JvoBH/I9y41qsw//uXyzvjhUQCG7pB174Z0Fo3s3Xaw4JimjUKJrFc0o2iGVwdI/cFL33NjYLz1vammzcASplP4XDJtIU+ZYjNyF+EybohC81ZfxFY9h3ajqSwBSt33CSLk=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB6486.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(18002099003)(22082099003)(56012099003)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?dmdUalpJR3diUVUyNjNGQ1pMWHJ2d2JrV2ZrRXJDSDBFUWFDd0lLOHFpT3lG?=
- =?utf-8?B?T2NmSUFrK2xQWlhOTml6cFMyL09vT2w3Mk5veXQxaE5aN1lNOXJaOEd1Z21U?=
- =?utf-8?B?Qk9uNlZFd0tmTVZXeEtLbld2aWhYdTdhdXhuTUpoV2lPY1I2cmhzMTVPR3Ri?=
- =?utf-8?B?cW9EcFZLanNRRzYxVElZVmpyOGlnU2JnU24zWXI0SkJaOHJWbVRybytYR3Rx?=
- =?utf-8?B?MmxCYkQ3L1VaRWIyanpSM0VpSGtLVDFoenB1ai9wSERWRXJmci90NGhYSTkx?=
- =?utf-8?B?WU1lL2JIelR5SEZCcVRkd3RrSnNkeEUvV2p3WlJwRFhNNjd2dDJSNVc4VUI3?=
- =?utf-8?B?eDhDQXVmOFpTbWlBVVRwdXpOY1NNMXp3MnR0bmJZN0RLd05UZzE2d0FoMGxO?=
- =?utf-8?B?dSsxdUFwT2EzdmpuQzhCTlhsSGJiRk9Lc3ZJY1R5aXA2emRML3Z1cFF5eWZx?=
- =?utf-8?B?VHdGbkRXdWJsQkNlSFIraVNoeE85MUtPODRuUVFUVUZ2RFFmY09DTHV2ZXJh?=
- =?utf-8?B?MEFTT2FGSDBEK1JkSHRkVzNsR0dsOWUwSFByTnJWaU5RbU1BbDhIdHp3Wity?=
- =?utf-8?B?dC8xTnlCaUo0WU5uaWYvdVJhMkhTZTlGbDMxMnAxN1RobFJQaU1iUDdrVUE2?=
- =?utf-8?B?UHJQRlYzR0FBUmlneHdybG5Ra2c5anpIS01iUFhrQUR4Y2FNQXpBSVdzMlZV?=
- =?utf-8?B?TUQrTTFBanhnQW52bEl5ZGsrZ0JNMXNuT2h0dHNYWVY1bkRTOTMxZlJaZDM1?=
- =?utf-8?B?THlMNUxHL2ZKcHlXaWtNT0RrTkdpaVZrSHVWYkRESCsvY3oyR0NNNG5ZSnZG?=
- =?utf-8?B?ZTh3UEFpRzVZWHFqSlBBZnV4RUtkbUlnZmhWSmZaZk1DZmJhSGhxZDlWZy9L?=
- =?utf-8?B?Nnp2ZUdNb1NJWnEzVTVMVWZER1JpaG84bWdkSTBRQ0JjUDU3dURyWllVamtj?=
- =?utf-8?B?aDJPZkFQcDZqblJBWVl2TFFKNHlObWw2RmY5c1NyNytSSHNOSjQxQjRiWFJH?=
- =?utf-8?B?N0gvQ2tUbVAzMmZPaXNNanVxckRYN2NSSEVHT25xM3N4UlZxbTNUa0VKWmxD?=
- =?utf-8?B?dVJuK0VUUU40c1VkejVYMWFPczJZSHRMUTJHYXlveTNkOWdPdTZjbVFzNnRm?=
- =?utf-8?B?Z1I5ZDNlVFlWOVlTc0pRbGtYQTR3MEhGcGJDVFZBVm5wYjI3eHRsdFJPRk43?=
- =?utf-8?B?bXVrYjNZNWxhVG9IOEVpRUJLRDZsek5hSjd1YzF3Z21EL1dwQmg1Tllxc3Rq?=
- =?utf-8?B?YUVuelY1d2F5WTAvY1ZhbmVZdTdWRmR5cWZBdVF3Z1VrQU5Zb1UraFdQSzA0?=
- =?utf-8?B?eGdwbG4vemtpZjhHdFpNbUVVZ3h2Y0dDeU91V1J2TDhLeHN1dWxxRVVYRjI0?=
- =?utf-8?B?TUI4dmFJSmQxUGE4Nit4NlNvNnBaTHU5MHhwT0dBbUpiSXp0ZXJkbmxvVEpI?=
- =?utf-8?B?L1NwZ1dWV1IyK0FMZkRFaEc3OVE4WHEvVzRtRVBXSk5yRFN6VGpTckNBN0RX?=
- =?utf-8?B?SVZvNTF4RGtpM0tnQ2s3R3oxampwamdnQ3dJc00xSVZCSnN2UUpORG5od2VE?=
- =?utf-8?B?TTEvOGdKSm9UMStNR0ZvWGFRUGVuMXVQajlYSjVmWFY3Tmk3WXpXaGs0OTk1?=
- =?utf-8?B?akVoRXUzUjFzTFd3KzE0aFZkdGlIRnF1WWZVVlpaV3UrNnMyRHQvT29pVjlO?=
- =?utf-8?B?SDM4RUFpR21YdWNQdnBESDBPRmdacFJ3aDFtdVhGRzZWdVF2Tm1SMUR5N25k?=
- =?utf-8?B?T1BFVVh5VkhkMkM5KzkrdWdka2Q0a1ArQStpRnByY2pEc2QxME92UW9yUWh0?=
- =?utf-8?B?T0M5U2ZWekpJTXpqMmNrMWVXVnprUGZGZHFZdjgxdUVRdmM2cFBnT3RZUTB1?=
- =?utf-8?B?RUZSWDBjZzd0dUtJTlBlZjAvdnJDeUlPZmlDWm4zd2h2K2E1WVYzbkRRSU9n?=
- =?utf-8?B?NHZZM1RPM0FFOGF6OUt2ZXd0Y2FQODVPVUN2YzZpeVd2YU1CQTFZQUNnQlNI?=
- =?utf-8?B?NkswaDZmd3NkcjJRdnFBd1lvS1lremc3QjZYaENKb3V5dVpsbTZSUndQRlh5?=
- =?utf-8?B?SE55THIxanpuamdleVc4SEMxNmowNHNJTXExSE51dFlUejBhckhLRzVMbEVw?=
- =?utf-8?B?LzYzS04zczR4Ti85OVJVUURBRG9odUt3WW5OeGFPUmRFZ0dFZjFMWENFR25R?=
- =?utf-8?B?dm9wMFBqTHgxZlNKUzlMdXZVTlhuN1FpVWJjTzF3dlI3YWxmVjFvOGlyUWlY?=
- =?utf-8?B?d2ExWmcwaE9jU3ZTaTZIV2ZZOWllNUVOeHpNVVQxVjFmbml0bGdwNFg3a2g0?=
- =?utf-8?B?ZkxKWmhFWUhkZWZ4TjhIN0IwR3Y0T2VzTEJoVzNhb2hkemJDWThvdz09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: face7d29-7c2c-4a46-2194-08de891bfe2f
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB6486.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2026 20:37:25.6622
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LCpxDHXjsvluIf5zcyrG8e/7r/1p7xCOJh2N57KQaUtO+KgnbFWhlpPh4DwUqPtrbM6I95FvdquoyP8OaBVCNA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6011
+References: <20260316-sleepable_tracepoints-v5-0-85525de71d25@meta.com> <20260316-sleepable_tracepoints-v5-2-85525de71d25@meta.com>
+In-Reply-To: <20260316-sleepable_tracepoints-v5-2-85525de71d25@meta.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Mon, 23 Mar 2026 21:38:21 +0100
+X-Gm-Features: AQROBzB6wt-UpN5uua262ccRLwQU8li8b7ETqLNRsOa6sQzCZuRr7tLSpW3alFM
+Message-ID: <CAP01T75bzeb867EtX52ua2myYOxH15tkXd9P_7=7ACkSdS8wQA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 2/5] bpf: Add sleepable support for classic
+ tracepoint programs
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com, 
+	Mykyta Yatsenko <yatsenko@meta.com>
+Content-Type: text/plain; charset="UTF-8"
 
+On Mon, 16 Mar 2026 at 22:47, Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
+>
+> From: Mykyta Yatsenko <yatsenko@meta.com>
+>
+> Add trace_call_bpf_faultable(), a variant of trace_call_bpf() for
+> faultable tracepoints that supports sleepable BPF programs. It uses
+> rcu_tasks_trace for lifetime protection and bpf_prog_run_array_uprobe()
+> for per-program RCU flavor selection, following the uprobe_prog_run()
+> pattern. Uses preempt-safe this_cpu_inc_return/this_cpu_dec for the
+> bpf_prog_active recursion counter since preemption is enabled in this
+> context.
+>
+> Restructure perf_syscall_enter() and perf_syscall_exit() to run BPF
+> filter before perf event processing. Previously, BPF ran after the
+> per-cpu perf trace buffer was allocated under preempt_disable,
+> requiring cleanup via perf_swevent_put_recursion_context() on filter.
+> Now BPF runs in faultable context before preempt_disable, reading
+> syscall arguments from local variables instead of the per-cpu trace
+> record, removing the dependency on buffer allocation. This allows
+> sleepable BPF programs to execute and avoids unnecessary buffer
+> allocation when BPF filters the event. The perf event submission
+> path (buffer allocation, fill, submit) remains under preempt_disable
+> as before.
+>
+> Add an attach-time check in __perf_event_set_bpf_prog() to reject
+> sleepable BPF_PROG_TYPE_TRACEPOINT programs on non-syscall
+> tracepoints, since only syscall tracepoints run in faultable context.
+>
+> This prepares the classic tracepoint runtime and attach paths for
+> sleepable programs. The verifier changes to allow loading sleepable
+> BPF_PROG_TYPE_TRACEPOINT programs are in a subsequent patch.
+>
+> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+> ---
+>  include/linux/trace_events.h  |   6 +++
+>  kernel/events/core.c          |   9 ++++
+>  kernel/trace/bpf_trace.c      |  39 ++++++++++++++++
+>  kernel/trace/trace_syscalls.c | 104 +++++++++++++++++++++++-------------------
+>  4 files changed, 110 insertions(+), 48 deletions(-)
+>
+> diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
+> index 37eb2f0f3dd8..5fbbeb9ec4b9 100644
+> --- a/include/linux/trace_events.h
+> +++ b/include/linux/trace_events.h
+> @@ -767,6 +767,7 @@ trace_trigger_soft_disabled(struct trace_event_file *file)
+>
+>  #ifdef CONFIG_BPF_EVENTS
+>  unsigned int trace_call_bpf(struct trace_event_call *call, void *ctx);
+> +unsigned int trace_call_bpf_faultable(struct trace_event_call *call, void *ctx);
+>  int perf_event_attach_bpf_prog(struct perf_event *event, struct bpf_prog *prog, u64 bpf_cookie);
+>  void perf_event_detach_bpf_prog(struct perf_event *event);
+>  int perf_event_query_prog_array(struct perf_event *event, void __user *info);
+> @@ -789,6 +790,11 @@ static inline unsigned int trace_call_bpf(struct trace_event_call *call, void *c
+>         return 1;
+>  }
+>
+> +static inline unsigned int trace_call_bpf_faultable(struct trace_event_call *call, void *ctx)
+> +{
+> +       return 1;
+> +}
+> +
+>  static inline int
+>  perf_event_attach_bpf_prog(struct perf_event *event, struct bpf_prog *prog, u64 bpf_cookie)
+>  {
+> diff --git a/kernel/events/core.c b/kernel/events/core.c
+> index 1f5699b339ec..46b733d3dd41 100644
+> --- a/kernel/events/core.c
+> +++ b/kernel/events/core.c
+> @@ -11647,6 +11647,15 @@ static int __perf_event_set_bpf_prog(struct perf_event *event,
+>                 /* only uprobe programs are allowed to be sleepable */
+>                 return -EINVAL;
+>
+> +       if (prog->type == BPF_PROG_TYPE_TRACEPOINT && prog->sleepable) {
+> +               /*
+> +                * Sleepable tracepoint programs can only attach to faultable
+> +                * tracepoints. Currently only syscall tracepoints are faultable.
+> +                */
+> +               if (!is_syscall_tp)
+> +                       return -EINVAL;
+> +       }
+> +
+>         /* Kprobe override only works for kprobes, not uprobes. */
+>         if (prog->kprobe_override && !is_kprobe)
+>                 return -EINVAL;
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 35ed53807cfd..69c9a5539e65 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -152,6 +152,45 @@ unsigned int trace_call_bpf(struct trace_event_call *call, void *ctx)
+>         return ret;
+>  }
+>
+> +/**
+> + * trace_call_bpf_faultable - invoke BPF program in faultable context
+> + * @call: tracepoint event
+> + * @ctx: opaque context pointer
+> + *
+> + * Variant of trace_call_bpf() for faultable tracepoints (e.g. syscall
+> + * tracepoints). Supports sleepable BPF programs by using rcu_tasks_trace
+> + * for lifetime protection and per-program rcu_read_lock for non-sleepable
+> + * programs, following the uprobe_prog_run() pattern.
+> + *
+> + * Must be called from a faultable/preemptible context.
+> + */
+> +unsigned int trace_call_bpf_faultable(struct trace_event_call *call, void *ctx)
+> +{
+> +       struct bpf_prog_array *prog_array;
+> +       unsigned int ret;
+> +
+> +       might_fault();
+> +
+> +       guard(rcu_tasks_trace)();
+> +       guard(migrate)();
+> +
+> +       if (unlikely(this_cpu_inc_return(bpf_prog_active) != 1)) {
 
+This seems a bit heavy handed, why not
+bpf_prog_get_recursion_context()? Esp. since we can potentially sleep
+and other tasks can preempt us on the same CPU.
 
-On 3/23/2026 11:17 AM, Boqun Feng wrote:
-> On Sat, Mar 21, 2026 at 10:03:21AM -0700, Boqun Feng wrote:
->> The following deadlock is possible:
->>
->> __mod_timer()
->>   lock_timer_base()
->>     raw_spin_lock_irqsave(&base->lock)   <- base->lock ACQUIRED
->>   trace_timer_start()                    <- tp_btf/timer_start fires here
->>     [probe_timer_start BPF program]
->>       bpf_task_storage_delete()
->>         bpf_selem_unlink(selem, false)   <- reuse_now=false
->>           bpf_selem_free(false)
->>             call_rcu_tasks_trace()
->>               call_rcu_tasks_generic()
->>                 raw_spin_trylock(rtpcp)  <- succeeds (different lock)
->>                 mod_timer(lazy_timer)    <- lazy_timer is on this CPU's base
->>                   lock_timer_base()
->>                     raw_spin_lock_irqsave(&base->lock) <- SAME LOCK -> DEADLOCK
->>
->> because BPF can instrument a place while the timer base lock is held.
->> Fix it by using an intermediate irq_work.
->>
->> Further, because a "timer base->lock" to a "rtpcp lock" lock dependency
->> can be establish in this way, we cannot mod_timer() with a rtpcp lock
->> held. Fix that as well.
->>
->> Fixes: d119357d0743 ("rcu-tasks: Treat only synchronous grace periods urgently")
->> Cc: stable@kernel.org
->> Signed-off-by: Boqun Feng <boqun@kernel.org>
->> ---
->> This is a follow-up of [1], and yes we can trigger a whole system
->> deadlock freeze easily with (even non-recursively) tracing the
->> timer_start tracepoint. I have a reproduce at:
->>
->> 	https://github.com/fbq/rcu_tasks_deadlock
->>
->> Be very careful, since it'll freeze your system when run it.
->>
->> I've tested it on 6.17 and 6.19 and can confirm the deadlock could be
->> triggered. So this is an old bug if it's a bug.
->>
->> It's up to BPF whether this is a bug or not, because it has existed for
->> a while and nobody seems to get hurt(?).
->>
-> 
-> Ping BPF ;-) I know this was sent in a Saturday and only 2 days have
-> passed, but we are at the decision point about how hard/urgent we should
-> fix these "BPF deadlocks": As this patch shows, the deadlocks existed
-> before v7.0 (i.e. before SRCU switches). And yes, ideally we should fix
-> all of them, but given we are close to v7.0 release, I would like to
-> focus the new issue that SRCU introduces, because that one would likely
-> affect SCHED_EXT. Thoughts?
+> +               scoped_guard(rcu) {
+> +                       bpf_prog_inc_misses_counters(rcu_dereference(call->prog_array));
+> +               }
+> +               this_cpu_dec(bpf_prog_active);
+> +               return 0;
+> +       }
+> +
+> +       prog_array = rcu_dereference_check(call->prog_array,
+> +                                          rcu_read_lock_trace_held());
+> +       ret = bpf_prog_run_array_uprobe(prog_array, ctx, bpf_prog_run);
 
-Yeah I think this deadlock is "lower priority" in the sense, I believe it
-existed even before 7.0. But the new SRCU ones are related to 7.0 where the RCU
-tasks trace implementation was switched to SRCU. So in that sense, yes I think
-the SRCU fix has to go in for 7.0 itself ideally, with the potential timer fix
-above moved to a later time.
+This confused me a bit, do we need to generalize it a bit? E.g. it
+would now set run_ctx.is_uprobe = 1 for this case too.
+Actually, except that bit, the rest looks reusable, so maybe it should
+be renamed to __ version and expose two wrappers, one that passes
+is_uprobe = false and one passing true?
+Then do bpf_prog_run_array_trace() here?
 
-I wonder also, could we (programmatically as a startup self-test) add a BPF
-tracepoint program to every trace point possible and see what blows up? I am
-pretty sure there are dragons in there too other than timers and workqueues.
-That would also make for a nice-selftest, where a test BPF program is hooked to
-all tracepoints and then busy-loop somework load is run. I'd brace for some
-fireworks but..;-)
-
-Btw, I am testing the v2 of the irq_work srcu fix, so far so good. :-)
-
-thanks,
-
---
-Joel Fernandes
-
-
-
-
-
-
-
-> 
-> Regards,
-> Boqun
-> 
->> [1]: https://lore.kernel.org/rcu/2b3848e9-3b11-41b8-8c44-5de28d4a4433@paulmck-laptop/
->>
->>  kernel/rcu/tasks.h | 26 +++++++++++++++++++++++---
->>  1 file changed, 23 insertions(+), 3 deletions(-)
->>
->> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
->> index 2b55e6acf3c1..d9d5b7d5944e 100644
->> --- a/kernel/rcu/tasks.h
->> +++ b/kernel/rcu/tasks.h
->> @@ -46,6 +46,7 @@ struct rcu_tasks_percpu {
->>  	unsigned int urgent_gp;
->>  	struct work_struct rtp_work;
->>  	struct irq_work rtp_irq_work;
->> +	struct irq_work timer_irq_work;
->>  	struct rcu_head barrier_q_head;
->>  	struct list_head rtp_blkd_tasks;
->>  	struct list_head rtp_exit_list;
->> @@ -134,6 +135,7 @@ static void call_rcu_tasks_iw_wakeup(struct irq_work *iwp);
->>  static DEFINE_PER_CPU(struct rcu_tasks_percpu, rt_name ## __percpu) = {			\
->>  	.lock = __RAW_SPIN_LOCK_UNLOCKED(rt_name ## __percpu.cbs_pcpu_lock),		\
->>  	.rtp_irq_work = IRQ_WORK_INIT_HARD(call_rcu_tasks_iw_wakeup),			\
->> +	.timer_irq_work = IRQ_WORK_INIT(call_rcu_tasks_mod_timer_lazy),			\
->>  };											\
->>  static struct rcu_tasks rt_name =							\
->>  {											\
->> @@ -321,11 +323,19 @@ static void call_rcu_tasks_generic_timer(struct timer_list *tlp)
->>  		if (!rtpcp->urgent_gp)
->>  			rtpcp->urgent_gp = 1;
->>  		needwake = true;
->> -		mod_timer(&rtpcp->lazy_timer, rcu_tasks_lazy_time(rtp));
->> +		/*
->> +		 * We cannot mod_timer() here because "timer base lock ->
->> +		 * rcu_node lock" lock dependencies can be establish by having
->> +		 * a BPF instrument at timer_start(), and that means deadlock
->> +		 * if we mod_timer() here. So delay the mod_timer() when we are
->> +		 * out of the lock critical section.
->> +		 */
->>  	}
->>  	raw_spin_unlock_irqrestore_rcu_node(rtpcp, flags);
->> -	if (needwake)
->> +	if (needwake) {
->> +		mod_timer(&rtpcp->lazy_timer, rcu_tasks_lazy_time(rtp));
->>  		rcuwait_wake_up(&rtp->cbs_wait);
->> +	}
->>  }
->>  
->>  // IRQ-work handler that does deferred wakeup for call_rcu_tasks_generic().
->> @@ -338,6 +348,16 @@ static void call_rcu_tasks_iw_wakeup(struct irq_work *iwp)
->>  	rcuwait_wake_up(&rtp->cbs_wait);
->>  }
->>  
->> +static void call_rcu_tasks_mod_timer_lazy(struct irq_work *iwp)
->> +{
->> +	struct rcu_tasks *rtp;
->> +	struct rcu_tasks_percpu *rtpcp = container_of(iwp, struct rcu_tasks_percpu, timer_irq_work);
->> +	rtp = rtpcp->rtpp;
->> +
->> +	if (!timer_pending(&rtpcp->lazy_timer))
->> +		mod_timer(&rtpcp->lazy_timer, rcu_tasks_lazy_time(rtp));
->> +}
->> +
->>  // Enqueue a callback for the specified flavor of Tasks RCU.
->>  static void call_rcu_tasks_generic(struct rcu_head *rhp, rcu_callback_t func,
->>  				   struct rcu_tasks *rtp)
->> @@ -377,7 +397,7 @@ static void call_rcu_tasks_generic(struct rcu_head *rhp, rcu_callback_t func,
->>  		   (rcu_segcblist_n_cbs(&rtpcp->cblist) == rcu_task_lazy_lim);
->>  	if (havekthread && !needwake && !timer_pending(&rtpcp->lazy_timer)) {
->>  		if (rtp->lazy_jiffies)
->> -			mod_timer(&rtpcp->lazy_timer, rcu_tasks_lazy_time(rtp));
->> +			irq_work_queue(&rtpcp->timer_irq_work);
->>  		else
->>  			needwake = rcu_segcblist_empty(&rtpcp->cblist);
->>  	}
->> -- 
->> 2.50.1 (Apple Git-155)
->>
-
--- 
-Joel Fernandes
-
+> +
+> [...]
