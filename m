@@ -1,184 +1,141 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 121E738F95B
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 15:33:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774366436; cv=none; b=RxG0uA1KLltWK7XcZYw02cSdxweKZO7prKDc8besXQYGmSgeLD7U6NzX549xYQwL8VaRlsNaELDFUEL9Z3WnmnJo6IWTEQ9XgyFJlthqaCXKiuGlb4mKwbZhJCzEAldcC/oDYGyPB0GM4nMtHMen80lDs8JtzqQULwjdLCqIErQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774366436; c=relaxed/simple;
-	bh=kfjm5yZGiCfEtrhK2jWybCcIIFl5EeW2xNwPyeDQtzM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=k9C/jy4Ful0uOrVBGL5GzguiP+RH5ymE6xe/wl0hdCDNSPa1b+p2+Ui8eP3WucEaJyQT7oAkp2y+4RzKj6JZUYg2qhjNEegMwtVcKNsNNjegds8e5RHGjfLsS1egjLQH9GAoRq5xO/2TdWADPIBgx1ruIlEMCxvZJjS14Y28Kp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZjVdc/Jj; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A17397E6C
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 15:39:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774366744; cv=pass; b=Eb3MiI650dCatlDKkZYw5lKfCC9FWueRNPO7Lb8NYU0MrKDW+C8PDcIbV2Yw/be3WCzzhhLn+QMjH2cQoyCF7QYpUCUkCFJbltC3gst92cbWWvg32Ga9Uvk4I5K2eaq0xk5DxLx/a6IGi5yHNBtgPlCnggeLCvVixXQfUI5hAGk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774366744; c=relaxed/simple;
+	bh=rt4qT/ui4sfGhTYQQ5tjwRfYxEZXbTdBWfiwG1q9eYs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ILq7kfgR0hn5KLEAq0QVOjZhY1fmvb2ggodIyTAMss4P4R5V0SBqvbzcuLS2NE/BzL1ccTkptqCwNom/sZeCvRI/mfjYY2pmQXNEQXWj9xjifdX0A1istjcL4h21ZtdR/I1fPuSXh3PVdOQhPfhLcPaiMrfwdEDcXnGCc4IdDrg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Urpk3HY3; arc=pass smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZjVdc/Jj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774366431;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Z2IIGMuAO+ucZPfz1QK9xPIoH0lITs2rYPhG8mHOgNI=;
-	b=ZjVdc/Jj08qP3GIW2Bo2AFHY++vSe0MdTfIdjxpmHgSOCaTRKMucbD86Pkqska0wZ8Tghf
-	InAW9wEBjDTRi7LHUe5I4sf07zTH5KIqcbdkSF169eo0rS0CSK6tVfcCsO/s5C5kSLRTM9
-	yKRbc5I4d17zuqFkG4c/1j2cRIAKJ0Q=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-584-pBWjeCHiMBykKOn1hjiBag-1; Tue,
- 24 Mar 2026 11:33:46 -0400
-X-MC-Unique: pBWjeCHiMBykKOn1hjiBag-1
-X-Mimecast-MFC-AGG-ID: pBWjeCHiMBykKOn1hjiBag_1774366414
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 78E541800372;
-	Tue, 24 Mar 2026 15:33:33 +0000 (UTC)
-Received: from RHTRH0061144 (unknown [10.17.17.65])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2EADC19560B1;
-	Tue, 24 Mar 2026 15:33:29 +0000 (UTC)
-From: Aaron Conole <aconole@redhat.com>
-To: "Vineeth Pillai (Google)" <vineeth@bitbyteword.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>,  Peter Zijlstra
- <peterz@infradead.org>,  "David S. Miller" <davem@davemloft.net>,  Eric
- Dumazet <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>,  Paolo
- Abeni <pabeni@redhat.com>,  Simon Horman <horms@kernel.org>,  Alexei
- Starovoitov <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
-  Jesper Dangaard Brouer <hawk@kernel.org>,  John Fastabend
- <john.fastabend@gmail.com>,  Stanislav Fomichev <sdf@fomichev.me>,  Eelco
- Chaudron <echaudro@redhat.com>,  Ilya Maximets <i.maximets@ovn.org>,
-  Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,  Xin Long
- <lucien.xin@gmail.com>,  Jon Maloy <jmaloy@redhat.com>,  Willem de Bruijn
- <willemb@google.com>,  Samiullah Khawaja <skhawaja@google.com>,  Hangbin
- Liu <liuhangbin@gmail.com>,  Kuniyuki Iwashima <kuniyu@google.com>,
-  netdev@vger.kernel.org,  linux-kernel@vger.kernel.org,
-  bpf@vger.kernel.org,  dev@openvswitch.org,  linux-sctp@vger.kernel.org,
-  tipc-discussion@lists.sourceforge.net,
-  linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 04/19] net: Use trace_call__##name() at guarded
- tracepoint call sites
-In-Reply-To: <20260323160052.17528-5-vineeth@bitbyteword.org> (Vineeth
-	Pillai's message of "Mon, 23 Mar 2026 12:00:23 -0400")
-References: <20260323160052.17528-1-vineeth@bitbyteword.org>
-	<20260323160052.17528-5-vineeth@bitbyteword.org>
-Date: Tue, 24 Mar 2026 11:33:28 -0400
-Message-ID: <f7ttsu58con.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Urpk3HY3"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-43b45bb7548so3935079f8f.1
+        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 08:39:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774366741; cv=none;
+        d=google.com; s=arc-20240605;
+        b=D+mrjBsSnsIy1gU/qQteFR42H/nhB5soNa5z5bEI/AcO/u6BScNDr6FFtkXDRwgLNj
+         aEpYALv4rHulcFmGZwvNxte2cUM3JvqoUEVnfu9zZBFaeXxk2vbL+0UDfeN7RxEbKfz5
+         fXxoNP2vdL+8DiEKY2txR/llvVNMJqYNv7/SWm+iWZ3v6rqtfcU4Lu+xDXi/wTbF/q5d
+         yZ9Ru3QX1jNhz5FuTWUZbxvnYVXn1oMzN+qwLR8Bk0DZWP513T+ggN4dMUPPM1Gm41xh
+         v1pKW1U4putPg6dDMEBWFWreQoHgCwYQa5Myb3DE4w4V1z3tF13TWKdKnZNgvy92Xfp4
+         vcig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=rt4qT/ui4sfGhTYQQ5tjwRfYxEZXbTdBWfiwG1q9eYs=;
+        fh=MKAEK//6DYOxY9D/faa1DM1W+T+tDdhoWdZjetP5E10=;
+        b=XcFd5c+HQgfhN/Yb0tnoaAGkpyXnJAm9/t6kb+2MqBa6+zDGYhtHGGRtWjXrlhij9z
+         eShnTyrKLgtVWSGgBe2pJpLSUA1REmEMJCIwSwOkFTS8sIW4w+wGsVzCPd95+unitbEn
+         CPEzi1IqGBbW+ZWd32+Vbn55uUSJ+RZevltKdS/oWMgXDxDuzXwVb6w8RFahFH79YJYG
+         WnOQlacWWPJXN6g4lmlVJGYZ36YX63SHwNesU36yxOvRuWJAAM7gZfZ98/pmbUEB+res
+         4s2haWNqp7G9iBCDr6x/XdinznfdcgD3ZAYqil0DKuw5MYnCxov6Am9GOwYhNA5cODMw
+         fcVg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774366741; x=1774971541; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rt4qT/ui4sfGhTYQQ5tjwRfYxEZXbTdBWfiwG1q9eYs=;
+        b=Urpk3HY3hO+s6dhxrOY1YgEcI+XJuEFiaH6UvmE25ZiGilaOUEXGlagdRh6nfITGsw
+         dwvZ3IAqLjY72M4m/rZrAGL2+wL0ZXTZlvoSFstafOfLD8ep+ygP7/aUYboMzeDi+/iC
+         Apci4bE5xgkgUSaslgMtjmRLQ9Ql3IJo+WtrfRlmG33HOJEwKu/VHXZWs+d/AdzdMZFL
+         bbhp8hkNMpmf6q50R/4w+7Gfrfn/rBNRt0LN37xhfjF1H/lORZyXBO8mR3VN7/0y4Nlt
+         aCsmucxYPrIp8NY1AdBJsntEJt9jmZDWOSeWKApeEpEQwacAyEhQ3WN7W7usmfLnKoox
+         0xSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774366741; x=1774971541;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=rt4qT/ui4sfGhTYQQ5tjwRfYxEZXbTdBWfiwG1q9eYs=;
+        b=TWJWpbIZTVAyLl4eDdYBe2lkD8AEFtsk4u4pDgkeCRFVxNcNr95KBeyaQZQLUKbiMD
+         WtYPl8vA7r9TRBd1GeO9mBTQQh8kRUD9vvmVp+/EBjlY97TUmKEQz/AG3whj9ABcFiBK
+         etaPtJiWClaAbvLY+nZde62xysMvK8EHm51K6RxCWjJ+NawEhsS/xgx7CpFZcdMahk3b
+         dIKIo3jeagaV+iMlDKHKai3Dd0aaz45+g7TttRZ4xO8V99Mk5L06yTz1+UNSz8YsdIXH
+         tBpYOH/3v/+BSq7+IipD/xWpwpbp5YCBIDbfpeKJhQjZETdxh8nm/KB6IY187jJfCXs4
+         3EJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW4Ph6VLSe1s7vml/ogv5P9Z7kdVC6a8kAKvOre4MMVeQdJlS4gA3geJ7xHh56AVhx0teo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8CPC4OYWJGle5g5owV1T384LJoyrkOwWB9XYTlynXB4hLKGFY
+	VuoIO24/WP8M2suN5nGjC5vc6O4YLz0yOepLxul6XMSe3yIDmVJssHLjizj4ZysG0BTsqJ640o4
+	i5oXiUc0drOiFBtCmJ5OeKbTEBJ8tRQs=
+X-Gm-Gg: ATEYQzxJkQhi4qg0DeUmuhRBrhDX8q8XMo9Ki3ClWEW2LolyQCX8cNhyVjsndvod9Hp
+	2tnLPQ4I5XUEd7DNfqiLFpYkP9/hj4bQfY8HLBe+5YNy+Gp1EXYL2FcT5aECN8+O6s2yyfsir1S
+	2VRWuAG+RuOKMqk6C+U78xsNjxli2UHtMHs56SQ5SgiKM671qzMbzKBu7/2dId2cmTXbkTgWHrX
+	Wx3fAh7mSR9mB2UcrP0GNsBwnJ+ynM+0Cq9mqiGxYvoCP4mjadcYuw8npYUdI36NsBc2Ty757++
+	nrlyQGtyoYI2pGnTGiiteXLViKEzdV0MDu0bKiNh9INt/qNc1xc4M2GGPmfMRffOQj1nAQt0AX5
+	1GFpYnXTp+3f5jlz6cM58ZRdiJg==
+X-Received: by 2002:a05:6000:1884:b0:439:c9e0:83a5 with SMTP id
+ ffacd0b85a97d-43b6428ba82mr27243700f8f.54.1774366741482; Tue, 24 Mar 2026
+ 08:39:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+References: <20260324040535.work.851-kees@kernel.org> <202603232224.C1555BF@keescook>
+ <CAADnVQLhWURvQ=gBYQvuEa3pTxabYQYhrPm9QG0gbxL9ee=vng@mail.gmail.com> <D53376BA-4772-486B-A18A-6858C1732723@kernel.org>
+In-Reply-To: <D53376BA-4772-486B-A18A-6858C1732723@kernel.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 24 Mar 2026 08:38:48 -0700
+X-Gm-Features: AQROBzB5DvXY4ZUpivMY_noBYppyOsiLxJF6u2hNM41m4-WOEutqa7thEOTe8Bo
+Message-ID: <CAADnVQLA3K6v_+_7-+BDVEeZ2N=6229FL6Ko=3ywDWsPVOPLcg@mail.gmail.com>
+Subject: Re: [PATCH] libbpf: Replace strncpy() with strnlen()+memcpy() in skel_map_create()
+To: Kees Cook <kees@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-"Vineeth Pillai (Google)" <vineeth@bitbyteword.org> writes:
-
-> Replace trace_foo() with the new trace_call__foo() at sites already
-> guarded by trace_foo_enabled(), avoiding a redundant
-> static_branch_unlikely() re-evaluation inside the tracepoint.
-> trace_call__foo() calls the tracepoint callbacks directly without
-> utilizing the static branch again.
+On Tue, Mar 24, 2026 at 8:28=E2=80=AFAM Kees Cook <kees@kernel.org> wrote:
 >
-> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-> Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Vineeth Pillai (Google) <vineeth@bitbyteword.org>
-> Assisted-by: Claude:claude-sonnet-4-6
-> ---
-
-As noted before, I think we can just eliminate the guard in the
-openvswitch module (and that would probably be a more understandable
-fix) rather than replacing the call-in.
-
->  net/core/dev.c             | 2 +-
->  net/core/xdp.c             | 2 +-
->  net/openvswitch/actions.c  | 2 +-
->  net/openvswitch/datapath.c | 2 +-
->  net/sctp/outqueue.c        | 2 +-
->  net/tipc/node.c            | 2 +-
->  6 files changed, 6 insertions(+), 6 deletions(-)
 >
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 14a83f2035b93..f7602b1892fea 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -6444,7 +6444,7 @@ void netif_receive_skb_list(struct list_head *head)
->  		return;
->  	if (trace_netif_receive_skb_list_entry_enabled()) {
->  		list_for_each_entry(skb, head, list)
-> -			trace_netif_receive_skb_list_entry(skb);
-> +			trace_call__netif_receive_skb_list_entry(skb);
->  	}
->  	netif_receive_skb_list_internal(head);
->  	trace_netif_receive_skb_list_exit(0);
-> diff --git a/net/core/xdp.c b/net/core/xdp.c
-> index 9890a30584ba7..3003e5c574191 100644
-> --- a/net/core/xdp.c
-> +++ b/net/core/xdp.c
-> @@ -362,7 +362,7 @@ int xdp_rxq_info_reg_mem_model(struct xdp_rxq_info *xdp_rxq,
->  		xsk_pool_set_rxq_info(allocator, xdp_rxq);
->  
->  	if (trace_mem_connect_enabled() && xdp_alloc)
-> -		trace_mem_connect(xdp_alloc, xdp_rxq);
-> +		trace_call__mem_connect(xdp_alloc, xdp_rxq);
->  	return 0;
->  }
->  
-> diff --git a/net/openvswitch/actions.c b/net/openvswitch/actions.c
-> index 792ca44a461da..60823de201417 100644
-> --- a/net/openvswitch/actions.c
-> +++ b/net/openvswitch/actions.c
-> @@ -1259,7 +1259,7 @@ static int do_execute_actions(struct datapath *dp, struct sk_buff *skb,
->  		int err = 0;
->  
->  		if (trace_ovs_do_execute_action_enabled())
-> -			trace_ovs_do_execute_action(dp, skb, key, a, rem);
-> +			trace_call__ovs_do_execute_action(dp, skb, key, a, rem);
->  
->  		/* Actions that rightfully have to consume the skb should do it
->  		 * and return directly.
-> diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
-> index e209099218b41..2b9755e2e4731 100644
-> --- a/net/openvswitch/datapath.c
-> +++ b/net/openvswitch/datapath.c
-> @@ -335,7 +335,7 @@ int ovs_dp_upcall(struct datapath *dp, struct sk_buff *skb,
->  	int err;
->  
->  	if (trace_ovs_dp_upcall_enabled())
-> -		trace_ovs_dp_upcall(dp, skb, key, upcall_info);
-> +		trace_call__ovs_dp_upcall(dp, skb, key, upcall_info);
->  
->  	if (upcall_info->portid == 0) {
->  		err = -ENOTCONN;
-> diff --git a/net/sctp/outqueue.c b/net/sctp/outqueue.c
-> index f6b8c13dafa4a..4025d863ffc84 100644
-> --- a/net/sctp/outqueue.c
-> +++ b/net/sctp/outqueue.c
-> @@ -1267,7 +1267,7 @@ int sctp_outq_sack(struct sctp_outq *q, struct sctp_chunk *chunk)
->  	/* SCTP path tracepoint for congestion control debugging. */
->  	if (trace_sctp_probe_path_enabled()) {
->  		list_for_each_entry(transport, transport_list, transports)
-> -			trace_sctp_probe_path(transport, asoc);
-> +			trace_call__sctp_probe_path(transport, asoc);
->  	}
->  
->  	sack_ctsn = ntohl(sack->cum_tsn_ack);
-> diff --git a/net/tipc/node.c b/net/tipc/node.c
-> index af442a5ef8f3d..5745d6aa0a054 100644
-> --- a/net/tipc/node.c
-> +++ b/net/tipc/node.c
-> @@ -1943,7 +1943,7 @@ static bool tipc_node_check_state(struct tipc_node *n, struct sk_buff *skb,
->  
->  	if (trace_tipc_node_check_state_enabled()) {
->  		trace_tipc_skb_dump(skb, false, "skb for node state check");
-> -		trace_tipc_node_check_state(n, true, " ");
-> +		trace_call__tipc_node_check_state(n, true, " ");
->  	}
->  	l = n->links[bearer_id].link;
->  	if (!l)
+>
+> On March 24, 2026 7:42:04 AM PDT, Alexei Starovoitov <alexei.starovoitov@=
+gmail.com> wrote:
+> >On Mon, Mar 23, 2026 at 10:25=E2=80=AFPM Kees Cook <kees@kernel.org> wro=
+te:
+> >>
+> >> On Mon, Mar 23, 2026 at 09:05:39PM -0700, Kees Cook wrote:
+> >> > While the original strncpy() would have copied a full 16 bytes from =
+an
+> >> > overlong name (producing an unterminated field that the syscall reje=
+cts),
+> >> > but this wasn't a reachable state. This replacement will instead alw=
+ays
+> >> > truncate to 15 bytes and keeps the NUL terminator, which should have=
+ no
+> >> > behavioral changes with the present code and avoids potential issues
+> >> > with future over-long string literals.
+> >>
+> >> Hm, I got a failure report, but it *seems* unrelated? But nothing else
+> >> fails that way recently, so I will try a v2 with the "unterminated at =
+16
+> >> bytes" behavior restored and see if it passes...
+> >>
+> >> test_progs_no_alu32-x86_64-llvm-21:
+> >> https://github.com/kernel-patches/bpf/actions/runs/23472955268/job/683=
+00440546
+> >
+> >Don't fix what is not broken.
+>
+> strncpy is broken. ;) This is one of the 6 remaining uses of strncpy in t=
+he kernel. But it needs a v3. I'll add explicit rejection of over-long stri=
+ngs and validate that the bpf test was a flake, as suggested in the other r=
+eply.
 
+Don't. it's not a kernel.
