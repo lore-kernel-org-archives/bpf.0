@@ -1,144 +1,132 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C87103845B5
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 21:59:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D00683AF648
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 21:59:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774389584; cv=none; b=LaL+0aDHmvRd3W8jOCD0WGTj3Q07/4PYwI+tfY9i2PAU4fufVhzapejLbGYQd30JKEle3V7r6MKU5jz0CW+/whOK0TZbKN9sw+G2kU9ieqZTZn/g9o3O17GZk0rgJliowI2Fj8XZjUQDHeSP9hvd5b/NmHct4yx7xN+GDzcHMrk=
+	t=1774389596; cv=none; b=QUzA9Bo8Ec3gMCJcKIyFVwv0kHUUQrrogFlQz/VbCHrsYDRsWTwbt7W2EtT5Hir0wIVGEsqT06kZL9PaWimjClcgbfeCVqcyl/lQp0on4R0d6g1x/6sMgwD44NUQJ33SdELDy35hrH+/fnTWTTPLBX8q2mhKeM0d8VzpHy9aKmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774389584; c=relaxed/simple;
-	bh=+PK9HY9pUZ0C+fawOgmlAhUP8YhbtL/lJkemA2N9ymo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MF5zgcfXKtTNKS+LUgP/xii6WC7Xp/mxUBYkF5dQxZ/SlNpQq4E0nYSsSNFLwVUzRQqduxBRTFlaz5sG8OZAef30Os7HqXEz1PLYQzWTemm39ZrBKCvjf8ZBV7WBm3mBoFwMGlFWAdtkUwtr+tHZrOwwYrxkGVQ5lb/ScQUW/do=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O30tVFBG; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774389596; c=relaxed/simple;
+	bh=ShgZqAsm1ES9TM2DCVST2bOFKrWMl1Az0BkQq6rZ+Ew=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eAvxcT8SxUaHZoNseQqSKd6uPvsz0FbCH5C85SHzbN+LHDA8WUMJze9WODBXV8UbuBRGvMu11Br22U5Q7JdWqStP4ZDriiQcu0orEbcF65psmBdX/xKQ2ebmcCtny0tQLKM4803825MWLL/p1raXVsXNvIvZJMgmwDifMN9jsZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dvc3wWfY; arc=none smtp.client-ip=91.218.175.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O30tVFBG"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2b061b6cf36so33630575ad.3
-        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 14:59:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774389582; x=1774994382; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CmS2a+FJZOM8vZtvqJBXu1EgB8VQZ6zodtDJYGUpZeY=;
-        b=O30tVFBGgDay2VMP++Sfa1gr6SOUjqRvQKSeTRham6UVUJRPXr+gwzEK2D0ZlFZsoC
-         vXzfLqx/2ojCVbnweDfNtx9RPvR3FUcFoJWWuVclGgMEJ9udJo1eG/sX1JAvpZeyzneg
-         GnYg4Dbd4eAZpwefi/hHg74ABKxhcVi7udf/+/XDTt8ae5ge8DDm15aKgS6sRwZqrWtg
-         XFae+Nn/2Pe+ujmWhEh7Xrao0Eh0D6e3Affjih5sctol5p/gxsLCoKCK9kf0yvvWlkJR
-         LEqpWzXKFOuPI+C3oFxnJDfSSekI2Xdi5mt3FJjs47H2qIP4ldlUJr+Juvktze6IvmpC
-         iy8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774389582; x=1774994382;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=CmS2a+FJZOM8vZtvqJBXu1EgB8VQZ6zodtDJYGUpZeY=;
-        b=h5DUPqv+qAZgH+HCGp3+byx7Gf5AyhaxBqZWeCGVvB02cDtg52aYIv3QeqJSszRgcQ
-         vVDVNlfe9bgiX5qiIgNxAvnUsG6J0sykcKyymxKZwAGp8U+cgBgsiO1gSYtOQLzaOS6I
-         mSqnkIFtOhhfd+jAQ2fx8dmQpfz3xVWa0ko+cJWFIn8S4yXLhx+pNORwm5WBdBSQgwwa
-         DbdkShx3kXyXXVWhrXrOHbGo//jIt5pTBctWmdQpDiKH7T08EFL9FkxWdul0xKqn4v0r
-         xbda1zgSKaRoXqfNjVSy66PLpuNfO+LRVsWetfs+Z4XvRylhE1Y0amPXoGEtPFuJVY/H
-         Qgsg==
-X-Gm-Message-State: AOJu0Yx9J2mhLBwJDk/VipVROVcm4nDUWeJrCZckqtX9G8959INyqQG7
-	iLRmDgf6QvD8pCTkZCqrnUdvDirFCxE0IpX/Spyf31/qsDtDmuCA05+n97376Q==
-X-Gm-Gg: ATEYQzzXbm993gmSQdhkj0IsvN479cdcNL57faEmZADEouztvbHXYTxZdCd23gOb5a/
-	wbcRe91F0gCchFIf36uGZ14hclUO0FxbR8Bxw6c8Ib7Mn8jOM7J6+RkpusonajPvQfHEBXZUdJh
-	c5JSj7LwhAE6CM1iOL01C/kELbuM2ZIba5EcAh0nll/1C3l6+x83OhRlPjoY6I5LcyHFDOt3Gm0
-	FGzm6CQaPqyYFPNEoosSl9G8kryBdLOYv8gmdWUjA+L9UCMEFu1b0oUat1oitQnRCPe4Oj56lXR
-	hUQNouaOE45WgU0nm6pjKbalzq/YtKL+EWs1S78WRgqbNX0O+1/WyBMfWYJmBYEZADijYJjRXmJ
-	Nbj/GMS6GqprOMl0USiEt9S2RlmCQSZuJdEI/DuUagz21mYpMc+DUpOM7mR28zxpVXlkfYmOiHh
-	wzQ94wmW3y/kZxj9SV+ZAO01QMxoa6nBaJLtoJgZ6GDC/BiRhb3KN9BdOmsjQrlkZBldlbwKReH
-	KV9oHTwWBq5KPzWZxyH0USbIg56T8ty7pMrWLGxiTHHfQnZUrFZWNOIiMGWUA==
-X-Received: by 2002:a17:902:f681:b0:2ae:4f15:1aba with SMTP id d9443c01a7336-2b0b0a9fd88mr11743865ad.30.1774389582532;
-        Tue, 24 Mar 2026 14:59:42 -0700 (PDT)
-Received: from localhost.localdomain ([2601:600:837f:c470:1879:8422:922b:e5d3])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b0836b15fbsm206885715ad.81.2026.03.24.14.59.41
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 24 Mar 2026 14:59:42 -0700 (PDT)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@kernel.org,
-	memxor@gmail.com,
-	eddyz87@gmail.com
-Subject: [PATCH v2 bpf-next 2/2] selftests/bpf: Test variable length stack write
-Date: Tue, 24 Mar 2026 14:59:37 -0700
-Message-ID: <20260324215938.81733-2-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260324215938.81733-1-alexei.starovoitov@gmail.com>
-References: <20260324215938.81733-1-alexei.starovoitov@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dvc3wWfY"
+Message-ID: <9adc3c2e-0d5a-4863-b3ed-194d8f9fd630@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774389581;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=x6cbUmLdr2RxX8BjNLt/qO3H5GrfRjVsh/qY1m2DFXM=;
+	b=dvc3wWfYADOarkhfj7HCpwJ7tW6Yjy29gNM6Jw1oC7c/yXnkjaG55LEHh73E0nY85ZPYp3
+	8l75bFEL+HPFUdFh5PsEzVkG5/ff42c162xk16fcwJN/iU8X8zDvHDf/KGLpq7/RghyQJB
+	efIzOvHgApLtbGpO5K2N/Z8CO/uNwPo=
+Date: Tue, 24 Mar 2026 14:59:32 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v1 2/2] selftests/bpf: Add protocol check test for
+ bpf_sk_assign_tcp_reqsk()
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
+ bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260323105510.51990-1-jiayuan.chen@linux.dev>
+ <20260323105510.51990-3-jiayuan.chen@linux.dev>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20260323105510.51990-3-jiayuan.chen@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-From: Alexei Starovoitov <ast@kernel.org>
+On 3/23/26 3:54 AM, Jiayuan Chen wrote:
+> +void test_tcp_custom_syncookie_protocol_check(void)
+> +{
+> +	struct test_tcp_custom_syncookie *skel;
+> +	struct sockaddr_in tcp_addr, udp_addr;
+> +	socklen_t addr_len = sizeof(tcp_addr);
+> +	int tcp_server = -1, udp_client = -1;
+> +	char buf[32] = "test";
+> +	int ret;
+> +
+> +	if (setup_netns())
+> +		return;
+> +
+> +	skel = test_tcp_custom_syncookie__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
+> +		return;
+>   
+> +	/* Create a TCP listener so the BPF can find a LISTEN socket */
+> +	tcp_server = start_server(AF_INET, SOCK_STREAM, "127.0.0.1", 0, 0);
+> +	if (!ASSERT_NEQ(tcp_server, -1, "start tcp_server"))
+> +		goto destroy_skel;
+> +
+> +	ret = getsockname(tcp_server, (struct sockaddr *)&tcp_addr, &addr_len);
+> +	if (!ASSERT_OK(ret, "getsockname"))
+> +		goto close_tcp;
+> +
+> +	skel->bss->tcp_listener_port = ntohs(tcp_addr.sin_port);
+> +	skel->bss->udp_test_port = 9999;
+> +
+> +	ret = bpf_program__fd(skel->progs.tcp_custom_syncookie_badproto);
+> +	if (setup_tc(ret))
+> +		goto close_tcp;
+> +
+> +	udp_client = socket(AF_INET, SOCK_DGRAM, 0);
+> +	if (!ASSERT_NEQ(udp_client, -1, "udp socket"))
+> +		goto cleanup_tc;
+> +
+> +	memset(&udp_addr, 0, sizeof(udp_addr));
+> +	udp_addr.sin_family = AF_INET;
+> +	udp_addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+> +	udp_addr.sin_port = htons(9999);
+> +
+> +	ret = sendto(udp_client, buf, sizeof(buf), 0,
+> +		     (struct sockaddr *)&udp_addr, sizeof(udp_addr));
+> +	ASSERT_EQ(ret, sizeof(buf), "sendto udp");
+> +
+> +	/* Wait for TC ingress BPF to process the skb. */
+> +	kern_sync_rcu();
 
-Add a test to make sure that variable length stack writes
-scrubs STACK_SPILL into STACK_MISC.
+hmm... is it guaranteed to work? Regardless, it checks the error 
+returned from bpf_sk_assign_tcp_reqsk(). Maybe bpf_prog_test_run is simpler?
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- .../selftests/bpf/progs/verifier_spill_fill.c | 41 +++++++++++++++++++
- 1 file changed, 41 insertions(+)
+pw-bot: cr
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-index a2b6d99628da..672e4446181e 100644
---- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-@@ -1316,4 +1316,45 @@ __naked void old_imprecise_scalar32_vs_cur_stack_misc(void)
- 	: __clobber_all);
- }
- 
-+SEC("raw_tp")
-+__success
-+__naked void var_off_write_over_scalar_spill(void)
-+{
-+	asm volatile (
-+	/* Get an unknown value bounded to {0, 4} */
-+	"call %[bpf_ktime_get_ns];"
-+	"r6 = r0;"
-+	"r6 &= 4;"
-+
-+	/* Spill a scalar to fp-16 */
-+	"r7 = 0xdeadbeef00000000 ll;"
-+	"*(u64 *)(r10 - 16) = r7;"
-+
-+	/*
-+	 * Variable-offset 4-byte write covering [fp-12, fp-4).
-+	 * This touches stype[3..0] of the spill slot at fp-16 but
-+	 * leaves stype[7..4] as STACK_SPILL. check_stack_write_var_off()
-+	 * must scrub the entire slot when setting spilled_ptr to NOT_INIT,
-+	 * otherwise a subsequent sub-register fill sees a non-scalar
-+	 * spilled_ptr and is rejected.
-+	 */
-+	"r8 = r10;"
-+	"r8 += r6;"
-+	"r8 += -12;"
-+	"r9 = 0;"
-+	"*(u32 *)(r8 + 0) = r9;"
-+
-+	/*
-+	 * 4-byte read from fp-16. Without the fix this fails with
-+	 * "invalid size of register fill" because is_spilled_reg()
-+	 * sees STACK_SPILL while spilled_ptr.type == NOT_INIT.
-+	 */
-+	"r0 = *(u32 *)(r10 - 16);"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_ktime_get_ns)
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.52.0
-
+> +
+> +	ASSERT_EQ(skel->bss->udp_intercepted, true, "udp_intercepted");
+> +
+> +	/* assign_ret == 0 means kfunc accepted UDP skb (bug).
+> +	 * assign_ret < 0 means kfunc correctly rejected it (fixed).
+> +	 */
+> +	ASSERT_NEQ(skel->data->assign_ret, 0, "assign_ret");
+> +
+> +cleanup_tc:
+> +	system("tc qdisc del dev lo clsact");
+> +	if (udp_client >= 0)
+> +		close(udp_client);
+> +close_tcp:
+> +	close(tcp_server);
+> +destroy_skel:
+>   	test_tcp_custom_syncookie__destroy(skel);
+>   }
