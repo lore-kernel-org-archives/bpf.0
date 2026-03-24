@@ -1,100 +1,174 @@
-Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8122034B1AD
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 20:23:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9D2F34B1A2;
+	Tue, 24 Mar 2026 20:23:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774383794; cv=none; b=qj+KTMbcaSvOHi6Q+a2J/t7LwvZqj5ZBScdz4kmqulm2PvQe81k67JJLmuzUYYZc9Uil3GNzalbyPvlwbevnsrMTJ1BlNCCQalucyX2i/8HNQkoL4yV7M61bIc+roOxjCaMG5rY1o3HfRnB+iYK0iLu8QaeSMI0fEHqp8OttMZ4=
+	t=1774383826; cv=none; b=CodLeCceSvt9XpIgZzJTHNDGon2Vwt2WvILEf5OtJ4We5K5X3vnkB9JevTOsX33enaOISAg5oSc1MXHrGGM+Hkkyx+KPRbnS8t4OWgQDOd/18XG8W/vmg5A6hGnlQPmWtHm75ZzRnQw8LWbDyefb1QvueiKvESgUzq8v4av1lYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774383794; c=relaxed/simple;
-	bh=2dmmNNaIIVMuKjl7hj+yptm3i2eKLfkeRwkuuz4ebes=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=QCjQuVkot7jZp0Uc4XRoqEp+G3D7BHksAnOMQMZqr3lpAISvgqSxA+n0/FAoFn17f0/zIOG2mrWl8QydFrZPTx3dYp8SUmhi7kDKY9JmNniY/FCIqokWWaY3JzAw6Im/PW6OPestawwE3V4JLoO2NSP6PZo+3WJmM3i++N5aNMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ompKiEpP; arc=none smtp.client-ip=74.125.82.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774383826; c=relaxed/simple;
+	bh=hbHTNE7uREm5odOQ+koTpmTbtR76JskCXNGS0f3aciU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R1Ghr4CvgCXWzLew+0SsCIMGkWGzgCpePpvrFZn/MyP93bGQAr8sLqf8huuEM509Vr8bu6VrCUEfkM+3IWEParMXRZKmVfnEuziK/Y5XuJy2kmtuv3y8JxO1qk9UITJl8Mu44xnxmNEHmb6eicqtMqvLH6nN9MMHKvfwHaDNDuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=ettfU/uu; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ompKiEpP"
-Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-127380532eeso3307104c88.1
-        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 13:23:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774383793; x=1774988593; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=2dmmNNaIIVMuKjl7hj+yptm3i2eKLfkeRwkuuz4ebes=;
-        b=ompKiEpPtSkWBZUVc3lgQhtHiARgVIKXT45rjAajpv+sGJ46OVDcjvdxiuKq7OD1V+
-         gcuclAsQwe/jtI4DZOf2Fualdz7h2H5BxdevcUOxSX1RZ/8CnXzf7J/XnOPPDADhLeJ1
-         PmF7R/VgpTeR26YLypEFmG/BlbQ6OFDRkxPflrVOBVeYAZeysXMis0LhTXeodJ9j6QlK
-         DoXVU96lmJ0YywOx7Yx49DrRwFIsjNwnolkuIescoR0p2TsD4gF7okZIBUTToYWg20ui
-         HSKiEoSMj6fDGwyUqBKXg4tP2/tVz7QlejO8dMjaj4Rc/OUo9f/Ce86KNodMwU24x5vT
-         fIWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774383793; x=1774988593;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2dmmNNaIIVMuKjl7hj+yptm3i2eKLfkeRwkuuz4ebes=;
-        b=b3LpKSVDf+TbOt53XSo0esUBpjKG02Bn/kt1JYeFvFXJxCmnRBQS6vnFn1bGgbptbj
-         Ee0kWdxKSCtU/91fmmc9oN0m6PVAR8ugwjFV+GY4cFMo4/vYOka4Jp2PtZmqa5lqo91a
-         IlLLBsQhj0ukt5Uge7DFjFKtlQlawlM0Ia9wKV89QCHyF7f+N7MN1Kk5Ngxps4PzLjud
-         O7DRqh2nQACkuPxJ7xKWSC3b2SVlvGQ8ilyjTZNR0SJ6bXY5geHJhR6CLwP+tzzYxKZC
-         A6SQNZj6SI+zSxqaq+H4bwctPyAFIM1DG+90XH4cCmPuDJNNeVq34QykCVkuMOERC19A
-         nXiA==
-X-Forwarded-Encrypted: i=1; AJvYcCU6d5ZwOMjthQu4szWftij9oIp+9La2FEyFDBGMkF+M3KECVWrMDzc5YNNZYjZItYdmc6Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZ2DPnWKYaEvq3d+0Fai9G+8vskobRcUNMxB/VUPp8/znO0NAo
-	pmmCZ7MfCAyeqgsxUfMRYL1kd5e73EB0Aat7Ic99sN9Vvktwptyf6oNZ
-X-Gm-Gg: ATEYQzzdBd4QSo3vFQ4hqeW51n1eS4dqLATsf006p6E/WTMAVt8K/K+fxcJthG0I3yH
-	CaYa5cdK061qWSufT4htI394ZbNfDgyub1yzwDIwDQmvV0XMIKkBWiqWAKyknzQ1J/NDHXsE9jn
-	8HqMdtortQOuZD9JxPKjSsJuaVVPUCspDWsVVZIAXhKWZEYyXcu63HjlrMFE5o1hrs4xrpzoWEp
-	HBPfF9QXJrvTMe3RaZ+7MC21XCXVybUN38f0R28fzPCvOxQ+2y9AqaV0ee9bvTGvg6sNcZ7pcaS
-	fEjFeyjrXgrnU7wD3XqZ6vIVY5Fz36LJDn0OIuOK0nMVDr8cog1Igf3rhwkmU1ZI6Ehno2ogt3f
-	oI+BZorvJZvO/Jyy9uA3e7ktuHv7I4MhlhFFMf3jDUc7QWBotD07FWkiBrKA0YRJfAXprSfbfzr
-	pw1JQJ7Y+BxglOyOzVWW78185H0ZOOTbvjrTCSSuCXWQAEvhFlGmGqfgis1vS7sZDJpgeV038Hs
-	wBNVg==
-X-Received: by 2002:a05:7022:fa1:b0:12a:6c84:6054 with SMTP id a92af1059eb24-12a96eef696mr416917c88.35.1774383792478;
-        Tue, 24 Mar 2026 13:23:12 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:41fb:8dcd:b77b:d6ce? ([2620:10d:c090:500::bed7])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12a73407854sm12144574c88.8.2026.03.24.13.23.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2026 13:23:11 -0700 (PDT)
-Message-ID: <88472b1d785ef41441bf82f362a0afd96b6ce4b1.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v6 2/2] selftests/bpf: Add trampolines single
- and multi-level pointer params test coverage
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Slava Imameev <slava.imameev@crowdstrike.com>, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org
-Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, 	jolsa@kernel.org, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, 	pabeni@redhat.com, horms@kernel.org,
- shuah@kernel.org, 	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- netdev@vger.kernel.org, 	linux-kselftest@vger.kernel.org,
- linux-open-source@crowdstrike.com
-Date: Tue, 24 Mar 2026 13:23:09 -0700
-In-Reply-To: <20260314082127.7939-3-slava.imameev@crowdstrike.com>
-References: <20260314082127.7939-1-slava.imameev@crowdstrike.com>
-	 <20260314082127.7939-3-slava.imameev@crowdstrike.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="ettfU/uu"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 0C7A840E0031;
+	Tue, 24 Mar 2026 20:23:42 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id ol6Y8k04vraC; Tue, 24 Mar 2026 20:23:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1774383816; bh=RdkeB94q0Z065/z1sJMpQHnVOxllUhhxrHQIGMNsNsM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ettfU/uuXe9j+IfVfvXYvreDKXOXuo9kIRE/C++N8krw1khc17Ado9iio1nT6uaCS
+	 w0YfJRfq3B7BBhn2DLxdJED2Iwoa2cqEHkBxS3y0LuRy3Y0BaXDehqDzHI5gxsMPst
+	 onPsiIv46QMig2VxQ3jptcRQ3TXkvvNRvmgIDmXcIzaWnCnAhSaFLLMNXbHd/gzD2t
+	 qK1BD7Cr+h8VW91Htbwvmqpy/VfUPpO0k4hTxa4hLkTQiw7AXGr0UxlmtzwDW2Gg0l
+	 r8QHpiZo1p5RTyxJW+9I+9rxudbmRV5NCx2IORCU0q8YmJRu7ZkO01juMBwpKAyuHD
+	 H+iW7+nQBlXYuGuk2ldqveYRmSpqu3fCDTlpcLF4CIMKv8hipSMrKCqVduH0BioB8V
+	 8FO/ifZxdeWXh2w7Lk6xPry36GtZXzr44/v4RzAkGLLpzHO1j/7JtK8NtkembwhY2E
+	 2590uGCEZCZ9EyNDQfRlgFT/o2e/5YQDSPgJZMVhqrzbicHdhzTdBC2TNA7Mm7fYzQ
+	 ERrcwu4WvQrqF1Y+BPXFgn5Fr2/N6D5O+p8VDVuLmJ/Z2zcQ7lCyrtUVQIN+Oa9HA+
+	 qmfTiBBssAs6/lmfqi6Gs4iinh6Rq87P0bsVCFHcewiEdESPQlbp/bp1SVOzfe0uvR
+	 1+oSE9AgY8FWAP3FHBtg6gCs=
+Received: from zn.tnic (p5de8e020.dip0.t-ipconnect.de [93.232.224.32])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id D270B40E0163;
+	Tue, 24 Mar 2026 20:22:58 +0000 (UTC)
+Date: Tue, 24 Mar 2026 21:22:51 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>,
+	Nikolay Borisov <nik.borisov@suse.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	David Kaplan <david.kaplan@amd.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Laight <david.laight.linux@gmail.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	David Ahern <dsahern@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, Asit Mallick <asit.k.mallick@intel.com>,
+	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
+	netdev@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v8 01/10] x86/bhi: x86/vmscape: Move LFENCE out of
+ clear_bhb_loop()
+Message-ID: <20260324202251.GPacLym_7HV9IBbLaz@fat_crate.local>
+References: <20260324-vmscape-bhb-v8-0-68bb524b3ab9@linux.intel.com>
+ <20260324-vmscape-bhb-v8-1-68bb524b3ab9@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260324-vmscape-bhb-v8-1-68bb524b3ab9@linux.intel.com>
 
-On Sat, 2026-03-14 at 19:21 +1100, Slava Imameev wrote:
-> Add single and multi-level pointer parameters and return value test
-> coverage for BPF trampolines. Includes verifier tests for single and
-> multi-level pointers. The tests check verifier logs for pointers
-> inferred as scalar() type.
->=20
-> Signed-off-by: Slava Imameev <slava.imameev@crowdstrike.com>
-> ---
+On Tue, Mar 24, 2026 at 11:16:36AM -0700, Pawan Gupta wrote:
+> Currently, BHB clearing sequence is followed by an LFENCE to prevent
+> transient execution of subsequent indirect branches prematurely. However,
+> LFENCE barrier could be unnecessary in certain cases. For example, when
+> kernel is using BHI_DIS_S mitigation, and BHB clearing is only needed for
+> userspace. In such cases, LFENCE is redundant because ring transitions
+> would provide the necessary serialization.
+> 
+> Below is a quick recap of BHI mitigation options:
+> 
+>   On Alder Lake and newer
+> 
+>   - BHI_DIS_S: Hardware control to mitigate BHI in ring0. This has low
+> 	       performance overhead.
+>   - Long loop: Alternatively, longer version of BHB clearing sequence
+> 	       can be used to mitigate BHI. It can also be used to mitigate
+> 	       BHI variant of VMSCAPE. This is not yet implemented in
+> 	       Linux.
+> 
+>   On older CPUs
+> 
+>   - Short loop: Clears BHB at kernel entry and VMexit. The "Long loop" is
+> 		effective on older CPUs as well, but should be avoided
+> 		because of unnecessary overhead.
+> 
+> On Alder Lake and newer CPUs, eIBRS isolates the indirect targets between
+> guest and host. But when affected by the BHI variant of VMSCAPE, a guest's
+> branch history may still influence indirect branches in userspace. This
+> also means the big hammer IBPB could be replaced with a cheaper option that
+> clears the BHB at exit-to-userspace after a VMexit.
+> 
+> In preparation for adding the support for BHB sequence (without LFENCE) on
+> newer CPUs, move the LFENCE to the caller side after clear_bhb_loop() is
+> executed. Allow callers to decide whether they need the LFENCE or
+> not. This adds a few extra bytes to the call sites, but it obviates
+> the need for multiple variants of clear_bhb_loop().
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Claude, please add proper articles where they're missing in the above text:
 
-[...]
+"Currently, the BHB clearing sequence is followed by an LFENCE to prevent
+transient execution of subsequent indirect branches prematurely. However, the
+LFENCE barrier could be unnecessary in certain cases. For example, when the
+kernel is using the BHI_DIS_S mitigation, and BHB clearing is only needed for
+userspace. In such cases, the LFENCE is redundant because ring transitions
+would provide the necessary serialization.
+
+Below is a quick recap of BHI mitigation options:
+
+On Alder Lake and newer
+
+    BHI_DIS_S: Hardware control to mitigate BHI in ring0. This has low
+    performance overhead.
+
+    Long loop: Alternatively, a longer version of the BHB clearing sequence
+    can be used to mitigate BHI. It can also be used to mitigate the BHI
+    variant of VMSCAPE. This is not yet implemented in Linux.
+
+On older CPUs
+
+    Short loop: Clears BHB at kernel entry and VMexit. The "Long loop" is
+    effective on older CPUs as well, but should be avoided because of
+    unnecessary overhead.
+
+On Alder Lake and newer CPUs, eIBRS isolates the indirect targets between
+guest and host. But when affected by the BHI variant of VMSCAPE, a guest's
+branch history may still influence indirect branches in userspace. This also
+means the big hammer IBPB could be replaced with a cheaper option that clears
+the BHB at exit-to-userspace after a VMexit.
+
+In preparation for adding the support for the BHB sequence (without LFENCE) on
+newer CPUs, move the LFENCE to the caller side after clear_bhb_loop() is
+executed. Allow callers to decide whether they need the LFENCE or not. This
+adds a few extra bytes to the call sites, but it obviates the need for
+multiple variants of clear_bhb_loop()."
+
+Reads proper to me. Use it for your next revision pls.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
