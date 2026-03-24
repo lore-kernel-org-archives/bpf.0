@@ -1,159 +1,227 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34394358363;
-	Tue, 24 Mar 2026 20:56:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D193825B30D;
+	Tue, 24 Mar 2026 21:00:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774385809; cv=none; b=JCaIalOwBPseUuuTLPDBh5CPDR/miUvGCO5K+cX2vYJwSa7N8xuf1R4IOVeckjIUuthi4CEnVrm5SJGZRVZIdRWSD2jnZcRtHIC+jNMogY3TtJ42gTojtQsawGkLSORt2Hvc2bFLHRkU1VfE4C9wwKPLge3mYnromI/lz6FmmEs=
+	t=1774386022; cv=none; b=DVoWSThT5O83oTevk/W/PInW2cyRtwqIrXsnuj8igWssBo14MPWeB++eH0BxYc0Kz9eaqbMUI5rdkKqLQQNKmOTIlmbs8ZS7SSM4HOtYhFfT/iUsDg3u4JNmhAUf9XK8j8aWhLwu+4KeZZ8oRH71zc9XtxxKya/9r57GtbAGnBM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774385809; c=relaxed/simple;
-	bh=Qo+ZovdrQkA7kuzporo2AYwDS9G8g8sICjIZiGOAKnU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=CggB4XjaShcftOxJqnGV8MKcuqf7NAjJAkpnpmcaB9W0yFKzbMhaYhTICjkJ+yDzmKFdcGdJY6TBYiQ35A00MRzQ3VGDIgE4tI83n/b6adcY1WmwSoKkkTaajd0VvEGwTFaTYza7hZuIfshM+FO0mlXwH78H+wyfLOZud0ZKne8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f6Poctri; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774386022; c=relaxed/simple;
+	bh=4IN37xQFXxyJwE0mRlTrwsVa85FzREeL3JCs1P/5Kvc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rVHFfAgeFsAeBPqApIXnyANr2lGh0g4EhKEauGa72+dkgDE3W+1Mu0w6R099IaBhZkHpcD4xb6+8K3eNpLQwDrF7t2Wg2MZIHsNkdbT2VMFt50ufwNJE3xaQkSeENLdnsmGPeW4TndGCWhT+UACfkXl8ODtA+VOR9K8wlDh3L0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=WgoRQjgf; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f6Poctri"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92E48C2BC9E;
-	Tue, 24 Mar 2026 20:56:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774385808;
-	bh=Qo+ZovdrQkA7kuzporo2AYwDS9G8g8sICjIZiGOAKnU=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=f6PoctrisWs98te5iO4xZq2aMrivny/ZTKH1g6lAJVKqCu4up5Jcvk5+KYY6nHk9F
-	 3qCodf23wxz+kbD9cCp2cSubZ/Dy+JrdOV4sDjqhCCPXva93kN/UIDxXcj1+Db/FEp
-	 FEmZcQTFAlb5JRMgUG8NJPTDz42ABtcAg7LK7zAaAvQZ/UuqKh29rEgunQIRzjuGIf
-	 ewfpTCdIBi0YDqg/wD+dAHAtbj5IqsB3x2klBeK6+2V4vAIUXkRCGm0n6VbF1+BN0J
-	 bMwciUWDai06Dzyf4612pObXLHKPJvtn+VUkp2h/8Wss0jNMqxah5nUeiCrMHwkv0o
-	 IMHTkGc+zl8og==
-Message-ID: <cd26436b-539d-44bf-87a6-0109eb8e26f2@kernel.org>
-Date: Tue, 24 Mar 2026 21:56:39 +0100
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="WgoRQjgf"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 0D1AD40E0194;
+	Tue, 24 Mar 2026 21:00:18 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 6WDUFy_i4rik; Tue, 24 Mar 2026 21:00:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1774386013; bh=BR3yEWx3FLoYnBT6ejXLArFk4bdNUVetIvOr0hEu9k4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WgoRQjgfKpnQbDxR9Wpwmo17AeReU718M/DWLRSRu3HFtJGYZM9VmpCjI7wGp4BrS
+	 /GcfXQGYABROmPhMwG9Nhlwa9lbMnFG8o1xKNLNCU/6jn7nhmAvDTuTYMcqFCiPs3d
+	 eoBKO4gflrvGeGOyUH7a64BmIl/WMYdHygf05x75+TS+LJgpcQao4vW/PFcvN8rQed
+	 WT0bENJjIfzMSrI/AbeuFH+Qb5+kSUfSL5uhXlo/A/u4PUezCkyZI9eu+2gRg449Em
+	 1XArikZYwp/xNnaIJJnMDFb6ZxQOzPKx8vdhNAZGclFsqhLlWF8VXQEt4Q8suQwiHh
+	 97e6HdPKtKSXHZT7H/z3Uct3LlNouMirEtgTRqNiWWsxtWcvCq8U1ZIOflPBdhRgpU
+	 DAHpeqnFKXK477/SZdZfTIJJlQxcvF1DXgVRi1vUcM6Qcc7y1owxBhGft9+bT0+vic
+	 rP5CXqFYOM2xahKbewrYcJva6Mf+uRxePz0FYCzYklCs1I81ZeQ3k5qvFGfzHofHvY
+	 EF8+sJKuIr1M58aEZBfxkp2F+LnU8jbQl/lylF5CHJMO4Z3ZzFTIqohZtl1OCmAT5q
+	 Xt06+/tLQN6NPB1LUCGvi1d9DKioH1bHrMvPdGJaeBFGUxn+FxHUYEnLLA6wLwGRzo
+	 4seepvY6T0obKAvWiLzyoWZw=
+Received: from zn.tnic (p5de8e020.dip0.t-ipconnect.de [93.232.224.32])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 5F42540E0163;
+	Tue, 24 Mar 2026 20:59:36 +0000 (UTC)
+Date: Tue, 24 Mar 2026 21:59:30 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>,
+	Nikolay Borisov <nik.borisov@suse.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	David Kaplan <david.kaplan@amd.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Laight <david.laight.linux@gmail.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	David Ahern <dsahern@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, Asit Mallick <asit.k.mallick@intel.com>,
+	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
+	netdev@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v8 02/10] x86/bhi: Make clear_bhb_loop() effective on
+ newer CPUs
+Message-ID: <20260324205930.GQacL7Mp7vwGBKX1W7@fat_crate.local>
+References: <20260324-vmscape-bhb-v8-0-68bb524b3ab9@linux.intel.com>
+ <20260324-vmscape-bhb-v8-2-68bb524b3ab9@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/3] mm/page_alloc: Optimize free_contig_range()
-To: Muhammad Usama Anjum <usama.anjum@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Brendan Jackman <jackmanb@google.com>, Johannes Weiner <hannes@cmpxchg.org>,
- Zi Yan <ziy@nvidia.com>, Uladzislau Rezki <urezki@gmail.com>,
- Nick Terrell <terrelln@fb.com>, David Sterba <dsterba@suse.com>,
- Vishal Moola <vishal.moola@gmail.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, Ryan.Roberts@arm.com,
- david.hildenbrand@arm.com
-References: <20260324133538.497616-1-usama.anjum@arm.com>
- <20260324133538.497616-2-usama.anjum@arm.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260324133538.497616-2-usama.anjum@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260324-vmscape-bhb-v8-2-68bb524b3ab9@linux.intel.com>
 
+On Tue, Mar 24, 2026 at 11:16:51AM -0700, Pawan Gupta wrote:
+> As a mitigation for BHI, clear_bhb_loop() executes branches that overwrites
+> the Branch History Buffer (BHB). On Alder Lake and newer parts this
+> sequence is not sufficient because it doesn't clear enough entries. This
+> was not an issue because these CPUs have a hardware control (BHI_DIS_S)
+> that mitigates BHI in kernel.
+> 
+> BHI variant of VMSCAPE requires isolating branch history between guests and
+> userspace. Note that there is no equivalent hardware control for userspace.
+> To effectively isolate branch history on newer CPUs, clear_bhb_loop()
+> should execute sufficient number of branches to clear a larger BHB.
+> 
+> Dynamically set the loop count of clear_bhb_loop() such that it is
+> effective on newer CPUs too. Use the hardware control enumeration
+> X86_FEATURE_BHI_CTRL to select the appropriate loop count.
+> 
+> Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
+> Reviewed-by: Nikolay Borisov <nik.borisov@suse.com>
+> Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+> ---
+>  arch/x86/entry/entry_64.S   | 21 ++++++++++++++++-----
+>  arch/x86/net/bpf_jit_comp.c |  7 -------
+>  2 files changed, 16 insertions(+), 12 deletions(-)
 
-> +void __free_contig_range(unsigned long pfn, unsigned long nr_pages)
-> +{
-> +	struct page *page = pfn_to_page(pfn);
-> +	struct page *start = NULL;
-> +	unsigned long start_sec;
-> +	unsigned long i;
-> +	bool can_free;
-> +
-> +	/*
-> +	 * Chunk the range into contiguous runs of pages for which the refcount
-> +	 * went to zero and for which free_pages_prepare() succeeded. If
-> +	 * free_pages_prepare() fails we consider the page to have been freed;
-> +	 * deliberately leak it.
-> +	 *
-> +	 * Code assumes contiguous PFNs have contiguous struct pages, but not
-> +	 * vice versa. Break batches at section boundaries since pages from
-> +	 * different sections must not be coalesced into a single high-order
-> +	 * block.
+Ok, pls tell me why this below doesn't work?
 
-The comment is not completely accurate: section boundary only applies to
-some kernel configs.
+The additional indirection makes even the BHB loop code simpler.
 
-Maybe rewrite the whole paragraph into
+(I didn't pay too much attention to the labels, 2: is probably weird there).
 
-"Contiguous PFNs might not have a contiguous "struct pages" in some
-kernel config. Therefore, check memdesc_section(), and stop batching
-once it changes, see num_pages_contiguous()."
+---
 
-> +	 */
-> +	for (i = 0; i < nr_pages; i++, page++) {
-> +		VM_WARN_ON_ONCE(PageHead(page));
-> +		VM_WARN_ON_ONCE(PageTail(page));
-> +
-> +		can_free = put_page_testzero(page);
-> +		if (can_free && !free_pages_prepare(page, 0))
-> +			can_free = false;
-> +
-> +		if (can_free && start &&
-> +		    memdesc_section(page->flags) != start_sec) {
-> +			free_prepared_contig_range(start, page - start);
-> +			start = page;
-> +			start_sec = memdesc_section(page->flags);
-> +		} else if (!can_free && start) {
-> +			free_prepared_contig_range(start, page - start);
-> +			start = NULL;
-> +		} else if (can_free && !start) {
-> +			start = page;
-> +			start_sec = memdesc_section(page->flags);
-> +		}
-> +	}
-
-Simplification a proposed by Zi make sense to me!
+diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+index 3a180a36ca0e..95c7ed9afbbe 100644
+--- a/arch/x86/entry/entry_64.S
++++ b/arch/x86/entry/entry_64.S
+@@ -1532,11 +1532,13 @@ SYM_CODE_END(rewind_stack_and_make_dead)
+  * Note, callers should use a speculation barrier like LFENCE immediately after
+  * a call to this function to ensure BHB is cleared before indirect branches.
+  */
+-SYM_FUNC_START(clear_bhb_loop)
++SYM_FUNC_START(__clear_bhb_loop)
+ 	ANNOTATE_NOENDBR
+ 	push	%rbp
++	/* BPF caller may require %rax to be preserved */
++	push	%rax
+ 	mov	%rsp, %rbp
+-	movl	$5, %ecx
++
+ 	ANNOTATE_INTRA_FUNCTION_CALL
+ 	call	1f
+ 	jmp	5f
+@@ -1557,17 +1559,17 @@ SYM_FUNC_START(clear_bhb_loop)
+ 	 * but some Clang versions (e.g. 18) don't like this.
+ 	 */
+ 	.skip 32 - 18, 0xcc
+-2:	movl	$5, %eax
++2:
+ 3:	jmp	4f
+ 	nop
+-4:	sub	$1, %eax
++4:	sub	$1, %rsi
+ 	jnz	3b
+-	sub	$1, %ecx
++	sub	$1, %rdi
+ 	jnz	1b
+ .Lret2:	RET
+ 5:
++	pop	%rax
+ 	pop	%rbp
+ 	RET
+-SYM_FUNC_END(clear_bhb_loop)
+-EXPORT_SYMBOL_FOR_KVM(clear_bhb_loop)
+-STACK_FRAME_NON_STANDARD(clear_bhb_loop)
++SYM_FUNC_END(__clear_bhb_loop)
++STACK_FRAME_NON_STANDARD(__clear_bhb_loop)
+diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
+index 70b377fcbc1c..a9f406941e11 100644
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -390,6 +390,7 @@ extern void write_ibpb(void);
+ 
+ #ifdef CONFIG_X86_64
+ extern void clear_bhb_loop(void);
++extern void __clear_bhb_loop(unsigned int a, unsigned int b);
+ #endif
+ 
+ extern void (*x86_return_thunk)(void);
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index 83f51cab0b1e..c41b0548cf2a 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -3735,3 +3735,11 @@ void __warn_thunk(void)
+ {
+ 	WARN_ONCE(1, "Unpatched return thunk in use. This should not happen!\n");
+ }
++
++void clear_bhb_loop(void)
++{
++	if (cpu_feature_enabled(X86_FEATURE_BHI_CTRL))
++		__clear_bhb_loop(12, 7);
++	else
++		__clear_bhb_loop(5, 5);
++}
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 63d6c9fa5e80..e2cceabb23e8 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -1614,11 +1614,6 @@ static int emit_spectre_bhb_barrier(u8 **pprog, u8 *ip,
+ 	u8 *func;
+ 
+ 	if (cpu_feature_enabled(X86_FEATURE_CLEAR_BHB_LOOP)) {
+-		/* The clearing sequence clobbers eax and ecx. */
+-		EMIT1(0x50); /* push rax */
+-		EMIT1(0x51); /* push rcx */
+-		ip += 2;
+-
+ 		func = (u8 *)clear_bhb_loop;
+ 		ip += x86_call_depth_emit_accounting(&prog, func, ip);
+ 
+@@ -1626,8 +1621,6 @@ static int emit_spectre_bhb_barrier(u8 **pprog, u8 *ip,
+ 			return -EINVAL;
+ 		/* Don't speculate past this until BHB is cleared */
+ 		EMIT_LFENCE();
+-		EMIT1(0x59); /* pop rcx */
+-		EMIT1(0x58); /* pop rax */
+ 	}
+ 	/* Insert IBHF instruction */
+ 	if ((cpu_feature_enabled(X86_FEATURE_CLEAR_BHB_LOOP) &&
 
 -- 
-Cheers,
+Regards/Gruss,
+    Boris.
 
-David
+https://people.kernel.org/tglx/notes-about-netiquette
