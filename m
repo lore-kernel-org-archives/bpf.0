@@ -1,177 +1,314 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2803537C924
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 07:10:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94E4134753F;
+	Tue, 24 Mar 2026 08:06:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.14
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774336213; cv=pass; b=BESFqb+1nFIoj/njImDqBXn5G0SM1x7Jx8+O55JJyJbM2CYKnApYGWtenlYeMhtk07g10g8/onL8EaFXXL1f/MsL5TjkCp5Zg72JV1YXiRkZhqytpoeNla/r5Y3afWDb2XOuhrOHIgnEEPdAcoZQga7RESU5UPrZfaICV+zGPtc=
+	t=1774339614; cv=fail; b=IhbPk79sJC0+hFiGg2PxpAz0lUsFeZ9DC8F3pMzFDmkk8sRpws1Lha4IVBbr9sVwx4y+/B8/5RLwxlOIg1hQSbWZvXAq4HK7b0zLZd8Svby9Gv7fBuB8+kGu+zlJYS3ShvaqWfnfJjAdSFGcas6ZpyHEtJAY2o8Pr7O8r+qkZlo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774336213; c=relaxed/simple;
-	bh=B7VPMKU8S41YOV0cq+2rJWZqQOczXWbCnxUejuoOI1M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PQbAQ4etXUh1TbX9/ZPbh0plEjfCxz1tlLEPCjRCoeJCs/1XMZH+Dxz+G++XO+sBdy8fuJrDC4CZ0DdTKfJzPf4uRmZkQElW6mnypghTjgbQd2LaUinIeyGFpUrjMgeo+kKuc3fbSOhBezcHmGadQ51ur3+Q0vuWq8Myyv4Uisk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PD/Ej470; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=p7H9mPcX; arc=pass smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1774339614; c=relaxed/simple;
+	bh=xPfdo/yzWNAr+lY95nD5BvNQ/Ht8aTgdxRktP4chJXs=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=UWqjBrYWlFhH4lX/qKoooTQK+6G6OJldYHbWltDF3r2BIh0ie9OgS3e1ZCyDudF/c6rjR698pcTpQ/Bd+7xwLayOUtFgu/rtIZABfHEoyRXUZYG9U5JDk05vttn+XOcBt/bzUCLC+1mQjmVNrtTGGqFjeChr8qvh0v+AEuQMOwU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PIfO2hGi; arc=fail smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PD/Ej470";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="p7H9mPcX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774336202;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=j0p7ruypCDdXXfhz5IqiaSpJ0nIoncl+MrV7FY/rAAI=;
-	b=PD/Ej470eOb+g84OhCkfHcxaEVAW2ZaWGBRxMZ/6RlQWtlPDUE73LTb2OcLeiY5mcx5x5T
-	mVRx4h59t4Cd+8/kGeq4nYb49CPsOOSik5h5yA5LZOaygJiXlduKycoP3wEJOtuXPP6PTw
-	XV44ms/XCid68DShZR9v9dgbyfvVFSY=
-Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com
- [74.125.82.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-680-kWjnNsZZO4GLDzdp7hqqzQ-1; Tue, 24 Mar 2026 03:10:01 -0400
-X-MC-Unique: kWjnNsZZO4GLDzdp7hqqzQ-1
-X-Mimecast-MFC-AGG-ID: kWjnNsZZO4GLDzdp7hqqzQ_1774336200
-Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-2c0e264d802so7208709eec.0
-        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 00:10:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774336200; cv=none;
-        d=google.com; s=arc-20240605;
-        b=HK2a9JlxSkKftF04VHyKDxLVDxikffnU2+XoWbiFmQehpdMTSyxNc7jHaObCm/mTMS
-         dBX5+LZOd08bXBMowrx2K52d/SvR0/Y2qtpRHv0YXL4sTjItTg4MR8wDAMv7S0UpnJJ0
-         v2nkgA+zGXLkuPQevNBkVbmsKvdp4aSquCSUH2bMdWMKhypJ2343gTpQUFWWf+rU6vY8
-         2HCGUvSo11l3LdAwZY+YRxE+yU6l9Kr2r/RXaL0mGu365Cc9Wfjjp8Pl0U1YjRqtsYDA
-         xG+gVEd3K2rqyx00PET9FcXLtw54Dy/WWY2xQTHSjreWj4fJgiMru8KlCHrsxoEQKTjZ
-         LXQA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=j0p7ruypCDdXXfhz5IqiaSpJ0nIoncl+MrV7FY/rAAI=;
-        fh=Gqp0BmUFX+5u5ufOLqUZdZEVPJxTcnqaPmrNh5/CQxI=;
-        b=Iqrizkwegwu3/yOL+s0w6Vj/mghRkPnqnCugeryNAL1DYqaIaGk9Qg4QDabj1oO1wG
-         pU558IXbfJPBzugpgaIoPKuirt12iY65akiFGZOaqrlzrxTwiEZEfzYRTDv9N9VlfSlf
-         21GNGqbnUg8J4gUdZ3kUOFdInynH9wwopGaYhLnlccYHIgfKlLUXQCGNuPP1N8yYdt0S
-         he4bN0UcVSrb3XLZhJxsAPFYJGpw9nUrK7BbI4xJ6q+39sJL5CGB/j2FjOU5LA3U8wbD
-         UVMJr/VUk6nmqef4AM9iR4oDjRstg3eG+KhJp1aUFYrqX02msklKXgO+6yP9zzXZbZdG
-         SuSA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1774336200; x=1774941000; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j0p7ruypCDdXXfhz5IqiaSpJ0nIoncl+MrV7FY/rAAI=;
-        b=p7H9mPcXEPZwdQ5IuomoLCuFGTcp35DMgfgWm+tPKC/0T1ZvuH38DWRzVjxpAFnIr1
-         iAM8y+nJYy/dHSWCMicJ7bOzDlVzT8r0j0345AoYWEunqkMHGTTu9RzvuePLMjHsckw9
-         Eru6RXWmbprCdtffpKK3+7DnjFQtqljIbaboJxwaveSqTqtpkr+IaS4oxNumJTzVcxjk
-         KEoC23ff+fSasdnLpxLxarRdQZ/ObMnpIPe0z/SrQCqIohpRUJNhHASNe4rFOri1YTSa
-         Y0hrch/L8mzkOAJuPTJDr/uqIAE6ffn228GfwxpqpcEPdeLnEfGl/UnG1F877v9jtyAS
-         Fopg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774336200; x=1774941000;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=j0p7ruypCDdXXfhz5IqiaSpJ0nIoncl+MrV7FY/rAAI=;
-        b=p42k+a8x5KBjDlsOkx/Z4Xs5zV7m+DaSwal7ouoO3QR6oi5HYhwUGwkn6Vifnko6lZ
-         poJFaiuJ4kDhM2l6QRk8Ujn4Zz8kDUmsyhI6K9XdnnkPjEdmgkeO1afeXtBqn5uXX+ZD
-         sphnJGAR5DDB0hZgi5AIOB03x1QJDm+GgoiP59ZcgbmAvPg8/MZjooAHUISGWPfkPf4C
-         x8ZY/SmixwxK3ntNZQDkcR/+G36XF0H4TPwsnqacJwV32KRjFo4t8MAJ5xJ2v3W+IsVk
-         1dvt/ubOrEGd0icqagSuYzCsT7QkmjjIJiBxZfXbqVGrO/rdx2p9uy69dn+gh2nkOEEx
-         G2Pg==
-X-Forwarded-Encrypted: i=1; AJvYcCWpFZn9pQzFOKVEc9i9D2x3fR4Xbet6BQQHeSaQCpkMjD5H/v9ZXc1pTTDKgfVNWaFjnhY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4J9wzqds0xVwISUqxOdaJxtEokwusTywp/GGrOhHrZCwN/g14
-	gF7ZDYOyDZt2L7DRLnpVMDzFiPPctDm0fFcMBrXvB06air4mia1bi8FAiGdHm4ll3h6Us/G7Ytp
-	KKjPX46EOLAP86YQNepj2VasPPUJqD9uA5qiJGqTJ4KPtaFjAnJ7smd+/tUt7jLJTAat5Jv2M4p
-	idOKqnrcmyaDOalEI8gPMw75/x4NS7
-X-Gm-Gg: ATEYQzwnIhEelew2vYW0bHLMoAnBBttgQZJysqgLba7CmEDjU+IDhQtBIoajZbszEG+
-	JRUbUMFEOFBiF9IJZc+qQLcFP9LUqgJaStwMg5SzKUBWqdBT4y76H7uAdvZZlAoBSiv1bsQaris
-	prFmJI4vFakm4F2dqxdvR7NG58zQbltKdCf58nr4iUBxf7D3tFfclJi45xczDoqksgA7rUmXF12
-	SGtPCA=
-X-Received: by 2002:a05:7300:a145:b0:2be:617:2ddf with SMTP id 5a478bee46e88-2c10970ed0fmr7262385eec.16.1774336199477;
-        Tue, 24 Mar 2026 00:09:59 -0700 (PDT)
-X-Received: by 2002:a05:7300:a145:b0:2be:617:2ddf with SMTP id
- 5a478bee46e88-2c10970ed0fmr7262363eec.16.1774336199034; Tue, 24 Mar 2026
- 00:09:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PIfO2hGi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774339604; x=1805875604;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=xPfdo/yzWNAr+lY95nD5BvNQ/Ht8aTgdxRktP4chJXs=;
+  b=PIfO2hGigH2Qj9vCzHJdZS+ivxqOxISBRxbiS588tvpTCxUEwnvDEHHe
+   rV6kdeV1rWJCKTi/wHqG3eeqxh7V4Rk3cQEnpwlh4mpAwpLN+FvAs8Ju4
+   QLph8zGXKhYQ78EEKYaN7K/85s82WnL9LRPdgsAn1mLW1pz1iuMra/TXR
+   rK+1GO+pdlWI8K7kuaNC0ibEW1aMSstPyRo2asaXOUPxkcPEwuH4N4Ljk
+   pUHvIrFzeZlcsMhAsmNKmUbMtciUajDtKOkSLKOmWq4BHIhz59OAhKbNq
+   kYxnWrd1Z1oF6mllYJbuvoMhm7pnu30a5lkKTV+PBXGk5hbgSPwfPW1rm
+   Q==;
+X-CSE-ConnectionGUID: HGgwclm5T0ejY1rGHYKeNw==
+X-CSE-MsgGUID: 6t9ifLMCSvCNZdfRYiA1aQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11738"; a="79205363"
+X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
+   d="scan'208";a="79205363"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 01:06:43 -0700
+X-CSE-ConnectionGUID: vMd1eVWHTGuZjWJXQib0ew==
+X-CSE-MsgGUID: ovm8Vck6TZCbUr0OHZWmHw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
+   d="scan'208";a="217715038"
+Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
+  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 01:06:42 -0700
+Received: from FMSMSX901.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Tue, 24 Mar 2026 01:06:41 -0700
+Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
+ FMSMSX901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37 via Frontend Transport; Tue, 24 Mar 2026 01:06:41 -0700
+Received: from DM1PR04CU001.outbound.protection.outlook.com (52.101.61.30) by
+ edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Tue, 24 Mar 2026 01:06:41 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=JEd3nt/vQRf+UmlC4Az9UEjukmsN4u7myEfqraK73EOnQrS14opDYOzVCD0X5wW2yyXlBQp9t916inMpbMb+dIIscQRYoXIZquuM7aDh2flruYT1k09kzqMzewE/uIX52p1Rekl4AoRNFQcNZr8Z7MW0Zmh1rneTx8Wo7a3F/MeJJAI+p+HZzA4CamgegGB1IviWTqd0liLv68yUkhEJlx9T2s4A5uF9rYEG6vJjKD4oB1TJdZw1aAaZPBUJqxudkCVgKMVfciZen0Ks96RPVnzC0ka9hp6IedKb4IPLpGuCYtvug99lRbHLofbvJX4mEqK5OWbvvNiltHDUhCvjvg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oXHsgDLE1k92vwWDqzHvB2hsBMVCqDoub+keIp3ED40=;
+ b=S7BzxXNdRHQvNs4w04sJEEuLybDIgWSjYExE0XI1xDz1gaCaKN6rXi9eJ7Lw7y2nZU3+x0ei0DPY8cLTgFavS336wTCm5w6CwZ9dQqXzphSHxMBbOfcV+cy4EZSesZWx7YvyiKBej86+8sj0WXPDgsOgXVMXOUhK+8LNUKXZ2sGAgsxudKmaylQaQTqhBMuI3s8Gf0+f8cLPHvylO3ffK+aYQyoESjh/cYCeMM9c8KEj17UxwmV2oGNiWsOL2Hpx/mXmxftq9T3+SPTOa+PgM8Ejzp9B/9R1zTxf7yJzGS6xkxOU9A1XaqU1u4Q6xxdRXt14NMJBMAQyrrLsRJTKFg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from IA3PR11MB8986.namprd11.prod.outlook.com (2603:10b6:208:577::21)
+ by CH3PR11MB8137.namprd11.prod.outlook.com (2603:10b6:610:15c::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.20; Tue, 24 Mar
+ 2026 08:06:38 +0000
+Received: from IA3PR11MB8986.namprd11.prod.outlook.com
+ ([fe80::e6f0:6afb:6ef9:ab5c]) by IA3PR11MB8986.namprd11.prod.outlook.com
+ ([fe80::e6f0:6afb:6ef9:ab5c%5]) with mapi id 15.20.9745.012; Tue, 24 Mar 2026
+ 08:06:38 +0000
+From: "Loktionov, Aleksandr" <aleksandr.loktionov@intel.com>
+To: Matteo Croce <technoboy85@gmail.com>, "Nguyen, Anthony L"
+	<anthony.l.nguyen@intel.com>, "Kitszel, Przemyslaw"
+	<przemyslaw.kitszel@intel.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
+ S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper
+ Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+	Mohsin Bashir <mohsin.bashr@gmail.com>
+CC: "netdev@vger.kernel.org" <netdev@vger.kernel.org>, "bpf@vger.kernel.org"
+	<bpf@vger.kernel.org>, "intel-wired-lan@lists.osuosl.org"
+	<intel-wired-lan@lists.osuosl.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: RE: [Intel-wired-lan] [PATCH net-next v4 1/2] e1000e: add basic XDP
+ support
+Thread-Topic: [Intel-wired-lan] [PATCH net-next v4 1/2] e1000e: add basic XDP
+ support
+Thread-Index: AQHcuvL2ls/Zpu65nU2IEljeWVhcO7W9U0KQ
+Date: Tue, 24 Mar 2026 08:06:38 +0000
+Message-ID: <IA3PR11MB8986EC18B4FE10649049AF87E548A@IA3PR11MB8986.namprd11.prod.outlook.com>
+References: <20260323182823.5813-1-teknoraver@meta.com>
+ <20260323182823.5813-2-teknoraver@meta.com>
+In-Reply-To: <20260323182823.5813-2-teknoraver@meta.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: IA3PR11MB8986:EE_|CH3PR11MB8137:EE_
+x-ms-office365-filtering-correlation-id: 51d7fdf6-82d9-4df0-9da0-08de897c46b0
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014|38070700021|921020|22082099003|56012099003|18002099003;
+x-microsoft-antispam-message-info: sawJSEjEYI5a6kytpzHHJ8uysFRDV+u7nPeYW4iFUxMo9pcwiuPweshO6IM4ZtVp8cn2qeLG8I4/3096roAbHXdSi2mv+B27C0SHg+45PGPACop3gH1HRXyCPz1mQ80s2ZfI23w4WkC2Ios1NJQXo9EJI2YI1BYSrNFLTxzEJ+TNxpweAw4lRX9Fnm9DD12wuL9dIuiiUQ69RTUM0collQrw49VUV/zQvE35eyCiClKzUcm1MVmQhy6AXQGy+Vii+hpvcme6OnYUG32t0PCu1vygFC7N7Jl/GEH9g6m4to4DOyo7mzJTraBZ5GVkH0LJaKTEEby2AS6dH+QHpnNdb/9KC5uaHyhtg4Lmw8j4h5IAwOdEqoICL0xhyFAZmFShVT+cXL72rBit6uBIlGBmk53F2fovmCPJtCB3nLU14UNvk+tZvyslRCBF4HnJQF0E5bpULga0tWaWy8O5ehz1vL+l4P8hsVlZJIn16oD1zs9ogW0e1a3dEq/6muHx9kpGZjpr/ulWmQDx5XONZ8xzSrirwrUzXVyCns05yREOE2eaxnRtfdOjXqEmsDXoWFsHIIvNAlfcNJaDGeqs6XFGK6qjUSy5nbunZqZ6fQWh99vCTocZEeO0/+NPnkzldCms7h3T+z0q1Bh9T69jh47IXldgk5LUiXDoEjHYojbV7fbnGmpX5K7z6yYqNJDRUProT/a7ggVC4TTavbh70KVQvZAx6Dqat0+U+yQPmj1hZys3Tchz5KqkjEaRTD0/mBTHODp2A324/Wqp5BJEo5Q6ixLTFpMgDwBhq7M2z1soDHsjuLH4KKDF26tYNDnvEWXz
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA3PR11MB8986.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(38070700021)(921020)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?PFb/b0+a8E3l8c/pJwO+D9+z8PszQxYUXSJrhcVE5YpVeBu2L3baB7qSpMp0?=
+ =?us-ascii?Q?VQJvaT2yGLnovg056I1kFXvd0IORORbTuEHZ9FyibPSd2xQeLYssD+xFBDjx?=
+ =?us-ascii?Q?zItEDZN5ufifLCn+zTOpSzlSRByLmxG4NSFboGAylB68DfHDm7D2SHhSdl7k?=
+ =?us-ascii?Q?Pe/CnVdk7AJJpnBFa77xmanoMVMUxf8J+rsXqwleMAFmJvmyLgY5IrjB0jjK?=
+ =?us-ascii?Q?RMLjlXCPO3uqJggsdbPxhNuOp4RaIFH0e2ZaVjr2QCPiXMLI6+/Eyv3eEupE?=
+ =?us-ascii?Q?UIk6eq99HhwNuc0jqTrdVhU/7h1Dxmv7Maq7PJ0IzPOo63tUVvx1zEd5rzAV?=
+ =?us-ascii?Q?qBiv5UkwY1CxcR9x6RAPO9wloMAYs3zj8Yp9APiqn89y2Hk6ofRCKA3v5VUj?=
+ =?us-ascii?Q?NWXDoywUItOiU841lSwuBcRlVloz0TrYJ/W6lkJqQ6rRSgtOFOgy/FALEz+w?=
+ =?us-ascii?Q?G/3GAMLSFOTUxt08C9FzvVuGLL19ZNBtCWMAAw9oyfYrQqWTmlqjCtrPsk5Y?=
+ =?us-ascii?Q?R3Une7k8emglZ+R3J6kzMaSJfpaCUJEYljiRx7yugTbT9i3zY5jHewo0PfZu?=
+ =?us-ascii?Q?eyAM37e1JrDlFFbP08HivchghNdDCW0kk20vp5b97BH9W5AJj/T+WEuPhxLh?=
+ =?us-ascii?Q?qgx7guWvl+3iigrwFkjjid+6oTrRaQACU3Ntbi7G2jHWOQIKIf8l90R6JSQN?=
+ =?us-ascii?Q?uVhJJijJatStjTSt9l9fwrkcvEHsvTQAFZR5gM9zGqgVOARLo+qn/9dMHByM?=
+ =?us-ascii?Q?PdrVcPBcwchMVDTiV+yHmFNc0aXekqtdjQpY+nXOY8OthyFQ4Dd+LXgA7A04?=
+ =?us-ascii?Q?D16Ogh9N+Kd4hYzEdbAsj9OdJABM2nek9xwte1LSAE+MsQMznVI3R9V4Up/s?=
+ =?us-ascii?Q?phFm524u9uTZBUoz4OqhtYuLhbYePlbHZ43qunyeaQeTcnLVDr4Lag5rTQ/I?=
+ =?us-ascii?Q?OJhN9oxGUCL7uzsRwReRRAq1usxHxEYQAzK8Db6XOPAV2W6mpUOW3LmzqVP3?=
+ =?us-ascii?Q?jLWNPckOuvRHOT+gz5ofnFbqbqQs+ds8qovVAjDLOMeN/7n2WFiGBAQdwLR1?=
+ =?us-ascii?Q?bnW1CWoJza7YWZ2r78dxVLUCy0hSBX3vOAopJFPFs2heUDaI3UoqyCHe3xK7?=
+ =?us-ascii?Q?tGYG91wj5i3xG81OKMu57t0TqGE7f9Na7hG+AurQERhdwUFQGJC457NusIu2?=
+ =?us-ascii?Q?U4vrb0kIA3eLKl2NkeV8TwINMuaOBLpUUWOPgC4vI1kBXq527E3080R9LjJu?=
+ =?us-ascii?Q?RQt30NBXhz0b0Aeb69NXG8uw1P8Ca2TZATo10AaSIkn4+/haSDwYblQoqfBC?=
+ =?us-ascii?Q?ddKsyPiHMDZA7l4A+MzjIqhs935KbaWcnXFghYR/kXwBSjk6UH0Xy+8Drm1k?=
+ =?us-ascii?Q?KtGVmyw1jBLN6G7ZVTeFuYD09iLfwM8Rpk1SM4RYlf+sMUVbU+MJ56q1KowW?=
+ =?us-ascii?Q?QGthX/U7B6SO7UIk0GbWIdHEcnEcvw2qa7FGI1ZCC9b7o3v5syYa7r3FULPU?=
+ =?us-ascii?Q?mewg9wn1o8MxP5UeiY6PNYI7y0ksQ1Imu7BtMcufPNd+nuwReFudgPo0ijTY?=
+ =?us-ascii?Q?H1qBLoUN67eKJ7lhJw4r7io4Nhi/WIf2NKwASxF1DqR8h2wxYU/FGwuvCG2o?=
+ =?us-ascii?Q?FWmg5f8EtB3OtlAENqiw1rzIvwI2QAZluZIdItYPNBoxOF/Rlzeq1e6hRtLA?=
+ =?us-ascii?Q?Kkg9mdDK5Rm5fpR+q3caRFrQDd5onACNQHw6xUWEndH9g3LRDiwBA75moByb?=
+ =?us-ascii?Q?qetmxkCOQMa+Iq1X0T0r+LBr3tb+BO4=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260322014402.8815-1-piliu@redhat.com> <20260323120202.e662110de3ca696086f9e1f9@linux-foundation.org>
-In-Reply-To: <20260323120202.e662110de3ca696086f9e1f9@linux-foundation.org>
-From: Pingfan Liu <piliu@redhat.com>
-Date: Tue, 24 Mar 2026 15:09:48 +0800
-X-Gm-Features: AQROBzArO1s8UFiUXdDfYP1zd5xobyzeix-spM303OTU0oAnUprxLEsDtBalr70
-Message-ID: <CAF+s44RKERrXWEt+a7c8+bMt5fDbFUfVo109nS2d++sTH_S9fw@mail.gmail.com>
-Subject: Re: [PATCHv7 00/13] kexec: Use BPF lskel to enable kexec to load PE
- format boot image
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: "David S. Miller" <davem@davemloft.net>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jeremy Linton <jeremy.linton@arm.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Ard Biesheuvel <ardb@kernel.org>, Simon Horman <horms@kernel.org>, Gerd Hoffmann <kraxel@redhat.com>, 
-	Vitaly Kuznetsov <vkuznets@redhat.com>, Philipp Rudo <prudo@redhat.com>, Viktor Malik <vmalik@redhat.com>, 
-	Jan Hendrik Farr <kernel@jfarr.cc>, Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>, 
-	kexec@lists.infradead.org, bpf@vger.kernel.org, 
-	systemd-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Exchange-RoutingPolicyChecked: fVqW0uB2QI6hIbGfCwL/0U/APNLZgnI0UhTHb8vg/rYXpYVXFdOkc4qBf+Bl5qBbya+OJuXk05EBET9U53YFd6/jdObpyDr30nsl3QrvBdqcP44pZyBv5w/e59wANZBwMTsqp3dVDi0vh2BNT2JAbHkvYJ+/kQEgqcC4x23DK9droXQOvERSRvPE3wIogHYifmQAUAPHsv61ljBfoX95ZmTOOgSwEbshqRSiMIwzVtayaiMHOHr4xClmMNHkvrUNmj1xwkbbhC9pUoHfhmPZeVb9BMYG9lBPk1Wzan47db4MXWZTzqmDAGhY94Z5/hZwym8yRmUSSdqi2aCVO4LetA==
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: IA3PR11MB8986.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 51d7fdf6-82d9-4df0-9da0-08de897c46b0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Mar 2026 08:06:38.7908
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: YQ/oO4E1I8QKtut3hbHGmfp4cKsxQhQt8nr/9J/rlPtmWnK/ZRdxTMTYnc5fu6Ftohq9M5W7GVVjDSXUTQMKYx6LvyxlakwDQBxo8SE4m5Y=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB8137
+X-OriginatorOrg: intel.com
 
-On Tue, Mar 24, 2026 at 3:02=E2=80=AFAM Andrew Morton <akpm@linux-foundatio=
-n.org> wrote:
->
-> On Sun, 22 Mar 2026 09:43:49 +0800 Pingfan Liu <piliu@redhat.com> wrote:
->
-> > Nowadays, UEFI PE bootable images are becoming increasingly popular
-> > among distributions. Currently, we have several kinds of image format
-> > parsers in user space (kexec-tools). However, this approach breaks the
-> > integrity protection of the images. To address this integrity protectio=
-n
-> > concern, several approaches have been proposed to resolve this issue,
-> > but none of them have been accepted upstream yet.
-> >
-> > The summary of those approaches:
-> >   -1. UEFI service emulator for UEFI stub
-> >   -2. PE format parser in kernel
-> >   -3. Signing the arm64/boot/Image
-> >
-> >
-> > For the first approach, I tried a purgatory-style emulator [1], but it
-> > encounters hardware scaling issues. For the second approach, both
-> > zboot-format [2] and UKI-format [3] parsers were rejected due to
-> > concerns that variant format parsers would bloat the kernel code.
-> > Additionally, for example in arm64, both UKI and zboot format parsers
-> > would need to be introduced and chained together to handle image
-> > loading. For the third approach, I attempted [4], but since zboot or UK=
-I
-> > images already have signatures, upstream maintainers dislike the
-> > additional signature on the Image. Moreover, for secure boot UKI, this
-> > method cannot use signatures to protect the initramfs.
-> >
-> >
-> > *** The approach in this series ***
-> >
-> > This series introduces an approach that allows image formats to be
-> > parsed by BPF programs.
->
-> AI review has a ton of questions:
->         https://sashiko.dev/#/patchset/20260322014402.8815-1-piliu@redhat=
-.com
->
-> Coverage is partial because some patches didn't apply.  Probably some
-> of these questions are legitimate, others will be false positives -
-> we're still figuring this out.
->
 
-Thank you, I will check them too.
 
-Best Regards,
+> -----Original Message-----
+> From: Intel-wired-lan <intel-wired-lan-bounces@osuosl.org> On Behalf
+> Of Matteo Croce
+> Sent: Monday, March 23, 2026 7:28 PM
+> To: Nguyen, Anthony L <anthony.l.nguyen@intel.com>; Kitszel,
+> Przemyslaw <przemyslaw.kitszel@intel.com>; Andrew Lunn
+> <andrew+netdev@lunn.ch>; David S. Miller <davem@davemloft.net>; Eric
+> Dumazet <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>; Paolo
+> Abeni <pabeni@redhat.com>; Alexei Starovoitov <ast@kernel.org>; Daniel
+> Borkmann <daniel@iogearbox.net>; Jesper Dangaard Brouer
+> <hawk@kernel.org>; John Fastabend <john.fastabend@gmail.com>; Mohsin
+> Bashir <mohsin.bashr@gmail.com>
+> Cc: netdev@vger.kernel.org; bpf@vger.kernel.org; intel-wired-
+> lan@lists.osuosl.org; linux-kernel@vger.kernel.org
+> Subject: [Intel-wired-lan] [PATCH net-next v4 1/2] e1000e: add basic
+> XDP support
+>=20
+> Add XDP support to the e1000e driver covering the actions defined by
+> NETDEV_XDP_ACT_BASIC: XDP_DROP, XDP_PASS, XDP_TX and XDP_ABORTED.
+>=20
+> Infrastructure:
+> - e1000_xdp_setup() / e1000_xdp() for program attach/detach with
+>   MTU validation and close/open cycle
+> - ndo_bpf support in net_device_ops
+> - xdp_rxq_info registration in setup/free_rx_resources
+>=20
+> Receive path:
+> - e1000_alloc_rx_buffers_xdp() for page-based Rx buffer allocation
+>   with XDP_PACKET_HEADROOM
+> - e1000_clean_rx_irq_xdp() as the XDP receive handler
+> - e1000_run_xdp() to execute the XDP program on received packets
+> - SKB building via napi_build_skb() for XDP_PASS with metadata,
+>   checksum offload and RSS hash support
+>=20
+> Transmit path:
+> - e1000_xdp_xmit_ring() to DMA-map and enqueue an XDP frame
+> - e1000_xdp_xmit_back() to convert an xdp_buff to a frame and send it
+> - e1000_finalize_xdp() to flush the TX ring after XDP processing
+> - TX completion via xdp_return_frame() with buffer type tracking
+>=20
+> Assisted-by: claude-opus-4-6
+> Signed-off-by: Matteo Croce <teknoraver@meta.com>
+> ---
+>  drivers/net/ethernet/intel/Kconfig         |   1 +
+>  drivers/net/ethernet/intel/e1000e/e1000.h  |  18 +-
+> drivers/net/ethernet/intel/e1000e/netdev.c | 533 ++++++++++++++++++++-
+>  3 files changed, 540 insertions(+), 12 deletions(-)
+>=20
+> diff --git a/drivers/net/ethernet/intel/Kconfig
+> b/drivers/net/ethernet/intel/Kconfig
+> index 288fa8ce53af..46e37cb68e70 100644
+> --- a/drivers/net/ethernet/intel/Kconfig
+> +++ b/drivers/net/ethernet/intel/Kconfig
+> @@ -63,6 +63,7 @@ config E1000E
+>  	depends on PCI && (!SPARC32 || BROKEN)
+>  	depends on PTP_1588_CLOCK_OPTIONAL
+>  	select CRC32
+> +	select PAGE_POOL
+>  	help
+>  	  This driver supports the PCI-Express Intel(R) PRO/1000
+> gigabit
+>  	  ethernet family of adapters. For PCI or PCI-X e1000 adapters,
+> diff --git a/drivers/net/ethernet/intel/e1000e/e1000.h
+> b/drivers/net/ethernet/intel/e1000e/e1000.h
+> index 63ebe00376f5..4c1175d4e5cb 100644
+> --- a/drivers/net/ethernet/intel/e1000e/e1000.h
+> +++ b/drivers/net/ethernet/intel/e1000e/e1000.h
+> @@ -19,10 +19,13 @@
+>  #include <linux/net_tstamp.h>
+>  #include <linux/ptp_clock_kernel.h>
+>  #include <linux/ptp_classify.h>
 
-Pingfan
+...
+
+> +/**
+> + * e1000_xdp_xmit_ring - transmit an XDP frame on the TX ring
+> + * @adapter: board private structure
+> + * @tx_ring: Tx descriptor ring
+> + * @xdpf: XDP frame to transmit
+> + *
+> + * Returns E1000_XDP_TX on success, E1000_XDP_CONSUMED on failure
+> **/
+> +static int e1000_xdp_xmit_ring(struct e1000_adapter *adapter,
+> +			       struct e1000_ring *tx_ring,
+> +			       struct xdp_frame *xdpf)
+> +{
+> +	struct e1000_buffer *buffer_info;
+> +	struct e1000_tx_desc *tx_desc;
+> +	dma_addr_t dma;
+> +	u16 i;
+> +
+> +	if (e1000_desc_unused(tx_ring) < 1)
+> +		return E1000_XDP_CONSUMED;
+> +
+> +	i =3D tx_ring->next_to_use;
+Unsynchronized read of next_to_use. ndo_start_xmit on another CPU can be
+reading+writing this same field RIGHT NOW under __netif_tx_lock, which we d=
+o NOT hold.
+Isn't it ?
+
+> +	buffer_info =3D &tx_ring->buffer_info[i];
+> +
+> +	dma =3D dma_map_single(&adapter->pdev->dev, xdpf->data, xdpf-
+> >len,
+> +			     DMA_TO_DEVICE);
+> +	if (dma_mapping_error(&adapter->pdev->dev, dma))
+> +		return E1000_XDP_CONSUMED;
+> +
+> +	buffer_info->xdpf =3D xdpf;
+> +	buffer_info->type =3D E1000_TX_BUF_XDP;
+> +	buffer_info->dma =3D dma;
+> +	buffer_info->length =3D xdpf->len;
+> +	buffer_info->time_stamp =3D jiffies;
+> +	buffer_info->next_to_watch =3D i;
+> +	buffer_info->segs =3D 1;
+> +	buffer_info->bytecount =3D xdpf->len;
+> +	buffer_info->mapped_as_page =3D 0;
+> +
+> +	tx_desc =3D E1000_TX_DESC(*tx_ring, i);
+> +	tx_desc->buffer_addr =3D cpu_to_le64(dma);
+Writing DMA descriptor that ndo_start_xmit may also be writing to
+at the same index - probably causes ring corruption
+
+> +	tx_desc->lower.data =3D cpu_to_le32(adapter->txd_cmd |
+> +					   E1000_TXD_CMD_IFCS |
+> +					   xdpf->len);
+> +	tx_desc->upper.data =3D 0;
+> +
+> +	i++;
+> +	if (i =3D=3D tx_ring->count)
+> +		i =3D 0;
+> +	tx_ring->next_to_use =3D i;
+Unsynchronized store - races with the identical write in e1000_xmit_frame.
+
+> +
+> +	return E1000_XDP_TX;
+> +}
+> +
+
+...
+
+>  	kfree(adapter->tx_ring);
+>  	kfree(adapter->rx_ring);
+>=20
+> --
+> 2.53.0
 
