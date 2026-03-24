@@ -1,90 +1,186 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C643A3EF0B6;
-	Tue, 24 Mar 2026 11:39:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC6F13DFC7B;
+	Tue, 24 Mar 2026 11:54:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774352381; cv=none; b=bWB8xXRFWQL0gInkQNXNRYrojvIHiX9wwKn+TZtTlgMGF1nQ6VISKF6YgfSM+63YIqsv6lUSFPhMjWhCLHcrMFVEzmoksCAW2Kn3WcLg8rQuBpUUOQ0Py956tEcQFQXBNV06/JJ97RIkiqZ7WgkoTzyvEbv3JFfVAGqCA7t6PU8=
+	t=1774353283; cv=none; b=ia0LF0xLmpiA5AaEag1oZzSpsWJYUW+SP0rNs4z46R8/pXbhpIWllkm11DwYn2aRQqWkOnqJQdwI482CvzTwryHQiqyPYboSrnmJ+JPhRliZ5UjFcLvt4gD1ZTyw1haujlenZXsMX0IQYvTvTEW7le5tVCsxzu5Husb43YckCpM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774352381; c=relaxed/simple;
-	bh=UknkrSuNDYtTn/8MeNcb6hXJiGQu0qdkPOIQvTQmQ2I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cY72cCSg/ES/VQQ98/cWlEbzZXAE3sQ0WAKV6G56P9h+fd7Y9pviS4TMD0yGTZm1JBIFAYSJeNJN2hv+xA3aU4mNXgzvx5LU7UAGrFgbcNZt+4X1v7sFMKKZjuhaOEV1In6xL4+ayzOVIn3pATBh2bV6KBjLny3869wtQMMCI4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=olXoGqqK; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="olXoGqqK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBDDDC2BCB2;
-	Tue, 24 Mar 2026 11:39:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774352381;
-	bh=UknkrSuNDYtTn/8MeNcb6hXJiGQu0qdkPOIQvTQmQ2I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=olXoGqqKINrHT9MBi6UPkYfU0ZKw58C6sHbsrU3gtf4636xlcN++qk0VzQMXWxDWR
-	 RjmJ6XKhs+g0WIzxddkigtIvUu+JTdZJmWQpVScLIGjGk0mgOeCa+oLzslnceDcKaG
-	 XXMNYxhQZ4u0C2UbNsSUt6nVjTWuayrXcjW28BiZtmw09XeLaoHQPh8+CSoYBV3J1F
-	 ceqOX7ceZiuusH8+vqKDrtdVJRVMM5uTfwyA3Yrf1xnC7RPx00LjSDTHzcok7q9KoA
-	 aKiz3rbo7ie/MbZ/8nW8jnV0gjc+LVYjGUP16XWI8MdzgJtY6FED24yR2nsYTR6sCz
-	 8YBc+94F/v0Rw==
-Date: Tue, 24 Mar 2026 07:39:39 -0400
-From: Sasha Levin <sashal@kernel.org>
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Petr Mladek <pmladek@suse.com>, Alexei Starovoitov <ast@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, David Gow <davidgow@google.com>,
-	Kees Cook <kees@kernel.org>, Greg KH <gregkh@linuxfoundation.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>, Helge Deller <deller@gmx.de>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Juergen Gross <jgross@suse.com>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Alexey Dobriyan <adobriyan@gmail.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Petr Pavlu <petr.pavlu@suse.com>, x86@kernel.org,
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-modules@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH 0/2] kallsyms: show typed function parameters in
- oops/WARN dumps
-Message-ID: <acJ3-2o0yxsFWwGJ@laps>
-References: <20260323164858.1939248-1-sashal@kernel.org>
- <acJR51EAjn-7EOPm@krava>
+	s=arc-20240116; t=1774353283; c=relaxed/simple;
+	bh=/OhEj+qBa2641IR0RX8OLbVcWBrncIqZi1dsC4Lgi94=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ct/llt1oDJU2hhG6mwWc9rsqFiRZ98WKQzRaTdOmeBGFutQflqoBecKyF8fBkyUprxAsJx0+eBSqgYsfFYK/29wvSmvyJ1L4AdvQ+t1361meymqFBpT1SDDo8n0N/EthVGQ2xg645vhGpZf39XYMTQkRKXCtm+OP6TpE8VGLfn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fg7jk6DgxzKHMgB;
+	Tue, 24 Mar 2026 19:54:02 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id E78E94056E;
+	Tue, 24 Mar 2026 19:54:39 +0800 (CST)
+Received: from k01.k01 (unknown [10.67.174.197])
+	by APP1 (Coremail) with SMTP id cCh0CgAXGdl7e8Jpv2M5CA--.508S7;
+	Tue, 24 Mar 2026 19:54:39 +0800 (CST)
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	=?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+	Shahab Vahedi <list+bpf@vahedi.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>,
+	Hengqi Chen <hengqi.chen@gmail.com>,
+	Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+	Paul Burton <paulburton@kernel.org>,
+	Hari Bathini <hbathini@linux.ibm.com>,
+	Christophe Leroy <chleroy@kernel.org>,
+	Naveen N Rao <naveen@kernel.org>,
+	Luke Nelson <luke.r.nels@gmail.com>,
+	Xi Wang <xi.wang@gmail.com>,
+	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Pu Lehui <pulehui@huawei.com>,
+	Ilya Leoshkevich <iii@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Wang YanQing <udknight@gmail.com>
+Subject: [PATCH bpf-next v10 5/5] bpf, arm64: Emit BTI for indirect jump target
+Date: Tue, 24 Mar 2026 20:20:52 +0800
+Message-ID: <20260324122052.342751-6-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260324122052.342751-1-xukuohai@huaweicloud.com>
+References: <20260324122052.342751-1-xukuohai@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <acJR51EAjn-7EOPm@krava>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:cCh0CgAXGdl7e8Jpv2M5CA--.508S7
+X-Coremail-Antispam: 1UD129KBjvJXoWxXrW8trW5XF45Cw1rWw4Uurg_yoW5uFWkpF
+	4DC3s0krWrGr4UWa1DXayDAFyakF4kGay3GFyFk3yIkrZIqFy5WF15KF12kFn3A3yrur1x
+	AayYkr17W34xJrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
+	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
+	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
+	AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
+	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
+	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF
+	7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
+	v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
+	vjxUI-eODUUUU
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On Tue, Mar 24, 2026 at 09:57:11AM +0100, Jiri Olsa wrote:
->On Mon, Mar 23, 2026 at 12:48:55PM -0400, Sasha Levin wrote:
->> Building on the lineinfo series, this adds typed function parameter
->
->hi,
->could you please specify the exact tree/commit and point to the
->series this patchset is based on?
+From: Xu Kuohai <xukuohai@huawei.com>
 
-Yup, sorry, I should have noted that. This series is based on Andrew Morton's
-mm-nonmm-unstable branch (git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-mm-nonmm-unstable) since he took the base lineinfo patches and these build on
-code adjacent to it.
+On CPUs that support BTI, the indirect jump selftest triggers a kernel
+panic because there is no BTI instructions at the indirect jump targets.
 
-There's no direct dependency between the two, but they touch the same parts of
-the code.
+Fix it by emitting a BTI instruction for each indirect jump target.
 
+For reference, below is a sample panic log.
+
+Internal error: Oops - BTI: 0000000036000003 [#1]  SMP
+...
+Call trace:
+ bpf_prog_2e5f1c71c13ac3e0_big_jump_table+0x54/0xf8 (P)
+ bpf_prog_run_pin_on_cpu+0x140/0x468
+ bpf_prog_test_run_syscall+0x280/0x3b8
+ bpf_prog_test_run+0x22c/0x2c0
+
+Fixes: f4a66cf1cb14 ("bpf: arm64: Add support for indirect jumps")
+Reviewed-by: Anton Protopopov <a.s.protopopov@gmail.com>
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+---
+ arch/arm64/net/bpf_jit_comp.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
+
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 7212ec89dfe3..aa5cd240cdda 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -1198,8 +1198,8 @@ static int add_exception_handler(const struct bpf_insn *insn,
+  * >0 - successfully JITed a 16-byte eBPF instruction.
+  * <0 - failed to JIT.
+  */
+-static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+-		      bool extra_pass)
++static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn *insn,
++		      struct jit_ctx *ctx, bool extra_pass)
+ {
+ 	const u8 code = insn->code;
+ 	u8 dst = bpf2a64[insn->dst_reg];
+@@ -1224,6 +1224,9 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 	int ret;
+ 	bool sign_extend;
+ 
++	if (bpf_insn_is_indirect_target(env, ctx->prog, i))
++		emit_bti(A64_BTI_J, ctx);
++
+ 	switch (code) {
+ 	/* dst = src */
+ 	case BPF_ALU | BPF_MOV | BPF_X:
+@@ -1899,7 +1902,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 	return 0;
+ }
+ 
+-static int build_body(struct jit_ctx *ctx, bool extra_pass)
++static int build_body(struct bpf_verifier_env *env, struct jit_ctx *ctx, bool extra_pass)
+ {
+ 	const struct bpf_prog *prog = ctx->prog;
+ 	int i;
+@@ -1918,7 +1921,7 @@ static int build_body(struct jit_ctx *ctx, bool extra_pass)
+ 		int ret;
+ 
+ 		ctx->offset[i] = ctx->idx;
+-		ret = build_insn(insn, ctx, extra_pass);
++		ret = build_insn(env, insn, ctx, extra_pass);
+ 		if (ret > 0) {
+ 			i++;
+ 			ctx->offset[i] = ctx->idx;
+@@ -2079,7 +2082,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 	if (build_prologue(&ctx, was_classic))
+ 		goto out_off;
+ 
+-	if (build_body(&ctx, extra_pass))
++	if (build_body(env, &ctx, extra_pass))
+ 		goto out_off;
+ 
+ 	ctx.epilogue_offset = ctx.idx;
+@@ -2127,7 +2130,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 	/* Dont write body instructions to memory for now */
+ 	ctx.write = false;
+ 
+-	if (build_body(&ctx, extra_pass))
++	if (build_body(env, &ctx, extra_pass))
+ 		goto out_free_hdr;
+ 
+ 	ctx.epilogue_offset = ctx.idx;
+@@ -2136,7 +2139,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 	ctx.write = true;
+ 
+ 	/* Pass 3: Adjust jump offset and write final image */
+-	if (build_body(&ctx, extra_pass) ||
++	if (build_body(env, &ctx, extra_pass) ||
+ 		WARN_ON_ONCE(ctx.idx != ctx.epilogue_offset))
+ 		goto out_free_hdr;
+ 
 -- 
-Thanks,
-Sasha
+2.47.3
+
