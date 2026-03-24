@@ -1,75 +1,44 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 743CE3A7588
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 06:20:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B54B4313534;
+	Tue, 24 Mar 2026 06:30:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774333235; cv=none; b=rY/jO0Vnp9z/THkpdo52PI2VHoSmNCW15SVFqHdjPfJA9XQZHEOviEw3PavNFP8P626LAS88wg6v28UKFqseEcx1huzhzrX68rvUtak7+39MTIp09Xt1ydhlG9ef4K5rZjsT7//Elum7z+s3CDEN7eSaMOUISdIZXgjiEknWka8=
+	t=1774333828; cv=none; b=EwFQVmB+er+YPV5tDFkcgYzpFh0CtVB35kGLncdjkc/a7QbYCHj1NJOqPXc780DMU3ilbc2Yn6SluOau+Npg1NDfbe74eRb+FnIkVf+4f1PEmDrljyXBl9itkY9aWIKx6U/SgYQWgOc+CrPWmOdXnB2NSLoVp++Tk7v+aRG9arg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774333235; c=relaxed/simple;
-	bh=7b1aDTSE0qRQSk30U9x92MpkGPkxm8eaUPvv8l2E0Gs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=V8ZiXlpYOods1OWjc87+QWUTLdhcojPwOy1An7JVYhL0XF+vmQ3fhHBJxFES5y0LasTg+RUzoL6+eM42OHg1/uhhJv3PKrW4XJPRJGCf3SRpU9oGvvy8mnyfaLZOJY5Tuh7+ns+T6xwVdKORuGLI+C8dh9LEfXxMG8Taa0y8Jrw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ets3LISb; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ets3LISb"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-35b97ed057cso2196082a91.1
-        for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 23:20:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774333234; x=1774938034; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8tWMba298e2gRxfQlq4zFMDhOWDqH8fZHMm6s7SJDP8=;
-        b=Ets3LISb6w9SkWBs9LfK8gUovSeJxWTJfXngB01ZklhV2wFXtQcZlWpwB4jElnsa4h
-         f3Y/2N9/FQZ05oEcsK5M7veGxekZiQPtJCwQjqd4s+WV+7LrO6tu7JD8aaz6egQZr/9e
-         B6t9b2A9hcNOOVGG/K1NfxacJH6r1flfF/IqfQxEovRRlSoqM9y58tIe37ugT7vXcA70
-         QfZsMW+hMO4noiJB9pb75DkKrQjt3ad9Tr9Vl8D4izT5X3zlGcgINp4wKGUFfcAirSAT
-         5la3G/x/DxZBDEiTjwPGzKsK5VA+yBgKzYv6priIX1kvj1CO6/o37txqibUVQu4kIwz/
-         DTaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774333234; x=1774938034;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8tWMba298e2gRxfQlq4zFMDhOWDqH8fZHMm6s7SJDP8=;
-        b=IKDVTzO57g6dU+TytoXOv27W2NJKklZeyPzCWkJiye+Rw/0ulvXih8d5Z1PVhKOQjs
-         FPLP9biBIitMqkXYg/quld1EKpdoYXC2gyXRjvropTGpNc95Tsm0tWlv8ze7oiD/dkzA
-         XsbcTJ1AvHa6EY61wctswzvIi/DjFTmfyM04G+HZXx75S4WC12YxAOtm5dXiF0xelsN3
-         VvzSiWD8OBUIj4UWn4/9DCEqDTeMQrMDm6/3K+zQyxdEcQr+RbwOSk36y0fdb3IdJ+2z
-         7rkKqIxH70tT7y7bSCKStCfY+PSR8MUFdpCbgEi4LASWTTBgMvolJppglpaH6GcoQGXs
-         OMDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXdPEF3qxtpUivVxTTQONzs+s4sN1RQzYnSaC8wOeFmsBocbPzuFU3xGIfmj17WF2+Rrvc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzzeebehg77UYyCAisXTmfZwBqIfqo8e6R68Sr4JRWnQvMgFnLm
-	hLsY+P+9zD+LW5rAfTM9bVHbHNedtCGB5Yq9WjILA7a+eC0oakXez1aW
-X-Gm-Gg: ATEYQzxIR5q/XoPmo+bb7Mce9UbiOsRdXIyj0yFsjkGQom6RzSSeUL6k4UgLlnNbBl5
-	iQpc+jNXLlASxbdShJg+dDSXU39BcweLyDv4HNqel/7dLxVRG3PmiJaA4rDW3gsfHWswFjN9nmD
-	ZvNDN2shXN+vVKrJMIk8VcN20ffZl6lJ5T6NtzAtALLJGaXNwn75zOSYjPwmY8jK89JU4aefD0V
-	6wQJsLvSgve62RHf1l1ipCwgpG7ax3oXSl7N3oK5l78TvZkZNw9gg2UTM0efHM+InaTxsKcpi6U
-	7WoibMdhu5jYW8wQUInn966rSN/kDWDGUtUov2CPNR7tMC7JeT0n/irsxAV6BVP2twUuA9q60P0
-	0yTfHZRJoPstscrQVfm52nchMqVxe8dSa4rzOuxIKv6rkFoo9J3d9nUfsKgPYoAK9YVH6WFl8X6
-	P3drLKK/bxII6OMjN7nT4DFhCApE/50rgc/O/BvX5Bt8Hj9uwgad0aPRSPwoX8spJ4r6+VGZyFD
-	k8C36DMK8EJAQ==
-X-Received: by 2002:a17:90b:5107:b0:34e:63c1:4a08 with SMTP id 98e67ed59e1d1-35bd2c98e30mr11242780a91.20.1774333233828;
-        Mon, 23 Mar 2026 23:20:33 -0700 (PDT)
-Received: from mi-HP-ProDesk-680-G6-PCI-Microtower-PC.mioffice.cn ([43.224.245.226])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35c0312f1cbsm1091367a91.4.2026.03.23.23.20.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Mar 2026 23:20:33 -0700 (PDT)
-From: zhidao su <soolaugust@gmail.com>
-X-Google-Original-From: zhidao su <suzhidao@xiaomi.com>
-To: Jonathan Corbet <corbet@lwn.net>,
-	workflows@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
+	s=arc-20240116; t=1774333828; c=relaxed/simple;
+	bh=xlN3ubk5aj6JoF2vHLdGiQLFRkP3ZYIcbsd2M7kf2to=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=r06SKhHLABB2lA4vdKw63Cwq/pReQcIXEH6/GbwqtvORr0uePKjlBpA5IgqkU7Yt8TrHgEhEzDyfi17ZE2UPolj1N4uVgpZCnYgbx9fncLi3gRtHVoKgUV1cXPg5T3n/S1H5dkdMy4U4V7MXBexgQ3i8j71OqFPt+e3E88Ve5Kg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=162.243.161.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
+Received: from zju.edu.cn (unknown [183.157.161.222])
+	by mtasvr (Coremail) with SMTP id _____wCHuexpL8Jpd7VMAA--.14579S3;
+	Tue, 24 Mar 2026 14:30:02 +0800 (CST)
+Received: from localhost.localdomain (unknown [183.157.161.222])
+	by mail-app2 (Coremail) with SMTP id zC_KCgDXR81nL8Jpt5gbAA--.3608S2;
+	Tue, 24 Mar 2026 14:30:00 +0800 (CST)
+From: Tianci Cao <ziye@zju.edu.cn>
+To: alexei.starovoitov@gmail.com
+Cc: andrii@kernel.org,
+	ast@kernel.org,
 	bpf@vger.kernel.org,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	zhidao su <suzhidao@xiaomi.com>
-Subject: [PATCH] docs: Document pahole v1.26 requirement for KF_IMPLICIT_ARGS kfuncs
-Date: Tue, 24 Mar 2026 14:20:28 +0800
-Message-ID: <20260324062028.2479059-1-suzhidao@xiaomi.com>
-X-Mailer: git-send-email 2.43.0
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	haoluo@google.com,
+	john.fastabend@gmail.com,
+	jolsa@kernel.org,
+	kpsingh@kernel.org,
+	linux-kernel@vger.kernel.org,
+	Yazhou Tang <tangyazhou518@outlook.com>,
+	Shenghao Yuan <shenghaoyuan0928@163.com>,
+	Tianci Cao <ziye@zju.edu.cn>
+Subject: Re: [PATCH bpf-next] bpf: Drop redundant CONT_JMP alias
+Date: Tue, 24 Mar 2026 14:29:57 +0800
+Message-Id: <20260324062957.2850-1-ziye@zju.edu.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <CAADnVQKgyDkH1xcrQTD2RgTz5k+NAwxbmXFnJEPosvCZH6J5NQ@mail.gmail.com>
+References: <CAADnVQKgyDkH1xcrQTD2RgTz5k+NAwxbmXFnJEPosvCZH6J5NQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -77,41 +46,39 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zC_KCgDXR81nL8Jpt5gbAA--.3608S2
+X-CM-SenderInfo: qtstiiaquyiko62m3hxhgxhubq/
+X-CM-DELIVERINFO: =?B?iZE8OAXKKxbFmtjJiESix3B1w3tzYfmPt4q7bPP17nv9Zvsme7sPvU0377+RBBKdO8
+	083gQkFDeLwlqL5lzEaRMYLHIL35aHLg90bYIEk44IbKOzsnRPZf0sjEpCD9KVvWslA0Mc
+	MclT0gJz5rPLUp4piIzN5RPxYw6l01w8CbPzC/8w
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+	ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+	BjDU0xBIdaVrnRJUUU9Eb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26c
+	xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+	j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxV
+	AFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x02
+	67AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+	0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280
+	aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0Y48Icx
+	kI7VAKI48G6xCjnVAKz4kxM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI7VAKI48J
+	MxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
+	AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
+	0xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4
+	v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AK
+	xVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU801v3UUUUU==
 
-Since Linux 7.0, kfuncs annotated with KF_IMPLICIT_ARGS require pahole
-v1.26 or later. Without it, such kfuncs have incorrect BTF prototypes in
-vmlinux, causing BPF programs to fail with 'func_proto incompatible with
-vmlinux' error.
+On Mon, Mar 23, 2026 at 08:22:52AM -0700, Alexei Starovoitov wrote:
+> It was like this for years and can stay as-is for historical reasons.
 
-This affects all sched_ext kfuncs (e.g. scx_bpf_create_dsq,
-scx_bpf_dispatch) and other KF_IMPLICIT_ARGS kfuncs across the kernel.
-Ubuntu 24.04 LTS ships pahole v1.25 by default, causing 23/30 sched_ext
-selftests to fail on affected systems.
+Thanks for the review and the explanation.
+I understand. I'll leave it as-is and keep this in mind for future cleanup patches.
 
-Document this requirement in Documentation/process/changes.rst so users
-understand the failure mode and can upgrade pahole appropriately.
+Thanks,
+Tianci
 
-Signed-off-by: zhidao su <suzhidao@xiaomi.com>
----
- Documentation/process/changes.rst | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
-index 6b373e193548..141a4576c24d 100644
---- a/Documentation/process/changes.rst
-+++ b/Documentation/process/changes.rst
-@@ -145,6 +145,11 @@ Since Linux 5.2, if CONFIG_DEBUG_INFO_BTF is selected, the build system
- generates BTF (BPF Type Format) from DWARF in vmlinux, a bit later from kernel
- modules as well.  This requires pahole v1.22 or later.
- 
-+Since Linux 7.0, kfuncs annotated with KF_IMPLICIT_ARGS require pahole v1.26
-+or later.  Without it, such kfuncs will have incorrect BTF prototypes in
-+vmlinux, causing BPF programs to fail to load with a "func_proto incompatible
-+with vmlinux" error.  Many sched_ext kfuncs are affected.
-+
- It is found in the 'dwarves' or 'pahole' distro packages or from
- https://fedorapeople.org/~acme/dwarves/.
- 
--- 
-2.43.0
+Co-developed-by: Yazhou Tang <tangyazhou518@outlook.com>
+Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
+Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
+Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
+Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
 
