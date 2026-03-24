@@ -1,93 +1,92 @@
-Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
+Received: from mail-wr1-f66.google.com (mail-wr1-f66.google.com [209.85.221.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E1C9156677
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 01:44:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CBC337BE7A
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 01:47:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.66
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774316660; cv=pass; b=mAwWG5WUMHAhslkq3ffL7DnKo2JOn2/rGJzliaV+lPkU+oDTVydm36wdmv3EnsXEPmDyPvgWi/873UYQvNYdjQ3OA/5gvBS8ZxI3WxXmr3JH723MoacKnjLCEgCheix9q2XTWs6Cta6dbsTEoRVAnw2f0PefQWzP/RJaNA9dZVM=
+	t=1774316851; cv=pass; b=RggZCPGTUFdsiOgE6o1PYftZSYXXaNXK4qxw0vOw8cbvRaQWJCgRFoMVjOEAsP1DMCKVQ25wp95oW/K0GeE1POYDcGDUtlR2h0SJJTo9cw1ZNnZy2MnBhJ9yZClpH7CRtPJnshQCyBPNJhHVndkPU/lpdG/GwAX62EPylc2LvcU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774316660; c=relaxed/simple;
-	bh=eN9OIG5xOOm08psjunbqUmZwhSjm3/YrUhUY73RH+vg=;
+	s=arc-20240116; t=1774316851; c=relaxed/simple;
+	bh=MUfi36ea7f/nz/pbaSwAf4o+ALXT/+r3vcfoR6Zt4jk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XyY6h5S/zAOOdKIEly5+WjTe5zjtxVemV2aPFWx6dBr4XA+HtA5gCu6t2Zaz3/cbrONOWrnvOTvT/vKvyp4gUnK73Z4pXKRmob3EXQzZMMlvVVhOjpJ8704UIQBH9tGU5s798WIFQS4Yx6lDSxGF3os6drg9CB/0vbDLplRfE18=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jPb4eVII; arc=pass smtp.client-ip=209.85.128.65
+	 To:Cc:Content-Type; b=Dnd7EkvOx4jLfTthaS5m/rzm5Y3rT/Jlo6OqbWJBPWoONjWlL8KmIKzMkhdPujihg2VF2QjEkIpZM5DVRAxZcz93rHvQWWDjvGqRC2913S3p2JwHhjoIzs35LHMbyXm65SMWhxLsWL/lhW60OQv999zoPK+1PILzeD9u+fCY9/8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R2Ra53+w; arc=pass smtp.client-ip=209.85.221.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jPb4eVII"
-Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-486fb14227cso6893105e9.3
-        for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 18:44:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774316658; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R2Ra53+w"
+Received: by mail-wr1-f66.google.com with SMTP id ffacd0b85a97d-43b3d9d0695so4390890f8f.0
+        for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 18:47:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774316847; cv=none;
         d=google.com; s=arc-20240605;
-        b=OEcyzYD6Pg66PVKrwBTggL/OUL06uqebIiCFpdfZKJtnsxBRVI1hFXDHgq165A9XV8
-         XQJUY+H242n1OoInvD7YKLaLeS+o2TwFV49Q5T+J6h4fqVFb7r0+dcY7DGr8UCUHUFPj
-         kMJX1Du00FO7KEH+I3iERdmq8EmNOgTqqM8e/aqv9xLK+cKdfl0v/7zFLnmkOeatbG1n
-         wRuVSgkQhH4fe1+ob65KUCfR8UfHN4dC3lUo1HW/qcOU5jaYV1l5umlI/B6FLTp7jFwN
-         4/X9GCfi8fNh7+Zc3xz405RNWOzvkiArLeN5p+v36GIBAzOFhuFacIIh9pM+4OOC3OUE
-         +3aA==
+        b=fbJOkw0V/k2E3C5w1va/pta9PMS3nWXzHJYb0xykouu4u7t8ltPcBQb8P9JvfQt5qY
+         UvwTZ33+1hzbhtXBh741h/kTBvc5aE2SpftzNHWy4u2qvsiLEPj1iaykqPdIahdI2oh6
+         LtZ2mgK28/7v8qm8J0Acoo+sgJ2xLiu/fX07nwxJKmu0irO+NkLdqpmQjxeFYBCDEFbD
+         jvmWwaJ5LlsdkkmkdCKb0h+2HmIhpMEEE6BW2rcQ8ZNyl2UvcWFUo9K35Cjz8RVHzLqZ
+         0yxtfWZVl0CFtA742V8GbD9xj540YM8L/UDlOpEhzG5KSRffLk3NTLbD4qjSqqu5NB66
+         rCYg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:dkim-signature;
-        bh=oA/BMSG0lIaU8QmGTi1RddZfsLsTkE9mU/q8AbqzqiU=;
-        fh=pxJILhuw7TlKR8v2p4AeVXsDLtnNbwuge3SG6KduBhs=;
-        b=devMCIPod0gAZM9lkbKPCC2vH1IMS+x+ti6Y3DaVXNXBg/y3uF6dBmiqmBprMoELE/
-         Zu8NyEUpVoKVJP4tkh4OFaUmCwUyg66wZakdFVVE7xvzUm31MoQuvBkGDcXDY3aDGiRi
-         5LtFy6/PQjQvHjjDCziZKokhaZ36vZ/F4x28/pWnjItsGozAHa7NpTry71MODR1BNj89
-         ww1y72RNQdG9HB5SoHU/fE+56janbwl4vHxGTeUOrUAjn8r8STgQoCiyW3Fbs5n3NmPU
-         VTIyZV6ljKampNdEcd5bqLKPbqMcdxWk0nQ72e26qtn6nctc8YyEUtb+xxd3in6+jNw8
-         +rKQ==;
+        bh=E05DQ8tPZZh1ybJbqcTlYE6PvwcKKcHXiXsgT1UEl+w=;
+        fh=m2y03ENBI/Gd3hAXQJce4PGJWoE3OjpWevADckSQoBM=;
+        b=VuwlepCdTgDws9SQfKvedoLpfe6KevDuy6/HMFrHcAH1gvQx+YMyUZTwMumG+BcywU
+         yxwgcj2b1a78LH68ZazdCG96KPw1PIzOcjRESnbh2OnnmOKcz8A7C0jfMsUuc6d9MN5w
+         0Kj5OFxhSk/DbPkyxRU/lcrSsd5o4bB56domNNy6UjFE8R9zSCWOJ48Stb9ptlfEckJb
+         ca2JZSPy4BZaV3fWdeN8V4qwC677D8+ME9h+NAReF92na7k+XgyYL8Z8r42FPmNywqdM
+         XBEt+WY4xLrCPkyO825fiEMZtoy0HvgbsjcnODKtHq+CsCAhGdhIA5lra8oxonWrFNrY
+         AHqA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774316658; x=1774921458; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774316847; x=1774921647; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=oA/BMSG0lIaU8QmGTi1RddZfsLsTkE9mU/q8AbqzqiU=;
-        b=jPb4eVIIHRjE9jzQDGBueykIWAA9HXpF4HGgKP2q1MMiPx7xyajGSko3S+C8DucWls
-         RqW3SYLm0yE3Gyrzx9Qw3ert3hXL6JE7KpWpFmxONN5ojo/46Dpg4aGbRGHDZpgxk00C
-         YutgLpox23Nxm9XuRP/cmF9PIt7sBekAEuX6IbgBOsZX4sO2em8TX6bhKkivkg+evviR
-         m2lKnrJm+7d6GXvn3Ry4bs6pF3NjxYNg1JXaKIZiwTE9Jdaz4ayQKMhOck2dO+40Bwei
-         bZ+0iqW/mNgXU0sBKOI4Gqc4dy69+pOORiWiaoTg+PB5yVX56r097PjAdoI64zMquA9E
-         aXZg==
+        bh=E05DQ8tPZZh1ybJbqcTlYE6PvwcKKcHXiXsgT1UEl+w=;
+        b=R2Ra53+wTqe4fKM0YowcYvj30AagsiIUCnlyrF/Byb9Z7ZfYIYs1cOyvsTQT9KtaBe
+         F29JEmIo0dGfEC7ePCHm+PQ4vd5ldCNJcs83CyZxvRRNHOjFUDm6mNIEG+kGrPN80ZYo
+         H6JKZBXZhk9U7DUdGSNIZmEAu3gRAItOfACzkPfXwh6U9SAWZMeYejoOrM0cfSAyALfD
+         vKbkSp9hkqQfn7X6YRR2++cVG88E2eotlNTmD+owYMGDwBl0aoXfDhomZZUjGgsOPoew
+         s/B/SeMJL12hyK31kgSqu8WBOjnMmZl+zIDXL5f1gLFgdwX0Dr0xhVWDH4PqAo8nSRrT
+         5nyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774316658; x=1774921458;
+        d=1e100.net; s=20251104; t=1774316847; x=1774921647;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oA/BMSG0lIaU8QmGTi1RddZfsLsTkE9mU/q8AbqzqiU=;
-        b=okZeNjE3n6uwfx15V2uL5of7NVIK8P5uRdWJls4jR/cHC8jXioBvWPCCwh+9DZ8Aqi
-         WbUbZRpk5OAqdq+DlRjE6c9PXRanLQd3/yNwXEtb0q/Cgdaiqa1wTwJQOhN8EU9M6JyP
-         rpbgrwanu59QMpjwE3ZFnnnY6E4z5J7lNEby8tu0W5ZlAUR3OKWHqV2T7q8T43QWjayY
-         5Ga+DQC1dxhdaa77lFSNyDfSmFMu3tzbQAT3ujPp9UvXTGFTDXU1euDkmFOdctKG2rnu
-         VwN1+uUbzX2h9yDSzLuEMKX58cuJtr671R+erbqdnFlFxrXYjmoEJbv5QYkprq+d1k0s
-         8XfA==
-X-Forwarded-Encrypted: i=1; AJvYcCUxiU29g1tcYLv5jwWwuFoAKJvEx4uwUfjBHFqBtgowAgcAQA/0h7bRMQg59Vt2jJCs5Fg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy8VUECVFd5O2T2w9LQT8N5enBBztPjUJQRzl5v04V6qM3zVBBT
-	y82T/fT1/mJtU2xitZW+6EpGDW19UOFclh9Eoj+Y2nOwoxNHvELrQV8y/ArGsMfgk/mIEXDBQaH
-	BWI83uUQw90AiAkldz1ko5aHJjHnHVKE=
-X-Gm-Gg: ATEYQzzfNYQGZqnONvhXJoks1/6Osj36kynQUeLHQOeAykLt8acPKtNLpy5/EnyURaf
-	/Rz85SLLY1+4oDwiqRFljduVfkmB/TlmQ5Fmzlv40am29Cyl3/hnVSsAvZR90395XJ363guNJgk
-	TqDLuY2MTd9OBVynuNSla15ExOaVmkw68yD6cNGRCzI8722u819vVSDOhVOZJEMKlCGfre/RXuj
-	lvijKjgv59dfwxG4lbvVQOXvIaXeSJU5q95xmLphiMPLC6iswZ/5EvuQiYu07TjqkotktauJ+vS
-	6sQu2QWp0l2VNUBThS9OBvsZzlCTOOhkZCBkqJc5UKDSV51q+NY9GlWGRzU=
-X-Received: by 2002:a05:600c:3554:b0:485:3ee1:eba5 with SMTP id
- 5b1f17b1804b1-486ff01cc5bmr205204065e9.27.1774316657635; Mon, 23 Mar 2026
- 18:44:17 -0700 (PDT)
+        bh=E05DQ8tPZZh1ybJbqcTlYE6PvwcKKcHXiXsgT1UEl+w=;
+        b=ToST6jMGdnYPEdIIZPG9Ejm4L8YM3slzduCnyGQofyfKlZKV6/eA39BduClTZxSX2S
+         dsSGBirX6c1qQoxkh1Zj2ll4kidTqIxD1sV/pepxnF6g+3Zj8jb7t8FAPZqYN+mIypla
+         5OyhLg2yLgVtqZvEzBDnVP47ecwAps2bC39Fl0WO6EyleywIsupSzTBkYaHJLi5UQ4/T
+         nEScTwH+zLi1hb8qFm1Wib0cBb+Cq6XWnX9ITWqiux4/LqSuKS0erB9VQkxUe6uWH8Pv
+         E1sShUUcmKUbqKNmZfs5oaCciCYWkPQ8ruy4UR0JWfBHzXfRntfAJubjswvnpyLIGC9L
+         PvoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXxYLLimYCH58PNfKESXG19UkY4VfgScoYPT9MuUPZO3KYs8bSBZznancsarkRI3D8Ns4E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwY8iA4EtvPUd6Cka4y5dGx00RRrfjqbtp2zvgAlj13L262ZZJ8
+	vVHtr1KRFXFfGr68QYV0IrMGYpYKcrK5inFOwmTHTA7WzDql2n294XVRYMpLZubQmFZ6/V5lFAj
+	ffLvHo+kneco9IxxfOVR5V5htWfVjgZk=
+X-Gm-Gg: ATEYQzyU1CVDWqYr1xTe2bwvE8pAsuv1iSjz/EDGemoU9+hisrevgyFDS6iFNK1wqFm
+	glAjT9Mq9MByrVGflTf9hzFcddpuiTAj2lH+DUcerxO8r8PxZcug//PJrpit+h+ho2zCl4eoNRu
+	mtMflWJ/cSS+KJmhSnpd0yMf/TxjlT1FiqDJijLfGEyCgAXr4MyqtYKGOgAgbXaKFjZVq/NU9iD
+	MhwLRyJrm+ZSpzGt/VLD9nKM1UWvZhuHsZ2b/d5xU96nhVNuOgLTK3+A21jWlxL/xL1/T4DFs57
+	ADMa9wbMuTCzqwNnMRqB900xYA/j9LojZ52f42pQIul8yNmTo3PNMq6FN/Y=
+X-Received: by 2002:a05:6000:5c8:b0:43b:4951:6b37 with SMTP id
+ ffacd0b85a97d-43b80592328mr2021634f8f.15.1774316846771; Mon, 23 Mar 2026
+ 18:47:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260316013651.3225328-1-ankur.a.arora@oracle.com> <20260316013651.3225328-10-ankur.a.arora@oracle.com>
-In-Reply-To: <20260316013651.3225328-10-ankur.a.arora@oracle.com>
+References: <20260316013651.3225328-1-ankur.a.arora@oracle.com> <20260316013651.3225328-11-ankur.a.arora@oracle.com>
+In-Reply-To: <20260316013651.3225328-11-ankur.a.arora@oracle.com>
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Tue, 24 Mar 2026 02:43:41 +0100
-X-Gm-Features: AQROBzB_vyabm8gMFgwrt-FFA5yFnsEMVMsPubU3mf_XijBG48EgQr58mCqMhFo
-Message-ID: <CAP01T76iJAtfovOAhm+9-QwtbVJRbiQgUPWLBZZXYFozLFK=uw@mail.gmail.com>
-Subject: Re: [PATCH v10 09/12] bpf/rqspinlock: switch check_timeout() to a
- clock interface
+Date: Tue, 24 Mar 2026 02:46:50 +0100
+X-Gm-Features: AQROBzDT8zHTe-cnXwc3ToHi1r8Z06VC2JgJudU67Ap-gCTlXPytLAmMbqYbD7w
+Message-ID: <CAP01T77qL1SF_-FFjbT4wJaYAe8g3XRNO0pyPs9c54qdcN5MGQ@mail.gmail.com>
+Subject: Re: [PATCH v10 10/12] bpf/rqspinlock: Use smp_cond_load_acquire_timeout()
 To: Ankur Arora <ankur.a.arora@oracle.com>
 Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
 	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, 
@@ -102,25 +101,53 @@ Content-Type: text/plain; charset="UTF-8"
 
 On Mon, 16 Mar 2026 at 02:37, Ankur Arora <ankur.a.arora@oracle.com> wrote:
 >
-> check_timeout() gets the current time value and depending on how
-> much time has passed, checks for deadlock or times out, returning 0
-> or -errno on deadlock or timeout.
+> Switch out the conditional load interfaces used by rqspinlock
+> to smp_cond_read_acquire_timeout() and its wrapper,
+> atomic_cond_read_acquire_timeout().
 >
-> Switch this out to a clock style interface, where it functions as a
-> clock in the "lock-domain", returning the current time until a
-> deadlock or timeout occurs. Once a deadlock or timeout has occurred,
-> it stops functioning as a clock and returns error.
+> Both these handle the timeout and amortize as needed, so use the
+> non-amortized RES_CHECK_TIMEOUT.
 >
-> Also adjust the RES_CHECK_TIMEOUT macro to discard the clock value
-> when updating the explicit return status.
+> RES_CHECK_TIMEOUT does double duty here -- presenting the current
+> clock value, the timeout/deadlock error from clock_deadlock() to
+> the cond-load and, returning the error value via ret.
+>
+> For correctness, we need to ensure that the error case of the
+> cond-load interface always agrees with that in clock_deadlock().
+>
+> For the most part, this is fine because there's no independent clock,
+> or double reads from the clock in cond-load -- either of which could
+> lead to its internal state going out of sync from that of
+> clock_deadlock().
+>
+> There is, however, an edge case where clock_deadlock() checks for:
+>
+>         if (time > ts->timeout_end)
+>                 return -ETIMEDOUT;
+>
+> while smp_cond_load_acquire_timeout() checks for:
+>
+>         __time_now = (time_expr_ns);
+>         if (__time_now <= 0 || __time_now >= __time_end) {
+>                 VAL = READ_ONCE(*__PTR);
+>                 break;
+>         }
+>
+> This runs into a problem when (__time_now == __time_end) since
+> clock_deadlock() does not treat it as a timeout condition but
+> the second clause in the conditional above does.
+> So, add an equality check in clock_deadlock().
+>
+> Finally, redefine SMP_TIMEOUT_POLL_COUNT to be 16k to be similar to
+> the spin-count used in the amortized version. We only do this for
+> non-arm64 as that uses a waiting implementation.
 >
 > Cc: bpf@vger.kernel.org
 > Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 > Cc: Alexei Starovoitov <ast@kernel.org>
 > Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
-> --
+> ---
 
 Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
->  [...]
->
+> [...]
