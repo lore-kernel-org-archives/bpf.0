@@ -1,162 +1,180 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 388F13D5258;
-	Tue, 24 Mar 2026 17:36:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36FF8408221;
+	Tue, 24 Mar 2026 17:45:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774373772; cv=none; b=XbKVOSlPdwfn/4IxZBGBnv3DKPbm9cu8k6JDugeemutHOcU5W/wbwXU4CasIzPkp4/vTfldaxndaKp+Fl/+cKdePL4tWO91QkoUUfW++kmLYDBP/YM78ZJo+kf8/8gW368LyMRf1cz6fq6fKxQcS55qttANPY4h9Jft0x2u4K/8=
+	t=1774374317; cv=none; b=cOQF2mES3UBwWSvdWXQ3nXWKi4ErM2IIl+HYbRGXeSsBUrI8BjkBMuVxZY2FdCJA4X9VRp1xmfZZshJtg9fErEzgsj1IqHaS4skg3QdvdE8vyOaccmtlotyptNk+iGvgSrw9k/upV/4RUzmasGlfSo8z77+iL6jQ/Jp0xcp7WLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774373772; c=relaxed/simple;
-	bh=V0ZecmU2AMKGKl2aDUn7f5w7I0jXyQ7cAYdWe2OxXNY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FF8gPBbDx+GEgB/nExynWhYp28O5USSp4dXW59b86br/ZxTsJ9I6NYjLUUvT1Mk555dQ61bFM5dnyjCU6uyGn008wgrejiqNwr3k3CpJZIdqkUib1qFebknmjUn0dLCVs6xBy/4cT9pyC38ZSQJk2XtidEwjiQIpxUMIw1zKjLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eqD+XJ73; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774374317; c=relaxed/simple;
+	bh=7lx5RQgAu8tuCa5/y0LmMXgKvily/v6Qd02zsj0mNNg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=I080j7TBtLwwTgq55S9pP0x9jxyEK4HyjszTTgHZpTuQLWZkvxvCR45cxUGtuoUeTMj7NNld/rBTdosRdFdAeo3oqIFoiKIxP5vSXCfLXK3+V0WcXSfOifzTuEtbWV7egCwjfG/g8Zr5lSwEsScx0IWmQh8LsNqcAqS8LCVyRHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=i7CZXbjk; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eqD+XJ73"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BEC4C19424;
-	Tue, 24 Mar 2026 17:36:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774373771;
-	bh=V0ZecmU2AMKGKl2aDUn7f5w7I0jXyQ7cAYdWe2OxXNY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eqD+XJ73xB8JtsFAPyFuDvX555CWAdod90jitRAdKE7OnWuHYupTqc4wbCLmgFMwf
-	 +ColFY7MorE4jl30Mv8pu4bEK21R+tEDnDMknh3xts21hPBUvaKFYMaWUJYHqWb/gv
-	 kySyQ10tEl006wZ8lItQYsZLPbfj2fCgMF+YaH9E0pSQQrPshdMsbwjqyWJGlKQgCS
-	 Oxo9B/OwjpivSdZITZOZjEbruO52crB4gzEj4g0a9n/gv8FUInVdk40pT6zI7ezAsI
-	 VOjg+e2xdzmHiZri7kQJq1rooVW8nOQRbbIQQVJauG4KTxf2alJPmcJHwLVUcyd6Uc
-	 mAF/ftZUpWEgA==
-Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 53E46F4006C;
-	Tue, 24 Mar 2026 13:36:10 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-03.internal (MEProxy); Tue, 24 Mar 2026 13:36:10 -0400
-X-ME-Sender: <xms:isvCaWDBsB9cusrSLVkCvA6toFQ8-IU_e1bdQuKFMR-ElZGKXR2L3g>
-    <xme:isvCaSAyYJOWQeLR6yziveMgCZ0hHLcsYMBDBFleguimalVq3ahroe3kPIgw1A9_n
-    rPtEgC2ssnmOc1MHUblP0aH5MsUJ_2APh7Oy8hF-gixAybzXw_EULk>
-X-ME-Received: <xmr:isvCaXPwI0XbT06JZ1gzHPvyNIZaM0yvf4Bswk6xy_-9AhnEfttHIfylZIx1H54cfthoiPj767WU_s21kgNrAhK9Bp7sfTIQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefvddvvddtucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpeeuohhquhhn
-    ucfhvghnghcuoegsohhquhhnsehkvghrnhgvlhdrohhrgheqnecuggftrfgrthhtvghrnh
-    epteelkeejledtledtvefhhedtfeeghfeuhfeljeevffelgeeltefhieefvdeuteehnecu
-    ffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshho
-    nhgrlhhithihqdduieejtdelkeegjeduqddujeejkeehheehvddqsghoqhhunheppehkvg
-    hrnhgvlhdrohhrghesfhhigihmvgdrnhgrmhgvpdhnsggprhgtphhtthhopedukedpmhho
-    uggvpehsmhhtphhouhhtpdhrtghpthhtoheprghlvgigvghirdhsthgrrhhovhhoihhtoh
-    hvsehgmhgrihhlrdgtohhmpdhrtghpthhtohepfhhrvgguvghrihgtsehkvghrnhgvlhdr
-    ohhrghdprhgtphhtthhopehjohgvlhgrghhnvghlfhesnhhvihguihgrrdgtohhmpdhrtg
-    hpthhtohepphgruhhlmhgtkheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgvmhig
-    ohhrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepsghighgvrghshieslhhinhhuthhroh
-    hnihigrdguvgdprhgtphhtthhopehnvggvrhgrjhdrihhithhruddtsehgmhgrihhlrdgt
-    ohhmpdhrtghpthhtohepuhhrvgiikhhisehgmhgrihhlrdgtohhmpdhrtghpthhtohepsg
-    hoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhm
-X-ME-Proxy: <xmx:isvCacNlGCs6Ztfvn0dw6df8MLVbVKITUDIyJ5rGY17U3-xL-Vf-3w>
-    <xmx:isvCabshvcuPrvyrdLT3KaCRoND_bwUP0WSvNK78h-z01Qno8uMCYw>
-    <xmx:isvCaR9-2Dj2RqErkLWg0j5zkspnW1Gujgdgbmu_nwd1nvgisik82Q>
-    <xmx:isvCaXEkLD4TME-kg2ab2JHf_Yv9aXAINfz5nNFZ8qDYxyxJRCR03w>
-    <xmx:isvCaYTJa1NzPHCFU1PBQlYKiFw_n4sFQ_09T37qbFZwGj_BMOH0kt5_>
-Feedback-ID: i8dbe485b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 24 Mar 2026 13:36:09 -0400 (EDT)
-Date: Tue, 24 Mar 2026 10:36:08 -0700
-From: Boqun Feng <boqun@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Frederic Weisbecker <frederic@kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Neeraj upadhyay <neeraj.iitr10@gmail.com>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, rcu@vger.kernel.org,
-	Tejun Heo <tj@kernel.org>, bpf <bpf@vger.kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrea Righi <arighi@nvidia.com>, Zqiang <qiang.zhang@linux.dev>
-Subject: Re: [PATCH v2] rcu: Use an intermediate irq_work to start
- process_srcu()
-Message-ID: <acLLiKc5Ax586EuO@tardis.local>
-References: <ab2yd35rm6OgZUmb@gpd4>
- <20260320222916.19987-1-boqun@kernel.org>
- <acJ1HRXomQhbTN4_@localhost.localdomain>
- <CAADnVQKcQNAGOeyt6SOAss0EK4k3A6jYp7-FvgpS0waO6pv-UA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="i7CZXbjk"
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62OCCIpq1022567;
+	Tue, 24 Mar 2026 17:44:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=mlJGl
+	TC/TiGAhOdLcvKPcmF12d02ePjIk6H4VEHMkrk=; b=i7CZXbjkovXRiqF5KU5Zv
+	0JCorGllHsAIUgoJHJXZAUQBOM0t84lmv5B9eA+jWUCfJ4U6+ys2Kog6CwL84KfY
+	i4ZiP/VK36smFzIV4XbbgbqVHIABBEP4wsa509SGHZZNjNcHZLGgOBHTuMozcdNm
+	rSA+9o5vShznALwLApCaGrBYbN1g19zyk2hRsJJmHS1HJqgmG1YcXkBwNCTTrlFU
+	ILS5cxfrdWbMFDe92g0zOicHWzH3+JeZLhBGX2450kBJ4Jsh1mPLWiJcFwfz+k7k
+	EWD3F3KCyGax2fhF6hDVE3BA9TGfZa14FAMVYEVBPyXwMaZT7LxxGfutuwuwkW30
+	Q==
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4d1kfpmr20-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 24 Mar 2026 17:44:56 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 62OG3MlY038879;
+	Tue, 24 Mar 2026 17:44:56 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4d1hsac72m-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 24 Mar 2026 17:44:55 +0000
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 62OHirgk035539;
+	Tue, 24 Mar 2026 17:44:55 GMT
+Received: from bpf.uk.oracle.com (dhcp-10-154-54-179.vpn.oracle.com [10.154.54.179])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4d1hsac706-2;
+	Tue, 24 Mar 2026 17:44:55 +0000
+From: Alan Maguire <alan.maguire@oracle.com>
+To: andrii@kernel.org, ast@kernel.org
+Cc: daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
+        song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+        qmo@kernel.org, ihor.solodrai@linux.dev, mykyta.yatsenko5@gmail.com,
+        dwarves@vger.kernel.org, bpf@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v15 bpf-next 1/9] btf: Add BTF kind layout encoding to UAPI
+Date: Tue, 24 Mar 2026 17:44:42 +0000
+Message-ID: <20260324174450.1570809-2-alan.maguire@oracle.com>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20260324174450.1570809-1-alan.maguire@oracle.com>
+References: <20260324174450.1570809-1-alan.maguire@oracle.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQKcQNAGOeyt6SOAss0EK4k3A6jYp7-FvgpS0waO6pv-UA@mail.gmail.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-24_03,2026-03-24_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 mlxscore=0
+ adultscore=0 suspectscore=0 phishscore=0 mlxlogscore=999 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2603050001
+ definitions=main-2603240137
+X-Proofpoint-GUID: kDW_B0547O91isKIRY_1UNvyN0tmGn5o
+X-Authority-Analysis: v=2.4 cv=VKnQXtPX c=1 sm=1 tr=0 ts=69c2cd98 b=1 cx=c_pps
+ a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
+ a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
+ a=x4eqshVgHu-cdnggieHk:22 a=VwQbUJbxAAAA:8 a=pGLkceISAAAA:8 a=yPCof4ZbAAAA:8
+ a=juZ357eHEe9gvkRO8XoA:9 cc=ntf awl=host:13824
+X-Proofpoint-ORIG-GUID: kDW_B0547O91isKIRY_1UNvyN0tmGn5o
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzI0MDEzOCBTYWx0ZWRfX9oxUC2ge45Zx
+ kVGmwhJjBbnTgQkavyC+4OAZwtlO/z752TksLXu4fHkx7jVsxMoWfyk32daLdfgt1iJwMY/Q//7
+ V47DGifN0xak+6Oza0Cw1HvplJm6E4PQ1O4GOcpJYykTQvcZBqGBQxQ1euTJhRRoewO44qRBvbi
+ C+RGpb4R8uXgYF/Ag7F+VXQmdR2WleDcEwXTEYKehTHe/ygk/7lQkLrwHzFCjgyE1WPfnWxis2x
+ wCZ6U7dqluCKlE9mPOXNIlWI7mOY7QMjXsnVEOuixQwYQVDgeU86nJUABfefCaArPO9zf+JzRvz
+ mieAScWTcOwXJOExXqN8kn1y7RsTM/30+BvkFydUg20ZVGx9fVI038jhWyaxVqs3HgNqvLoRnYG
+ k/AfkOuV4MoJERx+8GukDfnPCgEzus5kYnxPgka7rOwmGOr763fn0jSNZ85aLwqIadtNKTVbcRI
+ oy8GzRHlJTK9mWp1uP2K7AmRR2tNm481nsjaKUok=
 
-On Tue, Mar 24, 2026 at 07:56:44AM -0700, Alexei Starovoitov wrote:
-> On Tue, Mar 24, 2026 at 4:27 AM Frederic Weisbecker <frederic@kernel.org> wrote:
-> >
-> > Le Fri, Mar 20, 2026 at 03:29:16PM -0700, Boqun Feng a écrit :
-> > > Since commit c27cea4416a3 ("rcu: Re-implement RCU Tasks Trace in terms
-> > > of SRCU-fast") we switched to SRCU in BPF. However as BPF instrument can
-> > > happen basically everywhere (including where a scheduler lock is held),
-> > > call_srcu() now needs to avoid acquiring scheduler lock because
-> > > otherwise it could cause deadlock [1]. Fix this by following what the
-> > > previous RCU Tasks Trace did: using an irq_work to delay the queuing of
-> > > the work to start process_srcu().
-> > >
-> > > [boqun: Apply Joel's feedback]
-> > > [boqun: Apply Andrea's test feedback]
-> > >
-> > > Reported-by: Andrea Righi <arighi@nvidia.com>
-> > > Closes: https://lore.kernel.org/all/abjzvz_tL_siV17s@gpd4/
-> > > Fixes: commit c27cea4416a3 ("rcu: Re-implement RCU Tasks Trace in terms of SRCU-fast")
-> > > Link: https://lore.kernel.org/rcu/3c4c5a29-24ea-492d-aeee-e0d9605b4183@nvidia.com/ [1]
-> > > Suggested-by: Zqiang <qiang.zhang@linux.dev>
-> > > Tested-by: Andrea Righi <arighi@nvidia.com>
-> > > Signed-off-by: Boqun Feng <boqun@kernel.org>
-> >
-> > I have the feeling that this problem should be solved at the BPF
-> > level. Tracepoints can fire at any time, in that sense they are like NMIs,
-> > and NMIs shouldn't acquire locks, let alone call call_rcu_*()
-> >
-> > BPF should arrange for delaying such operations to more appropriate contexts.
-> >
-> > I understand this is a regression trigerred by an RCU change but to me it
-> > rather reveals a hidden design issue rather than an API breakage.
-> 
-> You all are still missing that rcu_tasks_trace was developed
-> exclusively for bpf with bpf requirements.
+BTF kind layouts provide information to parse BTF kinds. By separating
+parsing BTF from using all the information it provides, we allow BTF
+to encode new features even if they cannot be used by readers. This
+will be helpful in particular for cases where older tools are used
+to parse newer BTF with kinds the older tools do not recognize;
+the BTF can still be parsed in such cases using kind layout.
 
-I'm missing this for sure. But what would be a better design?
+The intent is to support encoding of kind layouts optionally so that
+tools like pahole can add this information. For each kind, we record
 
-BPF is also calling normal RCU (via call_rcu()) as well, and I don't
-think we can say normal call_rcu() was designed exclusively for BPF.
-Plus BPF heavily uses irq_work to avoid deadlocks but irq_work_queue()
-itself has a tracepoint in it (trace_ipi_send_cpu()), so in theory you
-could hit a deadlock there too.
+- length of singular element following struct btf_type
+- length of each of the btf_vlen() elements following
+- a (currently unused) flags field
 
-> Then srcu_fast was introduced and then it looked like that
-> task_trace can be replaced with srcu_fast and that's where the problems
-> discovered. So either task_trace need to be resurrected
-> or srcu_fast needs to be fixed.
-> Let's punt to bpf subsystem isn't an option.
+The ideas here were discussed at [1], [2]; hence
 
-I don't think we are suggesting that, i.e. "BPF should fix its own
-issue", at least myself was hoping that we can redesign the APIs that
-BPF relies on and make it clear that it's for BPF and we can in theory
-avoid all the deadlocks (we will probably have to make some primitives
-non-traceable) and BPF can use it combined with other general
-synchronization primitives.
+Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 
-The current approach seems to me that we just whack-a-mole when an issue
-happens, and it's not a systematic solution.
+[1] https://lore.kernel.org/bpf/CAEf4BzYjWHRdNNw4B=eOXOs_ONrDwrgX4bn=Nuc1g8JPFC34MA@mail.gmail.com/
+[2] https://lore.kernel.org/bpf/20230531201936.1992188-1-alan.maguire@oracle.com/
+---
+ include/uapi/linux/btf.h       | 12 ++++++++++++
+ tools/include/uapi/linux/btf.h | 12 ++++++++++++
+ 2 files changed, 24 insertions(+)
 
-(It doesn't have to be a problem, it could be an opportunity ;-))
+diff --git a/include/uapi/linux/btf.h b/include/uapi/linux/btf.h
+index 266d4ffa6c07..638615ebddc2 100644
+--- a/include/uapi/linux/btf.h
++++ b/include/uapi/linux/btf.h
+@@ -8,6 +8,16 @@
+ #define BTF_MAGIC	0xeB9F
+ #define BTF_VERSION	1
+ 
++/*
++ * BTF layout section consists of a struct btf_layout for each known
++ * kind at BTF encoding time.
++ */
++struct btf_layout {
++	__u8 info_sz;		/* size of singular element after btf_type */
++	__u8 elem_sz;		/* size of each of btf_vlen(t) elements */
++	__u16 flags;		/* currently unused */
++};
++
+ struct btf_header {
+ 	__u16	magic;
+ 	__u8	version;
+@@ -19,6 +29,8 @@ struct btf_header {
+ 	__u32	type_len;	/* length of type section	*/
+ 	__u32	str_off;	/* offset of string section	*/
+ 	__u32	str_len;	/* length of string section	*/
++	__u32	layout_off;	/* offset of layout section	*/
++	__u32	layout_len;	/* length of layout section	*/
+ };
+ 
+ /* Max # of type identifier */
+diff --git a/tools/include/uapi/linux/btf.h b/tools/include/uapi/linux/btf.h
+index 266d4ffa6c07..638615ebddc2 100644
+--- a/tools/include/uapi/linux/btf.h
++++ b/tools/include/uapi/linux/btf.h
+@@ -8,6 +8,16 @@
+ #define BTF_MAGIC	0xeB9F
+ #define BTF_VERSION	1
+ 
++/*
++ * BTF layout section consists of a struct btf_layout for each known
++ * kind at BTF encoding time.
++ */
++struct btf_layout {
++	__u8 info_sz;		/* size of singular element after btf_type */
++	__u8 elem_sz;		/* size of each of btf_vlen(t) elements */
++	__u16 flags;		/* currently unused */
++};
++
+ struct btf_header {
+ 	__u16	magic;
+ 	__u8	version;
+@@ -19,6 +29,8 @@ struct btf_header {
+ 	__u32	type_len;	/* length of type section	*/
+ 	__u32	str_off;	/* offset of string section	*/
+ 	__u32	str_len;	/* length of string section	*/
++	__u32	layout_off;	/* offset of layout section	*/
++	__u32	layout_len;	/* length of layout section	*/
+ };
+ 
+ /* Max # of type identifier */
+-- 
+2.39.3
 
-Regards,
-Boqun
-
-> At this rate we will have rcu_bpf. Which rcu_tasks_trace effectively was.
