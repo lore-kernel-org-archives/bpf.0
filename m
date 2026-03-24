@@ -1,378 +1,181 @@
-Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012031.outbound.protection.outlook.com [52.101.48.31])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B511B26CE2C;
-	Tue, 24 Mar 2026 17:15:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.31
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774372510; cv=fail; b=HNMePjruoHRvQk9jzShSatqpDk/EeeGOyLLbvDmR2/hEWzgXUOdkHplQYFD1LQVft59r339PczCfE2fwSPMWheqSm2OZE0f3xBjLefAezhauoKo0E7xFIrj/jkBBwfbt4MyJiYKQOjD20WncNjmiS5r14u+p3iZeGXiMj7vUf1o=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774372510; c=relaxed/simple;
-	bh=ZkLk9Z/kr6uvOkNyl4XCDu2I97YtLMjCoFoMxA1i/bk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=DATB8OICmWSLubUP79DQw4rj5witqGk5d3Vk8MNW7ocvHgzXcUwlEmURbcTBFPjYzuZzs6/TT118kY98nuufQaMBmEJlz92omRkCWodTLBVDn8e5c1nGztFBVkkiRnyFTgKulQvBxwG7jdd4pENkRf38attIHnnh03MZme9oXRM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ZISLJKxv; arc=fail smtp.client-ip=52.101.48.31
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35712408257
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 17:16:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774372619; cv=none; b=WQLOVum2SGjHUebVL3oeWRS+QTv4QVwZ6C34dwjTlZQKSHzHggeHhjJRjV6n99AhATB9zIlORBQLvw4kk+mb8JnrkI90kVUIK0Yxs/z+txF9K9PU7iSekJwyQwcyOkvEoa3RNn4Wj2/b4EZdFgSosEDPyAlQcCHynmUnfXVF44M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774372619; c=relaxed/simple;
+	bh=NJKSoCbXn+QUpPwOGq/+GC6/ZE50PsuhKLKs7WIYIi4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JxP46TyyVC1cc7kh/L7mIV1zxzCY5p8LJvRQ5vq+/s2PItzVXHp793880iYkksqyK4Tq6gPpTuUyP5XcbT/OG7L7XpPk6eDTu9edpA+XVGkWs15A87Oa6UvAsvZvq7uOHIqe0j0qbkMH6BiZM7KlNbcxI/ono7UD4Q0hEmzJJMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Dlb8YrSA; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ZISLJKxv"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=tcPqp+NKFKZJBimxYEIXeuSFB1I7boZy46MlHwmnZ5HFmbYxypuNqHSu9qBBns+ugRy1S2v3Ho8ePcqhl+YWEzB9p+yk7IhmeRI9xzULRMa2RxjeN62+ilNkeLYMbwsUYPNmr6vP5mALM/yxS08QZBXELgC7GyGaQllr9n+1LDW6SZION/HN59dFh/j3Q/H5apxdwEYCu3lrgXUrMizTGVAWtSBP2C712boBdPLx29kBHIboKr/W06FSbSStFpmSPeSkG7YlHInmKaCPhSA/39B0mOsihGmfq57WkpRXGzBY6ODcgF+1VtSKULJgk3uu/5txBoUxCG93gE8vNg1B8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cibplpRPItnb2wDztT9aerHlzWYBD6IZ62GnTIho75U=;
- b=fQeohZ64XCN8STMYnV8uOSLzQxLItIu4hiMfLvnems7u6lPx1LHMQ0fF3gWFVD53ekbvrBOi28MQYjf1ZxSwLzikx/Fa/6ylcIqua1g2YuDSo0YtLlJc/6kYWlv+tTP57jsW9WYF9jK3LcdyZgBbS4mTqEWaGgVTTl9i7V1uAl2o9xZsvCDYQkx4WOQUJTUZjv0IXN/25Rd8qqH6h5RntiHr2zArTGDDpcIATGWG7uSGekFvNs986PrAuuWOuw0iUXQqHrn1jetJDlC0p5P7E9FNnFKhqGJDvpaUBxT1QOuxmVD5t0lJkjmLDLqrJ+u/phiQznRkmOznLHwB1SPeEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cibplpRPItnb2wDztT9aerHlzWYBD6IZ62GnTIho75U=;
- b=ZISLJKxvk7DnGj56hC1j4He9FYTOH2IVLLry6mQ0bTvzohcuqg+MYuY3S15thyEKjzDoRo4m9bne/I3VtOrJb6OCtaD+RCVBdKrDonK5mkL+TnP9H0ld4A/WaAXboeeFCT4pNug1CLJBG9dzwUYH8iBGG7o/ChoZCIb/QmVJcn/YSeHhlRzPa0fO1+FfwAfbEQRjh2BAGL8fwUT54K2bj8/xl1LDE2HW5CeuA1uCeh6X6qoJAvBNwOxHPJ9rHc0UVUXt49F7Z7nZSbP+XsgdOnvowSOKcSOH33/iISzHfznNvVS17icvHcJZu8RFI8dw0EquBE+os3qJavNSBYZN5g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
- CYXPR12MB9441.namprd12.prod.outlook.com (2603:10b6:930:dc::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9745.20; Tue, 24 Mar 2026 17:15:04 +0000
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::f01d:73d2:2dda:c7b2]) by DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::f01d:73d2:2dda:c7b2%4]) with mapi id 15.20.9745.007; Tue, 24 Mar 2026
- 17:15:04 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: David Hildenbrand <david.hildenbrand@arm.com>
-Cc: Muhammad Usama Anjum <usama.anjum@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Brendan Jackman <jackmanb@google.com>, Johannes Weiner <hannes@cmpxchg.org>,
- Uladzislau Rezki <urezki@gmail.com>, Nick Terrell <terrelln@fb.com>,
- David Sterba <dsterba@suse.com>, Vishal Moola <vishal.moola@gmail.com>,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- Ryan.Roberts@arm.com
-Subject: Re: [PATCH v3 1/3] mm/page_alloc: Optimize free_contig_range()
-Date: Tue, 24 Mar 2026 13:14:58 -0400
-X-Mailer: MailMate (2.0r6290)
-Message-ID: <42C0A333-EB71-42A5-83A2-36831E1F5E50@nvidia.com>
-In-Reply-To: <88ff0f5b-e6d2-400f-9316-4863a5d169ea@arm.com>
-References: <20260324133538.497616-1-usama.anjum@arm.com>
- <20260324133538.497616-2-usama.anjum@arm.com>
- <E976076E-68B6-4088-BA67-AF4ACC0D3E7E@nvidia.com>
- <88ff0f5b-e6d2-400f-9316-4863a5d169ea@arm.com>
-Content-Type: text/plain
-X-ClientProxiedBy: BY3PR05CA0035.namprd05.prod.outlook.com
- (2603:10b6:a03:39b::10) To DS7PR12MB9473.namprd12.prod.outlook.com
- (2603:10b6:8:252::5)
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Dlb8YrSA"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=B4fumjl0RR/f2jk5HdtWIWLHYtaERV+C6H1s9c5PRq8=; b=Dlb8YrSALU0EPvIghZp5zb8WDr
+	tOBpYGG/N/1zsxOfuAUSgrgZbiEF97G65kCYE00bj0BJDGQWB/labQNj3NqmxanWMaeKvNYsErkq9
+	ZHz7NTb8JACyg4RRpXFZIJjM8NQFo3zvM6f5oGRh0UbSEEnJ7UFYUHyVjPgXGSnLJRtoyBsWyKthN
+	lA71ATXlGLi2azOfpERnbDL4/N9Auc7b6RpWq8Yax4uk+k1xUzZQxyBWobkMAQlf4Eztnte5sI4gT
+	1PG9Ds6Yoq49YmsVEybh5OJDik8kWxnbAzWPDX8gyibeZUZ/XlHfTW/jlCbKxUIV2LzIfas+0Q22M
+	FjaSpdlw==;
+Received: from sslproxy08.your-server.de ([78.47.166.52])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1w55N1-000HFT-0Y;
+	Tue, 24 Mar 2026 18:16:47 +0100
+Received: from localhost ([127.0.0.1])
+	by sslproxy08.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1w55Mz-000CtN-1b;
+	Tue, 24 Mar 2026 18:16:46 +0100
+Message-ID: <de203a42-0830-44cb-8746-53de037a9c95@iogearbox.net>
+Date: Tue, 24 Mar 2026 18:16:45 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|CYXPR12MB9441:EE_
-X-MS-Office365-Filtering-Correlation-Id: da75cb53-f273-417a-6d2f-08de89c8e3e9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|7416014|366016|56012099003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	AF83+hlBkHrkKUq7ed0WmbLLiucSuwTMagcMSJ1xNb7Y1OIA+uoifOxiPp6NroeI/BhqZsahEl5LtANXgSHEqnaSJQFNKC4OX3jZq05g8C20vlnzriQTudi4Dla9PEr0BY9c6lvRRKoMbIfNW6T38hq4fco+I+aqkVXddUENpRXfk3aIWBVeRBV2OOf9VOpJjZYu/jd14doHRzni6+ZL5f+IU19dq8Ukp2xSbPpjnmB6yLucJg4ySOu7i2UIlPXCCmhyQeklpZjUzpRauPA1hj9Zd2tbBuNGvQm4LAId69GJ/DZBCESKrwNceHzlDGeum7V04UIapfhI9XuQmIbQWBntmMY51KsccKLLfKm3DX/p2cCFza+vUCBhQ45X+Jc1TkEWqvolk2pxY2fLfSs04JHc+ytMO6ZOVgpxrR01sWAsyM3Vt55U0EMdKxelCGW0LFcIqDw+A2TgJK+fdsbKFOzgu8XS9jkOgEnMcnkWyVJoW365ah2HrlTlzgaEABy0rrYhfj7PcjJdG/49XjsZEvfp8p7jTVPfBUsY/pCKnY3LoN+uEljWHNQHJxyXRJlY55EZImz/ykjXlD+edg4a2uejnFABthU9VhXTqr9TmJSBCH6L8fFMNLtps6qHo/5rzLl0z5DeSLavctihCjcVjUss/sJHZ4363ct3SCQ9Bu0SuXfC6yyQbZS66o+ilyCFrdpYuf8Hc2phLevhKxGxfcw15kBm8A8QBiejYbTjTIE=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?xxxsULk47wsnlW74h4cmRkyQHHZkzoIo9D8CghmTF8yiIslGbRXIOli2h9kn?=
- =?us-ascii?Q?N70NHSNHYJzy4STmxtzhrhH/bsZK14L6Mf1aQpPDW7F67Rd32puf6d9NafTe?=
- =?us-ascii?Q?Zcl8PxN7AsVftrpz9myLgHV4B/2iKNmjagcdunG42XV778LsIEcQNaMWrPSp?=
- =?us-ascii?Q?klAafzinIH9MRHb/WSGJa9HYr/PbTTa/zeU31ur3maus6iw4NvganC9Iz3OS?=
- =?us-ascii?Q?7tp1EHfNyoaukzLnk/E60xEvasZcC8hSy5EdcIlEvelKBRVJtvw7WSZ1mlxJ?=
- =?us-ascii?Q?tYGm4TtrJdIme+Lqgoy1MZFalILmBaZUsHekynz/UNRMdm9+nbSMDFQhljsO?=
- =?us-ascii?Q?9GGxzpWIfOIKt5fBDtqXOcwxLsPGkeRBtSUHBsWpT0q/UelMYBWu5jf5yPoS?=
- =?us-ascii?Q?ctdBHKqLRlMIB5/23x0058rahSwgjplrz4eMLiDEmA2q1EJ5+Csz8ARz9ERZ?=
- =?us-ascii?Q?oxD3tEIRcOm/Pt7wcWwA/rKSxm4Ve4LkBUAJvyR95XJ5pnLRe9bCAg/rWTNZ?=
- =?us-ascii?Q?wVNyzrtYZYrBIqV7vXdp+LxWFBAdoiNP/GsJZSkN2TOGUtaRQfalb9YpMEPU?=
- =?us-ascii?Q?JOh3HHD3lqe3hbku6FUNcAbQa6Hvq0bCqGX9KvID02J7+/hqcVTpEZEGosKr?=
- =?us-ascii?Q?MAq8+EEImmQo50dyyQlRWQZ1Za9J8oAWABM2xtx9C+35XJCceEvuIcWNHMCD?=
- =?us-ascii?Q?w7gna9nvJ707kBIEUgc4emMJf5VCQjI7HPQVRnw+6O7cd/95g2DLZDnw0FlT?=
- =?us-ascii?Q?ydpbSkokOdTFuSSkkwiuYFcwcJHVcvGnHW32idt2q7klY8uiReJOMZnwVrOo?=
- =?us-ascii?Q?lPinaW9KdXsXLV8Y5mFE5tybYkH6jikEozJUu70jGBNyqCv3fKFoAcTYJFVu?=
- =?us-ascii?Q?ATTxmbIRDa6pKn+pEJyLymuaDcZst/txzIgoWl7U5cl5EURDkTuDFmppaAUJ?=
- =?us-ascii?Q?wrjfTUsq9YySUdM0pN7YIGgBLaoX1UawUy44QSZ/huEz/NiWcgqDrbrSu0eE?=
- =?us-ascii?Q?RgKy3QErf/MbuiixjoIp4HY/o3EaqckYO+2A0a1FpPGQwGykJ1tj5TrhG6JR?=
- =?us-ascii?Q?YSJeeOHej7DhG/LIfJnrIglqwksa2SgmBsmvEwbZyH+2efM/9jZtYo3oUzSh?=
- =?us-ascii?Q?f0xsuIOobeOBmlo88x/Xj5h4CS6BqSfrQRVcJwbCZYc5J99cwxZVaMbDj9gF?=
- =?us-ascii?Q?tS/gHP1+TyLJVkP275V9eCMvXV1ZtDnCsljm0rGcWJacbTWMqMBLL/IN77qW?=
- =?us-ascii?Q?To/XDAcwi/ZPFWPcRy0bojbPj2xpGd42ffPGFkUoGtblEzcEDpQsRBMZjAHV?=
- =?us-ascii?Q?zfcNvleHnaTtfCPzrxiQFYNkNQiu9Y8QTzi5l2bRRPluBcwEEWqJO9tf9uww?=
- =?us-ascii?Q?sw369wSZKTBdBvH1PducQPsAUMHmkqwIXk4CznRi6LWIPA1sedlFjuM0QAcN?=
- =?us-ascii?Q?yTaK3wGv5XzHLdREL67U7nihvQwTAKQvKjfRKXNiCTk7HqbsMO+574xYDdN6?=
- =?us-ascii?Q?bHCK0QepJubwGwULk8eYn5q0Ziuxu4CVjnFW8hi7q9ZZrOR9fcPs9AomR6Sw?=
- =?us-ascii?Q?kHkp9V6RSbvelhGRRTH7ExKKy1AU27jv5VVrT6DABMJt/d31rQSYCa1ZRbRx?=
- =?us-ascii?Q?yHcZH8hjdInCoLKs2zW0q4QEzVVxKW8xmPUGCkYKNI0hdh9yLz/Pe+cUTFCf?=
- =?us-ascii?Q?fIo5dNieaQT7xHgx0hWq2nfNIhsj49azSnC+MjRPN8vIv4th8Sgua5fOYs/q?=
- =?us-ascii?Q?Q8WwLipLcw=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: da75cb53-f273-417a-6d2f-08de89c8e3e9
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2026 17:15:04.5014
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CIzjQLdkNaZUfzDTlznTPwEfxhLHJWr73DV74/TiZ2VcEGEU9qkqvZHedhF6/5fh
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYXPR12MB9441
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/2] net: clear the dst when performing encap /
+ decap
+To: Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org
+Cc: maze@google.com, willemdebruijn.kernel@gmail.com, ast@kernel.org,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org
+References: <20260319234531.3022634-1-kuba@kernel.org>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20260319234531.3022634-1-kuba@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/27950/Tue Mar 24 07:24:19 2026)
 
-On 24 Mar 2026, at 11:22, David Hildenbrand wrote:
+On 3/20/26 12:45 AM, Jakub Kicinski wrote:
+> Commit ba9db6f907ac ("net: clear the dst when changing skb protocol")
+> added dst clearing when a BPF program changes the skb protocol
+> (e.g. IPv4 to IPv6). Since that was a fix we only cleared the dst when
+> the L3 protocol actually changes to keep it minimal. As suggested during
+> the discussion (see Link) encap or decap operation which wraps or unwraps
+> a same-protocol header may also render the existing dst incorrect - even
+> if that doesn't result in a crash, just the wrong route for the now-outermost
+> IP dst.
+> 
+> Make dropping dst unconditional for bpf_skb_change_proto() and all
+> L3 encap / decap ops.
+> 
+> Link: https://lore.kernel.org/CANP3RGfRaYwve_xgxH6Tp2zenzKn2-DjZ9tg023WVzfdJF3p_w@mail.gmail.com
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
-> On 3/24/26 15:46, Zi Yan wrote:
->> On 24 Mar 2026, at 9:35, Muhammad Usama Anjum wrote:
->>
->>> From: Ryan Roberts <ryan.roberts@arm.com>
->>>
->>> Decompose the range of order-0 pages to be freed into the set of largest
->>> possible power-of-2 size and aligned chunks and free them to the pcp or
->>> buddy. This improves on the previous approach which freed each order-0
->>> page individually in a loop. Testing shows performance to be improved by
->>> more than 10x in some cases.
->>>
->>> Since each page is order-0, we must decrement each page's reference
->>> count individually and only consider the page for freeing as part of a
->>> high order chunk if the reference count goes to zero. Additionally
->>> free_pages_prepare() must be called for each individual order-0 page
->>> too, so that the struct page state and global accounting state can be
->>> appropriately managed. But once this is done, the resulting high order
->>> chunks can be freed as a unit to the pcp or buddy.
->>>
->>> This significantly speeds up the free operation but also has the side
->>> benefit that high order blocks are added to the pcp instead of each page
->>> ending up on the pcp order-0 list; memory remains more readily available
->>> in high orders.
->>>
->>> vmalloc will shortly become a user of this new optimized
->>> free_contig_range() since it aggressively allocates high order
->>> non-compound pages, but then calls split_page() to end up with
->>> contiguous order-0 pages. These can now be freed much more efficiently.
->>>
->>> The execution time of the following function was measured in a server
->>> class arm64 machine:
->>>
->>> static int page_alloc_high_order_test(void)
->>> {
->>> 	unsigned int order = HPAGE_PMD_ORDER;
->>> 	struct page *page;
->>> 	int i;
->>>
->>> 	for (i = 0; i < 100000; i++) {
->>> 		page = alloc_pages(GFP_KERNEL, order);
->>> 		if (!page)
->>> 			return -1;
->>> 		split_page(page, order);
->>> 		free_contig_range(page_to_pfn(page), 1UL << order);
->>> 	}
->>>
->>> 	return 0;
->>> }
->>>
->>> Execution time before: 4097358 usec
->>> Execution time after:   729831 usec
->>>
->>> Perf trace before:
->>>
->>>     99.63%     0.00%  kthreadd         [kernel.kallsyms]      [.] kthread
->>>             |
->>>             ---kthread
->>>                0xffffb33c12a26af8
->>>                |
->>>                |--98.13%--0xffffb33c12a26060
->>>                |          |
->>>                |          |--97.37%--free_contig_range
->>>                |          |          |
->>>                |          |          |--94.93%--___free_pages
->>>                |          |          |          |
->>>                |          |          |          |--55.42%--__free_frozen_pages
->>>                |          |          |          |          |
->>>                |          |          |          |           --43.20%--free_frozen_page_commit
->>>                |          |          |          |                     |
->>>                |          |          |          |                      --35.37%--_raw_spin_unlock_irqrestore
->>>                |          |          |          |
->>>                |          |          |          |--11.53%--_raw_spin_trylock
->>>                |          |          |          |
->>>                |          |          |          |--8.19%--__preempt_count_dec_and_test
->>>                |          |          |          |
->>>                |          |          |          |--5.64%--_raw_spin_unlock
->>>                |          |          |          |
->>>                |          |          |          |--2.37%--__get_pfnblock_flags_mask.isra.0
->>>                |          |          |          |
->>>                |          |          |           --1.07%--free_frozen_page_commit
->>>                |          |          |
->>>                |          |           --1.54%--__free_frozen_pages
->>>                |          |
->>>                |           --0.77%--___free_pages
->>>                |
->>>                 --0.98%--0xffffb33c12a26078
->>>                           alloc_pages_noprof
->>>
->>> Perf trace after:
->>>
->>>      8.42%     2.90%  kthreadd         [kernel.kallsyms]         [k] __free_contig_range
->>>             |
->>>             |--5.52%--__free_contig_range
->>>             |          |
->>>             |          |--5.00%--free_prepared_contig_range
->>>             |          |          |
->>>             |          |          |--1.43%--__free_frozen_pages
->>>             |          |          |          |
->>>             |          |          |           --0.51%--free_frozen_page_commit
->>>             |          |          |
->>>             |          |          |--1.08%--_raw_spin_trylock
->>>             |          |          |
->>>             |          |           --0.89%--_raw_spin_unlock
->>>             |          |
->>>             |           --0.52%--free_pages_prepare
->>>             |
->>>              --2.90%--ret_from_fork
->>>                        kthread
->>>                        0xffffae1c12abeaf8
->>>                        0xffffae1c12abe7a0
->>>                        |
->>>                         --2.69%--vfree
->>>                                   __free_contig_range
->>>
->>> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
->>> Co-developed-by: Muhammad Usama Anjum <usama.anjum@arm.com>
->>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
->>> ---
->>> Changes since v2:
->>> - Handle different possible section boundries in __free_contig_range()
->>> - Drop the TODO
->>> - Remove return value from __free_contig_range()
->>> - Remove non-functional change from __free_pages_ok()
->>>
->>> Changes since v1:
->>> - Rebase on mm-new
->>> - Move FPI_PREPARED check inside __free_pages_prepare() now that
->>>   fpi_flags are already being passed.
->>> - Add todo (Zi Yan)
->>> - Rerun benchmarks
->>> - Convert VM_BUG_ON_PAGE() to VM_WARN_ON_ONCE()
->>> - Rework order calculation in free_prepared_contig_range() and use
->>>   MAX_PAGE_ORDER as high limit instead of pageblock_order as it must
->>>   be up to internal __free_frozen_pages() how it frees them
->>>
->>> Made-with: Cursor
->>> ---
->>>  include/linux/gfp.h |  2 +
->>>  mm/page_alloc.c     | 97 ++++++++++++++++++++++++++++++++++++++++++++-
->>>  2 files changed, 97 insertions(+), 2 deletions(-)
->>>
->>
->> <snip>
->>
->>> +
->>> +/**
->>> + * __free_contig_range - Free contiguous range of order-0 pages.
->>> + * @pfn: Page frame number of the first page in the range.
->>> + * @nr_pages: Number of pages to free.
->>> + *
->>> + * For each order-0 struct page in the physically contiguous range, put a
->>> + * reference. Free any page who's reference count falls to zero. The
->>> + * implementation is functionally equivalent to, but significantly faster than
->>> + * calling __free_page() for each struct page in a loop.
->>> + *
->>> + * Memory allocated with alloc_pages(order>=1) then subsequently split to
->>> + * order-0 with split_page() is an example of appropriate contiguous pages that
->>> + * can be freed with this API.
->>> + *
->>> + * Context: May be called in interrupt context or while holding a normal
->>> + * spinlock, but not in NMI context or while holding a raw spinlock.
->>> + */
->>> +void __free_contig_range(unsigned long pfn, unsigned long nr_pages)
->>> +{
->>> +	struct page *page = pfn_to_page(pfn);
->>> +	struct page *start = NULL;
->>> +	unsigned long start_sec;
->>> +	unsigned long i;
->>> +	bool can_free;
->>> +
->>> +	/*
->>> +	 * Chunk the range into contiguous runs of pages for which the refcount
->>> +	 * went to zero and for which free_pages_prepare() succeeded. If
->>> +	 * free_pages_prepare() fails we consider the page to have been freed;
->>> +	 * deliberately leak it.
->>> +	 *
->>> +	 * Code assumes contiguous PFNs have contiguous struct pages, but not
->>> +	 * vice versa. Break batches at section boundaries since pages from
->>> +	 * different sections must not be coalesced into a single high-order
->>> +	 * block.
->>> +	 */
->>> +	for (i = 0; i < nr_pages; i++, page++) {
->>> +		VM_WARN_ON_ONCE(PageHead(page));
->>> +		VM_WARN_ON_ONCE(PageTail(page));
->>> +
->>> +		can_free = put_page_testzero(page);
->>> +		if (can_free && !free_pages_prepare(page, 0))
->>> +			can_free = false;
->>> +
->>> +		if (can_free && start &&
->>> +		    memdesc_section(page->flags) != start_sec) {
->>> +			free_prepared_contig_range(start, page - start);
->>> +			start = page;
->>> +			start_sec = memdesc_section(page->flags);
->>> +		} else if (!can_free && start) {
->>> +			free_prepared_contig_range(start, page - start);
->>> +			start = NULL;
->>> +		} else if (can_free && !start) {
->>> +			start = page;
->>> +			start_sec = memdesc_section(page->flags);
->>> +		}
->>> +	}
->>
->> It can be simplified to:
->>
->>         for (i = 0; i < nr_pages; i++, page++) {
->>                 VM_WARN_ON_ONCE(PageHead(page));
->>                 VM_WARN_ON_ONCE(PageTail(page));
->>
->>                 can_free = put_page_testzero(page) && free_pages_prepare(page, 0);
->>
->>                 if (!can_free) {
->>                         if (start) {
->>                                 free_prepared_contig_range(start, page - start);
->>                                 start = NULL;
->>                         }
->>                         continue;
->>                 }
->>
->>                 if (start && memdesc_section(page->flags) != start_sec) {
->>                         free_prepared_contig_range(start, page - start);
->>                         start = page;
->>                         start_sec = memdesc_section(page->flags);
->>                 } else if (!start) {
->>                         start = page;
->>                         start_sec = memdesc_section(page->flags);
->>                 }
->>         }
->>
->> BTW, memdesc_section() returns 0 for !SECTION_IN_PAGE_FLAGS.
->> Is pfn_to_section_nr() more robust?
->
-> That's the whole trick: it's optimized out in that case. Linus proposed
-> that for num_pages_contiguous().
->
-> The cover letter should likely refer to num_pages_contiguous() :)
+LGTM, one question below:
 
-Oh, I needed to refresh my memory on SPARSEMEM to remember
-!SECTION_IN_PAGE_FLAGS is for SPARSE_VMEMMAP and the contiguous PFNs vs
-contiguous struct page thing.
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 2f023999f046..0f8c508c5f8b 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -3257,13 +3257,6 @@ static const struct bpf_func_proto bpf_skb_vlan_pop_proto = {
+>   	.arg1_type      = ARG_PTR_TO_CTX,
+>   };
+>   
+> -static void bpf_skb_change_protocol(struct sk_buff *skb, u16 proto)
+> -{
+> -	skb->protocol = htons(proto);
+> -	if (skb_valid_dst(skb))
+> -		skb_dst_drop(skb);
+> -}
+> -
+>   static int bpf_skb_generic_push(struct sk_buff *skb, u32 off, u32 len)
+>   {
+>   	/* Caller already did skb_cow() with meta_len+len as headroom,
+> @@ -3362,7 +3355,7 @@ static int bpf_skb_proto_4_to_6(struct sk_buff *skb)
+>   		shinfo->gso_type |=  SKB_GSO_DODGY;
+>   	}
+>   
+> -	bpf_skb_change_protocol(skb, ETH_P_IPV6);
+> +	skb->protocol = htons(ETH_P_IPV6);
+>   	skb_clear_hash(skb);
+>   
+>   	return 0;
+> @@ -3393,7 +3386,7 @@ static int bpf_skb_proto_6_to_4(struct sk_buff *skb)
+>   		shinfo->gso_type |=  SKB_GSO_DODGY;
+>   	}
+>   
+> -	bpf_skb_change_protocol(skb, ETH_P_IP);
+> +	skb->protocol = htons(ETH_P_IP);
+>   	skb_clear_hash(skb);
+>   
+>   	return 0;
+> @@ -3440,8 +3433,14 @@ BPF_CALL_3(bpf_skb_change_proto, struct sk_buff *, skb, __be16, proto,
+>   	 * need to be verified first.
+>   	 */
+>   	ret = bpf_skb_proto_xlat(skb, proto);
+> +	if (ret)
+> +		return ret;
+> +
+>   	bpf_compute_data_pointers(skb);
+> -	return ret;
 
-Now memdesc_section() makes sense to me. Thanks.
+Wouldn't it make sense to move the bpf_compute_data_pointers() before the `if (ret)`
+test? For example, if we'd fail after the skb_cow() and return back to the BPF program
+then they'd still point to the old data pointers.
 
-
-Best Regards,
-Yan, Zi
+> +	if (skb_valid_dst(skb))
+> +		skb_dst_drop(skb);
+> +
+> +	return 0;
+>   }
