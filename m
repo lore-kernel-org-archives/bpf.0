@@ -1,107 +1,166 @@
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDC053624BC;
-	Tue, 24 Mar 2026 14:28:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 339633CF03B
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 14:29:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774362484; cv=none; b=h3iPYxXvfn0HYV7ftl81qTGxxKBG2lf/F0Qg3hhLshSQL1MV+BSDizgUyiJkbdJF8qy9SuWMkK5899VCqoQB1EaX96zgWHQF6KepC4Gx91RDol7GHEAcNut1k0//iKz8e5Ii9c2aB5p5PFtDfVWYCeU/kwz/EuZgs3WGn8PkyAk=
+	t=1774362588; cv=none; b=AkkKqzAohSUfTm5JHT+eDpvdYN08sgfy2aVCyx77+E8BoXro3SSGnxkxdi0KFj6SFBePUuhgc7KnNMLolclg5jn9XKa5hABc5tWDn6Nc7Urjca13qqQIurnZnyJbb2oBaYDBRzhJX3jzW7MOfOibII/DC+FSfDgWkwrv0rybHjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774362484; c=relaxed/simple;
-	bh=Tli2X3y0LVZah9JzvHCs3qERanTby0V0BrV4nXSA3Js=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EDiC7YBWVSVjd1xuN7MVDRcf1lwlemnAX/FkCSHp/Ezdt1+m+mPid5mVMNdulCjbxsxh4eT78D7rBs8HwjJ/iKvV8gjj9zg0VDoo27Fby5ccARnIYHDa1LrGYzOUjtE/gLloBphqYFyF+ujqub7B3s3H2caxCrixTxF3dwC49Ng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf02.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay09.hostedemail.com (Postfix) with ESMTP id 1F17D9396F;
-	Tue, 24 Mar 2026 14:27:53 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf02.hostedemail.com (Postfix) with ESMTPA id DC83180011;
-	Tue, 24 Mar 2026 14:27:20 +0000 (UTC)
-Date: Tue, 24 Mar 2026 10:28:02 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: "Vineeth Pillai (Google)" <vineeth@bitbyteword.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Dmitry Ilvokhin <d@ilvokhin.com>,
- Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Ingo Molnar <mingo@redhat.com>, Jens
- Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
- <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Marcelo Ricardo
- Leitner <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, Jon
- Maloy <jmaloy@redhat.com>, Aaron Conole <aconole@redhat.com>, Eelco
- Chaudron <echaudro@redhat.com>, Ilya Maximets <i.maximets@ovn.org>,
- netdev@vger.kernel.org, bpf@vger.kernel.org, linux-sctp@vger.kernel.org,
- tipc-discussion@lists.sourceforge.net, dev@openvswitch.org, Jiri Pirko
- <jiri@resnulli.us>, Oded Gabbay <ogabbay@kernel.org>, Koby Elbaz
- <koby.elbaz@intel.com>, dri-devel@lists.freedesktop.org, "Rafael J.
- Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
- "Gautham R. Shenoy" <gautham.shenoy@amd.com>, Huang Rui
- <ray.huang@amd.com>, Mario Limonciello <mario.limonciello@amd.com>, Len
- Brown <lenb@kernel.org>, Srinivas Pandruvada
- <srinivas.pandruvada@linux.intel.com>, linux-pm@vger.kernel.org, MyungJoo
- Ham <myungjoo.ham@samsung.com>, Kyungmin Park <kyungmin.park@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Christian =?UTF-8?B?S8O2bmln?=
- <christian.koenig@amd.com>, Sumit Semwal <sumit.semwal@linaro.org>,
- linaro-mm-sig@lists.linaro.org, Eddie James <eajames@linux.ibm.com>, Andrew
- Jeffery <andrew@codeconstruct.com.au>, Joel Stanley <joel@jms.id.au>,
- linux-fsi@lists.ozlabs.org, David Airlie <airlied@gmail.com>, Simona Vetter
- <simona@ffwll.ch>, Alex Deucher <alexander.deucher@amd.com>, Danilo
- Krummrich <dakr@kernel.org>, Matthew Brost <matthew.brost@intel.com>,
- Philipp Stanner <phasta@kernel.org>, Harry Wentland
- <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>,
- amd-gfx@lists.freedesktop.org, Jiri Kosina <jikos@kernel.org>, Benjamin
- Tissoires <bentiss@kernel.org>, linux-input@vger.kernel.org, Wolfram Sang
- <wsa+renesas@sang-engineering.com>, linux-i2c@vger.kernel.org, Mark Brown
- <broonie@kernel.org>, Michael Hennerich <michael.hennerich@analog.com>,
- Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, linux-spi@vger.kernel.org,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, "Martin K.
- Petersen" <martin.petersen@oracle.com>, linux-scsi@vger.kernel.org, Chris
- Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
- linux-btrfs@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>, Andrew
- Morton <akpm@linux-foundation.org>, SeongJae Park <sj@kernel.org>,
- linux-mm@kvack.org, Borislav Petkov <bp@alien8.de>, Dave Hansen
- <dave.hansen@linux.intel.com>, x86@kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 00/19] tracepoint: Avoid double static_branch
- evaluation at guarded call sites
-Message-ID: <20260324102802.4f8af148@gandalf.local.home>
-In-Reply-To: <20260323160052.17528-1-vineeth@bitbyteword.org>
-References: <20260323160052.17528-1-vineeth@bitbyteword.org>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1774362588; c=relaxed/simple;
+	bh=M97mpQnDV66jGT+RZ5/PvVHHnBb3fripn9Zj/IeFKBc=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jlokIRdPIGJoLshAjhox3kxtTGI5P7LGWfwu8+93uIDaF4gbNAH05X0TO9Qxa4kC+LQ1AuLNgbtrQPjbRmCaoufci1QXIvRGoeVlEgN/ImiaM4SD3kAL+d5Ok8uy749GNC9v2ehiiJLGUhT4ppMpzDwGKT/DUepsksVBuOe2jgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FB+qpfm/; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FB+qpfm/"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4852afd42ceso10399115e9.2
+        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 07:29:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774362584; x=1774967384; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ku5SW27ATyQZZacq12btZ+N4SJ7ImnrT4i+1ZhasesE=;
+        b=FB+qpfm/cOIbU4KpO1hnV3FFx45NopJwxudqt4xxAv0UulcsD1mCw9siRbDRCR3x4W
+         GgQmsEChxp1/3UOpjSr6l+Hj2MaBVeCa0Z1PLSWtWyolR2rnNyWHZXyq4YWbyBfu54Es
+         O8TMkIZELXWM0vP32/O3yjZDzqgrWn4PDMcfRVOJIyG4kEnhwGfxKhAzYZX+S1JIhFcX
+         F/46V9LXGgNiZuW2M7aq03xHT2xN7Nemrbo+ixT9X/47W2ykEedukVe7hAa0a2OLPrGW
+         WF3K55FI1mdgdn467wdUD6rzIEeX7ODYxrfzznxjzxC48eoincLN//JeMtHOPCzkk8r1
+         iaaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774362584; x=1774967384;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ku5SW27ATyQZZacq12btZ+N4SJ7ImnrT4i+1ZhasesE=;
+        b=Lh256MMgiYIC1zU5Qub2gs9Zv2gVzL216vpk4qpifZaoepx8RJYuqzzhw8tpv2fjzn
+         6Z2X1txfr3HHvs45N+5CEK047GXDm/Ufiu6prs8fREMk6X2OSWmxQzz9EEceafx8LaFh
+         Cpqe16VJcKP4zPTsKDbGoHtIQd8ryrJgM2hX2YghOF3ixEt4Qk2NthcUeOAU7ZD19BA1
+         youRPyPZpz4mTlB4J0y5NVW515dzOBiTtiUuJ22KsOXqMEaWHwUVFhuRLEBNEN9ZDC9F
+         YwD5K+OiSdOdbM4qRS5X8LfQDteMOVhKR3Bx2FAjXD+aYgtvVyoszPuboYEMG9EezkJv
+         VNBA==
+X-Forwarded-Encrypted: i=1; AJvYcCWsgCbS5t8Apg7KvevzWCuFr4AW7XhIry+cGfELhOgRGWxmICPspFXBij2QZG5Sr6BoRts=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdnZ1vy7O9G2gcq8rADcHsrnB7jdb/zeN1iYGXQSVULnGYFsD9
+	tIHl4KMe0XVlAbkXq8cs+vMgsnoxxEo7Bu6doVvIdGr7TvCfMZ38ZnbT
+X-Gm-Gg: ATEYQzwovMGe+R/65ljxyQZ+6sV9l34Omlr7PvsPyUBNZJ0bgcxXfuPK5UH6W6S7Vxh
+	M89fbzm+0N0MrBCmQnhJHP/want5MjbGpQvVlp1hZOPCuT8H8GQehzAM/ZlNygJKiEYB/XiFunK
+	EZG6+88C8KskZeHf3No3uLCqIM12G9wufMkjpmbE5XhGHZkH55It2SnDDmZQNu+kG5mPcON8d+A
+	sumndHj2B6SvgrFuAaiCmv4qJ/IZaySr1KRAN+6kWq1ZgbbCDuriITaXL59O3imBeK6WRuo3ZdJ
+	ypuGUt5DrcB/Yz46E4RCSbeX9omhWmezwRf3q36GIUc01XpuGfbaJK+gJurSIq3V0gTlo0bX81x
+	pTPIKPqPuuJhc38YzmwDbkKcBbqCAIp9SpH+qzybO5jWwKztZlQtXypntuFC0Y1bhZJ1unHQhfi
+	jnS4wWtiZVX2I=
+X-Received: by 2002:a05:600c:6287:b0:479:1b0f:dfff with SMTP id 5b1f17b1804b1-48715fd545bmr78785e9.10.1774362584260;
+        Tue, 24 Mar 2026 07:29:44 -0700 (PDT)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4871169384dsm59025945e9.1.2026.03.24.07.29.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Mar 2026 07:29:43 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Tue, 24 Mar 2026 15:29:41 +0100
+To: bot+bpf-ci@kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	kafai@fb.com, eddyz87@gmail.com, songliubraving@fb.com, yhs@fb.com,
+	menglong8.dong@gmail.com, rostedt@kernel.org, martin.lau@kernel.org,
+	yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
+Subject: Re: [PATCHv4 bpf-next 09/25] bpf: Add
+ bpf_trampoline_multi_attach/detach functions
+Message-ID: <acKf1RMe7YMmxKzb@krava>
+References: <20260324081846.2334094-10-jolsa@kernel.org>
+ <711e8b90d27722e47cccfc30a1ccfe243ea7a696322997c15fda1a2147dba6a4@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: rgnt1g9q8d9rzsk6azwgoui85joqhwik
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: DC83180011
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX19u4yDoihzmlvbQbp4GBKk4Sx0FsrK0H8g=
-X-HE-Tag: 1774362440-296898
-X-HE-Meta: U2FsdGVkX18Kg3NfvHLPV0rnp3UrERb/HeySVgjR0PuCDys+LVJ4s2L8fsy1rJHv82yu9UO4h+xU9iEx3z3YFKVS1OFx2Vvti4rEmq0enV2xaTwbpZ+YWf60TFzb8QMlheid4NsXOVqOYcFPHCn+ZrWqPDCdrmq0l+tkyLSeYhbpJixFuANIjXhtSBZInyEBtAAqHPqUuWZ3PdZupXAY7JMTASH2KNw+CMFxYOXnDTbb38gpzJzBKiUcyoxK6GlO0db0aEPLlOAMHWKzcQEu5msgaweBGFFWtD9G0uWRbe+OcS9gBl+SI1CDJFvGCt0Z8gh5xinNWW7KF0gSIEh3ZlA0AO0+B5wCRjivVxgdquYH5bWbk7CtReb5es0u0tOp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <711e8b90d27722e47cccfc30a1ccfe243ea7a696322997c15fda1a2147dba6a4@mail.kernel.org>
 
-On Mon, 23 Mar 2026 12:00:19 -0400
-"Vineeth Pillai (Google)" <vineeth@bitbyteword.org> wrote:
-
-> When a caller already guards a tracepoint with an explicit enabled check:
+On Tue, Mar 24, 2026 at 08:58:41AM +0000, bot+bpf-ci@kernel.org wrote:
+> > diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> > index a9e328c0a1b3..2986e5cac743 100644
+> > --- a/kernel/bpf/trampoline.c
+> > +++ b/kernel/bpf/trampoline.c
 > 
->   if (trace_foo_enabled() && cond)
->       trace_foo(args);
+> [ ... ]
+> 
+> > +int bpf_trampoline_multi_detach(struct bpf_prog *prog, struct bpf_tracing_multi_link *link)
+> > +{
+> > +	struct bpf_tracing_multi_node *mnode;
+> > +	struct fentry_multi_data data = {};
+> > +	int i, cnt = link->nodes_cnt;
+> > +
+> > +	data.unreg  = alloc_ftrace_hash(FTRACE_HASH_DEFAULT_BITS);
+> > +	data.modify = alloc_ftrace_hash(FTRACE_HASH_DEFAULT_BITS);
+> > +
+> > +	if (!data.unreg || !data.modify) {
+> > +		free_fentry_multi_data(&data);
+> > +		return -ENOMEM;
+> > +	}
+> 
+> If alloc_ftrace_hash() fails here under memory pressure, the function
+> returns -ENOMEM without detaching any trampolines or releasing their
+> refcounts.
+> 
+> The caller in the next patch (bpf_tracing_multi_link_release) does:
+> 
+>     WARN_ON_ONCE(bpf_trampoline_multi_detach(link->prog, tr_link));
+> 
+> This drops the error on the floor. The link struct is then freed by
+> bpf_tracing_multi_link_dealloc(), but the trampolines remain attached
+> with elevated refcounts, permanently leaking them and their ftrace
+> hooks.
+> 
+> Would it make sense to pre-allocate these hashes during
+> bpf_trampoline_multi_attach() and store them in the link struct so
+> that the detach path cannot fail?
 
-Thanks Vineeth!
+it's not just hash objects but we will need allocate also entries,
+I can do follow up with this if others think it's needed
 
-I'm going to start pulling in this series. I'll take the first patch, and
-then any patch that has an Acked-by or Reviewed-by from the maintainer.
+> 
+> > +
+> > +	trampoline_lock_all();
+> 
+> [ ... ]
+> 
+> > +rollback_unlink:
+> > +	/*
+> > +	 * We can end up in here from 3 points from above code:
+> > +	 *
+> > +	 * - __bpf_trampoline_link_prog or update_ftrace_direct_add failed and
+> > +	 *   we have some portion of linked trampolines without ftrace update
+> > +	 *
+> > +	 * - update_ftrace_direct_mod failed and we have all trampolines linked
+> > +	 *   plus we already un-attached all new trampolines
+> > +	 *
+> > +	 * In both cases we need to unlink all trampolines from the new program
+> > +	 * and update modified (data.modify) sites, because those have previously
+> > +	 * some programs attached and the new trampoline needs to get attached.
+> > +	 */
+> 
+> This isn't a bug, but the comment says "3 points" and then describes
+> two scenarios in two bullet points. Maybe say "2 scenarios" or split
+> the first bullet into two to match?
 
-For patches without acks, I'll leave alone and then after the first patch
-gets merged into mainline, the maintainers could pull in their own patches
-at their own convenience. Unless of course they speak up now if they want
-me to take them ;-)
+first two points are covered in the first bullets, I think it's ok
 
--- Steve
+jirka
+
+> 
+> > +	ftrace_hash_clear(data.modify);
+> 
+> [ ... ]
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23480161822
+
