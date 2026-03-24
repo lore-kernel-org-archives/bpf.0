@@ -1,89 +1,124 @@
-Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ACE42F851;
-	Tue, 24 Mar 2026 21:02:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AD783537D8
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 21:27:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774386147; cv=none; b=XPXY7uWOXMxcpGAf4CnCXE+QOGHHqsx7zpWLp6owLNBonAs8aQ3ktUhJQj9RJzUjGD63UHI92D2nX+CetsYexb+KDRWiNCPXAhD2jjJjkkTMdadHhn6UcfoUHmAA1K4Hcp7B8NJ5ZgnpKJXfRikQoL+gtoTkwthm9UdpM6D7M4k=
+	t=1774387645; cv=none; b=RJGjlGJi1/k5lBuuV0VR3QLreo5jIuE1H7VGqw9CbwSfy1OJVHbYMhkJj5xEZ/2c2YvOukIVbxMxJnzx5BCBkgJupDBuS0zeVcDxh7wsb3fyu4ULKyq2oQZGlMIin8PZ48fLMqWgGBrUDP2LAfE2er8rPhdFcRIHGT+ZpAix/W8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774386147; c=relaxed/simple;
-	bh=GL+qA4pTv4cS7SCbFLA9KwC0gmU65vrrnM/ayKVBi+4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UMwpHBv5H+09x+JebLZBGUW5OdZqbQAYYfWlMpLkvN97F+5kHDegVRkQq8b8kl6iLmALO5gPHigVyvfUASBmCvfGyhmmhTBFmUISNGFfP/7NmM0Z1VhWwbRM+ympJ4E3aogP3Xd+UZnyB1hwZSL5wtQOQ7CUc+IBRJpBTTWTBI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf01.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay01.hostedemail.com (Postfix) with ESMTP id AEBC5E0519;
-	Tue, 24 Mar 2026 21:02:23 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf01.hostedemail.com (Postfix) with ESMTPA id 85F4960010;
-	Tue, 24 Mar 2026 21:02:21 +0000 (UTC)
-Date: Tue, 24 Mar 2026 17:03:03 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, jolsa@kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-open-source@crowdstrike.com
-Subject: Re: [External] Re: [RFC PATCH bpf-next 2/3] ftrace: Use kallsyms
- binary search for single-symbol lookup
-Message-ID: <20260324170303.06ec4231@gandalf.local.home>
-In-Reply-To: <CAOu3gNiHGBEP2oU07fY73=qOBzLJou+_wUY-6txhrnvRo84pAg@mail.gmail.com>
-References: <20260223215113.924599-1-andrey.grodzovsky@crowdstrike.com>
-	<20260223215113.924599-3-andrey.grodzovsky@crowdstrike.com>
-	<20260225064723.53bcce3e@fedora>
-	<CAOu3gNjdE_GaEEC__L=4v44iMJZt_eBN2Se_FotCDjX0BXwi1w@mail.gmail.com>
-	<20260225183220.7ba404cf@fedora>
-	<CAOu3gNiHGBEP2oU07fY73=qOBzLJou+_wUY-6txhrnvRo84pAg@mail.gmail.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1774387645; c=relaxed/simple;
+	bh=HhuDIiV8tWursPG2/V/doYStZhoGJQBDqDKH9HFRUSo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=d6yPYGyAJNjRuvEP32H3Mo3tYADT/eiGxRiMqlHvp0r28xQwAArT1zSEyKZ+KiKCrEf0CJoacYplCwgyqDm3aEkPcd63rmJOslgmM7RFJO7HIGfStYGIfrh6FI+/xg2EJfZpbUg7LvrHv67Rp7KbfT70I1H2FBTcACFusIIMuBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sFRdkvAT; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sFRdkvAT"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-823c56765fdso878004b3a.1
+        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 14:27:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774387644; x=1774992444; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=niAhtpZI+pVVAEWcQn/pUL4i4VTELLzB3A35UQDHiAM=;
+        b=sFRdkvATsWSsVZzOrDrQo8QpuoZICuoiW/NEOHw2J4NePkzROLL5rmvtogho5nFAme
+         xyan45J1a/xo4G6UVNR++P/6RvAyIohAKz7xxHjOXNy291srFQV/MZgytjlgPaIreWXN
+         Pw4WdBL+DpmFXZTcxHhW5sCHMlJpzvnD1418Ede+jK6k0RNzEoaCl6pKg98UC/+C0/tr
+         bSAkGUxZYjTPi/nP8pPuWM8bWb5sWZRmB34y5uJaKQi7xwO6CJupq58/DtUwnWcepKwZ
+         Q+T5lU5FiQi/eBFw9bYDDH3P781B2g9SNA28HcFHEXL3Uqz/6UWeDMRY5y/FP+j+HNcn
+         hTJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774387644; x=1774992444;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=niAhtpZI+pVVAEWcQn/pUL4i4VTELLzB3A35UQDHiAM=;
+        b=Sd1jFHYgRkhgRmVYPpXPg+ctM6UFg2DBCMxZfk/l8V1GvWZ7q7+oWuoNVZGEqtOfpD
+         Ka36WqYXK0Wdd0FOY/l2Jj/0QUV5x1w3WxVU6RNEVYdoAYd2Cv6NutSO9aUXXd+FxvHB
+         rbS7L6m0HXp7m+uAUpzC3o0ysJlxLDO59DLVi7/89LTcV5sC6IAlxJOJPofRaEBQJInJ
+         /JVwRG+13MqqnbO7Bgb5DTeXRPdWrwn7sq7xEj3lXGK0cZHrJOqZzwnOyiPvKba40wd4
+         VwvVUX//qCLZ3ZgGC+jJrOzy2eo6vLeKNLIN0kDPTr8u4n3JyVsCJq4xJcjBlJu8XGDR
+         6zpA==
+X-Gm-Message-State: AOJu0YxR3fhpgCOjWEfZNCpzBKN8VaqNWQV5zG6Jy2bNh4obwI6DFnBq
+	E+QuuyX7xjKOJQSoW7DDgCpM3jqGCzMjGVC92oAUsm4YlT3fDxJeS9X2ndTSZg==
+X-Gm-Gg: ATEYQzwM+L+aMhwCGaZnzAiVoo5K1AwIF2mcsXIvSHKQGO3+DGjm2tG5Zv8ZEZ+gGZF
+	pSrYILlkaOTqQvaxf1fVxFvypT5d4vq6Mg3J99OKWg2199uFvTVnmX/GTpvWlqYLkWpTxJfvyOt
+	oFsmB98HzAItKEwCYgK/ZjW/61sUQxjxk8ZBXbj5lDrS/bCuUHCn+nxE4sJkRvGfA7u8v3ANXok
+	xjfaTqfcmqNyzCmHmnj055JTP38Pjj+mpenUj11ganuNWdwNF6Yd38ErWHgiYvER5qMoEC+pCZY
+	uqmaRcN+hMmxdSIAXvMBdLCFlRuaKjf0wFlZ1BOkxCHIvZp0McWg+ySkIVEsDc58vhrnmHei7gq
+	GnvdN0cZpeNFrwXbyZzb/vldI0CoHGs8A0LG1suK5TjV28tAjAD39Ae/EPNFn8avoy5l7j0oGUV
+	4WAu3RcVI1sYWs6mSpLw5OrB7zOyldjOcBKEApI5sgFWGK7fj22qRoZ6T7/r/WxegPRFFS+3iqV
+	Lf5XLMxuwc+W7U+h0XnhdpSIcw959njCJi39LAhNqLULYYhE53BpZ9ba9gH3g==
+X-Received: by 2002:a05:6a00:9517:b0:821:a7b6:10a3 with SMTP id d2e1a72fcca58-82c6df62cbamr985787b3a.34.1774387643549;
+        Tue, 24 Mar 2026 14:27:23 -0700 (PDT)
+Received: from localhost.localdomain ([2601:600:837f:c470:1879:8422:922b:e5d3])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82b03aa7d8esm13006164b3a.4.2026.03.24.14.27.22
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 24 Mar 2026 14:27:23 -0700 (PDT)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@kernel.org,
+	memxor@gmail.com,
+	eddyz87@gmail.com
+Subject: [PATCH bpf-next 1/2] bpf: Fix variable length stack write over spilled pointers
+Date: Tue, 24 Mar 2026 14:27:20 -0700
+Message-ID: <20260324212721.71245-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 85F4960010
-X-Rspamd-Server: rspamout06
-X-Stat-Signature: h7fagp4qwrkhaaqayk9owyx783odwzfe
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/W8KCwGwVFsfKNqUlrDuuj5/ppcDaWm6I=
-X-HE-Tag: 1774386141-79949
-X-HE-Meta: U2FsdGVkX1+8qHD8qAOGtORFwQ77mN9ZkRRH7e7C3No+2nN5uYlwOS7pRa48mAlnMZyxdnz3kuoqMDyzkVnIWCkSF0DP+l/B5Uho4ziDsLmEImOOwurKJNazORFf8dJHY+2ywNm7lGfinlFcIImSy3DiT/0ujxe/OT9gijqyvf5G3wdUAaIhn15u0159wLmpjO7o2ygmwJaF9NydHmdOjRnFJPSg/mBMcLh5pl1dQ8/xbvfazBj474ALpVSFDz08emphWzvzGqhajgN8U5kYw+f76pN+CudVMFUf/lJJwUroswxyQHcuMoWyMBeD8i/osH/UPDhQI+v7mY14TYKFCi7ndWQXTkL7ScVtZUEO+41VhZ1dBrMW5cElWech7VT7x38somTGoD9ZMi89VlTFPQ==
+Content-Transfer-Encoding: 8bit
 
-On Wed, 25 Feb 2026 20:22:50 -0500
-Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com> wrote:
+From: Alexei Starovoitov <ast@kernel.org>
 
-> On Wed, Feb 25, 2026 at 6:32=E2=80=AFPM Steven Rostedt <rostedt@goodmis.o=
-rg> wrote:
-> >
-> > On Wed, 25 Feb 2026 10:25:04 -0500
-> > Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com> wrote:
-> > =20
-> > > Hey Steve, are there any extra steps required on my side to make this=
- go
-> > > through your tree? =20
-> >
-> > I see you Cc'd linux-trace-kernel which places it into the tracing
-> > patchwork. If there's no dependency on any other patch, I can add it to
-> > my 7.1 queue. That is, after I get some more time to review it a little
-> > deeper.
-> >
-> > -- Steve =20
->=20
-> There are no dependencies, I performed the original optimization in libbpf
-> (patch 1) in hopes this will make session kprobes faster then legacy
-> kprobe/kretprobe pairs and when it didn't, I dug deeper and came up
-> with this second optimization here (patch 2).
->=20
-> Let me know of any issues once you have time to review, in the meantime
-> I will roll V2 with all the fixes per Jiri's comments including this patc=
-h.
+Scrub slots if variable-offset stack write goes over spilled pointers.
+Otherwise is_spilled_reg() may == true && spilled_ptr.type == NOT_INIT
+and valid program is rejected by check_stack_read_fixed_off()
+with obscure "invalid size of register fill" message.
 
-Sorry for the late reply:
+Fixes: 01f810ace9ed ("bpf: Allow variable-offset stack access")
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ kernel/bpf/verifier.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
--- Steve
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 70a100dd4d0c..01663bb4ae1d 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5407,7 +5407,7 @@ static int check_stack_write_var_off(struct bpf_verifier_env *env,
+ {
+ 	struct bpf_func_state *cur; /* state of the current function */
+ 	int min_off, max_off;
+-	int i, err;
++	int i, j, err;
+ 	struct bpf_reg_state *ptr_reg = NULL, *value_reg = NULL;
+ 	struct bpf_insn *insn = &env->prog->insnsi[insn_idx];
+ 	bool writing_zero = false;
+@@ -5476,7 +5476,16 @@ static int check_stack_write_var_off(struct bpf_verifier_env *env,
+ 			}
+ 		}
+ 
+-		/* Erase all other spilled pointers. */
++		/*
++		 * Scrub slots if variable-offset stack write goes over spilled pointers.
++		 * Otherwise is_spilled_reg() may == true && spilled_ptr.type == NOT_INIT
++		 * and valid program is rejected by check_stack_read_fixed_off()
++		 * with obscure "invalid size of register fill" message.
++		 */
++		if (is_stack_slot_special(&state->stack[spi])) {
++			for (j = 0; j < BPF_REG_SIZE; j++)
++				scrub_spilled_slot(&state->stack[spi].slot_type[j]);
++		}
+ 		state->stack[spi].spilled_ptr.type = NOT_INIT;
+ 
+ 		/* Update the slot type. */
+-- 
+2.52.0
 
