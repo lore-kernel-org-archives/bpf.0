@@ -1,147 +1,160 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E7333FE369
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 14:56:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FBDE4035BA
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 15:03:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.54
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774364219; cv=pass; b=a3XoRaKerFJFdag+8CoBe+q6EfJSUGYR0SmGYxsnddi+VW1dm60FZXuIjF1AcNNbELiM37FWVNV6PJHMSoBO1zjQIxdI26ZQhqr+KBPkdbv9Hl9VoiHpSWVsl1ATa+bTHywsy7zB6owK70CLs2FnNMdcsKhT7eRCGw6q4MfOv6I=
+	t=1774364625; cv=pass; b=S2tnu3qD0DCE5qJS9MNdds5doROPckMD0H1ByfyDsBdkGy58kDKC/+Uii0xhCmUbjgY34OvYKzT3V0TIDCQb0GH/+Z4PE2wo8t551/lBH2KlFoKaEGZoK1vA0t7EkNvxspiJu6EL3iNz52++EIvmVxKUVfBjlaHZXljdBu3v+Jk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774364219; c=relaxed/simple;
-	bh=9TdbXn3ZDs/dZbLOQTiV+0BY7Obc6wGyCRsucRKYsV0=;
+	s=arc-20240116; t=1774364625; c=relaxed/simple;
+	bh=pGbN+jWmTUnUhmVdSv4PjGYUGPR4AJuGRrmDZfe9TOk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YM8iAmsvLQmJ8qyD/uagNr82FaoXsGdNGC4t49zVXTIq7QC70rFEB2gY90dTqIyEE7LO0pDDxl4M9oLKUw6Dnng1YYwzaxIEWhH64+TfGjfcmDbwnV+drl2hnPp1Wy2VsUv8V4bliOrTYiwgVk/lDKHRQA3vSgj4T+k8a+yL/oU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UHes4MmM; arc=pass smtp.client-ip=209.85.221.51
+	 To:Cc:Content-Type; b=hg2NwJWeMyOsaLAMwZJbdgjVPp/+nwVTRdH7SJutdEUprmFE0dkhnsY0SoGQMuclcXor3/910ZdazuRfW1iN9TJ+Hrh3XZ8FwwXWMLsbmibxZMPF7KzRy7s8PtsYq6xIv1JJZ3MfUAd6zfLsBD8qKUDyKANSH0d05uLhtd+sx5c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=siUVWbSY; arc=pass smtp.client-ip=209.85.221.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UHes4MmM"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-439d8dc4ae4so4827428f8f.2
-        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 07:56:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774364216; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="siUVWbSY"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-43b41b545d9so1407395f8f.2
+        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 08:03:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774364622; cv=none;
         d=google.com; s=arc-20240605;
-        b=NtliEBYT/29ZwzXpTqPTauPuWl6m5rhT7iYTioSFFfxH8XYATa5lnaqZTbJ66WxZSc
-         D/1RAND4kAK9t682kPjVp4nykIQwePK41Urg//s1pN/TVHRrXVxjDxNf2lyYyOhV0SLC
-         abYmVTgHrTL/NuTQTcm/6ZTSDslE2id3pPQHN9dpdanJeMmkQknUvJ5z0CE8Jlf0v8J+
-         sGggoU9AqkPC5v9cVjsTT7iJHcWdHJ7kTYepV4VX31oPTKZv7piQCfprHKER9q+wcWlK
-         8ktOnir15uBkf0r2fL5ISDg57yR/n2DYzPCBGk4DI8jpKeA2Ejmei7+FeesPpcQTsgf6
-         wJ5A==
+        b=PXXbT106MZ7Mxbk+fYw6bbtkTiGMzYirh1iTW90StO/mVBp2ulKDLEPXzQgnm7B85Z
+         h5Scy1hTX4Z6i24pgz3EF9u+n0E3B3FQHbRTgbV03ExJeIVTsWUxc6YMoreN+3ZG//MB
+         fPUg4X1HNHNBPQuXckMx4KbGYMwBbXyvqCLznnrWTp3dVuvcGLpxl8Dhy4Ahs77D63Dy
+         0U78WF8MjSrxcX5sduIHG6Vxg+9fq3mXOroL51xk3lwculZCp+8h9NXOm96v5LI3nkDr
+         6u7FvxEo/KNz5hgvfzSu4LMSxrYpqf0Wdjj/bJBZYplpGNCdugjEK3mq42XamaC+qxf7
+         CkTg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=9TdbXn3ZDs/dZbLOQTiV+0BY7Obc6wGyCRsucRKYsV0=;
-        fh=IQeFayOOEOfIw4Cuc+XTtdGunTw2qtDQlhMbRbIwQRM=;
-        b=QJvBcCWKmo8pIupYGQrt1P8FiCl7ys/Af+YHXMSZb1Gt2Rst5SlJdkDx/E3RtZZ8Ly
-         Y4da7+8/T/QFqMRVorD14nNFmOVR+6N6j17kCgtcgFsQpXiIesVwKXwSSsC7fZEfirw0
-         mYe9wdobjWu16akWD3M0J2bR57I71i6Yd+7FFPvjRruGWlw5g8sxtjvFBQJXL5ceKYRU
-         0tmlJgxurgpCDY6L64sdoLj8ioirlQqxQ2YLPhATSEjudGtJNAJfoffzP0VY+fs+HjNS
-         /HXtE5+eVuyQ2jbktdeV1lho5FvUHJVW/zGOKQ3l/se5cDlb2hy7pnwscKwcmX8JXPHq
-         tuNQ==;
+        bh=7pygaIxmYy8vrcTultPBr5yJtweQmbJOPxaBB0Dq1tM=;
+        fh=RFu1UvqFHNwAjs938qF5ngJyrku10ZZuwNWRlfWawRs=;
+        b=gahYy9k3btCUdGLjEgdN7VwYbahiH3JbxPjIeKWRZ4OkipKDlm/Pl2TpyRBCxJtp62
+         W/jLrZr9hWkWejVWzdc6of4udV49oGfAY3rhgVUySBHaCV2CcWpGbtG5/LqBCzpplva/
+         Ts2yxOjMmSj4Rmn0GcRSNzE0biTK3OnGgdWXIcofvMQy/PZNJEFp1BMxTSXPtrr/15TB
+         aoQj3ln3PXwJVUoHeeRu9e8FPLhAUd0O9zH+11zWpx7Q5lYxQTcv2a4aAbLEgWlrbHwL
+         G8CApHhq+WQXIUukAGzLKGzNwqac/lIGl5Gyaza0ti0xLMJo6F0b0LsIkxLV2ncpn9mr
+         QzXg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774364216; x=1774969016; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774364622; x=1774969422; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9TdbXn3ZDs/dZbLOQTiV+0BY7Obc6wGyCRsucRKYsV0=;
-        b=UHes4MmMkvnIgPzDKr67BGZJbzItgQvMmv0nzbjQgDxHuFe+PndO67DiVGt187xkhQ
-         pQLWYaPW51FItojAvzWf5srj1TZ1CSR67V7Ar8Or7Vl6AM1x/fSA53vX5C23lwSL/n3U
-         ZC9VU+sO9ULum5zdr+puPRxgatyoV3s4NHWaueY86YtcF2ZMjJYjuJn+4SnZA23lV5Jx
-         dVyF4k4TDjk3yJZlKwljygKtZwUsjs9aShUKj23olCzOQWFVT4Kwzmy4pCzug1HCnZUj
-         lQNaQcTvXVZKcoY43XXUNgWQVreQQCVxhfLnr/t6w6m3CJbp02Rvf7XHnMHyIavc2wva
-         d4LQ==
+        bh=7pygaIxmYy8vrcTultPBr5yJtweQmbJOPxaBB0Dq1tM=;
+        b=siUVWbSYsavvuxYNjP/noYbF2sxVqbJG6PaAsB9okjKvG4Aw9y6LDOLp5hiqMfM5ke
+         tD7QxgOChmurznz/jclKWPLualaCjOt5+yIbyBsTzQrH8ogjBbxzmJa5C8IqbKDGzY+0
+         N+rxbhTOA+aJX1jJnKSgnOpsxYDj//mNeWklMxXUWL2ohm/SMETvB9MkMIxLq+Ea+jwX
+         zv6TnqozUCoU6aT8Fks/btbFo1BwM1nnYq8JI50vzsGEvC3hFeDGsq6VNFp/iYvbmVmf
+         bS/6Yx1EwlafiRevKRIo34SPtKeyi5qBkiydVySWmV8KG+ynX0l7s0PnX6AY63fMduCQ
+         mUvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774364216; x=1774969016;
+        d=1e100.net; s=20251104; t=1774364622; x=1774969422;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=9TdbXn3ZDs/dZbLOQTiV+0BY7Obc6wGyCRsucRKYsV0=;
-        b=LBl9Ybqk2hYxPGq/BP7/Vw6DW/VAQ3oU0jD4+lC7f+j2C0WOVITJP7exNhFnpkcsvZ
-         zJh9gHtXN9821deud46sV0Su5PonqbLnOH09epzGroLs5KLohzfvHTOl0yHIoq4WxgCx
-         Gv8mE3STZKeqkuIxzy6G9SSTPUAkvhBEe2YE29hZyj6tJZeI+FwjIwBo1xz/Gs6giBLh
-         Mz7Ccbf52riKwGYScpO7EFQL80JyrnPHPIv2mq8X/+aFD4NLXvV+ybXdjyxeC4KW9TPN
-         QuFuxL/Yi++njSf2uygYSYqke3E5euYqDYaR6o9UpjRLXmCYp/U4HXyk8LXaGfhJhu2W
-         6aJA==
-X-Forwarded-Encrypted: i=1; AJvYcCVZHat5iiOKWh/iC0bxnY6lDSswO3db+iTiiPP/1C056dPMCdXffApnwYSuiNkQmfbX73A=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywdtoat1R/5TFL0/P9j7Sw/xB5nSS1pJxCgoP9rcYFDJfhiDriG
-	dsxh7EHF1UeJWUm+RQehRANejFFoRkPgxpq5/oRw4keuB8noS1VDWfE2ucXVeGrkTn8Vlpwvirz
-	Mx5Km7hVUWqeEMnp07uv2fFBJj2lQ0Iw=
-X-Gm-Gg: ATEYQzy+T60VKSfkdyhsl1SrsLWMNzpk9KCVXhWligL1dykgyglpte068QUzw1Y7tzU
-	7HBM1tOiIjBi+omX6t5loWvXWMjllKi4fuyNy+U+4y23Q+wQ1COkUx1fROLwFu4Tdz/13D47fZm
-	YCHHMv0IGWVDF21yyLesGTANxoB6XPbQ8nmu1CeXiOIfcIXcAR23FhZB6IyYX580mIZgdBnqazc
-	39s+bCXGKGyMTK06nQSwIoB5LjLB5r1cd9DDVKhgDx2djtQJiCiZiG5f5BwcXjGejOCPSQUkehO
-	pG15zqyBr/NQd/HjrANkTZdxOJ3QmE3sAYwM+Q8cNBfh9PtaHiMSaofYHx+jvuwi3NWM4aPEOB1
-	0GICq61HO6lQBpnDIwwMAVdEr/w==
-X-Received: by 2002:a05:6000:608:b0:439:fdd5:10b5 with SMTP id
- ffacd0b85a97d-43b6426d710mr26863361f8f.39.1774364216239; Tue, 24 Mar 2026
- 07:56:56 -0700 (PDT)
+        bh=7pygaIxmYy8vrcTultPBr5yJtweQmbJOPxaBB0Dq1tM=;
+        b=M0ZcrXOxhjuqXCEVhkauyhlu2XL4t64OM0QLV57vWiMqx4MJHw3aai/j6t3j/sAHAQ
+         p7hUjieMxMFpZEO+kAR1Nw66nT1fTOd2lTCJg73HWnf3W6uJS8+mLnOTZYHWQ1MNiAdX
+         6EKPaxGm9WhDGtu2Aj2H5W7EZhO0kWvEopkUEQ9jI5IcdqA0/H0guWJP+0wis3yjMIJV
+         xFjyyKp95poo4HOoUJPszqoMXLuEAdHEluI0A5iSz5XPxXDvADxLN2m7KlBg3HZPES63
+         CSsU2MatLZFf+DHi2hgg7wLIEOKTNRdhu+aEgemb2AkIADAoeoSAs1rlBVEVu1UVctAb
+         +bpg==
+X-Forwarded-Encrypted: i=1; AJvYcCWcoRaDxDXSwcIwOMRrdED0IyUo3iMBl46Yhtrml6xdybCE752o/sw7Hr1U8PnX7CnMgoE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwcTOe57WJnTAi/mOXOqv9u+xIIfQYQe4jS7JeUbhFTgsbbpA+q
+	6AFE2TV6zhG6gIVONqTpkNaX+LCfIDQ1w4sDcfGRqmarUupS/FFtL9z23YaHjgmIi7k1c9dF2i5
+	vFfTHSuHP8+I2ApzDk918SwNFdoKUaqY=
+X-Gm-Gg: ATEYQzzolb0cmFXLekBlXxqf9iagovOzNRNnlvHHVvxoAUm1FxLQQ8rY2scMqtNKI17
+	Koq4QgrGZW1AH8rgpI/lNHJkLgOZc6TLx0aAyFhDwVcXKxCiWTPYnglAWbcrqlSXiwWJzek7bDj
+	9e8zJogR79XXBwPqJ+Gxcil3S4/rC+54LzPtjCarsNhw6yMMGaikhCPQA6jiM+CIkANq/g7HJU4
+	TxwCggQOVMo6lLwZp+0JyWLgvVy2Ew0P1D4rnRoQ7lJv7P6miQZd8UFMLP4JE6r0UIhkNGmWNDs
+	iLT34QjmjNE1cxKxO2eKp1yKVotFXhVcQgTViB5pXcq43tUQf5dd1DfCdLglcCPrqH02j6jDZIq
+	0Rt9xJkNjrONLayN5BoalWX48cg==
+X-Received: by 2002:a05:6000:420e:b0:43b:5231:e94a with SMTP id
+ ffacd0b85a97d-43b6426580dmr25272373f8f.30.1774364621590; Tue, 24 Mar 2026
+ 08:03:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <ab2yd35rm6OgZUmb@gpd4> <20260320222916.19987-1-boqun@kernel.org> <acJ1HRXomQhbTN4_@localhost.localdomain>
-In-Reply-To: <acJ1HRXomQhbTN4_@localhost.localdomain>
+References: <20260323164858.1939248-1-sashal@kernel.org> <20260323164858.1939248-2-sashal@kernel.org>
+In-Reply-To: <20260323164858.1939248-2-sashal@kernel.org>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 24 Mar 2026 07:56:44 -0700
-X-Gm-Features: AQROBzDJ2iP-PoWSWyhZ84FyoYg7DjuQTXoVPXfPQvooPzE1dJu3zm52xoJ_bGk
-Message-ID: <CAADnVQKcQNAGOeyt6SOAss0EK4k3A6jYp7-FvgpS0waO6pv-UA@mail.gmail.com>
-Subject: Re: [PATCH v2] rcu: Use an intermediate irq_work to start process_srcu()
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: Boqun Feng <boqun@kernel.org>, Joel Fernandes <joelagnelf@nvidia.com>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Neeraj upadhyay <neeraj.iitr10@gmail.com>, 
-	Uladzislau Rezki <urezki@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, rcu@vger.kernel.org, 
-	Tejun Heo <tj@kernel.org>, bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrea Righi <arighi@nvidia.com>, Zqiang <qiang.zhang@linux.dev>
+Date: Tue, 24 Mar 2026 08:03:30 -0700
+X-Gm-Features: AQROBzBtYHLNynVUYaVr0FFPgK1a9gR9szjQmqF2fXdYPXYOTswB5hwZbCigrcE
+Message-ID: <CAADnVQJjJwRtUQNZAhLoXF7DYprhU97xJReZg9izV7n3f7=uJQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kallsyms: show function parameter info in oops/WARN dumps
+To: Sasha Levin <sashal@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Petr Mladek <pmladek@suse.com>, Alexei Starovoitov <ast@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	David Gow <davidgow@google.com>, Kees Cook <kees@kernel.org>, 
+	Greg KH <gregkh@linuxfoundation.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, Helge Deller <deller@gmx.de>, 
+	Randy Dunlap <rdunlap@infradead.org>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	Juergen Gross <jgross@suse.com>, James Bottomley <James.Bottomley@hansenpartnership.com>, 
+	Alexey Dobriyan <adobriyan@gmail.com>, Vlastimil Babka <vbabka@kernel.org>, 
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Petr Pavlu <petr.pavlu@suse.com>, 
+	X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, linux-modules@vger.kernel.org, 
+	bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 24, 2026 at 4:27=E2=80=AFAM Frederic Weisbecker <frederic@kerne=
-l.org> wrote:
+On Mon, Mar 23, 2026 at 9:49=E2=80=AFAM Sasha Levin <sashal@kernel.org> wro=
+te:
 >
-> Le Fri, Mar 20, 2026 at 03:29:16PM -0700, Boqun Feng a =C3=A9crit :
-> > Since commit c27cea4416a3 ("rcu: Re-implement RCU Tasks Trace in terms
-> > of SRCU-fast") we switched to SRCU in BPF. However as BPF instrument ca=
-n
-> > happen basically everywhere (including where a scheduler lock is held),
-> > call_srcu() now needs to avoid acquiring scheduler lock because
-> > otherwise it could cause deadlock [1]. Fix this by following what the
-> > previous RCU Tasks Trace did: using an irq_work to delay the queuing of
-> > the work to start process_srcu().
-> >
-> > [boqun: Apply Joel's feedback]
-> > [boqun: Apply Andrea's test feedback]
-> >
-> > Reported-by: Andrea Righi <arighi@nvidia.com>
-> > Closes: https://lore.kernel.org/all/abjzvz_tL_siV17s@gpd4/
-> > Fixes: commit c27cea4416a3 ("rcu: Re-implement RCU Tasks Trace in terms=
- of SRCU-fast")
-> > Link: https://lore.kernel.org/rcu/3c4c5a29-24ea-492d-aeee-e0d9605b4183@=
-nvidia.com/ [1]
-> > Suggested-by: Zqiang <qiang.zhang@linux.dev>
-> > Tested-by: Andrea Righi <arighi@nvidia.com>
-> > Signed-off-by: Boqun Feng <boqun@kernel.org>
+> Embed DWARF-derived function parameter name and type information in the
+> kernel image so that oops and WARN dumps display the crashing function's
+> register-passed arguments with their names, types, and values.
 >
-> I have the feeling that this problem should be solved at the BPF
-> level. Tracepoints can fire at any time, in that sense they are like NMIs=
-,
-> and NMIs shouldn't acquire locks, let alone call call_rcu_*()
+> A new build-time tool (scripts/gen_paraminfo.c) parses DW_TAG_subprogram
+> and DW_TAG_formal_parameter entries from DWARF .debug_info, extracting
+> parameter names and human-readable type strings. The resulting tables are
+> stored in .rodata using the same two-phase link approach as lineinfo.
 >
-> BPF should arrange for delaying such operations to more appropriate conte=
-xts.
+> At runtime, kallsyms_show_paraminfo() performs a binary search on the
+> paraminfo tables, maps parameters to x86-64 calling convention registers
+> (RDI, RSI, RDX, RCX, R8, R9), and prints each parameter's name, type,
+> and value from pt_regs. If a parameter value matches the page fault
+> address (CR2), it is highlighted with "<-- fault address".
 >
-> I understand this is a regression trigerred by an RCU change but to me it
-> rather reveals a hidden design issue rather than an API breakage.
+> Integration at show_regs() means this works for both oops and WARN()
+> automatically, since both paths provide full pt_regs at the exception
+> point.
+>
+> Example output:
+>
+>   Function parameters (ext4_readdir):
+>     file     (struct file *)         =3D 0xffff888123456000
+>     ctx      (struct dir_context *)  =3D 0x0000000000001234  <-- fault ad=
+dress
+>
+> Gated behind CONFIG_KALLSYMS_PARAMINFO (depends on CONFIG_KALLSYMS_LINEIN=
+FO).
+> Adds approximately 1-2 MB to the kernel image for ~58K functions.
+>
+> Assisted-by: Claude:claude-opus-4-6
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-You all are still missing that rcu_tasks_trace was developed
-exclusively for bpf with bpf requirements.
-Then srcu_fast was introduced and then it looked like that
-task_trace can be replaced with srcu_fast and that's where the problems
-discovered. So either task_trace need to be resurrected
-or srcu_fast needs to be fixed.
-Let's punt to bpf subsystem isn't an option.
-At this rate we will have rcu_bpf. Which rcu_tasks_trace effectively was.
+Nack.
+
+You asked claude to reinvent pahole and BTF and it did it
+completely missing years of fine tuning that pahole does.
+dwarf cannot be trusted as-is. pahole converts it carefully
+by analyzing optimized out arguments and dropping signatures
+from BTF that are not accurate. This work is still ongoing.
+For example see this set:
+https://lore.kernel.org/bpf/20260320190917.1970524-1-yonghong.song@linux.de=
+v/
+pahole isn't perfect, but what you attempted to do here
+is just broken.
