@@ -1,151 +1,159 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 003E537DEA0;
-	Tue, 24 Mar 2026 18:19:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22BD833A6EB
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 18:30:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774376345; cv=none; b=BxoklGB/0pV9NKD1iCof3Bm1cdVesO+NOgsvImrqAT/bCQougYloeOEBwPhsRNhRXKB3VMC2b4lIjmI6c420rxRf2cr00oC1BwCEpIC0fsxhsGFk9VRtbXVTuJXRBC3tJY8LxVwibwFf2sHibR8TE7r8ul22b6y3z9mkvyC9dVc=
+	t=1774377057; cv=none; b=VjxfVpyGLWoxJpbpDoE7gk7TmhmywDv4hyiA32UDRKMd7x8m4nBzO4KADVH3EZAQUoBSu8Reky+Q2EybEZAue4yIG/uAPgtqFH2+pyKEGWIm2Z2WSn3oTLn7Hxuv/wuQ4zxszwP5owQZOF5wOzaAFF/jml3jeBKKe4FrKmEaezM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774376345; c=relaxed/simple;
-	bh=tJKPFoTE04b29dqHeQZIy36ufkX7uRuyKW9NSMZZOE4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sLGetAlkm+f63DHG1s57GqXXr4P2Nqe3se8YG5km7QF5r9aStbsU0VcffzJxJoTErLS3+A+bBmfXxsjt+D/Qu47K88wmbs68+1DFrkLHTmMDY4ft30ZdDdBiic1LS9lkLJ2FCXiQHNRfYvBqH0fItLTSHSZCjxx0IvJIim1GhdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XMXvE67a; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1774377057; c=relaxed/simple;
+	bh=CkRrkLNRGh2zCKqsmt+SPMhud/dqY9HlhebCsfTZwIk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jYhJtCfxKImn7p2+JOUmQrLVrTnyHz0G2i7vr5sYPY4hdB0GkQCELGJVnfQNTo2xs2X1/ah7Dp9R6mrZzFtydPyMqUQW2xt/XHQNmnBQjI958LROrA76pb9XbDk+1O6NDIyY6hAoEqmGVt5LWq3Zeg8LneNT2snv5O7rzW1rl5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Z8NJKZP7; arc=none smtp.client-ip=95.215.58.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XMXvE67a"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774376343; x=1805912343;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tJKPFoTE04b29dqHeQZIy36ufkX7uRuyKW9NSMZZOE4=;
-  b=XMXvE67alTmY0b8weYjGVyOiX0QFxGpYvaAvAvEh/yqBUUnPBvkIxCdI
-   nPQeMv8atEneuQDPfCUsGs83XK5bGrsvIOEBJymwGHS+Urgxch5aI+8o1
-   j24yC4DLJCMQHjsp9+gnhVT2TfK2ICQuDboVh5ah+7ACR8+3hzF6uoqmT
-   LCsjwpOh6pHVbl5A2yz620MRSQP467ypiCsyroV0uq0Kcmz1/kD7smAlm
-   g41B0W+c2V3b9LvshMmWAHb31TvaJJPRCmD3HXLXSNj5VA3CVePDfPSQ4
-   FXs1N41J+jE5W94Mi7ffVW0tXQfxY5oovEb2dMrcLKEB0hLOoQdGfzzUk
-   Q==;
-X-CSE-ConnectionGUID: fB6pw53HTue8cRQjJGqEwA==
-X-CSE-MsgGUID: 0eBc547jRxOPDmOPTBXAUQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="79001149"
-X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
-   d="scan'208";a="79001149"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 11:19:02 -0700
-X-CSE-ConnectionGUID: whTIKQ1dTJenyzHLYJZAdg==
-X-CSE-MsgGUID: 7EdO1p2ZR36PRWrpLZAIIQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
-   d="scan'208";a="226066052"
-Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 11:19:01 -0700
-Date: Tue, 24 Mar 2026 11:19:01 -0700
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: x86@kernel.org, Jon Kohler <jon@nutanix.com>,
-	Nikolay Borisov <nik.borisov@suse.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	David Kaplan <david.kaplan@amd.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Laight <david.laight.linux@gmail.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	David Ahern <dsahern@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	Asit Mallick <asit.k.mallick@intel.com>,
-	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: [PATCH v8 10/10] x86/vmscape: Add cmdline vmscape=on to override
- attack vector controls
-Message-ID: <20260324-vmscape-bhb-v8-10-68bb524b3ab9@linux.intel.com>
-X-Mailer: b4 0.15-dev
-References: <20260324-vmscape-bhb-v8-0-68bb524b3ab9@linux.intel.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Z8NJKZP7"
+Message-ID: <60a0b32d-b02b-419d-9d71-3293261333cb@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774377053;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=L9fTdPH1aCElwFWRzX6/IMyrZGmyXLUmrj2QhF1Rny8=;
+	b=Z8NJKZP7HM7wGHfKLM8Ss8Ax9rDQPBpQYbWcL07MZeQyaZOv2IO9cTyo9gxuocOvQVRXZ7
+	xXfOsngesNEjmU2La6z3/JHRpyeiUq2oDdPmK1AhF6mgWipwraJAlFd04xtHSJCLSG/zmp
+	9eYQy+0MUyARbKGBLLoYBuInpOinqSc=
+Date: Tue, 24 Mar 2026 11:30:43 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260324-vmscape-bhb-v8-0-68bb524b3ab9@linux.intel.com>
+Subject: Re: [PATCH v2 4/5] bpf: allow new DECAP flags and add guard rails
+To: Nick Hudson <nhudson@akamai.com>
+Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Max Tottenham <mtottenh@akamai.com>, Anna Glasgall <aglasgal@akamai.com>,
+ Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260318134242.2725749-1-nhudson@akamai.com>
+ <20260318134242.2725749-5-nhudson@akamai.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20260318134242.2725749-5-nhudson@akamai.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-In general, individual mitigation knobs override the attack vector
-controls. For VMSCAPE, =ibpb exists but nothing to select BHB clearing
-mitigation. The =force option would select BHB clearing when supported, but
-with a side-effect of also forcing the bug, hence deploying the mitigation
-on unaffected parts too.
 
-Add a new cmdline option vmscape=on to enable the mitigation based on the
-VMSCAPE variant the CPU is affected by.
 
-Reviewed-by: Nikolay Borisov <nik.borisov@suse.com>
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
----
- Documentation/admin-guide/hw-vuln/vmscape.rst   | 4 ++++
- Documentation/admin-guide/kernel-parameters.txt | 2 ++
- arch/x86/kernel/cpu/bugs.c                      | 2 ++
- 3 files changed, 8 insertions(+)
+On 3/18/26 6:42 AM, Nick Hudson wrote:
+> Add checks to require shrink-only decap, reject conflicting decap flag
+> combinations, and verify removed length is sufficient for claimed header
+> decapsulation.
+> 
+> Co-developed-by: Max Tottenham <mtottenh@akamai.com>
+> Signed-off-by: Max Tottenham <mtottenh@akamai.com>
+> Co-developed-by: Anna Glasgall <aglasgal@akamai.com>
+> Signed-off-by: Anna Glasgall <aglasgal@akamai.com>
+> Signed-off-by: Nick Hudson <nhudson@akamai.com>
+> ---
+>   net/core/filter.c | 47 +++++++++++++++++++++++++++++++++++++----------
+>   1 file changed, 37 insertions(+), 10 deletions(-)
+> 
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 7c2871b40fe4..47aec44a9cd3 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -56,6 +56,7 @@
+>   #include <net/sock_reuseport.h>
+>   #include <net/busy_poll.h>
+>   #include <net/tcp.h>
+> +#include <net/gre.h>
+>   #include <net/xfrm.h>
+>   #include <net/udp.h>
+>   #include <linux/bpf_trace.h>
+> @@ -3496,7 +3497,9 @@ static u32 bpf_skb_net_base_len(const struct sk_buff *skb)
+>   					 BPF_F_ADJ_ROOM_ENCAP_L2( \
+>   					  BPF_ADJ_ROOM_ENCAP_L2_MASK))
+>   
+> -#define BPF_F_ADJ_ROOM_DECAP_MASK	(BPF_F_ADJ_ROOM_DECAP_L3_MASK)
+> +#define BPF_F_ADJ_ROOM_DECAP_MASK	(BPF_F_ADJ_ROOM_DECAP_L3_MASK | \
+> +					 BPF_F_ADJ_ROOM_DECAP_L4_MASK | \
+> +					 BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)
+>   
+>   #define BPF_F_ADJ_ROOM_MASK		(BPF_F_ADJ_ROOM_FIXED_GSO | \
+>   					 BPF_F_ADJ_ROOM_ENCAP_MASK | \
+> @@ -3743,20 +3746,44 @@ BPF_CALL_4(bpf_skb_adjust_room, struct sk_buff *, skb, s32, len_diff,
+>   		return -ENOTSUPP;
+>   	}
+>   
+> -	if (flags & BPF_F_ADJ_ROOM_DECAP_L3_MASK) {
+> +	if (flags & BPF_F_ADJ_ROOM_DECAP_MASK) {
 
-diff --git a/Documentation/admin-guide/hw-vuln/vmscape.rst b/Documentation/admin-guide/hw-vuln/vmscape.rst
-index 7c40cf70ad7a..a15d1bc91cce 100644
---- a/Documentation/admin-guide/hw-vuln/vmscape.rst
-+++ b/Documentation/admin-guide/hw-vuln/vmscape.rst
-@@ -117,3 +117,7 @@ The mitigation can be controlled via the ``vmscape=`` command line parameter:
- 
-    Choose the mitigation based on the VMSCAPE variant the CPU is affected by.
-    (default when CONFIG_MITIGATION_VMSCAPE=y)
-+
-+ * ``vmscape=on``:
-+
-+   Same as `auto`, except that it overrides attack vector controls.
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 3853c7109419..98204d464477 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -8383,6 +8383,8 @@ Kernel parameters
- 					  unaffected processors
- 			auto		- (default) use IBPB or BHB clear
- 					  mitigation based on CPU
-+			on		- same as "auto", but override attack
-+					  vector control
- 
- 	vsyscall=	[X86-64,EARLY]
- 			Controls the behavior of vsyscalls (i.e. calls to
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index ba714f600249..84bf89ca278b 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -3083,6 +3083,8 @@ static int __init vmscape_parse_cmdline(char *str)
- 	} else if (!strcmp(str, "force")) {
- 		setup_force_cpu_bug(X86_BUG_VMSCAPE);
- 		vmscape_mitigation = VMSCAPE_MITIGATION_ON;
-+	} else if (!strcmp(str, "on")) {
-+		vmscape_mitigation = VMSCAPE_MITIGATION_ON;
- 	} else if (!strcmp(str, "auto")) {
- 		vmscape_mitigation = VMSCAPE_MITIGATION_AUTO;
- 	} else {
+This change should be done together with the macro refactoring patch 
+mentioned in patch 3.
 
--- 
-2.34.1
+> +		u32 len_decap_min = 0;
+> +
+>   		if (!shrink)
+>   			return -EINVAL;
+>   
+> -		switch (flags & BPF_F_ADJ_ROOM_DECAP_L3_MASK) {
+> -		case BPF_F_ADJ_ROOM_DECAP_L3_IPV4:
+> +		/* Reject mutually exclusive decap flag pairs. */
+> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_L3_MASK) ==
+> +		    BPF_F_ADJ_ROOM_DECAP_L3_MASK)
 
+iiuc, this 'if' and the len_min assignment changes below replace the 
+existing switch case. Please separate this no-op change from the new 
+flag validation logic. It is small enough to be done together in the 
+macro refactoring patch also.
+
+> +			return -EINVAL;
+> +
+> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_MASK) ==
+> +		    BPF_F_ADJ_ROOM_DECAP_L4_MASK)
+> +			return -EINVAL;
+> +
+> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK) ==
+> +		    BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)
+> +			return -EINVAL;
+> +
+> +		/* Reject mutually exclusive decap tunnel type flags. */
+> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_MASK) &&
+> +		    (flags & BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK))
+> +			return -EINVAL;
+> +
+> +		if (flags & BPF_F_ADJ_ROOM_DECAP_L4_UDP)
+> +			len_decap_min += sizeof(struct udphdr);
+> +
+> +		if (flags & BPF_F_ADJ_ROOM_DECAP_L4_GRE)
+> +			len_decap_min += sizeof(struct gre_base_hdr);
+> +
+> +		if (len_diff_abs < len_decap_min)
+> +			return -EINVAL;
+> +
+> +		if (flags & BPF_F_ADJ_ROOM_DECAP_L3_IPV4)
+>   			len_min = sizeof(struct iphdr);
+> -			break;
+> -		case BPF_F_ADJ_ROOM_DECAP_L3_IPV6:
+> +
+> +		if (flags & BPF_F_ADJ_ROOM_DECAP_L3_IPV6)
+>   			len_min = sizeof(struct ipv6hdr);
+> -			break;
+> -		default:
+> -			return -EINVAL;
+> -		}
+>   	}
+>   
+>   	len_cur = skb->len - skb_network_offset(skb);
 
