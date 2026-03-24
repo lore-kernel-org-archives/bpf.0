@@ -1,144 +1,170 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80C803537D8
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 21:27:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C264C259CB2;
+	Tue, 24 Mar 2026 21:30:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774387648; cv=none; b=MY9ukQ6JvuNvuKJYMIWSoV2Boh6WPB/sqbXo8gp6nX3pz5v6OekuoIPkKb6yWkB2ulEdSXTFNKttlgiuufW2eFcaD3wIcM230sr1h/y8mX0NbQjNJJkeLTqxrgbwE6ftdq8Pzo4DLIgla1PRgpjaZHY7sMFdRSXxZN+VBlPfzG0=
+	t=1774387829; cv=none; b=kbGsnd8QNuAWt9MHA1Er6XnXPH5a3Y1rRXHpJnWUJQLJ9m67xH7herup6dTAmfv0zKsJVB3NHzXJ6sNveTwe7QmNzvgFXIFTc+EwywJpVE35++ehGgMEN21p1g6P9MxgFeb4EDuxNRCJE8lOnRA7b7br0dE6iwWUCVCChRGlCpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774387648; c=relaxed/simple;
-	bh=+PK9HY9pUZ0C+fawOgmlAhUP8YhbtL/lJkemA2N9ymo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RaSzLFWAsGUbMCZyVcqds2ZJQ661SVLyJkZsuggIQ7AqlGxqmL7vbEwhfBl80pwqLteNeD0U5AFoUU4+bOkix31iHtJ3S42BwoXMQ/vJ3x3zb90vBcVWOKf2ObsrjLjeL5nSg96R0AsMq6ZGeUNDeB9XIm1fB6tXnqFy3crhb7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BNBEGdA1; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774387829; c=relaxed/simple;
+	bh=39nUMyQfFEeGngy8KGNJdNCVECjoLlu165d2ANouZ6w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gsdBewUcmuhhY0MwpbflEjXFiR34IXi5dhnTPqYh0/EkzwjCgQ8l1Ih2SHhnrXcnrbeBlohN0kT0Q/FbqribJ024slnyDK8N9rNfYUIptGKRKDtdmzG6Mai6TE2vWXNZdNhfTlq+28yq0LRLP9D+Zdr701SNtaCNPTdq7/mLqsI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k4fZnumA; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BNBEGdA1"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-35ba749f441so1494675a91.1
-        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 14:27:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774387646; x=1774992446; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CmS2a+FJZOM8vZtvqJBXu1EgB8VQZ6zodtDJYGUpZeY=;
-        b=BNBEGdA1iov+NaGTRCl5BJlPyaYGGyNg9igwdtBOTl2nxskqqB7CUrH3ijBA/IqqdH
-         1ha8CEpf2g7ZVUjQgixpEs/SEmeWc6uWuoR5Sejz7/l7O4sHdNnLNAavIdjdAkptSovA
-         7x8rrkNZngpBmdqhesnm/+hdWJG9H8DKEpFa/wWiA+OuYhD1uiMt9Nn/s2Pv1pTuYOsM
-         nD8GgQQgXx5W6MtO5Pf75KBa708qfGb47GXXgYl7l9aHZUa9E10DJ0FKNbgI97ymOgBc
-         PHhs7MuoxyO5OnoHRcG/xWhNGtnrUOMPM9+qu9r/Edx13WTes9qWD+hVUteNLRhwySJk
-         tTlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774387646; x=1774992446;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=CmS2a+FJZOM8vZtvqJBXu1EgB8VQZ6zodtDJYGUpZeY=;
-        b=k9vYw/nrmtJSEvNyPk3spckb7ZZnMZSxaV3hHtUb4jj0gg9sJ75xd2hbW4m3v4g4+L
-         7Y+yR9JMJTgWdI9hlpuxQysH72awHJdaS9YndX02i+3J7mHdS/AlCPS/NLPT7/IG/PfL
-         34AdwXEvCVk0dK5H4jDwG84oaYpzYMyJ6I7Qfw1/r2RdKGrNmORqy8hg5VyijwxJ9HXO
-         i5eS1Qku7tLbzm8asiNGWrpgNI9braKT21yVfLWrnbTrj/Bexca4gfeyFJbRF3sruJWE
-         UKAJZq/HHpnrl3VCikGMZJANs9FJzyrA9di2wx97VkaxrB1PpvP/j+Z3fAJOTYR9jYQg
-         Z45g==
-X-Gm-Message-State: AOJu0YwmcO6QLGWJFrtZjoofJ77U2h951PKs8Bxw8/UTI8Hcr7NN/His
-	rVu/NPoCw5695At1OpUblobCkWcRCy6UNgYlSWjzPMbOvWqDAmL5GHdSV6rDKQ==
-X-Gm-Gg: ATEYQzyGe5QaNR5+nUKE+x36+YvQhZmgvwfHCbzXWDGKSsjRzgi6iSEz4Tx5xuB+FpC
-	zjQw8CV0TaNG0hYY/YP8b8XNu4xEdcviXj6jtYDH8Wj3AJH4HhmuVisX6YIIpjUaYNYMs3aULHE
-	eTRcuWavuBHQ8evGfY0H2mawqJNzukKK0Tm41JiIQdpmDngBNRWbELZDSVtXiFxCfukJkpFwcOU
-	vH8cjrqSwudElgrlSIzbdmuVXQiAcv8XzRe8IGuN/3nQa9O2eez0SnZqaCiIcW6ppNol3uw23vo
-	c2HE6fR+rEcONnoiHfpsXud4JljAPdDfd2AIBNMvhes6au31qy1+Mckl/KKIFt6ys4Q/TZWWmLs
-	pjx6l7MM5VvnG1j9Jt6H4m7ljNK0bL35TsTflAKZ2UoczZ+zySPFqomqwvpP84fGNMnkDseHunu
-	o94Laoo5gNME50VttFKPkroKiELK8DV2N58k9DP7sQHvT7axBSSyG1DAWG3BxCxEzPGqGsdAAZT
-	2BDNOMpIZnrAkiGFuDwtvct7I0BvzEY/FTYbb+frM2AF0yHnmq/730f/aOs6g==
-X-Received: by 2002:a17:90b:4a4f:b0:359:f22:8879 with SMTP id 98e67ed59e1d1-35c0ddb253amr845847a91.22.1774387646579;
-        Tue, 24 Mar 2026 14:27:26 -0700 (PDT)
-Received: from localhost.localdomain ([2601:600:837f:c470:1879:8422:922b:e5d3])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35c0d6060b5sm604151a91.17.2026.03.24.14.27.25
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 24 Mar 2026 14:27:26 -0700 (PDT)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@kernel.org,
-	memxor@gmail.com,
-	eddyz87@gmail.com
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Test variable length stack write
-Date: Tue, 24 Mar 2026 14:27:21 -0700
-Message-ID: <20260324212721.71245-2-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260324212721.71245-1-alexei.starovoitov@gmail.com>
-References: <20260324212721.71245-1-alexei.starovoitov@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k4fZnumA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774387827; x=1805923827;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=39nUMyQfFEeGngy8KGNJdNCVECjoLlu165d2ANouZ6w=;
+  b=k4fZnumACOTWWTWTiRlp/+TbFH8VDFhyjOpGpcMV/GlTWw+cpk7Y8K5c
+   WT1SLq8mQc9Nk5CjLmlIaocd+LY84/fgmteVsSXUeDMrElaqy+lZYiLZc
+   84pySkLLVMbctla/WYD/YV8PD0fQfueXyQJXwi/Sqncf0iHB1wEQrnPdr
+   0Dr82e/ywlQzbK4JntAbfZApmvRyrJI95e9fn2al0Xb8BoMfeXqUYxb1i
+   iTThJX7klf7GzPURk+UOEoRRywlemiVg6SQUTbPDxsFeVC//2odk3dHTM
+   hEL5/fBvyMIfjLTiFZUT/KzDPaHBpnesZBXf0sevPl+hHAMB6AuoK1vHL
+   w==;
+X-CSE-ConnectionGUID: 9/wSp/wvSEePXmlofbfEEw==
+X-CSE-MsgGUID: RqlTbL/MTzmQgFe6IDDWVg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="75443169"
+X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
+   d="scan'208";a="75443169"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 14:30:26 -0700
+X-CSE-ConnectionGUID: zWvkSUbgTmWNxtbAjjM07g==
+X-CSE-MsgGUID: lrHMiJ4aSoue0x0v96PqWg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
+   d="scan'208";a="226111963"
+Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 14:30:26 -0700
+Date: Tue, 24 Mar 2026 14:30:21 -0700
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>,
+	Nikolay Borisov <nik.borisov@suse.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	David Kaplan <david.kaplan@amd.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Laight <david.laight.linux@gmail.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	David Ahern <dsahern@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, Asit Mallick <asit.k.mallick@intel.com>,
+	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
+	netdev@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v8 01/10] x86/bhi: x86/vmscape: Move LFENCE out of
+ clear_bhb_loop()
+Message-ID: <20260324213021.c73ibiekw36xhd6x@desk>
+References: <20260324-vmscape-bhb-v8-0-68bb524b3ab9@linux.intel.com>
+ <20260324-vmscape-bhb-v8-1-68bb524b3ab9@linux.intel.com>
+ <20260324202251.GPacLym_7HV9IBbLaz@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260324202251.GPacLym_7HV9IBbLaz@fat_crate.local>
 
-From: Alexei Starovoitov <ast@kernel.org>
+On Tue, Mar 24, 2026 at 09:22:51PM +0100, Borislav Petkov wrote:
+> On Tue, Mar 24, 2026 at 11:16:36AM -0700, Pawan Gupta wrote:
+> > Currently, BHB clearing sequence is followed by an LFENCE to prevent
+> > transient execution of subsequent indirect branches prematurely. However,
+> > LFENCE barrier could be unnecessary in certain cases. For example, when
+> > kernel is using BHI_DIS_S mitigation, and BHB clearing is only needed for
+> > userspace. In such cases, LFENCE is redundant because ring transitions
+> > would provide the necessary serialization.
+> > 
+> > Below is a quick recap of BHI mitigation options:
+> > 
+> >   On Alder Lake and newer
+> > 
+> >   - BHI_DIS_S: Hardware control to mitigate BHI in ring0. This has low
+> > 	       performance overhead.
+> >   - Long loop: Alternatively, longer version of BHB clearing sequence
+> > 	       can be used to mitigate BHI. It can also be used to mitigate
+> > 	       BHI variant of VMSCAPE. This is not yet implemented in
+> > 	       Linux.
+> > 
+> >   On older CPUs
+> > 
+> >   - Short loop: Clears BHB at kernel entry and VMexit. The "Long loop" is
+> > 		effective on older CPUs as well, but should be avoided
+> > 		because of unnecessary overhead.
+> > 
+> > On Alder Lake and newer CPUs, eIBRS isolates the indirect targets between
+> > guest and host. But when affected by the BHI variant of VMSCAPE, a guest's
+> > branch history may still influence indirect branches in userspace. This
+> > also means the big hammer IBPB could be replaced with a cheaper option that
+> > clears the BHB at exit-to-userspace after a VMexit.
+> > 
+> > In preparation for adding the support for BHB sequence (without LFENCE) on
+> > newer CPUs, move the LFENCE to the caller side after clear_bhb_loop() is
+> > executed. Allow callers to decide whether they need the LFENCE or
+> > not. This adds a few extra bytes to the call sites, but it obviates
+> > the need for multiple variants of clear_bhb_loop().
+> 
+> Claude, please add proper articles where they're missing in the above text:
+> 
+> "Currently, the BHB clearing sequence is followed by an LFENCE to prevent
+> transient execution of subsequent indirect branches prematurely. However, the
+> LFENCE barrier could be unnecessary in certain cases. For example, when the
+> kernel is using the BHI_DIS_S mitigation, and BHB clearing is only needed for
+> userspace. In such cases, the LFENCE is redundant because ring transitions
+> would provide the necessary serialization.
+> 
+> Below is a quick recap of BHI mitigation options:
+> 
+> On Alder Lake and newer
+> 
+>     BHI_DIS_S: Hardware control to mitigate BHI in ring0. This has low
+>     performance overhead.
+> 
+>     Long loop: Alternatively, a longer version of the BHB clearing sequence
+>     can be used to mitigate BHI. It can also be used to mitigate the BHI
+>     variant of VMSCAPE. This is not yet implemented in Linux.
+> 
+> On older CPUs
+> 
+>     Short loop: Clears BHB at kernel entry and VMexit. The "Long loop" is
+>     effective on older CPUs as well, but should be avoided because of
+>     unnecessary overhead.
+> 
+> On Alder Lake and newer CPUs, eIBRS isolates the indirect targets between
+> guest and host. But when affected by the BHI variant of VMSCAPE, a guest's
+> branch history may still influence indirect branches in userspace. This also
+> means the big hammer IBPB could be replaced with a cheaper option that clears
+> the BHB at exit-to-userspace after a VMexit.
+> 
+> In preparation for adding the support for the BHB sequence (without LFENCE) on
+> newer CPUs, move the LFENCE to the caller side after clear_bhb_loop() is
+> executed. Allow callers to decide whether they need the LFENCE or not. This
+> adds a few extra bytes to the call sites, but it obviates the need for
+> multiple variants of clear_bhb_loop()."
+> 
+> Reads proper to me. Use it for your next revision pls.
 
-Add a test to make sure that variable length stack writes
-scrubs STACK_SPILL into STACK_MISC.
-
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- .../selftests/bpf/progs/verifier_spill_fill.c | 41 +++++++++++++++++++
- 1 file changed, 41 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-index a2b6d99628da..672e4446181e 100644
---- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-@@ -1316,4 +1316,45 @@ __naked void old_imprecise_scalar32_vs_cur_stack_misc(void)
- 	: __clobber_all);
- }
- 
-+SEC("raw_tp")
-+__success
-+__naked void var_off_write_over_scalar_spill(void)
-+{
-+	asm volatile (
-+	/* Get an unknown value bounded to {0, 4} */
-+	"call %[bpf_ktime_get_ns];"
-+	"r6 = r0;"
-+	"r6 &= 4;"
-+
-+	/* Spill a scalar to fp-16 */
-+	"r7 = 0xdeadbeef00000000 ll;"
-+	"*(u64 *)(r10 - 16) = r7;"
-+
-+	/*
-+	 * Variable-offset 4-byte write covering [fp-12, fp-4).
-+	 * This touches stype[3..0] of the spill slot at fp-16 but
-+	 * leaves stype[7..4] as STACK_SPILL. check_stack_write_var_off()
-+	 * must scrub the entire slot when setting spilled_ptr to NOT_INIT,
-+	 * otherwise a subsequent sub-register fill sees a non-scalar
-+	 * spilled_ptr and is rejected.
-+	 */
-+	"r8 = r10;"
-+	"r8 += r6;"
-+	"r8 += -12;"
-+	"r9 = 0;"
-+	"*(u32 *)(r8 + 0) = r9;"
-+
-+	/*
-+	 * 4-byte read from fp-16. Without the fix this fails with
-+	 * "invalid size of register fill" because is_spilled_reg()
-+	 * sees STACK_SPILL while spilled_ptr.type == NOT_INIT.
-+	 */
-+	"r0 = *(u32 *)(r10 - 16);"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_ktime_get_ns)
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.52.0
-
+Sure, will use this.
