@@ -1,254 +1,192 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EECF3C942C;
-	Tue, 24 Mar 2026 08:08:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D8A3365A08;
+	Tue, 24 Mar 2026 08:18:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774339694; cv=none; b=ZphPUhIHwi6gNdHv9Ia9NKvKUqp28NBBrLEQkq5yYESCVGiahwZt2GN61d3xcKNTgkpC6xRnrXfuK/ceJ5ySNbH0DySQX4zb6VvA+yKh2w7weU6swqGWt03KHcXHvHqz16WRIAJp0i+7kcXQ7IKF+PCSrYbcc5RJy3dcHC0daYc=
+	t=1774340340; cv=none; b=rkUHgr6T9ILAXdFzb9OwlRX0Nb7jwZxY2/das1v0WSqXBq4PNatuZ3EyPfNRg/+8xpy9tMBrRQLXMxAvASbEWfWyE7PVQRFtxcqWN7cwv+Cf41QLFsMwyE8GA8PyInT1pRLZF5q4gy5/jwa5wvqM98jrUnRt86cDUras1+mVXaM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774339694; c=relaxed/simple;
-	bh=a0Hq7JBY/yyVd5EppgclAW0QXM78t9KIM3zMxtFXKTA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jX2yfuq3MiWgshbA87rPRfHHH0Q7BzNtJeJ1Gi++nKXA4AVAI1hQIXnEM3Y6jstJF4Pebng3w5EMQw1mZaj/9rHif+0tWXWQWdRviG1RvaH0w0JnOQ+nb9d/4jEmoQkRZl1TJV/v5P1HdB/PXCehmqmyJhQJnDvLH43sJNizq0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=nd/N/cIZ; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1774340340; c=relaxed/simple;
+	bh=ZP1fqAasDk3GX97kzqOf84Tgy/Nd3Ugu5ZUEar1SkB8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AWaUXNFsp0BzmU9IIjwTvzWzBOLhKiYH9kYpr+q37NHM57UODiZ5tsXxLR8czE0EcagBFYD8//enyfAtLTJ9PM3ATqA3iMQHTVYr983TYrEPI6L6urUAEIHY35VC/fFU0DLWQeM5XMtkCly2zM62+nf85/eai26m6OK4Xo6nyC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NUAZgRIe; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="nd/N/cIZ"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 6341F4E427C3;
-	Tue, 24 Mar 2026 08:08:01 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 2D6606011D;
-	Tue, 24 Mar 2026 08:08:01 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D2415104510B0;
-	Tue, 24 Mar 2026 09:07:53 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1774339680; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=C9n9jI+Vm/d+FY8zoyyjjBY56nBV5IDRfgK7Hbw73Uo=;
-	b=nd/N/cIZqDfy+dpFekmnj0cHEJxACi2YcXLfqfIIfyGZ6ijTYqxqv0KSzHrzlDhyuLeyU5
-	DKGVqFsFAONcfd5SLXz6reDbfwJb2exQP7zyvCmcaif8HhqaTuO4SeJsageiU6zntOhLoA
-	mBgJ47+f5RduHOmLcq3nZdXqbImv5EwfnUL5rMgzws4OMrUlThkGxwVZWEAtdE+feH/lIc
-	77T91rKg8hZelp0+JZzCSrq1QpWCc9ZxH2tI7BWaS1mVWIL7UWP6JbuEksJ2qRTS1mNG3A
-	HTIPZhBNETgzgAtI9z9jGXry3wOBfZ2o7AEYhU3Gi80RKs5wtc8sW32OX/48Vg==
-Date: Tue, 24 Mar 2026 09:07:52 +0100
-From: Herve Codina <herve.codina@bootlin.com>
-To: Daniel Machon <daniel.machon@microchip.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
- <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Horatiu Vultur
- <horatiu.vultur@microchip.com>, Steen Hegelund
- <steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>, "Alexei
- Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- "Jesper Dangaard Brouer" <hawk@kernel.org>, John Fastabend
- <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Arnd
- Bergmann <arnd@arndb.de>, "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>, <netdev@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
-Subject: Re: [PATCH net-next 00/10] net: lan966x: add support for PCIe FDMA
-Message-ID: <20260324090752.0799acb1@bootlin.com>
-In-Reply-To: <20260323194059.jjphkep4teq5rzbc@DEN-DL-M70577.microsemi.net>
-References: <20260320-lan966x-pci-fdma-v1-0-ef54cb9b0c4b@microchip.com>
-	<20260323155204.0321db13@bootlin.com>
-	<20260323172640.2669232d@bootlin.com>
-	<20260323194059.jjphkep4teq5rzbc@DEN-DL-M70577.microsemi.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NUAZgRIe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6AE4C2BC9E;
+	Tue, 24 Mar 2026 08:18:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774340339;
+	bh=ZP1fqAasDk3GX97kzqOf84Tgy/Nd3Ugu5ZUEar1SkB8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=NUAZgRIedZ6JEMvehozelPs3VuITBFCTkDJl1XDe/GWkeY+SdtAP6d8DTiVSRNfj4
+	 s9wLcUQ6mLx6loXNeDZkKAVWdIqnmuNJ91VypTgG88Z3KBaCgZiyRbU8P2nGZGBifD
+	 jGcBPMaqRSAQQTBkTWkMM/dobi7/UWx6vzJyf56sx0XHbgzoWEZaN6ElL8aJfaXZkS
+	 i0Xv+eHz1lewUEFYkCwqh0To8CyNwrSE8ONyOPNcB0HnW+wuFwR4MCtd6zKbi0bmU8
+	 7RwKLnalgVzftvYaKNUhO3LylWYXLmNzgpOmMBrB+xNXu4xEkwfF7IfMWyyvETmt4H
+	 9ZMWzBXNSaywg==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Hengqi Chen <hengqi.chen@gmail.com>,
+	bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	Martin KaFai Lau <kafai@fb.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <songliubraving@fb.com>,
+	Yonghong Song <yhs@fb.com>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Steven Rostedt <rostedt@kernel.org>
+Subject: [PATCHv4 bpf-next 00/25] bpf: tracing_multi link
+Date: Tue, 24 Mar 2026 09:18:21 +0100
+Message-ID: <20260324081846.2334094-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
 
-Hi Daniel,
+hi,
+adding tracing_multi link support that allows fast attachment
+of tracing program to many functions.
 
-On Mon, 23 Mar 2026 20:40:59 +0100
-Daniel Machon <daniel.machon@microchip.com> wrote:
+RFC: https://lore.kernel.org/bpf/20260203093819.2105105-1-jolsa@kernel.org/
+v1: https://lore.kernel.org/bpf/20260220100649.628307-1-jolsa@kernel.org/
+v2: https://lore.kernel.org/bpf/20260304222141.497203-1-jolsa@kernel.org/
+v3: https://lore.kernel.org/bpf/20260316075138.465430-1-jolsa@kernel.org/
 
-> Hi Hervé,
-> 
-> > Hi Daniel,
-> > 
-> > On Mon, 23 Mar 2026 15:52:04 +0100
-> > Herve Codina <herve.codina@bootlin.com> wrote:
-> >   
-> > > Hi Daniel,
-> > >
-> > > On Fri, 20 Mar 2026 16:00:56 +0100
-> > > Daniel Machon <daniel.machon@microchip.com> wrote:
-> > >  
-> > > > When lan966x operates as a PCIe endpoint, the driver currently uses
-> > > > register-based I/O for frame injection and extraction. This approach is
-> > > > functional but slow, topping out at around 33 Mbps on an Intel x86 host
-> > > > with a lan966x PCIe card.
-> > > >
-> > > > This series adds FDMA (Frame DMA) support for the PCIe path. When
-> > > > operating as a PCIe endpoint, the internal FDMA engine on lan966x cannot
-> > > > directly access host memory, so DMA buffers are allocated as contiguous
-> > > > coherent memory and mapped through the PCIe Address Translation Unit
-> > > > (ATU). The ATU provides outbound windows that translate internal FDMA
-> > > > addresses to PCIe bus addresses, allowing the FDMA engine to read and
-> > > > write host memory. Because the ATU requires contiguous address regions,
-> > > > page_pool and normal per-page DMA mappings cannot be used. Instead,
-> > > > frames are transferred using memcpy between the ATU-mapped buffers and
-> > > > the network stack. With this, throughput increases from ~33 Mbps to ~620
-> > > > Mbps for default MTU.
-> > > >
-> > > > Patches 1-2 prepare the shared FDMA library: patch 1 renames the
-> > > > contiguous dataptr helpers for clarity, and patch 2 adds PCIe ATU region
-> > > > management and coherent DMA allocation with ATU mapping.
-> > > >
-> > > > Patches 3-5 refactor the lan966x FDMA code to support both platform and
-> > > > PCIe paths: extracting the LLP register write into a helper, exporting
-> > > > shared functions, and introducing an ops dispatch table selected at
-> > > > probe time.
-> > > >
-> > > > Patch 6 adds the core PCIe FDMA implementation with RX/TX using
-> > > > contiguous ATU-mapped buffers. Patches 7 and 8 extend it with MTU
-> > > > change and XDP support respectively.
-> > > >
-> > > > Patches 9-10 update the lan966x PCI device tree overlay to extend the
-> > > > cpu register mapping to cover the ATU register space and add the FDMA
-> > > > interrupt.
-> > > >  
-> > >
-> > > Thanks a lot for the series taking care of DMA and ATU in PCIe variants.
-> > >
-> > > I have tested the whole series on both my ARM and x86 systems.
-> > >
-> > > Doing a simple wget on my x86 system, I moved from 3.8MB/s to 11.2MB/s and
-> > > so the improvement is obvious.
-> > >
-> > > Tested-by: Herve Codina <herve.codina@bootlin.com>
-> > >  
-> > 
-> > Hum, I think I found an issue.
-> > 
-> > If I remove the lan966x_pci module (modprobe -r lan966x_pci), and reload
-> > it (modprobe lan966x_pci), the board is not working.
-> > 
-> > The system performs DHCP requests. Those requests are served by my PC (observed
-> > with Wireshark) but the system doesn't see those answers. Indeed, he continues
-> > to perform DHCP requests.
-> > 
-> > Looks like the lan966x_pci module removal leaves the board in a bad state.
-> > 
-> > Without the series applied, DHCP request answers from my PC are seen by the
-> > system after any module unloading / reloading.
-> > 
-> > Do you have any ideas of what could be wrong?
-> > 
-> > Best regards,
-> > Hervé  
-> 
-> Thanks for testing this!
-> 
-> As part of my testing I did unload/load the lan966x_switch module to ensure the
-> ATU was properly reset and reconfigured, and that seemed to work fine. I must
-> admit, I did not try with the lan966x_pci module.
-> 
-> From what I hear, when you are in the bad state, TX is still working, so it's an
-> RX issue. Could be the interrupt is not firing, so the napi poll is not
-> scheduled.
+v4 changes:
+- unlink rollback fix (added ftrace_hash_count) [bot]
+- use const for some bpf_link_create_opts tracing_multi members [bot]
+- adding missing comment for lockdep keys [bot]
+- selftest error path fixes (leaks) and other assorted test fixes [Leon Hwang]
+- several compile fixes wrt CONFIG_BPF_SYSCALL and CONFIG_BPF_JIT [kernel test robot]
+- make ftrace_hash_clear global, because it's needed in rollback
 
-Yes, confirmed that the issue is on Rx path. Tx data were received by my PC.
+v3 changes:
+- fix module parsing [Leon Hwang]
+- use function traceable check from libbpf [Leon Hwang]
+- use ptr_to_u64 and fix/updated few comments [ci]
+- display cookies as decimal numbers [ci]
+- added link_create.flags check [ci]
+- fix error path in bpf_trampoline_multi_detach [ci]
+- make fentry/fexit.multi not extendable [ci]
+- add missing OPTS_VALID to bpf_program__attach_tracing_multi [ci]
 
-> 
-> Anyway, I will have a look at it during the week. Will let you know.
-> 
+v2 changes:
+- allocate data.unreg in bpf_trampoline_multi_attach for rollback path [ci]
+  and fixed link count setup in rollback path [ci]
+- several small assorted fixes [ci]
+- added loongarch and powerpc changes for struct bpf_tramp_node change
+- added support to attach functions from modules
+- added tests for sleepable programs
+- added rollback tests
 
-Some more interesting information.
+v1 changes:
+- added ftrace_hash_count as wrapper for hash_count [Steven]
+- added trampoline mutex pool [Andrii]
+- reworked 'struct bpf_tramp_node' separatoin [Andrii]
+  - the 'struct bpf_tramp_node' now holds pointer to bpf_link,
+    which is similar to what we do for uprobe_multi;
+    I understand it's not a fundamental change compared to previous
+    version which used bpf_prog pointer instead, but I don't see better
+    way of doing this.. I'm happy to discuss this further if there's
+    better idea
+- reworked 'struct bpf_fsession_link' based on bpf_tramp_node
+- made btf__find_by_glob_kind function internal helper [Andrii]
+- many small assorted fixes [Andrii,CI]
+- added session support [Leon Hwang]
+- added cookies support
+- added more tests
 
-I tested lan966x_pci module unloading and re-loading on my ARM system.
 
-On this system the following traces are present when I reload the lan966x_pci
-module. Those traces were not present on my x86 system.
+Note I plan to send linkinfo support separately, the patchset is big enough.
 
-    [  104.715031] ------------[ cut here ]------------
-    [  104.719746] Unexpected error: 64, error_type: 1073741824
-    [  104.725217] WARNING: drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c:558 at lan966x_fdma_irq_handler+0xe0/0x12c [lan966x_switch], CPU#0: swapper/0/0
-    [  104.739119] Modules linked in: lan966x_pci irq_lan966x_oic reset_microchip_sparx5 pinctrl_ocelot lan966x_serdes mdio_mscc_miim lan966x_switch rtc_ds1307 marvell [last unloaded: lan966x_pci]
-    [  104.756250] CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted 7.0.0-rc1-00010-gfa357f2a6a00 #565 PREEMPT 
-    [  104.765743] Hardware name: Marvell Armada 3720 Development Board DB-88F3720-DDR3 (DT)
-    [  104.773579] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-    [  104.780551] pc : lan966x_fdma_irq_handler+0xe0/0x12c [lan966x_switch]
-    [  104.787046] lr : lan966x_fdma_irq_handler+0xe0/0x12c [lan966x_switch]
-    [  104.793538] sp : ffff800082a7bc00
-    [  104.796860] x29: ffff800082a7bc00 x28: ffff8000819abd00 x27: ffff800081a57757
-    [  104.804033] x26: ffff8000819a5d88 x25: 0000000000012400 x24: ffff800081a57758
-    [  104.811205] x23: 0000000000000038 x22: ffff00000f70ec00 x21: 0000000040000000
-    [  104.818376] x20: ffff00000f7a8080 x19: 0000000000000040 x18: 00000000ffffffff
-    [  104.825548] x17: ffff7fff9e7d6000 x16: ffff800082a78000 x15: ffff800102a7b837
-    [  104.832719] x14: 0000000000000000 x13: 0000000000000000 x12: 3031203a65707974
-    [  104.839891] x11: ffff8000819ca758 x10: 0000000000000018 x9 : ffff8000819ca758
-    [  104.847062] x8 : 00000000ffffefff x7 : ffff800081a22758 x6 : 00000000fffff000
-    [  104.854233] x5 : ffff00001fea1588 x4 : 0000000000000000 x3 : 0000000000000027
-    [  104.861404] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff8000819abd00
-    [  104.868576] Call trace:
-    [  104.871034]  lan966x_fdma_irq_handler+0xe0/0x12c [lan966x_switch] (P)
-    [  104.877531]  __handle_irq_event_percpu+0xa0/0x4c4
-    [  104.882261]  handle_irq_event+0x4c/0xf8
-    [  104.886117]  handle_level_irq+0xec/0x17c
-    [  104.890064]  handle_irq_desc+0x40/0x58
-    [  104.893831]  generic_handle_domain_irq+0x18/0x24
-    [  104.898467]  lan966x_oic_irq_handler_domain+0x64/0xb0 [irq_lan966x_oic]
-    [  104.905105]  lan966x_oic_irq_handler+0x34/0xb4 [irq_lan966x_oic]
-    [  104.911131]  handle_irq_desc+0x40/0x58
-    [  104.914900]  generic_handle_domain_irq+0x18/0x24
-    [  104.919536]  pci_dev_irq_handler+0x1c/0x30 [lan966x_pci]
-    [  104.924871]  __handle_irq_event_percpu+0xa0/0x4c4
-    [  104.929594]  handle_irq_event+0x4c/0xf8
-    [  104.933449]  handle_level_irq+0xec/0x17c
-    [  104.937394]  handle_irq_desc+0x40/0x58
-    [  104.941162]  generic_handle_domain_irq+0x18/0x24
-    [  104.945797]  advk_pcie_irq_handler+0x160/0x390
-    [  104.950260]  __handle_irq_event_percpu+0xa0/0x4c4
-    [  104.954983]  handle_irq_event+0x4c/0xf8
-    [  104.958839]  handle_fasteoi_irq+0x108/0x20c
-    [  104.963043]  handle_irq_desc+0x40/0x58
-    [  104.966811]  generic_handle_domain_irq+0x18/0x24
-    [  104.971447]  gic_handle_irq+0x4c/0x110
-    [  104.975214]  call_on_irq_stack+0x30/0x48
-    [  104.979156]  do_interrupt_handler+0x80/0x84
-    [  104.983360]  el1_interrupt+0x3c/0x60
-    [  104.986959]  el1h_64_irq_handler+0x18/0x24
-    [  104.991076]  el1h_64_irq+0x6c/0x70
-    [  104.994495]  default_idle_call+0x80/0x138 (P)
-    [  104.998870]  do_idle+0x220/0x290
-    [  105.002121]  cpu_startup_entry+0x34/0x3c
-    [  105.006064]  rest_init+0xf8/0x188
-    [  105.009398]  start_kernel+0x818/0x8ec
-    [  105.013085]  __primary_switched+0x88/0x90
-    [  105.017119] irq event stamp: 60740
-    [  105.020529] hardirqs last  enabled at (60739): [<ffff800080fb37bc>] default_idle_call+0x7c/0x138
-    [  105.029328] hardirqs last disabled at (60740): [<ffff800080fab5c4>] enter_from_kernel_mode+0x10/0x3c
-    [  105.038477] softirqs last  enabled at (60728): [<ffff8000800cb774>] handle_softirqs+0x624/0x63c
-    [  105.047193] softirqs last disabled at (60711): [<ffff8000800102d8>] __do_softirq+0x14/0x20
-    [  105.055471] ---[ end trace 0000000000000000 ]---
-    [  105.060274] ------------[ cut here ]------------
-    [  105.064963] Unexpected error: 64, error_type: 1073741824
-    [  105.070440] WARNING: drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c:558 at lan966x_fdma_irq_handler+0xe0/0x12c [lan966x_switch], CPU#0: swapper/0/0
-    ...
-    [  105.443891] ------------[ cut here ]------------
-    [  105.448536] Unexpected error: 64, error_type: 0
-    [  105.453235] WARNING: drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c:558 at lan966x_fdma_irq_handler+0xe0/0x12c [lan966x_switch], CPU#0: swapper/0/0
-    ...
+thanks,
+jirka
 
-And after them my ARM system don't see the answer of a ping command
-replied by my PC (I don't use DHCP with my ARM system).
 
-I don't know why those traces are not present on my x86 (config, race
-condition, other reason) but anyway, they can help to find some clues
-about what's going on.
+Cc: Hengqi Chen <hengqi.chen@gmail.com>
+---
+Jiri Olsa (25):
+      ftrace: Add ftrace_hash_count function
+      ftrace: Make ftrace_hash_clear global
+      bpf: Use mutex lock pool for bpf trampolines
+      bpf: Add struct bpf_trampoline_ops object
+      bpf: Add struct bpf_tramp_node object
+      bpf: Factor fsession link to use struct bpf_tramp_node
+      bpf: Add multi tracing attach types
+      bpf: Move sleepable verification code to btf_id_allow_sleepable
+      bpf: Add bpf_trampoline_multi_attach/detach functions
+      bpf: Add support for tracing multi link
+      bpf: Add support for tracing_multi link cookies
+      bpf: Add support for tracing_multi link session
+      bpf: Add support for tracing_multi link fdinfo
+      libbpf: Add bpf_object_cleanup_btf function
+      libbpf: Add bpf_link_create support for tracing_multi link
+      libbpf: Add btf_type_is_traceable_func function
+      libbpf: Add support to create tracing multi link
+      selftests/bpf: Add tracing multi skel/pattern/ids attach tests
+      selftests/bpf: Add tracing multi skel/pattern/ids module attach tests
+      selftests/bpf: Add tracing multi intersect tests
+      selftests/bpf: Add tracing multi cookies test
+      selftests/bpf: Add tracing multi session test
+      selftests/bpf: Add tracing multi attach fails test
+      selftests/bpf: Add tracing multi attach benchmark test
+      selftests/bpf: Add tracing multi attach rollback tests
 
-Of course, feel free to ask me some more tests or anything else I can do
-to help on this topic.
-
-Best regards,
-Hervé
+ arch/arm64/net/bpf_jit_comp.c                                      |  58 +++---
+ arch/loongarch/net/bpf_jit.c                                       |  44 ++---
+ arch/powerpc/net/bpf_jit_comp.c                                    |  46 ++---
+ arch/riscv/net/bpf_jit_comp64.c                                    |  52 ++---
+ arch/s390/net/bpf_jit_comp.c                                       |  44 ++---
+ arch/x86/net/bpf_jit_comp.c                                        |  54 ++---
+ include/linux/bpf.h                                                | 102 +++++++---
+ include/linux/bpf_types.h                                          |   1 +
+ include/linux/bpf_verifier.h                                       |   3 +
+ include/linux/btf_ids.h                                            |   1 +
+ include/linux/ftrace.h                                             |   2 +
+ include/linux/trace_events.h                                       |   6 +
+ include/uapi/linux/bpf.h                                           |   9 +
+ kernel/bpf/bpf_struct_ops.c                                        |  27 +--
+ kernel/bpf/btf.c                                                   |   4 +
+ kernel/bpf/syscall.c                                               |  88 ++++++---
+ kernel/bpf/trampoline.c                                            | 536 ++++++++++++++++++++++++++++++++++++++++---------
+ kernel/bpf/verifier.c                                              | 124 +++++++++---
+ kernel/trace/bpf_trace.c                                           | 149 +++++++++++++-
+ kernel/trace/ftrace.c                                              |   9 +-
+ net/bpf/bpf_dummy_struct_ops.c                                     |  14 +-
+ net/bpf/test_run.c                                                 |   3 +
+ tools/include/uapi/linux/bpf.h                                     |  10 +
+ tools/lib/bpf/bpf.c                                                |   9 +
+ tools/lib/bpf/bpf.h                                                |   5 +
+ tools/lib/bpf/libbpf.c                                             | 337 ++++++++++++++++++++++++++++++-
+ tools/lib/bpf/libbpf.h                                             |  15 ++
+ tools/lib/bpf/libbpf.map                                           |   1 +
+ tools/lib/bpf/libbpf_internal.h                                    |   1 +
+ tools/testing/selftests/bpf/Makefile                               |   9 +-
+ tools/testing/selftests/bpf/prog_tests/tracing_multi.c             | 912 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/tracing_multi_attach.c           |  39 ++++
+ tools/testing/selftests/bpf/progs/tracing_multi_attach_module.c    |  25 +++
+ tools/testing/selftests/bpf/progs/tracing_multi_bench.c            |  12 ++
+ tools/testing/selftests/bpf/progs/tracing_multi_check.c            | 212 ++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/tracing_multi_fail.c             |  18 ++
+ tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c |  41 ++++
+ tools/testing/selftests/bpf/progs/tracing_multi_rollback.c         |  43 ++++
+ tools/testing/selftests/bpf/progs/tracing_multi_session_attach.c   |  43 ++++
+ tools/testing/selftests/bpf/trace_helpers.c                        |   6 +-
+ tools/testing/selftests/bpf/trace_helpers.h                        |   1 +
+ 41 files changed, 2749 insertions(+), 366 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_attach.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_attach_module.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_bench.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_check.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_fail.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_rollback.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_session_attach.c
