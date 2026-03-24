@@ -1,132 +1,94 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D00683AF648
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 21:59:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EC763B19BC
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 22:09:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774389596; cv=none; b=QUzA9Bo8Ec3gMCJcKIyFVwv0kHUUQrrogFlQz/VbCHrsYDRsWTwbt7W2EtT5Hir0wIVGEsqT06kZL9PaWimjClcgbfeCVqcyl/lQp0on4R0d6g1x/6sMgwD44NUQJ33SdELDy35hrH+/fnTWTTPLBX8q2mhKeM0d8VzpHy9aKmU=
+	t=1774390159; cv=none; b=KHTsg6ibpl9y4/+uRzWUAsEQEWsxa5UOu9xYGBxHlVDonbYPXtBs1TinlWghCu8R029/RsrTlYnfs+Sv2NUjUdg0eHxuBjkXGo47bXotwElsABy9AVfS21QOUHg4UZFSKkjwefaVf575J+xqxZ6B2XnliUX3Kn9CmeAWvYLqLe4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774389596; c=relaxed/simple;
-	bh=ShgZqAsm1ES9TM2DCVST2bOFKrWMl1Az0BkQq6rZ+Ew=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eAvxcT8SxUaHZoNseQqSKd6uPvsz0FbCH5C85SHzbN+LHDA8WUMJze9WODBXV8UbuBRGvMu11Br22U5Q7JdWqStP4ZDriiQcu0orEbcF65psmBdX/xKQ2ebmcCtny0tQLKM4803825MWLL/p1raXVsXNvIvZJMgmwDifMN9jsZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dvc3wWfY; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1774390159; c=relaxed/simple;
+	bh=7vKkBYwCe0nZLOJaqUqy3huVvBWvizJCtj6drN+3kj0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pjJ4u5AUOnmb/VAALsTmALZyhZ0jXfJir8/AosbJbLCczMLLitALHXoh2P8mPPnwhQzd6BJRUAWt9yYtWkrtKD7Ez2p0SXpViU4+bizdvBxcwB+UldEIsAOTCB0RUmNIcFU5lUIp7uWqjXj2Og4/aw0DEhk+6uqg8clGgGJEaiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F3SBn1+s; arc=none smtp.client-ip=74.125.82.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dvc3wWfY"
-Message-ID: <9adc3c2e-0d5a-4863-b3ed-194d8f9fd630@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774389581;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=x6cbUmLdr2RxX8BjNLt/qO3H5GrfRjVsh/qY1m2DFXM=;
-	b=dvc3wWfYADOarkhfj7HCpwJ7tW6Yjy29gNM6Jw1oC7c/yXnkjaG55LEHh73E0nY85ZPYp3
-	8l75bFEL+HPFUdFh5PsEzVkG5/ff42c162xk16fcwJN/iU8X8zDvHDf/KGLpq7/RghyQJB
-	efIzOvHgApLtbGpO5K2N/Z8CO/uNwPo=
-Date: Tue, 24 Mar 2026 14:59:32 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F3SBn1+s"
+Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-128e4d0cc48so5206681c88.1
+        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 15:09:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774390157; x=1774994957; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=7vKkBYwCe0nZLOJaqUqy3huVvBWvizJCtj6drN+3kj0=;
+        b=F3SBn1+sT1XmB9qNTaErJHn3AElIExkDPeHEtULN6Y4XINvIAbEPrI0J70l8N9dIeW
+         Q2qbYyTlnG5ZwYiN6PudrmmHEG0TAGndX+FxtmKpl3sY+DLOaR4YmpX/U+1tiwEq7F3u
+         y5FgExxug4S/JtpqveTl++t9ENAIvnxgyx78MH2asCx/XduihR9BLxkqfPUGn7cy2p0p
+         fnHZIJBmt7ZsOvyfrUDT/xXPaB98NTbn6XtanHIGa2emtbOqntEcRwNLQEEW/tjhPhrq
+         tRWJE+G8/IVZZyiIIBDiE60V6wb28faEcRVmvjT0+OByLgqfv2XLS++QiFtbKDBC460V
+         ZhdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774390157; x=1774994957;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7vKkBYwCe0nZLOJaqUqy3huVvBWvizJCtj6drN+3kj0=;
+        b=cKJ2RpajJVGnJzr9ytUqNTmGc/qzKu/UNsfYNiL6+VaR3+bfq4Vyp65afABTveMY5X
+         isVA3X2MRnsIYRYiaDwe7/DYCKKuNyXRG0YKeMsOFawf7VQz9ECBXPj4IFTj/lU4aZqc
+         NijTC5e1/6aTt6mIyxEssvrCiOAcvT8HoOIwh6RM2zKSIK++h9cIRCCWxEo0Uu6ltg9T
+         VUf0vJBxmzzzXQlGCE4uZLbHkrd1Lhp5X1WylAd7fCBhm5ZPk6Hh6NetyDjeE7QLYT7v
+         HghvFuWeru8VKqN0tLytNqDwFyXnUOdRIhQIHGiNwi6WdXj+xwZdGf3RggR5N0CykkPZ
+         NXrw==
+X-Forwarded-Encrypted: i=1; AJvYcCU9Z4cWSwPsdzpui4pqLoJSTRFssxwNBnaKIGJdr2aJtaJaXUWLNlXq5/EgGzBGo9DEVb0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxG3AeX4AwKkYEKZUgT6PK2UKbP52JBdIwDj226MyGc/g6LH2dk
+	6Zfpj+cs5omQkOsnnQdkcGUoOzLeqEoAKvhtABIV17Xf+zE4KtS8mDx1
+X-Gm-Gg: ATEYQzwuoit1xGi/fYMBQqLBltmZlDb3gKMYoTr7IMAsH9DPEEA9duZ8OqCeVOzM9Ir
+	SG3EnT5IYQ31+ajUbqY0iZxu95LXgRJrrzCRnlYGEzS1rRJkz7lf5C9nA7bY4Ir+v+770CsnLtb
+	GrUGaqG2s4lXMGgPZqQW+NW+USBnLp1tJdsP0KqGu6zsltWgeUy4boCIhSrIHWeHLyiqdk+cY8a
+	ODCg+SWmLiPMvLd2yNWxXyPzR1LJ08gGB6H/qwbFrWpE968rjuLPny06+H31wdPrsNK8HuFuyTi
+	Kgeye90QUxN/PXk6n1O2tKN8hlWK5Qx5aAwTQJ5CC+se66VOup+UcA6/Ku7jdBf174EOKkvYxRw
+	AWNIhdq1A1E+3ZYTMwNPnkogU3otHL/7X+ih8punDtqkgnug2POlYpLyxvKgQcgVuPz6eT+q9B5
+	azQySRF+ykDEC8yamdvXAP1Eri63bFbCrRlpopgDzM6g7Uwco4HgoSByct13dE4onY7Y6d+N+nr
+	uTq/w2t4sNEalNl
+X-Received: by 2002:a05:7022:510:b0:128:c77a:6c8e with SMTP id a92af1059eb24-12a96ee761bmr570587c88.28.1774390157333;
+        Tue, 24 Mar 2026 15:09:17 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:41fb:8dcd:b77b:d6ce? ([2620:10d:c090:500::bed7])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b17b8f2sm22083304eec.9.2026.03.24.15.09.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Mar 2026 15:09:16 -0700 (PDT)
+Message-ID: <8c907a804b9a651bc04c326f6fd1a110dec78cab.camel@gmail.com>
+Subject: Re: [PATCH v2 bpf-next 2/2] selftests/bpf: Test variable length
+ stack write
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org, 
+	memxor@gmail.com
+Date: Tue, 24 Mar 2026 15:09:15 -0700
+In-Reply-To: <20260324215938.81733-2-alexei.starovoitov@gmail.com>
+References: <20260324215938.81733-1-alexei.starovoitov@gmail.com>
+	 <20260324215938.81733-2-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v1 2/2] selftests/bpf: Add protocol check test for
- bpf_sk_assign_tcp_reqsk()
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
- bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260323105510.51990-1-jiayuan.chen@linux.dev>
- <20260323105510.51990-3-jiayuan.chen@linux.dev>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20260323105510.51990-3-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 3/23/26 3:54 AM, Jiayuan Chen wrote:
-> +void test_tcp_custom_syncookie_protocol_check(void)
-> +{
-> +	struct test_tcp_custom_syncookie *skel;
-> +	struct sockaddr_in tcp_addr, udp_addr;
-> +	socklen_t addr_len = sizeof(tcp_addr);
-> +	int tcp_server = -1, udp_client = -1;
-> +	char buf[32] = "test";
-> +	int ret;
-> +
-> +	if (setup_netns())
-> +		return;
-> +
-> +	skel = test_tcp_custom_syncookie__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-> +		return;
->   
-> +	/* Create a TCP listener so the BPF can find a LISTEN socket */
-> +	tcp_server = start_server(AF_INET, SOCK_STREAM, "127.0.0.1", 0, 0);
-> +	if (!ASSERT_NEQ(tcp_server, -1, "start tcp_server"))
-> +		goto destroy_skel;
-> +
-> +	ret = getsockname(tcp_server, (struct sockaddr *)&tcp_addr, &addr_len);
-> +	if (!ASSERT_OK(ret, "getsockname"))
-> +		goto close_tcp;
-> +
-> +	skel->bss->tcp_listener_port = ntohs(tcp_addr.sin_port);
-> +	skel->bss->udp_test_port = 9999;
-> +
-> +	ret = bpf_program__fd(skel->progs.tcp_custom_syncookie_badproto);
-> +	if (setup_tc(ret))
-> +		goto close_tcp;
-> +
-> +	udp_client = socket(AF_INET, SOCK_DGRAM, 0);
-> +	if (!ASSERT_NEQ(udp_client, -1, "udp socket"))
-> +		goto cleanup_tc;
-> +
-> +	memset(&udp_addr, 0, sizeof(udp_addr));
-> +	udp_addr.sin_family = AF_INET;
-> +	udp_addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-> +	udp_addr.sin_port = htons(9999);
-> +
-> +	ret = sendto(udp_client, buf, sizeof(buf), 0,
-> +		     (struct sockaddr *)&udp_addr, sizeof(udp_addr));
-> +	ASSERT_EQ(ret, sizeof(buf), "sendto udp");
-> +
-> +	/* Wait for TC ingress BPF to process the skb. */
-> +	kern_sync_rcu();
+On Tue, 2026-03-24 at 14:59 -0700, Alexei Starovoitov wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+>=20
+> Add a test to make sure that variable length stack writes
+> scrubs STACK_SPILL into STACK_MISC.
+>=20
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> ---
 
-hmm... is it guaranteed to work? Regardless, it checks the error 
-returned from bpf_sk_assign_tcp_reqsk(). Maybe bpf_prog_test_run is simpler?
+Tested-by: Eduard Zingerman <eddyz87@gmail.com>
 
-pw-bot: cr
-
-> +
-> +	ASSERT_EQ(skel->bss->udp_intercepted, true, "udp_intercepted");
-> +
-> +	/* assign_ret == 0 means kfunc accepted UDP skb (bug).
-> +	 * assign_ret < 0 means kfunc correctly rejected it (fixed).
-> +	 */
-> +	ASSERT_NEQ(skel->data->assign_ret, 0, "assign_ret");
-> +
-> +cleanup_tc:
-> +	system("tc qdisc del dev lo clsact");
-> +	if (udp_client >= 0)
-> +		close(udp_client);
-> +close_tcp:
-> +	close(tcp_server);
-> +destroy_skel:
->   	test_tcp_custom_syncookie__destroy(skel);
->   }
+[...]
