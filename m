@@ -1,143 +1,138 @@
-Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA3AF30595C
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 19:33:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774380836; cv=none; b=XNoJqSAllatWiVvOA4XSaUCTqNa/5tb5WqPm3Jpz2Kxk1g/uiMIEu3sM/r9MWvWkDRedUwtf8kULAzYt9sNKCCvnIXXjipyAs4koMRgfaq5USRZZ7Zgiz7A0KnMpRdi4Jx/4a5KkYPIhpZcIEEYb0HFUieL2y5VUFx+0jw0/5v4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774380836; c=relaxed/simple;
-	bh=YPa3OlHZQHQcse4VHD1bGWQSnkTfICpradR8dYdmznE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=jtG59o3KXYN9gZklzk6lRaXwmr53YOJgmeASZQtK5jsmLe9xdTMIx5vi9rwa9xKH4I1jffmZiLigWiEMfrsuOPL9KruQHDelBZL9EPKBbgdWRBQ+3J3mYNIZkqbFZDuqVJNsPh9PtYZT7GHJW1Jirh3iqkY7JentbX/xYomGPpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e4LRdmxA; arc=none smtp.client-ip=74.125.82.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62A9B2D3EC7
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 19:38:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774381135; cv=pass; b=dVdOB9hAXshF8ZwXNW3dOqIue4x1Sa9FJRRp0JGXvBi1OAOPgwOFR1RJEQLQOtmxlEw3KVyRppRxtuqYDMFsyFIoy1zRCxY3cD6cYuAYtdmKOSgEpycgILS3cE4H4T32nJ9ar6rUZXa4vzYj8tU7QxhzaQgLrFJWP6F8t32K7PA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774381135; c=relaxed/simple;
+	bh=yI3xCTn6GHth7mFYEZb0fW+liPFwZsS6/4VS9PzQLAE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TUiWKH/cCMF/OB7LKQRabsc+UHDDCYVQti94MTkzR3AQ5uI83oQ5Wo1vVAtYaSCkHXoQ0peuOtVpYNGUNQqvwZWKqQ/95cTVdfkZFQibg1LjOlfpQmMPKakXQoMNCAZZ0ZwYp6+lOV30/Ue2InDjQeQqB1kYs+S5IEbDxS0VEXw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KVl7tP6h; arc=pass smtp.client-ip=209.85.221.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e4LRdmxA"
-Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2c0f754e756so2050850eec.1
-        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 12:33:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KVl7tP6h"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-43b4f48c47cso3113045f8f.0
+        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 12:38:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774381131; cv=none;
+        d=google.com; s=arc-20240605;
+        b=cZpLCAM775oAR5BbzCT2w711CtCILZzUV69KqsgKkvS59/qrbCZu780REfxwpQ2r1w
+         k/cC6ddOe/bpr8vMg5Ky4ocGibczGDhYV+F+N8YrUu7UpggGG3nyhPUlBGB8MRD/5XmU
+         TWA3iwiVFeeaDBGp5p72c9AIFMLwRwgYw5ffpPTQLFzE4ZI1nd7SzN8McQHEECxdcZcL
+         0ARmH+QAO9yf2ssAU7gcX7aJrG1theQ9TlVZFzqCg+i4X+ahqn0ju4hN+n58jrLTKSGM
+         53732v32ETP1Q+re7sNQXjBKO1iqJbpDyh7P3yIu1oZ+HM99lZgoC6In/X1TAfxX5IqU
+         yweg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=RyulBWdtbse6vY2m0hI5hgut+qotDEBTgU/TQet2TLQ=;
+        fh=QWPamShyA1J/8s5doFWE3PWqLapUJDuSRevdrJZqM+c=;
+        b=W+AjJAoJo2plIsEEQt5PkSdEKpUVhdwOOk1uWm8WqftstPP98omC9VvoiidQbJF7IS
+         Us/yu3ZvlHf1d8WpfwYthERVhJ/6Ixn9VmXK6Cc7bExyGMqts2uMEZ9eSAMhyNMZpowN
+         GvYLNVAlf8CUuLXFm1BtTtLNLwI+EEFkJeAAGkDo2y/5nhQnq1WxMQLokmJ1+FuBPGN2
+         Roo0BpJiENX5XuXhNq12IyN9ZftZwWDWu8VqN4lXbT5Yr5c3UpTHRii6xcEOMdoKjsC8
+         Bla1P+f9GSa6YqWJ17Jf+BvXX5DuNMJBvL7KLAJID9bR60xDWTD6SqbxyWgyz/XjPbnB
+         sOKQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774380835; x=1774985635; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=QCFGqUyXSc27G5VbKUMAxY0nregM0umwX0rgUYgLRMo=;
-        b=e4LRdmxAttjF8i5L9vFcv7l/GeD7tcXtFiUqy9BrbHKMvt55wuo+Mv8+RNPgDELDJg
-         qdvAUr/+stUmP58zn8rL9lQILaFKvXUZUR03+YoGu9dNVZBt7UrBj0vucBBx2h1etCIB
-         4b8huNnvEZr3xChyq4ZzNd0FLS+6LLRUvDI1DYRrd/wu8g4HQj9NybO4N6e6XcdAnmhH
-         sz0aZwBZtjL7tdS9VzC7Hwo9cej8OvPOPw9Yq8qRORKNlRjYqxcQnXYPSTN36NQrRVde
-         XcGhX9FvuxQuJBNcpHCCqP7os4RrsYcIHQd4zOuranYDELqLqejQNXvQFb4un/E6HAzv
-         l/BA==
+        d=gmail.com; s=20251104; t=1774381131; x=1774985931; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RyulBWdtbse6vY2m0hI5hgut+qotDEBTgU/TQet2TLQ=;
+        b=KVl7tP6hJOcHZsSDB5aht62sVghIDYXvpJItuhQH4s2FQTpUMvQeK9q4DbyGwFDho/
+         IbQuxme7haNi1Kp24OclsJpPL5fgvFnZb+DY/T/2emZTOIROLC3sIG/E9hDqatLCn889
+         UVWuUZ+z7BUJETA5PHjFPeYfCqZv97QBQc0azIKGuG2po3UX0IkewK8B0pruW4/FPTW4
+         or13noZQ7w6N7FKJ8jZ8J0EcKHKBiwb5fcnDSERqT261G0l/ZwGmpYnMNTzTsgfaiRaG
+         8+/al1fo/Zmm2fuiYm7eDMQRvbc62HVIc+OZ8lxBAi6Mo8ZP60Om+jUAC+U302g/Yxcm
+         LaHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774380835; x=1774985635;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QCFGqUyXSc27G5VbKUMAxY0nregM0umwX0rgUYgLRMo=;
-        b=dUQ/CTa0JWZc/HBbxorNWBUIXnn6kL08QXl3qiSeClBbWhGa5/5DN/cf4epwUFoQ9G
-         giMIavmIKXH5byZ1lKXeOpOlnkJLfrHsWnMDQPQW8jxxI+v9rPGmK2gwQCtelhACbcLk
-         LkprbZZ8rsAj3L/ud2faR+u/PlopyY4VYrpIU3b0znxLtum6WW7ds7wD0I1sbEKmzpLJ
-         2fKT4qgk4nNf03j/uIVmv1ztCxQT0lu9/q48nF5AGXwoeHKU4Ef7sN8YD9ajxNRLCclu
-         gMrWpMZJ/gZfrmJNB4l2/izya05KBTi9A5cHQSjRK7B9lz5NTZ+xlwtfAh3I2krxyeFa
-         NmXA==
-X-Forwarded-Encrypted: i=1; AJvYcCX95ldqaXaJZt1QCuoNdRsqbUife79mQg8TG2ymKWkQVbMdY/QH/VQxiEwmraAGeps7j28=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw7AHLbTn/mixLFlRmA44W/IQuel6ZEJWpUHkNRe+nbkNEwbrPh
-	cXAiI8+0Jtr58xieHot4Jr7TCpxl0pQ3/1S/25zoMuvwUfWdrlaL6u3YcjLIZfcA
-X-Gm-Gg: ATEYQzz6BHuREOnOFslp8IzOjLG4lIVR3H8bpKuAKIBzOWQedU2Va5Xd+ZisSYejI8s
-	0NTpjowMrXfsYchnqA/2GcyVpdPBlPg/DZX5WkPCGP4RBdIWVzT6UC1D+FlvaNX2tlqSIqMWozs
-	iytYUooohIbutG6L0WABL3NYvT+znNgxmhpEPp7zkXsfd7WQPdiFD9MeHXkAvpjEe7k1psjm0sM
-	0n+EuCoX4a20xgf3vdfntVwSdTCR1nJM4w9wVRV5QwILL5Jr/PU8MyB5Qq6onB4Ne/bRFXGq2QC
-	tuEUv2JBuyTSXEy2ATmeSUnQmhuqk2exWNUA+cz9YoS4+Sts58L+1VaKmbxVCgkc7GBS2/MrDAx
-	Nj9/eO8lrEtwrrlvnpqZDXHXmy1ig98asU2mSUPE6ujHOOlZmsotGVWy+E2ilbpAiB4hj/QYGiD
-	S1ZD14jLQLd6DVdz/+drlFe4SH6w11QAgKXQr9+SSX/vfOKVvoXUe8VSBesE7eYqp/loEzjh0S/
-	Q8TClD8Vnihs/+C
-X-Received: by 2002:a05:7300:dc04:b0:2bd:cfce:4c4b with SMTP id 5a478bee46e88-2c15d32b6acmr275370eec.2.1774380834781;
-        Tue, 24 Mar 2026 12:33:54 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:41fb:8dcd:b77b:d6ce? ([2620:10d:c090:500::bed7])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b17d1ddsm15827159eec.11.2026.03.24.12.33.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2026 12:33:53 -0700 (PDT)
-Message-ID: <54d5347331905486d367542613b71b09fd81134c.camel@gmail.com>
-Subject: Re: [PATCH v2 bpf-next 3/6] bpf: Exit early if reg_bounds_sync gets
- invalid inputs
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
-Cc: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>,  Shung-Hsi Yu <shung-hsi.yu@suse.com>,
- Srinivas Narayana <srinivas.narayana@rutgers.edu>, Santosh Nagarakatte
- <santosh.nagarakatte@rutgers.edu>
-Date: Tue, 24 Mar 2026 12:33:51 -0700
-In-Reply-To: <CAM=Ch053GkzkXGxNbfE6Xo=bcR0di_DraDPLP-6y+YJ2rQ3DDg@mail.gmail.com>
-References: <cover.1774025082.git.paul.chaignon@gmail.com>
-	 <704bf39f66a98877f66a4982c77cddb42f14fc82.1774025082.git.paul.chaignon@gmail.com>
-	 <ed85ac25cd315ac4273de335943f9f3a2c1f36e8.camel@gmail.com>
-	 <CAM=Ch053GkzkXGxNbfE6Xo=bcR0di_DraDPLP-6y+YJ2rQ3DDg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+        d=1e100.net; s=20251104; t=1774381131; x=1774985931;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=RyulBWdtbse6vY2m0hI5hgut+qotDEBTgU/TQet2TLQ=;
+        b=gH/ygJea2KN8aemWiuQOLckQgYANSGNvFFt12mcd89389ekLXWquT2buxo+wTf/gVk
+         9kv4eZlrPZBw5gWjcGAD0+BFmznhllPm7XV4Psm8yng1Xoqu1Cnd/GlxhUaiu3Ux1FT4
+         vqopG30dTDn7J9ryeiWOIwrS7FadSClnKGAn8j1vsQVdIIbyX2jL1ai4cKc/7Cutf5tz
+         bEhwFNgxuyewyOIXjAVHmfvEbKh3E/TCL1BOrsfMVLo+ydQVRwI1Dp8M3QITYa/pwrep
+         DOoeA+y2XA9GMgJQfNWVmF7onqjK81p7H5KtuajMZhahNXkJZULvoYMqA8G6jUC+UcRt
+         I97A==
+X-Gm-Message-State: AOJu0YxHl2ZRit3C7q+FgN96qQL7lA2ttmBkTSBlKCY9lcSef+8nuoow
+	NGH5dcoRHUzjiLGy0/wNh5kcF/GUGIqfRg3JAUrpEQ094C+PL5910U/N/7Vc64/blcpkW/Spg7i
+	Lr+sOksO32QYj7099NiBok7+XC73gIII=
+X-Gm-Gg: ATEYQzx6yyHtwRD5iXFw4kLp8Zq19q68/BNAp0Ug1fITyxSoxCWTArwStSaaf27HzTI
+	+KqiwmOwacF7wXUTU18F4V3UTN0KFfZZiCHxBY20ylgRI4g5ofj4DTzlB1iKInLw1V7vipWbRhv
+	/K77Dk7htQ07o29QkPqTu6c8viZwN0J4dNvEAL34djhs1O4cnpdcQW3DD4b1b5RYAC5N4KDO7lP
+	fVcjcjHaaCeqeGrKatR9GQf/wNgvQnQ/Wfg+YEqUsUBHgumdbt7/B8ZxHKQ32qbd31iAfefTRRS
+	s6UItRFwhio7WcgeJMSenim0cheLNSY96+YhrDiQd2VLuKpgblxCrSyRA4oYddyAVuNJnXZ9c/f
+	Wd2tz1dRR2DcXf4sfA+W5vXo/Ew==
+X-Received: by 2002:a05:6000:184d:b0:43b:5672:f01 with SMTP id
+ ffacd0b85a97d-43b8898d33amr1160048f8f.4.1774381131317; Tue, 24 Mar 2026
+ 12:38:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260316185736.649940-1-puranjay@kernel.org> <20260316185736.649940-2-puranjay@kernel.org>
+In-Reply-To: <20260316185736.649940-2-puranjay@kernel.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 24 Mar 2026 12:38:39 -0700
+X-Gm-Features: AQROBzCiBu9lti7-1Lpnd4u1_S86kiJeOdQhwm77mL2wJsRvPYiP_RnVzG4xnqo
+Message-ID: <CAADnVQKbxiBsXOsyau+rh86aK2VFHanNhBWRF49H0J+Tn+h0bg@mail.gmail.com>
+Subject: Re: [PATCH bpf v4 1/3] bpf: fix mm lifecycle in open-coded task_vma iterator
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: bpf <bpf@vger.kernel.org>, Puranjay Mohan <puranjay12@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, Kernel Team <kernel-team@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2026-03-24 at 15:28 -0400, Harishankar Vishwanathan wrote:
-> On Mon, Mar 23, 2026 at 2:47=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.c=
-om> wrote:
-> >=20
-> > On Fri, 2026-03-20 at 17:49 +0100, Paul Chaignon wrote:
-> >=20
-> > [...]
-> >=20
-> > > @@ -2786,8 +2786,13 @@ static void __reg_bound_offset(struct bpf_reg_=
-state *reg)
-> > >       reg->var_off =3D tnum_or(tnum_clear_subreg(var64_off), var32_of=
-f);
-> > >  }
-> > >=20
-> > > +static bool range_bounds_violation(struct bpf_reg_state *reg);
-> > > +
-> > >  static void reg_bounds_sync(struct bpf_reg_state *reg)
-> > >  {
-> > > +     /* If the input reg_state is invalid, we can exit early */
-> > > +     if (range_bounds_violation(reg))
-> > > +             return;
-> > >       /* We might have learned new bounds from the var_off. */
-> > >       __update_reg_bounds(reg);
-> > >       /* We might have learned something about the sign bit. */
-> >=20
-> > Is it possible for the invariants violation to manifest after
-> > __update_reg{32,64}_bounds() calls, once cross domain boundaries are
-> > propagated?
->=20
-> The short answer is yes.
->=20
-> The sub-sync functions, i.e. __update_reg_bounds, __reg_deduce_bounds,
-> __reg_bound_offset are individually sound (checked by Agni).
-> This means that they preserve any concrete value x that is contained in a=
-ll
-> the range bounds and tnum inputs, after refinement.
->=20
-> But if in the input, there is no concrete value x that is contained in
-> ALL the range bounds and tnum, then an invariant violation can
-> manifest. Note that this can happen in the presence
-> of the current early exit commit, i.e., even if
-> range_bounds_violation(reg) is false.
->=20
-> For example,
->=20
-> before reg_bounds_sync: s64=3D[1, 1], tnum=3D0
-> after reg_bounds_sync: s64=3D[1, 0] tnum=3D0
->=20
-> Could you elaborate on your concern? Did you perhaps imply that we should
-> be checking for reg_bounds_violation in
-> simulate_both_branches_taken after each sub-sync function?
+On Mon, Mar 16, 2026 at 11:57=E2=80=AFAM Puranjay Mohan <puranjay@kernel.or=
+g> wrote:
+>
+> The open-coded task_vma iterator reads task->mm and acquires
+> mmap_read_trylock() but never calls mmget(). The mm can reach
+> mm_users =3D=3D 0 if the task exits while the iterator holds the lock.
+>
+> Add mmget_not_zero() before mmap_read_trylock(). Drop the mm reference
+> via mmput_async() in _destroy() and the error path.
+>
+> Reject irqs-disabled contexts (including NMI) up front. Operations used
+> by _next() and _destroy() (mmap_read_unlock, mmput_async) take
+> spinlocks with IRQs disabled (pool->lock, pi_lock). Running from NMI
+> or from a tracepoint that fires with those locks held could deadlock.
+>
+> Widen the mmput_async() #if guard to include CONFIG_BPF_SYSCALL,
+> following the same approach used for CONFIG_FUTEX_PRIVATE_HASH.
 
-My main concern is that we might loose useful signal.
-It would be nice to adjust reg_bounds_sync() such
-that it would stop (e.g. return false, as you suggested previously)
-if it hits invariant violation mid-step.
+...
+
+> diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
+> index 95d0040df584..5908de0c2f82 100644
+> --- a/include/linux/sched/mm.h
+> +++ b/include/linux/sched/mm.h
+> @@ -140,7 +140,7 @@ static inline bool mmget_not_zero(struct mm_struct *m=
+m)
+>
+>  /* mmput gets rid of the mappings and all user-space */
+>  extern void mmput(struct mm_struct *);
+> -#if defined(CONFIG_MMU) || defined(CONFIG_FUTEX_PRIVATE_HASH)
+> +#if defined(CONFIG_MMU) || defined(CONFIG_FUTEX_PRIVATE_HASH) || defined=
+(CONFIG_BPF_SYSCALL)
+
+why? Is this some kind of odd config with bpf and without mmu?
+Is it even possible?
+
+These hunks make it impossible to land without broader review.
+
+pw-bot: cr
