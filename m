@@ -1,184 +1,116 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f68.google.com (mail-ot1-f68.google.com [209.85.210.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14295402457
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 15:16:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B3B3FF8A9
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 15:22:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774365364; cv=none; b=oqz3ZOlj36HT7T/Z8Hf2T9boy5RNAHb//rba33QnqNmJuZo8hVRAQ1kCPPCsuiq1nxxA6DWbwx7u17sH1uQItY3+JNpuQ7wVVIlLtnvk4qA4UdSogf6FGCqeYszSf+N3pJD5AsZ8LfxmKhh+4sZcIekTb5JGwE4gT/FWYmnrfwU=
+	t=1774365756; cv=none; b=IZaIecCHsYeFHxMoTUCgObtx0t59qFsg6yLo51lKTnk7E4GxIO99VBrG7+ZGPg7lWpN1D2JcP3bTn08fXghZ2RFSGBepQf2ubLiyLphRQiyUVBANJF9VCaNozKefGB11YFhw8u2+JS60/4nKd/LLjaGVypdOkAI/+SfSbe7vDDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774365364; c=relaxed/simple;
-	bh=0DAQT5hcnfFP7UoqaO6an4vhVS498McC5K6b/zfmBDc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=uxAf9pkHW5aTswcSMwBpjOuy6gle6aBVuBPEGBPt8liS245yhjEGxWshkyHdhsq8lJLRS/zEdVpe1vZN8QZ1kNLgHYp17xncTNsCAAsfNZYRBELMwSGCACyek8x8UFIp8fjBRM4Q2Dt2Ef5KpeJjMtbqwe7LlJEzWOMqOlVQFCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aiLzUFxq; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=cTiqyWVX; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1774365756; c=relaxed/simple;
+	bh=BL6U0PGGlAvTBLFZEYRoTRsTyhNsdPgVAmSHRVjNhj0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Eomy1tbSFbFPKAlVBwDp0abzbUS9hYLYnaAtUAIDRyUa/f/klAvXZ3TRdVMcEdqurR9Gm5o12qiQRm5O33IKIIqQhuF2MEDqQpzgmestfrJHYNNZ1LJUCGafI8JWKW3hjgVy7M8I2YGhM9FrjLPSjZ9yNmOyY0IN8NaCRlojH+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sANOGZ1+; arc=none smtp.client-ip=209.85.210.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aiLzUFxq";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="cTiqyWVX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774365362;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=zZaZ+weNFt/DeQ+y853Qd9D2vVvyy8X2coFZA5Jbyn4=;
-	b=aiLzUFxqsNzOqiPzOuCFGZYF1UY1Ap+iQO1TIkL2565e1VRlvo/2BvTTQDfWYZK1cH2hHG
-	xPn6qqwyOuIxGNIHQz8tjsIlqtUQf5+/x166ipaddTWfLwiL5GTTCop1gQSF34pdeCRFVP
-	Ph1wl3cXE86xlFq6Q6hYUctOScYePfQ=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-693-Zijp1AjKPxiZwEtw_II0cQ-1; Tue, 24 Mar 2026 11:15:59 -0400
-X-MC-Unique: Zijp1AjKPxiZwEtw_II0cQ-1
-X-Mimecast-MFC-AGG-ID: Zijp1AjKPxiZwEtw_II0cQ_1774365358
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-485c45885e6so59102065e9.0
-        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 08:15:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sANOGZ1+"
+Received: by mail-ot1-f68.google.com with SMTP id 46e09a7af769-7d7f09aa39fso4316065a34.0
+        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 08:22:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1774365358; x=1774970158; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zZaZ+weNFt/DeQ+y853Qd9D2vVvyy8X2coFZA5Jbyn4=;
-        b=cTiqyWVXW6ThVGdsO/WivvYGEgD6vRr7fw2tex9trBb2cD0cjZKTxMvfrGnfsgqqTK
-         /VKFxciS1+PIN2pALJ/ziWHPHTRdfnZpBzArKkQ9NTNNCx2rQV/YSBWux1XMKJscM1Ic
-         1YOh1lo3hiRKu107RYjOKZ+upuhu9sRLuh6K5EYCkVbxA+PSutogn/8UFnpN9vPm3g5z
-         JpOI3uTeBvxy6aQg6DPyBrBJUSzkCTiIkoTFQvwknPUPJM8rUrwsh3n2vCEz0aXUkTvT
-         LyHiWBdqED0nxjCgfZvE5wyAeRBxq0BhZ5YXK1bt60GQVk+dZDr9CcCSljExBUWlzNzM
-         610g==
+        d=gmail.com; s=20251104; t=1774365754; x=1774970554; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sk3AHP5tm6SXd9AguNLbNmgA5tkcSSHMOQbAO9OOBDw=;
+        b=sANOGZ1+LXhiBRAcgeDdorcZD/dp/tZMzXKdc+cvxH16ap8KkHx3s21c0ui/3SXOSX
+         IUsnO3z+5sT8OHRPKDOzlseaphZqa30OxeEI7RUZ5Fyy1CY5CNW9L624lJWZankMAmZU
+         6rCtFMFIfrJ3S5fgZCKauy94L7jmtUw5i9zkNrH2WoU26njYuoridBVEjrLaumHl5vz5
+         du0D16EYP5ssQPuX0KE+5RISXITxvC2lfn5TFR1ZJvDWz7DTITRG8QyCqLKxAki9ItKY
+         ePysSkghERKPlz0Mo5/HA8X4WPZe/sVms63j5pb4zqGYil5Z1EXzbi06eUcSdJNw6b8s
+         tFuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774365358; x=1774970158;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zZaZ+weNFt/DeQ+y853Qd9D2vVvyy8X2coFZA5Jbyn4=;
-        b=rUgv5eRjZwMbT3eXflE6PNZFOkoMUJ4GMl4fjCTwRCg/jPVAxMNxlagZhgMtYrv55V
-         Y+JhNMYTCI90/nI2itMfAhTZSWHTD8u+N7mdHE0Bcv07B//n6/DKKTGJLADpxW4Bd1Dh
-         zEkcSgZ1V85EUvtDuyxDB7Zk503+1Fdt2BNx2WQdCPEXmKLNipftCHgsCCKjAYKgZEDv
-         2PF0kDEq7ScIpZBCy0OX/ERPm0VN/hoCN5px65fZy9ulfejcbHvvGeIuTl1ilG32Djl9
-         34T2/R6ub1SyyfBOQ7iuzxjc9tnhgGcST9OcAzkObtnkEJ7QLJ1xY//NVV5zZAFacf3G
-         JY1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU6uaJsZHuGTbiRgQwI9Z3z+ZwsCuZgvRP4CwaFLp5uZ/ubGdCiRhqP55Juajj+bMLb1vA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwyfM+Rsyth5sgj8j3XBcx6YfAhQUMiUvS15BkR6OR0VXtSqkSe
-	lyZ3yIrKVdNU4V6nl80DLjUEG5HWY3wC7qT4fAOhhpcUCQ0VCrDzyeZOjciwMlpahP+5jG3SpFD
-	2yzFKpVjIHP8bIWdeKXdlKv1U8fyNLSjbDh/6Iw1SeBuW4AqVEODU2A==
-X-Gm-Gg: ATEYQzx5d0iu3WSYQHELI+Ku5Cs2L7p568ku9+2oQCIeqqRKKGgCIOiBUP5fF9NATOI
-	Jg8JmXeGw0EpsemABDkcVBc0CFVsW98f660o2ED6iZc5dvJ0xKSm/wRbl4trQ66XyPQsnzNBEIz
-	sm44eSrKOd2XqHQH58/Nyr28imBIo0/XrtW1v22dFlWSJsgqSNjvSzO9m8Eu9RdVdh7V5vkvq1Y
-	4ZNclD99BV2//o0AYo3qTj19tIIChvKL5EskvPRUI5ppT39pKk7FVayuY3rGR+cvkPIWOvT6sNS
-	wMj6qXC75PyM8RHza+gwIzVC5bYxqsXdu1usTxSk4AxHSkbsNRCIMnv78enlnESFJJ6xJfJDnTp
-	GDi6hukwpGfvlVK9/
-X-Received: by 2002:a05:600c:5296:b0:486:ffa3:593 with SMTP id 5b1f17b1804b1-4871606730amr1910415e9.28.1774365358068;
-        Tue, 24 Mar 2026 08:15:58 -0700 (PDT)
-X-Received: by 2002:a05:600c:5296:b0:486:ffa3:593 with SMTP id 5b1f17b1804b1-4871606730amr1909895e9.28.1774365357596;
-        Tue, 24 Mar 2026 08:15:57 -0700 (PDT)
-Received: from redhat.com ([2a0d:6fc0:1525:da00:3ac2:1a22:72ff:4256])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-487116d82f1sm55500765e9.11.2026.03.24.08.15.55
+        d=1e100.net; s=20251104; t=1774365754; x=1774970554;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Sk3AHP5tm6SXd9AguNLbNmgA5tkcSSHMOQbAO9OOBDw=;
+        b=EYBVga7J86AKJW3VtmZVlDNKsNIRzx4+I+YSsWfiili0gtbMReURVXBrxvUIVvMhEG
+         zCFa464ILak1kB2YudOBWT41/ezO7pa3JxiRWL2VmZM1UsY1VhRyJpkcvtuKZ9zl9gPC
+         1uicXsWCbGCfsi0RNgtmz3zETh+iuJRr3AF5scKYC2lc5iAZv/aHLnUyLByIvA5+hXYo
+         0KxRSgvMPtfYlpv6hnop5Rdlc6wLmUZd1ni+DG9Q2Rdqbqw4fsMepT1Hcx3eFJimUqXq
+         0BWrHkWmnxxX7AhEW4hlrNOo48FTC4vCkmxldQmBihK+qHCizJkxzCcQcfrJtPY3LN0w
+         V9qw==
+X-Gm-Message-State: AOJu0YxszCGvTKHsbAewfQgHfi98gGBXofkN9WXjrPqqFPfdBTFn0683
+	VFUhLw9dGNtMqitJxXSX2OHBRWJhChG6kTaAeoVKwGt1vAHX4XyUl+s6B/BMJTlQ
+X-Gm-Gg: ATEYQzxNivYN9cvNCgZ7G+OnG9mQjnB9V84v+3BN+cMPhWFwiyq8jr96CO7FOGRDa2D
+	D1GKvYz5SjmgD+hzj2Zfq7+Zcg3Ls+1MglZRaWGt8p8EyRmQG7a7KMEtc7im7k4gOxj2179OIvd
+	YQTZre6CLeSFg8yGn2DZLmPIgm10WGnf05qwZ7GS7MWJBWZq8lyM1ZqlkesWX2AL+vv5XOw9HiS
+	x/zgijXil2DSjMRjrA1zbCdgT9EFeVZjHFuhF1WBgolpNGMo1dTL1BmGp1q4AmFejTkqo1WfMv1
+	REDl6NmibWZlNswCa6SbzGSUXk0aj5OBR1PKB80LRVBbj9iOuN5jKGzw0EN8/zyEogmVuNBctDW
+	Jcz8tB2SSbqnux4gCTOdhGZt7d+l7Qd5rvKBWWCwtLJw753UoC71ZYXDBMim5m4+lcO+33mrl5E
+	R7DHmm8IYVr+/qs4Lv7k77CuQPOEB+uNtg8iuV2UFeri+A
+X-Received: by 2002:a05:6820:1b08:b0:67d:ea1c:e50c with SMTP id 006d021491bc7-67dff558fabmr110502eaf.51.1774365754023;
+        Tue, 24 Mar 2026 08:22:34 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:4e::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-41c14ddf9d4sm12767132fac.16.2026.03.24.08.22.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2026 08:15:57 -0700 (PDT)
-Date: Tue, 24 Mar 2026 11:15:54 -0400
-From: "Michael S. Tsirkin" <mst@redhat.com>
-To: linux-kernel@vger.kernel.org
-Cc: Omar Elghoul <oelghoul@linux.ibm.com>,
-	Srikanth Aithal <sraithal@amd.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
+        Tue, 24 Mar 2026 08:22:32 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
 	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
 	Stanislav Fomichev <sdf@fomichev.me>,
-	Vishwanath Seshagiri <vishs@meta.com>, netdev@vger.kernel.org,
-	virtualization@lists.linux.dev, bpf@vger.kernel.org
-Subject: [PATCH net-next] virtio_net: sync RX buffer before reading the header
-Message-ID: <f4caa9be9e5addae7851c012cab0a733be7f0974.1774365273.git.mst@redhat.com>
+	Hao Luo <haoluo@google.com>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v1] bpf: Update MAINTAINERS
+Date: Tue, 24 Mar 2026 08:22:30 -0700
+Message-ID: <20260324152230.2916217-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email 2.27.0.106.g8ac3dc51b1
-X-Mutt-Fcc: =sent
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1065; h=from:subject; bh=ZNEQpwHhjSmzlLXNjREXJfKDGkHY3vu0TXAichgBnTQ=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIfPQSqN0KbO1nNGHdi/XOsD4acIf1zxV5SaB+jTzf8eTYr3N 68U6SlkYxLgYZMUUWUr+72MyPlH5O9B2GTfMHFYmkCEMXJwCMJHb4owM+7XVJ54987lSZ0mHhkiijX SZ6Jf/SVV7fBzWaVU3Si6zYfjDVyP4QufuoW/M899eF3qhctGz5vtnYRehzBfnc9UWPWVjBAA=
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
+Content-Transfer-Encoding: 8bit
 
-receive_buf() reads the virtio header through buf before
-page_pool_dma_sync_for_cpu() runs in receive_small() or
-receive_mergeable(). The header buffer is thus unsynchronized at the
-point where flags and, for mergeable buffers, num_buffers are consumed.
+Per discussion with Alexei, add Eduard and myself as maintainers under
+BPF [GENERAL]. While at it, drop R entries for reviewers who have been
+inactive.
 
-Omar Elghoul reported that on s390x Secure Execution this showed up as
-greatly reduced virtio-net performance together with "bad gso" and
-"bad csum" messages in dmesg. This is because with SE sync actually
-copies data, so the header is uninitialized.
-
-Move the sync into receive_buf() so the
-header is synchronized before any access through buf.
-
-Tool use: Cursor with GPT-5.4 drafted the initial code move from prompt:
-"in drivers/net/virtio_net.c, move page_pool_dma_sync_for_cpu on receive
-path to before memory is accessed through buf".
-The result and the commit log were reviewed and edited manually.
-
-Fixes: 168b61da6871 ("virtio_net: add page_pool support for buffer allocation")
-Reported-by: Omar Elghoul <oelghoul@linux.ibm.com>
-Tested-by: Srikanth Aithal <sraithal@amd.com>
-Tested-by: Omar Elghoul <oelghoul@linux.ibm.com>
-Link: https://lore.kernel.org/r/20260323150136.14452-1-oelghoul@linux.ibm.com
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- drivers/net/virtio_net.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ MAINTAINERS | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 97035b49bae7..2f57245c682d 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -1956,13 +1956,6 @@ static struct sk_buff *receive_small(struct net_device *dev,
- 	 */
- 	buf -= VIRTNET_RX_PAD + xdp_headroom;
- 
--	if (rq->use_page_pool_dma) {
--		int offset = buf - page_address(page) +
--			     VIRTNET_RX_PAD + xdp_headroom;
--
--		page_pool_dma_sync_for_cpu(rq->page_pool, page, offset, len);
--	}
--
- 	len -= vi->hdr_len;
- 	u64_stats_add(&stats->bytes, len);
- 
-@@ -2398,9 +2391,6 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
- 
- 	head_skb = NULL;
- 
--	if (rq->use_page_pool_dma)
--		page_pool_dma_sync_for_cpu(rq->page_pool, page, offset, len);
--
- 	u64_stats_add(&stats->bytes, len - vi->hdr_len);
- 
- 	if (check_mergeable_len(dev, ctx, len))
-@@ -2563,6 +2553,16 @@ static void receive_buf(struct virtnet_info *vi, struct receive_queue *rq,
- 		return;
- 	}
- 
-+	/* Sync the memory before touching anything through buf,
-+	 * unless virtio core did it already.
-+	 */
-+	if (rq->use_page_pool_dma) {
-+		struct page *page = virt_to_head_page(buf);
-+		int offset = buf - page_address(page);
-+
-+		page_pool_dma_sync_for_cpu(rq->page_pool, page, offset, len);
-+	}
-+
- 	/* About the flags below:
- 	 * 1. Save the flags early, as the XDP program might overwrite them.
- 	 * These flags ensure packets marked as VIRTIO_NET_HDR_F_DATA_VALID
--- 
-MST
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 7d10988cbc62..980ba6ff3011 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4813,13 +4813,10 @@ M:	Alexei Starovoitov <ast@kernel.org>
+ M:	Daniel Borkmann <daniel@iogearbox.net>
+ M:	Andrii Nakryiko <andrii@kernel.org>
+ R:	Martin KaFai Lau <martin.lau@linux.dev>
+-R:	Eduard Zingerman <eddyz87@gmail.com>
++M:	Eduard Zingerman <eddyz87@gmail.com>
++M:	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+ R:	Song Liu <song@kernel.org>
+ R:	Yonghong Song <yonghong.song@linux.dev>
+-R:	John Fastabend <john.fastabend@gmail.com>
+-R:	KP Singh <kpsingh@kernel.org>
+-R:	Stanislav Fomichev <sdf@fomichev.me>
+-R:	Hao Luo <haoluo@google.com>
+ R:	Jiri Olsa <jolsa@kernel.org>
+ L:	bpf@vger.kernel.org
+ S:	Supported
+--
+2.52.0
 
