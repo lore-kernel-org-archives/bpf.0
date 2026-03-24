@@ -1,146 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C851D248883;
-	Tue, 24 Mar 2026 18:44:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB4013A450C
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 18:46:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774377885; cv=none; b=Hs7rjwHUXbF84UpXlEZB6SdLOcGZ6apnplo/s8SeLN7cn4wSvzKF6OQUpUY3ia+gaRXlE/Bi12a4+w7+MBwdt3qEfPlHqe2JpARDJ179U7EBrDIs4qif8ATZuInWtEQmBuZoiiGQv2CtgRCq93M6wPiSkOBoc8RqvpZK9DLHnoA=
+	t=1774377963; cv=none; b=WZsxzxJVOs+bU+xSEQ0zybrjqqIyfzXucuUgiX4lFD1DILK+d9u+NniiTafTabddGby9SxZb7V9LyJWB3Z7HEsfp9/rydGoa6fn51FSEenVVO6SP778Gh0lH1WeyWox/D/dAnUK9C6/zIv6vWDNGePj79rqk3kj83BRNhzD5nds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774377885; c=relaxed/simple;
-	bh=z+p7Gwoog4oyUayKVFnyDMtWHllATA6TDDFTEc5K0Ag=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sgvu7yAwAMb1OiFxeCbpMyMVmPTPkJH5jEGkDN3fVFa0jac+Pg46E1VRenz0tvzO9tyiKoDAiHPigY5YVusTTLJecWbbpGYzN0KD6w4JeDAiDG/k+hZf2ZSUJ/Ug1sGgiRhfY5x33dTmWZWvDiZv16B+jMViLCrgRn44np896XU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WJGsWAW9; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774377963; c=relaxed/simple;
+	bh=y+wo9iDBeS0npMhD30rCCyek5oK7q7whGhlUCHN1HNg=;
+	h=Message-ID:Date:From:Content-Type:MIME-Version:Subject:To:Cc:
+	 In-Reply-To:References; b=pvkJV5HoA2hSTEsJ592vUxuvDTt1sKQgkATn6etRr054KMy1FNvdexZafKGE+7pZXaDrMRa2tfRrlh0oC4o7UN5p/fgtf1q36hN2xZd3ARoY8mCWCOGieeJgjPC0rT4Bk5kGrELVWZ0xOztqbg0bXl+kUhNg3wpXpGyPiUj7aSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hgtb2z3c; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WJGsWAW9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EEF0C19424;
-	Tue, 24 Mar 2026 18:44:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774377885;
-	bh=z+p7Gwoog4oyUayKVFnyDMtWHllATA6TDDFTEc5K0Ag=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WJGsWAW9b/XOuu7CKFWkcT0DYdJk55Q5/rWczpgcokcv14bHqZV9ldkwtBIlH1CBn
-	 1plMs2T/E99bQj/dGIlW2R3l/d+0rBIpeyQ1yqaZQ052qHVlbRDr8anawNGPv6/bIr
-	 0A5JOD/y5vBgcBO5XI8ROpjzeMTFde88DcN7QsNf1+WLp9ScCvbYDJePqBj5/rHxfW
-	 w3Sdzmua0VP6egyB7EEng4fQR4z4g13jIIpfobWnQVKOGehzqD5c/xeDPS8i56iUFX
-	 0kNLD45BouUprlYPKfTLHLFHgxLGa1xRvfwA5IQDQ9QlUQHc5s1mFqIo0cH6JZafeO
-	 3UFI2hnDYNJ/w==
-Date: Tue, 24 Mar 2026 14:44:44 -0400
-From: Sasha Levin <sashal@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Petr Mladek <pmladek@suse.com>, Alexei Starovoitov <ast@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, David Gow <davidgow@google.com>,
-	Kees Cook <kees@kernel.org>, Greg KH <gregkh@linuxfoundation.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>, Helge Deller <deller@gmx.de>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Juergen Gross <jgross@suse.com>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Alexey Dobriyan <adobriyan@gmail.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Petr Pavlu <petr.pavlu@suse.com>, X86 ML <x86@kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-	linux-modules@vger.kernel.org, bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH 1/2] kallsyms: show function parameter info in oops/WARN
- dumps
-Message-ID: <acLbnMAPrHCpoIpr@laps>
-References: <20260323164858.1939248-1-sashal@kernel.org>
- <20260323164858.1939248-2-sashal@kernel.org>
- <CAADnVQJjJwRtUQNZAhLoXF7DYprhU97xJReZg9izV7n3f7=uJQ@mail.gmail.com>
- <acK1M_CvbYCtq7im@laps>
- <CAADnVQLr5Sx+vG6D4Jxm8r2vPxu7ygFz60LGwmqfkc=VB0-Miw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hgtb2z3c"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2ab232cc803so18909035ad.3
+        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 11:46:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774377962; x=1774982762; darn=vger.kernel.org;
+        h=references:in-reply-to:cc:to:subject:content-transfer-encoding
+         :mime-version:from:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y+wo9iDBeS0npMhD30rCCyek5oK7q7whGhlUCHN1HNg=;
+        b=hgtb2z3ck8Yx/38H1rKpkroQaw4J5kt8YKAEPdPZygaxPwld+KNoseNNno20d4YXI+
+         KAIJJfgonX7OavkZJaBi9WYX82TIw5ejEqY3M61w3zRe4mUANlROnLfNVe5nznANB/uY
+         WbY5i1dYTeSM35iSwq9iRGQTrqCT8JzChsQF0ajRQgdB2PQ7SJKDTiIATl/pHNv1QB3A
+         OulkT1mFO3AtVmBUVVfC3RaV+FRHn/yPd8bmiFP59LdNnlZfQiXJG1zm4UOl+xla7JWY
+         Q2aa/v2b/XURZlG42p6xmGv5KqV9x2nG6Pd8e25cq8sAwY+9uG+LNXO0J3eSJMMhwxVm
+         KMyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774377962; x=1774982762;
+        h=references:in-reply-to:cc:to:subject:content-transfer-encoding
+         :mime-version:from:date:message-id:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=y+wo9iDBeS0npMhD30rCCyek5oK7q7whGhlUCHN1HNg=;
+        b=fmNRCNtv44HzPysWbEycPeEgRxjOdfXQJcvW57TKvQeWAu5o8jMb6E44D9t0VXtxNn
+         QhgHHrAR7hc9i7eD1VzxZYYSu0u8RPyYEoV/e8JWjO5f4N+8/AQI7AouoodPt7n5WUYF
+         /00Md5Qpip2HImZ/q2yMiBRC9bxhPUpYUoD3/fOeE1lAohMRPBVnmxbCYm92kfkB0/La
+         9QqUjzCDTlcKNgh/oWBEsvyBOjqySH0tbm04YcazdAnARmx790SCiSGB0Um+X71jnqLH
+         UMjCw/Lq/h361lQlOqGaaLDal7xsR+BVDNF5fWB7IzxqKvnmT6fhJ9HvELjtKJeEb7oe
+         sLbA==
+X-Forwarded-Encrypted: i=1; AJvYcCUzoOYaQg7ITH1wSN63mHm1Y4hr8jYY8VgV2T6ElBMf9NBnF9sa5P3jLjCb86xwRsdH18A=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0cPjH7saxzPa9O2ZTaW0uNXy+AoTD/LczcOsDb+4AcUS+AZiz
+	cYNnb5aElkhrbZPpfYfT4sqenFm18KGXkV5ePMwIBTWAiKFq4HKZVRM1
+X-Gm-Gg: ATEYQzzAcoy/JC9MCAP4PF0jR6ME/s4we67STqrO7sPal2yROkwWPVk2EJwZYoICa4w
+	EywvJWd/CvI/yb812eLlkZP25c8HaQ3fzHlf31hvnHxBTzFcCaLQ2ypjkoE+7GzzJTuKwpOWR3X
+	ayngqBPhbHoIZ0tc4JERgm+AXfPPPTIR9GC81s/XPAvQBajxpM24xVdSG/poIwJzmz6qp4KP7zA
+	OF749uRp63hZ8a5hZ4Sxqb/PAHUGfOWvDFx/CbKHXQnvYfFc7Q/16GP8UGFjBuLWnfV1f3Sm0Dn
+	TKU0z+FTfJqHj4cBA6WQ5GHZGo+RNTw6S5jkdv/siILguHKqVzZhRLqQSsg5+hyuJsgP30AsaHe
+	kq8mK+QW04y+f5BBP/t/PtSWGsprAbssUMHHlgVdQwy6qcKTO8JHCMmlxBrotzacQv9+izV8kw8
+	7UBz1hF3VUXAru8HLdhyUenelb
+X-Received: by 2002:a17:903:1b4e:b0:2b0:6895:5535 with SMTP id d9443c01a7336-2b0b0a8c433mr6729765ad.33.1774377961993;
+        Tue, 24 Mar 2026 11:46:01 -0700 (PDT)
+Received: from [127.0.1.1] ([43.224.245.226])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b083656f65sm221497615ad.45.2026.03.24.11.45.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Mar 2026 11:46:00 -0700 (PDT)
+Message-ID: <69c2dbe8.170a0220.226f48.721e@mx.google.com>
+Date: Tue, 24 Mar 2026 11:46:00 -0700 (PDT)
+From: zhidao su <soolaugust@gmail.com>
+X-Google-Original-From: zhidao su <suzhidao@xiaomi.com>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQLr5Sx+vG6D4Jxm8r2vPxu7ygFz60LGwmqfkc=VB0-Miw@mail.gmail.com>
+Content-Transfer-Encoding: base64
+Subject: Re: [PATCH] docs: Document pahole v1.26 requirement for
+ KF_IMPLICIT_ARGS kfuncs
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, sched-ext@lists.linux.dev, bpf@vger.kernel.org
+In-Reply-To: 
+ <CAADnVQLbtuD=7mtGZFR25ULhjZ-3ifBpkyRcqu9jPSd2Mt3fBw@mail.gmail.com>
+References: <20260324062028.2479059-1-suzhidao@xiaomi.com>
+ <CAADnVQLbtuD=7mtGZFR25ULhjZ-3ifBpkyRcqu9jPSd2Mt3fBw@mail.gmail.com>
 
-On Tue, Mar 24, 2026 at 09:04:03AM -0700, Alexei Starovoitov wrote:
->On Tue, Mar 24, 2026 at 9:00 AM Sasha Levin <sashal@kernel.org> wrote:
->>
->> On Tue, Mar 24, 2026 at 08:03:30AM -0700, Alexei Starovoitov wrote:
->> >On Mon, Mar 23, 2026 at 9:49 AM Sasha Levin <sashal@kernel.org> wrote:
->> >>
->> >> Embed DWARF-derived function parameter name and type information in the
->> >> kernel image so that oops and WARN dumps display the crashing function's
->> >> register-passed arguments with their names, types, and values.
->> >>
->> >> A new build-time tool (scripts/gen_paraminfo.c) parses DW_TAG_subprogram
->> >> and DW_TAG_formal_parameter entries from DWARF .debug_info, extracting
->> >> parameter names and human-readable type strings. The resulting tables are
->> >> stored in .rodata using the same two-phase link approach as lineinfo.
->> >>
->> >> At runtime, kallsyms_show_paraminfo() performs a binary search on the
->> >> paraminfo tables, maps parameters to x86-64 calling convention registers
->> >> (RDI, RSI, RDX, RCX, R8, R9), and prints each parameter's name, type,
->> >> and value from pt_regs. If a parameter value matches the page fault
->> >> address (CR2), it is highlighted with "<-- fault address".
->> >>
->> >> Integration at show_regs() means this works for both oops and WARN()
->> >> automatically, since both paths provide full pt_regs at the exception
->> >> point.
->> >>
->> >> Example output:
->> >>
->> >>   Function parameters (ext4_readdir):
->> >>     file     (struct file *)         = 0xffff888123456000
->> >>     ctx      (struct dir_context *)  = 0x0000000000001234  <-- fault address
->> >>
->> >> Gated behind CONFIG_KALLSYMS_PARAMINFO (depends on CONFIG_KALLSYMS_LINEINFO).
->> >> Adds approximately 1-2 MB to the kernel image for ~58K functions.
->> >>
->> >> Assisted-by: Claude:claude-opus-4-6
->> >> Signed-off-by: Sasha Levin <sashal@kernel.org>
->> >
->> >Nack.
->> >
->> >You asked claude to reinvent pahole and BTF and it did it
->> >completely missing years of fine tuning that pahole does.
->>
->> Let's keep this on the technical side please.
->>
->> >dwarf cannot be trusted as-is. pahole converts it carefully
->> >by analyzing optimized out arguments and dropping signatures
->>
->> Fair point about pahole and optimized-out args. The problem is that BTF depends
->> on BPF_SYSCALL, and the environments I care about can't enable either.
->
->This is trivially fixable without reinventing pahole.
-
-Hmm...
-
-Looking at the code, I'd need to:
-
-- Split BTF parsing from kernel/bpf/btf.c to somewhere outside of kernel/bpf/.
-- New init path for btf_vmlinux outside BPF verifier.
-- Refactor btf_parse_vmlinux() BPF-specific bits.
-- Remove BPF_SYSCALL dependency from DEBUG_INFO_BTF.
-- Somehow make BTF work with DEBUG_INFO_REDUCED.
-
-I suppose that the first 4 are straightforward, but I don't have an idea about
-DEBUG_INFO_REDUCED. Though we can probably tackle it later.
-
-Does that make sense? Did I miss anything?
-
--- 
-Thanks,
-Sasha
+T24gVHVlLCAyNCBNYXIgMjAyNiAwODoxMjoxMiAtMDcwMCwgQWxleGVpIFN0YXJvdm9pdG92IHdy
+b3RlOgo+IEkgZG9uJ3QgdGhpbmsgdGhhdCdzIHRydWUuCj4gQXQgbGVhc3Qgd2hlbiBpbXBsaWNp
+dCBhcmdzIHdlcmUgZGVzaWduZWQgdGhlIGdvYWwgd2FzIHRvIGF2b2lkCj4gcGFob2xlIGRlcGVu
+ZGVuY2llcy4KPiBQbGVhc2Ugc2hhcmUgZXhhY3Qgc3RlcHMgdG8gcmVwcm9kdWNlLgoKSGVyZSBh
+cmUgdGhlIGV4YWN0IHJlcHJvZHVjdGlvbiBzdGVwcyBhbmQgY29kZSBwYXRoIGFuYWx5c2lzLgoK
+UmVwcm9kdWN0aW9uIChVYnVudHUgMjQuMDQsIHBhaG9sZSB2MS4yNSk6CgogICQgZ2l0IGNsb25l
+IGh0dHBzOi8vZ2l0aHViLmNvbS9zY2hlZC1leHQvc2NoZWRfZXh0LmdpdAogICQgY2Qgc2NoZWRf
+ZXh0ICYmIG1ha2UgLWokKG5wcm9jKSBMT0NBTFZFUlNJT049LXRlc3QKICAkIG1ha2UgLUMgdG9v
+bHMvdGVzdGluZy9zZWxmdGVzdHMvc2NoZWRfZXh0CiAgJCB2bmcgLS1ydW4gYXJjaC94ODYvYm9v
+dC9iekltYWdlIC0tY3B1cyA0IC0tbWVtb3J5IDRHIC0tIFwKICAgICAgdG9vbHMvdGVzdGluZy9z
+ZWxmdGVzdHMvc2NoZWRfZXh0L2J1aWxkL3J1bm5lciAyPiYxIHwgZ3JlcCAiZnVuY19wcm90byIK
+ClJlc3VsdDogMjMvMzAgdGVzdHMgZmFpbCB3aXRoOgogIGxpYmJwZjogZXh0ZXJuIChmdW5jIGtz
+eW0pICdzY3hfYnBmX2NyZWF0ZV9kc3EnOiBmdW5jX3Byb3RvIFszODJdCiAgICAgICAgICBpbmNv
+bXBhdGlibGUgd2l0aCB2bWxpbnV4IFs1MzgxM10KClJvb3QgY2F1c2U6CgpUaGUgS0ZfSU1QTElD
+SVRfQVJHUyBtZWNoYW5pc20gcmVxdWlyZXMgcGFob2xlIHYxLjI2IGZvciB0aGUgREVDTF9UQUcK
+Z2VuZXJhdGlvbiBzdGVwIHRoYXQgZW5hYmxlcyByZXNvbHZlX2J0ZmlkcyB0byBkbyBpdHMgYnRm
+MmJ0ZiB3b3JrOgoKMS4gc2NyaXB0cy9NYWtlZmlsZS5idGYgZ2F0ZXMgZGVjbF90YWdfa2Z1bmNz
+IG9uIHBhaG9sZSA+PSAxLjI2OgoKICAgICBwYWhvbGUtZmxhZ3MtJChjYWxsIHRlc3QtZ2UsICQo
+cGFob2xlLXZlciksIDEyNikgPSAuLi4gZGVjbF90YWdfa2Z1bmNzCgoyLiBXaXRob3V0IGRlY2xf
+dGFnX2tmdW5jcywgcGFob2xlIGRvZXMgbm90IGVtaXQgREVDTF9UQUcgQlRGIGVudHJpZXMKICAg
+Zm9yIF9fYnBmX2tmdW5jLWFubm90YXRlZCBmdW5jdGlvbnMuCgozLiByZXNvbHZlX2J0Zmlkcy9t
+YWluLmM6OmNvbGxlY3Rfa2Z1bmNzKCkgKGxpbmUgMTAwMikgZWFybHktcmV0dXJucwogICB3aGVu
+IG5yX2RlY2xfdGFncyA9PSAwOgoKICAgICBpZiAoIWxpbmstPm5yX2RlY2xfdGFncykKICAgICAg
+ICAgcmV0dXJuIDA7Cgo0LiBXaXRoIG5vIGJwZl9rZnVuYyBERUNMX1RBR3MsIGJ0ZjJidGYoKSBu
+ZXZlciBjYWxscwogICBwcm9jZXNzX2tmdW5jX3dpdGhfaW1wbGljaXRfYXJncygpIHRvIGNyZWF0
+ZSBfaW1wbCB2YXJpYW50cyBhbmQKICAgc3RyaXAgJ2F1eCcgZnJvbSB0aGUgb3JpZ2luYWwgcHJv
+dG8uCgo1LiBSZXN1bHQ6IHZtbGludXggcmV0YWlucyB0aGUgMy1wYXJhbSBwcm90byAod2l0aCAn
+YXV4JykgZm9yIGFsbAogICBLRl9JTVBMSUNJVF9BUkdTIGtmdW5jcy4KCkJURiBldmlkZW5jZSBm
+cm9tIG91ciBwYWhvbGUgdjEuMjUtY29tcGlsZWQgdm1saW51eDoKCiAgJCBicGZ0b29sIGJ0ZiBk
+dW1wIGZpbGUgdm1saW51eCB8IGdyZXAgLUE1ICdbNTM4MTNdJwogIFs1MzgxM10gRlVOQ19QUk9U
+TyAnKGFub24pJyByZXRfdHlwZV9pZD0uLi4gdmxlbj0zCiAgICAgICdkc3FfaWQnIHR5cGVfaWQ9
+Li4uCiAgICAgICdub2RlJyAgIHR5cGVfaWQ9Li4uCiAgICAgICdhdXgnICAgIHR5cGVfaWQ9Li4u
+ICAgIDwtLSBpbXBsaWNpdCBhcmcgc3RpbGwgcHJlc2VudCwgMy1wYXJhbQogIChubyBzY3hfYnBm
+X2NyZWF0ZV9kc3FfaW1wbCBleGlzdHMpCgpXaXRoIHBhaG9sZSB2MS4yNiwgcmVzb2x2ZV9idGZp
+ZHMgY3JlYXRlcyBzY3hfYnBmX2NyZWF0ZV9kc3FfaW1wbAooMy1wYXJhbSwgZm9yIHZlcmlmaWVy
+J3MgZmluZF9rZnVuY19pbXBsX3Byb3RvKSBhbmQgcmV3cml0ZXMKc2N4X2JwZl9jcmVhdGVfZHNx
+IHRvIDItcGFyYW0gKGZvciBsaWJicGYga3N5bSBtYXRjaGluZykuCgpZb3UncmUgcmlnaHQgdGhh
+dCB0aGUgZGVzaWduIGdvYWwgd2FzIHRvIGF2b2lkIHBhaG9sZSBkZXBlbmRlbmNpZXMgLQp0aGUg
+aW1wbGVtZW50YXRpb24gY291bGQgYmUgZml4ZWQgaW4gcmVzb2x2ZV9idGZpZHMgdG8gaGFuZGxl
+IHRoZQpuby1ERUNMX1RBRyBjYXNlLiBCdXQgdW50aWwgc3VjaCBhIGZpeCBsYW5kcywgdGhlIGRl
+cGVuZGVuY3kgZXhpc3RzCmluIHByYWN0aWNlLiBKb25hdGhhbiBDb3JiZXQgc3VnZ2VzdGVkIHJh
+aXNpbmcgdGhlIG1pbmltdW0gdmVyc2lvbiBpbgp0aGUgcmVxdWlyZW1lbnRzIHRhYmxlIHRvIDEu
+MjYsIHdoaWNoIHNlZW1zIHRoZSBjbGVhbmVzdCBmaXguCgpTaWduZWQtb2ZmLWJ5OiB6aGlkYW8g
+c3UgPHN1emhpZGFvQHhpYW9taS5jb20+Cg==
