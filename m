@@ -1,266 +1,138 @@
-Received: from omta36.uswest2.a.cloudfilter.net (omta36.uswest2.a.cloudfilter.net [35.89.44.35])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEB4038D6BB
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 21:51:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.89.44.35
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774389091; cv=none; b=aOEE542vP5LX1gppkL2PZqZIydwf60luwRQHiG9YuE14j4NyakQRYVbRiFP+nS7DSJLAmaV379CIfrB5WynS1ycKr7f+QVvVhILiEOKTRjdaHVgI0R9+VmkBylunhXSgWW8E+75HD3k5SisB5L2G/u0WYWfxf3nMMM4BWufq7F4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774389091; c=relaxed/simple;
-	bh=v8M/avmhZ+p5mDe6QYrKH2VFK1KNVhLl1fQvN6lgwqI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RWYb10l/r7hoDJEn1x548nCLbi6KQh1GbHzvW8RK8cFcYN52ZhOliVI89h2qhqWUaiOujnAJEQcnMoHLQcEQLv2ZNdrXw0bV3GWkS1gD+frQO4E6vZB4bdCEdb7xoyViQouieWGh2veRl4g2neNG8A1ULcjZbGoknBvqmOaPQys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com; spf=pass smtp.mailfrom=embeddedor.com; dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b=dren/ayx; arc=none smtp.client-ip=35.89.44.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=embeddedor.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ED78383C60
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 21:57:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774389425; cv=pass; b=Wii98IblNvGJES5ig4qJA8UxcFS6Bi70FPhvtYHHfqCqOJ8V0CK5366n27cOM6PkreMp9x9TXqOO9tzxhZKa78YnHaeYAL+yEIR99TYG6mO5KVyLc+EeH/Vvvv3YPYUmF0iVj9ZecpUrAruiETqvgVyeDn2oJ9hWXbcI0IP+kv0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774389425; c=relaxed/simple;
+	bh=06NqT5mNH8WH5XHnqPfulrse+8qOJRQeIdT9XEWW/yc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tXj2xzoPYCJQlb2uyaxpC/QsBPttbigFcgTuDNltOA0C9ocJ0pHOy9wKlyApE6ekob0bgFY0KcNefwa/3y21nEfaiaYhFWk5iQI0F31ifZXJTR/Ku2Q0mNaX0jOKsM1d1L4kWg2SNfle/l16H9Yv/GQhuE6eGy+Im+S00qwPrwY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TS8Kb0D5; arc=pass smtp.client-ip=209.85.222.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="dren/ayx"
-Received: from eig-obgw-5006b.ext.cloudfilter.net ([10.0.29.217])
-	by cmsmtp with ESMTPS
-	id 525Sw0witVCBN59erwoyPU; Tue, 24 Mar 2026 21:51:29 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id 59eqw9J1cOs9R59eqwxPXB; Tue, 24 Mar 2026 21:51:28 +0000
-X-Authority-Analysis: v=2.4 cv=HPPDFptv c=1 sm=1 tr=0 ts=69c30760
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=k5Y5iPg+dmTXVWgYE/XtfQ==:17
- a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=7T7KSl7uo7wA:10 a=VwQbUJbxAAAA:8
- a=knFFEZXCCS6sNPuXYSYA:9 a=QEXdDO2ut3YA:10 a=2aFnImwKRvkU0tJ3nQRT:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=t1tCrlPYFjY47Um8pkwyFOtPvnYcfZ5DeBcav9rYK4g=; b=dren/ayxdgB4upLGfffSGu8OXb
-	JptHjxg8cZRkXf8xCWL30xw9K1nCDMgPhdy7hqMP+tH7S4GJRXzHvILOwsD2X2wcBhGOwaasrpnJg
-	MEZWZGSnxDDNtXrFASoE3cTa5Dc9vFZs81Txr3HPIZ8teWCwBUU8nVL9bE0J8/ket7cqp1slV+T6j
-	wkG2fgdsfpUnYQ+W2ene3HzHhNBKX6ID/BYmhso3z1qiSsJUnYeP87xc3VfmfBTHOB2Mxc9r4t3ZQ
-	ME2deNHuTkwSFDBRSRF6/tuVWy31ko7Zj4lstxqYtq2jOY8nOQrTNYptBkVdjjuySVMWBC0GRg0qB
-	HQMi0esg==;
-Received: from [177.238.16.13] (port=54038 helo=[192.168.0.21])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.99.1)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1w59ec-00000004L0s-42HP;
-	Tue, 24 Mar 2026 16:51:15 -0500
-Message-ID: <ad1df772-9fcc-4b53-b726-188d609b536c@embeddedor.com>
-Date: Tue, 24 Mar 2026 15:50:05 -0600
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TS8Kb0D5"
+Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-94dd7178d63so3252742241.3
+        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 14:57:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774389423; cv=none;
+        d=google.com; s=arc-20240605;
+        b=GN2KNYsPMgaQGW/27epMB6oqppssVT5zP5iq1KwQCzYHwuRDWbzI5ux6zLecKWyyfX
+         j62/2tyNM0UnFjprdbiFeGUfSt9w3698YLagvUs2GIlBQ0RerihDX6oDkgVbykyxUS9v
+         hyzE2H3fX3stSaYQZnRfuSD7UZAZnRCi2vrr22zx0BcoyoltVuKRk3AxzbdVmCjD3+xi
+         NCNrRtE/lYaIz5tnJCnXpliQMpy6POd6rySjFqnfCIIzXcU+O8mU5RitiSWTQXMOY5Kx
+         Q1LMw+jh1skoCoIa3GUVSAZ9hShq94VNNVux+dOtyRyPqbSHQTLPltDUm2IKumvjyAh7
+         rBZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=06NqT5mNH8WH5XHnqPfulrse+8qOJRQeIdT9XEWW/yc=;
+        fh=5tRLknEeTpFAJkwvCbIhxLXFcEJ7LZ6FYb8Xv+KU0EY=;
+        b=QqeO3N21fnXlKp3b8OwjdEU63dxOD5U8XuAJH4jmYr8dnwkXyGMkpH3qdnP0KGJGKb
+         hP015Thd05+WMlAVpMQoO7SRgfVhx1ijsiVjMwnmMGUip0GBpR3yRCWwBkmV/c089vab
+         I1QEIofAGveQkj3ndOcGWVmfJ6fnwFMFUd6+U0+XX4dPDGCTLS5aGF9nJZA9OmtsWrDR
+         vNO7Oyy5xgBxioDd2zaclRthvEzIl+w/qYVETfvYGXCLCBm9YNxGKMdRxxPNUDJVLEwT
+         /HHa8hVwWsQtteOY/9BWfegnt+v/M2sew+UdcIecUKVJZMHbCJsYzhsReisod3w09r8J
+         wjWQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774389423; x=1774994223; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=06NqT5mNH8WH5XHnqPfulrse+8qOJRQeIdT9XEWW/yc=;
+        b=TS8Kb0D5iCEUOjhiS4GY/vocwaD8C07UeKIBpP1EcM0kZxAvVQcIDtsEtqPD6FuzLO
+         Zc2d9NrYrNlRReZIO7R35EvNYdwQYPFDUM2PaoHon5ltWqUq/3fNWJih9OAXN8I3kpw5
+         hKziTXA+2yFB94vr0NXmU03xnp7Vuu0rOj5qmOmIBEmlrBOEmw2ihzd9IRoYLtC4XYo4
+         7TABVSONe9bAz80zldA0qfR1UfNkq9vAypd+UIsXmuzj1aHQ+5zqN3B4t97NjX4HIw54
+         lkCu0LSwr+6owp2qpgYn+aWZS+V7JdpTptSGygnL+tFGTJGgLScOntDrXk7TlxqTH3xV
+         de7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774389423; x=1774994223;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=06NqT5mNH8WH5XHnqPfulrse+8qOJRQeIdT9XEWW/yc=;
+        b=U1kN+N+eQkkkbcxpx9ultYvOLnjOHMGfp36/kuiDvJpAtLbmilQJYADwY1Nig37q/Z
+         txYlU/vNrZVic5uy3bd/JcFnYg6PZlbDhD3gdZ5P9+vy7lLM6FSKZHWZrhsWxJItQyPM
+         pXEgJ+vzCG0sICptO3Dqsfqf4GVGmlFQCwHRtFruAfn8yFC7afgiUqTgoO8XVKcatGWo
+         6gXDShomzCLGKGBD0z/xKmZmT680zLq4SFhNU3Fxj7Rv3htZPjHGnQsoQxi6a9/1hb9L
+         Vcsmg0HdPx47utXnfF901xdPnaBbU6RnYTPeGFCRblesM8DuUtKuXBTgZzwfk+wp0/QN
+         TIQg==
+X-Forwarded-Encrypted: i=1; AJvYcCWHhRvF+fN+rssDkA8TVTWNqQZnKmaBKXX0ahFya39tFj7v7s79zxofXjaLXCph0SZVt74=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6ZzUF1PnTvkF54Ffuis6NQW+qBH/AJcLTPX2+hxuuo9T2QcBO
+	PzmY2bJ6XBnaCllPwPf+dSbSTMegzIa8amvcgo8xi4aYXg1z+DKOACKJKcxpeWOeLrjPd5O+H68
+	e0DLX5VL8KzWlQdKKVLheQN/GnGevJKY=
+X-Gm-Gg: ATEYQzzzvsnQ1cbj6RVIQfPkbrVhFqV85mD6RKmHexDUZSH4yFdpxWi7/ShKePljE9C
+	owc98/2SK+pQMuLXdG+v+DcwVhCwSbkVVEP7oCGrmmGZbMRb4fLoysbvYyoLzH10R1MIUmkLH+F
+	VU1phqdUdr7rdAUO89Tp9JsHWcc0HuGfDe14H3eKUdOvz7KCKD1rLWbjl1VUjZX5JJyhDsz/TXg
+	3wJvQRBE5UFpKM4u055iUkh/oJFMUunO0m1D27cy5xiy/5kAzdoMuXcpzQrEv4FBmjGCx5Lt03G
+	1aUt9X18+1pYBi46TyiCKTxWH0nSebMnaNDunFCrAA==
+X-Received: by 2002:a05:6102:2d06:b0:603:1a8a:c84a with SMTP id
+ ada2fe7eead31-60378fe89c2mr803487137.2.1774389423093; Tue, 24 Mar 2026
+ 14:57:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH][next] bpf: Avoid thousands of
- -Wflex-array-members-not-at-end warnings
-To: Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva"
- <gustavoars@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hardening@vger.kernel.org
-References: <aaZr2A1UPJq33127@kspp>
- <30A4F6F9-9E41-4767-9949-8F89927CA159@kernel.org>
-Content-Language: en-US
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <30A4F6F9-9E41-4767-9949-8F89927CA159@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 177.238.16.13
-X-Source-L: No
-X-Exim-ID: 1w59ec-00000004L0s-42HP
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.0.21]) [177.238.16.13]:54038
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 3
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfA/9Fq03gf8XUtgQvvoKBFLM+nAqjJgdEmzRs+WhEpm3UU6q24bOMaOLMSN2sYkIxB/zjxy2+seY/dFVsVxD15K8tOFBSA2ZkuMgWjRt0FSCa0AjUA48
- xQi44pJp1t/lr0Ym2ESQY1hvcVdSlc5lnWBdTK4Jej05guktsNFqtM52Hu7xS3bwcyoB81bTnZtyXTvXQT4DhvhigEYsLEehLFk=
+References: <20260320162336.166542-1-hao.sun@inf.ethz.ch> <177436741379.1084685.742970732574986773.git-patchwork-notify@kernel.org>
+ <CAM=Ch04dJEf0_1+NeO1AJOBwKhQ5hcQsionMyyxuu1h7Nmj_pg@mail.gmail.com> <CAADnVQKAb-igkV-7htfqMxFhui+utF24T70pbeWd4mwcXWQ4pQ@mail.gmail.com>
+In-Reply-To: <CAADnVQKAb-igkV-7htfqMxFhui+utF24T70pbeWd4mwcXWQ4pQ@mail.gmail.com>
+From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+Date: Tue, 24 Mar 2026 17:56:47 -0400
+X-Gm-Features: AQROBzCzEMFYN4eo7Ah7yrf83vMoLcCwUMebMsk7_Mke3croJWX60MhwezeeysA
+Message-ID: <CAM=Ch05c5ptrNHjKHWppynU_1rfsfZsiLwK111h4phrs_u77PA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2] bpf: Simplify tnum_step()
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: patchwork-bot+netdevbpf@kernel.org, Hao Sun <sunhao.th@gmail.com>, 
+	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
+	Paul Chaignon <paul.chaignon@gmail.com>, Shung-Hsi Yu <shung-hsi.yu@suse.com>, 
+	John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Mar 24, 2026 at 5:36=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Tue, Mar 24, 2026 at 2:33=E2=80=AFPM Harishankar Vishwanathan
+> <harishankar.vishwanathan@gmail.com> wrote:
+> >
+> > On Tue, Mar 24, 2026 at 11:50=E2=80=AFAM <patchwork-bot+netdevbpf@kerne=
+l.org> wrote:
+> > >
+> > > Hello:
+> > >
+> > > This patch was applied to bpf/bpf-next.git (master)
+> > > by Alexei Starovoitov <ast@kernel.org>:
+> >
+> > Hello, I see this was applied. Just a heads up that I still had a few
+> > concerns regarding the
+> > commit message and code style in my last reply. I think it was my
+> > mistake to include
+> > the Reviewed-by while still requesting changes.
+> >
+> > Hao, would you like to send a follow-up for those, or should I put one =
+together?
+> >
+> > Or Alexei, do you think it is okay as is? If yes, we can just leave it =
+be.
+>
+> They read like nits to me.
+> New code is definitely cleaner.
+> As a follow up better craft a targeted selftest and explain
+> your points in selftest comments.
 
+Yes they were definitely nits. Makes sense to keep the
+code clean.
 
-On 3/4/26 01:30, Kees Cook wrote:
-> 
-> 
-> On March 2, 2026 9:04:24 PM PST, "Gustavo A. R. Silva" <gustavoars@kernel.org> wrote:
->> -Wflex-array-member-not-at-end was introduced in GCC-14, and we are
->> getting ready to enable it, globally.
->>
->> struct bpf_prog_array is a flexible structure, this is a structure that
->> contains a flexible-array member (struct bpf_prog_array_item items[];).
->>
->> We create the new struct bpf_prog_array_hdr type, and use it to replace
->> the object type causing trouble in struct bpf_empty_prog_array, namely
->> struct bpf_prog_array hdr;
->>
->> Also, once -fms-extensions is enabled, we can use transparent struct
-> 
-> Typo: "since" instead of "once".
-
-Ah yes, thanks!
-
-> 
->> members in struct bpf_prog_array.
->>
->> Notice that the newly created type does not contain the flex-array
->> member `items`, which is the object causing the -Wfamnae warnings
->> in struct bpf_empty_prog_array.
->>
->> With these changes, fix the following warnings:
->>     
->> 7659 ./include/linux/bpf.h:2369:31: warning: structure containing a flexible array member is not at the end of another structure [-Wflex-array-member-not-at-end]
->>
->> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
->> ---
->> include/linux/bpf-cgroup.h | 2 +-
->> include/linux/bpf.h        | 8 ++++++--
->> kernel/bpf/core.c          | 6 +++---
->> 3 files changed, 10 insertions(+), 6 deletions(-)
->>
->> diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
->> index 2f535331f926..e7d266600ac7 100644
->> --- a/include/linux/bpf-cgroup.h
->> +++ b/include/linux/bpf-cgroup.h
->> @@ -184,7 +184,7 @@ static inline bool cgroup_bpf_sock_enabled(struct sock *sk,
->> 	struct bpf_prog_array *array;
->>
->> 	array = rcu_access_pointer(cgrp->bpf.effective[type]);
->> -	return array != &bpf_empty_prog_array.hdr;
->> +	return (void *)array != (void *)&bpf_empty_prog_array.hdr;
->> }
->>
->> /* Wrappers for __cgroup_bpf_run_filter_skb() guarded by cgroup_bpf_enabled. */
->> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
->> index 05b34a6355b0..488de065466e 100644
->> --- a/include/linux/bpf.h
->> +++ b/include/linux/bpf.h
->> @@ -2360,13 +2360,17 @@ struct bpf_prog_array_item {
->> 	};
->> };
->>
->> -struct bpf_prog_array {
->> +struct bpf_prog_array_hdr {
->> 	struct rcu_head rcu;
->> +};
->> +
->> +struct bpf_prog_array {
->> +	struct bpf_prog_array_hdr;
->> 	struct bpf_prog_array_item items[];
->> };
->>
->> struct bpf_empty_prog_array {
->> -	struct bpf_prog_array hdr;
->> +	struct bpf_prog_array_hdr hdr;
->> 	struct bpf_prog *null_prog;
->> };
-> 
-> AFAICT, this struct exists entirely to populate a single element of "items" in a global variable. (I only see "null_prog" used during the initializer.) None of this is needed; globals will be correctly sized with an array initializer of a FAM. Totally untested:
-> 
-> struct bpf_prog_array bpf_empty_prog_array = {
->      .items = { NULL, },
-> };
-
-Okay, in this case the patch would look as follows:
-
-diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-index 2f535331f926..b2e79c2b41d5 100644
---- a/include/linux/bpf-cgroup.h
-+++ b/include/linux/bpf-cgroup.h
-@@ -184,7 +184,7 @@ static inline bool cgroup_bpf_sock_enabled(struct sock *sk,
-  	struct bpf_prog_array *array;
-
-  	array = rcu_access_pointer(cgrp->bpf.effective[type]);
--	return array != &bpf_empty_prog_array.hdr;
-+	return array != &bpf_empty_prog_array;
-  }
-
-  /* Wrappers for __cgroup_bpf_run_filter_skb() guarded by cgroup_bpf_enabled. */
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 05b34a6355b0..4f5b9e85a20c 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2365,18 +2365,13 @@ struct bpf_prog_array {
-  	struct bpf_prog_array_item items[];
-  };
-
--struct bpf_empty_prog_array {
--	struct bpf_prog_array hdr;
--	struct bpf_prog *null_prog;
--};
--
-  /* to avoid allocating empty bpf_prog_array for cgroups that
-   * don't have bpf program attached use one global 'bpf_empty_prog_array'
-   * It will not be modified the caller of bpf_prog_array_alloc()
-   * (since caller requested prog_cnt == 0)
-   * that pointer should be 'freed' by bpf_prog_array_free()
-   */
--extern struct bpf_empty_prog_array bpf_empty_prog_array;
-+extern struct bpf_prog_array bpf_empty_prog_array;
-
-  struct bpf_prog_array *bpf_prog_array_alloc(u32 prog_cnt, gfp_t flags);
-  void bpf_prog_array_free(struct bpf_prog_array *progs);
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 67eb12b637a5..ca39d2e690b9 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2613,8 +2613,10 @@ static struct bpf_prog_dummy {
-  	},
-  };
-
--struct bpf_empty_prog_array bpf_empty_prog_array = {
--	.null_prog = NULL,
-+struct bpf_prog_array bpf_empty_prog_array = {
-+	.items = {
-+		{ .prog = NULL },
-+	},
-  };
-  EXPORT_SYMBOL(bpf_empty_prog_array);
-
-@@ -2625,14 +2627,14 @@ struct bpf_prog_array *bpf_prog_array_alloc(u32 prog_cnt, gfp_t flags)
-  	if (prog_cnt)
-  		p = kzalloc_flex(*p, items, prog_cnt + 1, flags);
-  	else
--		p = &bpf_empty_prog_array.hdr;
-+		p = &bpf_empty_prog_array;
-
-  	return p;
-  }
-
-  void bpf_prog_array_free(struct bpf_prog_array *progs)
-  {
--	if (!progs || progs == &bpf_empty_prog_array.hdr)
-+	if (!progs || progs == &bpf_empty_prog_array)
-  		return;
-  	kfree_rcu(progs, rcu);
-  }
-@@ -2653,7 +2655,7 @@ static void __bpf_prog_array_free_sleepable_cb(struct rcu_head *rcu)
-
-  void bpf_prog_array_free_sleepable(struct bpf_prog_array *progs)
-  {
--	if (!progs || progs == &bpf_empty_prog_array.hdr)
-+	if (!progs || progs == &bpf_empty_prog_array)
-  		return;
-  	call_rcu_tasks_trace(&progs->rcu, __bpf_prog_array_free_sleepable_cb);
-  }
-
-Could maintainers give us feedback or comment on this, please? :)
-
-Thanks!
--Gustavo
+The logic is sound and verified, so I'm happy to leave it as-is.
+If I find the time to put together a targeted selftest down the road,
+I'll send a separate patch!
