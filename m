@@ -1,128 +1,167 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C038B318EDF
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 12:27:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3ED92E975E;
+	Tue, 24 Mar 2026 12:46:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774355253; cv=none; b=FdMApkIRXHCy+7B1S0Vh/LGTY0pGRPbGh4EnLeT0U34sgQm+rUHRlJZ1vmsMrD/ze9QFb6i5HKOnSWSCRUTNjvj9l0E/CRm4ZjyuqjsEt7G0mG5zUDb34MbVS/RZiF8ViDZtoXB0YL3NlleSraCeEOELjge3bOJfKRFGvLc/MLM=
+	t=1774356365; cv=none; b=qkY4jwNUCH/gFhtPolpfidea8KWGwsMVkY6TWbefokfWC6WxDx9WD8epnkoIsRlSomU9PVMX9QVgtbtNMgPkNxRi666boyjRnExds/Ge/O/eo70phs8fb1K0NnrmSJrmTmpiW0gTB+mHPQJ273WYwZy9kpqqbHaa6FWWS3rPD3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774355253; c=relaxed/simple;
-	bh=2hwBaiTYWPgPdvYP/SDJeV1QwJS7IHBoFcHIsCNSe3k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gAOY28QyC3aSzPzJdtbf91mNKz7WLRpJiqBz6qslvV4EQZbbEwaILKzBAXzjwwjjuxIfKE1rR89ZsBSOfkwoHdyoiLHGt+anRBbQDHApBRndUr7w20BXJF8Z1Vz+HcytSdkEYxW+nGncJBfnXMshAGNoqNqspoqZSxm1K0MYvcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g+LQz+V2; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774356365; c=relaxed/simple;
+	bh=7v2y5R7yJ+aJsFUsyYdAnXA4i1XNAA7BioxYMzzceMY=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=usEhZDxYq4/H9BFTl7mNcVEz45HukCkaG+c167X9WKCpt83p6OcCCNk9U6mHNz3QYkV4G5KU6reN5CGb9zwe+frn28gZH9Q+JvaOxjvroC2YFNltg+mEy7f2DODF+AJvuLapgY2ZYImWrbS/AOLH1j9HM4eGt/w9vSuB+RgTQNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hpUp9+0q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g+LQz+V2"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-829b8b6c4d0so1018250b3a.0
-        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 05:27:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774355252; x=1774960052; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RwSnjFcjq1oUFhDGo0eVz8ywdnnal2i+ieo63wHrZYg=;
-        b=g+LQz+V2qNOpDJuAPTHj1o2Yz3j29juTS1l3w829Ryt72+ExBfBiog4isQlFKkQfPp
-         ymMffKKK1WURJSmrdMscXarjjIYU8+GAVDwzt+ACJqF1VbRJjzlaq+J1Uyaktj0zevBQ
-         s5fVZig+27VAB44vebHbgdX2/K+wU9uW0a0VbZEHiAHz9qNwM3RUJ9+l7VYS1+nXsW34
-         NvzKWR1VNg6v0KG/xuBd0sCQD8nUur2hGz6cSbAhiqwVFJLUSL1uMqwSodpMgMXYNCLq
-         nZfYDzuyR6P5zD+V42t9Zba3N7QxzUhHO1RMuMgWqGH5Vg8SBGcDSqRQLhjzNoCjSFQn
-         B6hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774355252; x=1774960052;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RwSnjFcjq1oUFhDGo0eVz8ywdnnal2i+ieo63wHrZYg=;
-        b=GQJ2jCdRfsHwxHjlmbjXknCnG+bG8DPXUeLiUjGYGWaslwVcyaAi3a2wO/IHY6WT3k
-         l6nCguqZLYk5FhXd1BWkjxVnCh4pJTMDAbGQyeHTfRfVneB18s4GsfHp8HSWTxe/A4od
-         1uTnszNOwCHlxV5V94K/L8VGtCnBkLDfR/ptaPV92wxisIMZd4iaXuSH+iv3fXqKKkGz
-         zlpHUgyh8mYk5ux8153et+bf/HktXiu+G2hnm9wxT4Jx0ranHRbjmCnfDmJPPgEr1WRc
-         riN2uQRSZ45HbUPwx7wjWoJWhCkNE0PLdFRgN8qQBH5673yO7/FydaDcDp4uM0k1vFpb
-         8urA==
-X-Gm-Message-State: AOJu0YzyikEgbfsWj47JRF3/8nzG3Pk+Wyu9qAyxZcinz4TWzqV2GjY5
-	PGuvExfuzntw56bC8Xkz7SwsfQwGOStBJeXbWAZ+EVmSN8i3R68CkAh7
-X-Gm-Gg: ATEYQzwn31IqiJbDoR9dHqqpxaCYpHOwsdjfc7I6ApvqbkB2Bd6rI1Ccq2TvR/9MFTR
-	R8Jq5EFSR05k6N/EG8Elam65JEcujYeh7gwQg7cM/bti/iPIq+IWaZnh/vJiTFfc48FpGTqifR3
-	z6n3ffiotRxfbGVcG8tT+AR9poR12TR1Fy80G11w6Tg1Gm2lI7HXOOdITfR7qTC5sygXlhuUgj9
-	sF2wqyW/WTZCIfa3SenjaZKlovEfog/uJYOvgg6QGw6yguQCQ0jWQPTo86lRR5L7qKkGV+RrDl4
-	jh3X/SqL8AXPfmHbKsvGw2BLY/i6efapO4h9KF0edmMShQXTKyxppCTWXTF8MBzvBG5pUMgVzeC
-	T5X5sZSM9YnVhYlF0uw7kGj7PflmiCBp5DC9vu1ZpoDpr8zGD4ZTDque/OYoOTUBZzFKeJvPYQi
-	kfX2Qo7QRykdOH9MJA7v4C9qKdi6bTtf0A2OYjjULhHD2eydilmlLIPA==
-X-Received: by 2002:a05:6a00:6c8d:b0:82a:7f28:c79b with SMTP id d2e1a72fcca58-82a8c2ef7bfmr13798915b3a.31.1774355252204;
-        Tue, 24 Mar 2026 05:27:32 -0700 (PDT)
-Received: from ZC-202510311500 ([61.185.217.216])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82b0409f409sm12224583b3a.31.2026.03.24.05.27.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2026 05:27:31 -0700 (PDT)
-From: Haoyu Lu <hechushiguitu666@gmail.com>
-To: arc@lists.infradead.org
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	"haoyu . lu" <hechushiguitu666@gmail.com>
-Subject: [PATCH] arch/arc: bpf_jit: fix missing newline in pr_err messages
-Date: Tue, 24 Mar 2026 20:27:02 +0800
-Message-ID: <20260324122703.641-1-hechushiguitu666@gmail.com>
-X-Mailer: git-send-email 2.53.0.windows.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hpUp9+0q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCAE0C19424;
+	Tue, 24 Mar 2026 12:46:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774356365;
+	bh=7v2y5R7yJ+aJsFUsyYdAnXA4i1XNAA7BioxYMzzceMY=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=hpUp9+0q79/nhSZp/N+0EmJv88hJup8Y83RJNwgl83DCCVzJel2/YgZ4f+S85T+O+
+	 RNoskRd5pFp1FIaDU1vjaP1erzeMG3f9VX9c6D1bWjkfnhdZgWS/KYOdvScUDLnUuL
+	 sXoohTFcfHrSvK1mVU81EC1bxivfCUTgir/fYcqppOvTCYZbzQVBncSMlbd+QCn2Ig
+	 3vyll3UYkh/pfMVCmBtV7Jn/ei7HOSprPLGK7Vf7NLVTKYiIZLx9nXu6fd9dheHiNE
+	 iYokbijN5Lus10fk67m5gJ4E4k7S+g5PDUgd6Daz3b8BKwHMloPC8eXKjm3P0qgUOH
+	 xROe/dROsk7iA==
+Content-Type: multipart/mixed; boundary="===============5284341796206288996=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <edfa617891aa2e2980ecfb8037a7a4ed069e518bbce1777e331c737024feb1da@mail.kernel.org>
+In-Reply-To: <20260324122052.342751-2-xukuohai@huaweicloud.com>
+References: <20260324122052.342751-2-xukuohai@huaweicloud.com>
+Subject: Re: [PATCH bpf-next v10 1/5] bpf: Move constants blinding out of arch-specific JITs
+From: bot+bpf-ci@kernel.org
+To: xukuohai@huaweicloud.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-arm-kernel@lists.infradead.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,yonghong.song@linux.dev,puranjay@kernel.org,a.s.protopopov@gmail.com,alexis.lothore@bootlin.com,list+bpf@vahedi.org,linux@armlinux.org.uk,yangtiezhu@loongson.cn,hengqi.chen@gmail.com,johan.almbladh@anyfinetworks.com,paulburton@kernel.org,hbathini@linux.ibm.com,chleroy@kernel.org,naveen@kernel.org,luke.r.nels@gmail.com,xi.wang@gmail.com,bjorn@kernel.org,pulehui@huawei.com,iii@linux.ibm.com,hca@linux.ibm.com,gor@linux.ibm.com,davem@davemloft.net,udknight@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 24 Mar 2026 12:46:04 +0000 (UTC)
 
-From: haoyu.lu <hechushiguitu666@gmail.com>
+--===============5284341796206288996==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Add missing newline to pr_err messages in arch/arc/net/bpf_jit_arcv2.c.
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 67eb12b637a5..8f52f4b6c3af 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
 
-Fixes: f122668ddcce ("ARC: Add eBPF JIT support")
-Signed-off-by: haoyu.lu <hechushiguitu666@gmail.com>
+[ ... ]
+
+> @@ -1507,13 +1507,16 @@ static void adjust_insn_arrays(struct bpf_prog *prog, u32 off, u32 len)
+>  #endif
+>  }
+>
+> -struct bpf_prog *bpf_jit_blind_constants(struct bpf_prog *prog)
+> +struct bpf_prog *bpf_jit_blind_constants(struct bpf_verifier_env *env, struct bpf_prog *prog)
+>  {
+
+[ ... ]
+
+> -		tmp = bpf_patch_insn_single(clone, i, insn_buff, rewritten);
+> -		if (IS_ERR(tmp)) {
+> +		if (env)
+> +			tmp = bpf_patch_insn_data(env, subprog_start + i, insn_buff, rewritten);
+> +		else
+> +			tmp = bpf_patch_insn_single(clone, i, insn_buff, rewritten);
+
+When env is non-NULL, bpf_patch_insn_data() adjusts env->insn_aux_data
+via adjust_insn_aux_data() and env->subprog_info via
+adjust_subprog_starts(). This shifts subprogram start positions to
+account for the expanded instructions.
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index cd008b146ee5..1b2b99f2d859 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+>  static int jit_subprogs(struct bpf_verifier_env *env)
+>  {
+> -	struct bpf_prog *prog = env->prog, **func, *tmp;
+> +	struct bpf_prog *orig_prog = env->prog, *prog, **func, *tmp;
+>  	int i, j, subprog_start, subprog_end = 0, len, subprog;
+>  	struct bpf_map *map_ptr;
+>  	struct bpf_insn *insn;
+>  	void *old_bpf_func;
+>  	int err, num_exentries;
+> -	int old_len, subprog_start_adjustment = 0;
+> +	bool blinded = false;
+>
+>  	if (env->subprog_cnt <= 1)
+>  		return 0;
+>
+> +	prog = bpf_jit_blind_constants(env, NULL);
+> +	if (IS_ERR(prog))
+> +		return -ENOMEM;
+> +	if (prog != orig_prog)
+> +		blinded = true;
+
+[ ... ]
+
+> +	if (blinded) {
+> +		bpf_jit_prog_release_other(orig_prog, prog);
+> +		env->prog = prog = orig_prog;
+> +	}
+>  	/* cleanup main prog to be interpreted */
+>  	prog->jit_requested = 0;
+>  	prog->blinding_requested = 0;
+> -	for (i = 0, insn = prog->insnsi; i < prog->len; i++, insn++) {
+> -		if (!bpf_pseudo_call(insn))
+> -			continue;
+> -		insn->off = 0;
+> -		insn->imm = env->insn_aux_data[i].call_imm;
+> +	/* we already rolled back to the clean orig_prog when blinded is true */
+> +	if (!blinded) {
+> +		for (i = 0, insn = prog->insnsi; i < prog->len; i++, insn++) {
+> +			if (!bpf_pseudo_call(insn))
+> +				continue;
+> +			insn->off = 0;
+> +			insn->imm = env->insn_aux_data[i].call_imm;
+> +		}
+>  	}
+>  	bpf_prog_jit_attempt_done(prog);
+>  	return err;
+
+When blinded is true, the rollback restores env->prog to orig_prog, but
+env->subprog_info still holds the shifted start positions from blinding
+(adjusted by adjust_subprog_starts() in bpf_patch_insn_data()). The
+commit message states "env->insn_aux_data and env->subprog_info are no
+longer used after JIT failure." However, on configurations without
+CONFIG_BPF_JIT_ALWAYS_ON, fixup_call_args() falls through to the
+interpreter fixup loop after jit_subprogs() fails:
+
+fixup_call_args() {
+    err = jit_subprogs(env);          /* fails, e.g. -ENOTSUPP */
+    ...
+    for (i = 0; i < prog->len; ...) {
+        ...
+        depth = get_callee_stack_depth(env, insn, i);
+    }
+}
+
+get_callee_stack_depth() computes a target address from orig_prog's
+original instruction offsets and calls find_subprog(env, start). Since
+env->subprog_info start positions were shifted by blinding but the
+instruction addresses are from the unblinded orig_prog, find_subprog()
+fails to find a matching entry and returns -ENOENT, triggering a
+spurious "verifier bug" warning and rejecting the program.
+
+Could env->subprog_info be restored alongside the prog rollback, or
+could jit_subprogs() return -EFAULT when blinding was active to skip
+the interpreter fallback path?
+
+
 ---
- arch/arc/net/bpf_jit_arcv2.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/arch/arc/net/bpf_jit_arcv2.c b/arch/arc/net/bpf_jit_arcv2.c
-index 6d989b6d88c6..7ee50aeae5a4 100644
---- a/arch/arc/net/bpf_jit_arcv2.c
-+++ b/arch/arc/net/bpf_jit_arcv2.c
-@@ -2427,7 +2427,7 @@ u8 arc_prologue(u8 *buf, u32 usage, u16 frame_size)
-
- #ifdef ARC_BPF_JIT_DEBUG
- 	if ((usage & BIT(ARC_R_FP)) && frame_size == 0) {
--		pr_err("FP is being saved while there is no frame.");
-+		pr_err("FP is being saved while there is no frame.\n");
- 		BUG();
- 	}
- #endif
-@@ -2454,7 +2454,7 @@ u8 arc_epilogue(u8 *buf, u32 usage, u16 frame_size)
-
- #ifdef ARC_BPF_JIT_DEBUG
- 	if ((usage & BIT(ARC_R_FP)) && frame_size == 0) {
--		pr_err("FP is being saved while there is no frame.");
-+		pr_err("FP is being saved while there is no frame.\n");
- 		BUG();
- 	}
- #endif
-@@ -2868,7 +2868,7 @@ u8 gen_jmp_64(u8 *buf, u8 rd, u8 rs, u8 cond, u32 curr_off, u32 targ_off)
- 		break;
- 	default:
- #ifdef ARC_BPF_JIT_DEBUG
--		pr_err("64-bit jump condition is not known.");
-+		pr_err("64-bit jump condition is not known.\n");
- 		BUG();
- #endif
- 	}
-@@ -2948,7 +2948,7 @@ u8 gen_jmp_32(u8 *buf, u8 rd, u8 rs, u8 cond, u32 curr_off, u32 targ_off)
- 	 */
- 	if (cond >= ARC_CC_LAST) {
- #ifdef ARC_BPF_JIT_DEBUG
--		pr_err("32-bit jump condition is not known.");
-+		pr_err("32-bit jump condition is not known.\n");
- 		BUG();
- #endif
- 		return 0;
---
-2.53.0.windows.1
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23488858455
+--===============5284341796206288996==--
