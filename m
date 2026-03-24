@@ -1,92 +1,107 @@
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 385883FCB34;
-	Tue, 24 Mar 2026 13:43:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDC053624BC;
+	Tue, 24 Mar 2026 14:28:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774359788; cv=none; b=mmB4RPBh5vesFWAcZtnIB4FqmkVHts30HohtT0mq8JEUyMUzwpCl3FI2cUZVlW478I67xdiwq8O1HD/pJ969zL2L3WxfznRANuwTtMfRjX+G2KzBJ+7p6HEzIOF0xdojVudesPOXUTwSj4RcdHo8xu4IQFqvoQd7H3rHhbSx3Dg=
+	t=1774362484; cv=none; b=h3iPYxXvfn0HYV7ftl81qTGxxKBG2lf/F0Qg3hhLshSQL1MV+BSDizgUyiJkbdJF8qy9SuWMkK5899VCqoQB1EaX96zgWHQF6KepC4Gx91RDol7GHEAcNut1k0//iKz8e5Ii9c2aB5p5PFtDfVWYCeU/kwz/EuZgs3WGn8PkyAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774359788; c=relaxed/simple;
-	bh=tQzP56JT8kO533jsrXHMynkypbhTkn3/hPD/iDlE2C0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=eFzXYMxqLdjcnykFi5RNwjPNDMdwA+ImKjdYRZvEFQHBOJAZrAUX5d9ezNBxr6eGg9taWLkbI2mpicurOtOeM6xdqQUFD3ZzotrFUY12v75BXqVPx78kpVSqc9Od20HGRQ+RdRpDnG/Xarp8zoh2ViwyN3WZCyFtusPeHx40inw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=RYS52nQe; arc=none smtp.client-ip=45.79.88.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="RYS52nQe"
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 447B640423
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1774359786; bh=8j1lWJ701yzUSlEYE6uskF2ZtMcXdWTUqSiglq8TPjA=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=RYS52nQevBGg/pPQsSNoovYWD/QCJ4Re0/bfQUMmZoczo/1ccMizkfOmhQ5zsZoAe
-	 PDmwUXpDPD8W3iv5nP3FoaOfK56iuuOQUgd9A7gR33ne7NSpQD+87zFMj58i9ZN8Vv
-	 IWgrJ7HNI6YICetie4bCO4hSy6feQx3pvQXtzRo5laTqK895OJtyGzCchUSRl0Bx0P
-	 kKcLWN1VSeNZapeT5MsTmPhdrn0QghjiJBgJ2JfNIifs9dM7OrfnSvfqDdV0sNQIBI
-	 aLYK7I9DrJjN95or0L3u9rYtqK7cAgfnTg9LgIQBz81ID5yDBEl+IRD2J2fmNb6s9B
-	 LP1qlvpGpKw/g==
-Received: from localhost (unknown [IPv6:2601:280:4600:27b::1fe])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id 447B640423;
-	Tue, 24 Mar 2026 13:43:06 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: zhidao su <soolaugust@gmail.com>, workflows@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- bpf@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>, zhidao su
- <suzhidao@xiaomi.com>
-Subject: Re: [PATCH] docs: Document pahole v1.26 requirement for
- KF_IMPLICIT_ARGS kfuncs
-In-Reply-To: <20260324062028.2479059-1-suzhidao@xiaomi.com>
-References: <20260324062028.2479059-1-suzhidao@xiaomi.com>
-Date: Tue, 24 Mar 2026 07:43:05 -0600
-Message-ID: <877br18hsm.fsf@trenco.lwn.net>
+	s=arc-20240116; t=1774362484; c=relaxed/simple;
+	bh=Tli2X3y0LVZah9JzvHCs3qERanTby0V0BrV4nXSA3Js=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=EDiC7YBWVSVjd1xuN7MVDRcf1lwlemnAX/FkCSHp/Ezdt1+m+mPid5mVMNdulCjbxsxh4eT78D7rBs8HwjJ/iKvV8gjj9zg0VDoo27Fby5ccARnIYHDa1LrGYzOUjtE/gLloBphqYFyF+ujqub7B3s3H2caxCrixTxF3dwC49Ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf02.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay09.hostedemail.com (Postfix) with ESMTP id 1F17D9396F;
+	Tue, 24 Mar 2026 14:27:53 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf02.hostedemail.com (Postfix) with ESMTPA id DC83180011;
+	Tue, 24 Mar 2026 14:27:20 +0000 (UTC)
+Date: Tue, 24 Mar 2026 10:28:02 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "Vineeth Pillai (Google)" <vineeth@bitbyteword.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Dmitry Ilvokhin <d@ilvokhin.com>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Ingo Molnar <mingo@redhat.com>, Jens
+ Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+ <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Marcelo Ricardo
+ Leitner <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, Jon
+ Maloy <jmaloy@redhat.com>, Aaron Conole <aconole@redhat.com>, Eelco
+ Chaudron <echaudro@redhat.com>, Ilya Maximets <i.maximets@ovn.org>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, linux-sctp@vger.kernel.org,
+ tipc-discussion@lists.sourceforge.net, dev@openvswitch.org, Jiri Pirko
+ <jiri@resnulli.us>, Oded Gabbay <ogabbay@kernel.org>, Koby Elbaz
+ <koby.elbaz@intel.com>, dri-devel@lists.freedesktop.org, "Rafael J.
+ Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+ "Gautham R. Shenoy" <gautham.shenoy@amd.com>, Huang Rui
+ <ray.huang@amd.com>, Mario Limonciello <mario.limonciello@amd.com>, Len
+ Brown <lenb@kernel.org>, Srinivas Pandruvada
+ <srinivas.pandruvada@linux.intel.com>, linux-pm@vger.kernel.org, MyungJoo
+ Ham <myungjoo.ham@samsung.com>, Kyungmin Park <kyungmin.park@samsung.com>,
+ Chanwoo Choi <cw00.choi@samsung.com>, Christian =?UTF-8?B?S8O2bmln?=
+ <christian.koenig@amd.com>, Sumit Semwal <sumit.semwal@linaro.org>,
+ linaro-mm-sig@lists.linaro.org, Eddie James <eajames@linux.ibm.com>, Andrew
+ Jeffery <andrew@codeconstruct.com.au>, Joel Stanley <joel@jms.id.au>,
+ linux-fsi@lists.ozlabs.org, David Airlie <airlied@gmail.com>, Simona Vetter
+ <simona@ffwll.ch>, Alex Deucher <alexander.deucher@amd.com>, Danilo
+ Krummrich <dakr@kernel.org>, Matthew Brost <matthew.brost@intel.com>,
+ Philipp Stanner <phasta@kernel.org>, Harry Wentland
+ <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>,
+ amd-gfx@lists.freedesktop.org, Jiri Kosina <jikos@kernel.org>, Benjamin
+ Tissoires <bentiss@kernel.org>, linux-input@vger.kernel.org, Wolfram Sang
+ <wsa+renesas@sang-engineering.com>, linux-i2c@vger.kernel.org, Mark Brown
+ <broonie@kernel.org>, Michael Hennerich <michael.hennerich@analog.com>,
+ Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, linux-spi@vger.kernel.org,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, "Martin K.
+ Petersen" <martin.petersen@oracle.com>, linux-scsi@vger.kernel.org, Chris
+ Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
+ linux-btrfs@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>, Andrew
+ Morton <akpm@linux-foundation.org>, SeongJae Park <sj@kernel.org>,
+ linux-mm@kvack.org, Borislav Petkov <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, x86@kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 00/19] tracepoint: Avoid double static_branch
+ evaluation at guarded call sites
+Message-ID: <20260324102802.4f8af148@gandalf.local.home>
+In-Reply-To: <20260323160052.17528-1-vineeth@bitbyteword.org>
+References: <20260323160052.17528-1-vineeth@bitbyteword.org>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: rgnt1g9q8d9rzsk6azwgoui85joqhwik
+X-Rspamd-Server: rspamout04
+X-Rspamd-Queue-Id: DC83180011
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX19u4yDoihzmlvbQbp4GBKk4Sx0FsrK0H8g=
+X-HE-Tag: 1774362440-296898
+X-HE-Meta: U2FsdGVkX18Kg3NfvHLPV0rnp3UrERb/HeySVgjR0PuCDys+LVJ4s2L8fsy1rJHv82yu9UO4h+xU9iEx3z3YFKVS1OFx2Vvti4rEmq0enV2xaTwbpZ+YWf60TFzb8QMlheid4NsXOVqOYcFPHCn+ZrWqPDCdrmq0l+tkyLSeYhbpJixFuANIjXhtSBZInyEBtAAqHPqUuWZ3PdZupXAY7JMTASH2KNw+CMFxYOXnDTbb38gpzJzBKiUcyoxK6GlO0db0aEPLlOAMHWKzcQEu5msgaweBGFFWtD9G0uWRbe+OcS9gBl+SI1CDJFvGCt0Z8gh5xinNWW7KF0gSIEh3ZlA0AO0+B5wCRjivVxgdquYH5bWbk7CtReb5es0u0tOp
 
-zhidao su <soolaugust@gmail.com> writes:
+On Mon, 23 Mar 2026 12:00:19 -0400
+"Vineeth Pillai (Google)" <vineeth@bitbyteword.org> wrote:
 
-> Since Linux 7.0, kfuncs annotated with KF_IMPLICIT_ARGS require pahole
-> v1.26 or later. Without it, such kfuncs have incorrect BTF prototypes in
-> vmlinux, causing BPF programs to fail with 'func_proto incompatible with
-> vmlinux' error.
->
-> This affects all sched_ext kfuncs (e.g. scx_bpf_create_dsq,
-> scx_bpf_dispatch) and other KF_IMPLICIT_ARGS kfuncs across the kernel.
-> Ubuntu 24.04 LTS ships pahole v1.25 by default, causing 23/30 sched_ext
-> selftests to fail on affected systems.
->
-> Document this requirement in Documentation/process/changes.rst so users
-> understand the failure mode and can upgrade pahole appropriately.
->
-> Signed-off-by: zhidao su <suzhidao@xiaomi.com>
-> ---
->  Documentation/process/changes.rst | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
-> index 6b373e193548..141a4576c24d 100644
-> --- a/Documentation/process/changes.rst
-> +++ b/Documentation/process/changes.rst
-> @@ -145,6 +145,11 @@ Since Linux 5.2, if CONFIG_DEBUG_INFO_BTF is selected, the build system
->  generates BTF (BPF Type Format) from DWARF in vmlinux, a bit later from kernel
->  modules as well.  This requires pahole v1.22 or later.
->  
-> +Since Linux 7.0, kfuncs annotated with KF_IMPLICIT_ARGS require pahole v1.26
-> +or later.  Without it, such kfuncs will have incorrect BTF prototypes in
-> +vmlinux, causing BPF programs to fail to load with a "func_proto incompatible
-> +with vmlinux" error.  Many sched_ext kfuncs are affected.
+> When a caller already guards a tracepoint with an explicit enabled check:
+> 
+>   if (trace_foo_enabled() && cond)
+>       trace_foo(args);
 
-This seems like reasonable information, but is there a reason to not
-just raise the minimum pahole version to 1.26 and be done with it?
+Thanks Vineeth!
 
-Thanks,
+I'm going to start pulling in this series. I'll take the first patch, and
+then any patch that has an Acked-by or Reviewed-by from the maintainer.
 
-jon
+For patches without acks, I'll leave alone and then after the first patch
+gets merged into mainline, the maintainers could pull in their own patches
+at their own convenience. Unless of course they speak up now if they want
+me to take them ;-)
+
+-- Steve
