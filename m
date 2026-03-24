@@ -1,140 +1,110 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4582ECE9B
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 19:56:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774382182; cv=pass; b=C48xFI8qU0KBwQ7mGo/rJX9nrqI54/NkZv+ny5wmM4266/A2ETzvBwXxlHGJFuQj/Jin32c09Ner/uISRPRWo2mXnXSwEPBliI3UZFYZRDoyKxnBEB5FtsNU+lPPpG7+MpOiTJnXvayP+O8p5k3DI6uGhRNZVi4NSyOEE+8G1k4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774382182; c=relaxed/simple;
-	bh=HdeSv//rf3/Q5CI04QJIFd/tTh2gIioZVNJv3xbWO7w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CSQhCk/VxZpALYsfA1ArxqqnTHjOdfGjf1MO+n5wAtBDuIYbl8fqHL1HEdoVvsYP2JKrFTCvLKuCV6x/xiWez3D5vbaDBxE0qBss3w/8mZ0NRwvsqEUwrHAMQ51cTnoEOCvrejkojrkvl/dPDpi9XU6TCkxHf+e1O4fhs6XMKwc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TVW91wJg; arc=pass smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 642E92D0635;
+	Tue, 24 Mar 2026 20:01:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774382478; cv=none; b=rVggVaqFMxaGpL9Vm/GRhZ5QbqulXtYeEG9OfbPpnsGYcUWwMj5c1r/T6OkTV/cReDSZo2IRGOkJ/NGCVqtfP0Q2pCypcAWMP3KOwCiK9cStbNcph3wGnkJ5RLxeLR9qNK0E7lVhv5jKS63ROXDTOljLRcpHOl1donPuWRMVdqA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774382478; c=relaxed/simple;
+	bh=MPwNHSpoYjyM16ewI+BxbAdvmJMpRdZDXK7CwZ6QIDw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JszMo7icXkoI528blbv37+KOdUPAFRqyG7/9IkaQuVv5x96MSOZMa3gSOnh5qN7mD+2H29wOwcKu/CLBJn3Cl7Czl95kHz5cQGH2wqnmj3AOv0AcLSQ5V0uJvZNjwWVlHxS+/KDpoZbRfWOfO8UU3S5FQwz76E7as0nng1au57g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=AmcOTFso; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TVW91wJg"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-439b94a19fdso4038668f8f.0
-        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 12:56:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774382179; cv=none;
-        d=google.com; s=arc-20240605;
-        b=j6RLOjj8jFRNpCLjH3HubQD4+2NRZ7hINFC9ziAVcPqVOuslvE5D9YvErChkY2d4A8
-         D5PnVLgRV4Dcs8aHa1+ACjWMIy68mpRJt5w055gFcyYiq6CowloUbhKpUTNFIgEeZ/1Y
-         nQNgS/LN6/Y8+NOlqsVncANnf0Zsfym3hLWbxAtw/0l6HEtEfuJwYVtfrdhYNUdsTEn8
-         JaVD6V7/FL3qflyXiVZfRuQO0CZf02Jy1CzK/hUTYK7odbZl6KQJU2T109C2U1869lPE
-         5CusO2UqvUkVUC//GQbn9Ygm6Ad4fRz4XdOiuzQfkMLU7szaprY287sDjl/cUOrFmq0X
-         6Kqg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=fMTElr/1qM+QD41PA/qAY/jaP9tLMh5Xsdai4VeMyGk=;
-        fh=oEMtQAMr3zPZpaJG5v1tfpkLsv0x83ljrknzlFra+uA=;
-        b=D3I2CIzVHtkGrQWNz6Px1yPyYKXLu1obpfadFIQIRcoxH9tMpoO7o8Ppdan2WmnlW1
-         2b8zjOPp+8jLsKwhlPRDg1Ib5EV9jdgsNQMEZwz0786GP47GxFbfZSUZJ8dh48GLOCWH
-         ujPkm7654+0n2BwZCVZ/71014UJ2tHt7qSSU2ASZDB/bIZDlVzpVU8gcPlOY+dvJ1x07
-         UTKkAi+/P47DKsDOOTnQOeAqTTXYj2kR5HwNN2zz2pkNKwEPugkeDEG6p7xQDaHVYqH+
-         yCp6xOg0gCOH7pcV1f0qdh69gp0OrbNdPABmApbAeB8JhmOKFg6LlB3Uo/nxmCvOecGW
-         o4+Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774382179; x=1774986979; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fMTElr/1qM+QD41PA/qAY/jaP9tLMh5Xsdai4VeMyGk=;
-        b=TVW91wJg3HHWfQBO70qXaD+NZhs7bUwQ9BK6q1jab0ks4NUSSgUeCxsQwlJhQQ38Zu
-         tcnIO6u2xH8jr1Yj1cLuYKopw6xt/0r9pgINSwXeAq7Zp2yj7uCRKjxHuQZcyqebVdLd
-         sJHH/pqCJnrAgPGgE+aMJ7MYf6oJEgv0OK8g/0xCTNNS69l2Afk6/OuFWy4tA1SqoOjr
-         orpqQnaQEn3gOsOC7lJpEk5Nxtwg/56YK8W8A6cZP5Xecj+qpgitEm7BPObCE9y9Yd+G
-         NZVOy9Si7rZZzN+3XFCCwNYQ3hc0s45+BAEeJBVMxnj5EDkMK1gyMn0WXAhiF+KvE8PT
-         EfOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774382179; x=1774986979;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=fMTElr/1qM+QD41PA/qAY/jaP9tLMh5Xsdai4VeMyGk=;
-        b=fmXxHILg1THnTrjtY9BAQ5PmGHrmGQTc8nWSlkD0ut/xofmyFBgMg2o/6rAChoCd3t
-         x7rDWdT8zjniKhyNn4AQ7x+uNmleUxXNV5RJMfCec+MbAhdbgp/YqKmPJlrBPyuBkolL
-         oIW5yN9TzppYjtRDMlrRDqg50MT4tA9Aby7e6sdZO7PawK2xuMOpCinq3Tc+TXoxQUew
-         k/0H68FGhNnmPL5D4rjt/eKo0aD2fgJzIYjXn3AgOeMMSNXIl6KT5MWlKf1Q2vblIXXn
-         4Ea5q7k/9HSt0jrDlUGgk+JPE+vpT4r5gAYnMIX0i9sZOuDUz+KDJz4JC9aSnvFpFlLm
-         J2vw==
-X-Gm-Message-State: AOJu0YwMRdmsp/k5nZeWMK1Jw8S2vRi784EFnVS9jR1CdoUV0lKbDMDH
-	SAOBZbbL9z7BsfLA4PoXP6MKH3qO5vLQnOYn+VR3LcB9rVL1+wplx/9JIcGDbQ2xTQhyYSKlILb
-	+xBoEGMsxiQlq4MIIjV+qsnoCE29ro1s=
-X-Gm-Gg: ATEYQzyPQ28r1emuAS14y9HoNL/Fk+uU8/P16vhZP5IQuf10wNmAkL4pVMK7PBG32Ra
-	gWsT4XYSD2NoRRl3OnDsp//8wjygTPojupOSeyOB+j3QUSQTMhRnzk8BJE6V99GiMUTwY8osyGZ
-	CYZUwNeHkTvPH5/9GFvpPxaVWoxXGQPMjto7DAMg4VnQVxbWD3ZImFmXy12cmExBBNZ7aRs+LIZ
-	LmCBJ1Is4AqQusziHmqvLqDWNBnQfHxs+f+jiHJM5cIrBwTt7ExAtbO7L4NUs7s/XtICcD4V7OZ
-	MaCB2wCyJjd43ePJ+uxivwUKeZSx4o4a2yXhD3OcKstRac8SqmuCZ5owzt9ViPD17uUlf32ubjf
-	lSrfBWcAXCyo+9l4cm2fljMor7A==
-X-Received: by 2002:a5d:588a:0:b0:43b:3d02:7806 with SMTP id
- ffacd0b85a97d-43b88a055d7mr1207639f8f.28.1774382179530; Tue, 24 Mar 2026
- 12:56:19 -0700 (PDT)
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="AmcOTFso"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 8045540E0222;
+	Tue, 24 Mar 2026 20:01:13 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id vXkONk_xMsOw; Tue, 24 Mar 2026 20:01:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1774382463; bh=rrltVfsKaUOz3jKzbq8S1z1BNCaZvfoi0wgXPux+LGo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AmcOTFsokQCadYhgaodHohkOM+Z+rHYntVaJXympYseSn0bmHzpYLQwX3qjT7BO6V
+	 Z6n/zj11uUN3AJXlC8IC9gNJoR2Ukj6qmiI+ysggCuy4t+MrUfJytvpXCwzJSb5PtW
+	 ov8I1VmsRIj/fKyefGm7/GkvSzS/mRAPFAoo0VQJK68LX1SO+otT0BX8MQMCCVO3Of
+	 7IlSJtnEtuG9RAOWrviSHwm5ciQsS4o8S5CFGpZrQmqcav3px84M7InZF3+mph25nG
+	 HPnPlbwaBfj3RNcPuPzBQo/SSzB6C47ArYDzCckZsrU4lY83D3G7bNv8W1RKuMOZsq
+	 Hpfhsv+RV+9+jc90O22I+5ltALhblGl4gEfBNUxBzBVtzh6Dei40gfEBxOgkTcyJix
+	 NyVAb1KE50NWOBJdXfEiMghOacFkk4/fOrQfHaXTCwHHl5zSuh9mDFU+m50dLyvxjt
+	 jngde1ZkfG6vChR3De2mnBZgrFz/3LUgc3HR0i9LLo2dOtrjSkA+/lX4xQRaZ/a7eq
+	 XTcPYn8vIK/HvYwYGfYjzmPk8iTNjc39InYjK7AJ/luScpkVfEy4XsAFaKIbn6MNRv
+	 1quh2qbNUCh+aawylKNXtU6eqxyluGDqHcdRgnjnyCGWD8TbH38IIbOyo1bwWtgAw+
+	 asPjanKnk6HRhk9DezGoMurk=
+Received: from zn.tnic (p5de8e020.dip0.t-ipconnect.de [93.232.224.32])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 5730B40E0031;
+	Tue, 24 Mar 2026 20:00:27 +0000 (UTC)
+Date: Tue, 24 Mar 2026 21:00:26 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+	Nikolay Borisov <nik.borisov@suse.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	David Kaplan <david.kaplan@amd.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Laight <david.laight.linux@gmail.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	David Ahern <dsahern@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, Asit Mallick <asit.k.mallick@intel.com>,
+	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
+	netdev@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v7 07/10] x86/vmscape: Use static_call() for predictor
+ flush
+Message-ID: <20260324200026.GCacLtWmhGVOmz832E@fat_crate.local>
+References: <20260319-vmscape-bhb-v7-0-b76a777a98af@linux.intel.com>
+ <20260319-vmscape-bhb-v7-7-b76a777a98af@linux.intel.com>
+ <20260319205802.GJ3738786@noisy.programming.kicks-ass.net>
+ <20260319213421.br6na4dulrjm6eke@desk>
+ <20260319214409.GL3738786@noisy.programming.kicks-ass.net>
+ <20260320062206.bdrnmnvho6lhmejw@desk>
+ <20260320090340.GN3738786@noisy.programming.kicks-ass.net>
+ <20260320113134.GAab0wFqe-hewZc175@fat_crate.local>
+ <20260320182308.ahynqzuswlv34wf6@desk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260324-sleepable_tracepoints-v6-0-81bab3a43f25@meta.com> <20260324-sleepable_tracepoints-v6-3-81bab3a43f25@meta.com>
-In-Reply-To: <20260324-sleepable_tracepoints-v6-3-81bab3a43f25@meta.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 24 Mar 2026 12:56:07 -0700
-X-Gm-Features: AQROBzCNlI2YrQikkOR2Pnat69YtlSbaTZeCzHdAPpbzcIEuBNA-KrwY6v7zuOU
-Message-ID: <CAADnVQLwU3Hz-KgvdpSx+qtkmsUvJ_MeWc0T2Fisnyk+OC3grg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 3/6] bpf: Add sleepable support for classic
- tracepoint programs
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin Lau <kafai@meta.com>, 
-	Kernel Team <kernel-team@meta.com>, Eduard <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Mykyta Yatsenko <yatsenko@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260320182308.ahynqzuswlv34wf6@desk>
 
-On Tue, Mar 24, 2026 at 12:03=E2=80=AFPM Mykyta Yatsenko
-<mykyta.yatsenko5@gmail.com> wrote:
->
-> From: Mykyta Yatsenko <yatsenko@meta.com>
->
-> Add trace_call_bpf_faultable(), a variant of trace_call_bpf() for
-> faultable tracepoints that supports sleepable BPF programs. It uses
-> rcu_tasks_trace for lifetime protection and
-> bpf_prog_run_array_sleepable() for per-program RCU flavor selection,
-> following the uprobe_prog_run() pattern.
->
-> Restructure perf_syscall_enter() and perf_syscall_exit() to run BPF
-> filter before perf event processing. Previously, BPF ran after the
-> per-cpu perf trace buffer was allocated under preempt_disable,
-> requiring cleanup via perf_swevent_put_recursion_context() on filter.
-> Now BPF runs in faultable context before preempt_disable, reading
-> syscall arguments from local variables instead of the per-cpu trace
-> record, removing the dependency on buffer allocation. This allows
-> sleepable BPF programs to execute and avoids unnecessary buffer
-> allocation when BPF filters the event. The perf event submission
-> path (buffer allocation, fill, submit) remains under preempt_disable
-> as before.
->
-> Add an attach-time check in __perf_event_set_bpf_prog() to reject
-> sleepable BPF_PROG_TYPE_TRACEPOINT programs on non-syscall
-> tracepoints, since only syscall tracepoints run in faultable context.
->
-> This prepares the classic tracepoint runtime and attach paths for
-> sleepable programs. The verifier changes to allow loading sleepable
-> BPF_PROG_TYPE_TRACEPOINT programs are in a subsequent patch.
->
-> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
-> ---
->  include/linux/trace_events.h  |   6 +++
->  kernel/events/core.c          |   9 ++++
->  kernel/trace/bpf_trace.c      |  29 +++++++++++
->  kernel/trace/trace_syscalls.c | 110 ++++++++++++++++++++++--------------=
-------
+On Fri, Mar 20, 2026 at 11:23:08AM -0700, Pawan Gupta wrote:
+> I am curious, what problems do you anticipate? There are nearly 50
 
-cc Peter and Steven when you respin. We need acks here.
-Or drop this part for now.
+What's easier when you need to change the underlying implementation: unexport
+the static key and touch a bunch of places in the process or simply change the
+accessor's body and all the callers don't notice a thing?
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
