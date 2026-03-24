@@ -1,173 +1,345 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010008.outbound.protection.outlook.com [52.101.85.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64FEC3264EF
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 14:50:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B685E27AC48;
+	Tue, 24 Mar 2026 14:56:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.8
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774363860; cv=pass; b=ZcL3Ty1IEep8AAO7lLVWK2zR7DdgtRrG+WZOqq7LpmPftjxeTfgTn23BrmX0otCnH+pqbSxEh8kNCtyDZgOOCgnBL+E20B3wdJEyJqFwej7ym0J2AIXm4fjmvx2r1SVzr6nmSwah3YVdeprpKgmKN0u1UBAMYczi2CU3CNrthp4=
+	t=1774364171; cv=fail; b=nbv9hCGx+tlOiL2q9CdYi3CUWJQkK1Aky+XrP7wNZTAgdVz5X9RFR+bksmeeXU20SK+z7Nz1lvSmgwI3CqYqRtlWkFVoaQ9dDzSmBZ6/KjQr4I6y0uAA9F7Z4poXC6mGJSgX2N/ljRPRAEcI9r/j82tbd5uo28S5zJoNhs49+ys=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774363860; c=relaxed/simple;
-	bh=3n66akwPL5aH75TB6OiseSZhlNEcpu5V8jrnFridO/Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iuWHV3Ern7hsKc9pYTA8JtMlENp+5YgUF5F4excFc7vVVF7taWAq2ai39da7eWVgtte2n21Xz+DOswkncVzJpwxEhnRjdInyiXlK4dHQq4roItJAgnmLQ/Yxi+cbSzDnDS38evGWmf2bzawQi93oCRBErVeo8nLr4atj1Fn7aww=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f3D7LOuS; arc=pass smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774364171; c=relaxed/simple;
+	bh=fRi+Pq5/0IaVCX79rSffyovUNxPCd/+qcxcVg/8L2EQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=j78VuS3UYNfPzgVFpxFK0A1s5NcIe7T3kbZcUdpMT0v94AhbczgPQgAOoILEmunw9B+BTUxGSua1JyU+uhvcRncfy2sBAUZsswhBgL5H8FJc1Zgnift16r78wdRacaW5e1WIH9zjLG1XVghAyHorWzMD4r0GqykErTjSlmvvhL0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=pHIkeeC8; arc=fail smtp.client-ip=52.101.85.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f3D7LOuS"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-439cd6b09f8so4017716f8f.3
-        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 07:50:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774363858; cv=none;
-        d=google.com; s=arc-20240605;
-        b=MO8st4TTqYjdZ5JjPo+CS+28y/mBd27FqyOI9l8q3f5I5bwwvSrnc5Jt9+UkeqVnBj
-         QkHYeeGAr+qPRn7nHLBmm/SXCPZm6yoHLTeDLA3N+m72G3q3H6m0oGnpBWWAzKAD7KyN
-         EQlqD9zkbBcYGp6cXOarLPhgvdrEVhEa9geWPpp4VyNJAmmipdfXDmZkINEJDR9cmQlz
-         LBEixnIxmADiV0qyo0uPInxzflyLw9Bdv12Vn9cZj+50+groOo4+xh20NUaZFtBp0caN
-         eie9jGygF5kDZRiBTYaoBmY7RXjXpNNxeyvfTYLiDz7l8CuYhTbnioGD9F4jyahLCjnX
-         A5GA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=OVDnf3LS1Zy+J4cELDWzZkJKr0472zSbdgFTuK1Jc+I=;
-        fh=3MRPOFf/7dhJa/blx9JwXnoNNAsYAFJubQUY4GBQbY4=;
-        b=W8Cb/gpVX0rK77jN/BbN1qMWuvyeeLVNIZ5DwQohGRYmP6sNKpjWEx8R9FZY4XDCHw
-         UxKoHo8au1CJFXLQDRc9bs5gh89aKPyNxXcfY1B8WMNqQQ42vXP5B3oqcuzuj6vrjw91
-         0BjtSdOdIasFwamq91XzsDhRsElrIvRtQbAMjmuHQ10kYu5zS6O25Gf9L6OS0Ju/5Ot5
-         pQorOhtY4RuvJqFJhWWA9acgsFI6tO0hyegWH80tCMgySkTB/glp7d2hyt/JserYWzEm
-         fP9LdoSkY04ROYCwT1BSu4T+AVYUHTJ7KdJ81DLi8DAZwx5dEjOxEVQQ/JUt6cSYR9TW
-         +vig==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774363858; x=1774968658; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OVDnf3LS1Zy+J4cELDWzZkJKr0472zSbdgFTuK1Jc+I=;
-        b=f3D7LOuSKSy/VLEGL33L2EmOjyTUGx4WEXmVEyf16nFhWUIi/PGwJKBKHLtCNjCDRH
-         lBvH5bdjjWxKhn1iUCLnzS2ihSuw/oF9m83gStwk5B9hyaOm46pwabNo7SuICLF2xPUc
-         +SOH48A+dodvp7CuDviU71KW1mfRpF5861gvQ3IYPje/ntpJBRg6N5h2GGCLM2wrj/vV
-         +GezvMSCNSLoBc/EKL+B/oWlAxlp3rHUMkRyqd8bFlgp/azohQL1CYhZjWXE1NfRzaGM
-         MnG6z8NHMOGagKHmvP35GRc3ATRKMyXZn9jaXSIpaaqVZpB+JYQL2CDbEm/PU9OAm6Uf
-         sWzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774363858; x=1774968658;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=OVDnf3LS1Zy+J4cELDWzZkJKr0472zSbdgFTuK1Jc+I=;
-        b=LnnPsl9vOc0KQFFy/kaezSBHopC1Il0AzdjfIXtnrXpHdC+NQlHBGkUWt+Z5ui4b3x
-         q6/sZks8up0PrPZP/Z86ZM0hT+RuwOWUtxRL00sPmB8Et3MHkecmY8hkOyk3L3XlYg+y
-         FjWgszBnGVd1VIyUwbh2WTVgTTWCyldBo99pHCBlQrvvBJiNlVQpQ2nEl8fdkAYL114M
-         Z+G/paYBZ3cD9JiT10/fD+hRlwoWd4O+PwfuCGV0xVeo6l6dG52aqINSFGNQkBg/mP/h
-         YGvMbCyKZNz43Ngyo76z8vNYW5/yLzj0omNOXRDmqRc1xgrtZBoVjfY85Et7aeQiFYNY
-         FDXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU9rMdIBeTdeBiGjWJVXCMUGx25XLTN/VPlyl9CdjF+ynKGN5VfaJycydqqfFjqOySW9RE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz39afCyOycOjzPBzUzBO0FDGkQ5mdsDL1UrngiL5CEY5viYXGu
-	ggv0Gofv6May1bBq0RXXkMMqNfghuTxNCGxk636yBr/lF9l0I2dYVZEHKETorhfZrOUhxRoASDq
-	Jt5PuUMVo5FWqjNZN4MVIqRnShOgnVtw=
-X-Gm-Gg: ATEYQzzXXO83O/MWi6jpoo+1QSw3wNtesQaGG6xKZZhzATBW/kneFQxhq9OBqpn5L81
-	GIuO0gvv8eEnUNHoGb8Ejq99dFcoANj6TabfkzP7gt9cQmvEoxtxtPtY0vQ8RJJ3YqvZWg4dMbE
-	xilJRpuMMpnFtVtPaeyT2vtCzyrQQfb9n7PEbHN/DMsoGHSiDx8MPceS+I6HE0/F1Ba2GBD6fzL
-	RVHvjtsE+t2HIqmcEUDVyA75ih0OQzyojH9UDEunuVCN/JhgOXU/0wESzyiFOtMroDf7NfDNpi7
-	zZEgRXZVg+i9NeAncqrBUs3V/mbiiIHpl9xbmRs8NiJUfMB89gQOkxJzuefyMYsdnlyn6Ae/0QL
-	sV+HLR7Z+6+Jyw/p/ZaDanLIO7wHlIx14DwT9
-X-Received: by 2002:a5d:5450:0:b0:43b:8023:8b2 with SMTP id
- ffacd0b85a97d-43b80232811mr4547485f8f.45.1774363857554; Tue, 24 Mar 2026
- 07:50:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="pHIkeeC8"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=XnF2HKiaP0CQA3/5br6QtuMcdymv57pAV7CRQhweQsvVd/nK5P4uV/+8yzTPdisk0QGD6po/3TX+MAfMzFVcabHVKvTcEM5lN2ZFvRW22XxPpVzISdg7NltUYaAxGSJbfpjrVc3L0VB+Tt2M3sHnqZiei+pU3wT8HswoDNeU7UGWb8f+4MA1I5D95Fh1BcpbcqyO8o6Av8t+MskCRynEPF53u/UOw1rfDuyzOM03E72ZT8AZJr17Wz4MNh9FfLdtwdKTtaE8e4UNhkb+gFBkGocBmKD7ltgJNA73TVASPbGl/08ANXB0vTk9rEVFwO7DtIECIf6HCF1gzMIl+0546A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vZ+ojWMYkevJfSrvpmZTmT/XiGK0/EFZYqgk7bJDrOk=;
+ b=bTODubsRHXdHapI1tqySxswnqgI3dKzEPX7eCbPjm8o0BwYBYLEVmHDvAOx6RYThjScykl1ci5/Gb7zTxiNHMNkj6eZvarFfA26K7q+p3UfHwFdYtxm1NRF7iTaSGzK4N9A6bcfNTywKJHbw7f7MrA99VKMNZr+Ct5Qv7oJFpplsWpciV+ZxxcZmG3DfwyUGwdvUjla7HZXuudfiJsjXjPBDVnS1DAtBGEDV1uzoj0HbDhw0SgcnYJ9PSR+CNGOjH9yj6lE971YAT6tIQuBxlVmLlJ8sb3FbW9HapwBKPGBTSBDqnjgt9PUkCkvrZ7ptzzcapt15f9jXFReAYNUiig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vZ+ojWMYkevJfSrvpmZTmT/XiGK0/EFZYqgk7bJDrOk=;
+ b=pHIkeeC8GDOgZ4BUkwgviK0BYRFAPkx3P7flnigxmomgxnZ/6OXZjjTib5l2wjtKQWVC9EGgPIEj1jid7+s6xhxB/WcsT1ROXnmwAo6rZ+niS0av1KM1l6yMYVfZSTLetfQSpTlIqJ+l58a/wj/i9W87yaC6315Fdyf7e/hF5oiIkzqJaDqmMJUQHmPT551TzX4z7mH7R/9HASzHmvUVZ7jQi5kpPwUYDDBNraeKUSh6bh5wMO4UBO9gonOVtvZNpHD4nkfaolUethG/jeNW0xqRyIRhm4R1cyOyOZjy/qTFdNsXFb+w6vWgRNzGstLt7rDihv2D+tFjjcaKK7V7iA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
+ SJ2PR12MB9191.namprd12.prod.outlook.com (2603:10b6:a03:55a::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9745.20; Tue, 24 Mar 2026 14:56:00 +0000
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::f01d:73d2:2dda:c7b2]) by DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::f01d:73d2:2dda:c7b2%4]) with mapi id 15.20.9745.007; Tue, 24 Mar 2026
+ 14:56:00 +0000
+From: Zi Yan <ziy@nvidia.com>
+To: Muhammad Usama Anjum <usama.anjum@arm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Brendan Jackman <jackmanb@google.com>, Johannes Weiner <hannes@cmpxchg.org>,
+ Uladzislau Rezki <urezki@gmail.com>, Nick Terrell <terrelln@fb.com>,
+ David Sterba <dsterba@suse.com>, Vishal Moola <vishal.moola@gmail.com>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ Ryan.Roberts@arm.com, david.hildenbrand@arm.com
+Subject: Re: [PATCH v3 2/3] vmalloc: Optimize vfree
+Date: Tue, 24 Mar 2026 10:55:55 -0400
+X-Mailer: MailMate (2.0r6290)
+Message-ID: <1D88CFF0-8A74-413F-9A6A-39E27B760AE1@nvidia.com>
+In-Reply-To: <20260324133538.497616-3-usama.anjum@arm.com>
+References: <20260324133538.497616-1-usama.anjum@arm.com>
+ <20260324133538.497616-3-usama.anjum@arm.com>
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: BYAPR02CA0058.namprd02.prod.outlook.com
+ (2603:10b6:a03:54::35) To DS7PR12MB9473.namprd12.prod.outlook.com
+ (2603:10b6:8:252::5)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260324053036.it.906-kees@kernel.org>
-In-Reply-To: <20260324053036.it.906-kees@kernel.org>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 24 Mar 2026 07:50:44 -0700
-X-Gm-Features: AQROBzBrEbGkOPmrzb0Te4EzLdynK4wKlfwGXuHnnrrTxceVeo39F1XZrtWmaho
-Message-ID: <CAADnVQ+XmbLJ2LCeBjun463V3CJriXsSiTrCTS55aikx06RNgg@mail.gmail.com>
-Subject: Re: [PATCH v2] libbpf: Replace strncpy() with strnlen()+memcpy() in skel_map_create()
-To: Kees Cook <kees@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|SJ2PR12MB9191:EE_
+X-MS-Office365-Filtering-Correlation-Id: c733d380-87d3-4680-9a4e-08de89b5767e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|7416014|376014|18002099003|22082099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	a/5GBBNiPDV8PpcrBkKroQX7mk2LqChdN350/TtH53h884DtF/ccwhJvQeMOSDjbVXySdGLyTRqnLd4eyP/4gfSkwm4SVuLCfhlZSHCX5X9Dt/hw7Y+tLOJAQoIqO8XsJNjXA77JE2Ks2eZbmk7/feYWm71EEyrE4mU1kSnTM1kWpeuFV547S0iWfGpOxvmG+pheTFk1IoWn6w8idHwDZg8nUYv2IUvjikQUXDbwHUQv+LGZ/BCe4xZKOAYbqawGS2B1ymHmepQItimeTxuiOr1Vd7VJ0i+1FUJILHCeUEKLK1x1rjkyzg++rNTbzUzrg9Bbw/OFaUSZsODFnu6IuqKloL0jKCb/ru+t8AG87hMPF9x3yoxZFRsOtBq8uRYDM527/KJX/oKqOEoT/vzzEr5eFB0UD/MExMeob5SEVRf/oMRF1qJL1d+7ZNb20tAeIES1xxlKiPWmultbzd2DloWcay5roSw6qQXqQfsBaxMhnLLNLdhkRtCUiWMfNNmsxRx+G3QdxUHcX98eOI7gOsshj022QXueLzJ7QrIcx8KIKh32bvaUUTnhNUbQ933qQGaNDcoU+AyiBtiUA2cV6nrS8JQ/QAxAfLyRpVPiQIAYbL9377I+e8Ijnxz61iAidlzCp9mNAV65vyZGv1ndGXuJmwohcvWWx2plx66G2EqQ9pF8sU60i3DuxPNlWxB7yj7KWzCxkK699i0SEMC5+Nbtrm1qoUCk9l1TTJo0blI=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?Koj7Ls8bipygUOfjL37Mu+s4gan+JnbKo8VPYaf+Kf8rQnggxWTT6DOO6up3?=
+ =?us-ascii?Q?LmUcW2G2Jg8hyVrsuShKwTUNlN+XQTuKWVkOAZeDvhfoj6CDFwTuy8xi+KPN?=
+ =?us-ascii?Q?PmAMW9Qtp3r533FG3dPN4dARYmjn+l0N6/CYIU88SZkpVZMSjlNeQvb26EY/?=
+ =?us-ascii?Q?8LrY/tEb8nUf3Etin3GjwSh47lnKsU3NTvUKsNf4XM7xPKtOoijZT00+q43r?=
+ =?us-ascii?Q?Q5GglT9TxGiFFMqfI5XNkXlsSlhprwXVVjlRRWFMMovuMdxyztW0l5PDZTk8?=
+ =?us-ascii?Q?6zg6JTb5V2Z2as/JZs/PZFkA+4DWVjPzVrthZPinU0VTPlW8vVvv7m4Y9A3Y?=
+ =?us-ascii?Q?T1CjvtymL8yW8ZyAT5wdzID5jXQIVhqz9jrJv763WJIyElPMJoZqIaXd+pEG?=
+ =?us-ascii?Q?OvgT1SRtK52w4TURqOgjdyW9s2JyyAINYMuJV+bMFArQWJhKprG3axrOZSbY?=
+ =?us-ascii?Q?T6Wq6z4V4R4UBBxUlGpLJSaN5dZk2eVz+IpK5uhqt0e1DBMHowZkTN2rmyEn?=
+ =?us-ascii?Q?zDV9NQfBNIA/bY49QKY95Qy2q0sWLAS3Fqt8DagNVEYNGN6qc0Hq/ejWIWHq?=
+ =?us-ascii?Q?/JyFQkdjRTprIYGoYo5nMAEeKhWk88Plj1Uka+ZQmgAP+rcixAw7y/53ToXY?=
+ =?us-ascii?Q?JZJGsq1vqRbOLCVZwurQCMFlF2TlvcQ9UPb6fGbl6Vxj74sqKUwD7FiCFgVX?=
+ =?us-ascii?Q?c+jmemDMns0F2tXkZWMFVJVqifLhxy/iWgMgIBOlXLcuc8a2Gyot4VBAQ2J5?=
+ =?us-ascii?Q?D4/LvzhE75wNaUGOaYg+z3peOMFV36fG8UgDlmzGYEDu3wwclQ6yoOkrAjR9?=
+ =?us-ascii?Q?uHslkTJ4iN9lGJJuV6O+z7A4BxhviNjQGAdQR+mFmA00bXpHwDHBis6p5Zb7?=
+ =?us-ascii?Q?ZzIGrnXncadHrWmQ7zVRzD/nQfzhOqedvBy1b7OoKFHF8PEUQlVSrb/TuR8X?=
+ =?us-ascii?Q?KQ1RC0jzc81h+1SH+M9Rw0NcOpHJFTa6Ki5HpNGR0D6lFUjXVVH4kQta/3Rh?=
+ =?us-ascii?Q?BopSKx+wsQK7wOug5Z4Na6Y8uEfjTsqt/oWe0rDTlZMqJ723VntThLloK9S0?=
+ =?us-ascii?Q?PvMThnmvlQXsT1J2sjvDI/xwY5GtlIj/n6clFhJ4Zgw8c2U1h1r55ene8ri6?=
+ =?us-ascii?Q?Cu856gD6pGmtfbq/mVZLBD75mLJHsYn0CcwIvyqOVFksle9XiS0Twz2c8tCn?=
+ =?us-ascii?Q?ohVtqpRwlW0oZ2RAxtf9iQ00DzcxSIzmIEl2XcL/B+E/QiYGlZMU0GQUP+c7?=
+ =?us-ascii?Q?K4p8zyTBHMieTcg0GbGe6L9VEDnUOEwd6MdSL+vktWFw4S6eAwpzWk0QjnWO?=
+ =?us-ascii?Q?S8dhM1v/33Xbj0pJDB/a8Xfj+5z6nWgNFcZQq1whhr/hyii5SGrJNaBLTWX2?=
+ =?us-ascii?Q?S9c6ChOi/fhNkyWKP+WKT/55vrSIs6J7nuVqMdnv7hcI6aFNj4iEF4biiVwE?=
+ =?us-ascii?Q?6vCqOwpMelgbz9Z75E9WAqQ+gBn5LP3AnaZGk7KmmZeS1firJdISFdH+iTFt?=
+ =?us-ascii?Q?8r3m1QNufkp0auMlP1KBXmNJ6kFAd77F49mKQsjyysl17WVvWipBxAwEWsty?=
+ =?us-ascii?Q?EvuYNqaoRehg6AOaxBsVmY3f4bnJbaf7EDBclef+J8n3wJTn89ZfjiqZRuRu?=
+ =?us-ascii?Q?93SOp/NYRcwTgeOcth0TriA9ieR08YjhhUgpmW0TXfwI11XS7NjoT4E7MqPo?=
+ =?us-ascii?Q?Izu92ZzVmVUs3Lnfi1HHnjZyMnUKvAjnJUlkGkg2XsLP+iqwHNHkshbd0qe5?=
+ =?us-ascii?Q?h7hQx46f1A=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c733d380-87d3-4680-9a4e-08de89b5767e
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2026 14:56:00.6133
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: obv/PRJF0WD6ROLT/cORWo9o8tFCM9BK9mNP8fTiYVOpIQpNFFarWdfRUBbVBIyD
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB9191
 
-On Mon, Mar 23, 2026 at 10:30=E2=80=AFPM Kees Cook <kees@kernel.org> wrote:
+On 24 Mar 2026, at 9:35, Muhammad Usama Anjum wrote:
+
+> From: Ryan Roberts <ryan.roberts@arm.com>
 >
-> Replace the deprecated[1] strncpy() with strnlen() on the source
-> followed by memcpy(). Normally strscpy() would be used in this case,
-> but skel_internal.h is shared between kernel and userspace tools, and
-> strscpy() is not available in the userspace build context.
+> Whenever vmalloc allocates high order pages (e.g. for a huge mapping) i=
+t
+> must immediately split_page() to order-0 so that it remains compatible
+> with users that want to access the underlying struct page.
+> Commit a06157804399 ("mm/vmalloc: request large order pages from buddy
+> allocator") recently made it much more likely for vmalloc to allocate
+> high order pages which are subsequently split to order-0.
 >
-> The source map_name is a NUL-terminated C string (the only caller
-> passes a 12 character string literal). The destination attr.map_name is
-> char[BPF_OBJ_NAME_LEN] (16 bytes) in union bpf_attr, passed to the bpf()
-> syscall. The kernel's bpf_obj_name_cpy() requires a NUL terminator within
-> the 16-byte field, rejecting names that use all 16 bytes. Valid names
-> are therefore at most 15 characters.
+> Unfortunately this had the side effect of causing performance
+> regressions for tight vmalloc/vfree loops (e.g. test_vmalloc.ko
+> benchmarks). See Closes: tag. This happens because the high order pages=
+
+> must be gotten from the buddy but then because they are split to
+> order-0, when they are freed they are freed to the order-0 pcp.
+> Previously allocation was for order-0 pages so they were recycled from
+> the pcp.
 >
-> The attr is pre-zeroed with memset() at the top of the function,
-> so the byte at position 15 is always NUL. The copy is bounded to
-> sizeof(attr.map_name) - 1 (15 bytes) to guarantee NUL-termination is
-> preserved. This is safe because the kernel would reject a 16-byte
-> unterminated name anyway, and the only in-tree caller passes
-> "__loader.map" (12 characters).
+> It would be preferable if when vmalloc allocates an (e.g.) order-3 page=
+
+> that it also frees that order-3 page to the order-3 pcp, then the
+> regression could be removed.
 >
-> While the original strncpy() would have copied a full 16 bytes from an
-> overlong name (producing an unterminated field that the syscall rejects),
-> but this shouldn't be a reachable state. Forcing truncation to 15 bytes,
-> however, seemed to induce a (unrelated?) BPF selftest failure:
-> https://github.com/kernel-patches/bpf/actions/runs/23472955268/job/683004=
-40546
+> So let's do exactly that; use the new __free_contig_range() API to
+> batch-free contiguous ranges of pfns. This not only removes the
+> regression, but significantly improves performance of vfree beyond the
+> baseline.
 >
-> Allow the literal to exceed 15 characters and exactly reproduce the
-> original strncpy() behavior (potentially lacking a NUL termination).
+> A selection of test_vmalloc benchmarks running on arm64 server class
+> system. mm-new is the baseline. Commit a06157804399 ("mm/vmalloc: reque=
+st
+> large order pages from buddy allocator") was added in v6.19-rc1 where w=
+e
+> see regressions. Then with this change performance is much better. (>0
+> is faster, <0 is slower, (R)/(I) =3D statistically significant
+> Regression/Improvement):
 >
-> Link: https://github.com/KSPP/linux/issues/90 [1]
-> Signed-off-by: Kees Cook <kees@kernel.org>
+> +-----------------+----------------------------------------------------=
+------+-------------------+--------------------+
+> | Benchmark       | Result Class                                       =
+      |   mm-new          |  this series       |
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
+> | micromm/vmalloc | fix_align_alloc_test: p:1, h:0, l:500000 (usec)    =
+      |        1331843.33 |         (I) 67.17% |
+> |                 | fix_size_alloc_test: p:1, h:0, l:500000 (usec)     =
+      |         415907.33 |             -5.14% |
+> |                 | fix_size_alloc_test: p:4, h:0, l:500000 (usec)     =
+      |         755448.00 |         (I) 53.55% |
+> |                 | fix_size_alloc_test: p:16, h:0, l:500000 (usec)    =
+      |        1591331.33 |         (I) 57.26% |
+> |                 | fix_size_alloc_test: p:16, h:1, l:500000 (usec)    =
+      |        1594345.67 |         (I) 68.46% |
+> |                 | fix_size_alloc_test: p:64, h:0, l:100000 (usec)    =
+      |        1071826.00 |         (I) 79.27% |
+> |                 | fix_size_alloc_test: p:64, h:1, l:100000 (usec)    =
+      |        1018385.00 |         (I) 84.17% |
+> |                 | fix_size_alloc_test: p:256, h:0, l:100000 (usec)   =
+      |        3970899.67 |         (I) 77.01% |
+> |                 | fix_size_alloc_test: p:256, h:1, l:100000 (usec)   =
+      |        3821788.67 |         (I) 89.44% |
+> |                 | fix_size_alloc_test: p:512, h:0, l:100000 (usec)   =
+      |        7795968.00 |         (I) 82.67% |
+> |                 | fix_size_alloc_test: p:512, h:1, l:100000 (usec)   =
+      |        6530169.67 |        (I) 118.09% |
+> |                 | full_fit_alloc_test: p:1, h:0, l:500000 (usec)     =
+      |         626808.33 |             -0.98% |
+> |                 | kvfree_rcu_1_arg_vmalloc_test: p:1, h:0, l:500000 (=
+usec) |         532145.67 |             -1.68% |
+> |                 | kvfree_rcu_2_arg_vmalloc_test: p:1, h:0, l:500000 (=
+usec) |         537032.67 |             -0.96% |
+> |                 | long_busy_list_alloc_test: p:1, h:0, l:500000 (usec=
+)     |        8805069.00 |         (I) 74.58% |
+> |                 | pcpu_alloc_test: p:1, h:0, l:500000 (usec)         =
+      |         500824.67 |              4.35% |
+> |                 | random_size_align_alloc_test: p:1, h:0, l:500000 (u=
+sec)  |        1637554.67 |         (I) 76.99% |
+> |                 | random_size_alloc_test: p:1, h:0, l:500000 (usec)  =
+      |        4556288.67 |         (I) 72.23% |
+> |                 | vm_map_ram_test: p:1, h:0, l:500000 (usec)         =
+      |         107371.00 |             -0.70% |
+> +-----------------+----------------------------------------------------=
+------+-------------------+--------------------+
+>
+> Fixes: a06157804399 ("mm/vmalloc: request large order pages from buddy =
+allocator")
+> Closes: https://lore.kernel.org/all/66919a28-bc81-49c9-b68f-dd7c73395a0=
+d@arm.com/
+> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+> Co-developed-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 > ---
->  v2: don't force truncation
->  v1: https://lore.kernel.org/lkml/20260324040535.work.851-kees@kernel.org=
-/
-> Cc: Andrii Nakryiko <andrii@kernel.org>
-> Cc: Eduard Zingerman <eddyz87@gmail.com>
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Martin KaFai Lau <martin.lau@linux.dev>
-> Cc: Song Liu <song@kernel.org>
-> Cc: Yonghong Song <yonghong.song@linux.dev>
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: KP Singh <kpsingh@kernel.org>
-> Cc: Stanislav Fomichev <sdf@fomichev.me>
-> Cc: Hao Luo <haoluo@google.com>
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: <bpf@vger.kernel.org>
+> Changes since v2:
+> - Remove BUG_ON in favour of simple implementation as this has never
+>   been seen to output any bug in the past as well
+> - Move the free loop to separate function, free_pages_bulk()
+> - Update stats, lruvec_stat in separate loop
+>
+> Changes since v1:
+> - Rebase on mm-new
+> - Rerun benchmarks
+>
+> Made-with: Cursor
 > ---
->  tools/lib/bpf/skel_internal.h | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  include/linux/gfp.h |  2 ++
+>  mm/page_alloc.c     | 23 +++++++++++++++++++++++
+>  mm/vmalloc.c        | 16 +++++-----------
+>  3 files changed, 30 insertions(+), 11 deletions(-)
 >
-> diff --git a/tools/lib/bpf/skel_internal.h b/tools/lib/bpf/skel_internal.=
-h
-> index 6a8f5c7a02eb..8702d6612978 100644
-> --- a/tools/lib/bpf/skel_internal.h
-> +++ b/tools/lib/bpf/skel_internal.h
-> @@ -243,7 +243,8 @@ static inline int skel_map_create(enum bpf_map_type m=
-ap_type,
->         attr.excl_prog_hash =3D (unsigned long) excl_prog_hash;
->         attr.excl_prog_hash_size =3D excl_prog_hash_sz;
+> diff --git a/include/linux/gfp.h b/include/linux/gfp.h
+> index 7c1f9da7c8e56..71f9097ab99a0 100644
+> --- a/include/linux/gfp.h
+> +++ b/include/linux/gfp.h
+> @@ -239,6 +239,8 @@ unsigned long alloc_pages_bulk_noprof(gfp_t gfp, in=
+t preferred_nid,
+>  				struct page **page_array);
+>  #define __alloc_pages_bulk(...)			alloc_hooks(alloc_pages_bulk_noprof(=
+__VA_ARGS__))
 >
-> -       strncpy(attr.map_name, map_name, sizeof(attr.map_name));
-> +       memcpy(attr.map_name, map_name,
-> +              strnlen(map_name, sizeof(attr.map_name)));
+> +void free_pages_bulk(struct page **page_array, unsigned long nr_pages)=
+;
+> +
+>  unsigned long alloc_pages_bulk_mempolicy_noprof(gfp_t gfp,
+>  				unsigned long nr_pages,
+>  				struct page **page_array);
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index eedce9a30eb7e..250cc07e547b8 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -5175,6 +5175,29 @@ unsigned long alloc_pages_bulk_noprof(gfp_t gfp,=
+ int preferred_nid,
+>  }
+>  EXPORT_SYMBOL_GPL(alloc_pages_bulk_noprof);
+>
+> +void free_pages_bulk(struct page **page_array, unsigned long nr_pages)=
 
-wont-fix.
+> +{
+> +	unsigned long start_pfn =3D 0, pfn;
+> +	unsigned long i, nr_contig =3D 0;
+> +
+> +	for (i =3D 0; i < nr_pages; i++) {
+> +		pfn =3D page_to_pfn(page_array[i]);
+> +		if (!nr_contig) {
+> +			start_pfn =3D pfn;
+> +			nr_contig =3D 1;
+> +		} else if (start_pfn + nr_contig !=3D pfn) {
+> +			__free_contig_range(start_pfn, nr_contig);
+> +			start_pfn =3D pfn;
+> +			nr_contig =3D 1;
+> +			cond_resched();
+> +		} else {
+> +			nr_contig++;
+> +		}
+> +	}
+> +	if (nr_contig)
+> +		__free_contig_range(start_pfn, nr_contig);
+> +}
 
-pw-bot: cr
+free_pages_bulk() assumes pages in page_array are sorted in PFN ascending=
+ order.
+I think it is worth documenting it, since without sorting, it can degrade=
+
+back to the original implementation.
+
+> +
+>  /*
+>   * This is the 'heart' of the zoned buddy allocator.
+>   */
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index c607307c657a6..e9b3d6451e48b 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -3459,19 +3459,13 @@ void vfree(const void *addr)
+>
+>  	if (unlikely(vm->flags & VM_FLUSH_RESET_PERMS))
+>  		vm_reset_perms(vm);
+> -	for (i =3D 0; i < vm->nr_pages; i++) {
+> -		struct page *page =3D vm->pages[i];
+>
+> -		BUG_ON(!page);
+> -		/*
+> -		 * High-order allocs for huge vmallocs are split, so
+> -		 * can be freed as an array of order-0 allocations
+> -		 */
+> -		if (!(vm->flags & VM_MAP_PUT_PAGES))
+> -			mod_lruvec_page_state(page, NR_VMALLOC, -1);
+> -		__free_page(page);
+> -		cond_resched();
+> +	if (!(vm->flags & VM_MAP_PUT_PAGES)) {
+> +		for (i =3D 0; i < vm->nr_pages; i++)
+> +			mod_lruvec_page_state(vm->pages[i], NR_VMALLOC, -1);
+>  	}
+> +	free_pages_bulk(vm->pages, vm->nr_pages);
+> +
+
+stats is updated before any page is freed. It is better to mention
+it in the commit message.
+
+>  	kvfree(vm->pages);
+>  	kfree(vm);
+>  }
+> -- =
+
+> 2.47.3
+
+Otherwise, LGTM.
+
+Acked-by: Zi Yan <ziy@nvidia.com>
+
+Best Regards,
+Yan, Zi
