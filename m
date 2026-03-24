@@ -1,32 +1,32 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A04C640626C
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 15:05:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73025402BA2
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 15:05:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774364746; cv=none; b=a3iGUDxpnGSqT/5d3V/sfaLUPc70CfzHwoFiKYXF3QOEyIHua0CkQAYGqrjTpXixSQYkB7vnjJGQfl1Chw4lMg6FsN7pqMYkSJpclD217CRCQjw0CN41ymdvZfLKSz2opMZ8GyEpNNh+D600t81IaeLZ58hIZ+SbJHIex/NmA/Q=
+	t=1774364757; cv=none; b=HyY57tTzYuzHRBBE88vkEcAsbMAwQnBdg5LsM/3CM46q5y72jinOzA862GkI2No8V6a36kvw8VsN+OX2VSmobA/VXHx4M44P5dHBRlEOeyV5LdvTqMGw8Pv9Gvg2mij4Thfff22viGUBe/keLzf1W0qO4aydXIcbBjWYbbpLoMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774364746; c=relaxed/simple;
-	bh=72MWYsOl5EJ7p0vRG75z7FYU25LgvlWXSOQQdyfu3Pk=;
+	s=arc-20240116; t=1774364757; c=relaxed/simple;
+	bh=WpqSBwwF7aTsP4Iam39AX17BQ0WaTx8bICKzwcui9Bw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=m0j0Z0VGerV7xd9tdb8ELEP9qFUhL1z5/HUlQhfXUB7iqal2SsVp1XtzhDCLLB+OxvYy6w33NjOKLdhcMCvY6ZQEMS+ornV1XswhjoaOmTCUdItsNiseh9ZsX8Mpko5SCjS5rR5GelfMOzNWCiqWcm6HutnLtv/SBdWBXcK8a3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uM25/9ju; arc=none smtp.client-ip=95.215.58.170
+	 MIME-Version; b=eCxmptpZXnrN4bHGC/Nicu4FvBUI1rM3zZuKIUaf/+p1g0d8pN7KdhogrWAr9GYwp2Zbiq5mAqgnXSAjxlga6EAZytcvzYGXZP76DLFq33ajhzDsz1sT85MvCQDWqZkSOM8cUa2SjiXtl1sUD9+7xsRu1dCpjP3dpTiRjZJhuR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PstxDbUC; arc=none smtp.client-ip=95.215.58.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uM25/9ju"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PstxDbUC"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774364742;
+	t=1774364753;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=z/gKO34+ktu/oc3xYij758qT5edGTskb/0z/xbIb/yQ=;
-	b=uM25/9ju5n7ZYSfnHVP0zMNtRl7pjgMO24m7PVMIvee07Yb3GjteQyLaOByPmJNlo0oWWa
-	ubxyTshQ7TTKv8hbqthIYrHkn+oPfkVLQVOYIFBP2ermB789dh8iwwrpb6K0WfLIcLjAwM
-	iw3FUb0h5qFCJQ35JQR/cOSnigmDlz4=
+	bh=1pwjzUaoLKRQGRwW5/62J5f/rc6uv0cMUcHFUjKNYB4=;
+	b=PstxDbUClb3pwXjZ5bGeV4kDIZQr/cECrUYdrG0sIy+q8IHeRTWQwSHRJzJWJyxzS+LCUr
+	WZyHV9vFhHu/k8MUFJDfZ/EhHthGwKbU5WYlNiKVTbeNFE1c6c9TcAUDdsYKZ0t2rPw0bk
+	Lqt0FXUXHL22aXapbXPEd4IZGbuD1jc=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -52,9 +52,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next 2/3] bpf: Disallow freplace on kprobe with mismatched kprobe_write_ctx values
-Date: Tue, 24 Mar 2026 23:04:43 +0800
-Message-ID: <20260324150444.68166-3-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next 3/3] selftests/bpf: Add tests to verify freplace compatibility
+Date: Tue, 24 Mar 2026 23:04:44 +0800
+Message-ID: <20260324150444.68166-4-leon.hwang@linux.dev>
 In-Reply-To: <20260324150444.68166-1-leon.hwang@linux.dev>
 References: <20260324150444.68166-1-leon.hwang@linux.dev>
 Precedence: bulk
@@ -66,61 +66,213 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-uprobe programs are allowed to modify struct pt_regs.
+Add tests to verify the issues:
 
-Since the actual program type of uprobe is KPROBE, it can be abused to
-modify struct pt_regs via kprobe+freplace when the kprobe attaches to
-kernel functions.
+* xdp_has_frags: The backwards compatibility can be broken via freplace.
+* kprobe_write_ctx: It can be abused to modify struct pt_regs of kernel
+  functions via kprobe_write_ctx=true freplace progs.
 
-For example,
+Without the fixes, the issues are verified:
 
-SEC("?kprobe")
-int kprobe(struct pt_regs *regs)
-{
-	return 0;
-}
+xdp_has_frags=true freplace prog is allowed to attach to
+xdp_has_frags=false XDP prog.
 
-SEC("?freplace")
-int freplace_kprobe(struct pt_regs *regs)
-{
-	regs->di = 0;
-	return 0;
-}
+kprobe_write_ctx=true freplace prog is allowed to attach to
+kprobe_write_ctx=false kprobe prog. Then, the first arg of
+bpf_fentry_test1 will be set as 0, and bpf_prog_test_run_opts() gets
+-EFAULT instead of 0.
 
-freplace_kprobe prog will attach to kprobe prog.
-kprobe prog will attach to a kernel function.
+With the fixes, the issues are rejected by verifier:
 
-Without this patch, when the kernel function runs, its first arg will
-always be set as 0 via the freplace_kprobe prog.
+ Extension program cannot have different xdp_has_frags value with target prog
+ #134/1   freplace_compatible/xdp_has_frags:OK
+ Extension program cannot have different kprobe_write_ctx value with target prog
+ #134/2   freplace_compatible/kprobe_write_ctx:OK
 
-To avoid the abuse of kprobe_write_ctx=true via kprobe+freplace, disallow
-freplace on kprobe programs with mismatched kprobe_write_ctx values.
-
-Fixes: 7384893d970e ("bpf: Allow uprobe program to change context registers")
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- kernel/bpf/verifier.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ .../bpf/prog_tests/freplace_compatible.c      | 124 ++++++++++++++++++
+ .../selftests/bpf/progs/freplace_compatible.c |  40 ++++++
+ 2 files changed, 164 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/freplace_compatible.c
+ create mode 100644 tools/testing/selftests/bpf/progs/freplace_compatible.c
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 12330466d58b..f8257bae6081 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -6404,6 +6404,14 @@ static int check_ctx_access(struct bpf_verifier_env *env, int insn_idx, int off,
- 		/* remember the offset of last byte accessed in ctx */
- 		if (env->prog->aux->max_ctx_offset < off + size)
- 			env->prog->aux->max_ctx_offset = off + size;
-+		if (env->prog->type == BPF_PROG_TYPE_EXT) {
-+			struct bpf_prog *dst_prog = env->prog->aux->dst_prog;
+diff --git a/tools/testing/selftests/bpf/prog_tests/freplace_compatible.c b/tools/testing/selftests/bpf/prog_tests/freplace_compatible.c
+new file mode 100644
+index 000000000000..251e17ef4e52
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/freplace_compatible.c
+@@ -0,0 +1,124 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include "freplace_compatible.skel.h"
 +
-+			if (env->prog->aux->kprobe_write_ctx != dst_prog->aux->kprobe_write_ctx) {
-+				verbose(env, "Extension program cannot have different kprobe_write_ctx value with target prog\n");
-+				return -EINVAL;
-+			}
-+		}
- 		return 0;
- 	}
- 
++static void test_xdp_has_frags(void)
++{
++	struct freplace_compatible *skel_xdp, *skel_ext = NULL;
++	struct bpf_program *prog_xdp, *prog_ext;
++	struct bpf_link *link = NULL;
++	char buff[128] = {};
++	int err, prog_fd;
++	__u32 flags;
++	LIBBPF_OPTS(bpf_test_run_opts, topts,
++		.data_in = buff,
++		.data_size_in = sizeof(buff),
++		.repeat = 1,
++	);
++
++	skel_xdp = freplace_compatible__open();
++	if (!ASSERT_OK_PTR(skel_xdp, "freplace_compatible__open xdp"))
++		return;
++
++	prog_xdp = skel_xdp->progs.xdp;
++	bpf_program__set_autoload(prog_xdp, true);
++
++	err = freplace_compatible__load(skel_xdp);
++	if (!ASSERT_OK(err, "freplace_compatible__load xdp"))
++		goto out;
++
++	skel_ext = freplace_compatible__open();
++	if (!ASSERT_OK_PTR(skel_ext, "freplace_compatible__open ext"))
++		goto out;
++
++	prog_ext = skel_ext->progs.freplace_xdp;
++	bpf_program__set_autoload(prog_ext, true);
++
++	flags = bpf_program__flags(prog_ext) | BPF_F_XDP_HAS_FRAGS;
++	bpf_program__set_flags(prog_ext, flags);
++
++	prog_fd = bpf_program__fd(prog_xdp);
++	bpf_program__set_attach_target(prog_ext, prog_fd, "xdp");
++
++	err = freplace_compatible__load(skel_ext);
++	ASSERT_ERR(err, "freplace_compatible__load ext");
++
++	link = bpf_program__attach_freplace(prog_ext, prog_fd, "xdp");
++	ASSERT_ERR_PTR(link, "bpf_program__attach_freplace");
++
++	err = bpf_prog_test_run_opts(prog_fd, &topts);
++	if (!ASSERT_OK(err, "bpf_prog_test_run_opts"))
++		goto out;
++
++	ASSERT_EQ(topts.retval, XDP_PASS, "xdp retval");
++
++out:
++	bpf_link__destroy(link);
++	freplace_compatible__destroy(skel_ext);
++	freplace_compatible__destroy(skel_xdp);
++}
++
++#ifdef __x86_64__
++static void test_kprobe_write_ctx(void)
++{
++	struct freplace_compatible *skel_kprobe, *skel_ext = NULL;
++	struct bpf_program *prog_kprobe, *prog_ext, *prog_fentry;
++	struct bpf_link *link_kprobe = NULL, *link_ext = NULL;
++	int err;
++	LIBBPF_OPTS(bpf_kprobe_opts, kprobe_opts);
++	LIBBPF_OPTS(bpf_test_run_opts, topts);
++
++	skel_kprobe = freplace_compatible__open();
++	if (!ASSERT_OK_PTR(skel_kprobe, "freplace_compatible__open kprobe"))
++		return;
++
++	prog_kprobe = skel_kprobe->progs.kprobe;
++	bpf_program__set_autoload(prog_kprobe, true);
++
++	prog_fentry = skel_kprobe->progs.fentry;
++	bpf_program__set_autoload(prog_fentry, true);
++
++	err = freplace_compatible__load(skel_kprobe);
++	if (!ASSERT_OK(err, "freplace_compatible__load kprobe"))
++		goto out;
++
++	skel_ext = freplace_compatible__open();
++	if (!ASSERT_OK_PTR(skel_ext, "freplace_compatible__open ext"))
++		goto out;
++
++	prog_ext = skel_ext->progs.freplace_kprobe;
++	bpf_program__set_autoload(prog_ext, true);
++
++	bpf_program__set_attach_target(prog_ext, bpf_program__fd(prog_kprobe), "kprobe");
++
++	err = freplace_compatible__load(skel_ext);
++	ASSERT_ERR(err, "freplace_compatible__load ext");
++
++	link_ext = bpf_program__attach_freplace(prog_ext, 0, NULL);
++	ASSERT_ERR_PTR(link_ext, "bpf_program__attach_freplace");
++
++	link_kprobe = bpf_program__attach_kprobe_opts(prog_kprobe, "bpf_fentry_test1",
++						      &kprobe_opts);
++	if (!ASSERT_OK_PTR(link_kprobe, "bpf_program__attach_kprobe_opts"))
++		goto out;
++
++	err = bpf_prog_test_run_opts(bpf_program__fd(prog_fentry), &topts);
++	ASSERT_OK(err, "bpf_prog_test_run_opts");
++
++out:
++	bpf_link__destroy(link_ext);
++	bpf_link__destroy(link_kprobe);
++	freplace_compatible__destroy(skel_ext);
++	freplace_compatible__destroy(skel_kprobe);
++}
++#endif
++
++void test_freplace_compatible(void)
++{
++	if (test__start_subtest("xdp_has_frags"))
++		test_xdp_has_frags();
++#ifdef __x86_64__
++	if (test__start_subtest("kprobe_write_ctx"))
++		test_kprobe_write_ctx();
++#endif
++}
+diff --git a/tools/testing/selftests/bpf/progs/freplace_compatible.c b/tools/testing/selftests/bpf/progs/freplace_compatible.c
+new file mode 100644
+index 000000000000..f13b4878268b
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/freplace_compatible.c
+@@ -0,0 +1,40 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++SEC("?xdp")
++int xdp(struct xdp_md *ctx)
++{
++	return XDP_PASS;
++}
++
++SEC("?freplace")
++int freplace_xdp(struct xdp_md *ctx)
++{
++	return 0xFF;
++}
++
++#if defined(__TARGET_ARCH_x86)
++SEC("?kprobe")
++int kprobe(struct pt_regs *regs)
++{
++	return 0;
++}
++
++SEC("?freplace")
++int freplace_kprobe(struct pt_regs *regs)
++{
++	regs->di = 0;
++	return 0;
++}
++
++SEC("?fentry/bpf_fentry_test1")
++int BPF_PROG(fentry)
++{
++	return 0;
++}
++#endif
++
++char _license[] SEC("license") = "GPL";
++
 -- 
 2.53.0
 
