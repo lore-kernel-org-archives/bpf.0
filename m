@@ -1,227 +1,165 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C610408252;
-	Tue, 24 Mar 2026 17:45:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774374357; cv=none; b=OMEpHUyr3efpo8bVxN6WbgwaqvpJ/rV5p5ULp4ej+3e8bUb7nQqjPfDsfFPkgzXrQ0SCUme7riFqc7jxU7VZf52zX6Wm3UpYwatepgHLRrK+jiuwMl+9S99Ug6Fhb7LtjXqbUwm5FOOYS7B9QhIzT3eH+GCEbMul8Jo+CN0cyq0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774374357; c=relaxed/simple;
-	bh=ko6i9wVp0oXZzoU3kZQBc+q4lex+RRNAupu/dFn3rfE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=boV0t+h+NclbCvN8ZImYb3vnRI+CkzkHaWaFlerzoeDu5861HE1WApPUp7IKikeyPj6cbe7hNIf+92SBgnUu/+fBiTr6JTLPcOFlqzLgikg8b9bDruqBCAFffaPMuPvDybXA+EFDzzM3oFaet2ddFFLNJ3mZkwCfEmYC4qcg3Xo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=U8m+3GjB; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B91C3391E55
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 17:46:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774374394; cv=pass; b=rbv8CRH+27aFwYeojkYHtiwAXbBOvms/Hs12UT3rk/ZgxuXMlePqZL10I8Y68xaoBNUUmP3PYnYSGqltZrnxuxaxrpdwpD/RAy9CaOvINxVUNWCqL7UCZrNByiAxWeHGdj8CMHFwyWYPHmq4GKmUr+nDXKE5BplJ8gs04KtGwVw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774374394; c=relaxed/simple;
+	bh=VL99yIlObkm/F6ZQ2daFiddD6ZnfVPryNtS8kH6wlkA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ex1V/Q1PboO8MaZBZe4nI820XJiezxiEulom7LvuvznsGgQ3OWqotJm4tEz9ffs6INQmPJc7tuB1zKdC/b6JB0OvSEhALIgMoM2HLBYb+g//7QgLvgFZG+eRWYmUBGfvkKaBaXlJYF5z+KmsED2iekwVqk1Tq4+oSozX5WYv4B8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rEPi1/wp; arc=pass smtp.client-ip=209.85.222.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="U8m+3GjB"
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62OCGNPO614488;
-	Tue, 24 Mar 2026 17:45:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=cAXFR
-	p9s9M0f8thb59WTY5iOLg1S6y1hiQEe8mTbjfo=; b=U8m+3GjB8aDBRm4nfl507
-	2Lyx1D1ArYyDIEWwjw1DL/+n+Wvur6nVjfMk+63c6aWeTJOX+LF1UTlJ8M+B5eDK
-	j1BU7V13GLARZ5Ou+DNUMCP2nxFReIBE69oGLc22+d8A+JZKHVXl7gS/7Q1cDL7t
-	SxPfCOKjGevVSY7ThKXOfEHgr+WTy+5D/AT080VutZ8Ckc3DNlD1VZxsRzy8uDik
-	zrv7Oofy+TwO1aJemH5mnep3aQDF70okhd6CKaNPrtRLSJwr6USrgwRGkufwDtFN
-	u/RV7j8GJkTSz0araxBnlBT0sXaTRpdzpANSOnckHe4H7rQQoFD6nMDVMiPPLYRf
-	w==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4d1khf4rdp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 24 Mar 2026 17:45:11 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 62OHcs9R038994;
-	Tue, 24 Mar 2026 17:45:10 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4d1hsac7g0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 24 Mar 2026 17:45:10 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 62OHirgw035539;
-	Tue, 24 Mar 2026 17:45:09 GMT
-Received: from bpf.uk.oracle.com (dhcp-10-154-54-179.vpn.oracle.com [10.154.54.179])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4d1hsac706-8;
-	Tue, 24 Mar 2026 17:45:09 +0000
-From: Alan Maguire <alan.maguire@oracle.com>
-To: andrii@kernel.org, ast@kernel.org
-Cc: daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
-        song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
-        qmo@kernel.org, ihor.solodrai@linux.dev, mykyta.yatsenko5@gmail.com,
-        dwarves@vger.kernel.org, bpf@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v15 bpf-next 7/9] btf: support kernel parsing of BTF with layout info
-Date: Tue, 24 Mar 2026 17:44:48 +0000
-Message-ID: <20260324174450.1570809-8-alan.maguire@oracle.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20260324174450.1570809-1-alan.maguire@oracle.com>
-References: <20260324174450.1570809-1-alan.maguire@oracle.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rEPi1/wp"
+Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-94ec56c6f05so770106241.3
+        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 10:46:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774374392; cv=none;
+        d=google.com; s=arc-20240605;
+        b=WrJ7m7iarm0ptLCdCyTBY+pyX3Mbo+LSs30ZgrHdJOlOHXRFGL3IjTPWEFDg8DHiM8
+         AX4Lt2/b4i6jLabiXgnil22+Bn8KG5+noRIdToI0WW49xRXCLze6rg9NvYr8EE/8FAQM
+         PYinYBXt7HAyiMA8g5bCJYjRRj0M+T6xt9+V7Ph+vr/0PqjfcqNN5oFP6UI4de6X4Lus
+         QbbyiHXdHtxhkbo85zLfEHE0XveTBXLpZljydL/4qq9M9BePFSgbRa+rIDc4IO4LEnJ9
+         pxK1m0audHSPzH9DR0foCAQlX/Sp7L3ex+mXRb3ZBSWPOwnksyktyfUx976XJqIlcrUe
+         ttxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=icuB+P4pLFsS5xV3yyRCAcHDDOVtvcJcGh9E5iVsFUw=;
+        fh=zIkQOOwDFXID/x/r6+t8sK7B4eLtyasGaWfua2Z3NYk=;
+        b=EHmswzCwRcllM15o+hjKs5ojLJjJu8duGgV155CACIU0V5r9Wmrbe5AeJzvQ0AAEpI
+         1ipXxC4lxEqE0FSDDI9TAevocSGYeNE/feMOhkQFiNVumXrdi5GF0dx2RjG8/Ufw1Byi
+         FFn2scg2FEtqF2g4/NUSdkJ/dgmWr5NvPW20KFYnYnXTdegEgVy2Bj8LeLqmBpRjhmTH
+         K+3gf0bSr/v+ijYZJbALAj3v1KOz/w2bW4WSALfemPxhxsq7jNEKEz7Al8Cyaomn89Nc
+         5aAon+OdbfAHm7C9oqHr9h/Bwmmhazd9a38omgLg14/slm91/w6Gjf5DfC2ujYkBxwKg
+         9jyQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774374392; x=1774979192; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=icuB+P4pLFsS5xV3yyRCAcHDDOVtvcJcGh9E5iVsFUw=;
+        b=rEPi1/wpljBnuePZfe+niz2Z45QcduGBH+r4kuXQ76tfyEm48L81+woRIMIUQQrMUv
+         znoPSJIrerv+3BtQ14gtyChHQvSF4E8TbAPBT7hpbwK6/AqFeBm4AF8eP+L7o+FOEzJx
+         mFxvSvhE5y6ZfChzJsqA100Od5qq6J8BNwRSKKhI3mqvXgc1zELt3LcX5uyAbqLrwQws
+         4KTlPP75BhfGsKyImGw68ncqPUUnkmDhk6cGddv6oWYQ5br2fRTiAMtN0rRdn0tvDx55
+         P1xUYTP9p+TKatNU3D5VuOeN2JG+nnZ17YRLm7yv8yncHzpzPjjib5zu2IBjdcs9xdNd
+         9Ojg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774374392; x=1774979192;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=icuB+P4pLFsS5xV3yyRCAcHDDOVtvcJcGh9E5iVsFUw=;
+        b=oBxyIgySOcFpVrMgDtg8J1CwQiYhJFY1/QPhArydtHUquFEjNSgtWmvWaTjwYUVz51
+         WuEZBlBBCmGIIDOa+uvEquQWVV1dcmmEgpgPB/facaOwt0FvVylED/Okp5dmeyaBqd7d
+         GtiCHinA1Q+NevudiflErRaFyZk8EnqaQz0KuGPtVHSS4HyIcp7tXMfWOETfDCT3dGac
+         fB/8yFDNsKfPhuqmQ+r+yBsQyGCHv6aLnR59de8tBGaanebocD2vABVkoT9bEb/nhhcX
+         niWqsNl+PW0PMqNWKpD8JT2QuCfA3IHJfzCejQ+vtab9hECYdMW63Gq6KlxkI360lTKm
+         MqBw==
+X-Forwarded-Encrypted: i=1; AJvYcCWNQmdte8JZryTjTycAhRAJ0uR6v+i5K27Ugg1psEaMVScwcdwT4SDsJrgbcqoNM5/InT8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YygKEjlizQzGCBc54DRyKAzykz5I7IZIMBJJxWdJYJDFGwyzAX2
+	oPv0wuL0QYr068mTGe/C6SqpHEEC8o9hJtgdk1MCNOisbmTN9cswek6R++hXXjFkbsLu53kyS77
+	q5KzvWT+WxXckAnUH/Lqmgjal8DvFXeI=
+X-Gm-Gg: ATEYQzwwrFFKzR1lwulm9bsH0vmHwAiHyvt7zIpMperKORAK+QAAVMtm2A8oq8dDWaF
+	3BYJGkaBjFN8GoIlsRcKNgkbGR1JsncRYpmKiozXpePyTTmAjuTbdJlRfe0T3untb8VPPUTCShu
+	c52sVn/FElMBxOJxT/EEsodc2rZX8cOcQSPle3lbmeb2fLmyvmVD+q07VhLw6q4oqtUjwB+m6oe
+	SBStSPai3QkNx7A+PTXn50cu8r1dA8IMxHOIyebkjEnEAKIUs32qwGmyVsOgSrK70Edw0FUQDvA
+	PyIu9cjWIP5xz8ZRrhzfYLLVnQObaKuCLAAHW02N+Zl8izd29K8R
+X-Received: by 2002:a05:6102:1588:b0:602:ac40:96ac with SMTP id
+ ada2fe7eead31-6038731687amr485231137.26.1774374391635; Tue, 24 Mar 2026
+ 10:46:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-24_03,2026-03-24_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 mlxscore=0
- adultscore=0 suspectscore=0 phishscore=0 mlxlogscore=999 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2603050001
- definitions=main-2603240137
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzI0MDEzOCBTYWx0ZWRfXxoQwFiLSnslb
- 9YNTwABf9wSGp1YGUK6KgujdKI8WwHqXyPsF8hLz8iQiRi86zIsS7uCgwQHUP3Vhddh9TxFo4hX
- PvKbHSP9oVGL0AFUSUdb6FKe/TBGTg87NauHBvt2lkqwt1BpjIv9TzlW+CLSfbkPvSVxY0B2UiW
- G/DY2KeKkLoPyZmkpVa80FnM4QLdKr0p/oKfpjOCdvIRMpL3hrquNCLX5+06yrzU7oFd/xDLPpe
- 5WOs7qJWtVuVzNJip0u7gtyTeRZ/iD7gs6tqG16SEOQV2MT7ls1TDRDb3q9lABHv7FEkGX9eOdV
- Z5aQ9x+pIlhRnfqGtdP9e+KQslXAcFTpepNfH+uryykiPaZOeQn+QJv+Rkg4qc9FLyWxJrz3Ywz
- rtg5nJgDVQhh/9Ca8tSbVz8x4YTBDiWAG3HoeZiKQ6HUxgr3N9dhYw39sV9FX4FjpBWo6gkOR18
- W3o82BBz4m5OmrpTnd94Eyd6YvWAtyWDzrcdUzSA=
-X-Authority-Analysis: v=2.4 cv=AIvfpCdw c=1 sm=1 tr=0 ts=69c2cda7 b=1 cx=c_pps
- a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
- a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=x0eKOSpe3m1H3M0S9YoZ:22 a=yPCof4ZbAAAA:8 a=0BF2J1FlyYghqvV610sA:9 cc=ntf
- awl=host:13824
-X-Proofpoint-ORIG-GUID: Meqq-KEEebQcri_19X3bRcbxKs8z4nwd
-X-Proofpoint-GUID: Meqq-KEEebQcri_19X3bRcbxKs8z4nwd
+References: <cover.1774025082.git.paul.chaignon@gmail.com> <704bf39f66a98877f66a4982c77cddb42f14fc82.1774025082.git.paul.chaignon@gmail.com>
+ <tg73xy4pml4rvriysppziwm6nxzgmfih2mqkvla5wl2coqbqut@ioj7ltsfrslm>
+In-Reply-To: <tg73xy4pml4rvriysppziwm6nxzgmfih2mqkvla5wl2coqbqut@ioj7ltsfrslm>
+From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+Date: Tue, 24 Mar 2026 13:46:15 -0400
+X-Gm-Features: AQROBzDOKkIYTWtmNbiTIC046DHYbjq7gv6ABc_mEtqzBqwQF0DHofinEhNxXiI
+Message-ID: <CAM=Ch04z+ZMyqSTLdoq6np96uyi1Q77-aF09VRiwjJs88vFsHw@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 3/6] bpf: Exit early if reg_bounds_sync gets
+ invalid inputs
+To: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Cc: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Srinivas Narayana <srinivas.narayana@rutgers.edu>, 
+	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Validate layout if present, but because the kernel must be
-strict in what it accepts, reject BTF with unsupported kinds,
-even if they are in the layout information.
+On Mon, Mar 23, 2026 at 8:12=E2=80=AFAM Shung-Hsi Yu <shung-hsi.yu@suse.com=
+> wrote:
+>
+> On Fri, Mar 20, 2026 at 05:49:30PM +0100, Paul Chaignon wrote:
+> > From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+[...]
+> Thought given reg_bounds_sync() is used if various different places, I
+> wonder how this will affect current syzbot reporting. In comparison the
+> rest of the patchset seems to try to preserve current behavior.
+>
+> Being nosey, I also look at the Sashiko review[1], which gave the
+> following review:
+>
+>   Does returning early here expose invalid bounds to
+>   reg_bounds_sanity_check()?
+>   When regs_refine_cond_op() produces overlapping bounds for logically de=
+ad
+>   branches (e.g., umin > umax), reg_bounds_sync() previously repaired the=
+m.
+>   With this early exit, the invalid bounds remain.
+>   Will the subsequent call to reg_bounds_sanity_check() detect this viola=
+tion
+>   and trigger a kernel warning via verifier_bug() and BPF_WARN_ONCE?
+>   Additionally, since reg_bounds_sanity_check() handles failures by marki=
+ng
+>   the register as unbounded, could this cause the verifier to explore dea=
+d
+>   branches with unconstrained registers and falsely reject valid programs=
+?
+>   While this is resolved in the subsequent commit "bpf: Simulate branches=
+ to
+>   prune based on range violations", could this intermediate state break
+>   git bisectability?
+>
+> Given if we get invalid bounds in reg_bounds_sync() to begin with, then
+> there is no guarantee that what the BPF verifier ended up with can be
+> trusted at all, so returning early shouldn't introduce new safety issue,
+> and the rest about falsely rejecting valid program doesn't seem like a
+> concern, too, for similar reason.
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- kernel/bpf/btf.c | 60 ++++++++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 56 insertions(+), 4 deletions(-)
+Thanks for taking a look at the review!
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 09fcbb125155..e6030627c3d4 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -270,6 +270,7 @@ struct btf {
- 	struct btf_id_dtor_kfunc_tab *dtor_kfunc_tab;
- 	struct btf_struct_metas *struct_meta_tab;
- 	struct btf_struct_ops_tab *struct_ops_tab;
-+	struct btf_layout *layout;
- 
- 	/* split BTF support */
- 	struct btf *base_btf;
-@@ -1707,6 +1708,11 @@ static void btf_verifier_log_hdr(struct btf_verifier_env *env,
- 	__btf_verifier_log(log, "type_len: %u\n", hdr->type_len);
- 	__btf_verifier_log(log, "str_off: %u\n", hdr->str_off);
- 	__btf_verifier_log(log, "str_len: %u\n", hdr->str_len);
-+	if (hdr->hdr_len >= sizeof(struct btf_header) &&
-+	    btf_data_size >= hdr->hdr_len) {
-+		__btf_verifier_log(log, "layout_off: %u\n", hdr->layout_off);
-+		__btf_verifier_log(log, "layout_len: %u\n", hdr->layout_len);
-+	}
- 	__btf_verifier_log(log, "btf_total_size: %u\n", btf_data_size);
- }
- 
-@@ -5517,7 +5523,8 @@ static int btf_parse_str_sec(struct btf_verifier_env *env)
- 	start = btf->nohdr_data + hdr->str_off;
- 	end = start + hdr->str_len;
- 
--	if (end != btf->data + btf->data_size) {
-+	if (hdr->hdr_len < sizeof(struct btf_header) &&
-+	    end != btf->data + btf->data_size) {
- 		btf_verifier_log(env, "String section is not at the end");
- 		return -EINVAL;
- 	}
-@@ -5538,9 +5545,46 @@ static int btf_parse_str_sec(struct btf_verifier_env *env)
- 	return 0;
- }
- 
-+static int btf_parse_layout_sec(struct btf_verifier_env *env)
-+{
-+	const struct btf_header *hdr = &env->btf->hdr;
-+	struct btf *btf = env->btf;
-+	void *start, *end;
-+
-+	if (hdr->hdr_len < sizeof(struct btf_header) ||
-+	    hdr->layout_len == 0)
-+		return 0;
-+
-+	/* Layout section must align to 4 bytes */
-+	if (hdr->layout_off & (sizeof(u32) - 1)) {
-+		btf_verifier_log(env, "Unaligned layout_off");
-+		return -EINVAL;
-+	}
-+	start = btf->nohdr_data + hdr->layout_off;
-+	end = start + hdr->layout_len;
-+
-+	if (hdr->layout_len < sizeof(struct btf_layout)) {
-+		btf_verifier_log(env, "Layout section is too small");
-+		return -EINVAL;
-+	}
-+	if (hdr->layout_len % sizeof(struct btf_layout) != 0) {
-+		btf_verifier_log(env, "layout_len is not multiple of %zu",
-+				 sizeof(struct btf_layout));
-+		return -EINVAL;
-+	}
-+	if (end > btf->data + btf->data_size) {
-+		btf_verifier_log(env, "Layout section is too big");
-+		return -EINVAL;
-+	}
-+	btf->layout = start;
-+
-+	return 0;
-+}
-+
- static const size_t btf_sec_info_offset[] = {
- 	offsetof(struct btf_header, type_off),
- 	offsetof(struct btf_header, str_off),
-+	offsetof(struct btf_header, layout_off)
- };
- 
- static int btf_sec_info_cmp(const void *a, const void *b)
-@@ -5556,24 +5600,28 @@ static int btf_check_sec_info(struct btf_verifier_env *env,
- {
- 	struct btf_sec_info secs[ARRAY_SIZE(btf_sec_info_offset)];
- 	u32 total, expected_total, i;
-+	u32 nr_secs = ARRAY_SIZE(btf_sec_info_offset);
- 	const struct btf_header *hdr;
- 	const struct btf *btf;
- 
- 	btf = env->btf;
- 	hdr = &btf->hdr;
- 
-+	if (hdr->hdr_len < sizeof(struct btf_header) || hdr->layout_len == 0)
-+		nr_secs--;
-+
- 	/* Populate the secs from hdr */
--	for (i = 0; i < ARRAY_SIZE(btf_sec_info_offset); i++)
-+	for (i = 0; i < nr_secs; i++)
- 		secs[i] = *(struct btf_sec_info *)((void *)hdr +
- 						   btf_sec_info_offset[i]);
- 
--	sort(secs, ARRAY_SIZE(btf_sec_info_offset),
-+	sort(secs, nr_secs,
- 	     sizeof(struct btf_sec_info), btf_sec_info_cmp, NULL);
- 
- 	/* Check for gaps and overlap among sections */
- 	total = 0;
- 	expected_total = btf_data_size - hdr->hdr_len;
--	for (i = 0; i < ARRAY_SIZE(btf_sec_info_offset); i++) {
-+	for (i = 0; i < nr_secs; i++) {
- 		if (expected_total < secs[i].off) {
- 			btf_verifier_log(env, "Invalid section offset");
- 			return -EINVAL;
-@@ -5929,6 +5977,10 @@ static struct btf *btf_parse(const union bpf_attr *attr, bpfptr_t uattr, u32 uat
- 	if (err)
- 		goto errout;
- 
-+	err = btf_parse_layout_sec(env);
-+	if (err)
-+		goto errout;
-+
- 	err = btf_parse_type_sec(env);
- 	if (err)
- 		goto errout;
--- 
-2.39.3
+As you know, the main reason for this commit is to allow the next
+commit to identify dead branches
+with a single call to range_bounds_violation(), instead of two calls
+(one after regs_refine_cond_op(),
+and one after sync()).
 
+You are right, if the inputs to sync() itself are invalid, then
+whatever "fixes" sync()
+can come up with don't make sense anyway. So it should be okay to exit earl=
+y.
+
+One argument to keep sync() unchanged is, as you say, to "preserve
+existing behavior".
+
+I'm okay either way. If it makes sense to keep sync() unchanged + use
+two calls to range_bounds_violation(), please advise.
+Otherwise will continue with this commit.
+
+> 1: https://sashiko.dev/#/patchset/cover.1774025082.git.paul.chaignon%40gm=
+ail.com
+>
+> ...
