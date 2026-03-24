@@ -1,118 +1,147 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE4D5384222
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 14:32:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774362727; cv=none; b=iHbxwo73N7fVcoJHiFC5Je2gdqm6Y0TCIwr6QQ9rGZ6n4M/0VIjCbTU6rN8+K2Wxby6GV6s7tux/4/2CcBiT1an6ZLivtYUfK3bqsig2CFhDzaAfH6NnquEDzteIvrcfTOanIPE1Ox4qLUzOY38QgEcxf7iTOKjRLkL6473mrKE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774362727; c=relaxed/simple;
-	bh=5o8l0vLxm74e0MmSjAvuKJTpAJjS6ccDL2inty2cmMc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=jW8WzzCO7pVok0c807bn1ZIpwgA1f8jq3zNJjpH2WZz3YWu6waa/OEsdvMxnj7g0Tifkv95hDFezJu9bjVI9obwJR6la2W4g5HxFS+vV+wjWEtE7U0Cps75tFngW7Dcu5UwZbRg+kmNXMpvXndHKslPH/BG5TEZX3qCSQzY59eQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cbYqNYjF; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9C413FE34E
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 14:38:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774363140; cv=pass; b=P5zGb2KR+k/mHH/8pA7FiFDiJykMpjRbs1gfOtWwjpx3sni2w00pY+/w0gbgAzAd0v9QY/ZvHmf9XQ2X2B0ymwi5xGHilZcOV4AW1y7jouAGdQ5pPWBW/+rDP8Z7RJKDdALauY89NqobXZ/gNMz3AM2D8g/bITe+04NuoIDMmCo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774363140; c=relaxed/simple;
+	bh=FCqCAhvSwfVF4WjHMhBlMzsUIHjNVgm9chKQCssuZsw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iZgED9oZP04vDSkdNNAGb+CjqzTlhsndggRskYW2Ld+9SyUouToVhpAyHioq8CJoOCbDeIxd1Vep/penTStcs4sv+V9LIemAHvZ2ZYefigXE9yjNCwR2sHi1JOXcFOUANZpREV7+24YJqtx6EObDphAUUO48Bl7ag9CI5Ljxh/A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ND3S0gWt; arc=pass smtp.client-ip=209.85.221.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cbYqNYjF"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4870206f73bso23125845e9.3
-        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 07:32:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ND3S0gWt"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-439c6fc2910so1075969f8f.0
+        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 07:38:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774363137; cv=none;
+        d=google.com; s=arc-20240605;
+        b=JNeuJxrn7YgvL+SFVnzlBknDE3QSiY1cWxWA5yiir+8txldR/6NcP9WjYg4GIQfcod
+         2JF4UHjTAd23onsZKMfQJHNTjvxhx0BRyqAGNCpawbDnO8W56T5kjNBnQvdzK6HxB1Z4
+         Dg9rESNXvEPi9WXlrlcyrl3bu5JRbKwDGBDThwc6JA+7bDqz+WefCBAAcJfO+0pD/JPQ
+         rr2PXc4svdTdOKAKcGIfG+KppmF7GK5R8IjV1Ql1f7XJxm7MX6o+QmqNqiax4JQWm4Zx
+         HzeSDKa/5pHVjvUxM0smTcdg/tbdTTNWWsCqfnvgLbGETCPGprd9+/So4FvKDLx2bt1t
+         fvYQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=7FSG5HsGurgnZqW8vLufEw370eOSK0W5u8ffTft8nZY=;
+        fh=UcZqnkcPYPCJuBeofOOObWQTYZ2DVO/Q2yzEycpMUlQ=;
+        b=P+4A6Drqj5QQdRhuaXGgMJuxbUatEERUudo3RvMEB30DQALrGHCNmE6GnQDSs4gzyh
+         ZqNjaPjskPaOJyK9sIEnBw8RqwBsqd7j4o8XfYjqEC9OynxyKcg5uCBBAzUO14ERYpNA
+         zmoFEyvXB/9A9uaVBWar16FG+yui1qeODPUB83wd9/unjE5HYPKFK7fO363BDsINiwAc
+         RT9bnW58leXsKO8eWYeJkGKy/aFxrfoco3+OXgPo61Pe4hXBhBtdgUhsV+7PxYKKAUUv
+         uGs8qHMkYcgBbxh3+wDVKkXfNsGgJZ7+lezUTCcDYWkvfaDilZP91alv4JyPjFwSFPBs
+         7ITA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774362724; x=1774967524; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5o8l0vLxm74e0MmSjAvuKJTpAJjS6ccDL2inty2cmMc=;
-        b=cbYqNYjFZ9A0CWDz3LoyNhGrJh6r8oQbJJL7qRqw2Er1py/zE6MMMIhjamI4nSRLtD
-         zBpVysG+PdOs3Q+V2kR2KSVXUXUVilyom3gQR+FURv5BAPWd4p7aWxb57c+Jk/tBHIzb
-         7XrIPhxyzJdnyMea89JNk26LG4IhsL3op5tV65aCJdsiilpbtvj34q2ImOozgjaAbo0r
-         TEGIrEEtti3gjXyDXe/XDnxs6QIcU9WnzMPUp8j+4M0K4aS5y9Fumdh3KwbtMYwkcFSv
-         g8uWEZ0VaV7z3K9X63fhs5AbWODPGjGj5o/4LqVIcdbRWjG85jiuwO4HLAObDVx4nT76
-         dicg==
+        d=gmail.com; s=20251104; t=1774363137; x=1774967937; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7FSG5HsGurgnZqW8vLufEw370eOSK0W5u8ffTft8nZY=;
+        b=ND3S0gWtbAGYhER1ZY7ioTHjtYzDMq1XynCvPEyHq53lAuRIPswzMc5Y/SYY0MPRmh
+         tu2EbBAnr/hv6gdqxXyOe9Im15NwlFcIPXdScAdXAXfi3jN10IwlHcEvio5KDuIsNcMP
+         1AAhx/Xtqo5BbQ4acWz9mwPabzhWsL+gVlHyeL0SnBWZLiVDh7XlFQ9ndptGQp1R529V
+         VTlKLl7rDIr5a+erWVC0JDe7lAVuHi3CjkjYTnEJqNfWPHlA2ZAZimxdSmJ38l4iLO/6
+         aVP8o9aURki9EiOl4dPvoFTwVgeI+nLy26Zv+T/UETZDAdHOsul91OTTZ+k2RkitZ7f/
+         6SRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774362724; x=1774967524;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=5o8l0vLxm74e0MmSjAvuKJTpAJjS6ccDL2inty2cmMc=;
-        b=MDAJ2F1j4L05qXZOWg9yRFZhQ1bZkDTy1jB3rortTx4SaBG6eSW5cBlgYW9B+1p6Qj
-         /ualrDWEUx8QUdClWjVM+P9sLJ9QxdNLa0paqNBC5tAojnECME1+kdJ5n0+t55fKekig
-         2NOCaf3OE4rlsKx6VSfIGjhfMhatP86NrenbtjiTTvpmRzFZZ3bvG5q7DW1VFaKgaA5p
-         Ttu+AwMygNA9K826WWwItSO9nKCJ3EWkCadWQXFW9omN2DNLbyRjfPl2UP7j3bQitOHX
-         hn+D+xXaPjlK5XSerYlrsIpBXfwVZMAnwJjYsPHflMjcKPcUICdvOcWUkKxskZoFGkGK
-         F0KQ==
-X-Gm-Message-State: AOJu0YwKqDiZP8QT28+NIsPRb1LzGJ1phabi9pyzn6Q87qU8uTbyWwqB
-	LlXpQItHIF3TlaErHV7HtEKjg5TiBEXxFAD1TchB8NxTCoipsLIfCuwA
-X-Gm-Gg: ATEYQzx79wwg0hD/ATiO7VyPs94aq+XNpVt62oSi2LxuxOz9Eks9wRCeaYkcYacL233
-	AcNs5UwMU9gibg96N/5H8wvXcRTcCuAuuXHfTIEuM4EgOIxFG7QLqKgS12PRcrDwt1RpgmKYivE
-	yMEfWooPH1c7tXyYnP9Ws9cWV/wkq5JuYJvg10x5Jl10ADbxC2a+sbGzqTrj9jqEp4KiuyS1NSO
-	06Db+3rRA1LtQU6IkQOHgCPAVIt5Icbr03FX1diPErzmqH+TyHOWYYijEJgZ0nj0eWKoKbNs8A2
-	RxBPi9Lq0Ohp2esAM00RVLKJ1vh1EjD4ne0yTHkrEjZ+jU4XsuNmgVeRlav8p7NA1eJR3zJHLoq
-	0fckRNomg9sUirpLLLROtnNUD01jCJDnymvxxgkZuLD1AgEoXe3hLe044T6HgC9yh+ncGJHOsNC
-	XiwPq33UA3IaWsXBw=
-X-Received: by 2002:a05:600c:c10b:b0:485:2fe9:336f with SMTP id 5b1f17b1804b1-486fee2cf68mr169649975e9.30.1774362723668;
-        Tue, 24 Mar 2026 07:32:03 -0700 (PDT)
-Received: from localhost ([2620:10d:c092:500::5:8a8a])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-487116f17f3sm51632665e9.1.2026.03.24.07.32.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2026 07:32:03 -0700 (PDT)
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-To: oskar@gerlicz.space
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com,
- eddyz87@gmail.com, memxor@gmail.com, yatsenko@meta.com
-Subject: Re: [PATCH bpf-next v5 2/5] bpf: Add sleepable support for classic
- tracepoint programs
-In-Reply-To: <e0443380-97d3-4bcc-b599-0883bb6c6a03@gmail.com>
-References: <629d0324276759a1bda71248e93a99e2@gerlicz.space>
- <7560779e22010c1907fe6045ef595d19@gerlicz.space>
- <e0443380-97d3-4bcc-b599-0883bb6c6a03@gmail.com>
-Date: Tue, 24 Mar 2026 14:32:02 +0000
-Message-ID: <877br1jo2l.fsf@gmail.com>
+        d=1e100.net; s=20251104; t=1774363137; x=1774967937;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=7FSG5HsGurgnZqW8vLufEw370eOSK0W5u8ffTft8nZY=;
+        b=fx5Rjer65ITJGGrOw1tnt0HZ4MmcR86TTRKWGQjVJC2Z26SPFaP/iwzAFKso7jNd9Y
+         BsbBmS64S/hGto18hsXuTNORR+RBwzUTpC65IA/yZyVBoMTYDJpYuDEChRdRGWo6NXxQ
+         yWaXqj3nd0CFcCPMVhXJk0A7gxPHnsTv6ViJtUKQ95jAYKF+Fqzv2pPYZo1Um0I+4QNm
+         VWq1Rp95w0QSP4dbX0rNLjGBvqcLByegDbjqwane19VsdBsVceeAi/ZqwtDtFp69P8KR
+         hZn3BIQsnpSlyl1UxVvL3Mc0hmyT0mpxZzoTg7RQ/AAWkCHp5KOlq/NlyUvIzhStjPlQ
+         5Q/Q==
+X-Gm-Message-State: AOJu0YxvERju5gqEttaYx6XEIj36lbqkj17ssprPIeqk12G2tJxM1v9P
+	ca0FXZJbnr080RHHicYjjQYAz8BC843MkmkqH228+faWdsySSSXb9TP05frbitROQq03qMgoB+Q
+	3tPzFYmI8wfpo6924HcnsD/csDbyNw10=
+X-Gm-Gg: ATEYQzxc66FLHxQzYtLTUIiNeqU2hUgAN4tn2TQqYmpk7LI9++qf+DakwDfEiFovh3t
+	YfXsrxocO4frcJIM+3Sl7t1C5oUNVPKEpn7VFXg6m2wnp006ub8vi1TS1PIySPk9bHMWeLtRRWy
+	HtDW33A8VCZh499qYTlOZKWJfWp0zuLlKW0MenuC4m2E7/YyQa/X+BfGygr4h8OxmjIDn2MPSqA
+	8b1xlIKOi7zIUoSYm1++pdasfB7pTA4VtANXYwZ6JWSbFHC95GtgnjZd2gmCSovOodFspdTxkrJ
+	AU5MH1vqRpI+bVyJHi3aD9+/ajOYXWY1UjRkl8e4MpDQID/yI/t2Lyi3sP2/IjYr+Wd/Ss1aK1z
+	I+20Fp6aDrDrDQT0tF2W7egdp8Q==
+X-Received: by 2002:a05:6000:2906:b0:43b:4881:cee with SMTP id
+ ffacd0b85a97d-43b6424310amr26146904f8f.1.1774363137098; Tue, 24 Mar 2026
+ 07:38:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+References: <20260323022410.75444-1-alexei.starovoitov@gmail.com>
+ <ada028bf2621bd489a09aa41cdd449cb160fbad6.camel@gmail.com> <c2782a066788a9dd0542391c4308d23854d2938f.camel@gmail.com>
+In-Reply-To: <c2782a066788a9dd0542391c4308d23854d2938f.camel@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 24 Mar 2026 07:38:44 -0700
+X-Gm-Features: AQROBzDe_LrL7uYeZhCdq79c0KXNT5WJ0Mwy06jehqxiQXuJlFBxgfjH7Xgng1Q
+Message-ID: <CAADnVQLSYzRbs-+axmNhKu5APTbyzCwTb99gJz=tZvp2ZDVHNQ@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 1/2] bpf: Support 32-bit scalar spills in stacksafe()
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Mykyta Yatsenko <mykyta.yatsenko5@gmail.com> writes:
-
-> On 3/23/26 9:26 PM, oskar@gerlicz.space wrote:
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (unlikely(this_cpu_inc_return(=
-bpf_prog_active) !=3D 1)) {
->>=20
->> Hi,
->>=20
->> A question regarding the recursion handling.
->>=20
->> Even with migrate_disable(), this still runs in a preemptible and
->> sleepable context. So if a task increments bpf_prog_active and then
->> sleeps, another task could run on the same CPU and also modify the
->> same per-CPU counter.
->>=20
->> Would this interleaving affect recursion tracking correctness, or is
->> this accounted for?
->>=20
->> Oskar Gerlicz Kowalczuk
->>=20
-> We discussed this with Kumar in the sibling thread, the initial thinking=
-=20
-> behind this was that second task incrementing this counter won't see 1,=20
-> so it's going to
+On Mon, Mar 23, 2026 at 12:54=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.co=
+m> wrote:
 >
-> this_cpu_dec(bpf_prog_active);
-> return 0;
+> On Mon, 2026-03-23 at 12:36 -0700, Eduard Zingerman wrote:
+> > On Sun, 2026-03-22 at 19:24 -0700, Alexei Starovoitov wrote:
+> >
+> > [...]
+> >
+> > > @@ -20020,12 +20020,12 @@ static bool is_stack_all_misc(struct bpf_ve=
+rifier_env *env,
+> > >  }
+> > >
+> > >  static struct bpf_reg_state *scalar_reg_for_stack(struct bpf_verifie=
+r_env *env,
+> > > -                                             struct bpf_stack_state =
+*stack)
+> > > +                                             struct bpf_stack_state =
+*stack, int im)
+> > >  {
+> > > -   if (is_spilled_scalar_reg64(stack))
+> > > +   if (is_spilled_scalar_after(stack, im))
+> > >             return &stack->spilled_ptr;
+> > >
+> > > -   if (is_stack_all_misc(env, stack))
+> > > +   if (is_stack_misc_after(env, stack, im))
+> > >             return &unbound_reg;
+> >
+> > unbound_reg has 64-bit bounds set to corresponding 64-bit min/max value=
+s.
+> > For a 32-bit spill, suppose that old state has a SPILL and MISC in the =
+slot,
+> > while new state has all MISC. This would lead to a
+> > regsafe(old_reg_with_32bit_bounds, &unbound_reg),
+> > which should return false. This is safe but conservative,
+> > maybe add a notion of unbound_reg32 to cover this case?
+> > Idk if this would have final veristat impact.
 >
-> I'm reworking this for the next version.
-The initial thinking behind this was that the second task incrementing this=
- counter won't see 1, so it's going to
+> On the other hand, this would matter only if register is marked as
+> precise the old state, and to make a difference it will have to be
+> both precise and unbounded. Probably an unlikely situation.
 
-this_cpu_dec(bpf_prog_active);
-return 0;
+Yes. I had the same thoughts, but it's worth an experiment.
 
-I'm reworking this for the next version, as discussed in the sibling thread=
- with Kumar.
+> Still curious about 8- and 16-bit cases.
+
+Yeah. I was wondering as well. Didn't have a chance to explore this further=
+.
+It can be a follow up. I think I will apply as-is, since
+the gains are big.
