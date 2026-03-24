@@ -1,61 +1,63 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AD783537D8
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 21:27:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80C803537D8
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 21:27:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774387645; cv=none; b=RJGjlGJi1/k5lBuuV0VR3QLreo5jIuE1H7VGqw9CbwSfy1OJVHbYMhkJj5xEZ/2c2YvOukIVbxMxJnzx5BCBkgJupDBuS0zeVcDxh7wsb3fyu4ULKyq2oQZGlMIin8PZ48fLMqWgGBrUDP2LAfE2er8rPhdFcRIHGT+ZpAix/W8=
+	t=1774387648; cv=none; b=MY9ukQ6JvuNvuKJYMIWSoV2Boh6WPB/sqbXo8gp6nX3pz5v6OekuoIPkKb6yWkB2ulEdSXTFNKttlgiuufW2eFcaD3wIcM230sr1h/y8mX0NbQjNJJkeLTqxrgbwE6ftdq8Pzo4DLIgla1PRgpjaZHY7sMFdRSXxZN+VBlPfzG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774387645; c=relaxed/simple;
-	bh=HhuDIiV8tWursPG2/V/doYStZhoGJQBDqDKH9HFRUSo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=d6yPYGyAJNjRuvEP32H3Mo3tYADT/eiGxRiMqlHvp0r28xQwAArT1zSEyKZ+KiKCrEf0CJoacYplCwgyqDm3aEkPcd63rmJOslgmM7RFJO7HIGfStYGIfrh6FI+/xg2EJfZpbUg7LvrHv67Rp7KbfT70I1H2FBTcACFusIIMuBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sFRdkvAT; arc=none smtp.client-ip=209.85.210.175
+	s=arc-20240116; t=1774387648; c=relaxed/simple;
+	bh=+PK9HY9pUZ0C+fawOgmlAhUP8YhbtL/lJkemA2N9ymo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=RaSzLFWAsGUbMCZyVcqds2ZJQ661SVLyJkZsuggIQ7AqlGxqmL7vbEwhfBl80pwqLteNeD0U5AFoUU4+bOkix31iHtJ3S42BwoXMQ/vJ3x3zb90vBcVWOKf2ObsrjLjeL5nSg96R0AsMq6ZGeUNDeB9XIm1fB6tXnqFy3crhb7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BNBEGdA1; arc=none smtp.client-ip=209.85.216.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sFRdkvAT"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-823c56765fdso878004b3a.1
-        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 14:27:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BNBEGdA1"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-35ba749f441so1494675a91.1
+        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 14:27:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774387644; x=1774992444; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=niAhtpZI+pVVAEWcQn/pUL4i4VTELLzB3A35UQDHiAM=;
-        b=sFRdkvATsWSsVZzOrDrQo8QpuoZICuoiW/NEOHw2J4NePkzROLL5rmvtogho5nFAme
-         xyan45J1a/xo4G6UVNR++P/6RvAyIohAKz7xxHjOXNy291srFQV/MZgytjlgPaIreWXN
-         Pw4WdBL+DpmFXZTcxHhW5sCHMlJpzvnD1418Ede+jK6k0RNzEoaCl6pKg98UC/+C0/tr
-         bSAkGUxZYjTPi/nP8pPuWM8bWb5sWZRmB34y5uJaKQi7xwO6CJupq58/DtUwnWcepKwZ
-         Q+T5lU5FiQi/eBFw9bYDDH3P781B2g9SNA28HcFHEXL3Uqz/6UWeDMRY5y/FP+j+HNcn
-         hTJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774387644; x=1774992444;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1774387646; x=1774992446; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=niAhtpZI+pVVAEWcQn/pUL4i4VTELLzB3A35UQDHiAM=;
-        b=Sd1jFHYgRkhgRmVYPpXPg+ctM6UFg2DBCMxZfk/l8V1GvWZ7q7+oWuoNVZGEqtOfpD
-         Ka36WqYXK0Wdd0FOY/l2Jj/0QUV5x1w3WxVU6RNEVYdoAYd2Cv6NutSO9aUXXd+FxvHB
-         rbS7L6m0HXp7m+uAUpzC3o0ysJlxLDO59DLVi7/89LTcV5sC6IAlxJOJPofRaEBQJInJ
-         /JVwRG+13MqqnbO7Bgb5DTeXRPdWrwn7sq7xEj3lXGK0cZHrJOqZzwnOyiPvKba40wd4
-         VwvVUX//qCLZ3ZgGC+jJrOzy2eo6vLeKNLIN0kDPTr8u4n3JyVsCJq4xJcjBlJu8XGDR
-         6zpA==
-X-Gm-Message-State: AOJu0YxR3fhpgCOjWEfZNCpzBKN8VaqNWQV5zG6Jy2bNh4obwI6DFnBq
-	E+QuuyX7xjKOJQSoW7DDgCpM3jqGCzMjGVC92oAUsm4YlT3fDxJeS9X2ndTSZg==
-X-Gm-Gg: ATEYQzwM+L+aMhwCGaZnzAiVoo5K1AwIF2mcsXIvSHKQGO3+DGjm2tG5Zv8ZEZ+gGZF
-	pSrYILlkaOTqQvaxf1fVxFvypT5d4vq6Mg3J99OKWg2199uFvTVnmX/GTpvWlqYLkWpTxJfvyOt
-	oFsmB98HzAItKEwCYgK/ZjW/61sUQxjxk8ZBXbj5lDrS/bCuUHCn+nxE4sJkRvGfA7u8v3ANXok
-	xjfaTqfcmqNyzCmHmnj055JTP38Pjj+mpenUj11ganuNWdwNF6Yd38ErWHgiYvER5qMoEC+pCZY
-	uqmaRcN+hMmxdSIAXvMBdLCFlRuaKjf0wFlZ1BOkxCHIvZp0McWg+ySkIVEsDc58vhrnmHei7gq
-	GnvdN0cZpeNFrwXbyZzb/vldI0CoHGs8A0LG1suK5TjV28tAjAD39Ae/EPNFn8avoy5l7j0oGUV
-	4WAu3RcVI1sYWs6mSpLw5OrB7zOyldjOcBKEApI5sgFWGK7fj22qRoZ6T7/r/WxegPRFFS+3iqV
-	Lf5XLMxuwc+W7U+h0XnhdpSIcw959njCJi39LAhNqLULYYhE53BpZ9ba9gH3g==
-X-Received: by 2002:a05:6a00:9517:b0:821:a7b6:10a3 with SMTP id d2e1a72fcca58-82c6df62cbamr985787b3a.34.1774387643549;
-        Tue, 24 Mar 2026 14:27:23 -0700 (PDT)
+        bh=CmS2a+FJZOM8vZtvqJBXu1EgB8VQZ6zodtDJYGUpZeY=;
+        b=BNBEGdA1iov+NaGTRCl5BJlPyaYGGyNg9igwdtBOTl2nxskqqB7CUrH3ijBA/IqqdH
+         1ha8CEpf2g7ZVUjQgixpEs/SEmeWc6uWuoR5Sejz7/l7O4sHdNnLNAavIdjdAkptSovA
+         7x8rrkNZngpBmdqhesnm/+hdWJG9H8DKEpFa/wWiA+OuYhD1uiMt9Nn/s2Pv1pTuYOsM
+         nD8GgQQgXx5W6MtO5Pf75KBa708qfGb47GXXgYl7l9aHZUa9E10DJ0FKNbgI97ymOgBc
+         PHhs7MuoxyO5OnoHRcG/xWhNGtnrUOMPM9+qu9r/Edx13WTes9qWD+hVUteNLRhwySJk
+         tTlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774387646; x=1774992446;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=CmS2a+FJZOM8vZtvqJBXu1EgB8VQZ6zodtDJYGUpZeY=;
+        b=k9vYw/nrmtJSEvNyPk3spckb7ZZnMZSxaV3hHtUb4jj0gg9sJ75xd2hbW4m3v4g4+L
+         7Y+yR9JMJTgWdI9hlpuxQysH72awHJdaS9YndX02i+3J7mHdS/AlCPS/NLPT7/IG/PfL
+         34AdwXEvCVk0dK5H4jDwG84oaYpzYMyJ6I7Qfw1/r2RdKGrNmORqy8hg5VyijwxJ9HXO
+         i5eS1Qku7tLbzm8asiNGWrpgNI9braKT21yVfLWrnbTrj/Bexca4gfeyFJbRF3sruJWE
+         UKAJZq/HHpnrl3VCikGMZJANs9FJzyrA9di2wx97VkaxrB1PpvP/j+Z3fAJOTYR9jYQg
+         Z45g==
+X-Gm-Message-State: AOJu0YwmcO6QLGWJFrtZjoofJ77U2h951PKs8Bxw8/UTI8Hcr7NN/His
+	rVu/NPoCw5695At1OpUblobCkWcRCy6UNgYlSWjzPMbOvWqDAmL5GHdSV6rDKQ==
+X-Gm-Gg: ATEYQzyGe5QaNR5+nUKE+x36+YvQhZmgvwfHCbzXWDGKSsjRzgi6iSEz4Tx5xuB+FpC
+	zjQw8CV0TaNG0hYY/YP8b8XNu4xEdcviXj6jtYDH8Wj3AJH4HhmuVisX6YIIpjUaYNYMs3aULHE
+	eTRcuWavuBHQ8evGfY0H2mawqJNzukKK0Tm41JiIQdpmDngBNRWbELZDSVtXiFxCfukJkpFwcOU
+	vH8cjrqSwudElgrlSIzbdmuVXQiAcv8XzRe8IGuN/3nQa9O2eez0SnZqaCiIcW6ppNol3uw23vo
+	c2HE6fR+rEcONnoiHfpsXud4JljAPdDfd2AIBNMvhes6au31qy1+Mckl/KKIFt6ys4Q/TZWWmLs
+	pjx6l7MM5VvnG1j9Jt6H4m7ljNK0bL35TsTflAKZ2UoczZ+zySPFqomqwvpP84fGNMnkDseHunu
+	o94Laoo5gNME50VttFKPkroKiELK8DV2N58k9DP7sQHvT7axBSSyG1DAWG3BxCxEzPGqGsdAAZT
+	2BDNOMpIZnrAkiGFuDwtvct7I0BvzEY/FTYbb+frM2AF0yHnmq/730f/aOs6g==
+X-Received: by 2002:a17:90b:4a4f:b0:359:f22:8879 with SMTP id 98e67ed59e1d1-35c0ddb253amr845847a91.22.1774387646579;
+        Tue, 24 Mar 2026 14:27:26 -0700 (PDT)
 Received: from localhost.localdomain ([2601:600:837f:c470:1879:8422:922b:e5d3])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82b03aa7d8esm13006164b3a.4.2026.03.24.14.27.22
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35c0d6060b5sm604151a91.17.2026.03.24.14.27.25
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 24 Mar 2026 14:27:23 -0700 (PDT)
+        Tue, 24 Mar 2026 14:27:26 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -63,10 +65,12 @@ Cc: daniel@iogearbox.net,
 	martin.lau@kernel.org,
 	memxor@gmail.com,
 	eddyz87@gmail.com
-Subject: [PATCH bpf-next 1/2] bpf: Fix variable length stack write over spilled pointers
-Date: Tue, 24 Mar 2026 14:27:20 -0700
-Message-ID: <20260324212721.71245-1-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Test variable length stack write
+Date: Tue, 24 Mar 2026 14:27:21 -0700
+Message-ID: <20260324212721.71245-2-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20260324212721.71245-1-alexei.starovoitov@gmail.com>
+References: <20260324212721.71245-1-alexei.starovoitov@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -77,48 +81,64 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Scrub slots if variable-offset stack write goes over spilled pointers.
-Otherwise is_spilled_reg() may == true && spilled_ptr.type == NOT_INIT
-and valid program is rejected by check_stack_read_fixed_off()
-with obscure "invalid size of register fill" message.
+Add a test to make sure that variable length stack writes
+scrubs STACK_SPILL into STACK_MISC.
 
-Fixes: 01f810ace9ed ("bpf: Allow variable-offset stack access")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/verifier.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ .../selftests/bpf/progs/verifier_spill_fill.c | 41 +++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 70a100dd4d0c..01663bb4ae1d 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -5407,7 +5407,7 @@ static int check_stack_write_var_off(struct bpf_verifier_env *env,
- {
- 	struct bpf_func_state *cur; /* state of the current function */
- 	int min_off, max_off;
--	int i, err;
-+	int i, j, err;
- 	struct bpf_reg_state *ptr_reg = NULL, *value_reg = NULL;
- 	struct bpf_insn *insn = &env->prog->insnsi[insn_idx];
- 	bool writing_zero = false;
-@@ -5476,7 +5476,16 @@ static int check_stack_write_var_off(struct bpf_verifier_env *env,
- 			}
- 		}
+diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+index a2b6d99628da..672e4446181e 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
++++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+@@ -1316,4 +1316,45 @@ __naked void old_imprecise_scalar32_vs_cur_stack_misc(void)
+ 	: __clobber_all);
+ }
  
--		/* Erase all other spilled pointers. */
-+		/*
-+		 * Scrub slots if variable-offset stack write goes over spilled pointers.
-+		 * Otherwise is_spilled_reg() may == true && spilled_ptr.type == NOT_INIT
-+		 * and valid program is rejected by check_stack_read_fixed_off()
-+		 * with obscure "invalid size of register fill" message.
-+		 */
-+		if (is_stack_slot_special(&state->stack[spi])) {
-+			for (j = 0; j < BPF_REG_SIZE; j++)
-+				scrub_spilled_slot(&state->stack[spi].slot_type[j]);
-+		}
- 		state->stack[spi].spilled_ptr.type = NOT_INIT;
- 
- 		/* Update the slot type. */
++SEC("raw_tp")
++__success
++__naked void var_off_write_over_scalar_spill(void)
++{
++	asm volatile (
++	/* Get an unknown value bounded to {0, 4} */
++	"call %[bpf_ktime_get_ns];"
++	"r6 = r0;"
++	"r6 &= 4;"
++
++	/* Spill a scalar to fp-16 */
++	"r7 = 0xdeadbeef00000000 ll;"
++	"*(u64 *)(r10 - 16) = r7;"
++
++	/*
++	 * Variable-offset 4-byte write covering [fp-12, fp-4).
++	 * This touches stype[3..0] of the spill slot at fp-16 but
++	 * leaves stype[7..4] as STACK_SPILL. check_stack_write_var_off()
++	 * must scrub the entire slot when setting spilled_ptr to NOT_INIT,
++	 * otherwise a subsequent sub-register fill sees a non-scalar
++	 * spilled_ptr and is rejected.
++	 */
++	"r8 = r10;"
++	"r8 += r6;"
++	"r8 += -12;"
++	"r9 = 0;"
++	"*(u32 *)(r8 + 0) = r9;"
++
++	/*
++	 * 4-byte read from fp-16. Without the fix this fails with
++	 * "invalid size of register fill" because is_spilled_reg()
++	 * sees STACK_SPILL while spilled_ptr.type == NOT_INIT.
++	 */
++	"r0 = *(u32 *)(r10 - 16);"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_ktime_get_ns)
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.52.0
 
