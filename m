@@ -1,106 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81A892E3397;
-	Tue, 24 Mar 2026 20:14:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83524332623
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 20:21:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774383253; cv=none; b=gbTbhOA+DwM1BSBsHitlzoCQWRDVfW6w0OErSQkqiDcYY2ox0y2ZRB4VJSpP5MJVBz0Jfdl3lJXApV1d1uO5ZRvq/q3+LCi120ezzrQzyQ7BRIHJWbel3+MIlRTJsDXLgsICgkkzwW5FLTKkdhHsICuXlA4ww+/EVpsbdQu5GlE=
+	t=1774383695; cv=none; b=tuFaYxRBZjRul48WNwLS6mmAD5cEbhVOF10D1kVUh02IywkHaQgEy+bCkS6/Wm/UzQt2r0A8Yyojj0s4p5FTgvsiSZ3Na0/s8I5duo6cWi+BbV0McoE37KSe98bOpA+F3IyMLgAqSycpuKIBBha3twWj2oijz3vN2t/cySNEnWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774383253; c=relaxed/simple;
-	bh=cFuFU8YE7cEVhEQVQCkzUpXv5UGSTwcmnJReRP9FaAU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YFNB10pCo97b3qY/SdufDwEqbxLJ/AxjdcNxO1ZqWljmfTinqxu+XubNA8z/47Obv5r4sif+ofGQAz7ANx9THnh2FXQeXATYKXIR+v38aqNBFoTSKEBZlmWr8dcVvH5v59Vn1UnRoXEPZDAqdwjgcDAokgcRYciyY2H+WzZsu+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EHAiURWq; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1774383695; c=relaxed/simple;
+	bh=YekaUXXUymXZs/3g2Vp+S0NZBc707UWzjqqiXrrBWgU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Y1toIE52QjJJqxzkgMrMTkYgSyizi6Z3gziuy5Umbdg/1lXOyI5ziwmMfCTi5jKOxyQhJRHEua1n5FZO9Z/eB6m7AUHRLunQSb7MzHQhCVif5P1PNNt4bxG4wGRa2bXXvCfSPfF34L8iQyGs0Pgyu8XJwK0TiO/ACKHMYg+l+so=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ruc37CfH; arc=none smtp.client-ip=74.125.82.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EHAiURWq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774383252; x=1805919252;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cFuFU8YE7cEVhEQVQCkzUpXv5UGSTwcmnJReRP9FaAU=;
-  b=EHAiURWqB+3ybVog7RIm7LsHnIT9RZmtDIydQ3m72JoYvxm4TBPZzO+o
-   yn04ZkEyv9+HiG/lxVyuNWcYsolERO33k5BdKvF73MA0+jP1snYNpp1Kq
-   OxDtxicFP4hurIU/WT1EV3ZB/Rr6b0hg79VZz/jh9eiOKLlAGJ8qXF2u2
-   663HwUnbbO6g+n3ZFvLfk5ZXWFQaKqIGDnIp6ecQBuHrDY/et/I9VA0Vc
-   DZFcpeFzPsoVs8TjDwmOUagww+h8gb4DlFf2nRxqDzmp+hoXIZUp/6Tcz
-   //S/ovEClJSBDP2ETzZ2BJYPynwoqnaKbu5OLnpBhdMNwrnR7lkNbiPPY
-   Q==;
-X-CSE-ConnectionGUID: usTPGGUcTseB1Tq79WRRtg==
-X-CSE-MsgGUID: CmLNsXrkR3CjoxA5UeYDQA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="86109686"
-X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
-   d="scan'208";a="86109686"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 13:14:11 -0700
-X-CSE-ConnectionGUID: AXhwVh04RBOwotUDZEP6Kw==
-X-CSE-MsgGUID: WEL3bLXtQZKCcEqSV3OuxQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
-   d="scan'208";a="219588789"
-Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 13:14:10 -0700
-Date: Tue, 24 Mar 2026 13:14:04 -0700
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-	Nikolay Borisov <nik.borisov@suse.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	David Kaplan <david.kaplan@amd.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Laight <david.laight.linux@gmail.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	David Ahern <dsahern@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org, Asit Mallick <asit.k.mallick@intel.com>,
-	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v7 07/10] x86/vmscape: Use static_call() for predictor
- flush
-Message-ID: <20260324201404.pi45c5anflqdrkgm@desk>
-References: <20260319-vmscape-bhb-v7-0-b76a777a98af@linux.intel.com>
- <20260319-vmscape-bhb-v7-7-b76a777a98af@linux.intel.com>
- <20260319205802.GJ3738786@noisy.programming.kicks-ass.net>
- <20260319213421.br6na4dulrjm6eke@desk>
- <20260319214409.GL3738786@noisy.programming.kicks-ass.net>
- <20260320062206.bdrnmnvho6lhmejw@desk>
- <20260320090340.GN3738786@noisy.programming.kicks-ass.net>
- <20260320113134.GAab0wFqe-hewZc175@fat_crate.local>
- <20260320182308.ahynqzuswlv34wf6@desk>
- <20260324200026.GCacLtWmhGVOmz832E@fat_crate.local>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ruc37CfH"
+Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-2c0bb213b16so10279328eec.0
+        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 13:21:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774383694; x=1774988494; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=YekaUXXUymXZs/3g2Vp+S0NZBc707UWzjqqiXrrBWgU=;
+        b=Ruc37CfHS+B/+pv/hj0IEwYVhZcTJF25K97i2ijyp8k8T9wgtOHEJWnhGA6LPFioKB
+         5ApXWklgKgV3osabwatO7QT/FkFdJw5JXH9gzmfPHPv+7992PyU4seEQsuxiqmm6O3Ny
+         ozGbPB3w/MTOHQ7qKzOtVkayWp3vWo5xg+SWH7kLpPJxXZjJGXmgc9J+kzgEg0m9pNu+
+         uhOCmBEAGSsXwAh+EQSXcYeoPOLCipDYV2ljD6A/z7iBgmqzpf2dAWVmIRx0KRd3fJ+j
+         rcFsBooHKMuL7kaVk1z0tZLBuQLMHJ839PuTmWLa11xePpcRHP6Wjff642o7z3nhp6wp
+         mbqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774383694; x=1774988494;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YekaUXXUymXZs/3g2Vp+S0NZBc707UWzjqqiXrrBWgU=;
+        b=rRjYNyAqLANFAWEifIiUP1INRS4Tjw7nbGXJM4LGbiRpeBBj+CnERL84Z16V9Fz8ur
+         OmwDoITVmT8nJ5Iv6DUQ9CbMQ31lDGeYRrY0xk7s1i39EJO8TqjIaJxyMTmOMiGDt9mX
+         JqHhwwMpf4kt5cya8WFNpnsV85JwX1i+ySry6dEGqzBOC/M3upHFw+joYQj2tmlWG1as
+         BJ5ty0cLHOkGBnHWUCXFh/Op8R7lTuInO/WePQEO82u0+wZxBd/ds3WVntjdB5I7Mf2p
+         QJzpt/3CdK7jYtaKeYnXaztsuhjStuCjniH1KcQyJ2bE7fpGwHhZDhiauWJiS66QVdaG
+         RIdQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWWbPIGFNVDFBDHYb7NehPFMKQInBcX7rc8qKb/2PS1YzvoUktsOLCoQVEhJshVhLVVEno=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCqSHSat1GiNkQAa7WmulBOrdZLVBu/cgc54Fsb+FaJWjaejVy
+	VsKFHHCZxeun/+3tbR47NoNV6Ip8ciG/3HZlbK4slIYZTR67ViSae8Z4
+X-Gm-Gg: ATEYQzzi0KPbnT6dB3eQcKQQJmK8nvQ9ovnWLRItXfjCOZgD/mG7EuaCCwNPoB4ouRf
+	C5J0KzTq4EAErpLoVU3rAcQ2S1TW4/RcTFFoTclXzd4siAKRBU97DzKspx+Q29smkdZDP7GmXpe
+	KXdzhbIf1xOzwcLqhQwMXNklEr3GZ44eFeB0f1r6hwuyBGOqmvlNKTfNNMIid9vRcVF9aAm8ggr
+	S3dPGNb01x0zRfxDsXW96cCq6o4HMnRjFRpHxc5nhNd65icL0vfLIam8t+edWZxEefvioPkrjZ1
+	ARAoJRfCDwIeryJTwQzdGhGh/u4bgT6WkMpg/8+CP2BP5cEEdlF4a7F6vdy+Q4avP0mVkOk6PgH
+	ARHbp/D8D6xQASw0rgTqbYRaIoKZW4l6XB/RMYzL9+thbb91PmyxPb2HkAFDAoiS5zE96EIGoX2
+	fTnjx+Al/BT+2bN2iH2kJ0uRMP1YOIMkmSJWE39veM2hoD91Bi8PBB55CCDprlrhOU1gbCAsWev
+	5R8Pw==
+X-Received: by 2002:a05:7301:4e0b:b0:2c1:4b1d:a472 with SMTP id 5a478bee46e88-2c15d3fb1e1mr395106eec.29.1774383693468;
+        Tue, 24 Mar 2026 13:21:33 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:41fb:8dcd:b77b:d6ce? ([2620:10d:c090:500::bed7])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b2ce04asm16295986eec.21.2026.03.24.13.21.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Mar 2026 13:21:32 -0700 (PDT)
+Message-ID: <1de9261a98d6e4041ad2e99c745fd6be0831a492.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v6 1/2] bpf: Support pointer param types via
+ SCALAR_VALUE for trampolines
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Slava Imameev <slava.imameev@crowdstrike.com>, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, 	jolsa@kernel.org, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, 	pabeni@redhat.com, horms@kernel.org,
+ shuah@kernel.org, 	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, 	linux-kselftest@vger.kernel.org,
+ linux-open-source@crowdstrike.com
+Date: Tue, 24 Mar 2026 13:21:29 -0700
+In-Reply-To: <20260314082127.7939-2-slava.imameev@crowdstrike.com>
+References: <20260314082127.7939-1-slava.imameev@crowdstrike.com>
+	 <20260314082127.7939-2-slava.imameev@crowdstrike.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260324200026.GCacLtWmhGVOmz832E@fat_crate.local>
 
-On Tue, Mar 24, 2026 at 09:00:26PM +0100, Borislav Petkov wrote:
-> On Fri, Mar 20, 2026 at 11:23:08AM -0700, Pawan Gupta wrote:
-> > I am curious, what problems do you anticipate? There are nearly 50
-> 
-> What's easier when you need to change the underlying implementation: unexport
-> the static key and touch a bunch of places in the process or simply change the
-> accessor's body and all the callers don't notice a thing?
+On Sat, 2026-03-14 at 19:21 +1100, Slava Imameev wrote:
+> Add BPF verifier support for single- and multi-level pointer
+> parameters and return values in BPF trampolines by treating these
+> parameters as SCALAR_VALUE.
+>=20
+> This extends the existing support for int and void pointers that are
+> already treated as SCALAR_VALUE.
+>=20
+> This provides consistent logic for single and multi-level pointers:
+> if a type is treated as SCALAR for a single-level pointer, the same
+> applies to multi-level pointers. The exception is pointer-to-struct,
+> which is currently PTR_TO_BTF_ID for single-level but treated as
+> scalar for multi-level pointers since the verifier lacks context
+> to infer the size of target memory regions.
+>=20
+> Safety is ensured by existing BTF verification, which rejects invalid
+> pointer types at the BTF verification stage.
+>=20
+> Signed-off-by: Slava Imameev <slava.imameev@crowdstrike.com>
+> ---
 
-I see. I switched to accessor in v8 I sent today.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+
+[...]
