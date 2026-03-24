@@ -1,91 +1,90 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD6F2393DD1;
-	Tue, 24 Mar 2026 11:27:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C643A3EF0B6;
+	Tue, 24 Mar 2026 11:39:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774351648; cv=none; b=CJWA1obX4bYB5JAlSDUABSyw8JCTp1rLG8qOt6sYef6b6KeQfBrQAh4e8n5HXtBgLivH9hmyIkp0dVnMW2jy27Xb84MuJFZIy9RrRdIUqG8IQNLg7PZrTs9zWbef/3oTN0eYAjhNGRqnfxjlzWriFCWjdeiypM6Q+MY8BJKg5fM=
+	t=1774352381; cv=none; b=bWB8xXRFWQL0gInkQNXNRYrojvIHiX9wwKn+TZtTlgMGF1nQ6VISKF6YgfSM+63YIqsv6lUSFPhMjWhCLHcrMFVEzmoksCAW2Kn3WcLg8rQuBpUUOQ0Py956tEcQFQXBNV06/JJ97RIkiqZ7WgkoTzyvEbv3JFfVAGqCA7t6PU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774351648; c=relaxed/simple;
-	bh=I8azb9YL+U6tmlmFYi8bALQhQcq5JRRjQA8cLgQ42Dg=;
+	s=arc-20240116; t=1774352381; c=relaxed/simple;
+	bh=UknkrSuNDYtTn/8MeNcb6hXJiGQu0qdkPOIQvTQmQ2I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ei+ea/2+vZ9TfLkNMf412p86djLkgU3Es7z2BbFFTe5Zb2TMRlXdj4XokKzXGHRW5U1VkKmyrzoxeDOXyQko7rUa6JWqeVC45Ypw3GCvGvPXb0cNz3SW568MGdKenX03wwDxbUDXcu2z1gshnZcxq6IHescoWjxXYwLWGcryWRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oSGfSh2Z; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=cY72cCSg/ES/VQQ98/cWlEbzZXAE3sQ0WAKV6G56P9h+fd7Y9pviS4TMD0yGTZm1JBIFAYSJeNJN2hv+xA3aU4mNXgzvx5LU7UAGrFgbcNZt+4X1v7sFMKKZjuhaOEV1In6xL4+ayzOVIn3pATBh2bV6KBjLny3869wtQMMCI4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=olXoGqqK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oSGfSh2Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10346C19424;
-	Tue, 24 Mar 2026 11:27:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="olXoGqqK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBDDDC2BCB2;
+	Tue, 24 Mar 2026 11:39:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774351648;
-	bh=I8azb9YL+U6tmlmFYi8bALQhQcq5JRRjQA8cLgQ42Dg=;
+	s=k20201202; t=1774352381;
+	bh=UknkrSuNDYtTn/8MeNcb6hXJiGQu0qdkPOIQvTQmQ2I=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oSGfSh2ZWungMvFGVdRptl/ZSREaBK1N9U5lCMO09JRFQ2w5gzK066O79PcCgeDSQ
-	 a9mW4HdHVkzKsfTakF2C+h17tOV2+HdoOViw8W+QmIQSwyjaLdxrN/VdEdHVu8MWi8
-	 6fRJJGHJD+rWq4P9h+YILIzYeuYPbXvyQKTstQjIJocfOQ8icaKC4hnRvpBK1lSVXC
-	 ilNFNukWhnRPQ9zMusjS2bYxWVTELBdLb1oWsggftQMKdyTRq2WRSxAaw7FtCQgFZB
-	 R9OpapDeOFzK0/NDZXr+6dQ1gdk9W8XHcFnfKGb4BQJvVfmqv9kDq3F2UZ8lnEhu58
-	 ju6o/VyxUhiDw==
-Date: Tue, 24 Mar 2026 12:27:25 +0100
-From: Frederic Weisbecker <frederic@kernel.org>
-To: Boqun Feng <boqun@kernel.org>
-Cc: Joel Fernandes <joelagnelf@nvidia.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	neeraj.iitr10@gmail.com, urezki@gmail.com, boqun.feng@gmail.com,
-	rcu@vger.kernel.org, Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrea Righi <arighi@nvidia.com>, Zqiang <qiang.zhang@linux.dev>
-Subject: Re: [PATCH v2] rcu: Use an intermediate irq_work to start
- process_srcu()
-Message-ID: <acJ1HRXomQhbTN4_@localhost.localdomain>
-References: <ab2yd35rm6OgZUmb@gpd4>
- <20260320222916.19987-1-boqun@kernel.org>
+	b=olXoGqqKINrHT9MBi6UPkYfU0ZKw58C6sHbsrU3gtf4636xlcN++qk0VzQMXWxDWR
+	 RjmJ6XKhs+g0WIzxddkigtIvUu+JTdZJmWQpVScLIGjGk0mgOeCa+oLzslnceDcKaG
+	 XXMNYxhQZ4u0C2UbNsSUt6nVjTWuayrXcjW28BiZtmw09XeLaoHQPh8+CSoYBV3J1F
+	 ceqOX7ceZiuusH8+vqKDrtdVJRVMM5uTfwyA3Yrf1xnC7RPx00LjSDTHzcok7q9KoA
+	 aKiz3rbo7ie/MbZ/8nW8jnV0gjc+LVYjGUP16XWI8MdzgJtY6FED24yR2nsYTR6sCz
+	 8YBc+94F/v0Rw==
+Date: Tue, 24 Mar 2026 07:39:39 -0400
+From: Sasha Levin <sashal@kernel.org>
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Petr Mladek <pmladek@suse.com>, Alexei Starovoitov <ast@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, David Gow <davidgow@google.com>,
+	Kees Cook <kees@kernel.org>, Greg KH <gregkh@linuxfoundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>, Helge Deller <deller@gmx.de>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Juergen Gross <jgross@suse.com>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Alexey Dobriyan <adobriyan@gmail.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Petr Pavlu <petr.pavlu@suse.com>, x86@kernel.org,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-modules@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH 0/2] kallsyms: show typed function parameters in
+ oops/WARN dumps
+Message-ID: <acJ3-2o0yxsFWwGJ@laps>
+References: <20260323164858.1939248-1-sashal@kernel.org>
+ <acJR51EAjn-7EOPm@krava>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260320222916.19987-1-boqun@kernel.org>
+In-Reply-To: <acJR51EAjn-7EOPm@krava>
 
-Le Fri, Mar 20, 2026 at 03:29:16PM -0700, Boqun Feng a écrit :
-> Since commit c27cea4416a3 ("rcu: Re-implement RCU Tasks Trace in terms
-> of SRCU-fast") we switched to SRCU in BPF. However as BPF instrument can
-> happen basically everywhere (including where a scheduler lock is held),
-> call_srcu() now needs to avoid acquiring scheduler lock because
-> otherwise it could cause deadlock [1]. Fix this by following what the
-> previous RCU Tasks Trace did: using an irq_work to delay the queuing of
-> the work to start process_srcu().
-> 
-> [boqun: Apply Joel's feedback]
-> [boqun: Apply Andrea's test feedback]
-> 
-> Reported-by: Andrea Righi <arighi@nvidia.com>
-> Closes: https://lore.kernel.org/all/abjzvz_tL_siV17s@gpd4/
-> Fixes: commit c27cea4416a3 ("rcu: Re-implement RCU Tasks Trace in terms of SRCU-fast")
-> Link: https://lore.kernel.org/rcu/3c4c5a29-24ea-492d-aeee-e0d9605b4183@nvidia.com/ [1]
-> Suggested-by: Zqiang <qiang.zhang@linux.dev>
-> Tested-by: Andrea Righi <arighi@nvidia.com>
-> Signed-off-by: Boqun Feng <boqun@kernel.org>
+On Tue, Mar 24, 2026 at 09:57:11AM +0100, Jiri Olsa wrote:
+>On Mon, Mar 23, 2026 at 12:48:55PM -0400, Sasha Levin wrote:
+>> Building on the lineinfo series, this adds typed function parameter
+>
+>hi,
+>could you please specify the exact tree/commit and point to the
+>series this patchset is based on?
 
-I have the feeling that this problem should be solved at the BPF
-level. Tracepoints can fire at any time, in that sense they are like NMIs,
-and NMIs shouldn't acquire locks, let alone call call_rcu_*()
+Yup, sorry, I should have noted that. This series is based on Andrew Morton's
+mm-nonmm-unstable branch (git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+mm-nonmm-unstable) since he took the base lineinfo patches and these build on
+code adjacent to it.
 
-BPF should arrange for delaying such operations to more appropriate contexts.
-
-I understand this is a regression trigerred by an RCU change but to me it
-rather reveals a hidden design issue rather than an API breakage.
-
-Thanks.
+There's no direct dependency between the two, but they touch the same parts of
+the code.
 
 -- 
-Frederic Weisbecker
-SUSE Labs
+Thanks,
+Sasha
