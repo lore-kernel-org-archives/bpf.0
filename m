@@ -1,78 +1,126 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0925E3502B8
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 09:42:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAF2638C43D;
+	Tue, 24 Mar 2026 09:42:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774345361; cv=none; b=SLd/iIYAzhiJ2aDfwju5+h8ndE4RaBwyOFWxh1QTfnLwkqEFDDfvBh+jsZHTpK4+5ebQLQDFSm0bjM2tSlLaspwvfk102giv8RgBdtHZr0qch7DUEUQU7tgYJxeY/lxQfJvVM6agWtQguEneERid7nYRQziKGkP4MaCFwmhEmJQ=
+	t=1774345369; cv=none; b=rzIpFpx7qiqh8YtihwBBKnqbokXGPd3I2dw3FrSFDPosRfNld7JJ0eHKAxx20qYUjiHN2xyT+6NlrFmPn/TyrXUv7HxtarldVBOBhGpGUKdgit8oD5r2lvxL5AMBHOocYqn6T+5uTbyBa2JbNFKykjWQLBiVWQPXP3t+8Zhw8t0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774345361; c=relaxed/simple;
-	bh=mw51Y/ppZX++/P8IPt+DaSPiMBccEE9fSs97az1KnjE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=e4jZw+74+l6B8dc3uTBeRUTvc1Y3RY4ueiLR04GzNAbhL4CVLAs6EB6BfKbKWIB1Y5V1qcXMLvks4u4k0sR3v0ru9IDA4idiUAU/gu0KcT8qaifDoKUJoktekZkJpBZ8QEXx7R1+3lDqT3iT4gUWfPlXI5qeKWtm7mHUVsLWYJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [209.85.210.170])
-	by gateway (Coremail) with SMTP id _____8Cx76uNXMJplSMeAA--.27114S3;
-	Tue, 24 Mar 2026 17:42:38 +0800 (CST)
-Received: from mail-pf1-f170.google.com (unknown [209.85.210.170])
-	by front1 (Coremail) with SMTP id qMiowJDxhcCMXMJp+RtcAA--.28804S2;
-	Tue, 24 Mar 2026 17:42:37 +0800 (CST)
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-82a646c96bdso4084484b3a.2
-        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 02:42:37 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUCJtIKmym5S55jlIum7dTwz3zrd88HxpjLXarnTNWKQFYTsWyUp1sGXninP84v1EggNm4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxfRfoZlgos2zdO9H89+oclrm4Ibyt6dvRfCQKWktu5j2QpngJF
-	nzlAJacBLvoY6V0cdK0qx22JEia0Bn9Zds+e8tURE1eYvKBMHCIfmAbKHWHmqG6vSMmtYV3R8MZ
-	wP/Fo7wkcNBU27o87M3up+CPbFWPenHQTmpHOXC3dIQ==
-X-Received: by 2002:a53:d911:0:b0:64e:8748:38a2 with SMTP id
- 956f58d0204a3-64eaa833467mr11980889d50.78.1774344805952; Tue, 24 Mar 2026
- 02:33:25 -0700 (PDT)
+	s=arc-20240116; t=1774345369; c=relaxed/simple;
+	bh=cOmymRh6eHE0j2p33Q1KgMqAmDq3K9jgiyb191hhoCQ=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=m/V6/lWrcJMWSLrqxleWIEDu5+I9tpi82UV/wJ6QTwRiEun/BkEuFiXfhL/nsauN6lZl1Y5jJf++W2cwNMS5QOc7dDVVKE7YrNT2WyhHkEqZNwFVGojcL8a2BPK/AV+XTkyDTCfxelHIYOGf1U3I5Cq6MWWXx4Xzz3pPrUZaUqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZZ68vgoM; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZZ68vgoM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32447C19424;
+	Tue, 24 Mar 2026 09:42:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774345369;
+	bh=cOmymRh6eHE0j2p33Q1KgMqAmDq3K9jgiyb191hhoCQ=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=ZZ68vgoM8oxRKP8sl1X5+A594Pj2IIh6YlFXdaI1NWbGKnxGbIULMfEUG/bHhi+WZ
+	 OarieXmuSLl+YpoemtxDXcb5Cl4eGCbSqTKC51pS6eRaxYCf/ux1c0e7KX+vMZsL+l
+	 aXvSFwfTvWzE8bOfZgT66JM0uFOgExQkEtBk9cOzZP1iE+NJoneO8AQ+eQ7rBuC2fb
+	 ha4G6yityK1iaE2zP3s+4hcpXVdClUYRJiuM7zWCLX2m5Nitp3nUUPwdUGShmeVAIm
+	 xmv6Hm4LXmEL1K0TomaFTNgd9H4ENN+SO2gSCWk5Ie4DoYvyv1QPVp2VxBzaFNrLOh
+	 kGdukgJMUOmTQ==
+Content-Type: multipart/mixed; boundary="===============3029566825714952226=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260324090106.13527-1-yangtiezhu@loongson.cn> <20260324090106.13527-7-yangtiezhu@loongson.cn>
+Message-Id: <5a2cfd2c3dddef83de46ea9b0f02bb5b90c29937c9b9d348542838fde1e29a93@mail.kernel.org>
 In-Reply-To: <20260324090106.13527-7-yangtiezhu@loongson.cn>
-From: WANG Rui <wangrui@loongson.cn>
-Date: Tue, 24 Mar 2026 17:33:15 +0800
-X-Gmail-Original-Message-ID: <CAHirt9gFWm+MKYFuz=936bODjmyeONNtmCmwfo=6RcVKixjiWQ@mail.gmail.com>
-X-Gm-Features: AaiRm518iICwgwOODgittoMslb9abb3rZMwPuj8NnsMq8NgfAnSheiAHWBmzh30
-Message-ID: <CAHirt9gFWm+MKYFuz=936bODjmyeONNtmCmwfo=6RcVKixjiWQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 6/7] LoongArch: BPF: Add load-acquire and
- store-release instructions
-To: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: loongarch@lists.linux.dev, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-CM-TRANSID:qMiowJDxhcCMXMJp+RtcAA--.28804S2
-X-CM-SenderInfo: pzdqw2txl6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-	ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
-	BjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
-	xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
-	j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxV
-	AFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x02
-	67AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-	ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E
-	87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2
-	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r17MIIYrxkI7VAKI48JMIIF0x
-	vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE
-	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
-	kF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07UE-erUUUUU=
+References: <20260324090106.13527-7-yangtiezhu@loongson.cn>
+Subject: Re: [RFC PATCH 6/7] LoongArch: BPF: Add load-acquire and store-release instructions
+From: bot+bpf-ci@kernel.org
+To: yangtiezhu@loongson.cn,loongarch@lists.linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 24 Mar 2026 09:42:49 +0000 (UTC)
 
-On Tue, Mar 24, 2026 at 5:12=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongson.cn=
-> wrote:
->
-> Use the native instructions LLACQ.{W/D} and SCREL.{W/D} to support the BP=
-F
-> load-acquire (BPF_LOAD_ACQ) and store-release (BPF_STORE_REL) instruction=
-s
-> in the JIT compiler.
->
+--===============3029566825714952226==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-LLACQ/SCREL are LL/SC primitives rather than plain
-load-acquire/store-release instructions.
+> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+> index c9a32f124f5e..d1e9866911dd 100644
+> --- a/arch/loongarch/net/bpf_jit.c
+> +++ b/arch/loongarch/net/bpf_jit.c
 
+[ ... ]
+
+> +	/* store_release(dst_reg + off16, src_reg) */
+> +	case BPF_STORE_REL:
+> +		switch (BPF_SIZE(insn->code)) {
+
+[ ... ]
+
+> +		case BPF_W:
+> +			if (cpu_has_llacq_screl) {
+> +				move_imm(ctx, t1, off, false);
+> +				emit_insn(ctx, addd, t2, dst, t1);
+> +				emit_insn(ctx, screlw, src, t2);
+
+SCREL.W is a store-conditional instruction, not a plain store-release.
+It checks LLbit and then overwrites rd with the success indicator
+(1 or 0), which would clobber the BPF source register.
+
+Looking at emit_atomic_rmw() in the same file for BPF_CMPXCHG, the
+existing LL/SC usage carefully avoids this:
+
+    move_reg(ctx, t3, src);
+    emit_insn(ctx, scw, t3, t1, 0);
+    emit_insn(ctx, beq, t3, LOONGARCH_GPR_ZERO, -6);
+
+Here SC.W is applied to the temp register t3 rather than the BPF
+register, and t3 is then checked for 0 to retry the loop. This
+confirms that SC-family instructions clobber their rd operand on
+LoongArch.
+
+Is SCREL.W/D the right instruction for a standalone store-release?
+The other architectures use plain stores with ordering guarantees
+for BPF_STORE_REL:
+
+  - arm64 uses STLR (a true store-release, not store-conditional)
+  - x86 uses a regular MOV (x86 stores have release semantics)
+  - riscv uses fence + store
+  - powerpc uses lwsync + store
+
+This also appears to be the root cause of the test failure noted in
+the cover letter, where "store-release, 64-bit @unpriv" returns 1
+instead of the expected 0 -- the value 1 is the SCREL success
+indicator that replaced the original register contents.
+
+> +			} else {
+> +				pr_err_once("bpf-jit: screl.w instruction is not supported\n");
+> +				return -EINVAL;
+> +			}
+> +			break;
+> +		case BPF_DW:
+> +			if (cpu_has_llacq_screl) {
+> +				move_imm(ctx, t1, off, false);
+> +				emit_insn(ctx, addd, t2, dst, t1);
+> +				emit_insn(ctx, screld, src, t2);
+
+Same issue here with SCREL.D -- src will be clobbered.
+
+> +			} else {
+> +				pr_err_once("bpf-jit: screl.d instruction is not supported\n");
+> +				return -EINVAL;
+> +			}
+> +			break;
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23481783544
+--===============3029566825714952226==--
