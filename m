@@ -1,163 +1,121 @@
-Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD60939B96F
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 03:26:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97C8170818;
+	Tue, 24 Mar 2026 04:05:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774322808; cv=none; b=hrpMQxz4aqFg1/AN5YNeiB+BqjIj7cA4+yN+DRG8hhWVZ6QiyxA3YqoaoHI552eVETncpxKwC3Dl7HfZvG6/OLUK8C7T+v5kxJjOiJ0B9nx4bVm0pZVpwJlp3Y5AcC1w0pVbP57pCNJx3j7N2FcXxDZ4lPBI5PH5k3KUnmqF4LA=
+	t=1774325141; cv=none; b=PIJCB0v9UEK0HG+knsSkYZFfL/7sjutCURTIt5rk5dVHmABBF4GLebmaKThsoXGvv1nA2cCwDxALZpxj/63bKQ96YIG+Q8qprOmomv5+Hsqa/icL1D9XYb/b09axuzddXvr/EIuD4yQmQILrobgd2ILUyZXkEezxzvUlC7OKdzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774322808; c=relaxed/simple;
-	bh=q4MaonmwIjRlJRf+o2DT8bA/i1vVInbGkcBBX5LlBSs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uJUAXER00Cr9ufi95HJgvzTe+y/ONpnQn3n+NujegMhFDHSn7j9+4sB3ag7EB7HLYFdbzat+MvvCWKfEfbHpOYGihoE4IVosLvewqUocaKJKSS81TBmvq7D8sRLc5HXCI42oXTxid0Fg1UcbXqUCPHjY7BVHQt/rlYwUAOH6osY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=209.97.182.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [183.157.161.208])
-	by mtasvr (Coremail) with SMTP id _____wC3Y6VUBMJpP9RLAA--.10620S3;
-	Tue, 24 Mar 2026 11:26:12 +0800 (CST)
-Received: from [0.0.0.0] (unknown [183.157.161.208])
-	by mail-app2 (Coremail) with SMTP id zC_KCgBH2tBKBMJpA6caAA--.12689S3;
-	Tue, 24 Mar 2026 11:26:02 +0800 (CST)
-Message-ID: <db2474d6-d61d-49a4-92ae-1b1dc50edc05@zju.edu.cn>
-Date: Tue, 24 Mar 2026 11:26:01 +0800
+	s=arc-20240116; t=1774325141; c=relaxed/simple;
+	bh=mbDDm1zReRj3CD4GxvHAUMT8iSVZINzYULyqBvGF4F8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tUcpgea6qeoS+N++J9WrnuoGzNx2x0cqK9KF4oIOPUWDOeZ3Q0ZvkJSxsD/vlD+1mcYVwgv8xNZ3IuMsfRu3+peFJvEBvbENmJB4uFXsOPsFG2KDXFhozYSWhiICfDeK7Iv/BUnZ8eKY8TBhfVJmqHEssTJAdCTg41WFeqkVSHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PLORA2Le; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PLORA2Le"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 391C9C19424;
+	Tue, 24 Mar 2026 04:05:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774325141;
+	bh=mbDDm1zReRj3CD4GxvHAUMT8iSVZINzYULyqBvGF4F8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=PLORA2LeifuSU3BpnoFHhnRKOmWDiLWeBQw0+1bc0EvXehVF24a1A1D5jWSif7ykQ
+	 ADGoPFtXBSyr6zRDdtXakyAt8U8ZsbHzVxsHtT4jrCe712dXeZ1lWORwQQ/Yy04np9
+	 egqsqEC4Luy+rdf7Zic3MRsSOGiPj9kOCVtgOALXpGl9hsFG+5pq8no6XNX5PXsfly
+	 gfcFXzfyKFmmdC3vP+kU2YDye5//BF219CGx7YnFgQ6wjm+epbCww6FGoQxU3VWUy1
+	 aZ5LFzB1nHXZ+N96FUx+Fdob+Zokniwzt98oYaCp9CaZPZ960PODQh1ZqbFp652aaI
+	 z4G9xr74cxVCg==
+From: Kees Cook <kees@kernel.org>
+To: Andrii Nakryiko <andrii@kernel.org>
+Cc: Kees Cook <kees@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH] libbpf: Replace strncpy() with strnlen()+memcpy() in skel_map_create()
+Date: Mon, 23 Mar 2026 21:05:39 -0700
+Message-Id: <20260324040535.work.851-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v3 3/3] bpf: Fix incorrect subprog ID in dumped
- bpf_pseudo_call instructions
-To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, tangyazhou518@outlook.com,
- shenghaoyuan0928@163.com, ziye@zju.edu.cn,
- Puranjay Mohan <puranjay@kernel.org>
-References: <20260323122254.98540-1-tangyazhou@zju.edu.cn>
- <20260323122254.98540-4-tangyazhou@zju.edu.cn>
- <DHA941F6HVW3.RNGBXB3DVTC6@etsalapatis.com>
-Content-Language: en-US
-From: Yazhou Tang <tangyazhou@zju.edu.cn>
-In-Reply-To: <DHA941F6HVW3.RNGBXB3DVTC6@etsalapatis.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:zC_KCgBH2tBKBMJpA6caAA--.12689S3
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBg8ACmnBl4sQsAAAsX
-X-CM-DELIVERINFO: =?B?NOBgmAXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9DbWWsqOl+/U1tRr0n6/5vnIVJOwrBkxeHHin0zPkvIQ4rntyzu6seaOZy5RSnBr0erw
-	DKObZXFOYNdCJhmZ4E/LWSfXWsPrHvI9TBnq1GS5oTTQzTDzfVZ3YDyUMgG9Dg==
-X-Coremail-Antispam: 1Uk129KBj93XoWxXF1Uur18Zw4ktw1rZF18WFX_yoWrJw4kpF
-	WkWFyfKF1DJFW7CFsrZanxuay5Ka97X347Wr15u343C3WUWFn7Gr4UKr1ruFZ0krn7Cr1I
-	vr4qva9I9w15JFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
-	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAF
-	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8c
-	xan2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8C
-	rVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXw
-	CIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x02
-	67AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
-	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUbG2
-	NtUUUUU==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2789; i=kees@kernel.org; h=from:subject:message-id; bh=mbDDm1zReRj3CD4GxvHAUMT8iSVZINzYULyqBvGF4F8=; b=owGbwMvMwCVmps19z/KJym7G02pJDJmHeCcbul3+k8kw6Udlp9qGtcyNdlYnf+xOFNEVEfv2u SuvP/p3RwkLgxgXg6yYIkuQnXuci8fb9nD3uYowc1iZQIYwcHEKwETMVRm++/nuKt4rfrPxRs/D zYKKocePLCu8z2r5Ze6L2smi87OkGf4XnnKMqTh/aYHJr//Kn5S/RFgHm0+ttmha9L/lQ7+J3D5 +AA==
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-Hi Emil,
+Replace the deprecated[1] strncpy() with strnlen() on the source
+followed by memcpy(). Normally strscpy() would be used in this case,
+but skel_internal.h is shared between kernel and userspace tools, and
+strscpy() is not available in the userspace build context.
 
-Thanks for your review and the tag.
+The source map_name is a NUL-terminated C string (the only caller
+passes a 12 character string literal). The destination attr.map_name is
+char[BPF_OBJ_NAME_LEN] (16 bytes) in union bpf_attr, passed to the bpf()
+syscall. The kernel's bpf_obj_name_cpy() requires a NUL terminator within
+the 16-byte field, rejecting names that use all 16 bytes. Valid names
+are therefore at most 15 characters.
 
-Since you're looking at this patch, I'd also like to get your thoughts 
-on the question I left for Puranjay below the "---" line:
+The attr is pre-zeroed with memset() at the top of the function,
+so the byte at position 15 is always NUL. The copy is bounded to
+sizeof(attr.map_name) - 1 (15 bytes) to guarantee NUL-termination is
+preserved. This is safe because the kernel would reject a 16-byte
+unterminated name anyway, and the only in-tree caller passes
+"__loader.map" (12 characters).
 
-Do you think it's worth adding a verifier warning log when the 
-truncation actually occurs in jit_subprogs(), or is the inline code 
-comment sufficient?
+While the original strncpy() would have copied a full 16 bytes from an
+overlong name (producing an unterminated field that the syscall rejects),
+but this wasn't a reachable state. This replacement will instead always
+truncate to 15 bytes and keeps the NUL terminator, which should have no
+behavioral changes with the present code and avoids potential issues
+with future over-long string literals.
 
-Thanks,
+Link: https://github.com/KSPP/linux/issues/90 [1]
+Signed-off-by: Kees Cook <kees@kernel.org>
+---
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Song Liu <song@kernel.org>
+Cc: Yonghong Song <yonghong.song@linux.dev>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: Stanislav Fomichev <sdf@fomichev.me>
+Cc: Hao Luo <haoluo@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: <bpf@vger.kernel.org>
+---
+ tools/lib/bpf/skel_internal.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Yazhou
-
-On 3/23/26 23:02, Emil Tsalapatis wrote:
-> On Mon Mar 23, 2026 at 8:22 AM EDT, Yazhou Tang wrote:
->> From: Yazhou Tang <tangyazhou518@outlook.com>
->>
->> In jit_subprogs(), restoring bpf_pseudo_call instructions truncates
->> the 32-bit call_imm into the 16-bit insn->off. For large BPF programs
->> (e.g., offsets > 32767), this silent truncation causes find_subprog()
->> to return an incorrect subprog ID, which is then stored in insn->imm.
->>
->> Consequently, "bpftool prog dump xlated" reads the corrupted insn->imm,
->> fails to resolve the subprogram name, and incorrectly displays a raw
->> kernel pointer.
->>
->> For example, dumping the xlated bytecode of the JIT-loaded selftest
->> introduced in patch 2/3 shows:
->>
->> Before this patch (with call_imm > 32767):
->>    4: (85) call pc+2#bpf_prog_115951674716e036_padding_subprog
->>    5: (85) call pc+3395#0xffffffff814aed4e
->>
->> After this patch:
->>    4: (85) call pc+2#bpf_prog_115951674716e036_padding_subprog
->>    5: (85) call pc+3395#bpf_prog_5dccd3f669bbe4e4_target_subprog
->>
->> This patch fixes the issue by passing the un-truncated 32-bit
->> env->insn_aux_data[i].call_imm directly to find_subprog().
->>
->> Note that the assignment to insn->off is retained. Although it still
->> truncates for large jumps, it remains correct for the vast majority
->> of BPF programs where the offset fits within s16 bounds. Keeping it
->> ensures backward compatibility for existing user-space tools that rely
->> on insn->off to display the relative offset. A comment is added to
->> explicitly clarify this truncation behavior.
->>
-> 
-> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-> 
->> Suggested-by: Puranjay Mohan <puranjay@kernel.org>
->> Fixes: 7105e828c087 ("bpf: allow for correlation of maps and helpers in dump")
->> Co-developed-by: Tianci Cao <ziye@zju.edu.cn>
->> Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
->> Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
->> Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
->> Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
->> ---
->> Hi Puranjay,
->>
->> As you mentioned in the last iteration, this still leaves insn->off wrong
->> but is generally fine. To clarify this for future readers, I have added
->> an inline comment explaining the truncation.
->>
->> I also debated whether to add a warning log when the truncation actually occurs.
->> However, since the program will load and run perfectly fine after this fix,
->> I held off on adding it to avoid unnecessary log spam.
->>
->> Do you think a warning log is worth adding here, or is the code comment sufficient?
->>
->>   kernel/bpf/verifier.c | 6 +++++-
->>   1 file changed, 5 insertions(+), 1 deletion(-)
->>
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 809ac2325dcb..a45a393365b4 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -23027,8 +23027,12 @@ static int jit_subprogs(struct bpf_verifier_env *env)
->>   		}
->>   		if (!bpf_pseudo_call(insn))
->>   			continue;
->> +		/*
->> +		 * Note: If the original insn->imm is out of s16 bounds,
->> +		 * insn->off here will be a truncated value.
->> +		 */
->>   		insn->off = env->insn_aux_data[i].call_imm;
->> -		subprog = find_subprog(env, i + insn->off + 1);
->> +		subprog = find_subprog(env, i + env->insn_aux_data[i].call_imm + 1);
->>   		insn->imm = subprog;
->>   	}
->>   
+diff --git a/tools/lib/bpf/skel_internal.h b/tools/lib/bpf/skel_internal.h
+index 6a8f5c7a02eb..137da935f478 100644
+--- a/tools/lib/bpf/skel_internal.h
++++ b/tools/lib/bpf/skel_internal.h
+@@ -243,7 +243,8 @@ static inline int skel_map_create(enum bpf_map_type map_type,
+ 	attr.excl_prog_hash = (unsigned long) excl_prog_hash;
+ 	attr.excl_prog_hash_size = excl_prog_hash_sz;
+ 
+-	strncpy(attr.map_name, map_name, sizeof(attr.map_name));
++	memcpy(attr.map_name, map_name,
++	       strnlen(map_name, sizeof(attr.map_name) - 1));
+ 	attr.key_size = key_size;
+ 	attr.value_size = value_size;
+ 	attr.max_entries = max_entries;
+-- 
+2.34.1
 
