@@ -1,114 +1,164 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EC443F7E73
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 13:10:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7C57371867;
+	Tue, 24 Mar 2026 13:35:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774357862; cv=none; b=KjGh1WP7apIlKdbE+L+VezYPaYQiW91ZX4I693ARGeFMx2vkk736lseEtakc2+1ThuI/k74UoAoL7JFlMMmH0V3avngysXzQM5WJukb7tRkL0PYlfuAvaa20akKiuiAh9WDlUuLSiKGC4ykjjjC5U+5A3BSL46XGzhWAnG+WL2g=
+	t=1774359352; cv=none; b=QbyFuenCR65LlZpkuN7Y0rhXX+J+b0IGzbZ0KJNnBrITceMtqHB+Caatx00vqtx+En0BFpTnb9I61R1b+RX/eh/E39OSyq534o6lCjm1Ai+QNW/himJjSEGQRY+R6RUaJZKHJTm/F71qcSz8zbYIIixK8/Es7tKzO4nUW5h2YVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774357862; c=relaxed/simple;
-	bh=YCVNfVgIpBzJm2Hd4TTEJx5VB5I3bYj3Ow25o7DzAgo=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=PJvkRImnKuROngz/3ysCysdPpmJsrbKza7O8f65T5lzGG7AcF+Vrh/aMYCQpgNeuGvImAyPxAt4FG0xS7Bon43vLUUrQ64E60y+UbVo1Zqy0cdxheGIUL6ZccSJFE2UpCD1qxSRpfKfk81Q+8WK85du2d3eWRyTRVN1J34qMWIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8CxH6pdjcJpti8eAA--.27064S3;
-	Tue, 24 Mar 2026 21:10:53 +0800 (CST)
-Received: from [10.130.40.83] (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJCx98BcjcJpajVcAA--.31199S3;
-	Tue, 24 Mar 2026 21:10:52 +0800 (CST)
-Subject: Re: [RFC PATCH 6/7] LoongArch: BPF: Add load-acquire and
- store-release instructions
-To: bot+bpf-ci@kernel.org, loongarch@lists.linux.dev, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- martin.lau@kernel.org, eddyz87@gmail.com, yonghong.song@linux.dev,
- clm@meta.com, ihor.solodrai@linux.dev, WANG Rui <wangrui@loongson.cn>
-References: <20260324090106.13527-7-yangtiezhu@loongson.cn>
- <5a2cfd2c3dddef83de46ea9b0f02bb5b90c29937c9b9d348542838fde1e29a93@mail.kernel.org>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <bbb797cd-c6ea-f61c-d99c-66908e4e5f68@loongson.cn>
-Date: Tue, 24 Mar 2026 21:10:51 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1774359352; c=relaxed/simple;
+	bh=vl2OXl2LVtwWCfThahPA38qmIKBgDZZ2FO5uliPOXaQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HeQuvUhqdfFCipWtHT9DBVYRB4WOGanM9K4TMSHoeFqzWjdPw7+GFziA+W/+oPyBnrn1GfVF5DK8Fqw7F+b1iJdfiL2+Gb99LCytCgj8Is1ycDzmVDUesIG5VRK2UBVpy6SdRXWNPF28YTQM4kFxzZBlPVjGozol8fveSMXIuQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=YrOiJ1S4; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="YrOiJ1S4"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 267011476;
+	Tue, 24 Mar 2026 06:35:44 -0700 (PDT)
+Received: from e142334-100.cambridge.arm.com (e142334-100.cambridge.arm.com [10.1.194.63])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B07DA3F836;
+	Tue, 24 Mar 2026 06:35:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1774359350; bh=vl2OXl2LVtwWCfThahPA38qmIKBgDZZ2FO5uliPOXaQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=YrOiJ1S4OX/2cBG3iTjFDWXRB27gOHHkVQ98dP48Z3JlKlbtaQ1trhiRDRbf9SC24
+	 y+TukdXunVA/89hdgTqOvGHZeKIkFVCCFHrZAHSgQH7+9ke1HLl6uOYJL/A6zfvmIt
+	 K4R9I7u2Qs06b/PHODVKGsSTHeB1S3ptLvBx9XgI=
+From: Muhammad Usama Anjum <usama.anjum@arm.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Brendan Jackman <jackmanb@google.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Zi Yan <ziy@nvidia.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Nick Terrell <terrelln@fb.com>,
+	David Sterba <dsterba@suse.com>,
+	Vishal Moola <vishal.moola@gmail.com>,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Ryan.Roberts@arm.com,
+	david.hildenbrand@arm.com
+Cc: Muhammad Usama Anjum <usama.anjum@arm.com>
+Subject: [PATCH v3 0/3] mm: Free contiguous order-0 pages efficiently
+Date: Tue, 24 Mar 2026 13:35:31 +0000
+Message-ID: <20260324133538.497616-1-usama.anjum@arm.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <5a2cfd2c3dddef83de46ea9b0f02bb5b90c29937c9b9d348542838fde1e29a93@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJCx98BcjcJpajVcAA--.31199S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7Kr48Kry5ZF1UAry7Gw1fKrX_yoW8Ar45pF
-	ZFy3Z5CrWvgryDZF97Ja18ZFyxtF4fKF13WF1UJrWSgr15Wr1SqFn5K3WYva98Gw4kCr40
-	9ryYywnIvFyDZacCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-	AVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-	8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
-	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67
-	AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
-	rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
-	v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
-	JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUxYiiDU
-	UUU
 
-On 2026/3/24 下午5:42, bot+bpf-ci@kernel.org wrote:
->> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
->> index c9a32f124f5e..d1e9866911dd 100644
->> --- a/arch/loongarch/net/bpf_jit.c
->> +++ b/arch/loongarch/net/bpf_jit.c
-> 
-> [ ... ]
-> 
->> +	/* store_release(dst_reg + off16, src_reg) */
->> +	case BPF_STORE_REL:
->> +		switch (BPF_SIZE(insn->code)) {
-> 
-> [ ... ]
-> 
->> +		case BPF_W:
->> +			if (cpu_has_llacq_screl) {
->> +				move_imm(ctx, t1, off, false);
->> +				emit_insn(ctx, addd, t2, dst, t1);
->> +				emit_insn(ctx, screlw, src, t2);
-> 
-> SCREL.W is a store-conditional instruction, not a plain store-release.
-> It checks LLbit and then overwrites rd with the success indicator
-> (1 or 0), which would clobber the BPF source register.
-> 
-> Looking at emit_atomic_rmw() in the same file for BPF_CMPXCHG, the
-> existing LL/SC usage carefully avoids this:
-> 
->      move_reg(ctx, t3, src);
->      emit_insn(ctx, scw, t3, t1, 0);
->      emit_insn(ctx, beq, t3, LOONGARCH_GPR_ZERO, -6);
-> 
-> Here SC.W is applied to the temp register t3 rather than the BPF
-> register, and t3 is then checked for 0 to retry the loop. This
-> confirms that SC-family instructions clobber their rd operand on
-> LoongArch.
-> 
-> Is SCREL.W/D the right instruction for a standalone store-release?
-> The other architectures use plain stores with ordering guarantees
-> for BPF_STORE_REL:
+Hi All,
 
-Indeed, I misunderstood the instructions before, thanks Wang Rui and
-bot+bpf-ci. I did some changes locally and tested again, the related
-testcases passed.
+A recent change to vmalloc caused some performance benchmark regressions (see
+[1]). I'm attempting to fix that (and at the same time significantly improve
+beyond the baseline) by freeing a contiguous set of order-0 pages as a batch.
 
-I will use the common memory access instruction with the barrier dbar
-to support load-acquire and store-release in the next version.
+At the same time I observed that free_contig_range() was essentially doing the
+same thing as vfree() so I've fixed it there too. While at it, optimize the
+__free_contig_frozen_range() as well.
+
+[1] https://lore.kernel.org/all/66919a28-bc81-49c9-b68f-dd7c73395a0d@arm.com
+
+v6.18      - Before the patch causing regression was added
+mm-new     - current latest code
+this series - v2 series of these patches
+
+(>0 is faster, <0 is slower, (R)/(I) = statistically significant
+Regression/Improvement)
+
+v6.18 vs mm-new
++-----------------+----------------------------------------------------------+-------------------+-------------+
+| Benchmark       | Result Class                                             |   v6.18    (base) |    mm-new   |
++=================+==========================================================+===================+=============+
+| micromm/vmalloc | fix_align_alloc_test: p:1, h:0, l:500000 (usec)          |         653643.33 | (R) -50.92% |
+|                 | fix_size_alloc_test: p:1, h:0, l:500000 (usec)           |         366167.33 | (R) -11.96% |
+|                 | fix_size_alloc_test: p:4, h:0, l:500000 (usec)           |         489484.00 | (R) -35.21% |
+|                 | fix_size_alloc_test: p:16, h:0, l:500000 (usec)          |        1011250.33 | (R) -36.45% |
+|                 | fix_size_alloc_test: p:16, h:1, l:500000 (usec)          |        1086812.33 | (R) -31.83% |
+|                 | fix_size_alloc_test: p:64, h:0, l:100000 (usec)          |         657940.00 | (R) -38.62% |
+|                 | fix_size_alloc_test: p:64, h:1, l:100000 (usec)          |         765422.00 | (R) -24.84% |
+|                 | fix_size_alloc_test: p:256, h:0, l:100000 (usec)         |        2468585.00 | (R) -37.83% |
+|                 | fix_size_alloc_test: p:256, h:1, l:100000 (usec)         |        2815758.33 | (R) -26.32% |
+|                 | fix_size_alloc_test: p:512, h:0, l:100000 (usec)         |        4851969.00 | (R) -37.76% |
+|                 | fix_size_alloc_test: p:512, h:1, l:100000 (usec)         |        4496257.33 | (R) -31.15% |
+|                 | full_fit_alloc_test: p:1, h:0, l:500000 (usec)           |         570605.00 |      -8.97% |
+|                 | kvfree_rcu_1_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         500866.00 |      -5.88% |
+|                 | kvfree_rcu_2_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         499733.00 |      -6.95% |
+|                 | long_busy_list_alloc_test: p:1, h:0, l:500000 (usec)     |        5266237.67 | (R) -40.19% |
+|                 | pcpu_alloc_test: p:1, h:0, l:500000 (usec)               |         490284.00 |      -2.10% |
+|                 | random_size_align_alloc_test: p:1, h:0, l:500000 (usec)  |         850986.33 | (R) -48.03% |
+|                 | random_size_alloc_test: p:1, h:0, l:500000 (usec)        |        2712106.00 | (R) -40.48% |
+|                 | vm_map_ram_test: p:1, h:0, l:500000 (usec)               |         111151.33 |       3.52% |
++-----------------+----------------------------------------------------------+-------------------+-------------+
+
+v6.18 vs mm-new with patches
++-----------------+----------------------------------------------------------+-------------------+--------------+
+| Benchmark       | Result Class                                             |   v6.18 (base)    |  this series |
++=================+==========================================================+===================+==============+
+| micromm/vmalloc | fix_align_alloc_test: p:1, h:0, l:500000 (usec)          |         653643.33 |      -14.02% |
+|                 | fix_size_alloc_test: p:1, h:0, l:500000 (usec)           |         366167.33 |       -7.23% |
+|                 | fix_size_alloc_test: p:4, h:0, l:500000 (usec)           |         489484.00 |       -1.57% |
+|                 | fix_size_alloc_test: p:16, h:0, l:500000 (usec)          |        1011250.33 |        1.57% |
+|                 | fix_size_alloc_test: p:16, h:1, l:500000 (usec)          |        1086812.33 |   (I) 15.75% |
+|                 | fix_size_alloc_test: p:64, h:0, l:100000 (usec)          |         657940.00 |    (I) 9.05% |
+|                 | fix_size_alloc_test: p:64, h:1, l:100000 (usec)          |         765422.00 |   (I) 38.45% |
+|                 | fix_size_alloc_test: p:256, h:0, l:100000 (usec)         |        2468585.00 |   (I) 12.56% |
+|                 | fix_size_alloc_test: p:256, h:1, l:100000 (usec)         |        2815758.33 |   (I) 38.61% |
+|                 | fix_size_alloc_test: p:512, h:0, l:100000 (usec)         |        4851969.00 |   (I) 13.43% |
+|                 | fix_size_alloc_test: p:512, h:1, l:100000 (usec)         |        4496257.33 |   (I) 49.21% |
+|                 | full_fit_alloc_test: p:1, h:0, l:500000 (usec)           |         570605.00 |       -8.47% |
+|                 | kvfree_rcu_1_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         500866.00 |       -8.17% |
+|                 | kvfree_rcu_2_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         499733.00 |       -5.54% |
+|                 | long_busy_list_alloc_test: p:1, h:0, l:500000 (usec)     |        5266237.67 |    (I) 4.63% |
+|                 | pcpu_alloc_test: p:1, h:0, l:500000 (usec)               |         490284.00 |        1.53% |
+|                 | random_size_align_alloc_test: p:1, h:0, l:500000 (usec)  |         850986.33 |       -0.00% |
+|                 | random_size_alloc_test: p:1, h:0, l:500000 (usec)        |        2712106.00 |        1.22% |
+|                 | vm_map_ram_test: p:1, h:0, l:500000 (usec)               |         111151.33 |    (I) 4.98% |
++-----------------+----------------------------------------------------------+-------------------+--------------+
+
+mm-new vs vmalloc_2 results are in 2/3 patch.
+
+So this series is mitigating the regression on average as results show -14% to 49% improvement.
 
 Thanks,
-Tiezhu
+Muhammad Usama Anjum
+
+---
+Changes since v2: (summary)
+- Patch 1 and 3:  Rework the loop to check for memory sections
+- Patch 2: Rework by removing the BUG on and add helper free_pages_bulk()
+
+Changes since v1:
+- Update description
+- Rebase on mm-new and rerun benchmarks/tests
+- Patch 1: move FPI_PREPARED check and add todo
+- Patch 2: Rework catering newer changes in vfree()
+- New Patch 3: optimizes __free_contig_frozen_range()
+
+Muhammad Usama Anjum (1):
+  mm/page_alloc: Optimize __free_contig_frozen_range()
+
+Ryan Roberts (2):
+  mm/page_alloc: Optimize free_contig_range()
+  vmalloc: Optimize vfree
+
+ include/linux/gfp.h |   4 ++
+ mm/page_alloc.c     | 146 ++++++++++++++++++++++++++++++++++++++++++--
+ mm/vmalloc.c        |  16 ++---
+ 3 files changed, 151 insertions(+), 15 deletions(-)
+
+-- 
+2.47.3
 
