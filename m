@@ -1,206 +1,250 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12CA43537D6
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 23:59:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 076413C5556
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 23:59:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774396774; cv=pass; b=Y/4JAVheVly5AXXbc0lQT0M6I1LskbA6tiTDz+5eiBwclckxKN8+nUrKDQ2c4JoEGnjAIlLlalnDVtzroH0y8IPGYT8eOgL51SpfgVC9deXCVgu+p3kS8dMI+WozWkGvvkVESevZHqDZ0FMWkIHeLWWVd/836ZjjwNeYLCEwZIo=
+	t=1774396791; cv=pass; b=S3mRywbMIVRpJaPLDrFLyhZzgHz1L0wvxWeHgK6esdYgy7VvW6bhA/i1dcq2SMIF1ZtRQuU3CGAi9WDYzXs4A8wpjjbofxvei/4vMauyHoFGpft5Qm0PDVyJfvaq2eEfQYdP9rweOYQpYMUgdTnKBp54NCZj8kSKA5dGt04WClI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774396774; c=relaxed/simple;
-	bh=hThwroPBmtOEr8Zt0mhaIIEFfPukkoSM9kAGrO/AJU4=;
+	s=arc-20240116; t=1774396791; c=relaxed/simple;
+	bh=XbeGRET36mZqQ0lSSEZQyrYj1YmuFF8my6GhMPT4Fwk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qfUUnX1Erxe+E5uk/IF+9kimGNuzbAGmxJF8bE1BCAI//YoyITeV6nM81P5cmzlv1Uth66nJUeZgjeOXA9tKhQ60bUAEkDqlEB9sNdovFuC4SL5w1++wapo81ESYRemoXePIgGLd3azUOW5M4uJAQC1QGQ6fZbYtywjBx+rex+U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZiNuxIyt; arc=pass smtp.client-ip=209.85.221.44
+	 To:Cc:Content-Type; b=Xr0e/ftabxeKguVRC61BNWxGKbqkef5OxsAhRX/UGB/H3Dbr66aXMxODuAIBhanbhy69Ioi1jbk8NQq0iatHachnUvxvNhuxcSdB6423Fw/DeHPhRHOdAFYPuIEMS7fWh5qeT86YoAHBRKFzpbYd9VudpFBpPxEhuCWYPi7s1Dc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OgRDxGM3; arc=pass smtp.client-ip=209.85.217.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZiNuxIyt"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-43a03cb1df9so2041743f8f.1
-        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 16:59:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774396771; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OgRDxGM3"
+Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-5ffe9a5b128so1640750137.2
+        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 16:59:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774396789; cv=none;
         d=google.com; s=arc-20240605;
-        b=TEAWwRENFb3Z1dIYru0Rc9nJ7PHnuu0QTlNcCJ7CWkxqlerZbIhBRQGbAk9wFCOA6L
-         OlDhmA4X/yERQIYc8jk9uhu8pt+wLU6kKa7Zh2sPTeEiMmGMHOmcD/FV8YyFeIa1EDF5
-         HoZ23olDv74qJkkN0CqrnBieXsRZeqpFbakwZN0UauyLVdlJFu3T2cOXwW+Nr1N/vjGm
-         OJbULu3NbtIxe3X/TAOWV1Kgm85OC4XA/tpSvOXlM2H7p3UhvdjQS5fLW60T91sWTCJZ
-         J/aoHkD+5/pRlAbyrdRpENXzBZe696fKjQAVE5giZQ9C+SiSJRZE8iJc+lcScrt9K8ee
-         HJDw==
+        b=FivCIT5alBkvcIi/ZE2Glg35/JILoC86lduxQ2iyBq6tVHaizifRUXqE5UtfCMF2Ip
+         zjmjHDm3tQs3XVOEWgPoorhUkIl2iqCcIQrradGzzL8A2QKmrXHufW+QJ6cs5irHULxi
+         xWhB8VFkole+KDlXUeX0kV504tYBGgCq+ijB8qbErnOTggU/PRLI60f2no52rAIX8MlQ
+         82nrzURtq8+FcJKj6ZpmPZIIfkzbilMV38esBV7x70R91jp9xuLTcbj/sz21QQCFJt74
+         GsC37Xt6/CraX3sJo8nSebebEZLXVYShPh9WwdMAOLnvAv878j11EKsomO7ObVBFjImF
+         gwEQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=LAPLAA0Q3V8ZfSSqOa3gqvGbSvp3OlBm9mZcJcj/jiw=;
-        fh=jSMz8IrnfiXfXHFjPM0Wn0xSgi5WnW5o2LcjBDH0gsU=;
-        b=jawljNZqga2ql4j14g7xvOO1QnCfRstZznusxFfU8S4eOnjBd2R9fKomuXlje9LnPg
-         hgn9RSAvteez7cHGKdI+9oIZCi4T/fgqET5p3PqGJ71JScGd+jJDxRrjoaTdWd+N83h7
-         LaopxD+lWNY/1ldDMG3toJwJB7g70O4NIgCsZZ9FQ14muztOiqtqMsooVeeaVVbwln08
-         UM9xT6edgUvxwmA+IRuifBQuKVVAzQRwSzL4EgWY6PLJL69ZeemKjYlVzQlbvElWpUO4
-         zm3WKz23nYBenaln0pAHFB961amW+ZvuQ9K6JsTdTdK82BCuwqOMuPTJWXgkRxWjfL6l
-         L/Ug==;
+        bh=hGm6DPbfXuG3rLsEiNH1wUMYYktfpRSm1XaRXMhElP0=;
+        fh=wsSThdFyvxnBMna4sDEREfGOcPQAPFhxV5Nc+Qlwn5Q=;
+        b=LDqT+3Bq6WiqI6zAqaoIgqc50aEf+NC28ZnKU1/iJSUpCC5zIXvy1rvs2yr0qAmzdw
+         /2miIw6dxyLuheziIYVGN79BSoYq3NHFEZNTT925wG+6D0Xwpv8CUsFgUXbmsT0awOvP
+         wvR8yAfV/5proH6PWyW2526rM61VfkpShwDZeNuKgkCJ+lYe4JVom1Vi5tYQUN2osJyH
+         PN5rF1n7muvTM7yePh9HmjBJXRNtSVlfcSALT4ao0ArKBAOzeI9NYR5DgZfkIqGOjjlT
+         HSF35R9vxcjDXuRr7zJFqrWGKcwY7r+kdnuC3Zrj3npJs96ZCD+NG50iAD67lCuSBmAP
+         OYSw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774396771; x=1775001571; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774396789; x=1775001589; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LAPLAA0Q3V8ZfSSqOa3gqvGbSvp3OlBm9mZcJcj/jiw=;
-        b=ZiNuxIyt23Ue3MlZHWfrxOZULSXSYSZ0nmURcV8r4VO84OMePMGPvAPrn2iLvJCDK3
-         gHMfWpjxQ1O/HnKD6pKlX7kDKfNBr1ikh5A3f0+zkiRQ6RHE/ruOSMyLnbGzyHI2A66S
-         fgJ5LwujrOSFmp74g6CcUDUM81jcmUWixxlgucneQgWZNK7DRe8kNhOCn8oLsyzNEz7z
-         HQysIifNOHGKVcI4c0DGc0o1ZHfoY9jsDmTK0dBkTiN9GHUl93yt5K/o7nVT1iLFXR1v
-         iMeZ9iv81Og9mNlaaG+++uuW0B0xDx65fC9Q3niHedRjyDhVr2NDf1p7IDcT/Hdpsqgp
-         tIiQ==
+        bh=hGm6DPbfXuG3rLsEiNH1wUMYYktfpRSm1XaRXMhElP0=;
+        b=OgRDxGM3woJDJ2x2ozLV5n6LNtu24g0wGjxOQId6JR0RW5g0ggkRVzRHDWCbzFCW/w
+         SjQY7iLacFau6XBqjlv1kphHqfe9Byh6TGDkzq4yPiDUp8+1tql8oqS4nvKa6duIb7kG
+         NDUB87MGD215+8b8uDOtCYrNZgO+hq9lN16vVuEarQdw8P0511UZ0mzIbRuSYj3sS5ux
+         MrRtGMLC6+sdN4W8CXlX/48SwtC/RUmqcPca5QHDw3UY+CyUrScc4m7wCyMQJixbPpgP
+         2Cy6g0Kx6aLNQ3/kHD1hEvk9KVarRk60Fm/uQwAiR0Cuu1IC1QTEy/tk8M6ikUtR+JKA
+         j1Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774396771; x=1775001571;
+        d=1e100.net; s=20251104; t=1774396789; x=1775001589;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=LAPLAA0Q3V8ZfSSqOa3gqvGbSvp3OlBm9mZcJcj/jiw=;
-        b=hxybLG0dymT72lkDMCbGCejOBHU7WqofXUYFX2X9e1XYWEeJzB98DNkqYTVQwKqXeA
-         u0VSbe3NhX0VgWMhYuYTerKD/G8rgoZAInnePk+XMLtC2AlWjYp0vddTH6/FsBB9jUMA
-         hN2EHo+mGTGvZV7YtTUcpljDXlcIA+N1TmblsE3J9qzjLl1dj9aMWbDYtT/5AaAeGKxD
-         Kq7hoKFzP7oNJfFnzCEsT79MaBywRVVp5wrGVCTCp5xHGrHt1u1hxLdlbh7uroSxvCuf
-         W05rUebbuEVX/dGSXGDguiPQT8IqwnT/PjbAcif3lOd8tn0jvQ1nqhGAn0CDowp+6hd5
-         ivQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXomOkyClAM1nHpNnt14hpWL3o1PJJz1Dq7w9F9o76rS21hFR5fNA9ypYyWDfuF2b3CqSI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+svhL5mpOXePynTBuUwMJDCst1jsoFmwqhuGVaxkNUDpspbKu
-	jGJ/aDdz0o7EYdvuy/buxvYdz5ct21/zbnUOtvzpZACncaYYX7mmR6tBZ9aPPnWY0AknzCvcVps
-	GTgnPGzjaNsR/C3X8TfdSR/vX/E+YRF8=
-X-Gm-Gg: ATEYQzxzD0+rcSyvUnLsuXUbj7fwtbKrG2C+AwyiPOsFlr4SJV/DxCkMuhx3tN/SISQ
-	NNE51fwbC+w77TfG343rus+boCO3p3zhmI3oNhuHsJxTN5NTIFpsiq4lgEui21JMopbEfCJBx9i
-	Kiiizay/YryFTyIApW33nVySLAzRs/rbUFQ+W7F18gZs/iOOm78A8aGgvMZic52Y3oABlvP4fDd
-	ho5uHHUz1MGLwJNMuB/AOdBcY3UAH67ZCcnR5+hnVt4kelagST5o9n8QvsmZw9LtShwSkcfDUEr
-	NQJgP2YVCVh8i3sdGWr9uWfECMVBhfiGBinXuMYCjWZBKXTMZVXtEJMkgjbueizzOgkjU9UulST
-	QH1FcUWKs256z3Tn05WksQTRgTw==
-X-Received: by 2002:a05:6000:22c1:b0:43b:564c:1f57 with SMTP id
- ffacd0b85a97d-43b88a4ff9dmr1732429f8f.23.1774396771212; Tue, 24 Mar 2026
- 16:59:31 -0700 (PDT)
+        bh=hGm6DPbfXuG3rLsEiNH1wUMYYktfpRSm1XaRXMhElP0=;
+        b=CbBWYd/zYPED28h2GZ11I6ZoSlSav7MGdh4Tt1YUjzROowYOX8MHDPevL2iywoRPb+
+         2xY+WaxQOfCevLrMq7FBfktG8ZrdXxphldJi3B/p0YtOp85LAxPYs2V2aD7ucOc6skLc
+         9iuZ5Y2kgDw3m1N3X0v13E9u9ueRDo8NbGy3MwiMdEUfS4lvxP5kLKClBVB/b8u5YfN4
+         kcbqUWR39CagdQvrtyV6R587hvbiwKHL0J+kGi69e/pAx7xIdHzJyaAOPT4gB9I83R3o
+         YC7tz3PD7eascBTKCjng5T6ujMs3NTQeWu0p/eLY5qUEnbefXOICjWNaDoPweC/wv+xl
+         HQnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW8VIsvt0pTYrj1uXuOovTUCuL3xUVXTbb4TOf7F+aSaZ4QlDMTsMzKp1MF5NulW+YtjkE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxy0tg1OzsfdgVdXOSS5rOWW0uhZDGwojKQctg7D7Y8BlCMNGu5
+	LMOuEOiAC8BCJTJL6ACAV/LAgHoKg+zu0LZfanpID94i6ASVP70Xlpn9sirCzxlxu2hXdJPwsQu
+	tHYtTZh0R59jRWdf7rTZWlutcJyQbAmE=
+X-Gm-Gg: ATEYQzxflMGoFTc2bK5F0k6zEBfnZWeJ56Z3ZfxjasJpRNvGSZNmgLZMli8siqBRiDi
+	lA+RMaZiWo6xj4vslYw5v8NAHQtFUajYjv+oEaCx/LWgZ5utQYvFWbhpEGq/kigpFQQOkoqm90p
+	JZ0qwGSq2+K5aVK4ZxoKnu1LR+VzANvKg6EsIx2OyIXRwq5cvRl28CBWoUlvRV9MQCVSoJeeHSU
+	dDvOOM9vuHSpz1RCCe2HWkrKv+eg9PA0Pun376MJOlo/26Ixc6ZFZX5nkGe8LL5OvYFRhZjPffd
+	V/040yPOtFUWTgohnc2+/EgUDUuZnljFXJoTtJjXxw==
+X-Received: by 2002:a05:6102:5a8e:b0:5ff:1cc2:aa98 with SMTP id
+ ada2fe7eead31-60394875239mr813558137.35.1774396788898; Tue, 24 Mar 2026
+ 16:59:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260324-sleepable_tracepoints-v6-0-81bab3a43f25@meta.com>
- <CAP01T74asfp5DY+wFd6pDVpSsiuPxjPaPE8iaFaczBUHe0BERw@mail.gmail.com>
- <871ph8kgxy.fsf@gmail.com> <CAADnVQLhkPcteADXk1OCHqWLWaLCrxiFsebut-1YtFRLyMbPbw@mail.gmail.com>
-In-Reply-To: <CAADnVQLhkPcteADXk1OCHqWLWaLCrxiFsebut-1YtFRLyMbPbw@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 24 Mar 2026 16:59:20 -0700
-X-Gm-Features: AQROBzBhWtQiRmp_saTJ8ZYlWNXM8OBUxz6R3FU5Bt1IoqgP-YW49_2jjxSlegs
-Message-ID: <CAADnVQKqmhOhK7akAn8xvokVq4dqyjSa5JVwBio2SvhE=Bd7_A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 0/6] bpf: Add support for sleepable tracepoint programs
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin Lau <kafai@meta.com>, 
-	Kernel Team <kernel-team@meta.com>, Eduard <eddyz87@gmail.com>, 
-	Mykyta Yatsenko <yatsenko@meta.com>
+References: <cover.1774025082.git.paul.chaignon@gmail.com> <d4fe45f8bd5c6a48efd2ba3b66932bf7eb5aa020.1774025082.git.paul.chaignon@gmail.com>
+ <847173114a13630e1512ad05375c6b407720a916.camel@gmail.com>
+In-Reply-To: <847173114a13630e1512ad05375c6b407720a916.camel@gmail.com>
+From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+Date: Tue, 24 Mar 2026 19:59:33 -0400
+X-Gm-Features: AQROBzCrVUaMgDRfv1UyzLmeZr2ndv4GZnym7E7PbAAczBOcnia7f3vXIMYBr-o
+Message-ID: <CAM=Ch05-XWF-x_VzUZAWhRO9eum-bjdutuwvPXEcOvnx_0omAA@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 4/6] bpf: Simulate branches to prune based on
+ range violations
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Shung-Hsi Yu <shung-hsi.yu@suse.com>, 
+	Srinivas Narayana <srinivas.narayana@rutgers.edu>, 
+	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 24, 2026 at 4:57=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Mon, Mar 23, 2026 at 3:05=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
+> wrote:
 >
-> On Tue, Mar 24, 2026 at 3:20=E2=80=AFPM Mykyta Yatsenko
-> <mykyta.yatsenko5@gmail.com> wrote:
-> >
-> > Kumar Kartikeya Dwivedi <memxor@gmail.com> writes:
-> >
-> > > On Tue, 24 Mar 2026 at 20:03, Mykyta Yatsenko
-> > > <mykyta.yatsenko5@gmail.com> wrote:
-> > >>
-> > >> This series adds support for sleepable BPF programs attached to raw
-> > >> tracepoints (tp_btf), classic raw tracepoints (raw_tp), and classic
-> > >> tracepoints (tp). The motivation is to allow BPF programs on syscall
-> > >> tracepoints to use sleepable helpers such as bpf_copy_from_user(),
-> > >> enabling reliable user memory reads that can page-fault.
-> > >>
-> > >> This series removes restriction for faultable tracepoints:
-> > >>
-> > >> Patch 1 modifies __bpf_trace_run() to support sleepable programs
-> > >> following the uprobe_prog_run() pattern: use explicit
-> > >> rcu_read_lock_trace() for sleepable programs and rcu_read_lock() for
-> > >> non-sleepable programs. Also removes preempt_disable from the faulta=
-ble
-> > >> tracepoint BPF callback wrapper, since migration protection and RCU
-> > >> locking are now managed per-program inside __bpf_trace_run().
-> > >>
-> > >> Patch 2 renames bpf_prog_run_array_uprobe() to
-> > >> bpf_prog_run_array_sleepable() to support new usecase.
-> > >>
-> > >> Patch 3 adds sleepable support for classic tracepoints
-> > >> (BPF_PROG_TYPE_TRACEPOINT) by introducing trace_call_bpf_faultable()
-> > >> and restructuring perf_syscall_enter/exit() to run BPF programs in
-> > >> faultable context before the preempt-disabled per-cpu buffer
-> > >> allocation. trace_call_bpf_faultable() uses rcu_tasks_trace for
-> > >> lifetime protection, following the uprobe pattern. This adds
-> > >> rcu_tasks_trace overhead for all classic tracepoint BPF programs on
-> > >> syscall tracepoints, not just sleepable ones.
-> > >>
-> > >> Patch 4 allows BPF_TRACE_RAW_TP, BPF_PROG_TYPE_RAW_TRACEPOINT, and
-> > >> BPF_PROG_TYPE_TRACEPOINT programs to be loaded as sleepable, with
-> > >> load-time and attach-time checks to reject sleepable programs on
-> > >> non-faultable tracepoints.
-> > >>
-> > >> Patch 5 adds libbpf SEC_DEF handlers: tp_btf.s, raw_tp.s,
-> > >> raw_tracepoint.s, tp.s, and tracepoint.s.
-> > >>
-> > >> Patch 6 adds selftests covering tp_btf.s, raw_tp.s, and tp.s positiv=
-e
-> > >> cases using bpf_copy_from_user() on sys_enter nanosleep, plus negati=
-ve
-> > >> tests for non-faultable tracepoints.
-> > >>
-> > >> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
-> > >> ---
-> > >> Changes in v6:
-> > >> - Remove recursion check from trace_call_bpf_faultable(), sleepable
-> > >> tracepoints are called from syscall enter/exit, no recursion is
-> > >> possible.(Kumar)
-> > >
-> > > Is this true? Can't the same program reenter due to the same syscall
-> > > from a different task which preempted the task running the previous
-> > > program?
-> > > Just asking because it wasn't clear to me, since we discussed
-> > > bpf_prog_get_recursion_context() instead.
-> > >
-> > Good question, this is my understanding, though I'm not 100% confident:
-> > There are 2 mechanisms we discussed:
-> >  * bpf_prog_get_recursion_context() - per program recursion guard, I
-> >  understand this is used to prevent self-recursion, where BPF program
-> >  infinitely generates calls to itself.
-> >  * bpf_prog_active - per CPU counter used to prevent deadlock between
-> >  instrumentation BPF prog (tracepoint, kprobe) and map operation
-> >  generating an event triggering those BPF progs when holding map bucket
-> >  spinlock.
-> >
-> > I suggest that none of these applies for the usecase, because we open
-> > sleepable only for syscall enter/exit:
-> >  * Deadlock on the map bucket spinlock is not possible (bpf_prog_active=
-)
-> >  * BPF program can't generate another syscall enter/exit - no infinite
-> >  recursion (bpf_prog_get_recursion_context())
-> >
-> > As for the situation that you describe: same program reenter due to the
-> > same syscall from a different task which preempted the task running the
-> > previous - this is normally supported, behaviour - similar to what
-> > we have when NMI runs on the same CPU and calls common BPF subprog, or
-> > two tasks schedule sleepable bpf_task_works callbacks, that can
-> > interleave on the same CPU.
-> >
-> > Let me know if my understanding is not correct. Thanks for checking thi=
-s
-> > series!
+> On Fri, 2026-03-20 at 17:49 +0100, Paul Chaignon wrote:
 >
-> I think it's fine to skip recursion check, but
-> make sure private stack is disabled too.
-> See bpf_enable_priv_stack() and bpf_prog_check_recur().
+> [...]
 >
-> priv stack is per-cpu per-prog.
-> So if sleepable prog attached to a syscall gets preempted
-> and that syscall fires again bad things happen with priv stack.
+> > @@ -16717,11 +16717,48 @@ static void find_good_pkt_pointers(struct bpf=
+_verifier_state *vstate,
+> >       }));
+> >  }
+> >
+> > +static void regs_refine_cond_op(struct bpf_reg_state *reg1, struct bpf=
+_reg_state *reg2,
+> > +                             u8 opcode, bool is_jmp32);
+> > +static u8 rev_opcode(u8 opcode);
+> > +
+> > +/* Learn more information about live branches by simulating both branc=
+hes being
+> > + * taken using regs_refine_cond_op. Because regs_refine_cond_op is sou=
+nd when
+> > + * the branch is taken, if it produces ill-formed register bounds, it =
+must mean
+> > + * that the branch is dead.
+> > + */
+> > +static int simulate_both_branches_taken(struct bpf_verifier_env *env, =
+u8 opcode, bool is_jmp32)
+> > +{
+> > +     /* Fallthrough (FALSE) branch */
+> > +     regs_refine_cond_op(&env->false_reg1, &env->false_reg2, rev_opcod=
+e(opcode), is_jmp32);
+> > +     reg_bounds_sync(&env->false_reg1);
+> > +     reg_bounds_sync(&env->false_reg2);
+> > +     /* If there is a range bounds violation in *any* of the abstract =
+values in
+> > +      * either reg_states in the FALSE branch (i.e. reg1, reg2), the
+> > +      * FALSE branch must be dead. Only TRUE branch will be taken.
+> > +      */
+> > +     if (range_bounds_violation(&env->false_reg1) || range_bounds_viol=
+ation(&env->false_reg2))
+> > +             return 1;
+> > +
+> > +     /* Jump (TRUE) branch */
+> > +     regs_refine_cond_op(&env->true_reg1, &env->true_reg2, opcode, is_=
+jmp32);
+> > +     reg_bounds_sync(&env->true_reg1);
+> > +     reg_bounds_sync(&env->true_reg2);
+> > +     /* If there is a range bounds violation in *any* of the abstract =
+values in
+> > +      * either reg_states in the TRUE branch (i.e. true_reg1, true_reg=
+2), the
+> > +      * TRUE branch must be dead. Only FALSE branch will be taken.
+> > +      */
+> > +     if (range_bounds_violation(&env->true_reg1) || range_bounds_viola=
+tion(&env->true_reg2))
+> > +             return 0;
+>
+> Why did you chose to limit these checks to range_bounds_violation(),
+> excluding const_{subreg_,}tnum_out_of_sync_with_range_bounds()?
 
-or add per-prog recursion check similar to all trampoline based progs
-and allow priv stack.
+The main reason was because the invariant violations were typically
+only detected by
+range_bounds_violations().
+
+> Also, it appears that tnum bounds checking functions are unnecessarily
+> restricted and should be implemented as follows:
+>
+>   static bool const_tnum_out_of_sync_with_range_bounds(struct bpf_reg_sta=
+te *reg)
+>   {
+>
+>         u64 tnum_umin =3D reg->var_off.value;
+>         u64 tnum_umax =3D reg->var_off.value | reg->var_off.mask;
+>         s64 tnum_smin =3D (s64)tnum_umin;
+>         s64 tnum_smax =3D (s64)tnum_smax;
+>
+>         // check that [tnum_umin, tnum_umax] and [reg->umin_value, reg->u=
+max_value] intersect
+>         // check that [tnum_smin, tnum_smax] and [reg->smin_value, reg->s=
+max_value] intersect
+>         return ...;
+>   }
+>
+> Wdyt?
+
+I like the idea! If we do this, we should also rename the function to simpl=
+y
+"tnum_range_mismatch" or something along those lines (as mentioned in
+the other thread),
+dropping the "const".
+
+Technically, the verifier should maintain the invariant that all domain
+pairs always have intersections. There are 10 domain pairs:
+u64_s64, u64_tnum, s64_tnum, u32_s32, u32_tnum, s32_tnum,
+u64_u32, u64_s32, u32_s64, s64_s32. We can have intersection checks
+for each of these pairs, or we can stick to the major ones, i.e. the top 6
+in this list.
+
+Checking for intersections was part of the original idea in the RFC
+for tnum_step()
+I had sent a while back [1], which was about detecting intersection between
+tnum and u64.
+
+Generally a simple check will be
+if (tmin > umax) || (tmax < umin) // no intersection
+
+The original idea in the RFC was to use tnum_step to make this check
+complete. Particularly, for cases like:
+
+        t =3D x0x1 {1, 3, 9, 11}
+        r =3D [4, 8] {4, 5, 6, 7, 8}
+
+The above check won't suffice. We can add the following check:
+
+if tnum_step(t, umin) > umax) // no intersection
+
+Since tnum_step() has been upstreamed, maybe it is a good time to
+revisit the idea, and have a sound and complete intersection check?
+Or do you think that is overkill for this patch?
+
+Also, then, should this patch introduce domain checks for all 10 domain pai=
+rs?
+
+[1]: https://lore.kernel.org/bpf/20251107192328.2190680-1-harishankar.vishw=
+anathan@gmail.com/
+
+> > +
+> > +     /* Both branches are possible, we can't determine which one will =
+be taken. */
+> > +     return -1;
+> > +}
+> > +
+> >  /*
+> >   * <reg1> <op> <reg2>, currently assuming reg2 is a constant
+> >   */
+> > -static int is_scalar_branch_taken(struct bpf_reg_state *reg1, struct b=
+pf_reg_state *reg2,
+> > -                               u8 opcode, bool is_jmp32)
+> > +static int is_scalar_branch_taken(struct bpf_verifier_env *env, struct=
+ bpf_reg_state *reg1,
+> > +                               struct bpf_reg_state *reg2, u8 opcode, =
+bool is_jmp32)
+> >  {
+> >       struct tnum t1 =3D is_jmp32 ? tnum_subreg(reg1->var_off) : reg1->=
+var_off;
+> >       struct tnum t2 =3D is_jmp32 ? tnum_subreg(reg2->var_off) : reg2->=
+var_off;
+>
+> [...]
