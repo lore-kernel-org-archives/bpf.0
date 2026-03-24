@@ -1,117 +1,134 @@
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1842336074D
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 16:07:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774368476; cv=pass; b=TZWt5GFYa2kSEkt5Fv/2+LsiQIQ3L/bnoewmBw33mUNqpkCzdt22FKfHYMl3GRq2i3Y8Qspl+18g+Ktj7/kEeqGyI/4jjhZylFt0/Sl5STdwv38BWqkHEARPP+gA94oBq3fSz52Ve5kKSo9sXXf2n38a9k7vnDFYdN2cQar8guI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774368476; c=relaxed/simple;
-	bh=CWgKyEE7HM7HrQi/1b6i0FBSGikaLp873YPdX58ewa8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=txmv6J7bKhiV25G5k1nX+BnFIF9LLsRTIAyLlW+iQ/Uj1E4xEE3LD2JSbThPiJHm6lt/URi8rD1SwXvK/0GZCIBel9ohsptT94QAiZi3NVn6SgUgr5wgr+OtizzcR7GmSijCl5hrdl8gCVfk3tsG+PEVXgqFfQgM1AnnI0ZoBxo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ktj/f4a7; arc=pass smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19052391E4B;
+	Tue, 24 Mar 2026 16:16:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774368974; cv=none; b=Wd1mlmx/wjPqGieybB9dFQvQxy3j+lGceH8AnEdZsDR4v+5fLWZCvqKtlhxl3Ty1Tn44aaLEA1RTVUGLXrfNTHiG7gjvGE0cxV0vgVXbooFk+0uazJxTC8N/lDdvrNDvswpyoCs+DKD3YnKlGFcqJt0ps46YcF0ifwkxrCKA7Ls=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774368974; c=relaxed/simple;
+	bh=8mE/hk4JeconWD2CxN0hrl6k/Bs3a/bHP5M+/Wb+Nqo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SNy6ZQC7pzpI4wykejWCKbYeiG4avtA5HmsprVXj9Nyo5mfW49eebNCTeeN6rHeChWREBzirWRZRvrkB2aL4I8TMW1lnH3MWA9MzIJx8aZMAmIAoOsu0X3tgfkXAvjZ7ICws2BNwdq3uQsIGXAzIV3Ga8XYKWlRZDvES9337Kkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J5hnkLMW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ktj/f4a7"
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b9382e59c0eso670685066b.0
-        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 09:07:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774368472; cv=none;
-        d=google.com; s=arc-20240605;
-        b=GWnrUy6nNo9naOeY/IKQpJrkkBcBnFSsvTfT4PfzbeZXbQy+fBkCmiifwSKCEGePDt
-         mkBbHiar+r++8w7tZUMnAj7Q7sKtWoI7nNYn5zIRVPVNUw1NkQGujj4qbSwejYGYM6t0
-         ppGKxbyG3FqIZMPbsvddFYNEEUNrXzlOrkzrNQcEPW93uhOTVGfCzVryQkezJ72szELZ
-         Ff7EyhYdVYDkEZK/w+kB5Bgp5AYt74H/ScCJvg5tQhJXBEo5935ULittyqiTadEtmVqs
-         jszEPHseM6Mq2b1ONOfOtcBxse073Oqsw+IoUhjmz1Y86XuRFUvXlyHg8EV5lBNvjha7
-         gnDg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=CWgKyEE7HM7HrQi/1b6i0FBSGikaLp873YPdX58ewa8=;
-        fh=/wOiA49IBmR3exKxYaCb+YMVipba8z7XvpII9ufU1cg=;
-        b=H1QBigMFA9nYs6g4hFFUAO3FfBl2XWwavKQWnxOVSDxfafbOColSXpVD9KVxvJSjo+
-         43twlxUIzeGhc0oje40EYewK4+dX+J4eiRcQxNE6pfdnSnLUbWV0dxZPdmkJYNfEqSA5
-         fo/xQ4NTooX0Y+mhafkT3VOMqMf5BkQZ+GBB8fTZmDUHq7ndXZalu/XsJIbqECoOSB/D
-         D6cJa2rNOwLPygny5dpwbNf3Xc/obKlTXUhu5iYv16muy0lsteyGHAnLUsPqEhRSgJ4h
-         YLBEHv9khb3+k16dMcIVX1hu4WX1IqbH7MVpXFYWuS6p8t3IlB+VETRsugkhtIlcxL3z
-         ffdg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774368472; x=1774973272; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CWgKyEE7HM7HrQi/1b6i0FBSGikaLp873YPdX58ewa8=;
-        b=Ktj/f4a7iD6bYDyvQCZjlgWDP6opa5bzJWtZ7rHGhJX3qAHGUKn/pdfN2M0bWsUKkx
-         uSYnoq29CrJAnsTtw3/70HX1QLn8FvtSXdpdL/mqeh+AGPHFqv4HQEvxv2XUZMGoGNNp
-         ajvayF60pZCgWCwloU+IALxuDtBlMgzgCe15iHYGgfF7v/1b9XpBuyMPg/WAHc6RJA/U
-         /TPoQlSXKFSBfHP0u0LaHA9wIPtrWxjOJkl8HHeqmponTYT4zVEiWGmyOET5JHWbDazq
-         eUSl87rW5aw76thnYmw+kBQRnmbl9Nol2UuOFtuxiJ0xjcnUN3/cSP5oAlFRwGMc+rWb
-         oNMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774368472; x=1774973272;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=CWgKyEE7HM7HrQi/1b6i0FBSGikaLp873YPdX58ewa8=;
-        b=fudcqa8KLPC7lbVXF3ZvqD/7B7ZvXKD/cV6e4I/oAkw6mE2ZxBMUlXe+SGAyC9E5VK
-         ixoP8nrn8IrDsvT/S5bFJWFlF7GT/c5UtDdgcwUETW5L51x6/FbZol85+BZVWBmvuk1V
-         mN3Me+lg590xJMz/G8rzFY5thCnTOf0+vZgahclFoIKzmbMOSwXdaH7K3hSP3DSRvCBb
-         BwA3nEQiJmUloDNKIQyCB8sDSH9pmigUnR0nRtLw8o7E3wn6eMdYO9gQGMRajVWxbDTC
-         m5GvUXosbShl+oeVeNs46uq5lEA0Xn7SYKPp30CisWrKthYtWvj7HPYF0Rgq6vqXeVpQ
-         wVbg==
-X-Forwarded-Encrypted: i=1; AJvYcCWytj6AJ07xZa82zSncGYsGFzPU849LBC4gNHO5QRsLNIjUN3Kt6UvYqRH3qykuq1c8z7w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGyEHwa93TOQFjBKYbJ5nVUVqUBilokvRXxr0dXuVfI2YODRxM
-	7Yj843tCEIszCoyKM/LNQIjX5ykG4HBiN8B50O5AZX6UC2C0nstXh/JwlqNmRDjCp29VZp0fVKM
-	sVySsLgRTqNdoUswvg8Ke0MKe3M+joOM=
-X-Gm-Gg: ATEYQzz0hCUISI9MJbmPXjNGCFL4y62tIv83v/CDSNR9S0re6Vlhps8iWm803GJABQI
-	Jhd/7zFVWXz7bejLMjffLLU/bCdtGLrsf76/O1sirZKRn2DXcPAHd0C2D369KxEFviqpE+/0wir
-	I9Zp74LNNwyDNvcgPbloNztDUu+BX412pNpCHI8GtvifrgSI4FPG3l6FMmDBOxQoHWG7gqb2Pzv
-	SPN66CRqGOMUhmx/xB0R4pYxfOTH54/LXVgB48SXXswgFMa51drxJRFWlF0TCPrsXQj0bOBRqhj
-	HzKmyyfx4ToNBGLHPIYhxBWdxzHvx/u3ZOhEFmfRn+KZjwuV+mnLFA5YDloi8miHUSbuqndP1qH
-	UKl7/htOhAEEQ+ZqP2RFVYQ2+gA==
-X-Received: by 2002:a17:906:c9c6:b0:b98:4d6:8c9c with SMTP id
- a640c23a62f3a-b982f363047mr1019281566b.32.1774368471653; Tue, 24 Mar 2026
- 09:07:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J5hnkLMW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7408C19424;
+	Tue, 24 Mar 2026 16:16:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774368973;
+	bh=8mE/hk4JeconWD2CxN0hrl6k/Bs3a/bHP5M+/Wb+Nqo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=J5hnkLMWBHFYljVWnrj80NbDVCKVmKeGqKKw2iceQXK+GvQL6sA8L966X02lluQuB
+	 FmaDZHkDe9Nzwn/e3fxdptX3iIFBGmZDzgU2Y/vCPmCX6Ir40ZUZkfnINQMZg8ylrt
+	 uFKNNQiCO76ZrxZhLEbMREHbqK14CCXzWOqmcpT70kwutnjzt3vsVQk6MyHh3Uce2q
+	 5EGzhwAetFPRy4rT4UWVWnTb3/sdRk0emCICZV6wWigLepKTM+M717w3g9kSpk/tB2
+	 XbpYutddsk+CkWRvpBz7/qgtiFGBaDnceGcQZCrY0nggTslBcj6P898LyfsoXf8+CR
+	 BFEMIIaHyb+rg==
+From: Kees Cook <kees@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>
+Cc: Kees Cook <kees@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	sun jian <sun.jian.kdev@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH v3] libbpf: Replace strncpy() with strnlen()+memcpy() in skel_map_create()
+Date: Tue, 24 Mar 2026 09:16:09 -0700
+Message-Id: <20260324161605.make.168-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260324152230.2916217-1-memxor@gmail.com> <b7c13a1f-1efc-4ed1-922f-54ca7353dbe2@iogearbox.net>
-In-Reply-To: <b7c13a1f-1efc-4ed1-922f-54ca7353dbe2@iogearbox.net>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 24 Mar 2026 09:07:39 -0700
-X-Gm-Features: AaiRm51dg2jxIEezg-Qf5yJRplTOkzn-RK4Cf2Dvo87uzkgvb6CaXVDVNJ4js8U
-Message-ID: <CAADnVQKbgk7SoOGjnhA-CiPobA+OWL6LFarC_Zdssh6waucpng@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1] bpf: Update MAINTAINERS
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, kkd@meta.com, 
-	Kernel Team <kernel-team@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3193; i=kees@kernel.org; h=from:subject:message-id; bh=8mE/hk4JeconWD2CxN0hrl6k/Bs3a/bHP5M+/Wb+Nqo=; b=owGbwMvMwCVmps19z/KJym7G02pJDJmHdpxknszs8fJUZ9/a/ccF1DqPVom+/jjJOPvZN6HaT 1Vf4s+UdZSyMIhxMciKKbIE2bnHuXi8bQ93n6sIM4eVCWQIAxenAEykbTUjw8w/uxSfS2/ueWIq qfo/c99zLqX7F37vkNf28478va40czMjw51anXO287+W2St6/r7+MchVg2ctHw/P0qVLnf2jeg4 84QAA
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 24, 2026 at 8:48=E2=80=AFAM Daniel Borkmann <daniel@iogearbox.n=
-et> wrote:
->
-> On 3/24/26 4:22 PM, Kumar Kartikeya Dwivedi wrote:
-> > Per discussion with Alexei, add Eduard and myself as maintainers under
-> > BPF [GENERAL]. While at it, drop R entries for reviewers who have been
-> > inactive.
-> >
-> > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> (this can go into bpf tree so it gets synced next time into both trees)
->
-> Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+Replace the deprecated[1] strncpy() with strnlen() on the source
+followed by memcpy(). Normally strscpy() would be used in this case,
+but skel_internal.h is shared between kernel and userspace tools, and
+strscpy() is not available in the userspace build context.
 
-I recall Dave was applying changes to maintainers via net. Not sure why.
-I'm too lazy to send bpf PR with a single patch and it's really not a fix.
-Applied to bpf-next.
+The source map_name is a NUL-terminated C string (the only caller
+passes the "__loader.map" 12 character string literal). The destination
+attr.map_name is char[BPF_OBJ_NAME_LEN] (16 bytes) in union bpf_attr,
+ultimately passed to the bpf() syscall.
+
+The bpf(BPF_MAP_CREATE) syscall, through bpf_obj_name_cpy(), requires a
+NUL terminator within this 16-byte array, rejecting names that use all 16
+bytes. Valid names are therefore at most 15 characters, but this wasn't
+being checked via the skel_map_create() path. Add a matching check and
+refuse 16+ character strings early, as they would be refused later by
+bpf_obj_name_cpy().
+
+The attr is pre-zeroed with memset() at the top of the function, so
+the last byte of attr.map_name is always NUL, meaning the memcpy()
+of just the non-NUL characters from the source will always produce a
+NUL-terminated destination string.
+
+Link: https://github.com/KSPP/linux/issues/90 [1]
+Signed-off-by: Kees Cook <kees@kernel.org>
+---
+ v3: instead of truncation, refuse the long length (test appears to have been a flake)
+ v2: https://lore.kernel.org/lkml/20260324053036.it.906-kees@kernel.org/
+ v1: https://lore.kernel.org/lkml/20260324040535.work.851-kees@kernel.org/
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: sun jian <sun.jian.kdev@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Song Liu <song@kernel.org>
+Cc: Yonghong Song <yonghong.song@linux.dev>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: Stanislav Fomichev <sdf@fomichev.me>
+Cc: Hao Luo <haoluo@google.com>
+Cc: <bpf@vger.kernel.org>
+---
+ tools/lib/bpf/skel_internal.h | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/tools/lib/bpf/skel_internal.h b/tools/lib/bpf/skel_internal.h
+index 6a8f5c7a02eb..2d38c387f43c 100644
+--- a/tools/lib/bpf/skel_internal.h
++++ b/tools/lib/bpf/skel_internal.h
+@@ -236,6 +236,7 @@ static inline int skel_map_create(enum bpf_map_type map_type,
+ {
+ 	const size_t attr_sz = offsetofend(union bpf_attr, excl_prog_hash_size);
+ 	union bpf_attr attr;
++	size_t map_name_len;
+ 
+ 	memset(&attr, 0, attr_sz);
+ 
+@@ -243,7 +244,12 @@ static inline int skel_map_create(enum bpf_map_type map_type,
+ 	attr.excl_prog_hash = (unsigned long) excl_prog_hash;
+ 	attr.excl_prog_hash_size = excl_prog_hash_sz;
+ 
+-	strncpy(attr.map_name, map_name, sizeof(attr.map_name));
++	/* attr.map_name must be NUL-terminated, like bpf_obj_name_cpy() */
++	map_name_len = strnlen(map_name, sizeof(attr.map_name));
++	if (map_name_len == sizeof(attr.map_name))
++		return -EINVAL;
++	memcpy(attr.map_name, map_name, map_name_len);
++
+ 	attr.key_size = key_size;
+ 	attr.value_size = value_size;
+ 	attr.max_entries = max_entries;
+-- 
+2.34.1
+
