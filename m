@@ -1,156 +1,67 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EB0F3F0ABE
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 17:22:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774372972; cv=pass; b=DX7u1Y04EMI+GPkklBvbNQE9K5yuAyEFZeNhkK0NcmhtS+wh2A4ddFscx/4OThgi5aamh5RBgLz5PNdmbzso1Dmqp9ctwHeBeFznzjV7u0pFaQEHx3bf8i+gllkhS1w9BDvvx6ByHyV4Ok9Ov6cbIti42M7IUSxQXaQ34PQOAx0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774372972; c=relaxed/simple;
-	bh=sJTuFUb4Ti4T0ymAsKlUQeLVVOJZlG9wIVy/H/OOj+U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jvVNOCtLxbsghGFSSkqWJW8w/T/2hxC2VyrBbEspZ8zjLO+iDXyhEtKG7gZJyg/ahCLKhTPH/jEVicMubG5WmkPwnTCkq969anBzgxdXJeKU01nt+3KhejzsAzQphE8f16LjI14UFpSy5PLrKYTu9p+Vl7xgOo6FY0a9w6g4V4A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mFGboR1c; arc=pass smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6FFE391E55
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 17:34:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774373679; cv=none; b=kb/XW6UTYUK0Q2m9GKKS4mFb7EMN7JNwlwRzLWtbLX177ZgVxRjrGIk20lhMaFJXF/NRZ9qecR/sVyxEZx833mP9MehbON5TvGDWt8Osp0W0DauD8bbtyVaNjDwdirs4WNTt91IOTcSx77kIa0lAnk0VzBwZtvRdERSd/Jv6EaM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774373679; c=relaxed/simple;
+	bh=gywsNUK0xaQ5/M5DTfuh2A78fRzck1sU9Y6jpu4e2E4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fe9kyStLz8yT+b6999YUgQTzlJ1weLvq5W2fSsw9WMa+U9IfH5ijBhLjYacHGSzba2x0q+tQwEWhyD/bDdZY1Gt7ULXwHhYaTXSOhtUgy8c7yRCZeOxkSQ14Xc3Qq4icrtOlvQvdV/4AoUlzvx9thVGjzcBgFLYtQOMYy55F9wo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xObZ/YQ3; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mFGboR1c"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-439b94a19fdso3930367f8f.0
-        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 10:22:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774372969; cv=none;
-        d=google.com; s=arc-20240605;
-        b=SnnACmXzm1HMed9L+rfRbJvzD6aC9IUfq+v0J6eX9Dau88wZXxvGPaUPTwwPdKnVMN
-         rtbsYKfw0KahXBvqgyyDA8tWv9j837G4Sn5vSfISTpnpoilYAk66Q8iM3mucgxdr749v
-         WY9mn0xjai+teOSYmq75KKnBrFdNcYMKb0eKrYHah6fXn/ootPJ5YJREwlCt5bXmXMiO
-         RvXsPLlYUrBxkY5Fmpd2npGT6xwZszxPJe1cpaf25CtGddYopJUCg7/tAjsN3P3pWJK3
-         pjHRQ9iQELrjTQE8bB5ATmJkAxDdLNfGArSj+f4gNJqmcOwa1vUq2MQIx6cOaOzMBOmO
-         DuxQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=1VXABupr2OCC3r+y5hHZyFvWeGtGdJxX2idEJ3H2Vc4=;
-        fh=41RIQVPJg28AetiCgLusTNrQmR8ad3DXhDZUPFQgUmQ=;
-        b=b3rqFeD2Tn+DrHcmYb12q7x1/u2/lA3iBt6WB9uLDqc1pL+ySzb2NxZxu/pzDwuOr4
-         l/SQcMipckF5F8be92/KXzb/FhodZOxSIj5KQksW0DJw3etIb54athX+KrlhaMGWDUJK
-         vngc1DphsRDiYA4RwnVDKG585iJ60zW+5itmLU5q+1j1Y/TutN59Rh149OpInbOfCjbd
-         Oe1zyJNiDHCTFMANqmkNg3/w4lQ9X7ff33Gb4zBNs3Iu40iPLOSOdtaO8Zu+Z2PRPj/w
-         +Cq1rYY+0QPlTbl8G+vDsQCw0+Dp80E7LferfObzao61E615hSITf/5UZLOv3PnhL554
-         pDPg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774372969; x=1774977769; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1VXABupr2OCC3r+y5hHZyFvWeGtGdJxX2idEJ3H2Vc4=;
-        b=mFGboR1cr+4HLMJqdxLItGMQO3oxEICPxSa+KcZbHs8lfyShpG84NdhF5ZDsvNzikE
-         qQR2ViwKTn402QfxvAWuT52U1m6GMfarr/J1TKyWRqYYxoBPK00DAvE4tLML8PEBpnLl
-         8XCXhCl9iZdTyknSUL7Hs4HgVZa5ujMX2L1VcmGSr/vsdNeBQ/DEUnLXntg4mclOJxJZ
-         c4u3v37IMOsHHuawq1EdNBLKXicPbyR9glLd7q84vCLR9bGkoBaMphYArNXxl4YotXAc
-         F8jhpFCQ6ocSkR/iTB3uTkWwUbgM5HlEzQmG1uzWPk0V49cyZuOjSZhA54o7ujCeP1NE
-         9n3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774372969; x=1774977769;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=1VXABupr2OCC3r+y5hHZyFvWeGtGdJxX2idEJ3H2Vc4=;
-        b=KB0LCtqnRRt+2AsKyIpeMRsLBvZSeMoFFBGxkdxSiDm+JUQLxu/r+1uJooeFytCBEm
-         PD6i/KWfkRyegKdKR/p2Kkx+JwHzo+ulSoyvULFHUXrHTBBU7Y6PkjztRrnZv+mC6hcO
-         FhWR4rIOUIVxm4oHyalgVHe9Gs2CzkPYuLgjdFZNR+KNb600TqxG3t3AX6ObDk+zURGp
-         64WPSD5b2ETCIDNyuXejNQML8lwKkW7xUCIrpTonLMrBoiZoy+DUsCOHTHuDfDi+6+Da
-         ZNIsKsfqLOIHdXcNhXWphl+OFlR/i5bpQ7A65Rktdb36tlozsMZUOJKR8nj6Ja/BTKGz
-         SGMg==
-X-Forwarded-Encrypted: i=1; AJvYcCVHGkdlnb0B9HAAUwUFNy/xTCYsj+r9RrHA3fsD457odEeFjFRdgkpbU1w+XVwm/1t/71M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyzljfedJFwQLAMfuyWN1HUmCYs8JJAoio9tP+G4yqBKDjpwLGV
-	+t9VrOHMdQo9tEr/+aYFHdGec5aUfPXZulAqfwdHy34cRPT0JYMfmeZhMgwhDFq4ZCB0gGquw4c
-	daq9W+7LjFs13TxAizVCcFWkXI5cz56s=
-X-Gm-Gg: ATEYQzy/VtqKkMD3b7L1Pjeo67T6uc0QWxsu77Ogx0dY781Iub+xx+oso9CFekF1+pl
-	ovAqAcRaO2iS6R7Gz93UduKkSepLuvwB0yuxz8Dv1H8PdYO7Or/8hp8twUwzMQDf6+7kqdwVxb6
-	xeU5MOK82s8BkRq22YX8u8tCJweIM9YJnaoDRpzJyFKfVdcFBtaIEFMUVhUyd3CwRJvoB9kFy+n
-	0gUWyTyL5wpfIPVkzXjAYsO6tLG4NLPpZgNn43e/kvkdltJzkYVJf44spdxWgjHzl8we1JOnlWr
-	pKsS1u0DjenWl0crSiCdE/5bKhtRt4IJKtPClklHR1EJGJq/jJ09snIaTXPVTSj2T9O/ZtkmQA5
-	le8PdoqW8Iy5kfOMUUCh2+3PoKg==
-X-Received: by 2002:a05:6000:40ce:b0:43b:5b25:67fa with SMTP id
- ffacd0b85a97d-43b889aba29mr469553f8f.18.1774372968584; Tue, 24 Mar 2026
- 10:22:48 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xObZ/YQ3"
+Message-ID: <e5a2ad16-d2ac-4fa0-be41-162227257682@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774373665;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ws42Rf5aPBnDXSt/oJVoEIiUzpyDal06gBdo0Z7vkQ4=;
+	b=xObZ/YQ34o/vPvH/6jC4FDj95XmRIFagmpTMrcCf/gzyFw/TCiEKEoSoqmSLpQAWsh2KrU
+	kHDL34O4ivK3Wsj/rDI2CtlZKUd6JFnnctF6K4tGeqi6ZFpZs9nHIA0IftTdBlyY8WNGiZ
+	amB7vZtMoTFb0N2q/7QONEZRaotwP8E=
+Date: Tue, 24 Mar 2026 10:34:20 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260318234210.1840295-1-ihor.solodrai@linux.dev>
- <CAADnVQ+iXJK46cFcGN-Ta8KGxe7Y+m_DxgWNS=QC-gOWT=WxCw@mail.gmail.com> <b040711c-0fd1-475f-b807-e4e0b4324f6e@linux.dev>
-In-Reply-To: <b040711c-0fd1-475f-b807-e4e0b4324f6e@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 24 Mar 2026 10:22:37 -0700
-X-Gm-Features: AQROBzDUPzJFhYcDqU0IBWFIIDbgL2-nVc2flV-287M0NYk6NQquNwWOKEzf6JY
-Message-ID: <CAADnVQKVEYhFXGXJ0u6TWQDe4t=zmq_tLpGKe2n_pOYT-J58qA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/2] bpf: Support struct btf_struct_meta via KF_IMPLICIT_ARGS
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, bpf <bpf@vger.kernel.org>, 
-	Kernel Team <kernel-team@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2 1/5] bpf: name the enum for BPF_FUNC_skb_adjust_room
+ flags
+To: Nick Hudson <nhudson@akamai.com>
+Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Max Tottenham <mtottenh@akamai.com>, Anna Glasgall <aglasgal@akamai.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260318134242.2725749-1-nhudson@akamai.com>
+ <20260318134242.2725749-2-nhudson@akamai.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20260318134242.2725749-2-nhudson@akamai.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Mar 23, 2026 at 12:58=E2=80=AFPM Ihor Solodrai <ihor.solodrai@linux=
-.dev> wrote:
->
-> On 3/21/26 1:27 PM, Alexei Starovoitov wrote:
-> > On Wed, Mar 18, 2026 at 4:42=E2=80=AFPM Ihor Solodrai <ihor.solodrai@li=
-nux.dev> wrote:
-> >>
-> >>                                         const struct btf *btf,
-> >> @@ -12594,6 +12620,14 @@ enum special_kfunc_type {
-> >>         KF_bpf_session_is_return,
-> >>         KF_bpf_stream_vprintk,
-> >>         KF_bpf_stream_print_stack,
-> >> +       KF_bpf_obj_new,
-> >> +       KF_bpf_percpu_obj_new,
-> >> +       KF_bpf_obj_drop,
-> >> +       KF_bpf_percpu_obj_drop,
-> >> +       KF_bpf_refcount_acquire,
-> >> +       KF_bpf_list_push_front,
-> >> +       KF_bpf_list_push_back,
-> >> +       KF_bpf_rbtree_add,
-> >>  };
-> >
-> > it's not an uapi. no need to add them to the end.
-> > Pls add them next to _impl flavors.
-> >
-> > The whole thing needs a full refactor in a long term.
-> > special_kfunc* thingy got out of hand.
->
-> I thought about this a little and tried a couple of ideas.  Here is
-> one that looks a bit better to me than KF_* enum: BTF_ID_LIST_NAMED()
-> and BTF_ID_NAMED().
->
-> I vibe-coded a PoC [1]. Essentially, we add a set of macros to
-> generate source-level stable symbol for each BTF_ID_LIST entry. Then
-> it is possible to refer to the associated value directly by name.
->
-> It looks like this:
->
-> +#define BTF_ID_LIST_NAMED(name)                                \
-> +       __BTF_ID_LIST(name, local)                      \
-> +       extern u32 name[];
-> +
-> +#define BTF_ID_NAMED(list, prefix, name)               \
-> +       __BTF_ID(__BTF_ID__##prefix##__##name##__##list, "") \
-> +       extern u32 __btf_id_##list##__##prefix##__##name \
-> +               asm("__BTF_ID__" #prefix "__" #name "__" #list);
 
-...
+On 3/18/26 6:42 AM, Nick Hudson wrote:
+> The existing anonymous enum for BPF_FUNC_skb_adjust_room flags is
+> named to enum bpf_adj_room_flags to enable CO-RE (Compile Once -
+> Run Everywhere) lookups in BPF programs.
 
-> [1] https://github.com/theihor/bpf/commit/be38dde0a027d7ab84d8d20ac266251=
-fb938ceb6
+It would be useful to demonstrate the intended CO-RE usage in a 
+selftest. I suspect it is bpf_core_enum_value_exists().
 
-too much claude in there. It talks about everything except
-important bits.
-How does the above 'asm' magic work?
+There are existing tests in test_tc_tunnel.c for the earlier 
+BPF_F_ADJ_ROOM_* flag additions. Please add similar tests for the new 
+flags introduced in this series.
 
-Just to clarify. This potential cleanup is not necessary to land this set.
