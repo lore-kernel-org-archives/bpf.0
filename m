@@ -1,91 +1,118 @@
-Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CB8E23D7E6;
-	Tue, 24 Mar 2026 15:46:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7659372EE3
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 15:48:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774367173; cv=none; b=PgGP4kF9Lb4KzZRxOgm9L2Cr7rpNl6B/DzaxCpRWLhxC+Ayp1TCRJku19a1jXHQ+iW4vb3kRF+NkWk8JWc/SIrOB7o1PyLszWUwclHHFyo74JAAMSVJhEjmOx0nfGJCzxCF/9OpbT9ztiniGWPQ8YIakSLdRjBoYiiXpPPPcqFY=
+	t=1774367310; cv=none; b=qfMMf56zdnjBAgAUGPe2ejfpbwbdrxv0NVgxP2N1sU2uoXS7r5F6DzCRk5aomvLoi07bybWIroOKsqQrP3MuoDQDlSOFZrPhF5sxPTrcNmGO297xy0vf4x9dpYPf7aOscM1o7H5QtPfogHdnqxNYK1mAnuEH7ywR+1xQ55oTkr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774367173; c=relaxed/simple;
-	bh=pLt1XqU3RZcuHwA0yFwsdkAZPuickPwzxs96gflSBRI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PKIh1kIbfoyFTXqxeZxZMlXOy6840g9+tH61TaySp891JZd+ZAE//cj5vIO3y3GTt+VeUp/0/Q6HYKI4wgKWe5Aj+0TxfIBVcF2wksaxj+OkcY9yoddqGmvV0QySz8XDLMoCL5NybTkERZGYOieVhV6n7fO+LeWfYiHHuUO35OQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf12.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay09.hostedemail.com (Postfix) with ESMTP id AEFD388B35;
-	Tue, 24 Mar 2026 15:36:54 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf12.hostedemail.com (Postfix) with ESMTPA id F093718;
-	Tue, 24 Mar 2026 15:36:48 +0000 (UTC)
-Date: Tue, 24 Mar 2026 11:37:31 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Aaron Conole <aconole@redhat.com>
-Cc: "Vineeth Pillai (Google)" <vineeth@bitbyteword.org>, Peter Zijlstra
- <peterz@infradead.org>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
- <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Eelco
- Chaudron <echaudro@redhat.com>, Ilya Maximets <i.maximets@ovn.org>, Marcelo
- Ricardo Leitner <marcelo.leitner@gmail.com>, Xin Long
- <lucien.xin@gmail.com>, Jon Maloy <jmaloy@redhat.com>, Willem de Bruijn
- <willemb@google.com>, Samiullah Khawaja <skhawaja@google.com>, Hangbin Liu
- <liuhangbin@gmail.com>, Kuniyuki Iwashima <kuniyu@google.com>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- dev@openvswitch.org, linux-sctp@vger.kernel.org,
- tipc-discussion@lists.sourceforge.net, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 04/19] net: Use trace_call__##name() at guarded
- tracepoint call sites
-Message-ID: <20260324113731.5252724e@gandalf.local.home>
-In-Reply-To: <f7ttsu58con.fsf@redhat.com>
-References: <20260323160052.17528-1-vineeth@bitbyteword.org>
-	<20260323160052.17528-5-vineeth@bitbyteword.org>
-	<f7ttsu58con.fsf@redhat.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1774367310; c=relaxed/simple;
+	bh=1a+wZUbazcQxnaBZXF/sW0Y6SN5vI9Jp6pLaHtpRbcg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fjkTP6VaJDNawNWo/0T/Ou8oV+2QOcN4zsZIEIPo30fU8CEJTTGB/MW3+8BJiYvllxnhXOzXJMKenW8VFxYg4S4kWJ3PBQwku0mc+O3TlTDm0UoUgI915HSJ7qIfp3GLXGC/RH1Ge+zu7VE+rVrgusuH9kxdmdyUbPw44L4eXyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=nHJ2Dax/; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="nHJ2Dax/"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=SuSQxhIc3SPnHrLtHCSkcwH5pyTBtRHTw8VXAvXcp7w=; b=nHJ2Dax/rSXV+xQlglFm2MSFhV
+	7aV/DrWI2R8EiECo3ZFSfpVrG7VThRv3ftWzFi7xmuWDHsEfalJ6rS9b1Od0fi6E97pWdck8vRnJW
+	xVvsSsB5/rhSl498kqsmzChHDWxTExpz01w35Yuq3kpt2lvhiEkfrBMStMcmx4QZJjbA7c0H41+Lg
+	s5KVNkAYyAhwNGKLbgUtoKUJ0kDkRUwbmWZKfLjr+yl/K3nny77T8/RzDN5KoKvVk3hZoapgyiFwq
+	dOSR121zm7b7FH/Ch4jNO0ERqPyc/CkXv6qqLEsyfDPLINwuRLAk9Tp/5HiuTYmMxMX923zj+njmR
+	LqV/TVvw==;
+Received: from sslproxy04.your-server.de ([78.46.152.42])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1w53zL-0002p4-2b;
+	Tue, 24 Mar 2026 16:48:15 +0100
+Received: from localhost ([127.0.0.1])
+	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1w53zK-000NCp-2F;
+	Tue, 24 Mar 2026 16:48:15 +0100
+Message-ID: <b7c13a1f-1efc-4ed1-922f-54ca7353dbe2@iogearbox.net>
+Date: Tue, 24 Mar 2026 16:48:14 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v1] bpf: Update MAINTAINERS
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ kkd@meta.com, kernel-team@meta.com
+References: <20260324152230.2916217-1-memxor@gmail.com>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20260324152230.2916217-1-memxor@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Stat-Signature: 44qkot3uem9ayugoztbi5z8yeb6k7s7e
-X-Rspamd-Server: rspamout08
-X-Rspamd-Queue-Id: F093718
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+tQiMn63Ec6IOmabtDBFhjzQTi5TFzBjc=
-X-HE-Tag: 1774366608-75188
-X-HE-Meta: U2FsdGVkX19yuAlxy+EoRVjDrCnH7N5nKRqw/zEwwZC+0iz33Moky87HDcPHBdq7orWI1a5ex/4oOWmHKzFtnBCa+C49FaCGuGESvPmS6eZ+Yg7FW1CDh9GufeoAF7RG0MbJliPUtZnyFah7YBt3MUz8wzRb2slkVWkSdCnPR98osAg1Dv5cNHz+fvo4Rm/FeeyTXJhB3GR7WbPLLUpI27359JqfgGUZpS6mj02gpifyicIXkpQVM1FuCpTPvqu/QS4xU2T3ACQ+LE1YXEEaVkE/QVSk6ud7Bb4rOwYHU5U1cj60+lJz0HkA+QyxmF7zwiw8RbAoZJnkx7LY4I2JZY1LfL8PA3eumh07N3g04fE54z1+OipVfc+XHoobFK4GirBxqASTnUh57Y58A2OK8lhis1Y0GhcDtr3yfvdQzlAyMDeZBI6ofWRESVa6tnikL9TyMHTKDgVoCEHjprrt1Vu5o02xrlYKbo3y1RDFl/c4uV/O65kHRdh7Q5AaVYoZ/RLifpTQl1w=
+X-Virus-Scanned: Clear (ClamAV 1.4.3/27950/Tue Mar 24 07:24:19 2026)
 
-On Tue, 24 Mar 2026 11:33:28 -0400
-Aaron Conole <aconole@redhat.com> wrote:
-
-> "Vineeth Pillai (Google)" <vineeth@bitbyteword.org> writes:
+On 3/24/26 4:22 PM, Kumar Kartikeya Dwivedi wrote:
+> Per discussion with Alexei, add Eduard and myself as maintainers under
+> BPF [GENERAL]. While at it, drop R entries for reviewers who have been
+> inactive.
 > 
-> > Replace trace_foo() with the new trace_call__foo() at sites already
-> > guarded by trace_foo_enabled(), avoiding a redundant
-> > static_branch_unlikely() re-evaluation inside the tracepoint.
-> > trace_call__foo() calls the tracepoint callbacks directly without
-> > utilizing the static branch again.
-> >
-> > Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-> > Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> > Signed-off-by: Vineeth Pillai (Google) <vineeth@bitbyteword.org>
-> > Assisted-by: Claude:claude-sonnet-4-6
-> > ---  
-> 
-> As noted before, I think we can just eliminate the guard in the
-> openvswitch module (and that would probably be a more understandable
-> fix) rather than replacing the call-in.
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+(this can go into bpf tree so it gets synced next time into both trees)
 
-That should probably be a separate patch, as it actually changes the
-code beyond the purpose of this patch.
-
-Removing the guard first, and then have a patch like this to modify the
-rest.
-
--- Steve
+Acked-by: Daniel Borkmann <daniel@iogearbox.net>
