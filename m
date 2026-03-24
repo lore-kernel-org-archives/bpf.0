@@ -1,134 +1,152 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19052391E4B;
-	Tue, 24 Mar 2026 16:16:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2551537B3F1
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 16:18:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774368974; cv=none; b=Wd1mlmx/wjPqGieybB9dFQvQxy3j+lGceH8AnEdZsDR4v+5fLWZCvqKtlhxl3Ty1Tn44aaLEA1RTVUGLXrfNTHiG7gjvGE0cxV0vgVXbooFk+0uazJxTC8N/lDdvrNDvswpyoCs+DKD3YnKlGFcqJt0ps46YcF0ifwkxrCKA7Ls=
+	t=1774369142; cv=none; b=IfdnY2+/InbvKau/7ZvyPSEXFzDBq95AVzkWoSRyrE7bUD5AEkqDF2iILj3C1MvlJ7ydhZ3kdxQylO/FQ+RJrQ0rtn5CmH2cEX5Zod55Es18osdlsZAYmB1koskvCg/xXVoWT/N9kXtGKPiAlv1/bWzfuoV3UmSnZmI9+Onjxo8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774368974; c=relaxed/simple;
-	bh=8mE/hk4JeconWD2CxN0hrl6k/Bs3a/bHP5M+/Wb+Nqo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SNy6ZQC7pzpI4wykejWCKbYeiG4avtA5HmsprVXj9Nyo5mfW49eebNCTeeN6rHeChWREBzirWRZRvrkB2aL4I8TMW1lnH3MWA9MzIJx8aZMAmIAoOsu0X3tgfkXAvjZ7ICws2BNwdq3uQsIGXAzIV3Ga8XYKWlRZDvES9337Kkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J5hnkLMW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774369142; c=relaxed/simple;
+	bh=j2vmMAgZBEIHOIcyw/exgvoqxhaoAAncNtLEhyVK7V8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=C3tcCGk4DrvHYYhtVzk/0UJEPCSFp9OIJQ8BVDl+30xt5P8vXFZ4S37Myz1w/MO/s517SnysljhkdoTGxevNYCpItHjlLy2eJe8q/8smG4ll5xST2QAz85Y+ojLgA1NAowWL4DbBYQj34Z6I9+DAe/W37pqayjLtEKHNOqCU128=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UvWNF0wg; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=rUmU6YOm; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J5hnkLMW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7408C19424;
-	Tue, 24 Mar 2026 16:16:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774368973;
-	bh=8mE/hk4JeconWD2CxN0hrl6k/Bs3a/bHP5M+/Wb+Nqo=;
-	h=From:To:Cc:Subject:Date:From;
-	b=J5hnkLMWBHFYljVWnrj80NbDVCKVmKeGqKKw2iceQXK+GvQL6sA8L966X02lluQuB
-	 FmaDZHkDe9Nzwn/e3fxdptX3iIFBGmZDzgU2Y/vCPmCX6Ir40ZUZkfnINQMZg8ylrt
-	 uFKNNQiCO76ZrxZhLEbMREHbqK14CCXzWOqmcpT70kwutnjzt3vsVQk6MyHh3Uce2q
-	 5EGzhwAetFPRy4rT4UWVWnTb3/sdRk0emCICZV6wWigLepKTM+M717w3g9kSpk/tB2
-	 XbpYutddsk+CkWRvpBz7/qgtiFGBaDnceGcQZCrY0nggTslBcj6P898LyfsoXf8+CR
-	 BFEMIIaHyb+rg==
-From: Kees Cook <kees@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>
-Cc: Kees Cook <kees@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	sun jian <sun.jian.kdev@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH v3] libbpf: Replace strncpy() with strnlen()+memcpy() in skel_map_create()
-Date: Tue, 24 Mar 2026 09:16:09 -0700
-Message-Id: <20260324161605.make.168-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UvWNF0wg";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="rUmU6YOm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774369139;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0pLGEONAHfojUOfaOSp5cChM4XB6HpkP9CDLtETY2Zg=;
+	b=UvWNF0wgSnxfP19DhIuC8JjD76fiIkslCDX4/NMpmxQjVX4QBESwrbJJDbBDYIjiZM21/w
+	HtU27K8qMP0CfUO4RM7dbJrJaBEvfkSSEvjugzhh2QF09LhIyK8Aw8gQGls1GFxookIIMX
+	HlEicRAq+l6D/vQK/CpMRxgdEeGD4ew=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-593-SP7Y14hAOfKlvnj-PtqB3w-1; Tue, 24 Mar 2026 12:18:57 -0400
+X-MC-Unique: SP7Y14hAOfKlvnj-PtqB3w-1
+X-Mimecast-MFC-AGG-ID: SP7Y14hAOfKlvnj-PtqB3w_1774369137
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-439cbfcfc21so4917757f8f.2
+        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 09:18:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1774369137; x=1774973937; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0pLGEONAHfojUOfaOSp5cChM4XB6HpkP9CDLtETY2Zg=;
+        b=rUmU6YOm3ZCZMZ7EHRgBKorXwzUWJWZyvVQK2SXrCg0xIYrY28uBtwIT4j0wrCZOIq
+         /GRGXn/UnVt5NfO3Mls1U1Ekx/w0M6seRDG+T4BTaurcKpQlnit7qfYnVBmmmmiJ6RDx
+         MFq8Rh+CQUgHb/CBoM0XKX1WtJo/4MZjkruQBBwW65VjtlhrhwOyaFhbmpF91R7iY3oW
+         SKcdCmb1T4EuAjfw0iq/pDCufgTmGFYA0Hx9fSo3VWjTx53FjxVCmuw3J/lwqQSp47kj
+         RtLHSvMECkQfCmVy8+D6FFworxn8+EsTstLaureeD9XjKhLU+/Ij1ugvz1QzeJyRAscF
+         h+IA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774369137; x=1774973937;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0pLGEONAHfojUOfaOSp5cChM4XB6HpkP9CDLtETY2Zg=;
+        b=Gaf6Ui/YKJT5j+v1DfOsa5EwNDI0riS6rkaXENg9qAo0bV+SBJzcMqrL1VPZGFTXtw
+         pQ5s3v5dnpG/sOHmUMV61CXwn92w+LrkZ27MvRXZ8QFWUeiXJkjI7YEKZ5hwZy/vlgR4
+         g+qVa2LYow5vlQeS5ezyyiqgKT09nO4IhGGMuKk0lYF6HJZ5jNZ0Fk4cuoTm6uEmXSY2
+         GkaY012YmNJJWta6MOWEJ1PZWL/ttuHFq/jLKvr6MXKBTNC46BPmim0R7hFs15QGuM9N
+         oNQRMVhAGE/1YcbCwgwxtD14CEAOOOMJZe7WOo/tlI1b3hy7y2QLohve9kmd6AH0hIFm
+         0DCA==
+X-Forwarded-Encrypted: i=1; AJvYcCUnn7RMisJff6TGte5H+Fwln5kqwfDDjti31px6RtOh5EQu1FvfcP7cPxQDKsOiriIucWs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHs/hCRc6j0tBFbFSRla1LIkQ3YJHb/U7RfXz7shV6baJ1XNZ/
+	Z1jmfRp+xHAvaKwJin6kmYyNL+EPzhFw9HNvDOmSIZxG/9bE+l2IIo73FkYvMvcbg41xKfEovSl
+	pCozhBQ9NygUNVWH+zfR2iyMvxM+K8PsnXVXOnImEumGn9j2JRkfshg==
+X-Gm-Gg: ATEYQzwzUckxaxlFcLHY5FAVWyJR1KbAVX4T/sxEB4uJc60xBZ5zmAQy4NQTa8h5bY3
+	b8HDKCQjzG48B/rTlMOLz5qq4KdSUG+3ueATb4HD38xEmoAWX6yaI1+2ZfuYpFDaFIcNIAMmLvl
+	ecEd7ne6fYFgbFsoBzavSXHjjzJkBDJ13CRGL8C0hEE/0pn901pcn2Sy8wcGMpk27F1i7JOccFK
+	wF13NWiVjwyTIl5XB3FpB9XzMl01hPV8qT1ebUIl4Fi4UnouUD21x8sN2og6zzhmK7fibnAyztP
+	B8N394zf4oMdbRGuXZD2uNCcXOIFO5oIuFo6ke6MHAv4hV1pAthH73bY9PPXhBfxRAYIfR8E8Fp
+	+YdTdSQIWE1O3qDJdqrRfwj8e8sVdB3MiZzTnFJT/2/HO9xcN
+X-Received: by 2002:a05:6000:2509:b0:43b:4920:56bb with SMTP id ffacd0b85a97d-43b88a0cfc1mr107780f8f.52.1774369136479;
+        Tue, 24 Mar 2026 09:18:56 -0700 (PDT)
+X-Received: by 2002:a05:6000:2509:b0:43b:4920:56bb with SMTP id ffacd0b85a97d-43b88a0cfc1mr107724f8f.52.1774369135946;
+        Tue, 24 Mar 2026 09:18:55 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk (alrua-x1.borgediget.toke.dk. [2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b64717e97sm41173985f8f.35.2026.03.24.09.18.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Mar 2026 09:18:55 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 24AE35A470F; Tue, 24 Mar 2026 17:18:54 +0100 (CET)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Andrii
+ Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong
+ Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, "David S . Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, Leon Hwang <leon.hwang@linux.dev>, Lorenzo
+ Bianconi <lorenzo@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+ kernel-patches-bot@fb.com
+Subject: Re: [PATCH bpf-next 1/3] bpf: Disallow freplace on XDP with
+ mismatched xdp_has_frags values
+In-Reply-To: <20260324150444.68166-2-leon.hwang@linux.dev>
+References: <20260324150444.68166-1-leon.hwang@linux.dev>
+ <20260324150444.68166-2-leon.hwang@linux.dev>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Tue, 24 Mar 2026 17:18:54 +0100
+Message-ID: <87ecl9mc9d.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3193; i=kees@kernel.org; h=from:subject:message-id; bh=8mE/hk4JeconWD2CxN0hrl6k/Bs3a/bHP5M+/Wb+Nqo=; b=owGbwMvMwCVmps19z/KJym7G02pJDJmHdpxknszs8fJUZ9/a/ccF1DqPVom+/jjJOPvZN6HaT 1Vf4s+UdZSyMIhxMciKKbIE2bnHuXi8bQ93n6sIM4eVCWQIAxenAEykbTUjw8w/uxSfS2/ueWIq qfo/c99zLqX7F37vkNf28478va40czMjw51anXO287+W2St6/r7+MchVg2ctHw/P0qVLnf2jeg4 84QAA
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Replace the deprecated[1] strncpy() with strnlen() on the source
-followed by memcpy(). Normally strscpy() would be used in this case,
-but skel_internal.h is shared between kernel and userspace tools, and
-strscpy() is not available in the userspace build context.
+Leon Hwang <leon.hwang@linux.dev> writes:
 
-The source map_name is a NUL-terminated C string (the only caller
-passes the "__loader.map" 12 character string literal). The destination
-attr.map_name is char[BPF_OBJ_NAME_LEN] (16 bytes) in union bpf_attr,
-ultimately passed to the bpf() syscall.
+> xdp_has_frags was introduced by the commit
+> c2f2cdbeffda ("bpf: introduce BPF_F_XDP_HAS_FRAGS flag in prog_flags loading the ebpf program").
+>
+> The commit f45d5b6ce2e8 ("bpf: generalise tail call map compatibility check")
+> was to ensure backwards compatibility against tail calls. However, it
+> missed that XDP progs can be extended by freplace progs, which could break
+> the backwards compatibility, e.g. xdp_has_frags=true freplace progs are
+> allowed to attach to xdp_has_frags=false XDP progs.
+>
+> To avoid breaking the backwards compatibility via freplace, disallow
+> freplace on XDP programs with different xdp_has_frags values.
 
-The bpf(BPF_MAP_CREATE) syscall, through bpf_obj_name_cpy(), requires a
-NUL terminator within this 16-byte array, rejecting names that use all 16
-bytes. Valid names are therefore at most 15 characters, but this wasn't
-being checked via the skel_map_create() path. Add a matching check and
-refuse 16+ character strings early, as they would be refused later by
-bpf_obj_name_cpy().
+The problem you describe is not actually a problem, though? A
+frags-aware program can run on a non-frags interface just fine.
 
-The attr is pre-zeroed with memset() at the top of the function, so
-the last byte of attr.map_name is always NUL, meaning the memcpy()
-of just the non-NUL characters from the source will always produce a
-NUL-terminated destination string.
+You're messing with long-standing behaviour (since 5.18!) to solve a
+non-existent problem. In a way that completely breaks the frags handling
+in libxdp[0]:
 
-Link: https://github.com/KSPP/linux/issues/90 [1]
-Signed-off-by: Kees Cook <kees@kernel.org>
----
- v3: instead of truncation, refuse the long length (test appears to have been a flake)
- v2: https://lore.kernel.org/lkml/20260324053036.it.906-kees@kernel.org/
- v1: https://lore.kernel.org/lkml/20260324040535.work.851-kees@kernel.org/
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: sun jian <sun.jian.kdev@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Song Liu <song@kernel.org>
-Cc: Yonghong Song <yonghong.song@linux.dev>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: Stanislav Fomichev <sdf@fomichev.me>
-Cc: Hao Luo <haoluo@google.com>
-Cc: <bpf@vger.kernel.org>
----
- tools/lib/bpf/skel_internal.h | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+    Running tests from ./test-libxdp.sh
+     [test_link_so]                PASS
+     [test_link_a]                 PASS
+     [test_old_dispatcher]         PASS
+     [test_xdp_devbound]           PASS
+     [test_xdp_frags]              FAIL
+          Kernel supports XDP programs with frags
+          check_load_frags:	FAILED
+          check_load_nofrags_success:	PASSED
+          check_load_nofrags_fail:	PASSED
+          check_load_frags_multi:	FAILED
+          check_load_mix_big:	FAILED
+          check_load_mix_small:	FAILED
+          Test test_xdp_frags exited with return code: 1
 
-diff --git a/tools/lib/bpf/skel_internal.h b/tools/lib/bpf/skel_internal.h
-index 6a8f5c7a02eb..2d38c387f43c 100644
---- a/tools/lib/bpf/skel_internal.h
-+++ b/tools/lib/bpf/skel_internal.h
-@@ -236,6 +236,7 @@ static inline int skel_map_create(enum bpf_map_type map_type,
- {
- 	const size_t attr_sz = offsetofend(union bpf_attr, excl_prog_hash_size);
- 	union bpf_attr attr;
-+	size_t map_name_len;
- 
- 	memset(&attr, 0, attr_sz);
- 
-@@ -243,7 +244,12 @@ static inline int skel_map_create(enum bpf_map_type map_type,
- 	attr.excl_prog_hash = (unsigned long) excl_prog_hash;
- 	attr.excl_prog_hash_size = excl_prog_hash_sz;
- 
--	strncpy(attr.map_name, map_name, sizeof(attr.map_name));
-+	/* attr.map_name must be NUL-terminated, like bpf_obj_name_cpy() */
-+	map_name_len = strnlen(map_name, sizeof(attr.map_name));
-+	if (map_name_len == sizeof(attr.map_name))
-+		return -EINVAL;
-+	memcpy(attr.map_name, map_name, map_name_len);
-+
- 	attr.key_size = key_size;
- 	attr.value_size = value_size;
- 	attr.max_entries = max_entries;
--- 
-2.34.1
+
+Please don't do that.
+
+-Toke
+
+[0] Run 'make test' here: https://github.com/xdp-project/xdp-tools
 
