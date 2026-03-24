@@ -1,245 +1,114 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6DE37A494
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 13:08:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774357692; cv=pass; b=RPVZsPr0FWeFMLtEH+ZmbHmRKvL6blH2ztSCqyr9ZfkzJEIUFLTC19uftD2dEiyaC2GG5h01XSLgNfvgutb6qu26FwRlLS8PEIMEt6e1cz8c4ngFkCUIcagPgk+3RsNMzxE6HB1c4h5X1ElIMRCjNrcdXTmWmDDOac5DPw1gEhE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774357692; c=relaxed/simple;
-	bh=0prnBxae6usShy4iTyK1IjfDqu9hgcalWUhqdmUJyL4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tl3CSstH6Or1qRt7X79YpjBtI7dP59m/TjaEEVYb5hqRlaiktCuFdBECFCLQJKA8XnE7zrCCDJL8KeTKKPdDMxqUTKhJla0cF+aSHmcv2oIvx4a58Hd/iqtGckVmM32i/0h2eyHj3YIQF0Dd58/WyVmwcO4+jO2GFOlc56djSqk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YB/apMBx; arc=pass smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YB/apMBx"
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-65c4152313fso7491003a12.1
-        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 06:08:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774357689; cv=none;
-        d=google.com; s=arc-20240605;
-        b=XFBSRVqaCS0qcCWIQxEaJn0DM69btO+GIoKNNScSK/XsBhe6zIve+wS2ZfcY2tRwez
-         2UFppj4kIKPtZEYC4q+vWHbHWmW/bkqpbQyuOa8Mj47HmdTFWpEMyINTpdthuY6cDF6Q
-         Wi/k1mK+5Y5YbPAqs5sLZK7K9RVNXnQ/bMADWQpcWkYIphcpsPqq2p1aJPOuetbC4zwm
-         SXXi3lgtzKoXak/zBn+4qDjFBIrD65unZWSOufzoVBzJHFgOwCVs0hmWUfpVeMjAQLpp
-         aCwE00D1wYiHMvUtZSKEyaAG0UUMFKgM0FXWHfYEGGwTsWzP1SwKao0NJZdTxgwE2qu6
-         NC5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=m3CxLwJFAGMg3jZRKUfOz7NrDJgZ2F9BUWuGCcsmwL8=;
-        fh=ocSOvAMKBRIJInEcQuIOTGDmVahYtqK5Dh6s2X05kv4=;
-        b=TN1VNcg0hldP77zMZXnGZJgfOQ/QGPPswvTZ/iqzcAunRGbxT6SYxM3Q+NwqaA5cOL
-         dsQ5W/UnBSPSCNUdiCXEIxDeWR449vgKJ/zTnxDNg8wy3fjvBXiHh425KANjMUIoGeqa
-         A7FvHztwjtKiMyHQRhSc/CRaWzUY+xT/YSI9TAhAPml+Owyg9i8ywJ48/nuQ+8BveSSU
-         kEu5o7YOolZBwOapPGE6adpgVqw5QtQv8Dsx47S1Z9fwn9Uze2jFoTfraD4rBs8rhiKq
-         +GSmr7PG4Bnx/6nsMr3FEpApb0DK1IQJTIUCowBwABJ9Rr7PuxeG6Ot1YpIGFVvEXeWL
-         5pbg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774357689; x=1774962489; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m3CxLwJFAGMg3jZRKUfOz7NrDJgZ2F9BUWuGCcsmwL8=;
-        b=YB/apMBxTXELBXu6FtiEcB35UWYd7677Mbb+IoonFUqgHiwk8KDgO4tZEdWbFf6V8U
-         cw+txcu6qvhvQCJ8N9173L3Hy4CBpkTl/sqiKcocSkiOC7Hcn7XrERCgqm7S/r94LISJ
-         fcDwE/LZlzLAMyQIoAELKu+zExZHKdNMlnMdF2FxL+V6mQSF3L2jlZjzN1/EIKPA79pI
-         5I/faRAGdOZsu9fttpMzvo+yjRHy0QDQldtu/9jt3FnfKklluhSlOgX7nhCMRCu83o/e
-         00gWAJRtNnmluK6Bg/8euqltoJHpkSGcM06ynR3jTt7NgJYJIRDm/2rIktqUuUMptNvr
-         Ph1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774357689; x=1774962489;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=m3CxLwJFAGMg3jZRKUfOz7NrDJgZ2F9BUWuGCcsmwL8=;
-        b=XlI0hKmsrTA7Ba2XY4TQ9HEh+3/yV4G6ydOEtgweDv0esP7q1vdkpn2WcD/jNixbpm
-         7R754x6h5zWAC8YWOjFjUr0CO20TfxM5+ntXz2FKHVHCsgfrfpbiMZrUaw/oMjvAznpR
-         TTU/d858y78C+++e8YRM+dITUVGAMVr0/U/IBs1jElza8e5/QECU4JMR+hv2GdNdRXab
-         6mOqTOAh4s+0IRTUz//Szz5pTZdNxPVdrKjho60pUGaeB5OHg8RxwXDTQ5AIVFNaAJnH
-         ofogszn0nVj6lJtfTWpYNrJjLHma9bmZnbLwydkoyRyfKiwZcKaSHmucYcW7+g43+hsQ
-         7fFA==
-X-Gm-Message-State: AOJu0Yz1uoCPlHI6JyNPY5+kWX3FZZU7fTkCRyZqJyx7cfsMwzpUQbVz
-	HiLEZnf2DYEKDKr2OYeH+KU84l7fITN55Bhs7zGXO7Y5VYKe5rQuNee6qcOgIknstQIECk/NV5n
-	NxFvyVS615C8fSflP3YtbqJrgofHLIPc=
-X-Gm-Gg: ATEYQzwQ3/BAWZp9jff99iofrdUdZSQwcqnBT55ZcLb8cvjhS0SFRsZ4Mciw572GmJV
-	SpLW4JEMJdH8+xf35lmk39YPLxEzTCFQpvibX0DVkr6YFqBUl2399m7lQ0y4zsfwLC9DW6HOknz
-	wP61vbUfwPwUwRGratSfbMr6pneaYUTZeiKA4UBLgjMsRVP4e+zWY8XaF8irbnklEmyMuf91czt
-	gM7+LwFVPQBw6oTfUQtkqtoAwI8b9/ffo8AwX1yvfDALa4sLWFqCy+shiCPojQhxiI8DWMF2bda
-	EzESxywbl+GCZuz+x15mGsMRHukLk0OFoQ==
-X-Received: by 2002:a05:6402:3786:b0:667:df35:873d with SMTP id
- 4fb4d7f45d1cf-668c9115101mr10876451a12.2.1774357689006; Tue, 24 Mar 2026
- 06:08:09 -0700 (PDT)
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EC443F7E73
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 13:10:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774357862; cv=none; b=KjGh1WP7apIlKdbE+L+VezYPaYQiW91ZX4I693ARGeFMx2vkk736lseEtakc2+1ThuI/k74UoAoL7JFlMMmH0V3avngysXzQM5WJukb7tRkL0PYlfuAvaa20akKiuiAh9WDlUuLSiKGC4ykjjjC5U+5A3BSL46XGzhWAnG+WL2g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774357862; c=relaxed/simple;
+	bh=YCVNfVgIpBzJm2Hd4TTEJx5VB5I3bYj3Ow25o7DzAgo=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=PJvkRImnKuROngz/3ysCysdPpmJsrbKza7O8f65T5lzGG7AcF+Vrh/aMYCQpgNeuGvImAyPxAt4FG0xS7Bon43vLUUrQ64E60y+UbVo1Zqy0cdxheGIUL6ZccSJFE2UpCD1qxSRpfKfk81Q+8WK85du2d3eWRyTRVN1J34qMWIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8CxH6pdjcJpti8eAA--.27064S3;
+	Tue, 24 Mar 2026 21:10:53 +0800 (CST)
+Received: from [10.130.40.83] (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJCx98BcjcJpajVcAA--.31199S3;
+	Tue, 24 Mar 2026 21:10:52 +0800 (CST)
+Subject: Re: [RFC PATCH 6/7] LoongArch: BPF: Add load-acquire and
+ store-release instructions
+To: bot+bpf-ci@kernel.org, loongarch@lists.linux.dev, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ martin.lau@kernel.org, eddyz87@gmail.com, yonghong.song@linux.dev,
+ clm@meta.com, ihor.solodrai@linux.dev, WANG Rui <wangrui@loongson.cn>
+References: <20260324090106.13527-7-yangtiezhu@loongson.cn>
+ <5a2cfd2c3dddef83de46ea9b0f02bb5b90c29937c9b9d348542838fde1e29a93@mail.kernel.org>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <bbb797cd-c6ea-f61c-d99c-66908e4e5f68@loongson.cn>
+Date: Tue, 24 Mar 2026 21:10:51 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260318172259.2882792-1-puranjay@kernel.org> <DH8T9WRPSRPY.264HCXDHAQT23@etsalapatis.com>
-In-Reply-To: <DH8T9WRPSRPY.264HCXDHAQT23@etsalapatis.com>
-From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Tue, 24 Mar 2026 13:07:57 +0000
-X-Gm-Features: AQROBzAF6NPs2IF-y3k5XVQ20-mFqlwPNqAHOjDsqOpsEnfJyaLej4ix48HU7xQ
-Message-ID: <CANk7y0jZOKJ=AzyJn-+MLSHH3kDKt-LZd-HndJQ7Qyj08CFYGw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4] bpftool: Enable aarch64 ISA extensions for
- JIT disassembly
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, 
-	Quentin Monnet <qmo@kernel.org>, kernel-team@meta.com, 
-	Yonghong Song <yonghong.song@linux.dev>, Leon Hwang <leon.hwang@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <5a2cfd2c3dddef83de46ea9b0f02bb5b90c29937c9b9d348542838fde1e29a93@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJCx98BcjcJpajVcAA--.31199S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7Kr48Kry5ZF1UAry7Gw1fKrX_yoW8Ar45pF
+	ZFy3Z5CrWvgryDZF97Ja18ZFyxtF4fKF13WF1UJrWSgr15Wr1SqFn5K3WYva98Gw4kCr40
+	9ryYywnIvFyDZacCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+	AVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+	8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
+	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67
+	AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
+	rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
+	v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
+	JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUxYiiDU
+	UUU
 
-On Sat, Mar 21, 2026 at 10:25=E2=80=AFPM Emil Tsalapatis <emil@etsalapatis.=
-com> wrote:
->
-> On Wed Mar 18, 2026 at 1:22 PM EDT, Puranjay Mohan wrote:
-> > The LLVM disassembler needs ISA extension features enabled to correctly
-> > decode instructions from those extensions. On aarch64, without these
-> > features, instructions like LSE atomics (e.g. ldaddal) are silently
-> > decoded as incorrect instructions and disassembly is truncated.
-> >
-> > Use LLVMCreateDisasmCPUFeatures() with "+all" features for aarch64
-> > targets so that the disassembler can handle any instruction the kernel
-> > JIT might emit.
-> >
-> > Before:
-> >
-> > int bench_trigger_uprobe(void * ctx):
-> > bpf_prog_538c6a43d1c6b84c_bench_trigger_uprobe:
-> > ; int cpu =3D bpf_get_smp_processor_id();
-> >    0:   mov     x9, x30
-> >    4:   nop
-> >    8:   stp     x29, x30, [sp, #-16]!
-> >    c:   mov     x29, sp
-> >   10:   stp     xzr, x26, [sp, #-16]!
-> >   14:   mov     x26, sp
-> >   18:   mrs     x10, SP_EL0
-> >   1c:   ldr     w7, [x10, #16]
-> > ; __sync_add_and_fetch(&hits[cpu & CPU_MASK].value, 1);
-> >   20:   and     w7, w7, #0xff
-> > ; __sync_add_and_fetch(&hits[cpu & CPU_MASK].value, 1);
-> >   24:   lsl     x7, x7, #7
-> >   28:   mov     x0, #-281474976710656
-> >   2c:   movk    x0, #32768, lsl #32
-> >   30:   movk    x0, #35407, lsl #16
-> >   34:   add     x0, x0, x7
-> >   38:   mov     x1, #1
-> > ; __sync_add_and_fetch(&hits[cpu & CPU_MASK].value, 1);
-> >   3c:   mov     x1, #1
-> >
-> > After:
-> >
-> > int bench_trigger_uprobe(void * ctx):
-> > bpf_prog_538c6a43d1c6b84c_bench_trigger_uprobe:
-> > ; int cpu =3D bpf_get_smp_processor_id();
-> >    0:   mov     x9, x30
-> >    4:   nop
-> >    8:   stp     x29, x30, [sp, #-16]!
-> >    c:   mov     x29, sp
-> >   10:   stp     xzr, x26, [sp, #-16]!
-> >   14:   mov     x26, sp
-> >   18:   mrs     x10, SP_EL0
-> >   1c:   ldr     w7, [x10, #16]
-> > ; __sync_add_and_fetch(&hits[cpu & CPU_MASK].value, 1);
-> >   20:   and     w7, w7, #0xff
-> > ; __sync_add_and_fetch(&hits[cpu & CPU_MASK].value, 1);
-> >   24:   lsl     x7, x7, #7
-> >   28:   mov     x0, #-281474976710656
-> >   2c:   movk    x0, #32768, lsl #32
-> >   30:   movk    x0, #35407, lsl #16
-> >   34:   add     x0, x0, x7
-> >   38:   mov     x1, #1
-> > ; __sync_add_and_fetch(&hits[cpu & CPU_MASK].value, 1);
-> >   3c:   ldaddal x1, x1, [x0]
-> > ; return 0;
-> >   40:   mov     w7, #0
-> >   44:   ldp     xzr, x26, [sp], #16
-> >   48:   ldp     x29, x30, [sp], #16
-> >   4c:   mov     x0, x7
-> >   50:   ret
-> >   54:   nop
-> >   58:   ldr     x10, #8
-> >   5c:   br      x10
-> >
-> > Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-> > Acked-by: Yonghong Song <yonghong.song@linux.dev>
-> > Acked-by: Leon Hwang <leon.hwang@linux.dev>
-> > Acked-by: Quentin Monnet <qmo@kernel.org>
->
-> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
->
-> > ---
-> > Changelog:
-> > v3: https://lore.kernel.org/all/20260311222608.521549-1-puranjay@kernel=
-.org/
-> > Changes in v4:
-> > - Add acked by Quentin
-> > - Rebased on bpf-next/master
-> > v2: https://lore.kernel.org/all/20260310223456.1706712-1-puranjay@kerne=
-l.org/
-> > Chnages in v3:
-> > - Fix bug in usage of strncmp() (AI)
-> > v1: https://lore.kernel.org/all/20260306163906.2870529-1-puranjay@kerne=
-l.org/
-> > Changes in v2:
-> > - Fix coding style issue (Quentin)
-> > - Use strncmp() in place of strstr() for detecting aarch64 in triple. (=
-Quentin)
-> > ---
-> >  tools/bpf/bpftool/jit_disasm.c | 11 ++++++++++-
-> >  1 file changed, 10 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/tools/bpf/bpftool/jit_disasm.c b/tools/bpf/bpftool/jit_dis=
-asm.c
-> > index 8895b4e1f690..04541155e9cc 100644
-> > --- a/tools/bpf/bpftool/jit_disasm.c
-> > +++ b/tools/bpf/bpftool/jit_disasm.c
-> > @@ -93,7 +93,16 @@ init_context(disasm_ctx_t *ctx, const char *arch,
-> >               p_err("Failed to retrieve triple");
-> >               return -1;
-> >       }
-> > -     *ctx =3D LLVMCreateDisasm(triple, NULL, 0, NULL, symbol_lookup_ca=
-llback);
-> > +
-> > +     /*
-> > +      * Enable all aarch64 ISA extensions so the disassembler can hand=
-le any
-> > +      * instruction the kernel JIT might emit (e.g. ARM64 LSE atomics)=
-.
-> > +      */
-> > +     if (!strncmp(triple, "aarch64", 7))
-> > +             *ctx =3D LLVMCreateDisasmCPUFeatures(triple, "", "+all", =
-NULL, 0, NULL,
-> > +                                                symbol_lookup_callback=
-);
-> > +     else
-> > +             *ctx =3D LLVMCreateDisasm(triple, NULL, 0, NULL, symbol_l=
-ookup_callback);
->
-> Question: Are there advantages to special casing aarch64? Shouldn't this
-> be a no-op for other architectures where it seems the JIT doesn't emit an=
-y
-> feature-dependent instructions?
+On 2026/3/24 下午5:42, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+>> index c9a32f124f5e..d1e9866911dd 100644
+>> --- a/arch/loongarch/net/bpf_jit.c
+>> +++ b/arch/loongarch/net/bpf_jit.c
+> 
+> [ ... ]
+> 
+>> +	/* store_release(dst_reg + off16, src_reg) */
+>> +	case BPF_STORE_REL:
+>> +		switch (BPF_SIZE(insn->code)) {
+> 
+> [ ... ]
+> 
+>> +		case BPF_W:
+>> +			if (cpu_has_llacq_screl) {
+>> +				move_imm(ctx, t1, off, false);
+>> +				emit_insn(ctx, addd, t2, dst, t1);
+>> +				emit_insn(ctx, screlw, src, t2);
+> 
+> SCREL.W is a store-conditional instruction, not a plain store-release.
+> It checks LLbit and then overwrites rd with the success indicator
+> (1 or 0), which would clobber the BPF source register.
+> 
+> Looking at emit_atomic_rmw() in the same file for BPF_CMPXCHG, the
+> existing LL/SC usage carefully avoids this:
+> 
+>      move_reg(ctx, t3, src);
+>      emit_insn(ctx, scw, t3, t1, 0);
+>      emit_insn(ctx, beq, t3, LOONGARCH_GPR_ZERO, -6);
+> 
+> Here SC.W is applied to the temp register t3 rather than the BPF
+> register, and t3 is then checked for 0 to retry the loop. This
+> confirms that SC-family instructions clobber their rd operand on
+> LoongArch.
+> 
+> Is SCREL.W/D the right instruction for a standalone store-release?
+> The other architectures use plain stores with ordering guarantees
+> for BPF_STORE_REL:
 
-Thanks for the review.
+Indeed, I misunderstood the instructions before, thanks Wang Rui and
+bot+bpf-ci. I did some changes locally and tested again, the related
+testcases passed.
 
-the "+all" is specific to the arm64 target and if I don't special case
-it, it will be ignored and that is fine but it prints this to the
-stdout:
-
-'+all' is not a recognized feature for this target (ignoring feature)
-
-this will be printed for every target except arm64, which is not
-something we want.
+I will use the common memory access instruction with the barrier dbar
+to support load-acquire and store-release in the next version.
 
 Thanks,
-Puranjay
+Tiezhu
+
