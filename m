@@ -1,94 +1,184 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9045040628C;
-	Tue, 24 Mar 2026 15:28:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 121E738F95B
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 15:33:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774366116; cv=none; b=jzmOmsDWtanScrUFSXloYkNmApJvzPls/j7G+tb/8JD6klTR8wkYXuv7S+T+ytLzg9D11/p1aviyLTk2R1C0aqnqA719zBkbV63lCl4P1Kaz4CB/to47FxincYIfEuoByT70+dMivL918uXUy4KolEO9q+zB+k2kOGjKI0CsqNg=
+	t=1774366436; cv=none; b=RxG0uA1KLltWK7XcZYw02cSdxweKZO7prKDc8besXQYGmSgeLD7U6NzX549xYQwL8VaRlsNaELDFUEL9Z3WnmnJo6IWTEQ9XgyFJlthqaCXKiuGlb4mKwbZhJCzEAldcC/oDYGyPB0GM4nMtHMen80lDs8JtzqQULwjdLCqIErQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774366116; c=relaxed/simple;
-	bh=AFY1t3dzpLhOlBGSBGqfYpTg+GWsxbB/cGrQYVqi6pY=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=ElHb5uknapO81PI/8PpOvPBm7/hYD0IaAqRjhh7jA3JXoRli09WPLPHaedunyH/EXOWg2KUQF2Z/2cvtxvC36BaUc5Y3myob5LHDSNI25+NIcp+vKUrqUEze9K1WTHr9QvEk1taYFt1PjzuhzufRLNjT3Hd3QKGjoGktL2KXMpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sGdCu5F1; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774366436; c=relaxed/simple;
+	bh=kfjm5yZGiCfEtrhK2jWybCcIIFl5EeW2xNwPyeDQtzM=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=k9C/jy4Ful0uOrVBGL5GzguiP+RH5ymE6xe/wl0hdCDNSPa1b+p2+Ui8eP3WucEaJyQT7oAkp2y+4RzKj6JZUYg2qhjNEegMwtVcKNsNNjegds8e5RHGjfLsS1egjLQH9GAoRq5xO/2TdWADPIBgx1ruIlEMCxvZJjS14Y28Kp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZjVdc/Jj; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sGdCu5F1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 215F8C19424;
-	Tue, 24 Mar 2026 15:28:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774366116;
-	bh=AFY1t3dzpLhOlBGSBGqfYpTg+GWsxbB/cGrQYVqi6pY=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=sGdCu5F1rf0XWBuOICgzXfM6J80k5apLUCFmap0jPCj5+cN73SW1MkHGEo4dQxCxl
-	 u/CmZkArZ5rnDGV+DLMB3OoLqnPXUcN4HOoPScbzovRr9/aF7kSpT2W0Qk452HJ383
-	 k149QgyJBJV8LkHJsBsTx1FWjH6kLHg7M+ZhvWlxYTdy5wLMk/S5+1NgRiIWlmlUO/
-	 AI9VZEVrvRgSDpUEOXyn44Bbnm3z5Pv9LNa6Ts/7ea8pd5mVNas4klQSpqQUza8uzB
-	 gehjjOHsYnh5YuCeTiLzcASQ+xfi8rOsCTWjzbyJdgQzG+QTCBd33h4SIZJ+XGa7yX
-	 VhVoqyx/Z80BA==
-Date: Tue, 24 Mar 2026 08:28:35 -0700
-From: Kees Cook <kees@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>, linux-hardening@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH=5D_libbpf=3A_Replace_strncpy=28=29_wit?=
- =?US-ASCII?Q?h_strnlen=28=29+memcpy=28=29_in_skel=5Fmap=5Fcreate=28=29?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CAADnVQLhWURvQ=gBYQvuEa3pTxabYQYhrPm9QG0gbxL9ee=vng@mail.gmail.com>
-References: <20260324040535.work.851-kees@kernel.org> <202603232224.C1555BF@keescook> <CAADnVQLhWURvQ=gBYQvuEa3pTxabYQYhrPm9QG0gbxL9ee=vng@mail.gmail.com>
-Message-ID: <D53376BA-4772-486B-A18A-6858C1732723@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZjVdc/Jj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774366431;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Z2IIGMuAO+ucZPfz1QK9xPIoH0lITs2rYPhG8mHOgNI=;
+	b=ZjVdc/Jj08qP3GIW2Bo2AFHY++vSe0MdTfIdjxpmHgSOCaTRKMucbD86Pkqska0wZ8Tghf
+	InAW9wEBjDTRi7LHUe5I4sf07zTH5KIqcbdkSF169eo0rS0CSK6tVfcCsO/s5C5kSLRTM9
+	yKRbc5I4d17zuqFkG4c/1j2cRIAKJ0Q=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-584-pBWjeCHiMBykKOn1hjiBag-1; Tue,
+ 24 Mar 2026 11:33:46 -0400
+X-MC-Unique: pBWjeCHiMBykKOn1hjiBag-1
+X-Mimecast-MFC-AGG-ID: pBWjeCHiMBykKOn1hjiBag_1774366414
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 78E541800372;
+	Tue, 24 Mar 2026 15:33:33 +0000 (UTC)
+Received: from RHTRH0061144 (unknown [10.17.17.65])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2EADC19560B1;
+	Tue, 24 Mar 2026 15:33:29 +0000 (UTC)
+From: Aaron Conole <aconole@redhat.com>
+To: "Vineeth Pillai (Google)" <vineeth@bitbyteword.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>,  Peter Zijlstra
+ <peterz@infradead.org>,  "David S. Miller" <davem@davemloft.net>,  Eric
+ Dumazet <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>,  Paolo
+ Abeni <pabeni@redhat.com>,  Simon Horman <horms@kernel.org>,  Alexei
+ Starovoitov <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
+  Jesper Dangaard Brouer <hawk@kernel.org>,  John Fastabend
+ <john.fastabend@gmail.com>,  Stanislav Fomichev <sdf@fomichev.me>,  Eelco
+ Chaudron <echaudro@redhat.com>,  Ilya Maximets <i.maximets@ovn.org>,
+  Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,  Xin Long
+ <lucien.xin@gmail.com>,  Jon Maloy <jmaloy@redhat.com>,  Willem de Bruijn
+ <willemb@google.com>,  Samiullah Khawaja <skhawaja@google.com>,  Hangbin
+ Liu <liuhangbin@gmail.com>,  Kuniyuki Iwashima <kuniyu@google.com>,
+  netdev@vger.kernel.org,  linux-kernel@vger.kernel.org,
+  bpf@vger.kernel.org,  dev@openvswitch.org,  linux-sctp@vger.kernel.org,
+  tipc-discussion@lists.sourceforge.net,
+  linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 04/19] net: Use trace_call__##name() at guarded
+ tracepoint call sites
+In-Reply-To: <20260323160052.17528-5-vineeth@bitbyteword.org> (Vineeth
+	Pillai's message of "Mon, 23 Mar 2026 12:00:23 -0400")
+References: <20260323160052.17528-1-vineeth@bitbyteword.org>
+	<20260323160052.17528-5-vineeth@bitbyteword.org>
+Date: Tue, 24 Mar 2026 11:33:28 -0400
+Message-ID: <f7ttsu58con.fsf@redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
+"Vineeth Pillai (Google)" <vineeth@bitbyteword.org> writes:
 
-
-On March 24, 2026 7:42:04 AM PDT, Alexei Starovoitov <alexei=2Estarovoitov=
-@gmail=2Ecom> wrote:
->On Mon, Mar 23, 2026 at 10:25=E2=80=AFPM Kees Cook <kees@kernel=2Eorg> wr=
-ote:
->>
->> On Mon, Mar 23, 2026 at 09:05:39PM -0700, Kees Cook wrote:
->> > While the original strncpy() would have copied a full 16 bytes from a=
-n
->> > overlong name (producing an unterminated field that the syscall rejec=
-ts),
->> > but this wasn't a reachable state=2E This replacement will instead al=
-ways
->> > truncate to 15 bytes and keeps the NUL terminator, which should have =
-no
->> > behavioral changes with the present code and avoids potential issues
->> > with future over-long string literals=2E
->>
->> Hm, I got a failure report, but it *seems* unrelated? But nothing else
->> fails that way recently, so I will try a v2 with the "unterminated at 1=
-6
->> bytes" behavior restored and see if it passes=2E=2E=2E
->>
->> test_progs_no_alu32-x86_64-llvm-21:
->> https://github=2Ecom/kernel-patches/bpf/actions/runs/23472955268/job/68=
-300440546
+> Replace trace_foo() with the new trace_call__foo() at sites already
+> guarded by trace_foo_enabled(), avoiding a redundant
+> static_branch_unlikely() re-evaluation inside the tracepoint.
+> trace_call__foo() calls the tracepoint callbacks directly without
+> utilizing the static branch again.
 >
->Don't fix what is not broken=2E
+> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Vineeth Pillai (Google) <vineeth@bitbyteword.org>
+> Assisted-by: Claude:claude-sonnet-4-6
+> ---
 
-strncpy is broken=2E ;) This is one of the 6 remaining uses of strncpy in =
-the kernel=2E But it needs a v3=2E I'll add explicit rejection of over-long=
- strings and validate that the bpf test was a flake, as suggested in the ot=
-her reply=2E
+As noted before, I think we can just eliminate the guard in the
+openvswitch module (and that would probably be a more understandable
+fix) rather than replacing the call-in.
 
--Kees
+>  net/core/dev.c             | 2 +-
+>  net/core/xdp.c             | 2 +-
+>  net/openvswitch/actions.c  | 2 +-
+>  net/openvswitch/datapath.c | 2 +-
+>  net/sctp/outqueue.c        | 2 +-
+>  net/tipc/node.c            | 2 +-
+>  6 files changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 14a83f2035b93..f7602b1892fea 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -6444,7 +6444,7 @@ void netif_receive_skb_list(struct list_head *head)
+>  		return;
+>  	if (trace_netif_receive_skb_list_entry_enabled()) {
+>  		list_for_each_entry(skb, head, list)
+> -			trace_netif_receive_skb_list_entry(skb);
+> +			trace_call__netif_receive_skb_list_entry(skb);
+>  	}
+>  	netif_receive_skb_list_internal(head);
+>  	trace_netif_receive_skb_list_exit(0);
+> diff --git a/net/core/xdp.c b/net/core/xdp.c
+> index 9890a30584ba7..3003e5c574191 100644
+> --- a/net/core/xdp.c
+> +++ b/net/core/xdp.c
+> @@ -362,7 +362,7 @@ int xdp_rxq_info_reg_mem_model(struct xdp_rxq_info *xdp_rxq,
+>  		xsk_pool_set_rxq_info(allocator, xdp_rxq);
+>  
+>  	if (trace_mem_connect_enabled() && xdp_alloc)
+> -		trace_mem_connect(xdp_alloc, xdp_rxq);
+> +		trace_call__mem_connect(xdp_alloc, xdp_rxq);
+>  	return 0;
+>  }
+>  
+> diff --git a/net/openvswitch/actions.c b/net/openvswitch/actions.c
+> index 792ca44a461da..60823de201417 100644
+> --- a/net/openvswitch/actions.c
+> +++ b/net/openvswitch/actions.c
+> @@ -1259,7 +1259,7 @@ static int do_execute_actions(struct datapath *dp, struct sk_buff *skb,
+>  		int err = 0;
+>  
+>  		if (trace_ovs_do_execute_action_enabled())
+> -			trace_ovs_do_execute_action(dp, skb, key, a, rem);
+> +			trace_call__ovs_do_execute_action(dp, skb, key, a, rem);
+>  
+>  		/* Actions that rightfully have to consume the skb should do it
+>  		 * and return directly.
+> diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
+> index e209099218b41..2b9755e2e4731 100644
+> --- a/net/openvswitch/datapath.c
+> +++ b/net/openvswitch/datapath.c
+> @@ -335,7 +335,7 @@ int ovs_dp_upcall(struct datapath *dp, struct sk_buff *skb,
+>  	int err;
+>  
+>  	if (trace_ovs_dp_upcall_enabled())
+> -		trace_ovs_dp_upcall(dp, skb, key, upcall_info);
+> +		trace_call__ovs_dp_upcall(dp, skb, key, upcall_info);
+>  
+>  	if (upcall_info->portid == 0) {
+>  		err = -ENOTCONN;
+> diff --git a/net/sctp/outqueue.c b/net/sctp/outqueue.c
+> index f6b8c13dafa4a..4025d863ffc84 100644
+> --- a/net/sctp/outqueue.c
+> +++ b/net/sctp/outqueue.c
+> @@ -1267,7 +1267,7 @@ int sctp_outq_sack(struct sctp_outq *q, struct sctp_chunk *chunk)
+>  	/* SCTP path tracepoint for congestion control debugging. */
+>  	if (trace_sctp_probe_path_enabled()) {
+>  		list_for_each_entry(transport, transport_list, transports)
+> -			trace_sctp_probe_path(transport, asoc);
+> +			trace_call__sctp_probe_path(transport, asoc);
+>  	}
+>  
+>  	sack_ctsn = ntohl(sack->cum_tsn_ack);
+> diff --git a/net/tipc/node.c b/net/tipc/node.c
+> index af442a5ef8f3d..5745d6aa0a054 100644
+> --- a/net/tipc/node.c
+> +++ b/net/tipc/node.c
+> @@ -1943,7 +1943,7 @@ static bool tipc_node_check_state(struct tipc_node *n, struct sk_buff *skb,
+>  
+>  	if (trace_tipc_node_check_state_enabled()) {
+>  		trace_tipc_skb_dump(skb, false, "skb for node state check");
+> -		trace_tipc_node_check_state(n, true, " ");
+> +		trace_call__tipc_node_check_state(n, true, " ");
+>  	}
+>  	l = n->links[bearer_id].link;
+>  	if (!l)
 
---=20
-Kees Cook
