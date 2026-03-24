@@ -1,173 +1,117 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDCE439B97C
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 16:04:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1842336074D
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 16:07:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.52
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774368259; cv=pass; b=k6hDgk+AkBLnbAJVnWbX1DCm/gqzz7fjc+XfZRYJfygE+SGsZBvrBby/wk/G8HrjfJCoEDrYfyady0hecKtrKTvY0kawbN0P5h69GthbjReDSKd7Zd4/6U3hEStd5WhWMTH+0lTTGUNx2lUC3M+WzDT7ehBnHeklbLi0dtIByY4=
+	t=1774368476; cv=pass; b=TZWt5GFYa2kSEkt5Fv/2+LsiQIQ3L/bnoewmBw33mUNqpkCzdt22FKfHYMl3GRq2i3Y8Qspl+18g+Ktj7/kEeqGyI/4jjhZylFt0/Sl5STdwv38BWqkHEARPP+gA94oBq3fSz52Ve5kKSo9sXXf2n38a9k7vnDFYdN2cQar8guI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774368259; c=relaxed/simple;
-	bh=Bap2I2Iwx1j90rJe9QRr9BlObCdTslZ+pvyg11P5Bkk=;
+	s=arc-20240116; t=1774368476; c=relaxed/simple;
+	bh=CWgKyEE7HM7HrQi/1b6i0FBSGikaLp873YPdX58ewa8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bTKnicdn/maOY9LfjN5XBoZWk2cayJ2xSUFZqnx9kcdeSubm1qdZI+TVmlJ1/skr8ZKakdv7IOb4vN3palo19rqvoQyoP5JZSXSL5UCnXCpazXxV7FsAWB1+cq5K3huIkDQsasbhTslWuVVlBVCFFv4P6Tw5ZXjZeRQA7u8xDeI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qh6tn7NE; arc=pass smtp.client-ip=209.85.208.43
+	 To:Cc:Content-Type; b=txmv6J7bKhiV25G5k1nX+BnFIF9LLsRTIAyLlW+iQ/Uj1E4xEE3LD2JSbThPiJHm6lt/URi8rD1SwXvK/0GZCIBel9ohsptT94QAiZi3NVn6SgUgr5wgr+OtizzcR7GmSijCl5hrdl8gCVfk3tsG+PEVXgqFfQgM1AnnI0ZoBxo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ktj/f4a7; arc=pass smtp.client-ip=209.85.218.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qh6tn7NE"
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-66a38c8255dso1367177a12.0
-        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 09:04:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774368256; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ktj/f4a7"
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b9382e59c0eso670685066b.0
+        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 09:07:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774368472; cv=none;
         d=google.com; s=arc-20240605;
-        b=Ee8wU48Dr6TCI816MZZY2+EqhFxBKZ2GdNa4kVCxxcKMe+pIPuwynMnDP48CD36zzO
-         EJXmF6Rf57pTKn6DHtkVjCnlMC/1jGcJ9NpY6CS83kKNj7FwwMtswwCi/GHEfm3McIGR
-         hDl6S98Lxm4UIfj1k2edYF6HwFbwJWgX6t+y1nTMsejiELtEvMHKNbOVHYhwvfeZ01+u
-         OaKU8x2dMLfNCS5BeiSu806kvUbx55s737qTTnsXnOC2dzGRdxLweNQI9ulXxejrQbvc
-         IQwTgnUBL3GmUG/BjrjrOazMK6jDZMs8qad15qZi05XikX6BUAym7lQacKwFB2EJWLrL
-         o1ZQ==
+        b=GWnrUy6nNo9naOeY/IKQpJrkkBcBnFSsvTfT4PfzbeZXbQy+fBkCmiifwSKCEGePDt
+         mkBbHiar+r++8w7tZUMnAj7Q7sKtWoI7nNYn5zIRVPVNUw1NkQGujj4qbSwejYGYM6t0
+         ppGKxbyG3FqIZMPbsvddFYNEEUNrXzlOrkzrNQcEPW93uhOTVGfCzVryQkezJ72szELZ
+         Ff7EyhYdVYDkEZK/w+kB5Bgp5AYt74H/ScCJvg5tQhJXBEo5935ULittyqiTadEtmVqs
+         jszEPHseM6Mq2b1ONOfOtcBxse073Oqsw+IoUhjmz1Y86XuRFUvXlyHg8EV5lBNvjha7
+         gnDg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=9lAIj9nrwaKz6NfMKfdrELFElXaxUC4oA/DBJISnVu8=;
-        fh=q4xa6HqL6AWMVfndyiQwlsMqoOVoPShY9MDbADRTQyI=;
-        b=PmQ+mkq8ciK1gbBv4W+3xHOw7tz2pBK9yPzVwBXSrQhgyE9nTtNT7e12JIVrPm3iN9
-         xnl7DSbNFBnxuqTlSEEEKVn5gpIUHhTGqUq72Mb0QRXXMybFH7J8IaVdYXkezk1Yg/PZ
-         CQ7XMlp0BKTqRFKtKmprr+o7ViADBtWAFwzGeI9wV7MtCm+d9QIjZfos1V/DZLBz66Zo
-         3iYyWKgUISRbeTVmtKijmbz0r/KapTCHQ0OC5owk6dtQOCJwQ9KW8jfaxO1GizIlDyIC
-         9kr8JGrZOwsWblr8J4ckI458qwV3/SU5gwA4t+rgp3Fwe7xn5zluh5PsEkhRswYUoImW
-         CZ8Q==;
+        bh=CWgKyEE7HM7HrQi/1b6i0FBSGikaLp873YPdX58ewa8=;
+        fh=/wOiA49IBmR3exKxYaCb+YMVipba8z7XvpII9ufU1cg=;
+        b=H1QBigMFA9nYs6g4hFFUAO3FfBl2XWwavKQWnxOVSDxfafbOColSXpVD9KVxvJSjo+
+         43twlxUIzeGhc0oje40EYewK4+dX+J4eiRcQxNE6pfdnSnLUbWV0dxZPdmkJYNfEqSA5
+         fo/xQ4NTooX0Y+mhafkT3VOMqMf5BkQZ+GBB8fTZmDUHq7ndXZalu/XsJIbqECoOSB/D
+         D6cJa2rNOwLPygny5dpwbNf3Xc/obKlTXUhu5iYv16muy0lsteyGHAnLUsPqEhRSgJ4h
+         YLBEHv9khb3+k16dMcIVX1hu4WX1IqbH7MVpXFYWuS6p8t3IlB+VETRsugkhtIlcxL3z
+         ffdg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774368256; x=1774973056; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774368472; x=1774973272; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9lAIj9nrwaKz6NfMKfdrELFElXaxUC4oA/DBJISnVu8=;
-        b=qh6tn7NEE62HHX3lMpBe7k2khmCW7U35AtqhMprApltPlBRt9IlTWtAF584ZGtnAf/
-         Rdh/SWyughatgMoucsZtjvMqa3P0la0SKGbrWMU8Z0Bf2/FGFkPPP7oLX2k4OdesqcPa
-         k9k2eid1bA6w6ZouXsQd8pHUDafnTZh1tsFgaKzsXg1ZrvZ/j7c20MG3gacpDE37rIJ4
-         3SWsPTR7SvHbb8DoFVhh3pSq+IrFw4VrLGJS2tlJgubFQ5R3JQS9ozUfD6ep76AFTJLC
-         CbGHW2Rogx5U00e38UbbQjFENm60+9lpMFL1qLJT/nDcVxNzfczk9zreYGRLKQnKThpX
-         RBnw==
+        bh=CWgKyEE7HM7HrQi/1b6i0FBSGikaLp873YPdX58ewa8=;
+        b=Ktj/f4a7iD6bYDyvQCZjlgWDP6opa5bzJWtZ7rHGhJX3qAHGUKn/pdfN2M0bWsUKkx
+         uSYnoq29CrJAnsTtw3/70HX1QLn8FvtSXdpdL/mqeh+AGPHFqv4HQEvxv2XUZMGoGNNp
+         ajvayF60pZCgWCwloU+IALxuDtBlMgzgCe15iHYGgfF7v/1b9XpBuyMPg/WAHc6RJA/U
+         /TPoQlSXKFSBfHP0u0LaHA9wIPtrWxjOJkl8HHeqmponTYT4zVEiWGmyOET5JHWbDazq
+         eUSl87rW5aw76thnYmw+kBQRnmbl9Nol2UuOFtuxiJ0xjcnUN3/cSP5oAlFRwGMc+rWb
+         oNMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774368256; x=1774973056;
+        d=1e100.net; s=20251104; t=1774368472; x=1774973272;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=9lAIj9nrwaKz6NfMKfdrELFElXaxUC4oA/DBJISnVu8=;
-        b=EYUqvW7AN8UnBCeYc1NYiz1opMnu4m11C+BZZPObTUACd6w3yckdjrl8/qH3j1dRM5
-         mbkgi/uzYLVa1M38JjPYbrx+EVAZNoU/frpNqSFXRhDbYspnH8HhoPIto1QEnDzoq2bd
-         x5mchbpjVXF3twbSvM5HPGHkWpAtHKEz6CzY5w/D2UPMc5xNU/UGrT3AADx0EJfQbztL
-         pdV6fAFf24HIhaAYSWOBnrwgmZhnHrckfX078wMuV6tv7p9AY9AScycQ8no0QEYZNSti
-         Q9bHu0uaVOildBfp4X7xyP6Qe3Yq2lU/dx+0DD+m2tXUQ3nkHQVuNucTwbc4VTEV2Gal
-         TpUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXWcAN6yGeg7BQ6Y8LFLN10SCcb+rkhd96RZjQAn1ax6CmPH3/HeQi4tPl0B7JGszE8aAY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwxPmL3TwLNg5158Ep/OYA/07cH1K/fSZ6d3JS+kqZkuAXjEwuO
-	l3osZTDTPTFJfSvvTJ5zs5P8dYUHZsXrIypfMPeUIdwjhhfi8JUzW7ZhT1cckiXz+xm+ESSxvxQ
-	fAteJVUIN9cRujfpZuISPDAFK6MQMs2Y=
-X-Gm-Gg: ATEYQzwVFAtL7aqaBHggZU5nSfKF99fnOyz/kyxwJCqxDtpWS1hLj4x6t0/KBnFNJSM
-	2OUsRnq16yy3bv4jus0YJELRLcbdwCTzFUEH+7rMKeG7aPe9OusjWOZxWRxqZK+244Sd17vpsuW
-	gXLTvuLr1M588OhwHjCzS02HhPF7kP9jU7kfOIEnSIVC0shWIaU3Xbx8DjUN4ohXGsAjqcfYJ2y
-	z6avGkUDPahvLwImdnpuzDZmg7p3CTvdhb1DfPI3Iiks8rNsvgoeNaJNQu+cSizMHeMDzozbRPv
-	6nLaDBR6zhV9Rc2EnPsA0Di8aeOjAUrAsNIpxm9Qd0wZFZf77sTMb2JDf86fn9XHilxvZyt1sf/
-	rEDARl/TBgPGGTti1vqiCgkYzoA==
-X-Received: by 2002:a17:907:a807:b0:b90:8016:cfe4 with SMTP id
- a640c23a62f3a-b982f0bd41bmr1118661566b.10.1774368255441; Tue, 24 Mar 2026
- 09:04:15 -0700 (PDT)
+        bh=CWgKyEE7HM7HrQi/1b6i0FBSGikaLp873YPdX58ewa8=;
+        b=fudcqa8KLPC7lbVXF3ZvqD/7B7ZvXKD/cV6e4I/oAkw6mE2ZxBMUlXe+SGAyC9E5VK
+         ixoP8nrn8IrDsvT/S5bFJWFlF7GT/c5UtDdgcwUETW5L51x6/FbZol85+BZVWBmvuk1V
+         mN3Me+lg590xJMz/G8rzFY5thCnTOf0+vZgahclFoIKzmbMOSwXdaH7K3hSP3DSRvCBb
+         BwA3nEQiJmUloDNKIQyCB8sDSH9pmigUnR0nRtLw8o7E3wn6eMdYO9gQGMRajVWxbDTC
+         m5GvUXosbShl+oeVeNs46uq5lEA0Xn7SYKPp30CisWrKthYtWvj7HPYF0Rgq6vqXeVpQ
+         wVbg==
+X-Forwarded-Encrypted: i=1; AJvYcCWytj6AJ07xZa82zSncGYsGFzPU849LBC4gNHO5QRsLNIjUN3Kt6UvYqRH3qykuq1c8z7w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGyEHwa93TOQFjBKYbJ5nVUVqUBilokvRXxr0dXuVfI2YODRxM
+	7Yj843tCEIszCoyKM/LNQIjX5ykG4HBiN8B50O5AZX6UC2C0nstXh/JwlqNmRDjCp29VZp0fVKM
+	sVySsLgRTqNdoUswvg8Ke0MKe3M+joOM=
+X-Gm-Gg: ATEYQzz0hCUISI9MJbmPXjNGCFL4y62tIv83v/CDSNR9S0re6Vlhps8iWm803GJABQI
+	Jhd/7zFVWXz7bejLMjffLLU/bCdtGLrsf76/O1sirZKRn2DXcPAHd0C2D369KxEFviqpE+/0wir
+	I9Zp74LNNwyDNvcgPbloNztDUu+BX412pNpCHI8GtvifrgSI4FPG3l6FMmDBOxQoHWG7gqb2Pzv
+	SPN66CRqGOMUhmx/xB0R4pYxfOTH54/LXVgB48SXXswgFMa51drxJRFWlF0TCPrsXQj0bOBRqhj
+	HzKmyyfx4ToNBGLHPIYhxBWdxzHvx/u3ZOhEFmfRn+KZjwuV+mnLFA5YDloi8miHUSbuqndP1qH
+	UKl7/htOhAEEQ+ZqP2RFVYQ2+gA==
+X-Received: by 2002:a17:906:c9c6:b0:b98:4d6:8c9c with SMTP id
+ a640c23a62f3a-b982f363047mr1019281566b.32.1774368471653; Tue, 24 Mar 2026
+ 09:07:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260323164858.1939248-1-sashal@kernel.org> <20260323164858.1939248-2-sashal@kernel.org>
- <CAADnVQJjJwRtUQNZAhLoXF7DYprhU97xJReZg9izV7n3f7=uJQ@mail.gmail.com> <acK1M_CvbYCtq7im@laps>
-In-Reply-To: <acK1M_CvbYCtq7im@laps>
+References: <20260324152230.2916217-1-memxor@gmail.com> <b7c13a1f-1efc-4ed1-922f-54ca7353dbe2@iogearbox.net>
+In-Reply-To: <b7c13a1f-1efc-4ed1-922f-54ca7353dbe2@iogearbox.net>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 24 Mar 2026 09:04:03 -0700
-X-Gm-Features: AaiRm50g5sRljE-pOlu1qkME3uHtiXscwZS9bY6E1gCFONCc9DBnMt7wYDgAtI4
-Message-ID: <CAADnVQLr5Sx+vG6D4Jxm8r2vPxu7ygFz60LGwmqfkc=VB0-Miw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kallsyms: show function parameter info in oops/WARN dumps
-To: Sasha Levin <sashal@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Petr Mladek <pmladek@suse.com>, Alexei Starovoitov <ast@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	David Gow <davidgow@google.com>, Kees Cook <kees@kernel.org>, 
-	Greg KH <gregkh@linuxfoundation.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Helge Deller <deller@gmx.de>, 
-	Randy Dunlap <rdunlap@infradead.org>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Juergen Gross <jgross@suse.com>, James Bottomley <James.Bottomley@hansenpartnership.com>, 
-	Alexey Dobriyan <adobriyan@gmail.com>, Vlastimil Babka <vbabka@kernel.org>, 
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Petr Pavlu <petr.pavlu@suse.com>, 
-	X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, linux-modules@vger.kernel.org, 
-	bpf <bpf@vger.kernel.org>
+Date: Tue, 24 Mar 2026 09:07:39 -0700
+X-Gm-Features: AaiRm51dg2jxIEezg-Qf5yJRplTOkzn-RK4Cf2Dvo87uzkgvb6CaXVDVNJ4js8U
+Message-ID: <CAADnVQKbgk7SoOGjnhA-CiPobA+OWL6LFarC_Zdssh6waucpng@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1] bpf: Update MAINTAINERS
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, kkd@meta.com, 
+	Kernel Team <kernel-team@meta.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 24, 2026 at 9:00=E2=80=AFAM Sasha Levin <sashal@kernel.org> wro=
-te:
+On Tue, Mar 24, 2026 at 8:48=E2=80=AFAM Daniel Borkmann <daniel@iogearbox.n=
+et> wrote:
 >
-> On Tue, Mar 24, 2026 at 08:03:30AM -0700, Alexei Starovoitov wrote:
-> >On Mon, Mar 23, 2026 at 9:49=E2=80=AFAM Sasha Levin <sashal@kernel.org> =
-wrote:
-> >>
-> >> Embed DWARF-derived function parameter name and type information in th=
-e
-> >> kernel image so that oops and WARN dumps display the crashing function=
-'s
-> >> register-passed arguments with their names, types, and values.
-> >>
-> >> A new build-time tool (scripts/gen_paraminfo.c) parses DW_TAG_subprogr=
-am
-> >> and DW_TAG_formal_parameter entries from DWARF .debug_info, extracting
-> >> parameter names and human-readable type strings. The resulting tables =
-are
-> >> stored in .rodata using the same two-phase link approach as lineinfo.
-> >>
-> >> At runtime, kallsyms_show_paraminfo() performs a binary search on the
-> >> paraminfo tables, maps parameters to x86-64 calling convention registe=
-rs
-> >> (RDI, RSI, RDX, RCX, R8, R9), and prints each parameter's name, type,
-> >> and value from pt_regs. If a parameter value matches the page fault
-> >> address (CR2), it is highlighted with "<-- fault address".
-> >>
-> >> Integration at show_regs() means this works for both oops and WARN()
-> >> automatically, since both paths provide full pt_regs at the exception
-> >> point.
-> >>
-> >> Example output:
-> >>
-> >>   Function parameters (ext4_readdir):
-> >>     file     (struct file *)         =3D 0xffff888123456000
-> >>     ctx      (struct dir_context *)  =3D 0x0000000000001234  <-- fault=
- address
-> >>
-> >> Gated behind CONFIG_KALLSYMS_PARAMINFO (depends on CONFIG_KALLSYMS_LIN=
-EINFO).
-> >> Adds approximately 1-2 MB to the kernel image for ~58K functions.
-> >>
-> >> Assisted-by: Claude:claude-opus-4-6
-> >> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> On 3/24/26 4:22 PM, Kumar Kartikeya Dwivedi wrote:
+> > Per discussion with Alexei, add Eduard and myself as maintainers under
+> > BPF [GENERAL]. While at it, drop R entries for reviewers who have been
+> > inactive.
 > >
-> >Nack.
-> >
-> >You asked claude to reinvent pahole and BTF and it did it
-> >completely missing years of fine tuning that pahole does.
+> > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> (this can go into bpf tree so it gets synced next time into both trees)
 >
-> Let's keep this on the technical side please.
->
-> >dwarf cannot be trusted as-is. pahole converts it carefully
-> >by analyzing optimized out arguments and dropping signatures
->
-> Fair point about pahole and optimized-out args. The problem is that BTF d=
-epends
-> on BPF_SYSCALL, and the environments I care about can't enable either.
+> Acked-by: Daniel Borkmann <daniel@iogearbox.net>
 
-This is trivially fixable without reinventing pahole.
+I recall Dave was applying changes to maintainers via net. Not sure why.
+I'm too lazy to send bpf PR with a single patch and it's really not a fix.
+Applied to bpf-next.
