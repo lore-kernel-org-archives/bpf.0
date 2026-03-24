@@ -1,153 +1,156 @@
-Received: from mail-wr1-f66.google.com (mail-wr1-f66.google.com [209.85.221.66])
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CBC337BE7A
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 01:47:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77E9A378D64
+	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 02:16:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.179
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774316851; cv=pass; b=RggZCPGTUFdsiOgE6o1PYftZSYXXaNXK4qxw0vOw8cbvRaQWJCgRFoMVjOEAsP1DMCKVQ25wp95oW/K0GeE1POYDcGDUtlR2h0SJJTo9cw1ZNnZy2MnBhJ9yZClpH7CRtPJnshQCyBPNJhHVndkPU/lpdG/GwAX62EPylc2LvcU=
+	t=1774318579; cv=pass; b=juGPozC5/QLcCZNddn2rJ+zAtIwphZkzpoeWZXvq5p9K5XRN3CO9QhK8mec6O6sjmLrjysaUl5ufTHAPiVf0r3mY0bQxhBRzM+3YhGV4gKj8WZRRhiqyZrx/0uvbMVTa3YUjdpJ8pLF8jhxh79caTEjNvmYVAsRfFlcRmuiQ3tA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774316851; c=relaxed/simple;
-	bh=MUfi36ea7f/nz/pbaSwAf4o+ALXT/+r3vcfoR6Zt4jk=;
+	s=arc-20240116; t=1774318579; c=relaxed/simple;
+	bh=wWbHGOahe1TmIl8FAwScQTkdwY/rQIonaOmU2HriuZY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Dnd7EkvOx4jLfTthaS5m/rzm5Y3rT/Jlo6OqbWJBPWoONjWlL8KmIKzMkhdPujihg2VF2QjEkIpZM5DVRAxZcz93rHvQWWDjvGqRC2913S3p2JwHhjoIzs35LHMbyXm65SMWhxLsWL/lhW60OQv999zoPK+1PILzeD9u+fCY9/8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R2Ra53+w; arc=pass smtp.client-ip=209.85.221.66
+	 To:Cc:Content-Type; b=dwECNVzPZjcOp+8X7A99wBHofg0DtcLXLGR2AbzYF3Xy3kaVnCKB+/pwMix1HmVZf8eENnsNXaswjMwoJC4+BdO5T4CHjZX4y4rEULw/AFzrGw9MHNy65vomKC8LnTHkQsfxBDp8H0ia5SwrwZaj2kR0VKSIvKIM0UB2yV2xR84=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bPM8x6NB; arc=pass smtp.client-ip=209.85.128.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R2Ra53+w"
-Received: by mail-wr1-f66.google.com with SMTP id ffacd0b85a97d-43b3d9d0695so4390890f8f.0
-        for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 18:47:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774316847; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bPM8x6NB"
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-79a8e873ca1so39164107b3.1
+        for <bpf@vger.kernel.org>; Mon, 23 Mar 2026 19:16:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774318577; cv=none;
         d=google.com; s=arc-20240605;
-        b=fbJOkw0V/k2E3C5w1va/pta9PMS3nWXzHJYb0xykouu4u7t8ltPcBQb8P9JvfQt5qY
-         UvwTZ33+1hzbhtXBh741h/kTBvc5aE2SpftzNHWy4u2qvsiLEPj1iaykqPdIahdI2oh6
-         LtZ2mgK28/7v8qm8J0Acoo+sgJ2xLiu/fX07nwxJKmu0irO+NkLdqpmQjxeFYBCDEFbD
-         jvmWwaJ5LlsdkkmkdCKb0h+2HmIhpMEEE6BW2rcQ8ZNyl2UvcWFUo9K35Cjz8RVHzLqZ
-         0yxtfWZVl0CFtA742V8GbD9xj540YM8L/UDlOpEhzG5KSRffLk3NTLbD4qjSqqu5NB66
-         rCYg==
+        b=hSuxIfCkQJWixWzvPMZIUmr/8tV8usEWeXDqtausTS5/wttyRZv6pRD1+y8RrDgm4P
+         9cKTAE8PdGrt7rLlIh+6+EjJ2V97iD93CkGR2HdUc5919Sm62rNxCHtlO63cXt/53MOv
+         iWrDacTs+131tlnmz9qzQlz4zfFA3ytnO94PZuJO0tQ9Jm2nwkpISwRcaiOgKwx1+e01
+         7XCF9wDDeoMqRVro5ixfSiSuUS2AvFyXN3ybpW9eUKVHGptb0LeRA3f3XmIVz7dbkj7i
+         wvE40ZENKEzq/hWREmlFNBlKy/s7BJR3sRqanUG+/A/Q5rb7EA/i1AwvKgcSqtVdpl8/
+         O5qg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=E05DQ8tPZZh1ybJbqcTlYE6PvwcKKcHXiXsgT1UEl+w=;
-        fh=m2y03ENBI/Gd3hAXQJce4PGJWoE3OjpWevADckSQoBM=;
-        b=VuwlepCdTgDws9SQfKvedoLpfe6KevDuy6/HMFrHcAH1gvQx+YMyUZTwMumG+BcywU
-         yxwgcj2b1a78LH68ZazdCG96KPw1PIzOcjRESnbh2OnnmOKcz8A7C0jfMsUuc6d9MN5w
-         0Kj5OFxhSk/DbPkyxRU/lcrSsd5o4bB56domNNy6UjFE8R9zSCWOJ48Stb9ptlfEckJb
-         ca2JZSPy4BZaV3fWdeN8V4qwC677D8+ME9h+NAReF92na7k+XgyYL8Z8r42FPmNywqdM
-         XBEt+WY4xLrCPkyO825fiEMZtoy0HvgbsjcnODKtHq+CsCAhGdhIA5lra8oxonWrFNrY
-         AHqA==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=BXYWZ3Af8+UWCG+9zf8xt8wJvtMCh01uE4kwpvainlo=;
+        fh=2oNmZeg6WvgxpxCmCsnrq464yYa4H4eTRXzratzBPcQ=;
+        b=AJeedj80DX7kfzmKuCAxSpmYoMwwiAtu6dX173N/1Pix0Yoigl0zwLZ/i7ANLm24Wf
+         BnurTukTIgIWLTYS36BKqhgDxlAWerPgP9nHcNPmtL7O8dAFPCVcXu6oA5btNmJCXiF2
+         UNye+U/1GQZhKi6ztmUk/b4LHooNlkTBWOodvu+qcvSc33846+Pmo2Uo+Pr9spIe3al/
+         t7IVEPLYItBZbouYS5tPct83xUe8joPoTT7rS+Vo/r1JoQyhmUzUD5Ssg5mcU5FPxRJo
+         BTlyv6BtIGv/hIrmv3zIwe3Ybfs6BGtg8jbQxPN16eztxtdACBhkZmjLnozKIcOUq7ta
+         mbwg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774316847; x=1774921647; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=E05DQ8tPZZh1ybJbqcTlYE6PvwcKKcHXiXsgT1UEl+w=;
-        b=R2Ra53+wTqe4fKM0YowcYvj30AagsiIUCnlyrF/Byb9Z7ZfYIYs1cOyvsTQT9KtaBe
-         F29JEmIo0dGfEC7ePCHm+PQ4vd5ldCNJcs83CyZxvRRNHOjFUDm6mNIEG+kGrPN80ZYo
-         H6JKZBXZhk9U7DUdGSNIZmEAu3gRAItOfACzkPfXwh6U9SAWZMeYejoOrM0cfSAyALfD
-         vKbkSp9hkqQfn7X6YRR2++cVG88E2eotlNTmD+owYMGDwBl0aoXfDhomZZUjGgsOPoew
-         s/B/SeMJL12hyK31kgSqu8WBOjnMmZl+zIDXL5f1gLFgdwX0Dr0xhVWDH4PqAo8nSRrT
-         5nyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774316847; x=1774921647;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1774318577; x=1774923377; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=E05DQ8tPZZh1ybJbqcTlYE6PvwcKKcHXiXsgT1UEl+w=;
-        b=ToST6jMGdnYPEdIIZPG9Ejm4L8YM3slzduCnyGQofyfKlZKV6/eA39BduClTZxSX2S
-         dsSGBirX6c1qQoxkh1Zj2ll4kidTqIxD1sV/pepxnF6g+3Zj8jb7t8FAPZqYN+mIypla
-         5OyhLg2yLgVtqZvEzBDnVP47ecwAps2bC39Fl0WO6EyleywIsupSzTBkYaHJLi5UQ4/T
-         nEScTwH+zLi1hb8qFm1Wib0cBb+Cq6XWnX9ITWqiux4/LqSuKS0erB9VQkxUe6uWH8Pv
-         E1sShUUcmKUbqKNmZfs5oaCciCYWkPQ8ruy4UR0JWfBHzXfRntfAJubjswvnpyLIGC9L
-         PvoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXxYLLimYCH58PNfKESXG19UkY4VfgScoYPT9MuUPZO3KYs8bSBZznancsarkRI3D8Ns4E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwY8iA4EtvPUd6Cka4y5dGx00RRrfjqbtp2zvgAlj13L262ZZJ8
-	vVHtr1KRFXFfGr68QYV0IrMGYpYKcrK5inFOwmTHTA7WzDql2n294XVRYMpLZubQmFZ6/V5lFAj
-	ffLvHo+kneco9IxxfOVR5V5htWfVjgZk=
-X-Gm-Gg: ATEYQzyU1CVDWqYr1xTe2bwvE8pAsuv1iSjz/EDGemoU9+hisrevgyFDS6iFNK1wqFm
-	glAjT9Mq9MByrVGflTf9hzFcddpuiTAj2lH+DUcerxO8r8PxZcug//PJrpit+h+ho2zCl4eoNRu
-	mtMflWJ/cSS+KJmhSnpd0yMf/TxjlT1FiqDJijLfGEyCgAXr4MyqtYKGOgAgbXaKFjZVq/NU9iD
-	MhwLRyJrm+ZSpzGt/VLD9nKM1UWvZhuHsZ2b/d5xU96nhVNuOgLTK3+A21jWlxL/xL1/T4DFs57
-	ADMa9wbMuTCzqwNnMRqB900xYA/j9LojZ52f42pQIul8yNmTo3PNMq6FN/Y=
-X-Received: by 2002:a05:6000:5c8:b0:43b:4951:6b37 with SMTP id
- ffacd0b85a97d-43b80592328mr2021634f8f.15.1774316846771; Mon, 23 Mar 2026
- 18:47:26 -0700 (PDT)
+        bh=BXYWZ3Af8+UWCG+9zf8xt8wJvtMCh01uE4kwpvainlo=;
+        b=bPM8x6NBxGknS1C2c8f5PJLmbGuw4/Wl/fhqFpQnIVBUwuD92BqPmNv/1I6Gr8z4zk
+         2jbeo+Obgzn6SukTfCrZf6PDiVHWIpYxATpr1l2PSGklhd2TvoZYk2X3pxCPnmSUWo5i
+         4qPvobQ9vKjEPeOV4qEgFE1x1SZ2NO7sIzaPqNmLHOZvUpAEFQveW60+95nwKc+ClKxf
+         9jv+19lZBNMOzj5TTI2MpsVb7yIjdJkjc+a/eIkN7dRNKdFy83mNqaLDswZ7FQWLhkGl
+         ogm1HYcH6ZtE60g9zNrs71+YkIDF4lOTParLswYnZz7KcOwjaiFA3qW1i2FeUkyQX8NK
+         a6hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774318577; x=1774923377;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=BXYWZ3Af8+UWCG+9zf8xt8wJvtMCh01uE4kwpvainlo=;
+        b=f0DCgc7W9uppcmpDGSDnpNQyNiM4feWgP3BoeColWSV+/3Pocveh/uy+Z7sHoqD/fF
+         m77PjrlUpNGVCGMCilzjKNOplJPvqxKAsIGR/AjuFTsWzwSArWHvoZnHxuIL2zJH05px
+         Tul87XZND0oTwHuxXRRQmDEZFO6tkEPj/TWl4swXTIvqYLauqg+n04lJDveYuaotrVNI
+         wrqMvOiWBQ2Tpb6XdOKyffSuSYUpig4yFubHu1ZeXVgruhR8SnPNriBMTExQdbiWbRsj
+         JSV6vIZkPuVO5xQRlFamQhtEGByYukT3Uy7TqAnyEK+4h2JyE1EJ/tuOIrVuyuLuBl1h
+         1y4w==
+X-Gm-Message-State: AOJu0YxOPclB07iV8MWepTkcLphZW44eroPYQMx2wnFtQRPR7ksYi++e
+	0cvtlxkyyyBwEfWDyIif70qFjdXFc/e3C7AQvEPL1LpRAi3MnnJlIwf87eRVTZP57WB2+qIKUZe
+	JMsRyjqlE5zTI0bfIKZ4jtgplkMkEQ2t7tzgB6MgWTw==
+X-Gm-Gg: ATEYQzx2J0J5yUjKLhsbSzQXt5EywWSJXBsLwtqrSKRjyrx48AE2ofpjeQL73Oc7reA
+	trTc8l1mglQi54sGYBEoGqlVd6c2+JIwpNEy+ru/cA2rEuwATLVOvRlqs4kdqrtkpdp/Gd56b+4
+	7glDVp6juQfDREqxtujZm1M0XKaIQlqTM5fmdML6heS+YCtQzRq+BJakkRajkP3mXEsG7okma+1
+	SEd0deM2bXdIK3Nff8QT4vYmyweq9sHqlfAy2v+2Tlrtyo90njhZMBxxj7CNFY7Z3XTqD4fPunE
+	UcI48nAnZQE3KA05yt3ZVe6A2mvYR9pFBSV4QCSLeOaJVIx99MSNJEsrV10=
+X-Received: by 2002:a05:690e:4383:b0:64c:a41a:3a65 with SMTP id
+ 956f58d0204a3-64ed78937efmr1191837d50.13.1774318577568; Mon, 23 Mar 2026
+ 19:16:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260316013651.3225328-1-ankur.a.arora@oracle.com> <20260316013651.3225328-11-ankur.a.arora@oracle.com>
-In-Reply-To: <20260316013651.3225328-11-ankur.a.arora@oracle.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Tue, 24 Mar 2026 02:46:50 +0100
-X-Gm-Features: AQROBzDT8zHTe-cnXwc3ToHi1r8Z06VC2JgJudU67Ap-gCTlXPytLAmMbqYbD7w
-Message-ID: <CAP01T77qL1SF_-FFjbT4wJaYAe8g3XRNO0pyPs9c54qdcN5MGQ@mail.gmail.com>
-Subject: Re: [PATCH v10 10/12] bpf/rqspinlock: Use smp_cond_load_acquire_timeout()
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, 
-	bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com, will@kernel.org, 
-	peterz@infradead.org, akpm@linux-foundation.org, mark.rutland@arm.com, 
-	harisokn@amazon.com, cl@gentwo.org, ast@kernel.org, rafael@kernel.org, 
-	daniel.lezcano@linaro.org, zhenglifeng1@huawei.com, 
-	xueshuai@linux.alibaba.com, rdunlap@infradead.org, 
-	david.laight.linux@gmail.com, joao.m.martins@oracle.com, 
-	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+References: <20260323225250.1623542-1-martin.lau@linux.dev>
+In-Reply-To: <20260323225250.1623542-1-martin.lau@linux.dev>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Tue, 24 Mar 2026 10:16:07 +0800
+X-Gm-Features: AQROBzDmBOwVNM8Iuq0GXGbuwKqfn5aRlGcf3rHTrRU9EEzZvW22fo-B-XQzorA
+Message-ID: <CABFUUZGdgV9RgsFLnayOisXOAzyvT0szFTuV9miR0MnTxbaiJQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: test_run: Remove ipv6_bpf_stub usage
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org, 
+	Jakub Kicinski <kuba@kernel.org>, Fernando Fernandez Mancera <fmancera@suse.de>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 16 Mar 2026 at 02:37, Ankur Arora <ankur.a.arora@oracle.com> wrote:
+On Tue, Mar 24, 2026 at 6:58=E2=80=AFAM Martin KaFai Lau <martin.lau@linux.=
+dev> wrote:
 >
-> Switch out the conditional load interfaces used by rqspinlock
-> to smp_cond_read_acquire_timeout() and its wrapper,
-> atomic_cond_read_acquire_timeout().
+> From: Martin KaFai Lau <martin.lau@kernel.org>
 >
-> Both these handle the timeout and amortize as needed, so use the
-> non-amortized RES_CHECK_TIMEOUT.
+> bpf_prog_test_run_skb() uses net->ipv6.ip6_null_entry for
+> BPF_PROG_TYPE_LWT_XMIT test runs.
 >
-> RES_CHECK_TIMEOUT does double duty here -- presenting the current
-> clock value, the timeout/deadlock error from clock_deadlock() to
-> the cond-load and, returning the error value via ret.
+> It currently checks ipv6_bpf_stub before using ip6_null_entry.
+> ipv6_bpf_stub will be removed by the CONFIG_IPV6=3Dm support removal
+> series posted at [1], so switch this check to ipv6_mod_enabled()
+> instead.
 >
-> For correctness, we need to ensure that the error case of the
-> cond-load interface always agrees with that in clock_deadlock().
+> This change depends on that series [1]. Without it, CONFIG_IPV6=3Dm is
+> still possible, and net->ipv6.ip6_null_entry remains NULL until
+> the IPv6 module is loaded.
 >
-> For the most part, this is fine because there's no independent clock,
-> or double reads from the clock in cond-load -- either of which could
-> lead to its internal state going out of sync from that of
-> clock_deadlock().
+> [1] https://lore.kernel.org/netdev/20260320185649.5411-1-fmancera@suse.de=
+/
 >
-> There is, however, an edge case where clock_deadlock() checks for:
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Fernando Fernandez Mancera <fmancera@suse.de>
+> Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
+> ---
+>  net/bpf/test_run.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
 >
->         if (time > ts->timeout_end)
->                 return -ETIMEDOUT;
->
-> while smp_cond_load_acquire_timeout() checks for:
->
->         __time_now = (time_expr_ns);
->         if (__time_now <= 0 || __time_now >= __time_end) {
->                 VAL = READ_ONCE(*__PTR);
->                 break;
+> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> index 56bc8dc1e281..fb25184ed03b 100644
+> --- a/net/bpf/test_run.c
+> +++ b/net/bpf/test_run.c
+> @@ -1157,15 +1157,12 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, =
+const union bpf_attr *kattr,
 >         }
 >
-> This runs into a problem when (__time_now == __time_end) since
-> clock_deadlock() does not treat it as a timeout condition but
-> the second clause in the conditional above does.
-> So, add an equality check in clock_deadlock().
+>         if (prog->type =3D=3D BPF_PROG_TYPE_LWT_XMIT) {
+> -               if (!ipv6_bpf_stub) {
+> -                       pr_warn_once("Please test this program with the I=
+Pv6 module loaded\n");
+> +               if (!ipv6_mod_enabled()) {
+> +                       pr_warn_once("Please test this program with IPv6 =
+enabled kernel\n");
+>                         ret =3D -EOPNOTSUPP;
+>                         goto out;
+>                 }
+>  #if IS_ENABLED(CONFIG_IPV6)
+> -               /* For CONFIG_IPV6=3Dn, ipv6_bpf_stub is NULL which is
+> -                * handled by the above if statement.
+> -                */
+>                 dst_hold(&net->ipv6.ip6_null_entry->dst);
+>                 skb_dst_set(skb, &net->ipv6.ip6_null_entry->dst);
+>  #endif
+> --
+> 2.52.0
 >
-> Finally, redefine SMP_TIMEOUT_POLL_COUNT to be 16k to be similar to
-> the spin-count used in the amortized version. We only do this for
-> non-arm64 as that uses a waiting implementation.
 >
-> Cc: bpf@vger.kernel.org
-> Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
-> ---
+ Since the CONFIG_IPV6=3Dm removal series also removes the stubs, switching
+ the check to ipv6_mod_enabled() makes sense.
 
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-
-> [...]
+Reviewed-by: Sun Jian <sun.jian.kdev@gmail.com>
