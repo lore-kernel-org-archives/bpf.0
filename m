@@ -1,48 +1,48 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5938240629D;
-	Tue, 24 Mar 2026 15:26:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9045040628C;
+	Tue, 24 Mar 2026 15:28:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774365962; cv=none; b=OVIEqAlFsFGbqXNgTiUVxET68hD2F0UyMnYjnfHN3LBl7fKhcW/YiXUUVhovkxnnm8J/KrIDf7eT+kse4a8ZGtqCOdFCvCoQ4ApbtSTB7NSyM2551Gonz/H9x2Wlteu0V4y19Ge+06jUwSe166uC4+ptmqhiLkXWBayS26unGUg=
+	t=1774366116; cv=none; b=jzmOmsDWtanScrUFSXloYkNmApJvzPls/j7G+tb/8JD6klTR8wkYXuv7S+T+ytLzg9D11/p1aviyLTk2R1C0aqnqA719zBkbV63lCl4P1Kaz4CB/to47FxincYIfEuoByT70+dMivL918uXUy4KolEO9q+zB+k2kOGjKI0CsqNg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774365962; c=relaxed/simple;
-	bh=0l54IzxQAoRqsYSO6TE+G9d9c9o2rAL1/Mv505hhc7E=;
+	s=arc-20240116; t=1774366116; c=relaxed/simple;
+	bh=AFY1t3dzpLhOlBGSBGqfYpTg+GWsxbB/cGrQYVqi6pY=;
 	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=NeVtf7HWmyHSaX6My42W8r8vRtQHCHfBJlYoVZ5F92J+D2RzuTYYAAmboCOEdkpy7Z17LLgtyvvngiui4IBAbNI1ysY3pxNbumGB0043VdRwVj9HPna2vEpUvtki6ldMoiav4HBcGGa0qPChVx6DfRAqLSz6O88pRV+99PimYMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DTS6vtRb; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=ElHb5uknapO81PI/8PpOvPBm7/hYD0IaAqRjhh7jA3JXoRli09WPLPHaedunyH/EXOWg2KUQF2Z/2cvtxvC36BaUc5Y3myob5LHDSNI25+NIcp+vKUrqUEze9K1WTHr9QvEk1taYFt1PjzuhzufRLNjT3Hd3QKGjoGktL2KXMpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sGdCu5F1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DTS6vtRb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04568C19424;
-	Tue, 24 Mar 2026 15:26:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sGdCu5F1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 215F8C19424;
+	Tue, 24 Mar 2026 15:28:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774365962;
-	bh=0l54IzxQAoRqsYSO6TE+G9d9c9o2rAL1/Mv505hhc7E=;
+	s=k20201202; t=1774366116;
+	bh=AFY1t3dzpLhOlBGSBGqfYpTg+GWsxbB/cGrQYVqi6pY=;
 	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=DTS6vtRbP0gWv5jr2c32wDNYzcUbkb6n7IRoH/XJAEUSQcIHLAbLeWE86uM75aqKH
-	 04Y4LA43MtAEUqZhoWn5AVM+tf/2YvNSAaKvWX9HrwicwNWpZ8o2kl9X7ID7AVWeXo
-	 o/r33udoskhlHz8caw4PrwgZlmE13OOy7nDjllO9t8KPbt46WzzAsN08mnjgfu4OIX
-	 ooJyAAc1sv/yM7L8cMNTlHweJ+ZA25mGMcOVJF+PE7DbqZD46H55u6boJqEJ0xgloj
-	 RniNrD9GOS+eatBNNrdQr0tYY5L+To4cmvlRg/yOW51W2lcE5Pk8h2NCWlwCaZqeMa
-	 AWNA4Gelnr2ww==
-Date: Tue, 24 Mar 2026 08:26:01 -0700
+	b=sGdCu5F1rf0XWBuOICgzXfM6J80k5apLUCFmap0jPCj5+cN73SW1MkHGEo4dQxCxl
+	 u/CmZkArZ5rnDGV+DLMB3OoLqnPXUcN4HOoPScbzovRr9/aF7kSpT2W0Qk452HJ383
+	 k149QgyJBJV8LkHJsBsTx1FWjH6kLHg7M+ZhvWlxYTdy5wLMk/S5+1NgRiIWlmlUO/
+	 AI9VZEVrvRgSDpUEOXyn44Bbnm3z5Pv9LNa6Ts/7ea8pd5mVNas4klQSpqQUza8uzB
+	 gehjjOHsYnh5YuCeTiLzcASQ+xfi8rOsCTWjzbyJdgQzG+QTCBd33h4SIZJ+XGa7yX
+	 VhVoqyx/Z80BA==
+Date: Tue, 24 Mar 2026 08:28:35 -0700
 From: Kees Cook <kees@kernel.org>
-To: Jiri Olsa <olsajiri@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 CC: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
  Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
  Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
  Yonghong Song <yonghong.song@linux.dev>,
  John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
  Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hardening@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2=5D_libbpf=3A_Replace_strncpy=28=29_w?=
- =?US-ASCII?Q?ith_strnlen=28=29+memcpy=28=29_in_skel=5Fmap=5Fcreate=28=29?=
+ Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>, linux-hardening@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH=5D_libbpf=3A_Replace_strncpy=28=29_wit?=
+ =?US-ASCII?Q?h_strnlen=28=29+memcpy=28=29_in_skel=5Fmap=5Fcreate=28=29?=
 User-Agent: K-9 Mail for Android
-In-Reply-To: <acJXtr10v7wE_xT9@krava>
-References: <20260324053036.it.906-kees@kernel.org> <acJXtr10v7wE_xT9@krava>
-Message-ID: <6F875550-530E-484C-B6EB-D2E18DCB257C@kernel.org>
+In-Reply-To: <CAADnVQLhWURvQ=gBYQvuEa3pTxabYQYhrPm9QG0gbxL9ee=vng@mail.gmail.com>
+References: <20260324040535.work.851-kees@kernel.org> <202603232224.C1555BF@keescook> <CAADnVQLhWURvQ=gBYQvuEa3pTxabYQYhrPm9QG0gbxL9ee=vng@mail.gmail.com>
+Message-ID: <D53376BA-4772-486B-A18A-6858C1732723@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -55,35 +55,40 @@ Content-Transfer-Encoding: quoted-printable
 
 
 
-On March 24, 2026 2:21:58 AM PDT, Jiri Olsa <olsajiri@gmail=2Ecom> wrote:
->On Mon, Mar 23, 2026 at 10:30:37PM -0700, Kees Cook wrote:
->> Replace the deprecated[1] strncpy() with strnlen() on the source
->> followed by memcpy()=2E Normally strscpy() would be used in this case,
->> but skel_internal=2Eh is shared between kernel and userspace tools, and
->> strscpy() is not available in the userspace build context=2E
->>=20
->> The source map_name is a NUL-terminated C string (the only caller
->> passes a 12 character string literal)=2E The destination attr=2Emap_nam=
-e is
->> char[BPF_OBJ_NAME_LEN] (16 bytes) in union bpf_attr, passed to the bpf(=
-)
->> syscall=2E The kernel's bpf_obj_name_cpy() requires a NUL terminator wi=
-thin
->> the 16-byte field, rejecting names that use all 16 bytes=2E Valid names
->> are therefore at most 15 characters=2E
->>=20
->> The attr is pre-zeroed with memset() at the top of the function,
->> so the byte at position 15 is always NUL=2E The copy is bounded to
->> sizeof(attr=2Emap_name) - 1 (15 bytes) to guarantee NUL-termination is
+On March 24, 2026 7:42:04 AM PDT, Alexei Starovoitov <alexei=2Estarovoitov=
+@gmail=2Ecom> wrote:
+>On Mon, Mar 23, 2026 at 10:25=E2=80=AFPM Kees Cook <kees@kernel=2Eorg> wr=
+ote:
+>>
+>> On Mon, Mar 23, 2026 at 09:05:39PM -0700, Kees Cook wrote:
+>> > While the original strncpy() would have copied a full 16 bytes from a=
+n
+>> > overlong name (producing an unterminated field that the syscall rejec=
+ts),
+>> > but this wasn't a reachable state=2E This replacement will instead al=
+ways
+>> > truncate to 15 bytes and keeps the NUL terminator, which should have =
+no
+>> > behavioral changes with the present code and avoids potential issues
+>> > with future over-long string literals=2E
+>>
+>> Hm, I got a failure report, but it *seems* unrelated? But nothing else
+>> fails that way recently, so I will try a v2 with the "unterminated at 1=
+6
+>> bytes" behavior restored and see if it passes=2E=2E=2E
+>>
+>> test_progs_no_alu32-x86_64-llvm-21:
+>> https://github=2Ecom/kernel-patches/bpf/actions/runs/23472955268/job/68=
+300440546
 >
->hm, but this version no longer does that, right?
+>Don't fix what is not broken=2E
 
-Arg=2E Yes, correct=2E I'll fix the commit log for v3=2E And yes, the bpf =
-test suite reported that v2 shows no test failures any more=2E
+strncpy is broken=2E ;) This is one of the 6 remaining uses of strncpy in =
+the kernel=2E But it needs a v3=2E I'll add explicit rejection of over-long=
+ strings and validate that the bpf test was a flake, as suggested in the ot=
+her reply=2E
 
-(Why does this need an unterminated string internally here when the syscal=
-l refuses to build one?)
-
+-Kees
 
 --=20
 Kees Cook
