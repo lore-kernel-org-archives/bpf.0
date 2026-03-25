@@ -1,387 +1,163 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A71F03D3013
-	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 12:11:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BBB73D5251
+	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 12:51:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774440680; cv=none; b=MksPQFSDJsFY+j+94fSZVxhxC7tWaYEFDk3k8xu4WY9VBlzjffRVexKooYLwturudbMH9gjjjTuip27M+UPYkcvzKuQ0kcxtQ52yA+eRW3g073F9R/4WFXzZa9w0QY2nkPNKXlP7TOcN7ZC167oBXPKJtMutLzyDFzNnDYBRFsQ=
+	t=1774443091; cv=none; b=PHYx6XtE3WwXKpkkhTDE5Abz43R9szCfpuIFlKnv7Pl/AQaUyOBWmFQHAx84TasGJowGRhEsCV5TEeTtZoCQ/Q6e7bi09HQRH4od4e9BcvzuGGr1/nUt0Eq5VAbwSVqrczeKhJ5JDtPTc7fSUXAapAvrYMoV2iUdpytJq/Fty7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774440680; c=relaxed/simple;
-	bh=YYtKao6aBuWtvYF/wEvxh6z1w78BlO96uQ3o/MpEfho=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MPkR7QWR5F9Xzgt4zwzvkEgazpuMrBALtwDJrq6QM/7E5DAf0DjuRdh5HfLzwjjoW0XutBmla65pzDgo5vuH7Svxqgr0JUyvSKQ9Lz/5tmizw5U7rw47vnboBy9LtqatCJ4galFAFZuuXrbY7dRa6NbCp07cpypKuqrRWK80q8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 3E67C5BD73;
-	Wed, 25 Mar 2026 12:11:17 +0000 (UTC)
-Authentication-Results: smtp-out2.suse.de;
-	none
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D4586443BE;
-	Wed, 25 Mar 2026 12:11:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id KJTWMOPQw2kbNgAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Wed, 25 Mar 2026 12:11:15 +0000
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-To: netdev@vger.kernel.org
-Cc: Fernando Fernandez Mancera <fmancera@suse.de>,
-	=?UTF-8?q?Ricardo=20B=2E=20Marli=C3=A8re?= <rbm@suse.com>,
+	s=arc-20240116; t=1774443091; c=relaxed/simple;
+	bh=GPBTp+1O4+roFKFHMU9nfDulOedOh68Qri2l6aoSPhc=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JVQy8azKcA2kt3vnoiM60jUjvqxYWTKJ4vhg2Y9djW+eD3hEmAPuRALanrs1nK0fsgRdEbzDP8zNygzQvgcv3PalIK3MlwjBs2UQGpgCbsCyRp753QIc99PwWPWBZY0URsMXkrbkuO7bByYU8FQMGmQrZOWzTa12XaSYEaX3DAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Uw/UpztU; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uw/UpztU"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-487035181a7so29154445e9.2
+        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 05:51:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774443088; x=1775047888; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RZG+AxjObasS6xwUegN7FbbmRxqAFvfcWHCDJeVu0lU=;
+        b=Uw/UpztUI/fwK/0kWmaICCJCsgBuI7s8r37hRp0B7mNVy69q7vWu4z5CkKIzzJ8nTa
+         6KcI66TElgzmXbJyBwjJSdXdPmQ3b0ntBEQavyWOAX3V94aBR3KmUtguB3Q+MXY3RpKn
+         KIWTLZIqr/jy2pvYBXs21o/6oCBXESOU2ToR/5N2EyI9OO0TFhUnxSXgQWTHJbLNABmF
+         BZgVfP1wK38qZsN/eI7x11EvPVJI5Z92aLCGQu+LwOqw/6CVftuDG2oldc0qIOUYtvSB
+         NRVjm9h3O+YsXje2m+o8wgfrWX0Zn0wbXVFv1H7azG2ztwltcGMBojfknS49LYY2LS8a
+         wE+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774443088; x=1775047888;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RZG+AxjObasS6xwUegN7FbbmRxqAFvfcWHCDJeVu0lU=;
+        b=GNQIuAGGQI4Uxw4SFwPJzroT97qDUcRm39Q7AzntrnYc4ILLP2RJnztq/Y9RipxXOe
+         HUrfD+csYTheryNLBv7gEkWPrH7EMkJleoXhbLlxri6EG0EwPcPMRt5u3dt/raJwMG5S
+         smTKyaSIPiWbn+ZxVGtpQzflxajW1VKbmTzm0TN8IUWYBGy0qF2QyTpjXcJRnwFuWqvD
+         AKaCz18uHLDhr2eb6QZxYMctk9yE5szBXxXFAhib6VMOWObHqRqTlqgpFofydnDfrFbt
+         7lfmewkGi5pvgesiIHWKnVSmd0boOR7GWZ+X57NbuNbI4AO6uKX3c8FE/xUwZPbpDwhP
+         gvvg==
+X-Gm-Message-State: AOJu0Yy3UrFAWzGkmbn/yDBmRv9EryrZJr0PVZLD3TqnsLCTqYDRHgQn
+	liBHDWwYGa2OUdqnGWVFYsefgyaPAu0P8H6mHkEzMiWE7h0a6L2I3ZRV
+X-Gm-Gg: ATEYQzxX6qhV3ORSHCQWoa7VDVlTBMzRspz7cOJcMdJTpJMl+ohGaKf/P0FwdNuI9rl
+	6QWDKJHSAx1tN+EASKRpuGkaPZHALg6oqQSaS7IcqEqVe2VA9YnANysgm5qnfI4KfdWNhcqEVtb
+	PRdQPVbemwvHsh70nM+8HXDGsi7VefuLaBT8Wy+fh4jJAkC2i3EF+1pb/bgKsn+d04iOBy/rowh
+	7hK1MTMAZ1ezUCf4rQMXDBfj4cbMhfZowPkEplFzW3V1nWuz1KkTie/TIm14HVrbzNM3g07nKTx
+	ARjhCHrSW6cD3KjW+bJd/W/xIAyAda9AGtyN2pPBQsyX6D4dC68OxVgS2GmtcYUCFCIsnHJGncF
+	jr/u7nRTjoyD4y2ErAukaECw0YYy+6DDyZMy8E4vAf7/wURYHJPYMGDnuAq1/naEuyzm5jy58vY
+	fxQfvAIaTXHR0=
+X-Received: by 2002:a05:600c:6287:b0:486:fc94:d8f2 with SMTP id 5b1f17b1804b1-48715fe2ad3mr45978195e9.14.1774443087426;
+        Wed, 25 Mar 2026 05:51:27 -0700 (PDT)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-487116c0c13sm271961125e9.7.2026.03.25.05.51.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Mar 2026 05:51:27 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Wed, 25 Mar 2026 13:51:25 +0100
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Guillaume Nault <gnault@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH 09/11 net-next v5] bpf: remove ipv6_bpf_stub completely and use direct function calls
-Date: Wed, 25 Mar 2026 13:08:50 +0100
-Message-ID: <20260325120928.15848-10-fmancera@suse.de>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260325120928.15848-1-fmancera@suse.de>
-References: <20260325120928.15848-1-fmancera@suse.de>
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Shuah Khan <shuah@kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Toke Hoiland-Jorgensen <toke@redhat.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: Re: [PATCH bpf-next 2/3] bpf: Disallow freplace on kprobe with
+ mismatched kprobe_write_ctx values
+Message-ID: <acPaTdLd70YI_uNW@krava>
+References: <20260324150444.68166-1-leon.hwang@linux.dev>
+ <20260324150444.68166-3-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Rspamd-Queue-Id: 3E67C5BD73
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Rspamd-Action: no action
-X-Spam-Score: -4.00
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-4.00 / 50.00];
-	REPLY(-4.00)[];
-	TAGGED_RCPT(0.00)[]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260324150444.68166-3-leon.hwang@linux.dev>
 
-As IPv6 is built-in only, the ipv6_bpf_stub can be removed completely.
+On Tue, Mar 24, 2026 at 11:04:43PM +0800, Leon Hwang wrote:
+> uprobe programs are allowed to modify struct pt_regs.
+> 
+> Since the actual program type of uprobe is KPROBE, it can be abused to
+> modify struct pt_regs via kprobe+freplace when the kprobe attaches to
+> kernel functions.
+> 
+> For example,
+> 
+> SEC("?kprobe")
+> int kprobe(struct pt_regs *regs)
+> {
+> 	return 0;
+> }
+> 
+> SEC("?freplace")
+> int freplace_kprobe(struct pt_regs *regs)
+> {
+> 	regs->di = 0;
+> 	return 0;
+> }
+> 
+> freplace_kprobe prog will attach to kprobe prog.
+> kprobe prog will attach to a kernel function.
+> 
+> Without this patch, when the kernel function runs, its first arg will
+> always be set as 0 via the freplace_kprobe prog.
+> 
+> To avoid the abuse of kprobe_write_ctx=true via kprobe+freplace, disallow
+> freplace on kprobe programs with mismatched kprobe_write_ctx values.
+> 
+> Fixes: 7384893d970e ("bpf: Allow uprobe program to change context registers")
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 
-Convert all ipv6_bpf_stub usage to direct function calls instead. The
-fallback functions introduced previously will prevent linkage errors
-when CONFIG_IPV6 is disabled.
+hi,
+so it's another issue in addition to that on with tail-calls [1]
+do you plan to resend this fix as well?
 
-Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
-Tested-by: Ricardo B. Marlière <rbm@suse.com>
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
----
- include/net/ipv6.h       |  2 ++
- include/net/ipv6_stubs.h | 21 ---------------
- net/core/filter.c        | 58 +++++++++++++++++-----------------------
- net/core/lwt_bpf.c       | 10 ++++---
- net/ipv6/af_inet6.c      | 13 ++-------
- 5 files changed, 35 insertions(+), 69 deletions(-)
+thanks,
+jirka
 
-diff --git a/include/net/ipv6.h b/include/net/ipv6.h
-index f99f273341f0..d042afe7a245 100644
---- a/include/net/ipv6.h
-+++ b/include/net/ipv6.h
-@@ -1149,6 +1149,8 @@ void ipv6_local_rxpmtu(struct sock *sk, struct flowi6 *fl6, u32 mtu);
- void inet6_cleanup_sock(struct sock *sk);
- void inet6_sock_destruct(struct sock *sk);
- int inet6_release(struct socket *sock);
-+int __inet6_bind(struct sock *sk, struct sockaddr_unsized *uaddr, int addr_len,
-+		 u32 flags);
- int inet6_bind(struct socket *sock, struct sockaddr_unsized *uaddr, int addr_len);
- int inet6_bind_sk(struct sock *sk, struct sockaddr_unsized *uaddr, int addr_len);
- int inet6_getname(struct socket *sock, struct sockaddr *uaddr,
-diff --git a/include/net/ipv6_stubs.h b/include/net/ipv6_stubs.h
-index 907681cecde8..dc708d9eca7a 100644
---- a/include/net/ipv6_stubs.h
-+++ b/include/net/ipv6_stubs.h
-@@ -77,25 +77,4 @@ struct ipv6_stub {
- 			__u32 mark, struct ipv6_txoptions *opt, int tclass, u32 priority);
- };
- extern const struct ipv6_stub *ipv6_stub __read_mostly;
--
--/* A stub used by bpf helpers. Similarly ugly as ipv6_stub */
--struct ipv6_bpf_stub {
--	int (*inet6_bind)(struct sock *sk, struct sockaddr_unsized *uaddr, int addr_len,
--			  u32 flags);
--	struct sock *(*udp6_lib_lookup)(const struct net *net,
--					const struct in6_addr *saddr, __be16 sport,
--					const struct in6_addr *daddr, __be16 dport,
--					int dif, int sdif, struct sk_buff *skb);
--	int (*ipv6_setsockopt)(struct sock *sk, int level, int optname,
--			       sockptr_t optval, unsigned int optlen);
--	int (*ipv6_getsockopt)(struct sock *sk, int level, int optname,
--			       sockptr_t optval, sockptr_t optlen);
--	int (*ipv6_dev_get_saddr)(struct net *net,
--				  const struct net_device *dst_dev,
--				  const struct in6_addr *daddr,
--				  unsigned int prefs,
--				  struct in6_addr *saddr);
--};
--extern const struct ipv6_bpf_stub *ipv6_bpf_stub __read_mostly;
--
- #endif
-diff --git a/net/core/filter.c b/net/core/filter.c
-index c56821afaa0f..d55525cc5540 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -73,7 +73,6 @@
- #include <net/seg6.h>
- #include <net/seg6_local.h>
- #include <net/lwtunnel.h>
--#include <net/ipv6_stubs.h>
- #include <net/bpf_sk_storage.h>
- #include <net/transp_v6.h>
- #include <linux/btf_ids.h>
-@@ -2279,7 +2278,7 @@ static int __bpf_redirect_neigh_v6(struct sk_buff *skb, struct net_device *dev,
- 			.saddr	      = ip6h->saddr,
- 		};
- 
--		dst = ipv6_stub->ipv6_dst_lookup_flow(net, NULL, &fl6, NULL);
-+		dst = ip6_dst_lookup_flow(net, NULL, &fl6, NULL);
- 		if (IS_ERR(dst))
- 			goto out_drop;
- 
-@@ -5577,12 +5576,12 @@ static int sol_ipv6_sockopt(struct sock *sk, int optname,
- 	}
- 
- 	if (getopt)
--		return ipv6_bpf_stub->ipv6_getsockopt(sk, SOL_IPV6, optname,
--						      KERNEL_SOCKPTR(optval),
--						      KERNEL_SOCKPTR(optlen));
-+		return do_ipv6_getsockopt(sk, SOL_IPV6, optname,
-+					  KERNEL_SOCKPTR(optval),
-+					  KERNEL_SOCKPTR(optlen));
- 
--	return ipv6_bpf_stub->ipv6_setsockopt(sk, SOL_IPV6, optname,
--					      KERNEL_SOCKPTR(optval), *optlen);
-+	return do_ipv6_setsockopt(sk, SOL_IPV6, optname,
-+				  KERNEL_SOCKPTR(optval), *optlen);
- }
- 
- static int __bpf_setsockopt(struct sock *sk, int level, int optname,
-@@ -5981,9 +5980,6 @@ static const struct bpf_func_proto bpf_sock_ops_cb_flags_set_proto = {
- 	.arg2_type	= ARG_ANYTHING,
- };
- 
--const struct ipv6_bpf_stub *ipv6_bpf_stub __read_mostly;
--EXPORT_SYMBOL_GPL(ipv6_bpf_stub);
--
- BPF_CALL_3(bpf_bind, struct bpf_sock_addr_kern *, ctx, struct sockaddr *, addr,
- 	   int, addr_len)
- {
-@@ -6007,11 +6003,9 @@ BPF_CALL_3(bpf_bind, struct bpf_sock_addr_kern *, ctx, struct sockaddr *, addr,
- 			return err;
- 		if (((struct sockaddr_in6 *)addr)->sin6_port == htons(0))
- 			flags |= BIND_FORCE_ADDRESS_NO_PORT;
--		/* ipv6_bpf_stub cannot be NULL, since it's called from
--		 * bpf_cgroup_inet6_connect hook and ipv6 is already loaded
--		 */
--		return ipv6_bpf_stub->inet6_bind(sk, (struct sockaddr_unsized *)addr,
--						 addr_len, flags);
-+
-+		return __inet6_bind(sk, (struct sockaddr_unsized *)addr,
-+				    addr_len, flags);
- #endif /* CONFIG_IPV6 */
- 	}
- #endif /* CONFIG_INET */
-@@ -6099,9 +6093,9 @@ static int bpf_fib_set_fwd_params(struct bpf_fib_lookup *params, u32 mtu)
- static int bpf_ipv4_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
- 			       u32 flags, bool check_mtu)
- {
-+	struct neighbour *neigh = NULL;
- 	struct fib_nh_common *nhc;
- 	struct in_device *in_dev;
--	struct neighbour *neigh;
- 	struct net_device *dev;
- 	struct fib_result res;
- 	struct flowi4 fl4;
-@@ -6221,8 +6215,8 @@ static int bpf_ipv4_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
- 	if (likely(nhc->nhc_gw_family != AF_INET6))
- 		neigh = __ipv4_neigh_lookup_noref(dev,
- 						  (__force u32)params->ipv4_dst);
--	else
--		neigh = __ipv6_neigh_lookup_noref_stub(dev, params->ipv6_dst);
-+	else if (IS_ENABLED(CONFIG_IPV6))
-+		neigh = __ipv6_neigh_lookup_noref(dev, params->ipv6_dst);
- 
- 	if (!neigh || !(READ_ONCE(neigh->nud_state) & NUD_VALID))
- 		return BPF_FIB_LKUP_RET_NO_NEIGH;
-@@ -6290,12 +6284,11 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
- 			params->tbid = 0;
- 		}
- 
--		tb = ipv6_stub->fib6_get_table(net, tbid);
-+		tb = fib6_get_table(net, tbid);
- 		if (unlikely(!tb))
- 			return BPF_FIB_LKUP_RET_NOT_FWDED;
- 
--		err = ipv6_stub->fib6_table_lookup(net, tb, oif, &fl6, &res,
--						   strict);
-+		err = fib6_table_lookup(net, tb, oif, &fl6, &res, strict);
- 	} else {
- 		if (flags & BPF_FIB_LOOKUP_MARK)
- 			fl6.flowi6_mark = params->mark;
-@@ -6305,7 +6298,7 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
- 		fl6.flowi6_tun_key.tun_id = 0;
- 		fl6.flowi6_uid = sock_net_uid(net, NULL);
- 
--		err = ipv6_stub->fib6_lookup(net, oif, &fl6, &res, strict);
-+		err = fib6_lookup(net, oif, &fl6, &res, strict);
- 	}
- 
- 	if (unlikely(err || IS_ERR_OR_NULL(res.f6i) ||
-@@ -6326,11 +6319,11 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
- 		return BPF_FIB_LKUP_RET_NOT_FWDED;
- 	}
- 
--	ipv6_stub->fib6_select_path(net, &res, &fl6, fl6.flowi6_oif,
--				    fl6.flowi6_oif != 0, NULL, strict);
-+	fib6_select_path(net, &res, &fl6, fl6.flowi6_oif,
-+			 fl6.flowi6_oif != 0, NULL, strict);
- 
- 	if (check_mtu) {
--		mtu = ipv6_stub->ip6_mtu_from_fib6(&res, dst, src);
-+		mtu = ip6_mtu_from_fib6(&res, dst, src);
- 		if (params->tot_len > mtu) {
- 			params->mtu_result = mtu; /* union with tot_len */
- 			return BPF_FIB_LKUP_RET_FRAG_NEEDED;
-@@ -6351,9 +6344,7 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
- 		if (res.f6i->fib6_prefsrc.plen) {
- 			*src = res.f6i->fib6_prefsrc.addr;
- 		} else {
--			err = ipv6_bpf_stub->ipv6_dev_get_saddr(net, dev,
--								&fl6.daddr, 0,
--								src);
-+			err = ipv6_dev_get_saddr(net, dev, &fl6.daddr, 0, src);
- 			if (err)
- 				return BPF_FIB_LKUP_RET_NO_SRC_ADDR;
- 		}
-@@ -6365,7 +6356,7 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
- 	/* xdp and cls_bpf programs are run in RCU-bh so rcu_read_lock_bh is
- 	 * not needed here.
- 	 */
--	neigh = __ipv6_neigh_lookup_noref_stub(dev, dst);
-+	neigh = __ipv6_neigh_lookup_noref(dev, dst);
- 	if (!neigh || !(READ_ONCE(neigh->nud_state) & NUD_VALID))
- 		return BPF_FIB_LKUP_RET_NO_NEIGH;
- 	memcpy(params->dmac, neigh->ha, ETH_ALEN);
-@@ -6900,11 +6891,10 @@ static struct sock *sk_lookup(struct net *net, struct bpf_sock_tuple *tuple,
- 					    src6, tuple->ipv6.sport,
- 					    dst6, ntohs(tuple->ipv6.dport),
- 					    dif, sdif, &refcounted);
--		else if (likely(ipv6_bpf_stub))
--			sk = ipv6_bpf_stub->udp6_lib_lookup(net,
--							    src6, tuple->ipv6.sport,
--							    dst6, tuple->ipv6.dport,
--							    dif, sdif, NULL);
-+		else if (likely(ipv6_mod_enabled()))
-+			sk = __udp6_lib_lookup(net, src6, tuple->ipv6.sport,
-+					       dst6, tuple->ipv6.dport,
-+					       dif, sdif, NULL);
- #endif
- 	}
- 
-diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
-index 9f40be0c3e71..f71ef82a5f3d 100644
---- a/net/core/lwt_bpf.c
-+++ b/net/core/lwt_bpf.c
-@@ -13,7 +13,6 @@
- #include <net/gre.h>
- #include <net/ip.h>
- #include <net/ip6_route.h>
--#include <net/ipv6_stubs.h>
- 
- struct bpf_lwt_prog {
- 	struct bpf_prog *prog;
-@@ -103,7 +102,12 @@ static int bpf_lwt_input_reroute(struct sk_buff *skb)
- 		dev_put(dev);
- 	} else if (skb->protocol == htons(ETH_P_IPV6)) {
- 		skb_dst_drop(skb);
--		err = ipv6_stub->ipv6_route_input(skb);
-+		if (IS_ENABLED(CONFIG_IPV6)) {
-+			ip6_route_input(skb);
-+			err = skb_dst(skb)->error;
-+		} else {
-+			err = -EAFNOSUPPORT;
-+		}
- 	} else {
- 		err = -EAFNOSUPPORT;
- 	}
-@@ -233,7 +237,7 @@ static int bpf_lwt_xmit_reroute(struct sk_buff *skb)
- 		fl6.daddr = iph6->daddr;
- 		fl6.saddr = iph6->saddr;
- 
--		dst = ipv6_stub->ipv6_dst_lookup_flow(net, skb->sk, &fl6, NULL);
-+		dst = ip6_dst_lookup_flow(net, skb->sk, &fl6, NULL);
- 		if (IS_ERR(dst)) {
- 			err = PTR_ERR(dst);
- 			goto err;
-diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
-index bb29b29fdcfb..07ae6ea7743a 100644
---- a/net/ipv6/af_inet6.c
-+++ b/net/ipv6/af_inet6.c
-@@ -264,8 +264,8 @@ static int inet6_create(struct net *net, struct socket *sock, int protocol,
- 	goto out;
- }
- 
--static int __inet6_bind(struct sock *sk, struct sockaddr_unsized *uaddr, int addr_len,
--			u32 flags)
-+int __inet6_bind(struct sock *sk, struct sockaddr_unsized *uaddr, int addr_len,
-+		 u32 flags)
- {
- 	struct sockaddr_in6 *addr = (struct sockaddr_in6 *)uaddr;
- 	struct inet_sock *inet = inet_sk(sk);
-@@ -1032,14 +1032,6 @@ static const struct ipv6_stub ipv6_stub_impl = {
- 	.ip6_xmit = ip6_xmit,
- };
- 
--static const struct ipv6_bpf_stub ipv6_bpf_stub_impl = {
--	.inet6_bind = __inet6_bind,
--	.udp6_lib_lookup = __udp6_lib_lookup,
--	.ipv6_setsockopt = do_ipv6_setsockopt,
--	.ipv6_getsockopt = do_ipv6_getsockopt,
--	.ipv6_dev_get_saddr = ipv6_dev_get_saddr,
--};
--
- static int __init inet6_init(void)
- {
- 	struct list_head *r;
-@@ -1199,7 +1191,6 @@ static int __init inet6_init(void)
- 	/* ensure that ipv6 stubs are visible only after ipv6 is ready */
- 	wmb();
- 	ipv6_stub = &ipv6_stub_impl;
--	ipv6_bpf_stub = &ipv6_bpf_stub_impl;
- out:
- 	return err;
- 
--- 
-2.53.0
 
+[1] https://lore.kernel.org/bpf/20260303150639.85007-4-leon.hwang@linux.dev/
+
+> ---
+>  kernel/bpf/verifier.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 12330466d58b..f8257bae6081 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -6404,6 +6404,14 @@ static int check_ctx_access(struct bpf_verifier_env *env, int insn_idx, int off,
+>  		/* remember the offset of last byte accessed in ctx */
+>  		if (env->prog->aux->max_ctx_offset < off + size)
+>  			env->prog->aux->max_ctx_offset = off + size;
+> +		if (env->prog->type == BPF_PROG_TYPE_EXT) {
+> +			struct bpf_prog *dst_prog = env->prog->aux->dst_prog;
+> +
+> +			if (env->prog->aux->kprobe_write_ctx != dst_prog->aux->kprobe_write_ctx) {
+> +				verbose(env, "Extension program cannot have different kprobe_write_ctx value with target prog\n");
+> +				return -EINVAL;
+> +			}
+> +		}
+>  		return 0;
+>  	}
+>  
+> -- 
+> 2.53.0
+> 
