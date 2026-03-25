@@ -1,132 +1,154 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 360D5408223
-	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 17:49:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774460986; cv=none; b=Djd040X4WkWNhCiuvqbqJxQ3EcAIfMiMa9xBRo4OIZdOtxrMTGE0EkTL1vQJV9VN4mglkkjnHt/yFx9YBwEMorixCS6eve6n0J8vwCvPwgaQOmpZAaV2gn+APCPEzKtd1h53/gThSVoQmvocJtIHux4qPKz3702AuRTIH5S/xa0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774460986; c=relaxed/simple;
-	bh=fEBUBDKjfAQhclj6kewAQ+TMtlrXCeB4SMlk67VLlyc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jc9jAgxqfWUllrXzrwciFuOQwnB8CHM3HsX28p3ECj28vHajDuQE7LWgRg20vJKfn6FlM0+vqhcUOPacH8Ir/bZXNe4URXWHG7f4NwDmD88UGes53aO+yY6eozXkoerHwmZKQVz9nY7aipqAA8RLwykClLf8QjAsTjTNPoq1rQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uQujRfPD; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51C123F7870
+	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 17:51:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774461075; cv=pass; b=RbZPfUw2+BRQU+fFWBO/5R7ogtLdOo0cs5QON9DTqoc/YffF0d6FpXR7N1Gky8isworHpws2mtGCyfJNCpE52FQJOQo66knY9bBoQeXht4+lf5ZHsC0iskF6gmgrjCvSXsqGs166UzlZhqHqmWp5tAI3tXkMFsCVif73qhcInrs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774461075; c=relaxed/simple;
+	bh=LfOHx404KK+zENd5k0iKvf2df8c1QUv6Mhd4nnrA2k0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZBwaJLkNYHJV5YEuxevIJXaON4NaAibN8ReSTa8QYqP4PbtGrI+QyZM86x2ztryzd1n5RwI+8VJDXzIpCZDvTXM3wM+BbWtFiQ3WX2LGOXcIUF2JCq5CjCx1gCHJ1kqcNRk+SHDueAQz8ED342ej2mthZLQ2puxR5UysrJ70I7o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dfl+pF2P; arc=pass smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uQujRfPD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29100C2BCB1;
-	Wed, 25 Mar 2026 17:49:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774460985;
-	bh=fEBUBDKjfAQhclj6kewAQ+TMtlrXCeB4SMlk67VLlyc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=uQujRfPDB4QAm1IuNe9+5IQk8fzFcdpuN8JQLrS91/TEVnxRtIlFMdlbuiWxPWTck
-	 ksCz1bO7syyNpe48fW6BNeGe9mSxM9Wo8ynE1+0Eq1/ciJ4/wRxoNu28T4dfV7EwZ+
-	 zJembuCr4/BtmC4iB5QRdd8wfUtrGutCqL4JHuO2q68wx2BmHmh5G1b0juZ3IUlbu8
-	 B52x+FP136RfD6X+U8uT9pGopPU1EjhS+BLglK4VNdjTwf/wamwZlcihYEQ9+SOz3O
-	 x0gedn2fKUYTue69e7KGxGY6cSf1FU0DtADbIt/QlCHgvMRTZxzktdH8zO+RcHV5XA
-	 8k8+Ia9PP3iqw==
-Message-ID: <59aecdf1-f023-4992-a277-eb7d17e46364@kernel.org>
-Date: Wed, 25 Mar 2026 17:49:42 +0000
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dfl+pF2P"
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-6628cc1bd69so1099a12.1
+        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 10:51:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774461073; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Q3eAWfPnEev7wyMV6d376foaptKSsBtZleLzOu+ENReKHgCDBnWKLgNqPy3pzfghI5
+         UX6dS2AT4yMUBm04DN0yxNxCCEhmK0t32FyHqDF9T72kVrApLdXtEX4PLiaSF8KGw6Nq
+         LSaBhhKCwBtc9AKtW6fwCelerZ7ALEXUc8JRzGKWcvEJdZ5O2MN87aUcWYok3N6REAhv
+         kz2sWqU7Bs9MHZvqoP+Mimp1SsHOI8pnS1i0ll392bxnQoyHxsV2okV5EQde3tpLfsUd
+         esuElg9abRKywfXrqfW4MPUiCFbgZZIzse6BzQ8KGbVyRZqIGPwxwuvClqzZNL+l2IoO
+         L86g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=lcdS5CNtdEsSElOVQqwojbHt2Qxr4nffxvoalO1pdQk=;
+        fh=6hM25cn8YRtC9FHLgYJO82KgGMsjlUWF6HPWHM20y+c=;
+        b=Gn98/RnKeh6BIqkHZhQhoVPqhSBVP5Avfw6LXkvEocZGuRLTXAX8ytA69whcJr4Z+z
+         rWGg0g6pSEncv+c6RryccwxeypgJF1aJOEsQSM3g+m/hVyZIS6wdosVEiu9HysN6p4GW
+         KIiXrpaW2TIvqZEKQXVp3MEWK0QADcGIS1W16H6U3Q8hoP749glpEMVtzMRy5AJzM2Qe
+         PlBVoBGhlCPEFhFrOnTStS9YdMVD3bL0AmsP3NxPtAfSAMwUvS1Jd8iP9C8CpzekRPlQ
+         Fop5MOwgQ1KUVGPMOzFkTTaugR8KIFW5FVG71T0UZxUqEGQ4P6r8r1y7vnqbSNc5nzYq
+         FlsQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1774461073; x=1775065873; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lcdS5CNtdEsSElOVQqwojbHt2Qxr4nffxvoalO1pdQk=;
+        b=dfl+pF2PhlOSL6iG9cI/eNprk8ZTDAdh7yZPvVJoiii8dnxP4ffSAoPzCHcSK8l8xi
+         g0SjFdBtNEhLpHKEoRwNjhffIvM9las8rkTkHvziL3Mxi5e1lewylzMVKDJptAQt9qKF
+         yKSbWprn1zK4Ptp3sa6mcVOjhNuayGDqID88GN2qORDF6SlDDTCZlv83St0i0wMlOVtl
+         4jd4feuZ0cdJBu2OlnDgnMkCKcM6u7ks/NDFcfkKmvuBTHbQs5uNFwbD5kNqiIHp9ZOR
+         Xlv/jMtwtqM8d7p+tAHHgPxCuUIE1rkRhRt07M/Xbaxrew+Hveo7Vc9Is77855Lr6mhN
+         JlLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774461073; x=1775065873;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=lcdS5CNtdEsSElOVQqwojbHt2Qxr4nffxvoalO1pdQk=;
+        b=UTEdNiWQ2HJqC6XZJdKLA1/7kIOyaTbNjZId3A7XDNMhQJVxNEqLVuV1DHuGm0UN2H
+         CjcFu+jKUTI3LHPYQMgzqWObKeHhNoR7xcQKZzNNThSFXdX5VLSML6vlSLUv6NdOa3oY
+         fXSiE9gA2KYpI/qboGOTePfMBpyDVTlRtE3pryURTjQntaEGSFIoB0ZOhAC4ojDuBM1S
+         QV0s7/7wQZL28Amz/rD3RNSG/hi02VY0MEE3sJy8PwpujHb+EWleSEY/aqTywKDdoAOK
+         8eGszL8Nbz5qjH+2O0L8Zjq3kvLvr2hqwknZi7J5npOz6kXJH5SOH8b0TQmzh7lfoNEc
+         tn7g==
+X-Forwarded-Encrypted: i=1; AJvYcCXZIDIC8apvOjVgI8ccHqWUkwDSk4LdLelmFSWlVdpfZAaZ5M95j0Juvtm2CDJcvCCzJsM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjsO4fY6ZE4Zk/f0kK23rDi7Fy8Zle6hi2isUeypphxdsm2p7O
+	XKFV+oxdb6dJKgj8mG0NNjrxRbx51oKkLrkhmUUZqyaDup7bhbQouazuviVYyuLnE2xKf7Me3Fh
+	PRHW944LOQVUwiueHVCreOtvZZPm3QieornuMKzBZ
+X-Gm-Gg: ATEYQzw8A4italhqYI4a3sRzkOTHZXkq4pZyjkUi3kQDWMzSiSvUGWHI+qu3nxW4BdH
+	PB+cp140uQZUSkj4SpPgb38tDnivSyHaD+weKbHhbu9ajpMlV/1ru0hsI5Kw+QKr5XMGGD/7XWJ
+	GvQc7CYvlPep9P5lcSpF5cWFS3nJ6CB8XEeUWOvzJwHeok5yMjXRbTfmILW0Fl1lhrmR3LnmWyA
+	nRSgBQabFZAed8JY0Nh35YgRJWmfoWxL307maoHzuBtNSFVapvSy+7CE4tBxixamnbrBwAbDtOr
+	w2s//O8=
+X-Received: by 2002:a05:6402:1451:b0:668:c2b6:9fa2 with SMTP id
+ 4fb4d7f45d1cf-66ad9575059mr2781a12.7.1774461072029; Wed, 25 Mar 2026 10:51:12
+ -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2] bpftool: Allow explicitly skip llvm, libbfd
- and libcrypto dependencies
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org,
- ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com,
- kernel-team@meta.com, eddyz87@gmail.com, Mykyta Yatsenko <yatsenko@meta.com>
-References: <20260312-b4-bpftool_build-v2-1-4c9d57133644@meta.com>
- <ad8a783b-7b8c-46f2-9a3c-953315aafe38@kernel.org>
- <ea4b6626-e435-4044-a671-35f5c18e3ce6@kernel.org>
- <CAEf4Bzb9b3aa5TmSsi4zM7zyFGOhnQWjPCMObPyaFCbfu3Ow9w@mail.gmail.com>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <CAEf4Bzb9b3aa5TmSsi4zM7zyFGOhnQWjPCMObPyaFCbfu3Ow9w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260324-vmscape-bhb-v8-0-68bb524b3ab9@linux.intel.com> <20260324-vmscape-bhb-v8-2-68bb524b3ab9@linux.intel.com>
+In-Reply-To: <20260324-vmscape-bhb-v8-2-68bb524b3ab9@linux.intel.com>
+From: Jim Mattson <jmattson@google.com>
+Date: Wed, 25 Mar 2026 10:50:58 -0700
+X-Gm-Features: AQROBzDwHlJH5nkrozA8k_jCaaxMY2azgH1uzVE_N9olWzdVjI8yDoxoWPHYtxY
+Message-ID: <CALMp9eTZRucL+CUSp1yUPG0aSTpyQ=po1EmurZhX9+R+vxgbPA@mail.gmail.com>
+Subject: Re: [PATCH v8 02/10] x86/bhi: Make clear_bhb_loop() effective on
+ newer CPUs
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>, Nikolay Borisov <nik.borisov@suse.com>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Josh Poimboeuf <jpoimboe@kernel.org>, David Kaplan <david.kaplan@amd.com>, 
+	Sean Christopherson <seanjc@google.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, David Laight <david.laight.linux@gmail.com>, 
+	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	David Ahern <dsahern@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	Asit Mallick <asit.k.mallick@intel.com>, Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-2026-03-23 13:21 UTC-0700 ~ Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> On Fri, Mar 20, 2026 at 5:50 PM Quentin Monnet <qmo@kernel.org> wrote:
->>
->> 2026-03-17 10:29 UTC+0000 ~ Quentin Monnet <qmo@kernel.org>
->>> 2026-03-12 17:03 UTC-0700 ~ Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
->>>> From: Mykyta Yatsenko <yatsenko@meta.com>
->>>>
->>>> Introduce SKIP_LLVM, SKIP_LIBBFD, and SKIP_CRYPTO build flags that let
->>>> users build bpftool without these optional dependencies.
->>>>
->>>> SKIP_LLVM=1 skips LLVM even when detected. SKIP_LIBBFD=1 prevents the
->>>> libbfd JIT disassembly fallback when LLVM is absent. Together, they
->>>> produce a bpftool with no disassembly support.
->>>>
->>>> SKIP_CRYPTO=1 excludes sign.c and removes the -lcrypto link dependency.
->>>> Inline stubs in main.h return errors with a clear message if signing
->>>> functions are called at runtime.
->>>>
->>>> Use BPFTOOL_WITHOUT_CRYPTO (not HAVE_LIBCRYPTO_SUPPORT) as the C
->>>> define, following the BPFTOOL_WITHOUT_SKELETONS naming convention for
->>>> bpftool-internal build config, leaving HAVE_LIBCRYPTO_SUPPORT free for
->>>> proper feature detection in the future.
->>>>
->>>> All three flags are propagated through the selftests Makefile to bpftool
->>>> sub-builds.
->>>>
->>>> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
->>>
->>>
->>> Sorry I'm late for this one, I see Andrii applied it - I just wanted to
->>> say thank you for this!
->>
->>
->> Mykyta, Andrii,
->>
->> Apologies again for missing the review on this series. I'm realising
->> only now that it goes beyond what we initially discussed: It adds a way
->> to turn off the optional dependencies related to the disassemblers,
->> which is what we agreed on, but it also makes libcrypto optional.
->>
->> There were previous discussions where I pushed back against making
->> program signing optional in bpftool. It's one thing to have the JIT
->> disassembler unavailable on a machine; but it's going to be a pain if a
->> policy requires signed programs on a system, but the bpftool version
->> available does not support signing. Are you really sure you want to make
->> it optional? My preference would be to keep program signing a mandatory
->> feature for bpftool going forward.
-> 
-> Hey Quentin,
-> 
-> I understand (and sympathize with) your stance that packaged bpftool
-> in distros should be fully featured, and I think we should push as
-> hard as necessary to have it be a case if it ever becomes not true.
-> But the truth is that bpftool is used in all sorts of limited
-> environments where its full functionality is a) not needed and b)
-> logistically a nightmare to build, so having Makefile-based opt-outs
-> for some parts seems like a decent tradeoff to keep bpftool relevant
-> (instead of forcing people to do some ad-hoc hacks or
-> reimplementations).
-> 
-> There is nothing stopping packager from doing a custom patch ripping
-> out crypto parts of bpftool if they really decide to. Only users and
-> maintainers push back, really. But apart from extreme laziness, why
-> would upstream packagers cripple bpftool like so?
-> 
-> We should stay vigilant, though, and if you notice some distro cutting
-> corners, please bring it up on the mailing list and we'll go from
-> there, ok?
+On Tue, Mar 24, 2026 at 11:19=E2=80=AFAM Pawan Gupta
+<pawan.kumar.gupta@linux.intel.com> wrote:
+>
+> As a mitigation for BHI, clear_bhb_loop() executes branches that overwrit=
+es
+> the Branch History Buffer (BHB). On Alder Lake and newer parts this
+> sequence is not sufficient because it doesn't clear enough entries. This
+> was not an issue because these CPUs have a hardware control (BHI_DIS_S)
+> that mitigates BHI in kernel.
+>
+> BHI variant of VMSCAPE requires isolating branch history between guests a=
+nd
+> userspace. Note that there is no equivalent hardware control for userspac=
+e.
+> To effectively isolate branch history on newer CPUs, clear_bhb_loop()
+> should execute sufficient number of branches to clear a larger BHB.
+>
+> Dynamically set the loop count of clear_bhb_loop() such that it is
+> effective on newer CPUs too. Use the hardware control enumeration
+> X86_FEATURE_BHI_CTRL to select the appropriate loop count.
+>
+> Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
+> Reviewed-by: Nikolay Borisov <nik.borisov@suse.com>
+> Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+> ---
+>  arch/x86/entry/entry_64.S   | 21 ++++++++++++++++-----
+>  arch/x86/net/bpf_jit_comp.c |  7 -------
+>  2 files changed, 16 insertions(+), 12 deletions(-)
+>
+> diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+> index 3a180a36ca0e..8128e00ca73f 100644
+> --- a/arch/x86/entry/entry_64.S
+> +++ b/arch/x86/entry/entry_64.S
+> @@ -1535,8 +1535,17 @@ SYM_CODE_END(rewind_stack_and_make_dead)
+>  SYM_FUNC_START(clear_bhb_loop)
+>         ANNOTATE_NOENDBR
+>         push    %rbp
+> +       /* BPF caller may require %rax to be preserved */
+> +       push    %rax
 
+Shouldn't the "push %rax" come after "mov %rsp, %rbp"?
 
-Hmm OK, I still believe making it easy to turn signing off has a higher
-chance to lead to the feature being unavailable, but if you actually
-have a need to strip out the signing part to build and run bpftool in
-production in your case, as Mykyta explains, it's a valid argument.
-Let's keep the option for now, then.
-
-Thank you both for your replies!
-
-Quentin
+>         mov     %rsp, %rbp
+> -       movl    $5, %ecx
