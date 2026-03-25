@@ -1,117 +1,172 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 370673290C4
-	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 21:49:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDE003563FB;
+	Wed, 25 Mar 2026 22:12:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774475380; cv=none; b=N5vDyBd3dPIHoVohyjPqLf+olmtAOqvGbEZYNiO/Ve0mPDf7dC7DB3Iw+qipFT44cpKodr4n/Bkk60UkUNBg+HAVloB3otSa25lNMDA69PJ1ObJIoDQedKspbtSxzRCWC4Z1aeyElKoAjbjdrMZRv2UjD83zBhEToQKTqPQ+/Wk=
+	t=1774476745; cv=none; b=I59T7zM/NG0N8bsOzgy9bwjd57lEQiAhp5q6fF+rDaL4IbH1p0BQNX3t+0V9SFN1Uu+8tPJAxJx2o3DFYrv0qABjmuXIKGP6IEc9J+e/sbQLWNRtK+nx5dIOnUbXlAyYuCuyOX0qxTIio819KEbOoll3iUjqHce0QMLjjwC2P7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774475380; c=relaxed/simple;
-	bh=iz1fSpZVNXeLgggcb5xsiGU0Q8slI2axIwIPVuRpvOc=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XUAMn7bzAsc/qcemwZD/qbla8LWU19bPBGnszT6oxU3IgNe3PZYNm+Frb5u6UNUFTTkM77VtVLevf2+WPfS4Xcso+EbfPkElj5xQW0L0tfMA+1lCcTHD4c/8cVf/Ty6Bk68M+fIdYDkueIEOOmD07o9u8IbDA13DjT8xHLZ8oX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ipekr+Dq; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774476745; c=relaxed/simple;
+	bh=rbAlc8Rhl8PMQBnjFbZ/hlsd4nHOhW9/up6gimmrhW8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oih82Oy+EPzoCJLO63ZwXQ1c+K/Z4S9tYIR+8RupiXulahGfosocPrgHmU30AFDcwh/l8Y0HZtm/c1s7q1jgaVb01/p494iHYdmty3MUEbzHR4yEY0oGplKQxf7Fh5/xmkUA9914yUcldFO7drV2+0JlrngqCMzlmlW5/1XVOo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pg3trNfP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ipekr+Dq"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-487035181a7so2130465e9.2
-        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 14:49:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774475378; x=1775080178; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mz0kcj+ndhoxRF+/ebTLeUq+YLmqb2xPLvFnCoHBQP8=;
-        b=ipekr+Dqnsny0EGTmIEEO9wyP6eO14YaPLriyBCZjD9tXpPQTiAlUGawYgIgoc+8Ak
-         ZNQFmRBPulAd+/A2LekW4p1NIJkCbv6/QeA/Lx+cs+unSsZ3aM05ppKnB9xlLApejlQJ
-         A4xkbXA2uTJmv/LseYp/tvq87A8sKKMbPHrfgdVVxS8liPnEULn7uxelAHB+mJEpafkZ
-         PxBgE3GtAIMJjJWUiNQz6g4hzxLq4IhMpATEiK0tX9O3XI1PRA7biciUXdmQGq9a1oum
-         AkJ/1fnQE/bs3pluSQU0cn0Bdyp8sA/oPVa3LAceiexcjs2fYA5f1S2Y+jax86iJOOWL
-         64fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774475378; x=1775080178;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mz0kcj+ndhoxRF+/ebTLeUq+YLmqb2xPLvFnCoHBQP8=;
-        b=Z58nFe602tCZDrsj4RDyCSFKE7mzPwxxMucGBi7n6XUPWZxG5olV4cBjIi3KkY2xeV
-         7zQ7y1XnRgOO++QJB+ZST0HmQm8KndpbPCCIRM+cU5zK1oHOlQWtt6lnDsW8qgZEVObx
-         JoiXcxphD5wVlg/QecEyyiDG56PG/24oSQSlbJeKhWVG3H0nkWKU679XW7v0zXhtIAIN
-         zBR3tUT9kNrxXOEfbcl19R8sAXwWkblH1dMsWdcHTsgOTizeD8Dudn9MPRgCNv608wYq
-         ptTnfqL5/JwLKEPVqv45AD2Uygf99dK4um0dYY3O412aX5rtx+8l2DTU3FXQLhMgWZQ6
-         XVgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXawrsIVooZLW8TkL1scx8M82bhYASsdHsPpv0apUpBsnyMIwlsHlju03PC2NqJCAM1Ewo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZSYCp0g/lkaAEauyPIdWXisn8VpKCA3C6UjUuPGsKhI8vxbVR
-	kIqZ9GS7gLY5u+vIBTVi8Mv3j+h8N5R0pC9yDAWCLHng/jox/jeMSJJ4
-X-Gm-Gg: ATEYQzyX5cJC9St0/2IB2jDz+cMdPW1j8lOY7xcv0BqLiF+EiSU5STC7JaRlFdAbuA9
-	VrjnwDFFTdLrjTv5REVnaWB2tU7A4cmznxrlMxRx/LoTUs54WrQD43EAk1op/awVju7hbUndk7Z
-	qHc/xfHXOyGWPgj+NH9w7j54gH2MJ6tL5S19k/0DGFPF4lpSq4y7+gL6jnrGlSXi8JJMrPTS6y1
-	Y+PSsbb91vhd9Zg7Uxc7C+C5FbxMRy/7EqXPcFF8UNY9VXDJQhoAFvFpHkcVU8t6Ut3rsPPXLHG
-	eoE5kxdrYNzHsm40FocZr69bKuXCW2v8CeP5UVWgv/54BODZdfK82niAB9l+A9NFNZ6FgkV86+l
-	NPgiYPTPZKmicerAy7IamayIoMTI8Iv4JlrTeGIs1FlA75xVf/18155S3mOlEXr3lXZwH+/i1To
-	fABd6CNlcojZ57ZOz2YltQurWa3gAWJDpouGAPdIC1rQ==
-X-Received: by 2002:a05:600c:a4f:b0:486:fbd1:9dc0 with SMTP id 5b1f17b1804b1-487160350d6mr70549235e9.22.1774475377407;
-        Wed, 25 Mar 2026 14:49:37 -0700 (PDT)
-Received: from krava (h082218179122.host.wavenet.at. [82.218.179.122])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4871fb38086sm11724845e9.4.2026.03.25.14.49.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Mar 2026 14:49:35 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 25 Mar 2026 22:49:33 +0100
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-	Menglong Dong <menglong8.dong@gmail.com>,
-	Steven Rostedt <rostedt@kernel.org>
-Subject: Re: [PATCHv4 bpf-next 25/25] selftests/bpf: Add tracing multi attach
- rollback tests
-Message-ID: <acRYbQkfgTWqJAAT@krava>
-References: <20260324081846.2334094-1-jolsa@kernel.org>
- <20260324081846.2334094-26-jolsa@kernel.org>
- <f222748c-69ce-4c63-826b-4f2d67fd4ec9@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pg3trNfP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83BC8C4CEF7;
+	Wed, 25 Mar 2026 22:12:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774476745;
+	bh=rbAlc8Rhl8PMQBnjFbZ/hlsd4nHOhW9/up6gimmrhW8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Pg3trNfPcDaaiMq/Ilhqs4aWxsEtkNXLtZGtHjFSlqyILNyWc9vkKKddSEUqZNY6U
+	 MYudpCZq+ePEggiMRwfksz8pWLz5NVoDVdSvtS6x0xCl8u/Ybx4/4bSvjis/5k/K5J
+	 Wr7V4znLHk3ou5Dds3kKfRapyEj3a9yAlpj/HUSmxzbVpqWCCIJQNEdCNQ0sjwHXOp
+	 LW0k3uJ/T5jch/5IItdYnV/sIcXsh7GjAJyJ58rYjqYivJojr3ZZRBQ51IyXl4djvJ
+	 LDPp5oDty9bZc9Y1f1lurpaZtBDnNEr81XdQlY0KeXEm6znhVNl75CV2JsnSVXGkAd
+	 LxQ2W8a6cyfxQ==
+Date: Wed, 25 Mar 2026 15:12:25 -0700
+From: "Darrick J. Wong" <djwong@kernel.org>
+To: Joanne Koong <joannelkoong@gmail.com>
+Cc: miklos@szeredi.hu, bpf@vger.kernel.org, bernd@bsbernd.com,
+	neal@gompa.dev, linux-fsdevel@vger.kernel.org,
+	linux-ext4@vger.kernel.org
+Subject: Re: [PATCH 3/5] fuse: implement file attributes mask for statx
+Message-ID: <20260325221225.GG6202@frogsfrogsfrogs>
+References: <177188733084.3935219.10400570136529869673.stgit@frogsfrogsfrogs>
+ <177188733175.3935219.14499232455997407711.stgit@frogsfrogsfrogs>
+ <CAJnrk1ZZV=nf2ZvsFz2gCEdFanK2c=_4X8hH5PyZ4ys-b5T8kQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <f222748c-69ce-4c63-826b-4f2d67fd4ec9@linux.dev>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJnrk1ZZV=nf2ZvsFz2gCEdFanK2c=_4X8hH5PyZ4ys-b5T8kQ@mail.gmail.com>
 
-On Wed, Mar 25, 2026 at 02:45:59PM +0800, Leon Hwang wrote:
-
-SNIP
-
-> > +static void test_rollback_unlink(void)
+On Wed, Mar 25, 2026 at 11:35:47AM -0700, Joanne Koong wrote:
+> On Mon, Feb 23, 2026 at 3:07 PM Darrick J. Wong <djwong@kernel.org> wrote:
+> >
+> > From: Darrick J. Wong <djwong@kernel.org>
+> >
+> > Actually copy the attributes/attributes_mask from userspace.  Ignore
+> > file attributes bits that the VFS sets (or doesn't set) on its own.
+> >
+> > Signed-off-by: "Darrick J. Wong" <djwong@kernel.org>
+> > Reviewed-by: Joanne Koong <joannelkoong@gmail.com>
+> > ---
+> >  fs/fuse/fuse_i.h |   37 +++++++++++++++++++++++++++++++++++++
+> >  fs/fuse/dir.c    |    4 ++++
+> >  fs/fuse/inode.c  |    4 ++++
+> >  3 files changed, 45 insertions(+)
+> >
+> >
+> > diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
+> > index 1d4beca5c7018d..79793db3e9a743 100644
+> > --- a/fs/fuse/fuse_i.h
+> > +++ b/fs/fuse/fuse_i.h
+> > @@ -147,6 +147,10 @@ struct fuse_inode {
+> >         /** Version of last attribute change */
+> >         u64 attr_version;
+> >
+> > +       /** statx file attributes */
+> > +       u64 statx_attributes;
+> > +       u64 statx_attributes_mask;
+> > +
+> >         union {
+> >                 /* read/write io cache (regular file only) */
+> >                 struct {
+> > @@ -1236,6 +1240,39 @@ void fuse_change_attributes_common(struct inode *inode, struct fuse_attr *attr,
+> >                                    u64 attr_valid, u32 cache_mask,
+> >                                    u64 evict_ctr);
+> >
+> > +/*
+> > + * These statx attribute flags are set by the VFS so mask them out of replies
+> > + * from the fuse server for local filesystems.  Nonlocal filesystems are
+> > + * responsible for enforcing and advertising these flags themselves.
+> > + */
+> > +#define FUSE_STATX_LOCAL_VFS_ATTRIBUTES (STATX_ATTR_IMMUTABLE | \
+> > +                                        STATX_ATTR_APPEND)
+> > +
+> > +/*
+> > + * These statx attribute flags are set by the VFS so mask them out of replies
+> > + * from the fuse server.
+> > + */
+> > +#define FUSE_STATX_VFS_ATTRIBUTES (STATX_ATTR_AUTOMOUNT | STATX_ATTR_DAX | \
+> > +                                  STATX_ATTR_MOUNT_ROOT)
+> > +
+> > +static inline u64 fuse_statx_attributes_mask(const struct inode *inode,
+> > +                                            const struct fuse_statx *sx)
 > > +{
-> > +	struct tracing_multi_rollback *skel, *extra;
-> > +	LIBBPF_OPTS(bpf_tracing_multi_opts, opts);
-> > +	struct tracing_multi_rollback **fillers;
-> > +	size_t cnt = FUNCS_CNT;
-> > +	__u32 *ids = NULL;
-> > +	int err, max;
+> > +       if (fuse_inode_is_exclusive(inode))
+> > +               return sx->attributes_mask & ~(FUSE_STATX_VFS_ATTRIBUTES |
+> > +                                              FUSE_STATX_LOCAL_VFS_ATTRIBUTES);
+> > +       return sx->attributes_mask & ~FUSE_STATX_VFS_ATTRIBUTES;
+> > +}
 > > +
-> > +	max = get_bpf_max_tramp_links();
-> > +	if (!ASSERT_GE(max, 1, "bpf_max_tramp_links"))
-> > +		return;
+> > +static inline u64 fuse_statx_attributes(const struct inode *inode,
+> > +                                       const struct fuse_statx *sx)
+> > +{
+> > +       if (fuse_inode_is_exclusive(inode))
+> > +               return sx->attributes & ~(FUSE_STATX_VFS_ATTRIBUTES |
+> > +                                         FUSE_STATX_LOCAL_VFS_ATTRIBUTES);
+> > +       return sx->attributes & ~FUSE_STATX_VFS_ATTRIBUTES;
+> > +}
 > > +
-> > +	/* Attach maximum allowed programs to bpf_fentry_test10 */
-> > +	fillers = fillers_load_and_link(max);
-> > +	if (!ASSERT_OK_PTR(fillers, "fillers_load_and_link"))
-> > +		return;
-> > +
-> > +	extra = extra_load_and_link();
-> > +	if (!ASSERT_OK_PTR(extra, "extra_load_and_link"))
+> >  u32 fuse_get_cache_mask(struct inode *inode);
+> >
+> >  /**
+> > diff --git a/fs/fuse/dir.c b/fs/fuse/dir.c
+> > index 7ac6b232ef1232..10fa47e969292f 100644
+> > --- a/fs/fuse/dir.c
+> > +++ b/fs/fuse/dir.c
+> > @@ -1464,6 +1464,8 @@ static int fuse_do_statx(struct mnt_idmap *idmap, struct inode *inode,
+> >                 stat->result_mask = sx->mask & (STATX_BASIC_STATS | STATX_BTIME);
+> >                 stat->btime.tv_sec = sx->btime.tv_sec;
+> >                 stat->btime.tv_nsec = min_t(u32, sx->btime.tv_nsec, NSEC_PER_SEC - 1);
+> > +               stat->attributes |= fuse_statx_attributes(inode, sx);
+> > +               stat->attributes_mask |= fuse_statx_attributes_mask(inode, sx);
+> >                 fuse_fillattr(idmap, inode, &attr, stat);
+> >                 stat->result_mask |= STATX_TYPE;
+> >         }
+> > @@ -1568,6 +1570,8 @@ static int fuse_update_get_attr(struct mnt_idmap *idmap, struct inode *inode,
+> >                         stat->btime = fi->i_btime;
+> >                         stat->result_mask |= STATX_BTIME;
+> >                 }
+> > +               stat->attributes = fi->statx_attributes;
+> > +               stat->attributes_mask = fi->statx_attributes_mask;
 > 
-> Should cleanup fillers here?
+> Do these need to be |= so we don't overwrite any vfs attributes stored
+> in stat already?
 
-yep, should jump to cleanup, thanks
+Ackpth yes.  Good catch!
 
-jirka
+--D
+
+> Thanks,
+> Joanne
+> 
+> >         }
+> >
+> >         return err;
+> > diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
+> > index 58c3351b467221..ff8b94cb02e63c 100644
+> > --- a/fs/fuse/inode.c
+> > +++ b/fs/fuse/inode.c
+> > @@ -286,6 +286,10 @@ void fuse_change_attributes_common(struct inode *inode, struct fuse_attr *attr,
+> >                         fi->i_btime.tv_sec = sx->btime.tv_sec;
+> >                         fi->i_btime.tv_nsec = sx->btime.tv_nsec;
+> >                 }
+> > +
+> > +               fi->statx_attributes = fuse_statx_attributes(inode, sx);
+> > +               fi->statx_attributes_mask = fuse_statx_attributes_mask(inode,
+> > +                                                                      sx);
+> >         }
+> >
+> >         if (attr->blksize)
+> >
+> 
