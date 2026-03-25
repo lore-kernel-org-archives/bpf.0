@@ -1,255 +1,121 @@
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ADB428726D
-	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 21:08:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1658B2E8B6B
+	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 21:12:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774472886; cv=none; b=enFXheLwlO2kj6os1XKaxt6ow0eg9NYZbv5qtbuRAmUGLfa8HpG25lT0fOq4Q9f4x2Lm3H14/cL4Ykb8GxHhfR7T/DDrbdcX4fq4KGkCpWUTIOFUk/xGXktlm8x3TFqsP9KQQS6xb6lO0iGURzcsen6s+83G6sna1RJQqCyADgM=
+	t=1774473134; cv=none; b=Zrk15Ea31xINbWkcicVLrWtzv23I7bxqex3ypy+rdoyxKDmel4jhaN7O2yQa1hj5aHuDLxyDGFqPkRtE8WRIkB8eqN2GHXpqrvCjG8iXPA7EOZdD6OkAG6sxrplWT+aB2czmveAurCjI1q/K2IfuuCRM09vEvo3tIgo7ijtT2gA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774472886; c=relaxed/simple;
-	bh=LMuTss0KLzyL7R/o84tMxIZTf5HqlQGKYlmpB0hAeF0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UYbfh6Mv3GFZ6up3NxAfw1PhuC9F14fXis6Ld1bFYxaJ3fbn7Vr255ucpdTwM6QcOItAy4au0qHOTNtgeVmkXyTNa2OFVkvU2d0V7DEXG29ByyHJ3UFesC1ujUNbV+6WIirloLx3lff5sQR9DiV81vrek6m7UuzBYH2iUNpH5zk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Jk34sV3c; arc=none smtp.client-ip=95.215.58.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1774473134; c=relaxed/simple;
+	bh=VEFE+Le3J4kokQ2bTMHgmn8JTCyDAPSCdILWGP3vRAs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HVAO7ifP/vFiGK0c465z20hj0iV8qFDjmy/tKi7o1XF2xlyvBilDbGNg5qcLZo6nreRyfbDluM9iab9GoORAScajbTfMgezHf+1yPZXAiv7cOGUWwJWG1wPPqrpv3qcOyKnl66C3O1rX7Yizpr4/lva0M2tkpARIagzoeDWXb1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cjUyn7NO; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Jk34sV3c"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774472872;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=lqVAzvFdsUO5RW3GYgUigpuEeGhwLS5p+ajeWTq/wEU=;
-	b=Jk34sV3cQputcgV+gOHFYcr0sseiG8UbizRrm5Aanuqp35rhwigwtVLKyDDHxEZXbmG1PN
-	QtnlV1RwTGkffi9/GuNjJEJDRZGzq/d/oHNJJ1Hy1CnQVAKVLVblNigKI9UyToRefw/axB
-	gRX6FAghKf+meNHha2ge8MirvjDMIw8=
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: lsf-pc@lists.linux-foundation.org
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	David Hildenbrand <david@kernel.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Qi Zheng <zhengqi.arch@bytedance.com>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Chen Ridong <chenridong@huaweicloud.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Yuanchu Xie <yuanchu@google.com>,
-	Wei Xu <weixugc@google.com>,
-	Kairui Song <ryncsn@gmail.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	Nhat Pham <nphamcs@gmail.com>,
-	Gregory Price <gourry@gourry.net>,
-	Barry Song <21cnbao@gmail.com>,
-	David Stevens <stevensd@google.com>,
-	Vernon Yang <vernon2gm@gmail.com>,
-	David Rientjes <rientjes@google.com>,
-	Kalesh Singh <kaleshsingh@google.com>,
-	wangzicheng <wangzicheng@honor.com>,
-	"T . J . Mercier" <tjmercier@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Meta kernel team <kernel-team@meta.com>,
-	bpf@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org
-Subject: [LSF/MM/BPF TOPIC] Towards Unified and Extensible Memory Reclaim (reclaim_ext)
-Date: Wed, 25 Mar 2026 14:06:37 -0700
-Message-ID: <20260325210637.3704220-1-shakeel.butt@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cjUyn7NO"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-439b6d9c981so125928f8f.1
+        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 14:12:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774473131; x=1775077931; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uKSyXsXjvD0/b9TNOxiddMFRBG+BCzc+FJTLa0tgGsM=;
+        b=cjUyn7NOlGGcbnkg+KXlGxzH1+BM6PdTkafBRGNhBb5snN1a2iMO+g19jqEAPtjH+k
+         gPD4o6TYQrl92dQZxMcHBoY4DHYy/Kw77zY6LPqea04l8ge1nGc2QiSfsLiiGH5vYmJE
+         ivIoHAf/fdZbgZnNh0sKEqXSOEYKO2XhKvRjWUbfydO42XpoF6WxnoTRZ07W0uMNq7vB
+         LdFVU6L4Jr679RdRegqicxgMJWofe9zn9rV1qDUhxFFI9JyqPxeDzQ86i1pdW0ERdxSW
+         XzHlrPU62DZwckYfldFHhY+3k8wZ6tjZ9Xo8/KNgt/1Cr69jCi9JrnDj9VlnGBXK+deS
+         XnSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774473131; x=1775077931;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uKSyXsXjvD0/b9TNOxiddMFRBG+BCzc+FJTLa0tgGsM=;
+        b=jrMQF+Gx9I4OJyM5Rk7HAA9VHpJxjAN4nPPgGqQE22zK2Gn+mD62llOACs901C7drq
+         nbFRnO+65/oO4XbRvwbnx2iqOly4fxWr3dEwLvoGmAyx+Ln1YS1YRZ84rg2GVgcqi6XC
+         lly9UA0MyCGps1+I11weFDrMM3d5O+JC9DqRqmK+RtWzslGlWuUWaO7oCExSqdTVEjq8
+         yK/AVkzDR2pXyAfsdUa1joCzIdB3wILMOCla8qXzTs1fKFbckQ9UrRCsKzWN1NfZcejw
+         T6FY6VmRbf+f9rlXnVMnGtxyGE8udu6cyuGarf58PKyInFE35R+FjXy7cMWpKCm3AFWY
+         hgxA==
+X-Gm-Message-State: AOJu0YwfefSd1eCt9XHF6nS1hsIuBR7+yQuZAsBIv9GwvjD4iPGmenKq
+	wsx+uoQfqk3A99GUFJ2aisu47vXhUQcyPHrN8XaVrTy5Na776pDr4Jm7
+X-Gm-Gg: ATEYQzxPBd4478yjQqDeU3C7MPVpxcJbup1Q4IJraKug09phVlkPerprBMDoczKOJCf
+	ob09wSAw6FsCXkkRHdrwZf1RK73/8ECNnt4Ar5FQ+Yy42PtYAConXvo/Y/UjyCnGwryR4tCXtv/
+	pM1Ty5MeMYbcNS9fV8BRGtmmkQe61QHuGO5qlCJx6fDdlppFIBCGJ2ORfdVQ6mgIouuUt0gcKck
+	EBCiznYA7q2Kaq44ApZxVeSiZwg4IvctMkYwYJJy/tSJ7OGy82VCDvwlAIhnWQovjoXpMd8vbbs
+	nUmL4HFF1Ng/sbfNcjROCX+YFxSlgLhyetWwo0XbdDnL/CJzYJZOqpLOHZjrNW3IliftuNv2g6V
+	EWlZ/95S5OvacuJjwt7wun6wnA5Xv8ISP2iKeC1I5sPu+edaubq/9Zjah+2DW3MB04yfFK/fif2
+	Hxl05F8DeKsny8Kg==
+X-Received: by 2002:a05:6000:4381:b0:439:ddc0:4bef with SMTP id ffacd0b85a97d-43b883786damr8154472f8f.8.1774473131295;
+        Wed, 25 Mar 2026 14:12:11 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:42::])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b919cefd7sm2433931f8f.17.2026.03.25.14.12.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Mar 2026 14:12:10 -0700 (PDT)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Subject: [PATCH 0/2] bpf: Migrate bpf_task_work and file dynptr to
+ kmalloc_nolock
+Date: Wed, 25 Mar 2026 14:11:53 -0700
+Message-Id: <20260325-kmalloc_special-v1-0-269666afb1ea@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJpPxGkC/x3MWwqDMBAF0K0M99uATVKl2YpICeOog/FBAqUg2
+ XuhZwHnRpGsUhDoRpaPFj0PBHo0BF7jsYjRCYFgW9u11jqz7TGlk9/lEtaYzMs5Yc9P76YeDeH
+ KMuv3Pw5jrT9DpzEfYQAAAA==
+X-Change-ID: 20260223-kmalloc_special-933ec4c543d7
+To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+ daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
+ eddyz87@gmail.com, memxor@gmail.com
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1774473129; l=1264;
+ i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
+ bh=VEFE+Le3J4kokQ2bTMHgmn8JTCyDAPSCdILWGP3vRAs=;
+ b=uFvdhUhy2dMzADomQoTQaU2NRCYziDdYkt2v4yL6quxKkmyjxaYq+83s6CC0HG75W8MN9IMze
+ YHpKoBJW3XcDtIy9ZahLCNcw3CmTGuTt9L/WbY+OS3SQiLFkIIHKx7L
+X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
+ pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
-The Problem
------------
+Now that kmalloc can be used from NMI context via kmalloc_nolock(),
+migrate BPF internal allocations away from bpf_mem_alloc to use the
+standard slab allocator.
 
-Memory reclaim in the kernel is a mess. We ship two completely separate
-eviction algorithms -- traditional LRU and MGLRU -- in the same file.
-mm/vmscan.c is over 8,000 lines. 40% of it is MGLRU-specific code that
-duplicates functionality already present in the traditional path. Every
-bug fix, every optimization, every feature has to be done twice or it
-only works for half the users. This is not sustainable. It has to stop.
+Use kfree_rcu() for deferred freeing, which waits for a regular RCU
+grace period before the memory is reclaimed. Sleepable BPF programs
+hold rcu_read_lock_trace but not regular rcu_read_lock, so patch 1
+adds explicit rcu_read_lock/unlock around the pointer-to-refcount
+window to prevent kfree_rcu from freeing memory while a sleepable
+program is still between reading the pointer and acquiring a
+reference.
 
-We should unify both algorithms into a single code path. In this path,
-both algorithms are a set of hooks called from that path. Everyone
-maintains, understands, and evolves a single codebase. Optimizations are
-now evaluated against -- and available to -- both algorithms. And the
-next time someone develops a new LRU algorithm, they can do so in a way
-that does not add churn to existing code.
+Patch 1 migrates bpf_task_work_ctx from bpf_mem_alloc/bpf_mem_free to
+kmalloc_nolock/kfree_rcu.
 
-How We Got Here
----------------
+Patch 2 migrates bpf_dynptr_file_impl from bpf_mem_alloc/bpf_mem_free
+to kmalloc_nolock/kfree_rcu.
 
-MGLRU brought interesting ideas -- multi-generation aging, page table
-scanning, Bloom filters, spatial lookaround. But we never tried to
-refactor the existing reclaim code or integrate these mechanisms into the
-traditional path. 3,300 lines of code were dumped as a completely
-parallel implementation with a runtime toggle to switch between the two.
-No attempt to evolve the existing code or share mechanisms between the
-two paths -- just a second reclaim system bolted on next to the first.
+Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+---
+Mykyta Yatsenko (2):
+      bpf: Migrate bpf_task_work to kmalloc_nolock
+      bpf: Migrate dynptr file to kmalloc_nolock
 
-To be fair, traditional reclaim is not easy to refactor. It has
-accumulated decades of heuristics trying to work for every workload, and
-touching any of it risks regressions. But difficulty is not an excuse.
-There was no justification for not even trying -- not attempting to
-generalize the existing scanning path, not proposing shared
-abstractions, not offering the new mechanisms as improvements to the code
-that was already there. Hard does not mean impossible, and the cost of
-not trying is what we are living with now.
+ kernel/bpf/helpers.c | 45 +++++++++++++++++++++++++++++----------------
+ 1 file changed, 29 insertions(+), 16 deletions(-)
+---
+base-commit: 9f7d8fa6817e2709846fc7f5c9f60254e536d138
+change-id: 20260223-kmalloc_special-933ec4c543d7
 
-The Differences That Matter
----------------------------
-
-The two algorithms differ in how they classify pages, detect access, and
-decide what to evict. But most of these differences are not fundamental
--- they are mechanisms that got trapped inside one implementation when
-they could benefit both. Not making those mechanisms shareable leaves
-potential free performance gains on the table.
-
-Access detection: Traditional LRU walks reverse mappings (RMAP) from the
-page back to its page table entries. MGLRU walks page tables forward,
-scanning process address spaces directly. Neither approach is inherently
-tied to its eviction policy. Page table scanning would benefit
-traditional LRU just as much -- it is cache-friendly, batches updates
-without the LRU lock, and naturally exploits spatial locality. There is
-no reason this should be MGLRU-only.
-
-Bloom filters and lookaround: MGLRU uses Bloom filters to skip cold
-page table regions and a lookaround optimization to scan adjacent PTEs
-during eviction. These are general-purpose optimizations for any
-scanning path. They are locked inside MGLRU today for no good reason.
-
-Lock-free age updates: MGLRU updates folio age using atomic flag
-operations, avoiding the LRU lock during scanning. Traditional reclaim
-can use the same technique to reduce lock contention.
-
-Page classification: Traditional LRU uses two buckets
-(active/inactive). MGLRU uses four generations with timestamps and
-reference frequency tiers. This is the policy difference --
-how many age buckets and how pages move between them. Every other
-mechanism is shareable.
-
-Both systems already share the core reclaim mechanics -- writeback,
-unmapping, swap, NUMA demotion, and working set tracking. The shareable
-mechanisms listed above should join that common core. What remains after
-that is a thin policy layer -- and that is all that should differ between
-algorithms.
-
-The Fix: One Reclaim, Pluggable and Extensible
------------------------------------------------
-
-We need one reclaim system, not two. One code path that everyone
-maintains, everyone tests, and everyone benefits from. But it needs to
-be pluggable as there will always be cases where someone wants some
-customization for their specialized workload or wants to explore some
-new techniques/ideas, and we do not want to get into the current mess
-again.
-
-The unified reclaim must separate mechanism from policy. The mechanisms
--- writeback, unmapping, swap, NUMA demotion, workingset tracking -- are
-shared today and should stay shared. The policy decisions -- how to
-detect access, how to classify pages, which pages to evict, when to
-protect a page -- are where the two algorithms differ, and where future
-algorithms will differ too. Make those pluggable.
-
-This gives us one maintained code path with the flexibility to evolve.
-New ideas get implemented as new policies, not as 3,000-line forks. Good
-mechanisms from MGLRU (page table scanning, Bloom filters, lookaround)
-become shared infrastructure available to any policy. And if someone
-comes up with a better eviction algorithm tomorrow, they plug it in
-without touching the core.
-
-Making reclaim pluggable implies we define it as a set of function
-methods (let's call them reclaim_ops) hooking into a stable codebase we
-rarely modify. We then have two big questions to answer: how do these
-reclaim ops look, and how do we move the existing code to the new model?
-
-How Do We Get There
--------------------
-
-Do we merge the two mechanisms feature by feature, or do we prioritize
-moving MGLRU to the pluggable model then follow with LRU once we are
-happy with the result?
-
-Whichever option we choose, we do the work in small, self-contained
-phases. Each phase ships independently, each phase makes the code
-better, each phase is bisectable. No big bang. No disruption. No
-excuses.
-
-Option A: Factor and Merge
-
-MGLRU is already pretty modular. However, we do not know which
-optimizations are actually generic and which ones are only useful for
-MGLRU itself.
-
-Phase 1 -- Factor out just MGLRU into reclaim_ops. We make no functional
-changes to MGLRU. Traditional LRU code is left completely untouched at
-this stage.
-
-Phase 2 -- Merge the two paths one method at a time. Right now the code
-diverts control to MGLRU from the very top of the high-level hooks. We
-instead unify the algorithms starting from the very beginning of LRU and
-deciding what to keep in common code and what to move into a traditional
-LRU path.
-
-Advantages:
-- We do not touch LRU until Phase 2, avoiding churn.
-- Makes it easy to experiment with combining MGLRU features into
-  traditional LRU. We do not actually know which optimizations are
-  useful and which should stay in MGLRU hooks.
-
-Disadvantages:
-- We will not find out whether reclaim_ops exposes the right methods
-  until we merge the paths at the end. We will have to change the ops
-  if it turns out we need a different split. The reclaim_ops API will
-  be private and have a single user so it is not that bad, but it may
-  require additional changes.
-
-Option B: Merge and Factor
-
-Phase 1 -- Extract MGLRU mechanisms into shared infrastructure. Page
-table scanning, Bloom filter PMD skipping, lookaround, lock-free folio
-age updates. These are independently useful. Make them available to both
-algorithms. Stop hoarding good ideas inside one code path.
-
-Phase 2 -- Collapse the remaining differences. Generalize list
-infrastructure to N classifications (trad=2, MGLRU=4). Unify eviction
-entry points. Common classification/promotion interface. At this point
-the two "algorithms" are thin wrappers over shared code.
-
-Phase 3 -- Define the hook interface. Define reclaim_ops around the
-remaining policy differences. Layer BPF on top (reclaim_ext).
-Traditional LRU and MGLRU become two instances of the same interface.
-Adding a third algorithm means writing a new set of hooks, not forking
-3,000 lines.
-
-Advantages:
-- We get signals on what should be shared earlier. We know every shared
-  method to be useful because we use it for both algorithms.
-- Can test LRU optimizations on MGLRU early.
-
-Disadvantages:
-- Slower, as we factor out both algorithms and expand reclaim_ops all
-  at once.
-
-Open Questions
---------------
-
-- Policy granularity: system-wide, per-node, or per-cgroup?
-- Mechanism/policy boundary: needs iteration; get it wrong and we
-  either constrain policies or duplicate code.
-- Validation: reclaim quality is hard to measure; we need agreed-upon
-  benchmarks.
-- Simplicity: the end result must be simpler than what we have today,
-  not more complex. If it is not simpler, we failed.
--- 
-2.52.0
+Best regards,
+--  
+Mykyta Yatsenko <yatsenko@meta.com>
 
