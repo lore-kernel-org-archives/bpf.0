@@ -1,140 +1,146 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6995A3FA5C9;
-	Wed, 25 Mar 2026 16:32:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F69C3DCD87;
+	Wed, 25 Mar 2026 16:34:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774456377; cv=none; b=a4oBzkXvw/BD+VoEOL21XN4yK0iEjFmQ9KVJPHkEMhtFU0kXoo1CvzmQtTqL/0KYCfnMbJxaDHu2kr/q3zqBly4RZkfiCWwM13iRVMQIYnw5fozr9SNOc33bzxMQNbjtUkdp2NLqNRq12vTkY9ah9Y3NIRfbjxs+KzKAsq+TNg8=
+	t=1774456456; cv=none; b=NfMXixSDMHEBEjLgcS+/tat8U9jjH9QnbqGJ2GNNz+LSU7E5lJN2X6dQbfEanX5fHjaSO8u1tJNOptMY72rzyEJa0KdsCRKCnmPllBgxdgtXERFt6ewzF2vmq1nuOidyXcuYAY8znU8sv8qBUnUGfkQMfqoflOds3/RfwuxEA5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774456377; c=relaxed/simple;
-	bh=8KromqTmRdEzC0f/nh0v6DgYME2PY+4qjNyQaiTrV7o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EAmxx0YQkSmhx/guy9alHzQd9IRTlMOr1VobeAa0XcHz3uk8Hq8Nn5U0Rgv18Z4g+63wn/J/TqbDHw/K60PZWz4CxWMSwaj1Gbt3lHSoDuXhzNYVNqeWPPElhrPjoXi2yQXfGB0RP69EX8jxXpnexiipzwlBGwkUNn7eiLfYsow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=ALxPshRs; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1774456456; c=relaxed/simple;
+	bh=EK+MXobnSf1BBibce4fu/sJoIEkh81eUcMOgGablWuc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hpZ33lUfWgtrXezA0QNglGxU/AX+NrP+e14Zb/+lsxSAXnLEEztMCqIA0IOxDoMAaBhGLlGptPl353rer+THIFZFRsBiGN/XbrK7JB6W7gMEaZUD6PbW0EE36pUHhdY4tG53TsfoHUBn96JSCOz5XRTFnlG+8A9K9WRqJuukmHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y7h94x2k; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="ALxPshRs"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C378C25DD;
-	Wed, 25 Mar 2026 09:32:49 -0700 (PDT)
-Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 59D2A3F915;
-	Wed, 25 Mar 2026 09:32:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1774456375; bh=8KromqTmRdEzC0f/nh0v6DgYME2PY+4qjNyQaiTrV7o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ALxPshRsDFuzUUSrAQLYb5oMb0tvtkxDp5jIXxdqmiTlZeXMf5KdiIGX4O1ZRzOAl
-	 aVHoJK/TwY8rW5hry6myIKboXKXRBeNCqnA6deW64JfWx1LBRlJOFK+43TxYKT1ESK
-	 YVwBkC6CymUCz98Qtl2lU+AYLcsJQEAvlp9zfpWc=
-Date: Wed, 25 Mar 2026 16:32:49 +0000
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Ankur Arora <ankur.a.arora@oracle.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-	bpf@vger.kernel.org, arnd@arndb.de, will@kernel.org,
-	peterz@infradead.org, mark.rutland@arm.com, harisokn@amazon.com,
-	cl@gentwo.org, ast@kernel.org, rafael@kernel.org,
-	daniel.lezcano@linaro.org, memxor@gmail.com,
-	zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com,
-	rdunlap@infradead.org, joao.m.martins@oracle.com,
-	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-Subject: Re: [PATCH v10 00/12] barrier: Add
- smp_cond_load_{relaxed,acquire}_timeout()
-Message-ID: <acQOMZMk0OMfIgFO@arm.com>
-References: <20260316013651.3225328-1-ankur.a.arora@oracle.com>
- <20260315184925.b6f93386e918ca79614843e3@linux-foundation.org>
- <874imftol4.fsf@oracle.com>
- <20260316233712.7cbfac27@pumpkin>
- <87ms07rlp9.fsf@oracle.com>
- <20260317091705.5a64fc56@pumpkin>
- <acPo7l_pd5rnHpSX@arm.com>
- <20260325154210.79a621df@pumpkin>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y7h94x2k"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBDBFC4CEF7;
+	Wed, 25 Mar 2026 16:34:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774456455;
+	bh=EK+MXobnSf1BBibce4fu/sJoIEkh81eUcMOgGablWuc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Y7h94x2kdDHczeELc5j9D4V4ZkNKjvFG0ghhN/UJqJUp1YSldk7TY8Y89o93EpPd/
+	 UYgGijBvukwnDYfccGvcD+TpFvk9QvJadmXSam6z+iGy9GTQEPcSxFG0J8i5ybWvKj
+	 J0as3Klj9WNbZc1uXs71rW5QsAsB9WGgNZQ3bhwrpMA2I6kWBFRRDS96xN/iCVYZ8M
+	 Dnhs9dDmTZuoLv1Yg9s7NhquLHif+p/HmcTLvRht81fNjyH2N/+fv/aK6Bsc6qYLlo
+	 9rNnxq/VvGFuo6jMNsUrlRjbKBf3nPyskonKjIZiv2yVKpsMcbQfRjl3+akdMcjtkT
+	 Qle77GdWeZ41g==
+Message-ID: <cbc7c2d7-963e-4630-baf5-287fb127774f@kernel.org>
+Date: Wed, 25 Mar 2026 17:34:08 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260325154210.79a621df@pumpkin>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/3] vmalloc: Optimize vfree
+To: Muhammad Usama Anjum <usama.anjum@arm.com>,
+ Uladzislau Rezki <urezki@gmail.com>
+Cc: Zi Yan <ziy@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>,
+ Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
+ <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Brendan Jackman <jackmanb@google.com>,
+ Johannes Weiner <hannes@cmpxchg.org>, Nick Terrell <terrelln@fb.com>,
+ David Sterba <dsterba@suse.com>, Vishal Moola <vishal.moola@gmail.com>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ Ryan.Roberts@arm.com, david.hildenbrand@arm.com
+References: <20260324133538.497616-1-usama.anjum@arm.com>
+ <20260324133538.497616-3-usama.anjum@arm.com>
+ <1D88CFF0-8A74-413F-9A6A-39E27B760AE1@nvidia.com> <acOjIcqyIVY9KNn0@milan>
+ <a79ff8ba-ed4a-43d0-9c4b-d2883a5c48e8@arm.com> <acQKZBqTjpm6-k2f@milan>
+ <84f14a13-6236-47ef-afc5-e168d16caeec@arm.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <84f14a13-6236-47ef-afc5-e168d16caeec@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Mar 25, 2026 at 03:42:10PM +0000, David Laight wrote:
-> On Wed, 25 Mar 2026 13:53:50 +0000
-> Catalin Marinas <catalin.marinas@arm.com> wrote:
-> 
-> > On Tue, Mar 17, 2026 at 09:17:05AM +0000, David Laight wrote:
-> > > On Mon, 16 Mar 2026 23:53:22 -0700
-> > > Ankur Arora <ankur.a.arora@oracle.com> wrote:  
-> > > > David Laight <david.laight.linux@gmail.com> writes:  
-> > > > > On arm64 I think you could use explicit sev and wfe - but that will wake all
-> > > > > 'sleeping' cpu; and you may not want the 'thundering herd'.    
-> > > > 
-> > > > Wouldn't we still have the same narrow window where the CPU disregards the IPI?  
-> > > 
-> > > You need a 'sevl' in the interrupt exit path.  
-> > 
-> > No need to, see the rule below in
-> > https://developer.arm.com/documentation/ddi0487/maa/2983-beijhbbd:
-> > 
-> > R_XRZRK
-> >   The Event Register for a PE is set by any of the following:
-> >   [...]
-> >   - An exception return.
-> > 
-> 
-> It is a shame the pages for the SEV and WFE instructions don't mention that.
-> And the copy I found doesn't have working hyperlinks to any other sections.
-> (Not even references to related instructions...)
+On 3/25/26 17:25, Muhammad Usama Anjum wrote:
+> On 25/03/2026 4:16 pm, Uladzislau Rezki wrote:
+>> On Wed, Mar 25, 2026 at 03:02:14PM +0000, Muhammad Usama Anjum wrote:
+>>> Sorry, I didn't get it. How does having cond_resched() in this function
+>>> affects __free_contig_range()?
+>>>
+>> It is not. What i am asking is about:
+>>
+>> <snip>
+>> spin_lock();
+>> free_pages_bulk()
+>> ...
+>> <snip>
+>>
+>> so this is not allowed because there is cond_resched() call. We
+>> can remove it and make it possible to invoke free_pages_bulk() under
+>> spin-lock, __but__ only if for example other calls do not sleep:
+>>
+>> __free_contig_range()
+>> memdesc_section()
+>> free_prepared_contig_range()
+>> ...
+>>
+>>>
+>>> The current user of this function is only vfree() which is sleepable.
+>>>
+>> I know. But this function can be used by others soon or later.
+>>
+>> Another option is add a comment, saying that it is only for sleepable
+>> contexts.
+> Thank you for detailed response. I can move cond_resched() to vfree() and make
+> free_pages_bulk() allowed to be called form sleepable context. But I feel the
+> current implementation is better to avoid latency spikes. I'll put explicit
+> comment that this function can only be called from sleepable contexts.
 
-The latest architecture spec (M.a.a) has working hyperlinks.
-
-> You do need to at least comment that the "msr s0_3_c1_c0_0, %[ecycles]" is
-> actually WFET.
-> Is that using an absolute cycle count?
-
-Yes, compared to CNTVCT.
-
-> If so does it work if the time has already passed?
-
-Yes, it exits immediately. These counters are not going to wrap in our
-(or device's) lifetime.
-
-> If it is absolute do you need to recalculate it every time around the loop?
-
-No but you do need to read CNTVCT, that's what __delay_cycles() does (it
-does not wait).
-
-> __delay_cycles() contains guard(preempt_notrace()). I haven't looked what
-> that does but is it needed here since preemption is disabled?
-
-The guard was added recently by commit e5cb94ba5f96 ("arm64: Fix
-sampling the "stable" virtual counter in preemptible section"). It's
-needed for the udelay() case but probably not for Ankur's series. Maybe
-we can move the guard in the caller?
-
-> Looking at the code I think the "sevl; wfe" pair should be higher up.
-
-Yes, I replied to your other message. We could move it higher indeed,
-before the condition check, but I can't get my head around the ordering.
-Can need_resched() check be speculated before the WFE? I need to think
-some more.
-
-> I also wonder how long it takes the cpu to leave any low power state.
-> We definitely found that was an issue on some x86 cpu and had to both
-> disable the lowest low power state and completely rework some wakeup
-> code that really wanted a 'thundering herd' rather than the very gentle
-> 'bring each cpu out of low power one at a time' that cv_broadcast()
-> gave it.
-
-WFE is a very shallow power state where all hardware state is retained.
-We have an even stream broadcast to all CPUs regularly already (10KHz)
-and I haven't heard people complaining about power degradation. If a CPU
-is a WFI state or even deeper into firmware (following a PSCI call), an
-exclusive monitor event won't wake it up. It's only for those cores
-waiting in WFE.
+That's probably good enough for now. It can accept arbitrarily large
+areas, so the cond_resched() in there is the right thing to do. :)
 
 -- 
-Catalin
+Cheers,
+
+David
