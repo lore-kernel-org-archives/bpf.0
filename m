@@ -1,128 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3DE01531E8;
-	Wed, 25 Mar 2026 02:15:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 037551D130E
+	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 03:19:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774404947; cv=none; b=YZh50BCmoVDtE27WjrXgPnsrifvyqIsLnwHQtlqMXrY9NVPr0JZrnM4U0FYbKbVzdJxmz7qyyyebW9r13GtCNPyz7K87Xvs+zVXv/BIc23tujolF4eKY4QBp4rxRBuvrCOm/XCnwPw45Fk2ei0yBTHGkSxtm+9RKiNncK0hpWpo=
+	t=1774408778; cv=none; b=hsMOyFZNRh+8Uo+ICkzP8CI4+VF7sCFCWB7NWDnUJ8/XJ3qPFzdD1mplFXgBuDHdno5+hWY5umSfHu9IjIOP88tcFg+NEcuEB9Fn+t2UCanHao6OfcxJvz6KPJZLKZqJXDZ2kuEA3oTW//GTYD4Ov/aL265sJFibVt+PEVJxVFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774404947; c=relaxed/simple;
-	bh=UQ36BHD5AltOWCXoTF1F067alxzo/XmfYIE8jWkukFg=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=utbXcFxEJnAMLwY50zLEkbUxcKiDsDhI71yTplfq8DMOpLSWTIL024qEkHVKCJnIk2dguyDpbM2iGV5e/EZlLXJ7dQUttSYJjVc9udigzOk7d4SnsmRe+0V3lbx4Dqd1xpNbLrbkXjRui0EBd01BaLWcZeqzUUI5yaUOpEvbi8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SXIEB9nN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774408778; c=relaxed/simple;
+	bh=ldusxSsSzJNWYITwxAoP9ADHNJIQwQmzjmUVhB6WPNY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=HfMB5IvHcv1GDuVWGZFmXpf1VhCjP5IR/rjXKHVelV4iEIy1rwu6wqN1ghtW/PS6JW6gGHpqU4fjwfiTK95yodp1YKeuwjA0Hj/3Aq8X0VT0mGwEryzRD+5LE9dR906Wzwmmyr0gd1DV1ceuMbszIy/hDIfq50GWQRhUDuEpkNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=P8M/Btq8; arc=none smtp.client-ip=209.85.160.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SXIEB9nN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FA8AC19424;
-	Wed, 25 Mar 2026 02:15:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774404947;
-	bh=UQ36BHD5AltOWCXoTF1F067alxzo/XmfYIE8jWkukFg=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=SXIEB9nNxGuVM7+G/zWqCOrk3ScU5D3kc7pMf71uYqS54jCtztJ3t+D04TLw1M3+9
-	 mE+HMEOIhSemtT3fb3I33VAZzmbye7BmjuY0RbnWai5x8v+2r19d2UnmZzoxCNaobX
-	 lDmRWkDamwqaLHrsf2JDHFktCY7tSSDxHyJMflQBbIOpJd/oOpk6D+/VxyUcbzoBEi
-	 Zzhih8EOYlxaTYl/EifYRfbS/Ps5Frot2VNd5AJNVtF31ssKLpr5c8EsGrT9cqc0fF
-	 h4zDDkpYCLfZGSgBAngHj44aq+k8UIY25+Qct7AOMEgeTNNsoSe76bnuQarmVRPZjm
-	 NK8PSxE6hMPLQ==
-Content-Type: multipart/mixed; boundary="===============8578444517970282799=="
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="P8M/Btq8"
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-50b268fba9aso17703291cf.3
+        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 20:19:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1774408776; x=1775013576; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MEld8D2ocGYqinW5QV65/BBdDiSzVVXzuCrrB42/tBA=;
+        b=P8M/Btq8vIp8vJDsI9C7P5xmbF/Pc0eoc1DHB1q3gYEEwjby9KlYzekSRKOTZp6Jof
+         NAwRu3RpP565tnArGyviv0ULehR2QyIrpJaFDGu0xGZDL7f9tY7tGMjFBCNohAeHuSjR
+         UJ88+qPi6jl/TMs8q6iJ8f/FCQmkqvWfacMara5TMDJNGDYT+574xlIPTbquU6GOG7E9
+         svSFv760fJjKzqgV5ZvaqD59rsNLdpBcxooav715vWY2AlLLluhZeqtFmW1xBuxnxBqS
+         AdYgd/XHGDxmmZKWUgU+T5E41QUc+9yag9Rzj+XyNcvNUIwxwy9MKvAX0+02QcO/1Gk5
+         dhRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774408776; x=1775013576;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MEld8D2ocGYqinW5QV65/BBdDiSzVVXzuCrrB42/tBA=;
+        b=FFZr+0YKQyAjAd9SM24+Rzqn0PG1BVNhMz1jEtLLcCzHNtiZh5cIe38IQ3PXHT0+V+
+         wrva1ndvaJci7DbSkF7m5zHSn8cnDz3LSTdlITYpDW4/8WmWyaiycTSM/trgcaQPTE3G
+         3APgRPm9aVZdlOhWijrHaWIjzZCRghyOkp4w46SRdLmepLGSP5BkWPE5bZvq7S961mqy
+         H0yf7fYwV/PUxJwyNX8Gifp36VSihPQf07wAGIKXuzHhUFy4GUzyOXG2hr8dOZue2e/2
+         aVEbNQWryy9/v6HbWKBuK5Hf0oty/loB2mO5Pv10Adbl27l/Kwww9aOPJJRcb3UBwTLL
+         tzww==
+X-Forwarded-Encrypted: i=1; AJvYcCXWg9jBKOfDK+/gVqFy8tW/1uwh1AOqTadEImJhZAMEazdro0hZJeXjyTmuoW8VCFRlSF4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOyMRhqEZR9Mh/x1MvPmTE5rmCiwACalu5hO6cbaCSQWw/mRxD
+	u0BMDbYNvw9R4ouhEtTtMCF1eHCO6Kpq3U8mK8xSvRMqSmPMmHTpcCeGxHH7eHbGWes=
+X-Gm-Gg: ATEYQzzW7ZtiYQ/9xgfkx4hMzH4gRFIofSGJQmaD6TCHFSZ3+bToe/uGwielti3b9+O
+	mnAvYrP3cEvVIm3f6xn142aMAL3lL7Brd4Gh4bA5HGXp8KSaeiYS1qxrctrOjV+hFZ/+QlHA2qQ
+	bGCiKlu4OeaXr7ExHbtOmIgRu6g7YDp1htGTCysd1iK+ZiCPAPRZYuXQSyE17WWIXzJ48vXdfbI
+	AgOoHoaDz0oGniP/zyS4IYvvSBYNKj/TxFo7J4ffn5RfQg1SkymPQQOd3q/a5H0niOJMI4zrP0l
+	SpveDrh1wdpHrOc383uUXeuhXQ1jhDYw9F/4AZDq0wi4UPNTSw9YxQtD9dXFgi3pZbmvrXP8/Cx
+	S14CiJCcd2xTXPs1GQYDTnID8BEDWsQDjHBic5U8VwJ10MfbR7atJB6sv3tFmH9nV102jqa1dBu
+	pRWMxXAamMqR+kIRTRx/x/NNs=
+X-Received: by 2002:ac8:7d54:0:b0:50b:2876:586 with SMTP id d75a77b69052e-50b80cd3831mr29513191cf.5.1774408775825;
+        Tue, 24 Mar 2026 20:19:35 -0700 (PDT)
+Received: from localhost ([140.174.219.137])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50b68c89e78sm48239791cf.30.2026.03.24.20.19.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Mar 2026 20:19:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <64037c46ac65e4e72f45f78a9703a8f938441d7499486ac389262aa406654b8b@mail.kernel.org>
-In-Reply-To: <20260325011853.657295-1-sashal@kernel.org>
-References: <20260325011853.657295-1-sashal@kernel.org>
-Subject: Re: [RFC] btf: split core BTF parsing out of BPF subsystem into kernel/btf/
-From: bot+bpf-ci@kernel.org
-To: sashal@kernel.org,sashal@kernel.org
-Cc: James.Bottomley@hansenpartnership.com,adobriyan@gmail.com,akpm@linux-foundation.org,alexei.starovoitov@gmail.com,ast@kernel.org,bp@alien8.de,bpf@vger.kernel.org,corbet@lwn.net,dave.hansen@linux.intel.com,davidgow@google.com,deller@gmx.de,geert@linux-m68k.org,gregkh@linuxfoundation.org,hpa@zytor.com,jgross@suse.com,jpoimboe@kernel.org,kees@kernel.org,laurent.pinchart@ideasonboard.com,linux-doc@vger.kernel.org,linux-kbuild@vger.kernel.org,linux-kernel@vger.kernel.org,linux-modules@vger.kernel.org,masahiroy@kernel.org,mcgrof@kernel.org,mingo@redhat.com,nathan@kernel.org,nsc@kernel.org,peterz@infradead.org,petr.pavlu@suse.com,pmladek@suse.com,rdunlap@infradead.org,rostedt@goodmis.org,tglx@kernel.org,vbabka@kernel.org,x86@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 25 Mar 2026 02:15:46 +0000 (UTC)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 24 Mar 2026 23:19:32 -0400
+Message-Id: <DHBJEWWLVRCH.2ZH320TJNWI21@etsalapatis.com>
+Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <martin.lau@kernel.org>,
+ <memxor@gmail.com>, <eddyz87@gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Make reg_bounds test more
+ robust
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
+ <bpf@vger.kernel.org>
+X-Mailer: aerc 0.20.1
+References: <20260325012242.45606-1-alexei.starovoitov@gmail.com>
+In-Reply-To: <20260325012242.45606-1-alexei.starovoitov@gmail.com>
 
---===============8578444517970282799==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Tue Mar 24, 2026 at 9:22 PM EDT, Alexei Starovoitov wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+>
+> The verifier log output may contain multiple lines that start with
+> 18: (bf) r0 =3D r6
+> teach reg_bounds to look for lines that have ';' in them,
+> since reg_bounds test is looking for:
+> 18: (bf) r0 =3D r6       ; R0=3D... R6=3D...
+>
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-> diff --git a/kernel/btf/bpf.c b/kernel/btf/bpf.c
-> new file mode 100644
-> index 0000000000000..ef973771bb2ab
-> --- /dev/null
-> +++ b/kernel/btf/bpf.c
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-[ ... ]
+> ---
+>  .../selftests/bpf/prog_tests/reg_bounds.c      | 18 +++++++++++++++++-
+>  1 file changed, 17 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c b/tools/=
+testing/selftests/bpf/prog_tests/reg_bounds.c
+> index cb8dd2f63296..49886f1b21e5 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
+> @@ -1217,7 +1217,23 @@ static int parse_range_cmp_log(const char *log_buf=
+, struct case_spec spec,
+>  			spec.compare_subregs ? "w0" : "r0",
+>  			spec.compare_subregs ? "w" : "r", specs[i].reg_idx);
+> =20
+> -		q =3D strstr(p, buf);
+> +		/*
+> +		 * In the verifier log look for lines:
+> +		 *   18: (bf) r0 =3D r6       ; R0=3D... R6=3D...
+> +		 * Different verifier passes may print
+> +		 *   18: (bf) r0 =3D r6
+> +		 * as well, but never followed by ';'.
+> +		 */
+> +		q =3D p;
+> +		while ((q =3D strstr(q, buf)) !=3D NULL) {
+> +			const char *s =3D q + strlen(buf);
+> +
+> +			while (*s =3D=3D ' ' || *s =3D=3D '\t')
+> +				s++;
+> +			if (*s =3D=3D ';')
+> +				break;
+> +			q++;
 
-> +struct btf_struct_ops_tab {
-> +	u32 cnt;
-> +	u32 capacity;
-> +	struct bpf_struct_ops_desc ops[];
-> +};
-> +	u32 id;
-> +	struct rcu_head rcu;
-> +	struct btf_kfunc_set_tab *kfunc_set_tab;
-> +	struct btf_id_dtor_kfunc_tab *dtor_kfunc_tab;
-> +	struct btf_struct_metas *struct_meta_tab;
-> +	struct btf_struct_ops_tab *struct_ops_tab;
-> +s32 bpf_find_btf_id(const char *name, u32 kind, struct btf **btf_p)
+I think the increment could alternatively be
 
-These six declarations between the closing brace of struct
-btf_struct_ops_tab and bpf_find_btf_id() appear to be orphaned
-fields from the original struct btf definition that were left
-behind during the split.
+q =3D s;
 
-They are parsed as file-scope global variable definitions. With
--fno-common, the name "id" in particular is likely to collide at
-link time. Were these meant to be removed here, given that they
-already appear correctly inside struct btf in kernel/btf/btf.h
-under the CONFIG_BPF_SYSCALL guard?
+to avoid rescanning the whitespace.
 
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 93f356d2b3d95..0009a7ac78462 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -395,14 +395,23 @@ config DEBUG_INFO_SPLIT
+> +		}
+>  		if (!q) {
+>  			*specs[i].state =3D (struct reg_state){.valid =3D false};
+>  			continue;
 
-[ ... ]
-
-> +config BTF
-> +	bool "BTF type information support"
-> +	depends on !DEBUG_INFO_SPLIT && !DEBUG_INFO_REDUCED
-> +	depends on !GCC_PLUGIN_RANDSTRUCT || COMPILE_TEST
-> +	depends on PAHOLE_VERSION >= 122
-> +	# pahole uses elfutils, which does not have support for Hexagon relocations
-> +	depends on !HEXAGON
-
-[ ... ]
-
-> +config DEBUG_INFO_BTF
-> +	bool "Generate BTF type information"
-> +	select BTF
-
-The old DEBUG_INFO_BTF had its own depends on lines:
-
-    depends on !DEBUG_INFO_SPLIT && !DEBUG_INFO_REDUCED
-    depends on !GCC_PLUGIN_RANDSTRUCT || COMPILE_TEST
-    depends on BPF_SYSCALL
-    depends on PAHOLE_VERSION >= 122
-    depends on !HEXAGON
-
-Those constraints now live only on CONFIG_BTF, and DEBUG_INFO_BTF
-uses "select BTF" with no depends of its own. Since select bypasses
-the selected symbol's depends-on checks, DEBUG_INFO_BTF is now
-visible and selectable even when BTF's dependencies are not met
-(e.g. on Hexagon, or with PAHOLE_VERSION < 122).
-
-Should DEBUG_INFO_BTF use "depends on BTF" instead of (or in
-addition to) "select BTF", so that it inherits the same
-constraints?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23520643445
---===============8578444517970282799==--
