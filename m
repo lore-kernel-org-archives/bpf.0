@@ -1,293 +1,196 @@
-Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013064.outbound.protection.outlook.com [52.101.72.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5601A3FA5D8;
-	Wed, 25 Mar 2026 15:03:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.64
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774451011; cv=fail; b=jwxENrhA8GRFWCp8xVvQ+w/kAX7DkbOUKgYTiLmFDiywKE1OZ0inaBX7OCcPZUFFf4Px153EC2sG/Z0TpRsgnDjB8yBSlUTaxW2fmbiSzYGMPWNK1/fuTibm3zdO6Kg/f+ksvq+KPxQiYOeBe+W9Lhp3rB5s3gSDud9RH8RBig4=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774451011; c=relaxed/simple;
-	bh=pMg70DVCNQV5nsXdPsP4yALyhbnmtG9q4hzw8pF+eFM=;
-	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=BRQe4gUCwUipKwR1Yuaia+kqfspgChp3AtbpZJwF6nAlOEXZMiLFvTN8JTu/nMEDiVLNH7Oy1Pg3RSHoGfb/iiEpAAfbNePGABftck1yDSIf+6anVmlFba/W31uu86KZ/LwpqiYvrc5J0JS4nFrbV9OkuM8e8ngtEcBXV78Vec4=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=pUiNNQyZ; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=pUiNNQyZ; arc=fail smtp.client-ip=52.101.72.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9BA23FB055
+	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 15:11:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774451476; cv=pass; b=dxsQ4Gj01MkWr1Zw7Mw6FO8x5wnf0Ew3p2uYlEPOuz1fj7FnnSoR5xqIxRmS3rcwmRXtUU+otzVOfq/8ovS2wt0ZVw789k0/1e4S9YSggw4YhxMi43M9OdyVsWcgGVPoQ8oNIQ3+IFCf6MqAwjI5TtsZ2iu1gHVE/GYgB/jinIg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774451476; c=relaxed/simple;
+	bh=tEmJpwuP8Bx2EyfWOZFEr5jKjcfFXY3n8OTV2ATLxuk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=naF82dP2F2EdTTEc5fPDr6lh5Z7y/pPvipzJKEsesyAOOVaem/QmwAWzphGBsZBhGWWeJcqWAMULoE1QGCIfAzTPfeCPzWTSZJPqlRemG/9s3RpygPT/5rP8zSEmGJVylx9jo+LSfmkfyEgAMf4c+8wxpGl8UqbZlVaDANybBfM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JPxdLatd; arc=pass smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="pUiNNQyZ";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="pUiNNQyZ"
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=lK0PTMNBSqY4V1kxdlhZkRrVde8LIHepA14GG2m4GLcDYT8vEOjSGsfq7ZU2l2nAB1P9uXVS2O14tHmpnDvaf4uT8BJDlgssPFlW5nAFj8cUZLZotel2Y5oQLFjvE0gbX94MiSoPDFMjd5FPgLkZRtJzjRd0PT5Kd7CYtD+LsuyUGUBUYlDauQs/vcsOpQU9zd2ZKjjfwC2ZxWVWrCaJUC6fdeR2LeppmsMGzqksPWwafNfDVAQuDWpZ4dzAIeiJAWAJwmS0Ycl5yRTtc0yFHdhNioRTq9rXI09NNxi654B+C+wmHaUVpfNkssxs4L45PxEgdjDfR4hDPxTdf2JI+A==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ROh51m0Nam5pQNioV64Gk7Uev2fS2bhw5xJaKOSQVv8=;
- b=J+vyVbrscXp+Zl5khibJQeioookN1kJPIm4veQ9kWN5xh7ECb96PqxJ3e9IpUsLTji2CYXBgOtioL+U0hUcRhAUJYtRZh10r3p4rrJsSWUf84Gjbg1D8ob16kIc3Qz9ZQqub+nYKmdXAfzAKPJFVAKvvxlinYiRfVl+dI2tvEYO6QKXcjSe7BPE63vVpW1TnxPnYpIs9GIyl3DJUmnUnk8Umhd2kJkZwbdZU4NDYw5kBo5S67gcFehwdll7oCbkWj+LuUS1uHurA99ACpRbO88eq7k+aBXpNRNoKwmDHS93ksVjQ01WaFipfqMPu0ilJyzEj5KExbt0vBDTnpP4ucg==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=gmail.com smtp.mailfrom=arm.com; dmarc=pass
- (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
- (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ROh51m0Nam5pQNioV64Gk7Uev2fS2bhw5xJaKOSQVv8=;
- b=pUiNNQyZU5NuToZRXDfhddlF5x71Pt1aPwrnFTO2efXoWuzn3fvi9Ta7xtfohH0W5Eegrwg7c4fu8d4g5QLcGbjtPTsX7ggZcgvj8YjILcpHsrLeWVPhhRVDk8mUJQnkoiusCO1wSVB/exAmNAewmY/+fGhryJjy/QGqY8kcTto=
-Received: from DUZPR01CA0294.eurprd01.prod.exchangelabs.com
- (2603:10a6:10:4b7::13) by DB4PR08MB7958.eurprd08.prod.outlook.com
- (2603:10a6:10:38f::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.31; Wed, 25 Mar
- 2026 15:03:19 +0000
-Received: from DU6PEPF00009528.eurprd02.prod.outlook.com
- (2603:10a6:10:4b7:cafe::25) by DUZPR01CA0294.outlook.office365.com
- (2603:10a6:10:4b7::13) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9723.31 via Frontend Transport; Wed,
- 25 Mar 2026 15:03:14 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- DU6PEPF00009528.mail.protection.outlook.com (10.167.8.9) with Microsoft SMTP
- Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9745.21 via
- Frontend Transport; Wed, 25 Mar 2026 15:03:18 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=og8BXUYJi3RecRWOw5HNRA8lZnOe1Zlu+aHv0GlZoVVth/4a7TSQgcWsD9VYFEncvqDkAlabBy5BydJeKS2QYePu0HyTkCCcPM8nxwsHe2/g/oJ0V4hdREsRSM7l3jKQqhbxV/rYVgaIpbZqbK0j9eApd6KMSo+0CzLHq7nTr4LPVrdcpjPoOmvmbmQ2eJW8sC2tF/6nHHkMG5xNWXqLHv/Jo7aTndFzzyuulCxOPB6VhPAm1D+7g4Lxyujy01hiq4tE7cY3365jn0cs522thSUp85vgucpUXVX1FrYzi0zGRPBanih1z2CrrdLi3XWbuuRFH6aBKM2dpYos/uItRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ROh51m0Nam5pQNioV64Gk7Uev2fS2bhw5xJaKOSQVv8=;
- b=uOGRSh5t7eU1rNKGx6sn68St0e/4A2vC+4dPVaqzIe2QwsbvGbcCntnDd0J9YPT1fWMA4Nj17720FRiWhzJrLLIJEh6fQnquEx0M/Asdb0L/jDpR16xVFEthbZdfZOoayyBuciYiGQxszhNB80eqcP+f4asDLtiZU8EvqNInvVyT+JHVhVZBH1GpUgNtbndKQ4HPb1dPQEipY2b2q1cJRngqjcCF6oSRC9a7/WP/4pIStynGQIKlG56I3YiDC42PSKzCBxEyF1nbkg95ZUYFQ106YGOiOaemQSTgb7Z+ifrI5Ixxne3AzIhCF3TupdOsw78vb9WOxzQ1i7yGjvdjmQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ROh51m0Nam5pQNioV64Gk7Uev2fS2bhw5xJaKOSQVv8=;
- b=pUiNNQyZU5NuToZRXDfhddlF5x71Pt1aPwrnFTO2efXoWuzn3fvi9Ta7xtfohH0W5Eegrwg7c4fu8d4g5QLcGbjtPTsX7ggZcgvj8YjILcpHsrLeWVPhhRVDk8mUJQnkoiusCO1wSVB/exAmNAewmY/+fGhryJjy/QGqY8kcTto=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from AM6PR08MB3414.eurprd08.prod.outlook.com (2603:10a6:20b:49::10)
- by DBBPR08MB5915.eurprd08.prod.outlook.com (2603:10a6:10:20d::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.31; Wed, 25 Mar
- 2026 15:02:15 +0000
-Received: from AM6PR08MB3414.eurprd08.prod.outlook.com
- ([fe80::dde8:bf0b:1dc:2a2]) by AM6PR08MB3414.eurprd08.prod.outlook.com
- ([fe80::dde8:bf0b:1dc:2a2%4]) with mapi id 15.20.9632.017; Wed, 25 Mar 2026
- 15:02:15 +0000
-Message-ID: <a79ff8ba-ed4a-43d0-9c4b-d2883a5c48e8@arm.com>
-Date: Wed, 25 Mar 2026 15:02:14 +0000
-User-Agent: Mozilla Thunderbird
-Cc: usama.anjum@arm.com, Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Brendan Jackman <jackmanb@google.com>, Johannes Weiner <hannes@cmpxchg.org>,
- Nick Terrell <terrelln@fb.com>, David Sterba <dsterba@suse.com>,
- Vishal Moola <vishal.moola@gmail.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, Ryan.Roberts@arm.com,
- david.hildenbrand@arm.com
-Subject: Re: [PATCH v3 2/3] vmalloc: Optimize vfree
-To: Uladzislau Rezki <urezki@gmail.com>, Zi Yan <ziy@nvidia.com>
-References: <20260324133538.497616-1-usama.anjum@arm.com>
- <20260324133538.497616-3-usama.anjum@arm.com>
- <1D88CFF0-8A74-413F-9A6A-39E27B760AE1@nvidia.com> <acOjIcqyIVY9KNn0@milan>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@arm.com>
-In-Reply-To: <acOjIcqyIVY9KNn0@milan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P265CA0224.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:315::8) To AM6PR08MB3414.eurprd08.prod.outlook.com
- (2603:10a6:20b:49::10)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JPxdLatd"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-43b4915161fso4979320f8f.2
+        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 08:11:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774451473; cv=none;
+        d=google.com; s=arc-20240605;
+        b=hwGK0Gxh6CLP/f4PUIdTC4XPlH26KrOkmLPIK9lZTwrxZ0HrLfWDp0fQeBUFyh5a6x
+         cHXeIC/VQLymqSEQyFem9gaYJrUTmuMAA3uDCVyx6b/QGtt8Qx+sRFfBJ+VdPjuPToIU
+         39aTPTAJkroGsDN0qsKpPN1/rFAjCzgBiSA2dkiE9A4navHrpz7mdKGiferOwHDIYii3
+         MaUgnBSodBdBsphUqUoPafbhR6JY20rziHTVsTjRQwYDYQ7sNoKnX8iAMDDETW+uSlpe
+         4/eblLOjdW88gESQbV+uUTpptpIY9+qapTSwSUBE3vw5AGntsP48kqf70vJ+/kvjyGZC
+         woDw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Y3iMCoDWAAEuK9jwULonU/Ttd/NY07moV9+aq4YSP2o=;
+        fh=6Ka4dRoNwLjWO08oQwtV4g9XRAHU074KZ+oC0S2FD50=;
+        b=h2obsz+hbGwl1gx8v0bZN5yByV6TmFDPCmme2va9n95gwcd1VJHsPOXN40fjMQ8/nm
+         uJeGthB14qnq3iJ/p9VBFRMh7xQEMN/K3JhvebYQ2/vSZd/zbQlQgX+0JGwJBrlgY8ez
+         9YvwxQKBBetdRJILUqIl8T2RUiBwd5uggUZAf/nshZ3h0YA/dfo76/Bgk/g2nNRIh092
+         CD1VJwv4AAyKlfGfytHa7XFRQb5YZqm7TTZ/o6KHLV2x0GZagF58wZntqNxtne8KNnBp
+         uVHBjCQ3u6lo13enhVdvin4ECsKm82BIygAUpZWhZd6G4j+yeaXUMfVATKRmd00wjZLX
+         m2rQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774451473; x=1775056273; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y3iMCoDWAAEuK9jwULonU/Ttd/NY07moV9+aq4YSP2o=;
+        b=JPxdLatdT8i9BQaos2+4O9ahU7LAvsvFHGJ3Clopjk8ZEPDc6ONak1UyshIMaCXzmn
+         p9YPZ85VmzY+bTczA9BPjk7VLzX/lRxv/RQ5MrzauHCU1+YX9a490/7z+4hVhWDXsLT6
+         A3wbNC+7sjurwikAcGnsYPpTot0LGdqpEZz1gIudC/S/bqCm8TzY9Wx2E6KVW0pjmuLG
+         E70Vy2HowEK9CHqN49x/OpC3zUdcByd9hSFe4z+YND9RY0CxUiCAE2UETN0zCqPkFLC8
+         ZBINszU98/CTFQ5K6KeqFK6EQfPtL6RbAk1oeXRKmICck2p+B/JhBMkm8mVhicDCme6F
+         ei9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774451473; x=1775056273;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Y3iMCoDWAAEuK9jwULonU/Ttd/NY07moV9+aq4YSP2o=;
+        b=irCZZDrNlL5l8WXb7uajsCmwQEyUpN3HyyaNsSrlenvo1kghgSL3nM1pt8Wds+QhUs
+         RZQh4rTwhbUX3cEiIkcLfNw6srqzuOmUwUXqIluK7nh5VnACN6gTkeHtQFD5ofoVXJUt
+         A+XAYftFnIlqfC1S6P40MK/h023MGUzOQ7nT9jd/PZ3vGLWtK+yaj9QrDzqxx/C0MXRb
+         OCL0CbS1PwBMxAts9kPT9VJKxbUqKE/0nx+dOr29qA6m1yXqEO1GtbulOOgbZwAPJ51Q
+         qtzGvqMviLTw9sr9oqtuPf7ULUXNxBdDspA09gZitpR85MkKkqg/hDg/IoLGMNRL33om
+         txRA==
+X-Forwarded-Encrypted: i=1; AJvYcCXKDHXbtkdE7wrqBLa96nBlnr9W1LH431sc5rMIMs9iXNoPh2v8f40YZgwG2olfht/r20s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxeLXPnst5W/lD0PCFp4IRgkgaqk1NZJtP74vSB5G8VeEP7EKNO
+	AiSjc8Jo3AEnDZdlZAK97UZkhVIqjwAhMylUtGQyDWXDWG0UbRvGhW7brmu6te1CpyGceba1Nln
+	CimktJ+CC6RIWSVeV4pjaaL496SnyNds=
+X-Gm-Gg: ATEYQzycbFYmLOssf45p9Y6WMLdVuelwNSZiMxHJ9/9TLqn2FfWl/OcF7Bp7B5jQ5UH
+	9hbpSoBW2E2sY64KFZuPXTTDZzjPhEwxWlMOZjzq0qmSMyVBz7BrTea+tdmAEOB8x4SUSJo5tdN
+	0dvd2bxdn1gfbdpHYQbMrwow66mc/jtozcbEYqwFkwC1OZhnc4HTeGRDn6+/Qg+BFpLPqqqSOIY
+	+2jo9J6VTNwCFPUkOlpq7OlJy3gDnv8rJFO/4UqK/jlfQQDjNZAGnF2VWYnzUWUzPKMglSKsh3X
+	PgC1uXtplwyPXXX2rdaXJoKdBLpZQUabsiD06T5pNmKDef5Z1Skdwyq6cNSx+XoVPMhDYWKD0WK
+	xqfnGhAktrDRTWhUBnmu689MaOw==
+X-Received: by 2002:a05:6000:40e0:b0:439:af81:1b23 with SMTP id
+ ffacd0b85a97d-43b889aaf9fmr5597133f8f.21.1774451472938; Wed, 25 Mar 2026
+ 08:11:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	AM6PR08MB3414:EE_|DBBPR08MB5915:EE_|DU6PEPF00009528:EE_|DB4PR08MB7958:EE_
-X-MS-Office365-Filtering-Correlation-Id: 94c01baa-099e-4340-9c99-08de8a7fa61f
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|366016|1800799024|7416014|376014|18002099003|56012099003|22082099003;
-X-Microsoft-Antispam-Message-Info-Original:
- QxQdkYDk8LIhjzhrcc8PKlBJohsFzEBszrA/ETyD9tnD1mPTkCIdmsq1OIap/0pUbKGVincMzXOlN1exj2teAaGVDB7D9XNRTqwSBmSVlROJ2Srl74XsOLYJUNAZ8xIZsoROpGmFlHo8PExZKMvL8pJ2mwWrSD/2XSs/pC3dy9hkVekxktJaxtUUnemrbm56ZJWnNIvmWWG4gZY/B4wq7SihiJx84l9F71kxJRnSU+/IID6wns9R6otZVUYZDpPH5lGieAgCfsdBxRaUpWf9F2f2Syj1CQUQKIkKk+IxlfBH/1goVk2oq2+cCUv0tm7DH2xZNCnOu7DN5uIXMn73TqOTOmZDrIr1gKUuNCbTfelwZAAOZUfZ2XItSlEcis6cvRtWXwpiL+22Z92sZX/i/7aXMtdl1XZh7zqbgZGq4quCIaLddHJL4DSQeXG3qyl7AjA/ygqdWYqAUOXN5u2DDnrjG5qjaDmy2ywjjGPePHp1t8F3W8+uEuCerhJJVmpSU3yjCQjAcAwGn2omqglC8mgTsWFt29yVlZzLPhOwVpWn4E+HiHnEQ7xh4gpUK56JJBryDxhXtYuCwAMR2JeEAI08jJyV08g+9qemk6vSu5aRienu1VsRnGwDi+KjN4gt4fH0xjeSMSBMNood0ZO/YMVssSJNY23AnHWsspGvuUx9RYvUXcPlaYCW0SNyvQwR
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR08MB3414.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
-X-Exchange-RoutingPolicyChecked:
- VejeALirzaMwxTx9coTxxoD/EWIml+o8+251tvyhUafhrFaNp2S8JFey7W8IUTnHInixDJSQ/lm5qgrJ7CNyhQja1dFanWJfEyugWd1pH2LdstyRIjDYRoHczuzuX4YJ/AURexuTCOY04q+GKRNu7FxJqcCFD0WhqbBfjx4IgM9rYYXKXLNxzP5EpAclC9otMubHTr5nCouOPAgzJ8w8JYPdGVf4fCxWkDXxxyVPxjd20Kri9+9dBkWt3bJatBpnsb3FzsI6V/sfgSE2fPZlE3ObeyrpnUGyoEdkPCTihBVpLBvrkGQ+CPNWimhliqa1A1Wwi2HO4/9KM6rjTGwGfg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR08MB5915
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- DU6PEPF00009528.eurprd02.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	df0d268a-a135-4469-3db9-08de8a7f809d
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|35042699022|14060799003|7416014|376014|82310400026|1800799024|36860700016|13003099007|56012099003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	VepsZiKueTk2HOUxGebEZFK3BTQ3CtpE70NS0zTh3OZz9Thzziuxl3IJRBetEFwvWy+u2lQ58Jb3+8Au69L6w37XHRwTik+LWd/O2LQ02/xpdt9m0JYpYO7VJQApnyxs2h0/jVRf/TFDVkdtvhsa+/u0+lQGd49wdXdVCvulh3Srp1VHsVAvZ0AHUMBMOBcdjDEazP4fS3tkYFt+01feudS8QOg+H494pefWXNukGxfDlArvDq0bX3mA8EY4/6TGaqOWvniiwVdWyDFZM5AtA73E0lTFQey43+0ZQ3K6Lxr/d5zHk2Vldk9IhwD/lMsTGQfeBd5kt96d6FWtP9YzHbY41wug+VNVvjPyI50OhMQy/LDbxEMRUcNy4Hu4OnFmeENHJsUNJ2Ch0e/zk6LGlnbTOuJKd87YR0gQmuUMnfKwiXw32Ijj2SMA8vvYZECP4rMWzQWyJJ01ZM0n21JoWwGIa9XBYIeqx2Yi414kxJsgu5ichUSxHLYE3ulbH41X+kg28jJCfRvjr+FBCvMh+mgVlOXzyrZAqfYFzc6XcvdWSG5I8iznxjLfqrIviSpe/kjzmhAOknb/KRUBOi8AB11NG6O7l0dMrntM4fT77BfhylyYY4KbOGOm6z9ohlrEioZmBQo4bJYngORYJkB+HcqzpGBw0IJvEQPgnwsXpTGt1iobkPLukkXwQD363G7KGEnX2QmUvd435LQLnLha6ZlouM0MWv4hob1OESPALOY=
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(35042699022)(14060799003)(7416014)(376014)(82310400026)(1800799024)(36860700016)(13003099007)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	AbyBeT31TupjgQElrktaAV9gM8PuJs17yel3sZwVoLuDwWhiVeSmFCEfX6dV92EQ7vgRBhRGnWFkqk8xaTrN14ChAnoeYDuuH5wsmEgyDouny80a0YM24nhEaM0MwkoXaGtgqfP3Lub1bE+XRCH5J1+zBWvjFYwqBUIjWzG5D5ldG33nT+j2/1HtSmluXwMhz01oucH0kCLpTM/zvEXV9atjEMeYDPBZt91Nf1mUsUyvdYK5TIHqjCmNiYOcD/JSMQZLUreZ4zQ3jIdhUaFQLDeQHZHyaOSUraCIVxCeNpXFJ5tPn0nB9J2tnbW3RIvtpEY2aJEhMtkfsgPAhM32FNuAQZ0SwDOPfaER2wAJQ/r+arUtnuH0WwsYxFJi/AIy96ThPScJ/BoMYoXo5IGZd8KLj3PpWv5itdeNMHPGuND/wFvaCSp8Z/+CDu0OgX05
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Mar 2026 15:03:18.4689
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 94c01baa-099e-4340-9c99-08de8a7fa61f
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DU6PEPF00009528.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB4PR08MB7958
+References: <20260324081846.2334094-1-jolsa@kernel.org> <20260324081846.2334094-25-jolsa@kernel.org>
+ <7a119223-9994-4edc-af0b-f1ee9876cd20@linux.dev>
+In-Reply-To: <7a119223-9994-4edc-af0b-f1ee9876cd20@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 25 Mar 2026 08:11:00 -0700
+X-Gm-Features: AQROBzAUBDSr70gmyhrufj8u8FMSWnPty6h_7SeMpMvBeesJou7M0cJ3OLUDeOE
+Message-ID: <CAADnVQL3gO=kuvDHQNa8VfL_NWUMvBv6=vrXkOd=8Fe9-dcU3A@mail.gmail.com>
+Subject: Re: [PATCHv4 bpf-next 24/25] selftests/bpf: Add tracing multi attach
+ benchmark test
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, Martin KaFai Lau <kafai@fb.com>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, 
+	Menglong Dong <menglong8.dong@gmail.com>, Steven Rostedt <rostedt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 25/03/2026 8:56 am, Uladzislau Rezki wrote:
-> On Tue, Mar 24, 2026 at 10:55:55AM -0400, Zi Yan wrote:
->> On 24 Mar 2026, at 9:35, Muhammad Usama Anjum wrote:
->>
->>> From: Ryan Roberts <ryan.roberts@arm.com>
->>>
->>> Whenever vmalloc allocates high order pages (e.g. for a huge mapping) it
->>> must immediately split_page() to order-0 so that it remains compatible
->>> with users that want to access the underlying struct page.
->>> Commit a06157804399 ("mm/vmalloc: request large order pages from buddy
->>> allocator") recently made it much more likely for vmalloc to allocate
->>> high order pages which are subsequently split to order-0.
->>>
->>> Unfortunately this had the side effect of causing performance
->>> regressions for tight vmalloc/vfree loops (e.g. test_vmalloc.ko
->>> benchmarks). See Closes: tag. This happens because the high order pages
->>> must be gotten from the buddy but then because they are split to
->>> order-0, when they are freed they are freed to the order-0 pcp.
->>> Previously allocation was for order-0 pages so they were recycled from
->>> the pcp.
->>>
->>> It would be preferable if when vmalloc allocates an (e.g.) order-3 page
->>> that it also frees that order-3 page to the order-3 pcp, then the
->>> regression could be removed.
->>>
->>> So let's do exactly that; use the new __free_contig_range() API to
->>> batch-free contiguous ranges of pfns. This not only removes the
->>> regression, but significantly improves performance of vfree beyond the
->>> baseline.
->>>
->>> A selection of test_vmalloc benchmarks running on arm64 server class
->>> system. mm-new is the baseline. Commit a06157804399 ("mm/vmalloc: request
->>> large order pages from buddy allocator") was added in v6.19-rc1 where we
->>> see regressions. Then with this change performance is much better. (>0
->>> is faster, <0 is slower, (R)/(I) = statistically significant
->>> Regression/Improvement):
->>>
->>> +-----------------+----------------------------------------------------------+-------------------+--------------------+
->>> | Benchmark       | Result Class                                             |   mm-new          |  this series       |
->>> +=================+==========================================================+===================+====================+
->>> | micromm/vmalloc | fix_align_alloc_test: p:1, h:0, l:500000 (usec)          |        1331843.33 |         (I) 67.17% |
->>> |                 | fix_size_alloc_test: p:1, h:0, l:500000 (usec)           |         415907.33 |             -5.14% |
->>> |                 | fix_size_alloc_test: p:4, h:0, l:500000 (usec)           |         755448.00 |         (I) 53.55% |
->>> |                 | fix_size_alloc_test: p:16, h:0, l:500000 (usec)          |        1591331.33 |         (I) 57.26% |
->>> |                 | fix_size_alloc_test: p:16, h:1, l:500000 (usec)          |        1594345.67 |         (I) 68.46% |
->>> |                 | fix_size_alloc_test: p:64, h:0, l:100000 (usec)          |        1071826.00 |         (I) 79.27% |
->>> |                 | fix_size_alloc_test: p:64, h:1, l:100000 (usec)          |        1018385.00 |         (I) 84.17% |
->>> |                 | fix_size_alloc_test: p:256, h:0, l:100000 (usec)         |        3970899.67 |         (I) 77.01% |
->>> |                 | fix_size_alloc_test: p:256, h:1, l:100000 (usec)         |        3821788.67 |         (I) 89.44% |
->>> |                 | fix_size_alloc_test: p:512, h:0, l:100000 (usec)         |        7795968.00 |         (I) 82.67% |
->>> |                 | fix_size_alloc_test: p:512, h:1, l:100000 (usec)         |        6530169.67 |        (I) 118.09% |
->>> |                 | full_fit_alloc_test: p:1, h:0, l:500000 (usec)           |         626808.33 |             -0.98% |
->>> |                 | kvfree_rcu_1_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         532145.67 |             -1.68% |
->>> |                 | kvfree_rcu_2_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         537032.67 |             -0.96% |
->>> |                 | long_busy_list_alloc_test: p:1, h:0, l:500000 (usec)     |        8805069.00 |         (I) 74.58% |
->>> |                 | pcpu_alloc_test: p:1, h:0, l:500000 (usec)               |         500824.67 |              4.35% |
->>> |                 | random_size_align_alloc_test: p:1, h:0, l:500000 (usec)  |        1637554.67 |         (I) 76.99% |
->>> |                 | random_size_alloc_test: p:1, h:0, l:500000 (usec)        |        4556288.67 |         (I) 72.23% |
->>> |                 | vm_map_ram_test: p:1, h:0, l:500000 (usec)               |         107371.00 |             -0.70% |
->>> +-----------------+----------------------------------------------------------+-------------------+--------------------+
->>>
->>> Fixes: a06157804399 ("mm/vmalloc: request large order pages from buddy allocator")
->>> Closes: https://lore.kernel.org/all/66919a28-bc81-49c9-b68f-dd7c73395a0d@arm.com/
->>> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
->>> Co-developed-by: Muhammad Usama Anjum <usama.anjum@arm.com>
->>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
->>> ---
->>> Changes since v2:
->>> - Remove BUG_ON in favour of simple implementation as this has never
->>>   been seen to output any bug in the past as well
->>> - Move the free loop to separate function, free_pages_bulk()
->>> - Update stats, lruvec_stat in separate loop
->>>
->>> Changes since v1:
->>> - Rebase on mm-new
->>> - Rerun benchmarks
->>>
->>> Made-with: Cursor
->>> ---
->>>  include/linux/gfp.h |  2 ++
->>>  mm/page_alloc.c     | 23 +++++++++++++++++++++++
->>>  mm/vmalloc.c        | 16 +++++-----------
->>>  3 files changed, 30 insertions(+), 11 deletions(-)
->>>
->>> diff --git a/include/linux/gfp.h b/include/linux/gfp.h
->>> index 7c1f9da7c8e56..71f9097ab99a0 100644
->>> --- a/include/linux/gfp.h
->>> +++ b/include/linux/gfp.h
->>> @@ -239,6 +239,8 @@ unsigned long alloc_pages_bulk_noprof(gfp_t gfp, int preferred_nid,
->>>  				struct page **page_array);
->>>  #define __alloc_pages_bulk(...)			alloc_hooks(alloc_pages_bulk_noprof(__VA_ARGS__))
->>>
->>> +void free_pages_bulk(struct page **page_array, unsigned long nr_pages);
->>> +
->>>  unsigned long alloc_pages_bulk_mempolicy_noprof(gfp_t gfp,
->>>  				unsigned long nr_pages,
->>>  				struct page **page_array);
->>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
->>> index eedce9a30eb7e..250cc07e547b8 100644
->>> --- a/mm/page_alloc.c
->>> +++ b/mm/page_alloc.c
->>> @@ -5175,6 +5175,29 @@ unsigned long alloc_pages_bulk_noprof(gfp_t gfp, int preferred_nid,
->>>  }
->>>  EXPORT_SYMBOL_GPL(alloc_pages_bulk_noprof);
->>>
->>> +void free_pages_bulk(struct page **page_array, unsigned long nr_pages)
->>> +{
->>> +	unsigned long start_pfn = 0, pfn;
->>> +	unsigned long i, nr_contig = 0;
->>> +
->>> +	for (i = 0; i < nr_pages; i++) {
->>> +		pfn = page_to_pfn(page_array[i]);
->>> +		if (!nr_contig) {
->>> +			start_pfn = pfn;
->>> +			nr_contig = 1;
->>> +		} else if (start_pfn + nr_contig != pfn) {
->>> +			__free_contig_range(start_pfn, nr_contig);
->>> +			start_pfn = pfn;
->>> +			nr_contig = 1;
->>> +			cond_resched();
->>
-> It will cause schedule while atomic. Have you checked that
-> __free_contig_range() also can sleep? Of so then we are aligned, if not
-> probably we should remove it.
-Sorry, I didn't get it. How does having cond_resched() in this function
-affects __free_contig_range()?
+On Tue, Mar 24, 2026 at 11:45=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> =
+wrote:
+>
+> > +
+> > +     btf =3D btf__load_vmlinux_btf();
+> > +     if (!ASSERT_OK_PTR(btf, "btf__load_vmlinux_btf"))
+> > +             return;> +
+> > +     skel =3D tracing_multi_bench__open_and_load();
+> > +     if (!ASSERT_OK_PTR(skel, "tracing_multi_bench__open_and_load"))
+> > +             goto cleanup;
+> > +
+> > +     if (!ASSERT_OK(bpf_get_ksyms(&ksyms, true), "get_syms"))
+> > +             goto cleanup;
+> > +
+> > +     /* Get all ftrace 'safe' symbols.. */
+> > +     for (i =3D 0; i < ksyms->filtered_cnt; i++) {
+> > +             if (is_unsafe_function(ksyms->filtered_syms[i]))
+> > +                     continue;
+> > +             tsearch(&ksyms->filtered_syms[i], &root, compare);
+> > +     }
+> > +
+> > +     /* ..and filter them through BTF and btf_type_is_traceable_func. =
+*/
+> > +     nr =3D btf__type_cnt(btf);
+> > +     for (type_id =3D 1; type_id < nr; type_id++) {
+> > +             const struct btf_type *type;
+> > +             const char *str;
+> > +
+> > +             type =3D btf__type_by_id(btf, type_id);
+> > +             if (!type)
+> > +                     break;
+> > +
+> > +             if (BTF_INFO_KIND(type->info) !=3D BTF_KIND_FUNC)
+> > +                     continue;
+> > +
+> > +             str =3D btf__name_by_offset(btf, type->name_off);
+> > +             if (!str)
+> > +                     break;
+> > +
+> > +             if (!tfind(&str, &root, compare))
+> > +                     continue;
+> > +
+> > +             if (!btf_type_is_traceable_func(btf, type))
+> > +                     continue;
+> > +
+> > +             err =3D libbpf_ensure_mem((void **) &ids, &cap, sizeof(*i=
+ds), cnt + 1);
+> > +             if (err)
+> > +                     goto cleanup;
+> > +
+> > +             ids[cnt++] =3D type_id;
+> > +     }
+> > +
+> > +     opts.ids =3D ids;
+> > +     opts.cnt =3D cnt;
+> > +
+> > +     attach_start_ns =3D get_time_ns();
+> > +     link =3D bpf_program__attach_tracing_multi(skel->progs.bench, NUL=
+L, &opts);
+> > +     attach_end_ns =3D get_time_ns();
+> > +
+> > +     if (!ASSERT_OK_PTR(link, "bpf_program__attach_tracing_multi"))
+> > +             goto cleanup;
+> > +
+> > +     detach_start_ns =3D get_time_ns();
+> > +     bpf_link__destroy(link);
+> > +     detach_end_ns =3D get_time_ns();
+> > +
+> > +     attach_delta =3D (attach_end_ns - attach_start_ns) / 1000000000.0=
+;
+> > +     detach_delta =3D (detach_end_ns - detach_start_ns) / 1000000000.0=
+;
+> > +
+> > +     printf("%s: found %lu functions\n", __func__, cnt);
+> > +     printf("%s: attached in %7.3lfs\n", __func__, attach_delta);
+> > +     printf("%s: detached in %7.3lfs\n", __func__, detach_delta);
+> > +
+> > +cleanup:
+> > +     tracing_multi_bench__destroy(skel);
+> > +     tdestroy(root, tdestroy_free_nop);
+> > +     free_kallsyms_local(ksyms);
+> > +     free(ids);
+>
+> Is btf__free(btf) missing here? Since 'btf' was calloc inner
+> btf__load_vmlinux_btf().
 
-The current user of this function is only vfree() which is sleepable.
+Good point.
+Leon, please trim your replies. No need to quote the whole patch.
 
-Thanks,
-Usama
+btw sashiko caught it too:
+https://sashiko.dev/#/patchset/20260324081846.2334094-1-jolsa%40kernel.org
+and many other bugs beyond what bpf CI could find.
 
-> 
-> --
-> Uladzislau Rezki
-> 
-
+Jiri, please address them all.
