@@ -1,75 +1,87 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D5F92D0601;
-	Wed, 25 Mar 2026 20:06:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09C3336404B
+	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 20:11:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774469220; cv=none; b=O0d5XO+QObp1DTXJrJVlrbeovoCoSMTanRPhNygc7LJJ3oRGRyuct9Pupa3E1VbQWcNkYw92Sd+lCioFXJrT1bBmBSYaI4pxEKpRTWpBxdJFoWDETI8ImPXIKrXy/tx2eX9IF+kHEm430qEBN+ORMJ5LPjUNR3xhngKy2tzH7xM=
+	t=1774469511; cv=none; b=hzirUpfw/Bhg4L8vZ71OTy6kcKcTIhy4BAgIi0zio1X7JFgpmXUV993dBWJaQSWf3pkcSWAV0dGd01av3Uc+4Z9RNngjCXDBrW3l22JUQ1ii1Tq/uBEdn1ZgimLvNWAtXU6TMksL4hcyrumInhAMwvBFmiWlBahdIJyLNZbB/oM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774469220; c=relaxed/simple;
-	bh=/O/fGhglL/MCROTSNPhwE+mJ/hdmOcDSHEzkULnTwhU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MCk4Hi8Wi9wYAJSQHja1WLhS5uiMLhxn7Wu1RcbbAdXS/9s1paeDVodgGLZTR0KX9UsbQXM9Znu99SPNoInxXZmfddLvSJsfDAd2Tj6auw3Jq1PJTCDNZfR5KK1mbeMBeJ4wQz63lGZhneKUXNQmeMhxZfSgzFCf4AXMyBVTrig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z8HLS6M4; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1774469511; c=relaxed/simple;
+	bh=W1rk8b1TxvRXUjyaOv5Nn3VlDflyKDjP5xegWKvAqM8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nGAPDOhFzl9AhDofNFteKMxOSZyURgjZKeXsHgHfUUk98ngKIHDTDuR5I2sXv/6ewzCtnefXR5isTUMgZOHB7ACQ1wmktQKAy5QkkuvdE0rT42w7S788LxBlg3dhxRwuczQy5vcVS1wUyhU/5UD+drx3puUaWS570jBTIL3JfBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=WVHuBdjd; arc=none smtp.client-ip=209.85.210.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z8HLS6M4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774469219; x=1806005219;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=/O/fGhglL/MCROTSNPhwE+mJ/hdmOcDSHEzkULnTwhU=;
-  b=Z8HLS6M4vIWU5ilFvKh3tDLKikC5b19WSzoS4Zo1Ulz7mqMURMKC+gQM
-   3WLKzAEj3kxn+kQEiBkTZZiXdOG+aIctySYi3uYIRRBuzQZ4AWSxT4CMy
-   G6UBNx1E6XNEcCSmCoNOu2uaRJYYmHVv5QUIPXTMg7auHTRpwACJfthmP
-   5skp4IgLY0BozhR0QeoW5I7Rk8qC8qqUTBwNTxNCvFymUQUVKz9XLsqub
-   PxTV7WO4rDWkmeaVxYz8AAflwxXkwuhw47KMGiVXLk4d6eyiv64jC5zJK
-   unXile63X8VkbNY6LRTJvi0g6DpamRNNdk9PsLU3a5YGOliFoGwS1+JnI
-   g==;
-X-CSE-ConnectionGUID: b5i5L7pGQ0K2Uh+vYv598g==
-X-CSE-MsgGUID: WdGewl/wScmi6R2djpOf7A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11740"; a="93096577"
-X-IronPort-AV: E=Sophos;i="6.23,140,1770624000"; 
-   d="scan'208";a="93096577"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2026 13:06:55 -0700
-X-CSE-ConnectionGUID: H5ptAaRPSJeGlq5lGr2FMQ==
-X-CSE-MsgGUID: AsIBchJbQVGcJgEbW/z2TQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,140,1770624000"; 
-   d="scan'208";a="229243695"
-Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
-  by orviesa004.jf.intel.com with ESMTP; 25 Mar 2026 13:06:55 -0700
-From: Tony Nguyen <anthony.l.nguyen@intel.com>
-To: davem@davemloft.net,
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="WVHuBdjd"
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-7d7e9b97a73so817801a34.0
+        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 13:11:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1774469509; x=1775074309; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yOK0NjVYr78bPbpIye+WMvOgHZn0ILapKUb+9KhRM08=;
+        b=WVHuBdjdfVmicGdQJoUmiH7gqWJidWcLezU6B1e9VX8l567K81UK4rnVDj9wBI22yI
+         b+AM1D3Ow6xYt54D4V46t5hLsaIO882cpRG3Xqy3gIa/9nHCiT6cSAbO3zeDO4+hoaPx
+         8isFrwVBqc8f1AA/JQRiBUyh9aedCw2+0zvo+/jGfcBd4DP145NE8a5amohouelaDUR4
+         WSt1Szetgha9HmA0n/te0FB1SzDBCRuPFtxcwafl/1/1r3j5zCmzXG00Np6xice+3t3e
+         ZDhqukzWvUSL2KtJf15Q0HZHQXpuUc0Tl+GIvKQOVFQEPLnCJx9gGZ0RT2bpHyQNEfih
+         QsIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774469509; x=1775074309;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yOK0NjVYr78bPbpIye+WMvOgHZn0ILapKUb+9KhRM08=;
+        b=BrH8fi1VlaiwNE6z6h2EjgmNZGDIDvUAnaFkfGaMW+kAtebhwEUntI+t4ZGOUfUasA
+         eXivzpLamcEGgdbLHqfROSbSduxohXMtfumu7KEcjKYStpuV3LKUthBXr1zmgQpW4hpx
+         ge8sOZ0llT1yUTYafSHXKh5QI1x77kwT1/4xqZBUrsqt2cI/3SGSL2HSgl1w9NZF8yFh
+         UEoyvSq53Rg6qXpJyiq1AFmasFXlntE9jw6YAySm4ajZEU5uNrkz/3VoeJQGXHUPBzOZ
+         hKblA4rzyPfjr3AasAzZp+QrYLs14NiDp+o5oMEXCJfz2sLorBjhIAgcBBfYb1SU+MmR
+         fnlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWrJEWI4IJqCj717T8Zvs+g/5jq07wcu8adC1hxiPWK7qNieXAkGiOph3jGQrItSY28Nak=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWor0AwaCDQ11x0JCQc8TiAtpxMJiCFxHR69e19yhuZp1mV6rM
+	EvStCQdhpxw2Ncf80Hqq08kvubFHb6erhkGtiS2b3xaZOpGjgKv3gLkjQBYLulp+Ha4=
+X-Gm-Gg: ATEYQzzZvgT+6IlHDpkkvMkRqPXh+ZkqzxLa0YHnDTQEM+Eoon4RcnLsNs1t1IVPkhB
+	WEf7ZKbLyop8bnQ4tFOxzQOr7psHJ9THuMeNwwqtxyqeOvQfigKmEXdTDixpiWoHEixa8xafDTm
+	TN7PTfe99wsTNb1+yg2HvxVPK/MKG86c9qWzC3YN8yGI6r6k52FvNKjNJuWxmEjDpmiG7ZMe3VQ
+	apDYVccfF2WoL8dldRrcN5lvVXUp0EDFxR/NAML+wglVDk/rUDgCxCW3+gwziV8EReXdnJg7dSe
+	EJhwvEUoszEGEV/5I9JF6jd1j59wCZ+PK78z9y1eSdwJJEOK/3gkase0vjmr6or6FfhUaKlbWMX
+	VppWPDveItsA3OF2/L8brEWpE3CyXCExmcnFJSX1otkStUtyGUmwdzgaxIviL0i4ylMTeuEsyi5
+	/1H9gcSStbMyJl7wQaN5i7WcE=
+X-Received: by 2002:a05:6820:1c8a:b0:67d:e8b6:fb4d with SMTP id 006d021491bc7-67dff4b41c6mr2208620eaf.13.1774469509007;
+        Wed, 25 Mar 2026 13:11:49 -0700 (PDT)
+Received: from 20HS2G4.aus01.local ([2a09:bac6:bf21:2632::3ce:1a])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-67e0ab274c7sm549764eaf.13.2026.03.25.13.11.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Mar 2026 13:11:48 -0700 (PDT)
+From: Chris J Arges <carges@cloudflare.com>
+To: netdev@vger.kernel.org,
+	michael.chan@broadcom.com,
+	pavan.chebbi@broadcom.com,
+	davem@davemloft.net,
+	joe@dama.to,
+	gospo@broadcom.com,
 	kuba@kernel.org,
 	pabeni@redhat.com,
-	edumazet@google.com,
-	andrew+netdev@lunn.ch,
-	netdev@vger.kernel.org
-Cc: Alexander Lobakin <aleksander.lobakin@intel.com>,
-	anthony.l.nguyen@intel.com,
-	jacob.e.keller@intel.com,
-	nxne.cnse.osdt.itp.upstreaming@intel.com,
+	edumazet@google.com
+Cc: andrew+netdev@lunn.ch,
 	horms@kernel.org,
-	maciej.fijalkowski@intel.com,
-	magnus.karlsson@intel.com,
 	ast@kernel.org,
 	daniel@iogearbox.net,
 	hawk@kernel.org,
 	john.fastabend@gmail.com,
 	sdf@fomichev.me,
+	shuah@kernel.org,
 	bpf@vger.kernel.org,
-	Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-Subject: [PATCH net-next v2 5/5] ice: add support for transmitting unreadable frags
-Date: Wed, 25 Mar 2026 13:06:43 -0700
-Message-ID: <20260325200644.2528726-6-anthony.l.nguyen@intel.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20260325200644.2528726-1-anthony.l.nguyen@intel.com>
-References: <20260325200644.2528726-1-anthony.l.nguyen@intel.com>
+	linux-kselftest@vger.kernel.org,
+	kernel-team@cloudflare.com,
+	Chris J Arges <carges@cloudflare.com>
+Subject: [PATCH net-next v5 0/6] bnxt_en: Add XDP RSS hash metadata support
+Date: Wed, 25 Mar 2026 15:09:46 -0500
+Message-ID: <20260325201139.2501937-1-carges@cloudflare.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -78,105 +90,72 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Alexander Lobakin <aleksander.lobakin@intel.com>
+This series adds XDP RSS hash metadata extraction support for the bnxt_en
+driver and includes selftests to validate the functionality. I was able
+to test this on a BCM57414 NIC.
 
-Advertise netmem Tx support in ice. The only change needed is to set
-ICE_TX_BUF_FRAG conditionally, only when skb_frag_is_net_iov() is
-false. Otherwise, the Tx buffer type will be ICE_TX_BUF_EMPTY and
-the driver will skip the DMA unmapping operation.
+Patches 1-4 implement the driver support:
+  - Patch 1 adds bnxt_xdp_buff to wrap xdp_buff with
+    pointers to the hardware RX completion descriptors and the
+    completion type. This is similar to other driver implementations.
+  - Patch 2 adds xmo_rx_hash callback for CMP_TYPE_RX_L2_CMP completions.
+  - Patch 3 moves bnxt_rss_ext_op to bnxt.h
+  - Patch 4 adds handling for CMP_TYPE_RX_L2_V3_CMP completions
 
-Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
-Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
----
- drivers/net/ethernet/intel/ice/ice_main.c   |  1 +
- drivers/net/ethernet/intel/ice/ice_sf_eth.c |  1 +
- drivers/net/ethernet/intel/ice/ice_txrx.c   | 17 +++++++++++++----
- 3 files changed, 15 insertions(+), 4 deletions(-)
+Patches 5-6 add selftest coverage:
+  - Patch 5 refactors common BPF map helper functions out of the
+    existing xdp.py selftest into a shared net/lib/py/bpf.py module.
+  - Patch 6 adds an XDP metadata selftest that loads an XDP program
+    calling bpf_xdp_metadata_rx_hash. The test skips on devices without
+    xdp-rx-metadata-features.
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index 28172912bb54..3477c53316ba 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -3526,6 +3526,7 @@ static void ice_set_ops(struct ice_vsi *vsi)
- 
- 	netdev->netdev_ops = &ice_netdev_ops;
- 	netdev->queue_mgmt_ops = &ice_queue_mgmt_ops;
-+	netdev->netmem_tx = true;
- 	netdev->udp_tunnel_nic_info = &pf->hw.udp_tunnel_nic;
- 	netdev->xdp_metadata_ops = &ice_xdp_md_ops;
- 	ice_set_ethtool_ops(netdev);
-diff --git a/drivers/net/ethernet/intel/ice/ice_sf_eth.c b/drivers/net/ethernet/intel/ice/ice_sf_eth.c
-index bd5eeb27d3f8..f3ac5dfabc0c 100644
---- a/drivers/net/ethernet/intel/ice/ice_sf_eth.c
-+++ b/drivers/net/ethernet/intel/ice/ice_sf_eth.c
-@@ -59,6 +59,7 @@ static int ice_sf_cfg_netdev(struct ice_dynamic_port *dyn_port,
- 	ether_addr_copy(netdev->perm_addr, dyn_port->hw_addr);
- 	netdev->netdev_ops = &ice_sf_netdev_ops;
- 	netdev->queue_mgmt_ops = &ice_queue_mgmt_ops;
-+	netdev->netmem_tx = true;
- 	SET_NETDEV_DEVLINK_PORT(netdev, devlink_port);
- 
- 	err = register_netdev(netdev);
-diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.c b/drivers/net/ethernet/intel/ice/ice_txrx.c
-index 59b2ab09b87a..3008745c2b39 100644
---- a/drivers/net/ethernet/intel/ice/ice_txrx.c
-+++ b/drivers/net/ethernet/intel/ice/ice_txrx.c
-@@ -113,11 +113,17 @@ ice_prgm_fdir_fltr(struct ice_vsi *vsi, struct ice_fltr_desc *fdir_desc,
- static void
- ice_unmap_and_free_tx_buf(struct ice_tx_ring *ring, struct ice_tx_buf *tx_buf)
- {
--	if (tx_buf->type != ICE_TX_BUF_XDP_TX && dma_unmap_len(tx_buf, len))
-+	switch (tx_buf->type) {
-+	case ICE_TX_BUF_DUMMY:
-+	case ICE_TX_BUF_FRAG:
-+	case ICE_TX_BUF_SKB:
-+	case ICE_TX_BUF_XDP_XMIT:
- 		dma_unmap_page(ring->dev,
- 			       dma_unmap_addr(tx_buf, dma),
- 			       dma_unmap_len(tx_buf, len),
- 			       DMA_TO_DEVICE);
-+		break;
-+	}
- 
- 	switch (tx_buf->type) {
- 	case ICE_TX_BUF_DUMMY:
-@@ -337,12 +343,14 @@ static bool ice_clean_tx_irq(struct ice_tx_ring *tx_ring, int napi_budget)
- 			}
- 
- 			/* unmap any remaining paged data */
--			if (dma_unmap_len(tx_buf, len)) {
-+			if (tx_buf->type != ICE_TX_BUF_EMPTY) {
- 				dma_unmap_page(tx_ring->dev,
- 					       dma_unmap_addr(tx_buf, dma),
- 					       dma_unmap_len(tx_buf, len),
- 					       DMA_TO_DEVICE);
-+
- 				dma_unmap_len_set(tx_buf, len, 0);
-+				tx_buf->type = ICE_TX_BUF_EMPTY;
- 			}
- 		}
- 		ice_trace(clean_tx_irq_unmap_eop, tx_ring, tx_desc, tx_buf);
-@@ -1494,7 +1502,8 @@ ice_tx_map(struct ice_tx_ring *tx_ring, struct ice_tx_buf *first,
- 				       DMA_TO_DEVICE);
- 
- 		tx_buf = &tx_ring->tx_buf[i];
--		tx_buf->type = ICE_TX_BUF_FRAG;
-+		if (!skb_frag_is_net_iov(frag))
-+			tx_buf->type = ICE_TX_BUF_FRAG;
- 	}
- 
- 	/* record SW timestamp if HW timestamp is not available */
-@@ -2366,7 +2375,7 @@ void ice_clean_ctrl_tx_irq(struct ice_tx_ring *tx_ring)
- 		}
- 
- 		/* unmap the data header */
--		if (dma_unmap_len(tx_buf, len))
-+		if (tx_buf->type != ICE_TX_BUF_EMPTY)
- 			dma_unmap_single(tx_ring->dev,
- 					 dma_unmap_addr(tx_buf, dma),
- 					 dma_unmap_len(tx_buf, len),
+Changes from v4: https://lore.kernel.org/all/20260313223029.454755-1-carges@cloudflare.com/
+  - address RCT again
+  - make _format_hex_bytes private
+  - remove redundant bpf_map_set
+  - rebased on net-next
+
+Changes from v3: https://lore.kernel.org/netdev/20260306230600.1628196-1-carges@cloudflare.com/
+  - split out bnxt_rss_ext_op into header
+  - address RCT issue
+  - rebased on net-next
+
+Changes from v2: https://lore.kernel.org/netdev/20260303024510.644962-1-carges@cloudflare.com/
+  - bnxt xdp: actually fixed RCT issues
+  - bnxt xdp: Added patch 3 to handle CMP_TYPE_RX_L2_V3_CMP completions.
+
+Changes from v1: https://lore.kernel.org/netdev/cover.1772211065.git.carges@cloudflare.com/
+  - selftests: moved tests into net/hw
+  - selftests: fix pylinter errors
+  - selftests: add check for no error count
+  - bnxt_xdp: followed RCT for variable declaration
+  - rebased on net-next
+
+Chris J Arges (6):
+  bnxt_en: use bnxt_xdp_buff for xdp context
+  bnxt_en: Implement XDP RSS hash metadata extraction
+  bnxt_en: Move bnxt_rss_ext_op into header
+  bnxt_en: Implement XDP RSS hash metadata extraction for V3_CMP
+  selftests: net: move common xdp.py functions into lib
+  selftests: drv-net: xdp: Add rss_hash metadata tests
+
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c     |  51 +++---
+ drivers/net/ethernet/broadcom/bnxt/bnxt.h     |  19 ++
+ drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c |  57 ++++++
+ drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h |  10 ++
+ .../testing/selftests/drivers/net/hw/Makefile |   1 +
+ .../drivers/net/hw/lib/py/__init__.py         |   2 +
+ .../selftests/drivers/net/hw/xdp_metadata.py  | 146 ++++++++++++++++
+ .../selftests/drivers/net/lib/py/__init__.py  |   2 +
+ tools/testing/selftests/drivers/net/xdp.py    |  96 +++--------
+ .../testing/selftests/net/lib/py/__init__.py  |   2 +
+ tools/testing/selftests/net/lib/py/bpf.py     |  68 ++++++++
+ .../selftests/net/lib/xdp_metadata.bpf.c      | 163 ++++++++++++++++++
+ 12 files changed, 516 insertions(+), 101 deletions(-)
+ create mode 100644 tools/testing/selftests/drivers/net/hw/xdp_metadata.py
+ create mode 100644 tools/testing/selftests/net/lib/py/bpf.py
+ create mode 100644 tools/testing/selftests/net/lib/xdp_metadata.bpf.c
+
 -- 
-2.47.1
+2.43.0
 
