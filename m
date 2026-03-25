@@ -1,241 +1,150 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39B4C32470E
-	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 19:11:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF2C22576E
+	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 19:36:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774465906; cv=none; b=e4a1wJg8LPDTF/4eAfcQJThAbLCybkHKHCaZOVFmrXaA2v1hD6afEPThv3Hv6CO8bVp0YvAlb7DJEpljQCXGNzX/Nf/KN2jRXCFVV6BNc+m8J6CV/qHX+NZS4CjfR2osccwO7nkfjGJe4qPd4lIA6MMi1QnYfzPLfmZOJ9mhVfQ=
+	t=1774467375; cv=none; b=MATkJi1I2zL54xSA8y3rPrQ8U3l4H7ng4MD5o5nGzLkTPGad9xtXcd5Vd4QJRe+aXodcI5N/0bDRDnLogvdMmUnOJGapWlQFizpmQukz1t1WG9F071mQCZ1hRKn56O/LWJJv19UxAauS7khF5KYQOPjughkBCqwVAfS/xIz+aQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774465906; c=relaxed/simple;
-	bh=3sJ77Gp7qkVWLtd/dpYIZhb93hL1rpNpMqHMEm5E89E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BRlMPLu8nL4/nQ9EfX4LgrLSMBEFCvY8VemjL5x+Akqc3EtpAVQyQQ2d1T19RCToTcVVTvF5NNMSDR+INFSNjqUVwRbiJ01pxDU8z+idp/expeUGQ+AmiZP6/twLyh6eIY7Tqqhb5u9z8DNPs8k5G8IsNXMrdF0hn7rEDpTfa2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=q9PzW5EN; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1774467375; c=relaxed/simple;
+	bh=t3vdFCTCCd/mYTmRbH029kf+rM34+Lq6Cw+Vdj1lzxI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YbAWsMwRAH9WEY+U9cPtOEIkH75tzSbh/mDG7W7j0Ef2n1gaJkpXUicDW4QVdqzXDgW1rF8epXksgNp/35ZOr00NjGRIqaFBzRl5xT+uLj05s9SrO3b70upFOU82K7SERFFPGP2ZOvNCpQy0jzEM0MPUf6AD09+D39BZCIfuL4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jFUJQFLM; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="q9PzW5EN"
-Message-ID: <1ff47530-44ee-4012-a013-0202182de208@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774465902;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7bwzI5I4kMNZg9C5PXzD0ZvcdZx2z7+EA/lSvVzkZ5w=;
-	b=q9PzW5EN5yrzsQ4r7/PCue0LoxNXR8Xpq/nGPlqKH3WZh/h7pweNW66NzeYTdB7QLbXU67
-	YS01LH2u8H7HTENe1oza9K20EHZLwWM+ysVNiamBYiNBS0CCETSUYDQouWXIwRa8+1QdZo
-	alt74wq8qcrBXopcorCb3u09udm4czc=
-Date: Wed, 25 Mar 2026 12:11:17 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jFUJQFLM"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-439d8dc4ae4so148473f8f.2
+        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 12:36:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774467372; x=1775072172; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0xbLSrdYpjpwOAwc60D31b27IF6Zr0PDhPWePECVS50=;
+        b=jFUJQFLMQf3rtZYSyRGu1wRWWlFbMCsKPFtf6gFH+dqAxRQ9ywiUmSJcyT8najtaRM
+         68A+mpPZauHCLvMUXvZJiqU/MRdqDWwexT/6EtNJ2Q9EQpdPLqFq/LDwxEpCz8k3pbCc
+         a5bj/RIsth1DFrirmLypIdsNXBf1DE7faOoA9U/u7ii46ERZYhYg/DC45p9j5zxgYsUD
+         GOKjKoRvF8xgNRS6vD0TYWigpjZPaJf/BOJPyxfee4AaagYSHPVw0VgotUsa2bhEv1Wp
+         S2LKU9qR9jnEEGeGOWiLaaxMi/dpIHD6Yw8Br23Y01sRLnX21CElWkgyaa70jHC6URnF
+         UXFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774467372; x=1775072172;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=0xbLSrdYpjpwOAwc60D31b27IF6Zr0PDhPWePECVS50=;
+        b=N54m9E0p/V3A3KugiivBxg8WEQr3/Iea5nBwqgbo10PP6kBWC1rbt7i7V34Dl36Ia9
+         soaCCCCXrt0H9uxMTmflIK6Ohah41Sxn9HAcLSXzjn7E1FvnWEhgcIi97ETHCf/JZ7YI
+         xtDAGJ6K1okce/3Pg2D+OBGDKienwNC2ooOUzQTFhalFrRmD/Vnu5pSXS06RowkrS2iR
+         BBvNpV0zV8/aQIYKeMlKLWcGG7lciA8vPS3B/L30Ncju2oedvyVQDEg927UXHtwYdPiG
+         jyAG1n9uvGILPu99uXqa3iBTzxNPuO7bzC6W3oxmLxL/+04lVqbL8SFH6ZPZZ+gsIv50
+         OwUA==
+X-Forwarded-Encrypted: i=1; AJvYcCXUi8YwRAob7g6kF8JVeO8k2wG5eF3Bt/AUNlHpA5VZ+peF1P3pUrXea/VRkKSdMMVauAs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtL3JxW6SOgGkl2s6ayYZdLCkVmM0G/aVG+j1ZsbVkN1B1PbFA
+	vxGisM+mugutXsKMWnGSNZjWyAr0IuT4MVXVjxLS2GV1lf1e0xSIIDHZ
+X-Gm-Gg: ATEYQzwDvjW3rx0fJFgjvtQeT/otbxpMljM+rHhBW9scIx+LvNV+AQ2MBCqoTGU5lTQ
+	OmcjEvb473e0Spm5ElsMeh2Ajw5wzK1SbwalcG8O5r20ZmpTkcKSrqJYw/xIeDUh9IZCIdDQ8FV
+	FXjYpp6hcjJEaMm/TMdwi/bu+Mn0LXRBSh1egQYjgNCp4CSLo3WQPwb47W8deQidXrHrk1GBkgS
+	jG09T07Lo6bClHTjT0sxeSYZETkFCQYF/tYoIQWB8GdMqIbyJns4WBBAFDFjizOzFDzr3Nquem1
+	gHfeFjn5S4m3U+ZqMQsORE11uh1lOvwlSVnpIwuOVE5CvcJVVoNWtjkEo1F2NLNZ2Y4WJNA4AfP
+	5dIWSFzIgc1trYP1XJIt5+85z97sKuMB82UvBcnMJP6TfGCvB5UZZBih4wstODr6S7h77eNcuhQ
+	/XUyweXQp+OeH4P5gpAZVbjMxSG2Hs7Ud3KheCzO2k3lEtaKEruEFaFZANjxnwBnVKiiQ26pvTB
+	Mg=
+X-Received: by 2002:a5d:5f47:0:b0:43b:8823:c12b with SMTP id ffacd0b85a97d-43b887e6cb0mr7083427f8f.0.1774467371899;
+        Wed, 25 Mar 2026 12:36:11 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b919dfb54sm2097287f8f.31.2026.03.25.12.36.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Mar 2026 12:36:11 -0700 (PDT)
+Date: Wed, 25 Mar 2026 19:36:08 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Ankur Arora <ankur.a.arora@oracle.com>, Andrew Morton
+ <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-pm@vger.kernel.org, bpf@vger.kernel.org, arnd@arndb.de,
+ will@kernel.org, peterz@infradead.org, mark.rutland@arm.com,
+ harisokn@amazon.com, cl@gentwo.org, ast@kernel.org, rafael@kernel.org,
+ daniel.lezcano@linaro.org, memxor@gmail.com, zhenglifeng1@huawei.com,
+ xueshuai@linux.alibaba.com, rdunlap@infradead.org,
+ joao.m.martins@oracle.com, boris.ostrovsky@oracle.com,
+ konrad.wilk@oracle.com
+Subject: Re: [PATCH v10 00/12] barrier: Add
+ smp_cond_load_{relaxed,acquire}_timeout()
+Message-ID: <20260325193608.10e9eca5@pumpkin>
+In-Reply-To: <acQFaVR_bGZU2JmJ@arm.com>
+References: <20260316013651.3225328-1-ankur.a.arora@oracle.com>
+	<20260315184925.b6f93386e918ca79614843e3@linux-foundation.org>
+	<874imftol4.fsf@oracle.com>
+	<20260316233712.7cbfac27@pumpkin>
+	<acQFaVR_bGZU2JmJ@arm.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 09/11 net-next v5] bpf: remove ipv6_bpf_stub completely
- and use direct function calls
-To: Fernando Fernandez Mancera <fmancera@suse.de>
-Cc: =?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>,
- Daniel Borkmann <daniel@iogearbox.net>, "David S. Miller"
- <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
- Guillaume Nault <gnault@redhat.com>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, netdev@vger.kernel.org
-References: <20260325120928.15848-1-fmancera@suse.de>
- <20260325120928.15848-10-fmancera@suse.de>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20260325120928.15848-10-fmancera@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 3/25/26 5:08 AM, Fernando Fernandez Mancera wrote:
-> As IPv6 is built-in only, the ipv6_bpf_stub can be removed completely.
+On Wed, 25 Mar 2026 15:55:21 +0000
+Catalin Marinas <catalin.marinas@arm.com> wrote:
+
+> On Mon, Mar 16, 2026 at 11:37:12PM +0000, David Laight wrote:
+...
+> > For osq_lock(), while an IPI will wake it up, there is also a small timing
+> > window where the IPI can happen before the ldx and so not actually wake up it.
+> > This is true whenever 'expr' is non-trivial.  
 > 
-> Convert all ipv6_bpf_stub usage to direct function calls instead. The
-> fallback functions introduced previously will prevent linkage errors
-> when CONFIG_IPV6 is disabled.
+> Hmm, I thought this is fine because of the implicit SEVL on exception
+> return but the arm64 __cmpwait_relaxed() does a SEVL+WFE which clears
+> any prior event, it can wait in theory forever when the event stream is
+> disabled.
 
-Thanks for working on this.
+Not forever, there will be a timer interrupt in the end.
 
-> @@ -6221,8 +6215,8 @@ static int bpf_ipv4_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
->   	if (likely(nhc->nhc_gw_family != AF_INET6))
->   		neigh = __ipv4_neigh_lookup_noref(dev,
->   						  (__force u32)params->ipv4_dst);
-> -	else
-> -		neigh = __ipv6_neigh_lookup_noref_stub(dev, params->ipv6_dst);
-> +	else if (IS_ENABLED(CONFIG_IPV6))
-> +		neigh = __ipv6_neigh_lookup_noref(dev, params->ipv6_dst);
-
-Should it be ipv6_mod_enabled() instead of IS_ENABLED(CONFIG_IPV6)?
-Is nd_tbl always initialized?
-
->   
->   	if (!neigh || !(READ_ONCE(neigh->nud_state) & NUD_VALID))
->   		return BPF_FIB_LKUP_RET_NO_NEIGH;
-> @@ -6290,12 +6284,11 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
->   			params->tbid = 0;
->   		}
->   
-> -		tb = ipv6_stub->fib6_get_table(net, tbid);
-> +		tb = fib6_get_table(net, tbid);
->   		if (unlikely(!tb))
->   			return BPF_FIB_LKUP_RET_NOT_FWDED;
->   
-> -		err = ipv6_stub->fib6_table_lookup(net, tb, oif, &fl6, &res,
-> -						   strict);
-> +		err = fib6_table_lookup(net, tb, oif, &fl6, &res, strict);
-
-A similar question here and other changes in the patch.
-
-I think bpf_ipv6_fib_lookup() is fine because the earlier
-"!idev" check should fail when ipv6 is disabled at boot time?
-
->   	} else {
->   		if (flags & BPF_FIB_LOOKUP_MARK)
->   			fl6.flowi6_mark = params->mark;
-> @@ -6305,7 +6298,7 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
->   		fl6.flowi6_tun_key.tun_id = 0;
->   		fl6.flowi6_uid = sock_net_uid(net, NULL);
->   
-> -		err = ipv6_stub->fib6_lookup(net, oif, &fl6, &res, strict);
-> +		err = fib6_lookup(net, oif, &fl6, &res, strict);
->   	}
->   
->   	if (unlikely(err || IS_ERR_OR_NULL(res.f6i) ||
-> @@ -6326,11 +6319,11 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
->   		return BPF_FIB_LKUP_RET_NOT_FWDED;
->   	}
->   
-> -	ipv6_stub->fib6_select_path(net, &res, &fl6, fl6.flowi6_oif,
-> -				    fl6.flowi6_oif != 0, NULL, strict);
-> +	fib6_select_path(net, &res, &fl6, fl6.flowi6_oif,
-> +			 fl6.flowi6_oif != 0, NULL, strict);
->   
->   	if (check_mtu) {
-> -		mtu = ipv6_stub->ip6_mtu_from_fib6(&res, dst, src);
-> +		mtu = ip6_mtu_from_fib6(&res, dst, src);
->   		if (params->tot_len > mtu) {
->   			params->mtu_result = mtu; /* union with tot_len */
->   			return BPF_FIB_LKUP_RET_FRAG_NEEDED;
-> @@ -6351,9 +6344,7 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
->   		if (res.f6i->fib6_prefsrc.plen) {
->   			*src = res.f6i->fib6_prefsrc.addr;
->   		} else {
-> -			err = ipv6_bpf_stub->ipv6_dev_get_saddr(net, dev,
-> -								&fl6.daddr, 0,
-> -								src);
-> +			err = ipv6_dev_get_saddr(net, dev, &fl6.daddr, 0, src);
->   			if (err)
->   				return BPF_FIB_LKUP_RET_NO_SRC_ADDR;
->   		}
-> @@ -6365,7 +6356,7 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
->   	/* xdp and cls_bpf programs are run in RCU-bh so rcu_read_lock_bh is
->   	 * not needed here.
->   	 */
-> -	neigh = __ipv6_neigh_lookup_noref_stub(dev, dst);
-> +	neigh = __ipv6_neigh_lookup_noref(dev, dst);
->   	if (!neigh || !(READ_ONCE(neigh->nud_state) & NUD_VALID))
->   		return BPF_FIB_LKUP_RET_NO_NEIGH;
->   	memcpy(params->dmac, neigh->ha, ETH_ALEN);
-> @@ -6900,11 +6891,10 @@ static struct sock *sk_lookup(struct net *net, struct bpf_sock_tuple *tuple,
->   					    src6, tuple->ipv6.sport,
->   					    dst6, ntohs(tuple->ipv6.dport),
->   					    dif, sdif, &refcounted);
-> -		else if (likely(ipv6_bpf_stub))
-> -			sk = ipv6_bpf_stub->udp6_lib_lookup(net,
-> -							    src6, tuple->ipv6.sport,
-> -							    dst6, tuple->ipv6.dport,
-> -							    dif, sdif, NULL);
-> +		else if (likely(ipv6_mod_enabled()))
-> +			sk = __udp6_lib_lookup(net, src6, tuple->ipv6.sport,
-> +					       dst6, tuple->ipv6.dport,
-> +					       dif, sdif, NULL);
->   #endif
->   	}
->   
-> diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
-> index 9f40be0c3e71..f71ef82a5f3d 100644
-> --- a/net/core/lwt_bpf.c
-> +++ b/net/core/lwt_bpf.c
-> @@ -13,7 +13,6 @@
->   #include <net/gre.h>
->   #include <net/ip.h>
->   #include <net/ip6_route.h>
-> -#include <net/ipv6_stubs.h>
->   
->   struct bpf_lwt_prog {
->   	struct bpf_prog *prog;
-> @@ -103,7 +102,12 @@ static int bpf_lwt_input_reroute(struct sk_buff *skb)
->   		dev_put(dev);
->   	} else if (skb->protocol == htons(ETH_P_IPV6)) {
->   		skb_dst_drop(skb);
-> -		err = ipv6_stub->ipv6_route_input(skb);
-> +		if (IS_ENABLED(CONFIG_IPV6)) {
-> +			ip6_route_input(skb);
-> +			err = skb_dst(skb)->error;
-> +		} else {
-> +			err = -EAFNOSUPPORT;
-> +		}
->   	} else {
->   		err = -EAFNOSUPPORT;
->   	}
-> @@ -233,7 +237,7 @@ static int bpf_lwt_xmit_reroute(struct sk_buff *skb)
->   		fl6.daddr = iph6->daddr;
->   		fl6.saddr = iph6->saddr;
->   
-> -		dst = ipv6_stub->ipv6_dst_lookup_flow(net, skb->sk, &fl6, NULL);
-> +		dst = ip6_dst_lookup_flow(net, skb->sk, &fl6, NULL);
->   		if (IS_ERR(dst)) {
->   			err = PTR_ERR(dst);
->   			goto err;
-> diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
-> index bb29b29fdcfb..07ae6ea7743a 100644
-> --- a/net/ipv6/af_inet6.c
-> +++ b/net/ipv6/af_inet6.c
-> @@ -264,8 +264,8 @@ static int inet6_create(struct net *net, struct socket *sock, int protocol,
->   	goto out;
->   }
->   
-> -static int __inet6_bind(struct sock *sk, struct sockaddr_unsized *uaddr, int addr_len,
-> -			u32 flags)
-> +int __inet6_bind(struct sock *sk, struct sockaddr_unsized *uaddr, int addr_len,
-> +		 u32 flags)
->   {
->   	struct sockaddr_in6 *addr = (struct sockaddr_in6 *)uaddr;
->   	struct inet_sock *inet = inet_sk(sk);
-> @@ -1032,14 +1032,6 @@ static const struct ipv6_stub ipv6_stub_impl = {
->   	.ip6_xmit = ip6_xmit,
->   };
->   
-> -static const struct ipv6_bpf_stub ipv6_bpf_stub_impl = {
-> -	.inet6_bind = __inet6_bind,
-> -	.udp6_lib_lookup = __udp6_lib_lookup,
-> -	.ipv6_setsockopt = do_ipv6_setsockopt,
-> -	.ipv6_getsockopt = do_ipv6_getsockopt,
-> -	.ipv6_dev_get_saddr = ipv6_dev_get_saddr,
-> -};
-> -
->   static int __init inet6_init(void)
->   {
->   	struct list_head *r;
-> @@ -1199,7 +1191,6 @@ static int __init inet6_init(void)
->   	/* ensure that ipv6 stubs are visible only after ipv6 is ready */
->   	wmb();
->   	ipv6_stub = &ipv6_stub_impl;
-> -	ipv6_bpf_stub = &ipv6_bpf_stub_impl;
+> Expanding smp_cond_load_relaxed() into asm, we have something like:
+> 
+> 	LDR	X0, [PTR]
+> 	condition check for VAL || need_resched() with branch out
+> 	SEVL
+> 	WFE
+> 	LDXR	X1, [PTR]
+> 	EOR	X1, X1, X0
+> 	CBNZ	out
+> 	WFE
 >   out:
->   	return err;
->   
+> 
+> If the condition is updated to become true (need_resched()) after the
+> condition check but before the first WFE while *PTR remains unchanged,
+> the IPI won't do anything. Maybe we should revert 1cfc63b5ae60 ("arm64:
+> cmpwait: Clear event register before arming exclusive monitor"). Not
+> great but probably better than reverting f5bfdc8e3947 ("locking/osq: Use
+> optimized spinning loop for arm64")).
 
+Could you change the order to:
+	LDR	X0, [PTR]
+	SEVL
+	WFE
+	condition check for VAL || need_resched() with branch out
+	LDXR	X1, [PTR]
+	EOR	X1, X1, X0
+	CBNZ	out
+	WFE
+  out:
+
+that closes the timing window for the interrupt provided the condition
+check doesn't change the event register.
+
+I must get back to the osq_lock code again.
+I'm happy with the code - the per-cpu data is down to two cpu numbers.
+(Apart from the acquire/release semantics in a few places.)
+But the comments have got out of hand.
+Writing succinct and accurate comments is hard - too verbose and they
+hide too much code.
+
+	David
