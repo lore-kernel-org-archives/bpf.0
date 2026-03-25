@@ -1,250 +1,159 @@
-Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
+Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 076413C5556
-	for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 23:59:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774396791; cv=pass; b=S3mRywbMIVRpJaPLDrFLyhZzgHz1L0wvxWeHgK6esdYgy7VvW6bhA/i1dcq2SMIF1ZtRQuU3CGAi9WDYzXs4A8wpjjbofxvei/4vMauyHoFGpft5Qm0PDVyJfvaq2eEfQYdP9rweOYQpYMUgdTnKBp54NCZj8kSKA5dGt04WClI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774396791; c=relaxed/simple;
-	bh=XbeGRET36mZqQ0lSSEZQyrYj1YmuFF8my6GhMPT4Fwk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Xr0e/ftabxeKguVRC61BNWxGKbqkef5OxsAhRX/UGB/H3Dbr66aXMxODuAIBhanbhy69Ioi1jbk8NQq0iatHachnUvxvNhuxcSdB6423Fw/DeHPhRHOdAFYPuIEMS7fWh5qeT86YoAHBRKFzpbYd9VudpFBpPxEhuCWYPi7s1Dc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OgRDxGM3; arc=pass smtp.client-ip=209.85.217.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B594B13D51E
+	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 00:08:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774397305; cv=none; b=M9Klf9wieUzfavjlr5oqerDnMSpu/fgdUi5oZfmNVnRxHwnZTPACEbB2vJXvhcbD4b+AlEeRpzJVhnbZqXWg0AhE9oA8464flxnrOwwsKjo89b12AzHZCcd4d64PVjgdq7yGLpDR23Z7X9sA+hSuKIWWZPnxp0Eos9YlJNxWdEo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774397305; c=relaxed/simple;
+	bh=8PWDeFsSPAQxT5s1vTmPcO3gk6UBtRUaHgt+0Hxr550=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=GwqvIv1llEsjEFcVdJ8CLvgy71pjV19Rz+XYW1b9M3ExHsittD6ZMRSjWmhk5enFHFQek+y43baYekSe7Sxci0wTl7kradxz/lLPDErBBlRbU7WnqiLj+zQCDYrcAGqQ9Z9GF5532mRgdBFz1IK64AzY3RxbZHR1eSlHLjPvzh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jH2MWiKX; arc=none smtp.client-ip=74.125.82.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OgRDxGM3"
-Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-5ffe9a5b128so1640750137.2
-        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 16:59:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774396789; cv=none;
-        d=google.com; s=arc-20240605;
-        b=FivCIT5alBkvcIi/ZE2Glg35/JILoC86lduxQ2iyBq6tVHaizifRUXqE5UtfCMF2Ip
-         zjmjHDm3tQs3XVOEWgPoorhUkIl2iqCcIQrradGzzL8A2QKmrXHufW+QJ6cs5irHULxi
-         xWhB8VFkole+KDlXUeX0kV504tYBGgCq+ijB8qbErnOTggU/PRLI60f2no52rAIX8MlQ
-         82nrzURtq8+FcJKj6ZpmPZIIfkzbilMV38esBV7x70R91jp9xuLTcbj/sz21QQCFJt74
-         GsC37Xt6/CraX3sJo8nSebebEZLXVYShPh9WwdMAOLnvAv878j11EKsomO7ObVBFjImF
-         gwEQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=hGm6DPbfXuG3rLsEiNH1wUMYYktfpRSm1XaRXMhElP0=;
-        fh=wsSThdFyvxnBMna4sDEREfGOcPQAPFhxV5Nc+Qlwn5Q=;
-        b=LDqT+3Bq6WiqI6zAqaoIgqc50aEf+NC28ZnKU1/iJSUpCC5zIXvy1rvs2yr0qAmzdw
-         /2miIw6dxyLuheziIYVGN79BSoYq3NHFEZNTT925wG+6D0Xwpv8CUsFgUXbmsT0awOvP
-         wvR8yAfV/5proH6PWyW2526rM61VfkpShwDZeNuKgkCJ+lYe4JVom1Vi5tYQUN2osJyH
-         PN5rF1n7muvTM7yePh9HmjBJXRNtSVlfcSALT4ao0ArKBAOzeI9NYR5DgZfkIqGOjjlT
-         HSF35R9vxcjDXuRr7zJFqrWGKcwY7r+kdnuC3Zrj3npJs96ZCD+NG50iAD67lCuSBmAP
-         OYSw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jH2MWiKX"
+Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-2c1092cc08cso2040434eec.1
+        for <bpf@vger.kernel.org>; Tue, 24 Mar 2026 17:08:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774396789; x=1775001589; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hGm6DPbfXuG3rLsEiNH1wUMYYktfpRSm1XaRXMhElP0=;
-        b=OgRDxGM3woJDJ2x2ozLV5n6LNtu24g0wGjxOQId6JR0RW5g0ggkRVzRHDWCbzFCW/w
-         SjQY7iLacFau6XBqjlv1kphHqfe9Byh6TGDkzq4yPiDUp8+1tql8oqS4nvKa6duIb7kG
-         NDUB87MGD215+8b8uDOtCYrNZgO+hq9lN16vVuEarQdw8P0511UZ0mzIbRuSYj3sS5ux
-         MrRtGMLC6+sdN4W8CXlX/48SwtC/RUmqcPca5QHDw3UY+CyUrScc4m7wCyMQJixbPpgP
-         2Cy6g0Kx6aLNQ3/kHD1hEvk9KVarRk60Fm/uQwAiR0Cuu1IC1QTEy/tk8M6ikUtR+JKA
-         j1Rw==
+        d=gmail.com; s=20251104; t=1774397304; x=1775002104; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=anljWnIgB+Zw+Fc3bpW3eKtjg1Z7f933CBy7wuCK1Go=;
+        b=jH2MWiKXOg9XfKuoBVDpJC0bumoRGFpfi95RRR3xTvxl1cfuz/E8IqpC0dOJCKUrXL
+         N1UiFLsG9Q0qGrkFpz/9JDYTVGOhNuQ5BhoHnUxIy+CGLIH2SQhD84Bbp5UgQleBVozi
+         OY+cK7GVTtp1UqRlkOjxuWr1ljTm9Q2PSO5wzH4XCgmaIglOeaSM9s7pYGRKQZm82fiZ
+         +Nb5/PQtMr8oijWkL2aSupVm0nqFU3kP6VmqKHXwwmb0b7EFThe2kSYA7idL0T/PP1SZ
+         WuOYfd6/zxiAQv0wxFGQVddjAK2IqRfu0b/nBKxx+Xfy0VjzE7QPYPIgkHtwe5GkluJw
+         avCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774396789; x=1775001589;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=hGm6DPbfXuG3rLsEiNH1wUMYYktfpRSm1XaRXMhElP0=;
-        b=CbBWYd/zYPED28h2GZ11I6ZoSlSav7MGdh4Tt1YUjzROowYOX8MHDPevL2iywoRPb+
-         2xY+WaxQOfCevLrMq7FBfktG8ZrdXxphldJi3B/p0YtOp85LAxPYs2V2aD7ucOc6skLc
-         9iuZ5Y2kgDw3m1N3X0v13E9u9ueRDo8NbGy3MwiMdEUfS4lvxP5kLKClBVB/b8u5YfN4
-         kcbqUWR39CagdQvrtyV6R587hvbiwKHL0J+kGi69e/pAx7xIdHzJyaAOPT4gB9I83R3o
-         YC7tz3PD7eascBTKCjng5T6ujMs3NTQeWu0p/eLY5qUEnbefXOICjWNaDoPweC/wv+xl
-         HQnQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW8VIsvt0pTYrj1uXuOovTUCuL3xUVXTbb4TOf7F+aSaZ4QlDMTsMzKp1MF5NulW+YtjkE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxy0tg1OzsfdgVdXOSS5rOWW0uhZDGwojKQctg7D7Y8BlCMNGu5
-	LMOuEOiAC8BCJTJL6ACAV/LAgHoKg+zu0LZfanpID94i6ASVP70Xlpn9sirCzxlxu2hXdJPwsQu
-	tHYtTZh0R59jRWdf7rTZWlutcJyQbAmE=
-X-Gm-Gg: ATEYQzxflMGoFTc2bK5F0k6zEBfnZWeJ56Z3ZfxjasJpRNvGSZNmgLZMli8siqBRiDi
-	lA+RMaZiWo6xj4vslYw5v8NAHQtFUajYjv+oEaCx/LWgZ5utQYvFWbhpEGq/kigpFQQOkoqm90p
-	JZ0qwGSq2+K5aVK4ZxoKnu1LR+VzANvKg6EsIx2OyIXRwq5cvRl28CBWoUlvRV9MQCVSoJeeHSU
-	dDvOOM9vuHSpz1RCCe2HWkrKv+eg9PA0Pun376MJOlo/26Ixc6ZFZX5nkGe8LL5OvYFRhZjPffd
-	V/040yPOtFUWTgohnc2+/EgUDUuZnljFXJoTtJjXxw==
-X-Received: by 2002:a05:6102:5a8e:b0:5ff:1cc2:aa98 with SMTP id
- ada2fe7eead31-60394875239mr813558137.35.1774396788898; Tue, 24 Mar 2026
- 16:59:48 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774397304; x=1775002104;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=anljWnIgB+Zw+Fc3bpW3eKtjg1Z7f933CBy7wuCK1Go=;
+        b=Zdn9OdmmEFA/wAmhVnEd51gSaESIHGD0WpmbhDl8EW1vDCJR0sONIyesRY2Zaf9tlP
+         ew0KazBc+1X5OnF1n0QGEU0mzuUCplMyf+cvblYEnd0hUF/o3niYLG/5uqKKz0YiFiBt
+         bcwb8jtL5/OhUa+dRE3J7eM/3B9rSdQ59IpMm3XHc5PP4PduVDddkP8vK9k4gYQU8OkP
+         SIKtORKD8AVVYGZG5l3CZjW9UeSb5WxObuG1MeV2B48wAOq44YhYLEhKZUxZ+yBF2m7F
+         rFVc8tTk0Bo0DLvmONwpONiR9VF+LfpiNZJtBfRY/DaS8xtEnHMIgAUoi1c2c5ZjCA4I
+         fWng==
+X-Forwarded-Encrypted: i=1; AJvYcCV4if74Bm0t7vuaP1JM66Q5iJgB0UZUThrV0bEvCfYUsEfwxPX4fEpUgIwtq1K5QEQpPOo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzg7qkuxrwjBoLNin5NPnHJ46jIhbAS4Zj4LPw8hyiW+nZeX2Jn
+	boW1MRS6KJuvsvUa+OlyfkwUPXw/hwT+XJMY0SeDBIMB15IYShXeiTGX
+X-Gm-Gg: ATEYQzxg/yeVSvF3scpz3duKHnFz+U3l2yRdL7CQ5NpSi1ocpvkZ8fNvqWlzZ/pLg7V
+	fQdlR71vXoLXdJMdVoZwgmd9ZoAGv3ebanBbSxLRNr2biCM/StYZ3uR3xZvuEv71jiJEX650PCu
+	K8Bt430tKV6EPTCSpHkEh9xhUNLx88Nz4pydt+pAcgH1pSW3h8StIILhqKGDRcqL84UuesXTFyI
+	igyAh6R/NPioxaBvgwIGNKlV4htmkO+zOa6DNaLB+JPBOCNt6pKceRbvozE4UepnToI02THlkC6
+	3tjy5jgJDuqEEFO3hHqe1ZY9JmZSxoJTjzkd4wVYo95i3LgDlkMyIDcRiVcghvkwpnBP1SpXCbe
+	fwUUaReb/CyMzjcqLqkJMFxXsMdqCnn5QOxO52cJjFNM4+iD1ADcx8wvk7l+zUsnIpfpz9yfEIa
+	YFqv/ruqUj336z9BwMMBI/smY4iiEd9zNblS3F5S3uHhoivjTx/mtW61H3wbDpcF39ams/6/r3Q
+	Q0kXQ==
+X-Received: by 2002:a05:7300:cd8e:b0:2c1:571f:b821 with SMTP id 5a478bee46e88-2c15d49f242mr730268eec.28.1774397303666;
+        Tue, 24 Mar 2026 17:08:23 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:41fb:8dcd:b77b:d6ce? ([2620:10d:c090:500::bed7])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b1a88e5sm21094754eec.13.2026.03.24.17.08.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Mar 2026 17:08:23 -0700 (PDT)
+Message-ID: <17127463da926dd8850d1b5c8e645da15cca2f0a.camel@gmail.com>
+Subject: Re: [PATCH v2 bpf-next 4/6] bpf: Simulate branches to prune based
+ on range violations
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+Cc: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>,  Shung-Hsi Yu <shung-hsi.yu@suse.com>,
+ Srinivas Narayana <srinivas.narayana@rutgers.edu>, Santosh Nagarakatte
+ <santosh.nagarakatte@rutgers.edu>
+Date: Tue, 24 Mar 2026 17:08:21 -0700
+In-Reply-To: <CAM=Ch05-XWF-x_VzUZAWhRO9eum-bjdutuwvPXEcOvnx_0omAA@mail.gmail.com>
+References: <cover.1774025082.git.paul.chaignon@gmail.com>
+	 <d4fe45f8bd5c6a48efd2ba3b66932bf7eb5aa020.1774025082.git.paul.chaignon@gmail.com>
+	 <847173114a13630e1512ad05375c6b407720a916.camel@gmail.com>
+	 <CAM=Ch05-XWF-x_VzUZAWhRO9eum-bjdutuwvPXEcOvnx_0omAA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1774025082.git.paul.chaignon@gmail.com> <d4fe45f8bd5c6a48efd2ba3b66932bf7eb5aa020.1774025082.git.paul.chaignon@gmail.com>
- <847173114a13630e1512ad05375c6b407720a916.camel@gmail.com>
-In-Reply-To: <847173114a13630e1512ad05375c6b407720a916.camel@gmail.com>
-From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
-Date: Tue, 24 Mar 2026 19:59:33 -0400
-X-Gm-Features: AQROBzCrVUaMgDRfv1UyzLmeZr2ndv4GZnym7E7PbAAczBOcnia7f3vXIMYBr-o
-Message-ID: <CAM=Ch05-XWF-x_VzUZAWhRO9eum-bjdutuwvPXEcOvnx_0omAA@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 4/6] bpf: Simulate branches to prune based on
- range violations
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Shung-Hsi Yu <shung-hsi.yu@suse.com>, 
-	Srinivas Narayana <srinivas.narayana@rutgers.edu>, 
-	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 23, 2026 at 3:05=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
->
-> On Fri, 2026-03-20 at 17:49 +0100, Paul Chaignon wrote:
->
-> [...]
->
-> > @@ -16717,11 +16717,48 @@ static void find_good_pkt_pointers(struct bpf=
-_verifier_state *vstate,
-> >       }));
-> >  }
-> >
-> > +static void regs_refine_cond_op(struct bpf_reg_state *reg1, struct bpf=
-_reg_state *reg2,
-> > +                             u8 opcode, bool is_jmp32);
-> > +static u8 rev_opcode(u8 opcode);
-> > +
-> > +/* Learn more information about live branches by simulating both branc=
-hes being
-> > + * taken using regs_refine_cond_op. Because regs_refine_cond_op is sou=
-nd when
-> > + * the branch is taken, if it produces ill-formed register bounds, it =
-must mean
-> > + * that the branch is dead.
-> > + */
-> > +static int simulate_both_branches_taken(struct bpf_verifier_env *env, =
-u8 opcode, bool is_jmp32)
-> > +{
-> > +     /* Fallthrough (FALSE) branch */
-> > +     regs_refine_cond_op(&env->false_reg1, &env->false_reg2, rev_opcod=
-e(opcode), is_jmp32);
-> > +     reg_bounds_sync(&env->false_reg1);
-> > +     reg_bounds_sync(&env->false_reg2);
-> > +     /* If there is a range bounds violation in *any* of the abstract =
-values in
-> > +      * either reg_states in the FALSE branch (i.e. reg1, reg2), the
-> > +      * FALSE branch must be dead. Only TRUE branch will be taken.
-> > +      */
-> > +     if (range_bounds_violation(&env->false_reg1) || range_bounds_viol=
-ation(&env->false_reg2))
-> > +             return 1;
-> > +
-> > +     /* Jump (TRUE) branch */
-> > +     regs_refine_cond_op(&env->true_reg1, &env->true_reg2, opcode, is_=
-jmp32);
-> > +     reg_bounds_sync(&env->true_reg1);
-> > +     reg_bounds_sync(&env->true_reg2);
-> > +     /* If there is a range bounds violation in *any* of the abstract =
-values in
-> > +      * either reg_states in the TRUE branch (i.e. true_reg1, true_reg=
-2), the
-> > +      * TRUE branch must be dead. Only FALSE branch will be taken.
-> > +      */
-> > +     if (range_bounds_violation(&env->true_reg1) || range_bounds_viola=
-tion(&env->true_reg2))
-> > +             return 0;
->
-> Why did you chose to limit these checks to range_bounds_violation(),
-> excluding const_{subreg_,}tnum_out_of_sync_with_range_bounds()?
+On Tue, 2026-03-24 at 19:59 -0400, Harishankar Vishwanathan wrote:
 
-The main reason was because the invariant violations were typically
-only detected by
-range_bounds_violations().
+[...]
 
-> Also, it appears that tnum bounds checking functions are unnecessarily
-> restricted and should be implemented as follows:
->
->   static bool const_tnum_out_of_sync_with_range_bounds(struct bpf_reg_sta=
-te *reg)
->   {
->
->         u64 tnum_umin =3D reg->var_off.value;
->         u64 tnum_umax =3D reg->var_off.value | reg->var_off.mask;
->         s64 tnum_smin =3D (s64)tnum_umin;
->         s64 tnum_smax =3D (s64)tnum_smax;
->
->         // check that [tnum_umin, tnum_umax] and [reg->umin_value, reg->u=
-max_value] intersect
->         // check that [tnum_smin, tnum_smax] and [reg->smin_value, reg->s=
-max_value] intersect
->         return ...;
->   }
->
-> Wdyt?
+> > Also, it appears that tnum bounds checking functions are unnecessarily
+> > restricted and should be implemented as follows:
+> >=20
+> >   static bool const_tnum_out_of_sync_with_range_bounds(struct bpf_reg_s=
+tate *reg)
+> >   {
+> >=20
+> >         u64 tnum_umin =3D reg->var_off.value;
+> >         u64 tnum_umax =3D reg->var_off.value | reg->var_off.mask;
+> >         s64 tnum_smin =3D (s64)tnum_umin;
+> >         s64 tnum_smax =3D (s64)tnum_smax;
+> >=20
+> >         // check that [tnum_umin, tnum_umax] and [reg->umin_value, reg-=
+>umax_value] intersect
+> >         // check that [tnum_smin, tnum_smax] and [reg->smin_value, reg-=
+>smax_value] intersect
+> >         return ...;
+> >   }
+> >=20
+> > Wdyt?
+>=20
+> I like the idea! If we do this, we should also rename the function to sim=
+ply
+> "tnum_range_mismatch" or something along those lines (as mentioned in
+> the other thread),
+> dropping the "const".
+>=20
+> Technically, the verifier should maintain the invariant that all domain
+> pairs always have intersections. There are 10 domain pairs:
+> u64_s64, u64_tnum, s64_tnum, u32_s32, u32_tnum, s32_tnum,
+> u64_u32, u64_s32, u32_s64, s64_s32. We can have intersection checks
+> for each of these pairs, or we can stick to the major ones, i.e. the top =
+6
+> in this list.
+>=20
+> Checking for intersections was part of the original idea in the RFC
+> for tnum_step()
+> I had sent a while back [1], which was about detecting intersection betwe=
+en
+> tnum and u64.
+>=20
+> Generally a simple check will be
+> if (tmin > umax) || (tmax < umin) // no intersection
+>=20
+> The original idea in the RFC was to use tnum_step to make this check
+> complete. Particularly, for cases like:
+>=20
+>         t =3D x0x1 {1, 3, 9, 11}
+>         r =3D [4, 8] {4, 5, 6, 7, 8}
+>=20
+> The above check won't suffice. We can add the following check:
+>=20
+> if tnum_step(t, umin) > umax) // no intersection
 
-I like the idea! If we do this, we should also rename the function to simpl=
-y
-"tnum_range_mismatch" or something along those lines (as mentioned in
-the other thread),
-dropping the "const".
+Yes, this makes sense.
 
-Technically, the verifier should maintain the invariant that all domain
-pairs always have intersections. There are 10 domain pairs:
-u64_s64, u64_tnum, s64_tnum, u32_s32, u32_tnum, s32_tnum,
-u64_u32, u64_s32, u32_s64, s64_s32. We can have intersection checks
-for each of these pairs, or we can stick to the major ones, i.e. the top 6
-in this list.
+> Since tnum_step() has been upstreamed, maybe it is a good time to
+> revisit the idea, and have a sound and complete intersection check?
+> Or do you think that is overkill for this patch?
+>=20
+> Also, then, should this patch introduce domain checks for all 10 domain p=
+airs?
 
-Checking for intersections was part of the original idea in the RFC
-for tnum_step()
-I had sent a while back [1], which was about detecting intersection between
-tnum and u64.
+I'd say we should check each and every but 10 sounds a bit scary.
+Maybe do it in a straightforward way and see if it shows in perf
+profile? Trying on a few large programs?
 
-Generally a simple check will be
-if (tmin > umax) || (tmax < umin) // no intersection
-
-The original idea in the RFC was to use tnum_step to make this check
-complete. Particularly, for cases like:
-
-        t =3D x0x1 {1, 3, 9, 11}
-        r =3D [4, 8] {4, 5, 6, 7, 8}
-
-The above check won't suffice. We can add the following check:
-
-if tnum_step(t, umin) > umax) // no intersection
-
-Since tnum_step() has been upstreamed, maybe it is a good time to
-revisit the idea, and have a sound and complete intersection check?
-Or do you think that is overkill for this patch?
-
-Also, then, should this patch introduce domain checks for all 10 domain pai=
-rs?
-
-[1]: https://lore.kernel.org/bpf/20251107192328.2190680-1-harishankar.vishw=
-anathan@gmail.com/
-
-> > +
-> > +     /* Both branches are possible, we can't determine which one will =
-be taken. */
-> > +     return -1;
-> > +}
-> > +
-> >  /*
-> >   * <reg1> <op> <reg2>, currently assuming reg2 is a constant
-> >   */
-> > -static int is_scalar_branch_taken(struct bpf_reg_state *reg1, struct b=
-pf_reg_state *reg2,
-> > -                               u8 opcode, bool is_jmp32)
-> > +static int is_scalar_branch_taken(struct bpf_verifier_env *env, struct=
- bpf_reg_state *reg1,
-> > +                               struct bpf_reg_state *reg2, u8 opcode, =
-bool is_jmp32)
-> >  {
-> >       struct tnum t1 =3D is_jmp32 ? tnum_subreg(reg1->var_off) : reg1->=
-var_off;
-> >       struct tnum t2 =3D is_jmp32 ? tnum_subreg(reg2->var_off) : reg2->=
-var_off;
->
-> [...]
+[...]
