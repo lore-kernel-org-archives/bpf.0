@@ -1,67 +1,227 @@
-Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DE4A3E4C7F
-	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 17:34:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E6E34B68C
+	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 17:36:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774460046; cv=none; b=r2UqPdYCCCqRP0ehc1ZZSIjr+TEyr36JjPZ+QTWd1yc8cWIsMrr19WLvzXooUTaw1aI55KfMe1jzct7QQynKczuj8KdNqKzpUeeA26VWMXQimnYyebxic7JNKwEpo874kVj1NP3EvA5yxkM6GcYLO0BKZFtjA9o1fikUqMANN74=
+	t=1774460169; cv=none; b=IPZur50POBti/ZLY2BjdSby732bpu0/vyyEsC95N8x6boT386lp9vzQmy6+c6s8MhELneu7W4ZraF4j1Q0B4ts3QR+sv6n81S5i2smc4rQNXn5HyrpmSgc6g6PmvNNH1PhzpLL0lTtvbuOtPCbp/hsEDKN2Zwi0ZHYaNiZjmdvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774460046; c=relaxed/simple;
-	bh=4M11YbD9z8oBJeyAOn0ddq/b5r2GHRThYIozQUFrkts=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dvPeBL6VK5p48+xbEzyR+cW89ZsKnqIgZOI6lcsR1hQf4YgZdFtQzzXaGGUMWw8dZc9aTScYvVtp+3mvYs0qfyDtEgFWnz2stBDKt8K8NUYzqavnEq9IxA1aV+UIrAKGKCZwcwxJaCLH/+LmqnZ3wv+lLW7aiHaJeK5ZFTAWovA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=s0FuTW3y; arc=none smtp.client-ip=95.215.58.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1774460169; c=relaxed/simple;
+	bh=+l0jUlugqhIlozPsvvUqrOGD8ObMwPDCrB1hnJ/l/TM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ZQYJteWHNxu1RpRqTmbX5C5jzNtC0DbRRZHWGQMnoKEifu27URAl4Q8+JfbSJNLnAm007Of9a/9y+/DX26a8d8WSduSB2uvPl8KN2KCAkd6GCFCQUiR9awpg1QcKecy5CO6dLp/Ems4mA9KzJ7sl8cL5URQqgJYNN8gR0iSkfdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YVDVadCE; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=aNA9twOx; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="s0FuTW3y"
-Message-ID: <cbe15485-b7c6-4e9b-80e5-36aad2dc4e2e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774460032;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YVDVadCE";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="aNA9twOx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774460167;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4M11YbD9z8oBJeyAOn0ddq/b5r2GHRThYIozQUFrkts=;
-	b=s0FuTW3yvHIwga1XtzaU8BcnhKWu5WJCZJD5aEMvkh5qqyqaYeFcEtV1nDgxBHIE1YT4XV
-	q9S5c9E7ARrXc+WFV328kEOvjSusMjPW481dDnl2krKhnaKanmnFhob+/UJ1reqiNhtwwm
-	+hf7+3E9aJ+ecELywX88T4bAMqwWsCw=
-Date: Wed, 25 Mar 2026 10:33:24 -0700
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=aknMUZi4Ykd1vZCSThVfLFs375oMsxp6htHuyPpwggE=;
+	b=YVDVadCEPgRJF1aYI+39LphZ+QY+QI7uRefEdl2l41JH2r/TMP5Zf2/QLpqvjJtHngLB5R
+	Hj1R1klI9lNZgeWu6lDjuTzfdexvmer4rT1aBQwX+EPZlruTP47LO3drakGxHMMoHJfIkY
+	gN8zg+9XwCs1sLQY+lxYcGWt1doXiYw=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-158-TKhxQKbWPEmwoTNGoWZXfg-1; Wed, 25 Mar 2026 13:36:05 -0400
+X-MC-Unique: TKhxQKbWPEmwoTNGoWZXfg-1
+X-Mimecast-MFC-AGG-ID: TKhxQKbWPEmwoTNGoWZXfg_1774460164
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-4362197d1easo32868f8f.2
+        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 10:36:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1774460164; x=1775064964; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aknMUZi4Ykd1vZCSThVfLFs375oMsxp6htHuyPpwggE=;
+        b=aNA9twOxrf/aUhL5JPMpdhUiqc32srNyG2XeadwlezAG0chai0b+kewoiW/AhbMdi8
+         HdMRf1w63GO9sohMannMUvObix0Z5oylvllvnD29j0Wry+M3re+Rk+IDcWkO39oFR4o6
+         1H/WC5wdG65sSOoRYspcWGvfihet+90vLhSPjp4kSVGnQ43mFuIgrQtyLjinFSMafU3w
+         rFFPd3TEReZmo/hO6XngxWrjSw2cC/lRAeljw5XBAa2gMJgHkeL6nBFWP4EXTHQjAzop
+         j7rln8c9Hdb0WN2Aj0pXMUvwkQcSm+sDaNzpFoxnWW/pUsZw8dZzKD7Wn06IOb90oSe3
+         tu9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774460164; x=1775064964;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aknMUZi4Ykd1vZCSThVfLFs375oMsxp6htHuyPpwggE=;
+        b=OoE+xIzYd1UiJxPKyn1QIF5Zltpnii+DGwD3rl5lSTxQU8GwKlQMditSJqiANO+LnZ
+         GJt+xvJx7DP4QIoAe13xngKLNQ2MXTTYzBlrifnM3T175tU4ZWCiWKxk0K+ftHE/O8tE
+         zv+D7gFVo05hFjRbyusakmULPSadabY1JcBFlJuzYkLNtdF3taMUUh4KCflMlcDHlHSZ
+         PzBNlP+Oe8K/Nlo1GFcU5W4b6ajvqvZWFTHTwyTkbMuMeqri98i4/KGV0fT+MLDjH35e
+         ha+R8Q6bBfsr2rJtfedKSztcNAgC3e5BaAwbxhT9f9qVyOMVb9xDvVIJDwKIVkXC2snD
+         67+w==
+X-Gm-Message-State: AOJu0YzyCKAK4uB5Tq8AdV3fYcPEeo1rnneelzKnhuALNWp6qTm2EDXB
+	YtMJrXGApA0PN/WVZLIPF4nE1l2nTKm0OCSEHU9MNzTYwmD3t07ZRKlj7qKYWMWFewfpcaTxGSp
+	quvTFEsrr/0SkYZdXpsGg0GZKshJ5Tb8X66ViUDLQ5Z7EAuNEOOzQdQ==
+X-Gm-Gg: ATEYQzyfovTUngbrxPGTTkCwi/0eV7TQY7iVOEbWS+Zs3KYhOAdGtRtn+nZef1VLuV+
+	NltazZkBbghZSx+i/CVLE7W2T3y3gj6D9FAQ/xBnjB2amtTMZZlx4PiHBzI0HySbGhG9GU5b5AA
+	K78NidzYS+1iPUBVfKo8Co6EX78LluB8LquOM6Gzi6JOkmyAV2gcGBvDq8OHIM10rZsbchy6S2w
+	LZNeaemY13fip+d6+lx/fXF9dkSf8XWkl1hvckF5ZQi23fBLv8X3Thqd3zEZtcCzix7xmW613hH
+	P36G69kA9maFLXwGlMrhxEvCGvWcc0t877jItQ/d/GZLIPyz4AqIt5QmpYpraYS2797xbD8yH4b
+	1wnFIW7UMCl8mC+N9
+X-Received: by 2002:a05:600c:3b12:b0:485:3f1c:d887 with SMTP id 5b1f17b1804b1-4871606dc4fmr68223395e9.26.1774460164110;
+        Wed, 25 Mar 2026 10:36:04 -0700 (PDT)
+X-Received: by 2002:a05:600c:3b12:b0:485:3f1c:d887 with SMTP id 5b1f17b1804b1-4871606dc4fmr68222725e9.26.1774460163566;
+        Wed, 25 Mar 2026 10:36:03 -0700 (PDT)
+Received: from redhat.com ([2a0d:6fc0:1525:da00:3ac2:1a22:72ff:4256])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-487166064fasm27148915e9.7.2026.03.25.10.36.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Mar 2026 10:36:03 -0700 (PDT)
+Date: Wed, 25 Mar 2026 13:36:00 -0400
+From: "Michael S. Tsirkin" <mst@redhat.com>
+To: linux-kernel@vger.kernel.org
+Cc: bpf@vger.kernel.org, Simon Schippers <simon.schippers@tu-dortmund.de>,
+	willemdebruijn.kernel@gmail.com, jasowang@redhat.com,
+	andrew+netdev@lunn.ch, davem@davemloft.net, kuba@kernel.org,
+	pabeni@redhat.com, eperezma@redhat.com, leiyang@redhat.com,
+	stephen@networkplumber.org, jon@nutanix.com,
+	tim.gebauer@tu-dortmund.de, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	virtualization@lists.linux.dev, Eric Dumazet <edumazet@google.com>
+Subject: [PATCH v2 net] ptr_ring: disable KCSAN warnings
+Message-ID: <dd3984b3bce9df3591927f927668cb31cc7ecf34.1774460059.git.mst@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 03/11 net-next v5] ipv6: replace IS_BUILTIN(CONFIG_IPV6)
- with IS_ENABLED(CONFIG_IPV6)
-To: Fernando Fernandez Mancera <fmancera@suse.de>
-Cc: =?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, bpf@vger.kernel.org
-References: <20260325120928.15848-1-fmancera@suse.de>
- <20260325120928.15848-4-fmancera@suse.de>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20260325120928.15848-4-fmancera@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email 2.27.0.106.g8ac3dc51b1
+X-Mutt-Fcc: =sent
 
-On 3/25/26 5:08 AM, Fernando Fernandez Mancera wrote:
-> As IPv6 is built-in only, it does not make sense to continue using
-> IS_BUILTIN(CONFIG_IPV6). Therefore, replace it with IS_ENABLED() when
-> necessary and drop it if it isn't valid anymore.
+Eric Dumazet reported KCSAN warnings:
 
-Acked-by: Martin KaFai Lau <martin.lau@kernel.org>
+BUG: KCSAN: data-race in pfifo_fast_dequeue / pfifo_fast_enqueue
+
+write to 0xffff88811d5ccc00 of 8 bytes by interrupt on cpu 0:
+__ptr_ring_zero_tail include/linux/ptr_ring.h:259 [inline]
+__ptr_ring_discard_one include/linux/ptr_ring.h:291 [inline]
+__ptr_ring_consume include/linux/ptr_ring.h:311 [inline]
+__skb_array_consume include/linux/skb_array.h:98 [inline]
+pfifo_fast_dequeue+0x770/0x8f0 net/sched/sch_generic.c:770
+dequeue_skb net/sched/sch_generic.c:297 [inline]
+qdisc_restart net/sched/sch_generic.c:402 [inline]
+__qdisc_run+0x189/0xc80 net/sched/sch_generic.c:420
+qdisc_run include/net/pkt_sched.h:120 [inline]
+net_tx_action+0x379/0x590 net/core/dev.c:5793
+handle_softirqs+0xb9/0x280 kernel/softirq.c:622
+do_softirq+0x45/0x60 kernel/softirq.c:523
+__local_bh_enable_ip+0x70/0x80 kernel/softirq.c:450
+local_bh_enable include/linux/bottom_half.h:33 [inline]
+bpf_test_run+0x2db/0x620 net/bpf/test_run.c:426
+bpf_prog_test_run_skb+0x9a4/0xef0 net/bpf/test_run.c:1159
+bpf_prog_test_run+0x204/0x340 kernel/bpf/syscall.c:4721
+__sys_bpf+0x52e/0x7e0 kernel/bpf/syscall.c:6246
+__do_sys_bpf kernel/bpf/syscall.c:6341 [inline]
+__se_sys_bpf kernel/bpf/syscall.c:6339 [inline]
+__x64_sys_bpf+0x41/0x50 kernel/bpf/syscall.c:6339
+x64_sys_call+0x10cb/0x3020 arch/x86/include/generated/asm/syscalls_64.h:322
+do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+do_syscall_64+0x12c/0x370 arch/x86/entry/syscall_64.c:94
+entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+read to 0xffff88811d5ccc00 of 8 bytes by task 22632 on cpu 1:
+__ptr_ring_produce include/linux/ptr_ring.h:106 [inline]
+ptr_ring_produce include/linux/ptr_ring.h:129 [inline]
+skb_array_produce include/linux/skb_array.h:44 [inline]
+pfifo_fast_enqueue+0xd5/0x2c0 net/sched/sch_generic.c:741
+dev_qdisc_enqueue net/core/dev.c:4144 [inline]
+__dev_xmit_skb net/core/dev.c:4188 [inline]
+__dev_queue_xmit+0x6a4/0x1f20 net/core/dev.c:4795
+dev_queue_xmit include/linux/netdevice.h:3384 [inline]
+__bpf_tx_skb net/core/filter.c:2153 [inline]
+__bpf_redirect_common net/core/filter.c:2197 [inline]
+__bpf_redirect+0x862/0x990 net/core/filter.c:2204
+____bpf_clone_redirect net/core/filter.c:2487 [inline]
+bpf_clone_redirect+0x20c/0x290 net/core/filter.c:2450
+bpf_prog_53f18857bc887b09+0x22/0x2a
+bpf_dispatcher_nop_func include/linux/bpf.h:1402 [inline]
+__bpf_prog_run include/linux/filter.h:723 [inline]
+bpf_prog_run include/linux/filter.h:730 [inline]
+bpf_test_run+0x29d/0x620 net/bpf/test_run.c:423
+bpf_prog_test_run_skb+0x9a4/0xef0 net/bpf/test_run.c:1159
+bpf_prog_test_run+0x204/0x340 kernel/bpf/syscall.c:4721
+__sys_bpf+0x52e/0x7e0 kernel/bpf/syscall.c:6246
+__do_sys_bpf kernel/bpf/syscall.c:6341 [inline]
+__se_sys_bpf kernel/bpf/syscall.c:6339 [inline]
+__x64_sys_bpf+0x41/0x50 kernel/bpf/syscall.c:6339
+x64_sys_call+0x10cb/0x3020 arch/x86/include/generated/asm/syscalls_64.h:322
+do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+do_syscall_64+0x12c/0x370 arch/x86/entry/syscall_64.c:94
+entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+value changed: 0xffff888104a93a00 -> 0x0000000000000000
+
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 1 UID: 0 PID: 22632 Comm: syz.0.4135 Tainted: G W syzkaller #0
+PREEMPT(full)
+Tainted: [W]=WARN
+Hardware name: Google Google Compute Engine/Google Compute Engine,
+BIOS Google 01/24/2026
+
+There is no race on ring accesses: reading/writing a partial pointer
+would be fine, because the reading is done by the producer
+which merely cares about NULL/non NULL.
+Document and disable the warnings using data_race().
+
+Tested-by: Opus Sonnet 4.6 1M window.
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+---
+
+changes from v1:
+	two more places, commit log tweak
+
+ include/linux/ptr_ring.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/include/linux/ptr_ring.h b/include/linux/ptr_ring.h
+index 534531807d95..d2c3629bbe45 100644
+--- a/include/linux/ptr_ring.h
++++ b/include/linux/ptr_ring.h
+@@ -48,7 +48,7 @@ struct ptr_ring {
+  */
+ static inline bool __ptr_ring_full(struct ptr_ring *r)
+ {
+-	return r->queue[r->producer];
++	return data_race(r->queue[r->producer]);
+ }
+ 
+ static inline bool ptr_ring_full(struct ptr_ring *r)
+@@ -103,7 +103,7 @@ static inline bool ptr_ring_full_bh(struct ptr_ring *r)
+  */
+ static inline int __ptr_ring_produce(struct ptr_ring *r, void *ptr)
+ {
+-	if (unlikely(!r->size) || r->queue[r->producer])
++	if (unlikely(!r->size) || data_race(r->queue[r->producer]))
+ 		return -ENOSPC;
+ 
+ 	/* Make sure the pointer we are storing points to a valid data. */
+@@ -194,7 +194,7 @@ static inline void *__ptr_ring_peek(struct ptr_ring *r)
+ static inline bool __ptr_ring_empty(struct ptr_ring *r)
+ {
+ 	if (likely(r->size))
+-		return !r->queue[READ_ONCE(r->consumer_head)];
++		return !data_race(r->queue[READ_ONCE(r->consumer_head)]);
+ 	return true;
+ }
+ 
+@@ -256,7 +256,7 @@ static inline void __ptr_ring_zero_tail(struct ptr_ring *r, int consumer_head)
+ 	 * besides the first one until we write out all entries.
+ 	 */
+ 	while (likely(head > r->consumer_tail))
+-		r->queue[--head] = NULL;
++		data_race(r->queue[--head] = NULL);
+ 
+ 	r->consumer_tail = consumer_head;
+ }
+-- 
+MST
 
