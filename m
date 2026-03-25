@@ -1,248 +1,156 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B0F334D389
-	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 19:40:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774467613; cv=pass; b=Lk3A/vV1KjkhGfT2SePBXMqzuhMbQLIhnWmn9oY+3NacxCSP0xwTjZiaLL8uSjDlqcg/YKODyPWowNAMGJUIi/pcuSvner44ySFGtrgk7Rv9DYEP1NlgAvVJmxTMPy2NrLe+QaC7AdYzBt9O4dPnl7ZUAd1yn6FjK04KuFL13sA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774467613; c=relaxed/simple;
-	bh=oeicwxjwchcF9WqvWg1RQaqLIIuLCbf8G0N4FWHt8Q4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SfL08Frwr5PPO3w7NpXTgg13mxttGBL4hGqOj4cMkcmO2eAu8npi6poRUgXIOojn5mOidt+mhd1XqUZtVtkcCYIifI+HUd9D39ZgvbCyEsJm/g76lm/f+nlu6SEQW+N8aK1xG6XXVawPGSi/X6Ytfko48gOLCRiSHHB8tf4s1S0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qk2iy/p5; arc=pass smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B127D35DA5D
+	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 19:41:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774467714; cv=none; b=ml3OtJTnuEOBPT+PzOWoGhVyq9uALFm7CAp5zS/MlJlnTEs/CsSGFDGgIsEh4MngzcjTzAtA++hmW4XklvnUrN4viXlmYOyPs34KtnXIH9+gE24Qvsp7BIRJCKSXWHCdmbrGdatE3k+ez98+jZyXiWcWrfxLcPxp/V5r76PgU/0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774467714; c=relaxed/simple;
+	bh=d+nfjMfEVHf7jtz1MIQh+squ9QrgehK0qZ/mTLc/EZw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tueWMPpC660+DuH3/K3tPBgXs/eSJJdT+rjXfHTy36V1usiBDFlVLLH0buqQw09KrawgqxMOMVqfpskBSVxFp9N59kQ/wSziYbicnfBlDDT/XwQeq7BegvBu4TxzzDy8a7FWptMaNvr/srAzT5IapSNzuEANgj5qWgDPeUBXwjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D8Zm4OEg; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qk2iy/p5"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-43b467dcf0bso848147f8f.0
-        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 12:40:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774467611; cv=none;
-        d=google.com; s=arc-20240605;
-        b=eTXBIwwYv4hgju6a5qgmxHmAZwvubVNoQD6r/nm3wRQON/hP7TLlPDaKOMp7jn4B7Y
-         jvHIPWQtVdalLFYEwa3mJLdunTzcVzFYyIF0KIh/DMLIpHdmOQr0SkEh1PXNvueHAhWV
-         UQgkiuyWWAtIgEvgIuOCZHNmuMC91ip/z4ZA0zdcKn3x2ntYXbAYDBhnvIHR0RmJExcY
-         /XSuRisr2yBE4W2yG/E37UJA5PA2rcff1xFn9V7UrVUmpjB2fqkCd2l0J7fdYu0MSTkS
-         7LK8qadAroPUlHFbg9jd0Gp/Fwhb3nZJHFFrgtpVwnrwm+ZK3EG1xHAtyK289r7XwJyb
-         llCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=1jaRlaeffeDJBGaCdxhQ4LgTNj3RIqYHRelemKVaRzI=;
-        fh=LW4tal2/VBYc0l0MxeNgrFyEqHJg4b+NmJhYvLofnN0=;
-        b=GRtDl4nJA8Fw4JzGNpyFzZa9swtb3BLbd+Wyj/lmfgMXkve1PNvwi5zMYnN1/tIDAA
-         UHGcv7O6XYGz/1xmP/D5Tr+dITVORnRecDsXxxshCrhEJuwTyEsWDjUpNjKPU5HLei9J
-         04kYTqxDxjV4zV48aRIyi1AbiHuDbqSC+sim0EOcUWgm+I1oE7lIoI2KOw2o+QbS8gqU
-         VASdC1L0HgMm+oFZ2q6uGb51qHTuVocMuI6Vx2YrN5HIKKHLk5K5O3U36z5+LM9/GduK
-         txMobm/oK4HWcngZUUwE2/lAvbchMpOXPy0VCAF68GM522MzDW3xGTK2HW9Ut6+DOWzL
-         KkGQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D8Zm4OEg"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-486fb14227cso2670645e9.3
+        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 12:41:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774467611; x=1775072411; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1774467711; x=1775072511; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1jaRlaeffeDJBGaCdxhQ4LgTNj3RIqYHRelemKVaRzI=;
-        b=Qk2iy/p54elQLzB8JP2+xrdLuCL06Leb5yvd7tCXwqvJRJOB6fmelu3xzcweMSL5eK
-         DdVCpx+PZCs6S4+56dn6/gS5fJG4EC4jY1LoabApjKwhKgXCKhpqzrnJ3Um8rLiIy/It
-         7PWJX+JcBqMdgAvc2MFZSqnJvUW4JR0SkNUwELdDjt4o4zC5n+00/A2bubKsq6WNfEA2
-         Btomix0C1N7pitC5lxxWn+AtUMWNjCuwtttJHozTLDHhiuQrnfNCYMWx452FtkTB6qHX
-         tTA5v8kooQyM8eb4D7EbbuHlxdCHK5SFbPf8c7c2PbVk0fcDNgoalA29DAvSxh9FOe4N
-         4Oiw==
+        bh=5agou4BHmM67c6SSsDwlj7qtFxZ2/CyU4qlcqH2Z8DI=;
+        b=D8Zm4OEgE7zuhMoO+TLA6zFkoCvrIu6Zulcl82z1eiQnUVxOyFpLzEDJ237N96a63L
+         q+ghLzhGjUVdtJnfPtk7wsAP1ykwBAmNJlRKmggQNUTHhMPdcqaYhrP7YYTLu7QwPU7E
+         GaN3y5XNr27D8BOGXzhOvOU8idIz+YpoSyZfo7jO4SjvekAgsJzLKIjJWXMm0/q4xdtC
+         R6M7fMSu/bc3U1VVmsE0QnTRmki7frlt9B+QlFeLeRPkftJTygbzwIyQ0sCjLn/MWkI9
+         LIcPpOgUvglVrXHmspUF2S0XPWXnf0yu54sjnr0l2jWGbRVq3qgGH7hrpA16cU+ymnpf
+         r9mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774467611; x=1775072411;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20251104; t=1774467711; x=1775072511;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=1jaRlaeffeDJBGaCdxhQ4LgTNj3RIqYHRelemKVaRzI=;
-        b=GzO87F4Ll5eMUjqWcApzo0As6rnYf/lrurYD6gRR3wORD7uaRu8mVaZgydjWmGw0/U
-         Cvt/VJxKfh5HbviVpG9h+VXwi3pDM9BVCt1bE9DBvTuO0YNDmOs+e0wXckUy68aV7EKc
-         jAxP+t3zYmmAottVJqpxd8xDeNcUwtuJTMS7Nq9XzDbduRRBXjmtDHNDxRRTVQP5ru/c
-         uUwoBW+jN8yCVK4tvoaHPR4cuWVd9TGvGBpPrqvuMcBASzwdJ3PL2Eo7oQghTLxX7xum
-         EaEN8wyHUB5/N5OO7vLsJVWCGgnVUBnVDUbayZIohGf1/kCLuZJdi67ZW6N9ODC2ryQE
-         eccw==
-X-Forwarded-Encrypted: i=1; AJvYcCVPuiHeomAo9BziYOLwP4NuB9sQiuJSYaoga85rOpM44Ez5TqW1ijXDILWJbe8KNHGNr9o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwhYqmageHePf3hHzMnAtmedjhbf4Yyz5LcydCLGjwfbf6jEU2W
-	6eiRls0LfnDvkwMumWhfGbwnJ7Wb+S3il+6ZV22Z0OeSVE45SyBz7l57xXwEDIXnjpRu6ZRiCy8
-	gonuZxrinE6rkR01hAyN0XmNyNnv831wg949LpSw=
-X-Gm-Gg: ATEYQzz7Lsuzn0kylc46Tri8ci9PK5SzXrY+x5WhKwaydqvU1eV8im9mnByQJCFOCjL
-	/qX9R3B2yOlIbgTnMhc6hR7exKbVzjj4P/RGCp/fk7lXhqboYTKKndxpPFjc4nH2rKHeCDx9Fvc
-	okfDH2LSh94q2DHBpWqppBQnR9pJ/dYHrRFcFBRXvJhQ5zjBUndPjF5HNIZWSVFfkrDzm3z+Gbm
-	IKQ1cFNLE2AtrlAzkuK3fnY+Hrdpm6ZdpIMSyZbHD/83vmjlO8Fs4q3mrKj+2lpFhw9ELOu7RPX
-	sxZ1QQ==
-X-Received: by 2002:a5d:5846:0:b0:43b:4703:9dd5 with SMTP id
- ffacd0b85a97d-43b883be2admr7963481f8f.18.1774467610501; Wed, 25 Mar 2026
- 12:40:10 -0700 (PDT)
+        bh=5agou4BHmM67c6SSsDwlj7qtFxZ2/CyU4qlcqH2Z8DI=;
+        b=sGkR4apaUi5iwQ98TFKNVwXm+Veb9Ifd4gCH4U/q0xwz2uutIfmLYMfTRl4U83WEaT
+         5wXIzoqnNj+2jAfoJIBAjr4fg21Rw7Q1UhS1vsW37pHe2p8ndBji6iXNFaaaqYNvKGDo
+         JbQllE/Qnxw9pr+56DjYP2jcTdg9rKa0OZdI+f4uqIjnZvLP8Wrl0vaq1E++qvXjFNdZ
+         zxr/+O3HaCJLiCUG1NK7O5Zzb3JWODP6Qv5hTN0PvAgLuxR1QSuPrhEargBQbnmj973g
+         zT7H0NbAePKjXJYdONpn1/W+gyKOrX7qe/ATup13rk0GptnGHYYnV4HY19xw0JcZbdvt
+         EvSg==
+X-Forwarded-Encrypted: i=1; AJvYcCW4fNZk341J8g1d+m1MRi5qb/d101nBcTeXESfi+2XkBPb4yYqXbHuaqgO//Ttovycttl8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzw7pDIQtqlRLXyXivZez5qjnFaYcS2Q16khkEBJ4RMYKT2en2i
+	h/fkJT/+wZ+fBVpXJI9X/D6bbHjswx6FFOd/PyUgKpswuKltku21n/7k
+X-Gm-Gg: ATEYQzxNiMe0Z+XSGXl4mK+hvqQ0ZAtV0JcsEnxszewqOwJ5ED4s0LEyRdooOGw+wOX
+	OCjg/+OJqtofU5waecBzd11Cs1lRH8u4HtChyPYXdQjplO0Yrs5EAOKI4HbZj4ljjHAFoEHbPu6
+	hKrOIK0K/n02g4K2Via/T2c/N20+6hSdGukL94+cp4PtOznsS/qzL2oqM7i9z+rY+isrgTHmewt
+	9xqNzw2i5Xy+Id7fyg3v5N84p3CKoQ1GLfvlnVM96eVeA59ck3aT4+UwBv0e3+RAU2PGRYaWYFN
+	LELgZZVWYKEKloNuAd3g47dxihw49Whg5dIpR236v43fwG5PSSB9IsbXp4jmfnsKKERhz4sX/4U
+	6pBKPw/EbZjDJirQ0LyLj7isatA/3B0pF2mfpDGxjwvfGJPhDcm4NaxOPKTswYTyiHt7H3kmaR+
+	Iy7sdpRZQB5ycA5nVaeCQ5RmYu9CbnkYlchATL8OvCkfAr0Ac55kjVXimS+dSHYGnk
+X-Received: by 2002:a05:600c:1c22:b0:480:20f1:7aa6 with SMTP id 5b1f17b1804b1-4871604c8e1mr76733195e9.21.1774467710858;
+        Wed, 25 Mar 2026 12:41:50 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4871fbb58a0sm688705e9.23.2026.03.25.12.41.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Mar 2026 12:41:50 -0700 (PDT)
+Date: Wed, 25 Mar 2026 19:41:46 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Jim Mattson <jmattson@google.com>
+Cc: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, x86@kernel.org, Jon
+ Kohler <jon@nutanix.com>, Nikolay Borisov <nik.borisov@suse.com>, "H. Peter
+ Anvin" <hpa@zytor.com>, Josh Poimboeuf <jpoimboe@kernel.org>, David Kaplan
+ <david.kaplan@amd.com>, Sean Christopherson <seanjc@google.com>, Borislav
+ Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, Peter
+ Zijlstra <peterz@infradead.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>, Jiri Olsa
+ <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, Andy
+ Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo
+ Molnar <mingo@redhat.com>, David Ahern <dsahern@kernel.org>, Martin KaFai
+ Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo
+ <haoluo@google.com>, Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet
+ <corbet@lwn.net>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, Asit
+ Mallick <asit.k.mallick@intel.com>, Tao Zhang <tao1.zhang@intel.com>,
+ bpf@vger.kernel.org, netdev@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v8 02/10] x86/bhi: Make clear_bhb_loop() effective on
+ newer CPUs
+Message-ID: <20260325194146.29c91953@pumpkin>
+In-Reply-To: <CALMp9eTZRucL+CUSp1yUPG0aSTpyQ=po1EmurZhX9+R+vxgbPA@mail.gmail.com>
+References: <20260324-vmscape-bhb-v8-0-68bb524b3ab9@linux.intel.com>
+	<20260324-vmscape-bhb-v8-2-68bb524b3ab9@linux.intel.com>
+	<CALMp9eTZRucL+CUSp1yUPG0aSTpyQ=po1EmurZhX9+R+vxgbPA@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <177188733084.3935219.10400570136529869673.stgit@frogsfrogsfrogs> <177188733196.3935219.3172887920210313838.stgit@frogsfrogsfrogs>
-In-Reply-To: <177188733196.3935219.3172887920210313838.stgit@frogsfrogsfrogs>
-From: Joanne Koong <joannelkoong@gmail.com>
-Date: Wed, 25 Mar 2026 12:39:57 -0700
-X-Gm-Features: AQROBzCZjUmNW3mHEyd1fr7dhM1RSyURYPV4Z6yvt_FMTpVeDdj7JRXwFxnTYS0
-Message-ID: <CAJnrk1YL3KnON-WtNjNi+2GZ+6rYvnVUnYwCk5efv0o41XkxcA@mail.gmail.com>
-Subject: Re: [PATCH 4/5] fuse: update file mode when updating acls
-To: "Darrick J. Wong" <djwong@kernel.org>
-Cc: miklos@szeredi.hu, bpf@vger.kernel.org, bernd@bsbernd.com, neal@gompa.dev, 
-	linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 23, 2026 at 3:07=E2=80=AFPM Darrick J. Wong <djwong@kernel.org>=
- wrote:
->
-> From: Darrick J. Wong <djwong@kernel.org>
->
-> If someone sets ACLs on a file that can be expressed fully as Unix DAC
-> mode bits, most local filesystems will then update the mode bits and
-> drop the ACL xattr to reduce inefficiency in the file access paths.
-> Let's do that too.  Note that means that we can setacl and end up with
-> no ACL xattrs, so we also need to tolerate ENODATA returns from
-> fuse_removexattr.
->
-> Note that here we define a "local" fuse filesystem as one that uses
-> fuseblk mode; we'll shortly add fuse servers that use iomap for the file
-> IO path to that list.
->
-> Signed-off-by: "Darrick J. Wong" <djwong@kernel.org>
-> ---
->  fs/fuse/fuse_i.h |    2 +-
->  fs/fuse/acl.c    |   43 ++++++++++++++++++++++++++++++++++++++++++-
->  2 files changed, 43 insertions(+), 2 deletions(-)
->
-> diff --git a/fs/fuse/acl.c b/fs/fuse/acl.c
-> index cbde6ac1add35a..f2b959efd67490 100644
-> --- a/fs/fuse/acl.c
-> +++ b/fs/fuse/acl.c
-> @@ -11,6 +11,18 @@
->  #include <linux/posix_acl.h>
->  #include <linux/posix_acl_xattr.h>
->
-> +/*
-> + * If this fuse server behaves like a local filesystem, we can implement=
- the
-> + * kernel's optimizations for ACLs for local filesystems instead of pass=
-ing
-> + * the ACL requests straight through to another server.
-> + */
-> +static inline bool fuse_inode_has_local_acls(const struct inode *inode)
-> +{
-> +       const struct fuse_conn *fc =3D get_fuse_conn(inode);
-> +
-> +       return fc->posix_acl && fuse_inode_is_exclusive(inode);
-> +}
-> +
->  static struct posix_acl *__fuse_get_acl(struct fuse_conn *fc,
->                                         struct inode *inode, int type, bo=
-ol rcu)
->  {
-> @@ -98,6 +110,7 @@ int fuse_set_acl(struct mnt_idmap *idmap, struct dentr=
-y *dentry,
->         struct inode *inode =3D d_inode(dentry);
->         struct fuse_conn *fc =3D get_fuse_conn(inode);
->         const char *name;
-> +       umode_t mode =3D inode->i_mode;
->         int ret;
->
->         if (fuse_is_bad(inode))
-> @@ -113,6 +126,18 @@ int fuse_set_acl(struct mnt_idmap *idmap, struct den=
-try *dentry,
->         else
->                 return -EINVAL;
->
-> +       /*
-> +        * If the ACL can be represented entirely with changes to the mod=
-e
-> +        * bits, then most filesystems will update the mode bits and dele=
-te
-> +        * the ACL xattr.
-> +        */
-> +       if (acl && type =3D=3D ACL_TYPE_ACCESS &&
-> +           fuse_inode_has_local_acls(inode)) {
-> +               ret =3D posix_acl_update_mode(idmap, inode, &mode, &acl);
-> +               if (ret)
-> +                       return ret;
-> +       }
-> +
->         if (acl) {
->                 unsigned int extra_flags =3D 0;
->                 /*
+On Wed, 25 Mar 2026 10:50:58 -0700
+Jim Mattson <jmattson@google.com> wrote:
 
-I think this sentence in this comment block "Fuse userspace is
-responsible for updating access permissions in the inode, if needed"
-needs some updating now, since this is only now true for non-local
-fuse servers
+> On Tue, Mar 24, 2026 at 11:19=E2=80=AFAM Pawan Gupta
+> <pawan.kumar.gupta@linux.intel.com> wrote:
+> >
+> > As a mitigation for BHI, clear_bhb_loop() executes branches that overwr=
+ites
+> > the Branch History Buffer (BHB). On Alder Lake and newer parts this
+> > sequence is not sufficient because it doesn't clear enough entries. This
+> > was not an issue because these CPUs have a hardware control (BHI_DIS_S)
+> > that mitigates BHI in kernel.
+> >
+> > BHI variant of VMSCAPE requires isolating branch history between guests=
+ and
+> > userspace. Note that there is no equivalent hardware control for usersp=
+ace.
+> > To effectively isolate branch history on newer CPUs, clear_bhb_loop()
+> > should execute sufficient number of branches to clear a larger BHB.
+> >
+> > Dynamically set the loop count of clear_bhb_loop() such that it is
+> > effective on newer CPUs too. Use the hardware control enumeration
+> > X86_FEATURE_BHI_CTRL to select the appropriate loop count.
+> >
+> > Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
+> > Reviewed-by: Nikolay Borisov <nik.borisov@suse.com>
+> > Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+> > ---
+> >  arch/x86/entry/entry_64.S   | 21 ++++++++++++++++-----
+> >  arch/x86/net/bpf_jit_comp.c |  7 -------
+> >  2 files changed, 16 insertions(+), 12 deletions(-)
+> >
+> > diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+> > index 3a180a36ca0e..8128e00ca73f 100644
+> > --- a/arch/x86/entry/entry_64.S
+> > +++ b/arch/x86/entry/entry_64.S
+> > @@ -1535,8 +1535,17 @@ SYM_CODE_END(rewind_stack_and_make_dead)
+> >  SYM_FUNC_START(clear_bhb_loop)
+> >         ANNOTATE_NOENDBR
+> >         push    %rbp
+> > +       /* BPF caller may require %rax to be preserved */
 
-> @@ -139,7 +164,7 @@ int fuse_set_acl(struct mnt_idmap *idmap, struct dent=
-ry *dentry,
->                  * through POSIX ACLs. Such daemons don't expect setgid b=
-its to
->                  * be stripped.
->                  */
-> -               if (fc->posix_acl &&
-> +               if (fc->posix_acl && mode =3D=3D inode->i_mode &&
+Since you need a new version change that to 'all registers preserved'.
 
-Maybe a bit verbose but imo it'd be clearer if we had a separate
-boolean tracking the case where the kernel updated the mode bits,
-instead of using "mode =3D=3D inode->i_mode" here and below for the
-fuse_do_setattr() logic block. That makes it more clear here to reason
-about (eg it'd at least make it more obvious here that we don't need
-to strip sgid since the kernel already did that when it updated the
-mode bits earlier)
+> > +       push    %rax =20
+>=20
+> Shouldn't the "push %rax" come after "mov %rsp, %rbp"?
 
->                     !in_group_or_capable(idmap, inode,
->                                          i_gid_into_vfsgid(idmap, inode))=
-)
->                         extra_flags |=3D FUSE_SETXATTR_ACL_KILL_SGID;
-> @@ -148,6 +173,22 @@ int fuse_set_acl(struct mnt_idmap *idmap, struct den=
-try *dentry,
->                 kfree(value);
->         } else {
->                 ret =3D fuse_removexattr(inode, name);
-> +               /* If the acl didn't exist to start with that's fine. */
-> +               if (ret =3D=3D -ENODATA)
-> +                       ret =3D 0;
-> +       }
-> +
-> +       /* If we scheduled a mode update above, push that to userspace no=
-w. */
-> +       if (!ret) {
-> +               struct iattr attr =3D { };
-> +
-> +               if (mode !=3D inode->i_mode) {
-> +                       attr.ia_valid |=3D ATTR_MODE;
-> +                       attr.ia_mode =3D mode;
-> +               }
-> +
-> +               if (attr.ia_valid)
-> +                       ret =3D fuse_do_setattr(idmap, dentry, &attr, NUL=
-L);
->         }
+Or delete the stack frame :-)
+It is only there for the stack trace-back code.
 
-I think this logic reads clearer if it's restructured to
+	David
 
-if (!ret && mode !=3D inode->i_mode) {
-    struct iattr attr =3D {
-            .ia_valid =3D ATTR_MODE,
-            .ia_mode =3D mode,
-     };
 
-    ret =3D fuse_do_setattr(idmap, dentry, &attr, NULL);
-}
+>=20
+> >         mov     %rsp, %rbp
+> > -       movl    $5, %ecx =20
 
->
->         if (fc->posix_acl) {
->
-
-For local / exclusive servers, the kernel already has / sets the
-refreshed attributes, so we could probably skip the invalidation logic
-here for that case since the cache is already uptodate?
-
-Thanks,
-Joanne
