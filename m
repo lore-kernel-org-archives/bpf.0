@@ -1,49 +1,49 @@
-Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012035.outbound.protection.outlook.com [52.101.66.35])
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011002.outbound.protection.outlook.com [52.101.65.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47CA71E32A2;
-	Wed, 25 Mar 2026 14:08:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DA7B318140;
+	Wed, 25 Mar 2026 14:12:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.2
 ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774447693; cv=fail; b=K6nFfVdtKvgJpcfK2S1j/yf34mzaoBEYOOyLF0bY/lcRry7VO6zRNfw/MYiCF5bHlzLUcF2plcMuFU6vr7SXPvgNq5kFKDby+r0oGeBM+2E+g3LwEJJ7INe13adqhxtsg5nPcbS0BHgTvpFHb1GgYRmLG6uQ+kJ5EtCvKtA+CEA=
+	t=1774447935; cv=fail; b=Oy2QiNyqGcAW8fcjuHUp6I6jNec1+vTpK8eEUM/yMbBaS525woPme0fkkqLb2M0okmmo6Lf/eAn5NjiN2pWdeQ548BDmu4wgrNMxMkyS0iYW+y43IAC1wXTs3SyGd7xWg3r4zzjQ3oT3E/YofWUFS6bNkWd+0p+7mJCzmHl+py4=
 ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774447693; c=relaxed/simple;
-	bh=z7NfKh0gtRaqmjtat+Ji32IAK6uqAzqoRG3g5BrjLjw=;
+	s=arc-20240116; t=1774447935; c=relaxed/simple;
+	bh=2NVYy0iQpV+7cQUqIapLPz69FbVm8Zfwrv2OpfxyBlE=;
 	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=T/8N7Qgy3Wr9JLh2mMpZR8rtg0USoWwuzYoYfASpDuvIV/nEAsRsB6DDvf5/HJGMCG6DMCzcNeFPcjjHrmLC1+2jJ6VFweMQIGBoMMTcM6LTgvUVYfyT8sQWavldgQXWdtl1yw1F8ZN8VyI78t3HSUFJX+6ukAgnQmqV3qmECb0=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=X5FuaaUq; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=X5FuaaUq; arc=fail smtp.client-ip=52.101.66.35
+	 Content-Type:MIME-Version; b=A+LpzK2By6AuAsoQztquKtsBRQ7rBGKWPnRMSm0EjrGC4YePns9A9ZsYsPAP12m0kREik/IJ6ZFw7anpiM7FEbgqARLVkCECSGbXkj6/uasLVQalhsWzAaD0w9WTOSnARrlNewYjOhg526Le0O8Pcyh8NwwVTTUG8FQSXyo0bsU=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=qjw7QNUB; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=qjw7QNUB; arc=fail smtp.client-ip=52.101.65.2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="X5FuaaUq";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="X5FuaaUq"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="qjw7QNUB";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="qjw7QNUB"
 ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=BnKCv8x7hJJSMtEZ3LyoW+KuqNBc42+kaMEQBKPwPQBEw54XhviVM2YnuFNh+CqA2YKtrG9OOjg6NjW6sqj6D03AF28u+GPsJm8cVLVPDrE1Kdt1Kp1MlvFMU7jeQQxwJLVE88qP4XYdLTTHPPyAMK5w/jp8PDttpBWqPZ0wo5a5kXZ9KIJd9AgH+P+vX6xkPcEEcDN/TLh8fVMF3RT66MCdmUObeOoyiN7hDyNSSomlZQcCh2b/HJ2hC6CrZpTBJzNG8fxt8DGM75xnmrVjN2aP8ynMlRIhfsezxAyKLifbzMgqQSGxrCK5hHySl+GOMkYxFSt9HQa4rJIYyYmPyQ==
+ b=bGzOlaNXmXuIoygiNsSPL5+WyRyUBH59ImyodMeqGxD80WuybUfw3/68ZqHRJzp+zed/jH8B1tF2Rdr8+9CfCmCOYFndEYGKiozFub6d2/RLS2FJ0Bu9kPS9uEBa9La26mxBeAO+U+laYPS9jWGq38inU2IVFRHqmYdoKDXyaO9wT/P9y63oR3b+vGa5AsrDojIRyr81QUJXw32zQMoBwYoiZuYM/8MVE8PHMz0kHp589YlI5TbhM3ZCVvcEKcEjDztBI8sxXtiFf3BXkmEfat9QFrPtERH+a7oAupCk2cM7eB0Rq2sTMWPpg6/rA5Znvz0B8vC+OGxr1sWm/RJWSA==
 ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YJ6QYbQNCAkHBRQHOVRNeV588J5KHcr3/XIoNZSqVRA=;
- b=T5uMIKfhGNQxka6fjtiZ/hzf2+SO9Tdt9WT8QnJPT/Kv0neMeN1h/Bbog0Tsq26Ze7LwdJF23nPV5BnPjMUgk0cGYExg97SOB3wkp2tPkunx4nPvQeaMVP1lNXf6tbTzv1Lync5TBuZZbEnKOiLZaU8FjxlbAXA/ujFJSMGYsrWdHiHUhH752MaYmj4Dos0mKHx76M95uUM4gowXp3qFelEzkaNnA53OVAFB/ZLqbJ8pxOj74Er+I70AozPLRu6yySsxCCuin1MR0V8uf1/wr2xaDf2heTzvYiJG4y8KdcKjq4LIgJgZUNgNb+hfb6QNCPVzC7p4uih3uOEDZsZLfg==
+ bh=PBDVhOjifwpRiAck7PVguDC40k7zDBj2sbtoDpWgUbA=;
+ b=F9/rGIYo6AF1qMft5CCBWTp2NGKhyUzGigNE/R7p1JD67y8r4J8Ns+sU4zwdIdugRIPdqfAkWwAdK81BnC0NRX3SGNZcyPzaFSvIrVFgMlwW+TAVzO+TOLqm1Tjnr1atyp7eQP/EVLw3anRBP+ahXxggqRYUv0y6o6VnGaTBVv0GmxwSUvMf09zUNdn9IO7R7ECWlPWmcN7/+PMGWR7bSNWCTDD54vGrHvZBX/Nx01KB655L7ExDS/4NJXILyCMoqqeQAWy/uUdWP+935brMCWPV0H4UViFXW83FLnUkShTOKG8S19z7j2M9yjrZWcJQzndnUDI6gUaar8Qlsp8kMw==
 ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=nvidia.com smtp.mailfrom=arm.com; dmarc=pass
+ 4.158.2.129) smtp.rcpttodomain=kernel.org smtp.mailfrom=arm.com; dmarc=pass
  (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
  (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
  spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
  dmarc=[1,1,header.from=arm.com])
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YJ6QYbQNCAkHBRQHOVRNeV588J5KHcr3/XIoNZSqVRA=;
- b=X5FuaaUqVJz3iCYkpvE04u5jjVVxHPkUwq7T+1eNejnhLbjo7J3Bq7Sg2zZMTCk9Xc777eUvd4+LrTNPrMo5yp7TNeQLIWypGQ9MejWHGsR6/y8uARYpEiF9LLLNreTvgGkNf+xpn9XVXVgPqeUXY/Yps4uIeIZSTVxK++gEh3Q=
-Received: from AS4PR09CA0030.eurprd09.prod.outlook.com (2603:10a6:20b:5d4::20)
- by GV2PR08MB11605.eurprd08.prod.outlook.com (2603:10a6:150:2d6::6) with
+ bh=PBDVhOjifwpRiAck7PVguDC40k7zDBj2sbtoDpWgUbA=;
+ b=qjw7QNUBvxo5/HHkOwDmAqlgrfDwkVPm2C30kDyD5+b26AIcSjonfq3tqzWHWZh1ZKQ8iyoV0+CVZuVkP99QsN3VGiEWN/h2r1X1NcakJCo6y+0ShpED4M8SPpn1npKB+MQqOlRIwiD9pQItjXEy97+uxiiXsBDHr6RGTjYQ60k=
+Received: from DB8PR04CA0007.eurprd04.prod.outlook.com (2603:10a6:10:110::17)
+ by AS8PR08MB6024.eurprd08.prod.outlook.com (2603:10a6:20b:23d::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.20; Wed, 25 Mar
- 2026 14:08:01 +0000
-Received: from AM4PEPF00027A62.eurprd04.prod.outlook.com
- (2603:10a6:20b:5d4:cafe::b2) by AS4PR09CA0030.outlook.office365.com
- (2603:10a6:20b:5d4::20) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.31; Wed, 25 Mar
+ 2026 14:12:07 +0000
+Received: from DB3PEPF0000885B.eurprd02.prod.outlook.com
+ (2603:10a6:10:110:cafe::10) by DB8PR04CA0007.outlook.office365.com
+ (2603:10a6:10:110::17) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.9723.31 via Frontend Transport; Wed,
- 25 Mar 2026 14:07:52 +0000
+ 25 Mar 2026 14:12:01 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
  smtp.mailfrom=arm.com; dkim=pass (signature was verified)
  header.d=arm.com;dmarc=pass action=none header.from=arm.com;
@@ -51,61 +51,60 @@ Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
  4.158.2.129 as permitted sender) receiver=protection.outlook.com;
  client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
 Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- AM4PEPF00027A62.mail.protection.outlook.com (10.167.16.71) with Microsoft
+ DB3PEPF0000885B.mail.protection.outlook.com (10.167.242.6) with Microsoft
  SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9745.21
- via Frontend Transport; Wed, 25 Mar 2026 14:08:00 +0000
+ via Frontend Transport; Wed, 25 Mar 2026 14:12:06 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ItrNiyO7zV4uf0EpOliWe+G9jNf5z75r4iqgbgswMidtzt3RXbY3jO6tV0JdEuRD+597LWP8FEbklKelZnCU0NxKX3UEEReWjBO/HwERQzCoXoBi8SxDm110Vwd4kGneWfH5/1zNb4+05I+eMl6BIPXP+mAIPCDrH8u2TJIBV+DKFwvx+/I87+7g54hBUxiCqwmOaTrhERf8mND2p5Bl2sz7gX/UJ2PxFXpee8uE5tffnusFi0GQrpHHKXVfl5WjCT2BhKASe805shzzQTv68sEM5vNWK3h9DpmVR8DblypqYX0x/fpPbEDH/wbNLr7EUnj04hIesWn0lhfy6sqVJQ==
+ b=nMsoIFpW0LHWMkvWZjaCEGMiyR9pd0P2URKXAGVLwaATffPmqLRONlkZvZ1MOXUMfBrb5arPq5Xj6NfiZUm4o6mdmJ1QPciZOu0Lgt/UhyAaafuS/7nUVJ3+ugm96wCdMeIOhy68u58G3RcCx1qWUUA5iyEPFwTIexYmAqf53krhdhk+7TXHwCnIFGs0Hd6fllOvjJHonvde7rcmMaGKNuMbRt3bbxcxxnwUZcfee1Qlll1jB+47/hg+3QRoLO1nzApMrvZxY+EMSzjP6CekFC6t/XYzFnBOW+b5PzrZ2Yxa3GKFNmfgCWM07teso8pgfRGdUL1nc2xk9tLJBcrNKg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YJ6QYbQNCAkHBRQHOVRNeV588J5KHcr3/XIoNZSqVRA=;
- b=CKhTzPP8rir4fSlKUPAorxvH3k9VBDS13wx+sleRlPT4pyUSHfS8GqQ3gc96gPdR0YDsylBSml3arB7knShzflrG2t0TFEttN7bdAWlL9MUL7VSqrFTuIuklHiisGPOH9RXsNd0v1cUJSaGHCd/HezBUONnId17GU0Ht74o2ZVAAHwURTWnXoXLasrZBWrGU2Z4gUlB3Jdk4gcyhBL+3IggnbYGzibiTXSsKvAnc8bLCNzkwuMK+XTYAE7PeFN+f9UhyGi5qP5OXzBae8rVD+UGQUKmllcwia+1QbS3smSw0r5PbxsOUMgjkF+VFuUy38Xs1UNiC05NvmHj4/0IZKw==
+ bh=PBDVhOjifwpRiAck7PVguDC40k7zDBj2sbtoDpWgUbA=;
+ b=HzPhsIkiHhwyRjAtH7P2Q+o5fnrKQQcjabwAnabqhsgcfnwE135qfSh+s72yUgJkWK+fBq+KsYfKZ+8RF4VE20tnaruh+pis2L/Vvobrm+t8VBJFiP/+hnRHm4BDrAmpD1W2khCBpn0FBaiJ3QL3ya2zLFAuVzJ/3gBUde9O1Xlhpc94i3OQvvRh29iod/K36r7gNsitBlAC3j0fBK6z8NJKM/3Lmc37RB4pCtEaQ5sFVb3/HJreY8kiWws4wJr4n7aBW2TRHYAq5Zqn29RZb+Rn+Woa+UvsZuLLkU4K53eBawWyRisZl5KatCWIK0dkk/DRUIKdLaRQStjbLvr4MQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
  header.d=arm.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YJ6QYbQNCAkHBRQHOVRNeV588J5KHcr3/XIoNZSqVRA=;
- b=X5FuaaUqVJz3iCYkpvE04u5jjVVxHPkUwq7T+1eNejnhLbjo7J3Bq7Sg2zZMTCk9Xc777eUvd4+LrTNPrMo5yp7TNeQLIWypGQ9MejWHGsR6/y8uARYpEiF9LLLNreTvgGkNf+xpn9XVXVgPqeUXY/Yps4uIeIZSTVxK++gEh3Q=
+ bh=PBDVhOjifwpRiAck7PVguDC40k7zDBj2sbtoDpWgUbA=;
+ b=qjw7QNUBvxo5/HHkOwDmAqlgrfDwkVPm2C30kDyD5+b26AIcSjonfq3tqzWHWZh1ZKQ8iyoV0+CVZuVkP99QsN3VGiEWN/h2r1X1NcakJCo6y+0ShpED4M8SPpn1npKB+MQqOlRIwiD9pQItjXEy97+uxiiXsBDHr6RGTjYQ60k=
 Authentication-Results-Original: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=arm.com;
 Received: from AM6PR08MB3414.eurprd08.prod.outlook.com (2603:10a6:20b:49::10)
- by DB9PR08MB9682.eurprd08.prod.outlook.com (2603:10a6:10:462::11) with
+ by PAXPR08MB6654.eurprd08.prod.outlook.com (2603:10a6:102:15e::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.20; Wed, 25 Mar
- 2026 14:06:53 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.31; Wed, 25 Mar
+ 2026 14:11:03 +0000
 Received: from AM6PR08MB3414.eurprd08.prod.outlook.com
  ([fe80::dde8:bf0b:1dc:2a2]) by AM6PR08MB3414.eurprd08.prod.outlook.com
  ([fe80::dde8:bf0b:1dc:2a2%4]) with mapi id 15.20.9632.017; Wed, 25 Mar 2026
- 14:06:52 +0000
-Message-ID: <a68800f1-ad23-4788-af70-50c93c91aaf3@arm.com>
-Date: Wed, 25 Mar 2026 14:06:50 +0000
+ 14:11:03 +0000
+Message-ID: <a5689d05-018c-4a21-aff2-c03157f592be@arm.com>
+Date: Wed, 25 Mar 2026 14:11:02 +0000
 User-Agent: Mozilla Thunderbird
-Cc: usama.anjum@arm.com, Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+Cc: usama.anjum@arm.com
+Subject: Re: [PATCH v3 1/3] mm/page_alloc: Optimize free_contig_range()
+To: "David Hildenbrand (Arm)" <david@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
  "Liam R . Howlett" <Liam.Howlett@oracle.com>,
  Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
  Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
  Brendan Jackman <jackmanb@google.com>, Johannes Weiner <hannes@cmpxchg.org>,
- Uladzislau Rezki <urezki@gmail.com>, Nick Terrell <terrelln@fb.com>,
- David Sterba <dsterba@suse.com>, Vishal Moola <vishal.moola@gmail.com>,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- Ryan.Roberts@arm.com
-Subject: Re: [PATCH v3 1/3] mm/page_alloc: Optimize free_contig_range()
-To: Zi Yan <ziy@nvidia.com>, David Hildenbrand <david.hildenbrand@arm.com>
+ Zi Yan <ziy@nvidia.com>, Uladzislau Rezki <urezki@gmail.com>,
+ Nick Terrell <terrelln@fb.com>, David Sterba <dsterba@suse.com>,
+ Vishal Moola <vishal.moola@gmail.com>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, Ryan.Roberts@arm.com,
+ david.hildenbrand@arm.com
 References: <20260324133538.497616-1-usama.anjum@arm.com>
  <20260324133538.497616-2-usama.anjum@arm.com>
- <E976076E-68B6-4088-BA67-AF4ACC0D3E7E@nvidia.com>
- <88ff0f5b-e6d2-400f-9316-4863a5d169ea@arm.com>
- <42C0A333-EB71-42A5-83A2-36831E1F5E50@nvidia.com>
+ <cd26436b-539d-44bf-87a6-0109eb8e26f2@kernel.org>
 From: Muhammad Usama Anjum <usama.anjum@arm.com>
 Content-Language: en-US
-In-Reply-To: <42C0A333-EB71-42A5-83A2-36831E1F5E50@nvidia.com>
+In-Reply-To: <cd26436b-539d-44bf-87a6-0109eb8e26f2@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0546.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:319::17) To AM6PR08MB3414.eurprd08.prod.outlook.com
+X-ClientProxiedBy: LO4P123CA0473.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:1a8::10) To AM6PR08MB3414.eurprd08.prod.outlook.com
  (2603:10a6:20b:49::10)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -114,299 +113,106 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-TrafficTypeDiagnostic:
-	AM6PR08MB3414:EE_|DB9PR08MB9682:EE_|AM4PEPF00027A62:EE_|GV2PR08MB11605:EE_
-X-MS-Office365-Filtering-Correlation-Id: baea7082-f2e0-4513-b783-08de8a77ec4d
+	AM6PR08MB3414:EE_|PAXPR08MB6654:EE_|DB3PEPF0000885B:EE_|AS8PR08MB6024:EE_
+X-MS-Office365-Filtering-Correlation-Id: 21c88052-f90e-4237-6d09-08de8a787f51
 x-checkrecipientrouted: true
 NoDisclaimer: true
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|1800799024|376014|7416014|366016|18002099003|22082099003|56012099003;
+ BCL:0;ARA:13230040|366016|1800799024|7416014|376014|921020|56012099003|22082099003|18002099003;
 X-Microsoft-Antispam-Message-Info-Original:
- yNhmmw8MDttXA2c7BALtyzuGMTJEikMACZbs7UThmIlvsXvv7klwI935Nvq8J4zQgXos0Imnr4JKvIRONxTjw9sGDo82sQXCW0KV4Ir8KavyrwZXt1elAzX4Xl6Vo2ZF52szP9RhY8iZTZiRaGoQth96KOsOP7tEZU7Ra1mwsZW7u5IkXIw14f7fKWOKhCYImDrUCiYMrb8lTZAyK0UzNHbBinaierPCMhPu7I9X0KJKaYWFc0tUaeqz62Sim4v5O9JxraaVu9Wy6CaOTr0aleKSt6KcgTI/+ynsTo7OWmIaoOIHPrkbgKoIONV6ABdkEPfRCUG/tuzQ8KqzOJLYO+SHvueCr9sdcEWl6EPkHfMTu8941lNCvUD4w2t09y0noCLOkI3zf7mPExBhL9K8HEDm1zITYZIQXiSSB0Rpm38aE6ga5EXM38rk3bIRxhict6ShNvEZxtQmH75Oy39/zqeCmgVjGC+hDpYNUqGh/CM8iS1xnPw6WLoIPzCm9m5DpenYNHOzi487JqT5BsQupWGBz+D9tNt+/bLGmYpYevE7Lc5wykDyRlzed13c+V5aVvm+DNYyDq0kZN29/doylvFGlKcMJPQ9n8Ss/W2W1gTwGisTrGD11g2xC8BWskWY7agnVsBrE+8kVLsHM3Mn9yWtcgLN8KFYoQuCnO0SNzgi788WJr6t5pO1N4/21qBGVm2Ycj0zFBVKaafpMn8qvFP04UTP4He5aL29uNFRtW8=
+ e3pSu3NrfQiyPTkZJQeNTIG1+IehDsxE5U9iGRtcI+8f4Y2blpk8n/MmlTa7aPkJyew5GUbA9d2SIaGWsseHZwXQfdhHAs2X/CuTpudRtt2QeQiFpisVIapz6CK9E2WO7yM8rdiMmW1MisJmAszMJFlJudbtDwm1oLsiLkdm1dNWzFQvDs//2aYrBH3nIL3ACo8TTHlf10uVjiCWZQgVHhjcLTuPeheIN2rmHIfem/bFqiuo5MHuelUfpScNpfjzSU3RXmlArr/YMRjCrrOjFhkOEQtcXJjqExEziBw06FQNLU5pbSh8J8zDWfzaSHHig8buUNQKFeM8OIeXtJK1UP5rW3HlvV3iohY/Dfk3zccHH7bq51PcKKfmZmmK4WmfsIsj4lyqOrJt9ZU3fwZ0iDWHMnSIIKJeiMhcwaw4SAtiNmLZwivJL7/MABQj5hYH2f6QL9oLjZoEL4/sr8SI0gpVtexEpUtorYIO/BkfPcCT2tz5PXX9fVCfJRD+5gUJrcNiiGbmtjB49ho9iOifjlWkShaO62C4Z+xSbmb7I2HPtc0scfGAC+aOS0G5q6s95hikfuZTRjqvRLLbaFK00xY3UFCsMrMMftoE0tLEa9wO2sbeGjhc9ciVrKd+O+vnWZqgMOO9WqCbkWiTBluMiElhAgu+s0t9A/ZxbtUQIBo/qmRVBUpca6aH/7SbVLNfvxU5n9sN8QE218RpSYH97EqDReWWyz2Ln22npE92+Lr3nSgvwSet0JhMjRXxvVZwLQ22RSvyi8buxMnxj7jTPw==
 X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR08MB3414.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR08MB3414.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(921020)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
 X-Exchange-RoutingPolicyChecked:
- JEtksENzt3fksMUTFiOb5OBCqFUZ+zFSj1+53VF4DPQS8NAG2Hj+3yNcByVBCNfKv2t2hPNJwePF8Xwmx/3ZsH3tHKfGMYbIbPDvDJXEqgDB6pnpzeMOMENN5qy8DArbZ0DR8k4/tuuYI+IefBwU6TWuR3+MY2WIROps2jnL38HN/RGp42qMaE7sdjnhSl3eXb4j0hwInCX4ltP0niAvivg2itkTcYRgwPPGNP0JEgc9zo27gHfn8s9+oKcqFgqUcW+4Q4wsr8fyEGldNw69TVSPCnqUzOOSQBOU33TBW3to2rOrJzrSp8L7zttMYH5+wriddn9irWfIfkayZ74aSQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR08MB9682
+ P1U6/pYdO3OzbPRujPQ32YApKllnIkwgQp/5r66v6lGG5J2je9P39oojftkUZVRnAb/HVVU46zQe2LhtVErd+o0hR79durrC1VWLjetU+/6/JV2U68hwcAN1tvJj38glvPAV4JKi+H/WIe81ni6cRmoA9U5DZH6QexplCRNJKjNR8LCvtUSlg/EtouNzfXqfdihN6h2mx0NxhZHYT/88NzRu52KBQFxuoyof37PU5H8MAJuIis2G//OaROazE+F4Z87PDIQFG7UMH5tjKANdJiQ3c1PIm/7jRM36YRw9P9NGb3hMekOw9Vai+9/cEyN/6W5pucFX8bUkYO5YEauxlg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR08MB6654
 X-EOPAttributedMessage: 0
 X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- AM4PEPF00027A62.eurprd04.prod.outlook.com
+ DB3PEPF0000885B.eurprd02.prod.outlook.com
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	96a18d13-5e89-43c5-175c-08de8a77c366
+	fec1a1ed-f7b7-4d26-2ffa-08de8a785947
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|14060799003|82310400026|35042699022|36860700016|7416014|376014|1800799024|56012099003|22082099003|18002099003;
+	BCL:0;ARA:13230040|36860700016|7416014|376014|14060799003|82310400026|35042699022|1800799024|921020|22082099003|18002099003|56012099003;
 X-Microsoft-Antispam-Message-Info:
-	Vc5lnUxOKgB94QSHr0bvzhDdwipVu5C5rEKz/hRhs/DUC0jCob6moD+OJ1Cwm5kPy7EYToQ+VcZqHAN/7HGjyi20GvD4mZg5/BddAvYTjIrMMl6I0nDBvWE0IafUKr1muGs9ps237wT8TyD5mPbzqcyvvOGz6uYD97RVAMiLNix/OeROw3TxBMUqmNQro3MjkCJMWmKG3GzzLFeJxAQQMnbRKSYUY8jTDqo4SCMfANcZudSfqwz+NVAJkjGsOJ8Czas7VVX0IvtDhh3uOoRz001AANnf+64CD4Qorjghq0POepHSxRJYuaCvksqvX7oHaGBMlNb7TBbcmNP7GTwns0V+glsSL08pZtwe7kTqh/q8d+VmLx3sG2HtbfJydIciAHxXPKj5fuRaMFXvWnJlp+TajsQTRrNj9usbc9lDAItyjJzZp36qizu1vkvtMKWkD3lDX2N3fxwqPku2YAfXH3od8YcjqgzGcCoePxRRJhmu5iFRdFYofbKS1UWjhO8SGAt70dKhDW98IRIAt0GIEPe+KkubBD8lGGG6XzOyzzfJGYiR5sr8yooJNXn0dE+v1BDeGYQhxTKz20oJ/SF6mm3zbzEtUs6C0dZlhCHB8uByHM+km3xS79+DOrWNVwW1PwXgMTeUzNNLbAJ6UNCluaNvq4gQvpGe0DWZk3sV3Z2Wf53+XB2BwCRYeZ9Kpr1RtneewuaMIGbjbuGY4O60SSpm5oLbyUHae6zfHZSG4K0jDZQ8Q/XMQUdVAQaxLY+OgJMgD4sJMLnZq8xQXiM8Ww==
+	fIy+bYgaskPC5/KJYz53+LvUbEXKDNVLFrFpaNbrXAQYM6sBttdh6mWrQvo1cmJt7kXtHHb1KwTAJjUTd//cXddfIfuy2tltI6oolJO74o7hCFesHYCh4dG2xsUO1XEZCgj/RpquihJfI8cyR0c7qRl60ki7VtGyRim/e9gaJUfVRRijw/rO3DEcrpl5X8HDQAroW5QpYKE/5sZnw+h2bk+ADrmp0iPIwIkbnlPExpcA0Ccqf+qeX0/XuLrQyOYOMtdEm7WFaMxCIlO5ZauyzbDssXAxxepJEWipfCtnPqVZwkQ23yHb232Y68vqnJgRp2RDDst8b+cxCb3Cosx3n/X8+aBD9yx3RS2tovcE/3XrgGaDQ7mZAbDjfJbGGgL8Z1E3ZIGu4o+nYYfNOUao0cGT88051RzSYIroqKukigq2GzQOOs9IgphIvxigStffenag+vHXzo9z6ESZSI0llMb1/vt5PUU4RG3OGDFFCetIgbJCMQl/rcK1S7Y/TEKbPkQYaw4I7BmsEnrvUOy+d2tcCZfH3lFa0nNzEy8Qch7qOp7svtu6m1A+TKG3K93xCLppc5RrGOXI40z+3aqe6ZW2aYYocOFuQuUS3ot1cu0GgxOo+Xxkun2MAAxGtzvS0f6UsUByeVh9ryxONI4XZC1KbeqoffgQSlT2svmDpSbc+PyB8o7Wo661M8y+dSUwssNDm/aOoOIvhOVsnLzdxTzSlcRslI9DyCiUmpDwWaVnWMZVnNx3HBPvyq5dKFKBh5CIqvW8D1AxJPlg2QQ+CkslhmGJ37th/k8gyJlV3iTCSuldiqhSL3U4OT0AVOgN
 X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(14060799003)(82310400026)(35042699022)(36860700016)(7416014)(376014)(1800799024)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(7416014)(376014)(14060799003)(82310400026)(35042699022)(1800799024)(921020)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	jHgkafy8/ST6b61Zq9q4qzKt88ijdglAsAWF5nfKQEWdYGEuG+tuUBkQcBqB8YlzCSsYs7qUUpsnXpFj7hZWgs1jrAyoWA89KKOdRC+IV3ovOJweUHVzf3UVIjizd2rz/AW90mZpv3cuZif2+nCyS1PFDaAVqnT1Bi8yY6jwhgAl30jfm+073jcD62ra9aMQJ9+luFYKj+OghOWgNuihuXRM5vhX98CTh0oEudA/Xh6/SIkklyckUHmyOclHUq2+tp6QwO5wukGteVKxdUbzH0t39hIbx189ZL2zsSWLOHfFgzg58atgwo40s6rrnq+pQEAkODkBNiMdwZ2RC4X0KejW2kGcAIi3lheR5m8UFqwTFSyS4OB8Q0PTT3TRIImqr4B902Talpsh9MXK19l80QAAnaRxUfEYVg1oc5cO77YApqf33KeOpZ0gM21qZz7O
+	oWaexPmX9Pv7Oty/dxqq9Z7Ee9uPWYAG2uEXq/KKEM/0zJbyAxzpH3nGpQEPxIerzMbu07cR2MbJdbYhE4iFUDbdPYlXiVswFFYSEIMZt4dxSzznWQYH++GV/IDWp0NbN5UchvxscFok6jcb51SUyVcU43Cr9lKgPjjQV1J3kdTigKFvr1bJQAzwwipAH4qj0nLXAilfmW0D/33owWmLWwE+wiGhzB8m8HbA8i/9dI3xtfH5JHC5tjOmyoO+sa48JpYeUIJ7UCAELWJgUzjazOIULjd45tjgRJbkYE2NSoWrIfpmw0NNUZ1/HozbqQDCoJX9LUWfN80LEeG3unhIwwPSfJBFxovKSydhLboY99WOWHb5Y7mVXzYxZyGiwL1sumFJTAXnh3mBl4I27+KA/LjgCnvF23SUXSk8lJDvRv7Gsdh3VkkQRxUNNgl/6omq
 X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Mar 2026 14:08:00.2403
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Mar 2026 14:12:06.8833
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: baea7082-f2e0-4513-b783-08de8a77ec4d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 21c88052-f90e-4237-6d09-08de8a787f51
 X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	AM4PEPF00027A62.eurprd04.prod.outlook.com
+	DB3PEPF0000885B.eurprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR08MB11605
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB6024
 
-On 24/03/2026 5:14 pm, Zi Yan wrote:
-> On 24 Mar 2026, at 11:22, David Hildenbrand wrote:
+On 24/03/2026 8:56 pm, David Hildenbrand (Arm) wrote:
 > 
->> On 3/24/26 15:46, Zi Yan wrote:
->>> On 24 Mar 2026, at 9:35, Muhammad Usama Anjum wrote:
->>>
->>>> From: Ryan Roberts <ryan.roberts@arm.com>
->>>>
->>>> Decompose the range of order-0 pages to be freed into the set of largest
->>>> possible power-of-2 size and aligned chunks and free them to the pcp or
->>>> buddy. This improves on the previous approach which freed each order-0
->>>> page individually in a loop. Testing shows performance to be improved by
->>>> more than 10x in some cases.
->>>>
->>>> Since each page is order-0, we must decrement each page's reference
->>>> count individually and only consider the page for freeing as part of a
->>>> high order chunk if the reference count goes to zero. Additionally
->>>> free_pages_prepare() must be called for each individual order-0 page
->>>> too, so that the struct page state and global accounting state can be
->>>> appropriately managed. But once this is done, the resulting high order
->>>> chunks can be freed as a unit to the pcp or buddy.
->>>>
->>>> This significantly speeds up the free operation but also has the side
->>>> benefit that high order blocks are added to the pcp instead of each page
->>>> ending up on the pcp order-0 list; memory remains more readily available
->>>> in high orders.
->>>>
->>>> vmalloc will shortly become a user of this new optimized
->>>> free_contig_range() since it aggressively allocates high order
->>>> non-compound pages, but then calls split_page() to end up with
->>>> contiguous order-0 pages. These can now be freed much more efficiently.
->>>>
->>>> The execution time of the following function was measured in a server
->>>> class arm64 machine:
->>>>
->>>> static int page_alloc_high_order_test(void)
->>>> {
->>>> 	unsigned int order = HPAGE_PMD_ORDER;
->>>> 	struct page *page;
->>>> 	int i;
->>>>
->>>> 	for (i = 0; i < 100000; i++) {
->>>> 		page = alloc_pages(GFP_KERNEL, order);
->>>> 		if (!page)
->>>> 			return -1;
->>>> 		split_page(page, order);
->>>> 		free_contig_range(page_to_pfn(page), 1UL << order);
->>>> 	}
->>>>
->>>> 	return 0;
->>>> }
->>>>
->>>> Execution time before: 4097358 usec
->>>> Execution time after:   729831 usec
->>>>
->>>> Perf trace before:
->>>>
->>>>     99.63%     0.00%  kthreadd         [kernel.kallsyms]      [.] kthread
->>>>             |
->>>>             ---kthread
->>>>                0xffffb33c12a26af8
->>>>                |
->>>>                |--98.13%--0xffffb33c12a26060
->>>>                |          |
->>>>                |          |--97.37%--free_contig_range
->>>>                |          |          |
->>>>                |          |          |--94.93%--___free_pages
->>>>                |          |          |          |
->>>>                |          |          |          |--55.42%--__free_frozen_pages
->>>>                |          |          |          |          |
->>>>                |          |          |          |           --43.20%--free_frozen_page_commit
->>>>                |          |          |          |                     |
->>>>                |          |          |          |                      --35.37%--_raw_spin_unlock_irqrestore
->>>>                |          |          |          |
->>>>                |          |          |          |--11.53%--_raw_spin_trylock
->>>>                |          |          |          |
->>>>                |          |          |          |--8.19%--__preempt_count_dec_and_test
->>>>                |          |          |          |
->>>>                |          |          |          |--5.64%--_raw_spin_unlock
->>>>                |          |          |          |
->>>>                |          |          |          |--2.37%--__get_pfnblock_flags_mask.isra.0
->>>>                |          |          |          |
->>>>                |          |          |           --1.07%--free_frozen_page_commit
->>>>                |          |          |
->>>>                |          |           --1.54%--__free_frozen_pages
->>>>                |          |
->>>>                |           --0.77%--___free_pages
->>>>                |
->>>>                 --0.98%--0xffffb33c12a26078
->>>>                           alloc_pages_noprof
->>>>
->>>> Perf trace after:
->>>>
->>>>      8.42%     2.90%  kthreadd         [kernel.kallsyms]         [k] __free_contig_range
->>>>             |
->>>>             |--5.52%--__free_contig_range
->>>>             |          |
->>>>             |          |--5.00%--free_prepared_contig_range
->>>>             |          |          |
->>>>             |          |          |--1.43%--__free_frozen_pages
->>>>             |          |          |          |
->>>>             |          |          |           --0.51%--free_frozen_page_commit
->>>>             |          |          |
->>>>             |          |          |--1.08%--_raw_spin_trylock
->>>>             |          |          |
->>>>             |          |           --0.89%--_raw_spin_unlock
->>>>             |          |
->>>>             |           --0.52%--free_pages_prepare
->>>>             |
->>>>              --2.90%--ret_from_fork
->>>>                        kthread
->>>>                        0xffffae1c12abeaf8
->>>>                        0xffffae1c12abe7a0
->>>>                        |
->>>>                         --2.69%--vfree
->>>>                                   __free_contig_range
->>>>
->>>> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
->>>> Co-developed-by: Muhammad Usama Anjum <usama.anjum@arm.com>
->>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
->>>> ---
->>>> Changes since v2:
->>>> - Handle different possible section boundries in __free_contig_range()
->>>> - Drop the TODO
->>>> - Remove return value from __free_contig_range()
->>>> - Remove non-functional change from __free_pages_ok()
->>>>
->>>> Changes since v1:
->>>> - Rebase on mm-new
->>>> - Move FPI_PREPARED check inside __free_pages_prepare() now that
->>>>   fpi_flags are already being passed.
->>>> - Add todo (Zi Yan)
->>>> - Rerun benchmarks
->>>> - Convert VM_BUG_ON_PAGE() to VM_WARN_ON_ONCE()
->>>> - Rework order calculation in free_prepared_contig_range() and use
->>>>   MAX_PAGE_ORDER as high limit instead of pageblock_order as it must
->>>>   be up to internal __free_frozen_pages() how it frees them
->>>>
->>>> Made-with: Cursor
->>>> ---
->>>>  include/linux/gfp.h |  2 +
->>>>  mm/page_alloc.c     | 97 ++++++++++++++++++++++++++++++++++++++++++++-
->>>>  2 files changed, 97 insertions(+), 2 deletions(-)
->>>>
->>>
->>> <snip>
->>>
->>>> +
->>>> +/**
->>>> + * __free_contig_range - Free contiguous range of order-0 pages.
->>>> + * @pfn: Page frame number of the first page in the range.
->>>> + * @nr_pages: Number of pages to free.
->>>> + *
->>>> + * For each order-0 struct page in the physically contiguous range, put a
->>>> + * reference. Free any page who's reference count falls to zero. The
->>>> + * implementation is functionally equivalent to, but significantly faster than
->>>> + * calling __free_page() for each struct page in a loop.
->>>> + *
->>>> + * Memory allocated with alloc_pages(order>=1) then subsequently split to
->>>> + * order-0 with split_page() is an example of appropriate contiguous pages that
->>>> + * can be freed with this API.
->>>> + *
->>>> + * Context: May be called in interrupt context or while holding a normal
->>>> + * spinlock, but not in NMI context or while holding a raw spinlock.
->>>> + */
->>>> +void __free_contig_range(unsigned long pfn, unsigned long nr_pages)
->>>> +{
->>>> +	struct page *page = pfn_to_page(pfn);
->>>> +	struct page *start = NULL;
->>>> +	unsigned long start_sec;
->>>> +	unsigned long i;
->>>> +	bool can_free;
->>>> +
->>>> +	/*
->>>> +	 * Chunk the range into contiguous runs of pages for which the refcount
->>>> +	 * went to zero and for which free_pages_prepare() succeeded. If
->>>> +	 * free_pages_prepare() fails we consider the page to have been freed;
->>>> +	 * deliberately leak it.
->>>> +	 *
->>>> +	 * Code assumes contiguous PFNs have contiguous struct pages, but not
->>>> +	 * vice versa. Break batches at section boundaries since pages from
->>>> +	 * different sections must not be coalesced into a single high-order
->>>> +	 * block.
->>>> +	 */
->>>> +	for (i = 0; i < nr_pages; i++, page++) {
->>>> +		VM_WARN_ON_ONCE(PageHead(page));
->>>> +		VM_WARN_ON_ONCE(PageTail(page));
->>>> +
->>>> +		can_free = put_page_testzero(page);
->>>> +		if (can_free && !free_pages_prepare(page, 0))
->>>> +			can_free = false;
->>>> +
->>>> +		if (can_free && start &&
->>>> +		    memdesc_section(page->flags) != start_sec) {
->>>> +			free_prepared_contig_range(start, page - start);
->>>> +			start = page;
->>>> +			start_sec = memdesc_section(page->flags);
->>>> +		} else if (!can_free && start) {
->>>> +			free_prepared_contig_range(start, page - start);
->>>> +			start = NULL;
->>>> +		} else if (can_free && !start) {
->>>> +			start = page;
->>>> +			start_sec = memdesc_section(page->flags);
->>>> +		}
->>>> +	}
->>>
->>> It can be simplified to:
->>>
->>>         for (i = 0; i < nr_pages; i++, page++) {
->>>                 VM_WARN_ON_ONCE(PageHead(page));
->>>                 VM_WARN_ON_ONCE(PageTail(page));
->>>
->>>                 can_free = put_page_testzero(page) && free_pages_prepare(page, 0);
->>>
->>>                 if (!can_free) {
->>>                         if (start) {
->>>                                 free_prepared_contig_range(start, page - start);
->>>                                 start = NULL;
->>>                         }
->>>                         continue;
->>>                 }
->>>
->>>                 if (start && memdesc_section(page->flags) != start_sec) {
->>>                         free_prepared_contig_range(start, page - start);
->>>                         start = page;
->>>                         start_sec = memdesc_section(page->flags);
->>>                 } else if (!start) {
->>>                         start = page;
->>>                         start_sec = memdesc_section(page->flags);
->>>                 }
->>>         }
-I'll simplify in the next version. Thanks.
-
->>>
->>> BTW, memdesc_section() returns 0 for !SECTION_IN_PAGE_FLAGS.
->>> Is pfn_to_section_nr() more robust?
->>
->> That's the whole trick: it's optimized out in that case. Linus proposed
->> that for num_pages_contiguous().
->>
->> The cover letter should likely refer to num_pages_contiguous() :)
-I'll refer to num_pages_contiguous() as well.
+>> +void __free_contig_range(unsigned long pfn, unsigned long nr_pages)
+>> +{
+>> +	struct page *page = pfn_to_page(pfn);
+>> +	struct page *start = NULL;
+>> +	unsigned long start_sec;
+>> +	unsigned long i;
+>> +	bool can_free;
+>> +
+>> +	/*
+>> +	 * Chunk the range into contiguous runs of pages for which the refcount
+>> +	 * went to zero and for which free_pages_prepare() succeeded. If
+>> +	 * free_pages_prepare() fails we consider the page to have been freed;
+>> +	 * deliberately leak it.
+>> +	 *
+>> +	 * Code assumes contiguous PFNs have contiguous struct pages, but not
+>> +	 * vice versa. Break batches at section boundaries since pages from
+>> +	 * different sections must not be coalesced into a single high-order
+>> +	 * block.
+> 
+> The comment is not completely accurate: section boundary only applies to
+> some kernel configs.
+> 
+> Maybe rewrite the whole paragraph into
+> 
+> "Contiguous PFNs might not have a contiguous "struct pages" in some
+> kernel config. Therefore, check memdesc_section(), and stop batching
+> once it changes, see num_pages_contiguous()."
+Agreed, I'll update.
 
 > 
-> Oh, I needed to refresh my memory on SPARSEMEM to remember
-> !SECTION_IN_PAGE_FLAGS is for SPARSE_VMEMMAP and the contiguous PFNs vs
-> contiguous struct page thing.
+>> +	 */
+>> +	for (i = 0; i < nr_pages; i++, page++) {
+>> +		VM_WARN_ON_ONCE(PageHead(page));
+>> +		VM_WARN_ON_ONCE(PageTail(page));
+>> +
+>> +		can_free = put_page_testzero(page);
+>> +		if (can_free && !free_pages_prepare(page, 0))
+>> +			can_free = false;
+>> +
+>> +		if (can_free && start &&
+>> +		    memdesc_section(page->flags) != start_sec) {
+>> +			free_prepared_contig_range(start, page - start);
+>> +			start = page;
+>> +			start_sec = memdesc_section(page->flags);
+>> +		} else if (!can_free && start) {
+>> +			free_prepared_contig_range(start, page - start);
+>> +			start = NULL;
+>> +		} else if (can_free && !start) {
+>> +			start = page;
+>> +			start_sec = memdesc_section(page->flags);
+>> +		}
+>> +	}
 > 
-> Now memdesc_section() makes sense to me. Thanks.
-> 
-> 
-> Best Regards,
-> Yan, Zi
+> Simplification a proposed by Zi make sense to me!
+I've added it.
+
+Thanks,
+Usama
 
