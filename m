@@ -1,154 +1,229 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51C123F7870
-	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 17:51:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D44BB3358B9
+	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 18:36:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.41
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774461075; cv=pass; b=RbZPfUw2+BRQU+fFWBO/5R7ogtLdOo0cs5QON9DTqoc/YffF0d6FpXR7N1Gky8isworHpws2mtGCyfJNCpE52FQJOQo66knY9bBoQeXht4+lf5ZHsC0iskF6gmgrjCvSXsqGs166UzlZhqHqmWp5tAI3tXkMFsCVif73qhcInrs=
+	t=1774463766; cv=pass; b=gJXMk6c7FZMnHKzPc6NM0j7OYLNt0OWJXqV2Ka75pr9GquPhntuzUSXPPHZTOyVW8E78XAdMdXKw2SH4AgrNinJafuj5mGG16RW/WK4MY3vymX/8rFhhzPdVs1DPqQi7GDI5h8+Omzr0DN8vsPQ/gXkk9ufbf5PZbG9+mjYdfT0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774461075; c=relaxed/simple;
-	bh=LfOHx404KK+zENd5k0iKvf2df8c1QUv6Mhd4nnrA2k0=;
+	s=arc-20240116; t=1774463766; c=relaxed/simple;
+	bh=DU09dneRr/GRbp2qrwsAbEux7gUhzS7AtKG/4sqMSBQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZBwaJLkNYHJV5YEuxevIJXaON4NaAibN8ReSTa8QYqP4PbtGrI+QyZM86x2ztryzd1n5RwI+8VJDXzIpCZDvTXM3wM+BbWtFiQ3WX2LGOXcIUF2JCq5CjCx1gCHJ1kqcNRk+SHDueAQz8ED342ej2mthZLQ2puxR5UysrJ70I7o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dfl+pF2P; arc=pass smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=kigL0R7ILNtNeiUGRkLP3MNMHo8GBM19v69Hj9yJ2V16eFdwlBuucZGr3Fdpm0p5fFcJoNeDhMjC9pbJ5Qt0g3oxFLB2Kq27m9iHfh6/YK5Oz7gQRTYfwTADvYgBeUJD/Aka3gTmTfZF0u7tk4lHEZYhkcPj/ChaFu1+ZLvkiJM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VYj9J+tR; arc=pass smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dfl+pF2P"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-6628cc1bd69so1099a12.1
-        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 10:51:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774461073; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VYj9J+tR"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-43b48ac2727so77008f8f.3
+        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 11:36:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774463759; cv=none;
         d=google.com; s=arc-20240605;
-        b=Q3eAWfPnEev7wyMV6d376foaptKSsBtZleLzOu+ENReKHgCDBnWKLgNqPy3pzfghI5
-         UX6dS2AT4yMUBm04DN0yxNxCCEhmK0t32FyHqDF9T72kVrApLdXtEX4PLiaSF8KGw6Nq
-         LSaBhhKCwBtc9AKtW6fwCelerZ7ALEXUc8JRzGKWcvEJdZ5O2MN87aUcWYok3N6REAhv
-         kz2sWqU7Bs9MHZvqoP+Mimp1SsHOI8pnS1i0ll392bxnQoyHxsV2okV5EQde3tpLfsUd
-         esuElg9abRKywfXrqfW4MPUiCFbgZZIzse6BzQ8KGbVyRZqIGPwxwuvClqzZNL+l2IoO
-         L86g==
+        b=jk71Y6nc+tsFOTPR1lH5YyrKwp8mpDHNBP2vEZhQtfgvh6BxGMGOqsRoWuo/jESLfp
+         dMlhG69gCHlDIF8i94eiLh4j1jo21CdM65j6sXoEQIAr8afGKFXvlk4prL3PrYV94ixv
+         wi8FhfSoPi7Pj91o6bQjPQLK2i6kANY3E6UhlFxgcGyBCBhyPMJnDHxennpcelLbwue5
+         6tSywl0HuuFmPhF5E08FLj072BYf1kzfXxgR/uXWDERQzxxChjkGDAa3KYzrvIrabXic
+         Arl73ULHQOQ9kOswwqXMRihRB4Se59h5Owc4wpOz5hC6cljc/kzieWZKKJJPv+ZQv+NL
+         GMgQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=lcdS5CNtdEsSElOVQqwojbHt2Qxr4nffxvoalO1pdQk=;
-        fh=6hM25cn8YRtC9FHLgYJO82KgGMsjlUWF6HPWHM20y+c=;
-        b=Gn98/RnKeh6BIqkHZhQhoVPqhSBVP5Avfw6LXkvEocZGuRLTXAX8ytA69whcJr4Z+z
-         rWGg0g6pSEncv+c6RryccwxeypgJF1aJOEsQSM3g+m/hVyZIS6wdosVEiu9HysN6p4GW
-         KIiXrpaW2TIvqZEKQXVp3MEWK0QADcGIS1W16H6U3Q8hoP749glpEMVtzMRy5AJzM2Qe
-         PlBVoBGhlCPEFhFrOnTStS9YdMVD3bL0AmsP3NxPtAfSAMwUvS1Jd8iP9C8CpzekRPlQ
-         Fop5MOwgQ1KUVGPMOzFkTTaugR8KIFW5FVG71T0UZxUqEGQ4P6r8r1y7vnqbSNc5nzYq
-         FlsQ==;
+        bh=9QtV8GBTb6YR4jdqHUX7Sv2eVsBl1fbWiLDxSj4EukQ=;
+        fh=4QWkRdx3K+0qJCZLtN+luFvkoalcc6pSnfCMbWRfn1k=;
+        b=hZmqLF//goGQHizwC9gIR+gyIOg9FcTUmzprq+OR5Y/nDGt0KJKKi4tt1l/OZztzlU
+         g2lJxysgYd+4awp0tWXrWwrER42R/YQxXH4eDAkhbol0V/sk3tnyzwkNmzsdNMKUg3XN
+         IDkgdgXrUw/xCuoi6TRw0vNfmpYc1x7tU8sYvqtpJcW/EcNqRw9SoOC5FdaaQs4Jh+6j
+         xDTchrxsScMXeHreUQZOrxd766WtVextkU3kmxMqfyNiRa64XIU7XzqV9j41XrhRrIRy
+         4Z/wYuMkA3akYc0tOTSAlKBdkHT/+Nf2X5WT9qOl+Y5lsTkNiFxhAP8dcEiiFHrbldOB
+         DCJQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774461073; x=1775065873; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774463759; x=1775068559; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lcdS5CNtdEsSElOVQqwojbHt2Qxr4nffxvoalO1pdQk=;
-        b=dfl+pF2PhlOSL6iG9cI/eNprk8ZTDAdh7yZPvVJoiii8dnxP4ffSAoPzCHcSK8l8xi
-         g0SjFdBtNEhLpHKEoRwNjhffIvM9las8rkTkHvziL3Mxi5e1lewylzMVKDJptAQt9qKF
-         yKSbWprn1zK4Ptp3sa6mcVOjhNuayGDqID88GN2qORDF6SlDDTCZlv83St0i0wMlOVtl
-         4jd4feuZ0cdJBu2OlnDgnMkCKcM6u7ks/NDFcfkKmvuBTHbQs5uNFwbD5kNqiIHp9ZOR
-         Xlv/jMtwtqM8d7p+tAHHgPxCuUIE1rkRhRt07M/Xbaxrew+Hveo7Vc9Is77855Lr6mhN
-         JlLA==
+        bh=9QtV8GBTb6YR4jdqHUX7Sv2eVsBl1fbWiLDxSj4EukQ=;
+        b=VYj9J+tRwEhyTKu1jFztIIyyKnSDqOC+nG/430snVSAMKZ23q3hy+/SYZlM77fAD43
+         E0PZ5FG6eiApjsCDYocstimrEeDBoQ5UlxRPdT7k/PiHutdlTGzN2FHJrQSCe2rnP09/
+         OARSS14vSE/zkQXqPAxP//9aclw+5uvv6/g8NELs8z/XKedJ96lKjOHcmzhGN7bRoI7F
+         nj/rqFYtA0qMq5gq9nFt+wuxkMPL13zAh1Pdx36ImO2BdFb7P2YmO9Y+24fAu81Cg8sB
+         M2VCdB97L+oxY+5+rZV73XMAGiPSbNRbEi6o2Shqh+6Bnk1vo2uhfDbgFIK8xaxZ1hBB
+         VFPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774461073; x=1775065873;
+        d=1e100.net; s=20251104; t=1774463759; x=1775068559;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=lcdS5CNtdEsSElOVQqwojbHt2Qxr4nffxvoalO1pdQk=;
-        b=UTEdNiWQ2HJqC6XZJdKLA1/7kIOyaTbNjZId3A7XDNMhQJVxNEqLVuV1DHuGm0UN2H
-         CjcFu+jKUTI3LHPYQMgzqWObKeHhNoR7xcQKZzNNThSFXdX5VLSML6vlSLUv6NdOa3oY
-         fXSiE9gA2KYpI/qboGOTePfMBpyDVTlRtE3pryURTjQntaEGSFIoB0ZOhAC4ojDuBM1S
-         QV0s7/7wQZL28Amz/rD3RNSG/hi02VY0MEE3sJy8PwpujHb+EWleSEY/aqTywKDdoAOK
-         8eGszL8Nbz5qjH+2O0L8Zjq3kvLvr2hqwknZi7J5npOz6kXJH5SOH8b0TQmzh7lfoNEc
-         tn7g==
-X-Forwarded-Encrypted: i=1; AJvYcCXZIDIC8apvOjVgI8ccHqWUkwDSk4LdLelmFSWlVdpfZAaZ5M95j0Juvtm2CDJcvCCzJsM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjsO4fY6ZE4Zk/f0kK23rDi7Fy8Zle6hi2isUeypphxdsm2p7O
-	XKFV+oxdb6dJKgj8mG0NNjrxRbx51oKkLrkhmUUZqyaDup7bhbQouazuviVYyuLnE2xKf7Me3Fh
-	PRHW944LOQVUwiueHVCreOtvZZPm3QieornuMKzBZ
-X-Gm-Gg: ATEYQzw8A4italhqYI4a3sRzkOTHZXkq4pZyjkUi3kQDWMzSiSvUGWHI+qu3nxW4BdH
-	PB+cp140uQZUSkj4SpPgb38tDnivSyHaD+weKbHhbu9ajpMlV/1ru0hsI5Kw+QKr5XMGGD/7XWJ
-	GvQc7CYvlPep9P5lcSpF5cWFS3nJ6CB8XEeUWOvzJwHeok5yMjXRbTfmILW0Fl1lhrmR3LnmWyA
-	nRSgBQabFZAed8JY0Nh35YgRJWmfoWxL307maoHzuBtNSFVapvSy+7CE4tBxixamnbrBwAbDtOr
-	w2s//O8=
-X-Received: by 2002:a05:6402:1451:b0:668:c2b6:9fa2 with SMTP id
- 4fb4d7f45d1cf-66ad9575059mr2781a12.7.1774461072029; Wed, 25 Mar 2026 10:51:12
- -0700 (PDT)
+        bh=9QtV8GBTb6YR4jdqHUX7Sv2eVsBl1fbWiLDxSj4EukQ=;
+        b=I5XI0IB/+ww1vJOQahqDtoFrVDEJu1gHfX4v9OeEbcVv5pKfFVE9r1wXrTVOHKuImQ
+         jUy6grZdNzPGnwO62AwnkLNjbT45ab6cPJTZjqKbq6iaYJFNqVrSaWn9lSreNYrQRh0o
+         fV12XoXued6Fl74LhWhmrXSD1hHAU5IqX+VaOGUv/uGQyIoMgWDe8V7stRHs3QDi7RZp
+         ScpaWcNASNVtiwa8usihKKWA8bFZTq8SM/cj1Hpm1yzuLNOTgAZl0HYzXNBV6As8JiNX
+         CeltF2Shrhrl1tNDpO/ImQ+KiJuzAvb51ViN2AqGGXz+58OLMi8U5EHmhObCatCxRFvL
+         XJWg==
+X-Forwarded-Encrypted: i=1; AJvYcCUvCb/HUq0l4GzHEj+JeDz7emENPFiqvYPBKdRN/fA4FjDVHZYbL6rSjFgwlAgPlRSNoUk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNmU4TNTpPMU1loK49zPgc/qvHNZwKAplBi4UQn6bSh+Fj59/U
+	hU5Se+a2QyMvBYzudoMcgPCANtaruvN8MIFQUfZJVX598iHMqZCUZpfSpXsbD9fOTET0SkXKI0h
+	LM194mmaIOttLqBWWGdxor8hD5ujfNqI=
+X-Gm-Gg: ATEYQzz/uS4JnE52x7CvKdO9nwbAgTmA836a9WyWOv4bni2aT5aji9SvWaC1GYBokTL
+	5PkyrIMINmb8uJWpHPCGAerxGVEIKON7Tuaag9im3gWfqZydjfkdg2ufO8TY1b+wH35aC4eEPSy
+	N7v/7mqO50Aco8XnG182jHXsy2PQcFI8QsC0UlMQOi7+oVYM8eAT+tEW2LmwQKi1R77Po8POe/E
+	OEWOiLtlV8gtVkQ8Mdvr6f2aJiNKN7lfdQXhaPnLygA5tF83lzG15/R4K/X0nxdMnZp7IiPfjqr
+	uK1ttw==
+X-Received: by 2002:a05:6000:4381:b0:439:b6f1:cd8d with SMTP id
+ ffacd0b85a97d-43b88a100a3mr6484733f8f.28.1774463758965; Wed, 25 Mar 2026
+ 11:35:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260324-vmscape-bhb-v8-0-68bb524b3ab9@linux.intel.com> <20260324-vmscape-bhb-v8-2-68bb524b3ab9@linux.intel.com>
-In-Reply-To: <20260324-vmscape-bhb-v8-2-68bb524b3ab9@linux.intel.com>
-From: Jim Mattson <jmattson@google.com>
-Date: Wed, 25 Mar 2026 10:50:58 -0700
-X-Gm-Features: AQROBzDwHlJH5nkrozA8k_jCaaxMY2azgH1uzVE_N9olWzdVjI8yDoxoWPHYtxY
-Message-ID: <CALMp9eTZRucL+CUSp1yUPG0aSTpyQ=po1EmurZhX9+R+vxgbPA@mail.gmail.com>
-Subject: Re: [PATCH v8 02/10] x86/bhi: Make clear_bhb_loop() effective on
- newer CPUs
-To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>, Nikolay Borisov <nik.borisov@suse.com>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Josh Poimboeuf <jpoimboe@kernel.org>, David Kaplan <david.kaplan@amd.com>, 
-	Sean Christopherson <seanjc@google.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, David Laight <david.laight.linux@gmail.com>, 
-	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	David Ahern <dsahern@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	Asit Mallick <asit.k.mallick@intel.com>, Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-doc@vger.kernel.org
+References: <177188733084.3935219.10400570136529869673.stgit@frogsfrogsfrogs> <177188733175.3935219.14499232455997407711.stgit@frogsfrogsfrogs>
+In-Reply-To: <177188733175.3935219.14499232455997407711.stgit@frogsfrogsfrogs>
+From: Joanne Koong <joannelkoong@gmail.com>
+Date: Wed, 25 Mar 2026 11:35:47 -0700
+X-Gm-Features: AQROBzAsyuIOQL6cuDHl9wKI-61KU4hUBnmgoj2gOGt1Tina83tHjQ4Mtdg7-gk
+Message-ID: <CAJnrk1ZZV=nf2ZvsFz2gCEdFanK2c=_4X8hH5PyZ4ys-b5T8kQ@mail.gmail.com>
+Subject: Re: [PATCH 3/5] fuse: implement file attributes mask for statx
+To: "Darrick J. Wong" <djwong@kernel.org>
+Cc: miklos@szeredi.hu, bpf@vger.kernel.org, bernd@bsbernd.com, neal@gompa.dev, 
+	linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 24, 2026 at 11:19=E2=80=AFAM Pawan Gupta
-<pawan.kumar.gupta@linux.intel.com> wrote:
+On Mon, Feb 23, 2026 at 3:07=E2=80=AFPM Darrick J. Wong <djwong@kernel.org>=
+ wrote:
 >
-> As a mitigation for BHI, clear_bhb_loop() executes branches that overwrit=
-es
-> the Branch History Buffer (BHB). On Alder Lake and newer parts this
-> sequence is not sufficient because it doesn't clear enough entries. This
-> was not an issue because these CPUs have a hardware control (BHI_DIS_S)
-> that mitigates BHI in kernel.
+> From: Darrick J. Wong <djwong@kernel.org>
 >
-> BHI variant of VMSCAPE requires isolating branch history between guests a=
-nd
-> userspace. Note that there is no equivalent hardware control for userspac=
-e.
-> To effectively isolate branch history on newer CPUs, clear_bhb_loop()
-> should execute sufficient number of branches to clear a larger BHB.
+> Actually copy the attributes/attributes_mask from userspace.  Ignore
+> file attributes bits that the VFS sets (or doesn't set) on its own.
 >
-> Dynamically set the loop count of clear_bhb_loop() such that it is
-> effective on newer CPUs too. Use the hardware control enumeration
-> X86_FEATURE_BHI_CTRL to select the appropriate loop count.
->
-> Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
-> Reviewed-by: Nikolay Borisov <nik.borisov@suse.com>
-> Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+> Signed-off-by: "Darrick J. Wong" <djwong@kernel.org>
+> Reviewed-by: Joanne Koong <joannelkoong@gmail.com>
 > ---
->  arch/x86/entry/entry_64.S   | 21 ++++++++++++++++-----
->  arch/x86/net/bpf_jit_comp.c |  7 -------
->  2 files changed, 16 insertions(+), 12 deletions(-)
+>  fs/fuse/fuse_i.h |   37 +++++++++++++++++++++++++++++++++++++
+>  fs/fuse/dir.c    |    4 ++++
+>  fs/fuse/inode.c  |    4 ++++
+>  3 files changed, 45 insertions(+)
 >
-> diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-> index 3a180a36ca0e..8128e00ca73f 100644
-> --- a/arch/x86/entry/entry_64.S
-> +++ b/arch/x86/entry/entry_64.S
-> @@ -1535,8 +1535,17 @@ SYM_CODE_END(rewind_stack_and_make_dead)
->  SYM_FUNC_START(clear_bhb_loop)
->         ANNOTATE_NOENDBR
->         push    %rbp
-> +       /* BPF caller may require %rax to be preserved */
-> +       push    %rax
+>
+> diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
+> index 1d4beca5c7018d..79793db3e9a743 100644
+> --- a/fs/fuse/fuse_i.h
+> +++ b/fs/fuse/fuse_i.h
+> @@ -147,6 +147,10 @@ struct fuse_inode {
+>         /** Version of last attribute change */
+>         u64 attr_version;
+>
+> +       /** statx file attributes */
+> +       u64 statx_attributes;
+> +       u64 statx_attributes_mask;
+> +
+>         union {
+>                 /* read/write io cache (regular file only) */
+>                 struct {
+> @@ -1236,6 +1240,39 @@ void fuse_change_attributes_common(struct inode *i=
+node, struct fuse_attr *attr,
+>                                    u64 attr_valid, u32 cache_mask,
+>                                    u64 evict_ctr);
+>
+> +/*
+> + * These statx attribute flags are set by the VFS so mask them out of re=
+plies
+> + * from the fuse server for local filesystems.  Nonlocal filesystems are
+> + * responsible for enforcing and advertising these flags themselves.
+> + */
+> +#define FUSE_STATX_LOCAL_VFS_ATTRIBUTES (STATX_ATTR_IMMUTABLE | \
+> +                                        STATX_ATTR_APPEND)
+> +
+> +/*
+> + * These statx attribute flags are set by the VFS so mask them out of re=
+plies
+> + * from the fuse server.
+> + */
+> +#define FUSE_STATX_VFS_ATTRIBUTES (STATX_ATTR_AUTOMOUNT | STATX_ATTR_DAX=
+ | \
+> +                                  STATX_ATTR_MOUNT_ROOT)
+> +
+> +static inline u64 fuse_statx_attributes_mask(const struct inode *inode,
+> +                                            const struct fuse_statx *sx)
+> +{
+> +       if (fuse_inode_is_exclusive(inode))
+> +               return sx->attributes_mask & ~(FUSE_STATX_VFS_ATTRIBUTES =
+|
+> +                                              FUSE_STATX_LOCAL_VFS_ATTRI=
+BUTES);
+> +       return sx->attributes_mask & ~FUSE_STATX_VFS_ATTRIBUTES;
+> +}
+> +
+> +static inline u64 fuse_statx_attributes(const struct inode *inode,
+> +                                       const struct fuse_statx *sx)
+> +{
+> +       if (fuse_inode_is_exclusive(inode))
+> +               return sx->attributes & ~(FUSE_STATX_VFS_ATTRIBUTES |
+> +                                         FUSE_STATX_LOCAL_VFS_ATTRIBUTES=
+);
+> +       return sx->attributes & ~FUSE_STATX_VFS_ATTRIBUTES;
+> +}
+> +
+>  u32 fuse_get_cache_mask(struct inode *inode);
+>
+>  /**
+> diff --git a/fs/fuse/dir.c b/fs/fuse/dir.c
+> index 7ac6b232ef1232..10fa47e969292f 100644
+> --- a/fs/fuse/dir.c
+> +++ b/fs/fuse/dir.c
+> @@ -1464,6 +1464,8 @@ static int fuse_do_statx(struct mnt_idmap *idmap, s=
+truct inode *inode,
+>                 stat->result_mask =3D sx->mask & (STATX_BASIC_STATS | STA=
+TX_BTIME);
+>                 stat->btime.tv_sec =3D sx->btime.tv_sec;
+>                 stat->btime.tv_nsec =3D min_t(u32, sx->btime.tv_nsec, NSE=
+C_PER_SEC - 1);
+> +               stat->attributes |=3D fuse_statx_attributes(inode, sx);
+> +               stat->attributes_mask |=3D fuse_statx_attributes_mask(ino=
+de, sx);
+>                 fuse_fillattr(idmap, inode, &attr, stat);
+>                 stat->result_mask |=3D STATX_TYPE;
+>         }
+> @@ -1568,6 +1570,8 @@ static int fuse_update_get_attr(struct mnt_idmap *i=
+dmap, struct inode *inode,
+>                         stat->btime =3D fi->i_btime;
+>                         stat->result_mask |=3D STATX_BTIME;
+>                 }
+> +               stat->attributes =3D fi->statx_attributes;
+> +               stat->attributes_mask =3D fi->statx_attributes_mask;
 
-Shouldn't the "push %rax" come after "mov %rsp, %rbp"?
+Do these need to be |=3D so we don't overwrite any vfs attributes stored
+in stat already?
 
->         mov     %rsp, %rbp
-> -       movl    $5, %ecx
+Thanks,
+Joanne
+
+>         }
+>
+>         return err;
+> diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
+> index 58c3351b467221..ff8b94cb02e63c 100644
+> --- a/fs/fuse/inode.c
+> +++ b/fs/fuse/inode.c
+> @@ -286,6 +286,10 @@ void fuse_change_attributes_common(struct inode *ino=
+de, struct fuse_attr *attr,
+>                         fi->i_btime.tv_sec =3D sx->btime.tv_sec;
+>                         fi->i_btime.tv_nsec =3D sx->btime.tv_nsec;
+>                 }
+> +
+> +               fi->statx_attributes =3D fuse_statx_attributes(inode, sx)=
+;
+> +               fi->statx_attributes_mask =3D fuse_statx_attributes_mask(=
+inode,
+> +                                                                      sx=
+);
+>         }
+>
+>         if (attr->blksize)
+>
