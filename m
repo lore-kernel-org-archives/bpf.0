@@ -1,164 +1,156 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C45933A031;
-	Wed, 25 Mar 2026 07:47:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774424850; cv=none; b=CsFGv+dzVT31yjCvVPNZfoKEwiza9c5myVy2sKpFVitRLpoobddmYXr1g4HFN+juS7Lilawup881AVB+VvAPeTKan2FitxFuuWjYsPXAs17TMeCo8+OnN/Fr21aaYdmfr7jDOXLpn4GudArQVHRu0vG8eZI9thMqkGj+BrIl78c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774424850; c=relaxed/simple;
-	bh=nVaBhXBGCwmdXl4qWbAMDiRnO0PnIlE9mWjCPQ5LboA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UDX5sA3MElfdEnVhz4/UoV6ZwLCNeKX92t5SW1mJnHuT1tnCsZLKteyDx7DQum3C8wTzjT/qfd3RFdTtDlwLL6gQXuU2gKeCd8EP5m6jAwrXn7TL7xiim7IiPJRQS9gtYiAouSvmX7yvEM6i1wh/KHpQUxsfUDwwWwYxlHebmCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4fgfBQ15jYzYQv2J;
-	Wed, 25 Mar 2026 15:47:10 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 2960C40539;
-	Wed, 25 Mar 2026 15:47:20 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP2 (Coremail) with SMTP id Syh0CgAXQAUGk8NpDDmXCA--.50986S2;
-	Wed, 25 Mar 2026 15:47:19 +0800 (CST)
-Message-ID: <5b24cd1d-a8cf-4c9c-a0c8-c79c10ea80e4@huaweicloud.com>
-Date: Wed, 25 Mar 2026 15:47:18 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2402A3909A8
+	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 07:57:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774425445; cv=pass; b=AQRTdxwWFtb+U6pKTp/PaZUgpxbm8pSfKQOJJnwHauTb/BWrE0m49aWa8xOG8z1nZfFP8Uxs0gVrDmo6yKVWL2hLfPgjkL2KqK4fG9aMlJl/eKoTLhgnIm9p8vX4UIS5V69S4x9bVuxnAsKzsghGRRM91pxBjQDXvwyX2LXxHz0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774425445; c=relaxed/simple;
+	bh=LTosCI4MVQmESVRw/t4QUQTFgJ4QedotPsW98iUcDow=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=t2m+4evc6mlqM9HRuiZepKbaIXSrW/fS22B+ny59HYxtnYab0RBydVzsHgyDSSxqw7ExFWo1Vbh0CfN3axI4SwxB+MRvluB3FNabK7ybjUXhVkUHZ0dx3C2XHXf7U0Wp0YLWHWmF79YkoPBKK2X5AYQ5AqT0MXOhQ4CtDwDRrGg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VAS/ML6C; arc=pass smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VAS/ML6C"
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-668e55bd36bso5263260a12.3
+        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 00:57:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774425440; cv=none;
+        d=google.com; s=arc-20240605;
+        b=D1zQp6VPKeUiozgpTKoHy4E4Ob2D+4wQGbAmV0hkcp3AaBgtmRGAZFZrjgybQLvVYz
+         rFaO+JjgtP687KLVMJA0ig701Cr0keWskIlryODILhQaCgiPkZ7siMRG17EzDZhtDvhC
+         ssZvezUCy4bayDrBV6RChJLJw1oLf5IMS/2RBOqg9nUkeDAqg74kguARxLC9WiOLBqvp
+         yeon8yD7BgcbruwHl9lsao+lG5XWvlyT+4VjE+0COQMQ8G/q/1pcjOEyqmL2qoJdoqF5
+         Zw5vjiLc/qKl+CMbrqCTE2CQNMKvg+ZzUyiLTvSAfPf90LUtfw/LOw/jR5pjkcrl/mlm
+         LzHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=LTosCI4MVQmESVRw/t4QUQTFgJ4QedotPsW98iUcDow=;
+        fh=MzQw727DZdU0eLzHP+Oo4eivrktVMYdhliwxrlJ0MD4=;
+        b=edSAam9IOtBEbXS6VOvDb75qBHQwDIIho/heksGK3Sr39U5lnDUvhZFiqYHfYWAZGf
+         twIDdfQbH/av2RKRtNVV26Pu6AxTI+W781ac6s8+TIyr1gppZMjtowSpQFQEODYgR6ac
+         od3b2TPNlUt4pj/tCz0IaVJYpt5gj+5FXfc/3wbP1konL40lbfl1jHqhPQQdCCZj756V
+         I33Hbd+zywMCmszr0C93mSV0dIVT7MPxXi4EDxNiVGOWHt91ksC6L19wttf+vY2lquxA
+         N/eceKIUN0SIL+FPdadJeeSaBpKzWVDAfv/j9U41o2xlr7sqMhjVI2Y8CgUU0mi+3z82
+         urLA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774425440; x=1775030240; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LTosCI4MVQmESVRw/t4QUQTFgJ4QedotPsW98iUcDow=;
+        b=VAS/ML6CsKbAkj6yuNjsMyepGu9dLARDr5yRGeYtiaztISvzYyB2bMXntVBc4Wz+SG
+         m4wygj3lsQGa0h9J/x25U62cHKACgTkoENJ8jJ0K0KIiwFsrD0dBEScUxRxGg0AJyXD0
+         pmeVgMISSjR5kX+LyW/bEpkOJ6su/ofJ1JHUIl74TS1ueytidW90NhRYFZ/hPrUfJvuu
+         e8UZGeAT21DHbk7Xjsw0jlGWLpUvB4zFadofMxC27QX4hcLfgmzo9tQpre20lT2gXO6A
+         PEymQXm6UqgFDJuNVvFc7Sqez6ErNPtCc8hvRGD90s33vGahruso/m7qyCdbo4viaBCs
+         EKBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774425440; x=1775030240;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=LTosCI4MVQmESVRw/t4QUQTFgJ4QedotPsW98iUcDow=;
+        b=hIsbtb+EnrdSK/X6wdF9mfSW+ud0hAVfy4BkqrWfiJcnF2ielsqGAeG98b0rhe6dNd
+         HsEVdkEw1nY6bJbrvHgM234uoSsoWRZGDjFe9KacIq+2qWulWvjwTK455mGEv//eCkZa
+         53eNTEDJ7+v0f8E2BRNEp7jWa0+7wCiWLDSoBoZW1RrxOhkD5UmuU9w9zjjEmnHMhXoB
+         68B1kYDWk6bISijz6w17m58Nb7ej+vR09Zzy/BpxWgcfiA1GiG2bLdMJP2UGb1qqw/6K
+         zDUvR8uUxrTxD4JEnPiN13v2KoGe3HiFhS9MYR1IWrAwntyLoo1ycTzmCE+GzIQL8vPE
+         YgVA==
+X-Forwarded-Encrypted: i=1; AJvYcCXi7vIEjPJ3sINF25u0UA28Axwy1VT6CtlXs+XVW/tOOuAeLtWP4HOjnphUuTAuxPnlh0k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhETx0+wgxQwcl5e/6cJEXhiQdmLsGGQwPau+5e3kb0LZiRI1U
+	Y0mMEValehxmSt0rwQMdx+m0lNoxDrQQPDim9X3DzhxO09MAQmQ/g1FgVWqSZyIt+Z6tzrSExAz
+	5dkdH6QNGCzkNHAf+uCaJ3rbPviwc3A==
+X-Gm-Gg: ATEYQzz8mEiXynCz4mV0ovQgxNZVrv4dz30vtM3FhDTYSJhfJB2iGTeqf8xF0AXQlNw
+	djkkJpmWS12mnAQzVFBthvoDJFtCj4i9LhuEturxpnPp8Vp/0v8QrC+NBgYrQd7LPz83WfCDvfg
+	gnimwMvGbZlGAhkWoX4pPT7Bs/ocMAUyWl5p/cTlR9NmkrfKUWT+9tj7BMx13wMoX6qlhyMDvn2
+	y16EZImyfkmz1cDalbApIMk4zU8r9AyF9gE6ooTbh6PUGFjyzZCLL34A4ObjvS8USlm1kM+mQ8U
+	RbQp+yqZdlC6TJfC79S2GWpwnA==
+X-Received: by 2002:a05:6402:26d6:b0:669:b5be:120f with SMTP id
+ 4fb4d7f45d1cf-66a82593953mr1781063a12.0.1774425439994; Wed, 25 Mar 2026
+ 00:57:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v10 1/5] bpf: Move constants blinding out of
- arch-specific JITs
-Content-Language: en-US
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, yonghong.song@linux.dev,
- puranjay@kernel.org, a.s.protopopov@gmail.com, alexis.lothore@bootlin.com,
- list+bpf@vahedi.org, linux@armlinux.org.uk, yangtiezhu@loongson.cn,
- hengqi.chen@gmail.com, johan.almbladh@anyfinetworks.com,
- paulburton@kernel.org, hbathini@linux.ibm.com, chleroy@kernel.org,
- naveen@kernel.org, luke.r.nels@gmail.com, xi.wang@gmail.com,
- bjorn@kernel.org, pulehui@huawei.com, iii@linux.ibm.com, hca@linux.ibm.com,
- gor@linux.ibm.com, davem@davemloft.net, udknight@gmail.com,
- martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
-References: <20260324122052.342751-2-xukuohai@huaweicloud.com>
- <edfa617891aa2e2980ecfb8037a7a4ed069e518bbce1777e331c737024feb1da@mail.kernel.org>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <edfa617891aa2e2980ecfb8037a7a4ed069e518bbce1777e331c737024feb1da@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:Syh0CgAXQAUGk8NpDDmXCA--.50986S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCr43CFW5uF17Kw4UWF1rZwb_yoW5tr1UpF
-	yvqr4YkF4DtF1j9w47JF48CrWYqan8Kw17GFn5GayIyF4jqrykWF4Fgw45ZFyYqryvkw1I
-	vr409r9Iga43urJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26rWY6Fy7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWrXVW8
-	Jr1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-	CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
-	6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07
-	j6a0PUUUUU=
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+References: <20260320162336.166542-1-hao.sun@inf.ethz.ch> <177436741379.1084685.742970732574986773.git-patchwork-notify@kernel.org>
+ <CAM=Ch04dJEf0_1+NeO1AJOBwKhQ5hcQsionMyyxuu1h7Nmj_pg@mail.gmail.com>
+ <CAADnVQKAb-igkV-7htfqMxFhui+utF24T70pbeWd4mwcXWQ4pQ@mail.gmail.com> <CAM=Ch05c5ptrNHjKHWppynU_1rfsfZsiLwK111h4phrs_u77PA@mail.gmail.com>
+In-Reply-To: <CAM=Ch05c5ptrNHjKHWppynU_1rfsfZsiLwK111h4phrs_u77PA@mail.gmail.com>
+From: Hao Sun <sunhao.th@gmail.com>
+Date: Wed, 25 Mar 2026 08:57:08 +0100
+X-Gm-Features: AQROBzCGBJa7258_COXowKUS9hywiOP09cP0s4QN4wc4o8E8JTgwMgd4WL2cxSM
+Message-ID: <CACkBjsbRMH1AJTL6Jnro_fng3XRdz7T8i5vVzXr-Afb3Apzrnw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2] bpf: Simplify tnum_step()
+To: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, patchwork-bot+netdevbpf@kernel.org, 
+	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
+	Paul Chaignon <paul.chaignon@gmail.com>, Shung-Hsi Yu <shung-hsi.yu@suse.com>, 
+	John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/24/2026 8:46 PM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
->> index 67eb12b637a5..8f52f4b6c3af 100644
->> --- a/kernel/bpf/core.c
->> +++ b/kernel/bpf/core.c
-> 
-> [ ... ]
-> 
->> @@ -1507,13 +1507,16 @@ static void adjust_insn_arrays(struct bpf_prog *prog, u32 off, u32 len)
->>   #endif
->>   }
->>
->> -struct bpf_prog *bpf_jit_blind_constants(struct bpf_prog *prog)
->> +struct bpf_prog *bpf_jit_blind_constants(struct bpf_verifier_env *env, struct bpf_prog *prog)
->>   {
-> 
-> [ ... ]
-> 
->> -		tmp = bpf_patch_insn_single(clone, i, insn_buff, rewritten);
->> -		if (IS_ERR(tmp)) {
->> +		if (env)
->> +			tmp = bpf_patch_insn_data(env, subprog_start + i, insn_buff, rewritten);
->> +		else
->> +			tmp = bpf_patch_insn_single(clone, i, insn_buff, rewritten);
-> 
-> When env is non-NULL, bpf_patch_insn_data() adjusts env->insn_aux_data
-> via adjust_insn_aux_data() and env->subprog_info via
-> adjust_subprog_starts(). This shifts subprogram start positions to
-> account for the expanded instructions.
+On Tue, Mar 24, 2026 at 10:57=E2=80=AFPM Harishankar Vishwanathan
+<harishankar.vishwanathan@gmail.com> wrote:
 >
-
-Right, but only the subsequent subprogs are shifted, the current subprog
-is not. Since we are patching the main prog when env is non-NULL, and
-subprog_start is always 0 for a main prog, subprog_start is not needed
-here and can be removed.
-
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index cd008b146ee5..1b2b99f2d859 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
-> 
-
-[ ... ]
-
-
->>   	}
->>   	bpf_prog_jit_attempt_done(prog);
->>   	return err;
-> 
-> When blinded is true, the rollback restores env->prog to orig_prog, but
-> env->subprog_info still holds the shifted start positions from blinding
-> (adjusted by adjust_subprog_starts() in bpf_patch_insn_data()). The
-> commit message states "env->insn_aux_data and env->subprog_info are no
-> longer used after JIT failure." However, on configurations without
-> CONFIG_BPF_JIT_ALWAYS_ON, fixup_call_args() falls through to the
-> interpreter fixup loop after jit_subprogs() fails:
-> 
-> fixup_call_args() {
->      err = jit_subprogs(env);          /* fails, e.g. -ENOTSUPP */
->      ...
->      for (i = 0; i < prog->len; ...) {
->          ...
->          depth = get_callee_stack_depth(env, insn, i);
->      }
-> }
-> 
-> get_callee_stack_depth() computes a target address from orig_prog's
-> original instruction offsets and calls find_subprog(env, start). Since
-> env->subprog_info start positions were shifted by blinding but the
-> instruction addresses are from the unblinded orig_prog, find_subprog()
-> fails to find a matching entry and returns -ENOENT, triggering a
-> spurious "verifier bug" warning and rejecting the program.
-> 
-> Could env->subprog_info be restored alongside the prog rollback, or
-> could jit_subprogs() return -EFAULT when blinding was active to skip
-> the interpreter fallback path?
+> On Tue, Mar 24, 2026 at 5:36=E2=80=AFPM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Tue, Mar 24, 2026 at 2:33=E2=80=AFPM Harishankar Vishwanathan
+> > <harishankar.vishwanathan@gmail.com> wrote:
+> > >
+> > > On Tue, Mar 24, 2026 at 11:50=E2=80=AFAM <patchwork-bot+netdevbpf@ker=
+nel.org> wrote:
+> > > >
+> > > > Hello:
+> > > >
+> > > > This patch was applied to bpf/bpf-next.git (master)
+> > > > by Alexei Starovoitov <ast@kernel.org>:
+> > >
+> > > Hello, I see this was applied. Just a heads up that I still had a few
+> > > concerns regarding the
+> > > commit message and code style in my last reply. I think it was my
+> > > mistake to include
+> > > the Reviewed-by while still requesting changes.
+> > >
+> > > Hao, would you like to send a follow-up for those, or should I put on=
+e together?
+> > >
+> > > Or Alexei, do you think it is okay as is? If yes, we can just leave i=
+t be.
+> >
+> > They read like nits to me.
+> > New code is definitely cleaner.
+> > As a follow up better craft a targeted selftest and explain
+> > your points in selftest comments.
 >
+> Yes they were definitely nits. Makes sense to keep the
+> code clean.
+>
+> The logic is sound and verified, so I'm happy to leave it as-is.
+> If I find the time to put together a targeted selftest down the road,
+> I'll send a separate patch!
 
-We can save and restore env->subprog_info. Since only the subprog start
-values in the subprog_info array are adjusted by the patching function,
-I will just back up the original values and restore them on failure,
-without duplicating the full subprog_info array.
+Hi Harishankar,
 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23488858455
+Thank you for reviewing the code and verifying its correctness, which
+gives additional confidence.
 
+I kept the commit message concise, as I felt it was sufficient to describe:
+simplifying the problem to finding the submask and treating d=E2=80=99s mas=
+k bits
+as a counter that we increment by one. Once this perspective is clear,
+the rest of the logic should be relatively easy to follow.
+
+That said, please feel free to refine the message further, e.g., adding a
+selftest and referencing it from the code.
