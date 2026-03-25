@@ -1,166 +1,144 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43A742874FA
-	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 15:12:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774451537; cv=pass; b=t1vSIy9EmRfSAhCq9drzpqwj16Yr4SiRd5r1Gf0WCUv85MDNfhe9aA6XHEeytACocwX/CHdCSM9lQiUmRPurzvILi8ZumC2OsOS3ioTp9TVHOWeFwKSz71gPQhMMQo8fz2CXA3SKgEfnhPZ9Wdpy62oRs2476hQE3ve2NuHtZhU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774451537; c=relaxed/simple;
-	bh=6J3rK+PQLNsf0zS4HmXMEH16rAMvx2AYmtoTuHQA/cc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KtwzpZ7hPQUbZh69qu/o1GkzGuWhdHlXw/ua7LU2LkU6K6LqXn2xd2cFmUNZcFAfTFMicOXqkXk4dqWNJRQIGt5zz96yi7aUzapGDFWRe9wDsYNPyLa1I/+e5JaJZ2KCGVg3s2quBjunp+TQWRsEjKkUFQ1xP3N5LZ0iYkHugXg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OP7zlfpQ; arc=pass smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 069E839A7FE
+	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 15:42:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774453335; cv=none; b=K278bLhBNxqG+NqfEOHNjpUrMJDy7YQ3VDEUIwTDU+1cggWR7z1azZW4GvKEfzpEI/gcfRaLHRaV6D6BihIfTtZ77LWGAF0UjiDHZlY8fXCJd6sVZQnUZzaBoa4SJDMa2r6WZl5TiC07a6TSyNwepV5wuZJMIlmlPzpMx1SFN/4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774453335; c=relaxed/simple;
+	bh=toS7UUE6wFJTL19DVzAONQ7Jlc/gULcgXL/ZAbuTzdI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=t8+0VqmAb7Y1BouTexPqK8MUsTP1QBsBjgvMPkNTWt4UMxWDzqOXgMFeAlTbGspJABz8wRFP0MYJYsVIJjYu73KP5nEEZ/HknKCqMx5v/hUDiATz5CjubO3sTf8uPHAuFtRZ4P+tnqVg6pcc8AcRz6A0MALNFolke/DdtXUTVG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cEfzyRVX; arc=none smtp.client-ip=209.85.221.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OP7zlfpQ"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-43b7481f9d3so2259355f8f.3
-        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 08:12:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774451534; cv=none;
-        d=google.com; s=arc-20240605;
-        b=hNMW9rsc9WHhg1Z8sK3q5qTAziX3NZwHXwQxoB1haIeQjbD/nvSiw82Flod1vVUmcR
-         7EBR4M+YzvRMrxCLSjl0IYRjina1E1QmhleeMSI8K10yhhzpEcyoQVcVJur3bq2Ms07D
-         Ij7cQhhgA04aK70PnTqHs0ihlbnvj8L1QdWEHJhBASSZSFQCyJavyaIqLzvg5PArgnuI
-         etKNma5RqHQF4qk8koQ84wd5MXLvJcOLkBjUF76jXnltAn/GIM6stfFcl1tlMF+ESI64
-         7bMnbW38ThIpZZmrwkBSCkaNVqgHhmMW19rvs7FpFOlMgNEhp0/5Bx2DV5gqPMhFKnaF
-         tLQg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=N8Ha9bsXW8GmW/gx0ZbCJlm8QKxYvQfpM0vtpt73qP8=;
-        fh=ticlYEepWSm0GdaeEZLOXauO1uWIPHoGMkLap+LAGz0=;
-        b=dvetW1wCTspwl+7JLW1+6D0prpdKGQOgqw01lJeAzfc7ieIIvEb8XGOMQ7komlL1z4
-         JAff/z8RWtjgml3tudtTTXmiR0cExnkpH+kb30t4FcaW5jJfiOl0qz+uYdXScpHF+Q2i
-         nQde9SfzOt0rcFYtGS0h6D7i3GZ4Ts21I89/sVY3oRlKjLI0FEg0oP5ikWZ8fh4Jkih2
-         ii0o/ePlCzRTiNwt69J9EuL0IIFmBsrz8BMt+8l7gs67jzcPf6TF5/OwJXabCb/URXcD
-         tJNIkpIDbre3JzHGhEDibFf/5yBGsg38L5H4cvKjObGEzVcSk+JQec0vTX6nVyw4T6F/
-         WGzg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cEfzyRVX"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-43b8982c2f4so679563f8f.2
+        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 08:42:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774451534; x=1775056334; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1774453332; x=1775058132; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=N8Ha9bsXW8GmW/gx0ZbCJlm8QKxYvQfpM0vtpt73qP8=;
-        b=OP7zlfpQ0sV9H0hNfsaoRzFT8ZP6JW0TZmRd7djJurD3kkDEGCtIjExy0M8NENJUYX
-         u28gBPCeMbchIhBrfgjG743LZxGSvoTNJzsdXn6lr9cTdqmwcW+Vicfney+WqicOqRA0
-         mwRpGBShbTsnoxwrCxgP3/73Fj7yA2JHvXWoeaTAul8YtRQHbbqCWkZjQNdmSRr8oZNs
-         uTOufGjZgQqUyfSxUKEbaL/RPO8x/aqfzwLepYLXFxgYKfZvWKoMVai9Px+Mdym27+/f
-         gj+SmYhu30yF6FQBVahc1kD4gvfZ92RCa2Y6K+xe8ikPG2F/kCFIkMf7e+OHbSwTA7pR
-         T1cA==
+        bh=ZqPXz+Sa/AY6Vo8qNYqeoHSuweF/2Tg4HA9dNOaxg0o=;
+        b=cEfzyRVXwJ/ySEXBaH7dTEKa+C/dffXAg3dYTU4ISN+5G7nGIy6gaiHG2qN27Sb1GO
+         5ztsPBRKljNUh1EHk2gNyMo1uaeS90HecqwBallrs1LVldeN+mvQiWXCR6GT33osJeYH
+         grc7YQXeCeqc/4L9wxIkLU1Z7KsU2A5VsefstjsGQxPHEg6Mz5dJtTX1IBMfxcAc1p+P
+         6XQPmBphvVJagA7Egq2r+sfwIrAJHkFKF7MK5YhZmyWFR5mt3s09I7MEtX2s+niYaAgN
+         TxFXD9cdk4pOL9dfTyVf8GkKghXRyy4rszeeTH/yKe8fJRId2wZDHHFw1zgGa0EvrMS5
+         6U4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774451534; x=1775056334;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20251104; t=1774453332; x=1775058132;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=N8Ha9bsXW8GmW/gx0ZbCJlm8QKxYvQfpM0vtpt73qP8=;
-        b=MWUIq8JxbofAADiLODaeyQ2P/v7oF+dgpxvAAvspM6mKsl4hwUpUT1zppLvlAD5Rzj
-         sSDbNSUZhpiN9YRS4wieRbJiulWSRiG9W7FB7vSyAYrZ3Hj8cJoqRo+47kh6CWdorOaF
-         JjU81zTrWGg3kJUvkKmJLrXhqKnoId5pXs2raB6Fw90jSlukH0IrnZmYB5Q06I0nLxDk
-         EG8tyQ+i1NYKI517gRhc1R/4nhj9VTfvGJ48Y09Np2av++DpRLMQyl1FitjWRRCbP6Ho
-         XgArvX6zaCgz+ttV300X1zm8nGFSnkDx2s9hfd0AwaPGTrypokXVD6Bns2N4lWO4xeab
-         7y6w==
-X-Forwarded-Encrypted: i=1; AJvYcCUv91CM/smloClMlYtjSOizfHU6XAN95jcw+r0CQU0cLYqoGjK0/06ZqPfFXmBmCdMMaK8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKPPvZXAvpkO5DCcRWyOlXCD6BRmGbBFsQfBV6ls2sdLx4pfi2
-	LUYB6PNkTEMKJLrNHM8TSZ9MexF7FW+9HgUZ/JblLqMgbwuektuOSLRm/vhTQO5PZRmaGl9Lo96
-	/ICLlPeLy+pA1eQsMVih5ql7kIGeRiCs=
-X-Gm-Gg: ATEYQzxI0k2nKQhhDYRhRhMmrOOLp4X/7IaPUXAy5aR+zcRC7eiWoQfVLQluJJU3ezB
-	0KsZKvitsINKfhy/HadCfXaC74vQqPF7hw219mzf6vChlh5oPG5+cis84Mc6P+U7ocuVjJuWlK6
-	8vhQKWqQPn3bT724MFonR1CKL47ZTF4TcRwJG7E1eE0HtoNoMmfIpUSwq0yRFIQPuyE70SSO/1s
-	Di+j7QFhKOj3M7zlDCR6+saj9o6LfodNTV8jJGRklBifBsycP1hHydMauuXvVQa/nZeiKoKbvDh
-	tCgcyiN7YQ/A0gPdI7x+YfaFn1TLuO943Oc7SVlSDhoN5xDX46tGV5BADoANr2IYHE3Mz5o6sCV
-	hgO5Bq4ZQIxScutBp3OYIpA/s2w==
-X-Received: by 2002:a05:6000:2502:b0:43b:50d6:4f04 with SMTP id
- ffacd0b85a97d-43b88a3db0dmr5558105f8f.38.1774451533418; Wed, 25 Mar 2026
- 08:12:13 -0700 (PDT)
+        bh=ZqPXz+Sa/AY6Vo8qNYqeoHSuweF/2Tg4HA9dNOaxg0o=;
+        b=NCMv8xoGuY8Oh9t0Wjxk8t/x8cJHyGlVVQ86j0RuMf29f++XxjgR91++fOxCKybEMG
+         HZLdYNUC+KfvodpEYf4V1uqWsWfxRvM8Rsdsu4jqQ1YVfDhwtIsXD0Rg+Q+V+oBP1E9U
+         fAsenhOB/zZxj0PIT+Yn21A3ujIlSKA/Nppe/JnJToETw2TjoEkhe6sCQHcMnpKmCmvN
+         Tk+uwOLHRG/1D8JPbAeXODVVhGI0bt8BKm0g5aA3tj4ENRLULSMH+JMTiRTO6xT2X3xJ
+         QLj0udwHFKhIJWp/CbhsmI7dEJRMwpKmLrAUxWNWWcyOQ5oSHkwn3FejFyJAV1JVqX/R
+         OPvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU4lcCYP6I55BP14WQTzc+c022VgWXciZhjgBw/V9Q5iYwPtRJKKxNDnSbbUZ4mlQGhUlU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZ5Gm9OqHmKCfVysqjEOkB2iqwtDbl6JjWdTff/SCSRaPYOe36
+	M+6VNdCyMPMrE2axrAw1LJkC9wfWhmtBAySPwhJbmSDu1Ud0g+nPHMCb
+X-Gm-Gg: ATEYQzxvsip8sSyCtrwZdPPLg+ZQ910Kss4qlaFDOZVgqPuagSJ2f5C7MsrkAXaj1Ya
+	lo+7KznmLGTIeOOFdqzdSkWuriyvyVLFpU94JrcrRvlA22UleQxPw62Df93KVhrKvznpr6fR5qN
+	IAuU1xv59GRiig+FtTfBwwPrF5aurOfKZQ0EXnGcQVvxdjaSwGwdvRVtTpwjfzrqrpz0G6DZ6+S
+	FVI+Gq6hdZ0uzFEDwSgDXSScZNFhIO+Grib0QOdCgtlTjdVhwIQyZWDZ06zN1E6WJQeDsonbqnF
+	X76wS62Rbu3Gvb5Dahh/CAeDhlSK0+ALgWJwG4l1Fb9n/1yypM+Sk7frHewltHBoYozMiM8kM2j
+	rj0ltnMG7/6PVVFbxdVg40mbc7EFJzOnA7XL+YFE2uRqp5Ox1w4xm9POXUnAZe4wQUbphNzEAf8
+	IHlt39WfkkWxE3i2vw8wu/YwwQ713vZni2gNEaLVlKZV9+lXVwNQgUcr+l4Pv8ZUVo
+X-Received: by 2002:a05:6000:2912:b0:43b:8766:6005 with SMTP id ffacd0b85a97d-43b8899d143mr6042308f8f.20.1774453332131;
+        Wed, 25 Mar 2026 08:42:12 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b919cf2b2sm609925f8f.18.2026.03.25.08.42.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Mar 2026 08:42:11 -0700 (PDT)
+Date: Wed, 25 Mar 2026 15:42:10 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Ankur Arora <ankur.a.arora@oracle.com>, Andrew Morton
+ <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-pm@vger.kernel.org, bpf@vger.kernel.org, arnd@arndb.de,
+ will@kernel.org, peterz@infradead.org, mark.rutland@arm.com,
+ harisokn@amazon.com, cl@gentwo.org, ast@kernel.org, rafael@kernel.org,
+ daniel.lezcano@linaro.org, memxor@gmail.com, zhenglifeng1@huawei.com,
+ xueshuai@linux.alibaba.com, rdunlap@infradead.org,
+ joao.m.martins@oracle.com, boris.ostrovsky@oracle.com,
+ konrad.wilk@oracle.com
+Subject: Re: [PATCH v10 00/12] barrier: Add
+ smp_cond_load_{relaxed,acquire}_timeout()
+Message-ID: <20260325154210.79a621df@pumpkin>
+In-Reply-To: <acPo7l_pd5rnHpSX@arm.com>
+References: <20260316013651.3225328-1-ankur.a.arora@oracle.com>
+	<20260315184925.b6f93386e918ca79614843e3@linux-foundation.org>
+	<874imftol4.fsf@oracle.com>
+	<20260316233712.7cbfac27@pumpkin>
+	<87ms07rlp9.fsf@oracle.com>
+	<20260317091705.5a64fc56@pumpkin>
+	<acPo7l_pd5rnHpSX@arm.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260324122052.342751-2-xukuohai@huaweicloud.com>
- <edfa617891aa2e2980ecfb8037a7a4ed069e518bbce1777e331c737024feb1da@mail.kernel.org>
- <5b24cd1d-a8cf-4c9c-a0c8-c79c10ea80e4@huaweicloud.com>
-In-Reply-To: <5b24cd1d-a8cf-4c9c-a0c8-c79c10ea80e4@huaweicloud.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 25 Mar 2026 08:12:02 -0700
-X-Gm-Features: AQROBzCPaabh8daelQqDj3MUVAnt_BoyyKMWkVTLF5Mk4FpOAwGezRlTKeSEVGw
-Message-ID: <CAADnVQJ01c5wkfcc7rOi+2X6KuLJCJ6A7H3aHAz4Spxcf_hV5A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v10 1/5] bpf: Move constants blinding out of
- arch-specific JITs
-To: Xu Kuohai <xukuohai@huaweicloud.com>
-Cc: bot+bpf-ci@kernel.org, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, Puranjay Mohan <puranjay@kernel.org>, 
-	Anton Protopopov <a.s.protopopov@gmail.com>, 
-	=?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>, 
-	Shahab Vahedi <list+bpf@vahedi.org>, Russell King <linux@armlinux.org.uk>, 
-	Tiezhu Yang <yangtiezhu@loongson.cn>, Hengqi Chen <hengqi.chen@gmail.com>, 
-	Johan Almbladh <johan.almbladh@anyfinetworks.com>, Paul Burton <paulburton@kernel.org>, 
-	Hari Bathini <hbathini@linux.ibm.com>, Christophe Leroy <chleroy@kernel.org>, 
-	"Naveen N. Rao" <naveen@kernel.org>, Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, 
-	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
-	Pu Lehui <pulehui@huawei.com>, Ilya Leoshkevich <iii@linux.ibm.com>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	"David S. Miller" <davem@davemloft.net>, Wang YanQing <udknight@gmail.com>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Chris Mason <clm@meta.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Mar 25, 2026 at 12:47=E2=80=AFAM Xu Kuohai <xukuohai@huaweicloud.co=
-m> wrote:
->
-> On 3/24/2026 8:46 PM, bot+bpf-ci@kernel.org wrote:
-> >> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> >> index 67eb12b637a5..8f52f4b6c3af 100644
-> >> --- a/kernel/bpf/core.c
-> >> +++ b/kernel/bpf/core.c
-> >
-> > [ ... ]
-> >
-> >> @@ -1507,13 +1507,16 @@ static void adjust_insn_arrays(struct bpf_prog=
- *prog, u32 off, u32 len)
-> >>   #endif
-> >>   }
-> >>
-> >> -struct bpf_prog *bpf_jit_blind_constants(struct bpf_prog *prog)
-> >> +struct bpf_prog *bpf_jit_blind_constants(struct bpf_verifier_env *env=
-, struct bpf_prog *prog)
-> >>   {
-> >
-> > [ ... ]
-> >
-> >> -            tmp =3D bpf_patch_insn_single(clone, i, insn_buff, rewrit=
-ten);
-> >> -            if (IS_ERR(tmp)) {
-> >> +            if (env)
-> >> +                    tmp =3D bpf_patch_insn_data(env, subprog_start + =
-i, insn_buff, rewritten);
-> >> +            else
-> >> +                    tmp =3D bpf_patch_insn_single(clone, i, insn_buff=
-, rewritten);
-> >
-> > When env is non-NULL, bpf_patch_insn_data() adjusts env->insn_aux_data
-> > via adjust_insn_aux_data() and env->subprog_info via
-> > adjust_subprog_starts(). This shifts subprogram start positions to
-> > account for the expanded instructions.
-> >
->
-> Right, but only the subsequent subprogs are shifted, the current subprog
-> is not. Since we are patching the main prog when env is non-NULL, and
-> subprog_start is always 0 for a main prog, subprog_start is not needed
-> here and can be removed.
+On Wed, 25 Mar 2026 13:53:50 +0000
+Catalin Marinas <catalin.marinas@arm.com> wrote:
 
-sashiko found other bugs too:
-https://sashiko.dev/#/patchset/20260324122052.342751-1-xukuohai%40huaweiclo=
-ud.com
+> On Tue, Mar 17, 2026 at 09:17:05AM +0000, David Laight wrote:
+> > On Mon, 16 Mar 2026 23:53:22 -0700
+> > Ankur Arora <ankur.a.arora@oracle.com> wrote:  
+> > > David Laight <david.laight.linux@gmail.com> writes:  
+> > > > On arm64 I think you could use explicit sev and wfe - but that will wake all
+> > > > 'sleeping' cpu; and you may not want the 'thundering herd'.    
+> > > 
+> > > Wouldn't we still have the same narrow window where the CPU disregards the IPI?  
+> > 
+> > You need a 'sevl' in the interrupt exit path.  
+> 
+> No need to, see the rule below in
+> https://developer.arm.com/documentation/ddi0487/maa/2983-beijhbbd:
+> 
+> R_XRZRK
+>   The Event Register for a PE is set by any of the following:
+>   [...]
+>   - An exception return.
+> 
 
-Pls fix them all.
+It is a shame the pages for the SEV and WFE instructions don't mention that.
+And the copy I found doesn't have working hyperlinks to any other sections.
+(Not even references to related instructions...)
+
+You do need to at least comment that the "msr s0_3_c1_c0_0, %[ecycles]" is
+actually WFET.
+Is that using an absolute cycle count?
+If so does it work if the time has already passed?
+If it is absolute do you need to recalculate it every time around the loop?
+__delay_cycles() contains guard(preempt_notrace()). I haven't looked what
+that does but is it needed here since preemption is disabled?
+
+Looking at the code I think the "sevl; wfe" pair should be higher up.
+If they were before the evaluation of the condition then an IPI that set
+need_resched() just after it was tested would cause a wakeup.
+Clearly that won't help if the condition does anything that executes 'wfe'
+and won't sleep if it sets the event - but I suspect they are unlikely.
+
+I also wonder how long it takes the cpu to leave any low power state.
+We definitely found that was an issue on some x86 cpu and had to both
+disable the lowest low power state and completely rework some wakeup
+code that really wanted a 'thundering herd' rather than the very gentle
+'bring each cpu out of low power one at a time' that cv_broadcast()
+gave it.
+
+	David
+
