@@ -1,432 +1,241 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD6F134C128
-	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 18:56:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39B4C32470E
+	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 19:11:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774464966; cv=none; b=uk+nu9YGnZDttHDBrr/WXdrLwuJWEtVBcexGK0vexUmVlqznnAKB4OIrSctcKaHxAVKnTR5w6OxE9tNqRn9ZQgt+4pTtnKRC+l2G9CwVAeSJ0dAHoIIpRxHdYVMB1+jsZIGc0cWJj+TA9D2r+pxlb/Tyzh8GB4dlM7UxjbcuGbA=
+	t=1774465906; cv=none; b=e4a1wJg8LPDTF/4eAfcQJThAbLCybkHKHCaZOVFmrXaA2v1hD6afEPThv3Hv6CO8bVp0YvAlb7DJEpljQCXGNzX/Nf/KN2jRXCFVV6BNc+m8J6CV/qHX+NZS4CjfR2osccwO7nkfjGJe4qPd4lIA6MMi1QnYfzPLfmZOJ9mhVfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774464966; c=relaxed/simple;
-	bh=BSoSyftKPiajwjvo13b22eQ7FZWEXkMUGGHBXk2w854=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=bi0BItUhU6aB19aMf8kpXdpnbXGpkeNDV7gd7SdBO/dKSSYMbWAjBpR++Hnldy2kkgsjXYeDuYbDMh5JY5SEty9lHaqtCcR20UYDCmR9fxOnp7D3uYqJQc03kssnF6zckIlMSzOIdNrFuilmvJ9Lj8o9gtImjaWts68UmUfn9Ew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=avGIqbKY; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774465906; c=relaxed/simple;
+	bh=3sJ77Gp7qkVWLtd/dpYIZhb93hL1rpNpMqHMEm5E89E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BRlMPLu8nL4/nQ9EfX4LgrLSMBEFCvY8VemjL5x+Akqc3EtpAVQyQQ2d1T19RCToTcVVTvF5NNMSDR+INFSNjqUVwRbiJ01pxDU8z+idp/expeUGQ+AmiZP6/twLyh6eIY7Tqqhb5u9z8DNPs8k5G8IsNXMrdF0hn7rEDpTfa2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=q9PzW5EN; arc=none smtp.client-ip=95.215.58.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="avGIqbKY"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-439af7d77f0so116072f8f.0
-        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 11:56:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774464960; x=1775069760; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AIrwgx/IZkH3tTF7nuFDgIrhDuNcmLtC/GtfOr63PAE=;
-        b=avGIqbKYNa4RA0ZD37b5E//m/LpESbHLH8NCOc0b/kmhEquqLwHJS0L9D/IfLx8qQ6
-         1a4aYGJOw8xansT/E0RHyMfjlH9V/JD3ab+x3BnafrD7vDftcuX+ZQgA6gF0DMrIfilc
-         VQvGHm/LWGikt4W/y/mSd2c7lYRsZuDKiY/tBlctS80U+uckbM2BzDaDZ/dDT/BH8bAO
-         jrCgA1D+jURYX84USOyStgGLgheo1QzDaPOYWcSB0lDeZinYwrkIxzejWvxATIVCrHhy
-         hv3ZNKy+LMgn9GXtxG+9UlMHnGX/HGx3mJFAwrC6L5bGxfcOcq98lwrxdmsgJ2O/fOQR
-         2nqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774464960; x=1775069760;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=AIrwgx/IZkH3tTF7nuFDgIrhDuNcmLtC/GtfOr63PAE=;
-        b=CsF3IUdv1djR1enIXNw56n+CPLieXr+Hkd13vJDUITQH1sMhk1xXVtGlcfhIh6qksA
-         AyihAzXncWZKARRSUAwWXyF7h2ASyBU+ajlyKSn8hkdJyOXq11cV0sfu8JoAoVRhwnir
-         ltJSAFLrdaH95xxpA7/jheyuT/xG5HKXgwxIJJ01bqz5TAw+Xq6gHS7CWfV5jQ1m45Ht
-         2KayYtROFQdZcQyLNsKR2MVddTaCe/nvQfii/AL3IyIYHeAHIRodHyDTu8B6PQX8s5qv
-         kij7zgYiqYWYvo+mwNbrLAo3noN+0MNBXW9YiOg/3gQdQ5Uh5J9x68s+/azUMsxkRssK
-         fuXw==
-X-Gm-Message-State: AOJu0Yx3DQkdk8OIh0h5IMdG1u38igCpa02qkcuneX2goa2ixlgN6YVb
-	nuMOLAuM7ou1L3JFVcmkMwpqQw2QdBS+fDhF/EDKszoHINwEWGu1gwuzHnHdTE70
-X-Gm-Gg: ATEYQzyEbjKiDDdEqpibg57GY4n0b2AOHrbHo1e9FCxbl6hVjIYqdvE38nMXPvcpeI7
-	tAcxigIc6+igJ6qokkkPS699JCl7FNC+OYSsEbHaY7DH8t9u/xuKzWB/lkDb8wblTRb0FEgLHT5
-	EJzFaFUx3Ez9pIuidH+6ySUmHGXV5YIe5IrTHvl6p7HFYatrIFUTUL0aseVBE1UIDJCI89KuLHy
-	rKTYri6//1QoVse7phVCDIMbb2jkdKeXiY7MKjLbvn/rTIisgKCpbsDhIAG/9nEROemKtuUS+Oq
-	6BFMmpApBnJK5N553cthCF3cHmXekzjvZBub35BusbqpvREGi8iCENOPbs6nEzDsHqHcO/tVd5/
-	gkq4FijUnwqgw6csvn+7lbNd4mvHCZRmLndA1dM5Uzk0MnAXeXt+UpegiyUtTxR77p0R8rmFx6U
-	pr1aFvRtp3S1EC25X8n7oUJXXh
-X-Received: by 2002:a05:6000:1ac7:b0:439:b440:b8b5 with SMTP id ffacd0b85a97d-43b889f5b49mr6442381f8f.43.1774464960378;
-        Wed, 25 Mar 2026 11:56:00 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:46::])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b9179b212sm1923380f8f.0.2026.03.25.11.55.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Mar 2026 11:56:00 -0700 (PDT)
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Wed, 25 Mar 2026 11:55:23 -0700
-Subject: [PATCH bpf-next v6 6/6] selftests/bpf: Add tests for sleepable
- tracepoint programs
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="q9PzW5EN"
+Message-ID: <1ff47530-44ee-4012-a013-0202182de208@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774465902;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7bwzI5I4kMNZg9C5PXzD0ZvcdZx2z7+EA/lSvVzkZ5w=;
+	b=q9PzW5EN5yrzsQ4r7/PCue0LoxNXR8Xpq/nGPlqKH3WZh/h7pweNW66NzeYTdB7QLbXU67
+	YS01LH2u8H7HTENe1oza9K20EHZLwWM+ysVNiamBYiNBS0CCETSUYDQouWXIwRa8+1QdZo
+	alt74wq8qcrBXopcorCb3u09udm4czc=
+Date: Wed, 25 Mar 2026 12:11:17 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Subject: Re: [PATCH 09/11 net-next v5] bpf: remove ipv6_bpf_stub completely
+ and use direct function calls
+To: Fernando Fernandez Mancera <fmancera@suse.de>
+Cc: =?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>,
+ Daniel Borkmann <daniel@iogearbox.net>, "David S. Miller"
+ <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
+ Guillaume Nault <gnault@redhat.com>, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, netdev@vger.kernel.org
+References: <20260325120928.15848-1-fmancera@suse.de>
+ <20260325120928.15848-10-fmancera@suse.de>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20260325120928.15848-10-fmancera@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260325-sleepable_tracepoints-v6-6-2b182dacea13@meta.com>
-References: <20260325-sleepable_tracepoints-v6-0-2b182dacea13@meta.com>
-In-Reply-To: <20260325-sleepable_tracepoints-v6-0-2b182dacea13@meta.com>
-To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
- daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
- eddyz87@gmail.com, memxor@gmail.com
-Cc: Mykyta Yatsenko <yatsenko@meta.com>
-X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1774464950; l=10473;
- i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
- bh=WS/EHttt2LOUmTMXKcUjws9WoFGgeeqClW3Jr6Q8Ypg=;
- b=tyXGFij3tn9v3K5InIdLliPqaIoAHOsxHbJO+7WED623X1NbJ4f8AkR6SjzelRMZbCcvGG9m0
- KJrZRJ34+5mDFgxnYq9WG8uNJX3t1g1jyCmSaVHRS6JmxxzstDi/FHg
-X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
- pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
+X-Migadu-Flow: FLOW_OUT
 
-From: Mykyta Yatsenko <yatsenko@meta.com>
+On 3/25/26 5:08 AM, Fernando Fernandez Mancera wrote:
+> As IPv6 is built-in only, the ipv6_bpf_stub can be removed completely.
+> 
+> Convert all ipv6_bpf_stub usage to direct function calls instead. The
+> fallback functions introduced previously will prevent linkage errors
+> when CONFIG_IPV6 is disabled.
 
-Add functional tests for sleepable tracepoint programs that attach to
-the nanosleep syscall and use bpf_copy_from_user() to read user memory:
+Thanks for working on this.
 
-  - tp_btf: BTF-based raw tracepoint using SEC("tp_btf.s/sys_enter")
-    with PT_REGS_PARM1_SYSCALL (non-CO-RE macro for BTF programs).
+> @@ -6221,8 +6215,8 @@ static int bpf_ipv4_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
+>   	if (likely(nhc->nhc_gw_family != AF_INET6))
+>   		neigh = __ipv4_neigh_lookup_noref(dev,
+>   						  (__force u32)params->ipv4_dst);
+> -	else
+> -		neigh = __ipv6_neigh_lookup_noref_stub(dev, params->ipv6_dst);
+> +	else if (IS_ENABLED(CONFIG_IPV6))
+> +		neigh = __ipv6_neigh_lookup_noref(dev, params->ipv6_dst);
 
-  - classic: Classic raw tracepoint using SEC("raw_tp.s/sys_enter")
-    with PT_REGS_PARM1_CORE_SYSCALL (CO-RE macro needed for classic).
+Should it be ipv6_mod_enabled() instead of IS_ENABLED(CONFIG_IPV6)?
+Is nd_tbl always initialized?
 
-  - tracepoint: Classic tracepoint using
-    SEC("tp.s/syscalls/sys_enter_nanosleep") receiving
-    struct syscall_trace_enter with direct access to args[].
+>   
+>   	if (!neigh || !(READ_ONCE(neigh->nud_state) & NUD_VALID))
+>   		return BPF_FIB_LKUP_RET_NO_NEIGH;
+> @@ -6290,12 +6284,11 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
+>   			params->tbid = 0;
+>   		}
+>   
+> -		tb = ipv6_stub->fib6_get_table(net, tbid);
+> +		tb = fib6_get_table(net, tbid);
+>   		if (unlikely(!tb))
+>   			return BPF_FIB_LKUP_RET_NOT_FWDED;
+>   
+> -		err = ipv6_stub->fib6_table_lookup(net, tb, oif, &fl6, &res,
+> -						   strict);
+> +		err = fib6_table_lookup(net, tb, oif, &fl6, &res, strict);
 
-Add a negative test (handle_sched_switch) that verifies sleepable
-programs are rejected on non-faultable tracepoints (sched_switch).
+A similar question here and other changes in the patch.
 
-Update verifier/sleepable.c tests:
-  - Add "sleepable raw tracepoint accept" test for sys_enter.
-  - Rename reject test and update error message to match the new
-    descriptive "Sleepable program cannot attach to non-faultable
-    tracepoint" message.
+I think bpf_ipv6_fib_lookup() is fine because the earlier
+"!idev" check should fail when ipv6 is disabled at boot time?
 
-Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
----
- .../bpf/prog_tests/sleepable_tracepoints.c         | 121 +++++++++++++++++++++
- .../bpf/progs/test_sleepable_tracepoints.c         | 117 ++++++++++++++++++++
- .../bpf/progs/test_sleepable_tracepoints_fail.c    |  18 +++
- tools/testing/selftests/bpf/verifier/sleepable.c   |  17 ++-
- 4 files changed, 271 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/sleepable_tracepoints.c b/tools/testing/selftests/bpf/prog_tests/sleepable_tracepoints.c
-new file mode 100644
-index 000000000000..46b7de1262b8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/sleepable_tracepoints.c
-@@ -0,0 +1,121 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-+
-+#include <test_progs.h>
-+#include <time.h>
-+#include "test_sleepable_tracepoints.skel.h"
-+#include "test_sleepable_tracepoints_fail.skel.h"
-+
-+static void trigger_nanosleep(void)
-+{
-+	syscall(__NR_nanosleep, &(struct timespec){ .tv_nsec = 555 }, NULL);
-+}
-+
-+static void run_test(struct test_sleepable_tracepoints *skel)
-+{
-+	skel->bss->target_pid = getpid();
-+	skel->bss->triggered = 0;
-+	skel->bss->err = 0;
-+	skel->bss->copied_tv_nsec = 0;
-+
-+	trigger_nanosleep();
-+
-+	ASSERT_EQ(skel->bss->triggered, 1, "triggered");
-+	ASSERT_EQ(skel->bss->err, 0, "err");
-+	ASSERT_EQ(skel->bss->copied_tv_nsec, 555, "copied_tv_nsec");
-+}
-+
-+static void run_auto_attach_test(struct bpf_program *prog, struct test_sleepable_tracepoints *skel)
-+{
-+	struct bpf_link *link;
-+
-+	link = bpf_program__attach(prog);
-+	if (!ASSERT_OK_PTR(link, "prog_attach"))
-+		return;
-+
-+	run_test(skel);
-+	bpf_link__destroy(link);
-+}
-+
-+void test_sleepable_tracepoints(void)
-+{
-+	struct test_sleepable_tracepoints *skel;
-+	struct bpf_link *link;
-+
-+	skel = test_sleepable_tracepoints__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
-+		return;
-+
-+	/* Primary functional tests: full bpf_copy_from_user exercise */
-+
-+	if (test__start_subtest("tp_btf"))
-+		run_auto_attach_test(skel->progs.handle_sys_enter_tp_btf, skel);
-+
-+	if (test__start_subtest("raw_tp"))
-+		run_auto_attach_test(skel->progs.handle_sys_enter_raw_tp, skel);
-+
-+	if (test__start_subtest("tracepoint"))
-+		run_auto_attach_test(skel->progs.handle_sys_enter_tp, skel);
-+
-+	/* Alias SEC variants: verify libbpf prefix parsing */
-+
-+	if (test__start_subtest("tracepoint_alias")) {
-+		link = bpf_program__attach(skel->progs.handle_sys_enter_tp_alias);
-+		if (ASSERT_OK_PTR(link, "tp_alias_attach"))
-+			bpf_link__destroy(link);
-+	}
-+
-+	if (test__start_subtest("raw_tracepoint_alias")) {
-+		link = bpf_program__attach(skel->progs.handle_sys_enter_raw_tp_alias);
-+		if (ASSERT_OK_PTR(link, "raw_tp_alias_attach"))
-+			bpf_link__destroy(link);
-+	}
-+
-+	/* Bare SEC variants: verify manual attach */
-+
-+	if (test__start_subtest("raw_tp_bare")) {
-+		link = bpf_program__attach_raw_tracepoint(skel->progs.handle_raw_tp_bare,
-+							  "sys_enter");
-+		if (ASSERT_OK_PTR(link, "raw_tp_bare_attach"))
-+			bpf_link__destroy(link);
-+	}
-+
-+	if (test__start_subtest("tp_bare")) {
-+		link = bpf_program__attach_tracepoint(skel->progs.handle_tp_bare, "syscalls",
-+						      "sys_enter_nanosleep");
-+		if (ASSERT_OK_PTR(link, "tp_bare_attach"))
-+			bpf_link__destroy(link);
-+	}
-+
-+	/* Sys exit test */
-+
-+	if (test__start_subtest("sys_exit")) {
-+		link = bpf_program__attach(skel->progs.handle_sys_exit_tp);
-+		if (ASSERT_OK_PTR(link, "sys_exit_attach")) {
-+			skel->bss->target_pid = getpid();
-+			skel->bss->exit_triggered = 0;
-+
-+			trigger_nanosleep();
-+
-+			ASSERT_EQ(skel->bss->exit_triggered, 1, "exit_triggered");
-+			bpf_link__destroy(link);
-+		}
-+	}
-+
-+	/* Negative: attach-time rejection on non-faultable tracepoints */
-+
-+	if (test__start_subtest("raw_tp_non_faultable")) {
-+		link = bpf_program__attach(skel->progs.handle_raw_tp_non_faultable);
-+		ASSERT_ERR_PTR(link, "raw_tp_non_faultable_attach");
-+	}
-+
-+	if (test__start_subtest("tp_non_syscall")) {
-+		link = bpf_program__attach(skel->progs.handle_tp_non_syscall);
-+		ASSERT_ERR_PTR(link, "tp_non_syscall_attach");
-+	}
-+
-+	test_sleepable_tracepoints__destroy(skel);
-+
-+	/* Negative: load-time rejection (separate BPF object) */
-+	RUN_TESTS(test_sleepable_tracepoints_fail);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_sleepable_tracepoints.c b/tools/testing/selftests/bpf/progs/test_sleepable_tracepoints.c
-new file mode 100644
-index 000000000000..bc8a7fd43ccc
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_sleepable_tracepoints.c
-@@ -0,0 +1,117 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-+
-+#include <vmlinux.h>
-+#include <asm/unistd.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_core_read.h>
-+#include <bpf/bpf_helpers.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+int target_pid;
-+int triggered;
-+int exit_triggered;
-+long err;
-+long copied_tv_nsec;
-+
-+static int copy_nanosleep_arg(struct __kernel_timespec *ts)
-+{
-+	long tv_nsec;
-+
-+	err = bpf_copy_from_user(&tv_nsec, sizeof(tv_nsec), &ts->tv_nsec);
-+	if (err)
-+		return err;
-+
-+	copied_tv_nsec = tv_nsec;
-+	triggered = 1;
-+	return 0;
-+}
-+
-+static __always_inline bool is_target_nanosleep(long id)
-+{
-+	return (bpf_get_current_pid_tgid() >> 32) == target_pid &&
-+	       id == __NR_nanosleep;
-+}
-+
-+/* Primary functional tests: full bpf_copy_from_user exercise */
-+
-+SEC("tp_btf.s/sys_enter")
-+int BPF_PROG(handle_sys_enter_tp_btf, struct pt_regs *regs, long id)
-+{
-+	if (!is_target_nanosleep(id))
-+		return 0;
-+
-+	return copy_nanosleep_arg((void *)PT_REGS_PARM1_SYSCALL(regs));
-+}
-+
-+SEC("raw_tp.s/sys_enter")
-+int BPF_PROG(handle_sys_enter_raw_tp, struct pt_regs *regs, long id)
-+{
-+	if (!is_target_nanosleep(id))
-+		return 0;
-+
-+	return copy_nanosleep_arg((void *)PT_REGS_PARM1_CORE_SYSCALL(regs));
-+}
-+
-+SEC("tp.s/syscalls/sys_enter_nanosleep")
-+int handle_sys_enter_tp(struct syscall_trace_enter *args)
-+{
-+	if ((bpf_get_current_pid_tgid() >> 32) != target_pid)
-+		return 0;
-+
-+	return copy_nanosleep_arg((void *)args->args[0]);
-+}
-+
-+SEC("tp.s/syscalls/sys_exit_nanosleep")
-+int handle_sys_exit_tp(struct syscall_trace_exit *args)
-+{
-+	if ((bpf_get_current_pid_tgid() >> 32) != target_pid)
-+		return 0;
-+
-+	exit_triggered = 1;
-+	return 0;
-+}
-+
-+/* Bare SEC variants: test manual attach without tracepoint in section name */
-+
-+SEC("raw_tp.s")
-+int BPF_PROG(handle_raw_tp_bare, struct pt_regs *regs, long id)
-+{
-+	return 0;
-+}
-+
-+SEC("tp.s")
-+int handle_tp_bare(void *ctx)
-+{
-+	return 0;
-+}
-+
-+/* Alias SEC variants: test libbpf prefix parsing for long-form names */
-+
-+SEC("tracepoint.s/syscalls/sys_enter_nanosleep")
-+int handle_sys_enter_tp_alias(struct syscall_trace_enter *args)
-+{
-+	return 0;
-+}
-+
-+SEC("raw_tracepoint.s/sys_enter")
-+int BPF_PROG(handle_sys_enter_raw_tp_alias, struct pt_regs *regs, long id)
-+{
-+	return 0;
-+}
-+
-+/* Negative: sleepable on non-faultable tracepoint (attach-time rejection) */
-+
-+SEC("raw_tp.s/sched_switch")
-+int BPF_PROG(handle_raw_tp_non_faultable, bool preempt,
-+	     struct task_struct *prev, struct task_struct *next)
-+{
-+	return 0;
-+}
-+
-+SEC("tp.s/sched/sched_switch")
-+int handle_tp_non_syscall(void *ctx)
-+{
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_sleepable_tracepoints_fail.c b/tools/testing/selftests/bpf/progs/test_sleepable_tracepoints_fail.c
-new file mode 100644
-index 000000000000..1a0748a9520b
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_sleepable_tracepoints_fail.c
-@@ -0,0 +1,18 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+/* Sleepable program on a non-faultable tracepoint should fail to load */
-+SEC("tp_btf.s/sched_switch")
-+__failure __msg("Sleepable program cannot attach to non-faultable tracepoint")
-+int BPF_PROG(handle_sched_switch, bool preempt,
-+	     struct task_struct *prev, struct task_struct *next)
-+{
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/verifier/sleepable.c b/tools/testing/selftests/bpf/verifier/sleepable.c
-index 1f0d2bdc673f..6dabc5522945 100644
---- a/tools/testing/selftests/bpf/verifier/sleepable.c
-+++ b/tools/testing/selftests/bpf/verifier/sleepable.c
-@@ -76,7 +76,20 @@
- 	.runs = -1,
- },
- {
--	"sleepable raw tracepoint reject",
-+	"sleepable raw tracepoint accept",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_TRACING,
-+	.expected_attach_type = BPF_TRACE_RAW_TP,
-+	.kfunc = "sys_enter",
-+	.result = ACCEPT,
-+	.flags = BPF_F_SLEEPABLE,
-+	.runs = -1,
-+},
-+{
-+	"sleepable raw tracepoint reject non-faultable",
- 	.insns = {
- 	BPF_MOV64_IMM(BPF_REG_0, 0),
- 	BPF_EXIT_INSN(),
-@@ -85,7 +98,7 @@
- 	.expected_attach_type = BPF_TRACE_RAW_TP,
- 	.kfunc = "sched_switch",
- 	.result = REJECT,
--	.errstr = "Only fentry/fexit/fmod_ret, lsm, iter, uprobe, and struct_ops programs can be sleepable",
-+	.errstr = "Sleepable program cannot attach to non-faultable tracepoint",
- 	.flags = BPF_F_SLEEPABLE,
- 	.runs = -1,
- },
-
--- 
-2.52.0
+>   	} else {
+>   		if (flags & BPF_FIB_LOOKUP_MARK)
+>   			fl6.flowi6_mark = params->mark;
+> @@ -6305,7 +6298,7 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
+>   		fl6.flowi6_tun_key.tun_id = 0;
+>   		fl6.flowi6_uid = sock_net_uid(net, NULL);
+>   
+> -		err = ipv6_stub->fib6_lookup(net, oif, &fl6, &res, strict);
+> +		err = fib6_lookup(net, oif, &fl6, &res, strict);
+>   	}
+>   
+>   	if (unlikely(err || IS_ERR_OR_NULL(res.f6i) ||
+> @@ -6326,11 +6319,11 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
+>   		return BPF_FIB_LKUP_RET_NOT_FWDED;
+>   	}
+>   
+> -	ipv6_stub->fib6_select_path(net, &res, &fl6, fl6.flowi6_oif,
+> -				    fl6.flowi6_oif != 0, NULL, strict);
+> +	fib6_select_path(net, &res, &fl6, fl6.flowi6_oif,
+> +			 fl6.flowi6_oif != 0, NULL, strict);
+>   
+>   	if (check_mtu) {
+> -		mtu = ipv6_stub->ip6_mtu_from_fib6(&res, dst, src);
+> +		mtu = ip6_mtu_from_fib6(&res, dst, src);
+>   		if (params->tot_len > mtu) {
+>   			params->mtu_result = mtu; /* union with tot_len */
+>   			return BPF_FIB_LKUP_RET_FRAG_NEEDED;
+> @@ -6351,9 +6344,7 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
+>   		if (res.f6i->fib6_prefsrc.plen) {
+>   			*src = res.f6i->fib6_prefsrc.addr;
+>   		} else {
+> -			err = ipv6_bpf_stub->ipv6_dev_get_saddr(net, dev,
+> -								&fl6.daddr, 0,
+> -								src);
+> +			err = ipv6_dev_get_saddr(net, dev, &fl6.daddr, 0, src);
+>   			if (err)
+>   				return BPF_FIB_LKUP_RET_NO_SRC_ADDR;
+>   		}
+> @@ -6365,7 +6356,7 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
+>   	/* xdp and cls_bpf programs are run in RCU-bh so rcu_read_lock_bh is
+>   	 * not needed here.
+>   	 */
+> -	neigh = __ipv6_neigh_lookup_noref_stub(dev, dst);
+> +	neigh = __ipv6_neigh_lookup_noref(dev, dst);
+>   	if (!neigh || !(READ_ONCE(neigh->nud_state) & NUD_VALID))
+>   		return BPF_FIB_LKUP_RET_NO_NEIGH;
+>   	memcpy(params->dmac, neigh->ha, ETH_ALEN);
+> @@ -6900,11 +6891,10 @@ static struct sock *sk_lookup(struct net *net, struct bpf_sock_tuple *tuple,
+>   					    src6, tuple->ipv6.sport,
+>   					    dst6, ntohs(tuple->ipv6.dport),
+>   					    dif, sdif, &refcounted);
+> -		else if (likely(ipv6_bpf_stub))
+> -			sk = ipv6_bpf_stub->udp6_lib_lookup(net,
+> -							    src6, tuple->ipv6.sport,
+> -							    dst6, tuple->ipv6.dport,
+> -							    dif, sdif, NULL);
+> +		else if (likely(ipv6_mod_enabled()))
+> +			sk = __udp6_lib_lookup(net, src6, tuple->ipv6.sport,
+> +					       dst6, tuple->ipv6.dport,
+> +					       dif, sdif, NULL);
+>   #endif
+>   	}
+>   
+> diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
+> index 9f40be0c3e71..f71ef82a5f3d 100644
+> --- a/net/core/lwt_bpf.c
+> +++ b/net/core/lwt_bpf.c
+> @@ -13,7 +13,6 @@
+>   #include <net/gre.h>
+>   #include <net/ip.h>
+>   #include <net/ip6_route.h>
+> -#include <net/ipv6_stubs.h>
+>   
+>   struct bpf_lwt_prog {
+>   	struct bpf_prog *prog;
+> @@ -103,7 +102,12 @@ static int bpf_lwt_input_reroute(struct sk_buff *skb)
+>   		dev_put(dev);
+>   	} else if (skb->protocol == htons(ETH_P_IPV6)) {
+>   		skb_dst_drop(skb);
+> -		err = ipv6_stub->ipv6_route_input(skb);
+> +		if (IS_ENABLED(CONFIG_IPV6)) {
+> +			ip6_route_input(skb);
+> +			err = skb_dst(skb)->error;
+> +		} else {
+> +			err = -EAFNOSUPPORT;
+> +		}
+>   	} else {
+>   		err = -EAFNOSUPPORT;
+>   	}
+> @@ -233,7 +237,7 @@ static int bpf_lwt_xmit_reroute(struct sk_buff *skb)
+>   		fl6.daddr = iph6->daddr;
+>   		fl6.saddr = iph6->saddr;
+>   
+> -		dst = ipv6_stub->ipv6_dst_lookup_flow(net, skb->sk, &fl6, NULL);
+> +		dst = ip6_dst_lookup_flow(net, skb->sk, &fl6, NULL);
+>   		if (IS_ERR(dst)) {
+>   			err = PTR_ERR(dst);
+>   			goto err;
+> diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
+> index bb29b29fdcfb..07ae6ea7743a 100644
+> --- a/net/ipv6/af_inet6.c
+> +++ b/net/ipv6/af_inet6.c
+> @@ -264,8 +264,8 @@ static int inet6_create(struct net *net, struct socket *sock, int protocol,
+>   	goto out;
+>   }
+>   
+> -static int __inet6_bind(struct sock *sk, struct sockaddr_unsized *uaddr, int addr_len,
+> -			u32 flags)
+> +int __inet6_bind(struct sock *sk, struct sockaddr_unsized *uaddr, int addr_len,
+> +		 u32 flags)
+>   {
+>   	struct sockaddr_in6 *addr = (struct sockaddr_in6 *)uaddr;
+>   	struct inet_sock *inet = inet_sk(sk);
+> @@ -1032,14 +1032,6 @@ static const struct ipv6_stub ipv6_stub_impl = {
+>   	.ip6_xmit = ip6_xmit,
+>   };
+>   
+> -static const struct ipv6_bpf_stub ipv6_bpf_stub_impl = {
+> -	.inet6_bind = __inet6_bind,
+> -	.udp6_lib_lookup = __udp6_lib_lookup,
+> -	.ipv6_setsockopt = do_ipv6_setsockopt,
+> -	.ipv6_getsockopt = do_ipv6_getsockopt,
+> -	.ipv6_dev_get_saddr = ipv6_dev_get_saddr,
+> -};
+> -
+>   static int __init inet6_init(void)
+>   {
+>   	struct list_head *r;
+> @@ -1199,7 +1191,6 @@ static int __init inet6_init(void)
+>   	/* ensure that ipv6 stubs are visible only after ipv6 is ready */
+>   	wmb();
+>   	ipv6_stub = &ipv6_stub_impl;
+> -	ipv6_bpf_stub = &ipv6_bpf_stub_impl;
+>   out:
+>   	return err;
+>   
 
