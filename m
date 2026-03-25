@@ -1,91 +1,91 @@
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2461B3DEFF3
-	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 16:49:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EF773FB04B
+	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 16:55:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774457370; cv=none; b=TgBPRZ+xp3CVjl9y3Jlr7MvQZwv7kJecLDta84uc2/LzpfonayNbOkEluZfsch+wGzB4fuTXYClw5Z9XF+87RBrJN100W3JfBlPE+eofvYHAwv0VNRFf65qpUrh3ukIyfCaBeoUvl5IYU05ArRF3IeJ/aZb1MQvg1yAAClXdEc4=
+	t=1774457757; cv=none; b=PJacnYX3TV7QvwBaTgSjyfnyi84on7RpGd6xJLAAvyZCE/f4IZbqfRRBVCsEQA9nixY9kiSGS8MICveKX1p4a2w3Kd01Mz84qzTvWk0Tl+weIvMLYYbZf/pbYBCEttPZocVUb23QaSWA4psL9GBVuFBBgdjgxS6EzsLOzyrDPRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774457370; c=relaxed/simple;
-	bh=iMGhwqFWkB54ZSWljJvvt29P23iRPNTtnPWO0uSjd5o=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kof6dEU21nVkzOr1GoIGlStDzOoj9Ywqh/Pt3SoOXokXoEMx6D9be90puDAIur/kt4TPE6Hka0gekf7nzhJnOLYATi8D4IJP16XzyTC9K9N3gymXiu0iYiW8aBk86SWm/Z8469jmZz08T2XQUQuEN1Hox0vpacImVC2eaGiAMcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MYVSz005; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774457757; c=relaxed/simple;
+	bh=+OjMb5092maQp2iEGHKWjP63NT/l3FVLEKtpncsAeD4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=gn060QBwMZ/JXsj57orBdcZfI7HL1rSJKxdJjoRZQU1EYEcnmG+2khgYjTflhU5DCnwF7FUMGULTagWZV3Vsvjd40nFXo8MgS0p5+pNCgSzZGDiQB8t9rTWBUsig4kFgiBWLAWJsosmBHuozshEGU4L3UPPp1UmTZV52qZGm8kc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ewzOSV46; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=eyHX7MSI; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MYVSz005"
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5a1443780c4so1053555e87.0
-        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 09:49:26 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ewzOSV46";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="eyHX7MSI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774457752;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=5gZ/S9pbjjkoQ+gcMJJTXTQUJ/FjVdC55bH/vaTcEqo=;
+	b=ewzOSV46u1ANS/Rf7aHfXMgM9RPRU+yErI82+z7BjptmN6dQj8pqInI2Z/Ffg1KQBWW0ya
+	b6ohzlc2QYLqwPJ9pb4n7A/BrEltJWoc72bk7WEdmBGZMLykpwo4Cs3qmI0LbWj0XlEWGr
+	ZPLcw4Iecd9zeo3FClUGfjZMek7TOKI=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-156-R4ojkzpSMj2QZZGWS5xW8A-1; Wed, 25 Mar 2026 12:55:50 -0400
+X-MC-Unique: R4ojkzpSMj2QZZGWS5xW8A-1
+X-Mimecast-MFC-AGG-ID: R4ojkzpSMj2QZZGWS5xW8A_1774457749
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-43b7ec737c1so4178f8f.1
+        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 09:55:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774457365; x=1775062165; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0KHc+LjoEpTOzgKnEsolcMaPHiEs9PP1WuXP2Jldb0w=;
-        b=MYVSz005bYFjtaF0DJfrU5GN5BeHirHBAAJ0RomF8QHF9wbgY1cDXFCc6mQzEb3Xtx
-         yIPTRt8+V18xOnMrjnH7O4/BJ8wMOmJNZH5xkYT/d9TEZysq0h0W9fmsQnFJWIOJ0qsw
-         RaVgq+PaYppol9BrGyKkWu6Z++NJ1nuF8kZcX/potwsTQwqKsrkalOpzCkX9F39yY3Y/
-         kAD8fbAZZFYM4w9ANIBJj/fxGXS+9+ci7qD8taQrj8EURDEdjKKJPn/cuC6qbBz6eBvd
-         dVCJFDcWafTLIEe9kEV6dDArTgZW1NBZpZU66SZdv/NkuuLEf/abtoMUFHxtSA3b3A9y
-         w0gw==
+        d=redhat.com; s=google; t=1774457749; x=1775062549; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5gZ/S9pbjjkoQ+gcMJJTXTQUJ/FjVdC55bH/vaTcEqo=;
+        b=eyHX7MSI6oZdAa22UyAPTlJ8LHOsi0Ion/mlPzlSv3lFbYvrqMw73uIqMIKJbSWnKb
+         bqrXm4B07UejB7h7leQCGCWyu3l8ZQdeCCG9/sNPrrTLSdkWak7REOf99Bajoj0gPtwO
+         7518ZZVdeaLxgmVd7ByA4plKt3bNsl5epnL7N4VDgl4Debxd6qVqmPLj3awyZO87U5+N
+         1TvX2mQew2TXiiA4fLfMVbuy4GwoNhjtZ9FA/Tmccp/eAIYschOCwuaZKUR+puhYaU7/
+         O45Le7ZGq5b0J1sQC09R4mWeIwGWQMleKGljLaTrM4u1FGVC5gRlU7jMVZpIjEsV7RXa
+         8Wfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774457365; x=1775062165;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0KHc+LjoEpTOzgKnEsolcMaPHiEs9PP1WuXP2Jldb0w=;
-        b=ODRBmZORPiExbDw94TFHUFhAuZYnO3FR5h650GxrtHFZzzIghDIYbZGfiOAXjHJQCy
-         LA08peYXO7VB4ZbJ1gJ5XYrpSxZ3mUqAjZnPYKTQ+jL9SCDkqICPhbd6eL73tLbsnTvU
-         3vk2Cm4mJWFnOIoeMh3UtJj9eDCQHnFqA1O7PEXId4Ih8oGUt/UdlMABhlXfmSjiubae
-         yTjea4IxbFSfOwZOzsvX9reduGuGXxOcBWDpJHkmLMHEyYWJUFBI2J9eo2bTmuqoKuzQ
-         jhE2y2abxgj/s5NVWi9WU+bsjlFmCsm3+YUuP89LYmBfTvBc8oFeoJo9ZEW8X5jM7IoQ
-         hJtA==
-X-Forwarded-Encrypted: i=1; AJvYcCVev7awUjTRIdFykANo3ckJvJPwyAwZBcAKbjiwoO4aHJw6WVwtKjY+tl0x+BDf7v1kpAg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxPP6br1lCaPEVcl1ZTGmWcNQSjIbpWNTduQYzHpZjWMJpV/tlS
-	1Ek0l8tcdPRKJC0WIYvtwyQ7tluJrwz4hr4ztwR6UN8GjguqG2rnpxxI
-X-Gm-Gg: ATEYQzyxjFPcIEExaPHv96GnEp8U+Zt+XrvWOIMSa/EoZFQj3SUnLjcGbwrlfESQpJi
-	kt21F9QE8O27qVfcaaBNGijiHuRFuJVpbOxGUKEMYoVckZNHm9U3ccvFtekt508ptCAjDiQBrhA
-	iq0yki/ReCDgMlVHdwTfbL6biMTDC18ftLirsYnBvcLLJMTNyxg0iSNqHqrCZMTbDIWF8PNxzbF
-	1wLmrnR5DiVWcvUCKAphDc/bCsE7zJ+2Ua+SgyzesdZ4hmCCxYlCLSaDNtYxPn0csXfFUg/NT6h
-	gwmTB0QLRgM8yBEi9e4PesoVOwT4XnVcIK+w87ceBbledAv42g8pd1DynKNmz0crXquxTtpRfVI
-	nMb9/SoTKR7TCjWbslchJXft8VRPt83H3gXm4MUj66GgaDEioGFW5rRKzNKlLdAUB
-X-Received: by 2002:a05:6512:15a9:b0:5a1:3d15:2861 with SMTP id 2adb3069b0e04-5a29b4f8bccmr1758576e87.6.1774457364681;
-        Wed, 25 Mar 2026 09:49:24 -0700 (PDT)
-Received: from milan ([2001:9b1:d5a0:a500::24b])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a2a06892b2sm13867e87.40.2026.03.25.09.49.23
+        d=1e100.net; s=20251104; t=1774457749; x=1775062549;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5gZ/S9pbjjkoQ+gcMJJTXTQUJ/FjVdC55bH/vaTcEqo=;
+        b=c2d5KNjAuISAh8UrvYaNYazVQn5QI5dQEX6IgNxmvdzXbdXZNOzd3RsfsYDdTzTzSu
+         Sy0zTYCDC4A0hOx2vaC5YhAw4ssbcSMEGuGXAatEqn5+XhGrhlIe7dS3s3dYQnMN55j3
+         j4fqVtOl52KrKzYyz5KD5k3hfIuvWcfJfVmUZsXnoY2btCVcN/JfyQITHPG5R7Y9jcjy
+         4XPxCfebH/0xtxDaeA/OFUe1ZxC8HPIlFvXdtt1qMbWTfwzXGPjs1e/njwjBtaCZWRED
+         B6oWrWt6nxnU1w3Db0Nizi2eQgTWO+J20ZhUx3Jj5jNGuCDUn8o0YUH0nUSWGtNSqkjR
+         pn5g==
+X-Gm-Message-State: AOJu0Yxc6haqkN1uyHfqIgy1tpdckzAzNJ6BSvAfKx9wM1Savrt/IRUB
+	AyysrGzj2lUZKj5tNgHO7xGqSUTjTZ57pxwbyM9DgDg9O3oImWTda4T9jLf6onpyvoZCdxIO0xs
+	x/mI2Xvcpc8JnsUPS9QgKa0NegoRvsIqdFew0YLW/MkGsa1usQapyjw==
+X-Gm-Gg: ATEYQzxEFbA8NNFD1bbm+KxaZgQhslVEIPH8uppFEHqdqwraygprIKuWz3CCRbs6dfB
+	JcHVgVQsL+QJWX6tM3sVxnbXPmgV5m4euEOK8j/rES72ERNwJ3qPtMNAWqDhxCXgxK1569iSWYZ
+	qZ5uXlkLiqM6C0HmGw9F1lxwAPiXHochk67ZmySqr6W8ceIbetrn2kYe2VaaQngGWdY+YcCqaqN
+	QaJ6vA34xEHAPfKO7dBLkI1A7X/3f875znCsZcJ5JM/ASs4c3BovnibObqICZHBU5UdlIU7WTIu
+	lmIvXD9iqP8Al7Ki4cd1tRQ7HN6bp6PzMaOqYTxNluKoNLYJxDroZjxIHRNnVk2XQ6P2VWGnf90
+	YuS12bMbmJdCNKEw1
+X-Received: by 2002:a5d:64e7:0:b0:43b:4960:60f2 with SMTP id ffacd0b85a97d-43b88a399aemr5997846f8f.47.1774457749429;
+        Wed, 25 Mar 2026 09:55:49 -0700 (PDT)
+X-Received: by 2002:a5d:64e7:0:b0:43b:4960:60f2 with SMTP id ffacd0b85a97d-43b88a399aemr5997793f8f.47.1774457748903;
+        Wed, 25 Mar 2026 09:55:48 -0700 (PDT)
+Received: from redhat.com ([2a0d:6fc0:1525:da00:3ac2:1a22:72ff:4256])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b91943184sm1001694f8f.14.2026.03.25.09.55.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Mar 2026 09:49:23 -0700 (PDT)
-From: Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@milan>
-Date: Wed, 25 Mar 2026 17:49:22 +0100
-To: "David Hildenbrand (Arm)" <david@kernel.org>,
-	Muhammad Usama Anjum <usama.anjum@arm.com>
-Cc: Muhammad Usama Anjum <usama.anjum@arm.com>,
-	Uladzislau Rezki <urezki@gmail.com>, Zi Yan <ziy@nvidia.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Brendan Jackman <jackmanb@google.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Nick Terrell <terrelln@fb.com>, David Sterba <dsterba@suse.com>,
-	Vishal Moola <vishal.moola@gmail.com>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	Ryan.Roberts@arm.com, david.hildenbrand@arm.com
-Subject: Re: [PATCH v3 2/3] vmalloc: Optimize vfree
-Message-ID: <acQSEn2ZfF5zEtE6@milan>
-References: <20260324133538.497616-1-usama.anjum@arm.com>
- <20260324133538.497616-3-usama.anjum@arm.com>
- <1D88CFF0-8A74-413F-9A6A-39E27B760AE1@nvidia.com>
- <acOjIcqyIVY9KNn0@milan>
- <a79ff8ba-ed4a-43d0-9c4b-d2883a5c48e8@arm.com>
- <acQKZBqTjpm6-k2f@milan>
- <84f14a13-6236-47ef-afc5-e168d16caeec@arm.com>
- <cbc7c2d7-963e-4630-baf5-287fb127774f@kernel.org>
+        Wed, 25 Mar 2026 09:55:48 -0700 (PDT)
+Date: Wed, 25 Mar 2026 12:55:45 -0400
+From: "Michael S. Tsirkin" <mst@redhat.com>
+To: linux-kernel@vger.kernel.org
+Cc: bpf@vger.kernel.org, Simon Schippers <simon.schippers@tu-dortmund.de>,
+	willemdebruijn.kernel@gmail.com, jasowang@redhat.com,
+	andrew+netdev@lunn.ch, davem@davemloft.net, kuba@kernel.org,
+	pabeni@redhat.com, eperezma@redhat.com, leiyang@redhat.com,
+	stephen@networkplumber.org, jon@nutanix.com,
+	tim.gebauer@tu-dortmund.de, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	virtualization@lists.linux.dev, Eric Dumazet <edumazet@google.com>
+Subject: [PATCH net] ptr_ring: disable KCSAN warnings
+Message-ID: <97d39458d8dd7a00341f0be391b580650896ce42.1774457524.git.mst@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -94,51 +94,113 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cbc7c2d7-963e-4630-baf5-287fb127774f@kernel.org>
+X-Mailer: git-send-email 2.27.0.106.g8ac3dc51b1
+X-Mutt-Fcc: =sent
 
-On Wed, Mar 25, 2026 at 05:34:08PM +0100, David Hildenbrand (Arm) wrote:
-> On 3/25/26 17:25, Muhammad Usama Anjum wrote:
-> > On 25/03/2026 4:16 pm, Uladzislau Rezki wrote:
-> >> On Wed, Mar 25, 2026 at 03:02:14PM +0000, Muhammad Usama Anjum wrote:
-> >>> Sorry, I didn't get it. How does having cond_resched() in this function
-> >>> affects __free_contig_range()?
-> >>>
-> >> It is not. What i am asking is about:
-> >>
-> >> <snip>
-> >> spin_lock();
-> >> free_pages_bulk()
-> >> ...
-> >> <snip>
-> >>
-> >> so this is not allowed because there is cond_resched() call. We
-> >> can remove it and make it possible to invoke free_pages_bulk() under
-> >> spin-lock, __but__ only if for example other calls do not sleep:
-> >>
-> >> __free_contig_range()
-> >> memdesc_section()
-> >> free_prepared_contig_range()
-> >> ...
-> >>
-> >>>
-> >>> The current user of this function is only vfree() which is sleepable.
-> >>>
-> >> I know. But this function can be used by others soon or later.
-> >>
-> >> Another option is add a comment, saying that it is only for sleepable
-> >> contexts.
-> > Thank you for detailed response. I can move cond_resched() to vfree() and make
-> > free_pages_bulk() allowed to be called form sleepable context. But I feel the
-> > current implementation is better to avoid latency spikes. I'll put explicit
-> > comment that this function can only be called from sleepable contexts.
-> 
-Sounds good!
+Eric Dumazet reported KCSAN warnings:
 
-> That's probably good enough for now. It can accept arbitrarily large
-> areas, so the cond_resched() in there is the right thing to do. :)
-> 
-I agree, since it will be available for other callers, adding the
-comment is a right way, so people know :)
+BUG: KCSAN: data-race in pfifo_fast_dequeue / pfifo_fast_enqueue
 
---
-Uladzislau Rezki
+write to 0xffff88811d5ccc00 of 8 bytes by interrupt on cpu 0:
+__ptr_ring_zero_tail include/linux/ptr_ring.h:259 [inline]
+__ptr_ring_discard_one include/linux/ptr_ring.h:291 [inline]
+__ptr_ring_consume include/linux/ptr_ring.h:311 [inline]
+__skb_array_consume include/linux/skb_array.h:98 [inline]
+pfifo_fast_dequeue+0x770/0x8f0 net/sched/sch_generic.c:770
+dequeue_skb net/sched/sch_generic.c:297 [inline]
+qdisc_restart net/sched/sch_generic.c:402 [inline]
+__qdisc_run+0x189/0xc80 net/sched/sch_generic.c:420
+qdisc_run include/net/pkt_sched.h:120 [inline]
+net_tx_action+0x379/0x590 net/core/dev.c:5793
+handle_softirqs+0xb9/0x280 kernel/softirq.c:622
+do_softirq+0x45/0x60 kernel/softirq.c:523
+__local_bh_enable_ip+0x70/0x80 kernel/softirq.c:450
+local_bh_enable include/linux/bottom_half.h:33 [inline]
+bpf_test_run+0x2db/0x620 net/bpf/test_run.c:426
+bpf_prog_test_run_skb+0x9a4/0xef0 net/bpf/test_run.c:1159
+bpf_prog_test_run+0x204/0x340 kernel/bpf/syscall.c:4721
+__sys_bpf+0x52e/0x7e0 kernel/bpf/syscall.c:6246
+__do_sys_bpf kernel/bpf/syscall.c:6341 [inline]
+__se_sys_bpf kernel/bpf/syscall.c:6339 [inline]
+__x64_sys_bpf+0x41/0x50 kernel/bpf/syscall.c:6339
+x64_sys_call+0x10cb/0x3020 arch/x86/include/generated/asm/syscalls_64.h:322
+do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+do_syscall_64+0x12c/0x370 arch/x86/entry/syscall_64.c:94
+entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+read to 0xffff88811d5ccc00 of 8 bytes by task 22632 on cpu 1:
+__ptr_ring_produce include/linux/ptr_ring.h:106 [inline]
+ptr_ring_produce include/linux/ptr_ring.h:129 [inline]
+skb_array_produce include/linux/skb_array.h:44 [inline]
+pfifo_fast_enqueue+0xd5/0x2c0 net/sched/sch_generic.c:741
+dev_qdisc_enqueue net/core/dev.c:4144 [inline]
+__dev_xmit_skb net/core/dev.c:4188 [inline]
+__dev_queue_xmit+0x6a4/0x1f20 net/core/dev.c:4795
+dev_queue_xmit include/linux/netdevice.h:3384 [inline]
+__bpf_tx_skb net/core/filter.c:2153 [inline]
+__bpf_redirect_common net/core/filter.c:2197 [inline]
+__bpf_redirect+0x862/0x990 net/core/filter.c:2204
+____bpf_clone_redirect net/core/filter.c:2487 [inline]
+bpf_clone_redirect+0x20c/0x290 net/core/filter.c:2450
+bpf_prog_53f18857bc887b09+0x22/0x2a
+bpf_dispatcher_nop_func include/linux/bpf.h:1402 [inline]
+__bpf_prog_run include/linux/filter.h:723 [inline]
+bpf_prog_run include/linux/filter.h:730 [inline]
+bpf_test_run+0x29d/0x620 net/bpf/test_run.c:423
+bpf_prog_test_run_skb+0x9a4/0xef0 net/bpf/test_run.c:1159
+bpf_prog_test_run+0x204/0x340 kernel/bpf/syscall.c:4721
+__sys_bpf+0x52e/0x7e0 kernel/bpf/syscall.c:6246
+__do_sys_bpf kernel/bpf/syscall.c:6341 [inline]
+__se_sys_bpf kernel/bpf/syscall.c:6339 [inline]
+__x64_sys_bpf+0x41/0x50 kernel/bpf/syscall.c:6339
+x64_sys_call+0x10cb/0x3020 arch/x86/include/generated/asm/syscalls_64.h:322
+do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+do_syscall_64+0x12c/0x370 arch/x86/entry/syscall_64.c:94
+entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+value changed: 0xffff888104a93a00 -> 0x0000000000000000
+
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 1 UID: 0 PID: 22632 Comm: syz.0.4135 Tainted: G W syzkaller #0
+PREEMPT(full)
+Tainted: [W]=WARN
+Hardware name: Google Google Compute Engine/Google Compute Engine,
+BIOS Google 01/24/2026
+
+There is no race here: reading/writing a partial pointer
+would be fine, because the reading is always done by the producer
+which merely cares about NULL/non NULL.
+Document this / disable the warnings using data_race().
+
+Link: https://lore.kernel.org/all/CANn89iLHwZ4foPEL2TdQhYx3Ps3zXiwygb%3DQr7OTKW2R7Ldixg@mail.gmail.com/
+Tested-by: Opus Sonnet 4.6 1M window.
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+---
+ include/linux/ptr_ring.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/ptr_ring.h b/include/linux/ptr_ring.h
+index 534531807d95..87ff669b0c57 100644
+--- a/include/linux/ptr_ring.h
++++ b/include/linux/ptr_ring.h
+@@ -103,7 +103,7 @@ static inline bool ptr_ring_full_bh(struct ptr_ring *r)
+  */
+ static inline int __ptr_ring_produce(struct ptr_ring *r, void *ptr)
+ {
+-	if (unlikely(!r->size) || r->queue[r->producer])
++	if (unlikely(!r->size) || data_race(r->queue[r->producer]))
+ 		return -ENOSPC;
+ 
+ 	/* Make sure the pointer we are storing points to a valid data. */
+@@ -256,7 +256,7 @@ static inline void __ptr_ring_zero_tail(struct ptr_ring *r, int consumer_head)
+ 	 * besides the first one until we write out all entries.
+ 	 */
+ 	while (likely(head > r->consumer_tail))
+-		r->queue[--head] = NULL;
++		data_race(r->queue[--head] = NULL);
+ 
+ 	r->consumer_tail = consumer_head;
+ }
+-- 
+MST
+
