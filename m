@@ -1,65 +1,65 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1658B2E8B6B
-	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 21:12:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 420AB33067C
+	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 21:12:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774473134; cv=none; b=Zrk15Ea31xINbWkcicVLrWtzv23I7bxqex3ypy+rdoyxKDmel4jhaN7O2yQa1hj5aHuDLxyDGFqPkRtE8WRIkB8eqN2GHXpqrvCjG8iXPA7EOZdD6OkAG6sxrplWT+aB2czmveAurCjI1q/K2IfuuCRM09vEvo3tIgo7ijtT2gA=
+	t=1774473136; cv=none; b=TYsbce/tBWspLdsKAqytN1PlT6kBJopK9ESsQ8drW7g5dmS0APJgcMXFJ/TQVuSzIz5IxZM2hJRp8cJmv2Qg6nmgmSBrLqPq2rL6tv21HvN6x15cW/aEmhQ5ixs+gkzSDbgYIKHjCO63g/WmHgnwK4GBoShL4+PX2HhzrMzoVGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774473134; c=relaxed/simple;
-	bh=VEFE+Le3J4kokQ2bTMHgmn8JTCyDAPSCdILWGP3vRAs=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HVAO7ifP/vFiGK0c465z20hj0iV8qFDjmy/tKi7o1XF2xlyvBilDbGNg5qcLZo6nreRyfbDluM9iab9GoORAScajbTfMgezHf+1yPZXAiv7cOGUWwJWG1wPPqrpv3qcOyKnl66C3O1rX7Yizpr4/lva0M2tkpARIagzoeDWXb1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cjUyn7NO; arc=none smtp.client-ip=209.85.221.49
+	s=arc-20240116; t=1774473136; c=relaxed/simple;
+	bh=NseeNkJq4VP3JY2KYv9pxhwcjvCj4ZlCTiPdABpqdkk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=YxV3av0wTNDSitP45BhNI9kKun1JuHtMHvv51zsPhUSSwgbXP7k3NKLHQxVnTPUEQXlh/pbNGQjJVNIFn0XVwUmeLQRFZPobk90WD807v/NohTOS+XA7GNiD3bkZKEdtrufpUHN4tziMllk3wpfkqTuyRaFAUcDjnxhKJjP+ZHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J9t6kffM; arc=none smtp.client-ip=209.85.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cjUyn7NO"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-439b6d9c981so125928f8f.1
-        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 14:12:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J9t6kffM"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-486fba7ce4cso3161175e9.3
+        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 14:12:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774473131; x=1775077931; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=uKSyXsXjvD0/b9TNOxiddMFRBG+BCzc+FJTLa0tgGsM=;
-        b=cjUyn7NOlGGcbnkg+KXlGxzH1+BM6PdTkafBRGNhBb5snN1a2iMO+g19jqEAPtjH+k
-         gPD4o6TYQrl92dQZxMcHBoY4DHYy/Kw77zY6LPqea04l8ge1nGc2QiSfsLiiGH5vYmJE
-         ivIoHAf/fdZbgZnNh0sKEqXSOEYKO2XhKvRjWUbfydO42XpoF6WxnoTRZ07W0uMNq7vB
-         LdFVU6L4Jr679RdRegqicxgMJWofe9zn9rV1qDUhxFFI9JyqPxeDzQ86i1pdW0ERdxSW
-         XzHlrPU62DZwckYfldFHhY+3k8wZ6tjZ9Xo8/KNgt/1Cr69jCi9JrnDj9VlnGBXK+deS
-         XnSQ==
+        d=gmail.com; s=20251104; t=1774473134; x=1775077934; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kzMFv/J8zUW31g8Cu5IpT5cFsqs52DDeUj69v9HYPRc=;
+        b=J9t6kffMfGSU269mXwKorUF6Mk0GIng8Q04gl81dRTmDm9YcnhSAoe+XKx0YuhIG+p
+         6gR7/m0lmbxPVKLVK//8UZJqDoUNzVPqnhkjWZRbZbzBTmutiT1HED8lPlQHk/nCrp0F
+         02GI8goPxz/5GX2UTTbM0VkjYNjtZmXz+ss2mLg61vfCtnC6UfLKNSnL+i/BV+E+DzTo
+         x5ed0xfp35iopiz0+vpAPRwMPXo1PdRIpyT/G60hqpFmWX7sb5YQQkLwKyhJA2VXJXBG
+         sDKbywl4rTYf84jZnSiPah32fthQPtCtJ4zbEiDRBwTYFl2xprjfL0OGJrTmRd3VWG9z
+         CGOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774473131; x=1775077931;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uKSyXsXjvD0/b9TNOxiddMFRBG+BCzc+FJTLa0tgGsM=;
-        b=jrMQF+Gx9I4OJyM5Rk7HAA9VHpJxjAN4nPPgGqQE22zK2Gn+mD62llOACs901C7drq
-         nbFRnO+65/oO4XbRvwbnx2iqOly4fxWr3dEwLvoGmAyx+Ln1YS1YRZ84rg2GVgcqi6XC
-         lly9UA0MyCGps1+I11weFDrMM3d5O+JC9DqRqmK+RtWzslGlWuUWaO7oCExSqdTVEjq8
-         yK/AVkzDR2pXyAfsdUa1joCzIdB3wILMOCla8qXzTs1fKFbckQ9UrRCsKzWN1NfZcejw
-         T6FY6VmRbf+f9rlXnVMnGtxyGE8udu6cyuGarf58PKyInFE35R+FjXy7cMWpKCm3AFWY
-         hgxA==
-X-Gm-Message-State: AOJu0YwfefSd1eCt9XHF6nS1hsIuBR7+yQuZAsBIv9GwvjD4iPGmenKq
-	wsx+uoQfqk3A99GUFJ2aisu47vXhUQcyPHrN8XaVrTy5Na776pDr4Jm7
-X-Gm-Gg: ATEYQzxPBd4478yjQqDeU3C7MPVpxcJbup1Q4IJraKug09phVlkPerprBMDoczKOJCf
-	ob09wSAw6FsCXkkRHdrwZf1RK73/8ECNnt4Ar5FQ+Yy42PtYAConXvo/Y/UjyCnGwryR4tCXtv/
-	pM1Ty5MeMYbcNS9fV8BRGtmmkQe61QHuGO5qlCJx6fDdlppFIBCGJ2ORfdVQ6mgIouuUt0gcKck
-	EBCiznYA7q2Kaq44ApZxVeSiZwg4IvctMkYwYJJy/tSJ7OGy82VCDvwlAIhnWQovjoXpMd8vbbs
-	nUmL4HFF1Ng/sbfNcjROCX+YFxSlgLhyetWwo0XbdDnL/CJzYJZOqpLOHZjrNW3IliftuNv2g6V
-	EWlZ/95S5OvacuJjwt7wun6wnA5Xv8ISP2iKeC1I5sPu+edaubq/9Zjah+2DW3MB04yfFK/fif2
-	Hxl05F8DeKsny8Kg==
-X-Received: by 2002:a05:6000:4381:b0:439:ddc0:4bef with SMTP id ffacd0b85a97d-43b883786damr8154472f8f.8.1774473131295;
-        Wed, 25 Mar 2026 14:12:11 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:42::])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b919cefd7sm2433931f8f.17.2026.03.25.14.12.10
+        d=1e100.net; s=20251104; t=1774473134; x=1775077934;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=kzMFv/J8zUW31g8Cu5IpT5cFsqs52DDeUj69v9HYPRc=;
+        b=XWqXmnGAq47V1WOp5i9SvEGtbcWFBUoBM9QO5Q1O4zIpDVBaTKLqNYsl5fF7fNqZhh
+         sPsZnVv3GHqzT9UHeA42pkWKEekasfJaQ2FQxav50Js7svF6HbK9/ijux9G2rosaQGPv
+         naCb5xxYRo27q/GUMsXms3Yrp4oyiBqAgE0TafPqV4mLKUKjTvUWyJAnaVq0nxWWGF8P
+         /WE/ULSd4RjDK444nXNbHbn070zBoDi1RJ9ii2Omxq8ZgeCmlc5D6/SVn/TjR+CNOpJ+
+         SdqOs+9ThFqrDSUveYNnv7WPplV8Y3KWlIZ+TzfOn5Vjw0INVTT89ypm9DpBQryMXc/G
+         +ZEA==
+X-Gm-Message-State: AOJu0YxejJGpX6VxgYTEygQakWA851R9RsZQx9Jl7KLnN092c19/dpw8
+	+8HlLUMc7T1KX6rhASHfizfOjN8zaaQS9wocKJ19+ycJLfd+mjbPnvJM
+X-Gm-Gg: ATEYQzzjfpXlK2MwA9hr7JN7HjWA2AHagO3mU+DJK4uUjpsn3rYbZ2lKM/SQAO+/YlW
+	CwwDw9Yh+ctblMtnXxuU+NgBHmLoXWsS5TDh/9lCCCePpcFnbzoRzL6WoVfTa6Ef6o2JqOouulb
+	SqaDROQrzDEpsLlHNGJ0vEDdKBvjK5KLzZv4ifBMCXStygmfjy587L/unDICCcBrvof5WPZzXTh
+	/ajE8tWPP2XN8Izld98rDVzxHo34bO8tjp3F1NiZaB8z7q96+gB72JxMiCOnu+nnp/fvU/F3iL5
+	j0QxikpZRZriiRVcEfRzDe5vh8+gayUNwabIuH5Uq6s+vFU675ZPjozv5E1BMgY5Cw9PA9tLtCr
+	U24sc3r97cQljVrHYmFJE4jRcgqZGhP1UHWN0cfPPp/1SGV7BRHOQ46htSlWW/PiA1P8BxI1LUl
+	WuhOD/F7V3PA==
+X-Received: by 2002:a05:600c:4ed0:b0:487:288:1199 with SMTP id 5b1f17b1804b1-487160934dcmr75919895e9.28.1774473133456;
+        Wed, 25 Mar 2026 14:12:13 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff::])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4871fbdd555sm3500975e9.2.2026.03.25.14.12.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Mar 2026 14:12:10 -0700 (PDT)
+        Wed, 25 Mar 2026 14:12:13 -0700 (PDT)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Subject: [PATCH 0/2] bpf: Migrate bpf_task_work and file dynptr to
- kmalloc_nolock
-Date: Wed, 25 Mar 2026 14:11:53 -0700
-Message-Id: <20260325-kmalloc_special-v1-0-269666afb1ea@meta.com>
+Date: Wed, 25 Mar 2026 14:11:54 -0700
+Subject: [PATCH 1/2] bpf: Migrate bpf_task_work to kmalloc_nolock
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,54 +68,135 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAJpPxGkC/x3MWwqDMBAF0K0M99uATVKl2YpICeOog/FBAqUg2
- XuhZwHnRpGsUhDoRpaPFj0PBHo0BF7jsYjRCYFgW9u11jqz7TGlk9/lEtaYzMs5Yc9P76YeDeH
- KMuv3Pw5jrT9DpzEfYQAAAA==
-X-Change-ID: 20260223-kmalloc_special-933ec4c543d7
+Message-Id: <20260325-kmalloc_special-v1-1-269666afb1ea@meta.com>
+References: <20260325-kmalloc_special-v1-0-269666afb1ea@meta.com>
+In-Reply-To: <20260325-kmalloc_special-v1-0-269666afb1ea@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
  daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
  eddyz87@gmail.com, memxor@gmail.com
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1774473129; l=1264;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1774473129; l=4270;
  i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
- bh=VEFE+Le3J4kokQ2bTMHgmn8JTCyDAPSCdILWGP3vRAs=;
- b=uFvdhUhy2dMzADomQoTQaU2NRCYziDdYkt2v4yL6quxKkmyjxaYq+83s6CC0HG75W8MN9IMze
- YHpKoBJW3XcDtIy9ZahLCNcw3CmTGuTt9L/WbY+OS3SQiLFkIIHKx7L
+ bh=rs3z5581qTWdiLfShda/3MLF90vVAE/t3MDfmerq2NU=;
+ b=qjAMuF5EHnT0JWJlrzL1C6QHbijqhhjilVitSva2sYop5mHhrRLKTTgqQph5QPtOwWpM7Yy8U
+ hk8yBqm4XIkCy69hpzd+eYoQSqsSECtxoAyRGZPzYbIq25gzM5/FBgP
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
-Now that kmalloc can be used from NMI context via kmalloc_nolock(),
-migrate BPF internal allocations away from bpf_mem_alloc to use the
-standard slab allocator.
+From: Mykyta Yatsenko <yatsenko@meta.com>
 
-Use kfree_rcu() for deferred freeing, which waits for a regular RCU
-grace period before the memory is reclaimed. Sleepable BPF programs
-hold rcu_read_lock_trace but not regular rcu_read_lock, so patch 1
-adds explicit rcu_read_lock/unlock around the pointer-to-refcount
-window to prevent kfree_rcu from freeing memory while a sleepable
-program is still between reading the pointer and acquiring a
-reference.
+Replace bpf_mem_alloc/bpf_mem_free with
+kmalloc_nolock/kfree_rcu for bpf_task_work_ctx.
 
-Patch 1 migrates bpf_task_work_ctx from bpf_mem_alloc/bpf_mem_free to
-kmalloc_nolock/kfree_rcu.
+Replace guard(rcu_tasks_trace)() with guard(rcu)() in
+bpf_task_work_irq(). The function only accesses ctx struct members
+(not map values), so tasks trace protection is not needed - regular
+RCU is sufficient since ctx is freed via kfree_rcu. The guard in
+bpf_task_work_callback() remains as tasks trace since it accesses map
+values from process context.
 
-Patch 2 migrates bpf_dynptr_file_impl from bpf_mem_alloc/bpf_mem_free
-to kmalloc_nolock/kfree_rcu.
+Sleepable BPF programs (e.g. BPF_PROG_TYPE_SYSCALL) hold
+rcu_read_lock_trace but not regular rcu_read_lock. Since kfree_rcu
+waits for a regular RCU grace period, the ctx memory can be freed
+while a sleepable program is still running. Add explicit
+rcu_read_lock/unlock around the pointer read and refcount tryget in
+bpf_task_work_acquire_ctx to close this race window.
 
-Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+For the lost-cmpxchg path the ctx was never published, so plain kfree
+is safe.
 ---
-Mykyta Yatsenko (2):
-      bpf: Migrate bpf_task_work to kmalloc_nolock
-      bpf: Migrate dynptr file to kmalloc_nolock
+ kernel/bpf/helpers.c | 36 +++++++++++++++++++++++-------------
+ 1 file changed, 23 insertions(+), 13 deletions(-)
 
- kernel/bpf/helpers.c | 45 +++++++++++++++++++++++++++++----------------
- 1 file changed, 29 insertions(+), 16 deletions(-)
----
-base-commit: 9f7d8fa6817e2709846fc7f5c9f60254e536d138
-change-id: 20260223-kmalloc_special-933ec4c543d7
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index cb6d242bd093..b197b6978f1a 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -4171,11 +4171,7 @@ static void bpf_task_work_ctx_put(struct bpf_task_work_ctx *ctx)
+ 		return;
+ 
+ 	bpf_task_work_ctx_reset(ctx);
+-
+-	/* bpf_mem_free expects migration to be disabled */
+-	migrate_disable();
+-	bpf_mem_free(&bpf_global_ma, ctx);
+-	migrate_enable();
++	kfree_rcu(ctx, rcu);
+ }
+ 
+ static void bpf_task_work_cancel(struct bpf_task_work_ctx *ctx)
+@@ -4229,7 +4225,7 @@ static void bpf_task_work_irq(struct irq_work *irq_work)
+ 	enum bpf_task_work_state state;
+ 	int err;
+ 
+-	guard(rcu_tasks_trace)();
++	guard(rcu)();
+ 
+ 	if (cmpxchg(&ctx->state, BPF_TW_PENDING, BPF_TW_SCHEDULING) != BPF_TW_PENDING) {
+ 		bpf_task_work_ctx_put(ctx);
+@@ -4251,9 +4247,9 @@ static void bpf_task_work_irq(struct irq_work *irq_work)
+ 	/*
+ 	 * It's technically possible for just scheduled task_work callback to
+ 	 * complete running by now, going SCHEDULING -> RUNNING and then
+-	 * dropping its ctx refcount. Instead of capturing extra ref just to
+-	 * protected below ctx->state access, we rely on RCU protection to
+-	 * perform below SCHEDULING -> SCHEDULED attempt.
++	 * dropping its ctx refcount. Instead of capturing an extra ref just
++	 * to protect below ctx->state access, we rely on rcu_read_lock
++	 * above to prevent kfree_rcu from freeing ctx before we return.
+ 	 */
+ 	state = cmpxchg(&ctx->state, BPF_TW_SCHEDULING, BPF_TW_SCHEDULED);
+ 	if (state == BPF_TW_FREED)
+@@ -4270,7 +4266,7 @@ static struct bpf_task_work_ctx *bpf_task_work_fetch_ctx(struct bpf_task_work *t
+ 	if (ctx)
+ 		return ctx;
+ 
+-	ctx = bpf_mem_alloc(&bpf_global_ma, sizeof(struct bpf_task_work_ctx));
++	ctx = kmalloc_nolock(sizeof(*ctx), 0, NUMA_NO_NODE);
+ 	if (!ctx)
+ 		return ERR_PTR(-ENOMEM);
+ 
+@@ -4284,7 +4280,7 @@ static struct bpf_task_work_ctx *bpf_task_work_fetch_ctx(struct bpf_task_work *t
+ 		 * tw->ctx is set by concurrent BPF program, release allocated
+ 		 * memory and try to reuse already set context.
+ 		 */
+-		bpf_mem_free(&bpf_global_ma, ctx);
++		kfree(ctx);
+ 		return old_ctx;
+ 	}
+ 
+@@ -4296,13 +4292,27 @@ static struct bpf_task_work_ctx *bpf_task_work_acquire_ctx(struct bpf_task_work
+ {
+ 	struct bpf_task_work_ctx *ctx;
+ 
++	/*
++	 * Sleepable BPF programs hold rcu_read_lock_trace but not
++	 * regular rcu_read_lock. Since kfree_rcu waits for regular
++	 * RCU GP, the ctx can be freed while we're between reading
++	 * the pointer and incrementing the refcount. Take regular
++	 * rcu_read_lock to prevent kfree_rcu from freeing the ctx
++	 * before we can tryget it.
++	 */
++	rcu_read_lock();
+ 	ctx = bpf_task_work_fetch_ctx(tw, map);
+-	if (IS_ERR(ctx))
++	if (IS_ERR(ctx)) {
++		rcu_read_unlock();
+ 		return ctx;
++	}
+ 
+ 	/* try to get ref for task_work callback to hold */
+-	if (!bpf_task_work_ctx_tryget(ctx))
++	if (!bpf_task_work_ctx_tryget(ctx)) {
++		rcu_read_unlock();
+ 		return ERR_PTR(-EBUSY);
++	}
++	rcu_read_unlock();
+ 
+ 	if (cmpxchg(&ctx->state, BPF_TW_STANDBY, BPF_TW_PENDING) != BPF_TW_STANDBY) {
+ 		/* lost acquiring race or map_release_uref() stole it from us, put ref and bail */
 
-Best regards,
---  
-Mykyta Yatsenko <yatsenko@meta.com>
+-- 
+2.52.0
 
