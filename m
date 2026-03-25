@@ -1,41 +1,41 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE56C13635C
-	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 06:43:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB0EE35F182
+	for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 06:45:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774421029; cv=none; b=J79+xtvpcrJk1LuYAo6E+hnkCixMOLGo7PIRpXg3U7/O5obseQ694qd2aw+zI7u1XmAMdPWoWpipU9BpyILk2KKai2w1O6/CyUP0C39tiGVqrvJanus+b2VFJnDFsSQZDpx8aQs2GUTNZ5gPUhu6XGLCOJqzrp1x/4WeL+laMuc=
+	t=1774421145; cv=none; b=VKzVNuVo0RBFF7zSZ1kAmF+DFA8JL0s3A29dxoRTIuoEmluoweUSw6aRBX3yC4EuU9TyG3HmzOqo7aFiFU6YlCuHshI2HvfJegu7BqWapQ3JSpIUwEXH2Cb42iBec5oWSkYRdmj8rqHe3giW5S8MbpzqEJX0d82qZry1W769Qig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774421029; c=relaxed/simple;
-	bh=9cyb6OiBZBRxGGGc8sHy3Km4p8p4taXSQ7mtJeYPa/U=;
+	s=arc-20240116; t=1774421145; c=relaxed/simple;
+	bh=+H1sQe6hwZTWmRieqS0pXVKir/Imi6FdyST0jsJjmwQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=O/+PvlCvu5e74JYMAmmRhnh9m8KFZe+whAQiI0ENCHMAplJRgpxwANHvsRsIej5nA/tELYTtffikCb93aQXetOUb5KuRObRJFkd0Xj3BxFcV5PkQWqM1r5hbyXv7UXq94I0nie5CAT3yYY8i5D9I7QL24R28xWGSVWAghWKC4Nw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=X0AX2CzT; arc=none smtp.client-ip=95.215.58.176
+	 In-Reply-To:Content-Type; b=T3biBYe7ZgBnSIoat2HMrmwsD9mR1ZF1lqKyqdxtR13s9VL080xCaTjcoQKG5JcJLCYG53az2t3+6qEt5ebZzPGYhpMfOzVY6C4MT2TkSA0jESs1qy6D6eaVUymYYKvVc1dlycS6riJzqYOnNEa4USUs0j76YXfIb3lmijqzq1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JX187vHh; arc=none smtp.client-ip=91.218.175.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="X0AX2CzT"
-Message-ID: <03163163-fae9-4980-8526-a1353cdabcfc@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JX187vHh"
+Message-ID: <7a119223-9994-4edc-af0b-f1ee9876cd20@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774421016;
+	t=1774421140;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=vwhc8PSS+2hKiZYt26VThXfB5guA2AYLd1UkTobn7Lw=;
-	b=X0AX2CzTfTpHTUqbjgE63LGqzCyje8VJv1az6fbjgVRpuymEtR1uoaF1aCRdLCgKEZnxI2
-	6qalCCqCMd3h2V5MSlM9SdpwShjA/eSKF9czrqllmPEi/Nvi4TmCmMEEPe1BOWSoF0AaSK
-	feWEo6oh1DXj1jVjrm2bz7A1NSxd1Hg=
-Date: Wed, 25 Mar 2026 14:43:19 +0800
+	bh=8fJZpIgD+0/f1kEulnsgp/FlRkAUVfsQAT+SXMw8lLE=;
+	b=JX187vHhGYaZXCi2xn6S0mJ0A+dB5YpiINke6nvVz38BVlVPDxKOqSkvvImcT32wZctUNP
+	GWZw+35cAVrhzYGZ3mV+pds8husnoVfak4gG3aZmUBUEUvNq2WEhj2CIPF4mlMv2vL9oss
+	4lmRYyuFYLllOTjf1Hcy78YBcly4JkU=
+Date: Wed, 25 Mar 2026 14:45:31 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCHv4 bpf-next 13/25] bpf: Add support for tracing_multi link
- fdinfo
+Subject: Re: [PATCHv4 bpf-next 24/25] selftests/bpf: Add tracing multi attach
+ benchmark test
 Content-Language: en-US
 To: Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
@@ -44,89 +44,223 @@ Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
  Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
  Menglong Dong <menglong8.dong@gmail.com>, Steven Rostedt <rostedt@kernel.org>
 References: <20260324081846.2334094-1-jolsa@kernel.org>
- <20260324081846.2334094-14-jolsa@kernel.org>
+ <20260324081846.2334094-25-jolsa@kernel.org>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <20260324081846.2334094-14-jolsa@kernel.org>
+In-Reply-To: <20260324081846.2334094-25-jolsa@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
 On 24/3/26 16:18, Jiri Olsa wrote:
-> Adding tracing_multi link fdinfo support with following output:
+> Adding benchmark test that attaches to (almost) all allowed tracing
+> functions and display attach/detach times.
 > 
-> pos:    0
-> flags:  02000000
-> mnt_id: 19
-> ino:    3091
-> link_type:      tracing_multi
-> link_id:        382
+>   # ./test_progs -t tracing_multi_bench_attach -v
+>   bpf_testmod.ko is already unloaded.
+>   Loading bpf_testmod.ko...
+>   Successfully loaded bpf_testmod.ko.
+>   serial_test_tracing_multi_bench_attach:PASS:btf__load_vmlinux_btf 0 nsec
+>   serial_test_tracing_multi_bench_attach:PASS:tracing_multi_bench__open_and_load 0 nsec
+>   serial_test_tracing_multi_bench_attach:PASS:get_syms 0 nsec
+>   serial_test_tracing_multi_bench_attach:PASS:bpf_program__attach_tracing_multi 0 nsec
+>   serial_test_tracing_multi_bench_attach: found 51186 functions
+>   serial_test_tracing_multi_bench_attach: attached in   1.295s
+>   serial_test_tracing_multi_bench_attach: detached in   0.243s
+>   #507     tracing_multi_bench_attach:OK
+>   Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+>   Successfully unloaded bpf_testmod.ko.
+> 
+> Exporting skip_entry as is_unsafe_function and using it in the test.
+> 
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  .../selftests/bpf/prog_tests/tracing_multi.c  | 98 +++++++++++++++++++
+>  .../selftests/bpf/progs/tracing_multi_bench.c | 12 +++
+>  tools/testing/selftests/bpf/trace_helpers.c   |  6 +-
+>  tools/testing/selftests/bpf/trace_helpers.h   |  1 +
+>  4 files changed, 114 insertions(+), 3 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_bench.c
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+> index dece45d8fb5e..6917471e329c 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+> @@ -9,6 +9,7 @@
+>  #include "tracing_multi_intersect.skel.h"
+>  #include "tracing_multi_session.skel.h"
+>  #include "tracing_multi_fail.skel.h"
+> +#include "tracing_multi_bench.skel.h"
+>  #include "trace_helpers.h"
+>  
+>  static __u64 bpf_fentry_test_cookies[] = {
+> @@ -571,6 +572,103 @@ static void test_attach_api_fails(void)
+>  	free(ids2);
+>  }
+>  
+> +void serial_test_tracing_multi_bench_attach(void)
+> +{
+> +	LIBBPF_OPTS(bpf_tracing_multi_opts, opts);
+> +	struct tracing_multi_bench *skel = NULL;
+> +	long attach_start_ns, attach_end_ns;
+> +	long detach_start_ns, detach_end_ns;
+> +	double attach_delta, detach_delta;
+> +	struct bpf_link *link = NULL;
+> +	size_t i, cap = 0, cnt = 0;
+> +	struct ksyms *ksyms = NULL;
+> +	void *root = NULL;
+> +	__u32 *ids = NULL;
+> +	__u32 nr, type_id;
+> +	struct btf *btf;
+> +	int err;
+> +
+> +#ifndef __x86_64__
+> +	test__skip();
+> +	return;
+> +#endif
+> +
+> +	btf = btf__load_vmlinux_btf();
+> +	if (!ASSERT_OK_PTR(btf, "btf__load_vmlinux_btf"))
+> +		return;> +
+> +	skel = tracing_multi_bench__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "tracing_multi_bench__open_and_load"))
+> +		goto cleanup;
+> +
+> +	if (!ASSERT_OK(bpf_get_ksyms(&ksyms, true), "get_syms"))
+> +		goto cleanup;
+> +
+> +	/* Get all ftrace 'safe' symbols.. */
+> +	for (i = 0; i < ksyms->filtered_cnt; i++) {
+> +		if (is_unsafe_function(ksyms->filtered_syms[i]))
+> +			continue;
+> +		tsearch(&ksyms->filtered_syms[i], &root, compare);
+> +	}
+> +
+> +	/* ..and filter them through BTF and btf_type_is_traceable_func. */
+> +	nr = btf__type_cnt(btf);
+> +	for (type_id = 1; type_id < nr; type_id++) {
+> +		const struct btf_type *type;
+> +		const char *str;
+> +
+> +		type = btf__type_by_id(btf, type_id);
+> +		if (!type)
+> +			break;
+> +
+> +		if (BTF_INFO_KIND(type->info) != BTF_KIND_FUNC)
+> +			continue;
+> +
+> +		str = btf__name_by_offset(btf, type->name_off);
+> +		if (!str)
+> +			break;
+> +
+> +		if (!tfind(&str, &root, compare))
+> +			continue;
+> +
+> +		if (!btf_type_is_traceable_func(btf, type))
+> +			continue;
+> +
+> +		err = libbpf_ensure_mem((void **) &ids, &cap, sizeof(*ids), cnt + 1);
+> +		if (err)
+> +			goto cleanup;
+> +
+> +		ids[cnt++] = type_id;
+> +	}
+> +
+> +	opts.ids = ids;
+> +	opts.cnt = cnt;
+> +
+> +	attach_start_ns = get_time_ns();
+> +	link = bpf_program__attach_tracing_multi(skel->progs.bench, NULL, &opts);
+> +	attach_end_ns = get_time_ns();
+> +
+> +	if (!ASSERT_OK_PTR(link, "bpf_program__attach_tracing_multi"))
+> +		goto cleanup;
+> +
+> +	detach_start_ns = get_time_ns();
+> +	bpf_link__destroy(link);
+> +	detach_end_ns = get_time_ns();
+> +
+> +	attach_delta = (attach_end_ns - attach_start_ns) / 1000000000.0;
+> +	detach_delta = (detach_end_ns - detach_start_ns) / 1000000000.0;
+> +
+> +	printf("%s: found %lu functions\n", __func__, cnt);
+> +	printf("%s: attached in %7.3lfs\n", __func__, attach_delta);
+> +	printf("%s: detached in %7.3lfs\n", __func__, detach_delta);
+> +
+> +cleanup:
+> +	tracing_multi_bench__destroy(skel);
+> +	tdestroy(root, tdestroy_free_nop);
+> +	free_kallsyms_local(ksyms);
+> +	free(ids);
 
-Would better to add attach_type?
-
-attach_type:	[fentry,fexit,fsession]_multi
+Is btf__free(btf) missing here? Since 'btf' was calloc inner
+btf__load_vmlinux_btf().
 
 Thanks,
 Leon
 
-> prog_tag:       62073a1123f07ef7
-> prog_id:        715
-> cnt:    10
-> cookie   BTF-id  func
-> 8        91203   bpf_fentry_test1+0x4/0x10
-> 9        91205   bpf_fentry_test2+0x4/0x10
-> 7        91206   bpf_fentry_test3+0x4/0x20
-> 5        91207   bpf_fentry_test4+0x4/0x20
-> 4        91208   bpf_fentry_test5+0x4/0x20
-> 2        91209   bpf_fentry_test6+0x4/0x20
-> 3        91210   bpf_fentry_test7+0x4/0x10
-> 1        91211   bpf_fentry_test8+0x4/0x10
-> 10       91212   bpf_fentry_test9+0x4/0x10
-> 6        91204   bpf_fentry_test10+0x4/0x10
-> 
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  kernel/trace/bpf_trace.c | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
-> 
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 761501ce3a5f..41b691e83dc4 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -3618,9 +3618,35 @@ static void bpf_tracing_multi_link_dealloc(struct bpf_link *link)
->  	kvfree(tr_link);
->  }
->  
-> +#ifdef CONFIG_PROC_FS
-> +static void bpf_tracing_multi_show_fdinfo(const struct bpf_link *link,
-> +					  struct seq_file *seq)
-> +{
-> +	struct bpf_tracing_multi_link *tr_link =
-> +		container_of(link, struct bpf_tracing_multi_link, link);
-> +	bool has_cookies = !!tr_link->cookies;
-> +
-> +	seq_printf(seq, "cnt:\t%u\n", tr_link->nodes_cnt);
-> +
-> +	seq_printf(seq, "%s\t %s\t %s\n", "cookie", "BTF-id", "func");
-> +	for (int i = 0; i < tr_link->nodes_cnt; i++) {
-> +		struct bpf_tracing_multi_node *mnode = &tr_link->nodes[i];
-> +		u32 btf_id;
-> +
-> +		bpf_trampoline_unpack_key(mnode->trampoline->key, NULL, &btf_id);
-> +		seq_printf(seq, "%llu\t %u\t %pS\n",
-> +			   has_cookies ? tr_link->cookies[i] : 0,
-> +			   btf_id, (void *) mnode->trampoline->ip);
-> +	}
 > +}
-> +#endif
 > +
->  static const struct bpf_link_ops bpf_tracing_multi_link_lops = {
->  	.release = bpf_tracing_multi_link_release,
->  	.dealloc_deferred = bpf_tracing_multi_link_dealloc,
-> +#ifdef CONFIG_PROC_FS
-> +	.show_fdinfo = bpf_tracing_multi_show_fdinfo,
-> +#endif
+>  void test_tracing_multi_test(void)
+>  {
+>  #ifndef __x86_64__
+> diff --git a/tools/testing/selftests/bpf/progs/tracing_multi_bench.c b/tools/testing/selftests/bpf/progs/tracing_multi_bench.c
+> new file mode 100644
+> index 000000000000..beae946cb8c4
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/tracing_multi_bench.c
+> @@ -0,0 +1,12 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <vmlinux.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +
+> +char _license[] SEC("license") = "GPL";
+> +
+> +SEC("fentry.multi")
+> +int BPF_PROG(bench)
+> +{
+> +	return 0;
+> +}
+> diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+> index 0e63daf83ed5..8de0b60766de 100644
+> --- a/tools/testing/selftests/bpf/trace_helpers.c
+> +++ b/tools/testing/selftests/bpf/trace_helpers.c
+> @@ -548,7 +548,7 @@ static const char * const trace_blacklist[] = {
+>  	"bpf_get_numa_node_id",
 >  };
 >  
->  int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr)
+> -static bool skip_entry(char *name)
+> +bool is_unsafe_function(const char *name)
+>  {
+>  	int i;
+>  
+> @@ -651,7 +651,7 @@ int bpf_get_ksyms(struct ksyms **ksymsp, bool kernel)
+>  		free(name);
+>  		if (sscanf(buf, "%ms$*[^\n]\n", &name) != 1)
+>  			continue;
+> -		if (skip_entry(name))
+> +		if (is_unsafe_function(name))
+>  			continue;
+>  
+>  		ks = search_kallsyms_custom_local(ksyms, name, search_kallsyms_compare);
+> @@ -728,7 +728,7 @@ int bpf_get_addrs(unsigned long **addrsp, size_t *cntp, bool kernel)
+>  		free(name);
+>  		if (sscanf(buf, "%p %ms$*[^\n]\n", &addr, &name) != 2)
+>  			continue;
+> -		if (skip_entry(name))
+> +		if (is_unsafe_function(name))
+>  			continue;
+>  
+>  		if (cnt == max_cnt) {
+> diff --git a/tools/testing/selftests/bpf/trace_helpers.h b/tools/testing/selftests/bpf/trace_helpers.h
+> index d5bf1433675d..01c8ecc45627 100644
+> --- a/tools/testing/selftests/bpf/trace_helpers.h
+> +++ b/tools/testing/selftests/bpf/trace_helpers.h
+> @@ -63,4 +63,5 @@ int read_build_id(const char *path, char *build_id, size_t size);
+>  int bpf_get_ksyms(struct ksyms **ksymsp, bool kernel);
+>  int bpf_get_addrs(unsigned long **addrsp, size_t *cntp, bool kernel);
+>  
+> +bool is_unsafe_function(const char *name);
+>  #endif
 
