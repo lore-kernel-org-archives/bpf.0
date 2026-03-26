@@ -1,290 +1,326 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B67C401486
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 15:47:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE1F4035B6;
+	Thu, 26 Mar 2026 15:49:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774540060; cv=none; b=a4TpnGIgoAf1qIPKQ6+xP8aZbVxgeFuVIs9i/WCVRTSFpg6O8SlwMeRfYNEvGQnO6MN1oeukib0hV5zogCGn/DCt8eodskJ2Ln4InoNLVy0WP9H179XdXRCCMXMp3tSG8NBYR9pB/zLCYAyIxCMi8EmAfX4q5nzVmw7MsrUwoEg=
+	t=1774540147; cv=none; b=G+7rE44W9Q8/MKqxHpvpJjDTbUXvCFDCRJCxj93wD80mwFdjTv3a+I4A2PAvxM0NgzQe7I6xNEQe5q8gi9wRgXZG7kPnBZr61Ra8UtuyShDTCt2hEfo9wLiD6/49GVxCyop/YmAIpI2/ASJdiaOu3/n+Xv7pMGglKAX6h/sZ2Qw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774540060; c=relaxed/simple;
-	bh=8zV1mlM9Db93HFNJiRFnSmu8T4K0En+s7iFzjSMIwxg=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=SdbcGLuHPtwB4PP5JqyFuZAbrMwOkD+ipWE32FeptR2wsrfz0o0VzfmgCLI5+xELy1jQ6WXtPrNFijjbRQ5YEE7HvO2WxPn8qLWjiPIyRxCNos7Nxgh7lwEeqJB24RYM1N+zUDB1kxqWeIX8cVZnNirycyzuVtVsxuc3h2Rav7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V7FIg4Ab; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774540147; c=relaxed/simple;
+	bh=lfc0HPiezXIbZWlN6mCvZhz9GywH5Y4IAvRgXmgoAqU=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UT4csGIeuwd4oOzDEUxxjnXane63I7wn9OQPMC8oznRdT3rJxmxbl+JrlBk+5B6vtd/PAqixwJMblGyAXc/E3LtwvKVCp1UMZwooh4o596nUfiVq1rYk4nrbY8oRRCYKB/PMHF1/SYA7LQxRLZaPd5mCQCVtIJy5wqFvHYIse4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=1wjFAFML; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V7FIg4Ab"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-486fd3a577eso10425575e9.1
-        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 08:47:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774540057; x=1775144857; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pAtXle1ukx/Ym7HaAgYcZ/3AU+9HOiKTUO5QzXa51OE=;
-        b=V7FIg4AbOcWXY2xZyFre+jQbrEjuqVbhNj3Y6AujjG5YJa7lwMSv5Gp7fanO5YWwur
-         hVn7h/VS99tNqMhOgkDdHP9jkEDOe/ty7TueYk2Jry08/DB8HV95mNjZxqSWwTfRW4sF
-         G3EqPrW7aeORZBT4DpRTXdZQufWB018bK1O2CUaKG3JKFTobIgg1rA0nbJ4DiMdoaL3f
-         EXDOvzr2Xz2Qht3wmSfOd37Si45NHHW7i9M35haBeuqopyUszp8OpfOP3NKvzpxl1T/y
-         xrzCCqPLTgLhlAwzipMWhI4iGi2/TaOsWViOyaU9V+R2qrcUyGGf/a8OwnPx8X0FG1hq
-         UUnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774540057; x=1775144857;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=pAtXle1ukx/Ym7HaAgYcZ/3AU+9HOiKTUO5QzXa51OE=;
-        b=dg/a93lTRL9+XRu3j9IEnD14J6m/NSjsH7nsO7ODyh5nAXbAR2NzOnsa5A6xwlBVuT
-         pE8wPuiRLgixQmUa2UMTc8wg1RnzNrBbRXZeMrdIJJ49PIxEHWOVXNA+vDeEpDLz5aSP
-         75lb0kUKoq0lxi/JnSq8ZxexDqjGx4kznh2ztMSqQ104Qrqv4FglstTlsDv5fHWO1EhG
-         FP6bHQiDVaMaKLoPeqEm/skzKC+kcY/11jf+HsZ1H2SxM4rNhoTStIhy9qdRHXd1afHA
-         A/9ZVW39jOmjv0SRw7DzefaffBKUsD2bnuxNpq3u7iQi7eyL5t1Q18tzIvk8qBYA1kkU
-         Ql0A==
-X-Forwarded-Encrypted: i=1; AJvYcCW8lQgetlW8mwGq9H5Ypp6wcu25j3sEgNZigs5vKnLmcv0V/y9pOsi6SdNGtwh10hCSGs4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJeAQ2hEpdPwqWvE41qJBFdBVDfD4oVh7HCpWfk9pSPAznmfj6
-	nZZeChYy+UHM6OcW9X4a1hzCnWORzm+tgKzj6KDyDZ6P/seY3AHll5Cp
-X-Gm-Gg: ATEYQzwU8izjCstPzwwnu2BQYB2XzxO96gKBG5u+zwRebXPl3Z7Kieh9rK1R9UThm91
-	fzgR6DiUpijmYULZNYoc7fqq0/TmReJZt4Q5Vqw4Ez+x7t7NZQfOKCZrwfz83La0RtbDxpQ7zzW
-	8bLjPsp6l8pcBZiC7ZDPv1jshPB/Cf+sF+9PdoMreGQa05aqjrmJ5UI/EU0vsyjcjr03DYVaDYL
-	1IOVuHmOao+JdMukm3nwRrB+7xnHDyduwTH3uvfMjUDnstLQWT8Us/ZJbO+V94OEV7a65wuGX3/
-	EAgaX0NTzVv//HFYLtnnq0w/8xQCqrupSMBvepnYYmj/Xj1eTjjTIGUt9HKpe8jITriYcyueeSE
-	yB4KKGyy4d+/xVHo7BGLaIs+FuvMshpjThWasKyREmWggpNig5IVfR3b2DbrxvDCs4/6Ke3tYi5
-	1LI8PqonVcgOlLBEyJ5rFzCJDG8wQxV2VXdw==
-X-Received: by 2002:a05:600c:4685:b0:485:17a7:ba0d with SMTP id 5b1f17b1804b1-4871606cbcemr131084795e9.32.1774540056495;
-        Thu, 26 Mar 2026 08:47:36 -0700 (PDT)
-Received: from localhost ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4871fbbf65asm25902095e9.2.2026.03.26.08.47.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Mar 2026 08:47:36 -0700 (PDT)
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-To: Puranjay Mohan <puranjay12@gmail.com>
-Cc: Aaron Esau <aaron1esau@gmail.com>, bpf@vger.kernel.org, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org
-Subject: Re: [BUG] bpf: use-after-free in hashtab BPF_F_LOCK in-place update
- path
-In-Reply-To: <87o6kaioju.fsf@gmail.com>
-References: <CADucPGRvSRpkneb94dPP08YkOHgNgBnskTK6myUag_Mkjimihg@mail.gmail.com>
- <m2se9mg16x.fsf@kernel.org> <87qzp6ipc7.fsf@gmail.com>
- <CANk7y0jkEKYviXGG2je80Q26MK4nfE4p=wfb_ukDuHGKSy2Qiw@mail.gmail.com>
- <87o6kaioju.fsf@gmail.com>
-Date: Thu, 26 Mar 2026 15:47:35 +0000
-Message-ID: <87ldfeiodk.fsf@gmail.com>
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="1wjFAFML"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1774540145; x=1806076145;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=lfc0HPiezXIbZWlN6mCvZhz9GywH5Y4IAvRgXmgoAqU=;
+  b=1wjFAFMLQLWZv/GZMIJYE0chnWRx7V7XawzOjqQ2XwW2OylmGvP+P8BV
+   nIav6blClU0MeoI1DnDkSvlYyGcobmoL656f792JkRhVs2NeB83Dm614n
+   7zPXpuIwwcyZChW3KMoTxOgWqKYNcB+g93L5pHs9JJFA4YNT6rxDt+o8b
+   iWsOaJ19kACn45w5KfRgISnedV+0KQS+AAQuF56Cx1MDi/Aet1gPjtlw6
+   y/9nMKz9UH6dDYNKMnBOAC21QyZsgWuOCyKzk7/z9OpIHz1GVO9k3fg+L
+   y6F+gY90nSszXjYjv5+Z4vKemgb8TppEMYWYxLbVzOoI6ncSH/UZNHrvr
+   Q==;
+X-CSE-ConnectionGUID: n7j694HTQAuiI4RXyCbB6Q==
+X-CSE-MsgGUID: AO7gC23YSNKbGcENH1Oxvw==
+X-IronPort-AV: E=Sophos;i="6.23,142,1770620400"; 
+   d="scan'208";a="55669549"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Mar 2026 08:48:59 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Thu, 26 Mar 2026 08:48:37 -0700
+Received: from DEN-DL-M70577 (10.10.85.11) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
+ Transport; Thu, 26 Mar 2026 08:48:34 -0700
+Date: Thu, 26 Mar 2026 16:48:33 +0100
+From: Daniel Machon <daniel.machon@microchip.com>
+To: Herve Codina <herve.codina@bootlin.com>
+CC: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Horatiu Vultur
+	<horatiu.vultur@microchip.com>, Steen Hegelund
+	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+	"Jesper Dangaard Brouer" <hawk@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Arnd
+ Bergmann <arnd@arndb.de>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+	<netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<bpf@vger.kernel.org>
+Subject: Re: [PATCH net-next 00/10] net: lan966x: add support for PCIe FDMA
+Message-ID: <20260326154833.jp6rx5x2rlpmwrg3@DEN-DL-M70577>
+References: <20260320-lan966x-pci-fdma-v1-0-ef54cb9b0c4b@microchip.com>
+ <20260323155204.0321db13@bootlin.com>
+ <20260323172640.2669232d@bootlin.com>
+ <20260323194059.jjphkep4teq5rzbc@DEN-DL-M70577.microsemi.net>
+ <20260324090752.0799acb1@bootlin.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260324090752.0799acb1@bootlin.com>
 
-Mykyta Yatsenko <mykyta.yatsenko5@gmail.com> writes:
+Hi Hervé,
 
-> Puranjay Mohan <puranjay12@gmail.com> writes:
->
->> On Thu, Mar 26, 2026 at 3:26=E2=80=AFPM Mykyta Yatsenko
->> <mykyta.yatsenko5@gmail.com> wrote:
->>>
->>> Puranjay Mohan <puranjay@kernel.org> writes:
->>>
->>> > Aaron Esau <aaron1esau@gmail.com> writes:
->>> >
->>> >> Reported-by: Aaron Esau <aaron1esau@gmail.com>
->>> >>
->>> >> htab_map_update_elem() has a use-after-free when BPF_F_LOCK is used
->>> >> for in-place updates.
->>> >>
->>> >> The BPF_F_LOCK path calls lookup_nulls_elem_raw() without holding the
->>> >> bucket lock, then dereferences the element via copy_map_value_locked=
-().
->>> >> A concurrent htab_map_delete_elem() can delete and free the element
->>> >> between these steps.
->>> >>
->>> >> free_htab_elem() uses bpf_mem_cache_free(), which immediately returns
->>> >> the object to the per-CPU free list (not RCU-deferred). The memory m=
-ay
->>> >> be reallocated before copy_map_value_locked() executes, leading to
->>> >> writes into a different element.
->>> >>
->>> >> When lookup succeeds (l_old !=3D NULL), the in-place update path ret=
-urns
->>> >> early, so the =E2=80=9Cfull lookup under lock=E2=80=9D path is not t=
-aken.
->>> >>
->>> >> Race:
->>> >>
->>> >>   CPU 0: htab_map_update_elem (BPF_F_LOCK)
->>> >>          lookup_nulls_elem_raw() =E2=86=92 E (no bucket lock)
->>> >>          ...
->>> >>   CPU 1: htab_map_delete_elem()
->>> >>          htab_lock_bucket =E2=86=92 hlist_nulls_del_rcu =E2=86=92 ht=
-ab_unlock_bucket
->>> >>          free_htab_elem =E2=86=92 bpf_mem_cache_free (immediate free)
->>> >>   CPU 1: htab_map_update_elem (new key)
->>> >>          alloc_htab_elem =E2=86=92 reuses E
->>> >>   CPU 0: copy_map_value_locked(E, ...) =E2=86=92 writes into reused =
-object
->>> >>
->>> >> Reproduction:
->>> >>
->>> >>   1. Create BPF_MAP_TYPE_HASH with a value containing bpf_spin_lock
->>> >>      (max_entries=3D64, 7 u64 fields + lock).
->>> >>   2. Threads A: BPF_MAP_UPDATE_ELEM with BPF_F_LOCK (pattern 0xAAAA.=
-..)
->>> >>   3. Threads B: DELETE + UPDATE (pattern 0xBBBB...) on same keys
->>> >>   4. Threads C: same as A (pattern 0xCCCC...)
->>> >>   5. Verifier threads: LOOKUP loop, detect mixed-pattern values
->>> >>   6. Run 60s on >=3D4 CPUs
->>> >>
->>> >> Attached a POC. On 6.19.9 (4 vCPU QEMU, CONFIG_PREEMPT=3Dy),
->>> >> I observed ~645 torn values in 2.5M checks (~0.026%).
->>> >>
->>> >> Fixes: 96049f3afd50 ("bpf: introduce BPF_F_LOCK flag")
->>> >
->>> > Although this is a real issue, your reproducer is not accurate, it wi=
-ll
->>> > see torn writes even without the UAF issue, because the verifier thre=
-ad
->>> > is not taking the lock:
->>> >
->>> > So the torn write pattern CCCAAAA can mean:
->>> >   1. Thread A finished writing AAAAAAA (while holding the lock)
->>> >   2. Thread C acquired the lock and started writing: field[0]=3DC, fi=
-eld[1]=3DC, field[2]=3DC...
->>> >   3. The verifier thread reads (no lock): sees field[0]=3DC, field[1]=
-=3DC, field[2]=3DC, field[3]=3DA, field[4]=3DA, field[5]=3DA, field[6]=3DA
->>> >   4. Thread C finishes: field[3]=3DC, field[4]=3DC, field[5]=3DC, fie=
-ld[6]=3DC, releases lock
->>> >
->>> > This race happens regardless of whether the element is freed/reused. =
- It
->>> > would happen even without thread B (the delete+readd thread). The
->>> > corruption source is the non-atomic read, not the UAF.
->>> Have you confirmed torn reads even with BPF_F_LOCK flag on the
->>> BPF_MAP_LOOKUP_ELEM_CMD? I understand there must not be any torn reads
->>> with spinlock taken on the lookup path.
->>>
->>> The reproducer looks like a good selftest to have, but it needs to be
->>> ported to use libbpf, currently it looks too complex.
->>
->> Yes, I have confirmed torn reads even with BPF_F_LOCK on
->> BPF_MAP_LOOKUP_ELEM_CMD, the results given below are with BPF_F_LOCK.
->> But this is expected behaviour, BPF_F_LOCK performs a lockless lookup
->> and takes only the element's embedded spin_lock for in-place value
->> updates. It does not synchronize against concurrent deletes.
->>
-> It does not synchronize against concurrent deletes, yes, but with
-> BPF_F_LOCK on BPF_MAP_LOOKUP_ELEM_CMD, we still take the spinlock before
-> copying value from the map (syscall.c:354). Deletion does not mutate the
-> element, so when the value is reused, it should still take the same lock,
-> shouldn't it?
+> Hi Daniel,
+> 
+> On Mon, 23 Mar 2026 20:40:59 +0100
+> Daniel Machon <daniel.machon@microchip.com> wrote:
+> 
+> > Hi Hervé,
+> >
+> > > Hi Daniel,
+> > >
+> > > On Mon, 23 Mar 2026 15:52:04 +0100
+> > > Herve Codina <herve.codina@bootlin.com> wrote:
+> > >
+> > > > Hi Daniel,
+> > > >
+> > > > On Fri, 20 Mar 2026 16:00:56 +0100
+> > > > Daniel Machon <daniel.machon@microchip.com> wrote:
+> > > >
+> > > > > When lan966x operates as a PCIe endpoint, the driver currently uses
+> > > > > register-based I/O for frame injection and extraction. This approach is
+> > > > > functional but slow, topping out at around 33 Mbps on an Intel x86 host
+> > > > > with a lan966x PCIe card.
+> > > > >
+> > > > > This series adds FDMA (Frame DMA) support for the PCIe path. When
+> > > > > operating as a PCIe endpoint, the internal FDMA engine on lan966x cannot
+> > > > > directly access host memory, so DMA buffers are allocated as contiguous
+> > > > > coherent memory and mapped through the PCIe Address Translation Unit
+> > > > > (ATU). The ATU provides outbound windows that translate internal FDMA
+> > > > > addresses to PCIe bus addresses, allowing the FDMA engine to read and
+> > > > > write host memory. Because the ATU requires contiguous address regions,
+> > > > > page_pool and normal per-page DMA mappings cannot be used. Instead,
+> > > > > frames are transferred using memcpy between the ATU-mapped buffers and
+> > > > > the network stack. With this, throughput increases from ~33 Mbps to ~620
+> > > > > Mbps for default MTU.
+> > > > >
+> > > > > Patches 1-2 prepare the shared FDMA library: patch 1 renames the
+> > > > > contiguous dataptr helpers for clarity, and patch 2 adds PCIe ATU region
+> > > > > management and coherent DMA allocation with ATU mapping.
+> > > > >
+> > > > > Patches 3-5 refactor the lan966x FDMA code to support both platform and
+> > > > > PCIe paths: extracting the LLP register write into a helper, exporting
+> > > > > shared functions, and introducing an ops dispatch table selected at
+> > > > > probe time.
+> > > > >
+> > > > > Patch 6 adds the core PCIe FDMA implementation with RX/TX using
+> > > > > contiguous ATU-mapped buffers. Patches 7 and 8 extend it with MTU
+> > > > > change and XDP support respectively.
+> > > > >
+> > > > > Patches 9-10 update the lan966x PCI device tree overlay to extend the
+> > > > > cpu register mapping to cover the ATU register space and add the FDMA
+> > > > > interrupt.
+> > > > >
+> > > >
+> > > > Thanks a lot for the series taking care of DMA and ATU in PCIe variants.
+> > > >
+> > > > I have tested the whole series on both my ARM and x86 systems.
+> > > >
+> > > > Doing a simple wget on my x86 system, I moved from 3.8MB/s to 11.2MB/s and
+> > > > so the improvement is obvious.
+> > > >
+> > > > Tested-by: Herve Codina <herve.codina@bootlin.com>
+> > > >
+> > >
+> > > Hum, I think I found an issue.
+> > >
+> > > If I remove the lan966x_pci module (modprobe -r lan966x_pci), and reload
+> > > it (modprobe lan966x_pci), the board is not working.
+> > >
+> > > The system performs DHCP requests. Those requests are served by my PC (observed
+> > > with Wireshark) but the system doesn't see those answers. Indeed, he continues
+> > > to perform DHCP requests.
+> > >
+> > > Looks like the lan966x_pci module removal leaves the board in a bad state.
+> > >
+> > > Without the series applied, DHCP request answers from my PC are seen by the
+> > > system after any module unloading / reloading.
+> > >
+> > > Do you have any ideas of what could be wrong?
+> > >
+> > > Best regards,
+> > > Hervé
+> >
+> > Thanks for testing this!
+> >
+> > As part of my testing I did unload/load the lan966x_switch module to ensure the
+> > ATU was properly reset and reconfigured, and that seemed to work fine. I must
+> > admit, I did not try with the lan966x_pci module.
+> >
+> > From what I hear, when you are in the bad state, TX is still working, so it's an
+> > RX issue. Could be the interrupt is not firing, so the napi poll is not
+> > scheduled.
+> 
+> Yes, confirmed that the issue is on Rx path. Tx data were received by my PC.
+> 
+> >
+> > Anyway, I will have a look at it during the week. Will let you know.
+> >
+> 
+> Some more interesting information.
+> 
+> I tested lan966x_pci module unloading and re-loading on my ARM system.
+> 
+> On this system the following traces are present when I reload the lan966x_pci
+> module. Those traces were not present on my x86 system.
+> 
+>     [  104.715031] ------------[ cut here ]------------
+>     [  104.719746] Unexpected error: 64, error_type: 1073741824
+>     [  104.725217] WARNING: drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c:558 at lan966x_fdma_irq_handler+0xe0/0x12c [lan966x_switch], CPU#0: swapper/0/0
+>     [  104.739119] Modules linked in: lan966x_pci irq_lan966x_oic reset_microchip_sparx5 pinctrl_ocelot lan966x_serdes mdio_mscc_miim lan966x_switch rtc_ds1307 marvell [last unloaded: lan966x_pci]
+>     [  104.756250] CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted 7.0.0-rc1-00010-gfa357f2a6a00 #565 PREEMPT
+>     [  104.765743] Hardware name: Marvell Armada 3720 Development Board DB-88F3720-DDR3 (DT)
+>     [  104.773579] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>     [  104.780551] pc : lan966x_fdma_irq_handler+0xe0/0x12c [lan966x_switch]
+>     [  104.787046] lr : lan966x_fdma_irq_handler+0xe0/0x12c [lan966x_switch]
+>     [  104.793538] sp : ffff800082a7bc00
+>     [  104.796860] x29: ffff800082a7bc00 x28: ffff8000819abd00 x27: ffff800081a57757
+>     [  104.804033] x26: ffff8000819a5d88 x25: 0000000000012400 x24: ffff800081a57758
+>     [  104.811205] x23: 0000000000000038 x22: ffff00000f70ec00 x21: 0000000040000000
+>     [  104.818376] x20: ffff00000f7a8080 x19: 0000000000000040 x18: 00000000ffffffff
+>     [  104.825548] x17: ffff7fff9e7d6000 x16: ffff800082a78000 x15: ffff800102a7b837
+>     [  104.832719] x14: 0000000000000000 x13: 0000000000000000 x12: 3031203a65707974
+>     [  104.839891] x11: ffff8000819ca758 x10: 0000000000000018 x9 : ffff8000819ca758
+>     [  104.847062] x8 : 00000000ffffefff x7 : ffff800081a22758 x6 : 00000000fffff000
+>     [  104.854233] x5 : ffff00001fea1588 x4 : 0000000000000000 x3 : 0000000000000027
+>     [  104.861404] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff8000819abd00
+>     [  104.868576] Call trace:
+>     [  104.871034]  lan966x_fdma_irq_handler+0xe0/0x12c [lan966x_switch] (P)
+>     [  104.877531]  __handle_irq_event_percpu+0xa0/0x4c4
+>     [  104.882261]  handle_irq_event+0x4c/0xf8
+>     [  104.886117]  handle_level_irq+0xec/0x17c
+>     [  104.890064]  handle_irq_desc+0x40/0x58
+>     [  104.893831]  generic_handle_domain_irq+0x18/0x24
+>     [  104.898467]  lan966x_oic_irq_handler_domain+0x64/0xb0 [irq_lan966x_oic]
+>     [  104.905105]  lan966x_oic_irq_handler+0x34/0xb4 [irq_lan966x_oic]
+>     [  104.911131]  handle_irq_desc+0x40/0x58
+>     [  104.914900]  generic_handle_domain_irq+0x18/0x24
+>     [  104.919536]  pci_dev_irq_handler+0x1c/0x30 [lan966x_pci]
+>     [  104.924871]  __handle_irq_event_percpu+0xa0/0x4c4
+>     [  104.929594]  handle_irq_event+0x4c/0xf8
+>     [  104.933449]  handle_level_irq+0xec/0x17c
+>     [  104.937394]  handle_irq_desc+0x40/0x58
+>     [  104.941162]  generic_handle_domain_irq+0x18/0x24
+>     [  104.945797]  advk_pcie_irq_handler+0x160/0x390
+>     [  104.950260]  __handle_irq_event_percpu+0xa0/0x4c4
+>     [  104.954983]  handle_irq_event+0x4c/0xf8
+>     [  104.958839]  handle_fasteoi_irq+0x108/0x20c
+>     [  104.963043]  handle_irq_desc+0x40/0x58
+>     [  104.966811]  generic_handle_domain_irq+0x18/0x24
+>     [  104.971447]  gic_handle_irq+0x4c/0x110
+>     [  104.975214]  call_on_irq_stack+0x30/0x48
+>     [  104.979156]  do_interrupt_handler+0x80/0x84
+>     [  104.983360]  el1_interrupt+0x3c/0x60
+>     [  104.986959]  el1h_64_irq_handler+0x18/0x24
+>     [  104.991076]  el1h_64_irq+0x6c/0x70
+>     [  104.994495]  default_idle_call+0x80/0x138 (P)
+>     [  104.998870]  do_idle+0x220/0x290
+>     [  105.002121]  cpu_startup_entry+0x34/0x3c
+>     [  105.006064]  rest_init+0xf8/0x188
+>     [  105.009398]  start_kernel+0x818/0x8ec
+>     [  105.013085]  __primary_switched+0x88/0x90
+>     [  105.017119] irq event stamp: 60740
+>     [  105.020529] hardirqs last  enabled at (60739): [<ffff800080fb37bc>] default_idle_call+0x7c/0x138
+>     [  105.029328] hardirqs last disabled at (60740): [<ffff800080fab5c4>] enter_from_kernel_mode+0x10/0x3c
+>     [  105.038477] softirqs last  enabled at (60728): [<ffff8000800cb774>] handle_softirqs+0x624/0x63c
+>     [  105.047193] softirqs last disabled at (60711): [<ffff8000800102d8>] __do_softirq+0x14/0x20
+>     [  105.055471] ---[ end trace 0000000000000000 ]---
+>     [  105.060274] ------------[ cut here ]------------
+>     [  105.064963] Unexpected error: 64, error_type: 1073741824
+>     [  105.070440] WARNING: drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c:558 at lan966x_fdma_irq_handler+0xe0/0x12c [lan966x_switch], CPU#0: swapper/0/0
+>     ...
+>     [  105.443891] ------------[ cut here ]------------
+>     [  105.448536] Unexpected error: 64, error_type: 0
+>     [  105.453235] WARNING: drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c:558 at lan966x_fdma_irq_handler+0xe0/0x12c [lan966x_switch], CPU#0: swapper/0/0
+>     ...
+> 
+> And after them my ARM system don't see the answer of a ping command
+> replied by my PC (I don't use DHCP with my ARM system).
+> 
+> I don't know why those traces are not present on my x86 (config, race
+> condition, other reason) but anyway, they can help to find some clues
+> about what's going on.
+> 
+> Of course, feel free to ask me some more tests or anything else I can do
+> to help on this topic.
+> 
+> Best regards,
+> Hervé
 
-Ok, I think this is just a wonky reproducer:
-fill_value(&val, PATTERN_B, seq++);
-map_update(g_map_fd, &g_key, &val, BPF_ANY);
+As I remembered, doing rmmod on the lan966x_switch followed by modprobe
+lan966x_switch works fine. This is because neither the switch core, nor the FDMA
+engine is reset, so they remain in sync.
 
-should have been BPF_ANY | BPF_F_LOCK
->>
->>> >
->>> > If you change the preproducer like:
->>> >
->>> > -- >8 --
->>> >
->>> > --- repro.c     2026-03-26 05:22:49.012503218 -0700
->>> > +++ repro2.c    2026-03-26 06:24:40.951044279 -0700
->>> > @@ -227,6 +227,7 @@
->>> >         attr.map_fd =3D fd;
->>> >         attr.key =3D (uint64_t)(unsigned long)key;
->>> >         attr.value =3D (uint64_t)(unsigned long)val;
->>> > +       attr.flags =3D BPF_F_LOCK;
->>> >         return bpf_sys(BPF_MAP_LOOKUP_ELEM_CMD, &attr, sizeof(attr));
->>> >  }
->>> >
->>> > -- 8< --
->>> >
->>> > Now it will detect the correct UAF problem.
->>> >
->>> > I verified that this updated reproducer shows the problem, the follow=
-ing
->>> > kernel diff fixes it:
->>> >
->>> > -- >8 --
->>> >
->>> > diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
->>> > index bc6bc8bb871d..af33f62069f0 100644
->>> > --- a/kernel/bpf/hashtab.c
->>> > +++ b/kernel/bpf/hashtab.c
->>> > @@ -953,7 +953,7 @@ static void htab_elem_free(struct bpf_htab *htab,=
- struct htab_elem *l)
->>> >
->>> >         if (htab->map.map_type =3D=3D BPF_MAP_TYPE_PERCPU_HASH)
->>> >                 bpf_mem_cache_free(&htab->pcpu_ma, l->ptr_to_pptr);
->>> > -       bpf_mem_cache_free(&htab->ma, l);
->>> > +       bpf_mem_cache_free_rcu(&htab->ma, l);
->>> >  }
->>> >
->>> >  static void htab_put_fd_value(struct bpf_htab *htab, struct htab_ele=
-m *l)
->>> >
->>> > -- 8< --
->>> >
->>> > Before:
->>> >
->>> > [root@alarm host0]# ./repro2
->>> > Running 10 threads for 60 seconds...
->>> >
->>> > Total checks:    49228421
->>> > Torn writes:     5470
->>> > Max torn fields: 3 / 7
->>> > Corruption rate: 0.011111%
->>> >
->>> > Cross-pattern breakdown:
->>> >   A in B: 8595
->>> >   C in B: 7826
->>> >   Unknown: 1
->>> >
->>> > First 20 events:
->>> >   [0] check #42061 seq=3D39070 CCCBBBB
->>> >   [1] check #65714 seq=3D60575 CCCBBBB
->>> >   [2] check #65287 seq=3D60575 CCCBBBB
->>> >   [3] check #70474 seq=3D65793 AAABBBB
->>> >   [4] check #70907 seq=3D65793 AAABBBB
->>> >   [5] check #103389 seq=3D95745 AAABBBB
->>> >   [6] check #107208 seq=3D98672 CCCBBBB
->>> >   [7] check #108218 seq=3D100387 CCCBBBB
->>> >   [8] check #111490 seq=3D103388 CCCBBBB
->>> >   [9] check #140942 seq=3D128894 CCCBBBB
->>> >   [10] check #164845 seq=3D151828 CCCBBBB
->>> >   [11] check #163993 seq=3D151828 CCCBBBB
->>> >   [12] check #169184 seq=3D155453 CCCBBBB
->>> >   [13] check #171383 seq=3D158572 AAABBBB
->>> >   [14] check #179943 seq=3D165425 CCCBBBB
->>> >   [15] check #189218 seq=3D173926 CCCBBBB
->>> >   [16] check #192119 seq=3D177892 CCCBBBB
->>> >   [17] check #194253 seq=3D180562 AAABBBB
->>> >   [18] check #202169 seq=3D187253 CCCBBBB
->>> >   [19] check #205452 seq=3D189021 CCCBBBB
->>> >
->>> > CORRUPTION DETECTED
->>> >
->>> > After:
->>> >
->>> > [root@alarm host0]# ./repro2
->>> > Running 10 threads for 60 seconds...
->>> >
->>> > Total checks:    108666576
->>> > Torn writes:     0
->>> > Max torn fields: 0 / 7
->>> >
->>> > No corruption detected (try more CPUs or longer run)
->>> > [root@alarm host0]# nproc
->>> > 16
->>> >
->>> > I will send a patch to fix this soon after validating the above kernel
->>> > diff and figuring out how we got to this state in htab_elem_free() by
->>> > analyzing the git history.
->>> >
->>> > Thanks for the report.
->>> > Puranjay
+When the lan966x_pci module is removed and reloaded (what you did), the DT
+overlay is re-applied, which causes the reset controller
+(reset-microchip-sparx5) to re-probe. During probe, it performs a GCB soft reset
+that resets the switch core, but protects the CPU domain from the reset. The
+FDMA engine is part of the CPU domain, so it is not reset.
+
+This leaves the switch core in a reset state while the FDMA
+retains state from the previous driver instance. When the switch driver
+subsequently probes and activates the FDMA channels, the two are out of
+sync, and the FDMA immediately reports extraction errors.
+
+Theres actually an FDMA register called NRESET that resets the FDMA controller
+state. Calling this in the FDMA init path causes traffic to work correctly on
+lan966x_pci reload, but it does not get rid of the FDMA splats you posted above.
+They get queued up between the switch core reset, in the reset controller, and
+the FDMA enabling. I tried different approaches to drain or flush queues, but
+they wont go away entirely.
+
+The only thing that seems to work consistently is to *not* do the soft reset in
+the reset controller for the PCI path. The soft reset is actually the problem:
+it only resets the switch core while protecting the CPU domain (including FDMA),
+causing a desync.
+
+A simple fix could be (in reset-microchip-sparx5.c):
+
++static bool mchp_reset_is_pci(struct device *dev)
++{
++	for (dev = dev->parent; dev; dev = dev->parent) {
++		if (dev_is_pci(dev))
++			return true;
++	}
++	return false;
++}
+
+-	/* Issue the reset very early, our actual reset callback is a noop. */
+-	err = sparx5_switch_reset(ctx);
+-	if (err)
+-		return err;
++	/* Issue the reset very early, our actual reset callback is a noop.
++	 *
++	 * On the PCI path, skip the reset. The endpoint is already in
++	 * power-on reset state on the first probe. On subsequent probes
++	 * (after driver reload), resetting the switch core while the FDMA
++	 * retains state (CPU domain is protected from the soft reset)
++	 * causes the two to go out of sync, leading to FDMA extraction
++	 * errors.
++	 */
++	if (!mchp_reset_is_pci(&pdev->dev)) {
++		err = sparx5_switch_reset(ctx);
++		if (err)
++			return err;
++	}
+
+Could you test it and see if it helps the problem on your side.
+
+/Daniel
