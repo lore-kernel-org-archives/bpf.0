@@ -1,154 +1,207 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAB9112F585
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 02:09:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0FAE2E8DFC
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 03:17:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.129.124
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774490975; cv=pass; b=Tvdo9zz/m0glRXN8RQ5qpOFb4NLuK0gpdRwrXFMQOcmfNAy0hbq54XJjbwkEMOH1n31qLeYFEJMnhTRu1iiRNx6hLvTXbGswCZ+93T3Eweas/fU4Dsw/I+EbFp3o2i4LH0RE4kz9D32rGTRxKskh0Z/8KiLb76fr50vfvgac6wY=
+	t=1774495039; cv=pass; b=VK4LBosdT6pYD7hHD8wYu6K7DL/S9NX+1LKnt55NyOSCg5jM67cyYbmiTC9/GbmfkFwHzR+BirMx3wuMoFz5ygOsDM/VAYPWz0OWBRL4FX+Q/87rq9nbWWn/6Xs86Y92xQc9LCnF4T3ZqawXokcYnV2okmaptN6AWvqBUU7n7jw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774490975; c=relaxed/simple;
-	bh=SM+x8B+Pz15Gvc1EQP2Y8VvxinV8pQbKuNafLtpnPcE=;
+	s=arc-20240116; t=1774495039; c=relaxed/simple;
+	bh=qEMu4a1EBiI1qS1w4fpDR/u6eaGVbAKl6V32/+r3aXo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=W8sIACLnNqa1uiPK2+VF+Q5nPSJkshWB47iFWKZJx82A+iUuxDC4A10J1eIfbffrt9coXcVFsqxmXHCPXVRAWgfMI9tfXSZPssqmE2AMWpV/K/YVmIFUhcdSYREOICEUKTGAyCLE9Ll3Ss0feZeVSxeMLX75Qc33pdaCBEvo3Q4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KZN7Rz5A; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=dgmdjjvQ; arc=pass smtp.client-ip=170.10.133.124
+	 To:Cc:Content-Type; b=RgOE+DtSgELhNiDruwNQS8GFRa9raJKDzhbkXYL3B6KS8oJ1rz3SHkSUnZKJPSeobxe2CUmM25pwtEgBHT/pRZ22eqnq23YNrDnSzu4Yk4Ou17n+fUC0bXvvEn2O7TiIZGI+52AFTsymTIFGuJqRyV/0WDlreYBz9qgGKLNmrh0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JL2+CKQl; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=drTwl0nY; arc=pass smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KZN7Rz5A";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="dgmdjjvQ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JL2+CKQl";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="drTwl0nY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774490972;
+	s=mimecast20190719; t=1774495036;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=SM+x8B+Pz15Gvc1EQP2Y8VvxinV8pQbKuNafLtpnPcE=;
-	b=KZN7Rz5Ax5DTS3CgZiamEURs2Nml1/jj20u18opqBXTS7o9LPXcGYDWA/6F5N38xxkJSLf
-	zEMsy6xhW4BzkdHFc2Lg9bXLCGjDAb1lte6QzQzua8Dibp3XQG/C83gZQE18ESkMkgyWxn
-	LnjMxuYtTXVkUI3rLZKijtSmgUQgXGo=
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
- [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=qEMu4a1EBiI1qS1w4fpDR/u6eaGVbAKl6V32/+r3aXo=;
+	b=JL2+CKQlV1vQL0FG18MqmztmgmOBSQcyT5mznqThtQ+pwaZf/OhOfGXDPNwzw3Cfox05l9
+	XObCNciuX8pTfjeZ6X68LtSeI47TRXJ9dBNkpLzr/3lXYwr+1tl4dMSYhJDwwrKbjtIRGI
+	Z7Isq64LyAq1uASCy/S3YAd9kR4iiQY=
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
+ [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-624-08fG-fatP4iIcjn8jGVcPg-1; Wed, 25 Mar 2026 22:09:30 -0400
-X-MC-Unique: 08fG-fatP4iIcjn8jGVcPg-1
-X-Mimecast-MFC-AGG-ID: 08fG-fatP4iIcjn8jGVcPg_1774490969
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-354bc535546so457941a91.3
-        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 19:09:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774490969; cv=none;
+ us-mta-83-q-gcyHGhMnmuBlvtGk7fSQ-1; Wed, 25 Mar 2026 23:17:15 -0400
+X-MC-Unique: q-gcyHGhMnmuBlvtGk7fSQ-1
+X-Mimecast-MFC-AGG-ID: q-gcyHGhMnmuBlvtGk7fSQ_1774495034
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2aeb90532f6so6110495ad.0
+        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 20:17:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774495034; cv=none;
         d=google.com; s=arc-20240605;
-        b=hqiOFaN3qaOWa2kSqqaH6nnRzXrSCnAj4iaKmXuucQWV89sf4+wnBzKAz2oGPOAsnP
-         CKxCoRagtAL7OmrAy4ZJd83JVeC2ZgIiMYhvEqBrUxNJy6myc/1rZ76XOzIYCvCgb108
-         d7IB/ms0o7kg5EhuXwiHwNm+LviWHuOPOYQtPtoGF2Pt/AdNJ5B86v7lhFAuN1i7mL5N
-         pLukleFXzs0HjgKLmaTQ1kTlHIhwp35ATtF0HmR4i8oo5YoJgAq3lk3Orupu5nbmB/64
-         QkXbuX824cxlL5ZAUQEcUa6GqrzNFyDx90oka/77YSeObwqc9xmR5+zDglNc3p3ZVLSb
-         T1nw==
+        b=UtM8cvIUFcOPa3YHxUwWx5CudtgkNjpZYOQiK/uNOp7YH0QGUnnSs3cZoF6BO6MkDv
+         3P6BnVC59EhvvylCjxJvvuol01LcnGfAgyherpKSO/SPyjsyr0/Ve/fCjJHrWGeU169+
+         LtkN9HToC7WLhWGSv8v+D2CzkN1aJS9epvX6s8pWXJ7+TSAeoMebF28mlUS5sSLOqXSe
+         I/qIzzLvwQJB1NK25cYsJaIvojvzz/NljNXCoAA2cRIV8jSYibYA+sDlqxjNMjsrMvrL
+         BNpV2zIgwnDLXbopQBAHAMqi08Kfe3vAQcqT2uvjYJHifKdV9/OU78y2z/UKCmZLlUwR
+         u7Jg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=SM+x8B+Pz15Gvc1EQP2Y8VvxinV8pQbKuNafLtpnPcE=;
-        fh=Ja7CfbmvEW5yQhVA9nqfi/jO8bYL012hBwK/sd4v/x4=;
-        b=k6FEwFvNEELi45cqmh1xUtNFrdPq79WKXrhipqEaAqnEOInzZFls2/8oFOGS6/YT+1
-         XfMpfeOgjVQDmlr9N+Ps2ErfeSlXtGIDbAcLLW1k0ehroGydLQyv0+4xiIHbFgUK+ut1
-         Q4HikZTvrVdANA+2ZPpumfYnX3E5RZ+keDF7AQNoLpIKql02h6LUzF1LD/qic8YZcikn
-         CLhQtMQx1L66PdXU1sKzsUxEbZfsSooPYH98k9Gu0DZQR7S4Y8E5GaduMxNPVvxXkksM
-         wsqAHolFMxjHe99fHmuwrzrZaUkW6M7dRUiYnYyc2nFht73ayi4hJpZV5kUnryIugSfU
-         T6qw==;
+        bh=qEMu4a1EBiI1qS1w4fpDR/u6eaGVbAKl6V32/+r3aXo=;
+        fh=/zCHkZ8djWta4x9WkzaOvzvCcQuUFO0QlmsKuCVJQHM=;
+        b=aYoTrDy8l9uJHWtsJT68bMgMeDn/h+mB5BUi8iTRK5zmuGJ5o+hufHwEY2IWw0r3Cs
+         ksistWj8N4oP9nFprC8HEkXcoucmaLMRWoJEAdqsGpue9c2cexafpfIMT6qbOPX0P/cy
+         qJiWyC9IgmTI+iYHISrKx/43lBuISnZZOtu9PmdxKgSt1d2yrVbYwdrr4uBHj/3pKTfV
+         0XALuBaY//dgocEPayKeox3Ch9A7cBgKMSXkxxkZvAumr4InHsCxh0gEFo00ehO2LBPn
+         cBzZnpstSXdnJXeLMPIbsCZ6Pv3xdC+TBx5ipPU3KtHI89jjNdq8ioTjn+llyrC/aqKR
+         TTew==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1774490969; x=1775095769; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1774495034; x=1775099834; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SM+x8B+Pz15Gvc1EQP2Y8VvxinV8pQbKuNafLtpnPcE=;
-        b=dgmdjjvQp7K+JooQx0xwwqgu1Ws+c1riVHbP90ERxHYNq3xGkT3BP3eIRV7uNMsxD6
-         dqAWUXhgrE5LJ3XL7Imgm8BXD1r4nPZ6cxWVi/Xhb4YK5QY2iRWEGgQNGOG5TEWYA0rw
-         84fGjY7n+U3XBujyQKrZj8OC9srsaVJdcy+ozWvHoAlXXOk1Q0M5u1XIfi983L1twujr
-         i9J9OfQWNA8uFIX2TBDnRtr9ipb3DHL/SpVbLMfluKshuY+1TrhtIbuhve/cRdyay39y
-         gGQCySXYdla/lYQB7lbjROw9AFcCcilnk4OmNBfiCLMOlHNeSNY+Nbace4fzH7Ls8V0w
-         wM6Q==
+        bh=qEMu4a1EBiI1qS1w4fpDR/u6eaGVbAKl6V32/+r3aXo=;
+        b=drTwl0nY/Sg9TTmJm2Z/Q6h8WD9tprBQE+BqneWaLE1y64j5+CbVNcyM/1BR+thtYh
+         QTpHovR8Iy1VjV7hrWF18abB38ejNNMFgwJlCFLjyj/ZACDgAAF17Gco2ZhL35Q1LDpW
+         HzZVPlTGqVB48LCNFU+Ey0pie0gNmu0nDVkIHENPMDUiT4+3kNzRqUwfLX1QzKvdUp3z
+         IXFV0hE8s7M5FQEog6qJY4HwTWnqkF015b5frV60B8ka/FLAcRfWL/GSFgnkufxINwXu
+         U5w4CKtGUU/Mba9cgPgJ9RdM8SxbyA/sbPlLOLN2ZVucBtwVRQ/aoeQHdN5F2xHPvwCW
+         K/wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774490969; x=1775095769;
+        d=1e100.net; s=20251104; t=1774495034; x=1775099834;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=SM+x8B+Pz15Gvc1EQP2Y8VvxinV8pQbKuNafLtpnPcE=;
-        b=NGdFYoGNxUewYw+lv9prCv9adALGm9n9Hxwb1AmBC02DgychQgFAGPZPqtf9wSUz32
-         tlk6x2fS13muy5dvCaRZc8cU2pJgg5/Ixf0cY98PtLBrGyhZIXuGAUMEX6NTmfgq/UZY
-         TRaEc5KgujqvEqoug18B3PwkQhUo8yWzwrYikF1RBCd9odO/prjy1vXL+UB8GOjQmroG
-         FUhEB52v/6+tlwA3II8m/WujnlZDk574U7B/NN62Rocj97DqJ34tdL5Jy/Nam/uPytYR
-         1tgRydKbAAlLzd6vR7j2t2LkFP+Gtd/1LisdIAzJGxclI2z3baRTLr0TuMah3gvDFeml
-         xp6g==
-X-Forwarded-Encrypted: i=1; AJvYcCUG85LQ2ikzA2SV9AVRLmERTIS02Iv/XZLGxmglaOKzy968ys/pgrCKF0sJ/vhO9G0pS5k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzVfLKlWYHNFbo8xGoAaWQrMO44q5Xwml0cUtFHv7v3Z9g70T0Q
-	6mOVlRJkTBw9g0RY8p8fEK/AbwbEAugZ1hc8v837crbm3eD30X2bNK+kyYu82pgtpLcrvGWwJmj
-	rgsRkpL3I9YcBczYfAIN+aSzh0fhgGP6ZhMwl6OV328S4EB80YlAcLuQJ3mEy7vb3jTVIBA0Qdx
-	oDFTec8osOdCNzt7zVwVBRxqrWD4dO
-X-Gm-Gg: ATEYQzwjxihy5qP7+JNSrMKtOEhD2KdlbafbyCsOZMpNhcq2o4so4lipYBByesg9QYR
-	XsrAhquC1MZVgsmiI/QUkNH9L3PtQkVqEucXVZoHOVlZnO/2F8Jf3nqZ31eCQIFanMHzBs/3qja
-	yh7bnywhhvTUOyhMMvbndIEFDs0g5jwoNo3+V8A+3aHE6/dtsy5RV4ZU0fSgdHOof04dwHLwvgG
-	3ZS
-X-Received: by 2002:a05:6a20:3d1c:b0:398:8546:c3fc with SMTP id adf61e73a8af0-39c4ab516d8mr6008499637.7.1774490969234;
-        Wed, 25 Mar 2026 19:09:29 -0700 (PDT)
-X-Received: by 2002:a05:6a20:3d1c:b0:398:8546:c3fc with SMTP id
- adf61e73a8af0-39c4ab516d8mr6008444637.7.1774490968666; Wed, 25 Mar 2026
- 19:09:28 -0700 (PDT)
+        bh=qEMu4a1EBiI1qS1w4fpDR/u6eaGVbAKl6V32/+r3aXo=;
+        b=Q+HJgsOyTVgaIF3F2Mgltjb2ldVDXBWqTtpETW0Zv9Q9iZuw2qVyzU3eP+Pop+3hYb
+         sfGqL7tZK9n6CuMmrwHXRdmRhZwuzuhu+KgLWswKk7kV2ZvrHLrCpmGE4bV+rYgfiZtF
+         +mw+MWrDhveM5KWXmBwzdu57I1wVYCc/bX3TxOkkaLTA8PHK2n+mbzH/XbdUk5AI4y78
+         Zd1qyelT8zyTCrDusSggliLe+L4YegU/fqcHC8jdvt/1fLDpD4yG9R+zuszKad59/USS
+         F2/utPBpSp3ep9iAofdFe/63J+4U0l2If7h5C8BEoR+/BypLCAj4GFtB/6fF7dKbYRBn
+         o9/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWD1k3PSK4ZwtXesDW5xutkNqhB52gexDXr/49LUBZieQiyvMt1nfq1KSoGEUzSocwrGv4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7HsAivcd5MreSqdh4xgDP3dRMFNXExHsRZkVqC8teKKSZsrfS
+	C3LUo4Bkupr4zgiYNt6CVSMqv4dryIOWRB/xXqLSEQlSiPFzsz8G94xFU12CvFJmgkOary/Id1k
+	dpGtCd24/FXSKfp5URBo70f36hNxgLfYA5uzxOzMeH4Dul+cHx0GSZIpiJvFa9mTBDQz1CUb4MS
+	u2jVgcDHlzTsl2R40+bDa4A+xq8bZ1
+X-Gm-Gg: ATEYQzznufc5zp6o9W5v9qPAJYHXMtoCScT9uFhhbux00BQr6PNifnNDEUu/5/pXk+G
+	r9Jubf794xBmbVFIOnt0N8o9zcjALS2b2MGd1HCTY3mg9Oyy2xQvsFfo9xttNRDEvCMGL/WlR1U
+	VTfpPBfckysF40YNHgtYFQwRgL4LFaYuOjrmMXiLtmiSNp70DvnuQnCoFrXeUYNeVaKBN++/tIn
+	uUv
+X-Received: by 2002:a05:6a21:998a:b0:39b:f9f5:7a4a with SMTP id adf61e73a8af0-39c4ae08a84mr6464216637.50.1774495034106;
+        Wed, 25 Mar 2026 20:17:14 -0700 (PDT)
+X-Received: by 2002:a05:6a21:998a:b0:39b:f9f5:7a4a with SMTP id
+ adf61e73a8af0-39c4ae08a84mr6464185637.50.1774495033612; Wed, 25 Mar 2026
+ 20:17:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <f4caa9be9e5addae7851c012cab0a733be7f0974.1774365273.git.mst@redhat.com>
-In-Reply-To: <f4caa9be9e5addae7851c012cab0a733be7f0974.1774365273.git.mst@redhat.com>
+References: <dd3984b3bce9df3591927f927668cb31cc7ecf34.1774460059.git.mst@redhat.com>
+In-Reply-To: <dd3984b3bce9df3591927f927668cb31cc7ecf34.1774460059.git.mst@redhat.com>
 From: Jason Wang <jasowang@redhat.com>
-Date: Thu, 26 Mar 2026 10:09:17 +0800
-X-Gm-Features: AQROBzAQPVawV1gSLClGfkluwZR06MG28vS66UgSXN-aCJ_PcJcLGWhQhc3M-Xc
-Message-ID: <CACGkMEt146_eZCuTt3qP02sjFXPMHb-1s_TcMnOBXox5k87Ugw@mail.gmail.com>
-Subject: Re: [PATCH net-next] virtio_net: sync RX buffer before reading the header
+Date: Thu, 26 Mar 2026 11:17:02 +0800
+X-Gm-Features: AQROBzAarNEtZJEoyFy_DkMNrrDU5KBdW2pr9F5lbth0WTjJwR9jg3tFeGnbKuI
+Message-ID: <CACGkMEuL613R8GRUX2hjRuJcvP0LNC_6_D1Y1yEjtTqehy6zJA@mail.gmail.com>
+Subject: Re: [PATCH v2 net] ptr_ring: disable KCSAN warnings
 To: "Michael S. Tsirkin" <mst@redhat.com>
-Cc: linux-kernel@vger.kernel.org, Omar Elghoul <oelghoul@linux.ibm.com>, 
-	Srikanth Aithal <sraithal@amd.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
-	=?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Vishwanath Seshagiri <vishs@meta.com>, netdev@vger.kernel.org, 
-	virtualization@lists.linux.dev, bpf@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	Simon Schippers <simon.schippers@tu-dortmund.de>, willemdebruijn.kernel@gmail.com, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, kuba@kernel.org, 
+	pabeni@redhat.com, eperezma@redhat.com, leiyang@redhat.com, 
+	stephen@networkplumber.org, jon@nutanix.com, tim.gebauer@tu-dortmund.de, 
+	netdev@vger.kernel.org, kvm@vger.kernel.org, virtualization@lists.linux.dev, 
+	Eric Dumazet <edumazet@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 24, 2026 at 11:16=E2=80=AFPM Michael S. Tsirkin <mst@redhat.com=
-> wrote:
+On Thu, Mar 26, 2026 at 1:36=E2=80=AFAM Michael S. Tsirkin <mst@redhat.com>=
+ wrote:
 >
-> receive_buf() reads the virtio header through buf before
-> page_pool_dma_sync_for_cpu() runs in receive_small() or
-> receive_mergeable(). The header buffer is thus unsynchronized at the
-> point where flags and, for mergeable buffers, num_buffers are consumed.
+> Eric Dumazet reported KCSAN warnings:
 >
-> Omar Elghoul reported that on s390x Secure Execution this showed up as
-> greatly reduced virtio-net performance together with "bad gso" and
-> "bad csum" messages in dmesg. This is because with SE sync actually
-> copies data, so the header is uninitialized.
+> BUG: KCSAN: data-race in pfifo_fast_dequeue / pfifo_fast_enqueue
 >
-> Move the sync into receive_buf() so the
-> header is synchronized before any access through buf.
+> write to 0xffff88811d5ccc00 of 8 bytes by interrupt on cpu 0:
+> __ptr_ring_zero_tail include/linux/ptr_ring.h:259 [inline]
+> __ptr_ring_discard_one include/linux/ptr_ring.h:291 [inline]
+> __ptr_ring_consume include/linux/ptr_ring.h:311 [inline]
+> __skb_array_consume include/linux/skb_array.h:98 [inline]
+> pfifo_fast_dequeue+0x770/0x8f0 net/sched/sch_generic.c:770
+> dequeue_skb net/sched/sch_generic.c:297 [inline]
+> qdisc_restart net/sched/sch_generic.c:402 [inline]
+> __qdisc_run+0x189/0xc80 net/sched/sch_generic.c:420
+> qdisc_run include/net/pkt_sched.h:120 [inline]
+> net_tx_action+0x379/0x590 net/core/dev.c:5793
+> handle_softirqs+0xb9/0x280 kernel/softirq.c:622
+> do_softirq+0x45/0x60 kernel/softirq.c:523
+> __local_bh_enable_ip+0x70/0x80 kernel/softirq.c:450
+> local_bh_enable include/linux/bottom_half.h:33 [inline]
+> bpf_test_run+0x2db/0x620 net/bpf/test_run.c:426
+> bpf_prog_test_run_skb+0x9a4/0xef0 net/bpf/test_run.c:1159
+> bpf_prog_test_run+0x204/0x340 kernel/bpf/syscall.c:4721
+> __sys_bpf+0x52e/0x7e0 kernel/bpf/syscall.c:6246
+> __do_sys_bpf kernel/bpf/syscall.c:6341 [inline]
+> __se_sys_bpf kernel/bpf/syscall.c:6339 [inline]
+> __x64_sys_bpf+0x41/0x50 kernel/bpf/syscall.c:6339
+> x64_sys_call+0x10cb/0x3020 arch/x86/include/generated/asm/syscalls_64.h:3=
+22
+> do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+> do_syscall_64+0x12c/0x370 arch/x86/entry/syscall_64.c:94
+> entry_SYSCALL_64_after_hwframe+0x77/0x7f
 >
-> Tool use: Cursor with GPT-5.4 drafted the initial code move from prompt:
-> "in drivers/net/virtio_net.c, move page_pool_dma_sync_for_cpu on receive
-> path to before memory is accessed through buf".
-> The result and the commit log were reviewed and edited manually.
+> read to 0xffff88811d5ccc00 of 8 bytes by task 22632 on cpu 1:
+> __ptr_ring_produce include/linux/ptr_ring.h:106 [inline]
+> ptr_ring_produce include/linux/ptr_ring.h:129 [inline]
+> skb_array_produce include/linux/skb_array.h:44 [inline]
+> pfifo_fast_enqueue+0xd5/0x2c0 net/sched/sch_generic.c:741
+> dev_qdisc_enqueue net/core/dev.c:4144 [inline]
+> __dev_xmit_skb net/core/dev.c:4188 [inline]
+> __dev_queue_xmit+0x6a4/0x1f20 net/core/dev.c:4795
+> dev_queue_xmit include/linux/netdevice.h:3384 [inline]
+> __bpf_tx_skb net/core/filter.c:2153 [inline]
+> __bpf_redirect_common net/core/filter.c:2197 [inline]
+> __bpf_redirect+0x862/0x990 net/core/filter.c:2204
+> ____bpf_clone_redirect net/core/filter.c:2487 [inline]
+> bpf_clone_redirect+0x20c/0x290 net/core/filter.c:2450
+> bpf_prog_53f18857bc887b09+0x22/0x2a
+> bpf_dispatcher_nop_func include/linux/bpf.h:1402 [inline]
+> __bpf_prog_run include/linux/filter.h:723 [inline]
+> bpf_prog_run include/linux/filter.h:730 [inline]
+> bpf_test_run+0x29d/0x620 net/bpf/test_run.c:423
+> bpf_prog_test_run_skb+0x9a4/0xef0 net/bpf/test_run.c:1159
+> bpf_prog_test_run+0x204/0x340 kernel/bpf/syscall.c:4721
+> __sys_bpf+0x52e/0x7e0 kernel/bpf/syscall.c:6246
+> __do_sys_bpf kernel/bpf/syscall.c:6341 [inline]
+> __se_sys_bpf kernel/bpf/syscall.c:6339 [inline]
+> __x64_sys_bpf+0x41/0x50 kernel/bpf/syscall.c:6339
+> x64_sys_call+0x10cb/0x3020 arch/x86/include/generated/asm/syscalls_64.h:3=
+22
+> do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+> do_syscall_64+0x12c/0x370 arch/x86/entry/syscall_64.c:94
+> entry_SYSCALL_64_after_hwframe+0x77/0x7f
 >
-> Fixes: 168b61da6871 ("virtio_net: add page_pool support for buffer alloca=
-tion")
-> Reported-by: Omar Elghoul <oelghoul@linux.ibm.com>
-> Tested-by: Srikanth Aithal <sraithal@amd.com>
-> Tested-by: Omar Elghoul <oelghoul@linux.ibm.com>
-> Link: https://lore.kernel.org/r/20260323150136.14452-1-oelghoul@linux.ibm=
-.com
+> value changed: 0xffff888104a93a00 -> 0x0000000000000000
+>
+> Reported by Kernel Concurrency Sanitizer on:
+> CPU: 1 UID: 0 PID: 22632 Comm: syz.0.4135 Tainted: G W syzkaller #0
+> PREEMPT(full)
+> Tainted: [W]=3DWARN
+> Hardware name: Google Google Compute Engine/Google Compute Engine,
+> BIOS Google 01/24/2026
+>
+> There is no race on ring accesses: reading/writing a partial pointer
+> would be fine, because the reading is done by the producer
+> which merely cares about NULL/non NULL.
+> Document and disable the warnings using data_race().
+>
+> Tested-by: Opus Sonnet 4.6 1M window.
 > Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+> ---
+>
 
 Acked-by: Jason Wang <jasowang@redhat.com>
 
