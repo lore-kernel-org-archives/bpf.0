@@ -1,86 +1,94 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEAE529D29F;
-	Thu, 26 Mar 2026 21:16:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D43141C72;
+	Thu, 26 Mar 2026 21:20:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774559761; cv=none; b=ls6n1NHvt+KlS6ro7MJnr8sEL8jpkU8rPk4ZkYtg0bvL94kJS1Ayf/gOAf+/5Soqizyvc6fsXeQ/MoG4N0AdxUVNlQybcWrlGs9s8vGf7wlpasJTYuUF14fuaAatzg56IVY+KdmJzHPjodTVh266viWabyhEXcLD1FgySzM3eQw=
+	t=1774560040; cv=none; b=OTp4r1wOnQJu08rcUPbd/+YED0aGDkF13yiieYXcwuqUAkQ7Hj9J/Omon89ZCuaJsNwF/HTDe5Z/wzDNYgkD0/KN5OsAhvwGBOk43ekqvjtx8G2O+73AJpQESN9SCQUmukSpOAOnxvSRJmbvYDqEOqxjPAc2mZ2lENvsT7nd6G8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774559761; c=relaxed/simple;
-	bh=1Pl+WjgFFGKB0h/WqZvWngHFD8GeFrz/gG9hz5PwpRQ=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=I6h4+U3vveQdSkiZmM63ccsxuk7fd4lWTRszQLsls0pJULqZVs0I6MYvvGIzOptZ1V8Jx2R5O6TAHKOTgvUvetMC7iO6vZ0CBbsW06vGhmweJRFv1pFfeDO81wJqUOAAQDeClrVPSt7qxwaWA2gADvwPxxTGKAkoIYS4/SgJ5JY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ciNIbzJ1; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774560040; c=relaxed/simple;
+	bh=gtmB+zFOa41OuBqbmO7TmyD/jbj4QQC/RgxbGwilKJU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=jyH//hAzfMGP2z9gzkpSuwNsDNvrygaNcaqqMoRPWG7MGqJ7VYTO/ofFIOwv8aKafxhpdh8M2uY40jyr4obig+h4T1ECTwxcOMy81OXsp10geVQdZsZ9qxjBM5hRxGLe2DtNQWB12vMd/RwiC//Wqy7/e/6NqY8vpsAQ/jHsXd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KVeVbaEv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ciNIbzJ1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35756C116C6;
-	Thu, 26 Mar 2026 21:16:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KVeVbaEv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27F21C116C6;
+	Thu, 26 Mar 2026 21:20:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774559760;
-	bh=1Pl+WjgFFGKB0h/WqZvWngHFD8GeFrz/gG9hz5PwpRQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=ciNIbzJ12Az0aqzMj8n5gTJ3kco6JYbXyXGj+JloA6I4ET3kfbFeLzySMfI5/q7Sm
-	 WwFxw8UJqjfLPxUXvPJmjkzqQJq/q/9VTD/vj5j98SjtXtVd6BAQ1122N4w5kpjeh5
-	 Gwd51fVZYbtw3S7f/2Am6FiS80SObPBlovBUQ3EDqw4NwvUGcGhfkFJBZhigiuuaKC
-	 TLg4xd01Z+0pfZcO78XJNeSbxPkV4nPI953w5CXStH6BJVukwgQLVD8lqh1tvDA+sO
-	 8bBaG+rEXzjbJE/hRW7uNNh1G8G5zosSZxsqe47tOvocPDSHjxesjzvr/keOolIkW7
-	 0mBCq1rA4sVnA==
-Content-Type: multipart/mixed; boundary="===============6558493855404507813=="
+	s=k20201202; t=1774560040;
+	bh=gtmB+zFOa41OuBqbmO7TmyD/jbj4QQC/RgxbGwilKJU=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=KVeVbaEv4EoD1gHM6u+zygqYmIuMPmCXuu1G3of5Mvf70bR48gyA7PVvmGn21Zskk
+	 P+3aMqvK0eSU+vYZuUPvanzUQkTSjMD2sU6BvgmHfTEiqt1swpVl/fLkJgC1EQJr7d
+	 ypL1+X3CtdiUH6dg94Z0q9T5i+g0CTGRnvUi3xSmJ/gdJmXfGaz5vN/D8xp1yAw8bu
+	 HmJL4inOe9djx/mziB+ZqBOIPOT7BjwOPVR2oZKx0X75NFQGZsKKD1+gLRlg7fY+8l
+	 UORptWAN1u/YSw/0+ZWv8hr/v0Gpr7uKyrVHRle7b9QXjVNT1j2FdXjaJCmPrtJE4l
+	 g/aT1TnnneJqg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BA01939F280C;
+	Thu, 26 Mar 2026 21:20:27 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <07c8ca950f26820b9982344ff798be3bb41f7c1f81f45b599ccb1a687b824f1c@mail.kernel.org>
-In-Reply-To: <20260326204335.3756885-1-suzhidao@xiaomi.com>
-References: <20260326204335.3756885-1-suzhidao@xiaomi.com>
-Subject: Re: [PATCH] libbpf: resolve versioned kfuncs by exact name before essential-name lookup
-From: bot+bpf-ci@kernel.org
-To: soolaugust@gmail.com,bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,sched-ext@lists.linux.dev,suzhidao@xiaomi.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 26 Mar 2026 21:16:00 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v16 bpf-next 0/9] Add BTF layout to BTF
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177456002639.3181880.17500353700750230925.git-patchwork-notify@kernel.org>
+Date: Thu, 26 Mar 2026 21:20:26 +0000
+References: <20260326145444.2076244-1-alan.maguire@oracle.com>
+In-Reply-To: <20260326145444.2076244-1-alan.maguire@oracle.com>
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, qmo@kernel.org,
+ ihor.solodrai@linux.dev, mykyta.yatsenko5@gmail.com, dwarves@vger.kernel.org,
+ bpf@vger.kernel.org
 
---===============6558493855404507813==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hello:
 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 1eaa7527d4da..85268406c0f5 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -8630,6 +8630,40 @@ static int bpf_object__resolve_ksym_func_btf_id(struct bpf_object *obj,
->
->  	local_func_proto_id = ext->ksym.type_id;
->
-> +	/*
-> +	 * For kfuncs with a flavor suffix (e.g. "func___v2"), first try the
-> +	 * exact name.
+This series was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-[ ... ]
+On Thu, 26 Mar 2026 14:54:35 +0000 you wrote:
+> Update struct btf_header to add a new "layout" section containing
+> a description of how to parse the BTF kinds known about at BTF
+> encoding time.  This provides the opportunity for tools that might
+> not know all of these kinds - as is the case when older tools run
+> on more newly-generated BTF - to still parse the BTF provided,
+> even if it cannot all be used.
+> 
+> [...]
 
-> +	if (ext->essent_name) {
+Here is the summary with links:
+  - [v16,bpf-next,1/9] btf: Add BTF kind layout encoding to UAPI
+    https://git.kernel.org/bpf/bpf-next/c/222edc843c15
+  - [v16,bpf-next,2/9] libbpf: Support layout section handling in BTF
+    https://git.kernel.org/bpf/bpf-next/c/087f3964f4b3
+  - [v16,bpf-next,3/9] libbpf: Use layout to compute an unknown kind size
+    https://git.kernel.org/bpf/bpf-next/c/2ecbe53e0e99
+  - [v16,bpf-next,4/9] libbpf: Add layout encoding support
+    https://git.kernel.org/bpf/bpf-next/c/d686d92c4080
+  - [v16,bpf-next,5/9] libbpf: BTF validation can use layout for unknown kinds
+    https://git.kernel.org/bpf/bpf-next/c/6ad89285996a
+  - [v16,bpf-next,6/9] libbpf: Support sanitization of BTF layout for older kernels
+    https://git.kernel.org/bpf/bpf-next/c/081677d03d8b
+  - [v16,bpf-next,7/9] btf: support kernel parsing of BTF with layout info
+    https://git.kernel.org/bpf/bpf-next/c/626e88c070ee
+  - [v16,bpf-next,8/9] selftests/bpf: Test kind encoding/decoding
+    https://git.kernel.org/bpf/bpf-next/c/0467491617cb
+  - [v16,bpf-next,9/9] kbuild, bpf: Specify "layout" optional feature
+    https://git.kernel.org/bpf/bpf-next/c/5e1942eb1c01
 
-This commit fixes a bug introduced by the patch that added
-triple-underscore flavor support for kfunc relocation.  Should it
-include a Fixes: tag?
-
-Suggested:
-Fixes: 5964a223f5e4 ("libbpf: Support triple-underscore flavors for kfunc relocation")
-
-> +		struct module_btf *exact_mod_btf = NULL;
-
-[ ... ]
-
-> +	}
-> +
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23617578044
---===============6558493855404507813==--
