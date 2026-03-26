@@ -1,106 +1,104 @@
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BCE0315D40
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 23:05:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.170
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774566306; cv=pass; b=dlQwlpDsbr4e5LwHSkCQ6vQIUKiSCJdRAZ82GBsGUR+8ZsZdcotYg2RIqpatbhe16w5FS/9TXCc5qJ4Ej69QQmivyqiY2aJZ7TZ5VG0e6+x/NcRgwXhKPm0ZEYj7Ys9ibqSkJviVHRDJe5s8kdbq57O68/3LQA/BIjJKw+ckJys=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774566306; c=relaxed/simple;
-	bh=kLvt8ALPWVdvZI4uxDrR8DdfOnNc7X8dwjsIDh2c50k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eN63rm6K8l3Djx7JpQA5iImuQSol9Xk2rd0XmPW8Eus2Am3Yj/WcD0f1DvMTPiWYRnaImV3vpdtuXa79AxNztL53mrTTRAiZUHvW6B8who+xXPHd7Xtx8A3RlLrpYmILRKeSQOdy62VhsSvequHsaJfZmHvTpwSNQ5pYJnZDtpk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IaNJOzGu; arc=pass smtp.client-ip=209.85.208.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5516F3A6F17
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 23:30:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774567804; cv=none; b=BgXg3fcjVZQRoP74IzeLwmDxTz9rRdYIFzmb/pAf15W3iN0juN7pK7uQ3JeJ+izTau/Dta0gmemb3YtW7xLkkjCqlrp2o0Q+IpV88QbnMbhIQNfGjJRBIZP1IyIvWUtk8P63ucJIj9beMDplW/w4yqlUkDlS4IafkonSxOb3aTg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774567804; c=relaxed/simple;
+	bh=ZAxzm5r1A8QCuom4v/qqXiX/6Y8VFr8Bo6ioi7kg4iE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=KOm8AqdQHQUNneGSTa4grr+bJArLDcT6nw73AuzHd8WXjTm0E1sLCkBp7yM1cQgmB73BDL2qXJTKEW//S5lN7x/CZgnmglvAlF5EMObj7ry6QW61hwCrEi8y/Di2qro4nx/IuyXwxDJMSidZUPuqXw83Dn2rR9oxPenGgFUqYdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NKAWkeSf; arc=none smtp.client-ip=74.125.82.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IaNJOzGu"
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-38be66a9fc0so16126071fa.1
-        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 16:05:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774566304; cv=none;
-        d=google.com; s=arc-20240605;
-        b=IQTk043K9hEtp4rri3oRz6l3hgQ/hBuEA6WKca0OJs4BvclkJldnrAG6Mz9BonjHAC
-         hfhbvVDm5JFwROoB6QS4knZgP2jmPTB+Ra4lt4an4VytAw+7pIgZplEeQ5jYJWPXA1h0
-         neU07mn96KJdv11vsunUv18hnXvT+ZTliZUqBtUegtm+4IKdX7CabcCkOoGacNjqSlYb
-         d1oXc6kOGVK/ODrXg/plXgsi9+8UiaF3jqnxHxDyB/ujgdV11jm0ydmNS9PwW/rtDHjl
-         uvb2jttDUhEc7GGo3NqncZrw1rxj/B5AipxLPXDMt+Plz10OehOZNJtq4K5hn2YZ7ohh
-         3bTg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=kLvt8ALPWVdvZI4uxDrR8DdfOnNc7X8dwjsIDh2c50k=;
-        fh=MZ0PeQKhjZRN10YMjH19AstY25dWzkP67dnANw4Ko78=;
-        b=WwhW1y5TGPS5NuqDUm2yPxUwgt2arSHZs2TVcnXqMxb4v9zLZ9JcVUtYzHuo2G0wIG
-         7eAgidbao7Yt7m83Z3lNueQymxF5e0JOO6j/eL642ffxQglFcM1zlkb2oNwj0vllK/Ia
-         ww0r3y1QEAqERkToNi6WcETfBwXxSnRPl1zdkE9eWpxP/3Wb1VcmGi+L0ONIC0SvthVP
-         H0oJHlfxPpeAg6b5U4DwkaPuqC/vm84XI98M15g8fjlVVpAmZAY/Drgd4+2PxAMpIDhq
-         NLFD2omfyJqConXn3cH7NNcwrBgf4v4UECdbMWKXPC24KBGPRuLCchjy7lUWqHUyrD4f
-         Kl4w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NKAWkeSf"
+Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-128b9b7e3edso526224c88.0
+        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 16:30:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774566303; x=1775171103; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kLvt8ALPWVdvZI4uxDrR8DdfOnNc7X8dwjsIDh2c50k=;
-        b=IaNJOzGuKk66x9bGRVdihzQItjJrDW+wwhMeJADFsqe2B2pR+j25805au+Mp9U+1on
-         gTfvAD8GLhEInnUYIlsm2W3S8X4bWdkpJfeFzzjz9E1OfLi5vE1FdiA4FWptabNDaGym
-         VEfCCdO016d7UmyQFlb7a09uYoCIfl9AsRmCBTBFu0lLxMZ/gm97t7DxfMDv9giinMKt
-         30PSGfH8UmrszhwHBwrkWLMFHPW13czqDjjrWRRRKHFl473qVXXUFz5rrKRABk/7ZIoX
-         x551SOAgWbDkUO9NpTgYNvE13b87HOZkmcg/gDjiee3S1BusCQ25G7krfyU44YdTrkZG
-         cSgA==
+        d=gmail.com; s=20251104; t=1774567802; x=1775172602; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ZAxzm5r1A8QCuom4v/qqXiX/6Y8VFr8Bo6ioi7kg4iE=;
+        b=NKAWkeSfOXiu1Fy9w3NvdsvtVUVlgbeLzgBrE+Mr6vS1PJY9X4Ynd1FnGoA4PUm27Q
+         UdNXrtAq5VNn0FcQpE3Ev7jA021YtlXASuxlxAcCGwMT+eiBlY6KDg06966EwTvXzvzm
+         bb5CWsRbQQkKjltUWdq6t7nhOvMfe7H0Z0lggTRCh2Grp2ys1zgJhCHi1q/+LChWPKDh
+         FJWMkaisFQs2LPWV+XNErCVtP8BI8gnDpcA87eesT6Qc3JxTwLNdXh4+MpDoNQkSbeQX
+         orrnhczGKR9UUAdgtYqhSJwr3N4+jEhnVqiuhokP8PzTr02KOLfN+2UZ+jtw5W58IHDl
+         tQHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774566304; x=1775171104;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=kLvt8ALPWVdvZI4uxDrR8DdfOnNc7X8dwjsIDh2c50k=;
-        b=iToqxYh8LIakX+09S+N1iKmPzLKtrxkAKHI/utSMviVK1PjI3PVFiw2tB/AI2zf1YN
-         0+QYGi71kbV6Nti5e2uhCURDwdHJImlFJDYp1Rz9WRud5/HTuePrzE1MjffY3oO6EMTl
-         lPk2EZg/qG4U7nkSb42VqSc46+JjP5+Wrl8Ui8EYX2Y3PM25mBZHeiqcBADGFHiuYKjT
-         uSAo2s3K3ueqSVFg7knTkmjWxi1j1OdKIC3XW9jLpzrGiTuKX9lv8xY+KpdoLjga5wpR
-         V4b5MBBLBVmPsqaxVjg5vRdIXXpVopM0xMV36UIG7SFoAkTl6zNi3wIDD2ws3UHYXCBj
-         o+pA==
-X-Forwarded-Encrypted: i=1; AJvYcCXC2yOdU6GFsamp57yrLrQ599MaunVV6vaUOegvj4RLRvnCK2rLbE+cCn1mvet1Z9pmKL8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVFltsaLucN/nusR+BMI4O0Z7YuBSPH5pu3MnyTFEtP9+naA8a
-	FaNW//U8UP+nPnpK1mAqiaO5Le4b9fUoNNff2e+1cnjFOO60MEPSaA07au2fwtO+rOwLfroJCfP
-	QHT48bDNmjGDm5nQmsAv/CtcYnGVFgWjB19oo6hEA
-X-Gm-Gg: ATEYQzxSOETVnu3r3WNb3OtE/eDo3nsv21GdZcHvhYstQbyTANJwHKZjyYodSt4ImUL
-	ta3ggOVpIuRg+Bi690GA3kkfSPeYJAJ92wYIkoMXR5WG49nRMw+rMx5aP1z/Trt6wvuGikQFR4v
-	qmJe1ZaIzXz5/5mazg29nHSYlaj0BynaOnux3NPTre5niyB52lpd0/QyxNSWvlmNqoCOLKJrf30
-	wMJ2JJUJthdMOShTtaqKdVsetcF3RvFZK2aZ4i1e0CoHZTO5341PoJAaaSrPpjw2X8W3R2TMmvz
-	1mAljH5G/rzbpa2+yw5Br+qZ2CHDapFbYYJYScENuC9xXNVP
-X-Received: by 2002:a05:651c:41cc:b0:383:31cb:e3ae with SMTP id
- 38308e7fff4ca-38c730b9edcmr1215331fa.9.1774566303147; Thu, 26 Mar 2026
- 16:05:03 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774567802; x=1775172602;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZAxzm5r1A8QCuom4v/qqXiX/6Y8VFr8Bo6ioi7kg4iE=;
+        b=mm7657EXclfN+bti64saraHypyFxqda5bTXibf+ksaG/7W9SPiS0NK53283C5pWnV5
+         Wuk48qC8qhpppeWcGNw8OWvyldmNRa+ADGvXJy4a6G3bKxkwl7LfvSZcjG1GAaxDUlKw
+         G730789IyWFaFuCz/QiW1ART0xEq1GsP1v020f1LCj5km80VLhr7mBV/6KNL2g7tZWbG
+         3LPRLfddtleXOQg8YStOecbrpTemtru2g10zb+3nBAi56g7P1Ws2YX2W3AkFXxtKLwng
+         e0SP9aRRfzrRAd1KGBJI65lLnkX0BhpjSAYAfJdtLKZeI+Hd36R9F/jVkMd/tIHba9gE
+         l0pQ==
+X-Gm-Message-State: AOJu0YzLHgPgz1nfHDujvoDtbb468LUO39qIwh96V8HqeZptxVjXH/aq
+	mn1oPFhHgCv867T9umnpUBLV15/jxwkQSvY7heL7OLbNPuX0rt8osVbC
+X-Gm-Gg: ATEYQzwfKqX15qhIJGUVs4AeMLpoJQ2XPayeBx1goNlnvLff3sUzEIE7Y5B7gUkTmt8
+	gZoCZcPt3LoOzqecmVbozIyiCz+nOfkJgzgHocXG5fhMnzyZmtk3Ik+C6NgtoXr6Eyas1nMX0OU
+	o9Tl1Het+6Me7i0NiVDSLRuYhLOHoufCqpMtzs0HAeJb/+g+I9Fr4v7EpKK5EBDtq81x1B11dpZ
+	F6UEv+8CSMRMt+suCY/7J36Z8S9XNRaHo8JeAFYdFKFCpPjuFH6MoDVEcXUqsc793X+nhjX/78Y
+	L+4kK2gxlJaH8cZqYNLzehZFda6hpslqlkNggPHv3ntZHc62sUzQw/gSaN7m/k0npYkpEF4L+Ym
+	PPrdgMEYtH7gqb37/fCwOkiGPDfk2iHjwnrHLZU3g31X1tyNAWYE2gTFSwuoZpsyebrKAYaTdIt
+	M3fYFYsXlecsr3JZHcuy6AXxOSd+zvFJVfLfprtXsH1tbigcQSKJkEqmgKSjWUWKeRoQ4cc/dma
+	hssG9zuIlDaRHvQcyQ=
+X-Received: by 2002:a05:693c:2b06:b0:2c1:7673:a6ae with SMTP id 5a478bee46e88-2c185f4f56amr245235eec.34.1774567802372;
+        Thu, 26 Mar 2026 16:30:02 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:4a82:c020:f551:481c? ([2620:10d:c090:500::1:634a])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c16ee29ff9sm3419314eec.29.2026.03.26.16.30.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Mar 2026 16:30:01 -0700 (PDT)
+Message-ID: <23a2ed0f2272f74bd7eed4720a2ee3b442ffe02f.camel@gmail.com>
+Subject: Re: [PATCH 3/4] selftests/bpf: impose global ordering for test
+ decl_tags
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, 	martin.lau@linux.dev, kernel-team@fb.com,
+ yonghong.song@linux.dev, 	cupertino.miranda@oracle.com
+Date: Thu, 26 Mar 2026 16:30:00 -0700
+In-Reply-To: <CAEf4BzaETjC-_mZ_rpDkbxnXXBZLvh74mzNE3oW_Ra-VgGMRyQ@mail.gmail.com>
+References: 
+	<20260326-selftests-global-tags-ordering-v1-0-5dd2ced5d9ad@gmail.com>
+	 <20260326-selftests-global-tags-ordering-v1-3-5dd2ced5d9ad@gmail.com>
+	 <CAEf4BzaQqWprVN8RcvGvAEML7rGsGE+x37+RYRHADsGRNd4JXg@mail.gmail.com>
+	 <46b5a0cdcb00899de5580896596ee5d3c693f3ac.camel@gmail.com>
+	 <CAEf4BzaETjC-_mZ_rpDkbxnXXBZLvh74mzNE3oW_Ra-VgGMRyQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260326114919.519456-1-maciej.fijalkowski@intel.com> <20260326114919.519456-12-maciej.fijalkowski@intel.com>
-In-Reply-To: <20260326114919.519456-12-maciej.fijalkowski@intel.com>
-From: Joshua Washington <joshwash@google.com>
-Date: Thu, 26 Mar 2026 16:04:50 -0700
-X-Gm-Features: AQROBzA8YYbhp_WNDVEgrQlqIcAqd1g3tgIQ2HlIhS8omAzHiv5MEEX3d9L4hKs
-Message-ID: <CALuQH+U0NJYxFZOeZ=iwJAygQvC5LHg0xAKWTUdHWqXoFunNLw@mail.gmail.com>
-Subject: Re: [PATCH v4 net 11/11] gve: remove home-grown xsk's frame size validation
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com, 
-	stfomichev@gmail.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
-	larysa.zaremba@intel.com, aleksander.lobakin@intel.com, bjorn@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 26, 2026 at 5:02=E2=80=AFAM Maciej Fijalkowski
-<maciej.fijalkowski@intel.com> wrote:
->
-> Since this check is now present in core in xp_assign_dev(), remove
-> redundant statement from gve_xsk_pool_enable().
->
-> Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+On Thu, 2026-03-26 at 16:00 -0700, Andrii Nakryiko wrote:
 
-Reviewed-by: Joshua Washington <joshwash@google.com>
+[...]
+
+> > > > +static void *realloc_or_free(void *ptr, size_t size)
+> > >=20
+> > > but why?... why invent a new realloc usage pattern just to save two
+> > > lines of error handling code?
+> >=20
+> > Yes. We have this in verifier.c:realloc_array() and I like it.
+> > Can through this one away if you don't like it.
+>=20
+> it just that you still have explicit free()s in that function for
+> clean up, so this realloc_or_free stands out as a deviation for no
+> good reason. So yeah, I don't think it's worth doing... but I'm also
+> not going to fight it, it just caught my "traditionalist"'s eye ;)
+
+I'll respin, no problem.
