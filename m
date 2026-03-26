@@ -1,84 +1,139 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 370A640FDB9;
-	Thu, 26 Mar 2026 16:40:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774543217; cv=none; b=iIqAAnJJG++tzhBFe3047ca3VjdFwMomp7IKx5eUmZAiI1suA5bgjaqUOB3KjKiZ/bk7dOi1BzXAEraSH/TH0nrOs+UgCW9VA/DPEfqFW+7ZNNQoMtFDBtiIz3okiqlMXxIUilDBki87veUqWDIIIar7Fz+oDdleED0XfuNvdqk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774543217; c=relaxed/simple;
-	bh=cYKlQ2o7FUUvHGc0tCvyTQqKxg3laNIlHyL2Hy6ob5w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CtJJXCgUo91hL9k760+aFWmtGPEVKXj9IiQyvve/YQNAN2asgPSNIUsobL2zt2DHwjbbWORavKVzW/c2qUn71VXi2Xoz+vmxGdD7orSrODcU200bkEsr8NXVl3E6qMGKMiaT/HYKSVSUt5Ac8hwV8Kpqn5TNtijCC34v3+axVAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oWe1AHWS; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 057E9421884
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 16:47:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.67
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774543657; cv=pass; b=pkdu8SCCCdBV42tSQCfJ8VXH7B6tLKMIaHlqM03mIZkEYTNjUvOKrGbHkoZ0e5/re7t4u1BiXPcZYoYndWGN2Rnj8hQvFL0mYxURE7FwvPTKsMbOHcOFdd21wypL7MsameWk7X1jZQNwF0eEruBE/FWc3GSodZbEC6dv8AYU5jA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774543657; c=relaxed/simple;
+	bh=Rxv4nPM/ftL4RuPoq2pbTqaR/Bm98LGV+PIa3QWzLvg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=W6562GoPeet7Yh3yHFZpc2kN2m8PiubIysE1CJAQZdsR10qyPOVb/Q49fLhlzVTdfYGsuUMZO1GNwvkDDQ3aLi+d/6blwrS+83v9diVWlF6oaqG4PaASy9n2FJw0nfg3o9/KxdtQPbVqhKlViFgAehCVonKYdCEj8q8av7kEMZs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QYpUPw9u; arc=pass smtp.client-ip=209.85.221.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oWe1AHWS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7AD7C116C6;
-	Thu, 26 Mar 2026 16:40:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774543216;
-	bh=cYKlQ2o7FUUvHGc0tCvyTQqKxg3laNIlHyL2Hy6ob5w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oWe1AHWSW+pwYbwC0VcqRbQdmlNq3VaXx1KYEsfhH6r9/QV24i8AergiggbHgGuSd
-	 6M7dkjQuO2qD9gVUhDAGWRe9lp8U0vCNUayFKnEQyBfXPzG4Loaja8HMp1jITQUsm9
-	 63Yd7NeYjqqMIsQDdGOuQZcm9y9pISfsqqBaxSAakjs9xH/DfI4yNRDdxBarKGtMdk
-	 tMdWKCw3ZLD9A+iP+pcvn/2WHOU5PQA22Rf0crNlcDPxmHmhvelPwTDogBXIOzdy3+
-	 UMlYBIu06ovaY6xJbp9X2grLD5o+bMcxiyzRq41Kn7ETRZzoDKgGtQM3bTOByydlDe
-	 2QwAF7oR3ZosQ==
-Date: Thu, 26 Mar 2026 16:40:08 +0000
-From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
-To: Gregory Price <gourry@gourry.net>
-Cc: Shakeel Butt <shakeel.butt@linux.dev>, 
-	lsf-pc@lists.linux-foundation.org, Andrew Morton <akpm@linux-foundation.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, David Hildenbrand <david@kernel.org>, 
-	Michal Hocko <mhocko@kernel.org>, Qi Zheng <zhengqi.arch@bytedance.com>, 
-	Chen Ridong <chenridong@huaweicloud.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Axel Rasmussen <axelrasmussen@google.com>, 
-	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, Kairui Song <ryncsn@gmail.com>, 
-	Matthew Wilcox <willy@infradead.org>, Nhat Pham <nphamcs@gmail.com>, Barry Song <21cnbao@gmail.com>, 
-	David Stevens <stevensd@google.com>, Vernon Yang <vernon2gm@gmail.com>, 
-	David Rientjes <rientjes@google.com>, Kalesh Singh <kaleshsingh@google.com>, 
-	wangzicheng <wangzicheng@honor.com>, "T . J . Mercier" <tjmercier@google.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Suren Baghdasaryan <surenb@google.com>, 
-	Meta kernel team <kernel-team@meta.com>, bpf@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [LSF/MM/BPF TOPIC] Towards Unified and Extensible Memory Reclaim
- (reclaim_ext)
-Message-ID: <7b7fec8f-78ac-4b6b-95ea-8509d8ca95b5@lucifer.local>
-References: <20260325210637.3704220-1-shakeel.butt@linux.dev>
- <42e26dbb-0180-4408-b8a8-be0cafb75ad9@lucifer.local>
- <acVPrEyfcE4Naz5b@gourry-fedora-PF4VCD3F>
- <248a126c-43e7-4320-b4bb-282e0b6da9c4@lucifer.local>
- <acVftLYT301ITlsO@gourry-fedora-PF4VCD3F>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QYpUPw9u"
+Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-43b949bf4easo698367f8f.0
+        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 09:47:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774543654; cv=none;
+        d=google.com; s=arc-20240605;
+        b=WtOzSKlQ1dpEKH+JUV/qchen44unziqktwJdGZoOizphChxdCwlRtfmSW7SGPkwP9l
+         ekrEQxRF++bD7FXCW6+7/PACVxNjfC4KKCwMjFNTHRCae+n16G4gj4W0TiThZ0y1SN0u
+         HDwIY2ErnMKr1D2vqIrqQN5bIL+930lKE6Lj2mKTw2epvYK6F3HHe/7ZBItyjMtYhG7i
+         JmG/UBrAeb/6RD0XZxlx2scmXQmys58RCVgY7yEgTsmAW4ghbBzwIFoPrqLwAft1UrsX
+         TEhi9ICiyfbohTOiYAdaqHzVJmbCkAem0ICV3ASltVUR1f2xp8csQkWyYn1eBD/eoyj5
+         0WZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=Rxv4nPM/ftL4RuPoq2pbTqaR/Bm98LGV+PIa3QWzLvg=;
+        fh=1JuR1Aycb0V8ZSPv77yGVmIk71vaa0wSf/gOb+23LOc=;
+        b=CDz8YJcGD1/Eyltb+MTMmGTPvI85GvGCzn2inAETq4iAdJbA/l62IlEYQtFf/KOnvm
+         d6B7YuUE75ygqA/jPX3lYAkpgFHRikOtaiyYWogDiNx4jdMOwSr8wAncSA7enyVW89ls
+         cN2vTZ7DutMwTlTAaGiLDvIzxVRHjBMETfmSQx800ouc02/+9wixXDz/gXDXRgyLJeo6
+         1Oy7RnOYsbTF5gqhZZn2v6XgOTFnLb5EI45pKI0S8QGGQRTy6UCp1Xzr5Ogj21WMv8V8
+         Geb6WEzVdycwirCyRzpOVHQPT9LIFsceOh15niduSOqxPmzeb3p+XkBCeYLoRHcN6+px
+         F+ng==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774543654; x=1775148454; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rxv4nPM/ftL4RuPoq2pbTqaR/Bm98LGV+PIa3QWzLvg=;
+        b=QYpUPw9uD3ZrXqA2iuVm3TIrx7QRqOdkTzCgrajI+KG0TAwTl7UHsk3xGWGAHA8PI0
+         Dj/IwPmyzgNdR7gDIq6ZGfcaEbImGQWfNH0UDFLoLnWK3PBHESXM2tBbtMIzBuSrc9nP
+         Dj6l0cuGfYHCa65ef63AcQrVZub597GvBq15xhsF2XRK0X3facKWdmY2srp4KaiQKhW7
+         zAxaKT5B0izHkahQG8FdWQvQvIveT2xjILzSZMKTy5DZtbcbK/eSftoNmeWO7G2Qxqo5
+         F3KL0QEq7Os+zfNUKJG+HG8uG94zYczNr9zekzgdOQqb58NmI96pKCOmr6CPCquHrqsD
+         HBSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774543654; x=1775148454;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Rxv4nPM/ftL4RuPoq2pbTqaR/Bm98LGV+PIa3QWzLvg=;
+        b=tJL20EnImrWE7+uxj/ax+Mr7YsXA4fM7EFPuloxMvp5iJBkPBKBOYLeskZ2m36cfh9
+         aXyj+DHiOAC/+IqpjjQwsjgUppftyOUHWRL1bFioKMaVFXKsJrn1Q2VDlOCqaeoEVHDc
+         m+kKHCoqvQnzKpWOoIN3S2a7abmxNVyLGCqZRJly1ZcIzBhlUlt/GORFccn4baOWbj9f
+         86yDfpFdvtpGTiGh0doSeTlhIzRuMKRtX65O0qURuf1Qi9SZt/eW5X5hD3PKBlUb1w21
+         L1GjBRdcolFvB624j5hApnfleU8yBOGIhMGAd1UXg5jJspg3KPwyUApM4zXr3GtBAvmX
+         8J8g==
+X-Gm-Message-State: AOJu0YxWIBOvi2pnTqpg5JgKeZ+UnJBnQsnTWQtgI9ZPLBal9YWRGpgx
+	Sfr4EzZds+bJx445Ujzy11H/61ZuuTzNX/DrEqebne6o//lr0CX3aJFeEkGsuHV9wkLTesFDO4s
+	PApeVg+p3kh/doY+D9b+6am7kawz8/ho=
+X-Gm-Gg: ATEYQzypfEhfm+HuJxOkxtaM44plOVR00PimAyXJIeJKr0TA+dPEztqq83MBuB7JXCv
+	aynmvJemfYCqXaF3beTNvInh3mbTiqtyZfu73oKw2flHoJ8VvqQawnS4tkvgldg7AHpX9E0CNnS
+	6kLOi4Yz4iOrJvETPIlQ4WJKc92pNjxti0XOAfAv8DKk8zO97s9DISWL1bOnfL5Sh+Y9XvYYKoR
+	P5M547QrgJMf9X1QySiSUKh7EcNGydkrw73R5SZVyUt75LW81MJrCfzBe17HwcDDOo/KSs9UD/l
+	tgkafUW1lCe5rNr4IqeEKtYpXjdmobPyoXE/SFPzWay05vCC/cRo5eGdeYtY
+X-Received: by 2002:a05:6000:24c3:b0:43b:5091:39db with SMTP id
+ ffacd0b85a97d-43b97a203f5mr4317766f8f.13.1774543654208; Thu, 26 Mar 2026
+ 09:47:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <acVftLYT301ITlsO@gourry-fedora-PF4VCD3F>
+References: <20260325-sleepable_tracepoints-v6-0-2b182dacea13@meta.com> <20260325-sleepable_tracepoints-v6-3-2b182dacea13@meta.com>
+In-Reply-To: <20260325-sleepable_tracepoints-v6-3-2b182dacea13@meta.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Thu, 26 Mar 2026 17:46:58 +0100
+X-Gm-Features: AQROBzBFq-Giws6ErZDhcg716aZigfVv5mVWiR1sjY2IYFp-MH71-_SRospZ8H4
+Message-ID: <CAP01T76ZAxNyUqtJ0b-K79BA8QmmJcf4vsKR9dz8mJFG-tGUWg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 3/6] bpf: Add sleepable support for classic
+ tracepoint programs
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com, 
+	Mykyta Yatsenko <yatsenko@meta.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Steven Rostedt <rostedt@goodmis.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Mar 26, 2026 at 11:32:52AM -0500, Gregory Price wrote:
-> On Thu, Mar 26, 2026 at 03:35:28PM +0000, Lorenzo Stoakes (Oracle) wrote:
-> >
-> > Maybe a stage 1 can be to separate stuff into another file, because that'd
-> > actually be pretty easy to do for a fair bit of it, surely?
-> >
-> > Can use mm/internal.h to handle stuff that has to link one with other?
-> >
+On Wed, 25 Mar 2026 at 19:55, Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
 >
-> Yeah i don't think we absolutely need to jump all the way to ops right
-> away, and splitting into a new file would at least give our eyes a rest
-> from the ifdef spaghetti.
-
-Yeah as I said in my reply here, I'm if(def?)fy about the ops tbh.
-
-But we can defer thinking about that until last anyway.
-
+> From: Mykyta Yatsenko <yatsenko@meta.com>
 >
-> ~Gregory
+> Add trace_call_bpf_faultable(), a variant of trace_call_bpf() for
+> faultable tracepoints that supports sleepable BPF programs. It uses
+> rcu_tasks_trace for lifetime protection and
+> bpf_prog_run_array_sleepable() for per-program RCU flavor selection,
+> following the uprobe_prog_run() pattern.
+>
+> Add per-prog recursion check to bpf_prog_run_array_sleepable(),
+> controlled by is_uprobe flag, allows sleepable tracepoints to use
+> private stack safely.
+>
+> Restructure perf_syscall_enter() and perf_syscall_exit() to run BPF
+> filter before perf event processing. Previously, BPF ran after the
+> per-cpu perf trace buffer was allocated under preempt_disable,
+> requiring cleanup via perf_swevent_put_recursion_context() on filter.
+> Now BPF runs in faultable context before preempt_disable, reading
+> syscall arguments from local variables instead of the per-cpu trace
+> record, removing the dependency on buffer allocation. This allows
+> sleepable BPF programs to execute and avoids unnecessary buffer
+> allocation when BPF filters the event. The perf event submission
+> path (buffer allocation, fill, submit) remains under preempt_disable
+> as before.
+>
+> Add an attach-time check in __perf_event_set_bpf_prog() to reject
+> sleepable BPF_PROG_TYPE_TRACEPOINT programs on non-syscall
+> tracepoints, since only syscall tracepoints run in faultable context.
+>
+> This prepares the classic tracepoint runtime and attach paths for
+> sleepable programs. The verifier changes to allow loading sleepable
+> BPF_PROG_TYPE_TRACEPOINT programs are in a subsequent patch.
+>
+> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+> To: Peter Zijlstra <peterz@infradead.org>
+> To: Steven Rostedt <rostedt@goodmis.org>
+> ---
 
-Cheers, Lorenzo
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com> # for BPF bits
+
+> [...]
