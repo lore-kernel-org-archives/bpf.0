@@ -1,147 +1,186 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EFC832B981
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 22:03:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E79DF3375AE
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 22:06:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774562619; cv=none; b=CMYjFJQexs63kIkM6KuVS/WDE95OC2QB1mMrss5whPGkvvbFrewru+qqx74QOswbI5Ikg7tsAON89hLQdtjnOwYwZhnuD87FzXu9G8zKEh8gxWhR/Cp1OmUEkmwAivatn7pLlsltwd5tl6Kuij+RfKPdFVoZ6NpKUz9eo1tMvV0=
+	t=1774562808; cv=none; b=LXvLoloqY1qUfeW490wPmFo+g90HatEHgi30A7KrfXhBOPjW4AY92sK+Q97nOfT2l+1ed2u8Yrm4FVotRP9KzVRW1qzuU8O65k9ez1yHvYISyAH4ZVBiEmp5kVH8IW9JD7keweMVzqnvP/1pL4JewUcNgUYDhvRhcahcZCiTDXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774562619; c=relaxed/simple;
-	bh=/0I5PlNTDmo42F78lIX7rXVUcj3Vn1T+pJs/PmebPl4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YCtKRMr9j9mAxA+njbVkkOSLG5UCK2SDQxj/nrfPeDqyuUJb7pkdqPAPK9ttFIOKEGIe6954P9HTofAwllQ+gBrEO3AXMmKWOkqxi2v3Xp6oXs/CF/J0JeEoGu6vIBmT6H47dfooC5dWIuB3zbmLQYghsQpkQ/u4n3kDyUcm3z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HheJeDSZ; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=eiPjsoJz; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1774562808; c=relaxed/simple;
+	bh=VHcxuzCD6goD5XgHUp8HZt3sVRcSxxWJZeFmpBM71Qo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IYrXAuEDoUQ4o/fT1sRTBtk4EeLZTcPp/P0U0VnxaGpXrtq/jFiRJiXbinuyFrwKbsmG6f/fR0fpEjHyiZePQzIYaryDTb4zX8DE24WhP8R9XbKetQKIaeXoUZ+jTO24bYb53nhHcvgKBhD1eeCNRKCynmiN9HEcJUCfTyfh14w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Dvzw7op5; arc=none smtp.client-ip=95.215.58.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HheJeDSZ";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="eiPjsoJz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774562617;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Dvzw7op5"
+Message-ID: <e0ca748d-3204-4160-b37d-0f76cbac8c6c@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774562795;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Lpgob1tvHT4IKRz9W+hPWJKbEluQbBFuXgVxhpqe0s0=;
-	b=HheJeDSZXc+D2HUtSd8Ne+tBU418qwkpfwGl5vY29faBCl10gqqdA3rbsG87WwS9Ef50PI
-	5n3ZFahDU6x9KhqFl1x7OASUwTCYsk45NDP7nc2NmJky/1SiBTokdg+a8fxSZH+nnOpX8b
-	0iWFGrTdHIXiyQi47kW6ywaQnJqIhuQ=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-269-e_ex5nZGNkCSIx3YxRbtWg-1; Thu, 26 Mar 2026 18:03:34 -0400
-X-MC-Unique: e_ex5nZGNkCSIx3YxRbtWg-1
-X-Mimecast-MFC-AGG-ID: e_ex5nZGNkCSIx3YxRbtWg_1774562614
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-486fc42c83aso11769295e9.0
-        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 15:03:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1774562613; x=1775167413; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lpgob1tvHT4IKRz9W+hPWJKbEluQbBFuXgVxhpqe0s0=;
-        b=eiPjsoJz10dXgxEAcpTuDqkDtqydJOTYGojrrxbVhxYA0GcO12tv70RlsMbeWavyvs
-         wE7k8Pvrq/4CJagj9Wmt+KO8n1ZGCNNM6LrqoxiweOqf9a+3yyQyw72sU95EmiEN8Oz1
-         WLGHBUBUBZuJJ05cxVdYhZWM89XueTwqnbmLmqhfrlq0JfohgYb2DnlosWotj6YfUrWK
-         TZsMi5I7AYxzQsVi9ug32CUIaeLakfh2U/TKBUvPi8ILfUW1ktDqnvPjTXxDQf4aJXMS
-         oAptCpjHe9/YGN6sMcbKo2+MEqJHB5bhwYOzYaJF75fgffd8NU3kf1oNNYbTrnuAc8bw
-         1FDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774562613; x=1775167413;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Lpgob1tvHT4IKRz9W+hPWJKbEluQbBFuXgVxhpqe0s0=;
-        b=BRJvEU/y1t/7KCBu8sEnZ+RWx3mPwgnq0vDph8iAlTPhziepQ7DdZmielz/cMwVh+C
-         oMRnu/Z9GiVFfO9QynfwgIBp5G18q0niLzH6iRQcCOitA70XzqgMQT0eYfCepSBHhD0H
-         nJAQTk+cgeZK03huhHu2yEj8Q5eDJw0zgv+u/u0LoApre39q4Pa5gzkVQrFC9k1AP4uu
-         6DV9hpBnbTxiZbKXUdrfj0pVpj79R/nv5Vmf0CjbNzp/OBVWEAfaO83Y/NpWGywF+zcC
-         QJa7PoHMc5veaaSd3ZVPPZrPq5a4vhyc8IJ1Zqt3DrZ/L7b2cbaxVd3SQJctv+MH85lw
-         PKPw==
-X-Forwarded-Encrypted: i=1; AJvYcCUvmR/ep88+WAuHCaghaM9QgC8lXnCtqVDjbg74V2GVI5ecnuS/tGleztt7miRwV1XtxNg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/0xO8tieJ1AjLFE9Kelg6vsGaXTxXR3nnw8nF/h5XyipkJpmD
-	TCXM8I8TKQm2gjpdH+cgHe1HxpN6+Ev9gH6Vn9vxRByBJYx13z5BwKMK66PYAMFGXZuCMCh4hJ3
-	YP9caubiv9it+U4tBngDgeLXRsDyChDkA1e6jvTRiejYaWKvSK5e4BA==
-X-Gm-Gg: ATEYQzyUDVPt/GappssQZN+ucWo4qFzj95hNELxY97tRHWarpWHlti/jeCsopZISF0P
-	limVfxWXwoY2ZUW0r/KFUzVi8MM2dMT5IajA9kpNZhX/SfwxcxRsD23yG5d8CaqKNGbyjYEhRAn
-	N+ihY7dvPutQdY3tCGUO39dpl3ySEZVOzIGVAfF+vFQ1BpWC9s1W54IyVFK41nKcbDh5iTkKgI2
-	6v02SVgr2PVhsSHWQQf81B6TTsoa63fTAp/9hxCLajgEQ7Ladeii5B4Kpm9Y2WEY3aDXLH7NVSv
-	DkBpaE+fuzo+1QjQltZCr332iGbsyHM7nrKFq/1sgjf59u4rUJCcBex0R/uVxRRbu+IKqCGYdCE
-	xYNN4aScYDM3y1sx+
-X-Received: by 2002:a05:600c:3d87:b0:487:1114:d42f with SMTP id 5b1f17b1804b1-48727d59da0mr4643865e9.1.1774562613597;
-        Thu, 26 Mar 2026 15:03:33 -0700 (PDT)
-X-Received: by 2002:a05:600c:3d87:b0:487:1114:d42f with SMTP id 5b1f17b1804b1-48727d59da0mr4643465e9.1.1774562613107;
-        Thu, 26 Mar 2026 15:03:33 -0700 (PDT)
-Received: from redhat.com ([2a0d:6fc0:1525:da00:3ac2:1a22:72ff:4256])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48722c9f58fsm90811505e9.11.2026.03.26.15.03.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Mar 2026 15:03:32 -0700 (PDT)
-Date: Thu, 26 Mar 2026 18:03:28 -0400
-From: "Michael S. Tsirkin" <mst@redhat.com>
-To: Simon Horman <horms@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Omar Elghoul <oelghoul@linux.ibm.com>,
-	Srikanth Aithal <sraithal@amd.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Vishwanath Seshagiri <vishs@meta.com>, netdev@vger.kernel.org,
-	virtualization@lists.linux.dev, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next] virtio_net: sync RX buffer before reading the
- header
-Message-ID: <20260326180313-mutt-send-email-mst@kernel.org>
-References: <f4caa9be9e5addae7851c012cab0a733be7f0974.1774365273.git.mst@redhat.com>
- <20260326181736.GV111839@horms.kernel.org>
+	bh=ap4HZuU3Kp/MebHLlBMt2MHPRPf8GdkWOr2FuBBdAdU=;
+	b=Dvzw7op5c5X6VP5abajNjvoHkIBJxJAk2lEJ2Li2ge9tGe5TSNF4qSaJEHnCf2tfm2yunU
+	B44Q4XghGrB5JB1dEYr4rEDjchocp6YetnTDiU9SclLTdxbAwpgfdOEPlJalxX4Y07vpys
+	wPX98H7qZLiOX8iAYf1WNC2Y0kW/9GE=
+Date: Thu, 26 Mar 2026 15:06:28 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260326181736.GV111839@horms.kernel.org>
+Subject: Re: [PATCH] docs: Document pahole v1.26 requirement for
+ KF_IMPLICIT_ARGS kfuncs
+To: zhidao su <soolaugust@gmail.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>, Tejun Heo <tj@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, sched-ext@lists.linux.dev, bpf@vger.kernel.org
+References: <20260324062028.2479059-1-suzhidao@xiaomi.com>
+ <CAADnVQLbtuD=7mtGZFR25ULhjZ-3ifBpkyRcqu9jPSd2Mt3fBw@mail.gmail.com>
+ <69c2dbe8.170a0220.226f48.721e@mx.google.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <69c2dbe8.170a0220.226f48.721e@mx.google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Mar 26, 2026 at 06:17:36PM +0000, Simon Horman wrote:
-> On Tue, Mar 24, 2026 at 11:15:54AM -0400, Michael S. Tsirkin wrote:
-> > receive_buf() reads the virtio header through buf before
-> > page_pool_dma_sync_for_cpu() runs in receive_small() or
-> > receive_mergeable(). The header buffer is thus unsynchronized at the
-> > point where flags and, for mergeable buffers, num_buffers are consumed.
-> > 
-> > Omar Elghoul reported that on s390x Secure Execution this showed up as
-> > greatly reduced virtio-net performance together with "bad gso" and
-> > "bad csum" messages in dmesg. This is because with SE sync actually
-> > copies data, so the header is uninitialized.
-> > 
-> > Move the sync into receive_buf() so the
-> > header is synchronized before any access through buf.
-> > 
-> > Tool use: Cursor with GPT-5.4 drafted the initial code move from prompt:
-> > "in drivers/net/virtio_net.c, move page_pool_dma_sync_for_cpu on receive
-> > path to before memory is accessed through buf".
-> > The result and the commit log were reviewed and edited manually.
-> > 
-> > Fixes: 168b61da6871 ("virtio_net: add page_pool support for buffer allocation")
+On 3/24/26 11:46 AM, zhidao su wrote:
+> On Tue, 24 Mar 2026 08:12:12 -0700, Alexei Starovoitov wrote:
+>> I don't think that's true.
+>> At least when implicit args were designed the goal was to avoid
+>> pahole dependencies.
+>> Please share exact steps to reproduce.
 > 
-> Hi Michael,
-> 
-> The hash for a patch with that subject in net-next appears to be 24fbd3967f3f.
+> Here are the exact reproduction steps and code path analysis.
 
-Thanks, will fix in the next version.
+Hi everyone, sorry I'm late to the party.
 
-> > Reported-by: Omar Elghoul <oelghoul@linux.ibm.com>
-> > Tested-by: Srikanth Aithal <sraithal@amd.com>
-> > Tested-by: Omar Elghoul <oelghoul@linux.ibm.com>
-> > Link: https://lore.kernel.org/r/20260323150136.14452-1-oelghoul@linux.ibm.com
-> > Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+First of all, a *Nack* to the doc change in isolation, I agree with
+Alexei here. Tejun, I suggest to revert it.
+
+Doc change is insufficient and will make things only more confusing.
+
+Kconfig checks for pahole version, as well as Makefile.btf. If we set
+a new minimum version then it makes sense to assume it in the kernel
+build code, and *disable CONFIG_DEBUG_INFO_BTF* if the version is not
+recent enough. Also remove any flags/conditions that depend on pahole
+being less than target minimum version. For reference see a patch
+where I bumped the minimum version to 1.22 (903922cfa0e6):
+https://lore.kernel.org/bpf/20251219181825.1289460-1-ihor.solodrai@linux.dev/
+
+More importantly, the reported problem is real, but the actual fix is
+a bump to v1.27, not v1.26. As usual AI got it about 80% right in the
+analysis below (I assume this is AI output, it certainly looks like
+one). Although to be fair AI was misled by a human error.
+
 > 
-> ...
+> Reproduction (Ubuntu 24.04, pahole v1.25):
+> 
+>   $ git clone https://github.com/sched-ext/sched_ext.git
+>   $ cd sched_ext && make -j$(nproc) LOCALVERSION=-test
+>   $ make -C tools/testing/selftests/sched_ext
+>   $ vng --run arch/x86/boot/bzImage --cpus 4 --memory 4G -- \
+>       tools/testing/selftests/sched_ext/build/runner 2>&1 | grep "func_proto"
+> 
+> Result: 23/30 tests fail with:
+>   libbpf: extern (func ksym) 'scx_bpf_create_dsq': func_proto [382]
+>           incompatible with vmlinux [53813]
+
+This is indeed an error you may get if BTF for kfuncs with
+KF_IMPLICIT_ARGS is wrong.
+
+> 
+> Root cause:
+> 
+> The KF_IMPLICIT_ARGS mechanism requires pahole v1.26 for the DECL_TAG
+> generation step that enables resolve_btfids to do its btf2btf work:
+> 
+> 1. scripts/Makefile.btf gates decl_tag_kfuncs on pahole >= 1.26:
+> 
+>      pahole-flags-$(call test-ge, $(pahole-ver), 126) = ... decl_tag_kfuncs
+
+This is correct in that resolve_btfids expects that pahole ran with
+decl_tag_kfuncs, but the version check is and was wrong.
+
+decl_tag_kfuncs was implemented in pahole commit 72e88f29c [1], which
+was released in v1.27. But on the kernel build side, the new feature
+was simply appended (ebb79e96f1ea [2]) to the list of features under
+1.26 check.
+
+[1] https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?id=72e88f29c6f7e14201756e65bd66157427a61aaf
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v7.0-rc5&id=ebb79e96f1ea454fbcc8fe27dfe44e751bd74b4b
+
+> 
+> 2. Without decl_tag_kfuncs, pahole does not emit DECL_TAG BTF entries
+>    for __bpf_kfunc-annotated functions.
+> 
+> 3. resolve_btfids/main.c::collect_kfuncs() (line 1002) early-returns
+>    when nr_decl_tags == 0:
+> 
+>      if (!link->nr_decl_tags)
+>          return 0;
+> 
+> 4. With no bpf_kfunc DECL_TAGs, btf2btf() never calls
+>    process_kfunc_with_implicit_args() to create _impl variants and
+>    strip 'aux' from the original proto.
+> 
+> 5. Result: vmlinux retains the 3-param proto (with 'aux') for all
+>    KF_IMPLICIT_ARGS kfuncs.
+> 
+> BTF evidence from our pahole v1.25-compiled vmlinux:
+> 
+>   $ bpftool btf dump file vmlinux | grep -A5 '[53813]'
+>   [53813] FUNC_PROTO '(anon)' ret_type_id=... vlen=3
+>       'dsq_id' type_id=...
+>       'node'   type_id=...
+>       'aux'    type_id=...    <-- implicit arg still present, 3-param
+>   (no scx_bpf_create_dsq_impl exists)
+
+So far so good.
+
+> 
+> With pahole v1.26, resolve_btfids creates scx_bpf_create_dsq_impl
+> (3-param, for verifier's find_kfunc_impl_proto) and rewrites
+> scx_bpf_create_dsq to 2-param (for libbpf ksym matching).
+
+And this is bullshit. The kernel build with pahole v1.26 has the same
+problem:
+
+  # Notice that 'bpf_wq_set_callback_impl' is absent from BTF
+  $ bpftool btf dump file vmlinux | grep 'bpf_wq_set'
+  [63890] FUNC 'bpf_wq_set_callback' type_id=9991 linkage=static
+          'KF_bpf_wq_set_callback' val=29
+
+vs expected (v1.27, v1.31):
+
+  $ bpftool btf dump vmlinux | grep 'bpf_wq_set'
+  [64253] FUNC 'bpf_wq_set_callback' type_id=51033 linkage=static
+  [64254] FUNC 'bpf_wq_set_callback_impl' type_id=34861 linkage=static
+          'KF_bpf_wq_set_callback' val=29
+
+One could've figured this out if they tried to actually run the build.
+
+> 
+> You're right that the design goal was to avoid pahole dependencies -
+> the implementation could be fixed in resolve_btfids to handle the
+> no-DECL_TAG case. But until such a fix lands, the dependency exists
+> in practice. Jonathan Corbet suggested raising the minimum version in
+> the requirements table to 1.26, which seems the cleanest fix.
+> 
+> Signed-off-by: zhidao su <suzhidao@xiaomi.com>
+
+
+zhidao su, I suggest you prepare a proper "minimum pahole version
+bump" patch, modifying kconfig checks, Makefile.btf and the
+documentation. Please route it through the BPF tree and add me to cc.
+
+Thanks.
+
 
