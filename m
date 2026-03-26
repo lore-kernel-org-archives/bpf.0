@@ -1,188 +1,309 @@
-Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C04D7946C
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 00:05:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8388F145348
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 00:10:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774483512; cv=pass; b=CYpW9tnPy3xNhGqWgHWgDDtOegWyKEex4D7s1SMTCzffMKO5Er8jq3RISmwRcu4INSdokh8V2Ai5ZjhDxbn+6s2hclt/aa01RUH1Wa3N/iHW11fzZW6e6eceU/H6jmgLjwcNiawuMIp7/5QsynSJYK87+cM+dH1FiyqQQGWM2tc=
+	t=1774483850; cv=pass; b=JR1O6NkAokqlr6OQZ1yWAPVSow45Pkcsd0N7k/YkaO8BePqceYyCjAH/SdO9mFoCv5U3XafNNfUxg/KZm8SRwsdF2bavb9JFENA9gCiioBEqzvdL+NZqBan/VS0R7prwdzvYf05TaXkCTJNXb3sDJ0MqMFTvmKhoKdZNcrBpdPQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774483512; c=relaxed/simple;
-	bh=09LknHMDIYhGkY37GVaHUaDbkJkl2uyKia+bWoJPBlI=;
+	s=arc-20240116; t=1774483850; c=relaxed/simple;
+	bh=cMmhFHqVUT3Ln+xedVYA8gRfiTzEMWlz5p0S04OGZXY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lGVZRMna6TOq2ERs2TCgguxaus2tazmBClUWCu+C5XwIO187hEER0mjdEMnkduXF1NXTssHeX1AzDI3gr4s+bCzSpN7/acIV43cSNSn7azJDnLb2q4giHiqbNZ2NGLDnq5y16rlq3bvFvhRxiqE29YI2KkN20yNggkRfAxeEZmI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iNC/XIXw; arc=pass smtp.client-ip=74.125.82.49
+	 To:Cc:Content-Type; b=Aq2RwNCfX9+F4yjWd48Nl2mWJj67e0OpnZkri1RcZPUa2ou3OtLJdryGfGrcPyxgtyU6RejXP/vwR9HYwlTa0Z12lKbCWmbWtSRB1mCJbjYWadkiZ1pmvM9KoRVnCOmgTsiGOzm8S/1gpye/dYI4QUXfH9FUy7FRY8NL2B3IlB4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FSn8MZcC; arc=pass smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iNC/XIXw"
-Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-128ebee22caso429731c88.0
-        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 17:05:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774483510; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FSn8MZcC"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-48569636800so30095e9.0
+        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 17:10:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774483847; cv=none;
         d=google.com; s=arc-20240605;
-        b=HI3jkqcW4E0LfeGMTHSB14owYvpHZuISUqRrMDMObSy1qjfrfoJPLBgDHgA6XWzVjx
-         zu29S4NJ1jUVVy0Ya5DEw3rENh/Vd6MzS9V5iL9fblbp0U06fPPHxuackto62TCfHsWL
-         f3DNwWmBNae9N2GAwVRLEaXpBBTgsKXyct5U1B9Tb+VU9YOjGtI2a3ij5M7kEFDHV7Ko
-         gJnyd4NbQb1Ocb1HSUiE1dxtk47Akrz2bx0XlOyLfhjDZGEYKdcephiGOhwLXKKvVs5S
-         YsPiMv6IhmRUgsDZBVE204W/0PXefp53uYDYZkrOGPJSX2Ebr/Ib70yvdO3JZcKR6btr
-         FVig==
+        b=C1aiWu0L5r30HF+KnDx7bin7SGdVa2aHDUuzAxqCT1DWwjbGDULaG2lMNS1Tmb4Ob+
+         J9SqsoctMLW6xx2q58poF93LyzVCF3BM4uPyrVFF7FEHXLtmKelw7a/d94PNxoWrzCRw
+         dXSLX/xh5ujakP0FztI4feGd6prqoTej5tadIhPdVnNXuCaZy6s6WqGP4lIa4DK3353X
+         G+6ME6P9EObsT0RbxthrGhBreDroPpRx7Clxe6VLsv3pGjGcBR5wVoQKUk03gflzpeq5
+         LNeiaVagpufY9RHUr0Z1HhnAprC/EvclzKLegnMVAoQTG1/Xq+PXxd2J6g1myPiLBWAw
+         mpew==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=rOHw2g9ZBT/hyeGef6C4r595s8lKM1vTjJzS7pLxOUk=;
-        fh=ROR8Ga0i4Os/aqm1OMY9YxuMuHT8OZei1kPtYYVQy9s=;
-        b=GFWTzph796PurQSfGwMarcXVFjv+En5zUFJIb0Qk20YmnGyXVmIfpNUyB9ROBOeBu1
-         3RM6mZd2apf3vaN0RgTBvcTuAmTvZms00gLBXs3bQNkgT08Bu2dILLDJwpt0nVch9LQo
-         gqXedw+7q6UtnAUB1mrsR+Qm7m8s8rq9z1ZvarqyogSTXUHtAGrYSTCj4cbtey8xwc+a
-         Nh5++VzlkTojFBVI7tCslj31uYmQC7rTwQnnBHDuiTVeefyykLTS5AGUa+1C66CQS/hf
-         HwCPEo5lpQaxkp1yvRVlpqWGrfzi7zp1x6eqV1MesQ86FNg5b8M5irHpQ9pnr+Q391k1
-         PKjw==;
+        bh=yR8CPRX+MCla1c54IvCJe3qdIOwVb1zd9FVeuuRvr94=;
+        fh=zPjl7wu2K6/HpXOEbfDTbbDmlsEsb70064LvugOBjKw=;
+        b=WamPPAsdPBsnD5TmfcxGQutx9YYhpfprO93v8HqOVdF23zLjqzV5OnzPXt33buo2My
+         UZTdZJ5xicj9Fjx3g8THfdeWTkLHDbYoKh3GHyR27t2a6BiOwnoDzTeM3Wz6MdgIDskb
+         6cKjzhW3h16SdUVxac5PvXMiOwvzvfq0y3TM58z0ZbTzpk6ZCet8RvNwu1NyMa5rq3jq
+         hl7/FB7seVMEiz7Gcu04cQZTQVkdcA7DX9e6LkJ6qNhz1L2uguw2cqLhJv9zxSpR25cZ
+         NVNeS/i9q4R9NSWFyFn73PQlKmou6GVQBeNPTkMPeiSwPbQLK4KwWDQoa774/I1Jz5K4
+         Xdkg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774483510; x=1775088310; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1774483847; x=1775088647; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rOHw2g9ZBT/hyeGef6C4r595s8lKM1vTjJzS7pLxOUk=;
-        b=iNC/XIXwBdW6onX6kBucVt5AW0ywZEL/36nFVVNRw0BVP3zttsDfXrkqROE14rpnMI
-         5vNplrBt7VlOp7jwsKt4HWW6mV15jqxZLVbK0AMUnmmD7LUeiqNjBusiRvNBI/fwf3Jp
-         40ypgmmIVB4vvaFDQa4dRr2aqMt0oje1Yy7u3P5FxoKciEOCYiVrDPXvM6Q1OqaF2oUD
-         HCLSQYB13i1gRAoQ6FQ3eu88/j47TDbkY5GWeiuqgYNLF31b8y/FuHAQCsK3Yqhl0n+B
-         /Vo6Ae/+L4DWpLGc5aCi+EE4Zrc2+6YVCCilUA3njVOgjs86r6Oe4Alzd5FH9MgNx62w
-         DOOQ==
+        bh=yR8CPRX+MCla1c54IvCJe3qdIOwVb1zd9FVeuuRvr94=;
+        b=FSn8MZcC7y1JSGs3Rf9/hXFHmK6woYXfmRHlN/16yDcuvJbqVaDE3b6Mj3g7+YKAL5
+         wTai/r3zTV2nJKdnyObmZEZpl3L/9WFS0KOGRTRC4oPYTQ36EKwMrii4xRv+fGwuoHaC
+         naZKwleS/X3AC2Wh8br8EU6LYJriWlkuzsFkG7ODxUYR2uhU20qRj2anHUybgsmqGhYJ
+         SczHaD22LtS+AAxkM0EfS8p/X/XrUCuzjcBXT0Xuv7NycCscFROQ+mn9UTJIV7gQlFG3
+         nRfX0N793yDHxUijexV1N8y5ktVRlkcDWcT1sVTxWd9sWr6d+KAy6hJfR4Itvtn6G8WH
+         T/7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774483510; x=1775088310;
+        d=1e100.net; s=20251104; t=1774483847; x=1775088647;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=rOHw2g9ZBT/hyeGef6C4r595s8lKM1vTjJzS7pLxOUk=;
-        b=XIRhQjVnDEx17Zr6/geT5SYXLVBv7x85nk0Jd0f0AMe++XjQydXgnjfUSP4lcW9ZdY
-         eW9RVYFL74w6ZtjHmnzNcwTym27u48NA/lWnCJZXsFotEU8vDmaoKeAzARzj6RcEFy+x
-         TA140o45iiZedsB05jKIrJnR0sBjQ19uboYGC9PAuXKfmpEYkFnRM1Pr25OoEJEIIwka
-         D3Kqkc3cbK7ZIS9nnj+MrvKHelLX/5NYXN4pHf+o1zrOdkkh+cTbnIemzbEsSPN1r5+z
-         JOzQFypKik/yDiAb03TEeByEyZGjrh72t/aaFHHBIZW2PQ/8Xt4bAtVITNCAX1ty+GtR
-         a3Hg==
-X-Forwarded-Encrypted: i=1; AJvYcCXVpvZti9jbF1AJFTSKSAsghZ7imoPsnEl8i6D/1GliLNZ89eHvbiiYQ2siAqU+fKuFKu0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXmucgWEOHZM6vMZ6KIPM7Ow2KQUJwzAk/grhUb92Dv/uIL7cU
-	+LJlxnjfD5ncpFSaNz/zIL3o/N4H7QpsY1IYB2zOe9B3RdhjKZ1Y/3J5s/UMTXCyGtjEATez/cR
-	D671XjwYDJrWaTNsvxRWwe4iq5LL843jgq6NDsqxI
-X-Gm-Gg: ATEYQzx7OVkJGB8xvArTEJjg38x0n3WDT27rt9dr5Fj/Jo/+j/KeVrMVUNzCWw9aJjj
-	6kKKVm6P7Jyx0PE8gqQyzXWoS88+p19Un3p+hjbmeZoE/XfpkPbXd+RDq8j6RraXQbDkZTStfPq
-	Zv6tqBd/dN13/WU5EjaBXZieJUdbMmjX5qv4hdxUFShmEgSKBZSC9aWLnhtasAqvpvb3UgPdB9+
-	ogDUsXA3f+1lHqYWv9jUCZkeRWSzNLcIC2Rxzju05MiEh6o5zwz0tmMiwjhRWTtX15PF4Doxvxl
-	sKF9+9BN8nOz7CMiyjs4EnauAtW2wAQPS2i17zGEcG5lZ/fS3aCyAG9SgWj/F3EjUn6i/w==
-X-Received: by 2002:a05:7022:ba5:b0:128:d967:466c with SMTP id
- a92af1059eb24-12a96ed373bmr2822619c88.24.1774483509090; Wed, 25 Mar 2026
- 17:05:09 -0700 (PDT)
+        bh=yR8CPRX+MCla1c54IvCJe3qdIOwVb1zd9FVeuuRvr94=;
+        b=hx9nLwPSdM9caMWqtjRHnRzdlSPMMuoBiawdv9YOXyD0aUaMW1TSmcbXjTZxn61iL2
+         AGV7Ti7h2ZAcoD7leQsjJdN/z+/u8NtNT5SvuQraFwYDMv3YSElUBF3sYE2gVLpu00Z+
+         +SzgqcfojcZMOMUQTIGG5waAGQMeRv0p3lwmiKpHNleeY5rYe6wpj/VDae7JkJGO/xig
+         OejM6pVlG8gcs4ydwfv32UhEAADl4LD2sMRh/Lig8eTwBZ+2vJ9m9Mt1Mg45EsIN44D3
+         t72nkUMfhpUOdkXiCmBVkiQfBr8UYbWoIo2tOZ+dMuFif7UMNfOhUYfN9/RiJ54cTuUY
+         ZOow==
+X-Forwarded-Encrypted: i=1; AJvYcCUZYGgAhiaoeRta8xgagWctrNaakiwit2IOi0kITCmFkW+r41OP+ChXEkTWcJ8TqsosK3g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsRWAt6M09Oo1RG1V3XudslSRA23WKTRNi43dwmPNc9llFCvow
+	DSN+GezdL4k72/g3F1QAIJKCGaRF1hUZgG5u4Z8nL3hjdGgEKmQYphdqY7cOs8flciPVIKWsii1
+	Rhp786vPmQ7VDMsBV+HsO2ivMhZbhczHjCu2Yeh5w
+X-Gm-Gg: ATEYQzxsA+LwAhRPAQJL23LRYrViz/EvsiwyYFjsUSBqabDcV3qVEQZLI8aBloarwLE
+	sHlDP4qitqX1qlF92pAJ2RZS7vX/R2sjNfZnGKEVpvUynt+Lp8sdQpsLQ+54Kp7WD5oiOk/HO26
+	XRbHy1WTA+0Q5KsrBZEN5H0C7G4hka0P115KbJKvM3D0hbuWgfMxxb92Osk6qOXqc1jTTJx9W0/
+	ThfX51QcceBPpO7ZrT3QMGvoa1TVRWLGVdxOTrjvVOesyB5SejjrAsR8ivHul3o0upo+/KNb0Lt
+	YIG6eoOICRvNw9iKcgkF9a2vaTBPGc/URacIcsdyLAxDgckkR2hkZevyBS6RfGrdtv2Cd0rjk9W
+	zLBGA
+X-Received: by 2002:a05:600c:9a2:b0:477:255c:bea8 with SMTP id
+ 5b1f17b1804b1-48720938fd9mr89845e9.7.1774483846234; Wed, 25 Mar 2026 17:10:46
+ -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260323105510.51990-1-jiayuan.chen@linux.dev> <20260323105510.51990-2-jiayuan.chen@linux.dev>
-In-Reply-To: <20260323105510.51990-2-jiayuan.chen@linux.dev>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Wed, 25 Mar 2026 17:04:58 -0700
-X-Gm-Features: AaiRm52AA_qp46xzo-zT0U_vZFvFfC3jyAgRm4AjFmf0jkfgDvGqPT6HupdXIf0
-Message-ID: <CAAVpQUDpkro_cA-vP1=L=NhAQ4WDPGdm8nVrUBiooiuji3kXow@mail.gmail.com>
-Subject: Re: [PATCH bpf v1 1/2] bpf: tcp: Reject non-TCP skb in bpf_sk_assign_tcp_reqsk()
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: netdev@vger.kernel.org, Jiayuan Chen <jiayuan.chen@shopee.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260325210637.3704220-1-shakeel.butt@linux.dev>
+In-Reply-To: <20260325210637.3704220-1-shakeel.butt@linux.dev>
+From: "T.J. Mercier" <tjmercier@google.com>
+Date: Wed, 25 Mar 2026 17:10:34 -0700
+X-Gm-Features: AQROBzDjd7k8G07gelmzXRNjlVKmHcP--nooUDgMHNLNynxjKIo0XEEcejoxIEI
+Message-ID: <CABdmKX2T9AmFH4RvShSB_82+_W1fY6fqsAX18C82nOzmTruq6Q@mail.gmail.com>
+Subject: Re: [LSF/MM/BPF TOPIC] Towards Unified and Extensible Memory Reclaim (reclaim_ext)
+To: Shakeel Butt <shakeel.butt@linux.dev>
+Cc: lsf-pc@lists.linux-foundation.org, 
+	Andrew Morton <akpm@linux-foundation.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	David Hildenbrand <david@kernel.org>, Michal Hocko <mhocko@kernel.org>, 
+	Qi Zheng <zhengqi.arch@bytedance.com>, Lorenzo Stoakes <ljs@kernel.org>, 
+	Chen Ridong <chenridong@huaweicloud.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Axel Rasmussen <axelrasmussen@google.com>, 
+	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, Kairui Song <ryncsn@gmail.com>, 
+	Matthew Wilcox <willy@infradead.org>, Nhat Pham <nphamcs@gmail.com>, 
+	Gregory Price <gourry@gourry.net>, Barry Song <21cnbao@gmail.com>, 
+	David Stevens <stevensd@google.com>, Vernon Yang <vernon2gm@gmail.com>, 
+	David Rientjes <rientjes@google.com>, Kalesh Singh <kaleshsingh@google.com>, 
+	wangzicheng <wangzicheng@honor.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+	Suren Baghdasaryan <surenb@google.com>, Meta kernel team <kernel-team@meta.com>, bpf@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 23, 2026 at 3:55=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.de=
+On Wed, Mar 25, 2026 at 2:07=E2=80=AFPM Shakeel Butt <shakeel.butt@linux.de=
 v> wrote:
 >
-> From: Jiayuan Chen <jiayuan.chen@shopee.com>
+> The Problem
+> -----------
 >
-> bpf_sk_assign_tcp_reqsk() only validates skb->protocol (L3) but does not
-> check the L4 protocol in the IP header. A BPF program can call this kfunc
-> on a UDP skb with a valid TCP listener socket, which will succeed and
-> attach a TCP reqsk to the UDP skb.
+> Memory reclaim in the kernel is a mess. We ship two completely separate
+> eviction algorithms -- traditional LRU and MGLRU -- in the same file.
+> mm/vmscan.c is over 8,000 lines. 40% of it is MGLRU-specific code that
+> duplicates functionality already present in the traditional path. Every
+> bug fix, every optimization, every feature has to be done twice or it
+> only works for half the users. This is not sustainable. It has to stop.
 >
-> When the UDP skb enters the UDP receive path, skb_steal_sock() returns
-> the TCP listener from the reqsk. The UDP code then passes this TCP socket
-> to udp_unicast_rcv_skb() -> __udp_enqueue_schedule_skb(), which casts
-> it to udp_sock and accesses UDP-specific fields at invalid offsets,
-> causing a null pointer dereference and kernel panic:
+> We should unify both algorithms into a single code path. In this path,
+> both algorithms are a set of hooks called from that path. Everyone
+> maintains, understands, and evolves a single codebase. Optimizations are
+> now evaluated against -- and available to -- both algorithms. And the
+> next time someone develops a new LRU algorithm, they can do so in a way
+> that does not add churn to existing code.
 >
->   BUG: KASAN: null-ptr-deref in __udp_enqueue_schedule_skb+0x19d/0x1df0
->   Read of size 4 at addr 0000000000000008 by task test_progs/537
+> How We Got Here
+> ---------------
 >
->   CPU: 1 UID: 0 PID: 537 Comm: test_progs Not tainted 7.0.0-rc4+ #46 PREE=
-MPT
->   Call Trace:
->    <IRQ>
->    dump_stack_lvl (lib/dump_stack.c:123)
->    print_report (mm/kasan/report.c:487)
->    kasan_report (mm/kasan/report.c:597)
->    __kasan_check_read (mm/kasan/shadow.c:32)
->    __udp_enqueue_schedule_skb (net/ipv4/udp.c:1719)
->    udp_queue_rcv_one_skb (net/ipv4/udp.c:2370 net/ipv4/udp.c:2500)
->    udp_queue_rcv_skb (net/ipv4/udp.c:2532)
->    udp_unicast_rcv_skb (net/ipv4/udp.c:2684)
->    __udp4_lib_rcv (net/ipv4/udp.c:2742)
->    udp_rcv (net/ipv4/udp.c:2937)
->    ip_protocol_deliver_rcu (net/ipv4/ip_input.c:209)
->    ip_local_deliver_finish (./include/linux/rcupdate.h:879 net/ipv4/ip_in=
-put.c:242)
->    ip_local_deliver (net/ipv4/ip_input.c:265)
->    __netif_receive_skb_one_core (net/core/dev.c:6164 (discriminator 4))
->    __netif_receive_skb (net/core/dev.c:6280)
+> MGLRU brought interesting ideas -- multi-generation aging, page table
+> scanning, Bloom filters, spatial lookaround. But we never tried to
+> refactor the existing reclaim code or integrate these mechanisms into the
+> traditional path. 3,300 lines of code were dumped as a completely
+> parallel implementation with a runtime toggle to switch between the two.
+> No attempt to evolve the existing code or share mechanisms between the
+> two paths -- just a second reclaim system bolted on next to the first.
 >
-> Fix this by checking the IP header's protocol field in
-> bpf_sk_assign_tcp_reqsk() and rejecting non-TCP skbs with -EINVAL.
+> To be fair, traditional reclaim is not easy to refactor. It has
+> accumulated decades of heuristics trying to work for every workload, and
+> touching any of it risks regressions. But difficulty is not an excuse.
+> There was no justification for not even trying -- not attempting to
+> generalize the existing scanning path, not proposing shared
+> abstractions, not offering the new mechanisms as improvements to the code
+> that was already there. Hard does not mean impossible, and the cost of
+> not trying is what we are living with now.
 >
-> Fixes: e472f88891ab ("bpf: tcp: Support arbitrary SYN Cookie.")
-> Cc: Jiayuan Chen <jiayuan.chen@linux.dev>
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
-
-Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
-
-Thanks, the fix looks good.
-Just curious how you found this, are you trying to use this
-feature for CDN or AI just found it ?
-
-
-> ---
->  net/core/filter.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+> The Differences That Matter
+> ---------------------------
 >
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 78b548158fb0..fb975bcce804 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -12248,11 +12248,17 @@ __bpf_kfunc int bpf_sk_assign_tcp_reqsk(struct =
-__sk_buff *s, struct sock *sk,
+> The two algorithms differ in how they classify pages, detect access, and
+> decide what to evict. But most of these differences are not fundamental
+> -- they are mechanisms that got trapped inside one implementation when
+> they could benefit both. Not making those mechanisms shareable leaves
+> potential free performance gains on the table.
 >
->         switch (skb->protocol) {
->         case htons(ETH_P_IP):
-> +               if (ip_hdr(skb)->protocol !=3D IPPROTO_TCP)
-> +                       return -EINVAL;
-> +
->                 ops =3D &tcp_request_sock_ops;
->                 min_mss =3D 536;
->                 break;
->  #if IS_BUILTIN(CONFIG_IPV6)
->         case htons(ETH_P_IPV6):
-> +               if (ipv6_hdr(skb)->nexthdr !=3D IPPROTO_TCP)
-> +                       return -EINVAL;
-> +
->                 ops =3D &tcp6_request_sock_ops;
->                 min_mss =3D IPV6_MIN_MTU - 60;
->                 break;
+> Access detection: Traditional LRU walks reverse mappings (RMAP) from the
+> page back to its page table entries. MGLRU walks page tables forward,
+> scanning process address spaces directly. Neither approach is inherently
+> tied to its eviction policy. Page table scanning would benefit
+> traditional LRU just as much -- it is cache-friendly, batches updates
+> without the LRU lock, and naturally exploits spatial locality. There is
+> no reason this should be MGLRU-only.
+>
+> Bloom filters and lookaround: MGLRU uses Bloom filters to skip cold
+> page table regions and a lookaround optimization to scan adjacent PTEs
+> during eviction. These are general-purpose optimizations for any
+> scanning path. They are locked inside MGLRU today for no good reason.
+>
+> Lock-free age updates: MGLRU updates folio age using atomic flag
+> operations, avoiding the LRU lock during scanning. Traditional reclaim
+> can use the same technique to reduce lock contention.
+>
+> Page classification: Traditional LRU uses two buckets
+> (active/inactive). MGLRU uses four generations with timestamps and
+> reference frequency tiers. This is the policy difference --
+> how many age buckets and how pages move between them. Every other
+> mechanism is shareable.
+>
+> Both systems already share the core reclaim mechanics -- writeback,
+> unmapping, swap, NUMA demotion, and working set tracking. The shareable
+> mechanisms listed above should join that common core. What remains after
+> that is a thin policy layer -- and that is all that should differ between
+> algorithms.
+>
+> The Fix: One Reclaim, Pluggable and Extensible
+> -----------------------------------------------
+>
+> We need one reclaim system, not two. One code path that everyone
+> maintains, everyone tests, and everyone benefits from. But it needs to
+> be pluggable as there will always be cases where someone wants some
+> customization for their specialized workload or wants to explore some
+> new techniques/ideas, and we do not want to get into the current mess
+> again.
+>
+> The unified reclaim must separate mechanism from policy. The mechanisms
+> -- writeback, unmapping, swap, NUMA demotion, workingset tracking -- are
+> shared today and should stay shared. The policy decisions -- how to
+> detect access, how to classify pages, which pages to evict, when to
+> protect a page -- are where the two algorithms differ, and where future
+> algorithms will differ too. Make those pluggable.
+>
+> This gives us one maintained code path with the flexibility to evolve.
+> New ideas get implemented as new policies, not as 3,000-line forks. Good
+> mechanisms from MGLRU (page table scanning, Bloom filters, lookaround)
+> become shared infrastructure available to any policy. And if someone
+> comes up with a better eviction algorithm tomorrow, they plug it in
+> without touching the core.
+>
+> Making reclaim pluggable implies we define it as a set of function
+> methods (let's call them reclaim_ops) hooking into a stable codebase we
+> rarely modify. We then have two big questions to answer: how do these
+> reclaim ops look, and how do we move the existing code to the new model?
+>
+> How Do We Get There
+> -------------------
+>
+> Do we merge the two mechanisms feature by feature, or do we prioritize
+> moving MGLRU to the pluggable model then follow with LRU once we are
+> happy with the result?
+>
+> Whichever option we choose, we do the work in small, self-contained
+> phases. Each phase ships independently, each phase makes the code
+> better, each phase is bisectable. No big bang. No disruption. No
+> excuses.
+>
+> Option A: Factor and Merge
+>
+> MGLRU is already pretty modular. However, we do not know which
+> optimizations are actually generic and which ones are only useful for
+> MGLRU itself.
+>
+> Phase 1 -- Factor out just MGLRU into reclaim_ops. We make no functional
+> changes to MGLRU. Traditional LRU code is left completely untouched at
+> this stage.
+>
+> Phase 2 -- Merge the two paths one method at a time. Right now the code
+> diverts control to MGLRU from the very top of the high-level hooks. We
+> instead unify the algorithms starting from the very beginning of LRU and
+> deciding what to keep in common code and what to move into a traditional
+> LRU path.
+>
+> Advantages:
+> - We do not touch LRU until Phase 2, avoiding churn.
+> - Makes it easy to experiment with combining MGLRU features into
+>   traditional LRU. We do not actually know which optimizations are
+>   useful and which should stay in MGLRU hooks.
+>
+> Disadvantages:
+> - We will not find out whether reclaim_ops exposes the right methods
+>   until we merge the paths at the end. We will have to change the ops
+>   if it turns out we need a different split. The reclaim_ops API will
+>   be private and have a single user so it is not that bad, but it may
+>   require additional changes.
+>
+> Option B: Merge and Factor
+>
+> Phase 1 -- Extract MGLRU mechanisms into shared infrastructure. Page
+> table scanning, Bloom filter PMD skipping, lookaround, lock-free folio
+> age updates. These are independently useful. Make them available to both
+> algorithms. Stop hoarding good ideas inside one code path.
+>
+> Phase 2 -- Collapse the remaining differences. Generalize list
+> infrastructure to N classifications (trad=3D2, MGLRU=3D4). Unify eviction
+> entry points. Common classification/promotion interface. At this point
+> the two "algorithms" are thin wrappers over shared code.
+>
+> Phase 3 -- Define the hook interface. Define reclaim_ops around the
+> remaining policy differences. Layer BPF on top (reclaim_ext).
+> Traditional LRU and MGLRU become two instances of the same interface.
+> Adding a third algorithm means writing a new set of hooks, not forking
+> 3,000 lines.
+>
+> Advantages:
+> - We get signals on what should be shared earlier. We know every shared
+>   method to be useful because we use it for both algorithms.
+> - Can test LRU optimizations on MGLRU early.
+>
+> Disadvantages:
+> - Slower, as we factor out both algorithms and expand reclaim_ops all
+>   at once.
+>
+> Open Questions
+> --------------
+>
+> - Policy granularity: system-wide, per-node, or per-cgroup?
+> - Mechanism/policy boundary: needs iteration; get it wrong and we
+>   either constrain policies or duplicate code.
+> - Validation: reclaim quality is hard to measure; we need agreed-upon
+>   benchmarks.
+> - Simplicity: the end result must be simpler than what we have today,
+>   not more complex. If it is not simpler, we failed.
 > --
-> 2.43.0
+> 2.52.0
 >
+
+Hi Shakeel,
+
+Nice outline, I'd be quite interested in this discussion. It's a
+little difficult for me to imagine a reclaim_ops getting us to
+complete convergence, but it seems like a good way to start making
+progress.
+
+Unfortuantely I got an LSFMM Invitation Decline, so I won't be there.
+Take good notes. :)
+
+-T.J.
