@@ -1,169 +1,154 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [4.193.249.245])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97ABD396B8C
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 09:02:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.193.249.245
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774515743; cv=none; b=KC+uHoQtGEBj+nbU8kBdSXUs9PMIMoV5mAt/e0mnUb96UN74n08XAl0QH69BzHRvtw31qmFjfczmyucO6M/C3pVvFiyS7oZqU8sKUtiuWX1ARdHMsen3f1Y1MOvYTNMao6qnr7RftYJHRD70p3j0w8WhcGQ0Ihdwqlfw2vNC4fA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774515743; c=relaxed/simple;
-	bh=DjQbbez3clDZeLoIznlzO136UD6m/n3T+2b6rbiEJ3c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qVCvxkQ7m1Czb7IE2QpEHG9+blrtHssc88zS75BSgPmbm+INJZY5PmwpbDDCnoeL+KHZsipwfnddmJqz0iqU5+3/zeliIIMv8iXRu6hBnliyifMqgfHyYU1esLMPGBvNnXPg9wqA210yhpCamvMJo8gP+wL/bzu8Q+ycxHqcx8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=4.193.249.245
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [10.190.130.12])
-	by mtasvr (Coremail) with SMTP id _____wCHwLD49cRp_PIFAA--.1223S3;
-	Thu, 26 Mar 2026 17:01:44 +0800 (CST)
-Received: from wolframium.tail477849.ts.net (unknown [10.190.130.12])
-	by mail-app1 (Coremail) with SMTP id yy_KCgAXG6X39cRpMLkeAA--.298S2;
-	Thu, 26 Mar 2026 17:01:43 +0800 (CST)
-From: Yazhou Tang <tangyazhou@zju.edu.cn>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	tangyazhou518@outlook.com,
-	shenghaoyuan0928@163.com,
-	ziye@zju.edu.cn,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf v5 1/3] bpf: Reject bpf-to-bpf call with large offset in interpreter
-Date: Thu, 26 Mar 2026 17:01:31 +0800
-Message-ID: <20260326090133.221957-2-tangyazhou@zju.edu.cn>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260326090133.221957-1-tangyazhou@zju.edu.cn>
-References: <20260326090133.221957-1-tangyazhou@zju.edu.cn>
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC103BA235
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 09:08:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774516107; cv=pass; b=LTJGe4+6ybkuTtEFRZ167d+sVDozmO26ASphMDgALPIPLBVyEST5BfDYMRjFWrXUfRSCA2rYPSO5yjMsE/ruMHgFiuFGkdFDg9OMWJqNYby3tF1K/VvbQc4MhOPELibQtZYxkJ0CLXmoFrpUdC2QGv7nBp9pmcjltpAS1ZuoLIs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774516107; c=relaxed/simple;
+	bh=nELhMo5HbKoT5PmrQHIsDRZuES6n1hKRONlh2hGKiy4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uuZzLDZPdOUfTg7xvQ7v22Ec/milzzvWV99kk43uiJaQwunhJ2v596N5+jwauaQ67d/c5Se5k14CLZfgBXj/V2l9xoWJZnZ77Nj3znbCOXcjxyUXztNV8vuJUSCpEUZzuoWnLrsAtOS//rJJmthnoAYaMlzZoMjEYM4w8/sZJ5E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qIuQlPu2; arc=pass smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qIuQlPu2"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-66a4c6bb6ecso1122292a12.1
+        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 02:08:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774516102; cv=none;
+        d=google.com; s=arc-20240605;
+        b=RNKQJ5ZSyAytIr3cZeY2zfD0HhSjVHEG0IuVm2BJV1ZiQ3ERSEFqVN1ZBMdePHInQZ
+         kOH4rJ6NNnbTDXDYdMoaOwSVNoShl02x+SSVBz1tenbWnuBdWichH9jselSF12pmIy/w
+         o81HBo17qudcUg+EBiWGm76l1KM0AIvKXudRMF9YOlQfki6UhvUWffAmin1MCcauAo9z
+         0heBa0yTmtga3p8uzhWKuP6V7IEW2jefDwxkjLSxlIp7EFRcQCtUt88+W9MiF5jGFIW7
+         vhuaHJqNOmK/In5Vl0c2Ti+wtsvsR6XSycTKtKBMheo/GgYMKF+5Jhzn62JlL4+7woTN
+         ukRA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=fupcQia+cIixkDUZQnHZg9spgTCSgrS5ZcgFhd7IQSs=;
+        fh=kgRp5VWqnb+R1VaC6eqio3iVft5+kpalc+14mahCSvE=;
+        b=KOODuZ2S5ch/V2qG7s0o9EyfdZNtyOMeqVz0YYbplUi0ipdS7dbWWVIua4dJObtLst
+         LIXr3Ls+yXUzZVSgHzd/nJr+bLn627kO+7v7JMoVbPpYrhzy8qDcPPai0bn85VV7TJ8U
+         gEYdNsvsMToFuRsW1yZ1/Jzef9mKZTwmvB+hflZAzWizqYe4FBlfJLcjPR2+Yfw3sAJK
+         TE7rT7OCWyrxYLMkLUx6tR9/jm6q1jcTnvQF8kik480u4lP9GGDldHItdj8TycUlKQaK
+         vkLuqPbyM//IYEdjJXdVCvASb5WDQvIrb9jLvZ2/siGzmdvCkPoxL/hiuzuRmaypadzL
+         oQkg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774516102; x=1775120902; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fupcQia+cIixkDUZQnHZg9spgTCSgrS5ZcgFhd7IQSs=;
+        b=qIuQlPu24oLCDe6MsNAxlkbfhztEEpkDB+tVzFX5sl8dye0nLHlmDLLSanc835EPzk
+         VrzKNnOnDb+UMFj1Eh8paJNQwaj3fdBODT43djTDl4QnU9ofl16jHRcgp3nHROLxoWWp
+         BkpjeaGp4S7IOHtyLpMP8cIwdSB2lYwso+CDwjtFfTfdUUy171T9QDahrPhI23bssRDf
+         f04sInFAhnaWiQkgL2YoqdViWEYDnPONUGCECHPkpLTjyG9X1Q97+Uiv5SkdF2r0r20u
+         NWNuYEt1EEgDYMfcMJgTJPwGQDNGuZizLe4xjmFioQ1lrFZITm2kIT66y41ZKq7/3Sm2
+         Cj4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774516102; x=1775120902;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=fupcQia+cIixkDUZQnHZg9spgTCSgrS5ZcgFhd7IQSs=;
+        b=XDWgPetEEtAprmJbPuTybjm9LDtmgymSf2Ryk5X+S2EqFqXySfUGKZLpB3FoQCxNcn
+         dHDgYr4ZBAfs0p+tBaSXE2x2Oca2r6YZ1L87MRmpUZnuaGUjNQ1q9bpMENtiehYF8ss5
+         k/wFZmFtcmu5wRPApCuY5nxPodMkMNmWq0pjGm/uT7wNFxbFCtyxYTVYwJ/qb+qvpWrJ
+         iBrDXMAMtBIZt4TVsaQT2qmy/Kt1VxLR82ZFeLFUScGOYpUpPx8ae3ZCG1LHKZas59EY
+         cXz+NwLC326+WqC5Qc3I3Ho0IyTSL8vKi4wiIPYLrr3nxmom0COsTuNJdxfrLp1jjzGG
+         a17A==
+X-Gm-Message-State: AOJu0YzQCIIVZgoZxO2h2rdmJydM2/d0YNGefhkdxsDFczlxX5dNYt6u
+	dPMCq2ohEvs1HwV1N+noEwscbpqY0HiidB6c/e04WVvwmfa5KkxMNP7F/77FAAL2ZA8hLf8KEYj
+	XTBcdf9WUxxrcaPICbTHS/R1zQwL0jiY=
+X-Gm-Gg: ATEYQzycJii/Y2P05U3lfEpDU66uweUvlXdJCmiN13MmAH4lMPFlDIrSwGiI0yWf1GP
+	AeUv/pVtmgfh+Jb4ktXjIfNAf3QC6HeDQGl837ZSNFQAYkWKq5oFLikWF5CD262eYPbj5O0w3/X
+	HVwzfRNQmq2BerBqHROzaJ4KNIRsY3rzJD8r33iXqNWFlswK0pZRGiCaPbl0JhHBZ/iFtlEabin
+	DsO/DhaZW6i+37NYBcYGZ+KIkbjtpbDI+z4MboJOzoHyS3BBqBy0T1OAvlXLSd5aDVZ6vZWep2O
+	afqj0AU5ivNapi0MCUSKvvk=
+X-Received: by 2002:a05:6402:5207:b0:660:e00f:3228 with SMTP id
+ 4fb4d7f45d1cf-66a82709918mr4302124a12.30.1774516101793; Thu, 26 Mar 2026
+ 02:08:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:yy_KCgAXG6X39cRpMLkeAA--.298S2
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBgICCmnEOosfIQACss
-X-CM-DELIVERINFO: =?B?RV6isQXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9GTgStBHiKbdOUzKiNaJnu7kz1sNGwux3MT5xhLgCrKRPMg8HWVxTunHPkH7zx1H9JuO
-	lPX7uiGJVlhaD92D0xRzCeWp4wcDkezVZrXinBoMC0qcE5cCGmTsmh81TryKdQ==
-X-Coremail-Antispam: 1Uk129KBj93XoWxur1xuw48KF1UJrWrZF47trc_yoW5KF13pF
-	1kKa4IyF4ktw40k343Cr47Zr13JFs5Z347KFyrA34Fkr4jqan3J3s8KFsrZFyfJrn3Cw4I
-	qFsF9rWIy34UWagCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUU9Eb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
-	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAF
-	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0Y48IcxkI7V
-	AKI48G6xCjnVAKz4kxM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC2
-	0s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI
-	0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE
-	14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20x
-	vaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8
-	JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8FoGPUUUUU==
+References: <20260326090133.221957-1-tangyazhou@zju.edu.cn> <20260326090133.221957-4-tangyazhou@zju.edu.cn>
+In-Reply-To: <20260326090133.221957-4-tangyazhou@zju.edu.cn>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Thu, 26 Mar 2026 09:08:09 +0000
+X-Gm-Features: AQROBzBur7JLtjpwsp3ueTQVtT5jCOMRuY5Q1dNhbv19g9q2roGQNP4teaJp1gY
+Message-ID: <CANk7y0iuC=4aD+zzJujWrwdref0zA+ZOt4Uqst_bOM+7Kqweug@mail.gmail.com>
+Subject: Re: [PATCH bpf v5 3/3] bpf: Fix incorrect subprog ID in dumped
+ bpf_pseudo_call instructions
+To: Yazhou Tang <tangyazhou@zju.edu.cn>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev, 
+	eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
+	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, 
+	tangyazhou518@outlook.com, shenghaoyuan0928@163.com, ziye@zju.edu.cn, 
+	Emil Tsalapatis <emil@etsalapatis.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Yazhou Tang <tangyazhou518@outlook.com>
+On Thu, Mar 26, 2026 at 9:02=E2=80=AFAM Yazhou Tang <tangyazhou@zju.edu.cn>=
+ wrote:
+>
+> From: Yazhou Tang <tangyazhou518@outlook.com>
+>
+> In jit_subprogs(), restoring bpf_pseudo_call instructions truncates
+> the 32-bit call_imm into the 16-bit insn->off. For large BPF programs
+> (e.g., call_imm > 32767), this silent truncation causes find_subprog()
+> to return an incorrect subprog ID, which is then stored in insn->imm.
+>
+> Consequently, "bpftool prog dump xlated" reads the corrupted insn->imm,
+> fails to resolve the subprogram name, and incorrectly displays a raw
+> kernel pointer.
+>
+> For example, dumping the xlated bytecode of the JIT-loaded selftest
+> introduced in patch 2/3 (call_imm =3D=3D 32768, i.e., 0x00008000) shows
+> that it is truncated to 0x8000 and reinterpreted as -32768 in s16:
+>
+> Before this patch (with call_imm > 32767):
+>    4: (85) call pc+2#bpf_prog_71cfe20590be813a_padding_subprog
+>    5: (85) call pc-32768#0xffffffff814aed4e
+>
+> After this patch:
+>    4: (85) call pc+2#bpf_prog_71cfe20590be813a_padding_subprog
+>    5: (85) call pc-32768#bpf_prog_5dccd3f669bbe4e4_target_subprog
+>
+> This patch fixes the issue by passing the un-truncated 32-bit
+> env->insn_aux_data[i].call_imm directly to find_subprog().
+>
+> Note that the assignment to insn->off is retained. Although it still
+> truncates for large jumps, it remains correct for the vast majority
+> of BPF programs where the offset fits within s16 bounds. Keeping it
+> ensures backward compatibility for existing user-space tools that rely
+> on insn->off to display the relative offset. A comment is added to
+> explicitly clarify this truncation behavior.
+>
+> Suggested-by: Puranjay Mohan <puranjay@kernel.org>
+> Fixes: 7105e828c087 ("bpf: allow for correlation of maps and helpers in d=
+ump")
+> Co-developed-by: Tianci Cao <ziye@zju.edu.cn>
+> Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
+> Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
+> Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
+> Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
+> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-Currently, the BPF instruction set allows bpf-to-bpf call (or internal call,
-pseudo call) to use a 32-bit imm field to represent the relative jump offset.
+Reviewed-by: Puranjay Mohan <puranjay@kernel.org>
 
-However, when JIT is disabled or falls back to interpreter, the verifier
-invokes bpf_patch_call_args() to rewrite the call instruction. In this
-function, the 32-bit imm is downcasted to s16 and stored in the `off` field.
+Yazhou, you should wait 3-4 days before sending the next version of a
+patch(set) and add a changelog so it is easy to see what changed
+between versions. For single patches you can add changelog below the
+"---" and for multi patch sets, you do it in the cover letter.
 
-    void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
-    {
-        stack_depth = max_t(u32, stack_depth, 1);
-        insn->off = (s16) insn->imm;
-        insn->imm = interpreters_args[(round_up(stack_depth, 32) / 32) - 1] -
-            __bpf_call_base_args;
-        insn->code = BPF_JMP | BPF_CALL_ARGS;
-    }
-
-If the original imm exceeds the s16 range (i.e., jump offset > 32KB),
-this downcast silently truncates the offset, resulting in an incorrect
-call target.
-
-Fix this by explicitly checking the offset boundary in bpf_patch_call_args().
-If the offset is out of range, reject the program with -EINVAL and emit
-a clear verifier log message.
-
-Fixes: 1ea47e01ad6e ("bpf: add support for bpf_call to interpreter")
-Co-developed-by: Tianci Cao <ziye@zju.edu.cn>
-Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
-Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
-Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
-Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
----
- include/linux/bpf.h   | 2 +-
- kernel/bpf/core.c     | 7 +++++--
- kernel/bpf/verifier.c | 6 +++++-
- 3 files changed, 11 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 05b34a6355b0..5daea9f82b80 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2916,7 +2916,7 @@ int bpf_check_uarg_tail_zero(bpfptr_t uaddr, size_t expected_size,
- int bpf_check(struct bpf_prog **fp, union bpf_attr *attr, bpfptr_t uattr, u32 uattr_size);
- 
- #ifndef CONFIG_BPF_JIT_ALWAYS_ON
--void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth);
-+int bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth);
- #endif
- 
- struct btf *bpf_get_btf_vmlinux(void);
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 39ddc7eb49b1..471ce73b760e 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2396,13 +2396,16 @@ EVAL4(PROG_NAME_LIST, 416, 448, 480, 512)
- #undef PROG_NAME_LIST
- 
- #ifdef CONFIG_BPF_SYSCALL
--void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
-+int bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
- {
--	stack_depth = max_t(u32, stack_depth, 1);
-+	if (insn->imm < S16_MIN || insn->imm > S16_MAX)
-+		return -EINVAL;
- 	insn->off = (s16) insn->imm;
-+	stack_depth = max_t(u32, stack_depth, 1);
- 	insn->imm = interpreters_args[(round_up(stack_depth, 32) / 32) - 1] -
- 		__bpf_call_base_args;
- 	insn->code = BPF_JMP | BPF_CALL_ARGS;
-+	return 0;
- }
- #endif
- #endif
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index df22bfc572e2..702579f56f7d 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -23112,7 +23112,11 @@ static int fixup_call_args(struct bpf_verifier_env *env)
- 		depth = get_callee_stack_depth(env, insn, i);
- 		if (depth < 0)
- 			return depth;
--		bpf_patch_call_args(insn, depth);
-+		err = bpf_patch_call_args(insn, depth);
-+		if (err) {
-+			verbose(env, "bpf-to-bpf call offset out of range for interpreter\n");
-+			return err;
-+		}
- 	}
- 	err = 0;
- #endif
--- 
-2.53.0
-
+Thanks
