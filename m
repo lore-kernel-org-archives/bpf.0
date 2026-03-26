@@ -1,199 +1,212 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 776953E3D95
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 14:17:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A5AC212550;
+	Thu, 26 Mar 2026 14:42:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774534684; cv=none; b=JM9PfQl3QkWmdtjj6ruZProwfN2EZdiyg+crNvFUkHS3rCLlgp+VauoCV7F4E5v/QahpgjOtsWs0bMN7slv2s4g0wZn64ZTWVuKZV5p34l7RAzwno3GR9rLe4ITPY/UOKQncpDrC4uZg+WWNVZgnOuN3yzfQOic8Ou4lG+H23wg=
+	t=1774536130; cv=none; b=iFU0oceovkKqKU7dVqIoW3JpJrb9TW5jqGG8q5qe9j+qQbM/uY5n9XoV1abKIgNodhWIOda/r2PUukgWKeA1bLWHJrh13dxknRtWIbGUBNjQ1jfnHgXhtQPA/SOoKRXVW0LPgvnECPKVdcPAa0FRiDCGdlTrZTF//nsdbUuvL/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774534684; c=relaxed/simple;
-	bh=0Qon4HZXDLs7KJsJb3LtUW6XavGkmseM2RWCIuxU8mI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=p9kyCbw3vyr4NpCZ14OpaJ1kHeDj4l5ZVmqkSrj+1O0+u6wf7EEzLkeDcLlsUCRGWlbgUH5TXwZ3zUvxWgQeizKzCjmV9o+ShWW4cpZXXH3fdozoJ+MRhLiiW/pEXTTqgQmLRI2kHV39wzDZ1XzQuVyIPp7k9Agye+5OatNg3Mw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xm5TdffL; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1774536130; c=relaxed/simple;
+	bh=7TlnbERDNjc6uhJyi+oMJD2jmKqEDwbDwVIc+hkUZEQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SVy8faZRYNoq9BwGHtC8hE89IhM8Yfl/58KzOiEBEA6o78iApG2p3BR8oGQavK+bdK031uW4sa6AlMWLcwjhgLVO1K1lWL3y85NgkmXsmc/AVSXjrrpeuuLPYKw1b8RkkR3FtP0hUCyPOM0D1GCF6Q1068k/t3na3WJC4Aot740=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oJGW7ISV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xm5TdffL"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774534676;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=h/h86vRb5ozacPc84nj3zyoBMhFdjKDRSZefVweQNT8=;
-	b=xm5TdffLI2ncOD+YXPE61UQvdGMNyhdD5AgviaDMtEnZSZFhiN9aSlR9af6gQU5i1gwaEi
-	MjIKAegK5OTkdbHBV0ZG3N+wxfI3sIMRgnjbYfXEhBHGhBCw3vn5cxCYuNnEZA5mZF+B4v
-	2f6bl4JNbv1cBLPvFEjqIaRx3/BlcXU=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Feng Yang <yangfeng@kylinos.cn>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Toke Hoiland-Jorgensen <toke@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Add test to verify the fix of kprobe_write_ctx abuse
-Date: Thu, 26 Mar 2026 22:17:18 +0800
-Message-ID: <20260326141718.17731-3-leon.hwang@linux.dev>
-In-Reply-To: <20260326141718.17731-1-leon.hwang@linux.dev>
-References: <20260326141718.17731-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oJGW7ISV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 649AFC116C6;
+	Thu, 26 Mar 2026 14:42:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774536129;
+	bh=7TlnbERDNjc6uhJyi+oMJD2jmKqEDwbDwVIc+hkUZEQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=oJGW7ISVLU2YiYHfmF5uSo+2vBsV7P+HyOWUTkVjZKUT8dhqGFtnzWEi1id2M6bFl
+	 zK2k2qodpuiHzPdLVNhbAiq+eG4LedGvj7suugTlzkwLpNVM/aRx0DtHBy1Puv4mm9
+	 0PxiWYbPDTa4UokhoT/9S0hIDIDFNuZ3u/6XGd2ESe1YfWRmfaJnflgbQSCMy64REw
+	 VOIDaZ67yv0TFyxmgLT7qvHEudIoKJLA5ZmtsQlItctgitEOhgrPZmXjdFZn2hksMt
+	 xnA6j1oErvGfId4Rp7xhgzQ1rOBxU+44fHaS8yWqpLw0uQUMCHFyZz1rQUveRi3uBg
+	 1TNLNwaxYFUiQ==
+Message-ID: <ed58493b-0369-4729-bcf7-bc89f72a7913@kernel.org>
+Date: Thu, 26 Mar 2026 15:42:02 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [REGRESSION] slab: replace cpu (partial) slabs with sheaves
+Content-Language: en-US
+To: Aishwarya Rambhadran <aishwarya.rambhadran@arm.com>,
+ Vlastimil Babka <vbabka@suse.cz>, Harry Yoo <harry.yoo@oracle.com>,
+ Petr Tesarik <ptesarik@suse.com>, Christoph Lameter <cl@gentwo.org>,
+ David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>
+Cc: Hao Li <hao.li@linux.dev>, Andrew Morton <akpm@linux-foundation.org>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Suren Baghdasaryan <surenb@google.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
+ bpf@vger.kernel.org, kasan-dev@googlegroups.com,
+ kernel test robot <oliver.sang@intel.com>, stable@vger.kernel.org,
+ "Paul E. McKenney" <paulmck@kernel.org>, ryan.roberts@arm.com
+References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
+ <afe9ba0a-1924-42a8-a9c5-34eec709f883@arm.com>
+From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+In-Reply-To: <afe9ba0a-1924-42a8-a9c5-34eec709f883@arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-Add a test to verify the issue: kprobe_write_ctx can be abused to modify
-struct pt_regs of kernel functions via kprobe_write_ctx=true freplace
-progs.
+On 3/26/26 13:43, Aishwarya Rambhadran wrote:
+> Hi Vlastimil, Harry,
 
-Without the fix, the issue is verified:
+Hi!
 
-kprobe_write_ctx=true freplace prog is allowed to attach to
-kprobe_write_ctx=false kprobe prog. Then, the first arg of
-bpf_fentry_test1 will be set as 0, and bpf_prog_test_run_opts() gets
--EFAULT instead of 0.
+> We have observed few kernel performance benchmark regressions,
+> mainly in perf & vmalloc workloads, when comparing v6.19 mainline
+> kernel results against later releases in the v7.0 cycle.
+> Independent bisections on different machines consistently point
+> to commits within the slab percpu sheaves series. However, towards
+> the end of the bisection, the signal becomes less clear, so it's
+> not yet certain which specific commit within the series is the
+> root cause.
+> 
+> The workloads were triggered on AWS Graviton3 (arm64) & AWS Intel
+> Sapphire Rapids (x86_64) systems in which the regressions are
+> reproducible across different kernel release candidates.
+> (R)/(I) mean statistically significant regression/improvement,
+> where "statistically significant" means the 95% confidence
+> intervals do not overlap”.
+> 
+> Below given are the performance benchmark results generated by
+> Fastpath Tool, for different kernel -rc versions relative to the
+> base version v6.19, executed on the mentioned SUTs. The perf/
+> syscall benchmarks (execve/fork) regress consistently by ~6–11% on
+> both arm64 and x86_64 across v7.0-rc1 to rc5, while vmalloc
+> workloads show smaller but stable regressions (~2–10%), particularly
+> in kvfree_rcu paths.
+> 
+> Regressions on AWS Intel Sapphire Rapids (x86_64) :
 
-With the fix, the issue is rejected at attach time.
+The table formatting is broken for me, can you resend it please? Maybe a
+.txt attachment would work better.
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../selftests/bpf/prog_tests/attach_probe.c   | 64 +++++++++++++++++++
- .../selftests/bpf/progs/kprobe_write_ctx.c    | 19 ++++++
- 2 files changed, 83 insertions(+)
+> +-----------------+----------------------------------------------------------+-----------------+-------------+-------------+---------------------------+-------------+-------------+-------------+
+> | Benchmark       | Result Class            |   6-19-0 (base) |  
+>   7-0-0-rc1 |   7-0-0-rc2 |  7-0-0-rc2-gaf4e9ef3d784 |   7-0-0-rc3 |  
+>   7-0-0-rc4 |   7-0-0-rc5 |
+> +=================+==========================================================+=================+=============+=============+===========================+=============+=============+=============+
+> | micromm/vmalloc | kvfree_rcu_1_arg_vmalloc_test: p:1, h:0, l:500000 
+> (usec) |       262605.17 |      -4.94% |      -7.48% |             (R) 
+> -8.11% |      -4.51% |      -6.23% |      -3.47% |
+> |                 | kvfree_rcu_2_arg_vmalloc_test: p:1, h:0, l:500000 
+> (usec) |       253198.67 |      -7.56% | (R) -10.57% |            (R) 
+> -10.13% |  (R) -7.07% |      -6.37% |      -6.55% |
+> |                 | pcpu_alloc_test: p:1, h:0, l:500000 (usec)           
+>   |       197904.67 |      -2.07% |      -3.38% |             -2.07% |  
+>      -2.97% |  (R) -4.30% |      -3.39% |
+> |                 | random_size_align_alloc_test: p:1, h:0, l:500000 
+> (usec)  |      1707089.83 |      -2.63% |  (R) -3.69% |               
+> (R) -3.25% |  (R) -2.87% |      -2.22% |  (R) -3.63% |
+> +-----------------+----------------------------------------------------------+-----------------+-------------+-------------+---------------------------+-------------+-------------+-------------+
+> | perf/syscall    | execve (ops/sec)            |         1202.92 |  (R) 
+> -7.15% |  (R) -7.05% |         (R) -7.03% |  (R) -7.93% |  (R) -6.51% |  
+> (R) -7.36% |
+> |                 | fork (ops/sec)            |          996.00 |  (R) 
+> -9.00% | (R) -10.27% |         (R) -9.92% | (R) -11.19% | (R) -10.69% | 
+> (R) -10.28% |
+> +-----------------+----------------------------------------------------------+-----------------+-------------+-------------+---------------------------+-------------+-------------+-------------+
+> 
+> Regressions on AWS Graviton3 (arm64) :
+> +-----------------+----------------------------------------------------------+-----------------+-------------+-------------+---------------------------+-------------+-------------+-------------+
+> | Benchmark       | Result Class            |   6-19-0 (base) |  
+>   7-0-0-rc1 |   7-0-0-rc2 |  7-0-0-rc2-gaf4e9ef3d784 |   7-0-0-rc3 |  
+>   7-0-0-rc4 |   7-0-0-rc5 |
+> +=================+==========================================================+=================+=============+=============+===========================+=============+=============+=============+
+> | micromm/vmalloc | fix_size_alloc_test: p:1, h:0, l:500000 (usec)      
+>       |       320101.50 |  (R) -4.72% |  (R) -3.81% |               (R) 
+> -5.05% |      -3.06% |      -3.16% |  (R) -3.91% |
+> |                 | fix_size_alloc_test: p:4, h:0, l:500000 (usec)      
+>       |       522072.83 |  (R) -2.15% |      -1.25% |               (R) 
+> -2.16% |  (R) -2.13% |      -2.10% |      -1.82% |
+> |                 | fix_size_alloc_test: p:16, h:0, l:500000 (usec)      
+>      |      1041640.33 |      -0.50% |  (R) -2.04% |                 
+> -1.43% |      -0.69% |      -1.78% |  (R) -2.03% |
+> |                 | fix_size_alloc_test: p:256, h:1, l:100000 (usec)    
+>       |      2255794.00 |      -1.51% |  (R) -2.24% |             (R) 
+> -2.33% |      -1.14% |      -0.94% |      -1.60% |
+> |                 | kvfree_rcu_1_arg_vmalloc_test: p:1, h:0, l:500000 
+> (usec) |       343543.83 |  (R) -4.50% |  (R) -3.54% |             (R) 
+> -5.00% |  (R) -4.88% |  (R) -4.01% |  (R) -5.54% |
+> |                 | kvfree_rcu_2_arg_vmalloc_test: p:1, h:0, l:500000 
+> (usec) |       342290.33 |  (R) -5.15% |  (R) -3.24% |             (R) 
+> -3.76% |  (R) -5.37% |  (R) -3.74% |  (R) -5.51% |
+> |                 | random_size_align_alloc_test: p:1, h:0, l:500000 
+> (usec)  |      1209666.83 |      -2.43% |      -2.09% |                 
+>    -1.19% |  (R) -4.39% |      -1.81% |      -3.15% |
+> +-----------------+----------------------------------------------------------+-----------------+-------------+-------------+---------------------------+-------------+-------------+-------------+
+> | perf/syscall    | execve (ops/sec)            |         1219.58 |      
+>         |  (R) -8.12% |         (R) -7.37% |  (R) -7.60% |  (R) -7.86% 
+> |  (R) -7.71% |
+> |                 | fork (ops/sec)            |          863.67 |        
+>       |  (R) -7.24% |         (R) -7.07% |  (R) -6.42% |  (R) -6.93% |  
+> (R) -6.55% |
+> +-----------------+----------------------------------------------------------+-----------------+-------------+-------------+---------------------------+-------------+-------------+-------------+
+> 
+> 
+> The details of latest bisections that were carried out for the above
+> listed regressions, are given below :
+> -Graviton3 (arm64)
+>   good: v6.19 (05f7e89ab973)
+>   bad:  v7.0-rc2 (11439c4635ed)
+>   workload: perf/syscall (execve)
+>   bisected to: f1427a1d6415 (“slab: make percpu sheaves compatible with
+>   kmalloc_nolock()/kfree_nolock()”)
+> 
+> -Sapphire Rapids (x86_64)
+>   good: v6.19 (05f7e89ab973)
+>   bad:  v7.0-rc3 (1f318b96cc84)
+>   workload: perf/syscall (fork)
+>   bisected to: f1427a1d6415 (“slab: make percpu sheaves compatible with
+>   kmalloc_nolock()/kfree_nolock()”)
+> 
+> -Graviton3 (arm64)
+>   good: v6.19 (05f7e89ab973)
+>   bad:  v7.0-rc3 (1f318b96cc84)
+>   workload: perf/syscall (execve)
+>   bisected to: f3421f8d154c (“slab: introduce percpu sheaves bootstrap”)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-index 9e77e5da7097..4d253900c4ad 100644
---- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-+++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-@@ -220,11 +220,73 @@ static void test_attach_kprobe_write_ctx(void)
- 
- 	kprobe_write_ctx__destroy(skel);
- }
-+
-+static void test_freplace_kprobe_write_ctx(void)
-+{
-+	struct bpf_program *prog_kprobe, *prog_ext, *prog_fentry;
-+	struct kprobe_write_ctx *skel_kprobe, *skel_ext = NULL;
-+	struct bpf_link *link_kprobe = NULL, *link_ext = NULL;
-+	int err, prog_fd;
-+	LIBBPF_OPTS(bpf_kprobe_opts, kprobe_opts);
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+
-+	skel_kprobe = kprobe_write_ctx__open();
-+	if (!ASSERT_OK_PTR(skel_kprobe, "kprobe_write_ctx__open kprobe"))
-+		return;
-+
-+	prog_kprobe = skel_kprobe->progs.kprobe_dummy;
-+	bpf_program__set_autoload(prog_kprobe, true);
-+
-+	prog_fentry = skel_kprobe->progs.fentry;
-+	bpf_program__set_autoload(prog_fentry, true);
-+
-+	err = kprobe_write_ctx__load(skel_kprobe);
-+	if (!ASSERT_OK(err, "kprobe_write_ctx__load kprobe"))
-+		goto out;
-+
-+	skel_ext = kprobe_write_ctx__open();
-+	if (!ASSERT_OK_PTR(skel_ext, "kprobe_write_ctx__open ext"))
-+		goto out;
-+
-+	prog_ext = skel_ext->progs.freplace_kprobe;
-+	bpf_program__set_autoload(prog_ext, true);
-+
-+	prog_fd = bpf_program__fd(skel_kprobe->progs.kprobe_write_ctx);
-+	bpf_program__set_attach_target(prog_ext, prog_fd, "kprobe_write_ctx");
-+
-+	err = kprobe_write_ctx__load(skel_ext);
-+	if (!ASSERT_OK(err, "kprobe_write_ctx__load ext"))
-+		goto out;
-+
-+	prog_fd = bpf_program__fd(prog_kprobe);
-+	link_ext = bpf_program__attach_freplace(prog_ext, prog_fd, "kprobe_dummy");
-+	ASSERT_ERR_PTR(link_ext, "bpf_program__attach_freplace link");
-+	ASSERT_EQ(errno, EINVAL, "bpf_program__attach_freplace errno");
-+
-+	link_kprobe = bpf_program__attach_kprobe_opts(prog_kprobe, "bpf_fentry_test1",
-+						      &kprobe_opts);
-+	if (!ASSERT_OK_PTR(link_kprobe, "bpf_program__attach_kprobe_opts"))
-+		goto out;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(prog_fentry), &topts);
-+	ASSERT_OK(err, "bpf_prog_test_run_opts");
-+
-+out:
-+	bpf_link__destroy(link_ext);
-+	bpf_link__destroy(link_kprobe);
-+	kprobe_write_ctx__destroy(skel_ext);
-+	kprobe_write_ctx__destroy(skel_kprobe);
-+}
- #else
- static void test_attach_kprobe_write_ctx(void)
- {
- 	test__skip();
- }
-+
-+static void test_freplace_kprobe_write_ctx(void)
-+{
-+	test__skip();
-+}
- #endif
- 
- static void test_attach_probe_auto(struct test_attach_probe *skel)
-@@ -434,6 +496,8 @@ void test_attach_probe(void)
- 		test_attach_kprobe_long_event_name();
- 	if (test__start_subtest("kprobe-write-ctx"))
- 		test_attach_kprobe_write_ctx();
-+	if (test__start_subtest("freplace-kprobe-write-ctx"))
-+		test_freplace_kprobe_write_ctx();
- 
- cleanup:
- 	test_attach_probe__destroy(skel);
-diff --git a/tools/testing/selftests/bpf/progs/kprobe_write_ctx.c b/tools/testing/selftests/bpf/progs/kprobe_write_ctx.c
-index f77aef0474d3..adbf52afe490 100644
---- a/tools/testing/selftests/bpf/progs/kprobe_write_ctx.c
-+++ b/tools/testing/selftests/bpf/progs/kprobe_write_ctx.c
-@@ -19,4 +19,23 @@ int kprobe_multi_write_ctx(struct pt_regs *ctx)
- 	ctx->ax = 0;
- 	return 0;
- }
-+
-+SEC("?kprobe")
-+int kprobe_dummy(struct pt_regs *regs)
-+{
-+	return 0;
-+}
-+
-+SEC("?freplace")
-+int freplace_kprobe(struct pt_regs *regs)
-+{
-+	regs->di = 0;
-+	return 0;
-+}
-+
-+SEC("?fentry/bpf_fentry_test1")
-+int BPF_PROG(fentry)
-+{
-+	return 0;
-+}
- #endif
--- 
-2.53.0
+Yeah none of these are likely to introduce the regression.
+We've seen other reports from e.g. lkp pointing to later commits that remove
+the cpu (partial) slabs. The theory is that on benchmarks that stress vma
+and maple node caches (fork and execve are likely those), the introduction
+of sheaves in 6.18 (for those caches only) resulted in ~doubled percpu
+caching capacity (and likely associated performance increase) - by sheaves
+backed by cpu (partial) slabs,. Removing the latter then looks like a
+regression in isolation in the 7.0 series.
 
+A regression of vmalloc related to kvfree_rcu might be new. Although if it's
+kvfree_rcu() of vmalloc'd objects, it would be weird. More likely they are
+kvmalloc'd but small enough to be actually kmalloc'd? What are the details
+of that test?
+
+> I'm aware that some fixes for the sheaves series have already been
+> merged around v7.0-rc3; however, these do not appear to resolve the
+> regressions described above completely. Are there additional fixes or
+> follow-ups in progress that I should evaluate? I can investigate
+> further and provide additional data, if that would be useful.
+
+We have some followups planned for 7.1 that would make a difference for
+systems with memoryless nodes. That would mean "numactl -H" shows nodes that
+have cpus but no memory, or that memory is all ZONE_MOVABLE and not ZONE_NORMAL.
+
+Thanks,
+Vlastimil
+
+> Thank you.
+> Aishwarya Rambhadran
+> 
+> 
+> On 23/01/26 12:22 PM, Vlastimil Babka wrote:
