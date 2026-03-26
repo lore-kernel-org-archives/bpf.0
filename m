@@ -1,63 +1,63 @@
-Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
+Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22E542314A
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 17:39:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B3BD421EFB
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 17:39:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774546794; cv=none; b=HpR1Vu8HWwcumO0IoShAw/m6gdHDTOybRjHuidw0YGSkO4V8tV30JUY136eQVgQyWgE6TfOwgXSEZozI4ZsW/WqCUZBqUjdDb+emM+0vKkvFDjwprkN6oC09tknts6weayFY+tDuwR+O2A4yi1T07ev47iA51oe55CD7ez12cMY=
+	t=1774546796; cv=none; b=sAa4XxnsMZB+foD8IjfM+LQu6MxrRHR+QJXsLgdjXFQBHBZhpY+iAnxTS2J1TVZ71HaRg26xFoUr2hNboagwRo+N4E9knay6LfbpLNnhDZ2NdEZ0F2tlnwoOmZmPFQ+VTP0c7DAlL4Vm4xH9zM6qcXQbgdkB1XrIJsouG0o+uz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774546794; c=relaxed/simple;
-	bh=xVZRYVseSgRfPr2Gvvp0wLrcukaiPmbDAMsmFa8p5zQ=;
+	s=arc-20240116; t=1774546796; c=relaxed/simple;
+	bh=J+mcsxq4XYWjxo/Gy2ozSKkSyeZ+Yga4LNWqmpxhRks=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pUniSJyTUhDRk7OsO6tDQZ+ph1kyocHT0c+B6ShcFVGXhccCIXtzB+iKuWBVMNLji4sc/oPZMSXIrCLdsIePS3XH6If54lY+5xyzb6ULh92X5Rv7IN7T1K7ZrqyySdJleEIM4TH9HjwrYQrVNh0Wgb1t4mUhKVJAQQtzeKW23Qo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dh0T+Ot+; arc=none smtp.client-ip=74.125.82.171
+	 MIME-Version:Content-Type; b=tFpTwg1j+MvqjibzvlMTu2QxqKIiOnvSKiPrb56ji7yENmtBiRAAtiZ2xAZqhgir7KfHY00r/0H9mcdaGgseawF44paOBwQvRribumKH7H7dHXdNItj0F2Pb335AkQI+spMmDss4Eka7CJBuAyDH54j0GSS9TZsAnLMI02ZNeAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GqZyzOYf; arc=none smtp.client-ip=74.125.82.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dh0T+Ot+"
-Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-2c0fa90d47bso1166156eec.0
-        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 10:39:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GqZyzOYf"
+Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-2c0bb213b16so2222405eec.0
+        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 10:39:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774546792; x=1775151592; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774546793; x=1775151593; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YzDkviCvOqGvJqiJHM9WwOT4J/I3tIygy1O6BN8LyWo=;
-        b=dh0T+Ot+JlN6BElKYl5ELXY2jMDMfTcK7E+/Bcfv+LmQqVgHre02ljmYH//mdDK2Iy
-         T28Q/v8u/ZfUIOnsluik5/b+2e98EXYPljHjfgji2C+rPBvUJ0ypBLgJahEuoCVlc4c5
-         oDeFAAun3h4pB4MQJiKqgbcgji9BtHhzchr5nQgNA7nKa9oXB+2rL1XLX3GzxXv2rHzJ
-         /sYbSVGDssxZUKIJA4zuwObha3vWxOwK/Qm62gbOncGmBxMPR6g7LihdSFHha+Aaddm3
-         Bot8YQ0Vh/bQPis8QpHXYqFKp3hKxK2OhVdwCrooCkc3lohz0Mw2JJs6jevJKS6RI1vw
-         VJOA==
+        bh=8gflvil4Nnz2Qdm5qnrX+omZECIStXEGuKRstHQeczA=;
+        b=GqZyzOYfLyHSahfmyFusBPGpK27nNUzLRMdOtYd2NyyWrBnMoDPYQt15WLsliTKVER
+         JS+qyETKdq1rvW5E/4vEvrPMfZ/CjMvYkEJ1IRRl5JDnXWBUy9D9AvpAWz2EweHiD6Qv
+         oOPuAEA+n2ZEkqYb0Gtf8xQ1NDcw7wOBgK5bBEiRn1p4eirojO2kfd2p/ShKlOIi7WwS
+         S/7OcxOdyW1YDnjJw7QJ1mjv6gnCtK7bOEf3xsaUW2y5vt+gruEEvRj6KSRRu/iHTjZ1
+         X7voTQvdqcIuGUqpAjsEbIt6LttNvcNS5oxQq0T88EPC4+KzlAJAwgZm5zNFiZ15D/ty
+         ZGDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774546792; x=1775151592;
+        d=1e100.net; s=20251104; t=1774546793; x=1775151593;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=YzDkviCvOqGvJqiJHM9WwOT4J/I3tIygy1O6BN8LyWo=;
-        b=RGWoDEPxNHl1X6Z/ohIELDvZxbVfcD+qvQQYWfh7w5zBVmxpyqtNxgEIfLv6gKHSqW
-         3CE8Ktwbpi3UtIlXN7FAlBw/jlQfuyDjJvnArAmDZ5j00WdzKwJAVFVZ4gVZ12sLZsTO
-         JFSbt+0fW9Bzo/gFSriuW6nST2X0ycc395IxcXBou2lfh6hCWVxepHbFq2bOvm+srnO1
-         u1XNA7n/Z8Eioabw4X4SV6XHTuzZZzNaVIHNfgM/zFgZ7zOua9vz6ZQrAnEV1R8B3VGm
-         Dp8OMxz7B1dszvFc3ScZATEfyFLYh+Og8JmfN559vz4aF29RtLEthDRSjNHhOdZ0qSJ9
-         sjtw==
-X-Gm-Message-State: AOJu0YzEDM/X0ht0n8ATk7tSUqHZqLjjlwefcQwbXPHQvghNtCGejNiH
-	cCfgbkpp1S1hP8yYUE1BWIoj/P6TRdyywiwwtzwuVm/PrGPQDb2/FX0oQxqUXZ9U
-X-Gm-Gg: ATEYQzxjiH25g5b3clSqATG9gFO6CQAIT1aAOMKTr6RXP5KxFx8YVvUN5HjV5Wy6Lh8
-	IEMSgZTAmB9lxCfH2brdKOdIp5tfkQq5RP66OoD9GmhFVvdjHBf/0UTwUnow4iLnIQ77DWdLve9
-	rRO6bUM8bY48FkyyA/1EdUFTw1gMjL0CMOfB37ZLNW5XQnYV9HXjiFY5HVsQAd5i8dBGtjAqodB
-	APwY4A3JEIoiqzRTOkyccNfpSm/4jpsDq28Sj905bBvex1GLUt56nBHuGCtxhjQzgEKw6p3Kvbc
-	0JLsRPr9R2XgClf9mm7IQDX6JgjQK+nuRcfeOViZb/NIKLXR1jgXsK+Mca/20/Ckpxz9dmxyLYV
-	uZELV0JmgWcx9jy+Z/GLiZWfR52A9llU0LnudFrQW9QndPf3RWJ/VXUWLhVzkkl6OCenSgBCXld
-	42a4MOr3PJx5+lY0UoN1XK2UA+XBdg1G5BcwC3fbVZTP4lagAr1J/oilxU0JeK8k41KlQjNeLGo
-	VXsiEY=
-X-Received: by 2002:a05:693c:2c8d:b0:2be:b20a:9b69 with SMTP id 5a478bee46e88-2c17723bdb8mr1446417eec.12.1774546791500;
-        Thu, 26 Mar 2026 10:39:51 -0700 (PDT)
+        bh=8gflvil4Nnz2Qdm5qnrX+omZECIStXEGuKRstHQeczA=;
+        b=ntAXRrOXenx5Uuq6Ia55753EnDj4cUyN0ucbbwznqescWSekT+QGFMaG9SW0J7LhqJ
+         l6UZKdaFf/H/1I7x+x1/etBWny0j/XVgl5SUzlFPu4q7vO7sB+27Xa6G8f+hd4EUp//h
+         nGiYlKOaLSjM450w3Kl9Wgkz6X2e7u7SYre5ndkV0q+Yu+m1xtS/PZ3mXI7bFUHx86uZ
+         9BS1X/dQx60TToIVOSxE7UKMkAI9MCp1XPyOBoCLMvvwEMKId3RJgrj6hBBfASlXpAuC
+         SjcoO3wmRzioTeUTGs2jM5G1DcJg4htFgj6jN0UKe8sB9SGg2zYrqdC8eTlNa9zv5SHJ
+         Cl9A==
+X-Gm-Message-State: AOJu0YwA9LyHDVQhyPi3TbPIPrq9EyB2yZnPVunZ8VOZ/nr1Tqsh2B8s
+	UhGrjEuN9zbRccIaD40TTnwICS6VGmkx3urEvhSS2C4h5w/PSvvjxctyV0Awz77e
+X-Gm-Gg: ATEYQzxIdkOBLdwGx5wPdqxBbYae80c8f0KjZBVCRvttVbubqyIPJhJapWLSKCvIF/S
+	ns6MeB3E3ph4+REvvrgcHmqPP6e1Dvs6LlsU7RynLNI649z3uHl3cj9/x7y6cbSqAuGBvVbtT9U
+	SndpGsmMFEcE53LKmrZcc8ogCtpPl5zQU7xytpHsB3Qc8rdawV1ntAjJOcBGm7q2CvkEKgmNDL2
+	uUl1L9DIFniE8NTjL5d/LomyOKbNWvi6LbrYo0Y6V2hE8baZ5bED4PGuiSeuGX8QKovirp7X4ni
+	MKqAYhtiXqHPI7+s3/wtAqmRjbXui3oBTO6OtiDy1BPbNsmMG/3COsdfTzx9bbTzfY7sdyW1tJV
+	f/xjaUeeDGLCYWFFBST6+R3feN7gldLUj3FKzwKn3JxnhJ7VKipOu7uXeJsDToZqzNC2+IOLsFH
+	amqoIJxTdTS3nhw1v+xbaeQe9bJTyQuYCiD45KbbPhAn4VeehQ5cWr3kWKlFIi5vXswJTA875Gp
+	uxFntw=
+X-Received: by 2002:a05:7300:a485:b0:2c1:7b61:870b with SMTP id 5a478bee46e88-2c17b70dd37mr1097066eec.3.1774546792910;
+        Thu, 26 Mar 2026 10:39:52 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J.thefacebook.com ([2620:10d:c090:500::1:634a])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c16ec47293sm3075711eec.9.2026.03.26.10.39.50
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c16ec47293sm3075711eec.9.2026.03.26.10.39.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Mar 2026 10:39:51 -0700 (PDT)
+        Thu, 26 Mar 2026 10:39:52 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -68,9 +68,9 @@ Cc: daniel@iogearbox.net,
 	yonghong.song@linux.dev,
 	eddyz87@gmail.com,
 	cupertino.miranda@oracle.com
-Subject: [PATCH 2/4] selftests/bpf: make str_has_pfx return pointer past the prefix
-Date: Thu, 26 Mar 2026 10:39:34 -0700
-Message-ID: <20260326-selftests-global-tags-ordering-v1-2-5dd2ced5d9ad@gmail.com>
+Subject: [PATCH 3/4] selftests/bpf: impose global ordering for test decl_tags
+Date: Thu, 26 Mar 2026 10:39:35 -0700
+Message-ID: <20260326-selftests-global-tags-ordering-v1-3-5dd2ced5d9ad@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260326-selftests-global-tags-ordering-v1-0-5dd2ced5d9ad@gmail.com>
 References: <20260326-selftests-global-tags-ordering-v1-0-5dd2ced5d9ad@gmail.com>
@@ -83,124 +83,392 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Change str_has_pfx() to return a pointer to the first character after
-the prefix, thus eliminating the repetitive (s + sizeof(PFX) - 1)
-patterns.
+Impose global ordering for all decl tags used by test_loader.c based
+tests (__success, __failure, __msg, etc):
+- change every tag to expand as
+  __attribute__((btf_decl_tag("comment:" XSTR(__COUNTER__) ...)))
+- change parse_test_spec() to collect all decl tags before
+  processing and sort them using strverscmp().
 
+The ordering is necessary for gcc-bpf.
+Neither GCC nor the C standard defines the order in which function
+attributes are consumed. While Clang tends to preserve definition order,
+GCC may process them out of sequence. This inconsistency causes BPF
+tests with multiple __msg entries to fail when compiled with GCC.
+
+Co-developed-by: Cupertino Miranda <cupertino.miranda@oracle.com>
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- tools/testing/selftests/bpf/test_loader.c | 41 ++++++++++++++-----------------
- 1 file changed, 18 insertions(+), 23 deletions(-)
+ tools/testing/selftests/bpf/progs/bpf_misc.h |  60 ++++-----
+ tools/testing/selftests/bpf/test_loader.c    | 174 +++++++++++++++------------
+ 2 files changed, 130 insertions(+), 104 deletions(-)
 
+diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
+index 52cf9f3cccd0ccd8034b9786d787e53992a4a6d8..32e06c575fbe1f36264c8965cbd84e4432a434d8 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_misc.h
++++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+@@ -130,39 +130,41 @@
+  * __linear_size     Specify the size of the linear area of non-linear skbs, or
+  *                   0 for linear skbs.
+  */
+-#define __msg(msg)		__attribute__((btf_decl_tag("comment:test_expect_msg=" XSTR(__COUNTER__) "=" msg)))
+-#define __not_msg(msg)		__attribute__((btf_decl_tag("comment:test_expect_not_msg=" XSTR(__COUNTER__) "=" msg)))
+-#define __xlated(msg)		__attribute__((btf_decl_tag("comment:test_expect_xlated=" XSTR(__COUNTER__) "=" msg)))
+-#define __jited(msg)		__attribute__((btf_decl_tag("comment:test_jited=" XSTR(__COUNTER__) "=" msg)))
+-#define __failure		__attribute__((btf_decl_tag("comment:test_expect_failure")))
+-#define __success		__attribute__((btf_decl_tag("comment:test_expect_success")))
+-#define __description(desc)	__attribute__((btf_decl_tag("comment:test_description=" desc)))
+-#define __msg_unpriv(msg)	__attribute__((btf_decl_tag("comment:test_expect_msg_unpriv=" XSTR(__COUNTER__) "=" msg)))
+-#define __not_msg_unpriv(msg)	__attribute__((btf_decl_tag("comment:test_expect_not_msg_unpriv=" XSTR(__COUNTER__) "=" msg)))
+-#define __xlated_unpriv(msg)	__attribute__((btf_decl_tag("comment:test_expect_xlated_unpriv=" XSTR(__COUNTER__) "=" msg)))
+-#define __jited_unpriv(msg)	__attribute__((btf_decl_tag("comment:test_jited_unpriv=" XSTR(__COUNTER__) "=" msg)))
+-#define __failure_unpriv	__attribute__((btf_decl_tag("comment:test_expect_failure_unpriv")))
+-#define __success_unpriv	__attribute__((btf_decl_tag("comment:test_expect_success_unpriv")))
+-#define __log_level(lvl)	__attribute__((btf_decl_tag("comment:test_log_level="#lvl)))
+-#define __flag(flag)		__attribute__((btf_decl_tag("comment:test_prog_flags="#flag)))
+-#define __retval(val)		__attribute__((btf_decl_tag("comment:test_retval="XSTR(val))))
+-#define __retval_unpriv(val)	__attribute__((btf_decl_tag("comment:test_retval_unpriv="XSTR(val))))
+-#define __auxiliary		__attribute__((btf_decl_tag("comment:test_auxiliary")))
+-#define __auxiliary_unpriv	__attribute__((btf_decl_tag("comment:test_auxiliary_unpriv")))
+-#define __btf_path(path)	__attribute__((btf_decl_tag("comment:test_btf_path=" path)))
+-#define __arch(arch)		__attribute__((btf_decl_tag("comment:test_arch=" arch)))
++#define __test_tag(tag)		__attribute__((btf_decl_tag("comment:" XSTR(__COUNTER__) ":" tag)))
++
++#define __msg(msg)		__test_tag("test_expect_msg=" msg)
++#define __not_msg(msg)		__test_tag("test_expect_not_msg=" msg)
++#define __xlated(msg)		__test_tag("test_expect_xlated=" msg)
++#define __jited(msg)		__test_tag("test_jited=" msg)
++#define __failure		__test_tag("test_expect_failure")
++#define __success		__test_tag("test_expect_success")
++#define __description(desc)	__test_tag("test_description=" desc)
++#define __msg_unpriv(msg)	__test_tag("test_expect_msg_unpriv=" msg)
++#define __not_msg_unpriv(msg)	__test_tag("test_expect_not_msg_unpriv=" msg)
++#define __xlated_unpriv(msg)	__test_tag("test_expect_xlated_unpriv=" msg)
++#define __jited_unpriv(msg)	__test_tag("test_jited_unpriv=" msg)
++#define __failure_unpriv	__test_tag("test_expect_failure_unpriv")
++#define __success_unpriv	__test_tag("test_expect_success_unpriv")
++#define __log_level(lvl)	__test_tag("test_log_level=" #lvl)
++#define __flag(flag)		__test_tag("test_prog_flags=" #flag)
++#define __retval(val)		__test_tag("test_retval=" XSTR(val))
++#define __retval_unpriv(val)	__test_tag("test_retval_unpriv=" XSTR(val))
++#define __auxiliary		__test_tag("test_auxiliary")
++#define __auxiliary_unpriv	__test_tag("test_auxiliary_unpriv")
++#define __btf_path(path)	__test_tag("test_btf_path=" path)
++#define __arch(arch)		__test_tag("test_arch=" arch)
+ #define __arch_x86_64		__arch("X86_64")
+ #define __arch_arm64		__arch("ARM64")
+ #define __arch_riscv64		__arch("RISCV64")
+ #define __arch_s390x		__arch("s390x")
+-#define __caps_unpriv(caps)	__attribute__((btf_decl_tag("comment:test_caps_unpriv=" EXPAND_QUOTE(caps))))
+-#define __load_if_JITed()	__attribute__((btf_decl_tag("comment:load_mode=jited")))
+-#define __load_if_no_JITed()	__attribute__((btf_decl_tag("comment:load_mode=no_jited")))
+-#define __stderr(msg)		__attribute__((btf_decl_tag("comment:test_expect_stderr=" XSTR(__COUNTER__) "=" msg)))
+-#define __stderr_unpriv(msg)	__attribute__((btf_decl_tag("comment:test_expect_stderr_unpriv=" XSTR(__COUNTER__) "=" msg)))
+-#define __stdout(msg)		__attribute__((btf_decl_tag("comment:test_expect_stdout=" XSTR(__COUNTER__) "=" msg)))
+-#define __stdout_unpriv(msg)	__attribute__((btf_decl_tag("comment:test_expect_stdout_unpriv=" XSTR(__COUNTER__) "=" msg)))
+-#define __linear_size(sz)	__attribute__((btf_decl_tag("comment:test_linear_size=" XSTR(sz))))
++#define __caps_unpriv(caps)	__test_tag("test_caps_unpriv=" EXPAND_QUOTE(caps))
++#define __load_if_JITed()	__test_tag("load_mode=jited")
++#define __load_if_no_JITed()	__test_tag("load_mode=no_jited")
++#define __stderr(msg)		__test_tag("test_expect_stderr=" msg)
++#define __stderr_unpriv(msg)	__test_tag("test_expect_stderr_unpriv=" msg)
++#define __stdout(msg)		__test_tag("test_expect_stdout=" msg)
++#define __stdout_unpriv(msg)	__test_tag("test_expect_stdout_unpriv=" msg)
++#define __linear_size(sz)	__test_tag("test_linear_size=" XSTR(sz))
+ 
+ /* Define common capabilities tested using __caps_unpriv */
+ #define CAP_NET_ADMIN		12
 diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
-index 338c035c36884c02ac57cd17110122c10b4858e4..f1eb99f829e112f0e738bfe44e7e61a49120ec85 100644
+index f1eb99f829e112f0e738bfe44e7e61a49120ec85..2779f0ecf0ada9985a5b1dfbc049c0d0ed824a76 100644
 --- a/tools/testing/selftests/bpf/test_loader.c
 +++ b/tools/testing/selftests/bpf/test_loader.c
-@@ -11,8 +11,12 @@
- #include "cap_helpers.h"
- #include "jit_disasm_helpers.h"
- 
--#define str_has_pfx(str, pfx) \
--	(strncmp(str, pfx, __builtin_constant_p(pfx) ? sizeof(pfx) - 1 : strlen(pfx)) == 0)
-+static inline const char *str_has_pfx(const char *str, const char *pfx)
-+{
-+	size_t len = strlen(pfx);
-+
-+	return strncmp(str, pfx, len) == 0 ? str + len : NULL;
-+}
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
+ #include <linux/capability.h>
++#include <linux/err.h>
+ #include <stdlib.h>
+ #include <test_progs.h>
+ #include <bpf/btf.h>
+@@ -20,34 +21,34 @@ static inline const char *str_has_pfx(const char *str, const char *pfx)
  
  #define TEST_LOADER_LOG_BUF_SZ 2097152
  
-@@ -452,8 +456,8 @@ static int parse_test_spec(struct test_loader *tester,
- 			continue;
+-#define TEST_TAG_EXPECT_FAILURE "comment:test_expect_failure"
+-#define TEST_TAG_EXPECT_SUCCESS "comment:test_expect_success"
+-#define TEST_TAG_EXPECT_MSG_PFX "comment:test_expect_msg="
+-#define TEST_TAG_EXPECT_NOT_MSG_PFX "comment:test_expect_not_msg="
+-#define TEST_TAG_EXPECT_XLATED_PFX "comment:test_expect_xlated="
+-#define TEST_TAG_EXPECT_FAILURE_UNPRIV "comment:test_expect_failure_unpriv"
+-#define TEST_TAG_EXPECT_SUCCESS_UNPRIV "comment:test_expect_success_unpriv"
+-#define TEST_TAG_EXPECT_MSG_PFX_UNPRIV "comment:test_expect_msg_unpriv="
+-#define TEST_TAG_EXPECT_NOT_MSG_PFX_UNPRIV "comment:test_expect_not_msg_unpriv="
+-#define TEST_TAG_EXPECT_XLATED_PFX_UNPRIV "comment:test_expect_xlated_unpriv="
+-#define TEST_TAG_LOG_LEVEL_PFX "comment:test_log_level="
+-#define TEST_TAG_PROG_FLAGS_PFX "comment:test_prog_flags="
+-#define TEST_TAG_DESCRIPTION_PFX "comment:test_description="
+-#define TEST_TAG_RETVAL_PFX "comment:test_retval="
+-#define TEST_TAG_RETVAL_PFX_UNPRIV "comment:test_retval_unpriv="
+-#define TEST_TAG_AUXILIARY "comment:test_auxiliary"
+-#define TEST_TAG_AUXILIARY_UNPRIV "comment:test_auxiliary_unpriv"
+-#define TEST_BTF_PATH "comment:test_btf_path="
+-#define TEST_TAG_ARCH "comment:test_arch="
+-#define TEST_TAG_JITED_PFX "comment:test_jited="
+-#define TEST_TAG_JITED_PFX_UNPRIV "comment:test_jited_unpriv="
+-#define TEST_TAG_CAPS_UNPRIV "comment:test_caps_unpriv="
+-#define TEST_TAG_LOAD_MODE_PFX "comment:load_mode="
+-#define TEST_TAG_EXPECT_STDERR_PFX "comment:test_expect_stderr="
+-#define TEST_TAG_EXPECT_STDERR_PFX_UNPRIV "comment:test_expect_stderr_unpriv="
+-#define TEST_TAG_EXPECT_STDOUT_PFX "comment:test_expect_stdout="
+-#define TEST_TAG_EXPECT_STDOUT_PFX_UNPRIV "comment:test_expect_stdout_unpriv="
+-#define TEST_TAG_LINEAR_SIZE "comment:test_linear_size="
++#define TEST_TAG_EXPECT_FAILURE "test_expect_failure"
++#define TEST_TAG_EXPECT_SUCCESS "test_expect_success"
++#define TEST_TAG_EXPECT_MSG_PFX "test_expect_msg="
++#define TEST_TAG_EXPECT_NOT_MSG_PFX "test_expect_not_msg="
++#define TEST_TAG_EXPECT_XLATED_PFX "test_expect_xlated="
++#define TEST_TAG_EXPECT_FAILURE_UNPRIV "test_expect_failure_unpriv"
++#define TEST_TAG_EXPECT_SUCCESS_UNPRIV "test_expect_success_unpriv"
++#define TEST_TAG_EXPECT_MSG_PFX_UNPRIV "test_expect_msg_unpriv="
++#define TEST_TAG_EXPECT_NOT_MSG_PFX_UNPRIV "test_expect_not_msg_unpriv="
++#define TEST_TAG_EXPECT_XLATED_PFX_UNPRIV "test_expect_xlated_unpriv="
++#define TEST_TAG_LOG_LEVEL_PFX "test_log_level="
++#define TEST_TAG_PROG_FLAGS_PFX "test_prog_flags="
++#define TEST_TAG_DESCRIPTION_PFX "test_description="
++#define TEST_TAG_RETVAL_PFX "test_retval="
++#define TEST_TAG_RETVAL_PFX_UNPRIV "test_retval_unpriv="
++#define TEST_TAG_AUXILIARY "test_auxiliary"
++#define TEST_TAG_AUXILIARY_UNPRIV "test_auxiliary_unpriv"
++#define TEST_BTF_PATH "test_btf_path="
++#define TEST_TAG_ARCH "test_arch="
++#define TEST_TAG_JITED_PFX "test_jited="
++#define TEST_TAG_JITED_PFX_UNPRIV "test_jited_unpriv="
++#define TEST_TAG_CAPS_UNPRIV "test_caps_unpriv="
++#define TEST_TAG_LOAD_MODE_PFX "load_mode="
++#define TEST_TAG_EXPECT_STDERR_PFX "test_expect_stderr="
++#define TEST_TAG_EXPECT_STDERR_PFX_UNPRIV "test_expect_stderr_unpriv="
++#define TEST_TAG_EXPECT_STDOUT_PFX "test_expect_stdout="
++#define TEST_TAG_EXPECT_STDOUT_PFX_UNPRIV "test_expect_stdout_unpriv="
++#define TEST_TAG_LINEAR_SIZE "test_linear_size="
  
- 		s = btf__str_by_offset(btf, t->name_off);
--		if (str_has_pfx(s, TEST_TAG_DESCRIPTION_PFX)) {
--			description = s + sizeof(TEST_TAG_DESCRIPTION_PFX) - 1;
-+		if ((val = str_has_pfx(s, TEST_TAG_DESCRIPTION_PFX))) {
-+			description = val;
- 		} else if (strcmp(s, TEST_TAG_EXPECT_FAILURE) == 0) {
- 			spec->priv.expect_failure = true;
- 			spec->mode_mask |= PRIV;
-@@ -530,29 +534,24 @@ static int parse_test_spec(struct test_loader *tester,
- 			if (err)
- 				goto cleanup;
- 			spec->mode_mask |= UNPRIV;
--		} else if (str_has_pfx(s, TEST_TAG_RETVAL_PFX)) {
--			val = s + sizeof(TEST_TAG_RETVAL_PFX) - 1;
-+		} else if ((val = str_has_pfx(s, TEST_TAG_RETVAL_PFX))) {
- 			err = parse_retval(val, &spec->priv.retval, "__retval");
- 			if (err)
- 				goto cleanup;
- 			spec->priv.execute = true;
- 			spec->mode_mask |= PRIV;
--		} else if (str_has_pfx(s, TEST_TAG_RETVAL_PFX_UNPRIV)) {
--			val = s + sizeof(TEST_TAG_RETVAL_PFX_UNPRIV) - 1;
-+		} else if ((val = str_has_pfx(s, TEST_TAG_RETVAL_PFX_UNPRIV))) {
- 			err = parse_retval(val, &spec->unpriv.retval, "__retval_unpriv");
- 			if (err)
- 				goto cleanup;
- 			spec->mode_mask |= UNPRIV;
- 			spec->unpriv.execute = true;
- 			has_unpriv_retval = true;
--		} else if (str_has_pfx(s, TEST_TAG_LOG_LEVEL_PFX)) {
--			val = s + sizeof(TEST_TAG_LOG_LEVEL_PFX) - 1;
-+		} else if ((val = str_has_pfx(s, TEST_TAG_LOG_LEVEL_PFX))) {
- 			err = parse_int(val, &spec->log_level, "test log level");
- 			if (err)
- 				goto cleanup;
--		} else if (str_has_pfx(s, TEST_TAG_PROG_FLAGS_PFX)) {
--			val = s + sizeof(TEST_TAG_PROG_FLAGS_PFX) - 1;
+ /* Warning: duplicated in bpf_misc.h */
+ #define POINTER_VALUE	0xbadcafe
+@@ -347,33 +348,54 @@ static void update_flags(int *flags, int flag, bool clear)
+ 		*flags |= flag;
+ }
+ 
+-/* Matches a string of form '<pfx>[^=]=.*' and returns it's suffix.
+- * Used to parse btf_decl_tag values.
+- * Such values require unique prefix because compiler does not add
+- * same __attribute__((btf_decl_tag(...))) twice.
+- * Test suite uses two-component tags for such cases:
+- *
+- *   <pfx> __COUNTER__ '='
+- *
+- * For example, two consecutive __msg tags '__msg("foo") __msg("foo")'
+- * would be encoded as:
+- *
+- *   [18] DECL_TAG 'comment:test_expect_msg=0=foo' type_id=15 component_idx=-1
+- *   [19] DECL_TAG 'comment:test_expect_msg=1=foo' type_id=15 component_idx=-1
+- *
+- * And the purpose of this function is to extract 'foo' from the above.
++static const char *skip_decl_tag_pfx(const char *s)
++{
++	int n = 0;
++
++	if (sscanf(s, "comment:%*d:%n", &n) < 0 || !n)
++		return s;
++	return s + n;
++}
++
++static void *realloc_or_free(void *ptr, size_t size)
++{
++	void *new = realloc(ptr, size);
++
++	if (!new)
++		free(ptr);
++	return new;
++}
++
++static int compare_decl_tags(const void *a, const void *b)
++{
++	return strverscmp(*(const char **)a, *(const char **)b);
++}
++
++/*
++ * Compilers don't guarantee order in which BTF attributes would be generated,
++ * while order is important for test tags like __msg.
++ * Each test tag has the following prefix: "comment:" __COUNTER__,
++ * when sorted using strverscmp this gives same order as in the original C code.
+  */
+-static const char *skip_dynamic_pfx(const char *s, const char *pfx)
++static const char **collect_decl_tags(struct btf *btf, int id, int *cnt)
+ {
+-	const char *msg;
 -
-+		} else if ((val = str_has_pfx(s, TEST_TAG_PROG_FLAGS_PFX))) {
- 			clear = val[0] == '!';
- 			if (clear)
- 				val++;
-@@ -577,8 +576,7 @@ static int parse_test_spec(struct test_loader *tester,
- 					goto cleanup;
- 				update_flags(&spec->prog_flags, flags, clear);
- 			}
--		} else if (str_has_pfx(s, TEST_TAG_ARCH)) {
--			val = s + sizeof(TEST_TAG_ARCH) - 1;
-+		} else if ((val = str_has_pfx(s, TEST_TAG_ARCH))) {
- 			if (strcmp(val, "X86_64") == 0) {
- 				arch = ARCH_X86_64;
- 			} else if (strcmp(val, "ARM64") == 0) {
-@@ -596,16 +594,14 @@ static int parse_test_spec(struct test_loader *tester,
- 			collect_jit = get_current_arch() == arch;
- 			unpriv_jit_on_next_line = true;
- 			jit_on_next_line = true;
--		} else if (str_has_pfx(s, TEST_BTF_PATH)) {
--			spec->btf_custom_path = s + sizeof(TEST_BTF_PATH) - 1;
--		} else if (str_has_pfx(s, TEST_TAG_CAPS_UNPRIV)) {
--			val = s + sizeof(TEST_TAG_CAPS_UNPRIV) - 1;
-+		} else if ((val = str_has_pfx(s, TEST_BTF_PATH))) {
-+			spec->btf_custom_path = val;
-+		} else if ((val = str_has_pfx(s, TEST_TAG_CAPS_UNPRIV))) {
- 			err = parse_caps(val, &spec->unpriv.caps, "test caps");
+-	if (strncmp(s, pfx, strlen(pfx)) != 0)
+-		return NULL;
+-	msg = s + strlen(pfx);
+-	msg = strchr(msg, '=');
+-	if (!msg)
+-		return NULL;
+-	return msg + 1;
++	const struct btf_type *t;
++	const char **tags = NULL;
++	int i;
++
++	*cnt = 0;
++	for (i = 1; i < btf__type_cnt(btf); i++) {
++		t = btf__type_by_id(btf, i);
++		if (!btf_is_decl_tag(t) || t->type != id || btf_decl_tag(t)->component_idx != -1)
++			continue;
++		tags = realloc_or_free(tags, (*cnt + 1) * sizeof(*tags));
++		if (!tags)
++			return ERR_PTR(-ENOMEM);
++		tags[(*cnt)++] = btf__str_by_offset(btf, t->name_off);
++	}
++
++	qsort(tags, *cnt, sizeof(*tags), compare_decl_tags);
++	return tags;
+ }
+ 
+ enum arch {
+@@ -419,7 +441,9 @@ static int parse_test_spec(struct test_loader *tester,
+ 	bool stdout_on_next_line = true;
+ 	bool unpriv_stdout_on_next_line = true;
+ 	bool collect_jit = false;
+-	int func_id, i, err = 0;
++	const char **tags = NULL;
++	int func_id, i, nr_tags;
++	int err = 0;
+ 	u32 arch_mask = 0;
+ 	u32 load_mask = 0;
+ 	struct btf *btf;
+@@ -442,20 +466,18 @@ static int parse_test_spec(struct test_loader *tester,
+ 		return -EINVAL;
+ 	}
+ 
+-	for (i = 1; i < btf__type_cnt(btf); i++) {
++	tags = collect_decl_tags(btf, func_id, &nr_tags);
++	if (IS_ERR(tags))
++		return PTR_ERR(tags);
++
++	for (i = 0; i < nr_tags; i++) {
+ 		const char *s, *val, *msg;
+-		const struct btf_type *t;
+ 		bool clear;
+ 		int flags;
+ 
+-		t = btf__type_by_id(btf, i);
+-		if (!btf_is_decl_tag(t))
++		s = skip_decl_tag_pfx(tags[i]);
++		if (!s)
+ 			continue;
+-
+-		if (t->type != func_id || btf_decl_tag(t)->component_idx != -1)
+-			continue;
+-
+-		s = btf__str_by_offset(btf, t->name_off);
+ 		if ((val = str_has_pfx(s, TEST_TAG_DESCRIPTION_PFX))) {
+ 			description = val;
+ 		} else if (strcmp(s, TEST_TAG_EXPECT_FAILURE) == 0) {
+@@ -478,27 +500,27 @@ static int parse_test_spec(struct test_loader *tester,
+ 		} else if (strcmp(s, TEST_TAG_AUXILIARY_UNPRIV) == 0) {
+ 			spec->auxiliary = true;
+ 			spec->mode_mask |= UNPRIV;
+-		} else if ((msg = skip_dynamic_pfx(s, TEST_TAG_EXPECT_MSG_PFX))) {
++		} else if ((msg = str_has_pfx(s, TEST_TAG_EXPECT_MSG_PFX))) {
+ 			err = push_msg(msg, false, &spec->priv.expect_msgs);
+ 			if (err)
+ 				goto cleanup;
+ 			spec->mode_mask |= PRIV;
+-		} else if ((msg = skip_dynamic_pfx(s, TEST_TAG_EXPECT_NOT_MSG_PFX))) {
++		} else if ((msg = str_has_pfx(s, TEST_TAG_EXPECT_NOT_MSG_PFX))) {
+ 			err = push_msg(msg, true, &spec->priv.expect_msgs);
+ 			if (err)
+ 				goto cleanup;
+ 			spec->mode_mask |= PRIV;
+-		} else if ((msg = skip_dynamic_pfx(s, TEST_TAG_EXPECT_MSG_PFX_UNPRIV))) {
++		} else if ((msg = str_has_pfx(s, TEST_TAG_EXPECT_MSG_PFX_UNPRIV))) {
+ 			err = push_msg(msg, false, &spec->unpriv.expect_msgs);
  			if (err)
  				goto cleanup;
  			spec->mode_mask |= UNPRIV;
--		} else if (str_has_pfx(s, TEST_TAG_LOAD_MODE_PFX)) {
--			val = s + sizeof(TEST_TAG_LOAD_MODE_PFX) - 1;
-+		} else if ((val = str_has_pfx(s, TEST_TAG_LOAD_MODE_PFX))) {
- 			if (strcmp(val, "jited") == 0) {
- 				load_mask = JITED;
- 			} else if (strcmp(val, "no_jited") == 0) {
-@@ -635,12 +631,11 @@ static int parse_test_spec(struct test_loader *tester,
+-		} else if ((msg = skip_dynamic_pfx(s, TEST_TAG_EXPECT_NOT_MSG_PFX_UNPRIV))) {
++		} else if ((msg = str_has_pfx(s, TEST_TAG_EXPECT_NOT_MSG_PFX_UNPRIV))) {
+ 			err = push_msg(msg, true, &spec->unpriv.expect_msgs);
+ 			if (err)
+ 				goto cleanup;
+ 			spec->mode_mask |= UNPRIV;
+-		} else if ((msg = skip_dynamic_pfx(s, TEST_TAG_JITED_PFX))) {
++		} else if ((msg = str_has_pfx(s, TEST_TAG_JITED_PFX))) {
+ 			if (arch_mask == 0) {
+ 				PRINT_FAIL("__jited used before __arch_*");
+ 				goto cleanup;
+@@ -510,7 +532,7 @@ static int parse_test_spec(struct test_loader *tester,
+ 					goto cleanup;
+ 				spec->mode_mask |= PRIV;
+ 			}
+-		} else if ((msg = skip_dynamic_pfx(s, TEST_TAG_JITED_PFX_UNPRIV))) {
++		} else if ((msg = str_has_pfx(s, TEST_TAG_JITED_PFX_UNPRIV))) {
+ 			if (arch_mask == 0) {
+ 				PRINT_FAIL("__unpriv_jited used before __arch_*");
+ 				goto cleanup;
+@@ -522,13 +544,13 @@ static int parse_test_spec(struct test_loader *tester,
+ 					goto cleanup;
+ 				spec->mode_mask |= UNPRIV;
+ 			}
+-		} else if ((msg = skip_dynamic_pfx(s, TEST_TAG_EXPECT_XLATED_PFX))) {
++		} else if ((msg = str_has_pfx(s, TEST_TAG_EXPECT_XLATED_PFX))) {
+ 			err = push_disasm_msg(msg, &xlated_on_next_line,
+ 					      &spec->priv.expect_xlated);
+ 			if (err)
+ 				goto cleanup;
+ 			spec->mode_mask |= PRIV;
+-		} else if ((msg = skip_dynamic_pfx(s, TEST_TAG_EXPECT_XLATED_PFX_UNPRIV))) {
++		} else if ((msg = str_has_pfx(s, TEST_TAG_EXPECT_XLATED_PFX_UNPRIV))) {
+ 			err = push_disasm_msg(msg, &unpriv_xlated_on_next_line,
+ 					      &spec->unpriv.expect_xlated);
+ 			if (err)
+@@ -611,22 +633,22 @@ static int parse_test_spec(struct test_loader *tester,
+ 				err = -EINVAL;
+ 				goto cleanup;
+ 			}
+-		} else if ((msg = skip_dynamic_pfx(s, TEST_TAG_EXPECT_STDERR_PFX))) {
++		} else if ((msg = str_has_pfx(s, TEST_TAG_EXPECT_STDERR_PFX))) {
+ 			err = push_disasm_msg(msg, &stderr_on_next_line,
+ 					      &spec->priv.stderr);
+ 			if (err)
+ 				goto cleanup;
+-		} else if ((msg = skip_dynamic_pfx(s, TEST_TAG_EXPECT_STDERR_PFX_UNPRIV))) {
++		} else if ((msg = str_has_pfx(s, TEST_TAG_EXPECT_STDERR_PFX_UNPRIV))) {
+ 			err = push_disasm_msg(msg, &unpriv_stderr_on_next_line,
+ 					      &spec->unpriv.stderr);
+ 			if (err)
+ 				goto cleanup;
+-		} else if ((msg = skip_dynamic_pfx(s, TEST_TAG_EXPECT_STDOUT_PFX))) {
++		} else if ((msg = str_has_pfx(s, TEST_TAG_EXPECT_STDOUT_PFX))) {
+ 			err = push_disasm_msg(msg, &stdout_on_next_line,
+ 					      &spec->priv.stdout);
+ 			if (err)
+ 				goto cleanup;
+-		} else if ((msg = skip_dynamic_pfx(s, TEST_TAG_EXPECT_STDOUT_PFX_UNPRIV))) {
++		} else if ((msg = str_has_pfx(s, TEST_TAG_EXPECT_STDOUT_PFX_UNPRIV))) {
+ 			err = push_disasm_msg(msg, &unpriv_stdout_on_next_line,
  					      &spec->unpriv.stdout);
  			if (err)
- 				goto cleanup;
--		} else if (str_has_pfx(s, TEST_TAG_LINEAR_SIZE)) {
-+		} else if ((val = str_has_pfx(s, TEST_TAG_LINEAR_SIZE))) {
- 			switch (bpf_program__type(prog)) {
- 			case BPF_PROG_TYPE_SCHED_ACT:
- 			case BPF_PROG_TYPE_SCHED_CLS:
- 			case BPF_PROG_TYPE_CGROUP_SKB:
--				val = s + sizeof(TEST_TAG_LINEAR_SIZE) - 1;
- 				err = parse_int(val, &spec->linear_sz, "test linear size");
- 				if (err)
- 					goto cleanup;
+@@ -706,9 +728,11 @@ static int parse_test_spec(struct test_loader *tester,
+ 
+ 	spec->valid = true;
+ 
++	free(tags);
+ 	return 0;
+ 
+ cleanup:
++	free(tags);
+ 	free_test_spec(spec);
+ 	return err;
+ }
 
 -- 
 2.53.0
