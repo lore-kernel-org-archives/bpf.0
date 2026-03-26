@@ -1,178 +1,160 @@
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2F201427A
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 20:32:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.174
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774557178; cv=pass; b=WTZrYkFYKtYmMY9emwBtW56xb/W75oNhfkAK/UlYKMwsO1rziZs1GoXkb0FXkaiek5ibqO0zt+fb4vyQHy5nMWPOddI78C4mqFOOyRvzvBAMNq4b/oWLOuZZJxTu78OmdtaDTn99ZGC8bVjt7KmEBcSiKIL0iHWx1E3OBIk8RH8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774557178; c=relaxed/simple;
-	bh=vv3fINOTm4a1DJcw01C0iHFPBMj2LdgZIpAj1i6uj8A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OQb3ixs5JaHAtQmnyhwFMCkcnJ9nRhRyyliHV5j00Gy0ngH13wklSX2RoXByAb91bLwEG8DNe8EKEZtWDQTE7G0BPajnHmSWgC2+pJ8VmwFDTNnk6uMRW4f5PLlA/goXuVx4yB7dqo/HUyQwxRqYJiciflkvTwltEXg0YxAh73Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CjiN0GtE; arc=pass smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 353933A6EE0
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 20:43:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774557823; cv=none; b=kEPNtIlwH0b2f/xUqp35fz9HNNjHS2n27Evluh83yVISmQRK7JlzxCJPXcys1L1DM/7dUuXk3Yg5lXVx6nd+yh8FOVJ+HDsjuam8lpvBnj9wZCg27gZ7ug4CPeDF5J1sL786SYi8NEbwAbz6wg/bi0xpSdEVUDd1nG2icB5azeY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774557823; c=relaxed/simple;
+	bh=egOiypsJwjF8/djFU7mQxlppV2Rai+dGuGmpTuFy1W8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uRRGoBBV6lvpDJUr2q8AF5T/CkKo1EqS5cla3PY03UhkzVkAUqBMetRUm/D3dMtuizhJV9Atd/OtnA/N00zL7Cr/Y2dwPbewkdD8gK0bPjrKxsLo/VCldN0SoULMhO+/5wRwtx9abkTezo30UnjWH6UdEpKn8huES6EhUHL677M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k55tI3hk; arc=none smtp.client-ip=209.85.215.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CjiN0GtE"
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-79a46ebe2beso14134377b3.2
-        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 13:32:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774557176; cv=none;
-        d=google.com; s=arc-20240605;
-        b=CwzXypzqzJ19sRurlY/oU6A7rl74g4wPk9aE/feCmxdH+/cYin50hJnu08QMn7Xa5L
-         2nkl0Fj00ezCYDsxhkCLHDuKvKwypfcZFEGrH5dFWzffmR2TTEXlVdyS/yjI+kWcbMC7
-         f1NyRddLr3MgEUIf0xf05wKYH8FaREmy2QVcKtiKuoSAmaq0PVbBvGanzEuZuntFdnEl
-         LBK+G+ep4G9Ga4Q8Fl18JkKgxr5YG7fC6YGwtWJqtCVQMvdBDWLkSLoOD+nJyyFdwLfH
-         vkbk8Ktah3uLOKd37g6al90E+Ax+wLAOyLsRx5ThKd9bRucHy4RDvGWZPGUMCB3KOgjp
-         +9kQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=So3250I84ApogcJkFPpmfO31U8ThAo0mkcinoVGA0TI=;
-        fh=PzF4mx18zzEJc6q5CF9iWR26tlykEsddYUFyx3rCgvY=;
-        b=k8YKLYfDAnB3b0HaZRACmObeXhmtRra7jRrdkZNGDDSLMFdjz++nKml5URq8TyaS4F
-         53YFe4q0peBFoCY1SFEG0nobnwRZFO/Don+K/4t+D6gPHkZMUS3vnSFbjbUzqw/qBbFK
-         bs6M8EkXoRcxwiAx4dRTAnwooMOcfwN6TuXdKPX4KFFLNBO6HaW9lNTMBXLMXNHh9E9d
-         THBMbUP20n+SN5Ve19r8tuggsCQ/YmHuHPKOF/MeaEbP/e3v6citFRXU5Sqkwnzwd76J
-         /2ust5hEA5w7U2/xq/gpnjNYoONeWAHyMkD5MVmcEK7C4sGMzCCQQWsGgwn/zLNpH7gC
-         TKbQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k55tI3hk"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-c7412b07f22so1153356a12.0
+        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 13:43:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774557176; x=1775161976; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=So3250I84ApogcJkFPpmfO31U8ThAo0mkcinoVGA0TI=;
-        b=CjiN0GtEDCU+KMhfWcJbV2aP9hOHCaYPGugc0isBxLw+PnUN63xpsgr+rfPMfPFb7I
-         UWyUCU+ZQ6waO+oqY6wBREBczrAxottslbLxSpkxdsFqDjV0vcfow1r/MQr3hYjfDkn7
-         0Mf4QFwdngYJOmyWVD8lhv6h3czaR6tnLZSb4LVuiq/9kOBH/tAb4bxdcuKBqS9AJjLD
-         d22PDYycxZTtWis+yqODeJf2kvsKwRBXVnVOmbqXRjVNXLX8oRiCXWoiWcGQdlGtP18d
-         vzwNe3cydmM+UbZqxxuS3mMp1ZHC8Dx0SHPXfoC4AkcVeAtFPTcA6QqrJPgW//0Y72y2
-         o9Ig==
+        d=gmail.com; s=20251104; t=1774557821; x=1775162621; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ig5sdFszUgYcFHRRqi6hTRlPGGoN0upuWT6iWptjeag=;
+        b=k55tI3hkB/gLrtGUwhFxDVOwPnH1TMdWh2RVsGiFj6cut1/4jPJAvik323Ycb0DYUN
+         6X8+Gw3lbecJLxKoGVADAdUGjv6TUNXSvE6FoD+NtLTHHGytGLC+yNRqxRnPucYFkP2t
+         P5VXbMInXrrepTQJVb19RETCBz16lHFe68sBdSEnVh75MaZG0DX5H13YjcmpK8Axn4vs
+         EFxh3uCr5QFUzGKDC8HqoK6TUrxn/mQUuJ2V/9l0U6BsDEJiPJ0TJVTDXhUGlsJRCpFZ
+         FeR4FYnM3+TIG0AgWjRdeIPhrNRcM745Buvo5ct+vNvyti6xmwi8J9vc9KBD6EN0afuZ
+         DDZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774557176; x=1775161976;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=So3250I84ApogcJkFPpmfO31U8ThAo0mkcinoVGA0TI=;
-        b=nTqIRA5Rh0McCK2r2kBVNVjHXqbQXIaDAn0vAzfIyci6X8FT1Y0XeMoB6v9aDgzXsF
-         9yRHCe9hfHmTP0mvlK3vehTd+2TR8kn7N53WOXZOzFZHJ0UZyUWuPv6crxbi+xskAIBn
-         fm9KRoW5dZYn6S8Mx29ps2DNVrVW1iE+h0ryam/V7IMxII/cAYEHctIi3cHj2atQv92O
-         uTyP/beENzrAzK0wRSuWRl4zr6/bzzgbH3JlsZSvXC1+xHWcMOUU98DxJ6W+7F5vULag
-         DMjgNRScYR8Isyl1rg7DVH5dQVTwb9KBatjZRITz+eMbKiQYnCxUkZsTf6IUiq2/TluN
-         yUug==
-X-Gm-Message-State: AOJu0YzQsDL5Zik5lThMfmT2Qrhp998LGJaxs8TZRVUxg87Qvckersm2
-	z9wSa0h8O/woqvoBflcRkMozttNYul1lcHU2ADDDxJ+oZkMSYHL/n9MkqUbhnVzgnMgqCeb5CNX
-	5tgpaRKPUAU3SVqwVjX+zOVilI8qyd2M=
-X-Gm-Gg: ATEYQzzGEU1X1+4cAYt9blfAvdm9bIfNHqXHRm0lNiTMZYuwS684GLofNVblv4k0HI6
-	OuPrXv1dUkzNRfpi92Ek7Ag9hMswF9QS4BFAc0h3ymxzT5cocJ3clajKOGT/Cn/6Z4B2foarXZ6
-	VzAUQBg52OjPY2mP9EZ5DZu7dPv89dG1FNJ3FL23nbRYMrK+BnB4T13NnXTLu+j8if694FUGfnq
-	aL5g/e0AjXxgtN+tHbM4qOI31oIVVi5HDLUW4DC1jVrOkirAK45TqQECaxWne0cxGvD/3nD0/fp
-	Js9BTPZbn9QVYrhYHp2RXoU=
-X-Received: by 2002:a05:690c:360f:b0:79a:5b3a:8e25 with SMTP id
- 00721157ae682-79acf6dbf2fmr99822067b3.58.1774557175836; Thu, 26 Mar 2026
- 13:32:55 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774557821; x=1775162621;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ig5sdFszUgYcFHRRqi6hTRlPGGoN0upuWT6iWptjeag=;
+        b=G+BWwDxWCO7aY8AG/gEMOLhiVFzM/bXedmeTp3bCkGG/rEeMa3FiH9iDFEEmwyERZX
+         Rv4s+QjPC8gYxe5SLk72vJOzgt2+XsrE4Qad2qnoYOWLKEWLvVI80Ljk//mYHVBv7Jw4
+         AJyQ4MKiAgh4AmVE8b1c1OqNlze4Dedav2ZfbF1ZsLoJ7pl2udOzqP9Fl7am1Dbk+5hS
+         blIO0n5V/1ecIZXCEoW8JG1/TeDTlfpRL7gWga2xE89kYIT6HR/DA3LX+DaVCjrrSd/+
+         Pf7OV/g6alqJVsVlfP6mD0sI/Xztlnq8yciTl4szcP3JNnBJa2D1RBBf1UfyJUEBArpw
+         XDlg==
+X-Gm-Message-State: AOJu0YzC6ZIAHQTSnQb8cj8jBHM0qC5CT9LFKT/V0/DZv/8oX2tIvPmG
+	Q9MQO7DleIOxgBEGyYdau9DaTSgHz/g6dmLTk+iLjSfcq1byzQLNnYB0ENib8A==
+X-Gm-Gg: ATEYQzyGM3sIcJQBee41O5GNxyssY46QvfM8S84l3bKlHHKXsUfR4654MT83lH9DE9c
+	EpN2VUybkwK8jSYZan8CQuMmTfZiT3SE8r/IeLEVh/WkbXISCE1V2Ak/cWw1A4q6PyxuJM4Rrtc
+	X0ofpj/mTZyfgx2vEHaTqdAr1pW/7Sq6/FJrN2oXz125bghy/EwKFNdGyqBYJrPCHpkC4x7cMG5
+	tBYFNxF9ji4wfdT2PHpv3kV4fh+HNHA80fIsxsTJgkancVqfn1SqafWXuzzieEmHukheBqw/FvR
+	xzwGJNEx01yPmmRQ9909mVxyKuyan3+aT4R1sp0F4170ukA6/sTMR8k6iRkrOGeBSrTZ+Hxvbvb
+	D1p0u/J7QZeWaSImg26X9MPcMor8LUv2Q1L+1OzMvtQ1wu71v7lrLddNanB1Y/S6v/c4g3qsRA+
+	GEoIwWjXIv5xflIWtclK5BFfTdDOJ75jhI8gQi1GvFMLVsSRla4wVjJZJAYD7NUzlmSMWZNbbus
+	kI=
+X-Received: by 2002:a17:902:d4cb:b0:2b0:6ba2:3d78 with SMTP id d9443c01a7336-2b0c48136a4mr28286055ad.3.1774557821400;
+        Thu, 26 Mar 2026 13:43:41 -0700 (PDT)
+Received: from mi-HP-ProDesk-680-G6-PCI-Microtower-PC.mioffice.cn ([43.224.245.226])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b0bc90d2cdsm46885085ad.75.2026.03.26.13.43.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Mar 2026 13:43:41 -0700 (PDT)
+From: zhidao su <soolaugust@gmail.com>
+X-Google-Original-From: zhidao su <suzhidao@xiaomi.com>
+To: bpf@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	sched-ext@lists.linux.dev,
+	zhidao su <suzhidao@xiaomi.com>
+Subject: [PATCH] libbpf: resolve versioned kfuncs by exact name before essential-name lookup
+Date: Fri, 27 Mar 2026 04:43:35 +0800
+Message-ID: <20260326204335.3756885-1-suzhidao@xiaomi.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260326052437.590158-1-ameryhung@gmail.com> <20260326052437.590158-2-ameryhung@gmail.com>
- <87ikaiimyy.fsf@gmail.com>
-In-Reply-To: <87ikaiimyy.fsf@gmail.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Thu, 26 Mar 2026 13:32:45 -0700
-X-Gm-Features: AQROBzDIdLJS7UlJaGo5T1COIP5PNpDfFxFGUBLUucY0kkG04jVKanTT2XQFj8s
-Message-ID: <CAMB2axNyYWApPr3gSpLe2k5kej04MGi1e8DWSWEfGa7xG2wKPw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 1/3] selftests/bpf: Fix task_local_data data
- allocation size
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, 
-	kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Mar 26, 2026 at 9:18=E2=80=AFAM Mykyta Yatsenko
-<mykyta.yatsenko5@gmail.com> wrote:
->
-> Amery Hung <ameryhung@gmail.com> writes:
->
-> > Currently, when allocating memory for data, size of tld_data_u->start
-> > is not taken into account. This may cause OOB access. Fixed it by addin=
-g
-> > the non-flexible array part of tld_datg_u.
-> >
-> > Besides, explicitly align tld_data_u->data to 8 bytes in case some
-> > fields are added before data in the future. It could break the
-> > assumption that every data field is 8 byte aligned and
-> > sizeof(tld_data_u) will no longer be equal to
-> > offsetof(struct tld_data_u, data), which we use interchangeably.
-> >
-> > Signed-off-by: Amery Hung <ameryhung@gmail.com>
-> > ---
-> >  .../selftests/bpf/prog_tests/task_local_data.h       | 12 +++++++-----
-> >  1 file changed, 7 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_data.h b=
-/tools/testing/selftests/bpf/prog_tests/task_local_data.h
-> > index 7819f318b2fb..a52d8b549425 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/task_local_data.h
-> > +++ b/tools/testing/selftests/bpf/prog_tests/task_local_data.h
-> > @@ -90,7 +90,7 @@ typedef struct {
-> >
-> >  struct tld_metadata {
-> >       char name[TLD_NAME_LEN];
-> > -     _Atomic __u16 size;
-> > +     _Atomic __u16 size; /* size of tld_data_u->data */
-> >  };
-> >
-> >  struct tld_meta_u {
-> > @@ -101,7 +101,7 @@ struct tld_meta_u {
-> >
-> >  struct tld_data_u {
-> >       __u64 start; /* offset of tld_data_u->data in a page */
-> > -     char data[];
-> > +     char data[] __attribute__((aligned(8)));
-> >  };
-> >
-> >  struct tld_map_value {
-> > @@ -158,6 +158,7 @@ static int __tld_init_data_p(int map_fd)
-> >       struct tld_data_u *data;
-> >       void *data_alloc =3D NULL;
-> >       int err, tid_fd =3D -1;
-> > +     size_t size;
-> >
-> >       tid_fd =3D syscall(SYS_pidfd_open, sys_gettid(), O_EXCL);
-> >       if (tid_fd < 0) {
-> > @@ -173,9 +174,10 @@ static int __tld_init_data_p(int map_fd)
-> >        * tld_meta_p->size =3D TLD_DYN_DATA_SIZE +
-> >        *          total size of TLDs defined via TLD_DEFINE_KEY()
-> >        */
-> > -     data_alloc =3D (use_aligned_alloc || tld_meta_p->size * 2 >=3D TL=
-D_PAGE_SIZE) ?
-> > -             aligned_alloc(TLD_PAGE_SIZE, tld_meta_p->size) :
-> > -             malloc(tld_meta_p->size * 2);
-> > +     size =3D tld_meta_p->size + sizeof(struct tld_data_u);
-> > +     data_alloc =3D (use_aligned_alloc || size * 2 >=3D TLD_PAGE_SIZE)=
- ?
-> > +             aligned_alloc(TLD_PAGE_SIZE, size) :
-> > +             malloc(size * 2);
-> It looks like there is no point having Patch 1 separately, most of it is
-> overwritten in the Patch 2, I understand you want to have fix and
-> simplification separately, but is it really worth it for this selftest.
+Some kfuncs use KF_IMPLICIT_ARGS and export both a base name (where
+the verifier strips the implicit aux parameter from the prototype) and
+a versioned name with additional user-visible parameters (e.g.
+scx_bpf_dsq_move_to_local vs scx_bpf_dsq_move_to_local___v2).
 
-The allocation path is already a bit puzzling, so I have this fix as a
-separate patch to make patch 2 easier to follow.
+When a BPF program declares a weak __ksym with a flavor suffix such as
+func___v2, libbpf strips the suffix to obtain the essential name and
+looks up the base entry first.  For KF_IMPLICIT_ARGS kfuncs the base
+entry has fewer parameters (aux was stripped); the prototype
+compatibility check against the versioned declaration (which has the
+extra user parameter) then fails, and libbpf leaves the weak symbol
+unresolved even though a perfectly-matching versioned kernel entry exists.
 
-That said, I can squash it if it is simpler and needs a respin.
+Fix by trying an exact-name lookup first when the symbol has an
+essential name (i.e. it has a flavor suffix).  If the exact name is
+found in kernel BTF and its prototype is compatible, use it directly.
+Only fall through to the essential-name lookup when the exact name is
+absent or incompatible.
 
+Signed-off-by: zhidao su <suzhidao@xiaomi.com>
+---
+ tools/lib/bpf/libbpf.c | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-> >       if (!data_alloc) {
-> >               err =3D -ENOMEM;
-> >               goto out;
-> > --
-> > 2.52.0
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 0be7017800fe..80e495aebe68 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -8630,6 +8630,40 @@ static int bpf_object__resolve_ksym_func_btf_id(struct bpf_object *obj,
+ 
+ 	local_func_proto_id = ext->ksym.type_id;
+ 
++	/*
++	 * For kfuncs with a flavor suffix (e.g. "func___v2"), first try the
++	 * exact name.  If the exact name exists in kernel BTF and its
++	 * prototype is compatible, use it directly.  This is necessary for
++	 * KF_IMPLICIT_ARGS kfuncs that export both a base name (with the
++	 * implicit aux parameter stripped) and a versioned name with extra
++	 * parameters: the essential-name lookup would find the base entry
++	 * (fewer params) and fail the compat check, leaving the weak symbol
++	 * unresolved even though the versioned kernel entry is a perfect
++	 * match.
++	 */
++	if (ext->essent_name) {
++		struct module_btf *exact_mod_btf = NULL;
++		struct btf *exact_btf = NULL;
++		int exact_id;
++
++		exact_id = find_ksym_btf_id(obj, ext->name, BTF_KIND_FUNC,
++					    &exact_btf, &exact_mod_btf);
++		if (exact_id >= 0) {
++			kern_func = btf__type_by_id(exact_btf, exact_id);
++			kfunc_proto_id = kern_func->type;
++			ret = bpf_core_types_are_compat(obj->btf,
++							local_func_proto_id,
++							exact_btf,
++							kfunc_proto_id);
++			if (ret > 0) {
++				kern_btf = exact_btf;
++				mod_btf = exact_mod_btf;
++				kfunc_id = exact_id;
++				goto found;
++			}
++		}
++	}
++
+ 	kfunc_id = find_ksym_btf_id(obj, ext->essent_name ?: ext->name, BTF_KIND_FUNC, &kern_btf,
+ 				    &mod_btf);
+ 	if (kfunc_id < 0) {
+@@ -8655,6 +8689,7 @@ static int bpf_object__resolve_ksym_func_btf_id(struct bpf_object *obj,
+ 		return -EINVAL;
+ 	}
+ 
++found:
+ 	/* set index for module BTF fd in fd_array, if unset */
+ 	if (mod_btf && !mod_btf->fd_array_idx) {
+ 		/* insn->off is s16 */
+-- 
+2.43.0
+
