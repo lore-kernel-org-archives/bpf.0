@@ -1,372 +1,154 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B08A3F1649;
-	Thu, 26 Mar 2026 11:43:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A50A3FA5C7;
+	Thu, 26 Mar 2026 11:49:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774525434; cv=none; b=d+QzYTMUIIXUtb/XvvMwPRnmaWaIQBGdxHIBAkPisRm/Y04pPqLGmgu6eNRTG1sjH90Uh/hOAzYXU6BJoOi7tjzxuHc6KxLXLyTyzzrENWF1hil2Gn9M9Hv7Y2Yl+RrGpj7Z97bZMppHhWBsLcgtYTmU280OA5rqAX9SdZ4uqiQ=
+	t=1774525782; cv=none; b=C5bFDCX4hFD4ouV/fXGJFyiJqJbVHwqdq24C33MaWJgK3jvaxJbkC8wb+RKiZAVlO73M/jdE85/yM4/IBMeXDB0vDS/07OMNYlQf6MXp1xbuq2U4riCD7P/ZlosD3GVRvnpOJWT7Odd1tl97CgvHSfV50IiKeNQvyKWkbJ7YtG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774525434; c=relaxed/simple;
-	bh=YL97lFy5kQhwfmoYidad7USKzO67YzuUg7btoOK2/BM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=flsf2m4hTVfLbogU4ZSVCmcT5Q7sieUUR/pkOEdu46LGK4WKy7uoORYOF97iVsQfDuXBRphAmr6X/p/bbXhz76xF6zVkQvMCZkLRkLOvN4RiyI9NplkGT1rRfE0sgeXxsbWgz1OjvnWDeUV/cMjq5jeeGcGsfhBRla2Ox9PHw10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JA6ACA81; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774525782; c=relaxed/simple;
+	bh=xFjviNipDLhR8rwfNROglO91Kk/zyF+M3xCXT4MhVmY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=OU2NHAkVcuL0I49WUQqqBNrxIjwFwetGSgiq5OmPQ7ytCcUDmOhxwJRr+sIKRlwtrlvgqnx+mP9XorOTKF7QHahFUX3aJIrncdMWMbZiTb37rvX8I+4LSL6cUK04zyZ9lovciO4dPjVn2sfX9lIg4X8L+30yl6YXee4UCt+jBjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Od1nT4lc; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JA6ACA81"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 303A4C2BC87;
-	Thu, 26 Mar 2026 11:43:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774525434;
-	bh=YL97lFy5kQhwfmoYidad7USKzO67YzuUg7btoOK2/BM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JA6ACA81RfmbrWjxio4e7C5FDjZFNALezl7n8aWESFgc2wY0MUQTcyrwSVrXFKhWX
-	 CBn7G7K3lo61REFN7C7JdBcn10jfbVgFJ3b08Y0oRk3h0Bx8qjhlQvs6jTaTFsK9yS
-	 f9k58uCkZYoo+Ra/EJYuyrt5MIO9w6xrxoyIi2NSs5NnLuM2xwDqfUNsb/CdvjZM/d
-	 JETtlI3gh27thQHPdxaq1KcPhH5AltUEmbbN0xWXyDJlmH9wlogPe1kl50cb7gVy+t
-	 jGq2rizVUdwqDG6eCfK9wfQvvIv1dDX/LWe2Q8vlJtso7M/wUcjnDO2c4IHIAUeg+m
-	 GvOfNuKqrbf+g==
-Date: Thu, 26 Mar 2026 11:43:46 +0000
-From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
-To: Shakeel Butt <shakeel.butt@linux.dev>
-Cc: lsf-pc@lists.linux-foundation.org, 
-	Andrew Morton <akpm@linux-foundation.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	David Hildenbrand <david@kernel.org>, Michal Hocko <mhocko@kernel.org>, 
-	Qi Zheng <zhengqi.arch@bytedance.com>, Chen Ridong <chenridong@huaweicloud.com>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
-	Kairui Song <ryncsn@gmail.com>, Matthew Wilcox <willy@infradead.org>, 
-	Nhat Pham <nphamcs@gmail.com>, Gregory Price <gourry@gourry.net>, 
-	Barry Song <21cnbao@gmail.com>, David Stevens <stevensd@google.com>, 
-	Vernon Yang <vernon2gm@gmail.com>, David Rientjes <rientjes@google.com>, 
-	Kalesh Singh <kaleshsingh@google.com>, wangzicheng <wangzicheng@honor.com>, 
-	"T . J . Mercier" <tjmercier@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	Suren Baghdasaryan <surenb@google.com>, Meta kernel team <kernel-team@meta.com>, bpf@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [LSF/MM/BPF TOPIC] Towards Unified and Extensible Memory Reclaim
- (reclaim_ext)
-Message-ID: <42e26dbb-0180-4408-b8a8-be0cafb75ad9@lucifer.local>
-References: <20260325210637.3704220-1-shakeel.butt@linux.dev>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Od1nT4lc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774525773; x=1806061773;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xFjviNipDLhR8rwfNROglO91Kk/zyF+M3xCXT4MhVmY=;
+  b=Od1nT4lcb2LQOQZBltQjWQIWhg4V4CstFhTQW+cyPeV/SzwnpIqCk00Y
+   uQFqIrFbkugFZ7EEbPPQX2OMV/qRKjpvm0xBuWsUCTM4fxbjodCVDQkcl
+   RFd/9bkraq9nxWzPK2hYPxuf76YWYT7zwrKUqW3hQIhaM6dK+g55/5p9U
+   zsCpDvULyDNHbuYv1A8AGZg5FxBzmR9WC8ZmtQEoT3j1UTEO7+efmftsi
+   K2T6mtonSeYJJMAK9IxXu90RVaurP8i+QpxmXSzqJRFzBKknI7eiYnorh
+   p2ojin+48YHogDDSN1Rl0mtsYUbC0seSG5RfBnRUAhSRbBGFXbSpqMiJx
+   Q==;
+X-CSE-ConnectionGUID: d4TH90QERvuanzo9iVsZJQ==
+X-CSE-MsgGUID: Q/rxDpIQTBKegxS0cmAGlQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11740"; a="75776226"
+X-IronPort-AV: E=Sophos;i="6.23,142,1770624000"; 
+   d="scan'208";a="75776226"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2026 04:49:31 -0700
+X-CSE-ConnectionGUID: FhUjxxA7Ssq/OJzPnxPy7g==
+X-CSE-MsgGUID: rM5bBhoMTxywHz8kefW4uA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,142,1770624000"; 
+   d="scan'208";a="248028994"
+Received: from boxer.igk.intel.com ([10.102.20.173])
+  by fmviesa002.fm.intel.com with ESMTP; 26 Mar 2026 04:49:29 -0700
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org,
+	magnus.karlsson@intel.com,
+	stfomichev@gmail.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	larysa.zaremba@intel.com,
+	aleksander.lobakin@intel.com,
+	bjorn@kernel.org,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: [PATCH v4 net 00/11] xsk: tailroom reservation and MTU validation
+Date: Thu, 26 Mar 2026 12:49:08 +0100
+Message-Id: <20260326114919.519456-1-maciej.fijalkowski@intel.com>
+X-Mailer: git-send-email 2.38.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260325210637.3704220-1-shakeel.butt@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Mar 25, 2026 at 02:06:37PM -0700, Shakeel Butt wrote:
-> The Problem
-> -----------
->
-> Memory reclaim in the kernel is a mess. We ship two completely separate
-> eviction algorithms -- traditional LRU and MGLRU -- in the same file.
+v3->v4:
+- allow exact 128 bytes of space when user defined headroom is deducted
+  from total frame size
+- provide a routine for reading procfs entries within xskxceiver
+  * use it to fetch cache line size and calculate skb_shared_info size
+    on our own
+- clean up gve and igc xsk pool enablement routines
+- include mtu vs frame size * max zc segments validation in
+  xp_assign_dev()
 
-Agreed :)
+v2->v3:
+- add tags from Bjorn/Stan
+- provide at least 128 bytes instead ETH_ZLEN when validating frame
+  headroom
+  * this way we can get rid of i40e/ice changes
+  * make sure xsk_pool_get_rx_frame_size() returns value 128b-aligned
+  * and remove pre-check from idpf
+- separate XDP_UMEM_SG_FLAG fixes from MTU validation in xsk_bind()
+- make drop_idx a local variable in xsk's xdp drop prog
+- adjust rx_dropped to new 128b related values
+- move ugly placed define (Bjorn)
+- remove READ_ONCE when fetching netdev->mtu (Bjorn)
 
-> mm/vmscan.c is over 8,000 lines. 40% of it is MGLRU-specific code that
-> duplicates functionality already present in the traditional path. Every
-> bug fix, every optimization, every feature has to be done twice or it
-> only works for half the users. This is not sustainable. It has to stop.
+v1->v2:
+- remove xsk_pool_get_tailroom() definition for !CONFIG_XDP_SOCKETS
+  (Stan)
+- do not rely on pool->umem->zc when configuring tailroom (Stan, Bjorn)
+- simplify dbuff setting in ZC drivers (Bjorn)
+- use defines for {head,tail}room in tests (Bjorn)
+- return EINVAL instead of EOPNOTSUPP when mtu setting is wrong (Bjorn)
+- include vlan headers and fcs length when validating mtu (Olek)
+- tighten umem headroom validation when registering umem (Sashiko AI)
+- set XDP_USE_SG in xp_assign_dev_shared() (Sashiko AI)
+- adjust rx dropped xskxceiver test
 
-Yup.
+Hi,
 
->
-> We should unify both algorithms into a single code path. In this path,
-> both algorithms are a set of hooks called from that path. Everyone
-> maintains, understands, and evolves a single codebase. Optimizations are
-> now evaluated against -- and available to -- both algorithms. And the
-> next time someone develops a new LRU algorithm, they can do so in a way
-> that does not add churn to existing code.
+here we fix a long-standing issue regarding multi-buffer scenario in ZC
+mode - we have not been providing space at the end of the buffer where
+multi-buffer XDP works on skb_shared_info. This has been brought to our
+attention via [0].
 
-Yup. I mean it's less churn more duplication which is a lot worse.
+Unaligned mode does not get any specific treatment, it is user's
+responsibility to properly handle XSK addresses in queues.
 
->
-> How We Got Here
-> ---------------
->
-> MGLRU brought interesting ideas -- multi-generation aging, page table
-> scanning, Bloom filters, spatial lookaround. But we never tried to
-> refactor the existing reclaim code or integrate these mechanisms into the
-> traditional path. 3,300 lines of code were dumped as a completely
-> parallel implementation with a runtime toggle to switch between the two.
-> No attempt to evolve the existing code or share mechanisms between the
-> two paths -- just a second reclaim system bolted on next to the first.
+With adjustments included here in this set against xskxceiver I have
+been able to pass the full test suite on ice.
 
-Yeah, I don't love that we accepted it in this form.
+Thanks,
+Maciej
 
-With review far sharper now I would hope in future there'd be pushback in at
-least having better separation in future.
+[0]: https://community.intel.com/t5/Ethernet-Products/X710-XDP-Packet-Corruption-Issue-DRV-MODE-Zero-Copy-Multi-Buffer/m-p/1724208
 
->
-> To be fair, traditional reclaim is not easy to refactor. It has
-> accumulated decades of heuristics trying to work for every workload, and
-> touching any of it risks regressions. But difficulty is not an excuse.
-> There was no justification for not even trying -- not attempting to
-> generalize the existing scanning path, not proposing shared
-> abstractions, not offering the new mechanisms as improvements to the code
-> that was already there. Hard does not mean impossible, and the cost of
-> not trying is what we are living with now.
 
-Yes. Agreed very much so.
+Maciej Fijalkowski (11):
+  xsk: tighten UMEM headroom validation to account for tailroom and min
+    frame
+  xsk: respect tailroom for ZC setups
+  xsk: fix XDP_UMEM_SG_FLAG issues
+  xsk: validate MTU against usable frame size on bind
+  selftests: bpf: introduce a common routine for reading procfs
+  selftests: bpf: fix pkt grow tests
+  selftests: bpf: have a separate variable for drop test
+  selftests: bpf: adjust rx_dropped xskxceiver's test to respect
+    tailroom
+  idpf: remove xsk frame size check against alignment
+  igc: remove home-grown xsk's frame size validation
+  gve: remove home-grown xsk's frame size validation
 
->
-> The Differences That Matter
-> ---------------------------
->
-> The two algorithms differ in how they classify pages, detect access, and
-> decide what to evict. But most of these differences are not fundamental
-> -- they are mechanisms that got trapped inside one implementation when
-> they could benefit both. Not making those mechanisms shareable leaves
-> potential free performance gains on the table.
->
-> Access detection: Traditional LRU walks reverse mappings (RMAP) from the
-> page back to its page table entries. MGLRU walks page tables forward,
-> scanning process address spaces directly. Neither approach is inherently
-> tied to its eviction policy. Page table scanning would benefit
-> traditional LRU just as much -- it is cache-friendly, batches updates
-> without the LRU lock, and naturally exploits spatial locality. There is
-> no reason this should be MGLRU-only.
+ drivers/net/ethernet/google/gve/gve_main.c    |  5 --
+ drivers/net/ethernet/intel/idpf/xsk.c         | 10 ----
+ drivers/net/ethernet/intel/igc/igc_xdp.c      | 11 ----
+ include/net/xdp_sock.h                        |  2 +-
+ include/net/xdp_sock_drv.h                    | 17 +++++-
+ net/xdp/xdp_umem.c                            |  3 +-
+ net/xdp/xsk_buff_pool.c                       | 11 +++-
+ .../selftests/bpf/prog_tests/test_xsk.c       | 55 +++++++++----------
+ .../selftests/bpf/prog_tests/test_xsk.h       |  2 +
+ .../selftests/bpf/progs/xsk_xdp_progs.c       |  4 +-
+ tools/testing/selftests/bpf/xskxceiver.c      | 44 +++++++++++++++
+ 11 files changed, 104 insertions(+), 60 deletions(-)
 
-Right.
+-- 
+2.43.0
 
->
-> Bloom filters and lookaround: MGLRU uses Bloom filters to skip cold
-> page table regions and a lookaround optimization to scan adjacent PTEs
-> during eviction. These are general-purpose optimizations for any
-> scanning path. They are locked inside MGLRU today for no good reason.
->
-> Lock-free age updates: MGLRU updates folio age using atomic flag
-> operations, avoiding the LRU lock during scanning. Traditional reclaim
-> can use the same technique to reduce lock contention.
->
-> Page classification: Traditional LRU uses two buckets
-> (active/inactive). MGLRU uses four generations with timestamps and
-> reference frequency tiers. This is the policy difference --
-> how many age buckets and how pages move between them. Every other
-> mechanism is shareable.
->
-> Both systems already share the core reclaim mechanics -- writeback,
-> unmapping, swap, NUMA demotion, and working set tracking. The shareable
-> mechanisms listed above should join that common core. What remains after
-> that is a thin policy layer -- and that is all that should differ between
-> algorithms.
-
-Yeah, this all really speaks to the review simply not being sufficient at
-the time.
-
-Given the data given by Mike at [0], it suggests the recent sub-M changes
-have made a really big difference to this (I'm genuinely pleasantly
-surprised by that!) so hopefully this is something we'll avoid in future.
-
-[0]:https://lore.kernel.org/linux-mm/acJEFArj6uw2Z_2e@kernel.org/
-
->
-> The Fix: One Reclaim, Pluggable and Extensible
-> -----------------------------------------------
->
-> We need one reclaim system, not two. One code path that everyone
-> maintains, everyone tests, and everyone benefits from. But it needs to
-> be pluggable as there will always be cases where someone wants some
-> customization for their specialized workload or wants to explore some
-> new techniques/ideas, and we do not want to get into the current mess
-> again.
-
-OK so I was with you up until the pluggable bit :) it's like you're
-combining two things here, obviously - unification and pluggability.
-
-I think we should consider both separately.
-
-I also hope that as a result of this those who are involved in unification
-gain understanding and some at least are able to perhaps become _active_
-co-maintainers/reviewers? As this is a major concern see [1].
-
-[1]:https://lore.kernel.org/linux-mm/aaBsrrmV25FTIkVX@casper.infradead.org/
-
->
-> The unified reclaim must separate mechanism from policy. The mechanisms
-> -- writeback, unmapping, swap, NUMA demotion, workingset tracking -- are
-> shared today and should stay shared. The policy decisions -- how to
-> detect access, how to classify pages, which pages to evict, when to
-> protect a page -- are where the two algorithms differ, and where future
-> algorithms will differ too. Make those pluggable.
-
-Again you're saying sane things than adding on 'pluggable' :)
-
-Let me address pluggability concerns further down I guess.
-
->
-> This gives us one maintained code path with the flexibility to evolve.
-
-I like 'maintained' here :)
-
-> New ideas get implemented as new policies, not as 3,000-line forks. Good
-> mechanisms from MGLRU (page table scanning, Bloom filters, lookaround)
-> become shared infrastructure available to any policy. And if someone
-> comes up with a better eviction algorithm tomorrow, they plug it in
-> without touching the core.
->
-> Making reclaim pluggable implies we define it as a set of function
-> methods (let's call them reclaim_ops) hooking into a stable codebase we
-> rarely modify. We then have two big questions to answer: how do these
-> reclaim ops look, and how do we move the existing code to the new model?
-
-Hmm, I'm not so sure about that. But it depends really on who has access to
-these operations.
-
-The issue with operations in general is that they eliminate the possibility
-of the general code being able to make assumptions about what's happening.
-
-For instance, the .mmap f_op callback meant that we had to account for any
-possible thing being done by a driver. You couldn't make assumptions about
-vma state, page table state, etc. and of course things happened that we
-didn't anticipate, leading to bugs.
-
-So I guess it's less 'no ops' more so 'what do we actually expose to the
-ops', 'what assumptions do we bake in about how the ops are used' and very
-importantly - 'who gets to populate them'.
-
-If they're _exclusively_ mm-internal then that's fine.
-
-Reclaim is a _very_ _very_ sensitive part of mm. At the point it's being
-activated you may be under extreme memory pressure, so a hook even
-allocating at all may either fail or enter infinite loops.
-
-We are also very sensitive on things like rmap locks and also, of course, -
-timing.
-
-It's not just a perf concern, if we are too slow, we might end up thrashing
-when we could otherwise not have.
-
-Also there ends up being a question of how much now-internal functionality
-we end up exposing to users.
-
-So we really need a good definition of who we intend should use this stuff,
-and how any such interface should be designed.
-
-I mean, if sufficiently abstracted, and with very carefully restricted
-constrainst perhaps we could work around a lot of this but we have to tread
-_very_ carefully here.
-
->
-> How Do We Get There
-> -------------------
->
-> Do we merge the two mechanisms feature by feature, or do we prioritize
-> moving MGLRU to the pluggable model then follow with LRU once we are
-> happy with the result?
-
-Absolutely by a distance the first is preferable. The pluggability is
-controversial here and needs careful consideration.
-
-Eliminating redundancy and ensuring broader community maintainership is
-easily more important.
-
->
-> Whichever option we choose, we do the work in small, self-contained
-> phases. Each phase ships independently, each phase makes the code
-> better, each phase is bisectable. No big bang. No disruption. No
-> excuses.
->
-> Option A: Factor and Merge
->
-> MGLRU is already pretty modular. However, we do not know which
-> optimizations are actually generic and which ones are only useful for
-> MGLRU itself.
->
-> Phase 1 -- Factor out just MGLRU into reclaim_ops. We make no functional
-> changes to MGLRU. Traditional LRU code is left completely untouched at
-> this stage.
->
-> Phase 2 -- Merge the two paths one method at a time. Right now the code
-> diverts control to MGLRU from the very top of the high-level hooks. We
-> instead unify the algorithms starting from the very beginning of LRU and
-> deciding what to keep in common code and what to move into a traditional
-> LRU path.
->
-> Advantages:
-> - We do not touch LRU until Phase 2, avoiding churn.
-> - Makes it easy to experiment with combining MGLRU features into
->   traditional LRU. We do not actually know which optimizations are
->   useful and which should stay in MGLRU hooks.
->
-> Disadvantages:
-> - We will not find out whether reclaim_ops exposes the right methods
->   until we merge the paths at the end. We will have to change the ops
->   if it turns out we need a different split. The reclaim_ops API will
->   be private and have a single user so it is not that bad, but it may
->   require additional changes.
-
-Yup this to me renders this totally not an option.
-
->
-> Option B: Merge and Factor
->
-> Phase 1 -- Extract MGLRU mechanisms into shared infrastructure. Page
-> table scanning, Bloom filter PMD skipping, lookaround, lock-free folio
-> age updates. These are independently useful. Make them available to both
-> algorithms. Stop hoarding good ideas inside one code path.
->
-> Phase 2 -- Collapse the remaining differences. Generalize list
-> infrastructure to N classifications (trad=2, MGLRU=4). Unify eviction
-> entry points. Common classification/promotion interface. At this point
-> the two "algorithms" are thin wrappers over shared code.
->
-> Phase 3 -- Define the hook interface. Define reclaim_ops around the
-> remaining policy differences. Layer BPF on top (reclaim_ext).
-> Traditional LRU and MGLRU become two instances of the same interface.
-> Adding a third algorithm means writing a new set of hooks, not forking
-> 3,000 lines.
->
-> Advantages:
-> - We get signals on what should be shared earlier. We know every shared
->   method to be useful because we use it for both algorithms.
-> - Can test LRU optimizations on MGLRU early.
->
-> Disadvantages:
-> - Slower, as we factor out both algorithms and expand reclaim_ops all
->   at once.
-
-Much preferable thanks. I'd rather we deferred the pluggability stuff.
-
->
-> Open Questions
-> --------------
->
-> - Policy granularity: system-wide, per-node, or per-cgroup?
-
-Well, we have varying levers to pull at least per-cgroup/system-wide.
-
-I wonder if we could add improved documentation on this overall by the way
-:) just a thought.
-
-A general reclaim page that mentions cgroup stuff also (can link back to
-cgroup pages) so a 'one stop shop' for reclaim/(perhaps also)
-reclaim-adjacent writeback, etc. controls could be useful.
-
-> - Mechanism/policy boundary: needs iteration; get it wrong and we
->   either constrain policies or duplicate code.
-
-> - Validation: reclaim quality is hard to measure; we need agreed-upon
->   benchmarks.
-
-Yes, it'd be great to get some standardised set of tests to ensure correct
-behaviour, though how we set those up might be tricky.
-
-Perhaps somehow some qemu/libvirt configurations with very tightly
-specified environments intended to trigger various reclaim behaviours, with
-some specific measurements (bpf, ftrace, procfs, etc.?) to correctly
-observe the behaviours in place?
-
-> - Simplicity: the end result must be simpler than what we have today,
->   not more complex. If it is not simpler, we failed.
-
-Yeah that's a nice aim :)
-
-> --
-> 2.52.0
->
-
-Thanks, Lorenzo
