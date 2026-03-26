@@ -1,320 +1,140 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFAFE3B3888
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 06:27:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5382E336EE1;
+	Thu, 26 Mar 2026 06:33:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774506459; cv=none; b=o8DLZu18et8Udw1dsqCQ+kzgkgdUoTB/qaO3M5HTpugu8pha6rEn0UT3262JxmRe/OWrq9uPQumShCqyipa5Qj0DkkbBYxZQJoBKjFsARdWbdSGOgNztQYnzlFwSeGw/4/+E6NF00X3lxfJKzSpwPd5fZuCVlG6jJJgSBksJApU=
+	t=1774506820; cv=none; b=VvHpQopGX4bRWzCMvSea+CxMy+zHtXQ0r9YWUv+5KzbLtrnjM8yasyi5PZXgoqOfnZKcKbUj73OPA2HwV70o4af6NNLpqK9p0NCicemVR6c/Vmuz5ksuVSy7ePCMCD78xYz/A0x6GhTt0LgnAji+zYkp70KHMP2F+QECk3xzcXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774506459; c=relaxed/simple;
-	bh=29zamgTScbbg5vvuvvtNvA6s4drRxnMdyD/RkK4l7BU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DyuE6JPyteq8JkxXB5Jlou9CppEL+lVMu51X/FDHLaNH1zVv/rTc+afbCy6x1o4XKJXLmVe4zSVd0BrAB9zFfMECmToYr/tRgcFG9qwokEa5kAv0oY987mrLLTqHYxF+4/Q+lwe4tJ3pBF9SKB1tvwtTDoDdRU2z7p3HNY9BHmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ROL0o+Td; arc=none smtp.client-ip=91.218.175.170
+	s=arc-20240116; t=1774506820; c=relaxed/simple;
+	bh=HDl1vN6+C2nBxX3TKFliBhRF/OsMjwcf3NmXLvLkiAQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=duSf9opG4LI3dWGzevn/XEy+HXVyGKcDuN0U34vRITfg0I68AWuqp1P7PMNlcLvnsiD0N/FbCidZnmlGvv12Wk3SSJsgNXzEjdRVd9VziBFdF4SmKyzSh+tPYl26ANrrMsQgOT5Ve0jwo9St0Jyj5+tWWTJHkk3THL5XGVuSsYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rU9zsLdY; arc=none smtp.client-ip=91.218.175.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ROL0o+Td"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rU9zsLdY"
+Message-ID: <12cc6b53-d801-4e77-83d6-b2a4655ec1b8@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774506454;
+	t=1774506807;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=9M3Pk1nKD0tOE5JdHLR3DyEbI3+wrZAKNOKkx5NkEK0=;
-	b=ROL0o+TdwMkUlRMbyt3+ck1m5f2b/8rXVxtKzzgaYiPa/kR7EWEZJSwcJ+8GiHlD2eyQdN
-	OxIk54G+GGF1Wy78LBC28SYE30PZJC1HBg4w6UeV1g5KExgIdZdzJwSBKPY2hzips3+IIy
-	jQhCsebZQkZmRBL9kHxC9hSnsIDaqVw=
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: netdev@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v2 2/2] selftests/bpf: Add protocol check test for bpf_sk_assign_tcp_reqsk()
-Date: Thu, 26 Mar 2026 14:26:36 +0800
-Message-ID: <20260326062657.88446-3-jiayuan.chen@linux.dev>
-In-Reply-To: <20260326062657.88446-1-jiayuan.chen@linux.dev>
-References: <20260326062657.88446-1-jiayuan.chen@linux.dev>
+	bh=l04fTvJB2+ddcC1WaxKYj6vGmeSvY98dLQzDrq19pZY=;
+	b=rU9zsLdYjtEPsrjr9FLee/5cXsgUAgFtjPdQUUEOTCBrkcHX6TL8CR57/RJlMevAEJIgEs
+	JfwAH4SpSOHg1SKZT+Y60mwN2DgFvTezwuBj51dQgH416kLlC+Paj9Qc4DRsI8WXwrVQSr
+	r9RDCYCr+C16jkj07bwP9LalJ5QaWiQ=
+Date: Wed, 25 Mar 2026 23:33:20 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf v1 2/2] selftests/bpf: Add protocol check test for
+ bpf_sk_assign_tcp_reqsk()
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
+ bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260323105510.51990-1-jiayuan.chen@linux.dev>
+ <20260323105510.51990-3-jiayuan.chen@linux.dev>
+ <9adc3c2e-0d5a-4863-b3ed-194d8f9fd630@linux.dev>
+ <4c27a461-2714-4c27-8604-dedd506a09aa@linux.dev>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <4c27a461-2714-4c27-8604-dedd506a09aa@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-From: Jiayuan Chen <jiayuan.chen@shopee.com>
+On 3/25/26 8:24 PM, Jiayuan Chen wrote:
+> 
+> On 3/25/26 5:59 AM, Martin KaFai Lau wrote:
+>> On 3/23/26 3:54 AM, Jiayuan Chen wrote:
+>>> +void test_tcp_custom_syncookie_protocol_check(void)
+>>> +{
+>>> +    struct test_tcp_custom_syncookie *skel;
+>>> +    struct sockaddr_in tcp_addr, udp_addr;
+>>> +    socklen_t addr_len = sizeof(tcp_addr);
+>>> +    int tcp_server = -1, udp_client = -1;
+>>> +    char buf[32] = "test";
+>>> +    int ret;
+>>> +
+>>> +    if (setup_netns())
+>>> +        return;
+>>> +
+>>> +    skel = test_tcp_custom_syncookie__open_and_load();
+>>> +    if (!ASSERT_OK_PTR(skel, "open_and_load"))
+>>> +        return;
+>>>   +    /* Create a TCP listener so the BPF can find a LISTEN socket */
+>>> +    tcp_server = start_server(AF_INET, SOCK_STREAM, "127.0.0.1", 0, 0);
+>>> +    if (!ASSERT_NEQ(tcp_server, -1, "start tcp_server"))
+>>> +        goto destroy_skel;
+>>> +
+>>> +    ret = getsockname(tcp_server, (struct sockaddr *)&tcp_addr, 
+>>> &addr_len);
+>>> +    if (!ASSERT_OK(ret, "getsockname"))
+>>> +        goto close_tcp;
+>>> +
+>>> +    skel->bss->tcp_listener_port = ntohs(tcp_addr.sin_port);
+>>> +    skel->bss->udp_test_port = 9999;
+>>> +
+>>> +    ret = bpf_program__fd(skel->progs.tcp_custom_syncookie_badproto);
+>>> +    if (setup_tc(ret))
+>>> +        goto close_tcp;
+>>> +
+>>> +    udp_client = socket(AF_INET, SOCK_DGRAM, 0);
+>>> +    if (!ASSERT_NEQ(udp_client, -1, "udp socket"))
+>>> +        goto cleanup_tc;
+>>> +
+>>> +    memset(&udp_addr, 0, sizeof(udp_addr));
+>>> +    udp_addr.sin_family = AF_INET;
+>>> +    udp_addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+>>> +    udp_addr.sin_port = htons(9999);
+>>> +
+>>> +    ret = sendto(udp_client, buf, sizeof(buf), 0,
+>>> +             (struct sockaddr *)&udp_addr, sizeof(udp_addr));
+>>> +    ASSERT_EQ(ret, sizeof(buf), "sendto udp");
+>>> +
+>>> +    /* Wait for TC ingress BPF to process the skb. */
+>>> +    kern_sync_rcu();
+>>
+>> hmm... is it guaranteed to work? Regardless, it checks the error 
+>> returned from bpf_sk_assign_tcp_reqsk(). Maybe bpf_prog_test_run is 
+>> simpler?
+>>
+>> pw-bot: cr
+>>
+>>> +
+>>>
+> I looked into using bpf_prog_test_run, but it won't work here
+> because bpf_sk_assign_tcp_reqsk() requires the skb to come from TC ingress
+> — it checks skb_at_tc_ingress() internally and returns -EINVAL otherwise.
 
-Add test_tcp_custom_syncookie_protocol_check to verify that
-bpf_sk_assign_tcp_reqsk() rejects non-TCP skbs. The test sends a UDP
-packet through TC ingress where a BPF program calls
-bpf_sk_assign_tcp_reqsk() on it and checks that the kfunc returns an
-error. A UDP server recv() is used as synchronization to ensure the
-BPF program has finished processing before checking the result.
+Thanks for trying.
 
-Without the fix in bpf_sk_assign_tcp_reqsk(), the kfunc succeeds and
-attaches a TCP reqsk to the UDP skb, which causes a null pointer
-dereference panic when the kernel processes it through the UDP receive
-path.
+> 
+> For the synchronization concern, instead of kern_sync_rcu(), I now create
+> a UDP server bound to the target port and recv() the packet after sendto().
+> Since the BPF program returns TC_ACT_OK, the packet passes through TC 
+> ingress
+> and arrives at the UDP socket. The recv() naturally blocks until the BPF 
+> program
+> has finished processing, so no timing tricks are needed.
+> 
 
-Test result:
-
-  ./test_progs -a tcp_custom_syncookie_protocol_check -v
-  setup_netns:PASS:create netns 0 nsec
-  setup_netns:PASS:ip 0 nsec
-  write_sysctl:PASS:open sysctl 0 nsec
-  write_sysctl:PASS:write sysctl 0 nsec
-  setup_netns:PASS:write_sysctl 0 nsec
-  test_tcp_custom_syncookie_protocol_check:PASS:open_and_load 0 nsec
-  test_tcp_custom_syncookie_protocol_check:PASS:start tcp_server 0 nsec
-  test_tcp_custom_syncookie_protocol_check:PASS:start udp_server 0 nsec
-  setup_tc:PASS:qdisc add dev lo clsact 0 nsec
-  setup_tc:PASS:filter add dev lo ingress 0 nsec
-  test_tcp_custom_syncookie_protocol_check:PASS:udp socket 0 nsec
-  test_tcp_custom_syncookie_protocol_check:PASS:sendto udp 0 nsec
-  test_tcp_custom_syncookie_protocol_check:PASS:recv udp 0 nsec
-  test_tcp_custom_syncookie_protocol_check:PASS:udp_intercepted 0 nsec
-  test_tcp_custom_syncookie_protocol_check:PASS:assign_ret 0 nsec
-  #471     tcp_custom_syncookie_protocol_check:OK
-  Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>
-Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
----
- .../bpf/prog_tests/tcp_custom_syncookie.c     | 84 ++++++++++++++++++-
- .../bpf/progs/test_tcp_custom_syncookie.c     | 79 +++++++++++++++++
- 2 files changed, 159 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c b/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
-index eaf441dc7e79..c50b76f70988 100644
---- a/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
-@@ -5,6 +5,7 @@
- #include <sched.h>
- #include <stdlib.h>
- #include <net/if.h>
-+#include <netinet/in.h>
- 
- #include "test_progs.h"
- #include "cgroup_helpers.h"
-@@ -47,11 +48,10 @@ static int setup_netns(void)
- 	return -1;
- }
- 
--static int setup_tc(struct test_tcp_custom_syncookie *skel)
-+static int setup_tc(int prog_fd)
- {
- 	LIBBPF_OPTS(bpf_tc_hook, qdisc_lo, .attach_point = BPF_TC_INGRESS);
--	LIBBPF_OPTS(bpf_tc_opts, tc_attach,
--		    .prog_fd = bpf_program__fd(skel->progs.tcp_custom_syncookie));
-+	LIBBPF_OPTS(bpf_tc_opts, tc_attach, .prog_fd = prog_fd);
- 
- 	qdisc_lo.ifindex = if_nametoindex("lo");
- 	if (!ASSERT_OK(bpf_tc_hook_create(&qdisc_lo), "qdisc add dev lo clsact"))
-@@ -127,7 +127,7 @@ void test_tcp_custom_syncookie(void)
- 	if (!ASSERT_OK_PTR(skel, "open_and_load"))
- 		return;
- 
--	if (setup_tc(skel))
-+	if (setup_tc(bpf_program__fd(skel->progs.tcp_custom_syncookie)))
- 		goto destroy_skel;
- 
- 	for (i = 0; i < ARRAY_SIZE(test_cases); i++) {
-@@ -145,6 +145,82 @@ void test_tcp_custom_syncookie(void)
- 
- destroy_skel:
- 	system("tc qdisc del dev lo clsact");
-+	test_tcp_custom_syncookie__destroy(skel);
-+}
- 
-+/* Test: bpf_sk_assign_tcp_reqsk() should reject non-TCP skb.
-+ *
-+ * Send a UDP packet through TC ingress where a BPF program calls
-+ * bpf_sk_assign_tcp_reqsk() on it. The kfunc should return an error
-+ * because the skb carries UDP, not TCP.
-+ */
-+void test_tcp_custom_syncookie_protocol_check(void)
-+{
-+	int tcp_server = -1, udp_server = -1, udp_client = -1;
-+	struct test_tcp_custom_syncookie *skel;
-+	struct sockaddr_in udp_addr;
-+	char buf[32] = "test";
-+	int udp_port, ret;
-+
-+	if (setup_netns())
-+		return;
-+
-+	skel = test_tcp_custom_syncookie__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	/* Create a TCP listener so the BPF can find a LISTEN socket */
-+	tcp_server = start_server(AF_INET, SOCK_STREAM, "127.0.0.1", 0, 0);
-+	if (!ASSERT_NEQ(tcp_server, -1, "start tcp_server"))
-+		goto destroy_skel;
-+
-+	/* Create a UDP server to receive the packet as synchronization */
-+	udp_server = start_server(AF_INET, SOCK_DGRAM, "127.0.0.1", 0, 0);
-+	if (!ASSERT_NEQ(udp_server, -1, "start udp_server"))
-+		goto close_tcp;
-+
-+	skel->bss->tcp_listener_port = ntohs(get_socket_local_port(tcp_server));
-+	udp_port = ntohs(get_socket_local_port(udp_server));
-+	skel->bss->udp_test_port = udp_port;
-+
-+	ret = bpf_program__fd(skel->progs.tcp_custom_syncookie_badproto);
-+	if (setup_tc(ret))
-+		goto close_udp_server;
-+
-+	udp_client = socket(AF_INET, SOCK_DGRAM, 0);
-+	if (!ASSERT_NEQ(udp_client, -1, "udp socket"))
-+		goto cleanup_tc;
-+
-+	memset(&udp_addr, 0, sizeof(udp_addr));
-+	udp_addr.sin_family = AF_INET;
-+	udp_addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-+	udp_addr.sin_port = htons(udp_port);
-+
-+	ret = sendto(udp_client, buf, sizeof(buf), 0,
-+		     (struct sockaddr *)&udp_addr, sizeof(udp_addr));
-+	if (!ASSERT_EQ(ret, sizeof(buf), "sendto udp"))
-+		goto cleanup_tc;
-+
-+	/* recv() ensures TC ingress BPF has processed the skb */
-+	ret = recv(udp_server, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(ret, sizeof(buf), "recv udp"))
-+		goto cleanup_tc;
-+
-+	ASSERT_EQ(skel->bss->udp_intercepted, true, "udp_intercepted");
-+
-+	/* assign_ret == 0 means kfunc accepted UDP skb (bug).
-+	 * assign_ret < 0 means kfunc correctly rejected it (fixed).
-+	 */
-+	ASSERT_NEQ(skel->data->assign_ret, 0, "assign_ret");
-+
-+cleanup_tc:
-+	system("tc qdisc del dev lo clsact");
-+	if (udp_client >= 0)
-+		close(udp_client);
-+close_udp_server:
-+	close(udp_server);
-+close_tcp:
-+	close(tcp_server);
-+destroy_skel:
- 	test_tcp_custom_syncookie__destroy(skel);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.c b/tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.c
-index 7d5293de1952..386705b6c9f2 100644
---- a/tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.c
-+++ b/tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.c
-@@ -588,4 +588,83 @@ int tcp_custom_syncookie(struct __sk_buff *skb)
- 	return tcp_handle_ack(&ctx);
- }
- 
-+/* Test: call bpf_sk_assign_tcp_reqsk() on a UDP skb.
-+ * The kfunc should reject it, but currently it doesn't check L4 protocol.
-+ */
-+__u16 tcp_listener_port = 0;
-+__u16 udp_test_port = 0;
-+int assign_ret = -1;
-+bool udp_intercepted = false;
-+
-+SEC("tc")
-+int tcp_custom_syncookie_badproto(struct __sk_buff *skb)
-+{
-+	void *data = (void *)(long)skb->data;
-+	void *data_end = (void *)(long)skb->data_end;
-+	struct bpf_sock_tuple tuple = {};
-+	struct bpf_tcp_req_attrs attrs = {};
-+	struct ethhdr *eth;
-+	struct iphdr *iph;
-+	struct udphdr *udp;
-+	struct bpf_sock *skc;
-+	struct sock *sk;
-+
-+	eth = (struct ethhdr *)data;
-+	if (eth + 1 > data_end)
-+		return TC_ACT_OK;
-+
-+	if (bpf_ntohs(eth->h_proto) != ETH_P_IP)
-+		return TC_ACT_OK;
-+
-+	iph = (struct iphdr *)(eth + 1);
-+	if (iph + 1 > data_end)
-+		return TC_ACT_OK;
-+
-+	if (iph->protocol != IPPROTO_UDP)
-+		return TC_ACT_OK;
-+
-+	udp = (struct udphdr *)(iph + 1);
-+	if (udp + 1 > data_end)
-+		return TC_ACT_OK;
-+
-+	if (bpf_ntohs(udp->dest) != udp_test_port)
-+		return TC_ACT_OK;
-+
-+	udp_intercepted = true;
-+
-+	tuple.ipv4.saddr = iph->saddr;
-+	tuple.ipv4.daddr = iph->daddr;
-+	tuple.ipv4.sport = udp->source;
-+	tuple.ipv4.dport = bpf_htons(tcp_listener_port);
-+
-+	skc = bpf_skc_lookup_tcp(skb, &tuple, sizeof(tuple.ipv4), -1, 0);
-+	if (!skc)
-+		return TC_ACT_OK;
-+
-+	if (skc->state != TCP_LISTEN) {
-+		bpf_sk_release(skc);
-+		return TC_ACT_OK;
-+	}
-+
-+	sk = (struct sock *)bpf_skc_to_tcp_sock(skc);
-+	if (!sk) {
-+		bpf_sk_release(skc);
-+		return TC_ACT_OK;
-+	}
-+
-+	attrs.mss = 1460;
-+	attrs.wscale_ok = 1;
-+	attrs.snd_wscale = 7;
-+	attrs.rcv_wscale = 7;
-+	attrs.sack_ok = 1;
-+
-+	/* Call bpf_sk_assign_tcp_reqsk on a UDP skb. */
-+	assign_ret = bpf_sk_assign_tcp_reqsk(skb, sk, &attrs, sizeof(attrs));
-+
-+	bpf_sk_release(skc);
-+
-+	/* Let the packet continue into the kernel */
-+	return TC_ACT_OK;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.43.0
-
+sgtm.
