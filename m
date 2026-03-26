@@ -1,139 +1,119 @@
-Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0C77332EBB
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 06:34:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79AD134C140
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 07:03:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774506893; cv=none; b=aTxsFGBCHAKOSszsp7GbnPYp8iDZcE8DtVW24fAYkINHEcdYADNbUNCHY3UP55/sRI6sVPsKQgpB67CgdtqHARjNmfL6zSKBhK11uk3zsLDbb03QBhgoWtEOrrr/W9+T+75K4RkeBwPfIxGYMGh928N3/1MlEO7GoZmoNNyQoWg=
+	t=1774508618; cv=none; b=PVAGJa0aXPT0fqBweRMROF7rBjryJ0Eu7vs69bDJGtAS22yHnikQnwKgWub6LR41TDK5j3E7T828rxsd5Es30JO9ieqd2uEcdHl7bGWP3kKlvMn+TtZ2zFc8u0PWhvbZO84FqnGdgnggLeJHlAZrpUxJFvXcxsarROeBVSdLOXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774506893; c=relaxed/simple;
-	bh=fr5PgxFVWVZhPZVN1RqqugnQ8DTuk76t+9mXi5G4DFg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qajzZwsO1SgxdbNkOqL6NSzOlgDcTML5isK5uFWpNJERp3vTOepd6l2Q7WsHaTy+V0uyhnTAdIwTYLFj3mynQ5cWraFkm0rTyDVZIX/YfWubUt9JAbJNkQAi+Wd91PJ+bcUGt/yliFpiXhGRkfRF9KcQoNAdfVVTi5ynvmihId0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=162.243.161.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [115.236.2.94])
-	by mtasvr (Coremail) with SMTP id _____wAXUghr08RpbOEEAA--.9534S3;
-	Thu, 26 Mar 2026 14:34:19 +0800 (CST)
-Received: from wolframium.tail477849.ts.net (unknown [115.236.2.94])
-	by mail-app2 (Coremail) with SMTP id zC_KCgDnmtJd08RpuHkqAA--.62372S2;
-	Thu, 26 Mar 2026 14:34:09 +0800 (CST)
-From: Yazhou Tang <tangyazhou@zju.edu.cn>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	tangyazhou518@outlook.com,
-	shenghaoyuan0928@163.com,
-	ziye@zju.edu.cn,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf v4 3/3] bpf: Fix incorrect subprog ID in dumped bpf_pseudo_call instructions
-Date: Thu, 26 Mar 2026 14:33:29 +0800
-Message-ID: <20260326063329.10031-4-tangyazhou@zju.edu.cn>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260326063329.10031-1-tangyazhou@zju.edu.cn>
-References: <20260326063329.10031-1-tangyazhou@zju.edu.cn>
+	s=arc-20240116; t=1774508618; c=relaxed/simple;
+	bh=xLyCrptEuCeJb2X5dVOKVaUZbQnrzf+C58tUjL+8P1s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W7IOpb0Lx69JUAsIHV6FdKQQqapACVqZ3G7I59RDPy3p8jpd+951rYX147/JjglLSEovCrY3PbncHlwLHkHvtkxxfVxDrSOdwoXu8i5WF+fapJI1LDsx20JIZkDA46M5vCWuiQ0njvZ4PDG5aNQcnqmy1IzBaK8kUcobV7VgOzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Imbdy8h1; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Imbdy8h1"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-439b2965d4bso418893f8f.2
+        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 00:03:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1774508616; x=1775113416; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lEkg49JXBlYRGRAlbz2ESpWLIMYJu5dEQ6CVQd0qq8c=;
+        b=Imbdy8h1F7Lx1gVikjdYfpWAm3DJqTLEEAePbwi4LDuP+dUVT2Muj1Eiu2z5NtfRCD
+         prn03z+HQUv9/xr4LWn0EZ/KN2MIEm6/s9LpFOS8iMQ6bwiB29vaLBiF89hu3pIBKbNS
+         Xemb2E988VLH2HOWu5T35r5Pk1M12kloXjzGE0v4cmX5J7sIVM5CpjaaExXe95LSOVO8
+         e3WjlgfQcKAZlCbuffHa0OzGRqD3uldm4v4LuO64+XIXv4/4kgK6qgVyjlJzSNA+2n6+
+         mCTbgFbDdanRrs6fGdJL+cfTIk3OzL/4E0EZqh8j7rnxJXaIyaCz+ji3N8cTHS7XVWMh
+         Kyeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774508616; x=1775113416;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lEkg49JXBlYRGRAlbz2ESpWLIMYJu5dEQ6CVQd0qq8c=;
+        b=jaomuyWAhT6mmesW2iqM9x/uOa/pWa50pdelzB3PMwPsCPTqAiS3CIKU2rQLqbYNE5
+         2TydhYuyfIgyc7VtZVbw9wPA8XcwW68OjC7ltut4LiyDzGUPKzdwiqrqmtYUmqwjcVJW
+         puK/uPAqqL0/6fgjA70NhAdrNk+RQL+OnGdpV+/p77cULr1KATPoxXAJuqX8NHyVeG4N
+         yX3GeDOR47RbvQLPgVgEQLXrsOqKLwl3D84dcgEhI6YKfyrSfJjMwKP68sXaxB+LiVJU
+         E+C5/JI9vCvuNbY1oilfh4J5/uiOqjFBaL4yYfRuNFYyeXsJ6HfhNVUYUv/K+TAsiONZ
+         kAWw==
+X-Forwarded-Encrypted: i=1; AJvYcCWAclQDj3rGcyBHM5mwAUcP94y1i8O1+JdycaVeWZ/WklFQc9ZyJXsxMMAAArTsC/cISLc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNMMen280JnPtv+q93Enqy9iMguOxfiKIscZ97dry+UNNYeStq
+	wr7jblj9EO5gceFjN+cApC14uMHkVfsMiYl5V62xle6IEpoK2BpdnJ2ij8UZdN40S3w=
+X-Gm-Gg: ATEYQzw1nYZf+inaPCLbe/ho2id9qu1qLfpxWE7EVvNkmMIq3vb0ANNSUXO1GNn8jpo
+	it8plce7zCToU5/EZuNHvjJyvRv0ceT97Ehis1BM6vWx1ZSSFR+47AOcnB5Oj3cF+H4czg9cG5t
+	VM/UkwpYgFtMXfwwPLH8AKAtvALQ5ZXArWU4Mi1DYGrTPRdpp3M3i77UvoD51algjXh7WMTtKw/
+	38QJ2ftI/SJ7cqztIb9NqGhsYy9n3oiwm42NBi0rqkygzMiZEWReCD5BhH8VdKM8ScLrJnJhlDt
+	WKrTlVddWlsZx6qtKz4FZk5D58puKZRNKm4+tV5mXkUKDzypDb2GBbbeXBHBlu83yMjqb1l10De
+	KKCGRIqHqrGi5xUjAmb4wQWrlqfXgIS9G0ZXOPq/3uLq2RS/a7fcOpkfOnkDFSeK3D+m3ksbLcU
+	SrqbYuOj4nd6rAjSqAreb/hnpD/TqIvz5RkoZh
+X-Received: by 2002:a05:6000:400b:b0:43b:4ef0:e13 with SMTP id ffacd0b85a97d-43b889a49eemr9597969f8f.12.1774508615797;
+        Thu, 26 Mar 2026 00:03:35 -0700 (PDT)
+Received: from localhost (109-81-31-149.rct.o2.cz. [109.81.31.149])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b919df903sm6070863f8f.30.2026.03.26.00.03.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Mar 2026 00:03:35 -0700 (PDT)
+Date: Thu, 26 Mar 2026 08:03:34 +0100
+From: Michal Hocko <mhocko@suse.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Shakeel Butt <shakeel.butt@linux.dev>,
+	lsf-pc@lists.linux-foundation.org,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	David Hildenbrand <david@kernel.org>,
+	Qi Zheng <zhengqi.arch@bytedance.com>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Chen Ridong <chenridong@huaweicloud.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
+	Kairui Song <ryncsn@gmail.com>,
+	Matthew Wilcox <willy@infradead.org>, Nhat Pham <nphamcs@gmail.com>,
+	Gregory Price <gourry@gourry.net>, Barry Song <21cnbao@gmail.com>,
+	David Stevens <stevensd@google.com>,
+	Vernon Yang <vernon2gm@gmail.com>,
+	David Rientjes <rientjes@google.com>,
+	Kalesh Singh <kaleshsingh@google.com>,
+	wangzicheng <wangzicheng@honor.com>,
+	"T . J . Mercier" <tjmercier@google.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Meta kernel team <kernel-team@meta.com>, bpf@vger.kernel.org,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [LSF/MM/BPF TOPIC] Towards Unified and Extensible Memory Reclaim
+ (reclaim_ext)
+Message-ID: <acTaRgusrxfCoKqe@tiehlicka>
+References: <20260325210637.3704220-1-shakeel.butt@linux.dev>
+ <20260325190547.abb7309fb63473b57b7a90a0@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zC_KCgDnmtJd08RpuHkqAA--.62372S2
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiAg0CCmnEOosdWgABsd
-X-CM-DELIVERINFO: =?B?5uxT8gXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9B7VUHZ/jH0WVNiQoVfoxX6vkrcZ41kXy9STt9Z9DwDMRZzVb1/iZbex7cxsrlg4NhFM
-	fhnQy2LORpqRyRjr0u8HHINKggpHC91MKYyLtHtAlapxxLhnoOmTWWzwFlMDFw==
-X-Coremail-Antispam: 1Uk129KBj93XoWxAFyUurykKF4rZry3AryxWFX_yoW5Gr4DpF
-	4vgFyfGFyDJF1j9rsrAFWDZFW5Kan7Z347WrWru34fGw4jqFyDGr4jgF1FqFZIkrn7Ar1I
-	vFsFva9I9w4UGFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUBjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
-	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAF
-	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0Y48IcxkI7V
-	AKI48G6xCjnVAKz4kxM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC2
-	0s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI
-	0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE
-	14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2
-	IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jUKsbUUUUU=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260325190547.abb7309fb63473b57b7a90a0@linux-foundation.org>
 
-From: Yazhou Tang <tangyazhou518@outlook.com>
+On Wed 25-03-26 19:05:47, Andrew Morton wrote:
+> On Wed, 25 Mar 2026 14:06:37 -0700 Shakeel Butt <shakeel.butt@linux.dev> wrote:
+> 
+> > We should unify both algorithms into a single code path. 
+> 
+> I'm here to ask the questions which others fear will sound dumb.
 
-In jit_subprogs(), restoring bpf_pseudo_call instructions truncates
-the 32-bit call_imm into the 16-bit insn->off. For large BPF programs
-(e.g., offsets > 32767), this silent truncation causes find_subprog()
-to return an incorrect subprog ID, which is then stored in insn->imm.
+Not dumb at all and recently discussed here https://lore.kernel.org/all/CAMgjq7AkYOtUL2HuZjBu5dJw=RTL7W2L1+zVv=SCOyHKYwc3AA@mail.gmail.com/T/#u
 
-Consequently, "bpftool prog dump xlated" reads the corrupted insn->imm,
-fails to resolve the subprogram name, and incorrectly displays a raw
-kernel pointer.
+> Is it indeed the plan to maintain both implementations?  I thought the
+> long-term ambition was to knock MGLRU into shape and to drop the legacy LRU?
 
-For example, dumping the xlated bytecode of the JIT-loaded selftest
-introduced in patch 2/3 shows:
-
-Before this patch (with call_imm > 32767):
-  4: (85) call pc+2#bpf_prog_115951674716e036_padding_subprog
-  5: (85) call pc+3395#0xffffffff814aed4e
-
-After this patch:
-  4: (85) call pc+2#bpf_prog_115951674716e036_padding_subprog
-  5: (85) call pc+3395#bpf_prog_5dccd3f669bbe4e4_target_subprog
-
-This patch fixes the issue by passing the un-truncated 32-bit
-env->insn_aux_data[i].call_imm directly to find_subprog().
-
-Note that the assignment to insn->off is retained. Although it still
-truncates for large jumps, it remains correct for the vast majority
-of BPF programs where the offset fits within s16 bounds. Keeping it
-ensures backward compatibility for existing user-space tools that rely
-on insn->off to display the relative offset. A comment is added to
-explicitly clarify this truncation behavior.
-
-Suggested-by: Puranjay Mohan <puranjay@kernel.org>
-Co-developed-by: Tianci Cao <ziye@zju.edu.cn>
-Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
-Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
-Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
-Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
----
- kernel/bpf/verifier.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 702579f56f7d..e87fedb09e1b 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -23017,8 +23017,12 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- 		}
- 		if (!bpf_pseudo_call(insn))
- 			continue;
-+		/*
-+		 * Note: If the original insn->imm is out of s16 bounds,
-+		 * insn->off here will be a truncated value.
-+		 */
- 		insn->off = env->insn_aux_data[i].call_imm;
--		subprog = find_subprog(env, i + insn->off + 1);
-+		subprog = find_subprog(env, i + env->insn_aux_data[i].call_imm + 1);
- 		insn->imm = subprog;
- 	}
- 
+Yes, but MGLRU is not there yet and with development pace last year or
+so we are not much closer than at the time MGLRU has been merged
+unfortunatelly.
 -- 
-2.53.0
-
+Michal Hocko
+SUSE Labs
