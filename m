@@ -1,71 +1,89 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7CDC3ECBDA;
-	Thu, 26 Mar 2026 16:02:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53A154035C1;
+	Thu, 26 Mar 2026 16:09:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774540933; cv=none; b=LBvh2yW34FA2nW64UWQ5bLwA7D0FTNQ22wf3+BnbpjIh51N1jRPG+WG1jZ0AJPdUUP4q7z0F/u7lS/0UOuvNveJq1ImdRAAKk7DKGokJ1ZT/M18jVrgn8uZIFkM5wnD8mA/JxgEFUYDyOHkcmaWcBrxrezdbwjY3vbl4O4hxrew=
+	t=1774541363; cv=none; b=f5YfFBp63tDNJMkSVNU2XBc8fw9fZduFHGWVagmzRwUOiWKq1kOUrtGgkxp621Fe2LGm27b2CulmPliZer/ChSlQuNyz2gvd4HskRmJ9+IKPfwbtYR2ZxCmmjTrYPKXD4MbW8rAHK11/XO0Y5xQ++iapCUsXqvNkOL8ZkguKkVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774540933; c=relaxed/simple;
-	bh=pcAbrX6ODf5LOs8xw/Oiha79DxbZoZEzxKqFT7yoPLs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=noBsaN9nuWgB6UsS+ePSOhcwSQ1dtp211ixY5KgsGyqC0ak6uA/yQmVb6NCWHfGkXtQ09C7N8QkmnfTveprjFCqAOGwPmVLJ7qcl+TnS7oHPmU441ucHxQpmoF4OeqoniLQ3fRKDQkuC2agiUyq6gWechWyP8qNj5z7jxJ4owi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nZ1sFFnM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774541363; c=relaxed/simple;
+	bh=i6O1zJoZfN8ZZ3jy/tm+/8+mLa33DvFPItUOXqaTx5M=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=h7N8o5yU89enWcfRXmeB7kMwHlLk1lbAbtkloLilwMU8MNs/zcuZE9iUl1le2vtFTQBKrvsow9Z4u0ep3bt9efaq9odiq7vPX7PJ2OCv4pPXlloqSxGqqvTCSxuqjKzM+IsZqSOd9b5ju+CWj37IVte/Guh9pWtY6RY0pAtCYAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JiBjlj74; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nZ1sFFnM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 726C1C116C6;
-	Thu, 26 Mar 2026 16:02:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JiBjlj74"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 434C8C116C6;
+	Thu, 26 Mar 2026 16:09:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774540932;
-	bh=pcAbrX6ODf5LOs8xw/Oiha79DxbZoZEzxKqFT7yoPLs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nZ1sFFnMrIcG1KY87J3HWMSgnEVbgJj9T0BRYhN6Pvv2jsqhhpqyM4PZ76QJRWxTr
-	 FGtkM2KAuoNaa2BWv3UuEqqi6X4BOlIduTFT9qtPkieg8bJslfcz30+HKrIevkOojX
-	 k8D+dZ73hpWP8GKlSE1zJatC1KcL0KS+EMVqRCTXESQ3j4m9j/hab4p5A9dzGAQAzX
-	 cpdWlzdtQeRO9OVaX29evsZ7vRB6ypGLuqv9pEXJC5Otb9m7kSwphAxpXPqFwaaRHM
-	 6BFw3Ml2ZY1kUUamiOQXWaP+RWwXp8qVGe8KXNScRboWM8mMio8QV8Co0q9GIH/oPb
-	 rWmInPRY03lBg==
-Date: Thu, 26 Mar 2026 16:02:04 +0000
-From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
-To: Kairui Song <ryncsn@gmail.com>
-Cc: Michal Hocko <mhocko@suse.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	lsf-pc@lists.linux-foundation.org, Johannes Weiner <hannes@cmpxchg.org>, 
-	David Hildenbrand <david@kernel.org>, Qi Zheng <zhengqi.arch@bytedance.com>, 
-	Chen Ridong <chenridong@huaweicloud.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Axel Rasmussen <axelrasmussen@google.com>, 
-	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
-	Matthew Wilcox <willy@infradead.org>, Nhat Pham <nphamcs@gmail.com>, Gregory Price <gourry@gourry.net>, 
-	Barry Song <21cnbao@gmail.com>, David Stevens <stevensd@google.com>, 
-	Vernon Yang <vernon2gm@gmail.com>, David Rientjes <rientjes@google.com>, 
-	Kalesh Singh <kaleshsingh@google.com>, wangzicheng <wangzicheng@honor.com>, 
-	"T . J . Mercier" <tjmercier@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	Suren Baghdasaryan <surenb@google.com>, Meta kernel team <kernel-team@meta.com>, bpf@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [LSF/MM/BPF TOPIC] Towards Unified and Extensible Memory Reclaim
- (reclaim_ext)
-Message-ID: <17b13155-b795-4e00-b9b8-9ab324c72aed@lucifer.local>
-References: <20260325210637.3704220-1-shakeel.butt@linux.dev>
- <20260325190547.abb7309fb63473b57b7a90a0@linux-foundation.org>
- <acTaRgusrxfCoKqe@tiehlicka>
- <ac05d923-7871-4691-8d26-eff41b3a3db0@lucifer.local>
- <CAMgjq7B_twv3xhd5VmMJxngAknf9YaLAiwGYpdi6H2n1cXD3-A@mail.gmail.com>
+	s=k20201202; t=1774541362;
+	bh=i6O1zJoZfN8ZZ3jy/tm+/8+mLa33DvFPItUOXqaTx5M=;
+	h=From:Subject:Date:To:Cc:From;
+	b=JiBjlj74x0cYc009A4NvmXIFImMM4CbIb/DXEZMk+f38efFSdQtjsibXigKC2sDMy
+	 5wQqyrkvsVomlLE+bI/8RQ7y8InL3SHSOs20gA8FY8GzZTc1kb6mvZsf9wS9KKSyDI
+	 NBzd5599yu55fOdvSdCVlMIgM6+w41H5/gZXaLHNGYKmvY9j7OEvhCAZPxumG4wkos
+	 9fPgybBu+O42wMxEpSikWVcGbXaMC8vP9thj+FhRY9ie7SD+VTB63RcLMAI+kk0kcv
+	 tel+530Wq+YQkFv77S1lqAlpt2hH+1/LeODtnAq5VAWDVvDbsWcwSqwGksxYA33hUN
+	 Z7grS4pX5go+g==
+From: Christian Brauner <brauner@kernel.org>
+Subject: [PATCH RESEND v2 0/2] bpf: classify block device hooks and add
+ selftests
+Date: Thu, 26 Mar 2026 17:09:13 +0100
+Message-Id: <20260326-work-bpf-bdev-v2-0-5e3c58963987@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMgjq7B_twv3xhd5VmMJxngAknf9YaLAiwGYpdi6H2n1cXD3-A@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAClaxWkC/3WOMQ+CMBSE/wp5s9XyADVODrI66GgYaHlAxbSkR
+ cQQ/rsU4+h2d7n7ciM4soocHIIRLPXKKaNng6sAZJ3ripgqZg/IccsROXsZ2zDRlkwU1LOyRLn
+ HMI4KnsC8aS2Valh4N7ik1/R8guybu6e4k+w8zDdF7ogJm2tZ+8gTNQ3d5id8p1auM/a9nOvDh
+ fnnRx8yzmQS0T5BGe84Hhuymh5rYyvIpmn6AA+HECHpAAAA
+X-Change-ID: 20260220-work-bpf-bdev-ff2c82143d05
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org
+Cc: KP Singh <kpsingh@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, linux-kernel@vger.kernel.org, 
+ Christian Brauner <brauner@kernel.org>
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1190; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=i6O1zJoZfN8ZZ3jy/tm+/8+mLa33DvFPItUOXqaTx5M=;
+ b=kA0DAAoWkcYbwGV43KIByyZiAGnFWi+iouKptngv6f3x3LuTtsatjmiU4WcQnJlzI4NJh/Hoo
+ oh1BAAWCgAdFiEEQIc0Vx6nDHizMmkokcYbwGV43KIFAmnFWi8ACgkQkcYbwGV43KL58wEAyelW
+ iZ8IAdNWzcNBNuciM0qt8bBEghIn6xQkTyJ1gOQBAMnN9mr19Ix8+fiuTgRBqVd3MvnxzcySE/p
+ x6w48kWsI
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-On Thu, Mar 26, 2026 at 08:37:06PM +0800, Kairui Song wrote:
-> For many other typical workloads under stress, MGLRU performs
-> significantly better too (e.g. database, build kernel could be more
-> than twice as fast), it would be a huge loss to leave it unmaintained.
+A bunch of new hooks for managing block devices were added a while ago
+but they weren't appropriately classified. Classify them and add a test
+program so we catch regressions.
 
-BTW press X to doubt on it doubling kernel build times :)
+Note that for whatever reason building the bpf selftests locally seems
+to fail for all kinds of arcane reasons for me. That might just be my
+fault. I added a pr against the ci to have the selftests run but to test
+this meaningfully it needs veritysetup and dmverity support. I'm not
+sure if that's available already.
 
-Cheers, Lorenzo
+Signed-off-by: Christian Brauner <brauner@kernel.org>
+---
+Changes in v2:
+- No changes.
+- Link to v1: https://patch.msgid.link/20260220-work-bpf-bdev-v1-0-c53e852c4702@kernel.org
+
+---
+Christian Brauner (2):
+      bpf: classify block device hooks appropriately
+      selftests/bpf: add block device management selftests
+
+ kernel/bpf/bpf_lsm.c                              |   4 +
+ tools/testing/selftests/bpf/prog_tests/lsm_bdev.c | 221 ++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/lsm_bdev.c      |  96 ++++++++++
+ 3 files changed, 321 insertions(+)
+---
+base-commit: 400ff899c336c24bf4d34479f98cef2fd2d3482a
+change-id: 20260220-work-bpf-bdev-ff2c82143d05
+
