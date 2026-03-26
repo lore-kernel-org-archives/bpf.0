@@ -1,54 +1,58 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 742B6402440;
-	Thu, 26 Mar 2026 15:35:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B7441AB6F1;
+	Thu, 26 Mar 2026 15:40:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774539336; cv=none; b=HMlsS/unEBebLz9y1ttEVEOf61YpBiB5Ci6BQXZrGuw56pbXf7azIuWplW26jvHKvaDbX9hpnvMV2pl//VHXR6xiFl7F0YFMrbYWTOrWa1W1XEdOHSwSAbyz+hR6L7i19ZE81vGrfR8ScoCXuZqp80aQ1MY7QS0RkiuiKsv+UXM=
+	t=1774539606; cv=none; b=gQyOLnFOJI0qkk1iv0nk9TdWRRxLzZTdxCcao9ziwKMAFPbCHVbgrmP3HwYl4hzgNRVbEAYm8SDgYSsk3N1baWA45lLVKfbpGOfBdCCOygGne2Li6QcfEtG8z7Ndr/263g0gNqulbSr4f+LE1qC9l517VED/JHc6+3g3eXSvt6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774539336; c=relaxed/simple;
-	bh=J+BrV9gtq0qIc5uH8RmrzCSQsDGfxVkuOgtcGS9wqRk=;
+	s=arc-20240116; t=1774539606; c=relaxed/simple;
+	bh=Q0dXKMwvqUVibjNiOVBckvLKDWg553EueB8+WMLxmc0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YQBYkolkZgfU6qQgKM01q9NbygeelW1wwuuAdONzKJjvsxD+QrPE4lxSD9jsIoBWMcsKmIvXyXDsqUzGpvBneHwdU1RWqWjfiF3V2aUKl5nMvsg/MAULIfSa7wNf1xevUdz8Q6NAbAIhjv4U3DEwmzZ/LMi2fBU90YXW9M5pk9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NEQ3/8kr; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=H+FID+MQ6tQkAcPsw42QfmFdE2v2RZOpNGzBLfH2F2D/O/OiSTrvH0/tr9vqXwThJLV8D6kBz8RtYDGRr3SdzVfSu1UCkn1izkgH3Rv4jP7kWiBuVfiTxnd3HOk4mLL4Dbe0NrPn01UpAAMCP5zUpjHPfvwSM29exR41MI3AaT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=mc4lcYVY; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NEQ3/8kr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40D2AC19424;
-	Thu, 26 Mar 2026 15:35:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774539336;
-	bh=J+BrV9gtq0qIc5uH8RmrzCSQsDGfxVkuOgtcGS9wqRk=;
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="mc4lcYVY"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CD94D1E8D;
+	Thu, 26 Mar 2026 08:39:57 -0700 (PDT)
+Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EABDB3F641;
+	Thu, 26 Mar 2026 08:40:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1774539603; bh=Q0dXKMwvqUVibjNiOVBckvLKDWg553EueB8+WMLxmc0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NEQ3/8kr7AXvTNifmkqXHgsSJYVLQy4oJZmUz6qvpVtujrx8Hkaz7jbuW5FqksPtB
-	 iVmeZVRnO03XSgMjf1z4oK17lKBtHlzFzEA2DLI6mBjx6QyDOXvv78NDgFHSfYiYxs
-	 +ebXSf1w32TibjJsohEsZoBGSUotwT/kSQWLeKkr8bFEpsQLBIi39j29JBKRDa2XM2
-	 gOYVaQo7cTYKr/tg+wmfv8WOqDQwgwtLQc04/ejN7tvwTO3PJpdgNmHtX0rg85s/Qt
-	 dtbyymDStrYDeMITbR+lHuxkhM8MBxFDxtrm9w9OS1lNaSRyNboAeF877khbazBSqC
-	 hRh7Im2JCKRYQ==
-Date: Thu, 26 Mar 2026 15:35:28 +0000
-From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
-To: Gregory Price <gourry@gourry.net>
-Cc: Shakeel Butt <shakeel.butt@linux.dev>, 
-	lsf-pc@lists.linux-foundation.org, Andrew Morton <akpm@linux-foundation.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, David Hildenbrand <david@kernel.org>, 
-	Michal Hocko <mhocko@kernel.org>, Qi Zheng <zhengqi.arch@bytedance.com>, 
-	Chen Ridong <chenridong@huaweicloud.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Axel Rasmussen <axelrasmussen@google.com>, 
-	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, Kairui Song <ryncsn@gmail.com>, 
-	Matthew Wilcox <willy@infradead.org>, Nhat Pham <nphamcs@gmail.com>, Barry Song <21cnbao@gmail.com>, 
-	David Stevens <stevensd@google.com>, Vernon Yang <vernon2gm@gmail.com>, 
-	David Rientjes <rientjes@google.com>, Kalesh Singh <kaleshsingh@google.com>, 
-	wangzicheng <wangzicheng@honor.com>, "T . J . Mercier" <tjmercier@google.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Suren Baghdasaryan <surenb@google.com>, 
-	Meta kernel team <kernel-team@meta.com>, bpf@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [LSF/MM/BPF TOPIC] Towards Unified and Extensible Memory Reclaim
- (reclaim_ext)
-Message-ID: <248a126c-43e7-4320-b4bb-282e0b6da9c4@lucifer.local>
-References: <20260325210637.3704220-1-shakeel.butt@linux.dev>
- <42e26dbb-0180-4408-b8a8-be0cafb75ad9@lucifer.local>
- <acVPrEyfcE4Naz5b@gourry-fedora-PF4VCD3F>
+	b=mc4lcYVYUHKT2M7If7nhAWGnZP/hhh3sCwS0HbRbciFw5wsasz3C/I3bFUxD59SRT
+	 XrtbThR6As6fI/3wYPm16LoQDN+8TdK6wkg5JDRXsQ3uXh1fduUKdo504SF8KLGg5M
+	 NI0FNHJR4eVatqynexCUxM4hF5xdex24OOKPoqCQ=
+Date: Thu, 26 Mar 2026 15:39:58 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Ankur Arora <ankur.a.arora@oracle.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+	bpf@vger.kernel.org, arnd@arndb.de, will@kernel.org,
+	peterz@infradead.org, mark.rutland@arm.com, harisokn@amazon.com,
+	cl@gentwo.org, ast@kernel.org, rafael@kernel.org,
+	daniel.lezcano@linaro.org, memxor@gmail.com,
+	zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com,
+	rdunlap@infradead.org, joao.m.martins@oracle.com,
+	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+Subject: Re: [PATCH v10 00/12] barrier: Add
+ smp_cond_load_{relaxed,acquire}_timeout()
+Message-ID: <acVTTmGCZL4QPln2@arm.com>
+References: <20260316013651.3225328-1-ankur.a.arora@oracle.com>
+ <20260315184925.b6f93386e918ca79614843e3@linux-foundation.org>
+ <874imftol4.fsf@oracle.com>
+ <20260316233712.7cbfac27@pumpkin>
+ <87ms07rlp9.fsf@oracle.com>
+ <20260317091705.5a64fc56@pumpkin>
+ <acPo7l_pd5rnHpSX@arm.com>
+ <20260325154210.79a621df@pumpkin>
+ <acQOMZMk0OMfIgFO@arm.com>
+ <20260325202357.3e203314@pumpkin>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -57,54 +61,75 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <acVPrEyfcE4Naz5b@gourry-fedora-PF4VCD3F>
+In-Reply-To: <20260325202357.3e203314@pumpkin>
 
-On Thu, Mar 26, 2026 at 10:24:28AM -0500, Gregory Price wrote:
-> ... snip snip snip ...
->
-> > >
-> > > How Do We Get There
-> > > -------------------
-> > >
-> > > Do we merge the two mechanisms feature by feature, or do we prioritize
-> > > moving MGLRU to the pluggable model then follow with LRU once we are
-> > > happy with the result?
-> >
-> > Absolutely by a distance the first is preferable. The pluggability is
-> > controversial here and needs careful consideration.
-> >
->
-> Pluggability asside - I do not think merging these two things "feature
-> by feature" is actually feasible (I would be delighted to be wrong).
->
-> Many MGLRU "features" solve problems that MGLRU invents for itself.
->
-> Take MGLRU's PID controller - its entire purpose is to try to smooth out
-> refault rates and "learn" from prior mistakes - but it's fundamentally
-> tied to MGLRU's aging system, and the aging systems differ greatly.
->
->   - LRU:   actual lists - active/inactive - that maintain ordering
->   - MGLRU: "generations", "inter-generation tiers", aging-in-place
->
-> "Merging" this is essentially inventing something completely new - or
-> more reasonably just migrating everyone to MGLRU.
->
-> In terms of managing risk, it seems far more reasonable to either split
-> MGLRU off into its own file and formalize the interface (ops), or simply
-> rip it out and let each individual feature fight its way back in.
+On Wed, Mar 25, 2026 at 08:23:57PM +0000, David Laight wrote:
+> On Wed, 25 Mar 2026 16:32:49 +0000
+> Catalin Marinas <catalin.marinas@arm.com> wrote:
+> 
+> > On Wed, Mar 25, 2026 at 03:42:10PM +0000, David Laight wrote:
+> ...
+> > > Looking at the code I think the "sevl; wfe" pair should be higher up.  
+> > 
+> > Yes, I replied to your other message. We could move it higher indeed,
+> > before the condition check, but I can't get my head around the ordering.
+> > Can need_resched() check be speculated before the WFE? I need to think
+> > some more.
+> 
+> I don't think speculation can matter.
+> Both SEVL and WFE must be serialised against any other instructions
+> that can change the event flag (as well as each other) otherwise
+> everything is broken.
 
-But _surely_ (and Shakeel can come back on this I guess) there are things that
-are commonalities.
+Welcome to the Arm memory model. We don't have any guarantee that an LDR
+will only access memory after SEVL+WFE. They are not serialising.
 
-In any case we can all agree that MGLRU cohabiting with classical reclaim is not
-a happy household one way or another.
+> Apart from that it doesn't matter, what matters is the instruction
+> boundary the interrupt happens at.
 
-Maybe a stage 1 can be to separate stuff into another file, because that'd
-actually be pretty easy to do for a fair bit of it, surely?
+True. If an interrupt is taken before the LDR (that would be a
+need_resched() check for example), then a prior WFE would not matter.
+This won't work if we replace the IPI with a SEV though (suggested
+somewhere in this thread).
 
-Can use mm/internal.h to handle stuff that has to link one with other?
+> Actually both SEVL and WFE may be synchronising instructions and very slow.
 
->
-> ~Gregory
+Most likely not.
 
-Cheers, Lorenzo
+> So you may not want to put them in the fast path where the condition
+> is true on entry (or even true after a retry).
+> So the code might have to look like:
+> 	for (;;) {
+> 		VAL = mem;
+
+If we only waited on the location passed to LDXR, things would have been
+much simpler. But the osq_lock() also wants to wait on the TIF flags via
+need_resched() (and vcpu_is_preempted()).
+
+> 		if (cond(VAL)) return;
+
+So the cond(VAL) here is actually a series of other memory loads
+unrelated to 'mem'
+
+> 		SEVL; WFE;
+> 		if (cond(VAL)) return;
+
+I think this will work in principle even if 'cond' accesses other memory
+locations, though I wouldn't bother with an additional 'cond' call, I'd
+expect SEVL+WFE to be mostly NOPs. However, 'cond' must not set a local
+event, otherwise the power saving on waiting is gone.
+
+> 		v1 = LDX(mem);
+> 		if (v1 == VAL)
+> 			WFE;
+> 	}
+
+I think it's cleaner to use Ankur's timeout API here for the very rare
+case where an IPI hits at the wrong time. We then keep
+smp_cond_load_relaxed() intact as it's really not meant to wait on
+multiple memory locations to change. Any changes of
+smp_cond_load_relaxed() with moving the WFE around are just hacks, not
+the intended use of this API.
+
+-- 
+Catalin
