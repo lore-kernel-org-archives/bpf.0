@@ -1,22 +1,22 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.175.55.52])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A9B935F612
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 09:02:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.175.55.52
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.229.168.213])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B8A337B3F7
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 09:02:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.229.168.213
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774515739; cv=none; b=C34XyvZQFQokMwypO/jas8reQQ+6txSttCqvcjcHDQlWSYwDGDefj8N55l43Pr+2vzwBG/DFbGo8w6d1hhg621FxApDl7RPqj3kLUxzwkbS1gwPS2dpjcPx9TLv8it2rVlcMntnquR4qlIa0oBZWevlBzE78Tk6eoqS1HhqHqlw=
+	t=1774515739; cv=none; b=P8sRDJxRMBBK9nAbb8gqs/ta/30X6+aVYQoSub+LoTEiE3e+qfeGN37eqNSYLBje3hzFUQg4oPXQYYJZ682LBJy0xwM+kwzGUPGwUKgi80qv3CE71hMEEmUlfX2e+Z4PEsWmAHX9AybSvwn+OGR2jddvv1EnQpRAgWrPQnpX3xA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1774515739; c=relaxed/simple;
-	bh=c0z83z4lww4X51DBxlKQRWbHCZpsnDdW1PFQyu5fW0U=;
+	bh=xu50TL1Z3x1JsmN5glaoqIrD6MU+TutZH36+EFm2/uM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NpA1sgVyVoAg08WvZ9603J2U0hzHAo7/LHJOSjNXrY+qNOaoBLjUHI9RP6VeOWpI0/idH7d6+1XqgjAtziDmShKfVDK5R/uYNJ5GtvUA2lt5IgH37Vain5e2qklQ0dTisjOfRMfmZI1Tb6MruOMVvFECLfHcsj+ywKAtC/G0yW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=52.175.55.52
+	 MIME-Version; b=JiBVjAJVQNJR17PbobeA3LfKx3/IEUvpUEt6cfR39I8IMiVZuL192U3Q8MYCjg2VQB3c5z5Wa9rwdy5Df9UgCAwPxcGP2xWB7yIasGhJurFwcMkITblPFruNUSqljT/rJXBeXSGajcFGwNgdjGMCY4Iu2KiRIpXGzOYrncze2+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=52.229.168.213
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
 Received: from zju.edu.cn (unknown [10.190.130.12])
-	by mtasvr (Coremail) with SMTP id _____wDXKND59cRpC_MFAA--.11941S3;
+	by mtasvr (Coremail) with SMTP id _____wD3SND59cRpBfMFAA--.11930S3;
 	Thu, 26 Mar 2026 17:01:45 +0800 (CST)
 Received: from wolframium.tail477849.ts.net (unknown [10.190.130.12])
-	by mail-app1 (Coremail) with SMTP id yy_KCgAnmKH59cRpN7keAA--.4386S2;
+	by mail-app1 (Coremail) with SMTP id yy_KCgD3Rp_49cRpNLkeAA--.333S2;
 	Thu, 26 Mar 2026 17:01:45 +0800 (CST)
 From: Yazhou Tang <tangyazhou@zju.edu.cn>
 To: bpf@vger.kernel.org
@@ -35,11 +35,10 @@ Cc: ast@kernel.org,
 	tangyazhou518@outlook.com,
 	shenghaoyuan0928@163.com,
 	ziye@zju.edu.cn,
-	Puranjay Mohan <puranjay@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf v5 3/3] bpf: Fix incorrect subprog ID in dumped bpf_pseudo_call instructions
-Date: Thu, 26 Mar 2026 17:01:33 +0800
-Message-ID: <20260326090133.221957-4-tangyazhou@zju.edu.cn>
+Subject: [PATCH bpf v5 2/3] selftests/bpf: Add test for large offset bpf-to-bpf call
+Date: Thu, 26 Mar 2026 17:01:32 +0800
+Message-ID: <20260326090133.221957-3-tangyazhou@zju.edu.cn>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260326090133.221957-1-tangyazhou@zju.edu.cn>
 References: <20260326090133.221957-1-tangyazhou@zju.edu.cn>
@@ -50,16 +49,16 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:yy_KCgAnmKH59cRpN7keAA--.4386S2
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiAggCCmnEOosmYAAAsY
-X-CM-DELIVERINFO: =?B?D882FQXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9LOcIldiP1c5d5Kcb9i58uWrvjPWE3IcrXV0zj122IwaQmq/UM5RGsvHJv/1dBi/y8WX
-	9xnMoDyM1+Pgk6rI88QnD4bUENBMeWZbMZW5HqgzHyZ585SPgt4kBsPJyVZBjg==
-X-Coremail-Antispam: 1Uk129KBj93XoWxAFyUurykKF4rZry3ArWxZrc_yoW5XFWxpF
-	4kWFySgFykGF12kwsrAF4kuay5Ka97Z347WFyrZ34fGw4jgFyDCr4jgr4FqFZIkrn7Jr1S
-	vFsFva9I9w4UGFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+X-CM-TRANSID:yy_KCgD3Rp_49cRpNLkeAA--.333S2
+X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBgICCmnEOosfIQADst
+X-CM-DELIVERINFO: =?B?i/xLcwXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
+	9q9GTgStBHiKbdOUzKiNaJnu748bOL992p6rNOIpQ13+iHZkhxRhffRBT+YXLhjSxlob6F
+	3svxpJTCOKp7HUKR5Y8TdHlkvNRVD3fA1Jlc0GJL8XPMVXuYrLAbhVrEDnttTA==
+X-Coremail-Antispam: 1Uk129KBj93XoW3Gr1fXFWxJF13Gw1UZw1xtFc_yoW7Gw45pa
+	4kWFy5KF1fGay7Kw13AFZrZF45GF4kZFWjyrWIqr90yr45Ar97Grs7KrWjqFy3CrZ5ZwnY
+	vFZIya93Wr48JFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
 	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUBjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2
+	0xBIdaVrnRJUUU9Eb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2
 	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
 	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
 	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
@@ -71,43 +70,25 @@ X-Coremail-Antispam: 1Uk129KBj93XoWxAFyUurykKF4rZry3ArWxZrc_yoW5XFWxpF
 	0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE
 	14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20x
 	vaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8
-	Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07je-eOUUUUU=
+	JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8SPfPUUUUU==
 
 From: Yazhou Tang <tangyazhou518@outlook.com>
 
-In jit_subprogs(), restoring bpf_pseudo_call instructions truncates
-the 32-bit call_imm into the 16-bit insn->off. For large BPF programs
-(e.g., call_imm > 32767), this silent truncation causes find_subprog()
-to return an incorrect subprog ID, which is then stored in insn->imm.
+Add a selftest to verify the verifier and JIT behavior when handling
+bpf-to-bpf calls with relative jump offsets exceeding the s16 boundary.
 
-Consequently, "bpftool prog dump xlated" reads the corrupted insn->imm,
-fails to resolve the subprogram name, and incorrectly displays a raw
-kernel pointer.
+The test utilizes an inline assembly block with ".rept 32765" to generate
+a massive dummy subprogram. By placing this padding between the main program
+and the target subprogram, it forces the verifier to process a bpf-to-bpf call
+with the imm field exceeding the s16 range.
 
-For example, dumping the xlated bytecode of the JIT-loaded selftest
-introduced in patch 2/3 (call_imm == 32768, i.e., 0x00008000) shows
-that it is truncated to 0x8000 and reinterpreted as -32768 in s16:
+The user-space test driver dynamically adapts to the host's configuration:
+- When JIT is enabled, it asserts that the program is successfully loaded,
+  JIT-compiled, and executes correctly to return the expected value.
+- When JIT is disabled, it asserts that the verifier cleanly rejects the
+  program with -EINVAL (or -ENOSPC if the log buffer is truncated), matching
+  the expected "offset out of range" error log.
 
-Before this patch (with call_imm > 32767):
-   4: (85) call pc+2#bpf_prog_71cfe20590be813a_padding_subprog
-   5: (85) call pc-32768#0xffffffff814aed4e
-
-After this patch:
-   4: (85) call pc+2#bpf_prog_71cfe20590be813a_padding_subprog
-   5: (85) call pc-32768#bpf_prog_5dccd3f669bbe4e4_target_subprog
-
-This patch fixes the issue by passing the un-truncated 32-bit
-env->insn_aux_data[i].call_imm directly to find_subprog().
-
-Note that the assignment to insn->off is retained. Although it still
-truncates for large jumps, it remains correct for the vast majority
-of BPF programs where the offset fits within s16 bounds. Keeping it
-ensures backward compatibility for existing user-space tools that rely
-on insn->off to display the relative offset. A comment is added to
-explicitly clarify this truncation behavior.
-
-Suggested-by: Puranjay Mohan <puranjay@kernel.org>
-Fixes: 7105e828c087 ("bpf: allow for correlation of maps and helpers in dump")
 Co-developed-by: Tianci Cao <ziye@zju.edu.cn>
 Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
 Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
@@ -115,27 +96,124 @@ Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
 Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
 Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
- kernel/bpf/verifier.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ .../selftests/bpf/prog_tests/call_large_imm.c | 54 +++++++++++++++++++
+ .../selftests/bpf/progs/call_large_imm.c      | 46 ++++++++++++++++
+ 2 files changed, 100 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/call_large_imm.c
+ create mode 100644 tools/testing/selftests/bpf/progs/call_large_imm.c
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 702579f56f7d..e87fedb09e1b 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -23017,8 +23017,12 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- 		}
- 		if (!bpf_pseudo_call(insn))
- 			continue;
-+		/*
-+		 * Note: If the original insn->imm is out of s16 bounds,
-+		 * insn->off here will be a truncated value.
-+		 */
- 		insn->off = env->insn_aux_data[i].call_imm;
--		subprog = find_subprog(env, i + insn->off + 1);
-+		subprog = find_subprog(env, i + env->insn_aux_data[i].call_imm + 1);
- 		insn->imm = subprog;
- 	}
- 
+diff --git a/tools/testing/selftests/bpf/prog_tests/call_large_imm.c b/tools/testing/selftests/bpf/prog_tests/call_large_imm.c
+new file mode 100644
+index 000000000000..8968b3c3263f
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/call_large_imm.c
+@@ -0,0 +1,54 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include "call_large_imm.skel.h"
++
++/*
++ * This test dynamically adapts to the current environment, and will succeed
++ * whether JIT is enabled or not.
++ * 1. If JIT is enabled: The test case will successfully load and return
++ *    the expected value.
++ * 2. If JIT is disabled: It asserts that the verifier cleanly rejects the
++ *    program with -EINVAL (or -ENOSPC) and outputs the expected error log.
++ */
++
++void test_call_large_imm(void)
++{
++	struct call_large_imm *skel;
++	int err, prog_fd;
++	char log_buf[4096];
++
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++
++	skel = call_large_imm__open();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		return;
++
++	if (!env.jit_enabled)
++		bpf_program__set_log_buf(skel->progs.call_large_imm_test,
++					 log_buf, sizeof(log_buf));
++
++	err = call_large_imm__load(skel);
++
++	if (env.jit_enabled) {
++		if (!ASSERT_OK(err, "load_should_succeed_with_jit"))
++			goto cleanup;
++
++		prog_fd = bpf_program__fd(skel->progs.call_large_imm_test);
++		err = bpf_prog_test_run_opts(prog_fd, &opts);
++
++		if (ASSERT_OK(err, "prog_run_success"))
++			ASSERT_EQ(opts.retval, 3, "prog_retval");
++
++	} else {
++		ASSERT_ERR(err, "load_should_fail_in_interpreter");
++		ASSERT_TRUE(err == -EINVAL || err == -ENOSPC, "err_should_be_einval_or_enospc");
++
++		if (!ASSERT_OK_PTR(strstr(log_buf, "bpf-to-bpf call offset out of range for interpreter"),
++				   "check_verifier_log_msg")) {
++			printf("Actual verifier log:\n%s\n", log_buf);
++		}
++	}
++
++cleanup:
++	call_large_imm__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/call_large_imm.c b/tools/testing/selftests/bpf/progs/call_large_imm.c
+new file mode 100644
+index 000000000000..7cdf1e6d80d8
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/call_large_imm.c
+@@ -0,0 +1,46 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++/*
++ * A volatile global variable is used here, so that padding_subprog()
++ * will not be optimized, and it will not be really executed even if
++ * it is successfully loaded (when JIT is enabled).
++ */
++volatile int zero = 0;
++
++/*
++ * 32765 is the exact minimum number of padding instructions needed to
++ * trigger the verifier failure, because:
++ * 1. Counting the wrapper instructions around the padding block (one
++ *    "r0=0" and two "exit" instructions), the actual jump distance
++ *    evaluates to N + 3.
++ * 2. To overflow the s16 max bound (32767), we need N + 3 > 32767.
++ * Thus, N = 32765 is the exact minimum padding size required.
++ */
++static __attribute__((noinline)) void padding_subprog(void)
++{
++	asm volatile ("					\
++		r0 = 0;					\
++		.rept 32765;				\
++		r0 += 0;				\
++		.endr;					\
++	" ::: "r0");
++}
++
++static __attribute__((noinline)) int target_subprog(void)
++{
++	/* A volatile variable is used here to prevent optimization. */
++	volatile int magic_ret = 3;
++	return magic_ret;
++}
++
++SEC("syscall")
++int call_large_imm_test(void *ctx)
++{
++	if (zero)
++		padding_subprog();
++	return target_subprog();
++}
++
++char LICENSE[] SEC("license") = "GPL";
 -- 
 2.53.0
 
