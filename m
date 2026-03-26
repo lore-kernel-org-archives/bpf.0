@@ -1,32 +1,30 @@
-Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBACE37F727
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 14:17:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC6DA394483
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 14:17:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774534676; cv=none; b=XxATl+K3VS3Cdrv/Imxiy9mkhvjf4rOeNhz26XAwsZiIQ8AWzQOw95aeTbwwqH9ev+DxqCDWhHGwK2Ls5/gAzNw7iTuIycNVUDOJAyYTRbO4DYYdCpKvmAR6ObxQg8IngLDI6kuG6GTGbpJ+e/M75V3Yqwca6+bVlUhYhqjD/Uo=
+	t=1774534678; cv=none; b=pO1J9gndxf1+BtXYbhQjWJHNalk/Py1wjzQUoI1uDFtIcl3oTGE3JK8c09zYUd+pQ/I5Dtu/0G/vvE54Y2I61VRJzrdXbUEIkmQEBN+/WI3RerNh/s8zQDZh+x1quF+UuabZTFihIzpWOi4B19MkQLWbogAafXCm/eZXWnEQbJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774534676; c=relaxed/simple;
-	bh=WVbCpWwtXFS5WnRF1GNs4kUcVMd1qblCOHqrZ/DEfCo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dov8FssDbSmC7kebt6YygaKNjFvnuV5/iU+tfOLfzteHfozZMzD1fldyaefPcINAPjMuqfhfYvwt3hK/K+UqTjUsn9tbtPxIq8N1lc36OrFgR9giQh7CzlpHxI4IpjbLZBhfr0MfEusF7roMZLvYLOpXRGOU/Ocl8Di1K+QGY1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aEK53iSg; arc=none smtp.client-ip=95.215.58.179
+	s=arc-20240116; t=1774534678; c=relaxed/simple;
+	bh=NMScAA6hNVmNhCc8Muq8ntdk+FO1XR4h9y05BqtAR28=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ikq77RzcicU7HeBM0rfMpO8nsmZxeUc2Tpbbv/gn6+NpF7kzs06M2dpNVc487tteWtEN8TMWupvSw/pyf3y7Owkfn0zEMGDfb4ofTKmzaUbvTElSYGxULQ5CcjdVRy+XwPERi3uh/Y226JElqm2p5nKgax4mRPT0r/PBqWmBokE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=V1AS4OB2; arc=none smtp.client-ip=95.215.58.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aEK53iSg"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="V1AS4OB2"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774534667;
+	t=1774534660;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+Ni2FOm+AKZAFdBlcw1DzXopDy53nnYWg3V8M/1f2/Q=;
-	b=aEK53iSgYB1Xg0JVyrEQW2Mb6yMvIXx15VjUa1ek/QwIXZsmsGqU5mwLDHuBxcMKvf6Dz5
-	seBxe7IpoUCxpR0LKtZiYJhCzP4ABDYUmJj++GuoXFm2X+MU3MKC6TXwNQnDH4ayw6jEUK
-	EeR5mvfLkiDND3WTAerNwfM2q4xJoQY=
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Rm8TkcxUTuxeADC4a4Qleb3gNKfjlb2uAkIj4nzO8I8=;
+	b=V1AS4OB2ROL19/k7rMJeejGVR2Quufrho6C96IVznPj69GqjQclWAZgrU/oA087I4uot4f
+	4JFOIZax5g5l6Tws+wIEk569g6E0smT01FQYhby6Cs9k4Nnp4nnwSdRCfehYKw3g0bMoAj
+	MIBYZfcnvv9Ok81+se5vXoWzCa6XiHk=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -46,11 +44,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v2 1/2] bpf: Fix abuse of kprobe_write_ctx via freplace
-Date: Thu, 26 Mar 2026 22:17:17 +0800
-Message-ID: <20260326141718.17731-2-leon.hwang@linux.dev>
-In-Reply-To: <20260326141718.17731-1-leon.hwang@linux.dev>
-References: <20260326141718.17731-1-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v2 0/2] bpf: Fix abuse of kprobe_write_ctx via freplace
+Date: Thu, 26 Mar 2026 22:17:16 +0800
+Message-ID: <20260326141718.17731-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -60,59 +56,42 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-uprobe programs are allowed to modify struct pt_regs.
+The potential issue of kprobe_write_ctx+freplace was mentioned in
+"bpf: Disallow !kprobe_write_ctx progs tail-calling kprobe_write_ctx progs" [1].
 
-Since the actual program type of uprobe is KPROBE, it can be abused to
-modify struct pt_regs via kprobe+freplace when the kprobe attaches to
-kernel functions.
+It is true issue, that the test in patch #2 verifies that kprobe_write_ctx=false
+kprobe progs can be abused to modify struct pt_regs via kprobe_write_ctx=true
+freplace progs.
 
-For example,
+When struct pt_regs is modified, bpf_prog_test_run_opts() gets -EFAULT instead
+of 0.
 
-SEC("?kprobe")
-int kprobe(struct pt_regs *regs)
-{
-	return 0;
-}
+test_freplace_kprobe_write_ctx:FAIL:bpf_prog_test_run_opts unexpected error: -14 (errno 14)
 
-SEC("?freplace")
-int freplace_kprobe(struct pt_regs *regs)
-{
-	regs->di = 0;
-	return 0;
-}
-
-freplace_kprobe prog will attach to kprobe prog.
-kprobe prog will attach to a kernel function.
-
-Without this patch, when the kernel function runs, its first arg will
-always be set as 0 via the freplace_kprobe prog.
-
-To fix the abuse of kprobe_write_ctx=true via kprobe+freplace, disallow
-attaching freplace programs on kprobe programs with different
+We will disallow attaching freplace programs on kprobe programs with different
 kprobe_write_ctx values.
 
-Fixes: 7384893d970e ("bpf: Allow uprobe program to change context registers")
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- kernel/bpf/syscall.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Links:
+[1] https://lore.kernel.org/bpf/CAP01T74w4KVMn9bEwpQXrk+bqcUxzb6VW1SQ_QvNy0A4EY-9Jg@mail.gmail.com/
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 51ade3cde8bb..1dd2ea076d8b 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -3733,6 +3733,11 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
- 		tr = prog->aux->dst_trampoline;
- 		tgt_prog = prog->aux->dst_prog;
- 	}
-+	if (prog->type == BPF_PROG_TYPE_EXT &&
-+	    prog->aux->kprobe_write_ctx != tgt_prog->aux->kprobe_write_ctx) {
-+		err = -EINVAL;
-+		goto out_unlock;
-+	}
- 
- 	err = bpf_link_prime(&link->link.link, &link_primer);
- 	if (err)
+Changes:
+v1 -> v2:
+* Drop patch #1 in v1, as it wasn't an issue (per Toke).
+* Check kprobe_write_ctx value at attach time instead of at load time, to
+  prevent attaching kprobe_write_ctx=true freplace progs on
+  kprobe_write_ctx=false kprobe progs (per Gemini/sashiko).
+* Move kprobe_write_ctx test code to attach_probe.c and kprobe_write_ctx.c.
+v1: https://lore.kernel.org/bpf/20260324150444.68166-1-leon.hwang@linux.dev/
+
+Leon Hwang (2):
+  bpf: Fix abuse of kprobe_write_ctx via freplace
+  selftests/bpf: Add test to verify the fix of kprobe_write_ctx abuse
+
+ kernel/bpf/syscall.c                          |  5 ++
+ .../selftests/bpf/prog_tests/attach_probe.c   | 64 +++++++++++++++++++
+ .../selftests/bpf/progs/kprobe_write_ctx.c    | 19 ++++++
+ 3 files changed, 88 insertions(+)
+
 -- 
 2.53.0
 
