@@ -1,71 +1,72 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D82034252B
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 15:24:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D42444035C9
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 15:24:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774538649; cv=none; b=pRwyJ5447wyp66TIauiYZJVVucl1flIFy43IalkQEtffkWrnGoXzRloJ9AEXKS27IbomD2d/nNlppconrt0LFRTN4JJaJ9y+cjR7PqeuQ9WjKcEz5jk24b/gOEfcfSxt8Rh1JVAg3l5Jd1K1E+mG5hecndVCyUu/Oy9NO1njCXM=
+	t=1774538673; cv=none; b=YKSbJUUT9jrQacQjzynDu09s0lzdvZTE2AAwO5RD28/L6drxqeATAawyv33X1vIduMGFAId3D2pIz3/kmp4HD7Kreee5ub9FhdKk7VzddoRRk1tQyS23MwowSITwgLXDYt7g7QE9ygHOYP2MvvIhyc7dj0diTrdvjtvQgoPx7Zc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774538649; c=relaxed/simple;
-	bh=QWjAEz//dMDe29W9qd/2cFtUHDd5g/j6psrsougQlNQ=;
+	s=arc-20240116; t=1774538673; c=relaxed/simple;
+	bh=nT+Xs3xIbIaPyc7WwKRINCLOr1g7D3DJ1PJ9Uud6yaw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u4qGx+PW3zLoBlu/flGT2X8nqpPia40n50hrPkfV/RuzM0cW8OrwR8CnPIu46WqSsWm1+75Imf5q0CXi0NQ9CtaPPAMM3h5TaCc0aryFJrR9UG3eOQm6KZZ74N7j9GAXc1/7ZQ4EVzlwnC/MqVJ0ZrIa4T1/nIhO36evUblB8Pg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Hj7gdRSk; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=uafUYx3fzY4JZ/AzBeiF9RjHx6a/J3rNkQL6DMlHchbGkuGu5//CUMxxvVWZVUH0BD+4yo4JuDUyF6re+N3Cy+KEKmvoe4D5NJCN1OuqebQC92mqK78DBCc8dfhGLIt8baY5UwUJuv3LCyNsijkaKusGGuQ4P96zklVhpkLspRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=HVV2Vp/+; arc=none smtp.client-ip=209.85.219.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Hj7gdRSk"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-439b97a8a8cso1088154f8f.1
-        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 08:24:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="HVV2Vp/+"
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-89a0ecbc713so12390776d6.1
+        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 08:24:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1774538646; x=1775143446; darn=vger.kernel.org;
+        d=gourry.net; s=google; t=1774538671; x=1775143471; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=j3SXFjDHalKyWonr/KBPjxaxh1IpYZ1fsMvko8xEISQ=;
-        b=Hj7gdRSkxjA0Q3zNxlYG4tUisg/RSiZbCy9gjg2PyZuKDQbU+G6tixw6iuiRh4+0BB
-         KUbQCLDet8s/putaPZzvdDjbJYenkKzjPEfqituidWOFLb19l2bRqMD7DaG6k+TaxBlN
-         0DBJZ/JjGywCH2q4mFId1uXQk4PfW5sMsrNV9NyC3g8GNuPERkw8ILKMZ3nw5UX9nWPM
-         k1kkCDecM4PFmfva9fL4pHm1Me/UUnF17waKD9ApI2Cd30GYI/u8tb5Ig/OlJP/mqQNq
-         +WxWeAS8s7t66wL1LbyvRBBk8tbuOmw63S+z1gpP01j5XVjraWL91qID3vzlSLv+Rqe0
-         TjsA==
+        bh=bIk59MTMskTJurRtc6jFkcPp9I+cldWKz4vCxcp4e8Y=;
+        b=HVV2Vp/+3ivH1JihZueLh21JMGPF9hZB6P8eFpnqBIyvtKD6EbzQqKiZ00nrZkQOec
+         ouwxmLDfuSBK3Psp9HnjY21fZSrC/oZEGkLnJjrkxYDtOIS1mHBu66FAr6p0ziuCrDFM
+         fHsTd+7fyeMt3RG32oUNUN5RgUi/tIQntAQ0bHHfAZ2A54iD/5stmUAsWEE+A06gS1tu
+         xLo2HHXkwftp6cl3EklMUywkcsQVW3mMd1Mz0NdzVxsaAcohh/w4Jud34MgC+H7tuLPL
+         7kVi0TLZmCjkxca5hqTUHyaEVNzYajcS5QgkOgeUj8Jd4ABECBwYxRd/4TLeoptm/4k5
+         mQzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774538646; x=1775143446;
+        d=1e100.net; s=20251104; t=1774538671; x=1775143471;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=j3SXFjDHalKyWonr/KBPjxaxh1IpYZ1fsMvko8xEISQ=;
-        b=O0jLNsptYbKq1NWmrxrfkD8DNRtjHR0yxYjMyUy0sP3aijfdc1kHWVjw4Jv5HBqy6c
-         13F7bOUS3wcNKpi46yBBRFtPO/Ib1H01YSg9QyPdA9ahxc38JuPRhsHgSrdoFGUFsHlx
-         Vlk5wXGUeiJoHxWMzAb7tSoWSy0fGGoWsSL0nG273m5RZ41B1E/OaAvV9GlBZbYAqYgP
-         xBSnSW/dM+Jhgv3A/htwZHwQVWqo6rSnlO0xjM8mWvCeyxsnbfQ2Z4Gu1fArLbSxcWiF
-         SYpJfevGgbExmTTjQ5R7sXZBIHjh63Wa7u7mHaMCGbNqHh1Enhf4T2zWgFamabcG3TTa
-         J2gA==
-X-Forwarded-Encrypted: i=1; AJvYcCUdyIrnvw4ym8qgqnR3TulEcHk84DOesUBMt37aNVviOqVrk/08iB3cnVoDvAhn7IXyw/k=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw83/TAGg36jzZcVhmmzN5PYAJB00YmLXmJtYz++BKyLa7jCGpq
-	Lxrqz9mEfGTWLg6HbThoLXtKDivILgPphwgAt09JCPzu7n6T8ATLfplrrZScACumK80=
-X-Gm-Gg: ATEYQzzCFQQgCKIUiDkHWwJy+obTvKV1r6uvDG3GtY1+5DeWHUGxH0CZb75i3wm/4UX
-	QQ38f0U894Q4CC6wBJpmJVZppBQCX5NIBwP5UHj5dVskyoX4AL2riA0TQbTPz3i6fQ/n9hk7j4+
-	8Ms6pcVV0yAyvLw8Cq+O6jCiePZOiwD4PnucuxQ7eZbqTm8JzFYUzGcRyJupOWvYjUTtw1bKHks
-	nOtCxo/3Y02dwII8zquiKCvv7UpjBcpu2gDKizk61iJGS5PZyy7YIq/mxPld0lB4mubi1rj8b5u
-	6Pu7CgtBipBU5zHAHtR5IoC09RG4ceGUfvT2hG+zn06JrwV0whWFmpQf2qcMu6fYFrEIK5/msUN
-	/LShPpChXYORExu4ndJp2yfrpOcN7WdVokZ1fdzZ/mCGfNQaslxJKanT/8lbCor+r1yexjWRutx
-	bvovbjYhX4YxTPdvWyrojAeGhb/y9lrAeirM9d
-X-Received: by 2002:a05:6000:40c7:b0:43b:4396:674c with SMTP id ffacd0b85a97d-43b88a39bc5mr11889230f8f.55.1774538646054;
-        Thu, 26 Mar 2026 08:24:06 -0700 (PDT)
-Received: from localhost (109-81-31-149.rct.o2.cz. [109.81.31.149])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b919cf2d3sm8479963f8f.19.2026.03.26.08.24.05
+        bh=bIk59MTMskTJurRtc6jFkcPp9I+cldWKz4vCxcp4e8Y=;
+        b=hPOjW+Kp4TeLIeIscbwO1lRFtVoOU1ZgON70ZBYMPJ8VHgibhrhp2Xw1Ecy20+cRnM
+         AvBsk0cNiMWAXqsHjbh+j/3GbUO1Xwj2Cmq3WG45rfGtxtfpB0+aflKf0Vc0KCcPiAGd
+         PVmfwuOuYdCXuDb3OMktLYhu8cEq7n4JijeTV2re+Im8eB3XiOl6P6REb1qkKycEdhaw
+         phLEyOlxi/MfzUFDlWcC7sPdOBheg8w1Fo068sIc6gfWQ3KSEDkN6M9+tXMNT+9Lw16f
+         om2CEb5Yy/w/CEr1BpvlKqXzU1GlcjWwPAr4dNQ06T6KnSmqdBVLJ+VeGmi/tV+DA9V/
+         ca6w==
+X-Forwarded-Encrypted: i=1; AJvYcCVkK+dCjQyFKF0T9WhikGaWRJAK/h4U5UXCxC4JL0MNevjdlkVUjMCQoC9bfCiWNFR/cZI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwXBn5iduyuGU64s2u9YFWLgHmy7wDTMCgi04g9jtJDlc/Dbnc9
+	zwfElat10NTO4pOMAifDjBYpeTeEc6Vh8xMuJwPpSjqSTAsJNQPSfhNipDAq8nUD1uY=
+X-Gm-Gg: ATEYQzxfj0t3ZfD/4TRbOviIFHRVzigcf06syWAA33h8kW/nqYHEwJr1ALQpF06OC4G
+	oDxAIIfpNXr/bsDLmsKS8QRau2rcrZpKaZmKbp5HB7VTJTyvworI7uiSYsi7iobxXW1Hj5uDZoM
+	6gbZppm6V/rAeMd0X62zcXGdmXAOWI30epWa4ZZDG2q80YYnhpEvLj2yXtj4OJsdQsO76JjS4Ds
+	yqX/va5gkZVWOM35zutUMRpZFle7FmaR3C1FJ6Eq+IrMxVoRcW5uggE9GFDmTNyYHO6VUAJUF64
+	xMqPn4zR+Jl7E6q9hK1GXu9ddr58ja1gTHSGcOBBnfz9Qg6aIDZsHBpYWIv0W99/NlYrXQ3uS51
+	NDcECC7BeuvqcraM7SL6sWn4rbadpb101DE5JnqUEblR+CwaH4Z/JOJP58k3X9pD2de3C7WywOt
+	TdzvTtG4fFcBxJ0HvVEdq9ISrulqNP2Lc=
+X-Received: by 2002:ad4:5d43:0:b0:899:f495:1a17 with SMTP id 6a1803df08f44-89cdde45098mr24691616d6.15.1774538670605;
+        Thu, 26 Mar 2026 08:24:30 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F ([2620:10d:c091:500::2:e5e8])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89cd588487dsm27153366d6.11.2026.03.26.08.24.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Mar 2026 08:24:05 -0700 (PDT)
-Date: Thu, 26 Mar 2026 16:24:04 +0100
-From: Michal Hocko <mhocko@suse.com>
-To: Shakeel Butt <shakeel.butt@linux.dev>
-Cc: lsf-pc@lists.linux-foundation.org,
+        Thu, 26 Mar 2026 08:24:30 -0700 (PDT)
+Date: Thu, 26 Mar 2026 10:24:28 -0500
+From: Gregory Price <gourry@gourry.net>
+To: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
+Cc: Shakeel Butt <shakeel.butt@linux.dev>,
+	lsf-pc@lists.linux-foundation.org,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Johannes Weiner <hannes@cmpxchg.org>,
 	David Hildenbrand <david@kernel.org>,
+	Michal Hocko <mhocko@kernel.org>,
 	Qi Zheng <zhengqi.arch@bytedance.com>,
-	Lorenzo Stoakes <ljs@kernel.org>,
 	Chen Ridong <chenridong@huaweicloud.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -73,8 +74,7 @@ Cc: lsf-pc@lists.linux-foundation.org,
 	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
 	Kairui Song <ryncsn@gmail.com>,
 	Matthew Wilcox <willy@infradead.org>, Nhat Pham <nphamcs@gmail.com>,
-	Gregory Price <gourry@gourry.net>, Barry Song <21cnbao@gmail.com>,
-	David Stevens <stevensd@google.com>,
+	Barry Song <21cnbao@gmail.com>, David Stevens <stevensd@google.com>,
 	Vernon Yang <vernon2gm@gmail.com>,
 	David Rientjes <rientjes@google.com>,
 	Kalesh Singh <kaleshsingh@google.com>,
@@ -86,10 +86,9 @@ Cc: lsf-pc@lists.linux-foundation.org,
 	linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Subject: Re: [LSF/MM/BPF TOPIC] Towards Unified and Extensible Memory Reclaim
  (reclaim_ext)
-Message-ID: <acVPlB1Y8IR-RKCg@tiehlicka>
+Message-ID: <acVPrEyfcE4Naz5b@gourry-fedora-PF4VCD3F>
 References: <20260325210637.3704220-1-shakeel.butt@linux.dev>
- <acTcStxrTCWAN6Dt@tiehlicka>
- <acUzMdxCDfbuyv9J@linux.dev>
+ <42e26dbb-0180-4408-b8a8-be0cafb75ad9@lucifer.local>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -98,27 +97,39 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <acUzMdxCDfbuyv9J@linux.dev>
+In-Reply-To: <42e26dbb-0180-4408-b8a8-be0cafb75ad9@lucifer.local>
 
-On Thu 26-03-26 06:44:07, Shakeel Butt wrote:
-> On Thu, Mar 26, 2026 at 08:12:10AM +0100, Michal Hocko wrote:
-> > On Wed 25-03-26 14:06:37, Shakeel Butt wrote:
-[...]
-> > I think we should focus to make a single canonical reclaim
-> > implementation work well. I.e. we deal with most (or ideally all) known
-> > regressions of MGLRU. 
+... snip snip snip ...
+
+> >
+> > How Do We Get There
+> > -------------------
+> >
+> > Do we merge the two mechanisms feature by feature, or do we prioritize
+> > moving MGLRU to the pluggable model then follow with LRU once we are
+> > happy with the result?
 > 
-> Here we disagree on the approach or steps to reach the single canonical reclaim
-> implementation. MGLRU is a plethora of different mechanisms and policies and it
-> never went through rigorous evaluation for each of those mechanisms and
-> policies individually. To me that needs to be done to have one solution. 
+> Absolutely by a distance the first is preferable. The pluggability is
+> controversial here and needs careful consideration.
+> 
 
-If my recollection is correct from the LSFMM (2022) there was a promise that
-MGLRU architecture should allow to add extension and eventually
-supersede traditional LRU. If we do not see that happening then we
-should re-evaluate current MGRLU approach. I do not think we want to
-build reclaim_ext architecture on top of the current code. Or are you
-suggesting to achieve MGLRU through reclaim_ext?
--- 
-Michal Hocko
-SUSE Labs
+Pluggability asside - I do not think merging these two things "feature
+by feature" is actually feasible (I would be delighted to be wrong).
+
+Many MGLRU "features" solve problems that MGLRU invents for itself.
+
+Take MGLRU's PID controller - its entire purpose is to try to smooth out
+refault rates and "learn" from prior mistakes - but it's fundamentally
+tied to MGLRU's aging system, and the aging systems differ greatly.
+
+  - LRU:   actual lists - active/inactive - that maintain ordering
+  - MGLRU: "generations", "inter-generation tiers", aging-in-place
+
+"Merging" this is essentially inventing something completely new - or
+more reasonably just migrating everyone to MGLRU.
+
+In terms of managing risk, it seems far more reasonable to either split
+MGLRU off into its own file and formalize the interface (ops), or simply
+rip it out and let each individual feature fight its way back in.
+
+~Gregory
