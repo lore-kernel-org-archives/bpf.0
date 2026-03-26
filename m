@@ -1,127 +1,178 @@
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AEAB39DBC6
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 20:30:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774557051; cv=none; b=r4DQMufwPkiqT380OzhkB5TAbi2Yqzi4Oym/5YYFOJ4YDXlm1P/H9Jyx2Bz2yooRyetuJlGh6oM6oPsNhcdI7S33U1xvyhyH6qAGoO0j79JJ/JxwLqpgu48tEdUL1lB7fETll4L72IrOPgCLQUEE7tWjQUA/VJMb/QjzaRPKH6g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774557051; c=relaxed/simple;
-	bh=MFuStYaTciGnTN4F0M0soWQLcMi2bMJJDLwUQ3uHv68=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UQsQclhwOjl8qV+3I9c9wQb9HJ+8u736oXOnG7xx+rQZCEm5cNCpgPTOuNaeXR01vittwiruq3AYEOTybBRO9ugxBYPZvWlQv6mrI+sbiG2lYET6bqeIao8WuNxsUk/0u/0RkY+MDih99OsNO3sDLIJB5qI6qIJVZMaNndVT/A8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=qZbivxfQ; arc=none smtp.client-ip=209.85.222.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2F201427A
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 20:32:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.174
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774557178; cv=pass; b=WTZrYkFYKtYmMY9emwBtW56xb/W75oNhfkAK/UlYKMwsO1rziZs1GoXkb0FXkaiek5ibqO0zt+fb4vyQHy5nMWPOddI78C4mqFOOyRvzvBAMNq4b/oWLOuZZJxTu78OmdtaDTn99ZGC8bVjt7KmEBcSiKIL0iHWx1E3OBIk8RH8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774557178; c=relaxed/simple;
+	bh=vv3fINOTm4a1DJcw01C0iHFPBMj2LdgZIpAj1i6uj8A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OQb3ixs5JaHAtQmnyhwFMCkcnJ9nRhRyyliHV5j00Gy0ngH13wklSX2RoXByAb91bLwEG8DNe8EKEZtWDQTE7G0BPajnHmSWgC2+pJ8VmwFDTNnk6uMRW4f5PLlA/goXuVx4yB7dqo/HUyQwxRqYJiciflkvTwltEXg0YxAh73Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CjiN0GtE; arc=pass smtp.client-ip=209.85.128.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="qZbivxfQ"
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-8cd7ecedf2cso158269385a.3
-        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 13:30:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CjiN0GtE"
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-79a46ebe2beso14134377b3.2
+        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 13:32:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774557176; cv=none;
+        d=google.com; s=arc-20240605;
+        b=CwzXypzqzJ19sRurlY/oU6A7rl74g4wPk9aE/feCmxdH+/cYin50hJnu08QMn7Xa5L
+         2nkl0Fj00ezCYDsxhkCLHDuKvKwypfcZFEGrH5dFWzffmR2TTEXlVdyS/yjI+kWcbMC7
+         f1NyRddLr3MgEUIf0xf05wKYH8FaREmy2QVcKtiKuoSAmaq0PVbBvGanzEuZuntFdnEl
+         LBK+G+ep4G9Ga4Q8Fl18JkKgxr5YG7fC6YGwtWJqtCVQMvdBDWLkSLoOD+nJyyFdwLfH
+         vkbk8Ktah3uLOKd37g6al90E+Ax+wLAOyLsRx5ThKd9bRucHy4RDvGWZPGUMCB3KOgjp
+         +9kQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=So3250I84ApogcJkFPpmfO31U8ThAo0mkcinoVGA0TI=;
+        fh=PzF4mx18zzEJc6q5CF9iWR26tlykEsddYUFyx3rCgvY=;
+        b=k8YKLYfDAnB3b0HaZRACmObeXhmtRra7jRrdkZNGDDSLMFdjz++nKml5URq8TyaS4F
+         53YFe4q0peBFoCY1SFEG0nobnwRZFO/Don+K/4t+D6gPHkZMUS3vnSFbjbUzqw/qBbFK
+         bs6M8EkXoRcxwiAx4dRTAnwooMOcfwN6TuXdKPX4KFFLNBO6HaW9lNTMBXLMXNHh9E9d
+         THBMbUP20n+SN5Ve19r8tuggsCQ/YmHuHPKOF/MeaEbP/e3v6citFRXU5Sqkwnzwd76J
+         /2ust5hEA5w7U2/xq/gpnjNYoONeWAHyMkD5MVmcEK7C4sGMzCCQQWsGgwn/zLNpH7gC
+         TKbQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1774557049; x=1775161849; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gtpETcl3yk6gc9JzFTgqg++pyqjs/XxnbLkYQgCVFgc=;
-        b=qZbivxfQ0kZ3LWINeIp6YXOjb0UO4V+Sx61Y6AV5ZpPIbVPIp1G0JjqaALutilNdCh
-         cGyXmJPqswiUxXFT/KHy9pmnOT4MP0cxGvywoN+UsGLXqsADkabZl/7z1ibwaWogm/yF
-         d6zndqU4tIOqGwji/zLv8EQYYhyvOSebu4DiE7HKGIvZApSR3XuIfpfepllDCP1WBl/l
-         qn9KQTucpKNkfEt6CNJS3kohOamugheE2aKH+39r8mbCfr9Zv34Hvu1vGKMSkqBdU4oz
-         iVjJav2MFNK5f22hrU+bF0hOwDmSK1VBPR2c34kRpn2ItE720zU7qlDx35pAaFsXnNRG
-         gpug==
+        d=gmail.com; s=20251104; t=1774557176; x=1775161976; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=So3250I84ApogcJkFPpmfO31U8ThAo0mkcinoVGA0TI=;
+        b=CjiN0GtEDCU+KMhfWcJbV2aP9hOHCaYPGugc0isBxLw+PnUN63xpsgr+rfPMfPFb7I
+         UWyUCU+ZQ6waO+oqY6wBREBczrAxottslbLxSpkxdsFqDjV0vcfow1r/MQr3hYjfDkn7
+         0Mf4QFwdngYJOmyWVD8lhv6h3czaR6tnLZSb4LVuiq/9kOBH/tAb4bxdcuKBqS9AJjLD
+         d22PDYycxZTtWis+yqODeJf2kvsKwRBXVnVOmbqXRjVNXLX8oRiCXWoiWcGQdlGtP18d
+         vzwNe3cydmM+UbZqxxuS3mMp1ZHC8Dx0SHPXfoC4AkcVeAtFPTcA6QqrJPgW//0Y72y2
+         o9Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774557049; x=1775161849;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gtpETcl3yk6gc9JzFTgqg++pyqjs/XxnbLkYQgCVFgc=;
-        b=pNELPIp5wbl0D7SadLd9Eok46zsqwOHEQeguI9KQDWiiFAyHMwt2DWPU5nxGwNDErU
-         Og1xZhgP5xiZ2U8P86snr5GRetyYEsE7j8LpJoqjSIQ+biTqRZXur83ghvGjVc/ROsF6
-         YTfKJbz3Wy0aWMh4CmBTlHNhwzRFB8D+PWGCD7Ru9R+HiLIVl2bDU9jiZxH++4wtbpTq
-         9z/uQANlkFPcS6PrLC/BLE55ZqMuPlBX71nNu65ThrzAzHJ2EM2FN0J68yI0CdBGRx/k
-         s04IBraI2+ZMCsa5JLzbbmP7W2t2Bbh5PwFY8y43vD0fhwgKj4Ac4O+5/oeHoc5losd3
-         kFyQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWtYQPF3rR7C3tangu0onJ5L6ZmjIjwRZgZipVu5wSRQaT1kaotEwHWaRdi0qww1d3AaAI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+BgYhNIlfJxV7EjA+NCeZ87KNayGN4FrUCjZdkh+OygaZLWAi
-	ht55pSJrS3p/V3dGD7Wup7T9Vmgpd65x0uhxlr6s+WLhh2Q3vZnkVo8iZLStOvysMS8=
-X-Gm-Gg: ATEYQzysAa12LTqCZKWys67+KTxM2ht9K5omAFWNgot6x/CNQri2TZ8T5Kukb0eht1x
-	Q+MTm5SLD854DQ6smMfoppFfq3UK4mSme/A9mMpiZ4Vqis9d9Y6SANB4KjLRP1ZksuoFDNmeYno
-	oF/ck5Vkzdrq+I1OueMegicY/nx40MubgAmZ/x7K6U7GPU9wMllkcs+6ZZEFnP2dg+ErTSg5oOD
-	Ehlz5VZn2DA/7OtIZL+9vsnHh3qEnDraBWnEYcCv07S8mCpqhgdL9ocdvCMv4g9wHl5vj+phTOs
-	FOsdgWkLgaXEr047fAfjp/1ei8wNm/8gOcJBBUFDDHA5I/anDta42R/8UGFkX6n6s5W4TA1Ss39
-	NsL8ezgjaswRpfBPbUGHVzE+yVbhxLuVMS3uSVTP+Thtl54yJwRVgD8ZbE4elqaYpDozRw7c5O7
-	nOia+xtyYMPzCYqwqAKafL
-X-Received: by 2002:a05:620a:198c:b0:8cf:d804:4567 with SMTP id af79cd13be357-8d000f20fcfmr1253345285a.23.1774557049133;
-        Thu, 26 Mar 2026 13:30:49 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F ([2620:10d:c091:500::2:e5e8])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8d00e4ca250sm323370585a.25.2026.03.26.13.30.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Mar 2026 13:30:48 -0700 (PDT)
-Date: Thu, 26 Mar 2026 15:30:46 -0500
-From: Gregory Price <gourry@gourry.net>
-To: Axel Rasmussen <axelrasmussen@google.com>
-Cc: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>,
-	Michal Hocko <mhocko@suse.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	lsf-pc@lists.linux-foundation.org,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	David Hildenbrand <david@kernel.org>,
-	Qi Zheng <zhengqi.arch@bytedance.com>,
-	Chen Ridong <chenridong@huaweicloud.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
-	Kairui Song <ryncsn@gmail.com>,
-	Matthew Wilcox <willy@infradead.org>, Nhat Pham <nphamcs@gmail.com>,
-	Barry Song <21cnbao@gmail.com>, David Stevens <stevensd@google.com>,
-	Vernon Yang <vernon2gm@gmail.com>,
-	David Rientjes <rientjes@google.com>,
-	Kalesh Singh <kaleshsingh@google.com>,
-	wangzicheng <wangzicheng@honor.com>,
-	"T . J . Mercier" <tjmercier@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Meta kernel team <kernel-team@meta.com>, bpf@vger.kernel.org,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [LSF/MM/BPF TOPIC] Towards Unified and Extensible Memory Reclaim
- (reclaim_ext)
-Message-ID: <acWXdvHx9mYqvT2w@gourry-fedora-PF4VCD3F>
-References: <20260325210637.3704220-1-shakeel.butt@linux.dev>
- <20260325190547.abb7309fb63473b57b7a90a0@linux-foundation.org>
- <acTaRgusrxfCoKqe@tiehlicka>
- <ac05d923-7871-4691-8d26-eff41b3a3db0@lucifer.local>
- <CAJHvVchSfGDubPhir0SgZfr_BcpN5oq_7AY4AZ587_ucgY4Apw@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1774557176; x=1775161976;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=So3250I84ApogcJkFPpmfO31U8ThAo0mkcinoVGA0TI=;
+        b=nTqIRA5Rh0McCK2r2kBVNVjHXqbQXIaDAn0vAzfIyci6X8FT1Y0XeMoB6v9aDgzXsF
+         9yRHCe9hfHmTP0mvlK3vehTd+2TR8kn7N53WOXZOzFZHJ0UZyUWuPv6crxbi+xskAIBn
+         fm9KRoW5dZYn6S8Mx29ps2DNVrVW1iE+h0ryam/V7IMxII/cAYEHctIi3cHj2atQv92O
+         uTyP/beENzrAzK0wRSuWRl4zr6/bzzgbH3JlsZSvXC1+xHWcMOUU98DxJ6W+7F5vULag
+         DMjgNRScYR8Isyl1rg7DVH5dQVTwb9KBatjZRITz+eMbKiQYnCxUkZsTf6IUiq2/TluN
+         yUug==
+X-Gm-Message-State: AOJu0YzQsDL5Zik5lThMfmT2Qrhp998LGJaxs8TZRVUxg87Qvckersm2
+	z9wSa0h8O/woqvoBflcRkMozttNYul1lcHU2ADDDxJ+oZkMSYHL/n9MkqUbhnVzgnMgqCeb5CNX
+	5tgpaRKPUAU3SVqwVjX+zOVilI8qyd2M=
+X-Gm-Gg: ATEYQzzGEU1X1+4cAYt9blfAvdm9bIfNHqXHRm0lNiTMZYuwS684GLofNVblv4k0HI6
+	OuPrXv1dUkzNRfpi92Ek7Ag9hMswF9QS4BFAc0h3ymxzT5cocJ3clajKOGT/Cn/6Z4B2foarXZ6
+	VzAUQBg52OjPY2mP9EZ5DZu7dPv89dG1FNJ3FL23nbRYMrK+BnB4T13NnXTLu+j8if694FUGfnq
+	aL5g/e0AjXxgtN+tHbM4qOI31oIVVi5HDLUW4DC1jVrOkirAK45TqQECaxWne0cxGvD/3nD0/fp
+	Js9BTPZbn9QVYrhYHp2RXoU=
+X-Received: by 2002:a05:690c:360f:b0:79a:5b3a:8e25 with SMTP id
+ 00721157ae682-79acf6dbf2fmr99822067b3.58.1774557175836; Thu, 26 Mar 2026
+ 13:32:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJHvVchSfGDubPhir0SgZfr_BcpN5oq_7AY4AZ587_ucgY4Apw@mail.gmail.com>
+References: <20260326052437.590158-1-ameryhung@gmail.com> <20260326052437.590158-2-ameryhung@gmail.com>
+ <87ikaiimyy.fsf@gmail.com>
+In-Reply-To: <87ikaiimyy.fsf@gmail.com>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Thu, 26 Mar 2026 13:32:45 -0700
+X-Gm-Features: AQROBzDIdLJS7UlJaGo5T1COIP5PNpDfFxFGUBLUucY0kkG04jVKanTT2XQFj8s
+Message-ID: <CAMB2axNyYWApPr3gSpLe2k5kej04MGi1e8DWSWEfGa7xG2wKPw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 1/3] selftests/bpf: Fix task_local_data data
+ allocation size
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, 
+	kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 26, 2026 at 01:02:02PM -0700, Axel Rasmussen wrote:
-> 
-> I think one thing we all agree on at least is, long term, there isn't
-> really a good argument for having > 1 LRU implementation. E.g., we
-> don't believe there are just irreconcilable differences, where one
-> impl is better for some workloads, and another is better for others,
-> and there is no way the two can be converged.
+On Thu, Mar 26, 2026 at 9:18=E2=80=AFAM Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
 >
+> Amery Hung <ameryhung@gmail.com> writes:
+>
+> > Currently, when allocating memory for data, size of tld_data_u->start
+> > is not taken into account. This may cause OOB access. Fixed it by addin=
+g
+> > the non-flexible array part of tld_datg_u.
+> >
+> > Besides, explicitly align tld_data_u->data to 8 bytes in case some
+> > fields are added before data in the future. It could break the
+> > assumption that every data field is 8 byte aligned and
+> > sizeof(tld_data_u) will no longer be equal to
+> > offsetof(struct tld_data_u, data), which we use interchangeably.
+> >
+> > Signed-off-by: Amery Hung <ameryhung@gmail.com>
+> > ---
+> >  .../selftests/bpf/prog_tests/task_local_data.h       | 12 +++++++-----
+> >  1 file changed, 7 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_data.h b=
+/tools/testing/selftests/bpf/prog_tests/task_local_data.h
+> > index 7819f318b2fb..a52d8b549425 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/task_local_data.h
+> > +++ b/tools/testing/selftests/bpf/prog_tests/task_local_data.h
+> > @@ -90,7 +90,7 @@ typedef struct {
+> >
+> >  struct tld_metadata {
+> >       char name[TLD_NAME_LEN];
+> > -     _Atomic __u16 size;
+> > +     _Atomic __u16 size; /* size of tld_data_u->data */
+> >  };
+> >
+> >  struct tld_meta_u {
+> > @@ -101,7 +101,7 @@ struct tld_meta_u {
+> >
+> >  struct tld_data_u {
+> >       __u64 start; /* offset of tld_data_u->data in a page */
+> > -     char data[];
+> > +     char data[] __attribute__((aligned(8)));
+> >  };
+> >
+> >  struct tld_map_value {
+> > @@ -158,6 +158,7 @@ static int __tld_init_data_p(int map_fd)
+> >       struct tld_data_u *data;
+> >       void *data_alloc =3D NULL;
+> >       int err, tid_fd =3D -1;
+> > +     size_t size;
+> >
+> >       tid_fd =3D syscall(SYS_pidfd_open, sys_gettid(), O_EXCL);
+> >       if (tid_fd < 0) {
+> > @@ -173,9 +174,10 @@ static int __tld_init_data_p(int map_fd)
+> >        * tld_meta_p->size =3D TLD_DYN_DATA_SIZE +
+> >        *          total size of TLDs defined via TLD_DEFINE_KEY()
+> >        */
+> > -     data_alloc =3D (use_aligned_alloc || tld_meta_p->size * 2 >=3D TL=
+D_PAGE_SIZE) ?
+> > -             aligned_alloc(TLD_PAGE_SIZE, tld_meta_p->size) :
+> > -             malloc(tld_meta_p->size * 2);
+> > +     size =3D tld_meta_p->size + sizeof(struct tld_data_u);
+> > +     data_alloc =3D (use_aligned_alloc || size * 2 >=3D TLD_PAGE_SIZE)=
+ ?
+> > +             aligned_alloc(TLD_PAGE_SIZE, size) :
+> > +             malloc(size * 2);
+> It looks like there is no point having Patch 1 separately, most of it is
+> overwritten in the Patch 2, I understand you want to have fix and
+> simplification separately, but is it really worth it for this selftest.
 
-I absolutely believe there are irreconcilable differences - but not in
-the sense that one is better or worse, but in the sense that features
-from one cannot work in the other.
+The allocation path is already a bit puzzling, so I have this fix as a
+separate patch to make patch 2 easier to follow.
 
-> - My sense is MGLRU is "close", meaning as Kairui said in "average"
-> cases it is substantially better, and the gaps are both fairly narrow
-> / edge-casey, and very solveable.
-> 
+That said, I can squash it if it is simpler and needs a respin.
 
-This is a really, really bold claim.  So much of this is workload
-dependent, and LRU has decades of battle-testing while MGLRU has barely
-been around 4 years.
 
-~Gregory
+> >       if (!data_alloc) {
+> >               err =3D -ENOMEM;
+> >               goto out;
+> > --
+> > 2.52.0
