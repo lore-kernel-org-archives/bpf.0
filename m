@@ -1,91 +1,92 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC103BA235
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 09:08:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 785A62EC54A
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 09:13:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774516107; cv=pass; b=LTJGe4+6ybkuTtEFRZ167d+sVDozmO26ASphMDgALPIPLBVyEST5BfDYMRjFWrXUfRSCA2rYPSO5yjMsE/ruMHgFiuFGkdFDg9OMWJqNYby3tF1K/VvbQc4MhOPELibQtZYxkJ0CLXmoFrpUdC2QGv7nBp9pmcjltpAS1ZuoLIs=
+	t=1774516412; cv=pass; b=uKp8CrBlmE5KS8LNTlwBuN2f+dZIZzQKJT/BGDS1xLvCMDTihoUMu4NCTQQWTRHqBseIhOMGGRGMMsOq2y58hHExRrMeygADt/tcttxhTFRLSnE6LDaeHL5Wua+tNNKkcTAY+QpTDZ3a3HjGJr8bIxJurx25B8h16xhQ66R6s9I=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774516107; c=relaxed/simple;
-	bh=nELhMo5HbKoT5PmrQHIsDRZuES6n1hKRONlh2hGKiy4=;
+	s=arc-20240116; t=1774516412; c=relaxed/simple;
+	bh=/e7hkDx42vRtWDDOFUhleCLIb/wxE/G7l9fKSe2NWS0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uuZzLDZPdOUfTg7xvQ7v22Ec/milzzvWV99kk43uiJaQwunhJ2v596N5+jwauaQ67d/c5Se5k14CLZfgBXj/V2l9xoWJZnZ77Nj3znbCOXcjxyUXztNV8vuJUSCpEUZzuoWnLrsAtOS//rJJmthnoAYaMlzZoMjEYM4w8/sZJ5E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qIuQlPu2; arc=pass smtp.client-ip=209.85.208.41
+	 To:Cc:Content-Type; b=GhG97wGePZ0TFXsUKN7EVRtyFsBtyVSscO6+nn5Zg6F64uwAfaeffWFTj0vMPI9w9t0gqWI9sQ5OwNWFhkXgyXw6hfy0xU5EVEwsXPWhTjtHK+hqet0SsLZA3lJiZwmaTEeQjHR39gIy1z01izySPUYQke5q6bPfqmsEbnXgpMU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AQStYnoi; arc=pass smtp.client-ip=209.85.218.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qIuQlPu2"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-66a4c6bb6ecso1122292a12.1
-        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 02:08:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774516102; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AQStYnoi"
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b8f9568e074so114261266b.0
+        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 02:13:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774516409; cv=none;
         d=google.com; s=arc-20240605;
-        b=RNKQJ5ZSyAytIr3cZeY2zfD0HhSjVHEG0IuVm2BJV1ZiQ3ERSEFqVN1ZBMdePHInQZ
-         kOH4rJ6NNnbTDXDYdMoaOwSVNoShl02x+SSVBz1tenbWnuBdWichH9jselSF12pmIy/w
-         o81HBo17qudcUg+EBiWGm76l1KM0AIvKXudRMF9YOlQfki6UhvUWffAmin1MCcauAo9z
-         0heBa0yTmtga3p8uzhWKuP6V7IEW2jefDwxkjLSxlIp7EFRcQCtUt88+W9MiF5jGFIW7
-         vhuaHJqNOmK/In5Vl0c2Ti+wtsvsR6XSycTKtKBMheo/GgYMKF+5Jhzn62JlL4+7woTN
-         ukRA==
+        b=DGVxKKubGK4stLW4EAYHC8ASky1oVkMnwgabQeDZrnMKcFrpUHAcJLdozeL5EIRCCB
+         oujDByAmXqNNc+S8rH+8yEIftFbkLfYMgy7QCVCwfGQX2NVOYpBd88bCpxSqrK8lPF3O
+         3Nr6PamNPUUBv7v8mVTb3w8c4j2u+mggsZtfUIE3nxtY5idMNRgzGWVNRKXrhHNFLYkF
+         F4+VKAsMEGa0q7ltT7wtMBKToCAG5vDmsrcD6PjHNVOlSaJZcEi3UgZjqCSIUW1UppsE
+         5fave9wQ6gQrHcWQobZIK8Jdt2+r/W43BljZhwwXhQLF+WCJqzrhqaqucoIeuwloihXW
+         YxLQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=fupcQia+cIixkDUZQnHZg9spgTCSgrS5ZcgFhd7IQSs=;
+        bh=UGB46r+Oixa13owbku5fmyOSlID64cowrqEeRMzZxSw=;
         fh=kgRp5VWqnb+R1VaC6eqio3iVft5+kpalc+14mahCSvE=;
-        b=KOODuZ2S5ch/V2qG7s0o9EyfdZNtyOMeqVz0YYbplUi0ipdS7dbWWVIua4dJObtLst
-         LIXr3Ls+yXUzZVSgHzd/nJr+bLn627kO+7v7JMoVbPpYrhzy8qDcPPai0bn85VV7TJ8U
-         gEYdNsvsMToFuRsW1yZ1/Jzef9mKZTwmvB+hflZAzWizqYe4FBlfJLcjPR2+Yfw3sAJK
-         TE7rT7OCWyrxYLMkLUx6tR9/jm6q1jcTnvQF8kik480u4lP9GGDldHItdj8TycUlKQaK
-         vkLuqPbyM//IYEdjJXdVCvASb5WDQvIrb9jLvZ2/siGzmdvCkPoxL/hiuzuRmaypadzL
-         oQkg==;
+        b=DWujOs048JrgGU/1uC8x+4X1vRkPBCtytgunpKYwdT+FO+00RTIZ0OaBPrQjhht/9B
+         1PIhEINYI5y+YXRRQ6RYiMzoKqvgTPIOSDqrj/XSr7PNMVqgAmFJbgShlNDe40qSBZoB
+         4+sajvNT8B4SeF3MTjI/BgF2FEK2rE/QGWzyHnbXiw7sr70mm9c3d3v1BfbSUBxsJ20K
+         efIAOYJCqLrHqrkRoD4MIP706lPy5OfEIaqxown2Y8uTqgh3Td1zhicvvpHPEWZPHIl3
+         o1wIdtG4yZoDrJhgMb/tRTNk+Z4Ze7FiVm1uy3HmdrbPREJSMbxzCBeJrd8tjIc1YWgf
+         ipfQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774516102; x=1775120902; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774516409; x=1775121209; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fupcQia+cIixkDUZQnHZg9spgTCSgrS5ZcgFhd7IQSs=;
-        b=qIuQlPu24oLCDe6MsNAxlkbfhztEEpkDB+tVzFX5sl8dye0nLHlmDLLSanc835EPzk
-         VrzKNnOnDb+UMFj1Eh8paJNQwaj3fdBODT43djTDl4QnU9ofl16jHRcgp3nHROLxoWWp
-         BkpjeaGp4S7IOHtyLpMP8cIwdSB2lYwso+CDwjtFfTfdUUy171T9QDahrPhI23bssRDf
-         f04sInFAhnaWiQkgL2YoqdViWEYDnPONUGCECHPkpLTjyG9X1Q97+Uiv5SkdF2r0r20u
-         NWNuYEt1EEgDYMfcMJgTJPwGQDNGuZizLe4xjmFioQ1lrFZITm2kIT66y41ZKq7/3Sm2
-         Cj4g==
+        bh=UGB46r+Oixa13owbku5fmyOSlID64cowrqEeRMzZxSw=;
+        b=AQStYnoiYn7++IuHZ6S0dKs06EEBFdznqpaWJ6OyOppiUmYuY+9ldQkc4kih3mlXF9
+         c/PUYM7OaVMDkmeBYab3ju6lcoxv1BfY+xIdVHBuRiR5POdft0C08EGcPPtbcMQrw5fR
+         JswrgPk9i2DSkiY5dCYhWNfM6uVJeCWmLV6OkigoSLMtMTY8mOmlL343Yh1xn7QPUtWP
+         czUh64+RCCVQZ4TKSHWipalocHEveEocKu1Ip1qbw1ZZzSUoex1Fene/iPrSmpIUNczP
+         tM6ggCq+/lzN0Q1zfLt+jfQWuCnCqmy9oQpfNjZk82fuSW6/MmdB5Tnxd9w7iS5UvJO+
+         irWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774516102; x=1775120902;
+        d=1e100.net; s=20251104; t=1774516409; x=1775121209;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=fupcQia+cIixkDUZQnHZg9spgTCSgrS5ZcgFhd7IQSs=;
-        b=XDWgPetEEtAprmJbPuTybjm9LDtmgymSf2Ryk5X+S2EqFqXySfUGKZLpB3FoQCxNcn
-         dHDgYr4ZBAfs0p+tBaSXE2x2Oca2r6YZ1L87MRmpUZnuaGUjNQ1q9bpMENtiehYF8ss5
-         k/wFZmFtcmu5wRPApCuY5nxPodMkMNmWq0pjGm/uT7wNFxbFCtyxYTVYwJ/qb+qvpWrJ
-         iBrDXMAMtBIZt4TVsaQT2qmy/Kt1VxLR82ZFeLFUScGOYpUpPx8ae3ZCG1LHKZas59EY
-         cXz+NwLC326+WqC5Qc3I3Ho0IyTSL8vKi4wiIPYLrr3nxmom0COsTuNJdxfrLp1jjzGG
-         a17A==
-X-Gm-Message-State: AOJu0YzQCIIVZgoZxO2h2rdmJydM2/d0YNGefhkdxsDFczlxX5dNYt6u
-	dPMCq2ohEvs1HwV1N+noEwscbpqY0HiidB6c/e04WVvwmfa5KkxMNP7F/77FAAL2ZA8hLf8KEYj
-	XTBcdf9WUxxrcaPICbTHS/R1zQwL0jiY=
-X-Gm-Gg: ATEYQzycJii/Y2P05U3lfEpDU66uweUvlXdJCmiN13MmAH4lMPFlDIrSwGiI0yWf1GP
-	AeUv/pVtmgfh+Jb4ktXjIfNAf3QC6HeDQGl837ZSNFQAYkWKq5oFLikWF5CD262eYPbj5O0w3/X
-	HVwzfRNQmq2BerBqHROzaJ4KNIRsY3rzJD8r33iXqNWFlswK0pZRGiCaPbl0JhHBZ/iFtlEabin
-	DsO/DhaZW6i+37NYBcYGZ+KIkbjtpbDI+z4MboJOzoHyS3BBqBy0T1OAvlXLSd5aDVZ6vZWep2O
-	afqj0AU5ivNapi0MCUSKvvk=
-X-Received: by 2002:a05:6402:5207:b0:660:e00f:3228 with SMTP id
- 4fb4d7f45d1cf-66a82709918mr4302124a12.30.1774516101793; Thu, 26 Mar 2026
- 02:08:21 -0700 (PDT)
+        bh=UGB46r+Oixa13owbku5fmyOSlID64cowrqEeRMzZxSw=;
+        b=at+v4gDnJtF7yKks3SZEgbP572vCwbT8KxQ6S9dMG4UaLWt0JkUgQBUYJ7U79mCaVX
+         phtKGpup3Cv4KPlTsqqDVbkOQmM0MY86o6RT9oFFbhFqe4+mAoZlYSwn8guo97YkFI7t
+         HAIjdQ8Jx8cFmKeBYuohaXd/w3Vmhpp066oE3Alz1K4hsOsvzGgOrsCv82AAd+Wj6JK4
+         U3Ht+IgtP2jxKoeG+Ly9Xl9f+UqrltmTXNFZJ948msHmm9/TWyDE+gHM6YB9Ep+W69ji
+         9z5xSrN9xe28W57oFCb07JUO3ZKLu4CTsz6pR0r/MMTZQhO1MOtxYX6k7YJqjze3PCN0
+         BeAg==
+X-Gm-Message-State: AOJu0Yy/mhe2aCQj3lzYqvgwQiYfMFmkAZ4bBCuTss8sJk0xP2mWA24O
+	WvYRpG90YgTq8LG5B9zI7aC0ruN5QBiV5GF1Zlx5Kd4ysjUrzm+eRzq+Afl2ToTRRZWIXuZliFK
+	k14kl/nYE3Cz+yI0r84h41EZAm54H4OU=
+X-Gm-Gg: ATEYQzx07ylzJxDGr+o6LUfYvC5fqleZh1rCZIly1pWFnTRfGMo5MI/UZckImBW8rTq
+	GipxRHVksOSNR/to/RqaPYKp4BjH4+75RhZd7Y6nf6gLNiAtxZhu0JW7y+7eMjwpBgKSo3Wg5QI
+	gzwPQEYF7wVTftow1GK/A5vKaT+5x9xsz7WFQFropfW/jelTxKjYLYzS0bvYCWCg0makz0qP5my
+	IbvDfW9kq1SJtWvTBYGQMeVfDWhW4hXRBCXmKAliWvIPr6u93GKlkQViJMLWe4QiB5u84J5NUEI
+	NS36jHVmDHGqJaZQSdkcCg4=
+X-Received: by 2002:a17:907:388b:b0:b9b:1f3e:fa56 with SMTP id
+ a640c23a62f3a-b9b1f3efbe5mr180626966b.45.1774516408681; Thu, 26 Mar 2026
+ 02:13:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260326090133.221957-1-tangyazhou@zju.edu.cn> <20260326090133.221957-4-tangyazhou@zju.edu.cn>
-In-Reply-To: <20260326090133.221957-4-tangyazhou@zju.edu.cn>
+References: <20260326090133.221957-1-tangyazhou@zju.edu.cn>
+ <20260326090133.221957-4-tangyazhou@zju.edu.cn> <CANk7y0iuC=4aD+zzJujWrwdref0zA+ZOt4Uqst_bOM+7Kqweug@mail.gmail.com>
+In-Reply-To: <CANk7y0iuC=4aD+zzJujWrwdref0zA+ZOt4Uqst_bOM+7Kqweug@mail.gmail.com>
 From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Thu, 26 Mar 2026 09:08:09 +0000
-X-Gm-Features: AQROBzBur7JLtjpwsp3ueTQVtT5jCOMRuY5Q1dNhbv19g9q2roGQNP4teaJp1gY
-Message-ID: <CANk7y0iuC=4aD+zzJujWrwdref0zA+ZOt4Uqst_bOM+7Kqweug@mail.gmail.com>
+Date: Thu, 26 Mar 2026 09:13:17 +0000
+X-Gm-Features: AQROBzCGa_087vSfATHHc_29FLzSjDbii7bmguaEsV0tZ7UebZJRUkDWVF4L2Gw
+Message-ID: <CANk7y0gKbC22yrsBec_6JmyLSN76eTshcX2_W_zhSYSgXkenxQ@mail.gmail.com>
 Subject: Re: [PATCH bpf v5 3/3] bpf: Fix incorrect subprog ID in dumped
  bpf_pseudo_call instructions
 To: Yazhou Tang <tangyazhou@zju.edu.cn>
@@ -98,57 +99,68 @@ Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 26, 2026 at 9:02=E2=80=AFAM Yazhou Tang <tangyazhou@zju.edu.cn>=
- wrote:
+On Thu, Mar 26, 2026 at 9:08=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.co=
+m> wrote:
 >
-> From: Yazhou Tang <tangyazhou518@outlook.com>
+> On Thu, Mar 26, 2026 at 9:02=E2=80=AFAM Yazhou Tang <tangyazhou@zju.edu.c=
+n> wrote:
+> >
+> > From: Yazhou Tang <tangyazhou518@outlook.com>
+> >
+> > In jit_subprogs(), restoring bpf_pseudo_call instructions truncates
+> > the 32-bit call_imm into the 16-bit insn->off. For large BPF programs
+> > (e.g., call_imm > 32767), this silent truncation causes find_subprog()
+> > to return an incorrect subprog ID, which is then stored in insn->imm.
+> >
+> > Consequently, "bpftool prog dump xlated" reads the corrupted insn->imm,
+> > fails to resolve the subprogram name, and incorrectly displays a raw
+> > kernel pointer.
+> >
+> > For example, dumping the xlated bytecode of the JIT-loaded selftest
+> > introduced in patch 2/3 (call_imm =3D=3D 32768, i.e., 0x00008000) shows
+> > that it is truncated to 0x8000 and reinterpreted as -32768 in s16:
+> >
+> > Before this patch (with call_imm > 32767):
+> >    4: (85) call pc+2#bpf_prog_71cfe20590be813a_padding_subprog
+> >    5: (85) call pc-32768#0xffffffff814aed4e
+> >
+> > After this patch:
+> >    4: (85) call pc+2#bpf_prog_71cfe20590be813a_padding_subprog
+> >    5: (85) call pc-32768#bpf_prog_5dccd3f669bbe4e4_target_subprog
+> >
+> > This patch fixes the issue by passing the un-truncated 32-bit
+> > env->insn_aux_data[i].call_imm directly to find_subprog().
+> >
+> > Note that the assignment to insn->off is retained. Although it still
+> > truncates for large jumps, it remains correct for the vast majority
+> > of BPF programs where the offset fits within s16 bounds. Keeping it
+> > ensures backward compatibility for existing user-space tools that rely
+> > on insn->off to display the relative offset. A comment is added to
+> > explicitly clarify this truncation behavior.
+> >
+> > Suggested-by: Puranjay Mohan <puranjay@kernel.org>
+> > Fixes: 7105e828c087 ("bpf: allow for correlation of maps and helpers in=
+ dump")
+> > Co-developed-by: Tianci Cao <ziye@zju.edu.cn>
+> > Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
+> > Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
+> > Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
+> > Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
+> > Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 >
-> In jit_subprogs(), restoring bpf_pseudo_call instructions truncates
-> the 32-bit call_imm into the 16-bit insn->off. For large BPF programs
-> (e.g., call_imm > 32767), this silent truncation causes find_subprog()
-> to return an incorrect subprog ID, which is then stored in insn->imm.
+> Reviewed-by: Puranjay Mohan <puranjay@kernel.org>
 >
-> Consequently, "bpftool prog dump xlated" reads the corrupted insn->imm,
-> fails to resolve the subprogram name, and incorrectly displays a raw
-> kernel pointer.
+> Yazhou, you should wait 3-4 days before sending the next version of a
+> patch(set) and add a changelog so it is easy to see what changed
+> between versions. For single patches you can add changelog below the
+> "---" and for multi patch sets, you do it in the cover letter.
 >
-> For example, dumping the xlated bytecode of the JIT-loaded selftest
-> introduced in patch 2/3 (call_imm =3D=3D 32768, i.e., 0x00008000) shows
-> that it is truncated to 0x8000 and reinterpreted as -32768 in s16:
->
-> Before this patch (with call_imm > 32767):
->    4: (85) call pc+2#bpf_prog_71cfe20590be813a_padding_subprog
->    5: (85) call pc-32768#0xffffffff814aed4e
->
-> After this patch:
->    4: (85) call pc+2#bpf_prog_71cfe20590be813a_padding_subprog
->    5: (85) call pc-32768#bpf_prog_5dccd3f669bbe4e4_target_subprog
->
-> This patch fixes the issue by passing the un-truncated 32-bit
-> env->insn_aux_data[i].call_imm directly to find_subprog().
->
-> Note that the assignment to insn->off is retained. Although it still
-> truncates for large jumps, it remains correct for the vast majority
-> of BPF programs where the offset fits within s16 bounds. Keeping it
-> ensures backward compatibility for existing user-space tools that rely
-> on insn->off to display the relative offset. A comment is added to
-> explicitly clarify this truncation behavior.
->
-> Suggested-by: Puranjay Mohan <puranjay@kernel.org>
-> Fixes: 7105e828c087 ("bpf: allow for correlation of maps and helpers in d=
-ump")
-> Co-developed-by: Tianci Cao <ziye@zju.edu.cn>
-> Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
-> Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
-> Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
-> Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
-> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+> Thanks
 
-Reviewed-by: Puranjay Mohan <puranjay@kernel.org>
-
-Yazhou, you should wait 3-4 days before sending the next version of a
-patch(set) and add a changelog so it is easy to see what changed
-between versions. For single patches you can add changelog below the
-"---" and for multi patch sets, you do it in the cover letter.
+I realized you do have a changelog in the cover letter, but you only
+cc-ed me in this patch and not the cover letter and other two patches.
+Anyways, I have seen those two patches from the list and they look
+good to me so you can add Reviewed-by: Puranjay Mohan
+<puranjay@kernel.org> to them as well.
 
 Thanks
