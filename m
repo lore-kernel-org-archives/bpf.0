@@ -1,437 +1,372 @@
-Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E39C3CAE91
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 11:25:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B08A3F1649;
+	Thu, 26 Mar 2026 11:43:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774524342; cv=none; b=dHlnzQG1phEbYCO+jqrniAB68BmIN5KfZNqg9ut9rOaXCWfBP9z7kYJZ+9XL0XagYEcVof0oYEaAWupaRGDreR0tQzWOHbb9nWtlpCAOGYCE02QJ9tqXxFJlI0FGpXFSqn4B/es2E3xWIaDoz8S8OHu8osmyt5ZYzr5LzaDl8OU=
+	t=1774525434; cv=none; b=d+QzYTMUIIXUtb/XvvMwPRnmaWaIQBGdxHIBAkPisRm/Y04pPqLGmgu6eNRTG1sjH90Uh/hOAzYXU6BJoOi7tjzxuHc6KxLXLyTyzzrENWF1hil2Gn9M9Hv7Y2Yl+RrGpj7Z97bZMppHhWBsLcgtYTmU280OA5rqAX9SdZ4uqiQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774524342; c=relaxed/simple;
-	bh=/V+0IdnH4j/38ObS2x8JnYWV0Up1Buj0iBonshlPv0o=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Py+m6mPo4Yp6GR4TYPBVEgK898RmGo2KtM3aSFRvvV79aJF6ApYbWzYpoMnv6fsiEUCNxww0Zf+Ctlbob2q/iKyrZdLjSLlc6aDbtu0f5wvTefOAz/A2M2uZty0Wszrf76VpimcsIqMg/M/KdYe1OMwvBSvdQdno24+kwFnWTyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WXtZg27Y; arc=none smtp.client-ip=74.125.82.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com
+	s=arc-20240116; t=1774525434; c=relaxed/simple;
+	bh=YL97lFy5kQhwfmoYidad7USKzO67YzuUg7btoOK2/BM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=flsf2m4hTVfLbogU4ZSVCmcT5Q7sieUUR/pkOEdu46LGK4WKy7uoORYOF97iVsQfDuXBRphAmr6X/p/bbXhz76xF6zVkQvMCZkLRkLOvN4RiyI9NplkGT1rRfE0sgeXxsbWgz1OjvnWDeUV/cMjq5jeeGcGsfhBRla2Ox9PHw10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JA6ACA81; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WXtZg27Y"
-Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2c0bddb9196so534691eec.1
-        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 04:25:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774524340; x=1775129140; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AADrlL5HtSz7LV90mafOdNvanEoEV46ktmXue5e6GMM=;
-        b=WXtZg27YRsX/r/r2lesffReMGwYDo4GTU3cfg6urrUWcSExB5B6w8R+CIPaBFHc9mx
-         o4qKTGrM1bQ8kQjqoJ7yiZfd4iiK++hoB0sU47tJfpZijELtNQ1WL8W/pBZCvjDCOEqH
-         vh7imIF2gyK7IXWlxr15RlQK3dQIRz5JHoFrFAK1EiQ/iI4fY1GV2wVOZVkd7Utga2pp
-         xPLaFcNLHg7B47GArr+C+ZeUAn/4erRMc5fzN+F2S4P/mfZ2Y8u0BmdQujKnQVJ96bnQ
-         A9ck7hRRhVH5p/JLS2/Q52wUYGqh4GR5sKUtz0aulYDZbLfL39ZRh9ULq72zZzoLrTbc
-         a3Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774524340; x=1775129140;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AADrlL5HtSz7LV90mafOdNvanEoEV46ktmXue5e6GMM=;
-        b=WeXFFcp7wuo7dJBCnF01x6/WXHvykcK+/Iuk7Azrw252/GW/v8cSj0f4PLmVsXjewH
-         rQUA8PUMu4O91Y/rFrHD79LZL5DAjLxgEm2LEOFn/AOYvB1wxmB2z04csJEjKBFv+K0c
-         UOklpE0B0WZqeG5kQNGIZa21m9DM/fEbUdDFpa2/a/jvPBVgfvHAVBV0SUKqRE9oOmT8
-         P/+icgLEUIfAD/B7wtpUS+ftrSwi2EXfPeh6LoKK+FlPgzzkvVVxaahXEVV3FzEJ7L+l
-         6UEG1Fd803ZAXqnWA/maESL562oHX/EHgM1PTlqn6QaC8kjhF5oVvOJyblMX4vqOPe53
-         2Rlw==
-X-Forwarded-Encrypted: i=1; AJvYcCXWjdobBFlmaDTBkjMPTC/0KsR7Dm7sSmpwnkNPCIaj4YxwnM1HWdrKHRmL/3PaPPUtyBU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzxCydohY3gfE1aHcFgcPVRj5VIiWrYGyXN+FlgiVoqa+5k1CM/
-	QrCQ2UWCHKMRL/fULnOVN8PVCFlIFm0wN/hTi0Q0+bLUJ+78Z5ykSRRxHztdGnS7zjOee2ZwusQ
-	yexdPza1cFN9+Nw==
-X-Received: from dyls26.prod.google.com ([2002:a05:7300:6a9a:b0:2be:9dd7:57f6])
- (user=wusamuel job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7300:3c05:b0:2ba:a3f2:958c with SMTP id 5a478bee46e88-2c15d12dc96mr4152044eec.0.1774524339916;
- Thu, 26 Mar 2026 04:25:39 -0700 (PDT)
-Date: Thu, 26 Mar 2026 04:25:20 -0700
-In-Reply-To: <20260326112521.2827500-1-wusamuel@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JA6ACA81"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 303A4C2BC87;
+	Thu, 26 Mar 2026 11:43:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774525434;
+	bh=YL97lFy5kQhwfmoYidad7USKzO67YzuUg7btoOK2/BM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JA6ACA81RfmbrWjxio4e7C5FDjZFNALezl7n8aWESFgc2wY0MUQTcyrwSVrXFKhWX
+	 CBn7G7K3lo61REFN7C7JdBcn10jfbVgFJ3b08Y0oRk3h0Bx8qjhlQvs6jTaTFsK9yS
+	 f9k58uCkZYoo+Ra/EJYuyrt5MIO9w6xrxoyIi2NSs5NnLuM2xwDqfUNsb/CdvjZM/d
+	 JETtlI3gh27thQHPdxaq1KcPhH5AltUEmbbN0xWXyDJlmH9wlogPe1kl50cb7gVy+t
+	 jGq2rizVUdwqDG6eCfK9wfQvvIv1dDX/LWe2Q8vlJtso7M/wUcjnDO2c4IHIAUeg+m
+	 GvOfNuKqrbf+g==
+Date: Thu, 26 Mar 2026 11:43:46 +0000
+From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
+To: Shakeel Butt <shakeel.butt@linux.dev>
+Cc: lsf-pc@lists.linux-foundation.org, 
+	Andrew Morton <akpm@linux-foundation.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	David Hildenbrand <david@kernel.org>, Michal Hocko <mhocko@kernel.org>, 
+	Qi Zheng <zhengqi.arch@bytedance.com>, Chen Ridong <chenridong@huaweicloud.com>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
+	Kairui Song <ryncsn@gmail.com>, Matthew Wilcox <willy@infradead.org>, 
+	Nhat Pham <nphamcs@gmail.com>, Gregory Price <gourry@gourry.net>, 
+	Barry Song <21cnbao@gmail.com>, David Stevens <stevensd@google.com>, 
+	Vernon Yang <vernon2gm@gmail.com>, David Rientjes <rientjes@google.com>, 
+	Kalesh Singh <kaleshsingh@google.com>, wangzicheng <wangzicheng@honor.com>, 
+	"T . J . Mercier" <tjmercier@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+	Suren Baghdasaryan <surenb@google.com>, Meta kernel team <kernel-team@meta.com>, bpf@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [LSF/MM/BPF TOPIC] Towards Unified and Extensible Memory Reclaim
+ (reclaim_ext)
+Message-ID: <42e26dbb-0180-4408-b8a8-be0cafb75ad9@lucifer.local>
+References: <20260325210637.3704220-1-shakeel.butt@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260326112521.2827500-1-wusamuel@google.com>
-X-Mailer: git-send-email 2.53.0.1018.g2bb0e51243-goog
-Message-ID: <20260326112521.2827500-3-wusamuel@google.com>
-Subject: [PATCH v2 2/2] selftests/bpf: Add tests for wakeup_sources kfuncs
-From: Samuel Wu <wusamuel@google.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: memxor@gmail.com, Samuel Wu <wusamuel@google.com>, kernel-team@android.com, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	driver-core@lists.linux.dev, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260325210637.3704220-1-shakeel.butt@linux.dev>
 
-Introduce a set of BPF selftests to verify the safety and functionality
-of wakeup_source kfuncs.
+On Wed, Mar 25, 2026 at 02:06:37PM -0700, Shakeel Butt wrote:
+> The Problem
+> -----------
+>
+> Memory reclaim in the kernel is a mess. We ship two completely separate
+> eviction algorithms -- traditional LRU and MGLRU -- in the same file.
 
-The suite includes:
-1. A functional test (test_wakeup_source.c) that iterates over the
-   global wakeup_sources list. It uses CO-RE to read timing statistics
-   and validates them in user-space via the BPF ring buffer.
-2. A negative test suite (wakeup_source_fail.c) ensuring the BPF
-   verifier correctly enforces reference tracking and type safety.
-3. Enable CONFIG_PM_WAKELOCKS in the test config, allowing creation of
-   wakeup sources via /sys/power/wake_lock.
+Agreed :)
 
-A shared header (wakeup_source.h) is introduced to ensure consistent
-memory layout for the Ring Buffer data between BPF and user-space.
+> mm/vmscan.c is over 8,000 lines. 40% of it is MGLRU-specific code that
+> duplicates functionality already present in the traditional path. Every
+> bug fix, every optimization, every feature has to be done twice or it
+> only works for half the users. This is not sustainable. It has to stop.
 
-Signed-off-by: Samuel Wu <wusamuel@google.com>
----
- tools/testing/selftests/bpf/config            |   3 +-
- .../selftests/bpf/prog_tests/wakeup_source.c  | 101 +++++++++++++++++
- .../selftests/bpf/progs/test_wakeup_source.c  | 107 ++++++++++++++++++
- .../selftests/bpf/progs/wakeup_source.h       |  22 ++++
- .../selftests/bpf/progs/wakeup_source_fail.c  |  63 +++++++++++
- 5 files changed, 295 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/wakeup_source.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_wakeup_source.c
- create mode 100644 tools/testing/selftests/bpf/progs/wakeup_source.h
- create mode 100644 tools/testing/selftests/bpf/progs/wakeup_source_fail.c
+Yup.
 
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index 24855381290d..bac60b444551 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -130,4 +130,5 @@ CONFIG_INFINIBAND=y
- CONFIG_SMC=y
- CONFIG_SMC_HS_CTRL_BPF=y
- CONFIG_DIBS=y
--CONFIG_DIBS_LO=y
-\ No newline at end of file
-+CONFIG_DIBS_LO=y
-+CONFIG_PM_WAKELOCKS=y
-diff --git a/tools/testing/selftests/bpf/prog_tests/wakeup_source.c b/tools/testing/selftests/bpf/prog_tests/wakeup_source.c
-new file mode 100644
-index 000000000000..ff2899cbf3a8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/wakeup_source.c
-@@ -0,0 +1,101 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright 2026 Google LLC */
-+
-+#include <test_progs.h>
-+#include <fcntl.h>
-+#include "test_wakeup_source.skel.h"
-+#include "wakeup_source_fail.skel.h"
-+#include "progs/wakeup_source.h"
-+
-+static int lock_ws(const char *name)
-+{
-+	int fd;
-+	ssize_t bytes;
-+
-+	fd = open("/sys/power/wake_lock", O_WRONLY);
-+	if (!ASSERT_OK_FD(fd, "open /sys/power/wake_lock"))
-+		return -1;
-+
-+	bytes = write(fd, name, strlen(name));
-+	close(fd);
-+	if (!ASSERT_EQ(bytes, strlen(name), "write to wake_lock"))
-+		return -1;
-+
-+	return 0;
-+}
-+
-+static void unlock_ws(const char *name)
-+{
-+	int fd;
-+
-+	fd = open("/sys/power/wake_unlock", O_WRONLY);
-+	if (fd < 0)
-+		return;
-+
-+	write(fd, name, strlen(name));
-+	close(fd);
-+}
-+
-+struct rb_ctx {
-+	const char *name;
-+	bool found;
-+	long long active_time_ns;
-+	long long total_time_ns;
-+};
-+
-+static int process_sample(void *ctx, void *data, size_t len)
-+{
-+	struct rb_ctx *rb_ctx = ctx;
-+	struct wakeup_event_t *e = data;
-+
-+	if (strcmp(e->name, rb_ctx->name) == 0) {
-+		rb_ctx->found = true;
-+		rb_ctx->active_time_ns = e->active_time_ns;
-+		rb_ctx->total_time_ns = e->total_time_ns;
-+	}
-+	return 0;
-+}
-+
-+void test_wakeup_source(void)
-+{
-+	if (test__start_subtest("iterate_and_verify_times")) {
-+		struct test_wakeup_source *skel;
-+		struct ring_buffer *rb = NULL;
-+		struct rb_ctx rb_ctx = {
-+			.name = "bpf_selftest_ws_times",
-+			.found = false,
-+		};
-+		int err;
-+
-+		skel = test_wakeup_source__open_and_load();
-+		if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
-+			return;
-+
-+		rb = ring_buffer__new(bpf_map__fd(skel->maps.rb), process_sample, &rb_ctx, NULL);
-+		if (!ASSERT_OK_PTR(rb, "ring_buffer__new"))
-+			goto destroy;
-+
-+		/* Create a temporary wakeup source */
-+		if (!ASSERT_OK(lock_ws(rb_ctx.name), "lock_ws"))
-+			goto unlock;
-+
-+		err = bpf_prog_test_run_opts(bpf_program__fd(
-+				skel->progs.iterate_wakeupsources), NULL);
-+		ASSERT_OK(err, "bpf_prog_test_run");
-+
-+		ring_buffer__consume(rb);
-+
-+		ASSERT_TRUE(rb_ctx.found, "found_test_ws_in_rb");
-+		ASSERT_GT(rb_ctx.active_time_ns, 0, "active_time_gt_0");
-+		ASSERT_GT(rb_ctx.total_time_ns, 0, "total_time_gt_0");
-+
-+unlock:
-+		unlock_ws(rb_ctx.name);
-+destroy:
-+		if (rb)
-+			ring_buffer__free(rb);
-+		test_wakeup_source__destroy(skel);
-+	}
-+
-+	RUN_TESTS(wakeup_source_fail);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_wakeup_source.c b/tools/testing/selftests/bpf/progs/test_wakeup_source.c
-new file mode 100644
-index 000000000000..fa35156e31d2
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_wakeup_source.c
-@@ -0,0 +1,107 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright 2026 Google LLC */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_core_read.h>
-+#include "bpf_experimental.h"
-+#include "bpf_misc.h"
-+#include "wakeup_source.h"
-+
-+#define MAX_LOOP_ITER 1000
-+#define RB_SIZE (16384 * 4)
-+
-+struct wakeup_source___local {
-+	const char *name;
-+	unsigned long active_count;
-+	unsigned long event_count;
-+	unsigned long wakeup_count;
-+	unsigned long expire_count;
-+	ktime_t last_time;
-+	ktime_t max_time;
-+	ktime_t total_time;
-+	ktime_t start_prevent_time;
-+	ktime_t prevent_sleep_time;
-+	struct list_head entry;
-+	bool active:1;
-+	bool autosleep_enabled:1;
-+} __attribute__((preserve_access_index));
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_RINGBUF);
-+	__uint(max_entries, RB_SIZE);
-+} rb SEC(".maps");
-+
-+struct bpf_ws_lock;
-+struct bpf_ws_lock *bpf_wakeup_sources_read_lock(void) __ksym;
-+void bpf_wakeup_sources_read_unlock(struct bpf_ws_lock *lock) __ksym;
-+struct list_head *bpf_wakeup_sources_get_head(void) __ksym;
-+
-+SEC("syscall")
-+__success __retval(0)
-+int iterate_wakeupsources(void *ctx)
-+{
-+	struct list_head *head = bpf_wakeup_sources_get_head();
-+	struct list_head *pos = head;
-+	struct bpf_ws_lock *lock;
-+	int i;
-+
-+	lock = bpf_wakeup_sources_read_lock();
-+	if (!lock)
-+		return 0;
-+
-+	bpf_for(i, 0, MAX_LOOP_ITER) {
-+		if (bpf_core_read(&pos, sizeof(pos), &pos->next) || !pos || pos == head)
-+			break;
-+
-+		struct wakeup_event_t *e = bpf_ringbuf_reserve(&rb, sizeof(*e), 0);
-+
-+		if (!e)
-+			break;
-+
-+		struct wakeup_source___local *ws = container_of(
-+				pos, struct wakeup_source___local, entry);
-+		s64 active_time = 0;
-+		bool active = BPF_CORE_READ_BITFIELD_PROBED(ws, active);
-+		bool autosleep_enable = BPF_CORE_READ_BITFIELD_PROBED(ws, autosleep_enabled);
-+		s64 last_time = BPF_CORE_READ(ws, last_time);
-+		s64 max_time = BPF_CORE_READ(ws, max_time);
-+		s64 prevent_sleep_time = BPF_CORE_READ(ws, prevent_sleep_time);
-+		s64 total_time = BPF_CORE_READ(ws, total_time);
-+
-+		if (active) {
-+			s64 curr_time = bpf_ktime_get_ns();
-+			s64 prevent_time = BPF_CORE_READ(ws, start_prevent_time);
-+
-+			if (curr_time > last_time)
-+				active_time = curr_time - last_time;
-+
-+			total_time += active_time;
-+			if (active_time > max_time)
-+				max_time = active_time;
-+			if (autosleep_enable && curr_time > prevent_time)
-+				prevent_sleep_time += curr_time - prevent_time;
-+		}
-+
-+		e->active_count = BPF_CORE_READ(ws, active_count);
-+		e->active_time_ns = active_time;
-+		e->event_count = BPF_CORE_READ(ws, event_count);
-+		e->expire_count = BPF_CORE_READ(ws, expire_count);
-+		e->last_time_ns = last_time;
-+		e->max_time_ns = max_time;
-+		e->prevent_sleep_time_ns = prevent_sleep_time;
-+		e->total_time_ns = total_time;
-+		e->wakeup_count = BPF_CORE_READ(ws, wakeup_count);
-+
-+		if (bpf_probe_read_kernel_str(
-+				e->name, WAKEUP_NAME_LEN, BPF_CORE_READ(ws, name)) < 0)
-+			e->name[0] = '\0';
-+
-+		bpf_ringbuf_submit(e, 0);
-+	}
-+
-+	bpf_wakeup_sources_read_unlock(lock);
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/wakeup_source.h b/tools/testing/selftests/bpf/progs/wakeup_source.h
-new file mode 100644
-index 000000000000..cd74de92c82f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/wakeup_source.h
-@@ -0,0 +1,22 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright 2026 Google LLC */
-+
-+#ifndef __WAKEUP_SOURCE_H__
-+#define __WAKEUP_SOURCE_H__
-+
-+#define WAKEUP_NAME_LEN 128
-+
-+struct wakeup_event_t {
-+	unsigned long active_count;
-+	long long active_time_ns;
-+	unsigned long event_count;
-+	unsigned long expire_count;
-+	long long last_time_ns;
-+	long long max_time_ns;
-+	long long prevent_sleep_time_ns;
-+	long long total_time_ns;
-+	unsigned long wakeup_count;
-+	char name[WAKEUP_NAME_LEN];
-+};
-+
-+#endif /* __WAKEUP_SOURCE_H__ */
-diff --git a/tools/testing/selftests/bpf/progs/wakeup_source_fail.c b/tools/testing/selftests/bpf/progs/wakeup_source_fail.c
-new file mode 100644
-index 000000000000..a569c9d53d21
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/wakeup_source_fail.c
-@@ -0,0 +1,63 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright 2026 Google LLC */
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+struct bpf_ws_lock;
-+
-+struct bpf_ws_lock *bpf_wakeup_sources_read_lock(void) __ksym;
-+void bpf_wakeup_sources_read_unlock(struct bpf_ws_lock *lock) __ksym;
-+
-+SEC("syscall")
-+__failure __msg("BPF_EXIT instruction in main prog would lead to reference leak")
-+int wakeup_source_lock_no_unlock(void *ctx)
-+{
-+	struct bpf_ws_lock *lock;
-+
-+	lock = bpf_wakeup_sources_read_lock();
-+	if (!lock)
-+		return 0;
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+__failure __msg("access beyond struct")
-+int wakeup_source_access_lock_fields(void *ctx)
-+{
-+	struct bpf_ws_lock *lock;
-+	int val;
-+
-+	lock = bpf_wakeup_sources_read_lock();
-+	if (!lock)
-+		return 0;
-+
-+	val = *(int *)lock;
-+
-+	bpf_wakeup_sources_read_unlock(lock);
-+	return val;
-+}
-+
-+SEC("syscall")
-+__failure __msg("type=scalar expected=fp")
-+int wakeup_source_unlock_no_lock(void *ctx)
-+{
-+	struct bpf_ws_lock *lock = (void *)0x1;
-+
-+	bpf_wakeup_sources_read_unlock(lock);
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+__failure __msg("Possibly NULL pointer passed to trusted arg0")
-+int wakeup_source_unlock_null(void *ctx)
-+{
-+	bpf_wakeup_sources_read_unlock(NULL);
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.53.0.1018.g2bb0e51243-goog
+>
+> We should unify both algorithms into a single code path. In this path,
+> both algorithms are a set of hooks called from that path. Everyone
+> maintains, understands, and evolves a single codebase. Optimizations are
+> now evaluated against -- and available to -- both algorithms. And the
+> next time someone develops a new LRU algorithm, they can do so in a way
+> that does not add churn to existing code.
 
+Yup. I mean it's less churn more duplication which is a lot worse.
+
+>
+> How We Got Here
+> ---------------
+>
+> MGLRU brought interesting ideas -- multi-generation aging, page table
+> scanning, Bloom filters, spatial lookaround. But we never tried to
+> refactor the existing reclaim code or integrate these mechanisms into the
+> traditional path. 3,300 lines of code were dumped as a completely
+> parallel implementation with a runtime toggle to switch between the two.
+> No attempt to evolve the existing code or share mechanisms between the
+> two paths -- just a second reclaim system bolted on next to the first.
+
+Yeah, I don't love that we accepted it in this form.
+
+With review far sharper now I would hope in future there'd be pushback in at
+least having better separation in future.
+
+>
+> To be fair, traditional reclaim is not easy to refactor. It has
+> accumulated decades of heuristics trying to work for every workload, and
+> touching any of it risks regressions. But difficulty is not an excuse.
+> There was no justification for not even trying -- not attempting to
+> generalize the existing scanning path, not proposing shared
+> abstractions, not offering the new mechanisms as improvements to the code
+> that was already there. Hard does not mean impossible, and the cost of
+> not trying is what we are living with now.
+
+Yes. Agreed very much so.
+
+>
+> The Differences That Matter
+> ---------------------------
+>
+> The two algorithms differ in how they classify pages, detect access, and
+> decide what to evict. But most of these differences are not fundamental
+> -- they are mechanisms that got trapped inside one implementation when
+> they could benefit both. Not making those mechanisms shareable leaves
+> potential free performance gains on the table.
+>
+> Access detection: Traditional LRU walks reverse mappings (RMAP) from the
+> page back to its page table entries. MGLRU walks page tables forward,
+> scanning process address spaces directly. Neither approach is inherently
+> tied to its eviction policy. Page table scanning would benefit
+> traditional LRU just as much -- it is cache-friendly, batches updates
+> without the LRU lock, and naturally exploits spatial locality. There is
+> no reason this should be MGLRU-only.
+
+Right.
+
+>
+> Bloom filters and lookaround: MGLRU uses Bloom filters to skip cold
+> page table regions and a lookaround optimization to scan adjacent PTEs
+> during eviction. These are general-purpose optimizations for any
+> scanning path. They are locked inside MGLRU today for no good reason.
+>
+> Lock-free age updates: MGLRU updates folio age using atomic flag
+> operations, avoiding the LRU lock during scanning. Traditional reclaim
+> can use the same technique to reduce lock contention.
+>
+> Page classification: Traditional LRU uses two buckets
+> (active/inactive). MGLRU uses four generations with timestamps and
+> reference frequency tiers. This is the policy difference --
+> how many age buckets and how pages move between them. Every other
+> mechanism is shareable.
+>
+> Both systems already share the core reclaim mechanics -- writeback,
+> unmapping, swap, NUMA demotion, and working set tracking. The shareable
+> mechanisms listed above should join that common core. What remains after
+> that is a thin policy layer -- and that is all that should differ between
+> algorithms.
+
+Yeah, this all really speaks to the review simply not being sufficient at
+the time.
+
+Given the data given by Mike at [0], it suggests the recent sub-M changes
+have made a really big difference to this (I'm genuinely pleasantly
+surprised by that!) so hopefully this is something we'll avoid in future.
+
+[0]:https://lore.kernel.org/linux-mm/acJEFArj6uw2Z_2e@kernel.org/
+
+>
+> The Fix: One Reclaim, Pluggable and Extensible
+> -----------------------------------------------
+>
+> We need one reclaim system, not two. One code path that everyone
+> maintains, everyone tests, and everyone benefits from. But it needs to
+> be pluggable as there will always be cases where someone wants some
+> customization for their specialized workload or wants to explore some
+> new techniques/ideas, and we do not want to get into the current mess
+> again.
+
+OK so I was with you up until the pluggable bit :) it's like you're
+combining two things here, obviously - unification and pluggability.
+
+I think we should consider both separately.
+
+I also hope that as a result of this those who are involved in unification
+gain understanding and some at least are able to perhaps become _active_
+co-maintainers/reviewers? As this is a major concern see [1].
+
+[1]:https://lore.kernel.org/linux-mm/aaBsrrmV25FTIkVX@casper.infradead.org/
+
+>
+> The unified reclaim must separate mechanism from policy. The mechanisms
+> -- writeback, unmapping, swap, NUMA demotion, workingset tracking -- are
+> shared today and should stay shared. The policy decisions -- how to
+> detect access, how to classify pages, which pages to evict, when to
+> protect a page -- are where the two algorithms differ, and where future
+> algorithms will differ too. Make those pluggable.
+
+Again you're saying sane things than adding on 'pluggable' :)
+
+Let me address pluggability concerns further down I guess.
+
+>
+> This gives us one maintained code path with the flexibility to evolve.
+
+I like 'maintained' here :)
+
+> New ideas get implemented as new policies, not as 3,000-line forks. Good
+> mechanisms from MGLRU (page table scanning, Bloom filters, lookaround)
+> become shared infrastructure available to any policy. And if someone
+> comes up with a better eviction algorithm tomorrow, they plug it in
+> without touching the core.
+>
+> Making reclaim pluggable implies we define it as a set of function
+> methods (let's call them reclaim_ops) hooking into a stable codebase we
+> rarely modify. We then have two big questions to answer: how do these
+> reclaim ops look, and how do we move the existing code to the new model?
+
+Hmm, I'm not so sure about that. But it depends really on who has access to
+these operations.
+
+The issue with operations in general is that they eliminate the possibility
+of the general code being able to make assumptions about what's happening.
+
+For instance, the .mmap f_op callback meant that we had to account for any
+possible thing being done by a driver. You couldn't make assumptions about
+vma state, page table state, etc. and of course things happened that we
+didn't anticipate, leading to bugs.
+
+So I guess it's less 'no ops' more so 'what do we actually expose to the
+ops', 'what assumptions do we bake in about how the ops are used' and very
+importantly - 'who gets to populate them'.
+
+If they're _exclusively_ mm-internal then that's fine.
+
+Reclaim is a _very_ _very_ sensitive part of mm. At the point it's being
+activated you may be under extreme memory pressure, so a hook even
+allocating at all may either fail or enter infinite loops.
+
+We are also very sensitive on things like rmap locks and also, of course, -
+timing.
+
+It's not just a perf concern, if we are too slow, we might end up thrashing
+when we could otherwise not have.
+
+Also there ends up being a question of how much now-internal functionality
+we end up exposing to users.
+
+So we really need a good definition of who we intend should use this stuff,
+and how any such interface should be designed.
+
+I mean, if sufficiently abstracted, and with very carefully restricted
+constrainst perhaps we could work around a lot of this but we have to tread
+_very_ carefully here.
+
+>
+> How Do We Get There
+> -------------------
+>
+> Do we merge the two mechanisms feature by feature, or do we prioritize
+> moving MGLRU to the pluggable model then follow with LRU once we are
+> happy with the result?
+
+Absolutely by a distance the first is preferable. The pluggability is
+controversial here and needs careful consideration.
+
+Eliminating redundancy and ensuring broader community maintainership is
+easily more important.
+
+>
+> Whichever option we choose, we do the work in small, self-contained
+> phases. Each phase ships independently, each phase makes the code
+> better, each phase is bisectable. No big bang. No disruption. No
+> excuses.
+>
+> Option A: Factor and Merge
+>
+> MGLRU is already pretty modular. However, we do not know which
+> optimizations are actually generic and which ones are only useful for
+> MGLRU itself.
+>
+> Phase 1 -- Factor out just MGLRU into reclaim_ops. We make no functional
+> changes to MGLRU. Traditional LRU code is left completely untouched at
+> this stage.
+>
+> Phase 2 -- Merge the two paths one method at a time. Right now the code
+> diverts control to MGLRU from the very top of the high-level hooks. We
+> instead unify the algorithms starting from the very beginning of LRU and
+> deciding what to keep in common code and what to move into a traditional
+> LRU path.
+>
+> Advantages:
+> - We do not touch LRU until Phase 2, avoiding churn.
+> - Makes it easy to experiment with combining MGLRU features into
+>   traditional LRU. We do not actually know which optimizations are
+>   useful and which should stay in MGLRU hooks.
+>
+> Disadvantages:
+> - We will not find out whether reclaim_ops exposes the right methods
+>   until we merge the paths at the end. We will have to change the ops
+>   if it turns out we need a different split. The reclaim_ops API will
+>   be private and have a single user so it is not that bad, but it may
+>   require additional changes.
+
+Yup this to me renders this totally not an option.
+
+>
+> Option B: Merge and Factor
+>
+> Phase 1 -- Extract MGLRU mechanisms into shared infrastructure. Page
+> table scanning, Bloom filter PMD skipping, lookaround, lock-free folio
+> age updates. These are independently useful. Make them available to both
+> algorithms. Stop hoarding good ideas inside one code path.
+>
+> Phase 2 -- Collapse the remaining differences. Generalize list
+> infrastructure to N classifications (trad=2, MGLRU=4). Unify eviction
+> entry points. Common classification/promotion interface. At this point
+> the two "algorithms" are thin wrappers over shared code.
+>
+> Phase 3 -- Define the hook interface. Define reclaim_ops around the
+> remaining policy differences. Layer BPF on top (reclaim_ext).
+> Traditional LRU and MGLRU become two instances of the same interface.
+> Adding a third algorithm means writing a new set of hooks, not forking
+> 3,000 lines.
+>
+> Advantages:
+> - We get signals on what should be shared earlier. We know every shared
+>   method to be useful because we use it for both algorithms.
+> - Can test LRU optimizations on MGLRU early.
+>
+> Disadvantages:
+> - Slower, as we factor out both algorithms and expand reclaim_ops all
+>   at once.
+
+Much preferable thanks. I'd rather we deferred the pluggability stuff.
+
+>
+> Open Questions
+> --------------
+>
+> - Policy granularity: system-wide, per-node, or per-cgroup?
+
+Well, we have varying levers to pull at least per-cgroup/system-wide.
+
+I wonder if we could add improved documentation on this overall by the way
+:) just a thought.
+
+A general reclaim page that mentions cgroup stuff also (can link back to
+cgroup pages) so a 'one stop shop' for reclaim/(perhaps also)
+reclaim-adjacent writeback, etc. controls could be useful.
+
+> - Mechanism/policy boundary: needs iteration; get it wrong and we
+>   either constrain policies or duplicate code.
+
+> - Validation: reclaim quality is hard to measure; we need agreed-upon
+>   benchmarks.
+
+Yes, it'd be great to get some standardised set of tests to ensure correct
+behaviour, though how we set those up might be tricky.
+
+Perhaps somehow some qemu/libvirt configurations with very tightly
+specified environments intended to trigger various reclaim behaviours, with
+some specific measurements (bpf, ftrace, procfs, etc.?) to correctly
+observe the behaviours in place?
+
+> - Simplicity: the end result must be simpler than what we have today,
+>   not more complex. If it is not simpler, we failed.
+
+Yeah that's a nice aim :)
+
+> --
+> 2.52.0
+>
+
+Thanks, Lorenzo
