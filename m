@@ -1,89 +1,97 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D77863A6B90;
-	Thu, 26 Mar 2026 20:29:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AEAB39DBC6
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 20:30:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774556980; cv=none; b=sG61CWVnfmslxN3FOUXv4M5rLe58BKW8LsCGD72cKXjVE95hS5Yc3hdn9AETDCzkd8TqypXkkHeUxTLLQ4tFh1X6cFpRgehi+06jIgJMeFbqmHEYYCCdbYZwhFNUPQ1Rd9yoUyboUIiYWMhCxUj5po592plU0+WOVE+cKTXeEv4=
+	t=1774557051; cv=none; b=r4DQMufwPkiqT380OzhkB5TAbi2Yqzi4Oym/5YYFOJ4YDXlm1P/H9Jyx2Bz2yooRyetuJlGh6oM6oPsNhcdI7S33U1xvyhyH6qAGoO0j79JJ/JxwLqpgu48tEdUL1lB7fETll4L72IrOPgCLQUEE7tWjQUA/VJMb/QjzaRPKH6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774556980; c=relaxed/simple;
-	bh=aAIMJ/1z/qST3QgwsF0GkMDgrYgNDrgudxyXalQJ5bo=;
+	s=arc-20240116; t=1774557051; c=relaxed/simple;
+	bh=MFuStYaTciGnTN4F0M0soWQLcMi2bMJJDLwUQ3uHv68=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Snx/nYh52OV1Z6ZyOfmKLism2rueFTGPjkZa1riO3HQSmVYiZ3Tt/tzGvto7Px8U9nXBCuc0qX7oSLqqrRd4Acqbb8qmYtlHQK2ydxqLy993Wn2b/tg36uRac+2U2Y0MAcvOVwLufHlaMgeIsN/IXwz3Kw92mp05dwuMv+seUnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WLU30aJq; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=UQsQclhwOjl8qV+3I9c9wQb9HJ+8u736oXOnG7xx+rQZCEm5cNCpgPTOuNaeXR01vittwiruq3AYEOTybBRO9ugxBYPZvWlQv6mrI+sbiG2lYET6bqeIao8WuNxsUk/0u/0RkY+MDih99OsNO3sDLIJB5qI6qIJVZMaNndVT/A8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=qZbivxfQ; arc=none smtp.client-ip=209.85.222.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WLU30aJq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774556978; x=1806092978;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aAIMJ/1z/qST3QgwsF0GkMDgrYgNDrgudxyXalQJ5bo=;
-  b=WLU30aJqgqyNijoJqI/luKcprNoBvNryzZN9DEvWH/Ij0EA+yPzoe9sU
-   IaKhhNjPpBrD4KK09KcDZ4VhP7V9Ye2YLte6jCOYKmbjyGypK6KVRzx5h
-   fEP5TMuvIChmzL0J5ik0ImnUsN6AiPCRsOuhnI41EF4dQZggVMG1SMaxS
-   LM1kbVLztQVey25V6gaSBjzPog4b6Plpdn/SlMm2wm9/khgrGtVbY3atH
-   JKYPX5piNbAwmIBRDy/Hl6BXAx4vWW9JWAvdKhnGxU+RQhNuD92TxNqze
-   LOGulvQFQPcj6g1mM6bcgZnGdLHTjqSpQU2isTeeu8squ5DxskM68NWLB
-   A==;
-X-CSE-ConnectionGUID: KVTRRahWTvC0qHuQd0yHGQ==
-X-CSE-MsgGUID: Ow4Rs4vXRbK9EY6to8Q6KA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11741"; a="75698752"
-X-IronPort-AV: E=Sophos;i="6.23,142,1770624000"; 
-   d="scan'208";a="75698752"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2026 13:29:37 -0700
-X-CSE-ConnectionGUID: //VhLxX2RO2956o8C0C0Eg==
-X-CSE-MsgGUID: a4nqmHl9RgG4KgUSsBkRpA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,142,1770624000"; 
-   d="scan'208";a="225044148"
-Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2026 13:29:36 -0700
-Date: Thu, 26 Mar 2026 13:29:31 -0700
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-	Jon Kohler <jon@nutanix.com>,
-	Nikolay Borisov <nik.borisov@suse.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	David Kaplan <david.kaplan@amd.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Peter Zijlstra <peterz@infradead.org>,
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="qZbivxfQ"
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-8cd7ecedf2cso158269385a.3
+        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 13:30:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gourry.net; s=google; t=1774557049; x=1775161849; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gtpETcl3yk6gc9JzFTgqg++pyqjs/XxnbLkYQgCVFgc=;
+        b=qZbivxfQ0kZ3LWINeIp6YXOjb0UO4V+Sx61Y6AV5ZpPIbVPIp1G0JjqaALutilNdCh
+         cGyXmJPqswiUxXFT/KHy9pmnOT4MP0cxGvywoN+UsGLXqsADkabZl/7z1ibwaWogm/yF
+         d6zndqU4tIOqGwji/zLv8EQYYhyvOSebu4DiE7HKGIvZApSR3XuIfpfepllDCP1WBl/l
+         qn9KQTucpKNkfEt6CNJS3kohOamugheE2aKH+39r8mbCfr9Zv34Hvu1vGKMSkqBdU4oz
+         iVjJav2MFNK5f22hrU+bF0hOwDmSK1VBPR2c34kRpn2ItE720zU7qlDx35pAaFsXnNRG
+         gpug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774557049; x=1775161849;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gtpETcl3yk6gc9JzFTgqg++pyqjs/XxnbLkYQgCVFgc=;
+        b=pNELPIp5wbl0D7SadLd9Eok46zsqwOHEQeguI9KQDWiiFAyHMwt2DWPU5nxGwNDErU
+         Og1xZhgP5xiZ2U8P86snr5GRetyYEsE7j8LpJoqjSIQ+biTqRZXur83ghvGjVc/ROsF6
+         YTfKJbz3Wy0aWMh4CmBTlHNhwzRFB8D+PWGCD7Ru9R+HiLIVl2bDU9jiZxH++4wtbpTq
+         9z/uQANlkFPcS6PrLC/BLE55ZqMuPlBX71nNu65ThrzAzHJ2EM2FN0J68yI0CdBGRx/k
+         s04IBraI2+ZMCsa5JLzbbmP7W2t2Bbh5PwFY8y43vD0fhwgKj4Ac4O+5/oeHoc5losd3
+         kFyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWtYQPF3rR7C3tangu0onJ5L6ZmjIjwRZgZipVu5wSRQaT1kaotEwHWaRdi0qww1d3AaAI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+BgYhNIlfJxV7EjA+NCeZ87KNayGN4FrUCjZdkh+OygaZLWAi
+	ht55pSJrS3p/V3dGD7Wup7T9Vmgpd65x0uhxlr6s+WLhh2Q3vZnkVo8iZLStOvysMS8=
+X-Gm-Gg: ATEYQzysAa12LTqCZKWys67+KTxM2ht9K5omAFWNgot6x/CNQri2TZ8T5Kukb0eht1x
+	Q+MTm5SLD854DQ6smMfoppFfq3UK4mSme/A9mMpiZ4Vqis9d9Y6SANB4KjLRP1ZksuoFDNmeYno
+	oF/ck5Vkzdrq+I1OueMegicY/nx40MubgAmZ/x7K6U7GPU9wMllkcs+6ZZEFnP2dg+ErTSg5oOD
+	Ehlz5VZn2DA/7OtIZL+9vsnHh3qEnDraBWnEYcCv07S8mCpqhgdL9ocdvCMv4g9wHl5vj+phTOs
+	FOsdgWkLgaXEr047fAfjp/1ei8wNm/8gOcJBBUFDDHA5I/anDta42R/8UGFkX6n6s5W4TA1Ss39
+	NsL8ezgjaswRpfBPbUGHVzE+yVbhxLuVMS3uSVTP+Thtl54yJwRVgD8ZbE4elqaYpDozRw7c5O7
+	nOia+xtyYMPzCYqwqAKafL
+X-Received: by 2002:a05:620a:198c:b0:8cf:d804:4567 with SMTP id af79cd13be357-8d000f20fcfmr1253345285a.23.1774557049133;
+        Thu, 26 Mar 2026 13:30:49 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F ([2620:10d:c091:500::2:e5e8])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8d00e4ca250sm323370585a.25.2026.03.26.13.30.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Mar 2026 13:30:48 -0700 (PDT)
+Date: Thu, 26 Mar 2026 15:30:46 -0500
+From: Gregory Price <gourry@gourry.net>
+To: Axel Rasmussen <axelrasmussen@google.com>
+Cc: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	lsf-pc@lists.linux-foundation.org,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	David Hildenbrand <david@kernel.org>,
+	Qi Zheng <zhengqi.arch@bytedance.com>,
+	Chen Ridong <chenridong@huaweicloud.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
 	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	David Ahern <dsahern@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org, Asit Mallick <asit.k.mallick@intel.com>,
-	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v8 02/10] x86/bhi: Make clear_bhb_loop() effective on
- newer CPUs
-Message-ID: <20260326202931.wlggnd3nfj6hngpb@desk>
-References: <20260324-vmscape-bhb-v8-0-68bb524b3ab9@linux.intel.com>
- <20260324-vmscape-bhb-v8-2-68bb524b3ab9@linux.intel.com>
- <20260324205930.GQacL7Mp7vwGBKX1W7@fat_crate.local>
- <20260324221308.7sh6afdy6r6tsf4w@desk>
- <20260325203759.GCacRHp2t8a7c4Bp6E@fat_crate.local>
- <20260326083934.fk4wyhe6rgiss34z@desk>
- <20260326100120.GAacUD8BVziYzLxZHB@fat_crate.local>
- <20260326104557.24295cbb@pumpkin>
+	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
+	Kairui Song <ryncsn@gmail.com>,
+	Matthew Wilcox <willy@infradead.org>, Nhat Pham <nphamcs@gmail.com>,
+	Barry Song <21cnbao@gmail.com>, David Stevens <stevensd@google.com>,
+	Vernon Yang <vernon2gm@gmail.com>,
+	David Rientjes <rientjes@google.com>,
+	Kalesh Singh <kaleshsingh@google.com>,
+	wangzicheng <wangzicheng@honor.com>,
+	"T . J . Mercier" <tjmercier@google.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Meta kernel team <kernel-team@meta.com>, bpf@vger.kernel.org,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [LSF/MM/BPF TOPIC] Towards Unified and Extensible Memory Reclaim
+ (reclaim_ext)
+Message-ID: <acWXdvHx9mYqvT2w@gourry-fedora-PF4VCD3F>
+References: <20260325210637.3704220-1-shakeel.butt@linux.dev>
+ <20260325190547.abb7309fb63473b57b7a90a0@linux-foundation.org>
+ <acTaRgusrxfCoKqe@tiehlicka>
+ <ac05d923-7871-4691-8d26-eff41b3a3db0@lucifer.local>
+ <CAJHvVchSfGDubPhir0SgZfr_BcpN5oq_7AY4AZ587_ucgY4Apw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -92,55 +100,28 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260326104557.24295cbb@pumpkin>
+In-Reply-To: <CAJHvVchSfGDubPhir0SgZfr_BcpN5oq_7AY4AZ587_ucgY4Apw@mail.gmail.com>
 
-On Thu, Mar 26, 2026 at 10:45:57AM +0000, David Laight wrote:
-> On Thu, 26 Mar 2026 11:01:20 +0100
-> Borislav Petkov <bp@alien8.de> wrote:
+On Thu, Mar 26, 2026 at 01:02:02PM -0700, Axel Rasmussen wrote:
 > 
-> > On Thu, Mar 26, 2026 at 01:39:34AM -0700, Pawan Gupta wrote:
-> > > I believe the equivalent for cpu_feature_enabled() in asm is the
-> > > ALTERNATIVE. Please let me know if I am missing something.  
-> > 
-> > Yes, you are.
-> > 
-> > The point is that you don't want to stick those alternative calls inside some
-> > magic bhb_loop function but hand them in from the outside, as function
-> > arguments.
-> > 
-> > Basically what I did.
-> > 
-> > Then you were worried about this being C code and it had to be noinstr... So
-> > that outer function can be rewritten in asm, I think, and still keep it well
-> > separate.
-> > 
-> > I'll try to rewrite it once I get a free minute, and see how it looks.
-> > 
+> I think one thing we all agree on at least is, long term, there isn't
+> really a good argument for having > 1 LRU implementation. E.g., we
+> don't believe there are just irreconcilable differences, where one
+> impl is better for some workloads, and another is better for others,
+> and there is no way the two can be converged.
+>
+
+I absolutely believe there are irreconcilable differences - but not in
+the sense that one is better or worse, but in the sense that features
+from one cannot work in the other.
+
+> - My sense is MGLRU is "close", meaning as Kairui said in "average"
+> cases it is substantially better, and the gaps are both fairly narrow
+> / edge-casey, and very solveable.
 > 
-> I think someone tried getting C code to write the values to global data
-> and getting the asm to read them.
-> That got discounted because it spilt things between two largely unrelated files.
 
+This is a really, really bold claim.  So much of this is workload
+dependent, and LRU has decades of battle-testing while MGLRU has barely
+been around 4 years.
 
-The implementation with global variables wasn't that bad, let me revive it.
-
-This part which ties sequence to BHI mitigation, which is not ideal,
-(because VMSCAPE also uses it) it does seems a cleaner option.
-
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -2095,6 +2095,11 @@ static void __init bhi_select_mitigation(void)
-
- static void __init bhi_update_mitigation(void)
- {
-+   if (!cpu_feature_enabled(X86_FEATURE_BHI_CTRL)) {
-+       bhi_seq_outer_loop = 5;
-+       bhi_seq_inner_loop = 5;
-+   }
-+
-
-I believe this can be moved to somewhere common to all mitigations.
-
-> I think the BPF code would need significant refactoring to call a C function.
-
-Ya, true. Will use globals and keep clear_bhb_loop() in asm.
+~Gregory
