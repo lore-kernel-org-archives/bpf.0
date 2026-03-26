@@ -1,140 +1,121 @@
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E5E52F9D85
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 13:44:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BA0F2C028F
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 13:45:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774532670; cv=none; b=T4cz6BW5BC8YPwBQAtJtDKVX0HnG3KIVTMi6WobUV0W4R0sGfSMdEDWg4WZ7t8FrKGKPaLY7XxeKM1wxXkxKyTJVSturqyf4M+FBLpUwhpSRaOgQ02qm85U2HSqNAyOXH+jZhLa1rxeYF3F+ZNfSy5h/MBmvkB1+cla/CbhUk3I=
+	t=1774532748; cv=none; b=ZFdAsua/wykbEWwNrae4EKERIRrC+XHxaCklaewqdGqbiEeT5HchgD4XQ2h5i66cF7p8q4p2Uj4yYxp0lw4YUYeMGMy6KApR0VyG4kL4Y9gdYWDsP1Fru4cGwgBujtsMRK519rTzQp69yDuKC4Lrrxbi9KWwcBieeNSBRbCvcKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774532670; c=relaxed/simple;
-	bh=qItOzyG57FH2aTGJPT/8dpCMDkYd8UM/PwFk8ao3cnM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=av3qWzQHJvnrL0iCXWkl0L5DOWiu6lCuggN0k+3rUNelZJhxQxDj0wgdnQhCZHsITlr47m9l8on5lW6bCJmvmvz7JUW2SsANpr6FZrxaOvn9HagZiHpCgR8p/BMDtJ829NKMix7UMdart5OialHxy+7seLkdOjjW3kk6WRojYqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JKnh8UbE; arc=none smtp.client-ip=95.215.58.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JKnh8UbE"
-Date: Thu, 26 Mar 2026 06:44:07 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774532667;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FHs1nX261KI0Bcg1Nf//oeXdKIr+A9JzQ6d3yV5ghDQ=;
-	b=JKnh8UbE2TxNQo7XZDsJ3d18TsjVhK3/RocXZOnwJCCpGvOzWmX4GWO+GfqBWTHmHdWXKY
-	v5IQUm1sFyGvotbOTuYWFXW20cz5O5tTB2CG6XsZzB1SDtPaplNpmaa2A9eClfS4FF/P5Y
-	vvTcQVQy9uinU12Qeg9RpNfAlh29z/s=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: Michal Hocko <mhocko@suse.com>
-Cc: lsf-pc@lists.linux-foundation.org, 
-	Andrew Morton <akpm@linux-foundation.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	David Hildenbrand <david@kernel.org>, Qi Zheng <zhengqi.arch@bytedance.com>, 
-	Lorenzo Stoakes <ljs@kernel.org>, Chen Ridong <chenridong@huaweicloud.com>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
-	Kairui Song <ryncsn@gmail.com>, Matthew Wilcox <willy@infradead.org>, 
-	Nhat Pham <nphamcs@gmail.com>, Gregory Price <gourry@gourry.net>, 
-	Barry Song <21cnbao@gmail.com>, David Stevens <stevensd@google.com>, 
-	Vernon Yang <vernon2gm@gmail.com>, David Rientjes <rientjes@google.com>, 
-	Kalesh Singh <kaleshsingh@google.com>, wangzicheng <wangzicheng@honor.com>, 
-	"T . J . Mercier" <tjmercier@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	Suren Baghdasaryan <surenb@google.com>, Meta kernel team <kernel-team@meta.com>, bpf@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [LSF/MM/BPF TOPIC] Towards Unified and Extensible Memory Reclaim
- (reclaim_ext)
-Message-ID: <acUzMdxCDfbuyv9J@linux.dev>
-References: <20260325210637.3704220-1-shakeel.butt@linux.dev>
- <acTcStxrTCWAN6Dt@tiehlicka>
+	s=arc-20240116; t=1774532748; c=relaxed/simple;
+	bh=DakBrvoXOimngun+K2mtNzDj8kLPBn5OHNzlkPLBQao=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nblExsOdrUH8iSpCqQTrbYNb8Yzgx/D4F5RbftfBCeJKQb8CT0KxaPAuQewnqY/o+bl+2hN7Znc3Uh9CqkITuUMQKQHdReagZV37z1wFVC+XXp9KgSa2/xX/1hMnq7jtF6u+QvPPrL/2e5TTI/hDwfYXn9FS1V13LADX3U3ZsT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fhQ4t2CBdzKHLtp
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 21:45:02 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 9BB254058D
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 21:45:42 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP4 (Coremail) with SMTP id gCh0CgBHIUyFOMVpZ+dFCQ--.52416S2;
+	Thu, 26 Mar 2026 21:45:42 +0800 (CST)
+Message-ID: <319906e9-3b47-472f-9a11-a0da60626144@huaweicloud.com>
+Date: Thu, 26 Mar 2026 21:45:41 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <acTcStxrTCWAN6Dt@tiehlicka>
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v5 1/3] bpf: Reject bpf-to-bpf call with large offset
+ in interpreter
+Content-Language: en-US
+To: Yazhou Tang <tangyazhou@zju.edu.cn>, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, tangyazhou518@outlook.com,
+ shenghaoyuan0928@163.com, ziye@zju.edu.cn,
+ Emil Tsalapatis <emil@etsalapatis.com>
+References: <20260326090133.221957-1-tangyazhou@zju.edu.cn>
+ <20260326090133.221957-2-tangyazhou@zju.edu.cn>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <20260326090133.221957-2-tangyazhou@zju.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgBHIUyFOMVpZ+dFCQ--.52416S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Cw15Xw4fGw4ruF15uryxGrg_yoW8Cr4fpF
+	WkKa47Aa1qqw4Ik39rCF4UZw15tws5tay7Ga4rJ34ftr4UXws8Gr1Ygay3Zry3Krn3Cw4I
+	vF4j9ryIy342g37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	s2-5UUUUU==
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On Thu, Mar 26, 2026 at 08:12:10AM +0100, Michal Hocko wrote:
-> On Wed 25-03-26 14:06:37, Shakeel Butt wrote:
-> > The Problem
-> > -----------
-> > 
-> > Memory reclaim in the kernel is a mess. We ship two completely separate
-> > eviction algorithms -- traditional LRU and MGLRU -- in the same file.
-> > mm/vmscan.c is over 8,000 lines. 40% of it is MGLRU-specific code that
-> > duplicates functionality already present in the traditional path. Every
-> > bug fix, every optimization, every feature has to be done twice or it
-> > only works for half the users. This is not sustainable. It has to stop.
-> 
-> While I do agree that having 2 implementations available and to maintain
-> them is not long term sustainable I would disagree with your above line
-> of argumentation. We are not aiming to have the two in feature parity
-> nor they are overlapping in bug space all that much.
+On 3/26/2026 5:01 PM, Yazhou Tang wrote:
 
-There is definitely basic set of features which we want from a reclaim
-mechanism (e.g. writeback and writeback throttling which MGLRU lacked for a long
-time) and it does not mean we should aim for feature parity.
+[...]
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 39ddc7eb49b1..471ce73b760e 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -2396,13 +2396,16 @@ EVAL4(PROG_NAME_LIST, 416, 448, 480, 512)
+>   #undef PROG_NAME_LIST
+>   
+>   #ifdef CONFIG_BPF_SYSCALL
+> -void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
+> +int bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
+>   {
+> -	stack_depth = max_t(u32, stack_depth, 1);
+> +	if (insn->imm < S16_MIN || insn->imm > S16_MAX)
+> +		return -EINVAL;
+>   	insn->off = (s16) insn->imm;
+> +	stack_depth = max_t(u32, stack_depth, 1);
+>   	insn->imm = interpreters_args[(round_up(stack_depth, 32) / 32) - 1] -
+>   		__bpf_call_base_args;
 
-For the bugs/debugging, we always need to answer if it is impacting one or the
-other or both.
+Maybe I’m missing something, but since interpreters_args is a small array, why not
+just store the index (round_up(stack_depth, 32) / 32) - 1 in insn->off?
 
-> 
-> > We should unify both algorithms into a single code path. In this path,
-> > both algorithms are a set of hooks called from that path.
-> 
-> Isn't this the case from a large part? MGRLU tends to have couple of
-> entry points in the shared code base (node/memcg scanning code).
+That way, the interpreter could directly use this index to find the function address,
+without needing insn->imm to record the address offset, thus avoiding the need to use
+another field like insn->off in the instruction to back up the original insn->imm.
 
-Most of the code is diverged at the reclaim entry point and from what I see the
-code at the lowest layer (shrink_folio_list) is shared.
-
-> 
-> > Everyone
-> > maintains, understands, and evolves a single codebase. Optimizations are
-> > now evaluated against -- and available to -- both algorithms. And the
-> > next time someone develops a new LRU algorithm, they can do so in a way
-> > that does not add churn to existing code.
-> 
-> I think we should focus to make a single canonical reclaim
-> implementation work well. I.e. we deal with most (or ideally all) known
-> regressions of MGLRU. 
-
-Here we disagree on the approach or steps to reach the single canonical reclaim
-implementation. MGLRU is a plethora of different mechanisms and policies and it
-never went through rigorous evaluation for each of those mechanisms and
-policies individually. To me that needs to be done to have one solution. 
-
-> In the initial presentation of the MGRLU framework
-> we were told that the implemenation should be extensible to provide more
-> creative aging algorithms etc.
-> 
-> > The Fix: One Reclaim, Pluggable and Extensible
-> > -----------------------------------------------
-> > 
-> > We need one reclaim system, not two. One code path that everyone
-> > maintains, everyone tests, and everyone benefits from. But it needs to
-> > be pluggable as there will always be cases where someone wants some
-> > customization for their specialized workload or wants to explore some
-> > new techniques/ideas, and we do not want to get into the current mess
-> > again.
-> 
-> I would go that way only if/after we are done with MGLRU unification and
-> after we will have depleted the potential of that approach and hit cases
-> where we cannot implement new extensions without going $foo_ext way. TBH
-> I am not convinced "make it pluginable to solve hard problems" is the
-> best way forward.
-
-The reason I have added pluggable/extensible part in this proposal is that I
-want to avoid the same scenario all over again in the future. There will always
-be some users with very specialized workloads needing some fancy/weird
-heuristic. Rather than polluting the core reclaim, letting such users to do
-fancy policies should be part of our long term strategy. In addition, we will
-want to explore different algorithms and techniques, providing a way to easily
-do that without changing the core is definitely needed for future proofing the
-reclaim.
+>   	insn->code = BPF_JMP | BPF_CALL_ARGS;
+> +	return 0;
+>   }
+>   #endif
+>   #endif
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index df22bfc572e2..702579f56f7d 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -23112,7 +23112,11 @@ static int fixup_call_args(struct bpf_verifier_env *env)
+>   		depth = get_callee_stack_depth(env, insn, i);
+>   		if (depth < 0)
+>   			return depth;
+> -		bpf_patch_call_args(insn, depth);
+> +		err = bpf_patch_call_args(insn, depth);
+> +		if (err) {
+> +			verbose(env, "bpf-to-bpf call offset out of range for interpreter\n");
+> +			return err;
+> +		}
+>   	}
+>   	err = 0;
+>   #endif
 
