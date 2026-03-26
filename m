@@ -1,97 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B5D7279329;
-	Thu, 26 Mar 2026 08:02:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F01F35F612
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 08:17:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774512141; cv=none; b=b7JO+qOFibjNqNeDHypcKA3gAZHLJ+BmkgP4mXRvRZfU7PSD3niKQ8YL2xOos0E5GHUzNmXUd1NXywUIYPC6qLaZqDln+cuWhUrHy/2mu3ycfkVx8xt8GufBHqs0lgdnaE2FyD9zzGHBjmvk40hyxBq3nu66sApFd1wNknQPOrg=
+	t=1774513065; cv=none; b=OLyymk6z/bjvnZGul+dtX02EbJmtqhN7GQE8xRmZMg7WIbphr5JUBcCeVSrpcd7S/5gM14eLccjliPKXu2CVsY0O3Nzwmx3xD8pR4Va0O1+D/lHboXOHPOnZZzwt0HWRFhAsK9pX/PUL/tG5PDewbtVRCEwQZkWz5zoKhXNMcxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774512141; c=relaxed/simple;
-	bh=A48kUkO1TtrycoKeHx6/YYvUwwXAqNBRegZ4mzWsWV4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ABluFPLwFnK5JfuLHHxrdaZ6SIYahtKNLmBJGxXWIoP3WbfmqQGaH4+4US1aZJw03w9yoXLd6PHRuO5s29VHl62Bo/ONXhEXijccBL8Elhs27CdtXncxMDWEcx9z4f2hAXM0x58NDj+5hKuMghPHB/c9bzzb1q5xRR6hI7l0BkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AT5Q7FdA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774513065; c=relaxed/simple;
+	bh=sMFWXFO6cLuww1GusJy3mbB7SNxCe+Q9IO/iui2X94A=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=eYxtXATt89YGctg6iBnWPEMEu/+aJiYxt25J5qQ7uR0khTnRsRbcFj6AevAHW9J2UskxO439pIw6GOHh9+n00J7tWSV1qqQNUXg1df1iuRZmbArfXHl3AY/UqS+cXLpSbozalKgwhU3zMTCr0VSC0jXmakG/SrM8E0hEw6A5pgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mZpGm7uf; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AT5Q7FdA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DF66C116C6;
-	Thu, 26 Mar 2026 08:02:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774512141;
-	bh=A48kUkO1TtrycoKeHx6/YYvUwwXAqNBRegZ4mzWsWV4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AT5Q7FdAlt3PjmHZzDskG9ydXKEAAtzJIYmfbCnqz4kza5CM8AFrdE85fKpjjpwaL
-	 Fz9NS3JMR46gZG5WOmxUP+m5ol0ITjKrkBLpYaITOCWuvUtvlKoQEt2i1TmNgJ/5kT
-	 /vi2HHCpuLyAfLcrIv1VF8ZsQRsxuZfS9Hh5aAW7+I6XJHo62HxOFe2X3k7t2y+kbd
-	 anSt8hYP/MrBl7AOcj1nDnufgSjSZIu6bGXfQ9Q/f0ItuTNirDMGrO63KUZUNRjO2Z
-	 2LP7Gpg2SrePNK7jtESKiWS6TcJFkG1iMO13I1S/ZMPZJ4ikkWCDcS1pdefCZXu+R3
-	 SviBOW7FWSV/w==
-Date: Thu, 26 Mar 2026 08:02:12 +0000
-From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
-To: Michal Hocko <mhocko@suse.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, lsf-pc@lists.linux-foundation.org, 
-	Johannes Weiner <hannes@cmpxchg.org>, David Hildenbrand <david@kernel.org>, 
-	Qi Zheng <zhengqi.arch@bytedance.com>, Chen Ridong <chenridong@huaweicloud.com>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
-	Kairui Song <ryncsn@gmail.com>, Matthew Wilcox <willy@infradead.org>, 
-	Nhat Pham <nphamcs@gmail.com>, Gregory Price <gourry@gourry.net>, 
-	Barry Song <21cnbao@gmail.com>, David Stevens <stevensd@google.com>, 
-	Vernon Yang <vernon2gm@gmail.com>, David Rientjes <rientjes@google.com>, 
-	Kalesh Singh <kaleshsingh@google.com>, wangzicheng <wangzicheng@honor.com>, 
-	"T . J . Mercier" <tjmercier@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	Suren Baghdasaryan <surenb@google.com>, Meta kernel team <kernel-team@meta.com>, bpf@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [LSF/MM/BPF TOPIC] Towards Unified and Extensible Memory Reclaim
- (reclaim_ext)
-Message-ID: <ac05d923-7871-4691-8d26-eff41b3a3db0@lucifer.local>
-References: <20260325210637.3704220-1-shakeel.butt@linux.dev>
- <20260325190547.abb7309fb63473b57b7a90a0@linux-foundation.org>
- <acTaRgusrxfCoKqe@tiehlicka>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mZpGm7uf"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <acTaRgusrxfCoKqe@tiehlicka>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774513061;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+cjXlOnP+xsK5fVXd4CCAeINLx8Rs+T12Wp3tIQpO1U=;
+	b=mZpGm7ufgnlHUJfxVJ8pxUf6piil/vXgiBaxibhYcGgKSx8pRzxwv4ceQtAsYCsHYWyzYQ
+	+vJd6EV8CXWdLfmN24ZFBblr6oUyse3RDML3abxEnm1D/YxXgri8bQ57Uy5DyfvNfS0+c8
+	zTFrkDB6myL75CMMptHGPnu6ncrQLrM=
+Date: Thu, 26 Mar 2026 08:17:36 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "teawater" <hui.zhu@linux.dev>
+Message-ID: <2755fdba5839e9f5ea654e2fe7a7853f990f194c@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH bpf-next v3 06/17] mm: define mem_cgroup_get_from_ino() 
+ outside of CONFIG_SHRINKER_DEBUG
+To: "Roman Gushchin" <roman.gushchin@linux.dev>, bpf@vger.kernel.org
+Cc: "Michal Hocko" <mhocko@suse.com>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Matt Bobrowski" <mattbobrowski@google.com>, "Shakeel Butt"
+ <shakeel.butt@linux.dev>, "JP Kobryn" <inwardvessel@gmail.com>,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, "Suren Baghdasaryan"
+ <surenb@google.com>, "Johannes Weiner" <hannes@cmpxchg.org>, "Andrew 
+ Morton" <akpm@linux-foundation.org>, "Roman Gushchin"
+ <roman.gushchin@linux.dev>
+In-Reply-To: <20260127024421.494929-7-roman.gushchin@linux.dev>
+References: <20260127024421.494929-1-roman.gushchin@linux.dev>
+ <20260127024421.494929-7-roman.gushchin@linux.dev>
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Mar 26, 2026 at 08:03:34AM +0100, Michal Hocko wrote:
-> On Wed 25-03-26 19:05:47, Andrew Morton wrote:
-> > On Wed, 25 Mar 2026 14:06:37 -0700 Shakeel Butt <shakeel.butt@linux.dev> wrote:
-> >
-> > > We should unify both algorithms into a single code path.
-> >
-> > I'm here to ask the questions which others fear will sound dumb.
->
-> Not dumb at all and recently discussed here https://lore.kernel.org/all/CAMgjq7AkYOtUL2HuZjBu5dJw=RTL7W2L1+zVv=SCOyHKYwc3AA@mail.gmail.com/T/#u
->
-> > Is it indeed the plan to maintain both implementations?  I thought the
-> > long-term ambition was to knock MGLRU into shape and to drop the legacy LRU?
->
-> Yes, but MGLRU is not there yet and with development pace last year or
-> so we are not much closer than at the time MGLRU has been merged
-> unfortunatelly.
+>=20
+>=20mem_cgroup_get_from_ino() can be reused by the BPF OOM implementation=
+,
+> but currently depends on CONFIG_SHRINKER_DEBUG. Remove this dependency.
+>=20
+>=20Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> Acked-by: Michal Hocko <mhocko@suse.com>
 
-I'm quite concerned about maintainership, as it seems the MGLRU maintainers have
-not been all that active, and the MGLRU to me at least is currently a black box.
+After dropping this commit, I applied the remaining patches to the
+current bpf-next and ran the selftests.
+Everything passed, though the following warning was observed during
+the build:
+make -j 30 -C tools/testing/selftests/bpf
+...
+  GEN     /home/teawater/kernel/linux-ebpf/tools/testing/selftests/bpf/to=
+ols/build/libbpf/libbpf.pc
+Warning: Kernel ABI header at 'tools/include/uapi/linux/bpf.h' differs fr=
+om latest version at 'include/uapi/linux/bpf.h'
+  CC      /home/teawater/kernel/linux-ebpf/tools/testing/selftests/bpf/to=
+ols/build/libbpf/sharedobjs/libbpf.o
 
-I'm not the only one who's raised this (see [0]).
+Best,
+Hui
 
-That'd very much have to be resolved and the community reassured that MGLRU is
-_actively_ maintained before we could even contemplate it replacing the
-'classic' reclaim approach IMO.
-
-I hope that Kairu, Barry, Zicheng and others who are interested int it resolve
-this, however!
-
-Thanks, Lorenzo
-
-[0]:https://lore.kernel.org/linux-mm/aaBsrrmV25FTIkVX@casper.infradead.org/
-
-> --
-> Michal Hocko
-> SUSE Labs
+> ---
+>  include/linux/memcontrol.h | 4 ++--
+>  mm/memcontrol.c | 2 --
+>  2 files changed, 2 insertions(+), 4 deletions(-)
+>=20
+>=20diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> index 229ac9835adb..f3b8c71870d8 100644
+> --- a/include/linux/memcontrol.h
+> +++ b/include/linux/memcontrol.h
+> @@ -833,9 +833,9 @@ static inline unsigned long mem_cgroup_ino(struct m=
+em_cgroup *memcg)
+>  {
+>  return memcg ? cgroup_ino(memcg->css.cgroup) : 0;
+>=20=20}
