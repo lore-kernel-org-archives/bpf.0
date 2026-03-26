@@ -1,171 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0DFA20FAAB;
-	Thu, 26 Mar 2026 13:46:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 264CA2DB789
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 13:54:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774532762; cv=none; b=OneMsH8E1j8XLrFL36ydCknJrg20iGE18tJwHKdhBehxrsiSFGAeXm2YElZ4pr41fwmIyvNS4LlR6V4mRn2XgAAqjepVuvCTLt92+B7EKrTCUVKd4eoGsBxqxjkHVyv0QIvybzsXZjW/1WJOq0/2UiZbLwLeC6HR+XsfYTzOT0Y=
+	t=1774533298; cv=none; b=tutuKGi7UQEenK2FSpzAItQF9bX21Kvn5HtZjx8JmXZFF1cnj78Qt2abQwOEod7B0ov7Q8c+O4vKeD0QAY8zcPO8VdlWvoIhzk1L+wlOQeQUfz+jHsqoQD2Kv6rcRTqkV/+v49jpyhIgvJCw04XebxpWRYykW0pbf/E9p35I0ys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774532762; c=relaxed/simple;
-	bh=RudqkoNqPBUX98fLz0+P5t9+ze0SEqpsNjTsusgfFDk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EOiadD2/6ABLSoIhslwSYXZ8cfqkN+x+PlhJXh85sRibjeStDmlcHTE4tYixm0G0Sm90Z9lR3g9ltbuyWoGB2AtI/xksF0JDVWdDGFKOoKZGQYLwBhOM6Gc/CONbKcSojbLfS39BXvlmjLmznXRnioYAs5HjKRVQMpszG4lOzmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LSj5r7P6; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LSj5r7P6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29739C19423;
-	Thu, 26 Mar 2026 13:45:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774532762;
-	bh=RudqkoNqPBUX98fLz0+P5t9+ze0SEqpsNjTsusgfFDk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LSj5r7P6tvWg8RDoOKSFcjrp9BYauvtEROZVgJiSzZYIWSHC9NJzKB5elnZv2CQyD
-	 w5r7LNhlCSoxpMC8Y3sVod1Gzem24Hk4m1u6j5DeVLY52ME3LPfs0YUEmnxX6flBeE
-	 um8x1lyhyriKeZyyXOzLqhz3N2USlUZifloXHQ9ah2BNtaS1AiouYoX+1xPCQOoYmm
-	 tG0ifLHmyTSqhizKG/n8f/RdNJu79Gd9WjXG5VqHkTZS3iDJWL+MWYDVxyFZUvQz7r
-	 JxWs8pGnjifgIxDJIVYCps553/2g5VXg/h8VCAF2eiEhGbABeUZY0Vuce9P29BjXxS
-	 TtMaX7iqRZm9g==
-Date: Thu, 26 Mar 2026 13:45:54 +0000
-From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Kairui Song <ryncsn@gmail.com>, Michal Hocko <mhocko@suse.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	lsf-pc@lists.linux-foundation.org, Johannes Weiner <hannes@cmpxchg.org>, 
-	Qi Zheng <zhengqi.arch@bytedance.com>, Chen Ridong <chenridong@huaweicloud.com>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
-	Matthew Wilcox <willy@infradead.org>, Nhat Pham <nphamcs@gmail.com>, Gregory Price <gourry@gourry.net>, 
-	Barry Song <21cnbao@gmail.com>, David Stevens <stevensd@google.com>, 
-	Vernon Yang <vernon2gm@gmail.com>, David Rientjes <rientjes@google.com>, 
-	Kalesh Singh <kaleshsingh@google.com>, wangzicheng <wangzicheng@honor.com>, 
-	"T . J . Mercier" <tjmercier@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	Suren Baghdasaryan <surenb@google.com>, Meta kernel team <kernel-team@meta.com>, bpf@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [LSF/MM/BPF TOPIC] Towards Unified and Extensible Memory Reclaim
- (reclaim_ext)
-Message-ID: <4eb3bd28-f9d1-46a4-b794-fdeabad92158@lucifer.local>
-References: <20260325210637.3704220-1-shakeel.butt@linux.dev>
- <20260325190547.abb7309fb63473b57b7a90a0@linux-foundation.org>
- <acTaRgusrxfCoKqe@tiehlicka>
- <ac05d923-7871-4691-8d26-eff41b3a3db0@lucifer.local>
- <CAMgjq7B_twv3xhd5VmMJxngAknf9YaLAiwGYpdi6H2n1cXD3-A@mail.gmail.com>
- <67f1588e-a094-413c-9746-9c28bdf6cc56@lucifer.local>
- <b340e43f-2e08-4a77-8176-e49667387e85@kernel.org>
+	s=arc-20240116; t=1774533298; c=relaxed/simple;
+	bh=A6zApQBk2RcPoI4mK32ZpcSPVLgShH/Op6DIOFkWZd4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=m4TBQhBfWfJlfL0Z0hN2N64gn1PhwZl46Ir/kWmXTsxZSEW2UXkoAXiKq/so4bIw0BEGTCuNroHxlIdnLn1pPqBxUuMqBjESZ0ANCCcTpnCUJ8dxHv+OKVBETR6gO7qUMDKUvNdXh+VVAAWyRksoTCly6lWA1HsdzWQ7u8/l4vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4fhQJ14fQlzYQts8
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 21:54:41 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id C29C340575
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 21:54:53 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP1 (Coremail) with SMTP id cCh0CgBXp9etOsVprWI0CQ--.12861S2;
+	Thu, 26 Mar 2026 21:54:53 +0800 (CST)
+Message-ID: <e6b07a39-c2d6-4adc-bc6e-0d31472f9550@huaweicloud.com>
+Date: Thu, 26 Mar 2026 21:54:53 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b340e43f-2e08-4a77-8176-e49667387e85@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v5 3/3] bpf: Fix incorrect subprog ID in dumped
+ bpf_pseudo_call instructions
+Content-Language: en-US
+To: Yazhou Tang <tangyazhou@zju.edu.cn>, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, tangyazhou518@outlook.com,
+ shenghaoyuan0928@163.com, ziye@zju.edu.cn,
+ Puranjay Mohan <puranjay@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>
+References: <20260326090133.221957-1-tangyazhou@zju.edu.cn>
+ <20260326090133.221957-4-tangyazhou@zju.edu.cn>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <20260326090133.221957-4-tangyazhou@zju.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:cCh0CgBXp9etOsVprWI0CQ--.12861S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJFWrKry5GF4kCw1DXry7Jrb_yoW5Ww48pF
+	4vgFWfGF95JrW29w47AF4DCw45Ga1kZ347WryrZ34fJw47WFyDCr4UKr4FqFZIkr1xGr4I
+	vFsFvasI9w4UGFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	bAw3UUUUU==
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On Thu, Mar 26, 2026 at 02:42:35PM +0100, David Hildenbrand (Arm) wrote:
-> On 3/26/26 14:13, Lorenzo Stoakes (Oracle) wrote:
-> > On Thu, Mar 26, 2026 at 08:37:06PM +0800, Kairui Song wrote:
-> >> On Thu, Mar 26, 2026 at 4:02 PM Lorenzo Stoakes (Oracle) <ljs@kernel.org> wrote:
-> >>>
-> >>>
-> >>> I'm quite concerned about maintainership, as it seems the MGLRU maintainers have
-> >>> not been all that active, and the MGLRU to me at least is currently a black box.
-> >>>
-> >>> I'm not the only one who's raised this (see [0]).
-> >>>
-> >>> That'd very much have to be resolved and the community reassured that MGLRU is
-> >>> _actively_ maintained before we could even contemplate it replacing the
-> >>> 'classic' reclaim approach IMO.
-> >>>
-> >>> I hope that Kairu, Barry, Zicheng and others who are interested int it resolve
-> >>> this, however!
-> >>
-> >> Hi everyone,
-> >>
-> >> Right, I think we are starting to make good progress on improving
-> >> MGLRU recently. For the last few years we already have some commits
-> >> stashed downstream to enable that on our fleet, most of my effort in
-> >> upstream is spent on other parts like SWAP, really looking forward to
-> >> making MGLRU better upstreamly.
-> >>
-> >> Yesterday I was still discussing with CachyOS folks about their usage
-> >> while working on that series for MGLRU cleanup and dirty flush
-> >> optimization, and got some nice feedback later from their chat server
-> >> that MGLRU's TTL resolved their thrashing issue very well. With
-> >> classic LRU they needed a le9 patch downtreamly.
-> >>
-> >> For many other typical workloads under stress, MGLRU performs
-> >> significantly better too (e.g. database, build kernel could be more
-> >> than twice as fast), it would be a huge loss to leave it unmaintained.
-> >>
-> >> Barry also provided some really helpful ideas about MGLRU like
-> >> readahead handling. We are also seeing other vendors and people
-> >> contributing to MGLRU like Leno and Baolin recently. Things are
-> >> looking promising.
-> >
-> > Guys, can I please make a plea then for you guys to AT LEAST become
-> > reviewers in MAINTAINERS please:
-> >
-> > MEMORY MANAGEMENT - MGLRU (MULTI-GEN LRU)
-> > M:	Andrew Morton <akpm@linux-foundation.org>
-> >
-> > Well Andrew is Andrew :)
-> >
-> > M:	Axel Rasmussen <axelrasmussen@google.com>
-> >
-> > git log mm/vmscan.c has 0 results.
-> >
-> > Axel has however engaged in discussion on
-> > https://lore.kernel.org/linux-mm/20260318-mglru-reclaim-v1-0-2c46f9eb0508@tencent.com/
-> > recently for example, but not much in 2025 afaict.
-> >
-> > M:	Yuanchu Xie <yuanchu@google.com>
-> >
-> > git log mm/vmscan.c shows 1 result from August 13th 2024.
-> >
-> > Yuanchu has engaged in some MGLRU discussion also recently, here and there.
-> >
-> > R:	Wei Xu <weixugc@google.com>
-> >
-> > git log mm/vmscan.c shows 2 results from October 2024.
-> >
-> > Wei doesn't look to have engaged in discussion on MGLRU recently.
-> >
-> > L:	linux-mm@kvack.org
-> > S:	Maintained
-> > W:	http://www.linux-mm.org
-> > T:	git git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-> > F:	Documentation/admin-guide/mm/multigen_lru.rst
-> > F:	Documentation/mm/multigen_lru.rst
-> > F:	include/linux/mm_inline.h
-> > F:	include/linux/mmzone.h
-> > F:	mm/swap.c
-> > F:	mm/vmscan.c
-> > F:	mm/workingset.c
-> >
-> > It doesn't really feel like MGLRU is currently maintained at all, quite
-> > honestly.
-> >
-> > So I think we need people to step up here.
->
->
-> Ans some serious cleanup of the entry to reflect who is actually
-> involved nowadays, if at all.
->
-> Master of MAINTAINER updates, I assume you'll take care of that?
+On 3/26/2026 5:01 PM, Yazhou Tang wrote:
+> From: Yazhou Tang <tangyazhou518@outlook.com>
+> 
+> In jit_subprogs(), restoring bpf_pseudo_call instructions truncates
+> the 32-bit call_imm into the 16-bit insn->off. For large BPF programs
+> (e.g., call_imm > 32767), this silent truncation causes find_subprog()
+> to return an incorrect subprog ID, which is then stored in insn->imm.
+> 
+> Consequently, "bpftool prog dump xlated" reads the corrupted insn->imm,
+> fails to resolve the subprogram name, and incorrectly displays a raw
+> kernel pointer.
+> 
+> For example, dumping the xlated bytecode of the JIT-loaded selftest
+> introduced in patch 2/3 (call_imm == 32768, i.e., 0x00008000) shows
+> that it is truncated to 0x8000 and reinterpreted as -32768 in s16:
+> 
+> Before this patch (with call_imm > 32767):
+>     4: (85) call pc+2#bpf_prog_71cfe20590be813a_padding_subprog
+>     5: (85) call pc-32768#0xffffffff814aed4e
+> 
+> After this patch:
+>     4: (85) call pc+2#bpf_prog_71cfe20590be813a_padding_subprog
+>     5: (85) call pc-32768#bpf_prog_5dccd3f669bbe4e4_target_subprog
+> 
+> This patch fixes the issue by passing the un-truncated 32-bit
+> env->insn_aux_data[i].call_imm directly to find_subprog().
+> 
+> Note that the assignment to insn->off is retained. Although it still
+> truncates for large jumps, it remains correct for the vast majority
+> of BPF programs where the offset fits within s16 bounds. Keeping it
+> ensures backward compatibility for existing user-space tools that rely
+> on insn->off to display the relative offset. A comment is added to
+> explicitly clarify this truncation behavior.
+> 
+> Suggested-by: Puranjay Mohan <puranjay@kernel.org>
+> Fixes: 7105e828c087 ("bpf: allow for correlation of maps and helpers in dump")
+> Co-developed-by: Tianci Cao <ziye@zju.edu.cn>
+> Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
+> Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
+> Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
+> Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
+> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+> ---
+>   kernel/bpf/verifier.c | 6 +++++-
+>   1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 702579f56f7d..e87fedb09e1b 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -23017,8 +23017,12 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+>   		}
+>   		if (!bpf_pseudo_call(insn))
+>   			continue;
+> +		/*
+> +		 * Note: If the original insn->imm is out of s16 bounds,
+> +		 * insn->off here will be a truncated value.
+> +		 */
+>   		insn->off = env->insn_aux_data[i].call_imm;
 
-Ack of course :)
+seems we can just set insn->off to 0, right?
 
-I mean I can suggest a change and cc the various people and we can do it
-that way :)
+> -		subprog = find_subprog(env, i + insn->off + 1);
+> +		subprog = find_subprog(env, i + env->insn_aux_data[i].call_imm + 1);
+>   		insn->imm = subprog;
+>   	}
+>   
 
-Obviously will want some Acked-by's from those invovled on that though! :)
-
->
-> --
-> Cheers,
->
-> David
-
-Cheers, Lorenzo
