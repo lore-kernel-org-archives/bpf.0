@@ -1,173 +1,330 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE1EF1DE3DB
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 12:37:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774528667; cv=pass; b=YKjs2toQtFJ5RxWJQYFW1eI/T51ze9LMvD4ZqtvVH4ILur/VOHeC5F9uUDxvngPi/o24b/5FCFPo6VLA+7LO+XrUz8mgKedGZRnKQZ9cdm8jsAVQixdzk55Fs4Z6t3QZGIu5+OgLvSJUwg4WCNNvh9ZLYyPEOCXKSw45dpp+K8c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774528667; c=relaxed/simple;
-	bh=4vfIHSls0hR9eJFrl8KKddOChPa9goU36LlWQUL4eAs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IAx6rVKWUSBhKdmtjV2tkWU83boq8FIhRejFrqNyTJn70Ra8cd7Zkn1CqKZU/4VzKg8Kq1QN11CVJ4ZejWr4TB7wb2QUAs8UZzu4XqQOtUfmInMXBHaU/TRw9PDy+sT2dFM0Qaza4B1amH2CCE4xua71f/9oqHdqjCBH3es4hro=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X1NIloXO; arc=pass smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 474CB364E8E;
+	Thu, 26 Mar 2026 12:43:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774529005; cv=none; b=sWJcCq2z1nEJ1/dzrW/VBC4FbJG/2mrSTQT0ac4GpdFyi7PfkULcd0NMqt50ZGzzAHQsixmYhLfzE7AVWXQhmwS2jSJLmxqueNMG3+97DGZBGuD7twULmHAYmEDDSo8K/lcZh3ykfILkDB4uCsu8OxyCXLbImXKGY7T9MwC+SHA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774529005; c=relaxed/simple;
+	bh=ezgYEtb3s3eMwdi/vpYeeeN3GfCmCpHq3Lr9/CE5zkA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MrE0NyRz2wRkvox9tnvlK8jJIJFgS7TDZTHq/JpFmmB37Fp32JLE+qC6GUN99RC9JOfp0Bha1TTKREN9E8fu5IFY+JzYsFTohPUbhy2xyBhgfRkFffsRBg5TUQ8C4YVaxzEJcvxRQwVi7lI+etOn0kyN2h2Met1jm7ZNSVFs1uE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=bCtaJne+; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X1NIloXO"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-66a82351490so1596588a12.0
-        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 05:37:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774528664; cv=none;
-        d=google.com; s=arc-20240605;
-        b=eA82NWNexLbwaUqvbsNgFmpMAhzwI6jieS7xDnrD3x3QY4DpYP9/2avVFsrKLoNpDA
-         wPSQFCBXsgeZbRvTRb2YDUJaHmDlMIkI0i+Db5sFE52HzrbYfOIFNtjaw+zKOPtEZFaN
-         VYPhWtqUS9dNccNkJYCUWI9c1EPa3wQQ5ClMoVIR87YyPTEh+4eAHx5Km9JHT/hmWC/h
-         K0DWazYBgEgi3lemnAHHkV7mQagCuRGs3PGl1+bZfZpu6aBIVRcRr4wo+AaCFbu6iEfa
-         GPLPsRjxCfTG1f11wizh4O+4M6ryRE0OrFiq4CxGZJQ5+BctOWfy83hfL+sBW+EzAvv0
-         PcgQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=M8FW8TOG/ggI/iYIAOkVhhdCPCiS3Oq8BCMwRl36bPo=;
-        fh=E1tmykeU8sS5818x6ycnLhEA7UhBOY81oFbFLNKgD7Q=;
-        b=YexiMDdhYAxzK98mGEBf6iOwcUU3aBlLAw0N2NlYNFrcS/0MTzf3Lz6Br+yQqizbC5
-         DPvpj/MvLjEIcCx3+XEYzKiigfRIqx8QOSHK4tR1luG6uOrQLZLm9+tg/yb61fqAp37b
-         U8S/2wo4KkFy/TMND7hZ/LDDmYEvDVvymp2h0duU6dAGRhqQkW25DjsD66DORvKzuIEv
-         I6CdXxT5sR938UobOj9ewgc27jzmr2PsB9tI6rL1qvDOfxkthXJYcTLqJ5qfIBQh/3Ih
-         lSK37hH4hgX4iZW9PCNQb0T2CO8MThC/rhY/xe0TTF+G3cCMH4gT11ogrCMNRTFhnzn6
-         Wpaw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774528664; x=1775133464; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M8FW8TOG/ggI/iYIAOkVhhdCPCiS3Oq8BCMwRl36bPo=;
-        b=X1NIloXORKETGrxPmCFE+3aMERPinXXbp7LfSU52GMD+L2zQtl7a7NQ6COFFP59qjn
-         pAUT4tfy7/7Ab8RZsNQL3j1WFG2ybtLWshWW6TpsOS3tq+oT2r+9dEX9QUIBl0DYI6GW
-         aCLkZshySntQqWMRrDSRn/m9WKbRxTsoJVtPQLX8EIFAqNf4ktNfvbfT6qU6+0JyokRX
-         ojZq+s0ZTwlyC/DeGLHACROLlYsIXb5wrxDhbOYza9wXFUBUFLkJ2sikPMiSAghG0zyP
-         RCPIR1wuTdDJ+oOdRQ3P9m/OTF/zgmwp1VAiyYwFERjyO9b2HOuTRhfdUHEglX3DQSmQ
-         p/2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774528664; x=1775133464;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=M8FW8TOG/ggI/iYIAOkVhhdCPCiS3Oq8BCMwRl36bPo=;
-        b=jYN/unqjCsvddCMCxpy3jH62Z8sNmlnjADDpxEem6phFmhVJdlCV8Tbxr7IwqFUBe9
-         +efVAnmCFa+V1yiq7nlOXEZ63mLszijj7VRHIhaRhpq4AOYtPYAN98pQC5hMVynNtz//
-         9bjt8udScQI6tc2eWo0fb9R0ersK0HVS/c55p4NnC+S5l9sYt1pNH5kWPn6ZoNBNuuU6
-         tM+wSK0vp0CD0bHs5/b6dExuJYjQJi33r24/yLGWNhL019IIaD1TIXUr2Q/4zTYbmVXU
-         HPMDPlnd9EX/nMEBy5lAmjksMaUKVgkpRwDlCT7AQZ4Fwbv0SPReV/PmcLXFQUbIXFfu
-         bS4w==
-X-Forwarded-Encrypted: i=1; AJvYcCWX34wdu+0cmEfzO/8kcliMo6bINHl0xD6L5UAn25sIuuH8jV/NrBJj4jeJIMrjAdsqckM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YypEF/eGGG230y3YP+mY87T31XeBRcLjqk0TMqZbUrY9Powh6kP
-	7mYaYtZI5ONlfTn0iMtcJAVQiwx1Rn3D5KxlJEH7bZnRPFzGGJEDv8Jgp7kjzdz66vH6NH/UaN1
-	ZbMNiEAIZmSOODCUBDniWuUvNwMd8KRA=
-X-Gm-Gg: ATEYQzwyv5y8OkRfsterYdrxpTOpWlnTCjEZV8vl3tSFuq5KYwZi/LRXdn3CD4Mq/td
-	lnhM48240UMMFCt5HmTiDIQuhi2Hx1wfrlBBxT5DBtZ2MpMWxzLycpibBUZQFod01N7aTifINFA
-	09s7tR6e2KVoTo0ea/Xe64txbDxQMXlUlSq9nNyj1hduIb2ZgaVhFOvfqNlWidsBW+aH0q3XNU+
-	c0AdmWBpyemKb+Ju4gzp1IzMXpC+k+z95WjXZPJqzkNmUYQ/Wz1xGtZyG3Q77DWY6sUCmvThFjI
-	Jc3ukXBu6RNqYTI0kQ/AE3FcCRpmCYwXbTquIC/q
-X-Received: by 2002:a05:6402:52cf:b0:667:90c1:844 with SMTP id
- 4fb4d7f45d1cf-66b07ee03ffmr1012084a12.10.1774528663980; Thu, 26 Mar 2026
- 05:37:43 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="bCtaJne+"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AABD4175A;
+	Thu, 26 Mar 2026 05:43:15 -0700 (PDT)
+Received: from [10.163.180.31] (unknown [10.163.180.31])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ACF9D3FB90;
+	Thu, 26 Mar 2026 05:43:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1774529001; bh=ezgYEtb3s3eMwdi/vpYeeeN3GfCmCpHq3Lr9/CE5zkA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=bCtaJne+gV11OuDXbXnU3WdUE43cGOfz2lttCvq33Asfu1kM2mofBv55xFLamnJzZ
+	 0/Di/YTw9i/DhUd4736CEpw/8+q9uKmhsk3rNmpgD6aymocprtwCVhYdQvx1pYm73M
+	 3zilmdWgkkIWAG/rWlShFTapnNPU1YWZyxamw1nU=
+Message-ID: <afe9ba0a-1924-42a8-a9c5-34eec709f883@arm.com>
+Date: Thu, 26 Mar 2026 18:13:11 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260325210637.3704220-1-shakeel.butt@linux.dev>
- <20260325190547.abb7309fb63473b57b7a90a0@linux-foundation.org>
- <acTaRgusrxfCoKqe@tiehlicka> <ac05d923-7871-4691-8d26-eff41b3a3db0@lucifer.local>
-In-Reply-To: <ac05d923-7871-4691-8d26-eff41b3a3db0@lucifer.local>
-From: Kairui Song <ryncsn@gmail.com>
-Date: Thu, 26 Mar 2026 20:37:06 +0800
-X-Gm-Features: AQROBzDDhAwWy50_0AvWQXh7pN5XimsTxdhJS695rjfTsFhXBLoLPjM3epTli8o
-Message-ID: <CAMgjq7B_twv3xhd5VmMJxngAknf9YaLAiwGYpdi6H2n1cXD3-A@mail.gmail.com>
-Subject: Re: [LSF/MM/BPF TOPIC] Towards Unified and Extensible Memory Reclaim (reclaim_ext)
-To: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
-Cc: Michal Hocko <mhocko@suse.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, lsf-pc@lists.linux-foundation.org, 
-	Johannes Weiner <hannes@cmpxchg.org>, David Hildenbrand <david@kernel.org>, 
-	Qi Zheng <zhengqi.arch@bytedance.com>, Chen Ridong <chenridong@huaweicloud.com>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Matthew Wilcox <willy@infradead.org>, Nhat Pham <nphamcs@gmail.com>, 
-	Gregory Price <gourry@gourry.net>, Barry Song <21cnbao@gmail.com>, 
-	David Stevens <stevensd@google.com>, Vernon Yang <vernon2gm@gmail.com>, 
-	David Rientjes <rientjes@google.com>, Kalesh Singh <kaleshsingh@google.com>, 
-	wangzicheng <wangzicheng@honor.com>, "T . J . Mercier" <tjmercier@google.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Suren Baghdasaryan <surenb@google.com>, 
-	Meta kernel team <kernel-team@meta.com>, bpf@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: [REGRESSION] slab: replace cpu (partial) slabs with sheaves
+To: Vlastimil Babka <vbabka@suse.cz>, Harry Yoo <harry.yoo@oracle.com>,
+ Petr Tesarik <ptesarik@suse.com>, Christoph Lameter <cl@gentwo.org>,
+ David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>
+Cc: Hao Li <hao.li@linux.dev>, Andrew Morton <akpm@linux-foundation.org>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Suren Baghdasaryan <surenb@google.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
+ bpf@vger.kernel.org, kasan-dev@googlegroups.com,
+ kernel test robot <oliver.sang@intel.com>, stable@vger.kernel.org,
+ "Paul E. McKenney" <paulmck@kernel.org>, ryan.roberts@arm.com
+References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
+Content-Language: en-US
+From: Aishwarya Rambhadran <aishwarya.rambhadran@arm.com>
+In-Reply-To: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Mar 26, 2026 at 4:02=E2=80=AFPM Lorenzo Stoakes (Oracle) <ljs@kerne=
-l.org> wrote:
+Hi Vlastimil, Harry,
+
+We have observed few kernel performance benchmark regressions,
+mainly in perf & vmalloc workloads, when comparing v6.19 mainline
+kernel results against later releases in the v7.0 cycle.
+Independent bisections on different machines consistently point
+to commits within the slab percpu sheaves series. However, towards
+the end of the bisection, the signal becomes less clear, so it's
+not yet certain which specific commit within the series is the
+root cause.
+
+The workloads were triggered on AWS Graviton3 (arm64) & AWS Intel
+Sapphire Rapids (x86_64) systems in which the regressions are
+reproducible across different kernel release candidates.
+(R)/(I) mean statistically significant regression/improvement,
+where "statistically significant" means the 95% confidence
+intervals do not overlap”.
+
+Below given are the performance benchmark results generated by
+Fastpath Tool, for different kernel -rc versions relative to the
+base version v6.19, executed on the mentioned SUTs. The perf/
+syscall benchmarks (execve/fork) regress consistently by ~6–11% on
+both arm64 and x86_64 across v7.0-rc1 to rc5, while vmalloc
+workloads show smaller but stable regressions (~2–10%), particularly
+in kvfree_rcu paths.
+
+Regressions on AWS Intel Sapphire Rapids (x86_64) :
++-----------------+----------------------------------------------------------+-----------------+-------------+-------------+---------------------------+-------------+-------------+-------------+
+| Benchmark       | Result Class            |   6-19-0 (base) |  
+  7-0-0-rc1 |   7-0-0-rc2 |  7-0-0-rc2-gaf4e9ef3d784 |   7-0-0-rc3 |  
+  7-0-0-rc4 |   7-0-0-rc5 |
++=================+==========================================================+=================+=============+=============+===========================+=============+=============+=============+
+| micromm/vmalloc | kvfree_rcu_1_arg_vmalloc_test: p:1, h:0, l:500000 
+(usec) |       262605.17 |      -4.94% |      -7.48% |             (R) 
+-8.11% |      -4.51% |      -6.23% |      -3.47% |
+|                 | kvfree_rcu_2_arg_vmalloc_test: p:1, h:0, l:500000 
+(usec) |       253198.67 |      -7.56% | (R) -10.57% |            (R) 
+-10.13% |  (R) -7.07% |      -6.37% |      -6.55% |
+|                 | pcpu_alloc_test: p:1, h:0, l:500000 (usec)           
+  |       197904.67 |      -2.07% |      -3.38% |             -2.07% |  
+     -2.97% |  (R) -4.30% |      -3.39% |
+|                 | random_size_align_alloc_test: p:1, h:0, l:500000 
+(usec)  |      1707089.83 |      -2.63% |  (R) -3.69% |               
+(R) -3.25% |  (R) -2.87% |      -2.22% |  (R) -3.63% |
++-----------------+----------------------------------------------------------+-----------------+-------------+-------------+---------------------------+-------------+-------------+-------------+
+| perf/syscall    | execve (ops/sec)            |         1202.92 |  (R) 
+-7.15% |  (R) -7.05% |         (R) -7.03% |  (R) -7.93% |  (R) -6.51% |  
+(R) -7.36% |
+|                 | fork (ops/sec)            |          996.00 |  (R) 
+-9.00% | (R) -10.27% |         (R) -9.92% | (R) -11.19% | (R) -10.69% | 
+(R) -10.28% |
++-----------------+----------------------------------------------------------+-----------------+-------------+-------------+---------------------------+-------------+-------------+-------------+
+
+Regressions on AWS Graviton3 (arm64) :
++-----------------+----------------------------------------------------------+-----------------+-------------+-------------+---------------------------+-------------+-------------+-------------+
+| Benchmark       | Result Class            |   6-19-0 (base) |  
+  7-0-0-rc1 |   7-0-0-rc2 |  7-0-0-rc2-gaf4e9ef3d784 |   7-0-0-rc3 |  
+  7-0-0-rc4 |   7-0-0-rc5 |
++=================+==========================================================+=================+=============+=============+===========================+=============+=============+=============+
+| micromm/vmalloc | fix_size_alloc_test: p:1, h:0, l:500000 (usec)      
+      |       320101.50 |  (R) -4.72% |  (R) -3.81% |               (R) 
+-5.05% |      -3.06% |      -3.16% |  (R) -3.91% |
+|                 | fix_size_alloc_test: p:4, h:0, l:500000 (usec)      
+      |       522072.83 |  (R) -2.15% |      -1.25% |               (R) 
+-2.16% |  (R) -2.13% |      -2.10% |      -1.82% |
+|                 | fix_size_alloc_test: p:16, h:0, l:500000 (usec)      
+     |      1041640.33 |      -0.50% |  (R) -2.04% |                 
+-1.43% |      -0.69% |      -1.78% |  (R) -2.03% |
+|                 | fix_size_alloc_test: p:256, h:1, l:100000 (usec)    
+      |      2255794.00 |      -1.51% |  (R) -2.24% |             (R) 
+-2.33% |      -1.14% |      -0.94% |      -1.60% |
+|                 | kvfree_rcu_1_arg_vmalloc_test: p:1, h:0, l:500000 
+(usec) |       343543.83 |  (R) -4.50% |  (R) -3.54% |             (R) 
+-5.00% |  (R) -4.88% |  (R) -4.01% |  (R) -5.54% |
+|                 | kvfree_rcu_2_arg_vmalloc_test: p:1, h:0, l:500000 
+(usec) |       342290.33 |  (R) -5.15% |  (R) -3.24% |             (R) 
+-3.76% |  (R) -5.37% |  (R) -3.74% |  (R) -5.51% |
+|                 | random_size_align_alloc_test: p:1, h:0, l:500000 
+(usec)  |      1209666.83 |      -2.43% |      -2.09% |                 
+   -1.19% |  (R) -4.39% |      -1.81% |      -3.15% |
++-----------------+----------------------------------------------------------+-----------------+-------------+-------------+---------------------------+-------------+-------------+-------------+
+| perf/syscall    | execve (ops/sec)            |         1219.58 |      
+        |  (R) -8.12% |         (R) -7.37% |  (R) -7.60% |  (R) -7.86% 
+|  (R) -7.71% |
+|                 | fork (ops/sec)            |          863.67 |        
+      |  (R) -7.24% |         (R) -7.07% |  (R) -6.42% |  (R) -6.93% |  
+(R) -6.55% |
++-----------------+----------------------------------------------------------+-----------------+-------------+-------------+---------------------------+-------------+-------------+-------------+
+
+
+The details of latest bisections that were carried out for the above
+listed regressions, are given below :
+-Graviton3 (arm64)
+  good: v6.19 (05f7e89ab973)
+  bad:  v7.0-rc2 (11439c4635ed)
+  workload: perf/syscall (execve)
+  bisected to: f1427a1d6415 (“slab: make percpu sheaves compatible with
+  kmalloc_nolock()/kfree_nolock()”)
+
+-Sapphire Rapids (x86_64)
+  good: v6.19 (05f7e89ab973)
+  bad:  v7.0-rc3 (1f318b96cc84)
+  workload: perf/syscall (fork)
+  bisected to: f1427a1d6415 (“slab: make percpu sheaves compatible with
+  kmalloc_nolock()/kfree_nolock()”)
+
+-Graviton3 (arm64)
+  good: v6.19 (05f7e89ab973)
+  bad:  v7.0-rc3 (1f318b96cc84)
+  workload: perf/syscall (execve)
+  bisected to: f3421f8d154c (“slab: introduce percpu sheaves bootstrap”)
+
+I'm aware that some fixes for the sheaves series have already been
+merged around v7.0-rc3; however, these do not appear to resolve the
+regressions described above completely. Are there additional fixes or
+follow-ups in progress that I should evaluate? I can investigate
+further and provide additional data, if that would be useful.
+
+Thank you.
+Aishwarya Rambhadran
+
+
+On 23/01/26 12:22 PM, Vlastimil Babka wrote:
+> Percpu sheaves caching was introduced as opt-in but the goal was to
+> eventually move all caches to them. This is the next step, enabling
+> sheaves for all caches (except the two bootstrap ones) and then removing
+> the per cpu (partial) slabs and lots of associated code.
 >
-> On Thu, Mar 26, 2026 at 08:03:34AM +0100, Michal Hocko wrote:
-> > On Wed 25-03-26 19:05:47, Andrew Morton wrote:
-> > > On Wed, 25 Mar 2026 14:06:37 -0700 Shakeel Butt <shakeel.butt@linux.d=
-ev> wrote:
-> > >
-> > > > We should unify both algorithms into a single code path.
-> > >
-> > > I'm here to ask the questions which others fear will sound dumb.
-> >
-> > Not dumb at all and recently discussed here https://lore.kernel.org/all=
-/CAMgjq7AkYOtUL2HuZjBu5dJw=3DRTL7W2L1+zVv=3DSCOyHKYwc3AA@mail.gmail.com/T/#=
-u
-> >
-> > > Is it indeed the plan to maintain both implementations?  I thought th=
-e
-> > > long-term ambition was to knock MGLRU into shape and to drop the lega=
-cy LRU?
-> >
-> > Yes, but MGLRU is not there yet and with development pace last year or
-> > so we are not much closer than at the time MGLRU has been merged
-> > unfortunatelly.
+> Besides (hopefully) improved performance, this removes the rather
+> complicated code related to the lockless fastpaths (using
+> this_cpu_try_cmpxchg128/64) and its complications with PREEMPT_RT or
+> kmalloc_nolock().
 >
-> I'm quite concerned about maintainership, as it seems the MGLRU maintaine=
-rs have
-> not been all that active, and the MGLRU to me at least is currently a bla=
-ck box.
+> The lockless slab freelist+counters update operation using
+> try_cmpxchg128/64 remains and is crucial for freeing remote NUMA objects
+> without repeating the "alien" array flushing of SLUB, and to allow
+> flushing objects from sheaves to slabs mostly without the node
+> list_lock.
 >
-> I'm not the only one who's raised this (see [0]).
+> Sending this v4 because various changes accumulated in the branch due to
+> review and -next exposure (see the list below). Thanks for all the
+> reviews!
 >
-> That'd very much have to be resolved and the community reassured that MGL=
-RU is
-> _actively_ maintained before we could even contemplate it replacing the
-> 'classic' reclaim approach IMO.
+> Git branch for the v4
+>    https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git/log/?h=sheaves-for-all-v4
 >
-> I hope that Kairu, Barry, Zicheng and others who are interested int it re=
-solve
-> this, however!
-
-Hi everyone,
-
-Right, I think we are starting to make good progress on improving
-MGLRU recently. For the last few years we already have some commits
-stashed downstream to enable that on our fleet, most of my effort in
-upstream is spent on other parts like SWAP, really looking forward to
-making MGLRU better upstreamly.
-
-Yesterday I was still discussing with CachyOS folks about their usage
-while working on that series for MGLRU cleanup and dirty flush
-optimization, and got some nice feedback later from their chat server
-that MGLRU's TTL resolved their thrashing issue very well. With
-classic LRU they needed a le9 patch downtreamly.
-
-For many other typical workloads under stress, MGLRU performs
-significantly better too (e.g. database, build kernel could be more
-than twice as fast), it would be a huge loss to leave it unmaintained.
-
-Barry also provided some really helpful ideas about MGLRU like
-readahead handling. We are also seeing other vendors and people
-contributing to MGLRU like Leno and Baolin recently. Things are
-looking promising.
+> Which is a snapshot of:
+>    https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git/log/?h=b4/sheaves-for-all
+>
+> Based on:
+>    https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git/log/?h=slab/for-7.0/sheaves-base
+>    - includes a sheaves optimization that seemed minor but there was lkp
+>      test robot result with significant improvements:
+>      https://lore.kernel.org/all/202512291555.56ce2e53-lkp@intel.com/
+>      (could be an uncommon corner case workload though)
+>    - includes the kmalloc_nolock() fix commit a4ae75d1b6a2 that is undone
+>      as part of this series
+>
+> Significant (but not critical) remaining TODOs:
+> - Integration of rcu sheaves handling with kfree_rcu batching.
+>    - Currently the kfree_rcu batching is almost completely bypassed. I'm
+>      thinking it could be adjusted to handle rcu sheaves in addition to
+>      individual objects, to get the best of both.
+> - Performance evaluation. Petr Tesarik has been doing that on the RFC
+>    with some promising results (thanks!) and also found a memory leak.
+>
+> Note that as many things, this caching scheme change is a tradeoff, as
+> summarized by Christoph:
+>
+>    https://lore.kernel.org/all/f7c33974-e520-387e-9e2f-1e523bfe1545@gentwo.org/
+>
+> - Objects allocated from sheaves should have better temporal locality
+>    (likely recently freed, thus cache hot) but worse spatial locality
+>    (likely from many different slabs, increasing memory usage and
+>    possibly TLB pressure on kernel's direct map).
+>
+> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+> ---
+> Changes in v4:
+> - Fix up both missing and spurious r-b tags from v3, and add new ones
+>    (big thanks to Hao Li, Harry, and Suren!)
+> - Fix infinite recursion with kmemleak (Breno Leitao)
+> - Use cache_has_sheaves() in pcs_destroy() (Suren)
+> - Use cache_has_sheaves() in kvfree_rcu_barrier_on_cache() (Hao Li)
+> - Bypass sheaf for remote object free also in kfree_nolock() (Harry)
+> - WRITE_ONCE slab->counters in __update_freelist_slow() so
+>    get_partial_node_bulk() can stop being paranoid (Harry)
+> - Tweak conditions in alloc_from_new_slab() (Hao Li, Suren)
+> - Rename get_partial*() functions to get_from_partial*() (Suren)
+> - Rename variable freelist to object in ___slab_alloc() (Suren)
+> - Separate struct partial_bulk_context instead of extending.
+> - Rename flush_cpu_slab() to flush_cpu_sheaves() (Hao Li)
+> - Add "mm/slab: fix false lockdep warning in __kfree_rcu_sheaf()" from
+>    Harry.
+> - Add counting of FREE_SLOWPATH stat to some missing places (Suren, Hao
+>    Li)
+> - Link to v3: https://patch.msgid.link/20260116-sheaves-for-all-v3-0-5595cb000772@suse.cz
+>
+> Changes in v3:
+> - Rebase to current slab/for-7.0/sheaves which itself is rebased to
+>    slab/for-next-fixes to include commit a4ae75d1b6a2 ("slab: fix
+>    kmalloc_nolock() context check for PREEMPT_RT")
+> - Revert a4ae75d1b6a2 as part of "slab: simplify kmalloc_nolock()" as
+>    it's no longer necessary.
+> - Add cache_has_sheaves() helper to test for s->sheaf_capacity, use it
+>    in more places instead of s->cpu_sheaves tests that were missed
+>    (Hao Li)
+> - Fix a bug where kmalloc_nolock() could end up trying to allocate empty
+>    sheaf (not compatible with !allow_spin) in __pcs_replace_full_main()
+>    (Hao Li)
+> - Fix missing inc_slabs_node() in ___slab_alloc() ->
+>    alloc_from_new_slab() path. (Hao Li)
+>    - Also a bug where refill_objects() -> alloc_from_new_slab ->
+>      free_new_slab_nolock() (previously defer_deactivate_slab()) would
+>      do inc_slabs_node() without matching dec_slabs_node()
+> - Make __free_slab call free_frozen_pages_nolock() when !allow_spin.
+>    This was correct in the first RFC. (Hao Li)
+> - Add patch to make SLAB_CONSISTENCY_CHECKS prevent merging.
+> - Add tags from sveral people (thanks!)
+> - Fix checkpatch warnings.
+> - Link to v2: https://patch.msgid.link/20260112-sheaves-for-all-v2-0-98225cfb50cf@suse.cz
+>
+> Changes in v2:
+> - Rebased to v6.19-rc1+slab.git slab/for-7.0/sheaves
+>    - Some of the preliminary patches from the RFC went in there.
+> - Incorporate feedback/reports from many people (thanks!), including:
+>    - Make caches with sheaves mergeable.
+>    - Fix a major memory leak.
+> - Cleanup of stat items.
+> - Link to v1: https://patch.msgid.link/20251023-sheaves-for-all-v1-0-6ffa2c9941c0@suse.cz
+>
+> ---
+> Harry Yoo (1):
+>        mm/slab: fix false lockdep warning in __kfree_rcu_sheaf()
+>
+> Vlastimil Babka (21):
+>        mm/slab: add rcu_barrier() to kvfree_rcu_barrier_on_cache()
+>        slab: add SLAB_CONSISTENCY_CHECKS to SLAB_NEVER_MERGE
+>        mm/slab: move and refactor __kmem_cache_alias()
+>        mm/slab: make caches with sheaves mergeable
+>        slab: add sheaves to most caches
+>        slab: introduce percpu sheaves bootstrap
+>        slab: make percpu sheaves compatible with kmalloc_nolock()/kfree_nolock()
+>        slab: handle kmalloc sheaves bootstrap
+>        slab: add optimized sheaf refill from partial list
+>        slab: remove cpu (partial) slabs usage from allocation paths
+>        slab: remove SLUB_CPU_PARTIAL
+>        slab: remove the do_slab_free() fastpath
+>        slab: remove defer_deactivate_slab()
+>        slab: simplify kmalloc_nolock()
+>        slab: remove struct kmem_cache_cpu
+>        slab: remove unused PREEMPT_RT specific macros
+>        slab: refill sheaves from all nodes
+>        slab: update overview comments
+>        slab: remove frozen slab checks from __slab_free()
+>        mm/slub: remove DEACTIVATE_TO_* stat items
+>        mm/slub: cleanup and repurpose some stat items
+>
+>   include/linux/slab.h |    6 -
+>   mm/Kconfig           |   11 -
+>   mm/internal.h        |    1 +
+>   mm/page_alloc.c      |    5 +
+>   mm/slab.h            |   65 +-
+>   mm/slab_common.c     |   61 +-
+>   mm/slub.c            | 2689 ++++++++++++++++++--------------------------------
+>   7 files changed, 1031 insertions(+), 1807 deletions(-)
+> ---
+> base-commit: a66f9c0f1ba2dd05fa994c800ebc63f265155f91
+> change-id: 20251002-sheaves-for-all-86ac13dc47a5
+>
+> Best regards,
