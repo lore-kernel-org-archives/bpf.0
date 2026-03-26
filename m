@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9979F3F7E67;
-	Thu, 26 Mar 2026 11:49:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E495A3F7899;
+	Thu, 26 Mar 2026 11:49:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774525792; cv=none; b=QOjx+SICz9uX0bVyjggOlSrOqKpPhAOTb1lpXtUKZNp02O6t999P2SBT01j4SubEdubJ71zALguH/6uBimZAdpuVUqDENsAbCWCBVwTN1Vub/ESColm/d4CrbMcB3uiDJoDNnjwGSVo6xfTIyMqRPpabFJt9QtcZ9uz8Zq968YU=
+	t=1774525800; cv=none; b=Pt/ARXr7+TkZkLY7rVjLJ1AyZZxcM0p+iwy+qkIx0L1Na/F6z8vSc6RgBrFCXBSV1YRSsssB9N9kzLKd1AiMyyKbeFFytYB/pXZqslnKDalHmqBQEJPn2fV4MwmMmIXLI6DbVOCT1guFzE2527QrQNWb1WnzrPBFd7WggAc55QI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774525792; c=relaxed/simple;
-	bh=VpYczqwnmJncpyaWulNnHSoKDHNu7SSDIFJJMLI3IKM=;
+	s=arc-20240116; t=1774525800; c=relaxed/simple;
+	bh=I8BjhB09WHI0Dd4PK6+/oKsCoUslOHLL+FHEaRMpywY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZmOWtlXNXShb1wXoJgy4W928ai5PZaTjXDILQl9aJ6VGCucfXHEJnKbyaGWrAJnVZuyH6sRmUbPEIKhppBDR+O3f7+2XxOcWUM0AKpmShNHIJjqjv0dLdtLV1uCg4L1PZlAm3cj+nwvmvpGkqsc3k9nN4ozxwrApyUCR9gt7SBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ax13Gi43; arc=none smtp.client-ip=198.175.65.16
+	 MIME-Version; b=g8/tx16G2B7t6s1kxrEVtA7+kJM+30vSXazAjNiw4dRDRtSrDR/zIrVRJWvtadFfbIGLH2rIuVP+YwHPD8IJaigVVZ+HOAq0smoA2sNlx5ZgJsO0z5l5r7PNxye71j/F96VraAjTYKEy83BQPbqBkdxbZMYnRMLG86VbfwjaKak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SM96W1tF; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ax13Gi43"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SM96W1tF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774525783; x=1806061783;
+  t=1774525792; x=1806061792;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=VpYczqwnmJncpyaWulNnHSoKDHNu7SSDIFJJMLI3IKM=;
-  b=ax13Gi43FvWhlPpnGXMD6TNM8GbmlwMTs0vgyeAXIRolez3cd/rtDo9U
-   xZhSh89C82jsCU8mvbpope6y6+ALsUZ0qhs61oNU4wP2ZlLQNXZxEyQnt
-   29eYgsPT0A2wx0ydPFxO2NxSetRTy+koWbYZnYAScLTE2NmT9hqFrjCfR
-   n6SmlCiB83pjhjM8mLDuIQp+MhgaTQeUACFqBCzRu10jqN5EK72xr0p9Y
-   PPHAps5ktrUiPupsc7IInJv3Z5oTOOA7BV2h+Jp22wH0+DtPq+ghxCx9M
-   GxG2eI7VifR5uzcA2mQdb7yx+7QxCBiR0Kv3J4sxuWSUtk4Ci/Z3jrKP1
-   A==;
-X-CSE-ConnectionGUID: Bf2Eez8ATrGE0CK/otjX8A==
-X-CSE-MsgGUID: JOjibenPS5aqkeMWnB9bxg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11740"; a="75776244"
+  bh=I8BjhB09WHI0Dd4PK6+/oKsCoUslOHLL+FHEaRMpywY=;
+  b=SM96W1tFlJMPAx8P9l0G1DOqoKPaZli78txOx9lYXJl9K0Lk1qVrGdfg
+   xDXMhf5hdfCgUN5bXhn0sf2XG4BSixh3Shz2TJl5+YD6nw4Kq/tP6bvsH
+   85F+rjSSC4FDcMuqsmezs/0d9akP0iC3YYfFMwYZF5+Q5t1ingfVHqFJs
+   brveocB11iWDZMEYu5RGGvHM7IdQ201rd6QPBLlhYvGF8yQATAJyN0qOK
+   Z/yrQhbhSpjO+fhfBkzyD//NlB4d9qtBV21VGKAguf4AOG+KDb19fqnIr
+   wJnO+cF9LVjvqzxMxY+IlyaKtT2d1pOzDNQyyUKqu0kmNezX0dYbNjJm8
+   w==;
+X-CSE-ConnectionGUID: KB8fSQIOToS7oR/ejq1+mw==
+X-CSE-MsgGUID: X9oKVJ5ITduJ7F+KvkFGWQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11740"; a="75776256"
 X-IronPort-AV: E=Sophos;i="6.23,142,1770624000"; 
-   d="scan'208";a="75776244"
+   d="scan'208";a="75776256"
 Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2026 04:49:39 -0700
-X-CSE-ConnectionGUID: 46bj7kW9R7S9SpyxqHarWA==
-X-CSE-MsgGUID: NfcD+BIAQc67VzcJ6YfK2w==
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2026 04:49:45 -0700
+X-CSE-ConnectionGUID: Kbwd/96DSHKjK6ZvZMbbxQ==
+X-CSE-MsgGUID: GD5iz+jNTTqywagWdVXm3g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,142,1770624000"; 
-   d="scan'208";a="248029022"
+   d="scan'208";a="248029052"
 Received: from boxer.igk.intel.com ([10.102.20.173])
-  by fmviesa002.fm.intel.com with ESMTP; 26 Mar 2026 04:49:37 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 26 Mar 2026 04:49:42 -0700
 From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -55,9 +55,9 @@ Cc: bpf@vger.kernel.org,
 	aleksander.lobakin@intel.com,
 	bjorn@kernel.org,
 	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v4 net 03/11] xsk: fix XDP_UMEM_SG_FLAG issues
-Date: Thu, 26 Mar 2026 12:49:11 +0100
-Message-Id: <20260326114919.519456-4-maciej.fijalkowski@intel.com>
+Subject: [PATCH v4 net 05/11] selftests: bpf: introduce a common routine for reading procfs
+Date: Thu, 26 Mar 2026 12:49:13 +0100
+Message-Id: <20260326114919.519456-6-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20260326114919.519456-1-maciej.fijalkowski@intel.com>
 References: <20260326114919.519456-1-maciej.fijalkowski@intel.com>
@@ -69,49 +69,157 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently xp_assign_dev_shared() is missing XDP_USE_SG being propagated
-to flags so set it in order to preserve mtu check that is supposed to be
-done only when no multi-buffer setup is in picture.
+Parametrize current way of getting MAX_SKB_FRAGS value from procfs so
+that it can be re-used to get cache line size of system's CPU. All that
+just to mimic and compute size of kernel's struct skb_shared_info which
+for xsk and test suite interpret as tailroom.
 
-Also, this flag has the same value as XDP_UMEM_TX_SW_CSUM so we could
-get unexpected SG setups for software Tx checksums. Since csum flag is
-UAPI, modify value of XDP_UMEM_SG_FLAG.
+Introduce two variables to ifobject struct that will carry count of skb
+frags and tailroom size. Do the reading and computing once, at the
+beginning of test suite execution.
 
-Fixes: d609f3d228a8 ("xsk: add multi-buffer support for sockets sharing umem")
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- include/net/xdp_sock.h  | 2 +-
- net/xdp/xsk_buff_pool.c | 4 ++++
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ .../selftests/bpf/prog_tests/test_xsk.c       | 25 +----------
+ .../selftests/bpf/prog_tests/test_xsk.h       |  2 +
+ tools/testing/selftests/bpf/xskxceiver.c      | 44 +++++++++++++++++++
+ 3 files changed, 47 insertions(+), 24 deletions(-)
 
-diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
-index 23e8861e8b25..ebac60a3d8a1 100644
---- a/include/net/xdp_sock.h
-+++ b/include/net/xdp_sock.h
-@@ -14,7 +14,7 @@
- #include <linux/mm.h>
- #include <net/sock.h>
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
+index 7e38ec6e656b..62118ffba661 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
+@@ -179,25 +179,6 @@ int xsk_configure_socket(struct xsk_socket_info *xsk, struct xsk_umem_info *umem
+ 	return xsk_socket__create(&xsk->xsk, ifobject->ifindex, 0, umem->umem, rxr, txr, &cfg);
+ }
  
--#define XDP_UMEM_SG_FLAG (1 << 1)
-+#define XDP_UMEM_SG_FLAG BIT(3)
+-#define MAX_SKB_FRAGS_PATH "/proc/sys/net/core/max_skb_frags"
+-static unsigned int get_max_skb_frags(void)
+-{
+-	unsigned int max_skb_frags = 0;
+-	FILE *file;
+-
+-	file = fopen(MAX_SKB_FRAGS_PATH, "r");
+-	if (!file) {
+-		ksft_print_msg("Error opening %s\n", MAX_SKB_FRAGS_PATH);
+-		return 0;
+-	}
+-
+-	if (fscanf(file, "%u", &max_skb_frags) != 1)
+-		ksft_print_msg("Error reading %s\n", MAX_SKB_FRAGS_PATH);
+-
+-	fclose(file);
+-	return max_skb_frags;
+-}
+-
+ static int set_ring_size(struct ifobject *ifobj)
+ {
+ 	int ret;
+@@ -2242,11 +2223,7 @@ int testapp_too_many_frags(struct test_spec *test)
+ 	if (test->mode == TEST_MODE_ZC) {
+ 		max_frags = test->ifobj_tx->xdp_zc_max_segs;
+ 	} else {
+-		max_frags = get_max_skb_frags();
+-		if (!max_frags) {
+-			ksft_print_msg("Can't get MAX_SKB_FRAGS from system, using default (17)\n");
+-			max_frags = 17;
+-		}
++		max_frags = test->ifobj_tx->max_skb_frags;
+ 		max_frags += 1;
+ 	}
  
- struct net_device;
- struct xsk_queue;
-diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-index 37b7a68b89b3..729602a3cec0 100644
---- a/net/xdp/xsk_buff_pool.c
-+++ b/net/xdp/xsk_buff_pool.c
-@@ -247,6 +247,10 @@ int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_sock *umem_xs,
- 	struct xdp_umem *umem = umem_xs->umem;
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.h b/tools/testing/selftests/bpf/prog_tests/test_xsk.h
+index 8fc78a057de0..55d808eeabc5 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_xsk.h
++++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.h
+@@ -115,6 +115,8 @@ struct ifobject {
+ 	int mtu;
+ 	u32 bind_flags;
+ 	u32 xdp_zc_max_segs;
++	u32 umem_tailroom;
++	u32 max_skb_frags;
+ 	bool tx_on;
+ 	bool rx_on;
+ 	bool use_poll;
+diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
+index 05b3cebc5ca9..2623cf4dd2c5 100644
+--- a/tools/testing/selftests/bpf/xskxceiver.c
++++ b/tools/testing/selftests/bpf/xskxceiver.c
+@@ -80,6 +80,7 @@
+ #include <linux/mman.h>
+ #include <linux/netdev.h>
+ #include <linux/ethtool.h>
++#include <linux/align.h>
+ #include <arpa/inet.h>
+ #include <net/if.h>
+ #include <locale.h>
+@@ -101,6 +102,9 @@
  
- 	flags = umem->zc ? XDP_ZEROCOPY : XDP_COPY;
+ #include <network_helpers.h>
+ 
++#define MAX_SKB_FRAGS_PATH "/proc/sys/net/core/max_skb_frags"
++#define SMP_CACHE_BYTES_PATH "/sys/devices/system/cpu/cpu0/cache/index0/coherency_line_size"
 +
-+	if (umem->flags & XDP_UMEM_SG_FLAG)
-+		flags |= XDP_USE_SG;
-+
- 	if (umem_xs->pool->uses_need_wakeup)
- 		flags |= XDP_USE_NEED_WAKEUP;
+ static bool opt_print_tests;
+ static enum test_mode opt_mode = TEST_MODE_ALL;
+ static u32 opt_run_test = RUN_ALL_TESTS;
+@@ -330,9 +334,28 @@ static void print_tests(void)
+ 		printf("%u: %s\n", i, ci_skip_tests[i - ARRAY_SIZE(tests)].name);
+ }
  
++static unsigned int read_procfs_val(const char *path)
++{
++	unsigned int read_val = 0;
++	FILE *file;
++
++	file = fopen(path, "r");
++	if (!file) {
++		ksft_print_msg("Error opening %s\n", path);
++		return 0;
++	}
++
++	if (fscanf(file, "%u", &read_val) != 1)
++		ksft_print_msg("Error reading %s\n", path);
++
++	fclose(file);
++	return read_val;
++}
++
+ int main(int argc, char **argv)
+ {
+ 	const size_t total_tests = ARRAY_SIZE(tests) + ARRAY_SIZE(ci_skip_tests);
++	u32 cache_line_size, max_frags, umem_tailroom;
+ 	struct pkt_stream *rx_pkt_stream_default;
+ 	struct pkt_stream *tx_pkt_stream_default;
+ 	struct ifobject *ifobj_tx, *ifobj_rx;
+@@ -354,6 +377,27 @@ int main(int argc, char **argv)
+ 
+ 	setlocale(LC_ALL, "");
+ 
++	cache_line_size = read_procfs_val(SMP_CACHE_BYTES_PATH);
++	if (!cache_line_size) {
++		ksft_print_msg("Can't get SMP_CACHE_BYTES from system, using default (64)\n");
++		cache_line_size = 64;
++	}
++
++	max_frags = read_procfs_val(MAX_SKB_FRAGS_PATH);
++	if (!max_frags) {
++		ksft_print_msg("Can't get MAX_SKB_FRAGS from system, using default (17)\n");
++		max_frags = 17;
++	}
++	ifobj_tx->max_skb_frags = max_frags;
++	ifobj_rx->max_skb_frags = max_frags;
++
++	/* 48 bytes is a part of skb_shared_info w/o frags array;
++	 * 16 bytes is sizeof(skb_frag_t)
++	 */
++	umem_tailroom = ALIGN(48 + (max_frags * 16), cache_line_size);
++	ifobj_tx->umem_tailroom = umem_tailroom;
++	ifobj_rx->umem_tailroom = umem_tailroom;
++
+ 	parse_command_line(ifobj_tx, ifobj_rx, argc, argv);
+ 
+ 	if (opt_print_tests) {
 -- 
 2.43.0
 
