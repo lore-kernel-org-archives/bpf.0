@@ -1,70 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F37D637F756;
-	Thu, 26 Mar 2026 02:05:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DAD21E51E0
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 02:09:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774490750; cv=none; b=C232d/Wl4tTWfkEU5iDxiLpU8JqJwFQKX26OE4nsHtB27SI887gzRThttt02Jur/l+blHasvu28VZP1ITJT0d1YfWbMoz4NihZwATOjgIM3xq06rCnYGv8NSRe3IuSuI4VCMAR1FpRHt1DxNPUk/Jg8DGK2p7bsFy8/R70W+24Q=
+	t=1774490948; cv=none; b=tIZfAgGCfOfljkmp9kWLGXl7FrN0BEvymaz0nU9OoL9X9EQIEQNg8nvNo5300zYWE9ZQN6/7sm4m+Ety+0vF4HMM8mqvsz2ViQ1tMXtv5voEpcBc4ZJomNSe9Dfr7LFOacHssL38ee0I6DSSL0KyGc+N4k0o8s/hqqq+ASB64kA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774490750; c=relaxed/simple;
-	bh=mtEUOAMPeIXBSy2/Sy+n9/8l/Xxu4HKjYU1IeLBTV3g=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=mKjfanO5taor8WjwEmG5Pludbborc45agc74wms9TivX/wM5jwfgJv5C9PIG64vx5A/hHWRcCiYwkY7S2mXmYPBC8Y1EmkuonPiX+5GcOR36KLVW61D1DoouFFNHKIk+NBs8AchHL36FdiDmQjvx2VxgR3wwOxLiObCfikI3E70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=waC01LrU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774490948; c=relaxed/simple;
+	bh=8CtA1BAah7T7CAmtZQCzfJlkSKfvDWcJhiWhNoRCb6o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AKeJ/8Tvygf0XYKDPx1VE+f63fmhcVeN3bFjmjkjkIvFq08/josBGGEgvZm53tnAKwGB/oOwAzXaaMQdERjEVJpNJv7lpItxurCs3/sTZ0ELGb4KaCMsFzJJ1HLTqTtkmRAuLEzZf72FW0FkLI55ieR5cOvIj5TCVN6tyyTfwq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=XZTCR6yo; arc=none smtp.client-ip=209.85.160.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="waC01LrU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96C22C4CEF7;
-	Thu, 26 Mar 2026 02:05:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1774490749;
-	bh=mtEUOAMPeIXBSy2/Sy+n9/8l/Xxu4HKjYU1IeLBTV3g=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=waC01LrUKtqwDboD0zEDswPZcsahgJD1uLbD/7QjzJzzupbiu24URsshBggUB+xzA
-	 Xrq67mNtGKsN/bJW1vRyA05MrAoNr2Xty77pcDVoobqjk5SDSLH1JCH9qudptSfdM/
-	 fl+dNzCqfgdEIDKfvIf4iWkOKR7YfkAYa0jTA1/w=
-Date: Wed, 25 Mar 2026 19:05:47 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Shakeel Butt <shakeel.butt@linux.dev>
-Cc: lsf-pc@lists.linux-foundation.org, Johannes Weiner <hannes@cmpxchg.org>,
- David Hildenbrand <david@kernel.org>, Michal Hocko <mhocko@kernel.org>, Qi
- Zheng <zhengqi.arch@bytedance.com>, Lorenzo Stoakes <ljs@kernel.org>, Chen
- Ridong <chenridong@huaweicloud.com>, Emil Tsalapatis
- <emil@etsalapatis.com>, Alexei Starovoitov <ast@kernel.org>, Axel Rasmussen
- <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu
- <weixugc@google.com>, Kairui Song <ryncsn@gmail.com>, Matthew Wilcox
- <willy@infradead.org>, Nhat Pham <nphamcs@gmail.com>, Gregory Price
- <gourry@gourry.net>, Barry Song <21cnbao@gmail.com>, David Stevens
- <stevensd@google.com>, Vernon Yang <vernon2gm@gmail.com>, David Rientjes
- <rientjes@google.com>, Kalesh Singh <kaleshsingh@google.com>, wangzicheng
- <wangzicheng@honor.com>, "T . J . Mercier" <tjmercier@google.com>, Baolin
- Wang <baolin.wang@linux.alibaba.com>, Suren Baghdasaryan
- <surenb@google.com>, Meta kernel team <kernel-team@meta.com>,
- bpf@vger.kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [LSF/MM/BPF TOPIC] Towards Unified and Extensible Memory
- Reclaim (reclaim_ext)
-Message-Id: <20260325190547.abb7309fb63473b57b7a90a0@linux-foundation.org>
-In-Reply-To: <20260325210637.3704220-1-shakeel.butt@linux.dev>
-References: <20260325210637.3704220-1-shakeel.butt@linux.dev>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="XZTCR6yo"
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-41c420d1460so220897fac.3
+        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 19:09:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1774490945; x=1775095745; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/JLU1gejQqZao14J8ooTXxU2npvtEHMcTdwtYoGa0cQ=;
+        b=XZTCR6yoF4SfzVzvKZi96HuQsADCXc86YUN/3/bW65y7VwizK4CAc1e9IvV7LMFZJv
+         bUOUl+oJlhIf3qQ5iN212G/8ZUv0KvXgjODEFbk4NM887waOUO8XaAVwp/C5LRfyUJAA
+         bHBHHsR6HinoAcaFI72tBtJ2r6YTTLNL+b0Q4g1ylvTgsxJdc2hODc5aVGlBDVvx5y/M
+         HpdiY9FF3txnJnQU4ncpVldUnHQGQTCVD90TcXagDkknxlMo13PAva7fuTcK8b8hzVWm
+         fUiuMyKAX8hmpNEbNN3I4YDAOnSEtEt80jnQ1Tl+ilsKKrJJPQkp52lIS013nuy4x8cc
+         wLLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774490945; x=1775095745;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/JLU1gejQqZao14J8ooTXxU2npvtEHMcTdwtYoGa0cQ=;
+        b=Q/E4ZJc9LpYa+pjeDnsiqsQEdjcuEqDEEmCtCbT4/yBVHmIFNhH62kzaA6z5NIq6TL
+         1LMocNuaAYvKmbggyFbYQa18LA5gJ/KTRM60m3Zl4hl05hLnNSrGCRwxweb0DwCnAmsD
+         /ZD6DU7zCapDQ0jjnFmADZHvQSIPxPZDSWGBnPFpgyV91Qo2okKcNb/yS6wmoEIn7y2a
+         KVQnmf6ql46etGawq/dyCf/g5HOSom/nvQchXASizQSpZgAXrnYbVqqgoOOVhsiMDhaT
+         bA0as1+BWfdEbz11tbPxTrvK3HCQTqni3RrRGs7OWEsMnqrgk9sM7pAxKA0zS+S024gK
+         xHOQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX5JJrao5TKox2TOeVrBjVqC2BkbzEGVJzqQ0yF4qj7uYnZmsqCR3p4SXBa2V/fqdw4p/s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUIE7tMnXNU4Y7ZSLqu70h7lk7xYteDcWbl5Vvec+EKpMaMOiz
+	u/e8StGDUiXrAr8DLbSSadtvwpEiki7FJacYEc+VI5YYpXYu7XzsRFev76KGcATtUwxwQjM9Xqs
+	twEKB9AM=
+X-Gm-Gg: ATEYQzxfPBRq95iQ2QQcnsRG1bgIAV5+U9JuK7yaRjrTY5m1vfMZDunfYXsVFMRx/vE
+	/eXVrEt+x0f9lyssKRP15jSzQobzzaRCn+9cxSQk1m822LESD/26ctgXSxjYCW2MyLf1VEE06kh
+	h8KKc3+k1xRmYMED3pmMzOUq1vjTXWStgrNCAitjk1SNlNxsSQmjX7lZgkVOZYFVlRKbK9m9fx4
+	oXyz0zmUGxvQby8dx+fA3q9Ena6Q4+y++NF9RoMKe6LD6EzeLWu6yziWwpg/VwF5+14nCA2OUvS
+	+txvndN7QTopkpnJxO0R98EWqWBZzVo/OlxW6BGi2hdHQVXYGQ2pKkShAvUb+fqkzNBWDzb6aw5
+	fp/r8CpqjI+pJc3TVBQoXFy9AQdnYicDzHfRYVaz3WxNqapzyfcdbVt9xlOD7AfW6yva75rtRGa
+	YnUp5tAldbrIHaCgwnWEc9zz0Dz2/OltFDctbM6f68U2D+f0/oWjIKoWa2ORR2dVt4+jXO0mwrM
+	/WgY6XWSKBwnz0mc2zK
+X-Received: by 2002:a05:6870:a797:b0:40e:dcc9:c3a0 with SMTP id 586e51a60fabf-41ca6df1502mr3200041fac.17.1774490945480;
+        Wed, 25 Mar 2026 19:09:05 -0700 (PDT)
+Received: from [192.168.1.150] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-41cc7b3e55fsm1192963fac.14.2026.03.25.19.09.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Mar 2026 19:09:04 -0700 (PDT)
+Message-ID: <b7216cd5-68f4-4ab5-b1c8-b1c71f38fc00@kernel.dk>
+Date: Wed, 25 Mar 2026 20:09:03 -0600
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V3 05/12] io_uring: bpf: extend io_uring with bpf
+ struct_ops
+To: Ming Lei <ming.lei@redhat.com>, io-uring@vger.kernel.org
+Cc: Caleb Sander Mateos <csander@purestorage.com>,
+ Akilesh Kailash <akailash@google.com>, bpf@vger.kernel.org,
+ Xiao Ni <xni@redhat.com>, Alexei Starovoitov <ast@kernel.org>
+References: <20260324163753.1900977-1-ming.lei@redhat.com>
+ <20260324163753.1900977-6-ming.lei@redhat.com>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20260324163753.1900977-6-ming.lei@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On Wed, 25 Mar 2026 14:06:37 -0700 Shakeel Butt <shakeel.butt@linux.dev> wrote:
+On 3/24/26 10:37 AM, Ming Lei wrote:
+>  int io_uring_bpf_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+>  {
+> +	struct uring_bpf_data *data = io_kiocb_to_cmd(req, struct uring_bpf_data);
+> +	u32 opf = READ_ONCE(sqe->bpf_op_flags);
+> +	unsigned char bpf_op = uring_bpf_get_op(opf);
+> +	const struct uring_bpf_ops *ops;
+> +
+> +	if (unlikely(!(req->ctx->flags & IORING_SETUP_BPF_EXT)))
+> +		goto fail;
+> +
+> +	if (bpf_op >= IO_RING_MAX_BPF_OPS)
+> +		return -EINVAL;
+> +
+> +	ops = req->ctx->bpf_ext_ops[bpf_op].ops;
+> +	data->opf = opf;
+> +	data->ops = ops;
+> +	if (ops && ops->prep_fn)
+> +		return ops->prep_fn(data, sqe);
+> +fail:
+>  	return -EOPNOTSUPP;
+>  }
 
-> We should unify both algorithms into a single code path. 
+Any early exit should ensure 'data' is sane, so that the cleanup doesn't
+potentially touch uninitialized crap. This is something that has bit us
+in the past. Not an issue for this patch that adds the code, but it will
+be once the next patch is applied. Better to clear ->opf/ops here
+upfront, so that we never leave this function without 'data' being fully
+initialized.
 
-I'm here to ask the questions which others fear will sound dumb.
-
-Is it indeed the plan to maintain both implementations?  I thought the
-long-term ambition was to knock MGLRU into shape and to drop the legacy LRU?
-
-And that Linus has expressed such a desire, but my googling fails me.
-
-
+-- 
+Jens Axboe
