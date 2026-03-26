@@ -1,140 +1,125 @@
-Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5382E336EE1;
-	Thu, 26 Mar 2026 06:33:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.229.168.213])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C881830EF7B
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 06:34:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.229.168.213
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774506820; cv=none; b=VvHpQopGX4bRWzCMvSea+CxMy+zHtXQ0r9YWUv+5KzbLtrnjM8yasyi5PZXgoqOfnZKcKbUj73OPA2HwV70o4af6NNLpqK9p0NCicemVR6c/Vmuz5ksuVSy7ePCMCD78xYz/A0x6GhTt0LgnAji+zYkp70KHMP2F+QECk3xzcXM=
+	t=1774506865; cv=none; b=bEWupJPswQQUEAkz8YHlu+wIiCBPckhT2q1TR3d8KMOjhQxER45T5bsIOawfVtwdQo9M4LkemtH4Qx4iA06O0h7LVmS4Sz0vLu5L4TJoBr9hPFAiQrUWneaC6L2LRQIH+2uiV2wbo8jRxaDYmsQonEMHL8ASo3vJ0w8SVWDQptE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774506820; c=relaxed/simple;
-	bh=HDl1vN6+C2nBxX3TKFliBhRF/OsMjwcf3NmXLvLkiAQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=duSf9opG4LI3dWGzevn/XEy+HXVyGKcDuN0U34vRITfg0I68AWuqp1P7PMNlcLvnsiD0N/FbCidZnmlGvv12Wk3SSJsgNXzEjdRVd9VziBFdF4SmKyzSh+tPYl26ANrrMsQgOT5Ve0jwo9St0Jyj5+tWWTJHkk3THL5XGVuSsYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rU9zsLdY; arc=none smtp.client-ip=91.218.175.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rU9zsLdY"
-Message-ID: <12cc6b53-d801-4e77-83d6-b2a4655ec1b8@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774506807;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=l04fTvJB2+ddcC1WaxKYj6vGmeSvY98dLQzDrq19pZY=;
-	b=rU9zsLdYjtEPsrjr9FLee/5cXsgUAgFtjPdQUUEOTCBrkcHX6TL8CR57/RJlMevAEJIgEs
-	JfwAH4SpSOHg1SKZT+Y60mwN2DgFvTezwuBj51dQgH416kLlC+Paj9Qc4DRsI8WXwrVQSr
-	r9RDCYCr+C16jkj07bwP9LalJ5QaWiQ=
-Date: Wed, 25 Mar 2026 23:33:20 -0700
+	s=arc-20240116; t=1774506865; c=relaxed/simple;
+	bh=xBzvgQnv0g3ZH/dBE3R5fgQwYFnDo4h1E3v0LFWdJKo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Cii+i0poqaE6Ohb5x/PzecMCeT2ka2yAmXRZ/wuLNc5dQUpHceSsjBzKvlsCBChYbOrwYzMh8E5HC368DSUQZapF9otY7kjNHvus5B5U6jXqMkZZka1wQpEot66RCfpO3iw6Z8+4ZVHy7I96JLqJAu3RooCRUzSsp7oTzP9dsSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=52.229.168.213
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
+Received: from zju.edu.cn (unknown [115.236.2.94])
+	by mtasvr (Coremail) with SMTP id _____wAXeLBN08RpTuAEAA--.9698S3;
+	Thu, 26 Mar 2026 14:33:50 +0800 (CST)
+Received: from wolframium.tail477849.ts.net (unknown [115.236.2.94])
+	by mail-app2 (Coremail) with SMTP id zC_KCgCH+c5B08RpA3kqAA--.55576S2;
+	Thu, 26 Mar 2026 14:33:38 +0800 (CST)
+From: Yazhou Tang <tangyazhou@zju.edu.cn>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	tangyazhou518@outlook.com,
+	shenghaoyuan0928@163.com,
+	ziye@zju.edu.cn
+Subject: [PATCH bpf v4 0/3] bpf: Fix s16 truncation for large bpf-to-bpf call offsets
+Date: Thu, 26 Mar 2026 14:33:26 +0800
+Message-ID: <20260326063329.10031-1-tangyazhou@zju.edu.cn>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v1 2/2] selftests/bpf: Add protocol check test for
- bpf_sk_assign_tcp_reqsk()
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
- bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260323105510.51990-1-jiayuan.chen@linux.dev>
- <20260323105510.51990-3-jiayuan.chen@linux.dev>
- <9adc3c2e-0d5a-4863-b3ed-194d8f9fd630@linux.dev>
- <4c27a461-2714-4c27-8604-dedd506a09aa@linux.dev>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <4c27a461-2714-4c27-8604-dedd506a09aa@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-CM-TRANSID:zC_KCgCH+c5B08RpA3kqAA--.55576S2
+X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBhIBCmnC6QtZNQABs7
+X-CM-DELIVERINFO: =?B?x7VPHAXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
+	9q9EgOJRkhWYhllRvpYFmgQv/m1oHotqNwaoWelSOfl8lCO5P7RtaL6gMsBCLET446myPI
+	7cyb+odkRC5uxTZHPdafLS1+7GEO9aonCHy/6M1uZv00UxOl1UEwQDbUhBa4SA==
+X-Coremail-Antispam: 1Uk129KBj93XoW7KF4fCr4fKFWUAry8tFWDtrc_yoW5JF18pF
+	4kJ34fJr97trW7Cr4fAanrWF43Kan5u3y7ur1fX3sIyr4YyF18JF1kKr45CasxJrW7Cr1I
+	vFW2yF98W3WrAFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUU9Eb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
+	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
+	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAF
+	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0Y48IcxkI7V
+	AKI48G6xCjnVAKz4kxM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC2
+	0s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI
+	0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE
+	14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20x
+	vaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8
+	JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU801v3UUUUU==
 
-On 3/25/26 8:24 PM, Jiayuan Chen wrote:
-> 
-> On 3/25/26 5:59 AM, Martin KaFai Lau wrote:
->> On 3/23/26 3:54 AM, Jiayuan Chen wrote:
->>> +void test_tcp_custom_syncookie_protocol_check(void)
->>> +{
->>> +    struct test_tcp_custom_syncookie *skel;
->>> +    struct sockaddr_in tcp_addr, udp_addr;
->>> +    socklen_t addr_len = sizeof(tcp_addr);
->>> +    int tcp_server = -1, udp_client = -1;
->>> +    char buf[32] = "test";
->>> +    int ret;
->>> +
->>> +    if (setup_netns())
->>> +        return;
->>> +
->>> +    skel = test_tcp_custom_syncookie__open_and_load();
->>> +    if (!ASSERT_OK_PTR(skel, "open_and_load"))
->>> +        return;
->>>   +    /* Create a TCP listener so the BPF can find a LISTEN socket */
->>> +    tcp_server = start_server(AF_INET, SOCK_STREAM, "127.0.0.1", 0, 0);
->>> +    if (!ASSERT_NEQ(tcp_server, -1, "start tcp_server"))
->>> +        goto destroy_skel;
->>> +
->>> +    ret = getsockname(tcp_server, (struct sockaddr *)&tcp_addr, 
->>> &addr_len);
->>> +    if (!ASSERT_OK(ret, "getsockname"))
->>> +        goto close_tcp;
->>> +
->>> +    skel->bss->tcp_listener_port = ntohs(tcp_addr.sin_port);
->>> +    skel->bss->udp_test_port = 9999;
->>> +
->>> +    ret = bpf_program__fd(skel->progs.tcp_custom_syncookie_badproto);
->>> +    if (setup_tc(ret))
->>> +        goto close_tcp;
->>> +
->>> +    udp_client = socket(AF_INET, SOCK_DGRAM, 0);
->>> +    if (!ASSERT_NEQ(udp_client, -1, "udp socket"))
->>> +        goto cleanup_tc;
->>> +
->>> +    memset(&udp_addr, 0, sizeof(udp_addr));
->>> +    udp_addr.sin_family = AF_INET;
->>> +    udp_addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
->>> +    udp_addr.sin_port = htons(9999);
->>> +
->>> +    ret = sendto(udp_client, buf, sizeof(buf), 0,
->>> +             (struct sockaddr *)&udp_addr, sizeof(udp_addr));
->>> +    ASSERT_EQ(ret, sizeof(buf), "sendto udp");
->>> +
->>> +    /* Wait for TC ingress BPF to process the skb. */
->>> +    kern_sync_rcu();
->>
->> hmm... is it guaranteed to work? Regardless, it checks the error 
->> returned from bpf_sk_assign_tcp_reqsk(). Maybe bpf_prog_test_run is 
->> simpler?
->>
->> pw-bot: cr
->>
->>> +
->>>
-> I looked into using bpf_prog_test_run, but it won't work here
-> because bpf_sk_assign_tcp_reqsk() requires the skb to come from TC ingress
-> — it checks skb_at_tc_ingress() internally and returns -EINVAL otherwise.
+From: Yazhou Tang <tangyazhou518@outlook.com>
 
-Thanks for trying.
+This patchset addresses a silent truncation bug in the BPF verifier that
+occurs when a bpf-to-bpf call involves a massive relative jump offset.
+Because the BPF instruction set utilizes a 32-bit imm field for bpf-to-bpf
+calls, implicitly downcasting it to the 16-bit insn->off causes incorrect
+call targets or subprog ID resolution for large BPF programs.
 
-> 
-> For the synchronization concern, instead of kern_sync_rcu(), I now create
-> a UDP server bound to the target port and recv() the packet after sendto().
-> Since the BPF program returns TC_ACT_OK, the packet passes through TC 
-> ingress
-> and arrives at the UDP socket. The recv() naturally blocks until the BPF 
-> program
-> has finished processing, so no timing tricks are needed.
-> 
+Patches 1/3 and 2/3 fix the interpreter path by explicitly checking the offset
+boundary in bpf_patch_call_args() and introduce a selftest for verification.
 
-sgtm.
+Patch 3/3 fixes a related issue in jit_subprogs() where the truncated
+insn->off causes tools like bpftool to incorrectly dump the subprogram name.
+
+---
+
+Change log:
+
+v4:
+1. Remove some redundant commit messages of patch 2/3. (Emil)
+2. Change the number of instructions in padding_subprog() from 200,000
+   to 32,765, which is the minimum number of instructions required to
+   trigger the verifier failure. (Emil)
+
+v3: https://lore.kernel.org/bpf/20260323122254.98540-1-tangyazhou@zju.edu.cn/
+1. Resend to fix a typo in v2 and add "Fixes" tag. The rest of the changes
+   are identical to v2.
+
+v2 (incorrect): https://lore.kernel.org/bpf/20260323081748.106603-1-tangyazhou@zju.edu.cn/
+1. Move the s16 boundary check from fixup_call_args() to bpf_patch_call_args(),
+   and change the return type of bpf_patch_call_args() to int. (Emil)
+2. Add Patch 3/3 to fix the incorrect subprog ID in dumped bpf_pseudo_call
+   instructions, which is caused by the same truncation issue. (Puranjay)
+3. Refine the new selftest for clarity and add detailed comments explaining
+   the test design. (Emil)
+
+v1: https://lore.kernel.org/bpf/20260316190220.113417-1-tangyazhou@zju.edu.cn/
+
+Yazhou Tang (3):
+  bpf: Reject bpf-to-bpf call with large offset in interpreter
+  selftests/bpf: Add test for large offset bpf-to-bpf call
+  bpf: Fix incorrect subprog ID in dumped bpf_pseudo_call instructions
+
+ include/linux/bpf.h                           |  2 +-
+ kernel/bpf/core.c                             |  7 ++-
+ kernel/bpf/verifier.c                         | 12 ++++-
+ .../selftests/bpf/prog_tests/call_large_imm.c | 54 +++++++++++++++++++
+ .../selftests/bpf/progs/call_large_imm.c      | 46 ++++++++++++++++
+ 5 files changed, 116 insertions(+), 5 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/call_large_imm.c
+ create mode 100644 tools/testing/selftests/bpf/progs/call_large_imm.c
+
+-- 
+2.53.0
+
