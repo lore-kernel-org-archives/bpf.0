@@ -1,118 +1,156 @@
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DAD21E51E0
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 02:09:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774490948; cv=none; b=tIZfAgGCfOfljkmp9kWLGXl7FrN0BEvymaz0nU9OoL9X9EQIEQNg8nvNo5300zYWE9ZQN6/7sm4m+Ety+0vF4HMM8mqvsz2ViQ1tMXtv5voEpcBc4ZJomNSe9Dfr7LFOacHssL38ee0I6DSSL0KyGc+N4k0o8s/hqqq+ASB64kA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774490948; c=relaxed/simple;
-	bh=8CtA1BAah7T7CAmtZQCzfJlkSKfvDWcJhiWhNoRCb6o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AKeJ/8Tvygf0XYKDPx1VE+f63fmhcVeN3bFjmjkjkIvFq08/josBGGEgvZm53tnAKwGB/oOwAzXaaMQdERjEVJpNJv7lpItxurCs3/sTZ0ELGb4KaCMsFzJJ1HLTqTtkmRAuLEzZf72FW0FkLI55ieR5cOvIj5TCVN6tyyTfwq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=XZTCR6yo; arc=none smtp.client-ip=209.85.160.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAB9112F585
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 02:09:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.133.124
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774490975; cv=pass; b=Tvdo9zz/m0glRXN8RQ5qpOFb4NLuK0gpdRwrXFMQOcmfNAy0hbq54XJjbwkEMOH1n31qLeYFEJMnhTRu1iiRNx6hLvTXbGswCZ+93T3Eweas/fU4Dsw/I+EbFp3o2i4LH0RE4kz9D32rGTRxKskh0Z/8KiLb76fr50vfvgac6wY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774490975; c=relaxed/simple;
+	bh=SM+x8B+Pz15Gvc1EQP2Y8VvxinV8pQbKuNafLtpnPcE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=W8sIACLnNqa1uiPK2+VF+Q5nPSJkshWB47iFWKZJx82A+iUuxDC4A10J1eIfbffrt9coXcVFsqxmXHCPXVRAWgfMI9tfXSZPssqmE2AMWpV/K/YVmIFUhcdSYREOICEUKTGAyCLE9Ll3Ss0feZeVSxeMLX75Qc33pdaCBEvo3Q4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KZN7Rz5A; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=dgmdjjvQ; arc=pass smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="XZTCR6yo"
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-41c420d1460so220897fac.3
-        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 19:09:06 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KZN7Rz5A";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="dgmdjjvQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774490972;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SM+x8B+Pz15Gvc1EQP2Y8VvxinV8pQbKuNafLtpnPcE=;
+	b=KZN7Rz5Ax5DTS3CgZiamEURs2Nml1/jj20u18opqBXTS7o9LPXcGYDWA/6F5N38xxkJSLf
+	zEMsy6xhW4BzkdHFc2Lg9bXLCGjDAb1lte6QzQzua8Dibp3XQG/C83gZQE18ESkMkgyWxn
+	LnjMxuYtTXVkUI3rLZKijtSmgUQgXGo=
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
+ [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-624-08fG-fatP4iIcjn8jGVcPg-1; Wed, 25 Mar 2026 22:09:30 -0400
+X-MC-Unique: 08fG-fatP4iIcjn8jGVcPg-1
+X-Mimecast-MFC-AGG-ID: 08fG-fatP4iIcjn8jGVcPg_1774490969
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-354bc535546so457941a91.3
+        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 19:09:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774490969; cv=none;
+        d=google.com; s=arc-20240605;
+        b=hqiOFaN3qaOWa2kSqqaH6nnRzXrSCnAj4iaKmXuucQWV89sf4+wnBzKAz2oGPOAsnP
+         CKxCoRagtAL7OmrAy4ZJd83JVeC2ZgIiMYhvEqBrUxNJy6myc/1rZ76XOzIYCvCgb108
+         d7IB/ms0o7kg5EhuXwiHwNm+LviWHuOPOYQtPtoGF2Pt/AdNJ5B86v7lhFAuN1i7mL5N
+         pLukleFXzs0HjgKLmaTQ1kTlHIhwp35ATtF0HmR4i8oo5YoJgAq3lk3Orupu5nbmB/64
+         QkXbuX824cxlL5ZAUQEcUa6GqrzNFyDx90oka/77YSeObwqc9xmR5+zDglNc3p3ZVLSb
+         T1nw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=SM+x8B+Pz15Gvc1EQP2Y8VvxinV8pQbKuNafLtpnPcE=;
+        fh=Ja7CfbmvEW5yQhVA9nqfi/jO8bYL012hBwK/sd4v/x4=;
+        b=k6FEwFvNEELi45cqmh1xUtNFrdPq79WKXrhipqEaAqnEOInzZFls2/8oFOGS6/YT+1
+         XfMpfeOgjVQDmlr9N+Ps2ErfeSlXtGIDbAcLLW1k0ehroGydLQyv0+4xiIHbFgUK+ut1
+         Q4HikZTvrVdANA+2ZPpumfYnX3E5RZ+keDF7AQNoLpIKql02h6LUzF1LD/qic8YZcikn
+         CLhQtMQx1L66PdXU1sKzsUxEbZfsSooPYH98k9Gu0DZQR7S4Y8E5GaduMxNPVvxXkksM
+         wsqAHolFMxjHe99fHmuwrzrZaUkW6M7dRUiYnYyc2nFht73ayi4hJpZV5kUnryIugSfU
+         T6qw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1774490945; x=1775095745; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/JLU1gejQqZao14J8ooTXxU2npvtEHMcTdwtYoGa0cQ=;
-        b=XZTCR6yoF4SfzVzvKZi96HuQsADCXc86YUN/3/bW65y7VwizK4CAc1e9IvV7LMFZJv
-         bUOUl+oJlhIf3qQ5iN212G/8ZUv0KvXgjODEFbk4NM887waOUO8XaAVwp/C5LRfyUJAA
-         bHBHHsR6HinoAcaFI72tBtJ2r6YTTLNL+b0Q4g1ylvTgsxJdc2hODc5aVGlBDVvx5y/M
-         HpdiY9FF3txnJnQU4ncpVldUnHQGQTCVD90TcXagDkknxlMo13PAva7fuTcK8b8hzVWm
-         fUiuMyKAX8hmpNEbNN3I4YDAOnSEtEt80jnQ1Tl+ilsKKrJJPQkp52lIS013nuy4x8cc
-         wLLA==
+        d=redhat.com; s=google; t=1774490969; x=1775095769; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SM+x8B+Pz15Gvc1EQP2Y8VvxinV8pQbKuNafLtpnPcE=;
+        b=dgmdjjvQp7K+JooQx0xwwqgu1Ws+c1riVHbP90ERxHYNq3xGkT3BP3eIRV7uNMsxD6
+         dqAWUXhgrE5LJ3XL7Imgm8BXD1r4nPZ6cxWVi/Xhb4YK5QY2iRWEGgQNGOG5TEWYA0rw
+         84fGjY7n+U3XBujyQKrZj8OC9srsaVJdcy+ozWvHoAlXXOk1Q0M5u1XIfi983L1twujr
+         i9J9OfQWNA8uFIX2TBDnRtr9ipb3DHL/SpVbLMfluKshuY+1TrhtIbuhve/cRdyay39y
+         gGQCySXYdla/lYQB7lbjROw9AFcCcilnk4OmNBfiCLMOlHNeSNY+Nbace4fzH7Ls8V0w
+         wM6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774490945; x=1775095745;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/JLU1gejQqZao14J8ooTXxU2npvtEHMcTdwtYoGa0cQ=;
-        b=Q/E4ZJc9LpYa+pjeDnsiqsQEdjcuEqDEEmCtCbT4/yBVHmIFNhH62kzaA6z5NIq6TL
-         1LMocNuaAYvKmbggyFbYQa18LA5gJ/KTRM60m3Zl4hl05hLnNSrGCRwxweb0DwCnAmsD
-         /ZD6DU7zCapDQ0jjnFmADZHvQSIPxPZDSWGBnPFpgyV91Qo2okKcNb/yS6wmoEIn7y2a
-         KVQnmf6ql46etGawq/dyCf/g5HOSom/nvQchXASizQSpZgAXrnYbVqqgoOOVhsiMDhaT
-         bA0as1+BWfdEbz11tbPxTrvK3HCQTqni3RrRGs7OWEsMnqrgk9sM7pAxKA0zS+S024gK
-         xHOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX5JJrao5TKox2TOeVrBjVqC2BkbzEGVJzqQ0yF4qj7uYnZmsqCR3p4SXBa2V/fqdw4p/s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUIE7tMnXNU4Y7ZSLqu70h7lk7xYteDcWbl5Vvec+EKpMaMOiz
-	u/e8StGDUiXrAr8DLbSSadtvwpEiki7FJacYEc+VI5YYpXYu7XzsRFev76KGcATtUwxwQjM9Xqs
-	twEKB9AM=
-X-Gm-Gg: ATEYQzxfPBRq95iQ2QQcnsRG1bgIAV5+U9JuK7yaRjrTY5m1vfMZDunfYXsVFMRx/vE
-	/eXVrEt+x0f9lyssKRP15jSzQobzzaRCn+9cxSQk1m822LESD/26ctgXSxjYCW2MyLf1VEE06kh
-	h8KKc3+k1xRmYMED3pmMzOUq1vjTXWStgrNCAitjk1SNlNxsSQmjX7lZgkVOZYFVlRKbK9m9fx4
-	oXyz0zmUGxvQby8dx+fA3q9Ena6Q4+y++NF9RoMKe6LD6EzeLWu6yziWwpg/VwF5+14nCA2OUvS
-	+txvndN7QTopkpnJxO0R98EWqWBZzVo/OlxW6BGi2hdHQVXYGQ2pKkShAvUb+fqkzNBWDzb6aw5
-	fp/r8CpqjI+pJc3TVBQoXFy9AQdnYicDzHfRYVaz3WxNqapzyfcdbVt9xlOD7AfW6yva75rtRGa
-	YnUp5tAldbrIHaCgwnWEc9zz0Dz2/OltFDctbM6f68U2D+f0/oWjIKoWa2ORR2dVt4+jXO0mwrM
-	/WgY6XWSKBwnz0mc2zK
-X-Received: by 2002:a05:6870:a797:b0:40e:dcc9:c3a0 with SMTP id 586e51a60fabf-41ca6df1502mr3200041fac.17.1774490945480;
-        Wed, 25 Mar 2026 19:09:05 -0700 (PDT)
-Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-41cc7b3e55fsm1192963fac.14.2026.03.25.19.09.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Mar 2026 19:09:04 -0700 (PDT)
-Message-ID: <b7216cd5-68f4-4ab5-b1c8-b1c71f38fc00@kernel.dk>
-Date: Wed, 25 Mar 2026 20:09:03 -0600
+        d=1e100.net; s=20251104; t=1774490969; x=1775095769;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=SM+x8B+Pz15Gvc1EQP2Y8VvxinV8pQbKuNafLtpnPcE=;
+        b=NGdFYoGNxUewYw+lv9prCv9adALGm9n9Hxwb1AmBC02DgychQgFAGPZPqtf9wSUz32
+         tlk6x2fS13muy5dvCaRZc8cU2pJgg5/Ixf0cY98PtLBrGyhZIXuGAUMEX6NTmfgq/UZY
+         TRaEc5KgujqvEqoug18B3PwkQhUo8yWzwrYikF1RBCd9odO/prjy1vXL+UB8GOjQmroG
+         FUhEB52v/6+tlwA3II8m/WujnlZDk574U7B/NN62Rocj97DqJ34tdL5Jy/Nam/uPytYR
+         1tgRydKbAAlLzd6vR7j2t2LkFP+Gtd/1LisdIAzJGxclI2z3baRTLr0TuMah3gvDFeml
+         xp6g==
+X-Forwarded-Encrypted: i=1; AJvYcCUG85LQ2ikzA2SV9AVRLmERTIS02Iv/XZLGxmglaOKzy968ys/pgrCKF0sJ/vhO9G0pS5k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzVfLKlWYHNFbo8xGoAaWQrMO44q5Xwml0cUtFHv7v3Z9g70T0Q
+	6mOVlRJkTBw9g0RY8p8fEK/AbwbEAugZ1hc8v837crbm3eD30X2bNK+kyYu82pgtpLcrvGWwJmj
+	rgsRkpL3I9YcBczYfAIN+aSzh0fhgGP6ZhMwl6OV328S4EB80YlAcLuQJ3mEy7vb3jTVIBA0Qdx
+	oDFTec8osOdCNzt7zVwVBRxqrWD4dO
+X-Gm-Gg: ATEYQzwjxihy5qP7+JNSrMKtOEhD2KdlbafbyCsOZMpNhcq2o4so4lipYBByesg9QYR
+	XsrAhquC1MZVgsmiI/QUkNH9L3PtQkVqEucXVZoHOVlZnO/2F8Jf3nqZ31eCQIFanMHzBs/3qja
+	yh7bnywhhvTUOyhMMvbndIEFDs0g5jwoNo3+V8A+3aHE6/dtsy5RV4ZU0fSgdHOof04dwHLwvgG
+	3ZS
+X-Received: by 2002:a05:6a20:3d1c:b0:398:8546:c3fc with SMTP id adf61e73a8af0-39c4ab516d8mr6008499637.7.1774490969234;
+        Wed, 25 Mar 2026 19:09:29 -0700 (PDT)
+X-Received: by 2002:a05:6a20:3d1c:b0:398:8546:c3fc with SMTP id
+ adf61e73a8af0-39c4ab516d8mr6008444637.7.1774490968666; Wed, 25 Mar 2026
+ 19:09:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V3 05/12] io_uring: bpf: extend io_uring with bpf
- struct_ops
-To: Ming Lei <ming.lei@redhat.com>, io-uring@vger.kernel.org
-Cc: Caleb Sander Mateos <csander@purestorage.com>,
- Akilesh Kailash <akailash@google.com>, bpf@vger.kernel.org,
- Xiao Ni <xni@redhat.com>, Alexei Starovoitov <ast@kernel.org>
-References: <20260324163753.1900977-1-ming.lei@redhat.com>
- <20260324163753.1900977-6-ming.lei@redhat.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20260324163753.1900977-6-ming.lei@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <f4caa9be9e5addae7851c012cab0a733be7f0974.1774365273.git.mst@redhat.com>
+In-Reply-To: <f4caa9be9e5addae7851c012cab0a733be7f0974.1774365273.git.mst@redhat.com>
+From: Jason Wang <jasowang@redhat.com>
+Date: Thu, 26 Mar 2026 10:09:17 +0800
+X-Gm-Features: AQROBzAQPVawV1gSLClGfkluwZR06MG28vS66UgSXN-aCJ_PcJcLGWhQhc3M-Xc
+Message-ID: <CACGkMEt146_eZCuTt3qP02sjFXPMHb-1s_TcMnOBXox5k87Ugw@mail.gmail.com>
+Subject: Re: [PATCH net-next] virtio_net: sync RX buffer before reading the header
+To: "Michael S. Tsirkin" <mst@redhat.com>
+Cc: linux-kernel@vger.kernel.org, Omar Elghoul <oelghoul@linux.ibm.com>, 
+	Srikanth Aithal <sraithal@amd.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+	=?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Vishwanath Seshagiri <vishs@meta.com>, netdev@vger.kernel.org, 
+	virtualization@lists.linux.dev, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/24/26 10:37 AM, Ming Lei wrote:
->  int io_uring_bpf_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
->  {
-> +	struct uring_bpf_data *data = io_kiocb_to_cmd(req, struct uring_bpf_data);
-> +	u32 opf = READ_ONCE(sqe->bpf_op_flags);
-> +	unsigned char bpf_op = uring_bpf_get_op(opf);
-> +	const struct uring_bpf_ops *ops;
-> +
-> +	if (unlikely(!(req->ctx->flags & IORING_SETUP_BPF_EXT)))
-> +		goto fail;
-> +
-> +	if (bpf_op >= IO_RING_MAX_BPF_OPS)
-> +		return -EINVAL;
-> +
-> +	ops = req->ctx->bpf_ext_ops[bpf_op].ops;
-> +	data->opf = opf;
-> +	data->ops = ops;
-> +	if (ops && ops->prep_fn)
-> +		return ops->prep_fn(data, sqe);
-> +fail:
->  	return -EOPNOTSUPP;
->  }
+On Tue, Mar 24, 2026 at 11:16=E2=80=AFPM Michael S. Tsirkin <mst@redhat.com=
+> wrote:
+>
+> receive_buf() reads the virtio header through buf before
+> page_pool_dma_sync_for_cpu() runs in receive_small() or
+> receive_mergeable(). The header buffer is thus unsynchronized at the
+> point where flags and, for mergeable buffers, num_buffers are consumed.
+>
+> Omar Elghoul reported that on s390x Secure Execution this showed up as
+> greatly reduced virtio-net performance together with "bad gso" and
+> "bad csum" messages in dmesg. This is because with SE sync actually
+> copies data, so the header is uninitialized.
+>
+> Move the sync into receive_buf() so the
+> header is synchronized before any access through buf.
+>
+> Tool use: Cursor with GPT-5.4 drafted the initial code move from prompt:
+> "in drivers/net/virtio_net.c, move page_pool_dma_sync_for_cpu on receive
+> path to before memory is accessed through buf".
+> The result and the commit log were reviewed and edited manually.
+>
+> Fixes: 168b61da6871 ("virtio_net: add page_pool support for buffer alloca=
+tion")
+> Reported-by: Omar Elghoul <oelghoul@linux.ibm.com>
+> Tested-by: Srikanth Aithal <sraithal@amd.com>
+> Tested-by: Omar Elghoul <oelghoul@linux.ibm.com>
+> Link: https://lore.kernel.org/r/20260323150136.14452-1-oelghoul@linux.ibm=
+.com
+> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
 
-Any early exit should ensure 'data' is sane, so that the cleanup doesn't
-potentially touch uninitialized crap. This is something that has bit us
-in the past. Not an issue for this patch that adds the code, but it will
-be once the next patch is applied. Better to clear ->opf/ops here
-upfront, so that we never leave this function without 'data' being fully
-initialized.
+Acked-by: Jason Wang <jasowang@redhat.com>
 
--- 
-Jens Axboe
+Thanks
+
