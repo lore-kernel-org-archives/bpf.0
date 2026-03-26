@@ -1,72 +1,71 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91908DF59
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 03:46:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CADA39B963
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 04:25:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774496818; cv=none; b=jFJZTTHIs2n5MRl8TUrHPP31c1IOx7Kud7T2x/ZHYBZUx1vigqVhnZ8ZXkrUbpYJ4zaSAc+sNx8lPmv7p/NsPeU+4+nRzrWwkCmclTIjXPoO8SO4BWDaySm/sowaFjKKw9gC9I/Zi7092ZBwX/cbYiWGxR4sF6Dkl20XvIBlWXc=
+	t=1774499146; cv=none; b=kIb+MQImfgLBhV9DBeZ1cfme/TpBtBGycOQyaanmAQx5mDUU89gM/Jg6mZV/E87nTsOE5jUAqHkF2wzfT3Q+bi3aUcByzbxs6HfUyPEOUXsnvXcwsujhIr445eBpV3BwPdWau5GMZ9gj+YizUErhC2vzoYgL3lhvQ5YKKlkaQMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774496818; c=relaxed/simple;
-	bh=TpXIOE0zKCcg2/dKXEK2isrj55QtWa+ucN7wcNDcoS0=;
+	s=arc-20240116; t=1774499146; c=relaxed/simple;
+	bh=0EQ5A1y7IduXMFUSvbTcMnliNRqhvOxBbaothkwbgvc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Fx3J+8ISMf2kJ8ByAYgFF9VY7eq6rr3VAgC07DymIpwVj/tB8BnX3xT5GFaEvnj3MP9su0eNeqeCG8iIdx0S7eoIqrjiNQV4GMMzTgqIJ0c63VSlfmcb2cCALh2DLl6TY8Z+lcSs+UzYkCsUddsDUq5DpgencozRY+NPOIfbbBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=gsdHBl0p; arc=none smtp.client-ip=209.85.128.48
+	 Content-Type:Content-Disposition:In-Reply-To; b=rolZq1rJKs1iQhmtheDG40VQm/tvo5tAgR0i6Af8OY7H/NWD4NwiegtXxcyVTadSsK2amChjb3WJRPP7030z037c0hB8IKtFIR3pU/2HMX5Zl3Owl2bhp/A8T9wPNl4FRZF/gFgWgjImKQkI+qatihf4h7Kit22cyC2QRHokhtQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ePBy21MR; arc=none smtp.client-ip=209.85.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="gsdHBl0p"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-482f454be5bso14495465e9.0
-        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 20:46:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ePBy21MR"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-486fba7ce4cso5047065e9.3
+        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 21:25:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1774496815; x=1775101615; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1774499143; x=1775103943; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rx/hM9tEY2bKaC+3a39zTrnXDe9lSCuvs2OMj9HI3+8=;
-        b=gsdHBl0p+VZQRTNpJXao3xsdWvwiTSupW4I71bMbpTHh4xnvuVQNAs8r62Ev/i9JN2
-         mSIx76p75ogPHF+iCJ/whAxLubWMaWmRtJqWIlQac9UyNcXLyLEdFoJQFvi/JlueHqjD
-         UotVeP+l+qkHovue0K1osYGGY11jvkC3LumQ3RqFlCRP6V4exKIeV2JUl7LbhF8us7lD
-         fvbkEjM/a8qMOu0JD2g5IgSDEWKbHnfvlfoqIUpi0wtozsKzPEqhjG4lJdw3dwEbKZz9
-         M77VXOZw8GaebCSTCaEROFY0GTkbDPvHWMPq91crx7z4jBdtrhX/f6NMU07yXOJ6T7H1
-         ZltQ==
+        bh=F6QOYTpdTlEIxoS/jtRGK2shguUNebLSVH602cSGio8=;
+        b=ePBy21MRuP64r2dSByFS5M6jdRb9SLmPm1LS8cP+fNNwj6PmZpI1JdwmWSv9eKQxyl
+         37rg3NbDrspUD/1mXWqPyIQFIRAJJcJjIIxObU1Y9CRkJRQpNS0jW5uPpRQgIgMEQB+h
+         VajTFoQFHwtMXDqUNNq8+QQ09lQHkGsSdkTCzofklMqDVqN+P9xhmrLFD37GA0UMH2d1
+         MvKY7+oiPHj80WNl45n66eUxAzeHbcxJh3b1VGnzZ4pt3qvkqzt/HVNGjX/uD0dK3X7J
+         84FjX9Omxa0kZxsEMJgo6npFgyLhFahcwq1hAdj/dRMqpED96irXbb7NMmDGQKAkFd6P
+         HUzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774496815; x=1775101615;
+        d=1e100.net; s=20251104; t=1774499143; x=1775103943;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rx/hM9tEY2bKaC+3a39zTrnXDe9lSCuvs2OMj9HI3+8=;
-        b=BS6R/sXFcn0oeudymbUR+vnyTVKjDpQwgA3whwvvC6Nxjm2/Ifh6mN8+jZ2BzsjyQI
-         oZfnWBlqX9fyPWlb7uEAq3umH6aAD+uhzT3i0XwiDOsvXRnBZHnGIBj/ub8k4Q/ZpRW9
-         xp8vgaEbuTywKQAtrgzTPU8XaEs4RpH+XXWiVW7NIMAT3w0+WR2P+13him4Pqmm+ywvx
-         QQNroqLuBxosh5guPvppwE/tTGn4RAd3Lj4pHwYH2p6E1rVMVikJKRHf29r39MqPhwb2
-         PzrTK5BWD4ILHTHbBvCEpdR/rVZcijQrPBrx5gVnVyPllpqXiBLdGrGEPaQVb2PM1JZj
-         sKdQ==
-X-Gm-Message-State: AOJu0YzU3L1rTsR9XrMdSW1KKMrhio82SrcijOuiZ6ZMFln2avmKf/CM
-	r2dK9J0xWniIMGswf7RkfLFzWZfP7ScCdNjJc/N453sCOH7LIHOHY2976W0yBiKit2s=
-X-Gm-Gg: ATEYQzzY3/Aq+EAe8gc51TKS5zGbVJbVfTxe3Bctk73M9kNwfdk5mch8ChWxIrbgvTW
-	EDsMnbzqOBydbS/pjW10f3AndQPvNRZmsXY7WD4q/Yz2FHbhnPesCxWqQ2RafSAICZnXG5Y5fxz
-	XajSC/9+UMqMvZpESyfC7qr6I7te0XOsaeph9f1JiqU45RdTKLYwOxufFM2d+ByyvtyvMf4OVRj
-	5PXQLqieJFUAnxlddZu8XzOfzXqsMfGC0pQBXHzpcsFh4H2Y74cH8fvgBGo0QWJtDNPw2mQIDl1
-	2Yg3LHDAGq8kl3LpgGjMinn9JUaOetpresW2CgaCDakdwGHayvwQsFFAQ8/uJorXGRd8wY8181J
-	/VhqY1o3AB4RmR1xajCHRSTf/amlN99c7vPQowyUe66r7EUw1Kr/WvtYsfX50ZnFORKef1ndSQc
-	KEhE4Ha68ADqL3/S+6ISY=
-X-Received: by 2002:a05:600c:2d82:b0:487:467:49e9 with SMTP id 5b1f17b1804b1-48722b92fcfmr418905e9.7.1774496814828;
-        Wed, 25 Mar 2026 20:46:54 -0700 (PDT)
+        bh=F6QOYTpdTlEIxoS/jtRGK2shguUNebLSVH602cSGio8=;
+        b=B8k9ltvUH64fRl3xrqwVR19LxQvubj+2zi0JW4e22cERt8bfmX9WtL9rDPXCeqcs/x
+         AWqk7VwwbKpC1RqmM/dw50/ZodJDTiIbhppIYD5IzB0FITkFPtj9pQjWyHbrOP+qpMh3
+         qv+EjAjqVptj/iPqOI5L3TLu6LM56CpWgxpysUbYopjyc8Ih4lEE45JdMuS9flomk2Yt
+         +VJlDQb9I0aOuHsHZgH7aiWQZU+d2WHg5EvQmks61Zocp69g0E8z/0bXe3FQlPM/qetB
+         X0lggXXfx7qnlbKY7NJnk4k83UWiVCzZ+CWWZ6fO8ZPqpG2ZfsukyzKq2Q7g6J4L5vK6
+         Usdw==
+X-Gm-Message-State: AOJu0YyBiWtcuCVto8Kmw0IbQno2ew9R9Yf9iAOfCT2UmaFIwDMhkibU
+	gvhhtScyLRFuf8lO74a8efaq78bW/hxl8A4wgRUDW1KlbTIHBjofdKXIntFA1PUJfYw=
+X-Gm-Gg: ATEYQzwrEH2r28ZSEA9geFsODrpLP/lIkTlzY3XoACbUQwd7CQrfX8SGa22x6sE67+u
+	6XLd4Z8xfopBNuTeCoC/FBY1OmBIOKqCN3z2sAuSGMQ0U2GVxdgbYQLBZUJ8pBliUmDINDKt92S
+	q8rBaLtc98ZtF0yUGUh8pm3fG+4N8YaYynytMtQ+Tm/iNtlng7m1udzo5skat7Ikf6SOX0JS0Hv
+	1mFBb+Kv/S/24nbxpNhJpF2mOy+n7u2HXVYvn0T/Hh5pXy+9MU22Qsoj/rzDwiuvRJf5NTTK/3o
+	QTQRrxUyYmJ+V8Liu9PPFcJwy/HR1huSkDyqMHvLjXdjyxsRpNRhfSCppwVMu1X42gBzz2w2PEf
+	P8xI0zqDJLZOulEvu3rDKRh92KPIW3nWdytRvSYQLPaRjzAn4h14lYV9tzlh/czaq40SXEtMUN9
+	2uLFdFKBGYHfo5PTaUQnI=
+X-Received: by 2002:a05:600c:3d90:b0:485:2a4b:7bc3 with SMTP id 5b1f17b1804b1-48715fc38f3mr86290975e9.4.1774499143380;
+        Wed, 25 Mar 2026 21:25:43 -0700 (PDT)
 Received: from u94a ([2401:e180:8df5:367c:7729:d191:ce82:e062])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35c22d09573sm9229a91.16.2026.03.25.20.46.51
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76739345b2sm797239a12.17.2026.03.25.21.25.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Mar 2026 20:46:53 -0700 (PDT)
-Date: Thu, 26 Mar 2026 11:46:47 +0800
+        Wed, 25 Mar 2026 21:25:42 -0700 (PDT)
+Date: Thu, 26 Mar 2026 12:25:35 +0800
 From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
 To: Eduard Zingerman <eddyz87@gmail.com>
 Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
 	daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com, 
 	yonghong.song@linux.dev, paul.chaignon@gmail.com, harishankar.vishwanathan@gmail.com
-Subject: Re: [PATCH RFC bpf-next v1 1/4] bpf: representation and basic
- operations on circular numbers
-Message-ID: <pptqk4ehfb4zptc6ubd7h7rrup72xkaqzgkdguf25iunp4j4ot@n3ddkhculaok>
+Subject: Re: [PATCH RFC bpf-next 0/4] bpf: implement __reg_deduce_bounds()
+ using wrapped intervals
+Message-ID: <qfwof7nyxz2amrzbjxolhc7m2nvzzqpnwglafk4tuetdyuiixu@tlbntm5jgswg>
 References: <20260318-cnum-sync-bounds-v1-0-1f2e455ea711@gmail.com>
- <20260318-cnum-sync-bounds-v1-1-1f2e455ea711@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -75,48 +74,84 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260318-cnum-sync-bounds-v1-1-1f2e455ea711@gmail.com>
+In-Reply-To: <20260318-cnum-sync-bounds-v1-0-1f2e455ea711@gmail.com>
 
-On Wed, Mar 18, 2026 at 09:28:58AM -0700, Eduard Zingerman wrote:
-...
-> + * cnum32: a circular number.
-> + * A unified representation for signed and unsigned ranges.
-> + *
-> + * Assume that a 32-bit range is a circle, with 0 being in the 12 o'clock
-> + * position, numbers placed sequentially in clockwise order and U32_MAX
-> + * in the 11 o'clock position. Signed values map onto the same circle:
-> + * S32_MAX sits at 5 o'clock, S32_MIN sits at 6 o'clock (opposite 0),
-> + * negative values occupy the left half and positive values the right half.
-> + *
-> + * @cnum32 represents an arc on this circle drawn clockwise.
-> + * @base corresponds to the first value of the range.
-> + * @size corresponds to the number of integers in the range excluding @base.
-> + * (The @base is excluded to avoid integer overflow when representing the full
-> + *  0..U32_MAX range, which corresponds to 2^32, which can't be stored in u32).
-> + *
-> + * For example: {U32_MAX, 1} corresponds to signed range [-1, 0],
-> + *              {S32_MAX, 1} corresponds to unsigned range [S32_MAX, S32_MIN].
-> + */
-> +struct cnum32 {
-> +	u32 base;
-> +	u32 size;
-> +};
+On Wed, Mar 18, 2026 at 09:28:57AM -0700, Eduard Zingerman wrote:
+> Use wrapped intervals representation [1] to express range-based
+> deductions. Such representation allows to express these deductions in
+> a more mathematically rigorous way:
+> - {32,64}-bit signed -> unsigned, unsigned -> signed deduction infers
+>   improved bounds from an intersection of signed and unsigned arcs.
+> - 32-bit -> 64-bit and 32-bit -> 64 bit deduction infer improved
+>   bounds from projections of 32-bit arcs onto 64-bit space and
+>   vice-versa.
+> 
+> Reformulating 32-bit -> 64-bit deduction in such terms allowed to find
+> two cases currently not handled by deduce_bounds_64_from_32().
+> See patch #3 for details.
+> 
+> This RFC argues that wrapped interval based implementation for
+> __reg_deduce_bounds() is easier to understand and maintain.
+> An alternative to this RFC would be to update
+> deduce_bounds_64_from_32() in a same way patch #3 modifies
+> reg_bounds.c selftest, in order to handle newly identified cases.
 
-Minor note, memory are vague, but despite having 'size' available seems
-to make some calculation easier, I end up finding using 'start' and
-'end'[1] more intuitive and feel to me less indirection, as well as
-being closer to existing implementation. E.g.
+I think introducing wrapper interval for purpose of improving &
+simplification of __reg_deduce_bounds() alone might not be enough. That
+said, I still want to push wrapper interval integration forward, but
+that will be addressed in a separate follow-up email.
 
-...
-> +/* True if this cnum represents two signed ranges. */
-> +static inline bool FN(srange_overflow)(struct cnum_t cnum)
-> +{
-> +	return FN(contains)(cnum, (ut)ST_MAX) && FN(contains)(cnum, (ut)ST_MIN);
+If I understand it right, the newly identified case in patch #4 is not
+something we encounter from compiler-generated BPF program (yet), and
+thus not something that is needed currently, either this or the
+alternative to update deduce_bounds_64_from_32() in a same way patch #3.
 
-To check overflow in signed ranges, just do `(sT)end < (sT)start`, which
-should be more familiar to most.
+On the other hand, I do like the much cleaner code as well as better
+modularity for reuse, and being more mistake-proof.
 
-1: https://lore.kernel.org/bpf/20231108054611.19531-2-shung-hsi.yu@suse.com/
+For a more objective metric, I gauged at the difference in terms of
+cognitive complexity (which penalize nested conditional more compared to
+cyclomatic complexity) through clang-tidy, and do find supporting
+evidence:
 
-> +}
+  Before this patchset, congitive complexity is 88
+
+    'deduce_bounds_32_from_64' has cognitive complexity of 42
+    'deduce_bounds_32_from_32' has cognitive complexity of 20
+    'deduce_bounds_64_from_64' has cognitive complexity of 20
+    'deduce_bounds_64_from_32' has cognitive complexity of 6
+
+  After this patchset, cognitive complexity is 49
+
+    'cnum32_from_cnum64' has cognitive complexity of 2
+    'cnum64_cnum32_intersect' has cognitive complexity of 13
+    'cnumT_umin' has cognitive complexity of 1
+    'cnumT_srange_overflow' has cognitive complexity of 1
+    'cnumT_intersect' has cognitive complexity of 17
+    'cnum_update_reg32_bounds' has cognitive complexity of 4
+    'cnum_update_reg64_bounds' has cognitive complexity of 4
+    'deduce_bounds_32_from_64' has cognitive complexity of 1
+    'deduce_bounds_32_from_32' has cognitive complexity of 1
+    'deduce_bounds_64_from_64' has cognitive complexity of 1
+    'deduce_bounds_64_from_32' has cognitive complexity of 4
+
+So there is indeed a net reduction of 41 (~46%) in terms of complexity
+score. Supporting the easier to maintain claim, too.
+
+That said, we do pay some price as cnum is more mind bending and not as
+straightforward to grasp. Cognitive complexity cannot factor in the
+background knowledge required.
+
+I do think there are more reason to push cnum/wrapped interval forward
+beyond using it __reg_deduce_bounds though. Will try to write a
+follow-up to this email.
+
+> [1] https://jorgenavas.github.io/papers/ACM-TOPLAS-wrapped.pdf
+> 
+> ---
+> Eduard Zingerman (4):
+>       bpf: representation and basic operations on circular numbers
+>       bpf: cnum for 32->32, 64->64, 64->32 deductions in reg_bounds_sync
+>       bpf: cnum 32->64 deductions in reg_bounds_sync
+>       selftests/bpf: new cases handled by 32->64 range refinements
 ...
