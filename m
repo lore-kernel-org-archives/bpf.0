@@ -1,190 +1,223 @@
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF658405AA2
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 15:56:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A2B44014B8
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 15:57:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774540610; cv=pass; b=ZCzxrJUxMp7b50Zw+YmGSlkYlF9apGH18vFi4v3tnYZuYjzrDOoMfBU9QKrEcr/ocvSvGa3no67z/T4drBrsWnZoK/1aVBLDw3EyrnrpJ+3NWcmmCf0+xCNLgv+VKdtj4FcLbf2ypjKbD84sOOJwv7rMo5BpKDITzR8RYnRKPkQ=
+	t=1774540676; cv=pass; b=WZmw7Y/UmhPcZ1DVsmtbrWnuTep8UDMHtwmRR/j+eM1uot3UuTa4PbOPcWbzPQbEmbK2OGWLqC9RWckSx9SkvlJ1iT+sM3BKEB4DMPJYKWKbCb1mm12m2qd62udmrYxgYHBXDnomqGfkb31HtNEWmIuPDUgHkozJMWCHYbDvGhw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774540610; c=relaxed/simple;
-	bh=P+1TFgcm8u6LvnWwQZL0iG9ymsVorf/E55NWzFlf/Q0=;
+	s=arc-20240116; t=1774540676; c=relaxed/simple;
+	bh=Efhur1PwShVcD/aN0lMTGKUH7QN80Ncns8BdFf1uL6Q=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PN+FLNZ8FW88vBocibJANJpCf+dUYNh//P3kBUFcH7LFlC3HZYFNQB+ZnGfKFiWJj8Ax/n8Jitve0aAXCQBc+0WHBZCILvdrmOOcoF0dePw8+fVy7ZOsrnxOK5We5/DUl4UvBu8jUIF5Pee4uLML2O15cyr5z+k3XczyFBJyIMI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HuQUb4h3; arc=pass smtp.client-ip=209.85.128.176
+	 To:Cc:Content-Type; b=VpGXyy4FCZtAmPJOmk6/bCAxDeN0V92BaXjo2pGrgFj3txhgGMfthRJJv93IbYZLDZSB8tN+p2DQSUt3j3fOYEgzheUyoaIhvTloxfcpuV+GV5RUcWFGX3wQpU80Bw10LdWk61OfFfQzLBa0UcDYRJ7XtPpB/JQwY26Fmqs/tQM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qfWQ49D8; arc=pass smtp.client-ip=209.85.208.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HuQUb4h3"
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-79a535e7c00so12099357b3.3
-        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 08:56:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774540605; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qfWQ49D8"
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-66abcbae8a2so990363a12.3
+        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 08:57:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774540673; cv=none;
         d=google.com; s=arc-20240605;
-        b=EJPp1Cf8WsDNz1+Rd5vw8+NNiF0Nu8ACaeK4F1kbig+6N//GxQN0jsGb9dOrwgxE4G
-         gxlpfll+7aNzer5nad+tn4dSLGrPDrIjPnhDBgtt2pw279k9MTX2wvvQzIZ22IwmacRf
-         VqYtQFakFnmpC5foTsVr6ndWpZaVtVYMEhKpb5jLgjF4VjWlAfWuxRezlGrr5rSSMaZh
-         swR566FnhmBh7vLjzEn1jdTW9dN4slFQRG2CixM5aopE/vpZE9VOFfpKMlQiEAUDBaX4
-         MGxfIFO5fRD9oRMq7lz04pfGzbc5VSJbJ1tpu/AjdPI15wTHVvAG68cYHBWgMjRk4vQ/
-         IMOw==
+        b=aDqZDxylLOYRrYcgIz2fLBEeO4wtZ+a9YcyhhEA4lo+cSY5x1IawUxMApnDS35394S
+         s5KRPQG190bdYSimnf0MZbSGUk26grsDQtpgUcZ2U8TSI1WWUlg67h7eyIMz2WaD6NSd
+         dvOV6oq2OfSqJ70LMOTkpx4caszlKAGTJhl7i5xc81Po5CZ5Y0n099wE97MFB+tRDGjX
+         f1BP5jCIgFCN6vYSLkZO+4JdFZ9WgF4rJvrKTlhlc4R8YAM0cgrGaQ5U9mkSHmaO/K4I
+         H0WNQlOvMehkpiEgAu0QD3IeViPBr0a819nQYxez7nt8pNkLLaFllUOm76jMwD0+LPWs
+         dsgA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=iDBJ7sCgWzMhFqtmYLgGxuVtDEt5mT2n6dUSB1UNQyg=;
-        fh=IhjkrtoTOZvYY1xPm9z5IEwH00wCCn41nAjOgwWQPHo=;
-        b=EMcdU4zdDDIER6FoekOL/dw/7g8cQzNKbJC6VD9VEuWnwc6K+bLI7PoeGItVe0iSD0
-         y8G/JXlkGcDA1RNqa/dZwevhnzp0OmvOaxlwqqDcoPIlICCg7dmdSNR5wO43gFzY6zvR
-         utShYkx3q5TP215PyIc4Vgg4j/a+bux9wWgYdkLrBUilck69xHKlxip2xlOk6vR5aAag
-         F/WT3qR10XCmlwKSsgdK8RiypQcGDsTdJL/0QgIL/RvyLtDlGr3nZJ0LoLfeJ1WlOlhF
-         Nl9bX1d+OiI62zZFrGhzhqM2eAiibSq1hvot49KPVhp3WoHyEWPUtTRhNNe/EUzLwx4T
-         Xg/w==;
+        bh=FBRCtRKDJQZI+rc1isgeuA8oOX6FoZCivZKEfZOwGac=;
+        fh=RZ1rmZsavDUtZTnQfqdRL3/KI32yiiVtN64kO9/i8G4=;
+        b=lX8IjoQJrSqJXuCLkFIxqKnj80wYjKkCaIW58LRD+FqczjKS2jcL6anCFTu1iHxLyv
+         tebtEWpWXUOQBCVYxuUYTMVzekqRLRHzdUqsldE3ZWeWy1bAZzYX7Fi50006S1RPXuEB
+         4pyVCZyaaZTfJUZ/j8LL0+FvT9ODjljFI39KAyJxc2OlUNJ+wJuL9UViY9BsSrnY+eC2
+         m3qe9D5FR2fBEJXAVXBWj4audclYQOo1yXqbyeGwuRdPKMTay6taRNPDWfJ7n1F5LNht
+         mus9OTTAYtK9LFYT+OEMRD69Z7GC8qxcnwctr2mV0DBpmxUoy4ZD0avpHbE+RPTwdvNk
+         Tcmg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774540605; x=1775145405; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774540673; x=1775145473; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iDBJ7sCgWzMhFqtmYLgGxuVtDEt5mT2n6dUSB1UNQyg=;
-        b=HuQUb4h31HPiw5iN+j9gfj1YTjEkiCuBLQbzmzAE/Nw0eQnuLb6fcdwRd+g7M3z/XW
-         93h2alwAWxLvwBxN/Jkig+GSeDmMbwmbL7UflLyV99l+ksFMnXRxKPwY08Nm+ft/Jowd
-         4rudsCFo7woOAKfNW8UMocJLlBwxwy4xC4SFMP/fSeI7InAVptnzrptyPRJJaIVuVgrY
-         0CERYjZunKjF3aKxPAHrBs9U8p+BrgmgQXG65/gYU3zOrfw2sAuZ8mVjKf+JFFQKhKIU
-         4rjDreQgEYmafAIWlA53mpKmsJAbbtXobhzHcz69ohbJQysS4YrmiFGOkcO3U4ueP8KX
-         CC0A==
+        bh=FBRCtRKDJQZI+rc1isgeuA8oOX6FoZCivZKEfZOwGac=;
+        b=qfWQ49D8eOoIp3fZbQY1y66ziFjM2NwZHFsWt/Wd07bwm9YiCc7cojk70dz43KYMvB
+         0roTZXcj1D9xKh7ZrcglaERF3vAdc1gycdZ6eR2EcsHWG/PVmjyqx9y1gISzZdyylMsq
+         nMdI8yZykWwx1ujnbWB04c3cflRegN3B5ExsVuducPbiB+YMCHICZAYnjxDA7OhX6eMs
+         OyCvPtVUnk6nD5gxlqJsHpCIAXui/hU4rzRbdMpX4dThG3yYLxv9qzVQLImEyJDpoy3f
+         x3RmD7A2M+kqMHEBPHkNENYFxd3A/fc8iKWLDGpT7cl2/inXfFxUiWgafwphk8NIAYq+
+         HFLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774540605; x=1775145405;
+        d=1e100.net; s=20251104; t=1774540673; x=1775145473;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=iDBJ7sCgWzMhFqtmYLgGxuVtDEt5mT2n6dUSB1UNQyg=;
-        b=frQVFp5ekh5PI6rqDkAD8T64kpnn/tmkdkEUxm2w2UdnM3PpNChTeYGSCkpV7YAabr
-         VTiY/gj2kuR1G4bzj33xwPwfruWF25JHIyLpioiEXBVrAeZokr51bFepEDuQ4XU7IqOA
-         Sn4EIo3dYO2BfnxudneWFQ9ckSnjOU0yotvdgacHfNlBUaPZc+3TzF3syFVjOokFPKDC
-         +bKhqVco8DGs76YHePsCNi5LD6Y7o2WfvFuAweToPnoEqIs9+N8Sym/B45mbZvK0sTgi
-         JmUz716FX4K6LU8CV32/h6m4qh+jBM47QsYgBv7fTbqrPN9YuXAems8E/5YJbjPgfXu6
-         RX+Q==
-X-Gm-Message-State: AOJu0YzHVozQEc5melZmoLnKc0+wYlo4yRny9hmzVk/voraFMM8ylVuh
-	k9Wy5ixuPYYczBL8d7+PYgzNJ36jhhpyqmMxP6K8zq/3dAWzVEU5AgCv1Chk0KHrMQWTCqD3WD8
-	PZ2GxgzBl8vQQpWawj+OmTsMWKxez+cY=
-X-Gm-Gg: ATEYQzz1Kxv/NdENOWRT6nk5FWikGo6xPrsYGk+hLRDdr2HeSN5+BD1/L8sxjiHQ9uR
-	RcTnNaPXYxiFwczhReVo+FbNsf8Wk1EVpz12kOeZMfc3pPmmOl8D67FVkWf7t5VEtBPw+Dlb6dZ
-	mhBk24pjgDicNjzg/8jdBWH+uh3EJfqC0vlwCcVh8t4EYEMZLd9d4d9clC+CWfrsQRQZWJBFz0N
-	/gz6mz+ShMJ9n/m+3zTNKrbN11LJsmMGL2+FssMFzbMhQWysIM1hO/dgwMW+r7sYTM8kCq8uuSC
-	bgASa4s=
-X-Received: by 2002:a05:690c:39b:b0:79a:702b:4ecc with SMTP id
- 00721157ae682-79acf6f60f2mr80089467b3.55.1774540605288; Thu, 26 Mar 2026
- 08:56:45 -0700 (PDT)
+        bh=FBRCtRKDJQZI+rc1isgeuA8oOX6FoZCivZKEfZOwGac=;
+        b=fVX3GsVPkBA42qJaoPGPn3BLZbTjnPYyMDnrHqe1odSoEm9CVONRrKyeVlWTUKwYmn
+         LMe+2GPtzhOCa4Ozb7cViunV/a/KGaHUchTysaTlXBc12TyOLXVT/YtnxRfsVY8k4RMF
+         0Z64MICIL7xTWUsB67756c96fGYIbuTKQQpLqEVWvFY4Rc1ZWO75vkA0cJ5MIv2SQIiL
+         hpbUe0mdccnswsImeKJ+v/wcCLNk2Yv0yBUrPw6Xj+6k/mD3OOcrmB3UUxVBcvgn3G61
+         r1dKFetCk2DhZfy/oKU16ukvw5ozlqnKh3FFYqvhrrogfnF6nh04Lw7pC1eHFi1p7OQk
+         hHeg==
+X-Forwarded-Encrypted: i=1; AJvYcCUOWWmqTIYqpVoMLrryNm4cxFwJ+PywLdFPrOpoGM7KtoWxXS9q2kiuHwvxdVcXCa0vj6g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwA8TGFn+1lhi3iqCzVcDiBnnwttYbImlGZVSEo5sXPowjVVzwQ
+	oZgioLYCds2ITihgiCfACB2VMryEt8tQ+WouWXtaGc8q81lHZtpdfyiiK4rQJlsSKm2tnCPFHuE
+	jBzxnx0kiy7KsjHe2aEsc7++sntKTzI0=
+X-Gm-Gg: ATEYQzyNzQGwIle+QGO5HJVK43Ilem7RHzxT0oKI9zpuHIjjF8DxKNKWuIBAREHL7VM
+	/jY0mS9YYQWlsw1J+sXzwnHezIEc5h3q/+8xm+WuS8VVSH8+2/ogC516DMYK04Wa4LaCfmxNlcg
+	cnIqQB4GggfFtpgbeKWmT3NoqL0b6Wuvr4FQYG8jarTcT8uFFJKUP3nGUJ2ozwAwpTU/hSrrAsu
+	aJNQlhS1DWopVIbPBq9H9Aryp9TuFEBSirxz31qLPBTxM8aKBMngYSupZ5+XmAGjN6BzyiKRr2F
+	/oh2P8NS81BfU6XmuJTVjJcGINbgEUNMaw==
+X-Received: by 2002:a05:6402:4605:b0:664:68fb:bcc6 with SMTP id
+ 4fb4d7f45d1cf-66a8263c034mr4363227a12.12.1774540672617; Thu, 26 Mar 2026
+ 08:57:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260326052437.590158-1-ameryhung@gmail.com> <20260326052437.590158-2-ameryhung@gmail.com>
- <CABFUUZGnj6jOifYknYahrEJjzx9inbT7nz=OGmdr_MfUEW-HHQ@mail.gmail.com>
-In-Reply-To: <CABFUUZGnj6jOifYknYahrEJjzx9inbT7nz=OGmdr_MfUEW-HHQ@mail.gmail.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Thu, 26 Mar 2026 08:56:34 -0700
-X-Gm-Features: AQROBzDtIYmp0rrHK8XB2SHXulgauxtbxiWVPjTI5o7pFpikeoruH-foLbeKnxE
-Message-ID: <CAMB2axOZniWCCXjjCDGNXJK7k9=evFkCsxQdmH5vCLRu5oYTkg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 1/3] selftests/bpf: Fix task_local_data data
- allocation size
-To: sun jian <sun.jian.kdev@gmail.com>
-Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, 
-	kernel-team@meta.com
+References: <CADucPGRvSRpkneb94dPP08YkOHgNgBnskTK6myUag_Mkjimihg@mail.gmail.com>
+ <m2se9mg16x.fsf@kernel.org> <87qzp6ipc7.fsf@gmail.com> <CANk7y0jkEKYviXGG2je80Q26MK4nfE4p=wfb_ukDuHGKSy2Qiw@mail.gmail.com>
+ <87o6kaioju.fsf@gmail.com> <87ldfeiodk.fsf@gmail.com>
+In-Reply-To: <87ldfeiodk.fsf@gmail.com>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Thu, 26 Mar 2026 15:57:40 +0000
+X-Gm-Features: AQROBzD-_492PgD5jCQu4_aaP608dgK9TP1u8UtDuwJfkScRD7hPgQmfrBmFmzg
+Message-ID: <CANk7y0iXJ1sTn5eMrUosvbwnLrSwGtxyirgTpFwdDVWN0tHb5Q@mail.gmail.com>
+Subject: Re: [BUG] bpf: use-after-free in hashtab BPF_F_LOCK in-place update path
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: Aaron Esau <aaron1esau@gmail.com>, bpf@vger.kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 26, 2026 at 3:27=E2=80=AFAM sun jian <sun.jian.kdev@gmail.com> =
-wrote:
+On Thu, Mar 26, 2026 at 3:47=E2=80=AFPM Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
 >
-> On Thu, Mar 26, 2026 at 1:25=E2=80=AFPM Amery Hung <ameryhung@gmail.com> =
-wrote:
+> Mykyta Yatsenko <mykyta.yatsenko5@gmail.com> writes:
+>
+> > Puranjay Mohan <puranjay12@gmail.com> writes:
 > >
-> > Currently, when allocating memory for data, size of tld_data_u->start
-> > is not taken into account. This may cause OOB access. Fixed it by addin=
-g
-> > the non-flexible array part of tld_datg_u.
-> nit: seems to be a typo of tld_data_u?
+> >> On Thu, Mar 26, 2026 at 3:26=E2=80=AFPM Mykyta Yatsenko
+> >> <mykyta.yatsenko5@gmail.com> wrote:
+> >>>
+> >>> Puranjay Mohan <puranjay@kernel.org> writes:
+> >>>
+> >>> > Aaron Esau <aaron1esau@gmail.com> writes:
+> >>> >
+> >>> >> Reported-by: Aaron Esau <aaron1esau@gmail.com>
+> >>> >>
+> >>> >> htab_map_update_elem() has a use-after-free when BPF_F_LOCK is use=
+d
+> >>> >> for in-place updates.
+> >>> >>
+> >>> >> The BPF_F_LOCK path calls lookup_nulls_elem_raw() without holding =
+the
+> >>> >> bucket lock, then dereferences the element via copy_map_value_lock=
+ed().
+> >>> >> A concurrent htab_map_delete_elem() can delete and free the elemen=
+t
+> >>> >> between these steps.
+> >>> >>
+> >>> >> free_htab_elem() uses bpf_mem_cache_free(), which immediately retu=
+rns
+> >>> >> the object to the per-CPU free list (not RCU-deferred). The memory=
+ may
+> >>> >> be reallocated before copy_map_value_locked() executes, leading to
+> >>> >> writes into a different element.
+> >>> >>
+> >>> >> When lookup succeeds (l_old !=3D NULL), the in-place update path r=
+eturns
+> >>> >> early, so the =E2=80=9Cfull lookup under lock=E2=80=9D path is not=
+ taken.
+> >>> >>
+> >>> >> Race:
+> >>> >>
+> >>> >>   CPU 0: htab_map_update_elem (BPF_F_LOCK)
+> >>> >>          lookup_nulls_elem_raw() =E2=86=92 E (no bucket lock)
+> >>> >>          ...
+> >>> >>   CPU 1: htab_map_delete_elem()
+> >>> >>          htab_lock_bucket =E2=86=92 hlist_nulls_del_rcu =E2=86=92 =
+htab_unlock_bucket
+> >>> >>          free_htab_elem =E2=86=92 bpf_mem_cache_free (immediate fr=
+ee)
+> >>> >>   CPU 1: htab_map_update_elem (new key)
+> >>> >>          alloc_htab_elem =E2=86=92 reuses E
+> >>> >>   CPU 0: copy_map_value_locked(E, ...) =E2=86=92 writes into reuse=
+d object
+> >>> >>
+> >>> >> Reproduction:
+> >>> >>
+> >>> >>   1. Create BPF_MAP_TYPE_HASH with a value containing bpf_spin_loc=
+k
+> >>> >>      (max_entries=3D64, 7 u64 fields + lock).
+> >>> >>   2. Threads A: BPF_MAP_UPDATE_ELEM with BPF_F_LOCK (pattern 0xAAA=
+A...)
+> >>> >>   3. Threads B: DELETE + UPDATE (pattern 0xBBBB...) on same keys
+> >>> >>   4. Threads C: same as A (pattern 0xCCCC...)
+> >>> >>   5. Verifier threads: LOOKUP loop, detect mixed-pattern values
+> >>> >>   6. Run 60s on >=3D4 CPUs
+> >>> >>
+> >>> >> Attached a POC. On 6.19.9 (4 vCPU QEMU, CONFIG_PREEMPT=3Dy),
+> >>> >> I observed ~645 torn values in 2.5M checks (~0.026%).
+> >>> >>
+> >>> >> Fixes: 96049f3afd50 ("bpf: introduce BPF_F_LOCK flag")
+> >>> >
+> >>> > Although this is a real issue, your reproducer is not accurate, it =
+will
+> >>> > see torn writes even without the UAF issue, because the verifier th=
+read
+> >>> > is not taking the lock:
+> >>> >
+> >>> > So the torn write pattern CCCAAAA can mean:
+> >>> >   1. Thread A finished writing AAAAAAA (while holding the lock)
+> >>> >   2. Thread C acquired the lock and started writing: field[0]=3DC, =
+field[1]=3DC, field[2]=3DC...
+> >>> >   3. The verifier thread reads (no lock): sees field[0]=3DC, field[=
+1]=3DC, field[2]=3DC, field[3]=3DA, field[4]=3DA, field[5]=3DA, field[6]=3D=
+A
+> >>> >   4. Thread C finishes: field[3]=3DC, field[4]=3DC, field[5]=3DC, f=
+ield[6]=3DC, releases lock
+> >>> >
+> >>> > This race happens regardless of whether the element is freed/reused=
+.  It
+> >>> > would happen even without thread B (the delete+readd thread). The
+> >>> > corruption source is the non-atomic read, not the UAF.
+> >>> Have you confirmed torn reads even with BPF_F_LOCK flag on the
+> >>> BPF_MAP_LOOKUP_ELEM_CMD? I understand there must not be any torn read=
+s
+> >>> with spinlock taken on the lookup path.
+> >>>
+> >>> The reproducer looks like a good selftest to have, but it needs to be
+> >>> ported to use libbpf, currently it looks too complex.
+> >>
+> >> Yes, I have confirmed torn reads even with BPF_F_LOCK on
+> >> BPF_MAP_LOOKUP_ELEM_CMD, the results given below are with BPF_F_LOCK.
+> >> But this is expected behaviour, BPF_F_LOCK performs a lockless lookup
+> >> and takes only the element's embedded spin_lock for in-place value
+> >> updates. It does not synchronize against concurrent deletes.
+> >>
+> > It does not synchronize against concurrent deletes, yes, but with
+> > BPF_F_LOCK on BPF_MAP_LOOKUP_ELEM_CMD, we still take the spinlock befor=
+e
+> > copying value from the map (syscall.c:354). Deletion does not mutate th=
+e
+> > element, so when the value is reused, it should still take the same loc=
+k,
+> > shouldn't it?
+>
+> Ok, I think this is just a wonky reproducer:
+> fill_value(&val, PATTERN_B, seq++);
+> map_update(g_map_fd, &g_key, &val, BPF_ANY);
+>
+> should have been BPF_ANY | BPF_F_LOCK
 
-Ah yes
-
-> >
-> > Besides, explicitly align tld_data_u->data to 8 bytes in case some
-> > fields are added before data in the future. It could break the
-> > assumption that every data field is 8 byte aligned and
-> > sizeof(tld_data_u) will no longer be equal to
-> > offsetof(struct tld_data_u, data), which we use interchangeably.
-> >
-> > Signed-off-by: Amery Hung <ameryhung@gmail.com>
-> > ---
-> >  .../selftests/bpf/prog_tests/task_local_data.h       | 12 +++++++-----
-> >  1 file changed, 7 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_data.h b=
-/tools/testing/selftests/bpf/prog_tests/task_local_data.h
-> > index 7819f318b2fb..a52d8b549425 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/task_local_data.h
-> > +++ b/tools/testing/selftests/bpf/prog_tests/task_local_data.h
-> > @@ -90,7 +90,7 @@ typedef struct {
-> >
-> >  struct tld_metadata {
-> >         char name[TLD_NAME_LEN];
-> > -       _Atomic __u16 size;
-> > +       _Atomic __u16 size; /* size of tld_data_u->data */
-> >  };
-> >
-> >  struct tld_meta_u {
-> > @@ -101,7 +101,7 @@ struct tld_meta_u {
-> >
-> >  struct tld_data_u {
-> >         __u64 start; /* offset of tld_data_u->data in a page */
-> > -       char data[];
-> > +       char data[] __attribute__((aligned(8)));
-> >  };
-> >
-> >  struct tld_map_value {
-> > @@ -158,6 +158,7 @@ static int __tld_init_data_p(int map_fd)
-> >         struct tld_data_u *data;
-> >         void *data_alloc =3D NULL;
-> >         int err, tid_fd =3D -1;
-> > +       size_t size;
-> >
-> >         tid_fd =3D syscall(SYS_pidfd_open, sys_gettid(), O_EXCL);
-> >         if (tid_fd < 0) {
-> > @@ -173,9 +174,10 @@ static int __tld_init_data_p(int map_fd)
-> >          * tld_meta_p->size =3D TLD_DYN_DATA_SIZE +
-> >          *          total size of TLDs defined via TLD_DEFINE_KEY()
-> >          */
-> > -       data_alloc =3D (use_aligned_alloc || tld_meta_p->size * 2 >=3D =
-TLD_PAGE_SIZE) ?
-> > -               aligned_alloc(TLD_PAGE_SIZE, tld_meta_p->size) :
-> > -               malloc(tld_meta_p->size * 2);
-> > +       size =3D tld_meta_p->size + sizeof(struct tld_data_u);
-> > +       data_alloc =3D (use_aligned_alloc || size * 2 >=3D TLD_PAGE_SIZ=
-E) ?
-> > +               aligned_alloc(TLD_PAGE_SIZE, size) :
-> with `start` now included, `size` seems even less likely to be a multiple=
- of
-> TLD_PAGE_SIZE. Could aligned_alloc() fail here?
-
-Hi, Thanks for taking a look.
-
-This indeed could be a problem. Passing size not being an integral
-multiple of alignment can be undefined behavior for some memory
-allocators. This is okay for TLD_DATA_USE_ALIGNED_ALLOC as it should
-only be enabled when users know the memory allocator supports it.
-However, aligned_alloc() is always used when size * 2 > TLD_PAGE_SIZE,
-which may lead to UB.
-
-This issue is addressed in patch 2 when the allocation path is cleaned up.
-
-> > +               malloc(size * 2);
-> >         if (!data_alloc) {
-> >                 err =3D -ENOMEM;
-> >                 goto out;
-> > --
-> > 2.52.0
-> >
-> >
+Yes, if all the users have BPF_F_LOCK then it will work because the
+re-used element will have the same lock and everything is serialized.
+But this reproducer is trying to show that the elements are being
+re-used, which they are.
