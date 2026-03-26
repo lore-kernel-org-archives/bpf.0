@@ -1,132 +1,122 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E22B61F0E34
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 03:25:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91908DF59
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 03:46:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774495520; cv=none; b=tud8wKEmkV+mdF6nztCUND2zsDg0mIzKds1McHUhklL1W+PpvUcYFrM1hCIK0UVMNPvOQ2ZDpHrOJpC1022VtbZJcWnin6V5Pl7TdiKlK2lxSwyYlhIeUK4EYv7D0DjdHKvEV0mL8beKhVOedp5q8kyyOkjFV9ijx5EoN+LDhpI=
+	t=1774496818; cv=none; b=jFJZTTHIs2n5MRl8TUrHPP31c1IOx7Kud7T2x/ZHYBZUx1vigqVhnZ8ZXkrUbpYJ4zaSAc+sNx8lPmv7p/NsPeU+4+nRzrWwkCmclTIjXPoO8SO4BWDaySm/sowaFjKKw9gC9I/Zi7092ZBwX/cbYiWGxR4sF6Dkl20XvIBlWXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774495520; c=relaxed/simple;
-	bh=PeO3Wn4eC2AsM7MoyTFPPR2RxQrGibPXKvXagwq9jD8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uGZNTuPIKALxNYzkBETFdRmtl15ba29Im2SHdMH22BGL5wvIX87fk+54UlUK+D1ZbMcREExvU1zuqAl4opmK/tv7mc+b00jYUypL4vgoewezb5YIuZ8/ePeaZFiSQt3sxXF4iidBhtd0QaBj6YkbP5j9Gvyqq9K3I2HiRTQYSAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=auY2R3sw; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1774496818; c=relaxed/simple;
+	bh=TpXIOE0zKCcg2/dKXEK2isrj55QtWa+ucN7wcNDcoS0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fx3J+8ISMf2kJ8ByAYgFF9VY7eq6rr3VAgC07DymIpwVj/tB8BnX3xT5GFaEvnj3MP9su0eNeqeCG8iIdx0S7eoIqrjiNQV4GMMzTgqIJ0c63VSlfmcb2cCALh2DLl6TY8Z+lcSs+UzYkCsUddsDUq5DpgencozRY+NPOIfbbBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=gsdHBl0p; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="auY2R3sw"
-Message-ID: <4c27a461-2714-4c27-8604-dedd506a09aa@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774495506;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wNdfjJHD6SMD9Xw8BJ+zCQWvHXfF4m3AH/8ikcFZoxY=;
-	b=auY2R3swKFmiQYJ62EhZeIZ6lJgq+hhn4f8D4apQgKw3hvmi8awSu9dy5bBPhVf1PseunR
-	Bf14bYgKDDOiMNz9HrgunVljUnXDZ/QWZHVfptyhd8vBoV8P/D+2pfg3Jzfk43UPDVM1Pm
-	JY1JwnQOPI2JXs2PC41PuCSNh9gyV2k=
-Date: Thu, 26 Mar 2026 11:24:39 +0800
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="gsdHBl0p"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-482f454be5bso14495465e9.0
+        for <bpf@vger.kernel.org>; Wed, 25 Mar 2026 20:46:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1774496815; x=1775101615; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rx/hM9tEY2bKaC+3a39zTrnXDe9lSCuvs2OMj9HI3+8=;
+        b=gsdHBl0p+VZQRTNpJXao3xsdWvwiTSupW4I71bMbpTHh4xnvuVQNAs8r62Ev/i9JN2
+         mSIx76p75ogPHF+iCJ/whAxLubWMaWmRtJqWIlQac9UyNcXLyLEdFoJQFvi/JlueHqjD
+         UotVeP+l+qkHovue0K1osYGGY11jvkC3LumQ3RqFlCRP6V4exKIeV2JUl7LbhF8us7lD
+         fvbkEjM/a8qMOu0JD2g5IgSDEWKbHnfvlfoqIUpi0wtozsKzPEqhjG4lJdw3dwEbKZz9
+         M77VXOZw8GaebCSTCaEROFY0GTkbDPvHWMPq91crx7z4jBdtrhX/f6NMU07yXOJ6T7H1
+         ZltQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774496815; x=1775101615;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rx/hM9tEY2bKaC+3a39zTrnXDe9lSCuvs2OMj9HI3+8=;
+        b=BS6R/sXFcn0oeudymbUR+vnyTVKjDpQwgA3whwvvC6Nxjm2/Ifh6mN8+jZ2BzsjyQI
+         oZfnWBlqX9fyPWlb7uEAq3umH6aAD+uhzT3i0XwiDOsvXRnBZHnGIBj/ub8k4Q/ZpRW9
+         xp8vgaEbuTywKQAtrgzTPU8XaEs4RpH+XXWiVW7NIMAT3w0+WR2P+13him4Pqmm+ywvx
+         QQNroqLuBxosh5guPvppwE/tTGn4RAd3Lj4pHwYH2p6E1rVMVikJKRHf29r39MqPhwb2
+         PzrTK5BWD4ILHTHbBvCEpdR/rVZcijQrPBrx5gVnVyPllpqXiBLdGrGEPaQVb2PM1JZj
+         sKdQ==
+X-Gm-Message-State: AOJu0YzU3L1rTsR9XrMdSW1KKMrhio82SrcijOuiZ6ZMFln2avmKf/CM
+	r2dK9J0xWniIMGswf7RkfLFzWZfP7ScCdNjJc/N453sCOH7LIHOHY2976W0yBiKit2s=
+X-Gm-Gg: ATEYQzzY3/Aq+EAe8gc51TKS5zGbVJbVfTxe3Bctk73M9kNwfdk5mch8ChWxIrbgvTW
+	EDsMnbzqOBydbS/pjW10f3AndQPvNRZmsXY7WD4q/Yz2FHbhnPesCxWqQ2RafSAICZnXG5Y5fxz
+	XajSC/9+UMqMvZpESyfC7qr6I7te0XOsaeph9f1JiqU45RdTKLYwOxufFM2d+ByyvtyvMf4OVRj
+	5PXQLqieJFUAnxlddZu8XzOfzXqsMfGC0pQBXHzpcsFh4H2Y74cH8fvgBGo0QWJtDNPw2mQIDl1
+	2Yg3LHDAGq8kl3LpgGjMinn9JUaOetpresW2CgaCDakdwGHayvwQsFFAQ8/uJorXGRd8wY8181J
+	/VhqY1o3AB4RmR1xajCHRSTf/amlN99c7vPQowyUe66r7EUw1Kr/WvtYsfX50ZnFORKef1ndSQc
+	KEhE4Ha68ADqL3/S+6ISY=
+X-Received: by 2002:a05:600c:2d82:b0:487:467:49e9 with SMTP id 5b1f17b1804b1-48722b92fcfmr418905e9.7.1774496814828;
+        Wed, 25 Mar 2026 20:46:54 -0700 (PDT)
+Received: from u94a ([2401:e180:8df5:367c:7729:d191:ce82:e062])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35c22d09573sm9229a91.16.2026.03.25.20.46.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Mar 2026 20:46:53 -0700 (PDT)
+Date: Thu, 26 Mar 2026 11:46:47 +0800
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com, 
+	yonghong.song@linux.dev, paul.chaignon@gmail.com, harishankar.vishwanathan@gmail.com
+Subject: Re: [PATCH RFC bpf-next v1 1/4] bpf: representation and basic
+ operations on circular numbers
+Message-ID: <pptqk4ehfb4zptc6ubd7h7rrup72xkaqzgkdguf25iunp4j4ot@n3ddkhculaok>
+References: <20260318-cnum-sync-bounds-v1-0-1f2e455ea711@gmail.com>
+ <20260318-cnum-sync-bounds-v1-1-1f2e455ea711@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v1 2/2] selftests/bpf: Add protocol check test for
- bpf_sk_assign_tcp_reqsk()
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
- bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260323105510.51990-1-jiayuan.chen@linux.dev>
- <20260323105510.51990-3-jiayuan.chen@linux.dev>
- <9adc3c2e-0d5a-4863-b3ed-194d8f9fd630@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <9adc3c2e-0d5a-4863-b3ed-194d8f9fd630@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260318-cnum-sync-bounds-v1-1-1f2e455ea711@gmail.com>
 
+On Wed, Mar 18, 2026 at 09:28:58AM -0700, Eduard Zingerman wrote:
+...
+> + * cnum32: a circular number.
+> + * A unified representation for signed and unsigned ranges.
+> + *
+> + * Assume that a 32-bit range is a circle, with 0 being in the 12 o'clock
+> + * position, numbers placed sequentially in clockwise order and U32_MAX
+> + * in the 11 o'clock position. Signed values map onto the same circle:
+> + * S32_MAX sits at 5 o'clock, S32_MIN sits at 6 o'clock (opposite 0),
+> + * negative values occupy the left half and positive values the right half.
+> + *
+> + * @cnum32 represents an arc on this circle drawn clockwise.
+> + * @base corresponds to the first value of the range.
+> + * @size corresponds to the number of integers in the range excluding @base.
+> + * (The @base is excluded to avoid integer overflow when representing the full
+> + *  0..U32_MAX range, which corresponds to 2^32, which can't be stored in u32).
+> + *
+> + * For example: {U32_MAX, 1} corresponds to signed range [-1, 0],
+> + *              {S32_MAX, 1} corresponds to unsigned range [S32_MAX, S32_MIN].
+> + */
+> +struct cnum32 {
+> +	u32 base;
+> +	u32 size;
+> +};
 
-On 3/25/26 5:59 AM, Martin KaFai Lau wrote:
-> On 3/23/26 3:54 AM, Jiayuan Chen wrote:
->> +void test_tcp_custom_syncookie_protocol_check(void)
->> +{
->> +    struct test_tcp_custom_syncookie *skel;
->> +    struct sockaddr_in tcp_addr, udp_addr;
->> +    socklen_t addr_len = sizeof(tcp_addr);
->> +    int tcp_server = -1, udp_client = -1;
->> +    char buf[32] = "test";
->> +    int ret;
->> +
->> +    if (setup_netns())
->> +        return;
->> +
->> +    skel = test_tcp_custom_syncookie__open_and_load();
->> +    if (!ASSERT_OK_PTR(skel, "open_and_load"))
->> +        return;
->>   +    /* Create a TCP listener so the BPF can find a LISTEN socket */
->> +    tcp_server = start_server(AF_INET, SOCK_STREAM, "127.0.0.1", 0, 0);
->> +    if (!ASSERT_NEQ(tcp_server, -1, "start tcp_server"))
->> +        goto destroy_skel;
->> +
->> +    ret = getsockname(tcp_server, (struct sockaddr *)&tcp_addr, 
->> &addr_len);
->> +    if (!ASSERT_OK(ret, "getsockname"))
->> +        goto close_tcp;
->> +
->> +    skel->bss->tcp_listener_port = ntohs(tcp_addr.sin_port);
->> +    skel->bss->udp_test_port = 9999;
->> +
->> +    ret = bpf_program__fd(skel->progs.tcp_custom_syncookie_badproto);
->> +    if (setup_tc(ret))
->> +        goto close_tcp;
->> +
->> +    udp_client = socket(AF_INET, SOCK_DGRAM, 0);
->> +    if (!ASSERT_NEQ(udp_client, -1, "udp socket"))
->> +        goto cleanup_tc;
->> +
->> +    memset(&udp_addr, 0, sizeof(udp_addr));
->> +    udp_addr.sin_family = AF_INET;
->> +    udp_addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
->> +    udp_addr.sin_port = htons(9999);
->> +
->> +    ret = sendto(udp_client, buf, sizeof(buf), 0,
->> +             (struct sockaddr *)&udp_addr, sizeof(udp_addr));
->> +    ASSERT_EQ(ret, sizeof(buf), "sendto udp");
->> +
->> +    /* Wait for TC ingress BPF to process the skb. */
->> +    kern_sync_rcu();
->
-> hmm... is it guaranteed to work? Regardless, it checks the error 
-> returned from bpf_sk_assign_tcp_reqsk(). Maybe bpf_prog_test_run is 
-> simpler?
->
-> pw-bot: cr
->
->> +
->>
-I looked into using bpf_prog_test_run, but it won't work here
-because bpf_sk_assign_tcp_reqsk() requires the skb to come from TC ingress
-— it checks skb_at_tc_ingress() internally and returns -EINVAL otherwise.
+Minor note, memory are vague, but despite having 'size' available seems
+to make some calculation easier, I end up finding using 'start' and
+'end'[1] more intuitive and feel to me less indirection, as well as
+being closer to existing implementation. E.g.
 
-For the synchronization concern, instead of kern_sync_rcu(), I now create
-a UDP server bound to the target port and recv() the packet after sendto().
-Since the BPF program returns TC_ACT_OK, the packet passes through TC 
-ingress
-and arrives at the UDP socket. The recv() naturally blocks until the BPF 
-program
-has finished processing, so no timing tricks are needed.
+...
+> +/* True if this cnum represents two signed ranges. */
+> +static inline bool FN(srange_overflow)(struct cnum_t cnum)
+> +{
+> +	return FN(contains)(cnum, (ut)ST_MAX) && FN(contains)(cnum, (ut)ST_MIN);
 
+To check overflow in signed ranges, just do `(sT)end < (sT)start`, which
+should be more familiar to most.
+
+1: https://lore.kernel.org/bpf/20231108054611.19531-2-shung-hsi.yu@suse.com/
+
+> +}
+...
