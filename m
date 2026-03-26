@@ -1,82 +1,119 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.175.55.52])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ADF43C3434
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 09:58:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.175.55.52
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45F343DA7E0;
+	Thu, 26 Mar 2026 10:02:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774519104; cv=none; b=RhJpmpopTWEh8QwFu80WMg0yoiQDHLMeQscLHAZqw+rt+/dysiLp/8FmN/HJfng9OTkl+im1EcAfNATwBnQQhUDQueMFvkBTJrq4D02aeXn4NlW05PC5/c0UAoOcLlOVWm4UbakmekrIVB9ajDFo0qbiVJY3Bu39qujIXa6nQIU=
+	t=1774519337; cv=none; b=i48molvcGsAOMoqsgYwkZRQ2mP/hLb7a+1Sl0DXjR74+Q8D76l4Cpus7/2vV26UAyHoxnyieBNoybmofev0b8BV3FelY1DMn5tyV4b6AYRJowoUWW/YzDyacjQxP7cI3Q9e+0/WdAultYkN5m0syEh9fP/WMnyrGHObX26ooBGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774519104; c=relaxed/simple;
-	bh=oikzp10J2ldiw/wzSNsbBFDlrKScj41nc4sjR1M/qBc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MQPXADNY6spX3+jG+2S7JUTX95Xv47ZX14J/1CJ+cYYEGPkrRkvMsYmhBVgy7a38Ykt94C0wjfuMXbEAM5XoNZB2s3goWIf85mcF/OPpWxFbyrU/J5QnD5OJhDta/GMjD01dejUAGp613LWNezLU2j28hIaeIaFW31EWc2LfheE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=52.175.55.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [115.236.2.94])
-	by mtasvr (Coremail) with SMTP id _____wCHwAkWA8Vp0EsGAA--.144S3;
-	Thu, 26 Mar 2026 17:57:43 +0800 (CST)
-Received: from [0.0.0.0] (unknown [115.236.2.94])
-	by mail-app4 (Coremail) with SMTP id zi_KCgBnmjEUA8Vpk7YcAA--.28149S3;
-	Thu, 26 Mar 2026 17:57:41 +0800 (CST)
-Message-ID: <dc459496-fe51-4927-9192-ad7a68ca9a08@zju.edu.cn>
-Date: Thu, 26 Mar 2026 17:57:40 +0800
+	s=arc-20240116; t=1774519337; c=relaxed/simple;
+	bh=UXJmkilgCUI/u+gPAR4mHLGMXteOiBgjgCWr/Gty7iQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NjLNwmb5JR2YXoMK5ZWIwmBuq7cpiBJ1Ya8OD3hrBPaSqfglZHPh6kKkUUcJ+fjz+qSPPj6BSXTeeDmLcMwog9vkNNPnW5la3ibw+P/irrLFPHsuyK54yc4ZK/mEzokr+xPrf9yX5LOGCrG5BcR9gROUd03cAqrRt3gXgJPwvak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=ijMJ9dSk; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="ijMJ9dSk"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 8492640E015B;
+	Thu, 26 Mar 2026 10:02:10 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id MsheAMuzPrx7; Thu, 26 Mar 2026 10:02:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1774519325; bh=C2mWFe1qNi3PMZA4pOcAbJW8lmILDzuIi8XH3/XIOf4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ijMJ9dSk7+FFkbX12jIwy02uXnJL10wiFXoCPlwyUqT13WtlMZYKjbxhSv6iYc2V8
+	 nUsd00ftkQEUSwaK2E8alb0ef0/Xupyc18HwfYLnMtaijlwsn+75oPXw9IfCKIFI83
+	 RHVX7eE26VoJ5RkSC25P344LGu7gvbWuaxieYQirZGWgh6SzurTshnpHRQ00s4d5nj
+	 CNbq3g4A7hcApqUVqYTdPUzLrN8f8Yz97R8rmza03yD0SKlewWB23DacOnI3rnbs+e
+	 OfLHcLTgKyi0xISxpH6ZxdE0XoT4Tg98OsWAocu4lxrtE/noMbsP00NjCt77wGW0BM
+	 LlodWonuMOXUtG/PQwiUnR84xAs9n8OB5RedkQC/v7W6YTECWY+QjdAXmMiwddEYnS
+	 HckdK7FGeZtdMD5SWlmZ7HEIyCFn5WEHYx0OEe94m7OecMA0vBubPauJQrCQFzxUHm
+	 c2kAHHiOlnKIdCpDEFfvGX15hQ/NbwV5R4yxFdmd7+RLQSbY19hvOVAXwGQrz3SDbn
+	 ioNRWPdf69PAI3UX7KuhcQ63egfggLs8jKUJfW5mx7c445PFGK1T3Eud9r2pJisEWG
+	 /xTdFmPl3sUGISDldtEsZehMg3aiW1BhxxDgHb4cJUS1Oc+kD8NmUhVFtMLfP+6SlB
+	 XQ4dP5hDqOLsb+WVplWrz9TE=
+Received: from zn.tnic (p5de8e020.dip0.t-ipconnect.de [93.232.224.32])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id BF59740E0140;
+	Thu, 26 Mar 2026 10:01:27 +0000 (UTC)
+Date: Thu, 26 Mar 2026 11:01:20 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>,
+	Nikolay Borisov <nik.borisov@suse.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	David Kaplan <david.kaplan@amd.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Laight <david.laight.linux@gmail.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	David Ahern <dsahern@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, Asit Mallick <asit.k.mallick@intel.com>,
+	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
+	netdev@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v8 02/10] x86/bhi: Make clear_bhb_loop() effective on
+ newer CPUs
+Message-ID: <20260326100120.GAacUD8BVziYzLxZHB@fat_crate.local>
+References: <20260324-vmscape-bhb-v8-0-68bb524b3ab9@linux.intel.com>
+ <20260324-vmscape-bhb-v8-2-68bb524b3ab9@linux.intel.com>
+ <20260324205930.GQacL7Mp7vwGBKX1W7@fat_crate.local>
+ <20260324221308.7sh6afdy6r6tsf4w@desk>
+ <20260325203759.GCacRHp2t8a7c4Bp6E@fat_crate.local>
+ <20260326083934.fk4wyhe6rgiss34z@desk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v5 3/3] bpf: Fix incorrect subprog ID in dumped
- bpf_pseudo_call instructions
-To: Puranjay Mohan <puranjay12@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
- eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- tangyazhou518@outlook.com, shenghaoyuan0928@163.com, ziye@zju.edu.cn,
- Emil Tsalapatis <emil@etsalapatis.com>
-References: <20260326090133.221957-1-tangyazhou@zju.edu.cn>
- <20260326090133.221957-4-tangyazhou@zju.edu.cn>
- <CANk7y0iuC=4aD+zzJujWrwdref0zA+ZOt4Uqst_bOM+7Kqweug@mail.gmail.com>
- <CANk7y0gKbC22yrsBec_6JmyLSN76eTshcX2_W_zhSYSgXkenxQ@mail.gmail.com>
- <afaa5cb2-57d4-4fc8-849e-34db300f34a3@zju.edu.cn>
- <CANk7y0jjLH_hYm4Ga9WAs03-QicbVPxqPWJQFRvqSVud_5We1A@mail.gmail.com>
-Content-Language: en-US
-From: Yazhou Tang <tangyazhou@zju.edu.cn>
-In-Reply-To: <CANk7y0jjLH_hYm4Ga9WAs03-QicbVPxqPWJQFRvqSVud_5We1A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:zi_KCgBnmjEUA8Vpk7YcAA--.28149S3
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBhICCmnEOospAQAAso
-X-CM-DELIVERINFO: =?B?RASA8AXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9DXIn+6ro37HmzLxrMvvUs+iM6gEeWNzRbRVd/5lM0J/dphEymzyql+cmgCDuS4EsUZx
-	e2QGIhOz/qsosBQlEmmBRHqX/uYC/okkLEbCXNvBW64oPiS26Z2xqUjAVse3Qg==
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-	ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
-	BjDU0xBIdaVrnRJUUU9Sb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26c
-	xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
-	j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxV
-	AFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x02
-	67AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
-	0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280
-	aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I
-	0E8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
-	1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
-	Wlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j
-	6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr
-	0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
-	YxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260326083934.fk4wyhe6rgiss34z@desk>
 
-Hi Puranjay,
+On Thu, Mar 26, 2026 at 01:39:34AM -0700, Pawan Gupta wrote:
+> I believe the equivalent for cpu_feature_enabled() in asm is the
+> ALTERNATIVE. Please let me know if I am missing something.
 
-On 3/26/26 17:51, Puranjay Mohan wrote:
-> If I understand correctly, truncated insn->off will only be used for
-> dumping the program assembly and will not affect the program at
-> runtime. My suggestion would also be to keep the comment but not add a
-> WARN() as it is unnecessary log spam.
-Makes sense. This is exactly what I did in patch 3/3 of v5.
+Yes, you are.
 
-Thanks,
-Yazhou
+The point is that you don't want to stick those alternative calls inside some
+magic bhb_loop function but hand them in from the outside, as function
+arguments.
 
+Basically what I did.
+
+Then you were worried about this being C code and it had to be noinstr... So
+that outer function can be rewritten in asm, I think, and still keep it well
+separate.
+
+I'll try to rewrite it once I get a free minute, and see how it looks.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
