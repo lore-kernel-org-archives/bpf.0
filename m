@@ -1,194 +1,152 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64FFB2DEA62
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 09:15:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.76.78.106])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7390123EABA
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 09:27:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.76.78.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774516559; cv=none; b=WNPb/v9B78kGmgNy9117+4ju1nd6oTSUp1ZEhmUP0GboiTenoiMVpr4pU5sKgff4TlbnzxPAdj8LtvYM5ZHkN8uOVgOoKeSpARMM11wfv3jf2hKBh1iZLFcDyG+rBUluKo9vVqkYwG09b3hVWDQ2bkOPn4FpwChMJP40N1aUUro=
+	t=1774517257; cv=none; b=PGyP+8FYKTfp3cItvZZS9vOYXS6KrnvwFNvXf8POdcVyBxNo+nDwRkCGS2XD2QMzodsU3dwSYAPyif6TzVEB74nZk9sV+7el0Uw51HFytaDJDsZM+1gUDKtmqytHMmIQsccxxje8QL1zeU5w/v+8V3kRhW43Zu+eGM88BjA8dno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774516559; c=relaxed/simple;
-	bh=vuXIxAlE+8VDPmKuy3kgKQSNmOeDUZC6172+muiSKao=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Bz/VYxcjSORmd9lrBkEOiHIEkEFt2TOlG9uhWEWMPT/qpMiDSdYnuE7OVAZiBpriCIGduiqQuYroCQuTtGewtOGRg512SZzcb4UiYk5Zi/BlWIB0ReOyndfhST795fvc6P+sN4jrlYDnRkmTNyjPAO6qX3M6qaWhVEzyI5na+1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YepfNsf2; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YepfNsf2"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-48704db565eso10048295e9.1
-        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 02:15:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774516556; x=1775121356; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JMTJK/EQaff6wJVDA7nxhfImBcBFjA6yOuaHGNzrGu8=;
-        b=YepfNsf2/dAhq0QSAF2FPzq7AU58TQmQheCcpPSOge89kz0swZ1HMzi/rvAonM9C+c
-         BO0dZUIkuLg3P2gvOadR9AEtcTf3wR3ooPVZIcuq23f4xEZoxBXOhk9aUz/9gc5qQmaB
-         rkMKTZ5eUgFtnjY8WkUiGVuKrcg0tfQYSU/FAys8BU3KVDEgFzj94z8XPfYYc4yidrR0
-         EUgqLk7W0flOBXuHFqIemMm1uBgaysj1AHZ3CFd+P3mEXG9UuVyzOCGU1/9UVgVnwCv0
-         0R4cxT0YmuKvAzjKrvLuiC7fooEm0AVoRFY31/nRiqli7ItKKh7UMnIJnH2FjU2VtKmw
-         XeOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774516556; x=1775121356;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=JMTJK/EQaff6wJVDA7nxhfImBcBFjA6yOuaHGNzrGu8=;
-        b=PRrj81BAFG+nuwEg/gJ1RJtAsN84GKkdZMyeD4WoTXBxyVsWbexRwBrSn99xhm/KZg
-         3KQUbiB3kdmKA8HaYBB1qfghtAVuLiIV4aLNkL5bOW4Lm/Tw+Omp2uwV5of6SHzvP6i3
-         0PdAoLMiBJNOzFrQ/itxvPBFPuZTregJpMfxI5e/OuUjM/5Sv/KZ/p/utc2j+bsff2/j
-         yhJvzDIc2b7jzfa2QIhD/4UYR+n42NhnQ4ZaGNg7DgjkwE7/XREUZzbelweBPtmTjEhh
-         4e6aLeNrrsayBgBI/DQnWjl7LwyVzmul4/afaeBkz7wJfMZ23qnOAPPW2JHBzEj6qKoT
-         tMVg==
-X-Forwarded-Encrypted: i=1; AJvYcCVRwjkPqVDruak8xFKLxWxFPGw93EGCL0aDByNJhse3oy/+e9nwpUVeiJlsAoS1P9G8To8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/quVpcMIJDHAlXsCfEm1pgBZRH7OA47CuLAnIfS7Pv1vzRK/E
-	SYe603YkeltnJAGjd/cJIiDOhuyZxbRZ2YbiDhGDYrT6AhH9z29TGyGL
-X-Gm-Gg: ATEYQzy8XSATYoMXRT3KakPcaaPXkmwJ8uGxK6hWzthVn5AhjtMtGlFandELVRer2qX
-	6DJtHsBYcslSSQbsTKYklLgThRcGCYVia+2lU4ClH5VXP9bTluch/FYTRfMObaFczx6LHZ/AzPR
-	s5x1nh7OLYbwCuHICeSI4x5E5FmUJq7TLlXxktAdio8TVLrJFfvD5DdiTkUHkOJImAiubRE+8w3
-	8xxiVfQ5SXUlSb1k13s44+C3fYSsSnKRhfWATzxXYxcIxpjxsicpVtibIStR6jWdG5sIvrCDBYp
-	krsXpyswzVmQUOuF8POnrPZ6o+QtHwRloOSHgcYV+J52yc1ElKzhhg6mHw6G3tehiXhcg8kGCYb
-	YnXC9qZnKX1H0w89lYwbtJoqGlwvmYmIh62OoT+0YCpXKiV3L4MZlsyBwHF2klhLyoOaiM9Y0je
-	KV40zWHp4Qx86adibPw+n5o0ENCPbdkAyqf17zfI3kWcrsXNffJjam7DQuft4rgHPz
-X-Received: by 2002:a05:600c:6087:b0:483:2c98:4368 with SMTP id 5b1f17b1804b1-4871605a9a5mr95820565e9.18.1774516555572;
-        Thu, 26 Mar 2026 02:15:55 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b9192e533sm7731498f8f.2.2026.03.26.02.15.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Mar 2026 02:15:55 -0700 (PDT)
-Date: Thu, 26 Mar 2026 09:15:53 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc: Borislav Petkov <bp@alien8.de>, x86@kernel.org, Jon Kohler
- <jon@nutanix.com>, Nikolay Borisov <nik.borisov@suse.com>, "H. Peter Anvin"
- <hpa@zytor.com>, Josh Poimboeuf <jpoimboe@kernel.org>, David Kaplan
- <david.kaplan@amd.com>, Sean Christopherson <seanjc@google.com>, Dave
- Hansen <dave.hansen@linux.intel.com>, Peter Zijlstra
- <peterz@infradead.org>, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, KP
- Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, "David S. Miller"
- <davem@davemloft.net>, Andy Lutomirski <luto@kernel.org>, Thomas Gleixner
- <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, David Ahern
- <dsahern@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
- Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Paolo
- Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org, Asit Mallick
- <asit.k.mallick@intel.com>, Tao Zhang <tao1.zhang@intel.com>,
- bpf@vger.kernel.org, netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v8 02/10] x86/bhi: Make clear_bhb_loop() effective on
- newer CPUs
-Message-ID: <20260326091553.414752ee@pumpkin>
-In-Reply-To: <20260326083934.fk4wyhe6rgiss34z@desk>
-References: <20260324-vmscape-bhb-v8-0-68bb524b3ab9@linux.intel.com>
-	<20260324-vmscape-bhb-v8-2-68bb524b3ab9@linux.intel.com>
-	<20260324205930.GQacL7Mp7vwGBKX1W7@fat_crate.local>
-	<20260324221308.7sh6afdy6r6tsf4w@desk>
-	<20260325203759.GCacRHp2t8a7c4Bp6E@fat_crate.local>
-	<20260326083934.fk4wyhe6rgiss34z@desk>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	s=arc-20240116; t=1774517257; c=relaxed/simple;
+	bh=wKhaujzVu/dp/SeqbU5zTsUke0Md4zUkPyURYzVwaqs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NzOl+2uvCDiQ3+m+v848aVO13F4M73Q7+Jp01UuEbRD5RWYTH6S8xD1G9PUdFo1sC2BfbLEIqilQjt9SxW19+4WBvOgL/u5Y6ET6KoTKng0Dp/qRnmKnLtOliJhVaROndibkhxiUWi2U3BPd1hZtkSJqKKh20JhY8wYJdwedTKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=13.76.78.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
+Received: from zju.edu.cn (unknown [115.236.2.94])
+	by mtasvr (Coremail) with SMTP id _____wA3cgjl+8RpYxsGAA--.1637S3;
+	Thu, 26 Mar 2026 17:27:02 +0800 (CST)
+Received: from [0.0.0.0] (unknown [115.236.2.94])
+	by mail-app4 (Coremail) with SMTP id zi_KCgCHazTc+8Rpy50cAA--.11725S3;
+	Thu, 26 Mar 2026 17:26:53 +0800 (CST)
+Message-ID: <afaa5cb2-57d4-4fc8-849e-34db300f34a3@zju.edu.cn>
+Date: Thu, 26 Mar 2026 17:26:51 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v5 3/3] bpf: Fix incorrect subprog ID in dumped
+ bpf_pseudo_call instructions
+To: Puranjay Mohan <puranjay12@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+ tangyazhou518@outlook.com, shenghaoyuan0928@163.com, ziye@zju.edu.cn,
+ Emil Tsalapatis <emil@etsalapatis.com>
+References: <20260326090133.221957-1-tangyazhou@zju.edu.cn>
+ <20260326090133.221957-4-tangyazhou@zju.edu.cn>
+ <CANk7y0iuC=4aD+zzJujWrwdref0zA+ZOt4Uqst_bOM+7Kqweug@mail.gmail.com>
+ <CANk7y0gKbC22yrsBec_6JmyLSN76eTshcX2_W_zhSYSgXkenxQ@mail.gmail.com>
+Content-Language: en-US
+From: Yazhou Tang <tangyazhou@zju.edu.cn>
+In-Reply-To: <CANk7y0gKbC22yrsBec_6JmyLSN76eTshcX2_W_zhSYSgXkenxQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zi_KCgCHazTc+8Rpy50cAA--.11725S3
+X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiAggCCmnEOosmYAADsb
+X-CM-DELIVERINFO: =?B?nktsIAXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
+	9q9LOcIldiP1c5d5Kcb9i58uUFoFZDwRPuX4HuEqP+AQvb/2Ny4Dq2FOYOPaA8OwfRKIPy
+	3gM1VK5My3YFYsHDFm6kLtAIFJVFxh2HBK3zmpFUEqIYt8LAyQ1hdHGAIpxIew==
+X-Coremail-Antispam: 1Uk129KBj93XoWxGFyUXry5Zw1DWFW3Ar4xuFX_yoW5KF4DpF
+	WDGa43KFykGrW7Ar4Iva17Ww4rKFs7J347WryrJry3Cw4q9F1furW8Kr4F9a4DCr1xur40
+	qF4qvasagw45JagCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
+	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
+	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAF
+	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8c
+	xan2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8C
+	rVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXw
+	CIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x02
+	67AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr
+	0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ
+	18PUUUUU=
 
-On Thu, 26 Mar 2026 01:39:34 -0700
-Pawan Gupta <pawan.kumar.gupta@linux.intel.com> wrote:
+Hi Puranjay,
 
-> On Wed, Mar 25, 2026 at 09:37:59PM +0100, Borislav Petkov wrote:
-> > On Tue, Mar 24, 2026 at 03:13:08PM -0700, Pawan Gupta wrote:  
-> > > This is cleaner. A few things to consider are, CLEAR_BRANCH_HISTORY that
-> > > calls clear_bhb_loop() would be calling into C code very early during the
-> > > kernel entry. The code generated here may vary based on the compiler. Any
-> > > indirect branch here would be security risk. This needs to be noinstr so
-> > > that it can't be hijacked by probes and ftraces.
-> > > 
-> > > At kernel entry, calling into C before mitigations are applied is risky.  
-> > 
-> > You can write the above function in asm if you prefer - should still be
-> > easier.  
-> 
-> I believe the equivalent for cpu_feature_enabled() in asm is the
-> ALTERNATIVE. Please let me know if I am missing something.
-> 
-> Regarding your intent to move the loop count selection out of the BHB
-> sequence, below is what I could come up. It is not as pretty as the C
-> version, but it is trying to achieve something similar:
+Thanks for the review and the tags!
 
-I think that fails on being harder to read and longer.
-So no real benefit.
+Sorry for missing you on the CC list for the rest of the series—I 
+thought git send-email would do it automatically. I will double-check 
+the CC list and wait 3-4 days between versions next time.
 
-I believe this code has to be asm because it is required to excute
-specific instructions in a specific order - you can't trust the C
-compiler to do that for you.
+By the way, I left a question for you in v3 about the insn->off 
+truncation warning.
+If you have a moment, you can find it here:
+https://lore.kernel.org/bpf/20260323122254.98540-4-tangyazhou@zju.edu.cn/
 
-	David
+Thanks again for your time and guidance.
 
+Best,
+Yazhou
+
+On 3/26/26 17:13, Puranjay Mohan wrote:
+> On Thu, Mar 26, 2026 at 9:08 AM Puranjay Mohan <puranjay12@gmail.com> wrote:
+>>
+>> On Thu, Mar 26, 2026 at 9:02 AM Yazhou Tang <tangyazhou@zju.edu.cn> wrote:
+>>>
+>>> From: Yazhou Tang <tangyazhou518@outlook.com>
+>>>
+>>> In jit_subprogs(), restoring bpf_pseudo_call instructions truncates
+>>> the 32-bit call_imm into the 16-bit insn->off. For large BPF programs
+>>> (e.g., call_imm > 32767), this silent truncation causes find_subprog()
+>>> to return an incorrect subprog ID, which is then stored in insn->imm.
+>>>
+>>> Consequently, "bpftool prog dump xlated" reads the corrupted insn->imm,
+>>> fails to resolve the subprogram name, and incorrectly displays a raw
+>>> kernel pointer.
+>>>
+>>> For example, dumping the xlated bytecode of the JIT-loaded selftest
+>>> introduced in patch 2/3 (call_imm == 32768, i.e., 0x00008000) shows
+>>> that it is truncated to 0x8000 and reinterpreted as -32768 in s16:
+>>>
+>>> Before this patch (with call_imm > 32767):
+>>>     4: (85) call pc+2#bpf_prog_71cfe20590be813a_padding_subprog
+>>>     5: (85) call pc-32768#0xffffffff814aed4e
+>>>
+>>> After this patch:
+>>>     4: (85) call pc+2#bpf_prog_71cfe20590be813a_padding_subprog
+>>>     5: (85) call pc-32768#bpf_prog_5dccd3f669bbe4e4_target_subprog
+>>>
+>>> This patch fixes the issue by passing the un-truncated 32-bit
+>>> env->insn_aux_data[i].call_imm directly to find_subprog().
+>>>
+>>> Note that the assignment to insn->off is retained. Although it still
+>>> truncates for large jumps, it remains correct for the vast majority
+>>> of BPF programs where the offset fits within s16 bounds. Keeping it
+>>> ensures backward compatibility for existing user-space tools that rely
+>>> on insn->off to display the relative offset. A comment is added to
+>>> explicitly clarify this truncation behavior.
+>>>
+>>> Suggested-by: Puranjay Mohan <puranjay@kernel.org>
+>>> Fixes: 7105e828c087 ("bpf: allow for correlation of maps and helpers in dump")
+>>> Co-developed-by: Tianci Cao <ziye@zju.edu.cn>
+>>> Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
+>>> Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
+>>> Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
+>>> Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
+>>> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+>>
+>> Reviewed-by: Puranjay Mohan <puranjay@kernel.org>
+>>
+>> Yazhou, you should wait 3-4 days before sending the next version of a
+>> patch(set) and add a changelog so it is easy to see what changed
+>> between versions. For single patches you can add changelog below the
+>> "---" and for multi patch sets, you do it in the cover letter.
+>>
+>> Thanks
 > 
-> diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-> index ecae3cef9d8c..54c65b0a3f65 100644
-> --- a/arch/x86/entry/entry_64.S
-> +++ b/arch/x86/entry/entry_64.S
-> @@ -1494,6 +1494,20 @@ SYM_CODE_START_NOALIGN(rewind_stack_and_make_dead)
->  SYM_CODE_END(rewind_stack_and_make_dead)
->  .popsection
->  
-> +/*
-> + * Between the long and short version of BHB clear sequence, just the
-> + * loop count differs based on BHI_CTRL, see Intel's BHI guidance.
-> + */
-> +#define BHB_SHORT_LOOP_OUTER	5
-> +#define BHB_SHORT_LOOP_INNER	5
-> +
-> +#define BHB_LONG_LOOP_OUTER	12
-> +#define BHB_LONG_LOOP_INNER	7
-> +
-> +#define BHB_MOVB(type, reg)						\
-> +	ALTERNATIVE __stringify(movb $BHB_SHORT_LOOP_##type, reg),	\
-> +		    __stringify(movb $BHB_LONG_LOOP_##type, reg), X86_FEATURE_BHI_CTRL
-> +
->  /*
->   * This sequence executes branches in order to remove user branch information
->   * from the branch history tracker in the Branch Predictor, therefore removing
-> @@ -1540,12 +1554,7 @@ SYM_FUNC_START(clear_bhb_loop_nofence)
->  	/* BPF caller may require all registers to be preserved */
->  	push	%rax
->  
-> -	/*
-> -	 * Between the long and short version of BHB clear sequence, just the
-> -	 * loop count differs based on BHI_CTRL, see Intel's BHI guidance.
-> -	 */
-> -	ALTERNATIVE "movb $5,  %al",	\
-> -		    "movb $12, %al", X86_FEATURE_BHI_CTRL
-> +	BHB_MOVB(OUTER, %al)
->  
->  	ANNOTATE_INTRA_FUNCTION_CALL
->  	call	1f
-> @@ -1567,8 +1576,7 @@ SYM_FUNC_START(clear_bhb_loop_nofence)
->  	 * but some Clang versions (e.g. 18) don't like this.
->  	 */
->  	.skip 32 - 14, 0xcc
-> -2:	ALTERNATIVE "movb $5, %ah",	\
-> -		    "movb $7, %ah", X86_FEATURE_BHI_CTRL
-> +2:	BHB_MOVB(INNER, %ah)
->  3:	jmp	4f
->  	nop
->  4:	sub	$1, %ah
+> I realized you do have a changelog in the cover letter, but you only
+> cc-ed me in this patch and not the cover letter and other two patches.
+> Anyways, I have seen those two patches from the list and they look
+> good to me so you can add Reviewed-by: Puranjay Mohan
+> <puranjay@kernel.org> to them as well.
 > 
-> 
-> Below is how the disassembly looks like:
-> 
-> clear_bhb_loop_nofence:
-> 	...
-> 	call    1f
-> 	jmp     5f
-> 	// BHB_MOVB(OUTER, %al)
-> 	mov    $0x5,%al
+> Thanks
 
