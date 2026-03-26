@@ -1,177 +1,228 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82FBAF4F1;
-	Thu, 26 Mar 2026 01:28:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50D7A1A316E
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 01:31:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774488531; cv=none; b=PfZcJtRbXoGVAEVhBuPV/c8amRd0+d9nPDDbcTRhcSRkSlozRgxI4LJvZx1N/VrC80RHM3LZ/ocKuQPJV2arhQoYk01jYtCCA0qkqOho9eL/k0wiHSDMoc/DEqUrWTYJt3YsffIBxctROBTU7nowukEM4Y3mghA7t7ve9zuE9P4=
+	t=1774488718; cv=none; b=o5qK6pmOpAMpPe5PnSNQgvbBzPfzpIo/x8NXHemCwSPaWkxaekMzvLFbdGrLf3YcouZUZ+w6jvNNbs8X4yQmYygK8k/5OwFRzvyVxp6rQjNUUOcmAqSNQg1DeGwgiUXF9o9CWhPvDJ2qJPwbOS3vRlopA36KQHq1D/g8pBun/EU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774488531; c=relaxed/simple;
-	bh=0Cq7OMqDyz29Hy/YQIvOOTgh39yp/jjxAwDycnlq/O0=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=WUy6Adt/wTSA2KclWJzTRK3DBM6NvXfdRYO9O51OS3uJiN2S7VmuEBVqfV8fJKFB2cSIbxPioovUs2hkuyPWfq91a2RmVbTK4c8EEq1oxtWUObO/STRlK9n4A+qNfMA5NFkC4CyQ1uy1srPr8fUy2zIJnxggaM3wMmZZPJef4YM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MLfhqhkz; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MLfhqhkz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3592AC4CEF7;
-	Thu, 26 Mar 2026 01:28:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774488531;
-	bh=0Cq7OMqDyz29Hy/YQIvOOTgh39yp/jjxAwDycnlq/O0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=MLfhqhkzsxa7tc0jHzhytzV6qchl81dHU9KAPgpYRYmOHYLzk4wblKHPtqEHyv28p
-	 Q/b1ZGVBAKVMA2DtsWIH4xs0i1VJ2p7crVWlc/njQGIq3j2rxJcz4zZlqQtGtXSKGY
-	 qE7kmn3skAAmdHpynUh6G1IcDYzRBpRJQJ2v9dHtuEYl1SHM9u79m3ODxDTtFbRHwF
-	 TrXVRIXikjQcC748T/h8YzRRuj5Is74hno4IqadGPqhCATzpJM+vXtHmT1645lImlw
-	 xbcKSEnaeY6vjDCFgor9rDZ7RPAf5TB+nN0PUncVs3G3ToCrGTMxxDR5q52eHlIdvK
-	 yL93d9yknBOTA==
-Date: Thu, 26 Mar 2026 10:28:40 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: "Vineeth Pillai (Google)" <vineeth@bitbyteword.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Peter Zijlstra
- <peterz@infradead.org>, Dmitry Ilvokhin <d@ilvokhin.com>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
- io-uring@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Marcelo Ricardo Leitner
- <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, Jon Maloy
- <jmaloy@redhat.com>, Aaron Conole <aconole@redhat.com>, Eelco Chaudron
- <echaudro@redhat.com>, Ilya Maximets <i.maximets@ovn.org>,
- netdev@vger.kernel.org, bpf@vger.kernel.org, linux-sctp@vger.kernel.org,
- tipc-discussion@lists.sourceforge.net, dev@openvswitch.org, Jiri Pirko
- <jiri@resnulli.us>, Oded Gabbay <ogabbay@kernel.org>, Koby Elbaz
- <koby.elbaz@intel.com>, dri-devel@lists.freedesktop.org,
- "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar
- <viresh.kumar@linaro.org>, "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
- Huang Rui <ray.huang@amd.com>, Mario Limonciello
- <mario.limonciello@amd.com>, Len Brown <lenb@kernel.org>, Srinivas
- Pandruvada <srinivas.pandruvada@linux.intel.com>, linux-pm@vger.kernel.org,
- MyungJoo Ham <myungjoo.ham@samsung.com>, Kyungmin Park
- <kyungmin.park@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>,
- Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>, Sumit Semwal
- <sumit.semwal@linaro.org>, linaro-mm-sig@lists.linaro.org, Eddie James
- <eajames@linux.ibm.com>, Andrew Jeffery <andrew@codeconstruct.com.au>, Joel
- Stanley <joel@jms.id.au>, linux-fsi@lists.ozlabs.org, David Airlie
- <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Alex Deucher
- <alexander.deucher@amd.com>, Danilo Krummrich <dakr@kernel.org>, Matthew
- Brost <matthew.brost@intel.com>, Philipp Stanner <phasta@kernel.org>, Harry
- Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>,
- amd-gfx@lists.freedesktop.org, Jiri Kosina <jikos@kernel.org>, Benjamin
- Tissoires <bentiss@kernel.org>, linux-input@vger.kernel.org, Wolfram Sang
- <wsa+renesas@sang-engineering.com>, linux-i2c@vger.kernel.org, Mark Brown
- <broonie@kernel.org>, Michael Hennerich <michael.hennerich@analog.com>,
- Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, linux-spi@vger.kernel.org,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- linux-scsi@vger.kernel.org, Chris Mason <clm@fb.com>, David Sterba
- <dsterba@suse.com>, linux-btrfs@vger.kernel.org, Thomas Gleixner
- <tglx@linutronix.de>, Andrew Morton <akpm@linux-foundation.org>, SeongJae
- Park <sj@kernel.org>, linux-mm@kvack.org, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 01/19] tracepoint: Add trace_call__##name() API
-Message-Id: <20260326102840.80a270ec818fea7e000aeef4@kernel.org>
-In-Reply-To: <20260323160052.17528-2-vineeth@bitbyteword.org>
-References: <20260323160052.17528-1-vineeth@bitbyteword.org>
-	<20260323160052.17528-2-vineeth@bitbyteword.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1774488718; c=relaxed/simple;
+	bh=d0TzmQ5D+kXpxhTGCOO4nZEMk0y7TKId7CV3s/K1mEc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mi7WTW28zcSnX0AnnK0A0oGNTa3XI7oEUjrIllGaSXQ+HEC48WS26WaHd1hi0EaGw3Hkg6SuoJcNHMjxOzr21N/6wcpHRs5SQPH4W+30Nws7u3f+TVZ9iN80KlTI2NWeizIjPCBqjUczg6/hxHmncOGNxD0MQ6OjT6TR2fn7We4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id 5EFC32E280EDA; Wed, 25 Mar 2026 18:31:44 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: Alan Maguire <alan.maguire@oracle.com>,
+	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+	dwarves@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	bpf@vger.kernel.org,
+	kernel-team@fb.com
+Subject: [PATCH dwarves v4 00/11] pahole: Encode true signatures in kernel BTF
+Date: Wed, 25 Mar 2026 18:31:44 -0700
+Message-ID: <20260326013144.2901265-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 23 Mar 2026 12:00:20 -0400
-"Vineeth Pillai (Google)" <vineeth@bitbyteword.org> wrote:
+Current vmlinux BTF encoding is based on the source level signatures.
+But the compiler may do some optimization and changed the signature.
+If the user tried with source level signature, their initial implementati=
+on
+may have wrong results and then the user need to check what is the
+problem and work around it, e.g. through kprobe since kprobe does not
+need vmlinux BTF.
 
-> Add trace_call__##name() as a companion to trace_##name().  When a
-> caller already guards a tracepoint with an explicit enabled check:
-> 
->   if (trace_foo_enabled() && cond)
->       trace_foo(args);
-> 
-> trace_foo() internally repeats the static_branch_unlikely() test, which
-> the compiler cannot fold since static branches are patched binary
-> instructions.  This results in two static-branch evaluations for every
-> guarded call site.
-> 
-> trace_call__##name() calls __do_trace_##name() directly, skipping the
-> redundant static-branch re-check.  This avoids leaking the internal
-> __do_trace_##name() symbol into call sites while still eliminating the
-> double evaluation:
-> 
->   if (trace_foo_enabled() && cond)
->       trace_invoke_foo(args);   /* calls __do_trace_foo() directly */
+Majority of changed signatures are due to dead argument elimination.
+The following is a more complex one. The original source signature:
+  typedef struct {
+        union {
+                void            *kernel;
+                void __user     *user;
+        };
+        bool            is_kernel : 1;
+  } sockptr_t;
+  typedef sockptr_t bpfptr_t;
+  static int map_create(union bpf_attr *attr, bpfptr_t uattr) { ... }
+After compiler optimization, the signature becomes:
+  static int map_create(union bpf_attr *attr, bool uattr__is_kernel) { ..=
+. }
+In the above, uattr__is_kernel corresponds to 'is_kernel' field in sockpt=
+r_t.
+This makes it easier for developers to understand what changed.
 
-nit: trace_call_foo() instead of trace_invoke_foo()?
+The new signature needs to properly follow ABI specification based on
+locations. Otherwise, that signature should be discarded. For example,
 
-Anyway looks good to me.
+    0x0242f1f7:   DW_TAG_subprogram
+                    DW_AT_name      ("memblock_find_in_range")
+                    DW_AT_calling_convention        (DW_CC_nocall)
+                    DW_AT_type      (0x0242decc "phys_addr_t")
+                    ...
+    0x0242f22e:     DW_TAG_formal_parameter
+                      DW_AT_location        (indexed (0x14a) loclist =3D =
+0x005595bc:
+                         [0xffffffff87a000f9, 0xffffffff87a00178): DW_OP_=
+reg5 RDI
+                         [0xffffffff87a00178, 0xffffffff87a001be): DW_OP_=
+reg14 R14
+                         [0xffffffff87a001be, 0xffffffff87a001c7): DW_OP_=
+entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
+                         [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_=
+reg14 R14)
+                      DW_AT_name    ("start")
+                      DW_AT_type    (0x0242decc "phys_addr_t")
+                      ...
+    0x0242f239:     DW_TAG_formal_parameter
+                      DW_AT_location        (indexed (0x14b) loclist =3D =
+0x005595e6:
+                         [0xffffffff87a000f9, 0xffffffff87a00175): DW_OP_=
+reg4 RSI
+                         [0xffffffff87a00175, 0xffffffff87a001b8): DW_OP_=
+reg3 RBX
+                         [0xffffffff87a001b8, 0xffffffff87a001c7): DW_OP_=
+entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
+                         [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_=
+reg3 RBX)
+                      DW_AT_name    ("end")
+                      DW_AT_type    (0x0242decc "phys_addr_t")
+                      ...
+    0x0242f245:     DW_TAG_formal_parameter
+                      DW_AT_location        (indexed (0x14c) loclist =3D =
+0x00559610:
+                         [0xffffffff87a001e3, 0xffffffff87a001ef): DW_OP_=
+breg4 RSI+0)
+                      DW_AT_name    ("size")
+                      DW_AT_type    (0x0242decc "phys_addr_t")
+                      ...
+    0x0242f250:     DW_TAG_formal_parameter
+                      DW_AT_const_value     (4096)
+                      DW_AT_name    ("align")
+                      DW_AT_type    (0x0242decc "phys_addr_t")
+                      ...
 
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+The third argument should correspond to RDX for x86_64. But the location =
+suggests that
+the parameter value is stored in the address with 'RSI + 0'. It is not cl=
+ear whether
+the parameter value is stored in RDX or not. So we have to discard this f=
+unciton in
+vmlinux BTF to avoid incorrect true signatures.
 
+For llvm, any function having
+  DW_AT_calling_convention        (DW_CC_nocall)
+in dwarf DW_TAG_subprogram will indicate that this function has signature=
+ changed.
+I did experiment with latest bpf-next. For x86_64, there are 69103 kernel=
+ functions
+and 875 kernel functions having signature changed. A series of patches ar=
+e intended
+to ensure true signatures are properly represented. Eventually, only 18 f=
+unctions
+cannot have true signatures due to locations.
 
-> 
-> Three locations are updated:
-> - __DECLARE_TRACE: invoke form omits static_branch_unlikely, retains
->   the LOCKDEP RCU-watching assertion.
-> - __DECLARE_TRACE_SYSCALL: same, plus retains might_fault().
-> - !TRACEPOINTS_ENABLED stub: empty no-op so callers compile cleanly
->   when tracepoints are compiled out.
-> 
-> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-> Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Vineeth Pillai (Google) <vineeth@bitbyteword.org>
-> Assisted-by: Claude:claude-sonnet-4-6
-> ---
->  include/linux/tracepoint.h | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
-> index 22ca1c8b54f32..ed969705341f1 100644
-> --- a/include/linux/tracepoint.h
-> +++ b/include/linux/tracepoint.h
-> @@ -294,6 +294,10 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
->  			WARN_ONCE(!rcu_is_watching(),			\
->  				  "RCU not watching for tracepoint");	\
->  		}							\
-> +	}								\
-> +	static inline void trace_call__##name(proto)			\
-> +	{								\
-> +		__do_trace_##name(args);				\
->  	}
->  
->  #define __DECLARE_TRACE_SYSCALL(name, proto, args, data_proto)		\
-> @@ -313,6 +317,11 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
->  			WARN_ONCE(!rcu_is_watching(),			\
->  				  "RCU not watching for tracepoint");	\
->  		}							\
-> +	}								\
-> +	static inline void trace_call__##name(proto)			\
-> +	{								\
-> +		might_fault();						\
-> +		__do_trace_##name(args);				\
->  	}
->  
->  /*
-> @@ -398,6 +407,8 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
->  #define __DECLARE_TRACE_COMMON(name, proto, args, data_proto)		\
->  	static inline void trace_##name(proto)				\
->  	{ }								\
-> +	static inline void trace_call__##name(proto)			\
-> +	{ }								\
->  	static inline int						\
->  	register_trace_##name(void (*probe)(data_proto),		\
->  			      void *data)				\
-> -- 
-> 2.53.0
-> 
+For arm64, there are 863 kernel functions having signature changed, and
+70 functions cannot have true signatures due to locations. I checked thos=
+e
+functions and look like llvm arm64 backend more relaxed to compute parame=
+ter
+values.
 
+For full testing, I enabled true signature support in kernel scripts/Make=
+file.btf like below:
+  -pahole-flags-$(call test-ge, $(pahole-ver), 130) +=3D --btf_features=3D=
+attributes
+  +pahole-flags-$(call test-ge, $(pahole-ver), 130) +=3D --btf_features=3D=
+attributes --btf_features=3D+true_signature
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+For the patch set, Patch 1 introduced usage of DW_AT_calling_convention, =
+which
+can precisely identify which function has signature changed. This can fil=
+ter
+majority of functions where their signature won't change. Patch 2 did a p=
+rescan
+of parameter registers to accommodate some cases where the optimization c=
+ould
+happen but didn't. Patches 3 to 9 tried to find functions with true signa=
+ture.
+Patch 10 enables to btf encoder to properly generate BTF.
+Patch 11 includes a few tests.
+
+Changelog:
+  v3 -> v4:
+    - v3: https://lore.kernel.org/bpf/20260320190917.1970524-1-yonghong.s=
+ong@linux.dev/
+    - Add simple prescan of parameter registers in order to get true sign=
+atures
+      for those functions where optimization could happen but compiler di=
+dn't do it.
+    - Do not create a new name (e.g. "uattr__is_kernel") with malloc at p=
+arameter_reg()
+      stage. Instead remember both "uattr" and "is_kernel" and later gene=
+rate the
+      name "uattr_is_kernel" in btf encoder.
+    - Add comments to explain how to handle parameters which may take two=
+ registers.
+    - Fix some test failures on aarch64.
+  v2 -> v3:
+    - v2: https://lore.kernel.org/bpf/20260309153215.1917033-1-yonghong.s=
+ong@linux.dev/
+    - Change tests by using newly added test_lib.sh.
+    - Simplify to get bool variable producer_clang.
+    - Try to avoid producer_clang appearance in dwarf_loader.c in order t=
+o avoid
+      clear separation between clang and gcc.
+  v1 -> v2:
+    - v1: https://lore.kernel.org/bpf/20260305225455.1151066-1-yonghong.s=
+ong@linux.dev/
+    - Added producer_clang guarding in btf_encoder. Otherwise, gcc kernel=
+ build
+      will crash pahole.
+    - Fix an early return in parameter__reg() which didn't do pthread_mut=
+ex_unlock()
+      which caused the deadlock for arm64.
+    - Add a few more places to guard with producer_clang and conf->true_s=
+ignature
+      to maintain the previous behavior if not clang or conf->true_signat=
+ure is false.
+
+Yonghong Song (11):
+  dwarf_loader: Reduce parameter checking with clang
+    DW_AT_calling_convention attr
+  dwarf_loader: Prescan all parameters with expected registers
+  dwarf_loader: Handle signatures with dead arguments
+  dwarf_loader: Refactor initial ret -1 to be macro PARM_DEFAULT_FAIL
+  dwarf_laoder: Handle locations with DW_OP_fbreg
+  dwarf_loader: Change exprlen checking condition in parameter__reg()
+  dwarf_loader: Detect optimized parameters with locations having
+    constant values
+  dwarf_loader: Check whether two-reg parameter actually use two regs or
+    not
+  dwarf_loader: Handle expression lists
+  btf_encoder: Handle optimized parameter properly
+  tests: Add a few clang true signature tests
+
+ btf_encoder.c                       |  32 +-
+ dwarf_loader.c                      | 546 ++++++++++++++++++++++++++--
+ dwarves.h                           |   3 +
+ tests/clang_parm_aggregate.sh       |  85 +++++
+ tests/clang_parm_optimized.sh       |  63 ++++
+ tests/clang_parm_optimized_stack.sh |  63 ++++
+ 6 files changed, 763 insertions(+), 29 deletions(-)
+ create mode 100755 tests/clang_parm_aggregate.sh
+ create mode 100755 tests/clang_parm_optimized.sh
+ create mode 100755 tests/clang_parm_optimized_stack.sh
+
+--=20
+2.52.0
+
