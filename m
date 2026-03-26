@@ -1,128 +1,116 @@
-Received: from mail-wr1-f68.google.com (mail-wr1-f68.google.com [209.85.221.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BC22325485
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 16:53:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.68
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774544025; cv=pass; b=jo3qsrfcIBU0k7XdNZtEr8ky9wp7mBtNd47WJ8tbs4TcHQF0lHF4C20l8IdkCJJc7t4tc0CF5jWlike40+rdD/r6z0FgM996P9W3alIig/ojRCxQCJVh/m/Vgt7KmUKW+KzIfXBMLf2Sn99Y1BYl48MYKS9c0CamGx6ss8gqxc8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774544025; c=relaxed/simple;
-	bh=A3PqtdqzkiyzeZpHgFTpllG6L7qSAtCCqgipTPm/urM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=roEQFqYYzQ2JGEx+bVMhW5AX6wJiuTIs/kgkLQjhXzwdNktJP7k5fJ3QEDGTmk0u8zYPqluxDkDrGfM8dy6aSrRSn+a7x0xz3dXpcIpjohH8umFbEc0DjRXWDWDV76zRON7x6dDVg5kM25kje9MaCNsqfjsWSpJfMDbyvh1LC4U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GzXE0vy1; arc=pass smtp.client-ip=209.85.221.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 280713988E6;
+	Thu, 26 Mar 2026 16:53:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774544030; cv=none; b=IyuaO2QHoSRNjKdaTyGGzcBIrvqeZhb/aZCx7eqTmt9R1LJ5XxDNVe4TzfUfzTXUUKfok8dQ5QCrH+sh9YPPFee9xPqp7zyPmi+sPAaNK8eBs7WENlVWZuoLI1uPoT17gH97larjLf4OFkI76oP3ulkI4ZfKzNpuP/VTCzmhv4g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774544030; c=relaxed/simple;
+	bh=XZWJ98mw/d9PXWaJqt8DPzYRnSBX+nG8fMx5SP0rQXc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=s4u5nac5gxz1im5Xittfrv/f/QQ4r2rJ19jRdrmb64s4176D7pRzneD0wC2e0+qFL1kPkAtO0kFr3RkWLr1Z0UhofGd5xSUYs8EfWW8HeMtx7iSESnrAiIPGaFl6OpNOl4gVxwA++zFofCq9GYNw4BGBQPFHdoaN9wQz9AfYDzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=unrPE2Ev; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GzXE0vy1"
-Received: by mail-wr1-f68.google.com with SMTP id ffacd0b85a97d-43b40003d13so858680f8f.2
-        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 09:53:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774544023; cv=none;
-        d=google.com; s=arc-20240605;
-        b=P5PiDLeHZBjC02/bQE88hPGC7QnSrn8BHbUsiu/A+O8Xanzg43M26rSiP0wkuxYpen
-         9NU2JUygnoCpLvuX+qov1Nqi2JJe5cdBXvFIFupN8CuK1cshQW5c6KjTitTWiKNhsn7Y
-         XwRWxLXn2fZcXjPpqQ6Qud+Y5Uc/EosS3KkZt2Xht2e90SJDdHI6d8YPDeBmi+JMvyIE
-         ukCqKOoFQH6ExCcsDk1CzymnZefenwAFM30WrtB03byRjtjOIGslwMNQ8fjTj9B/U7xV
-         KOTO+DJSXJqjUv0n8HrKo0JcIScJlzxzMdC7KDe4p115tb0i8o03NhGWSR1zfSByMGw1
-         ALiQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=k04eIS2j1nJe9MtCSKxboEDXj2ttdan/54E20AyItdE=;
-        fh=mV8Uwy03aTQpEc71kkKqimIDFbwq2oIhKiU5zAUO9K0=;
-        b=lCv1RbieFsMdNdDEDTHOW+OStdRDjM10Qck1p40P2jHbKe3enQIqDYhQpz0oVlcZOo
-         jTT7vuW2oYMUKCOjZQNC+mDpNj/VAVgQ7lyVMVNmGp8uYtl+CUoE7CrCJ1rbiaFSshiu
-         qe0N1Hdse8QKJ6NOiHAJmPX/3CBa93YhcU0C0sSvzWO3dSRl8oJDM6YYWL2/g4Kg5YxN
-         XZyEXXeHdbk3wxfC6FHMzYgK88u9YZqP6R433kdK1TrC7yPCo8gUe3ipPjEvnpLXrVYh
-         lJ4rlRm77HRcBJMw2fCfrmR5W9FQD+ngyr9a5WulSVLQAGW4rzMqwVayz6jk5ZNKH5G+
-         S1cw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774544023; x=1775148823; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=k04eIS2j1nJe9MtCSKxboEDXj2ttdan/54E20AyItdE=;
-        b=GzXE0vy18LXbqptjrepr/xVFDknhXh+dMadWo9/TVoNfPNQ3IDtZ2hLjo0Vb9H2uB1
-         yMZQQF7PaI/eihskYD4eyAhaNRcVwPS06dpXIj+RyBPQsFXCzMAY4058HyFQmgflzo73
-         93VLW9Ig90O05gC4wgPu+YZaniZClgMXtzM5zNjS98YfVt1Q9NSVugpd/0UqnswHJ03i
-         DcJrqgG4G3v8uSRs5vtl7gJ3Ntm+7foH8DbgNF1QT4jSGFCLU/fslnx2MzmDvXbmkstR
-         EkVLrY8sQTRRBCN/pCXItz6qpgV63x0C4MTp/ieOrmo0EqCyC7oI5QFAdjJB2+kV7zeu
-         ovRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774544023; x=1775148823;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k04eIS2j1nJe9MtCSKxboEDXj2ttdan/54E20AyItdE=;
-        b=mf0O6cTMQj+t9abUcjzp/kyV2En3rPnsprKuvg2j1I+KXV0Ux/wH+zxDiTAzCv0Z+/
-         XUQIrG+lW86dUd4WWXRds7bziQ2p7l/W9A+o/SpHIR6QVZLzum6j88CY3QFAxQsVJrsd
-         hOE3gUCy2kwbd04Ykt3+FKZXh4vbaztiEZTmpAoHrkWiVXsEyySjUbEGSeEjHXk76rVY
-         7zjBLbQ1xV83lTzkO6xf0i6FNcOInTVRKP/8Hjml8LT9RaW2s3IcWHq2W6HrdzQVMq7t
-         sCD75VyzYetfAtq9Dlec0orkLLUpAahylsuQ87vvMVt6EfLA5E3gvT1IwEnhHsuJXOu1
-         W/eQ==
-X-Gm-Message-State: AOJu0Yy5i2ma4aSdZQ6psaGYlWRDE2ZVHFymdCMIkcn1EOFCy4mVI/Xc
-	OW73HETlYtCSx//SbBS9/H8k6eKVrDgBhDQl4EBMZMlKFHlHxAb/Hcly9w2OuSc/8Jjyk4CSIrw
-	Li8wX60gsbgRaCRoqTCuhXtgWAzJQLedH/9oYwQI=
-X-Gm-Gg: ATEYQzx4nZkB2axqZj824QBvU9jNZOhzuWz1OhQ3mYd8QbJz69bd/Rc0iHaTksDtj/Q
-	WpyszKjmIE/iX06SK9y3fuffMGWmMeKO+LWMF5e6jhNHvtjbeGaSXLRv2WNXPb34efbrc3eIXTy
-	hRNLm82xOTrzoYa7KszeZVEELur6bbKpNNSTguiaEuFUQ8iX845mA3tYo4LEFGrG9SsjC/yd7lk
-	VxDm6082BksrDfNBGsan6MSKhnIEDQejdxP3S6o7WjrfoUAmytDSLIQiFfIScf4WsgxIW+dhHhB
-	+HgjRpnoVNy8g04MvX4ecrXdGT3CM+RvTK+kJ6NTlJXtd97elUIBn1aFSlZrASaA5nRl+yc=
-X-Received: by 2002:a5d:5d02:0:b0:439:c9e0:83a5 with SMTP id
- ffacd0b85a97d-43b88a41347mr12674364f8f.54.1774544022538; Thu, 26 Mar 2026
- 09:53:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="unrPE2Ev"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01275C116C6;
+	Thu, 26 Mar 2026 16:53:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774544029;
+	bh=XZWJ98mw/d9PXWaJqt8DPzYRnSBX+nG8fMx5SP0rQXc=;
+	h=From:Date:Subject:To:Cc:From;
+	b=unrPE2EvfuDKdH/n7sObSmFy+deZnmxUY/tJi/vcs/TAHdHW+RFa/vQ9GJhyMF6kS
+	 lMXpn5/fUQboEG6XnqZGNQV37bMpw3f6kXBF1yZFL+7Ooxe5tKbe7QLlOGDvndyI8b
+	 GRcuAm6rFzGOKy8ewBtAYjFdJGFH5H6WL29C/mVD+5kxF50tDibAZQXsgEWZ74fLXx
+	 mUPcAhCD/aiJh5sJ+qGbj74mPjFS25IQN3fDlA5J44XKTiWo5TyTkkp4eF4+UdiM0m
+	 551WzpPQOclOwClhsOTJQvQQmZDpyP58US+t33BcoD9VMr5f60TuAyIG8w4zvBe2GH
+	 9nX0YRaqnS6Ug==
+From: Christian Brauner <brauner@kernel.org>
+Date: Thu, 26 Mar 2026 17:53:44 +0100
+Subject: [PATCH] bpf: add bpf_real_inode() kfunc
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260325-sleepable_tracepoints-v6-0-2b182dacea13@meta.com> <20260325-sleepable_tracepoints-v6-6-2b182dacea13@meta.com>
-In-Reply-To: <20260325-sleepable_tracepoints-v6-6-2b182dacea13@meta.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Thu, 26 Mar 2026 17:53:06 +0100
-X-Gm-Features: AQROBzBPfHyFm2Gd6rlYwZ0z2pvboAMpyF7usmbcytRkkMuHuc8QEF-uMGXrLsM
-Message-ID: <CAP01T761uVV=xizguceH7A7+r8V-W-tb=bXGzHp+B=T7=Q2LUw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 6/6] selftests/bpf: Add tests for sleepable
- tracepoint programs
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com, 
-	Mykyta Yatsenko <yatsenko@meta.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260326-work-bpf-verity-v1-1-efe9edc46ddc@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAJdkxWkC/yWM0QrCMAxFf2Xk2cjMxhB/RXxIa+qi0I1mVmXs3
+ 2318RzuuSuYJBWDU7NCkqymUyxw2DXgR443Qb0WBmppaDsa8DWlB7o5YC7h8kHuu0BHx0w9Qan
+ mJEHfv8fz5c/2dHfxS72pC8cm6BJHP1aVg+2rgm37AnSmVnuOAAAA
+X-Change-ID: 20260326-work-bpf-verity-a43f28baa242
+To: Amir Goldstein <amir73il@gmail.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
+ linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org, 
+ Christian Brauner <brauner@kernel.org>
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2257; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=XZWJ98mw/d9PXWaJqt8DPzYRnSBX+nG8fMx5SP0rQXc=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQeTZmtpy73ZXGkPPMmxmsBspXBp3wDXrH78k/lvbjHq
+ WFRw4GcjlIWBjEuBlkxRRaHdpNwueU8FZuNMjVg5rAygQxh4OIUgIlo7mNkuKpyXOGWfGHZP4O/
+ b9d2lkXYhc1esfb0qzJl9o8u+/warzMynDZQkvfYr7OsbVPGUSnhrJt+Tm6P7lnvYJb5aHawTXY
+ XAwA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-On Wed, 25 Mar 2026 at 19:56, Mykyta Yatsenko
-<mykyta.yatsenko5@gmail.com> wrote:
->
-> From: Mykyta Yatsenko <yatsenko@meta.com>
->
-> Add functional tests for sleepable tracepoint programs that attach to
-> the nanosleep syscall and use bpf_copy_from_user() to read user memory:
->
->   - tp_btf: BTF-based raw tracepoint using SEC("tp_btf.s/sys_enter")
->     with PT_REGS_PARM1_SYSCALL (non-CO-RE macro for BTF programs).
->
->   - classic: Classic raw tracepoint using SEC("raw_tp.s/sys_enter")
->     with PT_REGS_PARM1_CORE_SYSCALL (CO-RE macro needed for classic).
->
->   - tracepoint: Classic tracepoint using
->     SEC("tp.s/syscalls/sys_enter_nanosleep") receiving
->     struct syscall_trace_enter with direct access to args[].
->
-> Add a negative test (handle_sched_switch) that verifies sleepable
-> programs are rejected on non-faultable tracepoints (sched_switch).
->
-> Update verifier/sleepable.c tests:
->   - Add "sleepable raw tracepoint accept" test for sys_enter.
->   - Rename reject test and update error message to match the new
->     descriptive "Sleepable program cannot attach to non-faultable
->     tracepoint" message.
->
-> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
-> ---
+Add a sleepable BPF kfunc that resolves the real inode backing a dentry
+via d_real_inode(). On overlay/union filesystems the inode attached to
+the dentry is the overlay inode which does not carry the underlying
+device information. d_real_inode() resolves through the overlay and
+returns the inode from the lower, real filesystem.
 
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+This is needed by the dm-verity based execution policy implemented in
+systemd [1] where BPF LSM hooks must resolve a file's backing block
+device via inode->i_sb->s_dev. Without looking through overlayfs the
+device lookup would return the overlay's anonymous device number instead
+of the actual dm-verity block device, causing all overlayfs-hosted
+binaries to be incorrectly denied.
 
-> [...]
+Link: https://github.com/systemd/systemd/pull/41340 [1]
+Signed-off-by: Christian Brauner <brauner@kernel.org>
+---
+ fs/bpf_fs_kfuncs.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
+index e4e51a1d0de2..fc30aa906b8c 100644
+--- a/fs/bpf_fs_kfuncs.c
++++ b/fs/bpf_fs_kfuncs.c
+@@ -353,6 +353,21 @@ __bpf_kfunc int bpf_cgroup_read_xattr(struct cgroup *cgroup, const char *name__s
+ }
+ #endif /* CONFIG_CGROUPS */
+ 
++/**
++ * bpf_real_inode - get the real inode backing a dentry
++ * @dentry: dentry to resolve
++ *
++ * If the dentry is on a union/overlay filesystem, return the underlying, real
++ * inode that hosts the data.  Otherwise return the inode attached to the
++ * dentry itself.
++ *
++ * Return: The real inode backing the dentry.
++ */
++__bpf_kfunc struct inode *bpf_real_inode(struct dentry *dentry)
++{
++	return d_real_inode(dentry);
++}
++
+ __bpf_kfunc_end_defs();
+ 
+ BTF_KFUNCS_START(bpf_fs_kfunc_set_ids)
+@@ -363,6 +378,7 @@ BTF_ID_FLAGS(func, bpf_get_dentry_xattr, KF_SLEEPABLE)
+ BTF_ID_FLAGS(func, bpf_get_file_xattr, KF_SLEEPABLE)
+ BTF_ID_FLAGS(func, bpf_set_dentry_xattr, KF_SLEEPABLE)
+ BTF_ID_FLAGS(func, bpf_remove_dentry_xattr, KF_SLEEPABLE)
++BTF_ID_FLAGS(func, bpf_real_inode, KF_SLEEPABLE)
+ BTF_KFUNCS_END(bpf_fs_kfunc_set_ids)
+ 
+ static int bpf_fs_kfuncs_filter(const struct bpf_prog *prog, u32 kfunc_id)
+
+---
+base-commit: 1f318b96cc84d7c2ab792fcc0bfd42a7ca890681
+change-id: 20260326-work-bpf-verity-a43f28baa242
+
