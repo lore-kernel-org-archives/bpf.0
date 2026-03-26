@@ -1,179 +1,125 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A820637C90C
-	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 15:02:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774537335; cv=pass; b=izgKux8PsKRJZpCeM1hAKBtX66+JvALRxmR6kd5k3QBBlMJyK94812KqURXOTjQ9yoQtG2ODYznNSkn0BHimPR0dQcDeE9Pq6q9plQRzMd+CMKZLMlTDBZdWIWXtWvp5xX7wnnMOFfCi4diJoo28G1GCCIcbAtu6zyQcMBMTt4s=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774537335; c=relaxed/simple;
-	bh=fQBoj1TH90YinvX7tOqOMb4BmPMJ09nlNwkXs74qpl8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=k/NxK8NdalaJ1/t0F7vvBG+pDQ+xpfrrd/zCoBqfWfSoHfJu9ug3Quv9u5J+NVUym0ZXJIHaGNI+Mr939URXlW2Oq7uinz3mR6B13ek1ApmaqTYvyShj/wRC/+BoHeWo2ynwzVAW3kZQIS/J0Jdz4EnsSzmi73IIt7gVq1sfY0M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UK3s+lPl; arc=pass smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA11837C901
+	for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 15:11:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774537879; cv=none; b=LCgT/sG1XN/OkbZdQ6vjclQDrV7JAyRSyjxfQ4tXRY7Ylj1igONpeZZBPt9Iz2accS8uC8kvkk4+3M48McySfhuPo+jJufVR7ce5BXgiBdjpU8SC1bBTl/9eNgtNOS07j3EVfSyeHzl7C+QhpleNVquds1KdwEC0amv7xtXBIqo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774537879; c=relaxed/simple;
+	bh=J694CBVV7rz8d7WT7BQSesrpAUX9vArQKayZzDb8HQg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ww0/+ubn+G9rTSOn87PFojeEicJiTOqp5eMtWILsBjpESb5BUBc2rIRk3mCImzjm/EucJZfKNAfniyaVi3n6jcgwiPkdsYqdFFthkz9LTWTxtgaY17Fq2C40+fwcoUEkhkax8N++6t6e+C+Kjqr70JWwaXb00RjXNtpoa+bjMrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jx0PmrPh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UK3s+lPl"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-43b949bf4easo620194f8f.0
-        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 08:02:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774537332; cv=none;
-        d=google.com; s=arc-20240605;
-        b=AXqfvvMyygx/T0LuX7adPG0lsorzK9Scviu+MX/KB5yc7md528m7l1WK3dSWN3XPJn
-         c044Uahj7E/SWPV3TUqGrkDIps2EeleGVEg7D2+9Hqv+gmOBF2dxxT0bazjdHnOSs4Dj
-         C4iVCe/5wouFnunNFwBS1mWG67O7zS3ZjFqTrZenaoHEwUeqZGsXPJbv0p10N40jdH7x
-         U3Ou2fevOSAE+RpXsfyyJaVz40LW6zHBClZE9mga5Z7VPuC/kTaIUvx4R++kxkR7d0+S
-         cK3OtDvVo8P68A46nTJOVgEpWZNE4YcPL5B5UBAq9/7rnvDciaYgitMLQ7rEZxxAAWAG
-         +ygA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=u/Sf6wOkMweWv83xQm9DiuxVskt6+OUeojXwOwVW50E=;
-        fh=nFHXqg0xz8tr10z5PVRe5z07vyod4WFSC0anmRz7flo=;
-        b=Zp1+Men1cXCqrWreqUw/6nNmJIIj2cxQnk8W2RsJjsIsVMkCaH5tW0xiWaQwn2e5Hm
-         7PdAqrKFOuOGx413O8jvI2BksBrftky1keEFvtubGW5qylW8buKHbHTYuID4qLGqbDPs
-         vLeW9f3wMVp0RrTsbHMe7zOTjBMoGpuVgVwnutn5CP7e36PGVmjvvT8XRHzDE07KgkmW
-         VlWO6dI/TXB3YHVDxqXyB+CeqS6TCERJzA0Sbd7RGdiyRvE9no2DbxK70CiX+g4o5Dk4
-         6uKY5Cl/f84ThL3WU1R4vha+qwoCb62OSa4ndOjxbEl75ZuKwGEWh0jCuBNyg7omrnCm
-         PWWg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774537332; x=1775142132; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u/Sf6wOkMweWv83xQm9DiuxVskt6+OUeojXwOwVW50E=;
-        b=UK3s+lPlD9MYqLbq2XqOb1LxIBTr7cQc3F+6Gvs2+Q3tcGDYwgES+sAUQc3pohNKup
-         NgxgItPP7kiMQQZCAVtjB1OTiLYbWvEj78uVJxEX7VFAJvjHjVg2I/2reW6reU1/0T4b
-         0+UGSHLyiqGsDDyTbwItbuk7keXVbLJCE4PlW6gYWUKCo0Y4p2Q7qoBFGLkvX2MflY5T
-         IcESzn6fAePJgfWulOELBEBfVPD2OG62+rNc8giuMNIqCS/N4+eLEf2XQWz8XPHjV+vn
-         EvnhCjcUl2QeEbjdCDSAaaFRmClBkKiVP2tNR2ViQmRLhE5qkVqd7duYgudQQyEWYww/
-         KxLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774537332; x=1775142132;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=u/Sf6wOkMweWv83xQm9DiuxVskt6+OUeojXwOwVW50E=;
-        b=qs6JeDkjvw9o2Qpd//79H1iW6M7DxdAf+MEDoMrsgF11bosBi0NPbTZ6bNM/jzKS2a
-         1N47U9m1CdTDtqJAk3IVM109vf6jyncUoe6ESzKnKu+yypBuutTv+enIo/HXJ13Nmmfr
-         6GBNorVo+H18Fv5vbtsJ6jHkFHOMrrviKFLQE+5LrugzLlxsBnUHvJWWDmdKQdRNnd7f
-         NlEbqC3+481jEUEM3LH88mPj8d+6CiZac8gEVxR3H3ltQWgqIY9EKuA8vG7gP9uR+M8b
-         WTeJA/lL/HQqrrpckcRGPT6XosnNU6/lSNOyN6oPHglLERZGj6UyjYx5jMZHHqzVQZ+k
-         AgUw==
-X-Forwarded-Encrypted: i=1; AJvYcCXZbRbcVlJRz20s27PSzspzR/Y5kIKGe84NSs0yWVWx1QDRY8MeoE5TbmP4OwQQ5dRjeMc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+bw///egSFWuOSIkBLPYWyAarlv1nnaChD8zAy/ZsvAyk9NNA
-	o+N8DBRJ40x5/hJGHOhPG80l9G8XeQmmmdZQU6dVyciCtshO9cvaUZuocToCgUTXAjjkRoYe0Je
-	8PLxFoFhqXFajm3tlCfxoaltWsizK6jU=
-X-Gm-Gg: ATEYQzxqZzW6B6HZSz6+87vfBgrrk4G529vLP10M+5mowSMwXB4h/+VY12QzzKWpoSB
-	GV5Dic9J3STzQ+srdTa/dCulgmaMbhhckKsXga23MV5KsUOIrdedPHziMjHNjcuT9mb31FJdk88
-	P2whydQSRJT2EPbEwxCNiMB0f8+ytAwdQZrZlF8SU8+a477UPRDvMFXZj6OQWldZd7URYVuHfz7
-	0e3poXqxty4VuCIsSUHtT/Up+VakhFlxTWFEzGSeRCVtL+Jm3UQ9Fcwc5kGUNMvzlX1ChcwEPyf
-	pQpP7Tnyoy5vd0h7i4NqE4evUgbBWjgIT4vkXTsSrH9UAuf5lPE/5gBiz3BzmK4r9l1k9iCMlHj
-	7LEhnJdA3
-X-Received: by 2002:a05:6000:1848:b0:43b:9687:620a with SMTP id
- ffacd0b85a97d-43b979fc0fdmr3667446f8f.5.1774537331511; Thu, 26 Mar 2026
- 08:02:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jx0PmrPh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34ED4C19423;
+	Thu, 26 Mar 2026 15:11:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774537879;
+	bh=J694CBVV7rz8d7WT7BQSesrpAUX9vArQKayZzDb8HQg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Jx0PmrPh7rU9r7YKE6Q8ScziXwwct4QXq8h8h607cekhxH5PU9T+rYjHhRlBZrdpP
+	 S+GQmRyUVisSJ0W0DEILSDA2vsZjCzgmy94Zb4vb2HK86ss7HIeX66YpQTDYQI1Itj
+	 6bKT+N7KT/wQc0dBtAiRRIH8G4IChVf5UZMOqgvnfLI06kh6Rkd350UoeOrWOLEtSj
+	 hMs/MRy7n766VYxN1GAxxI+xg6uRZV+ircjKyOwZ6xyfJFiBN4hYHB1vggUExOw5zD
+	 OSere+mNLeARhFyaUvICJ0NynhuTj9gB2xc66Sn+knC4kGGJNtIYVBPgZpgn+HeUbE
+	 7aupUZQ6m9OSA==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: bpf@vger.kernel.org
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	Puranjay Mohan <puranjay12@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
+	kernel-team@meta.com
+Subject: [RESEND PATCH bpf v5 0/3] bpf: fix and improve open-coded task_vma iterator
+Date: Thu, 26 Mar 2026 08:11:05 -0700
+Message-ID: <20260326151111.4002475-1-puranjay@kernel.org>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260326112521.2827500-1-wusamuel@google.com> <m2v7eig4ue.fsf@kernel.org>
- <CAP01T74KNVT2SVRR+XPbFb1vy85W=Jkp4_yD6xvTSg2avQo8AQ@mail.gmail.com>
-In-Reply-To: <CAP01T74KNVT2SVRR+XPbFb1vy85W=Jkp4_yD6xvTSg2avQo8AQ@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 26 Mar 2026 08:01:59 -0700
-X-Gm-Features: AQROBzCGtnU5-dOrxHATP1abxYAIKp7uD_DNHv2-zLG2AdZOG74ShatkiLTI8Ko
-Message-ID: <CAADnVQK252XxmxM3enS4wPREshTEawQKbChgN-teX3+wmxgdBQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] Support BPF traversal of wakeup sources
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Puranjay Mohan <puranjay@kernel.org>, Samuel Wu <wusamuel@google.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Android Kernel Team <kernel-team@android.com>, LKML <linux-kernel@vger.kernel.org>, 
-	Linux Power Management <linux-pm@vger.kernel.org>, driver-core@lists.linux.dev, 
-	bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Mar 26, 2026 at 7:54=E2=80=AFAM Kumar Kartikeya Dwivedi
-<memxor@gmail.com> wrote:
->
-> On Thu, 26 Mar 2026 at 13:20, Puranjay Mohan <puranjay@kernel.org> wrote:
-> >
-> > Samuel Wu <wusamuel@google.com> writes:
-> >
-> > > This patchset adds requisite kfuncs for BPF programs to safely traver=
-se
-> > > wakeup_sources, and puts a config flag around the sysfs interface.
-> > >
-> > > Currently, a traversal of wakeup sources require going through
-> > > /sys/class/wakeup/* or /d/wakeup_sources/*. The repeated syscalls to =
-query
-> > > sysfs is inefficient, as there can be hundreds of wakeup_sources, wit=
-h each
-> > > wakeup source also having multiple attributes. debugfs is unstable an=
-d
-> > > insecure.
-> > >
-> > > Adding kfuncs to lock/unlock wakeup sources allows BPF program to saf=
-ely
-> > > traverse the wakeup sources list. The head address of wakeup_sources =
-can
-> > > safely be resolved through BPF helper functions or variable attribute=
-s.
-> > >
-> > > On a quiescent Pixel 6 traversing 150 wakeup_sources, I am seeing ~34=
-x
-> > > speedup (sampled 75 times in table below). For a device under load, t=
-he
-> > > speedup is greater.
-> > > +-------+----+----------+----------+
-> > > |       | n  | AVG (ms) | STD (ms) |
-> > > +-------+----+----------+----------+
-> > > | sysfs | 75 | 44.9     | 12.6     |
-> > > +-------+----+----------+----------+
-> > > | BPF   | 75 | 1.3      | 0.7      |
-> > > +-------+----+----------+----------+
-> > >
-> > > The initial attempts for BPF traversal of wakeup_sources was with BPF
-> > > iterators [1]. However, BPF already allows for traversing of a simple=
- list
-> > > with bpf_for(), and this current patchset has the added benefit of be=
-ing
-> > > ~2-3x more performant than BPF iterators.
-> >
-> > I left some inline comments on patch 1, but the high level concern is
-> > that encoding the SRCU index into a fake pointer to get KF_ACQUIRE/
-> > KF_RELEASE tracking is working against the verifier rather than with it=
-.
-> > Nothing actually prevents a BPF program from walking the list without
-> > the lock, and the whole pointer encoding trick goes away if this is don=
-e
-> > as an open-coded iterator instead.
->
-> Which is fine, the critical section is only doing CO-RE accesses, and
-> the SRCU lock is just to be able to read things in a valid state while
-> walking the list. It is all best-effort.
-> Open coded iterators was already explored as an option in earlier
-> iterations of the series and discarded as no-go.
+Changelog:
+v4: https://lore.kernel.org/all/20260316185736.649940-1-puranjay@kernel.org/
+Changes in v5:
+- Use get_task_mm() instead of a lockless task->mm read followed by
+  mmget_not_zero() to fix a use-after-free: mm_struct is not
+  SLAB_TYPESAFE_BY_RCU, so the lockless pointer can go stale (AI)
+- Add a local bpf_iter_mmput_async() wrapper with #ifdef CONFIG_MMU
+  to avoid modifying fork.c and sched/mm.h outside the BPF tree
+- Drop the fork.c and sched/mm.h changes that widened the
+  mmput_async() #if guard
+- Disable IRQs around get_task_mm() to prevent raw tracepoint
+  re-entrancy from deadlocking on task_lock()
 
-kinda best-effort...
-the way it's written bpf_wakeup_sources_get_head() returns
-trusted list_head. It's then core-read-ed anyway.
-Ideally it should be trusted only within that srcu CS
-and invalidated by the verifier similar to KF_RCU_PROTECTED,
-but that's bigger task.
-Instead let's make bpf_wakeup_sources_get_head() return 'void *',
-so it's clearly untrusted.
+v3: https://lore.kernel.org/all/20260311225726.808332-1-puranjay@kernel.org/
+Changes in v4:
+- Disable task_vma iterator in irq_disabled() contexts to mitigate deadlocks (Alexei)
+- Use a helper function to reset the snapshot (Andrii)
+- Remove the redundant snap->vm_mm = kit->data->mm; (Andrii)
+- Remove all irq_work deferral as the iterator will not work in
+  irq_disabled() sections anymore and _new() will return -EBUSY early.
+
+v2: https://lore.kernel.org/all/20260309155506.23490-1-puranjay@kernel.org/
+Changes in v3:
+- Remove the rename patch 1 (Andrii)
+- Put the irq_work in the iter data, per-cpu slot is not needed (Andrii)
+- Remove the unnecessary !in_hardirq() in the deferral path (Alexei)
+- Use PAGE_SIZE advancement in case vma shrinks back to maintain the
+  forward progress guarantee (AI)
+
+v1: https://lore.kernel.org/all/20260304142026.1443666-1-puranjay@kernel.org/
+Changes in v2:
+- Add a preparatory patch to rename mmap_unlock_irq_work to
+  bpf_iter_mm_irq_work (Mykyta)
+- Fix bpf_iter_mmput() to also defer for IRQ disabled regions (Alexei)
+- Fix a build issue where mmpu_async() is not available without
+  CONFIG_MMU (kernel test robot)
+- Reuse mmap_unlock_irq_work (after rename) for mmput (Mykyta)
+- Move vma lookup (retry block) to a separate function (Mykyta)
+
+This series fixes the mm lifecycle handling in the open-coded task_vma
+BPF iterator and switches it from mmap_lock to per-VMA locking to reduce
+contention. It then fixes a deadlock that is caused by holding locks
+accross the body of the iterator where faulting is allowed.
+
+Patch 1 fixes a use-after-free where task->mm was read locklessly and
+could be freed before the iterator used it. It uses get_task_mm() to
+safely acquire the mm reference under task_lock() and disables the
+iterator in irq_disabled() contexts by returning -EBUSY from _new().
+
+Patch 2 switches from holding mmap_lock for the entire iteration to
+per-VMA locking via lock_vma_under_rcu(). This still doesn't fix the
+deadlock problem because holding the per-vma lock for the whole
+iteration can still cause lock ordering issues when a faultable helper
+is called in the body of the iterator.
+
+Patch 3 resolves the lock ordering problems caused by holding the
+per-VMA lock or the mmap_lock (not applicable after patch 2) across BPF
+program execution. It snapshots VMA fields under the lock, then drops
+the lock before returning to the BPF program. File references are
+managed via get_file()/fput() across iterations.
+
+Puranjay Mohan (3):
+  bpf: fix mm lifecycle in open-coded task_vma iterator
+  bpf: switch task_vma iterator from mmap_lock to per-VMA locks
+  bpf: return VMA snapshot from task_vma iterator
+
+ kernel/bpf/task_iter.c | 141 ++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 125 insertions(+), 16 deletions(-)
+
+
+base-commit: c369299895a591d96745d6492d4888259b004a9e
+-- 
+2.52.0
+
