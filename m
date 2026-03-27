@@ -1,69 +1,254 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 429B237E2EB
-	for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 22:04:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33148393DD9
+	for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 22:06:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774649074; cv=none; b=Y7xk9rcPmDOEiyT1IMmDpXK/1afQ2t++R8Bzpx4YD3fmhSzw9k5FnXa7GzRFVMRwjX1/quf2EyIsSuBuUmVyK36fmcV3296cNNu+VfPmIW3XlX+ZDAYPzxqoXbPAIPwiL3QtOOL52tnsFlpDICHsUAopJ2iATYOP9xraKhOJScE=
+	t=1774649196; cv=none; b=XqVgXV4pTIPdJ4CuB3bO42eE6QrM6SxulDLeubzXWrxO8dYTu4cROzdf7eRTVmE03NKXix7sP5nIl1VVvTcI8Z0RCB9CKdNfxNYWPvML4dnXigZAyZ7p9aOgC6XQ7ZSxo+NqbFRAw/Zq4a+AM3lY1yYdoeDkumU+56miqguTcTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774649074; c=relaxed/simple;
-	bh=pvi0CPbsuhv5zp2v4yL/p7j7QhpOiY/TiqHjEbxndOM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PTg/jTNkTST+EK9FbQh5Bqc8AfnnTXs9LXNkQQVNC0oaBD/K0OiOfnF4JZR/BL++GcI6GrSc7LO4N73Uxw89CMfMLSAp20ypk3tmG7pPwWSrMeoVm/xpVnq1YWwHLHJGOlz+Zd1Y4MoLXIeNyLruVyQ5Jhrce1ySqvMYTsbh5A8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Hg2JOogO; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1774649196; c=relaxed/simple;
+	bh=gEE1CjXR0TRZRdMZf+XjGUzs0f9SWb16JmhkPLTkD7w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QPePNDGmGQeIjGcDP4bFRd9UnrLh09AWRWNf3xeuBbd56d8PSiZ/b8UO1wwH2pm5Gitqw3Fwxiwnx3bR2/Bkf4eKgmmzCbBszcBA5/iNP9IZb0vOAYeuBKo98+wPqAp5NlL4Xo0arh4+x8R4KER3d21xQ0tCWskQgn9U7Tju/kM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=e7/WMkr8; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Hg2JOogO"
-Message-ID: <b6e99fa1-ffaf-4a9f-90aa-7e5424f1a7bb@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774649070;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bP9fkJOZ06UoL3UxqA2oSjuWDLkLScEcq9A5WfKzw3M=;
-	b=Hg2JOogO1w+EJoChWXmU4wEmapuO+vomuPQghYpAp6n4hQXN0RL9mKd9RsRo8NV9DvB4wU
-	r7pu0t04JVnOR/+U003serd6Z1+Am7qo1z8y2b7GarZMx4xpfE6uVW7siM1So6cpBdZ0oV
-	OWPgRJ6nFXklJux3eGdDvwwvbh/umKg=
-Date: Fri, 27 Mar 2026 15:04:25 -0700
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="e7/WMkr8"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=5vmzevZHkuRrjnC2YXofisHUWyZMpn1++JJi5mgur+M=; b=e7/WMkr8lt+ckxEMzPGOY6b5LA
+	Qm8e9sCd5pk1qqwXfUIXO/sQYu2N/FbVD84zq1TkfZOHoDC2/tUMeihZ1F7AuQMpZJYm+zDSK5JUB
+	hleHuFs++87VZmc9popk2UVEq731f15jYv0S/DaLNoBKgNsGoTNPbWafJDXAwifq4ctL/V3u+kmZ5
+	hirh2ReYNEZmlAZZ2Ej28Vp1rWZ5o9RCNtf3u/PzMIsCWX7FMAkVAVLO0mvoSAcdTqA36xiNEExU4
+	WcoO/ZBKfYDJmDgJaycxMp2W849Kafydq2L9qRbu839X9No/L4kVMFk+HjdPEgpWycE98oEb9QeCh
+	Zf4m8jHQ==;
+Received: from localhost ([127.0.0.1])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1w6FK2-000GsK-0S;
+	Fri, 27 Mar 2026 23:06:30 +0100
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	rivastava0@gmail.com
+Subject: [PATH bpf-next] selftests/bpf: Add few tests for alu32 shift value tracking and zext
+Date: Fri, 27 Mar 2026 23:06:29 +0100
+Message-ID: <20260327220629.343327-1-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 4/4] selftests/bpf: inline TEST_TAG constants in
- test_loader.c
-To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
- ast@kernel.org, andrii@kernel.org
-Cc: daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com,
- yonghong.song@linux.dev, cupertino.miranda@oracle.com
-References: <20260326-selftests-global-tags-ordering-v1-0-5dd2ced5d9ad@gmail.com>
- <20260326-selftests-global-tags-ordering-v1-4-5dd2ced5d9ad@gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260326-selftests-global-tags-ordering-v1-4-5dd2ced5d9ad@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/27953/Fri Mar 27 07:24:46 2026)
 
-On 3/26/26 10:39 AM, Eduard Zingerman wrote:
-> After str_has_pfx() refactoring each TEST_TAG_* / TEST_BTF_PATH
-> constant is used exactly once. Since constant definitions are not
-> shared between BPF-side bpf_misc.h and userspace side test_loader.c,
-> there is no need in the additional redirection layer.
-> 
-> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+Add few more alu32 shift tests using div-by-zero on provably dead paths
+to check both verifier and JIT xlation resp. runtime correctness.
 
-Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+If the verifier mistracks the result, it rejects due to the div by 0;
+if the JIT computes a wrong value, then runtime hits the dead path and
+retval changes.
 
-> ---
->  tools/testing/selftests/bpf/test_loader.c | 84 +++++++++++--------------------
->  1 file changed, 28 insertions(+), 56 deletions(-)
-> 
-> [...]
-> 
+  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t verifier_subreg
+  [...]
+  #644/76  verifier_subreg/arsh32_imm1_value:OK
+  #644/77  verifier_subreg/lsh32_reg0_zero_extend_check:OK
+  #644/78  verifier_subreg/rsh32_reg0_zero_extend_check:OK
+  #644/79  verifier_subreg/arsh32_reg0_zero_extend_check:OK
+  #644/80  verifier_subreg/lsh32_imm31_value:OK
+  #644/81  verifier_subreg/rsh32_imm31_value:OK
+  #644/82  verifier_subreg/arsh32_imm31_value:OK
+  #644/83  verifier_subreg/lsh32_unknown_precise_bounds:OK
+  #644/84  verifier_subreg/rsh32_unknown_bounds:OK
+  #644     verifier_subreg:OK
+  Summary: 1/84 PASSED, 0 SKIPPED, 0 FAILED
+
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+---
+ .../selftests/bpf/progs/verifier_subreg.c     | 165 ++++++++++++++++++
+ 1 file changed, 165 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/progs/verifier_subreg.c b/tools/testing/selftests/bpf/progs/verifier_subreg.c
+index be328100ba53..31832a306f91 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_subreg.c
++++ b/tools/testing/selftests/bpf/progs/verifier_subreg.c
+@@ -823,4 +823,169 @@ __naked void arsh_63_or(void)
+ 	: __clobber_all);
+ }
+ 
++SEC("socket")
++__success __retval(42)
++__naked void arsh32_imm1_value(void)
++{
++	asm volatile ("					\
++	r0 = 42;					\
++	r1 = -2147483648;				\
++	w1 s>>= 1;		/* r1 = 0xC0000000 */	\
++	r2 = 0xC0000000 ll;				\
++	if r1 == r2 goto l0_%=;			\
++	r0 /= 0;		/* unreachable */	\
++l0_%=:	exit;						\
++"	:
++	:
++	: __clobber_all);
++}
++
++SEC("socket")
++__success __retval(1)
++__naked void lsh32_reg0_zero_extend_check(void)
++{
++	asm volatile ("					\
++	r6 = 1;						\
++	call %[bpf_get_prandom_u32];			\
++	r1 = 0x1000000000 ll;				\
++	r0 |= r1;					\
++	w1 = 0;						\
++	w0 <<= w1;		/* reg shift by 0 */	\
++	r0 >>= 32;		/* must be 0 */		\
++	if r0 == 0 goto l0_%=;				\
++	r6 /= 0;		/* unreachable */	\
++l0_%=:	r0 = r6;					\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++SEC("socket")
++__success __retval(1)
++__naked void rsh32_reg0_zero_extend_check(void)
++{
++	asm volatile ("					\
++	r6 = 1;						\
++	call %[bpf_get_prandom_u32];			\
++	r1 = 0x1000000000 ll;				\
++	r0 |= r1;					\
++	w1 = 0;						\
++	w0 >>= w1;		/* reg rsh by 0 */	\
++	r0 >>= 32;		/* must be 0 */		\
++	if r0 == 0 goto l0_%=;				\
++	r6 /= 0;		/* unreachable */	\
++l0_%=:	r0 = r6;					\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++SEC("socket")
++__success __retval(1)
++__naked void arsh32_reg0_zero_extend_check(void)
++{
++	asm volatile ("					\
++	r6 = 1;						\
++	call %[bpf_get_prandom_u32];			\
++	r1 = 0x1000000000 ll;				\
++	r0 |= r1;					\
++	w1 = 0;						\
++	w0 s>>= w1;		/* reg arsh by 0 */	\
++	r0 >>= 32;		/* must be 0 */		\
++	if r0 == 0 goto l0_%=;				\
++	r6 /= 0;		/* unreachable */	\
++l0_%=:	r0 = r6;					\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++SEC("socket")
++__success __retval(42)
++__naked void lsh32_imm31_value(void)
++{
++	asm volatile ("					\
++	r0 = 42;					\
++	r1 = 1;						\
++	w1 <<= 31;		/* r1 = 0x80000000 */	\
++	r2 = 0x80000000 ll;				\
++	if r1 == r2 goto l0_%=;			\
++	r0 /= 0;		/* unreachable */	\
++l0_%=:	exit;						\
++"	:
++	:
++	: __clobber_all);
++}
++
++SEC("socket")
++__success __retval(42)
++__naked void rsh32_imm31_value(void)
++{
++	asm volatile ("					\
++	r0 = 42;					\
++	r1 = -2147483648;	/* 0x80000000 */	\
++	w1 >>= 31;		/* r1 = 1 */		\
++	if r1 == 1 goto l0_%=;				\
++	r0 /= 0;		/* unreachable */	\
++l0_%=:	exit;						\
++"	:
++	:
++	: __clobber_all);
++}
++
++SEC("socket")
++__success __retval(42)
++__naked void arsh32_imm31_value(void)
++{
++	asm volatile ("					\
++	r0 = 42;					\
++	r1 = -2147483648;	/* 0x80000000 */	\
++	w1 s>>= 31;		/* r1 = 0xFFFFFFFF */	\
++	r2 = 0xFFFFFFFF ll;				\
++	if r1 == r2 goto l0_%=;			\
++	r0 /= 0;		/* unreachable */	\
++l0_%=:	exit;						\
++"	:
++	:
++	: __clobber_all);
++}
++
++SEC("socket")
++__success __retval(1)
++__naked void lsh32_unknown_precise_bounds(void)
++{
++	asm volatile ("					\
++	r6 = 1;						\
++	call %[bpf_get_prandom_u32];			\
++	w0 &= 3;		/* u32: [0, 3] */	\
++	w0 <<= 1;		/* u32: [0, 6] */	\
++	if w0 < 7 goto l0_%=;				\
++	r6 /= 0;		/* unreachable */	\
++l0_%=:	r0 = r6;					\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++SEC("socket")
++__success __retval(1)
++__naked void rsh32_unknown_bounds(void)
++{
++	asm volatile ("					\
++	r6 = 1;						\
++	call %[bpf_get_prandom_u32];			\
++	w0 >>= 28;		/* u32: [0, 15] */	\
++	if w0 < 16 goto l0_%=;				\
++	r6 /= 0;		/* unreachable */	\
++l0_%=:	r0 = r6;					\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
+-- 
+2.43.0
 
