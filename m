@@ -1,218 +1,206 @@
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB97D388E67;
-	Fri, 27 Mar 2026 19:49:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E912DC359
+	for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 19:53:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774640950; cv=none; b=BRaOx5IXZt/JrcfLXXORMvbqY3K+ehw4nlG/boz+cDtc1wgc8ZW5f4vWtncEPi3QXQ5ySEPWa+h8D9T3vyhQakVnxW3SqE4xYyW4dZgiKM667Zk1BGz+p/+4bZSPwah3/M3WXNLUhm7ffe5oOcnpvFEhL7NWFhCg2+H3PcDGXQ0=
+	t=1774641194; cv=none; b=MspWf+vhUi07oOgq2vDb4ZyxgyYzMciUtKFBn5sVwKGA4EfTz1YvP9NahbCPQm/yeYKc/V2yujYtTL8XNYsYhRVJrf53Tvz01OmzwsfpCV10S8p8uSBSElzptG2OcWokT/OqnJst+NU5c1M4bcWB2ZGXGHI9ARLRY0a8OATuar8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774640950; c=relaxed/simple;
-	bh=xGrbC5F4b04ONwJEomxQGx5rA9AY/2JimpC5ZSKk+Yw=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=JHjzyOGClYIjrTqV6Ghn/A7twrCeLi8/LCzFyS2/41deg5qUnQUkorjQdeiH9uKfLuGu0btSsXl6Y1kDaBACPwJm+l7KNpdbXhycoDlcXND8soXs+DK5WKhry86neYYxiVbfpEaaofQed80nPvBwuvvc52+mpVAvvMURsnoJdm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=gqQXGWSx; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+	s=arc-20240116; t=1774641194; c=relaxed/simple;
+	bh=GEDJYkft/OmVVsV+DTZZJESwv5gAYjzclww29/nA0QU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YHAG2OZypjXjOAypKyZm4YXV7MXxqWIZK3Nyi0ms4xLcRwzhIux4AUU+Fv87l02PBBGQcEOMoXHSLLSH5DMROvyEnqRm2cpR4/JbJZCxUHcAur32shwCNCwOIdZcuKntTcMDcOfxg+qBXMy1QRuQj6Z38mlhJZjnmKZ7nw0Inw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmpxchg.org; spf=pass smtp.mailfrom=cmpxchg.org; dkim=pass (2048-bit key) header.d=cmpxchg.org header.i=@cmpxchg.org header.b=VVwz4gkn; arc=none smtp.client-ip=209.85.219.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmpxchg.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmpxchg.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="gqQXGWSx"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
-	To:From:Sender:Reply-To:Cc:Content-Type:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=HEcEMSdAtcSoh2KSyJwTVX69amc/NpQLVgQSqsTXIYs=; b=gqQXGWSxiX3V8T1ZcmRi98k83l
-	joXxyZcyVuGAdUiCQLhn7i8sFOKbAvsnP++jtk6/2d/fn40b/V5oHr1tEp+uXpYxE8aWn8HWCbCp8
-	vFeudNXa4oMMNecs2PTvq7yqZJzUiYhI2yD4yxbnS2yo63yqcNPVOp4gELLFmNFoJlkhkDK4kfNqK
-	RsXOcdgz/rMSK+4TPNMaaE1fsUKZVGrTXkito5TQskthmSczPLxs2zV/eGxQ/9eJkZ0WQZjIyGLBt
-	U2rP9vyY1ftxaMXkefE7kMjuHn8QzdTwX9iH88EVWxMn45VfE2AN9E6jLxGYupecDsuJ17fkTWMWr
-	mtZOY+MQ==;
-Received: from [179.221.50.217] (helo=toolbx)
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1w6DAt-007M01-Ph; Fri, 27 Mar 2026 20:48:56 +0100
-From: Helen Koike <koike@igalia.com>
-To: andrii@kernel.org,
-	eddyz87@gmail.com,
-	shung-hsi.yu@suse.com,
-	yonghong.song@linux.dev,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	koike@igalia.com,
-	kernel-dev@igalia.com
-Subject: [PATCH] bpf: fix umin/umax when lower bits fall outside u32 range
-Date: Fri, 27 Mar 2026 16:48:33 -0300
-Message-ID: <20260327194849.855397-1-koike@igalia.com>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=cmpxchg.org header.i=@cmpxchg.org header.b="VVwz4gkn"
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-899a9f445cbso28630866d6.0
+        for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 12:53:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg.org; s=google; t=1774641188; x=1775245988; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=sprVlPGXU/l7BB3P7Z9OXglgjV345FzoAVG09a2hhrs=;
+        b=VVwz4gknqGe+VL5Cey4QObyH3ZDYIvL/eFh7A+PpdJYXnaf6JTbCvU4c2NaVDcAgU1
+         1qj0mSy6gqzksGLhPOgJwYYxw2sx29jf0Y6mIR9DP49q9Wfj9QMg9SW8VHdGYPuo5Exc
+         0yMwQDVQVLQ6ehHrOxtRVtjbMMuhDe6bYuH1drxwMqycot2XpS2BMd2xfQw5G//W2e7+
+         oBmrjo6XprYW8BkhE31YMJTHc4gy+8ICmuQe7GiPKFhcybmsmjTqFleMHHkM8xBn6zJB
+         /YIsOpHElOqsWJDZxi1WoDRQl84bxB/D8wjkfb4HeJWfws6bjWPlgDaxNLeHVBFO1rhG
+         ZwpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774641188; x=1775245988;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sprVlPGXU/l7BB3P7Z9OXglgjV345FzoAVG09a2hhrs=;
+        b=k0Iw2k5NLmWD2edoS+Rj2vTatylQyyqSO1smCBQ6l6bEylVyX/jc5JatvdFutQeVeb
+         6pYZYeMvAw0oZna1s8SyoiyCZRgekfWem8wIdInIZIyMj827awLq86adpuV1BQXnoGN/
+         dE9fvcudAIn8EoEeog7L1QuYPJIJnr15l0EPZfrPbSVkWRxmvd60mWmOQzPwjSIKZ7Y3
+         Q3zBkC+USs0+ZaxagZqVmBkDt4HVrcY9t7q6Pv93vzwizvPd2zT3LkG1xGirkyqwq38j
+         /oBbth7CDkRs3fVpwsvZLG9iZ1ofKaX90xD2PVMYPaOJiMU8HCpEmcrPlmdQXcAt2xuw
+         MAgA==
+X-Forwarded-Encrypted: i=1; AJvYcCWBzGuEqzEDXL/YIo377LD068/zoFcSMFyAUJJJ1G/rw5hMjvWR3PdOnSPlO5Cb6H16A1s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YycPzYqiOJeIoGc7J2QwIfr70khFWAbyGylNfJmjwwc67Cn3lV3
+	NPz3/RIU5P2jyyxvVcSSb5jsqFrXUT1FH9dVr65bwoDHLssNeGdNoUG999Znb3OQfaI=
+X-Gm-Gg: ATEYQzxGPKziNRZqg8ykBqgAyEDT8UHHrTr+U8dsvW2ImvTUnfLRM4RlBTRStm4WbJH
+	9HQ9ixmcN71hoDLqM3OvqtuUAIsunr44gFsyHcWK1WnD7CP5dFz/kCJ6diK6yU9JuKzlrjfFgxy
+	D9fqkA96R3oi3p5olzO8535BXKC0vz2fuKOjQXGciv/SUVQVQAFkMER/Mfs1jWrZjN26ukHDfJB
+	SPOE/RTPLJrRDocNWINyBOu/8kkbfsAu/9seG96KRCtOZVn0iMLvJ1Jhg3aTnPGpIOLJHvNtb8Z
+	g9yw4ehObRkHOMJYFvzhnNAr8yizYNqGX2l9ohpjci30vc95Jc7f6MKCQiSAuv7TqKNTr9QCU5M
+	Pfw1LReHJRK9JixQgbkP41fMI81CQ2B6RgMrQZyHNmtbgpNtkj71U/8VNhrMlSeajRbUwgLlw/A
+	sWOqNeAWzNQD7JC0MlU+7UJ29O8qFwNQiL
+X-Received: by 2002:ad4:5deb:0:b0:899:ea9e:31c2 with SMTP id 6a1803df08f44-89ce8fab7d7mr48646526d6.58.1774641188243;
+        Fri, 27 Mar 2026 12:53:08 -0700 (PDT)
+Received: from localhost ([2603:7000:c00:3a00:365a:60ff:fe62:ff29])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89ecf866653sm553286d6.35.2026.03.27.12.53.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Mar 2026 12:53:07 -0700 (PDT)
+Date: Fri, 27 Mar 2026 15:53:04 -0400
+From: Johannes Weiner <hannes@cmpxchg.org>
+To: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
+Cc: Gregory Price <gourry@gourry.net>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	lsf-pc@lists.linux-foundation.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Qi Zheng <zhengqi.arch@bytedance.com>,
+	Chen Ridong <chenridong@huaweicloud.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
+	Kairui Song <ryncsn@gmail.com>,
+	Matthew Wilcox <willy@infradead.org>, Nhat Pham <nphamcs@gmail.com>,
+	Barry Song <21cnbao@gmail.com>, David Stevens <stevensd@google.com>,
+	Vernon Yang <vernon2gm@gmail.com>,
+	David Rientjes <rientjes@google.com>,
+	Kalesh Singh <kaleshsingh@google.com>,
+	wangzicheng <wangzicheng@honor.com>,
+	"T . J . Mercier" <tjmercier@google.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Meta kernel team <kernel-team@meta.com>, bpf@vger.kernel.org,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [LSF/MM/BPF TOPIC] Towards Unified and Extensible Memory Reclaim
+ (reclaim_ext)
+Message-ID: <acbgIKuwDsPvPjdF@cmpxchg.org>
+References: <20260325210637.3704220-1-shakeel.butt@linux.dev>
+ <42e26dbb-0180-4408-b8a8-be0cafb75ad9@lucifer.local>
+ <acVPrEyfcE4Naz5b@gourry-fedora-PF4VCD3F>
+ <248a126c-43e7-4320-b4bb-282e0b6da9c4@lucifer.local>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <248a126c-43e7-4320-b4bb-282e0b6da9c4@lucifer.local>
 
-Fix the case where min/max adjustments on a conditional statement cross
-u32 boundaries.
+On Thu, Mar 26, 2026 at 03:35:28PM +0000, Lorenzo Stoakes (Oracle) wrote:
+> On Thu, Mar 26, 2026 at 10:24:28AM -0500, Gregory Price wrote:
+> > ... snip snip snip ...
+> >
+> > > >
+> > > > How Do We Get There
+> > > > -------------------
+> > > >
+> > > > Do we merge the two mechanisms feature by feature, or do we prioritize
+> > > > moving MGLRU to the pluggable model then follow with LRU once we are
+> > > > happy with the result?
+> > >
+> > > Absolutely by a distance the first is preferable. The pluggability is
+> > > controversial here and needs careful consideration.
+> > >
+> >
+> > Pluggability asside - I do not think merging these two things "feature
+> > by feature" is actually feasible (I would be delighted to be wrong).
+> >
+> > Many MGLRU "features" solve problems that MGLRU invents for itself.
+> >
+> > Take MGLRU's PID controller - its entire purpose is to try to smooth out
+> > refault rates and "learn" from prior mistakes - but it's fundamentally
+> > tied to MGLRU's aging system, and the aging systems differ greatly.
+> >
+> >   - LRU:   actual lists - active/inactive - that maintain ordering
+> >   - MGLRU: "generations", "inter-generation tiers", aging-in-place
+> >
+> > "Merging" this is essentially inventing something completely new - or
+> > more reasonably just migrating everyone to MGLRU.
+> >
+> > In terms of managing risk, it seems far more reasonable to either split
+> > MGLRU off into its own file and formalize the interface (ops), or simply
+> > rip it out and let each individual feature fight its way back in.
+> 
+> But _surely_ (and Shakeel can come back on this I guess) there are things that
+> are commonalities.
 
-The case where this bug was found has the following scenario (see full
-bpf prog below):
+There are some commonalities, but MGLRU was almost maximalist in its
+approach to finding parallel solutions and reinventing various wheels
+with little commentary, explanations or isolated testing.
 
-  insn 2: (bf) r0 = r2
-  ...
-  insn 4: (3d) if r3 >= r0 goto pc+1
-  ...
-  insn 9: (67) r2 <<= 7
-  ...
-  insn 13: (65) if r7 s> 2 goto pc-12 # back to insn 2
+For example, MGLRU took a totally different, ad-hoc approach to
+dealing with dirty and writeback pages. It's been converging on the
+LRU mechanism. This process has been stretching out for years, with
+users eventually running into all the same problems that shaped the
+LRU implementation to begin with. Yes, you need to wake flushers from
+reclaim. Yes, you will OOM if you don't throttle on writeback.
 
-Since this is a loop, at some later iteration, both
-u32_min_value/u32_max_value of r0 converge to 0 due to the shift of r2
-on insn 9 and later the assignment to r0 on insn 2.
+There are many other divergences like this that complicate the picture:
+- Cgroup tree iteration, per-zone lists to implement node reclaim.
+- Divergent anon/file balancing policies.
+- A notably different approach to scan resistance.
 
-When evaluating the branch FALSE on the conditional jump of insn 4,
-since it needs to respect r0 > r3, it elevates umin of r0 by 1:
+Many of these were not part of the main pitch at the time, but they’ve
+created sizable technical debt that we’re now forced to reconcile.
 
-  r0.umin = r3.umin + 1
+I think MGLRU's NIH-attitude towards the problem space set it up for
+running into past lessons again and learning the hard way, just like
+with writeback.
 
-This is done by this part of the code:
+The good thing is that there are some integration efforts now, even if
+they don't come from the people that promised them. And some of them
+do exactly the targeted, rigorous tests on a per-component basis that
+is needed to sort it out (and was asked for back then).
 
-  static void regs_refine_cond_op(...) {
-	...
-	case BPF_JLT:
-		...
-		u64 new_umin = max(reg1->umin_value + 1, reg2->umin_value);
+But there are many workloads, many hardware configurations, and many
+cornercases to cover, so this will take time. The end result doesn't
+just need to be fast for some workloads, it also needs to be
+universal, robust, easy to reason about and predictable.
 
-But the problem is that u32_min_value/u32_max_value are zero, so it
-needs to be adjusted by reg_bounds_sync(), which calls
-__reg_deduce_mixed_bounds() that performs the following tightening:
+Based on the current differences and how unification has been going so
+far, I think it's premature to claim that we're close to deleting one.
 
-  new_umin = (reg->umin_value & ~0xffffffffULL) | reg->u32_min_value;
-  ...
-  reg->umin_value = max_t(u64, reg->umin_value, new_umin);
+And the current code structure makes it difficult to whittle down the
+differences methodically.
 
-Here it was hitting the situation of: u64=[0x1,0xfffffff800000000] u32=[0x0,0x0]
-Leading to:
-	new_umin = 0
-	reg->umin_value = max(1, 0) = 1
+IMO modularization is the best path forward. Giving people the ability
+to experiment with a la carte combinations of features would make it
+much easier to actually production test and prove individual ideas.
 
-Which is inconsistent because: (u32)reg->umin_value > reg->u32_max_value.
+A nice side effect of this is that entirely new ideas would also be
+easier to try out.
 
-That propagates until it reaches a:
+I think a good start would be to keep the common bits - "library" code
+like shrink_folio_list() list and shared facilities like kswapd - in
+vmscan.c. Move LRU and MGLRU specifics to their own files.
 
-  verifier bug: REG INVARIANTS VIOLATION (true_reg2): range bounds violation
-    u64=[0x0, 0x7800000000] s64=[0x0, 0xffffffffffffffff]
-    u32=[0x80000000, 0x0] s32=[0x0, 0xffffffff] var_off=(0x0, 0x7800000000)
+Then as much as possible extract and generalize functionality into the
+common code so it can plug into both. For example, collecting accessed
+bits from page tables instead of rmap chains should really not have to
+be specific to one. Nor how the cgroup tree is iterated.
 
+It might be possible to make N lists a natural extension of 2 lists,
+so that the tracking datastructures themselves can be shared. With
+minimal parameterization from the policy engines.
 
-Fix __reg_deduce_mixed_bounds() to detect the case when the u32
-boundaries are crossed and advance umin to the next 32-bit block (or
-retreat umax to the previous one).
-
-Example:
-
-  If we have:
-        u64=[0x1,0xfffffff800000000] u32=[0x0,0x0]
-  Go to the next 32-bit block:
-        u64=[0x100000000,0xfffffff800000000] u32=[0x0,0x0]
-
-This way we keep the consistency on the lower 32 bits boundaries.
-The same applies for the max value, but go to the previous 32-bit block.
-
-
-Full BPF prog for reference:
-============================
-
-NOTE: this was extracted from a reproducer of Syzbot from another bug
-report.
-
-  insn 0: (61) r2 = *(u32 *)(r1 + 48)
-  insn 1: (61) r3 = *(u32 *)(r1 + 76)
-  insn 2: (bf) r0 = r2
-  insn 3: (16) if w0 == 21502727 goto pc+16
-  insn 4: (3d) if r3 >= r0 goto pc+1
-  insn 5: (0f) r2 += r0
-  insn 6: (bc) w6 = (s16)w2
-  insn 7: (bf) r7 = (s32)r6
-  insn 8: (16) if w2 == 524047 goto pc+0
-  insn 9: (67) r2 <<= 7
-  insn 10: (36) if w6 >= -268376562 goto pc+0
-  insn 11: (bf) r5 = r0
-  insn 12: (0f) r5 += r6
-  insn 13: (65) if r7 s> 2 goto pc-12
-  insn 14: (07) r7 += 4194380
-  insn 15: (1f) r5 -= r7
-  insn 16: (bf) r4 = r5
-  insn 17: (07) r5 += -458749
-  insn 18: (ad) if r3 < r4 goto pc+1
-  insn 19: (95) exit
-  insn 20: (05) goto pc+0
-  insn 21: (95) exit
-  insn 22: (4d) if r11 & r9 goto pc-28203
-  insn 23: (99) if w3 >= -2094934247 goto pc-30763
-
-The reproducer can be found at:
-  https://syzkaller.appspot.com/text?tag=ReproC&x=16773406580000
-
-Fixes: c51d5ad6543c ("bpf: improve deduction of 64-bit bounds from 32-bit bounds")
-Signed-off-by: Helen Koike <koike@igalia.com>
-
----
-
-Hi all,
-
-I'm not familiar with the verifier code base or discussions around it,
-but I tried to do my best, I searched a bit if this was already
-discussed, but the discussions I found didn't seem related.
-
-Please let me know if this case was already discussed and/or if I should
-follow a different path into solving this.
-
-Tested on bpf/master branch.
-
-Thanks in advance.
----
- kernel/bpf/verifier.c | 26 +++++++++++++++++++++++---
- 1 file changed, 23 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index a965b2c45bbe..ddac09c8a9e5 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2702,9 +2702,29 @@ static void __reg_deduce_mixed_bounds(struct bpf_reg_state *reg)
- 	__u64 new_umin, new_umax;
- 	__s64 new_smin, new_smax;
- 
--	/* u32 -> u64 tightening, it's always well-formed */
--	new_umin = (reg->umin_value & ~0xffffffffULL) | reg->u32_min_value;
--	new_umax = (reg->umax_value & ~0xffffffffULL) | reg->u32_max_value;
-+	/*
-+	 * If (u32)umin > u32_max, no value in the current upper-32-bit block
-+	 * satisfies [u32_min, u32_max] while being >= umin; advance umin to
-+	 * the next block. Otherwise apply standard u32->u64 tightening.
-+	 */
-+	if ((u32)reg->umin_value > reg->u32_max_value)
-+		new_umin = (reg->umin_value & ~0xffffffffULL) + (1ULL << 32) |
-+			   reg->u32_min_value;
-+	else
-+		new_umin = (reg->umin_value & ~0xffffffffULL) |
-+			   reg->u32_min_value;
-+
-+	/*
-+	 * Symmetrically, if (u32)umax < u32_min, retreat umax to the
-+	 * previous block. Otherwise apply standard u32->u64 tightening.
-+	 */
-+	if ((u32)reg->umax_value < reg->u32_min_value)
-+		new_umax = (reg->umax_value & ~0xffffffffULL) - (1ULL << 32) |
-+			   reg->u32_max_value;
-+	else
-+		new_umax = (reg->umax_value & ~0xffffffffULL) |
-+			   reg->u32_max_value;
-+
- 	reg->umin_value = max_t(u64, reg->umin_value, new_umin);
- 	reg->umax_value = min_t(u64, reg->umax_value, new_umax);
- 	/* u32 -> s64 tightening, u32 range embedded into s64 preserves range validity */
--- 
-2.53.0
-
+If we can get to a place where the only difference is how reference
+data is interpreted and causes the lists to be sorted - you know, the
+actual replacement policy - that is a much more manageable gap to
+evaluate and argue about. Or swap out to try entirely new ones.
