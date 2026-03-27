@@ -1,99 +1,336 @@
-Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
+Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010000.outbound.protection.outlook.com [52.101.61.0])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96621317173;
-	Fri, 27 Mar 2026 15:48:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774626519; cv=none; b=GKHnK8tcf33EQCsdO5vbL2dYRqPrTLivJfbxIAhKi175aZbruhTTd0yCCisjqRl/EA1fjUA4w5E9oMjmMGs1I/XzpPOoe5+UAMhDL8N1p1ySldl4bLfY7+VwTDXd5b5H9i2kbe6+Cc+z3GYiEFB7wjZw7jI4s9foH1gVCwYx8mE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774626519; c=relaxed/simple;
-	bh=w7e8xKMVwZwox5IQWdkUnPwsOPywXW3XfBut2voR89o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=S6wSVBYASV7jrq0ZafkaklZHRfdCyRHhwEvVVn0c4W3rPMQjrQZ5AeMh7f4PDltKDV9sw/P2DtpoxBWW/DoQN/wgJuKJ46SliKB6RGOj10va0ZrYz53xcRvV7ZdaY1rGnYMgGuuRmZ/DsUqaTWjdj0UF+GBFgH7RuqfB62uxc48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=y/CwjrgZ; arc=none smtp.client-ip=199.89.1.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C64BD2745E;
+	Fri, 27 Mar 2026 15:54:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.0
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774626855; cv=fail; b=HkefXyl2VfGIzXdEDNqHajv/87LYUxQvoS/UZ2XlQjeXHOJzO/HADiIEq1PJMdr1d0ETEECsj1VRcuqsSpFxaDHtYy/VR7bLPnDNzOOv9q58cpldTXprjjSpveA0L4NiAk3y7vqDBD7kGwGqxq735UTmWCmjmb+0jIJ+sXucfv8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774626855; c=relaxed/simple;
+	bh=HNVrbe4zCDsBGIhSj7WcwBSCpiyE+8AduV9O2xxRz/I=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=gsT/dx8gcacqfN95KkikNObmOg2Ml2RWieYpI0UQwJmXH5jmE/ruBsgEoBzY2DFPYPeZ5z3cvwj5J/IcP0AGZujEMFcxg9NO6oPZy5rE3ii3lpsO3ynoAndhsLoTIbZ7Z61XA9xF8d+Kamv1VQox42Rszh24JjYlN4ezuwsu+Jo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=CZGZLUS9; arc=fail smtp.client-ip=52.101.61.0
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="y/CwjrgZ"
-Received: from localhost (localhost [127.0.0.1])
-	by 013.lax.mailroute.net (Postfix) with ESMTP id 4fj4n20nQszlgqw5;
-	Fri, 27 Mar 2026 15:48:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1774626506; x=1777218507; bh=daYKBfZtVRE0Up+JvW4epS91
-	zfI0bi2LU/4qn3ihDck=; b=y/CwjrgZaYZ8yuyWAm7DVpesBmImJ3qmESbF7Oph
-	7bcSW56maohK9flTVqvLGyUEPvzPHCsVBaSRD5PgFlANNFQ6DetOqlymgFOyuKvS
-	G89BGNB0HUcVwyVUe46i6iHpNQlkj5DsVwoGrohq040AglGJ3JeqHX/MMontyRBJ
-	65d0Fcz2pHeDO8DjVZeswp9C1voPLPXmsJsVY91BEF/Gd8SJHnUrsy48ZWUH/Tan
-	DFRKTzh13diapZrM5bsErlqCXq8j5qrB9X/68kkcaBjRZqmpN7atVfy9TfuTbcRU
-	ZW/e6waW9YBYz7gNn3Afjj1xTwahBjjBsBMu0LamPIoevA==
-X-Virus-Scanned: by MailRoute
-Received: from 013.lax.mailroute.net ([127.0.0.1])
- by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id XR9mbTQNfkjy; Fri, 27 Mar 2026 15:48:26 +0000 (UTC)
-Received: from [100.119.48.131] (unknown [104.135.180.219])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4fj4mf33mJzlfwHS;
-	Fri, 27 Mar 2026 15:48:18 +0000 (UTC)
-Message-ID: <91bacd7d-6ec0-4888-be0d-f11a6607f38f@acm.org>
-Date: Fri, 27 Mar 2026 08:48:17 -0700
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="CZGZLUS9"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=j9oY4pmfNMvMInTknF+6wgQEbD0UQmsEoEkC+CLlEYdB//fEsatGs/V2Btl6vj/U4PbjfpdQkvYOtYpkKWNU0Ziz3iiNfU7235o1ORy/0CfyzeV8p+wjV4kTJNdFArx2I3+SerPdCWsYgGHQJQcMT1kGyMp6j55S32gFios5HyAjsBeHCs3QpdqLFyeLX3CQcTVmIDeuLgnr9SX/1cDqygOmOx2snJzxl4UFZHc7zmob1QAEoZCQIuIURqkoMEAQbEqSIjhZU20is5fcIXzdMC8F61WYUxcr+WIP2EQEBJ+1HFbOilR05U6gnX7ycVewUgJ7nAknGPcWXJQ+5yafoA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SjQezoNq05V6xD5KR47J+WANOZbySW7llmHSCSR0mtc=;
+ b=doxNQRuL6dHEc5BgRGp21QCyWv4bPAsmpthHpR8Z4ngipXmLCjlGUZa5JuaG172SgdStnkEMoeDIK4STBV9kPedjI0jFzBMOOruenE23C4/368evTqQwAMQ+YaQJAritNa1H1j4GhgsxdfK2k0nIsUIcQhHA2A93/O3xeKQAQd8NHIY+gMrxZDgrFn7lyNH41I3NoPadhZaOgsMtymVh3U+WCJQhMRCrHNOfKHrhd66OE2cZ18+3k6j7Qg/OtH4uj3cEKUNH9Ehwm+Mxx4wHpKFfBPHUmFczc8RgNdva9Ega1PGNWIByuG7DYOgEBSni2HDgErfMKmVF5op91ptu9Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SjQezoNq05V6xD5KR47J+WANOZbySW7llmHSCSR0mtc=;
+ b=CZGZLUS9A7jbDV4un17NjC22yZJ1td6tEYqnxosqH6peWIcqoNe4B9BeVzwLXfP/eriVfzJ+8djsuaEwRnH/0e2WaCXJkgze7zecvJ6E8LGZQbo9YWL/mtNa/XSr03XHCSl88OW87eONGDUyzUjAyGFWHEW+l38bAwAz2e2IDd6mLaZsY3CNH872zEwGO4BQwTwR60qaMMcLJElkae9WVgF0hkQCvfFIRVPGhLGnO71FXVL6dbsxvl8lLX+axchbsdMiBajbDIGj7/D2E4u4Z51V8MgyMNthgqRa5AUAXLBYW6c5sYn0bvrOYRz5qXQaewJPFu59eMGRbYTp+6+d+w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
+ SJ2PR12MB8848.namprd12.prod.outlook.com (2603:10b6:a03:537::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9745.20; Fri, 27 Mar 2026 15:54:06 +0000
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::f01d:73d2:2dda:c7b2]) by DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::f01d:73d2:2dda:c7b2%4]) with mapi id 15.20.9745.007; Fri, 27 Mar 2026
+ 15:54:06 +0000
+From: Zi Yan <ziy@nvidia.com>
+To: Muhammad Usama Anjum <usama.anjum@arm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Brendan Jackman <jackmanb@google.com>, Johannes Weiner <hannes@cmpxchg.org>,
+ Uladzislau Rezki <urezki@gmail.com>, Nick Terrell <terrelln@fb.com>,
+ David Sterba <dsterba@suse.com>, Vishal Moola <vishal.moola@gmail.com>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ Ryan.Roberts@arm.com, david.hildenbrand@arm.com
+Subject: Re: [PATCH v4 1/3] mm/page_alloc: Optimize free_contig_range()
+Date: Fri, 27 Mar 2026 11:54:02 -0400
+X-Mailer: MailMate (2.0r6290)
+Message-ID: <9A3A4520-76F9-41CF-926E-AE2882814C84@nvidia.com>
+In-Reply-To: <20260327125720.2270651-2-usama.anjum@arm.com>
+References: <20260327125720.2270651-1-usama.anjum@arm.com>
+ <20260327125720.2270651-2-usama.anjum@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BN9PR03CA0847.namprd03.prod.outlook.com
+ (2603:10b6:408:13d::12) To DS7PR12MB9473.namprd12.prod.outlook.com
+ (2603:10b6:8:252::5)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC 0/2] block: Introduce a BPF-based I/O scheduler
-To: Chengkaitao <pilgrimtao@gmail.com>, axboe@kernel.dk, pjw@kernel.org,
- palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr, ojeda@kernel.org,
- boqun@kernel.org, gary@garyguo.net, bjorn3_gh@protonmail.com,
- lossin@kernel.org, a.hindborg@kernel.org, aliceryhl@google.com,
- tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org,
- nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com
-Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-riscv@lists.infradead.org, rust-for-linux@vger.kernel.org,
- bpf@vger.kernel.org, llvm@lists.linux.dev,
- Kaitao Cheng <chengkaitao@kylinos.cn>
-References: <20260327114741.91500-1-pilgrimtao@gmail.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20260327114741.91500-1-pilgrimtao@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|SJ2PR12MB8848:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9f191d26-68f4-4b92-e15b-08de8c191385
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|1800799024|366016|22082099003|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	IVK5JkeyQcd0ddoSz8Dys32Gj6r1FdHDfo31Rkt56ajVPTaoIXzV6QSnfkylUYna7C/NB+rPUd6XIGddpw4wVbsH3iuDmbP60kVj7kIit7jpKKr/7ZupLQpO9u4ZjPvynzdBnuQHC2pPCB/SA+CpcbO33uqKBFwvsitdnDK8t+zUKLFKBHs8hmAx5c2u3bZuqske1G7UpO+4pCgdj8YpMFd3go5QTDoPGp+UoGysyEtHq+eruUyvszOdCgJUNcNlNC+83qJbaCWMfkIGwZh2rjeqSbXWnphMnGqVeOASTbo3sSHbKUKYK5eF+rCLHa7OBovqF2jAl31/xN7CXi25lId4PGK/pjq5ud6vGFYsmIh/DLmsO7QaE1YhtsM4kabqL8hHAmYI8zzy3WXR+J7LP34RpjFMYXp+2g7a/rrZa3cwHvsIfUivX4v4S3RnUe44JrpOzb0cG3tUbHbLY9clZvnICzjTJL9YQVLREu4dkZy3FmuKhhr+ESF9yAsaum9mf44cbBMDgb/w1Kbh+uNRekPVZbO1mwgKbZJjpOSecvtW3O6LV8avyWsfF2LKuJDLZAam7BRJpxGWNKDcBnHE7n6spmqkka8CuY1GtsPPISmygP4hkF4B3hcIZZPoHlfqrlGcOJnDdj+s9qKZUVH6BhUhdfhrt+COL+KCS3ls0RfyhLdErjOHziVYIuxsjCskkX9Pyytcr4jw1orTCwAlnJmgW8fYZt3VPz+NGkh6kg4=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?d3kzSTZabDJEZDlRZjltTFZZVVg3TGtZaUc4QnUwVHZyYVRrYkNYQ25MU2lr?=
+ =?utf-8?B?bnlCeGxrSkgxVG82OFF2cEpjOTRMYkQ0QmdpNGxFeHBBV002WFZmYTlFQkp4?=
+ =?utf-8?B?RU5nRHhQcnhlK20wa1FTK1hMNlZPOGRaRXdoMjJGbVd0a1NZUStvcEkrSnlL?=
+ =?utf-8?B?c0pDL3Bwa2hDU0FjR3V3cEtRR1NsbXg0QlBXWkRkSk5HeGZka09Qc0pZUGhX?=
+ =?utf-8?B?ak5NaDdNQ1NsRUtyMW5kTXp3VmpNMEdwZklqZUhUMkxsSi8rdHFWTUtRY2Z4?=
+ =?utf-8?B?dDAxSGNpZXVGY0k1eW9VcGdtdy9ycVBXZkgyWU9tNzkvQkxoU3pWMmx6S1Yy?=
+ =?utf-8?B?QlVDR04xZlVWOHkxU0NDSjNqU3MzdHZ3S1pYQS9VR3hWM0hubXpwQVBpdnJw?=
+ =?utf-8?B?bi9xaWRMb1VKTHFLclB5dkowcERma3lTL2NlcFNsdVNGbUNINVdaREhnTFMz?=
+ =?utf-8?B?K25Ud1dkOUNJK0lBT0RsRlcxL3FXSkp4dEl0dzUxbndiYTVZdWVuWjdIRDMy?=
+ =?utf-8?B?NitQYnQrczlRdFJnQWlZV0t6cUNIOTJVdWZQQWl4WmpkRGhCeXlIU3NVVmdr?=
+ =?utf-8?B?eUJBOW5BeTZiWlFacmNzRytWbGhucU9iTDFCQmxDbTZ0dFVneVVRWnM5UUJV?=
+ =?utf-8?B?WHBzYlgvTnBvRHpIN2dOdHBMQ2hvUnF4WnBjTTlKY0hFTGZBaVFxNHNvY3pP?=
+ =?utf-8?B?S201ajduMnZZZURNczc5bE1adUFTTTd4eGcwSGxzY2pTRWd1ZkNxRHpGVUpx?=
+ =?utf-8?B?YjZWQUxMdHZuMkM4SGxsUjZHT2wrV1IvSEJjK2c4elBtN09RTU0xcEdnZnll?=
+ =?utf-8?B?NUIvTmphY29kdVY0K1lueFhWcEdsR2x2ZlV3TXpTazFqaVNlZ09rcTB0bUln?=
+ =?utf-8?B?MGRvYXFLdFdmRlgvOGQvb2VCdnY0R0daNmpmZ1lURGYyZkZrd05sSG1OMHFj?=
+ =?utf-8?B?SFE4aS9aZGJXY1VrdTBGYS83UEhKTmErRS9iOUVsUmsvaTZMcUtLUWJUL3Zh?=
+ =?utf-8?B?MmdqK2ZidnBaM3pWTUZDWkVZSjFXRXdiT0ltODJtWmpENzlUV1RTYWxKbVNE?=
+ =?utf-8?B?Wm11SmJNYTYvOFJDZUN2bTU5VVprK2ZPcXliTTRrRVhCWFNXcDZ4ZDZQeDFo?=
+ =?utf-8?B?SlFWekFyRElRZHFaeXhOeE8xNG5wbEpRWFRaTEh4eEJvWTZKUUZBbUpkcjhi?=
+ =?utf-8?B?alhVbjEyWDhTSlhUN0NlRlNnSERaNjFLNVNKRWVCUnphSTlZUzNGcEtubDdl?=
+ =?utf-8?B?MFlPMkZ4a3dPS055M2FmaWlPNlRyTlhzeFFnQ1liZGY3aGx6encydStPWlgv?=
+ =?utf-8?B?VStiaXFod2JnYXlwbXE5TndReUFyWnhna1JycnZVVTNrQTVHYndDWldNZXAy?=
+ =?utf-8?B?YVlRbS9odnJXaC9kVi9pSTNMUUpzOUE5ZDNSRDFJV1FnNWs2VWg3RlpESGZF?=
+ =?utf-8?B?NGtMaVRXdUhJSGw1dXhHTzB2Yk51ZHp2TkVTM1M1azFEaVN6T2FDWnlxaGo5?=
+ =?utf-8?B?WmNPSlA1Q3VsdjdkUmJlRG9EVUJScUNmUVNsZUNjTEx3QjMwb0VuZUJXQjYr?=
+ =?utf-8?B?bkRjbzBrNTRkZE1FWWI3UlUvclY1VkVreGxkb0hIM0s3cjRBS1ZWT25TanR5?=
+ =?utf-8?B?MHFpdVVZekVLcFh5dUhOdk1uVkZZUlIwZ0JaK2RrdzExelRmMnBKckNHWE5i?=
+ =?utf-8?B?TlcyVGNxcmFtUUdiVzgvMllQOG4wQkdaQmJWV2xqQlRGbE9xVDNZWklCRUZk?=
+ =?utf-8?B?Mzg4ZXhmRGRuME1KbjBCTCtad3JQTFhncDIwMEV4Y014Z0FGa2UrVm5RRC9N?=
+ =?utf-8?B?Ny84eFFIQzhNanBnRStXVXVoZ0JYMXVTQkl4c0FUd0UwWTJuRzBaWkdSWlVi?=
+ =?utf-8?B?RWEwdkhXOUV1Q01wWjRYeFVzWnJ4ckhDcG1MaVRJVStFYzhzWElzOWdxOHF6?=
+ =?utf-8?B?TlI1Q0hvblZoUnhvdnY3STg2dHNKSk5vbnJtekhVcTR4N1A3NlNNRzFySEdj?=
+ =?utf-8?B?OHdDOUJGaDNLdVBwcGxmUTZmWUttb2VKMWxOUmppc3N6Y3p1QTRETXlEMStw?=
+ =?utf-8?B?SmFUYW5KUGgzM1UwdDJnWnFxMTFMbmsvRWIxWCtTOFpueHhzRXNDYnNKMVN5?=
+ =?utf-8?B?Vi9PS1JEZUxwTGEzK1hTWE9yb0F3a1JLKzl3OStaTmhILzdJaFhiN1oyQmpQ?=
+ =?utf-8?B?UW5RYStBci9VUkU4NC9LVWJCQTAvUUdwb1NXaDBSN0lja2lYWlhkMW1RK3RI?=
+ =?utf-8?B?ckFIcDdXNjlkd1dDMlg3KzBLOWpGTnZFbDlTbzQwT0JTdFMvUXdXVU9tOTQ4?=
+ =?utf-8?B?Szg3anRaTXFwWjd0NEhMa0RPR25zOXZZUlBqaG1RQ0I1aktCQm9HZz09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9f191d26-68f4-4b92-e15b-08de8c191385
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2026 15:54:06.4352
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5TXkqaOZrg3NSK/tFaHAj2c5ahIfWYKF605Vc/AipGwTb84SsiL8S24AaKhqLwLF
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8848
 
-On 3/27/26 4:47 AM, Chengkaitao wrote:
-> I have been working on adding a new BPF-based I/O scheduler. It has both
-> kernel and user-space parts. In kernel space, using per-ctx,
+On 27 Mar 2026, at 8:57, Muhammad Usama Anjum wrote:
 
-Does "ctx" perhaps refer to struct blk_mq_hw_ctx? If so, please use the 
-abbreviation "hctx" to prevent confusion with struct blk_mq_ctx (block
-layer software queue).
+> From: Ryan Roberts <ryan.roberts@arm.com>
+>
+> Decompose the range of order-0 pages to be freed into the set of largest
+> possible power-of-2 size and aligned chunks and free them to the pcp or
+> buddy. This improves on the previous approach which freed each order-0
+> page individually in a loop. Testing shows performance to be improved by
+> more than 10x in some cases.
+>
+> Since each page is order-0, we must decrement each page's reference
+> count individually and only consider the page for freeing as part of a
+> high order chunk if the reference count goes to zero. Additionally
+> free_pages_prepare() must be called for each individual order-0 page
+> too, so that the struct page state and global accounting state can be
+> appropriately managed. But once this is done, the resulting high order
+> chunks can be freed as a unit to the pcp or buddy.
+>
+> This significantly speeds up the free operation but also has the side
+> benefit that high order blocks are added to the pcp instead of each page
+> ending up on the pcp order-0 list; memory remains more readily available
+> in high orders.
+>
+> vmalloc will shortly become a user of this new optimized
+> free_contig_range() since it aggressively allocates high order
+> non-compound pages, but then calls split_page() to end up with
+> contiguous order-0 pages. These can now be freed much more efficiently.
+>
+> The execution time of the following function was measured in a server
+> class arm64 machine:
+>
+> static int page_alloc_high_order_test(void)
+> {
+> 	unsigned int order = HPAGE_PMD_ORDER;
+> 	struct page *page;
+> 	int i;
+>
+> 	for (i = 0; i < 100000; i++) {
+> 		page = alloc_pages(GFP_KERNEL, order);
+> 		if (!page)
+> 			return -1;
+> 		split_page(page, order);
+> 		free_contig_range(page_to_pfn(page), 1UL << order);
+> 	}
+>
+> 	return 0;
+> }
+>
+> Execution time before: 4097358 usec
+> Execution time after:   729831 usec
+>
+> Perf trace before:
+>
+>     99.63%     0.00%  kthreadd         [kernel.kallsyms]      [.] kthread
+>             |
+>             ---kthread
+>                0xffffb33c12a26af8
+>                |
+>                |--98.13%--0xffffb33c12a26060
+>                |          |
+>                |          |--97.37%--free_contig_range
+>                |          |          |
+>                |          |          |--94.93%--___free_pages
+>                |          |          |          |
+>                |          |          |          |--55.42%--__free_frozen_pages
+>                |          |          |          |          |
+>                |          |          |          |           --43.20%--free_frozen_page_commit
+>                |          |          |          |                     |
+>                |          |          |          |                      --35.37%--_raw_spin_unlock_irqrestore
+>                |          |          |          |
+>                |          |          |          |--11.53%--_raw_spin_trylock
+>                |          |          |          |
+>                |          |          |          |--8.19%--__preempt_count_dec_and_test
+>                |          |          |          |
+>                |          |          |          |--5.64%--_raw_spin_unlock
+>                |          |          |          |
+>                |          |          |          |--2.37%--__get_pfnblock_flags_mask.isra.0
+>                |          |          |          |
+>                |          |          |           --1.07%--free_frozen_page_commit
+>                |          |          |
+>                |          |           --1.54%--__free_frozen_pages
+>                |          |
+>                |           --0.77%--___free_pages
+>                |
+>                 --0.98%--0xffffb33c12a26078
+>                           alloc_pages_noprof
+>
+> Perf trace after:
+>
+>      8.42%     2.90%  kthreadd         [kernel.kallsyms]         [k] __free_contig_range
+>             |
+>             |--5.52%--__free_contig_range
+>             |          |
+>             |          |--5.00%--free_prepared_contig_range
+>             |          |          |
+>             |          |          |--1.43%--__free_frozen_pages
+>             |          |          |          |
+>             |          |          |           --0.51%--free_frozen_page_commit
+>             |          |          |
+>             |          |          |--1.08%--_raw_spin_trylock
+>             |          |          |
+>             |          |           --0.89%--_raw_spin_unlock
+>             |          |
+>             |           --0.52%--free_pages_prepare
+>             |
+>              --2.90%--ret_from_fork
+>                        kthread
+>                        0xffffae1c12abeaf8
+>                        0xffffae1c12abe7a0
+>                        |
+>                         --2.69%--vfree
+>                                   __free_contig_range
+>
+> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+> Co-developed-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+> ---
+> Changes since v3:
+> - Move __free_contig_range() to more generic __free_contig_range_common()
+>   which will used to free frozen pages as well
+> - Simplify the loop in __free_contig_range_common()
+> - Rewrite the comment
+>
+> Changes since v2:
+> - Handle different possible section boundries in __free_contig_range()
+> - Drop the TODO
+> - Remove return value from __free_contig_range()
+> - Remove non-functional change from __free_pages_ok()
+>
+> Changes since v1:
+> - Rebase on mm-new
+> - Move FPI_PREPARED check inside __free_pages_prepare() now that
+>   fpi_flags are already being passed.
+> - Add todo (Zi Yan)
+> - Rerun benchmarks
+> - Convert VM_BUG_ON_PAGE() to VM_WARN_ON_ONCE()
+> - Rework order calculation in free_prepared_contig_range() and use
+>   MAX_PAGE_ORDER as high limit instead of pageblock_order as it must
+>   be up to internal __free_frozen_pages() how it frees them
+> ---
+>  include/linux/gfp.h |   2 +
+>  mm/page_alloc.c     | 103 +++++++++++++++++++++++++++++++++++++++++++-
+>  2 files changed, 103 insertions(+), 2 deletions(-)
 
-For what type of block devices is this new type of I/O scheduler 
-intended? This new type of I/O scheduler is not appropriate for hard
-disks. To schedule I/O effectively for harddisks, an I/O scheduler must
-be aware of all pending I/O requests. This is why the mq-deadline I/O
-scheduler maintains a single list of requests across all hardware
-queues.
+LGTM, except some nits below.
 
-Additionally, this new I/O scheduler is not appropriate for the fastest
-block devices. For very fast block devices, any I/O scheduler incurs a
-measurable overhead.
+Reviewed-by: Zi Yan <ziy@nvidia.com>
 
-> I implemented
-> a simple elevator that exposes a set of BPF hooks. The goal is to move the
-> policy side of I/O scheduling out of the kernel and into user space,
 
-What does "into user space" mean in this context? As you know BPF code
-runs in kernel context.
+> +/**
+> + * __free_contig_range - Free contiguous range of order-0 pages.
+> + * @pfn: Page frame number of the first page in the range.
+> + * @nr_pages: Number of pages to free.
+> + *
+> + * For each order-0 struct page in the physically contiguous range, put a
+> + * reference. Free any page who's reference count falls to zero. The
 
-Thanks,
+s/who’s/whose
 
-Bart.
+> + * implementation is functionally equivalent to, but significantly faster than
+> + * calling __free_page() for each struct page in a loop.
+> + *
+> + * Memory allocated with alloc_pages(order>=1) then subsequently split to
+> + * order-0 with split_page() is an example of appropriate contiguous pages that
+> + * can be freed with this API.
+> + *
+> + * Context: May be called in interrupt context or while holding a normal
+> + * spinlock, but not in NMI context or while holding a raw spinlock.
+> + */
+> +void __free_contig_range(unsigned long pfn, unsigned long nr_pages)
+> +{
+> +	__free_contig_range_common(pfn, nr_pages, false);
+
+__free_contig_range_common(pfn, nr_pages, /* is_frozen= */ false);
+
+is what we usually do for bool input for a better readability.
+
+> +}
+> +EXPORT_SYMBOL(__free_contig_range);
+> +
+>  #ifdef CONFIG_CONTIG_ALLOC
+>  /* Usage: See admin-guide/dynamic-debug-howto.rst */
+>  static void alloc_contig_dump_pages(struct list_head *page_list)
+> @@ -7330,8 +7430,7 @@ void free_contig_range(unsigned long pfn, unsigned long nr_pages)
+>  	if (WARN_ON_ONCE(PageHead(pfn_to_page(pfn))))
+>  		return;
+>
+> -	for (; nr_pages--; pfn++)
+> -		__free_page(pfn_to_page(pfn));
+> +	__free_contig_range(pfn, nr_pages);
+>  }
+>  EXPORT_SYMBOL(free_contig_range);
+>  #endif /* CONFIG_CONTIG_ALLOC */
+> -- 
+> 2.47.3
+
+
+Best Regards,
+Yan, Zi
