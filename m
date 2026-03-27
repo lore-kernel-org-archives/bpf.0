@@ -1,159 +1,133 @@
-Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A33030EF77
-	for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 20:57:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46325393DD8
+	for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 21:00:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.44
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774645030; cv=pass; b=gCXP8PBZ4gmL/5jv8jOy2DYGrmgLE1w8NyN9+jCEV7LsqVsvJP7ZzUcOlB0/J+UrtJ2+JR+RR3zszt64NCB9kD7l/PT1GNdhQnRvqjhvndF7fdlzrDYPCD9Yv+R4D9Et7+ZOJBne5xEUqdxvtdvWVQTBebJ4DtPc0W7yMVgl5Y8=
+	t=1774645223; cv=pass; b=hkRFQ0JPhSmQR8k5a8qng6/QmPaaOxLD21TsJFU9DKSYFVOAJSENyYq8UK1UmyJZIaOMmCWafLmLpxujR7q2x/u41CpA2RAWNWWfSdUYlHAWK7ay1UCgQVs4hu0BKmEcFV5Idw+i3H42Tbil4DfIZin2dbeqDceT2ty2frMOCSY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774645030; c=relaxed/simple;
-	bh=11vqMLmnmVvXfKYQE6V2j6Hqzo90FWfb7+HWBz7xWOc=;
+	s=arc-20240116; t=1774645223; c=relaxed/simple;
+	bh=boXAe/SBZRQ3vJHLFGMIondtcgS5qfNTX8dYY4IcdFI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ca9w5gtb+8USIpxStY+7ACT2+ofIFUnn4aWWv02s3wG3qYt8J8dXaHiEvfPlDw6w8rBIIP4fHPrLyeUiZ8k/KeFvWvUCCfcElRZfIDYKKKn54wgm8tGnRaklWQD1mZqXbPeH555wNmQVFfZX4SBBoRKsxHfRjDaYrzQtVgqBScA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LI+el5UQ; arc=pass smtp.client-ip=74.125.224.54
+	 To:Cc:Content-Type; b=HUsnnf/N97bMfoaH5DdEowPsagG/WmffwhGc7zMibga63uU5pwtr1DM8Sb2e4Po+x9HM6zobqzAvLntoZ6+uSwUwLFnpPAC4f6nEv0eTux0MwMKhJyvCYNYeVMmV+kTLaGKj+2BK0L7ZV5xe415ktwgbjReJmvmQJF+5WXcbtCE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hu8rF7T3; arc=pass smtp.client-ip=209.85.128.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LI+el5UQ"
-Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-64edf260b49so3373108d50.0
-        for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 13:57:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774645028; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hu8rF7T3"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-48540d21f7dso28609135e9.0
+        for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 14:00:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774645221; cv=none;
         d=google.com; s=arc-20240605;
-        b=YiUVmwY985lxpqHnJyvTzXiIEVaWlXVB7Ox+aEZYtriyAqVa/+m784bLaNxA3YvYJA
-         U4zkE4d4sWGQW2tcGY6H1gDNehoErGxlsBkWY4zje3hW/ihAHoohYYNortImcJziT3aw
-         L0K0urCLxlf3kvwCwms6rz22pMvpXsB0+oBE+cPS8qdu9pd7CzwsjwftV6ehzQjwdidC
-         sL+RXIA/wwNDh+8YZG9b1H7+37fjEbHL/iU13K295bM5NZkAcZ2hrJVo3uDu5WpyoMYf
-         yERD5UfX9Fv+ieNW3sNAHaFTQ4yP/keBG7j7u0N9QPZ2Jh3DOQGivcVzRQT90Ef9IcRa
-         Cplg==
+        b=f/5L8S983kDp5weqIub9rUqvnPstLeCZNyhTZd2LZcwqM+yVLAGpe+4vjLmxlGUIgo
+         EdHHIJAZTpTIKEyTThOUF6LBBKnvSAxU7Keu1x/WSzVbTh1sROMvmPkfeRC6TvFXs+MN
+         CySyL7XWbyEv7eUoAe6We2wB8WkEnegewK6gj7jrrurRrDqpSC6AASRxweEKZfxIyLwt
+         rwPc95HbElE3mUJa17NFhNz5GYsHzBYwOiO//exxv9cDh+EVL3B4CDdaCopw2TFtP8R9
+         gQxyQfKJtcGC9QevnCYqSGKhRhTI6RuC2M5NftHZNUK/LlS/4oCYF0EuPvj3jyfixCFM
+         GI0Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=EwozKa3X/QWLVXPC8OoFgdUEYenwrIPEsb6D5h50MIU=;
-        fh=PzF4mx18zzEJc6q5CF9iWR26tlykEsddYUFyx3rCgvY=;
-        b=QU5JDALFFQLQj5VeLQw0HpSvY4DDprDiuGBIniehDMKGDyBzbdopeMPdGPDydXi2vV
-         nDPk7Ns8xlILyMNBgnTCzk4s2svj+7Eto9cAxFnIuaGv7TXGYib8ZmmlV32OVdu5DxhC
-         PGaSoFSWkIG3RN6kqUkSLx8g/cRKRcGB5P34Goc08Io6FEZKfVya1b38NPslGNwFqVXg
-         pu2BfCtPs0ls85c9oUeOznRAQitABW3dWMRlfsIrw6qxfpTQoafGNmqMLsm+oB+BvKSr
-         G5TC9a3vi+QYBJzYla/e/2zsDo4gWV7YOwnSoJ5l4toWJ0vtdmhqDXKb9H600UUcotOd
-         jVnQ==;
+        bh=boXAe/SBZRQ3vJHLFGMIondtcgS5qfNTX8dYY4IcdFI=;
+        fh=s8Hf09bqqN7dVwVE2qTrRX9L0OLipez4vLIHk1zGKOY=;
+        b=Z3WEbOc07YTGNLHl8IYtFRPgXK1Z5R9iACvcBwh8tNKbc9J5grCaRmL/CH9zdfO0BC
+         gsNYrS6U7pfUYJsHv+EXrO1m7d1eYWQ3ugCzw8dt+kf+9PsJBeLagTE9LBjDYjEPi/44
+         JwI6o9vyMiAOYKO158H9JwV1FCJlYeIjgiDSBt1/rucBXofLTPXM60HT7Iv1QXHzuCVK
+         5Cn0hU4IKyWq+YlqcAOIEHiif5Nfdynzl2Q/fmr06IrRPMxOxz6lPAgQLparutYrTok/
+         NB0xStT+NlGH/C1Xoyo4kXTxBYVzJadpMV6EPfZGhep7PV9IVVPVZ3zO5UyiRFmp1EPl
+         pXTA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774645028; x=1775249828; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774645221; x=1775250021; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EwozKa3X/QWLVXPC8OoFgdUEYenwrIPEsb6D5h50MIU=;
-        b=LI+el5UQZiwAUb/SDCjX0re8vNnTZ7GHxA3eCiENKTdO5sTfvhAzLK/fbWUMnDtSoR
-         ZRlEULqb7D5aSxdVuMgCqB+cd05Ggru+ejpzkaknNmjcDDvEm2SwCyxxR1GeaTQT0jZR
-         T2+Cb4ElJw73qp2IFTS0CoxAC1QZi21mg2XCIDQSoJJ6rClX4WKpIq6fWZPC6DKuy/Xa
-         TiTNi0213i4qEA3Vwmp5JRVGOypbN4zB/MjJHGKk7OwwrukqHB8tQFo68nGROyRXadXh
-         B3pcR/c3Ijx+Bd0OZdY9JyH0wOudK6dG9XoWoC2U1cMznPNzzxgEpNr54VWK/wCkcbGP
-         t7ug==
+        bh=boXAe/SBZRQ3vJHLFGMIondtcgS5qfNTX8dYY4IcdFI=;
+        b=hu8rF7T3CESjCcBc8XmsJoU3y4yAXPJmmE6Otk+gvjmblLLPSYiIQaSAkHfGo6oWq3
+         Af2ewErzYIJhd+dVYOX4+ZNkqaxH1vah0u5VlKLG8UBzl+DuCizU3FbNbKIkmUlpADpW
+         S0ZFPLUdsRLlY1qpnHMW0V4w1cCgy2UO7ZVG2C00VHBAQof/sxFlR8IH1ZGfQsCyVA9g
+         tC6Gc6PoEZ2Xi96+P2SYkb54YJ3xQTTeyWvdBo6Hw+POuruKqMUPrQfC9WxLtt+m/K6q
+         2zFy51rUqscheVuBnEYo2V9DE0GuUuYfmmRv9Yl2pqqqiRfhkILTXIXSvdyaGmcW+r+K
+         eejQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774645028; x=1775249828;
+        d=1e100.net; s=20251104; t=1774645221; x=1775250021;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=EwozKa3X/QWLVXPC8OoFgdUEYenwrIPEsb6D5h50MIU=;
-        b=pCUhqBGOnHYqYVoYK0+s/8oq7ZkMkrH553VqLcqHOK0b4jPDN6BcSskzWqdaSg9oWx
-         9IHFfsYwaJ6JkBZlDddXtVwnK1DZZ4314aXJKvDK/Mb4RA4lPLW4qDcPlWqf7zGtAC6d
-         nz0n8BWhjiEyJt1Dra5v4J0fdfqwvL9T5VU68jJI6fbnlt57EnMVjb9dEbJIRcd2AEiO
-         fPHQroc4qV6Vl4js8S7xE9mQpyvOVc8QNe5CzQXTSCv5k49j9wjANvkN9fHPhUlOEr4z
-         qvDEwTJkCFFcq90fxenlvsLNnNh3r/0wxZeMh4qyOum+nRYry2opC0EEMUXwPgj2YEYr
-         5Yug==
-X-Gm-Message-State: AOJu0Yxu0oOjCo32Sq1E50nY9X7RqwH0sPy0gDtlc4wWoa2XLvORHQCk
-	9ZCu4DO8Wgq+fQzjD/IirXGtsJeDepYp3ZyU1y1JPIsNk0DVtYnUlJDWwgylOYpXn8INC/gEnfA
-	mcKHuPlM4qgeIBdIK3W8Ptt2fXT/jjSs=
-X-Gm-Gg: ATEYQzxLuTzXPSbRMM+JpInTipsAxYvyPWXtdgp0xJGwfbWKcjpiwJU3/jMkfyA2zv9
-	HUY3TbLhPw2EHG5oK9XPVw8QZwR5CmBOyJcOz8wvtFmWo7a7WNcEZVBAtgwAPeLM5AzZfEHxQhb
-	Ut+yRoozDLWTnOZbXFBHU438FFqaSB9/AWffwPsR4X4J3N1HibAmBXILnGXZl7iJ45hsT7Ju5kG
-	bpfKusE7Ga01gfvQfc7CuRStG33gmMwDcv8B9WW+7Q8kC3U/AMOn5rJtzqtRXE/tNcWrqDpy96Y
-	SnJLWRU=
-X-Received: by 2002:a05:690c:38b:b0:794:c283:5fb8 with SMTP id
- 00721157ae682-79bd02acf90mr59953307b3.25.1774645028582; Fri, 27 Mar 2026
- 13:57:08 -0700 (PDT)
+        bh=boXAe/SBZRQ3vJHLFGMIondtcgS5qfNTX8dYY4IcdFI=;
+        b=TCt3E8ACoBiTJC/zhU2WYe7BbQ54pSaKIkjvNcvK/KsZAwClotTEUfkhIdv2dWhMq2
+         BEjghm6uli5Xj0eR75LmFRl+YFl/5ewxv4T1OSizXgR2gswW2brQx2GMvp5t/asY8UHw
+         Oc0tUgjoeLu9UcYiVETOIxeCp1EOPFlgFH/2fJYhDgcTmQTZnl0lzxJrFGyrkqkiUNb9
+         EKRJV5lPzbBWVc5iPISEucVwGpyn+w4bhxQenHypjEuYUeVcjS8/luzIAybeV1/GaBLQ
+         K1rGvxOTfD4iirxMVspCJOnOHUNSIkZFLKN4JNQjYjojNw0px9rf9HG2n7N03OjQ6t6v
+         iecA==
+X-Forwarded-Encrypted: i=1; AJvYcCU5ZXhqxPU4fCO1xMQZdxQD5zSgiK9viKjBDplE7KKDjtBvAE26pA8DAQq7+CyKlnV1nSs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2WnLLcyWLvHAMIDOikx8QBD+dVC3K5IeFAbBFXOLZ/nSpIkHi
+	CU+7Hnc5anYOiZ1A6kGWUwIhas+NFoifxd23gPORyQWDYnht5zwILlEWl0EZDtLiy6RLCeYJEGI
+	n1R6go7oTelwUhZKPXL6iZ7EKY7xEkBY=
+X-Gm-Gg: ATEYQzx14HV2NHj1nQP6F1Ll+gsU05lc8xgTIuCxiiS92dSvDUFRduNjIjGBqNf6I8u
+	MAojIaF2HVN/i2KnXoXDsvhKVfwPFmJhwwVLxsqbOtmLETC9xcDklGTcsmCEj6+nxosCtNsALfR
+	x4W/zbtv407nehavaSugHsW/dgbH6AaqTNuj/FIAfF7tIbo1M08qoagkbdwLSaywl0Y3lp86VRA
+	jaXpwje4KyyOqUYxpztEVVS0TSt8qMy2EwNKkwro1SC7/PGj4WRVWiAkYUSWfcYOl7XhUohqZ75
+	xVJyTGnHa7sW6KgaVqafXKG+MIavfTstNANVinaAD31vlnVG4fQjpq/MySC3biUw5hb/sSWdaHV
+	cKMa7YB4SpfdFM/bkleeWWp7Xdw==
+X-Received: by 2002:a05:6000:2681:b0:439:c78b:cbef with SMTP id
+ ffacd0b85a97d-43b9ea4a534mr6360629f8f.25.1774645220518; Fri, 27 Mar 2026
+ 14:00:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260326052437.590158-1-ameryhung@gmail.com> <20260326052437.590158-3-ameryhung@gmail.com>
- <877bqxi600.fsf@gmail.com>
-In-Reply-To: <877bqxi600.fsf@gmail.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Fri, 27 Mar 2026 13:56:57 -0700
-X-Gm-Features: AQROBzCNchU_nyL80AmhOxCXsxh0-B3KfPm2qubeuJqz6hB0fv35N8ZH-z9HL1E
-Message-ID: <CAMB2axPBjQtdDog+ktgfgo3q=8NEke=Pq_LxD1ji0cD5ei80AA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 2/3] selftests/bpf: Simplify task_local_data
- memory allocation
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, 
-	kernel-team@meta.com
+References: <20260318234210.1840295-1-ihor.solodrai@linux.dev>
+ <CAADnVQ+iXJK46cFcGN-Ta8KGxe7Y+m_DxgWNS=QC-gOWT=WxCw@mail.gmail.com>
+ <b040711c-0fd1-475f-b807-e4e0b4324f6e@linux.dev> <CAADnVQKVEYhFXGXJ0u6TWQDe4t=zmq_tLpGKe2n_pOYT-J58qA@mail.gmail.com>
+ <21e5333c-0b57-46ce-99c8-f6c414270e70@linux.dev> <CAADnVQ+bj2z0kzLcGTJ62NJgReTvqEu8fn6=7=bn+WKmfe9iTQ@mail.gmail.com>
+ <676332b5-1f7f-4c8d-b41e-e2dbbc1d7e4e@linux.dev>
+In-Reply-To: <676332b5-1f7f-4c8d-b41e-e2dbbc1d7e4e@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 27 Mar 2026 14:00:09 -0700
+X-Gm-Features: AQROBzBXjQEEF8jsmGcuKt8gn_auUAUNeyeEuXgk4wEfA5f7-tXm5A5J0-pCG7Q
+Message-ID: <CAADnVQLUTNoa4qXW357CU5e2hP+DpxM=QYK2ZuWHR_aLbmb7Hg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/2] bpf: Support struct btf_struct_meta via KF_IMPLICIT_ARGS
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	Kernel Team <kernel-team@meta.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 27, 2026 at 9:36=E2=80=AFAM Mykyta Yatsenko
-<mykyta.yatsenko5@gmail.com> wrote:
+On Fri, Mar 27, 2026 at 1:55=E2=80=AFPM Ihor Solodrai <ihor.solodrai@linux.=
+dev> wrote:
 >
-> Amery Hung <ameryhung@gmail.com> writes:
->
-> > Simplify data allocation by always using aligned_alloc() and passing
-> > size_pot, size rounded up to the closest power of two to alignment.
+> On 3/27/26 1:48 PM, Alexei Starovoitov wrote:
+> > On Thu, Mar 26, 2026 at 12:13=E2=80=AFPM Ihor Solodrai <ihor.solodrai@l=
+inux.dev> wrote:
+> >>
+> >> [...]
+> >>
+> >> The above works, and the question now is if we like this mechanism
+> >> more than current setup with explicit enums.
 > >
-> > Currently, aligned_alloc(page_size, size) is only intended to be used
-> > with memory allocators that can fulfill the request without rounding
-> > size up to page_size to conserve memory. This is enabled by defining
-> > TLD_DATA_USE_ALIGNED_ALLOC. The reason to align to page_size is due to
-> > the limitation of UPTR where only a page can be pinned to the kernel.
-> > Otherwise, malloc(size * 2) is used to allocate memory for data.
+> > Got it. Thanks for the explanation.
+> > Your approach does sound a lot better than explicit enums.
+> > Make a proper patch out of it.
 > >
-> > However, we don't need to call aligned_alloc(page_size, size) to get
-> > a contiguous memory of size bytes within a page. aligned_alloc(size_pot=
-,
-> > ...) will also do the trick. Therefore, just use aligned_alloc(size_pot=
-,
-> > ...) universally.
-> >
-> > As for the size argument, create a new option,
-> > TLD_DONT_ROUND_UP_DATA_SIZE, to specify not rounding up the size.
-> > This preserves the current TLD_DATA_USE_ALIGNED_ALLOC behavior, allowin=
-g
-> > memory allocators with low overhead aligned_alloc() to not waste memory=
-.
-> > To enable this, users need to make sure it is not an undefined behavior
-> > for the memory allocator to have size not being an integral multiple of
-> > alignment.
-> Why not simplify this further and just mmap() a page?
+> > If we do this can we remove <counter><line> approach everywhere
+> > while at it and only use named ?
 >
->   data =3D mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE,
->               MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> This crossed my mind too. I'll try to *replace* the suffixes and if
+> it works fine submit that.
 >
-> That gives you a page-aligned, page-sized buffer with no ambiguity
-> about alignment, page boundary crossings, or aligned_alloc() POSIX
-> compliance. munmap() on cleanup instead of free().
->
-> The whole power-of-two rounding and TLD_DONT_ROUND_UP_DATA_SIZE
-> option adds complexity that's hard to justify for selftest
-> infrastructure. How does a user decide when to define/undefine
-> TLD_DONT_ROUND_UP? This is a selftest library -- the common case
-> should just work with the simplest possible approach
+> One inconvenience is that with named suffixes BTF_ID() macro will
+> have to accept an additional arg (the list name), but I think
+> that's ok. We already have to pass struct/func everywhere too.
 
-This library, while residing in selftest, is designed to be used in
-production projects. sched_ext is in the process of adopting it.
-Therefore, simplicity is traded for efficiency.
+and that name has to be unique.. I think it's fine.
+I'd do such change, and reuse all of BTF_ID macros.
+So that only BTF_SET_START line will differ.
 
-data here is allocated for every thread that calls tld_get_data(). So
-if we mmap a page for every thread (which could be in 100k order), it
-is going to waste a significant amount of memory.
-
-> >
-> > Compared to the current implementation, !TLD_DATA_USE_ALIGNED_ALLOC
-> > used to always waste size-byte of memory due to malloc(size * 2).
-> > Now the worst case becomes size - 1 and the best case is 0 when the siz=
-e
-> > is already a power of two.
-> >
+The overall diff stat shouldn't be big ?
