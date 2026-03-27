@@ -1,151 +1,167 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A64F738C43E
-	for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 20:42:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 368A432B9A9
+	for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 20:46:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774644122; cv=none; b=b3AHMjJYXXWfz3VHxhRL2vu66bIlVkNnWb1UTO6X6SMH1rpVrUEqXHsM8K1WTX9kvADlJmmeTBTFyPCaq43VM5lPo1Y9n6xME3+PdzLlUto2PkFSna6PwKgIEaDH7egtbLTsbgjSnCiKTcNiyeWunhyoROe9SrPadlJ2KKwBvsw=
+	t=1774644367; cv=none; b=dn4mfLUuwS/oweEm4V4CRMTQX+WoziTUqQN3hVFmEoGJcDMtLSjrsNUc+TYlq6KSxQzQr9aWAOTEfy8sqC60gGQOqq5mXq4yerjxAhyKcwPcwbtH3iFbyjvYCMlgVKdU36lRFIwiRMJbdBSsv1TUCNzAsFbv8RKLHqWzRksiTzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774644122; c=relaxed/simple;
-	bh=OseZgolmzhAr4jFqxBRNN1L/7ggRloDkt++YOQpR2p8=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U9q+p9fff2LcrY/GmJbZrxgxxJlVUmDr317kiM886itzd6yXP2HmPjX7f2Znas+CUWXcCM5vHj9cjDa+Lu5B/LWn/zicfleQKQ/BXx8hyD7Gq0IMu4/bx0w+Iix4bnWHzorcjLUI76b6xIgIs7GxuI+oiTixxMkKT+f6hl5VT/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nM/BfZ+Y; arc=none smtp.client-ip=209.85.128.53
+	s=arc-20240116; t=1774644367; c=relaxed/simple;
+	bh=fDzymumxhmPVi0kqJDnPX1S5XLdUlqA4PsrkwxXRf2w=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=P/yTN/9UFwDOIR9L9h9Jc2cXM+DPRu5wXtq9iAc+wPUGSbUy0O7beNGRUcyrzW1p41gSqnRVQWJ0oQV+fw1/0KlLJgyVSI2/8bY6S9o8HpC0geglhdFRIkHmFCKrVGi0Dd4hO2jolsRJtu7KDsaBbrpUCjmOUKX9Q9sec/m6c88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KsXkG43/; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nM/BfZ+Y"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-486b9675d36so22186015e9.0
-        for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 13:42:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KsXkG43/"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-35a1f549e7eso1598522a91.0
+        for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 13:46:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774644119; x=1775248919; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=sZ/7XD1rJXQYlW2CUYI9bsXyEYg+8UaYCRyEmTmJK34=;
-        b=nM/BfZ+YLMVvk5P3x54GwdFqdhKmNJ1Hx2r4zooAmkk5jyqty65BG5Z/uNElRCb6iY
-         atigMkijN16Bg0MggWKJdpuEJizIgzzsHp8uWkf3jKGObwBow5TmIAnkXXrqS59Y+HyE
-         hUaDJeb7L7MvoygWrNTlThnWgcILNdnwFIxHBmdrUObxwmUefmvY23WjhAsY3hLEmf3V
-         rONqyr8uPLBAQt0hOQm9zA/WPdl8mxXYOXcdgzOLm3g5YAip4rEMTMXdKxwYDbKtdNF+
-         59EkTsbwaWxSa4pz4TXedRnJ3xpRtQwB741vQE2mzx7GXYus9zCyOz5xX/f6uYz16fe6
-         I6QQ==
+        d=gmail.com; s=20251104; t=1774644365; x=1775249165; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dhhPmZv6jB3Nj9KqY4gAaqQdksQx9LQaFKMP0x84xAw=;
+        b=KsXkG43/UbUB9mxfhuHxI0mNmTDWkcPEqvdXEKafuZKpkY/BdRz7+xPxK3sJt+f9+C
+         i0RmfucnqS2/40kx3l8xOT5Poq6a3xhs9G0kWY3eA0j06HGLAwzMRD2kgdik90Wea3Gh
+         8mBI3z0UJgT/Vg9bDxsUjdT3VXBtSstgNgfU0SIkWGAOvTwNusUegf7rJTik9V3XBPW1
+         bRWUAWFcHYBlKdZeDjuAz47VOiBfodNrMsO0K7d/zmt4OQgyOJwlTVYne5R7QjS79aUb
+         rxLMaJuslseCPbzbssgsFTxhkkeF3w0pm+Ej1jv8gE2h+a818xO36OPwXVW1vuNPTMCT
+         wk0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774644119; x=1775248919;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sZ/7XD1rJXQYlW2CUYI9bsXyEYg+8UaYCRyEmTmJK34=;
-        b=a+SDaru/nDooxkDvwbewNYXWgKQbLuBY4slFm2/wkwzsNCPyV17vU3MshedDtRRCcC
-         NjZ3dclKUXbUwowjTY76lf/u69wIlCSgYZpMW4K6jI/7ST6SOlL/bHPAwbTdTqDGlWao
-         oidyYTIQl0kSDSsk53YJb7jeMv2RH69ebna4Y3IpmqhhLf03g9XtX+goqJw8fJ0LQZwd
-         q+/ZI7+Nqn+BMTskZ031Fq/+z0IyYRhTh3KrRiSO1Ve15+/MPI2pmSue4DCivIk/5yFq
-         BNeas0YDlekZRiSBv5PwFLgSevibsHGxGvFhwLxG18SIPd5FQLMsKWKTUoJxUXUWSZs1
-         WTXw==
-X-Gm-Message-State: AOJu0YxgGBBPvEO2wpyPGE8QiLn2901jEwkPLXsDLMXivvx6jjmuEwwq
-	/DQlZQ2veKLrUld1LlDyuugvrXOD42aP0nJTv5FejZndko+ekwvW4FDXyhG+8cp/
-X-Gm-Gg: ATEYQzxgrACcgtA3YfGZyIXqSJVqmpDu16MD7OxendMwmp0DY66bENWDTiV2mvwarYq
-	H7ganGCWbnyul5cMGk2NiMkNzuCbdrAL0GmfFm0Ju/F3x9I09bjVTfoMRvKEMIYmUVjGhT9B3Rj
-	RWkNdmm20lMqfCRzlQ5ODcffxp/11NpZVDyrhfbi9bLpcKzdB2PCgduoT6k2FBN1AkXlEVKxZRX
-	dNnKAVlKABwdsNrfjU810nWASW159ba3XrWp17/n3RCrdJ54xRTgvMA3mMjscA/nV3GC+qbq3Kx
-	CdJLVW3WRs4uuxBWOQGUPXlBNb073ItyWuDOPB2GxMDKdb89jxzAw3iHsbeb5vvlYoTghSOfjqr
-	mUNiEkMHf9297nG3DOaSJ9mv+e89zWubLMPMJx/jjxf/2sBJ7dWv70qEVkon7Wc6/ANR9cWLW9R
-	yV1hVIFyRqfjGisfCSejKeCGx0J5iYGAI18yYKjncU2PTq8ZMtTdkefOu3tg==
-X-Received: by 2002:a05:600c:1d15:b0:485:2fc5:3a5 with SMTP id 5b1f17b1804b1-48727edf4f5mr64539105e9.26.1774644118896;
-        Fri, 27 Mar 2026 13:41:58 -0700 (PDT)
-Received: from krava (cust-west-par-46-193-1-135.cust.wifirst.net. [46.193.1.135])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4872712b3ebsm20378445e9.19.2026.03.27.13.41.58
+        d=1e100.net; s=20251104; t=1774644365; x=1775249165;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dhhPmZv6jB3Nj9KqY4gAaqQdksQx9LQaFKMP0x84xAw=;
+        b=MuFzdl+cZPV8wYHNgwY4jS2Cp3lEHmR8hf45BYNUZDuw6QnVwy3Z6H6GByvgXOTL5x
+         WEFeAIYhSg3fA8LDa/QReWuJ9KQXR03L9e3gVDZVlRK010+/uuGZNRYb9QXMVZLHSaAS
+         IL3LhUwbKreaA8I/vaacTp2UJ7Up/0VUBqNgB8cJlA6XpUVT0/Dky8hWnb8MF/8wP3Nr
+         E6wkpAsxwvpF7oXiZfgxhreTc0kzyxXnj9agbKtEtWg3Y5fzyhBEFi8YXti2x1eyX91K
+         NsKHdRBY8j6zIgu1zJscszwgvm/Ee81uq86uNRrkAU4J3udvSp6/QTHPinsJBv0g0r0u
+         EjOw==
+X-Forwarded-Encrypted: i=1; AJvYcCWqOovglUJRs9ePe5vF7UscPXFPs8ElTq8hGXVxSeKcvo8wR+p3P93bWCilez6DdHsUZMs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzIgbdE3lm5sp8ocJHnUlKxm0NSs08FeNTdhPuFDdB/WmTVP74g
+	2j6JW5ieo+y80skrpvF+squKgjhIgdlRBLCGjUdnxovt8ciLqvDJR4pK
+X-Gm-Gg: ATEYQzwfL0J71uMWaOAW1jTX9D/CuVpGLNmwYdhBSRVXihDUo+A4FoUSI8DsDy/z6ux
+	t6vgm0QWUm57MhtrJRxCXSvP6ePF0Qw+klUTx9EwaiCIwZDnH6hCdLnP1cNbiQ49s+Vq9BrGx2Y
+	Y7683mTufJL3pJbm4+YrO7/6t66e6RdjJCt/ZAw/YXr/+hrTpgiBm6KCRwxRKdnrXaHJMVX9Haj
+	u66KZDV+0rECzhEXNb5Ucx46h/uYrYs8up+rAKDlREcgUqlYvjv2WvwQTrZxyAa/EHh5u2Sfi4c
+	/J75I1RSeNvAmGcHut65qgsLeYqBHcZIUWDsKUJJ2wYOzUueOtwg2BAXTfZp5Bi8LuUAmCIW3nr
+	rHL9MpOviHt6nkAb+j9Py1v23Ib3/ihGJxeB9aLUWtfMCD201WQcDZC4/DQkbfd/KbF8j1CoTYn
+	6JPENxK+cHudXJD6aswiwApcdJ3/VzDFZz6UWyqz/AZWSv1Z1hUwWFEGIoNN845A==
+X-Received: by 2002:a17:902:e850:b0:2b0:6895:5535 with SMTP id d9443c01a7336-2b0cdcb0cf6mr42563145ad.33.1774644365245;
+        Fri, 27 Mar 2026 13:46:05 -0700 (PDT)
+Received: from [192.168.0.56] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2427afa57sm1816175ad.71.2026.03.27.13.46.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2026 13:41:58 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Fri, 27 Mar 2026 21:41:56 +0100
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Shuah Khan <shuah@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Toke Hoiland-Jorgensen <toke@redhat.com>,
-	Lorenzo Bianconi <lorenzo@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: Re: [PATCH bpf-next 2/3] bpf: Disallow freplace on kprobe with
- mismatched kprobe_write_ctx values
-Message-ID: <acbrlN_n4Z684h9e@krava>
-References: <20260324150444.68166-1-leon.hwang@linux.dev>
- <20260324150444.68166-3-leon.hwang@linux.dev>
+        Fri, 27 Mar 2026 13:46:04 -0700 (PDT)
+Message-ID: <74e65b463d1f992bc0e4846085394a440796f563.camel@gmail.com>
+Subject: Re: [PATCH] bpf: fix umin/umax when lower bits fall outside u32
+ range
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Helen Koike <koike@igalia.com>, andrii@kernel.org,
+ shung-hsi.yu@suse.com, 	yonghong.song@linux.dev, ast@kernel.org,
+ bpf@vger.kernel.org, 	linux-kernel@vger.kernel.org, kernel-dev@igalia.com
+Date: Fri, 27 Mar 2026 13:46:02 -0700
+In-Reply-To: <20260327194849.855397-1-koike@igalia.com>
+References: <20260327194849.855397-1-koike@igalia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260324150444.68166-3-leon.hwang@linux.dev>
 
-On Tue, Mar 24, 2026 at 11:04:43PM +0800, Leon Hwang wrote:
-> uprobe programs are allowed to modify struct pt_regs.
-> 
-> Since the actual program type of uprobe is KPROBE, it can be abused to
-> modify struct pt_regs via kprobe+freplace when the kprobe attaches to
-> kernel functions.
-> 
-> For example,
-> 
-> SEC("?kprobe")
-> int kprobe(struct pt_regs *regs)
-> {
-> 	return 0;
-> }
-> 
-> SEC("?freplace")
-> int freplace_kprobe(struct pt_regs *regs)
-> {
-> 	regs->di = 0;
-> 	return 0;
-> }
-> 
-> freplace_kprobe prog will attach to kprobe prog.
-> kprobe prog will attach to a kernel function.
-> 
-> Without this patch, when the kernel function runs, its first arg will
-> always be set as 0 via the freplace_kprobe prog.
-> 
-> To avoid the abuse of kprobe_write_ctx=true via kprobe+freplace, disallow
-> freplace on kprobe programs with mismatched kprobe_write_ctx values.
-> 
-> Fixes: 7384893d970e ("bpf: Allow uprobe program to change context registers")
-> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-> ---
->  kernel/bpf/verifier.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
+On Fri, 2026-03-27 at 16:48 -0300, Helen Koike wrote:
+
+[...]
+
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 12330466d58b..f8257bae6081 100644
+> index a965b2c45bbe..ddac09c8a9e5 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
-> @@ -6404,6 +6404,14 @@ static int check_ctx_access(struct bpf_verifier_env *env, int insn_idx, int off,
->  		/* remember the offset of last byte accessed in ctx */
->  		if (env->prog->aux->max_ctx_offset < off + size)
->  			env->prog->aux->max_ctx_offset = off + size;
-> +		if (env->prog->type == BPF_PROG_TYPE_EXT) {
-> +			struct bpf_prog *dst_prog = env->prog->aux->dst_prog;
+> @@ -2702,9 +2702,29 @@ static void __reg_deduce_mixed_bounds(struct bpf_r=
+eg_state *reg)
+> =C2=A0	__u64 new_umin, new_umax;
+> =C2=A0	__s64 new_smin, new_smax;
+> =C2=A0
+> -	/* u32 -> u64 tightening, it's always well-formed */
+> -	new_umin =3D (reg->umin_value & ~0xffffffffULL) | reg->u32_min_value;
+> -	new_umax =3D (reg->umax_value & ~0xffffffffULL) | reg->u32_max_value;
+> +	/*
+> +	 * If (u32)umin > u32_max, no value in the current upper-32-bit block
+> +	 * satisfies [u32_min, u32_max] while being >=3D umin; advance umin to
+> +	 * the next block. Otherwise apply standard u32->u64 tightening.
+> +	 */
+> +	if ((u32)reg->umin_value > reg->u32_max_value)
+> +		new_umin =3D (reg->umin_value & ~0xffffffffULL) + (1ULL << 32) |
+> +			=C2=A0=C2=A0 reg->u32_min_value;
+> +	else
+> +		new_umin =3D (reg->umin_value & ~0xffffffffULL) |
+> +			=C2=A0=C2=A0 reg->u32_min_value;
+
+What would happen if there is no next or previous 32-bit block?
+E.g. if (reg->umin_value & ~0xffffffffULL) + (1ULL << 32) wraps around.
+I guess the argument is that if this happens, there is an invariant
+violation already, will the final register still bin in invariant
+violation state?
+
+Useful picture:
+
+ N*2^32                   (N+1)*2^32                (N+2)*2^32             =
+   (N+3)*2^32
+ ||----|=3D=3D=3D=3D=3D|--|----------||----|=3D=3D=3D=3D=3D|-------------||=
+--|-|=3D=3D=3D=3D=3D|-------------||
+       |< b >|  |                |< b >|                 | |< b >|
+                |                |     |                 |
+                |<---------------+- a -+---------------->|
+                                 |     |
+                                 |< t >| refined r0 range
+
+Also, as this is based solely on unsigned ranges, the following case
+is not covered, right?
+
+ N*2^32                   (N+1)*2^32                (N+2)*2^32             =
+   (N+3)*2^32
+ ||=3D=3D=3D|---------|------|=3D=3D=3D||=3D=3D=3D|----------------|=3D=3D=
+=3D||=3D=3D=3D|---------|------|=3D=3D=3D||
+  |b >|         |      |< b||b >|                |< b||b >|         |      =
+|< b|
+                |      |                                  |         |
+                |<-----+----------------- a --------------+-------->|
+                       |                                  |
+                       |<---------------- t ------------->| refined r0 rang=
+e
+
+Would it be hard to implementing something in the same line as [2] to cover=
+ it?
+
 > +
-> +			if (env->prog->aux->kprobe_write_ctx != dst_prog->aux->kprobe_write_ctx) {
-> +				verbose(env, "Extension program cannot have different kprobe_write_ctx value with target prog\n");
-> +				return -EINVAL;
-> +			}
-> +		}
+> +	/*
+> +	 * Symmetrically, if (u32)umax < u32_min, retreat umax to the
+> +	 * previous block. Otherwise apply standard u32->u64 tightening.
+> +	 */
+> +	if ((u32)reg->umax_value < reg->u32_min_value)
+> +		new_umax =3D (reg->umax_value & ~0xffffffffULL) - (1ULL << 32) |
+> +			=C2=A0=C2=A0 reg->u32_max_value;
+> +	else
+> +		new_umax =3D (reg->umax_value & ~0xffffffffULL) |
+> +			=C2=A0=C2=A0 reg->u32_max_value;
+> +
+> =C2=A0	reg->umin_value =3D max_t(u64, reg->umin_value, new_umin);
+> =C2=A0	reg->umax_value =3D min_t(u64, reg->umax_value, new_umax);
+> =C2=A0	/* u32 -> s64 tightening, u32 range embedded into s64 preserves ra=
+nge validity */
 
-would it be more clear to check this in bpf_check_attach_target,
-instead of depending on actual write to context
+I think we can move forward with this, as the fate of my RFC is
+uncertain. Please add some selftests, e.g. from [1].
 
-jirka
+[1] https://lore.kernel.org/bpf/20260318-cnum-sync-bounds-v1-4-1f2e455ea711=
+@gmail.com/
+[2] https://github.com/eddyz87/cnum-verif/blob/master/cnum.c#L242
