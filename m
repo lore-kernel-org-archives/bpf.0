@@ -1,165 +1,113 @@
-Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A2DF359A97
-	for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 03:41:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E1B236C0B7
+	for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 03:43:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.178
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774582914; cv=pass; b=GcdCNJoTKRaCPC+qvhAgxqSa9hqP1Vk+H7mP6sO4zBJDSJhxQIngUYMF2+fxMIgn0eF/ZDL9cpMxtecRsWcJj8Lsm2AkvqkwNkoPpFgvvagYCf2BEkZga9UCVAfbMr17zpGlH5bgEZSNlE/uJV3ZcbLmXLwLEwdV4JAqQqqAgGQ=
+	t=1774583026; cv=pass; b=LODfzlwJ6leXHp/te6BE4+hGwGAk7KewU/m6oCiT3gsffEx7Pam5c5ezYeN4lo6NCj8tSoU4G/xZtVzYDICq298X2TV7xdF+BEgzJWqGB2CMhEuXNCBvNImdAgMvEo04ULEJFDjweXchuHxFBJ18dn7HuhDomICZ8x3SwAdw1N0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774582914; c=relaxed/simple;
-	bh=5Ru2YhEXAI7dlMIm2PMqAIu5X4YlrOQ5+v6CxXLlNy4=;
+	s=arc-20240116; t=1774583026; c=relaxed/simple;
+	bh=XZ+5Uk/DsKDjljxFTH2gNYDX6n86w4DiW+i7ZwAY4FQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gsJf2yQOUIRNlLrVG8MdGvx356M1DWmoSYdQxSME1LlV5eyUzru4Gi1+nr61jdura2yV7o4s/FfBBlVHhGQbDoKkmMXWBoKp/r4GWxhlhSiThLhsH175La6T9MGCTrow6pjVWlpSfdleCRc/QTVRaKrgOAXIlf8pXGxHz0XsQk8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oJzyd9bE; arc=pass smtp.client-ip=209.85.128.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=EoQk2GzLoA5UrlFVjank9G8Kd4SFFxtaGYMrV23KQ2qA+YbXyOOpnOJS+tcOnQSzctthdAk9Yq+JqWtIrcF9/AqmOBEkVwuCJ7y4ARhzEAalYvZ0K43wnTh9L0kJmaB2p2n+mBGq4CTOuBLUaAHK4g3YB9WKsoFnBCM6Q1NjS6I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=u7Ws/JCZ; arc=pass smtp.client-ip=209.85.160.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oJzyd9bE"
-Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-482f454be5bso25083475e9.0
-        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 20:41:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774582912; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="u7Ws/JCZ"
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-50904a8f421so16959001cf.2
+        for <bpf@vger.kernel.org>; Thu, 26 Mar 2026 20:43:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774583024; cv=none;
         d=google.com; s=arc-20240605;
-        b=IRqtsrbqrmVGj1QPyAZ6payKlWO8JO49xbG/DtCnIaIpu6IquQwjH/4V3dKAIj2cGZ
-         Q7hnOjQNLu7YqbNM2UY7nO0Yo1DjZpjRUtUGWb2nZkhNsQwT9b/jmyVH6anMyDIUnxlM
-         4GLhFNowpgmwp7nkHgF9wNxE5jOzRWGg2RJu8/XzfFbdcY2Nmixjm5k3BBFNMKWeNi48
-         0mVzhzr4irClzxah/Fc7pBMhpuAvSIrqD3ShA2zLX1tQLR9gWQZvzwI0rhaPsG8lRlxX
-         7B9S0Un8Lb5dDyB15M6kE4YK+X6DmVzjVGwpZ4oRm9u/WnvUEMIFvje0Wlv/jvlm9+WS
-         Ef3A==
+        b=IXTQyIuOKND2T8oWg4FFh5WsVbEzZIlYxn1mcQSmkarvJTC211AItAhfH8ef4dcfPd
+         YaD+vK0Azj3cuD0A2Oqc6dpQFgbx1zLgDRQfvCBlbymHpzNySRBmgwNrlHVT9Dq46CQK
+         6GDmf8B1jQVJ110MMFIeHiNerevbBuQWr6XUX470TBEF9PLDNXAtNx8M7/R8HvYd5SYg
+         dIXeClWkegOMUplNSRg44N02OW55NkpDL3huHTJoh/HB986ntI+iFPmDJCmENwLDIpaZ
+         RfZkfXImyp1jLFfjCq6stQux7gNby7Bpysbghk48/H1TOORleaKzEBElx05S+t6pRSYv
+         hANg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=NQN8Z3BXWFXzQgAxpw3e9/69wwl9g9s6ecFNIDS+jrk=;
-        fh=mV8Uwy03aTQpEc71kkKqimIDFbwq2oIhKiU5zAUO9K0=;
-        b=FF7LnNhKtCyDOYSZlGrYhaHdVdNS89eCq8g6SPpiekcdKYV4A0yXKJ5E2GR5EpdtnJ
-         pbJePyrQkx6LW9rgf76OjJdfS5+uFGYDUE/tTcwJuHbvCClfxS573zhmX42bWFx/222A
-         C26EwaXcv9D2MRtBvhyHY7ejsnJihUN3kTCP0tv9ucuEEhdhiRXu1owjHz5rJil6QN1X
-         /s6xFs0XWIp+ztSLisIXH1PgC0hQ/kE0St5paJh+iKSea0DcCom84RRl59TBvPCTN2Eu
-         Al6Y96tZ5hBUa6HUBVGdHapXSW90XpKsTHyXm3i3aU+n/lXJG+JgJU6tQbdcb4ydTqum
-         zuAQ==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=XZ+5Uk/DsKDjljxFTH2gNYDX6n86w4DiW+i7ZwAY4FQ=;
+        fh=Krrx5hd4vvS0U3qz+gyJIJABgRh2yHuhR3imEC2/EbE=;
+        b=ODwQd1iu49eZuuNt8Nxw7blobHURXm4NRQJn+cxnoOpbnp5h9i3UEpcR/r4/WK5oLU
+         8K7YaCKj99ypv1qvZ54BTh5z3WHZdxMQF7e3+1hF/BJzjvlcQGA5bGtIsYJ7IHNdxrU1
+         D/1rP6vPuLYCKcw4mpZfnwLpcm5ZGGi+OXUxNQa9gdzxyWnwz5g8DWsf+/tzX26Mzdg4
+         p6KEapkgZu+f8smM7HtsbHLnbVIhJR2nm7PCE53ehsrLuA95KbaNoaY1hS23bRnkD+i4
+         Ap8tnXk1kvYSvKICX7eCbmap9YHmfmC8VraRh6u9zwsd10YWp02QWnAE48r9Fr801uTE
+         v4bQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774582912; x=1775187712; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NQN8Z3BXWFXzQgAxpw3e9/69wwl9g9s6ecFNIDS+jrk=;
-        b=oJzyd9bE46RTNVz0yVU5nAkYEaUmu9gC4kpxyPk9kFlD+9YB8o9RhIHKhId3bLhtJj
-         t5NvfwlJGJ1NxxuUAy3Q+gLOCxvwaZvKfC7R+l3EeE6iwzbnk8rDb36rNLUeRysANQOl
-         vD51XSLyejIIL+eH3yofygLOWZOFzlqOyQtRjd32bNn2uYt4EbXYoizd5ajj19XxDGIH
-         LCeWEZAkfFvrUmQrhu1h4pXU3+gqp8/uFbjgep6ZoK8+MCxHJS2s/l8+JWZTw3vOaGA7
-         BipYGV1Ib2pgZ2v8tfLJQ06FucztEKc6ur/pxq5U0AnIhlr34MXaPNE/HHYDIp+Eug6G
-         wt7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774582912; x=1775187712;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20251104; t=1774583024; x=1775187824; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NQN8Z3BXWFXzQgAxpw3e9/69wwl9g9s6ecFNIDS+jrk=;
-        b=U5yrCfDtCFLJ6eSXL0GXLicw+F+hvqCxtiguyXthaoO2/Gsx3IERoOyXVvm1ypEaQ9
-         f6v5ZSqloV4uq5CBhWwZwVKnqXEoPv8vd0U36S8UJ/PTLy3AOxBbfsfJ0eyeEj3Lt/qa
-         RrnyjeixU43J3qK6hpemktpLeRgaxldPxdHqo6Soy1fDpT2QaO/sd7s8Nn00AAgMI5DT
-         W/Rwf+BdjRMtTvNjLUFKN4XZ2DIHfiYXBhymwEHhrMxiEOjxo6r4kb4c/O+zN+PtTkUe
-         CsDive1cR0Tv11WPC+pKkPs6dXHi7ZfYfOh+IW6kPgFw2DfjvZcvBgPcY4gRNqELzr9E
-         ntCQ==
-X-Gm-Message-State: AOJu0YzxDc0AnniZbKvMnsE0XBybk3vSAue/5tXMEAPzw0jbnoTtUyas
-	40cNN6m7enxDgnwWgfFc6ZaFSuSO7NSvHhn7QL5fha1BMfG4QpkJIttnWihYxGjZmT/LHmnwMjC
-	t+PGXVwReGs+y5fePYDSK4tt8SaUUrto=
-X-Gm-Gg: ATEYQzz3GJv3f07i0CoyVozxA2hUIk2khP4u2CJX9NpZcQHf4XDA0aEHq//8JwT+e1a
-	o1XEBUsKKdCYFy+awngfZRdYTvz4hKFJVF0h6pphpmsHL6LU9OmmufIdVqnjGxApghxIvjF3cKQ
-	rVbpXgNfKYUleusBHJQaWRiHIePn0utogHXpne2kcxQFHeZhsjKO2xRmp8WjJvQb9QolVJa9L8x
-	vU2wD1byNT/6ifsZLGziYmw8v7/wBbZrQDIBpkk9GiiNUoZ1wXRspaSd2xRT3mRGoVJ977PYaJN
-	R+REOJkXNE1YIXurcIbiWy50vEgcxw5Mc650SwQNO34R2pgJA/e1B5p1BP5A
-X-Received: by 2002:a05:6000:18a7:b0:439:ddc0:4bef with SMTP id
- ffacd0b85a97d-43b9eaad03amr1170162f8f.8.1774582911568; Thu, 26 Mar 2026
- 20:41:51 -0700 (PDT)
+        bh=XZ+5Uk/DsKDjljxFTH2gNYDX6n86w4DiW+i7ZwAY4FQ=;
+        b=u7Ws/JCZNimk/pAmatYO3igeRU+sC4Nb/sBDK0vRl6AooNd7ymqtFy5RvKSeP4jHSv
+         26mAA0AqrHmzOWvuvi6GU/G/xaTGgRvp2N+6DtttQXSw/JTOG7f6MuK93Yp0bi8osAon
+         JyC2HPayj1uNLRxfA07Pbq+xVlrF1tejQ327w6lS55WWdGkJU5jozm7cdawikJ9mtPvn
+         F6iZ/X7ob56en+EHu+j9iNmLXIdFCOuJ/T1K4maFljQII5ZYUC7WetRr1LPm8x16bxpE
+         Rhb8Fee71nJxyTg+C/O78t/mx6RpPR4F4tpjgtRzIbJH3mox7N+Dj2RNIe9n0OVSwF0Z
+         1XPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774583024; x=1775187824;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=XZ+5Uk/DsKDjljxFTH2gNYDX6n86w4DiW+i7ZwAY4FQ=;
+        b=EmL/m82VZ9/YfIYkpT5vZxaZ7tKFIdm4CSwMT8FXvAqij9Uq6Ld4VzHjr1TADkiP2Q
+         n+OJGOfAetoCxfitUXeCBfekqJq3EwoU395/DolmYLwW9l135DfeH8pQo/VAUuzrxkqQ
+         5BlK+w3v8pfY5GMaSUzNkpPzDcWuSGgoyTYsjmHmdPTFNHKYzFMIXHr3EEHy1Oot8t9Q
+         BauT3VW5M6RULT74WD7oYdDsM9xYlzy3vrbhbeJLUNpM6sPp/wgiTmOgK3VNPPjGULps
+         63UEDKgzIJSMRPokZiYCRg58N9G5XPSLkB5M7NnMn5X+pEpiVzBarm28O00UJHt/H0QT
+         8AFA==
+X-Forwarded-Encrypted: i=1; AJvYcCWJ4Se8RL4d8zYqJ9P3fwvRWcebb21D4THP0HeD1lmKjP0b+uuomOi499ksR8JMiH4XaUQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyscC0F0wQsIkTRPvHBH5/+NdWDO1mDfSLOkVVvcWCTivsjJS9D
+	xd9yHQAKCIppuRC6xvk9909BDDsLADCzOyfQ5Rd9Zm74UFBUkFxR0p23nWR77IElNOY1Q1GtN+E
+	qwtSYcaCeGyGp6dBDvb1lo7NShmdbh/GRqB8ukpH0
+X-Gm-Gg: ATEYQzx+CfB/q3Mu8PwcfQrpv6sHviGHIIhRVQ5mLV184a6/JBlDUnLXVHDo54G0vMM
+	apPNU7ztNnPwyGn+SugfR/sr7HArcS6tEJPaY+S6bgJDs46JaxoP/Y0jF2sejQHpbGx+FtrkyUd
+	eEALCYKwYUerjkA2VRSZBt4bC2h9e6SYkApK875oq6ziWMYy5zuFTLJmAkD7lTswjVu2F+skLV3
+	IqIakT6ipVRbNNDZu6C/MZifZ5AhADTJ8P7Dkm6f1PtEgGmDCTzI9sySNQhlVgEjuUWsLEsTm/i
+	bkDsxw==
+X-Received: by 2002:a05:622a:5a0a:b0:50b:4c64:4730 with SMTP id
+ d75a77b69052e-50ba37d3a17mr14739431cf.15.1774583024002; Thu, 26 Mar 2026
+ 20:43:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260325-kmalloc_special-v1-0-269666afb1ea@meta.com> <20260325-kmalloc_special-v1-1-269666afb1ea@meta.com>
-In-Reply-To: <20260325-kmalloc_special-v1-1-269666afb1ea@meta.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Fri, 27 Mar 2026 04:41:15 +0100
-X-Gm-Features: AQROBzDj1BWI_kZI-b7KkrbdfQiAxRLQxfaBACLXC6DKbpDxuKAwCqXs6YElTvM
-Message-ID: <CAP01T74d63iXXxz6UhjLQWgC_FOvJTrUbfrREcf=+qkshbOoag@mail.gmail.com>
-Subject: Re: [PATCH 1/2] bpf: Migrate bpf_task_work to kmalloc_nolock
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com, 
-	Mykyta Yatsenko <yatsenko@meta.com>
+References: <dd3984b3bce9df3591927f927668cb31cc7ecf34.1774460059.git.mst@redhat.com>
+ <CACGkMEuL613R8GRUX2hjRuJcvP0LNC_6_D1Y1yEjtTqehy6zJA@mail.gmail.com>
+In-Reply-To: <CACGkMEuL613R8GRUX2hjRuJcvP0LNC_6_D1Y1yEjtTqehy6zJA@mail.gmail.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Thu, 26 Mar 2026 20:43:33 -0700
+X-Gm-Features: AQROBzBTAZQiZv5gITUpNks5cRGZmqvxfVTU9Y6vZlwD1VKoOLXGxZ_EY6bfseI
+Message-ID: <CANn89iKJUMP+7udEPs_j2Z5pPJnc8-Gkn==5OLr63OJQs1a5Mg@mail.gmail.com>
+Subject: Re: [PATCH v2 net] ptr_ring: disable KCSAN warnings
+To: Jason Wang <jasowang@redhat.com>
+Cc: "Michael S. Tsirkin" <mst@redhat.com>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	Simon Schippers <simon.schippers@tu-dortmund.de>, willemdebruijn.kernel@gmail.com, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, kuba@kernel.org, 
+	pabeni@redhat.com, eperezma@redhat.com, leiyang@redhat.com, 
+	stephen@networkplumber.org, jon@nutanix.com, tim.gebauer@tu-dortmund.de, 
+	netdev@vger.kernel.org, kvm@vger.kernel.org, virtualization@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-nit: I think you need to target bpf-next in next respin, patch subject
-is incorrect.
-
-On Wed, 25 Mar 2026 at 22:12, Mykyta Yatsenko
-<mykyta.yatsenko5@gmail.com> wrote:
+On Wed, Mar 25, 2026 at 8:17=E2=80=AFPM Jason Wang <jasowang@redhat.com> wr=
+ote:
 >
-> From: Mykyta Yatsenko <yatsenko@meta.com>
+> On Thu, Mar 26, 2026 at 1:36=E2=80=AFAM Michael S. Tsirkin <mst@redhat.co=
+m> wrote:
 >
-> Replace bpf_mem_alloc/bpf_mem_free with
-> kmalloc_nolock/kfree_rcu for bpf_task_work_ctx.
->
-> Replace guard(rcu_tasks_trace)() with guard(rcu)() in
-> bpf_task_work_irq(). The function only accesses ctx struct members
-> (not map values), so tasks trace protection is not needed - regular
-> RCU is sufficient since ctx is freed via kfree_rcu. The guard in
-> bpf_task_work_callback() remains as tasks trace since it accesses map
-> values from process context.
+> Acked-by: Jason Wang <jasowang@redhat.com>
 >
 
-I think a comment in both places would be useful. Also, this bit can
-(should?) probably be a separate patch preceding the conversion.
+Reviewed-by: Eric Dumazet <edumazet@google.com>
 
-> Sleepable BPF programs (e.g. BPF_PROG_TYPE_SYSCALL) hold
-> rcu_read_lock_trace but not regular rcu_read_lock. Since kfree_rcu
-> waits for a regular RCU grace period, the ctx memory can be freed
-> while a sleepable program is still running. Add explicit
-> rcu_read_lock/unlock around the pointer read and refcount tryget in
-> bpf_task_work_acquire_ctx to close this race window.
->
-> For the lost-cmpxchg path the ctx was never published, so plain kfree
-> is safe.
-> ---
-> [...]
->
-> @@ -4296,13 +4292,27 @@ static struct bpf_task_work_ctx *bpf_task_work_acquire_ctx(struct bpf_task_work
->  {
->         struct bpf_task_work_ctx *ctx;
->
-> +       /*
-> +        * Sleepable BPF programs hold rcu_read_lock_trace but not
-> +        * regular rcu_read_lock. Since kfree_rcu waits for regular
-> +        * RCU GP, the ctx can be freed while we're between reading
-> +        * the pointer and incrementing the refcount. Take regular
-> +        * rcu_read_lock to prevent kfree_rcu from freeing the ctx
-> +        * before we can tryget it.
-> +        */
-> +       rcu_read_lock();
->         ctx = bpf_task_work_fetch_ctx(tw, map);
-> -       if (IS_ERR(ctx))
-> +       if (IS_ERR(ctx)) {
-> +               rcu_read_unlock();
->                 return ctx;
-> +       }
->
->         /* try to get ref for task_work callback to hold */
-> -       if (!bpf_task_work_ctx_tryget(ctx))
-> +       if (!bpf_task_work_ctx_tryget(ctx)) {
-> +               rcu_read_unlock();
->                 return ERR_PTR(-EBUSY);
-> +       }
-> +       rcu_read_unlock();
-
-nit: This might look cleaner with explicit block {} and guard(rcu)() inside?
-
->
->         if (cmpxchg(&ctx->state, BPF_TW_STANDBY, BPF_TW_PENDING) != BPF_TW_STANDBY) {
->                 /* lost acquiring race or map_release_uref() stole it from us, put ref and bail */
->
-> --
-> 2.52.0
->
+Thanks!
