@@ -1,94 +1,94 @@
-Received: from mail-qv1-f98.google.com (mail-qv1-f98.google.com [209.85.219.98])
+Received: from mail-qk1-f228.google.com (mail-qk1-f228.google.com [209.85.222.228])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A27AF3FCB1D
-	for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 18:17:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70D322BE7DB
+	for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 18:20:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.228
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774635449; cv=pass; b=U7HW39Si/YHaUw0qVZVjM1rbu1AiM7Pdydl6OdWcOiK+bEuSZTQwEkXt18SOWOfBbeh3nSmPktS1kuGg/6UvWrlBrFA3sWksdWKSa9n9HG+YPhq/n0g6jLPLEijcpngsvWju0FO1qAdBpzvRZ/BRR9WNwvF2NB3WIrrl1ntFwDk=
+	t=1774635605; cv=pass; b=bRRIgx9jR9UBTJOs2wA/TcxFMD2r18IrCUIZAZPNb1Y26ouJC482lYQC5y0pcV8n0afk+DubYAGe0dE/IHAWgpJT+mYB7/ssAySGrHYG6WiufmoAQZF5bEBL73gGUaGtmophGsveoOe6rVdHcoLxSQ769+NvN/af68vO+bMj67Y=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774635449; c=relaxed/simple;
-	bh=gv9FA1AXOSDoSErGjg7Ec3gLzty/D2uaqOH+18aJgdk=;
+	s=arc-20240116; t=1774635605; c=relaxed/simple;
+	bh=w1KBg8FYcLyXYzyB3YYf1W1Zitqxp6MB39xlkq9jsXQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ENhW8lWnngzfewp9gxMYcRT0rxhq7T8ZRiojizQCCsGX6KdtADVZT/C6um88YCD3L3HuXTkPzbr2bHVfCYloKM3iWtJEs1KVLXIb0k8ruJI0RqvEASuJ/VDggiaFUgN9jPdUtgC6XHvLZdipQKlDT8ZfSkY/YdcJL1T5cQUXn3w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=KZ7YvMzo; arc=pass smtp.client-ip=209.85.219.98
+	 To:Cc:Content-Type; b=Y56HFsjWgR6qK1pBm2B8E+t3Bopo0wc7bLaNT0YvBcQJWea30v4wgR93xlsLlsbCX7oHFHiv/2ESJvmwl9VA30RmcgjxnAcmFREEB44PfGa4IQOk0mohlSFG2T1Q2JLTZqVmTkuG4APsDL2wm2UJg824TJEW7PaWq24D/CYtIyA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=fetbc0VK; arc=pass smtp.client-ip=209.85.222.228
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="KZ7YvMzo"
-Received: by mail-qv1-f98.google.com with SMTP id 6a1803df08f44-89c43c4c383so30025806d6.1
-        for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 11:17:23 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="fetbc0VK"
+Received: by mail-qk1-f228.google.com with SMTP id af79cd13be357-8cd7ecedf2cso259893785a.3
+        for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 11:20:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774635442; x=1775240242;
+        d=1e100.net; s=20251104; t=1774635601; x=1775240401;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gv9FA1AXOSDoSErGjg7Ec3gLzty/D2uaqOH+18aJgdk=;
-        b=UmOivAWzy6OAEwX+34Gw4ghBGzXY12a58LjKvI7ds6NHg0EqB5LgGm34y/sm1PVVnV
-         VHevH+XoR795CNN380gfOvqqQNqZmKir/w9l/BJdnBEGFgPYx+BH7V6s76ozAwnX42Sd
-         n2NPrsA9aP8w8+jm+q3CPHrXb3nc+juyPiQ8haEIoyWZkmnHvObYqBMQwwxhGwuMvXWe
-         Bz1OeuTQj4x1QNKpW2hW5y+3uCI7h++kWGGxSMTc740dVSHi0p/99usp3zNRcM1Opbj8
-         h8abj+ZaZ4J4xI47kuHpKhPeQ8fmISx0z9znOijr5hq3MaJDYBUPzACdHzfu5uuJMI7m
-         ONzw==
-X-Forwarded-Encrypted: i=2; AJvYcCVULbgIl4V2Z3/WlT4MHMtxzEdSoOm30W2ze4gM9CCXKWPfResGOebtPMKPFny+4DKrVRM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz105COeZN8aOx2HY5lFmhTrpxbWCXi+ar2E1wzdwkEkI8Yuvdh
-	VHs+IkCvi9ZlgTtE7D0a9oRrguDTJ3wEhXEYMGOK93g4LNex6tPeS5mMts2f0UCUVsNghksv724
-	cMVv39lUmeaAjBnbCRYR6yWvwLvlOzm+H80iVt9X+UbrxS01oLT9qL7lTAykUIjnbhkcll8xE1p
-	zcv4/qr7a327yNxkXJD0la7uk8tbe5GmegiyZkSHmM0LsnPFVaPbiSOLI55INrl+p5j0z84B65T
-	dj2RkFT5pHy/g==
-X-Gm-Gg: ATEYQzzjpGWVgCe1xDO1d2xzZBC1GnMWAKr3iGDGcxjlBIzucJhbnJyKkamY0XVVL84
-	TWhi/32iR9xguOAQ+/BTLYKVQwxmjbyzVra3HhpDqt2VYkgjVIf18a7TajI08Ml5k/jMtvLWnoM
-	SFJ/XKtGtBZJQ7slUgEzlXWLGQ0RL6bX2XHVjGyazekK2g12hyYyxCumUP6Cm4ISn9A3Jg/8fiM
-	ydE6fR6ONtvif+9iZkom4xLjjYUBl+3bh19CzfpvkEl4b1VHVVd/n7YbxGGdr0kOEC+nT5DAzZc
-	y/c+k2x6setbA0XU9MQNUx8pafYxna4K5LfI+6iOHtSEVqj/iXuxeVe/A1zrRBFgdKo36okJXHm
-	/Q9ENUYGoz00UzHbZSFOquwLD6Q8OTtcEd6MC9jvI7b1KcNrzlg2sDnl9lFn2VcbBaF0GHY8f83
-	jNICNMnLtcBGftN3pyzgXz6tY3kw8BYfoIslmWTqDaLz9/iTJm1YjgW1qztfalVN4=
-X-Received: by 2002:a05:6214:29e7:b0:89c:edc1:dfa8 with SMTP id 6a1803df08f44-89cedc1e0d4mr33544176d6.57.1774635442048;
-        Fri, 27 Mar 2026 11:17:22 -0700 (PDT)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-25.dlp.protect.broadcom.com. [144.49.247.25])
-        by smtp-relay.gmail.com with ESMTPS id 6a1803df08f44-89cd59ab315sm7514596d6.16.2026.03.27.11.17.21
+        bh=3afQH8ommadsbw8DeWCAmAFa9gBh4EFmZQ2HyVWUnpw=;
+        b=lKE2ZoGga9BwkjSFN51jkmLxSIxnNQBpJyU0xyDascT7dMqX/2ZCNI2cLDLS80VRfD
+         5iK72a0OUPNaAjlz2H1AXAf5OfO3Vh1KAOnhpDLjBeiOIyYE/qtS9MZ+ozSuIqVUZhGs
+         Uf4uGO9elsZ1iSAkv+fsWWbqkbKBdI8t1SJ+YHeZzfUnqvZR/DOycwBkYk4U184p1eZb
+         iW8G+ahQqcNtSVzA8TK1yQLwUeIeZNOuagQ7YAa6z+R+P4h6Ee93VL78UVwe/Pmembks
+         RuUbgIk5I882pyaqVCwn+b0iOtIervNATh2pmFd+5Uwc6XUtV3PaDu2cQk1VyTEI3h3B
+         sXyg==
+X-Forwarded-Encrypted: i=2; AJvYcCUxBDxRLUB+u2r1vp7upuQaFkdmA8opneF2tAEkKzE944sam9jfcpkPe+XyekPm+LvwdP8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz05UfGmuC2biG/ghD5r0aNnoq18RuNPcZ5CMaEiXOtx7rpA1/D
+	kyfJrjM2PPAk5/wedCc4QLqH9FVRpaxZy4qQ6dci2ZIl4ntvbh/3hV8sZpCC76S57Phoypv0GW2
+	/AdqfbbycPpKjXtbc8jIpM29JmqIXG53T2iSlVxW/al3nacKX7QlqMq62nKzQUx5jHM+VGcGZVB
+	WQAS5D/EYQGw/PvDjNGxlnzUxyDib7aayexzYVJCNZkJwX8WZq/OOwKsrp8lZYdCLN2So8+PyOq
+	Mb8NbjU5bPzqA==
+X-Gm-Gg: ATEYQzwCLhOfBVn9+2hOYogetV147CwIzv7V0x7P1SLbMb/4tKSaAt7aw5xw375M1Hp
+	ni84Sc2obKbEoiOMaYIPJBXKoJZ7SD5rrRIEeHrQxdGhsnfNOk9dfeCUt+H4k6Mzx3rfPnP75wk
+	TkycwhUoEpds+dYpvKcFEqWeC22nPQQO1bGhuSg7t6a5boOMkktfkCadjqVif+RUB4vi/JuBJfN
+	zctQXTaNCaIGL1g16wDTpyC3EWq5HqbiloQA2oD5rhmsa4s4PBaGeRLx/TgbuClYt82qG4Y2AhV
+	DDAcpGb3eknhqtiRqS591K7k5X1uxfP0fxjCb00bW82OyUgzLM2CTQsNfPir79KbqNtq5lOBx3y
+	yz9AhQByjC3+6iJleGbzm6I3mwytcD3m2PLDxZeVKsn3/7B8c8wgONEuSJp5tfy51PGHMBIdLAP
+	rjlJIVGfweFm8=
+X-Received: by 2002:a05:620a:4555:b0:8cd:871c:909d with SMTP id af79cd13be357-8d01c82b71bmr489184085a.53.1774635600477;
+        Fri, 27 Mar 2026 11:20:00 -0700 (PDT)
+Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com ([144.49.247.127])
+        by smtp-relay.gmail.com with ESMTPS id af79cd13be357-8d00e228ec6sm47521285a.0.2026.03.27.11.19.59
         for <bpf@vger.kernel.org>
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 27 Mar 2026 11:17:22 -0700 (PDT)
+        Fri, 27 Mar 2026 11:20:00 -0700 (PDT)
 X-Relaying-Domain: broadcom.com
 X-CFilter-Loop: Reflected
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4836abfc742so20846765e9.0
-        for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 11:17:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774635439; cv=none;
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-43b4085da48so2130729f8f.2
+        for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 11:19:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774635599; cv=none;
         d=google.com; s=arc-20240605;
-        b=Osgq/l05uSjA2kj+vZ04eIvXaDnSvfCx3l8I+uQc1Oi8aFIQn046NG9PzRDr8m09aU
-         pGoBsjFLAwSfjpuAKp6X2WtIHHza8TnJMmVHLBYeufkVfmBNbrPKJKYFmBnTVNe2U3oB
-         qAwkyJJEr+hvEDt5/nfOYpLJQZpKcKccYG7K2CjbyrND53WQtB4z+1FT3LMuC4cqRENb
-         oLCnIfkAy5xrxSJsJnc1Tc4aEPnidD6ogx2jWBkqKqJCuuMyIFtF82QdGXBt7xwsgIL3
-         Mj558RnPny1yxOoWGcK0y0SOzCbBjM+0lIBGYbIjv2Mi6hZU/CmO63XKW043znq9giFw
-         CrzQ==
+        b=J8HwMpvs4fdQb6cLLE5PmT4A9YMgMYqu7C9f5Jj6bb/8JSAhcS1+PNoFY4r4gWvJtW
+         34cr64StnsYvX//lNQePadGe5stRjXJWpoPwcXRpqY9MksNy+bUFCrgQ7UlWGGAhNJHX
+         ts2NAHir09JnO2/taeOPtIFQsBZavSThlGL8SIoPbnDGwpSptM9fRSw9JPWuv62iv1Eq
+         Vv9AZs4WDI3RwyJc/z00KRnzo/JOXFFOjXIUkI5yFSBD2Xu1TEv6DEHRCxjJli1sD6Xh
+         N5u6x5/k220ABZ3ORS1p+5lovHZ3G0qEoIHWDKvNUhOyb3uSap2xs8k/EKTSyF3Hx3jP
+         EMrQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:dkim-signature;
-        bh=gv9FA1AXOSDoSErGjg7Ec3gLzty/D2uaqOH+18aJgdk=;
-        fh=rWvodS/rOBmKqd06eG8GV4cn8OCDCAmTabFkrL3f5fw=;
-        b=iS7nW2SQakKajzP8AIYEDUo5TgVk5eRK1BXVJAx7z0GAf+4OfR+YLa6OcT5VStDZU9
-         3ya9u7SM8ZpxcyHDXJWwWZ65mOkPkQ9cy3ocPXKHI5/n18oAqeotogq209M86NdsAEmp
-         yf5dU2aYZGkNw6U9elziXMQRgPiNQCZgb6kfpzPokEZ77X7lxOsrCrqHIfKP73pfwIw9
-         KNqtEk0sxK6kFmXCb6HAJyq6uAA1wvyjwZDSWafBckv9hhHNIeEnKF92fhYmFyIpHF/M
-         7T20ox98/g5TeTWh5iLMLa9Gwz2PiUozI3fUg9Q6Jl7RlD3jhdUMu134lTVvKDDzVZmZ
-         2WPA==;
+        bh=3afQH8ommadsbw8DeWCAmAFa9gBh4EFmZQ2HyVWUnpw=;
+        fh=a/kswWwkHmLx8QDaiZJWn/ce2EL1k0WMXe0yVaqwqyk=;
+        b=MfNemqtoaMTH9FC65wVO90NcE2sA+g42+e2998FIPAXmBImSinaWmxBpCzzgYVF//K
+         21+mbRmL/SChin4gSm/VLJZrLJ+wjBMpoaQlMDMvc2v0bpEsVQ/gPn4poyPyaAJSCmh4
+         F9yQaO5b7g4bWBf2DmkPCndJMXz5/tG7jjQdF7ymUwqjfYqEalnkZlM0mX5/Y8nG9W13
+         P0uhrME6R9yHdzL3ZGi+jFMWIoDQB74UC0Os8bmKIdS4rJ5OxcZw/aeQO690sQn0nfPC
+         PVSku+JsW7RIa+zGz7iFudK3NvD46lh3McUHuunU9Sbns5IJycrS6qUoZ2D8M10nIj0z
+         toTA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1774635439; x=1775240239; darn=vger.kernel.org;
+        d=broadcom.com; s=google; t=1774635599; x=1775240399; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gv9FA1AXOSDoSErGjg7Ec3gLzty/D2uaqOH+18aJgdk=;
-        b=KZ7YvMzot+L6ZfW7qPjWk+hq7dHN2/KYiDnZD/Ly+Dra6BN6bBgz5GQCTxMACjzIxe
-         wG8KushPUqApnh4swK47lWez1uTtJD6zYy+FQ3+68syLY6OtnsXBZBgQ1/GQvniaMflm
-         DedugG4J9lWsWWIeaLE02FYjArRx4Zj2ii6kk=
-X-Forwarded-Encrypted: i=1; AJvYcCUmBUocY+xtS/FnaL9XQ1VmrB+PElzqz1snKYFEngoMtfkpr4hEBBNScMCHldgInluP7iw=@vger.kernel.org
-X-Received: by 2002:a05:600c:a408:b0:485:9a50:3370 with SMTP id 5b1f17b1804b1-48727d735a7mr47046215e9.8.1774635439526;
-        Fri, 27 Mar 2026 11:17:19 -0700 (PDT)
-X-Received: by 2002:a05:600c:a408:b0:485:9a50:3370 with SMTP id
- 5b1f17b1804b1-48727d735a7mr47045795e9.8.1774635438989; Fri, 27 Mar 2026
- 11:17:18 -0700 (PDT)
+        bh=3afQH8ommadsbw8DeWCAmAFa9gBh4EFmZQ2HyVWUnpw=;
+        b=fetbc0VKHwzd0cNVV+lrfX0OgKZZTd7IgRuR2BZT4Yyyt7tT4wj89IeZM498sPKjix
+         2F7JQxXnegAmtT1KPCxtAabBJZsx+1Vk7Kd8DqTWdfcTTg/Zg7Le2ELC8B3JvTIhW/Sw
+         6B7zEkU23QUIPtaEeQujZ1K/kP2WiFBN+PNmM=
+X-Forwarded-Encrypted: i=1; AJvYcCUsXrxM8ddZZdAeteZCp+BQtrXom1lm5yzm7zeF37I/9M8ICsPhKPaqBhG2zMjMfvIBr74=@vger.kernel.org
+X-Received: by 2002:a05:6000:4313:b0:43b:9416:1aeb with SMTP id ffacd0b85a97d-43b9ea66f50mr5832678f8f.45.1774635269762;
+        Fri, 27 Mar 2026 11:14:29 -0700 (PDT)
+X-Received: by 2002:a05:6000:4313:b0:43b:9416:1aeb with SMTP id
+ ffacd0b85a97d-43b9ea66f50mr5832607f8f.45.1774635269058; Fri, 27 Mar 2026
+ 11:14:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -96,13 +96,13 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260320211921.1202058-1-jitendra.vegiraju@broadcom.com>
- <20260320211921.1202058-6-jitendra.vegiraju@broadcom.com> <acVleH7_kh7kAAZR@shell.armlinux.org.uk>
-In-Reply-To: <acVleH7_kh7kAAZR@shell.armlinux.org.uk>
+ <20260320211921.1202058-5-jitendra.vegiraju@broadcom.com> <acVlC3v0Hyt94XDN@shell.armlinux.org.uk>
+In-Reply-To: <acVlC3v0Hyt94XDN@shell.armlinux.org.uk>
 From: Jitendra Vegiraju <jitendra.vegiraju@broadcom.com>
-Date: Fri, 27 Mar 2026 11:17:06 -0700
-X-Gm-Features: AQROBzDOeqJbNa9mCtRKtZ-IFiNPO_lpzfpzaY_mAFy_J0BCDBOc15lDtCnVYpY
-Message-ID: <CAMdnO-Ko9FX2MG0q=sSK9foXLwtNW-QxDpgz8oUH3VmA3K0EfA@mail.gmail.com>
-Subject: Re: [PATCH net-next v8 5/6] Fix error handling in probe function.
+Date: Fri, 27 Mar 2026 11:14:15 -0700
+X-Gm-Features: AQROBzAQdeoF2TsC6pyuhb-C5pK3pms_hQQEO1sZdWHFtgUcfgs96hzmHlgqKOM
+Message-ID: <CAMdnO-J8xV7KtO12CxhzktxnJ=s1kwZYfCPCgkTv3sS8Fpv5kQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v8 4/6] Add PCI driver support for BCM8958x
 To: "Russell King (Oracle)" <linux@armlinux.org.uk>
 Cc: netdev@vger.kernel.org, alexandre.torgue@foss.st.com, davem@davemloft.net, 
 	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
@@ -120,43 +120,497 @@ Cc: netdev@vger.kernel.org, alexandre.torgue@foss.st.com, davem@davemloft.net,
 	florian.fainelli@broadcom.com, quic_abchauha@quicinc.com
 X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000003997064e05834b"
+	boundary="0000000000007ecbf8064e058c6c"
 
---000000000000003997064e05834b
+--0000000000007ecbf8064e058c6c
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Russell
+Hi Russell,
 
-On Thu, Mar 26, 2026 at 9:57=E2=80=AFAM Russell King (Oracle)
+On Thu, Mar 26, 2026 at 9:56=E2=80=AFAM Russell King (Oracle)
 <linux@armlinux.org.uk> wrote:
 >
-> On Fri, Mar 20, 2026 at 02:19:20PM -0700, Jitendra Vegiraju wrote:
-> > From: Jitendra Vegiraju <jitendra.vegiraju@broadcom.com>
-> >
-> > Software node created in probe function is not being cleaned up if
-> > the probe function returns an error.
-> > The stmmac core provides mechanism to handle this error condition
-> > with plat->init, plat->exit helper functions.
-> > Move glue driver's initialization code to plat->init function.
-> > If the probe function returns an error, plat->exit function is
-> > called. Handle any glue driver level cleanup in the plat->exit
-> > handler.
-> > Use devm_add_action_or_reset() to register a callback to free
-> > irq vectors automatically, simplifying error handling in probe().
-> >
-> > Suggested-by: Russell King (Oracle) <linux@armlinux.org.uk>
-> > Signed-off-by: Jitendra Vegiraju <jitendra.vegiraju@broadcom.com>
+> On Fri, Mar 20, 2026 at 02:19:19PM -0700, Jitendra Vegiraju wrote:
+> > +static const struct property_entry fixed_link_properties[] =3D {
+> > +     PROPERTY_ENTRY_U32("speed", 10000),
+> > +     PROPERTY_ENTRY_BOOL("full-duplex"),
+> > +     PROPERTY_ENTRY_BOOL("pause"),
+> > +     { }
+> > +};
+> > +
+> > +static const struct software_node parent_swnode =3D {
+> > +     .name =3D "phy-device",
+> > +};
+> > +
+> > +static const struct software_node fixed_link_swnode =3D {
+> > +     .name =3D "fixed-link",           /* MUST be named "fixed-link" *=
+/
+> > +     .parent =3D &parent_swnode,
+> > +     .properties =3D fixed_link_properties,
+> > +};
+> > +
+> > +static const struct software_node *brcm_swnodes[] =3D {
+> > +     &parent_swnode,
+> > +     &fixed_link_swnode,
+> > +     NULL
+> > +};
 >
-> Oh, you did fix it. Please merge this into patch 4, there is no need
-> to have this fix seperate.
-Sure, I will merge this into patch 4.
+> Looking at this structure, I'm not sure it's correct. You seem to have:
+>
+> pci_device
+> - "phy-device" swnode attached here (which describes the PCI device,
+>   which isn't any kind of PHY)
+>         - "fixed-link" attached as a child
+>
+> The "fixed-link" is a property for the local network device which
+> signifies that there isn't a PHY attached or there's an inaccessible
+> PHY that only operates with one set of settings.
+>
+> Maybe rename "phy-device" to "ethernet"?
+>
+Sure, that make sense. I will rename it as "ethernet"
+> > +
+> > +struct brcm_priv_data {
+> > +     void __iomem *mbox_regs;    /* MBOX  Registers*/
+> > +     void __iomem *misc_regs;    /* MISC  Registers*/
+> > +     void __iomem *xgmac_regs;   /* XGMAC Registers*/
+> > +};
+> > +
+> > +struct dwxgmac_brcm_pci_info {
+> > +     int (*setup)(struct pci_dev *pdev, struct plat_stmmacenet_data *p=
+lat);
+> > +};
+> > +
+> > +static void misc_iowrite(struct brcm_priv_data *brcm_priv,
+> > +                      u32 reg, u32 val)
+> > +{
+> > +     iowrite32(val, brcm_priv->misc_regs + reg);
+> > +}
+> > +
+> > +static void dwxgmac_brcm_common_default_data(struct plat_stmmacenet_da=
+ta *plat)
+> > +{
+> > +     int i;
+> > +
+> > +     plat->force_sf_dma_mode =3D true;
+> > +     plat->mac_port_sel_speed =3D SPEED_10000;
+> > +     plat->clk_ptp_rate =3D 125000000;
+> > +     plat->clk_ref_rate =3D 250000000;
+> > +     plat->tx_coe =3D true;
+> > +     plat->rx_coe =3D STMMAC_RX_COE_TYPE1;
+> > +     plat->rss_en =3D 1;
+> > +     plat->max_speed =3D SPEED_10000;
+> > +
+> > +     /* Set default value for multicast hash bins */
+> > +     plat->multicast_filter_bins =3D HASH_TABLE_SIZE;
+>
+> Already the default setup by stmmac_plat_dat_alloc().
+Ack.
+>
+> > +
+> > +     /* Set default value for unicast filter entries */
+> > +     plat->unicast_filter_entries =3D 1;
+>
+> Already the default setup by stmmac_plat_dat_alloc().
+>
+Ack
+> > +
+> > +     /* Set the maxmtu to device's default */
+> > +     plat->maxmtu =3D BRCM_MAX_MTU;
+> > +
+> > +     /* Set default number of RX and TX queues to use */
+> > +     plat->tx_queues_to_use =3D BRCM_TX_Q_COUNT;
+> > +     plat->rx_queues_to_use =3D BRCM_RX_Q_COUNT;
+> > +
+> > +     plat->tx_sched_algorithm =3D MTL_TX_ALGORITHM_SP;
+> > +     for (i =3D 0; i < plat->tx_queues_to_use; i++) {
+> > +             plat->tx_queues_cfg[i].use_prio =3D false;
+>
+> Already false.
+>
+Ack
+> > +             plat->tx_queues_cfg[i].prio =3D 0;
+>
+> Already zero.
+>
+Ack
+> > +             plat->tx_queues_cfg[i].mode_to_use =3D MTL_QUEUE_AVB;
+>
+> Since MTL_QUEUE_AVB is zero, this is already the case.
+>
+> > +     }
+>
+> All three points taken together mean that this loop is not required
+> as all these members are being explicitly set to values of zero,
+> which they already hold.
+>
+Ack
+> > +
+> > +     plat->rx_sched_algorithm =3D MTL_RX_ALGORITHM_SP;
+> > +     for (i =3D 0; i < plat->rx_queues_to_use; i++) {
+> > +             plat->rx_queues_cfg[i].use_prio =3D false;
+>
+> Already false.
+>
+Ack
+> > +             plat->rx_queues_cfg[i].mode_to_use =3D MTL_QUEUE_AVB;
+>
+> Since MTL_QUEUE_AVB is zero, this is already the case.
+>
+Ack
+> > +             plat->rx_queues_cfg[i].pkt_route =3D 0x0;
+>
+> Already zero.
+>
+Ack
+> > +             plat->rx_queues_cfg[i].chan =3D i;
+>
+> stmmac_plat_dat_alloc() already initialises plat->rx_queues_cfg[].chan.
+>
+> > +     }
+>
+> Taking all these points together, it means that this loop also isn't
+> required, since you're not changing anything that hasn't already been
+> setup.
+>
+True, That will eliminate some redundant lines.
+> > +}
+> > +
+> > +static int dwxgmac_brcm_default_data(struct pci_dev *pdev,
+> > +                                  struct plat_stmmacenet_data *plat)
+> > +{
+> > +     /* Set common default data first */
+> > +     dwxgmac_brcm_common_default_data(plat);
+> > +     plat->core_type =3D DWMAC_CORE_25GMAC;
+> > +     plat->bus_id =3D 0;
+>
+> The underlying devm_kzalloc() which allocates "plat" will clear the
+> struct to zeros, so this assignment to bus_id shouldn't be necessary.
+>
+> > +     plat->phy_addr =3D 0;
+>
+> You said there's no MDIO bus, so I don't think you need to initialise
+> plat->phy_addr. stmmac_plat_dat_alloc() will set this to -1.
+>
+Ack
+> > +     plat->phy_interface =3D PHY_INTERFACE_MODE_XGMII;
+> > +
+> > +     plat->dma_cfg->pbl =3D DEFAULT_DMA_PBL;
+> > +     plat->dma_cfg->pblx8 =3D true;
+> > +     plat->dma_cfg->aal =3D false;
+> > +     plat->dma_cfg->eame =3D true;
+> > +
+> > +     plat->axi->axi_wr_osr_lmt =3D 31;
+> > +     plat->axi->axi_rd_osr_lmt =3D 31;
+> > +     plat->axi->axi_fb =3D false;
+>
+> devm_kzalloc() which is used to allocate plat->axi in the probe function
+> will zero out this structure, so axi_fb will already be false.
+>
+Ack
+> > +     plat->axi->axi_blen_regval =3D DMA_AXI_BLEN64;
+> > +     return 0;
+> > +}
+> > +
+> > +static struct dwxgmac_brcm_pci_info dwxgmac_brcm_pci_info =3D {
+> > +     .setup =3D dwxgmac_brcm_default_data,
+> > +};
+>
+> It looks to me like this is a copy of stmmac_pci.c / dwmac-intel.c etc.
+> Do you know for certain that you're going to need to do different
+> setups depending on the PCI device?
+>
+> What's the reasoning for the split between
+> dwxgmac_brcm_common_default_data() and dwxgmac_brcm_default_data() ?
+>
+We intend to eventually add support for another device with a
+different setup function.
+If the preference is to keep it simple until the additional
+indirection is needed, I will
+remove the setup function abstraction.
+
+> > +
+> > +static void brcm_config_misc_regs(struct pci_dev *pdev,
+> > +                               struct brcm_priv_data *brcm_priv)
+> > +{
+> > +     pci_write_config_dword(pdev, XGMAC_PCIE_CFG_MSIX_ADDR_MATCH_LOW,
+> > +                            XGMAC_PCIE_CFG_MSIX_ADDR_MATCH_LO_VALUE);
+> > +     pci_write_config_dword(pdev, XGMAC_PCIE_CFG_MSIX_ADDR_MATCH_HIGH,
+> > +                            XGMAC_PCIE_CFG_MSIX_ADDR_MATCH_HI_VALUE);
+> > +
+> > +     misc_iowrite(brcm_priv, XGMAC_PCIE_MISC_MSIX_ADDR_MATCH_LO_OFFSET=
+,
+> > +                  XGMAC_PCIE_MISC_MSIX_ADDR_MATCH_LO_VALUE);
+> > +     misc_iowrite(brcm_priv, XGMAC_PCIE_MISC_MSIX_ADDR_MATCH_HI_OFFSET=
+,
+> > +                  XGMAC_PCIE_MISC_MSIX_ADDR_MATCH_HI_VALUE);
+> > +
+> > +     /* Enable Switch Link */
+> > +     misc_iowrite(brcm_priv, XGMAC_PCIE_MISC_MII_CTRL_OFFSET,
+> > +                  XGMAC_PCIE_MISC_MII_CTRL_PAUSE_RX |
+> > +                  XGMAC_PCIE_MISC_MII_CTRL_PAUSE_TX |
+> > +                  XGMAC_PCIE_MISC_MII_CTRL_LINK_UP);
+> > +}
+> > +
+> > +static int brcm_config_multi_msi(struct pci_dev *pdev,
+> > +                              struct plat_stmmacenet_data *plat,
+> > +                              struct stmmac_resources *res)
+> > +{
+> > +     int ret;
+> > +     int i;
+> > +
+> > +     ret =3D pci_alloc_irq_vectors(pdev, BRCM_XGMAC_MSI_VECTOR_MAX,
+> > +                                 BRCM_XGMAC_MSI_VECTOR_MAX,
+> > +                                 PCI_IRQ_MSI | PCI_IRQ_MSIX);
+> > +     if (ret < 0) {
+> > +             dev_err(&pdev->dev, "%s: multi MSI enablement failed\n",
+> > +                     __func__);
+> > +             return ret;
+> > +     }
+> > +
+> > +     /* For RX MSI */
+> > +     for (i =3D 0; i < plat->rx_queues_to_use; i++)
+> > +             res->rx_irq[i] =3D
+> > +                     pci_irq_vector(pdev,
+> > +                                    BRCM_XGMAC_MSI_RX_VECTOR_START + i=
+ * 2);
+> > +
+> > +     /* For TX MSI */
+> > +     for (i =3D 0; i < plat->tx_queues_to_use; i++)
+> > +             res->tx_irq[i] =3D
+> > +                     pci_irq_vector(pdev,
+> > +                                    BRCM_XGMAC_MSI_TX_VECTOR_START + i=
+ * 2);
+> > +
+> > +     res->irq =3D pci_irq_vector(pdev, BRCM_XGMAC_MSI_MAC_VECTOR);
+> > +
+> > +     plat->flags |=3D STMMAC_FLAG_MULTI_MSI_EN;
+> > +     plat->flags |=3D STMMAC_FLAG_TSO_EN;
+> > +     plat->flags |=3D STMMAC_FLAG_SPH_DISABLE;
+> > +     return 0;
+> > +}
+> > +
+> > +static int brcm_pci_resume(struct device *dev, void *bsp_priv)
+> > +{
+> > +     struct pci_dev *pdev =3D to_pci_dev(dev);
+> > +
+> > +     brcm_config_misc_regs(pdev, bsp_priv);
+>
+> Is it worth declaring struct pdev for one place that it's used?
+>
+>         brcm_config_misc_regs(to_pci_dev(dev), bsp_priv);
+>
+> should work just as well.
+>
+Ack. Will change it.
+> > +
+> > +     return stmmac_pci_plat_resume(dev, bsp_priv);
+> > +}
+> > +
+> > +static int dwxgmac_brcm_pci_probe(struct pci_dev *pdev,
+> > +                               const struct pci_device_id *id)
+> > +{
+> > +     struct dwxgmac_brcm_pci_info *info =3D
+> > +             (struct dwxgmac_brcm_pci_info *)id->driver_data;
+> > +     struct plat_stmmacenet_data *plat;
+> > +     struct brcm_priv_data *brcm_priv;
+> > +     struct stmmac_resources res;
+> > +     struct device *dev;
+> > +     int rx_offset;
+> > +     int tx_offset;
+> > +     int vector;
+> > +     int ret;
+> > +
+> > +     dev =3D &pdev->dev;
+>
+> As you go to the effort of declaring a struct device pointer, and
+> assign it, do you think it would be a good idea to either use it for
+> all &pdev->dev instances below, or just get rid of the two instances
+> that you actually use "dev" ?
+>
+> I count six instances of "&pdev->dev" below vs two making use of "dev"
+> directly.
+>
+Ack. I will change it.
+> > +
+> > +     brcm_priv =3D devm_kzalloc(&pdev->dev, sizeof(*brcm_priv), GFP_KE=
+RNEL);
+> > +     if (!brcm_priv)
+> > +             return -ENOMEM;
+> > +
+> > +     plat =3D stmmac_plat_dat_alloc(dev);
+> > +     if (!plat)
+> > +             return -ENOMEM;
+> > +
+> > +     plat->axi =3D devm_kzalloc(&pdev->dev, sizeof(*plat->axi), GFP_KE=
+RNEL);
+> > +     if (!plat->axi)
+> > +             return -ENOMEM;
+> > +
+> > +     /* This device is directly attached to the switch chip internal t=
+o the
+> > +      * SoC using XGMII interface. Since no MDIO is present, register
+> > +      * fixed-link software_node to create phylink.
+> > +      */
+> > +     software_node_register_node_group(brcm_swnodes);
+> > +     device_set_node(dev, software_node_fwnode(&parent_swnode));
+> > +
+> > +     /* Disable D3COLD as our device does not support it */
+> > +     pci_d3cold_disable(pdev);
+> > +
+> > +     /* Enable PCI device */
+> > +     ret =3D pcim_enable_device(pdev);
+> > +     if (ret) {
+> > +             dev_err(&pdev->dev, "%s: ERROR: failed to enable device\n=
+",
+> > +                     __func__);
+> > +             return ret;
+>
+> What about cleaning up the swnodes ?
+>
+As you commented on patch5, I will squash the two patches.
+> > +     }
+> > +
+> > +     pci_set_master(pdev);
+> > +
+> > +     memset(&res, 0, sizeof(res));
+> > +     res.addr =3D pcim_iomap_region(pdev, 0, pci_name(pdev));
+> > +     if (IS_ERR(res.addr))
+> > +             return dev_err_probe(&pdev->dev, PTR_ERR(res.addr),
+> > +                                  "failed to map IO region\n");
+>
+> Convention is to have a blank line here.
+>
+Ack.
+> > +     /* MISC Regs */
+> > +     brcm_priv->misc_regs =3D res.addr + BRCM_XGMAC_IOMEM_MISC_REG_OFF=
+SET;
+> > +     /* MBOX Regs */
+> > +     brcm_priv->mbox_regs =3D res.addr + BRCM_XGMAC_IOMEM_MBOX_REG_OFF=
+SET;
+> > +     /* XGMAC config Regs */
+> > +     res.addr +=3D BRCM_XGMAC_IOMEM_CFG_REG_OFFSET;
+> > +     brcm_priv->xgmac_regs =3D res.addr;
+> > +
+> > +     plat->suspend           =3D stmmac_pci_plat_suspend;
+> > +     plat->resume            =3D brcm_pci_resume;
+> > +     plat->bsp_priv =3D brcm_priv;
+> > +
+> > +     ret =3D info->setup(pdev, plat);
+> > +     if (ret)
+> > +             return ret;
+>
+> What about cleaning up the swnodes ?
+>
+Patch 5 addressed this.
+> > +
+> > +     pci_write_config_dword(pdev, XGMAC_PCIE_CFG_MSIX_ADDR_MATCH_LOW,
+> > +                            XGMAC_PCIE_CFG_MSIX_ADDR_MATCH_LO_VALUE);
+> > +     pci_write_config_dword(pdev, XGMAC_PCIE_CFG_MSIX_ADDR_MATCH_HIGH,
+> > +                            XGMAC_PCIE_CFG_MSIX_ADDR_MATCH_HI_VALUE);
+> > +
+> > +     misc_iowrite(brcm_priv, XGMAC_PCIE_MISC_MSIX_ADDR_MATCH_LO_OFFSET=
+,
+> > +                  XGMAC_PCIE_MISC_MSIX_ADDR_MATCH_LO_VALUE);
+> > +     misc_iowrite(brcm_priv, XGMAC_PCIE_MISC_MSIX_ADDR_MATCH_HI_OFFSET=
+,
+> > +                  XGMAC_PCIE_MISC_MSIX_ADDR_MATCH_HI_VALUE);
+> > +
+> > +     /* SBD Interrupt */
+> > +     misc_iowrite(brcm_priv, XGMAC_PCIE_MISC_MSIX_VECTOR_MAP_SBD_ALL_O=
+FFSET,
+> > +                  XGMAC_PCIE_MISC_MSIX_VECTOR_MAP_SBD_ALL_VALUE);
+> > +     /* EP_DOORBELL Interrupt */
+> > +     misc_iowrite(brcm_priv,
+> > +                  XGMAC_PCIE_MISC_MSIX_VECTOR_MAP_EP2HOST_DBELL_OFFSET=
+,
+> > +                  XGMAC_PCIE_MISC_MSIX_VECTOR_MAP_EP2HOST_DBELL_VALUE)=
+;
+> > +     /* EP_H0 Interrupt */
+> > +     misc_iowrite(brcm_priv,
+> > +                  XGMAC_PCIE_MISC_MSIX_VECTOR_MAP_EP2HOST0_OFFSET,
+> > +                  XGMAC_PCIE_MISC_MSIX_VECTOR_MAP_EP2HOST0_VALUE);
+> > +     /* EP_H1 Interrupt */
+> > +     misc_iowrite(brcm_priv,
+> > +                  XGMAC_PCIE_MISC_MSIX_VECTOR_MAP_EP2HOST1_OFFSET,
+> > +                  XGMAC_PCIE_MISC_MSIX_VECTOR_MAP_EP2HOST1_VALUE);
+> > +
+> > +     rx_offset =3D XGMAC_PCIE_MISC_MSIX_VECTOR_MAP_RX0_PF0_OFFSET;
+> > +     tx_offset =3D XGMAC_PCIE_MISC_MSIX_VECTOR_MAP_TX0_PF0_OFFSET;
+> > +     vector =3D BRCM_XGMAC_MSI_RX_VECTOR_START;
+> > +     for (int i =3D 0; i < BRCM_MAX_DMA_CHANNEL_PAIRS; i++) {
+> > +             /* RX Interrupt */
+> > +             misc_iowrite(brcm_priv, rx_offset, vector++);
+> > +             /* TX Interrupt */
+> > +             misc_iowrite(brcm_priv, tx_offset, vector++);
+> > +             rx_offset +=3D 4;
+> > +             tx_offset +=3D 4;
+> > +     }
+>
+> It looks like this device can program the MSI vector numbers. Does
+> it make sense to interleave them, or would it be simpler to have
+> all the receive vectors and then all the transmit vectors?
+>
+> This also hard-codes the fact that BRCM_XGMAC_MSI_TX_VECTOR_START
+> is one more than BRCM_XGMAC_MSI_RX_VECTOR_START, which isn't nice
+> given that you use these macros when claiming the MSI vectors.
+>
+Thanks for your input. I will remove the vector interleaving.
+> > +
+> > +     /* Enable Switch Link */
+> > +     misc_iowrite(brcm_priv, XGMAC_PCIE_MISC_MII_CTRL_OFFSET,
+> > +                  XGMAC_PCIE_MISC_MII_CTRL_PAUSE_RX |
+> > +                  XGMAC_PCIE_MISC_MII_CTRL_PAUSE_TX |
+> > +                  XGMAC_PCIE_MISC_MII_CTRL_LINK_UP);
+> > +     /* Enable MSI-X */
+> > +     misc_iowrite(brcm_priv, XGMAC_PCIE_MISC_PCIESS_CTRL_OFFSET,
+> > +                  XGMAC_PCIE_MISC_PCIESS_CTRL_EN_MSI_MSIX);
+> > +
+> > +     ret =3D brcm_config_multi_msi(pdev, plat, &res);
+> > +     if (ret) {
+> > +             dev_err(&pdev->dev,
+> > +                     "%s: ERROR: failed to enable IRQ\n", __func__);
+> > +             goto err_disable_msi;
+> > +     }
+> > +
+> > +     ret =3D stmmac_dvr_probe(&pdev->dev, plat, &res);
+> > +     if (ret)
+> > +             goto err_disable_msi;
+> > +
+> > +     return ret;
+> > +
+> > +err_disable_msi:
+> > +     pci_free_irq_vectors(pdev);
+>
+> This is still buggy. What about cleaning up the swnodes?
+Patch 5 addressed this. I will squash patches 4 and 5 in V9.
+>
+> > +
+> > +     return ret;
+> > +}
+> > +
+> > +static void dwxgmac_brcm_pci_remove(struct pci_dev *pdev)
+> > +{
+> > +     stmmac_dvr_remove(&pdev->dev);
+> > +     pci_free_irq_vectors(pdev);
+> > +     device_set_node(&pdev->dev, NULL);
+> > +     software_node_unregister_node_group(brcm_swnodes);
+>
+> As the remove function does way more cleanup than the probe function,
+> this is a sign that the probe function is buggy. This is exactly why
+> I suggested using ->init and ->exit in the previous review. I seem
+> to have been ignored on that though... and the problem I already
+> pointed out remains.
+As mentioned above, I will squash patches 4 and 5.
+>
+> Thanks.
 >
 > --
 > RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
 > FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
---000000000000003997064e05834b
+--0000000000007ecbf8064e058c6c
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -249,13 +703,13 @@ Y/1/C9Jv/mWm/2lK8nvusOFxhKmbG83Hx8toQdZ5F1kYk6zAWjfB7lwXr/En9mCmLieJ18hen9EK
 qbYyUkmCmuoLi5GXFMJy+iQv6DgMVQ7CACagybU6FUrmL9lVa+A6caBEEh4xggJXMIICUwIBATBi
 MFIxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSgwJgYDVQQDEx9HbG9i
 YWxTaWduIEdDQyBSNiBTTUlNRSBDQSAyMDIzAgwYdforFgrdZbZjKmswDQYJYIZIAWUDBAIBBQCg
-gccwLwYJKoZIhvcNAQkEMSIEIK7K1B0+upDb2Rg1K3KbRZGMl9LrhHVqxjWjk3jOneLUMBgGCSqG
-SIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI2MDMyNzE4MTcxOVowXAYJKoZI
+gccwLwYJKoZIhvcNAQkEMSIEIG5b/hS7ReVuWm5TJGyJCTXdIodj8yC6gyjMbqI7DCLKMBgGCSqG
+SIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI2MDMyNzE4MTk1OVowXAYJKoZI
 hvcNAQkPMU8wTTALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG
-9w0DBzALBgkqhkiG9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAHX1NL1jPOYc
-ybekXYy/gSqctAcX5qJYLf31IuN9ygUzI9pMDQj+iO/w4/POsq1yRIkEI3KcnTpH2OfKDAsPBV8Y
-5+sVV0tEH+yaNOmj1WK++Jhigo3YeLYxXo4R+l0YlQ+Kc/y6L3oPPjvakwDj5wCrqRriuZRITimP
-kyzb66eMwiCoulGJcKMK+PQFgA6iT8OY0s222p/LXLcP52iLv4MUyxahVlkbPOcWttWmm5IO564j
-5wpy6TyT0WuTESX2EGD0VBUrzXI931F4DulMDhFhZHy8+vrfc7FXm8oWYbbVgiqo3enq4IG+hyFz
-5qLaxHNQG/NKu4oPOP6zesOQQis=
---000000000000003997064e05834b--
+9w0DBzALBgkqhkiG9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAI58f1AMKeEm
+uPwA4BrFJJtHEE2JIQ8dOcRLUJRj2mDfl4dySjzrSj7WBVYBpxdaonQ52SrasZ9qQCmRqhiSuqSQ
+kp3fOa3hGAZ9fVElwoK6LNZjzpSeBNqmOyUfDDyercphBnxah7wASGLROiSUEvthT+z9YaOnZIja
+inw8QgQvASikV3TKNn4bRveWB9ma9wFeeobEklA8EmgewFDCvzzPEwUKMfmUhP0qaWmIC3nI+EzX
+BV0p2oCR6H311PX+Dg3geFqC4/HTRKglps8mcO9C4iMOxlcidpSSMXN568bmNXidEs3XqRn35BQY
+v0ajaKNFmit9xlOxOwyyfxua7t4=
+--0000000000007ecbf8064e058c6c--
