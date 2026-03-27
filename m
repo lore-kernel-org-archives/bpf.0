@@ -1,100 +1,106 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.175.55.52])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBE4B3CF664
-	for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 09:56:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.175.55.52
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD0F2361DD1;
+	Fri, 27 Mar 2026 10:00:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774605370; cv=none; b=aitm4+Kw2HbO5xfg7/Nh/u1ycbr5JPKfV0uM+asnUjZoc0J3dOsO+2IhAePdSOBN0Tsg1lj05YEQg322CSGUXwCKw8Hy7Pf9ZY/0L8IZtwDq8ThR4ECbgMsgCvN0OTUyHI8jS6l+i3JmUqfjB+qvNUGJhFNwIw7faBtzwx7BNVM=
+	t=1774605645; cv=none; b=N9jpMbIPk+Zlu6cJ0CKVFMQUDpssJKtTv3vZQrYx9w33T+88fh6xaFnaz4slIy2f4ZD5clkTI0wVHpst/3SSZiTzdQqwqIByEjvgFHTSjdlM6gwQ1X/8QYeOa76LRC5u7L2l3CXuj4Kz8Tc/W1O4v81/Xkr9my5PLlfZNuhVctA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774605370; c=relaxed/simple;
-	bh=Y8GmEgJhD6C3BDed9UAm7a4CzeRkvRkxMVaPGjQl+b4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QlLXRi1PbYnxhiOaeWW9Tf4FgVbnnsfCQwZ5Mt8XDyqHq/Es8yqE/Y0d3djusXBhIexJR6nvX8kRYcaWbDCcBVAfK43MudffyvE1PWME4q4IQ+KH1/dKRzJrLjnsbtlDdwwYrQ9PMJpRTyLMnkJMjvcaYeKK4Ju7EFaj1boTE6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=52.175.55.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [122.224.66.110])
-	by mtasvr (Coremail) with SMTP id _____wDnOKwPVMZpwEERAA--.287S3;
-	Fri, 27 Mar 2026 17:55:28 +0800 (CST)
-Received: from [0.0.0.0] (unknown [122.224.66.110])
-	by mail-app2 (Coremail) with SMTP id zC_KCgBXyc4JVMZpKfQzAA--.13964S3;
-	Fri, 27 Mar 2026 17:55:22 +0800 (CST)
-Message-ID: <422fce2b-228d-40d0-8fbf-f295f2aac0db@zju.edu.cn>
-Date: Fri, 27 Mar 2026 17:55:20 +0800
+	s=arc-20240116; t=1774605645; c=relaxed/simple;
+	bh=8CaLLkSgumSYT7IJ6abf2lHJKc4ycWuvxtapyXVpyac=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UlnpUlVMlAnhnWWHPykfRdE1UL+MdlcoeEqvRCijFZyijdd14HsgEtO0mGdofNdG79PEwXFs/1KNX/MPaJDqklYNi27FX72FA4bwcE4Lf3E2aRaMsb5MZXaz5j9Ku2Cgpm5cEzHNp4ZWO4FbtCDbTkBal3/ZEPfZZuRybjDoJXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DGpUVyiJ; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DGpUVyiJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F342CC19423;
+	Fri, 27 Mar 2026 10:00:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774605645;
+	bh=8CaLLkSgumSYT7IJ6abf2lHJKc4ycWuvxtapyXVpyac=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DGpUVyiJMP4UazDfTLYwE+zeASuQdCPtsTHi/T5V93Qx4ufFer+yJBmEI0KQx7Pdl
+	 szM4zo8FVLWf4zAUKMgynpU1T4fppMgr0JrdxK1cErr8HKJ46IHsJupFWgB6PxQcyq
+	 lopKGMGX8wRxHHAXz2yfG9HTgf+uHpnWN9+HgxWFXXTltxUvB9SQRtkDeaNd2w5Wex
+	 nnCmicZ+PQ+Uy+AMllm+X/JKg+s1zyzRNdFh98DyOVxEYx+79c9UzGexJ1FwYLv/lJ
+	 eKurtVMw/eKFIYCy0hF62t51vUEvd+yOwNA2WBAYx9c20mPhg9veTWby1KCYXml7nn
+	 H1MqdMS80syig==
+Date: Fri, 27 Mar 2026 19:00:43 +0900
+From: "Harry Yoo (Oracle)" <harry@kernel.org>
+To: Ryan Roberts <ryan.roberts@arm.com>
+Cc: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Aishwarya Rambhadran <aishwarya.rambhadran@arm.com>,
+	Vlastimil Babka <vbabka@suse.cz>, Petr Tesarik <ptesarik@suse.com>,
+	Christoph Lameter <cl@gentwo.org>,
+	David Rientjes <rientjes@google.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Hao Li <hao.li@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
+	bpf@vger.kernel.org, kasan-dev@googlegroups.com,
+	kernel test robot <oliver.sang@intel.com>, stable@vger.kernel.org,
+	"Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: [REGRESSION] slab: replace cpu (partial) slabs with sheaves
+Message-ID: <acZVS-ehXCtvcA9s@hyeyoo>
+References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
+ <afe9ba0a-1924-42a8-a9c5-34eec709f883@arm.com>
+ <ed58493b-0369-4729-bcf7-bc89f72a7913@kernel.org>
+ <acV36oPNFMgL4puz@milan>
+ <ea1cb2a1-b674-4d69-bbf6-00051a0e11df@kernel.org>
+ <eafefe7a-a33b-4102-93cf-fecc33ddf49e@arm.com>
+ <0f441d8f-d84c-470a-a4cb-0249b15220a2@kernel.org>
+ <f100305b-6c56-4499-98a4-6a22f8c49443@arm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v5 3/3] bpf: Fix incorrect subprog ID in dumped
- bpf_pseudo_call instructions
-To: Puranjay Mohan <puranjay12@gmail.com>,
- Xu Kuohai <xukuohai@huaweicloud.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
- eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- tangyazhou518@outlook.com, shenghaoyuan0928@163.com, ziye@zju.edu.cn,
- Emil Tsalapatis <emil@etsalapatis.com>
-References: <20260326090133.221957-1-tangyazhou@zju.edu.cn>
- <20260326090133.221957-4-tangyazhou@zju.edu.cn>
- <e6b07a39-c2d6-4adc-bc6e-0d31472f9550@huaweicloud.com>
- <CANk7y0iUYYHTQLoS7uTj5+puP_p5QjqyTVkconV84VWYCwirQA@mail.gmail.com>
-Content-Language: en-US
-From: Yazhou Tang <tangyazhou@zju.edu.cn>
-In-Reply-To: <CANk7y0iUYYHTQLoS7uTj5+puP_p5QjqyTVkconV84VWYCwirQA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zC_KCgBXyc4JVMZpKfQzAA--.13964S3
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiAgADCmnFjAspIwABsr
-X-CM-DELIVERINFO: =?B?yYkErwXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9OBCyAu4//tBYspsrrrqb59rb97hZX+wIuR2tZTTtjhiQM0ByKZ1xFOlj/DwgwDqtzFQ
-	SnxELX89NY88tlO/B5hrzu593QOkHqyJbwdm/D24M+/I6yXKWnHutBPDrMWITw==
-X-Coremail-Antispam: 1Uk129KBj9xXoWrZrW3tFW5XryUXFy7CryUurX_yoWfuFg_KF
-	ZY9r9rXrnxWF13C3Z7KF4YyrWkua1Fq3WrGryjqw1UXryjyFykC3s5CrsYg3W7JFW7Jw1k
-	uFn5Za4SkryrZosvyTuYvTs0mTUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUbI8YFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
-	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AK
-	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2
-	ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
-	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
-	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
-	14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
-	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGO
-	UUUUU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f100305b-6c56-4499-98a4-6a22f8c49443@arm.com>
 
-Hi Puranjay and Kuohai,
-
-On 3/26/26 22:00, Puranjay Mohan wrote:
-> On Thu, Mar 26, 2026 at 1:55 PM Xu Kuohai <xukuohai@huaweicloud.com> wrote:
->> On 3/26/2026 5:01 PM, Yazhou Tang wrote:
->>> +             /*
->>> +              * Note: If the original insn->imm is out of s16 bounds,
->>> +              * insn->off here will be a truncated value.
->>> +              */
->>>                insn->off = env->insn_aux_data[i].call_imm;
->>
->> seems we can just set insn->off to 0, right?
+On Fri, Mar 27, 2026 at 08:58:36AM +0000, Ryan Roberts wrote:
+> >>>>> On 3/26/26 13:43, Aishwarya Rambhadran wrote:
+> >>> Right so there should be just the overhead of the extra is_vmalloc_addr()
+> >>> test. Possibly also the call of kfree_rcu_sheaf() if it's not inlined.
+> >>> I'd say it's something we can just accept? It seems this is a unit test
+> >>> being used as a microbenchmark, so it can be very sensitive even to such
+> >>> details, but it should be negligible in practice.
+> >>
+> >> The perf/syscall cases might be a bit more concerning though? (those tests are
+> >> from "perf bench syscall fork|execve"). Yes they are microbenchmarks, but a 7%
+> >> increased cost for fork seems like something we'd want to avoid if we can.
+> > 
+> > Sure, I tried to explain those in my first reply. Harry then linked to how
+> > that explanation can be verified. Hopefully it's really the same reason.
 > 
-> If the insn->off is valid (not truncated) then it is useful when
-> dumping assembly using bpftool. But maybe we can set it to 0 rather
-> than some random truncated value when it is out of bounds.
+> Ahh sorry I missed your first email. We only added that benchmark from 6.19 so
+> don't have results for earlier kernels, but I'll ask Aishu to run it for 6.17
+> and 6.18 to see if the results correlate with your expectation.
+> 
+> But from a high level perspective, a 7% regression on fork is not ideal even if
+> there was a 7% improvement in 6.18.
 
-Thanks for the suggestions.
+If that improvement comes from the number of objects cached per CPU,
+I'm not sure if determining the default value (# of cached objs) based on
+"a point when microbenchmarks stop improving" is a reasonable measure
+because the default value affects all slab caches and will inevitably
+increase overall memory usage.
 
-I agree with Puranjay's point. We should set insn->off to 0 only when 
-call_imm is out of s16 bounds. This avoids exposing a confusing 
-truncated value for large jumps,
-while still assigning the correct offset for bpftool to use in normal cases.
+Hopefully we could discuss what a reasonable heuristic that
+"works for most situations" looks like, and allow users to tune it further
+based on their needs.
 
-I will include this change in v6.
+As a side note, changing sheaf capacity at runtime is not supported yet
+(I'm working on it) and targeting at least before the next LTS.
 
-Best,
-Yazhou
-
+-- 
+Cheers,
+Harry / Hyeonggon
