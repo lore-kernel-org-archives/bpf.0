@@ -1,88 +1,173 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7C192FDC5E;
-	Fri, 27 Mar 2026 12:19:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94EE83BB9EE;
+	Fri, 27 Mar 2026 12:57:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774613947; cv=none; b=V3nvVw52rgMbREjQA2kmjnFY9wOi6WVG3kkkysxHftn4GXQJKWd8IFA6uD/cnoS4HBEfUwLys6Qw9dSKoeF+9/N0mkFmc/7HAAMbqUolScTET3ipiZgxvulzhYVHb1OQqw8pzk6JoJ90fyslfEnaIRK7Ld30TNv2hWQfLvvL+dg=
+	t=1774616257; cv=none; b=AZT8Qi+j0CiK1RLBAyXutDqjyV0Bo2NsTPGFBcFTPorWIvF88FaiOJo6mJErLXd3Za6YxQFxRHrXMxs992w0g5sZ2+yBDWOBN7dFljv5IfGh1gG4bZMecCBMAdEH1BW6dvGO3MdZyhEVuatQ2rqLMca7hDW7lFIXRib7xewMYQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774613947; c=relaxed/simple;
-	bh=vOf9JpiJqLBAVffpWxFYe1jMzCTrAUeY8ihzrFmTcLM=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=WcuQ2f8QIiBES4wnPMEE3UhREN2LGhFhk0j2KIwD/3K03FN5Av3bIa1D+K06GXlvwg+B/0BOamyaUPfvA3zDXzAr0whBCPvu4rMrN0cNllwxIJ0e2syv6oiHTohzPGlNROn4FpXmt9CCKi1rgfw4qNetxfuIjUnolYc4LKljgGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TT7ld0MR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774616257; c=relaxed/simple;
+	bh=fW9VknbcGagUXC5K7RwsOauZC9Z8jFdk0hGXN7TqvDA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Px1TpgYRUFOpWc9OgSEg8EmPta9MBDQyyAN59dsGFG19Y4vFG5JEWS1Z9herGy73g68JVQCTTo0XvP98Tatxtrc0I4WjIM4TlIEBJK6ODGiepgY2eVJwcWxonMx+E1bdZj+Vao7fLynaQxqoAK2k8XfJhOpZk3njaV7XCIaMayA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=LrA6sDVL; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TT7ld0MR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28870C2BC86;
-	Fri, 27 Mar 2026 12:19:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774613947;
-	bh=vOf9JpiJqLBAVffpWxFYe1jMzCTrAUeY8ihzrFmTcLM=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=TT7ld0MRJx6IUHvNp38ae6q4SBmb6njUx181P5uRwfy5R45PUarx5UuX4up24I0eb
-	 1zEMypb/e1w42pE2eEKZuifZW6iavBlCSE0fWSzZfSxAigPth3KCX2ERWDWBPJHH8b
-	 /2qvSgvIy3HIMhZWZ+k/Bnhyt71LnWUc98Ih10HF+NhYRA5VYTHjJVbFoWYrCkfhD0
-	 X+D4VEk92gnP3LUwLFathHjDI5UU6919AcoFFAFxwUIwWzyExSqRNpTXjv+10da/M4
-	 EgIKYqBCas3Sg0SeqcdOZjtw2j2Hx3DWM9wM/P+QDHKDa2c2qL4kBUAvYB7sSsPgAA
-	 aeQUpqxXyhfdw==
-Content-Type: multipart/mixed; boundary="===============2884610874117475039=="
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="LrA6sDVL"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 24DA735A1;
+	Fri, 27 Mar 2026 05:57:29 -0700 (PDT)
+Received: from e142334-100.cambridge.arm.com (e142334-100.cambridge.arm.com [10.1.194.63])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2EEED3F905;
+	Fri, 27 Mar 2026 05:57:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1774616255; bh=fW9VknbcGagUXC5K7RwsOauZC9Z8jFdk0hGXN7TqvDA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=LrA6sDVL8cZ0Ug0UaZi4iHA3NFxZiG0KHfUGBhfurgMrYpxDl47p1agpS4+1ZxYIJ
+	 t882IKY9Ql2OTRk0ncwCtXyg0z10wZCJnCK2Mmys4KSo494eY+ohUJAVvO2rLR/Ut0
+	 KPhmQQ6E+BOuDK+kxZOPPdy5e48imE0gNrwrn8BA=
+From: Muhammad Usama Anjum <usama.anjum@arm.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Brendan Jackman <jackmanb@google.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Zi Yan <ziy@nvidia.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Nick Terrell <terrelln@fb.com>,
+	David Sterba <dsterba@suse.com>,
+	Vishal Moola <vishal.moola@gmail.com>,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Ryan.Roberts@arm.com,
+	david.hildenbrand@arm.com
+Cc: Muhammad Usama Anjum <usama.anjum@arm.com>
+Subject: [PATCH v4 0/3] mm: Free contiguous order-0 pages efficiently
+Date: Fri, 27 Mar 2026 12:57:12 +0000
+Message-ID: <20260327125720.2270651-1-usama.anjum@arm.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <0129a179266ecd9071d04e6db172790e3e1dc2a70c896e91069bd12724776569@mail.kernel.org>
-In-Reply-To: <20260326-work-bpf-verity-v1-1-efe9edc46ddc@kernel.org>
-References: <20260326-work-bpf-verity-v1-1-efe9edc46ddc@kernel.org>
-Subject: Re: [PATCH] bpf: add bpf_real_inode() kfunc
-From: bot+bpf-ci@kernel.org
-To: brauner@kernel.org,amir73il@gmail.com
-Cc: viro@zeniv.linux.org.uk,jack@suse.cz,daniel@iogearbox.net,ast@kernel.org,linux-fsdevel@vger.kernel.org,bpf@vger.kernel.org,brauner@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 27 Mar 2026 12:19:07 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============2884610874117475039==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi All,
 
-> diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
-> index e4e51a1d0de2..fc30aa906b8c 100644
-> --- a/fs/bpf_fs_kfuncs.c
-> +++ b/fs/bpf_fs_kfuncs.c
+A recent change to vmalloc caused some performance benchmark regressions (see
+[1]). I'm attempting to fix that (and at the same time significantly improve
+beyond the baseline) by freeing a contiguous set of order-0 pages as a batch.
 
-[ ... ]
+At the same time I observed that free_contig_range() was essentially doing the
+same thing as vfree() so I've fixed it there too. While at it, optimize the
+__free_contig_frozen_range() as well.
 
-> +__bpf_kfunc struct inode *bpf_real_inode(struct dentry *dentry)
-> +{
-> +	return d_real_inode(dentry);
-> +}
+Check that the contiguous range falls in the same section. If they aren't enabled,
+the if conditions get optimized out by the compiler as memdesc_section() returns 0.
+See num_pages_contiguous() for more details about it.
 
-[ ... ]
+[1] https://lore.kernel.org/all/66919a28-bc81-49c9-b68f-dd7c73395a0d@arm.com
 
-> +BTF_ID_FLAGS(func, bpf_real_inode, KF_SLEEPABLE)
+v6.18      - Before the patch causing regression was added
+mm-new     - current latest code
+this series - v2 series of these patches
 
-d_real_inode() calls d_inode(d_real(dentry, D_REAL_DATA)), and
-d_inode() returns dentry->d_inode, which is NULL for negative
-dentries.
+(>0 is faster, <0 is slower, (R)/(I) = statistically significant
+Regression/Improvement)
 
-BPF LSM programs can be attached to hooks that receive negative
-dentries, for example security_inode_create() or
-security_inode_mkdir(), where the dentry represents a name that
-does not yet exist.  If a BPF program passes such a dentry to
-bpf_real_inode() and then dereferences the returned pointer, does
-this result in a NULL pointer dereference?
+v6.18 vs mm-new
++-----------------+----------------------------------------------------------+-------------------+-------------+
+| Benchmark       | Result Class                                             |   v6.18    (base) |    mm-new   |
++=================+==========================================================+===================+=============+
+| micromm/vmalloc | fix_align_alloc_test: p:1, h:0, l:500000 (usec)          |         653643.33 | (R) -50.92% |
+|                 | fix_size_alloc_test: p:1, h:0, l:500000 (usec)           |         366167.33 | (R) -11.96% |
+|                 | fix_size_alloc_test: p:4, h:0, l:500000 (usec)           |         489484.00 | (R) -35.21% |
+|                 | fix_size_alloc_test: p:16, h:0, l:500000 (usec)          |        1011250.33 | (R) -36.45% |
+|                 | fix_size_alloc_test: p:16, h:1, l:500000 (usec)          |        1086812.33 | (R) -31.83% |
+|                 | fix_size_alloc_test: p:64, h:0, l:100000 (usec)          |         657940.00 | (R) -38.62% |
+|                 | fix_size_alloc_test: p:64, h:1, l:100000 (usec)          |         765422.00 | (R) -24.84% |
+|                 | fix_size_alloc_test: p:256, h:0, l:100000 (usec)         |        2468585.00 | (R) -37.83% |
+|                 | fix_size_alloc_test: p:256, h:1, l:100000 (usec)         |        2815758.33 | (R) -26.32% |
+|                 | fix_size_alloc_test: p:512, h:0, l:100000 (usec)         |        4851969.00 | (R) -37.76% |
+|                 | fix_size_alloc_test: p:512, h:1, l:100000 (usec)         |        4496257.33 | (R) -31.15% |
+|                 | full_fit_alloc_test: p:1, h:0, l:500000 (usec)           |         570605.00 |      -8.97% |
+|                 | kvfree_rcu_1_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         500866.00 |      -5.88% |
+|                 | kvfree_rcu_2_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         499733.00 |      -6.95% |
+|                 | long_busy_list_alloc_test: p:1, h:0, l:500000 (usec)     |        5266237.67 | (R) -40.19% |
+|                 | pcpu_alloc_test: p:1, h:0, l:500000 (usec)               |         490284.00 |      -2.10% |
+|                 | random_size_align_alloc_test: p:1, h:0, l:500000 (usec)  |         850986.33 | (R) -48.03% |
+|                 | random_size_alloc_test: p:1, h:0, l:500000 (usec)        |        2712106.00 | (R) -40.48% |
+|                 | vm_map_ram_test: p:1, h:0, l:500000 (usec)               |         111151.33 |       3.52% |
++-----------------+----------------------------------------------------------+-------------------+-------------+
 
-Without KF_RET_NULL, the verifier marks the return as
-PTR_TO_BTF_ID | PTR_TRUSTED, so it will not require a NULL check
-before the BPF program accesses the returned inode.  Should this
-have KF_RET_NULL to let the verifier enforce a NULL check?
+v6.18 vs mm-new with patches
++-----------------+----------------------------------------------------------+-------------------+--------------+
+| Benchmark       | Result Class                                             |   v6.18 (base)    |  this series |
++=================+==========================================================+===================+==============+
+| micromm/vmalloc | fix_align_alloc_test: p:1, h:0, l:500000 (usec)          |         653643.33 |      -14.02% |
+|                 | fix_size_alloc_test: p:1, h:0, l:500000 (usec)           |         366167.33 |       -7.23% |
+|                 | fix_size_alloc_test: p:4, h:0, l:500000 (usec)           |         489484.00 |       -1.57% |
+|                 | fix_size_alloc_test: p:16, h:0, l:500000 (usec)          |        1011250.33 |        1.57% |
+|                 | fix_size_alloc_test: p:16, h:1, l:500000 (usec)          |        1086812.33 |   (I) 15.75% |
+|                 | fix_size_alloc_test: p:64, h:0, l:100000 (usec)          |         657940.00 |    (I) 9.05% |
+|                 | fix_size_alloc_test: p:64, h:1, l:100000 (usec)          |         765422.00 |   (I) 38.45% |
+|                 | fix_size_alloc_test: p:256, h:0, l:100000 (usec)         |        2468585.00 |   (I) 12.56% |
+|                 | fix_size_alloc_test: p:256, h:1, l:100000 (usec)         |        2815758.33 |   (I) 38.61% |
+|                 | fix_size_alloc_test: p:512, h:0, l:100000 (usec)         |        4851969.00 |   (I) 13.43% |
+|                 | fix_size_alloc_test: p:512, h:1, l:100000 (usec)         |        4496257.33 |   (I) 49.21% |
+|                 | full_fit_alloc_test: p:1, h:0, l:500000 (usec)           |         570605.00 |       -8.47% |
+|                 | kvfree_rcu_1_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         500866.00 |       -8.17% |
+|                 | kvfree_rcu_2_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         499733.00 |       -5.54% |
+|                 | long_busy_list_alloc_test: p:1, h:0, l:500000 (usec)     |        5266237.67 |    (I) 4.63% |
+|                 | pcpu_alloc_test: p:1, h:0, l:500000 (usec)               |         490284.00 |        1.53% |
+|                 | random_size_align_alloc_test: p:1, h:0, l:500000 (usec)  |         850986.33 |       -0.00% |
+|                 | random_size_alloc_test: p:1, h:0, l:500000 (usec)        |        2712106.00 |        1.22% |
+|                 | vm_map_ram_test: p:1, h:0, l:500000 (usec)               |         111151.33 |    (I) 4.98% |
++-----------------+----------------------------------------------------------+-------------------+--------------+
 
+mm-new vs vmalloc_2 results are in 2/3 patch.
+
+So this series is mitigating the regression on average as results show -14% to 49% improvement.
+
+Thanks,
+Muhammad Usama Anjum
 
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Chagnes since v3: (summary)
+- Introduce __free_contig_range_common() in first patch  and use it in
+  3rd patch as well
+- Cosmetic changes related to comments and kerneldoc
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23644830944
---===============2884610874117475039==--
+Changes since v2: (summary)
+- Patch 1 and 3:  Rework the loop to check for memory sections
+- Patch 2: Rework by removing the BUG on and add helper free_pages_bulk()
+
+Changes since v1:
+- Update description
+- Rebase on mm-new and rerun benchmarks/tests
+- Patch 1: move FPI_PREPARED check and add todo
+- Patch 2: Rework catering newer changes in vfree()
+- New Patch 3: optimizes __free_contig_frozen_range()
+
+Muhammad Usama Anjum (1):
+  mm/page_alloc: Optimize __free_contig_frozen_range()
+
+Ryan Roberts (2):
+  mm/page_alloc: Optimize free_contig_range()
+  vmalloc: Optimize vfree
+
+ include/linux/gfp.h |   4 ++
+ mm/page_alloc.c     | 144 ++++++++++++++++++++++++++++++++++++++++++--
+ mm/vmalloc.c        |  16 ++---
+ 3 files changed, 149 insertions(+), 15 deletions(-)
+
+-- 
+2.47.3
+
