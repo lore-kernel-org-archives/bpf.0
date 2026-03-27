@@ -1,75 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09CBC30B51E;
-	Fri, 27 Mar 2026 06:05:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A237A3BF685;
+	Fri, 27 Mar 2026 06:42:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774591519; cv=none; b=DdQr8kG/7jf9/55lBimjwz0ISbRWsk4HTnlb4f1MRBaqKjjDGjHE7lg+sOeGZdcBQwbztSIUJmZ/PFNdA8wp5r4DkAGk+0f9yQF1+dbe+RiHslxpcGfuXNsVQbCr7XqyAAnGhuaLFaicutSr+xCBuxE/QfrJBPlNOwv39BjarsA=
+	t=1774593775; cv=none; b=CNOS8lLcWquVROKtXlY+a0QZTrpKTIYxJF/sYoG+vBS9r0cJGnyyax7YMTwacTHLyKZONKu8IhN3d7yPdIQ+IintY56+Ka87HfGw4Mc9DhJsNHCkXRIJEyc4TgXGIz2D9JAnUNiPkqNcH/jtbofc8SB/o1wW2FuxGnaZp5DwNNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774591519; c=relaxed/simple;
-	bh=3zpggxe+bVQs52v6JpXlcKy/PVZUHZyPYXEEIA94JQ0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SJ1nGUxBnvwgMCOTiPfnh2A2lMzva6cg1/M8Jdjq8evUjid0rif/Y8dkpvpJuCPYdUk5TTaZhMWXfFyAx+Gf1TWLTYVDk9Z1X9LQ9xVUM6BPEcx2+snNL4kspEBgSB0J4G9HjKivkHQp9PfWCAPvh0OiJ+hkN7KnJB6ul9gzet0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MEK91Xgl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774593775; c=relaxed/simple;
+	bh=wFXmO27wKvV6/Kr+vvz+qry41MFFNZPIOZqFd6mwDpk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LFjOjF6RJ/ohEf+V65cHTjIsMz3znY9PhDtPWqWRu3fZt2D+MPV0598O5d1qnlsaT4PY2AZpumpq0Co2z2FVYoqHqU087CCy2aIiHhCqbwvzhGw4QDlL7Z/mV4pWmuVkzerlieXF5AuMOWOhGdQUtfVDjRRF46SE5Ws8zrVoEVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BMHLiTTQ; arc=none smtp.client-ip=95.215.58.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MEK91Xgl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E349C19423;
-	Fri, 27 Mar 2026 06:05:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774591518;
-	bh=3zpggxe+bVQs52v6JpXlcKy/PVZUHZyPYXEEIA94JQ0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MEK91XglpLKgSre0jgVBLD17K8QMDYwYL0K1lL0SB3ba0o09gCKmKvQDyWnF4DTBZ
-	 iuhMqXLc/Asnh6cpQmxYV5B6q683PzDPdUQByanHhpm/2QaWHTk2h85rxqBe8zKdBf
-	 DM/gnA1ipI5Ek5x6XYyf/t4eJvZh8QurmEXu43WqviZHOM7MhtNqPVQdYoTDcSoGuz
-	 DMrtP6ShigaRTC235i8Tb7YzvJDvgbjimpJwruZaKPCf9TgoDAb34b3/Fh/WoQq5lo
-	 sbECxzdlZZpdlu6id6BgC9utEsuQ5ABLMqaZjkULavHDe0Lr3T6pjeP5rMHn51+0gI
-	 ZnEpdiE4W6cpA==
-Date: Thu, 26 Mar 2026 23:05:18 -0700
-From: "Darrick J. Wong" <djwong@kernel.org>
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Christian Brauner <brauner@kernel.org>,
-	Amir Goldstein <amir73il@gmail.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Alexei Starovoitov <ast@kernel.org>, linux-fsdevel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH] bpf: add bpf_real_inode() kfunc
-Message-ID: <20260327060518.GP6202@frogsfrogsfrogs>
-References: <20260326-work-bpf-verity-v1-1-efe9edc46ddc@kernel.org>
- <acYVjuDOD7NynO9m@infradead.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BMHLiTTQ"
+Message-ID: <785e0b04-91e4-457f-8d6c-e0a911c0fd88@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774593754;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=b59W3l9WpyzX2iAsGdXQno8uo7jmzlLBBhaOtXWpNvk=;
+	b=BMHLiTTQOLBNNQJP1khgYmCgNFAUY7dhRkrLHCZixLoDngy+y9oGHvb+X/htRg5tAnrzYL
+	qjUTh78zj/13+gL/g6zuuaUcknueSbo/k9tL8No+U7yYTPc/n6xr65yrih1eE9EWSBHKov
+	kZH7LA0auDo3Rmb8p0JFYlNF0BYBsEM=
+Date: Fri, 27 Mar 2026 14:42:19 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <acYVjuDOD7NynO9m@infradead.org>
+Subject: Re: [PATCH bpf-next 1/3] bpf: Disallow freplace on XDP with
+ mismatched xdp_has_frags values
+Content-Language: en-US
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, "David S . Miller" <davem@davemloft.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Toke Hoiland-Jorgensen <toke@redhat.com>,
+ Lorenzo Bianconi <lorenzo@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+ kernel-patches-bot@fb.com
+References: <20260324150444.68166-1-leon.hwang@linux.dev>
+ <20260324150444.68166-2-leon.hwang@linux.dev>
+ <20260326124205.1a3bb825@kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <20260326124205.1a3bb825@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Mar 26, 2026 at 10:28:46PM -0700, Christoph Hellwig wrote:
-> No comment on the code, here, but this caught my eye:
+On 27/3/26 03:42, Jakub Kicinski wrote:
+> On Tue, 24 Mar 2026 23:04:42 +0800 Leon Hwang wrote:
+>> The commit f45d5b6ce2e8 ("bpf: generalise tail call map compatibility check")
+>> was to ensure backwards compatibility against tail calls. However, it
+>> missed that XDP progs can be extended by freplace progs, which could break
+>> the backwards compatibility, e.g. xdp_has_frags=true freplace progs are
+>> allowed to attach to xdp_has_frags=false XDP progs.
+>>
+>> To avoid breaking the backwards compatibility via freplace, disallow
+>> freplace on XDP programs with different xdp_has_frags values.
 > 
-> On Thu, Mar 26, 2026 at 05:53:44PM +0100, Christian Brauner wrote:
-> > This is needed by the dm-verity based execution policy implemented in
-> > systemd [1] where BPF LSM hooks must resolve a file's backing block
-> > device via inode->i_sb->s_dev. 
-> 
-> inode->i_sb->s_dev is not a files backing block device.  The only
-> think inode->i_sb->s_dev is required to be is the lookup key for
-> finding the super block.  It also happens to be the default backing
-> block device for simple file systems, but once things get a little more
-> complicated it often is not.  Examples are btrfs where it never matches,
-> f2fs additional devices, the XFS RT device, pNFS block layouts and
-> probably a few more I forgot.
-> 
-> For the more complex cases like btrfs there might not even be a single
-> block device for a file and/or the mapping can change.  So please do not
-> encode such an assumption anywhere because it is broken.
+> It may be worth adding a selftest to
+> tools/testing/selftests/drivers/net/xdp.py
+> which sets MTU to 9k, tries to attach a non-frag-capable prog
+> if that fails attaches a frag-capable prog and then checks if
+> replacing the capable prog with non-capable fails.
+> Drivers may be buggy in this regard.
 
-Seconded.  It's a pity that dax_writeback_mapping_range makes nearly the
-same mistake...
+Do you mean adding these two tests to xdp.py?
 
---D
+1. Verify the failure of attaching non-frag-capable prog to mtu=9k
+   driver.
+2. Verify the failure of updating frag-capable prog with non-frag-
+   capable prog via libbpf.c::bpf_link__update_program().
+
+As for test #2, it may require a helper to attach prog then update prog
+using libbpf's APIs.
+
+Thanks,
+Leon
+
