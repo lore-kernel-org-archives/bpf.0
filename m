@@ -1,287 +1,151 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7351935C1A0
-	for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 20:32:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A64F738C43E
+	for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 20:42:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774643577; cv=none; b=oa/rmhIu2xXbB0yI7jF4491IkpKySA65HNpPLQIc8PlQ2L4B/EGcZuZSA7QGTU8ULQZGSFnGN3qPTUhYvWifpTVgJDJL672P/lfxfDiQRdLyhumFElPN37PzTxA4fFkJrSshMtX4bpSK5LoBIA8pYiG1Tfn3tsYon3OlC1MkrFY=
+	t=1774644122; cv=none; b=b3AHMjJYXXWfz3VHxhRL2vu66bIlVkNnWb1UTO6X6SMH1rpVrUEqXHsM8K1WTX9kvADlJmmeTBTFyPCaq43VM5lPo1Y9n6xME3+PdzLlUto2PkFSna6PwKgIEaDH7egtbLTsbgjSnCiKTcNiyeWunhyoROe9SrPadlJ2KKwBvsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774643577; c=relaxed/simple;
-	bh=fJS9W+zeuwNgB25ejwsQ54771mdLSicS8/Orb8ws/84=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bZxGVWlq43ssAXrOEjIV2LjuVkmP1nwMmvW906ToV6hNhCk0BrQZZ6puyME+EMDDu5pKSKt1vJRnGEb4pDDDXr0O1MFB+vYcvKxF7ADEykA0ESYh1W/APEyxOf08sjxafwjKmRWMsw0gW2xp1MNyl2PHjabAoB74Tm/sQts5L+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Agx2ZIdV; arc=none smtp.client-ip=91.218.175.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1774644122; c=relaxed/simple;
+	bh=OseZgolmzhAr4jFqxBRNN1L/7ggRloDkt++YOQpR2p8=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U9q+p9fff2LcrY/GmJbZrxgxxJlVUmDr317kiM886itzd6yXP2HmPjX7f2Znas+CUWXcCM5vHj9cjDa+Lu5B/LWn/zicfleQKQ/BXx8hyD7Gq0IMu4/bx0w+Iix4bnWHzorcjLUI76b6xIgIs7GxuI+oiTixxMkKT+f6hl5VT/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nM/BfZ+Y; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Agx2ZIdV"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774643573;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=t9joWJlumx2b97oal16aDRH9ns5elX6YCDMifmLKe2U=;
-	b=Agx2ZIdVvAc7HGJPTYOSJFE97ueuLtWMkO7Td770qdQksYzSzJdzEgJB/CpSEbzMYvQPLM
-	PqHce7xfJTR0XTv6P9NVblsn7DFNM+TwWp2bOrHEu467jdhSYf2dbtSAWSBJhZLsTkB+6T
-	o1/w69maNiMDTaqc+RfzBC6YVOXvrhs=
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nM/BfZ+Y"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-486b9675d36so22186015e9.0
+        for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 13:42:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774644119; x=1775248919; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sZ/7XD1rJXQYlW2CUYI9bsXyEYg+8UaYCRyEmTmJK34=;
+        b=nM/BfZ+YLMVvk5P3x54GwdFqdhKmNJ1Hx2r4zooAmkk5jyqty65BG5Z/uNElRCb6iY
+         atigMkijN16Bg0MggWKJdpuEJizIgzzsHp8uWkf3jKGObwBow5TmIAnkXXrqS59Y+HyE
+         hUaDJeb7L7MvoygWrNTlThnWgcILNdnwFIxHBmdrUObxwmUefmvY23WjhAsY3hLEmf3V
+         rONqyr8uPLBAQt0hOQm9zA/WPdl8mxXYOXcdgzOLm3g5YAip4rEMTMXdKxwYDbKtdNF+
+         59EkTsbwaWxSa4pz4TXedRnJ3xpRtQwB741vQE2mzx7GXYus9zCyOz5xX/f6uYz16fe6
+         I6QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774644119; x=1775248919;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sZ/7XD1rJXQYlW2CUYI9bsXyEYg+8UaYCRyEmTmJK34=;
+        b=a+SDaru/nDooxkDvwbewNYXWgKQbLuBY4slFm2/wkwzsNCPyV17vU3MshedDtRRCcC
+         NjZ3dclKUXbUwowjTY76lf/u69wIlCSgYZpMW4K6jI/7ST6SOlL/bHPAwbTdTqDGlWao
+         oidyYTIQl0kSDSsk53YJb7jeMv2RH69ebna4Y3IpmqhhLf03g9XtX+goqJw8fJ0LQZwd
+         q+/ZI7+Nqn+BMTskZ031Fq/+z0IyYRhTh3KrRiSO1Ve15+/MPI2pmSue4DCivIk/5yFq
+         BNeas0YDlekZRiSBv5PwFLgSevibsHGxGvFhwLxG18SIPd5FQLMsKWKTUoJxUXUWSZs1
+         WTXw==
+X-Gm-Message-State: AOJu0YxgGBBPvEO2wpyPGE8QiLn2901jEwkPLXsDLMXivvx6jjmuEwwq
+	/DQlZQ2veKLrUld1LlDyuugvrXOD42aP0nJTv5FejZndko+ekwvW4FDXyhG+8cp/
+X-Gm-Gg: ATEYQzxgrACcgtA3YfGZyIXqSJVqmpDu16MD7OxendMwmp0DY66bENWDTiV2mvwarYq
+	H7ganGCWbnyul5cMGk2NiMkNzuCbdrAL0GmfFm0Ju/F3x9I09bjVTfoMRvKEMIYmUVjGhT9B3Rj
+	RWkNdmm20lMqfCRzlQ5ODcffxp/11NpZVDyrhfbi9bLpcKzdB2PCgduoT6k2FBN1AkXlEVKxZRX
+	dNnKAVlKABwdsNrfjU810nWASW159ba3XrWp17/n3RCrdJ54xRTgvMA3mMjscA/nV3GC+qbq3Kx
+	CdJLVW3WRs4uuxBWOQGUPXlBNb073ItyWuDOPB2GxMDKdb89jxzAw3iHsbeb5vvlYoTghSOfjqr
+	mUNiEkMHf9297nG3DOaSJ9mv+e89zWubLMPMJx/jjxf/2sBJ7dWv70qEVkon7Wc6/ANR9cWLW9R
+	yV1hVIFyRqfjGisfCSejKeCGx0J5iYGAI18yYKjncU2PTq8ZMtTdkefOu3tg==
+X-Received: by 2002:a05:600c:1d15:b0:485:2fc5:3a5 with SMTP id 5b1f17b1804b1-48727edf4f5mr64539105e9.26.1774644118896;
+        Fri, 27 Mar 2026 13:41:58 -0700 (PDT)
+Received: from krava (cust-west-par-46-193-1-135.cust.wifirst.net. [46.193.1.135])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4872712b3ebsm20378445e9.19.2026.03.27.13.41.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Mar 2026 13:41:58 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Fri, 27 Mar 2026 21:41:56 +0100
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>,
-	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	bpf@vger.kernel.org,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v5 2/2] selftests/bpf: Update kfuncs using btf_struct_meta to new variants
-Date: Fri, 27 Mar 2026 13:32:41 -0700
-Message-ID: <20260327203241.3365046-2-ihor.solodrai@linux.dev>
-In-Reply-To: <20260327203241.3365046-1-ihor.solodrai@linux.dev>
-References: <20260327203241.3365046-1-ihor.solodrai@linux.dev>
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Shuah Khan <shuah@kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Toke Hoiland-Jorgensen <toke@redhat.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: Re: [PATCH bpf-next 2/3] bpf: Disallow freplace on kprobe with
+ mismatched kprobe_write_ctx values
+Message-ID: <acbrlN_n4Z684h9e@krava>
+References: <20260324150444.68166-1-leon.hwang@linux.dev>
+ <20260324150444.68166-3-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260324150444.68166-3-leon.hwang@linux.dev>
 
-Update selftests to use the new non-_impl kfuncs marked with
-KF_IMPLICIT_ARGS by removing redundant declarations and macros from
-bpf_experimental.h (the new kfuncs are present in the vmlinux.h) and
-updating relevant callsites.
+On Tue, Mar 24, 2026 at 11:04:43PM +0800, Leon Hwang wrote:
+> uprobe programs are allowed to modify struct pt_regs.
+> 
+> Since the actual program type of uprobe is KPROBE, it can be abused to
+> modify struct pt_regs via kprobe+freplace when the kprobe attaches to
+> kernel functions.
+> 
+> For example,
+> 
+> SEC("?kprobe")
+> int kprobe(struct pt_regs *regs)
+> {
+> 	return 0;
+> }
+> 
+> SEC("?freplace")
+> int freplace_kprobe(struct pt_regs *regs)
+> {
+> 	regs->di = 0;
+> 	return 0;
+> }
+> 
+> freplace_kprobe prog will attach to kprobe prog.
+> kprobe prog will attach to a kernel function.
+> 
+> Without this patch, when the kernel function runs, its first arg will
+> always be set as 0 via the freplace_kprobe prog.
+> 
+> To avoid the abuse of kprobe_write_ctx=true via kprobe+freplace, disallow
+> freplace on kprobe programs with mismatched kprobe_write_ctx values.
+> 
+> Fixes: 7384893d970e ("bpf: Allow uprobe program to change context registers")
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
+>  kernel/bpf/verifier.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 12330466d58b..f8257bae6081 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -6404,6 +6404,14 @@ static int check_ctx_access(struct bpf_verifier_env *env, int insn_idx, int off,
+>  		/* remember the offset of last byte accessed in ctx */
+>  		if (env->prog->aux->max_ctx_offset < off + size)
+>  			env->prog->aux->max_ctx_offset = off + size;
+> +		if (env->prog->type == BPF_PROG_TYPE_EXT) {
+> +			struct bpf_prog *dst_prog = env->prog->aux->dst_prog;
+> +
+> +			if (env->prog->aux->kprobe_write_ctx != dst_prog->aux->kprobe_write_ctx) {
+> +				verbose(env, "Extension program cannot have different kprobe_write_ctx value with target prog\n");
+> +				return -EINVAL;
+> +			}
+> +		}
 
-Fix spin_lock verifier-log matching for lock_id_kptr_preserve by
-accepting variable instruction numbers. The calls to kfuncs with
-implicit arguments do not have register moves (e.g. r5 = 0)
-corresponding to dummy arguments anymore, so the order of instructions
-has shifted.
+would it be more clear to check this in bpf_check_attach_target,
+instead of depending on actual write to context
 
-Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
----
- .../testing/selftests/bpf/bpf_experimental.h  | 156 +-----------------
- .../selftests/bpf/prog_tests/spin_lock.c      |   5 +-
- .../selftests/bpf/progs/kptr_xchg_inline.c    |   4 +-
- 3 files changed, 9 insertions(+), 156 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-index 44466acf8083..2234bd6bc9d3 100644
---- a/tools/testing/selftests/bpf/bpf_experimental.h
-+++ b/tools/testing/selftests/bpf/bpf_experimental.h
-@@ -8,156 +8,11 @@
- 
- #define __contains(name, node) __attribute__((btf_decl_tag("contains:" #name ":" #node)))
- 
--/* Description
-- *	Allocates an object of the type represented by 'local_type_id' in
-- *	program BTF. User may use the bpf_core_type_id_local macro to pass the
-- *	type ID of a struct in program BTF.
-- *
-- *	The 'local_type_id' parameter must be a known constant.
-- *	The 'meta' parameter is rewritten by the verifier, no need for BPF
-- *	program to set it.
-- * Returns
-- *	A pointer to an object of the type corresponding to the passed in
-- *	'local_type_id', or NULL on failure.
-- */
--extern void *bpf_obj_new_impl(__u64 local_type_id, void *meta) __ksym;
--
--/* Convenience macro to wrap over bpf_obj_new_impl */
--#define bpf_obj_new(type) ((type *)bpf_obj_new_impl(bpf_core_type_id_local(type), NULL))
--
--/* Description
-- *	Free an allocated object. All fields of the object that require
-- *	destruction will be destructed before the storage is freed.
-- *
-- *	The 'meta' parameter is rewritten by the verifier, no need for BPF
-- *	program to set it.
-- * Returns
-- *	Void.
-- */
--extern void bpf_obj_drop_impl(void *kptr, void *meta) __ksym;
--
--/* Convenience macro to wrap over bpf_obj_drop_impl */
--#define bpf_obj_drop(kptr) bpf_obj_drop_impl(kptr, NULL)
--
--/* Description
-- *	Increment the refcount on a refcounted local kptr, turning the
-- *	non-owning reference input into an owning reference in the process.
-- *
-- *	The 'meta' parameter is rewritten by the verifier, no need for BPF
-- *	program to set it.
-- * Returns
-- *	An owning reference to the object pointed to by 'kptr'
-- */
--extern void *bpf_refcount_acquire_impl(void *kptr, void *meta) __ksym;
--
--/* Convenience macro to wrap over bpf_refcount_acquire_impl */
--#define bpf_refcount_acquire(kptr) bpf_refcount_acquire_impl(kptr, NULL)
--
--/* Description
-- *	Add a new entry to the beginning of the BPF linked list.
-- *
-- *	The 'meta' and 'off' parameters are rewritten by the verifier, no need
-- *	for BPF programs to set them
-- * Returns
-- *	0 if the node was successfully added
-- *	-EINVAL if the node wasn't added because it's already in a list
-- */
--extern int bpf_list_push_front_impl(struct bpf_list_head *head,
--				    struct bpf_list_node *node,
--				    void *meta, __u64 off) __ksym;
--
--/* Convenience macro to wrap over bpf_list_push_front_impl */
--#define bpf_list_push_front(head, node) bpf_list_push_front_impl(head, node, NULL, 0)
--
--/* Description
-- *	Add a new entry to the end of the BPF linked list.
-- *
-- *	The 'meta' and 'off' parameters are rewritten by the verifier, no need
-- *	for BPF programs to set them
-- * Returns
-- *	0 if the node was successfully added
-- *	-EINVAL if the node wasn't added because it's already in a list
-- */
--extern int bpf_list_push_back_impl(struct bpf_list_head *head,
--				   struct bpf_list_node *node,
--				   void *meta, __u64 off) __ksym;
--
--/* Convenience macro to wrap over bpf_list_push_back_impl */
--#define bpf_list_push_back(head, node) bpf_list_push_back_impl(head, node, NULL, 0)
--
--/* Description
-- *	Remove the entry at the beginning of the BPF linked list.
-- * Returns
-- *	Pointer to bpf_list_node of deleted entry, or NULL if list is empty.
-- */
--extern struct bpf_list_node *bpf_list_pop_front(struct bpf_list_head *head) __ksym;
--
--/* Description
-- *	Remove the entry at the end of the BPF linked list.
-- * Returns
-- *	Pointer to bpf_list_node of deleted entry, or NULL if list is empty.
-- */
--extern struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *head) __ksym;
--
--/* Description
-- *	Remove 'node' from rbtree with root 'root'
-- * Returns
-- * 	Pointer to the removed node, or NULL if 'root' didn't contain 'node'
-- */
--extern struct bpf_rb_node *bpf_rbtree_remove(struct bpf_rb_root *root,
--					     struct bpf_rb_node *node) __ksym;
--
--/* Description
-- *	Add 'node' to rbtree with root 'root' using comparator 'less'
-- *
-- *	The 'meta' and 'off' parameters are rewritten by the verifier, no need
-- *	for BPF programs to set them
-- * Returns
-- *	0 if the node was successfully added
-- *	-EINVAL if the node wasn't added because it's already in a tree
-- */
--extern int bpf_rbtree_add_impl(struct bpf_rb_root *root, struct bpf_rb_node *node,
--			       bool (less)(struct bpf_rb_node *a, const struct bpf_rb_node *b),
--			       void *meta, __u64 off) __ksym;
--
--/* Convenience macro to wrap over bpf_rbtree_add_impl */
--#define bpf_rbtree_add(head, node, less) bpf_rbtree_add_impl(head, node, less, NULL, 0)
-+/* Convenience macro to wrap over bpf_obj_new */
-+#define bpf_obj_new(type) ((type *)bpf_obj_new(bpf_core_type_id_local(type)))
- 
--/* Description
-- *	Return the first (leftmost) node in input tree
-- * Returns
-- *	Pointer to the node, which is _not_ removed from the tree. If the tree
-- *	contains no nodes, returns NULL.
-- */
--extern struct bpf_rb_node *bpf_rbtree_first(struct bpf_rb_root *root) __ksym;
--
--/* Description
-- *	Allocates a percpu object of the type represented by 'local_type_id' in
-- *	program BTF. User may use the bpf_core_type_id_local macro to pass the
-- *	type ID of a struct in program BTF.
-- *
-- *	The 'local_type_id' parameter must be a known constant.
-- *	The 'meta' parameter is rewritten by the verifier, no need for BPF
-- *	program to set it.
-- * Returns
-- *	A pointer to a percpu object of the type corresponding to the passed in
-- *	'local_type_id', or NULL on failure.
-- */
--extern void *bpf_percpu_obj_new_impl(__u64 local_type_id, void *meta) __ksym;
--
--/* Convenience macro to wrap over bpf_percpu_obj_new_impl */
--#define bpf_percpu_obj_new(type) ((type __percpu_kptr *)bpf_percpu_obj_new_impl(bpf_core_type_id_local(type), NULL))
--
--/* Description
-- *	Free an allocated percpu object. All fields of the object that require
-- *	destruction will be destructed before the storage is freed.
-- *
-- *	The 'meta' parameter is rewritten by the verifier, no need for BPF
-- *	program to set it.
-- * Returns
-- *	Void.
-- */
--extern void bpf_percpu_obj_drop_impl(void *kptr, void *meta) __ksym;
-+/* Convenience macro to wrap over bpf_percpu_obj_new */
-+#define bpf_percpu_obj_new(type) ((type __percpu_kptr *)bpf_percpu_obj_new(bpf_core_type_id_local(type)))
- 
- struct bpf_iter_task_vma;
- 
-@@ -167,9 +22,6 @@ extern int bpf_iter_task_vma_new(struct bpf_iter_task_vma *it,
- extern struct vm_area_struct *bpf_iter_task_vma_next(struct bpf_iter_task_vma *it) __ksym;
- extern void bpf_iter_task_vma_destroy(struct bpf_iter_task_vma *it) __ksym;
- 
--/* Convenience macro to wrap over bpf_obj_drop_impl */
--#define bpf_percpu_obj_drop(kptr) bpf_percpu_obj_drop_impl(kptr, NULL)
--
- /* Description
-  *	Throw a BPF exception from the program, immediately terminating its
-  *	execution and unwinding the stack. The supplied 'cookie' parameter
-diff --git a/tools/testing/selftests/bpf/prog_tests/spin_lock.c b/tools/testing/selftests/bpf/prog_tests/spin_lock.c
-index 254fbfeab06a..bbe476f4c47d 100644
---- a/tools/testing/selftests/bpf/prog_tests/spin_lock.c
-+++ b/tools/testing/selftests/bpf/prog_tests/spin_lock.c
-@@ -13,8 +13,9 @@ static struct {
- 	const char *err_msg;
- } spin_lock_fail_tests[] = {
- 	{ "lock_id_kptr_preserve",
--	  "5: (bf) r1 = r0                       ; R0=ptr_foo(id=2,ref_obj_id=2) "
--	  "R1=ptr_foo(id=2,ref_obj_id=2) refs=2\n6: (85) call bpf_this_cpu_ptr#154\n"
-+	  "[0-9]\\+: (bf) r1 = r0                       ; R0=ptr_foo(id=2,ref_obj_id=2)"
-+	  " R1=ptr_foo(id=2,ref_obj_id=2) refs=2\n"
-+	  "[0-9]\\+: (85) call bpf_this_cpu_ptr#154\n"
- 	  "R1 type=ptr_ expected=percpu_ptr_" },
- 	{ "lock_id_global_zero",
- 	  "; R1=map_value(map=.data.A,ks=4,vs=4)\n2: (85) call bpf_this_cpu_ptr#154\n"
-diff --git a/tools/testing/selftests/bpf/progs/kptr_xchg_inline.c b/tools/testing/selftests/bpf/progs/kptr_xchg_inline.c
-index 2414ac20b6d5..ca5943166057 100644
---- a/tools/testing/selftests/bpf/progs/kptr_xchg_inline.c
-+++ b/tools/testing/selftests/bpf/progs/kptr_xchg_inline.c
-@@ -25,14 +25,14 @@ __naked int kptr_xchg_inline(void)
- 		"if r0 == 0 goto 1f;"
- 		"r1 = r0;"
- 		"r2 = 0;"
--		"call %[bpf_obj_drop_impl];"
-+		"call %[bpf_obj_drop];"
- 	"1:"
- 		"r0 = 0;"
- 		"exit;"
- 		:
- 		: __imm_addr(ptr),
- 		  __imm(bpf_kptr_xchg),
--		  __imm(bpf_obj_drop_impl)
-+		  __imm(bpf_obj_drop)
- 		: __clobber_all
- 	);
- }
--- 
-2.53.0
-
+jirka
