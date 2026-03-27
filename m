@@ -1,82 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0297C296BD2;
-	Fri, 27 Mar 2026 16:10:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FE7034A3D8;
+	Fri, 27 Mar 2026 16:25:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774627829; cv=none; b=Q3zgmRBTgXUmwC/hZ+kON2HXp/Ag6OkhQtrwBiuMkSDyoYGy9qh4EYszwiQiiYSWk3Cw5H9mrdPdhEju7idNsukM34ndl/ZxcPY19l8t/kmz/FPk9XosdiQCu7rNAzig/28PSpJX0aZ15uN4lbH6Aw7VXG7iDFRAyKeUrjEGizo=
+	t=1774628713; cv=none; b=GH7KQ5jJJ7B257d6Lg/hhM7fYQ2VYLTtu/kAlgHXLgTFFXfuZ6WKADb4pKd2mSdoD361JGbpD7L66In2ydO4FrGomUr99cQtXZvIcUa2H2jnNGa68/lMNwGsH6pD02/AojnQMdxx0hvFIvQDswP4h4hG9QLnEIx2lGNfwSEu4nQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774627829; c=relaxed/simple;
-	bh=TQ/CHNnNLIzPwPDDfCfnZgkekOwWEEe8go4F0lZc8Fc=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Ncn167QDMNr/3jp9YaCsGmZO7Z/mKThd1eP/+Lc9vL4hNe0qjyIYanYrQ4VvuLM7OzMeKgR1yVFdol3Cgg0D0zSNkGRVCu/KxOQiEcZ7bE6uTXY6xBapRypue2MyGyiV1DfErnnfloDe8INhC8wMRYDzqMPoBkL8srxSyvrpX9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tBXgDd7o; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774628713; c=relaxed/simple;
+	bh=o37e/u2s3ApNY3T2Mivm5sQi2e7lLw78zt9EIlgSSfo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fcPRprlC2tUEiTqAwVPHTleBR11qdNlaqApv/RHHTJmszMJeGPStI6XWuKoiaopb5N+PrJHQqNX8K3YUDtz2s4acXj7Q180NWfbHbfZZQ1OSR8JFay/ZRWJQURH5umL16AkyYs/XbNV9YCp0PAQEsFSJRKHUYDWKLCb3RlcxDhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=YiI6Npr6; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tBXgDd7o"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D364EC19423;
-	Fri, 27 Mar 2026 16:10:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774627828;
-	bh=TQ/CHNnNLIzPwPDDfCfnZgkekOwWEEe8go4F0lZc8Fc=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=tBXgDd7oOO6bQ4dmvzcEhIKDaZyP9vxYh7PF9CNtxPJGshBgVGdQiV5ZihLJswotz
-	 V5kS04c6+C5yNBwjGQanEsCrmOjCv/eT3imO6VY4q15HrCeEbYsikR31nmyzVqEUSn
-	 7eIdbMxgYs0rReI6o7DM3myzE12rHYPA2QbHu7dU3uMhwNAuHHxYSaDwi8ha1F6IyX
-	 MlCWOebO7zwD/HSchjHGqSjvt5je3DSBxB2PiJe3HD20fFsGnSwHJI3iZOTtkCBI1B
-	 MtEPzvAXnM+x3SnYj6OpMGTOUqebW4Fln7d+dnvhTjzvw9d4R5Ppz+d8rgLEYQZ9Up
-	 W/PLWSe+MMnbw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02E3639301C1;
-	Fri, 27 Mar 2026 16:10:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="YiI6Npr6"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 24FC935DA;
+	Fri, 27 Mar 2026 09:25:05 -0700 (PDT)
+Received: from [10.163.180.175] (unknown [10.163.180.175])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AB3E73F905;
+	Fri, 27 Mar 2026 09:25:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1774628711; bh=o37e/u2s3ApNY3T2Mivm5sQi2e7lLw78zt9EIlgSSfo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=YiI6Npr6YyJq4PlBLVpfqiUTOOL161bptBTF8MU82La2TI82X2RO4XSVDq+AGrDXt
+	 LHhV9Pdl3j6OF27Npzjr4tIAziCsnEIupAbkdCevLtRBxf4jTYQjxcj+BAnG3ri7lV
+	 w2AICP2O5dCu263VnHUEwfdWQqetcjrXRZ2nJ/Wg=
+Message-ID: <346eeb8c-616b-4f4e-b811-ad1a3ae4a58f@arm.com>
+Date: Fri, 27 Mar 2026 21:54:43 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [REGRESSION] slab: replace cpu (partial) slabs with sheaves
+To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
+ "Harry Yoo (Oracle)" <harry@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>
+Cc: Uladzislau Rezki <urezki@gmail.com>, Vlastimil Babka <vbabka@suse.cz>,
+ Petr Tesarik <ptesarik@suse.com>, Christoph Lameter <cl@gentwo.org>,
+ David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>, Hao Li <hao.li@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Suren Baghdasaryan <surenb@google.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
+ bpf@vger.kernel.org, kasan-dev@googlegroups.com,
+ kernel test robot <oliver.sang@intel.com>, stable@vger.kernel.org,
+ "Paul E. McKenney" <paulmck@kernel.org>
+References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
+ <afe9ba0a-1924-42a8-a9c5-34eec709f883@arm.com>
+ <ed58493b-0369-4729-bcf7-bc89f72a7913@kernel.org> <acV36oPNFMgL4puz@milan>
+ <ea1cb2a1-b674-4d69-bbf6-00051a0e11df@kernel.org>
+ <eafefe7a-a33b-4102-93cf-fecc33ddf49e@arm.com>
+ <0f441d8f-d84c-470a-a4cb-0249b15220a2@kernel.org>
+ <f100305b-6c56-4499-98a4-6a22f8c49443@arm.com> <acZVS-ehXCtvcA9s@hyeyoo>
+ <d120d8d3-f785-47ec-9c6b-b28d42ebb1f7@kernel.org>
+Content-Language: en-US
+From: Aishwarya Rambhadran <aishwarya.rambhadran@arm.com>
+In-Reply-To: <d120d8d3-f785-47ec-9c6b-b28d42ebb1f7@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH RESEND v2 0/2] bpf: classify block device hooks and add
- selftests
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177462781479.3551071.3975124198098746090.git-patchwork-notify@kernel.org>
-Date: Fri, 27 Mar 2026 16:10:14 +0000
-References: <20260326-work-bpf-bdev-v2-0-5e3c58963987@kernel.org>
-In-Reply-To: <20260326-work-bpf-bdev-v2-0-5e3c58963987@kernel.org>
-To: Christian Brauner <brauner@kernel.org>
-Cc: ast@kernel.org, daniel@iogearbox.net, bpf@vger.kernel.org,
- kpsingh@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
- linux-kernel@vger.kernel.org
 
-Hello:
+Hi all,
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Thanks for the discussion and the insights.
 
-On Thu, 26 Mar 2026 17:09:13 +0100 you wrote:
-> A bunch of new hooks for managing block devices were added a while ago
-> but they weren't appropriately classified. Classify them and add a test
-> program so we catch regressions.
-> 
-> Note that for whatever reason building the bpf selftests locally seems
-> to fail for all kinds of arcane reasons for me. That might just be my
-> fault. I added a pr against the ci to have the selftests run but to test
-> this meaningfully it needs veritysetup and dmverity support. I'm not
-> sure if that's available already.
-> 
-> [...]
+For completeness, the SUTs used are single NUMA node:
+$ numactl -H
+available: 1 nodes (0)
+node 0 cpus: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42
+43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63
+node 0 size: 257218 MB
+node 0 free: 255376 MB
+node distances:
+node   0
+   0:  10
 
-Here is the summary with links:
-  - [RESEND,v2,1/2] bpf: classify block device hooks appropriately
-    https://git.kernel.org/bpf/bpf-next/c/46df585fcff7
-  - [RESEND,v2,2/2] selftests/bpf: add block device management selftests
-    https://git.kernel.org/bpf/bpf-next/c/96f4c251a087
+As suggested by Ryan, I re-ran and compared the perf benchmarks
+across 6.17, 6.18, and later kernels. The behavior is consistent
+with what has been discussed in this thread and aligns with our
+observations.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Thanks again for the clarifications and apologies for the table
+rendering issues in the initial email.
 
+Regards,
+Aishwarya Rambhadran
+
+On 27/03/26 4:51 PM, Vlastimil Babka (SUSE) wrote:
+> On 3/27/26 11:00, Harry Yoo (Oracle) wrote:
+>> On Fri, Mar 27, 2026 at 08:58:36AM +0000, Ryan Roberts wrote:
+>>>>>>>> On 3/26/26 13:43, Aishwarya Rambhadran wrote: 
+>>>>>> Right so there should be just the overhead of the extra 
+>>>>>> is_vmalloc_addr() test. Possibly also the call of 
+>>>>>> kfree_rcu_sheaf() if it's not inlined. I'd say it's something we 
+>>>>>> can just accept? It seems this is a unit test being used as a 
+>>>>>> microbenchmark, so it can be very sensitive even to such details, 
+>>>>>> but it should be negligible in practice. 
+>>>>> The perf/syscall cases might be a bit more concerning though? 
+>>>>> (those tests are from "perf bench syscall fork|execve"). Yes they 
+>>>>> are microbenchmarks, but a 7% increased cost for fork seems like 
+>>>>> something we'd want to avoid if we can. 
+>>>> Sure, I tried to explain those in my first reply. Harry then linked 
+>>>> to how that explanation can be verified. Hopefully it's really the 
+>>>> same reason. 
+>>> Ahh sorry I missed your first email. We only added that benchmark 
+>>> from 6.19 so don't have results for earlier kernels, but I'll ask 
+>>> Aishu to run it for 6.17 and 6.18 to see if the results correlate 
+>>> with your expectation. But from a high level perspective, a 7% 
+>>> regression on fork is not ideal even if there was a 7% improvement 
+>>> in 6.18. 
+> In retrospect it was an oversight not to disable the pre-existing cpu 
+> caching layer immediately for sheaf-enabled caches in 6.18. Can't undo 
+> that mistake now, unfortunately.
+>> If that improvement comes from the number of objects cached per CPU, 
+>> I'm not sure if determining the default value (# of cached objs) 
+>> based on "a point when microbenchmarks stop improving" is a 
+>> reasonable measure because the default value affects all slab caches 
+>> and will inevitably increase overall memory usage. 
+> Yeah that's the thing, some workloads might just keep improving as you 
+> throw more caching at them, but there's a memory usage cost to that. A 
+> case of stress test doing nothing but forks might also not be 
+> representative of performance of forks under normal workload where 
+> other operations also happen, returning the related slab objects, so 
+> in the end it doesn't expose the batch size that much.
+>> Hopefully we could discuss what a reasonable heuristic that "works 
+>> for most situations" looks like, and allow users to tune it further 
+>> based on their needs. As a side note, changing sheaf capacity at 
+>> runtime is not supported yet (I'm working on it) and targeting at 
+>> least before the next LTS. 
 
