@@ -1,288 +1,185 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0BBA3F87E1
-	for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 14:16:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774620989; cv=none; b=h9JQcw9l7O/dGgvJu/aGjFl5NLvUAjPXm6OKu2X+6fIoOBGm8bdmSuphtkwyaF0G3e6Iqf8quqf8RpVsK3JuchfgRX+r27lLhmPPydf03o29X0mm+3DdDzzgEiASv8sljALrtvSIisJRp+LK3uWW0RLeqLwdUVPs8zmT96gxUIc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774620989; c=relaxed/simple;
-	bh=nk/5ZakMJ+t2bnACkG2W+99kDbR1MO4cQq0DjDs269o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=S+m0Sue45GweJnJ7ACmPgPo5V+788TSDW0INe5ejTKn2rw+XIztNofe45IO87LsCdKUSidItnSSQrTn38n/ZKNsDuc20l0xdVwKNSEhJF0bAKGaCnG2yBK43Pv21/dHUC/cjY2axHiTW+pi8mPYU22xjrpCwyqBtCVz61dobOoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bBVk2nHT; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB3B7394463;
+	Fri, 27 Mar 2026 14:20:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.9
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774621251; cv=fail; b=pBqgnklXu4u6LbI8ujb+njl9NL1xZo0Q0nTkwGeyNQmR2Ko71CPPO+eQDULtgxcQyqwEuzBHSfZIPw1iu6DRlwB1sN6b/FNpP6plEdVwyC+pAd5d8006/Ye8kqh726EVM9RafHaIu/D5jugHoKyT3nVlxAsCiH3UGS/1PHDCR0M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774621251; c=relaxed/simple;
+	bh=n/DhL+bC7UMDPz6fgRVj9tMp7KLfz2d1jCcef27wmSw=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=rOGZxk4o5W85eQILix8f5j11jhYadSEH8nw6tFdmH7wMK2f1VYcTzyPGPuc8nFRAIwTzgVEuMz0B1Ww+DCq5Sf+fX/JMa1w5dh1y09GQhmZXvNQYkzcA6SuxnNSWqAf/K7D/73/s59hLD/uW6rn0GekpziYe5Pz1IvVH1TQkle4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hjO9EhCZ; arc=fail smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bBVk2nHT"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2ab39b111b9so9918445ad.1
-        for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 07:16:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774620985; x=1775225785; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6aupF+DuW1/DcLr6AsgbIe6z0Vi4ttYW8cK5LaEjq3w=;
-        b=bBVk2nHTC40dS0AyeaC0MCoeEtN5Bf+tnn3sfNcMhXGXO+XfJqN4Fn6KVL8sdrWkwC
-         gnnaYgu8oQomOxYvq4SaUXaCF81lut0Z3ewvBFNCR9QOEsoWc4bFbcZkc6AXV4GCeM7L
-         9HCOrLEk1gQOimME7WZbhZjWU7PbOkCTXwp5iqfK7P62rs+yFbeHHpNTC/d4/ZpYfrhq
-         OdnzUPmTOh+opu9hcBmCR+6NnMySZv4SwX77hB2xtwQAmeIjjUMmZd81DuhtZlYEzjhM
-         e2iwu0Ow3v53ROZbJ7vafnm89nTFBOspkLGHzHw+4kRXsOHanJqSPox+GqsJLqTtgr/C
-         0NIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774620985; x=1775225785;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=6aupF+DuW1/DcLr6AsgbIe6z0Vi4ttYW8cK5LaEjq3w=;
-        b=XrbyMCQtWjPLrqoADI8A2di6YKRxD/Py4RN409voLuuOt+W2wA+S0ktiNbJiy35EZH
-         5LSWPcZJta0SJDKSpenTKq/gdPz9n2VelRBqL4T6pOwTqhZjNIsWYBEJ0KjnnvnRQfRm
-         1nsSrdPnQkL61gB9C+XilYynlMjqxuF8Ygw8+5Qd8/jWRuBoZCCaG+QIf0j4yo5V+gth
-         nry8TEsXO9HfZdA8itN28DPfKHcd26V6GhGlZAAJ4SVPQERwqIK04OXo7litxyCc9g0Y
-         1yd1GG0+BfTkQJf0p/0xwPbM8oQNng5qb1awXos+UJ/gGRrT72csRD8psDdf6rU/PVmc
-         YLJg==
-X-Gm-Message-State: AOJu0YxEOGJOZKdqfWMRYMfsOi52/vXBC9JmC8i9rOnH9a8TPJF25OD0
-	Kd/4BWKdmVKO0k34YklnABacmz8UFH+RkvCqEw60VIVptIz7I+CR0K7P
-X-Gm-Gg: ATEYQzzqqhEWZT72oqB+rH1L2WaQDWPqMUCjj3VGKJfL3C9zncAzwFPN9OkdoosZgym
-	w+rbOnbIcnv9VESOylTZh6ul7TAMCRUMoCdc/tXSZh/UQCR/7zEGc1QnbTlixw7bKXmCEpZ7wpi
-	hr/kYvWVAP4ejIfzgAYyBj5De+8tqnNdcarsTgmRltKr+Ekk70LScqXCAJmnXN/o4juIrCqQvsK
-	bwU1AoQP3NHJ4ofqrLQ76iFlRB4ghhMK45UoD9WA4/RZy5WKJDhhRs1MQ6fsuUHSJ+Jh/23mvCW
-	JVJ8zXKFLQPbCgcDGqD7tm3WFwqXvU13UgGWwQlw0rjGRzzGP7JY5WaoX5wGh385gqVt4w5sv+K
-	vWnPAqkbKUn+srDl4DKzQP0BkTn1EmbKd9MZUFEBpdqbMDTk5yNSI8/BgLnlVD39uXSWZNYERFu
-	2BfWkFmRK9iH+70wWVBclaiXI+/hG/kVidHSIN2dz61+j8d0oWRPCmX+fEuMSQEuRnAxeXAUNu6
-	PbIiCl+x2A/ZTsY5C4unxsnwjp48WwSIvvwt25eEKjd
-X-Received: by 2002:a17:902:ce06:b0:2b0:5a4c:7266 with SMTP id d9443c01a7336-2b0cdc29022mr30209125ad.16.1774620984287;
-        Fri, 27 Mar 2026 07:16:24 -0700 (PDT)
-Received: from lab-kiba-ocxma-dut-01.. (191.68.231.218.rev.ocx2915.net. [218.231.68.191])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b0bc8e958csm61371365ad.66.2026.03.27.07.16.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2026 07:16:23 -0700 (PDT)
-From: Takeru Hayasaka <hayatake396@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org
-Cc: bpf@vger.kernel.org,
-	x86@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 2/2] selftests/bpf: cover fentry on tailcalled programs
-Date: Fri, 27 Mar 2026 14:16:02 +0000
-Message-ID: <20260327141616.1961457-3-hayatake396@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260327141616.1961457-1-hayatake396@gmail.com>
-References: <20260327141616.1961457-1-hayatake396@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hjO9EhCZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774621250; x=1806157250;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=n/DhL+bC7UMDPz6fgRVj9tMp7KLfz2d1jCcef27wmSw=;
+  b=hjO9EhCZ73ZQ9e1UXHDmh3iW+yR7qzHJbi/Xls5PN9c1klv51hIA5jUv
+   WDI1SnAZE9I4+0qAFs2B5Ux/GGzu2PChwsewX40GQvPQtd3pOs/tPgIOT
+   XuJNlrLNZNgAmJtZFJunGJ/CVyoKv/ynGDaqvMTAn/XQicl1xrT6o2rKJ
+   XI+tk2U7m59hxFcBvjLpO9NG5UEDoZEH12k1sA7lTuFgfEPltuCqWB4dG
+   byDdtLzvR67wdRK54Pju2RdDwYiEiWqezRSJsEUj/VTw+IN4fu1OT16P9
+   TAH7GKSLfsWTCkroeY5NgxVMpEsYX684zePIsMwCSxc9RZshg93OekDOl
+   g==;
+X-CSE-ConnectionGUID: 5jWpp1enRfmOWa3in3sttA==
+X-CSE-MsgGUID: ReoJVAORTU2L8hcyg4DopA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11741"; a="86387619"
+X-IronPort-AV: E=Sophos;i="6.23,144,1770624000"; 
+   d="scan'208";a="86387619"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2026 07:20:49 -0700
+X-CSE-ConnectionGUID: hZxIDo+dQm+1h/2iyvVz4Q==
+X-CSE-MsgGUID: n+k2oksgQJuMjy2RwNx1fg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,144,1770624000"; 
+   d="scan'208";a="230099933"
+Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
+  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2026 07:20:49 -0700
+Received: from FMSMSX901.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Fri, 27 Mar 2026 07:20:48 -0700
+Received: from fmsedg902.ED.cps.intel.com (10.1.192.144) by
+ FMSMSX901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37 via Frontend Transport; Fri, 27 Mar 2026 07:20:48 -0700
+Received: from PH8PR06CU001.outbound.protection.outlook.com (40.107.209.9) by
+ edgegateway.intel.com (192.55.55.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Fri, 27 Mar 2026 07:20:48 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=kB1rCJaam4kZY5SC/lYngHd57XyOXNqbWcono3tIZcxMPqbXc2Zk1oqgusTFz3i3H8yP5WuVOUmkSYiit8A+ErGWMkbZtGxwhQgVNwCcsmlvaJTwpaPq2uHXhMQX/O1vZIvq9tZpIFlna5Dc6ADZBaLwY/YDg/scSQYhl5f+BBXj6SOh6206eJJsM39Fmf8HDZeApMs8AxavJc0Kmvh1FG22IQtBI0KjV9aD9kGN+ws/yNeuNY4WRN6/Wb5T1A4rasL0aY4i8zrQ9lIoRV+uvXjdae7GKZ1UYQgRCEDOAyWJvasIgg6cOXNeM0FYjlRemMdfOQqEGgOTmzLz8Apu6Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Y1SmRZwI5nMwxEiL/+mO2lx34zBNvQWfNaQ1aJYA87M=;
+ b=BdibX+TtALZ5G9Eu5hMQa+2UtDxj3sXb2qumMBS2UHk6MyKwJk8BVfBzOv+YiWejuQWLBolIdwmuTnZMnI4v5YK2bVca3b+qM4BJqPCyb6bThHq5bxOGfRLUNfaRpmpNyAr0guBSl4hN22Z55FJE/KEUGT9q10uJg9muAnnZPsMFYUu8+jwUIH+rZAEY28sJ7fHxjLxCS6H3x8rHjMmLXvWT2YmAjCnJGnVNm1825gjI84Jb4UZYYxvwMesa9SYTAfXy4QVgqqTz8hwadUxYSIOQx7DKgUV1+0oCucCPNMc0TMyDbge2TvJrKGb0ds6UgivnVbG2moD5Eqy5iACnxg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
+ LV4PR11MB9489.namprd11.prod.outlook.com (2603:10b6:408:2e4::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9769.7; Fri, 27 Mar 2026 14:20:44 +0000
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd]) by DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd%6]) with mapi id 15.20.9769.006; Fri, 27 Mar 2026
+ 14:20:44 +0000
+Date: Fri, 27 Mar 2026 15:20:38 +0100
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: Jakub Kicinski <kuba@kernel.org>
+CC: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<magnus.karlsson@intel.com>, <stfomichev@gmail.com>, <pabeni@redhat.com>,
+	<horms@kernel.org>, <larysa.zaremba@intel.com>,
+	<aleksander.lobakin@intel.com>, <bjorn@kernel.org>, Ihor Solodrai
+	<ihor.solodrai@linux.dev>
+Subject: Re: [PATCH v3 net 0/8] xsk: tailroom reservation and MTU validation
+Message-ID: <acaSNnW8moIFNCMb@boxer>
+References: <20260323192457.504631-1-maciej.fijalkowski@intel.com>
+ <20260326202721.37382070@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20260326202721.37382070@kernel.org>
+X-ClientProxiedBy: VI6PEPF00000216.AUTP296.PROD.OUTLOOK.COM
+ (2603:10a6:808:1::8ce) To DM4PR11MB6117.namprd11.prod.outlook.com
+ (2603:10b6:8:b3::19)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|LV4PR11MB9489:EE_
+X-MS-Office365-Filtering-Correlation-Id: 71998d56-98b7-4b9c-0168-08de8c0c0878
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016|18002099003|22082099003|56012099003;
+X-Microsoft-Antispam-Message-Info: ncUZue8mclDSmFxs+uIs2EiVk8doM3AVGqdpRZhasC+WGaViP6rHBcCwqlB33B4ATcA3bc+aMQaxhmX+JM05DrmZ2JLVO6a8w7n8x+YMQfdpyI3qMmAS9+10ksCruTvEA2f8IC1u2iUiqXil27WLgSCx8rqtm+NCnTtpHc1LS0aqSDM94WBbv7FSuLzZPzO/GY9LZIVTGAILoTpyinVksX5fXsJwbRAOYp6JZvZjz/Qvc9tdlQMcQXivKsem+aEmvyy0xQRLqhuEcJzKJe3VAnH6aTF7WmPqs1Ke4VOKH6uvVNfYCvGbEVMvXZ3ghpLUa6TGGQMfI9e7JxobjPUsknQHwTZLdFhtzZVP/7LBvBNIMMVh9KMc4zYdwhczjSmJin+IiVfljwO6LBBkTNVTbugLUIXs5Qtuh+QFLJkPWKpT3Aw28Jox4Ef/mkBosrlDZKCFnufNcPE0XGfGP3leQuKR/Ka463PL8+VXoUQTQ6pWV+1Py37eWZjm2wBSjCkPvUV/SDpG+aEg7fC0uofBnvw0ODEkBPDaL2BIC2lKxyR6lMWDRtS2WEap9bjLF2NLzHPJ/VE/ysaQa8btffOkgX4rmwQdod2czAbSJzVmP9JXoyayX7jgcSqYSCOTA8UmZpOM40IiEjNzvDbOWD75kIzSp0qsNiOS7XnGYPOo/q/jWZREqicSLyqGWaw8M5CmipOA2q1yChYINihdxiCbygEZfo6htCSmXPOioCAqpPY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NJI+5UcpLFJ219Ly1R9D623CKA7b1EjfYjJEWOwdtp8hd5yFnIGZfOg3ldyY?=
+ =?us-ascii?Q?fFUnhIk+dsh6rhwXGHXfMdpg7kXjquzH+32mqpDVyyktXydluEwYWjDFuAGb?=
+ =?us-ascii?Q?7WakelFJkbmmp0YVTQYCscPRcbXNuq8MMPVMdIZa76qTwKRucGjfQ+GiXDRV?=
+ =?us-ascii?Q?DVCzRJ0cN4Uwvzjf7bKpqH7qpuBYY4/Zi/Z2XwB/h77jnwnJH47MmN9XgzhB?=
+ =?us-ascii?Q?EFwneRVhBUN+KpnXQNAvmog+CTyuPk8rUJMvrJZsHEmy+7oNcVsaYfEjpgdq?=
+ =?us-ascii?Q?fuWMQfcpu3KSIZWucxPzlunRuhWB6+RAMt6sBTqYC4HHlCY2UB9PyZVZQ/OM?=
+ =?us-ascii?Q?fqqTx0fMGddmqQim7KByxpdxdte8dT+NgL12w/238zoSmw9kP06BOJ59tsRl?=
+ =?us-ascii?Q?z/g361h+Q0S5ddUkEIajtinVp00vGXcaCIVej4zdYpLuHXtPIbg55jwWYI+S?=
+ =?us-ascii?Q?k76P4g6fA37/ML8jciXEt+WHH9usY0jkCOHPhHfxc6xVTpZKH71MI17BjIkE?=
+ =?us-ascii?Q?S4XlpyLDyOXZcAoYNvrqCz/VJnIgNrUTf1M+60nIa5x5i2qUJ1+HbKzDee0d?=
+ =?us-ascii?Q?IrRlIaxdAY45edz9euUbDHgq7tKFVb5vjHKa02nMow8XeKOUY7jm47TS3NC8?=
+ =?us-ascii?Q?2sTLeuNeGttx77HpQLL/TgQYRILBI/AUi7dHrF9KCU9EQVVBJeX3P4vkoimQ?=
+ =?us-ascii?Q?NAXN+JhzbojseBPFuuI6vKAeQIK3ZHIYBJx5AKzO0Vy59txrXPYZJ/G25qh6?=
+ =?us-ascii?Q?LcarBLekcQKTOCrERMtSjizqfQrHk0FPAgcrELxQesqEcDdRGSe1ycKWokfh?=
+ =?us-ascii?Q?LUVZU8e5FHRxfr74MZghAP0qFvUIGYiDxCXvgoIyg8B7j+BUZxneo0vbb7Mz?=
+ =?us-ascii?Q?42cRDviqmH/KcepZfeIG0nBc1C5xGY2lZBtzKsuFWmWOF7OODb6dEMO3/NLQ?=
+ =?us-ascii?Q?ok8MySwhorXGnJ+1ecNIB65Q3VVh3/2SLKLCyXX/ohDo3PaZpxXSR+hJ/NqL?=
+ =?us-ascii?Q?5sKpE5vt8lTn+6rpN+THyjpF5jXENbLtmwAEshaxpkzPfIJU7E+DbDRDn1V6?=
+ =?us-ascii?Q?3yRtbmRzzMovo8xM6eCN4yl6HZOpwipg+OJNESt9SUplAJQp8Tjq061u3dCg?=
+ =?us-ascii?Q?oPyVvIOIs3FIj2LzFhbL/5ezsrm9K92LPgVm+oxcIG7K6xw0HEDTSHLolm2q?=
+ =?us-ascii?Q?u4WZ/EfUKlPAi6FdMemSv3z/9B+ZC2t42ODGkJfpImMqQh0LKwh8fPorBRRS?=
+ =?us-ascii?Q?93L7ZW+W1LilZlD52Qqd1VkczO+bT8hB45SjEfNvGDJsDVbzoW/U1Lp741hn?=
+ =?us-ascii?Q?9DOAQs584O0guhwwGxFJjJeWvacy/aP363D+cqX49HvDejYQe7UKHsFjOckE?=
+ =?us-ascii?Q?ecwrQQwNOHzTGfhB/DSh2UHhPCM5mWG7Mem58pTu4A/qtrKPJaELnh1FwSfn?=
+ =?us-ascii?Q?ihzOKTeD4ewjpRwL1Xf+NrfYRGn8DbzklAOcjOTnCxlbnoifiPkD73pCSTYd?=
+ =?us-ascii?Q?6K4Y3GbRbzcz+CVng2SMzXxXleEnKCqZcJgIHNpamjKzhtsjS/mCI6v8C/j7?=
+ =?us-ascii?Q?bm5npTMijZPKmPzs7MsO2j/X0IYveJA4XFVMjWhIBc2ZcmTtK3F2TD5ieiA2?=
+ =?us-ascii?Q?f2pHByQ8SNnMosRCutyNK9SgyOFEgGiO5tJ9Doj53L52WwH6hCY+q2NyHAwc?=
+ =?us-ascii?Q?fXGsTBS4br6OihKbe9qQBZaw/2+iZtmpQQEYZ9ILiklJ6lv/OO2IJilK+jwQ?=
+ =?us-ascii?Q?MqMDhuXW7aK/bYNHzTqXsw148YfjXp0=3D?=
+X-Exchange-RoutingPolicyChecked: ICKig3fqzGLXeyHIUjSjW1duHtnfC95kMh7x2tw/Uaal9qaP7GGKe86CThHxN9MmiBC1WomNnlYsL+ZFbY61c8rStMThMg0Fcxj4GuFUlr7poJHbkYbqSycx3HztUJrbaLPQAPM7KZPEgDWeZSkfSsbspXUNx7eyi4sMsUX1OUc1Slgyv56RR0ii0ylDIn/3MWTiN4zzJToQjYEZCfLExENvjDJoWhN702yUd1hAk/bgNxjYsfSaBZsYjU3vlZHK1Hm2qNLg0QNsEISV7OX7+ZFjveBa0OZvbEHhiom6W3jceKmCsfk6wJvsalKM2xtAmmCqWiEuVV07RMImwU6yLA==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 71998d56-98b7-4b9c-0168-08de8c0c0878
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2026 14:20:44.4391
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: f0gofqlzHwlHBZwZPdy7GBDVltMO9E1NRffDqVrYpgRBLbt171Wu+nsEpdSbJbrL02cKWdtWkJnpEln6PDUDeNZkJj3mOmwxKPQ8JSxjz2E=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV4PR11MB9489
+X-OriginatorOrg: intel.com
 
-Add a small tailcall target/probe pair and a tailcalls subtest that
-attaches fentry to the callee program.
+On Thu, Mar 26, 2026 at 08:27:21PM -0700, Jakub Kicinski wrote:
+> On Mon, 23 Mar 2026 20:24:49 +0100 Maciej Fijalkowski wrote:
+> > here we fix a long-standing issue regarding multi-buffer scenario in ZC
+> > mode - we have not been providing space at the end of the buffer where
+> > multi-buffer XDP works on skb_shared_info. This has been brought to our
+> > attention via [0].
+> > 
+> > Unaligned mode does not get any specific treatment, it is user's
+> > responsibility to properly handle XSK addresses in queues.
+> > 
+> > With adjustments included here in this set against xskxceiver I have
+> > been able to pass the full test suite on ice.
+> 
+> Please scream at me if I'm wrong but I _think_ this is somehow 
+> breaking BPF CI ?? It's the only BPF change we have AFAICT and
+> CI has been failing like this all day:
+> 
+> Root directory input is valid!
+> Error: The path for one of the files in artifact is not valid: /packets-132-3-net_timestamping__INET4:_bpf_timestamping-net_timestamping_ns.log. Contains the following character:  Colon :
+>           
+> Invalid characters include:  Double quote ", Colon :, Less than <, Greater than >, Vertical bar |, Asterisk *, Question mark ?, Carriage return \r, Line feed \n
+> 
+> https://github.com/kernel-patches/bpf/actions/runs/23624136123/job/68809559810
 
-The test first runs the callee directly and checks that fentry fires
-exactly once, then runs the entry program, tail-calls into the callee
-and checks that the same fentry also fires exactly once on the tail-call
-path.
+That is probably due to this hang:
+WATCHDOG: test case ns_xsk_drv/STAT_RX_DROPPED executes for 10 seconds...
 
-This covers both sides of the x86 change: direct entry must not
-double-fire, while tail-called entry must now be observable.
+Sorry for that! Please toss away v3 and v4 and let me resolve this.
+I was too focused on the outcome of HW tests which I have been running via
+xskxceiver. I need to see how to satisfy both sides.
 
-Signed-off-by: Takeru Hayasaka <hayatake396@gmail.com>
----
- .../selftests/bpf/prog_tests/tailcalls.c      | 110 ++++++++++++++++++
- .../bpf/progs/tailcall_fentry_probe.c         |  16 +++
- .../bpf/progs/tailcall_fentry_target.c        |  27 +++++
- 3 files changed, 153 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/tailcall_fentry_probe.c
- create mode 100644 tools/testing/selftests/bpf/progs/tailcall_fentry_target.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/tailcalls.c b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-index 7d534fde0af9..ac05df65b666 100644
---- a/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-@@ -1113,6 +1113,114 @@ static void test_tailcall_bpf2bpf_fentry_entry(void)
- 	bpf_object__close(tgt_obj);
- }
- 
-+static void test_tailcall_fentry_tailcallee(void)
-+{
-+	struct bpf_object *tgt_obj = NULL, *fentry_obj = NULL;
-+	struct bpf_map *prog_array, *data_map;
-+	struct bpf_link *fentry_link = NULL;
-+	struct bpf_program *prog;
-+	int err, map_fd, callee_fd, main_fd, data_fd, i, val;
-+	char buff[128] = {};
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, topts,
-+		    .data_in = buff,
-+		    .data_size_in = sizeof(buff),
-+		    .repeat = 1,
-+	);
-+
-+	err = bpf_prog_test_load("tailcall_fentry_target.bpf.o",
-+				 BPF_PROG_TYPE_SCHED_CLS,
-+				 &tgt_obj, &main_fd);
-+	if (!ASSERT_OK(err, "load tgt_obj"))
-+		return;
-+
-+	prog_array = bpf_object__find_map_by_name(tgt_obj, "jmp_table");
-+	if (!ASSERT_OK_PTR(prog_array, "find jmp_table map"))
-+		goto out;
-+
-+	map_fd = bpf_map__fd(prog_array);
-+	if (!ASSERT_FALSE(map_fd < 0, "find jmp_table map fd"))
-+		goto out;
-+
-+	prog = bpf_object__find_program_by_name(tgt_obj, "entry");
-+	if (!ASSERT_OK_PTR(prog, "find entry prog"))
-+		goto out;
-+
-+	main_fd = bpf_program__fd(prog);
-+	if (!ASSERT_FALSE(main_fd < 0, "find entry prog fd"))
-+		goto out;
-+
-+	prog = bpf_object__find_program_by_name(tgt_obj, "callee");
-+	if (!ASSERT_OK_PTR(prog, "find callee prog"))
-+		goto out;
-+
-+	callee_fd = bpf_program__fd(prog);
-+	if (!ASSERT_FALSE(callee_fd < 0, "find callee prog fd"))
-+		goto out;
-+
-+	i = 0;
-+	err = bpf_map_update_elem(map_fd, &i, &callee_fd, BPF_ANY);
-+	if (!ASSERT_OK(err, "update jmp_table"))
-+		goto out;
-+
-+	fentry_obj = bpf_object__open_file("tailcall_fentry_probe.bpf.o", NULL);
-+	if (!ASSERT_OK_PTR(fentry_obj, "open fentry_obj file"))
-+		goto out;
-+
-+	prog = bpf_object__find_program_by_name(fentry_obj, "fentry_callee");
-+	if (!ASSERT_OK_PTR(prog, "find fentry prog"))
-+		goto out;
-+
-+	err = bpf_program__set_attach_target(prog, callee_fd, "callee");
-+	if (!ASSERT_OK(err, "set_attach_target callee"))
-+		goto out;
-+
-+	err = bpf_object__load(fentry_obj);
-+	if (!ASSERT_OK(err, "load fentry_obj"))
-+		goto out;
-+
-+	fentry_link = bpf_program__attach_trace(prog);
-+	if (!ASSERT_OK_PTR(fentry_link, "attach_trace"))
-+		goto out;
-+
-+	data_map = bpf_object__find_map_by_name(fentry_obj, ".bss");
-+	if (!ASSERT_FALSE(!data_map || !bpf_map__is_internal(data_map),
-+			  "find tailcall_fentry_probe.bss map"))
-+		goto out;
-+
-+	data_fd = bpf_map__fd(data_map);
-+	if (!ASSERT_FALSE(data_fd < 0,
-+			  "find tailcall_fentry_probe.bss map fd"))
-+		goto out;
-+
-+	err = bpf_prog_test_run_opts(callee_fd, &topts);
-+	ASSERT_OK(err, "direct callee");
-+	ASSERT_EQ(topts.retval, 7, "direct callee retval");
-+
-+	i = 0;
-+	err = bpf_map_lookup_elem(data_fd, &i, &val);
-+	ASSERT_OK(err, "direct fentry count");
-+	ASSERT_EQ(val, 1, "direct fentry count");
-+
-+	val = 0;
-+	err = bpf_map_update_elem(data_fd, &i, &val, BPF_ANY);
-+	ASSERT_OK(err, "reset fentry count");
-+
-+	err = bpf_prog_test_run_opts(main_fd, &topts);
-+	ASSERT_OK(err, "tailcall");
-+	ASSERT_EQ(topts.retval, 7, "tailcall retval");
-+
-+	i = 0;
-+	err = bpf_map_lookup_elem(data_fd, &i, &val);
-+	ASSERT_OK(err, "fentry count");
-+	ASSERT_EQ(val, 1, "fentry count");
-+
-+out:
-+	bpf_link__destroy(fentry_link);
-+	bpf_object__close(fentry_obj);
-+	bpf_object__close(tgt_obj);
-+}
-+
- #define JMP_TABLE "/sys/fs/bpf/jmp_table"
- 
- static int poke_thread_exit;
-@@ -1759,6 +1867,8 @@ void test_tailcalls(void)
- 		test_tailcall_bpf2bpf_fentry_fexit();
- 	if (test__start_subtest("tailcall_bpf2bpf_fentry_entry"))
- 		test_tailcall_bpf2bpf_fentry_entry();
-+	if (test__start_subtest("tailcall_fentry_tailcallee"))
-+		test_tailcall_fentry_tailcallee();
- 	if (test__start_subtest("tailcall_poke"))
- 		test_tailcall_poke();
- 	if (test__start_subtest("tailcall_bpf2bpf_hierarchy_1"))
-diff --git a/tools/testing/selftests/bpf/progs/tailcall_fentry_probe.c b/tools/testing/selftests/bpf/progs/tailcall_fentry_probe.c
-new file mode 100644
-index 000000000000..b784aeffb316
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tailcall_fentry_probe.c
-@@ -0,0 +1,16 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+int count = 0;
-+
-+SEC("fentry/callee")
-+int BPF_PROG(fentry_callee, struct sk_buff *skb)
-+{
-+	count++;
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/tailcall_fentry_target.c b/tools/testing/selftests/bpf/progs/tailcall_fentry_target.c
-new file mode 100644
-index 000000000000..46da06ce323c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tailcall_fentry_target.c
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_legacy.h"
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 1);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+} jmp_table SEC(".maps");
-+
-+SEC("tc")
-+int callee(struct __sk_buff *skb)
-+{
-+	return 7;
-+}
-+
-+SEC("tc")
-+int entry(struct __sk_buff *skb)
-+{
-+	bpf_tail_call_static(skb, &jmp_table, 0);
-+	return 0;
-+}
-+
-+char __license[] SEC("license") = "GPL";
--- 
-2.43.0
-
+Maciej
