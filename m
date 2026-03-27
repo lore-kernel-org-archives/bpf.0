@@ -1,38 +1,38 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5674395279;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0705395242;
 	Fri, 27 Mar 2026 12:11:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774613484; cv=none; b=XwYHnIzk6+exf4g4FIpC3R5oE6gwH7wa6OXkMSfQpmlgmAq0Xxgo5IncCV0+JUsfbMGRrrD/ytATeuFO/KVL9wEcb8fWaBjVN2B56M4XqgR/jo4pXVlrS7O+uSpl/2F8PP8tCanBr+oIKAR8QTr+Z3XmyKtPKtcRUWq6Md/uSW0=
+	t=1774613483; cv=none; b=LhMvyUZLJIEnN5LRKXPvjJRt9ZNuBMxfnsAC7EdeEgp3+Oq9Dk3qX+z1fDkwy13acRnMbuEpdVYIAZxFPZtAgtLmZU5rrOP2ncHitaXrokKh3no0u5CT+BpUktLWJnm+S/N8v1/kF1+OP/8Grd//8LEdXy5h+EdOVG3/EG5Iu6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774613484; c=relaxed/simple;
-	bh=9D8BJbehshhsHbNQRtY/FI3VDoM3nVtyTO3LNGCN7Ho=;
+	s=arc-20240116; t=1774613483; c=relaxed/simple;
+	bh=yLBaDIJRUb2S4fD4PBbr3ImUYiTYzCHBxoqyPRfRhbw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kZVpXfchFrTIUtsszzMh1bMhott82BOF2Nwc12mBfzOKoPd4O8baRzwWVkbL5gGhpaX/DsbWlhDiM8zWI0tbqrMhrl8KIZVFgD9IsaSkd/tcmgxwhIZyqHjqrKqVO8GtkfskJxeT9hcboHjqLPouST/MW5koyWbLrAgU4avpGW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=m/xxNBG4; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=uRkdYsjTLjU1c0hFXXvJyY2xRyQx1fUTnYKxPWi0JkphKJqPLu8XaKKR6cWUDwo4Cqc/iw14G0g+13FhlQkjzagPXDJwVxHNmjnK8Y3rOFzKUP3ZmuBpsuM8iTtKh4pytPgHqqQOi1plIZKeN1cOCTwbTX06NyTGZVIXEH5Ixpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=hLBwkpmP; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="m/xxNBG4"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="hLBwkpmP"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=X9PpAFXGngPSWjUkUOig88orWWgRphvodJRBV0/c380=; b=m/xxNBG4TC0l6UG8s+MzjW9XZ5
-	e1jSZlslDbtpok88k7wka5k+nLIC49sEKgmiaz0Hyd8xi7RtcAUidilVr0F06uJQzUjJ+Df4dlVAd
-	UEP0OFHDvY0aF8CxAPtqrxrQ2EPCv/mdyiEr+2BptkJwTZ75ruRW4jb8lPcB2XSoibjoVYw7Z5vt3
-	UMKD/AJq93L2M5iK3OlcXpsTTzJzNBZeGFrNxrC+5y7GwAvL5k3mSML5jIdGVb8xf8HvhfbuNn50U
-	xzFN2K2WbYoAexhuD+MGJ1xO2RsuRL8I7CnTNTDOM+KvQIO4Zg4e+QNj8Q51Fc299Lgqk2Ii4js0E
-	IUx6Uspw==;
+	bh=OFv6uV5GTnwHWnoAMen2ABCUodHALHhDZDqyvabIvaU=; b=hLBwkpmPnACtQD7Wmnl4CH/MdK
+	4XKUbOgauI2JViDmaSl4a0QUHaqg2QRu2yhJOopQIybSDKw6zcYrZW8n+E/6MDJdytZbl3PK0NLWK
+	13Jh+oGFo3CSmv8vcfosG1FOu6psy/0nj326mmvJKVdwinhKDc3ySHXqOh1e0eE9YjK9bcyI8da16
+	1qBGiTlTOtbgjSF3beWlnAXPORiY76tokLhCJjUQITrlIdk9laC/zbsy7+JPH9b37JJyw9dtWTXKG
+	IkNXqhmctewWH2+r6qzwhD7IfMqZ4pSsxB2Zpp71vcbxBf4J8MGx5uFKERB3G4ibs1JZCb0uSuEeN
+	ledva/ng==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1w661c-000AM7-2Y;
-	Fri, 27 Mar 2026 13:10:52 +0100
+	id 1w661l-000ANh-0T;
+	Fri, 27 Mar 2026 13:11:01 +0100
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -51,9 +51,9 @@ Cc: bpf@vger.kernel.org,
 	toke@redhat.com,
 	yangzhenze@bytedance.com,
 	wangdongdong.6@bytedance.com
-Subject: [PATCH net-next v10 01/14] net: Add queue-create operation
-Date: Fri, 27 Mar 2026 13:10:36 +0100
-Message-ID: <20260327121049.334562-2-daniel@iogearbox.net>
+Subject: [PATCH net-next v10 08/14] xsk: Extend xsk_rcv_check validation
+Date: Fri, 27 Mar 2026 13:10:43 +0100
+Message-ID: <20260327121049.334562-9-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260327121049.334562-1-daniel@iogearbox.net>
 References: <20260327121049.334562-1-daniel@iogearbox.net>
@@ -66,303 +66,70 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/27953/Fri Mar 27 07:24:46 2026)
 
-Add a ynl netdev family operation called queue-create that creates a
-new queue on a netdevice:
+xsk_rcv_check tests for inbound packets to see whether they match
+the bound AF_XDP socket. Refactor the test into a small helper
+xsk_dev_queue_valid and move the validation against xs->dev and
+xs->queue_id there.
 
-      name: queue-create
-      attribute-set: queue
-      flags: [admin-perm]
-      do:
-        request:
-          attributes:
-            - ifindex
-            - type
-            - lease
-        reply: &queue-create-op
-          attributes:
-            - id
-
-This is a generic operation such that it can be extended for various
-use cases in future. Right now it is mandatory to specify ifindex,
-the queue type which is enforced to rx and a lease. The newly created
-queue id is returned to the caller.
-
-A queue from a virtual device can have a lease which refers to another
-queue from a physical device. This is useful for memory providers
-and AF_XDP operations which take an ifindex and queue id to allow
-applications to bind against virtual devices in containers. The lease
-couples both queues together and allows to proxy the operations from
-a virtual device in a container to the physical device.
-
-In future, the nested lease attribute can be lifted and made optional
-for other use-cases such as dynamic queue creation for physical
-netdevs. The lack of lease and the specification of the physical
-device as an ifindex will imply that we need a real queue to be
-allocated. Similarly, the queue type enforcement to rx can then be
-lifted as well to support tx.
-
-An early implementation had only driver-specific integration [0], but
-in order for other virtual devices to reuse, it makes sense to have
-this as a generic API in core net.
-
-For leasing queues, the virtual netdev must have real_num_rx_queues
-less than num_rx_queues at the time of calling queue-create. The
-queue-type must be rx as only rx queues are supported for leasing
-for now. We also enforce that the queue-create ifindex must point
-to a virtual device, and that the nested lease attribute's ifindex
-must point to a physical device. The nested lease attribute set
-contains a netns-id attribute which is optional and can specify a
-netns-id relative to the caller's netns. It requires cap_net_admin
-and if the netns-id attribute is not specified, the lease ifindex
-will be retrieved from the current netns. Also, it is modeled as
-an s32 type similarly as done elsewhere in the stack.
+The fast-path case stays in place and allows for quick return in
+xsk_dev_queue_valid. If it fails, the validation is extended to
+check whether the AF_XDP socket is bound against a leased queue,
+and if so, the test is redone.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Co-developed-by: David Wei <dw@davidwei.uk>
 Signed-off-by: David Wei <dw@davidwei.uk>
 Acked-by: Stanislav Fomichev <sdf@fomichev.me>
 Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
-Link: https://bpfconf.ebpf.io/bpfconf2025/bpfconf2025_material/lsfmmbpf_2025_netkit_borkmann.pdf [0]
 ---
- Documentation/netlink/specs/netdev.yaml | 46 +++++++++++++++++++++++++
- include/uapi/linux/netdev.h             | 11 ++++++
- net/core/netdev-genl-gen.c              | 20 +++++++++++
- net/core/netdev-genl-gen.h              |  2 ++
- net/core/netdev-genl.c                  |  5 +++
- tools/include/uapi/linux/netdev.h       | 11 ++++++
- 6 files changed, 95 insertions(+)
+ net/xdp/xsk.c | 29 ++++++++++++++++++++++++++---
+ 1 file changed, 26 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
-index 596c306ce52b..b93beb247a11 100644
---- a/Documentation/netlink/specs/netdev.yaml
-+++ b/Documentation/netlink/specs/netdev.yaml
-@@ -339,6 +339,15 @@ attribute-sets:
-         doc: XSK information for this queue, if any.
-         type: nest
-         nested-attributes: xsk-info
-+      -
-+        name: lease
-+        doc: |
-+          A queue from a virtual device can have a lease which refers to
-+          another queue from a physical device. This is useful for memory
-+          providers and AF_XDP operations which take an ifindex and queue id
-+          to allow applications to bind against virtual devices in containers.
-+        type: nest
-+        nested-attributes: lease
-   -
-     name: qstats
-     doc: |
-@@ -537,6 +546,26 @@ attribute-sets:
-         name: id
-       -
-         name: type
-+  -
-+    name: lease
-+    attributes:
-+      -
-+        name: ifindex
-+        doc: The netdev ifindex to lease the queue from.
-+        type: u32
-+        checks:
-+          min: 1
-+      -
-+        name: queue
-+        doc: The netdev queue to lease from.
-+        type: nest
-+        nested-attributes: queue-id
-+      -
-+        name: netns-id
-+        doc: The network namespace id of the netdev.
-+        type: s32
-+        checks:
-+          min: 0
-   -
-     name: dmabuf
-     attributes:
-@@ -686,6 +715,7 @@ operations:
-             - dmabuf
-             - io-uring
-             - xsk
-+            - lease
-       dump:
-         request:
-           attributes:
-@@ -797,6 +827,22 @@ operations:
-         reply:
-           attributes:
-             - id
-+    -
-+      name: queue-create
-+      doc: |
-+        Create a new queue for the given netdevice. Whether this operation
-+        is supported depends on the device and the driver.
-+      attribute-set: queue
-+      flags: [admin-perm]
-+      do:
-+        request:
-+          attributes:
-+            - ifindex
-+            - type
-+            - lease
-+        reply: &queue-create-op
-+          attributes:
-+            - id
- 
- kernel-family:
-   headers: ["net/netdev_netlink.h"]
-diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
-index e0b579a1df4f..7df1056a35fd 100644
---- a/include/uapi/linux/netdev.h
-+++ b/include/uapi/linux/netdev.h
-@@ -160,6 +160,7 @@ enum {
- 	NETDEV_A_QUEUE_DMABUF,
- 	NETDEV_A_QUEUE_IO_URING,
- 	NETDEV_A_QUEUE_XSK,
-+	NETDEV_A_QUEUE_LEASE,
- 
- 	__NETDEV_A_QUEUE_MAX,
- 	NETDEV_A_QUEUE_MAX = (__NETDEV_A_QUEUE_MAX - 1)
-@@ -202,6 +203,15 @@ enum {
- 	NETDEV_A_QSTATS_MAX = (__NETDEV_A_QSTATS_MAX - 1)
- };
- 
-+enum {
-+	NETDEV_A_LEASE_IFINDEX = 1,
-+	NETDEV_A_LEASE_QUEUE,
-+	NETDEV_A_LEASE_NETNS_ID,
-+
-+	__NETDEV_A_LEASE_MAX,
-+	NETDEV_A_LEASE_MAX = (__NETDEV_A_LEASE_MAX - 1)
-+};
-+
- enum {
- 	NETDEV_A_DMABUF_IFINDEX = 1,
- 	NETDEV_A_DMABUF_QUEUES,
-@@ -228,6 +238,7 @@ enum {
- 	NETDEV_CMD_BIND_RX,
- 	NETDEV_CMD_NAPI_SET,
- 	NETDEV_CMD_BIND_TX,
-+	NETDEV_CMD_QUEUE_CREATE,
- 
- 	__NETDEV_CMD_MAX,
- 	NETDEV_CMD_MAX = (__NETDEV_CMD_MAX - 1)
-diff --git a/net/core/netdev-genl-gen.c b/net/core/netdev-genl-gen.c
-index ba673e81716f..81aecb5d3bc5 100644
---- a/net/core/netdev-genl-gen.c
-+++ b/net/core/netdev-genl-gen.c
-@@ -28,6 +28,12 @@ static const struct netlink_range_validation netdev_a_napi_defer_hard_irqs_range
- };
- 
- /* Common nested types */
-+const struct nla_policy netdev_lease_nl_policy[NETDEV_A_LEASE_NETNS_ID + 1] = {
-+	[NETDEV_A_LEASE_IFINDEX] = NLA_POLICY_MIN(NLA_U32, 1),
-+	[NETDEV_A_LEASE_QUEUE] = NLA_POLICY_NESTED(netdev_queue_id_nl_policy),
-+	[NETDEV_A_LEASE_NETNS_ID] = NLA_POLICY_MIN(NLA_S32, 0),
-+};
-+
- const struct nla_policy netdev_page_pool_info_nl_policy[NETDEV_A_PAGE_POOL_IFINDEX + 1] = {
- 	[NETDEV_A_PAGE_POOL_ID] = NLA_POLICY_FULL_RANGE(NLA_UINT, &netdev_a_page_pool_id_range),
- 	[NETDEV_A_PAGE_POOL_IFINDEX] = NLA_POLICY_FULL_RANGE(NLA_U32, &netdev_a_page_pool_ifindex_range),
-@@ -107,6 +113,13 @@ static const struct nla_policy netdev_bind_tx_nl_policy[NETDEV_A_DMABUF_FD + 1]
- 	[NETDEV_A_DMABUF_FD] = { .type = NLA_U32, },
- };
- 
-+/* NETDEV_CMD_QUEUE_CREATE - do */
-+static const struct nla_policy netdev_queue_create_nl_policy[NETDEV_A_QUEUE_LEASE + 1] = {
-+	[NETDEV_A_QUEUE_IFINDEX] = NLA_POLICY_MIN(NLA_U32, 1),
-+	[NETDEV_A_QUEUE_TYPE] = NLA_POLICY_MAX(NLA_U32, 1),
-+	[NETDEV_A_QUEUE_LEASE] = NLA_POLICY_NESTED(netdev_lease_nl_policy),
-+};
-+
- /* Ops table for netdev */
- static const struct genl_split_ops netdev_nl_ops[] = {
- 	{
-@@ -205,6 +218,13 @@ static const struct genl_split_ops netdev_nl_ops[] = {
- 		.maxattr	= NETDEV_A_DMABUF_FD,
- 		.flags		= GENL_CMD_CAP_DO,
- 	},
-+	{
-+		.cmd		= NETDEV_CMD_QUEUE_CREATE,
-+		.doit		= netdev_nl_queue_create_doit,
-+		.policy		= netdev_queue_create_nl_policy,
-+		.maxattr	= NETDEV_A_QUEUE_LEASE,
-+		.flags		= GENL_ADMIN_PERM | GENL_CMD_CAP_DO,
-+	},
- };
- 
- static const struct genl_multicast_group netdev_nl_mcgrps[] = {
-diff --git a/net/core/netdev-genl-gen.h b/net/core/netdev-genl-gen.h
-index cffc08517a41..d71b435d72c1 100644
---- a/net/core/netdev-genl-gen.h
-+++ b/net/core/netdev-genl-gen.h
-@@ -14,6 +14,7 @@
- #include <net/netdev_netlink.h>
- 
- /* Common nested types */
-+extern const struct nla_policy netdev_lease_nl_policy[NETDEV_A_LEASE_NETNS_ID + 1];
- extern const struct nla_policy netdev_page_pool_info_nl_policy[NETDEV_A_PAGE_POOL_IFINDEX + 1];
- extern const struct nla_policy netdev_queue_id_nl_policy[NETDEV_A_QUEUE_TYPE + 1];
- 
-@@ -36,6 +37,7 @@ int netdev_nl_qstats_get_dumpit(struct sk_buff *skb,
- int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info);
- int netdev_nl_napi_set_doit(struct sk_buff *skb, struct genl_info *info);
- int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info);
-+int netdev_nl_queue_create_doit(struct sk_buff *skb, struct genl_info *info);
- 
- enum {
- 	NETDEV_NLGRP_MGMT,
-diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
-index 470fabbeacd9..aae75431858d 100644
---- a/net/core/netdev-genl.c
-+++ b/net/core/netdev-genl.c
-@@ -1120,6 +1120,11 @@ int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info)
- 	return err;
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 79f31705276f..3fab551eeaf7 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -330,14 +330,37 @@ static bool xsk_is_bound(struct xdp_sock *xs)
+ 	return false;
  }
  
-+int netdev_nl_queue_create_doit(struct sk_buff *skb, struct genl_info *info)
++static bool xsk_dev_queue_valid(const struct xdp_sock *xs,
++				const struct xdp_rxq_info *info)
 +{
-+	return -EOPNOTSUPP;
++	struct net_device *dev = xs->dev;
++	u32 queue_index = xs->queue_id;
++	struct netdev_rx_queue *rxq;
++
++	if (info->dev == dev &&
++	    info->queue_index == queue_index)
++		return true;
++
++	if (queue_index < dev->real_num_rx_queues) {
++		rxq = READ_ONCE(__netif_get_rx_queue(dev, queue_index)->lease);
++		if (!rxq)
++			return false;
++
++		dev = rxq->dev;
++		queue_index = get_netdev_rx_queue_index(rxq);
++
++		return info->dev == dev &&
++		       info->queue_index == queue_index;
++	}
++	return false;
 +}
 +
- void netdev_nl_sock_priv_init(struct netdev_nl_sock *priv)
+ static int xsk_rcv_check(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
  {
- 	INIT_LIST_HEAD(&priv->bindings);
-diff --git a/tools/include/uapi/linux/netdev.h b/tools/include/uapi/linux/netdev.h
-index e0b579a1df4f..7df1056a35fd 100644
---- a/tools/include/uapi/linux/netdev.h
-+++ b/tools/include/uapi/linux/netdev.h
-@@ -160,6 +160,7 @@ enum {
- 	NETDEV_A_QUEUE_DMABUF,
- 	NETDEV_A_QUEUE_IO_URING,
- 	NETDEV_A_QUEUE_XSK,
-+	NETDEV_A_QUEUE_LEASE,
- 
- 	__NETDEV_A_QUEUE_MAX,
- 	NETDEV_A_QUEUE_MAX = (__NETDEV_A_QUEUE_MAX - 1)
-@@ -202,6 +203,15 @@ enum {
- 	NETDEV_A_QSTATS_MAX = (__NETDEV_A_QSTATS_MAX - 1)
- };
- 
-+enum {
-+	NETDEV_A_LEASE_IFINDEX = 1,
-+	NETDEV_A_LEASE_QUEUE,
-+	NETDEV_A_LEASE_NETNS_ID,
-+
-+	__NETDEV_A_LEASE_MAX,
-+	NETDEV_A_LEASE_MAX = (__NETDEV_A_LEASE_MAX - 1)
-+};
-+
- enum {
- 	NETDEV_A_DMABUF_IFINDEX = 1,
- 	NETDEV_A_DMABUF_QUEUES,
-@@ -228,6 +238,7 @@ enum {
- 	NETDEV_CMD_BIND_RX,
- 	NETDEV_CMD_NAPI_SET,
- 	NETDEV_CMD_BIND_TX,
-+	NETDEV_CMD_QUEUE_CREATE,
- 
- 	__NETDEV_CMD_MAX,
- 	NETDEV_CMD_MAX = (__NETDEV_CMD_MAX - 1)
+ 	if (!xsk_is_bound(xs))
+ 		return -ENXIO;
+-
+-	if (xs->dev != xdp->rxq->dev || xs->queue_id != xdp->rxq->queue_index)
++	if (!xsk_dev_queue_valid(xs, xdp->rxq))
+ 		return -EINVAL;
+-
+ 	if (len > xsk_pool_get_rx_frame_size(xs->pool) && !xs->sg) {
+ 		xs->rx_dropped++;
+ 		return -ENOSPC;
 -- 
 2.43.0
 
