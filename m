@@ -1,331 +1,164 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2265396576;
-	Fri, 27 Mar 2026 12:11:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82A1434EEF2
+	for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 12:18:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774613489; cv=none; b=Ah1+hIhEhYt+AKBq0f9JsLEwtps/U1nK/xQ85dHVVXZadj2X2dTC2BmrpNpSjB0i3f9jkR9xjqBldv7wufqcsGBOc460Z5njF+h2C9+WLIhhIVG2ksDSrl7GKp3fdL5vGtIE+ln5eVSm2b7Mb5ybYhlAfBSYZ5zaXDq+WpidUpc=
+	t=1774613921; cv=none; b=nDf93YdwF7eP29EvvFMN6DF15zvyhYZlCNLtTqMJjC3cy/Y1A+PtlG65S9STITPh/8JvVC734bqHBYU7hmIWkBtcSJaPqEAu4FIC+AdLnFUkS8QDcf1uro77hi+D50p4SIwi3d9zdBlc8w9Nfe3psmvAYaEYksxU7wdjMDRzD1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774613489; c=relaxed/simple;
-	bh=EwlJDszPpfEdKhOhu7f108JikiWoOZWkmZViWA1GeC0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KA1lFmpQU/sp3+EfYmIyciWqGoiqlUn7NhNBYjhsOhbxHGOHE2UTQdWaDXvhZ9fBcrDFM0rhRSMnvDa5LbFyP8gtykrOYqv+mxrQR3rgKOukDTFpeVub+7hX7+Cw1qngiCuLnu6ijnAcrH9A6T6h4VAzyRq4npIwasJo0LaiX8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=X4uJLn7k; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1774613921; c=relaxed/simple;
+	bh=EaKJ+rRyUyacbPbzLG2wbYQ1RHT0poSn3EKIFeh9jMI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Miq8f8ZOhx7Yki4w5Xx8FWdmHmWyUigPrZao0ZnExIwChZ9LZkdnuhjKAk3To8ENks3uDK69U+LHsKqdl7FXFzIC1Je6wOoijHmtW/gfwt4TcaZnvt+tS0DIfw7LbjQ67UEvqDo+Bsere97YB69rz6v/YS0F7IVRhhy60RGTbrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jj7sJUVX; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="X4uJLn7k"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=2CfLTFsaBvNqZg4DLZFKNzwuTNoI1glmMV6lIBJA3y8=; b=X4uJLn7kEGsdZ2qVX0qJsDwrwx
-	Kx8nSq/QOu5B2nwg30o3M34PiAf3y2eROdPJ4uTHXIX4ZyFRxTsXLZs6UHDFLOdIAkkt3lPC1n4cm
-	nEdAJzDXT+8wEq+Pk9AOc4qq4WY4nnRDZHFChbhFD21qMIPBGQmlGL17VbotWzKHYPHVgM2kLn1wk
-	AC4qp5gSn//mhj3zJaRyvw69T0UGAmbvxGIPdwbN6zh3F9Hdl0pcJpdEhpq3socf7oyu2/Ja+1Sin
-	plOXVbXlj99nPZI25BrMyalZdIIZfrePI9xhDWVNMo8qR6fHuIfWxZ3+jqBC7RB5V1r9zGjqAtduO
-	XgLqECjw==;
-Received: from localhost ([127.0.0.1])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1w661f-000AMe-1O;
-	Fri, 27 Mar 2026 13:10:55 +0100
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org,
-	kuba@kernel.org,
-	davem@davemloft.net,
-	razor@blackwall.org,
-	pabeni@redhat.com,
-	willemb@google.com,
-	sdf@fomichev.me,
-	john.fastabend@gmail.com,
-	martin.lau@kernel.org,
-	jordan@jrife.io,
-	maciej.fijalkowski@intel.com,
-	magnus.karlsson@intel.com,
-	dw@davidwei.uk,
-	toke@redhat.com,
-	yangzhenze@bytedance.com,
-	wangdongdong.6@bytedance.com
-Subject: [PATCH net-next v10 03/14] net: Add lease info to queue-get response
-Date: Fri, 27 Mar 2026 13:10:38 +0100
-Message-ID: <20260327121049.334562-4-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260327121049.334562-1-daniel@iogearbox.net>
-References: <20260327121049.334562-1-daniel@iogearbox.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jj7sJUVX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774613920; x=1806149920;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EaKJ+rRyUyacbPbzLG2wbYQ1RHT0poSn3EKIFeh9jMI=;
+  b=jj7sJUVXKgaxcH2jolayhKOoNvefKkGqe+/JPO90Ac1A0WJlXRzfzcbR
+   X6F6k4DpZ53iNs0NhZ1b7bKdwTSthgRSb1HXpE0T0DwS8NbXeL+sQ6rS3
+   0XuHdMZQdEMKojHj/rPmAMN9npfEKi9XZgwT95aLrPzMI42R2+JkVju8/
+   Il2R3msgre+5xrXV8HyI8+ZpBZjEVJeuL8XufFIBlXn84QkC4otPPbLev
+   jEVV/JaN781gM6BFXQRm9G4+RHeHTgm9l8K65LtI5HzF2kdnYuwagK6TG
+   uhiM5bqkdmPU3zUu1Taz5Vpv4V7LpNSmuN/EX5HKib2Jt3rvUCIgyWzST
+   w==;
+X-CSE-ConnectionGUID: l6O34Zy4Q+2XL+UIBCfWeg==
+X-CSE-MsgGUID: XuEih5M9QsiG5K2cdrnGPw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11741"; a="75566668"
+X-IronPort-AV: E=Sophos;i="6.23,144,1770624000"; 
+   d="scan'208";a="75566668"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2026 05:18:39 -0700
+X-CSE-ConnectionGUID: aTeumil1RsSUl8a3gw9waQ==
+X-CSE-MsgGUID: mutqkBPvStiqF9kzYi0oqg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,144,1770624000"; 
+   d="scan'208";a="225551369"
+Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 27 Mar 2026 05:18:35 -0700
+Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w6692-00000000AFp-0gdP;
+	Fri, 27 Mar 2026 12:18:32 +0000
+Date: Fri, 27 Mar 2026 20:18:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org,
+	ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+	kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com,
+	memxor@gmail.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH bpf-next v6 3/6] bpf: Add sleepable support for classic
+ tracepoint programs
+Message-ID: <202603272034.xdMLP5lS-lkp@intel.com>
+References: <20260325-sleepable_tracepoints-v6-3-2b182dacea13@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/27953/Fri Mar 27 07:24:46 2026)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260325-sleepable_tracepoints-v6-3-2b182dacea13@meta.com>
 
-Populate nested lease info to the queue-get response that returns the
-ifindex, queue id with type and optionally netns id if the device
-resides in a different netns.
+Hi Mykyta,
 
-Example with ynl client when using AF_XDP via queue leasing:
+kernel test robot noticed the following build errors:
 
-  # ip a
-  [...]
-  4: enp10s0f0np0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 xdp/id:24 qdisc mq state UP group default qlen 1000
-    link/ether e8:eb:d3:a3:43:f6 brd ff:ff:ff:ff:ff:ff
-    inet 10.0.0.2/24 scope global enp10s0f0np0
-       valid_lft forever preferred_lft forever
-    inet6 fe80::eaeb:d3ff:fea3:43f6/64 scope link proto kernel_ll
-       valid_lft forever preferred_lft forever
-  [...]
+[auto build test ERROR on 6c8e1a9eee0fec802b542dadf768c30c2a183b3c]
 
-  # ethtool -i enp10s0f0np0
-  driver: mlx5_core
-  [...]
+url:    https://github.com/intel-lab-lkp/linux/commits/Mykyta-Yatsenko/bpf-Add-sleepable-support-for-raw-tracepoint-programs/20260327-132324
+base:   6c8e1a9eee0fec802b542dadf768c30c2a183b3c
+patch link:    https://lore.kernel.org/r/20260325-sleepable_tracepoints-v6-3-2b182dacea13%40meta.com
+patch subject: [PATCH bpf-next v6 3/6] bpf: Add sleepable support for classic tracepoint programs
+config: sparc64-defconfig (https://download.01.org/0day-ci/archive/20260327/202603272034.xdMLP5lS-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260327/202603272034.xdMLP5lS-lkp@intel.com/reproduce)
 
-  # ynl --family netdev --output-json --do queue-get \
-        --json '{"ifindex": 4, "id": 15, "type": "rx"}'
-  {'id': 15,
-   'ifindex': 4,
-   'lease': {'ifindex': 8, 'netns-id': 0, 'queue': {'id': 1, 'type': 'rx'}},
-   'napi-id': 8227,
-   'type': 'rx',
-   'xsk': {}}
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603272034.xdMLP5lS-lkp@intel.com/
 
-  # ip netns list
-  foo (id: 0)
+All errors (new ones prefixed by >>):
 
-  # ip netns exec foo ip a
-  [...]
-  8: nk@NONE: <BROADCAST,MULTICAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
-      link/ether 00:00:00:00:00:00 brd ff:ff:ff:ff:ff:ff
-      inet6 fe80::200:ff:fe00:0/64 scope link proto kernel_ll
-         valid_lft forever preferred_lft forever
-  [...]
+>> ld.lld: error: duplicate symbol: bpf_prog_inc_misses_counter
+   >>> defined at mdio_bus.c
+   >>>            drivers/net/phy/mdio_bus.o:(bpf_prog_inc_misses_counter)
+   >>> defined at mdio_device.c
+   >>>            drivers/net/phy/mdio_device.o:(.text+0x0)
+--
+>> ld.lld: error: duplicate symbol: bpf_prog_inc_misses_counter
+   >>> defined at phy.c
+   >>>            drivers/net/phy/phy.o:(bpf_prog_inc_misses_counter)
+   >>> defined at phy-c45.c
+   >>>            drivers/net/phy/phy-c45.o:(.text+0x0)
+--
+>> ld.lld: error: duplicate symbol: bpf_prog_inc_misses_counter
+   >>> defined at phy.c
+   >>>            drivers/net/phy/phy.o:(bpf_prog_inc_misses_counter)
+   >>> defined at phy-core.c
+   >>>            drivers/net/phy/phy-core.o:(.text+0x0)
+--
+>> ld.lld: error: duplicate symbol: bpf_prog_inc_misses_counter
+   >>> defined at phy.c
+   >>>            drivers/net/phy/phy.o:(bpf_prog_inc_misses_counter)
+   >>> defined at linkmode.c
+   >>>            drivers/net/phy/linkmode.o:(.text+0x0)
+--
+>> ld.lld: error: duplicate symbol: bpf_prog_inc_misses_counter
+   >>> defined at phy.c
+   >>>            drivers/net/phy/phy.o:(bpf_prog_inc_misses_counter)
+   >>> defined at phy_device.c
+   >>>            drivers/net/phy/phy_device.o:(.text+0x0)
+--
+>> ld.lld: error: duplicate symbol: bpf_prog_inc_misses_counter
+   >>> defined at phy.c
+   >>>            drivers/net/phy/phy.o:(bpf_prog_inc_misses_counter)
+   >>> defined at phy_link_topology.c
+   >>>            drivers/net/phy/phy_link_topology.o:(.text+0x0)
+--
+>> ld.lld: error: duplicate symbol: bpf_prog_inc_misses_counter
+   >>> defined at phy.c
+   >>>            drivers/net/phy/phy.o:(bpf_prog_inc_misses_counter)
+   >>> defined at phy_caps.c
+   >>>            drivers/net/phy/phy_caps.o:(.text+0x0)
+--
+>> ld.lld: error: duplicate symbol: bpf_prog_inc_misses_counter
+   >>> defined at phy.c
+   >>>            drivers/net/phy/phy.o:(bpf_prog_inc_misses_counter)
+   >>> defined at phy_port.c
+   >>>            drivers/net/phy/phy_port.o:(.text+0x0)
+--
+>> ld.lld: error: duplicate symbol: bpf_prog_inc_misses_counter
+   >>> defined at phy.c
+   >>>            drivers/net/phy/phy.o:(bpf_prog_inc_misses_counter)
+   >>> defined at mdio_bus_provider.c
+   >>>            drivers/net/phy/mdio_bus_provider.o:(.text+0x0)
+--
+>> ld.lld: error: duplicate symbol: bpf_prog_inc_misses_counter
+   >>> defined at phy.c
+   >>>            drivers/net/phy/phy.o:(bpf_prog_inc_misses_counter)
+   >>> defined at swphy.c
+   >>>            drivers/net/phy/swphy.o:(.text+0x0)
+--
+>> ld.lld: error: duplicate symbol: bpf_prog_inc_misses_counter
+   >>> defined at vlan.c
+   >>>            net/8021q/vlan.o:(bpf_prog_inc_misses_counter)
+   >>> defined at vlan_netlink.c
+   >>>            net/8021q/vlan_netlink.o:(.text+0x0)
+..
 
-  # ip netns exec foo ethtool -i nk
-  driver: netkit
-  [...]
-
-  # ip netns exec foo ls /sys/class/net/nk/queues/
-  rx-0  rx-1  tx-0
-
-  # ip netns exec foo ynl --family netdev --output-json --do queue-get \
-        --json '{"ifindex": 8, "id": 1, "type": "rx"}'
-  {"id": 1, "type": "rx", "ifindex": 8, "xsk": {}}
-
-Note that the caller of netdev_nl_queue_fill_one() holds the netdevice
-lock. For the queue-get we do not lock both devices. When queues get
-{un,}leased, both devices are locked, thus if __netif_get_rx_queue_lease()
-returns a lease pointer, it points to a valid device. The netns-id is
-fetched via peernet2id_alloc() similarly as done in OVS.
-
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Co-developed-by: David Wei <dw@davidwei.uk>
-Signed-off-by: David Wei <dw@davidwei.uk>
----
- include/net/netdev_rx_queue.h | 14 ++++++++
- net/core/netdev-genl.c        | 66 ++++++++++++++++++++++++++++++++---
- net/core/netdev_rx_queue.c    | 54 ++++++++++++++++++++++++++++
- 3 files changed, 130 insertions(+), 4 deletions(-)
-
-diff --git a/include/net/netdev_rx_queue.h b/include/net/netdev_rx_queue.h
-index 1d41c253f0a3..7e98c679ea84 100644
---- a/include/net/netdev_rx_queue.h
-+++ b/include/net/netdev_rx_queue.h
-@@ -67,6 +67,20 @@ get_netdev_rx_queue_index(struct netdev_rx_queue *queue)
- 	return index;
- }
- 
-+enum netif_lease_dir {
-+	NETIF_VIRT_TO_PHYS,
-+	NETIF_PHYS_TO_VIRT,
-+};
-+
-+struct netdev_rx_queue *
-+__netif_get_rx_queue_lease(struct net_device **dev, unsigned int *rxq,
-+			   enum netif_lease_dir dir);
-+
-+struct netdev_rx_queue *
-+netif_get_rx_queue_lease_locked(struct net_device **dev, unsigned int *rxq);
-+void netif_put_rx_queue_lease_locked(struct net_device *orig_dev,
-+				     struct net_device *dev);
-+
- int netdev_rx_queue_restart(struct net_device *dev, unsigned int rxq);
- void netdev_rx_queue_lease(struct netdev_rx_queue *rxq_dst,
- 			   struct netdev_rx_queue *rxq_src);
-diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
-index 5d5e5b9a8af0..515832854251 100644
---- a/net/core/netdev-genl.c
-+++ b/net/core/netdev-genl.c
-@@ -386,12 +386,63 @@ static int nla_put_napi_id(struct sk_buff *skb, const struct napi_struct *napi)
- 	return 0;
- }
- 
-+static int
-+netdev_nl_queue_fill_lease(struct sk_buff *rsp, struct net_device *netdev,
-+			   u32 q_idx, u32 q_type)
-+{
-+	struct net_device *orig_netdev = netdev;
-+	struct nlattr *nest_lease, *nest_queue;
-+	struct netdev_rx_queue *rxq;
-+	struct net *net, *peer_net;
-+
-+	rxq = __netif_get_rx_queue_lease(&netdev, &q_idx,
-+					 NETIF_PHYS_TO_VIRT);
-+	if (!rxq || orig_netdev == netdev)
-+		return 0;
-+
-+	nest_lease = nla_nest_start(rsp, NETDEV_A_QUEUE_LEASE);
-+	if (!nest_lease)
-+		goto nla_put_failure;
-+
-+	nest_queue = nla_nest_start(rsp, NETDEV_A_LEASE_QUEUE);
-+	if (!nest_queue)
-+		goto nla_put_failure;
-+	if (nla_put_u32(rsp, NETDEV_A_QUEUE_ID, q_idx))
-+		goto nla_put_failure;
-+	if (nla_put_u32(rsp, NETDEV_A_QUEUE_TYPE, q_type))
-+		goto nla_put_failure;
-+	nla_nest_end(rsp, nest_queue);
-+
-+	if (nla_put_u32(rsp, NETDEV_A_LEASE_IFINDEX,
-+			READ_ONCE(netdev->ifindex)))
-+		goto nla_put_failure;
-+
-+	rcu_read_lock();
-+	peer_net = dev_net_rcu(netdev);
-+	net = dev_net_rcu(orig_netdev);
-+	if (!net_eq(net, peer_net)) {
-+		s32 id = peernet2id_alloc(net, peer_net, GFP_ATOMIC);
-+
-+		if (nla_put_s32(rsp, NETDEV_A_LEASE_NETNS_ID, id))
-+			goto nla_put_failure_unlock;
-+	}
-+	rcu_read_unlock();
-+	nla_nest_end(rsp, nest_lease);
-+	return 0;
-+
-+nla_put_failure_unlock:
-+	rcu_read_unlock();
-+nla_put_failure:
-+	return -ENOMEM;
-+}
-+
- static int
- netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
- 			 u32 q_idx, u32 q_type, const struct genl_info *info)
- {
- 	struct pp_memory_provider_params *params;
--	struct netdev_rx_queue *rxq;
-+	struct net_device *orig_netdev = netdev;
-+	struct netdev_rx_queue *rxq, *rxq_lease;
- 	struct netdev_queue *txq;
- 	void *hdr;
- 
-@@ -409,17 +460,22 @@ netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
- 		rxq = __netif_get_rx_queue(netdev, q_idx);
- 		if (nla_put_napi_id(rsp, rxq->napi))
- 			goto nla_put_failure;
-+		if (netdev_nl_queue_fill_lease(rsp, netdev, q_idx, q_type))
-+			goto nla_put_failure;
- 
-+		rxq_lease = netif_get_rx_queue_lease_locked(&netdev, &q_idx);
-+		if (rxq_lease)
-+			rxq = rxq_lease;
- 		params = &rxq->mp_params;
- 		if (params->mp_ops &&
- 		    params->mp_ops->nl_fill(params->mp_priv, rsp, rxq))
--			goto nla_put_failure;
-+			goto nla_put_failure_lease;
- #ifdef CONFIG_XDP_SOCKETS
- 		if (rxq->pool)
- 			if (nla_put_empty_nest(rsp, NETDEV_A_QUEUE_XSK))
--				goto nla_put_failure;
-+				goto nla_put_failure_lease;
- #endif
--
-+		netif_put_rx_queue_lease_locked(orig_netdev, netdev);
- 		break;
- 	case NETDEV_QUEUE_TYPE_TX:
- 		txq = netdev_get_tx_queue(netdev, q_idx);
-@@ -437,6 +493,8 @@ netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
- 
- 	return 0;
- 
-+nla_put_failure_lease:
-+	netif_put_rx_queue_lease_locked(orig_netdev, netdev);
- nla_put_failure:
- 	genlmsg_cancel(rsp, hdr);
- 	return -EMSGSIZE;
-diff --git a/net/core/netdev_rx_queue.c b/net/core/netdev_rx_queue.c
-index a1f23c2c96d4..a4d8cad6db74 100644
---- a/net/core/netdev_rx_queue.c
-+++ b/net/core/netdev_rx_queue.c
-@@ -41,6 +41,60 @@ bool netif_rxq_is_leased(struct net_device *dev, unsigned int rxq_idx)
- 	return false;
- }
- 
-+/* Virtual devices eligible for leasing have no dev->dev.parent, while
-+ * physical devices always have one. Use this to enforce the correct
-+ * lease traversal direction.
-+ */
-+static bool netif_lease_dir_ok(const struct net_device *dev,
-+			       enum netif_lease_dir dir)
-+{
-+	if (dir == NETIF_VIRT_TO_PHYS && !dev->dev.parent)
-+		return true;
-+	if (dir == NETIF_PHYS_TO_VIRT && dev->dev.parent)
-+		return true;
-+	return false;
-+}
-+
-+struct netdev_rx_queue *
-+__netif_get_rx_queue_lease(struct net_device **dev, unsigned int *rxq_idx,
-+			   enum netif_lease_dir dir)
-+{
-+	struct net_device *orig_dev = *dev;
-+	struct netdev_rx_queue *rxq = __netif_get_rx_queue(orig_dev, *rxq_idx);
-+
-+	if (rxq->lease) {
-+		if (!netif_lease_dir_ok(orig_dev, dir))
-+			return NULL;
-+		rxq = rxq->lease;
-+		*rxq_idx = get_netdev_rx_queue_index(rxq);
-+		*dev = rxq->dev;
-+	}
-+	return rxq;
-+}
-+
-+struct netdev_rx_queue *
-+netif_get_rx_queue_lease_locked(struct net_device **dev, unsigned int *rxq_idx)
-+{
-+	struct net_device *orig_dev = *dev;
-+	struct netdev_rx_queue *rxq;
-+
-+	/* Locking order is always from the virtual to the physical device
-+	 * see netdev_nl_queue_create_doit().
-+	 */
-+	netdev_ops_assert_locked(orig_dev);
-+	rxq = __netif_get_rx_queue_lease(dev, rxq_idx, NETIF_VIRT_TO_PHYS);
-+	if (rxq && orig_dev != *dev)
-+		netdev_lock(*dev);
-+	return rxq;
-+}
-+
-+void netif_put_rx_queue_lease_locked(struct net_device *orig_dev,
-+				     struct net_device *dev)
-+{
-+	if (orig_dev != dev)
-+		netdev_unlock(dev);
-+}
-+
- /* See also page_pool_is_unreadable() */
- bool netif_rxq_has_unreadable_mp(struct net_device *dev, unsigned int rxq_idx)
- {
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
