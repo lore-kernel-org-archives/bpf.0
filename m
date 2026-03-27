@@ -1,129 +1,218 @@
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA94386347
-	for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 19:43:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB97D388E67;
+	Fri, 27 Mar 2026 19:49:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774640627; cv=none; b=c2V2BO7Qvu+Ac0sX3VKAbo+eXYw9Jkbj3oRQ8JcisXj4Ozon016MFtANGHvKE2TDBHc7CvXAdyk8j+QXVkBRmfe8J6obgQphoxFjPkuf7JIn/FWTYLlu/MQzfMtUUF6BSYdlDjlO5yXBLFHBgKZ50sTLbGSzoTHFOCOA6jY02Dk=
+	t=1774640950; cv=none; b=BRaOx5IXZt/JrcfLXXORMvbqY3K+ehw4nlG/boz+cDtc1wgc8ZW5f4vWtncEPi3QXQ5ySEPWa+h8D9T3vyhQakVnxW3SqE4xYyW4dZgiKM667Zk1BGz+p/+4bZSPwah3/M3WXNLUhm7ffe5oOcnpvFEhL7NWFhCg2+H3PcDGXQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774640627; c=relaxed/simple;
-	bh=u7TP/JsqBOYtb90MWsXcsU2CGL3817VGGapqJXtiP8M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ix1L/YcpDQwjyBOKbXfzW73bgtkwIJm9tcM/AI1G+1KbzoGYPx5mkYkGvFFH82Mp0bd/koC/TKfNLc1hqaxOZgR0QhtM10ky5SGRDeHk9eYIHP6rglJ2Fxfb0ocXGmgFck7Vajf3XCIwK4jxmy+ocTy+XWIAYi8Z+EFOQfwbLzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=gnY/o/m2; arc=none smtp.client-ip=209.85.219.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+	s=arc-20240116; t=1774640950; c=relaxed/simple;
+	bh=xGrbC5F4b04ONwJEomxQGx5rA9AY/2JimpC5ZSKk+Yw=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=JHjzyOGClYIjrTqV6Ghn/A7twrCeLi8/LCzFyS2/41deg5qUnQUkorjQdeiH9uKfLuGu0btSsXl6Y1kDaBACPwJm+l7KNpdbXhycoDlcXND8soXs+DK5WKhry86neYYxiVbfpEaaofQed80nPvBwuvvc52+mpVAvvMURsnoJdm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=gqQXGWSx; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="gnY/o/m2"
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-89a05955720so29378406d6.2
-        for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 12:43:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1774640619; x=1775245419; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5ycsjbas8cC1Onl2FsApYb1y1z6bcYUHR+E+PGpMszI=;
-        b=gnY/o/m2Dt2Ylp705PZQGa5v0M2M/AM8V3tzBzp/stnBp/jfNtfPONjIbtUZPYRPDN
-         WJZc00SefPAWU6rT1d6BM1DxlMjkMcJFr300wqrm0Le7ilGX5g9AZv/LSZiuPn/VOeoz
-         EUeioVu5B7v2qq4BH7L5HE79CDvhyDBl6ozYJijOCVi/FKY6nC6n0W1e9R6fkTqF37A9
-         KNOUoeCluuKovReVOMB/vGR11F+hKFpniFPNkmhRaXoyn1zM5oRP3DbWvWbzWAF9BMZ6
-         xo83wCh3IcgnIVQANyudbJqjZDr7SZo/jo1UGWYOmD2cbFa2qR9jFk+wzOxRbfxEpG/Z
-         ABkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774640619; x=1775245419;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5ycsjbas8cC1Onl2FsApYb1y1z6bcYUHR+E+PGpMszI=;
-        b=Aza6Aix0FOmYa+FOgK7oi0gtOQLM1QG8/ba4BEQ91k3w4InQFgWJedT1u9mjyWjujH
-         1n9caBwMCF4Pm2RElm//11cbNnJFXaXxOM+z1brhnIX8/Y2eTNe5yRWkth48XcdzOz+A
-         1N+3KgOKweTBmdNxzaf/bbaYgOIhLf8jVhXCNOtuGbZFdMKpjVHbncPlMDJSe8zjJSk6
-         RCOCWkp5PK1X/4V62W1KU4suhxSpgPRmXsHXH7AZeqxEuXtiQsoVuz0cDb6H2B1dZHIj
-         LrXLybbQd5LymOflTDqq5eDe4kTX+kuw3yF6nrnHXgbR/jT8wxLEbYDfKNH5rgS6/idh
-         r3tg==
-X-Forwarded-Encrypted: i=1; AJvYcCVKaqyD0JYe3eLkE84DKTAJh4s3Gocit32YAjMeBzLO/uULyEJYeh9SnddqYIGh/r53U4U=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywvg3flB0Gsb/BXILvdnKxqpTmKe7ouiugqbWCBh3Ya1uQH/Xjh
-	U5DPDovi2RnQUK/SpUtLtI1g+jZIA+8OkqBRxKJR7ZIOpTeIxNaBWJ1uKU3AVoBz2Ys=
-X-Gm-Gg: ATEYQzzvuHIoqu6Opel+e6TKo7aMl2wUxYJvi5GzXP3ghxQVT63nWFhmBvGxPKjYNUJ
-	vS2tKiTmXE3zBIISxgIO7x4Ur3RP4p/jo1nSIAXTdfOsUZHEycRxrd+zPWq810IUCkRibEKNeDg
-	5HQea30CcVEiITFt6ykvsiY1/zVzGQAaqgAH6wRhxa06R0beQ3hs5arYJPLGnBTtI6JwIG4j+l5
-	f77iENFGcoPCAL/0MnwvjIVRoU2uvMF+IgM7beuMQViVzjMnHTS/j44QcQHqdY4IdyWlsqqTujS
-	6BG9LBWk50A2EGZr4X79SkM2ZOl10L5MH9cV80vlFhYeSe8bB5bSrpiK4LoTykFSfvAmrNVf7KX
-	/9H4vy+I0qg4LW+2alytybYug4FvpKCDEqm03HdqH40Bwk27wlhcmciL6e/Myk0/M4cUmlOcUMu
-	IcMN5JkUcVLQwPyULYNbL9IRB+Gt+dzCPG5UTJYOxa2BwCRfwReSbYPjybmse5gVA2tXRn/30nc
-	S7V
-X-Received: by 2002:a05:6214:4901:b0:89e:a170:6af2 with SMTP id 6a1803df08f44-89ea170721bmr11920846d6.41.1774640618959;
-        Fri, 27 Mar 2026 12:43:38 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F (158-94-182-130.mclarenap.oninferno.net. [158.94.182.130])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89ecbba4bd0sm797206d6.11.2026.03.27.12.43.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2026 12:43:38 -0700 (PDT)
-Date: Fri, 27 Mar 2026 14:43:34 -0500
-From: Gregory Price <gourry@gourry.net>
-To: Tal Zussman <tz2294@columbia.edu>
-Cc: Matthew Wilcox <willy@infradead.org>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	"Lorenzo Stoakes (Oracle)" <ljs@kernel.org>,
-	Michal Hocko <mhocko@suse.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	lsf-pc@lists.linux-foundation.org,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	David Hildenbrand <david@kernel.org>,
-	Qi Zheng <zhengqi.arch@bytedance.com>,
-	Chen Ridong <chenridong@huaweicloud.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
-	Kairui Song <ryncsn@gmail.com>, Nhat Pham <nphamcs@gmail.com>,
-	Barry Song <21cnbao@gmail.com>, David Stevens <stevensd@google.com>,
-	Vernon Yang <vernon2gm@gmail.com>,
-	David Rientjes <rientjes@google.com>,
-	Kalesh Singh <kaleshsingh@google.com>,
-	wangzicheng <wangzicheng@honor.com>,
-	"T . J . Mercier" <tjmercier@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Meta kernel team <kernel-team@meta.com>, bpf@vger.kernel.org,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [LSF/MM/BPF TOPIC] Towards Unified and Extensible Memory Reclaim
- (reclaim_ext)
-Message-ID: <acbd5lKEh8xa1IQk@gourry-fedora-PF4VCD3F>
-References: <20260325210637.3704220-1-shakeel.butt@linux.dev>
- <20260325190547.abb7309fb63473b57b7a90a0@linux-foundation.org>
- <acTaRgusrxfCoKqe@tiehlicka>
- <ac05d923-7871-4691-8d26-eff41b3a3db0@lucifer.local>
- <CAJHvVchSfGDubPhir0SgZfr_BcpN5oq_7AY4AZ587_ucgY4Apw@mail.gmail.com>
- <acWXdvHx9mYqvT2w@gourry-fedora-PF4VCD3F>
- <CAJHvVciAmX9OFLBSahwvXL=E+3xnDsL2aE4WKfDBFqaT1Gu+Qg@mail.gmail.com>
- <acX8_XMQYA0-NGUW@casper.infradead.org>
- <6f40c513-af3e-45b6-9000-c61494a23bd3@columbia.edu>
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="gqQXGWSx"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+	To:From:Sender:Reply-To:Cc:Content-Type:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=HEcEMSdAtcSoh2KSyJwTVX69amc/NpQLVgQSqsTXIYs=; b=gqQXGWSxiX3V8T1ZcmRi98k83l
+	joXxyZcyVuGAdUiCQLhn7i8sFOKbAvsnP++jtk6/2d/fn40b/V5oHr1tEp+uXpYxE8aWn8HWCbCp8
+	vFeudNXa4oMMNecs2PTvq7yqZJzUiYhI2yD4yxbnS2yo63yqcNPVOp4gELLFmNFoJlkhkDK4kfNqK
+	RsXOcdgz/rMSK+4TPNMaaE1fsUKZVGrTXkito5TQskthmSczPLxs2zV/eGxQ/9eJkZ0WQZjIyGLBt
+	U2rP9vyY1ftxaMXkefE7kMjuHn8QzdTwX9iH88EVWxMn45VfE2AN9E6jLxGYupecDsuJ17fkTWMWr
+	mtZOY+MQ==;
+Received: from [179.221.50.217] (helo=toolbx)
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1w6DAt-007M01-Ph; Fri, 27 Mar 2026 20:48:56 +0100
+From: Helen Koike <koike@igalia.com>
+To: andrii@kernel.org,
+	eddyz87@gmail.com,
+	shung-hsi.yu@suse.com,
+	yonghong.song@linux.dev,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	koike@igalia.com,
+	kernel-dev@igalia.com
+Subject: [PATCH] bpf: fix umin/umax when lower bits fall outside u32 range
+Date: Fri, 27 Mar 2026 16:48:33 -0300
+Message-ID: <20260327194849.855397-1-koike@igalia.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6f40c513-af3e-45b6-9000-c61494a23bd3@columbia.edu>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 27, 2026 at 03:12:16PM -0400, Tal Zussman wrote:
-> 
-> It's been well-known in the academic realm for a while that there isn't
-> really a "one-size-fits-all" policy that works *best* for all workloads.
-> Yes, you can make a general policy that works *well*, but if you really care
-> about a workload's performance and want to squeeze out the last 10-20% (or
-> more) of performance, you need to be able to (1) experiment and (2) take
-> advantage of application-level insights. Being able to extend reclaim (in
-> our case with eBPF) enables that.
->
+Fix the case where min/max adjustments on a conditional statement cross
+u32 boundaries.
 
-This just makes me think going all the way to reclaim_ext and re-writing
-MGLRU as an eBPF extension in an effort to simplify the code/maintenance
-and keep what works working is the least-worst option.
+The case where this bug was found has the following scenario (see full
+bpf prog below):
 
-But this is a naive take, i'm sure making that interface stable would be
-even worse than just maintaining both LRU/MGLRU.
+  insn 2: (bf) r0 = r2
+  ...
+  insn 4: (3d) if r3 >= r0 goto pc+1
+  ...
+  insn 9: (67) r2 <<= 7
+  ...
+  insn 13: (65) if r7 s> 2 goto pc-12 # back to insn 2
 
-~Gregory
+Since this is a loop, at some later iteration, both
+u32_min_value/u32_max_value of r0 converge to 0 due to the shift of r2
+on insn 9 and later the assignment to r0 on insn 2.
+
+When evaluating the branch FALSE on the conditional jump of insn 4,
+since it needs to respect r0 > r3, it elevates umin of r0 by 1:
+
+  r0.umin = r3.umin + 1
+
+This is done by this part of the code:
+
+  static void regs_refine_cond_op(...) {
+	...
+	case BPF_JLT:
+		...
+		u64 new_umin = max(reg1->umin_value + 1, reg2->umin_value);
+
+But the problem is that u32_min_value/u32_max_value are zero, so it
+needs to be adjusted by reg_bounds_sync(), which calls
+__reg_deduce_mixed_bounds() that performs the following tightening:
+
+  new_umin = (reg->umin_value & ~0xffffffffULL) | reg->u32_min_value;
+  ...
+  reg->umin_value = max_t(u64, reg->umin_value, new_umin);
+
+Here it was hitting the situation of: u64=[0x1,0xfffffff800000000] u32=[0x0,0x0]
+Leading to:
+	new_umin = 0
+	reg->umin_value = max(1, 0) = 1
+
+Which is inconsistent because: (u32)reg->umin_value > reg->u32_max_value.
+
+That propagates until it reaches a:
+
+  verifier bug: REG INVARIANTS VIOLATION (true_reg2): range bounds violation
+    u64=[0x0, 0x7800000000] s64=[0x0, 0xffffffffffffffff]
+    u32=[0x80000000, 0x0] s32=[0x0, 0xffffffff] var_off=(0x0, 0x7800000000)
+
+
+Fix __reg_deduce_mixed_bounds() to detect the case when the u32
+boundaries are crossed and advance umin to the next 32-bit block (or
+retreat umax to the previous one).
+
+Example:
+
+  If we have:
+        u64=[0x1,0xfffffff800000000] u32=[0x0,0x0]
+  Go to the next 32-bit block:
+        u64=[0x100000000,0xfffffff800000000] u32=[0x0,0x0]
+
+This way we keep the consistency on the lower 32 bits boundaries.
+The same applies for the max value, but go to the previous 32-bit block.
+
+
+Full BPF prog for reference:
+============================
+
+NOTE: this was extracted from a reproducer of Syzbot from another bug
+report.
+
+  insn 0: (61) r2 = *(u32 *)(r1 + 48)
+  insn 1: (61) r3 = *(u32 *)(r1 + 76)
+  insn 2: (bf) r0 = r2
+  insn 3: (16) if w0 == 21502727 goto pc+16
+  insn 4: (3d) if r3 >= r0 goto pc+1
+  insn 5: (0f) r2 += r0
+  insn 6: (bc) w6 = (s16)w2
+  insn 7: (bf) r7 = (s32)r6
+  insn 8: (16) if w2 == 524047 goto pc+0
+  insn 9: (67) r2 <<= 7
+  insn 10: (36) if w6 >= -268376562 goto pc+0
+  insn 11: (bf) r5 = r0
+  insn 12: (0f) r5 += r6
+  insn 13: (65) if r7 s> 2 goto pc-12
+  insn 14: (07) r7 += 4194380
+  insn 15: (1f) r5 -= r7
+  insn 16: (bf) r4 = r5
+  insn 17: (07) r5 += -458749
+  insn 18: (ad) if r3 < r4 goto pc+1
+  insn 19: (95) exit
+  insn 20: (05) goto pc+0
+  insn 21: (95) exit
+  insn 22: (4d) if r11 & r9 goto pc-28203
+  insn 23: (99) if w3 >= -2094934247 goto pc-30763
+
+The reproducer can be found at:
+  https://syzkaller.appspot.com/text?tag=ReproC&x=16773406580000
+
+Fixes: c51d5ad6543c ("bpf: improve deduction of 64-bit bounds from 32-bit bounds")
+Signed-off-by: Helen Koike <koike@igalia.com>
+
+---
+
+Hi all,
+
+I'm not familiar with the verifier code base or discussions around it,
+but I tried to do my best, I searched a bit if this was already
+discussed, but the discussions I found didn't seem related.
+
+Please let me know if this case was already discussed and/or if I should
+follow a different path into solving this.
+
+Tested on bpf/master branch.
+
+Thanks in advance.
+---
+ kernel/bpf/verifier.c | 26 +++++++++++++++++++++++---
+ 1 file changed, 23 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index a965b2c45bbe..ddac09c8a9e5 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2702,9 +2702,29 @@ static void __reg_deduce_mixed_bounds(struct bpf_reg_state *reg)
+ 	__u64 new_umin, new_umax;
+ 	__s64 new_smin, new_smax;
+ 
+-	/* u32 -> u64 tightening, it's always well-formed */
+-	new_umin = (reg->umin_value & ~0xffffffffULL) | reg->u32_min_value;
+-	new_umax = (reg->umax_value & ~0xffffffffULL) | reg->u32_max_value;
++	/*
++	 * If (u32)umin > u32_max, no value in the current upper-32-bit block
++	 * satisfies [u32_min, u32_max] while being >= umin; advance umin to
++	 * the next block. Otherwise apply standard u32->u64 tightening.
++	 */
++	if ((u32)reg->umin_value > reg->u32_max_value)
++		new_umin = (reg->umin_value & ~0xffffffffULL) + (1ULL << 32) |
++			   reg->u32_min_value;
++	else
++		new_umin = (reg->umin_value & ~0xffffffffULL) |
++			   reg->u32_min_value;
++
++	/*
++	 * Symmetrically, if (u32)umax < u32_min, retreat umax to the
++	 * previous block. Otherwise apply standard u32->u64 tightening.
++	 */
++	if ((u32)reg->umax_value < reg->u32_min_value)
++		new_umax = (reg->umax_value & ~0xffffffffULL) - (1ULL << 32) |
++			   reg->u32_max_value;
++	else
++		new_umax = (reg->umax_value & ~0xffffffffULL) |
++			   reg->u32_max_value;
++
+ 	reg->umin_value = max_t(u64, reg->umin_value, new_umin);
+ 	reg->umax_value = min_t(u64, reg->umax_value, new_umax);
+ 	/* u32 -> s64 tightening, u32 range embedded into s64 preserves range validity */
+-- 
+2.53.0
+
