@@ -1,175 +1,115 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7FC9315D46;
-	Fri, 27 Mar 2026 11:07:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80C78386429;
+	Fri, 27 Mar 2026 11:21:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774609676; cv=none; b=I3GZ9bZNbq/cr45kAzke35LzLTtKLHnCKuf+lqy+If3LRKQ5gR4ORulOPxOjzW6YX/i04TELMnM9m68KgoMXcYjKEJ5/EYeVUQ1zzEn2KuJCHS4Z9r0gucWHjTk8h4kHd4p9x3MfVl17jtpAftDBwYWdiFazJ1hmQJeagepmdlQ=
+	t=1774610490; cv=none; b=pyYCWXOor8mHH3qkCdMxdZRo3DinXVwMKnzawg6E4ULLIWXfyEZNJjQJQ8DS4/lF1fQf8yVHF23QpfuKJRhTYS1W4xuF6FkUqZb0zvrxOLtAXa+hMZd076q1fZ5gP9oomj0U3HkchPJLpDfojf6Xhr2dBhBgjJCsqg5LXgsyOpM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774609676; c=relaxed/simple;
-	bh=X7+MSwRLL32PrKY1RmX3TkO6F/2E8YzLL2YkG7lfk48=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k9/L3dsjeaHAe/29Lh2JIi517Ebl2tJVPzXoPEGI7E9wujIumQeN1xFD2oSLstbcB1pbWLIIe2XsuK/TknS8DoMO0ga0vU5ZvbjbScy9tyuMTQqNj4iLIphooKwfbmmMUbXsW4ezm279zyQSUygrr6YOQl3dtkqKpKII+R/MVek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=x2LrWzb6; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1774610490; c=relaxed/simple;
+	bh=swcohrFbsQ9OatkiOSOTSr2Oxhk0CH56KvYFD2WN+Ys=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FGVeBERbDGV5kQAFif50TQh33Cyj1iPohM08qEQO8/nNf55rLqSjFZG853ZLKHpFt1K2KXChQzc9fy90h/oriKj1cw0NuBwlrQSczOF3asvEy5DxaKtU+TS0cFDgNVUXusxAhKG1cZ8B0KpgrqFVgICHV4JW1PRX2+WViZvs7HA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IS0dUb2l; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="x2LrWzb6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1774609672; x=1806145672;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=X7+MSwRLL32PrKY1RmX3TkO6F/2E8YzLL2YkG7lfk48=;
-  b=x2LrWzb6dIWahEibaqQhgfi8NovYc8mxcPqG86SiNS8boJrA7xHUVR7V
-   dk3Kum4K8Ps1nC4B9SFhw07pRgMnVKmTWaD40/RxxPlXENBqzaeUHpgwu
-   E8x6EHbfnVO4ucU+sjJCb6tt+83vGnL8PsgwVkFc+jjFQG8671eLa4wHi
-   BHxrmYog77qfIEGXTK9W8bE/vfbnbES8mvJWIzmQmkqoFs3ydU3+YYYep
-   LBhhN0bS6q8DnkZEu0d9Xq4Wy1shOca+1No57em2ZoPEoVky4eG4fZRTm
-   zVRIHKIKixH5UiPMZEs0t8a97bqOm2qLHyfYAXvDhsxbT5T/vtsuAJBwz
-   A==;
-X-CSE-ConnectionGUID: x2neiTdjQO65w24S27r6nA==
-X-CSE-MsgGUID: DN5Z1Fr4R52TqPmX0f8tDQ==
-X-IronPort-AV: E=Sophos;i="6.23,144,1770620400"; 
-   d="scan'208";a="55302100"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Mar 2026 04:07:49 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Fri, 27 Mar 2026 04:07:24 -0700
-Received: from DEN-DL-M70577 (10.10.85.11) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
- Transport; Fri, 27 Mar 2026 04:07:21 -0700
-Date: Fri, 27 Mar 2026 12:07:20 +0100
-From: Daniel Machon <daniel.machon@microchip.com>
-To: Herve Codina <herve.codina@bootlin.com>
-CC: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Horatiu Vultur
-	<horatiu.vultur@microchip.com>, Steen Hegelund
-	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>, "Alexei
- Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
-	"Jesper Dangaard Brouer" <hawk@kernel.org>, John Fastabend
-	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Arnd
- Bergmann <arnd@arndb.de>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-	<netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<bpf@vger.kernel.org>
-Subject: Re: [PATCH net-next 00/10] net: lan966x: add support for PCIe FDMA
-Message-ID: <20260327110720.une422vpf7pas4tg@DEN-DL-M70577>
-References: <20260320-lan966x-pci-fdma-v1-0-ef54cb9b0c4b@microchip.com>
- <20260323155204.0321db13@bootlin.com>
- <20260323172640.2669232d@bootlin.com>
- <20260323194059.jjphkep4teq5rzbc@DEN-DL-M70577.microsemi.net>
- <20260324090752.0799acb1@bootlin.com>
- <20260326154833.jp6rx5x2rlpmwrg3@DEN-DL-M70577>
- <20260327113337.0368eea3@bootlin.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IS0dUb2l"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBD33C19423;
+	Fri, 27 Mar 2026 11:21:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774610490;
+	bh=swcohrFbsQ9OatkiOSOTSr2Oxhk0CH56KvYFD2WN+Ys=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=IS0dUb2l6dq/UKuQvOxjZqoanLCXjZM37R1bc4wCScoCJe4XW8j2TvJ+wLupL5zn4
+	 /5+ULZLFGH97Bb84dwDA6SaV6wum4iCZYiVl7bAMK5c9/zGxj1Pcpqx6qj4m1ELKw7
+	 tTo5wVnT//ihfdMz19PopHmuv+Wtie7OyKTk8UCqowLlxFHq6C7dH/6DgA+NI4XW0s
+	 MqGDbpHnUvkRsy9SlPdgGLyxftYSB5tdhn7ou2al0Bu7ezYiGcyMWJ5AtgSEarW4Q+
+	 1z2fKkkmgqsYj1iQ0dDmcE/+ChBUdBwUSGZeTlyt4g/w0pBwbutvb8OsV1/oWSEZQk
+	 uQ4PspkZSd0hg==
+Message-ID: <d120d8d3-f785-47ec-9c6b-b28d42ebb1f7@kernel.org>
+Date: Fri, 27 Mar 2026 12:21:23 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260327113337.0368eea3@bootlin.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [REGRESSION] slab: replace cpu (partial) slabs with sheaves
+Content-Language: en-US
+To: "Harry Yoo (Oracle)" <harry@kernel.org>,
+ Ryan Roberts <ryan.roberts@arm.com>
+Cc: Uladzislau Rezki <urezki@gmail.com>,
+ Aishwarya Rambhadran <aishwarya.rambhadran@arm.com>,
+ Vlastimil Babka <vbabka@suse.cz>, Petr Tesarik <ptesarik@suse.com>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>, Hao Li <hao.li@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Suren Baghdasaryan <surenb@google.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
+ bpf@vger.kernel.org, kasan-dev@googlegroups.com,
+ kernel test robot <oliver.sang@intel.com>, stable@vger.kernel.org,
+ "Paul E. McKenney" <paulmck@kernel.org>
+References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
+ <afe9ba0a-1924-42a8-a9c5-34eec709f883@arm.com>
+ <ed58493b-0369-4729-bcf7-bc89f72a7913@kernel.org> <acV36oPNFMgL4puz@milan>
+ <ea1cb2a1-b674-4d69-bbf6-00051a0e11df@kernel.org>
+ <eafefe7a-a33b-4102-93cf-fecc33ddf49e@arm.com>
+ <0f441d8f-d84c-470a-a4cb-0249b15220a2@kernel.org>
+ <f100305b-6c56-4499-98a4-6a22f8c49443@arm.com> <acZVS-ehXCtvcA9s@hyeyoo>
+From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+In-Reply-To: <acZVS-ehXCtvcA9s@hyeyoo>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Hervé,
+On 3/27/26 11:00, Harry Yoo (Oracle) wrote:
+> On Fri, Mar 27, 2026 at 08:58:36AM +0000, Ryan Roberts wrote:
+>> >>>>> On 3/26/26 13:43, Aishwarya Rambhadran wrote:
+>> >>> Right so there should be just the overhead of the extra is_vmalloc_addr()
+>> >>> test. Possibly also the call of kfree_rcu_sheaf() if it's not inlined.
+>> >>> I'd say it's something we can just accept? It seems this is a unit test
+>> >>> being used as a microbenchmark, so it can be very sensitive even to such
+>> >>> details, but it should be negligible in practice.
+>> >>
+>> >> The perf/syscall cases might be a bit more concerning though? (those tests are
+>> >> from "perf bench syscall fork|execve"). Yes they are microbenchmarks, but a 7%
+>> >> increased cost for fork seems like something we'd want to avoid if we can.
+>> > 
+>> > Sure, I tried to explain those in my first reply. Harry then linked to how
+>> > that explanation can be verified. Hopefully it's really the same reason.
+>> 
+>> Ahh sorry I missed your first email. We only added that benchmark from 6.19 so
+>> don't have results for earlier kernels, but I'll ask Aishu to run it for 6.17
+>> and 6.18 to see if the results correlate with your expectation.
+>> 
+>> But from a high level perspective, a 7% regression on fork is not ideal even if
+>> there was a 7% improvement in 6.18.
 
-> Hi Daniel,
-> 
-> On Thu, 26 Mar 2026 16:48:33 +0100
-> Daniel Machon <daniel.machon@microchip.com> wrote:
-> 
-> ...
-> 
-> >
-> > As I remembered, doing rmmod on the lan966x_switch followed by modprobe
-> > lan966x_switch works fine. This is because neither the switch core, nor the FDMA
-> > engine is reset, so they remain in sync.
-> >
-> > When the lan966x_pci module is removed and reloaded (what you did), the DT
-> > overlay is re-applied, which causes the reset controller
-> > (reset-microchip-sparx5) to re-probe. During probe, it performs a GCB soft reset
-> > that resets the switch core, but protects the CPU domain from the reset. The
-> > FDMA engine is part of the CPU domain, so it is not reset.
-> >
-> > This leaves the switch core in a reset state while the FDMA
-> > retains state from the previous driver instance. When the switch driver
-> > subsequently probes and activates the FDMA channels, the two are out of
-> > sync, and the FDMA immediately reports extraction errors.
-> >
-> > Theres actually an FDMA register called NRESET that resets the FDMA controller
-> > state. Calling this in the FDMA init path causes traffic to work correctly on
-> > lan966x_pci reload, but it does not get rid of the FDMA splats you posted above.
-> > They get queued up between the switch core reset, in the reset controller, and
-> > the FDMA enabling. I tried different approaches to drain or flush queues, but
-> > they wont go away entirely.
-> >
-> > The only thing that seems to work consistently is to *not* do the soft reset in
-> > the reset controller for the PCI path. The soft reset is actually the problem:
-> > it only resets the switch core while protecting the CPU domain (including FDMA),
-> > causing a desync.
-> >
-> > A simple fix could be (in reset-microchip-sparx5.c):
-> >
-> > +static bool mchp_reset_is_pci(struct device *dev)
-> > +{
-> > +     for (dev = dev->parent; dev; dev = dev->parent) {
-> > +             if (dev_is_pci(dev))
-> > +                     return true;
-> > +     }
-> > +     return false;
-> > +}
-> >
-> > -     /* Issue the reset very early, our actual reset callback is a noop. */
-> > -     err = sparx5_switch_reset(ctx);
-> > -     if (err)
-> > -             return err;
-> > +     /* Issue the reset very early, our actual reset callback is a noop.
-> > +      *
-> > +      * On the PCI path, skip the reset. The endpoint is already in
-> > +      * power-on reset state on the first probe. On subsequent probes
-> > +      * (after driver reload), resetting the switch core while the FDMA
-> > +      * retains state (CPU domain is protected from the soft reset)
-> > +      * causes the two to go out of sync, leading to FDMA extraction
-> > +      * errors.
-> > +      */
-> > +     if (!mchp_reset_is_pci(&pdev->dev)) {
-> > +             err = sparx5_switch_reset(ctx);
-> > +             if (err)
-> > +                     return err;
-> > +     }
-> >
-> > Could you test it and see if it helps the problem on your side.
-> >
-> 
-> I have tested it on my ARM and x86 system. It fixes the lan966x_pci module
-> unloading / reloading issue.
-> 
-> However an other regression is present. After a reboot, without power
-> off/on, the board is not working (tested on both my ARM and x86 systems).
-> 
-> According to your explanation, this makes sense.
-> 
-> IMHO, the problem is that we cannot make the assumption that "The endpoint
-> is already in power-on reset state on the first probe". That's not true
-> when you just call the reboot command.
-> 
-> Best regards,
-> Hervé
+In retrospect it was an oversight not to disable the pre-existing cpu
+caching layer immediately for sheaf-enabled caches in 6.18. Can't undo that
+mistake now, unfortunately.
 
-Again, thanks for testing.
+> If that improvement comes from the number of objects cached per CPU,
+> I'm not sure if determining the default value (# of cached objs) based on
+> "a point when microbenchmarks stop improving" is a reasonable measure
+> because the default value affects all slab caches and will inevitably
+> increase overall memory usage.
 
-Agreed, that makes sense.
+Yeah that's the thing, some workloads might just keep improving as you throw
+more caching at them, but there's a memory usage cost to that.
+A case of stress test doing nothing but forks might also not be
+representative of performance of forks under normal workload where other
+operations also happen, returning the related slab objects, so in the end it
+doesn't expose the batch size that much.
 
-I will continue experimenting with the FDMA reset and see if I can do an FDMA
-reset on switch driver probe, while not getting any intermediate FDMA errors.
-After spring break, that is :)
-
-/Daniel
-
+> Hopefully we could discuss what a reasonable heuristic that
+> "works for most situations" looks like, and allow users to tune it further
+> based on their needs.
+> 
+> As a side note, changing sheaf capacity at runtime is not supported yet
+> (I'm working on it) and targeting at least before the next LTS.
+> 
 
