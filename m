@@ -1,122 +1,120 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91B332737F2
-	for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 16:09:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774627767; cv=none; b=oEhKOiNNNN/MsbL+ZkdsJdYcQfnugWzmESyNtGihTiWcsMgfCorNyr51pZgGGS1N0lzMwgdOG+52sGWQIHylHW0rxlyrU8WLzwkNpXcJ3sbUX+3op4ynfxEbFKwGHpx4XoIVXC/uQwDdzOzWxMwPlyxLzQarOR99crv6p1yEmMY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774627767; c=relaxed/simple;
-	bh=xuLintyR4tYmiyQmUlHF5BJe7KKXm7X2Jj8pszJ0JSE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=j0CpRzDTkrBRfLxWzRyysoaTPPP+okmIbNPBLC/iCr5oQ4DpCX5yqvxZdZsJ1lL7vIL5/i476Dss2/W5KzYkMswd7BoEjx+ftChrYGjyF24dDceusshNx7XBlPJnrw9H/Sh7MHzHiIuMHi0urCHifNut3nPF/rv5pOIhv8trOqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gTyePO3e; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CC2833260E
+	for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 16:10:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774627806; cv=pass; b=rNVd4BpurY+Yp7QK3Wl1VSm+7hmnRH+AZtreF8Ga5fTROoG0utW7c2UnMww2NG7jlzrQGH/QKo/SI4MZ7xzxznfdcT5SRukx3wPRFaWu/K/6YyJ6FFcU7x9GwFIDJht3sOBpjJakJcB1V0IYB+x2OwM72tXlYZKdhSYADiKN7lk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774627806; c=relaxed/simple;
+	bh=Q6TmnOpeExcSP68v1WBPeIpo2KznzbDRRsuXO3vOiv0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FZAFGrpizoB1bxf0F1LTjy8YV8AjkLq5XD38NP4mla1pdWqDUiVsJKPuPlUK4XdQhljniNIFdJe1+k7GWpdXeZLRLfhLAGmFJdqqLj05gusReasFdC4UMkBpqqz+wpYDPoWbdsluGcHdYrb9DCJFW9+tcUUvyyX3qIeKVDV1tJQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kh/NSuIJ; arc=pass smtp.client-ip=209.85.218.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gTyePO3e"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-486fb439299so21773095e9.0
-        for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 09:09:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kh/NSuIJ"
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b97ed4ad579so373484266b.3
+        for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 09:10:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774627803; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Jtxo5EN/xIc7Bg3RSdVoA935wQCzvEqoaMhTa9JV9yMS+2LFdHHvmLHCSYYEWeVHVe
+         SDIrAyb2epxDqxQBrHBUO8wh0+JRK3mfuaD+OcAIbpzJWbocYj7C9EcrYahaGgZMzQwP
+         qeBn/QWZ5gXBE7jHU85YJkSalr9+KV5Xaqd9WhMd1lMZ1GN/gkXKX29fovbd6S5GvI2B
+         To79ZymweA/nABYBjZyWQ9gDxuNZDYF2nXOE6O+ZwSTJgOuM25VCJR06p+sIU1qZreUg
+         KJ8C7P/LOyYk8JdIpZdUUNkCPE+lMvYyq9tJVvtRIK4337UW4qFZ8/AcGv4F+ra9AHF2
+         xlXQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Q6TmnOpeExcSP68v1WBPeIpo2KznzbDRRsuXO3vOiv0=;
+        fh=TuFtG2RZn4MMAD9Wo8wGzmb0gF1dRceNmdB5T3rpwQY=;
+        b=XzVJOf1kbf4prDo85yilp5EYWzrMlpNYzC5eLx87pThmIF3QvlEHtEsBYVKCyxs3LR
+         wC9FbM5N4X/vhtgGxJC554d65CFJMVvoNOcKLOF80X0fw8yrv5vYUsSIewpGvLHZKhdm
+         mvbZur9hj+YbH9bbjr0Mzsh+yb8VR69r85GtH4eQVyfTn9EI/2GJwfyw81qwpYpxqKXM
+         it7UO4JeLb+iMBFbnYzMxr7onElIh0dk3zj2E9msXkX241Ta4bi+nUsVHFt6KNUMYIdD
+         0sY983haaxzFswAS/rhWWpE1i7dYSv505QfAhzjuPTYMTnoeWwvQER5YczWU6bEoIX9k
+         FFYA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774627765; x=1775232565; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xuLintyR4tYmiyQmUlHF5BJe7KKXm7X2Jj8pszJ0JSE=;
-        b=gTyePO3ew8rj7l0ZzIwPaa6w8RBmn+J46ahgYEJ/6eouLht8SW4/LO4srcNxt9BRY8
-         3xFixG0fpPyHO9RfBZ4s2QBu4ZX1r9b2dHT4iapkh/6QaJFWbsG10t7R/PSvgpbpF/Ie
-         IR/w46Fwe6he/aRlv2GG8L3KubMvirrjtVKzMseo0y6tb4dVTTBjYb3JrfdHyffPuDV+
-         3seqX0V3V2qGCkp7Q/fgdBpfc2ty4haGAHBC5htzSwsYjoNn3T7vj6V3o2K47k02ifEw
-         anS5DVqxW1iCnMMEcTQeZ/zmsxgDwrz7FQkA4pmETNc81Mjj+Ck927DT5JGRlPkklMAq
-         qk2g==
+        d=gmail.com; s=20251104; t=1774627803; x=1775232603; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q6TmnOpeExcSP68v1WBPeIpo2KznzbDRRsuXO3vOiv0=;
+        b=Kh/NSuIJF1TDloSkOyK1rUi5Uq7WuazEGTixR8EBquvk4Bv64flETq/iXOPEZSaHyM
+         tS0EPMtoBCXxPfSOe5yifaBYkM5R7TCX72DsgBnERXJY/I2evxlvhm0oJHEAoAjHTx/y
+         DfXdKpQBtfuW/8WkVFN+bzyFvdiH/8aPRLwySTRxvCoKwUqZCPF8TJdq9Imof+Qr3qLr
+         00t+7iajwW2tgFDFPSPH8r8SYsLfUHpdDGmBvtoE2UkK+3zJj8LYXvbQni2yD/ap/w1d
+         5cmp2pzj/crvIe2+ZUcDaAUYOOVFCE8D7pnfGuHvnTn/cXUbHJUQ2n92D9JYC0eLpGsg
+         lhHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774627765; x=1775232565;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xuLintyR4tYmiyQmUlHF5BJe7KKXm7X2Jj8pszJ0JSE=;
-        b=hzrWt09dEY8ZAvo+03JTRV84EaX0FWqMOw8YmrNxzidytSqZwRQAsW/m25q+p5GXBO
-         TWzYb6VawaA/gOaV7LibTaZoJjFScKne0skVi/OLH8BMPBkf9bnYmgSr9qJ0xO2PMblx
-         9RVoS3yhMPJv44abUQTMCP/SZJhvh3LAts4xp2m8QMN/NKvL98TMBajgbsrkHeC1oetG
-         1CSvh2+DEc4bp9EUXEm5gu0dA0GjP/LIyNrPvindZlUHDCaCe29z37Dxpl0e+JR6HS0n
-         OPevM5CVSAPCrC23BjEvt7d1lyXOV8nG84sXU3Md+wVkwq0pWVlrwFnCNWgzkIFW1mZ4
-         pk4g==
-X-Forwarded-Encrypted: i=1; AJvYcCUhJtfuYxjfaivXCXMe+TYLs5N9PlyArpRdJu10MXQz9uwdVLFDUFbjGhrONgBcKUby6CE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyG0G6s21g7L+oKhlis/LslD6cbhzGfdE7CbEm3PEitDVtZZ6tt
-	G0tghHhSXTYNfovgQ5PXGs/Hig6hhg+MJnHhj2A/eRVEIR9qjA9h6i2D
-X-Gm-Gg: ATEYQzwlox2wX56TwRkyR512yaQAaBbJBeEJzhMi1m4O5rg9cltpA3DIDopg/aUIUDA
-	JPnzXxxZoW3JhUD2OPkuQ1Jq6Zj6RGp6d6BtOwZKCQBq5z5c36+ncddCezQk3tUU2IjK76fnSx9
-	aeA0vfX8pMNIUAHrnPxmVDYoFlpubnWw1Ec+aDGNtZUSzCo2/RICrAm1mDq1NhHHQzexwDWTxrC
-	IftVsBoNqiME9sD3bhTCFyrgTBgHWhNtsqBSzoQ/q1BkbsLE/wJEj/LmCVZMp5cT39p+rhzzpLj
-	bVAVczpxi9lbQU7rjBNc6b+YkSGAvR75IuRJRgVzMtZXLgrsWoaIqmTdCWQBwan4qf/ZxkPTHuz
-	WbIdfxFDcG6mbOn6l6NBa3IzV91NXCcvCxvN8aDpmhnJQUtHWLI/CwL00S+ae1QxaDCbGZ7HjTp
-	D8ZBPrSrLPvq8Z+nQ582uOOl4KR+RxbyuGXA==
-X-Received: by 2002:a05:600c:6091:b0:487:13d:4e77 with SMTP id 5b1f17b1804b1-487280a9d07mr50802605e9.27.1774627764722;
-        Fri, 27 Mar 2026 09:09:24 -0700 (PDT)
-Received: from localhost ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48722cb0d83sm94131245e9.13.2026.03.27.09.09.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2026 09:09:24 -0700 (PDT)
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Aaron Esau
- <aaron1esau@gmail.com>
-Cc: Puranjay Mohan <puranjay12@gmail.com>, bpf@vger.kernel.org,
- ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
-Subject: Re: [BUG] bpf: use-after-free in hashtab BPF_F_LOCK in-place update
- path
-In-Reply-To: <CAP01T7712ZmLy2YaViHtZ=2RqtF4i_F49Vyb_UC8NgQcYX8j5g@mail.gmail.com>
-References: <CADucPGRvSRpkneb94dPP08YkOHgNgBnskTK6myUag_Mkjimihg@mail.gmail.com>
- <m2se9mg16x.fsf@kernel.org> <87qzp6ipc7.fsf@gmail.com>
- <CANk7y0jkEKYviXGG2je80Q26MK4nfE4p=wfb_ukDuHGKSy2Qiw@mail.gmail.com>
- <87o6kaioju.fsf@gmail.com> <87ldfeiodk.fsf@gmail.com>
- <CANk7y0iXJ1sTn5eMrUosvbwnLrSwGtxyirgTpFwdDVWN0tHb5Q@mail.gmail.com>
- <CADucPGTNHas6gJu=ybWyZ5X2s6bOO_ar2eg9PFv6TRv-=NA-Zw@mail.gmail.com>
- <CAP01T7712ZmLy2YaViHtZ=2RqtF4i_F49Vyb_UC8NgQcYX8j5g@mail.gmail.com>
-Date: Fri, 27 Mar 2026 16:09:23 +0000
-Message-ID: <87a4vti79o.fsf@gmail.com>
+        d=1e100.net; s=20251104; t=1774627803; x=1775232603;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Q6TmnOpeExcSP68v1WBPeIpo2KznzbDRRsuXO3vOiv0=;
+        b=CFewN0a+qYoByDF1CckXlre4jGhPJqwgnfFVF0LxjajuhETg5Bo08cmm5orJnYoQyo
+         6+XzBmnRpNEO/OuGQ9hcer9cQS7IxVV+/OT/BG4581912rES6e9xYyZvlcqxsQINPDUh
+         pY6TNZ0i/78BLOiXspjjLm0qqBSUTpEe9Jp+2PklBeQvh/alsITHn76JGDIzSwwzeuXz
+         rdpYi3n4IuRnELgow1cVi+E0BZgYJ0YxP5OhbCljpthBTTm/fdp6TkVqAZwu1BPg+RZf
+         SOpZvTr61cwz1QsU/V4364j2G0Mri0EACq3Z2xqTwaYuk7sgwrvK9vhzSFB0qd1iUs9h
+         uixA==
+X-Forwarded-Encrypted: i=1; AJvYcCX3OYdlMQhrkyLtUOsdGgifU2tp/v7YQ8Ss2/BT68xSUnGeCWGsmcScaDT4XB97qyK2nVg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyO36nqQ1NiqfJHq/9D6z35iuGlbKsT057E6stogEySCeZrLkoz
+	7nvJrEysgFz9T3uCH4Vs2tUY8x4B+2Z64eA2xSk3A+4LThOnqqujeGfqqak1V88wLC5xK04dgzP
+	3k9Mwc265wifMe72uXl8XGFE63TdVQsA=
+X-Gm-Gg: ATEYQzy3uK5eNkYA5HKnT7gU8sN3DHsSANF2lwP4mAoWgQs06ino/KeCN6NIZmYftv4
+	Uqf7jMcjKqhWYEN0+vqGgqxvgaVEvzmFbFTFO6pGrkc52IjwTaTRrY3czK48zofBaqoh1zYCyH4
+	prgfUo1/UNLedmIgUowH5OZQp7e6gzcJBilxwgEyUqpOWky4ujuZByM2zt7utq5c8F8kVQRld40
+	+d4pHdLTgynABjWXOwN9zwcuXh0x5VvfTssNJsw+296FkWUMr+5sc44N6z1BbYvyduAwpXS3KAM
+	1Z4L7ymDbHkHy07G7DiMQFiSxtlFPOlQKG7qLPUvfS/a1tpiRxCqm5QTLpscNtfwn07Vk2XI9al
+	C/Wthd3r5ZpgVKdcRMzxpYfO+hQ==
+X-Received: by 2002:a17:907:3cc7:b0:b83:e7e:3732 with SMTP id
+ a640c23a62f3a-b9b507a5dd5mr212383266b.30.1774627803420; Fri, 27 Mar 2026
+ 09:10:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20260327141616.1961457-1-hayatake396@gmail.com>
+ <20260327141616.1961457-2-hayatake396@gmail.com> <CAADnVQLh76CWYJCJXgOst43FcJOrPP2Y0wcwGPX71QqmiD+7pA@mail.gmail.com>
+ <CADFiAcLvdjE7zwqf-hpH01jnbxtnWQNoj4+zBwK0+RU80-k9bg@mail.gmail.com>
+ <CAADnVQLR6Y94wKo1G_4w0-xTPdR8ws38oGu3xfHOXxNKcqjyWA@mail.gmail.com>
+ <CADFiAcJtjVHYVQeYJ_znVsjiJkEBmLfOafp5srY0HQMGwVtiQQ@mail.gmail.com>
+ <CAADnVQ+0EwaJXgS1WSDf12+Ds2Uxbh9KMpDcyq+gyZjcQ_6+dw@mail.gmail.com> <CADFiAcJFy-n5Zz+Wj1dWEH0WcK+PhKXi7cbvdsLnPhMXRcVktg@mail.gmail.com>
+In-Reply-To: <CADFiAcJFy-n5Zz+Wj1dWEH0WcK+PhKXi7cbvdsLnPhMXRcVktg@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 27 Mar 2026 09:09:52 -0700
+X-Gm-Features: AQROBzC83d7M3ywFEBHgpYKvreBOkrl4uhLAWBsTwhT1G3q975_gL7m2eQX0iKg
+Message-ID: <CAADnVQJmqKVZC1gkvAaAmO9V=cnYPO0UYB6Wyp6Shko4tZeUQg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf, x86: patch tail-call fentry slot on
+ non-IBT JITs
+To: Takeru Hayasaka <hayatake396@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, X86 ML <x86@kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Kumar Kartikeya Dwivedi <memxor@gmail.com> writes:
-
-> On Fri, 27 Mar 2026 at 03:54, Aaron Esau <aaron1esau@gmail.com> wrote:
->>
->> Puranjay Mohan <puranjay12@gmail.com> writes:
->>
->> > Yes, if all the users have BPF_F_LOCK then it will work because the
->> > re-used element will have the same lock and everything is serialized.
->> > But this reproducer is trying to show that the elements are being
->> > re-used, which they are.
->>
->> Updated reproducer attached. All operations now use BPF_F_LOCK (updates,
->> re-add after delete, and lookups), so value access is serialized via the
->> element's embedded spin_lock. The value size is ~4000 bytes. Torn writes
->> are still observed (3 in 2.7M).
->>
->> With full spin_lock coverage, the only remaining unlocked write path is
->> alloc_htab_elem() -> copy_map_value(), which copies into a newly
->> allocated element prior to insertion. For this to race with a locked
->> reader or writer, the reader must be dereferencing a stale pointer to
->> memory that has been freed and reallocated -- a use-after-free.
->>
->> The root cause is bpf_mem_cache_free() in htab_elem_free(), which
->> immediately returns memory to the per-CPU freelist rather than deferring
->> via RCU. This allows reuse while the syscall path is still within an RCU
->> read-side critical section. Preallocated maps do not have this problem
->> because freed elements remain within a pool of valid htab_elems.
->>
->> Switching to bpf_mem_cache_free_rcu(), as Puranjay showed earlier in this
->> thread, eliminates the corruption.
+On Fri, Mar 27, 2026 at 9:06=E2=80=AFAM Takeru Hayasaka <hayatake396@gmail.=
+com> wrote:
 >
-> As I said, the reuse is intended behavior. We won't be switching to
-> bpf_mem_cache_free_rcu().
-> This is mostly for performance reasons, in case you're perplexed as to why.
-> That said, we could do copy_map_value_locked() if map_flags &
-> BPF_F_LOCK to fix this particular case.
-> Such that if the value is being reused we will still have serialization.
-I think we should do copy_map_value_locked() on the reuse path.
+> Sorry about the top-posting.
+
+yet you're still top posting :(
+
+> That makes sense, thanks. I agree perf can provide visibility into which
+> BPF programs are running, including tail-called ones.
+>
+> What I am still unsure about is packet-level / structured-data
+> observability. My use case is closer to xdpdump-style debugging, where I
+> want to inspect packet-related context from specific XDP leaf programs
+> in a live pipeline.
+
+see how cilium did it. with pwru tool, etc.
