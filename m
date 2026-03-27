@@ -1,137 +1,122 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FE7034A3D8;
-	Fri, 27 Mar 2026 16:25:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774628713; cv=none; b=GH7KQ5jJJ7B257d6Lg/hhM7fYQ2VYLTtu/kAlgHXLgTFFXfuZ6WKADb4pKd2mSdoD361JGbpD7L66In2ydO4FrGomUr99cQtXZvIcUa2H2jnNGa68/lMNwGsH6pD02/AojnQMdxx0hvFIvQDswP4h4hG9QLnEIx2lGNfwSEu4nQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774628713; c=relaxed/simple;
-	bh=o37e/u2s3ApNY3T2Mivm5sQi2e7lLw78zt9EIlgSSfo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fcPRprlC2tUEiTqAwVPHTleBR11qdNlaqApv/RHHTJmszMJeGPStI6XWuKoiaopb5N+PrJHQqNX8K3YUDtz2s4acXj7Q180NWfbHbfZZQ1OSR8JFay/ZRWJQURH5umL16AkyYs/XbNV9YCp0PAQEsFSJRKHUYDWKLCb3RlcxDhE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=YiI6Npr6; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E18535BDBB
+	for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 16:30:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774629022; cv=pass; b=Wzv1B99di7usUTX3ZNIzCdRDeIDEV9FIaAMHKBD0zjpazx1tdmthwEa+9zuV0b+SdnkLHIPp65e2x9EkuiDKq4jhWIoY5AGUYjxb73tWZRnbCruEou1O42m4sRpI6HMqEnYTamcDP2IYDX5FrXoZWLCuHkk4/BgiQxsQdwYhjpA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774629022; c=relaxed/simple;
+	bh=FC3aGEn7yaFpmPR9w0yiTeAf7we4oOmunpak6tx0IxU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mM1d9wo9Te04pyV5JxGUnLrdwwh7cVJJEJ2g/Cu5FXpdZnxDbpUFk+F5BKAaGdBSU0j5oXY8XZ/QjO3/0lJm1HLTEX+n265YewNWan+bVGktEg2nuCcvn9DNRKKJRZLfNQt2V5OrNfygUJmWee2kFiZoPHIvRCMKjDe/093FEho=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Od/DrxZO; arc=pass smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="YiI6Npr6"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 24FC935DA;
-	Fri, 27 Mar 2026 09:25:05 -0700 (PDT)
-Received: from [10.163.180.175] (unknown [10.163.180.175])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AB3E73F905;
-	Fri, 27 Mar 2026 09:25:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1774628711; bh=o37e/u2s3ApNY3T2Mivm5sQi2e7lLw78zt9EIlgSSfo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=YiI6Npr6YyJq4PlBLVpfqiUTOOL161bptBTF8MU82La2TI82X2RO4XSVDq+AGrDXt
-	 LHhV9Pdl3j6OF27Npzjr4tIAziCsnEIupAbkdCevLtRBxf4jTYQjxcj+BAnG3ri7lV
-	 w2AICP2O5dCu263VnHUEwfdWQqetcjrXRZ2nJ/Wg=
-Message-ID: <346eeb8c-616b-4f4e-b811-ad1a3ae4a58f@arm.com>
-Date: Fri, 27 Mar 2026 21:54:43 +0530
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Od/DrxZO"
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b886fc047d5so371235866b.3
+        for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 09:30:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774629019; cv=none;
+        d=google.com; s=arc-20240605;
+        b=WpHeI0qgzEsuSgVP9Zp2in1w0P1ZZvlMpaHYvvss6UsRNV5Axysdj/V66Vy90whO6G
+         OQ8m94JwhI4ZOtkmpAHiUj9XGq2IcGyICrB/b5TOb179japZ/H2KHABGMrYmjiuM06Iy
+         AK5/V19AldY+m0zq+SV/hcsFU6FfKNlTP1Di0hz9jW27HBltTimLKKPkFUGXR1KedFqf
+         kM/3BEX7UTUPjWatblwhVyQ1mvwNX5Kw1PEKqomHpKUXMR8WprxpkD5NIQv1zTRWbgKP
+         Wvr6SQcGIu9zHWPUFf0jwdiI0K8TfahTTXHGW20AsBQR5cQWh2oQLg2Z9ImbYbP9H9+f
+         dpmA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=FC3aGEn7yaFpmPR9w0yiTeAf7we4oOmunpak6tx0IxU=;
+        fh=YBluoplolQH/20d/XxUpeviEzkx3l2/OcMkVmUn2Hh0=;
+        b=AaoFruc3+gG3klrYgcA/Xx1mcKsjZj7M5BOgZHet7dVM5TA4B5mYAIIJIN0maX9xXG
+         3d1I4qIRn4uoYqMbB30XRjs2usrrx00OysAjGNFyiLBppPoGiW46+Ik02vks9HuVz1Zi
+         KdoG0mgeDzWML1QlM/WnC891HKsq3Hx5qm+cIA69GdHug0fj2GdfqxbZP90I0IAIw5JT
+         pIML0yxtMTFIvAbhZTqEgLfKkhEgUR3O1JWpEMTjD1LLszptpu7oNjjh7AAwZHVIXuQ+
+         K7ZQYiSBorQV0KMFYJAOT9HhH1i5GRDJS7FY0uAMNBQ4++T+dze3JFxF1TazLFrSeIh7
+         sY5g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774629019; x=1775233819; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FC3aGEn7yaFpmPR9w0yiTeAf7we4oOmunpak6tx0IxU=;
+        b=Od/DrxZObGIaVdSxQ2bSIsHGjb8vLQNHDWwSqHnDURK8rMUWLQ0p/SdEQuRzjIJ14c
+         Z7lXUIkzbWouxV/wfu1+5V0bMPzs5U0N0H7jQdcv+PBOWfvoHxI/ic7AR5N9nSTUZX7F
+         TfRi0qI4Nz1tQ23LXh2stlW7vFKbKU9xB7VYzsctT7G4fcMV1ODllniaRAZF3QEWGnpC
+         WowRbdFz9bjMo08oQOU+o8+kl04Uh/Z0izXHK9MJVTfGp8bwMHpdbZ0VHKYasL5iYlSN
+         sAJInd6OeuW5KUxN6+liEx3chYTAq3KT4D0/AHA8hGQkx7vR5K2TZjNB7Fr29Z69mYLA
+         QB4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774629019; x=1775233819;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FC3aGEn7yaFpmPR9w0yiTeAf7we4oOmunpak6tx0IxU=;
+        b=iYQILQcYSC4UoLso5P+x5dz8JOBsg4QMTp92lJI3AMB7N8Q7PUoo3cAIZZVS/2W1uE
+         DQ3SsEjigz6y0PQ3Bur1GObvKt3VaFfavHC6PKXo2DzCDXYnFATHF9xkIYDsDH8mGk4S
+         2VWv52VeMlNut23YNs70LDtmmxZgJXGqxfj1fgBFY906YXVI6CicQp7QiZM6zReyzmoP
+         PvcpV0xEMLOqlma7+DteJY78xWaFOc9t1YAvMe9fKv0hS46Cwd7Ap6oHGTl/14+dksq8
+         323arAp0+FUFy0iOimMXu9Te3gMCX6fJNAMjKWJo6M0PKfbOLqiiJQFBriCJ4gYGurGv
+         /E6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUSWeEl1aXU9ZwDJo5r7qQvbyidek+3nL9zINZdn0ddQMdeCRVjPXgo80I/xkySLDkPYJw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwzEU7o12BTiDlFyjtHQ1v0TmeBFVnLXpvBz1p+y/scT3abake5
+	p0hkTaX3xt+cBQbYL2jyqx0xDHdl3tGgRs0tzp1doJEF8ItWV12WJ0LfeK1IGR6laxPYKeBU49U
+	gWvixPGLZSP8dR10fNzV4xFoUJBxZGP2YQwvo
+X-Gm-Gg: ATEYQzwl8QcI+WnUIBfCovVtzMhHI1Utyggx3W5ZECJfV3MKQCaEES5HZwxZVW3eRrj
+	rpmC0MZbOaKYx/Qmxzct5n7w8n8hD85mW5KM/XRuxv9bzLbm+W4XvgIQ5VCxQJoUsFwCKt5QiyP
+	33OmugN1GYnUklkxcWxSyFnXK4kM5Fun3PHPCMTPhzscJgcoo+2UbL9eMzvY5zM92JGvnWoPAW3
+	nURiu1MxzUPJYCkQ2R3NRMZ5RCdZ4rgt6Ha/uQk7YlRUf7mjT0/8INaWMWC3wh/c7y78ANv+vcx
+	8bsq+B3Od6h5B242GwtqCgJBHXDmCTReCTyvJ508g+5EVhqJ5Q==
+X-Received: by 2002:a17:906:9597:b0:b98:2732:3dd1 with SMTP id
+ a640c23a62f3a-b9b507cc370mr155133266b.42.1774629019174; Fri, 27 Mar 2026
+ 09:30:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [REGRESSION] slab: replace cpu (partial) slabs with sheaves
-To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
- "Harry Yoo (Oracle)" <harry@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>
-Cc: Uladzislau Rezki <urezki@gmail.com>, Vlastimil Babka <vbabka@suse.cz>,
- Petr Tesarik <ptesarik@suse.com>, Christoph Lameter <cl@gentwo.org>,
- David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>, Hao Li <hao.li@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Suren Baghdasaryan <surenb@google.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
- bpf@vger.kernel.org, kasan-dev@googlegroups.com,
- kernel test robot <oliver.sang@intel.com>, stable@vger.kernel.org,
- "Paul E. McKenney" <paulmck@kernel.org>
-References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
- <afe9ba0a-1924-42a8-a9c5-34eec709f883@arm.com>
- <ed58493b-0369-4729-bcf7-bc89f72a7913@kernel.org> <acV36oPNFMgL4puz@milan>
- <ea1cb2a1-b674-4d69-bbf6-00051a0e11df@kernel.org>
- <eafefe7a-a33b-4102-93cf-fecc33ddf49e@arm.com>
- <0f441d8f-d84c-470a-a4cb-0249b15220a2@kernel.org>
- <f100305b-6c56-4499-98a4-6a22f8c49443@arm.com> <acZVS-ehXCtvcA9s@hyeyoo>
- <d120d8d3-f785-47ec-9c6b-b28d42ebb1f7@kernel.org>
-Content-Language: en-US
-From: Aishwarya Rambhadran <aishwarya.rambhadran@arm.com>
-In-Reply-To: <d120d8d3-f785-47ec-9c6b-b28d42ebb1f7@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20260327141616.1961457-1-hayatake396@gmail.com>
+ <20260327141616.1961457-2-hayatake396@gmail.com> <CAADnVQLh76CWYJCJXgOst43FcJOrPP2Y0wcwGPX71QqmiD+7pA@mail.gmail.com>
+ <CADFiAcLvdjE7zwqf-hpH01jnbxtnWQNoj4+zBwK0+RU80-k9bg@mail.gmail.com>
+ <CAADnVQLR6Y94wKo1G_4w0-xTPdR8ws38oGu3xfHOXxNKcqjyWA@mail.gmail.com>
+ <CADFiAcJtjVHYVQeYJ_znVsjiJkEBmLfOafp5srY0HQMGwVtiQQ@mail.gmail.com>
+ <CAADnVQ+0EwaJXgS1WSDf12+Ds2Uxbh9KMpDcyq+gyZjcQ_6+dw@mail.gmail.com>
+ <CADFiAcJFy-n5Zz+Wj1dWEH0WcK+PhKXi7cbvdsLnPhMXRcVktg@mail.gmail.com> <CAADnVQJmqKVZC1gkvAaAmO9V=cnYPO0UYB6Wyp6Shko4tZeUQg@mail.gmail.com>
+In-Reply-To: <CAADnVQJmqKVZC1gkvAaAmO9V=cnYPO0UYB6Wyp6Shko4tZeUQg@mail.gmail.com>
+From: Takeru Hayasaka <hayatake396@gmail.com>
+Date: Sat, 28 Mar 2026 01:30:07 +0900
+X-Gm-Features: AQROBzBzwb6fls0dn26HPvWeRnh5qPUOZ6CMbjvFarf6_LGZ-e-aYjW0CDjTnwE
+Message-ID: <CADFiAcJCrS0wjkPcGU9sCYQukEoegeZG7JMkqhGDYq5C43nfXA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf, x86: patch tail-call fentry slot on
+ non-IBT JITs
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, X86 ML <x86@kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi all,
+> yet you're still top posting :(
 
-Thanks for the discussion and the insights.
+Sorry about that. I misunderstood what top posting meant and ended up
+replying in the wrong style.
+I had not understood that it referred to quoting in that way, and I am
+embarrassed that I got it wrong....
 
-For completeness, the SUTs used are single NUMA node:
-$ numactl -H
-available: 1 nodes (0)
-node 0 cpus: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
-21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42
-43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63
-node 0 size: 257218 MB
-node 0 free: 255376 MB
-node distances:
-node   0
-   0:  10
+> see how cilium did it. with pwru tool, etc.
 
-As suggested by Ryan, I re-ran and compared the perf benchmarks
-across 6.17, 6.18, and later kernels. The behavior is consistent
-with what has been discussed in this thread and aligns with our
-observations.
+Thank you for the suggestion.
+As for pwru, I had thought it was not able to capture packet data such as pcap,
+and understood it more as a tool to trace where a specific packet
+enters the processing path and how it is handled.
 
-Thanks again for the clarifications and apologies for the table
-rendering issues in the initial email.
-
-Regards,
-Aishwarya Rambhadran
-
-On 27/03/26 4:51 PM, Vlastimil Babka (SUSE) wrote:
-> On 3/27/26 11:00, Harry Yoo (Oracle) wrote:
->> On Fri, Mar 27, 2026 at 08:58:36AM +0000, Ryan Roberts wrote:
->>>>>>>> On 3/26/26 13:43, Aishwarya Rambhadran wrote: 
->>>>>> Right so there should be just the overhead of the extra 
->>>>>> is_vmalloc_addr() test. Possibly also the call of 
->>>>>> kfree_rcu_sheaf() if it's not inlined. I'd say it's something we 
->>>>>> can just accept? It seems this is a unit test being used as a 
->>>>>> microbenchmark, so it can be very sensitive even to such details, 
->>>>>> but it should be negligible in practice. 
->>>>> The perf/syscall cases might be a bit more concerning though? 
->>>>> (those tests are from "perf bench syscall fork|execve"). Yes they 
->>>>> are microbenchmarks, but a 7% increased cost for fork seems like 
->>>>> something we'd want to avoid if we can. 
->>>> Sure, I tried to explain those in my first reply. Harry then linked 
->>>> to how that explanation can be verified. Hopefully it's really the 
->>>> same reason. 
->>> Ahh sorry I missed your first email. We only added that benchmark 
->>> from 6.19 so don't have results for earlier kernels, but I'll ask 
->>> Aishu to run it for 6.17 and 6.18 to see if the results correlate 
->>> with your expectation. But from a high level perspective, a 7% 
->>> regression on fork is not ideal even if there was a 7% improvement 
->>> in 6.18. 
-> In retrospect it was an oversight not to disable the pre-existing cpu 
-> caching layer immediately for sheaf-enabled caches in 6.18. Can't undo 
-> that mistake now, unfortunately.
->> If that improvement comes from the number of objects cached per CPU, 
->> I'm not sure if determining the default value (# of cached objs) 
->> based on "a point when microbenchmarks stop improving" is a 
->> reasonable measure because the default value affects all slab caches 
->> and will inevitably increase overall memory usage. 
-> Yeah that's the thing, some workloads might just keep improving as you 
-> throw more caching at them, but there's a memory usage cost to that. A 
-> case of stress test doing nothing but forks might also not be 
-> representative of performance of forks under normal workload where 
-> other operations also happen, returning the related slab objects, so 
-> in the end it doesn't expose the batch size that much.
->> Hopefully we could discuss what a reasonable heuristic that "works 
->> for most situations" looks like, and allow users to tune it further 
->> based on their needs. As a side note, changing sheaf capacity at 
->> runtime is not supported yet (I'm working on it) and targeting at 
->> least before the next LTS. 
-
+For example, in an environment where systems are already
+interconnected and running, I sometimes want to capture the actual
+packets being sent for real processing.
+On the other hand, if the goal is simply to observe processing safely
+in a development environment, I think tools such as ipftrace2 or pwru
+can be very useful.
