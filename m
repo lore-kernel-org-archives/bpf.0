@@ -1,115 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80C78386429;
-	Fri, 27 Mar 2026 11:21:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D63F35CB9B
+	for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 11:35:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774610490; cv=none; b=pyYCWXOor8mHH3qkCdMxdZRo3DinXVwMKnzawg6E4ULLIWXfyEZNJjQJQ8DS4/lF1fQf8yVHF23QpfuKJRhTYS1W4xuF6FkUqZb0zvrxOLtAXa+hMZd076q1fZ5gP9oomj0U3HkchPJLpDfojf6Xhr2dBhBgjJCsqg5LXgsyOpM=
+	t=1774611335; cv=none; b=ik6EDFw28Ua9BoX73SLT4cOkEtTVSSD0983ttT72w+MEDPGDZ4z2Nwu2o4iolAe3ffZInajL/bvVPHzmlJ5PD7z/TX0b6N0e2Tk07hZR8G6p3gCq/UnFMheTyumH3SLhAgO6E6TI/Hja1pOqsZ7fh5UmwxQxlCQ/8SsxEDpMYcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774610490; c=relaxed/simple;
-	bh=swcohrFbsQ9OatkiOSOTSr2Oxhk0CH56KvYFD2WN+Ys=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FGVeBERbDGV5kQAFif50TQh33Cyj1iPohM08qEQO8/nNf55rLqSjFZG853ZLKHpFt1K2KXChQzc9fy90h/oriKj1cw0NuBwlrQSczOF3asvEy5DxaKtU+TS0cFDgNVUXusxAhKG1cZ8B0KpgrqFVgICHV4JW1PRX2+WViZvs7HA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IS0dUb2l; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774611335; c=relaxed/simple;
+	bh=PpRB8vSChJA7l38bu5fh541HmHcq/Grnif2xKGtymuU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NZL4NZ8evzfeiccWZ2JM9QsAVRtdsvRnhcIiM0hOHtozbQL6JDY29OQ7IdSJ0+tiN8dtIAcVP1AmbjAuFRVYCA0kKs/IM3QFl2Hgahqqza8XDrBL/9hw5U7M4IW3vSeouTCOoy2GNAzsAeMJgUlF/ftl5fVkpF9bT8llKDQYThY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Tw00jNHZ; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IS0dUb2l"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBD33C19423;
-	Fri, 27 Mar 2026 11:21:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774610490;
-	bh=swcohrFbsQ9OatkiOSOTSr2Oxhk0CH56KvYFD2WN+Ys=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=IS0dUb2l6dq/UKuQvOxjZqoanLCXjZM37R1bc4wCScoCJe4XW8j2TvJ+wLupL5zn4
-	 /5+ULZLFGH97Bb84dwDA6SaV6wum4iCZYiVl7bAMK5c9/zGxj1Pcpqx6qj4m1ELKw7
-	 tTo5wVnT//ihfdMz19PopHmuv+Wtie7OyKTk8UCqowLlxFHq6C7dH/6DgA+NI4XW0s
-	 MqGDbpHnUvkRsy9SlPdgGLyxftYSB5tdhn7ou2al0Bu7ezYiGcyMWJ5AtgSEarW4Q+
-	 1z2fKkkmgqsYj1iQ0dDmcE/+ChBUdBwUSGZeTlyt4g/w0pBwbutvb8OsV1/oWSEZQk
-	 uQ4PspkZSd0hg==
-Message-ID: <d120d8d3-f785-47ec-9c6b-b28d42ebb1f7@kernel.org>
-Date: Fri, 27 Mar 2026 12:21:23 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Tw00jNHZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774611333; x=1806147333;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PpRB8vSChJA7l38bu5fh541HmHcq/Grnif2xKGtymuU=;
+  b=Tw00jNHZRpQITEh2sQvp399vOOW2ffnTSEspOgITdym0WyBUQ+Xuojir
+   AFfGl1yJ8Eff3U94xcxiblWRz/EBdTf+cA/5Cpmh5WxSCsBCwEdxcfKvl
+   N2n0A6zsVBBJVGFFU66zUEECggT+GTLONrgLk8EhPIcgeMMCr8Oo5brUb
+   6Y6HTUYwO+ubvE0oc3urL2IZTIJ0N5Jt+cc2a1e3GQ+VT1UKIazVWaVRg
+   d5jpJyhukLr81aIr1p0q7OZWF2qdAVf4h3CNkGBXUyxFc+F/VA3o9dxB3
+   P6ySDKnmBKVqVeDqRVCDnIi91Ciyh7pFHDxIm60L7i8dVhQ12jsv0whjF
+   Q==;
+X-CSE-ConnectionGUID: bUh7bW9aT1KioJi2ppWcHQ==
+X-CSE-MsgGUID: l+FjAM18QHmWMUVf9AOyuQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11741"; a="101141913"
+X-IronPort-AV: E=Sophos;i="6.23,144,1770624000"; 
+   d="scan'208";a="101141913"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2026 04:35:32 -0700
+X-CSE-ConnectionGUID: +sKy+qFWT7O9giwWyupOlg==
+X-CSE-MsgGUID: JKh+EASoQk+TpmGEknZJFA==
+X-ExtLoop1: 1
+Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 27 Mar 2026 04:35:29 -0700
+Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w65TK-00000000ADt-00jr;
+	Fri, 27 Mar 2026 11:35:26 +0000
+Date: Fri, 27 Mar 2026 19:35:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org,
+	ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+	kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com,
+	memxor@gmail.com
+Cc: oe-kbuild-all@lists.linux.dev, Mykyta Yatsenko <yatsenko@meta.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH bpf-next v6 3/6] bpf: Add sleepable support for classic
+ tracepoint programs
+Message-ID: <202603271953.AkWFtw6W-lkp@intel.com>
+References: <20260325-sleepable_tracepoints-v6-3-2b182dacea13@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [REGRESSION] slab: replace cpu (partial) slabs with sheaves
-Content-Language: en-US
-To: "Harry Yoo (Oracle)" <harry@kernel.org>,
- Ryan Roberts <ryan.roberts@arm.com>
-Cc: Uladzislau Rezki <urezki@gmail.com>,
- Aishwarya Rambhadran <aishwarya.rambhadran@arm.com>,
- Vlastimil Babka <vbabka@suse.cz>, Petr Tesarik <ptesarik@suse.com>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>, Hao Li <hao.li@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Suren Baghdasaryan <surenb@google.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
- bpf@vger.kernel.org, kasan-dev@googlegroups.com,
- kernel test robot <oliver.sang@intel.com>, stable@vger.kernel.org,
- "Paul E. McKenney" <paulmck@kernel.org>
-References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
- <afe9ba0a-1924-42a8-a9c5-34eec709f883@arm.com>
- <ed58493b-0369-4729-bcf7-bc89f72a7913@kernel.org> <acV36oPNFMgL4puz@milan>
- <ea1cb2a1-b674-4d69-bbf6-00051a0e11df@kernel.org>
- <eafefe7a-a33b-4102-93cf-fecc33ddf49e@arm.com>
- <0f441d8f-d84c-470a-a4cb-0249b15220a2@kernel.org>
- <f100305b-6c56-4499-98a4-6a22f8c49443@arm.com> <acZVS-ehXCtvcA9s@hyeyoo>
-From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-In-Reply-To: <acZVS-ehXCtvcA9s@hyeyoo>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260325-sleepable_tracepoints-v6-3-2b182dacea13@meta.com>
 
-On 3/27/26 11:00, Harry Yoo (Oracle) wrote:
-> On Fri, Mar 27, 2026 at 08:58:36AM +0000, Ryan Roberts wrote:
->> >>>>> On 3/26/26 13:43, Aishwarya Rambhadran wrote:
->> >>> Right so there should be just the overhead of the extra is_vmalloc_addr()
->> >>> test. Possibly also the call of kfree_rcu_sheaf() if it's not inlined.
->> >>> I'd say it's something we can just accept? It seems this is a unit test
->> >>> being used as a microbenchmark, so it can be very sensitive even to such
->> >>> details, but it should be negligible in practice.
->> >>
->> >> The perf/syscall cases might be a bit more concerning though? (those tests are
->> >> from "perf bench syscall fork|execve"). Yes they are microbenchmarks, but a 7%
->> >> increased cost for fork seems like something we'd want to avoid if we can.
->> > 
->> > Sure, I tried to explain those in my first reply. Harry then linked to how
->> > that explanation can be verified. Hopefully it's really the same reason.
->> 
->> Ahh sorry I missed your first email. We only added that benchmark from 6.19 so
->> don't have results for earlier kernels, but I'll ask Aishu to run it for 6.17
->> and 6.18 to see if the results correlate with your expectation.
->> 
->> But from a high level perspective, a 7% regression on fork is not ideal even if
->> there was a 7% improvement in 6.18.
+Hi Mykyta,
 
-In retrospect it was an oversight not to disable the pre-existing cpu
-caching layer immediately for sheaf-enabled caches in 6.18. Can't undo that
-mistake now, unfortunately.
+kernel test robot noticed the following build errors:
 
-> If that improvement comes from the number of objects cached per CPU,
-> I'm not sure if determining the default value (# of cached objs) based on
-> "a point when microbenchmarks stop improving" is a reasonable measure
-> because the default value affects all slab caches and will inevitably
-> increase overall memory usage.
+[auto build test ERROR on 6c8e1a9eee0fec802b542dadf768c30c2a183b3c]
 
-Yeah that's the thing, some workloads might just keep improving as you throw
-more caching at them, but there's a memory usage cost to that.
-A case of stress test doing nothing but forks might also not be
-representative of performance of forks under normal workload where other
-operations also happen, returning the related slab objects, so in the end it
-doesn't expose the batch size that much.
+url:    https://github.com/intel-lab-lkp/linux/commits/Mykyta-Yatsenko/bpf-Add-sleepable-support-for-raw-tracepoint-programs/20260327-132324
+base:   6c8e1a9eee0fec802b542dadf768c30c2a183b3c
+patch link:    https://lore.kernel.org/r/20260325-sleepable_tracepoints-v6-3-2b182dacea13%40meta.com
+patch subject: [PATCH bpf-next v6 3/6] bpf: Add sleepable support for classic tracepoint programs
+config: x86_64-randconfig-103-20260327 (https://download.01.org/0day-ci/archive/20260327/202603271953.AkWFtw6W-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260327/202603271953.AkWFtw6W-lkp@intel.com/reproduce)
 
-> Hopefully we could discuss what a reasonable heuristic that
-> "works for most situations" looks like, and allow users to tune it further
-> based on their needs.
-> 
-> As a side note, changing sheaf capacity at runtime is not supported yet
-> (I'm working on it) and targeting at least before the next LTS.
-> 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603271953.AkWFtw6W-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
+
+   In file included from include/linux/security.h:35,
+                    from include/linux/perf_event.h:53,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:95,
+                    from include/linux/syscalls_api.h:1,
+                    from kernel/sched/sched.h:64,
+                    from kernel/sched/rq-offsets.c:5:
+>> include/linux/bpf.h:3363:20: error: static declaration of 'bpf_prog_inc_misses_counter' follows non-static declaration
+    3363 | static inline void bpf_prog_inc_misses_counter(struct bpf_prog *prog)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:2489:14: note: previous declaration of 'bpf_prog_inc_misses_counter' with type 'void(struct bpf_prog *)'
+    2489 | void notrace bpf_prog_inc_misses_counter(struct bpf_prog *prog);
+         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   make[3]: *** [scripts/Makefile.build:184: kernel/sched/rq-offsets.s] Error 1
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1333: prepare0] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +/bpf_prog_inc_misses_counter +3363 include/linux/bpf.h
+
+05b24ff9b2cfab Jiri Olsa     2022-09-16  3362  
+05b24ff9b2cfab Jiri Olsa     2022-09-16 @3363  static inline void bpf_prog_inc_misses_counter(struct bpf_prog *prog)
+05b24ff9b2cfab Jiri Olsa     2022-09-16  3364  {
+05b24ff9b2cfab Jiri Olsa     2022-09-16  3365  }
+c4bcfb38a95edb Yonghong Song 2022-10-25  3366  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
