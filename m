@@ -1,124 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F19C373C10;
-	Fri, 27 Mar 2026 09:29:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B24C78F4A
+	for <bpf@vger.kernel.org>; Fri, 27 Mar 2026 09:38:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.21.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774603784; cv=none; b=RQjgrhnuNaq2eNWtF1sKNsYv+GzTszLsl26zmMVwXaTUY2/s9n/7xdGzyYnTZgdRi09GiBxakKbIwnzyFua1hkIv7hVjaFBHzZ+7dZDZfhJ6vNbyfAo6MYIhh4tYUD5xi8kabjzP0F787TW2I9hbzU3BeMTMezG+l/ZgJLjK9ZM=
+	t=1774604295; cv=none; b=ki00a+/5xkKSP0lHieFkphYzuIeu99OJFBMCVLNBhwraivQGD2h1rrgR1fQv9NiGBmBQ55d4FOiFI2NHsVGKVBXcuJrDh8oFaBEjIKJ2QEhgcTEjfFjp+OENXE3TBRsgvb6mHt20ZEoWOeLCQYmh2Vit3FC3wJaO6KcuPztAfh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774603784; c=relaxed/simple;
-	bh=vTQoXBzSoGbvJfIlwkPLr8sIT5gradTLmH5Adve2H7w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D29QJW08sV9iV1oNksbL2kczztreINkD8dO6QIeVXxx9nSgXy2Y94LgMRprxt5suC7qW+muNgUyQDaGEZI4P2JyKIC7Y85SC2+a3CcB8O9XFbW3/MGGEQZdnJ4URWrU/r6CuDhDZxabAmsnilCn5w4SqR8GhT6PzT4h2EFlpAt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FjlZkKE8; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FjlZkKE8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 551F9C2BC87;
-	Fri, 27 Mar 2026 09:29:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774603783;
-	bh=vTQoXBzSoGbvJfIlwkPLr8sIT5gradTLmH5Adve2H7w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FjlZkKE8ImyH5aLAYpVnl1L7USQiezExCFUH077Y1cCHroDKKUm0fOOJgLUl0w05y
-	 LEjQKSwSWuyBS7wNJPO3VqJJstpV2//IQOToWFz83ZZFdFt6zXknDX2lZUPNuSunI0
-	 CYfa3dEVNG10jP1Y+3Vu1Vtg4IMovwJbaLVQm7YSZMp8E4OMYFFryxsbA8g2aKaxTO
-	 NKWebKSqKv2FDLLqa0gwzzBkqd+Oxqr9hogIj4TH7j3u3VsahyPcyMp3KowI9QptDR
-	 altB6XDNGS0Rh5lhLj5DMQBk/5mwjnYgBobt9ksxFvAIHcuVIJGsCHIAFpGntQdsfv
-	 ViLKWi/j02lfg==
-Date: Fri, 27 Mar 2026 09:29:33 +0000
-From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
-To: Vlastimil Babka <vbabka@suse.com>
-Cc: Axel Rasmussen <axelrasmussen@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, lsf-pc@lists.linux-foundation.org, 
-	Johannes Weiner <hannes@cmpxchg.org>, David Hildenbrand <david@kernel.org>, 
-	Qi Zheng <zhengqi.arch@bytedance.com>, Chen Ridong <chenridong@huaweicloud.com>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, Kairui Song <ryncsn@gmail.com>, 
-	Matthew Wilcox <willy@infradead.org>, Nhat Pham <nphamcs@gmail.com>, Gregory Price <gourry@gourry.net>, 
-	Barry Song <21cnbao@gmail.com>, David Stevens <stevensd@google.com>, 
-	Vernon Yang <vernon2gm@gmail.com>, David Rientjes <rientjes@google.com>, 
-	Kalesh Singh <kaleshsingh@google.com>, wangzicheng <wangzicheng@honor.com>, 
-	"T . J . Mercier" <tjmercier@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	Suren Baghdasaryan <surenb@google.com>, Meta kernel team <kernel-team@meta.com>, bpf@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org, Tal Zussman <tz2294@columbia.edu>
-Subject: Re: [Lsf-pc] [LSF/MM/BPF TOPIC] Towards Unified and Extensible
- Memory Reclaim (reclaim_ext)
-Message-ID: <bd7099a1-aa15-4c58-875e-1e00624a57ea@lucifer.local>
-References: <20260325210637.3704220-1-shakeel.butt@linux.dev>
- <20260325190547.abb7309fb63473b57b7a90a0@linux-foundation.org>
- <acTaRgusrxfCoKqe@tiehlicka>
- <ac05d923-7871-4691-8d26-eff41b3a3db0@lucifer.local>
- <CAJHvVchSfGDubPhir0SgZfr_BcpN5oq_7AY4AZ587_ucgY4Apw@mail.gmail.com>
- <8406d210-4f68-4919-b791-c03c310a8385@suse.com>
+	s=arc-20240116; t=1774604295; c=relaxed/simple;
+	bh=OSpiNwpJDeM4AcUNYHku5fBPQDHNh9uD8XT7M0lVMRQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cX/P52fK4s2R9QvJCutBbAohWBAHlh/v2cJ8OsRLilxk6vYV1MBt8cwUpeVuzeSlbw2PPzPGQOCExKQieUDNFyqgh/h7hFEHXZ7hPRgbFS9yTfp/TP7EPwUgpSkE/60BBTYN1K7pUhDnuqBFlrsigBei416o2lYLjBJXNbtPPCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=206.189.21.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
+Received: from zju.edu.cn (unknown [115.236.2.75])
+	by mtasvr (Coremail) with SMTP id _____wDnOLDRT8ZptCMRAA--.1290S3;
+	Fri, 27 Mar 2026 17:37:22 +0800 (CST)
+Received: from [0.0.0.0] (unknown [115.236.2.75])
+	by mail-app3 (Coremail) with SMTP id zS_KCgBHMnfFT8Zpm2IjAA--.46072S3;
+	Fri, 27 Mar 2026 17:37:10 +0800 (CST)
+Message-ID: <9a61d64e-7943-4e39-8c82-c79bb9ac65b4@zju.edu.cn>
+Date: Fri, 27 Mar 2026 17:37:09 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v5 1/3] bpf: Reject bpf-to-bpf call with large offset
+ in interpreter
+To: Xu Kuohai <xukuohai@huaweicloud.com>, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, tangyazhou518@outlook.com,
+ shenghaoyuan0928@163.com, ziye@zju.edu.cn,
+ Emil Tsalapatis <emil@etsalapatis.com>
+References: <20260326090133.221957-1-tangyazhou@zju.edu.cn>
+ <20260326090133.221957-2-tangyazhou@zju.edu.cn>
+ <319906e9-3b47-472f-9a11-a0da60626144@huaweicloud.com>
+Content-Language: en-US
+From: Yazhou Tang <tangyazhou@zju.edu.cn>
+In-Reply-To: <319906e9-3b47-472f-9a11-a0da60626144@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <8406d210-4f68-4919-b791-c03c310a8385@suse.com>
+X-CM-TRANSID:zS_KCgBHMnfFT8Zpm2IjAA--.46072S3
+X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiAgADCmnFjAspIwAAsq
+X-CM-DELIVERINFO: =?B?xaO9awXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
+	9q9OBCyAu4//tBYspsrrrqb5+QnwRYdX8k3V08FC5kVtFuKsrr5t6vLxvTJj5KcKqoA0Xi
+	5Oy8wbgHUJkVtm1ArGTMpHxCtqOVjGxHDQlmVqntPJgV6uxzH6bbvNX6ZfOgiw==
+X-Coremail-Antispam: 1Uk129KBj93XoW7AFyDXr17JryDCr4UKr4xZrc_yoW8Jw4kpF
+	WkWa4jyw1DA3y3K397Zw18Aw1Ygrs2ya15CFW5GryfAr43GF1ayF15KFZYvFy2krsrCr1j
+	qFWjvw1kAa4qkacCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
+	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
+	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAF
+	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8c
+	xan2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8C
+	rVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXw
+	CIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x02
+	67AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
+	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU13r
+	cDUUUUU==
 
-On Fri, Mar 27, 2026 at 09:07:55AM +0100, Vlastimil Babka wrote:
-> On 3/26/26 21:02, Axel Rasmussen via Lsf-pc wrote:
-> > On Thu, Mar 26, 2026 at 1:02 AM Lorenzo Stoakes (Oracle) <ljs@kernel.org> wrote:
-> >>
-> >> On Thu, Mar 26, 2026 at 08:03:34AM +0100, Michal Hocko wrote:
-> >> > On Wed 25-03-26 19:05:47, Andrew Morton wrote:
-> >> > > On Wed, 25 Mar 2026 14:06:37 -0700 Shakeel Butt <shakeel.butt@linux.dev> wrote:
-> >> > >
-> >> > > > We should unify both algorithms into a single code path.
-> >> > >
-> >> > > I'm here to ask the questions which others fear will sound dumb.
-> >> >
-> >> > Not dumb at all and recently discussed here https://lore.kernel.org/all/CAMgjq7AkYOtUL2HuZjBu5dJw=RTL7W2L1+zVv=SCOyHKYwc3AA@mail.gmail.com/T/#u
-> >> >
-> >> > > Is it indeed the plan to maintain both implementations?  I thought the
-> >> > > long-term ambition was to knock MGLRU into shape and to drop the legacy LRU?
-> >
-> > I think one thing we all agree on at least is, long term, there isn't
-> > really a good argument for having > 1 LRU implementation. E.g., we
-> > don't believe there are just irreconcilable differences, where one
-> > impl is better for some workloads, and another is better for others,
-> > and there is no way the two can be converged.
-> >
-> > On that basis, I would be hesitant to add some complex abstraction
-> > layer / reclaim_ops to facilitate having two. It seems ilke it may
-> > make things a bit cleaner in the short term, but long term might make
-> > that end goal harder (because we'd add the task of cleaning up this
-> > abstraction at some point).
-> >
-> > My preferred way would be more like:
-> >
-> > - Look for opportunities where we can deduplicate code, but without
-> > adding abstraction (e.g., factor out common operations into common
-> > functions both impls can call).
-> > - Identify gaps where MGLRU performs worse than classic LRU, and close them.
->
-> I'm afraid to identify these gaps we'd have to indeed split the MGLRU
-> differences (as listed in Shakeel's proposal) in a way that they can be
-> tried separately. I recall when MGLRU was proposed, we did argue that it's a
-> combination of several things done differently and they should be introduced
-> to the existing reclaim and validated separately. But the author refused to
-> go that way.
+Hi Kuohai,
 
-It's unfortunate we were ok with going ahead with this anyway, I hope in the
-current mm culture we'd simply say 'ok series doesn't land then'.
+On 3/26/26 21:45, Xu Kuohai wrote:
+> Maybe I’m missing something, but since interpreters_args is a small 
+> array, why not
+> just store the index (round_up(stack_depth, 32) / 32) - 1 in insn->off?
+> 
+> That way, the interpreter could directly use this index to find the 
+> function address,
+> without needing insn->imm to record the address offset, thus avoiding 
+> the need to use
+> another field like insn->off in the instruction to back up the original 
+> insn->imm.
 
-It feels like the 'merge by default' stuff has been both a process _and_ a
-culture fail for a while honestly.
+Thanks for the suggestion! Conceptually, storing the array index in 
+insn->off and keeping the 32-bits insn->imm unchanged is a very elegant 
+way to solve this problem.
+But I think it will introduce a performance regression in the 
+interpreter's hot path (___bpf_prog_run).
 
-We are managing arguably _the_ most core part of the kernel (I know people will
-argue on that but at it's at least up there :) and almost certainly _the_
-subsystem with the most direct route to exploitable security bugs, but we've
-been running it with some of the loosest merge criteria in the entire kernel.
+Currently, the array lookup is done once during verification. The 
+resulting offset is stored in insn->imm, allowing the runtime to use a 
+fast ALU addition: __bpf_call_base_args + insn->imm.
 
-It's patently insane.
+However, If we store the index in insn->off instead, we force the 
+runtime to perform a memory load (interpreters_args[insn->off]) on every 
+single bpf-to-bpf call.
 
-Things are changing however!
+Because of this overhead, rejecting out-of-bounds offsets at load time 
+with -EINVAL (as done in v5) seems to be the safer and more performant 
+trade-off.
 
-Cheers, Lorenzo
+What are your thoughts on this?
+
+Best,
+Yazhou
+
