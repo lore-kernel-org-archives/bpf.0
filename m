@@ -1,212 +1,173 @@
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6A4A3537CB
-	for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 15:36:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FC6633DEE5
+	for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 15:44:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774712172; cv=none; b=N/1eOG36yjfEiwTRR90ewdSYN6jZEZk0lOyCjEja+8w+WB+Pb1oY3sat3bYFPbWaiYTwrZrzEPPGHMg13yb0Zn7CC50XJ//reTQuYyiCVXKmrwZqNsAWqUCdZvS4uhHY54Yw6Gue+AFOnVicl5rbWdfz6HwI/w6Nm0Rb48ehyB8=
+	t=1774712647; cv=none; b=dgeRXbdfZeWxKKbWEJZBulGnF0ZIs+E+nRdpajKXDzBlzGoK2xEqtFtiN0uUcmUzpVkaxKNpjN9lZbwhZ5RGRMGTXsjJXu4OE9eqayF0Ibmn1J+/Xr5O/4ZsEnUQaEWppu+Shn7/ccIQkO4KK6a2w6JGAl3CzXitrREpjqzHNQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774712172; c=relaxed/simple;
-	bh=/GEXZkmKX4s9b/SmUpPLX93M0m6mbEsjeCZUiizWuRs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=i46xRLLcYQsagbTMFam93vaLKW/ffG4RjGcbn7GZDTEPnvZ4TyIZwNR1VMix5AnS418DR+ByZivQDB0W6yRyqg19aGvFQTv778/q7pX1HfsgbJCivn4s2n3u7KpzmaDZPvS7r/+dZJYr6bwAYhaEeWeXmeRDmjsxqzOObqLHW3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DeceLkWQ; arc=none smtp.client-ip=209.85.208.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774712647; c=relaxed/simple;
+	bh=+JvJUtFV1FwOAyBEZih9NfIXAfatfUjyA2bfmrJIeeY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=CZm9EWoJsMnJvKA1A35TwRz81vSfnWz+krFVY1XdQEXxBh+NnmdaiSyedbhT6oy9o/fzV5aml+XRq1j4dnhbXbZnP7ULj3OQ0tm+nEQGv0bBwNZf99xkpol7EcTjYOpqhqP3zsGjDxKf+5st2XDtcy2zBXsKfyapMDA3XWq+Aiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=WRQ0j3C0; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DeceLkWQ"
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-38ad26e3992so24413951fa.1
-        for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 08:36:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="WRQ0j3C0"
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5a2a8abac7dso1812533e87.3
+        for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 08:44:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774712165; x=1775316965; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1774712644; x=1775317444; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=A/VNplDWWCZzS7/n5RiNsPZoo6NH5P9/pGe+zWFZeD0=;
-        b=DeceLkWQBs7xX4ntad3gj27hkYmkCpFROGPk8Bsm5iA1WLg5LBzVrTzakHD+1ZbZru
-         R5pELq7zDVoDVkfjiQg+zZ7eOuOVQIzmiZ1FduT6yXveyTCBbetx5HER9ebEBup78SvO
-         zrqyHbQcJoRQ5OyswdleO+ixgeP0+ghGof3mMe9oUJgpgz20QYlKKe6+bo4Yx5h9xOsR
-         s20HKZFz01ipbkafzlhHoMJBNopCrq+dTRBZr/HIGnV+ohfos/1q97ZRmKriw6KRSYRa
-         58OPlHanNRDgRO7McEf//HAA6SXya1rh5t2+KBp03z0g1++vjA+uopMG4TLfW83IFfTG
-         3lsw==
+        bh=CnDYuCPPOC0a7dKZYCydLNtXkl+EJ9KEblo4sLyQOoE=;
+        b=WRQ0j3C0vG85UWu25ZUNhiEcoJ6LOSEVZtsBOnwbj9ZHoDHc5J2aS8H8kKIFgUgszU
+         kukXdcoigVaM6nGbvcNV6wth6nsF7qYtKc72v7Z06u9PUgoHJJp18TpCb+AlBuCliUMp
+         M2k8TZgfuGB6hJiAJkiMzny+QZIchIifU9RWM5i3OY4Vb24VtqDiE1HTnZFq7z66QmlH
+         IWdTZdi+fQZecoL5Um/WJtx32+0TdEzTS+RWOiAVjw6Z6TfuQXP+mzRj6Ia6Csc3JuiG
+         l0H64aWDeAZZreG+mCXmD566o4A25UZ+Knnjxl1P+d1XM6bOKq5Al+e1X3slGAHKywon
+         sRAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774712165; x=1775316965;
+        d=1e100.net; s=20251104; t=1774712644; x=1775317444;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=A/VNplDWWCZzS7/n5RiNsPZoo6NH5P9/pGe+zWFZeD0=;
-        b=Us6xqH1xG0QSrakqvA+trPpmvZuegKrmMQixhsqySn0uXc1YNWrs/VpjoPV03bORkk
-         wgiFW4/8Sv5o+TRj/Q2UoTgm9gmdg0WbPJQebFm8mxCUSRErRQ5XEHw1n4t9z/Mg55WI
-         ozjDFwtO5jrI+4PSQPngLlm7b9oWcT98JKlWnrZ90oezWRp3+SCTtjo9wT0eJdkGYDMq
-         p9wkyl2WK+C4dcYanNuof1DJyhWvRGdY51k4qQx7Iem4fBeq9UZ+WVZeDN8UgaFpEE47
-         jvQfcH76FNHg3aB9vTNOByX+dQSIEaWy3qH1kn18Etne86gmOvw6pivo7IYhal+iPiAR
-         W3FQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUcw8xcqtCbJUJUURK0WuwLSV1mqyhXHzN30BmFKRO3mWrHCcqTK8eLmn4GRqRgpjBdP9A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyeOJSCvZGjc+B5l7SBv4kPzWrmX5AmslEnGPOvSwsXPLS6S0Q+
-	E6J1vtmkYclB3qh9e9hWRynMq1Dy/whb52u+HcraGQaJ2EAvJXArTA1FiX1H2ONH
-X-Gm-Gg: ATEYQzxeNG5tFwnvXmqBPmszySNUUrmjwR02OuWtBLpxW3EsXznvJmXzvLlw6rW14pN
-	64Oi7d6pod7LemBpk4agowEZ75HEExztD7g73JB0EGmezejTZjwf7W8hKHZsPmLQSLAHrdS+dZG
-	bnwjNFFmHhChA9WzfwyYtqmkjY1py9DOIcXQ8aoAZYm9TQ4jjwIIWsEsgHGcshMwj2rGqbEaXT0
-	WoX12uOZRGXPxtEKeKupwbNVeJibQCsUIEQvPQkvUCIjqv0Ik4m+MaUrqb6lSkGR005bnrDQ+h0
-	+FoxobKoiGxARUvbEmSe/WoXvC91d1eloUf8xuVL1pL8PBeMoRuaXvQskki5u4AWwC7l9u798tm
-	zHGdOCj/QwP1SqcotGbewD0RhiL0AaHdjfsGWzyqHi3PzXNqieF6zoSCQxhkRSxjx9UNFOeVQFb
-	V3xIRxar9s/KVxngCd+LVw7BBVf1Si1ty09QHOWHTwzaxlca6K9Oli3P0Sy9xrsmnI
-X-Received: by 2002:a05:600c:828a:b0:487:338:b4df with SMTP id 5b1f17b1804b1-48727d8818cmr86841645e9.15.1774692519962;
-        Sat, 28 Mar 2026 03:08:39 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4872716799dsm32314725e9.25.2026.03.28.03.08.38
+        bh=CnDYuCPPOC0a7dKZYCydLNtXkl+EJ9KEblo4sLyQOoE=;
+        b=UGRAo9jJdVN+akbO/wvC3GTIZTwU3jF5eKOmkhldpcg0cfjMR//EQLsCw7p2TzyNGe
+         btl38Y4TTCgDSL9CVTOXSgMwHr0n7lXrPYiHAKvRRiAQpalxK4Ar2YlQUSF5ZSTZ1KiX
+         0erGjUg3Px4xhOc4/nnnCyy5QEgRDD0B+OslJ+yxG1SpK4gievaBag6FrlQZOubLQd4M
+         Rc09gRnBXtR4fN/VHe+4iKyVS49hh1tZwEEorv3SWwm9LlAIted18jCf0MDXhNol9JKD
+         B9e3+KLEt8hVYh5gEiuG8bJ7Kv/QubFjmoftj4Ww/skDtGjokF+7nj6uHVv2hgw8OljX
+         vnug==
+X-Gm-Message-State: AOJu0YzZVd7gGqcpKZ4RaEFsWYZ0HkwpYmn9wX6zJGjELuQXllaMe9YX
+	Oh1nX6ktHgXyn+rqaLOe5P0GKn0d0Zz1rRxP07KjEFzny2q0akKQ/8yvDb0dE3GjIh1mr8d1wr7
+	Ac7XDwjs=
+X-Gm-Gg: ATEYQzwVw9kjGzCR0+LVpABWNx+HRoVrBuk6AcSL1q9b+eryz7iN9DR1bmS9CeLQIht
+	FTax7FTcOW7TTFb/3XB6ncZth7Kc6l7Bv/iu7chQEi7eso5ObF4FeyCCG/sM4ltCT4ddLJnJdlr
+	Kt8Mmu7L6KFKnkf8PCk4LuGA/mStsHX/om9L0uzxQw7hNgv8uqZsdnVmj6gddgza3mcqjyXEcDP
+	0pg+TNl+CQk21oQgNmg8MyZ/PKYpWcYjj8AbYBzycs7z7P/h3XgH0YWGuK5F+h2iIegnRZRy2K7
+	hvb3LjqzzXCpCYdORtKaV5UwRXnsSqJhun6exQp6Q8o86P8Kz1awryzqP0h/BwxaYGi0/j1TmS/
+	8xmlPF+6GqWYewI0pw6VoNJKYHx/WKUgd1zOnTTlXVGUGoXFcO75KjBPhOlAOI9NUbb601Lo9X4
+	cMzMLfL4L2VtbvSnRUYaXPJcAcxY3WYcFPhGy+bpdYdIVorCee2ccRIdudfNuOEA==
+X-Received: by 2002:a05:600d:1c:b0:485:3f17:425 with SMTP id 5b1f17b1804b1-48727ec7681mr82529125e9.21.1774708015839;
+        Sat, 28 Mar 2026 07:26:55 -0700 (PDT)
+Received: from f16.localdomain ([121.167.230.140])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76916da892sm1874017a12.14.2026.03.28.07.26.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Mar 2026 03:08:39 -0700 (PDT)
-Date: Sat, 28 Mar 2026 10:08:37 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc: Borislav Petkov <bp@alien8.de>, x86@kernel.org, Jon Kohler
- <jon@nutanix.com>, Nikolay Borisov <nik.borisov@suse.com>, "H. Peter Anvin"
- <hpa@zytor.com>, Josh Poimboeuf <jpoimboe@kernel.org>, David Kaplan
- <david.kaplan@amd.com>, Sean Christopherson <seanjc@google.com>, Dave
- Hansen <dave.hansen@linux.intel.com>, Peter Zijlstra
- <peterz@infradead.org>, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, KP
- Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, "David S. Miller"
- <davem@davemloft.net>, Andy Lutomirski <luto@kernel.org>, Thomas Gleixner
- <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, David Ahern
- <dsahern@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
- Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Paolo
- Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org, Asit Mallick
- <asit.k.mallick@intel.com>, Tao Zhang <tao1.zhang@intel.com>,
- bpf@vger.kernel.org, netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v8 02/10] x86/bhi: Make clear_bhb_loop() effective on
- newer CPUs
-Message-ID: <20260328100837.7e6dc7fe@pumpkin>
-In-Reply-To: <20260328004256.mm2ttj5iwvu5kdpa@desk>
-References: <20260324-vmscape-bhb-v8-0-68bb524b3ab9@linux.intel.com>
-	<20260324-vmscape-bhb-v8-2-68bb524b3ab9@linux.intel.com>
-	<20260324205930.GQacL7Mp7vwGBKX1W7@fat_crate.local>
-	<20260324221308.7sh6afdy6r6tsf4w@desk>
-	<20260325203759.GCacRHp2t8a7c4Bp6E@fat_crate.local>
-	<20260326083934.fk4wyhe6rgiss34z@desk>
-	<20260326100120.GAacUD8BVziYzLxZHB@fat_crate.local>
-	<20260326104557.24295cbb@pumpkin>
-	<20260326202931.wlggnd3nfj6hngpb@desk>
-	<20260328004256.mm2ttj5iwvu5kdpa@desk>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+        Sat, 28 Mar 2026 07:26:54 -0700 (PDT)
+From: Hoyeon Lee <hoyeon.lee@suse.com>
+To: bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Feng Yang <yangfeng@kylinos.cn>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 2/2] selftests/bpf: add test for address-based single kprobe attach
+Date: Sat, 28 Mar 2026 23:26:09 +0900
+Message-ID: <20260328142643.627560-3-hoyeon.lee@suse.com>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260328142643.627560-1-hoyeon.lee@suse.com>
+References: <20260328142643.627560-1-hoyeon.lee@suse.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Fri, 27 Mar 2026 17:42:56 -0700
-Pawan Gupta <pawan.kumar.gupta@linux.intel.com> wrote:
+attach_probe already verifies manual single-kprobe attaches with
+func_name and optional offset.
 
-> On Thu, Mar 26, 2026 at 01:29:31PM -0700, Pawan Gupta wrote:
-> > On Thu, Mar 26, 2026 at 10:45:57AM +0000, David Laight wrote:  
-> > > On Thu, 26 Mar 2026 11:01:20 +0100
-> > > Borislav Petkov <bp@alien8.de> wrote:
-> > >   
-> > > > On Thu, Mar 26, 2026 at 01:39:34AM -0700, Pawan Gupta wrote:  
-> > > > > I believe the equivalent for cpu_feature_enabled() in asm is the
-> > > > > ALTERNATIVE. Please let me know if I am missing something.    
-> > > > 
-> > > > Yes, you are.
-> > > > 
-> > > > The point is that you don't want to stick those alternative calls inside some
-> > > > magic bhb_loop function but hand them in from the outside, as function
-> > > > arguments.
-> > > > 
-> > > > Basically what I did.
-> > > > 
-> > > > Then you were worried about this being C code and it had to be noinstr... So
-> > > > that outer function can be rewritten in asm, I think, and still keep it well
-> > > > separate.
-> > > > 
-> > > > I'll try to rewrite it once I get a free minute, and see how it looks.
-> > > >   
-> > > 
-> > > I think someone tried getting C code to write the values to global data
-> > > and getting the asm to read them.
-> > > That got discounted because it spilt things between two largely unrelated files.  
-> > 
-> > 
-> > The implementation with global variables wasn't that bad, let me revive it.
-> > 
-> > This part which ties sequence to BHI mitigation, which is not ideal,
-> > (because VMSCAPE also uses it) it does seems a cleaner option.
-> > 
-> > --- a/arch/x86/kernel/cpu/bugs.c
-> > +++ b/arch/x86/kernel/cpu/bugs.c
-> > @@ -2095,6 +2095,11 @@ static void __init bhi_select_mitigation(void)
-> > 
-> >  static void __init bhi_update_mitigation(void)
-> >  {
-> > +   if (!cpu_feature_enabled(X86_FEATURE_BHI_CTRL)) {
-> > +       bhi_seq_outer_loop = 5;
-> > +       bhi_seq_inner_loop = 5;
-> > +   }
-> > +
-> > 
-> > I believe this can be moved to somewhere common to all mitigations.
-> >   
-> > > I think the BPF code would need significant refactoring to call a C function.  
-> > 
-> > Ya, true. Will use globals and keep clear_bhb_loop() in asm.  
-> 
-> While testing this approach, I noticed that syscalls were suffering an 8%
-> regression on ICX for Native BHI mitigation:
-> 
->   $ perf bench syscall basic -l 100000000
-> 
-> Bisection pointed to the change for using 8-bit registers (al/ah replacing
-> eax/ecx) as the main contributor to the regression. (Global variables added
-> a bit, but within noise).
-> 
-> Further digging revealed a strange behavior, using %ah for the inner loop
-> was causing the regression, interchanging %al and %ah in the loops
-> (for movb and sub) eliminated the regression.
-> 
-> <clear_bhb_loop_nofence>:
-> 
-> 	movb	bhb_seq_outer_loop(%rip), %al
-> 
-> 	call	1f
-> 	jmp	5f
-> 1:	call	2f
-> .Lret1:	RET
-> 2:	movb	bhb_seq_inner_loop(%rip), %ah
-> 3:	jmp	4f
-> 	nop
-> 4:	sub	$1, %ah <---- No regression with %al here
-> 	jnz	3b
-> 	sub	$1, %al
-> 	jnz	1b
-> 
-> My guess is, "sub $1, %al" is faster than "sub $1, %ah". Using %al in the
-> inner loop, which is executed more number of times is likely making the
-> difference. A perf profile is needed to confirm this.
+This commit adds address-based single-kprobe attach subtests for the
+two underlying attach paths, legacy tracefs/debugfs and PMU-based
+non-legacy. The new subtests resolve SYS_NANOSLEEP_KPROBE_NAME through
+kallsyms, pass the result through bpf_kprobe_opts.addr, and verify that
+kprobe and kretprobe are still triggered.
 
-I bet it is also CPU dependant - it is quite likely that there isn't
-any special hardware to support partial writes of %ah so it ends up taking
-a slow path (possibly even a microcoded one to get an 8% regression).
+Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
+---
+ .../selftests/bpf/prog_tests/attach_probe.c   | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-As well as swapping %al <-> %ah try changing the outer loop decrement to
-	sub $0x100, %ax
-since %al is zero that will set the z flag the same.
-
-I've just hacked a test into some test code I've got.
-I'm not seeing an unexpected costs on either zen-5 or haswell.
-So it may be more subtle.
-
-	David
-
-
-> 
-> Never imagined a register selection can make an 8% difference in
-> performance! Anyways, will update the patch with this finding.
+diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+index 9e77e5da7097..64f2ed75779d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
++++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+@@ -123,6 +123,51 @@ static void test_attach_probe_manual(enum probe_attach_mode attach_mode)
+ 	test_attach_probe_manual__destroy(skel);
+ }
+ 
++/* manual attach address-based kprobe/kretprobe testings */
++static void test_attach_kprobe_by_addr(enum probe_attach_mode attach_mode)
++{
++	DECLARE_LIBBPF_OPTS(bpf_kprobe_opts, kprobe_opts);
++	struct bpf_link *kprobe_link, *kretprobe_link;
++	struct test_attach_probe_manual *skel;
++	unsigned long func_addr;
++
++	if (!ASSERT_OK(load_kallsyms(), "load_kallsyms"))
++		return;
++
++	func_addr = ksym_get_addr(SYS_NANOSLEEP_KPROBE_NAME);
++	if (!ASSERT_NEQ(func_addr, 0UL, "func_addr"))
++		return;
++
++	skel = test_attach_probe_manual__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_kprobe_manual_open_and_load"))
++		return;
++
++	kprobe_opts.attach_mode = attach_mode;
++	kprobe_opts.retprobe = false;
++	kprobe_opts.addr = func_addr;
++	kprobe_link = bpf_program__attach_kprobe_opts(skel->progs.handle_kprobe,
++						      NULL, &kprobe_opts);
++	if (!ASSERT_OK_PTR(kprobe_link, "attach_kprobe_by_addr"))
++		goto cleanup;
++	skel->links.handle_kprobe = kprobe_link;
++
++	kprobe_opts.retprobe = true;
++	kretprobe_link = bpf_program__attach_kprobe_opts(skel->progs.handle_kretprobe,
++							 NULL, &kprobe_opts);
++	if (!ASSERT_OK_PTR(kretprobe_link, "attach_kretprobe_by_addr"))
++		goto cleanup;
++	skel->links.handle_kretprobe = kretprobe_link;
++
++	/* trigger & validate kprobe && kretprobe */
++	usleep(1);
++
++	ASSERT_EQ(skel->bss->kprobe_res, 1, "check_kprobe_res");
++	ASSERT_EQ(skel->bss->kretprobe_res, 2, "check_kretprobe_res");
++
++cleanup:
++	test_attach_probe_manual__destroy(skel);
++}
++
+ /* attach uprobe/uretprobe long event name testings */
+ static void test_attach_uprobe_long_event_name(void)
+ {
+@@ -416,6 +461,10 @@ void test_attach_probe(void)
+ 		test_attach_probe_manual(PROBE_ATTACH_MODE_PERF);
+ 	if (test__start_subtest("manual-link"))
+ 		test_attach_probe_manual(PROBE_ATTACH_MODE_LINK);
++	if (test__start_subtest("kprobe-legacy-by-addr"))
++		test_attach_kprobe_by_addr(PROBE_ATTACH_MODE_LEGACY);
++	if (test__start_subtest("kprobe-perf-by-addr"))
++		test_attach_kprobe_by_addr(PROBE_ATTACH_MODE_PERF);
+ 
+ 	if (test__start_subtest("auto"))
+ 		test_attach_probe_auto(skel);
+-- 
+2.52.0
 
