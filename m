@@ -1,156 +1,129 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E41A3783C3
-	for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 13:40:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.176
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774705209; cv=pass; b=iPYnpKo14F8GB9uouGnlnqx4w+YmRg/WP2UBZsU06WKlCmmBM76YcBhKLzAoyxx3hZq/PjYlFlMpP1czZqyb0X4DrAx+K8bh+Yt/WEFng/dDRtvTqbxEs3KlbBbNUoGzC5XcEuR9L9YxhkjXm7dUj7wMpsTRxk6O0rmo4pHNSgI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774705209; c=relaxed/simple;
-	bh=5ZtQ2cHIQnNPmhkNNEc2uIDy13fXSNOA9me1ZOCMupg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jme3eauz3aJ7P7XNSqlXEq/8cAbPtUw8a6j8oikKF4RW1Y1Am66M+zw1cgENxVqKVKWp0Xq55wns+Ijg0dAGy1iZMPj4cAY+UEscY5fiAkbeDBPWL+0QmBsJABkGOdbnah7XdmyNsk/jQMHUouAu9LNURkx6pyrRTvGi4HkebK0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CDEvyPuV; arc=pass smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9D0085C4A
+	for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 14:19:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774707579; cv=none; b=nxOaYwG5rjrrQQQFvgxslJHjFFHVHp5jUKX8HyVnt0jnr0FW43R7C5VsWosqRgBZIZyCHJ0cnFGXP2hkjK/TCPc/t81+MfkWGlnJbQ9xwYX9LF9FJt8Yn7ob1qanREsZUUweh3Sycp6dk7O4ArYpm0vxK/OPfV3fRBKY+7bxPWk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774707579; c=relaxed/simple;
+	bh=KhgHCyFR9No8KLt+OlnuwwLQyFERX2PwG/liMhvnIdU=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nIRbaKsyCNDgLo8B0TgBMiO08gj6XaDQPXyLrflZj8p8TBaJUoifVzIOGjVhRO5Pz3vR2xcbGlL3pRlNr8fOj8eQbkioFXltPa26tq5nlC0nqIB3232LRXq0iiGdxZYUzYe2API1Bzm/QmK0Zzerf5SBXmeif4frHWZlwkkpP3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VnsAysks; arc=none smtp.client-ip=209.85.128.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CDEvyPuV"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-8296d553142so1507037b3a.3
-        for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 06:40:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774705207; cv=none;
-        d=google.com; s=arc-20240605;
-        b=VI6QkshRZrcBm3SjMAXkEXalmd95gZ2t1d9dkrC97vB+mGWPcphSpCfJwrGIAdVNxh
-         M/mMe7zrpeNsYTIEWVFDhZV7cbyEubS5o3w2eVJtZqE7mx418RnQ4iM6ISSCS/kuLSOF
-         46kKaa0y7aPuGr2Z+hKTFUsPMfUnJ/ExEEA2To5EFiLWP4cmmBfZHoBAd4GwEmi01yWJ
-         /VgxkuRDVM6Exay9nBFPZ0ZaXZRuY6tiECz6+PxhEW5Z3FI4o7XELmc/YePjGgAE+7do
-         MROUUjRrY903JuHAAIRW9Sb+bvW3QgUs/kYuNX/iteZeZjPPhKWqyN8TILlcEb+T3wrX
-         gzsA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=5ZtQ2cHIQnNPmhkNNEc2uIDy13fXSNOA9me1ZOCMupg=;
-        fh=YGmwo52TIZlRKWKD7FuQ9B7w/+ywWPB3XRl51YlCOYc=;
-        b=g0FoIJJk36ZZR+nyVtk1iq7HPJi4hYxq1NwtZCIfotZW0VQMR2kt+7gIb8Ot6SJjKh
-         DcwCxurWo38hSrssc/mAXVTmD5EF+XEwq1TDu8avUWigpT9FQivAkvla8KquBYP6hwnV
-         cy4yubaOcm8FKaliZM5/7lIzNBGXhjxbm5rqvTh/EOGOdRulHlLIK+IGpAZ5weom+QUN
-         htEdywBKQJfkTOQYvV0d/Osp9HI6qOIShWT1i5JjhiB87s9+nW5N/I6SDYNeFAEnExhv
-         BXSyLqrGA1tw/akhRBy/dvxqoMjzNevGD+HOd0ppnDBr5aVqTj6dSTgw9NyEuQRpr5oz
-         GENg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VnsAysks"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-486fb112c09so30722745e9.1
+        for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 07:19:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774705207; x=1775310007; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5ZtQ2cHIQnNPmhkNNEc2uIDy13fXSNOA9me1ZOCMupg=;
-        b=CDEvyPuVDoJAurm6Ipy4sC0g77FY7WX7Hj7Y0GX3ZfTfB0oCEiNy0zPGyhMzkqDs2a
-         YJebyPFJkM7dGctnxi8GJnbebKI4KfWZ9yJcGayBTdCyhq0KtiN64xSg5P6ckQhsaEeQ
-         HOezVtlhhm0s76fO4C8aOGGWd4kSdN9wVLIioC0a3Jj3in+zrSOea2/MKnvk7ayend4M
-         Fdjbykq/PnURVDnMC3nYSk6vwydevXT4bWizpwlqw31jKu9XY4TP9RLlo5312OxYQkgt
-         +014sUSospkbg8lpNzwmFML32EFxCNKXMFy3cARWUNqbnqpW0qbMirq5Bddq6bNE7hEi
-         RgVQ==
+        d=gmail.com; s=20251104; t=1774707576; x=1775312376; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Kw/qYDuL6NOAyizpknGIl9vSf0/5ZM/wdACWWsJgXx4=;
+        b=VnsAysksyG7vSAzlRvyofGlEvllhHas3/EQv+SZxst2sm6UJsPMyL255Dnd2Aat0HU
+         t5A+xoLdAWC3JSf4Bez5AGNLkbmrRZFdJfV+F8uYVg9n1g5MnOFDatVV+QTmIfOTf5AV
+         Ot91PqBfEdQcvE6TxNg63XdcvLIut9CJOqTUOwPhOO9MNxVar8VY0ncRmu7hM6I6CuGH
+         m7cmpuie6wPfqoUUFqHBQszsjbDCNLnYJkHsUtxJecl17r/U0esEgG6Z6BVZ9LmV0+tn
+         8bj/DwdAlzzEPHSBU81MgnzmvsQpQV3OW3KeuCIqjJdESm5nuLCOwDO+fBAqdpy2Voe2
+         UKhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774705207; x=1775310007;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=5ZtQ2cHIQnNPmhkNNEc2uIDy13fXSNOA9me1ZOCMupg=;
-        b=Is/jMaYDZr7K8ua9mR0X9k4a58lW3DRAw38hgzjNix/oHD9Gsqstfk9LM7rIa8QfxO
-         uOMGfIOhFX5OLOr4g+pquQcTq/CLU50G0x0MagIWa3XFbPxzl5ZOo5FV7ZCxfMRxrPGA
-         1Xrrd0jWmJyTpamWoMWKuxvMxJXOIClPGUXbol8rPhkHXqMzEaRdDlnsNxcBgt9adML6
-         If3EhYxotZgSbpvfZU9vXktO2PwjRk8jLrOZHDmY2aHyMKub3fDCel2THy57rwr3TDXa
-         MjRrCuLHPbTVLijIRkRmYUAuhZvDQZ77yL3usg3huk9Ms77Bbqo6XV4k/yNWvXfw+g9V
-         nRVw==
-X-Forwarded-Encrypted: i=1; AJvYcCW+icnXWtxikIOrL5RNwWUFCp9tbBEOa6f440JFwQ+c/PpqK629kWOliaJqv3AphHJkcfU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZ37K7kdEKyxjHb1UJ/SKc5+7+stGcdWlEzG+AEVYzBobDG2zZ
-	vePv0GsDwe6jnnZXiWwgDLrR0xqU4hdR2jU+UjPqWTSntKBo2nr/U1RrC3dMBmrjods6eT8l8MX
-	r0tM7I40m7xAk025Uk39CJYfZconPWh0=
-X-Gm-Gg: ATEYQzwBCH5fW68U4zn60n5oG9zrWXsgsX+BaFvpTWv0vxvDdbR3W+sMe6wbLH8i+7H
-	LuJ/Dnd9v9v09cdU/3TkqnUwS8p84TAOzaqZGqLKyR2i4hCZEF6jyfs4BZbb4B46V0Gq6VTK/UX
-	2HPljW4pgKxdyx2hv93MDfXfLlF60+40j5VknkFBrMd6nXNkpbwz6OWNcxXCljACjQ2JmeVBnOu
-	on00zhklZy06XWcBvXkmzjRoFhaMA0iDijtmB3h1LE1gc6Fs+yC3iWXLCxkmEfYiW59D+MaBykC
-	niDcjyU=
-X-Received: by 2002:a05:6a00:1789:b0:82a:6de8:fa50 with SMTP id
- d2e1a72fcca58-82c95e45d30mr6453604b3a.18.1774705207164; Sat, 28 Mar 2026
- 06:40:07 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774707576; x=1775312376;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Kw/qYDuL6NOAyizpknGIl9vSf0/5ZM/wdACWWsJgXx4=;
+        b=XNlX3cVaulXhZr9G8GVOzS0KUmRh3Gls5sP1ZOSDixt3X4q90BnHbm5+Drdl2Cb0P7
+         sJY8yDlMx2/aIB10BLdILq+DiRpSckuF3sBVUvDCkAFfGBZgou8bLYqPBRJYZoWsMotR
+         2SgcLtMmD77xE7JLHsR9x8DzxgW89AnKPA7EuZrGIShwVyOmW8LkuTCYOzS0up8vwsBh
+         gcKC55Jc7CN7E5Sz5LR0uZDqCvlvtUq3Krzo1Ury/qXb7oAknUcCk1m67WCIQ60aHiq8
+         IVOFyFFnHiDl0j2ujEG/Tof3fT1jtL5TmVpQaKQv4MDZBOdEYtvIqeM6r8VzGDu4hEGS
+         rjyA==
+X-Forwarded-Encrypted: i=1; AJvYcCV9P6yqguAagrt89ZGC3WBFHnvYS25PCKpYKGGPI+YPdj5/kRIORVTKITn8via95GKXF3Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwrjXRlO6rD1akAXG9cgiCKB+ii2y9DtAXAU6kjgWXZtsFr7bAU
+	vO3N8rDtoihweDbcVdMJ9/+t3kgTIWV0vXfr5T3zcVBqILMlNwqTScwaGmpIDcMR
+X-Gm-Gg: ATEYQzw67AUnZe201/CcBx802Mf+ip5M30aEvcC13E6PqyQdCsOq+NQjS8JHM2RtasG
+	sXtH9S+L7S3XUzMRuloWLjhPvQ9ldO8Xfwc0C3rli79gzIRStaeU2hG5dOiUweYwdsYsP0y3dht
+	z92hh7L7UOceBgrH6jo5VlqOrYqZpLUiL58ShwCxfIsp4u5JA2uu6jmWIjbZBJsJYF8yHtYlJn/
+	Hb759ZrnsWTGSfGK0mOsrOD3xD5d0NEJMwy9eLJpe8myxE1Sp3GW49Uwuz3q6mkV6KI3gkbO2af
+	5Q1dEwWjDkiQQS9jJlJPXvPS9kaTxrzMtrYURzIqTjftr1udQ6YPXQQEtGc+XUzM+adWBGpd53E
+	I/SZjgIZenQL5WVT6GaZXCCEo6nnYqmeAlPuhieHwLjShGwrvwuDMTomYvlwfzSGj9qmOI93C2L
+	6G2vSQN+c1hxbs
+X-Received: by 2002:a05:600c:8489:b0:486:fbdb:b718 with SMTP id 5b1f17b1804b1-4872807483cmr106801495e9.25.1774707575925;
+        Sat, 28 Mar 2026 07:19:35 -0700 (PDT)
+Received: from krava ([2a01:e0a:1057:8840:999:a3d5:618e:57b1])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48722d38a5fsm149954545e9.12.2026.03.28.07.19.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 Mar 2026 07:19:35 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Sat, 28 Mar 2026 15:19:33 +0100
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Jiri Olsa <olsajiri@gmail.com>,
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org,
+	kernel-team@meta.com
+Subject: Re: [PATCH bpf-next v5 1/2] bpf: Support struct btf_struct_meta via
+ KF_IMPLICIT_ARGS
+Message-ID: <acfjdVLdrXQb6Uzf@krava>
+References: <20260327203241.3365046-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260327114741.91500-1-pilgrimtao@gmail.com> <91bacd7d-6ec0-4888-be0d-f11a6607f38f@acm.org>
-In-Reply-To: <91bacd7d-6ec0-4888-be0d-f11a6607f38f@acm.org>
-From: Chengkaitao <pilgrimtao@gmail.com>
-Date: Sat, 28 Mar 2026 21:39:55 +0800
-X-Gm-Features: AQROBzBTENtnZtQhxmzRNb76sGSIhzOCRnc5fvzKUgEMLoc4tyX_zU5SvhHxtug
-Message-ID: <CAAWJmAZe+pyfju+37-dfjYUdwRR1ae6Rq8OJjZea76d2CPkEMA@mail.gmail.com>
-Subject: Re: [RFC 0/2] block: Introduce a BPF-based I/O scheduler
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: axboe@kernel.dk, pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
-	alex@ghiti.fr, ojeda@kernel.org, boqun@kernel.org, gary@garyguo.net, 
-	bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org, 
-	aliceryhl@google.com, tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org, 
-	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, rust-for-linux@vger.kernel.org, 
-	bpf@vger.kernel.org, llvm@lists.linux.dev, 
-	Kaitao Cheng <chengkaitao@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260327203241.3365046-1-ihor.solodrai@linux.dev>
 
-On Fri, Mar 27, 2026 at 11:48=E2=80=AFPM Bart Van Assche <bvanassche@acm.or=
-g> wrote:
->
-> On 3/27/26 4:47 AM, Chengkaitao wrote:
-> > I have been working on adding a new BPF-based I/O scheduler. It has bot=
-h
-> > kernel and user-space parts. In kernel space, using per-ctx,
->
-> Does "ctx" perhaps refer to struct blk_mq_hw_ctx? If so, please use the
-> abbreviation "hctx" to prevent confusion with struct blk_mq_ctx (block
-> layer software queue).
+On Fri, Mar 27, 2026 at 01:32:40PM -0700, Ihor Solodrai wrote:
+> The following kfuncs currently accept void *meta__ign argument:
+>   * bpf_obj_new_impl
+>   * bpf_obj_drop_impl
+>   * bpf_percpu_obj_new_impl
+>   * bpf_percpu_obj_drop_impl
+>   * bpf_refcount_acquire_impl
+>   * bpf_list_push_back_impl
+>   * bpf_list_push_front_impl
+>   * bpf_rbtree_add_impl
+> 
+> The __ign suffix is an indicator for the verifier to skip the argument
+> in check_kfunc_args(). Then, in fixup_kfunc_call() the verifier may
+> set the value of this argument to struct btf_struct_meta *
+> kptr_struct_meta from insn_aux_data.
+> 
+> BPF programs must pass a dummy NULL value when calling these kfuncs.
+> 
+> Additionally, the list and rbtree _impl kfuncs also accept an implicit
+> u64 argument, which doesn't require __ign suffix because it's a
+> scalar, and BPF programs explicitly pass 0.
+> 
+> Add new kfuncs with KF_IMPLICIT_ARGS [1], that correspond to each
+> _impl kfunc accepting meta__ign. The existing _impl kfuncs remain
+> unchanged for backwards compatibility.
+> 
+> To support this, add "btf_struct_meta" to the list of recognized
+> implicit argument types in resolve_btfids.
+> 
+> Implement is_kfunc_arg_implicit() in the verifier, that determines
+> implicit args by inspecting both a non-_impl BTF prototype of the
+> kfunc.
+> 
+> Update the special_kfunc_list in the verifier and relevant checks to
+> support both the old _impl and the new KF_IMPLICIT_ARGS variants of
+> btf_struct_meta users.
+> 
+> [1] https://lore.kernel.org/bpf/20260120222638.3976562-1-ihor.solodrai@linux.dev/
+> 
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
-Here, ctx refers to struct blk_mq_ctx. The intent is: when no eBPF
-policy is attached, the new I/O scheduler behaves like the none
-scheduler; when an eBPF policy is attached, the blk_mq_ctx queues
-maintained by the new I/O scheduler serve as backup and fallback
-for the eBPF program.
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-> For what type of block devices is this new type of I/O scheduler
-> intended? This new type of I/O scheduler is not appropriate for hard
-> disks. To schedule I/O effectively for harddisks, an I/O scheduler must
-> be aware of all pending I/O requests. This is why the mq-deadline I/O
-> scheduler maintains a single list of requests across all hardware
-> queues.
-
-This new I/O scheduler targets mechanical hard disks. The scheduler
-can be aware of all pending I/O requests, and users can maintain a
-single list of requests in an eBPF program.
-
-> Additionally, this new I/O scheduler is not appropriate for the fastest
-> block devices. For very fast block devices, any I/O scheduler incurs a
-> measurable overhead.
-
-For the fastest block devices, avoiding extra scheduling policy is
-often the best policy. In some customized workloads, however, extra
-policy may be needed, for example priority scheduling, cgroup-aware
-differentiation, or fine-grained metrics. Those scenarios have not
-been validated with real demos yet, but the approach seems viable.
-
-> > I implemented
-> > a simple elevator that exposes a set of BPF hooks. The goal is to move =
-the
-> > policy side of I/O scheduling out of the kernel and into user space,
->
-> What does "into user space" mean in this context? As you know BPF code
-> runs in kernel context.
-
-Sorry, my wording was inaccurate. It would be more appropriate to
-phrase it as "into user-defined BPF programs".
-
---=20
-Yours,
-Chengkaitao
+jirka
