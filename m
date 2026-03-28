@@ -1,326 +1,307 @@
 Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8469F3491F5
-	for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 15:20:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E68E29CE1
+	for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 15:27:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774711248; cv=none; b=dweEvFUtv0Mg1iDMXu0ZTWVH+3yzHuMlMzFEsiyqPGl237tJTiF7iPpa+/ZhoAASmFcx65kodS10cghOQZq+jrEXYXg3kyb5bTFNWD5Md3LmSTeX2oKo46YdWHbWistKqyFh+CM+5HlWA+0KLWv1X8BZyvRk/9WEcE/yEuu4lJs=
+	t=1774711666; cv=none; b=JiQ5qAIN+6AobK1uu5PUy+NPywPls4r9KOrmnT+qobpenoSTQ774IvQyM6fqsuBa7yB7eYVOBHbSSzdbd2DxVqgTYjNk3HzT2KDf7RVvZQPgKDkLiN2CmcW4dj6kPgESMIO19EWTgmcQBufcPsCe6Cwbq2j6RwidAgtH13utYKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774711248; c=relaxed/simple;
-	bh=YlVmldUM4ySXMYYQ22OmmL2W6MsB5D2KZUEL9HtgECI=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S/bLtSoMreG5SzBRH2ARlGbB8g6AzY2JuZnSF5jpzQomOAiv5OlB2dyVMc3fGpz6qXpgRa9rmxNWC5VM1Si/Pxj/RUS2SpvEmj4n4GF6qnislkAdzG8Y3IvLZhCcl3fvn749hBg7pvmpbcFRzD4gnjxX+Gd85gCssLlsGW3+xNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MSdDJqWj; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774711666; c=relaxed/simple;
+	bh=yL8Td9UZA88O3o7r3JW+BpHaCJ4yxltbSa4UhiL9gIg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=lddjHKIMnZIkOtUNnfiTRqVZxCw0lgevYcgyYl3BoA//l6+ICVJpHQGH8EBCI3T0dWHvUYPRZGLhsHNQoGFhuxmPbsiMkj2ybHkEGMI3aNm6XPKSHDTw/Q1dUb7eT9A7+F5GC9yqW+4N1GojP3OQJ0DB3vQd7ZI2qotPnyki+LM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=GClIRyJQ; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MSdDJqWj"
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-66abe08cdf5so4869214a12.0
-        for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 08:20:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="GClIRyJQ"
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-66ba9898ae8so270613a12.1
+        for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 08:27:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774711245; x=1775316045; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oOVQ59AZB53pswcczmapH8Kv6W0EN0CgW4ld++taO5w=;
-        b=MSdDJqWjXYvB+1nzZFjF6RZW+I40KzXGLiEFMn63pCZNkITm4g9pHxT1n2PZbUZl+7
-         7OPgv9mKjozr6AzXFX2QEG0qLFPW4UQQRyWfjvpODDKPn99NOJfw/BOVOXkIH3xq8d8G
-         i+ucl2ASkuBODY6uyL5nIVTElRtAtpqgPG8l7pEIWXhHxz7GXrcVM746FpDcucMs5OZb
-         gvGaSzn3T+6kJtQdLvZfkBUoKAEHxG+Ky/bi2yGo1VZe8ITPFueu1JaO9fA0Kkw9CKMw
-         UzOCsu+mJv2fvaVDOn4RLOpgIENAAkR4VWyYlOWbhzDcZnNNezKqEqlCSUwfMge/bbbd
-         oUQw==
+        d=suse.com; s=google; t=1774711663; x=1775316463; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lPuSW6pRsFeFjtweuNOAKbGLGRJBOpgP+7O/NYd7b34=;
+        b=GClIRyJQVYE9BE+NxPVo3sYZLnnuYB3CDHYlrr0uwZanUO8BgH/VnzEVUnYbdvz+3r
+         7UFogOanMVxOfMi/5sxVoJkyuqQp11EJYyoeKyaezj04AnlVEY4ELdpho5cyKeO9KFUC
+         T4QAaD+luTnfAP8bukpDhNIecELRphRB/gCGQ4ZXCHx59V6AAAdury2jUgSBW3O1odsM
+         bPBG6K2Lvoz8IMU+vy4qoI1eDlVqpU+HKUUUruThKSl46UMxfoMRd8c0i39cVMNN4J62
+         6D+AVueFGaIbdrms3cUDlN6U1ttbL4x5/taqT4Jwlmw3dwKdF3P0Vrs9MYF7V2fL3iQX
+         ijCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774711245; x=1775316045;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oOVQ59AZB53pswcczmapH8Kv6W0EN0CgW4ld++taO5w=;
-        b=QEaDfz9lHU5ILL2HuJT/UcCdSddD/q7l/Z2h8LyIg+lKdg0TLPdE0Co/wAoPvi+N7S
-         UahkGtxR349/KRYdZ7VBRN2SQ44/9JlcGZlK52vc6q4cItrM155MRm2pLb2DJi0YssiF
-         sbZ+coIzu/x98SZ9KbK5+3npTQncAze+tLEtNGi5JWjzMZsS7wVxCezPhFfmSPIthJX6
-         M31yr56esvbwu97SzFvpWv+6OC0yIy5KKu3V68neLXU4deVgIUWp8uk+mugU13zavHFN
-         qj+g7Is5X0VpztusmwXOuqFH9zDTSSt8NLS0YT/Sjwyf1FO69bbxVOLaR80WoS1D/+yw
-         Jgag==
-X-Forwarded-Encrypted: i=1; AJvYcCUvCNu5877PAsT7erw3oVvJfK1BUx28i5S1Q8aOc0AbP769qk32rSLWiN5LUquRS2uMVls=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQ4odWAndyz8+usppJUUROhG81LcMKeHIWPIjVDb/+B/FAb6nr
-	UtesNMdesA06l5xwy2+ajsTQwhZrkdmxQ/Zd3JTKyUjwTenBdJf1bAeYQHY2Y3sn
-X-Gm-Gg: ATEYQzwuUDD6Xr3e4z/URLWAP845VcjC9eO2fNgBD6/JKq5QVzbxL/v8xUEKL0RBz9b
-	mk5QR5y9T2rjXw+MG/rVaGT7rx3xVJC9qz6TVzIVAXhhufgCk4UAOIU15sYyyeNXsMSM7HRdnpt
-	ZpIcwvj4gs7Vzeyv+4gG2SyQMalWOXFFJCXsvREcywrNOpwN99LQohEnQj6FhhqndQVdJN4fzV8
-	gwXZXXc8H9MDWHwpW5pqH5g2oBL35mjt/YrWo6K+08F2nabspLngrOzMhWLJGPhl4gd2+YJkcit
-	qWURwocJLIgXRDfPS2Fj4PolhLzckdNNDIBAQfGJGCnFAX75KW5uDYgNmbVxmHrHUIx1SUpCvlt
-	m5yZgCLoH2TQAVEOV8R78zIHkION732iiv3JJxbA43OT4ZBeN4fM+SEK3WRTbAxJxWk6Tm3malA
-	0jcnJdeARl1Mpxd9jqr7Mq8VU=
-X-Received: by 2002:a05:600c:4f91:b0:486:f634:ef1 with SMTP id 5b1f17b1804b1-48727eda549mr106384535e9.17.1774707565111;
-        Sat, 28 Mar 2026 07:19:25 -0700 (PDT)
-Received: from krava ([2a01:e0a:1057:8840:999:a3d5:618e:57b1])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48722d2366dsm149590505e9.10.2026.03.28.07.19.24
+        d=1e100.net; s=20251104; t=1774711663; x=1775316463;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=lPuSW6pRsFeFjtweuNOAKbGLGRJBOpgP+7O/NYd7b34=;
+        b=Otv/KhXBMRkCOktBrNi1zH/kps6LEr7cDirxKDhWjjFvFP0LRxErQgHlC35KntrgMN
+         pZokY61f4eqw0rl4et/Rx96RjXih7mYIy0hNl5azHY5j4XO4oAC835yH4bH0iAXS7AoD
+         YuhJ/CUiYjLUO6u73K/1N5M57M/XqpW++FhKtoc9GSRno+h+M5dGKlEpmhILgAwGeLX1
+         zseqKrBw6jiPeHsuSMJ2ed+SnfeW9kB7VlXDXAiBuJq9vPG/7qMWHSCgTxkbrt1WQ01a
+         4TqgMKhx/RE0U3GwSA3/y8hl6/IcogTeb3cgaKlc4fNJOFHcEcQiu8VTHcHAr1ieEZzB
+         +7mQ==
+X-Gm-Message-State: AOJu0Yyaw7eJEyPwe1gUs0FlH0WAiofqelOayNyw5zaPVC18Bct3JoUj
+	Xre6WhNGnBD+xt3Bxb5vh07Xlv6750ejDhm+ecB5VyIP0m9+A8NaP5z/fyp8ISnBsqi21WSPU0h
+	vunqJlcw=
+X-Gm-Gg: ATEYQzz7z59gelL8vwo8aG+Cpou7y76DyOTfyYAkbEqpscHqHPovb7oNEAdvHmQETWo
+	qpVN69xSd87zxptC7nNNjN8p4BkZTvGDEOb1ApOeh5Cu7Tt9dfzQKSHoPsA++x6AFLPHx5V/k0f
+	7Vu4CG2Uns7fE3Yr7IQD2oSA4RhxFeWL6coKP4e1BWrvhMMXNkUQnHzCC8kx7a+e37n5ZE5WcTQ
+	j9MC5Dj2aKxkBFR5JxnB8hJINcZOZw2YdgnEX4rBUqzUREEAAZVwy8ah231TsFOFCB9/NErA1+d
+	bfeloWYdJGEWEVns0BGDH3K0b0fvN9D8SEbp7Lttl1Bzq48ya4a5ztKrqUZTWvDsAXglFeWS3i0
+	XiA2kEyNCxg7O9/mVSTDD32kcMjVw7ZV6MVFtVt54Ye1TdEl6IjhuT/xjqfDxSPMla9LeYhWUVR
+	C5/ySTMQruosWWQubpz8DIJXxAGtQULWif3a4dar+vB79KrSFusIpOaH9GX0aj3A==
+X-Received: by 2002:a05:600c:5956:b0:486:fe08:639a with SMTP id 5b1f17b1804b1-48722b813a4mr110789345e9.4.1774708012383;
+        Sat, 28 Mar 2026 07:26:52 -0700 (PDT)
+Received: from f16.localdomain ([121.167.230.140])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76916da892sm1874017a12.14.2026.03.28.07.26.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Mar 2026 07:19:24 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Sat, 28 Mar 2026 15:19:22 +0100
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
+        Sat, 28 Mar 2026 07:26:51 -0700 (PDT)
+From: Hoyeon Lee <hoyeon.lee@suse.com>
+To: bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Jiri Olsa <olsajiri@gmail.com>,
-	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org,
-	kernel-team@meta.com
-Subject: Re: [PATCH bpf-next v5 2/2] selftests/bpf: Update kfuncs using
- btf_struct_meta to new variants
-Message-ID: <acfjaqJc2QlppL1v@krava>
-References: <20260327203241.3365046-1-ihor.solodrai@linux.dev>
- <20260327203241.3365046-2-ihor.solodrai@linux.dev>
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Feng Yang <yangfeng@kylinos.cn>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 1/2] libbpf: allow address-based single kprobe attach
+Date: Sat, 28 Mar 2026 23:26:08 +0900
+Message-ID: <20260328142643.627560-2-hoyeon.lee@suse.com>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260328142643.627560-1-hoyeon.lee@suse.com>
+References: <20260328142643.627560-1-hoyeon.lee@suse.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260327203241.3365046-2-ihor.solodrai@linux.dev>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 27, 2026 at 01:32:41PM -0700, Ihor Solodrai wrote:
-> Update selftests to use the new non-_impl kfuncs marked with
-> KF_IMPLICIT_ARGS by removing redundant declarations and macros from
-> bpf_experimental.h (the new kfuncs are present in the vmlinux.h) and
-> updating relevant callsites.
-> 
-> Fix spin_lock verifier-log matching for lock_id_kptr_preserve by
-> accepting variable instruction numbers. The calls to kfuncs with
-> implicit arguments do not have register moves (e.g. r5 = 0)
-> corresponding to dummy arguments anymore, so the order of instructions
-> has shifted.
-> 
-> Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+bpf_program__attach_kprobe_opts() currently attaches a single kprobe only
+by func_name, with an optional offset. This covers only the symbol-
+based form, not the raw-address form that the kernel already supports
+for both kprobe PMU events and legacy tracefs/debugfs kprobes. Callers
+that already have a target IP still have to drop down to
+perf_event_open() or direct tracefs writes.
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+libbpf already exposes address-based attach for kprobe_multi through
+bpf_kprobe_multi_opts.addrs. This commit adds bpf_kprobe_opts.addr so
+that single kprobes can be attached either by func_name + offset or by
+raw address.
 
-jirka
+Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
+---
+ tools/lib/bpf/libbpf.c | 77 +++++++++++++++++++++++++++++-------------
+ tools/lib/bpf/libbpf.h |  5 ++-
+ 2 files changed, 57 insertions(+), 25 deletions(-)
 
-> ---
->  .../testing/selftests/bpf/bpf_experimental.h  | 156 +-----------------
->  .../selftests/bpf/prog_tests/spin_lock.c      |   5 +-
->  .../selftests/bpf/progs/kptr_xchg_inline.c    |   4 +-
->  3 files changed, 9 insertions(+), 156 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-> index 44466acf8083..2234bd6bc9d3 100644
-> --- a/tools/testing/selftests/bpf/bpf_experimental.h
-> +++ b/tools/testing/selftests/bpf/bpf_experimental.h
-> @@ -8,156 +8,11 @@
->  
->  #define __contains(name, node) __attribute__((btf_decl_tag("contains:" #name ":" #node)))
->  
-> -/* Description
-> - *	Allocates an object of the type represented by 'local_type_id' in
-> - *	program BTF. User may use the bpf_core_type_id_local macro to pass the
-> - *	type ID of a struct in program BTF.
-> - *
-> - *	The 'local_type_id' parameter must be a known constant.
-> - *	The 'meta' parameter is rewritten by the verifier, no need for BPF
-> - *	program to set it.
-> - * Returns
-> - *	A pointer to an object of the type corresponding to the passed in
-> - *	'local_type_id', or NULL on failure.
-> - */
-> -extern void *bpf_obj_new_impl(__u64 local_type_id, void *meta) __ksym;
-> -
-> -/* Convenience macro to wrap over bpf_obj_new_impl */
-> -#define bpf_obj_new(type) ((type *)bpf_obj_new_impl(bpf_core_type_id_local(type), NULL))
-> -
-> -/* Description
-> - *	Free an allocated object. All fields of the object that require
-> - *	destruction will be destructed before the storage is freed.
-> - *
-> - *	The 'meta' parameter is rewritten by the verifier, no need for BPF
-> - *	program to set it.
-> - * Returns
-> - *	Void.
-> - */
-> -extern void bpf_obj_drop_impl(void *kptr, void *meta) __ksym;
-> -
-> -/* Convenience macro to wrap over bpf_obj_drop_impl */
-> -#define bpf_obj_drop(kptr) bpf_obj_drop_impl(kptr, NULL)
-> -
-> -/* Description
-> - *	Increment the refcount on a refcounted local kptr, turning the
-> - *	non-owning reference input into an owning reference in the process.
-> - *
-> - *	The 'meta' parameter is rewritten by the verifier, no need for BPF
-> - *	program to set it.
-> - * Returns
-> - *	An owning reference to the object pointed to by 'kptr'
-> - */
-> -extern void *bpf_refcount_acquire_impl(void *kptr, void *meta) __ksym;
-> -
-> -/* Convenience macro to wrap over bpf_refcount_acquire_impl */
-> -#define bpf_refcount_acquire(kptr) bpf_refcount_acquire_impl(kptr, NULL)
-> -
-> -/* Description
-> - *	Add a new entry to the beginning of the BPF linked list.
-> - *
-> - *	The 'meta' and 'off' parameters are rewritten by the verifier, no need
-> - *	for BPF programs to set them
-> - * Returns
-> - *	0 if the node was successfully added
-> - *	-EINVAL if the node wasn't added because it's already in a list
-> - */
-> -extern int bpf_list_push_front_impl(struct bpf_list_head *head,
-> -				    struct bpf_list_node *node,
-> -				    void *meta, __u64 off) __ksym;
-> -
-> -/* Convenience macro to wrap over bpf_list_push_front_impl */
-> -#define bpf_list_push_front(head, node) bpf_list_push_front_impl(head, node, NULL, 0)
-> -
-> -/* Description
-> - *	Add a new entry to the end of the BPF linked list.
-> - *
-> - *	The 'meta' and 'off' parameters are rewritten by the verifier, no need
-> - *	for BPF programs to set them
-> - * Returns
-> - *	0 if the node was successfully added
-> - *	-EINVAL if the node wasn't added because it's already in a list
-> - */
-> -extern int bpf_list_push_back_impl(struct bpf_list_head *head,
-> -				   struct bpf_list_node *node,
-> -				   void *meta, __u64 off) __ksym;
-> -
-> -/* Convenience macro to wrap over bpf_list_push_back_impl */
-> -#define bpf_list_push_back(head, node) bpf_list_push_back_impl(head, node, NULL, 0)
-> -
-> -/* Description
-> - *	Remove the entry at the beginning of the BPF linked list.
-> - * Returns
-> - *	Pointer to bpf_list_node of deleted entry, or NULL if list is empty.
-> - */
-> -extern struct bpf_list_node *bpf_list_pop_front(struct bpf_list_head *head) __ksym;
-> -
-> -/* Description
-> - *	Remove the entry at the end of the BPF linked list.
-> - * Returns
-> - *	Pointer to bpf_list_node of deleted entry, or NULL if list is empty.
-> - */
-> -extern struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *head) __ksym;
-> -
-> -/* Description
-> - *	Remove 'node' from rbtree with root 'root'
-> - * Returns
-> - * 	Pointer to the removed node, or NULL if 'root' didn't contain 'node'
-> - */
-> -extern struct bpf_rb_node *bpf_rbtree_remove(struct bpf_rb_root *root,
-> -					     struct bpf_rb_node *node) __ksym;
-> -
-> -/* Description
-> - *	Add 'node' to rbtree with root 'root' using comparator 'less'
-> - *
-> - *	The 'meta' and 'off' parameters are rewritten by the verifier, no need
-> - *	for BPF programs to set them
-> - * Returns
-> - *	0 if the node was successfully added
-> - *	-EINVAL if the node wasn't added because it's already in a tree
-> - */
-> -extern int bpf_rbtree_add_impl(struct bpf_rb_root *root, struct bpf_rb_node *node,
-> -			       bool (less)(struct bpf_rb_node *a, const struct bpf_rb_node *b),
-> -			       void *meta, __u64 off) __ksym;
-> -
-> -/* Convenience macro to wrap over bpf_rbtree_add_impl */
-> -#define bpf_rbtree_add(head, node, less) bpf_rbtree_add_impl(head, node, less, NULL, 0)
-> +/* Convenience macro to wrap over bpf_obj_new */
-> +#define bpf_obj_new(type) ((type *)bpf_obj_new(bpf_core_type_id_local(type)))
->  
-> -/* Description
-> - *	Return the first (leftmost) node in input tree
-> - * Returns
-> - *	Pointer to the node, which is _not_ removed from the tree. If the tree
-> - *	contains no nodes, returns NULL.
-> - */
-> -extern struct bpf_rb_node *bpf_rbtree_first(struct bpf_rb_root *root) __ksym;
-> -
-> -/* Description
-> - *	Allocates a percpu object of the type represented by 'local_type_id' in
-> - *	program BTF. User may use the bpf_core_type_id_local macro to pass the
-> - *	type ID of a struct in program BTF.
-> - *
-> - *	The 'local_type_id' parameter must be a known constant.
-> - *	The 'meta' parameter is rewritten by the verifier, no need for BPF
-> - *	program to set it.
-> - * Returns
-> - *	A pointer to a percpu object of the type corresponding to the passed in
-> - *	'local_type_id', or NULL on failure.
-> - */
-> -extern void *bpf_percpu_obj_new_impl(__u64 local_type_id, void *meta) __ksym;
-> -
-> -/* Convenience macro to wrap over bpf_percpu_obj_new_impl */
-> -#define bpf_percpu_obj_new(type) ((type __percpu_kptr *)bpf_percpu_obj_new_impl(bpf_core_type_id_local(type), NULL))
-> -
-> -/* Description
-> - *	Free an allocated percpu object. All fields of the object that require
-> - *	destruction will be destructed before the storage is freed.
-> - *
-> - *	The 'meta' parameter is rewritten by the verifier, no need for BPF
-> - *	program to set it.
-> - * Returns
-> - *	Void.
-> - */
-> -extern void bpf_percpu_obj_drop_impl(void *kptr, void *meta) __ksym;
-> +/* Convenience macro to wrap over bpf_percpu_obj_new */
-> +#define bpf_percpu_obj_new(type) ((type __percpu_kptr *)bpf_percpu_obj_new(bpf_core_type_id_local(type)))
->  
->  struct bpf_iter_task_vma;
->  
-> @@ -167,9 +22,6 @@ extern int bpf_iter_task_vma_new(struct bpf_iter_task_vma *it,
->  extern struct vm_area_struct *bpf_iter_task_vma_next(struct bpf_iter_task_vma *it) __ksym;
->  extern void bpf_iter_task_vma_destroy(struct bpf_iter_task_vma *it) __ksym;
->  
-> -/* Convenience macro to wrap over bpf_obj_drop_impl */
-> -#define bpf_percpu_obj_drop(kptr) bpf_percpu_obj_drop_impl(kptr, NULL)
-> -
->  /* Description
->   *	Throw a BPF exception from the program, immediately terminating its
->   *	execution and unwinding the stack. The supplied 'cookie' parameter
-> diff --git a/tools/testing/selftests/bpf/prog_tests/spin_lock.c b/tools/testing/selftests/bpf/prog_tests/spin_lock.c
-> index 254fbfeab06a..bbe476f4c47d 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/spin_lock.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/spin_lock.c
-> @@ -13,8 +13,9 @@ static struct {
->  	const char *err_msg;
->  } spin_lock_fail_tests[] = {
->  	{ "lock_id_kptr_preserve",
-> -	  "5: (bf) r1 = r0                       ; R0=ptr_foo(id=2,ref_obj_id=2) "
-> -	  "R1=ptr_foo(id=2,ref_obj_id=2) refs=2\n6: (85) call bpf_this_cpu_ptr#154\n"
-> +	  "[0-9]\\+: (bf) r1 = r0                       ; R0=ptr_foo(id=2,ref_obj_id=2)"
-> +	  " R1=ptr_foo(id=2,ref_obj_id=2) refs=2\n"
-> +	  "[0-9]\\+: (85) call bpf_this_cpu_ptr#154\n"
->  	  "R1 type=ptr_ expected=percpu_ptr_" },
->  	{ "lock_id_global_zero",
->  	  "; R1=map_value(map=.data.A,ks=4,vs=4)\n2: (85) call bpf_this_cpu_ptr#154\n"
-> diff --git a/tools/testing/selftests/bpf/progs/kptr_xchg_inline.c b/tools/testing/selftests/bpf/progs/kptr_xchg_inline.c
-> index 2414ac20b6d5..ca5943166057 100644
-> --- a/tools/testing/selftests/bpf/progs/kptr_xchg_inline.c
-> +++ b/tools/testing/selftests/bpf/progs/kptr_xchg_inline.c
-> @@ -25,14 +25,14 @@ __naked int kptr_xchg_inline(void)
->  		"if r0 == 0 goto 1f;"
->  		"r1 = r0;"
->  		"r2 = 0;"
-> -		"call %[bpf_obj_drop_impl];"
-> +		"call %[bpf_obj_drop];"
->  	"1:"
->  		"r0 = 0;"
->  		"exit;"
->  		:
->  		: __imm_addr(ptr),
->  		  __imm(bpf_kptr_xchg),
-> -		  __imm(bpf_obj_drop_impl)
-> +		  __imm(bpf_obj_drop)
->  		: __clobber_all
->  	);
->  }
-> -- 
-> 2.53.0
-> 
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 9ea41f40dc82..a49ea01288ad 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -11523,7 +11523,7 @@ static int determine_uprobe_retprobe_bit(void)
+ #define PERF_UPROBE_REF_CTR_OFFSET_SHIFT 32
+ 
+ static int perf_event_open_probe(bool uprobe, bool retprobe, const char *name,
+-				 uint64_t offset, int pid, size_t ref_ctr_off)
++				 uint64_t offset_or_addr, int pid, size_t ref_ctr_off)
+ {
+ 	const size_t attr_sz = sizeof(struct perf_event_attr);
+ 	struct perf_event_attr attr;
+@@ -11558,7 +11558,7 @@ static int perf_event_open_probe(bool uprobe, bool retprobe, const char *name,
+ 	attr.type = type;
+ 	attr.config |= (__u64)ref_ctr_off << PERF_UPROBE_REF_CTR_OFFSET_SHIFT;
+ 	attr.config1 = ptr_to_u64(name); /* kprobe_func or uprobe_path */
+-	attr.config2 = offset;		 /* kprobe_addr or probe_offset */
++	attr.config2 = offset_or_addr;	 /* kprobe_addr or probe_offset */
+ 
+ 	/* pid filter is meaningful only for uprobes */
+ 	pfd = syscall(__NR_perf_event_open, &attr,
+@@ -11633,13 +11633,14 @@ static const char *tracefs_available_filter_functions_addrs(void)
+ }
+ 
+ static void gen_probe_legacy_event_name(char *buf, size_t buf_sz,
+-					const char *name, size_t offset)
++					const char *name, uint64_t offset_or_addr)
+ {
+ 	static int index = 0;
+ 	int i;
+ 
+-	snprintf(buf, buf_sz, "libbpf_%u_%d_%s_0x%zx", getpid(),
+-		 __sync_fetch_and_add(&index, 1), name, offset);
++	snprintf(buf, buf_sz, "libbpf_%u_%d_%s_0x%" PRIx64, getpid(),
++		 __sync_fetch_and_add(&index, 1), name ?: "addr",
++		 offset_or_addr);
+ 
+ 	/* sanitize name in the probe name */
+ 	for (i = 0; buf[i]; i++) {
+@@ -11648,13 +11649,27 @@ static void gen_probe_legacy_event_name(char *buf, size_t buf_sz,
+ 	}
+ }
+ 
++static void gen_kprobe_target(char *buf, size_t buf_sz, const char *name,
++			      uint64_t offset_or_addr)
++{
++	if (name)
++		snprintf(buf, buf_sz, "%s+0x%" PRIx64, name, offset_or_addr);
++	else
++		snprintf(buf, buf_sz, "0x%" PRIx64, offset_or_addr);
++}
++
+ static int add_kprobe_event_legacy(const char *probe_name, bool retprobe,
+-				   const char *kfunc_name, size_t offset)
++				   const char *kfunc_name, uint64_t offset_or_addr)
+ {
+-	return append_to_file(tracefs_kprobe_events(), "%c:%s/%s %s+0x%zx",
++	char probe_target[128];
++
++	gen_kprobe_target(probe_target, sizeof(probe_target), kfunc_name,
++			  offset_or_addr);
++
++	return append_to_file(tracefs_kprobe_events(), "%c:%s/%s %s",
+ 			      retprobe ? 'r' : 'p',
+ 			      retprobe ? "kretprobes" : "kprobes",
+-			      probe_name, kfunc_name, offset);
++			      probe_name, probe_target);
+ }
+ 
+ static int remove_kprobe_event_legacy(const char *probe_name, bool retprobe)
+@@ -11674,24 +11689,27 @@ static int determine_kprobe_perf_type_legacy(const char *probe_name, bool retpro
+ }
+ 
+ static int perf_event_kprobe_open_legacy(const char *probe_name, bool retprobe,
+-					 const char *kfunc_name, size_t offset, int pid)
++					 const char *kfunc_name, uint64_t offset_or_addr, int pid)
+ {
+ 	const size_t attr_sz = sizeof(struct perf_event_attr);
+ 	struct perf_event_attr attr;
+ 	int type, pfd, err;
++	char probe_target[128];
+ 
+-	err = add_kprobe_event_legacy(probe_name, retprobe, kfunc_name, offset);
++	gen_kprobe_target(probe_target, sizeof(probe_target), kfunc_name,
++			  offset_or_addr);
++
++	err = add_kprobe_event_legacy(probe_name, retprobe, kfunc_name,
++				      offset_or_addr);
+ 	if (err < 0) {
+-		pr_warn("failed to add legacy kprobe event for '%s+0x%zx': %s\n",
+-			kfunc_name, offset,
++		pr_warn("failed to add legacy kprobe event for '%s': %s\n", probe_target,
+ 			errstr(err));
+ 		return err;
+ 	}
+ 	type = determine_kprobe_perf_type_legacy(probe_name, retprobe);
+ 	if (type < 0) {
+ 		err = type;
+-		pr_warn("failed to determine legacy kprobe event id for '%s+0x%zx': %s\n",
+-			kfunc_name, offset,
++		pr_warn("failed to determine legacy kprobe event id for '%s': %s\n", probe_target,
+ 			errstr(err));
+ 		goto err_clean_legacy;
+ 	}
+@@ -11784,6 +11802,9 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
+ 	enum probe_attach_mode attach_mode;
+ 	char *legacy_probe = NULL;
+ 	struct bpf_link *link;
++	uint64_t offset_or_addr;
++	char probe_target[128];
++	unsigned long addr;
+ 	size_t offset;
+ 	bool retprobe, legacy;
+ 	int pfd, err;
+@@ -11794,8 +11815,18 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
+ 	attach_mode = OPTS_GET(opts, attach_mode, PROBE_ATTACH_MODE_DEFAULT);
+ 	retprobe = OPTS_GET(opts, retprobe, false);
+ 	offset = OPTS_GET(opts, offset, 0);
++	addr = OPTS_GET(opts, addr, 0);
++	offset_or_addr = func_name ? offset : addr;
+ 	pe_opts.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
+ 
++	if (!!func_name == !!addr)
++		return libbpf_err_ptr(-EINVAL);
++	if (addr && offset)
++		return libbpf_err_ptr(-EINVAL);
++
++	gen_kprobe_target(probe_target, sizeof(probe_target), func_name,
++			  offset_or_addr);
++
+ 	legacy = determine_kprobe_perf_type() < 0;
+ 	switch (attach_mode) {
+ 	case PROBE_ATTACH_MODE_LEGACY:
+@@ -11819,26 +11850,25 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
+ 
+ 	if (!legacy) {
+ 		pfd = perf_event_open_probe(false /* uprobe */, retprobe,
+-					    func_name, offset,
++					    func_name, offset_or_addr,
+ 					    -1 /* pid */, 0 /* ref_ctr_off */);
+ 	} else {
+ 		char probe_name[MAX_EVENT_NAME_LEN];
+ 
+ 		gen_probe_legacy_event_name(probe_name, sizeof(probe_name),
+-					    func_name, offset);
++					    func_name, offset_or_addr);
+ 
+ 		legacy_probe = strdup(probe_name);
+ 		if (!legacy_probe)
+ 			return libbpf_err_ptr(-ENOMEM);
+ 
+ 		pfd = perf_event_kprobe_open_legacy(legacy_probe, retprobe, func_name,
+-						    offset, -1 /* pid */);
++						    offset_or_addr, -1 /* pid */);
+ 	}
+ 	if (pfd < 0) {
+-		err = -errno;
+-		pr_warn("prog '%s': failed to create %s '%s+0x%zx' perf event: %s\n",
+-			prog->name, retprobe ? "kretprobe" : "kprobe",
+-			func_name, offset,
++		err = pfd;
++		pr_warn("prog '%s': failed to create %s '%s' perf event: %s\n",
++			prog->name, retprobe ? "kretprobe" : "kprobe", probe_target,
+ 			errstr(err));
+ 		goto err_out;
+ 	}
+@@ -11846,9 +11876,8 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
+ 	err = libbpf_get_error(link);
+ 	if (err) {
+ 		close(pfd);
+-		pr_warn("prog '%s': failed to attach to %s '%s+0x%zx': %s\n",
+-			prog->name, retprobe ? "kretprobe" : "kprobe",
+-			func_name, offset,
++		pr_warn("prog '%s': failed to attach to %s '%s': %s\n",
++			prog->name, retprobe ? "kretprobe" : "kprobe", probe_target,
+ 			errstr(err));
+ 		goto err_clean_legacy;
+ 	}
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 0be34852350f..526d44111e81 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -563,9 +563,12 @@ struct bpf_kprobe_opts {
+ 	bool retprobe;
+ 	/* kprobe attach mode */
+ 	enum probe_attach_mode attach_mode;
++	/* kernel address to install kprobe to; mutually exclusive with func_name */
++	unsigned long addr;
+ 	size_t :0;
+ };
+-#define bpf_kprobe_opts__last_field attach_mode
++
++#define bpf_kprobe_opts__last_field addr
+ 
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach_kprobe(const struct bpf_program *prog, bool retprobe,
+-- 
+2.52.0
+
