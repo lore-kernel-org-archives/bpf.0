@@ -1,307 +1,212 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E68E29CE1
-	for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 15:27:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6A4A3537CB
+	for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 15:36:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774711666; cv=none; b=JiQ5qAIN+6AobK1uu5PUy+NPywPls4r9KOrmnT+qobpenoSTQ774IvQyM6fqsuBa7yB7eYVOBHbSSzdbd2DxVqgTYjNk3HzT2KDf7RVvZQPgKDkLiN2CmcW4dj6kPgESMIO19EWTgmcQBufcPsCe6Cwbq2j6RwidAgtH13utYKY=
+	t=1774712172; cv=none; b=N/1eOG36yjfEiwTRR90ewdSYN6jZEZk0lOyCjEja+8w+WB+Pb1oY3sat3bYFPbWaiYTwrZrzEPPGHMg13yb0Zn7CC50XJ//reTQuYyiCVXKmrwZqNsAWqUCdZvS4uhHY54Yw6Gue+AFOnVicl5rbWdfz6HwI/w6Nm0Rb48ehyB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774711666; c=relaxed/simple;
-	bh=yL8Td9UZA88O3o7r3JW+BpHaCJ4yxltbSa4UhiL9gIg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lddjHKIMnZIkOtUNnfiTRqVZxCw0lgevYcgyYl3BoA//l6+ICVJpHQGH8EBCI3T0dWHvUYPRZGLhsHNQoGFhuxmPbsiMkj2ybHkEGMI3aNm6XPKSHDTw/Q1dUb7eT9A7+F5GC9yqW+4N1GojP3OQJ0DB3vQd7ZI2qotPnyki+LM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=GClIRyJQ; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1774712172; c=relaxed/simple;
+	bh=/GEXZkmKX4s9b/SmUpPLX93M0m6mbEsjeCZUiizWuRs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=i46xRLLcYQsagbTMFam93vaLKW/ffG4RjGcbn7GZDTEPnvZ4TyIZwNR1VMix5AnS418DR+ByZivQDB0W6yRyqg19aGvFQTv778/q7pX1HfsgbJCivn4s2n3u7KpzmaDZPvS7r/+dZJYr6bwAYhaEeWeXmeRDmjsxqzOObqLHW3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DeceLkWQ; arc=none smtp.client-ip=209.85.208.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="GClIRyJQ"
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-66ba9898ae8so270613a12.1
-        for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 08:27:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DeceLkWQ"
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-38ad26e3992so24413951fa.1
+        for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 08:36:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1774711663; x=1775316463; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774712165; x=1775316965; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lPuSW6pRsFeFjtweuNOAKbGLGRJBOpgP+7O/NYd7b34=;
-        b=GClIRyJQVYE9BE+NxPVo3sYZLnnuYB3CDHYlrr0uwZanUO8BgH/VnzEVUnYbdvz+3r
-         7UFogOanMVxOfMi/5sxVoJkyuqQp11EJYyoeKyaezj04AnlVEY4ELdpho5cyKeO9KFUC
-         T4QAaD+luTnfAP8bukpDhNIecELRphRB/gCGQ4ZXCHx59V6AAAdury2jUgSBW3O1odsM
-         bPBG6K2Lvoz8IMU+vy4qoI1eDlVqpU+HKUUUruThKSl46UMxfoMRd8c0i39cVMNN4J62
-         6D+AVueFGaIbdrms3cUDlN6U1ttbL4x5/taqT4Jwlmw3dwKdF3P0Vrs9MYF7V2fL3iQX
-         ijCQ==
+        bh=A/VNplDWWCZzS7/n5RiNsPZoo6NH5P9/pGe+zWFZeD0=;
+        b=DeceLkWQBs7xX4ntad3gj27hkYmkCpFROGPk8Bsm5iA1WLg5LBzVrTzakHD+1ZbZru
+         R5pELq7zDVoDVkfjiQg+zZ7eOuOVQIzmiZ1FduT6yXveyTCBbetx5HER9ebEBup78SvO
+         zrqyHbQcJoRQ5OyswdleO+ixgeP0+ghGof3mMe9oUJgpgz20QYlKKe6+bo4Yx5h9xOsR
+         s20HKZFz01ipbkafzlhHoMJBNopCrq+dTRBZr/HIGnV+ohfos/1q97ZRmKriw6KRSYRa
+         58OPlHanNRDgRO7McEf//HAA6SXya1rh5t2+KBp03z0g1++vjA+uopMG4TLfW83IFfTG
+         3lsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774711663; x=1775316463;
+        d=1e100.net; s=20251104; t=1774712165; x=1775316965;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=lPuSW6pRsFeFjtweuNOAKbGLGRJBOpgP+7O/NYd7b34=;
-        b=Otv/KhXBMRkCOktBrNi1zH/kps6LEr7cDirxKDhWjjFvFP0LRxErQgHlC35KntrgMN
-         pZokY61f4eqw0rl4et/Rx96RjXih7mYIy0hNl5azHY5j4XO4oAC835yH4bH0iAXS7AoD
-         YuhJ/CUiYjLUO6u73K/1N5M57M/XqpW++FhKtoc9GSRno+h+M5dGKlEpmhILgAwGeLX1
-         zseqKrBw6jiPeHsuSMJ2ed+SnfeW9kB7VlXDXAiBuJq9vPG/7qMWHSCgTxkbrt1WQ01a
-         4TqgMKhx/RE0U3GwSA3/y8hl6/IcogTeb3cgaKlc4fNJOFHcEcQiu8VTHcHAr1ieEZzB
-         +7mQ==
-X-Gm-Message-State: AOJu0Yyaw7eJEyPwe1gUs0FlH0WAiofqelOayNyw5zaPVC18Bct3JoUj
-	Xre6WhNGnBD+xt3Bxb5vh07Xlv6750ejDhm+ecB5VyIP0m9+A8NaP5z/fyp8ISnBsqi21WSPU0h
-	vunqJlcw=
-X-Gm-Gg: ATEYQzz7z59gelL8vwo8aG+Cpou7y76DyOTfyYAkbEqpscHqHPovb7oNEAdvHmQETWo
-	qpVN69xSd87zxptC7nNNjN8p4BkZTvGDEOb1ApOeh5Cu7Tt9dfzQKSHoPsA++x6AFLPHx5V/k0f
-	7Vu4CG2Uns7fE3Yr7IQD2oSA4RhxFeWL6coKP4e1BWrvhMMXNkUQnHzCC8kx7a+e37n5ZE5WcTQ
-	j9MC5Dj2aKxkBFR5JxnB8hJINcZOZw2YdgnEX4rBUqzUREEAAZVwy8ah231TsFOFCB9/NErA1+d
-	bfeloWYdJGEWEVns0BGDH3K0b0fvN9D8SEbp7Lttl1Bzq48ya4a5ztKrqUZTWvDsAXglFeWS3i0
-	XiA2kEyNCxg7O9/mVSTDD32kcMjVw7ZV6MVFtVt54Ye1TdEl6IjhuT/xjqfDxSPMla9LeYhWUVR
-	C5/ySTMQruosWWQubpz8DIJXxAGtQULWif3a4dar+vB79KrSFusIpOaH9GX0aj3A==
-X-Received: by 2002:a05:600c:5956:b0:486:fe08:639a with SMTP id 5b1f17b1804b1-48722b813a4mr110789345e9.4.1774708012383;
-        Sat, 28 Mar 2026 07:26:52 -0700 (PDT)
-Received: from f16.localdomain ([121.167.230.140])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76916da892sm1874017a12.14.2026.03.28.07.26.49
+        bh=A/VNplDWWCZzS7/n5RiNsPZoo6NH5P9/pGe+zWFZeD0=;
+        b=Us6xqH1xG0QSrakqvA+trPpmvZuegKrmMQixhsqySn0uXc1YNWrs/VpjoPV03bORkk
+         wgiFW4/8Sv5o+TRj/Q2UoTgm9gmdg0WbPJQebFm8mxCUSRErRQ5XEHw1n4t9z/Mg55WI
+         ozjDFwtO5jrI+4PSQPngLlm7b9oWcT98JKlWnrZ90oezWRp3+SCTtjo9wT0eJdkGYDMq
+         p9wkyl2WK+C4dcYanNuof1DJyhWvRGdY51k4qQx7Iem4fBeq9UZ+WVZeDN8UgaFpEE47
+         jvQfcH76FNHg3aB9vTNOByX+dQSIEaWy3qH1kn18Etne86gmOvw6pivo7IYhal+iPiAR
+         W3FQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUcw8xcqtCbJUJUURK0WuwLSV1mqyhXHzN30BmFKRO3mWrHCcqTK8eLmn4GRqRgpjBdP9A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyeOJSCvZGjc+B5l7SBv4kPzWrmX5AmslEnGPOvSwsXPLS6S0Q+
+	E6J1vtmkYclB3qh9e9hWRynMq1Dy/whb52u+HcraGQaJ2EAvJXArTA1FiX1H2ONH
+X-Gm-Gg: ATEYQzxeNG5tFwnvXmqBPmszySNUUrmjwR02OuWtBLpxW3EsXznvJmXzvLlw6rW14pN
+	64Oi7d6pod7LemBpk4agowEZ75HEExztD7g73JB0EGmezejTZjwf7W8hKHZsPmLQSLAHrdS+dZG
+	bnwjNFFmHhChA9WzfwyYtqmkjY1py9DOIcXQ8aoAZYm9TQ4jjwIIWsEsgHGcshMwj2rGqbEaXT0
+	WoX12uOZRGXPxtEKeKupwbNVeJibQCsUIEQvPQkvUCIjqv0Ik4m+MaUrqb6lSkGR005bnrDQ+h0
+	+FoxobKoiGxARUvbEmSe/WoXvC91d1eloUf8xuVL1pL8PBeMoRuaXvQskki5u4AWwC7l9u798tm
+	zHGdOCj/QwP1SqcotGbewD0RhiL0AaHdjfsGWzyqHi3PzXNqieF6zoSCQxhkRSxjx9UNFOeVQFb
+	V3xIRxar9s/KVxngCd+LVw7BBVf1Si1ty09QHOWHTwzaxlca6K9Oli3P0Sy9xrsmnI
+X-Received: by 2002:a05:600c:828a:b0:487:338:b4df with SMTP id 5b1f17b1804b1-48727d8818cmr86841645e9.15.1774692519962;
+        Sat, 28 Mar 2026 03:08:39 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4872716799dsm32314725e9.25.2026.03.28.03.08.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Mar 2026 07:26:51 -0700 (PDT)
-From: Hoyeon Lee <hoyeon.lee@suse.com>
-To: bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Feng Yang <yangfeng@kylinos.cn>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 1/2] libbpf: allow address-based single kprobe attach
-Date: Sat, 28 Mar 2026 23:26:08 +0900
-Message-ID: <20260328142643.627560-2-hoyeon.lee@suse.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260328142643.627560-1-hoyeon.lee@suse.com>
-References: <20260328142643.627560-1-hoyeon.lee@suse.com>
+        Sat, 28 Mar 2026 03:08:39 -0700 (PDT)
+Date: Sat, 28 Mar 2026 10:08:37 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc: Borislav Petkov <bp@alien8.de>, x86@kernel.org, Jon Kohler
+ <jon@nutanix.com>, Nikolay Borisov <nik.borisov@suse.com>, "H. Peter Anvin"
+ <hpa@zytor.com>, Josh Poimboeuf <jpoimboe@kernel.org>, David Kaplan
+ <david.kaplan@amd.com>, Sean Christopherson <seanjc@google.com>, Dave
+ Hansen <dave.hansen@linux.intel.com>, Peter Zijlstra
+ <peterz@infradead.org>, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, KP
+ Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, "David S. Miller"
+ <davem@davemloft.net>, Andy Lutomirski <luto@kernel.org>, Thomas Gleixner
+ <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, David Ahern
+ <dsahern@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
+ Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Paolo
+ Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ linux-kernel@vger.kernel.org, kvm@vger.kernel.org, Asit Mallick
+ <asit.k.mallick@intel.com>, Tao Zhang <tao1.zhang@intel.com>,
+ bpf@vger.kernel.org, netdev@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v8 02/10] x86/bhi: Make clear_bhb_loop() effective on
+ newer CPUs
+Message-ID: <20260328100837.7e6dc7fe@pumpkin>
+In-Reply-To: <20260328004256.mm2ttj5iwvu5kdpa@desk>
+References: <20260324-vmscape-bhb-v8-0-68bb524b3ab9@linux.intel.com>
+	<20260324-vmscape-bhb-v8-2-68bb524b3ab9@linux.intel.com>
+	<20260324205930.GQacL7Mp7vwGBKX1W7@fat_crate.local>
+	<20260324221308.7sh6afdy6r6tsf4w@desk>
+	<20260325203759.GCacRHp2t8a7c4Bp6E@fat_crate.local>
+	<20260326083934.fk4wyhe6rgiss34z@desk>
+	<20260326100120.GAacUD8BVziYzLxZHB@fat_crate.local>
+	<20260326104557.24295cbb@pumpkin>
+	<20260326202931.wlggnd3nfj6hngpb@desk>
+	<20260328004256.mm2ttj5iwvu5kdpa@desk>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-bpf_program__attach_kprobe_opts() currently attaches a single kprobe only
-by func_name, with an optional offset. This covers only the symbol-
-based form, not the raw-address form that the kernel already supports
-for both kprobe PMU events and legacy tracefs/debugfs kprobes. Callers
-that already have a target IP still have to drop down to
-perf_event_open() or direct tracefs writes.
+On Fri, 27 Mar 2026 17:42:56 -0700
+Pawan Gupta <pawan.kumar.gupta@linux.intel.com> wrote:
 
-libbpf already exposes address-based attach for kprobe_multi through
-bpf_kprobe_multi_opts.addrs. This commit adds bpf_kprobe_opts.addr so
-that single kprobes can be attached either by func_name + offset or by
-raw address.
+> On Thu, Mar 26, 2026 at 01:29:31PM -0700, Pawan Gupta wrote:
+> > On Thu, Mar 26, 2026 at 10:45:57AM +0000, David Laight wrote:  
+> > > On Thu, 26 Mar 2026 11:01:20 +0100
+> > > Borislav Petkov <bp@alien8.de> wrote:
+> > >   
+> > > > On Thu, Mar 26, 2026 at 01:39:34AM -0700, Pawan Gupta wrote:  
+> > > > > I believe the equivalent for cpu_feature_enabled() in asm is the
+> > > > > ALTERNATIVE. Please let me know if I am missing something.    
+> > > > 
+> > > > Yes, you are.
+> > > > 
+> > > > The point is that you don't want to stick those alternative calls inside some
+> > > > magic bhb_loop function but hand them in from the outside, as function
+> > > > arguments.
+> > > > 
+> > > > Basically what I did.
+> > > > 
+> > > > Then you were worried about this being C code and it had to be noinstr... So
+> > > > that outer function can be rewritten in asm, I think, and still keep it well
+> > > > separate.
+> > > > 
+> > > > I'll try to rewrite it once I get a free minute, and see how it looks.
+> > > >   
+> > > 
+> > > I think someone tried getting C code to write the values to global data
+> > > and getting the asm to read them.
+> > > That got discounted because it spilt things between two largely unrelated files.  
+> > 
+> > 
+> > The implementation with global variables wasn't that bad, let me revive it.
+> > 
+> > This part which ties sequence to BHI mitigation, which is not ideal,
+> > (because VMSCAPE also uses it) it does seems a cleaner option.
+> > 
+> > --- a/arch/x86/kernel/cpu/bugs.c
+> > +++ b/arch/x86/kernel/cpu/bugs.c
+> > @@ -2095,6 +2095,11 @@ static void __init bhi_select_mitigation(void)
+> > 
+> >  static void __init bhi_update_mitigation(void)
+> >  {
+> > +   if (!cpu_feature_enabled(X86_FEATURE_BHI_CTRL)) {
+> > +       bhi_seq_outer_loop = 5;
+> > +       bhi_seq_inner_loop = 5;
+> > +   }
+> > +
+> > 
+> > I believe this can be moved to somewhere common to all mitigations.
+> >   
+> > > I think the BPF code would need significant refactoring to call a C function.  
+> > 
+> > Ya, true. Will use globals and keep clear_bhb_loop() in asm.  
+> 
+> While testing this approach, I noticed that syscalls were suffering an 8%
+> regression on ICX for Native BHI mitigation:
+> 
+>   $ perf bench syscall basic -l 100000000
+> 
+> Bisection pointed to the change for using 8-bit registers (al/ah replacing
+> eax/ecx) as the main contributor to the regression. (Global variables added
+> a bit, but within noise).
+> 
+> Further digging revealed a strange behavior, using %ah for the inner loop
+> was causing the regression, interchanging %al and %ah in the loops
+> (for movb and sub) eliminated the regression.
+> 
+> <clear_bhb_loop_nofence>:
+> 
+> 	movb	bhb_seq_outer_loop(%rip), %al
+> 
+> 	call	1f
+> 	jmp	5f
+> 1:	call	2f
+> .Lret1:	RET
+> 2:	movb	bhb_seq_inner_loop(%rip), %ah
+> 3:	jmp	4f
+> 	nop
+> 4:	sub	$1, %ah <---- No regression with %al here
+> 	jnz	3b
+> 	sub	$1, %al
+> 	jnz	1b
+> 
+> My guess is, "sub $1, %al" is faster than "sub $1, %ah". Using %al in the
+> inner loop, which is executed more number of times is likely making the
+> difference. A perf profile is needed to confirm this.
 
-Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
----
- tools/lib/bpf/libbpf.c | 77 +++++++++++++++++++++++++++++-------------
- tools/lib/bpf/libbpf.h |  5 ++-
- 2 files changed, 57 insertions(+), 25 deletions(-)
+I bet it is also CPU dependant - it is quite likely that there isn't
+any special hardware to support partial writes of %ah so it ends up taking
+a slow path (possibly even a microcoded one to get an 8% regression).
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 9ea41f40dc82..a49ea01288ad 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -11523,7 +11523,7 @@ static int determine_uprobe_retprobe_bit(void)
- #define PERF_UPROBE_REF_CTR_OFFSET_SHIFT 32
- 
- static int perf_event_open_probe(bool uprobe, bool retprobe, const char *name,
--				 uint64_t offset, int pid, size_t ref_ctr_off)
-+				 uint64_t offset_or_addr, int pid, size_t ref_ctr_off)
- {
- 	const size_t attr_sz = sizeof(struct perf_event_attr);
- 	struct perf_event_attr attr;
-@@ -11558,7 +11558,7 @@ static int perf_event_open_probe(bool uprobe, bool retprobe, const char *name,
- 	attr.type = type;
- 	attr.config |= (__u64)ref_ctr_off << PERF_UPROBE_REF_CTR_OFFSET_SHIFT;
- 	attr.config1 = ptr_to_u64(name); /* kprobe_func or uprobe_path */
--	attr.config2 = offset;		 /* kprobe_addr or probe_offset */
-+	attr.config2 = offset_or_addr;	 /* kprobe_addr or probe_offset */
- 
- 	/* pid filter is meaningful only for uprobes */
- 	pfd = syscall(__NR_perf_event_open, &attr,
-@@ -11633,13 +11633,14 @@ static const char *tracefs_available_filter_functions_addrs(void)
- }
- 
- static void gen_probe_legacy_event_name(char *buf, size_t buf_sz,
--					const char *name, size_t offset)
-+					const char *name, uint64_t offset_or_addr)
- {
- 	static int index = 0;
- 	int i;
- 
--	snprintf(buf, buf_sz, "libbpf_%u_%d_%s_0x%zx", getpid(),
--		 __sync_fetch_and_add(&index, 1), name, offset);
-+	snprintf(buf, buf_sz, "libbpf_%u_%d_%s_0x%" PRIx64, getpid(),
-+		 __sync_fetch_and_add(&index, 1), name ?: "addr",
-+		 offset_or_addr);
- 
- 	/* sanitize name in the probe name */
- 	for (i = 0; buf[i]; i++) {
-@@ -11648,13 +11649,27 @@ static void gen_probe_legacy_event_name(char *buf, size_t buf_sz,
- 	}
- }
- 
-+static void gen_kprobe_target(char *buf, size_t buf_sz, const char *name,
-+			      uint64_t offset_or_addr)
-+{
-+	if (name)
-+		snprintf(buf, buf_sz, "%s+0x%" PRIx64, name, offset_or_addr);
-+	else
-+		snprintf(buf, buf_sz, "0x%" PRIx64, offset_or_addr);
-+}
-+
- static int add_kprobe_event_legacy(const char *probe_name, bool retprobe,
--				   const char *kfunc_name, size_t offset)
-+				   const char *kfunc_name, uint64_t offset_or_addr)
- {
--	return append_to_file(tracefs_kprobe_events(), "%c:%s/%s %s+0x%zx",
-+	char probe_target[128];
-+
-+	gen_kprobe_target(probe_target, sizeof(probe_target), kfunc_name,
-+			  offset_or_addr);
-+
-+	return append_to_file(tracefs_kprobe_events(), "%c:%s/%s %s",
- 			      retprobe ? 'r' : 'p',
- 			      retprobe ? "kretprobes" : "kprobes",
--			      probe_name, kfunc_name, offset);
-+			      probe_name, probe_target);
- }
- 
- static int remove_kprobe_event_legacy(const char *probe_name, bool retprobe)
-@@ -11674,24 +11689,27 @@ static int determine_kprobe_perf_type_legacy(const char *probe_name, bool retpro
- }
- 
- static int perf_event_kprobe_open_legacy(const char *probe_name, bool retprobe,
--					 const char *kfunc_name, size_t offset, int pid)
-+					 const char *kfunc_name, uint64_t offset_or_addr, int pid)
- {
- 	const size_t attr_sz = sizeof(struct perf_event_attr);
- 	struct perf_event_attr attr;
- 	int type, pfd, err;
-+	char probe_target[128];
- 
--	err = add_kprobe_event_legacy(probe_name, retprobe, kfunc_name, offset);
-+	gen_kprobe_target(probe_target, sizeof(probe_target), kfunc_name,
-+			  offset_or_addr);
-+
-+	err = add_kprobe_event_legacy(probe_name, retprobe, kfunc_name,
-+				      offset_or_addr);
- 	if (err < 0) {
--		pr_warn("failed to add legacy kprobe event for '%s+0x%zx': %s\n",
--			kfunc_name, offset,
-+		pr_warn("failed to add legacy kprobe event for '%s': %s\n", probe_target,
- 			errstr(err));
- 		return err;
- 	}
- 	type = determine_kprobe_perf_type_legacy(probe_name, retprobe);
- 	if (type < 0) {
- 		err = type;
--		pr_warn("failed to determine legacy kprobe event id for '%s+0x%zx': %s\n",
--			kfunc_name, offset,
-+		pr_warn("failed to determine legacy kprobe event id for '%s': %s\n", probe_target,
- 			errstr(err));
- 		goto err_clean_legacy;
- 	}
-@@ -11784,6 +11802,9 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
- 	enum probe_attach_mode attach_mode;
- 	char *legacy_probe = NULL;
- 	struct bpf_link *link;
-+	uint64_t offset_or_addr;
-+	char probe_target[128];
-+	unsigned long addr;
- 	size_t offset;
- 	bool retprobe, legacy;
- 	int pfd, err;
-@@ -11794,8 +11815,18 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
- 	attach_mode = OPTS_GET(opts, attach_mode, PROBE_ATTACH_MODE_DEFAULT);
- 	retprobe = OPTS_GET(opts, retprobe, false);
- 	offset = OPTS_GET(opts, offset, 0);
-+	addr = OPTS_GET(opts, addr, 0);
-+	offset_or_addr = func_name ? offset : addr;
- 	pe_opts.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
- 
-+	if (!!func_name == !!addr)
-+		return libbpf_err_ptr(-EINVAL);
-+	if (addr && offset)
-+		return libbpf_err_ptr(-EINVAL);
-+
-+	gen_kprobe_target(probe_target, sizeof(probe_target), func_name,
-+			  offset_or_addr);
-+
- 	legacy = determine_kprobe_perf_type() < 0;
- 	switch (attach_mode) {
- 	case PROBE_ATTACH_MODE_LEGACY:
-@@ -11819,26 +11850,25 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
- 
- 	if (!legacy) {
- 		pfd = perf_event_open_probe(false /* uprobe */, retprobe,
--					    func_name, offset,
-+					    func_name, offset_or_addr,
- 					    -1 /* pid */, 0 /* ref_ctr_off */);
- 	} else {
- 		char probe_name[MAX_EVENT_NAME_LEN];
- 
- 		gen_probe_legacy_event_name(probe_name, sizeof(probe_name),
--					    func_name, offset);
-+					    func_name, offset_or_addr);
- 
- 		legacy_probe = strdup(probe_name);
- 		if (!legacy_probe)
- 			return libbpf_err_ptr(-ENOMEM);
- 
- 		pfd = perf_event_kprobe_open_legacy(legacy_probe, retprobe, func_name,
--						    offset, -1 /* pid */);
-+						    offset_or_addr, -1 /* pid */);
- 	}
- 	if (pfd < 0) {
--		err = -errno;
--		pr_warn("prog '%s': failed to create %s '%s+0x%zx' perf event: %s\n",
--			prog->name, retprobe ? "kretprobe" : "kprobe",
--			func_name, offset,
-+		err = pfd;
-+		pr_warn("prog '%s': failed to create %s '%s' perf event: %s\n",
-+			prog->name, retprobe ? "kretprobe" : "kprobe", probe_target,
- 			errstr(err));
- 		goto err_out;
- 	}
-@@ -11846,9 +11876,8 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
- 	err = libbpf_get_error(link);
- 	if (err) {
- 		close(pfd);
--		pr_warn("prog '%s': failed to attach to %s '%s+0x%zx': %s\n",
--			prog->name, retprobe ? "kretprobe" : "kprobe",
--			func_name, offset,
-+		pr_warn("prog '%s': failed to attach to %s '%s': %s\n",
-+			prog->name, retprobe ? "kretprobe" : "kprobe", probe_target,
- 			errstr(err));
- 		goto err_clean_legacy;
- 	}
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 0be34852350f..526d44111e81 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -563,9 +563,12 @@ struct bpf_kprobe_opts {
- 	bool retprobe;
- 	/* kprobe attach mode */
- 	enum probe_attach_mode attach_mode;
-+	/* kernel address to install kprobe to; mutually exclusive with func_name */
-+	unsigned long addr;
- 	size_t :0;
- };
--#define bpf_kprobe_opts__last_field attach_mode
-+
-+#define bpf_kprobe_opts__last_field addr
- 
- LIBBPF_API struct bpf_link *
- bpf_program__attach_kprobe(const struct bpf_program *prog, bool retprobe,
--- 
-2.52.0
+As well as swapping %al <-> %ah try changing the outer loop decrement to
+	sub $0x100, %ax
+since %al is zero that will set the z flag the same.
+
+I've just hacked a test into some test code I've got.
+I'm not seeing an unexpected costs on either zen-5 or haswell.
+So it may be more subtle.
+
+	David
+
+
+> 
+> Never imagined a register selection can make an 8% difference in
+> performance! Anyways, will update the patch with this finding.
 
