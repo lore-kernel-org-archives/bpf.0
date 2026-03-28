@@ -1,178 +1,145 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48B1E1DC1AB
-	for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 17:31:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774719097; cv=pass; b=FJiPur0JXcP5TF097VFpHfmxBCGj5Faxx4V4WHmFhOu7e2btiwZJdifTOO/3in+VoC5a1sgWByPFVmL/9MEGaM/PHFnuYNWIGDLzXNU1Ff7OKqYgrz1pS21U4ELrvu6sjm7TwztrCVhPlWlvqVLj2rcpihz0nbwBpgkeU8NV+kE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774719097; c=relaxed/simple;
-	bh=aRXa5dkkPR9HpHDJgU3ZJHG5f5J8GDl9KLDi4hro6Ls=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rcIHg9GKcoXWY8J/YiBmkyFvZKIwUNLYQbeU5+mMLrlxFJWL2gP+GLZhVh0ZFmHTflfxP8zLXDslnyXHZjbipMBoIk7om4S+aBrdrVrCCsnbFvoKpI61Gz1WlmSzwRONYzZ5r6y13k8vEb9aOiPu2/N9ANcnDasIbza5Ig8BZeY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=s2IMsdr+; arc=pass smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2851932ED29
+	for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 17:44:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774719881; cv=none; b=XGy3j5R+E9LigUC/P4003Eh6ZAqLlcRbWFnDjIo4wIbhrKkY7n5d4ZW5FKbm49gYj15K++bWbpxBUEo2EPhwTSrheAc0Xkh0cQYtyPEzwXbkQWImtt/nEmA2hAD6p2Grfk6De/0Knr80iHXGqkh6cze9IVKPZUNPYGulAvCG5eA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774719881; c=relaxed/simple;
+	bh=WvILGTpjF/D4pi5kdNEKgty4Bl1aj/OQVB9dAAA4a3Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZRNXK7sg5kZ0lA43hBIpD8pv3/CbNTxmFodyQPC0o7Y3mSNHd6hg75H9GJ/xOJvEW0XiX5mfTxxsiDRj2sShCm7bvi1eFVUZxKndUJ2EJ//wXJOgf+uK9HRTJQPkT7t91nyp0ytqMQCL+JXnw1VR3jOgES/xfQIOP917TXtqBJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fDzLWEaj; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="s2IMsdr+"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-43cf73bbfbdso135538f8f.1
-        for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 10:31:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774719095; cv=none;
-        d=google.com; s=arc-20240605;
-        b=UvcnrEMdFvaZ9GcJYDKeGzQMiXDTeAHh/8i89Vc22XAQCSPMHrd9VDzgm73RqwGGQP
-         GZhghln2pw+HKsO70D5x0vTuNG8n3mxNYw7cAtlRFUMHstLTQscfLSIbQOvtM/qgY9ug
-         19XJWQmxrwezsZu3eF4wphfAHVvmKHRRDoFUDDXePocn84uMFzS1TTGIiUmq4mIh1yeQ
-         s04S0SsMbbqVI+k4dNonmkFW1+pNvnUBShSnpkZ5ws8JVTwc9bte1t2HiwxTaVXLbLIC
-         9FM7kcDWVjKQ8Xjft42ofFeyzPavcfvBkCuTGMedvmgDOD3Sy9aeF6dAuBHfCALVBl2H
-         VuNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=g191wywC3C6A8Bl4NajHAZiUFAuR19jL8UMhMb1Vddo=;
-        fh=i4ra377jioU2YTBV6nOH1Dd5LwsD14+ylHG1lf+guBU=;
-        b=K2V7QG94KFVu1fUrsDjJXkDSGbI1PNAeRpICLffLbAJedkAslxYz+lF/NuHhS6MNZE
-         MYr1PPnIYHybpPLAkN9Sr02iYUzIgtIYxKhopa4YW1jVUz/mcto+jR7mHs4v8J2svbAj
-         9v8KdX4t0SYbfxA9wJZ6RwpjBvXCVtlRE3aORTUQmVJHDZKn9ip5ochOIpUQV3ZVqz+N
-         Rzj4ud6/DIrNkgejl30BszEN4QURGgLr1Di/BgeXkX9Lc6C95qs7E/9zaE1cOKADoEV7
-         cQuj0aIWq/6jSQq+qe5vQWp2YFYshGJhVTuwfZ3/3Gd2QehZTBMPftQPK6MHQw4Ri20c
-         f6uQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fDzLWEaj"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2b0afa0210bso16020355ad.2
+        for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 10:44:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774719095; x=1775323895; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g191wywC3C6A8Bl4NajHAZiUFAuR19jL8UMhMb1Vddo=;
-        b=s2IMsdr+Hj4Ap59dGUD3sqijJbxYwKHkA9bde0V/Cl52ggTMyRt7yCgYiTZo0dLOPB
-         vJYAjK0CWIZmZLiJFXpPO1qQ0R6UIQS1MytCOK5YOIBFXiWyC4HtAO/7TIFFpIFUe+l8
-         tQK6dEE5Ol8YkxYMbCLhkSNp0VNdelHpAXfTYwYTEPjkbzN1aDzFguxOg0KdvxOEXL0S
-         87ArlpPIz0bAXtzdXkiG5XxJZ6AZbCD9pCiTo+RoHtaho7WCBG6yAuEQ5D7hHMqq7CE9
-         DBLbcKBbeeqH4Z/XT8Mhbi/3dwqL5nQAHFCzhOmcFa+w6QeaDIFHziVqVmb7Y3N0PF7I
-         zKLg==
+        d=gmail.com; s=20251104; t=1774719879; x=1775324679; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zvSfAaSNTnZS97xnXnYJY5nBSkWpcfr6mFAd698DlKg=;
+        b=fDzLWEajWqOxQzYVVNbVMzDzCNxhj+uFbWcJ6E7T9ciXD3u04WA28xmKglCPcYrla5
+         42K7jSpJL6RK5jmt6+ymW66tdL7kIYr0aYsSJuW0nh/y4SPRm2q9PfCMRiCgMDo8+Vq8
+         itqa6evJ+/K7KWztpPjTnz/45sdZ5IXkhp532b1nUbAnFJewg0p1KbVreEWSXLUdmcCt
+         VUOazwYt0ZHhtivDZONP2iwIR37OmnmyGRgU1R51OWMjxt/36zBMDF57lUAse9chRRa6
+         08Rr1HJgcr7ct2EPgZr/xBpvlUcqRqOAfK0LnsGABE5z5LSiJYchezI6WO8WiHU8VhT1
+         SBNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774719095; x=1775323895;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=g191wywC3C6A8Bl4NajHAZiUFAuR19jL8UMhMb1Vddo=;
-        b=WbpemWswv+RVmjMK24AeQ5EMi8b/ry6Q83/E534VaAqEd9guCYlmtwAh5FbmQNdr1g
-         +VnnGQo2hN0euqYqfqdwZO+HoueZVKovOX13DlQJbvhk7G5J3y56Sfr78CmUGsSkZYkw
-         F2OFr3HvDpUKkic06lBB1i5/l02eJRBMzy4smbWGwQ1chCq03sIyrX8RQhgqazuL6JCa
-         s/7c7r+kot/hgi3k1No4yyrof/iH+L4w21/Jg5b7WzA0ovqxinTAsmM9RXNa9Q9NZ8zG
-         bOSxeRn92Vedzk66SCuJ1VzR4c8RVLyQIbGOor6O2tZ7XMHpeFLISokAb7E3as6Z09cl
-         Ybug==
-X-Forwarded-Encrypted: i=1; AJvYcCXpYZVjISccy7Q+4hYwytCK+JMSdexPbDhxD8Dn5pqAiL95QshNkJpkU7SRBvyUWHPYZqs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7bnTrjYvXt4XFlRQSJLs7r88vtUVADnuMHZS2dFPIQ4iydlWh
-	50NO6dbh/pfq3DzbW2r4d467OO4UaVDYp0dbnh0YjrNKqq3uXJSzkr4AEOXCPoajmiUY55dqEBe
-	MrAwsEP95IpNPDaBMcQ9CqSeWfkclLgFud7m0
-X-Gm-Gg: ATEYQzxLLRo+GzZIdQzq2I8w+oUGn0Q94EPTs1/U3O7DzY1lho+qB6R1V+WpSRR+UR4
-	GA44jWQVaxYvpAwX739GaqMc3flFGBgh+1OSS8kLakZSQ6gwia46n1/1PSpZOUsalQ1oEynuw/7
-	CBV8Z3G3JKrKY1PngCk0be6WxZt97lTGLBNcv089+GXK7+5qjp2DFWdhQAs0bH2ZIqF1bo0/9Pl
-	fuMtu1kiLhSwHgGecBtxvc4X82kEOxrImo6qL5qmC5CbaEu0Q5jvmTSTNJYUrbtEt/7r5aUg24E
-	uCIHg3pDnLpWq394WnC47op1MlglSeuNQ9B98JKiUVdFCcIftxtDTEhG28qslfJATN3TDfSLsF5
-	C7Ca4/VZcyJXym5Zak13P7tY/9A==
-X-Received: by 2002:a05:6000:4013:b0:43b:50d6:4f04 with SMTP id
- ffacd0b85a97d-43b9ea66dc1mr10726122f8f.38.1774719094545; Sat, 28 Mar 2026
- 10:31:34 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774719879; x=1775324679;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zvSfAaSNTnZS97xnXnYJY5nBSkWpcfr6mFAd698DlKg=;
+        b=T0wjaCbU2GalTSxbtHeX9VmmmPiv+gGwrwIXfztTxXyo59MTa8w6qQ52zYPDzXLch6
+         V/stGqNbMN7Eg8eb3Er1Lld+zY3D5I33ekYzwT0AknD4Ew1NMlML+w3XJrT9JRkXquql
+         vp+K9TB+zAsirj8NDh42Jav9jR0GQKUosk8zxSBZpHJ+ufqmd+iBMuEwnk7G+JHVd1rV
+         ty+aF0zcU+/ZAjM52nhO07+u3LPlOc/K8hu483aVolOKGSiWAYqOrHMhiJl4Wv+A9cHL
+         fDTmktRNxJvl+3VVW0WwW1kKo7qjk5+ric5MDEnhL73Ldxuheuz+25p4qFozFL+p6cV5
+         I2og==
+X-Gm-Message-State: AOJu0YwVYxaH/1fMOHxjhH7NoHZ58dSuWSHw8mdewiqqELggmIbA285x
+	udJMFQwdajHSAC+6suW/Ip6DKmz1YdDOkMFtPjJonA3V18/PV317IycgspmvsthQ
+X-Gm-Gg: ATEYQzxYQVpZ8mOqZ1gj1sDFpjvZRBOEiL8Pd/c98zDHPU3ZVhR1f2Bs1SlM64trnVl
+	BaYDGra86hWkC3OJa60cYNTq5FpFougYcySH3dX0QnvYi/CduxDETQsZo8pkONstlLJaFZR/hC+
+	K25Od8KQ4RLVR5uytdRZR7HViK5c6I0U/F9tWpBrBJnloTQraVYsqggUJNhgojPRLMBXRtsPqqt
+	y0P0F9ATZ9YsR52IvzU1WdOjg8ckyJAqbJ0yn8lSDJqxnXKVyfbs2nmNkIgjt7eDgnMtkhA1Efq
+	75eqnVI2Hc9P4CoHwo3dDvm0dahgNhyNOCk0Tr2LmTY1+z/E7RTWYLRXtSy/w9nCIhqkXd1NfTx
+	HiKDwaKgnPo9nSqxQyI+T70YdzeZvJZFryBCC96YVOpgDvucQUfs9P9MvmHV7C7QlD6KeRqbZoY
+	uiMJLFia1U1gaP2tmAIO7YuUK8zu0Ym+gz92t2Yhze3rHAuz6qsK8HEoyd1WvaHw==
+X-Received: by 2002:a17:903:2f8d:b0:2b2:4b6a:f3b8 with SMTP id d9443c01a7336-2b24b6afb22mr1511365ad.29.1774719879041;
+        Sat, 28 Mar 2026 10:44:39 -0700 (PDT)
+Received: from cps-manycore-1.. ([143.248.136.81])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2427c5339sm29262105ad.79.2026.03.28.10.44.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 Mar 2026 10:44:38 -0700 (PDT)
+From: Sechang Lim <rhkrqnwk98@gmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.next,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	Sechang Lim <rhkrqnwk98@gmail.com>
+Subject: [PATCH bpf] bpf: Fix RCU stall in bpf_fd_array_map_clear()
+Date: Sat, 28 Mar 2026 17:44:28 +0000
+Message-ID: <20260328174428.3554328-1-rhkrqnwk98@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1774025082.git.paul.chaignon@gmail.com> <b82e9240f62200aae173a1c69c782f56ed7f8f21.1774025082.git.paul.chaignon@gmail.com>
- <87ikamjv5q.fsf@gmail.com> <acf_3HgkpATWYzs9@Tunnel>
-In-Reply-To: <acf_3HgkpATWYzs9@Tunnel>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sat, 28 Mar 2026 10:31:23 -0700
-X-Gm-Features: AQROBzDcUMVJXJDF4ADJ28bMjEdCnSRzgU6Zg1-hHn9WLLwZ_2S8uCQN-YItf8g
-Message-ID: <CAADnVQJ2hX6E1_p557MYJOQLxXROzDxezwr-x79A7MyZZLzJuA@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 5/6] selftests/bpf: Cover invariant violation
- cases from syzbot
-To: Paul Chaignon <paul.chaignon@gmail.com>
-Cc: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>, Shung-Hsi Yu <shung-hsi.yu@suse.com>, 
-	Srinivas Narayana <srinivas.narayana@rutgers.edu>, 
-	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sat, Mar 28, 2026 at 9:20=E2=80=AFAM Paul Chaignon <paul.chaignon@gmail.=
-com> wrote:
->
-> On Mon, Mar 23, 2026 at 05:46:41PM +0000, Mykyta Yatsenko wrote:
-> > Paul Chaignon <paul.chaignon@gmail.com> writes:
->
-> [...]
->
-> > > +/* Last jump can be detected as always taken because the intersectio=
-n of R5 and
-> > > + * R7 32bit tnums produces a constant that isn't within R7's s32 bou=
-nds.
-> > > + */
-> > > +SEC("socket")
-> > > +__description("dead branch: tnums give impossible constant if equal"=
-)
-> > > +__success
-> > > +__flag(BPF_F_TEST_REG_INVARIANTS)
-> > > +__naked void tnums_equal_impossible_constant(void *ctx)
-> > > +{
-> > > +   asm volatile("                                                   =
-                       \
-> > > +   call %[bpf_get_prandom_u32];                                     =
-                       \
-> > > +   r5 =3D r0;                                                       =
-                         \
-> > > +   r5 &=3D 0xfffffffffffffffc;       /* var_off32=3D(0; 0xfffffffc) =
-*/                         \
-> > > +   r7 =3D r0;                                                       =
-                         \
-> > > +   r7 &=3D 0x1;                      /* var_off32=3D(0x0; 0x1) */   =
-                           \
-> > > +   r7 +=3D -43;                      /* s32=3D[-43; -42] & var_off32=
-=3D(0xffffffd4; 0x3) */      \
-> > > +   if w5 !=3D w7 goto +1;            /* on fallthrough var_off32=3D-=
-44, not in s32 */          \
-> > w5 has bits 0,1 zero, rest unknown
-> > w7 has top bits known as 0xffffffd4, and bits 0,1 unknown
-> > If w5 =3D=3D w7, their tnums must intersect to a single
-> > value =3D 0xffffffd4(-44). Which is outside of w7's range [-43; 42]. So
-> > the r10 =3D 0 branch should be unreachable.
-> > I guess the comment should be updated to the kernel style as well.
->
-> Thanks for the review! We already have a lot of end-of-line comments on
-> the BPF assembly in selftests (including two tests above) so I assumed
-> that was fine.
+Add a missing cond_resched() in bpf_fd_array_map_clear() loop.
 
-btw we have two comment styles in bpf progs.
-I personally prefer this one:
-        /*
-         * Checkpoint at function entry should not fire, as caller
-         * stack fp[0]-8 is alive at this point.
-         */
-        "r6 =3D r2;"
-        "r1 =3D *(u64 *)(r6 + 0);"
-        "*(u64*)(r10 - 8) =3D 7;"
-        "r2 =3D r10;"
+For PROG_ARRAY maps with many entries this loop calls
+prog_array_map_poke_run() per entry which can be expensive, and
+without yielding this can cause RCU stalls under load:
 
-because of color highlighting.
-But some prefer the other one:
+  rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+  rcu: 	(detected by 0, t=6502 jiffies, g=729293, q=305 ncpus=1)
+  rcu: All QSes seen, last rcu_preempt kthread activity 6502 (4295096514-4295090012), jiffies_till_next_fqs=1, root ->qsmask 0x0
+  rcu: rcu_preempt kthread starved for 6502 jiffies! g729293 f0x2 RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=0
+  rcu: 	Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
+  rcu: RCU grace-period kthread stack dump:
+  task:rcu_preempt     state:R  running task     stack:0     pid:15    tgid:15    ppid:2      task_flags:0x208040 flags:0x00004000
+  Call Trace:
+   <TASK>
+   context_switch kernel/sched/core.c:5382 [inline]
+   __schedule+0x697/0x1430 kernel/sched/core.c:6767
+   __schedule_loop kernel/sched/core.c:6845 [inline]
+   schedule+0x10a/0x3e0 kernel/sched/core.c:6860
+   schedule_timeout+0x145/0x2c0 kernel/time/sleep_timeout.c:99
+   rcu_gp_fqs_loop+0x255/0x1350 kernel/rcu/tree.c:2046
+   rcu_gp_kthread+0x347/0x680 kernel/rcu/tree.c:2248
+   kthread+0x465/0x880 kernel/kthread.c:464
+   ret_from_fork+0x4d/0x80 arch/x86/kernel/process.c:153
+   ret_from_fork_asm+0x19/0x30 arch/x86/entry/entry_64.S:245
+   </TASK>
+  rcu: Stack dump where RCU GP kthread last ran:
+  CPU: 0 UID: 0 PID: 30932 Comm: kworker/0:2 Not tainted 6.14.0-13195-g967e8def1100 #2 PREEMPT(undef)
+  Hardware name: QEMU Ubuntu 24.04 PC v2 (i440FX + PIIX, arch_caps fix, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+  Workqueue: events prog_array_map_clear_deferred
+  RIP: 0010:write_comp_data+0x38/0x90 kernel/kcov.c:246
+  Call Trace:
+   <TASK>
+   prog_array_map_poke_run+0x77/0x380 kernel/bpf/arraymap.c:1096
+   __fd_array_map_delete_elem+0x197/0x310 kernel/bpf/arraymap.c:925
+   bpf_fd_array_map_clear kernel/bpf/arraymap.c:1000 [inline]
+   prog_array_map_clear_deferred+0x119/0x1b0 kernel/bpf/arraymap.c:1141
+   process_one_work+0x898/0x19d0 kernel/workqueue.c:3238
+   process_scheduled_works kernel/workqueue.c:3319 [inline]
+   worker_thread+0x770/0x10b0 kernel/workqueue.c:3400
+   kthread+0x465/0x880 kernel/kthread.c:464
+   ret_from_fork+0x4d/0x80 arch/x86/kernel/process.c:153
+   ret_from_fork_asm+0x19/0x30 arch/x86/entry/entry_64.S:245
+   </TASK>
 
-        asm volatile ("                                 \
-        /* spill R1(ctx) into stack */                  \
-        *(u64*)(r10 - 8) =3D r1;                          \
-        /* fill it back into R2 */                      \
-        r2 =3D *(u64*)(r10 - 8);                          \
+Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+---
+ kernel/bpf/arraymap.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-The comments have the same color as asm, but
-no " " marks.
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 33de68c95..5e25e0353 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -1015,8 +1015,10 @@ static void bpf_fd_array_map_clear(struct bpf_map *map, bool need_defer)
+ 	struct bpf_array *array = container_of(map, struct bpf_array, map);
+ 	int i;
+ 
+-	for (i = 0; i < array->map.max_entries; i++)
++	for (i = 0; i < array->map.max_entries; i++) {
+ 		__fd_array_map_delete_elem(map, &i, need_defer);
++		cond_resched();
++	}
+ }
+ 
+ static void prog_array_map_seq_show_elem(struct bpf_map *map, void *key,
+-- 
+2.43.0
 
-
-> (Unrelated: On some mail clients, your comments are hard to spot. It
-> might help if you could include a blank line before and after them :) )
-
-+1
