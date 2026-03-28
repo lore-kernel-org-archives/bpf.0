@@ -1,186 +1,106 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE0C326F46F;
-	Sat, 28 Mar 2026 02:55:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF2BF1DDC3F;
+	Sat, 28 Mar 2026 03:30:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774666555; cv=none; b=U20gwdkiFYks7RtAGcd54wWzYCeOec12MtJxajrX7GM754XfcQY+mhWeNAcNZrgfDNNaNgJmRCBX5TjwFzZrSYHgQtX8fL6wUytug6Tl0bWuTp7T1Lui7Vy7udhV94HSCoT7uLQLAsdChJh7lT6g+7Yp4lcQ5K3SdnUZhuHCzks=
+	t=1774668626; cv=none; b=oLkcUgXFHlbCJ5uEuist3CSebJKzC6AQ376eDtMcfv8apdUL4Oa4Hs/KXDZ1ljpsXvOik2NfdwQErngWfvl8sguNRLfPmcmY9kTml3EGBfJ233nIpBHNYQjVvI85beqOZCeR+72fVR7fiRjdJWWJeuO3XWMLdRVaCs5ovo20TV4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774666555; c=relaxed/simple;
-	bh=+nZ4u3MBcRwp9OGWXaCUo2FPTKLyPZrQVTAvSmX15Bk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jpKtGCQ+thKUBjtezz5uWL+Phn13pIvk35lcpZUKWer6f6uiJ/Dt8Un5CKKQp+5LSK0V96Oq351W/UhdeOvb/UsOOO3fUKrp4pZdBhCnb9RwMv+wrovaTOD128NSYeCBaJHtbvkMrHBiWULUYjv6/dY84c/ZMNjEM2zOys+ixwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aknoCzpB; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1774668626; c=relaxed/simple;
+	bh=j0dH5kvTMqHLiJML1JmVpOXxmBCLlUMBSucA7QjeNlA=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=RL8kBB++RA3loQV1P2DzbHYhIw9Q5EHNnciPLB9E4Rj/2xeLOkzHemt1tvpAiHT2nWAK2MvdP2nQvFYsg4GK1sPTlnRW/WgL0JnAEiUPOw9yhLeiBYnvUXopTLqZXZTT1d/ErvDFvPV+GVfdvMNABaNimYsNiy3VVaPwoJp/Y1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sRSDToqU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aknoCzpB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774666553; x=1806202553;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+nZ4u3MBcRwp9OGWXaCUo2FPTKLyPZrQVTAvSmX15Bk=;
-  b=aknoCzpBFPiWDl2zhYIRTrNx/Viwi1izg4yymvSELiYZiZhNSPZ6NjqS
-   T23LURY1gE0trdSMruvKRHrQZ/Ti9Q86vSqImFVQ0OCWI9LGiwIsLjuhU
-   25yGqXYrHQcKwxXRQ6g62rpyjL9XGNmrYpoF75MQDxYtKxgAjQMD46n80
-   dYHgsfkWJI6Q5B7lxe2ugD/ZB9TFklfuJbmaWva4pv0G3+3h2/8omGYwi
-   j1u6cX1cBHur1UfXxzexXjXS++yfO1p2YFyJwGMpmZKwqWA7l97QcaWTd
-   WReT9Bx348IxEcv1jMHCtqaY1eu5Q2yKu1+DGa4tSWW9MxQD6pQgcoQ6d
-   w==;
-X-CSE-ConnectionGUID: o0uctF+YQuywrHHaHwpYCg==
-X-CSE-MsgGUID: X4M4L7QvRrqnHdC3y1/2Ow==
-X-IronPort-AV: E=McAfee;i="6800,10657,11742"; a="75857023"
-X-IronPort-AV: E=Sophos;i="6.23,145,1770624000"; 
-   d="scan'208";a="75857023"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2026 19:55:52 -0700
-X-CSE-ConnectionGUID: /bKuae7qTwSAoSUlotz+1g==
-X-CSE-MsgGUID: peMT7tAZRFGoECNlx4ANoA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,145,1770624000"; 
-   d="scan'208";a="224685528"
-Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 27 Mar 2026 19:55:46 -0700
-Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w6Jpv-00000000B0v-1g9H;
-	Sat, 28 Mar 2026 02:55:43 +0000
-Date: Sat, 28 Mar 2026 10:55:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>,
-	Jonathan Corbet <corbet@lwn.net>, Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	"Dr. David Alan Gilbert" <linux@treblig.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	James.Bottomley@hansenpartnership.com, dhowells@redhat.com,
-	Fan Wu <wufan@kernel.org>, Ryan Foster <foster.ryan.r@gmail.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [PATCH v3 6/9] security: Hornet LSM
-Message-ID: <202603281030.AIoqyOy3-lkp@intel.com>
-References: <20260326060655.2550595-7-bboscaccy@linux.microsoft.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sRSDToqU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70A6CC19424;
+	Sat, 28 Mar 2026 03:30:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774668626;
+	bh=j0dH5kvTMqHLiJML1JmVpOXxmBCLlUMBSucA7QjeNlA=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=sRSDToqUtgUGZDh+5qnZAYPT3xCTpLrrjLzoZrzyFuSCOnBpxDMeA9rfKNcVrKH/T
+	 pwq4NbG4CledVelDW4C1K870u2iPacWe+HG7cUpp9cAJKbVGqXCAQW2l5tr2VlVErv
+	 PpJMWuxHpgdaM13etbe/8T7eX07sXvsDTQUkFXXVmddUjO6/QwOsFV8ZJnJDeIu1fi
+	 oTeeNYO3BbnAR2xBnIJbZym/qeAwgpHjo25xBoO2NyQC8J1+HV9VsF1npyAGzFzZHp
+	 /J5CNGjcMeTUgVk0NisrsSoCNSrb1Ho91aS7M21wD99sWyOZkzyB9dBpiBGrgbcKh4
+	 oxPlZTAiVqjlg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3FDD73930181;
+	Sat, 28 Mar 2026 03:30:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260326060655.2550595-7-bboscaccy@linux.microsoft.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 net] ptr_ring: disable KCSAN warnings
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177466861178.4167434.16609769903000560037.git-patchwork-notify@kernel.org>
+Date: Sat, 28 Mar 2026 03:30:11 +0000
+References: 
+ <dd3984b3bce9df3591927f927668cb31cc7ecf34.1774460059.git.mst@redhat.com>
+In-Reply-To: 
+ <dd3984b3bce9df3591927f927668cb31cc7ecf34.1774460059.git.mst@redhat.com>
+To: Michael S. Tsirkin <mst@redhat.com>
+Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ simon.schippers@tu-dortmund.de, willemdebruijn.kernel@gmail.com,
+ jasowang@redhat.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ kuba@kernel.org, pabeni@redhat.com, eperezma@redhat.com, leiyang@redhat.com,
+ stephen@networkplumber.org, jon@nutanix.com, tim.gebauer@tu-dortmund.de,
+ netdev@vger.kernel.org, kvm@vger.kernel.org, virtualization@lists.linux.dev,
+ edumazet@google.com
 
-Hi Blaise,
+Hello:
 
-kernel test robot noticed the following build errors:
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-[auto build test ERROR on herbert-cryptodev-2.6/master]
-[also build test ERROR on herbert-crypto-2.6/master shuah-kselftest/next shuah-kselftest/fixes linus/master v7.0-rc5 next-20260327]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Wed, 25 Mar 2026 13:36:00 -0400 you wrote:
+> Eric Dumazet reported KCSAN warnings:
+> 
+> BUG: KCSAN: data-race in pfifo_fast_dequeue / pfifo_fast_enqueue
+> 
+> write to 0xffff88811d5ccc00 of 8 bytes by interrupt on cpu 0:
+> __ptr_ring_zero_tail include/linux/ptr_ring.h:259 [inline]
+> __ptr_ring_discard_one include/linux/ptr_ring.h:291 [inline]
+> __ptr_ring_consume include/linux/ptr_ring.h:311 [inline]
+> __skb_array_consume include/linux/skb_array.h:98 [inline]
+> pfifo_fast_dequeue+0x770/0x8f0 net/sched/sch_generic.c:770
+> dequeue_skb net/sched/sch_generic.c:297 [inline]
+> qdisc_restart net/sched/sch_generic.c:402 [inline]
+> __qdisc_run+0x189/0xc80 net/sched/sch_generic.c:420
+> qdisc_run include/net/pkt_sched.h:120 [inline]
+> net_tx_action+0x379/0x590 net/core/dev.c:5793
+> handle_softirqs+0xb9/0x280 kernel/softirq.c:622
+> do_softirq+0x45/0x60 kernel/softirq.c:523
+> __local_bh_enable_ip+0x70/0x80 kernel/softirq.c:450
+> local_bh_enable include/linux/bottom_half.h:33 [inline]
+> bpf_test_run+0x2db/0x620 net/bpf/test_run.c:426
+> bpf_prog_test_run_skb+0x9a4/0xef0 net/bpf/test_run.c:1159
+> bpf_prog_test_run+0x204/0x340 kernel/bpf/syscall.c:4721
+> __sys_bpf+0x52e/0x7e0 kernel/bpf/syscall.c:6246
+> __do_sys_bpf kernel/bpf/syscall.c:6341 [inline]
+> __se_sys_bpf kernel/bpf/syscall.c:6339 [inline]
+> __x64_sys_bpf+0x41/0x50 kernel/bpf/syscall.c:6339
+> x64_sys_call+0x10cb/0x3020 arch/x86/include/generated/asm/syscalls_64.h:322
+> do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+> do_syscall_64+0x12c/0x370 arch/x86/entry/syscall_64.c:94
+> entry_SYSCALL_64_after_hwframe+0x77/0x7f
+> 
+> [...]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Blaise-Boscaccy/crypto-pkcs7-add-flag-for-validated-trust-on-a-signed-info-block/20260327-145024
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
-patch link:    https://lore.kernel.org/r/20260326060655.2550595-7-bboscaccy%40linux.microsoft.com
-patch subject: [PATCH v3 6/9] security: Hornet LSM
-config: x86_64-randconfig-102-20260328 (https://download.01.org/0day-ci/archive/20260328/202603281030.AIoqyOy3-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260328/202603281030.AIoqyOy3-lkp@intel.com/reproduce)
+Here is the summary with links:
+  - [v2,net] ptr_ring: disable KCSAN warnings
+    https://git.kernel.org/netdev/net-next/c/d748047af135
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603281030.AIoqyOy3-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> security/hornet/hornet_lsm.c:194:6: error: call to undeclared function 'verify_pkcs7_message_sig'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     194 |         if (verify_pkcs7_message_sig(prog->insnsi, prog->len * sizeof(struct bpf_insn), msg,
-         |             ^
-   1 error generated.
-
-
-vim +/verify_pkcs7_message_sig +194 security/hornet/hornet_lsm.c
-
-   155	
-   156	static int hornet_check_program(struct bpf_prog *prog, union bpf_attr *attr,
-   157					struct bpf_token *token, bool is_kernel,
-   158					enum lsm_integrity_verdict *verdict)
-   159	{
-   160		struct hornet_maps maps = {0};
-   161		bpfptr_t usig = make_bpfptr(attr->signature, is_kernel);
-   162		struct pkcs7_message *msg;
-   163		struct hornet_parse_context *ctx;
-   164		void *sig;
-   165		int err;
-   166		const void *authattrs;
-   167		size_t authattrs_len;
-   168	
-   169		if (!attr->signature) {
-   170			*verdict = LSM_INT_VERDICT_UNSIGNED;
-   171			return 0;
-   172		}
-   173	
-   174		ctx = kzalloc(sizeof(struct hornet_parse_context), GFP_KERNEL);
-   175		if (!ctx)
-   176			return -ENOMEM;
-   177	
-   178		maps.fd_array = make_bpfptr(attr->fd_array, is_kernel);
-   179		sig = kzalloc(attr->signature_size, GFP_KERNEL);
-   180		if (!sig) {
-   181			err = -ENOMEM;
-   182			goto out;
-   183		}
-   184		err = copy_from_bpfptr(sig, usig, attr->signature_size);
-   185		if (err != 0)
-   186			goto cleanup_sig;
-   187	
-   188		msg = pkcs7_parse_message(sig, attr->signature_size);
-   189		if (IS_ERR(msg)) {
-   190			err = LSM_INT_VERDICT_BADSIG;
-   191			goto cleanup_sig;
-   192		}
-   193	
- > 194		if (verify_pkcs7_message_sig(prog->insnsi, prog->len * sizeof(struct bpf_insn), msg,
-   195					     VERIFY_USE_SECONDARY_KEYRING,
-   196					     VERIFYING_BPF_SIGNATURE,
-   197					     NULL, NULL)) {
-   198			err = LSM_INT_VERDICT_UNKNOWNKEY;
-   199			goto cleanup_msg;
-   200		}
-   201	
-   202		if (pkcs7_get_authattr(msg, OID_hornet_data,
-   203				       &authattrs, &authattrs_len) == -ENODATA) {
-   204			err = LSM_INT_VERDICT_PARTIALSIG;
-   205			goto cleanup_msg;
-   206		}
-   207	
-   208		err = asn1_ber_decoder(&hornet_decoder, ctx, authattrs, authattrs_len);
-   209		if (err < 0 || authattrs == NULL) {
-   210			err = LSM_INT_VERDICT_BADSIG;
-   211			goto cleanup_msg;
-   212		}
-   213	
-   214		err = hornet_verify_hashes(&maps, ctx, prog);
-   215	
-   216	cleanup_msg:
-   217		pkcs7_free_message(msg);
-   218	cleanup_sig:
-   219		kfree(sig);
-   220	out:
-   221		kfree(ctx);
-   222		return err;
-   223	}
-   224	
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
