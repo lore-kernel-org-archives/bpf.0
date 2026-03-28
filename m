@@ -1,133 +1,178 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAA023A1A2B
-	for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 16:20:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774714851; cv=none; b=DAy0bElWj0iWzSokgizBg3qbCtfn0x+t4CyR6/fsVAbwpjki0216jgDpmUXOBiJP3Q7NL/HwEbUtGX08XgtFKaOVm51geSil4aQgZI1TkUTrQZBHV2J5iDpmVTvOYS6ZmeYMIgDCujV+tr5DRVjvSyNC+QOMjOWwZ0dlIxwWxm0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774714851; c=relaxed/simple;
-	bh=ISmPtlm+i0yyz3eM9k0oGnw88uP7rfl5EchddrxV0T4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EuvqJgPXG302XkblY7OW0yfnztEeJXSANvVIh6qZmKh2HUrPiIG8WgT+BofJUOb3cdUslQqYLtR5Eiesk9w6fksbxBsAhYtzy5bNET3ERwyzdnV9EWUE/kKH5pV+KmC/76et/x/jSO2l+s3W/MJrv4PvbSaX965pOV8u+Jf1NoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U+0d61wb; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48B1E1DC1AB
+	for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 17:31:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774719097; cv=pass; b=FJiPur0JXcP5TF097VFpHfmxBCGj5Faxx4V4WHmFhOu7e2btiwZJdifTOO/3in+VoC5a1sgWByPFVmL/9MEGaM/PHFnuYNWIGDLzXNU1Ff7OKqYgrz1pS21U4ELrvu6sjm7TwztrCVhPlWlvqVLj2rcpihz0nbwBpgkeU8NV+kE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774719097; c=relaxed/simple;
+	bh=aRXa5dkkPR9HpHDJgU3ZJHG5f5J8GDl9KLDi4hro6Ls=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rcIHg9GKcoXWY8J/YiBmkyFvZKIwUNLYQbeU5+mMLrlxFJWL2gP+GLZhVh0ZFmHTflfxP8zLXDslnyXHZjbipMBoIk7om4S+aBrdrVrCCsnbFvoKpI61Gz1WlmSzwRONYzZ5r6y13k8vEb9aOiPu2/N9ANcnDasIbza5Ig8BZeY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=s2IMsdr+; arc=pass smtp.client-ip=209.85.221.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U+0d61wb"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-43b87970468so2847572f8f.3
-        for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 09:20:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="s2IMsdr+"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-43cf73bbfbdso135538f8f.1
+        for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 10:31:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774719095; cv=none;
+        d=google.com; s=arc-20240605;
+        b=UvcnrEMdFvaZ9GcJYDKeGzQMiXDTeAHh/8i89Vc22XAQCSPMHrd9VDzgm73RqwGGQP
+         GZhghln2pw+HKsO70D5x0vTuNG8n3mxNYw7cAtlRFUMHstLTQscfLSIbQOvtM/qgY9ug
+         19XJWQmxrwezsZu3eF4wphfAHVvmKHRRDoFUDDXePocn84uMFzS1TTGIiUmq4mIh1yeQ
+         s04S0SsMbbqVI+k4dNonmkFW1+pNvnUBShSnpkZ5ws8JVTwc9bte1t2HiwxTaVXLbLIC
+         9FM7kcDWVjKQ8Xjft42ofFeyzPavcfvBkCuTGMedvmgDOD3Sy9aeF6dAuBHfCALVBl2H
+         VuNQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=g191wywC3C6A8Bl4NajHAZiUFAuR19jL8UMhMb1Vddo=;
+        fh=i4ra377jioU2YTBV6nOH1Dd5LwsD14+ylHG1lf+guBU=;
+        b=K2V7QG94KFVu1fUrsDjJXkDSGbI1PNAeRpICLffLbAJedkAslxYz+lF/NuHhS6MNZE
+         MYr1PPnIYHybpPLAkN9Sr02iYUzIgtIYxKhopa4YW1jVUz/mcto+jR7mHs4v8J2svbAj
+         9v8KdX4t0SYbfxA9wJZ6RwpjBvXCVtlRE3aORTUQmVJHDZKn9ip5ochOIpUQV3ZVqz+N
+         Rzj4ud6/DIrNkgejl30BszEN4QURGgLr1Di/BgeXkX9Lc6C95qs7E/9zaE1cOKADoEV7
+         cQuj0aIWq/6jSQq+qe5vQWp2YFYshGJhVTuwfZ3/3Gd2QehZTBMPftQPK6MHQw4Ri20c
+         f6uQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774714848; x=1775319648; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eaiHU0PYN8PTs2PGhaMeeOAkkhQQNal4ajbtCASg2r8=;
-        b=U+0d61wbs4/rhd9Lo4Ab8WVOXcxAyZg/NwOYMGDFfNH2bAdxfCTIlwR68HhA+RVLWn
-         LzbHKpp0HjfHMNgXAbVzryOFMzuTbL7yvKFb70oBwYWAVL5GfRd+I1jU6jk4I5pJ28mX
-         wl/oz4yDhIYGu00bt15t3Lxp9+8q9xnAYIGrrG5y+kFElVRHR2Xu817oY01ECgEVgXrz
-         AGl5zFetk4gHGuTfXFq1qFQyz2QJ7I2P/XFhvq7IxNOnHXv9GCyZF40yG+V+Qdud2NSa
-         24TJUAeNk0zb2jPeCU/M3BOVCTSSaz/CBd2fG8zsORGfYCg3iw81Uo9wP0t7SuHQKTGy
-         quew==
+        d=gmail.com; s=20251104; t=1774719095; x=1775323895; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=g191wywC3C6A8Bl4NajHAZiUFAuR19jL8UMhMb1Vddo=;
+        b=s2IMsdr+Hj4Ap59dGUD3sqijJbxYwKHkA9bde0V/Cl52ggTMyRt7yCgYiTZo0dLOPB
+         vJYAjK0CWIZmZLiJFXpPO1qQ0R6UIQS1MytCOK5YOIBFXiWyC4HtAO/7TIFFpIFUe+l8
+         tQK6dEE5Ol8YkxYMbCLhkSNp0VNdelHpAXfTYwYTEPjkbzN1aDzFguxOg0KdvxOEXL0S
+         87ArlpPIz0bAXtzdXkiG5XxJZ6AZbCD9pCiTo+RoHtaho7WCBG6yAuEQ5D7hHMqq7CE9
+         DBLbcKBbeeqH4Z/XT8Mhbi/3dwqL5nQAHFCzhOmcFa+w6QeaDIFHziVqVmb7Y3N0PF7I
+         zKLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774714848; x=1775319648;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eaiHU0PYN8PTs2PGhaMeeOAkkhQQNal4ajbtCASg2r8=;
-        b=K/HrkLoh1KrVVa8IQ7GelbyEij4yes8QOklLeGXsagIfzNzFwrJF3TPR/Rv2sA9e5Y
-         4i24qWoEohQ72ylC1smRifvdy+e5n4c2SoUO4HziImq/piIKwp/TLvMY7gSL+3i+rqIy
-         FutJdshOi82TpVjRy2oSP4VYaE+CR1Qol1deyaLVCrMr5jSqlfKfwprTf9xev+vNcu6i
-         UlJm8/3CfVzTBpPacAyGyLcwSzGtyclkV/9sx8Uk/fPRtS++5O/1DzyPJINySXq3CGjF
-         +iE2nXaGGFt7PNq3pmFCoxRwOqvVcathUjMzYKhp/SaSe9I54/1otQHt6gtBw3zRffr7
-         gbdg==
-X-Gm-Message-State: AOJu0YxHYmC7//sSNCl/NVjw8LCwuB/u1uMnLKFjjyFgCfeM5+d8+cUv
-	Lp0f4nqE7SeprlrWNwHdk38M9cnF4EPuKMEuh6LEgsDgEmxFlecm9eKp
-X-Gm-Gg: ATEYQzzq573gpwBh2E0+y5JiYD0a3zzGRS++15/OJTTA5WDvHZYYGxDXouteENKnA1n
-	1cO031JZOlLE7+wyUGP9H1a2+XUTEYEEiD0xx8HG5+Y7h9aqK4n7H8KdpNfSfTrSY1jFP0986El
-	pXRZ9cTMigYpOYorwuTa2f4gfa9Stfab6xZZK/nRNqfDG5TGHwdeVCZrVM/CetO7apPervPjy6F
-	T3srerZeV62tnKmO6Dg/Etcpdsc9gjiqvnc+hZsJl6NgjW4D+utD0n7KOp9A6h8vZx4PEd5pgVr
-	jyrmGuPO4bH0+jo1JJXpZPzLXxQhK06FLBdD6dVZFevFGnYpY3/WIk/GyskeQ6mtop0Idw28EwB
-	0qIefw6F9+heJieAtHLZHia2vAzezgFfiKRrIFVI34ARY5QbKu0i/O1Gau2FIIKOqeemWPkgQ7T
-	r3/GRd+ed/MlF3gqaXBzSWpyJ9piMMk+STE9crB920SKUxFCxJSc3RASpnKW6TejBbzD9JJaTJW
-	vTi+pEz3Sr/U4FWs8qnW5zDh3tOAH7soNW/rCWUireCPefitNlX5CCdhaXrTqBvjydGVpkMBKM=
-X-Received: by 2002:a05:6000:3106:b0:439:f64b:a82b with SMTP id ffacd0b85a97d-43b9ea1a1b0mr11245696f8f.6.1774714847732;
-        Sat, 28 Mar 2026 09:20:47 -0700 (PDT)
-Received: from Tunnel (2a01cb09b0419c777d428aa4583db37e.ipv6.abo.wanadoo.fr. [2a01:cb09:b041:9c77:7d42:8aa4:583d:b37e])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43cf21f1749sm5885241f8f.14.2026.03.28.09.20.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Mar 2026 09:20:47 -0700 (PDT)
-Date: Sat, 28 Mar 2026 17:20:44 +0100
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>,
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
-	Srinivas Narayana <srinivas.narayana@rutgers.edu>,
-	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
-Subject: Re: [PATCH v2 bpf-next 5/6] selftests/bpf: Cover invariant violation
- cases from syzbot
-Message-ID: <acf_3HgkpATWYzs9@Tunnel>
-References: <cover.1774025082.git.paul.chaignon@gmail.com>
- <b82e9240f62200aae173a1c69c782f56ed7f8f21.1774025082.git.paul.chaignon@gmail.com>
- <87ikamjv5q.fsf@gmail.com>
+        d=1e100.net; s=20251104; t=1774719095; x=1775323895;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=g191wywC3C6A8Bl4NajHAZiUFAuR19jL8UMhMb1Vddo=;
+        b=WbpemWswv+RVmjMK24AeQ5EMi8b/ry6Q83/E534VaAqEd9guCYlmtwAh5FbmQNdr1g
+         +VnnGQo2hN0euqYqfqdwZO+HoueZVKovOX13DlQJbvhk7G5J3y56Sfr78CmUGsSkZYkw
+         F2OFr3HvDpUKkic06lBB1i5/l02eJRBMzy4smbWGwQ1chCq03sIyrX8RQhgqazuL6JCa
+         s/7c7r+kot/hgi3k1No4yyrof/iH+L4w21/Jg5b7WzA0ovqxinTAsmM9RXNa9Q9NZ8zG
+         bOSxeRn92Vedzk66SCuJ1VzR4c8RVLyQIbGOor6O2tZ7XMHpeFLISokAb7E3as6Z09cl
+         Ybug==
+X-Forwarded-Encrypted: i=1; AJvYcCXpYZVjISccy7Q+4hYwytCK+JMSdexPbDhxD8Dn5pqAiL95QshNkJpkU7SRBvyUWHPYZqs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7bnTrjYvXt4XFlRQSJLs7r88vtUVADnuMHZS2dFPIQ4iydlWh
+	50NO6dbh/pfq3DzbW2r4d467OO4UaVDYp0dbnh0YjrNKqq3uXJSzkr4AEOXCPoajmiUY55dqEBe
+	MrAwsEP95IpNPDaBMcQ9CqSeWfkclLgFud7m0
+X-Gm-Gg: ATEYQzxLLRo+GzZIdQzq2I8w+oUGn0Q94EPTs1/U3O7DzY1lho+qB6R1V+WpSRR+UR4
+	GA44jWQVaxYvpAwX739GaqMc3flFGBgh+1OSS8kLakZSQ6gwia46n1/1PSpZOUsalQ1oEynuw/7
+	CBV8Z3G3JKrKY1PngCk0be6WxZt97lTGLBNcv089+GXK7+5qjp2DFWdhQAs0bH2ZIqF1bo0/9Pl
+	fuMtu1kiLhSwHgGecBtxvc4X82kEOxrImo6qL5qmC5CbaEu0Q5jvmTSTNJYUrbtEt/7r5aUg24E
+	uCIHg3pDnLpWq394WnC47op1MlglSeuNQ9B98JKiUVdFCcIftxtDTEhG28qslfJATN3TDfSLsF5
+	C7Ca4/VZcyJXym5Zak13P7tY/9A==
+X-Received: by 2002:a05:6000:4013:b0:43b:50d6:4f04 with SMTP id
+ ffacd0b85a97d-43b9ea66dc1mr10726122f8f.38.1774719094545; Sat, 28 Mar 2026
+ 10:31:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87ikamjv5q.fsf@gmail.com>
+References: <cover.1774025082.git.paul.chaignon@gmail.com> <b82e9240f62200aae173a1c69c782f56ed7f8f21.1774025082.git.paul.chaignon@gmail.com>
+ <87ikamjv5q.fsf@gmail.com> <acf_3HgkpATWYzs9@Tunnel>
+In-Reply-To: <acf_3HgkpATWYzs9@Tunnel>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sat, 28 Mar 2026 10:31:23 -0700
+X-Gm-Features: AQROBzDcUMVJXJDF4ADJ28bMjEdCnSRzgU6Zg1-hHn9WLLwZ_2S8uCQN-YItf8g
+Message-ID: <CAADnVQJ2hX6E1_p557MYJOQLxXROzDxezwr-x79A7MyZZLzJuA@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 5/6] selftests/bpf: Cover invariant violation
+ cases from syzbot
+To: Paul Chaignon <paul.chaignon@gmail.com>
+Cc: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>, Shung-Hsi Yu <shung-hsi.yu@suse.com>, 
+	Srinivas Narayana <srinivas.narayana@rutgers.edu>, 
+	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 23, 2026 at 05:46:41PM +0000, Mykyta Yatsenko wrote:
-> Paul Chaignon <paul.chaignon@gmail.com> writes:
+On Sat, Mar 28, 2026 at 9:20=E2=80=AFAM Paul Chaignon <paul.chaignon@gmail.=
+com> wrote:
+>
+> On Mon, Mar 23, 2026 at 05:46:41PM +0000, Mykyta Yatsenko wrote:
+> > Paul Chaignon <paul.chaignon@gmail.com> writes:
+>
+> [...]
+>
+> > > +/* Last jump can be detected as always taken because the intersectio=
+n of R5 and
+> > > + * R7 32bit tnums produces a constant that isn't within R7's s32 bou=
+nds.
+> > > + */
+> > > +SEC("socket")
+> > > +__description("dead branch: tnums give impossible constant if equal"=
+)
+> > > +__success
+> > > +__flag(BPF_F_TEST_REG_INVARIANTS)
+> > > +__naked void tnums_equal_impossible_constant(void *ctx)
+> > > +{
+> > > +   asm volatile("                                                   =
+                       \
+> > > +   call %[bpf_get_prandom_u32];                                     =
+                       \
+> > > +   r5 =3D r0;                                                       =
+                         \
+> > > +   r5 &=3D 0xfffffffffffffffc;       /* var_off32=3D(0; 0xfffffffc) =
+*/                         \
+> > > +   r7 =3D r0;                                                       =
+                         \
+> > > +   r7 &=3D 0x1;                      /* var_off32=3D(0x0; 0x1) */   =
+                           \
+> > > +   r7 +=3D -43;                      /* s32=3D[-43; -42] & var_off32=
+=3D(0xffffffd4; 0x3) */      \
+> > > +   if w5 !=3D w7 goto +1;            /* on fallthrough var_off32=3D-=
+44, not in s32 */          \
+> > w5 has bits 0,1 zero, rest unknown
+> > w7 has top bits known as 0xffffffd4, and bits 0,1 unknown
+> > If w5 =3D=3D w7, their tnums must intersect to a single
+> > value =3D 0xffffffd4(-44). Which is outside of w7's range [-43; 42]. So
+> > the r10 =3D 0 branch should be unreachable.
+> > I guess the comment should be updated to the kernel style as well.
+>
+> Thanks for the review! We already have a lot of end-of-line comments on
+> the BPF assembly in selftests (including two tests above) so I assumed
+> that was fine.
 
-[...]
+btw we have two comment styles in bpf progs.
+I personally prefer this one:
+        /*
+         * Checkpoint at function entry should not fire, as caller
+         * stack fp[0]-8 is alive at this point.
+         */
+        "r6 =3D r2;"
+        "r1 =3D *(u64 *)(r6 + 0);"
+        "*(u64*)(r10 - 8) =3D 7;"
+        "r2 =3D r10;"
 
-> > +/* Last jump can be detected as always taken because the intersection of R5 and
-> > + * R7 32bit tnums produces a constant that isn't within R7's s32 bounds.
-> > + */
-> > +SEC("socket")
-> > +__description("dead branch: tnums give impossible constant if equal")
-> > +__success
-> > +__flag(BPF_F_TEST_REG_INVARIANTS)
-> > +__naked void tnums_equal_impossible_constant(void *ctx)
-> > +{
-> > +	asm volatile("										\
-> > +	call %[bpf_get_prandom_u32];								\
-> > +	r5 = r0;										\
-> > +	r5 &= 0xfffffffffffffffc;	/* var_off32=(0; 0xfffffffc) */				\
-> > +	r7 = r0;										\
-> > +	r7 &= 0x1;			/* var_off32=(0x0; 0x1) */				\
-> > +	r7 += -43;			/* s32=[-43; -42] & var_off32=(0xffffffd4; 0x3) */	\
-> > +	if w5 != w7 goto +1;		/* on fallthrough var_off32=-44, not in s32 */		\
-> w5 has bits 0,1 zero, rest unknown
-> w7 has top bits known as 0xffffffd4, and bits 0,1 unknown
-> If w5 == w7, their tnums must intersect to a single
-> value = 0xffffffd4(-44). Which is outside of w7's range [-43; 42]. So
-> the r10 = 0 branch should be unreachable.
-> I guess the comment should be updated to the kernel style as well.
+because of color highlighting.
+But some prefer the other one:
 
-Thanks for the review! We already have a lot of end-of-line comments on
-the BPF assembly in selftests (including two tests above) so I assumed
-that was fine.
+        asm volatile ("                                 \
+        /* spill R1(ctx) into stack */                  \
+        *(u64*)(r10 - 8) =3D r1;                          \
+        /* fill it back into R2 */                      \
+        r2 =3D *(u64*)(r10 - 8);                          \
 
-(Unrelated: On some mail clients, your comments are hard to spot. It
-might help if you could include a blank line before and after them :) )
+The comments have the same color as asm, but
+no " " marks.
 
-> Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
-> > +	r10 = 0;										\
-> > +	exit;											\
-> > +"	:
-> > +	: __imm(bpf_get_prandom_u32)
-> > +	: __clobber_all);
-> > +}
-> > +
-> >  char _license[] SEC("license") = "GPL";
-> > -- 
-> > 2.43.0
+
+> (Unrelated: On some mail clients, your comments are hard to spot. It
+> might help if you could include a blank line before and after them :) )
+
++1
