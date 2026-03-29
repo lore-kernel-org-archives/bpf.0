@@ -1,122 +1,153 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71B4B37646C;
-	Sun, 29 Mar 2026 14:45:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6794727707
+	for <bpf@vger.kernel.org>; Sun, 29 Mar 2026 16:18:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774795544; cv=none; b=FLqNiL53Z1zycPIXYvdtM5auipfMmZn6Ip+RAOScmi4JtV2d6CXVR5clnaYs0w+SXdlg0P5HtZh6yXjVi5lFDieKlyVFtxJsn/4jWS5U/0zurkTnoz8iprze+Senf2R1FdT4O7oQsGOQIe7EKOGbi1AhR79AGTS8o7LD+WCkvBU=
+	t=1774801091; cv=none; b=AgnAJztz7Xfd6sDgfMEy/PgQuqE1+K7uSF8+3h8qCcKkik89fi1f095C/eWN2s1cfCClJDIyAB8RHEj7EOl7gdOfbSjJzzC2KyCOSS5+1oohuDVtINJOaTcBgjVctdAti0av3qPvNehpAfYuGacXlR/2+/8A2BPVUQZ5pPDVHsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774795544; c=relaxed/simple;
-	bh=RVkbp1JwoKFigRMkCrU2BJt/HtePGZ2WrmFEhalWXqY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=aSZ6xDcBdggnb4pfcVMTmSBDSYP6WmGWk2KG9DioQnx5HD8/Y8pJUIs+Hxy0JJxh6v93WmCV64K8Ly6hU41NaZWT1+eQFc7cT4RcGDlK8a5zBANellerjgXV7nYqXrSfHzv76bhCPNWQmFncoENoLaZ/bJxCUuw1APomOcL781Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gVVm2xcB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774801091; c=relaxed/simple;
+	bh=vA7FGZ4QgImw8H7FwAwRGPAFqoafQa4yOe2ds6Od3rU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kWInwgUnbSpqcHAUQsM58JHuP+jt3J4Ynp+GunOpwRtrb1tnrWXdCgv4rXvWDnaj51vr93+oH2zca9QoOqviDVXjyuyZodKtn0tjiiHesPueaQQXxY/1jJKFCUxWMrfaL80e15b8dScKiFnPQ0+rmtuhavgV5nuZkZWBtFypNbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gt1CAXSE; arc=none smtp.client-ip=74.125.224.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gVVm2xcB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B625DC116C6;
-	Sun, 29 Mar 2026 14:45:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774795544;
-	bh=RVkbp1JwoKFigRMkCrU2BJt/HtePGZ2WrmFEhalWXqY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=gVVm2xcBXi0PMWMA2b70frX2Y2Tknu/T+xqYVycoAAXFSdn0mxQ0oDF/Mu0W4UbYJ
-	 8xx+YHEaKYsCq8wUFC1d/Eluajr6AQxXi5Eg++hGZnscp05G2Lj/35rNSAsDkHU0JR
-	 T+IvTJ8n5SamyLfNWFEHoWza1w+xomUDFtgg+IlIMXTXOKdPTBYEmTJgKweJyV7D8F
-	 e1vkH54yfrlAVgRR/d8d4Z/yTHrRi+euCoq/pmjtZ62kEEQQvDm3g0fHPQ8ES0Yk+v
-	 bhAo1735Qv1/Lx5EzgHOBdlaspnDQHD5ji3OhBWSf4IOn+8+XA2v9BK/eEtaRvQVca
-	 owm2YbCLKu3yA==
-Content-Type: multipart/mixed; boundary="===============7307341392841228648=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gt1CAXSE"
+Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-64e8cdafeffso7104234d50.1
+        for <bpf@vger.kernel.org>; Sun, 29 Mar 2026 09:18:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774801089; x=1775405889; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=a83TUsskxy1VkF8Vg9eln+jbw7jfWEDWtbMcqUkZ9fM=;
+        b=gt1CAXSEcqSMUTCq4NvcKCfGmVvMF3qN1b9CQoHH28GLay64l9eB6scxUgJIjsMCFU
+         kBLwWUQF1ebkikqZ1+XW8T/prpRtQx5bqth0JE7X8ZFqF9gMuOnRJnQlH3weUw8vyayM
+         ntvBru3B6TP7TxC5p9AxCNP8g+/xFuDVOa9DBc3EFR5NSE0mWaQSUUwJogPnC3peNgsQ
+         y8eo3zFUtc+54yEquulqa9MYjxhS188WvPaEhmL5kZ+/tFPJ2dKEeus0rtUGxH20ETAw
+         A38ny0uIQURiZzQzvqnrwzg9zd4ZpQ1aSA42X6YHbsnAxaJ9J1mKclU79JqBz91kjhoF
+         Q98A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774801089; x=1775405889;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a83TUsskxy1VkF8Vg9eln+jbw7jfWEDWtbMcqUkZ9fM=;
+        b=JkZT/9E1oemkrj32SwCMvjM6EOxYd/urIdsPCrKjdev/VKe5ZZT0IJxlxyypSwni79
+         8+essTsd5zMnnNzkiFXz5Ft89zy6233igRHXX72yrrXzcycYKxKNcwq91mD1dtXbYDHv
+         OwpPceKLrxyP0cniPRTeVqNDXuRZ+bByc8TXjr2g/42h7aEBPzAR3kZ3TaPhp/WOL55L
+         blWUwGhR1kkUdq7ePH98RsmoRGS/43zCsq+tY0l096rSbpQClKcgHPKsb+CYjI/ljzcw
+         1Ei5n/B+GZjzbQbTBtDqXf/JYMtfz19ul1fWEdJo7+OlyiaFo9WGUO69MvDMJINbzEKN
+         Idrg==
+X-Forwarded-Encrypted: i=1; AJvYcCVOo/BxEKyCQEgjamUi5blCAzqBObso+7hYByiWqJ9oMwaxIxKIiJh50Bu+fa0c3mtiI5g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzahGqycc+OAdHexBgyIXC2FTgR4QkkzF0IUTJ9l6hd2XCayYKf
+	D7pZM+miTGq1h+6XUyiACwZB4Nvi2BQ60GtEsTla3VOI9QGAXIAZzYmA
+X-Gm-Gg: ATEYQzyvVgEM/vLimgClqQAL+SuJluBsWjcGIg2SbTO6z+n1iN9UKVXpA1hmL/jF//4
+	a26FZ0FdP0FuPXMsn/zjXpJG+Ks2VOyeL/CZiiO1UcgoObgqCg/fM8pNtkuYfVX1jze8yZlsjIm
+	zakHlbtDic2vupCepsC4WmcRaYLBvUs4KwvALEQg2oHUwPCUzwznLqG0mF+GoaKnqx4ksgcng7U
+	oUBqFAQj1mydQjfxRHOma5Qd0kfTgh6MVfaIPstHJ4/HVpKj6Ii1c3CAU64nB1UIWRv0Izo1Naa
+	llmxJoYz9jJK9krk7RMGfPECKUgEFYy8gziDx8OG0VRyqCoxLCuxRpFuZ8ZZnCHHbtQyWfHFzXw
+	YSolHqqKPSIlDRMy3nhOPsaTQNJlsjAZ4WpNj7/MZjdBnL1uhhIZbWf1ac+yBo1PuuZG3TQh+/d
+	rK4VVsSmW2t+NOe/HSzVmL+Hy+ad3QySCEJc+1sfv5fs9TIn0sa1Kh2nKW2uik4mF67O6KDYPMv
+	FWBNsXO9XfEtt/J3aYL05plWGxjLhNqBIeOZ7U4XQ5HNQGTlcqyVHEV044d5xWXPY8=
+X-Received: by 2002:a05:690e:4092:b0:64e:e833:337a with SMTP id 956f58d0204a3-64fee1b61a5mr10432402d50.2.1774801089372;
+        Sun, 29 Mar 2026 09:18:09 -0700 (PDT)
+Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6500936f692sm2638216d50.19.2026.03.29.09.18.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Mar 2026 09:18:09 -0700 (PDT)
+From: Sun Jian <sun.jian.kdev@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org
+Cc: martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Sun Jian <sun.jian.kdev@gmail.com>,
+	syzbot+619b9ef527f510a57cfc@syzkaller.appspotmail.com
+Subject: [PATCH v2] selftests/bpf: Reject malformed IPv4/IPv6 skb test input
+Date: Mon, 30 Mar 2026 00:17:51 +0800
+Message-ID: <20260329161751.1914272-1-sun.jian.kdev@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <380d555cac33dac80adcd56735493f0afe0ea54360e454f8e7464a200bb5021e@mail.kernel.org>
-In-Reply-To: <20260329140506.9595-4-pilgrimtao@gmail.com>
-References: <20260329140506.9595-4-pilgrimtao@gmail.com>
-Subject: Re: [PATCH bpf-next v9 3/9] bpf: clear list node owner and unlink before drop
-From: bot+bpf-ci@kernel.org
-To: pilgrimtao@gmail.com,martin.lau@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,chengkaitao@kylinos.cn,linux-kselftest@vger.kernel.org
-Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sun, 29 Mar 2026 14:45:43 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============7307341392841228648==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+bpf_prog_test_run_skb() derives skb->protocol from the Ethernet header
+through eth_type_trans(), but it does not verify that the provided
+linear input is long enough to contain the corresponding L3 base header.
 
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index 94fcd4ab39e9..8abb99712043 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -2247,6 +2247,9 @@ void bpf_list_head_free(const struct btf_field *field, void *list_head,
->  	if (!head->next || list_empty(head))
->  		goto unlock;
->  	head = head->next;
-> +	/* Clear owner under spinlock to ensure the owner is always valid */
-> +	for (pos = head; pos != orig_head; pos = pos->next)
-> +		WRITE_ONCE(container_of(pos, struct bpf_list_node_kern, list_head)->owner, NULL);
->  unlock:
->  	INIT_LIST_HEAD(orig_head);
->  	__bpf_spin_unlock_irqrestore(spin_lock);
+This can result in an inconsistent skb being passed to test_run helpers
+such as bpf_skb_adjust_room(), where inferred protocol offsets can lead
+to operating on uninitialized memory, triggering KMSAN errors.
 
-Setting owner to NULL under lock A is good for concurrent readers
-(bpf_list_front/back), but could it open a window for concurrent
-writers?
+To reject such malformed test input, we check that the linear head is
+sufficiently large to contain the corresponding L3 base header (IPv4
+or IPv6) before running the program.
 
-After the lock is released, the drain loop below processes each node
-without holding any lock. Meanwhile, if a BPF program on another CPU
-holds a refcounted owning reference to one of these nodes (obtained
-earlier via bpf_refcount_acquire), it can attempt __bpf_list_add to
-a different list under a different lock B.
-
-In __bpf_list_add():
-
-    if (cmpxchg(&node->owner, NULL, BPF_PTR_POISON)) {
-        ...
-    }
-    list_add(n, prev);
-
-Before this patch, owner pointed to the old list head (non-NULL), so
-the cmpxchg would fail and the add would be rejected. With owner
-cleared to NULL, the cmpxchg succeeds, and list_add() modifies the
-node's next/prev to point into list B.
-
-> @@ -2255,7 +2258,9 @@ void bpf_list_head_free(const struct btf_field *field, void *list_head,
->  		void *obj = head;
->
->  		obj -= field->graph_root.node_offset;
-> +		pos = head;
->  		head = head->next;
-> +		list_del_init(pos);
-
-If the concurrent list_add above has already modified head->next, does
-this drain loop then follow into list B's chain? The termination
-condition (head != orig_head) would never be satisfied by list B's
-nodes, and the loop would call __bpf_obj_drop_impl on list B's nodes
-without holding lock B.
-
-Would it be safer to also call list_del_init() under the spinlock
-(e.g., splicing into a local list), so that nodes are fully detached
-from the chain before the lock is released? The existing comment notes
-that draining outside the lock avoids deadlocks from tracing programs,
-but the list_del_init operations themselves should be inexpensive
-compared to __bpf_obj_drop_impl.
-
-This commit also appears to be a bug fix (addressing stale owner
-pointers after drain) but does not include a Fixes: tag. The concurrent
-reader issue was introduced when bpf_list_front/back was added.
-
-Suggested tag:
-
-    Fixes: fb5b480205ba ("bpf: Add bpf_list_{front,back} kfunc")
-
-
+Reported-by: syzbot+619b9ef527f510a57cfc@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=619b9ef527f510a57cfc
+Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+v2:
+ - Ensured that the linear head is large enough to accommodate the corresponding L3 base header (IPv4 or IPv6), before running the program.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23710972607
---===============7307341392841228648==--
+Link: <https://lore.kernel.org/bpf/129d235b04aca276c0a57c7c3646ce48644458cdc85d9b92b25f405e2d58a9ae@mail.kernel.org/>
+
+ net/bpf/test_run.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 178c4738e63b..4790bee535b9 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -1118,6 +1118,25 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 	skb->protocol = eth_type_trans(skb, dev);
+ 	skb_reset_network_header(skb);
+ 
++	switch (skb->protocol) {
++	case htons(ETH_P_IP):
++		if (skb_headlen(skb) < sizeof(struct iphdr)) {
++			ret = -EINVAL;
++			goto out;
++		}
++		break;
++#if IS_ENABLED(CONFIG_IPV6)
++	case htons(ETH_P_IPV6):
++		if (skb_headlen(skb) < sizeof(struct ipv6hdr)) {
++			ret = -EINVAL;
++			goto out;
++		}
++		break;
++#endif
++	default:
++		break;
++	}
++
+ 	switch (skb->protocol) {
+ 	case htons(ETH_P_IP):
+ 		sk->sk_family = AF_INET;
+
+base-commit: cbfffcca2bf0622b601b7eaf477aa29035169184
+-- 
+2.43.0
+
