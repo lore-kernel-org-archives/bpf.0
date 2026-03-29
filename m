@@ -1,62 +1,62 @@
-Received: from mail-ot1-f65.google.com (mail-ot1-f65.google.com [209.85.210.65])
+Received: from mail-ot1-f68.google.com (mail-ot1-f68.google.com [209.85.210.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E54D314D2D
-	for <bpf@vger.kernel.org>; Sun, 29 Mar 2026 21:25:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 150D436C5BD
+	for <bpf@vger.kernel.org>; Sun, 29 Mar 2026 21:25:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774819542; cv=none; b=Qf4G1ncBLKEbqeeEd1Ae1RvtXc+Xy+KLS3LRKz6ZnGGX9hRYNETork/NCmsXMN4IiT/x9shxu/rlj57GcZlYebqK8zCrM+fOUam1158hkn2qHQUQ569V4w+JkLKeoZjtVfTSE92kIrMAP4A+45lq4rdQ0pwZrEHUniCFOpvB+Nc=
+	t=1774819545; cv=none; b=MbF51C/QXhxQWRmGA2Mzyqy56DKNIObyKSNtY0hCBeK83OIAF0rA0dslQlMeWRfzEXtpLes8pB9dvav62NeI4t9+y7diHnVfigvud0s1xSNneRo7GXlm2AX7t0fa1PNfSnotIpI1YdzRgeJvA0oT9N3Izj0Xhb9LBY6jDt7qUME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774819542; c=relaxed/simple;
-	bh=PDHqJ3h9do4u6Yk2y5S4B9L46uFf/iwV4iB4cnIHNhE=;
+	s=arc-20240116; t=1774819545; c=relaxed/simple;
+	bh=bKI5bNxQUtO0/6qHxB1Ww2UE3+hExnBymx891Yvnhw4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SDi1lChuIpWgrElKEv+I1/oJSpvmMpoxoV9IFPVrpasv4U5m2LDZnRHjhbNK6UsAqRbwFU0SI6yDL05wk5qATHT6da6eYT4izsBfjl/TGfT4Prhe6i5wfqLItI9CelSGsL+uSDOgdHhacbZ0ufbMG81X+zj9ZypTB0IKh6fV59E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EZ68GSGN; arc=none smtp.client-ip=209.85.210.65
+	 MIME-Version; b=kGn01+swoNtacEZeorbdvWZzbYg2HGX06br/UQNpCAdFnnHQg16HaNwgvotzfKkEaRocsmnUZLqkIYBQk6nkpsHkBy2yGDKSySO3Ke2o6ZonHZMdUlxa1FnqRmVdVYip43/Dad07jcIhjh5ejLXdXzYvdW2seFZtiOLB98kBzNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S7Vm37aW; arc=none smtp.client-ip=209.85.210.68
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EZ68GSGN"
-Received: by mail-ot1-f65.google.com with SMTP id 46e09a7af769-7d8b2703f37so3630539a34.1
-        for <bpf@vger.kernel.org>; Sun, 29 Mar 2026 14:25:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S7Vm37aW"
+Received: by mail-ot1-f68.google.com with SMTP id 46e09a7af769-7d7eb85fb81so3868325a34.0
+        for <bpf@vger.kernel.org>; Sun, 29 Mar 2026 14:25:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774819540; x=1775424340; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774819542; x=1775424342; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=G0jsSHpG3R/9Rhasb4/9Bf3vQf61E+88H5hV+CFutFs=;
-        b=EZ68GSGN76/zMUFowo6YkLJG2ndU6IW91QAXGx+XWvG3t+Oughom2q37/MNl2coXLw
-         md4ahiSByqycG2u5IEpL15LdWIkKzzdy3ctupKyJyBwFJrHTk0SZyFAT7RQ6XWmnMfV1
-         n6IRW71GwA8lmx9bniulek67KRCGOTfOkg2XCVBrvvt4+GI1wH264b36+Q77CuxqEs2/
-         Oo9MNfvwh4xrIbU+gwZC3PSCLRiM1PAXKSm7F9KFaLcjZIhv8ZqGRYiqjJEXlxNKPMzy
-         K+VExv6VSE5AD8+BsRniXB4dYvYuhICab8SZ0xoxj3PZZtbD6Wk2H7BkHnxEBQZm1Gvm
-         0S4Q==
+        bh=C4yFVfd5J6VlKZjRGlD0SwubSo3BQLfXRkpgZzsxPx4=;
+        b=S7Vm37aWJSkszpqTO9pONmduZDQwvEJ1MzHMQJpPLYTeFbICnBoEoMjC5EBBOA/T5V
+         0u6g1wNJ7OAQsBQRHx5Qxb1WZwraxoC8l2E6JCRj3QfV2DUln9DQP3AjKPesEluHTC4G
+         0U9xvLBG8AeRJbBTEWm+C5S1YKufqbnTVSODTTs7JZdzEw9bjwoLIVcu+Px5uFFaG+ZP
+         7eXM5q8migXbM4im3xT1ZelSw1+qsw7Y5eIUeQgoOhhiXTlRo2kk7kPJVkWa19zQqHzM
+         61WoE5w1CE9SubX+1M4Z2t/v3dd2bjKx2EF4vLlfrQW9fsJkS4tykHwyjaBElHapnJSn
+         4gUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774819540; x=1775424340;
+        d=1e100.net; s=20251104; t=1774819542; x=1775424342;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=G0jsSHpG3R/9Rhasb4/9Bf3vQf61E+88H5hV+CFutFs=;
-        b=D3YVTDA3mOiktnw+xUNUBZ2PSKVK6YejoxcQAX1AB4tMy907mvKez6Fo35AVtpUVbK
-         CKlexUvvA3CZeCF+b08x2BmceCG8BSlWxParuaaPV/vHPHkMerUi/7mZZKwVIKWC8Z+T
-         kbJFvovn9gRb2OQDKNJbwhzvUdSQ1aM5UxNHgY9HdsRdGfwlucE3zAE1EF9dja3Ntskc
-         sLa0ocRgjh+j7EleK2PImh8eubjmAJGEHSETuwpYLpTd2MLh6K2wnfIAhbag+n2hb5Ic
-         WFbc3qW+BOuBeiRZek7D9fS64K/jyVZ1xdf+kRRWSkImBEVP0hOxLev75p8cCGimhQ3D
-         9t1Q==
-X-Gm-Message-State: AOJu0YzNJ1nIi0QOdAKRu/P5yQJ/8DKj0u3FClZLNiMyerj+ReQlC/b9
-	cbP/ozUSbvBAmPSUUPTcT38jRDwJGDeqSGCjqw63T/k258XbsqBkgI3j8gOxsdVfez4=
-X-Gm-Gg: ATEYQzxipeDS/3iMnzq6B8uX2NzOxJ/BSYvvg6paJdDFBnCkXmx4r255vzegc1uVu7s
-	DuNXssi3RxZ+XQyD9dv/+fYc1wdcQ2WpmCqFAuuUZzhRFoaJ/JaZLDSjtsSwzK/rVGnLI0ShY3A
-	kSmbkNGTfaC3z0FYkZCgLbwa8NSWDdZLhS50gQphxSa36r55a5wlaYEU4C2JluRzb70jyzcXfX+
-	J5FYf+E7SqpYCPh4zVydA+ubZ65DHhzTQdcDFcyoPcojZ1cCSCNCnnLYZi8v+SoWjjq9fXzbRz/
-	+TM19mE4HIuIL86uYhOZoljmiIx/pzk9iLBCM1kJ6DhoOpX1XunrRPAi50bEdeuNBpM452DylSM
-	I7ndqWnY789qiNpJUhdk7+oq7VohTeSTvi3XIq6KBM6D8UxUznt0CTyeE9V6fNsxsja2Z4VlvLv
-	XNqFpyLt6Voc5nZwQLxYGhj+VkzOUObFgtyYL/uDVNF+4=
-X-Received: by 2002:a05:6830:2683:b0:7d7:48cc:ccdb with SMTP id 46e09a7af769-7d9faedf0b2mr6410516a34.19.1774819539686;
-        Sun, 29 Mar 2026 14:25:39 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:2::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7da0a7b5499sm4588579a34.18.2026.03.29.14.25.39
+        bh=C4yFVfd5J6VlKZjRGlD0SwubSo3BQLfXRkpgZzsxPx4=;
+        b=WHErVg6BF/BwjW7DsUMX/m6M5mrHVtXR67YJwEVzQA9VHg6bJXWxnLCGiGADqyNa3k
+         kUQ95ULSh4zl3vaqljycHMWXGEK5Ra1Fa10GDumjqgjaQlIl6MVyrNzz4M0sVNYZuoSo
+         hg647CPvVRd5QthTH8h6Yj3eMARB+lttBnyoH5fcpTCMSCn5uLJL5jftopn6IzENe2Zh
+         LY9tsUEGnrNzwYz7Go7c4x+U+a6F5aVMOtBNdx/u5f9MnhSPHGPVRGpRHyN6IaiVAaos
+         PzMkIQ7Pm+hdMr0hCtB1Ni9OtavMeISLkVTgIh0e3Fkz1r7f2EdT9dZQ0bJhlTdzciDu
+         pIcg==
+X-Gm-Message-State: AOJu0Yz45v1KX1w6CbdbZmfsI6J04HZ6BKl2uboJ4Ul9hix+noNoPnEl
+	yO8DuPqNdoIiOc3bjb2td0sY2Y6SF51QiAZnvR9MNQ+QUh2LCq1YIxAGRJ6CINV1FE4=
+X-Gm-Gg: ATEYQzxGtHi//ge97dyRzh1ioA99tS04K5nsQozRCSRz4OxO4/fcrlAQH+xiW83kH/Z
+	+zFW+a6f/GIxXwuwEHvakmh9ZABs/mU9ANKzIKvKrNAi6MoW2npSjlPXK/w8HZDVQqRCyCS/yNE
+	yz+r8fP7okDKdohhefVn63in7kL/fQDS039Xo05qXHSEbbC5U8/8MvlKIMEwtAx5zUIAvLC4VLF
+	aZnxzyXOumdnXomBVHyl9gpxduKtcWvhcvkDtC7oYNhyeAp4t8G25iWqxfIR9lfxUItiw2ZwSr9
+	RfbkPFFzjHmXyEt+qBByL0bNe+ilLIQWzwtwu3UVffp3TjvDcKaWx5Guq2qDugoMdPDJxZfF3QU
+	5BdTOtUnvOGPhhz62ixdwMwBQN1kSExm/kYh3dTYGp7YyFDTyD9rNpw0ikWTZ+tUz5cZ7m4Eila
+	atb8Iu6UHJ299y2M0uBpZFVlmXpLD1Yp+IUPGjN6kTDvR+YXFy5VwJHg==
+X-Received: by 2002:a05:6820:222a:b0:67c:2752:8dd5 with SMTP id 006d021491bc7-67e185eb834mr4839579eaf.9.1774819542564;
+        Sun, 29 Mar 2026 14:25:42 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:3::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-41d0496591csm3464959fac.8.2026.03.29.14.25.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Mar 2026 14:25:39 -0700 (PDT)
+        Sun, 29 Mar 2026 14:25:41 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -67,9 +67,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 2/3] bpf: Emit verifier warnings through prog stderr
-Date: Sun, 29 Mar 2026 23:25:32 +0200
-Message-ID: <20260329212534.3270005-3-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 3/3] libbpf: Wire up verifier warning display logic
+Date: Sun, 29 Mar 2026 23:25:33 +0200
+Message-ID: <20260329212534.3270005-4-memxor@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260329212534.3270005-1-memxor@gmail.com>
 References: <20260329212534.3270005-1-memxor@gmail.com>
@@ -79,179 +79,71 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6404; h=from:subject; bh=PDHqJ3h9do4u6Yk2y5S4B9L46uFf/iwV4iB4cnIHNhE=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIfPkdNUFYd/4FnPaTGRZOa9vd9ipbM+/9f83/0gOvjh9nnNS rd2djlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAExkmj7DX7HAeP7aIsP+4FlT4hm4RH +Unfu+X+Kn6ZpuV6fi2gD/SEaGl6+aW7YGx03TOClXY3X3l7tAXPmeU2fDKjkymB2mSZ3lBQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2352; h=from:subject; bh=bKI5bNxQUtO0/6qHxB1Ww2UE3+hExnBymx891Yvnhw4=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIfPkdFXmg8uE3ofILD6T/XjhMmOf0Ok+iUG1Um9NtieIrVyq brG0o5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABPhLGZk6E384Lza6IXg4iNz3I6usy xliVnMIOuS+7sldHvjqcagRQy/2RxEr3MYnn93csFsW3t2phN6uy79d968pP/onmMvf72x4AUA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-There is a class of messages that aren't treated as hard errors, such
-that the program must be rejected, but should be surfaced to the user to
-make them aware that while the program succeeded, parts of their program
-are exhibiting behavior that needs attention. One example is usage of
-kfuncs that are supposed to be deprecated, and may be dropped in the
-future, though are preserved for now for backwards compatibility.
+Wire up the flushing of all accumulated messages in a program's stderr
+stream after verification is complete. An example is shown below of a
+warning printed now about usage of deprecated kfuncs.
 
-Add support for emitting a warning message to the BPF program's stderr
-stream whenever we detect usage of a _impl suffixed kfunc, which have
-now been replaced with KF_IMPLICIT_ARGS variants. For this purpose,
-introduce bpf_stream_pr_warn() as a convenience wrapper, and then mark
-bpf_find_linfo() as global to allow its usage in the verifier to find
-the linfo corresponding to an instruction index.
+$ ./test_progs -t kfunc_implicit_args/test_kfunc_implicit_arg_legacy_impl -v
+...
+libbpf: prog 'test_kfunc_implicit_arg_legacy_impl': VERIFIER WARNINGS:
+WARNING: kfunc_implicit_args.c:40 calls deprecated kfunc bpf_kfunc_implicit_arg_legacy_impl(), which will be removed.
+WARNING: Switch to kfunc bpf_kfunc_implicit_arg_legacy() instead.
+WARNING: For older kernels, choose the kfunc using bpf_ksym_exists(bpf_kfunc_implicit_arg_legacy).
+...
 
-To make the message more helpful, recommend usage of bpf_ksym_exists()
-as a way for the user to write backwards compatible BPF code that works
-on older kernels offering _impl suffixed kfuncs.
+Note that test_progs overrides the default logging function, hence -v is
+necessary. By default these messages would be printed for the user.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf.h          |  9 ++++++
- include/linux/bpf_verifier.h |  3 +-
- kernel/bpf/log.c             |  6 ++--
- kernel/bpf/verifier.c        | 53 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 67 insertions(+), 4 deletions(-)
+ tools/lib/bpf/libbpf.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 2c4f92085d79..d0158edd27b2 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -3912,6 +3912,15 @@ int bpf_stream_stage_dump_stack(struct bpf_stream_stage *ss);
- 		bpf_stream_stage_free(&ss);                    \
- 	})
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 9ea41f40dc82..f308bacd083f 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -7826,6 +7826,27 @@ static int libbpf_prepare_prog_load(struct bpf_program *prog,
  
-+#define bpf_stream_pr_warn(prog, fmt, ...)                              \
-+	({                                                              \
-+		struct bpf_stream_stage __ss;                           \
-+									\
-+		bpf_stream_stage(__ss, prog, BPF_STDERR, ({		\
-+			bpf_stream_printk(__ss, fmt, ##__VA_ARGS__);	\
-+		}));							\
-+	})
-+
- #ifdef CONFIG_BPF_LSM
- void bpf_cgroup_atype_get(u32 attach_btf_id, int cgroup_atype);
- void bpf_cgroup_atype_put(int cgroup_atype);
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 090aa26d1c98..5683c06f5a90 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -873,7 +873,8 @@ int bpf_vlog_init(struct bpf_verifier_log *log, u32 log_level,
- 		  char __user *log_buf, u32 log_size);
- void bpf_vlog_reset(struct bpf_verifier_log *log, u64 new_pos);
- int bpf_vlog_finalize(struct bpf_verifier_log *log, u32 *log_size_actual);
--
-+const struct bpf_line_info *bpf_find_linfo(const struct bpf_verifier_env *env,
-+					   u32 insn_off);
- __printf(3, 4) void verbose_linfo(struct bpf_verifier_env *env,
- 				  u32 insn_off,
- 				  const char *prefix_fmt, ...);
-diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-index 37d72b052192..598b494ded36 100644
---- a/kernel/bpf/log.c
-+++ b/kernel/bpf/log.c
-@@ -329,8 +329,8 @@ __printf(2, 3) void bpf_log(struct bpf_verifier_log *log,
- }
- EXPORT_SYMBOL_GPL(bpf_log);
+ static void fixup_verifier_log(struct bpf_program *prog, char *buf, size_t buf_sz);
  
--static const struct bpf_line_info *
--find_linfo(const struct bpf_verifier_env *env, u32 insn_off)
-+const struct bpf_line_info *
-+bpf_find_linfo(const struct bpf_verifier_env *env, u32 insn_off)
- {
- 	const struct bpf_line_info *linfo;
- 	const struct bpf_prog *prog;
-@@ -390,7 +390,7 @@ __printf(3, 4) void verbose_linfo(struct bpf_verifier_env *env,
- 		return;
- 
- 	prev_linfo = env->prev_linfo;
--	linfo = find_linfo(env, insn_off);
-+	linfo = bpf_find_linfo(env, insn_off);
- 	if (!linfo || linfo == prev_linfo)
- 		return;
- 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 8c1cf2eb6cbb..f50e0ebd0ded 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3206,6 +3206,7 @@ struct bpf_kfunc_desc {
- 	u32 func_id;
- 	s32 imm;
- 	u16 offset;
-+	bool warned_deprecated;
- 	unsigned long addr;
- };
- 
-@@ -14045,6 +14046,53 @@ static int fetch_kfunc_arg_meta(struct bpf_verifier_env *env,
- 	return 0;
- }
- 
-+static bool get_insn_file_line(const struct bpf_verifier_env *env, u32 insn_off,
-+			       const char **filep, int *linep)
++static void bpf_object_load_prog_emit_stderr(struct bpf_program *prog, int prog_fd)
 +{
-+	const struct bpf_line_info *linfo;
++	char chunk[256];
++	bool emitted = false;
++	int ret;
 +
-+	if (!env->prog->aux->btf)
-+		return false;
++	while ((ret = bpf_prog_stream_read(prog_fd, BPF_STREAM_STDERR, chunk,
++					   sizeof(chunk), NULL)) > 0) {
++		if (!emitted) {
++			pr_warn("prog '%s': VERIFIER WARNINGS:\n", prog->name);
++			emitted = true;
++		}
++		libbpf_print(LIBBPF_WARN, "%.*s", ret, chunk);
++	}
 +
-+	linfo = bpf_find_linfo(env, insn_off);
-+	if (!linfo)
-+		return false;
-+
-+	if (bpf_get_linfo_file_line(env->prog->aux->btf, linfo, filep, NULL, linep))
-+		return false;
-+	return true;
++	if (ret < 0) {
++		pr_debug("prog '%s': failed to read BPF stderr stream: %s\n",
++			 prog->name, errstr(ret));
++	}
 +}
 +
-+static void warn_for_deprecated_kfuncs(struct bpf_verifier_env *env,
-+				       struct bpf_kfunc_desc *desc,
-+				       const char *func_name,
-+				       int insn_idx)
-+{
-+	int repl_len, line;
-+	const char *file;
-+
-+	if (desc->warned_deprecated)
-+		return;
-+
-+	if (!func_name || !strends(func_name, KF_IMPL_SUFFIX))
-+		return;
-+
-+	repl_len = strlen(func_name) - strlen(KF_IMPL_SUFFIX);
-+
-+	if (get_insn_file_line(env, insn_idx, &file, &line))
-+		snprintf(env->tmp_str_buf, TMP_STR_BUF_LEN, "%s:%u", file, line);
-+	else
-+		snprintf(env->tmp_str_buf, TMP_STR_BUF_LEN, "insn #%d", insn_idx);
-+
-+	bpf_stream_pr_warn(env->prog,
-+			   "WARNING: %s calls deprecated kfunc %s(), which will be removed.\n"
-+			   "WARNING: Switch to kfunc %.*s() instead.\n"
-+			   "WARNING: For older kernels, choose the kfunc using bpf_ksym_exists(%.*s).\n",
-+			   env->tmp_str_buf, func_name, repl_len, func_name, repl_len, func_name);
-+
-+	desc->warned_deprecated = true;
-+}
-+
- /* check special kfuncs and return:
-  *  1  - not fall-through to 'else' branch, continue verification
-  *  0  - fall-through to 'else' branch
-@@ -14231,6 +14279,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- {
- 	bool sleepable, rcu_lock, rcu_unlock, preempt_disable, preempt_enable;
- 	u32 i, nargs, ptr_type_id, release_ref_obj_id;
-+	struct bpf_kfunc_desc *desc;
- 	struct bpf_reg_state *regs = cur_regs(env);
- 	const char *func_name, *ptr_type_name;
- 	const struct btf_type *t, *ptr_type;
-@@ -14253,6 +14302,10 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	func_name = meta.func_name;
- 	insn_aux = &env->insn_aux_data[insn_idx];
+ static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_program *prog,
+ 				struct bpf_insn *insns, int insns_cnt,
+ 				const char *license, __u32 kern_version, int *prog_fd)
+@@ -7950,6 +7971,8 @@ static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_program *prog
+ 				 prog->name, log_buf);
+ 		}
  
-+	desc = find_kfunc_desc(env->prog, insn->imm, insn->off);
-+	if (desc)
-+		warn_for_deprecated_kfuncs(env, desc, func_name, insn_idx);
++		bpf_object_load_prog_emit_stderr(prog, ret);
 +
- 	insn_aux->is_iter_next = is_iter_next_kfunc(&meta);
- 
- 	if (!insn->off &&
+ 		if (obj->has_rodata && kernel_supports(obj, FEAT_PROG_BIND_MAP)) {
+ 			struct bpf_map *map;
+ 			int i;
 -- 
 2.52.0
 
