@@ -1,182 +1,114 @@
-Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BB082253EB
-	for <bpf@vger.kernel.org>; Sun, 29 Mar 2026 05:47:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774763242; cv=pass; b=IKh+ZU6BDFmo4s765NLr7SiP37y8TszH0GfS2AUCzB/liEdRkMbgHTREk2h7F9C9nPuFdCcAfDHEPvT3LW9EYvI3Mm921MeHiG/AoQo95rhI+ovp7ZTGWnA9N1Je+VTU88LWmBoWb+05sYWUvMGlzsjVeQ/M3V5kUuqlffA4S2g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774763242; c=relaxed/simple;
-	bh=6g6DrpTAKhnXqrK42OWkoWbrpN9ueXmFiP1/LqE5P14=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EtTPw89BkqwWyJcXCDdFoIMe6/2SlyvcLCpMKlz5swRoNVQtQSFWK1ZbZtYveykyKGXP0faC03rRuCB1QSK2fXlVNIF81nPnLC2EfEbaU5g3c2AsnKqE01yHV+GDHhZtuXgy/333nlkrI8tjL1Tc4cprMBRsfrE4I28yO8NRd3s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ouMx6zNA; arc=pass smtp.client-ip=74.125.224.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C9F36E46F
+	for <bpf@vger.kernel.org>; Sun, 29 Mar 2026 12:44:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774788279; cv=none; b=oUuLJKcrC18DQMWyQpcE4coX7nh3hxSw8moS8CLjjITQtEHNevyYKz4Yy4FrH+a9Lh1MnzEb4IHXv7pkkXJFEUFM1PJ95b7UnV6uh59YNkg9qqoKzSCz40r+LP4Z6RMaLUgV6HuDWLVYBm7TWZPeW2YQc4yArn/BXCsyfulGWb0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774788279; c=relaxed/simple;
+	bh=Rmh3Y+JrArpJE7iqH6JLEcKEfdpuVbpvkJS7lyIHjzg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eDmDQ8KcK9j46I75b0GTtOadK7JJSgFKNIHjFpdzHoarahs1g0aCvPOUjryjytxEO4mFre8rjDHp+V58SA/3mkqy4vYNpU5SmUYI+FGATmKwVV73cfJ3rHi/CZAMSP21AwLTQkrNoOYKMGoe7IoV+PDSviQhwCWiLWJrEtfOY+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=dnXMdCkV; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ouMx6zNA"
-Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-6500eae6d2fso1024219d50.1
-        for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 22:47:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774763240; cv=none;
-        d=google.com; s=arc-20240605;
-        b=JiDK6XGNzD6HFViWsEsK9rP/9oTBAovNPkldivE6vYMrfkIGhUjhtjirOxKR/Udasl
-         wPb80JTuTp5symcr4w7eOO+RHTBqxLSUDNHCjyJUPA/2j3t0c31Z/xHAv7T4qkKC2VB4
-         P/g750EHL/F0x0ONmh9XVK70Rm5k59TAFj1pnNi8y/ndlGgvhDrs0R26NNjWD8Wnun7S
-         M6F8bhCK77ZakNgp1fw6jLUVadBlnzmdU0XzxLR5yEA7JMWSKiwlmp4NFg5RyIItHwYR
-         x8f+wyjaXqEGDKTU579T3cBj24pn6X0wzTHh/xDJruIuw2Ugj3QekUkjxBTj5As7/paX
-         hSWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=/iugZFsSjOuzcJMja6paNm03P4LwjhuAC89wGrDPrX0=;
-        fh=WQU8venkldqDHPmtw91swEk5JYU6JjBa9iHik1oEEvw=;
-        b=bVBcGkLFKdWtcSyB8Aaq51eaZPIoGeHqHQXZ1hZOE/60l5pLMLKJJRLsqKoswoDWzt
-         rGvkzAFY5Xv44Tb2mYgnY1VvcII175LYFDyswkbAQfX06DDmVrKJF9DiY1hPnHUvLqyZ
-         IvIHYhn1YafpJMrnErtbXM8qUq01GU8CyFaz1wy7/D35cWbaUNzNSZo/62cjRgOogqyw
-         vOs33Or1kfNuTzcXuGPXuYKk7/slYcxC5Fm/eb0its7yxcDOKzHew5mCPEPqbGg3B/nb
-         PYkOU5QNzjxsyZdNzG4k0U+UkFKjXD1g3VWUsHqcIhNtMF+4gadq5nh4X+cdDUQ58nVw
-         21jg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="dnXMdCkV"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-48557c8ad47so27332735e9.0
+        for <bpf@vger.kernel.org>; Sun, 29 Mar 2026 05:44:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774763240; x=1775368040; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/iugZFsSjOuzcJMja6paNm03P4LwjhuAC89wGrDPrX0=;
-        b=ouMx6zNAEeOW/ePCl4scnqhtSs4htQ5GTgpv6uAK/nsEG+NMb2inQ7tuFkvGuqCWEc
-         h0nH4Dc6D4qsW2fY9TLoI+W4YAKOgJdfWGZ+lNJOg3UhzZPucezM6TjgAKAh4YhkqRmR
-         whHKP3EEseTq+UzOEk4vdjHdSTyCbHkjlZ3u38VihAS0DECHBHjjsrE2u3d9whJUjZzn
-         BWd9ClL+SfaARjeM+7NSmELTgDcRiI4r86WZY+A+8viQ7NlvBC5euHk9IBo9FaslErhx
-         dQnYPOhSFzeVdihbQ/651QLRVH12fCycAdV2GHq4iUddEvKQxGnMhFJC7F8IZrbMrwyN
-         SqIw==
+        d=suse.com; s=google; t=1774788276; x=1775393076; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CMhuHeD7KIQLmawFhIk+JJPpQUf9loVrwxnFpBfk5n8=;
+        b=dnXMdCkVm5madfRT6P0ezSg720NIs3rc3IdYHXtNSPo+e0ql0rLWCaDZUoR5zVWTnL
+         wTvwDXSJaquyL6hIkrUAk1m910HuxsnB78WwnT7+StVl5MZsudbD/x9adkquCwQd8BPm
+         XNDDurbSXXW9XOos05BJ/5Hv+gkEi3YwWujdsU0bLtR82tMc8D0ASfDhspiJmz6eiHHI
+         pHyJXOQ7Q7fPIk1ZC+OhPvpKxxPojDyfbi64aTXesM8pzRyVsXTOr9k0/HawTcF2KXFH
+         XDtLAG+hOeoQwt+Ac/GyN5+aAKMPAsix/EMT28zQC5G0sa3awuhh/zQ3nJQ40hK+XP9P
+         qspg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774763240; x=1775368040;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=/iugZFsSjOuzcJMja6paNm03P4LwjhuAC89wGrDPrX0=;
-        b=NigSihWjkZ9I1U8f+eyHdekXSqAxYxTZPuMVZw4f9D15NCdeN6IdwH8Dl/GupGTESW
-         C+6JX2O0vWh++4DjCRaBgyMA8gjuqK0ikW6a/bLpO91mtl7vFPTuL9qwLd2HWkTbdAce
-         3Pp8uDLZQSTW0X4GFt571BgFT3LoqAqwohx6bmEjkzjtDXroPwpWabKjNLz1W8zYDsKu
-         TFkfbmin76lvkTgi+T5VdShjPgyyIO94VFGRiaC7PnQL8ZiRR7txFhERZFzXVE390XB5
-         dcnmCKKUG3g4Q60WYVQeWDnZwBBdohPCm22lpu8EsGVXA9DufCAQ15XSHNovGndErPXA
-         1QdA==
-X-Gm-Message-State: AOJu0YyYRxdgJgz5kKvFEFp7aa8lmml87zLLFNldNudtcNI9aPkYCGQl
-	CPMZYh3Kve3QkEjCVhbFmxhQkcoYsffjTRMttZUkC/HUw+4+sxuakW3T3Jwf0K7Ne6OjX02GKfS
-	dAyLDTP67rpWuSjYB6jhWCGES5DCYJPk=
-X-Gm-Gg: ATEYQzxDwfMdP/7+Gc97VyhY+qUNwIZVqoCk1LrZyGcq4E8Zx0/DipLGx2egUqJP59A
-	vKOoonjcqV62G8mYQ6wwFQVCOAG3UjAHhOYn8z2EV687CUwZbLXzoK1bmBZ+5eDqGIKtQ8/dJ8m
-	WUOaZ4vbWAJ/pidYhd+297oMxCQ/XYinRdzgcuq6Osrau2Q8DswJPJdRLQ85BjmkC32BpB35Pst
-	zWmrt+4XxcXhdoR+T/2/VDsywTvU+xv1UI8xCuPvsKZDBPV8zveZNnf0PYOJy2UO0qCT0C/CCOz
-	a8OOEX9ha0tP8EWIlsmj8p8x0jukjHBcUzFr08zRsX0oCw2mFCFaXNKEaT4=
-X-Received: by 2002:a05:690e:1688:b0:640:cccb:1fd2 with SMTP id
- 956f58d0204a3-64ff7239c2emr7682432d50.33.1774763240407; Sat, 28 Mar 2026
- 22:47:20 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774788276; x=1775393076;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CMhuHeD7KIQLmawFhIk+JJPpQUf9loVrwxnFpBfk5n8=;
+        b=Qiab0qrbqRasF0tS2nmxr8hP+hx6D28C56XNDvUHixIINv0ZUgAp3mO8FVCNbX7TQR
+         ximWZIY17PGjz1mC5tuXz0AQfJePKgMF1whAmtDMOymJwBcVs56FyxbZs2UvH+kqF9Uj
+         CAdE2gx3rtT8ex1opm7ZFdJq724EL/Lar679qFH9qy2TJkF6mLiFCxpOixilMV9WIK+W
+         1NKTi2Q9Y+M5dMcffAmuHRkoy5hP73D9I3/PZKazwsP8wYVI2iRruZMMQpuPzDMwsM6N
+         w9pjxA5tExOUCOuSXg5DEhaGH8AzYDmjxU/6W/KHwXHeSjkuIwHysH1+nSRiNQeVWHL0
+         M/Bw==
+X-Gm-Message-State: AOJu0YzTQ0zPO7LMq8JL2S5ahhBypdyl48q6hYQVpidYxO3LsOg5L813
+	dyWdHOJ4ikvjr19wF4VG/p1TFiXWXqZIix+LYXnGZqvpdGkwQGNizvUItS1l5Yy0gBzj3+sTmB5
+	TgpKnN7I=
+X-Gm-Gg: ATEYQzwvu/JRdQbmLYXqZZGRfJq/DpWiVLI+OesGf7LdZaFYi24aWT6z4IrP8j8s8FR
+	OSSFGwkri60wJ1dkg84mATKgwf6E8lNDq+zFW6luo9AMXFmjnTc8o/Tlm9zwE8m/TMy6xtmWO4o
+	X4N8n5PMsxnkGlZW8P/mxOwSp7G1ITwgQXOARzBvijOvN2ctqe6bU112BwxpH9s+T4hK/pLhNcw
+	B8ahlPcaEJUAKce+qyikMVn20PVq5KuBCr5eXxOpTKV8t2t0PnB/XPGfWkCJwwYCx53gtetlf0O
+	o+ukeG6YYxbyzkdIZQfSYikmkJrnWz/mTiTdhJ/CMHD97SnJcbT+IlEI1I/AFvR3JL7LG64PurR
+	NiGsXakLZrvUYKuL2mZ+QXEprZmzwNrRJFBg5L1GbpanuRx0SWTjm8e+TUD9if/B5SSu+uTDaE0
+	7r4Cn3uCaXolmvMasD2Hu9CUVf6nKd2SW6W3KpXi7qlFUB9A6o2ZbiV2mH2rzi7w==
+X-Received: by 2002:a05:600c:524a:b0:486:f9a4:d487 with SMTP id 5b1f17b1804b1-48727c816e6mr142138465e9.0.1774788275973;
+        Sun, 29 Mar 2026 05:44:35 -0700 (PDT)
+Received: from f16.localdomain ([121.167.230.140])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76916da892sm3700321a12.14.2026.03.29.05.44.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Mar 2026 05:44:34 -0700 (PDT)
+From: Hoyeon Lee <hoyeon.lee@suse.com>
+To: bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Feng Yang <yangfeng@kylinos.cn>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2 0/2] libbpf: allow address-based single kprobe attach
+Date: Sun, 29 Mar 2026 21:43:37 +0900
+Message-ID: <20260329124429.689912-1-hoyeon.lee@suse.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260329020748.3649741-1-rhkrqnwk98@gmail.com>
-In-Reply-To: <20260329020748.3649741-1-rhkrqnwk98@gmail.com>
-From: sun jian <sun.jian.kdev@gmail.com>
-Date: Sun, 29 Mar 2026 13:47:11 +0800
-X-Gm-Features: AQROBzBYTYUItKpL89566WBJeajv3BpFtRdkfNzeP_NNr9gLnt4CyjMgmHSd28o
-Message-ID: <CABFUUZE9yfTucMqiQDP_2RAWtF5s3d80u6Em2apzbjJ=os6Liw@mail.gmail.com>
-Subject: Re: [PATCH bpf v2] bpf: Fix RCU stall in bpf_fd_array_map_clear()
-To: Sechang Lim <rhkrqnwk98@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, martin.lau@linux.dev, eddyz78@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sun, Mar 29, 2026 at 10:08=E2=80=AFAM Sechang Lim <rhkrqnwk98@gmail.com>=
- wrote:
->
-> Add a missing cond_resched() in bpf_fd_array_map_clear() loop.
-> Other similar loops in the same file already have one.
->
-> For PROG_ARRAY maps with many entries this loop calls
-> prog_array_map_poke_run() per entry which can be expensive, and
-> without yielding this can cause RCU stalls under load:
->
->   rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
->   rcu:  (detected by 0, t=3D6502 jiffies, g=3D729293, q=3D305 ncpus=3D1)
->   rcu: All QSes seen, last rcu_preempt kthread activity 6502 (4295096514-=
-4295090012), jiffies_till_next_fqs=3D1, root ->qsmask 0x0
->   rcu: rcu_preempt kthread starved for 6502 jiffies! g729293 f0x2 RCU_GP_=
-WAIT_FQS(5) ->state=3D0x0 ->cpu=3D0
->   rcu:  Unless rcu_preempt kthread gets sufficient CPU time, OOM is now e=
-xpected behavior.
->   rcu: RCU grace-period kthread stack dump:
->   task:rcu_preempt     state:R  running task     stack:0     pid:15    tg=
-id:15    ppid:2      task_flags:0x208040 flags:0x00004000
->   Call Trace:
->    <TASK>
->    context_switch kernel/sched/core.c:5382 [inline]
->    __schedule+0x697/0x1430 kernel/sched/core.c:6767
->    __schedule_loop kernel/sched/core.c:6845 [inline]
->    schedule+0x10a/0x3e0 kernel/sched/core.c:6860
->    schedule_timeout+0x145/0x2c0 kernel/time/sleep_timeout.c:99
->    rcu_gp_fqs_loop+0x255/0x1350 kernel/rcu/tree.c:2046
->    rcu_gp_kthread+0x347/0x680 kernel/rcu/tree.c:2248
->    kthread+0x465/0x880 kernel/kthread.c:464
->    ret_from_fork+0x4d/0x80 arch/x86/kernel/process.c:153
->    ret_from_fork_asm+0x19/0x30 arch/x86/entry/entry_64.S:245
->    </TASK>
->   rcu: Stack dump where RCU GP kthread last ran:
->   CPU: 0 UID: 0 PID: 30932 Comm: kworker/0:2 Not tainted 6.14.0-13195-g96=
-7e8def1100 #2 PREEMPT(undef)
->   Hardware name: QEMU Ubuntu 24.04 PC v2 (i440FX + PIIX, arch_caps fix, 1=
-996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
->   Workqueue: events prog_array_map_clear_deferred
->   RIP: 0010:write_comp_data+0x38/0x90 kernel/kcov.c:246
->   Call Trace:
->    <TASK>
->    prog_array_map_poke_run+0x77/0x380 kernel/bpf/arraymap.c:1096
->    __fd_array_map_delete_elem+0x197/0x310 kernel/bpf/arraymap.c:925
->    bpf_fd_array_map_clear kernel/bpf/arraymap.c:1000 [inline]
->    prog_array_map_clear_deferred+0x119/0x1b0 kernel/bpf/arraymap.c:1141
->    process_one_work+0x898/0x19d0 kernel/workqueue.c:3238
->    process_scheduled_works kernel/workqueue.c:3319 [inline]
->    worker_thread+0x770/0x10b0 kernel/workqueue.c:3400
->    kthread+0x465/0x880 kernel/kthread.c:464
->    ret_from_fork+0x4d/0x80 arch/x86/kernel/process.c:153
->    ret_from_fork_asm+0x19/0x30 arch/x86/entry/entry_64.S:245
->    </TASK>
->
-> Fixes: da765a2f5993 ("bpf: Add poke dependency tracking for prog array ma=
-ps")
-> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
-> ---
->  kernel/bpf/arraymap.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-> index 33de68c95..5e25e0353 100644
-> --- a/kernel/bpf/arraymap.c
-> +++ b/kernel/bpf/arraymap.c
-> @@ -1015,8 +1015,10 @@ static void bpf_fd_array_map_clear(struct bpf_map =
-*map, bool need_defer)
->         struct bpf_array *array =3D container_of(map, struct bpf_array, m=
-ap);
->         int i;
->
-> -       for (i =3D 0; i < array->map.max_entries; i++)
-> +       for (i =3D 0; i < array->map.max_entries; i++) {
->                 __fd_array_map_delete_elem(map, &i, need_defer);
-> +               cond_resched();
-> +       }
->  }
->
->  static void prog_array_map_seq_show_elem(struct bpf_map *map, void *key,
-> --
-> 2.43.0
->
->
-Reviewed-by Sun Jian <sun.jian.kdev@gmail.com>
+Today libbpf can attach a single kprobe only by function name, with an
+optional offset. But the kernel also supports attaching a single kprobe
+directly by raw kernel address, through both legacy tracefs/debugfs
+kprobes and PMU-based non-legacy kprobes. Since libbpf doesn't support
+this yet, callers that already have a target IP still have to drop down
+to perf_event_open() or direct tracefs writes.
+
+This patchset adds address-based single-kprobe attach support to
+bpf_program__attach_kprobe_opts() and covers it in selftests/bpf. The
+first commit adds bpf_kprobe_opts.addr so that libbpf can attach single
+kprobes by raw address through both legacy tracefs/debugfs and PMU-based
+non-legacy paths. The second commit extends attach_probe selftests/bpf
+with address-based kprobe attach subtests for these paths.
+
+---
+Changes in v2:
+- Fix line wrapping and indentation
+
+Hoyeon Lee (2):
+  libbpf: allow address-based single kprobe attach
+  selftests/bpf: add test for address-based single kprobe attach
+
+ tools/lib/bpf/libbpf.c                        | 88 +++++++++++++------
+ tools/lib/bpf/libbpf.h                        |  5 +-
+ .../selftests/bpf/prog_tests/attach_probe.c   | 49 +++++++++++
+ 3 files changed, 114 insertions(+), 28 deletions(-)
+
+-- 
+2.52.0
